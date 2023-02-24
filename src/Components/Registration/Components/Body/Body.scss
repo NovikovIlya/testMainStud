@@ -1,0 +1,82 @@
+@tailwind components;
+
+@layer components{
+  .Reg__Body{
+    @apply flex flex-col w-full h-full items-center;
+
+      .Img{
+        @apply absolute bottom-0 right-0;
+      }
+
+      .InputBlock{
+        @apply flex flex-col w-4/5 h-full bg-white justify-around;
+
+        .TopBlock{
+          @apply flex w-4/5 h-auto mt-5 mx-auto justify-between items-center
+          MobileScreen:mt-2;
+
+          .MainText{
+            @apply w-auto h-full text-lg font-bold;
+          }
+
+          .LanguageMenu{
+            @apply flex w-auto h-full;
+
+            .Button{
+              @apply visited:text-black border-none hover:text-blue-700 font-bold bg-white shadow-none;
+            }
+          }
+        }
+
+        .Block{
+          @apply flex relative justify-center;
+
+          .VisibleCaption{
+            @apply absolute flex ml-6 mt-1 z-10 w-4/5 mx-auto text-xs text-gray-400;
+          }
+
+          .UnVisibleCaption{
+            @apply hidden;
+          }
+
+          Input{
+            @apply placeholder-black;
+          }
+
+          .Inputs{
+            @apply flex w-4/5 mx-auto h-12 shadow-md shadow-gray-400
+            MobileScreen:h-10;
+          }
+
+          .ErrorText{
+            @apply w-4/5 mx-auto text-red-500 text-sm;
+          }
+        }
+
+        .TextUnderPass{
+          @apply flex flex-wrap w-4/5 mx-auto text-sm mt-1;
+        }
+
+        .Button{
+          @apply flex w-4/5 justify-center items-center font-bold h-8 mx-auto border-none shadow-md shadow-gray-400 rounded-md;
+        }
+
+        .CheckBox{
+          @apply flex w-4/5 h-auto mx-auto text-gray-400 text-sm;
+        }
+
+        .Navigate{
+          @apply flex w-full h-auto justify-center flex-wrap;
+
+          .Question{
+            @apply w-auto h-full flex-wrap mr-1;
+          }
+          .Link{
+            @apply w-auto underline flex-wrap h-full hover:text-blue-700 visited:text-black;
+          }
+        }
+
+
+      }
+    }
+}

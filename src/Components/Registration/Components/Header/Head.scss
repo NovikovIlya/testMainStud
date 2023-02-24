@@ -1,0 +1,10 @@
+@tailwind components;
+
+@layer components{
+  .Reg__Header_General{
+    @apply flex w-full h-full bg-blue-800;
+    .Reg__Header_Img {
+      @apply flex w-auto h-auto my-auto ml-10;
+    }
+  }
+}

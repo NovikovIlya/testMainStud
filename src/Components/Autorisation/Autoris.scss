@@ -1,0 +1,14 @@
+@tailwind components;
+
+@layer components{
+  .Autoris__General{
+    @apply flex flex-col w-full h-full;
+    
+    .Autoris__Header{
+      @apply flex h-20 w-full;
+    }
+    .Autoris__Body{
+      @apply flex h-full w-full;
+    }
+  }
+}

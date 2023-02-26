@@ -2,7 +2,7 @@
 
 @layer components{
   .Check_General{
-    @apply w-4/5 relative h-5/6 flex flex-col m-auto justify-between rounded-md shadow-md shadow-gray-400;
+    @apply w-full relative h-full flex flex-col m-auto justify-between rounded-md shadow-md shadow-gray-400;
 
     .Check_LeftImg{
       @apply absolute left-0 bottom-0 rounded-md;
@@ -13,7 +13,7 @@
     }
 
     .Check_TopBlock{
-      @apply w-full h-2/3 flex flex-col justify-start;
+      @apply w-11/12 mx-auto h-2/3 flex flex-col justify-start mt-10;
 
       .Check_FirstBlock{
         @apply w-full h-auto flex justify-between mb-4;
@@ -27,7 +27,7 @@
         @apply flex w-auto h-full;
 
         .Check_Button{
-          @apply visited:text-black border-none hover:text-blue-700 font-bold bg-white shadow-none;
+          @apply visited:text-black border-none hover:text-blue-700 bg-white shadow-none;
         }
       }
       .Check_TextBlock{
@@ -54,7 +54,7 @@
         }
 
         .Check_Link{
-          @apply w-auto h-auto underline visited:text-black hover:text-blue-700;
+          @apply w-auto h-auto underline z-10 visited:text-black hover:text-blue-700;
         }
       }
     }

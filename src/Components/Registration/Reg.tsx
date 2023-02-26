@@ -10,7 +10,7 @@ const Reg = () => {
   return (
     <div className="Reg__General">
       {ShowMainPage && <div className="Reg__Body"><BodyComponent SetEmail={ChangeEmail} ShowBody={ChangeShow}/></div>}
-      {!ShowMainPage && <div className="Reg__Body"><EmailComponent Email={Email}/></div>}
+      {!ShowMainPage && <div className="Reg__CheckEmail"><EmailComponent Email={Email}/></div>}
     </div>
   );
 }

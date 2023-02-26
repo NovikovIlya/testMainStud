@@ -2,18 +2,19 @@
 
 @layer components{
   .General{
-    @apply w-4/5 relative h-5/6 flex flex-col m-auto justify-between rounded-lg shadow-md shadow-gray-400;
+    @apply w-96 relative h-5/6 flex flex-col m-auto justify-between rounded-md border-solid border-2 border-gray-400
+    MobileScreen:w-full MobileScreen:h-full MobileScreen:border-none;
 
     .LeftImg{
-      @apply absolute left-0 bottom-0 rounded-lg;
+      @apply absolute left-0 bottom-0 rounded-sm;
     }
 
     .RightImg{
-      @apply absolute right-0 bottom-0 rounded-lg;
+      @apply absolute right-0 bottom-0 rounded-sm;
     }
 
     .TopBlock{
-      @apply w-full h-1/2 flex flex-col justify-start;
+      @apply w-11/12 mx-auto mt-5 h-1/2 flex flex-col justify-start;
 
       .FirstBlock{
         @apply w-full h-auto flex justify-between mb-5;

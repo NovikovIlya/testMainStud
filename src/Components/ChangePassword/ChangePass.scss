@@ -1,0 +1,90 @@
+@tailwind components;
+
+@layer components{
+  .General{
+    @apply flex relative flex-col w-96 h-3/4 border-solid border-2 border-gray-400 rounded-md
+    MobileScreen:w-full MobileScreen:h-full MobileScreen:border-none;
+
+    .LeftBotImg{
+      @apply absolute left-0 bottom-0;
+    }
+
+    .RightBotImg{
+      @apply absolute right-0 bottom-0;
+    }
+
+    .TopBlock{
+      @apply flex w-full h-1/6 justify-center mt-0;
+
+      .MainBlock{
+        @apply flex w-11/12 mx-auto justify-between h-4/6;
+
+        .TextBlock{
+          @apply w-auto text-lg font-bold h-auto my-auto;
+        }
+
+        .CloseIco{
+            @apply transition-colors w-auto hover:text-blue-700 my-auto;
+        }
+
+      }
+    }
+
+    .MiddleBlock{
+      @apply w-full h-1/2 flex flex-col justify-around;
+
+      .InputBlock{
+        @apply flex flex-col relative w-11/12 h-1/2 mx-auto;
+
+        .Caption{
+          @apply flex absolute z-10 w-3/4 ml-3 mt-1 h-auto text-gray-400 text-xs;
+        }
+
+        .Input{
+          @apply h-10 w-full mb-1; 
+        }
+
+        Input{
+          @apply placeholder:text-black;
+        }
+
+        .SomeTextBlock{
+          @apply flex w-full h-auto flex-wrap;
+        }
+      }
+
+    }
+
+    .BottomBlock{
+      @apply w-full h-1/3 flex flex-col justify-between;
+
+      .Button{
+        @apply transition-colors w-11/12 h-10 mx-auto rounded-md justify-center items-center;
+      }
+
+      .LinkBlock{
+        @apply w-full h-auto flex flex-col mb-4 text-sm;
+
+        .Navigate{
+          @apply w-full h-auto flex justify-center;
+
+          .Question{
+            @apply w-auto h-full mr-1;
+          }
+
+          .Link{
+            @apply w-auto h-full underline;
+          }
+        }
+
+        .BlockMenu{
+          @apply flex w-full h-auto justify-end;
+
+          .LanguageType{
+            @apply transition-colors z-10 border-none mr-1 w-auto h-full bg-EllipseColor hover:text-blue-700;
+          }
+        }
+      }
+    }
+  }
+}

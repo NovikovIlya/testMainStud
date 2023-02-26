@@ -2,7 +2,7 @@
 
 @layer components{
   .Reg__Body{
-    @apply flex flex-col w-full h-full items-center;
+    @apply flex flex-col w-full h-full items-center relative;
 
       .Img{
         @apply absolute bottom-0 right-0;

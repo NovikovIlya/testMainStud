@@ -5,6 +5,9 @@ module.exports = {
     extend: {
       screens: {
         'MobileScreen': { 'raw': '(max-width: 617px)' },
+      },
+      colors: {
+        EllipseColor: '#7fc3e5'
       }
     },
   },

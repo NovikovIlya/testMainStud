@@ -171,7 +171,10 @@ const Autoris = () => {
                 ? IsSend
                   ? EmailValue.length > 0
                     ? ChangeSend(false)
-                    : ChangeError((el) => ({ EmailError: true, PassError: el.PassError }))
+                    : ChangeError((el) => ({
+                        EmailError: true,
+                        PassError: el.PassError,
+                      }))
                   : GoBack()
                 : ''
             }

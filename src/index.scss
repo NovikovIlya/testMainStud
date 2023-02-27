@@ -2,8 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer components{
-  body{
+@layer components {
+  body {
     @apply w-screen h-screen m-0 p-0;
   }
+}
+* {
+  margin: 0;
+  padding: 0;
 }

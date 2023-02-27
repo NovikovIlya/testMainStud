@@ -1,0 +1,32 @@
+.main {
+  @apply flex w-screen  justify-center text-base;
+  .svg {
+    @apply relative top-[80px]  w-0;
+  }
+  .loginForm {
+    @apply max-w-[508.91px] pb-[54px];
+    .title {
+      @apply text-2xl text-center mb-[32px] font-bold;
+    }
+    .buttons {
+      @apply flex flex-col gap-[66px] min-w-[374px] mt-[27px] text-base;
+      span {
+        @apply text-center text-base;
+      }
+    }
+    .wrapper {
+      @apply flex justify-between mb-[56px] mt-[23px];
+      .switcher {
+        .select {
+          @apply text-sky-600 font-bold;
+        }
+        span {
+          @apply cursor-pointer;
+        }
+      }
+      svg {
+        @apply cursor-pointer;
+      }
+    }
+  }
+}

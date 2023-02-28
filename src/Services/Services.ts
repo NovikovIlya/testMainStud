@@ -12,7 +12,7 @@ export default class Services {
     agreement: boolean,
     phone: string,
     password: string,
-  ): Promise<AxiosResponse<RegResponse>> {
+  ) {
     return $api.post<RegResponse>('/api/register', {
       lastName,
       firstName,

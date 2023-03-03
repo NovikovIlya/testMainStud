@@ -1,29 +1,18 @@
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
+import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Form, Input, Typography } from "antd";
+import { Link } from "react-router-dom";
 
-import styles from "./Registration.module.scss";
+import styles from "./Login.module.scss";
 import CircleSVG from "../../assets/svg/CircleSVG";
-import CloseSVG from "../../assets/svg/CloseSVG";
 
 const { Title } = Typography;
 
-export const Registration: FC = () => {
+export const Login: FC = () => {
   const onFinish = (values: any) => {
     console.log("Received values of form: ", values);
   };
-  const [data, setData] = useState();
 
-  useEffect(() => {
-    // fetch data
-    const dataFetch = async () => {
-      const data = await fetch("https://jsonplaceholder.typicode.com/users/1");
-      console.log(data);
-
-      // set state when the data received
-    };
-
-    dataFetch();
-  }, []);
   return (
     <div className={styles.main}>
       <div className={styles.svg}>
@@ -40,30 +29,10 @@ export const Registration: FC = () => {
             <span>EN </span>
             <span className={styles.select}>РУС</span>
           </div>
-          <CloseSVG />
         </div>
 
-        <Title className={styles.title}>Регистрация</Title>
+        <Title className={styles.title}>Авторизация</Title>
 
-        <Form.Item
-          name="surname"
-          rules={[
-            { type: "string" },
-            { required: true, message: "Please input your Surname!" },
-          ]}
-        >
-          <Input size="large" placeholder="Фамилия" />
-        </Form.Item>
-
-        <Form.Item
-          name="name"
-          rules={[
-            { type: "string" },
-            { required: true, message: "Please input your Name!" },
-          ]}
-        >
-          <Input size="large" placeholder="Имя" />
-        </Form.Item>
         <Form.Item
           name="username"
           rules={[
@@ -71,20 +40,36 @@ export const Registration: FC = () => {
             { required: true, message: "Please input your Email!" },
           ]}
         >
-          <Input size="large" placeholder="Логин / Email" />
+          <Input
+            prefix={<UserOutlined />}
+            size="large"
+            placeholder="Логин / Email"
+            className={styles.test}
+          />
         </Form.Item>
 
         <Form.Item
           name="password"
           rules={[{ required: true, message: "Please input your Password!" }]}
         >
-          <Input size="large" type="password" placeholder="Пароль" />
+          <Input
+            prefix={<LockOutlined />}
+            size="large"
+            type="password"
+            placeholder="Пароль"
+          />
         </Form.Item>
+
+        <Link to={""}>Не помню пароль</Link>
+
         <Form.Item>
           <div className={styles.buttons}>
             <Button size="large" type="primary" htmlType="submit">
               Войти
             </Button>
+            <span>
+              Нет профиля? <Link to="/registration">Зарегистрируйтесь</Link>
+            </span>
           </div>
         </Form.Item>
       </Form>

@@ -1,11 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./src/**/*.{js,jsx,ts,tsx}"],
+  content: ["./src/**/*.{js,jsx,ts,tsx,scss}"],
   theme: {
     extend: {
-      screens: {
-        MobileScreen: { raw: "(max-width: 617px)" },
-      },
       colors: {
         EllipseColor: "#7fc3e5",
         bluekfu: "#1677ff",

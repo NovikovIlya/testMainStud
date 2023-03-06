@@ -1,29 +1,38 @@
 .main {
-  @apply flex flex-col text-base;
-  .univer {
-    @apply text-start text-base text-gray-500 font-bold w-[246px] mt-[15px] ml-[80px] mb-[15px];
-  }
+  @apply flex flex-col text-base mt-[30px];
   .loginForm {
     @apply max-w-[508.91px] pl-[175px] min-w-[550px];
     .title {
       @apply text-2xl text-start mb-[20px] font-bold;
     }
+    .switcher {
+      @apply flex items-center justify-center h-[50px];
+      label {
+        @apply w-[186px] flex items-center justify-start h-[50px] shadow;
+      }
+    }
     input {
-      @apply px-5 py-3;
+      @apply px-5 py-3 shadow;
     }
     p {
       @apply text-gray-d9;
     }
     .password {
-      @apply m-0;
+      @apply mb-1;
+    }
+    .passwordText {
+      @apply mb-4 text-xs;
     }
     .buttons {
       @apply flex flex-col text-base;
+      button {
+        @apply shadow h-[50px];
+      }
       span {
         @apply text-center text-base;
       }
       p {
-        @apply text-sm text-start my-5;
+        @apply text-xs text-start my-5;
       }
     }
   }

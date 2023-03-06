@@ -11,28 +11,24 @@ import {
 
 import styles from "./Registration.module.scss";
 import { Link } from "react-router-dom";
-import { CheckboxChangeEvent } from "antd/es/checkbox";
+import type { CheckboxChangeEvent } from "antd/es/checkbox";
 
 const { Title } = Typography;
 
 export const Registration: FC = () => {
-  const [value, setValue] = useState(1);
+  const [value, setValue] = useState(0);
+  const [check, setCheck] = useState(false);
 
-  const onChangeRadio = (e: RadioChangeEvent) => {
-    console.log("radio checked", e.target.value);
-    setValue(e.target.value);
-  };
+  const onChangeRadio = (e: RadioChangeEvent) => setValue(e.target.value);
 
-  const onChangeCheckbox = (e: CheckboxChangeEvent) => {
-    console.log(`checked = ${e.target.checked}`);
-  };
+  const onChangeCheckbox = (e: CheckboxChangeEvent) =>
+    setCheck(e.target.checked);
 
   const onFinish = (values: any) => {
-    console.log("Received values of form: ", values);
+    if (check) console.log("Received values of form: ", values);
   };
   return (
     <div className={styles.main}>
-      <h3 className={styles.univer}>ИАС “Электронный университет”</h3>
       <Form
         name="login"
         className={styles.loginForm}
@@ -41,9 +37,15 @@ export const Registration: FC = () => {
       >
         <Form.Item>
           <Title className={styles.title}>Регистрация</Title>
-          <Radio.Group onChange={onChangeRadio} value={value}>
-            <Radio value={1}>По номеру телефона</Radio>
-            <Radio value={2}>По Email</Radio>
+          <Radio.Group
+            onChange={onChangeRadio}
+            defaultValue={0}
+            size="large"
+            className={styles.switcher}
+            buttonStyle="solid"
+          >
+            <Radio.Button value={0}>По Email</Radio.Button>
+            <Radio.Button value={1}>По номеру телефона</Radio.Button>
           </Radio.Group>
         </Form.Item>
         <Form.Item
@@ -65,15 +67,27 @@ export const Registration: FC = () => {
         >
           <Input size="large" placeholder="Имя" />
         </Form.Item>
-        <Form.Item
-          name="username"
-          rules={[
-            { type: "email" },
-            { required: true, message: "Please input your Email!" },
-          ]}
-        >
-          <Input size="large" placeholder="Логин / Email" />
-        </Form.Item>
+        {value ? (
+          <Form.Item
+            name="phone"
+            rules={[
+              { type: "string" },
+              { required: true, message: "Please input your Phone!" },
+            ]}
+          >
+            <Input size="large" type="tel" placeholder="Телефон" />
+          </Form.Item>
+        ) : (
+          <Form.Item
+            name="email"
+            rules={[
+              { type: "email" },
+              { required: true, message: "Please input your Email!" },
+            ]}
+          >
+            <Input size="large" placeholder="Электронная почта" />
+          </Form.Item>
+        )}
 
         <Form.Item
           className={styles.password}
@@ -82,13 +96,15 @@ export const Registration: FC = () => {
         >
           <Input size="large" type="password" placeholder="Пароль" />
         </Form.Item>
-        <p className={styles.password}>
+
+        <p className={styles.passwordText}>
           Пароль должен содержать от 8 символов, буквы верхнего и нижнего
           регистра, а также цифры
         </p>
+
         <Form.Item
           name="confirmPassword"
-          rules={[{ required: true, message: "Please input your Password!" }]}
+          rules={[{ required: true, message: "Please confirm your Password!" }]}
         >
           <Input size="large" type="password" placeholder="Повторите пароль" />
         </Form.Item>
@@ -98,7 +114,7 @@ export const Registration: FC = () => {
             <Button size="large" type="primary" htmlType="submit">
               Далее
             </Button>
-            <Checkbox onChange={onChangeCheckbox}>
+            <Checkbox onChange={onChangeCheckbox} checked={check}>
               <p>
                 Я принимаю пользовательское соглашение и даю разрешение порталу
                 КФУ на обработку моих персональных данных в соотвествии с
@@ -107,7 +123,7 @@ export const Registration: FC = () => {
               </p>
             </Checkbox>
             <span>
-              Уже есть профиль? <Link to="/to">Войдите</Link>
+              Уже есть профиль? <Link to="/login">Войдите</Link>
             </span>
           </div>
         </Form.Item>

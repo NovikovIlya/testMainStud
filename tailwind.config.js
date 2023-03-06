@@ -9,7 +9,7 @@ module.exports = {
       colors: {
         EllipseColor: "#7fc3e5",
         bluekfu: "#1677ff",
-        "gray-d9": "#d9d9d9",
+        "gray-d9": "#b9b9b9",
       },
     },
   },

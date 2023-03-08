@@ -1,11 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
-//import authReducer from './auth/reducer'
+import authReducer from "./auth/authReducer";
 import { useDispatch } from "react-redux";
 import logger from "redux-logger";
 
 export const store = configureStore({
   reducer: {
-    // auth: authReducer
+    auth: authReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(

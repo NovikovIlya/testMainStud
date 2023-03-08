@@ -5,12 +5,33 @@ import { Link } from "react-router-dom";
 
 import styles from "./Login.module.scss";
 import CircleSVG from "../../assets/svg/CircleSVG";
+import { ILoginRequest } from "../../api/auth/types";
+import { useAppDispatch } from "../../store";
+import { loginUser } from "../../store/auth/actionCreators";
+import axios from "axios";
 
 const { Title } = Typography;
 
 export const Login: FC = () => {
-  const onFinish = (values: any) => {
+  const dispatch = useAppDispatch();
+
+  async function name() {
+    const data = await fetch("http://localhost:8080/api/login", {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        username: "ayaz@gmail.com",
+        password: "ayaz2002",
+      }),
+    });
+    console.log("data", data);
+  }
+
+  const onFinish = (values: ILoginRequest) => {
     console.log("Received values of form: ", values);
+    name();
+    dispatch(loginUser({ ...values }));
   };
 
   return (

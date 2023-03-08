@@ -1,5 +1,5 @@
 export enum Endpoints {
-  Login = "/api/login",
-  Refresh = "/api/refresh/token",
-  Register = "/api/register",
+  Login = "http://localhost:8080/api/login",
+  Refresh = "http://localhost:8080/api/refresh/token",
+  Register = "http://localhost:8080/api/register",
 }

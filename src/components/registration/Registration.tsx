@@ -122,12 +122,15 @@ export const Registration: FC = () => {
                 данных”
               </p>
             </Checkbox>
-            <span>
-              Уже есть профиль?{" "}
-              <Link className={styles.link} to="/login">
-                Войдите
-              </Link>
-            </span>
+            <div className={styles.login}>
+              <span>
+                Уже есть профиль?{" "}
+                <Link className={styles.link} to="/login">
+                  Войдите
+                </Link>
+              </span>
+              <span className={styles.kpfu}>kpfu.ru</span>
+            </div>
           </div>
         </Form.Item>
       </Form>

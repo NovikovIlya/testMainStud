@@ -14,8 +14,11 @@
     input {
       @apply px-5 py-3 shadow;
     }
+    input::placeholder {
+      @apply text-black opacity-50;
+    }
     p {
-      @apply text-gray-d9;
+      @apply text-[#808080];
     }
     .password {
       @apply mb-1;
@@ -33,6 +36,12 @@
       }
       .link:hover {
         @apply text-[#0E1F81];
+      }
+      .login {
+        @apply flex items-center justify-between;
+        .kpfu {
+          @apply font-bold opacity-50;
+        }
       }
       span {
         @apply text-center text-base;

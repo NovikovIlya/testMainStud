@@ -14,6 +14,9 @@
     input {
       @apply px-5 py-3 shadow;
     }
+    input::placeholder {
+      @apply text-black opacity-50;
+    }
     .password {
       @apply mb-1;
     }

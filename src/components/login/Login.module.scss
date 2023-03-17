@@ -30,6 +30,9 @@
       }
       .gos {
         @apply mt-0 mb-10 flex h-[50px] w-full items-center justify-center bg-white;
+        svg {
+          @apply ml-[15px];
+        }
       }
       .link {
         @apply text-base text-[#004EC2] opacity-100;

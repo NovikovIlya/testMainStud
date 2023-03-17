@@ -90,11 +90,16 @@ export const Registration: FC = () => {
         )}
 
         <Form.Item
-          className={styles.password}
           name="password"
+          className={styles.password}
           rules={[{ required: true, message: "Please input your Password!" }]}
         >
-          <Input size="large" type="password" placeholder="Пароль" />
+          <Input.Password
+            className={styles.password}
+            size="large"
+            type="password"
+            placeholder="Пароль"
+          />
         </Form.Item>
 
         <p className={styles.passwordText}>
@@ -106,7 +111,12 @@ export const Registration: FC = () => {
           name="confirmPassword"
           rules={[{ required: true, message: "Please confirm your Password!" }]}
         >
-          <Input size="large" type="password" placeholder="Повторите пароль" />
+          <Input.Password
+            size="large"
+            className={styles.password}
+            type="password"
+            placeholder="Повторите пароль"
+          />
         </Form.Item>
 
         <Form.Item>

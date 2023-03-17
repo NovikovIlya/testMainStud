@@ -1,19 +1,20 @@
-import { FC } from "react";
-import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Form, Input, Typography } from "antd";
+import { FC, useState } from "react";
+import { Button, Form, Input, Radio, RadioChangeEvent, Typography } from "antd";
 import { Link } from "react-router-dom";
 
 import styles from "./Login.module.scss";
-import CircleSVG from "../../assets/svg/CircleSVG";
 import { ILoginRequest } from "../../api/auth/types";
 import { useAppDispatch } from "../../store";
 import { loginUser } from "../../store/auth/actionCreators";
-import axios from "axios";
+import { GosSvg } from "./GosSvg";
 
 const { Title } = Typography;
 
 export const Login: FC = () => {
   const dispatch = useAppDispatch();
+  const [value, setValue] = useState(0);
+
+  const onChangeRadio = (e: RadioChangeEvent) => setValue(e.target.value);
 
   async function name() {
     const data = await fetch("http://localhost:8080/api/login", {
@@ -36,60 +37,87 @@ export const Login: FC = () => {
 
   return (
     <div className={styles.main}>
-      <div className={styles.svg}>
-        <CircleSVG />
-      </div>
       <Form
         name="login"
         className={styles.loginForm}
         initialValues={{ remember: true }}
         onFinish={onFinish}
       >
-        <div className={styles.wrapper}>
-          <div className={styles.switcher}>
-            <span>EN </span>
-            <span className={styles.select}>РУС</span>
-          </div>
-        </div>
-
-        <Title className={styles.title}>Авторизация</Title>
-
-        <Form.Item
-          name="username"
-          rules={[
-            { type: "email" },
-            { required: true, message: "Please input your Email!" },
-          ]}
-        >
-          <Input
-            prefix={<UserOutlined />}
+        <Form.Item>
+          <Title className={styles.title}>Авторизация</Title>
+          <Radio.Group
+            onChange={onChangeRadio}
+            defaultValue={0}
             size="large"
-            placeholder="Логин / Email"
-            className={styles.test}
-          />
+            className={styles.switcher}
+            buttonStyle="solid"
+          >
+            <Radio.Button value={0}>По Email</Radio.Button>
+            <Radio.Button value={1}>По номеру телефона</Radio.Button>
+          </Radio.Group>
         </Form.Item>
 
+        {value ? (
+          <Form.Item
+            name="phone"
+            rules={[
+              { type: "string" },
+              { required: true, message: "Please input your Phone!" },
+            ]}
+          >
+            <Input size="large" type="tel" placeholder="Телефон" />
+          </Form.Item>
+        ) : (
+          <Form.Item
+            name="email"
+            rules={[
+              { type: "email" },
+              { required: true, message: "Please input your Email!" },
+            ]}
+          >
+            <Input size="large" placeholder="Email" />
+          </Form.Item>
+        )}
+
         <Form.Item
+          className={styles.password}
           name="password"
           rules={[{ required: true, message: "Please input your Password!" }]}
         >
-          <Input
-            prefix={<LockOutlined />}
-            size="large"
-            type="password"
-            placeholder="Пароль"
-          />
+          <Input size="large" type="password" placeholder="Пароль" />
         </Form.Item>
 
-        <Link to={""}>Не помню пароль</Link>
+        <p className={styles.forgot}>Не помню пароль</p>
 
         <Form.Item>
           <div className={styles.buttons}>
-            <Button size="large" type="primary" htmlType="submit">
+            <Button
+              className={styles.login}
+              size="large"
+              type="primary"
+              htmlType="submit"
+            >
               Войти
             </Button>
-            <span>
-              Нет профиля? <Link to="/registration">Зарегистрируйтесь</Link>
+
+            <Button
+              className={styles.gos}
+              onClick={(e) => {
+                e.preventDefault();
+              }}
+              size="large"
+              type="primary"
+              ghost
+              htmlType="submit"
+            >
+              Войти через
+              <GosSvg />
+            </Button>
+            <span className={styles.reg}>
+              Нет профиля?{" "}
+              <Link className={styles.link} to="/registration">
+                Зарегистрируйтесь
+              </Link>
             </span>
           </div>
         </Form.Item>

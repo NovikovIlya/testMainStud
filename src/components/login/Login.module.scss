@@ -1,28 +1,41 @@
 .main {
-  @apply flex justify-center text-base;
+  @apply mt-[100px] flex flex-col text-base;
   .loginForm {
-    @apply max-w-[508.91px] pb-[54px] opacity-100;
+    @apply min-w-[550px] max-w-[508.91px] pl-[175px] opacity-100;
     .title {
-      @apply mb-[32px] text-center text-2xl font-bold;
+      @apply mb-[20px] text-start text-2xl font-bold;
+    }
+    .switcher {
+      @apply flex h-[50px] items-center justify-center;
+      label {
+        @apply flex h-[50px] w-[186px] items-center justify-start shadow;
+      }
+    }
+    input {
+      @apply px-5 py-3 shadow;
+    }
+    .password {
+      @apply mb-1;
+    }
+    .forgot {
+      @apply mt-5 w-fit cursor-pointer underline;
     }
     .buttons {
-      @apply mt-[27px] flex  min-w-[374px] flex-col gap-[66px]  text-base;
+      @apply flex flex-col text-base;
+      .login {
+        @apply mb-5 mt-[30px] h-[50px]  shadow-lg;
+      }
+      .gos {
+        @apply mt-0 mb-10 flex h-[50px] w-full items-center justify-center bg-white;
+      }
+      .link {
+        @apply text-[#004EC2];
+      }
+      .link:hover {
+        @apply text-[#0E1F81];
+      }
       span {
         @apply text-center text-base;
-      }
-    }
-    .wrapper {
-      @apply mb-[56px] mt-[23px] flex justify-between;
-      .switcher {
-        .select {
-          @apply font-bold text-sky-600;
-        }
-        span {
-          @apply cursor-pointer;
-        }
-      }
-      svg {
-        @apply cursor-pointer;
       }
     }
   }

@@ -1,5 +1,5 @@
 .main {
-  @apply mt-[30px] flex flex-col text-base;
+  @apply mt-[100px] flex flex-col text-base;
   .loginForm {
     @apply min-w-[550px] max-w-[508.91px] pl-[175px] opacity-100;
     .title {
@@ -27,6 +27,12 @@
       @apply flex flex-col text-base;
       button {
         @apply h-[50px] shadow-lg;
+      }
+      .link {
+        @apply text-[#004EC2];
+      }
+      .link:hover {
+        @apply text-[#0E1F81];
       }
       span {
         @apply text-center text-base;

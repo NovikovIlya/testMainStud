@@ -123,7 +123,10 @@ export const Registration: FC = () => {
               </p>
             </Checkbox>
             <span>
-              Уже есть профиль? <Link to="/login">Войдите</Link>
+              Уже есть профиль?{" "}
+              <Link className={styles.link} to="/login">
+                Войдите
+              </Link>
             </span>
           </div>
         </Form.Item>

@@ -21,7 +21,7 @@
       @apply text-black opacity-50;
     }
     .password {
-      @apply mb-1 max-h-[50px];
+      @apply mb-1 max-h-[50px] opacity-100;
       input {
         @apply px-2 shadow-none;
       }

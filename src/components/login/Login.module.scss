@@ -18,7 +18,7 @@
       @apply text-black opacity-50;
     }
     .password {
-      @apply mb-0 max-h-[50px];
+      @apply mb-0 max-h-[50px] opacity-100;
       input {
         @apply px-2 shadow-none;
       }
@@ -34,7 +34,7 @@
       .gos {
         @apply mt-0 mb-10 flex h-[50px] w-full items-center justify-center bg-white;
         svg {
-          @apply ml-[15px];
+          @apply ml-[15px] opacity-100;
         }
       }
       .link {

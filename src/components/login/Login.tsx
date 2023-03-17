@@ -7,12 +7,14 @@ import { ILoginRequest } from "../../api/auth/types";
 import { useAppDispatch } from "../../store";
 import { loginUser } from "../../store/auth/actionCreators";
 import { GosSvg } from "./GosSvg";
+import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 
 const { Title } = Typography;
 
 export const Login: FC = () => {
   const dispatch = useAppDispatch();
   const [value, setValue] = useState(0);
+  const [passwordVisible, setPasswordVisible] = useState(false);
 
   const onChangeRadio = (e: RadioChangeEvent) => setValue(e.target.value);
 
@@ -80,15 +82,18 @@ export const Login: FC = () => {
         )}
 
         <Form.Item
-          className={styles.password}
           name="password"
           rules={[{ required: true, message: "Please input your Password!" }]}
         >
-          <Input size="large" type="password" placeholder="Пароль" />
+          <Input.Password
+            className={styles.password}
+            size="large"
+            type="password"
+            placeholder="Пароль"
+          />
         </Form.Item>
 
         <p className={styles.forgot}>Не помню пароль</p>
-
         <Form.Item>
           <div className={styles.buttons}>
             <Button

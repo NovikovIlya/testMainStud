@@ -18,7 +18,10 @@
       @apply text-black opacity-50;
     }
     .password {
-      @apply mb-1;
+      @apply max-h-[50px];
+      input {
+        @apply px-2 shadow-none;
+      }
     }
     .forgot {
       @apply mt-5 w-fit cursor-pointer underline;

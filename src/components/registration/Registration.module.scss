@@ -18,7 +18,7 @@
       @apply text-black opacity-50;
     }
     p {
-      @apply text-[#808080];
+      @apply text-black opacity-50;
     }
     .password {
       @apply mb-1;
@@ -32,10 +32,10 @@
         @apply h-[50px] shadow-lg;
       }
       .link {
-        @apply text-[#004EC2];
+        @apply text-base text-[#004EC2] opacity-100;
       }
       .link:hover {
-        @apply text-[#0E1F81];
+        @apply text-base text-[#0E1F81] opacity-100;
       }
       .login {
         @apply flex items-center justify-between;

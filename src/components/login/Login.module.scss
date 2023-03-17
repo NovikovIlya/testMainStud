@@ -26,16 +26,16 @@
     .buttons {
       @apply flex flex-col text-base;
       .login {
-        @apply mb-5 mt-[30px] h-[50px]  shadow-lg;
+        @apply mb-5 mt-[30px] h-[50px] shadow-lg;
       }
       .gos {
         @apply mt-0 mb-10 flex h-[50px] w-full items-center justify-center bg-white;
       }
       .link {
-        @apply text-[#004EC2];
+        @apply text-base text-[#004EC2] opacity-100;
       }
       .link:hover {
-        @apply text-[#0E1F81];
+        @apply text-base text-[#0E1F81] opacity-100;
       }
       span {
         @apply text-center text-base;

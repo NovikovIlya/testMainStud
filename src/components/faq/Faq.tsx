@@ -1,4 +1,3 @@
-import { MessageFilled } from '@ant-design/icons'
 import { FC, useState } from 'react'
 
 import { DrawerEmail } from './Drawer'

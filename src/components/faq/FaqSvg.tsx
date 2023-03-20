@@ -13,8 +13,8 @@ export const FaqSvg = () => {
 				<circle cx="49" cy="44" r="31" fill="#004EC2" />
 			</g>
 			<path
-				fill-rule="evenodd"
-				clip-rule="evenodd"
+				fillRule="evenodd"
+				clipRule="evenodd"
 				d="M54.4056 32.145H59.4223C60.8991 32.145 62.0933 33.3444 62.0933 34.8188V58.5164C62.0933 59.7087 60.6518 60.3013 59.811 59.4617L56.4173 53.9518H38.5778C37.101 53.9518 35.9069 52.7596 35.9069 51.2851V46.2761H35.9636L35.9141 46.269V34.8188C35.907 33.3444 37.1012 32.145 38.5779 32.145H54.4055H54.4056Z"
 				fill="white"
 			/>
@@ -26,9 +26,9 @@ export const FaqSvg = () => {
 					width="102"
 					height="102"
 					filterUnits="userSpaceOnUse"
-					color-interpolation-filters="sRGB"
+					colorInterpolationFilters="sRGB"
 				>
-					<feFlood flood-opacity="0" result="BackgroundImageFix" />
+					<feFlood floodOpacity="0" result="BackgroundImageFix" />
 					<feColorMatrix
 						in="SourceAlpha"
 						type="matrix"

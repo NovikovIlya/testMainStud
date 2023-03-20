@@ -1,5 +1,5 @@
 .main {
-	@apply mt-[100px] flex flex-col text-base;
+	@apply mt-[100px] flex flex-row justify-between text-base;
 	.loginForm {
 		@apply min-w-[550px] max-w-[508.91px] pl-[175px] opacity-100;
 		.title {
@@ -21,7 +21,7 @@
 			@apply text-black opacity-50;
 		}
 		.password {
-			@apply mb-1 max-h-[50px] opacity-100;
+			@apply mb-1 max-h-[50px] opacity-100 shadow;
 			input {
 				@apply px-2 shadow-none;
 			}

@@ -11,6 +11,8 @@ import type { CheckboxChangeEvent } from 'antd/es/checkbox'
 import { FC, useState } from 'react'
 import { Link } from 'react-router-dom'
 
+import { Faq } from '../faq/Faq'
+
 import styles from './Registration.module.scss'
 
 const { Title } = Typography
@@ -144,6 +146,7 @@ export const Registration: FC = () => {
 					</div>
 				</Form.Item>
 			</Form>
+			<Faq />
 		</div>
 	)
 }

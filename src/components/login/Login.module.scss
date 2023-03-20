@@ -1,51 +1,51 @@
 .main {
-  @apply mt-[100px] flex flex-col text-base;
-  .loginForm {
-    @apply min-w-[550px] max-w-[508.91px] pl-[175px] opacity-100;
-    .title {
-      @apply mb-[20px] text-start text-2xl font-bold;
-    }
-    .switcher {
-      @apply flex h-[50px] items-center justify-center;
-      label {
-        @apply flex h-[50px] w-[186px] items-center justify-start shadow;
-      }
-    }
-    input {
-      @apply px-5 py-3 shadow;
-    }
-    input::placeholder {
-      @apply text-black opacity-50;
-    }
-    .password {
-      @apply mb-0 max-h-[50px] opacity-100;
-      input {
-        @apply px-2 shadow-none;
-      }
-    }
-    .forgot {
-      @apply mt-5 w-fit cursor-pointer underline;
-    }
-    .buttons {
-      @apply flex flex-col text-base;
-      .login {
-        @apply mb-5 mt-[30px] h-[50px] shadow-lg;
-      }
-      .gos {
-        @apply mt-0 mb-10 flex h-[50px] w-full items-center justify-center bg-white;
-        svg {
-          @apply ml-[15px] opacity-100;
-        }
-      }
-      .link {
-        @apply text-base text-[#004EC2] opacity-100;
-      }
-      .link:hover {
-        @apply text-base text-[#0E1F81] opacity-100;
-      }
-      span {
-        @apply text-center text-base;
-      }
-    }
-  }
+	@apply mt-[100px] flex flex-row justify-between text-base;
+	.loginForm {
+		@apply min-w-[550px] max-w-[508.91px] pl-[175px] opacity-100;
+		.title {
+			@apply mb-[20px] text-start text-2xl font-bold;
+		}
+		.switcher {
+			@apply flex h-[50px] items-center justify-center;
+			label {
+				@apply flex h-[50px] w-[186px] items-center justify-start shadow;
+			}
+		}
+		input {
+			@apply px-5 py-3 shadow;
+		}
+		input::placeholder {
+			@apply text-black opacity-50;
+		}
+		.password {
+			@apply mb-0 max-h-[50px] opacity-100;
+			input {
+				@apply px-2 shadow-none;
+			}
+		}
+		.forgot {
+			@apply mt-5 w-fit cursor-pointer underline;
+		}
+		.buttons {
+			@apply flex flex-col text-base;
+			.login {
+				@apply mb-5 mt-[30px] h-[50px] shadow-lg;
+			}
+			.gos {
+				@apply mt-0 mb-10 flex h-[50px] w-full items-center justify-center bg-white;
+				svg {
+					@apply ml-[15px] opacity-100;
+				}
+			}
+			.link {
+				@apply text-base text-[#004EC2] opacity-100;
+			}
+			.link:hover {
+				@apply text-base text-[#0E1F81] opacity-100;
+			}
+			span {
+				@apply text-center text-base;
+			}
+		}
+	}
 }

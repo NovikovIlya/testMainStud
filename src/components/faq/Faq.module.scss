@@ -1,0 +1,9 @@
+.img {
+	@apply pr-[175px];
+}
+.faq {
+	@apply flex justify-end pr-[50px];
+	svg {
+		@apply cursor-pointer;
+	}
+}

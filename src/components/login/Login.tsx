@@ -124,6 +124,7 @@ export const Login: FC = () => {
 								Зарегистрируйтесь
 							</Link>
 						</span>
+						<span className={styles.kpfu}>kpfu.ru</span>
 					</div>
 				</Form.Item>
 			</Form>

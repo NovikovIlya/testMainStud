@@ -1,29 +1,62 @@
-import { Button, Collapse, Divider, Drawer, Typography } from 'antd'
+import {
+	Button,
+	Collapse,
+	Divider,
+	Drawer,
+	Form,
+	Input,
+	Typography,
+	Upload,
+	message
+} from 'antd'
+import type { UploadProps } from 'antd'
 import { FC } from 'react'
 
 import './Drawer.scss'
-import { TitleFaq } from './Title'
+import { TitleEmail } from './TitleEmail'
+import { TitleFaq } from './TitleFaq'
 
 interface IDrawerPros {
 	open: boolean
 	onClose: () => void
+	onChildrenDrawerClose: () => void
+	showChildrenDrawer: () => void
+	childrenDrawer: boolean
 }
 
 const { Panel } = Collapse
 const { Text } = Typography
 
+const props: UploadProps = {
+	beforeUpload: file => {
+		const isSize = file.size > 4096
+		if (!isSize) {
+			message.error(`${file.name} file is too big`)
+		}
+		return isSize || Upload.LIST_IGNORE
+	},
+	onChange: info => {
+		console.log(info.fileList)
+	}
+}
 const text = `
   A dog is a type of domesticated animal.
   Known for its loyalty and faithfulness,
   it can be found as a welcome guest in many households across the world.
 `
 
-export const DrawerEmail: FC<IDrawerPros> = ({ open, onClose }) => {
+export const DrawerEmail: FC<IDrawerPros> = ({
+	open,
+	onClose,
+	childrenDrawer,
+	onChildrenDrawerClose,
+	showChildrenDrawer
+}) => {
 	return (
 		<>
 			<Drawer
-				title={<TitleFaq />}
-				size="default"
+				title={<TitleFaq showChildrenDrawer={showChildrenDrawer} />}
+				width={450}
 				onClose={onClose}
 				closable={false}
 				open={open}
@@ -68,6 +101,7 @@ export const DrawerEmail: FC<IDrawerPros> = ({ open, onClose }) => {
 				</Collapse>
 				<Divider />
 				<Button
+					onClick={showChildrenDrawer}
 					className="flex items-center w-full gap-2 mb-3"
 					icon={
 						<svg
@@ -112,15 +146,98 @@ export const DrawerEmail: FC<IDrawerPros> = ({ open, onClose }) => {
 					Позвонить
 				</Button>
 				<Divider />
-				<div className="flex justify-center items-center">
+				<div className="flex justify-center items-center text-lg">
 					<Text strong className="text-black opacity-50 cursor-pointer">
 						deshelp@kpfu.ru
 					</Text>
-					<Divider type="vertical" />
+					<Divider className=" h-[25px]" type="vertical" />
 					<Text strong className="text-black opacity-50 cursor-pointer">
 						+7 (843) 206-50-84
 					</Text>
 				</div>
+				<Drawer
+					title={<TitleEmail />}
+					width={320}
+					closable={false}
+					onClose={onChildrenDrawerClose}
+					open={childrenDrawer}
+					headerStyle={{ textAlign: 'center' }}
+				>
+					<Form layout="vertical" hideRequiredMark>
+						<Form.Item
+							name="email"
+							rules={[
+								{ type: 'email' },
+								{ required: true, message: 'Please enter user email' }
+							]}
+						>
+							<Input placeholder="Email" size="large" />
+						</Form.Item>
+
+						<Form.Item
+							name="header"
+							rules={[
+								{ type: 'string' },
+								{ required: true, message: 'Please enter header' }
+							]}
+						>
+							<Input placeholder="Заголовок" size="large" />
+						</Form.Item>
+
+						<Form.Item
+							name="description"
+							rules={[
+								{ type: 'string' },
+								{
+									required: true,
+									message: 'please enter describe the problem'
+								}
+							]}
+						>
+							<Input.TextArea rows={4} placeholder="Текст" />
+						</Form.Item>
+
+						<Upload {...props}>
+							<Button
+								type="text"
+								icon={
+									<svg
+										className="mr-1.5"
+										width="14"
+										height="11"
+										viewBox="0 0 14 11"
+										fill="none"
+										xmlns="http://www.w3.org/2000/svg"
+									>
+										<path
+											d="M7.36116 5.46385L5.7116 6.84683C5.49413 7.02862 5.32158 7.2446 5.20385 7.4824C5.08611 7.7202 5.02551 7.97514 5.02551 8.23261C5.02551 8.49008 5.08611 8.74502 5.20385 8.98282C5.32158 9.22062 5.49413 9.4366 5.7116 9.61839C5.92843 9.80072 6.18605 9.94538 6.46968 10.0441C6.75332 10.1428 7.0574 10.1936 7.3645 10.1936C7.6716 10.1936 7.97568 10.1428 8.25932 10.0441C8.54295 9.94538 8.80057 9.80072 9.0174 9.61839L11.6153 7.44034C12.491 6.70479 12.9828 5.70801 12.9828 4.66877C12.9828 3.62954 12.491 2.63276 11.6153 1.89721C10.738 1.16306 9.54905 0.750732 8.30949 0.750732C7.06994 0.750732 5.88102 1.16306 5.00369 1.89721L2.17206 4.27124C0.609315 5.58143 0.609315 7.70909 2.17206 9.02488"
+											stroke="#004EC2"
+											strokeWidth="1.5"
+											strokeLinecap="round"
+											strokeLinejoin="round"
+										/>
+									</svg>
+								}
+							>
+								Прикрепить файл
+							</Button>
+						</Upload>
+						<Form.Item>
+							<Button
+								className="w-full mt-[30px]"
+								size="large"
+								type="primary"
+								htmlType="submit"
+							>
+								Отправить письмо
+							</Button>
+							<Text className="text-black opacity-50 cursor-pointer flex mt-[10px] text-center">
+								Отправляя письмо, вы соглашаетесь на обработку персональных
+								данных
+							</Text>
+						</Form.Item>
+					</Form>
+				</Drawer>
 			</Drawer>
 		</>
 	)

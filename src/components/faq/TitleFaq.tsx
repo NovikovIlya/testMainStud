@@ -1,11 +1,15 @@
 import { Typography } from 'antd'
-import React from 'react'
+import { FC } from 'react'
+
+interface ITitleFaqProps {
+	showChildrenDrawer: () => void
+}
 
 const { Title, Text } = Typography
 
-export const TitleFaq = () => {
+export const TitleFaq: FC<ITitleFaqProps> = ({ showChildrenDrawer }) => {
 	return (
-		<div className="shadow-md pb-[25px] rounded-b">
+		<div className="shadow pb-[25px] rounded-b">
 			<Title style={{ marginBottom: 5, marginTop: 20 }} level={3}>
 				Центр поддержки
 			</Title>
@@ -14,6 +18,7 @@ export const TitleFaq = () => {
 			</Text>
 			<div className="flex justify-center gap-5 mt-[15px]">
 				<svg
+					onClick={showChildrenDrawer}
 					className="cursor-pointer"
 					width="58"
 					height="57"

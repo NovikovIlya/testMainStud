@@ -10,7 +10,6 @@ import {
 	message
 } from 'antd'
 import type { UploadProps } from 'antd'
-import Link from 'antd/es/typography/Link'
 import { FC } from 'react'
 
 import './Drawer.scss'
@@ -26,7 +25,7 @@ interface IDrawerPros {
 }
 
 const { Panel } = Collapse
-const { Text } = Typography
+const { Text, Link } = Typography
 
 const props: UploadProps = {
 	beforeUpload: file => {

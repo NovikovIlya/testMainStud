@@ -1,10 +1,9 @@
 import { Typography } from 'antd'
-import React from 'react'
 
-const { Title } = Typography
+const { Link } = Typography
 export const BackMainPage = () => {
 	return (
-		<div className="flex items-center gap-[10px] my-[50px] ml-[50px]">
+		<div className=" flex w-fit items-center gap-[10px] my-[50px] ml-[50px] cursor-pointer">
 			<svg
 				width="8"
 				height="11"
@@ -15,15 +14,15 @@ export const BackMainPage = () => {
 				<path
 					d="M6.69336 1L0.999929 5.5C3.22335 7.25736 4.46994 8.24264 6.69336 10"
 					stroke="black"
-					stroke-width="2"
-					stroke-linecap="round"
-					stroke-linejoin="round"
+					strokeWidth="2"
+					strokeLinecap="round"
+					strokeLinejoin="round"
 				/>
 			</svg>
 
-			<Title style={{ margin: 0 }} level={5}>
+			<Link className="text-base " style={{ color: 'black' }} href="">
 				Назад на главную
-			</Title>
+			</Link>
 		</div>
 	)
 }

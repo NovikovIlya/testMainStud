@@ -2,7 +2,8 @@ import { Button, Form, Input, Radio, RadioChangeEvent, Typography } from 'antd'
 import { FC, useState } from 'react'
 import { Link } from 'react-router-dom'
 
-import { ILoginRequest } from '../../api/auth/types'
+import { IAuthRequest } from '../../api/auth/types'
+// import { ILoginRequest } from '../../api/auth/types'
 import { useAppDispatch } from '../../store'
 import { loginUser } from '../../store/auth/actionCreators'
 import { BackMainPage } from '../back-main-page/BackMainPage'
@@ -19,23 +20,24 @@ export const Login: FC = () => {
 
 	const onChangeRadio = (e: RadioChangeEvent) => setValue(e.target.value)
 
-	async function name() {
-		const data = await fetch('http://localhost:8080/api/login', {
-			method: 'POST',
-			mode: 'no-cors',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({
-				username: 'ayaz@gmail.com',
-				password: 'ayaz2002'
-			})
-		})
-		console.log('data', data)
-	}
+	// async function name() {
+	// 	const data = await fetch('http://localhost:8080/api/login', {
+	// 		method: 'POST',
+	// 		mode: 'no-cors',
+	// 		headers: { 'Content-Type': 'application/json' },
+	// 		body: JSON.stringify({
+	// 			username: 'ayaz@gmail.com',
+	// 			password: 'ayaz2002'
+	// 		})
+	// 	})
+	// 	console.log('data', data)
+	// }
 
-	const onFinish = (values: ILoginRequest) => {
+	const onFinish = (values: { email: string; password: string }) => {
 		console.log('Received values of form: ', values)
-		name()
-		dispatch(loginUser({ ...values }))
+		dispatch(loginUser({ username: values.email, password: values.password }))
+		// name()
+		// dispatch(loginUser({ ...values }))
 	}
 
 	return (

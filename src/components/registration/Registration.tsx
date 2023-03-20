@@ -8,9 +8,15 @@ import {
 	Typography
 } from 'antd'
 import type { CheckboxChangeEvent } from 'antd/es/checkbox'
+import classNames from 'classnames'
 import { FC, useState } from 'react'
+import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
+import { IRegRequest, RegFormData } from '../../api/auth/types'
+import { useAppDispatch } from '../../store'
+import { RootState } from '../../store'
+import { regUser } from '../../store/auth/actionCreators'
 import { BackMainPage } from '../back-main-page/BackMainPage'
 import { Faq } from '../faq/Faq'
 
@@ -19,21 +25,63 @@ import styles from './Registration.module.scss'
 const { Title } = Typography
 
 export const Registration: FC = () => {
+	const isLoading = useSelector(
+		(state: RootState) => state.auth.regData.isLoading
+	)
+	const error = useSelector((state: RootState) => state.auth.regData.error)
+	const dispatch = useAppDispatch()
 	const [value, setValue] = useState(0)
 	const [check, setCheck] = useState(false)
+
+	let new_user: IRegRequest = {
+		lastName: '',
+		firstName: '',
+		middleName: null,
+		phone: null,
+		password: '',
+		email: null
+	}
 
 	const onChangeRadio = (e: RadioChangeEvent) => setValue(e.target.value)
 
 	const onChangeCheckbox = (e: CheckboxChangeEvent) =>
 		setCheck(e.target.checked)
 
-	const onFinish = (values: any) => {
-		if (check) console.log('Received values of form: ', values)
+	const onFinish = (values: RegFormData) => {
+		if (values?.phone) {
+			dispatch(
+				regUser({
+					...new_user,
+					lastName: values.surname,
+					firstName: values.name,
+					phone: values.phone,
+					password: values.password
+				})
+			)
+		}
+		if (values?.email) {
+			dispatch(
+				regUser({
+					...new_user,
+					lastName: values.surname,
+					firstName: values.name,
+					email: values.email,
+					password: values.password
+				})
+			)
+		}
+		//if (check) console.log('Received values of form: ', values)
 	}
 	return (
-		<div>
+		<>
 			<BackMainPage />
-			<div className={styles.main}>
+			<div
+				className={
+					!isLoading
+						? styles.main
+						: classNames(styles.main, 'bg-gray-600 animate-pulse opacity-30')
+				}
+			>
 				<Form
 					name="login"
 					className={styles.loginForm}
@@ -55,6 +103,7 @@ export const Registration: FC = () => {
 					</Form.Item>
 					<Form.Item
 						name="surname"
+						messageVariables={{ another: 'good' }}
 						rules={[
 							{ type: 'string' },
 							{ required: true, message: 'Please input your Surname!' }
@@ -79,6 +128,14 @@ export const Registration: FC = () => {
 								{ type: 'string' },
 								{ required: true, message: 'Please input your Phone!' }
 							]}
+							validateStatus={error !== null ? 'error' : undefined}
+							help={error?.map(el =>
+								el.message.substring(0, 3) !== 'pas' ? (
+									<div key={el.message}>{el.message}</div>
+								) : (
+									''
+								)
+							)}
 						>
 							<Input size="large" type="tel" placeholder="Телефон" />
 						</Form.Item>
@@ -89,6 +146,14 @@ export const Registration: FC = () => {
 								{ type: 'email' },
 								{ required: true, message: 'Please input your Email!' }
 							]}
+							validateStatus={error !== null ? 'error' : undefined}
+							help={error?.map(el =>
+								el.message.substring(0, 3) !== 'pas' ? (
+									<div key={el.message}>{el.message}</div>
+								) : (
+									''
+								)
+							)}
 						>
 							<Input size="large" placeholder="Электронная почта" />
 						</Form.Item>
@@ -98,6 +163,7 @@ export const Registration: FC = () => {
 						name="password"
 						className={styles.password}
 						rules={[{ required: true, message: '' }]}
+						validateStatus={error !== null ? 'error' : undefined}
 					>
 						<Input.Password
 							className={styles.password}
@@ -106,11 +172,21 @@ export const Registration: FC = () => {
 							placeholder="Пароль"
 						/>
 					</Form.Item>
-
-					<p className={styles.passwordText}>
-						Пароль должен содержать от 8 символов, буквы верхнего и нижнего
-						регистра, а также цифры
-					</p>
+					<div className={classNames('w-auto h-auto', 'text-red-500')}>
+						{error?.map(el =>
+							el.message.substring(0, 3) === 'pas' ? (
+								<div key={el.message}>{el.message}</div>
+							) : (
+								''
+							)
+						)}
+					</div>
+					{error === null && (
+						<p className={styles.passwordText}>
+							Пароль должен содержать от 8 символов, буквы верхнего и нижнего
+							регистра, а также цифры
+						</p>
+					)}
 
 					<Form.Item
 						name="confirmPassword"
@@ -153,6 +229,6 @@ export const Registration: FC = () => {
 				</Form>
 				<Faq />
 			</div>
-		</div>
+		</>
 	)
 }

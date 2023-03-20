@@ -10,6 +10,7 @@ import {
 	message
 } from 'antd'
 import type { UploadProps } from 'antd'
+import Link from 'antd/es/typography/Link'
 import { FC } from 'react'
 
 import './Drawer.scss'
@@ -147,13 +148,23 @@ export const DrawerEmail: FC<IDrawerPros> = ({
 				</Button>
 				<Divider />
 				<div className="flex justify-center items-center text-lg">
-					<Text strong className="text-black opacity-50 cursor-pointer">
+					<Link
+						href="mailto:deshelp@kpfu.ru"
+						strong
+						style={{ color: '#808080' }}
+						className=" cursor-pointer"
+					>
 						deshelp@kpfu.ru
-					</Text>
+					</Link>
 					<Divider className=" h-[25px]" type="vertical" />
-					<Text strong className="text-black opacity-50 cursor-pointer">
+					<Link
+						href="tel:+7 (843) 206-50-84"
+						style={{ color: '#808080' }}
+						strong
+						className="cursor-pointer"
+					>
 						+7 (843) 206-50-84
-					</Text>
+					</Link>
 				</div>
 				<Drawer
 					title={<TitleEmail />}

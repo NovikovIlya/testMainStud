@@ -1,9 +1,10 @@
 import { FC, useState } from 'react'
 
-import { DrawerEmail } from './Drawer'
+import { FaqSvg } from '../../assets/svg/FaqSvg'
+
 import styles from './Faq.module.scss'
-import { FaqSvg } from './FaqSvg'
 import logo from './Group.png'
+import { DrawerEmail } from './drawer/Drawer'
 
 export const Faq: FC = () => {
 	const [open, setOpen] = useState(false)

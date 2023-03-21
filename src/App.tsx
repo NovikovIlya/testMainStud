@@ -1,5 +1,5 @@
 import { ConfigProvider } from 'antd'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Route, Routes } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
@@ -12,23 +12,17 @@ import { RootState } from './store'
 import { getAccessToken } from './store/auth/actionCreators'
 
 const App = () => {
-	const [load, ChangeLoad] = useState(true)
-	// const isLoading = useSelector(
-	// 	(state: RootState) => state.auth.authData.isLoading
-	// )
 	const navigate = useNavigate()
 	const dispatch = useAppDispatch()
-
-	// useEffect(() => {
-	// 	const dataApi = async () => {
-	// 		const res = await dispatch(getAccessToken())
-	// 		console.log(res)
-	// 		if (res !== null) {
-	// 			navigate('/profile')
-	// 		}
-	// 	}
-	// 	dataApi()
-	// }, [navigate])
+	useEffect(() => {
+		const dataApi = async () => {
+			const res = await dispatch(getAccessToken())
+			if (res !== null) {
+				navigate('/profile')
+			}
+		}
+		dataApi()
+	}, [navigate, dispatch])
 
 	return (
 		<>

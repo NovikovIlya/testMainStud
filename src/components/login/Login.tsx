@@ -81,6 +81,8 @@ export const Login: FC = () => {
 								{ type: 'string' },
 								{ required: true, message: 'Please input your Phone!' }
 							]}
+							validateStatus={error !== null ? 'error' : undefined}
+							help={error !== null ? error[0].message : ''}
 						>
 							<Input size="large" type="tel" placeholder="Телефон" />
 						</Form.Item>

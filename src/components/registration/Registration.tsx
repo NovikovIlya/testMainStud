@@ -70,18 +70,11 @@ export const Registration: FC = () => {
 				})
 			)
 		}
-		//if (check) console.log('Received values of form: ', values)
 	}
 	return (
 		<>
 			<BackMainPage />
-			<div
-				className={
-					!isLoading
-						? styles.main
-						: classNames(styles.main, 'bg-gray-600 animate-pulse opacity-30')
-				}
-			>
+			<div className={styles.main}>
 				<Form
 					name="login"
 					className={styles.loginForm}

@@ -1,8 +1,5 @@
 import { Button, Form, Input, Radio, RadioChangeEvent, Typography } from 'antd'
-//import { IAuthRequest } from '../../api/auth/types'
-// import { ILoginRequest } from '../../api/auth/types'
-import classNames from 'classnames'
-import { FC, useEffect, useState } from 'react'
+import { FC, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
@@ -20,9 +17,6 @@ const { Title } = Typography
 
 export const Login: FC = () => {
 	const navigate = useNavigate()
-	const isLoading = useSelector(
-		(state: RootState) => state.auth.authData.isLoading
-	)
 	const error = useSelector((state: RootState) => state.auth.authData.error)
 	const dispatch = useAppDispatch()
 	const [value, setValue] = useState(0)
@@ -30,7 +24,6 @@ export const Login: FC = () => {
 	const onChangeRadio = (e: RadioChangeEvent) => setValue(e.target.value)
 
 	const onFinish = (values: { email: string; password: string }) => {
-		// console.log('Received values of form: ', values)
 		const dataApi = async () => {
 			await dispatch(
 				loginUser({ username: values.email, password: values.password })
@@ -41,20 +34,12 @@ export const Login: FC = () => {
 			}
 		}
 		dataApi()
-		// name()
-		// dispatch(loginUser({ ...values }))
 	}
 
 	return (
 		<div>
 			<BackMainPage />
-			<div
-				className={
-					!isLoading
-						? styles.main
-						: classNames(styles.main, 'bg-gray-600 animate-pulse opacity-30')
-				}
-			>
+			<div className={styles.main}>
 				<Form
 					name="login"
 					className={styles.loginForm}
@@ -71,7 +56,7 @@ export const Login: FC = () => {
 							buttonStyle="solid"
 						>
 							<Radio.Button value={0}>По Email</Radio.Button>
-							<Radio.Button value={1}>По номеру телефона</Radio.Button>
+							<Radio.Button value={1}>По номеру</Radio.Button>
 						</Radio.Group>
 					</Form.Item>
 
@@ -83,7 +68,13 @@ export const Login: FC = () => {
 								{ required: true, message: 'Please input your Phone!' }
 							]}
 							validateStatus={error !== null ? 'error' : undefined}
-							help={error !== null ? error[0].message : ''}
+							help={error?.map(el =>
+								el.message.substring(0, 3) !== 'pas' ? (
+									<div key={el.message}>{el.message}</div>
+								) : (
+									''
+								)
+							)}
 						>
 							<Input size="large" type="tel" placeholder="Телефон" />
 						</Form.Item>
@@ -95,7 +86,13 @@ export const Login: FC = () => {
 								{ required: true, message: 'Please input your Email!' }
 							]}
 							validateStatus={error !== null ? 'error' : undefined}
-							help={error !== null ? error[0].message : ''}
+							help={error?.map(el =>
+								el.message.substring(0, 3) !== 'pas' ? (
+									<div key={el.message}>{el.message}</div>
+								) : (
+									''
+								)
+							)}
 						>
 							<Input size="large" placeholder="Email" />
 						</Form.Item>
@@ -105,7 +102,13 @@ export const Login: FC = () => {
 						name="password"
 						rules={[{ required: true, message: 'Please input your Password!' }]}
 						validateStatus={error !== null ? 'error' : undefined}
-						help={error !== null ? error[0].message : ''}
+						help={error?.map(el =>
+							el.message.substring(0, 3) !== 'pas' ? (
+								<div key={el.message}>{el.message}</div>
+							) : (
+								''
+							)
+						)}
 					>
 						<Input.Password
 							className={styles.password}

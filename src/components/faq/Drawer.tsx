@@ -56,7 +56,6 @@ export const DrawerEmail: FC<IDrawerPros> = ({
 		<>
 			<Drawer
 				title={<TitleFaq showChildrenDrawer={showChildrenDrawer} />}
-				width={450}
 				onClose={onClose}
 				closable={false}
 				open={open}

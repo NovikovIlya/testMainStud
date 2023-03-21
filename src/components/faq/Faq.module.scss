@@ -1,9 +1,12 @@
-.img {
-	@apply pr-[175px] opacity-100;
-}
-.faq {
-	@apply flex justify-end pr-[50px] text-base;
-	svg {
-		@apply cursor-pointer;
+.main {
+	@apply max-lg:w-full;
+	.img {
+		@apply max-lg:hidden;
+	}
+	.faq {
+		@apply flex justify-end text-base;
+		svg {
+			@apply cursor-pointer;
+		}
 	}
 }

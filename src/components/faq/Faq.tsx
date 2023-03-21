@@ -15,14 +15,8 @@ export const Faq: FC = () => {
 	const onChildrenDrawerClose = () => setChildrenDrawer(false)
 
 	return (
-		<div>
-			<img
-				width={712}
-				height={537}
-				className={styles.img}
-				src={logo}
-				alt="group"
-			/>
+		<div className={styles.main}>
+			<img className={styles.img} src={logo} alt="group" />
 			<div className={styles.faq} onClick={showDrawer}>
 				<FaqSvg />
 			</div>

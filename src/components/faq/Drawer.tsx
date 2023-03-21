@@ -55,7 +55,9 @@ export const DrawerEmail: FC<IDrawerPros> = ({
 	return (
 		<>
 			<Drawer
-				title={<TitleFaq showChildrenDrawer={showChildrenDrawer} />}
+				title={
+					<TitleFaq onClose={onClose} showChildrenDrawer={showChildrenDrawer} />
+				}
 				onClose={onClose}
 				closable={false}
 				open={open}
@@ -165,7 +167,7 @@ export const DrawerEmail: FC<IDrawerPros> = ({
 					</Link>
 				</div>
 				<Drawer
-					title={<TitleEmail />}
+					title={<TitleEmail onClose={onChildrenDrawerClose} />}
 					width={320}
 					closable={false}
 					onClose={onChildrenDrawerClose}

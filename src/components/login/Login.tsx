@@ -35,7 +35,8 @@ export const Login: FC = () => {
 			await dispatch(
 				loginUser({ username: values.email, password: values.password })
 			)
-			if (error === null) {
+			const res = await dispatch(getAccessToken())
+			if (res !== null) {
 				navigate('/profile')
 			}
 		}

@@ -12,6 +12,7 @@ import { RootState } from './store'
 import { getAccessToken } from './store/auth/actionCreators'
 
 const App = () => {
+	const [isLogginIn, ChangeIsLogginIn] = useState(false)
 	const navigate = useNavigate()
 	const dispatch = useAppDispatch()
 	useEffect(() => {
@@ -19,6 +20,9 @@ const App = () => {
 			const res = await dispatch(getAccessToken())
 			if (res !== null) {
 				navigate('/profile')
+				ChangeIsLogginIn(false)
+			} else {
+				ChangeIsLogginIn(true)
 			}
 		}
 		dataApi()
@@ -38,7 +42,10 @@ const App = () => {
 					<Routes>
 						<Route path="/*" element={<Login />} />
 						<Route path="/registration/*" element={<Registration />} />
-						<Route path="/profile/*" element={<Profile />} />
+						<Route
+							path="/profile/*"
+							element={isLogginIn ? <Login /> : <Profile />}
+						/>
 					</Routes>
 				</main>
 			</ConfigProvider>

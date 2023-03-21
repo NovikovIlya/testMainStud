@@ -91,7 +91,7 @@ export const Registration: FC = () => {
 							buttonStyle="solid"
 						>
 							<Radio.Button value={0}>По Email</Radio.Button>
-							<Radio.Button value={1}>По номеру телефона</Radio.Button>
+							<Radio.Button value={1}>По номеру</Radio.Button>
 						</Radio.Group>
 					</Form.Item>
 					<Form.Item

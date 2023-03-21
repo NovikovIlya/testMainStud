@@ -1,7 +1,7 @@
 .main {
 	@apply flex flex-row justify-between px-[175px] text-base max-xl:gap-4 max-xl:px-[75px] max-lg:flex-col max-lg:items-center;
 	.loginForm {
-		@apply max-w-[372px] opacity-100 max-sm:max-w-[365px] max-[321px]:max-w-[300px];
+		@apply max-w-[372px] opacity-100 max-sm:max-w-[365px] max-[321px]:max-w-[300px] max-[321px]:opacity-100;
 		.title {
 			@apply mb-[20px] text-start text-2xl font-bold;
 		}

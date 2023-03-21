@@ -64,7 +64,9 @@ export const authReducer = createSlice({
 		}),
 		loginSuccess: (state, action: PayloadAction<any>): IAuthState => {
 			localStorage.setItem('token', action.payload.accessToken)
-			cookies.set('refresh', action.payload.refreshToken, { maxAge: 43200 })
+			if (action.payload.refreshToken !== '') {
+				cookies.set('refresh', action.payload.refreshToken)
+			}
 			return {
 				...state,
 				authData: {
@@ -128,10 +130,11 @@ export const authReducer = createSlice({
 				error: action.payload
 			}
 		}),
-		logoutSuccess: (): IAuthState => {
+		logoutSuccess: () => {
 			cookies.remove('refresh')
 			localStorage.clear()
-			return initialState
+
+			//return initialState
 		}
 	}
 })

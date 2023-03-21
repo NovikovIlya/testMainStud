@@ -1,4 +1,5 @@
 import { Dispatch } from '@reduxjs/toolkit'
+import { useNavigate } from 'react-router-dom'
 
 import { Auth_User, Refresh_Token, Reg_User } from '../../api/auth'
 import { IAuthRequest, IRegRequest } from '../../api/auth/types'
@@ -10,6 +11,7 @@ import {
 	loginFailure,
 	loginStart,
 	loginSuccess,
+	logoutSuccess,
 	registFailure,
 	registStart,
 	registSuccess
@@ -61,16 +63,21 @@ export const getAccessToken =
 
 			if (accessToken !== null) {
 				if (isTokenExpired(accessToken)) {
-					dispatch(loginStart())
 					const res = await Refresh_Token()
 					if (res.status === 200) {
-						dispatch(loginSuccess(res.data))
+						dispatch(
+							loginSuccess({
+								accessToken: res.data.accessToken,
+								refreshToken: ''
+							})
+						)
 					}
 					accessToken = res.data.accessToken
 				}
 			}
 		} catch (e: any) {
-			dispatch(loginFailure(e.response.data.errors)) //если 403
+			//если 403
+			dispatch(logoutSuccess())
 			console.error(e)
 		}
 		return accessToken

@@ -1,7 +1,7 @@
 const endpoints = {
 	AUTH: {
 		LOGIN: '/login',
-		REGRESH: '/refresh/token'
+		REGRESH: '/token/refresh'
 	},
 	REG: {
 		REGISTR: '/register'

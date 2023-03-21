@@ -2,7 +2,7 @@ import { getUnixTime } from './date'
 
 export interface IAuthTokenInfo {
 	exp: number
-	lat: number
+	iat: number
 	login: string
 }
 
@@ -16,15 +16,12 @@ export const isTokenExpired = (token: string | null): boolean => {
 	try {
 		const tokenInfo = token.split('.')[1] //достаем среднюю часть токена: login, lat, exp
 		const tokenInfoDecoded = window.atob(tokenInfo) //раскодирование данных
-		const { exp, lat }: IAuthTokenInfo = JSON.parse(tokenInfoDecoded) //извлечение в соответствующие переменные
+		const { exp }: IAuthTokenInfo = JSON.parse(tokenInfoDecoded) //извлечение в соответствующие переменные
 
-		//тут уже смотрим истек ли access токен
-		const tokenLeftTime = exp - getUnixTime() / 1000
+		console.log(exp - getUnixTime())
 
-		const minLifeTimeUpdate = (exp - lat) * LIFE_TO_UPDATE_MULTIPLIER
-
-		//условие послволяет сделать обновление токена aceess не дожидаясь того, чтобы у него срок жизни закончился окончательно
-		return tokenLeftTime < minLifeTimeUpdate
+		//берем время до которого живет токен и вычитаем из него текущее время
+		return exp - getUnixTime() <= 0
 	} catch (e) {
 		console.error(e)
 		return true

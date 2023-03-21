@@ -1,6 +1,5 @@
 import { ConfigProvider } from 'antd'
-import { useEffect, useRef, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useEffect, useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 
@@ -8,7 +7,6 @@ import { Login } from './components/login/Login'
 import { Profile } from './components/profile/profile'
 import { Registration } from './components/registration/Registration'
 import { useAppDispatch } from './store'
-import { RootState } from './store'
 import { getAccessToken } from './store/auth/actionCreators'
 
 const App = () => {

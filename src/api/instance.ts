@@ -18,7 +18,6 @@ const urlsSkipAuth = [endpoints.REG.REGISTR, endpoints.AUTH.LOGIN]
 
 axiosInstance.interceptors.request.use(async (config: any) => {
 	if (config.url && urlsSkipAuth.includes(config.url)) {
-		console.log('here')
 		return config
 	}
 

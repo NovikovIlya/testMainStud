@@ -51,30 +51,30 @@ export const regUser =
 export const getAccessToken =
 	() =>
 	async (dispatch: Dispatch<any>): Promise<string | null> => {
+		let accessToken = null
 		try {
-			let accessToken = null
+			dispatch(loginStart())
 			if (localStorage.getItem('token') !== null) {
 				accessToken = localStorage.getItem('token')
 			} else {
 				accessToken = store.getState().auth.authData.accessToken
 			}
 
-			if (!accessToken || isTokenExpired(accessToken)) {
-				dispatch(loginStart())
+			if (accessToken != null || isTokenExpired(accessToken)) {
 				const res = await Refresh_Token()
 				if (res.status === 200) {
 					dispatch(loginSuccess(res.data))
 				}
-				if (res.status === 403) {
-					dispatch(loginFailure(res.data))
-				}
+				accessToken = res.data.accessToken
+			} else {
+				dispatch(loginSuccess(accessToken))
 			}
-			return accessToken
-		} catch (e) {
+		} catch (e: any) {
+			dispatch(loginFailure(e.response.data.errors)) //если 403
 			console.error(e)
-
-			return null
 		}
+
+		return accessToken
 	}
 
 // export const getUserData = () => async (dispatch: Dispatch<any>): Promise<void> => {

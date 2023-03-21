@@ -75,10 +75,10 @@ export const authReducer = createSlice({
 				}
 			}
 		},
-		registSuccess: (state, action: PayloadAction<{ id: string }>) => {
+		registSuccess: (state, action: PayloadAction<string>) => {
 			state.regData.error = null
 			state.regData.isLoading = false
-			state.authData.id = action.payload.id
+			state.authData.id = action.payload
 		},
 		loginFailure: (state, action: PayloadAction<Error[]>): IAuthState => ({
 			...state,

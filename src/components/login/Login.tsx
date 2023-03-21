@@ -1,11 +1,15 @@
 import { Button, Form, Input, Radio, RadioChangeEvent, Typography } from 'antd'
-import { FC, useState } from 'react'
-import { Link } from 'react-router-dom'
-
-import { IAuthRequest } from '../../api/auth/types'
+//import { IAuthRequest } from '../../api/auth/types'
 // import { ILoginRequest } from '../../api/auth/types'
+import classNames from 'classnames'
+import { FC, useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+
 import { useAppDispatch } from '../../store'
-import { loginUser } from '../../store/auth/actionCreators'
+import { RootState } from '../../store'
+import { getAccessToken, loginUser } from '../../store/auth/actionCreators'
 import { BackMainPage } from '../back-main-page/BackMainPage'
 import { Faq } from '../faq/Faq'
 
@@ -15,27 +19,27 @@ import styles from './Login.module.scss'
 const { Title } = Typography
 
 export const Login: FC = () => {
+	const navigate = useNavigate()
+	const isLoading = useSelector(
+		(state: RootState) => state.auth.authData.isLoading
+	)
+	const error = useSelector((state: RootState) => state.auth.authData.error)
 	const dispatch = useAppDispatch()
 	const [value, setValue] = useState(0)
 
 	const onChangeRadio = (e: RadioChangeEvent) => setValue(e.target.value)
 
-	// async function name() {
-	// 	const data = await fetch('http://localhost:8080/api/login', {
-	// 		method: 'POST',
-	// 		mode: 'no-cors',
-	// 		headers: { 'Content-Type': 'application/json' },
-	// 		body: JSON.stringify({
-	// 			username: 'ayaz@gmail.com',
-	// 			password: 'ayaz2002'
-	// 		})
-	// 	})
-	// 	console.log('data', data)
-	// }
-
 	const onFinish = (values: { email: string; password: string }) => {
-		console.log('Received values of form: ', values)
-		dispatch(loginUser({ username: values.email, password: values.password }))
+		// console.log('Received values of form: ', values)
+		const dataApi = async () => {
+			await dispatch(
+				loginUser({ username: values.email, password: values.password })
+			)
+			if (error === null) {
+				navigate('/profile')
+			}
+		}
+		dataApi()
 		// name()
 		// dispatch(loginUser({ ...values }))
 	}
@@ -43,7 +47,13 @@ export const Login: FC = () => {
 	return (
 		<div>
 			<BackMainPage />
-			<div className={styles.main}>
+			<div
+				className={
+					!isLoading
+						? styles.main
+						: classNames(styles.main, 'bg-gray-600 animate-pulse opacity-30')
+				}
+			>
 				<Form
 					name="login"
 					className={styles.loginForm}
@@ -81,6 +91,8 @@ export const Login: FC = () => {
 								{ type: 'email' },
 								{ required: true, message: 'Please input your Email!' }
 							]}
+							validateStatus={error !== null ? 'error' : undefined}
+							help={error !== null ? error[0].message : ''}
 						>
 							<Input size="large" placeholder="Email" />
 						</Form.Item>
@@ -89,6 +101,8 @@ export const Login: FC = () => {
 					<Form.Item
 						name="password"
 						rules={[{ required: true, message: 'Please input your Password!' }]}
+						validateStatus={error !== null ? 'error' : undefined}
+						help={error !== null ? error[0].message : ''}
 					>
 						<Input.Password
 							className={styles.password}

@@ -18,8 +18,10 @@ export const Faq: FC = () => {
 	return (
 		<div className={styles.main}>
 			<img className={styles.img} src={logo} alt="group" />
-			<div className={styles.faq} onClick={showDrawer}>
-				<FaqSvg />
+			<div className={styles.faq}>
+				<div onClick={showDrawer}>
+					<FaqSvg />
+				</div>
 			</div>
 			<DrawerEmail
 				childrenDrawer={childrenDrawer}

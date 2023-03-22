@@ -1,5 +1,5 @@
 import { Button, Collapse, Divider, Drawer, Typography } from 'antd'
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
 
 import { EmailSvg } from '../../../assets/svg/EmailSvg'
 import { PhoneSvg } from '../../../assets/svg/PhoneSvg'
@@ -33,6 +33,8 @@ export const DrawerEmail: FC<IDrawerPros> = ({
 	onChildrenDrawerClose,
 	showChildrenDrawer
 }) => {
+	const width = document.body.clientWidth > 1800 ? 800 : 320
+
 	return (
 		<>
 			<Drawer
@@ -41,10 +43,15 @@ export const DrawerEmail: FC<IDrawerPros> = ({
 				}
 				onClose={onClose}
 				closable={false}
+				width={width}
 				open={open}
 				headerStyle={{ textAlign: 'center' }}
 			>
-				<Collapse expandIcon={() => <QuestionSvg />} ghost>
+				<Collapse
+					className="min-[2559px]:text-4xl"
+					expandIcon={() => <QuestionSvg />}
+					ghost
+				>
 					<Panel header="Как подключиться к Wi-Fi КФУ?" key="1">
 						<p>{text}</p>
 					</Panel>
@@ -58,35 +65,38 @@ export const DrawerEmail: FC<IDrawerPros> = ({
 				<Divider />
 				<Button
 					onClick={showChildrenDrawer}
-					className="flex items-center w-full gap-2 mb-3"
+					className="flex items-center w-full gap-2 mb-3 min-[2559px]:text-4xl min-[2559px]:py-10 min-[2559px]:m-0"
 					icon={<EmailSvg />}
 					type="text"
 				>
 					Написать письмо
 				</Button>
 				<Button
-					className="flex w-full items-center gap-2 mb-3"
+					className="flex w-full items-center gap-2 mb-3 min-[2559px]:text-4xl min-[2559px]:py-10 min-[2559px]:m-0"
 					icon={<PhoneSvg />}
 					type="text"
 				>
 					Позвонить
 				</Button>
 				<Divider />
-				<div className="flex justify-center items-center text-lg">
+				<div className="flex justify-center items-center text-lg ">
 					<Link
 						href="mailto:deshelp@kpfu.ru"
 						strong
 						style={{ color: '#808080' }}
-						className=" cursor-pointer"
+						className=" cursor-pointer min-[2559px]:text-4xl"
 					>
 						deshelp@kpfu.ru
 					</Link>
-					<Divider className=" h-[25px]" type="vertical" />
+					<Divider
+						className="h-[25px] min-[2559px]:h-10 min-[2559px]:border-2"
+						type="vertical"
+					/>
 					<Link
 						href="tel:+7 (843) 206-50-84"
 						style={{ color: '#808080' }}
 						strong
-						className="cursor-pointer"
+						className="cursor-pointer min-[2559px]:text-4xl"
 					>
 						+7 (843) 206-50-84
 					</Link>

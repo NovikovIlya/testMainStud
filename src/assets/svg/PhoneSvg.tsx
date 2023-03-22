@@ -3,6 +3,7 @@ import React from 'react'
 export const PhoneSvg = () => {
 	return (
 		<svg
+			className="min-[2559px]:w-10 min-[2559px]:h-10"
 			width="22"
 			height="22"
 			viewBox="0 0 22 22"

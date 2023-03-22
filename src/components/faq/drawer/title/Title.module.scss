@@ -1,0 +1,15 @@
+.main {
+	@apply rounded-b pb-[25px] shadow;
+	.close {
+		@apply absolute  right-0 m-5 cursor-pointer;
+	}
+	.title {
+		@apply mt-5 min-[2559px]:my-10 min-[2559px]:text-7xl;
+	}
+	.work {
+		@apply text-black opacity-50 min-[2559px]:text-4xl;
+	}
+	.buttons {
+		@apply mt-[15px] flex justify-center gap-5 min-[2559px]:mt-10;
+	}
+}

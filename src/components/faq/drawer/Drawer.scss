@@ -1,3 +1,6 @@
 .ant-drawer .ant-drawer-header {
 	@apply p-0;
 }
+.ant-collapse > .ant-collapse-item > .ant-collapse-header {
+	@apply flex items-center;
+}

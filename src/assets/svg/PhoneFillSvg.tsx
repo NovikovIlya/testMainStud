@@ -3,6 +3,7 @@ import React from 'react'
 export const PhoneFillSvg = () => {
 	return (
 		<svg
+			className="min-[2559px]:w-28 min-[2559px]:h-28"
 			width="57"
 			height="57"
 			viewBox="0 0 57 57"

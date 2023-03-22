@@ -5,33 +5,31 @@ import { CloseSvg } from '../../../../assets/svg/CloseSvg'
 import { EmailFillSvg } from '../../../../assets/svg/EmailFillSvg'
 import { PhoneFillSvg } from '../../../../assets/svg/PhoneFillSvg'
 
+import styles from './Title.module.scss'
+
 interface ITitleFaqProps {
 	showChildrenDrawer: () => void
 	onClose: () => void
 }
 
-const { Title, Text } = Typography
+const { Text } = Typography
 
 export const TitleFaq: FC<ITitleFaqProps> = ({
 	showChildrenDrawer,
 	onClose
 }) => {
 	return (
-		<div className="shadow pb-[25px] rounded-b">
-			<div onClick={onClose} className="absolute right-0 m-5 cursor-pointer">
+		<div className={styles.main}>
+			<div onClick={onClose} className={styles.close}>
 				<CloseSvg />
 			</div>
-			<Title style={{ marginBottom: 5, marginTop: 20 }} level={3}>
-				Центр поддержки
-			</Title>
-			<Text className="text-black opacity-50 ">
-				Работаем с Пн - Пт, 8:00 - 18:00
-			</Text>
-			<div className="flex justify-center gap-5 mt-[15px]">
-				<div onClick={showChildrenDrawer} className="cursor-pointer">
+			<h3 className={styles.title}>Центр поддержки</h3>
+			<Text className={styles.work}>Работаем с Пн - Пт, 8:00 - 18:00</Text>
+			<div className={styles.buttons}>
+				<div onClick={showChildrenDrawer} className="cursor-pointer ">
 					<EmailFillSvg />
 				</div>
-				<div className="cursor-pointer">
+				<div className="cursor-pointer ">
 					<PhoneFillSvg />
 				</div>
 			</div>

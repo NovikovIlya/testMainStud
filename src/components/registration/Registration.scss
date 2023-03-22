@@ -1,6 +1,9 @@
 .ant-form-item .ant-form-item-explain-error {
 	@apply min-[2559px]:text-3xl;
 }
+.ant-checkbox {
+	@apply min-[2559px]:top-3.5;
+}
 .ant-checkbox .ant-checkbox-inner::after {
 	@apply min-[2559px]:h-5 min-[2559px]:w-2;
 }

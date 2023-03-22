@@ -1,5 +1,5 @@
 .main {
-	@apply max-lg:w-full;
+	@apply flex flex-col justify-between max-lg:w-full;
 	.img {
 		@apply max-lg:hidden min-[2559px]:h-[1074px] min-[2559px]:w-[1074px];
 	}

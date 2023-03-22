@@ -8,7 +8,7 @@ export const GosSvg = () => {
 			viewBox="0 0 22 24"
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"
-			className="base-0-2-23"
+			className="base-0-2-23 min-[2559px]:w-10 min-[2559px]:h-10"
 			ie-style=""
 		>
 			<path

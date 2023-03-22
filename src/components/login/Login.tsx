@@ -4,14 +4,15 @@ import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 
+import { GosSvg } from '../../assets/svg/GosSvg'
 import { useAppDispatch } from '../../store'
 import { RootState } from '../../store'
 import { getAccessToken, loginUser } from '../../store/auth/actionCreators'
 import { BackMainPage } from '../back-main-page/BackMainPage'
 import { Faq } from '../faq/Faq'
 
-import { GosSvg } from './GosSvg'
 import styles from './Login.module.scss'
+import './Login.scss'
 
 const { Title } = Typography
 
@@ -63,9 +64,10 @@ export const Login: FC = () => {
 					{value ? (
 						<Form.Item
 							name="phone"
+							className={styles.input}
 							rules={[
 								{ type: 'string' },
-								{ required: true, message: 'Please input your Phone!' }
+								{ required: true, message: 'Пожалуйста, введите свой телефон!' }
 							]}
 							validateStatus={error !== null ? 'error' : undefined}
 							help={error?.map(el =>
@@ -80,10 +82,14 @@ export const Login: FC = () => {
 						</Form.Item>
 					) : (
 						<Form.Item
+							className={styles.input}
 							name="email"
 							rules={[
 								{ type: 'email' },
-								{ required: true, message: 'Please input your Email!' }
+								{
+									required: true,
+									message: 'Пожалуйста, введите свою электронную почту!'
+								}
 							]}
 							validateStatus={error !== null ? 'error' : undefined}
 							help={error?.map(el =>
@@ -100,7 +106,10 @@ export const Login: FC = () => {
 
 					<Form.Item
 						name="password"
-						rules={[{ required: true, message: 'Please input your Password!' }]}
+						className={styles.input}
+						rules={[
+							{ required: true, message: 'Пожалуйста, введите свой пароль!' }
+						]}
 						validateStatus={error !== null ? 'error' : undefined}
 						help={error?.map(el =>
 							el.message.substring(0, 3) !== 'pas' ? (
@@ -110,12 +119,7 @@ export const Login: FC = () => {
 							)
 						)}
 					>
-						<Input.Password
-							className={styles.password}
-							size="large"
-							type="password"
-							placeholder="Пароль"
-						/>
+						<Input size="large" type="password" placeholder="Пароль" />
 					</Form.Item>
 
 					<p className={styles.forgot}>Не помню пароль</p>
@@ -150,7 +154,9 @@ export const Login: FC = () => {
 										Зарегистрируйтесь
 									</Link>
 								</span>
-								<span className={styles.kpfu}>kpfu.ru</span>
+								<Link to={'https://kpfu.ru/'} className={styles.kpfu}>
+									kpfu.ru
+								</Link>
 							</div>
 						</div>
 					</Form.Item>

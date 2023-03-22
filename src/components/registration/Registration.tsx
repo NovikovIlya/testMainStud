@@ -21,13 +21,11 @@ import { BackMainPage } from '../back-main-page/BackMainPage'
 import { Faq } from '../faq/Faq'
 
 import styles from './Registration.module.scss'
+import './Registration.scss'
 
 const { Title } = Typography
 
 export const Registration: FC = () => {
-	const isLoading = useSelector(
-		(state: RootState) => state.auth.regData.isLoading
-	)
 	const error = useSelector((state: RootState) => state.auth.regData.error)
 	const dispatch = useAppDispatch()
 	const [value, setValue] = useState(0)
@@ -96,10 +94,11 @@ export const Registration: FC = () => {
 					</Form.Item>
 					<Form.Item
 						name="surname"
+						className={styles.input}
 						messageVariables={{ another: 'good' }}
 						rules={[
 							{ type: 'string' },
-							{ required: true, message: 'Please input your Surname!' }
+							{ required: true, message: 'Пожалуйста, введите свою фамилию!' }
 						]}
 					>
 						<Input size="large" placeholder="Фамилия" />
@@ -107,9 +106,10 @@ export const Registration: FC = () => {
 
 					<Form.Item
 						name="name"
+						className={styles.input}
 						rules={[
 							{ type: 'string' },
-							{ required: true, message: 'Please input your Name!' }
+							{ required: true, message: 'Пожалуйста, введите свое имя!' }
 						]}
 					>
 						<Input size="large" placeholder="Имя" />
@@ -117,9 +117,10 @@ export const Registration: FC = () => {
 					{value ? (
 						<Form.Item
 							name="phone"
+							className={styles.input}
 							rules={[
 								{ type: 'string' },
-								{ required: true, message: 'Please input your Phone!' }
+								{ required: true, message: 'Пожалуйста, введите свой телефон!' }
 							]}
 							validateStatus={error !== null ? 'error' : undefined}
 							help={error?.map(el =>
@@ -135,9 +136,13 @@ export const Registration: FC = () => {
 					) : (
 						<Form.Item
 							name="email"
+							className={styles.input}
 							rules={[
 								{ type: 'email' },
-								{ required: true, message: 'Please input your Email!' }
+								{
+									required: true,
+									message: 'Пожалуйста, введите свою электронную почту!'
+								}
 							]}
 							validateStatus={error !== null ? 'error' : undefined}
 							help={error?.map(el =>
@@ -154,16 +159,11 @@ export const Registration: FC = () => {
 
 					<Form.Item
 						name="password"
-						className={styles.password}
+						className={styles.input}
 						rules={[{ required: true, message: '' }]}
 						validateStatus={error !== null ? 'error' : undefined}
 					>
-						<Input.Password
-							className={styles.password}
-							size="large"
-							type="password"
-							placeholder="Пароль"
-						/>
+						<Input size="large" type="password" placeholder="Пароль" />
 					</Form.Item>
 					<div className={classNames('w-auto h-auto', 'text-red-500')}>
 						{error?.map(el =>
@@ -174,22 +174,23 @@ export const Registration: FC = () => {
 							)
 						)}
 					</div>
-					{error === null && (
-						<p className={styles.passwordText}>
-							Пароль должен содержать от 8 символов, буквы верхнего и нижнего
-							регистра, а также цифры
-						</p>
-					)}
+					<div className={styles.passwordText}>
+						Пароль должен содержать от 8 символов, буквы верхнего и нижнего
+						регистра, а также цифры
+					</div>
 
 					<Form.Item
 						name="confirmPassword"
+						className={styles.input}
 						rules={[
-							{ required: true, message: 'Please confirm your Password!' }
+							{
+								required: true,
+								message: 'Пожалуйста, подтвердите свой пароль!'
+							}
 						]}
 					>
-						<Input.Password
+						<Input
 							size="large"
-							className={styles.password}
 							type="password"
 							placeholder="Повторите пароль"
 						/>
@@ -200,8 +201,12 @@ export const Registration: FC = () => {
 							<Button size="large" type="primary" htmlType="submit">
 								Далее
 							</Button>
-							<Checkbox onChange={onChangeCheckbox} checked={check}>
-								<p>
+							<Checkbox
+								className={styles.check}
+								onChange={onChangeCheckbox}
+								checked={check}
+							>
+								<p className={styles.termsUse}>
 									Я принимаю пользовательское соглашение и даю разрешение
 									порталу КФУ на обработку моих персональных данных в
 									соотвествии с Федеральным законом №152-ФЗ от 27.07.2006 года
@@ -215,7 +220,9 @@ export const Registration: FC = () => {
 										Войдите
 									</Link>
 								</span>
-								<span className={styles.kpfu}>kpfu.ru</span>
+								<Link to={'https://kpfu.ru/'} className={styles.kpfu}>
+									kpfu.ru
+								</Link>
 							</div>
 						</div>
 					</Form.Item>

@@ -1,12 +1,12 @@
 .main {
 	@apply max-lg:w-full;
 	.img {
-		@apply max-lg:hidden;
+		@apply max-lg:hidden min-[2559px]:h-[1074px] min-[2559px]:w-[1074px];
 	}
 	.faq {
 		@apply flex justify-end text-base;
 		svg {
-			@apply cursor-pointer;
+			@apply cursor-pointer min-[2559px]:h-[200px] min-[2559px]:w-[200px];
 		}
 	}
 }

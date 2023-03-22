@@ -3,7 +3,7 @@ import React from 'react'
 export const UploadSvg = () => {
 	return (
 		<svg
-			className="mr-1.5"
+			className="mr-1.5 min-[2559px]:w-10 min-[2559px]:h-10"
 			width="14"
 			height="11"
 			viewBox="0 0 14 11"

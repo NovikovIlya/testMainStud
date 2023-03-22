@@ -3,7 +3,7 @@ import React from 'react'
 export const CloseSvg = () => {
 	return (
 		<svg
-			className="min-[2559px]:w-10 min-[2559px]:h-10"
+			className="min-[2559px]:w-12  min-[2559px]:h-12"
 			width="26"
 			height="29"
 			viewBox="0 0 26 29"

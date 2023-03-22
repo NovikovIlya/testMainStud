@@ -1,0 +1,23 @@
+.form {
+	input {
+		@apply px-5 py-3 shadow  min-[2559px]:h-[100px] min-[2559px]:w-full min-[2559px]:max-w-[800px] min-[2559px]:px-9 min-[2559px]:text-4xl;
+	}
+	.upload {
+		@apply flex items-center min-[2559px]:h-[100px] min-[2559px]:max-w-[800px] min-[2559px]:text-4xl;
+	}
+	.send {
+		@apply mt-[30px]  w-full shadow min-[2559px]:h-[100px] min-[2559px]:text-4xl;
+	}
+	.text {
+		@apply mt-[10px] flex cursor-pointer text-center text-black opacity-50 min-[2559px]:text-3xl;
+	}
+	textarea {
+		@apply px-5 py-3 shadow   min-[2559px]:w-full min-[2559px]:max-w-[800px] min-[2559px]:px-9 min-[2559px]:text-4xl;
+	}
+	.input {
+		@apply min-[2559px]:mb-10  min-[2559px]:w-[1000px] min-[2559px]:max-w-full min-[2559px]:text-4xl;
+		> div {
+			@apply min-[2559px]:text-4xl;
+		}
+	}
+}

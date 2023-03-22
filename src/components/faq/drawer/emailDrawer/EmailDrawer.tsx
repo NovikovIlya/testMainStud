@@ -5,6 +5,8 @@ import { FC } from 'react'
 import { UploadSvg } from '../../../../assets/svg/UploadSvg'
 import { TitleEmail } from '../title/TitleEmail'
 
+import styles from './EmailDrawer.module.scss'
+
 interface IEmailDrawerProps {
 	childrenDrawer: boolean
 	onChildrenDrawerClose: () => void
@@ -29,18 +31,21 @@ export const EmailDrawer: FC<IEmailDrawerProps> = ({
 	onChildrenDrawerClose,
 	childrenDrawer
 }) => {
+	const width = document.body.clientWidth > 1800 ? 600 : 320
+
 	return (
 		<Drawer
 			title={<TitleEmail onClose={onChildrenDrawerClose} />}
-			width={320}
+			width={width}
 			closable={false}
 			onClose={onChildrenDrawerClose}
 			open={childrenDrawer}
 			headerStyle={{ textAlign: 'center' }}
 		>
-			<Form layout="vertical" hideRequiredMark>
+			<Form className={styles.form} layout="vertical" hideRequiredMark>
 				<Form.Item
 					name="email"
+					className={styles.input}
 					rules={[
 						{ type: 'email' },
 						{ required: true, message: 'Please enter user email' }
@@ -51,6 +56,7 @@ export const EmailDrawer: FC<IEmailDrawerProps> = ({
 
 				<Form.Item
 					name="header"
+					className={styles.input}
 					rules={[
 						{ type: 'string' },
 						{ required: true, message: 'Please enter header' }
@@ -61,6 +67,7 @@ export const EmailDrawer: FC<IEmailDrawerProps> = ({
 
 				<Form.Item
 					name="description"
+					className={styles.input}
 					rules={[
 						{ type: 'string' },
 						{
@@ -73,20 +80,15 @@ export const EmailDrawer: FC<IEmailDrawerProps> = ({
 				</Form.Item>
 
 				<Upload {...props}>
-					<Button type="text" icon={<UploadSvg />}>
+					<Button type="text" className={styles.upload} icon={<UploadSvg />}>
 						Прикрепить файл
 					</Button>
 				</Upload>
 				<Form.Item>
-					<Button
-						className="w-full mt-[30px]"
-						size="large"
-						type="primary"
-						htmlType="submit"
-					>
+					<Button className={styles.send} type="primary" htmlType="submit">
 						Отправить письмо
 					</Button>
-					<Text className="text-black opacity-50 cursor-pointer flex mt-[10px] text-center">
+					<Text className={styles.text}>
 						Отправляя письмо, вы соглашаетесь на обработку персональных данных
 					</Text>
 				</Form.Item>

@@ -1,12 +1,12 @@
 .main {
 	@apply flex flex-row justify-between px-[180px] text-base  max-xl:gap-4 max-xl:px-[75px] max-lg:flex-col max-lg:items-center;
 	.loginForm {
-		@apply min-w-[400px] opacity-100 max-sm:min-w-[345px] max-[321px]:min-w-[300px] max-[321px]:opacity-100 min-[2559px]:w-[1000px] min-[2559px]:max-w-[800px] min-[2559px]:opacity-10;
+		@apply min-w-[400px] opacity-100 max-sm:min-w-[345px] max-[321px]:min-w-[300px] max-[321px]:opacity-100 min-[2559px]:w-[1000px] min-[2559px]:max-w-[800px] min-[2559px]:opacity-100;
 		.title {
 			@apply mb-[20px] text-start text-2xl font-bold min-[2559px]:text-7xl;
 		}
 		.switcher {
-			@apply flex h-[50px] items-center justify-center min-[2559px]:my-10 min-[2559px]:h-[120px] min-[2559px]:w-[1000px] min-[2559px]:max-w-[800px] min-[2559px]:opacity-10;
+			@apply flex h-[50px] items-center justify-center min-[2559px]:my-10 min-[2559px]:h-[120px] min-[2559px]:w-[1000px] min-[2559px]:max-w-[800px] min-[2559px]:opacity-100;
 			label {
 				@apply flex h-[50px] w-full items-center justify-start shadow min-[2559px]:h-[120px]  min-[2559px]:px-9 min-[2559px]:text-4xl;
 			}

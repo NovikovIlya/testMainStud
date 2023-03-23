@@ -72,7 +72,7 @@ export const Registration: FC = () => {
 	console.log(error)
 
 	return (
-		<>
+		<div className="flex items-center flex-col">
 			<BackMainPage />
 			<div className={styles.main}>
 				<Form
@@ -227,6 +227,6 @@ export const Registration: FC = () => {
 				</Form>
 				<Faq />
 			</div>
-		</>
+		</div>
 	)
 }

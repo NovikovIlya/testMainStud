@@ -38,7 +38,7 @@ export const Login: FC = () => {
 	}
 
 	return (
-		<div>
+		<div className=" flex  items-center flex-col">
 			<BackMainPage />
 			<div className={styles.main}>
 				<Form

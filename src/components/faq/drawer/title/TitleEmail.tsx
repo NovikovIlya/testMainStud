@@ -7,7 +7,7 @@ interface ITitleEmailProps {
 	onClose: () => void
 }
 
-const { Title, Text } = Typography
+const { Text } = Typography
 
 export const TitleEmail: FC<ITitleEmailProps> = ({ onClose }) => {
 	return (

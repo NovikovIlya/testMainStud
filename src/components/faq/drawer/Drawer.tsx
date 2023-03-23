@@ -1,5 +1,5 @@
 import { Button, Collapse, Divider, Drawer, Typography } from 'antd'
-import { FC, useEffect } from 'react'
+import { FC } from 'react'
 
 import { EmailSvg } from '../../../assets/svg/EmailSvg'
 import { PhoneSvg } from '../../../assets/svg/PhoneSvg'

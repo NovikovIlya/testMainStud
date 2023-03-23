@@ -69,6 +69,8 @@ export const Registration: FC = () => {
 			)
 		}
 	}
+	console.log(error)
+
 	return (
 		<>
 			<BackMainPage />
@@ -103,7 +105,6 @@ export const Registration: FC = () => {
 					>
 						<Input size="large" placeholder="Фамилия" />
 					</Form.Item>
-
 					<Form.Item
 						name="name"
 						className={styles.input}
@@ -146,7 +147,7 @@ export const Registration: FC = () => {
 							]}
 							validateStatus={error !== null ? 'error' : undefined}
 							help={error?.map(el =>
-								el.message.substring(0, 3) !== 'pas' ? (
+								el.message.substring(0, 3) === 'ema' ? (
 									<div key={el.message}>{el.message}</div>
 								) : (
 									''
@@ -156,29 +157,27 @@ export const Registration: FC = () => {
 							<Input size="large" placeholder="Электронная почта" />
 						</Form.Item>
 					)}
-
 					<Form.Item
 						name="password"
 						className={styles.input}
 						rules={[{ required: true, message: '' }]}
 						validateStatus={error !== null ? 'error' : undefined}
-					>
-						<Input size="large" type="password" placeholder="Пароль" />
-					</Form.Item>
-					<div className={classNames('w-auto h-auto', 'text-red-500')}>
-						{error?.map(el =>
+						help={error?.map(el =>
 							el.message.substring(0, 3) === 'pas' ? (
 								<div key={el.message}>{el.message}</div>
 							) : (
 								''
 							)
 						)}
-					</div>
-					<div className={styles.passwordText}>
-						Пароль должен содержать от 8 символов, буквы верхнего и нижнего
-						регистра, а также цифры
-					</div>
-
+					>
+						<Input size="large" type="password" placeholder="Пароль" />
+					</Form.Item>
+					{!error && (
+						<div className={styles.passwordText}>
+							Пароль должен содержать от 8 символов, буквы верхнего и нижнего
+							регистра, а также цифры
+						</div>
+					)}
 					<Form.Item
 						name="confirmPassword"
 						className={styles.input}
@@ -195,7 +194,6 @@ export const Registration: FC = () => {
 							placeholder="Повторите пароль"
 						/>
 					</Form.Item>
-
 					<Form.Item>
 						<div className={styles.buttons}>
 							<Button size="large" type="primary" htmlType="submit">

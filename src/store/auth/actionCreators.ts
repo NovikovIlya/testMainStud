@@ -1,5 +1,4 @@
 import { Dispatch } from '@reduxjs/toolkit'
-import { useNavigate } from 'react-router-dom'
 
 import { Auth_User, Refresh_Token, Reg_User } from '../../api/auth'
 import { IAuthRequest, IRegRequest } from '../../api/auth/types'
@@ -7,7 +6,6 @@ import { isTokenExpired } from '../../utils/jwt'
 import { store } from '../index'
 
 import {
-	loadProfileSuccess,
 	loginFailure,
 	loginStart,
 	loginSuccess,

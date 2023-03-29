@@ -18,8 +18,7 @@ export const axiosInstance = axios.create({
 })
 
 const urlWithOutBearer = [endpoints.REG.REGISTR, endpoints.AUTH.LOGIN]
-const urlWithRefreshBearer = [endpoints.AUTH.REGRESH]
-//const urlWithAccessBearer = [endpoints.PROFILE]
+const urlWithRefreshBearer = [endpoints.AUTH.REFRESH]
 
 axiosInstance.interceptors.request.use(async (config: any) => {
 	let authorization = null
@@ -27,10 +26,9 @@ axiosInstance.interceptors.request.use(async (config: any) => {
 		return config
 	} else {
 		if (config.url && urlWithRefreshBearer.includes(config.url)) {
-			console.log('refresh bearer')
+			// console.log('refresh bearer')
 			authorization = `Bearer ${cookies.get('refresh')}`
 		} else {
-			console.log('access bearer')
 			const accessToken = await store.dispatch(getAccessToken())
 			authorization = `Bearer ${accessToken}`
 		}

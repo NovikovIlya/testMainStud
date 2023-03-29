@@ -25,17 +25,19 @@ export interface IAuthResponse {
 }
 
 export interface ProfileData {
-	lastName: string
-	firstName: string
-	middleName: string
-	birthDate: string
-	institut: string
-	group: number
-	workPlace: string
-	kabinet: string //какой тип?
-	phone: string
-	fax: string //какой тип?
-	email: string
+	lastName: string | null
+	firstName: string | null
+	middleName: string | null
+	birthDate: string | null
+	citizenship: string | null
+	birthPlace: string | null
+	institut: string | null
+	group: number | null
+	workPlace: string | null
+	kabinet: number | null
+	phone: string | null
+	fax: string | null
+	email: string | null
 }
 
 export interface RegFormData {
@@ -44,4 +46,8 @@ export interface RegFormData {
 	name: string
 	email: string | null
 	phone: string | null
+}
+
+export interface ChangePassword {
+	password: string
 }

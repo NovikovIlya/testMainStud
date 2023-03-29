@@ -1,11 +1,26 @@
 import { Dispatch } from '@reduxjs/toolkit'
 
-import { Auth_User, Refresh_Token, Reg_User } from '../../api/auth'
-import { IAuthRequest, IRegRequest } from '../../api/auth/types'
+import {
+	Auth_User,
+	Change_User_Pass,
+	Get_User_Data,
+	Put_User_Data,
+	Refresh_Token,
+	Reg_User
+} from '../../api/auth'
+import {
+	ChangePassword,
+	IAuthRequest,
+	IRegRequest,
+	ProfileData
+} from '../../api/auth/types'
 import { isTokenExpired } from '../../utils/jwt'
 import { store } from '../index'
 
 import {
+	loadProfileFailure,
+	loadProfileStart,
+	loadProfileSuccess,
 	loginFailure,
 	loginStart,
 	loginSuccess,
@@ -14,24 +29,6 @@ import {
 	registStart,
 	registSuccess
 } from './authReducer'
-
-export const loginUser =
-	(data: IAuthRequest) =>
-	async (dispatch: Dispatch): Promise<void> => {
-		try {
-			dispatch(loginStart())
-			const res = await Auth_User(data)
-
-			if (res.status === 200) {
-				dispatch(loginSuccess(res.data))
-			}
-			//dispatch(getProfile())
-		} catch (e: any) {
-			dispatch(loginFailure(e.response.data.errors))
-			//console.error(e)
-			//dispatch(loginFailure(e.messages))
-		}
-	}
 
 export const regUser =
 	(data: IRegRequest) =>
@@ -81,8 +78,65 @@ export const getAccessToken =
 		return accessToken
 	}
 
-// export const getUserData = () => async (dispatch: Dispatch<any>): Promise<void> => {
-//   try {
-//     dispatch
-//   }
-// }
+export const get_user_data =
+	() =>
+	async (dispatch: Dispatch): Promise<void> => {
+		try {
+			dispatch(loadProfileStart())
+			const res = await Get_User_Data()
+			if (res.status === 200) {
+				dispatch(loadProfileSuccess(res.data))
+			}
+		} catch (e: any) {
+			dispatch(loadProfileFailure(e.response.data.errors))
+			console.error(e.response)
+		}
+	}
+
+export const loginUser =
+	(data: IAuthRequest) =>
+	async (dispatch: Dispatch): Promise<void> => {
+		try {
+			dispatch(loginStart())
+			const res = await Auth_User(data)
+
+			if (res.status === 200) {
+				dispatch(loginSuccess(res.data))
+			}
+		} catch (e: any) {
+			dispatch(loginFailure(e.response.data.errors))
+		}
+	}
+
+export const change_user_data =
+	(data: ProfileData) =>
+	async (dispatch: Dispatch): Promise<void> => {
+		try {
+			dispatch(loadProfileStart())
+			const res = await Put_User_Data(data)
+			if (res.status === 204) {
+				console.log('Пользовательские данные успешно изменены')
+				dispatch(loadProfileSuccess(null))
+			}
+		} catch (e: any) {
+			dispatch(
+				loadProfileFailure('ошибка при изменении пользовательских данных')
+			)
+		}
+	}
+
+export const change_user_password =
+	(data: ChangePassword) =>
+	async (dispatch: Dispatch): Promise<void> => {
+		try {
+			dispatch(loadProfileStart())
+			const res = await Change_User_Pass(data)
+			if (res.status === 204) {
+				console.log('Пользовательский пароль изменен успешно')
+				dispatch(loadProfileSuccess(null))
+			}
+		} catch (e: any) {
+			dispatch(loadProfileFailure('ошибка в изменении пароля'))
+			//console.error(e.response)
+		}
+	}

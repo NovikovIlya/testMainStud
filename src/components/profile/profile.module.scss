@@ -1,3 +1,23 @@
 .main {
 	@apply flex h-screen w-full items-center justify-center bg-blue-500 text-3xl font-bold;
+
+	.box {
+		@apply flex h-3/4 w-3/4 flex-col items-center justify-center rounded-lg border-4 border-black bg-gray-600;
+
+		.caption {
+			@apply flex h-auto w-full justify-center text-lg;
+		}
+
+		.input_item {
+			@apply mt-2 flex h-auto w-11/12 justify-center;
+		}
+
+		.button_block {
+			@apply mt-6 flex h-auto w-full justify-around;
+
+			.button {
+				@apply h-auto w-auto border-b-2 border-none border-black bg-gray-500 text-white transition-colors hover:border-gray-500 hover:bg-black hover:text-bluekfu;
+			}
+		}
+	}
 }

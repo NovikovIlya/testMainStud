@@ -18,9 +18,8 @@ export interface IAuthState {
 		error: Error[] | null
 	}
 	profileData: {
-		// profile: string | null
 		isLoading: boolean
-		error: Error[] | null
+		error: Error[] | null | String
 		CurrentData: ProfileData | null
 	}
 }
@@ -108,21 +107,23 @@ export const authReducer = createSlice({
 		}),
 		loadProfileSuccess: (
 			state,
-			action: PayloadAction<{ data: ProfileData }>
-		): IAuthState => ({
-			...state,
-			profileData: {
-				...state.profileData,
-				// profile: action.payload,
-				isLoading: false,
-				error: null,
-				CurrentData: action.payload.data
+			action: PayloadAction<ProfileData | null>
+		): IAuthState => {
+			if (action.payload !== null) {
+				return {
+					...state,
+					profileData: {
+						...state.profileData,
+						isLoading: false,
+						error: null,
+						CurrentData: action.payload
+					}
+				}
+			} else {
+				return { ...state }
 			}
-		}),
-		loadProfileFailure: (
-			state,
-			action: PayloadAction<Error[]>
-		): IAuthState => ({
+		},
+		loadProfileFailure: (state, action: PayloadAction<String>): IAuthState => ({
 			...state,
 			profileData: {
 				...state.profileData,
@@ -130,10 +131,10 @@ export const authReducer = createSlice({
 				error: action.payload
 			}
 		}),
-		logoutSuccess: () => {
+		logoutSuccess: (state): IAuthState => {
 			cookies.remove('refresh')
 			localStorage.clear()
-
+			return initialState
 			//return initialState
 		}
 	}

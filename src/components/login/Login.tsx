@@ -7,7 +7,11 @@ import { useNavigate } from 'react-router-dom'
 import { GosSvg } from '../../assets/svg/GosSvg'
 import { useAppDispatch } from '../../store'
 import { RootState } from '../../store'
-import { getAccessToken, loginUser } from '../../store/auth/actionCreators'
+import {
+	getAccessToken,
+	get_user_data,
+	loginUser
+} from '../../store/auth/actionCreators'
 import { BackMainPage } from '../back-main-page/BackMainPage'
 import { Faq } from '../faq/Faq'
 
@@ -24,13 +28,25 @@ export const Login: FC = () => {
 
 	const onChangeRadio = (e: RadioChangeEvent) => setValue(e.target.value)
 
-	const onFinish = (values: { email: string; password: string }) => {
+	const onFinish = (values: {
+		email?: string
+		phone?: string
+		password: string
+	}) => {
 		const dataApi = async () => {
-			await dispatch(
-				loginUser({ username: values.email, password: values.password })
-			)
+			if (values?.email) {
+				await dispatch(
+					loginUser({ username: values.email, password: values.password })
+				)
+			}
+			if (values?.phone) {
+				await dispatch(
+					loginUser({ username: values.phone, password: values.password })
+				)
+			}
 			const res = await dispatch(getAccessToken())
 			if (res !== null) {
+				dispatch(get_user_data())
 				navigate('/profile')
 			}
 		}

@@ -10,17 +10,18 @@ import { useAppDispatch } from './store'
 import { getAccessToken } from './store/auth/actionCreators'
 
 const App = () => {
-	const [isLogginIn, ChangeIsLogginIn] = useState(false)
+	const [isLoginIn, ChangeIsLoginIn] = useState(false)
 	const navigate = useNavigate()
 	const dispatch = useAppDispatch()
 	useEffect(() => {
 		const dataApi = async () => {
 			const res = await dispatch(getAccessToken())
 			if (res !== null) {
+				console.log(res)
 				navigate('/profile')
-				ChangeIsLogginIn(false)
+				ChangeIsLoginIn(false)
 			} else {
-				ChangeIsLogginIn(true)
+				ChangeIsLoginIn(true)
 			}
 		}
 		dataApi()
@@ -42,7 +43,7 @@ const App = () => {
 						<Route path="/registration/*" element={<Registration />} />
 						<Route
 							path="/profile/*"
-							element={isLogginIn ? <Login /> : <Profile />}
+							element={isLoginIn ? <Login /> : <Profile />}
 						/>
 					</Routes>
 				</main>

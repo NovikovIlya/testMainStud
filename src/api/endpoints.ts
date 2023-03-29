@@ -1,12 +1,13 @@
 const endpoints = {
 	AUTH: {
 		LOGIN: '/login',
-		REGRESH: '/token/refresh'
+		REFRESH: '/token/refresh'
 	},
 	REG: {
 		REGISTR: '/register'
 	},
-	PROFILE: '/users/me'
+	GET_USER: '/users/me',
+	CHANGE_PASSWORD: '/users/me/password'
 }
 
 export default endpoints

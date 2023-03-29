@@ -18,7 +18,7 @@ export const isTokenExpired = (token: string | null): boolean => {
 		const tokenInfoDecoded = window.atob(tokenInfo) //раскодирование данных
 		const { exp }: IAuthTokenInfo = JSON.parse(tokenInfoDecoded) //извлечение в соответствующие переменные
 
-		console.log(exp - getUnixTime())
+		// console.log(exp - getUnixTime())
 
 		//берем время до которого живет токен и вычитаем из него текущее время
 		return exp - getUnixTime() <= 0

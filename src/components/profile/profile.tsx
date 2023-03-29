@@ -3,14 +3,9 @@ import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-import { ChangePassword, ProfileData } from '../../api/auth/types'
-import { useAppDispatch } from '../../store'
 import { RootState } from '../../store'
-import {
-	change_user_data,
-	change_user_password,
-	get_user_data
-} from '../../store/auth/actionCreators'
+import { useAppDispatch } from '../../store'
+import { get_user_data } from '../../store/auth/actionCreators'
 import { logoutSuccess } from '../../store/auth/authReducer'
 
 import styles from './profile.module.scss'
@@ -23,37 +18,14 @@ export const Profile: FC = () => {
 	)
 	const navigate = useNavigate()
 	useEffect(() => {
-		console.log(localStorage.getItem('token'))
+		dispatch(get_user_data())
 		if (localStorage.getItem('token') === null) {
 			navigate('/')
 		}
 	}, [])
 
-	let ChangedData: ProfileData = {
-		lastName: 'Закиров',
-		firstName: 'Булат',
-		middleName: 'Маратович',
-		birthDate: '2002-06-28',
-		citizenship: 'Russia',
-		birthPlace: 'Kazan',
-		institut: 'IVMIIT',
-		group: 9052,
-		workPlace: null,
-		kabinet: null,
-		phone: '89274139312',
-		fax: null,
-		email: 'Ghost.stop@yandex.ru'
-	}
-	let Password: ChangePassword = {
-		password: 'Zakirow1234'
-	}
-	const Change_UserData = () => {
-		dispatch(change_user_data(ChangedData))
-		dispatch(get_user_data())
-	}
-	const Change_Password = () => {
-		dispatch(change_user_password(Password))
-	}
+	console.log(userdata)
+
 	return (
 		<div className={styles.main}>
 			<div className={styles.box}>
@@ -104,12 +76,6 @@ export const Profile: FC = () => {
 						: userdata?.workPlace}
 				</div>
 				<div className={styles.button_block}>
-					<button onClick={() => Change_UserData()} className={styles.button}>
-						Изменить данные пользователя
-					</button>
-					<button onClick={() => Change_Password()} className={styles.button}>
-						Изменить пароль
-					</button>
 					<button
 						onClick={() => {
 							dis(logoutSuccess())

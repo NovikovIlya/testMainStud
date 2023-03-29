@@ -7,11 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import { GosSvg } from '../../assets/svg/GosSvg'
 import { useAppDispatch } from '../../store'
 import { RootState } from '../../store'
-import {
-	getAccessToken,
-	get_user_data,
-	loginUser
-} from '../../store/auth/actionCreators'
+import { getAccessToken, loginUser } from '../../store/auth/actionCreators'
 import { BackMainPage } from '../back-main-page/BackMainPage'
 import { Faq } from '../faq/Faq'
 
@@ -46,7 +42,6 @@ export const Login: FC = () => {
 			}
 			const res = await dispatch(getAccessToken())
 			if (res !== null) {
-				dispatch(get_user_data())
 				navigate('/profile')
 			}
 		}
@@ -101,7 +96,7 @@ export const Login: FC = () => {
 							className={styles.input}
 							name="email"
 							rules={[
-								{ type: 'email' },
+								// { type: 'email' },
 								{
 									required: true,
 									message: 'Пожалуйста, введите свою электронную почту!'

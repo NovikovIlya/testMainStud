@@ -17,7 +17,6 @@ const App = () => {
 		const dataApi = async () => {
 			const res = await dispatch(getAccessToken())
 			if (res !== null) {
-				console.log(res)
 				navigate('/profile')
 				ChangeIsLoginIn(false)
 			} else {

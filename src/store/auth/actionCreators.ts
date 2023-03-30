@@ -1,4 +1,5 @@
 import { Dispatch } from '@reduxjs/toolkit'
+import { AxiosError } from 'axios'
 
 import {
 	Auth_User,
@@ -8,6 +9,7 @@ import {
 	Refresh_Token,
 	Reg_User
 } from '../../api/auth'
+import { AuthSuccess } from '../../api/auth/types'
 import {
 	ChangePassword,
 	IAuthRequest,
@@ -101,7 +103,12 @@ export const loginUser =
 			const res = await Auth_User(data)
 
 			if (res.status === 200) {
-				dispatch(loginSuccess(res.data))
+				dispatch(
+					loginSuccess({
+						accessToken: res.data.accessToken,
+						refreshToken: res.data.refreshToken
+					})
+				)
 			}
 		} catch (e: any) {
 			dispatch(loginFailure(e.response.data.errors))

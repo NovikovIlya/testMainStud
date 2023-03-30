@@ -7,21 +7,18 @@ export interface IRegRequest {
 	email: string | null
 }
 
-export interface IRegResponse {
-	answer: any //Error[] | string
+export interface IAuthRequest {
+	username: string
+	password: string
 }
 
 export interface Error {
 	message: string
 }
 
-export interface IAuthRequest {
-	username: string
-	password: string
-}
-
-export interface IAuthResponse {
-	answer: any //AuthSuccess | Error[];
+export interface AuthSuccess {
+	accessToken: string
+	refreshToken: string
 }
 
 export interface ProfileData {
@@ -46,6 +43,7 @@ export interface RegFormData {
 	name: string
 	email: string | null
 	phone: string | null
+	confirmPassword: string | null
 }
 
 export interface ChangePassword {

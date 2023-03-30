@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import Cookies from 'universal-cookie'
 
-import { Error, ProfileData } from '../../api/auth/types'
+import { AuthSuccess, Error, ProfileData } from '../../api/auth/types'
 import { RootState } from '../index'
 
 const cookies = new Cookies()
@@ -38,7 +38,6 @@ const initialState: IAuthState = {
 	profileData: {
 		error: null,
 		isLoading: false,
-		// profile: null,
 		CurrentData: null
 	}
 }
@@ -61,7 +60,7 @@ export const authReducer = createSlice({
 				isLoading: true
 			}
 		}),
-		loginSuccess: (state, action: PayloadAction<any>): IAuthState => {
+		loginSuccess: (state, action: PayloadAction<AuthSuccess>): IAuthState => {
 			localStorage.setItem('token', action.payload.accessToken)
 			if (action.payload.refreshToken !== '') {
 				cookies.set('refresh', action.payload.refreshToken)
@@ -89,7 +88,7 @@ export const authReducer = createSlice({
 				error: action.payload
 			}
 		}),
-		registFailure: (state, action: PayloadAction<any>): IAuthState => {
+		registFailure: (state, action: PayloadAction<Error[]>): IAuthState => {
 			return {
 				...state,
 				regData: {
@@ -123,7 +122,7 @@ export const authReducer = createSlice({
 				return { ...state }
 			}
 		},
-		loadProfileFailure: (state, action: PayloadAction<String>): IAuthState => ({
+		loadProfileFailure: (state, action: PayloadAction<string>): IAuthState => ({
 			...state,
 			profileData: {
 				...state.profileData,
@@ -131,11 +130,10 @@ export const authReducer = createSlice({
 				error: action.payload
 			}
 		}),
-		logoutSuccess: (state): IAuthState => {
+		logoutSuccess: (): IAuthState => {
 			cookies.remove('refresh')
 			localStorage.clear()
 			return initialState
-			//return initialState
 		}
 	}
 })

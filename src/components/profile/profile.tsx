@@ -24,8 +24,6 @@ export const Profile: FC = () => {
 		}
 	}, [])
 
-	console.log(userdata)
-
 	return (
 		<div className={styles.main}>
 			<div className={styles.box}>

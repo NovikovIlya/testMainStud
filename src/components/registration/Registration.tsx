@@ -8,7 +8,6 @@ import {
 	Typography
 } from 'antd'
 import type { CheckboxChangeEvent } from 'antd/es/checkbox'
-import classNames from 'classnames'
 import { FC, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
@@ -26,10 +25,11 @@ import './Registration.scss'
 const { Title } = Typography
 
 export const Registration: FC = () => {
-	const error = useSelector((state: RootState) => state.auth.regData.error)
+	let error = useSelector((state: RootState) => state.auth.regData.error)
 	const dispatch = useAppDispatch()
 	const [value, setValue] = useState(0)
 	const [check, setCheck] = useState(false)
+	const [PasEq, ChangePasEq] = useState(true)
 
 	let new_user: IRegRequest = {
 		lastName: '',
@@ -46,30 +46,34 @@ export const Registration: FC = () => {
 		setCheck(e.target.checked)
 
 	const onFinish = (values: RegFormData) => {
-		if (values?.phone) {
-			dispatch(
-				regUser({
-					...new_user,
-					lastName: values.surname,
-					firstName: values.name,
-					phone: values.phone,
-					password: values.password
-				})
-			)
-		}
-		if (values?.email) {
-			dispatch(
-				regUser({
-					...new_user,
-					lastName: values.surname,
-					firstName: values.name,
-					email: values.email,
-					password: values.password
-				})
-			)
+		if (values.confirmPassword !== values.password) {
+			ChangePasEq(false)
+		} else {
+			ChangePasEq(true)
+			if (values?.phone) {
+				dispatch(
+					regUser({
+						...new_user,
+						lastName: values.surname,
+						firstName: values.name,
+						phone: values.phone,
+						password: values.password
+					})
+				)
+			}
+			if (values?.email) {
+				dispatch(
+					regUser({
+						...new_user,
+						lastName: values.surname,
+						firstName: values.name,
+						email: values.email,
+						password: values.password
+					})
+				)
+			}
 		}
 	}
-	console.log(error)
 
 	return (
 		<div className="flex items-center flex-col">
@@ -123,9 +127,13 @@ export const Registration: FC = () => {
 								{ type: 'string' },
 								{ required: true, message: 'Пожалуйста, введите свой телефон!' }
 							]}
-							validateStatus={error !== null ? 'error' : undefined}
+							validateStatus={
+								error?.some(el => el.message.substring(0, 3) === 'ema')
+									? 'error'
+									: undefined
+							}
 							help={error?.map(el =>
-								el.message.substring(0, 3) !== 'pas' ? (
+								el.message.substring(0, 3) === 'ema' ? (
 									<div key={el.message}>{el.message}</div>
 								) : (
 									''
@@ -145,7 +153,11 @@ export const Registration: FC = () => {
 									message: 'Пожалуйста, введите свою электронную почту!'
 								}
 							]}
-							validateStatus={error !== null ? 'error' : undefined}
+							validateStatus={
+								error?.some(el => el.message.substring(0, 3) === 'ema')
+									? 'error'
+									: undefined
+							}
 							help={error?.map(el =>
 								el.message.substring(0, 3) === 'ema' ? (
 									<div key={el.message}>{el.message}</div>
@@ -161,18 +173,31 @@ export const Registration: FC = () => {
 						name="password"
 						className={styles.input}
 						rules={[{ required: true, message: '' }]}
-						validateStatus={error !== null ? 'error' : undefined}
-						help={error?.map(el =>
-							el.message.substring(0, 3) === 'pas' ? (
-								<div key={el.message}>{el.message}</div>
+						validateStatus={
+							error?.some(el => el.message.substring(0, 3) === 'pas') ||
+							PasEq === false
+								? 'error'
+								: undefined
+						}
+						help={
+							PasEq === false ? (
+								<div>
+									Пожалуйста, убедитесь, что пароль и его подтвержение равны
+								</div>
 							) : (
-								''
+								error?.map(el =>
+									el.message.substring(0, 3) === 'pas' ? (
+										<div key={el.message}>{el.message}</div>
+									) : (
+										''
+									)
+								)
 							)
-						)}
+						}
 					>
 						<Input size="large" type="password" placeholder="Пароль" />
 					</Form.Item>
-					{!error && (
+					{PasEq && !error && (
 						<div className={styles.passwordText}>
 							Пароль должен содержать от 8 символов, буквы верхнего и нижнего
 							регистра, а также цифры
@@ -187,6 +212,18 @@ export const Registration: FC = () => {
 								message: 'Пожалуйста, подтвердите свой пароль!'
 							}
 						]}
+						validateStatus={
+							error?.some(el => el.message.substring(0, 3) === 'pas')
+								? 'error'
+								: undefined
+						}
+						help={error?.map(el =>
+							el.message.substring(0, 3) === 'pas' ? (
+								<div key={el.message}>{el.message}</div>
+							) : (
+								''
+							)
+						)}
 					>
 						<Input
 							size="large"

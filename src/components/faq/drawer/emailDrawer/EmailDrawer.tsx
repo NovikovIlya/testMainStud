@@ -42,7 +42,7 @@ export const EmailDrawer: FC<IEmailDrawerProps> = ({
 			open={childrenDrawer}
 			headerStyle={{ textAlign: 'center' }}
 		>
-			<Form className={styles.form} layout="vertical" hideRequiredMark>
+			<Form className={styles.form} layout="vertical" requiredMark>
 				<Form.Item
 					name="email"
 					className={styles.input}

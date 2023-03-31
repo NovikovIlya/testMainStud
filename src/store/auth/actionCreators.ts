@@ -1,5 +1,4 @@
 import { Dispatch } from '@reduxjs/toolkit'
-import { AxiosError } from 'axios'
 
 import {
 	Auth_User,
@@ -9,7 +8,6 @@ import {
 	Refresh_Token,
 	Reg_User
 } from '../../api/auth'
-import { AuthSuccess } from '../../api/auth/types'
 import {
 	ChangePassword,
 	IAuthRequest,

@@ -96,7 +96,7 @@ export const Login: FC = () => {
 							className={styles.input}
 							name="email"
 							rules={[
-								// { type: 'email' },
+								{ type: 'string' },
 								{
 									required: true,
 									message: 'Пожалуйста, введите свою электронную почту!'

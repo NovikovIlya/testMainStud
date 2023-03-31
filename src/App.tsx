@@ -1,5 +1,5 @@
 import { ConfigProvider } from 'antd'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 
@@ -13,24 +13,26 @@ const App = () => {
 	const [isLoginIn, ChangeIsLoginIn] = useState(false)
 	const navigate = useNavigate()
 	const dispatch = useAppDispatch()
-	//const Load = useSelector((state: RootState) => state.auth.authData.isLoading)
+	const FirstShow = useRef(0)
 
 	useEffect(() => {
-		console.log('hey')
 		const dataApi = async () => {
 			const res = await dispatch(getAccessToken())
 			if (res !== null) {
-				console.log(res)
-				navigate('/profile')
 				ChangeIsLoginIn(false)
-			} else {
+				navigate('/profile')
+			}
+			if (res === '403') {
+				navigate('/')
 				ChangeIsLoginIn(true)
+				FirstShow.current = 0
 			}
 		}
-		dataApi()
-	}, [])
-
-	console.log('1')
+		if (FirstShow.current === 0) {
+			dataApi()
+			FirstShow.current = 1
+		}
+	}, [navigate, dispatch])
 
 	return (
 		<>

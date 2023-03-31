@@ -1,6 +1,4 @@
 import { Dispatch } from '@reduxjs/toolkit'
-import { AxiosPromise } from 'axios'
-import { useNavigate } from 'react-router-dom'
 
 import {
 	Auth_User,
@@ -10,7 +8,6 @@ import {
 	Refresh_Token,
 	Reg_User
 } from '../../api/auth'
-import { AuthSuccess } from '../../api/auth/types'
 import {
 	ChangePassword,
 	IAuthRequest,
@@ -28,6 +25,7 @@ import {
 	loginStart,
 	loginSuccess,
 	logoutSuccess,
+	putId,
 	registFailure,
 	registStart,
 	registSuccess
@@ -45,14 +43,9 @@ export const regUser =
 			}
 		} catch (e: any) {
 			dispatch(registFailure(e.response.data.errors))
-			setTimeout(() => {
-				dispatch(registFailure([]))
-			}, 8000)
 			console.error(e.response)
 		}
 	}
-
-let counter = 0
 
 export const getAccessToken =
 	() =>
@@ -67,13 +60,9 @@ export const getAccessToken =
 
 			if (accessToken !== null) {
 				if (isTokenExpired(accessToken)) {
-					if (counter === 0) {
-						console.log(counter)
-						const res = await Refresh_Token()
-						if (res.status === 200) {
-							accessToken = res.data.accessToken
-						}
-						counter++
+					const res = await Refresh_Token()
+					if (res.status === 200) {
+						accessToken = res.data.accessToken
 					}
 				}
 				dispatch(
@@ -87,25 +76,32 @@ export const getAccessToken =
 			//если 403
 			dispatch(logoutSuccess())
 			console.error(e)
-			return null
+			return '403'
 		}
 		return accessToken
 	}
 
 export const get_user_data =
 	() =>
-	async (dispatch: Dispatch): Promise<void> => {
+	async (dispatch: Dispatch): Promise<string> => {
 		try {
+			console.log('get_data')
 			dispatch(loadProfileStart())
 			const res = await Get_User_Data()
 			if (res.status === 200) {
-				dispatch(loadProfileSuccess(res.data))
 				localStorage.setItem('user_data', JSON.stringify(res.data))
+				dispatch(
+					loadProfileSuccess(
+						JSON.parse(localStorage.getItem('user_data') || '{}')
+					)
+				)
+				return '200'
 			}
 		} catch (e: any) {
 			dispatch(loadProfileFailure(e.response.data.errors))
 			console.error(e.response)
 		}
+		return '404'
 	}
 
 export const loginUser =
@@ -125,9 +121,6 @@ export const loginUser =
 			}
 		} catch (e: any) {
 			dispatch(loginFailure(e.response.data.errors))
-			setTimeout(() => {
-				dispatch(loginFailure([]))
-			}, 8000)
 		}
 	}
 
@@ -162,4 +155,31 @@ export const change_user_password =
 			dispatch(loadProfileFailure('ошибка в изменении пароля'))
 			//console.error(e.response)
 		}
+	}
+
+export const init_state_with_user_data =
+	() =>
+	async (dispatch: Dispatch<any>): Promise<void> => {
+		dispatch(
+			loadProfileSuccess(JSON.parse(localStorage.getItem('user_data') || '{}'))
+		)
+		dispatch(putId(localStorage.getItem('user_id') || ''))
+	}
+
+export const log_out =
+	() =>
+	async (dispatch: Dispatch<any>): Promise<void> => {
+		dispatch(logoutSuccess())
+	}
+
+export const Base_Login_Errors =
+	() =>
+	async (dispatch: Dispatch<any>): Promise<void> => {
+		dispatch(loginFailure([]))
+	}
+
+export const Base_Registration_Errors =
+	() =>
+	async (dispatch: Dispatch<any>): Promise<void> => {
+		dispatch(registFailure([]))
 	}

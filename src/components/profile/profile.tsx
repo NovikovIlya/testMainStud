@@ -1,32 +1,34 @@
-import { FC, useEffect } from 'react'
+import { FC, useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
-import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import { RootState } from '../../store'
-import { putId } from '../../store/auth/authReducer'
-import { loadProfileSuccess, logoutSuccess } from '../../store/auth/authReducer'
+import { useAppDispatch } from '../../store'
+import {
+	init_state_with_user_data,
+	log_out
+} from '../../store/auth/actionCreators'
 
 import styles from './profile.module.scss'
 
 export const Profile: FC = () => {
-	const dis = useDispatch()
+	const dispatch = useAppDispatch()
+	const FirstShow = useRef(0)
+
 	const userdata = useSelector(
 		(state: RootState) => state.auth.profileData.CurrentData
 	)
 	const navigate = useNavigate()
 	useEffect(() => {
-		if (localStorage.getItem('token') !== null) {
-			dis(
-				loadProfileSuccess(
-					JSON.parse(localStorage.getItem('user_data') || '{}')
-				)
-			)
-			dis(putId(localStorage.getItem('user_id') || ''))
+		if (FirstShow.current === 0) {
+			FirstShow.current = 1
+			if (userdata === null) {
+				dispatch(init_state_with_user_data())
+			}
 		} else {
-			navigate('/')
+			FirstShow.current = 0
 		}
-	}, [])
+	}, [dispatch, userdata])
 
 	return (
 		<div className={styles.main}>
@@ -90,7 +92,7 @@ export const Profile: FC = () => {
 				<div className={styles.button_block}>
 					<button
 						onClick={() => {
-							dis(logoutSuccess())
+							dispatch(log_out())
 							navigate('/')
 						}}
 						className={styles.button}

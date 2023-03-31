@@ -8,7 +8,7 @@ import {
 	Typography
 } from 'antd'
 import type { CheckboxChangeEvent } from 'antd/es/checkbox'
-import { FC, useState } from 'react'
+import { FC, useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
@@ -16,6 +16,7 @@ import { IRegRequest, RegFormData } from '../../api/auth/types'
 import { useAppDispatch } from '../../store'
 import { RootState } from '../../store'
 import { regUser } from '../../store/auth/actionCreators'
+import { Base_Registration_Errors } from '../../store/auth/actionCreators'
 import { BackMainPage } from '../back-main-page/BackMainPage'
 import { Faq } from '../faq/Faq'
 
@@ -30,6 +31,7 @@ export const Registration: FC = () => {
 	const [value, setValue] = useState(0)
 	const [check, setCheck] = useState(false)
 	const [PasEq, ChangePasEq] = useState(true)
+	const ShowFirst = useRef(0)
 
 	let new_user: IRegRequest = {
 		lastName: '',
@@ -44,6 +46,15 @@ export const Registration: FC = () => {
 
 	const onChangeCheckbox = (e: CheckboxChangeEvent) =>
 		setCheck(e.target.checked)
+
+	useEffect(() => {
+		if (ShowFirst.current === 0) {
+			ShowFirst.current = 1
+			dispatch(Base_Registration_Errors())
+		} else {
+			ShowFirst.current = 0
+		}
+	}, [])
 
 	const onFinish = (values: RegFormData) => {
 		if (values.confirmPassword !== values.password) {

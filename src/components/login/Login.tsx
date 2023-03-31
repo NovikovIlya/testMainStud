@@ -1,10 +1,9 @@
-import { Form, Radio, RadioChangeEvent, Typography } from 'antd'
+import { Form, Typography } from 'antd'
 import { FC, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-import { useAppDispatch } from '../../store'
-import { RootState } from '../../store'
+import { RootState, useAppDispatch } from '../../store'
 import { getAccessToken, loginUser } from '../../store/auth/actionCreators'
 import { BackMainPage } from '../back-main-page/BackMainPage'
 import { Faq } from '../faq/Faq'
@@ -13,6 +12,7 @@ import styles from './Login.module.scss'
 import './Login.scss'
 import { Buttons } from './buttons/Buttons'
 import { Inputs } from './inputs/Inputs'
+import { Switcher } from './switcher/Switcher'
 
 const { Title } = Typography
 
@@ -21,8 +21,6 @@ export const Login: FC = () => {
 	const error = useSelector((state: RootState) => state.auth.authData.error)
 	const dispatch = useAppDispatch()
 	const [value, setValue] = useState(0)
-
-	const onChangeRadio = (e: RadioChangeEvent) => setValue(e.target.value)
 
 	const onFinish = (values: {
 		email?: string
@@ -49,7 +47,7 @@ export const Login: FC = () => {
 	}
 
 	return (
-		<div className="flex items-center flex-col">
+		<div className={styles.wrapper}>
 			<BackMainPage />
 			<div className={styles.main}>
 				<Form
@@ -58,19 +56,9 @@ export const Login: FC = () => {
 					initialValues={{ remember: true }}
 					onFinish={onFinish}
 				>
-					<Form.Item>
-						<Title className={styles.title}>Авторизация</Title>
-						<Radio.Group
-							onChange={onChangeRadio}
-							defaultValue={0}
-							size="large"
-							className={styles.switcher}
-							buttonStyle="solid"
-						>
-							<Radio.Button value={0}>По Email</Radio.Button>
-							<Radio.Button value={1}>По номеру</Radio.Button>
-						</Radio.Group>
-					</Form.Item>
+					<Title className={styles.title}>Авторизация</Title>
+
+					<Switcher setValue={setValue} />
 					<Inputs error={error} value={value} />
 					<Buttons />
 				</Form>

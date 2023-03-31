@@ -1,5 +1,6 @@
 import { Dispatch } from '@reduxjs/toolkit'
-import { AxiosError } from 'axios'
+import { AxiosPromise } from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 import {
 	Auth_User,
@@ -40,12 +41,18 @@ export const regUser =
 			const res = await Reg_User(data)
 			if (res.status === 201) {
 				dispatch(registSuccess(res.data))
+				localStorage.setItem('user_id', res.data)
 			}
 		} catch (e: any) {
 			dispatch(registFailure(e.response.data.errors))
+			setTimeout(() => {
+				dispatch(registFailure([]))
+			}, 8000)
 			console.error(e.response)
 		}
 	}
+
+let counter = 0
 
 export const getAccessToken =
 	() =>
@@ -60,22 +67,27 @@ export const getAccessToken =
 
 			if (accessToken !== null) {
 				if (isTokenExpired(accessToken)) {
-					const res = await Refresh_Token()
-					if (res.status === 200) {
-						dispatch(
-							loginSuccess({
-								accessToken: res.data.accessToken,
-								refreshToken: ''
-							})
-						)
+					if (counter === 0) {
+						console.log(counter)
+						const res = await Refresh_Token()
+						if (res.status === 200) {
+							accessToken = res.data.accessToken
+						}
+						counter++
 					}
-					accessToken = res.data.accessToken
 				}
+				dispatch(
+					loginSuccess({
+						accessToken: accessToken,
+						refreshToken: ''
+					})
+				)
 			}
 		} catch (e: any) {
 			//если 403
 			dispatch(logoutSuccess())
 			console.error(e)
+			return null
 		}
 		return accessToken
 	}
@@ -88,6 +100,7 @@ export const get_user_data =
 			const res = await Get_User_Data()
 			if (res.status === 200) {
 				dispatch(loadProfileSuccess(res.data))
+				localStorage.setItem('user_data', JSON.stringify(res.data))
 			}
 		} catch (e: any) {
 			dispatch(loadProfileFailure(e.response.data.errors))
@@ -112,6 +125,9 @@ export const loginUser =
 			}
 		} catch (e: any) {
 			dispatch(loginFailure(e.response.data.errors))
+			setTimeout(() => {
+				dispatch(loginFailure([]))
+			}, 8000)
 		}
 	}
 

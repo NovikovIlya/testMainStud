@@ -4,22 +4,26 @@ import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import { RootState } from '../../store'
-import { useAppDispatch } from '../../store'
-import { get_user_data } from '../../store/auth/actionCreators'
-import { logoutSuccess } from '../../store/auth/authReducer'
+import { putId } from '../../store/auth/authReducer'
+import { loadProfileSuccess, logoutSuccess } from '../../store/auth/authReducer'
 
 import styles from './profile.module.scss'
 
 export const Profile: FC = () => {
 	const dis = useDispatch()
-	const dispatch = useAppDispatch()
 	const userdata = useSelector(
 		(state: RootState) => state.auth.profileData.CurrentData
 	)
 	const navigate = useNavigate()
 	useEffect(() => {
-		dispatch(get_user_data())
-		if (localStorage.getItem('token') === null) {
+		if (localStorage.getItem('token') !== null) {
+			dis(
+				loadProfileSuccess(
+					JSON.parse(localStorage.getItem('user_data') || '{}')
+				)
+			)
+			dis(putId(localStorage.getItem('user_id') || ''))
+		} else {
 			navigate('/')
 		}
 	}, [])
@@ -47,6 +51,16 @@ export const Profile: FC = () => {
 					{userdata?.birthDate === null
 						? 'birthDate is null'
 						: userdata?.birthDate}
+				</div>
+				<div className={styles.input_item}>
+					{userdata?.birthPlace === null
+						? 'birthPlace is null'
+						: userdata?.birthPlace}
+				</div>
+				<div className={styles.input_item}>
+					{userdata?.citizenship === null
+						? 'citizenship is null'
+						: userdata?.citizenship}
 				</div>
 				<div className={styles.input_item}>
 					{userdata?.email === null ? 'email is null' : userdata?.email}

@@ -7,7 +7,8 @@ import { useNavigate } from 'react-router-dom'
 import { GosSvg } from '../../assets/svg/GosSvg'
 import { useAppDispatch } from '../../store'
 import { RootState } from '../../store'
-import { getAccessToken, loginUser } from '../../store/auth/actionCreators'
+import { loginUser } from '../../store/auth/actionCreators'
+import { get_user_data } from '../../store/auth/actionCreators'
 import { BackMainPage } from '../back-main-page/BackMainPage'
 import { Faq } from '../faq/Faq'
 
@@ -40,13 +41,15 @@ export const Login: FC = () => {
 					loginUser({ username: values.phone, password: values.password })
 				)
 			}
-			const res = await dispatch(getAccessToken())
-			if (res !== null) {
+			if (localStorage.getItem('token') !== null) {
 				navigate('/profile')
+				dispatch(get_user_data())
 			}
 		}
 		dataApi()
 	}
+
+	console.log('2')
 
 	return (
 		<div className=" flex  items-center flex-col">

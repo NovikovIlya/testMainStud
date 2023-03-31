@@ -128,12 +128,12 @@ export const Registration: FC = () => {
 								{ required: true, message: 'Пожалуйста, введите свой телефон!' }
 							]}
 							validateStatus={
-								error?.some(el => el.message.substring(0, 3) === 'ema')
+								error?.some(el => el.message.substring(0, 3) === 'эле')
 									? 'error'
 									: undefined
 							}
 							help={error?.map(el =>
-								el.message.substring(0, 3) === 'ema' ? (
+								el.message.substring(0, 3) === 'эле' ? (
 									<div key={el.message}>{el.message}</div>
 								) : (
 									''
@@ -154,12 +154,12 @@ export const Registration: FC = () => {
 								}
 							]}
 							validateStatus={
-								error?.some(el => el.message.substring(0, 3) === 'ema')
+								error?.some(el => el.message.substring(0, 3) === 'эле')
 									? 'error'
 									: undefined
 							}
 							help={error?.map(el =>
-								el.message.substring(0, 3) === 'ema' ? (
+								el.message.substring(0, 3) === 'эле' ? (
 									<div key={el.message}>{el.message}</div>
 								) : (
 									''
@@ -174,8 +174,11 @@ export const Registration: FC = () => {
 						className={styles.input}
 						rules={[{ required: true, message: '' }]}
 						validateStatus={
-							error?.some(el => el.message.substring(0, 3) === 'pas') ||
-							PasEq === false
+							error?.some(
+								el =>
+									el.message.substring(0, 3) === 'дли' ||
+									el.message.substring(0, 3) === 'пар'
+							) || PasEq === false
 								? 'error'
 								: undefined
 						}
@@ -186,7 +189,8 @@ export const Registration: FC = () => {
 								</div>
 							) : (
 								error?.map(el =>
-									el.message.substring(0, 3) === 'pas' ? (
+									el.message.substring(0, 3) === 'дли' ||
+									el.message.substring(0, 3) === 'пар' ? (
 										<div key={el.message}>{el.message}</div>
 									) : (
 										''

@@ -12,7 +12,8 @@ export const Reg_User = (params: IRegRequest): AxiosPromise<string> =>
 export const Auth_User = (params: IAuthRequest): AxiosPromise<AuthSuccess> =>
 	axiosInstance.post(endpoints.AUTH.LOGIN, params)
 
-export const Refresh_Token = () => axiosInstance.get(endpoints.AUTH.REFRESH)
+export const Refresh_Token = (): AxiosPromise<AuthSuccess> =>
+	axiosInstance.get(endpoints.AUTH.REFRESH)
 
 export const Get_User_Data = () => axiosInstance.get(endpoints.GET_USER)
 

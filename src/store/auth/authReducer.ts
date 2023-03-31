@@ -75,19 +75,34 @@ export const authReducer = createSlice({
 				}
 			}
 		},
+		putId: (state, action: PayloadAction<string>): IAuthState => {
+			return {
+				...state,
+				authData: {
+					...state.authData,
+					id: action.payload
+				}
+			}
+		},
 		registSuccess: (state, action: PayloadAction<string>) => {
 			state.regData.error = null
 			state.regData.isLoading = false
 			state.authData.id = action.payload
 		},
-		loginFailure: (state, action: PayloadAction<Error[]>): IAuthState => ({
-			...state,
-			authData: {
-				...state.authData,
-				isLoading: false,
-				error: action.payload
+		loginFailure: (state, action: PayloadAction<Error[]>): IAuthState => {
+			if (action.payload.length === 0) {
+				return {
+					...state,
+					authData: {
+						...state.authData,
+						isLoading: false,
+						error: action.payload
+					}
+				}
+			} else {
+				return { ...state }
 			}
-		}),
+		},
 		registFailure: (state, action: PayloadAction<Error[]>): IAuthState => {
 			return {
 				...state,
@@ -145,6 +160,7 @@ export const {
 	loginFailure,
 	loginStart,
 	loginSuccess,
+	putId,
 	registStart,
 	registFailure,
 	registSuccess,

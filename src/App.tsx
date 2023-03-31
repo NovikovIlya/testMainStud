@@ -13,10 +13,14 @@ const App = () => {
 	const [isLoginIn, ChangeIsLoginIn] = useState(false)
 	const navigate = useNavigate()
 	const dispatch = useAppDispatch()
+	//const Load = useSelector((state: RootState) => state.auth.authData.isLoading)
+
 	useEffect(() => {
+		console.log('hey')
 		const dataApi = async () => {
 			const res = await dispatch(getAccessToken())
 			if (res !== null) {
+				console.log(res)
 				navigate('/profile')
 				ChangeIsLoginIn(false)
 			} else {
@@ -24,7 +28,9 @@ const App = () => {
 			}
 		}
 		dataApi()
-	}, [navigate, dispatch])
+	}, [])
+
+	console.log('1')
 
 	return (
 		<>

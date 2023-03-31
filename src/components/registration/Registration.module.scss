@@ -1,58 +1,12 @@
-.main {
-	@apply flex flex-row justify-between gap-24 text-base max-xl:gap-4 max-lg:flex-col  max-lg:items-center min-[2559px]:gap-40  min-[2559px]:opacity-100;
-	.loginForm {
-		@apply max-w-[400px] opacity-100 max-sm:min-w-[345px] max-[321px]:min-w-[300px] max-[321px]:opacity-100 min-[2559px]:w-[1000px] min-[2559px]:max-w-[800px] min-[2559px]:opacity-100;
+.wrapper {
+	@apply flex flex-col items-center;
+	.main {
+		@apply flex flex-row justify-between gap-24 text-base max-xl:gap-4 max-lg:flex-col  max-lg:items-center min-[2559px]:gap-40  min-[2559px]:opacity-100;
+		.loginForm {
+			@apply max-w-[400px] p-2 opacity-100 max-sm:min-w-[345px] max-[321px]:min-w-[300px] max-[321px]:opacity-100 min-[2559px]:w-[1000px] min-[2559px]:max-w-[800px] min-[2559px]:opacity-100;
 
-		.title {
-			@apply mb-[20px] text-start text-2xl font-bold min-[2559px]:text-7xl;
-		}
-		.switcher {
-			@apply flex h-[50px] items-center justify-center min-[2559px]:my-10 min-[2559px]:h-[120px] min-[2559px]:w-[1000px] min-[2559px]:max-w-[800px] min-[2559px]:opacity-100;
-			label {
-				@apply flex h-[50px] w-full items-center justify-start shadow min-[2559px]:h-[120px]  min-[2559px]:px-9 min-[2559px]:text-4xl;
-			}
-		}
-		input {
-			@apply px-5 py-3 shadow  min-[2559px]:h-[120px] min-[2559px]:w-[1000px] min-[2559px]:max-w-[800px] min-[2559px]:px-9 min-[2559px]:text-4xl;
-		}
-		.input {
-			@apply min-[2559px]:mb-10  min-[2559px]:w-[1000px] min-[2559px]:max-w-[800px] min-[2559px]:text-4xl;
-			> div {
-				@apply min-[2559px]:text-4xl;
-			}
-		}
-		input::placeholder {
-			@apply text-black opacity-50;
-		}
-
-		.passwordText {
-			@apply relative -top-6 text-black  opacity-50   min-[2559px]:text-3xl;
-		}
-		.buttons {
-			@apply flex flex-col;
-			button {
-				@apply h-[50px] shadow-lg min-[2559px]:h-[120px] min-[2559px]:w-[1000px] min-[2559px]:max-w-[800px] min-[2559px]:text-4xl;
-			}
-			.link {
-				@apply text-base text-[#004EC2] opacity-100 min-[2559px]:text-4xl;
-			}
-			.check {
-				@apply min-[2559px]:my-5;
-				span > span {
-					@apply min-[2559px]:h-10 min-[2559px]:w-10;
-				}
-				.termsUse {
-					@apply my-4 text-xs min-[2559px]:text-3xl;
-				}
-			}
-			.link:hover {
-				@apply text-base text-[#0E1F81] opacity-100 min-[2559px]:text-4xl;
-			}
-			.login {
-				@apply flex items-center justify-between min-[2559px]:text-4xl;
-				.kpfu {
-					@apply font-bold text-black opacity-50;
-				}
+			.title {
+				@apply mb-[20px] text-start text-2xl font-bold min-[2559px]:text-7xl;
 			}
 		}
 	}

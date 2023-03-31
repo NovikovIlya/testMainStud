@@ -1,0 +1,24 @@
+.buttons {
+	@apply flex flex-col text-base;
+	.login {
+		@apply mb-5 mt-[30px] h-[50px] shadow-lg min-[2559px]:h-[120px] min-[2559px]:w-[1000px] min-[2559px]:max-w-[800px] min-[2559px]:text-4xl;
+	}
+	.gos {
+		@apply mt-0 mb-10 flex h-[50px] w-full items-center justify-center bg-white min-[2559px]:h-[120px] min-[2559px]:w-[1000px] min-[2559px]:max-w-[800px] min-[2559px]:text-4xl;
+		svg {
+			@apply ml-[15px] opacity-100;
+		}
+	}
+	.link {
+		@apply text-base text-[#004EC2] opacity-100 min-[2559px]:text-4xl;
+	}
+	.link:hover {
+		@apply text-base text-[#0E1F81] opacity-100 min-[2559px]:text-4xl;
+	}
+	.reg {
+		@apply flex items-center justify-between min-[2559px]:text-4xl;
+		.kpfu {
+			@apply font-bold text-black opacity-50;
+		}
+	}
+}

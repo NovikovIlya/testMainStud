@@ -1,0 +1,29 @@
+.main {
+	.buttons {
+		@apply flex flex-col;
+		button {
+			@apply h-[50px] shadow-lg min-[2559px]:h-[120px] min-[2559px]:w-[1000px] min-[2559px]:max-w-[800px] min-[2559px]:text-4xl;
+		}
+		.link {
+			@apply text-base text-[#004EC2] opacity-100 min-[2559px]:text-4xl;
+		}
+		.check {
+			@apply min-[2559px]:my-5;
+			span > span {
+				@apply min-[2559px]:h-10 min-[2559px]:w-10;
+			}
+			.termsUse {
+				@apply my-4 text-xs min-[2559px]:text-3xl;
+			}
+		}
+		.link:hover {
+			@apply text-base text-[#0E1F81] opacity-100 min-[2559px]:text-4xl;
+		}
+		.login {
+			@apply flex items-center justify-between min-[2559px]:text-4xl;
+			.kpfu {
+				@apply font-bold text-black opacity-50;
+			}
+		}
+	}
+}

@@ -1,4 +1,4 @@
-import { Form, Input, Radio, RadioChangeEvent, Typography } from 'antd'
+import { Form, Typography } from 'antd'
 import { FC, useState } from 'react'
 import { useSelector } from 'react-redux'
 
@@ -33,8 +33,6 @@ export const Registration: FC = () => {
 		password: '',
 		email: null
 	}
-
-	const onChangeRadio = (e: RadioChangeEvent) => setValue(e.target.value)
 
 	const onFinish = (values: RegFormData) => {
 		if (values.confirmPassword !== values.password) {

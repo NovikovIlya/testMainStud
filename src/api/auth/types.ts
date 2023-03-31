@@ -12,7 +12,7 @@ export interface IAuthRequest {
 	password: string
 }
 
-export interface Error {
+export interface IError {
 	message: string
 }
 

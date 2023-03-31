@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import Cookies from 'universal-cookie'
 
-import { AuthSuccess, Error, ProfileData } from '../../api/auth/types'
+import { AuthSuccess, IError, ProfileData } from '../../api/auth/types'
 import { RootState } from '../index'
 
 const cookies = new Cookies()
@@ -11,15 +11,15 @@ export interface IAuthState {
 		id: string | null
 		accessToken: string | null
 		isLoading: boolean
-		error: Error[] | null
+		error: IError[] | null
 	}
 	regData: {
 		isLoading: boolean
-		error: Error[] | null
+		error: IError[] | null
 	}
 	profileData: {
 		isLoading: boolean
-		error: Error[] | null | String
+		error: IError[] | null | String
 		CurrentData: ProfileData | null
 	}
 }
@@ -80,7 +80,7 @@ export const authReducer = createSlice({
 			state.regData.isLoading = false
 			state.authData.id = action.payload
 		},
-		loginFailure: (state, action: PayloadAction<Error[]>): IAuthState => ({
+		loginFailure: (state, action: PayloadAction<IError[]>): IAuthState => ({
 			...state,
 			authData: {
 				...state.authData,
@@ -88,7 +88,7 @@ export const authReducer = createSlice({
 				error: action.payload
 			}
 		}),
-		registFailure: (state, action: PayloadAction<Error[]>): IAuthState => {
+		registFailure: (state, action: PayloadAction<IError[]>): IAuthState => {
 			return {
 				...state,
 				regData: {

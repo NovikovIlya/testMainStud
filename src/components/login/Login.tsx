@@ -1,10 +1,8 @@
-import { Button, Form, Input, Radio, RadioChangeEvent, Typography } from 'antd'
+import { Form, Radio, RadioChangeEvent, Typography } from 'antd'
 import { FC, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 
-import { GosSvg } from '../../assets/svg/GosSvg'
 import { useAppDispatch } from '../../store'
 import { RootState } from '../../store'
 import { getAccessToken, loginUser } from '../../store/auth/actionCreators'
@@ -13,6 +11,8 @@ import { Faq } from '../faq/Faq'
 
 import styles from './Login.module.scss'
 import './Login.scss'
+import { Buttons } from './buttons/Buttons'
+import { Inputs } from './inputs/Inputs'
 
 const { Title } = Typography
 
@@ -49,7 +49,7 @@ export const Login: FC = () => {
 	}
 
 	return (
-		<div className=" flex  items-center flex-col">
+		<div className="flex items-center flex-col">
 			<BackMainPage />
 			<div className={styles.main}>
 				<Form
@@ -71,106 +71,8 @@ export const Login: FC = () => {
 							<Radio.Button value={1}>По номеру</Radio.Button>
 						</Radio.Group>
 					</Form.Item>
-
-					{value ? (
-						<Form.Item
-							name="phone"
-							className={styles.input}
-							rules={[
-								{ type: 'string' },
-								{ required: true, message: 'Пожалуйста, введите свой телефон!' }
-							]}
-							validateStatus={error !== null ? 'error' : undefined}
-							help={error?.map(el =>
-								el.message.substring(0, 3) !== 'pas' ? (
-									<div key={el.message}>{el.message}</div>
-								) : (
-									''
-								)
-							)}
-						>
-							<Input size="large" type="tel" placeholder="Телефон" />
-						</Form.Item>
-					) : (
-						<Form.Item
-							className={styles.input}
-							name="email"
-							rules={[
-								{ type: 'string' },
-								{
-									required: true,
-									message: 'Пожалуйста, введите свою электронную почту!'
-								}
-							]}
-							validateStatus={error !== null ? 'error' : undefined}
-							help={error?.map(el =>
-								el.message.substring(0, 3) !== 'pas' ? (
-									<div key={el.message}>{el.message}</div>
-								) : (
-									''
-								)
-							)}
-						>
-							<Input size="large" placeholder="Email" />
-						</Form.Item>
-					)}
-
-					<Form.Item
-						name="password"
-						className={styles.input}
-						rules={[
-							{ required: true, message: 'Пожалуйста, введите свой пароль!' }
-						]}
-						validateStatus={error !== null ? 'error' : undefined}
-						help={error?.map(el =>
-							el.message.substring(0, 3) !== 'pas' ? (
-								<div key={el.message}>{el.message}</div>
-							) : (
-								''
-							)
-						)}
-					>
-						<Input size="large" type="password" placeholder="Пароль" />
-					</Form.Item>
-
-					<p className={styles.forgot}>Не помню пароль</p>
-					<Form.Item>
-						<div className={styles.buttons}>
-							<Button
-								className={styles.login}
-								size="large"
-								type="primary"
-								htmlType="submit"
-							>
-								Войти
-							</Button>
-
-							<Button
-								className={styles.gos}
-								onClick={e => {
-									e.preventDefault()
-								}}
-								size="large"
-								type="primary"
-								ghost
-								htmlType="submit"
-							>
-								Войти через
-								<GosSvg />
-							</Button>
-							<div className={styles.reg}>
-								<span>
-									Нет профиля?{' '}
-									<Link className={styles.link} to="/registration">
-										Зарегистрируйтесь
-									</Link>
-								</span>
-								<Link to={'https://kpfu.ru/'} className={styles.kpfu}>
-									kpfu.ru
-								</Link>
-							</div>
-						</div>
-					</Form.Item>
+					<Inputs error={error} value={value} />
+					<Buttons />
 				</Form>
 				<Faq />
 			</div>

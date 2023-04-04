@@ -1,9 +1,8 @@
-import { Button, Form, Input, Radio, RadioChangeEvent, Typography } from 'antd'
+import { Form, Typography } from 'antd'
 import { FC, useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-import { GosSvg } from '../../assets/svg/GosSvg'
 import { useAppDispatch } from '../../store'
 import { RootState } from '../../store'
 import { loginUser } from '../../store/auth/actionCreators'
@@ -26,8 +25,6 @@ export const Login: FC = () => {
 	const dispatch = useAppDispatch()
 	const [value, setValue] = useState(0)
 	const FirstShow = useRef(0)
-
-	const onChangeRadio = (e: RadioChangeEvent) => setValue(e.target.value)
 
 	useEffect(() => {
 		if (FirstShow.current === 0) {

@@ -30,7 +30,12 @@ export const Inputs: FC<IInputsProps> = ({ value, error }) => {
 						)
 					)}
 				>
-					<Input size="large" type="tel" placeholder="Телефон" />
+					<Input
+						className="phone"
+						size="large"
+						type="tel"
+						placeholder="Телефон"
+					/>
 				</Form.Item>
 			) : (
 				<Form.Item
@@ -52,7 +57,7 @@ export const Inputs: FC<IInputsProps> = ({ value, error }) => {
 						)
 					)}
 				>
-					<Input size="large" placeholder="Email" />
+					<Input className="email" size="large" placeholder="Email" />
 				</Form.Item>
 			)}
 
@@ -71,7 +76,12 @@ export const Inputs: FC<IInputsProps> = ({ value, error }) => {
 					)
 				)}
 			>
-				<Input size="large" type="password" placeholder="Пароль" />
+				<Input.Password
+					className={styles.password}
+					size="large"
+					type="password"
+					placeholder="Пароль"
+				/>
 			</Form.Item>
 			<p className={styles.forgot}>Не помню пароль</p>
 		</>

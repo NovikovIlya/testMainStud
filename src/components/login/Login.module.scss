@@ -7,28 +7,6 @@
 			.title {
 				@apply mb-[20px] text-start text-2xl font-bold min-[2559px]:text-7xl;
 			}
-			.switcher {
-				@apply flex h-[50px] items-center justify-center min-[2559px]:my-10 min-[2559px]:h-[120px] min-[2559px]:w-[1000px] min-[2559px]:max-w-[800px] min-[2559px]:opacity-100;
-				label {
-					@apply flex h-[50px] w-full items-center justify-start shadow min-[2559px]:h-[120px]  min-[2559px]:px-9 min-[2559px]:text-4xl;
-				}
-			}
-			input {
-				@apply px-5 py-3 shadow  min-[2559px]:h-[120px] min-[2559px]:w-[1000px] min-[2559px]:max-w-[800px] min-[2559px]:px-9 min-[2559px]:text-4xl;
-			}
-			.input {
-				@apply min-[2559px]:mb-10  min-[2559px]:w-[1000px] min-[2559px]:max-w-[800px] min-[2559px]:text-4xl;
-				> div {
-					@apply min-[2559px]:text-4xl;
-				}
-			}
-
-			input::placeholder {
-				@apply text-black opacity-50;
-			}
-			.forgot {
-				@apply mt-5 w-fit cursor-pointer underline min-[2559px]:mt-[110px] min-[2559px]:text-4xl;
-			}
 		}
 	}
 }

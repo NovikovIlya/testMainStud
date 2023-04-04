@@ -1,5 +1,4 @@
-import { Form, RadioChangeEvent, Typography } from 'antd'
-import type { CheckboxChangeEvent } from 'antd/es/checkbox'
+import { Form, Typography } from 'antd'
 import { FC, useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 
@@ -45,11 +44,6 @@ export const Registration: FC = () => {
 			ShowFirst.current = 0
 		}
 	}, [])
-
-	const onChangeRadio = (e: RadioChangeEvent) => setValue(e.target.value)
-
-	const onChangeCheckbox = (e: CheckboxChangeEvent) =>
-		setCheck(e.target.checked)
 
 	const onFinish = (values: RegFormData) => {
 		if (values.confirmPassword !== values.password) {

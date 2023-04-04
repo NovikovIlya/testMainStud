@@ -39,7 +39,12 @@ export const Password: FC<IPasswordProps> = ({ error, confirmPassword }) => {
 					)
 				}
 			>
-				<Input size="large" type="password" placeholder="Пароль" />
+				<Input.Password
+					className={styles.password}
+					size="large"
+					type="password"
+					placeholder="Пароль"
+				/>
 			</Form.Item>
 			{confirmPassword && !error && (
 				<div className={styles.passwordText}>

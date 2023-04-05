@@ -65,10 +65,10 @@ const DropDrag: FunctionComponent = () => {
 	}
 
 	return (
-		<div className="mb-4">
+		<div className="mb-4 overflow-hidden">
 			<ResponsiveReactGridLayout
 				className="layout"
-				rowHeight={300}
+				rowHeight={200}
 				cols={{ lg: 6, md: 10, sm: 6, xs: 4, xxs: 2 }}
 				breakpoint=""
 				containerPadding={[0, 0]}

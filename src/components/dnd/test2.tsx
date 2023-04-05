@@ -57,7 +57,7 @@ const DropDrag: FunctionComponent = () => {
 							Static - {i}
 						</span>
 					) : (
-						<span className="text">{i}</span>
+						<span className="text w-full">{i}</span>
 					)}
 				</div>
 			)
@@ -65,7 +65,7 @@ const DropDrag: FunctionComponent = () => {
 	}
 
 	return (
-		<div className="mb-4 overflow-hidden">
+		<div className=" mb-4 max-w-screen-xl mx-auto">
 			<ResponsiveReactGridLayout
 				className="layout"
 				rowHeight={200}

@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 
+import DropDrag from './components/dnd/test2'
 import { Login } from './components/login/Login'
 import { Profile } from './components/profile/profile'
 import { Registration } from './components/registration/Registration'
@@ -52,6 +53,7 @@ const App = () => {
 							path="/profile/*"
 							element={isLoginIn ? <Login /> : <Profile />}
 						/>
+						<Route path="/test/*" element={<DropDrag />} />
 					</Routes>
 				</main>
 			</ConfigProvider>

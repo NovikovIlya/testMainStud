@@ -8,7 +8,7 @@ import './styles.css'
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive)
 
-const DropDrag: FunctionComponent = props => {
+const DropDrag: FunctionComponent = () => {
 	const [layouts, setLayouts] = useState<{ [index: string]: any[] }>({
 		lg: _.map(_.range(0, 25), function (item, i) {
 			var y = Math.ceil(Math.random() * 4) + 1
@@ -17,8 +17,7 @@ const DropDrag: FunctionComponent = props => {
 				y: Math.floor(i / 6) * y,
 				w: 2,
 				h: y,
-				i: i.toString(),
-				static: Math.random() < 0.05
+				i: i.toString()
 			}
 		})
 	})
@@ -49,7 +48,7 @@ const DropDrag: FunctionComponent = props => {
 
 		return _.map(layouts.lg, function (l, i) {
 			return (
-				<div key={i} className="bg-gray-300 flex items-center justify-center">
+				<div key={i} className="flex items-center justify-center">
 					{l.static ? (
 						<span
 							className="text"
@@ -69,17 +68,17 @@ const DropDrag: FunctionComponent = props => {
 		<div className="mb-4">
 			<ResponsiveReactGridLayout
 				className="layout"
-				rowHeight={100}
-				cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }}
+				rowHeight={300}
+				cols={{ lg: 6, md: 10, sm: 6, xs: 4, xxs: 2 }}
 				breakpoint=""
 				containerPadding={[0, 0]}
-				style={{ background: '#f0f0f0' }}
 				layouts={layouts}
-				measureBeforeMount={false}
+				measureBeforeMount={true}
 				useCSSTransforms={mounted}
 				onLayoutChange={onLayoutChange}
 				onBreakpointChange={onBreakpointChange}
-				isDroppable
+				isDroppable={false}
+				isResizable={false}
 			>
 				{generateDOM()}
 			</ResponsiveReactGridLayout>

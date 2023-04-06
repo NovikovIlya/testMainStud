@@ -10,11 +10,11 @@ const ResponsiveReactGridLayout = WidthProvider(Responsive)
 
 const DropDrag: FunctionComponent = () => {
 	const [layouts, setLayouts] = useState<{ [index: string]: any[] }>({
-		lg: _.map(_.range(0, 25), function (item, i) {
+		lg: _.map(_.range(0, 5), function (item, i) {
 			var y = Math.ceil(Math.random() * 4) + 1
 			return {
 				x: (_.random(0, 5) * 2) % 12,
-				y: Math.floor(i / 6) * y,
+				y: Math.floor(i / 12) * y,
 				w: 2,
 				h: y,
 				i: i.toString()
@@ -68,8 +68,8 @@ const DropDrag: FunctionComponent = () => {
 		<div className=" mb-4 max-w-screen-xl mx-auto">
 			<ResponsiveReactGridLayout
 				className="layout"
-				rowHeight={200}
-				cols={{ lg: 6, md: 10, sm: 6, xs: 4, xxs: 2 }}
+				rowHeight={100}
+				cols={{ lg: 6, md: 6, sm: 4, xs: 4, xxs: 2 }}
 				breakpoint=""
 				containerPadding={[0, 0]}
 				layouts={layouts}

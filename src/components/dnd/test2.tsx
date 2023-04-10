@@ -7,9 +7,13 @@ import 'react-resizable/css/styles.css'
 import { block } from './constatant'
 import './styles.css'
 
+interface IDropDragProps {
+	edit: boolean
+}
+
 const ResponsiveReactGridLayout = WidthProvider(Responsive)
 
-const DropDrag: FunctionComponent = () => {
+const DropDrag: FunctionComponent<IDropDragProps> = ({ edit }) => {
 	const [layouts, setLayouts] = useState<{ [index: string]: any[] }>(block)
 	const [currentBreakpoint, setCurrentBreakpoint] = useState<string>('lg')
 	const [mounted, setMounted] = useState(false)
@@ -30,8 +34,6 @@ const DropDrag: FunctionComponent = () => {
 	}
 
 	const onLayoutChange = (layout: any, layouts: any) => {
-		console.log(layouts)
-
 		setLayouts({ ...layouts })
 	}
 
@@ -67,6 +69,9 @@ const DropDrag: FunctionComponent = () => {
 				useCSSTransforms={mounted}
 				onLayoutChange={onLayoutChange}
 				onBreakpointChange={onBreakpointChange}
+				isBounded={true}
+				isDraggable={edit}
+				isResizable={edit}
 			>
 				{generateDOM()}
 			</ResponsiveReactGridLayout>

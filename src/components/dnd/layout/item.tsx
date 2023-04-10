@@ -45,6 +45,7 @@ export const Item = (
 			label: textEdit,
 			icon: <EditOutlined />,
 			danger: value,
+
 			onClick: () => setValue(!value)
 		}
 	]

@@ -69,7 +69,6 @@ const DropDrag: FunctionComponent<IDropDragProps> = ({ edit }) => {
 				useCSSTransforms={mounted}
 				onLayoutChange={onLayoutChange}
 				onBreakpointChange={onBreakpointChange}
-				isBounded={true}
 				isDraggable={edit}
 				isResizable={edit}
 			>

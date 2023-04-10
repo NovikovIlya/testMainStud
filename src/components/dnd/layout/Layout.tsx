@@ -18,7 +18,11 @@ export const LayoutApp: React.FC = () => {
 	const {
 		token: { colorBgContainer }
 	} = theme.useToken()
-
+	const onSelect = ({ key }: any) => {
+		if (key !== '10') {
+			setEdit(false)
+		}
+	}
 	const items: MenuItem[] = Item(setEdit, edit)
 	return (
 		<Layout className={styles.layout}>
@@ -39,6 +43,7 @@ export const LayoutApp: React.FC = () => {
 					defaultSelectedKeys={['1']}
 					mode="inline"
 					items={items}
+					onSelect={onSelect}
 				/>
 			</Sider>
 			<Layout className="site-layout">

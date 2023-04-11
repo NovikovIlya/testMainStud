@@ -1,3 +1,4 @@
+import { DeleteOutlined } from '@ant-design/icons'
 import _ from 'lodash'
 import { FunctionComponent, useEffect, useState } from 'react'
 import { Responsive, WidthProvider } from 'react-grid-layout'
@@ -44,11 +45,27 @@ const DropDrag: FunctionComponent<IDropDragProps> = ({
 		setLayouts({ ...layouts })
 	}
 
-	const generateDOM = _.map(layouts.lg, function (l, i) {
+	const onRemoveItem = (i: number) => {
+		console.log('removing', i)
+		setLayouts({
+			...layouts,
+			lg: [...layouts.lg].filter(item => item.i !== i)
+		})
+	}
+
+	const generateDOM = layouts.lg.map((item, index) => {
 		return (
-			<div key={i}>
-				<div className="text w-full h-full flex items-center justify-center">
-					{i}
+			<div key={item.i}>
+				<div className="text w-full h-full flex items-center justify-center ">
+					{edit && (
+						<div
+							className="absolute top-2 cursor-pointer right-2"
+							onClick={() => onRemoveItem(item.i)}
+						>
+							<DeleteOutlined style={{ color: 'red', fontSize: 18 }} />
+						</div>
+					)}
+					{item.i}
 				</div>
 			</div>
 		)

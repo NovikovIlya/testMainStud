@@ -25,11 +25,13 @@ export const LayoutApp: React.FC = () => {
 	}
 	const items: MenuItem[] = Item(setEdit, edit)
 	return (
-		<Layout style={{ minHeight: '100vh' }}>
+		<Layout
+			style={{ minHeight: '100vh', position: 'absolute', minWidth: '100vw' }}
+		>
 			<Sider
 				collapsible
 				collapsed={collapsed}
-				style={{ position: 'absolute', bottom: 0, top: 0 }}
+				style={{ position: 'absolute', height: '100%' }}
 				onCollapse={value => setCollapsed(value)}
 			>
 				<div

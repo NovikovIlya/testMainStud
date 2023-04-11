@@ -53,16 +53,16 @@ const DropDrag: FunctionComponent<IDropDragProps> = ({
 		})
 	}
 
-	const generateDOM = layouts.lg.map((item, index) => {
+	const generateDOM = layouts.lg.map(item => {
 		return (
 			<div key={item.i}>
-				<div className="text w-full h-full flex items-center justify-center ">
+				<div className="text text-white w-full h-full flex items-center justify-center ">
 					{edit && (
 						<div
 							className="absolute top-2 cursor-pointer right-2"
 							onClick={() => onRemoveItem(item.i)}
 						>
-							<DeleteOutlined style={{ color: 'red', fontSize: 18 }} />
+							<DeleteOutlined style={{ color: 'white', fontSize: 18 }} />
 						</div>
 					)}
 					{item.i}

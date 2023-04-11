@@ -16,7 +16,7 @@ export const LayoutApp: React.FC = () => {
 	const [collapsed, setCollapsed] = useState(true)
 	const [edit, setEdit] = useState(false)
 	const [layouts, setLayouts] = useState<{ [index: string]: any[] }>(() => {
-		return JSON.parse(localStorage.getItem('dashboard') || '')
+		return localStorage.getItem('dashboard')
 			? JSON.parse(localStorage.getItem('dashboard') || '')
 			: block
 	})

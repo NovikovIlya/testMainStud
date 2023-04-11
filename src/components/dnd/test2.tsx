@@ -1,3 +1,4 @@
+import { Tooltip } from 'antd'
 import _ from 'lodash'
 import { FunctionComponent, useEffect, useState } from 'react'
 import { Responsive, WidthProvider } from 'react-grid-layout'
@@ -12,9 +13,10 @@ interface IDropDragProps {
 }
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive)
-
 const DropDrag: FunctionComponent<IDropDragProps> = ({ edit }) => {
-	const [layouts, setLayouts] = useState<{ [index: string]: any[] }>(block)
+	const [layouts, setLayouts] = useState<{ [index: string]: any[] }>(() => {
+		return JSON.parse(localStorage.getItem('dashboard') || '')
+	})
 	const [currentBreakpoint, setCurrentBreakpoint] = useState<string>('lg')
 	const [mounted, setMounted] = useState(false)
 	const [toolbox, setToolbox] = useState<{ [index: string]: any[] }>({
@@ -24,7 +26,9 @@ const DropDrag: FunctionComponent<IDropDragProps> = ({ edit }) => {
 	useEffect(() => {
 		setMounted(true)
 	}, [])
-
+	useEffect(() => {
+		localStorage.setItem('dashboard', JSON.stringify(layouts))
+	}, [layouts])
 	const onBreakpointChange = (breakpoint: any) => {
 		setCurrentBreakpoint(breakpoint)
 		setToolbox({
@@ -40,17 +44,10 @@ const DropDrag: FunctionComponent<IDropDragProps> = ({ edit }) => {
 	const generateDOM = () => {
 		return _.map(layouts.lg, function (l, i) {
 			return (
-				<div key={i} className="flex items-center justify-center">
-					{l.static ? (
-						<span
-							className="text"
-							title="This item is static and cannot be removed or resized."
-						>
-							Static - {i}
-						</span>
-					) : (
-						<span className="text w-full">{i}</span>
-					)}
+				<div key={i}>
+					<div className="text w-full h-full flex items-center justify-center">
+						{i}
+					</div>
 				</div>
 			)
 		})
@@ -59,10 +56,9 @@ const DropDrag: FunctionComponent<IDropDragProps> = ({ edit }) => {
 	return (
 		<div className=" mb-4">
 			<ResponsiveReactGridLayout
-				className="layout mx-auto "
+				className="layout mx-auto"
 				rowHeight={200}
-				cols={{ lg: 6, md: 6, sm: 4, xs: 4, xxs: 2 }}
-				breakpoint=""
+				cols={{ lg: 5, md: 4, sm: 3, xs: 2, xxs: 1 }}
 				containerPadding={[10, 10]}
 				layouts={layouts}
 				measureBeforeMount={true}

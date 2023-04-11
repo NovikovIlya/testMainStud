@@ -25,7 +25,7 @@ export const LayoutApp: React.FC = () => {
 	}
 	const items: MenuItem[] = Item(setEdit, edit)
 	return (
-		<Layout className={styles.layout}>
+		<Layout style={{ minHeight: '100vh' }}>
 			<Sider
 				collapsible
 				collapsed={collapsed}

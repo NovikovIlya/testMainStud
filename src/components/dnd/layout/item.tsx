@@ -1,4 +1,5 @@
 import {
+	AppstoreAddOutlined,
 	DesktopOutlined,
 	EditOutlined,
 	FileOutlined,
@@ -24,7 +25,8 @@ function getItem(
 }
 export const Item = (
 	setValue: (value: boolean) => void,
-	value: boolean
+	value: boolean,
+	addItem: () => void
 ): MenuItem[] => {
 	const textEdit = value ? 'Save dashboard' : 'Edit dashboard'
 	return [
@@ -47,6 +49,13 @@ export const Item = (
 			danger: value,
 
 			onClick: () => setValue(!value)
+		},
+		{
+			key: '11',
+			label: 'Add item',
+			icon: <AppstoreAddOutlined />,
+
+			onClick: () => addItem()
 		}
 	]
 }

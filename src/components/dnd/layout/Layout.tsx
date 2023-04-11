@@ -1,10 +1,11 @@
 import type { MenuProps } from 'antd'
 import { Breadcrumb, Layout, Menu, theme } from 'antd'
 import React, { useState } from 'react'
+import uuid from 'react-uuid'
 
+import { block } from '../constatant'
 import DropDrag from '../test2'
 
-import styles from './Layout.module.scss'
 import { Item } from './item'
 
 const { Header, Content, Footer, Sider } = Layout
@@ -14,7 +15,27 @@ type MenuItem = Required<MenuProps>['items'][number]
 export const LayoutApp: React.FC = () => {
 	const [collapsed, setCollapsed] = useState(true)
 	const [edit, setEdit] = useState(false)
-
+	const [layouts, setLayouts] = useState<{ [index: string]: any[] }>(() => {
+		return JSON.parse(localStorage.getItem('dashboard') || '')
+			? JSON.parse(localStorage.getItem('dashboard') || '')
+			: block
+	})
+	const onAddItem = () => {
+		console.log('adding', 'n')
+		setLayouts({
+			...layouts,
+			lg: [
+				...layouts.lg,
+				{
+					i: uuid(),
+					x: (layouts.lg.length * 2) % 5,
+					y: Infinity,
+					w: 2,
+					h: 2
+				}
+			]
+		})
+	}
 	const {
 		token: { colorBgContainer }
 	} = theme.useToken()
@@ -23,7 +44,7 @@ export const LayoutApp: React.FC = () => {
 			setEdit(false)
 		}
 	}
-	const items: MenuItem[] = Item(setEdit, edit)
+	const items: MenuItem[] = Item(setEdit, edit, onAddItem)
 	return (
 		<Layout
 			style={{ minHeight: '100vh', position: 'absolute', minWidth: '100vw' }}
@@ -66,7 +87,7 @@ export const LayoutApp: React.FC = () => {
 							background: colorBgContainer
 						}}
 					>
-						<DropDrag edit={edit} />
+						<DropDrag edit={edit} layouts={layouts} setLayouts={setLayouts} />
 					</div>
 				</Content>
 				<Footer style={{ textAlign: 'center' }}>

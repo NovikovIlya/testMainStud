@@ -1,24 +1,23 @@
-import { Tooltip } from 'antd'
 import _ from 'lodash'
 import { FunctionComponent, useEffect, useState } from 'react'
 import { Responsive, WidthProvider } from 'react-grid-layout'
 import 'react-grid-layout/css/styles.css'
 import 'react-resizable/css/styles.css'
 
-import { block } from './constatant'
 import './styles.css'
 
 interface IDropDragProps {
 	edit: boolean
+	layouts: { [index: string]: any[] }
+	setLayouts: (value: { [index: string]: any[] }) => void
 }
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive)
-const DropDrag: FunctionComponent<IDropDragProps> = ({ edit }) => {
-	const [layouts, setLayouts] = useState<{ [index: string]: any[] }>(() => {
-		return JSON.parse(localStorage.getItem('dashboard') || '')
-			? JSON.parse(localStorage.getItem('dashboard') || '')
-			: block
-	})
+const DropDrag: FunctionComponent<IDropDragProps> = ({
+	edit,
+	layouts,
+	setLayouts
+}) => {
 	const [currentBreakpoint, setCurrentBreakpoint] = useState<string>('lg')
 	const [mounted, setMounted] = useState(false)
 	const [toolbox, setToolbox] = useState<{ [index: string]: any[] }>({
@@ -28,9 +27,11 @@ const DropDrag: FunctionComponent<IDropDragProps> = ({ edit }) => {
 	useEffect(() => {
 		setMounted(true)
 	}, [])
+
 	useEffect(() => {
 		localStorage.setItem('dashboard', JSON.stringify(layouts))
 	}, [layouts])
+
 	const onBreakpointChange = (breakpoint: any) => {
 		setCurrentBreakpoint(breakpoint)
 		setToolbox({
@@ -43,17 +44,15 @@ const DropDrag: FunctionComponent<IDropDragProps> = ({ edit }) => {
 		setLayouts({ ...layouts })
 	}
 
-	const generateDOM = () => {
-		return _.map(layouts.lg, function (l, i) {
-			return (
-				<div key={i}>
-					<div className="text w-full h-full flex items-center justify-center">
-						{i}
-					</div>
+	const generateDOM = _.map(layouts.lg, function (l, i) {
+		return (
+			<div key={i}>
+				<div className="text w-full h-full flex items-center justify-center">
+					{i}
 				</div>
-			)
-		})
-	}
+			</div>
+		)
+	})
 
 	return (
 		<div className=" mb-4">
@@ -70,7 +69,7 @@ const DropDrag: FunctionComponent<IDropDragProps> = ({ edit }) => {
 				isDraggable={edit}
 				isResizable={edit}
 			>
-				{generateDOM()}
+				{generateDOM}
 			</ResponsiveReactGridLayout>
 		</div>
 	)

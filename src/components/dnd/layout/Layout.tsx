@@ -12,7 +12,7 @@ const { Header, Content, Footer, Sider } = Layout
 type MenuItem = Required<MenuProps>['items'][number]
 
 export const LayoutApp: React.FC = () => {
-	const [collapsed, setCollapsed] = useState(false)
+	const [collapsed, setCollapsed] = useState(true)
 	const [edit, setEdit] = useState(false)
 
 	const {
@@ -29,12 +29,12 @@ export const LayoutApp: React.FC = () => {
 			<Sider
 				collapsible
 				collapsed={collapsed}
+				style={{ position: 'absolute', bottom: 0, top: 0 }}
 				onCollapse={value => setCollapsed(value)}
 			>
 				<div
 					style={{
 						height: 32,
-						margin: 16,
 						background: 'rgba(255, 255, 255, 0.2)'
 					}}
 				/>
@@ -46,16 +46,21 @@ export const LayoutApp: React.FC = () => {
 					onSelect={onSelect}
 				/>
 			</Sider>
-			<Layout className="site-layout">
+			<Layout
+				className={`site-layout transition-all ${
+					collapsed ? ' ml-[120px]' : ' ml-[200px]'
+				}`}
+			>
 				<Header style={{ padding: 0, background: colorBgContainer }} />
-				<Content style={{ margin: '0 16px' }}>
+				<Content className="ml-4">
 					<Breadcrumb style={{ margin: '16px 0' }}>
 						<Breadcrumb.Item>User</Breadcrumb.Item>
 					</Breadcrumb>
 					<div
+						className={`p-6 min-h-fit transition-all ${
+							collapsed ? ' mr-[80px]' : ' mr-0'
+						}`}
 						style={{
-							padding: 24,
-							minHeight: 360,
 							background: colorBgContainer
 						}}
 					>

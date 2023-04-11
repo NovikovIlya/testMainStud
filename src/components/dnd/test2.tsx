@@ -16,6 +16,8 @@ const ResponsiveReactGridLayout = WidthProvider(Responsive)
 const DropDrag: FunctionComponent<IDropDragProps> = ({ edit }) => {
 	const [layouts, setLayouts] = useState<{ [index: string]: any[] }>(() => {
 		return JSON.parse(localStorage.getItem('dashboard') || '')
+			? JSON.parse(localStorage.getItem('dashboard') || '')
+			: block
 	})
 	const [currentBreakpoint, setCurrentBreakpoint] = useState<string>('lg')
 	const [mounted, setMounted] = useState(false)
@@ -56,7 +58,7 @@ const DropDrag: FunctionComponent<IDropDragProps> = ({ edit }) => {
 	return (
 		<div className=" mb-4">
 			<ResponsiveReactGridLayout
-				className="layout mx-auto"
+				className="layout "
 				rowHeight={200}
 				cols={{ lg: 5, md: 4, sm: 3, xs: 2, xxs: 1 }}
 				containerPadding={[10, 10]}

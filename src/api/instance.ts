@@ -1,14 +1,12 @@
 import axios from 'axios'
-import Cookies from 'universal-cookie'
 
-import { store } from '../store'
-import { getAccessToken } from '../store/auth/actionCreators'
+// import Cookies from 'universal-cookie'
 
-import endpoints from './endpoints'
+// import endpoints from './endpoints'
 
 export const API_URL = `http://localhost:8080/api`
 
-const cookies = new Cookies()
+// const cookies = new Cookies()
 
 export const axiosInstance = axios.create({
 	baseURL: API_URL,
@@ -17,40 +15,30 @@ export const axiosInstance = axios.create({
 	}
 })
 
-const urlWithOutBearer = [endpoints.REG.REGISTR, endpoints.AUTH.LOGIN]
-const urlWithRefreshBearer = [endpoints.AUTH.REFRESH]
+// const urlWithoutBearer = [endpoints.REG, endpoints.AUTH.LOGIN]
+// const urlWithRefreshBearer = [endpoints.AUTH.REFRESH]
+// const urlWithAccessBearer = [endpoints.USERDATA]
 
-axiosInstance.interceptors.request.use(async (config: any) => {
-	let authorization = null
-	if (config.url && urlWithOutBearer.includes(config.url)) {
-		return config
-	} else {
-		if (config.url && urlWithRefreshBearer.includes(config.url)) {
-			// console.log('refresh bearer')
-			authorization = `Bearer ${cookies.get('refresh')}`
-		} else {
-			const accessToken = await store.dispatch(getAccessToken())
-			authorization = `Bearer ${accessToken}`
-		}
-	}
+// axiosInstance.interceptors.request.use(async (config: any) => {
+// 	let authorization = null
 
-	config.headers = {
-		...config.headers,
-		authorization: authorization
-	}
+// 	if (config.url && urlWithoutBearer.includes(config.url)) {
+// 		return config
+// 	} else {
+// 		if (config.url && urlWithRefreshBearer.includes(config.url)) {
+// 			authorization = `Bearer ${cookies.get('refresh')}`
+// 		}
 
-	return config
-})
+// 		if (config.url && urlWithAccessBearer.includes(config.url)) {
+// 			const accessToken = localStorage.getItem('access')
+// 			authorization = `Bearer ${accessToken}`
+// 		}
+// 	}
 
-// axiosInstance.interceptors.response.use(
-//   (response) => response,
-//   (error: AxiosError) => {
-//     const isLoggedIn = !!store.getState().auth.authData.accessToken;
+// 	config.headers = {
+// 		...config.headers,
+// 		authorization: authorization
+// 	}
 
-//     if (error.response?.status === 403 && isLoggedIn) {
-//       store.dispatch(LogOut);
-//     }
-
-//     return error;
-//   },
-// );
+// 	return config
+// })

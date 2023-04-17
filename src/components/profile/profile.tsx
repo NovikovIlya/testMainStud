@@ -4,95 +4,45 @@ import { useNavigate } from 'react-router-dom'
 
 import { RootState } from '../../store'
 import { useAppDispatch } from '../../store'
-import {
-	init_state_with_user_data,
-	log_out
-} from '../../store/auth/actionCreators'
+import { LogOut, ReloadState } from '../../store/creators/SomeCreators'
 
 import styles from './profile.module.scss'
 
 export const Profile: FC = () => {
 	const dispatch = useAppDispatch()
-	const FirstShow = useRef(0)
+	const JustOnce = useRef(0)
 
 	const userdata = useSelector(
-		(state: RootState) => state.auth.profileData.CurrentData
+		(state: RootState) => state.Profile.profileData.CurrentData
 	)
 	const navigate = useNavigate()
 	useEffect(() => {
-		if (FirstShow.current === 0) {
-			FirstShow.current = 1
+		if (JustOnce.current === 0) {
+			JustOnce.current = 1
 			if (userdata === null) {
-				dispatch(init_state_with_user_data())
+				dispatch(ReloadState())
 			}
 		} else {
-			FirstShow.current = 0
+			JustOnce.current = 0
 		}
 	}, [dispatch, userdata])
 
 	return (
 		<div className={styles.main}>
-			<div className={styles.box}>
+			<div className={styles.box1}>
 				<div className={styles.caption}>Пользовательские данные</div>
-				<div className={styles.input_item}>
-					{userdata?.firstName === null
-						? 'firstName is null'
-						: userdata?.firstName}
-				</div>
-				<div className={styles.input_item}>
-					{userdata?.lastName === null
-						? 'lastName is null'
-						: userdata?.lastName}
-				</div>
-				<div className={styles.input_item}>
-					{userdata?.middleName === null
-						? 'middleName is null'
-						: userdata?.middleName}
-				</div>
-				<div className={styles.input_item}>
-					{userdata?.birthDate === null
-						? 'birthDate is null'
-						: userdata?.birthDate}
-				</div>
-				<div className={styles.input_item}>
-					{userdata?.birthPlace === null
-						? 'birthPlace is null'
-						: userdata?.birthPlace}
-				</div>
-				<div className={styles.input_item}>
-					{userdata?.citizenship === null
-						? 'citizenship is null'
-						: userdata?.citizenship}
-				</div>
-				<div className={styles.input_item}>
-					{userdata?.email === null ? 'email is null' : userdata?.email}
-				</div>
-				<div className={styles.input_item}>
-					{userdata?.fax === null ? 'fax is null' : userdata?.fax}
-				</div>
-				<div className={styles.input_item}>
-					{userdata?.group === null ? 'group is null' : userdata?.group}
-				</div>
-				<div className={styles.input_item}>
-					{userdata?.institut === null
-						? 'institut is null'
-						: userdata?.institut}
-				</div>
-				<div className={styles.input_item}>
-					{userdata?.kabinet === null ? 'kabinet is null' : userdata?.kabinet}
-				</div>
-				<div className={styles.input_item}>
-					{userdata?.phone === null ? 'phone is null' : userdata?.phone}
-				</div>
-				<div className={styles.input_item}>
-					{userdata?.workPlace === null
-						? 'workPlace is null'
-						: userdata?.workPlace}
-				</div>
+				<div className={styles.item}>{userdata?.username}</div>
+				<div className={styles.item}>{userdata?.lastname}</div>
+				<div className={styles.item}>{userdata?.firstname}</div>
+				<div className={styles.item}>{userdata?.middlename}</div>
+				<div className={styles.item}>{userdata?.birthday}</div>
+				<div className={styles.item}>{userdata?.phone}</div>
+				<div className={styles.item}>{userdata?.email}</div>
+				<div className={styles.item}>{userdata?.citizenship}</div>
 				<div className={styles.button_block}>
 					<button
 						onClick={() => {
-							dispatch(log_out())
+							dispatch(LogOut())
 							navigate('/')
 						}}
 						className={styles.button}
@@ -100,6 +50,24 @@ export const Profile: FC = () => {
 						Выйти с аккаунта
 					</button>
 				</div>
+			</div>
+			<div className={styles.box2}>
+				<div className={styles.caption}>Пользовательские роли</div>
+				<>
+					{userdata?.roles.map(el => (
+						<div className={styles.itembox} key={el.id}>
+							<div className={styles.item}>
+								{el.id === null ? 'null' : el.id}
+							</div>
+							<div className={styles.item}>
+								{el.login === null ? 'null' : el.login}
+							</div>
+							<div className={styles.item}>
+								{el.type === null ? 'null' : el.type}
+							</div>
+						</div>
+					))}
+				</>
 			</div>
 		</div>
 	)

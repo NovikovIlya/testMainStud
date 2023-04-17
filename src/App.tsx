@@ -8,7 +8,7 @@ import { Login } from './components/login/Login'
 import { Profile } from './components/profile/profile'
 import { Registration } from './components/registration/Registration'
 import { useAppDispatch } from './store'
-import { getAccessToken } from './store/auth/actionCreators'
+import { RequestForTokens } from './store/creators/MainCreators'
 
 const App = () => {
 	const [isLoginIn, ChangeIsLoginIn] = useState(false)
@@ -18,7 +18,7 @@ const App = () => {
 
 	useEffect(() => {
 		const dataApi = async () => {
-			const res = await dispatch(getAccessToken())
+			const res = await dispatch(RequestForTokens())
 			if (res !== null) {
 				ChangeIsLoginIn(false)
 				navigate('/profile')

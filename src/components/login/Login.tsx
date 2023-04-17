@@ -5,9 +5,8 @@ import { useNavigate } from 'react-router-dom'
 
 import { useAppDispatch } from '../../store'
 import { RootState } from '../../store'
-import { loginUser } from '../../store/auth/actionCreators'
-import { get_user_data } from '../../store/auth/actionCreators'
-import { Base_Login_Errors } from '../../store/auth/actionCreators'
+import { RequestFolLogIn } from '../../store/creators/MainCreators'
+import { DeleteLogInErrors } from '../../store/creators/SomeCreators'
 import { BackMainPage } from '../back-main-page/BackMainPage'
 import { Faq } from '../faq/Faq'
 
@@ -21,17 +20,17 @@ const { Title } = Typography
 
 export const Login: FC = () => {
 	const navigate = useNavigate()
-	const error = useSelector((state: RootState) => state.auth.authData.error)
+	const error = useSelector((state: RootState) => state.AuthReg.authData.error)
 	const dispatch = useAppDispatch()
 	const [value, setValue] = useState(0)
-	const FirstShow = useRef(0)
+	const JustOnce = useRef(0)
 
 	useEffect(() => {
-		if (FirstShow.current === 0) {
-			FirstShow.current = 1
-			dispatch(Base_Login_Errors())
+		if (JustOnce.current === 0) {
+			JustOnce.current = 1
+			dispatch(DeleteLogInErrors())
 		} else {
-			FirstShow.current = 0
+			JustOnce.current = 0
 		}
 	}, [])
 
@@ -43,19 +42,16 @@ export const Login: FC = () => {
 		const dataApi = async () => {
 			if (values?.email) {
 				await dispatch(
-					loginUser({ username: values.email, password: values.password })
+					RequestFolLogIn({ username: values.email, password: values.password })
 				)
 			}
 			if (values?.phone) {
 				await dispatch(
-					loginUser({ username: values.phone, password: values.password })
+					RequestFolLogIn({ username: values.phone, password: values.password })
 				)
 			}
-			if (localStorage.getItem('token') !== null) {
-				const res = await dispatch(get_user_data())
-				if (res === '200') {
-					navigate('/profile')
-				}
+			if (localStorage.getItem('access') !== null) {
+				navigate('/profile')
 			}
 		}
 		dataApi()

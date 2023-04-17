@@ -1,7 +1,7 @@
 export interface IRegRequest {
-	lastName: string //фамилия
-	firstName: string //имя
-	middleName: string | null // отчество
+	lastName: string
+	firstName: string
+	middleName: string | null
 	phone: string | null
 	password: string
 	email: string | null
@@ -16,28 +16,36 @@ export interface IError {
 	message: string
 }
 
-export interface AuthSuccess {
+export interface IAuthSuccess {
+	accessToken: string
+	refreshToken: string
+	user: IUserData
+}
+
+export interface IAuthReducerRequest {
 	accessToken: string
 	refreshToken: string
 }
 
-export interface ProfileData {
-	lastName: string | null
-	firstName: string | null
-	middleName: string | null
-	birthDate: string | null
-	citizenship: string | null
-	birthPlace: string | null
-	institut: string | null
-	group: number | null
-	workPlace: string | null
-	kabinet: number | null
-	phone: string | null
-	fax: string | null
-	email: string | null
+export interface IUserData {
+	username: string
+	firstname: string
+	lastname: string
+	middlename: string
+	birthday: string
+	phone: string
+	email: string
+	citizenship: string
+	roles: IRole[]
 }
 
-export interface RegFormData {
+export interface IRole {
+	login: string
+	id: number | null
+	type: string
+}
+
+export interface IRegFormData {
 	surname: string
 	password: string
 	name: string
@@ -46,6 +54,27 @@ export interface RegFormData {
 	confirmPassword: string | null
 }
 
-export interface ChangePassword {
-	password: string
+export interface IAuthRegState {
+	authData: {
+		accessToken: string | null
+		error: IError[] | null
+	}
+	regData: {
+		error: IError[] | null
+	}
+}
+
+export interface IProfileState {
+	profileData: {
+		error: IError[] | null | String
+		CurrentData: IUserData | null
+	}
+}
+
+export interface IRefreshRequest {
+	RefreshToken: string
+}
+
+export interface IRegfreshSuccess {
+	accessToken: string
 }

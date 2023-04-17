@@ -39,7 +39,9 @@ export const Registration: FC = () => {
 	useEffect(() => {
 		if (JustOnce.current === 0) {
 			JustOnce.current = 1
-			dispatch(DeleteRegistrationErrors())
+			if (error !== null) {
+				dispatch(DeleteRegistrationErrors())
+			}
 		} else {
 			JustOnce.current = 0
 		}

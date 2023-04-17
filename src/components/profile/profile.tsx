@@ -1,31 +1,20 @@
-import { FC, useEffect, useRef } from 'react'
+import { FC } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import { RootState } from '../../store'
 import { useAppDispatch } from '../../store'
-import { LogOut, ReloadState } from '../../store/creators/SomeCreators'
+import { LogOut } from '../../store/creators/SomeCreators'
 
 import styles from './profile.module.scss'
 
 export const Profile: FC = () => {
 	const dispatch = useAppDispatch()
-	const JustOnce = useRef(0)
 
 	const userdata = useSelector(
 		(state: RootState) => state.Profile.profileData.CurrentData
 	)
 	const navigate = useNavigate()
-	useEffect(() => {
-		if (JustOnce.current === 0) {
-			JustOnce.current = 1
-			if (userdata === null) {
-				dispatch(ReloadState())
-			}
-		} else {
-			JustOnce.current = 0
-		}
-	}, [dispatch, userdata])
 
 	return (
 		<div className={styles.main}>

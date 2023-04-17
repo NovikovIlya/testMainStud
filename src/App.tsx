@@ -11,7 +11,7 @@ import { useAppDispatch } from './store'
 import { RequestForTokens } from './store/creators/MainCreators'
 
 const App = () => {
-	const [isLoginIn, ChangeIsLoginIn] = useState(false)
+	const [isLogIn, ChangeIsLogIn] = useState(false)
 	const navigate = useNavigate()
 	const dispatch = useAppDispatch()
 	const FirstShow = useRef(0)
@@ -19,13 +19,13 @@ const App = () => {
 	useEffect(() => {
 		const dataApi = async () => {
 			const res = await dispatch(RequestForTokens())
-			if (res !== null) {
-				ChangeIsLoginIn(false)
+			if (res === '200') {
+				ChangeIsLogIn(false)
 				navigate('/profile')
 			}
 			if (res === '403') {
 				navigate('/')
-				ChangeIsLoginIn(true)
+				ChangeIsLogIn(true)
 				FirstShow.current = 0
 			}
 		}
@@ -47,11 +47,16 @@ const App = () => {
 			>
 				<div>
 					<Routes>
-						<Route path="/*" element={<Login />} />
+						<Route
+							path="/*"
+							element={<Login ChangeIsLogIn={ChangeIsLogIn} />}
+						/>
 						<Route path="/registration/*" element={<Registration />} />
 						<Route
 							path="/profile/*"
-							element={isLoginIn ? <Login /> : <Profile />}
+							element={
+								isLogIn ? <Login ChangeIsLogIn={ChangeIsLogIn} /> : <Profile />
+							}
 						/>
 						<Route path="/test/*" element={<LayoutApp />} />
 					</Routes>

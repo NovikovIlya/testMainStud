@@ -72,7 +72,7 @@ export interface IProfileState {
 }
 
 export interface IRefreshRequest {
-	RefreshToken: string
+	refreshToken: string
 }
 
 export interface IRegfreshSuccess {

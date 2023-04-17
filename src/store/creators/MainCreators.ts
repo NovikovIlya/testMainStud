@@ -15,7 +15,8 @@ const cookies = new Cookies()
 
 export const RequestFolLogIn =
 	(data: IAuthRequest) =>
-	async (dispatch: Dispatch): Promise<void> => {
+	async (dispatch: Dispatch): Promise<String> => {
+		let answear = '401'
 		try {
 			const res = await AuthScelet(data)
 
@@ -27,10 +28,14 @@ export const RequestFolLogIn =
 				})
 			)
 			dispatch(ProfileSuccess(res.data.user))
+
+			answear = '200'
 		} catch (e: any) {
 			//401
 			dispatch(LogInFailure(e.response.data.errors))
 		}
+
+		return answear
 	}
 
 // export const RequestForRegistration =
@@ -51,6 +56,7 @@ export const RequestFolLogIn =
 export const RequestForTokens =
 	() =>
 	async (dispatch: Dispatch): Promise<string | null> => {
+		let answear = null
 		let accessToken = null
 		try {
 			if (localStorage.getItem('access') !== null) {
@@ -59,24 +65,29 @@ export const RequestForTokens =
 
 			if (accessToken !== null) {
 				if (isTokenExpired(accessToken)) {
-					const res = await RefreshTokenScelet(cookies.get('refresh'))
+					const res = await RefreshTokenScelet({
+						refreshToken: cookies.get('refresh')
+					})
 
 					//200
 					accessToken = res.data.accessToken
 				}
-
+				answear = '200'
 				dispatch(
 					LogInSuccess({
 						accessToken: accessToken,
 						refreshToken: ''
 					})
 				)
+				dispatch(
+					ProfileSuccess(JSON.parse(localStorage.getItem('user_data') || '{}'))
+				)
 			}
 		} catch (e: any) {
 			//если 403
 			dispatch(LogOutSuccess())
-			return '403'
+			answear = '403'
 		}
 
-		return accessToken
+		return answear
 	}

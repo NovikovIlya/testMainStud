@@ -5,15 +5,6 @@ import {
 	LogOutSuccess,
 	RegistFailure
 } from '../reducers/AuthRegReducer'
-import { ProfileSuccess } from '../reducers/ProfileReducer'
-
-export const ReloadState =
-	() =>
-	async (dispatch: Dispatch): Promise<void> => {
-		dispatch(
-			ProfileSuccess(JSON.parse(localStorage.getItem('user_data') || '{}'))
-		)
-	}
 
 export const LogOut =
 	() =>

@@ -18,7 +18,11 @@ import { Switcher } from './switcher/Switcher'
 
 const { Title } = Typography
 
-export const Login: FC = () => {
+interface ILoginProps {
+	ChangeIsLogIn: (IsLogIn: boolean) => void
+}
+
+export const Login: FC<ILoginProps> = ({ ChangeIsLogIn }) => {
 	const navigate = useNavigate()
 	const error = useSelector((state: RootState) => state.AuthReg.authData.error)
 	const dispatch = useAppDispatch()
@@ -28,7 +32,9 @@ export const Login: FC = () => {
 	useEffect(() => {
 		if (JustOnce.current === 0) {
 			JustOnce.current = 1
-			dispatch(DeleteLogInErrors())
+			if (error !== null) {
+				dispatch(DeleteLogInErrors())
+			}
 		} else {
 			JustOnce.current = 0
 		}
@@ -40,18 +46,21 @@ export const Login: FC = () => {
 		password: string
 	}) => {
 		const dataApi = async () => {
+			let response = null
 			if (values?.email) {
-				await dispatch(
+				response = await dispatch(
 					RequestFolLogIn({ username: values.email, password: values.password })
 				)
 			}
 			if (values?.phone) {
-				await dispatch(
+				response = await dispatch(
 					RequestFolLogIn({ username: values.phone, password: values.password })
 				)
 			}
-			if (localStorage.getItem('access') !== null) {
+			console.log(response)
+			if (response === '200') {
 				navigate('/profile')
+				ChangeIsLogIn(false)
 			}
 		}
 		dataApi()

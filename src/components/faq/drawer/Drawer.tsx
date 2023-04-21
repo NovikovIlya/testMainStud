@@ -33,7 +33,7 @@ export const DrawerEmail: FC<IDrawerPros> = ({
 	onChildrenDrawerClose,
 	showChildrenDrawer
 }) => {
-	const width = document.body.clientWidth > 1800 ? 800 : 320
+	const width = document.body.clientWidth > 2200 ? 800 : 320
 
 	return (
 		<>
@@ -69,14 +69,14 @@ export const DrawerEmail: FC<IDrawerPros> = ({
 					icon={<EmailSvg />}
 					type="text"
 				>
-					Написать письмо
+					<Link href="mailto:deshelp@kpfu.ru">Написать письмо</Link>
 				</Button>
 				<Button
 					className="flex w-full items-center gap-2 mb-3 min-[2559px]:text-4xl min-[2559px]:py-10 min-[2559px]:m-0"
 					icon={<PhoneSvg />}
 					type="text"
 				>
-					Позвонить
+					<Link href="tel:+7 (843) 206-50-84">Позвонить</Link>
 				</Button>
 				<Divider />
 				<div className="flex justify-center items-center text-lg ">

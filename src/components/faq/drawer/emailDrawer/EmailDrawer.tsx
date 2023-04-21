@@ -31,7 +31,7 @@ export const EmailDrawer: FC<IEmailDrawerProps> = ({
 	onChildrenDrawerClose,
 	childrenDrawer
 }) => {
-	const width = document.body.clientWidth > 1800 ? 600 : 320
+	const width = document.body.clientWidth > 2200 ? 600 : 320
 
 	return (
 		<Drawer

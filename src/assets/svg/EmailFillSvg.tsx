@@ -4,10 +4,10 @@ export const EmailFillSvg = () => {
 	return (
 		<>
 			<svg
-				className="min-[2559px]:w-20 min-[2559px]:h-20"
+				className="w-[2vh] h-[2vh]"
 				width="30"
-				height="26"
-				viewBox="0 0 30 26"
+				height="30"
+				viewBox="0 0 30 30"
 				fill="none"
 				xmlns="http://www.w3.org/2000/svg"
 			>

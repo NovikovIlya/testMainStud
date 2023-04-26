@@ -54,20 +54,20 @@ export const DrawerEmail: FC<IDrawerPros> = ({
 				>
 					<Panel
 						header="Как подключиться к Wi-Fi КФУ?"
-						className="hover:bg-black hover:bg-opacity-5 rounded-md"
+						className="hover:bg-black hover:bg-opacity-5 rounded-md "
 						key="1"
 					>
 						<p>{text}</p>
 					</Panel>
 					<Panel
 						header="Как получить учетные данные?"
-						className="hover:bg-black hover:bg-opacity-5 rounded-md"
+						className="hover:bg-black hover:bg-opacity-5 rounded-md my-[1vh]"
 						key="2"
 					>
 						<p>{text}</p>
 					</Panel>
 					<Panel
-						className="hover:bg-black hover:bg-opacity-5 rounded-md"
+						className="hover:bg-black hover:bg-opacity-5 rounded-md "
 						header="Ответы на частые вопросы"
 						key="3"
 					>

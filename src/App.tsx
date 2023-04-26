@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { LayoutApp } from './components/dnd/layout/Layout'
 import { Login } from './components/login/Login'
+import { OtherUser } from './components/other-user/OtherUser'
 import { Profile } from './components/profile/profile'
 import { Registration } from './components/registration/Registration'
 import { useAppDispatch } from './store'
@@ -59,6 +60,7 @@ const App = () => {
 							}
 						/>
 						<Route path="/test/*" element={<LayoutApp />} />
+						<Route path="/other-user/*" element={<OtherUser />} />
 					</Routes>
 				</div>
 			</ConfigProvider>

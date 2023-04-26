@@ -21,7 +21,6 @@ export const LayoutApp: React.FC = () => {
 			: block
 	})
 	const onAddItem = () => {
-		console.log('adding', 'n')
 		setLayouts({
 			...layouts,
 			lg: [

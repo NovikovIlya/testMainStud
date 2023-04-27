@@ -1,0 +1,19 @@
+.ant-input {
+	font-size: 1vw;
+	width: 30vw;
+	height: 2.5vw;
+}
+.grad {
+	background: linear-gradient(
+		252.96deg,
+		rgba(0, 78, 194, 0.2) 2.24%,
+		rgba(143, 164, 193, 0.2) 27.03%,
+		rgba(160, 189, 232, 0.2) 68.6%,
+		rgba(0, 78, 194, 0.2) 116.08%
+	);
+}
+.text-grad {
+	background: -webkit-linear-gradient(#eee, #333);
+	background-clip: text;
+	-webkit-text-fill-color: transparent;
+}

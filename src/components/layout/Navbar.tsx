@@ -4,9 +4,11 @@ import { FaMapMarkerAlt } from 'react-icons/fa'
 import { GiHamburgerMenu } from 'react-icons/gi'
 import { IoDocument } from 'react-icons/io5'
 
+import './Header.scss'
+
 export const Navbar = () => {
 	return (
-		<aside className="w-[4vw] text-[2vw] min-h-screen bg-white shadow-md gap-[5vh] flex flex-col items-center">
+		<aside className="w-[4vw] text-[2vw]  min-h-screen bg-white shadow-md gap-[5vh] flex flex-col items-center">
 			<div className=" mt-[2vw]">
 				<GiHamburgerMenu />
 			</div>

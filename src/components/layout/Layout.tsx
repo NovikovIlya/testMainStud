@@ -1,5 +1,7 @@
 import React, { FC } from 'react'
 
+import { Header } from './Header'
+import './Header.scss'
 import { Navbar } from './Navbar'
 
 interface ILayoutProps {
@@ -8,8 +10,9 @@ interface ILayoutProps {
 
 export const Layout: FC<ILayoutProps> = ({ children }) => {
 	return (
-		<div className="bg-[#AAB3C1] bg-opacity-20">
+		<div className="grad flex">
 			<Navbar />
+			<Header />
 		</div>
 	)
 }

@@ -6,8 +6,6 @@ export interface IAuthTokenInfo {
 	login: string
 }
 
-const LIFE_TO_UPDATE_MULTIPLIER = 0.5
-
 export const isTokenExpired = (token: string | null): boolean => {
 	if (token === null) {
 		return false

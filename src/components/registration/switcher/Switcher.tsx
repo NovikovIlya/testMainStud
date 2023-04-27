@@ -1,4 +1,4 @@
-import { Form, Radio, RadioChangeEvent, Typography } from 'antd'
+import { Form, Radio, RadioChangeEvent } from 'antd'
 import { FC } from 'react'
 
 import styles from './Switcher.module.scss'

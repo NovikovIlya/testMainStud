@@ -1,6 +1,6 @@
 import { Button, Checkbox, Form } from 'antd'
 import { CheckboxChangeEvent } from 'antd/es/checkbox'
-import { FC, useState } from 'react'
+import { FC } from 'react'
 import { Link } from 'react-router-dom'
 
 import styles from './Buttons.module.scss'

@@ -2,10 +2,9 @@ import { Form, Typography } from 'antd'
 import { FC, useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 
-import { IRegFormData, IRegRequest } from '../../api/auth/types'
+import { IRegFormData } from '../../api/auth/types'
 import { useAppDispatch } from '../../store'
 import { RootState } from '../../store'
-// import { RequestForRegistration } from '../../store/creators/MainCreators'
 import { DeleteRegistrationErrors } from '../../store/creators/SomeCreators'
 import { BackMainPage } from '../back-main-page/BackMainPage'
 import { Faq } from '../faq/Faq'
@@ -27,15 +26,6 @@ export const Registration: FC = () => {
 	const JustOnce = useRef(0)
 	const [confirmPassword, setConfirmPassword] = useState(true)
 
-	let new_user: IRegRequest = {
-		lastName: '',
-		firstName: '',
-		middleName: null,
-		phone: null,
-		password: '',
-		email: null
-	}
-
 	useEffect(() => {
 		if (JustOnce.current === 0) {
 			JustOnce.current = 1
@@ -45,36 +35,10 @@ export const Registration: FC = () => {
 		} else {
 			JustOnce.current = 0
 		}
-	}, [])
+	}, [dispatch, error])
 
 	const onFinish = (values: IRegFormData) => {
-		if (values.confirmPassword !== values.password) {
-			setConfirmPassword(false)
-		} else {
-			// setConfirmPassword(true)
-			// if (values?.phone) {
-			// 	dispatch(
-			// 		RequestForRegistration({
-			// 			...new_user,
-			// 			lastName: values.surname,
-			// 			firstName: values.name,
-			// 			phone: values.phone,
-			// 			password: values.password
-			// 		})
-			// 	)
-			// }
-			// if (values?.email) {
-			// 	dispatch(
-			// 		RequestForRegistration({
-			// 			...new_user,
-			// 			lastName: values.surname,
-			// 			firstName: values.name,
-			// 			email: values.email,
-			// 			password: values.password
-			// 		})
-			// 	)
-			// }
-		}
+		if (values.confirmPassword !== values.password) setConfirmPassword(false)
 	}
 
 	return (

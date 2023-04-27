@@ -1,5 +1,4 @@
 import { DeleteOutlined } from '@ant-design/icons'
-import _ from 'lodash'
 import { FunctionComponent, useEffect, useState } from 'react'
 import { Responsive, WidthProvider } from 'react-grid-layout'
 import 'react-grid-layout/css/styles.css'

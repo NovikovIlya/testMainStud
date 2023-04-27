@@ -6,7 +6,7 @@ import { IoDocument } from 'react-icons/io5'
 
 export const Navbar = () => {
 	return (
-		<div className="w-[4vw] text-[2vw] min-h-screen bg-white shadow-md gap-[5vh] flex flex-col items-center">
+		<aside className="w-[4vw] text-[2vw] min-h-screen bg-white shadow-md gap-[5vh] flex flex-col items-center">
 			<div className=" mt-[2vw]">
 				<GiHamburgerMenu />
 			</div>
@@ -23,6 +23,6 @@ export const Navbar = () => {
 			<div>
 				<BsFillQuestionCircleFill />
 			</div>
-		</div>
+		</aside>
 	)
 }

@@ -38,7 +38,7 @@ export const Login: FC<ILoginProps> = ({ ChangeIsLogIn }) => {
 		} else {
 			JustOnce.current = 0
 		}
-	}, [])
+	}, [dispatch, error])
 
 	const onFinish = (values: {
 		email?: string

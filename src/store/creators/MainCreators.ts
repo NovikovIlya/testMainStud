@@ -2,7 +2,7 @@ import { Dispatch } from '@reduxjs/toolkit'
 import { Cookies } from 'react-cookie'
 
 import { AuthScelet, RefreshTokenScelet } from '../../api/auth/index'
-import { IAuthRequest, IRefreshRequest } from '../../api/auth/types'
+import { IAuthRequest } from '../../api/auth/types'
 import { isTokenExpired } from '../../utils/jwt'
 import {
 	LogInFailure,

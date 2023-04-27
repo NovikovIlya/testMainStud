@@ -14,7 +14,7 @@ import './Header.scss'
 export const Header = () => {
 	return (
 		<div className="h-[7vw] w-full flex items-center px-[2vw]  justify-between font-sans">
-			<div className="flex items-center gap-[3vw]">
+			<div className="flex wrapper items-center gap-[3vw]">
 				<div className="w-fit">
 					<LogoIasSvg />
 				</div>

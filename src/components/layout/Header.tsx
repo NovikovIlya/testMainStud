@@ -26,8 +26,8 @@ export const Header = () => {
 				<div className="flex gap-[0.5vw] items-center">
 					<PersonSvg />
 					<div className="flex flex-col h-full justify-between">
-						<div className="text-[1.3vw] font-bold">Мистер Бин Бинович</div>
-						<span className="text-[1vw]">Пользователь</span>
+						<div className="text-[1vw] font-bold">Мистер Бин Бинович</div>
+						<span className="text-[0.8vw]">Пользователь</span>
 					</div>
 					<div className="flex gap-[1vw] ml-[5vw]">
 						<SettingSvg />

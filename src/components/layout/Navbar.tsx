@@ -1,29 +1,34 @@
-import { AiFillEdit, AiFillEye } from 'react-icons/ai'
-import { BsFillPersonVcardFill, BsFillQuestionCircleFill } from 'react-icons/bs'
-import { FaMapMarkerAlt } from 'react-icons/fa'
-import { GiHamburgerMenu } from 'react-icons/gi'
-import { IoDocument } from 'react-icons/io5'
+import {
+	DocumentSvg,
+	EyeSvg,
+	LangSvg,
+	MapSvg,
+	MenuSvg,
+	PersonCardSvg,
+	PersonalizeSvg,
+	QuestionFillSvg
+} from '../../assets/svg'
 
 import './Header.scss'
 
 export const Navbar = () => {
 	return (
-		<aside className="w-[4vw] text-[2vw]  min-h-screen bg-white shadow-md gap-[5vh] flex flex-col items-center">
+		<aside className="px-[1vw]  min-h-screen bg-white shadow-md gap-[4vw] flex flex-col items-center rounded-r-[1vw]">
 			<div className=" mt-[2vw]">
-				<GiHamburgerMenu />
+				<MenuSvg />
 			</div>
-			<div className="flex flex-col gap-[1.5vh]">
-				<BsFillPersonVcardFill />
-				<FaMapMarkerAlt />
-				<AiFillEdit />
-				<IoDocument />
+			<div className="flex flex-col gap-[1.2vw] items-center">
+				<PersonCardSvg />
+				<MapSvg />
+				<PersonalizeSvg />
+				<DocumentSvg />
 			</div>
-			<div className="flex flex-col gap-[1vh] items-center">
-				<AiFillEye />
-				<span className="font-semibold text-[1.5vw] font-sans">En</span>
+			<div className="flex flex-col gap-[1vw] items-center">
+				<EyeSvg />
+				<LangSvg />
 			</div>
 			<div>
-				<BsFillQuestionCircleFill />
+				<QuestionFillSvg />
 			</div>
 		</aside>
 	)

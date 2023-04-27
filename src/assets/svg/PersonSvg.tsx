@@ -5,8 +5,8 @@ export const PersonSvg = () => {
 		<svg
 			width="61"
 			height="61"
+			className="h-[3vw] w-auto"
 			viewBox="0 0 61 61"
-			className="w-auto h-[3vw]"
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"
 		>
@@ -37,11 +37,11 @@ export const PersonSvg = () => {
 					y2="16.8809"
 					gradientUnits="userSpaceOnUse"
 				>
-					<stop stop-color="#3E89F9" />
-					<stop offset="0.223958" stop-color="#78AEFF" />
-					<stop offset="0.40625" stop-color="#74ACFF" />
-					<stop offset="0.598722" stop-color="#4E8AE4" />
-					<stop offset="1" stop-color="#004EC2" />
+					<stop stopColor="#3E89F9" />
+					<stop offset="0.223958" stopColor="#78AEFF" />
+					<stop offset="0.40625" stopColor="#74ACFF" />
+					<stop offset="0.598722" stopColor="#4E8AE4" />
+					<stop offset="1" stopColor="#004EC2" />
 				</linearGradient>
 			</defs>
 		</svg>

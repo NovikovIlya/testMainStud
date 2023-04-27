@@ -4,9 +4,9 @@ export const LogoIasSvg = () => {
 	return (
 		<svg
 			width="172"
-			className="w-auto h-[3vw]"
 			height="52"
 			viewBox="0 0 172 52"
+			className="h-[3vw] w-auto"
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"
 		>

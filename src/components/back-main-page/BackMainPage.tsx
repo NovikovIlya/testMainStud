@@ -1,6 +1,6 @@
 import { Typography } from 'antd'
 
-import { ArrowLeftSvg } from '../../assets/svg/ArrowLeftSvg'
+import { ArrowLeftSvg } from '../../assets/svg'
 
 const { Link } = Typography
 export const BackMainPage = () => {

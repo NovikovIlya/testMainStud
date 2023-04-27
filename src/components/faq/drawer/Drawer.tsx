@@ -1,9 +1,7 @@
 import { Button, Collapse, Divider, Drawer, Typography } from 'antd'
 import { FC } from 'react'
 
-import { EmailSvg } from '../../../assets/svg/EmailSvg'
-import { PhoneSvg } from '../../../assets/svg/PhoneSvg'
-import { QuestionSvg } from '../../../assets/svg/QuestionSvg'
+import { EmailSvg, PhoneSvg, QuestionSvg } from '../../../assets/svg'
 
 import './Drawer.scss'
 import { EmailDrawer } from './emailDrawer/EmailDrawer'

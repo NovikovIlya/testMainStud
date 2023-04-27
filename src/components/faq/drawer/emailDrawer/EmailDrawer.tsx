@@ -2,7 +2,7 @@ import { Button, Drawer, Form, Input, Typography, Upload, message } from 'antd'
 import type { UploadProps } from 'antd'
 import { FC } from 'react'
 
-import { UploadSvg } from '../../../../assets/svg/UploadSvg'
+import { UploadSvg } from '../../../../assets/svg'
 import { TitleEmail } from '../title/TitleEmail'
 
 import styles from './EmailDrawer.module.scss'

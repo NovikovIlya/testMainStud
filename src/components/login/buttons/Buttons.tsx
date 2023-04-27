@@ -1,7 +1,7 @@
 import { Button, Form } from 'antd'
 import { Link } from 'react-router-dom'
 
-import { GosSvg } from '../../../assets/svg/GosSvg'
+import { GosSvg } from '../../../assets/svg'
 
 import styles from './Buttons.module.scss'
 

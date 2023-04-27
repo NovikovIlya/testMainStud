@@ -1,6 +1,6 @@
 import { FC, useState } from 'react'
 
-import { FaqSvg } from '../../assets/svg/FaqSvg'
+import { FaqSvg } from '../../assets/svg'
 
 import styles from './Faq.module.scss'
 import logo from './Group.png'

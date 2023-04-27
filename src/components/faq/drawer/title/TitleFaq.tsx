@@ -1,9 +1,7 @@
 import { Typography } from 'antd'
 import { FC } from 'react'
 
-import { CloseSvg } from '../../../../assets/svg/CloseSvg'
-import { EmailFillSvg } from '../../../../assets/svg/EmailFillSvg'
-import { PhoneFillSvg } from '../../../../assets/svg/PhoneFillSvg'
+import { CloseSvg, EmailFillSvg, PhoneFillSvg } from '../../../../assets/svg'
 
 import styles from './Title.module.scss'
 

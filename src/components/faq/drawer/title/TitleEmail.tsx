@@ -1,7 +1,7 @@
 import { Typography } from 'antd'
 import { FC } from 'react'
 
-import { CloseSvg } from '../../../../assets/svg/CloseSvg'
+import { CloseSvg } from '../../../../assets/svg'
 
 interface ITitleEmailProps {
 	onClose: () => void

@@ -4,7 +4,7 @@ export const EmailFillSvg = () => {
 	return (
 		<>
 			<svg
-				className="w-[2vh] h-[2vh]"
+				className="w-[2vh] h-[2.8vh]"
 				width="30"
 				height="30"
 				viewBox="0 0 30 30"

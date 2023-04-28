@@ -4,7 +4,7 @@ export const SettingSvg = () => {
 	return (
 		<svg
 			width="33"
-			className="h-[2vh] w-auto"
+			className="h-[2.8vh] w-auto"
 			height="31"
 			viewBox="0 0 33 31"
 			fill="none"

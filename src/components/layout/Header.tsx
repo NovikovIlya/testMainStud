@@ -14,7 +14,7 @@ import './Header.scss'
 
 export const Header = () => {
 	return (
-		<div className="h-[8vh] my-[1vh] w-full flex items-center px-[3vh] justify-between font-sans">
+		<div className=" my-[2vh] gap-[2vh] w-full flex items-center px-[3vh] justify-between font-sans">
 			<div className="flex wrapper items-center gap-[8vh] max-lg:gap-[4vh]">
 				<div>
 					<LogoIasSvg />
@@ -24,13 +24,15 @@ export const Header = () => {
 				</div>
 			</div>
 			<div>
-				<div className="flex gap-[1vh] items-center">
-					<PersonSvg />
-					<div className="flex flex-col h-full justify-between max-sm:hidden">
-						<div className="text-[1.5vh] font-bold">Мистер Бин Бинович</div>
-						<span className="text-[1vh]">Пользователь</span>
+				<div className="flex gap-[15vh] max-xl:gap-[5vh] max-lg:gap-[2vh] items-center">
+					<div className="flex gap-[1vh]">
+						<PersonSvg />
+						<div className="flex flex-col  max-sm:hidden justify-center">
+							<div className="text-[1.5vh] font-bold">Мистер Бин Бинович</div>
+							<span className="text-[1vh]">Пользователь</span>
+						</div>
 					</div>
-					<div className="flex gap-[1vh] ml-[5vh] max-sm:ml-[1vh] max-[321px]:hidden">
+					<div className="flex gap-[2vh] max-sm:ml-[1vh] max-[426px]:hidden">
 						<SettingSvg />
 						<MessageSvg />
 						<NotificationSvg />

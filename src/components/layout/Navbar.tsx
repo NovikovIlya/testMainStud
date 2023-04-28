@@ -13,7 +13,7 @@ import './Header.scss'
 
 export const Navbar = () => {
 	return (
-		<aside className="px-[1.3vh]  min-h-screen bg-white shadow-md gap-[5vh] flex flex-col items-center rounded-r-[1vh]">
+		<aside className="px-[2vh]  min-h-screen bg-white shadow-md gap-[5vh] flex flex-col items-center rounded-r-[1vh]">
 			<div className=" mt-[2vh]">
 				<MenuSvg />
 			</div>

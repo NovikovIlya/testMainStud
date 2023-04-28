@@ -5,7 +5,7 @@ export const MenuSvg = () => {
 		<svg
 			width="47"
 			height="46"
-			className="h-[2vh] w-auto"
+			className="h-[2.8vh] w-auto"
 			viewBox="0 0 47 46"
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"

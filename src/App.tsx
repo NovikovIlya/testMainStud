@@ -60,7 +60,7 @@ const App = () => {
 							}
 						/>
 						<Route path="/test/*" element={<LayoutApp />} />
-						<Route path="/other-user/*" element={<OtherUser />} />
+						<Route path="/user/*" element={<OtherUser />} />
 					</Routes>
 				</div>
 			</ConfigProvider>

@@ -30,8 +30,8 @@ export const Header = () => {
 					<div className="flex gap-[1vh]">
 						<PersonSvg />
 						<div className="flex flex-col  max-sm:hidden justify-center">
-							<div className="text-[0.85vh] font-bold">Мистер Бин Бинович</div>
-							<span className="text-[0.85vh]">Гость</span>
+							<div className="text-[1vh] font-bold">Мистер Бин Бинович</div>
+							<span className="text-[1vh]">Гость</span>
 						</div>
 					</div>
 					<div className="flex gap-[3vh] max-sm:ml-[1vh] max-[426px]:hidden">

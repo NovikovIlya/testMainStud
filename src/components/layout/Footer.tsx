@@ -1,15 +1,17 @@
 import React from 'react'
 
-import { LogoSvg } from '../../assets/svg'
-import { DzenSvg } from '../../assets/svg/DzenSvg'
-import { OkSvg } from '../../assets/svg/OkSvg'
-import { TelegramSvg } from '../../assets/svg/TelegramSvg'
-import { VkSvg } from '../../assets/svg/VkSvg'
-import { YoutubeSvg } from '../../assets/svg/YoutubeSvg'
+import {
+	DzenSvg,
+	LogoSvg,
+	OkSvg,
+	TelegramSvg,
+	VkSvg,
+	YoutubeSvg
+} from '../../assets/svg'
 
 export const Footer = () => {
 	return (
-		<footer className="w-full min-h-[30vh] bg-[#212121] text-white font-sans">
+		<footer className="w-full min-h-[30vh] bg-[#212121] text-white text-[2vh] font-sans">
 			<div className="flex justify-around pt-[4vh] px-[2vh]">
 				<div>
 					<LogoSvg />

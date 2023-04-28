@@ -13,19 +13,9 @@ import { PersonSvg } from '../../assets/svg/PersonSvg'
 import './Header.scss'
 
 export const Header = () => {
-	const [navColor, setnavColor] = useState('transparent')
-	const listenScrollEvent = () => {
-		window.scrollY > 10 ? setnavColor('#f0f0f0') : setnavColor('#fff')
-	}
-	useEffect(() => {
-		window.addEventListener('scroll', listenScrollEvent)
-		return () => {
-			window.removeEventListener('scroll', listenScrollEvent)
-		}
-	}, [])
 	return (
 		<div
-			className={`bg-[${navColor}] bg-opacity-50 fixed pl-[13vh] max-sm:pl-[8vh] z-10 py-[2vh] gap-[2vh] w-full flex items-center px-[3vh] justify-between font-sans `}
+			className={`bg-[#f0f0f0] bg-opacity-50 fixed pl-[13vh] max-sm:pl-[8vh] z-10 py-[2vh] gap-[2vh] w-full flex items-center px-[3vh] justify-between font-sans `}
 		>
 			<div className="flex wrapper items-center gap-[8vh] max-lg:gap-[4vh]">
 				<div>

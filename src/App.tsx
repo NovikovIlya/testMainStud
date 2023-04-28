@@ -3,11 +3,10 @@ import { useEffect, useRef, useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 
-import { LayoutApp } from './components/dnd/layout/Layout'
 import { Login } from './components/login/Login'
-import { OtherUser } from './components/other-user/OtherUser'
 import { Profile } from './components/profile/profile'
 import { Registration } from './components/registration/Registration'
+import { User } from './components/user/User'
 import { useAppDispatch } from './store'
 import { RequestForTokens } from './store/creators/MainCreators'
 
@@ -59,8 +58,7 @@ const App = () => {
 								isLogIn ? <Login ChangeIsLogIn={ChangeIsLogIn} /> : <Profile />
 							}
 						/>
-						<Route path="/test/*" element={<LayoutApp />} />
-						<Route path="/user/*" element={<OtherUser />} />
+						<Route path="/user/*" element={<User />} />
 					</Routes>
 				</div>
 			</ConfigProvider>

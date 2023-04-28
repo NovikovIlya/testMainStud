@@ -4,7 +4,7 @@ import { Responsive, WidthProvider } from 'react-grid-layout'
 import 'react-grid-layout/css/styles.css'
 import 'react-resizable/css/styles.css'
 
-import './styles.css'
+import './DropDrag.scss'
 
 interface IDropDragProps {
 	edit: boolean
@@ -74,8 +74,8 @@ const DropDrag: FunctionComponent<IDropDragProps> = ({
 		<div className=" mb-4">
 			<ResponsiveReactGridLayout
 				className="layout "
-				rowHeight={200}
-				cols={{ lg: 5, md: 4, sm: 3, xs: 2, xxs: 1 }}
+				rowHeight={400}
+				cols={{ lg: 3, md: 2, sm: 2, xs: 2, xxs: 1 }}
 				containerPadding={[10, 10]}
 				layouts={layouts}
 				measureBeforeMount={true}

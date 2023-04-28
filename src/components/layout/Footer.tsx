@@ -12,7 +12,7 @@ import {
 export const Footer = () => {
 	return (
 		<footer className="w-full min-h-[30vh] bg-[#212121] text-white text-[2vh] font-sans">
-			<div className="flex justify-around pt-[4vh] px-[2vh]">
+			<div className="flex justify-around pt-[4vh] px-[2vh] max-sm:flex-col max-sm:gap-[2vh]">
 				<div>
 					<LogoSvg />
 					<div className="my-[2vh] flex flex-col">
@@ -31,7 +31,7 @@ export const Footer = () => {
 					<span>
 						<strong>Соцсети:</strong>
 					</span>
-					<div className="flex gap-[1vh] mt-[1.5vh]">
+					<div className="flex gap-[1vh] my-[1.5vh]">
 						<VkSvg />
 						<YoutubeSvg />
 						<DzenSvg />

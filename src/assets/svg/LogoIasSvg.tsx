@@ -6,7 +6,7 @@ export const LogoIasSvg = () => {
 			width="172"
 			height="52"
 			viewBox="0 0 172 52"
-			className="h-[3vw] w-auto"
+			className="h-[3.5vh] w-auto"
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"
 		>

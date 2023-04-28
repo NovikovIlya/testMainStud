@@ -5,7 +5,7 @@ export const PersonSvg = () => {
 		<svg
 			width="61"
 			height="61"
-			className="h-[3vw] w-auto"
+			className="h-[5vh] w-auto"
 			viewBox="0 0 61 61"
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"

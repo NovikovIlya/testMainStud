@@ -5,7 +5,7 @@ export const DocumentSvg = () => {
 		<svg
 			width="39"
 			height="41"
-			className="h-[1.5vw] w-auto"
+			className="h-[2vh] w-auto"
 			viewBox="0 0 39 41"
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"

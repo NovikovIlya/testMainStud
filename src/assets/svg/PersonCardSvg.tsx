@@ -4,7 +4,7 @@ export const PersonCardSvg = () => {
 	return (
 		<svg
 			width="47"
-			className="h-[1.5vw] w-auto"
+			className="h-[2vh] w-auto"
 			height="42"
 			viewBox="0 0 47 42"
 			fill="none"

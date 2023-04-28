@@ -1,7 +1,7 @@
 .wrapper {
 	.search {
 		.ant-input {
-			@apply w-[25vw] rounded-[0.5vw] px-[0.8vw] py-[0.3vw] font-sans text-[1vw] opacity-100 max-sm:w-full;
+			@apply w-[35vh] rounded-[1vh] px-[0.8vh] py-[0.5vh] font-sans text-[1.5vh] opacity-100 max-lg:w-[20vh] max-sm:w-full;
 		}
 	}
 }

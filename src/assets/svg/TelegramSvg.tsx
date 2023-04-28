@@ -10,7 +10,7 @@ export const TelegramSvg = () => {
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"
 		>
-			<g clip-path="url(#clip0_696_398)">
+			<g clipPath="url(#clip0_696_398)">
 				<mask
 					id="mask0_696_398"
 					style={{ maskType: 'luminance' }}
@@ -50,8 +50,8 @@ export const TelegramSvg = () => {
 					y2="40.592"
 					gradientUnits="userSpaceOnUse"
 				>
-					<stop stop-color="#212121" />
-					<stop offset="1" stop-color="#505050" />
+					<stop stopColor="#212121" />
+					<stop offset="1" stopColor="#505050" />
 				</linearGradient>
 				<clipPath id="clip0_696_398">
 					<rect

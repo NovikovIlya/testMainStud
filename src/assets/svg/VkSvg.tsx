@@ -10,7 +10,7 @@ export const VkSvg = () => {
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"
 		>
-			<g clip-path="url(#clip0_696_364)">
+			<g clipPath="url(#clip0_696_364)">
 				<mask
 					id="mask0_696_364"
 					style={{ maskType: 'luminance' }}

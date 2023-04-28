@@ -3,7 +3,7 @@ import React from 'react'
 export const PersonalizeSvg = () => {
 	return (
 		<svg
-			className="h-[1.5vw] w-auto"
+			className="h-[2vh] w-auto"
 			width="42"
 			height="41"
 			viewBox="0 0 42 41"

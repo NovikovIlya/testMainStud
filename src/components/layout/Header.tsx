@@ -1,4 +1,5 @@
 import { Input } from 'antd'
+import { useEffect, useState } from 'react'
 
 import {
 	LogoutSvg,
@@ -13,23 +14,23 @@ import './Header.scss'
 
 export const Header = () => {
 	return (
-		<div className="h-[7vw] w-full flex items-center px-[2vw] justify-between font-sans">
-			<div className="flex wrapper items-center gap-[3vw] ">
-				<div className="w-fit">
+		<div className="h-[8vh] my-[1vh] w-full flex items-center px-[3vh] justify-between font-sans">
+			<div className="flex wrapper items-center gap-[8vh] max-lg:gap-[4vh]">
+				<div>
 					<LogoIasSvg />
 				</div>
-				<div className="search flex items-center">
+				<div className="search flex items-center max-md:hidden">
 					<Input placeholder="Поиск" className="shadow" />
 				</div>
 			</div>
 			<div>
-				<div className="flex gap-[0.5vw] items-center">
+				<div className="flex gap-[1vh] items-center">
 					<PersonSvg />
-					<div className="flex flex-col h-full justify-between">
-						<div className="text-[1vw] font-bold">Мистер Бин Бинович</div>
-						<span className="text-[0.8vw]">Пользователь</span>
+					<div className="flex flex-col h-full justify-between max-sm:hidden">
+						<div className="text-[1.5vh] font-bold">Мистер Бин Бинович</div>
+						<span className="text-[1vh]">Пользователь</span>
 					</div>
-					<div className="flex gap-[1vw] ml-[5vw]">
+					<div className="flex gap-[1vh] ml-[5vh] max-sm:ml-[1vh] max-[321px]:hidden">
 						<SettingSvg />
 						<MessageSvg />
 						<NotificationSvg />

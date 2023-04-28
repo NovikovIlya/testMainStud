@@ -5,7 +5,7 @@ export const LangSvg = () => {
 		<svg
 			width="27"
 			height="18"
-			className="h-[0.8vw] w-auto"
+			className="h-[1vh] w-auto"
 			viewBox="0 0 27 18"
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"

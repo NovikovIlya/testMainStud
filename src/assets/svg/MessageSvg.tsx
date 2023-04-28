@@ -4,7 +4,7 @@ export const MessageSvg = () => {
 	return (
 		<svg
 			width="30"
-			className="h-[1.5vw] w-auto"
+			className="h-[2vh] w-auto"
 			height="31"
 			viewBox="0 0 30 31"
 			fill="none"

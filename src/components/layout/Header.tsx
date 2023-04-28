@@ -1,4 +1,5 @@
 import { Input } from 'antd'
+import { useEffect, useState } from 'react'
 
 import {
 	LogoutSvg,
@@ -12,8 +13,20 @@ import { PersonSvg } from '../../assets/svg/PersonSvg'
 import './Header.scss'
 
 export const Header = () => {
+	const [navColor, setnavColor] = useState('transparent')
+	const listenScrollEvent = () => {
+		window.scrollY > 10 ? setnavColor('#f0f0f0') : setnavColor('#fff')
+	}
+	useEffect(() => {
+		window.addEventListener('scroll', listenScrollEvent)
+		return () => {
+			window.removeEventListener('scroll', listenScrollEvent)
+		}
+	}, [])
 	return (
-		<div className=" my-[2vh] gap-[2vh] w-full flex items-center px-[3vh] justify-between font-sans">
+		<div
+			className={`bg-[${navColor}] bg-opacity-50 fixed pl-[13vh] max-sm:pl-[8vh] z-10 py-[2vh] gap-[2vh] w-full flex items-center px-[3vh] justify-between font-sans `}
+		>
 			<div className="flex wrapper items-center gap-[8vh] max-lg:gap-[4vh]">
 				<div>
 					<LogoIasSvg />
@@ -27,11 +40,11 @@ export const Header = () => {
 					<div className="flex gap-[1vh]">
 						<PersonSvg />
 						<div className="flex flex-col  max-sm:hidden justify-center">
-							<div className="text-[1.5vh] font-bold">Мистер Бин Бинович</div>
-							<span className="text-[1vh]">Пользователь</span>
+							<div className="text-[0.85vh] font-bold">Мистер Бин Бинович</div>
+							<span className="text-[0.85vh]">Гость</span>
 						</div>
 					</div>
-					<div className="flex gap-[2vh] max-sm:ml-[1vh] max-[426px]:hidden">
+					<div className="flex gap-[3vh] max-sm:ml-[1vh] max-[426px]:hidden">
 						<SettingSvg />
 						<MessageSvg />
 						<NotificationSvg />

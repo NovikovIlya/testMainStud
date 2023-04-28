@@ -13,17 +13,17 @@ import './Header.scss'
 
 export const Navbar = () => {
 	return (
-		<aside className="px-[2vh]  min-h-screen bg-white shadow-md gap-[5vh] flex flex-col items-center rounded-r-[1vh]">
+		<aside className="px-[2vh] z-20 fixed min-h-screen bg-white shadow-md gap-[7vh] flex flex-col items-center">
 			<div className=" mt-[2vh]">
 				<MenuSvg />
 			</div>
-			<div className="flex flex-col gap-[1.5vh] items-center">
+			<div className="flex flex-col gap-[3vh] items-center">
 				<PersonCardSvg />
 				<MapSvg />
 				<PersonalizeSvg />
 				<DocumentSvg />
 			</div>
-			<div className="flex flex-col gap-[1.5vh] items-center">
+			<div className="flex flex-col gap-[2vh] items-center">
 				<EyeSvg />
 				<LangSvg />
 			</div>

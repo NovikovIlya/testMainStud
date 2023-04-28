@@ -5,7 +5,7 @@ export const NotificationSvg = () => {
 		<svg
 			width="24"
 			height="31"
-			className="h-[2.8vh] w-auto"
+			className="h-[1.7vh] w-auto"
 			viewBox="0 0 24 31"
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"

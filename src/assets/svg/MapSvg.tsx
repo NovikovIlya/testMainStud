@@ -4,7 +4,7 @@ export const MapSvg = () => {
 	return (
 		<svg
 			width="39"
-			className="h-[2.8vh] w-auto"
+			className="h-[2vh] w-auto"
 			height="46"
 			viewBox="0 0 39 46"
 			fill="none"

@@ -4,7 +4,7 @@ export const QuestionFillSvg = () => {
 	return (
 		<svg
 			width="41"
-			className="h-[2.8vh] w-auto"
+			className="h-[2vh] w-auto"
 			height="41"
 			viewBox="0 0 41 41"
 			fill="none"

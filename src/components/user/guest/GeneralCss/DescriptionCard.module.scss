@@ -1,0 +1,15 @@
+.main {
+	@apply flex h-full w-1/2 flex-col items-center justify-around rounded-md border-[1px] border-solid border-black bg-white;
+	.firstTittle {
+		@apply flex h-2/6 w-10/12 items-center text-2xl font-bold;
+	}
+	.secondTittle {
+		@apply flex h-1/6 w-10/12 flex-wrap;
+	}
+	.buttonBlock {
+		@apply flex h-1/6 w-10/12;
+		.button {
+			@apply h-auto w-1/2 rounded-full border-[1px] border-solid border-black p-2 font-bold transition-colors hover:bg-[#9ADDFF];
+		}
+	}
+}

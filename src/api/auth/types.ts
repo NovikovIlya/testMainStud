@@ -78,3 +78,8 @@ export interface IRefreshRequest {
 export interface IRegfreshSuccess {
 	accessToken: string
 }
+
+export interface data {
+	tittle1: string
+	tittle2: string
+}

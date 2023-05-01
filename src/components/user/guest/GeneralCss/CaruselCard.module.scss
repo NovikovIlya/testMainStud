@@ -1,0 +1,42 @@
+.main {
+	@apply relative flex h-full w-full flex-col justify-around rounded-md border-[1px] border-solid border-black bg-white;
+	.tittleBlock {
+		@apply flex h-2/6 w-1/2 justify-start pl-4;
+		.tittle {
+			@apply flex h-full w-full flex-col;
+			.TopItem {
+				@apply flex h-full w-full text-2xl font-bold;
+			}
+			.BottomItem {
+				@apply flex h-1/2 w-full;
+			}
+		}
+		.img {
+			@apply absolute top-2 right-5 h-[100px] w-[100px];
+		}
+	}
+	.carouselBlock {
+		@apply flex h-1/6 w-full items-center;
+		.arrowBlocks {
+			@apply flex h-full w-1/12 items-center justify-center;
+			.Button {
+				@apply h-auto w-auto border-none bg-white;
+			}
+		}
+		.carousel {
+			@apply flex h-full w-full flex-col justify-start;
+			.itemsMiddleBlock {
+				@apply flex h-1/2 w-full justify-start;
+			}
+			.itemsRightBlock {
+				@apply flex h-[40px] w-full items-center justify-around;
+			}
+		}
+	}
+	.buttonBlock {
+		@apply flex h-1/6 w-11/12 justify-start pl-4;
+		.mainButton {
+			@apply h-auto w-1/2 rounded-full border-[1px] border-solid border-black bg-[#3E89F9] p-2 font-bold text-white transition-colors hover:bg-white hover:text-black;
+		}
+	}
+}

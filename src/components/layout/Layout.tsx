@@ -11,15 +11,15 @@ interface ILayoutProps {
 
 export const Layout: FC<ILayoutProps> = ({ children }) => {
 	return (
-		<>
-			<div className="bg-[#f1f1f1] flex w-full">
+		<div className="flex flex-col w-full h-auto">
+			<div className="bg-[#f1f1f1] flex w-full h-full">
 				<Navbar />
-				<div className="w-full">
+				<div className="flex flex-col w-full">
 					<Header />
 					{children}
 				</div>
 			</div>
 			<Footer />
-		</>
+		</div>
 	)
 }

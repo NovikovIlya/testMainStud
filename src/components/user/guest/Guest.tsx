@@ -1,7 +1,7 @@
 import { Typography } from 'antd'
 import React from 'react'
 
-import Styles from './Guest.module.scss'
+import styles from './Guest.module.scss'
 import FifthBlock from './fifthBlock/FifthBlock'
 import FirstBlock from './firstBlock/FirstBlock'
 import FourthBlock from './fourthBlock/FourthBlock'
@@ -12,9 +12,9 @@ const { Title } = Typography
 
 const Guest = () => {
 	return (
-		<div className={Styles.main}>
-			<div className={Styles.wrapper}>
-				<Title className={Styles.tittle}>Личный кабинет КФУ</Title>
+		<div className={styles.main}>
+			<div className={styles.wrapper}>
+				<Title className={styles.tittle}>Личный кабинет КФУ</Title>
 				<FirstBlock />
 				<SecondBlock />
 				<ThirdBlock />

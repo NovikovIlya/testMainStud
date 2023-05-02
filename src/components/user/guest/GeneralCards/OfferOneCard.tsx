@@ -1,30 +1,30 @@
 import React, { FC } from 'react'
 
 import { data } from '../../../../api/auth/types'
-import Styles from '../GeneralCss/OfferOneCard.module.scss'
+import styles from '../GeneralCss/OfferOneCard.module.scss'
 
-interface IleftBlockProps {
+interface ILeftBlockProps {
 	info: data[]
 	tittle: string
 }
 
-const OfferOneCard: FC<IleftBlockProps> = ({ info, tittle }) => {
+const OfferOneCard: FC<ILeftBlockProps> = ({ info, tittle }) => {
 	return (
-		<div className={Styles.main}>
-			<span className={Styles.tittleBlock}>{tittle}</span>
-			<div className={Styles.baseBlock}>
+		<div className={styles.main}>
+			<span className={styles.tittleBlock}>{tittle}</span>
+			<div className={styles.baseBlock}>
 				{info.map(el => (
 					<div className="flex flex-col w-full h-auto" key={el.tittle1}>
-						<span className={Styles.topElements}>
+						<span className={styles.topElements}>
 							<span>{el.tittle1}</span>
 							<span className="font-bold text-[#3E89F9]">{el.tittle2}</span>
 						</span>
-						<hr className={Styles.hr} />
+						<hr className={styles.hr} />
 					</div>
 				))}
 			</div>
-			<div className={Styles.buttonBlock}>
-				<button className={Styles.button}>Посмотреть</button>
+			<div className={styles.buttonBlock}>
+				<button className={styles.button}>Посмотреть</button>
 			</div>
 		</div>
 	)

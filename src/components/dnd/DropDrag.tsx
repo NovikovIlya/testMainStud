@@ -4,6 +4,8 @@ import { Responsive, WidthProvider } from 'react-grid-layout'
 import 'react-grid-layout/css/styles.css'
 import 'react-resizable/css/styles.css'
 
+import { AboutUniversity } from '../user/bek/aboutUniversity/AboutUniversity'
+
 import './DropDrag.scss'
 
 interface IDropDragProps {
@@ -53,9 +55,26 @@ const DropDrag: FunctionComponent<IDropDragProps> = ({
 	}
 
 	const generateDOM = layouts.lg.map(item => {
+		if (item.i === '1') {
+			return (
+				<div key={item.i} className="bg-white font-sans rounded-[2vh]">
+					<div className="text  w-full h-full  ">
+						{edit && (
+							<div
+								className="absolute top-2 cursor-pointer right-2"
+								onClick={() => onRemoveItem(item.i)}
+							>
+								<DeleteOutlined className="text-[1.5vh] max-[2000px]:text-[2vh] mt-[1vh]" />
+							</div>
+						)}
+						<AboutUniversity />
+					</div>
+				</div>
+			)
+		}
 		return (
 			<div key={item.i}>
-				<div className="text text-white w-full h-full flex items-center justify-center ">
+				<div className="text rounded-[2vh] text-white w-full h-full flex items-center justify-center ">
 					{edit && (
 						<div
 							className="absolute top-2 cursor-pointer right-2"

@@ -27,6 +27,7 @@
 }
 
 .react-grid-item.react-grid-placeholder {
+	border-radius: 2vh;
 	background: red;
 	opacity: 0.2;
 	transition-duration: 100ms;
@@ -37,13 +38,16 @@
 	-o-user-select: none;
 	user-select: none;
 }
-
+.react-grid-item > .react-resizable-handle.react-resizable-handle-se {
+	bottom: 1vh;
+	right: 1vh;
+}
 .react-grid-item > .react-resizable-handle {
 	position: absolute;
 	width: 20px;
 	height: 20px;
-	bottom: 0;
-	right: 0;
+	bottom: 1vh;
+	right: 1vh;
 	cursor: se-resize;
 }
 
@@ -54,6 +58,6 @@
 	bottom: 3px;
 	width: 5px;
 	height: 5px;
-	border-right: 2px solid rgba(255, 255, 255);
-	border-bottom: 2px solid rgba(255, 255, 255);
+	border-right: 2px solid rgba(0, 0, 0);
+	border-bottom: 2px solid rgba(0, 0, 0);
 }

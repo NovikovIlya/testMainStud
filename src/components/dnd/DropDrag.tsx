@@ -55,11 +55,11 @@ const DropDrag: FunctionComponent<IDropDragProps> = ({
 	}
 
 	const generateDOM = layouts.lg.map(item => {
-		if (item.i === '1') {
+		if (item.i === '0') {
 			return (
 				<div
 					key={item.i}
-					className="bg-white font-sans rounded-[2vh] shadow-md"
+					className="bg-white/50 backdrop-blur-sm font-sans rounded-[2vh] shadow-md"
 				>
 					<div className="text  w-full h-full  ">
 						{edit && (
@@ -76,17 +76,17 @@ const DropDrag: FunctionComponent<IDropDragProps> = ({
 			)
 		}
 		return (
-			<div key={item.i}>
-				<div className="text rounded-[2vh] text-white w-full h-full flex items-center justify-center ">
+			<div key={item.i} className="rounded-[2vh] backdrop-blur-sm">
+				<div className="text-white w-full h-full flex items-center justify-center ">
 					{edit && (
 						<div
 							className="absolute top-2 cursor-pointer right-2"
 							onClick={() => onRemoveItem(item.i)}
 						>
-							<DeleteOutlined style={{ color: 'white', fontSize: 18 }} />
+							<DeleteOutlined className="text-[1.5vh] max-[2000px]:text-[2vh] mt-[1vh] mr-[1vh]" />
 						</div>
 					)}
-					{item.i}
+					<div>{item.i}</div>
 				</div>
 			</div>
 		)

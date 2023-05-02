@@ -79,9 +79,6 @@ export const RequestForTokens =
 						refreshToken: ''
 					})
 				)
-				dispatch(
-					ProfileSuccess(JSON.parse(localStorage.getItem('user_data') || '{}'))
-				)
 			}
 		} catch (e: any) {
 			//если 403

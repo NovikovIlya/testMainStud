@@ -11,27 +11,27 @@ import { useAppDispatch } from './store'
 import { RequestForTokens } from './store/creators/MainCreators'
 
 const App = () => {
-	const [isLogIn, ChangeIsLogIn] = useState(false)
+	const [isLogIn, changeIsLogIn] = useState(false)
 	const navigate = useNavigate()
 	const dispatch = useAppDispatch()
-	const FirstShow = useRef(0)
+	const firstShow = useRef(0)
 
 	useEffect(() => {
 		const dataApi = async () => {
 			const res = await dispatch(RequestForTokens())
 			if (res === '200') {
-				ChangeIsLogIn(false)
+				changeIsLogIn(false)
 				navigate('/profile')
 			}
 			if (res === '403') {
 				navigate('/')
-				ChangeIsLogIn(true)
-				FirstShow.current = 0
+				changeIsLogIn(true)
+				firstShow.current = 0
 			}
 		}
-		if (FirstShow.current === 0) {
+		if (firstShow.current === 0) {
 			dataApi()
-			FirstShow.current = 1
+			firstShow.current = 1
 		}
 	}, [navigate, dispatch])
 
@@ -49,13 +49,13 @@ const App = () => {
 					<Routes>
 						<Route
 							path="/*"
-							element={<Login ChangeIsLogIn={ChangeIsLogIn} />}
+							element={<Login changeIsLogIn={changeIsLogIn} />}
 						/>
 						<Route path="/registration/*" element={<Registration />} />
 						<Route
 							path="/profile/*"
 							element={
-								isLogIn ? <Login ChangeIsLogIn={ChangeIsLogIn} /> : <Profile />
+								isLogIn ? <Login changeIsLogIn={changeIsLogIn} /> : <Profile />
 							}
 						/>
 						<Route path="/user/*" element={<User />} />

@@ -15,8 +15,9 @@ export const User = () => {
 	})
 	return (
 		<Layout>
-			<Guest />
-			{/* <DropDrag edit={edit} layouts={layouts} setLayouts={setLayouts} /> */}
+			{/*<Guest /> */}
+			<DropDrag edit={edit} layouts={layouts} setLayouts={setLayouts} />
+			{/*  */}
 		</Layout>
 	)
 }

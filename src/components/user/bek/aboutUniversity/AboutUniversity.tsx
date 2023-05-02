@@ -13,7 +13,7 @@ export const AboutUniversity = () => {
 						инфографика внутри — хвалебные маркетинговые оды университету
 					</span>
 				</div>
-				<div className="flex justify-center">
+				<div className="flex justify-center items-center">
 					<div className="min-w-[130px] bg-[#3E89F9] rounded-full h-[130px] ml-[2vh]"></div>
 				</div>
 			</div>

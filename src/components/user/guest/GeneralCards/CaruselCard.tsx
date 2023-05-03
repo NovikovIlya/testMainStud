@@ -37,7 +37,7 @@ const CaruselCard: FC<ICarucelProps> = ({
 					</button>
 				</div>
 				<div className="flex w-full">
-					<Carousel className="w-80" dots={false} autoplay ref={ref}>
+					<Carousel className="w-[20vh]" dots={false} autoplay ref={ref}>
 						{blockName === 'middle' &&
 							info.map(el => (
 								<div className={Styles.carousel} key={el.tittle1}>

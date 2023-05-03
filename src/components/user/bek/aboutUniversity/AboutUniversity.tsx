@@ -2,8 +2,8 @@ import { Button } from 'antd'
 
 export const AboutUniversity = () => {
 	return (
-		<div className="px-[2vh] pt-[2vh] h-full flex flex-col justify-around">
-			<div className="flex">
+		<div className="px-[3vh] pt-[3vh] pb-[1vh] h-full flex flex-col justify-around">
+			<div className="flex max-sm:flex-col gap-[1vh]">
 				<div className="text-start">
 					<h3 className="text-[1.7vh] max-[2000px]:text-[2vh]">
 						Об университете
@@ -14,7 +14,7 @@ export const AboutUniversity = () => {
 					</span>
 				</div>
 				<div className="flex justify-center items-center">
-					<div className="min-w-[130px] bg-[#3E89F9] rounded-full h-[130px] ml-[2vh]"></div>
+					<div className="min-w-[130px] bg-[#3E89F9] rounded-full h-[130px]"></div>
 				</div>
 			</div>
 			<div className="flex justify-start">

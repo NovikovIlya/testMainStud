@@ -19,7 +19,7 @@ import { Switcher } from './switcher/Switcher'
 const { Title } = Typography
 
 export const Registration: FC = () => {
-	let error = useSelector((state: RootState) => state.AuthReg.regData.error)
+	const error = useSelector((state: RootState) => state.AuthReg.regData.error)
 	const dispatch = useAppDispatch()
 	const [value, setValue] = useState(0)
 	const [check, setCheck] = useState(false)

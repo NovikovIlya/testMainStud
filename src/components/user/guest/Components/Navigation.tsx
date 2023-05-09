@@ -2,9 +2,9 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 import { LongArrowRightSvg } from '../../../../assets/svg/LongArrowRightSvg'
+import Styles from '../Styles/Navigation.module.scss'
 
-import Img from './../beautiful_girl.png'
-import Styles from './FirstBlock.module.scss'
+import Img from './../beautiful_girl.webp'
 
 const FirstBlock = () => {
 	return (

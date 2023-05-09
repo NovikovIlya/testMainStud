@@ -1,25 +1,25 @@
 import { Dispatch } from '@reduxjs/toolkit'
 
 import {
-	LogInFailure,
-	LogOutSuccess,
-	RegistFailure
+	loginFailure,
+	logoutSuccess,
+	registrationFailure
 } from '../reducers/AuthRegReducer'
 
-export const LogOut =
+export const logout =
 	() =>
 	async (dispatch: Dispatch): Promise<void> => {
-		dispatch(LogOutSuccess())
+		dispatch(logoutSuccess())
 	}
 
 export const DeleteLogInErrors =
 	() =>
 	async (dispatch: Dispatch): Promise<void> => {
-		dispatch(LogInFailure([]))
+		dispatch(loginFailure([]))
 	}
 
 export const DeleteRegistrationErrors =
 	() =>
 	async (dispatch: Dispatch): Promise<void> => {
-		dispatch(RegistFailure([]))
+		dispatch(registrationFailure([]))
 	}

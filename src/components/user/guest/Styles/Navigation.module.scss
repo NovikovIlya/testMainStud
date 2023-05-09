@@ -1,5 +1,7 @@
+@tailwind base;
+
 .main {
-	@apply mb-5 flex h-[200px] w-full items-center justify-between rounded-md border-[1px] border-solid border-black bg-white;
+	@apply mb-3 ml-[1.5vh] mr-[2.5vh] flex h-[200px] w-auto items-center justify-between rounded-[2vh] border-[1px] border-solid border-black;
 	.leftBlock {
 		@apply flex h-1/2 w-3/5 flex-col;
 		.tittle {

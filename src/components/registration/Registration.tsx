@@ -1,8 +1,8 @@
 import { Form, Typography } from 'antd'
-import { FC, useEffect, useRef, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
-import { IRegFormData } from '../../api/auth/types'
+import { IRegFormData } from '../../api/types'
 import { useAppDispatch } from '../../store'
 import { RootState } from '../../store'
 import { DeleteRegistrationErrors } from '../../store/creators/SomeCreators'
@@ -23,17 +23,11 @@ export const Registration: FC = () => {
 	const dispatch = useAppDispatch()
 	const [value, setValue] = useState(0)
 	const [check, setCheck] = useState(false)
-	const JustOnce = useRef(0)
 	const [confirmPassword, setConfirmPassword] = useState(true)
 
 	useEffect(() => {
-		if (JustOnce.current === 0) {
-			JustOnce.current = 1
-			if (error !== null) {
-				dispatch(DeleteRegistrationErrors())
-			}
-		} else {
-			JustOnce.current = 0
+		if (error !== null) {
+			dispatch(DeleteRegistrationErrors())
 		}
 	}, [dispatch, error])
 

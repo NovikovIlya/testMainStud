@@ -4,8 +4,6 @@ import DropDrag from '../dnd/DropDrag'
 import { block } from '../dnd/constatant'
 import { Layout } from '../layout/Layout'
 
-import Guest from './guest/Guest'
-
 export const User = () => {
 	const [edit, setEdit] = useState(true)
 	const [layouts, setLayouts] = useState<{ [index: string]: any[] }>(() => {
@@ -15,9 +13,7 @@ export const User = () => {
 	})
 	return (
 		<Layout>
-			{/*<Guest /> */}
 			<DropDrag edit={edit} layouts={layouts} setLayouts={setLayouts} />
-			{/*  */}
 		</Layout>
 	)
 }

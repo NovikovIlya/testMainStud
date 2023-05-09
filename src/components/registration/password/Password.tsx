@@ -1,7 +1,7 @@
 import { Form, Input } from 'antd'
 import { FC } from 'react'
 
-import { IError } from '../../../api/auth/types'
+import { IError } from '../../../api/types'
 
 import styles from './Password.module.scss'
 

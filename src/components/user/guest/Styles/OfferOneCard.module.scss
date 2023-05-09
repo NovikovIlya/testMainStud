@@ -1,0 +1,40 @@
+@tailwind utilities;
+
+@layer utilities {
+	.baseBlock::-webkit-scrollbar {
+		width: 2px;
+	}
+	.baseBlock::-webkit-scrollbar-track {
+		-webkit-box-shadow: 5px 5px 5px -5px rgba(34, 60, 80, 0.2) inset;
+		background-color: #f9f9fd;
+	}
+
+	.baseBlock::-webkit-scrollbar-thumb {
+		background: linear-gradient(180deg, #00c6fb, #005bea);
+	}
+}
+
+.main {
+	@apply flex h-full w-full flex-col items-start justify-around pr-8 pl-4;
+	.tittleBlock {
+		@apply flex h-auto w-full text-lg font-bold;
+	}
+	.wrapper {
+		@apply relative flex h-3/6 w-full overflow-hidden;
+		.baseBlock {
+			@apply absolute flex h-full w-full flex-col overflow-auto;
+			.topElements {
+				@apply mb-2 flex h-auto w-full justify-between;
+			}
+			.hr {
+				@apply mb-2 h-auto w-full border-t-[1px] border-dashed border-black;
+			}
+		}
+	}
+	.buttonBlock {
+		@apply flex h-[40px] w-auto;
+		.button {
+			@apply h-full w-full rounded-lg border-[1px] border-solid border-black p-2 font-bold text-black hover:bg-[#9ADDFF];
+		}
+	}
+}

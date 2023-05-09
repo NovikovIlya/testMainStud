@@ -1,11 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import Cookies from 'universal-cookie'
 
-import {
-	IAuthReducerRequest,
-	IAuthRegState,
-	IError
-} from '../../api/auth/types'
+import { IAuthReducerRequest, IAuthRegState, IError } from '../../api/types'
 import { RootState } from '../index'
 
 const cookies = new Cookies()
@@ -24,14 +20,12 @@ export const AuthRegReducer = createSlice({
 	name: 'AuthReg',
 	initialState,
 	reducers: {
-		LogInSuccess: (
+		loginSuccess: (
 			state,
 			action: PayloadAction<IAuthReducerRequest>
 		): IAuthRegState => {
 			localStorage.setItem('access', action.payload.accessToken)
-			if (action.payload.refreshToken !== '') {
-				cookies.set('refresh', action.payload.refreshToken)
-			}
+			cookies.set('refresh', action.payload.refreshToken)
 			return {
 				...state,
 				authData: {
@@ -41,10 +35,19 @@ export const AuthRegReducer = createSlice({
 				}
 			}
 		},
-		RegistSuccess: (state, action: PayloadAction<string>) => {
+		refreshSuccess: (state, action: PayloadAction<string>): IAuthRegState => {
+			return {
+				...state,
+				authData: {
+					...state.authData,
+					accessToken: action.payload
+				}
+			}
+		},
+		registrationSuccess: state => {
 			state.regData.error = null
 		},
-		LogInFailure: (state, action: PayloadAction<IError[]>): IAuthRegState => {
+		loginFailure: (state, action: PayloadAction<IError[]>): IAuthRegState => {
 			return {
 				...state,
 				authData: {
@@ -53,7 +56,10 @@ export const AuthRegReducer = createSlice({
 				}
 			}
 		},
-		RegistFailure: (state, action: PayloadAction<IError[]>): IAuthRegState => {
+		registrationFailure: (
+			state,
+			action: PayloadAction<IError[]>
+		): IAuthRegState => {
 			return {
 				...state,
 				regData: {
@@ -62,22 +68,22 @@ export const AuthRegReducer = createSlice({
 				}
 			}
 		},
-		LogOutSuccess: (): IAuthRegState => {
+		logoutSuccess: (): IAuthRegState => {
 			cookies.remove('refresh')
 			localStorage.removeItem('access')
-			localStorage.removeItem('user_id')
-			localStorage.removeItem('user_data')
+			localStorage.removeItem('userInfo')
 			return initialState
 		}
 	}
 })
 
 export const {
-	LogInFailure,
-	LogInSuccess,
-	RegistFailure,
-	RegistSuccess,
-	LogOutSuccess
+	loginFailure,
+	loginSuccess,
+	registrationFailure,
+	registrationSuccess,
+	logoutSuccess,
+	refreshSuccess
 } = AuthRegReducer.actions
 
 export default AuthRegReducer.reducer

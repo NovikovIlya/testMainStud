@@ -1,0 +1,51 @@
+.main {
+	@apply flex h-full w-full flex-col items-start justify-around;
+	.tittleBlock {
+		@apply flex h-2/6 w-11/12 justify-start pl-4;
+		.tittle {
+			@apply flex h-full w-full flex-col;
+			.TopItem {
+				@apply z-10 flex h-full w-full text-lg font-bold;
+			}
+			.BottomItem {
+				@apply z-10 flex h-1/2 w-full;
+			}
+		}
+		.img {
+			@apply absolute top-4 right-8 z-0 h-[100px] w-[100px] rounded-full bg-[#9ADDFF];
+		}
+	}
+	.carouselBlock {
+		@apply relative z-10 mx-auto flex h-2/6 w-full justify-between;
+		.arrowBlocks {
+			@apply flex h-full w-[14px] items-center justify-center;
+			.Button {
+				@apply h-auto w-auto border-none bg-white;
+			}
+		}
+		.carousel {
+			@apply absolute left-5 right-5 flex h-full w-auto items-center;
+			.itemBlock {
+				@apply flex h-full w-full flex-col justify-start;
+				.contentWithDescription {
+					@apply flex h-auto w-full justify-start;
+					.textStyles {
+						@apply mr-2 font-bold;
+					}
+				}
+				.contentWithOutDescription {
+					@apply mx-auto flex h-full w-full justify-around;
+					.textStyles {
+						@apply text-base font-bold text-[#3E89F9];
+					}
+				}
+			}
+		}
+	}
+	.buttonBlock {
+		@apply flex h-[40px] w-auto pl-4;
+		.mainButton {
+			@apply h-full w-full rounded-lg border-[1px] border-solid border-black bg-[#3E89F9] p-2 font-bold text-white transition-colors hover:bg-white hover:text-black;
+		}
+	}
+}

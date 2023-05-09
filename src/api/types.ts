@@ -1,12 +1,3 @@
-export interface IRegRequest {
-	lastName: string
-	firstName: string
-	middleName: string | null
-	phone: string | null
-	password: string
-	email: string | null
-}
-
 export interface IAuthRequest {
 	username: string
 	password: string

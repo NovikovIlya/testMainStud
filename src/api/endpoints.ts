@@ -3,7 +3,6 @@ const endpoints = {
 		LOGIN: '/login',
 		REFRESH: '/token/refresh'
 	}
-	// REG: '/register'
 }
 
 export default endpoints

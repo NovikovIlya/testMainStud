@@ -1,9 +1,0 @@
-.main {
-	@apply ml-[12vh] mt-[12vh] mr-[2vh] flex h-full  items-center justify-center font-sans max-sm:ml-[7vh];
-	.wrapper {
-		@apply flex h-full w-full flex-col;
-		.tittle {
-			@apply h-auto w-full text-4xl font-bold;
-		}
-	}
-}

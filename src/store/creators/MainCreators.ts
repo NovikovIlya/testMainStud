@@ -1,90 +1,84 @@
+import { RootState } from '..'
 import { Dispatch } from '@reduxjs/toolkit'
 import { Cookies } from 'react-cookie'
+import { useSelector } from 'react-redux'
 
-import { AuthScelet, RefreshTokenScelet } from '../../api/auth/index'
-import { IAuthRequest } from '../../api/auth/types'
-import { isTokenExpired } from '../../utils/jwt'
+import { login, refresh } from '../../api/index'
+import { IAuthRequest } from '../../api/types'
 import {
-	LogInFailure,
-	LogInSuccess,
-	LogOutSuccess
+	loginFailure,
+	loginSuccess,
+	logoutSuccess,
+	refreshSuccess
 } from '../reducers/AuthRegReducer'
 import { ProfileSuccess } from '../reducers/ProfileReducer'
 
 const cookies = new Cookies()
 
-export const RequestFolLogIn =
+export const loginUser =
 	(data: IAuthRequest) =>
-	async (dispatch: Dispatch): Promise<String> => {
-		let answear = '401'
+	async (dispatch: Dispatch): Promise<number> => {
+		let answer = 403
 		try {
-			const res = await AuthScelet(data)
+			const res = await login(data)
 
-			//200
 			dispatch(
-				LogInSuccess({
+				loginSuccess({
 					accessToken: res.data.accessToken,
 					refreshToken: res.data.refreshToken
 				})
 			)
+			localStorage.setItem('userInfo', JSON.stringify(res.data.user))
 			dispatch(ProfileSuccess(res.data.user))
 
-			answear = '200'
+			answer = 200
 		} catch (e: any) {
-			//401
-			dispatch(LogInFailure(e.response.data.errors))
+			dispatch(loginFailure(e.response.data.errors))
 		}
 
-		return answear
+		return answer
 	}
 
-// export const RequestForRegistration =
-// 	(data: IRegRequest) =>
-// 	async (dispatch: Dispatch): Promise<void> => {
-// 		try {
-// 			const res = await RegScelet(data)
-
-// 			//201
-// 			dispatch(RegistSuccess(res.data))
-// 			localStorage.setItem('user_id', res.data)
-// 		} catch (e: any) {
-// 			//400
-// 			dispatch(RegistFailure(e.response.data.errors))
-// 		}
-// 	}
-
-export const RequestForTokens =
+export const refreshToken =
 	() =>
-	async (dispatch: Dispatch): Promise<string | null> => {
-		let answear = null
-		let accessToken = null
-		try {
-			if (localStorage.getItem('access') !== null) {
-				accessToken = localStorage.getItem('access')
-			}
+	async (dispatch: Dispatch): Promise<number> => {
+		let answer = 403
 
-			if (accessToken !== null) {
-				if (isTokenExpired(accessToken)) {
-					const res = await RefreshTokenScelet({
-						refreshToken: cookies.get('refresh')
-					})
-
-					//200
-					accessToken = res.data.accessToken
-				}
-				answear = '200'
-				dispatch(
-					LogInSuccess({
-						accessToken: accessToken,
-						refreshToken: ''
-					})
-				)
-			}
-		} catch (e: any) {
-			//если 403
-			dispatch(LogOutSuccess())
-			answear = '403'
+		let accessToken = localStorage.getItem('access')
+		if (accessToken === null) {
+			accessToken = useSelector(
+				(state: RootState) => state.AuthReg.authData.accessToken
+			)
 		}
 
-		return answear
+		if (accessToken !== null) {
+			try {
+				const res = await refresh({
+					//access
+					refreshToken: accessToken
+				})
+				answer = 200
+				dispatch(refreshSuccess(accessToken))
+			} catch (e: any) {
+				try {
+					const res = await refresh({
+						//refresh
+						refreshToken: cookies.get('refresh')
+					})
+					answer = 200
+					localStorage.removeItem('access')
+					localStorage.setItem('access', res.data.accessToken)
+					dispatch(refreshSuccess(res.data.accessToken))
+				} catch (e: any) {
+					dispatch(logoutSuccess())
+				}
+			}
+		}
+		if (answer === 200) {
+			dispatch(
+				ProfileSuccess(JSON.parse(localStorage.getItem('userInfo') || ''))
+			)
+		}
+
+		return answer
 	}

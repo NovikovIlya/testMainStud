@@ -3,7 +3,7 @@ import { FC, useState } from 'react'
 import { FaqSvg } from '../../assets/svg'
 
 import styles from './Faq.module.scss'
-import logo from './Group.png'
+import logo from './Group.webp'
 import { DrawerEmail } from './drawer/Drawer'
 
 export const Faq: FC = () => {

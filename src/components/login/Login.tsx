@@ -1,11 +1,11 @@
 import { Form, Typography } from 'antd'
-import { FC, useEffect, useRef, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import { useAppDispatch } from '../../store'
 import { RootState } from '../../store'
-import { RequestFolLogIn } from '../../store/creators/MainCreators'
+import { loginUser } from '../../store/creators/MainCreators'
 import { DeleteLogInErrors } from '../../store/creators/SomeCreators'
 import { BackMainPage } from '../back-main-page/BackMainPage'
 import { Faq } from '../faq/Faq'
@@ -27,43 +27,36 @@ export const Login: FC<ILoginProps> = ({ changeIsLogIn }) => {
 	const error = useSelector((state: RootState) => state.AuthReg.authData.error)
 	const dispatch = useAppDispatch()
 	const [value, setValue] = useState(0)
-	const JustOnce = useRef(0)
 
 	useEffect(() => {
-		if (JustOnce.current === 0) {
-			JustOnce.current = 1
-			if (error !== null) {
-				dispatch(DeleteLogInErrors())
-			}
-		} else {
-			JustOnce.current = 0
+		if (error !== null) {
+			dispatch(DeleteLogInErrors())
 		}
-	}, [dispatch, error])
+	}, [])
 
 	const onFinish = (values: {
 		email?: string
 		phone?: string
 		password: string
 	}) => {
-		const dataApi = async () => {
-			let response = null
+		const request = async () => {
+			let res = null
 			if (values?.email) {
-				response = await dispatch(
-					RequestFolLogIn({ username: values.email, password: values.password })
+				res = await dispatch(
+					loginUser({ username: values.email, password: values.password })
 				)
 			}
 			if (values?.phone) {
-				response = await dispatch(
-					RequestFolLogIn({ username: values.phone, password: values.password })
+				res = await dispatch(
+					loginUser({ username: values.phone, password: values.password })
 				)
 			}
-			console.log(response)
-			if (response === '200') {
+			if (res === 200) {
 				navigate('/profile')
 				changeIsLogIn(false)
 			}
 		}
-		dataApi()
+		request()
 	}
 
 	return (

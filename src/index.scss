@@ -10,3 +10,14 @@
 body {
 	@apply overflow-x-hidden;
 }
+
+@layer utilities {
+	body::-webkit-scrollbar {
+		width: 10px;
+	}
+
+	body::-webkit-scrollbar-thumb {
+		background: linear-gradient(293.86deg, #3e89f9 33.91%, #ff9567 88.67%);
+		border-radius: 10px;
+	}
+}

@@ -1,19 +1,20 @@
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
+import { IUserData } from '../../api/types'
 import { RootState } from '../../store'
 import { useAppDispatch } from '../../store'
-import { LogOut } from '../../store/creators/SomeCreators'
+import { logout } from '../../store/creators/SomeCreators'
 
 import styles from './profile.module.scss'
 
 export const Profile: FC = () => {
 	const dispatch = useAppDispatch()
-
-	const userdata = useSelector(
+	let userdata: IUserData | null = useSelector(
 		(state: RootState) => state.Profile.profileData.CurrentData
 	)
+
 	const navigate = useNavigate()
 
 	return (
@@ -31,7 +32,7 @@ export const Profile: FC = () => {
 				<div className={styles.button_block}>
 					<button
 						onClick={() => {
-							dispatch(LogOut())
+							dispatch(logout())
 							navigate('/')
 						}}
 						className={styles.button}

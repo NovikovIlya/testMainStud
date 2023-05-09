@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
-import { IError, IProfileState, IUserData } from '../../api/auth/types'
+import { IError, IProfileState, IUserData } from '../../api/types'
 import { RootState } from '../index'
 
 const initialState: IProfileState = {
@@ -18,7 +18,6 @@ export const ProfileReducer = createSlice({
 			state,
 			action: PayloadAction<IUserData>
 		): IProfileState => {
-			localStorage.setItem('user_data', JSON.stringify(action.payload))
 			return {
 				...state,
 				profileData: {

@@ -34,7 +34,7 @@
 	.buttonBlock {
 		@apply flex h-[40px] w-auto;
 		.button {
-			@apply h-full w-full rounded-lg border-[1px] border-solid border-black p-2 font-bold text-black hover:bg-[#9ADDFF];
+			@apply h-full w-full rounded-lg border-[1px] border-solid border-black p-2 font-bold text-black;
 		}
 	}
 }

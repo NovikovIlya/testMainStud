@@ -2,18 +2,17 @@ import { Button, Carousel } from 'antd'
 import React, { FC, useRef } from 'react'
 
 import { data } from '../../../../api/types'
-import { ArrLeftSVG } from '../../../../assets/svg/ArrLeftSVG'
-import { ArrowRightSvg } from '../../../../assets/svg/ArrowRightSvg'
-import Styles from '../Styles/CaruselCard.module.scss'
+import { ArrLeftSVG, ArrowRightSvg } from '../../../../assets/svg'
+import Styles from '../Styles/CarouselCard.module.scss'
 
-interface ICarucelProps {
+interface ICarouseProps {
 	info: data[]
 	generalTittle: string
 	someTittle?: string
 	ThereIsDescription: boolean
 }
 
-const CaruselCard: FC<ICarucelProps> = ({
+const CarouselCard: FC<ICarouseProps> = ({
 	info,
 	generalTittle,
 	someTittle,
@@ -68,10 +67,9 @@ const CaruselCard: FC<ICarucelProps> = ({
 			</div>
 			<div className={Styles.buttonBlock}>
 				<Button className={Styles.mainButton}>Записаться</Button>
-				{/* <button className={Styles.mainButton}>Записаться</button> */}
 			</div>
 		</div>
 	)
 }
 
-export default CaruselCard
+export default CarouselCard

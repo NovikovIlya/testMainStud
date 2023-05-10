@@ -10,7 +10,7 @@
 		.menu {
 			@apply ml-10 flex h-1/2 w-11/12 items-end justify-between font-bold;
 			.item {
-				@apply h-auto w-auto rounded-md p-1 no-underline transition-colors visited:text-black hover:border-[1px] hover:border-solid hover:border-black;
+				@apply h-auto w-auto rounded-md p-1 no-underline transition-colors visited:text-black hover:border-[1px] hover:border-solid hover:border-black hover:bg-EllipseColor;
 			}
 		}
 	}

@@ -12,7 +12,7 @@
 			}
 		}
 		.img {
-			@apply absolute top-4 right-8 z-0 h-[100px] w-[100px] rounded-full;
+			@apply absolute top-4 right-8 z-0 h-[100px] w-[100px] rounded-full bg-EllipseColor;
 		}
 	}
 	.carouselBlock {
@@ -36,7 +36,7 @@
 				.contentWithOutDescription {
 					@apply mx-auto flex h-full w-full justify-around;
 					.textStyles {
-						@apply text-base font-bold;
+						@apply font-bold text-middleBlue;
 					}
 				}
 			}
@@ -45,7 +45,7 @@
 	.buttonBlock {
 		@apply flex h-[40px] w-auto pl-4;
 		.mainButton {
-			@apply h-full w-full rounded-lg border-[1px] border-solid border-black p-2 font-bold text-white transition-colors hover:bg-white hover:text-black;
+			@apply h-full w-full rounded-lg border-[1px] border-solid border-black bg-middleBlue p-2 font-bold text-white transition-colors hover:bg-white hover:text-black;
 		}
 	}
 }

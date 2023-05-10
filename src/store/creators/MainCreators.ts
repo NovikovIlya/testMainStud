@@ -1,7 +1,5 @@
-import { RootState } from '..'
 import { Dispatch } from '@reduxjs/toolkit'
 import { Cookies } from 'react-cookie'
-import { useSelector } from 'react-redux'
 
 import { login, refresh } from '../../api/index'
 import { IAuthRequest } from '../../api/types'
@@ -42,43 +40,32 @@ export const loginUser =
 export const refreshToken =
 	() =>
 	async (dispatch: Dispatch): Promise<number> => {
-		let answer = 403
-
 		let accessToken = localStorage.getItem('access')
-		if (accessToken === null) {
-			accessToken = useSelector(
-				(state: RootState) => state.AuthReg.authData.accessToken
-			)
-		}
 
 		if (accessToken !== null) {
 			try {
-				const res = await refresh({
-					//access
+				dispatch(
+					ProfileSuccess(JSON.parse(localStorage.getItem('userInfo') || ''))
+				)
+				await refresh({
 					refreshToken: accessToken
 				})
-				answer = 200
-				dispatch(refreshSuccess(accessToken))
+				return 200
 			} catch (e: any) {
 				try {
 					const res = await refresh({
-						//refresh
 						refreshToken: cookies.get('refresh')
 					})
-					answer = 200
 					localStorage.removeItem('access')
 					localStorage.setItem('access', res.data.accessToken)
 					dispatch(refreshSuccess(res.data.accessToken))
+					return 200
 				} catch (e: any) {
 					dispatch(logoutSuccess())
+					return 403
 				}
 			}
 		}
-		if (answer === 200) {
-			dispatch(
-				ProfileSuccess(JSON.parse(localStorage.getItem('userInfo') || ''))
-			)
-		}
 
-		return answer
+		return 403
 	}

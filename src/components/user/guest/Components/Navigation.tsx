@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import { LongArrowRightSvg } from '../../../../assets/svg/LongArrowRightSvg'
+import { LongArrowRightSvg } from '../../../../assets/svg'
 import Styles from '../Styles/Navigation.module.scss'
 
 import Img from './../beautiful_girl.webp'

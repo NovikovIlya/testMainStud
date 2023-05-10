@@ -16,7 +16,12 @@ const App = () => {
 	const dispatch = useAppDispatch()
 
 	useEffect(() => {
-		dataApi()
+		if (
+			localStorage.getItem('userInfo') !== null &&
+			localStorage.getItem('access') !== null
+		) {
+			dataApi()
+		}
 	}, [])
 
 	const dataApi = async () => {

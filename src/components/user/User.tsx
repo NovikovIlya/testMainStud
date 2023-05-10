@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 import DropDrag from '../dnd/DropDrag'
-import { block } from '../dnd/constatant'
+import { block } from '../dnd/constant'
 import { Layout } from '../layout/Layout'
 
 export const User = () => {

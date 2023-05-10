@@ -15,7 +15,7 @@
 }
 
 .main {
-	@apply flex h-full w-full flex-col items-start justify-around pr-8 pl-4;
+	@apply flex h-full w-full flex-col items-start justify-around pr-10 pl-4;
 	.tittleBlock {
 		@apply flex h-auto w-full text-lg font-bold;
 	}
@@ -34,7 +34,7 @@
 	.buttonBlock {
 		@apply flex h-[40px] w-auto;
 		.button {
-			@apply h-full w-full rounded-lg border-[1px] border-solid border-black p-2 font-bold text-black;
+			@apply h-full w-full rounded-lg border-[1px] border-solid border-black p-2 font-bold text-black hover:bg-EllipseColor;
 		}
 	}
 }

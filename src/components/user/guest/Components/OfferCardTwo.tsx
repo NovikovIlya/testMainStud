@@ -4,12 +4,12 @@ import React, { FC } from 'react'
 import { data } from '../../../../api/types'
 import Styles from '../Styles/OfferTwoCard.module.scss'
 
-interface IleftBlockProps {
+interface IOfferTwoProps {
 	info: data[]
 	tittle: string
 }
 
-const OfferTwoCard: FC<IleftBlockProps> = ({ info, tittle }) => {
+const OfferTwoCard: FC<IOfferTwoProps> = ({ info, tittle }) => {
 	return (
 		<div className={Styles.main}>
 			<span className={Styles.tittleBlock}>{tittle}</span>

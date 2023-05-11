@@ -14,16 +14,6 @@ const App = () => {
 	const [isLogIn, changeIsLogIn] = useState(false)
 	const navigate = useNavigate()
 	const dispatch = useAppDispatch()
-
-	useEffect(() => {
-		if (
-			localStorage.getItem('userInfo') !== null &&
-			localStorage.getItem('access') !== null
-		) {
-			dataApi()
-		}
-	}, [])
-
 	const dataApi = async () => {
 		const res = await dispatch(refreshToken())
 		if (res === 200) {
@@ -35,6 +25,14 @@ const App = () => {
 			changeIsLogIn(true)
 		}
 	}
+	useEffect(() => {
+		if (
+			localStorage.getItem('userInfo') !== null &&
+			localStorage.getItem('access') !== null
+		) {
+			dataApi()
+		}
+	})
 
 	return (
 		<>

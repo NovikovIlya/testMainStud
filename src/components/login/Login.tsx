@@ -32,7 +32,7 @@ export const Login: FC<ILoginProps> = ({ changeIsLogIn }) => {
 		if (error !== null) {
 			dispatch(DeleteLogInErrors())
 		}
-	}, [])
+	}, [dispatch, error])
 
 	const onFinish = (values: {
 		email?: string

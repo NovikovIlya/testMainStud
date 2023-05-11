@@ -4,95 +4,16 @@ import { Responsive, WidthProvider } from 'react-grid-layout'
 import 'react-grid-layout/css/styles.css'
 import 'react-resizable/css/styles.css'
 
-import {
-	CarouselDataOne,
-	CarouselDataTwo,
-	Events,
-	Vacancies
-} from '../../api/plugs'
-import CarouselCard from '../user/guest/Components/CarouselCard'
-import DescriptionCard from '../user/guest/Components/DescriptionCard'
 import NavigationBlock from '../user/guest/Components/Navigation'
-import OfferOneCard from '../user/guest/Components/OfferCardOne'
-import OfferTwoCard from '../user/guest/Components/OfferCardTwo'
 
 import './DropDrag.scss'
+import { jsxElements } from './defaultElement'
 
 interface IDropDragProps {
 	edit: boolean
 	layouts: { [index: string]: any[] }
 	setLayouts: (value: { [index: string]: any[] }) => void
 }
-
-interface jsx {
-	index: string
-	element: any
-}
-
-export const jsxElements: jsx[] = [
-	{
-		index: '0',
-		element: (
-			<DescriptionCard
-				generalTittle="Об университете"
-				someTittle="Мини-текст в 3-4 строки о том какой КФУ крутой, статистика инфографика внутри — хвалебные маркетинговые оды университету"
-				ShowButton={true}
-				ShowCircle={true}
-			/>
-		)
-	},
-	{
-		index: '1',
-		element: (
-			<CarouselCard
-				info={CarouselDataOne}
-				generalTittle="Олимпиады студентам"
-				ThereIsDescription={false}
-			/>
-		)
-	},
-	{
-		index: '2',
-		element: (
-			<CarouselCard
-				info={CarouselDataTwo}
-				generalTittle="Олимпиады студентам"
-				someTittle="Облачные технологии в образовании"
-				ThereIsDescription={true}
-			/>
-		)
-	},
-	{
-		index: '3',
-		element: (
-			<DescriptionCard
-				generalTittle="Общие результаты вступительных экзаменов"
-				someTittle="В этом году всего поступило 450690 студентов."
-				ShowButton={true}
-				ShowCircle={true}
-			/>
-		)
-	},
-	{
-		index: '4',
-		element: (
-			<DescriptionCard
-				generalTittle="Новости"
-				someTittle="Каждый из нас понимает очевидную вещь: убеждённость некоторых оппонентов влечет за собой процесс."
-				ShowButton={false}
-				ShowCircle={true}
-			/>
-		)
-	},
-	{
-		index: '5',
-		element: <OfferOneCard info={Vacancies} tittle="Вакансии" />
-	},
-	{
-		index: '6',
-		element: <OfferTwoCard info={Events} tittle="Мероприятия" />
-	}
-]
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive)
 const DropDrag: FunctionComponent<IDropDragProps> = ({
@@ -137,7 +58,7 @@ const DropDrag: FunctionComponent<IDropDragProps> = ({
 		return (
 			<div
 				key={item.i}
-				className="bg-white/50 backdrop-blur-sm rounded-[2vh] shadow-md border-[1px] border-solid border-black"
+				className="bg-white/50 backdrop-blur-sm rounded-[2vh] shadow-md "
 			>
 				<div className="text  w-full h-full  ">
 					{edit && (

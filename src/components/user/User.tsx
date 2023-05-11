@@ -5,7 +5,6 @@ import { block } from '../dnd/constant'
 import { Layout } from '../layout/Layout'
 
 export const User = () => {
-	const [edit, setEdit] = useState(true)
 	const [layouts, setLayouts] = useState<{ [index: string]: any[] }>(() => {
 		return localStorage.getItem('dashboard')
 			? JSON.parse(localStorage.getItem('dashboard') || '')
@@ -13,7 +12,7 @@ export const User = () => {
 	})
 	return (
 		<Layout>
-			<DropDrag edit={edit} layouts={layouts} setLayouts={setLayouts} />
+			<DropDrag edit={true} layouts={layouts} setLayouts={setLayouts} />
 		</Layout>
 	)
 }

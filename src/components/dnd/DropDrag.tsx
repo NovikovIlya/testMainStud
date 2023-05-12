@@ -56,7 +56,7 @@ const DropDrag: FunctionComponent<IDropDragProps> = ({
 		return (
 			<div
 				key={item.i}
-				className="bg-white/50 backdrop-blur-sm rounded-[20px] shadow-md "
+				className="bg-white/70 backdrop-blur-sm rounded-[20px] shadow-md "
 			>
 				<div className="text w-full">
 					{edit && (
@@ -75,7 +75,7 @@ const DropDrag: FunctionComponent<IDropDragProps> = ({
 	console.log(layouts)
 
 	return (
-		<div className="ml-[200px] mt-[40px] mr-[80px] mb-[100px] font-sans">
+		<div className="ml-[200px] mt-[40px] mr-[80px] mb-[100px]">
 			<ResponsiveReactGridLayout
 				className="layout "
 				cols={{ lg: 3, md: 2, sm: 2, xs: 1, xxs: 1 }}

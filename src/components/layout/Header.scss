@@ -1,7 +1,7 @@
 .wrapper {
 	.search {
 		.ant-input {
-			@apply w-[488px] max-w-[488px] rounded-[10px] font-sans opacity-100;
+			@apply h-[40px] w-[488px] max-w-[488px] rounded-[10px] text-base opacity-100;
 		}
 	}
 }

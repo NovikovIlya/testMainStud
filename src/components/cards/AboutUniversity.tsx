@@ -16,12 +16,12 @@ export const AboutUniversity = () => {
 					</div>
 				</div>
 				<div className="text-start absolute bottom-[40px]">
-					<Button className="rounded-full w-[200px] h-[50px] text-base font-semibold mt-[40px]">
+					<Button className="rounded-full border-black  w-[200px] h-[50px] text-base font-semibold mt-[40px]">
 						Посмотреть
 					</Button>
 				</div>
 			</div>
-			<div className="min-w-[125px] min-h-[125px] ml-[15px] mt-[50px] mr-[50px] max-h-[125px] bg-[#3E89F9] rounded-full">
+			<div className="min-w-[125px] min-h-[125px] ml-[15px] mt-[50px] mr-[50px] max-h-[125px] bg-[#3E89F9] bg-opacity-80 rounded-full">
 				<img className="rounded-b-full -mt-[5px]" src={img} alt="" />
 			</div>
 		</div>

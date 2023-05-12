@@ -2,10 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 @tailwind variants;
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700;800&display=swap');
 * {
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
+	font-family: 'Open Sans', sans-serif;
 }
 body {
 	@apply overflow-x-hidden;

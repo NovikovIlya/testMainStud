@@ -6,18 +6,29 @@ export const Apply = () => {
 	return (
 		<div className="h-[320px] w-full ml-[50px] flex">
 			<div>
-				<div className="text-[42px] w-fit font-semibold  mt-[62px]">
+				<div className="text-[42px] w-fit font-bold  mt-[62px]">
 					Подать заявление
 				</div>
 				<div className="mt-[40px]">
-					<Button className="w-[203px] h-[46px] text-2xl">Бакалавриат</Button>
-					<Button type="text" className="w-[203px] h-[46px] text-2xl ml-[50px]">
+					<Button className="w-[203px] font-bold h-[62px] border-black text-2xl">
+						Бакалавриат
+					</Button>
+					<Button
+						type="text"
+						className="w-[203px] font-bold h-[62px] text-2xl ml-[50px]"
+					>
 						Магистратура
 					</Button>
-					<Button type="text" className="w-[203px] h-[46px] text-2xl ml-[50px]">
+					<Button
+						type="text"
+						className="w-[203px] font-bold h-[62px] text-2xl ml-[50px]"
+					>
 						Аспирантура
 					</Button>
-					<Button type="text" className="w-[203px] h-[46px] text-2xl ml-[50px]">
+					<Button
+						type="text"
+						className="w-[203px] font-bold h-[62px] text-2xl ml-[50px]"
+					>
 						Ординатура
 					</Button>
 				</div>

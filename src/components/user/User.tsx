@@ -13,11 +13,11 @@ export const User = () => {
 	})
 	return (
 		<Layout>
-			<Heading className="ml-[200px] mt-[145px] text-[62px] font-sans font-bold">
+			<Heading className="ml-[200px] mt-[145px] text-[62px] font-bold">
 				Личный кабинет КФУ
 			</Heading>
 
-			<DropDrag edit={false} layouts={layouts} setLayouts={setLayouts} />
+			<DropDrag edit={true} layouts={layouts} setLayouts={setLayouts} />
 		</Layout>
 	)
 }

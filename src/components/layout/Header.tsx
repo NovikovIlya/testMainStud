@@ -14,7 +14,7 @@ import './Header.scss'
 export const Header = () => {
 	return (
 		<div
-			className={`bg-[#F5F8FB] h-[126px] backdrop-blur-sm fixed bg-opacity-50  pl-[200px]  z-10  gap-[2vh] w-full flex items-center px-[3vh] justify-between font-sans`}
+			className={`bg-[#F5F8FB] h-[126px] backdrop-blur-sm fixed   pl-[200px]  z-10  gap-[2vh] w-full flex items-center px-[3vh] justify-between font-sans`}
 		>
 			<div className="flex wrapper items-center gap-[68px] ">
 				<div>

@@ -1,6 +1,7 @@
 import { CarouselDataTwo, Vacancies } from '../../api/plugs'
 import { AboutUniversity } from '../cards/AboutUniversity'
 import { Apply } from '../cards/Apply'
+import { EducationalCourses } from '../cards/EducationalCourses'
 import { Events } from '../cards/Events'
 import { Olympics } from '../cards/Olympics'
 import CarouselCard from '../user/guest/Components/CarouselCard'
@@ -27,14 +28,7 @@ export const jsxElements = [
 	},
 	{
 		index: '4',
-		element: (
-			<DescriptionCard
-				generalTittle="Новости"
-				someTittle="Каждый из нас понимает очевидную вещь: убеждённость некоторых оппонентов влечет за собой процесс."
-				ShowButton={false}
-				ShowCircle={true}
-			/>
-		)
+		element: <EducationalCourses />
 	},
 	{
 		index: '5',

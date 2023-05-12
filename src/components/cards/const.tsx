@@ -52,7 +52,7 @@ export const educationalCourses = [
 				<div className="text-xl">10 000 руб.</div>
 			</div>
 		</div>
-		<Divider dashed className="border-black w-[716px] my-[20px]" />
+		<Divider dashed className="border-black max-w-[716px] my-[20px]" />
 		<div className="flex items-center justify-between mr-[280px]">
 			<div className="text-base ">Облачные технологии в образовании</div>
 			<div className="text-[#3073D7] text-xl flex">
@@ -71,7 +71,7 @@ export const educationalCourses = [
 				<div className="text-xl">10 000 руб.</div>
 			</div>
 		</div>
-		<Divider dashed className="border-black w-[716px] my-[20px]" />
+		<Divider dashed className="border-black max-w-[716px] my-[20px]" />
 		<div className="flex items-center justify-between mr-[280px]">
 			<div className="text-base ">Облачные технологии в образовании</div>
 			<div className="text-[#3073D7] text-xl flex">

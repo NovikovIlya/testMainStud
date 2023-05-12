@@ -12,23 +12,23 @@ export const NotificationSvg = () => {
 			<path
 				d="M12.9975 2.44531C8.06188 2.44531 4.05078 6.45642 4.05078 11.392V15.7013C4.05078 16.6109 3.66309 17.9977 3.20084 18.773L1.48605 21.6211C0.427362 23.3806 1.15801 25.334 3.09646 25.9901C9.52318 28.1373 16.4569 28.1373 22.8836 25.9901C24.6878 25.3936 25.4781 23.2613 24.494 21.6211L22.7792 18.773C22.3319 17.9977 21.9442 16.6109 21.9442 15.7013V11.392C21.9442 6.47133 17.9182 2.44531 12.9975 2.44531Z"
 				stroke="#1F5CB8"
-				stroke-width="2"
-				stroke-miterlimit="10"
-				stroke-linecap="round"
+				strokeWidth="2"
+				strokeMiterlimit="10"
+				strokeLinecap="round"
 			/>
 			<path
 				d="M15.7574 2.87881C13.9542 2.36525 12.0434 2.36525 10.2402 2.87881C10.6727 1.77538 11.7463 1 12.9988 1C14.2513 1 15.3249 1.77538 15.7574 2.87881Z"
 				stroke="#1F5CB8"
-				stroke-width="2"
-				stroke-miterlimit="10"
-				stroke-linecap="round"
-				stroke-linejoin="round"
+				strokeWidth="2"
+				strokeMiterlimit="10"
+				strokeLinecap="round"
+				strokeLinejoin="round"
 			/>
 			<path
 				d="M17.4701 26.5273C17.4701 28.9877 15.4571 31.0007 12.9968 31.0007C11.7741 31.0007 10.6408 30.4937 9.83562 29.6885C8.99785 28.8495 8.52611 27.713 8.52344 26.5273"
 				stroke="#1F5CB8"
-				stroke-width="2"
-				stroke-miterlimit="10"
+				strokeWidth="2"
+				strokeMiterlimit="10"
 			/>
 		</svg>
 	)

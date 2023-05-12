@@ -1,9 +1,6 @@
-import {
-	CarouselDataOne,
-	CarouselDataTwo,
-	Events,
-	Vacancies
-} from '../../api/plugs'
+import { CarouselDataTwo, Events, Vacancies } from '../../api/plugs'
+import { AboutUniversity } from '../cards/AboutUniversity'
+import { Apply } from '../cards/Apply'
 import CarouselCard from '../user/guest/Components/CarouselCard'
 import DescriptionCard from '../user/guest/Components/DescriptionCard'
 import OfferOneCard from '../user/guest/Components/OfferCardOne'
@@ -12,24 +9,11 @@ import OfferTwoCard from '../user/guest/Components/OfferCardTwo'
 export const jsxElements = [
 	{
 		index: '0',
-		element: (
-			<DescriptionCard
-				generalTittle="Об университете"
-				someTittle="Мини-текст в 3-4 строки о том какой КФУ крутой, статистика инфографика внутри — хвалебные маркетинговые оды университету"
-				ShowButton={true}
-				ShowCircle={true}
-			/>
-		)
+		element: <Apply />
 	},
 	{
 		index: '1',
-		element: (
-			<CarouselCard
-				info={CarouselDataOne}
-				generalTittle="Олимпиады студентам"
-				ThereIsDescription={false}
-			/>
-		)
+		element: <AboutUniversity />
 	},
 	{
 		index: '2',

@@ -1,16 +1,16 @@
 export const block = {
 	lg: [
 		{
-			w: 2,
+			w: 3,
 			maxH: 4,
 			maxW: 4,
 			minH: 2,
-			h: 1,
-			x: 2,
+			h: 2,
+			x: 0,
 			y: 0,
 			i: '0',
 			moved: false,
-			static: false
+			static: true
 		},
 		{
 			w: 2,

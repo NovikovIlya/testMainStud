@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import DropDrag from '../dnd/DropDrag'
 import { block } from '../dnd/constant'
 import { Layout } from '../layout/Layout'
+import { Heading } from '../ui/Heading'
 
 export const User = () => {
 	const [layouts, setLayouts] = useState<{ [index: string]: any[] }>(() => {
@@ -12,7 +13,11 @@ export const User = () => {
 	})
 	return (
 		<Layout>
-			<DropDrag edit={true} layouts={layouts} setLayouts={setLayouts} />
+			<Heading className="ml-[200px] mt-[145px] text-[62px] font-sans font-bold">
+				Личный кабинет КФУ
+			</Heading>
+
+			<DropDrag edit={false} layouts={layouts} setLayouts={setLayouts} />
 		</Layout>
 	)
 }

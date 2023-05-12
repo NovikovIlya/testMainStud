@@ -4,8 +4,6 @@ import { Responsive, WidthProvider } from 'react-grid-layout'
 import 'react-grid-layout/css/styles.css'
 import 'react-resizable/css/styles.css'
 
-import NavigationBlock from '../user/guest/Components/Navigation'
-
 import './DropDrag.scss'
 import { jsxElements } from './defaultElement'
 
@@ -74,13 +72,14 @@ const DropDrag: FunctionComponent<IDropDragProps> = ({
 			</div>
 		)
 	})
+	console.log(layouts)
 
 	return (
-		<div className="ml-[200px] mt-[145px] mr-[1vh] max-sm:ml-[7vh] font-sans">
+		<div className="ml-[200px] mt-[40px] mr-[80px]  font-sans">
 			<ResponsiveReactGridLayout
 				className="layout "
 				cols={{ lg: 3, md: 2, sm: 2, xs: 1, xxs: 1 }}
-				containerPadding={[10, 10]}
+				containerPadding={[0, 0]}
 				layouts={layouts}
 				measureBeforeMount={true}
 				useCSSTransforms={mounted}

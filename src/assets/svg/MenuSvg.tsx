@@ -12,20 +12,20 @@ export const MenuSvg = () => {
 			<path
 				d="M2 2H45"
 				stroke="#1F5CB8"
-				stroke-width="3"
-				stroke-linecap="round"
+				strokeWidth="3"
+				strokeLinecap="round"
 			/>
 			<path
 				d="M2 16.8008H45"
 				stroke="#1F5CB8"
-				stroke-width="3"
-				stroke-linecap="round"
+				strokeWidth="3"
+				strokeLinecap="round"
 			/>
 			<path
 				d="M2 32H45"
 				stroke="#1F5CB8"
-				stroke-width="3"
-				stroke-linecap="round"
+				strokeWidth="3"
+				strokeLinecap="round"
 			/>
 		</svg>
 	)

@@ -12,16 +12,16 @@ export const DocumentSvg = () => {
 			<path
 				d="M42 18V28C42 38 38 42 28 42H16C6 42 2 38 2 28V16C2 6 6 2 16 2H26"
 				stroke="#1F5CB8"
-				stroke-width="3"
-				stroke-linecap="round"
-				stroke-linejoin="round"
+				strokeWidth="3"
+				strokeLinecap="round"
+				strokeLinejoin="round"
 			/>
 			<path
 				d="M42 18H34C28 18 26 16 26 10V2L42 18Z"
 				stroke="#1F5CB8"
-				stroke-width="3"
-				stroke-linecap="round"
-				stroke-linejoin="round"
+				strokeWidth="3"
+				strokeLinecap="round"
+				strokeLinejoin="round"
 			/>
 		</svg>
 	)

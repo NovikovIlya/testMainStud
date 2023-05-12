@@ -26,3 +26,13 @@ export const olympics = [
 		</div>
 	</div>
 ]
+export const events = [
+	<div className="text-start justify-between flex ">
+		<div className="text-base w-max">День открытых дверей ИВМиИТ</div>
+		<div className="text-base font-semibold text-[#3073D7]">24.09.2023</div>
+	</div>,
+	<div className="text-start justify-between flex ">
+		<div className="text-base w-max">День открытых дверей ИФМ</div>
+		<div className="text-base font-semibold text-[#3073D7]">26.09.2023</div>
+	</div>
+]

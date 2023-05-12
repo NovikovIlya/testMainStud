@@ -58,7 +58,7 @@ const DropDrag: FunctionComponent<IDropDragProps> = ({
 				key={item.i}
 				className="bg-white/50 backdrop-blur-sm rounded-[20px] shadow-md "
 			>
-				<div className="text  w-full h-full  ">
+				<div className="text w-full">
 					{edit && (
 						<div
 							className="absolute top-2 cursor-pointer right-2"

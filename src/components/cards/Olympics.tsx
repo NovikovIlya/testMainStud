@@ -21,7 +21,7 @@ export const Olympics = () => {
 			>
 				{olympics}
 			</Carousel>
-			<div className="text-start">
+			<div className="text-start absolute bottom-[40px]">
 				<Button
 					type="primary"
 					className="rounded-full w-[200px] h-[50px] text-base font-semibold mt-[52px]"

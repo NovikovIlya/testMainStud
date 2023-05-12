@@ -15,7 +15,7 @@ export const AboutUniversity = () => {
 						инфографика внутри — хвалебные маркетинговые оды университету
 					</div>
 				</div>
-				<div className="text-start">
+				<div className="text-start absolute bottom-[40px]">
 					<Button className="rounded-full w-[200px] h-[50px] text-base font-semibold mt-[40px]">
 						Посмотреть
 					</Button>

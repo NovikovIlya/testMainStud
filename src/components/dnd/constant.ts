@@ -2,10 +2,10 @@ export const block = {
 	lg: [
 		{
 			w: 3,
+			h: 2,
 			maxH: 4,
 			maxW: 4,
 			minH: 2,
-			h: 2,
 			x: 0,
 			y: 0,
 			i: '0',
@@ -14,10 +14,10 @@ export const block = {
 		},
 		{
 			w: 1,
+			h: 2,
 			maxH: 4,
 			maxW: 4,
 			minH: 2,
-			h: 2,
 			x: 0,
 			y: 2,
 			i: '1',
@@ -25,62 +25,26 @@ export const block = {
 			static: false
 		},
 		{
-			w: 2,
+			w: 1,
 			h: 2,
 			maxH: 4,
 			maxW: 4,
 			minH: 2,
-			x: 3,
+			x: 1,
 			y: 2,
 			i: '2',
 			moved: false,
 			static: false
 		},
 		{
-			w: 2,
+			w: 1,
+			h: 2,
 			maxH: 4,
 			maxW: 4,
 			minH: 2,
-			h: 2,
-			x: 4,
-			y: 0,
+			x: 2,
+			y: 2,
 			i: '3',
-			moved: false,
-			static: false
-		},
-		{
-			w: 2,
-			maxH: 4,
-			maxW: 4,
-			minH: 2,
-			h: 2,
-			x: 4,
-			y: 0,
-			i: '4',
-			moved: false,
-			static: false
-		},
-		{
-			w: 2,
-			maxH: 4,
-			maxW: 4,
-			minH: 2,
-			h: 2,
-			x: 4,
-			y: 0,
-			i: '5',
-			moved: false,
-			static: false
-		},
-		{
-			w: 2,
-			maxH: 4,
-			maxW: 4,
-			minH: 2,
-			h: 2,
-			x: 4,
-			y: 0,
-			i: '6',
 			moved: false,
 			static: false
 		}

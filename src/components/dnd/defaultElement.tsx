@@ -1,6 +1,7 @@
-import { CarouselDataTwo, Events, Vacancies } from '../../api/plugs'
+import { CarouselDataTwo, Vacancies } from '../../api/plugs'
 import { AboutUniversity } from '../cards/AboutUniversity'
 import { Apply } from '../cards/Apply'
+import { Events } from '../cards/Events'
 import { Olympics } from '../cards/Olympics'
 import CarouselCard from '../user/guest/Components/CarouselCard'
 import DescriptionCard from '../user/guest/Components/DescriptionCard'
@@ -22,14 +23,7 @@ export const jsxElements = [
 	},
 	{
 		index: '3',
-		element: (
-			<DescriptionCard
-				generalTittle="Общие результаты вступительных экзаменов"
-				someTittle="В этом году всего поступило 450690 студентов."
-				ShowButton={true}
-				ShowCircle={true}
-			/>
-		)
+		element: <Events />
 	},
 	{
 		index: '4',
@@ -45,9 +39,5 @@ export const jsxElements = [
 	{
 		index: '5',
 		element: <OfferOneCard info={Vacancies} tittle="Вакансии" />
-	},
-	{
-		index: '6',
-		element: <OfferTwoCard info={Events} tittle="Мероприятия" />
 	}
 ]

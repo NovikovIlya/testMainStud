@@ -5,7 +5,7 @@ export const block = {
 			maxH: 4,
 			maxW: 4,
 			minH: 2,
-			h: 2,
+			h: 1,
 			x: 2,
 			y: 0,
 			i: '0',

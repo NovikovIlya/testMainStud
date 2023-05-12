@@ -66,7 +66,7 @@ export interface IRefreshRequest {
 	refreshToken: string
 }
 
-export interface IRegfreshSuccess {
+export interface IRefreshSuccess {
 	accessToken: string
 }
 

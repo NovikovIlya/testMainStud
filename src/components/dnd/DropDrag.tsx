@@ -76,11 +76,7 @@ const DropDrag: FunctionComponent<IDropDragProps> = ({
 	})
 
 	return (
-		<div className="ml-[8vh] mt-[12vh] mr-[1vh] max-sm:ml-[7vh] font-sans">
-			<span className="flex w-full h-auto font-bold text-5xl ml-2 mb-10">
-				Личный кабинет КФУ
-			</span>
-			<NavigationBlock />
+		<div className="ml-[200px] mt-[145px] mr-[1vh] max-sm:ml-[7vh] font-sans">
 			<ResponsiveReactGridLayout
 				className="layout "
 				cols={{ lg: 3, md: 2, sm: 2, xs: 1, xxs: 1 }}

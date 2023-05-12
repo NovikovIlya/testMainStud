@@ -1,6 +1,7 @@
 import { CarouselDataTwo, Events, Vacancies } from '../../api/plugs'
 import { AboutUniversity } from '../cards/AboutUniversity'
 import { Apply } from '../cards/Apply'
+import { Olympics } from '../cards/Olympics'
 import CarouselCard from '../user/guest/Components/CarouselCard'
 import DescriptionCard from '../user/guest/Components/DescriptionCard'
 import OfferOneCard from '../user/guest/Components/OfferCardOne'
@@ -17,14 +18,7 @@ export const jsxElements = [
 	},
 	{
 		index: '2',
-		element: (
-			<CarouselCard
-				info={CarouselDataTwo}
-				generalTittle="Олимпиады студентам"
-				someTittle="Облачные технологии в образовании"
-				ThereIsDescription={true}
-			/>
-		)
+		element: <Olympics />
 	},
 	{
 		index: '3',

@@ -13,13 +13,13 @@ export const block = {
 			static: true
 		},
 		{
-			w: 2,
+			w: 1,
 			maxH: 4,
 			maxW: 4,
 			minH: 2,
 			h: 2,
-			x: 2,
-			y: 0,
+			x: 0,
+			y: 2,
 			i: '1',
 			moved: false,
 			static: false

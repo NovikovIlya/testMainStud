@@ -45,7 +45,6 @@ const DropDrag: FunctionComponent<IDropDragProps> = ({
 	}
 
 	const onRemoveItem = (i: number) => {
-		console.log('removing', i)
 		setLayouts({
 			...layouts,
 			lg: [...layouts.lg].filter(item => item.i !== i)
@@ -72,7 +71,6 @@ const DropDrag: FunctionComponent<IDropDragProps> = ({
 			</div>
 		)
 	})
-	console.log(layouts)
 
 	return (
 		<div className="ml-[200px] mt-[40px] mr-[80px] mb-[100px]">

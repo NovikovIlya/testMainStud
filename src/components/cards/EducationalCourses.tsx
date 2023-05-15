@@ -1,10 +1,34 @@
-import { Button, Carousel } from 'antd'
+import { Button, Carousel, Divider } from 'antd'
 
 import img from '../../assets/images/educationalCourses.png'
 
-import { educationalCourses, next, prev } from './const'
+import { NextSvg, PrevSvg, educationalCourse } from './const'
 
 export const EducationalCourses = () => {
+	const educationalCourses = educationalCourse.map((item, index) => (
+		<div key={index}>
+			<div className="flex items-center justify-between mr-[280px]">
+				<div className="text-base ">{item.titleUp}</div>
+				<div className="text-[#3073D7] text-xl flex">
+					<span>{item.hourUp}</span>
+					<Divider type="vertical" className="border-[#3073D7] border-1 m-2" />
+					<div className="text-xl">{item.priceUp}.</div>
+				</div>
+			</div>
+			<Divider
+				dashed
+				className="border-black max-w-[716px] w-[716px] my-[20px]"
+			/>
+			<div className="flex items-center justify-between mr-[280px]">
+				<div className="text-base ">{item.titleUp}</div>
+				<div className="text-[#3073D7] text-xl flex">
+					<span>{item.hourUp}</span>
+					<Divider type="vertical" className="border-[#3073D7] border-1 m-2" />
+					<div className="text-xl">{item.priceDown}</div>
+				</div>
+			</div>
+		</div>
+	))
 	return (
 		<div className="px-[52px] mt-[40px]">
 			<div className="font-semibold text-2xl text-start">
@@ -14,8 +38,8 @@ export const EducationalCourses = () => {
 				<Carousel
 					className="h-[80px]  mt-[31px] text-start"
 					arrows
-					prevArrow={prev}
-					nextArrow={next}
+					prevArrow={<PrevSvg />}
+					nextArrow={<NextSvg />}
 				>
 					{educationalCourses}
 				</Carousel>

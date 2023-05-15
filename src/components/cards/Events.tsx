@@ -1,9 +1,16 @@
-import { Button } from 'antd'
+import { Button, Divider } from 'antd'
 import React from 'react'
 
-import { events } from './const'
+import { event } from './const'
 
 export const Events = () => {
+	const events = event.map((item, index) => (
+		<div key={index} className="text-start  flex gap-[8px]">
+			<div className="text-base w-max">{item.title}</div>
+			<Divider className="border-black   m-0 mt-4 flex-1 min-w-fit" dashed />
+			<div className="text-base font-semibold text-[#3073D7]">{item.date}</div>
+		</div>
+	))
 	return (
 		<div className="px-[52px] mt-[40px] ">
 			<div className="font-semibold text-2xl text-start mb-[30px]">

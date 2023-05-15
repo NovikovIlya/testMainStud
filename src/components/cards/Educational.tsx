@@ -5,7 +5,7 @@ import img from '../../assets/images/educationalCourses.png'
 
 import { NextSvg, PrevSvg, educationalCourse } from './const'
 
-export const EducationalCourses = () => {
+export const Educational = () => {
 	const slider = useRef() as React.MutableRefObject<any>
 
 	const educationalCourses = educationalCourse.map((item, index) => (

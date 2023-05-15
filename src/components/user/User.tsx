@@ -18,7 +18,7 @@ export const User = () => {
 				Личный кабинет КФУ
 			</Heading>
 
-			<DropDrag edit={false} layouts={layouts} setLayouts={setLayouts} />
+			<DropDrag edit={true} layouts={layouts} setLayouts={setLayouts} />
 			<Faq />
 		</Layout>
 	)

@@ -1,8 +1,9 @@
 import { ConfigProvider } from 'antd'
 import { useEffect, useState } from 'react'
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes, useSearchParams } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 
+import { ApproveEmail } from './components/approve/ApproveEmail'
 import { Login } from './components/login/Login'
 import { Profile } from './components/profile/profile'
 import { Registration } from './components/registration/Registration'
@@ -12,8 +13,11 @@ import { refreshToken } from './store/creators/MainCreators'
 
 const App = () => {
 	const [isLogIn, changeIsLogIn] = useState(false)
+
+	console.log(window.location.pathname)
 	const navigate = useNavigate()
 	const dispatch = useAppDispatch()
+
 	const dataApi = async () => {
 		const res = await dispatch(refreshToken())
 		if (res === 200) {
@@ -58,6 +62,7 @@ const App = () => {
 							}
 						/>
 						<Route path="/user/*" element={<User />} />
+						<Route path="/register/approve" element={<ApproveEmail />} />
 					</Routes>
 				</div>
 			</ConfigProvider>

@@ -12,15 +12,15 @@ export const Olympics = () => {
 		<div key={index}>
 			<div>
 				<div>
-					<strong>Предмет:</strong>
+					<strong>Предмет: </strong>
 					{item.item}
 				</div>
 				<div>
-					<strong>Дата:</strong>
+					<strong>Дата: </strong>
 					{item.date}
 				</div>
 				<div>
-					<strong>Кому:</strong>
+					<strong>Кому: </strong>
 					{item.whom}
 				</div>
 			</div>
@@ -40,7 +40,10 @@ export const Olympics = () => {
 			>
 				<PrevSvg />
 			</div>
-			<Carousel className="h-[80px]  mt-[31px] text-start" ref={slider}>
+			<Carousel
+				className="h-[80px] w-[270px] mt-[31px] text-start"
+				ref={slider}
+			>
 				{olympics}
 			</Carousel>
 			<div

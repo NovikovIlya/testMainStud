@@ -41,7 +41,10 @@ export const EducationalCourses = () => {
 				>
 					<PrevSvg />
 				</div>
-				<Carousel className="h-[80px]  mt-[31px] text-start" ref={slider}>
+				<Carousel
+					className="h-[80px] w-[716px] mt-[31px] text-start"
+					ref={slider}
+				>
 					{educationalCourses}
 				</Carousel>
 				<div
@@ -51,7 +54,7 @@ export const EducationalCourses = () => {
 					<NextSvg />
 				</div>
 			</div>
-			<div className="min-w-[125px] min-h-[125px] absolute right-[70px] top-[80px] max-h-[125px] bg-[#3E89F9] rounded-full">
+			<div className="min-w-[125px] min-h-[125px] absolute right-[70px] top-[80px] max-h-[125px] bg-opacity-80 bg-[#3E89F9] rounded-full">
 				<img className="rounded-b-full -mt-[15px]" src={img} alt="" />
 			</div>
 			<div className="flex absolute gap-[365px] items-center bottom-[40px]">

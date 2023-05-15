@@ -59,6 +59,18 @@ export const block = {
 			i: '4',
 			moved: false,
 			static: false
+		},
+		{
+			w: 1,
+			h: 2,
+			maxH: 4,
+			maxW: 4,
+			minH: 2,
+			x: 2,
+			y: 4,
+			i: '5',
+			moved: false,
+			static: false
 		}
 	]
 }

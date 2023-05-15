@@ -34,6 +34,9 @@ export const Navbar = () => {
 			<div className="hover:bg-[#E3E8ED] w-full px-[38px] mt-[42px] py-[20px] cursor-pointer">
 				<EyeSvg />
 			</div>
+			<div className="hover:bg-[#E3E8ED] w-full px-[38px]  py-[20px] cursor-pointer">
+				<div className="text-[#1F5CB8] text-2xl font-bold text-center ">En</div>
+			</div>
 		</aside>
 	)
 }

@@ -20,7 +20,7 @@ export const EducationalCourses = () => {
 			</div>
 			<Divider dashed className="border-black" />
 			<div className="flex items-center justify-between ">
-				<div className="text-base ">{item.titleUp}</div>
+				<div className="text-base ">{item.titleDown}</div>
 				<div className="text-[#3073D7] text-xl flex">
 					<span>{item.hourUp}</span>
 					<Divider type="vertical" className="border-[#3073D7] border-1 m-2" />

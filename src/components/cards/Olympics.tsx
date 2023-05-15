@@ -27,20 +27,26 @@ export const Olympics = () => {
 		</div>
 	))
 	return (
-		<div className="px-[52px] mt-[40px]">
+		<div className="px-[76px] mt-[40px]">
 			<div>
 				<div className="font-semibold text-2xl text-start">Олимпиады</div>
 			</div>
 			<div className="min-w-[125px] absolute min-h-[125px] right-[55px] z-10 top-[50px] max-h-[125px] max-w-[125px] bg-opacity-80 bg-[#3E89F9] rounded-full">
 				<img className="rounded-b-full -mt-[5px]" src={img} alt="" />
 			</div>
-			<div onClick={() => slider.current.prev()}>
+			<div
+				onClick={() => slider.current.prev()}
+				className="absolute cursor-pointer left-[32px] top-[147px]"
+			>
 				<PrevSvg />
 			</div>
 			<Carousel className="h-[80px]  mt-[31px] text-start" ref={slider}>
 				{olympics}
 			</Carousel>
-			<div onClick={() => slider.current.next()}>
+			<div
+				onClick={() => slider.current.next()}
+				className="absolute cursor-pointer top-[147px] right-[32px]"
+			>
 				<NextSvg />
 			</div>
 			<div className="text-start absolute bottom-[40px]">

@@ -1,13 +1,16 @@
 import { Button, Carousel, Divider } from 'antd'
+import { useRef } from 'react'
 
 import img from '../../assets/images/educationalCourses.png'
 
 import { NextSvg, PrevSvg, educationalCourse } from './const'
 
 export const EducationalCourses = () => {
+	const slider = useRef() as React.MutableRefObject<any>
+
 	const educationalCourses = educationalCourse.map((item, index) => (
-		<div key={index}>
-			<div className="flex items-center justify-between mr-[280px]">
+		<div key={index} className="max-w-[716px]">
+			<div className="flex items-center justify-between ">
 				<div className="text-base ">{item.titleUp}</div>
 				<div className="text-[#3073D7] text-xl flex">
 					<span>{item.hourUp}</span>
@@ -15,11 +18,8 @@ export const EducationalCourses = () => {
 					<div className="text-xl">{item.priceUp}.</div>
 				</div>
 			</div>
-			<Divider
-				dashed
-				className="border-black max-w-[716px] w-[716px] my-[20px]"
-			/>
-			<div className="flex items-center justify-between mr-[280px]">
+			<Divider dashed className="border-black" />
+			<div className="flex items-center justify-between ">
 				<div className="text-base ">{item.titleUp}</div>
 				<div className="text-[#3073D7] text-xl flex">
 					<span>{item.hourUp}</span>
@@ -30,19 +30,26 @@ export const EducationalCourses = () => {
 		</div>
 	))
 	return (
-		<div className="px-[52px] mt-[40px]">
+		<div className="px-[80px] mt-[40px]">
 			<div className="font-semibold text-2xl text-start">
 				Образовательные курсы
 			</div>
 			<div>
-				<Carousel
-					className="h-[80px]  mt-[31px] text-start"
-					arrows
-					prevArrow={<PrevSvg />}
-					nextArrow={<NextSvg />}
+				<div
+					onClick={() => slider.current.prev()}
+					className="absolute cursor-pointer left-[32px] top-[147px]"
 				>
+					<PrevSvg />
+				</div>
+				<Carousel className="h-[80px]  mt-[31px] text-start" ref={slider}>
 					{educationalCourses}
 				</Carousel>
+				<div
+					onClick={() => slider.current.next()}
+					className="absolute cursor-pointer top-[147px] right-[32px]"
+				>
+					<NextSvg />
+				</div>
 			</div>
 			<div className="min-w-[125px] min-h-[125px] absolute right-[70px] top-[80px] max-h-[125px] bg-[#3E89F9] rounded-full">
 				<img className="rounded-b-full -mt-[15px]" src={img} alt="" />

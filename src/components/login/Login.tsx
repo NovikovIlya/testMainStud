@@ -3,6 +3,7 @@ import { FC, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
+import logo from '../../assets/images/group.webp'
 import { useAppDispatch } from '../../store'
 import { RootState } from '../../store'
 import { loginUser } from '../../store/creators/MainCreators'
@@ -75,6 +76,7 @@ export const Login: FC<ILoginProps> = ({ changeIsLogIn }) => {
 					<Inputs error={error} value={value} />
 					<Buttons />
 				</Form>
+				<img className={styles.img} src={logo} alt="group" />
 				<Faq />
 			</div>
 		</div>

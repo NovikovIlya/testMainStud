@@ -3,6 +3,7 @@ import { FC, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import { IRegFormData } from '../../api/types'
+import logo from '../../assets/images/group.webp'
 import { useAppDispatch } from '../../store'
 import { RootState } from '../../store'
 import { DeleteRegistrationErrors } from '../../store/creators/SomeCreators'
@@ -51,6 +52,7 @@ export const Registration: FC = () => {
 					<Password confirmPassword={confirmPassword} error={error} />
 					<Buttons check={check} setCheck={setCheck} />
 				</Form>
+				<img className={styles.img} src={logo} alt="group" />
 				<Faq />
 			</div>
 		</div>

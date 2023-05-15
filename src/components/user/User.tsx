@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 
 import DropDrag from '../dnd/DropDrag'
 import { block } from '../dnd/constant'
+import { Faq } from '../faq/Faq'
 import { Layout } from '../layout/Layout'
 import { Heading } from '../ui/Heading'
 
@@ -18,6 +19,7 @@ export const User = () => {
 			</Heading>
 
 			<DropDrag edit={false} layouts={layouts} setLayouts={setLayouts} />
+			<Faq />
 		</Layout>
 	)
 }

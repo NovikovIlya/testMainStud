@@ -3,7 +3,6 @@ import { FC, useState } from 'react'
 import { FaqSvg } from '../../assets/svg'
 
 import styles from './Faq.module.scss'
-import logo from './Group.webp'
 import { DrawerEmail } from './drawer/Drawer'
 
 export const Faq: FC = () => {
@@ -16,12 +15,9 @@ export const Faq: FC = () => {
 	const onChildrenDrawerClose = () => setChildrenDrawer(false)
 
 	return (
-		<div className={styles.main}>
-			<img className={styles.img} src={logo} alt="group" />
-			<div className={styles.faq}>
-				<div onClick={showDrawer}>
-					<FaqSvg />
-				</div>
+		<div className="fixed right-[92px] bottom-[92px]">
+			<div onClick={showDrawer} className="cursor-pointer">
+				<FaqSvg />
 			</div>
 			<DrawerEmail
 				childrenDrawer={childrenDrawer}

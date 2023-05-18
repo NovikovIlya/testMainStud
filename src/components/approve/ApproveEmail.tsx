@@ -1,15 +1,21 @@
 import { Button } from 'antd'
-import React from 'react'
+import { useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
 import { approveApi } from '../../store/service/ApproveService'
 import { Layout } from '../layout/Layout'
 
 export const ApproveEmail = () => {
-	const [searchParams, setSearchParams] = useSearchParams()
+	const [searchParams] = useSearchParams()
 	console.log('render')
 
 	const [approve] = approveApi.useApproveEmailMutation()
+	useEffect(() => {
+		approve({
+			id: searchParams.get('id'),
+			hash: searchParams.get('hash')
+		})
+	}, [])
 	return (
 		<Layout>
 			<div className="p-32">

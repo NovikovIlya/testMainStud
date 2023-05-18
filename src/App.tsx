@@ -62,7 +62,7 @@ const App = () => {
 							}
 						/>
 						<Route path="/user/*" element={<User />} />
-						<Route path="/register/approve" element={<ApproveEmail />} />
+						<Route path="/api/register/approve" element={<ApproveEmail />} />
 					</Routes>
 				</div>
 			</ConfigProvider>

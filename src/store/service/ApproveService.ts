@@ -7,7 +7,7 @@ type TypeApprove = {
 export const approveApi = createApi({
 	reducerPath: 'approveApi',
 	baseQuery: fetchBaseQuery({
-		baseUrl: 'http://localhost:8080/'
+		baseUrl: 'http://localhost:8080/api/'
 	}),
 	endpoints: builder => ({
 		approveEmail: builder.mutation<any, TypeApprove>({

@@ -7,7 +7,6 @@ import { Layout } from '../layout/Layout'
 
 export const ApproveEmail = () => {
 	const [searchParams] = useSearchParams()
-	console.log('render')
 
 	const [approve] = approveApi.useApproveEmailMutation()
 	useEffect(() => {

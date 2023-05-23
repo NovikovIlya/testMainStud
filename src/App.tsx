@@ -1,6 +1,6 @@
 import { ConfigProvider } from 'antd'
 import { useEffect, useState } from 'react'
-import { Route, Routes, useSearchParams } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 
 import { ApproveEmail } from './components/approve/ApproveEmail'
@@ -14,7 +14,6 @@ import { refreshToken } from './store/creators/MainCreators'
 const App = () => {
 	const [isLogIn, changeIsLogIn] = useState(false)
 
-	console.log(window.location.pathname)
 	const navigate = useNavigate()
 	const dispatch = useAppDispatch()
 

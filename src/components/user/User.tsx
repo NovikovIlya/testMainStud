@@ -14,7 +14,7 @@ export const User = () => {
 	})
 	return (
 		<Layout>
-			<Heading className="ml-[200px] mt-[145px] text-[62px] font-bold">
+			<Heading className="ml-[180px] mt-[145px] text-2xl font-bold text-[#1F5CB8]">
 				Личный кабинет КФУ
 			</Heading>
 

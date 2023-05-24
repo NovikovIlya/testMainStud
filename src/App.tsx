@@ -10,23 +10,24 @@ import { Registration } from './components/registration/Registration'
 import { User } from './components/user/User'
 import { useAppDispatch } from './store'
 import { refreshToken } from './store/creators/MainCreators'
+import { logoutSuccess } from './store/reducers/AuthRegReducer'
 
 const App = () => {
-	const [isLogIn, changeIsLogIn] = useState(false)
+	const [isLogin, changeIsLogin] = useState(true)
 
-	console.log(window.location.pathname)
+	// console.log(window.location.pathname)
 	const navigate = useNavigate()
 	const dispatch = useAppDispatch()
 
 	const dataApi = async () => {
 		const res = await dispatch(refreshToken())
 		if (res === 200) {
-			changeIsLogIn(false)
+			changeIsLogin(false)
 			navigate('/profile')
 		}
 		if (res === 403) {
 			navigate('/')
-			changeIsLogIn(true)
+			changeIsLogin(true)
 		}
 	}
 	useEffect(() => {
@@ -35,8 +36,13 @@ const App = () => {
 			localStorage.getItem('access') !== null
 		) {
 			dataApi()
+		} else {
+			if (!isLogin) {
+				dispatch(logoutSuccess())
+				navigate('/')
+			}
 		}
-	})
+	}, [])
 
 	return (
 		<>
@@ -52,13 +58,13 @@ const App = () => {
 					<Routes>
 						<Route
 							path="/*"
-							element={<Login changeIsLogIn={changeIsLogIn} />}
+							element={<Login changeIsLogIn={changeIsLogin} />}
 						/>
 						<Route path="/registration/*" element={<Registration />} />
 						<Route
 							path="/profile/*"
 							element={
-								isLogIn ? <Login changeIsLogIn={changeIsLogIn} /> : <Profile />
+								isLogin ? <Login changeIsLogIn={changeIsLogin} /> : <Profile />
 							}
 						/>
 						<Route path="/user/*" element={<User />} />

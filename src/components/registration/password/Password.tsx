@@ -1,5 +1,5 @@
 import { Form, Input } from 'antd'
-import { FC } from 'react'
+import { AllHTMLAttributes, FC } from 'react'
 
 import { IError } from '../../../api/types'
 
@@ -8,9 +8,17 @@ import styles from './Password.module.scss'
 interface IPasswordProps {
 	error: IError[] | null
 	confirmPassword: boolean
+	ErrorPrinter: (
+		searchWord: string,
+		error: IError[] | null
+	) => AllHTMLAttributes<HTMLDivElement>
 }
 
-export const Password: FC<IPasswordProps> = ({ error, confirmPassword }) => {
+export const Password: FC<IPasswordProps> = ({
+	error,
+	confirmPassword,
+	ErrorPrinter
+}) => {
 	return (
 		<>
 			<Form.Item
@@ -18,25 +26,19 @@ export const Password: FC<IPasswordProps> = ({ error, confirmPassword }) => {
 				className={styles.input}
 				rules={[{ required: true, message: '' }]}
 				validateStatus={
-					error?.some(el => el.message.substring(0, 3) === 'pas') ||
-					confirmPassword === false
+					error?.some(
+						el =>
+							el.message.indexOf('пароль') >= 0 ||
+							el.message.indexOf('пароля') >= 0
+					) || confirmPassword === false
 						? 'error'
 						: undefined
 				}
 				help={
-					confirmPassword === false ? (
-						<div>
-							Пожалуйста, убедитесь, что пароль и его подтвержение равны
-						</div>
-					) : (
-						error?.map(el =>
-							el.message.substring(0, 3) === 'pas' ? (
-								<div key={el.message}>{el.message}</div>
-							) : (
-								''
-							)
-						)
-					)
+					<>
+						{ErrorPrinter('пароль', error)}
+						{ErrorPrinter('пароля', error)}
+					</>
 				}
 			>
 				<Input.Password
@@ -46,12 +48,6 @@ export const Password: FC<IPasswordProps> = ({ error, confirmPassword }) => {
 					placeholder="Пароль"
 				/>
 			</Form.Item>
-			{confirmPassword && !error && (
-				<div className={styles.passwordText}>
-					Пароль должен содержать от 8 символов, буквы верхнего и нижнего
-					регистра, а также цифры
-				</div>
-			)}
 			<Form.Item
 				name="confirmPassword"
 				className={styles.input}
@@ -61,18 +57,14 @@ export const Password: FC<IPasswordProps> = ({ error, confirmPassword }) => {
 						message: 'Пожалуйста, подтвердите свой пароль!'
 					}
 				]}
-				validateStatus={
-					error?.some(el => el.message.substring(0, 3) === 'pas')
-						? 'error'
-						: undefined
+				validateStatus={confirmPassword === false ? 'error' : undefined}
+				help={
+					<>
+						{!confirmPassword && (
+							<>Поле не соответсвует указанному паролю выше</>
+						)}
+					</>
 				}
-				help={error?.map(el =>
-					el.message.substring(0, 3) === 'pas' ? (
-						<div key={el.message}>{el.message}</div>
-					) : (
-						''
-					)
-				)}
 			>
 				<Input size="large" type="password" placeholder="Повторите пароль" />
 			</Form.Item>

@@ -2,10 +2,13 @@ import { Button, Form } from 'antd'
 import { Link } from 'react-router-dom'
 
 import { GosSvg } from '../../../assets/svg'
+import { useAppDispatch } from '../../../store'
+import { DeleteLogInErrors } from '../../../store/creators/SomeCreators'
 
 import styles from './Buttons.module.scss'
 
 export const Buttons = () => {
+	const dispatch = useAppDispatch()
 	return (
 		<Form.Item>
 			<div className={styles.buttons}>
@@ -34,7 +37,11 @@ export const Buttons = () => {
 				<div className={styles.reg}>
 					<span>
 						Нет профиля?{' '}
-						<Link className={styles.link} to="/registration">
+						<Link
+							className={styles.link}
+							to="/registration"
+							onClick={() => dispatch(DeleteLogInErrors())}
+						>
 							Зарегистрируйтесь
 						</Link>
 					</span>

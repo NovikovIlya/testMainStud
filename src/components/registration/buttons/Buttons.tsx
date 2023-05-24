@@ -3,6 +3,9 @@ import { CheckboxChangeEvent } from 'antd/es/checkbox'
 import { FC } from 'react'
 import { Link } from 'react-router-dom'
 
+import { useAppDispatch } from '../../../store'
+import { DeleteRegistrationErrors } from '../../../store/creators/SomeCreators'
+
 import styles from './Buttons.module.scss'
 
 interface IButtonsProps {
@@ -11,12 +14,13 @@ interface IButtonsProps {
 }
 
 export const Buttons: FC<IButtonsProps> = ({ setCheck, check }) => {
+	const dispatch = useAppDispatch()
 	const onChangeCheckbox = (e: CheckboxChangeEvent) =>
 		setCheck(e.target.checked)
 	return (
 		<Form.Item className={styles.main}>
 			<div className={styles.buttons}>
-				<Button size="large" type="primary" htmlType="submit">
+				<Button size="large" type="primary" htmlType="submit" disabled={!check}>
 					Далее
 				</Button>
 				<Checkbox
@@ -33,7 +37,11 @@ export const Buttons: FC<IButtonsProps> = ({ setCheck, check }) => {
 				<div className={styles.login}>
 					<span>
 						Уже есть профиль?{' '}
-						<Link className={styles.link} to="/login">
+						<Link
+							className={styles.link}
+							to="/login"
+							onClick={() => dispatch(DeleteRegistrationErrors())}
+						>
 							Войдите
 						</Link>
 					</span>

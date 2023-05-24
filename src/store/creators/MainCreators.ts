@@ -1,13 +1,14 @@
 import { Dispatch } from '@reduxjs/toolkit'
 import { Cookies } from 'react-cookie'
 
-import { login, refresh } from '../../api/index'
-import { IAuthRequest } from '../../api/types'
+import { login, refresh, register } from '../../api/index'
+import { IAuthRequest, IRegRequest } from '../../api/types'
 import {
 	loginFailure,
 	loginSuccess,
 	logoutSuccess,
-	refreshSuccess
+	refreshSuccess,
+	registrationFailure
 } from '../reducers/AuthRegReducer'
 import { ProfileSuccess } from '../reducers/ProfileReducer'
 
@@ -42,30 +43,42 @@ export const refreshToken =
 	async (dispatch: Dispatch): Promise<number> => {
 		let accessToken = localStorage.getItem('access')
 
-		if (accessToken !== null) {
-			try {
-				dispatch(
-					ProfileSuccess(JSON.parse(localStorage.getItem('userInfo') || ''))
-				)
-				await refresh({
-					refreshToken: accessToken
-				})
-				return 200
-			} catch (e: any) {
-				try {
-					const res = await refresh({
-						refreshToken: cookies.get('refresh')
-					})
-					localStorage.removeItem('access')
-					localStorage.setItem('access', res.data.accessToken)
-					dispatch(refreshSuccess(res.data.accessToken))
-					return 200
-				} catch (e: any) {
-					dispatch(logoutSuccess())
-					return 403
-				}
-			}
+		if (accessToken == null) {
+			return 403
 		}
 
-		return 403
+		try {
+			dispatch(
+				ProfileSuccess(JSON.parse(localStorage.getItem('userInfo') || ''))
+			)
+			await refresh({
+				refreshToken: accessToken
+			})
+			return 200
+		} catch (e: any) {
+			try {
+				const res = await refresh({
+					refreshToken: cookies.get('refresh')
+				})
+				localStorage.removeItem('access')
+				localStorage.setItem('access', res.data.accessToken)
+				dispatch(refreshSuccess(res.data.accessToken))
+				return 200
+			} catch (e: any) {
+				dispatch(logoutSuccess())
+				return 403
+			}
+		}
+	}
+
+export const registerUser =
+	(data: IRegRequest) =>
+	async (dispatch: Dispatch): Promise<void> => {
+		try {
+			await register(data)
+			dispatch(registrationFailure([]))
+		} catch (e: any) {
+			console.log(e.response.data.errors)
+			dispatch(registrationFailure(e.response.data.errors))
+		}
 	}

@@ -29,12 +29,6 @@ export const Login: FC<ILoginProps> = ({ changeIsLogIn }) => {
 	const dispatch = useAppDispatch()
 	const [value, setValue] = useState(0)
 
-	useEffect(() => {
-		if (error !== null) {
-			dispatch(DeleteLogInErrors())
-		}
-	}, [dispatch, error])
-
 	const onFinish = (values: {
 		email?: string
 		phone?: string

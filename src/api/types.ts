@@ -1,3 +1,11 @@
+export interface IRegRequest {
+	lastName: string
+	password: string
+	firstName: string
+	email: string | null
+	agreement: string | null
+}
+
 export interface IAuthRequest {
 	username: string
 	password: string
@@ -11,11 +19,6 @@ export interface IAuthSuccess {
 	accessToken: string
 	refreshToken: string
 	user: IUserData
-}
-
-export interface IAuthReducerRequest {
-	accessToken: string
-	refreshToken: string
 }
 
 export interface IUserData {
@@ -34,15 +37,6 @@ export interface IRole {
 	login: string
 	id: number | null
 	type: string
-}
-
-export interface IRegFormData {
-	surname: string
-	password: string
-	name: string
-	email: string | null
-	phone: string | null
-	confirmPassword: string | null
 }
 
 export interface IAuthRegState {

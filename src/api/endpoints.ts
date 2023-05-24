@@ -1,8 +1,7 @@
 const endpoints = {
-	AUTH: {
-		LOGIN: '/login',
-		REFRESH: '/token/refresh'
-	}
+	LOGIN: '/login',
+	REFRESH: '/token/refresh',
+	REGISTER: '/register'
 }
 
 export default endpoints

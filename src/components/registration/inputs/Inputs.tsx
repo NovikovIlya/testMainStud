@@ -1,5 +1,5 @@
 import { Form, Input } from 'antd'
-import React, { FC } from 'react'
+import React, { AllHTMLAttributes, FC } from 'react'
 
 import { IError } from '../../../api/types'
 
@@ -8,9 +8,13 @@ import styles from './Inputs.module.scss'
 interface IInputsProps {
 	error: IError[] | null
 	value: number
+	ErrorPrinter: (
+		searchWord: string,
+		error: IError[] | null
+	) => AllHTMLAttributes<HTMLDivElement>
 }
 
-export const Inputs: FC<IInputsProps> = ({ error, value }) => {
+export const Inputs: FC<IInputsProps> = ({ error, value, ErrorPrinter }) => {
 	return (
 		<>
 			<Form.Item
@@ -20,6 +24,12 @@ export const Inputs: FC<IInputsProps> = ({ error, value }) => {
 					{ type: 'string' },
 					{ required: true, message: 'Пожалуйста, введите свою фамилию!' }
 				]}
+				validateStatus={
+					error?.some(el => el.message.indexOf('фамилия') >= 0)
+						? 'error'
+						: undefined
+				}
+				help={<>{ErrorPrinter('фам', error)}</>}
 			>
 				<Input size="large" placeholder="Фамилия" />
 			</Form.Item>
@@ -42,17 +52,11 @@ export const Inputs: FC<IInputsProps> = ({ error, value }) => {
 						{ required: true, message: 'Пожалуйста, введите свой телефон!' }
 					]}
 					validateStatus={
-						error?.some(el => el.message.substring(0, 3) === 'ema')
+						error?.some(el => el.message.indexOf('имя') >= 0)
 							? 'error'
 							: undefined
 					}
-					help={error?.map(el =>
-						el.message.substring(0, 3) === 'ema' ? (
-							<div key={el.message}>{el.message}</div>
-						) : (
-							''
-						)
-					)}
+					help={<>{ErrorPrinter('имя', error)}</>}
 				>
 					<Input size="large" type="tel" placeholder="Телефон" />
 				</Form.Item>
@@ -68,17 +72,20 @@ export const Inputs: FC<IInputsProps> = ({ error, value }) => {
 						}
 					]}
 					validateStatus={
-						error?.some(el => el.message.substring(0, 3) === 'ema')
+						error?.some(
+							el =>
+								el.message.indexOf('почты') >= 0 ||
+								el.message.indexOf('e-mail') >= 0
+						)
 							? 'error'
 							: undefined
 					}
-					help={error?.map(el =>
-						el.message.substring(0, 3) === 'ema' ? (
-							<div key={el.message}>{el.message}</div>
-						) : (
-							''
-						)
-					)}
+					help={
+						<>
+							<>{ErrorPrinter('почты', error)}</>
+							<>{ErrorPrinter('e-mail', error)}</>
+						</>
+					}
 				>
 					<Input size="large" placeholder="Электронная почта" />
 				</Form.Item>

@@ -73,7 +73,7 @@ const DropDrag: FunctionComponent<IDropDragProps> = ({
 	})
 
 	return (
-		<div className="ml-[200px] mt-[40px] mr-[80px] mb-[100px]">
+		<div className="ml-[180px] mt-[40px] mr-[80px] mb-[100px]">
 			<ResponsiveReactGridLayout
 				className="layout "
 				cols={{ lg: 3, md: 2, sm: 2, xs: 1, xxs: 1 }}

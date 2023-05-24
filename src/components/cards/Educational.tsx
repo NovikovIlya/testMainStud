@@ -9,7 +9,7 @@ export const Educational = () => {
 	const slider = useRef() as React.MutableRefObject<any>
 
 	const educationalCourses = educationalCourse.map((item, index) => (
-		<div key={index} className="max-w-[716px]">
+		<div key={index}>
 			<div className="flex items-center justify-between ">
 				<div className="text-base ">{item.titleUp}</div>
 				<div className="text-[#3073D7] text-xl flex">
@@ -42,7 +42,7 @@ export const Educational = () => {
 					<PrevSvg />
 				</div>
 				<Carousel
-					className="h-[80px] w-[716px] mt-[31px] text-start"
+					className="h-[80px] pr-[125px] mt-[31px] text-start"
 					ref={slider}
 				>
 					{educationalCourses}
@@ -57,14 +57,14 @@ export const Educational = () => {
 			<div className="min-w-[125px] min-h-[125px] absolute right-[70px] top-[80px] max-h-[125px] bg-opacity-80 bg-[#3E89F9] rounded-full">
 				<img className="rounded-b-full -mt-[15px]" src={img} alt="" />
 			</div>
-			<div className="flex absolute gap-[365px] items-center bottom-[40px]">
+			<div className="flex absolute justify-between w-full items-center bottom-[40px]">
 				<Button
 					type="primary"
 					className="rounded-full w-[200px]  h-[50px] text-base font-semibold "
 				>
 					Записаться
 				</Button>
-				<div className="text-base font-bold text-[#3073D7]">
+				<div className="text-base font-bold pr-[160px] text-[#3073D7]">
 					#доп_образование
 				</div>
 			</div>

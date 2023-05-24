@@ -2,7 +2,6 @@ import React, { FC } from 'react'
 
 import { Footer } from './Footer'
 import { Header } from './Header'
-import './Header.scss'
 import { Navbar } from './Navbar'
 
 interface ILayoutProps {

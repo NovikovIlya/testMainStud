@@ -1,6 +1,6 @@
 import { ConfigProvider } from 'antd'
 import { useEffect, useState } from 'react'
-import { Route, Routes, useSearchParams } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 
 import { ApproveEmail } from './components/approve/ApproveEmail'
@@ -15,7 +15,6 @@ import { logoutSuccess } from './store/reducers/AuthRegReducer'
 const App = () => {
 	const [isLogin, changeIsLogin] = useState(true)
 
-	// console.log(window.location.pathname)
 	const navigate = useNavigate()
 	const dispatch = useAppDispatch()
 

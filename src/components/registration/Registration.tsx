@@ -1,5 +1,5 @@
 import { Form, Typography } from 'antd'
-import { AllHTMLAttributes, FC, useEffect, useState } from 'react'
+import { AllHTMLAttributes, FC, useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import { IError } from '../../api/types'
@@ -87,9 +87,10 @@ const ErrorPrinter = (
 	}
 	return (
 		<>
-			{error?.map(el => {
+			{error.map(el => {
 				if (el.message.indexOf(searchWord) >= 0)
 					return <div key={el.message}>{el.message}</div>
+				else return null
 			})}
 		</>
 	)

@@ -1,5 +1,5 @@
 import { Form, Typography } from 'antd'
-import { FC, useEffect, useState } from 'react'
+import { FC, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
@@ -7,7 +7,6 @@ import logo from '../../assets/images/group.webp'
 import { useAppDispatch } from '../../store'
 import { RootState } from '../../store'
 import { loginUser } from '../../store/creators/MainCreators'
-import { DeleteLogInErrors } from '../../store/creators/SomeCreators'
 import { BackMainPage } from '../back-main-page/BackMainPage'
 import { Faq } from '../faq/Faq'
 

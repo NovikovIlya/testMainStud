@@ -1,8 +1,8 @@
 import { Dispatch } from '@reduxjs/toolkit'
 import { Cookies } from 'react-cookie'
 
-import { login, refresh, register } from '../../api/index'
-import { IAuthRequest, IRegRequest } from '../../api/types'
+import { approve, login, refresh, register } from '../../api/index'
+import { IApproveRequest, IAuthRequest, IRegRequest } from '../../api/types'
 import {
 	loginFailure,
 	loginSuccess,
@@ -81,4 +81,19 @@ export const registerUser =
 			console.log(e.response.data.errors)
 			dispatch(registrationFailure(e.response.data.errors))
 		}
+	}
+
+export const approveEmail =
+	(data: IApproveRequest) =>
+	async (dispatch: Dispatch): Promise<void> => {
+		const res = await approve(data)
+
+		dispatch(
+			loginSuccess({
+				accessToken: res.data.accessToken,
+				refreshToken: res.data.refreshToken
+			})
+		)
+		localStorage.setItem('userInfo', JSON.stringify(res.data.user))
+		dispatch(ProfileSuccess(res.data.user))
 	}

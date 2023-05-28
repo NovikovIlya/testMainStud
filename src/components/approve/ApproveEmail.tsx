@@ -1,35 +1,38 @@
 import { Button } from 'antd'
 import { useEffect } from 'react'
+import { FC } from 'react'
 import { useSearchParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
-import { approveApi } from '../../store/service/ApproveService'
+import { useAppDispatch } from '../../store'
+import { approveEmail } from '../../store/creators/MainCreators'
 import { Layout } from '../layout/Layout'
 
-export const ApproveEmail = () => {
-	const [searchParams] = useSearchParams()
+interface IApproveProps {
+	changeIsLogin: (IsLogIn: boolean) => void
+}
 
-	const [approve] = approveApi.useApproveEmailMutation()
+export const ApproveEmail: FC<IApproveProps> = ({ changeIsLogin }) => {
+	const [searchParams] = useSearchParams()
+	const navigate = useNavigate()
+	const dispatch = useAppDispatch()
+
 	useEffect(() => {
-		approve({
-			id: searchParams.get('id'),
-			hash: searchParams.get('hash')
-		})
+		console.log(searchParams.get('id'), searchParams.get('hash'))
+		if (searchParams.get('id') !== null && searchParams.get('hash') !== null) {
+			dispatch(
+				approveEmail({
+					id: searchParams.get('id'),
+					hash: searchParams.get('hash')
+				})
+			)
+			changeIsLogin(false)
+			navigate('/profile')
+		}
 	}, [])
 	return (
 		<Layout>
-			<div className="p-32">
-				Почта подтверждена
-				<Button
-					onClick={() => {
-						approve({
-							id: searchParams.get('id'),
-							hash: searchParams.get('hash')
-						})
-					}}
-				>
-					Approve
-				</Button>
-			</div>
+			<div className="p-32">Почта подтверждена</div>
 		</Layout>
 	)
 }

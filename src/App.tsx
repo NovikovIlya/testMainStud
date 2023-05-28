@@ -41,7 +41,7 @@ const App = () => {
 				navigate('/')
 			}
 		}
-	})
+	}, [])
 
 	return (
 		<>
@@ -57,17 +57,20 @@ const App = () => {
 					<Routes>
 						<Route
 							path="/*"
-							element={<Login changeIsLogIn={changeIsLogin} />}
+							element={<Login changeIsLogin={changeIsLogin} />}
 						/>
 						<Route path="/registration/*" element={<Registration />} />
 						<Route
 							path="/profile/*"
 							element={
-								isLogin ? <Login changeIsLogIn={changeIsLogin} /> : <Profile />
+								isLogin ? <Login changeIsLogin={changeIsLogin} /> : <Profile />
 							}
 						/>
 						<Route path="/user/*" element={<User />} />
-						<Route path="/api/register/approve" element={<ApproveEmail />} />
+						<Route
+							path="/api/register/approve"
+							element={<ApproveEmail changeIsLogin={changeIsLogin} />}
+						/>
 					</Routes>
 				</div>
 			</ConfigProvider>

@@ -2,7 +2,7 @@ import { AxiosPromise } from 'axios'
 
 import endpoints from './endpoints'
 import { axiosInstance } from './instance'
-import { IAuthSuccess } from './types'
+import { IApproveRequest, IAuthSuccess } from './types'
 import {
 	IAuthRequest,
 	IRefreshRequest,
@@ -20,3 +20,6 @@ export const refresh = (
 
 export const register = (params: IRegRequest): AxiosPromise<number> =>
 	axiosInstance.post(endpoints.REGISTER, params)
+
+export const approve = (params: IApproveRequest): AxiosPromise<IAuthSuccess> =>
+	axiosInstance.post(endpoints.APPROVE, params)

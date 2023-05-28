@@ -4,18 +4,16 @@ import logger from 'redux-logger'
 
 import AuthRegReducer from './reducers/AuthRegReducer'
 import ProfileReducer from './reducers/ProfileReducer'
-import { approveApi } from './service/ApproveService'
 
 export const store = configureStore({
 	reducer: {
 		AuthReg: AuthRegReducer,
-		Profile: ProfileReducer,
-		[approveApi.reducerPath]: approveApi.reducer
+		Profile: ProfileReducer
 	},
 	middleware: getDefaultMiddleware =>
-		getDefaultMiddleware()
-			.concat(...(process.env.NODE_ENV !== 'production' ? [logger] : []))
-			.concat(approveApi.middleware)
+		getDefaultMiddleware().concat(
+			...(process.env.NODE_ENV !== 'production' ? [logger] : [])
+		)
 })
 
 export type RootState = ReturnType<typeof store.getState>

@@ -19,10 +19,10 @@ import { Switcher } from './switcher/Switcher'
 const { Title } = Typography
 
 interface ILoginProps {
-	changeIsLogIn: (IsLogIn: boolean) => void
+	changeIsLogin: (IsLogIn: boolean) => void
 }
 
-export const Login: FC<ILoginProps> = ({ changeIsLogIn }) => {
+export const Login: FC<ILoginProps> = ({ changeIsLogin }) => {
 	const navigate = useNavigate()
 	const error = useSelector((state: RootState) => state.AuthReg.authData.error)
 	const dispatch = useAppDispatch()
@@ -47,7 +47,7 @@ export const Login: FC<ILoginProps> = ({ changeIsLogIn }) => {
 			}
 			if (res === 200) {
 				navigate('/profile')
-				changeIsLogIn(false)
+				changeIsLogin(false)
 			}
 		}
 		request()

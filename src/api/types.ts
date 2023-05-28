@@ -68,3 +68,8 @@ export interface data {
 	tittle1: string
 	tittle2: string
 }
+
+export interface IApproveRequest {
+	id: string | null
+	hash: string | null
+}

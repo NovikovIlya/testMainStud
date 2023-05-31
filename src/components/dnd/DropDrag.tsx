@@ -63,7 +63,7 @@ const DropDrag: FunctionComponent<IDropDragProps> = ({
 							className="absolute top-2 cursor-pointer right-2"
 							onClick={() => onRemoveItem(item.i)}
 						>
-							<DeleteOutlined className="text-[1.5vh] max-[2000px]:text-[2vh] mt-[1vh] mr-[1vh]" />
+							<DeleteOutlined className="text-[1.5vh] max-[2000px]:text-[2vh] mt-[1vh] mr-[1vh] opacity-50" />
 						</div>
 					)}
 					{jsxElements.filter(el => el.index === item.i)[0].element}
@@ -77,6 +77,7 @@ const DropDrag: FunctionComponent<IDropDragProps> = ({
 			<ResponsiveReactGridLayout
 				className="layout "
 				cols={{ lg: 3, md: 2, sm: 2, xs: 1, xxs: 1 }}
+				rowHeight={140}
 				containerPadding={[0, 0]}
 				margin={[40, 40]}
 				layouts={layouts}
@@ -85,7 +86,7 @@ const DropDrag: FunctionComponent<IDropDragProps> = ({
 				onLayoutChange={onLayoutChange}
 				onBreakpointChange={onBreakpointChange}
 				isDraggable={edit}
-				isResizable={edit}
+				isResizable={false}
 			>
 				{generateDOM}
 			</ResponsiveReactGridLayout>

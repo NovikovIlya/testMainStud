@@ -1,38 +1,51 @@
 import { Button } from 'antd'
+import { useState } from 'react'
 
 import img from '../../assets/images/avatar.png'
 
 export const Apply = () => {
 	return (
 		<div
-			className="h-[340px] rounded-[1vw] w-full pl-[50px] flex"
+			className="h-[320px] rounded-[1vw] w-full pl-[55px] flex"
 			style={{
 				background: 'linear-gradient(89.94deg, #71AAFF 12.16%, #3D7AD5 104.42%)'
 			}}
 		>
 			<div>
-				<div className="text-[42px] uppercase text-white w-fit font-extrabold  mt-[62px]">
+				<div className="text-4xl  text-white w-fit font-extrabold  mt-[76px]">
 					Подать заявление
 				</div>
 				<div className="mt-[40px] text-white">
-					<Button className="w-[203px] shadow-lg font-bold h-[62px] text-2xl">
+					<Button className="w-[203px] shadow-md font-bold h-[62px] text-2xl ">
 						Бакалавриат
 					</Button>
 					<Button
 						type="text"
-						className="w-[203px] shadow-lg text-white font-bold h-[62px] text-2xl ml-[50px]"
+						style={{
+							color: 'white',
+							backgroundColor: 'transparent'
+						}}
+						className="w-[203px]  text-white font-bold h-[62px] text-2xl ml-[50px] hover:border-white hover:border "
 					>
 						Магистратура
 					</Button>
 					<Button
+						style={{
+							color: 'white',
+							backgroundColor: 'transparent'
+						}}
 						type="text"
-						className="w-[203px] shadow-lg text-white font-bold h-[62px] text-2xl ml-[50px]"
+						className="w-[203px]  text-white font-bold h-[62px] text-2xl ml-[50px] hover:border-white hover:border"
 					>
 						Аспирантура
 					</Button>
 					<Button
+						style={{
+							color: 'white',
+							backgroundColor: 'transparent'
+						}}
 						type="text"
-						className="w-[203px] shadow-lg text-white font-bold h-[62px] text-2xl ml-[50px]"
+						className="w-[203px]  text-white font-bold h-[62px] text-2xl ml-[50px] hover:border-white hover:border"
 					>
 						Ординатура
 					</Button>
@@ -40,7 +53,7 @@ export const Apply = () => {
 			</div>
 			<div>
 				<img
-					className="rounded-full absolute right-[200px] -top-[150px]"
+					className="rounded-full absolute right-[200px] -top-[130px]"
 					src={img}
 					alt="avatar"
 				/>

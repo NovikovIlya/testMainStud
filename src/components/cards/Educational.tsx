@@ -15,7 +15,7 @@ export const Educational = () => {
 				<div className="text-[#3073D7] text-xl flex">
 					<span>{item.hourUp}</span>
 					<Divider type="vertical" className="border-[#3073D7] border-1 m-2" />
-					<div className="text-xl">{item.priceUp}.</div>
+					<div className="text-xl">{item.priceUp} руб.</div>
 				</div>
 			</div>
 			<Divider dashed className="border-black" />
@@ -24,14 +24,14 @@ export const Educational = () => {
 				<div className="text-[#3073D7] text-xl flex">
 					<span>{item.hourUp}</span>
 					<Divider type="vertical" className="border-[#3073D7] border-1 m-2" />
-					<div className="text-xl">{item.priceDown}</div>
+					<div className="text-xl">{item.priceDown} руб.</div>
 				</div>
 			</div>
 		</div>
 	))
 	return (
 		<div className="px-[80px] mt-[40px]">
-			<div className="font-semibold text-2xl text-start">
+			<div className="font-semibold text-xl text-start">
 				Образовательные курсы
 			</div>
 			<div>

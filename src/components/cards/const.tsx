@@ -42,32 +42,36 @@ export const educationalCourse = [
 
 export const PrevSvg = () => (
 	<svg
-		width="14"
-		height="33"
-		viewBox="0 0 14 33"
+		width="7"
+		height="18"
+		viewBox="0 0 7 18"
 		fill="none"
 		xmlns="http://www.w3.org/2000/svg"
 	>
 		<path
-			d="M12.5 0.972656L2.19501 16.5523L12.5 31.4067"
+			opacity="0.6"
+			d="M6 1.97363L1 9.65236L6 16.9736"
 			stroke="black"
-			strokeWidth="3"
+			strokeWidth="2"
+			strokeLinecap="round"
 			strokeLinejoin="round"
 		/>
 	</svg>
 )
 export const NextSvg = () => (
 	<svg
-		width="14"
-		height="33"
-		viewBox="0 0 14 33"
+		width="7"
+		height="18"
+		viewBox="0 0 7 18"
 		fill="none"
 		xmlns="http://www.w3.org/2000/svg"
 	>
 		<path
-			d="M1.5 0.972656L11.805 16.5523L1.5 31.4067"
+			opacity="0.6"
+			d="M1 1.97363L6 9.65236L1 16.9736"
 			stroke="black"
-			strokeWidth="3"
+			strokeWidth="2"
+			strokeLinecap="round"
 			strokeLinejoin="round"
 		/>
 	</svg>

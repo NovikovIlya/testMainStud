@@ -1,4 +1,3 @@
-import { Button } from 'antd'
 import { useEffect } from 'react'
 import { FC } from 'react'
 import { useSearchParams } from 'react-router-dom'
@@ -29,7 +28,7 @@ export const ApproveEmail: FC<IApproveProps> = ({ changeIsLogin }) => {
 			changeIsLogin(false)
 			navigate('/profile')
 		}
-	}, [])
+	})
 	return (
 		<Layout>
 			<div className="p-32">Почта подтверждена</div>

@@ -27,12 +27,9 @@ export const Olympics = () => {
 		</div>
 	))
 	return (
-		<div className="px-[76px] mt-[40px]">
+		<div className="px-[80px] mt-[40px]">
 			<div>
-				<div className="font-semibold text-2xl text-start">Олимпиады</div>
-			</div>
-			<div className="min-w-[125px] absolute min-h-[125px] right-[55px] z-10 top-[50px] max-h-[125px] max-w-[125px] bg-opacity-80 bg-[#3E89F9] rounded-full">
-				<img className="rounded-b-full -mt-[5px]" src={img} alt="" />
+				<div className="font-semibold text-xl text-start">Олимпиады</div>
 			</div>
 			<div
 				onClick={() => slider.current.prev()}
@@ -41,8 +38,9 @@ export const Olympics = () => {
 				<PrevSvg />
 			</div>
 			<Carousel
-				className="h-[80px] w-[270px] mt-[31px] text-start"
+				className=" w-[270px] mt-[30px] text-start"
 				ref={slider}
+				dots={false}
 			>
 				{olympics}
 			</Carousel>
@@ -59,6 +57,9 @@ export const Olympics = () => {
 				>
 					Записаться
 				</Button>
+			</div>
+			<div className="min-w-[125px] absolute min-h-[125px] right-[55px] z-10 top-[50px] max-h-[125px] max-w-[125px] bg-opacity-80 bg-[#3E89F9] rounded-full">
+				<img className="rounded-b-full -mt-[5px]" src={img} alt="" />
 			</div>
 		</div>
 	)

@@ -7,7 +7,7 @@ export const AboutUniversity = () => {
 		<div className="flex h-[320px]">
 			<div className="ml-[40px] mt-[40px]">
 				<div>
-					<div className="font-semibold text-2xl text-start">
+					<div className="font-semibold text-xl text-start">
 						Об университете
 					</div>
 					<div className="text-base text-start mt-[30px]">

@@ -12,7 +12,7 @@ import {
 
 export const Header = () => {
 	return (
-		<div className="bg-[#F5F8FB] h-[100px] backdrop-blur-sm fixed pl-[120px] pr-[80px] z-10 gap-[2vh] w-full flex items-center justify-between">
+		<div className="bg-[#F5F8FB] h-[100px] backdrop-blur-sm fixed pl-[180px] pr-[80px] z-10 gap-[2vh] w-full flex items-center justify-between">
 			<div className="flex wrapper items-center gap-[24px] ">
 				<div>
 					<LogoIasSvg />

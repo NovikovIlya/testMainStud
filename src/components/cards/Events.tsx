@@ -13,7 +13,7 @@ export const Events = () => {
 	))
 	return (
 		<div className="px-[52px] mt-[40px] ">
-			<div className="font-semibold text-2xl text-start mb-[30px]">
+			<div className="font-semibold text-xl text-start mb-[30px]">
 				Мероприятия
 			</div>
 			<div className="max-h-[130px] flex flex-col gap-[20px] overflow-auto">

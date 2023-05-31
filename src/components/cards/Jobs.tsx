@@ -6,7 +6,7 @@ export const Jobs = () => {
 		<div className="">
 			<div className="mx-[40px] mt-[40px]">
 				<div>
-					<div className="font-semibold text-2xl text-start">
+					<div className="font-semibold text-xl text-start">
 						Об университете
 					</div>
 					<div className="mt-[30px] w-full">

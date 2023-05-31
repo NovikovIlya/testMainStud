@@ -78,7 +78,7 @@ export const Apply = () => {
 					alt="avatar"
 				/>
 			</div>
-			<div className="absolute right-[108px] cursor-pointer hover:scale-x-125 hover:right-20 w-[100px] transition-all duration-200 h-full flex items-center">
+			<div className="absolute right-[108px] cursor-pointer hover:scale-x-125 hover:right-20 w-[100px] hover:w-[120px] transition-all duration-200 h-full flex items-center">
 				<svg
 					width="87"
 					height="40"

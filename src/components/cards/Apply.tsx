@@ -4,6 +4,19 @@ import { useState } from 'react'
 import img from '../../assets/images/avatar.png'
 
 export const Apply = () => {
+	const [activeApply, setActiveApply] = useState<
+		'bachelor' | 'magistracy' | 'PhD' | 'residency'
+	>('bachelor')
+	const disableStyle = {
+		color: '#004EC2',
+		border: '1px solid #004EC2',
+		cursor: 'default',
+		backgroundColor: 'white'
+	}
+	const activeStyle = {
+		color: 'white',
+		backgroundColor: 'transparent'
+	}
 	return (
 		<div
 			className="h-[320px] rounded-[1vw] w-full pl-[55px] flex"
@@ -15,37 +28,44 @@ export const Apply = () => {
 				<div className="text-4xl  text-white w-fit font-extrabold  mt-[76px]">
 					Подать заявление
 				</div>
-				<div className="mt-[40px] text-white">
-					<Button className="w-[203px] shadow-md font-bold h-[62px] text-2xl ">
+				<div className="mt-[40px] ">
+					<Button
+						onClick={() => {
+							setActiveApply('bachelor')
+						}}
+						type="text"
+						style={activeApply === 'bachelor' ? disableStyle : activeStyle}
+						className={`w-[203px] font-bold h-[62px] text-2xl  hover:border-white hover:border`}
+					>
 						Бакалавриат
 					</Button>
 					<Button
-						type="text"
-						style={{
-							color: 'white',
-							backgroundColor: 'transparent'
+						onClick={() => {
+							setActiveApply('magistracy')
 						}}
-						className="w-[203px]  text-white font-bold h-[62px] text-2xl ml-[50px] hover:border-white hover:border "
+						type="text"
+						style={activeApply === 'magistracy' ? disableStyle : activeStyle}
+						className={`w-[203px] ml-[50px] font-bold h-[62px] text-2xl  hover:border-white hover:border`}
 					>
 						Магистратура
 					</Button>
 					<Button
-						style={{
-							color: 'white',
-							backgroundColor: 'transparent'
+						onClick={() => {
+							setActiveApply('PhD')
 						}}
+						style={activeApply === 'PhD' ? disableStyle : activeStyle}
 						type="text"
 						className="w-[203px]  text-white font-bold h-[62px] text-2xl ml-[50px] hover:border-white hover:border"
 					>
 						Аспирантура
 					</Button>
 					<Button
-						style={{
-							color: 'white',
-							backgroundColor: 'transparent'
+						onClick={() => {
+							setActiveApply('residency')
 						}}
+						style={activeApply === 'residency' ? disableStyle : activeStyle}
 						type="text"
-						className="w-[203px]  text-white font-bold h-[62px] text-2xl ml-[50px] hover:border-white hover:border"
+						className="w-[203px]  text-white font-bold h-[62px] text-2xl ml-[50px] hover:border-white hover:border transition-all duration-500"
 					>
 						Ординатура
 					</Button>
@@ -58,7 +78,7 @@ export const Apply = () => {
 					alt="avatar"
 				/>
 			</div>
-			<div className="absolute right-[108px] h-full flex items-center">
+			<div className="absolute right-[108px] cursor-pointer hover:scale-x-125 hover:right-20 transition-all duration-200 h-full flex items-center">
 				<svg
 					width="87"
 					height="40"

@@ -2,10 +2,10 @@ import { Button, Input } from 'antd'
 import { AiOutlineMenu } from 'react-icons/ai'
 
 import {
+	EditSvg,
 	LogoIasSvg,
 	LogoutSvg,
 	MessageSvg,
-	NotificationSvg,
 	PersonSvg,
 	SettingSvg
 } from '../../assets/svg'
@@ -44,7 +44,7 @@ export const Header = () => {
 						<MessageSvg />
 					</div>
 					<div className="hover:bg-[#E3E8ED] cursor-pointer flex items-center px-[14px] h-full">
-						<NotificationSvg />
+						<EditSvg />
 					</div>
 					<div className="hover:bg-[#E3E8ED] cursor-pointer flex items-center px-[14px] h-full">
 						<LogoutSvg />

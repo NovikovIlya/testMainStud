@@ -1,5 +1,4 @@
 import {
-	Card,
 	List,
 	ListItem,
 	ListItemPrefix,
@@ -7,8 +6,6 @@ import {
 	Typography
 } from '@material-tailwind/react'
 import { Button, Modal } from 'antd'
-import type { RadioChangeEvent } from 'antd'
-import { useState } from 'react'
 
 type TypeInfoUserModal = {
 	isOpen: boolean
@@ -23,12 +20,7 @@ export const InfoUserModal = ({ isOpen, close }: TypeInfoUserModal) => {
 	const handleCancel = () => {
 		close(false)
 	}
-	const [value, setValue] = useState(1)
 
-	const onChange = (e: RadioChangeEvent) => {
-		console.log('radio checked', e.target.value)
-		setValue(e.target.value)
-	}
 	const footer = <></>
 	return (
 		<Modal
@@ -64,7 +56,7 @@ export const InfoUserModal = ({ isOpen, close }: TypeInfoUserModal) => {
 									name="vertical-list"
 									id="vertical-list-react"
 									ripple={false}
-									className="hover:before:opacity-0"
+									className="hover:before:opacity-0 w-4 h-4"
 									containerProps={{
 										className: 'p-0'
 									}}
@@ -87,7 +79,7 @@ export const InfoUserModal = ({ isOpen, close }: TypeInfoUserModal) => {
 									name="vertical-list"
 									id="vertical-list-vue"
 									ripple={false}
-									className="hover:before:opacity-0"
+									className="hover:before:opacity-0 w-4 h-4"
 									containerProps={{
 										className: 'p-0'
 									}}
@@ -110,7 +102,7 @@ export const InfoUserModal = ({ isOpen, close }: TypeInfoUserModal) => {
 									name="vertical-list"
 									id="vertical-list-svelte"
 									ripple={false}
-									className="hover:before:opacity-0"
+									className="hover:before:opacity-0 w-4 h-4"
 									containerProps={{
 										className: 'p-0'
 									}}
@@ -133,7 +125,7 @@ export const InfoUserModal = ({ isOpen, close }: TypeInfoUserModal) => {
 									name="vertical-list"
 									id="vertical-list-next"
 									ripple={false}
-									className="hover:before:opacity-0"
+									className="hover:before:opacity-0 w-4 h-4"
 									containerProps={{
 										className: 'p-0'
 									}}

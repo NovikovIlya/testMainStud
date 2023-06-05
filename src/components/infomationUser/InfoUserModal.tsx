@@ -40,23 +40,23 @@ export const InfoUserModal = ({ isOpen, close }: TypeInfoUserModal) => {
 					<div className="w-[8px] h-[8px] rounded-full bg-[#3073D7]" />
 					<div className="w-[8px] h-[8px] rounded-full bg-[#3073D7]" />
 				</div>
-				<p className="mt-5 text-center font-bold">
-					Для того, чтобы мы настроили личный кабинет персонально для
-					Вас,выберите с какой целью Вы регистрировались на сайте:
+				<p className="mt-5 text-center font-bold px-7">
+					Для того, чтобы мы настроили личный кабинет персонально для Вас,
+					выберите с какой целью Вы регистрировались на сайте:
 				</p>
 
 				<List className="mt-5">
-					<ListItem className="p-0">
+					<ListItem className="p-0 ">
 						<label
 							htmlFor="vertical-list-react"
-							className="px-3 py-2 flex items-center w-full cursor-pointer"
+							className="px-3 py-2 flex items-start w-full cursor-pointer"
 						>
 							<ListItemPrefix className="mr-3">
 								<Radio
 									name="vertical-list"
 									id="vertical-list-react"
 									ripple={false}
-									className="hover:before:opacity-0 w-4 h-4"
+									className="hover:before:opacity-0 w-4 h-4 mt-1"
 									containerProps={{
 										className: 'p-0'
 									}}
@@ -72,14 +72,14 @@ export const InfoUserModal = ({ isOpen, close }: TypeInfoUserModal) => {
 					<ListItem className="p-0">
 						<label
 							htmlFor="vertical-list-vue"
-							className="px-3 py-2 flex items-center w-full cursor-pointer"
+							className="px-3 py-2 flex items-start w-full cursor-pointer"
 						>
 							<ListItemPrefix className="mr-3">
 								<Radio
 									name="vertical-list"
 									id="vertical-list-vue"
 									ripple={false}
-									className="hover:before:opacity-0 w-4 h-4"
+									className="hover:before:opacity-0 w-4 h-4 mt-1"
 									containerProps={{
 										className: 'p-0'
 									}}
@@ -95,14 +95,14 @@ export const InfoUserModal = ({ isOpen, close }: TypeInfoUserModal) => {
 					<ListItem className="p-0">
 						<label
 							htmlFor="vertical-list-svelte"
-							className="px-3 py-2 flex items-center w-full cursor-pointer"
+							className="px-3 py-2 flex items-start w-full cursor-pointer"
 						>
 							<ListItemPrefix className="mr-3">
 								<Radio
 									name="vertical-list"
 									id="vertical-list-svelte"
 									ripple={false}
-									className="hover:before:opacity-0 w-4 h-4"
+									className="hover:before:opacity-0 w-4 h-4 mt-1"
 									containerProps={{
 										className: 'p-0'
 									}}
@@ -118,14 +118,14 @@ export const InfoUserModal = ({ isOpen, close }: TypeInfoUserModal) => {
 					<ListItem className="p-0">
 						<label
 							htmlFor="vertical-list-next"
-							className="px-3 py-2 flex items-center w-full cursor-pointer"
+							className="px-3 py-2 flex items-start w-full cursor-pointer"
 						>
 							<ListItemPrefix className="mr-3">
 								<Radio
 									name="vertical-list"
 									id="vertical-list-next"
 									ripple={false}
-									className="hover:before:opacity-0 w-4 h-4"
+									className="hover:before:opacity-0 w-4 h-4 mt-1"
 									containerProps={{
 										className: 'p-0'
 									}}

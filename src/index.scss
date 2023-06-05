@@ -19,6 +19,9 @@ body {
 	}
 
 	body::-webkit-scrollbar-thumb {
-		background: #212121;
+		background: #ccc;
 	}
+}
+.ant-modal .ant-modal-content {
+	border-radius: 20px;
 }

@@ -3,7 +3,7 @@ import { DocumentSvg, EyeSvg, MapSvg, PersonCardSvg } from '../../assets/svg'
 export const Navbar = () => {
 	return (
 		<aside className="fixed rounded-tr-[20px] z-20 min-h-screen bg-white shadow-lg flex flex-col items-center">
-			<div className="flex flex-col mt-[100px]">
+			<div className="flex flex-col mt-[100px] w-full">
 				<div className="hover:bg-[#E3E8ED] cursor-pointer  px-[20px] py-[20px]">
 					<PersonCardSvg />
 				</div>

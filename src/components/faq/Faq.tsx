@@ -14,7 +14,7 @@ export const Faq: FC = () => {
 	const onChildrenDrawerClose = () => setChildrenDrawer(false)
 
 	return (
-		<div className="fixed right-[92px] bottom-[92px]">
+		<div className="fixed right-[2vw] bottom-[2vw]">
 			<div onClick={showDrawer} className="cursor-pointer">
 				<FaqSvg />
 			</div>

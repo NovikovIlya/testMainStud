@@ -57,7 +57,7 @@ const DropDrag: FunctionComponent<IDropDragProps> = ({
 				key={item.i}
 				className="bg-white/70 backdrop-blur-sm rounded-[20px] shadow-md "
 			>
-				<div className="text w-full">
+				<div className="w-full h-full">
 					{edit && (
 						<div
 							className="absolute top-2 cursor-pointer right-2"
@@ -73,11 +73,11 @@ const DropDrag: FunctionComponent<IDropDragProps> = ({
 	})
 
 	return (
-		<div className="ml-[180px] mt-[40px] mr-[80px] mb-[100px]">
+		<div className="ml-[180px] mt-[40px] pr-[80px] mb-[100px] max-sm:ml-3  max-xl:pr-3 max-xl:ml-[100px]">
 			<ResponsiveReactGridLayout
 				className="layout "
-				cols={{ lg: 3, md: 2, sm: 2, xs: 1, xxs: 1 }}
-				rowHeight={140}
+				cols={{ lg: 3, md: 2, sm: 1, xs: 1, xxs: 1 }}
+				rowHeight={150}
 				containerPadding={[0, 0]}
 				margin={[40, 40]}
 				layouts={layouts}

@@ -19,16 +19,16 @@ export const Apply = () => {
 	}
 	return (
 		<div
-			className="h-[320px] rounded-[1vw] w-full pl-[55px] flex"
+			className="rounded-[1vw] w-full pl-[55px] flex h-full overflow-y-auto"
 			style={{
 				background: 'linear-gradient(89.94deg, #71AAFF 12.16%, #3D7AD5 104.42%)'
 			}}
 		>
-			<div>
-				<div className="text-4xl  text-white w-fit font-extrabold  mt-[76px]">
+			<div className='max-w-[53vw] max-2xl:max-w-[40vw] max-xl:max-w-full '>
+				<div className="text-4xl  text-white w-fit font-extrabold  mt-[76px] max-2xl:mt-[36px]">
 					Подать заявление
 				</div>
-				<div className="mt-[40px] ">
+				<div className="mt-[40px] gap-4 flex flex-wrap">
 					<Button
 						onClick={() => {
 							setActiveApply('bachelor')
@@ -71,14 +71,14 @@ export const Apply = () => {
 					</Button>
 				</div>
 			</div>
-			<div>
+			<div className='max-xl:hidden'>
 				<img
 					className="rounded-full absolute right-[200px] -top-[130px]"
 					src={img}
 					alt="avatar"
 				/>
 			</div>
-			<div className="absolute right-[108px] cursor-pointer hover:scale-x-125 hover:right-20 w-[100px] hover:w-[120px] transition-all duration-200 h-full flex items-center">
+			<div className="max-xl:hidden absolute right-[108px] cursor-pointer hover:scale-x-125 hover:right-20 w-[100px] hover:w-[120px] transition-all duration-200 h-full flex items-center">
 				<svg
 					width="87"
 					height="40"

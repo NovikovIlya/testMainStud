@@ -16,7 +16,7 @@ export const User = () => {
 	const [isShow, setIsShow] = useState(true)
 	return (
 		<Layout>
-			<Heading className="ml-[180px] mt-[125px] text-2xl font-bold text-[#1F5CB8]">
+			<Heading className="ml-[180px] mt-[125px] max-sm:ml-3 text-2xl font-bold text-[#1F5CB8]">
 				Личный кабинет КФУ
 			</Heading>
 			<InfoUserModal close={setIsShow} isOpen={isShow} />

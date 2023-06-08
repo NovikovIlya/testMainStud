@@ -4,13 +4,13 @@ import img from '../../assets/images/aboutUniversity.png'
 
 export const AboutUniversity = () => {
 	return (
-		<div className="flex h-[320px]">
+		<div className="flex overflow-y-auto">
 			<div className="ml-[40px] mt-[40px]">
 				<div>
 					<div className="font-semibold text-xl text-start">
 						Об университете
 					</div>
-					<div className="text-base text-start mt-[30px]">
+					<div className="text-base text-start mt-[30px] max-h-[100px]">
 						Мини-текст в 3-4 строки о том какой КФУ крутой, статистика,
 						инфографика внутри — хвалебные маркетинговые оды университету
 					</div>

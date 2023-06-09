@@ -69,7 +69,7 @@ export const Login: FC<ILoginProps> = ({ changeIsLogin }) => {
 					<Inputs error={error} value={value} />
 					<Buttons />
 				</Form>
-				<img className={styles.img} src={logo} alt="group" />
+				<img className='max-lg:hidden' src={logo} alt="group" />
 				<Faq />
 			</div>
 		</div>

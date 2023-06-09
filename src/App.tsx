@@ -1,9 +1,12 @@
-import { ConfigProvider } from 'antd'
-import { useEffect, useState } from 'react'
-import { Route, Routes } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
+import { ConfigProvider } from 'antd';
+import { useEffect, useState } from 'react';
+import { Route, Routes } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+
+
 
 import { ApproveEmail } from './components/approve/ApproveEmail'
+import { InfoUser } from './components/formUser/InfoUser'
 import { Login } from './components/login/Login'
 import { Profile } from './components/profile/profile'
 import { Registration } from './components/registration/Registration'
@@ -22,7 +25,7 @@ const App = () => {
 		const res = await dispatch(refreshToken())
 		if (res === 200) {
 			changeIsLogin(false)
-			navigate('/profile')
+			navigate('/infoUser')
 		}
 		if (res === 403) {
 			navigate('/')
@@ -71,6 +74,7 @@ const App = () => {
 							path="/api/register/approve"
 							element={<ApproveEmail changeIsLogin={changeIsLogin} />}
 						/>
+						<Route path="/infoUser" element={<InfoUser />} />
 					</Routes>
 				</div>
 			</ConfigProvider>

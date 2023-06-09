@@ -5,54 +5,39 @@ import {
 	Radio,
 	Typography
 } from '@material-tailwind/react'
-import {
-  Dialog,
-  DialogBody,
-} from "@material-tailwind/react";
 import { Button } from 'antd'
+import { useNavigate } from 'react-router-dom'
 
-type TypeInfoUserModal = {
-	isOpen: boolean
-	close: (value: boolean) => void
-}
-
-export const InfoUserModal = ({ isOpen, close }: TypeInfoUserModal) => {
-	const handleOk = () => {
-		close(false)
-	}
-
+export const InfoUser = () => {
+	const navigate = useNavigate()
 	const handleCancel = () => {
-		close(false)
+		navigate('/user')
 	}
 
 	return (
-		<Dialog
-		open={isOpen}
-        size='xxl'
-        handler={close}
-		className='min-h-screen h-full'
-      >
-        <DialogBody divider className='w-full flex justify-center h-full'>
-		<div className="container max-w-2xl flex flex-col items-center justify-center h-screen p-5">
-				<h2 className="text-center font-bold">Добро пожаловать!</h2>
-				
-				<p className="mt-5 text-center font-bold px-7">
+		<div className="w-full flex justify-center h-full">
+			<div className="container max-w-2xl flex flex-col items-center justify-center h-screen p-5">
+				<h2 className="text-center font-bold border-solid border-0 border-b-2 border-[#3073D7] pb-2">
+					Добро пожаловать!
+				</h2>
+
+				<p className="mt-8 text-center font-bold px-7">
 					Для того, чтобы мы настроили личный кабинет персонально для Вас,
 					выберите с какой целью Вы регистрировались на сайте:
 				</p>
 
-				<List className="mt-5 max-w-2xl">
-					<ListItem className="p-0 ">
+				<List className="p-0 mt-5">
+					<ListItem className="p-0">
 						<label
-							htmlFor="vertical-list-react"
-							className=" py-2 flex items-start w-full cursor-pointer"
+							htmlFor="0"
+							className="px-3 py-2 flex items-start  w-full cursor-pointer"
 						>
 							<ListItemPrefix className="mr-3">
 								<Radio
 									name="vertical-list"
-									id="vertical-list-react"
+									id="0"
 									ripple={false}
-									className="hover:before:opacity-0 w-4 h-4 mt-1"
+									className="hover:before:opacity-0 mt-1"
 									containerProps={{
 										className: 'p-0'
 									}}
@@ -67,15 +52,15 @@ export const InfoUserModal = ({ isOpen, close }: TypeInfoUserModal) => {
 					</ListItem>
 					<ListItem className="p-0">
 						<label
-							htmlFor="vertical-list-vue"
-							className=" py-2 flex items-start w-full cursor-pointer"
+							htmlFor="1"
+							className="px-3 py-2 flex items-start  w-full cursor-pointer"
 						>
 							<ListItemPrefix className="mr-3">
 								<Radio
 									name="vertical-list"
-									id="vertical-list-vue"
+									id="1"
 									ripple={false}
-									className="hover:before:opacity-0 w-4 h-4 mt-1"
+									className="hover:before:opacity-0 mt-1"
 									containerProps={{
 										className: 'p-0'
 									}}
@@ -90,15 +75,37 @@ export const InfoUserModal = ({ isOpen, close }: TypeInfoUserModal) => {
 					</ListItem>
 					<ListItem className="p-0">
 						<label
-							htmlFor="vertical-list-svelte"
-							className=" py-2 flex items-start w-full cursor-pointer"
+							htmlFor="2"
+							className="px-3 py-2 flex items-start  w-full cursor-pointer"
 						>
 							<ListItemPrefix className="mr-3">
 								<Radio
 									name="vertical-list"
-									id="vertical-list-svelte"
+									id="2"
 									ripple={false}
-									className="hover:before:opacity-0 w-4 h-4 mt-1"
+									className="hover:before:opacity-0 mt-1"
+									containerProps={{
+										className: 'p-0'
+									}}
+								/>
+							</ListItemPrefix>
+							<Typography color="blue-gray" className="font-medium">
+								Я слушатель. Зарегистрировался, чтобы обучаться новому,
+								проходить курсы и получать дополнительное образование
+							</Typography>
+						</label>
+					</ListItem>
+					<ListItem className="p-0">
+						<label
+							htmlFor="3"
+							className="px-3 py-2 flex items-start  w-full cursor-pointer"
+						>
+							<ListItemPrefix className="mr-3">
+								<Radio
+									name="vertical-list"
+									id="3"
+									ripple={false}
+									className="hover:before:opacity-0 mt-1"
 									containerProps={{
 										className: 'p-0'
 									}}
@@ -113,15 +120,15 @@ export const InfoUserModal = ({ isOpen, close }: TypeInfoUserModal) => {
 					</ListItem>
 					<ListItem className="p-0">
 						<label
-							htmlFor="vertical-list-next"
-							className=" py-2 flex items-start w-full cursor-pointer"
+							htmlFor="4"
+							className="px-3 py-2 flex items-start mt-1 w-full cursor-pointer"
 						>
 							<ListItemPrefix className="mr-3">
 								<Radio
 									name="vertical-list"
-									id="vertical-list-next"
+									id="4"
 									ripple={false}
-									className="hover:before:opacity-0 w-4 h-4 mt-1"
+									className="hover:before:opacity-0 mt-1"
 									containerProps={{
 										className: 'p-0'
 									}}
@@ -151,7 +158,7 @@ export const InfoUserModal = ({ isOpen, close }: TypeInfoUserModal) => {
 						Пропустить
 					</Button>
 					<Button
-						onClick={handleOk}
+						onClick={() => {}}
 						type="primary"
 						className="w-[200px] h-[50px] rounded-full"
 					>
@@ -159,8 +166,6 @@ export const InfoUserModal = ({ isOpen, close }: TypeInfoUserModal) => {
 					</Button>
 				</div>
 			</div>
-        </DialogBody>
-      </Dialog>
-
+		</div>
 	)
 }

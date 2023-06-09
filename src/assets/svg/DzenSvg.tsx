@@ -5,7 +5,6 @@ export const DzenSvg = () => {
 		<svg
 			width="60"
 			height="60"
-			className="h-[4.5vh] w-auto"
 			viewBox="0 0 60 60"
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"

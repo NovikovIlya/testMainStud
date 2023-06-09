@@ -5,7 +5,11 @@ import {
 	Radio,
 	Typography
 } from '@material-tailwind/react'
-import { Button, Modal } from 'antd'
+import {
+  Dialog,
+  DialogBody,
+} from "@material-tailwind/react";
+import { Button } from 'antd'
 
 type TypeInfoUserModal = {
 	isOpen: boolean
@@ -21,35 +25,27 @@ export const InfoUserModal = ({ isOpen, close }: TypeInfoUserModal) => {
 		close(false)
 	}
 
-	const footer = <></>
 	return (
-		<Modal
-			open={isOpen}
-			onCancel={handleCancel}
-			width={800}
-			centered
-			className="rounded-[20px]"
-			footer={footer}
-		>
-			<div className="p-14">
-				<h2 className="text-center font-bold">Здравствуйте!</h2>
-				<div className="flex justify-center gap-[5px] mt-5">
-					<div className="w-[8px] h-[8px] rounded-full bg-[#3073D7]" />
-					<div className="w-[8px] h-[8px] rounded-full bg-[#3073D7]" />
-					<div className="w-[8px] h-[8px] rounded-full bg-[#3073D7]" />
-					<div className="w-[8px] h-[8px] rounded-full bg-[#3073D7]" />
-					<div className="w-[8px] h-[8px] rounded-full bg-[#3073D7]" />
-				</div>
+		<Dialog
+		open={isOpen}
+        size='xxl'
+        handler={close}
+		className='min-h-screen h-full'
+      >
+        <DialogBody divider className='w-full flex justify-center h-full'>
+		<div className="container max-w-2xl flex flex-col items-center justify-center h-screen p-5">
+				<h2 className="text-center font-bold">Добро пожаловать!</h2>
+				
 				<p className="mt-5 text-center font-bold px-7">
 					Для того, чтобы мы настроили личный кабинет персонально для Вас,
 					выберите с какой целью Вы регистрировались на сайте:
 				</p>
 
-				<List className="mt-5">
+				<List className="mt-5 max-w-2xl">
 					<ListItem className="p-0 ">
 						<label
 							htmlFor="vertical-list-react"
-							className="px-3 py-2 flex items-start w-full cursor-pointer"
+							className=" py-2 flex items-start w-full cursor-pointer"
 						>
 							<ListItemPrefix className="mr-3">
 								<Radio
@@ -72,7 +68,7 @@ export const InfoUserModal = ({ isOpen, close }: TypeInfoUserModal) => {
 					<ListItem className="p-0">
 						<label
 							htmlFor="vertical-list-vue"
-							className="px-3 py-2 flex items-start w-full cursor-pointer"
+							className=" py-2 flex items-start w-full cursor-pointer"
 						>
 							<ListItemPrefix className="mr-3">
 								<Radio
@@ -95,7 +91,7 @@ export const InfoUserModal = ({ isOpen, close }: TypeInfoUserModal) => {
 					<ListItem className="p-0">
 						<label
 							htmlFor="vertical-list-svelte"
-							className="px-3 py-2 flex items-start w-full cursor-pointer"
+							className=" py-2 flex items-start w-full cursor-pointer"
 						>
 							<ListItemPrefix className="mr-3">
 								<Radio
@@ -118,7 +114,7 @@ export const InfoUserModal = ({ isOpen, close }: TypeInfoUserModal) => {
 					<ListItem className="p-0">
 						<label
 							htmlFor="vertical-list-next"
-							className="px-3 py-2 flex items-start w-full cursor-pointer"
+							className=" py-2 flex items-start w-full cursor-pointer"
 						>
 							<ListItemPrefix className="mr-3">
 								<Radio
@@ -139,7 +135,7 @@ export const InfoUserModal = ({ isOpen, close }: TypeInfoUserModal) => {
 					</ListItem>
 				</List>
 
-				<div className="border border-[#BDBDBD] border-solid rounded py-6 px- mt-10">
+				<div className="border border-[#BDBDBD] border-solid rounded py-6 px-12 px- mt-10">
 					<p className="text-center">
 						Сейчас Вы выбираете Вашу основную роль, позднее в разделе “Обо мне”
 						Вы сможете подключить другие роли, заполнив дополнительную
@@ -163,6 +159,8 @@ export const InfoUserModal = ({ isOpen, close }: TypeInfoUserModal) => {
 					</Button>
 				</div>
 			</div>
-		</Modal>
+        </DialogBody>
+      </Dialog>
+
 	)
 }

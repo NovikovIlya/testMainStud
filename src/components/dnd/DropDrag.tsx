@@ -63,7 +63,7 @@ const DropDrag: FunctionComponent<IDropDragProps> = ({
 							className="absolute top-2 cursor-pointer right-2"
 							onClick={() => onRemoveItem(item.i)}
 						>
-							<DeleteOutlined className="text-[1.5vh] max-[2000px]:text-[2vh] mt-[1vh] mr-[1vh] opacity-50" />
+							<DeleteOutlined className=" mt-2 mr-2 opacity-50" />
 						</div>
 					)}
 					{jsxElements.filter(el => el.index === item.i)[0].element}

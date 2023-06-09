@@ -11,11 +11,11 @@ import {
 
 export const Footer = () => {
 	return (
-		<footer className="w-full min-h-[30vh] bg-[#212121] text-white text-[1.5vh]">
-			<div className="flex justify-around pt-[4vh] max-md:px-[8vh] max-sm:flex-col max-sm:gap-[2vh]">
-				<div>
+		<footer className="w-full min-h-[400px] bg-[#212121] text-white text-base">
+			<div className="flex justify-around my-[100px] ">
+				<div className='flex flex-col justify-center'>
 					<LogoSvg />
-					<div className="my-[2vh] flex flex-col">
+					<div className=" flex flex-col mt-10 mb-5">
 						<span>
 							<strong>Адрес:</strong> 420008 г. Казань, ул. Кремлевская, 18
 						</span>
@@ -31,7 +31,7 @@ export const Footer = () => {
 					<span>
 						<strong>Соцсети:</strong>
 					</span>
-					<div className="flex gap-[1vh] my-[1.5vh]">
+					<div className="flex gap-5 my-5">
 						<VkSvg />
 						<YoutubeSvg />
 						<DzenSvg />

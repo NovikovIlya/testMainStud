@@ -1,7 +1,6 @@
-import axios from 'axios';
+import axios from 'axios'
 
-
-export const API_URL = `http://localhost:8080/api`
+export const API_URL = `http://192.168.63.96:8080/api`
 //`http://192.168.63.96:8080/api`
 //'http://localhost:8080/api'
 export const axiosInstance = axios.create({

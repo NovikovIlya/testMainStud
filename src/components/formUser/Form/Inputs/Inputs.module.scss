@@ -1,0 +1,9 @@
+.main {
+	@apply flex h-full w-full flex-col justify-between;
+	.textStyles {
+		@apply flex h-auto w-full font-bold;
+	}
+	.inputBlock {
+		@apply m-0 flex h-auto w-full shadow-sm shadow-gray-400;
+	}
+}

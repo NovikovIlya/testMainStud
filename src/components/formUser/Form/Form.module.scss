@@ -1,0 +1,24 @@
+.main {
+	@apply flex h-screen w-full justify-center;
+	.wrapper {
+		@apply flex h-screen w-[550px] flex-col;
+		.topBlock {
+			@apply flex h-1/6 w-full flex-col justify-between font-bold;
+			.textStyles {
+				@apply flex h-auto w-full text-center;
+			}
+		}
+		.InputsBlock {
+			@apply flex h-5/6 w-full flex-col justify-between;
+		}
+		.BottomBlock {
+			@apply flex h-auto w-full justify-center;
+			.circle {
+				@apply mr-2 flex h-3 w-3 rounded-full border-2 border-solid border-bluekfu;
+			}
+			.active {
+				@apply bg-bluekfu;
+			}
+		}
+	}
+}

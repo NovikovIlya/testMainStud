@@ -1,0 +1,18 @@
+.main {
+	@apply my-5 flex h-auto w-full flex-col;
+	.textStyles {
+		@apply mx-auto mb-5 w-3/4 rounded-md border-[1px] border-solid border-gray-400 p-3 text-center font-bold text-gray-400;
+	}
+	.buttonBlock {
+		@apply flex h-auto w-full justify-around;
+		.generalButton {
+			@apply flex h-8 w-40 items-center justify-center rounded-3xl p-5 font-bold;
+		}
+		.leftButton {
+			@apply border-[1px] border-solid border-bluekfu bg-white text-bluekfu hover:bg-bluekfu hover:text-white;
+		}
+		.rightButton {
+			@apply bg-bluekfu text-white hover:border-[1px] hover:border-solid hover:border-bluekfu hover:bg-white hover:text-bluekfu;
+		}
+	}
+}

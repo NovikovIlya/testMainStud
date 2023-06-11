@@ -1,11 +1,10 @@
-import { ConfigProvider } from 'antd';
-import { useEffect, useState } from 'react';
-import { Route, Routes } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
-
-
+import { ConfigProvider } from 'antd'
+import { useEffect, useState } from 'react'
+import { Route, Routes } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import { ApproveEmail } from './components/approve/ApproveEmail'
+import { FormModal } from './components/formUser/Form/Form'
 import { InfoUser } from './components/formUser/InfoUser'
 import { Login } from './components/login/Login'
 import { Profile } from './components/profile/profile'
@@ -44,7 +43,7 @@ const App = () => {
 				navigate('/')
 			}
 		}
-	})
+	}, [])
 
 	return (
 		<>
@@ -75,6 +74,7 @@ const App = () => {
 							element={<ApproveEmail changeIsLogin={changeIsLogin} />}
 						/>
 						<Route path="/infoUser" element={<InfoUser />} />
+						<Route path="/Form" element={<FormModal />} />
 					</Routes>
 				</div>
 			</ConfigProvider>

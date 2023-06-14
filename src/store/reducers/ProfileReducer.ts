@@ -1,7 +1,10 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-import { IError, IProfileState, IUserData } from '../../api/types'
-import { RootState } from '../index'
+
+
+import { IError, IProfileState, IUserData } from '../../api/types';
+import { RootState } from '../index';
+
 
 const initialState: IProfileState = {
 	profileData: {

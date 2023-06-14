@@ -1,15 +1,12 @@
-import {
-	List,
-	ListItem,
-	ListItemPrefix,
-	Radio,
-	Typography
-} from '@material-tailwind/react'
-import { Button } from 'antd'
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { List, ListItem, ListItemPrefix, Radio, Typography } from '@material-tailwind/react';
+import { Button } from 'antd';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import { Layout } from './Layout'
+
+
+import { Layout } from './Layout';
+
 
 export const InfoUser = () => {
 	const navigate = useNavigate()
@@ -18,7 +15,7 @@ export const InfoUser = () => {
 		navigate('/user')
 	}
 	const handleOk = () => {
-		console.log(role)
+		navigate('/form')
 	}
 	const handleChangeRole = (e: React.FormEvent<HTMLDivElement>) => {
 		//@ts-ignore

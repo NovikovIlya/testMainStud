@@ -5,10 +5,10 @@ import { useNavigate } from 'react-router-dom';
 
 
 
-import { ApproveEmail } from './components/approve/ApproveEmail'
+import { ApproveEmail } from './components/approve/ApproveEmail';
+import { Form } from './components/formUser/Form'
 import { InfoUser } from './components/formUser/InfoUser'
 import { Login } from './components/login/Login'
-import { Profile } from './components/profile/profile'
 import { Registration } from './components/registration/Registration'
 import { User } from './components/user/User'
 import { useAppDispatch } from './store'
@@ -44,7 +44,7 @@ const App = () => {
 				navigate('/')
 			}
 		}
-	})
+	}, [])
 
 	return (
 		<>
@@ -66,7 +66,7 @@ const App = () => {
 						<Route
 							path="/profile/*"
 							element={
-								isLogin ? <Login changeIsLogin={changeIsLogin} /> : <Profile />
+								isLogin ? <Login changeIsLogin={changeIsLogin} /> : <InfoUser />
 							}
 						/>
 						<Route path="/user/*" element={<User />} />
@@ -75,6 +75,7 @@ const App = () => {
 							element={<ApproveEmail changeIsLogin={changeIsLogin} />}
 						/>
 						<Route path="/infoUser" element={<InfoUser />} />
+						<Route path="/form" element={<Form />} />
 					</Routes>
 				</div>
 			</ConfigProvider>

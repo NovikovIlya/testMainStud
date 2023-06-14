@@ -86,7 +86,7 @@ const DropDrag: FunctionComponent<IDropDragProps> = ({
 				onLayoutChange={onLayoutChange}
 				onBreakpointChange={onBreakpointChange}
 				isDraggable={edit}
-				isResizable={false}
+				isResizable={true}
 			>
 				{generateDOM}
 			</ResponsiveReactGridLayout>

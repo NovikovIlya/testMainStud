@@ -1,5 +1,6 @@
 import { Button, Form } from 'antd';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
+
 
 export const Buttons = () => {
 	const navigate = useNavigate()
@@ -8,7 +9,7 @@ export const Buttons = () => {
 		navigate('/user')
 	}
 	const handleOk = () => {
-		navigate('/form')
+		navigate('/education')
 	}
 	return (
 		<div>

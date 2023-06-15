@@ -1,15 +1,14 @@
-import { Button, Form } from 'antd';
-import { useNavigate } from 'react-router-dom';
-
+import { Button, Form } from 'antd'
+import { useNavigate } from 'react-router-dom'
 
 export const Buttons = () => {
 	const navigate = useNavigate()
 
 	const handleCancel = () => {
-		navigate('/user')
+		navigate('/form')
 	}
 	const handleOk = () => {
-		navigate('/education')
+		navigate('/documents')
 	}
 	return (
 		<div>

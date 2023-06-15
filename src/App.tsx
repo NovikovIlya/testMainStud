@@ -1,11 +1,10 @@
-import { ConfigProvider } from 'antd';
-import { useEffect, useState } from 'react';
-import { Route, Routes } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
-
-
+import { ConfigProvider } from 'antd'
+import { useEffect, useState } from 'react'
+import { Route, Routes } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import { ApproveEmail } from './components/approve/ApproveEmail'
+import { DocumentForm } from './components/formUser/DocumentForm/DocumentForm'
 import { EducationForm } from './components/formUser/EducationForm/EducationForm'
 import { FormModal } from './components/formUser/Form/UserForm'
 import { InfoUser } from './components/formUser/InfoUser'
@@ -78,6 +77,7 @@ const App = () => {
 						<Route path="/infoUser" element={<InfoUser />} />
 						<Route path="/form" element={<FormModal />} />
 						<Route path="/education" element={<EducationForm />} />
+						<Route path="/documents" element={<DocumentForm />} />
 					</Routes>
 				</div>
 			</ConfigProvider>

@@ -12,6 +12,7 @@ export const Inputs = () => {
 		<div>
 			<span className="text-sm">Фамилия</span>
 			<Input
+				id="surName"
 				size="large"
 				type="text"
 				placeholder="Фамилия"

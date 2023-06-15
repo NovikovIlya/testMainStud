@@ -56,6 +56,36 @@ export interface IProfileState {
 	}
 }
 
+export interface IFormState {
+	role: string
+	infoForm: {
+		name: string
+		surName: string
+		patronymic: string | null
+		birthDay: string
+		gender: string
+		phoneNumber: string
+		country: string
+	}
+	education: {
+		country: string
+		nameOfInstitute: string
+		educationLevel: string
+		passwordSeries: string | null
+		passwordNumber: string | null
+	}
+	documents: {
+		mainDocument: string
+		passwordSeries: string | null
+		passwordNumber: string | null
+		issuedBy: string | null
+		dateIssue: string | null
+		divisionCode: string | null
+		inn: string
+		snils: string
+	}
+}
+
 export interface IRefreshRequest {
 	refreshToken: string
 }

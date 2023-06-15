@@ -3,12 +3,14 @@ import { useDispatch } from 'react-redux'
 import logger from 'redux-logger'
 
 import AuthRegReducer from './reducers/AuthRegReducer'
+import FormReducer from './reducers/FormReducer'
 import ProfileReducer from './reducers/ProfileReducer'
 
 export const store = configureStore({
 	reducer: {
 		AuthReg: AuthRegReducer,
-		Profile: ProfileReducer
+		Profile: ProfileReducer,
+		Form: FormReducer
 	},
 	middleware: getDefaultMiddleware =>
 		getDefaultMiddleware().concat(

@@ -10,13 +10,15 @@ import { Switcher } from './Radio/Switcher'
 
 export const FormModal = () => {
 	const [form, changeForm] = useState<IinfoForm>({
-		name: '',
-		surName: '',
-		patronymic: null,
-		birthDay: '',
-		gender: '',
-		phoneNumber: '',
-		country: ''
+		infoForm: {
+			name: '',
+			surName: '',
+			patronymic: null,
+			birthDay: '',
+			gender: '',
+			phoneNumber: '',
+			country: ''
+		}
 	})
 	return (
 		<ImagesLayout>

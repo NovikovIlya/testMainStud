@@ -18,10 +18,11 @@ export const Inputs: FC<IformCompProps> = ({ changeForm, formData }) => {
 				placeholder="Фамилия"
 				className="mt-2 mb-4"
 				onChange={e => {
-					console.log(formData)
 					changeForm({
-						...formData,
-						surName: e.target.value
+						infoForm: {
+							...formData.infoForm,
+							surName: e.target.value
+						}
 					})
 				}}
 			/>
@@ -34,8 +35,10 @@ export const Inputs: FC<IformCompProps> = ({ changeForm, formData }) => {
 				className="mt-2 mb-4"
 				onChange={e => {
 					changeForm({
-						...formData,
-						name: e.target.value
+						infoForm: {
+							...formData.infoForm,
+							name: e.target.value
+						}
 					})
 				}}
 			/>
@@ -48,8 +51,10 @@ export const Inputs: FC<IformCompProps> = ({ changeForm, formData }) => {
 				className="mt-2 mb-4"
 				onChange={e => {
 					changeForm({
-						...formData,
-						patronymic: e.target.value
+						infoForm: {
+							...formData.infoForm,
+							patronymic: e.target.value
+						}
 					})
 				}}
 			/>
@@ -63,21 +68,24 @@ export const Inputs: FC<IformCompProps> = ({ changeForm, formData }) => {
 				onChange={e => {
 					if (e != null) {
 						changeForm({
-							...formData,
-							birthDay: e.format('DD.MM.YYYY')
+							infoForm: {
+								...formData.infoForm,
+								birthDay: e.format('DD.MM.YYYY')
+							}
 						})
 					}
 				}}
 			/>
 			<span className="text-sm">Страна гражданина</span>
 			<Select
-				defaultValue="Бангладеш"
 				className="block mt-2 mb-4"
 				size="large"
 				onChange={e => {
 					changeForm({
-						...formData,
-						country: e
+						infoForm: {
+							...formData.infoForm,
+							country: e
+						}
 					})
 				}}
 				options={[
@@ -97,8 +105,10 @@ export const Inputs: FC<IformCompProps> = ({ changeForm, formData }) => {
 				className="mt-2 mb-4"
 				onChange={e => {
 					changeForm({
-						...formData,
-						phoneNumber: e.target.value
+						infoForm: {
+							...formData.infoForm,
+							phoneNumber: e.target.value
+						}
 					})
 				}}
 			/>

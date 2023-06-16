@@ -12,14 +12,16 @@ import { ImagesLayout } from '../ImagesLayout'
 export const DocumentForm = () => {
 	const dispatch = useDispatch()
 	const [form, changeForm] = useState<IdocumentsForm>({
-		mainDocument: '',
-		passwordSeries: null,
-		passwordNumber: null,
-		issuedBy: null,
-		dateIssue: null,
-		divisionCode: null,
-		inn: '',
-		snils: ''
+		documents: {
+			mainDocument: '',
+			passwordSeries: null,
+			passwordNumber: null,
+			issuedBy: null,
+			dateIssue: null,
+			divisionCode: null,
+			inn: '',
+			snils: ''
+		}
 	})
 	const navigate = useNavigate()
 
@@ -38,10 +40,13 @@ export const DocumentForm = () => {
 						<h2>Документы</h2>
 						<h4 className="mt-7">Тип документа</h4>
 						<Select
-							defaultValue="паспорт"
 							className="mt-4 shadow-md shadow-gray-400 rounded-lg"
 							size="large"
-							onChange={e => changeForm({ ...form, mainDocument: e })}
+							onChange={e =>
+								changeForm({
+									documents: { ...form.documents, mainDocument: e }
+								})
+							}
 							options={[
 								{ value: 'паспорт' },
 								{ value: 'свидетельство о рождении' },
@@ -60,7 +65,12 @@ export const DocumentForm = () => {
 									className="mt-4 shadow-md shadow-gray-400"
 									maxLength={7}
 									onChange={e =>
-										changeForm({ ...form, divisionCode: e.target.value })
+										changeForm({
+											documents: {
+												...form.documents,
+												divisionCode: e.target.value
+											}
+										})
 									}
 								/>
 							</div>
@@ -70,7 +80,12 @@ export const DocumentForm = () => {
 									className="mt-4 shadow-md shadow-gray-400 w-full"
 									onChange={e => {
 										if (e != null) {
-											changeForm({ ...form, dateIssue: e.format('DD.MM.YYYY') })
+											changeForm({
+												documents: {
+													...form.documents,
+													dateIssue: e.format('DD.MM.YYYY')
+												}
+											})
 										}
 									}}
 									locale={locale}
@@ -87,7 +102,12 @@ export const DocumentForm = () => {
 									className="mt-2 shadow-md shadow-gray-400"
 									maxLength={4}
 									onChange={e =>
-										changeForm({ ...form, passwordSeries: e.target.value })
+										changeForm({
+											documents: {
+												...form.documents,
+												passwordSeries: e.target.value
+											}
+										})
 									}
 								/>
 							</div>
@@ -99,7 +119,12 @@ export const DocumentForm = () => {
 									className="mt-2 shadow-md shadow-gray-400"
 									maxLength={4}
 									onChange={e =>
-										changeForm({ ...form, passwordNumber: e.target.value })
+										changeForm({
+											documents: {
+												...form.documents,
+												passwordNumber: e.target.value
+											}
+										})
 									}
 								/>
 							</div>
@@ -111,7 +136,9 @@ export const DocumentForm = () => {
 								size="large"
 								className="mt-2 shadow-md shadow-gray-400"
 								onChange={e =>
-									changeForm({ ...form, issuedBy: e.target.value })
+									changeForm({
+										documents: { ...form.documents, issuedBy: e.target.value }
+									})
 								}
 							/>
 						</div>
@@ -125,7 +152,11 @@ export const DocumentForm = () => {
 								placeholder="0000"
 								className="shadow-md shadow-gray-400"
 								maxLength={4}
-								onChange={e => changeForm({ ...form, snils: e.target.value })}
+								onChange={e =>
+									changeForm({
+										documents: { ...form.documents, snils: e.target.value }
+									})
+								}
 							/>
 							<p className="mt-4">ИНН</p>
 							<Input
@@ -133,7 +164,11 @@ export const DocumentForm = () => {
 								placeholder="0000"
 								maxLength={4}
 								className="shadow-md shadow-gray-400"
-								onChange={e => changeForm({ ...form, inn: e.target.value })}
+								onChange={e =>
+									changeForm({
+										documents: { ...form.documents, inn: e.target.value }
+									})
+								}
 							/>
 						</div>
 					</div>

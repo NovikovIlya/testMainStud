@@ -67,13 +67,6 @@ export interface IFormState {
 		phoneNumber: string
 		country: string
 	}
-	education: {
-		country: string
-		nameOfInstitute: string
-		educationLevel: string
-		passwordSeries: string | null
-		passwordNumber: string | null
-	}
 	documents: {
 		mainDocument: string
 		passwordSeries: string | null
@@ -84,34 +77,23 @@ export interface IFormState {
 		inn: string
 		snils: string
 	}
+	education: {
+		nameOfInstitute: string
+		educationLevel: string
+		documentNumber: string
+		documentSeries: string
+		educationCountry: string
+	}
 }
 
-export interface IinfoForm {
-	name: string
-	surName: string
-	patronymic: string | null
-	birthDay: string | null
-	gender: string
-	phoneNumber: string
-	country: string
-}
-export interface IdocumentsForm {
-	mainDocument: string
-	passwordSeries: string | null
-	passwordNumber: string | null
-	issuedBy: string | null
-	dateIssue: string | null
-	divisionCode: string | null
-	inn: string
-	snils: string
-}
-export interface IeducationForm {
-	country: string
-	nameOfInstitute: string
-	educationLevel: string
-	passwordSeries: string | null
-	passwordNumber: string | null
-}
+export interface IinfoForm
+	extends Omit<IFormState, 'role' | 'documents' | 'education'> {}
+
+export interface IdocumentsForm
+	extends Omit<IFormState, 'role' | 'infoForm' | 'education'> {}
+
+export interface IeducationForm
+	extends Omit<IFormState, 'role' | 'infoForm' | 'documents'> {}
 
 export interface IformCompProps {
 	changeForm: (obj: IinfoForm) => void

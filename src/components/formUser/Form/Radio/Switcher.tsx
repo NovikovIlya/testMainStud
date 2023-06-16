@@ -6,8 +6,10 @@ import { IformCompProps } from '../../../../api/types'
 export const Switcher: FC<IformCompProps> = ({ changeForm, formData }) => {
 	const saveGender = (gender: string) => {
 		changeForm({
-			...formData,
-			gender: gender
+			infoForm: {
+				...formData.infoForm,
+				gender: gender
+			}
 		})
 	}
 	return (

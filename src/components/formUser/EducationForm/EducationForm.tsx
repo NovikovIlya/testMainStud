@@ -9,11 +9,13 @@ import { ImagesLayout } from '../ImagesLayout'
 
 export const EducationForm = () => {
 	const [form, changeForm] = useState<IeducationForm>({
-		country: '',
-		nameOfInstitute: '',
-		educationLevel: '',
-		passwordSeries: null,
-		passwordNumber: null
+		education: {
+			nameOfInstitute: '',
+			educationLevel: '',
+			documentNumber: '',
+			documentSeries: '',
+			educationCountry: ''
+		}
 	})
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
@@ -25,7 +27,6 @@ export const EducationForm = () => {
 		dispatch(educationSuccess(form))
 		navigate('/infoUser')
 	}
-	console.log(form)
 	return (
 		<ImagesLayout>
 			<div className="w-full flex justify-center min-h-screen">
@@ -40,17 +41,25 @@ export const EducationForm = () => {
 								size="large"
 								className="mt-2"
 								onChange={e =>
-									changeForm({ ...form, educationLevel: e.target.value })
+									changeForm({
+										education: {
+											...form.education,
+											educationLevel: e.target.value
+										}
+									})
 								}
 							/>
 						</div>
 						<div>
 							<p>Страна получения образования</p>
 							<Select
-								defaultValue="Бангладеш"
 								className="block mt-2"
 								size="large"
-								onChange={e => changeForm({ ...form, country: e })}
+								onChange={e =>
+									changeForm({
+										education: { ...form.education, educationCountry: e }
+									})
+								}
 								options={[
 									{ value: 'Бангладеш' },
 									{ value: 'Ботсвана' },
@@ -66,7 +75,12 @@ export const EducationForm = () => {
 						size="large"
 						className="mt-2"
 						onChange={e =>
-							changeForm({ ...form, nameOfInstitute: e.target.value })
+							changeForm({
+								education: {
+									...form.education,
+									nameOfInstitute: e.target.value
+								}
+							})
 						}
 					/>
 					<div className="grid grid-cols-2 mt-4 gap-10 w-full max-sm:gap-5">
@@ -77,7 +91,12 @@ export const EducationForm = () => {
 								size="large"
 								className="mt-2"
 								onChange={e =>
-									changeForm({ ...form, passwordSeries: e.target.value })
+									changeForm({
+										education: {
+											...form.education,
+											documentSeries: e.target.value
+										}
+									})
 								}
 								maxLength={4}
 							/>
@@ -89,7 +108,12 @@ export const EducationForm = () => {
 								size="large"
 								className="mt-2"
 								onChange={e =>
-									changeForm({ ...form, passwordNumber: e.target.value })
+									changeForm({
+										education: {
+											...form.education,
+											documentNumber: e.target.value
+										}
+									})
 								}
 								maxLength={4}
 							/>

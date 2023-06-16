@@ -20,11 +20,11 @@ const initialState: IFormState = {
 		country: ''
 	},
 	education: {
-		country: '',
 		nameOfInstitute: '',
 		educationLevel: '',
-		passwordSeries: null,
-		passwordNumber: null
+		documentNumber: '',
+		documentSeries: '',
+		educationCountry: ''
 	},
 	documents: {
 		mainDocument: '',
@@ -50,21 +50,21 @@ export const FormReducer = createSlice({
 		},
 		formSuccess: (state, action: PayloadAction<IinfoForm>): IFormState => ({
 			...state,
-			infoForm: action.payload
+			infoForm: action.payload.infoForm
 		}),
 		documentsSuccess: (
 			state,
 			action: PayloadAction<IdocumentsForm>
 		): IFormState => ({
 			...state,
-			documents: action.payload
+			documents: action.payload.documents
 		}),
 		educationSuccess: (
 			state,
 			action: PayloadAction<IeducationForm>
 		): IFormState => ({
 			...state,
-			education: action.payload
+			education: action.payload.education
 		})
 	}
 })

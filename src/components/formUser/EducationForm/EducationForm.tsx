@@ -19,105 +19,135 @@ export const EducationForm = () => {
 	})
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
-
+	const [array, setArray] = useState(['0'])
 	const handleCancel = () => {
-		navigate('/user')
+		navigate('/documents')
 	}
 	const handleOk = () => {
 		dispatch(educationSuccess(form))
 		navigate('/infoUser')
+	}
+	const handleSkip = () => {
+		navigate('/user')
+
+	}
+	const addEducation = () => {
+		setArray(previous => [...previous, '0'])
+	}
+	const HandleEducation = () => {
+		return (
+			<div>
+				<p className="self-start mt-7">Данные документа об образовании</p>
+				<div className="grid grid-cols-2 gap-10 mt-5 w-full max-sm:grid-cols-1 max-sm:gap-4">
+					<div>
+						<p>Уровень образования</p>
+						<Input
+							placeholder="Высшее образование"
+							size="large"
+							className="mt-2"
+							onChange={e =>
+								changeForm({
+									education: {
+										...form.education,
+										educationLevel: e.target.value
+									}
+								})
+							}
+						/>
+					</div>
+					<div>
+						<p>Страна получения образования</p>
+						<Select
+							className="block mt-2"
+							size="large"
+							onChange={e =>
+								changeForm({
+									education: { ...form.education, educationCountry: e }
+								})
+							}
+							options={[
+								{ value: 'Бангладеш' },
+								{ value: 'Ботсвана' },
+								{ value: 'Белиз' },
+								{ value: 'Бруней' }
+							]}
+						/>
+					</div>
+				</div>
+				<p className="mt-4 self-start">Наименование учебного заведения</p>
+				<Input
+					placeholder="Казанский федеральный университет"
+					size="large"
+					className="mt-2"
+					onChange={e =>
+						changeForm({
+							education: {
+								...form.education,
+								nameOfInstitute: e.target.value
+							}
+						})
+					}
+				/>
+				<div className="grid grid-cols-2 mt-4 gap-10 w-full max-sm:gap-5">
+					<div>
+						<p>Серия</p>
+						<Input
+							placeholder="0000"
+							size="large"
+							className="mt-2"
+							onChange={e =>
+								changeForm({
+									education: {
+										...form.education,
+										documentSeries: e.target.value
+									}
+								})
+							}
+							maxLength={4}
+						/>
+					</div>
+					<div>
+						<p>Номер</p>
+						<Input
+							placeholder="0000"
+							size="large"
+							className="mt-2"
+							onChange={e =>
+								changeForm({
+									education: {
+										...form.education,
+										documentNumber: e.target.value
+									}
+								})
+							}
+							maxLength={4}
+						/>
+					</div>
+				</div>
+			</div>
+		)
 	}
 	return (
 		<ImagesLayout>
 			<div className="w-full flex justify-center min-h-screen">
 				<div className="container max-w-2xl flex flex-col items-center justify-center  p-5">
 					<h3 className="self-start">Образование</h3>
-					<p className="self-start mt-7">Паспортные данные</p>
-					<div className="grid grid-cols-2 gap-10 mt-5 w-full max-sm:grid-cols-1 max-sm:gap-4">
-						<div>
-							<p>Уровень образования</p>
-							<Input
-								placeholder="Высшее образование"
-								size="large"
-								className="mt-2"
-								onChange={e =>
-									changeForm({
-										education: {
-											...form.education,
-											educationLevel: e.target.value
-										}
-									})
-								}
-							/>
-						</div>
-						<div>
-							<p>Страна получения образования</p>
-							<Select
-								className="block mt-2"
-								size="large"
-								onChange={e =>
-									changeForm({
-										education: { ...form.education, educationCountry: e }
-									})
-								}
-								options={[
-									{ value: 'Бангладеш' },
-									{ value: 'Ботсвана' },
-									{ value: 'Белиз' },
-									{ value: 'Бруней' }
-								]}
-							/>
-						</div>
+					<div className='flex flex-col gap-10'>
+						{array.map(() => (
+							<HandleEducation />
+						))}
 					</div>
-					<p className="mt-4 self-start">Наименование учебного заведения</p>
-					<Input
-						placeholder="Казанский федеральный университет"
-						size="large"
-						className="mt-2"
-						onChange={e =>
-							changeForm({
-								education: {
-									...form.education,
-									nameOfInstitute: e.target.value
-								}
-							})
-						}
-					/>
-					<div className="grid grid-cols-2 mt-4 gap-10 w-full max-sm:gap-5">
-						<div>
-							<p>Серия</p>
-							<Input
-								placeholder="0000"
-								size="large"
-								className="mt-2"
-								onChange={e =>
-									changeForm({
-										education: {
-											...form.education,
-											documentSeries: e.target.value
-										}
-									})
-								}
-								maxLength={4}
-							/>
-						</div>
-						<div>
-							<p>Номер</p>
-							<Input
-								placeholder="0000"
-								size="large"
-								className="mt-2"
-								onChange={e =>
-									changeForm({
-										education: {
-											...form.education,
-											documentNumber: e.target.value
-										}
-									})
-								}
-								maxLength={4}
-							/>
-						</div>
+
+					<div className="mt-10 flex flex-col items-center">
+						<Button
+							className="rounded-full text-center p-0 w-8 h-8 text-xl"
+							type="primary"
+							onClick={addEducation}
+						>
+							+
+						</Button>
+						<p className="opacity-40 text-sm mt-2">добавить</p>
+						<p className="opacity-40 text-sm">образование</p>
 					</div>
 					<div className="w-full flex justify-center items-center gap-8 mt-[60px]">
 						<Button
@@ -135,7 +165,7 @@ export const EducationForm = () => {
 							Далее
 						</Button>
 					</div>
-					<Button type="text" className="rounded-full w-[200px] h-[50px] mt-8">
+					<Button onClick={handleSkip} type="text" className="rounded-full w-[200px] h-[50px] mt-8">
 						Заполнить позже
 					</Button>
 				</div>

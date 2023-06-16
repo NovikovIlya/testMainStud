@@ -35,7 +35,7 @@ export const InfoUser = () => {
 		setRole(e.target.id)
 	}
 	return (
-		<ImagesLayout>
+		<ImagesLayout first>
 			<div className="w-full flex justify-center min-h-screen">
 				<div className="container max-w-2xl flex flex-col items-center justify-center  p-5">
 					<h2 className="text-center font-bold border-solid border-0 border-b-2 border-[#3073D7] pb-2">
@@ -172,9 +172,9 @@ export const InfoUser = () => {
 					</div>
 					<div className="w-full flex justify-center items-center gap-8 mt-[60px]">
 						<Button
-							onClick={handleCancel}
+							disabled
 							type="default"
-							className="w-[200px] h-[50px] rounded-full border-[#3073D7] text-[#3073D7]"
+							className="w-[200px] h-[50px] rounded-full cursor-default border-[#3073D7] text-[#3073D7]"
 						>
 							Назад
 						</Button>

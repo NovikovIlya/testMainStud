@@ -1,17 +1,34 @@
-import { QuestionCircleOutlined } from '@ant-design/icons'
-import { Popover } from 'antd'
-import React, { FC, PropsWithChildren } from 'react'
+import { QuestionCircleOutlined } from '@ant-design/icons';
+import { Popover } from 'antd';
+import React, { FC, PropsWithChildren } from 'react';
 
-import pencil from '../../assets/images/pencil.png'
-import rectangle from '../../assets/images/rectangle.png'
+
+
+import pencil from '../../assets/images/pencil.png';
+import rectangle from '../../assets/images/rectangle.png';
 import { LogoIasSvg } from '../../assets/svg'
 
-export const ImagesLayout: FC<PropsWithChildren<unknown>> = ({ children }) => {
+export const ImagesLayout: FC<PropsWithChildren<{ first?: boolean }>> = ({
+	children,
+	first
+}) => {
 	return (
 		<div className="h-full">
 			<div className="flex items-center justify-between m-10">
 				<LogoIasSvg />
-				<Popover content={content} title="">
+				<Popover
+					content={
+						first ? (
+							<div>
+								<p>Сейчас Вы выбираете Вашу основную роль, позднее</p>
+								<p>в разделе “Обо мне” Вы сможете подключить другие роли,</p>
+								<p> заполнив дополнительную информацию</p>
+							</div>
+						) : (
+							<p>Мы не передаем Ваши данные третьим лицам</p>
+						)
+					}
+				>
 					<QuestionCircleOutlined />
 				</Popover>
 			</div>
@@ -28,9 +45,3 @@ export const ImagesLayout: FC<PropsWithChildren<unknown>> = ({ children }) => {
 		</div>
 	)
 }
-
-const content = (
-	<div>
-		<p>Мы не передаем Ваши данные третьим лицам</p>
-	</div>
-)

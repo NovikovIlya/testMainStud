@@ -26,18 +26,21 @@ export const DocumentForm = () => {
 	const navigate = useNavigate()
 
 	const handleCancel = () => {
-		navigate('/user')
+		navigate('/form')
 	}
 	const handleOk = () => {
 		dispatch(documentsSuccess(form))
 		navigate('/education')
+	}
+	const handleSkip = () => {
+		navigate('/user')
 	}
 	return (
 		<ImagesLayout>
 			<div className="w-full flex justify-center min-h-screen">
 				<div className="container max-w-2xl flex flex-col items-center justify-center p-5">
 					<div className="flex w-full flex-col">
-						<h2>Документы</h2>
+						<h3>Документы</h3>
 						<h4 className="mt-7">Тип документа</h4>
 						<Select
 							className="mt-4 "
@@ -188,7 +191,7 @@ export const DocumentForm = () => {
 							Далее
 						</Button>
 					</div>
-					<Button type="text" className="rounded-full w-[200px] h-[50px] mt-8">
+					<Button onClick={handleSkip} type="text" className="rounded-full w-[200px] h-[50px] mt-8">
 						Заполнить позже
 					</Button>
 				</div>

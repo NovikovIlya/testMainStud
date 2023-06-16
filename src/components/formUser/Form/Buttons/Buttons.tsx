@@ -15,14 +15,17 @@ export const Buttons: FC<IButProps> = ({ formData }) => {
 	const navigate = useNavigate()
 
 	const handleCancel = () => {
-		navigate('/form')
+		navigate('/infoUser')
 	}
 	const handleOk = () => {
 		navigate('/documents')
 		dispatch(formSuccess(formData))
 	}
+	const handleSkip = () => {
+		navigate('/user')
+	}
 	return (
-		<div className='w-full flex flex-col items-center'>
+		<div className="w-full flex flex-col items-center">
 			<div className="w-full flex justify-center items-center gap-8 mt-[60px]">
 				<Button
 					onClick={handleCancel}
@@ -39,7 +42,11 @@ export const Buttons: FC<IButProps> = ({ formData }) => {
 					Далее
 				</Button>
 			</div>
-			<Button type="text" className="rounded-full w-[200px] h-[50px] mt-8">
+			<Button
+				onClick={handleSkip}
+				type="text"
+				className="rounded-full w-[200px] h-[50px] mt-8"
+			>
 				Заполнить позже
 			</Button>
 		</div>

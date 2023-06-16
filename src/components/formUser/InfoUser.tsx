@@ -7,19 +7,29 @@ import {
 } from '@material-tailwind/react'
 import { Button } from 'antd'
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+
+import { infoUserSuccess } from '../../store/reducers/FormReducer'
 
 import { ImagesLayout } from './ImagesLayout'
 import { Layout } from './Layout'
 
 export const InfoUser = () => {
+	const dispatch = useDispatch()
 	const navigate = useNavigate()
-	const [role, setRole] = useState()
+	const [role, setRole] = useState('')
 	const handleCancel = () => {
 		navigate('/user')
 	}
 	const handleOk = () => {
+		saveInStore()
 		navigate('/form')
+	}
+	const saveInStore = () => {
+		if (role !== '') {
+			dispatch(infoUserSuccess(role))
+		}
 	}
 	const handleChangeRole = (e: React.FormEvent<HTMLDivElement>) => {
 		//@ts-ignore

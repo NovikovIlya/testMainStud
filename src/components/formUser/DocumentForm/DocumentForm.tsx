@@ -1,21 +1,33 @@
 import { Button, DatePicker, Input, Select } from 'antd'
 import locale from 'antd/es/date-picker/locale/ru_RU'
-import dayjs from 'dayjs'
 import 'dayjs/locale/ru'
+import { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
+import { IdocumentsForm } from '../../../api/types'
+import { documentsSuccess } from '../../../store/reducers/FormReducer'
 import { ImagesLayout } from '../ImagesLayout'
 
 export const DocumentForm = () => {
+	const dispatch = useDispatch()
+	const [form, changeForm] = useState<IdocumentsForm>({
+		mainDocument: '',
+		passwordSeries: null,
+		passwordNumber: null,
+		issuedBy: null,
+		dateIssue: null,
+		divisionCode: null,
+		inn: '',
+		snils: ''
+	})
 	const navigate = useNavigate()
 
-	const handleChange = (value: string) => {
-		console.log(`selected ${value}`)
-	}
 	const handleCancel = () => {
 		navigate('/user')
 	}
 	const handleOk = () => {
+		dispatch(documentsSuccess(form))
 		navigate('/education')
 	}
 	return (
@@ -26,14 +38,14 @@ export const DocumentForm = () => {
 						<h2>Документы</h2>
 						<h4 className="mt-7">Тип документа</h4>
 						<Select
-							defaultValue="main"
+							defaultValue="паспорт"
 							className="mt-4 shadow-md shadow-gray-400 rounded-lg"
 							size="large"
-							onChange={handleChange}
+							onChange={e => changeForm({ ...form, mainDocument: e })}
 							options={[
-								{ value: 'main', label: 'паспорт' },
-								{ value: 'some1', label: 'свидетельство о рождении' },
-								{ value: 'some2', label: 'загранпаспорт' }
+								{ value: 'паспорт' },
+								{ value: 'свидетельство о рождении' },
+								{ value: 'загранпаспорт' }
 							]}
 						/>
 					</div>
@@ -41,12 +53,42 @@ export const DocumentForm = () => {
 						<h4>Паспортные данные</h4>
 						<div className="grid grid-cols-2 gap-5 mt-5 max-sm:grid-cols-1 max-sm:gap-4">
 							<div>
+								<p>Код подразделения</p>
+								<Input
+									placeholder="000-000"
+									size="large"
+									className="mt-4 shadow-md shadow-gray-400"
+									maxLength={7}
+									onChange={e =>
+										changeForm({ ...form, divisionCode: e.target.value })
+									}
+								/>
+							</div>
+							<div>
+								<p>Когда выдан</p>
+								<DatePicker
+									className="mt-4 shadow-md shadow-gray-400 w-full"
+									onChange={e => {
+										if (e != null) {
+											changeForm({ ...form, dateIssue: e.format('DD.MM.YYYY') })
+										}
+									}}
+									locale={locale}
+									size="large"
+									format={'DD.MM.YYYY'}
+									placeholder="ДД.ММ.ГГГГ"
+								/>
+							</div>
+							<div>
 								<p>Серия</p>
 								<Input
 									placeholder="0000"
 									size="large"
 									className="mt-2 shadow-md shadow-gray-400"
 									maxLength={4}
+									onChange={e =>
+										changeForm({ ...form, passwordSeries: e.target.value })
+									}
 								/>
 							</div>
 							<div>
@@ -56,28 +98,9 @@ export const DocumentForm = () => {
 									size="large"
 									className="mt-2 shadow-md shadow-gray-400"
 									maxLength={4}
-								/>
-							</div>
-							<div>
-								<p>Когда выдан</p>
-								<DatePicker
-									className="mt-4 shadow-md shadow-gray-400 w-full"
-									onChange={(e: dayjs.Dayjs | null) => {
-										console.log(e?.format('DD.MM.YYYY'))
-									}}
-									locale={locale}
-									size="large"
-									format={'DD.MM.YYYY'}
-									placeholder="ДД.ММ.ГГГГ"
-								/>
-							</div>
-							<div>
-								<p>Код подразделения</p>
-								<Input
-									placeholder="000-000"
-									size="large"
-									className="mt-4 shadow-md shadow-gray-400"
-									maxLength={7}
+									onChange={e =>
+										changeForm({ ...form, passwordNumber: e.target.value })
+									}
 								/>
 							</div>
 						</div>
@@ -87,6 +110,9 @@ export const DocumentForm = () => {
 								placeholder="УФМС по Республике Татарстан"
 								size="large"
 								className="mt-2 shadow-md shadow-gray-400"
+								onChange={e =>
+									changeForm({ ...form, issuedBy: e.target.value })
+								}
 							/>
 						</div>
 					</div>
@@ -99,6 +125,7 @@ export const DocumentForm = () => {
 								placeholder="0000"
 								className="shadow-md shadow-gray-400"
 								maxLength={4}
+								onChange={e => changeForm({ ...form, snils: e.target.value })}
 							/>
 							<p className="mt-4">ИНН</p>
 							<Input
@@ -106,6 +133,7 @@ export const DocumentForm = () => {
 								placeholder="0000"
 								maxLength={4}
 								className="shadow-md shadow-gray-400"
+								onChange={e => changeForm({ ...form, inn: e.target.value })}
 							/>
 						</div>
 					</div>

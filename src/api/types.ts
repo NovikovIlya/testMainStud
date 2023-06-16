@@ -62,7 +62,7 @@ export interface IFormState {
 		name: string
 		surName: string
 		patronymic: string | null
-		birthDay: string
+		birthDay: string | null
 		gender: string
 		phoneNumber: string
 		country: string
@@ -84,6 +84,38 @@ export interface IFormState {
 		inn: string
 		snils: string
 	}
+}
+
+export interface IinfoForm {
+	name: string
+	surName: string
+	patronymic: string | null
+	birthDay: string | null
+	gender: string
+	phoneNumber: string
+	country: string
+}
+export interface IdocumentsForm {
+	mainDocument: string
+	passwordSeries: string | null
+	passwordNumber: string | null
+	issuedBy: string | null
+	dateIssue: string | null
+	divisionCode: string | null
+	inn: string
+	snils: string
+}
+export interface IeducationForm {
+	country: string
+	nameOfInstitute: string
+	educationLevel: string
+	passwordSeries: string | null
+	passwordNumber: string | null
+}
+
+export interface IformCompProps {
+	changeForm: (obj: IinfoForm) => void
+	formData: IinfoForm
 }
 
 export interface IRefreshRequest {

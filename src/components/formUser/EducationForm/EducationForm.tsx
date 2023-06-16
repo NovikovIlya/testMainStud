@@ -1,21 +1,31 @@
 import { Button, Input, Select } from 'antd'
-import React from 'react'
+import { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
+import { IeducationForm } from '../../../api/types'
+import { educationSuccess } from '../../../store/reducers/FormReducer'
 import { ImagesLayout } from '../ImagesLayout'
 
 export const EducationForm = () => {
+	const [form, changeForm] = useState<IeducationForm>({
+		country: '',
+		nameOfInstitute: '',
+		educationLevel: '',
+		passwordSeries: null,
+		passwordNumber: null
+	})
+	const dispatch = useDispatch()
 	const navigate = useNavigate()
 
-	const handleChange = (value: string) => {
-		console.log(`selected ${value}`)
-	}
 	const handleCancel = () => {
 		navigate('/user')
 	}
 	const handleOk = () => {
+		dispatch(educationSuccess(form))
 		navigate('/infoUser')
 	}
+	console.log(form)
 	return (
 		<ImagesLayout>
 			<div className="w-full flex justify-center min-h-screen">
@@ -29,20 +39,23 @@ export const EducationForm = () => {
 								placeholder="Высшее образование"
 								size="large"
 								className="mt-2"
+								onChange={e =>
+									changeForm({ ...form, educationLevel: e.target.value })
+								}
 							/>
 						</div>
 						<div>
 							<p>Страна получения образования</p>
 							<Select
-								defaultValue="lucy"
+								defaultValue="Бангладеш"
 								className="block mt-2"
 								size="large"
-								onChange={handleChange}
+								onChange={e => changeForm({ ...form, country: e })}
 								options={[
-									{ value: 'jack', label: 'Бангладеш' },
-									{ value: 'lucy', label: 'Ботсвана' },
-									{ value: 'Yiminghe', label: 'Белиз' },
-									{ value: 'disabled', label: 'Бруней' }
+									{ value: 'Бангладеш' },
+									{ value: 'Ботсвана' },
+									{ value: 'Белиз' },
+									{ value: 'Бруней' }
 								]}
 							/>
 						</div>
@@ -52,15 +65,34 @@ export const EducationForm = () => {
 						placeholder="Казанский федеральный университет"
 						size="large"
 						className="mt-2"
+						onChange={e =>
+							changeForm({ ...form, nameOfInstitute: e.target.value })
+						}
 					/>
 					<div className="grid grid-cols-2 mt-4 gap-10 w-full max-sm:gap-5">
 						<div>
 							<p>Серия</p>
-							<Input placeholder="0000" size="large" className="mt-2" />
+							<Input
+								placeholder="0000"
+								size="large"
+								className="mt-2"
+								onChange={e =>
+									changeForm({ ...form, passwordSeries: e.target.value })
+								}
+								maxLength={4}
+							/>
 						</div>
 						<div>
 							<p>Номер</p>
-							<Input placeholder="0000" size="large" className="mt-2" />
+							<Input
+								placeholder="0000"
+								size="large"
+								className="mt-2"
+								onChange={e =>
+									changeForm({ ...form, passwordNumber: e.target.value })
+								}
+								maxLength={4}
+							/>
 						</div>
 					</div>
 					<div className="w-full flex justify-center items-center gap-[30px] mt-[60px]">

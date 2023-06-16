@@ -1,10 +1,15 @@
-import {
-	ListItemPrefix,
-	Radio,
-	Typography
-} from '@material-tailwind/react'
+import { ListItemPrefix, Radio, Typography } from '@material-tailwind/react'
+import { FC } from 'react'
 
-export const Switcher = () => {
+import { IformCompProps } from '../../../../api/types'
+
+export const Switcher: FC<IformCompProps> = ({ changeForm, formData }) => {
+	const saveGender = (gender: string) => {
+		changeForm({
+			...formData,
+			gender: gender
+		})
+	}
 	return (
 		<div className="flex self-start mb-4">
 			<label htmlFor="0" className="flex items-start  w-full cursor-pointer">
@@ -17,6 +22,7 @@ export const Switcher = () => {
 						containerProps={{
 							className: 'p-0'
 						}}
+						onChange={() => saveGender('Женщина')}
 					/>
 				</ListItemPrefix>
 				<Typography color="blue-gray" className="font-medium text-sm">
@@ -36,6 +42,7 @@ export const Switcher = () => {
 						containerProps={{
 							className: 'p-0'
 						}}
+						onChange={() => saveGender('Мужчина')}
 					/>
 				</ListItemPrefix>
 				<Typography color="blue-gray" className="font-medium text-sm">

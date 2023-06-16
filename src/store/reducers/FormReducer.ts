@@ -1,14 +1,12 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
-import { IFormState } from '../../api/types'
+import {
+	IFormState,
+	IdocumentsForm,
+	IeducationForm,
+	IinfoForm
+} from '../../api/types'
 import { RootState } from '../index'
-
-interface IinfoForm
-	extends Omit<IFormState, 'role' | 'education' | 'documents'> {}
-interface IdocumentsForm
-	extends Omit<IFormState, 'role' | 'infoForm' | 'education'> {}
-interface IeducationForm
-	extends Omit<IFormState, 'role' | 'infoForm' | 'documents'> {}
 
 const initialState: IFormState = {
 	role: '',
@@ -52,21 +50,21 @@ export const FormReducer = createSlice({
 		},
 		formSuccess: (state, action: PayloadAction<IinfoForm>): IFormState => ({
 			...state,
-			infoForm: action.payload.infoForm
+			infoForm: action.payload
 		}),
 		documentsSuccess: (
 			state,
 			action: PayloadAction<IdocumentsForm>
 		): IFormState => ({
 			...state,
-			documents: action.payload.documents
+			documents: action.payload
 		}),
 		educationSuccess: (
 			state,
 			action: PayloadAction<IeducationForm>
 		): IFormState => ({
 			...state,
-			education: action.payload.education
+			education: action.payload
 		})
 	}
 })

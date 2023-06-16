@@ -40,7 +40,7 @@ export const DocumentForm = () => {
 						<h2>Документы</h2>
 						<h4 className="mt-7">Тип документа</h4>
 						<Select
-							className="mt-4 shadow-md shadow-gray-400 rounded-lg"
+							className="mt-4 "
 							size="large"
 							onChange={e =>
 								changeForm({
@@ -62,7 +62,7 @@ export const DocumentForm = () => {
 								<Input
 									placeholder="000-000"
 									size="large"
-									className="mt-4 shadow-md shadow-gray-400"
+									className="mt-4 shadow "
 									maxLength={7}
 									onChange={e =>
 										changeForm({
@@ -77,7 +77,7 @@ export const DocumentForm = () => {
 							<div>
 								<p>Когда выдан</p>
 								<DatePicker
-									className="mt-4 shadow-md shadow-gray-400 w-full"
+									className="mt-4 shadow  w-full"
 									onChange={e => {
 										if (e != null) {
 											changeForm({
@@ -99,7 +99,7 @@ export const DocumentForm = () => {
 								<Input
 									placeholder="0000"
 									size="large"
-									className="mt-2 shadow-md shadow-gray-400"
+									className="mt-2 shadow "
 									maxLength={4}
 									onChange={e =>
 										changeForm({
@@ -116,7 +116,7 @@ export const DocumentForm = () => {
 								<Input
 									placeholder="0000"
 									size="large"
-									className="mt-2 shadow-md shadow-gray-400"
+									className="mt-2 shadow "
 									maxLength={4}
 									onChange={e =>
 										changeForm({
@@ -134,7 +134,7 @@ export const DocumentForm = () => {
 							<Input
 								placeholder="УФМС по Республике Татарстан"
 								size="large"
-								className="mt-2 shadow-md shadow-gray-400"
+								className="mt-2 shadow "
 								onChange={e =>
 									changeForm({
 										documents: { ...form.documents, issuedBy: e.target.value }
@@ -150,7 +150,7 @@ export const DocumentForm = () => {
 							<Input
 								size="large"
 								placeholder="0000"
-								className="shadow-md shadow-gray-400"
+								className="shadow "
 								maxLength={4}
 								onChange={e =>
 									changeForm({
@@ -163,7 +163,7 @@ export const DocumentForm = () => {
 								size="large"
 								placeholder="0000"
 								maxLength={4}
-								className="shadow-md shadow-gray-400"
+								className="shadow "
 								onChange={e =>
 									changeForm({
 										documents: { ...form.documents, inn: e.target.value }
@@ -172,13 +172,13 @@ export const DocumentForm = () => {
 							/>
 						</div>
 					</div>
-					<div className="w-full flex justify-center items-center gap-[30px] mt-[60px]">
+					<div className="w-full flex justify-center items-center gap-8 mt-[60px]">
 						<Button
 							onClick={handleCancel}
 							type="default"
 							className="w-[200px] h-[50px] rounded-full border-[#3073D7] text-[#3073D7]"
 						>
-							Пропустить
+							Назад
 						</Button>
 						<Button
 							onClick={handleOk}
@@ -188,6 +188,9 @@ export const DocumentForm = () => {
 							Далее
 						</Button>
 					</div>
+					<Button type="text" className="rounded-full w-[200px] h-[50px] mt-8">
+						Заполнить позже
+					</Button>
 				</div>
 			</div>
 		</ImagesLayout>

@@ -16,7 +16,7 @@ export const Inputs: FC<IformCompProps> = ({ changeForm, formData }) => {
 				size="large"
 				type="text"
 				placeholder="Фамилия"
-				className="mt-2 mb-4"
+				className="mt-2 mb-4 shadow"
 				onChange={e => {
 					changeForm({
 						infoForm: {
@@ -32,7 +32,7 @@ export const Inputs: FC<IformCompProps> = ({ changeForm, formData }) => {
 				size="large"
 				type="text"
 				placeholder="Имя"
-				className="mt-2 mb-4"
+				className="mt-2 mb-4 shadow"
 				onChange={e => {
 					changeForm({
 						infoForm: {
@@ -48,7 +48,7 @@ export const Inputs: FC<IformCompProps> = ({ changeForm, formData }) => {
 				size="large"
 				type="text"
 				placeholder="Отчество"
-				className="mt-2 mb-4"
+				className="mt-2 mb-4 shadow"
 				onChange={e => {
 					changeForm({
 						infoForm: {
@@ -61,7 +61,7 @@ export const Inputs: FC<IformCompProps> = ({ changeForm, formData }) => {
 
 			<span className="text-sm">Дата рождения</span>
 			<DatePicker
-				className="block mt-2 mb-4"
+				className="block mt-2 mb-4 shadow"
 				locale={locale}
 				size="large"
 				format={'DD.MM.YYYY'}
@@ -78,7 +78,7 @@ export const Inputs: FC<IformCompProps> = ({ changeForm, formData }) => {
 			/>
 			<span className="text-sm">Страна гражданина</span>
 			<Select
-				className="block mt-2 mb-4"
+				className="block mt-2 mb-4 shadow"
 				size="large"
 				onChange={e => {
 					changeForm({
@@ -102,7 +102,7 @@ export const Inputs: FC<IformCompProps> = ({ changeForm, formData }) => {
 				type="text"
 				maxLength={11}
 				placeholder="Телефон"
-				className="mt-2 mb-4"
+				className="mt-2 mb-4 shadow"
 				onChange={e => {
 					changeForm({
 						infoForm: {

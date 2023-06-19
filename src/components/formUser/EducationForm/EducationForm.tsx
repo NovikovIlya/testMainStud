@@ -19,7 +19,7 @@ export const EducationForm = () => {
 	})
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
-	const [array, setArray] = useState(['0'])
+	const [array, setArray] = useState([Date.now()])
 	const handleCancel = () => {
 		navigate('/documents')
 	}
@@ -29,15 +29,29 @@ export const EducationForm = () => {
 	}
 	const handleSkip = () => {
 		navigate('/user')
-
 	}
 	const addEducation = () => {
-		setArray(previous => [...previous, '0'])
+		setArray(previous => [...previous, Date.now()])
 	}
-	const HandleEducation = () => {
+	const handleDeleteEducation = (id: number) => {
+		console.log(id)
+		const newArray = array.filter(item => id !== item)
+		setArray(newArray)
+	}
+	const HandleEducation = (item: { id: number }) => {
 		return (
 			<div>
-				<p className="self-start mt-7">Данные документа об образовании</p>
+				<div className="flex self-start gap-4 mt-7">
+					<p className="">Данные документа об образовании</p>
+					{array.length !== 1 && (
+						<p
+							onClick={() => handleDeleteEducation(item.id)}
+							className="opacity-40 text-sm"
+						>
+							Удалить
+						</p>
+					)}
+				</div>
 				<div className="grid grid-cols-2 gap-10 mt-5 w-full max-sm:grid-cols-1 max-sm:gap-4">
 					<div>
 						<p>Уровень образования</p>
@@ -129,12 +143,12 @@ export const EducationForm = () => {
 	}
 	return (
 		<ImagesLayout>
-			<div className="w-full flex justify-center min-h-screen">
+			<div className="w-full flex justify-center min-h-screen text-sm">
 				<div className="container max-w-2xl flex flex-col items-center justify-center  p-5">
 					<h3 className="self-start">Образование</h3>
-					<div className='flex flex-col gap-10'>
-						{array.map(() => (
-							<HandleEducation />
+					<div className="flex flex-col gap-10 w-full">
+						{array.map(item => (
+							<HandleEducation id={item} />
 						))}
 					</div>
 
@@ -165,7 +179,11 @@ export const EducationForm = () => {
 							Далее
 						</Button>
 					</div>
-					<Button onClick={handleSkip} type="text" className="rounded-full w-[200px] h-[50px] mt-8">
+					<Button
+						onClick={handleSkip}
+						type="text"
+						className="rounded-full w-[200px] h-[50px] mt-8"
+					>
 						Заполнить позже
 					</Button>
 				</div>

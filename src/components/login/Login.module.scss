@@ -1,11 +1,9 @@
 .wrapper {
-	@apply flex flex-col items-center;
-
+	@apply flex flex-col items-center min-h-screen;
 	.main {
-		@apply flex flex-row justify-between gap-24 text-base max-xl:gap-4 max-lg:flex-col max-lg:items-center;
-
+		@apply flex flex-row justify-center  gap-24 text-base max-xl:gap-4 max-lg:flex-col max-lg:items-center h-full w-full;
 		.loginForm {
-			@apply min-w-[400px] opacity-100 max-sm:min-w-[345px] max-[321px]:min-w-[300px] max-[321px]:opacity-100;
+			@apply min-w-[400px] opacity-100 mx-2 max-sm:min-w-[345px] max-[321px]:min-w-[300px] max-[321px]:opacity-100;
 
 			.title {
 				@apply mb-[20px] text-start text-2xl font-bold;

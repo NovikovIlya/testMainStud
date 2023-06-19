@@ -1,17 +1,18 @@
-import { Form, Popover, Typography } from 'antd'
-import { FC, useState } from 'react'
-import { useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { Form, Popover, Typography } from 'antd';
+import { FC, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
-import logo from '../../assets/images/group.png'
-import { useAppDispatch } from '../../store'
-import { RootState } from '../../store'
-import { loginUser } from '../../store/creators/MainCreators'
-import { BackMainPage } from '../back-main-page/BackMainPage'
+
+
+import logo from '../../assets/images/group.png';
+import { useAppDispatch } from '../../store';
+import { RootState } from '../../store';
+import { loginUser } from '../../store/creators/MainCreators';
+import { BackMainPage } from '../back-main-page/BackMainPage';
 import { Faq } from '../faq/Faq'
 
 import styles from './Login.module.scss'
-import './Login.scss'
 import { Buttons } from './buttons/Buttons'
 import { Inputs } from './inputs/Inputs'
 import { Switcher } from './switcher/Switcher'
@@ -69,7 +70,13 @@ export const Login: FC<ILoginProps> = ({ changeIsLogin }) => {
 					<Inputs error={error} value={value} />
 					<Buttons />
 				</Form>
-				<img className="max-lg:hidden max-w-lg" src={logo} alt="group" />
+				<div className="flex items-center">
+					<img
+						className="max-lg:hidden w-[400px] h-[400px]"
+						src={logo}
+						alt="group"
+					/>
+				</div>
 				<Faq />
 			</div>
 		</div>

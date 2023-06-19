@@ -36,7 +36,7 @@ export const InfoUser = () => {
 	}
 	return (
 		<ImagesLayout first>
-			<div className="w-full flex justify-center min-h-screen">
+			<div className="w-full mt-[-80px] flex justify-center items-center min-h-screen">
 				<div className="container max-w-2xl flex flex-col items-center justify-center  p-5">
 					<h2 className="text-center font-bold border-solid border-0 border-b-2 border-[#3073D7] pb-2">
 						Добро пожаловать КФУ!

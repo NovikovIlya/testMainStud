@@ -1,10 +1,8 @@
 .input {
-	@apply rounded-[10px]  min-[2559px]:mb-10 min-[2559px]:w-[1000px] min-[2559px]:max-w-[800px] min-[2559px]:text-4xl;
-	> div {
-		@apply min-[2559px]:text-4xl;
-	}
+	@apply rounded-[10px];
+	
 	input {
-		@apply min-h-[50px] px-5 py-3 shadow min-[2559px]:h-[120px] min-[2559px]:w-[1000px] min-[2559px]:max-w-[800px] min-[2559px]:px-9 min-[2559px]:text-4xl;
+		@apply min-h-[50px] px-5 py-3 shadow;
 	}
 
 	input::placeholder {
@@ -13,15 +11,10 @@
 	.password {
 		@apply p-0 pr-3 shadow;
 		input {
-			@apply min-h-[50px] rounded-[10px]  px-5 py-3 shadow-none min-[2559px]:h-[120px] min-[2559px]:w-[1000px] min-[2559px]:max-w-[800px] min-[2559px]:px-9 min-[2559px]:text-4xl;
-		}
-		span {
-			svg {
-				@apply min-[2559px]:h-10  min-[2559px]:w-10;
-			}
+			@apply min-h-[50px] rounded-[10px]  px-5 py-3 shadow-none;
 		}
 	}
 }
 .forgot {
-	@apply mt-5 w-fit cursor-pointer underline min-[2559px]:mt-[110px] min-[2559px]:text-4xl;
+	@apply mt-5 w-fit cursor-pointer underline;
 }

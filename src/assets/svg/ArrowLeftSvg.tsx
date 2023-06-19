@@ -3,7 +3,6 @@ import React from 'react'
 export const ArrowLeftSvg = () => {
 	return (
 		<svg
-			className="min-[2559px]:h-8 min-[2559px]:w-8"
 			width="8"
 			height="11"
 			viewBox="0 0 8 11"

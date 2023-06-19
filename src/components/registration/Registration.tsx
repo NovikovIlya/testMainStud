@@ -1,9 +1,11 @@
-import { Form, Typography } from 'antd'
-import { AllHTMLAttributes, FC, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { Form, Typography } from 'antd';
+import { AllHTMLAttributes, FC, useState } from 'react';
+import { useSelector } from 'react-redux';
+
+
 
 import { IError } from '../../api/types'
-import logo from '../../assets/images/group.webp'
+import logo from '../../assets/images/group.png'
 import { useAppDispatch } from '../../store'
 import { RootState } from '../../store'
 import { registerUser } from '../../store/creators/MainCreators'
@@ -11,7 +13,6 @@ import { BackMainPage } from '../back-main-page/BackMainPage'
 import { Faq } from '../faq/Faq'
 
 import styles from './Registration.module.scss'
-import './Registration.scss'
 import { Buttons } from './buttons/Buttons'
 import { Inputs } from './inputs/Inputs'
 import { Password } from './password/Password'
@@ -71,7 +72,13 @@ export const Registration: FC = () => {
 					/>
 					<Buttons check={check} setCheck={setCheck} />
 				</Form>
-				<img className={styles.img} src={logo} alt="group" />
+				<div className="flex items-center">
+					<img
+						className="max-lg:hidden w-[400px] h-[400px]"
+						src={logo}
+						alt="group"
+					/>
+				</div>
 				<Faq />
 			</div>
 		</div>

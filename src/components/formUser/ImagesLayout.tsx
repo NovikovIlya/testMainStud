@@ -1,11 +1,9 @@
-import { QuestionCircleOutlined } from '@ant-design/icons';
-import { Popover } from 'antd';
-import React, { FC, PropsWithChildren } from 'react';
+import { QuestionCircleOutlined } from '@ant-design/icons'
+import { Popover } from 'antd'
+import React, { FC, PropsWithChildren } from 'react'
 
-
-
-import pencil from '../../assets/images/pencil.png';
-import rectangle from '../../assets/images/rectangle.png';
+import pencil from '../../assets/images/pencil.png'
+import rectangle from '../../assets/images/rectangle.png'
 import { LogoIasSvg } from '../../assets/svg'
 
 export const ImagesLayout: FC<PropsWithChildren<{ first?: boolean }>> = ({
@@ -14,9 +12,11 @@ export const ImagesLayout: FC<PropsWithChildren<{ first?: boolean }>> = ({
 }) => {
 	return (
 		<div className="h-full">
-			<div className="flex items-center justify-between m-10">
+			<div className="flex items-center justify-between my-10 mx-20">
 				<LogoIasSvg />
 				<Popover
+					placement="left"
+					className="h-fit"
 					content={
 						first ? (
 							<div>

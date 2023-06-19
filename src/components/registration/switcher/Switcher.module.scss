@@ -1,8 +1,8 @@
 .main {
 	.switcher {
-		@apply flex h-[50px] items-center justify-center min-[2559px]:my-10 min-[2559px]:h-[120px] min-[2559px]:w-[1000px] min-[2559px]:max-w-[800px] min-[2559px]:opacity-100;
+		@apply flex h-[50px] items-center justify-center;
 		label {
-			@apply flex h-[50px] w-full items-center justify-start shadow min-[2559px]:h-[120px]  min-[2559px]:px-9 min-[2559px]:text-4xl;
+			@apply flex h-[50px] w-full items-center justify-start shadow;
 		}
 	}
 }

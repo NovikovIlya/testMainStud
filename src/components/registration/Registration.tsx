@@ -1,8 +1,6 @@
-import { Form, Typography } from 'antd';
-import { AllHTMLAttributes, FC, useState } from 'react';
-import { useSelector } from 'react-redux';
-
-
+import { Form, Typography } from 'antd'
+import { AllHTMLAttributes, FC, useState } from 'react'
+import { useSelector } from 'react-redux'
 
 import { IError } from '../../api/types'
 import logo from '../../assets/images/group.png'
@@ -48,8 +46,10 @@ export const Registration: FC = () => {
 						agreement: 'true'
 					})
 			  )
-		if (values.confirmPassword !== values.password) setConfirmPassword(false)
-		else setConfirmPassword(true)
+
+		if (values.confirmPassword !== values.password) {
+			setConfirmPassword(false)
+		} else setConfirmPassword(true)
 	}
 
 	return (

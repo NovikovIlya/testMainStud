@@ -19,7 +19,7 @@ export const EducationForm = () => {
 	})
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
-	const [array, setArray] = useState([Date.now()])
+	const [countEducation, setCountEducation] = useState([Date.now()])
 	const handleCancel = () => {
 		navigate('/documents')
 	}
@@ -31,19 +31,18 @@ export const EducationForm = () => {
 		navigate('/user')
 	}
 	const addEducation = () => {
-		setArray(previous => [...previous, Date.now()])
+		setCountEducation(previous => [...previous, Date.now()])
 	}
 	const handleDeleteEducation = (id: number) => {
-		console.log(id)
-		const newArray = array.filter(item => id !== item)
-		setArray(newArray)
+		const newArray = countEducation.filter(item => id !== item)
+		setCountEducation(newArray)
 	}
 	const HandleEducation = (item: { id: number }) => {
 		return (
 			<div>
 				<div className="flex self-start gap-4 mt-7">
 					<p className="">Данные документа об образовании</p>
-					{array.length !== 1 && (
+					{countEducation.length !== 1 && (
 						<p
 							onClick={() => handleDeleteEducation(item.id)}
 							className="opacity-40 text-sm"
@@ -147,7 +146,7 @@ export const EducationForm = () => {
 				<div className="container max-w-2xl flex flex-col items-center justify-center  p-5">
 					<h3 className="self-start">Образование</h3>
 					<div className="flex flex-col gap-10 w-full">
-						{array.map(item => (
+						{countEducation.map(item => (
 							<HandleEducation id={item} />
 						))}
 					</div>

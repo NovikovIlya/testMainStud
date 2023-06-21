@@ -1,6 +1,7 @@
 import { Form, Typography } from 'antd'
-import { AllHTMLAttributes, FC, useState } from 'react'
+import { AllHTMLAttributes, FC, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 import { IError } from '../../api/types'
 import logo from '../../assets/images/group.png'
@@ -28,11 +29,19 @@ interface IRegForm {
 }
 
 export const Registration: FC = () => {
+	const navigate = useNavigate()
 	const error = useSelector((state: RootState) => state.AuthReg.regData.error)
 	const dispatch = useAppDispatch()
 	const [value, setValue] = useState(0)
 	const [check, setCheck] = useState(false)
 	const [confirmPassword, setConfirmPassword] = useState(true)
+	const [checkButton, changeCheck] = useState(false)
+
+	useEffect(() => {
+		if (checkButton && error === null) {
+			navigate('/registration/checkingEmail')
+		}
+	}, [error, checkButton])
 
 	const onFinish = (values: IRegForm) => {
 		values.email == null
@@ -70,7 +79,11 @@ export const Registration: FC = () => {
 						error={error}
 						ErrorPrinter={ErrorPrinter}
 					/>
-					<Buttons check={check} setCheck={setCheck} />
+					<Buttons
+						check={check}
+						setCheck={setCheck}
+						changeCheck={changeCheck}
+					/>
 				</Form>
 				<div className="flex items-center">
 					<img

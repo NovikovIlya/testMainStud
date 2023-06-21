@@ -4,6 +4,7 @@ import { Route, Routes } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 
 import { ApproveEmail } from './components/approve/ApproveEmail'
+import { CheckEmail } from './components/checkEmail/checkEmail'
 import { DocumentForm } from './components/formUser/DocumentForm/DocumentForm'
 import { EducationForm } from './components/formUser/EducationForm/EducationForm'
 import { FormModal } from './components/formUser/Form/UserForm'
@@ -78,6 +79,10 @@ const App = () => {
 						<Route path="/form" element={<FormModal />} />
 						<Route path="/education" element={<EducationForm />} />
 						<Route path="/documents" element={<DocumentForm />} />
+						<Route
+							path="/registration/checkingEmail"
+							element={<CheckEmail />}
+						/>
 					</Routes>
 				</div>
 			</ConfigProvider>

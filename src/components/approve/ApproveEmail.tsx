@@ -7,6 +7,8 @@ import { useAppDispatch } from '../../store'
 import { approveEmail } from '../../store/creators/MainCreators'
 import { Layout } from '../layout/Layout'
 
+import { CardForm } from './cardForm'
+
 interface IApproveProps {
 	changeIsLogin: (IsLogIn: boolean) => void
 }
@@ -29,9 +31,23 @@ export const ApproveEmail: FC<IApproveProps> = ({ changeIsLogin }) => {
 			navigate('/profile')
 		}
 	})
+
+	const buttonEffect = () => {
+		console.log("it's buttons effect")
+	}
+
+	const closeEffect = () => {
+		console.log("it's close effect")
+	}
 	return (
-		<Layout>
-			<div className="p-32">Почта подтверждена</div>
-		</Layout>
+		<CardForm
+			buttonEffect={buttonEffect}
+			closeEffect={closeEffect}
+			withDots={false}
+			mainTittle="Добро пожаловать"
+			secondTittle="Здесь нужен интересный приветственный текст о том, что может делать пользователь. Не следует, однако, забывать, что высокотехнологичная концепция общественного уклада не даёт нам иного выбора, кроме определения новых предложений."
+			buttonText="Начнём"
+			buttonBgBlue={false}
+		/>
 	)
 }

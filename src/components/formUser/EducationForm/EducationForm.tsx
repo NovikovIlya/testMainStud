@@ -1,41 +1,64 @@
 import { Button, Input, Select } from 'antd'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-import { IeducationForm } from '../../../api/types'
+import { IeducationForm, edForm } from '../../../api/types'
 import { educationSuccess } from '../../../store/reducers/FormReducer'
 import { ImagesLayout } from '../ImagesLayout'
 
 export const EducationForm = () => {
-	const [form, changeForm] = useState<IeducationForm>({
-		education: {
-			nameOfInstitute: '',
-			educationLevel: '',
-			documentNumber: '',
-			documentSeries: '',
-			educationCountry: ''
-		}
-	})
+	const educationBaseForm: edForm = {
+		id: 0,
+		nameOfInstitute: '',
+		educationLevel: '',
+		documentNumber: '',
+		documentSeries: '',
+		educationCountry: ''
+	}
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 	const [countEducation, setCountEducation] = useState([Date.now()])
+	let form = useRef<IeducationForm>({
+		education: [{ ...educationBaseForm, id: countEducation[0] }]
+	})
 	const handleCancel = () => {
 		navigate('/documents')
 	}
 	const handleOk = () => {
-		dispatch(educationSuccess(form))
+		saveInStore()
 		navigate('/infoUser')
+	}
+	const saveInStore = () => {
+		let IsEmpty = form.current.education.some(
+			item =>
+				item.documentNumber === '' ||
+				item.documentSeries === '' ||
+				item.educationCountry === '' ||
+				item.educationLevel === '' ||
+				item.nameOfInstitute === ''
+		)
+		if (!IsEmpty) {
+			dispatch(educationSuccess(form.current))
+		}
 	}
 	const handleSkip = () => {
 		navigate('/user')
 	}
 	const addEducation = () => {
-		setCountEducation(previous => [...previous, Date.now()])
+		const id = Date.now()
+		setCountEducation(previous => [...previous, id])
+		form.current = {
+			...form.current,
+			education: [...form.current.education, { ...educationBaseForm, id: id }]
+		}
 	}
 	const handleDeleteEducation = (id: number) => {
 		const newArray = countEducation.filter(item => id !== item)
 		setCountEducation(newArray)
+		form.current = {
+			education: form.current.education.filter(item => item.id !== id)
+		}
 	}
 	const HandleEducation = (item: { id: number }) => {
 		return (
@@ -45,7 +68,7 @@ export const EducationForm = () => {
 					{countEducation.length !== 1 && (
 						<p
 							onClick={() => handleDeleteEducation(item.id)}
-							className="opacity-40 text-sm"
+							className="opacity-40 text-sm cursor-pointer"
 						>
 							Удалить
 						</p>
@@ -58,14 +81,17 @@ export const EducationForm = () => {
 							placeholder="Высшее образование"
 							size="large"
 							className="mt-2"
-							onChange={e =>
-								changeForm({
-									education: {
-										...form.education,
-										educationLevel: e.target.value
-									}
-								})
-							}
+							onChange={e => {
+								form.current = {
+									...form.current,
+									education: form.current.education.map(el => {
+										if (el.id === item.id) {
+											return { ...el, educationLevel: e.target.value }
+										}
+										return el
+									})
+								}
+							}}
 						/>
 					</div>
 					<div>
@@ -73,11 +99,17 @@ export const EducationForm = () => {
 						<Select
 							className="block mt-2"
 							size="large"
-							onChange={e =>
-								changeForm({
-									education: { ...form.education, educationCountry: e }
-								})
-							}
+							onChange={e => {
+								form.current = {
+									...form.current,
+									education: form.current.education.map(el => {
+										if (el.id === item.id) {
+											return { ...el, educationCountry: e }
+										}
+										return el
+									})
+								}
+							}}
 							options={[
 								{ value: 'Бангладеш' },
 								{ value: 'Ботсвана' },
@@ -92,14 +124,17 @@ export const EducationForm = () => {
 					placeholder="Казанский федеральный университет"
 					size="large"
 					className="mt-2"
-					onChange={e =>
-						changeForm({
-							education: {
-								...form.education,
-								nameOfInstitute: e.target.value
-							}
-						})
-					}
+					onChange={e => {
+						form.current = {
+							...form.current,
+							education: form.current.education.map(el => {
+								if (el.id === item.id) {
+									return { ...el, nameOfInstitute: e.target.value }
+								}
+								return el
+							})
+						}
+					}}
 				/>
 				<div className="grid grid-cols-2 mt-4 gap-10 w-full max-sm:gap-5">
 					<div>
@@ -108,14 +143,17 @@ export const EducationForm = () => {
 							placeholder="0000"
 							size="large"
 							className="mt-2"
-							onChange={e =>
-								changeForm({
-									education: {
-										...form.education,
-										documentSeries: e.target.value
-									}
-								})
-							}
+							onChange={e => {
+								form.current = {
+									...form.current,
+									education: form.current.education.map(el => {
+										if (el.id === item.id) {
+											return { ...el, documentSeries: e.target.value }
+										}
+										return el
+									})
+								}
+							}}
 							maxLength={4}
 						/>
 					</div>
@@ -125,14 +163,17 @@ export const EducationForm = () => {
 							placeholder="0000"
 							size="large"
 							className="mt-2"
-							onChange={e =>
-								changeForm({
-									education: {
-										...form.education,
-										documentNumber: e.target.value
-									}
-								})
-							}
+							onChange={e => {
+								form.current = {
+									...form.current,
+									education: form.current.education.map(el => {
+										if (el.id === item.id) {
+											return { ...el, documentNumber: e.target.value }
+										}
+										return el
+									})
+								}
+							}}
 							maxLength={4}
 						/>
 					</div>
@@ -147,7 +188,7 @@ export const EducationForm = () => {
 					<h3 className="self-start">Образование</h3>
 					<div className="flex flex-col gap-10 w-full">
 						{countEducation.map(item => (
-							<HandleEducation id={item} />
+							<HandleEducation id={item} key={item} />
 						))}
 					</div>
 

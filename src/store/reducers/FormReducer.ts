@@ -4,7 +4,8 @@ import {
 	IFormState,
 	IdocumentsForm,
 	IeducationForm,
-	IinfoForm
+	IinfoForm,
+	roleType
 } from '../../api/types'
 import { RootState } from '../index'
 
@@ -19,13 +20,7 @@ const initialState: IFormState = {
 		phoneNumber: '',
 		country: ''
 	},
-	education: {
-		nameOfInstitute: '',
-		educationLevel: '',
-		documentNumber: '',
-		documentSeries: '',
-		educationCountry: ''
-	},
+	education: [],
 	documents: {
 		mainDocument: '',
 		passwordSeries: null,
@@ -42,7 +37,7 @@ export const FormReducer = createSlice({
 	name: 'Form',
 	initialState,
 	reducers: {
-		infoUserSuccess: (state, action: PayloadAction<string>): IFormState => {
+		infoUserSuccess: (state, action: PayloadAction<roleType>): IFormState => {
 			return {
 				...state,
 				role: action.payload

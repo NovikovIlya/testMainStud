@@ -10,6 +10,7 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
+import { roleType } from '../../api/types'
 import { infoUserSuccess } from '../../store/reducers/FormReducer'
 
 import { ImagesLayout } from './ImagesLayout'
@@ -17,7 +18,8 @@ import { ImagesLayout } from './ImagesLayout'
 export const InfoUser = () => {
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
-	const [role, setRole] = useState('')
+	const [role, setRole] = useState<roleType>('')
+
 	const handleCancel = () => {
 		navigate('/user')
 	}
@@ -30,9 +32,8 @@ export const InfoUser = () => {
 			dispatch(infoUserSuccess(role))
 		}
 	}
-	const handleChangeRole = (e: React.FormEvent<HTMLDivElement>) => {
-		//@ts-ignore
-		setRole(e.target.id)
+	const handleChangeRole = (e: roleType) => {
+		setRole(e)
 	}
 	return (
 		<ImagesLayout first>
@@ -47,7 +48,7 @@ export const InfoUser = () => {
 						выберите с какой целью Вы регистрировались на сайте:
 					</p>
 
-					<List className="p-0 mt-5" onChange={handleChangeRole}>
+					<List className="p-0 mt-5">
 						<ListItem className="p-0">
 							<label
 								htmlFor="0"
@@ -61,6 +62,9 @@ export const InfoUser = () => {
 										className="hover:before:opacity-0 mt-1"
 										containerProps={{
 											className: 'p-0'
+										}}
+										onChange={() => {
+											handleChangeRole('schoolboy')
 										}}
 									/>
 								</ListItemPrefix>
@@ -85,6 +89,9 @@ export const InfoUser = () => {
 										containerProps={{
 											className: 'p-0'
 										}}
+										onChange={() => {
+											handleChangeRole('enrollee')
+										}}
 									/>
 								</ListItemPrefix>
 								<Typography color="blue-gray" className="font-medium">
@@ -108,6 +115,9 @@ export const InfoUser = () => {
 										containerProps={{
 											className: 'p-0'
 										}}
+										onChange={() => {
+											handleChangeRole('listener')
+										}}
 									/>
 								</ListItemPrefix>
 								<Typography color="blue-gray" className="font-medium">
@@ -129,6 +139,9 @@ export const InfoUser = () => {
 										className="hover:before:opacity-0 mt-1"
 										containerProps={{
 											className: 'p-0'
+										}}
+										onChange={() => {
+											handleChangeRole('applicant')
 										}}
 									/>
 								</ListItemPrefix>
@@ -152,6 +165,9 @@ export const InfoUser = () => {
 										className="hover:before:opacity-0 mt-1"
 										containerProps={{
 											className: 'p-0'
+										}}
+										onChange={() => {
+											handleChangeRole('guest')
 										}}
 									/>
 								</ListItemPrefix>

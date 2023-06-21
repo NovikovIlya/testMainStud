@@ -18,8 +18,13 @@ export const Buttons: FC<IButProps> = ({ formData }) => {
 		navigate('/infoUser')
 	}
 	const handleOk = () => {
+		saveInStore()
 		navigate('/documents')
-		dispatch(formSuccess(formData))
+	}
+	const saveInStore = () => {
+		if (formData.infoForm.gender !== '') {
+			dispatch(formSuccess(formData))
+		}
 	}
 	const handleSkip = () => {
 		navigate('/user')

@@ -56,8 +56,25 @@ export interface IProfileState {
 	}
 }
 
+export type roleType =
+	| 'enrollee'
+	| 'student'
+	| 'schoolboy'
+	| 'listener'
+	| 'applicant'
+	| 'guest'
+	| ''
+
+export interface edForm {
+	id: number
+	nameOfInstitute: string
+	educationLevel: string
+	documentNumber: string
+	documentSeries: string
+	educationCountry: string
+}
 export interface IFormState {
-	role: string
+	role: roleType
 	infoForm: {
 		name: string
 		surName: string
@@ -77,13 +94,7 @@ export interface IFormState {
 		inn: string
 		snils: string
 	}
-	education: {
-		nameOfInstitute: string
-		educationLevel: string
-		documentNumber: string
-		documentSeries: string
-		educationCountry: string
-	}
+	education: edForm[]
 }
 
 export interface IinfoForm

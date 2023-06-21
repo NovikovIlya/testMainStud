@@ -29,8 +29,13 @@ export const DocumentForm = () => {
 		navigate('/form')
 	}
 	const handleOk = () => {
-		dispatch(documentsSuccess(form))
+		saveInStore()
 		navigate('/education')
+	}
+	const saveInStore = () => {
+		if (form.documents.mainDocument !== '') {
+			dispatch(documentsSuccess(form))
+		}
 	}
 	const handleSkip = () => {
 		navigate('/user')
@@ -191,7 +196,11 @@ export const DocumentForm = () => {
 							Далее
 						</Button>
 					</div>
-					<Button onClick={handleSkip} type="text" className="rounded-full w-[200px] h-[50px] mt-8">
+					<Button
+						onClick={handleSkip}
+						type="text"
+						className="rounded-full w-[200px] h-[50px] mt-8"
+					>
 						Заполнить позже
 					</Button>
 				</div>

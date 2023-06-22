@@ -58,35 +58,27 @@ const App = () => {
 					}
 				}}
 			>
-				<div>
-					<Routes>
-						<Route
-							path="/*"
-							element={<Login changeIsLogin={changeIsLogin} />}
-						/>
-						<Route path="/registration/*" element={<Registration />} />
-						<Route
-							path="/profile/*"
-							element={
-								isLogin ? <Login changeIsLogin={changeIsLogin} /> : <InfoUser />
-							}
-						/>
-						<Route path="/user/*" element={<User />} />
-						<Route
-							path="/api/register/approve"
-							element={<ApproveEmail changeIsLogin={changeIsLogin} />}
-						/>
-						<Route path="/infoUser" element={<InfoUser />} />
-						<Route path="/form" element={<FormModal />} />
-						<Route path="/education" element={<EducationForm />} />
-						<Route path="/documents" element={<DocumentForm />} />
-						<Route path="/work" element={<WorkForm />} />
-						<Route
-							path="/registration/checkingEmail"
-							element={<CheckEmail />}
-						/>
-					</Routes>
-				</div>
+				<Routes>
+					<Route path="/*" element={<Login changeIsLogin={changeIsLogin} />} />
+					<Route path="/registration/*" element={<Registration />} />
+					<Route
+						path="/profile/*"
+						element={
+							isLogin ? <Login changeIsLogin={changeIsLogin} /> : <InfoUser />
+						}
+					/>
+					<Route path="/user/*" element={<User />} />
+					<Route
+						path="/api/register/approve"
+						element={<ApproveEmail changeIsLogin={changeIsLogin} />}
+					/>
+					<Route path="/infoUser" element={<InfoUser />} />
+					<Route path="/form" element={<FormModal />} />
+					<Route path="/education" element={<EducationForm />} />
+					<Route path="/documents" element={<DocumentForm />} />
+					<Route path="/work" element={<WorkForm />} />
+					<Route path="/registration/checkingEmail" element={<CheckEmail />} />
+				</Routes>
 			</ConfigProvider>
 		</>
 	)

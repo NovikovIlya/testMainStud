@@ -60,7 +60,7 @@ export const WorkForm = () => {
 	}
 	return (
 		<ImagesLayout>
-			<div className="w-full flex justify-center min-h-screen text-sm">
+			<div className="w-full flex justify-center  text-sm">
 				<div className="container max-w-2xl flex flex-col  pч-5">
 					<h3 className="self-start">Работа</h3>
 					<div className="flex flex-col gap-10 w-full">

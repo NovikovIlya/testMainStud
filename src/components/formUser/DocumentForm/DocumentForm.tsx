@@ -42,7 +42,7 @@ export const DocumentForm = () => {
 	}
 	return (
 		<ImagesLayout>
-			<div className="w-full flex justify-center min-h-screen">
+			<div className="w-full flex justify-center ">
 				<div className="container max-w-2xl flex flex-col items-center justify-center p-5">
 					<div className="flex w-full flex-col">
 						<h3>Документы</h3>

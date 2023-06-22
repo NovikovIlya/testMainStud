@@ -21,7 +21,7 @@ export const FormModal = () => {
 	})
 	return (
 		<ImagesLayout>
-			<div className="w-full flex justify-center min-h-screen">
+			<div className="w-full flex justify-center ">
 				<div className="container max-w-2xl flex flex-col items-center justify-center  p-5">
 					<h2 className="text-center font-bold ">Заполните короткую форму</h2>
 

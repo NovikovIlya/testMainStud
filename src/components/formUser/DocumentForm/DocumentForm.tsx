@@ -43,7 +43,7 @@ export const DocumentForm = () => {
 	return (
 		<ImagesLayout>
 			<div className="w-full flex justify-center ">
-				<div className="container max-w-2xl flex flex-col items-center justify-center p-5">
+				<div className="container max-w-2xl flex flex-col items-center justify-center px-5">
 					<div className="flex w-full flex-col">
 						<p  className='text-xl font-bold'>Документы</p>
 						<span className="mt-4 text-sm">Тип документа</span>

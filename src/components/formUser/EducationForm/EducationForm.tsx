@@ -184,7 +184,7 @@ export const EducationForm = () => {
 	return (
 		<ImagesLayout>
 			<div className="w-full flex justify-center min-h-screen text-sm">
-				<div className="container max-w-2xl flex flex-col items-center justify-center  p-5">
+				<div className="container max-w-2xl flex flex-col  pч-5">
 					<h3 className="self-start">Образование</h3>
 					<div className="flex flex-col gap-10 w-full">
 						{countEducation.map(item => (
@@ -207,25 +207,28 @@ export const EducationForm = () => {
 						<Button
 							onClick={handleCancel}
 							type="default"
-							className="w-[200px] h-[50px] rounded-full border-[#3073D7] text-[#3073D7]"
+							className="w-[200px] h-[50px] font-bold rounded-full border-[#3073D7] text-[#3073D7]"
 						>
 							Назад
 						</Button>
 						<Button
 							onClick={handleOk}
 							type="primary"
-							className="w-[200px] h-[50px] rounded-full"
+							className="w-[200px] font-bold h-[50px] rounded-full"
 						>
 							Далее
 						</Button>
 					</div>
+					<div className='w-full flex justify-center'>
+
 					<Button
 						onClick={handleSkip}
 						type="text"
-						className="rounded-full w-[200px] h-[50px] mt-8"
-					>
+						className="rounded-full w-[200px]  h-[50px] mt-8"
+						>
 						Заполнить позже
 					</Button>
+						</div>
 				</div>
 			</div>
 		</ImagesLayout>

@@ -35,14 +35,14 @@ export const Buttons: FC<IButProps> = ({ formData }) => {
 				<Button
 					onClick={handleCancel}
 					type="default"
-					className="w-[200px] h-[50px] rounded-full border-[#3073D7] text-[#3073D7]"
+					className="w-[200px] font-bold h-[50px] rounded-full border-[#3073D7] text-[#3073D7]"
 				>
 					Назад
 				</Button>
 				<Button
 					onClick={handleOk}
 					type="primary"
-					className="w-[200px] h-[50px] rounded-full"
+					className="w-[200px] font-bold h-[50px] rounded-full"
 				>
 					Далее
 				</Button>

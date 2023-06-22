@@ -10,14 +10,19 @@ import { useAppDispatch } from '../../store';
 import { RootState } from '../../store';
 import { loginUser } from '../../store/creators/MainCreators';
 import { BackMainPage } from '../back-main-page/BackMainPage';
-import { Faq } from '../faq/Faq'
+import { Faq } from '../faq/Faq';
 
-import styles from './Login.module.scss'
-import { Buttons } from './buttons/Buttons'
-import { Inputs } from './inputs/Inputs'
-import { Switcher } from './switcher/Switcher'
+
+
+import styles from './Login.module.scss';
+import { Buttons } from './buttons/Buttons';
+import { Inputs } from './inputs/Inputs';
+import { Switcher } from './switcher/Switcher';
+
 
 const { Title } = Typography
+
+type TypeRule = 'student' | 'worker'// и тд
 
 interface ILoginProps {
 	changeIsLogin: (IsLogIn: boolean) => void

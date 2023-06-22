@@ -184,7 +184,7 @@ export const DocumentForm = () => {
 						<Button
 							onClick={handleCancel}
 							type="default"
-							className="w-[200px] h-[50px] rounded-full border-[#3073D7] text-[#3073D7]"
+							className="w-[200px] h-[50px] font-bold rounded-full border-[#3073D7] text-[#3073D7]"
 						>
 							Назад
 						</Button>
@@ -199,7 +199,7 @@ export const DocumentForm = () => {
 					<Button
 						onClick={handleSkip}
 						type="text"
-						className="rounded-full w-[200px] h-[50px] mt-8"
+						className="rounded-full w-[200px] font-bold h-[50px] mt-8"
 					>
 						Заполнить позже
 					</Button>

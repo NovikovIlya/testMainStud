@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import DropDrag from '../dnd/DropDrag'
 import { block } from '../dnd/constant'

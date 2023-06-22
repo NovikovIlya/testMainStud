@@ -37,8 +37,8 @@ export const InfoUser = () => {
 	}
 	return (
 		<ImagesLayout first>
-			<div className="w-full mt-[-80px] flex justify-center items-center min-h-screen">
-				<div className="container max-w-2xl flex flex-col items-center justify-center  p-5">
+			<div className="w-full flex justify-center min-h-screen">
+				<div className="container max-w-2xl flex flex-col items-center justify-center  px-5">
 					<h2 className="text-center font-bold border-solid border-0 border-b-2 border-[#3073D7] pb-2">
 						Добро пожаловать КФУ!
 					</h2>
@@ -186,18 +186,18 @@ export const InfoUser = () => {
 							информацию
 						</p>
 					</div>
-					<div className="w-full flex justify-center items-center gap-8 mt-[60px]">
+					<div className="w-full flex justify-center items-center gap-8 mt-[60px] ">
 						<Button
 							disabled
 							type="default"
-							className="w-[200px] h-[50px] rounded-full cursor-default border-[#3073D7] text-[#3073D7]"
+							className="w-[200px] h-[50px] rounded-full cursor-default font-bold border-[#3073D7] text-[#3073D7]"
 						>
 							Назад
 						</Button>
 						<Button
 							onClick={handleOk}
 							type="primary"
-							className="w-[200px] h-[50px] rounded-full"
+							className="w-[200px] h-[50px] rounded-full font-bold"
 						>
 							Далее
 						</Button>

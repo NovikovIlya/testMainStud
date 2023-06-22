@@ -2,7 +2,6 @@ import { useState } from 'react'
 
 import { IinfoForm } from '../../../api/types'
 import { ImagesLayout } from '../ImagesLayout'
-import { Layout } from '../Layout'
 
 import { Buttons } from './Buttons/Buttons'
 import { Inputs } from './Inputs/Inputs'
@@ -24,9 +23,7 @@ export const FormModal = () => {
 		<ImagesLayout>
 			<div className="w-full flex justify-center min-h-screen">
 				<div className="container max-w-2xl flex flex-col items-center justify-center  p-5">
-					<h2 className="text-center font-bold ">
-						Заполните короткую форму
-					</h2>
+					<h2 className="text-center font-bold ">Заполните короткую форму</h2>
 
 					<p className="mt-8 text-center font-bold px-7">
 						Это необходимо для полного доступа на платформе, который включает в

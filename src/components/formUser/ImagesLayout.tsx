@@ -12,7 +12,7 @@ export const ImagesLayout: FC<PropsWithChildren<{ first?: boolean }>> = ({
 }) => {
 	return (
 		<div className="h-full">
-			<div className="flex items-center justify-between my-10 mx-20">
+			<div className="flex items-center justify-between my-5 mx-20">
 				<LogoIasSvg />
 				<Popover
 					placement="left"

@@ -5,10 +5,11 @@ import { useNavigate } from 'react-router-dom'
 
 import { ApproveEmail } from './components/approve/ApproveEmail'
 import { CheckEmail } from './components/checkEmail/checkEmail'
+import { FormModal } from './components/formUser/AboutUserForm/UserForm'
 import { DocumentForm } from './components/formUser/DocumentForm/DocumentForm'
 import { EducationForm } from './components/formUser/EducationForm/EducationForm'
-import { FormModal } from './components/formUser/Form/UserForm'
 import { InfoUser } from './components/formUser/InfoUser'
+import { WorkForm } from './components/formUser/WrokForm/WorkForm'
 import { Login } from './components/login/Login'
 import { Registration } from './components/registration/Registration'
 import { User } from './components/user/User'
@@ -79,6 +80,7 @@ const App = () => {
 						<Route path="/form" element={<FormModal />} />
 						<Route path="/education" element={<EducationForm />} />
 						<Route path="/documents" element={<DocumentForm />} />
+						<Route path="/work" element={<WorkForm />} />
 						<Route
 							path="/registration/checkingEmail"
 							element={<CheckEmail />}

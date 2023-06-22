@@ -39,17 +39,17 @@ export const InfoUser = () => {
 		<ImagesLayout first>
 			<div className="w-full flex justify-center ">
 				<div className="container max-w-2xl flex flex-col items-center justify-center  px-5">
-					<h2 className="text-center font-bold border-solid border-0 border-b-2 border-[#3073D7] pb-2">
+					<h2 className="text-center text-2xl font-bold border-solid border-0 border-b-2 border-[#3073D7] pb-2">
 						Добро пожаловать КФУ!
 					</h2>
 
-					<p className="mt-8 text-center font-bold px-7">
+					<p className="mt-8 text-center text-sm font-bold px-7">
 						Для того, чтобы мы настроили личный кабинет персонально для Вас,
 						выберите с какой целью Вы регистрировались на сайте:
 					</p>
 
-					<List className="p-0 mt-5">
-						<ListItem className="p-0">
+					<List className="p-0 mt-5 ">
+						<ListItem className="p-0 ">
 							<label
 								htmlFor="0"
 								className="px-3 py-2 flex items-start  w-full cursor-pointer"
@@ -68,7 +68,7 @@ export const InfoUser = () => {
 										}}
 									/>
 								</ListItemPrefix>
-								<Typography color="blue-gray" className="font-medium">
+								<Typography color="blue-gray" className="font-medium text-sm">
 									Я школьник. Зарегистрировался для участия в олимпиадах,
 									получения дополнительного образования или чтобы поступить в
 									лицей КФУ
@@ -94,7 +94,7 @@ export const InfoUser = () => {
 										}}
 									/>
 								</ListItemPrefix>
-								<Typography color="blue-gray" className="font-medium">
+								<Typography color="blue-gray" className="font-medium text-sm">
 									Я абитуриент. Зарегистрировался чтобы узнать больше информации
 									об институтах и кафедрах, на которые можно поступить, а также
 									подготовитьсяк ЕГЭ
@@ -120,7 +120,7 @@ export const InfoUser = () => {
 										}}
 									/>
 								</ListItemPrefix>
-								<Typography color="blue-gray" className="font-medium">
+								<Typography color="blue-gray" className="font-medium text-sm">
 									Я слушатель. Зарегистрировался, чтобы обучаться новому,
 									проходить курсы и получать дополнительное образование
 								</Typography>
@@ -145,7 +145,7 @@ export const InfoUser = () => {
 										}}
 									/>
 								</ListItemPrefix>
-								<Typography color="blue-gray" className="font-medium">
+								<Typography color="blue-gray" className="font-medium text-sm">
 									Я соискатель. Зарегистрировался чтобы иметь возможность
 									просматривать актуальные вакансии и отправлять своё резюме для
 									трудоустройства
@@ -171,7 +171,7 @@ export const InfoUser = () => {
 										}}
 									/>
 								</ListItemPrefix>
-								<Typography color="blue-gray" className="font-medium">
+								<Typography color="blue-gray" className="font-medium text-sm">
 									Я гость. Ещё не определился с какой целью прошёл регистрацию
 									на портале, хочу просто посмотреть и определиться потом
 								</Typography>
@@ -180,7 +180,7 @@ export const InfoUser = () => {
 					</List>
 
 					<div className="border border-[#BDBDBD] border-solid rounded py-6 px-12 px- mt-10">
-						<p className="text-center">
+						<p className="text-center text-sm">
 							Сейчас Вы выбираете Вашу основную роль, позднее в разделе “Обо
 							мне” Вы сможете подключить другие роли, заполнив дополнительную
 							информацию

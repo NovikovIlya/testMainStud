@@ -62,7 +62,7 @@ export const WorkForm = () => {
 		<ImagesLayout>
 			<div className="w-full flex justify-center  text-sm">
 				<div className="container max-w-2xl flex flex-col  pч-5">
-					<h3 className="self-start">Работа</h3>
+					<h3 className="text-xl">Работа</h3>
 					<div className="flex flex-col gap-10 w-full">
 						{countEducation.map(item => (
 							<HandleWork id={item} key={item} />

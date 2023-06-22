@@ -1,19 +1,22 @@
-import { ConfigProvider } from 'antd'
-import { useEffect, useState } from 'react'
-import { Route, Routes } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
+import { ConfigProvider } from 'antd';
+import { useEffect, useState } from 'react';
+import { Route, Routes } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-import { ApproveEmail } from './components/approve/ApproveEmail'
-import { CheckEmail } from './components/checkEmail/checkEmail'
-import { FormModal } from './components/formUser/AboutUserForm/UserForm'
-import { DocumentForm } from './components/formUser/DocumentForm/DocumentForm'
-import { EducationForm } from './components/formUser/EducationForm/EducationForm'
-import { InfoUser } from './components/formUser/InfoUser'
-import { WorkForm } from './components/formUser/WrokForm/WorkForm'
-import { Login } from './components/login/Login'
-import { Registration } from './components/registration/Registration'
-import { User } from './components/user/User'
-import { useAppDispatch } from './store'
+
+
+import { ApproveEmail } from './components/approve/ApproveEmail';
+import { CheckEmail } from './components/checkEmail/checkEmail';
+import { FormModal } from './components/formUser/AboutUserForm/UserForm';
+import { DocumentForm } from './components/formUser/DocumentForm/DocumentForm';
+import { EducationForm } from './components/formUser/EducationForm/EducationForm';
+import { InfoUser } from './components/formUser/InfoUser';
+import { ParentForm } from './components/formUser/ParentForm/ParentForm';
+import { WorkForm } from './components/formUser/WrokForm/WorkForm';
+import { Login } from './components/login/Login';
+import { Registration } from './components/registration/Registration';
+import { User } from './components/user/User';
+import { useAppDispatch } from './store';
 import { refreshToken } from './store/creators/MainCreators'
 import { logoutSuccess } from './store/reducers/AuthRegReducer'
 
@@ -77,6 +80,7 @@ const App = () => {
 					<Route path="/education" element={<EducationForm />} />
 					<Route path="/documents" element={<DocumentForm />} />
 					<Route path="/work" element={<WorkForm />} />
+					<Route path="/parent" element={<ParentForm />} />
 					<Route path="/registration/checkingEmail" element={<CheckEmail />} />
 				</Routes>
 			</ConfigProvider>

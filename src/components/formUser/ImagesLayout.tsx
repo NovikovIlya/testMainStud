@@ -1,10 +1,13 @@
-import { QuestionCircleOutlined } from '@ant-design/icons'
+import { QuestionCircleOutlined } from '@ant-design/icons';
 import { Popover } from 'antd'
-import React, { FC, PropsWithChildren } from 'react'
+import { FC, PropsWithChildren } from 'react'
 
-import pencil from '../../assets/images/pencil.png'
-import rectangle from '../../assets/images/rectangle.png'
-import { LogoIasSvg } from '../../assets/svg'
+
+
+import pencil from '../../assets/images/pencil.png';
+import rectangle from '../../assets/images/rectangle.png';
+import { LogoIasSvg } from '../../assets/svg';
+
 
 export const ImagesLayout: FC<PropsWithChildren<{ first?: boolean }>> = ({
 	children,

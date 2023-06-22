@@ -45,10 +45,10 @@ export const DocumentForm = () => {
 			<div className="w-full flex justify-center ">
 				<div className="container max-w-2xl flex flex-col items-center justify-center p-5">
 					<div className="flex w-full flex-col">
-						<h3>Документы</h3>
-						<h4 className="mt-7">Тип документа</h4>
+						<h3 className='text-xl'>Документы</h3>
+						<h4 className="mt-4 text-sm">Тип документа</h4>
 						<Select
-							className="mt-4 "
+							className="mt-2"
 							size="large"
 							onChange={e =>
 								changeForm({
@@ -62,15 +62,15 @@ export const DocumentForm = () => {
 							]}
 						/>
 					</div>
-					<div className="flex w-full flex-col mt-7">
+					<div className="flex w-full flex-col mt-4 text-sm">
 						<h4>Паспортные данные</h4>
-						<div className="grid grid-cols-2 gap-5 mt-5 max-sm:grid-cols-1 max-sm:gap-4">
+						<div className="grid grid-cols-2 gap-4 mt-4 max-sm:grid-cols-1 max-sm:gap-4">
 							<div>
 								<p>Код подразделения</p>
 								<Input
 									placeholder="000-000"
 									size="large"
-									className="mt-4 shadow "
+									className="mt-2 shadow "
 									maxLength={7}
 									onChange={e =>
 										changeForm({
@@ -85,7 +85,7 @@ export const DocumentForm = () => {
 							<div>
 								<p>Когда выдан</p>
 								<DatePicker
-									className="mt-4 shadow  w-full"
+									className="mt-2 shadow  w-full"
 									onChange={e => {
 										if (e != null) {
 											changeForm({
@@ -137,7 +137,7 @@ export const DocumentForm = () => {
 								/>
 							</div>
 						</div>
-						<div className="mt-5">
+						<div className="mt-4">
 							<p>Кем выдан</p>
 							<Input
 								placeholder="УФМС по Республике Татарстан"
@@ -151,14 +151,14 @@ export const DocumentForm = () => {
 							/>
 						</div>
 					</div>
-					<div className="mt-5 w-full">
-						<h4 className="mb-5">Дополнительные документы</h4>
-						<div className="flex flex-col w-full">
+					<div className="mt-4 w-full">
+						<h4 className="text-sm">Дополнительные документы</h4>
+						<div className="flex text-sm flex-col w-full mt-4">
 							<p>СНИЛС</p>
 							<Input
 								size="large"
 								placeholder="0000"
-								className="shadow "
+								className="shadow mt-2"
 								maxLength={4}
 								onChange={e =>
 									changeForm({
@@ -171,7 +171,7 @@ export const DocumentForm = () => {
 								size="large"
 								placeholder="0000"
 								maxLength={4}
-								className="shadow "
+								className="shadow mt-2"
 								onChange={e =>
 									changeForm({
 										documents: { ...form.documents, inn: e.target.value }
@@ -191,7 +191,7 @@ export const DocumentForm = () => {
 						<Button
 							onClick={handleOk}
 							type="primary"
-							className="w-[200px] h-[50px] rounded-full"
+							className="w-[200px] h-[50px]  font-bold rounded-full"
 						>
 							Далее
 						</Button>
@@ -199,7 +199,7 @@ export const DocumentForm = () => {
 					<Button
 						onClick={handleSkip}
 						type="text"
-						className="rounded-full w-[200px] font-bold h-[50px] mt-8"
+						className="rounded-full w-[200px] h-[50px] mt-8"
 					>
 						Заполнить позже
 					</Button>

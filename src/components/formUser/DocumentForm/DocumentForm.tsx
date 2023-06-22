@@ -45,8 +45,8 @@ export const DocumentForm = () => {
 			<div className="w-full flex justify-center ">
 				<div className="container max-w-2xl flex flex-col items-center justify-center p-5">
 					<div className="flex w-full flex-col">
-						<h3 className='text-xl'>Документы</h3>
-						<h4 className="mt-4 text-sm">Тип документа</h4>
+						<p  className='text-xl font-bold'>Документы</p>
+						<span className="mt-4 text-sm">Тип документа</span>
 						<Select
 							className="mt-2"
 							size="large"
@@ -63,7 +63,7 @@ export const DocumentForm = () => {
 						/>
 					</div>
 					<div className="flex w-full flex-col mt-4 text-sm">
-						<h4>Паспортные данные</h4>
+						<span>Паспортные данные</span>
 						<div className="grid grid-cols-2 gap-4 mt-4 max-sm:grid-cols-1 max-sm:gap-4">
 							<div>
 								<p>Код подразделения</p>
@@ -152,7 +152,7 @@ export const DocumentForm = () => {
 						</div>
 					</div>
 					<div className="mt-4 w-full">
-						<h4 className="text-sm">Дополнительные документы</h4>
+						<p className="text-sm">Дополнительные документы</p>
 						<div className="flex text-sm flex-col w-full mt-4">
 							<p>СНИЛС</p>
 							<Input

@@ -27,7 +27,7 @@ const initialState: IFormState = {
 		passwordNumber: null,
 		issuedBy: null,
 		dateIssue: null,
-		divisionCode: null,
+		divisionCode: '',
 		inn: '',
 		snils: ''
 	}
@@ -60,7 +60,10 @@ export const FormReducer = createSlice({
 		): IFormState => ({
 			...state,
 			education: action.payload.education
-		})
+		}),
+		changeDivisionCode(state, action: PayloadAction<string>) {
+			state.documents.divisionCode = action.payload
+		}
 	}
 })
 
@@ -68,7 +71,8 @@ export const {
 	infoUserSuccess,
 	formSuccess,
 	documentsSuccess,
-	educationSuccess
+	educationSuccess,
+	changeDivisionCode
 } = FormReducer.actions
 
 export default FormReducer.reducer

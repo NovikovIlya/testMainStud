@@ -7,15 +7,18 @@ import { useNavigate } from 'react-router-dom';
 
 
 
-import { IdocumentsForm } from '../../../api/types'
+import { IdocumentsForm } from '../../../api/types';
 import { useAppSelector } from '../../../store'
-import { documentsSuccess } from '../../../store/reducers/FormReducer'
+import {
+	changeDivisionCode,
+	documentsSuccess
+} from '../../../store/reducers/FormReducer'
 import { ImagesLayout } from '../ImagesLayout'
 
 export const DocumentForm = () => {
 	const dispatch = useDispatch()
 	const userRole = useAppSelector(state => state.Form.role)
-
+	const data = useAppSelector(state => state.Form.documents)
 	const [form, changeForm] = useState<IdocumentsForm>({
 		documents: {
 			mainDocument: '',
@@ -23,7 +26,7 @@ export const DocumentForm = () => {
 			passwordNumber: null,
 			issuedBy: null,
 			dateIssue: null,
-			divisionCode: null,
+			divisionCode: '',
 			inn: '',
 			snils: ''
 		}
@@ -76,15 +79,11 @@ export const DocumentForm = () => {
 								<Input
 									placeholder="000-000"
 									size="large"
+									value={data?.divisionCode}
 									className="mt-2 shadow "
 									maxLength={7}
 									onChange={e =>
-										changeForm({
-											documents: {
-												...form.documents,
-												divisionCode: e.target.value
-											}
-										})
+										dispatch(changeDivisionCode(e.currentTarget.value))
 									}
 								/>
 							</div>

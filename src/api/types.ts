@@ -90,7 +90,7 @@ export interface IFormState {
 		passwordNumber: string | null
 		issuedBy: string | null
 		dateIssue: string | null
-		divisionCode: string | null
+		divisionCode: string
 		inn: string
 		snils: string
 	}

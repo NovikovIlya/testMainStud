@@ -1,9 +1,12 @@
-import { Button } from 'antd'
-import { FC } from 'react'
-import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { Button } from 'antd';
+import { FC } from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+
+
 
 import { IinfoForm } from '../../../../api/types'
+import { useAppSelector } from '../../../../store'
 import { formSuccess } from '../../../../store/reducers/FormReducer'
 
 interface IButProps {
@@ -13,13 +16,15 @@ interface IButProps {
 export const Buttons: FC<IButProps> = ({ formData }) => {
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
+	const userRole = useAppSelector(state => state.Form.role)
 
 	const handleCancel = () => {
 		navigate('/infoUser')
 	}
 	const handleOk = () => {
 		saveInStore()
-		navigate('/documents')
+		if (userRole === 'guest') navigate('user')
+		else navigate('/documents')
 	}
 	const saveInStore = () => {
 		if (formData.infoForm.gender !== '') {

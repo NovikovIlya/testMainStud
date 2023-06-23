@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import { IeducationForm, edForm } from '../../../api/types'
+import { useAppSelector } from '../../../store'
 import { educationSuccess } from '../../../store/reducers/FormReducer'
 import { ImagesLayout } from '../ImagesLayout'
 
@@ -17,6 +18,7 @@ export const EducationForm = () => {
 		educationCountry: ''
 	}
 	const dispatch = useDispatch()
+	const userRole = useAppSelector(state => state.Form.role)
 	const navigate = useNavigate()
 	const [countEducation, setCountEducation] = useState([Date.now()])
 	let form = useRef<IeducationForm>({
@@ -27,7 +29,8 @@ export const EducationForm = () => {
 	}
 	const handleOk = () => {
 		saveInStore()
-		navigate('/infoUser')
+		if (userRole === 'applicant') navigate('/work')
+		else navigate('user')
 	}
 	const saveInStore = () => {
 		let IsEmpty = form.current.education.some(
@@ -219,16 +222,15 @@ export const EducationForm = () => {
 							Далее
 						</Button>
 					</div>
-					<div className='w-full flex justify-center'>
-
-					<Button
-						onClick={handleSkip}
-						type="text"
-						className="rounded-full w-[200px]  h-[50px] mt-8"
+					<div className="w-full flex justify-center">
+						<Button
+							onClick={handleSkip}
+							type="text"
+							className="rounded-full w-[200px]  h-[50px] mt-8"
 						>
-						Заполнить позже
-					</Button>
-						</div>
+							Заполнить позже
+						</Button>
+					</div>
 				</div>
 			</div>
 		</ImagesLayout>

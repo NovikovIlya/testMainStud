@@ -1,8 +1,11 @@
-import { Button, Input } from 'antd'
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Button, Input } from 'antd';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import { ImagesLayout } from '../ImagesLayout'
+
+
+import { ImagesLayout } from '../ImagesLayout';
+
 
 const { TextArea } = Input
 
@@ -14,7 +17,7 @@ export const WorkForm = () => {
 		navigate('/documents')
 	}
 	const handleOk = () => {
-		navigate('/infoUser')
+		navigate('/user')
 	}
 	const handleSkip = () => {
 		navigate('/user')

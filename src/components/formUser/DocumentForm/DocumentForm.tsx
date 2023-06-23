@@ -1,16 +1,21 @@
-import { Button, DatePicker, Input, Select } from 'antd'
-import locale from 'antd/es/date-picker/locale/ru_RU'
-import 'dayjs/locale/ru'
-import { useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { Button, DatePicker, Input, Select } from 'antd';
+import locale from 'antd/es/date-picker/locale/ru_RU';
+import 'dayjs/locale/ru';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+
+
 
 import { IdocumentsForm } from '../../../api/types'
+import { useAppSelector } from '../../../store'
 import { documentsSuccess } from '../../../store/reducers/FormReducer'
 import { ImagesLayout } from '../ImagesLayout'
 
 export const DocumentForm = () => {
 	const dispatch = useDispatch()
+	const userRole = useAppSelector(state => state.Form.role)
+
 	const [form, changeForm] = useState<IdocumentsForm>({
 		documents: {
 			mainDocument: '',
@@ -30,7 +35,8 @@ export const DocumentForm = () => {
 	}
 	const handleOk = () => {
 		saveInStore()
-		navigate('/education')
+		if (userRole === 'schoolboy') navigate('/parent')
+		else navigate('/education')
 	}
 	const saveInStore = () => {
 		if (form.documents.mainDocument !== '') {
@@ -45,7 +51,7 @@ export const DocumentForm = () => {
 			<div className="w-full flex justify-center ">
 				<div className="container max-w-2xl flex flex-col items-center justify-center px-5">
 					<div className="flex w-full flex-col">
-						<p  className='text-xl font-bold'>Документы</p>
+						<p className="text-xl font-bold">Документы</p>
 						<span className="mt-4 text-sm">Тип документа</span>
 						<Select
 							className="mt-2"

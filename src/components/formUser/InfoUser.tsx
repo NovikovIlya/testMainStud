@@ -20,9 +20,6 @@ export const InfoUser = () => {
 	const navigate = useNavigate()
 	const [role, setRole] = useState<roleType>('')
 
-	const handleCancel = () => {
-		navigate('/user')
-	}
 	const handleOk = () => {
 		saveInStore()
 		navigate('/form')

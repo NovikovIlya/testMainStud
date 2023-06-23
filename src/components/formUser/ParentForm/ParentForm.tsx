@@ -1,6 +1,4 @@
-import { Button, DatePicker, Input, Select } from 'antd'
-import locale from 'antd/es/date-picker/locale/ru_RU'
-import { useState } from 'react'
+import { Button, Input, Select } from 'antd'
 import { useNavigate } from 'react-router-dom'
 
 import { ImagesLayout } from '../ImagesLayout'
@@ -12,7 +10,7 @@ export const ParentForm = () => {
 		navigate('/form')
 	}
 	const handleOk = () => {
-		navigate('/education')
+		navigate('/user')
 	}
 	const handleSkip = () => {
 		navigate('/user')

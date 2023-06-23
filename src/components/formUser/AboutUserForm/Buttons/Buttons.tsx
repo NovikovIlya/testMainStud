@@ -5,9 +5,10 @@ import { useNavigate } from 'react-router-dom';
 
 
 
-import { IinfoForm } from '../../../../api/types'
-import { useAppSelector } from '../../../../store'
-import { formSuccess } from '../../../../store/reducers/FormReducer'
+import { IinfoForm } from '../../../../api/types';
+import { useAppSelector } from '../../../../store';
+import { formSuccess } from '../../../../store/reducers/FormReducer';
+
 
 interface IButProps {
 	formData: IinfoForm
@@ -23,7 +24,7 @@ export const Buttons: FC<IButProps> = ({ formData }) => {
 	}
 	const handleOk = () => {
 		saveInStore()
-		if (userRole === 'guest') navigate('user')
+		if (userRole === 'guest') navigate('/user')
 		else navigate('/documents')
 	}
 	const saveInStore = () => {

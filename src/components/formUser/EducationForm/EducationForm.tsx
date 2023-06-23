@@ -1,12 +1,15 @@
-import { Button, Input, Select } from 'antd'
-import { useRef, useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { Button, Input, Select } from 'antd';
+import { useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
-import { IeducationForm, edForm } from '../../../api/types'
-import { useAppSelector } from '../../../store'
-import { educationSuccess } from '../../../store/reducers/FormReducer'
-import { ImagesLayout } from '../ImagesLayout'
+
+
+import { IeducationForm, edForm } from '../../../api/types';
+import { useAppSelector } from '../../../store';
+import { educationSuccess } from '../../../store/reducers/FormReducer';
+import { ImagesLayout } from '../ImagesLayout';
+
 
 export const EducationForm = () => {
 	const educationBaseForm: edForm = {
@@ -30,7 +33,7 @@ export const EducationForm = () => {
 	const handleOk = () => {
 		saveInStore()
 		if (userRole === 'applicant') navigate('/work')
-		else navigate('user')
+		else navigate('/user')
 	}
 	const saveInStore = () => {
 		let IsEmpty = form.current.education.some(

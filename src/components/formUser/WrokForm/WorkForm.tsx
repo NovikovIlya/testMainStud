@@ -1,11 +1,8 @@
-import { Button, Input } from 'antd';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Button, Input } from 'antd'
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
-
-
-import { ImagesLayout } from '../ImagesLayout';
-
+import { ImagesLayout } from '../ImagesLayout'
 
 const { TextArea } = Input
 

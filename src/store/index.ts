@@ -1,16 +1,26 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import logger from 'redux-logger'
 
 import AuthRegReducer from './reducers/AuthRegReducer'
-import FormReducer from './reducers/FormReducer'
+import DocumentReducer from './reducers/FormReducers/DocumentReducer'
+import EducationReducer from './reducers/FormReducers/EducationReducer'
+import FormReducer from './reducers/FormReducers/FormReducer'
+import InfoUserReducer from './reducers/FormReducers/InfoUserReducer'
+import ParentReducer from './reducers/FormReducers/ParentReducer'
+import WorkReducer from './reducers/FormReducers/WorkReducer'
 import ProfileReducer from './reducers/ProfileReducer'
 
 export const store = configureStore({
 	reducer: {
 		AuthReg: AuthRegReducer,
 		Profile: ProfileReducer,
-		Form: FormReducer
+		InfoUser: InfoUserReducer,
+		Form: FormReducer,
+		Document: DocumentReducer,
+		Education: EducationReducer,
+		Work: WorkReducer,
+		Parent: ParentReducer
 	},
 	middleware: getDefaultMiddleware =>
 		getDefaultMiddleware().concat(

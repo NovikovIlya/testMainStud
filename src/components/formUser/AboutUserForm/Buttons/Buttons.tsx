@@ -1,36 +1,35 @@
-import { Button } from 'antd';
-import { FC } from 'react';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { Button } from 'antd'
+import { useNavigate } from 'react-router-dom'
 
+import { useAppSelector } from '../../../../store'
 
-
-import { IinfoForm } from '../../../../api/types';
-import { useAppSelector } from '../../../../store';
-import { formSuccess } from '../../../../store/reducers/FormReducer';
-
-
-interface IButProps {
-	formData: IinfoForm
-}
-
-export const Buttons: FC<IButProps> = ({ formData }) => {
-	const dispatch = useDispatch()
+export const Buttons = () => {
 	const navigate = useNavigate()
-	const userRole = useAppSelector(state => state.Form.role)
+	const userRole = useAppSelector(state => state.InfoUser.role)
+	const data = useAppSelector(state => state.Form)
 
 	const handleCancel = () => {
 		navigate('/infoUser')
 	}
 	const handleOk = () => {
-		saveInStore()
-		if (userRole === 'guest') navigate('/user')
-		else navigate('/documents')
+		if (!saveInStore()) {
+			if (userRole === 'guest') navigate('/user')
+			else navigate('/documents')
+		}
 	}
 	const saveInStore = () => {
-		if (formData.infoForm.gender !== '') {
-			dispatch(formSuccess(formData))
-		}
+		if (
+			[
+				data.birthDay,
+				data.country,
+				data.gender,
+				data.name,
+				data.phoneNumber,
+				data.surName
+			].some(el => el === '')
+		)
+			return true
+		else return false
 	}
 	const handleSkip = () => {
 		navigate('/user')

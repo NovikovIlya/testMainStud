@@ -65,6 +65,31 @@ export type roleType =
 	| 'guest'
 	| ''
 
+export interface IinfoUserState {
+	role: roleType
+}
+
+export interface IFormState {
+	name: string
+	surName: string
+	patronymic: string | null
+	birthDay: string | null
+	gender: string
+	phoneNumber: string
+	country: string
+}
+
+export interface IDocumentState {
+	mainDocument: string
+	passwordSeries: string | null
+	passwordNumber: string | null
+	issuedBy: string | null
+	dateIssue: string | null
+	divisionCode: string
+	inn: string
+	snils: string
+}
+
 export interface edForm {
 	id: number
 	nameOfInstitute: string
@@ -73,42 +98,37 @@ export interface edForm {
 	documentSeries: string
 	educationCountry: string
 }
-export interface IFormState {
-	role: roleType
-	infoForm: {
-		name: string
-		surName: string
-		patronymic: string | null
-		birthDay: string | null
-		gender: string
-		phoneNumber: string
-		country: string
-	}
-	documents: {
-		mainDocument: string
-		passwordSeries: string | null
-		passwordNumber: string | null
-		issuedBy: string | null
-		dateIssue: string | null
-		divisionCode: string
-		inn: string
-		snils: string
-	}
-	education: edForm[]
+
+export interface IeducationState {
+	educationItems: edForm[]
 }
 
-export interface IinfoForm
-	extends Omit<IFormState, 'role' | 'documents' | 'education'> {}
+export interface WorkArray {
+	id: number
+	place: string
+	time: string
+}
 
-export interface IdocumentsForm
-	extends Omit<IFormState, 'role' | 'infoForm' | 'education'> {}
+export interface IWorkState {
+	workItems: WorkArray[]
+	description: string
+	link: string
+}
 
-export interface IeducationForm
-	extends Omit<IFormState, 'role' | 'infoForm' | 'documents'> {}
-
-export interface IformCompProps {
-	changeForm: (obj: IinfoForm) => void
-	formData: IinfoForm
+export interface IParentState {
+	FIO: string
+	eMail: string
+	phoneNumber: string
+	mainDocument: string
+	divisitonCode: string
+	issuedBy: string | null
+	passwordSeries: string | null
+	passwordNumber: string | null
+	dateIssue: string | null
+	inn: string
+	snils: string
+	registrationAddress: string
+	residenceAddress: string
 }
 
 export interface IRefreshRequest {

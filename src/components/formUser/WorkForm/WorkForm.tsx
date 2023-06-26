@@ -1,39 +1,57 @@
 import { Button, Input } from 'antd'
-import { useState } from 'react'
+import { useCallback } from 'react'
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
+import { useAppSelector } from '../../../store'
+import {
+	descriptionSuccess,
+	idAdd,
+	idDelete,
+	linkSuccess,
+	placeSuccess,
+	timeSuccess
+} from '../../../store/reducers/FormReducers/WorkReducer'
 import { ImagesLayout } from '../ImagesLayout'
 
 const { TextArea } = Input
 
 export const WorkForm = () => {
 	const navigate = useNavigate()
-	const [countEducation, setCountEducation] = useState([Date.now()])
+	const dispatch = useDispatch()
+	const data = useAppSelector(state => state.Work)
 
 	const handleCancel = () => {
 		navigate('/documents')
 	}
 	const handleOk = () => {
-		navigate('/user')
+		if (!saveInStore()) {
+			navigate('/user')
+		}
 	}
 	const handleSkip = () => {
 		navigate('/user')
 	}
+	const saveInStore = () => {
+		let IsEmpty = data.workItems.some(
+			item => item.place === '' || item.time === ''
+		)
+		if (data.description === '' || data.link === '') IsEmpty = true
+		return IsEmpty
+	}
 	const handleDeleteEducation = (id: number) => {
-		const newArray = countEducation.filter(item => id !== item)
-		setCountEducation(newArray)
+		dispatch(idDelete(id))
 	}
 	const addEducation = () => {
-		const id = Date.now()
-		setCountEducation(previous => [...previous, id])
+		dispatch(idAdd(data.workItems.length))
 	}
-	const HandleWork = (item: { id: number }) => {
+	const HandleWork = useCallback((item: { id: number }) => {
 		return (
 			<div>
 				<div className=" mt-5 w-full max-sm:gap-4">
-					<p className="flex gap-2">
-						Место работы
-						{countEducation.length !== 1 && (
+					<span className="flex">
+						<p className="flex mr-5">Место работы</p>
+						{item.id !== 0 && (
 							<p
 								onClick={() => handleDeleteEducation(item.id)}
 								className="opacity-40 text-sm cursor-pointer"
@@ -41,12 +59,15 @@ export const WorkForm = () => {
 								Удалить
 							</p>
 						)}
-					</p>
+					</span>
 
 					<Input
 						placeholder="Калифорнийский университет в Беркли, департамент всего самого умного, отдел выпендрежников"
 						size="large"
 						className="mt-2"
+						onChange={e =>
+							dispatch(placeSuccess({ id: item.id, place: e.target.value }))
+						}
 					/>
 				</div>
 				<p className="mt-4 self-start">Период работы</p>
@@ -54,18 +75,21 @@ export const WorkForm = () => {
 					placeholder="август 2018 — май 2023"
 					size="large"
 					className="mt-2"
+					onChange={e =>
+						dispatch(timeSuccess({ id: item.id, time: e.target.value }))
+					}
 				/>
 			</div>
 		)
-	}
+	}, [])
 	return (
 		<ImagesLayout>
 			<div className="w-full flex justify-center  text-sm">
 				<div className="container max-w-2xl flex flex-col  pч-5">
 					<h3 className="text-xl">Работа</h3>
 					<div className="flex flex-col gap-10 w-full">
-						{countEducation.map(item => (
-							<HandleWork id={item} key={item} />
+						{data.workItems.map(item => (
+							<HandleWork id={item.id} key={item.id} />
 						))}
 					</div>
 
@@ -86,6 +110,7 @@ export const WorkForm = () => {
 							placeholder="Расскажите о Вашем опыте работы в целом"
 							className="mt-2"
 							autoSize={{ minRows: 4, maxRows: 8 }}
+							onChange={e => dispatch(descriptionSuccess(e.target.value))}
 						/>
 						<p className="text-black text-sm font-normal mt-4">
 							Ссылка на портфолио
@@ -94,6 +119,7 @@ export const WorkForm = () => {
 							placeholder="август 2018 — май 2023"
 							size="large"
 							className="mt-2"
+							onChange={e => dispatch(linkSuccess(e.target.value))}
 						/>
 					</div>
 					<div className="w-full flex justify-center items-center gap-8 mt-[60px]">

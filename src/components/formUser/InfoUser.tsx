@@ -6,32 +6,25 @@ import {
 	Typography
 } from '@material-tailwind/react'
 import { Button } from 'antd'
-import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-import { roleType } from '../../api/types'
-import { infoUserSuccess } from '../../store/reducers/FormReducer'
+import { useAppSelector } from '../../store'
+import { roleSuccess } from '../../store/reducers/FormReducers/InfoUserReducer'
 
 import { ImagesLayout } from './ImagesLayout'
 
 export const InfoUser = () => {
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
-	const [role, setRole] = useState<roleType>('')
+	const role = useAppSelector(state => state.InfoUser.role)
 
 	const handleOk = () => {
-		saveInStore()
-		navigate('/form')
-	}
-	const saveInStore = () => {
 		if (role !== '') {
-			dispatch(infoUserSuccess(role))
+			navigate('/form')
 		}
 	}
-	const handleChangeRole = (e: roleType) => {
-		setRole(e)
-	}
+
 	return (
 		<ImagesLayout first>
 			<div className="w-full flex justify-center ">
@@ -61,7 +54,7 @@ export const InfoUser = () => {
 											className: 'p-0'
 										}}
 										onChange={() => {
-											handleChangeRole('schoolboy')
+											dispatch(roleSuccess('schoolboy'))
 										}}
 									/>
 								</ListItemPrefix>
@@ -87,7 +80,7 @@ export const InfoUser = () => {
 											className: 'p-0'
 										}}
 										onChange={() => {
-											handleChangeRole('enrollee')
+											dispatch(roleSuccess('enrollee'))
 										}}
 									/>
 								</ListItemPrefix>
@@ -113,7 +106,7 @@ export const InfoUser = () => {
 											className: 'p-0'
 										}}
 										onChange={() => {
-											handleChangeRole('listener')
+											dispatch(roleSuccess('listener'))
 										}}
 									/>
 								</ListItemPrefix>
@@ -138,7 +131,7 @@ export const InfoUser = () => {
 											className: 'p-0'
 										}}
 										onChange={() => {
-											handleChangeRole('applicant')
+											dispatch(roleSuccess('applicant'))
 										}}
 									/>
 								</ListItemPrefix>
@@ -164,7 +157,7 @@ export const InfoUser = () => {
 											className: 'p-0'
 										}}
 										onChange={() => {
-											handleChangeRole('guest')
+											dispatch(roleSuccess('guest'))
 										}}
 									/>
 								</ListItemPrefix>

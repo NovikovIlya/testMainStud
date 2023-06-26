@@ -1,17 +1,10 @@
 import { ListItemPrefix, Radio, Typography } from '@material-tailwind/react'
-import { FC } from 'react'
+import { useDispatch } from 'react-redux'
 
-import { IformCompProps } from '../../../../api/types'
+import { genderSuccess } from '../../../../store/reducers/FormReducers/FormReducer'
 
-export const Switcher: FC<IformCompProps> = ({ changeForm, formData }) => {
-	const saveGender = (gender: string) => {
-		changeForm({
-			infoForm: {
-				...formData.infoForm,
-				gender: gender
-			}
-		})
-	}
+export const Switcher = () => {
+	const dispatch = useDispatch()
 	return (
 		<div className="flex self-start mb-4">
 			<label htmlFor="0" className="flex items-start  w-full cursor-pointer">
@@ -24,7 +17,7 @@ export const Switcher: FC<IformCompProps> = ({ changeForm, formData }) => {
 						containerProps={{
 							className: 'p-0'
 						}}
-						onChange={() => saveGender('Женщина')}
+						onChange={() => dispatch(genderSuccess('Женщина'))}
 					/>
 				</ListItemPrefix>
 				<Typography color="blue-gray" className="font-medium text-sm">
@@ -44,7 +37,7 @@ export const Switcher: FC<IformCompProps> = ({ changeForm, formData }) => {
 						containerProps={{
 							className: 'p-0'
 						}}
-						onChange={() => saveGender('Мужчина')}
+						onChange={() => dispatch(genderSuccess('Мужчина'))}
 					/>
 				</ListItemPrefix>
 				<Typography color="blue-gray" className="font-medium text-sm">

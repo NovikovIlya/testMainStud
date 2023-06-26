@@ -1,19 +1,60 @@
-import { Button, Input, Select } from 'antd'
+import { Button, DatePicker, Input, Select } from 'antd'
+import locale from 'antd/es/date-picker/locale/ru_RU'
+import 'dayjs/locale/ru'
+import { isEmpty } from 'lodash'
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
+import { useAppSelector } from '../../../store'
+import {
+	FIOSuccess,
+	dateIssueSuccess,
+	divisitonCodeSuccess,
+	eMailSuccess,
+	innSuccess,
+	issuedBySuccess,
+	mainDocumentSuccess,
+	passwordNumberSuccess,
+	passwordSeriesSuccess,
+	phoneNumberSuccess,
+	registrationAddressSuccess,
+	residenceAddressSuccess,
+	snilsSuccess
+} from '../../../store/reducers/FormReducers/ParentReducer'
 import { ImagesLayout } from '../ImagesLayout'
 
 export const ParentForm = () => {
+	const dispatch = useDispatch()
 	const navigate = useNavigate()
+	const data = useAppSelector(state => state.Parent)
 
 	const handleCancel = () => {
 		navigate('/form')
 	}
 	const handleOk = () => {
-		navigate('/user')
+		if (!saveInStore()) navigate('/user')
 	}
 	const handleSkip = () => {
 		navigate('/user')
+	}
+	const saveInStore = () => {
+		if (
+			[
+				data.FIO,
+				data.dateIssue,
+				data.divisitonCode,
+				data.eMail,
+				data.inn,
+				data.issuedBy,
+				data.mainDocument,
+				data.passwordNumber,
+				data.passwordSeries,
+				data.phoneNumber,
+				data.snils
+			].some(el => el === '')
+		)
+			return true
+		else return false
 	}
 	return (
 		<ImagesLayout>
@@ -29,6 +70,7 @@ export const ParentForm = () => {
 						placeholder="Безухов Пьер Кириллович"
 						size="large"
 						className="mt-2 shadow"
+						onChange={e => dispatch(FIOSuccess(e.target.value))}
 					/>
 					<div className="text-black text-[14px] font-normal mt-4">
 						Номер телефона родителя
@@ -37,6 +79,7 @@ export const ParentForm = () => {
 						placeholder="+7 999 898-88-00"
 						size="large"
 						className="mt-2 shadow"
+						onChange={e => dispatch(phoneNumberSuccess(e.target.value))}
 					/>
 					<div className="text-black text-[14px] font-normal mt-4">
 						Email родителя
@@ -45,6 +88,7 @@ export const ParentForm = () => {
 						placeholder="BezuPr@gmail.com"
 						size="large"
 						className="mt-2 shadow"
+						onChange={e => dispatch(eMailSuccess(e.target.value))}
 					/>
 					<div className="text-black text-[20px] mt-7 font-bold">
 						Документы родителя
@@ -55,11 +99,13 @@ export const ParentForm = () => {
 					<Select
 						className="mt-2 w-full shadow rounded-lg"
 						size="large"
+						defaultValue={'Паспорт РФ'}
 						options={[
-							{ value: 'паспорт' },
+							{ value: 'Паспорт РФ' },
 							{ value: 'свидетельство о рождении' },
 							{ value: 'загранпаспорт' }
 						]}
+						onChange={e => dispatch(mainDocumentSuccess(e))}
 					/>
 					<div className="w-[151px] h-[19px] text-black text-[14px] font-bold mt-4">
 						Данные документа
@@ -73,13 +119,25 @@ export const ParentForm = () => {
 								placeholder="000-000"
 								size="large"
 								className="mt-2 shadow"
+								onChange={e => dispatch(divisitonCodeSuccess(e.target.value))}
 							/>
 						</div>
 						<div className="mt-4">
 							<div className="text-black text-[14px] font-normal">
 								Когда выдан
 							</div>
-							<Input placeholder="0000" size="large" className="mt-2 shadow" />
+							<DatePicker
+								className="mt-2 shadow  w-full"
+								onChange={e => {
+									if (e != null) {
+										dispatch(dateIssueSuccess(e.format('DD.MM.YYYY')))
+									}
+								}}
+								locale={locale}
+								size="large"
+								format={'DD.MM.YYYY'}
+								placeholder="ДД.ММ.ГГГГ"
+							/>
 						</div>
 						<div className="">
 							<div className="text-black text-[14px] font-normal">Серия</div>
@@ -87,20 +145,45 @@ export const ParentForm = () => {
 								placeholder="000-000"
 								size="large"
 								className="mt-2 shadow"
+								onChange={e => dispatch(passwordSeriesSuccess(e.target.value))}
 							/>
 						</div>
 						<div className="">
 							<div className="text-black text-[14px] font-normal">Номер</div>
-							<Input placeholder="0000" size="large" className="mt-2 shadow" />
+							<Input
+								placeholder="0000"
+								size="large"
+								className="mt-2 shadow"
+								onChange={e => dispatch(passwordNumberSuccess(e.target.value))}
+							/>
 						</div>
+					</div>
+					<div className="mt-4 w-full">
+						<p>Кем выдан</p>
+						<Input
+							placeholder="УФМС по Республике Татарстан"
+							size="large"
+							className="mt-2 shadow"
+							onChange={e => dispatch(issuedBySuccess(e.target.value))}
+						/>
 					</div>
 					<div className="text-black text-[14px] mt-4 font-bold">
 						Дополнительные документы
 					</div>
 					<div className="text-black text-[14px] font-normal mt-4">СНИЛС</div>
-					<Input placeholder="0000" size="large" className="mt-2 shadow" />
+					<Input
+						placeholder="0000"
+						size="large"
+						className="mt-2 shadow"
+						onChange={e => dispatch(snilsSuccess(e.target.value))}
+					/>
 					<div className="text-black text-[14px] font-normal mt-4">ИНН</div>
-					<Input placeholder="0000" size="large" className="mt-2 shadow" />
+					<Input
+						placeholder="0000"
+						size="large"
+						className="mt-2 shadow"
+						onChange={e => dispatch(innSuccess(e.target.value))}
+					/>
 					<div className="text-black text-[20px] font-bold mt-7">Адрес</div>
 					<div className="text-black text-[14px] font-normal mt-7">
 						Адрес регистрации
@@ -109,6 +192,7 @@ export const ParentForm = () => {
 						placeholder="РФ, г. Казань, ул. Адорацкого, д.3, кв. 88"
 						size="large"
 						className="mt-2 shadow"
+						onChange={e => dispatch(registrationAddressSuccess(e.target.value))}
 					/>
 					<div className="text-black text-[14px] mt-4 font-normal">
 						Адрес проживания
@@ -117,6 +201,7 @@ export const ParentForm = () => {
 						placeholder="РФ, г. Казань, ул. Адорацкого, д.3, кв. 88"
 						size="large"
 						className="mt-2 shadow"
+						onChange={e => dispatch(residenceAddressSuccess(e.target.value))}
 					/>
 
 					<div className="w-full flex justify-center items-center gap-8 mt-[60px]">

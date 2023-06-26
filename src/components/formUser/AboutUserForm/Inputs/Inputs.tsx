@@ -2,12 +2,20 @@ import { DatePicker, Input, Select } from 'antd'
 import locale from 'antd/es/date-picker/locale/ru_RU'
 import dayjs from 'dayjs'
 import 'dayjs/locale/ru'
-import { FC } from 'react'
+import { useDispatch } from 'react-redux'
 
-import { IformCompProps } from '../../../../api/types'
+import {
+	birthDaySuccess,
+	countrySuccess,
+	nameSuccess,
+	patronymicSuccess,
+	phoneNumberSuccess,
+	surNameSuccess
+} from '../../../../store/reducers/FormReducers/FormReducer'
 
-export const Inputs: FC<IformCompProps> = ({ changeForm, formData }) => {
+export const Inputs = () => {
 	dayjs.locale('ru')
+	const dispatch = useDispatch()
 	return (
 		<div>
 			<span className="text-sm">Фамилия</span>
@@ -18,12 +26,7 @@ export const Inputs: FC<IformCompProps> = ({ changeForm, formData }) => {
 				placeholder="Фамилия"
 				className="mt-2 mb-4 shadow"
 				onChange={e => {
-					changeForm({
-						infoForm: {
-							...formData.infoForm,
-							surName: e.target.value
-						}
-					})
+					dispatch(surNameSuccess(e.target.value))
 				}}
 			/>
 
@@ -34,12 +37,7 @@ export const Inputs: FC<IformCompProps> = ({ changeForm, formData }) => {
 				placeholder="Имя"
 				className="mt-2 mb-4 shadow"
 				onChange={e => {
-					changeForm({
-						infoForm: {
-							...formData.infoForm,
-							name: e.target.value
-						}
-					})
+					dispatch(nameSuccess(e.target.value))
 				}}
 			/>
 
@@ -50,12 +48,7 @@ export const Inputs: FC<IformCompProps> = ({ changeForm, formData }) => {
 				placeholder="Отчество"
 				className="mt-2 mb-4 shadow"
 				onChange={e => {
-					changeForm({
-						infoForm: {
-							...formData.infoForm,
-							patronymic: e.target.value
-						}
-					})
+					dispatch(patronymicSuccess(e.target.value))
 				}}
 			/>
 
@@ -67,12 +60,7 @@ export const Inputs: FC<IformCompProps> = ({ changeForm, formData }) => {
 				format={'DD.MM.YYYY'}
 				onChange={e => {
 					if (e != null) {
-						changeForm({
-							infoForm: {
-								...formData.infoForm,
-								birthDay: e.format('DD.MM.YYYY')
-							}
-						})
+						dispatch(birthDaySuccess(e.format('DD.MM.YYYY')))
 					}
 				}}
 			/>
@@ -81,14 +69,11 @@ export const Inputs: FC<IformCompProps> = ({ changeForm, formData }) => {
 				className="block mt-2 mb-4 shadow"
 				size="large"
 				onChange={e => {
-					changeForm({
-						infoForm: {
-							...formData.infoForm,
-							country: e
-						}
-					})
+					dispatch(countrySuccess(e))
 				}}
+				defaultValue={'Российская Федерация'}
 				options={[
+					{ value: 'Российская Федерация' },
 					{ value: 'Бангладеш' },
 					{ value: 'Ботсвана' },
 					{ value: 'Белиз' },
@@ -104,12 +89,7 @@ export const Inputs: FC<IformCompProps> = ({ changeForm, formData }) => {
 				placeholder="Телефон"
 				className="mt-2 mb-4 shadow"
 				onChange={e => {
-					changeForm({
-						infoForm: {
-							...formData.infoForm,
-							phoneNumber: e.target.value
-						}
-					})
+					dispatch(phoneNumberSuccess(e.target.value))
 				}}
 			/>
 		</div>

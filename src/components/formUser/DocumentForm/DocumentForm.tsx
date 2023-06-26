@@ -1,53 +1,56 @@
-import { Button, DatePicker, Input, Select } from 'antd';
-import locale from 'antd/es/date-picker/locale/ru_RU';
-import 'dayjs/locale/ru';
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { Button, DatePicker, Input, Select } from 'antd'
+import locale from 'antd/es/date-picker/locale/ru_RU'
+import 'dayjs/locale/ru'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
-
-
-import { IdocumentsForm } from '../../../api/types';
 import { useAppSelector } from '../../../store'
 import {
-	changeDivisionCode,
-	documentsSuccess
-} from '../../../store/reducers/FormReducer'
+	dateIssueSuccess,
+	divisionCodeSuccess,
+	innSuccess,
+	issuedBySuccess,
+	mainDocumentSuccess,
+	passwordNumberSuccess,
+	passwordSeriesSuccess,
+	snilsSuccess
+} from '../../../store/reducers/FormReducers/DocumentReducer'
 import { ImagesLayout } from '../ImagesLayout'
 
 export const DocumentForm = () => {
 	const dispatch = useDispatch()
-	const userRole = useAppSelector(state => state.Form.role)
-	const data = useAppSelector(state => state.Form.documents)
-	const [form, changeForm] = useState<IdocumentsForm>({
-		documents: {
-			mainDocument: '',
-			passwordSeries: null,
-			passwordNumber: null,
-			issuedBy: null,
-			dateIssue: null,
-			divisionCode: '',
-			inn: '',
-			snils: ''
-		}
-	})
+	const userRole = useAppSelector(state => state.InfoUser.role)
+	const data = useAppSelector(state => state.Document)
+
 	const navigate = useNavigate()
 
 	const handleCancel = () => {
 		navigate('/form')
 	}
 	const handleOk = () => {
-		saveInStore()
-		if (userRole === 'schoolboy') navigate('/parent')
-		else navigate('/education')
-	}
-	const saveInStore = () => {
-		if (form.documents.mainDocument !== '') {
-			dispatch(documentsSuccess(form))
+		if (!saveInStore()) {
+			if (userRole === 'schoolboy') navigate('/parent')
+			else navigate('/education')
 		}
 	}
 	const handleSkip = () => {
 		navigate('/user')
+	}
+	const saveInStore = () => {
+		if (
+			[
+				data.dateIssue,
+				data.divisionCode,
+				data.inn,
+				data.issuedBy,
+				data.mainDocument,
+				data.passwordNumber,
+				data.passwordSeries,
+				data.snils
+			].some(el => el === '')
+		)
+			return true
+		else return false
 	}
 	return (
 		<ImagesLayout>
@@ -59,13 +62,10 @@ export const DocumentForm = () => {
 						<Select
 							className="mt-2"
 							size="large"
-							onChange={e =>
-								changeForm({
-									documents: { ...form.documents, mainDocument: e }
-								})
-							}
+							onChange={e => dispatch(mainDocumentSuccess(e))}
+							defaultValue={'Паспорт РФ'}
 							options={[
-								{ value: 'паспорт' },
+								{ value: 'Паспорт РФ' },
 								{ value: 'свидетельство о рождении' },
 								{ value: 'загранпаспорт' }
 							]}
@@ -83,7 +83,7 @@ export const DocumentForm = () => {
 									className="mt-2 shadow "
 									maxLength={7}
 									onChange={e =>
-										dispatch(changeDivisionCode(e.currentTarget.value))
+										dispatch(divisionCodeSuccess(e.currentTarget.value))
 									}
 								/>
 							</div>
@@ -93,12 +93,7 @@ export const DocumentForm = () => {
 									className="mt-2 shadow  w-full"
 									onChange={e => {
 										if (e != null) {
-											changeForm({
-												documents: {
-													...form.documents,
-													dateIssue: e.format('DD.MM.YYYY')
-												}
-											})
+											dispatch(dateIssueSuccess(e.format('DD.MM.YYYY')))
 										}
 									}}
 									locale={locale}
@@ -115,12 +110,7 @@ export const DocumentForm = () => {
 									className="mt-2 shadow "
 									maxLength={4}
 									onChange={e =>
-										changeForm({
-											documents: {
-												...form.documents,
-												passwordSeries: e.target.value
-											}
-										})
+										dispatch(passwordSeriesSuccess(e.target.value))
 									}
 								/>
 							</div>
@@ -132,12 +122,7 @@ export const DocumentForm = () => {
 									className="mt-2 shadow "
 									maxLength={4}
 									onChange={e =>
-										changeForm({
-											documents: {
-												...form.documents,
-												passwordNumber: e.target.value
-											}
-										})
+										dispatch(passwordNumberSuccess(e.target.value))
 									}
 								/>
 							</div>
@@ -148,11 +133,7 @@ export const DocumentForm = () => {
 								placeholder="УФМС по Республике Татарстан"
 								size="large"
 								className="mt-2 shadow "
-								onChange={e =>
-									changeForm({
-										documents: { ...form.documents, issuedBy: e.target.value }
-									})
-								}
+								onChange={e => dispatch(issuedBySuccess(e.target.value))}
 							/>
 						</div>
 					</div>
@@ -165,11 +146,7 @@ export const DocumentForm = () => {
 								placeholder="0000"
 								className="shadow mt-2"
 								maxLength={4}
-								onChange={e =>
-									changeForm({
-										documents: { ...form.documents, snils: e.target.value }
-									})
-								}
+								onChange={e => dispatch(snilsSuccess(e.target.value))}
 							/>
 							<p className="mt-4">ИНН</p>
 							<Input
@@ -177,11 +154,7 @@ export const DocumentForm = () => {
 								placeholder="0000"
 								maxLength={4}
 								className="shadow mt-2"
-								onChange={e =>
-									changeForm({
-										documents: { ...form.documents, inn: e.target.value }
-									})
-								}
+								onChange={e => dispatch(innSuccess(e.target.value))}
 							/>
 						</div>
 					</div>

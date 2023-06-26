@@ -1,42 +1,37 @@
-import { Button, Input, Select } from 'antd';
-import { useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { Button, Input, Select } from 'antd'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
-
-
-import { IeducationForm, edForm } from '../../../api/types';
-import { useAppSelector } from '../../../store';
-import { educationSuccess } from '../../../store/reducers/FormReducer';
-import { ImagesLayout } from '../ImagesLayout';
-
+import { useAppSelector } from '../../../store'
+import {
+	documentNumberSuccess,
+	documentSeriesSuccess,
+	educationCountrySeriesSuccess,
+	educationLevelSuccess,
+	idAdd,
+	idDelete,
+	nameOfInstituteSuccess
+} from '../../../store/reducers/FormReducers/EducationReducer'
+import { ImagesLayout } from '../ImagesLayout'
 
 export const EducationForm = () => {
-	const educationBaseForm: edForm = {
-		id: 0,
-		nameOfInstitute: '',
-		educationLevel: '',
-		documentNumber: '',
-		documentSeries: '',
-		educationCountry: ''
-	}
 	const dispatch = useDispatch()
-	const userRole = useAppSelector(state => state.Form.role)
+	const userRole = useAppSelector(state => state.InfoUser.role)
 	const navigate = useNavigate()
-	const [countEducation, setCountEducation] = useState([Date.now()])
-	let form = useRef<IeducationForm>({
-		education: [{ ...educationBaseForm, id: countEducation[0] }]
-	})
+	const form = useAppSelector(state => state.Education)
+
 	const handleCancel = () => {
 		navigate('/documents')
 	}
 	const handleOk = () => {
-		saveInStore()
-		if (userRole === 'applicant') navigate('/work')
-		else navigate('/user')
+		if (saveInStore()) {
+			if (userRole === 'applicant') navigate('/work')
+			else navigate('/user')
+		}
 	}
 	const saveInStore = () => {
-		let IsEmpty = form.current.education.some(
+		let IsEmpty = form.educationItems.some(
 			item =>
 				item.documentNumber === '' ||
 				item.documentSeries === '' ||
@@ -44,34 +39,23 @@ export const EducationForm = () => {
 				item.educationLevel === '' ||
 				item.nameOfInstitute === ''
 		)
-		if (!IsEmpty) {
-			dispatch(educationSuccess(form.current))
-		}
+		return IsEmpty
 	}
 	const handleSkip = () => {
 		navigate('/user')
 	}
 	const addEducation = () => {
-		const id = Date.now()
-		setCountEducation(previous => [...previous, id])
-		form.current = {
-			...form.current,
-			education: [...form.current.education, { ...educationBaseForm, id: id }]
-		}
+		dispatch(idAdd(form.educationItems.length))
 	}
 	const handleDeleteEducation = (id: number) => {
-		const newArray = countEducation.filter(item => id !== item)
-		setCountEducation(newArray)
-		form.current = {
-			education: form.current.education.filter(item => item.id !== id)
-		}
+		dispatch(idDelete(id))
 	}
-	const HandleEducation = (item: { id: number }) => {
+	const HandleEducation = useCallback((item: { id: number }) => {
 		return (
 			<div>
 				<div className="flex self-start gap-4 mt-7">
 					<p className="">Данные документа об образовании</p>
-					{countEducation.length !== 1 && (
+					{item.id !== 0 && (
 						<p
 							onClick={() => handleDeleteEducation(item.id)}
 							className="opacity-40 text-sm cursor-pointer"
@@ -87,17 +71,14 @@ export const EducationForm = () => {
 							placeholder="Высшее образование"
 							size="large"
 							className="mt-2"
-							onChange={e => {
-								form.current = {
-									...form.current,
-									education: form.current.education.map(el => {
-										if (el.id === item.id) {
-											return { ...el, educationLevel: e.target.value }
-										}
-										return el
+							onChange={e =>
+								dispatch(
+									educationLevelSuccess({
+										id: item.id,
+										educationLevel: e.target.value
 									})
-								}
-							}}
+								)
+							}
 						/>
 					</div>
 					<div>
@@ -105,17 +86,14 @@ export const EducationForm = () => {
 						<Select
 							className="block mt-2"
 							size="large"
-							onChange={e => {
-								form.current = {
-									...form.current,
-									education: form.current.education.map(el => {
-										if (el.id === item.id) {
-											return { ...el, educationCountry: e }
-										}
-										return el
+							onChange={e =>
+								dispatch(
+									educationCountrySeriesSuccess({
+										id: item.id,
+										educationCountry: e
 									})
-								}
-							}}
+								)
+							}
 							options={[
 								{ value: 'Бангладеш' },
 								{ value: 'Ботсвана' },
@@ -130,17 +108,14 @@ export const EducationForm = () => {
 					placeholder="Казанский федеральный университет"
 					size="large"
 					className="mt-2"
-					onChange={e => {
-						form.current = {
-							...form.current,
-							education: form.current.education.map(el => {
-								if (el.id === item.id) {
-									return { ...el, nameOfInstitute: e.target.value }
-								}
-								return el
+					onChange={e =>
+						dispatch(
+							nameOfInstituteSuccess({
+								id: item.id,
+								nameOfInstitute: e.target.value
 							})
-						}
-					}}
+						)
+					}
 				/>
 				<div className="grid grid-cols-2 mt-4 gap-10 w-full max-sm:gap-5">
 					<div>
@@ -149,17 +124,14 @@ export const EducationForm = () => {
 							placeholder="0000"
 							size="large"
 							className="mt-2"
-							onChange={e => {
-								form.current = {
-									...form.current,
-									education: form.current.education.map(el => {
-										if (el.id === item.id) {
-											return { ...el, documentSeries: e.target.value }
-										}
-										return el
+							onChange={e =>
+								dispatch(
+									documentSeriesSuccess({
+										id: item.id,
+										documentSeries: e.target.value
 									})
-								}
-							}}
+								)
+							}
 							maxLength={4}
 						/>
 					</div>
@@ -169,32 +141,29 @@ export const EducationForm = () => {
 							placeholder="0000"
 							size="large"
 							className="mt-2"
-							onChange={e => {
-								form.current = {
-									...form.current,
-									education: form.current.education.map(el => {
-										if (el.id === item.id) {
-											return { ...el, documentNumber: e.target.value }
-										}
-										return el
+							onChange={e =>
+								dispatch(
+									documentNumberSuccess({
+										id: item.id,
+										documentNumber: e.target.value
 									})
-								}
-							}}
+								)
+							}
 							maxLength={4}
 						/>
 					</div>
 				</div>
 			</div>
 		)
-	}
+	}, [])
 	return (
 		<ImagesLayout>
 			<div className="w-full flex justify-center  text-sm">
 				<div className="container max-w-2xl flex flex-col  pч-5">
 					<h3 className="self-start text-xl">Образование</h3>
 					<div className="flex flex-col gap-10 w-full">
-						{countEducation.map(item => (
-							<HandleEducation id={item} key={item} />
+						{form.educationItems.map(item => (
+							<HandleEducation id={item.id} key={item.id} />
 						))}
 					</div>
 

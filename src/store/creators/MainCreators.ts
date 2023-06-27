@@ -1,7 +1,9 @@
 import { Dispatch } from '@reduxjs/toolkit'
+import request from 'axios'
 import { Cookies } from 'react-cookie'
 
 import { approve, login, refresh, register } from '../../api/index'
+import { IRegError } from '../../api/types'
 import { IApproveRequest, IAuthRequest, IRegRequest } from '../../api/types'
 import {
 	loginFailure,
@@ -31,10 +33,11 @@ export const loginUser =
 			dispatch(ProfileSuccess(res.data.user))
 
 			answer = 200
-		} catch (e: any) {
-			dispatch(loginFailure(e.response.data.errors))
+		} catch (e) {
+			if (request.isAxiosError(e) && e.response) {
+				dispatch(loginFailure((e.response?.data as IRegError).errors))
+			}
 		}
-
 		return answer
 	}
 
@@ -42,8 +45,10 @@ export const refreshToken =
 	() =>
 	async (dispatch: Dispatch): Promise<number> => {
 		let accessToken = localStorage.getItem('access')
+		let userData = localStorage.getItem('userInfo')
 
-		if (accessToken == null) {
+		if (accessToken == null || userData == null) {
+			dispatch(logoutSuccess())
 			return 403
 		}
 
@@ -73,14 +78,17 @@ export const refreshToken =
 
 export const registerUser =
 	(data: IRegRequest) =>
-	async (dispatch: Dispatch): Promise<void> => {
+	async (dispatch: Dispatch): Promise<number> => {
 		try {
 			await register(data)
 			dispatch(registrationFailure([]))
-		} catch (e: any) {
-			console.log(e.response.data.errors)
-			dispatch(registrationFailure(e.response.data.errors))
+			return 200
+		} catch (e) {
+			if (request.isAxiosError(e) && e.response) {
+				dispatch(registrationFailure((e.response?.data as IRegError).errors))
+			}
 		}
+		return 400
 	}
 
 export const approveEmail =

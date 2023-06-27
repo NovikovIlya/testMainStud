@@ -11,27 +11,16 @@ import styles from './Buttons.module.scss'
 interface IButtonsProps {
 	check: boolean
 	setCheck: (value: boolean) => void
-	changeCheck: (checkButton: boolean) => void
 }
 
-export const Buttons: FC<IButtonsProps> = ({
-	setCheck,
-	changeCheck,
-	check
-}) => {
+export const Buttons: FC<IButtonsProps> = ({ setCheck, check }) => {
 	const dispatch = useAppDispatch()
 	const onChangeCheckbox = (e: CheckboxChangeEvent) =>
 		setCheck(e.target.checked)
 	return (
 		<Form.Item className={styles.main}>
 			<div className={styles.buttons}>
-				<Button
-					size="large"
-					type="primary"
-					htmlType="submit"
-					disabled={!check}
-					onClick={() => changeCheck(true)}
-				>
+				<Button size="large" type="primary" htmlType="submit" disabled={!check}>
 					Далее
 				</Button>
 				<Checkbox

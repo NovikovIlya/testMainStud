@@ -1,5 +1,5 @@
 import { Form, Typography } from 'antd'
-import { AllHTMLAttributes, FC, useEffect, useState } from 'react'
+import { AllHTMLAttributes, FC, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
@@ -28,25 +28,25 @@ interface IRegForm {
 	confirmPassword: string
 }
 
-export const Registration: FC = () => {
+interface IRegProps {
+	changeEmail: (email: string) => void
+}
+
+export const Registration: FC<IRegProps> = ({ changeEmail }) => {
 	const navigate = useNavigate()
 	const error = useSelector((state: RootState) => state.AuthReg.regData.error)
 	const dispatch = useAppDispatch()
 	const [value, setValue] = useState(0)
 	const [check, setCheck] = useState(false)
 	const [confirmPassword, setConfirmPassword] = useState(true)
-	const [checkButton, changeCheck] = useState(false)
 
-	useEffect(() => {
-		if (checkButton && error === null) {
-			navigate('/registration/checkingEmail')
-		}
-	}, [error, checkButton])
-
-	const onFinish = (values: IRegForm) => {
-		values.email == null
-			? console.log('phone')
-			: dispatch(
+	const onFinish = async (values: IRegForm) => {
+		if (values.confirmPassword !== values.password) {
+			setConfirmPassword(false)
+		} else {
+			setConfirmPassword(true)
+			if (values.email != null) {
+				const response = await dispatch(
 					registerUser({
 						lastName: values.surname,
 						password: values.password,
@@ -54,11 +54,12 @@ export const Registration: FC = () => {
 						email: values.email,
 						agreement: 'true'
 					})
-			  )
-
-		if (values.confirmPassword !== values.password) {
-			setConfirmPassword(false)
-		} else setConfirmPassword(true)
+				)
+				if (response === 200) {
+					navigate('/registration/checkingEmail')
+				}
+			}
+		}
 	}
 
 	return (
@@ -73,17 +74,18 @@ export const Registration: FC = () => {
 				>
 					<Title className={styles.title}>Регистрация</Title>
 					<Switcher setValue={setValue} />
-					<Inputs error={error} value={value} ErrorPrinter={ErrorPrinter} />
+					<Inputs
+						error={error}
+						value={value}
+						ErrorPrinter={ErrorPrinter}
+						changeEmail={changeEmail}
+					/>
 					<Password
 						confirmPassword={confirmPassword}
 						error={error}
 						ErrorPrinter={ErrorPrinter}
 					/>
-					<Buttons
-						check={check}
-						setCheck={setCheck}
-						changeCheck={changeCheck}
-					/>
+					<Buttons check={check} setCheck={setCheck} />
 				</Form>
 				<div className="flex items-center">
 					<img

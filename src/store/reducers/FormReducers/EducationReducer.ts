@@ -3,17 +3,17 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { RootState } from '../..'
 import { IeducationState, edForm } from '../../../api/types'
 
+const generalState: edForm = {
+	id: -1,
+	nameOfInstitute: '',
+	educationLevel: '',
+	documentNumber: '',
+	documentSeries: '',
+	educationCountry: 'Российская Федерация'
+}
+
 const initialState: IeducationState = {
-	educationItems: [
-		{
-			id: 0,
-			nameOfInstitute: '',
-			educationLevel: '',
-			documentNumber: '',
-			documentSeries: '',
-			educationCountry: ''
-		}
-	]
+	educationItems: [{ ...generalState, id: 0 }]
 }
 
 export const EducationReducer = createSlice({
@@ -21,20 +21,15 @@ export const EducationReducer = createSlice({
 	initialState,
 	reducers: {
 		idAdd: (state, action: PayloadAction<number>): IeducationState => {
-			const generalState: edForm = {
-				id: action.payload,
-				nameOfInstitute: '',
-				educationLevel: '',
-				documentNumber: '',
-				documentSeries: '',
-				educationCountry: ''
-			}
 			if (state.educationItems.length === 0) {
-				return { educationItems: [generalState] }
+				return { educationItems: [{ ...generalState, id: action.payload }] }
 			} else {
 				return {
 					...state,
-					educationItems: [...state.educationItems, generalState]
+					educationItems: [
+						...state.educationItems,
+						{ ...generalState, id: action.payload }
+					]
 				}
 			}
 		},

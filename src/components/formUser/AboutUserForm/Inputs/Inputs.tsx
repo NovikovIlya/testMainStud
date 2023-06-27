@@ -4,6 +4,7 @@ import dayjs from 'dayjs'
 import 'dayjs/locale/ru'
 import { useDispatch } from 'react-redux'
 
+import { useAppSelector } from '../../../../store'
 import {
 	birthDaySuccess,
 	countrySuccess,
@@ -16,6 +17,7 @@ import {
 export const Inputs = () => {
 	dayjs.locale('ru')
 	const dispatch = useDispatch()
+	const data = useAppSelector(state => state.Form)
 	return (
 		<div>
 			<span className="text-sm">Фамилия</span>
@@ -28,6 +30,7 @@ export const Inputs = () => {
 				onChange={e => {
 					dispatch(surNameSuccess(e.target.value))
 				}}
+				value={data.surName}
 			/>
 
 			<span className="text-sm">Имя</span>
@@ -39,6 +42,7 @@ export const Inputs = () => {
 				onChange={e => {
 					dispatch(nameSuccess(e.target.value))
 				}}
+				value={data.name}
 			/>
 
 			<span className="text-sm">Отчество</span>
@@ -50,6 +54,7 @@ export const Inputs = () => {
 				onChange={e => {
 					dispatch(patronymicSuccess(e.target.value))
 				}}
+				value={data.patronymic !== null ? data.patronymic : ''}
 			/>
 
 			<span className="text-sm">Дата рождения</span>
@@ -63,6 +68,9 @@ export const Inputs = () => {
 						dispatch(birthDaySuccess(e.format('DD.MM.YYYY')))
 					}
 				}}
+				value={
+					data.birthDay !== null ? dayjs(data.birthDay, 'DD.MM.YYYY') : null
+				}
 			/>
 			<span className="text-sm">Страна гражданина</span>
 			<Select
@@ -71,7 +79,7 @@ export const Inputs = () => {
 				onChange={e => {
 					dispatch(countrySuccess(e))
 				}}
-				defaultValue={'Российская Федерация'}
+				defaultValue={data.country}
 				options={[
 					{ value: 'Российская Федерация' },
 					{ value: 'Бангладеш' },
@@ -91,6 +99,7 @@ export const Inputs = () => {
 				onChange={e => {
 					dispatch(phoneNumberSuccess(e.target.value))
 				}}
+				value={data.phoneNumber}
 			/>
 		</div>
 	)

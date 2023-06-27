@@ -1,10 +1,12 @@
 import { ListItemPrefix, Radio, Typography } from '@material-tailwind/react'
 import { useDispatch } from 'react-redux'
 
+import { useAppSelector } from '../../../../store'
 import { genderSuccess } from '../../../../store/reducers/FormReducers/FormReducer'
 
 export const Switcher = () => {
 	const dispatch = useDispatch()
+	const gender = useAppSelector(state => state.Form.gender)
 	return (
 		<div className="flex self-start mb-4">
 			<label htmlFor="0" className="flex items-start  w-full cursor-pointer">
@@ -18,6 +20,7 @@ export const Switcher = () => {
 							className: 'p-0'
 						}}
 						onChange={() => dispatch(genderSuccess('Женщина'))}
+						checked={gender === 'Женщина' ? true : false}
 					/>
 				</ListItemPrefix>
 				<Typography color="blue-gray" className="font-medium text-sm">
@@ -38,6 +41,7 @@ export const Switcher = () => {
 							className: 'p-0'
 						}}
 						onChange={() => dispatch(genderSuccess('Мужчина'))}
+						checked={gender === 'Мужчина' ? true : false}
 					/>
 				</ListItemPrefix>
 				<Typography color="blue-gray" className="font-medium text-sm">

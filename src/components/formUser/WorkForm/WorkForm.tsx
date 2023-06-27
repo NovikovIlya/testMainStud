@@ -45,43 +45,48 @@ export const WorkForm = () => {
 	const addEducation = () => {
 		dispatch(idAdd(data.workItems.length))
 	}
-	const HandleWork = useCallback((item: { id: number }) => {
-		return (
-			<div>
-				<div className=" mt-5 w-full max-sm:gap-4">
-					<span className="flex">
-						<p className="flex mr-5">Место работы</p>
-						{item.id !== 0 && (
-							<p
-								onClick={() => handleDeleteEducation(item.id)}
-								className="opacity-40 text-sm cursor-pointer"
-							>
-								Удалить
-							</p>
-						)}
-					</span>
+	const HandleWork = useCallback(
+		(item: { id: number }) => {
+			return (
+				<div>
+					<div className=" mt-5 w-full max-sm:gap-4">
+						<span className="flex">
+							<p className="flex mr-5">Место работы</p>
+							{item.id !== 0 && (
+								<p
+									onClick={() => handleDeleteEducation(item.id)}
+									className="opacity-40 text-sm cursor-pointer"
+								>
+									Удалить
+								</p>
+							)}
+						</span>
 
+						<Input
+							placeholder="Калифорнийский университет в Беркли, департамент всего самого умного, отдел выпендрежников"
+							size="large"
+							className="mt-2"
+							onChange={e =>
+								dispatch(placeSuccess({ id: item.id, place: e.target.value }))
+							}
+							defaultValue={data.workItems[item.id].place}
+						/>
+					</div>
+					<p className="mt-4 self-start">Период работы</p>
 					<Input
-						placeholder="Калифорнийский университет в Беркли, департамент всего самого умного, отдел выпендрежников"
+						placeholder="август 2018 — май 2023"
 						size="large"
 						className="mt-2"
 						onChange={e =>
-							dispatch(placeSuccess({ id: item.id, place: e.target.value }))
+							dispatch(timeSuccess({ id: item.id, time: e.target.value }))
 						}
+						defaultValue={data.workItems[item.id].time}
 					/>
 				</div>
-				<p className="mt-4 self-start">Период работы</p>
-				<Input
-					placeholder="август 2018 — май 2023"
-					size="large"
-					className="mt-2"
-					onChange={e =>
-						dispatch(timeSuccess({ id: item.id, time: e.target.value }))
-					}
-				/>
-			</div>
-		)
-	}, [])
+			)
+		},
+		[data.workItems.length]
+	)
 	return (
 		<ImagesLayout>
 			<div className="w-full flex justify-center  text-sm">
@@ -111,6 +116,7 @@ export const WorkForm = () => {
 							className="mt-2"
 							autoSize={{ minRows: 4, maxRows: 8 }}
 							onChange={e => dispatch(descriptionSuccess(e.target.value))}
+							defaultValue={data.description}
 						/>
 						<p className="text-black text-sm font-normal mt-4">
 							Ссылка на портфолио
@@ -120,6 +126,7 @@ export const WorkForm = () => {
 							size="large"
 							className="mt-2"
 							onChange={e => dispatch(linkSuccess(e.target.value))}
+							defaultValue={data.link}
 						/>
 					</div>
 					<div className="w-full flex justify-center items-center gap-8 mt-[60px]">

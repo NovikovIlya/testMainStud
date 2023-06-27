@@ -1,8 +1,13 @@
+import { FC } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { CardForm } from '../approve/cardForm'
 
-export const CheckEmail = () => {
+interface ICheckEmailProps {
+	email: string
+}
+
+export const CheckEmail: FC<ICheckEmailProps> = ({ email }) => {
 	const navigate = useNavigate()
 	const buttonEffect = () => {
 		console.log("it's buttons effect")
@@ -17,7 +22,13 @@ export const CheckEmail = () => {
 			closeEffect={closeEffect}
 			withDots={true}
 			mainTittle="Проверьте почту"
-			secondTittle="На почту Molodec@gmail.com выслано приветственное письмо. Для завершения регистрации Вам необходимо перейти по ссылке, указанной в письме "
+			secondTittle={
+				<span>
+					На почту <span className="font-bold">{email}</span> выслано
+					приветственное письмо. Для завершения регистрации Вам необходимо
+					перейти по ссылке, указанной в письме
+				</span>
+			}
 			buttonText="Выслать повторно"
 			buttonBgBlue={true}
 		/>

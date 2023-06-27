@@ -1,5 +1,5 @@
 import { Button, Input, Select } from 'antd'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
@@ -19,19 +19,20 @@ export const EducationForm = () => {
 	const dispatch = useDispatch()
 	const userRole = useAppSelector(state => state.InfoUser.role)
 	const navigate = useNavigate()
-	const form = useAppSelector(state => state.Education)
+	const data = useAppSelector(state => state.Education)
 
 	const handleCancel = () => {
 		navigate('/documents')
 	}
 	const handleOk = () => {
-		if (saveInStore()) {
+		if (!saveInStore()) {
 			if (userRole === 'applicant') navigate('/work')
 			else navigate('/user')
 		}
 	}
+
 	const saveInStore = () => {
-		let IsEmpty = form.educationItems.some(
+		let IsEmpty = data.educationItems.some(
 			item =>
 				item.documentNumber === '' ||
 				item.documentSeries === '' ||
@@ -45,124 +46,133 @@ export const EducationForm = () => {
 		navigate('/user')
 	}
 	const addEducation = () => {
-		dispatch(idAdd(form.educationItems.length))
+		dispatch(idAdd(data.educationItems.length))
 	}
 	const handleDeleteEducation = (id: number) => {
 		dispatch(idDelete(id))
 	}
-	const HandleEducation = useCallback((item: { id: number }) => {
-		return (
-			<div>
-				<div className="flex self-start gap-4 mt-7">
-					<p className="">Данные документа об образовании</p>
-					{item.id !== 0 && (
-						<p
-							onClick={() => handleDeleteEducation(item.id)}
-							className="opacity-40 text-sm cursor-pointer"
-						>
-							Удалить
-						</p>
-					)}
+	const HandleEducation = useCallback(
+		(item: { id: number }) => {
+			return (
+				<div>
+					<div className="flex self-start gap-4 mt-7">
+						<p className="">Данные документа об образовании</p>
+						{item.id !== 0 && (
+							<p
+								onClick={() => handleDeleteEducation(item.id)}
+								className="opacity-40 text-sm cursor-pointer"
+							>
+								Удалить
+							</p>
+						)}
+					</div>
+					<div className="grid grid-cols-2 gap-10 mt-5 w-full max-sm:grid-cols-1 max-sm:gap-4">
+						<div>
+							<p>Уровень образования</p>
+							<Input
+								placeholder="Высшее образование"
+								size="large"
+								className="mt-2"
+								onChange={e =>
+									dispatch(
+										educationLevelSuccess({
+											id: item.id,
+											educationLevel: e.target.value
+										})
+									)
+								}
+								defaultValue={data.educationItems[item.id].educationLevel}
+							/>
+						</div>
+						<div>
+							<p>Страна получения образования</p>
+							<Select
+								className="block mt-2"
+								size="large"
+								onChange={e =>
+									dispatch(
+										educationCountrySeriesSuccess({
+											id: item.id,
+											educationCountry: e
+										})
+									)
+								}
+								options={[
+									{ value: 'Российская Федерация' },
+									{ value: 'Бангладеш' },
+									{ value: 'Ботсвана' },
+									{ value: 'Белиз' },
+									{ value: 'Бруней' }
+								]}
+								defaultValue={data.educationItems[item.id].educationCountry}
+							/>
+						</div>
+					</div>
+					<p className="mt-4 self-start">Наименование учебного заведения</p>
+					<Input
+						placeholder="Казанский федеральный университет"
+						size="large"
+						className="mt-2"
+						onChange={e =>
+							dispatch(
+								nameOfInstituteSuccess({
+									id: item.id,
+									nameOfInstitute: e.target.value
+								})
+							)
+						}
+						defaultValue={data.educationItems[item.id].nameOfInstitute}
+					/>
+					<div className="grid grid-cols-2 mt-4 gap-10 w-full max-sm:gap-5">
+						<div>
+							<p>Серия</p>
+							<Input
+								placeholder="0000"
+								size="large"
+								className="mt-2"
+								onChange={e =>
+									dispatch(
+										documentSeriesSuccess({
+											id: item.id,
+											documentSeries: e.target.value
+										})
+									)
+								}
+								defaultValue={data.educationItems[item.id].documentSeries}
+								maxLength={4}
+							/>
+						</div>
+						<div>
+							<p>Номер</p>
+							<Input
+								placeholder="0000"
+								size="large"
+								className="mt-2"
+								onChange={e =>
+									dispatch(
+										documentNumberSuccess({
+											id: item.id,
+											documentNumber: e.target.value
+										})
+									)
+								}
+								defaultValue={data.educationItems[item.id].documentNumber}
+								maxLength={4}
+							/>
+						</div>
+					</div>
 				</div>
-				<div className="grid grid-cols-2 gap-10 mt-5 w-full max-sm:grid-cols-1 max-sm:gap-4">
-					<div>
-						<p>Уровень образования</p>
-						<Input
-							placeholder="Высшее образование"
-							size="large"
-							className="mt-2"
-							onChange={e =>
-								dispatch(
-									educationLevelSuccess({
-										id: item.id,
-										educationLevel: e.target.value
-									})
-								)
-							}
-						/>
-					</div>
-					<div>
-						<p>Страна получения образования</p>
-						<Select
-							className="block mt-2"
-							size="large"
-							onChange={e =>
-								dispatch(
-									educationCountrySeriesSuccess({
-										id: item.id,
-										educationCountry: e
-									})
-								)
-							}
-							options={[
-								{ value: 'Бангладеш' },
-								{ value: 'Ботсвана' },
-								{ value: 'Белиз' },
-								{ value: 'Бруней' }
-							]}
-						/>
-					</div>
-				</div>
-				<p className="mt-4 self-start">Наименование учебного заведения</p>
-				<Input
-					placeholder="Казанский федеральный университет"
-					size="large"
-					className="mt-2"
-					onChange={e =>
-						dispatch(
-							nameOfInstituteSuccess({
-								id: item.id,
-								nameOfInstitute: e.target.value
-							})
-						)
-					}
-				/>
-				<div className="grid grid-cols-2 mt-4 gap-10 w-full max-sm:gap-5">
-					<div>
-						<p>Серия</p>
-						<Input
-							placeholder="0000"
-							size="large"
-							className="mt-2"
-							onChange={e =>
-								dispatch(
-									documentSeriesSuccess({
-										id: item.id,
-										documentSeries: e.target.value
-									})
-								)
-							}
-							maxLength={4}
-						/>
-					</div>
-					<div>
-						<p>Номер</p>
-						<Input
-							placeholder="0000"
-							size="large"
-							className="mt-2"
-							onChange={e =>
-								dispatch(
-									documentNumberSuccess({
-										id: item.id,
-										documentNumber: e.target.value
-									})
-								)
-							}
-							maxLength={4}
-						/>
-					</div>
-				</div>
-			</div>
-		)
-	}, [])
+			)
+		},
+		[data.educationItems.length]
+	)
 	return (
 		<ImagesLayout>
 			<div className="w-full flex justify-center  text-sm">
 				<div className="container max-w-2xl flex flex-col  pч-5">
 					<h3 className="self-start text-xl">Образование</h3>
 					<div className="flex flex-col gap-10 w-full">
-						{form.educationItems.map(item => (
+						{data.educationItems.map(item => (
 							<HandleEducation id={item.id} key={item.id} />
 						))}
 					</div>

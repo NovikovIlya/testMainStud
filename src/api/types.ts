@@ -15,6 +15,10 @@ export interface IError {
 	message: string
 }
 
+export interface IRegError {
+	errors: IError[]
+}
+
 export interface IAuthSuccess {
 	accessToken: string
 	refreshToken: string

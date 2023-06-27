@@ -1,34 +1,23 @@
-import { Form, Popover, Typography } from 'antd';
-import { FC, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { Form, Popover, Typography } from 'antd'
+import { FC, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
+import logo from '../../assets/images/group.png'
+import { useAppDispatch } from '../../store'
+import { RootState } from '../../store'
+import { loginUser } from '../../store/creators/MainCreators'
+import { BackMainPage } from '../back-main-page/BackMainPage'
+import { Faq } from '../faq/Faq'
 
-
-import logo from '../../assets/images/group.png';
-import { useAppDispatch } from '../../store';
-import { RootState } from '../../store';
-import { loginUser } from '../../store/creators/MainCreators';
-import { BackMainPage } from '../back-main-page/BackMainPage';
-import { Faq } from '../faq/Faq';
-
-
-
-import styles from './Login.module.scss';
-import { Buttons } from './buttons/Buttons';
-import { Inputs } from './inputs/Inputs';
-import { Switcher } from './switcher/Switcher';
-
+import styles from './Login.module.scss'
+import { Buttons } from './buttons/Buttons'
+import { Inputs } from './inputs/Inputs'
+import { Switcher } from './switcher/Switcher'
 
 const { Title } = Typography
 
-type TypeRule = 'student' | 'worker'// и тд
-
-interface ILoginProps {
-	changeIsLogin: (IsLogIn: boolean) => void
-}
-
-export const Login: FC<ILoginProps> = ({ changeIsLogin }) => {
+export const Login = () => {
 	const navigate = useNavigate()
 	const error = useSelector((state: RootState) => state.AuthReg.authData.error)
 	const dispatch = useAppDispatch()
@@ -52,8 +41,7 @@ export const Login: FC<ILoginProps> = ({ changeIsLogin }) => {
 				)
 			}
 			if (res === 200) {
-				navigate('/profile')
-				changeIsLogin(false)
+				navigate('/infoUser')
 			}
 		}
 		request()

@@ -56,6 +56,7 @@ export const InfoUser = () => {
 										onChange={() => {
 											dispatch(roleSuccess('schoolboy'))
 										}}
+										checked={role === 'schoolboy' ? true : false}
 									/>
 								</ListItemPrefix>
 								<Typography color="blue-gray" className="font-medium text-sm">
@@ -82,6 +83,7 @@ export const InfoUser = () => {
 										onChange={() => {
 											dispatch(roleSuccess('enrollee'))
 										}}
+										checked={role === 'enrollee' ? true : false}
 									/>
 								</ListItemPrefix>
 								<Typography color="blue-gray" className="font-medium text-sm">
@@ -108,6 +110,7 @@ export const InfoUser = () => {
 										onChange={() => {
 											dispatch(roleSuccess('listener'))
 										}}
+										checked={role === 'listener' ? true : false}
 									/>
 								</ListItemPrefix>
 								<Typography color="blue-gray" className="font-medium text-sm">
@@ -133,6 +136,7 @@ export const InfoUser = () => {
 										onChange={() => {
 											dispatch(roleSuccess('applicant'))
 										}}
+										checked={role === 'applicant' ? true : false}
 									/>
 								</ListItemPrefix>
 								<Typography color="blue-gray" className="font-medium text-sm">
@@ -159,6 +163,7 @@ export const InfoUser = () => {
 										onChange={() => {
 											dispatch(roleSuccess('guest'))
 										}}
+										checked={role === 'guest' ? true : false}
 									/>
 								</ListItemPrefix>
 								<Typography color="blue-gray" className="font-medium text-sm">

@@ -1,5 +1,5 @@
 import { Button } from 'antd'
-import { FC } from 'react'
+import { AllHTMLAttributes, FC } from 'react'
 
 import { CloseSvg } from '../../assets/svg'
 
@@ -8,7 +8,7 @@ interface cardProps {
 	closeEffect: () => void
 	withDots: boolean
 	mainTittle: string
-	secondTittle: string
+	secondTittle: AllHTMLAttributes<HTMLSpanElement>
 	buttonText: string
 	buttonBgBlue: boolean
 }
@@ -25,7 +25,7 @@ export const CardForm: FC<cardProps> = ({
 	return (
 		<div className="w-screen h-screen">
 			<div
-				className="w-full h-[600px] rounded-md border-[1px] fixed left-0 right-0 top-0 bottom-0 m-auto border-bluekfu border-solid
+				className="w-full h-[600px] rounded-3xl border-[1px] fixed left-0 right-0 top-0 bottom-0 m-auto border-bluekfu border-solid
       md:w-[768px] sm:w-[640px] sm:h-[380px] flex flex-col justify-around"
 			>
 				<span className="flex justify-end">
@@ -43,7 +43,7 @@ export const CardForm: FC<cardProps> = ({
 					</span>
 				)}
 				<h4 className="mt-[20px] mb-[20px] w-4/6 text-center mx-auto flex font-normal">
-					{secondTittle}
+					<>{secondTittle}</>
 				</h4>
 				<div className="flex justify-center">
 					{!buttonBgBlue && (
@@ -56,7 +56,7 @@ export const CardForm: FC<cardProps> = ({
 					)}
 					{buttonBgBlue && (
 						<Button
-							className="rounded-md text-white bg-bluekfu font-bold w-1/3 h-[56px] text-center"
+							className="rounded-md bg-bluekfu text-white font-bold w-1/3 h-[56px] text-center hover:bg-white"
 							onClick={buttonEffect}
 						>
 							{buttonText}

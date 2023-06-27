@@ -1,7 +1,9 @@
 import { ConfigProvider } from 'antd'
 import { useEffect, useState } from 'react'
+import { Cookies } from 'react-cookie'
 import { Route, Routes } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 
 import { ApproveEmail } from './components/approve/ApproveEmail'
 import { CheckEmail } from './components/checkEmail/checkEmail'
@@ -19,33 +21,50 @@ import { refreshToken } from './store/creators/MainCreators'
 import { logoutSuccess } from './store/reducers/AuthRegReducer'
 
 const App = () => {
-	const [isLogin, changeIsLogin] = useState(true)
+	const cookies = new Cookies()
+	const [email, changeEmail] = useState('')
 
 	const navigate = useNavigate()
 	const dispatch = useAppDispatch()
+	const currentUrl = useLocation()
+
+	console.log(currentUrl.pathname)
 
 	const dataApi = async () => {
 		const res = await dispatch(refreshToken())
 		if (res === 200) {
-			changeIsLogin(false)
-			navigate('/infoUser')
+			const isTrue = [
+				'/form',
+				'/parent',
+				'/work',
+				'/documents',
+				'/education'
+			].some(el => el === currentUrl.pathname)
+			if (isTrue) {
+				navigate('/infoUser')
+			} else {
+				navigate(currentUrl.pathname)
+			}
 		}
 		if (res === 403) {
 			navigate('/')
-			changeIsLogin(true)
 		}
 	}
 	useEffect(() => {
 		if (
-			localStorage.getItem('userInfo') !== null &&
-			localStorage.getItem('access') !== null
+			localStorage.getItem('access') !== null ||
+			localStorage.getItem('userInfo') !== null ||
+			cookies.get('refresh') !== null
 		) {
 			dataApi()
-		} else {
-			if (!isLogin) {
-				dispatch(logoutSuccess())
-				navigate('/')
-			}
+		}
+		if (
+			localStorage.getItem('access') === null &&
+			localStorage.getItem('userInfo') === null &&
+			cookies.get('refresh') === null &&
+			currentUrl.pathname !== '/'
+		) {
+			dispatch(logoutSuccess())
 		}
 	}, [])
 
@@ -60,26 +79,23 @@ const App = () => {
 				}}
 			>
 				<Routes>
-					<Route path="/*" element={<Login changeIsLogin={changeIsLogin} />} />
-					<Route path="/registration/*" element={<Registration />} />
+					<Route path="/*" element={<Login />} />
 					<Route
-						path="/profile/*"
-						element={
-							isLogin ? <Login changeIsLogin={changeIsLogin} /> : <InfoUser />
-						}
+						path="/registration/*"
+						element={<Registration changeEmail={changeEmail} />}
 					/>
 					<Route path="/user/*" element={<User />} />
-					<Route
-						path="/api/register/approve"
-						element={<ApproveEmail changeIsLogin={changeIsLogin} />}
-					/>
+					<Route path="/api/register/approve" element={<ApproveEmail />} />
 					<Route path="/infoUser" element={<InfoUser />} />
 					<Route path="/form" element={<FormModal />} />
 					<Route path="/education" element={<EducationForm />} />
 					<Route path="/documents" element={<DocumentForm />} />
 					<Route path="/work" element={<WorkForm />} />
 					<Route path="/parent" element={<ParentForm />} />
-					<Route path="/registration/checkingEmail" element={<CheckEmail />} />
+					<Route
+						path="/registration/checkingEmail"
+						element={<CheckEmail email={email} />}
+					/>
 				</Routes>
 			</ConfigProvider>
 		</>

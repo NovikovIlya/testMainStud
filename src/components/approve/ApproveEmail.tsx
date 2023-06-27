@@ -1,19 +1,13 @@
 import { useEffect } from 'react'
-import { FC } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 
 import { useAppDispatch } from '../../store'
 import { approveEmail } from '../../store/creators/MainCreators'
-import { Layout } from '../layout/Layout'
 
 import { CardForm } from './cardForm'
 
-interface IApproveProps {
-	changeIsLogin: (IsLogIn: boolean) => void
-}
-
-export const ApproveEmail: FC<IApproveProps> = ({ changeIsLogin }) => {
+export const ApproveEmail = () => {
 	const [searchParams] = useSearchParams()
 	const navigate = useNavigate()
 	const dispatch = useAppDispatch()
@@ -27,17 +21,15 @@ export const ApproveEmail: FC<IApproveProps> = ({ changeIsLogin }) => {
 					hash: searchParams.get('hash')
 				})
 			)
-			changeIsLogin(false)
-			navigate('/profile')
 		}
 	})
 
 	const buttonEffect = () => {
-		console.log("it's buttons effect")
+		navigate('/infoUser')
 	}
 
 	const closeEffect = () => {
-		console.log("it's close effect")
+		navigate('/')
 	}
 	return (
 		<CardForm
@@ -45,7 +37,14 @@ export const ApproveEmail: FC<IApproveProps> = ({ changeIsLogin }) => {
 			closeEffect={closeEffect}
 			withDots={false}
 			mainTittle="Добро пожаловать"
-			secondTittle="Здесь нужен интересный приветственный текст о том, что может делать пользователь. Не следует, однако, забывать, что высокотехнологичная концепция общественного уклада не даёт нам иного выбора, кроме определения новых предложений."
+			secondTittle={
+				<span>
+					"Здесь нужен интересный приветственный текст о том, что может делать
+					пользователь. Не следует, однако, забывать, что высокотехнологичная
+					концепция общественного уклада не даёт нам иного выбора, кроме
+					определения новых предложений."
+				</span>
+			}
 			buttonText="Начнём"
 			buttonBgBlue={false}
 		/>

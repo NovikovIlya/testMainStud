@@ -1,5 +1,6 @@
 import { Button, DatePicker, Input, Select } from 'antd'
 import locale from 'antd/es/date-picker/locale/ru_RU'
+import dayjs from 'dayjs'
 import 'dayjs/locale/ru'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -18,6 +19,7 @@ import {
 import { ImagesLayout } from '../ImagesLayout'
 
 export const DocumentForm = () => {
+	dayjs.locale('ru')
 	const dispatch = useDispatch()
 	const userRole = useAppSelector(state => state.InfoUser.role)
 	const data = useAppSelector(state => state.Document)
@@ -63,7 +65,7 @@ export const DocumentForm = () => {
 							className="mt-2"
 							size="large"
 							onChange={e => dispatch(mainDocumentSuccess(e))}
-							defaultValue={'Паспорт РФ'}
+							defaultValue={data.mainDocument}
 							options={[
 								{ value: 'Паспорт РФ' },
 								{ value: 'свидетельство о рождении' },
@@ -100,6 +102,11 @@ export const DocumentForm = () => {
 									size="large"
 									format={'DD.MM.YYYY'}
 									placeholder="ДД.ММ.ГГГГ"
+									value={
+										data.dateIssue != null
+											? dayjs(data.dateIssue, 'DD.MM.YYYY')
+											: null
+									}
 								/>
 							</div>
 							<div>
@@ -112,6 +119,7 @@ export const DocumentForm = () => {
 									onChange={e =>
 										dispatch(passwordSeriesSuccess(e.target.value))
 									}
+									value={data.passwordSeries != null ? data.passwordSeries : ''}
 								/>
 							</div>
 							<div>
@@ -124,6 +132,7 @@ export const DocumentForm = () => {
 									onChange={e =>
 										dispatch(passwordNumberSuccess(e.target.value))
 									}
+									value={data.passwordNumber != null ? data.passwordNumber : ''}
 								/>
 							</div>
 						</div>
@@ -134,6 +143,7 @@ export const DocumentForm = () => {
 								size="large"
 								className="mt-2 shadow "
 								onChange={e => dispatch(issuedBySuccess(e.target.value))}
+								value={data.issuedBy != null ? data.issuedBy : ''}
 							/>
 						</div>
 					</div>
@@ -147,6 +157,7 @@ export const DocumentForm = () => {
 								className="shadow mt-2"
 								maxLength={4}
 								onChange={e => dispatch(snilsSuccess(e.target.value))}
+								value={data.snils}
 							/>
 							<p className="mt-4">ИНН</p>
 							<Input
@@ -155,6 +166,7 @@ export const DocumentForm = () => {
 								maxLength={4}
 								className="shadow mt-2"
 								onChange={e => dispatch(innSuccess(e.target.value))}
+								value={data.inn}
 							/>
 						</div>
 					</div>

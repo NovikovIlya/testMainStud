@@ -12,9 +12,15 @@ interface IInputsProps {
 		searchWord: string,
 		error: IError[] | null
 	) => AllHTMLAttributes<HTMLDivElement>
+	changeEmail: (email: string) => void
 }
 
-export const Inputs: FC<IInputsProps> = ({ error, value, ErrorPrinter }) => {
+export const Inputs: FC<IInputsProps> = ({
+	error,
+	value,
+	ErrorPrinter,
+	changeEmail
+}) => {
 	return (
 		<>
 			<Form.Item
@@ -87,7 +93,11 @@ export const Inputs: FC<IInputsProps> = ({ error, value, ErrorPrinter }) => {
 						</>
 					}
 				>
-					<Input size="large" placeholder="Электронная почта" />
+					<Input
+						size="large"
+						placeholder="Электронная почта"
+						onChange={e => changeEmail(e.target.value)}
+					/>
 				</Form.Item>
 			)}
 		</>

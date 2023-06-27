@@ -1,7 +1,7 @@
 import { Button, DatePicker, Input, Select } from 'antd'
 import locale from 'antd/es/date-picker/locale/ru_RU'
+import dayjs from 'dayjs'
 import 'dayjs/locale/ru'
-import { isEmpty } from 'lodash'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
@@ -24,6 +24,7 @@ import {
 import { ImagesLayout } from '../ImagesLayout'
 
 export const ParentForm = () => {
+	dayjs.locale('ru')
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 	const data = useAppSelector(state => state.Parent)
@@ -71,6 +72,7 @@ export const ParentForm = () => {
 						size="large"
 						className="mt-2 shadow"
 						onChange={e => dispatch(FIOSuccess(e.target.value))}
+						value={data.FIO}
 					/>
 					<div className="text-black text-[14px] font-normal mt-4">
 						Номер телефона родителя
@@ -80,6 +82,7 @@ export const ParentForm = () => {
 						size="large"
 						className="mt-2 shadow"
 						onChange={e => dispatch(phoneNumberSuccess(e.target.value))}
+						value={data.phoneNumber}
 					/>
 					<div className="text-black text-[14px] font-normal mt-4">
 						Email родителя
@@ -89,6 +92,7 @@ export const ParentForm = () => {
 						size="large"
 						className="mt-2 shadow"
 						onChange={e => dispatch(eMailSuccess(e.target.value))}
+						value={data.eMail}
 					/>
 					<div className="text-black text-[20px] mt-7 font-bold">
 						Документы родителя
@@ -99,7 +103,7 @@ export const ParentForm = () => {
 					<Select
 						className="mt-2 w-full shadow rounded-lg"
 						size="large"
-						defaultValue={'Паспорт РФ'}
+						defaultValue={data.mainDocument}
 						options={[
 							{ value: 'Паспорт РФ' },
 							{ value: 'свидетельство о рождении' },
@@ -120,6 +124,7 @@ export const ParentForm = () => {
 								size="large"
 								className="mt-2 shadow"
 								onChange={e => dispatch(divisitonCodeSuccess(e.target.value))}
+								value={data.divisitonCode}
 							/>
 						</div>
 						<div className="mt-4">
@@ -127,12 +132,17 @@ export const ParentForm = () => {
 								Когда выдан
 							</div>
 							<DatePicker
-								className="mt-2 shadow  w-full"
+								className="mt-2 shadow w-full"
 								onChange={e => {
 									if (e != null) {
 										dispatch(dateIssueSuccess(e.format('DD.MM.YYYY')))
 									}
 								}}
+								value={
+									data.dateIssue != null
+										? dayjs(data.dateIssue, 'DD.MM.YYYY')
+										: null
+								}
 								locale={locale}
 								size="large"
 								format={'DD.MM.YYYY'}
@@ -146,6 +156,7 @@ export const ParentForm = () => {
 								size="large"
 								className="mt-2 shadow"
 								onChange={e => dispatch(passwordSeriesSuccess(e.target.value))}
+								value={data.passwordSeries != null ? data.passwordSeries : ''}
 							/>
 						</div>
 						<div className="">
@@ -155,6 +166,7 @@ export const ParentForm = () => {
 								size="large"
 								className="mt-2 shadow"
 								onChange={e => dispatch(passwordNumberSuccess(e.target.value))}
+								value={data.passwordNumber != null ? data.passwordNumber : ''}
 							/>
 						</div>
 					</div>
@@ -165,6 +177,7 @@ export const ParentForm = () => {
 							size="large"
 							className="mt-2 shadow"
 							onChange={e => dispatch(issuedBySuccess(e.target.value))}
+							value={data.issuedBy != null ? data.issuedBy : ''}
 						/>
 					</div>
 					<div className="text-black text-[14px] mt-4 font-bold">
@@ -176,6 +189,7 @@ export const ParentForm = () => {
 						size="large"
 						className="mt-2 shadow"
 						onChange={e => dispatch(snilsSuccess(e.target.value))}
+						value={data.snils}
 					/>
 					<div className="text-black text-[14px] font-normal mt-4">ИНН</div>
 					<Input
@@ -183,6 +197,7 @@ export const ParentForm = () => {
 						size="large"
 						className="mt-2 shadow"
 						onChange={e => dispatch(innSuccess(e.target.value))}
+						value={data.inn}
 					/>
 					<div className="text-black text-[20px] font-bold mt-7">Адрес</div>
 					<div className="text-black text-[14px] font-normal mt-7">
@@ -193,6 +208,7 @@ export const ParentForm = () => {
 						size="large"
 						className="mt-2 shadow"
 						onChange={e => dispatch(registrationAddressSuccess(e.target.value))}
+						value={data.registrationAddress}
 					/>
 					<div className="text-black text-[14px] mt-4 font-normal">
 						Адрес проживания
@@ -202,6 +218,7 @@ export const ParentForm = () => {
 						size="large"
 						className="mt-2 shadow"
 						onChange={e => dispatch(residenceAddressSuccess(e.target.value))}
+						value={data.residenceAddress}
 					/>
 
 					<div className="w-full flex justify-center items-center gap-8 mt-[60px]">

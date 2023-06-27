@@ -42,7 +42,7 @@ export const WorkForm = () => {
 	const handleDeleteEducation = (id: number) => {
 		dispatch(idDelete(id))
 	}
-	const addEducation = () => {
+	const addWork = () => {
 		dispatch(idAdd(data.workItems.length))
 	}
 	const HandleWork = useCallback((item: { id: number }) => {
@@ -97,7 +97,7 @@ export const WorkForm = () => {
 						<Button
 							className="rounded-full text-center p-0 w-8 h-8 text-xl"
 							type="primary"
-							onClick={addEducation}
+							onClick={addWork}
 						>
 							+
 						</Button>

@@ -1,14 +1,17 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-import { RootState } from '../..'
-import { IParentState } from '../../../api/types'
+
+
+import { RootState } from '../..';
+import { IParentState } from '../../../api/types';
+
 
 const initialState: IParentState = {
 	FIO: '',
 	eMail: '',
 	phoneNumber: '',
 	mainDocument: 'Паспорт РФ',
-	divisitonCode: '',
+	divisionCode: '',
 	issuedBy: null,
 	passwordSeries: null,
 	passwordNumber: null,
@@ -59,7 +62,7 @@ export const ParentReducer = createSlice({
 		): IParentState => {
 			return {
 				...state,
-				divisitonCode: action.payload
+				divisionCode: action.payload
 			}
 		},
 		issuedBySuccess: (state, action: PayloadAction<string>): IParentState => {

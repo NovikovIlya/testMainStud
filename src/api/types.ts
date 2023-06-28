@@ -94,7 +94,7 @@ export interface IDocumentState {
 	snils: string
 }
 
-export interface edForm {
+export interface IEdForm {
 	id: number
 	nameOfInstitute: string
 	educationLevel: string
@@ -103,18 +103,18 @@ export interface edForm {
 	educationCountry: string
 }
 
-export interface IeducationState {
-	educationItems: edForm[]
+export interface IEducationState {
+	educationItems: IEdForm[]
 }
 
-export interface WorkArray {
+export interface IWorkArray {
 	id: number
 	place: string
 	time: string
 }
 
 export interface IWorkState {
-	workItems: WorkArray[]
+	workItems: IWorkArray[]
 	description: string
 	link: string
 }
@@ -124,7 +124,7 @@ export interface IParentState {
 	eMail: string
 	phoneNumber: string
 	mainDocument: string
-	divisitonCode: string
+	divisionCode: string
 	issuedBy: string | null
 	passwordSeries: string | null
 	passwordNumber: string | null

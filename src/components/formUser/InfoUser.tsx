@@ -21,8 +21,9 @@ export const InfoUser = () => {
 
 	const handleOk = () => {
 		if (role !== '') {
-			navigate('/form')
+			dispatch(roleSuccess('guest'))
 		}
+		navigate('/form')
 	}
 
 	return (
@@ -38,137 +39,126 @@ export const InfoUser = () => {
 						выберите с какой целью Вы регистрировались на сайте:
 					</p>
 
-					<List className="p-0 mt-5 ">
-						<ListItem className="p-0 ">
-							<label
-								htmlFor="0"
-								className="px-3 py-2 flex items-start  w-full cursor-pointer"
-							>
-								<ListItemPrefix className="mr-3">
-									<Radio
-										name="vertical-list"
-										id="0"
-										ripple={false}
-										className="hover:before:opacity-0 mt-1"
-										containerProps={{
-											className: 'p-0'
-										}}
-										onChange={() => {
-											dispatch(roleSuccess('schoolboy'))
-										}}
-										checked={role === 'schoolboy' ? true : false}
-									/>
-								</ListItemPrefix>
-								<Typography color="blue-gray" className="font-medium text-sm">
-									Я школьник. Зарегистрировался для участия в олимпиадах,
-									получения дополнительного образования или чтобы поступить в
-									лицей КФУ
-								</Typography>
-							</label>
-						</ListItem>
+					<List
+						className="p-0 mt-5"
+						onChange={e => {
+							//@ts-ignore
+							dispatch(roleSuccess(e.target.id))
+						}}
+					>
 						<ListItem className="p-0">
 							<label
-								htmlFor="1"
-								className="px-3 py-2 flex items-start  w-full cursor-pointer"
-							>
-								<ListItemPrefix className="mr-3">
-									<Radio
-										name="vertical-list"
-										id="1"
-										ripple={false}
-										className="hover:before:opacity-0 mt-1"
-										containerProps={{
-											className: 'p-0'
-										}}
-										onChange={() => {
-											dispatch(roleSuccess('enrollee'))
-										}}
-										checked={role === 'enrollee' ? true : false}
-									/>
-								</ListItemPrefix>
-								<Typography color="blue-gray" className="font-medium text-sm">
-									Я абитуриент. Зарегистрировался чтобы узнать больше информации
-									об институтах и кафедрах, на которые можно поступить, а также
-									подготовитьсяк ЕГЭ
-								</Typography>
-							</label>
-						</ListItem>
-						<ListItem className="p-0">
-							<label
-								htmlFor="2"
-								className="px-3 py-2 flex items-start  w-full cursor-pointer"
-							>
-								<ListItemPrefix className="mr-3">
-									<Radio
-										name="vertical-list"
-										id="2"
-										ripple={false}
-										className="hover:before:opacity-0 mt-1"
-										containerProps={{
-											className: 'p-0'
-										}}
-										onChange={() => {
-											dispatch(roleSuccess('listener'))
-										}}
-										checked={role === 'listener' ? true : false}
-									/>
-								</ListItemPrefix>
-								<Typography color="blue-gray" className="font-medium text-sm">
-									Я слушатель. Зарегистрировался, чтобы обучаться новому,
-									проходить курсы и получать дополнительное образование
-								</Typography>
-							</label>
-						</ListItem>
-						<ListItem className="p-0">
-							<label
-								htmlFor="3"
-								className="px-3 py-2 flex items-start  w-full cursor-pointer"
-							>
-								<ListItemPrefix className="mr-3">
-									<Radio
-										name="vertical-list"
-										id="3"
-										ripple={false}
-										className="hover:before:opacity-0 mt-1"
-										containerProps={{
-											className: 'p-0'
-										}}
-										onChange={() => {
-											dispatch(roleSuccess('applicant'))
-										}}
-										checked={role === 'applicant' ? true : false}
-									/>
-								</ListItemPrefix>
-								<Typography color="blue-gray" className="font-medium text-sm">
-									Я соискатель. Зарегистрировался чтобы иметь возможность
-									просматривать актуальные вакансии и отправлять своё резюме для
-									трудоустройства
-								</Typography>
-							</label>
-						</ListItem>
-						<ListItem className="p-0">
-							<label
-								htmlFor="4"
+								htmlFor="guest"
 								className="px-3 py-2 flex items-start mt-1 w-full cursor-pointer"
 							>
 								<ListItemPrefix className="mr-3">
 									<Radio
 										name="vertical-list"
-										id="4"
+										id="guest"
+										ripple={false}
+										defaultChecked
+										className="hover:before:opacity-0 mt-1"
+										containerProps={{
+											className: 'p-0'
+										}}
+									/>
+								</ListItemPrefix>
+								<Typography color="blue-gray" className="font-medium text-sm">
+									<strong> Я гость.</strong> Ещё не определился с какой целью
+									прошёл регистрацию на портале, хочу просто посмотреть и
+									определиться потом
+								</Typography>
+							</label>
+						</ListItem>
+						<ListItem className="p-0 ">
+							<label
+								htmlFor="schoolboy"
+								className="px-3 py-2 flex items-start  w-full cursor-pointer"
+							>
+								<ListItemPrefix className="mr-3">
+									<Radio
+										name="vertical-list"
+										id="schoolboy"
 										ripple={false}
 										className="hover:before:opacity-0 mt-1"
 										containerProps={{
 											className: 'p-0'
 										}}
-										onChange={() => {
-											dispatch(roleSuccess('guest'))
-										}}
-										checked={role === 'guest' ? true : false}
 									/>
 								</ListItemPrefix>
 								<Typography color="blue-gray" className="font-medium text-sm">
-									Я гость. Ещё не определился с какой целью прошёл регистрацию
-									на портале, хочу просто посмотреть и определиться потом
+									<strong> Я школьник.</strong> Зарегистрировался для участия в
+									олимпиадах, получения дополнительного образования или чтобы
+									поступить в лицей КФУ
+								</Typography>
+							</label>
+						</ListItem>
+						<ListItem className="p-0">
+							<label
+								htmlFor="enrollee"
+								className="px-3 py-2 flex items-start  w-full cursor-pointer"
+							>
+								<ListItemPrefix className="mr-3">
+									<Radio
+										name="vertical-list"
+										id="enrollee"
+										ripple={false}
+										className="hover:before:opacity-0 mt-1"
+										containerProps={{
+											className: 'p-0'
+										}}
+									/>
+								</ListItemPrefix>
+								<Typography color="blue-gray" className="font-medium text-sm">
+									<strong> Я абитуриент.</strong> Зарегистрировался чтобы узнать
+									больше информации об институтах и кафедрах, на которые можно
+									поступить, а также подготовитьсяк ЕГЭ
+								</Typography>
+							</label>
+						</ListItem>
+						<ListItem className="p-0">
+							<label
+								htmlFor="listener"
+								className="px-3 py-2 flex items-start  w-full cursor-pointer"
+							>
+								<ListItemPrefix className="mr-3">
+									<Radio
+										name="vertical-list"
+										id="listener"
+										ripple={false}
+										className="hover:before:opacity-0 mt-1"
+										containerProps={{
+											className: 'p-0'
+										}}
+									/>
+								</ListItemPrefix>
+								<Typography color="blue-gray" className="font-medium text-sm">
+									<strong> Я слушатель.</strong> Зарегистрировался, чтобы
+									обучаться новому, проходить курсы и получать дополнительное
+									образование
+								</Typography>
+							</label>
+						</ListItem>
+						<ListItem className="p-0">
+							<label
+								htmlFor="applicant"
+								className="px-3 py-2 flex items-start  w-full cursor-pointer"
+							>
+								<ListItemPrefix className="mr-3">
+									<Radio
+										name="vertical-list"
+										id="applicant"
+										ripple={false}
+										className="hover:before:opacity-0 mt-1"
+										containerProps={{
+											className: 'p-0'
+										}}
+									/>
+								</ListItemPrefix>
+								<Typography color="blue-gray" className="font-medium text-sm">
+									<strong>Я соискатель.</strong> Зарегистрировался чтобы иметь
+									возможность просматривать актуальные вакансии и отправлять
+									своё резюме для трудоустройства
 								</Typography>
 							</label>
 						</ListItem>

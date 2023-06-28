@@ -47,7 +47,12 @@ export const EducationForm = () => {
 		navigate('/user')
 	}
 	const addEducation = () => {
-		dispatch(idAdd(data.current.educationItems.length))
+		dispatch(
+			idAdd(
+				data.current.educationItems[data.current.educationItems.length - 1].id +
+					1
+			)
+		)
 	}
 	const handleDeleteEducation = (id: number) => {
 		console.log(id)

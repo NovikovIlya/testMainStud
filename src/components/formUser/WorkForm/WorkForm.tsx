@@ -1,5 +1,5 @@
 import { Button, Input } from 'antd'
-import { useCallback } from 'react'
+import { useCallback, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
@@ -17,9 +17,10 @@ import { ImagesLayout } from '../ImagesLayout'
 const { TextArea } = Input
 
 export const WorkForm = () => {
+	const data = useRef(useAppSelector(state => state.Work))
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
-	const data = useAppSelector(state => state.Work)
+	data.current = useAppSelector(state => state.Work)
 
 	const handleCancel = () => {
 		navigate('/documents')
@@ -33,17 +34,20 @@ export const WorkForm = () => {
 		navigate('/user')
 	}
 	const saveInStore = () => {
-		let IsEmpty = data.workItems.some(
+		let IsEmpty = data.current.workItems.some(
 			item => item.place === '' || item.time === ''
 		)
-		if (data.description === '' || data.link === '') IsEmpty = true
+		if (data.current.description === '' || data.current.link === '')
+			IsEmpty = true
 		return IsEmpty
 	}
 	const handleDeleteEducation = (id: number) => {
 		dispatch(idDelete(id))
 	}
-	const addEducation = () => {
-		dispatch(idAdd(data.workItems.length))
+	const addWork = () => {
+		dispatch(
+			idAdd(data.current.workItems[data.current.workItems.length - 1].id + 1)
+		)
 	}
 	const HandleWork = useCallback(
 		(item: { id: number }) => {
@@ -69,7 +73,9 @@ export const WorkForm = () => {
 							onChange={e =>
 								dispatch(placeSuccess({ id: item.id, place: e.target.value }))
 							}
-							value={data.workItems[item.id].place}
+							value={
+								data.current.workItems.filter(el => el.id === item.id)[0].place
+							}
 						/>
 					</div>
 					<p className="mt-4 self-start">Период работы</p>
@@ -80,12 +86,14 @@ export const WorkForm = () => {
 						onChange={e =>
 							dispatch(timeSuccess({ id: item.id, time: e.target.value }))
 						}
-						defaultValue={data.workItems[item.id].time}
+						value={
+							data.current.workItems.filter(el => el.id === item.id)[0].time
+						}
 					/>
 				</div>
 			)
 		},
-		[data.workItems.length]
+		[data.current.workItems.length]
 	)
 	return (
 		<ImagesLayout>
@@ -93,7 +101,7 @@ export const WorkForm = () => {
 				<div className="container max-w-2xl flex flex-col  pч-5">
 					<h3 className="text-xl">Работа</h3>
 					<div className="flex flex-col gap-10 w-full">
-						{data.workItems.map(item => (
+						{data.current.workItems.map(item => (
 							<HandleWork id={item.id} key={item.id} />
 						))}
 					</div>
@@ -102,7 +110,7 @@ export const WorkForm = () => {
 						<Button
 							className="rounded-full text-center p-0 w-8 h-8 text-xl"
 							type="primary"
-							onClick={addEducation}
+							onClick={addWork}
 						>
 							+
 						</Button>
@@ -116,7 +124,7 @@ export const WorkForm = () => {
 							className="mt-2"
 							autoSize={{ minRows: 4, maxRows: 8 }}
 							onChange={e => dispatch(descriptionSuccess(e.target.value))}
-							defaultValue={data.description}
+							value={data.current.description}
 						/>
 						<p className="text-black text-sm font-normal mt-4">
 							Ссылка на портфолио
@@ -126,7 +134,7 @@ export const WorkForm = () => {
 							size="large"
 							className="mt-2"
 							onChange={e => dispatch(linkSuccess(e.target.value))}
-							defaultValue={data.link}
+							value={data.current.link}
 						/>
 					</div>
 					<div className="w-full flex justify-center items-center gap-8 mt-[60px]">

@@ -43,7 +43,7 @@ export const ParentForm = () => {
 			[
 				data.FIO,
 				data.dateIssue,
-				data.divisitonCode,
+				data.divisionCode,
 				data.eMail,
 				data.inn,
 				data.issuedBy,
@@ -124,7 +124,7 @@ export const ParentForm = () => {
 								size="large"
 								className="mt-2 shadow"
 								onChange={e => dispatch(divisitonCodeSuccess(e.target.value))}
-								value={data.divisitonCode}
+								value={data.divisionCode}
 							/>
 						</div>
 						<div className="mt-4">

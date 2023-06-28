@@ -1,5 +1,5 @@
 import { Button, Input, Select } from 'antd'
-import { useCallback } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
@@ -16,10 +16,12 @@ import {
 import { ImagesLayout } from '../ImagesLayout'
 
 export const EducationForm = () => {
+	const data = useRef(useAppSelector(state => state.Education))
 	const dispatch = useDispatch()
 	const userRole = useAppSelector(state => state.InfoUser.role)
 	const navigate = useNavigate()
-	const data = useAppSelector(state => state.Education)
+	const state = useAppSelector(state => state.Education)
+	data.current = state
 
 	const handleCancel = () => {
 		navigate('/documents')
@@ -30,9 +32,8 @@ export const EducationForm = () => {
 			else navigate('/user')
 		}
 	}
-
 	const saveInStore = () => {
-		let IsEmpty = data.educationItems.some(
+		let IsEmpty = data.current.educationItems.some(
 			item =>
 				item.documentNumber === '' ||
 				item.documentSeries === '' ||
@@ -46,7 +47,7 @@ export const EducationForm = () => {
 		navigate('/user')
 	}
 	const addEducation = () => {
-		dispatch(idAdd(data.educationItems.length))
+		dispatch(idAdd(data.current.educationItems.length))
 	}
 	const handleDeleteEducation = (id: number) => {
 		dispatch(idDelete(id))
@@ -81,7 +82,8 @@ export const EducationForm = () => {
 										})
 									)
 								}
-								defaultValue={data.educationItems[item.id].educationLevel}
+								value={data.current.educationItems[item.id].educationLevel}
+								//defaultValue={data.educationItems[item.id].educationLevel}
 							/>
 						</div>
 						<div>
@@ -104,7 +106,8 @@ export const EducationForm = () => {
 									{ value: 'Белиз' },
 									{ value: 'Бруней' }
 								]}
-								defaultValue={data.educationItems[item.id].educationCountry}
+								value={data.current.educationItems[item.id].educationCountry}
+								//defaultValue={data.educationItems[item.id].educationCountry}
 							/>
 						</div>
 					</div>
@@ -121,7 +124,8 @@ export const EducationForm = () => {
 								})
 							)
 						}
-						defaultValue={data.educationItems[item.id].nameOfInstitute}
+						value={data.current.educationItems[item.id].nameOfInstitute}
+						//defaultValue={data.educationItems[item.id].nameOfInstitute}
 					/>
 					<div className="grid grid-cols-2 mt-4 gap-10 w-full max-sm:gap-5">
 						<div>
@@ -138,7 +142,8 @@ export const EducationForm = () => {
 										})
 									)
 								}
-								defaultValue={data.educationItems[item.id].documentSeries}
+								value={data.current.educationItems[item.id].documentSeries}
+								//defaultValue={data.educationItems[item.id].documentSeries}
 								maxLength={4}
 							/>
 						</div>
@@ -156,7 +161,8 @@ export const EducationForm = () => {
 										})
 									)
 								}
-								defaultValue={data.educationItems[item.id].documentNumber}
+								value={data.current.educationItems[item.id].documentNumber}
+								//defaultValue={data.educationItems[item.id].documentNumber}
 								maxLength={4}
 							/>
 						</div>
@@ -164,7 +170,7 @@ export const EducationForm = () => {
 				</div>
 			)
 		},
-		[data.educationItems.length]
+		[data.current.educationItems.length]
 	)
 	return (
 		<ImagesLayout>
@@ -172,7 +178,7 @@ export const EducationForm = () => {
 				<div className="container max-w-2xl flex flex-col  pч-5">
 					<h3 className="self-start text-xl">Образование</h3>
 					<div className="flex flex-col gap-10 w-full">
-						{data.educationItems.map(item => (
+						{data.current.educationItems.map(item => (
 							<HandleEducation id={item.id} key={item.id} />
 						))}
 					</div>

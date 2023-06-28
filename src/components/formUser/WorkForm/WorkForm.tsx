@@ -69,7 +69,7 @@ export const WorkForm = () => {
 							onChange={e =>
 								dispatch(placeSuccess({ id: item.id, place: e.target.value }))
 							}
-							defaultValue={data.workItems[item.id].place}
+							value={data.workItems[item.id].place}
 						/>
 					</div>
 					<p className="mt-4 self-start">Период работы</p>

@@ -28,7 +28,7 @@ const App = () => {
 	const dispatch = useAppDispatch()
 	const currentUrl = useLocation()
 
-	console.log(currentUrl.pathname)
+	//console.log(currentUrl.pathname)
 
 	const dataApi = async () => {
 		const res = await dispatch(refreshToken())
@@ -54,17 +54,9 @@ const App = () => {
 		if (
 			localStorage.getItem('access') !== null ||
 			localStorage.getItem('userInfo') !== null ||
-			cookies.get('refresh') !== null
+			cookies.get('refresh') !== undefined
 		) {
 			dataApi()
-		}
-		if (
-			localStorage.getItem('access') === null &&
-			localStorage.getItem('userInfo') === null &&
-			cookies.get('refresh') === null &&
-			currentUrl.pathname !== '/'
-		) {
-			dispatch(logoutSuccess())
 		}
 	}, [])
 

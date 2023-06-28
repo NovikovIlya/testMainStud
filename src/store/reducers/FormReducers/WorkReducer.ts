@@ -1,7 +1,9 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+
+
 
 import { RootState } from '../..'
-import { IWorkState, WorkArray } from '../../../api/types'
+import { IWorkArray, IWorkState } from '../../../api/types'
 
 const initialState: IWorkState = {
 	workItems: [
@@ -20,7 +22,7 @@ export const WorkReducer = createSlice({
 	initialState,
 	reducers: {
 		idAdd: (state, action: PayloadAction<number>): IWorkState => {
-			const generalArray: WorkArray = {
+			const generalArray: IWorkArray = {
 				id: action.payload,
 				place: '',
 				time: ''

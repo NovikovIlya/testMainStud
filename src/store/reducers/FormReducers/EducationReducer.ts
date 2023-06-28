@@ -1,9 +1,9 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 import { RootState } from '../..'
-import { IeducationState, edForm } from '../../../api/types'
+import { IEdForm, IEducationState } from '../../../api/types'
 
-const generalState: edForm = {
+const generalState: IEdForm = {
 	id: -1,
 	nameOfInstitute: '',
 	educationLevel: '',
@@ -12,7 +12,7 @@ const generalState: edForm = {
 	educationCountry: 'Российская Федерация'
 }
 
-const initialState: IeducationState = {
+const initialState: IEducationState = {
 	educationItems: [{ ...generalState, id: 0 }]
 }
 
@@ -20,7 +20,7 @@ export const EducationReducer = createSlice({
 	name: 'Education',
 	initialState,
 	reducers: {
-		idAdd: (state, action: PayloadAction<number>): IeducationState => {
+		idAdd: (state, action: PayloadAction<number>): IEducationState => {
 			if (state.educationItems.length === 0) {
 				return { educationItems: [{ ...generalState, id: action.payload }] }
 			} else {
@@ -33,7 +33,7 @@ export const EducationReducer = createSlice({
 				}
 			}
 		},
-		idDelete: (state, action: PayloadAction<number>): IeducationState => {
+		idDelete: (state, action: PayloadAction<number>): IEducationState => {
 			return {
 				...state,
 				educationItems: state.educationItems.filter(
@@ -44,7 +44,7 @@ export const EducationReducer = createSlice({
 		nameOfInstituteSuccess: (
 			state,
 			action: PayloadAction<{ id: number; nameOfInstitute: string }>
-		): IeducationState => {
+		): IEducationState => {
 			return {
 				...state,
 				educationItems: state.educationItems.map(e => {
@@ -59,7 +59,7 @@ export const EducationReducer = createSlice({
 		educationLevelSuccess: (
 			state,
 			action: PayloadAction<{ id: number; educationLevel: string }>
-		): IeducationState => {
+		): IEducationState => {
 			return {
 				...state,
 				educationItems: state.educationItems.map(e => {
@@ -74,7 +74,7 @@ export const EducationReducer = createSlice({
 		documentNumberSuccess: (
 			state,
 			action: PayloadAction<{ id: number; documentNumber: string }>
-		): IeducationState => {
+		): IEducationState => {
 			return {
 				...state,
 				educationItems: state.educationItems.map(e => {
@@ -89,7 +89,7 @@ export const EducationReducer = createSlice({
 		documentSeriesSuccess: (
 			state,
 			action: PayloadAction<{ id: number; documentSeries: string }>
-		): IeducationState => {
+		): IEducationState => {
 			return {
 				...state,
 				educationItems: state.educationItems.map(e => {
@@ -104,7 +104,7 @@ export const EducationReducer = createSlice({
 		educationCountrySeriesSuccess: (
 			state,
 			action: PayloadAction<{ id: number; educationCountry: string }>
-		): IeducationState => {
+		): IEducationState => {
 			return {
 				...state,
 				educationItems: state.educationItems.map(e => {

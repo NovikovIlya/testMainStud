@@ -43,9 +43,15 @@ export const EducationForm = () => {
 		navigate('/user')
 	}
 	const addEducation = () => {
-		dispatch(idAdd(data.current.educationItems.length))
+		dispatch(
+			idAdd(
+				data.current.educationItems[data.current.educationItems.length - 1].id +
+					1
+			)
+		)
 	}
 	const handleDeleteEducation = (id: number) => {
+		console.log(id)
 		dispatch(idDelete(id))
 	}
 	const HandleEducation = useCallback(
@@ -78,8 +84,10 @@ export const EducationForm = () => {
 										})
 									)
 								}
-								value={data.current.educationItems[item.id].educationLevel}
-								//defaultValue={data.educationItems[item.id].educationLevel}
+								value={
+									data.current.educationItems.filter(el => el.id === item.id)[0]
+										.educationLevel
+								}
 							/>
 						</div>
 						<div>
@@ -102,8 +110,11 @@ export const EducationForm = () => {
 									{ value: 'Белиз' },
 									{ value: 'Бруней' }
 								]}
-								value={data.current.educationItems[item.id].educationCountry}
-								//defaultValue={data.educationItems[item.id].educationCountry}
+								value={
+									data.current.educationItems.filter(
+										element => element.id === item.id
+									)[0].educationCountry
+								}
 							/>
 						</div>
 					</div>
@@ -120,8 +131,11 @@ export const EducationForm = () => {
 								})
 							)
 						}
-						value={data.current.educationItems[item.id].nameOfInstitute}
-						//defaultValue={data.educationItems[item.id].nameOfInstitute}
+						value={
+							data.current.educationItems.filter(
+								element => element.id === item.id
+							)[0].nameOfInstitute
+						}
 					/>
 					<div className="grid grid-cols-2 mt-4 gap-10 w-full max-sm:gap-5">
 						<div>
@@ -138,8 +152,11 @@ export const EducationForm = () => {
 										})
 									)
 								}
-								value={data.current.educationItems[item.id].documentSeries}
-								//defaultValue={data.educationItems[item.id].documentSeries}
+								value={
+									data.current.educationItems.filter(
+										element => element.id === item.id
+									)[0].documentSeries
+								}
 								maxLength={4}
 							/>
 						</div>
@@ -157,8 +174,11 @@ export const EducationForm = () => {
 										})
 									)
 								}
-								value={data.current.educationItems[item.id].documentNumber}
-								//defaultValue={data.educationItems[item.id].documentNumber}
+								value={
+									data.current.educationItems.filter(
+										element => element.id === item.id
+									)[0].documentNumber
+								}
 								maxLength={4}
 							/>
 						</div>

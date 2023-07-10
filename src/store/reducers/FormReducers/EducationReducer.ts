@@ -20,18 +20,8 @@ export const EducationReducer = createSlice({
 	name: 'Education',
 	initialState,
 	reducers: {
-		idAdd: (state, action: PayloadAction<number>): IEducationState => {
-			if (state.educationItems.length === 0) {
-				return { educationItems: [{ ...generalState, id: action.payload }] }
-			} else {
-				return {
-					...state,
-					educationItems: [
-						...state.educationItems,
-						{ ...generalState, id: action.payload }
-					]
-				}
-			}
+		idAdd: (state, action: PayloadAction<number>) => {
+			state.educationItems.push({ ...generalState, id: action.payload })
 		},
 		idDelete: (state, action: PayloadAction<number>): IEducationState => {
 			return {

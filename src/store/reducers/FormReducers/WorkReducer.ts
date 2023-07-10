@@ -1,18 +1,16 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-
-
+import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 import { RootState } from '../..'
 import { IWorkArray, IWorkState } from '../../../api/types'
 
+const generalArray: IWorkArray = {
+	id: -1,
+	place: '',
+	time: ''
+}
+
 const initialState: IWorkState = {
-	workItems: [
-		{
-			id: 0,
-			place: '',
-			time: ''
-		}
-	],
+	workItems: [{ ...generalArray, id: 0 }],
 	description: '',
 	link: ''
 }
@@ -21,20 +19,8 @@ export const WorkReducer = createSlice({
 	name: 'Work',
 	initialState,
 	reducers: {
-		idAdd: (state, action: PayloadAction<number>): IWorkState => {
-			const generalArray: IWorkArray = {
-				id: action.payload,
-				place: '',
-				time: ''
-			}
-			if (state.workItems.length === 0) {
-				return { ...state, workItems: [generalArray] }
-			} else {
-				return {
-					...state,
-					workItems: [...state.workItems, generalArray]
-				}
-			}
+		idAdd: (state, action: PayloadAction<number>) => {
+			state.workItems.push({ ...generalArray, id: action.payload })
 		},
 		idDelete: (state, action: PayloadAction<number>): IWorkState => {
 			return {

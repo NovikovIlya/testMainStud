@@ -23,7 +23,7 @@ export const ProfileReducer = createSlice({
 		): IProfileState => {
 			return {
 				...state,
-				profileData: {
+				profileData: { 
 					...state.profileData,
 					error: null,
 					CurrentData: action.payload

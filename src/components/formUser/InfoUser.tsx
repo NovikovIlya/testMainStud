@@ -20,7 +20,7 @@ export const InfoUser = () => {
 	const role = useAppSelector(state => state.InfoUser.role)
 
 	const handleOk = () => {
-		if (role !== '') {
+		if (role === '') {
 			dispatch(roleSuccess('guest'))
 		}
 		navigate('/form')

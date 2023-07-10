@@ -1,5 +1,8 @@
-import { Button } from 'antd'
-import { useNavigate } from 'react-router-dom'
+import { Button } from 'antd';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+
 
 import { useAppSelector } from '../../../../store'
 
@@ -7,7 +10,7 @@ export const Buttons = () => {
 	const navigate = useNavigate()
 	const userRole = useAppSelector(state => state.InfoUser.role)
 	const data = useAppSelector(state => state.Form)
-
+	const [error, setError] = useState(false)
 	const handleCancel = () => {
 		navigate('/infoUser')
 	}
@@ -15,6 +18,8 @@ export const Buttons = () => {
 		if (!saveInStore()) {
 			if (userRole === 'guest') navigate('/user')
 			else navigate('/documents')
+		} else {
+			setError(true)
 		}
 	}
 	const saveInStore = () => {

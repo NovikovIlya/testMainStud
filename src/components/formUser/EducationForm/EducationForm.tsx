@@ -1,19 +1,14 @@
-import { Button, Input, Select } from 'antd'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { Button, Input, Select } from 'antd';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
-import { useAppSelector } from '../../../store'
-import {
-	documentNumberSuccess,
-	documentSeriesSuccess,
-	educationCountrySeriesSuccess,
-	educationLevelSuccess,
-	idAdd,
-	idDelete,
-	nameOfInstituteSuccess
-} from '../../../store/reducers/FormReducers/EducationReducer'
-import { ImagesLayout } from '../ImagesLayout'
+
+
+import { useAppSelector } from '../../../store';
+import { documentNumberSuccess, documentSeriesSuccess, educationCountrySeriesSuccess, educationLevelSuccess, idAdd, idDelete, nameOfInstituteSuccess } from '../../../store/reducers/FormReducers/EducationReducer';
+import { ImagesLayout } from '../ImagesLayout';
+
 
 export const EducationForm = () => {
 	const data = useRef(useAppSelector(state => state.Education))
@@ -22,6 +17,7 @@ export const EducationForm = () => {
 	const navigate = useNavigate()
 	const state = useAppSelector(state => state.Education)
 	data.current = state
+
 
 	const handleCancel = () => {
 		navigate('/documents')

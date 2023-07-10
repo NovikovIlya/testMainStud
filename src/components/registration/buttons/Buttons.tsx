@@ -21,7 +21,7 @@ export const Buttons: FC<IButtonsProps> = ({ setCheck, check }) => {
 		<Form.Item className={styles.main}>
 			<div className={styles.buttons}>
 				<Button size="large" type="primary" htmlType="submit" disabled={!check}>
-					Далее
+				Зарегистрироваться
 				</Button>
 				<Checkbox
 					className={styles.check}

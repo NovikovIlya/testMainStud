@@ -87,7 +87,7 @@ export const Registration: FC<IRegProps> = ({ changeEmail }) => {
 					/>
 					<Buttons check={check} setCheck={setCheck} />
 				</Form>
-				<div className="flex items-center">
+				<div className="flex items-start mt-10">
 					<img
 						className="max-lg:hidden w-[400px] h-[400px]"
 						src={logo}

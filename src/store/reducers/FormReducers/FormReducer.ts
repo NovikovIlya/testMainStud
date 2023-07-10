@@ -8,11 +8,10 @@ const initialState: IFormState = {
 	surName: '',
 	patronymic: null,
 	birthDay: null,
-	gender: '',
+	gender: 'Мужчина',
 	phoneNumber: '',
 	country: 'Российская Федерация'
 }
-
 export const FormReducer = createSlice({
 	name: 'Form',
 	initialState,

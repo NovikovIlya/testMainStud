@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 import { ImagesLayout } from '../ImagesLayout'
 
 import { Buttons } from './Buttons/Buttons'
@@ -5,6 +7,8 @@ import { Inputs } from './Inputs/Inputs'
 import { Switcher } from './Radio/Switcher'
 
 export const FormModal = () => {
+	const [error, setError] = useState(true)
+
 	return (
 		<ImagesLayout>
 			<div className="w-full flex justify-center ">

@@ -18,7 +18,7 @@
 		.login {
 			@apply flex items-center justify-between;
 			.kpfu {
-				@apply font-bold text-black opacity-50;
+				@apply font-bold text-black opacity-50 flex;
 			}
 		}
 	}

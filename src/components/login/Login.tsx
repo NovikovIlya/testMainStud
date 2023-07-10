@@ -63,7 +63,7 @@ export const Login = () => {
 					<Inputs error={error} value={value} />
 					<Buttons />
 				</Form>
-				<div className="flex items-center">
+				<div className="flex items-start mt-10">
 					<img
 						className="max-lg:hidden w-[400px] h-[400px]"
 						src={logo}

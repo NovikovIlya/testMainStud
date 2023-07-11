@@ -23,8 +23,8 @@ export const FormModal = () => {
 					</p>
 					<h3 className="self-start my-7 text-xl">Обо мне</h3>
 					<Switcher />
-					<Inputs error={error} setError={setError} />
-					<Buttons setError={setError} error={error} />
+					<Inputs error={error} />
+					<Buttons setError={setError} />
 				</div>
 			</div>
 		</ImagesLayout>

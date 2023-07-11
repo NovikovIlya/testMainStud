@@ -1,16 +1,11 @@
-import { Button } from 'antd';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-
-
+import { Button } from 'antd'
+import { useNavigate } from 'react-router-dom'
 
 import { useAppSelector } from '../../../../store'
 
 export const Buttons = ({
-	error,
 	setError
 }: {
-	error: boolean
 	setError: (value: boolean) => void
 }) => {
 	const navigate = useNavigate()

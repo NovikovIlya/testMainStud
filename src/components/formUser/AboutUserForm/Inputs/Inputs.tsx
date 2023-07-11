@@ -1,31 +1,20 @@
-import { DatePicker, Input, Select } from 'antd'
-import locale from 'antd/es/date-picker/locale/ru_RU'
-import clsx from 'clsx'
-import dayjs from 'dayjs'
-import 'dayjs/locale/ru'
-import { useDispatch } from 'react-redux'
+import { DatePicker, Input, Select } from 'antd';
+import locale from 'antd/es/date-picker/locale/ru_RU';
+import clsx from 'clsx';
+import dayjs from 'dayjs';
+import 'dayjs/locale/ru';
+import { useDispatch } from 'react-redux';
 
-import { useAppSelector } from '../../../../store'
-import {
-	birthDaySuccess,
-	countrySuccess,
-	nameSuccess,
-	patronymicSuccess,
-	phoneNumberSuccess,
-	surNameSuccess
-} from '../../../../store/reducers/FormReducers/FormReducer'
 
-export const Inputs = ({
-	error,
-	setError
-}: {
-	error: boolean
-	setError: (value: boolean) => void
-}) => {
+
+import { useAppSelector } from '../../../../store';
+import { birthDaySuccess, countrySuccess, nameSuccess, patronymicSuccess, phoneNumberSuccess, surNameSuccess } from '../../../../store/reducers/FormReducers/FormReducer';
+
+
+export const Inputs = ({ error }: { error: boolean }) => {
 	dayjs.locale('ru')
 	const dispatch = useDispatch()
 	const data = useAppSelector(state => state.Form)
-	console.log(Boolean(data.surName))
 
 	return (
 		<div>

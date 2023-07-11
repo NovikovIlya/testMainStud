@@ -1,11 +1,6 @@
-import {
-	List,
-	ListItem,
-	ListItemPrefix,
-	Radio,
-	Typography
-} from '@material-tailwind/react'
-import { Button } from 'antd'
+import { List, ListItem, ListItemPrefix, Radio, Typography } from '@material-tailwind/react';
+import { Button } from 'antd';
+import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
@@ -18,7 +13,7 @@ export const InfoUser = () => {
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 	const role = useAppSelector(state => state.InfoUser.role)
-
+	const { t } = useTranslation()
 	const handleOk = () => {
 		if (role === '') {
 			dispatch(roleSuccess('guest'))
@@ -31,13 +26,10 @@ export const InfoUser = () => {
 			<div className="w-full flex justify-center ">
 				<div className="container max-w-2xl flex flex-col items-center justify-center  px-5">
 					<h2 className="text-center text-2xl font-bold border-solid border-0 border-b-2 border-[#3073D7] pb-2">
-						Добро пожаловать КФУ!
+						{t('welcome')}
 					</h2>
 
-					<p className="mt-8 text-center text-sm font-bold px-7">
-						Для того, чтобы мы настроили личный кабинет персонально для Вас,
-						выберите с какой целью Вы регистрировались на сайте:
-					</p>
+					<p className="mt-8 text-center text-sm font-bold px-7">{t('role')}</p>
 
 					<List
 						className="p-0 mt-5"
@@ -64,9 +56,8 @@ export const InfoUser = () => {
 									/>
 								</ListItemPrefix>
 								<Typography color="blue-gray" className="font-medium text-sm">
-									<strong> Я гость.</strong> Ещё не определился с какой целью
-									прошёл регистрацию на портале, хочу просто посмотреть и
-									определиться потом
+									<strong>{t('roleGuest')}</strong>
+									{t('roleGuestDescription')}
 								</Typography>
 							</label>
 						</ListItem>
@@ -87,9 +78,8 @@ export const InfoUser = () => {
 									/>
 								</ListItemPrefix>
 								<Typography color="blue-gray" className="font-medium text-sm">
-									<strong> Я школьник.</strong> Зарегистрировался для участия в
-									олимпиадах, получения дополнительного образования или чтобы
-									поступить в лицей КФУ
+									<strong>{t('roleSchoolboy')}</strong>
+									{t('roleSchoolboyDescription')}
 								</Typography>
 							</label>
 						</ListItem>
@@ -110,9 +100,8 @@ export const InfoUser = () => {
 									/>
 								</ListItemPrefix>
 								<Typography color="blue-gray" className="font-medium text-sm">
-									<strong> Я абитуриент.</strong> Зарегистрировался чтобы узнать
-									больше информации об институтах и кафедрах, на которые можно
-									поступить, а также подготовитьсяк ЕГЭ
+									<strong>{t('roleEntrant')}</strong>
+									{t('roleEntrantDescription')}
 								</Typography>
 							</label>
 						</ListItem>
@@ -133,9 +122,8 @@ export const InfoUser = () => {
 									/>
 								</ListItemPrefix>
 								<Typography color="blue-gray" className="font-medium text-sm">
-									<strong> Я слушатель.</strong> Зарегистрировался, чтобы
-									обучаться новому, проходить курсы и получать дополнительное
-									образование
+									<strong>{t('roleListener')}</strong>
+									{t('roleListenerDescription')}
 								</Typography>
 							</label>
 						</ListItem>
@@ -156,20 +144,15 @@ export const InfoUser = () => {
 									/>
 								</ListItemPrefix>
 								<Typography color="blue-gray" className="font-medium text-sm">
-									<strong>Я соискатель.</strong> Зарегистрировался чтобы иметь
-									возможность просматривать актуальные вакансии и отправлять
-									своё резюме для трудоустройства
+									<strong>{t('roleApplicant')}</strong>
+									{t('roleApplicantDescription')}
 								</Typography>
 							</label>
 						</ListItem>
 					</List>
 
 					<div className="border border-[#BDBDBD] border-solid rounded py-6 px-12 px- mt-10">
-						<p className="text-center text-sm">
-							Сейчас Вы выбираете Вашу основную роль, позднее в разделе “Обо
-							мне” Вы сможете подключить другие роли, заполнив дополнительную
-							информацию
-						</p>
+						<p className="text-center text-sm">{t('chooseRole')}</p>
 					</div>
 					<div className="w-full flex justify-center items-center gap-8 mt-[60px] ">
 						<Button
@@ -177,18 +160,18 @@ export const InfoUser = () => {
 							type="default"
 							className="w-[200px] h-[50px] rounded-full cursor-default font-bold border-[#3073D7] text-[#3073D7]"
 						>
-							Назад
+							{t('back')}
 						</Button>
 						<Button
 							onClick={handleOk}
 							type="primary"
 							className="w-[200px] h-[50px] rounded-full font-bold"
 						>
-							Далее
+							{t('next')}
 						</Button>
 					</div>
 					<Button type="text" className="rounded-full w-[200px] h-[50px] mt-8">
-						Заполнить позже
+						{t('fillLater')}
 					</Button>
 				</div>
 			</div>

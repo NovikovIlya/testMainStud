@@ -1,0 +1,18 @@
+{
+    "welcome": "Welcome to KFU!",
+    "role": "In order for us to set up a personal account for you personally, choose for what purpose you registered on the site:",
+    "roleGuest": "I'm a guest. ",
+    "roleGuestDescription": "I haven't decided yet for what purpose I registered on the portal, I just want to look and decide later",
+    "roleSchoolboy": "I'm a schoolboy. ",
+    "roleSchoolboyDescription": "Registered to participate in Olympiads, receive additional education or to enroll in the KFU Lyceum",
+    "roleEntrant": "I am an entrant. ",
+    "roleEntrantDescription": "I registered to find out more information about the institutes and departments that you can enroll in, as well as prepare for the Unified State Exam",
+    "roleListener": "I'm a listener. ",
+    "roleListenerDescription": "Registered to learn new things, take courses and receive additional education",
+    "roleApplicant": "I'm a job seeker. ",
+    "roleApplicantDescription": "I registered to be able to view current vacancies and send my resume for employment",
+    "chooseRole": "Now you choose your main role, later in the section “About me” You will be able to connect other roles by filling in additional information",
+    "back": "Back",
+    "next": "Next",
+    "fillLater":"Fill in later"
+}

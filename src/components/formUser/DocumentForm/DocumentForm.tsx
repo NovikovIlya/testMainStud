@@ -84,6 +84,7 @@ export const DocumentForm = () => {
 									value={data?.divisionCode}
 									className="mt-2 shadow "
 									maxLength={7}
+									
 									onChange={e =>
 										dispatch(divisionCodeSuccess(e.currentTarget.value))
 									}

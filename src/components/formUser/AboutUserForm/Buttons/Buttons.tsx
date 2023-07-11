@@ -6,11 +6,16 @@ import { useNavigate } from 'react-router-dom';
 
 import { useAppSelector } from '../../../../store'
 
-export const Buttons = () => {
+export const Buttons = ({
+	error,
+	setError
+}: {
+	error: boolean
+	setError: (value: boolean) => void
+}) => {
 	const navigate = useNavigate()
 	const userRole = useAppSelector(state => state.InfoUser.role)
 	const data = useAppSelector(state => state.Form)
-	const [error, setError] = useState(false)
 	const handleCancel = () => {
 		navigate('/infoUser')
 	}
@@ -32,9 +37,10 @@ export const Buttons = () => {
 				data.phoneNumber,
 				data.surName
 			].some(el => el === '')
-		)
+		) {
+			setError(true)
 			return true
-		else return false
+		} else return false
 	}
 	const handleSkip = () => {
 		navigate('/user')

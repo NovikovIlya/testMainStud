@@ -1,5 +1,6 @@
 import { DatePicker, Input, Select } from 'antd'
 import locale from 'antd/es/date-picker/locale/ru_RU'
+import clsx from 'clsx'
 import dayjs from 'dayjs'
 import 'dayjs/locale/ru'
 import { useDispatch } from 'react-redux'
@@ -14,10 +15,18 @@ import {
 	surNameSuccess
 } from '../../../../store/reducers/FormReducers/FormReducer'
 
-export const Inputs = () => {
+export const Inputs = ({
+	error,
+	setError
+}: {
+	error: boolean
+	setError: (value: boolean) => void
+}) => {
 	dayjs.locale('ru')
 	const dispatch = useDispatch()
 	const data = useAppSelector(state => state.Form)
+	console.log(Boolean(data.surName))
+
 	return (
 		<div>
 			<span className="text-sm">Фамилия</span>
@@ -26,7 +35,10 @@ export const Inputs = () => {
 				size="large"
 				type="text"
 				placeholder="Фамилия"
-				className="mt-2 mb-4 shadow"
+				className={clsx(
+					'mt-2 mb-4 shadow transition-all duration-500',
+					error && !data.surName && 'border-rose-500'
+				)}
 				onChange={e => {
 					dispatch(surNameSuccess(e.target.value))
 				}}
@@ -38,7 +50,10 @@ export const Inputs = () => {
 				size="large"
 				type="text"
 				placeholder="Имя"
-				className="mt-2 mb-4 shadow"
+				className={clsx(
+					'mt-2 mb-4 shadow transition-all duration-500',
+					error && !data.name && 'border-rose-500'
+				)}
 				onChange={e => {
 					dispatch(nameSuccess(e.target.value))
 				}}
@@ -50,7 +65,10 @@ export const Inputs = () => {
 				size="large"
 				type="text"
 				placeholder="Отчество"
-				className="mt-2 mb-4 shadow"
+				className={clsx(
+					'mt-2 mb-4 shadow transition-all duration-500',
+					error && !data.patronymic && 'border-rose-500'
+				)}
 				onChange={e => {
 					dispatch(patronymicSuccess(e.target.value))
 				}}
@@ -59,7 +77,10 @@ export const Inputs = () => {
 
 			<span className="text-sm">Дата рождения</span>
 			<DatePicker
-				className="block mt-2 mb-4 shadow"
+				className={clsx(
+					'block mt-2 mb-4 shadow transition-all duration-500',
+					error && !data.birthDay && 'border-rose-500'
+				)}
 				locale={locale}
 				size="large"
 				format={'DD.MM.YYYY'}
@@ -74,7 +95,7 @@ export const Inputs = () => {
 			/>
 			<span className="text-sm">Страна гражданина</span>
 			<Select
-				className="block mt-2 mb-4 shadow"
+				className="block mt-2 mb-4 shadow transition-all duration-500"
 				size="large"
 				onChange={e => {
 					dispatch(countrySuccess(e))
@@ -95,7 +116,10 @@ export const Inputs = () => {
 				type="text"
 				maxLength={11}
 				placeholder="Телефон"
-				className="mt-2 mb-4 shadow"
+				className={clsx(
+					'mt-2 mb-4 shadow transition-all duration-500',
+					error && !data.name && 'border-rose-500'
+				)}
 				onChange={e => {
 					dispatch(phoneNumberSuccess(e.target.value))
 				}}

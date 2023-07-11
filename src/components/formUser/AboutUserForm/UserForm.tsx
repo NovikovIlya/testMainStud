@@ -7,7 +7,7 @@ import { Inputs } from './Inputs/Inputs'
 import { Switcher } from './Radio/Switcher'
 
 export const FormModal = () => {
-	const [error, setError] = useState(true)
+	const [error, setError] = useState(false)
 
 	return (
 		<ImagesLayout>
@@ -23,8 +23,8 @@ export const FormModal = () => {
 					</p>
 					<h3 className="self-start my-7 text-xl">Обо мне</h3>
 					<Switcher />
-					<Inputs />
-					<Buttons />
+					<Inputs error={error} setError={setError} />
+					<Buttons setError={setError} error={error} />
 				</div>
 			</div>
 		</ImagesLayout>

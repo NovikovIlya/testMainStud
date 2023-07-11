@@ -1,13 +1,10 @@
-import { QuestionCircleOutlined } from '@ant-design/icons';
+import { QuestionCircleOutlined } from '@ant-design/icons'
 import { Popover } from 'antd'
 import { FC, PropsWithChildren } from 'react'
 
-
-
-import pencil from '../../assets/images/pencil.png';
-import rectangle from '../../assets/images/rectangle.png';
-import { LogoIasSvg } from '../../assets/svg';
-
+import pencil from '../../assets/images/pencil.png'
+import rectangle from '../../assets/images/rectangle.png'
+import { LogoIasSvg } from '../../assets/svg'
 
 export const ImagesLayout: FC<PropsWithChildren<{ first?: boolean }>> = ({
 	children,
@@ -40,7 +37,7 @@ export const ImagesLayout: FC<PropsWithChildren<{ first?: boolean }>> = ({
 				<div className="absolute right-0">
 					<img src={pencil} alt="" className="w-[30vw]" />
 				</div>
-				<div className="absolute left-0 bottom-0  -z-10">
+				<div className="absolute left-0 bottom-0 -z-10">
 					<img src={rectangle} alt="" className="w-[30vw]" />
 				</div>
 				<div className="absolute w-[50vw] h-[50vw] -z-20 bg-[#D6E3F7] left-0 bottom-0 translate-x-[-50%] translate-y-[50%]  rounded-full" />

@@ -23,6 +23,7 @@ export const Password: FC<IPasswordProps> = ({
 		<>
 			<Form.Item
 				name="password"
+				style={{marginBottom: 30}}
 				className={styles.input}
 				rules={[{ required: true, message: '' }]}
 				validateStatus={
@@ -51,6 +52,7 @@ export const Password: FC<IPasswordProps> = ({
 			<Form.Item
 				name="confirmPassword"
 				className={styles.input}
+				style={{marginBottom: 30}}
 				rules={[
 					{
 						required: true,

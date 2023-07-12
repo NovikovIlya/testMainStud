@@ -21,6 +21,7 @@ export const Inputs: FC<IInputsProps> = ({ value, error }) => {
 						{ type: 'string' },
 						{ required: true, message: 'Пожалуйста, введите свой телефон!' }
 					]}
+					style={{ marginBottom: 30 }}
 					validateStatus={error !== null ? 'error' : undefined}
 					help={error?.map(el =>
 						el.message.substring(0, 3) !== 'pas' ? (
@@ -41,6 +42,7 @@ export const Inputs: FC<IInputsProps> = ({ value, error }) => {
 				<Form.Item
 					className={styles.input}
 					name="email"
+					style={{ marginBottom: 30 }}
 					rules={[
 						{ type: 'string' },
 						{
@@ -64,6 +66,7 @@ export const Inputs: FC<IInputsProps> = ({ value, error }) => {
 			<Form.Item
 				name="password"
 				className={styles.input}
+				style={{ marginBottom: 30 }}
 				rules={[
 					{ required: true, message: 'Пожалуйста, введите свой пароль!' }
 				]}

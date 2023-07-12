@@ -25,6 +25,7 @@ export const Inputs: FC<IInputsProps> = ({
 		<>
 			<Form.Item
 				name="surname"
+				style={{ marginBottom: 30 }}
 				className={styles.input}
 				rules={[
 					{ type: 'string' },
@@ -42,6 +43,7 @@ export const Inputs: FC<IInputsProps> = ({
 			<Form.Item
 				name="name"
 				className={styles.input}
+				style={{ marginBottom: 30 }}
 				rules={[
 					{ type: 'string' },
 					{ required: true, message: 'Пожалуйста, введите свое имя!' }
@@ -53,6 +55,7 @@ export const Inputs: FC<IInputsProps> = ({
 				<Form.Item
 					name="phone"
 					className={styles.input}
+					style={{ marginBottom: 30 }}
 					rules={[
 						{ type: 'string' },
 						{ required: true, message: 'Пожалуйста, введите свой телефон!' }
@@ -70,6 +73,7 @@ export const Inputs: FC<IInputsProps> = ({
 				<Form.Item
 					name="email"
 					className={styles.input}
+					style={{ marginBottom: 30 }}
 					rules={[
 						{ type: 'email' },
 						{

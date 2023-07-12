@@ -1,4 +1,5 @@
-import { ListItemPrefix, Radio, Typography } from '@material-tailwind/react'
+import { ListItemPrefix, Radio, Typography } from '@material-tailwind/react';
+import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 
 import { useAppSelector } from '../../../../store'
@@ -7,6 +8,7 @@ import { genderSuccess } from '../../../../store/reducers/FormReducers/FormReduc
 export const Switcher = () => {
 	const dispatch = useDispatch()
 	const gender = useAppSelector(state => state.Form.gender)
+	const { t } = useTranslation()
 	return (
 		<div className="flex self-start mb-4">
 			<label htmlFor="0" className="flex items-start  w-full cursor-pointer">
@@ -24,7 +26,7 @@ export const Switcher = () => {
 					/>
 				</ListItemPrefix>
 				<Typography color="blue-gray" className="font-medium text-sm">
-					Женщина
+					{t('woman')}
 				</Typography>
 			</label>
 			<label
@@ -45,7 +47,7 @@ export const Switcher = () => {
 					/>
 				</ListItemPrefix>
 				<Typography color="blue-gray" className="font-medium text-sm">
-					Мужчина
+					{t('man')}
 				</Typography>
 			</label>
 		</div>

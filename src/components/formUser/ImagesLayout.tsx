@@ -1,6 +1,5 @@
 import { QuestionCircleOutlined } from '@ant-design/icons';
-import { Popover } from 'antd'
-import { Select } from 'antd'
+import { Popover, Select } from 'antd'
 import { FC, PropsWithChildren } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -13,6 +12,7 @@ export const ImagesLayout: FC<PropsWithChildren<{ first?: boolean }>> = ({
 	first
 }) => {
 	const { t, i18n } = useTranslation()
+
 	const changeLanguage = (language: string) => {
 		i18n.changeLanguage(language)
 	}
@@ -22,7 +22,7 @@ export const ImagesLayout: FC<PropsWithChildren<{ first?: boolean }>> = ({
 				<LogoIasSvg />
 				<div className="flex gap-4 items-center">
 					<Select
-						defaultValue="ru"
+						defaultValue={i18n.language}
 						style={{ width: 100 }}
 						bordered={false}
 						onChange={e => changeLanguage(e.valueOf())}

@@ -14,5 +14,17 @@
     "chooseRole": "Now you choose your main role, later in the section “About me” You will be able to connect other roles by filling in additional information",
     "back": "Back",
     "next": "Next",
-    "fillLater":"Fill in later"
+    "fillLater": "Fill in later",
+    "fillForm": "Fill out the short form",
+    "fillFormDescription": "This is necessary for full access on the platform, which includes the ability to enroll in courses, events and much more",
+    "aboutMe": "About me",
+    "man": "Man",
+    "woman": "Woman",
+    "surname": "Surname",
+    "name": "Name",
+    "middleName": "Middle name",
+    "birth": "Date of birth",
+    "selectDate": "Select a date",
+    "citizen": "Country of the citizen",
+    "telephone": "Telephone"
 }

@@ -1,4 +1,5 @@
 import { Button } from 'antd'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { useAppSelector } from '../../../../store'
@@ -11,6 +12,7 @@ export const Buttons = ({
 	const navigate = useNavigate()
 	const userRole = useAppSelector(state => state.InfoUser.role)
 	const data = useAppSelector(state => state.Form)
+	const { t } = useTranslation()
 	const handleCancel = () => {
 		navigate('/infoUser')
 	}
@@ -48,14 +50,14 @@ export const Buttons = ({
 					type="default"
 					className="w-[200px] font-bold h-[50px] rounded-full border-[#3073D7] text-[#3073D7]"
 				>
-					Назад
+					{t('back')}
 				</Button>
 				<Button
 					onClick={handleOk}
 					type="primary"
 					className="w-[200px] font-bold h-[50px] rounded-full"
 				>
-					Далее
+					{t('next')}
 				</Button>
 			</div>
 			<Button
@@ -63,7 +65,7 @@ export const Buttons = ({
 				type="text"
 				className="rounded-full w-[200px] h-[50px] mt-8"
 			>
-				Заполнить позже
+				{t('fillLater')}
 			</Button>
 		</div>
 	)

@@ -3,27 +3,32 @@ import locale from 'antd/es/date-picker/locale/ru_RU';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
-import { useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next'
+import { useDispatch } from 'react-redux'
 
-
-
-import { useAppSelector } from '../../../../store';
-import { birthDaySuccess, countrySuccess, nameSuccess, patronymicSuccess, phoneNumberSuccess, surNameSuccess } from '../../../../store/reducers/FormReducers/FormReducer';
-
+import { useAppSelector } from '../../../../store'
+import {
+	birthDaySuccess,
+	countrySuccess,
+	nameSuccess,
+	patronymicSuccess,
+	phoneNumberSuccess,
+	surNameSuccess
+} from '../../../../store/reducers/FormReducers/FormReducer'
 
 export const Inputs = ({ error }: { error: boolean }) => {
 	dayjs.locale('ru')
 	const dispatch = useDispatch()
 	const data = useAppSelector(state => state.Form)
-
+	const { t } = useTranslation()
 	return (
 		<div>
-			<span className="text-sm">Фамилия</span>
+			<span className="text-sm">{t('surname')}</span>
 			<Input
 				id="surName"
 				size="large"
 				type="text"
-				placeholder="Фамилия"
+				placeholder={t('surname')}
 				className={clsx(
 					'mt-2 mb-4 shadow transition-all duration-500',
 					error && !data.surName && 'border-rose-500'
@@ -34,11 +39,11 @@ export const Inputs = ({ error }: { error: boolean }) => {
 				value={data.surName}
 			/>
 
-			<span className="text-sm">Имя</span>
+			<span className="text-sm">{t('name')}</span>
 			<Input
 				size="large"
 				type="text"
-				placeholder="Имя"
+				placeholder={t('name')}
 				className={clsx(
 					'mt-2 mb-4 shadow transition-all duration-500',
 					error && !data.name && 'border-rose-500'
@@ -49,11 +54,11 @@ export const Inputs = ({ error }: { error: boolean }) => {
 				value={data.name}
 			/>
 
-			<span className="text-sm">Отчество</span>
+			<span className="text-sm">{t('middleName')}</span>
 			<Input
 				size="large"
 				type="text"
-				placeholder="Отчество"
+				placeholder={t('middleName')}
 				className={clsx(
 					'mt-2 mb-4 shadow transition-all duration-500',
 					error && !data.patronymic && 'border-rose-500'
@@ -64,13 +69,14 @@ export const Inputs = ({ error }: { error: boolean }) => {
 				value={data.patronymic !== null ? data.patronymic : ''}
 			/>
 
-			<span className="text-sm">Дата рождения</span>
+			<span className="text-sm">{t('birth')}</span>
 			<DatePicker
 				className={clsx(
 					'block mt-2 mb-4 shadow transition-all duration-500',
 					error && !data.birthDay && 'border-rose-500'
 				)}
 				locale={locale}
+				placeholder={t('selectDate')}
 				size="large"
 				format={'DD.MM.YYYY'}
 				onChange={e => {
@@ -82,7 +88,7 @@ export const Inputs = ({ error }: { error: boolean }) => {
 					data.birthDay !== null ? dayjs(data.birthDay, 'DD.MM.YYYY') : null
 				}
 			/>
-			<span className="text-sm">Страна гражданина</span>
+			<span className="text-sm">{t('citizen')}</span>
 			<Select
 				className="block mt-2 mb-4 shadow transition-all duration-500"
 				size="large"
@@ -99,12 +105,12 @@ export const Inputs = ({ error }: { error: boolean }) => {
 				]}
 			/>
 
-			<span className="text-sm">Телефон</span>
+			<span className="text-sm">{t('telephone')}</span>
 			<Input
 				size="large"
 				type="text"
 				maxLength={11}
-				placeholder="Телефон"
+				placeholder={t('telephone')}
 				className={clsx(
 					'mt-2 mb-4 shadow transition-all duration-500',
 					error && !data.name && 'border-rose-500'

@@ -26,5 +26,18 @@
     "birth": "Дата рождения",
     "selectDate": "Выберите дату",
     "citizen": "Страна гражданина",
-    "telephone": "Телефон"
+    "telephone": "Телефон",
+    "documents": "Документы",
+    "documentType": "Тип документа",
+    "passportData": "Паспортные данные",
+    "divisionCode": "Код подразделения",
+    "whenIssued": "Когда выдан",
+    "series": "Серия",
+    "number": "Номер",
+    "issuedWhom": "Кем выдан",
+    "additionalDocuments": "Дополнительные документы",
+    "snils": "СНИЛС",
+    "inn": "ИНН",
+    "date": "ДД.ММ.ГГГГ",
+    "location": "УФМС по Республике Татарстан"
 }

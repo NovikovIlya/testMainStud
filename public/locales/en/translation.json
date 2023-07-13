@@ -26,5 +26,18 @@
     "birth": "Date of birth",
     "selectDate": "Select a date",
     "citizen": "Country of the citizen",
-    "telephone": "Telephone"
+    "telephone": "Telephone",
+    "documents": "Documents",
+    "documentType": "Document type",
+    "passportData": "Passport data",
+    "divisionCode": "Division code",
+    "whenIssued": "When issued",
+    "series": "Series",
+    "number": "Number",
+    "issuedWhom": "Issued by whom",
+    "additionalDocuments": "Additional document",
+    "snils": "SNILS",
+    "inn": "INN",
+    "date": "DD.MM.YYYY",
+    "location": "Federal Migration Service for the Republic of Tatarstan"
 }

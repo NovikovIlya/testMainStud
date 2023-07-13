@@ -1,7 +1,8 @@
-import { Button, DatePicker, Input, Select } from 'antd'
-import locale from 'antd/es/date-picker/locale/ru_RU'
-import dayjs from 'dayjs'
+import { Button, DatePicker, Input, Select } from 'antd';
+import locale from 'antd/es/date-picker/locale/ru_RU';
+import dayjs from 'dayjs';
 import 'dayjs/locale/ru'
+import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
@@ -20,6 +21,7 @@ import { ImagesLayout } from '../ImagesLayout'
 
 export const DocumentForm = () => {
 	dayjs.locale('ru')
+	const { t } = useTranslation()
 	const dispatch = useDispatch()
 	const userRole = useAppSelector(state => state.InfoUser.role)
 	const data = useAppSelector(state => state.Document)
@@ -59,8 +61,8 @@ export const DocumentForm = () => {
 			<div className="w-full flex justify-center ">
 				<div className="container max-w-2xl flex flex-col items-center justify-center px-5">
 					<div className="flex w-full flex-col">
-						<p className="text-xl font-bold">Документы</p>
-						<span className="mt-4 text-sm">Тип документа</span>
+						<p className="text-xl font-bold">{t('documents')}</p>
+						<span className="mt-4 text-sm">{t('documentType')}</span>
 						<Select
 							className="mt-2"
 							size="large"
@@ -74,24 +76,23 @@ export const DocumentForm = () => {
 						/>
 					</div>
 					<div className="flex w-full flex-col mt-4 text-sm">
-						<span>Паспортные данные</span>
+						<span>{t('passportData')}</span>
 						<div className="grid grid-cols-2 gap-4 mt-4 max-sm:grid-cols-1 max-sm:gap-4">
 							<div>
-								<p>Код подразделения</p>
+								<p>{t('divisionCode')}</p>
 								<Input
 									placeholder="000-000"
 									size="large"
 									value={data?.divisionCode}
 									className="mt-2 shadow "
 									maxLength={7}
-									
 									onChange={e =>
 										dispatch(divisionCodeSuccess(e.currentTarget.value))
 									}
 								/>
 							</div>
 							<div>
-								<p>Когда выдан</p>
+								<p>{t('whenIssued')}</p>
 								<DatePicker
 									className="mt-2 shadow  w-full"
 									onChange={e => {
@@ -102,7 +103,7 @@ export const DocumentForm = () => {
 									locale={locale}
 									size="large"
 									format={'DD.MM.YYYY'}
-									placeholder="ДД.ММ.ГГГГ"
+									placeholder={t('date')}
 									value={
 										data.dateIssue != null
 											? dayjs(data.dateIssue, 'DD.MM.YYYY')
@@ -111,7 +112,7 @@ export const DocumentForm = () => {
 								/>
 							</div>
 							<div>
-								<p>Серия</p>
+								<p>{t('series')}</p>
 								<Input
 									placeholder="0000"
 									size="large"
@@ -124,7 +125,7 @@ export const DocumentForm = () => {
 								/>
 							</div>
 							<div>
-								<p>Номер</p>
+								<p>{t('number')}</p>
 								<Input
 									placeholder="0000"
 									size="large"
@@ -138,9 +139,9 @@ export const DocumentForm = () => {
 							</div>
 						</div>
 						<div className="mt-4">
-							<p>Кем выдан</p>
+							<p>{t('issuedWhom')}</p>
 							<Input
-								placeholder="УФМС по Республике Татарстан"
+								placeholder={t('location')}
 								size="large"
 								className="mt-2 shadow "
 								onChange={e => dispatch(issuedBySuccess(e.target.value))}
@@ -149,9 +150,9 @@ export const DocumentForm = () => {
 						</div>
 					</div>
 					<div className="mt-4 w-full">
-						<p className="text-sm">Дополнительные документы</p>
+						<p className="text-sm">{t('additionalDocuments')}</p>
 						<div className="flex text-sm flex-col w-full mt-4">
-							<p>СНИЛС</p>
+							<p>{t('snils')}</p>
 							<Input
 								size="large"
 								placeholder="0000"
@@ -160,7 +161,7 @@ export const DocumentForm = () => {
 								onChange={e => dispatch(snilsSuccess(e.target.value))}
 								value={data.snils}
 							/>
-							<p className="mt-4">ИНН</p>
+							<p className="mt-4">{t('inn')}</p>
 							<Input
 								size="large"
 								placeholder="0000"
@@ -177,14 +178,14 @@ export const DocumentForm = () => {
 							type="default"
 							className="w-[200px] h-[50px] font-bold rounded-full border-[#3073D7] text-[#3073D7]"
 						>
-							Назад
+							{t('back')}
 						</Button>
 						<Button
 							onClick={handleOk}
 							type="primary"
 							className="w-[200px] h-[50px]  font-bold rounded-full"
 						>
-							Далее
+							{t('next')}
 						</Button>
 					</div>
 					<Button
@@ -192,7 +193,7 @@ export const DocumentForm = () => {
 						type="text"
 						className="rounded-full w-[200px] h-[50px] mt-8"
 					>
-						Заполнить позже
+						{t('fillLater')}
 					</Button>
 				</div>
 			</div>

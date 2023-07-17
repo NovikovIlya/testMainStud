@@ -12,10 +12,7 @@ interface ITitleFaqProps {
 
 const { Text, Link } = Typography
 
-export const TitleFaq: FC<ITitleFaqProps> = ({
-	showChildrenDrawer,
-	onClose
-}) => {
+export const TitleFaq: FC<ITitleFaqProps> = ({ onClose }) => {
 	return (
 		<div className={styles.main}>
 			<div onClick={onClose} className={styles.close}>

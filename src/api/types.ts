@@ -60,18 +60,13 @@ export interface IProfileState {
 	}
 }
 
-export type roleType =
+export type TypeRole =
 	| 'enrollee'
 	| 'student'
 	| 'schoolboy'
 	| 'listener'
 	| 'applicant'
 	| 'guest'
-	| ''
-
-export interface IinfoUserState {
-	role: roleType
-}
 
 export interface IFormState {
 	name: string
@@ -79,12 +74,12 @@ export interface IFormState {
 	patronymic: string | null
 	birthDay: string | null
 	gender: string
-	phoneNumber: string
+	phone: string
 	country: string
 }
 
 export interface IDocumentState {
-	mainDocument: string
+	nameDocument: string
 	passwordSeries: string | null
 	passwordNumber: string | null
 	issuedBy: string | null
@@ -122,8 +117,8 @@ export interface IWorkState {
 export interface IParentState {
 	FIO: string
 	eMail: string
-	phoneNumber: string
-	mainDocument: string
+	phone: string
+	nameDocument: string
 	divisionCode: string
 	issuedBy: string | null
 	passwordSeries: string | null

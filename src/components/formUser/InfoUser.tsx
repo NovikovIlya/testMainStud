@@ -5,18 +5,18 @@ import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import { useAppSelector } from '../../store'
-import { roleSuccess } from '../../store/reducers/FormReducers/InfoUserReducer'
+import { role } from '../../store/reducers/FormReducers/InfoUserReducer'
 
 import { ImagesLayout } from './ImagesLayout'
 
 export const InfoUser = () => {
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
-	const role = useAppSelector(state => state.InfoUser.role)
+	const roleState = useAppSelector(state => state.InfoUser.role)
 	const { t } = useTranslation()
 	const handleOk = () => {
-		if (role === '') {
-			dispatch(roleSuccess('guest'))
+		if (roleState === '') {
+			dispatch(role('guest'))
 		}
 		navigate('/form')
 	}
@@ -35,7 +35,7 @@ export const InfoUser = () => {
 						className="p-0 mt-5"
 						onChange={e => {
 							//@ts-ignore
-							dispatch(roleSuccess(e.target.id))
+							dispatch(role(e.target.id))
 						}}
 					>
 						<ListItem className="p-0">

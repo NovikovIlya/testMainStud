@@ -1,19 +1,19 @@
-import { DatePicker, Input, Select } from 'antd';
-import locale from 'antd/es/date-picker/locale/ru_RU';
-import clsx from 'clsx';
-import dayjs from 'dayjs';
-import 'dayjs/locale/ru';
+import { DatePicker, DatePickerProps, Input, Select } from 'antd'
+import locale from 'antd/es/date-picker/locale/ru_RU'
+import clsx from 'clsx'
+import dayjs from 'dayjs'
+import 'dayjs/locale/ru'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 
 import { useAppSelector } from '../../../../store'
 import {
-	birthDaySuccess,
-	countrySuccess,
-	nameSuccess,
-	patronymicSuccess,
-	phoneNumberSuccess,
-	surNameSuccess
+	birthDay,
+	country,
+	name,
+	patronymic,
+	phone,
+	surName
 } from '../../../../store/reducers/FormReducers/FormReducer'
 
 export const Inputs = ({ error }: { error: boolean }) => {
@@ -21,6 +21,9 @@ export const Inputs = ({ error }: { error: boolean }) => {
 	const dispatch = useDispatch()
 	const data = useAppSelector(state => state.Form)
 	const { t } = useTranslation()
+	const onChange: DatePickerProps['onChange'] = (date, dateString) => {
+		dispatch(birthDay(dateString))
+	}
 	return (
 		<div>
 			<span className="text-sm">{t('surname')}</span>
@@ -34,7 +37,7 @@ export const Inputs = ({ error }: { error: boolean }) => {
 					error && !data.surName && 'border-rose-500'
 				)}
 				onChange={e => {
-					dispatch(surNameSuccess(e.target.value))
+					dispatch(surName(e.target.value))
 				}}
 				value={data.surName}
 			/>
@@ -49,7 +52,7 @@ export const Inputs = ({ error }: { error: boolean }) => {
 					error && !data.name && 'border-rose-500'
 				)}
 				onChange={e => {
-					dispatch(nameSuccess(e.target.value))
+					dispatch(name(e.target.value))
 				}}
 				value={data.name}
 			/>
@@ -64,7 +67,7 @@ export const Inputs = ({ error }: { error: boolean }) => {
 					error && !data.patronymic && 'border-rose-500'
 				)}
 				onChange={e => {
-					dispatch(patronymicSuccess(e.target.value))
+					dispatch(patronymic(e.target.value))
 				}}
 				value={data.patronymic !== null ? data.patronymic : ''}
 			/>
@@ -75,25 +78,16 @@ export const Inputs = ({ error }: { error: boolean }) => {
 					'block mt-2 mb-4 shadow transition-all duration-500',
 					error && !data.birthDay && 'border-rose-500'
 				)}
-				locale={locale}
+				onChange={onChange}
 				placeholder={t('selectDate')}
 				size="large"
-				format={'DD.MM.YYYY'}
-				onChange={e => {
-					if (e != null) {
-						dispatch(birthDaySuccess(e.format('DD.MM.YYYY')))
-					}
-				}}
-				value={
-					data.birthDay !== null ? dayjs(data.birthDay, 'DD.MM.YYYY') : null
-				}
 			/>
 			<span className="text-sm">{t('citizen')}</span>
 			<Select
 				className="block mt-2 mb-4 shadow transition-all duration-500"
 				size="large"
 				onChange={e => {
-					dispatch(countrySuccess(e))
+					dispatch(country(e))
 				}}
 				defaultValue={data.country}
 				options={[
@@ -113,12 +107,12 @@ export const Inputs = ({ error }: { error: boolean }) => {
 				placeholder={t('telephone')}
 				className={clsx(
 					'mt-2 mb-4 shadow transition-all duration-500',
-					error && !data.name && 'border-rose-500'
+					error && !data.phone && 'border-rose-500'
 				)}
 				onChange={e => {
-					dispatch(phoneNumberSuccess(e.target.value))
+					dispatch(phone(e.target.value))
 				}}
-				value={data.phoneNumber}
+				value={data.phone}
 			/>
 		</div>
 	)

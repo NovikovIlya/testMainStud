@@ -1,20 +1,17 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
-
-
-import { RootState } from '../..';
-import { IParentState } from '../../../api/types';
-
+import { RootState } from '../..'
+import { IParentState } from '../../../api/types'
 
 const initialState: IParentState = {
 	FIO: '',
 	eMail: '',
-	phoneNumber: '',
-	mainDocument: 'Паспорт РФ',
+	phone: '',
+	nameDocument: 'Паспорт РФ',
 	divisionCode: '',
-	issuedBy: null,
-	passwordSeries: null,
-	passwordNumber: null,
+	issuedBy: '',
+	passwordSeries: '',
+	passwordNumber: '',
 	dateIssue: null,
 	inn: '',
 	snils: '',
@@ -26,122 +23,62 @@ export const ParentReducer = createSlice({
 	name: 'Parent',
 	initialState,
 	reducers: {
-		FIOSuccess: (state, action: PayloadAction<string>): IParentState => {
-			return {
-				...state,
-				FIO: action.payload
-			}
+		FIO: (state, action: PayloadAction<string>) => {
+			state.FIO = action.payload
 		},
-		eMailSuccess: (state, action: PayloadAction<string>): IParentState => {
-			return {
-				...state,
-				eMail: action.payload
-			}
+		eMail: (state, action: PayloadAction<string>) => {
+			state.eMail = action.payload
 		},
-		phoneNumberSuccess: (
-			state,
-			action: PayloadAction<string>
-		): IParentState => {
-			return {
-				...state,
-				phoneNumber: action.payload
-			}
+		phone: (state, action: PayloadAction<string>) => {
+			state.phone = action.payload
 		},
-		mainDocumentSuccess: (
-			state,
-			action: PayloadAction<string>
-		): IParentState => {
-			return {
-				...state,
-				mainDocument: action.payload
-			}
+		nameDocument: (state, action: PayloadAction<string>) => {
+			state.nameDocument = action.payload
 		},
-		divisitonCodeSuccess: (
-			state,
-			action: PayloadAction<string>
-		): IParentState => {
-			return {
-				...state,
-				divisionCode: action.payload
-			}
+		divisionCode: (state, action: PayloadAction<string>) => {
+			state.divisionCode = action.payload
 		},
-		issuedBySuccess: (state, action: PayloadAction<string>): IParentState => {
-			return {
-				...state,
-				issuedBy: action.payload
-			}
+		issuedBy: (state, action: PayloadAction<string>) => {
+			state.issuedBy = action.payload
 		},
-		passwordSeriesSuccess: (
-			state,
-			action: PayloadAction<string>
-		): IParentState => {
-			return {
-				...state,
-				passwordSeries: action.payload
-			}
+		passwordSeries: (state, action: PayloadAction<string>) => {
+			state.passwordSeries = action.payload
 		},
-		passwordNumberSuccess: (
-			state,
-			action: PayloadAction<string>
-		): IParentState => {
-			return {
-				...state,
-				passwordNumber: action.payload
-			}
+		passwordNumber: (state, action: PayloadAction<string>) => {
+			state.passwordNumber = action.payload
 		},
-		dateIssueSuccess: (state, action: PayloadAction<string>): IParentState => {
-			return {
-				...state,
-				dateIssue: action.payload
-			}
+		dateIssue: (state, action: PayloadAction<string>) => {
+			state.dateIssue = action.payload
 		},
-		innSuccess: (state, action: PayloadAction<string>): IParentState => {
-			return {
-				...state,
-				inn: action.payload
-			}
+		inn: (state, action: PayloadAction<string>) => {
+			state.inn = action.payload
 		},
-		snilsSuccess: (state, action: PayloadAction<string>): IParentState => {
-			return {
-				...state,
-				snils: action.payload
-			}
+		snils: (state, action: PayloadAction<string>) => {
+			state.snils = action.payload
 		},
-		registrationAddressSuccess: (
-			state,
-			action: PayloadAction<string>
-		): IParentState => {
-			return {
-				...state,
-				registrationAddress: action.payload
-			}
+		registrationAddress: (state, action: PayloadAction<string>) => {
+			state.registrationAddress = action.payload
 		},
-		residenceAddressSuccess: (
-			state,
-			action: PayloadAction<string>
-		): IParentState => {
-			return {
-				...state,
-				residenceAddress: action.payload
-			}
+		residenceAddress: (state, action: PayloadAction<string>) => {
+			state.residenceAddress = action.payload
 		}
 	}
 })
 
 export const {
-	FIOSuccess,
-	eMailSuccess,
-	phoneNumberSuccess,
-	mainDocumentSuccess,
-	divisitonCodeSuccess,
-	issuedBySuccess,
-	passwordSeriesSuccess,
-	passwordNumberSuccess,
-	dateIssueSuccess,
-	innSuccess,
-	snilsSuccess,
-	residenceAddressSuccess,
-	registrationAddressSuccess
+	FIO,
+	eMail,
+	phone,
+	nameDocument,
+	divisionCode,
+	issuedBy,
+	passwordSeries,
+	passwordNumber,
+	dateIssue,
+	inn,
+	snils,
+	residenceAddress,
+	registrationAddress
 } = ParentReducer.actions
 
 export default ParentReducer.reducer

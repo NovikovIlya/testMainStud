@@ -1,30 +1,32 @@
-import { Button, DatePicker, Input, Select } from 'antd'
+import { Button, DatePicker, DatePickerProps, Input, Select } from 'antd'
 import locale from 'antd/es/date-picker/locale/ru_RU'
 import dayjs from 'dayjs'
 import 'dayjs/locale/ru'
+import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import { useAppSelector } from '../../../store'
 import {
-	FIOSuccess,
-	dateIssueSuccess,
-	divisitonCodeSuccess,
-	eMailSuccess,
-	innSuccess,
-	issuedBySuccess,
-	mainDocumentSuccess,
-	passwordNumberSuccess,
-	passwordSeriesSuccess,
-	phoneNumberSuccess,
-	registrationAddressSuccess,
-	residenceAddressSuccess,
-	snilsSuccess
+	FIO,
+	dateIssue,
+	divisionCode,
+	eMail,
+	inn,
+	issuedBy,
+	nameDocument,
+	passwordNumber,
+	passwordSeries,
+	phone,
+	registrationAddress,
+	residenceAddress,
+	snils
 } from '../../../store/reducers/FormReducers/ParentReducer'
 import { ImagesLayout } from '../ImagesLayout'
 
 export const ParentForm = () => {
 	dayjs.locale('ru')
+	const [error, setError] = useState(false)
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 	const data = useAppSelector(state => state.Parent)
@@ -47,15 +49,18 @@ export const ParentForm = () => {
 				data.eMail,
 				data.inn,
 				data.issuedBy,
-				data.mainDocument,
+				data.nameDocument,
 				data.passwordNumber,
 				data.passwordSeries,
-				data.phoneNumber,
+				data.phone,
 				data.snils
 			].some(el => el === '')
 		)
 			return true
 		else return false
+	}
+	const onChange: DatePickerProps['onChange'] = (date, dateString) => {
+		dispatch(dateIssue(dateString))
 	}
 	return (
 		<ImagesLayout>
@@ -71,7 +76,7 @@ export const ParentForm = () => {
 						placeholder="Безухов Пьер Кириллович"
 						size="large"
 						className="mt-2 shadow"
-						onChange={e => dispatch(FIOSuccess(e.target.value))}
+						onChange={e => dispatch(FIO(e.target.value))}
 						value={data.FIO}
 					/>
 					<div className="text-black text-[14px] font-normal mt-4">
@@ -81,8 +86,8 @@ export const ParentForm = () => {
 						placeholder="+7 999 898-88-00"
 						size="large"
 						className="mt-2 shadow"
-						onChange={e => dispatch(phoneNumberSuccess(e.target.value))}
-						value={data.phoneNumber}
+						onChange={e => dispatch(phone(e.target.value))}
+						value={data.phone}
 					/>
 					<div className="text-black text-[14px] font-normal mt-4">
 						Email родителя
@@ -91,7 +96,7 @@ export const ParentForm = () => {
 						placeholder="BezuPr@gmail.com"
 						size="large"
 						className="mt-2 shadow"
-						onChange={e => dispatch(eMailSuccess(e.target.value))}
+						onChange={e => dispatch(eMail(e.target.value))}
 						value={data.eMail}
 					/>
 					<div className="text-black text-[20px] mt-7 font-bold">
@@ -103,13 +108,13 @@ export const ParentForm = () => {
 					<Select
 						className="mt-2 w-full shadow rounded-lg"
 						size="large"
-						defaultValue={data.mainDocument}
+						defaultValue={data.nameDocument}
 						options={[
 							{ value: 'Паспорт РФ' },
 							{ value: 'свидетельство о рождении' },
 							{ value: 'загранпаспорт' }
 						]}
-						onChange={e => dispatch(mainDocumentSuccess(e))}
+						onChange={e => dispatch(nameDocument(e))}
 					/>
 					<div className="w-[151px] h-[19px] text-black text-[14px] font-bold mt-4">
 						Данные документа
@@ -123,7 +128,7 @@ export const ParentForm = () => {
 								placeholder="000-000"
 								size="large"
 								className="mt-2 shadow"
-								onChange={e => dispatch(divisitonCodeSuccess(e.target.value))}
+								onChange={e => dispatch(divisionCode(e.target.value))}
 								value={data.divisionCode}
 							/>
 						</div>
@@ -133,19 +138,8 @@ export const ParentForm = () => {
 							</div>
 							<DatePicker
 								className="mt-2 shadow w-full"
-								onChange={e => {
-									if (e != null) {
-										dispatch(dateIssueSuccess(e.format('DD.MM.YYYY')))
-									}
-								}}
-								value={
-									data.dateIssue != null
-										? dayjs(data.dateIssue, 'DD.MM.YYYY')
-										: null
-								}
-								locale={locale}
+								onChange={onChange}
 								size="large"
-								format={'DD.MM.YYYY'}
 								placeholder="ДД.ММ.ГГГГ"
 							/>
 						</div>
@@ -155,7 +149,7 @@ export const ParentForm = () => {
 								placeholder="000-000"
 								size="large"
 								className="mt-2 shadow"
-								onChange={e => dispatch(passwordSeriesSuccess(e.target.value))}
+								onChange={e => dispatch(passwordSeries(e.target.value))}
 								value={data.passwordSeries != null ? data.passwordSeries : ''}
 							/>
 						</div>
@@ -165,7 +159,7 @@ export const ParentForm = () => {
 								placeholder="0000"
 								size="large"
 								className="mt-2 shadow"
-								onChange={e => dispatch(passwordNumberSuccess(e.target.value))}
+								onChange={e => dispatch(passwordNumber(e.target.value))}
 								value={data.passwordNumber != null ? data.passwordNumber : ''}
 							/>
 						</div>
@@ -176,7 +170,7 @@ export const ParentForm = () => {
 							placeholder="УФМС по Республике Татарстан"
 							size="large"
 							className="mt-2 shadow"
-							onChange={e => dispatch(issuedBySuccess(e.target.value))}
+							onChange={e => dispatch(issuedBy(e.target.value))}
 							value={data.issuedBy != null ? data.issuedBy : ''}
 						/>
 					</div>
@@ -188,7 +182,7 @@ export const ParentForm = () => {
 						placeholder="0000"
 						size="large"
 						className="mt-2 shadow"
-						onChange={e => dispatch(snilsSuccess(e.target.value))}
+						onChange={e => dispatch(snils(e.target.value))}
 						value={data.snils}
 					/>
 					<div className="text-black text-[14px] font-normal mt-4">ИНН</div>
@@ -196,7 +190,7 @@ export const ParentForm = () => {
 						placeholder="0000"
 						size="large"
 						className="mt-2 shadow"
-						onChange={e => dispatch(innSuccess(e.target.value))}
+						onChange={e => dispatch(inn(e.target.value))}
 						value={data.inn}
 					/>
 					<div className="text-black text-[20px] font-bold mt-7">Адрес</div>
@@ -207,7 +201,7 @@ export const ParentForm = () => {
 						placeholder="РФ, г. Казань, ул. Адорацкого, д.3, кв. 88"
 						size="large"
 						className="mt-2 shadow"
-						onChange={e => dispatch(registrationAddressSuccess(e.target.value))}
+						onChange={e => dispatch(registrationAddress(e.target.value))}
 						value={data.registrationAddress}
 					/>
 					<div className="text-black text-[14px] mt-4 font-normal">
@@ -217,7 +211,7 @@ export const ParentForm = () => {
 						placeholder="РФ, г. Казань, ул. Адорацкого, д.3, кв. 88"
 						size="large"
 						className="mt-2 shadow"
-						onChange={e => dispatch(residenceAddressSuccess(e.target.value))}
+						onChange={e => dispatch(residenceAddress(e.target.value))}
 						value={data.residenceAddress}
 					/>
 

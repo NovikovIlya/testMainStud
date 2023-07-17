@@ -3,11 +3,11 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 
 import { useAppSelector } from '../../../../store'
-import { genderSuccess } from '../../../../store/reducers/FormReducers/FormReducer'
+import { gender } from '../../../../store/reducers/FormReducers/FormReducer'
 
 export const Switcher = () => {
 	const dispatch = useDispatch()
-	const gender = useAppSelector(state => state.Form.gender)
+	const genderState = useAppSelector(state => state.Form.gender)
 	const { t } = useTranslation()
 	return (
 		<div className="flex self-start mb-4">
@@ -21,8 +21,8 @@ export const Switcher = () => {
 						containerProps={{
 							className: 'p-0'
 						}}
-						onChange={() => dispatch(genderSuccess('Женщина'))}
-						checked={gender === 'Женщина' ? true : false}
+						onChange={() => dispatch(gender('Женщина'))}
+						checked={genderState === 'Женщина' ? true : false}
 					/>
 				</ListItemPrefix>
 				<Typography color="blue-gray" className="font-medium text-sm">
@@ -42,8 +42,8 @@ export const Switcher = () => {
 						containerProps={{
 							className: 'p-0'
 						}}
-						onChange={() => dispatch(genderSuccess('Мужчина'))}
-						checked={gender === 'Мужчина' ? true : false}
+						onChange={() => dispatch(gender('Мужчина'))}
+						checked={genderState === 'Мужчина' ? true : false}
 					/>
 				</ListItemPrefix>
 				<Typography color="blue-gray" className="font-medium text-sm">

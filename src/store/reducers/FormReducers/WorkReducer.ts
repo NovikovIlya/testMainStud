@@ -1,15 +1,13 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 import { RootState } from '../..'
-import { IWorkArray, IWorkState } from '../../../api/types'
 
-const generalArray: IWorkArray = {
-	id: -1,
+const generalArray = {
 	place: '',
 	time: ''
 }
 
-const initialState: IWorkState = {
+const initialState = {
 	workItems: [{ ...generalArray, id: 0 }],
 	description: '',
 	link: ''
@@ -22,65 +20,26 @@ export const WorkReducer = createSlice({
 		idAdd: (state, action: PayloadAction<number>) => {
 			state.workItems.push({ ...generalArray, id: action.payload })
 		},
-		idDelete: (state, action: PayloadAction<number>): IWorkState => {
-			return {
-				...state,
-				workItems: state.workItems.filter(e => e.id !== action.payload)
-			}
+		idDelete: (state, action: PayloadAction<number>) => {
+			state.workItems.filter(e => e.id !== action.payload)
 		},
-		descriptionSuccess: (state, action: PayloadAction<string>): IWorkState => {
-			return {
-				...state,
-				description: action.payload
-			}
+		description: (state, action: PayloadAction<string>) => {
+			state.description = action.payload
 		},
-		linkSuccess: (state, action: PayloadAction<string>): IWorkState => {
-			return {
-				...state,
-				link: action.payload
-			}
+		link: (state, action: PayloadAction<string>) => {
+			state.link = action.payload
 		},
-		placeSuccess: (
-			state,
-			action: PayloadAction<{ id: number; place: string }>
-		): IWorkState => {
-			return {
-				...state,
-				workItems: state.workItems.map(e => {
-					if (e.id === action.payload.id) {
-						return { ...e, place: action.payload.place }
-					} else {
-						return e
-					}
-				})
-			}
+		place: (state, action: PayloadAction<{ id: number; place: string }>) => {
+			state.workItems[action.payload.id].place = action.payload.place
 		},
-		timeSuccess: (
-			state,
-			action: PayloadAction<{ id: number; time: string }>
-		): IWorkState => {
-			return {
-				...state,
-				workItems: state.workItems.map(e => {
-					if (e.id === action.payload.id) {
-						return { ...e, time: action.payload.time }
-					} else {
-						return e
-					}
-				})
-			}
+		time: (state, action: PayloadAction<{ id: number; time: string }>) => {
+			state.workItems[action.payload.id].time = action.payload.time
 		}
 	}
 })
 
-export const {
-	idAdd,
-	idDelete,
-	descriptionSuccess,
-	linkSuccess,
-	placeSuccess,
-	timeSuccess
-} = WorkReducer.actions
+export const { idAdd, idDelete, description, link, place, time } =
+	WorkReducer.actions
 
 export default WorkReducer.reducer
 

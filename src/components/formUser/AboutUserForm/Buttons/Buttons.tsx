@@ -31,7 +31,7 @@ export const Buttons = ({
 				data.country,
 				data.gender,
 				data.name,
-				data.phoneNumber,
+				data.phone,
 				data.surName
 			].some(el => el === '')
 		) {

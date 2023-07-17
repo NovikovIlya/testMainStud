@@ -4,10 +4,10 @@ import { RootState } from '../..'
 import { IDocumentState } from '../../../api/types'
 
 const initialState: IDocumentState = {
-	mainDocument: 'Паспорт РФ',
-	passwordSeries: null,
-	passwordNumber: null,
-	issuedBy: null,
+	nameDocument: 'Паспорт РФ',
+	passwordSeries: '',
+	passwordNumber: '',
+	issuedBy: '',
 	dateIssue: null,
 	divisionCode: '',
 	inn: '',
@@ -18,57 +18,42 @@ export const DocumentReducer = createSlice({
 	name: 'Document',
 	initialState,
 	reducers: {
-		mainDocumentSuccess: (
-			state,
-			action: PayloadAction<string>
-		): IDocumentState => {
-			return { ...state, mainDocument: action.payload }
+		nameDocument: (state, action: PayloadAction<string>) => {
+			state.nameDocument = action.payload
 		},
-		passwordSeriesSuccess: (
-			state,
-			action: PayloadAction<string>
-		): IDocumentState => {
-			return { ...state, passwordSeries: action.payload }
+		passwordSeries: (state, action: PayloadAction<string>) => {
+			state.passwordSeries = action.payload
 		},
-		passwordNumberSuccess: (
-			state,
-			action: PayloadAction<string>
-		): IDocumentState => {
-			return { ...state, passwordNumber: action.payload }
+		passwordNumber: (state, action: PayloadAction<string>) => {
+			state.passwordNumber = action.payload
 		},
-		issuedBySuccess: (state, action: PayloadAction<string>): IDocumentState => {
-			return { ...state, issuedBy: action.payload }
+		issuedBy: (state, action: PayloadAction<string>) => {
+			state.issuedBy = action.payload
 		},
-		dateIssueSuccess: (
-			state,
-			action: PayloadAction<string>
-		): IDocumentState => {
-			return { ...state, dateIssue: action.payload }
+		dateIssue: (state, action: PayloadAction<string | null>) => {
+			state.dateIssue = action.payload
 		},
-		divisionCodeSuccess: (
-			state,
-			action: PayloadAction<string>
-		): IDocumentState => {
-			return { ...state, divisionCode: action.payload }
+		divisionCode: (state, action: PayloadAction<string>) => {
+			state.divisionCode = action.payload
 		},
-		innSuccess: (state, action: PayloadAction<string>): IDocumentState => {
-			return { ...state, inn: action.payload }
+		inn: (state, action: PayloadAction<string>) => {
+			state.inn = action.payload
 		},
-		snilsSuccess: (state, action: PayloadAction<string>): IDocumentState => {
-			return { ...state, snils: action.payload }
+		snils: (state, action: PayloadAction<string>) => {
+			state.snils = action.payload
 		}
 	}
 })
 
 export const {
-	mainDocumentSuccess,
-	passwordSeriesSuccess,
-	passwordNumberSuccess,
-	issuedBySuccess,
-	dateIssueSuccess,
-	divisionCodeSuccess,
-	innSuccess,
-	snilsSuccess
+	nameDocument,
+	passwordSeries,
+	passwordNumber,
+	issuedBy,
+	dateIssue,
+	divisionCode,
+	inn,
+	snils
 } = DocumentReducer.actions
 
 export default DocumentReducer.reducer

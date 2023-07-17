@@ -5,12 +5,12 @@ import { useNavigate } from 'react-router-dom'
 
 import { useAppSelector } from '../../../store'
 import {
-	descriptionSuccess,
+	description,
 	idAdd,
 	idDelete,
-	linkSuccess,
-	placeSuccess,
-	timeSuccess
+	link,
+	place,
+	time
 } from '../../../store/reducers/FormReducers/WorkReducer'
 import { ImagesLayout } from '../ImagesLayout'
 
@@ -71,7 +71,7 @@ export const WorkForm = () => {
 							size="large"
 							className="mt-2"
 							onChange={e =>
-								dispatch(placeSuccess({ id: item.id, place: e.target.value }))
+								dispatch(place({ id: item.id, place: e.target.value }))
 							}
 							value={
 								data.current.workItems.filter(el => el.id === item.id)[0].place
@@ -84,7 +84,7 @@ export const WorkForm = () => {
 						size="large"
 						className="mt-2"
 						onChange={e =>
-							dispatch(timeSuccess({ id: item.id, time: e.target.value }))
+							dispatch(time({ id: item.id, time: e.target.value }))
 						}
 						value={
 							data.current.workItems.filter(el => el.id === item.id)[0].time
@@ -123,7 +123,7 @@ export const WorkForm = () => {
 							placeholder="Расскажите о Вашем опыте работы в целом"
 							className="mt-2"
 							autoSize={{ minRows: 4, maxRows: 8 }}
-							onChange={e => dispatch(descriptionSuccess(e.target.value))}
+							onChange={e => dispatch(description(e.target.value))}
 							value={data.current.description}
 						/>
 						<p className="text-black text-sm font-normal mt-4">
@@ -133,7 +133,7 @@ export const WorkForm = () => {
 							placeholder="август 2018 — май 2023"
 							size="large"
 							className="mt-2"
-							onChange={e => dispatch(linkSuccess(e.target.value))}
+							onChange={e => dispatch(link(e.target.value))}
 							value={data.current.link}
 						/>
 					</div>

@@ -1,27 +1,30 @@
 import { Button, DatePicker, Input, Select } from 'antd';
 import locale from 'antd/es/date-picker/locale/ru_RU';
-import dayjs from 'dayjs';
+import clsx from 'clsx'
+import dayjs from 'dayjs'
 import 'dayjs/locale/ru'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import { useAppSelector } from '../../../store'
 import {
-	dateIssueSuccess,
-	divisionCodeSuccess,
-	innSuccess,
-	issuedBySuccess,
-	mainDocumentSuccess,
-	passwordNumberSuccess,
-	passwordSeriesSuccess,
-	snilsSuccess
+	dateIssue,
+	divisionCode,
+	inn,
+	issuedBy,
+	nameDocument,
+	passwordNumber,
+	passwordSeries,
+	snils
 } from '../../../store/reducers/FormReducers/DocumentReducer'
 import { ImagesLayout } from '../ImagesLayout'
 
 export const DocumentForm = () => {
 	dayjs.locale('ru')
 	const { t } = useTranslation()
+	const [error, setError] = useState(false)
 	const dispatch = useDispatch()
 	const userRole = useAppSelector(state => state.InfoUser.role)
 	const data = useAppSelector(state => state.Document)
@@ -47,14 +50,15 @@ export const DocumentForm = () => {
 				data.divisionCode,
 				data.inn,
 				data.issuedBy,
-				data.mainDocument,
+				data.nameDocument,
 				data.passwordNumber,
 				data.passwordSeries,
 				data.snils
 			].some(el => el === '')
-		)
+		) {
+			setError(true)
 			return true
-		else return false
+		} else return false
 	}
 	return (
 		<ImagesLayout>
@@ -66,8 +70,8 @@ export const DocumentForm = () => {
 						<Select
 							className="mt-2"
 							size="large"
-							onChange={e => dispatch(mainDocumentSuccess(e))}
-							defaultValue={data.mainDocument}
+							onChange={e => dispatch(nameDocument(e))}
+							defaultValue={data.nameDocument}
 							options={[
 								{ value: 'Паспорт РФ' },
 								{ value: 'свидетельство о рождении' },
@@ -84,20 +88,24 @@ export const DocumentForm = () => {
 									placeholder="000-000"
 									size="large"
 									value={data?.divisionCode}
-									className="mt-2 shadow "
+									className={clsx(
+										'mt-2 shadow ',
+										error && !data.divisionCode && 'border-rose-500'
+									)}
 									maxLength={7}
-									onChange={e =>
-										dispatch(divisionCodeSuccess(e.currentTarget.value))
-									}
+									onChange={e => dispatch(divisionCode(e.currentTarget.value))}
 								/>
 							</div>
 							<div>
 								<p>{t('whenIssued')}</p>
 								<DatePicker
-									className="mt-2 shadow  w-full"
+									className={clsx(
+										'mt-2 shadow w-full',
+										error && !data.dateIssue && 'border-rose-500'
+									)}
 									onChange={e => {
 										if (e != null) {
-											dispatch(dateIssueSuccess(e.format('DD.MM.YYYY')))
+											dispatch(dateIssue(e.format('DD.MM.YYYY')))
 										}
 									}}
 									locale={locale}
@@ -116,11 +124,12 @@ export const DocumentForm = () => {
 								<Input
 									placeholder="0000"
 									size="large"
-									className="mt-2 shadow "
+									className={clsx(
+										'mt-2 shadow ',
+										error && !data.passwordSeries && 'border-rose-500'
+									)}
 									maxLength={4}
-									onChange={e =>
-										dispatch(passwordSeriesSuccess(e.target.value))
-									}
+									onChange={e => dispatch(passwordSeries(e.target.value))}
 									value={data.passwordSeries != null ? data.passwordSeries : ''}
 								/>
 							</div>
@@ -129,11 +138,12 @@ export const DocumentForm = () => {
 								<Input
 									placeholder="0000"
 									size="large"
-									className="mt-2 shadow "
+									className={clsx(
+										'mt-2 shadow ',
+										error && !data.passwordNumber && 'border-rose-500'
+									)}
 									maxLength={4}
-									onChange={e =>
-										dispatch(passwordNumberSuccess(e.target.value))
-									}
+									onChange={e => dispatch(passwordNumber(e.target.value))}
 									value={data.passwordNumber != null ? data.passwordNumber : ''}
 								/>
 							</div>
@@ -143,8 +153,11 @@ export const DocumentForm = () => {
 							<Input
 								placeholder={t('location')}
 								size="large"
-								className="mt-2 shadow "
-								onChange={e => dispatch(issuedBySuccess(e.target.value))}
+								className={clsx(
+									'mt-2 shadow ',
+									error && !data.issuedBy && 'border-rose-500'
+								)}
+								onChange={e => dispatch(issuedBy(e.target.value))}
 								value={data.issuedBy != null ? data.issuedBy : ''}
 							/>
 						</div>
@@ -156,9 +169,12 @@ export const DocumentForm = () => {
 							<Input
 								size="large"
 								placeholder="0000"
-								className="shadow mt-2"
+								className={clsx(
+									'mt-2 shadow ',
+									error && !data.snils && 'border-rose-500'
+								)}
 								maxLength={4}
-								onChange={e => dispatch(snilsSuccess(e.target.value))}
+								onChange={e => dispatch(snils(e.target.value))}
 								value={data.snils}
 							/>
 							<p className="mt-4">{t('inn')}</p>
@@ -166,8 +182,11 @@ export const DocumentForm = () => {
 								size="large"
 								placeholder="0000"
 								maxLength={4}
-								className="shadow mt-2"
-								onChange={e => dispatch(innSuccess(e.target.value))}
+								className={clsx(
+									'mt-2 shadow ',
+									error && !data.inn && 'border-rose-500'
+								)}
+								onChange={e => dispatch(inn(e.target.value))}
 								value={data.inn}
 							/>
 						</div>

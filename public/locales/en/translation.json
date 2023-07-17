@@ -39,5 +39,14 @@
     "snils": "SNILS",
     "inn": "INN",
     "date": "DD.MM.YYYY",
-    "location": "Federal Migration Service for the Republic of Tatarstan"
+    "location": "Federal Migration Service for the Republic of Tatarstan",
+    "educationDocument": "Data of the education document",
+    "remove": "Remove",
+    "educationLevel": "Education Level",
+    "countryEducation": "Country of education",
+    "nameEducational": "Name of the educational institution",
+    "higherEducation": "Higher education",
+    "kfu": "Kazan Federal University",
+    "education": "Education",
+    "add": "Add"
 }

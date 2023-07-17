@@ -1,23 +1,29 @@
 import { Button, Input, Select } from 'antd';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useCallback, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
-
-
-import { useAppSelector } from '../../../store';
-import { documentNumberSuccess, documentSeriesSuccess, educationCountrySeriesSuccess, educationLevelSuccess, idAdd, idDelete, nameOfInstituteSuccess } from '../../../store/reducers/FormReducers/EducationReducer';
-import { ImagesLayout } from '../ImagesLayout';
-
+import { useAppSelector } from '../../../store'
+import {
+	documentNumberSuccess,
+	documentSeriesSuccess,
+	educationCountrySeriesSuccess,
+	educationLevelSuccess,
+	idAdd,
+	idDelete,
+	nameOfInstituteSuccess
+} from '../../../store/reducers/FormReducers/EducationReducer'
+import { ImagesLayout } from '../ImagesLayout'
 
 export const EducationForm = () => {
 	const data = useRef(useAppSelector(state => state.Education))
 	const dispatch = useDispatch()
 	const userRole = useAppSelector(state => state.InfoUser.role)
 	const navigate = useNavigate()
+	const { t } = useTranslation()
 	const state = useAppSelector(state => state.Education)
 	data.current = state
-
 
 	const handleCancel = () => {
 		navigate('/documents')
@@ -59,21 +65,21 @@ export const EducationForm = () => {
 			return (
 				<div>
 					<div className="flex self-start gap-4 mt-7">
-						<p className="">Данные документа об образовании</p>
+						<p className="">{t('educationDocument')}</p>
 						{item.id !== 0 && (
 							<p
 								onClick={() => handleDeleteEducation(item.id)}
 								className="opacity-40 text-sm cursor-pointer"
 							>
-								Удалить
+								{t('remove')}
 							</p>
 						)}
 					</div>
 					<div className="grid grid-cols-2 gap-10 mt-5 w-full max-sm:grid-cols-1 max-sm:gap-4">
 						<div>
-							<p>Уровень образования</p>
+							<p>{t('educationDocument')}</p>
 							<Input
-								placeholder="Высшее образование"
+								placeholder={t('higherEducational')}
 								size="large"
 								className="mt-2"
 								onChange={e =>
@@ -91,7 +97,7 @@ export const EducationForm = () => {
 							/>
 						</div>
 						<div>
-							<p>Страна получения образования</p>
+							<p>{t('countryEducation')}</p>
 							<Select
 								className="block mt-2"
 								size="large"
@@ -118,9 +124,9 @@ export const EducationForm = () => {
 							/>
 						</div>
 					</div>
-					<p className="mt-4 self-start">Наименование учебного заведения</p>
+					<p className="mt-4 self-start">{t('nameEducational')}</p>
 					<Input
-						placeholder="Казанский федеральный университет"
+						placeholder={t('kfu')}
 						size="large"
 						className="mt-2"
 						onChange={e =>
@@ -139,7 +145,7 @@ export const EducationForm = () => {
 					/>
 					<div className="grid grid-cols-2 mt-4 gap-10 w-full max-sm:gap-5">
 						<div>
-							<p>Серия</p>
+							<p>{t('series')}</p>
 							<Input
 								placeholder="0000"
 								size="large"
@@ -161,7 +167,7 @@ export const EducationForm = () => {
 							/>
 						</div>
 						<div>
-							<p>Номер</p>
+							<p>{t('number')}</p>
 							<Input
 								placeholder="0000"
 								size="large"
@@ -192,7 +198,7 @@ export const EducationForm = () => {
 		<ImagesLayout>
 			<div className="w-full flex justify-center  text-sm">
 				<div className="container max-w-2xl flex flex-col  pч-5">
-					<h3 className="self-start text-xl">Образование</h3>
+					<h3 className="self-start text-xl">{t('education')}</h3>
 					<div className="flex flex-col gap-10 w-full">
 						{data.current.educationItems.map(item => (
 							<HandleEducation id={item.id} key={item.id} />
@@ -207,8 +213,8 @@ export const EducationForm = () => {
 						>
 							+
 						</Button>
-						<p className="opacity-40 text-sm mt-2">добавить</p>
-						<p className="opacity-40 text-sm">образование</p>
+						<p className="opacity-40 text-sm mt-2">{t('add')}</p>
+						<p className="opacity-40 text-sm lowercase">{t('education')}</p>
 					</div>
 					<div className="w-full flex justify-center items-center gap-8 mt-[60px]">
 						<Button
@@ -216,14 +222,14 @@ export const EducationForm = () => {
 							type="default"
 							className="w-[200px] h-[50px] font-bold rounded-full border-[#3073D7] text-[#3073D7]"
 						>
-							Назад
+							{t('back')}
 						</Button>
 						<Button
 							onClick={handleOk}
 							type="primary"
 							className="w-[200px] font-bold h-[50px] rounded-full"
 						>
-							Далее
+							{t('next')}
 						</Button>
 					</div>
 					<div className="w-full flex justify-center">
@@ -232,7 +238,7 @@ export const EducationForm = () => {
 							type="text"
 							className="rounded-full w-[200px]  h-[50px] mt-8"
 						>
-							Заполнить позже
+							{t('fillLater')}
 						</Button>
 					</div>
 				</div>

@@ -64,6 +64,16 @@
     "errorPassword": "Please enter your password!",
     "errorPhone": "Please enter your phone number!",
     "errorEmail": "Please enter your email!",
+    "errorName": "Please enter your name!",
+    "errorSurnameName": "Please enter your last name!",
     "password": "Password",
-    "rememberPassword": "I don't remember the password"
+    "rememberPassword": "I don't remember the password",
+    "enter": "Login",
+    "loginVia": "Log in via",
+    "noProfile": "No profile?",
+    "register": "Register",
+    "registration": "Registration",
+    "confirm": "The field does not match the above password",
+    "repeatPassword": "Repeat the password",
+    "email": "Email"
 }

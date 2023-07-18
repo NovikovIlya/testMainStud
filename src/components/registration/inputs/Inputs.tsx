@@ -1,5 +1,6 @@
-import { Form, Input } from 'antd'
+import { Form, Input } from 'antd';
 import React, { AllHTMLAttributes, FC } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { IError } from '../../../api/types'
 
@@ -21,6 +22,7 @@ export const Inputs: FC<IInputsProps> = ({
 	ErrorPrinter,
 	changeEmail
 }) => {
+	const { t } = useTranslation()
 	return (
 		<>
 			<Form.Item
@@ -29,7 +31,7 @@ export const Inputs: FC<IInputsProps> = ({
 				className={styles.input}
 				rules={[
 					{ type: 'string' },
-					{ required: true, message: 'Пожалуйста, введите свою фамилию!' }
+					{ required: true, message: t('errorSurnameName') }
 				]}
 				validateStatus={
 					error?.some(el => el.message.indexOf('фамилия') >= 0)
@@ -38,7 +40,7 @@ export const Inputs: FC<IInputsProps> = ({
 				}
 				help={<>{ErrorPrinter('фам', error)}</>}
 			>
-				<Input size="large" placeholder="Фамилия" />
+				<Input size="large" placeholder={t('surname')} />
 			</Form.Item>
 			<Form.Item
 				name="name"
@@ -46,10 +48,10 @@ export const Inputs: FC<IInputsProps> = ({
 				style={{ marginBottom: 30 }}
 				rules={[
 					{ type: 'string' },
-					{ required: true, message: 'Пожалуйста, введите свое имя!' }
+					{ required: true, message: t('errorName') }
 				]}
 			>
-				<Input size="large" placeholder="Имя" />
+				<Input size="large" placeholder={t('name')} />
 			</Form.Item>
 			{value ? (
 				<Form.Item
@@ -58,7 +60,7 @@ export const Inputs: FC<IInputsProps> = ({
 					style={{ marginBottom: 30 }}
 					rules={[
 						{ type: 'string' },
-						{ required: true, message: 'Пожалуйста, введите свой телефон!' }
+						{ required: true, message: t('errorPhone') }
 					]}
 					validateStatus={
 						error?.some(el => el.message.indexOf('имя') >= 0)
@@ -67,7 +69,7 @@ export const Inputs: FC<IInputsProps> = ({
 					}
 					help={<>{ErrorPrinter('имя', error)}</>}
 				>
-					<Input size="large" type="tel" placeholder="Телефон" />
+					<Input size="large" type="tel" placeholder={t('telephone')} />
 				</Form.Item>
 			) : (
 				<Form.Item
@@ -78,7 +80,7 @@ export const Inputs: FC<IInputsProps> = ({
 						{ type: 'email' },
 						{
 							required: true,
-							message: 'Пожалуйста, введите свою электронную почту!'
+							message: t('errorEmail')
 						}
 					]}
 					validateStatus={
@@ -99,7 +101,7 @@ export const Inputs: FC<IInputsProps> = ({
 				>
 					<Input
 						size="large"
-						placeholder="Электронная почта"
+						placeholder={t('email')}
 						onChange={e => changeEmail(e.target.value)}
 					/>
 				</Form.Item>

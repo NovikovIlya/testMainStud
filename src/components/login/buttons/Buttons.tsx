@@ -1,4 +1,5 @@
-import { Button, Form } from 'antd'
+import { Button, Form } from 'antd';
+import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import { GosSvg } from '../../../assets/svg'
@@ -9,6 +10,7 @@ import styles from './Buttons.module.scss'
 
 export const Buttons = () => {
 	const dispatch = useAppDispatch()
+	const { t } = useTranslation()
 	return (
 		<Form.Item>
 			<div className={styles.buttons}>
@@ -18,7 +20,7 @@ export const Buttons = () => {
 					type="primary"
 					htmlType="submit"
 				>
-					Войти
+					{t('enter')}
 				</Button>
 
 				<Button
@@ -31,18 +33,18 @@ export const Buttons = () => {
 					ghost
 					htmlType="submit"
 				>
-					Войти через
+					{t('loginVia')}
 					<GosSvg />
 				</Button>
 				<div className={styles.reg}>
 					<span>
-						Нет профиля?{' '}
+						{t('noProfile')}{' '}
 						<Link
 							className={styles.link}
 							to="/registration"
 							onClick={() => dispatch(DeleteLogInErrors())}
 						>
-							Зарегистрируйтесь
+							{t('register')}
 						</Link>
 					</span>
 					<Link to={'https://kpfu.ru/'} className={styles.kpfu}>

@@ -1,5 +1,6 @@
 import { Form, Input } from 'antd'
 import { AllHTMLAttributes, FC } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { IError } from '../../../api/types'
 
@@ -19,11 +20,12 @@ export const Password: FC<IPasswordProps> = ({
 	confirmPassword,
 	ErrorPrinter
 }) => {
+	const { t } = useTranslation()
 	return (
 		<>
 			<Form.Item
 				name="password"
-				style={{marginBottom: 30}}
+				style={{ marginBottom: 30 }}
 				className={styles.input}
 				rules={[{ required: true, message: '' }]}
 				validateStatus={
@@ -46,29 +48,23 @@ export const Password: FC<IPasswordProps> = ({
 					className={styles.password}
 					size="large"
 					type="password"
-					placeholder="Пароль"
+					placeholder={t('password')}
 				/>
 			</Form.Item>
 			<Form.Item
 				name="confirmPassword"
 				className={styles.input}
-				style={{marginBottom: 30}}
+				style={{ marginBottom: 30 }}
 				rules={[
 					{
 						required: true,
-						message: 'Пожалуйста, подтвердите свой пароль!'
+						message: t('errorPassword')
 					}
 				]}
 				validateStatus={confirmPassword === false ? 'error' : undefined}
-				help={
-					<>
-						{!confirmPassword && (
-							<>Поле не соответсвует указанному паролю выше</>
-						)}
-					</>
-				}
+				help={<>{!confirmPassword && <>{t('confirm')}</>}</>}
 			>
-				<Input size="large" type="password" placeholder="Повторите пароль" />
+				<Input size="large" type="password" placeholder={t('repeatPassword')} />
 			</Form.Item>
 		</>
 	)

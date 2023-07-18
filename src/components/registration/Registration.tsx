@@ -1,5 +1,6 @@
-import { Form, Typography } from 'antd'
+import { Form, Typography } from 'antd';
 import { AllHTMLAttributes, FC, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
@@ -36,6 +37,7 @@ export const Registration: FC<IRegProps> = ({ changeEmail }) => {
 	const navigate = useNavigate()
 	const error = useSelector((state: RootState) => state.AuthReg.regData.error)
 	const dispatch = useAppDispatch()
+	const { t } = useTranslation()
 	const [value, setValue] = useState(0)
 	const [check, setCheck] = useState(false)
 	const [confirmPassword, setConfirmPassword] = useState(true)
@@ -72,7 +74,7 @@ export const Registration: FC<IRegProps> = ({ changeEmail }) => {
 					initialValues={{ remember: true }}
 					onFinish={onFinish}
 				>
-					<Title className={styles.title}>Регистрация</Title>
+					<Title className={styles.title}>{t('registration')}</Title>
 					<Switcher setValue={setValue} />
 					<Inputs
 						error={error}

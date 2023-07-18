@@ -1,5 +1,6 @@
-import { Form, Popover, Typography } from 'antd'
+import { Form, Popover, Typography } from 'antd';
 import { FC, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
@@ -19,6 +20,7 @@ const { Title } = Typography
 
 export const Login = () => {
 	const navigate = useNavigate()
+	const { t } = useTranslation()
 	const error = useSelector((state: RootState) => state.AuthReg.authData.error)
 	const dispatch = useAppDispatch()
 	const [value, setValue] = useState(0)
@@ -57,7 +59,7 @@ export const Login = () => {
 					initialValues={{ remember: true }}
 					onFinish={onFinish}
 				>
-					<Title className={styles.title}>Авторизация</Title>
+					<Title className={styles.title}>{t('authorization')}</Title>
 
 					<Switcher setValue={setValue} />
 					<Inputs error={error} value={value} />

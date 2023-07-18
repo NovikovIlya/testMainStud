@@ -1,5 +1,7 @@
 import { Button, Input } from 'antd'
-import { useCallback, useRef } from 'react'
+import clsx from 'clsx'
+import { useCallback, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
@@ -17,92 +19,85 @@ import { ImagesLayout } from '../ImagesLayout'
 const { TextArea } = Input
 
 export const WorkForm = () => {
-	const data = useRef(useAppSelector(state => state.Work))
+	const data = useAppSelector(state => state.Work)
+	const { t } = useTranslation()
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
-	data.current = useAppSelector(state => state.Work)
-
+	const [error, setError] = useState(false)
 	const handleCancel = () => {
 		navigate('/documents')
 	}
 	const handleOk = () => {
 		if (!saveInStore()) {
 			navigate('/user')
-		}
+		} else setError(true)
 	}
 	const handleSkip = () => {
 		navigate('/user')
 	}
 	const saveInStore = () => {
-		let IsEmpty = data.current.workItems.some(
+		let IsEmpty = data.workItems.some(
 			item => item.place === '' || item.time === ''
 		)
-		if (data.current.description === '' || data.current.link === '')
-			IsEmpty = true
+		if (data.description === '' || data.link === '') IsEmpty = true
 		return IsEmpty
 	}
 	const handleDeleteEducation = (id: number) => {
 		dispatch(idDelete(id))
 	}
 	const addWork = () => {
-		dispatch(
-			idAdd(data.current.workItems[data.current.workItems.length - 1].id + 1)
-		)
+		dispatch(idAdd(data.workItems[data.workItems.length - 1].id + 1))
 	}
-	const HandleWork = useCallback(
-		(item: { id: number }) => {
-			return (
-				<div>
-					<div className=" mt-5 w-full max-sm:gap-4">
-						<span className="flex">
-							<p className="flex mr-5">Место работы</p>
-							{item.id !== 0 && (
-								<p
-									onClick={() => handleDeleteEducation(item.id)}
-									className="opacity-40 text-sm cursor-pointer"
-								>
-									Удалить
-								</p>
-							)}
-						</span>
-
-						<Input
-							placeholder="Калифорнийский университет в Беркли, департамент всего самого умного, отдел выпендрежников"
-							size="large"
-							className="mt-2"
-							onChange={e =>
-								dispatch(place({ id: item.id, place: e.target.value }))
-							}
-							value={
-								data.current.workItems.filter(el => el.id === item.id)[0].place
-							}
-						/>
-					</div>
-					<p className="mt-4 self-start">Период работы</p>
-					<Input
-						placeholder="август 2018 — май 2023"
-						size="large"
-						className="mt-2"
-						onChange={e =>
-							dispatch(time({ id: item.id, time: e.target.value }))
-						}
-						value={
-							data.current.workItems.filter(el => el.id === item.id)[0].time
-						}
-					/>
-				</div>
-			)
-		},
-		[data.current.workItems.length]
-	)
 	return (
 		<ImagesLayout>
 			<div className="w-full flex justify-center  text-sm">
 				<div className="container max-w-2xl flex flex-col  pч-5">
-					<h3 className="text-xl">Работа</h3>
+					<h3 className="text-xl">{t('work')}</h3>
 					<div className="flex flex-col gap-10 w-full">
-						{data.current.workItems.map(item => (
-							<HandleWork id={item.id} key={item.id} />
+						{data.workItems.map(item => (
+							<div key={item.id}>
+								<div className=" mt-5 w-full max-sm:gap-4">
+									<span className="flex">
+										<p className="flex mr-5">{t('placeWork')}</p>
+										{item.id !== 0 && (
+											<p
+												onClick={() => handleDeleteEducation(item.id)}
+												className="opacity-40 text-sm cursor-pointer"
+											>
+												{t('remove')}
+											</p>
+										)}
+									</span>
+
+									<Input
+										placeholder={t('placeholder')}
+										size="large"
+										className={clsx(
+											'mt-2',
+											error &&
+												!data.workItems[item.id].place &&
+												'border-rose-500'
+										)}
+										onChange={e =>
+											dispatch(place({ id: item.id, place: e.target.value }))
+										}
+										value={data.workItems[item.id].place}
+									/>
+								</div>
+								<p className="mt-4 self-start">{t('periodOperation')}</p>
+								<Input
+									placeholder={t('timeLine')}
+									size="large"
+									className={clsx(
+										'mt-2',
+										error && !data.workItems[item.id].time && 'border-rose-500'
+									)}
+									onChange={e =>
+										dispatch(time({ id: item.id, time: e.target.value }))
+									}
+									value={data.workItems[item.id].time}
+								/>
+							</div>
 						))}
 					</div>
 
@@ -114,27 +109,32 @@ export const WorkForm = () => {
 						>
 							+
 						</Button>
-						<p className="opacity-40 text-sm mt-2">добавить</p>
-						<p className="opacity-40 text-sm">работу</p>
+						<p className="opacity-40 text-sm mt-2">{t('add')}</p>
+						<p className="opacity-40 text-sm lowercase">{t('work')}</p>
 					</div>
 					<div>
-						<p className="text-black text-sm font-normal">Опыт работы</p>
+						<p className="text-black text-sm font-normal">
+							{t('workExperience')}
+						</p>
 						<TextArea
-							placeholder="Расскажите о Вашем опыте работы в целом"
-							className="mt-2"
+							placeholder={t('tellYourWorkExperience')}
+							className={clsx(
+								'mt-2',
+								error && !data.description && 'border-rose-500'
+							)}
 							autoSize={{ minRows: 4, maxRows: 8 }}
 							onChange={e => dispatch(description(e.target.value))}
-							value={data.current.description}
+							value={data.description}
 						/>
 						<p className="text-black text-sm font-normal mt-4">
-							Ссылка на портфолио
+							{t('linkPortfolio')}
 						</p>
 						<Input
-							placeholder="август 2018 — май 2023"
+							placeholder={t('timeLine')}
 							size="large"
-							className="mt-2"
+							className={clsx('mt-2', error && !data.link && 'border-rose-500')}
 							onChange={e => dispatch(link(e.target.value))}
-							value={data.current.link}
+							value={data.link}
 						/>
 					</div>
 					<div className="w-full flex justify-center items-center gap-8 mt-[60px]">
@@ -143,14 +143,14 @@ export const WorkForm = () => {
 							type="default"
 							className="w-[200px] h-[50px] font-bold rounded-full border-[#3073D7] text-[#3073D7]"
 						>
-							Назад
+							{t('back')}
 						</Button>
 						<Button
 							onClick={handleOk}
 							type="primary"
 							className="w-[200px] font-bold h-[50px] rounded-full"
 						>
-							Далее
+							{t('next')}
 						</Button>
 					</div>
 					<div className="w-full flex justify-center">
@@ -159,7 +159,7 @@ export const WorkForm = () => {
 							type="text"
 							className="rounded-full w-[200px]  h-[50px] mt-8"
 						>
-							Заполнить позже
+							{t('fillLater')}
 						</Button>
 					</div>
 				</div>

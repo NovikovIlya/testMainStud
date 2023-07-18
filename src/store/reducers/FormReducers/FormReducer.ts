@@ -1,12 +1,13 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 import { RootState } from '../..'
+import { IFormState } from '../../../api/types'
 
-const initialState = {
+const initialState: IFormState = {
 	name: '',
 	surName: '',
 	patronymic: '',
-	birthDay: '',
+	birthDay: null,
 	gender: 'Мужчина',
 	phone: '',
 	country: 'Российская Федерация'

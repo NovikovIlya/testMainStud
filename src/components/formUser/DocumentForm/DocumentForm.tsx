@@ -1,5 +1,4 @@
-import { Button, DatePicker, Input, Select } from 'antd';
-import locale from 'antd/es/date-picker/locale/ru_RU';
+import { Button, DatePicker, Input, Select } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import 'dayjs/locale/ru'
@@ -108,7 +107,6 @@ export const DocumentForm = () => {
 											dispatch(dateIssue(e.format('DD.MM.YYYY')))
 										}
 									}}
-									locale={locale}
 									size="large"
 									format={'DD.MM.YYYY'}
 									placeholder={t('date')}

@@ -1,13 +1,18 @@
 import { List, ListItem, ListItemPrefix, Radio, Typography } from '@material-tailwind/react';
 import { Button } from 'antd';
-import { useTranslation } from 'react-i18next'
-import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
-import { useAppSelector } from '../../store'
-import { role } from '../../store/reducers/FormReducers/InfoUserReducer'
 
-import { ImagesLayout } from './ImagesLayout'
+
+import { useAppSelector } from '../../store';
+import { role } from '../../store/reducers/FormReducers/InfoUserReducer';
+
+
+
+import { ImagesLayout } from './ImagesLayout';
+
 
 export const InfoUser = () => {
 	const dispatch = useDispatch()
@@ -19,6 +24,9 @@ export const InfoUser = () => {
 			dispatch(role('guest'))
 		}
 		navigate('/form')
+	}
+	const handleSkip = () => {
+		navigate('/user')
 	}
 
 	return (
@@ -170,7 +178,7 @@ export const InfoUser = () => {
 							{t('next')}
 						</Button>
 					</div>
-					<Button type="text" className="rounded-full w-[200px] h-[50px] mt-8">
+					<Button type="text" className="rounded-full w-[200px] h-[50px] mt-8" onClick={handleSkip}>
 						{t('fillLater')}
 					</Button>
 				</div>

@@ -1,5 +1,6 @@
-import { Form, Input } from 'antd'
+import { Form, Input } from 'antd';
 import { FC } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { IError } from '../../../api/types'
 
@@ -11,6 +12,7 @@ interface IInputsProps {
 }
 
 export const Inputs: FC<IInputsProps> = ({ value, error }) => {
+	const { t } = useTranslation()
 	return (
 		<>
 			{value ? (
@@ -19,7 +21,7 @@ export const Inputs: FC<IInputsProps> = ({ value, error }) => {
 					className={styles.input}
 					rules={[
 						{ type: 'string' },
-						{ required: true, message: 'Пожалуйста, введите свой телефон!' }
+						{ required: true, message: t('errorPhone') }
 					]}
 					style={{ marginBottom: 30 }}
 					validateStatus={error !== null ? 'error' : undefined}
@@ -35,7 +37,7 @@ export const Inputs: FC<IInputsProps> = ({ value, error }) => {
 						className="phone"
 						size="large"
 						type="tel"
-						placeholder="Телефон"
+						placeholder={t('telephone')}
 					/>
 				</Form.Item>
 			) : (
@@ -47,7 +49,7 @@ export const Inputs: FC<IInputsProps> = ({ value, error }) => {
 						{ type: 'string' },
 						{
 							required: true,
-							message: 'Пожалуйста, введите свою электронную почту!'
+							message: t('errorEmail')
 						}
 					]}
 					validateStatus={error !== null ? 'error' : undefined}
@@ -67,9 +69,7 @@ export const Inputs: FC<IInputsProps> = ({ value, error }) => {
 				name="password"
 				className={styles.input}
 				style={{ marginBottom: 30 }}
-				rules={[
-					{ required: true, message: 'Пожалуйста, введите свой пароль!' }
-				]}
+				rules={[{ required: true, message: t('errorPassword') }]}
 				validateStatus={error !== null ? 'error' : undefined}
 				help={error?.map(el =>
 					el.message.substring(0, 3) !== 'pas' ? (
@@ -83,10 +83,10 @@ export const Inputs: FC<IInputsProps> = ({ value, error }) => {
 					className={styles.password}
 					size="large"
 					type="password"
-					placeholder="Пароль"
+					placeholder={t('password')}
 				/>
 			</Form.Item>
-			<p className={styles.forgot}>Не помню пароль</p>
+			<p className={styles.forgot}>{t('rememberPassword')}</p>
 		</>
 	)
 }

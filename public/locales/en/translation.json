@@ -48,5 +48,22 @@
     "higherEducational": "Higher education",
     "kfu": "Kazan Federal University",
     "education": "Education",
-    "add": "Add"
+    "add": "Add",
+    "placeWork": "Place of work",
+    "placeholder": "University of California at Berkeley, Department of All the smartest, Department of show-offs",
+    "periodOperation": "Period of operation",
+    "timeLine": "August 2018 — May 2023",
+    "work": "Work",
+    "workExperience": "Work experience",
+    "tellYourWorkExperience": "Tell us about your work experience in general",
+    "linkPortfolio": "Link to the portfolio",
+    "authorization": "Authorization",
+    "backPage": "Back to the main page",
+    "byEmail": "By Email",
+    "byPhone": "By Phone",
+    "errorPassword": "Please enter your password!",
+    "errorPhone": "Please enter your phone number!",
+    "errorEmail": "Please enter your email!",
+    "password": "Password",
+    "rememberPassword": "I don't remember the password"
 }

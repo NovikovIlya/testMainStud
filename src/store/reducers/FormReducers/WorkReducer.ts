@@ -1,6 +1,9 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-import { RootState } from '../..'
+
+
+import { RootState } from '../..';
+
 
 const generalArray = {
 	place: '',
@@ -21,7 +24,7 @@ export const WorkReducer = createSlice({
 			state.workItems.push({ ...generalArray, id: action.payload })
 		},
 		idDelete: (state, action: PayloadAction<number>) => {
-			state.workItems.filter(e => e.id !== action.payload)
+			state.workItems = state.workItems.filter(e => e.id !== action.payload)
 		},
 		description: (state, action: PayloadAction<string>) => {
 			state.description = action.payload

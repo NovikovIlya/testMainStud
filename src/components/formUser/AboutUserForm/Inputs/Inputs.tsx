@@ -81,6 +81,10 @@ export const Inputs = ({ error }: { error: boolean }) => {
 				onChange={onChange}
 				placeholder={t('selectDate')}
 				size="large"
+				format={'DD.MM.YYYY'}
+				value={
+					data.birthDay != null ? dayjs(data.birthDay, 'DD.MM.YYYY') : null
+				}
 			/>
 			<span className="text-sm">{t('citizen')}</span>
 			<Select

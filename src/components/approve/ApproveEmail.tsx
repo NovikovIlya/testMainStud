@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { Cookies } from 'react-cookie'
 import { useSearchParams } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 
@@ -8,6 +9,7 @@ import { approveEmail } from '../../store/creators/MainCreators'
 import { CardForm } from './cardForm'
 
 export const ApproveEmail = () => {
+	const cookies = new Cookies()
 	const [searchParams] = useSearchParams()
 	const navigate = useNavigate()
 	const dispatch = useAppDispatch()
@@ -25,7 +27,13 @@ export const ApproveEmail = () => {
 	})
 
 	const buttonEffect = () => {
-		navigate('/infoUser')
+		if (
+			localStorage.getItem('access') !== null ||
+			localStorage.getItem('userInfo') !== null ||
+			cookies.get('refresh') !== undefined
+		) {
+			navigate('/infoUser')
+		}
 	}
 
 	const closeEffect = () => {

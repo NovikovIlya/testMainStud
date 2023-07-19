@@ -68,6 +68,10 @@ export type TypeRole =
 	| 'applicant'
 	| 'guest'
 
+export interface IinfoUserState {
+	role: TypeRole
+}
+
 export interface IFormState {
 	name: string
 	surName: string
@@ -96,22 +100,6 @@ export interface IEdForm {
 	documentNumber: string
 	documentSeries: string
 	educationCountry: string
-}
-
-export interface IEducationState {
-	educationItems: IEdForm[]
-}
-
-export interface IWorkArray {
-	id: number
-	place: string
-	time: string
-}
-
-export interface IWorkState {
-	workItems: IWorkArray[]
-	description: string
-	link: string
 }
 
 export interface IParentState {

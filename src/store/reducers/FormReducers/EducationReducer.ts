@@ -1,8 +1,10 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 import { RootState } from '../..'
+import { IEdForm } from '../../../api/types'
 
 const generalState = {
+	id: 0,
 	nameOfInstitute: '',
 	educationLevel: '',
 	documentNumber: '',
@@ -10,16 +12,7 @@ const generalState = {
 	educationCountry: 'Российская Федерация'
 }
 
-const initialState = [
-	{
-		id: 0,
-		nameOfInstitute: '',
-		educationLevel: '',
-		documentNumber: '',
-		documentSeries: '',
-		educationCountry: 'Российская Федерация'
-	}
-]
+const initialState: IEdForm[] = [generalState]
 
 export const EducationReducer = createSlice({
 	name: 'Education',
@@ -28,8 +21,8 @@ export const EducationReducer = createSlice({
 		idAdd: (state, action: PayloadAction<number>) => {
 			state.push({ ...generalState, id: action.payload })
 		},
-		idDelete: (state, action: PayloadAction<number>) => {
-			state = state.filter(e => e.id !== action.payload)
+		idDelete: (state, action: PayloadAction<number>): IEdForm[] => {
+			return state.filter(e => e.id !== action.payload)
 		},
 		nameOfInstitute: (
 			state,

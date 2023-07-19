@@ -1,4 +1,4 @@
-import { Form, Typography } from 'antd';
+import { Form, Typography } from 'antd'
 import { AllHTMLAttributes, FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
@@ -43,6 +43,7 @@ export const Registration: FC<IRegProps> = ({ changeEmail }) => {
 	const [confirmPassword, setConfirmPassword] = useState(true)
 
 	const onFinish = async (values: IRegForm) => {
+		navigate('/registration/checkingEmail')
 		if (values.confirmPassword !== values.password) {
 			setConfirmPassword(false)
 		} else {

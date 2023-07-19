@@ -1,5 +1,6 @@
 import { Button, Input } from 'antd'
 import { AiOutlineMenu } from 'react-icons/ai'
+import { useNavigate } from 'react-router-dom'
 
 import {
 	EditSvg,
@@ -9,8 +10,12 @@ import {
 	PersonSvg,
 	SettingSvg
 } from '../../assets/svg'
+import { useAppDispatch } from '../../store'
+import { logout } from '../../store/creators/SomeCreators'
 
 export const Header = () => {
+	const dispatch = useAppDispatch()
+	const navigate = useNavigate()
 	return (
 		<header className="bg-[#F5F8FB] max-xl:pr-3 max-xl:pl-[100px] max-sm:px-3 h-[100px] backdrop-blur-sm fixed pl-[180px] max-lg:pl-[100px] max-md:pl-[80px] pr-[80px] z-10 gap-[2vh] w-full flex items-center justify-between">
 			<div className="flex wrapper  gap-[24px] max-md:justify-around max-md:gap-0 max-md:w-full">
@@ -46,9 +51,15 @@ export const Header = () => {
 					<div className="hover:bg-[#E3E8ED] cursor-pointer flex items-center px-[14px] h-full">
 						<EditSvg />
 					</div>
-					<div className="hover:bg-[#E3E8ED] cursor-pointer flex items-center px-[14px] h-full">
+					<Button
+						className="hover:bg-[#E3E8ED] cursor-pointer flex items-center px-[14px] h-full border-0 bg-inherit"
+						onClick={() => {
+							dispatch(logout())
+							navigate('/')
+						}}
+					>
 						<LogoutSvg />
-					</div>
+					</Button>
 				</div>
 			</div>
 		</header>

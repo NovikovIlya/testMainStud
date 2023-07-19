@@ -1,11 +1,9 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
-
-
-import { RootState } from '../..';
-
+import { RootState } from '../..'
 
 const generalArray = {
+	id: 0,
 	place: '',
 	time: ''
 }

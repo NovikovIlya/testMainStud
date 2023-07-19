@@ -1,18 +1,19 @@
-import { List, ListItem, ListItemPrefix, Radio, Typography } from '@material-tailwind/react';
-import { Button } from 'antd';
-import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import {
+	List,
+	ListItem,
+	ListItemPrefix,
+	Radio,
+	Typography
+} from '@material-tailwind/react'
+import { Button } from 'antd'
+import { useTranslation } from 'react-i18next'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
+import { useAppSelector } from '../../store'
+import { role } from '../../store/reducers/FormReducers/InfoUserReducer'
 
-
-import { useAppSelector } from '../../store';
-import { role } from '../../store/reducers/FormReducers/InfoUserReducer';
-
-
-
-import { ImagesLayout } from './ImagesLayout';
-
+import { ImagesLayout } from './ImagesLayout'
 
 export const InfoUser = () => {
 	const dispatch = useDispatch()
@@ -20,15 +21,12 @@ export const InfoUser = () => {
 	const roleState = useAppSelector(state => state.InfoUser.role)
 	const { t } = useTranslation()
 	const handleOk = () => {
-		if (roleState === '') {
-			dispatch(role('guest'))
-		}
+		dispatch(role(roleState))
 		navigate('/form')
 	}
 	const handleSkip = () => {
 		navigate('/user')
 	}
-
 	return (
 		<ImagesLayout first>
 			<div className="w-full flex justify-center ">
@@ -56,7 +54,7 @@ export const InfoUser = () => {
 										name="vertical-list"
 										id="guest"
 										ripple={false}
-										defaultChecked
+										defaultChecked={roleState === 'guest' ? true : false}
 										className="hover:before:opacity-0 mt-1"
 										containerProps={{
 											className: 'p-0'
@@ -83,6 +81,7 @@ export const InfoUser = () => {
 										containerProps={{
 											className: 'p-0'
 										}}
+										defaultChecked={roleState === 'schoolboy' ? true : false}
 									/>
 								</ListItemPrefix>
 								<Typography color="blue-gray" className="font-medium text-sm">
@@ -105,6 +104,7 @@ export const InfoUser = () => {
 										containerProps={{
 											className: 'p-0'
 										}}
+										defaultChecked={roleState === 'enrollee' ? true : false}
 									/>
 								</ListItemPrefix>
 								<Typography color="blue-gray" className="font-medium text-sm">
@@ -127,6 +127,7 @@ export const InfoUser = () => {
 										containerProps={{
 											className: 'p-0'
 										}}
+										defaultChecked={roleState === 'listener' ? true : false}
 									/>
 								</ListItemPrefix>
 								<Typography color="blue-gray" className="font-medium text-sm">
@@ -149,6 +150,7 @@ export const InfoUser = () => {
 										containerProps={{
 											className: 'p-0'
 										}}
+										defaultChecked={roleState === 'applicant' ? true : false}
 									/>
 								</ListItemPrefix>
 								<Typography color="blue-gray" className="font-medium text-sm">
@@ -178,7 +180,11 @@ export const InfoUser = () => {
 							{t('next')}
 						</Button>
 					</div>
-					<Button type="text" className="rounded-full w-[200px] h-[50px] mt-8" onClick={handleSkip}>
+					<Button
+						type="text"
+						className="rounded-full w-[200px] h-[50px] mt-8"
+						onClick={handleSkip}
+					>
 						{t('fillLater')}
 					</Button>
 				</div>

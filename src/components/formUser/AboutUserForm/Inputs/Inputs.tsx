@@ -1,5 +1,4 @@
 import { DatePicker, DatePickerProps, Input, Select } from 'antd'
-import locale from 'antd/es/date-picker/locale/ru_RU'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import 'dayjs/locale/ru'

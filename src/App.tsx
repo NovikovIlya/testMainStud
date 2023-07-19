@@ -18,7 +18,6 @@ import { Registration } from './components/registration/Registration'
 import { User } from './components/user/User'
 import { useAppDispatch } from './store'
 import { refreshToken } from './store/creators/MainCreators'
-import { logoutSuccess } from './store/reducers/AuthRegReducer'
 
 const App = () => {
 	const cookies = new Cookies()
@@ -27,8 +26,6 @@ const App = () => {
 	const navigate = useNavigate()
 	const dispatch = useAppDispatch()
 	const currentUrl = useLocation()
-
-	//console.log(currentUrl.pathname)
 
 	const dataApi = async () => {
 		const res = await dispatch(refreshToken())
@@ -57,6 +54,15 @@ const App = () => {
 			cookies.get('refresh') !== undefined
 		) {
 			dataApi()
+		} else {
+			const isBasePages = [
+				'/',
+				'/login',
+				'/registration',
+				'/api/register/approve',
+				'/registration/checkingEmail'
+			].some(el => el === currentUrl.pathname)
+			isBasePages ? navigate(currentUrl.pathname) : navigate('/')
 		}
 	}, [])
 

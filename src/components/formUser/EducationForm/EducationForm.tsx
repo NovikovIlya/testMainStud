@@ -1,6 +1,6 @@
 import { Button, Input, Select } from 'antd'
 import clsx from 'clsx'
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -63,7 +63,7 @@ export const EducationForm = () => {
 					<h3 className="self-start text-xl">{t('education')}</h3>
 					<div className="flex flex-col gap-10 w-full">
 						{data.map(item => (
-							<div>
+							<div key={item.id}>
 								<div className="flex self-start gap-4 mt-7">
 									<p>{t('educationDocument')}</p>
 									{item.id !== 0 && (

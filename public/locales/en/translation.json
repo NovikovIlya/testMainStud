@@ -75,5 +75,8 @@
     "registration": "Registration",
     "confirm": "The field does not match the above password",
     "repeatPassword": "Repeat the password",
-    "email": "Email"
+    "email": "Email",
+    "userAgreement": "I accept the user agreement and give permission to the CFU portal to process my personal data in accordance with Federal Law No. 152-FZ of 27.07.2006 <<On Personal Data>>",
+    "alreadyProfile": "Already have a profile?",
+    "login": "Log in"
 }

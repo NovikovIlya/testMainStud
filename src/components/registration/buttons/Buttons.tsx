@@ -1,6 +1,7 @@
-import { Button, Checkbox, Form } from 'antd'
-import { CheckboxChangeEvent } from 'antd/es/checkbox'
+import { Button, Checkbox, Form } from 'antd';
+import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { FC } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import { useAppDispatch } from '../../../store'
@@ -15,34 +16,31 @@ interface IButtonsProps {
 
 export const Buttons: FC<IButtonsProps> = ({ setCheck, check }) => {
 	const dispatch = useAppDispatch()
+	const { t } = useTranslation()
 	const onChangeCheckbox = (e: CheckboxChangeEvent) =>
 		setCheck(e.target.checked)
 	return (
 		<Form.Item className={styles.main}>
 			<div className={styles.buttons}>
 				<Button size="large" type="primary" htmlType="submit" disabled={!check}>
-				Зарегистрироваться
+					{t('register')}
 				</Button>
 				<Checkbox
 					className={styles.check}
 					onChange={onChangeCheckbox}
 					checked={check}
 				>
-					<p className={styles.termsUse}>
-						Я принимаю пользовательское соглашение и даю разрешение порталу КФУ
-						на обработку моих персональных данных в соотвествии с Федеральным
-						законом №152-ФЗ от 27.07.2006 года “О персональных данных”
-					</p>
+					<p className={styles.termsUse}>{t('userAgreement')}</p>
 				</Checkbox>
 				<div className={styles.login}>
 					<span>
-						Уже есть профиль?{' '}
+						{t('alreadyProfile')}{' '}
 						<Link
 							className={styles.link}
 							to="/login"
 							onClick={() => dispatch(DeleteRegistrationErrors())}
 						>
-							Войдите
+							{t('login')}
 						</Link>
 					</span>
 					<Link to={'https://kpfu.ru/'} className={styles.kpfu}>

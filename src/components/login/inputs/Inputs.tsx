@@ -61,7 +61,7 @@ export const Inputs: FC<IInputsProps> = ({ value, error }) => {
 						)
 					)}
 				>
-					<Input className="email" size="large" placeholder="Email" />
+					<Input className="email" size="large" placeholder="Email/Login" />
 				</Form.Item>
 			)}
 

@@ -43,7 +43,7 @@ export const Login = () => {
 				)
 			}
 			if (res === 200) {
-				navigate('/infoUser')
+				navigate('/user')
 			}
 		}
 		request()

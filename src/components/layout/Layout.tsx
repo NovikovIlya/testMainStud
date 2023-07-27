@@ -1,8 +1,9 @@
-import React, { FC } from 'react'
+import React, { FC } from 'react';
+
+
 
 import { Footer } from './Footer'
 import { Header } from './Header'
-import { Navbar } from './Navbar'
 
 interface ILayoutProps {
 	children: React.ReactNode
@@ -11,8 +12,7 @@ interface ILayoutProps {
 export const Layout: FC<ILayoutProps> = ({ children }) => {
 	return (
 		<div className="flex flex-col w-full ">
-			<div className="bg-[#F5F8FB] flex w-full h-full min-h-screen">
-				<Navbar />
+			<div className=" flex w-full h-full min-h-screen">
 				<div className="flex flex-col w-full">
 					<Header />
 					{children}

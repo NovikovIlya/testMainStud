@@ -17,22 +17,17 @@ export const User = () => {
 	const user = useAppSelector(state => state.InfoUser.role)
 	return (
 		<Layout>
-			<Heading
-				className={clsx(
-					`ml-[180px] mt-[125px] max-sm:ml-3 text-2xl font-bold text-[#1F5CB8]`,
-					user === 'guest' && 'bg-black',
-					user === 'enrollee' && 'bg-red-500',
-					user === 'student' && 'bg-yellow-500',
-					user === 'schoolboy' && 'bg-green-500',
-					user === 'listener' && 'bg-blue-500',
-					user === 'applicant' && 'bg-purple-500'
-				)}
-			>
-				Личный кабинет КФУ <br />
-				{user}
-			</Heading>
-			<DropDrag edit={true} layouts={layouts} setLayouts={setLayouts} />
-			<Faq />
+			<div className="px-10 flex items-center justify-center">
+				<div className='max-w-[1600px] w-[1600px]'>
+					<Heading
+						className={clsx(`mt-[125px] text-2xl font-bold text-[#1F5CB8]`)}
+					>
+						Личный кабинет КФУ <br />
+					</Heading>
+					<DropDrag edit={true} layouts={layouts} setLayouts={setLayouts} />
+					<Faq />
+				</div>
+			</div>
 		</Layout>
 	)
 }

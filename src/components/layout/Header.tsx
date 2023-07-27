@@ -1,65 +1,120 @@
-import { Button, Input } from 'antd'
+import { Button } from 'antd'
+import type { MenuProps } from 'antd'
+import { Dropdown, Space } from 'antd'
 import { AiOutlineMenu } from 'react-icons/ai'
 import { useNavigate } from 'react-router-dom'
 
 import {
-	EditSvg,
+	EyeSvg,
 	LogoIasSvg,
 	LogoutSvg,
+	MapSvg,
+	MenuSvg,
 	MessageSvg,
+	PersonCardSvg,
 	PersonSvg,
+	SearchSvg,
 	SettingSvg
 } from '../../assets/svg'
+import PersonalizationSvg from '../../assets/svg/PersonalizationSvg'
 import { useAppDispatch } from '../../store'
 import { logout } from '../../store/creators/SomeCreators'
 
+const items: MenuProps['items'] = [
+	{
+		label: (
+			<div className="p-2 text-sm text-[#1F5CB8] font-bold">
+				User001@mail.com
+			</div>
+		),
+		key: '0'
+	},
+	{
+		type: 'divider'
+	},
+	{
+		label: (
+			<div className="flex items-center gap-3">
+				<PersonCardSvg />
+				Обо мне
+			</div>
+		),
+		key: '1'
+	},
+	{
+		label: (
+			<div className="flex items-center gap-3">
+				<SettingSvg />
+				Настройки
+			</div>
+		),
+		key: '3'
+	},
+	{
+		label: (
+			<div className="flex items-center gap-3">
+				<PersonalizationSvg />
+				Персонализация
+			</div>
+		),
+		key: '4'
+	},
+	{
+		label: (
+			<div className="flex items-center gap-3">
+				<LogoutSvg />
+				Выйти
+			</div>
+		),
+		key: '5'
+	}
+]
 export const Header = () => {
 	const dispatch = useAppDispatch()
 	const navigate = useNavigate()
 	return (
-		<header className="bg-[#F5F8FB] max-xl:pr-3 max-xl:pl-[100px] max-sm:px-3 h-[100px] backdrop-blur-sm fixed pl-[180px] max-lg:pl-[100px] max-md:pl-[80px] pr-[80px] z-10 gap-[2vh] w-full flex items-center justify-between">
-			<div className="flex wrapper  gap-[24px] max-md:justify-around max-md:gap-0 max-md:w-full">
-				<div>
+		<header className="bg-white z-50  h-[80px] fixed flex items-center justify-center w-full">
+			<div className="w-screen max-w-[1600px] flex h-full justify-between px-14">
+				<div className="flex gap-8 items-center">
+					<Button
+						className="h-[40px] rounded-full font-semibold bg-transparent text-[#1F5CB8] border-2 border-[#1F5CB8] flex items-center justify-center w-[130px] hover:text-white"
+						icon={<MenuSvg />}
+					>
+						Сервисы
+					</Button>
 					<LogoIasSvg />
 				</div>
-				<Button
-					className="h-[40px] flex items-center justify-center w-[130px]"
-					type="primary"
-					icon={<AiOutlineMenu />}
-				>
-					Сервисы
-				</Button>
-				<div className="search flex items-center max-xl:hidden w-[20vw]">
-					<Input placeholder="Поиск" className="shadow  w-full h-[40px]" />
-				</div>
-			</div>
-			<div className="flex h-full gap-[40px] max-sm:hidden">
-				<div className="flex gap-[1vh] w-full items-center">
-					<PersonSvg />
-					<div className="flex flex-col justify-center max-lg:hidden">
-						<div className="text-xs font-bold">Мистер Бин Бинович</div>
-						<span className="text-xs">Гость</span>
+				<div className="flex gap-20 items-center h-full">
+					<div className="flex h-full items-center">
+						<div className="h-full flex items-center px-3 cursor-pointer hover:bg-[#E3E8ED]">
+							<MessageSvg />
+						</div>
+						<div className="h-full flex items-center px-3 cursor-pointer hover:bg-[#E3E8ED]">
+							<MapSvg />
+						</div>
+						<div className="h-full flex items-center px-3 cursor-pointer hover:bg-[#E3E8ED]">
+							<EyeSvg />
+						</div>
+						<div className="h-full flex items-center px-3 cursor-pointer hover:bg-[#E3E8ED]">
+							<SearchSvg />
+						</div>
 					</div>
-				</div>
-				<div className="flex h-full w-full max-md:hidden">
-					<div className="hover:bg-[#E3E8ED] cursor-pointer flex items-center px-[14px] h-full">
-						<SettingSvg />
+					<div className="h-full hover:bg-[#E3E8ED] w-[180px] flex items-center justify-center">
+						<Dropdown
+							menu={{ items }}
+							placement="bottom"
+							trigger={['click']}
+							className="cursor-pointer h-full"
+						>
+							<Space>
+								<PersonSvg />
+								<div className="h-full">
+									<div className="font-bold text-sm">User 001</div>
+									<div className="text-sm">Guest</div>
+								</div>
+							</Space>
+						</Dropdown>
 					</div>
-					<div className="hover:bg-[#E3E8ED] cursor-pointer flex items-center px-[14px] h-full">
-						<MessageSvg />
-					</div>
-					<div className="hover:bg-[#E3E8ED] cursor-pointer flex items-center px-[14px] h-full">
-						<EditSvg />
-					</div>
-					<Button
-						className="hover:bg-[#E3E8ED] cursor-pointer flex items-center px-[14px] h-full border-0 bg-inherit"
-						onClick={() => {
-							dispatch(logout())
-							navigate('/')
-						}}
-					>
-						<LogoutSvg />
-					</Button>
 				</div>
 			</div>
 		</header>

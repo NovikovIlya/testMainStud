@@ -73,20 +73,20 @@ const DropDrag: FunctionComponent<IDropDragProps> = ({
 	})
 
 	return (
-		<div className="ml-[180px] mt-[40px] pr-[80px] mb-[100px] max-sm:ml-3  max-xl:pr-3 max-xl:ml-[100px]">
+		<div className=" mt-[40px] w-[min(1600px, 100%)] mb-[100px]">
 			<ResponsiveReactGridLayout
 				className="layout "
-				cols={{ lg: 3, md: 2, sm: 1, xs: 1, xxs: 1 }}
+				cols={{ lg: 3, md: 2, sm: 2, xs: 1, xxs: 1 }}
 				rowHeight={150}
 				containerPadding={[0, 0]}
-				margin={[40, 40]}
+				margin={[20, 20]}
 				layouts={layouts}
 				measureBeforeMount={true}
 				useCSSTransforms={mounted}
 				onLayoutChange={onLayoutChange}
 				onBreakpointChange={onBreakpointChange}
 				isDraggable={edit}
-				isResizable={true}
+				isResizable={false}
 			>
 				{generateDOM}
 			</ResponsiveReactGridLayout>

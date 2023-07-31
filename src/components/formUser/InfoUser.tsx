@@ -1,26 +1,27 @@
-import {
-	List,
-	ListItem,
-	ListItemPrefix,
-	Radio,
-	Typography
-} from '@material-tailwind/react'
-import { Button } from 'antd'
-import { useTranslation } from 'react-i18next'
-import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { List, ListItem, ListItemPrefix, Radio, Typography } from '@material-tailwind/react';
+import { Button } from 'antd';
+import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+
+
 
 import { useAppSelector } from '../../store'
+import { usePutRoleMutation } from '../../store/reducers/FormReducers/FormSlice'
 import { role } from '../../store/reducers/FormReducers/InfoUserReducer'
 
 import { ImagesLayout } from './ImagesLayout'
 
 export const InfoUser = () => {
 	const dispatch = useDispatch()
+	const [updatePost] = usePutRoleMutation()
 	const navigate = useNavigate()
 	const roleState = useAppSelector(state => state.InfoUser.role)
 	const { t } = useTranslation()
 	const handleOk = () => {
+		updatePost({
+			role: 'SCHOOL'
+		})
 		dispatch(role(roleState))
 		navigate('/form')
 	}

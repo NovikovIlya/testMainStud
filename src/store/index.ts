@@ -6,6 +6,7 @@ import AuthRegReducer from './reducers/AuthRegReducer'
 import DocumentReducer from './reducers/FormReducers/DocumentReducer'
 import EducationReducer from './reducers/FormReducers/EducationReducer'
 import FormReducer from './reducers/FormReducers/FormReducer'
+import { roleApi } from './reducers/FormReducers/FormSlice'
 import InfoUserReducer from './reducers/FormReducers/InfoUserReducer'
 import ParentReducer from './reducers/FormReducers/ParentReducer'
 import WorkReducer from './reducers/FormReducers/WorkReducer'
@@ -20,12 +21,13 @@ export const store = configureStore({
 		Document: DocumentReducer,
 		Education: EducationReducer,
 		Work: WorkReducer,
-		Parent: ParentReducer
+		Parent: ParentReducer,
+		[roleApi.reducerPath]: roleApi.reducer
 	},
 	middleware: getDefaultMiddleware =>
-		getDefaultMiddleware().concat(
-			...(process.env.NODE_ENV !== 'production' ? [logger] : [])
-		)
+		getDefaultMiddleware()
+			.concat(...(process.env.NODE_ENV !== 'production' ? [logger] : []))
+			.concat(roleApi.middleware)
 })
 
 export type RootState = ReturnType<typeof store.getState>

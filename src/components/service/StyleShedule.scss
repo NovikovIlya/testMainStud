@@ -1,0 +1,11 @@
+.ant-radio-button-wrapper:not(:first-child)::before {
+    width: 0;
+}
+.ant-radio-button-wrapper:first-child, .ant-radio-button-wrapper:last-child{
+    border-radius: 99999px;
+}
+.ant-radio-button-wrapper {
+    border-block-start-width: 1px;
+    border-inline-start-width: 1px;
+    border-inline-end-width: 1px;
+}

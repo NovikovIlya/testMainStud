@@ -1,6 +1,11 @@
 import React from 'react'
 
-export const MenuSvg = () => {
+type TypeMenuSvgProps = {
+	white?: boolean
+}
+export const MenuSvg = ({ white }: TypeMenuSvgProps) => {
+	const color = () => (white ? 'white' : '#1F5CB8')
+
 	return (
 		<svg
 			width="22"
@@ -11,21 +16,21 @@ export const MenuSvg = () => {
 		>
 			<path
 				d="M1.14844 1H20.9964"
-				stroke="#1F5CB8"
-				stroke-width="2"
-				stroke-linecap="round"
+				stroke={color()}
+				strokeWidth="2"
+				strokeLinecap="round"
 			/>
 			<path
 				d="M1.14844 5.93359H20.9964"
-				stroke="#1F5CB8"
-				stroke-width="2"
-				stroke-linecap="round"
+				stroke={color()}
+				strokeWidth="2"
+				strokeLinecap="round"
 			/>
 			<path
 				d="M1.14844 11H20.9964"
-				stroke="#1F5CB8"
-				stroke-width="2"
-				stroke-linecap="round"
+				stroke={color()}
+				strokeWidth="2"
+				strokeLinecap="round"
 			/>
 		</svg>
 	)

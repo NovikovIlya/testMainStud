@@ -15,6 +15,7 @@ import { ParentForm } from './components/formUser/ParentForm/ParentForm'
 import { WorkForm } from './components/formUser/WorkForm/WorkForm'
 import { Login } from './components/login/Login'
 import { Registration } from './components/registration/Registration'
+import { Schedule } from './components/service/Schedule'
 import { User } from './components/user/User'
 import { useAppDispatch } from './store'
 import { refreshToken } from './store/creators/MainCreators'
@@ -94,6 +95,7 @@ const App = () => {
 						path="/registration/checkingEmail"
 						element={<CheckEmail email={email} />}
 					/>
+					<Route path="/setting" element={<Schedule />} />
 				</Routes>
 			</ConfigProvider>
 		</>

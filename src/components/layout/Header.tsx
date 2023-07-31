@@ -1,6 +1,7 @@
-import { Button } from 'antd'
-import type { MenuProps } from 'antd'
+import { Button } from 'antd';
+import type { MenuProps } from 'antd';
 import { Dropdown, Space } from 'antd'
+import clsx from 'clsx'
 import { AiOutlineMenu } from 'react-icons/ai'
 import { useNavigate } from 'react-router-dom'
 
@@ -19,6 +20,10 @@ import {
 import PersonalizationSvg from '../../assets/svg/PersonalizationSvg'
 import { useAppDispatch } from '../../store'
 import { logout } from '../../store/creators/SomeCreators'
+
+type TypeHeaderProps = {
+	type?: 'service' | 'main'
+}
 
 const items: MenuProps['items'] = [
 	{
@@ -69,34 +74,45 @@ const items: MenuProps['items'] = [
 		key: '5'
 	}
 ]
-export const Header = () => {
+
+export const Header = ({ type = 'main' }: TypeHeaderProps) => {
 	const dispatch = useAppDispatch()
 	const navigate = useNavigate()
 	return (
-		<header className="bg-white z-50  h-[80px] fixed flex items-center justify-center w-full">
-			<div className="w-screen max-w-[1600px] flex h-full justify-between px-14">
+		<header
+			className={clsx(
+				' z-50  h-[80px] fixed flex items-center justify-center w-full',
+				type === 'main' ? 'bg-white' : 'bg-[#65A1FA]'
+			)}
+		>
+			<div className="w-screen max-w-[1600px] flex h-full justify-between px-8">
 				<div className="flex gap-8 items-center">
 					<Button
-						className="h-[40px] rounded-full font-semibold bg-transparent text-[#1F5CB8] border-2 border-[#1F5CB8] flex items-center justify-center w-[130px] hover:text-white"
-						icon={<MenuSvg />}
+						className={clsx(
+							'h-[40px] rounded-full font-semibold bg-transparent border-2 flex items-center justify-center w-[130px] ',
+							type === 'main'
+								? 'text-[#1F5CB8] border-[#1F5CB8]'
+								: 'text-white border-white'
+						)}
+						icon={<MenuSvg white={type === 'service'} />}
 					>
 						Сервисы
 					</Button>
-					<LogoIasSvg />
+					<LogoIasSvg white={type === 'service'} />
 				</div>
 				<div className="flex gap-20 items-center h-full">
 					<div className="flex h-full items-center">
 						<div className="h-full flex items-center px-3 cursor-pointer hover:bg-[#E3E8ED]">
-							<MessageSvg />
+							<MessageSvg white={type === 'service'} />
 						</div>
 						<div className="h-full flex items-center px-3 cursor-pointer hover:bg-[#E3E8ED]">
-							<MapSvg />
+							<MapSvg white={type === 'service'} />
 						</div>
 						<div className="h-full flex items-center px-3 cursor-pointer hover:bg-[#E3E8ED]">
-							<EyeSvg />
+							<EyeSvg white={type === 'service'} />
 						</div>
 						<div className="h-full flex items-center px-3 cursor-pointer hover:bg-[#E3E8ED]">
-							<SearchSvg />
+							<SearchSvg white={type === 'service'} />
 						</div>
 					</div>
 					<div className="h-full hover:bg-[#E3E8ED] w-[180px] flex items-center justify-center">
@@ -107,8 +123,10 @@ export const Header = () => {
 							className="cursor-pointer h-full"
 						>
 							<Space>
-								<PersonSvg />
-								<div className="h-full">
+								<PersonSvg white={type === 'service'} />
+								<div
+									className={clsx('h-full', type === 'service' && 'text-white')}
+								>
 									<div className="font-bold text-sm">User 001</div>
 									<div className="text-sm">Guest</div>
 								</div>

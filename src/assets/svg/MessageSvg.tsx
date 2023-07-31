@@ -1,24 +1,32 @@
-import React from 'react'
+import React from 'react';
 
-export const MessageSvg = () => {
+
+type TypeMenuSvgProps = {
+	white?: boolean
+}
+export const MessageSvg = ({ white }: TypeMenuSvgProps) => {
+	const color = () => (white ? 'white' : '#1F5CB8')
+
 	return (
 		<svg
 			width="22"
-			height="21"
-			viewBox="0 0 22 21"
+			height="23"
+			viewBox="0 0 22 23"
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"
 		>
 			<path
-				d="M7.62118 17.4492H7.12268C3.13464 17.4492 1.14062 16.4521 1.14062 11.4671V6.48205C1.14062 2.49402 3.13464 0.5 7.12268 0.5H15.0988C19.0868 0.5 21.0808 2.49402 21.0808 6.48205V11.4671C21.0808 15.4551 19.0868 17.4492 15.0988 17.4492H14.6002C14.2912 17.4492 13.9921 17.5987 13.8026 17.848L12.3071 19.842C11.6491 20.7193 10.5723 20.7193 9.9143 19.842L8.41879 17.848C8.25927 17.6286 7.89038 17.4492 7.62118 17.4492Z"
-				stroke="#1F5CB8"
+				d="M7.48056 18.7245H6.98205C2.99402 18.7245 1 17.7275 1 12.7425V7.75744C1 3.76941 2.99402 1.77539 6.98205 1.77539H14.9581C18.9462 1.77539 20.9402 3.76941 20.9402 7.75744V12.7425C20.9402 16.7305 18.9462 18.7245 14.9581 18.7245H14.4596C14.1505 18.7245 13.8514 18.8741 13.662 19.1233L12.1665 21.1174C11.5085 21.9947 10.4317 21.9947 9.77368 21.1174L8.27817 19.1233C8.11864 18.904 7.74975 18.7245 7.48056 18.7245Z"
+				stroke={color()}
+				strokeWidth="2"
 				strokeMiterlimit="10"
 				strokeLinecap="round"
 				strokeLinejoin="round"
 			/>
 			<path
-				d="M6.125 6.48145H16.0951M6.125 11.4665H12.1071"
-				stroke="#1F5CB8"
+				d="M5.98438 7.75586H15.9545M5.98438 12.7409H11.9664"
+				stroke={color()}
+				strokeWidth="2"
 				strokeLinecap="round"
 				strokeLinejoin="round"
 			/>

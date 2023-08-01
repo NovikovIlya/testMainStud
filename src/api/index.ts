@@ -2,7 +2,7 @@ import { AxiosPromise } from 'axios'
 
 import endpoints from './endpoints'
 import { axiosInstance } from './instance'
-import { IApproveRequest, IAuthSuccess } from './types'
+import { IApproveRequest, IAuthSuccess, IRoleInfo } from './types'
 import {
 	IAuthRequest,
 	IRefreshRequest,
@@ -23,3 +23,6 @@ export const register = (params: IRegRequest): AxiosPromise<number> =>
 
 export const approve = (params: IApproveRequest): AxiosPromise<IAuthSuccess> =>
 	axiosInstance.post(endpoints.APPROVE, params)
+
+export const role = (params: IRoleInfo) =>
+	axiosInstance.put(endpoints.SETROLE, params)

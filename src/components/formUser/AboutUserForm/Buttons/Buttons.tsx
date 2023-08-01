@@ -18,7 +18,7 @@ export const Buttons = ({
 	}
 	const handleOk = () => {
 		if (!saveInStore()) {
-			if (userRole === 'guest') navigate('/user')
+			if (userRole === 'GUEST') navigate('/user')
 			else navigate('/documents')
 		} else {
 			setError(true)

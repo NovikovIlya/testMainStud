@@ -1,28 +1,31 @@
-import { List, ListItem, ListItemPrefix, Radio, Typography } from '@material-tailwind/react';
-import { Button } from 'antd';
-import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-
-
+import {
+	List,
+	ListItem,
+	ListItemPrefix,
+	Radio,
+	Typography
+} from '@material-tailwind/react'
+import { Button } from 'antd'
+import { useTranslation } from 'react-i18next'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 import { useAppSelector } from '../../store'
-import { usePutRoleMutation } from '../../store/reducers/FormReducers/FormSlice'
-import { role } from '../../store/reducers/FormReducers/InfoUserReducer'
+import { useAppDispatch } from '../../store'
+import { setUserRole } from '../../store/creators/MainCreators'
+import { putRole } from '../../store/reducers/FormReducers/InfoUserReducer'
 
 import { ImagesLayout } from './ImagesLayout'
 
 export const InfoUser = () => {
+	const customDispatch = useAppDispatch()
 	const dispatch = useDispatch()
-	const [updatePost] = usePutRoleMutation()
 	const navigate = useNavigate()
 	const roleState = useAppSelector(state => state.InfoUser.role)
 	const { t } = useTranslation()
 	const handleOk = () => {
-		updatePost({
-			role: 'SCHOOL'
-		})
-		dispatch(role(roleState))
+		dispatch(putRole(roleState))
+		customDispatch(setUserRole(roleState))
 		navigate('/form')
 	}
 	const handleSkip = () => {
@@ -55,7 +58,7 @@ export const InfoUser = () => {
 										name="vertical-list"
 										id="guest"
 										ripple={false}
-										defaultChecked={roleState === 'guest' ? true : false}
+										defaultChecked={roleState === 'GUEST' ? true : false}
 										className="hover:before:opacity-0 mt-1"
 										containerProps={{
 											className: 'p-0'
@@ -82,7 +85,7 @@ export const InfoUser = () => {
 										containerProps={{
 											className: 'p-0'
 										}}
-										defaultChecked={roleState === 'schoolboy' ? true : false}
+										defaultChecked={roleState === 'SCHOOL' ? true : false}
 									/>
 								</ListItemPrefix>
 								<Typography color="blue-gray" className="font-medium text-sm">
@@ -105,7 +108,7 @@ export const InfoUser = () => {
 										containerProps={{
 											className: 'p-0'
 										}}
-										defaultChecked={roleState === 'enrollee' ? true : false}
+										defaultChecked={roleState === 'ABIT' ? true : false}
 									/>
 								</ListItemPrefix>
 								<Typography color="blue-gray" className="font-medium text-sm">
@@ -128,7 +131,7 @@ export const InfoUser = () => {
 										containerProps={{
 											className: 'p-0'
 										}}
-										defaultChecked={roleState === 'listener' ? true : false}
+										defaultChecked={roleState === 'ATTEND' ? true : false}
 									/>
 								</ListItemPrefix>
 								<Typography color="blue-gray" className="font-medium text-sm">
@@ -151,7 +154,7 @@ export const InfoUser = () => {
 										containerProps={{
 											className: 'p-0'
 										}}
-										defaultChecked={roleState === 'applicant' ? true : false}
+										defaultChecked={roleState === 'SEEKER' ? true : false}
 									/>
 								</ListItemPrefix>
 								<Typography color="blue-gray" className="font-medium text-sm">

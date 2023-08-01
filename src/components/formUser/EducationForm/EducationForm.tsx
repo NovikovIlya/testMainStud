@@ -30,7 +30,7 @@ export const EducationForm = () => {
 	}
 	const handleOk = () => {
 		if (!saveInStore()) {
-			if (userRole === 'applicant') navigate('/work')
+			if (userRole === 'SEEKER') navigate('/work')
 			else navigate('/user')
 		} else {
 			setError(true)

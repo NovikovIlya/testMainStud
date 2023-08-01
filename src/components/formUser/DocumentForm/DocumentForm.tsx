@@ -35,7 +35,7 @@ export const DocumentForm = () => {
 	}
 	const handleOk = () => {
 		if (!saveInStore()) {
-			if (userRole === 'schoolboy') navigate('/parent')
+			if (userRole === 'SCHOOL') navigate('/parent')
 			else navigate('/education')
 		}
 	}

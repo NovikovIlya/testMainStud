@@ -1,23 +1,23 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 import { RootState } from '../..'
-import { IinfoUserState, TypeRole } from '../../../api/types'
+import { IRoleInfo, TypeRole } from '../../../api/types'
 
-const initialState: IinfoUserState = {
-	role: 'guest'
+const initialState: IRoleInfo = {
+	role: 'GUEST'
 }
 
 export const InfoUserReducer = createSlice({
 	name: 'InfoUser',
 	initialState,
 	reducers: {
-		role: (state, action: PayloadAction<TypeRole>) => {
+		putRole: (state, action: PayloadAction<TypeRole>) => {
 			state.role = action.payload
 		}
 	}
 })
 
-export const { role } = InfoUserReducer.actions
+export const { putRole } = InfoUserReducer.actions
 
 export default InfoUserReducer.reducer
 

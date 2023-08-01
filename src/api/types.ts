@@ -61,14 +61,14 @@ export interface IProfileState {
 }
 
 export type TypeRole =
-	| 'enrollee'
-	| 'student'
-	| 'schoolboy'
-	| 'listener'
-	| 'applicant'
-	| 'guest'
+	| 'ABIT'
+	| 'STUD'
+	| 'SCHOOL'
+	| 'SEEKER'
+	| 'GUEST'
+	| 'ATTEND'
 
-export interface IinfoUserState {
+export interface IRoleInfo {
 	role: TypeRole
 }
 

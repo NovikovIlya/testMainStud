@@ -2,8 +2,8 @@ import { Dispatch } from '@reduxjs/toolkit'
 import request from 'axios'
 import { Cookies } from 'react-cookie'
 
-import { approve, login, refresh, register } from '../../api/index'
-import { IRegError } from '../../api/types'
+import { approve, login, refresh, register, role } from '../../api/index'
+import { IRegError, TypeRole } from '../../api/types'
 import { IApproveRequest, IAuthRequest, IRegRequest } from '../../api/types'
 import {
 	loginFailure,
@@ -105,3 +105,13 @@ export const approveEmail =
 		localStorage.setItem('userInfo', JSON.stringify(res.data.user))
 		dispatch(ProfileSuccess(res.data.user))
 	}
+
+export const setUserRole = (data: TypeRole) => async (dispatch: Dispatch) => {
+	try {
+		await role({ role: data })
+	} catch (e) {
+		if (request.isAxiosError(e) && e.response) {
+			console.log((e.response?.data as IRegError).errors)
+		}
+	}
+}

@@ -26,11 +26,15 @@ type TypeHeaderProps = {
 	service?: string
 }
 
+
+export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
+	const user = useAppSelector(state => state.Profile.profileData.CurrentData)
+	
 const items: MenuProps['items'] = [
 	{
 		label: (
 			<div className="p-2 text-sm text-[#1F5CB8] font-bold">
-				User001@mail.com
+				{user?.email}
 			</div>
 		),
 		key: '0'
@@ -40,7 +44,7 @@ const items: MenuProps['items'] = [
 	},
 	{
 		label: (
-			<div className="flex items-center gap-3">
+			<div className="flex items-center gap-[15px] px-[4px] py-[5px]">
 				<PersonCardSvg />
 				Обо мне
 			</div>
@@ -49,7 +53,7 @@ const items: MenuProps['items'] = [
 	},
 	{
 		label: (
-			<div className="flex items-center gap-3">
+			<div className="flex items-center gap-[15px] px-[4px] py-[5px]">
 				<SettingSvg />
 				Настройки
 			</div>
@@ -58,7 +62,7 @@ const items: MenuProps['items'] = [
 	},
 	{
 		label: (
-			<div className="flex items-center gap-3">
+			<div className="flex items-center gap-[15px] px-[4px] py-[5px]">
 				<PersonalizationSvg />
 				Персонализация
 			</div>
@@ -67,7 +71,7 @@ const items: MenuProps['items'] = [
 	},
 	{
 		label: (
-			<div className="flex items-center gap-3">
+			<div className="flex items-center gap-[15px] px-[4px] py-[5px]">
 				<LogoutSvg />
 				Выйти
 			</div>
@@ -75,9 +79,6 @@ const items: MenuProps['items'] = [
 		key: '5'
 	}
 ]
-
-export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
-	const user = useAppSelector(state => state.Profile.profileData.CurrentData)
 	return (
 		<header
 			className={clsx(
@@ -89,7 +90,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 				<div className="flex gap-8 items-center">
 					<Button
 						className={clsx(
-							'h-[40px] rounded-full font-semibold bg-transparent border-2 flex items-center justify-center w-[130px] ',
+							'h-[40px] rounded-full  font-semibold bg-transparent border-2 flex items-center justify-center w-[130px] ',
 							type === 'main'
 								? 'text-[#1F5CB8] border-[#1F5CB8] '
 								: 'text-white border-white hover:!border-white hover:!text-white'
@@ -97,7 +98,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						type="default"
 						icon={<MenuSvg white={type === 'service'} />}
 					>
-						Сервисы
+						<span className="pl-2">Сервисы</span>
 					</Button>
 					<div className="flex items-center gap-5">
 						<LogoIasSvg white={type === 'service'} />
@@ -148,9 +149,9 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 							<EyeSvg white={type === 'service'} />
 						</div>
 					</div>
-					<a
+					<div
 						className={clsx(
-							'h-full flex items-center  max-w-[200px] cursor-pointer bg-transparent',
+							'h-full flex items-center cursor-pointer bg-transparent',
 							type === 'main'
 								? 'hover:bg-[#E3E8ED]'
 								: 'target:bg-[#3073D7] active:bg-[#3073D7] visited:bg-[#3073D7] focus-visible:bg-[#3073D7] focus-within:bg-[#3073D7] focus:bg-[#3073D7] hover:bg-[#3073D7]'
@@ -160,9 +161,9 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 							menu={{ items }}
 							placement="bottom"
 							trigger={['click']}
-							className="cursor-pointer h-full w-[200px] box-border"
+							className="cursor-pointer h-full  box-border"
 						>
-							<Space className='px-3'>
+							<Space className="px-10">
 								<PersonSvg white={type === 'service'} />
 								<div
 									className={clsx('h-full', type === 'service' && 'text-white')}
@@ -174,7 +175,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 								</div>
 							</Space>
 						</Dropdown>
-					</a>
+					</div>
 				</div>
 			</div>
 		</header>

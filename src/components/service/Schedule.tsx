@@ -35,7 +35,7 @@ const columns: ColumnsType<DataType> = [
 		title: 'Время',
 		dataIndex: 'time',
 		key: 'time',
-		render: item => <p className="text-base">{item}</p>
+		render: item => <p className="text-base whitespace-nowrap">{item}</p>
 	},
 	{
 		title: 'Предмет',
@@ -135,37 +135,37 @@ export const Schedule = () => {
 				className="flex gap-[10px] h-9"
 			>
 				<Radio.Button
-					className="rounded-full h-full flex items-center  text-base"
+					className="rounded-full bg-transparent h-full flex items-center  text-base"
 					value="a"
 				>
 					Понедельник
 				</Radio.Button>
 				<Radio.Button
-					className="rounded-full h-full flex items-center text-base"
+					className="rounded-full h-full flex items-center text-base bg-transparent"
 					value="b"
 				>
 					Вторник
 				</Radio.Button>
 				<Radio.Button
-					className="rounded-full h-full flex items-center text-base"
+					className="rounded-full h-full flex items-center text-base bg-transparent"
 					value="c"
 				>
 					Среда
 				</Radio.Button>
 				<Radio.Button
-					className="rounded-full h-full flex items-center text-base"
+					className="rounded-full h-full flex items-center text-base bg-transparent"
 					value="d"
 				>
 					Четверг
 				</Radio.Button>
 				<Radio.Button
-					className="rounded-full h-full flex items-center text-base"
+					className="rounded-full h-full flex items-center text-base bg-transparent"
 					value="f"
 				>
 					Пятница
 				</Radio.Button>
 				<Radio.Button
-					className="rounded-full h-full flex items-center text-base"
+					className="rounded-full h-full flex items-center text-base bg-transparent"
 					value="g"
 				>
 					Суббота
@@ -180,35 +180,35 @@ export const Schedule = () => {
 				/>
 				<div className="flex flex-col gap-6 text-sm">
 					<div className="flex items-center gap-2">
-						<div className="min-w-3 min-h-3 w-3 h-3  rounded-full bg-[#A7FAFF]" />
+						<div className="min-w-3 min-h-3 w-[11px] h-[11px]  rounded-full bg-[#A7FAFF]" />
 						Потоковая лекция
 					</div>
 					<div className="flex items-center gap-2">
-						<div className="min-w-3 min-h-3 w-3 h-3 rounded-full bg-[#3A92E3]" />
+						<div className="min-w-3 min-h-3 w-[11px] h-[11px] rounded-full bg-[#3A92E3]" />
 						Лекция
 					</div>
 					<div className="flex items-center gap-2">
-						<div className="min-w-3 min-h-3 w-3 h-3 rounded-full bg-[#FFE24C]" />
+						<div className="min-w-3 min-h-3 w-[11px] h-[11px] rounded-full bg-[#FFE24C]" />
 						Семинар
 					</div>
 					<div className="flex items-center gap-2">
-						<div className="min-w-3 min-h-3 w-3 h-3 rounded-full bg-[#59C348]" />
+						<div className="min-w-3 min-h-3 w-[11px] h-[11px] rounded-full bg-[#59C348]" />
 						Лабораторное занятие
 					</div>
 					<div className="flex items-center gap-2">
-						<div className="min-w-3 min-h-3 w-3 h-3 rounded-full bg-[#E93A3A]" />
+						<div className="min-w-3 min-h-3 w-[11px] h-[11px] rounded-full bg-[#E93A3A]" />
 						Факультатив
 					</div>
 					<div className="flex items-center gap-2">
-						<div className="min-w-3 min-h-3 w-3 h-3 rounded-full bg-[#844EC9]" />
+						<div className="min-w-3 min-h-3 w-[11px] h-[11px] rounded-full bg-[#844EC9]" />
 						Практика
 					</div>
 					<div className="flex items-center gap-2">
-						<div className="min-w-3 min-h-3 w-3 h-3 rounded-full bg-[#FF9838]" />
+						<div className="min-w-3 min-h-3 w-[11px] h-[11px] rounded-full bg-[#FF9838]" />
 						Тестирование
 					</div>
 					<div className="flex items-center gap-2">
-						<div className="min-w-3 min-h-3 w-3 h-3 rounded-full bg-[#B3B3B3]" />
+						<div className="min-w-3 min-h-3 w-[11px] h-[11px] rounded-full bg-[#B3B3B3]" />
 						Тип дисциплины не указан
 					</div>
 				</div>

@@ -150,7 +150,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 					</div>
 					<a
 						className={clsx(
-							'h-full flex items-center  max-w-[200px] px-3 cursor-pointer bg-transparent',
+							'h-full flex items-center  max-w-[200px] cursor-pointer bg-transparent',
 							type === 'main'
 								? 'hover:bg-[#E3E8ED]'
 								: 'target:bg-[#3073D7] active:bg-[#3073D7] visited:bg-[#3073D7] focus-visible:bg-[#3073D7] focus-within:bg-[#3073D7] focus:bg-[#3073D7] hover:bg-[#3073D7]'
@@ -160,9 +160,9 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 							menu={{ items }}
 							placement="bottom"
 							trigger={['click']}
-							className="cursor-pointer h-full"
+							className="cursor-pointer h-full w-[200px] box-border"
 						>
-							<Space>
+							<Space className='px-3'>
 								<PersonSvg white={type === 'service'} />
 								<div
 									className={clsx('h-full', type === 'service' && 'text-white')}

@@ -7,10 +7,6 @@ import CalendarSvg from '../../assets/svg/CalendarSvg'
 
 import { Schedule } from './Schedule'
 
-type TypeNavProps = {
-	className?: string
-	children?: ReactNode
-}
 const navList = [
 	{
 		id: '/schedule',

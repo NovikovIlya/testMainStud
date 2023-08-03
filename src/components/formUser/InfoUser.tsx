@@ -21,7 +21,7 @@ export const InfoUser = () => {
 	const customDispatch = useAppDispatch()
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
-	const roleState = useAppSelector(state => state.InfoUser.role)
+	const roleState = useAppSelector(state => state.InfoUser?.role)
 	const { t } = useTranslation()
 	const handleOk = () => {
 		dispatch(putRole(roleState))
@@ -45,7 +45,7 @@ export const InfoUser = () => {
 						className="p-0 mt-5"
 						onChange={e => {
 							//@ts-ignore
-							dispatch(role(e.target.id))
+							dispatch(putRole(e.target.id))
 						}}
 					>
 						<ListItem className="p-0">

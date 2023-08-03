@@ -1,8 +1,7 @@
-import { Button } from 'antd';
-import type { MenuProps } from 'antd';
+import { Button, Divider } from 'antd'
+import type { MenuProps } from 'antd'
 import { Dropdown, Space } from 'antd'
 import clsx from 'clsx'
-import { AiOutlineMenu } from 'react-icons/ai'
 import { useNavigate } from 'react-router-dom'
 
 import {
@@ -17,12 +16,14 @@ import {
 	SearchSvg,
 	SettingSvg
 } from '../../assets/svg'
+import { DocumentSvg } from '../../assets/svg/DocumentSvg'
 import PersonalizationSvg from '../../assets/svg/PersonalizationSvg'
-import { useAppDispatch } from '../../store'
+import { useAppDispatch, useAppSelector } from '../../store'
 import { logout } from '../../store/creators/SomeCreators'
 
 type TypeHeaderProps = {
 	type?: 'service' | 'main'
+	service?: string
 }
 
 const items: MenuProps['items'] = [
@@ -75,9 +76,8 @@ const items: MenuProps['items'] = [
 	}
 ]
 
-export const Header = ({ type = 'main' }: TypeHeaderProps) => {
-	const dispatch = useAppDispatch()
-	const navigate = useNavigate()
+export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
+	const user = useAppSelector(state => state.Profile.profileData.CurrentData)
 	return (
 		<header
 			className={clsx(
@@ -91,31 +91,71 @@ export const Header = ({ type = 'main' }: TypeHeaderProps) => {
 						className={clsx(
 							'h-[40px] rounded-full font-semibold bg-transparent border-2 flex items-center justify-center w-[130px] ',
 							type === 'main'
-								? 'text-[#1F5CB8] border-[#1F5CB8]'
-								: 'text-white border-white'
+								? 'text-[#1F5CB8] border-[#1F5CB8] '
+								: 'text-white border-white hover:!border-white hover:!text-white'
 						)}
+						type="default"
 						icon={<MenuSvg white={type === 'service'} />}
 					>
 						Сервисы
 					</Button>
-					<LogoIasSvg white={type === 'service'} />
+					<div className="flex items-center gap-5">
+						<LogoIasSvg white={type === 'service'} />
+						<Divider type="vertical" className="border-l-white h-10 m-0" />
+						<div className="text-white text-base font-bold">{service}</div>
+					</div>
 				</div>
 				<div className="flex gap-20 items-center h-full">
 					<div className="flex h-full items-center">
-						<div className="h-full flex items-center px-3 cursor-pointer hover:bg-[#E3E8ED]">
-							<MessageSvg white={type === 'service'} />
-						</div>
-						<div className="h-full flex items-center px-3 cursor-pointer hover:bg-[#E3E8ED]">
-							<MapSvg white={type === 'service'} />
-						</div>
-						<div className="h-full flex items-center px-3 cursor-pointer hover:bg-[#E3E8ED]">
-							<EyeSvg white={type === 'service'} />
-						</div>
-						<div className="h-full flex items-center px-3 cursor-pointer hover:bg-[#E3E8ED]">
+						<div
+							className={clsx(
+								'h-full flex items-center px-3 cursor-pointer ',
+								type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-[#3073D7]'
+							)}
+						>
 							<SearchSvg white={type === 'service'} />
 						</div>
+						<div
+							className={clsx(
+								'h-full flex items-center px-3 cursor-pointer ',
+								type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-[#3073D7]'
+							)}
+						>
+							<MessageSvg white={type === 'service'} />
+						</div>
+						<div
+							className={clsx(
+								'h-full flex items-center px-3 cursor-pointer ',
+								type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-[#3073D7]'
+							)}
+						>
+							<MapSvg white={type === 'service'} />
+						</div>
+						<div
+							className={clsx(
+								'h-full flex items-center px-3 cursor-pointer ',
+								type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-[#3073D7]'
+							)}
+						>
+							<DocumentSvg white={type === 'service'} />
+						</div>
+						<div
+							className={clsx(
+								'h-full flex items-center px-3 cursor-pointer ',
+								type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-[#3073D7]'
+							)}
+						>
+							<EyeSvg white={type === 'service'} />
+						</div>
 					</div>
-					<div className="h-full hover:bg-[#E3E8ED] w-[180px] flex items-center justify-center">
+					<a
+						className={clsx(
+							'h-full flex items-center  max-w-[200px] px-3 cursor-pointer bg-transparent',
+							type === 'main'
+								? 'hover:bg-[#E3E8ED]'
+								: 'target:bg-[#3073D7] active:bg-[#3073D7] visited:bg-[#3073D7] focus-visible:bg-[#3073D7] focus-within:bg-[#3073D7] focus:bg-[#3073D7] hover:bg-[#3073D7]'
+						)}
+					>
 						<Dropdown
 							menu={{ items }}
 							placement="bottom"
@@ -127,12 +167,14 @@ export const Header = ({ type = 'main' }: TypeHeaderProps) => {
 								<div
 									className={clsx('h-full', type === 'service' && 'text-white')}
 								>
-									<div className="font-bold text-sm">User 001</div>
-									<div className="text-sm">Guest</div>
+									<div className="font-bold text-sm truncate max-w-[100px]">
+										{user?.lastname}
+									</div>
+									<div className="text-sm">{user?.roles[0].type}</div>
 								</div>
 							</Space>
 						</Dropdown>
-					</div>
+					</a>
 				</div>
 			</div>
 		</header>

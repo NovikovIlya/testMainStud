@@ -86,7 +86,7 @@ const items: MenuProps['items'] = [
 				type === 'main' ? 'bg-white' : 'bg-[#65A1FA]'
 			)}
 		>
-			<div className="w-screen max-w-[1600px] flex h-full justify-between px-8">
+			<div className="w-screen flex h-full justify-between px-8">
 				<div className="flex gap-8 items-center">
 					<Button
 						className={clsx(

@@ -1,5 +1,5 @@
-import React from 'react';
-
+import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
 type TypeMenuSvgProps = {
 	white?: boolean
@@ -7,11 +7,13 @@ type TypeMenuSvgProps = {
 
 export const LogoIasSvg = ({ white }: TypeMenuSvgProps) => {
 	const color = () => (white ? 'white' : '#1F5CB8')
-
+	const navigate = useNavigate()
 	return (
 		<svg
+			onClick={() => navigate('/user')}
 			width="134"
 			height="40"
+			className='cursor-pointer'
 			viewBox="0 0 134 40"
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"

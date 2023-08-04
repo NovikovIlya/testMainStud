@@ -2,25 +2,25 @@ import clsx from 'clsx'
 import React, { ReactNode } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-import { BriefcaseSvg } from '../../assets/svg/BriefcaseSvg'
-import CalendarSvg from '../../assets/svg/CalendarSvg'
 
 import { Schedule } from './Schedule'
 import { Services } from './Services'
+import CalendarSvg from '../../../assets/svg/CalendarSvg'
+import { BriefcaseSvg } from '../../../assets/svg/BriefcaseSvg'
 
 const navList = [
 	{
-		id: '/services/schedule',
+		id: '/services/schedule/schedule',
 		icon: <CalendarSvg />,
 		name: 'Мое расписание'
 	},
 	{
-		id: '/services/services',
+		id: '/services/schedule/services',
 		icon: <BriefcaseSvg />,
 		name: 'Расписание служб'
 	}
 ]
-export const NavLayout = () => {
+export const NavSchedule = () => {
 	const { pathname } = useLocation()
 	const navigate = useNavigate()
 	const handleNavigate = (url: string) => {

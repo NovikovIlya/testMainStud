@@ -26,65 +26,63 @@ type TypeHeaderProps = {
 	service?: string
 }
 
-
 export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const user = useAppSelector(state => state.Profile.profileData.CurrentData)
-	
-const items: MenuProps['items'] = [
-	{
-		label: (
-			<div className="p-2 text-sm text-[#1F5CB8] font-bold cursor-default">
-				{user?.email}
-			</div>
-		),
-		key: '0'
-	},
-	{
-		type: 'divider'
-	},
-	{
-		label: (
-			<div className="flex items-center gap-[15px] px-[4px] py-[5px]">
-				<PersonCardSvg />
-				Обо мне
-			</div>
-		),
-		key: '1'
-	},
-	{
-		label: (
-			<div className="flex items-center gap-[15px] px-[4px] py-[5px]">
-				<SettingSvg />
-				Настройки
-			</div>
-		),
-		key: '3'
-	},
-	{
-		label: (
-			<div className="flex items-center gap-[15px] px-[4px] py-[5px]">
-				<PersonalizationSvg />
-				Персонализация
-			</div>
-		),
-		key: '4'
-	},
-	{
-		label: (
-			<div className="flex items-center gap-[15px] px-[4px] py-[5px]">
-				<LogoutSvg />
-				Выйти
-			</div>
-		),
-		key: '5'
-	},
-	{
-		label: (
-			<div className='cursor-default'/>
-		),
-		key: '6'
-	}
-]
+
+	const items: MenuProps['items'] = [
+		{
+			label: (
+				<div className="p-2 text-sm text-[#1F5CB8] font-bold cursor-default">
+					{user?.email}
+				</div>
+			),
+			key: '0'
+		},
+		{
+			type: 'divider'
+		},
+		{
+			label: (
+				<div className="flex items-center gap-[15px] px-[4px] py-[5px]">
+					<PersonCardSvg />
+					Обо мне
+				</div>
+			),
+			key: '1'
+		},
+		{
+			label: (
+				<div className="flex items-center gap-[15px] px-[4px] py-[5px]">
+					<SettingSvg />
+					Настройки
+				</div>
+			),
+			key: '3'
+		},
+		{
+			label: (
+				<div className="flex items-center gap-[15px] px-[4px] py-[5px]">
+					<PersonalizationSvg />
+					Персонализация
+				</div>
+			),
+			key: '4'
+		},
+		{
+			label: (
+				<div className="flex items-center gap-[15px] px-[4px] py-[5px]">
+					<LogoutSvg />
+					Выйти
+				</div>
+			),
+			key: '5'
+		},
+		{
+			label: <div className="cursor-default" />,
+			key: '6'
+		}
+	]
+	const navigate = useNavigate()
 	return (
 		<header
 			className={clsx(
@@ -95,6 +93,7 @@ const items: MenuProps['items'] = [
 			<div className="w-screen flex h-full justify-between px-8">
 				<div className="flex gap-8 items-center">
 					<Button
+						onClick={() => navigate('/services/schedule')}
 						className={clsx(
 							'h-[40px] rounded-full  font-semibold bg-transparent border-2 flex items-center justify-center w-[130px] ',
 							type === 'main'

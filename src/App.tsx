@@ -15,11 +15,10 @@ import { ParentForm } from './components/formUser/ParentForm/ParentForm'
 import { WorkForm } from './components/formUser/WorkForm/WorkForm'
 import { Login } from './components/login/Login'
 import { Registration } from './components/registration/Registration'
-import { Layout } from './components/service/Layout'
-import { Schedule } from './components/service/Schedule'
 import { User } from './components/user/User'
 import { useAppDispatch } from './store'
 import { refreshToken } from './store/creators/MainCreators'
+import Service from './components/service'
 
 const App = () => {
 	const cookies = new Cookies()
@@ -96,7 +95,7 @@ const App = () => {
 						path="/registration/checkingEmail"
 						element={<CheckEmail email={email} />}
 					/>
-					<Route path="/services/*" element={<Layout />} />
+					<Route path="/services/*" element={<Service />} />
 				</Routes>
 			</ConfigProvider>
 		</>

@@ -33,7 +33,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 const items: MenuProps['items'] = [
 	{
 		label: (
-			<div className="p-2 text-sm text-[#1F5CB8] font-bold">
+			<div className="p-2 text-sm text-[#1F5CB8] font-bold cursor-default">
 				{user?.email}
 			</div>
 		),
@@ -77,6 +77,12 @@ const items: MenuProps['items'] = [
 			</div>
 		),
 		key: '5'
+	},
+	{
+		label: (
+			<div className='cursor-default'/>
+		),
+		key: '6'
 	}
 ]
 	return (
@@ -168,7 +174,7 @@ const items: MenuProps['items'] = [
 								<div
 									className={clsx('h-full', type === 'service' && 'text-white')}
 								>
-									<div className="font-bold text-sm truncate max-w-[100px]">
+									<div className="font-bold text-sm truncate max-w-[120px]">
 										{user?.lastname}
 									</div>
 									<div className="text-sm">{user?.roles[0].type}</div>

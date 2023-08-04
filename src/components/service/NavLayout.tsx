@@ -6,15 +6,16 @@ import { BriefcaseSvg } from '../../assets/svg/BriefcaseSvg'
 import CalendarSvg from '../../assets/svg/CalendarSvg'
 
 import { Schedule } from './Schedule'
+import { Services } from './Services'
 
 const navList = [
 	{
-		id: '/schedule',
+		id: '/services/schedule',
 		icon: <CalendarSvg />,
 		name: 'Мое расписание'
 	},
 	{
-		id: '/services',
+		id: '/services/services',
 		icon: <BriefcaseSvg />,
 		name: 'Расписание служб'
 	}
@@ -51,6 +52,7 @@ export const NavLayout = () => {
 			</div>
 			<div className="bg-[#F5F8FB] w-full">
 				{pathname === navList[0].id && <Schedule />}
+				{pathname === navList[1].id && <Services/>}
 			</div>
 		</>
 	)

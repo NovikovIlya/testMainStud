@@ -96,8 +96,7 @@ const App = () => {
 						path="/registration/checkingEmail"
 						element={<CheckEmail email={email} />}
 					/>
-					<Route path="/schedule" element={<Layout />} />
-					<Route path="/services" element={<Layout />} />
+					<Route path="/services/*" element={<Layout />} />
 				</Routes>
 			</ConfigProvider>
 		</>

@@ -25,6 +25,8 @@ export const InfoUser = () => {
 	const { t } = useTranslation()
 	const handleOk = () => {
 		dispatch(putRole(roleState))
+		console.log(roleState)
+
 		customDispatch(setUserRole(roleState))
 		navigate('/form')
 	}
@@ -46,6 +48,7 @@ export const InfoUser = () => {
 						onChange={e => {
 							//@ts-ignore
 							dispatch(putRole(e.target.id))
+							console.log(roleState)
 						}}
 					>
 						<ListItem className="p-0">

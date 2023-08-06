@@ -2,12 +2,14 @@ import { AxiosPromise } from 'axios'
 
 import endpoints from './endpoints'
 import { axiosInstance } from './instance'
-import { IApproveRequest, IAuthSuccess, IRoleInfo } from './types'
+import { IApproveRequest, IAuthSuccess, IDetailsRequest } from './types'
 import {
 	IAuthRequest,
+	ICountryRequest,
 	IRefreshRequest,
 	IRefreshSuccess,
-	IRegRequest
+	IRegRequest,
+	countryItem
 } from './types'
 
 export const login = (params: IAuthRequest): AxiosPromise<IAuthSuccess> =>
@@ -19,10 +21,14 @@ export const refresh = (
 	axiosInstance.post(endpoints.REFRESH, params)
 
 export const register = (params: IRegRequest): AxiosPromise<number> =>
-	axiosInstance.post(endpoints.REGISTER, params)
+	axiosInstance.post(endpoints.REG.REGISTER, params)
 
 export const approve = (params: IApproveRequest): AxiosPromise<IAuthSuccess> =>
-	axiosInstance.post(endpoints.APPROVE, params)
+	axiosInstance.post(endpoints.REG.APPROVE, params)
 
-export const role = (params: IRoleInfo) =>
-	axiosInstance.put(endpoints.SETROLE, params)
+export const details = (params: IDetailsRequest) =>
+	axiosInstance.put(endpoints.USER.DETAILS, params)
+
+export const contries = (
+	params: ICountryRequest
+): AxiosPromise<countryItem[]> => axiosInstance.get(endpoints.USER.COUNTRIES)

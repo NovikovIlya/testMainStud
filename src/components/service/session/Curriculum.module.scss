@@ -1,0 +1,15 @@
+.button {
+	&:hover {
+		color: white !important;
+		border-color: #1677ff !important;
+	}
+	@apply mr-2 rounded-full border-solid border-black transition-colors hover:bg-bluekfu;
+}
+
+.table {
+	@apply mt-[50px] rounded-none border-[2px] shadow-[#d4e3f1] drop-shadow-lg;
+	th,
+	td {
+		text-align: center !important;
+	}
+}

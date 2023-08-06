@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { useAppSelector } from '../../store'
 import { useAppDispatch } from '../../store'
-import { setUserRole } from '../../store/creators/MainCreators'
+import { userDetails } from '../../store/creators/MainCreators'
 import { putRole } from '../../store/reducers/FormReducers/InfoUserReducer'
 
 import { ImagesLayout } from './ImagesLayout'
@@ -25,9 +25,6 @@ export const InfoUser = () => {
 	const { t } = useTranslation()
 	const handleOk = () => {
 		dispatch(putRole(roleState))
-		console.log(roleState)
-
-		customDispatch(setUserRole(roleState))
 		navigate('/form')
 	}
 	const handleSkip = () => {
@@ -48,18 +45,17 @@ export const InfoUser = () => {
 						onChange={e => {
 							//@ts-ignore
 							dispatch(putRole(e.target.id))
-							console.log(roleState)
 						}}
 					>
 						<ListItem className="p-0">
 							<label
-								htmlFor="guest"
+								htmlFor="GUEST"
 								className="px-3 py-2 flex items-start mt-1 w-full cursor-pointer"
 							>
 								<ListItemPrefix className="mr-3">
 									<Radio
 										name="vertical-list"
-										id="guest"
+										id="GUEST"
 										ripple={false}
 										defaultChecked={roleState === 'GUEST' ? true : false}
 										className="hover:before:opacity-0 mt-1"
@@ -76,13 +72,13 @@ export const InfoUser = () => {
 						</ListItem>
 						<ListItem className="p-0 ">
 							<label
-								htmlFor="schoolboy"
+								htmlFor="SCHOOL"
 								className="px-3 py-2 flex items-start  w-full cursor-pointer"
 							>
 								<ListItemPrefix className="mr-3">
 									<Radio
 										name="vertical-list"
-										id="schoolboy"
+										id="SCHOOL"
 										ripple={false}
 										className="hover:before:opacity-0 mt-1"
 										containerProps={{
@@ -99,13 +95,13 @@ export const InfoUser = () => {
 						</ListItem>
 						<ListItem className="p-0">
 							<label
-								htmlFor="enrollee"
+								htmlFor="ABIT"
 								className="px-3 py-2 flex items-start  w-full cursor-pointer"
 							>
 								<ListItemPrefix className="mr-3">
 									<Radio
 										name="vertical-list"
-										id="enrollee"
+										id="ABIT"
 										ripple={false}
 										className="hover:before:opacity-0 mt-1"
 										containerProps={{
@@ -122,13 +118,13 @@ export const InfoUser = () => {
 						</ListItem>
 						<ListItem className="p-0">
 							<label
-								htmlFor="listener"
+								htmlFor="ATTEND"
 								className="px-3 py-2 flex items-start  w-full cursor-pointer"
 							>
 								<ListItemPrefix className="mr-3">
 									<Radio
 										name="vertical-list"
-										id="listener"
+										id="ATTEND"
 										ripple={false}
 										className="hover:before:opacity-0 mt-1"
 										containerProps={{
@@ -145,13 +141,13 @@ export const InfoUser = () => {
 						</ListItem>
 						<ListItem className="p-0">
 							<label
-								htmlFor="applicant"
+								htmlFor="SEEKER"
 								className="px-3 py-2 flex items-start  w-full cursor-pointer"
 							>
 								<ListItemPrefix className="mr-3">
 									<Radio
 										name="vertical-list"
-										id="applicant"
+										id="SEEKER"
 										ripple={false}
 										className="hover:before:opacity-0 mt-1"
 										containerProps={{

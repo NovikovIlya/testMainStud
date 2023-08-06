@@ -1,40 +1,56 @@
-import { Button, DatePicker, Input, Select } from 'antd'
+import { Button, DatePicker, DatePickerProps, Input, Select } from 'antd'
+import enPicker from 'antd/lib/date-picker/locale/en_US'
+import ruPicker from 'antd/lib/date-picker/locale/ru_RU'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
-import 'dayjs/locale/ru'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import { useAppSelector } from '../../../store'
+import { useAppDispatch } from '../../../store'
+import { userDetails } from '../../../store/creators/MainCreators'
 import {
 	dateIssue,
 	divisionCode,
+	documentTypeId,
 	inn,
 	issuedBy,
-	nameDocument,
-	passwordNumber,
-	passwordSeries,
+	passportNumber,
+	passportSeries,
 	snils
 } from '../../../store/reducers/FormReducers/DocumentReducer'
 import { ImagesLayout } from '../ImagesLayout'
 
 export const DocumentForm = () => {
-	dayjs.locale('ru')
-	const { t } = useTranslation()
+	const { t, i18n } = useTranslation()
 	const [error, setError] = useState(false)
+	const castDispatch = useAppDispatch()
 	const dispatch = useDispatch()
 	const userRole = useAppSelector(state => state.InfoUser.role)
+	const userInfo = useAppSelector(state => state.Form)
+	const userDocuments = useAppSelector(state => state.Document)
 	const data = useAppSelector(state => state.Document)
 
 	const navigate = useNavigate()
+
+	const onChange: DatePickerProps['onChange'] = (date, dateString) => {
+		dateString !== '' && dispatch(dateIssue(dateString))
+	}
 
 	const handleCancel = () => {
 		navigate('/form')
 	}
 	const handleOk = () => {
 		if (!saveInStore()) {
+			castDispatch(
+				userDetails({
+					role: userRole,
+					generalInfo: userInfo,
+					document: userDocuments
+				})
+			)
 			if (userRole === 'SCHOOL') navigate('/parent')
 			else navigate('/education')
 		}
@@ -49,9 +65,9 @@ export const DocumentForm = () => {
 				data.divisionCode,
 				data.inn,
 				data.issuedBy,
-				data.nameDocument,
-				data.passwordNumber,
-				data.passwordSeries,
+				data.documentTypeId,
+				data.passportNumber,
+				data.passportSeries,
 				data.snils
 			].some(el => el === '')
 		) {
@@ -69,12 +85,12 @@ export const DocumentForm = () => {
 						<Select
 							className="mt-2"
 							size="large"
-							onChange={e => dispatch(nameDocument(e))}
-							defaultValue={data.nameDocument}
+							onChange={e => dispatch(documentTypeId(e))}
+							defaultValue={data.documentTypeId}
 							options={[
-								{ value: 'Паспорт РФ' },
-								{ value: 'свидетельство о рождении' },
-								{ value: 'загранпаспорт' }
+								{ value: 1, label: 'Паспорт РФ' },
+								{ value: 2, label: 'свидетельство о рождении' },
+								{ value: 3, label: 'загранпаспорт' }
 							]}
 						/>
 					</div>
@@ -89,7 +105,7 @@ export const DocumentForm = () => {
 									value={data?.divisionCode}
 									className={clsx(
 										'mt-2 shadow ',
-										error && !data.divisionCode && 'border-rose-500'
+										error && data.divisionCode === '' && 'border-rose-500'
 									)}
 									maxLength={7}
 									onChange={e => dispatch(divisionCode(e.currentTarget.value))}
@@ -100,18 +116,15 @@ export const DocumentForm = () => {
 								<DatePicker
 									className={clsx(
 										'mt-2 shadow w-full',
-										error && !data.dateIssue && 'border-rose-500'
+										error && data.dateIssue === '' && 'border-rose-500'
 									)}
-									onChange={e => {
-										if (e != null) {
-											dispatch(dateIssue(e.format('DD.MM.YYYY')))
-										}
-									}}
+									onChange={onChange}
+									locale={i18n.language === 'ru' ? ruPicker : enPicker}
 									size="large"
-									format={'DD.MM.YYYY'}
 									placeholder={t('date')}
+									format={'DD.MM.YYYY'}
 									value={
-										data.dateIssue != null
+										data.dateIssue !== ''
 											? dayjs(data.dateIssue, 'DD.MM.YYYY')
 											: null
 									}
@@ -124,11 +137,11 @@ export const DocumentForm = () => {
 									size="large"
 									className={clsx(
 										'mt-2 shadow ',
-										error && !data.passwordSeries && 'border-rose-500'
+										error && data.passportSeries === '' && 'border-rose-500'
 									)}
 									maxLength={4}
-									onChange={e => dispatch(passwordSeries(e.target.value))}
-									value={data.passwordSeries != null ? data.passwordSeries : ''}
+									onChange={e => dispatch(passportSeries(e.target.value))}
+									value={data.passportSeries !== '' ? data.passportSeries : ''}
 								/>
 							</div>
 							<div>
@@ -138,11 +151,11 @@ export const DocumentForm = () => {
 									size="large"
 									className={clsx(
 										'mt-2 shadow ',
-										error && !data.passwordNumber && 'border-rose-500'
+										error && data.passportNumber === '' && 'border-rose-500'
 									)}
 									maxLength={4}
-									onChange={e => dispatch(passwordNumber(e.target.value))}
-									value={data.passwordNumber != null ? data.passwordNumber : ''}
+									onChange={e => dispatch(passportNumber(e.target.value))}
+									value={data.passportNumber !== '' ? data.passportNumber : ''}
 								/>
 							</div>
 						</div>
@@ -153,10 +166,10 @@ export const DocumentForm = () => {
 								size="large"
 								className={clsx(
 									'mt-2 shadow ',
-									error && !data.issuedBy && 'border-rose-500'
+									error && data.issuedBy === '' && 'border-rose-500'
 								)}
 								onChange={e => dispatch(issuedBy(e.target.value))}
-								value={data.issuedBy != null ? data.issuedBy : ''}
+								value={data.issuedBy !== '' ? data.issuedBy : ''}
 							/>
 						</div>
 					</div>
@@ -169,7 +182,7 @@ export const DocumentForm = () => {
 								placeholder="0000"
 								className={clsx(
 									'mt-2 shadow ',
-									error && !data.snils && 'border-rose-500'
+									error && data.snils === '' && 'border-rose-500'
 								)}
 								maxLength={4}
 								onChange={e => dispatch(snils(e.target.value))}
@@ -182,7 +195,7 @@ export const DocumentForm = () => {
 								maxLength={4}
 								className={clsx(
 									'mt-2 shadow ',
-									error && !data.inn && 'border-rose-500'
+									error && data.inn === '' && 'border-rose-500'
 								)}
 								onChange={e => dispatch(inn(e.target.value))}
 								value={data.inn}

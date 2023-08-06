@@ -28,12 +28,13 @@ export const Buttons = ({
 		if (
 			[
 				data.birthDay,
-				data.country,
+				data.countryId,
 				data.gender,
 				data.name,
 				data.phone,
 				data.surName
-			].some(el => el === '')
+			].some(el => el === '') ||
+			data.phone.length !== 11
 		) {
 			setError(true)
 			return true

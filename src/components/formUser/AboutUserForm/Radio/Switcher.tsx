@@ -1,4 +1,4 @@
-import { ListItemPrefix, Radio, Typography } from '@material-tailwind/react';
+import { ListItemPrefix, Radio, Typography } from '@material-tailwind/react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 
@@ -21,8 +21,8 @@ export const Switcher = () => {
 						containerProps={{
 							className: 'p-0'
 						}}
-						onChange={() => dispatch(gender('Женщина'))}
-						checked={genderState === 'Женщина' ? true : false}
+						onChange={() => dispatch(gender('W'))}
+						checked={genderState === 'W' ? true : false}
 					/>
 				</ListItemPrefix>
 				<Typography color="blue-gray" className="font-medium text-sm">
@@ -42,8 +42,8 @@ export const Switcher = () => {
 						containerProps={{
 							className: 'p-0'
 						}}
-						onChange={() => dispatch(gender('Мужчина'))}
-						checked={genderState === 'Мужчина' ? true : false}
+						onChange={() => dispatch(gender('M'))}
+						checked={genderState === 'M' ? true : false}
 					/>
 				</ListItemPrefix>
 				<Typography color="blue-gray" className="font-medium text-sm">

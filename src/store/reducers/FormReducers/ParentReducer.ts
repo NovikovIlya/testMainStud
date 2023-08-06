@@ -7,12 +7,12 @@ const initialState: IParentState = {
 	FIO: '',
 	eMail: '',
 	phone: '',
-	nameDocument: 'Паспорт РФ',
+	documentTypeId: 1,
 	divisionCode: '',
 	issuedBy: '',
-	passwordSeries: '',
-	passwordNumber: '',
-	dateIssue: null,
+	passportSeries: '',
+	passportNumber: '',
+	dateIssue: '',
 	inn: '',
 	snils: '',
 	registrationAddress: '',
@@ -32,8 +32,8 @@ export const ParentReducer = createSlice({
 		phone: (state, action: PayloadAction<string>) => {
 			state.phone = action.payload
 		},
-		nameDocument: (state, action: PayloadAction<string>) => {
-			state.nameDocument = action.payload
+		documentTypeId: (state, action: PayloadAction<number>) => {
+			state.documentTypeId = action.payload
 		},
 		divisionCode: (state, action: PayloadAction<string>) => {
 			state.divisionCode = action.payload
@@ -41,11 +41,11 @@ export const ParentReducer = createSlice({
 		issuedBy: (state, action: PayloadAction<string>) => {
 			state.issuedBy = action.payload
 		},
-		passwordSeries: (state, action: PayloadAction<string>) => {
-			state.passwordSeries = action.payload
+		passportSeries: (state, action: PayloadAction<string>) => {
+			state.passportSeries = action.payload
 		},
-		passwordNumber: (state, action: PayloadAction<string>) => {
-			state.passwordNumber = action.payload
+		passportNumber: (state, action: PayloadAction<string>) => {
+			state.passportNumber = action.payload
 		},
 		dateIssue: (state, action: PayloadAction<string>) => {
 			state.dateIssue = action.payload
@@ -69,11 +69,11 @@ export const {
 	FIO,
 	eMail,
 	phone,
-	nameDocument,
+	documentTypeId,
 	divisionCode,
 	issuedBy,
-	passwordSeries,
-	passwordNumber,
+	passportSeries,
+	passportNumber,
 	dateIssue,
 	inn,
 	snils,

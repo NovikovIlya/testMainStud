@@ -15,10 +15,9 @@ axiosInstance.interceptors.request.use(
 		config.url === '/users/me/details' &&
 			(config.headers.Authorization =
 				'Bearer ' + `${localStorage.getItem('access')}`)
-		console.log(config)
 		return config
 	},
 	error => {
-		return Promise.reject(error)
+		console.log(Promise.reject(error))
 	}
 )

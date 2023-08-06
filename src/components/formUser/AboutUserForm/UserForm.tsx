@@ -11,7 +11,6 @@ export const FormModal = () => {
 	const [error, setError] = useState(false)
 
 	const { t } = useTranslation()
-
 	return (
 		<ImagesLayout>
 			<div className="w-full flex justify-center ">

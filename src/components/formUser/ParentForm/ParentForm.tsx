@@ -1,8 +1,10 @@
 import { Button, DatePicker, DatePickerProps, Input, Select } from 'antd'
-import locale from 'antd/es/date-picker/locale/ru_RU'
+import enPicker from 'antd/lib/date-picker/locale/en_US'
+import ruPicker from 'antd/lib/date-picker/locale/ru_RU'
+import clsx from 'clsx'
 import dayjs from 'dayjs'
-import 'dayjs/locale/ru'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
@@ -11,12 +13,12 @@ import {
 	FIO,
 	dateIssue,
 	divisionCode,
+	documentTypeId,
 	eMail,
 	inn,
 	issuedBy,
-	nameDocument,
-	passwordNumber,
-	passwordSeries,
+	passportNumber,
+	passportSeries,
 	phone,
 	registrationAddress,
 	residenceAddress,
@@ -25,7 +27,7 @@ import {
 import { ImagesLayout } from '../ImagesLayout'
 
 export const ParentForm = () => {
-	dayjs.locale('ru')
+	const { t, i18n } = useTranslation()
 	const [error, setError] = useState(false)
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
@@ -49,18 +51,19 @@ export const ParentForm = () => {
 				data.eMail,
 				data.inn,
 				data.issuedBy,
-				data.nameDocument,
-				data.passwordNumber,
-				data.passwordSeries,
+				data.documentTypeId,
+				data.passportNumber,
+				data.passportSeries,
 				data.phone,
 				data.snils
 			].some(el => el === '')
-		)
+		) {
+			setError(true)
 			return true
-		else return false
+		} else return false
 	}
 	const onChange: DatePickerProps['onChange'] = (date, dateString) => {
-		dispatch(dateIssue(dateString))
+		dateString !== '' && dispatch(dateIssue(dateString))
 	}
 	return (
 		<ImagesLayout>
@@ -75,7 +78,10 @@ export const ParentForm = () => {
 					<Input
 						placeholder="Безухов Пьер Кириллович"
 						size="large"
-						className="mt-2 shadow"
+						className={clsx(
+							'mt-2 shadow',
+							error && data.FIO === '' && 'border-rose-500'
+						)}
 						onChange={e => dispatch(FIO(e.target.value))}
 						value={data.FIO}
 					/>
@@ -85,7 +91,10 @@ export const ParentForm = () => {
 					<Input
 						placeholder="+7 999 898-88-00"
 						size="large"
-						className="mt-2 shadow"
+						className={clsx(
+							'mt-2 shadow',
+							error && data.phone === '' && 'border-rose-500'
+						)}
 						onChange={e => dispatch(phone(e.target.value))}
 						value={data.phone}
 					/>
@@ -95,7 +104,10 @@ export const ParentForm = () => {
 					<Input
 						placeholder="BezuPr@gmail.com"
 						size="large"
-						className="mt-2 shadow"
+						className={clsx(
+							'mt-2 shadow',
+							error && data.eMail === '' && 'border-rose-500'
+						)}
 						onChange={e => dispatch(eMail(e.target.value))}
 						value={data.eMail}
 					/>
@@ -108,13 +120,13 @@ export const ParentForm = () => {
 					<Select
 						className="mt-2 w-full shadow rounded-lg"
 						size="large"
-						defaultValue={data.nameDocument}
+						defaultValue={data.documentTypeId}
 						options={[
-							{ value: 'Паспорт РФ' },
-							{ value: 'свидетельство о рождении' },
-							{ value: 'загранпаспорт' }
+							{ value: 1, label: 'Паспорт РФ' },
+							{ value: 2, label: 'свидетельство о рождении' },
+							{ value: 3, label: 'загранпаспорт' }
 						]}
-						onChange={e => dispatch(nameDocument(e))}
+						onChange={e => dispatch(documentTypeId(e))}
 					/>
 					<div className="w-[151px] h-[19px] text-black text-[14px] font-bold mt-4">
 						Данные документа
@@ -127,7 +139,10 @@ export const ParentForm = () => {
 							<Input
 								placeholder="000-000"
 								size="large"
-								className="mt-2 shadow"
+								className={clsx(
+									'mt-2 shadow',
+									error && data.divisionCode === '' && 'border-rose-500'
+								)}
 								onChange={e => dispatch(divisionCode(e.target.value))}
 								value={data.divisionCode}
 							/>
@@ -137,10 +152,20 @@ export const ParentForm = () => {
 								Когда выдан
 							</div>
 							<DatePicker
-								className="mt-2 shadow w-full"
+								className={clsx(
+									'mt-2 shadow w-full',
+									error && data.dateIssue === '' && 'border-rose-500'
+								)}
 								onChange={onChange}
+								locale={i18n.language === 'ru' ? ruPicker : enPicker}
 								size="large"
 								placeholder="ДД.ММ.ГГГГ"
+								format={'DD.MM.YYYY'}
+								value={
+									data.dateIssue !== ''
+										? dayjs(data.dateIssue, 'DD.MM.YYYY')
+										: null
+								}
 							/>
 						</div>
 						<div className="">
@@ -148,9 +173,12 @@ export const ParentForm = () => {
 							<Input
 								placeholder="000-000"
 								size="large"
-								className="mt-2 shadow"
-								onChange={e => dispatch(passwordSeries(e.target.value))}
-								value={data.passwordSeries != null ? data.passwordSeries : ''}
+								className={clsx(
+									'mt-2 shadow',
+									error && data.passportSeries === '' && 'border-rose-500'
+								)}
+								onChange={e => dispatch(passportSeries(e.target.value))}
+								value={data.passportSeries}
 							/>
 						</div>
 						<div className="">
@@ -158,9 +186,12 @@ export const ParentForm = () => {
 							<Input
 								placeholder="0000"
 								size="large"
-								className="mt-2 shadow"
-								onChange={e => dispatch(passwordNumber(e.target.value))}
-								value={data.passwordNumber != null ? data.passwordNumber : ''}
+								className={clsx(
+									'mt-2 shadow',
+									error && data.passportNumber === '' && 'border-rose-500'
+								)}
+								onChange={e => dispatch(passportNumber(e.target.value))}
+								value={data.passportNumber}
 							/>
 						</div>
 					</div>
@@ -169,9 +200,12 @@ export const ParentForm = () => {
 						<Input
 							placeholder="УФМС по Республике Татарстан"
 							size="large"
-							className="mt-2 shadow"
+							className={clsx(
+								'mt-2 shadow',
+								error && data.issuedBy === '' && 'border-rose-500'
+							)}
 							onChange={e => dispatch(issuedBy(e.target.value))}
-							value={data.issuedBy != null ? data.issuedBy : ''}
+							value={data.issuedBy}
 						/>
 					</div>
 					<div className="text-black text-[14px] mt-4 font-bold">
@@ -181,7 +215,10 @@ export const ParentForm = () => {
 					<Input
 						placeholder="0000"
 						size="large"
-						className="mt-2 shadow"
+						className={clsx(
+							'mt-2 shadow',
+							error && data.snils === '' && 'border-rose-500'
+						)}
 						onChange={e => dispatch(snils(e.target.value))}
 						value={data.snils}
 					/>
@@ -189,7 +226,10 @@ export const ParentForm = () => {
 					<Input
 						placeholder="0000"
 						size="large"
-						className="mt-2 shadow"
+						className={clsx(
+							'mt-2 shadow',
+							error && data.inn === '' && 'border-rose-500'
+						)}
 						onChange={e => dispatch(inn(e.target.value))}
 						value={data.inn}
 					/>
@@ -200,7 +240,10 @@ export const ParentForm = () => {
 					<Input
 						placeholder="РФ, г. Казань, ул. Адорацкого, д.3, кв. 88"
 						size="large"
-						className="mt-2 shadow"
+						className={clsx(
+							'mt-2 shadow',
+							error && data.registrationAddress === '' && 'border-rose-500'
+						)}
 						onChange={e => dispatch(registrationAddress(e.target.value))}
 						value={data.registrationAddress}
 					/>
@@ -210,7 +253,10 @@ export const ParentForm = () => {
 					<Input
 						placeholder="РФ, г. Казань, ул. Адорацкого, д.3, кв. 88"
 						size="large"
-						className="mt-2 shadow"
+						className={clsx(
+							'mt-2 shadow',
+							error && data.residenceAddress === '' && 'border-rose-500'
+						)}
 						onChange={e => dispatch(residenceAddress(e.target.value))}
 						value={data.residenceAddress}
 					/>

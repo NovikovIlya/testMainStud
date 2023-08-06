@@ -1,9 +1,14 @@
 const endpoints = {
 	LOGIN: '/login',
 	REFRESH: '/token/refresh',
-	REGISTER: '/register',
-	APPROVE: '/register/approve',
-	SETROLE: '/users/me/details'
+	REG: {
+		REGISTER: '/register',
+		APPROVE: '/register/approve'
+	},
+	USER: {
+		DETAILS: '/users/me/details',
+		COUNTRIES: '/country'
+	}
 }
 
 export default endpoints

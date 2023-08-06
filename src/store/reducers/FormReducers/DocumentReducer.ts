@@ -4,11 +4,11 @@ import { RootState } from '../..'
 import { IDocumentState } from '../../../api/types'
 
 const initialState: IDocumentState = {
-	nameDocument: 'Паспорт РФ',
-	passwordSeries: '',
-	passwordNumber: '',
+	documentTypeId: 1,
+	passportSeries: '',
+	passportNumber: '',
 	issuedBy: '',
-	dateIssue: null,
+	dateIssue: '',
 	divisionCode: '',
 	inn: '',
 	snils: ''
@@ -18,19 +18,19 @@ export const DocumentReducer = createSlice({
 	name: 'Document',
 	initialState,
 	reducers: {
-		nameDocument: (state, action: PayloadAction<string>) => {
-			state.nameDocument = action.payload
+		documentTypeId: (state, action: PayloadAction<number>) => {
+			state.documentTypeId = action.payload
 		},
-		passwordSeries: (state, action: PayloadAction<string>) => {
-			state.passwordSeries = action.payload
+		passportSeries: (state, action: PayloadAction<string>) => {
+			state.passportSeries = action.payload
 		},
-		passwordNumber: (state, action: PayloadAction<string>) => {
-			state.passwordNumber = action.payload
+		passportNumber: (state, action: PayloadAction<string>) => {
+			state.passportNumber = action.payload
 		},
 		issuedBy: (state, action: PayloadAction<string>) => {
 			state.issuedBy = action.payload
 		},
-		dateIssue: (state, action: PayloadAction<string | null>) => {
+		dateIssue: (state, action: PayloadAction<string>) => {
 			state.dateIssue = action.payload
 		},
 		divisionCode: (state, action: PayloadAction<string>) => {
@@ -46,9 +46,9 @@ export const DocumentReducer = createSlice({
 })
 
 export const {
-	nameDocument,
-	passwordSeries,
-	passwordNumber,
+	documentTypeId,
+	passportSeries,
+	passportNumber,
 	issuedBy,
 	dateIssue,
 	divisionCode,

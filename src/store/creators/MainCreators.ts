@@ -2,8 +2,8 @@ import { Dispatch } from '@reduxjs/toolkit'
 import request from 'axios'
 import { Cookies } from 'react-cookie'
 
-import { approve, login, refresh, register, role } from '../../api/index'
-import { IRegError, TypeRole } from '../../api/types'
+import { approve, details, login, refresh, register } from '../../api/index'
+import { IDetailsRequest, IRegError } from '../../api/types'
 import { IApproveRequest, IAuthRequest, IRegRequest } from '../../api/types'
 import {
 	loginFailure,
@@ -106,9 +106,21 @@ export const approveEmail =
 		dispatch(ProfileSuccess(res.data.user))
 	}
 
-export const setUserRole = (data: TypeRole) => async (dispatch: Dispatch) => {
+export const userDetails = (data: IDetailsRequest) => async () => {
 	try {
-		await role({ role: data })
+		var dateIssue = data.document.dateIssue.split('.')
+		var birthDay = data.generalInfo.birthDay.split('.')
+		if (data.role !== 'GUEST') {
+			data.generalInfo = {
+				...data.generalInfo,
+				birthDay: birthDay[2] + '-' + birthDay[1] + '-' + birthDay[0]
+			}
+			data.document = {
+				...data.document,
+				dateIssue: dateIssue[2] + '-' + dateIssue[1] + '-' + dateIssue[0]
+			}
+			await details(data)
+		}
 	} catch (e) {
 		if (request.isAxiosError(e) && e.response) {
 			console.log((e.response?.data as IRegError).errors)

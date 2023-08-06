@@ -1,16 +1,16 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 import { RootState } from '../..'
-import { IFormState } from '../../../api/types'
+import { IFormState, IGender } from '../../../api/types'
 
 const initialState: IFormState = {
 	name: '',
 	surName: '',
 	patronymic: '',
-	birthDay: null,
-	gender: 'Мужчина',
+	birthDay: '',
+	gender: 'M',
 	phone: '',
-	country: 'Российская Федерация'
+	countryId: 1
 }
 export const FormReducer = createSlice({
 	name: 'Form',
@@ -28,14 +28,14 @@ export const FormReducer = createSlice({
 		birthDay: (state, action: PayloadAction<string>) => {
 			state.birthDay = action.payload
 		},
-		gender: (state, action: PayloadAction<string>) => {
+		gender: (state, action: PayloadAction<IGender>) => {
 			state.gender = action.payload
 		},
 		phone: (state, action: PayloadAction<string>) => {
 			state.phone = action.payload
 		},
-		country: (state, action: PayloadAction<string>) => {
-			state.country = action.payload
+		country: (state, action: PayloadAction<number>) => {
+			state.countryId = action.payload
 		}
 	}
 })

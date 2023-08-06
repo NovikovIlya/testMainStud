@@ -15,10 +15,10 @@ import { ParentForm } from './components/formUser/ParentForm/ParentForm'
 import { WorkForm } from './components/formUser/WorkForm/WorkForm'
 import { Login } from './components/login/Login'
 import { Registration } from './components/registration/Registration'
+import Service from './components/service'
 import { User } from './components/user/User'
 import { useAppDispatch } from './store'
 import { refreshToken } from './store/creators/MainCreators'
-import Service from './components/service'
 
 const App = () => {
 	const cookies = new Cookies()
@@ -38,11 +38,11 @@ const App = () => {
 				'/documents',
 				'/education'
 			].some(el => el === currentUrl.pathname)
-			if (isTrue) {
-				navigate('/infoUser')
-			} else {
-				navigate(currentUrl.pathname)
-			}
+			// if (isTrue) {
+			// 	navigate('/infoUser')
+			// } else {
+			// 	navigate(currentUrl.pathname)
+			// }
 		}
 		if (res === 403) {
 			navigate('/')

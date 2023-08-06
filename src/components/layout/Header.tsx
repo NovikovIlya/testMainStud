@@ -27,6 +27,7 @@ type TypeHeaderProps = {
 }
 
 export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
+	const dispatch = useAppDispatch()
 	const user = useAppSelector(state => state.Profile.profileData.CurrentData)
 
 	const items: MenuProps['items'] = [
@@ -70,7 +71,12 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 		},
 		{
 			label: (
-				<div className="flex items-center gap-[15px] px-[4px] py-[5px]">
+				<div
+					className="flex items-center gap-[15px] px-[4px] py-[5px]"
+					onClick={() => {
+						dispatch(logout)
+					}}
+				>
 					<LogoutSvg />
 					Выйти
 				</div>

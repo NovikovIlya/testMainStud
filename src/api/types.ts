@@ -68,30 +68,43 @@ export type TypeRole =
 	| 'GUEST'
 	| 'ATTEND'
 
-export interface IRoleInfo {
+export type IGender = 'W' | 'M'
+
+export type ILanguage = 'RU' | 'EN' | 'en' | 'ru'
+
+export type countryItem = {
+	id: number
+	shortName: string
+}
+
+export interface IDetailsRequest {
 	role: TypeRole
+	generalInfo: {
+		name: string
+		surName: string
+		patronymic: string
+		birthDay: string
+		gender: IGender
+		phone: string
+		countryId: number
+	}
+	document: {
+		documentTypeId: number
+		passportSeries: string
+		passportNumber: string
+		issuedBy: string
+		dateIssue: string
+		divisionCode: string
+		inn: string
+		snils: string
+	}
 }
 
-export interface IFormState {
-	name: string
-	surName: string
-	patronymic: string | null
-	birthDay: string | null
-	gender: string
-	phone: string
-	country: string
-}
+export type IRoleInfo = Pick<IDetailsRequest, 'role'>
 
-export interface IDocumentState {
-	nameDocument: string
-	passwordSeries: string | null
-	passwordNumber: string | null
-	issuedBy: string | null
-	dateIssue: string | null
-	divisionCode: string
-	inn: string
-	snils: string
-}
+export type IFormState = IDetailsRequest['generalInfo']
+
+export type IDocumentState = IDetailsRequest['document']
 
 export interface IEdForm {
 	id: number
@@ -102,18 +115,10 @@ export interface IEdForm {
 	educationCountry: string
 }
 
-export interface IParentState {
+export type IParentState = IDetailsRequest['document'] & {
 	FIO: string
 	eMail: string
 	phone: string
-	nameDocument: string
-	divisionCode: string
-	issuedBy: string | null
-	passwordSeries: string | null
-	passwordNumber: string | null
-	dateIssue: string | null
-	inn: string
-	snils: string
 	registrationAddress: string
 	residenceAddress: string
 }
@@ -134,4 +139,8 @@ export interface data {
 export interface IApproveRequest {
 	id: string | null
 	hash: string | null
+}
+
+export interface ICountryRequest {
+	language: ILanguage
 }

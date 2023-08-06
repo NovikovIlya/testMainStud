@@ -1,8 +1,11 @@
+import clsx from 'clsx'
 import React from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+
 import CalendarSvg from '../../../assets/svg/CalendarSvg'
-import { BriefcaseSvg } from '../../../assets/svg/BriefcaseSvg'
-import clsx from 'clsx'
+import { SubtractSVG } from '../../../assets/svg/SubtractSVG'
+
+import { Curriculum } from './Curriculum'
 import { Session } from './Session'
 
 const navList = [
@@ -13,13 +16,13 @@ const navList = [
 	},
 	{
 		id: '/services/session/curriculum',
-		icon: <BriefcaseSvg />,
+		icon: <SubtractSVG />,
 		name: 'Учебный план'
 	}
 ]
 
 export const NavSession = () => {
-    const { pathname } = useLocation()
+	const { pathname } = useLocation()
 	const navigate = useNavigate()
 	const handleNavigate = (url: string) => {
 		navigate(url)
@@ -49,7 +52,8 @@ export const NavSession = () => {
 				</ul>
 			</div>
 			<div className="bg-[#F5F8FB] w-full pt-14 px-14 ">
-                {pathname === navList[0].id && <Session/>}
+				{pathname === navList[0].id && <Session />}
+				{pathname === navList[1].id && <Curriculum />}
 			</div>
 		</>
 	)

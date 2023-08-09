@@ -3,7 +3,7 @@ import { Radio } from 'antd'
 import { Table } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 import axios from 'axios'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useGetScheduleQuery } from '../../../store/slice/scheduleSlice'
 
@@ -73,9 +73,11 @@ export const Schedule = () => {
 		isFetching,
 		isLoading
 	} = useGetScheduleQuery()
-	const [data, setData] = useState(schedule?.monday)
+	const [data, setData] = useState<DataType[] | undefined>()
+	useEffect(() => {
+		setData(schedule?.monday)
+	}, [isLoading, schedule])
 	if (schedule === undefined) return null
-	console.log(schedule)
 
 	const onChange = (e: RadioChangeEvent) => {
 		//@ts-ignore
@@ -86,7 +88,7 @@ export const Schedule = () => {
 			<div className="mb-14 text-[28px]">Мое расписание</div>
 			<Radio.Group
 				onChange={onChange}
-				defaultValue="a"
+				defaultValue="monday"
 				buttonStyle="solid"
 				className="flex gap-[10px] h-9"
 			>
@@ -132,7 +134,7 @@ export const Schedule = () => {
 					columns={columns}
 					dataSource={data}
 					pagination={false}
-					className="max-w-[1050px] drop-shadow-lg shadow-[#d4e3f1] rounded-none"
+					className="max-w-[1050px] w-full drop-shadow-lg shadow-[#d4e3f1] rounded-none"
 				/>
 				<div className="flex flex-col gap-6 text-sm">
 					<div className="flex items-center gap-2">

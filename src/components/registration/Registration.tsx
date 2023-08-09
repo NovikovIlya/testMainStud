@@ -42,10 +42,7 @@ export const Registration: FC<IRegProps> = ({ changeEmail }) => {
 
 	const onFinish = async (values: IRegForm) => {
 		navigate('/registration/checkingEmail')
-		if (values.confirmPassword !== values.password) {
-			setConfirmPassword(false)
-		} else {
-			setConfirmPassword(true)
+		if (confirmPassword) {
 			if (values.email != null) {
 				const response = await dispatch(
 					registerUser({

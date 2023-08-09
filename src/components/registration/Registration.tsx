@@ -16,7 +16,6 @@ import styles from './Registration.module.scss'
 import { Buttons } from './buttons/Buttons'
 import { Inputs } from './inputs/Inputs'
 import { Password } from './password/Password'
-import { Switcher } from './switcher/Switcher'
 
 const { Title } = Typography
 
@@ -38,9 +37,8 @@ export const Registration: FC<IRegProps> = ({ changeEmail }) => {
 	const error = useSelector((state: RootState) => state.AuthReg.regData.error)
 	const dispatch = useAppDispatch()
 	const { t } = useTranslation()
-	const [value, setValue] = useState(0)
 	const [check, setCheck] = useState(false)
-	const [confirmPassword, setConfirmPassword] = useState(true)
+	const [confirmPassword, setConfirmPassword] = useState(false)
 
 	const onFinish = async (values: IRegForm) => {
 		navigate('/registration/checkingEmail')
@@ -76,17 +74,10 @@ export const Registration: FC<IRegProps> = ({ changeEmail }) => {
 					onFinish={onFinish}
 				>
 					<Title className={styles.title}>{t('registration')}</Title>
-					<Switcher setValue={setValue} />
-					<Inputs
-						error={error}
-						value={value}
-						ErrorPrinter={ErrorPrinter}
-						changeEmail={changeEmail}
-					/>
+					<Inputs error={error} changeEmail={changeEmail} />
 					<Password
 						confirmPassword={confirmPassword}
-						error={error}
-						ErrorPrinter={ErrorPrinter}
+						setConfirmPassword={setConfirmPassword}
 					/>
 					<Buttons check={check} setCheck={setCheck} />
 				</Form>

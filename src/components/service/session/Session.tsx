@@ -59,7 +59,7 @@ const data: DataType[] = [
 		certification: 'Зачет',
 		teacher: 'Малютина Л.В.'
 	},
-    {
+	{
 		key: '2',
 		time: '08:00',
 		address: 'Корпус 2, ул. Астрономическая, д.5',
@@ -68,7 +68,7 @@ const data: DataType[] = [
 		certification: 'Зачет',
 		teacher: 'Малютина Л.В.'
 	},
-    {
+	{
 		key: '3',
 		time: '08:00',
 		address: 'Корпус 2, ул. Астрономическая, д.5',
@@ -77,7 +77,7 @@ const data: DataType[] = [
 		certification: 'Зачет',
 		teacher: 'Малютина Л.В.'
 	},
-    {
+	{
 		key: '4',
 		time: '08:00',
 		address: 'Корпус 2, ул. Астрономическая, д.5',
@@ -86,7 +86,7 @@ const data: DataType[] = [
 		certification: 'Зачет',
 		teacher: 'Малютина Л.В.'
 	},
-    {
+	{
 		key: '5',
 		time: '08:00',
 		address: 'Корпус 2, ул. Астрономическая, д.5',
@@ -94,7 +94,7 @@ const data: DataType[] = [
 		subject: 'Общая биология: тренинг по саморазвитию и планированию карьеры',
 		certification: 'Зачет',
 		teacher: 'Малютина Л.В.'
-	},
+	}
 ]
 
 export const Session = () => {
@@ -107,7 +107,7 @@ export const Session = () => {
 				columns={columns}
 				dataSource={data}
 				pagination={false}
-				className="drop-shadow-lg mt-[50px] shadow-[#d4e3f1] rounded-none"
+				className="drop-shadow-lg mt-[50px] shadow-[#d4e3f1] rounded-none max-w-[1300px]"
 			/>
 		</div>
 	)

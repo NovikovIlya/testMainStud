@@ -1,4 +1,4 @@
-import { Form, Popover, Typography } from 'antd';
+import { Form, Popover, Typography } from 'antd'
 import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
@@ -14,7 +14,6 @@ import { Faq } from '../faq/Faq'
 import styles from './Login.module.scss'
 import { Buttons } from './buttons/Buttons'
 import { Inputs } from './inputs/Inputs'
-import { Switcher } from './switcher/Switcher'
 
 const { Title } = Typography
 
@@ -61,7 +60,6 @@ export const Login = () => {
 				>
 					<Title className={styles.title}>{t('authorization')}</Title>
 
-					<Switcher setValue={setValue} />
 					<Inputs error={error} value={value} />
 					<Buttons />
 				</Form>

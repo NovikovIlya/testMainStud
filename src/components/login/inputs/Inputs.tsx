@@ -1,4 +1,4 @@
-import { Form, Input } from 'antd';
+import { Form, Input } from 'antd'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -15,55 +15,28 @@ export const Inputs: FC<IInputsProps> = ({ value, error }) => {
 	const { t } = useTranslation()
 	return (
 		<>
-			{value ? (
-				<Form.Item
-					name="phone"
-					className={styles.input}
-					rules={[
-						{ type: 'string' },
-						{ required: true, message: t('errorPhone') }
-					]}
-					style={{ marginBottom: 30 }}
-					validateStatus={error !== null ? 'error' : undefined}
-					help={error?.map(el =>
-						el.message.substring(0, 3) !== 'pas' ? (
-							<div key={el.message}>{el.message}</div>
-						) : (
-							''
-						)
-					)}
-				>
-					<Input
-						className="phone"
-						size="large"
-						type="tel"
-						placeholder={t('telephone')}
-					/>
-				</Form.Item>
-			) : (
-				<Form.Item
-					className={styles.input}
-					name="email"
-					style={{ marginBottom: 30 }}
-					rules={[
-						{ type: 'string' },
-						{
-							required: true,
-							message: t('errorEmail')
-						}
-					]}
-					validateStatus={error !== null ? 'error' : undefined}
-					help={error?.map(el =>
-						el.message.substring(0, 3) !== 'pas' ? (
-							<div key={el.message}>{el.message}</div>
-						) : (
-							''
-						)
-					)}
-				>
-					<Input className="email" size="large" placeholder="Email/Login" />
-				</Form.Item>
-			)}
+			<Form.Item
+				className={styles.input}
+				name="email"
+				style={{ marginBottom: 30 }}
+				rules={[
+					{ type: 'string' },
+					{
+						required: true,
+						message: t('errorEmail')
+					}
+				]}
+				validateStatus={error !== null ? 'error' : undefined}
+				help={error?.map(el =>
+					el.message.substring(0, 3) !== 'pas' ? (
+						<div key={el.message}>{el.message}</div>
+					) : (
+						''
+					)
+				)}
+			>
+				<Input className="email" size="large" placeholder="Email/Login" />
+			</Form.Item>
 
 			<Form.Item
 				name="password"

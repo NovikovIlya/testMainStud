@@ -2,23 +2,27 @@ import type { RadioChangeEvent } from 'antd'
 import { Radio } from 'antd'
 import { Table } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
+import axios from 'axios'
+import { useState } from 'react'
+
+import { useGetScheduleQuery } from '../../../store/slice/scheduleSlice'
 
 import './StyleSchedule.scss'
 
 interface DataType {
-	key: string
+	name: string
 	time: string
-	subject: string
 	teacher: string
-	body: string
-	lecture: string
-	color?: string
+	teacherId: number
+	building: string
+	room: string
+	type: string
 }
 const columns: ColumnsType<DataType> = [
 	{
 		title: '',
-		dataIndex: 'color',
-		key: 'color',
+		dataIndex: 'type',
+		key: 'type',
 		render: item => {
 			return {
 				props: {
@@ -39,8 +43,8 @@ const columns: ColumnsType<DataType> = [
 	},
 	{
 		title: 'Предмет',
-		dataIndex: 'subject',
-		key: 'subject',
+		dataIndex: 'name',
+		key: 'name',
 		render: item => <p className="text-base">{item}</p>
 	},
 	{
@@ -51,79 +55,31 @@ const columns: ColumnsType<DataType> = [
 	},
 	{
 		title: 'Корпус',
-		key: 'body',
-		dataIndex: 'body',
+		key: 'building',
+		dataIndex: 'building',
 		render: item => <p className="text-base">{item}</p>
 	},
 	{
 		title: 'Аудитория',
-		key: 'lecture',
-		dataIndex: 'lecture',
+		key: 'room',
+		dataIndex: 'room',
 		render: item => <p className="text-base">{item}</p>
 	}
 ]
-const data: DataType[] = [
-	{
-		key: '1',
-		time: '10:10-11:40',
-		subject: 'Элективные курсы по физической культуре и спорту',
-		teacher: 'Малютина Л.В.',
-		body: 'Спортивный комплекс Бустан',
-		lecture: 'спортивный зал',
-		color: 'black'
-	},
-	{
-		key: '2',
-		time: '10:10-11:40',
-		subject: 'Элективные курсы по физической культуре и спорту',
-		teacher: 'Малютина Л.В.',
-		body: 'Спортивный комплекс Бустан',
-		lecture: 'спортивный зал'
-	},
-	{
-		key: '3',
-		time: '10:10-11:40',
-		subject: 'Элективные курсы по физической культуре и спорту',
-		teacher: 'Малютина Л.В.',
-		body: 'Спортивный комплекс Бустан',
-		lecture: 'спортивный зал'
-	},
-	{
-		key: '4',
-		time: '10:10-11:40',
-		subject: 'Элективные курсы по физической культуре и спорту',
-		teacher: 'Малютина Л.В.',
-		body: 'Спортивный комплекс Бустан',
-		lecture: 'спортивный зал'
-	},
-	{
-		key: '5',
-		time: '10:10-11:40',
-		subject: 'Элективные курсы по физической культуре и спорту',
-		teacher: 'Малютина Л.В.',
-		body: 'Спортивный комплекс Бустан',
-		lecture: 'спортивный зал'
-	},
-	{
-		key: '6',
-		time: '10:10-11:40',
-		subject: 'Элективные курсы по физической культуре и спорту',
-		teacher: 'Малютина Л.В.Малютина Л.В.Малютина Л.В.',
-		body: 'Спортивный комплекс Бустан',
-		lecture: 'спортивный зал'
-	},
-	{
-		key: '7',
-		time: '10:10-11:40',
-		subject: 'Элективные курсы по физической культуре и спорту',
-		teacher: 'Малютина Л.В.',
-		body: 'Спортивный комплекс Бустан',
-		lecture: 'спортивный зал'
-	}
-]
 export const Schedule = () => {
+	const {
+		data: schedule,
+		refetch,
+		isFetching,
+		isLoading
+	} = useGetScheduleQuery()
+	const [data, setData] = useState(schedule?.monday)
+	if (schedule === undefined) return null
+	console.log(schedule)
+
 	const onChange = (e: RadioChangeEvent) => {
-		console.log(`radio checked:${e.target.value}`)
+		//@ts-ignore
+		setData(schedule[e.target.value])
 	}
 	return (
 		<div className="mt-14 mx-14 radio">
@@ -136,37 +92,37 @@ export const Schedule = () => {
 			>
 				<Radio.Button
 					className="rounded-full bg-transparent h-full flex items-center  text-base"
-					value="a"
+					value="monday"
 				>
 					Понедельник
 				</Radio.Button>
 				<Radio.Button
 					className="rounded-full h-full flex items-center text-base bg-transparent"
-					value="b"
+					value="tuesday"
 				>
 					Вторник
 				</Radio.Button>
 				<Radio.Button
 					className="rounded-full h-full flex items-center text-base bg-transparent"
-					value="c"
+					value="wednesday"
 				>
 					Среда
 				</Radio.Button>
 				<Radio.Button
 					className="rounded-full h-full flex items-center text-base bg-transparent"
-					value="d"
+					value="thursday"
 				>
 					Четверг
 				</Radio.Button>
 				<Radio.Button
 					className="rounded-full h-full flex items-center text-base bg-transparent"
-					value="f"
+					value="friday"
 				>
 					Пятница
 				</Radio.Button>
 				<Radio.Button
 					className="rounded-full h-full flex items-center text-base bg-transparent"
-					value="g"
+					value="saturday"
 				>
 					Суббота
 				</Radio.Button>

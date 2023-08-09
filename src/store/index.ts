@@ -10,6 +10,7 @@ import InfoUserReducer from './reducers/FormReducers/InfoUserReducer'
 import ParentReducer from './reducers/FormReducers/ParentReducer'
 import WorkReducer from './reducers/FormReducers/WorkReducer'
 import ProfileReducer from './reducers/ProfileReducer'
+import { scheduleApi } from './slice/scheduleSlice'
 
 export const store = configureStore({
 	reducer: {
@@ -20,12 +21,13 @@ export const store = configureStore({
 		Document: DocumentReducer,
 		Education: EducationReducer,
 		Work: WorkReducer,
-		Parent: ParentReducer
+		Parent: ParentReducer,
+		[scheduleApi.reducerPath]: scheduleApi.reducer
 	},
 	middleware: getDefaultMiddleware =>
-		getDefaultMiddleware().concat(
-			...(process.env.NODE_ENV !== 'production' ? [logger] : [])
-		)
+		getDefaultMiddleware()
+			.concat(...(process.env.NODE_ENV !== 'production' ? [logger] : []))
+			.concat(scheduleApi.middleware)
 })
 
 export type RootState = ReturnType<typeof store.getState>

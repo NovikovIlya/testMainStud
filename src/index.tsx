@@ -1,3 +1,4 @@
+import { ApiProvider } from '@reduxjs/toolkit/dist/query/react'
 import React, { Suspense } from 'react'
 import ReactDOM from 'react-dom/client'
 import { Provider } from 'react-redux'
@@ -7,6 +8,7 @@ import './18n'
 import App from './App'
 import './index.scss'
 import { store } from './store'
+import { scheduleApi } from './store/slice/scheduleSlice'
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 

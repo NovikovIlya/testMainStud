@@ -108,22 +108,6 @@ export const approveEmail =
 
 export const userDetails = (data: IDetailsRequest) => async () => {
 	try {
-		var dateIssue = data.document.dateIssue.split('.')
-		var birthDay = data.generalInfo.birthDay.split('.')
-		if (data.role !== 'GUEST') {
-			data.generalInfo = {
-				...data.generalInfo,
-				birthDay: birthDay[2] + '-' + birthDay[1] + '-' + birthDay[0]
-			}
-			data.document = {
-				...data.document,
-				dateIssue: dateIssue[2] + '-' + dateIssue[1] + '-' + dateIssue[0]
-			}
-			await details(data)
-		}
-	} catch (e) {
-		if (request.isAxiosError(e) && e.response) {
-			console.log((e.response?.data as IRegError).errors)
-		}
-	}
+		await details(data)
+	} catch (e) {}
 }

@@ -1,18 +1,20 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 import { RootState } from '../..'
-import { IEdForm } from '../../../api/types'
+import { IEducationState } from '../../../api/types'
 
 const generalState = {
 	id: 0,
 	nameOfInstitute: '',
-	educationLevel: '',
+	educationLevelId: 1,
 	documentNumber: '',
 	documentSeries: '',
-	educationCountry: 'Российская Федерация'
+	countryId: 1,
+	graduateYear: '',
+	specialization: ''
 }
 
-const initialState: IEdForm[] = [generalState]
+const initialState: IEducationState[] = [generalState]
 
 export const EducationReducer = createSlice({
 	name: 'Education',
@@ -21,7 +23,7 @@ export const EducationReducer = createSlice({
 		idAdd: (state, action: PayloadAction<number>) => {
 			state.push({ ...generalState, id: action.payload })
 		},
-		idDelete: (state, action: PayloadAction<number>): IEdForm[] => {
+		idDelete: (state, action: PayloadAction<number>): IEducationState[] => {
 			return state.filter(e => e.id !== action.payload)
 		},
 		nameOfInstitute: (
@@ -30,11 +32,12 @@ export const EducationReducer = createSlice({
 		) => {
 			state[action.payload.id].nameOfInstitute = action.payload.nameOfInstitute
 		},
-		educationLevel: (
+		educationLevelId: (
 			state,
-			action: PayloadAction<{ id: number; educationLevel: string }>
+			action: PayloadAction<{ id: number; educationLevelId: number }>
 		) => {
-			state[action.payload.id].educationLevel = action.payload.educationLevel
+			state[action.payload.id].educationLevelId =
+				action.payload.educationLevelId
 		},
 		documentNumber: (
 			state,
@@ -48,12 +51,23 @@ export const EducationReducer = createSlice({
 		) => {
 			state[action.payload.id].documentSeries = action.payload.documentSeries
 		},
-		educationCountrySeries: (
+		countryId: (
 			state,
-			action: PayloadAction<{ id: number; educationCountry: string }>
+			action: PayloadAction<{ id: number; countryId: number }>
 		) => {
-			state[action.payload.id].educationCountry =
-				action.payload.educationCountry
+			state[action.payload.id].countryId = action.payload.countryId
+		},
+		graduateYear: (
+			state,
+			action: PayloadAction<{ id: number; graduateYear: string }>
+		) => {
+			state[action.payload.id].graduateYear = action.payload.graduateYear
+		},
+		specialization: (
+			state,
+			action: PayloadAction<{ id: number; specialization: string }>
+		) => {
+			state[action.payload.id].specialization = action.payload.specialization
 		}
 	}
 })
@@ -62,10 +76,12 @@ export const {
 	idAdd,
 	idDelete,
 	nameOfInstitute,
-	educationLevel,
+	educationLevelId,
 	documentNumber,
 	documentSeries,
-	educationCountrySeries
+	countryId,
+	graduateYear,
+	specialization
 } = EducationReducer.actions
 
 export default EducationReducer.reducer

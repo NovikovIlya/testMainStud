@@ -11,14 +11,11 @@ import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import { useAppSelector } from '../../store'
-import { useAppDispatch } from '../../store'
-import { userDetails } from '../../store/creators/MainCreators'
 import { putRole } from '../../store/reducers/FormReducers/InfoUserReducer'
 
 import { ImagesLayout } from './ImagesLayout'
 
 export const InfoUser = () => {
-	const customDispatch = useAppDispatch()
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 	const roleState = useAppSelector(state => state.InfoUser?.role)

@@ -70,11 +70,38 @@ export type TypeRole =
 
 export type IGender = 'W' | 'M'
 
-export type ILanguage = 'RU' | 'EN' | 'en' | 'ru'
+export type ILanguage = 'en' | 'ru'
 
 export type countryItem = {
 	id: number
 	shortName: string
+}
+
+export type educationLevelItem = {
+	id: number
+	name: string
+}
+
+export type documentItem = {
+	id: number
+	type: string
+}
+
+export type educationItem = {
+	nameOfInstitute: string
+	educationLevelId: number
+	documentNumber: string
+	documentSeries: string
+	countryId: number
+	graduateYear: string
+	specialization: string
+}
+
+export type workItem = {
+	name: string
+	startDate: string
+	endDate: string
+	isPresent: boolean
 }
 
 export interface IDetailsRequest {
@@ -98,6 +125,22 @@ export interface IDetailsRequest {
 		inn: string
 		snils: string
 	}
+	educations: educationItem[]
+	parent: {
+		name: string
+		surName: string
+		patronymic: string
+		dateIssue: string
+		divisionCode: string
+		eMail: string
+		issuedBy: string
+		documentTypeId: number
+		phone: string
+		passportSeries: string
+		passportNumber: string
+		registrationAddress: string
+	}
+	job: workItem[]
 }
 
 export type IRoleInfo = Pick<IDetailsRequest, 'role'>
@@ -106,21 +149,16 @@ export type IFormState = IDetailsRequest['generalInfo']
 
 export type IDocumentState = IDetailsRequest['document']
 
-export interface IEdForm {
-	id: number
-	nameOfInstitute: string
-	educationLevel: string
-	documentNumber: string
-	documentSeries: string
-	educationCountry: string
-}
+export type IEducationState = educationItem & { id: number }
 
-export type IParentState = IDetailsRequest['document'] & {
+export type IParentState = Omit<
+	IDetailsRequest['parent'],
+	'name' | 'surName' | 'patronymic'
+> & {
 	FIO: string
-	eMail: string
-	phone: string
-	registrationAddress: string
 	residenceAddress: string
+	inn: string
+	snils: string
 }
 
 export interface IRefreshRequest {
@@ -139,8 +177,4 @@ export interface data {
 export interface IApproveRequest {
 	id: string | null
 	hash: string | null
-}
-
-export interface ICountryRequest {
-	language: ILanguage
 }

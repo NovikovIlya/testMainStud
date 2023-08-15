@@ -1,16 +1,16 @@
-import { Button, DatePicker, DatePickerProps, Input, Select } from 'antd'
-import enPicker from 'antd/lib/date-picker/locale/en_US'
-import ruPicker from 'antd/lib/date-picker/locale/ru_RU'
+import { Button, ConfigProvider, DatePicker, Input, Select } from 'antd'
+import enPicker from 'antd/locale/en_US'
+import ruPicker from 'antd/locale/ru_RU'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
+import 'dayjs/locale/en'
+import 'dayjs/locale/ru'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import { useAppSelector } from '../../../store'
-import { useAppDispatch } from '../../../store'
-import { userDetails } from '../../../store/creators/MainCreators'
 import {
 	dateIssue,
 	divisionCode,
@@ -21,36 +21,26 @@ import {
 	passportSeries,
 	snils
 } from '../../../store/reducers/FormReducers/DocumentReducer'
+import { useGetDocumentsQuery } from '../../../store/slice/documentSlice'
 import { ImagesLayout } from '../ImagesLayout'
 
 export const DocumentForm = () => {
 	const { t, i18n } = useTranslation()
+	dayjs.locale(i18n.language)
 	const [error, setError] = useState(false)
-	const castDispatch = useAppDispatch()
 	const dispatch = useDispatch()
 	const userRole = useAppSelector(state => state.InfoUser.role)
-	const userInfo = useAppSelector(state => state.Form)
-	const userDocuments = useAppSelector(state => state.Document)
 	const data = useAppSelector(state => state.Document)
 
-	const navigate = useNavigate()
+	const { data: documents } = useGetDocumentsQuery()
 
-	const onChange: DatePickerProps['onChange'] = (date, dateString) => {
-		dateString !== '' && dispatch(dateIssue(dateString))
-	}
+	const navigate = useNavigate()
 
 	const handleCancel = () => {
 		navigate('/form')
 	}
 	const handleOk = () => {
 		if (!saveInStore()) {
-			castDispatch(
-				userDetails({
-					role: userRole,
-					generalInfo: userInfo,
-					document: userDocuments
-				})
-			)
 			if (userRole === 'SCHOOL') navigate('/parent')
 			else navigate('/education')
 		}
@@ -87,11 +77,11 @@ export const DocumentForm = () => {
 							size="large"
 							onChange={e => dispatch(documentTypeId(e))}
 							defaultValue={data.documentTypeId}
-							options={[
-								{ value: 1, label: 'Паспорт РФ' },
-								{ value: 2, label: 'свидетельство о рождении' },
-								{ value: 3, label: 'загранпаспорт' }
-							]}
+							options={
+								documents !== undefined
+									? documents.map(el => ({ value: el.id, label: el.type }))
+									: []
+							}
 						/>
 					</div>
 					<div className="flex w-full flex-col mt-4 text-sm">
@@ -113,22 +103,32 @@ export const DocumentForm = () => {
 							</div>
 							<div>
 								<p>{t('whenIssued')}</p>
-								<DatePicker
-									className={clsx(
-										'mt-2 shadow w-full',
-										error && data.dateIssue === '' && 'border-rose-500'
-									)}
-									onChange={onChange}
+								<ConfigProvider
 									locale={i18n.language === 'ru' ? ruPicker : enPicker}
-									size="large"
-									placeholder={t('date')}
-									format={'DD.MM.YYYY'}
-									value={
-										data.dateIssue !== ''
-											? dayjs(data.dateIssue, 'DD.MM.YYYY')
-											: null
-									}
-								/>
+								>
+									<DatePicker
+										className={clsx(
+											'mt-2 shadow w-full',
+											error && data.dateIssue === '' && 'border-rose-500'
+										)}
+										onChange={e =>
+											dispatch(
+												dateIssue(e == null ? '' : e?.format('YYYY-MM-DD'))
+											)
+										}
+										size="large"
+										placeholder={t('date')}
+										format={'DD.MM.YYYY'}
+										value={
+											data.dateIssue !== ''
+												? dayjs(
+														data.dateIssue.split('-').reverse().join('.'),
+														'DD.MM.YYYY'
+												  )
+												: null
+										}
+									/>
+								</ConfigProvider>
 							</div>
 							<div>
 								<p>{t('series')}</p>

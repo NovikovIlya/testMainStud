@@ -1,4 +1,4 @@
-import { QuestionCircleOutlined } from '@ant-design/icons';
+import { QuestionCircleOutlined } from '@ant-design/icons'
 import { Popover, Select } from 'antd'
 import { FC, PropsWithChildren } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -37,12 +37,12 @@ export const ImagesLayout: FC<PropsWithChildren<{ first?: boolean }>> = ({
 						content={
 							first ? (
 								<div>
-									<p>Сейчас Вы выбираете Вашу основную роль, позднее</p>
-									<p>в разделе “Обо мне” Вы сможете подключить другие роли,</p>
-									<p>заполнив дополнительную информацию</p>
+									<p>{t('LongPopupTop')}</p>
+									<p>{t('LongPopupMiddle')}</p>
+									<p>{t('LongPopupBottom')}</p>
 								</div>
 							) : (
-								<p>Мы не передаем Ваши данные третьим лицам</p>
+								<p>{t('ShortPopup')}</p>
 							)
 						}
 					>

@@ -7,7 +7,9 @@ const endpoints = {
 	},
 	USER: {
 		DETAILS: '/users/me/details',
-		COUNTRIES: '/country'
+		COUNTRIES: '/country',
+		EDUCATION_LEVEL: '/education/levels',
+		DOCUMENTS: '/document'
 	}
 }
 

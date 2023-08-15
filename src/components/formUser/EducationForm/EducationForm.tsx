@@ -1,5 +1,6 @@
-import { Button, Input, Select } from 'antd'
+import { Button, DatePicker, DatePickerProps, Input, Select } from 'antd'
 import clsx from 'clsx'
+import dayjs from 'dayjs'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
@@ -7,23 +8,29 @@ import { useNavigate } from 'react-router-dom'
 
 import { useAppSelector } from '../../../store'
 import {
+	countryId,
 	documentNumber,
 	documentSeries,
-	educationCountrySeries,
-	educationLevel,
+	educationLevelId,
+	graduateYear,
 	idAdd,
 	idDelete,
-	nameOfInstitute
+	nameOfInstitute,
+	specialization
 } from '../../../store/reducers/FormReducers/EducationReducer'
+import { useGetCountriesQuery } from '../../../store/slice/countrySlice'
+import { useGetEducationLevelQuery } from '../../../store/slice/educationLevelSlice'
 import { ImagesLayout } from '../ImagesLayout'
 
 export const EducationForm = () => {
 	const dispatch = useDispatch()
 	const userRole = useAppSelector(state => state.InfoUser.role)
 	const navigate = useNavigate()
-	const { t } = useTranslation()
+	const { t, i18n } = useTranslation()
+	const { data: educationLevel } = useGetEducationLevelQuery(i18n.language)
+	const { data: countries } = useGetCountriesQuery(i18n.language)
 	const [error, setError] = useState(false)
-	const data = useAppSelector(state => state.Education)
+	const info = useAppSelector(state => state.Education)
 
 	const handleCancel = () => {
 		navigate('/documents')
@@ -37,13 +44,13 @@ export const EducationForm = () => {
 		}
 	}
 	const saveInStore = () => {
-		let IsEmpty = data.some(
+		let IsEmpty = info.some(
 			item =>
 				item.documentNumber === '' ||
 				item.documentSeries === '' ||
-				item.educationCountry === '' ||
-				item.educationLevel === '' ||
-				item.nameOfInstitute === ''
+				item.nameOfInstitute === '' ||
+				item.graduateYear === '' ||
+				item.specialization === ''
 		)
 		return IsEmpty
 	}
@@ -51,7 +58,7 @@ export const EducationForm = () => {
 		navigate('/user')
 	}
 	const addEducation = () => {
-		dispatch(idAdd(data[data.length - 1].id + 1))
+		dispatch(idAdd(info[info.length - 1].id + 1))
 	}
 	const handleDeleteEducation = (id: number) => {
 		dispatch(idDelete(id))
@@ -62,7 +69,7 @@ export const EducationForm = () => {
 				<div className="container max-w-2xl flex flex-col  pч-5">
 					<h3 className="self-start text-xl">{t('education')}</h3>
 					<div className="flex flex-col gap-10 w-full">
-						{data.map(item => (
+						{info.map(item => (
 							<div key={item.id}>
 								<div className="flex self-start gap-4 mt-7">
 									<p>{t('educationDocument')}</p>
@@ -77,25 +84,30 @@ export const EducationForm = () => {
 								</div>
 								<div className="grid grid-cols-2 gap-10 mt-5 w-full max-sm:grid-cols-1 max-sm:gap-4">
 									<div>
-										<p>{t('educationDocument')}</p>
-										<Input
-											placeholder={t('higherEducational')}
+										<p>{t('higherEducational')}</p>
+										<Select
+											className="block mt-2"
 											size="large"
-											className={clsx(
-												'mt-2',
-												!data[item.id].educationLevel &&
-													error &&
-													'border-rose-500'
-											)}
-											onChange={e => {
+											onChange={e =>
 												dispatch(
-													educationLevel({
+													educationLevelId({
 														id: item.id,
-														educationLevel: e.target.value
+														educationLevelId: e
 													})
 												)
-											}}
-											value={data[item.id].educationLevel}
+											}
+											options={
+												educationLevel == null
+													? []
+													: educationLevel.map(el => ({
+															value: el.id,
+															label: el.name
+													  }))
+											}
+											value={
+												info.filter(element => element.id === item.id)[0]
+													.educationLevelId
+											}
 										/>
 									</div>
 									<div>
@@ -105,22 +117,23 @@ export const EducationForm = () => {
 											size="large"
 											onChange={e =>
 												dispatch(
-													educationCountrySeries({
+													countryId({
 														id: item.id,
-														educationCountry: e
+														countryId: e
 													})
 												)
 											}
-											options={[
-												{ value: 'Российская Федерация' },
-												{ value: 'Бангладеш' },
-												{ value: 'Ботсвана' },
-												{ value: 'Белиз' },
-												{ value: 'Бруней' }
-											]}
+											options={
+												countries == null
+													? []
+													: countries.map(el => ({
+															value: el.id,
+															label: el.shortName
+													  }))
+											}
 											value={
-												data.filter(element => element.id === item.id)[0]
-													.educationCountry
+												info.filter(element => element.id === item.id)[0]
+													.countryId
 											}
 										/>
 									</div>
@@ -131,7 +144,7 @@ export const EducationForm = () => {
 									size="large"
 									className={clsx(
 										'mt-2',
-										!data[item.id].nameOfInstitute && error && 'border-rose-500'
+										!info[item.id].nameOfInstitute && error && 'border-rose-500'
 									)}
 									onChange={e => {
 										dispatch(
@@ -141,17 +154,17 @@ export const EducationForm = () => {
 											})
 										)
 									}}
-									value={data[item.id].nameOfInstitute}
+									value={info[item.id].nameOfInstitute}
 								/>
-								<div className="grid grid-cols-2 mt-4 gap-10 w-full max-sm:gap-5">
+								<div className="grid grid-cols-2 mt-4 gap-x-10 gap-y-4 w-full max-sm:gap-5">
 									<div>
-										<p>{t('series')}</p>
+										<p>{t('diplomaSeries')}</p>
 										<Input
 											placeholder="0000"
 											size="large"
 											className={clsx(
 												'mt-2',
-												!data.filter(element => element.id === item.id)[0]
+												!info.filter(element => element.id === item.id)[0]
 													.documentSeries &&
 													error &&
 													'border-rose-500'
@@ -165,20 +178,20 @@ export const EducationForm = () => {
 												)
 											}
 											value={
-												data.filter(element => element.id === item.id)[0]
+												info.filter(element => element.id === item.id)[0]
 													.documentSeries
 											}
 											maxLength={4}
 										/>
 									</div>
 									<div>
-										<p>{t('number')}</p>
+										<p>{t('diplomaNumber')}</p>
 										<Input
 											placeholder="0000"
 											size="large"
 											className={clsx(
 												'mt-2',
-												!data[item.id].documentNumber &&
+												!info[item.id].documentNumber &&
 													error &&
 													'border-rose-500'
 											)}
@@ -190,8 +203,58 @@ export const EducationForm = () => {
 													})
 												)
 											}
-											value={data[item.id].documentNumber}
+											value={info[item.id].documentNumber}
 											maxLength={4}
+										/>
+									</div>
+									<div>
+										<p>{t('graduateYear')}</p>
+										<DatePicker
+											className={clsx(
+												'mt-2 shadow w-full',
+												error &&
+													info[item.id].graduateYear === '' &&
+													'border-rose-500'
+											)}
+											onChange={e => {
+												dispatch(
+													graduateYear({
+														id: item.id,
+														graduateYear:
+															e == null ? '' : e.format('YYYY').toString()
+													})
+												)
+											}}
+											size="large"
+											placeholder={new Date().getFullYear().toString()}
+											picker="year"
+											value={
+												info[item.id].graduateYear !== ''
+													? dayjs(info[item.id].graduateYear, 'YYYY')
+													: null
+											}
+										/>
+									</div>
+									<div>
+										<p>{t('specialization')}</p>
+										<Input
+											placeholder={t('webDesign')}
+											size="large"
+											className={clsx(
+												'mt-2',
+												error &&
+													info[item.id].specialization === '' &&
+													'border-rose-500'
+											)}
+											onChange={e =>
+												dispatch(
+													specialization({
+														id: item.id,
+														specialization: e.target.value
+													})
+												)
+											}
+											value={info[item.id].specialization}
 										/>
 									</div>
 								</div>

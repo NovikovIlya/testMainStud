@@ -5,11 +5,9 @@ import { axiosInstance } from './instance'
 import { IApproveRequest, IAuthSuccess, IDetailsRequest } from './types'
 import {
 	IAuthRequest,
-	ICountryRequest,
 	IRefreshRequest,
 	IRefreshSuccess,
-	IRegRequest,
-	countryItem
+	IRegRequest
 } from './types'
 
 export const login = (params: IAuthRequest): AxiosPromise<IAuthSuccess> =>
@@ -28,7 +26,3 @@ export const approve = (params: IApproveRequest): AxiosPromise<IAuthSuccess> =>
 
 export const details = (params: IDetailsRequest) =>
 	axiosInstance.put(endpoints.USER.DETAILS, params)
-
-export const contries = (
-	params: ICountryRequest
-): AxiosPromise<countryItem[]> => axiosInstance.get(endpoints.USER.COUNTRIES)

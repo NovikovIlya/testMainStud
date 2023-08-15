@@ -4,7 +4,7 @@ import { RootState } from '../..'
 import { IDocumentState } from '../../../api/types'
 
 const initialState: IDocumentState = {
-	documentTypeId: 1,
+	documentTypeId: 2,
 	passportSeries: '',
 	passportNumber: '',
 	issuedBy: '',

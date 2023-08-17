@@ -13,6 +13,13 @@
 		border-color: black;
 	}
 }
+.rotate {
+	transform: rotate(270deg);
+	white-space: nowrap;
+	width: 32px;
+	position: inherit;
+	bottom: -70px;
+}
 .ant-table-wrapper .ant-table-container {
 	border-start-start-radius: unset;
 	border-start-end-radius: unset;

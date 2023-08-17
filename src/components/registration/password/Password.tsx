@@ -24,6 +24,14 @@ export const Password: FC<IPasswordProps> = ({
 	}, [password, confirm])
 	return (
 		<>
+			<Input.Password
+				className={styles.password}
+				value={password}
+				onChange={e => setPassword(e.currentTarget.value)}
+				size="large"
+				type="password"
+				placeholder={t('password')}
+			/>
 			<Form.Item
 				name="password"
 				style={{ marginBottom: 30 }}
@@ -32,16 +40,14 @@ export const Password: FC<IPasswordProps> = ({
 					{ required: true, message: t('errorPassword') },
 					{ min: 6, message: t('errorMinLength') }
 				]}
-			>
-				<Input.Password
-					className={styles.password}
-					value={password}
-					onChange={e => setPassword(e.currentTarget.value)}
-					size="large"
-					type="password"
-					placeholder={t('password')}
-				/>
-			</Form.Item>
+			></Form.Item>
+			<Input
+				value={confirm}
+				onChange={e => setConfirm(e.currentTarget.value)}
+				size="large"
+				type="password"
+				placeholder={t('repeatPassword')}
+			/>
 			<Form.Item
 				name="confirmPassword"
 				className={styles.input}
@@ -58,15 +64,7 @@ export const Password: FC<IPasswordProps> = ({
 						<p className="text-rose-500">{t('errorConfirmPassword')}</p>
 					)
 				}
-			>
-				<Input
-					value={confirm}
-					onChange={e => setConfirm(e.currentTarget.value)}
-					size="large"
-					type="password"
-					placeholder={t('repeatPassword')}
-				/>
-			</Form.Item>
+			></Form.Item>
 		</>
 	)
 }

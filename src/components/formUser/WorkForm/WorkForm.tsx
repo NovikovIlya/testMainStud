@@ -1,4 +1,6 @@
-import { Button, Input } from 'antd'
+import { Button, DatePicker, Input } from 'antd'
+import enPicker from 'antd/lib/date-picker/locale/en_US'
+import ruPicker from 'antd/lib/date-picker/locale/ru_RU'
 import clsx from 'clsx'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -20,7 +22,7 @@ const { TextArea } = Input
 
 export const WorkForm = () => {
 	const data = useAppSelector(state => state.Work)
-	const { t } = useTranslation()
+	const { t, i18n } = useTranslation()
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
 	const [error, setError] = useState(false)
@@ -85,18 +87,31 @@ export const WorkForm = () => {
 									/>
 								</div>
 								<p className="mt-4 self-start">{t('periodOperation')}</p>
-								<Input
-									placeholder={t('timeLine')}
-									size="large"
+								<DatePicker.RangePicker
+									picker="month"
 									className={clsx(
-										'mt-2',
-										error && !data.workItems[item.id].time && 'border-rose-500'
+										'mt-2 shadow w-full',
+										error && item.time === '' && 'border-rose-500'
 									)}
-									onChange={e =>
-										dispatch(time({ id: item.id, time: e.target.value }))
-									}
-									value={data.workItems[item.id].time}
+									locale={i18n.language === 'ru' ? ruPicker : enPicker}
+									size="large"
+									format={'DD.MM.YYYY'}
 								/>
+								<div className="mt-4">
+									<p className="text-black text-sm font-normal">
+										{t('workExperience')}
+									</p>
+									<TextArea
+										placeholder={t('tellYourWorkExperience')}
+										className={clsx(
+											'mt-2',
+											error && !data.description && 'border-rose-500'
+										)}
+										autoSize={{ minRows: 4, maxRows: 8 }}
+										onChange={e => dispatch(description(e.target.value))}
+										value={data.description}
+									/>
+								</div>
 							</div>
 						))}
 					</div>
@@ -112,31 +127,16 @@ export const WorkForm = () => {
 						<p className="opacity-40 text-sm mt-2">{t('add')}</p>
 						<p className="opacity-40 text-sm lowercase">{t('work')}</p>
 					</div>
-					<div>
-						<p className="text-black text-sm font-normal">
-							{t('workExperience')}
-						</p>
-						<TextArea
-							placeholder={t('tellYourWorkExperience')}
-							className={clsx(
-								'mt-2',
-								error && !data.description && 'border-rose-500'
-							)}
-							autoSize={{ minRows: 4, maxRows: 8 }}
-							onChange={e => dispatch(description(e.target.value))}
-							value={data.description}
-						/>
-						<p className="text-black text-sm font-normal mt-4">
-							{t('linkPortfolio')}
-						</p>
-						<Input
-							placeholder={t('timeLine')}
-							size="large"
-							className={clsx('mt-2', error && !data.link && 'border-rose-500')}
-							onChange={e => dispatch(link(e.target.value))}
-							value={data.link}
-						/>
-					</div>
+					<p className="text-black text-sm font-normal mt-4">
+						{t('linkPortfolio')}
+					</p>
+					<Input
+						placeholder={t('timeLine')}
+						size="large"
+						className={clsx('mt-2', error && !data.link && 'border-rose-500')}
+						onChange={e => dispatch(link(e.target.value))}
+						value={data.link}
+					/>
 					<div className="w-full flex justify-center items-center gap-8 mt-[60px]">
 						<Button
 							onClick={handleCancel}

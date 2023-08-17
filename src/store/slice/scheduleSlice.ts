@@ -22,7 +22,6 @@ type TypeSchedule = {
 const baseQuery = fetchBaseQuery({
 	baseUrl: 'http://192.168.63.96:8085/api/schedule',
 	prepareHeaders: (headers, { getState }) => {
-		const token = getState() as RootState //?.AuthReg?.authData?.accessToken
 		const accessToken = localStorage.getItem('access')
 		console.log(accessToken)
 

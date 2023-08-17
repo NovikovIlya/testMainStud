@@ -2,7 +2,6 @@ import type { RadioChangeEvent } from 'antd'
 import { Radio } from 'antd'
 import { Table } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
-import axios from 'axios'
 import { useEffect, useState } from 'react'
 
 import { useGetScheduleQuery } from '../../../store/slice/scheduleSlice'
@@ -67,12 +66,7 @@ const columns: ColumnsType<DataType> = [
 	}
 ]
 export const Schedule = () => {
-	const {
-		data: schedule,
-		refetch,
-		isFetching,
-		isLoading
-	} = useGetScheduleQuery()
+	const { data: schedule, isLoading } = useGetScheduleQuery()
 	const [data, setData] = useState<DataType[] | undefined>()
 	useEffect(() => {
 		setData(schedule?.monday)

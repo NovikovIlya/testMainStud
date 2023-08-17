@@ -41,9 +41,9 @@ export const Registration: FC<IRegProps> = ({ changeEmail }) => {
 	const [confirmPassword, setConfirmPassword] = useState(false)
 
 	const onFinish = async (values: IRegForm) => {
-		navigate('/registration/checkingEmail')
 		if (confirmPassword) {
 			if (values.email != null) {
+				navigate('/registration/checkingEmail')
 				const response = await dispatch(
 					registerUser({
 						lastName: values.surname,
@@ -88,23 +88,5 @@ export const Registration: FC<IRegProps> = ({ changeEmail }) => {
 				<Faq />
 			</div>
 		</div>
-	)
-}
-
-const ErrorPrinter = (
-	searchWord: string,
-	error: IError[] | null
-): AllHTMLAttributes<HTMLDivElement> => {
-	if (error == null) {
-		return <></>
-	}
-	return (
-		<>
-			{error.map(el => {
-				if (el.message.indexOf(searchWord) >= 0)
-					return <div key={el.message}>{el.message}</div>
-				else return null
-			})}
-		</>
 	)
 }

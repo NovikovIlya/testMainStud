@@ -1,7 +1,8 @@
-import { Button, Divider } from 'antd'
+import { Button, Divider, Drawer } from 'antd'
 import type { MenuProps } from 'antd'
 import { Dropdown, Space } from 'antd'
 import clsx from 'clsx'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import {
@@ -20,6 +21,7 @@ import { DocumentSvg } from '../../assets/svg/DocumentSvg'
 import PersonalizationSvg from '../../assets/svg/PersonalizationSvg'
 import { useAppDispatch, useAppSelector } from '../../store'
 import { logout } from '../../store/creators/SomeCreators'
+import { ModalNav } from '../service/modalMenu/ModalNav'
 
 type TypeHeaderProps = {
 	type?: 'service' | 'main'
@@ -28,8 +30,16 @@ type TypeHeaderProps = {
 
 export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const dispatch = useAppDispatch()
-	const user = useAppSelector(state => state.Profile.profileData.CurrentData)
+	const [open, setOpen] = useState(false)
 
+	const user = useAppSelector(state => state.Profile.profileData.CurrentData)
+	const showDrawer = () => {
+		setOpen(!open)
+	}
+
+	const onClose = () => {
+		setOpen(false)
+	}
 	const items: MenuProps['items'] = [
 		{
 			label: (
@@ -88,7 +98,6 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 			key: '6'
 		}
 	]
-	const navigate = useNavigate()
 	return (
 		<header
 			className={clsx(
@@ -99,7 +108,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 			<div className="w-screen flex h-full justify-between px-8">
 				<div className="flex gap-8 items-center">
 					<Button
-						onClick={() => navigate('/services/schedule')}
+						onClick={showDrawer}
 						className={clsx(
 							'h-[40px] rounded-full  font-semibold bg-transparent border-2 flex items-center justify-center w-[130px] ',
 							type === 'main'
@@ -186,6 +195,16 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 								</div>
 							</Space>
 						</Dropdown>
+						<Drawer
+							rootStyle={{ position: 'fixed', top: 75 }}
+							placement="top"
+							closable={false}
+							onClose={onClose}
+							open={open}
+							key="top"
+						>
+							<ModalNav close={onClose} />
+						</Drawer>
 					</div>
 				</div>
 			</div>

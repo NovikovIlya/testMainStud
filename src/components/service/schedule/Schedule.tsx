@@ -1,6 +1,4 @@
-import type { RadioChangeEvent } from 'antd'
-import { Radio } from 'antd'
-import { Table } from 'antd'
+import { Radio, RadioChangeEvent, Table } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 import { useEffect, useState } from 'react'
 

@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom'
 
 import { Header } from '../layout/Header'
 
+import { NavAboutMe } from './aboutMe/NavAboutMe'
 import { NavSchedule } from './schedule/NavSchedule'
 import { NavSession } from './session/NavSession'
 
@@ -15,6 +16,7 @@ const Service = ({ children }: { children?: ReactNode }) => {
 			<div className="flex min-h-full pt-20">
 				{pathname.includes('/services/schedule') && <NavSchedule />}
 				{pathname.includes('/services/session') && <NavSession />}
+				{pathname.includes('/services/aboutMe') && <NavAboutMe />}
 			</div>
 		</div>
 	)

@@ -5,9 +5,11 @@ import clsx from 'clsx'
 import dayjs from 'dayjs'
 import 'dayjs/locale/en'
 import 'dayjs/locale/ru'
+import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 
+import { IError } from '../../../../api/types'
 import { useAppSelector } from '../../../../store'
 import {
 	birthDay,
@@ -19,7 +21,11 @@ import {
 } from '../../../../store/reducers/FormReducers/FormReducer'
 import { useGetCountriesQuery } from '../../../../store/slice/countrySlice'
 
-export const Inputs = ({ error }: { error: boolean }) => {
+interface IInputProps {
+	error: IError | null
+}
+
+export const Inputs: FC<IInputProps> = ({ error }) => {
 	const dispatch = useDispatch()
 	const info = useAppSelector(state => state.Form)
 	const { t, i18n } = useTranslation()
@@ -27,76 +33,117 @@ export const Inputs = ({ error }: { error: boolean }) => {
 	const { data } = useGetCountriesQuery(i18n.language)
 
 	return (
-		<div>
+		<div className="w-full">
 			<span className="text-sm">{t('surname')}</span>
-			<Input
-				id="surName"
-				size="large"
-				type="text"
-				placeholder={t('surname')}
-				className={clsx(
-					'mt-2 mb-4 shadow transition-all duration-500',
-					error && info.surName === '' && 'border-rose-500'
+			<p className="mt-2 mb-4">
+				<Input
+					id="surName"
+					size="large"
+					type="text"
+					placeholder={t('surname')}
+					className={clsx(
+						'shadow transition-all duration-500',
+						error !== null &&
+							error.details.some(el => el.field === 'lastname') &&
+							'border-rose-500'
+					)}
+					onChange={e => {
+						dispatch(surName(e.target.value))
+					}}
+					value={info.surName}
+				/>
+				{error !== null && (
+					<span className="text-red-500 text-sm">
+						{error.details.map(el => {
+							if (el.field === 'lastname') return <p>{el.message}</p>
+							else return ''
+						})}
+					</span>
 				)}
-				onChange={e => {
-					dispatch(surName(e.target.value))
-				}}
-				value={info.surName}
-			/>
+			</p>
 
 			<span className="text-sm">{t('name')}</span>
-			<Input
-				size="large"
-				type="text"
-				placeholder={t('name')}
-				className={clsx(
-					'mt-2 mb-4 shadow transition-all duration-500',
-					error && info.name === '' && 'border-rose-500'
+			<p className="mt-2 mb-4">
+				<Input
+					size="large"
+					type="text"
+					placeholder={t('name')}
+					className={clsx(
+						'shadow transition-all duration-500',
+						error !== null &&
+							error.details.some(el => el.field === 'firstname') &&
+							'border-rose-500'
+					)}
+					onChange={e => {
+						dispatch(name(e.target.value))
+					}}
+					value={info.name}
+				/>
+				{error !== null && (
+					<span className="text-red-500 text-sm">
+						{error.details.map(el => {
+							if (el.field === 'firstname') return <p>{el.message}</p>
+							else return ''
+						})}
+					</span>
 				)}
-				onChange={e => {
-					dispatch(name(e.target.value))
-				}}
-				value={info.name}
-			/>
+			</p>
 
 			<span className="text-sm">{t('middleName')}</span>
-			<Input
-				size="large"
-				type="text"
-				placeholder={t('middleName')}
-				className={clsx(
-					'mt-2 mb-4 shadow transition-all duration-500',
-					error && info.patronymic === '' && 'border-rose-500'
+			<p className="mt-2 mb-4">
+				<Input
+					size="large"
+					type="text"
+					placeholder={t('middleName')}
+					className={clsx(
+						'shadow transition-all duration-500',
+						error !== null &&
+							error.details.some(el => el.field === 'middlename') &&
+							'border-rose-500'
+					)}
+					onChange={e => {
+						dispatch(patronymic(e.target.value))
+					}}
+					value={info.patronymic}
+				/>
+				{error !== null && (
+					<span className="text-red-500 text-sm">
+						{error.details.map(el => {
+							if (el.field === 'middlename') return <p>{el.message}</p>
+							else return ''
+						})}
+					</span>
 				)}
-				onChange={e => {
-					dispatch(patronymic(e.target.value))
-				}}
-				value={info.patronymic}
-			/>
+			</p>
 
 			<span className="text-sm">{t('birth')}</span>
-			<ConfigProvider locale={i18n.language === 'ru' ? ruPicker : enPicker}>
-				<DatePicker
-					className={clsx(
-						'block mt-2 mb-4 shadow transition-all duration-500',
-						error && info.birthDay === '' && 'border-rose-500'
-					)}
-					onChange={e =>
-						dispatch(birthDay(e == null ? '' : e?.format('YYYY-MM-DD')))
-					}
-					placeholder={t('selectDate')}
-					size="large"
-					format={'DD.MM.YYYY'}
-					value={
-						info.birthDay !== ''
-							? dayjs(
-									info.birthDay.split('-').reverse().join('.'),
-									'DD.MM.YYYY'
-							  )
-							: null
-					}
-				/>
-			</ConfigProvider>
+			<p className="mt-2 mb-4">
+				<ConfigProvider locale={i18n.language === 'ru' ? ruPicker : enPicker}>
+					<DatePicker
+						className={clsx(
+							'block shadow transition-all duration-500',
+							error !== null && info.birthDay === '' && 'border-rose-500'
+						)}
+						onChange={e =>
+							dispatch(birthDay(e == null ? '' : e?.format('YYYY-MM-DD')))
+						}
+						placeholder={t('selectDate')}
+						size="large"
+						format={'DD.MM.YYYY'}
+						value={
+							info.birthDay !== ''
+								? dayjs(
+										info.birthDay.split('-').reverse().join('.'),
+										'DD.MM.YYYY'
+								  )
+								: null
+						}
+					/>
+				</ConfigProvider>
+				{info.birthDay === '' && error !== null && (
+					<p className="text-red-500 text-sm">{t('DateError')}</p>
+				)}
+			</p>
 			<span className="text-sm">{t('citizen')}</span>
 			<Select
 				className="block mt-2 mb-4 shadow transition-all duration-500"
@@ -113,20 +160,32 @@ export const Inputs = ({ error }: { error: boolean }) => {
 			/>
 
 			<span className="text-sm">{t('telephone')}</span>
-			<Input
-				size="large"
-				type="text"
-				maxLength={11}
-				placeholder={t('telephone')}
-				className={clsx(
-					'mt-2 mb-4 shadow transition-all duration-500',
-					error && info.phone.length !== 11 && 'border-rose-500'
+			<p className="mt-2 mb-4">
+				<Input
+					size="large"
+					type="text"
+					maxLength={11}
+					placeholder={t('telephone')}
+					className={clsx(
+						'shadow transition-all duration-500',
+						error !== null &&
+							error.details.some(el => el.field === 'phone') &&
+							'border-rose-500'
+					)}
+					onChange={e => {
+						dispatch(phone(e.target.value))
+					}}
+					value={info.phone}
+				/>
+				{error !== null && (
+					<span className="text-red-500 text-sm">
+						{error.details.map(el => {
+							if (el.field === 'phone') return <p>{el.message}</p>
+							else return ''
+						})}
+					</span>
 				)}
-				onChange={e => {
-					dispatch(phone(e.target.value))
-				}}
-				value={info.phone}
-			/>
+			</p>
 		</div>
 	)
 }

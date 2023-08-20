@@ -1,10 +1,10 @@
-import { Button, Form } from 'antd';
+import { Button, Form } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import { GosSvg } from '../../../assets/svg'
 import { useAppDispatch } from '../../../store'
-import { DeleteLogInErrors } from '../../../store/creators/SomeCreators'
+import { clearLoginErrors } from '../../../store/creators/SomeCreators'
 
 import styles from './Buttons.module.scss'
 
@@ -42,7 +42,7 @@ export const Buttons = () => {
 						<Link
 							className={styles.link}
 							to="/registration"
-							onClick={() => dispatch(DeleteLogInErrors())}
+							onClick={() => dispatch(clearLoginErrors())}
 						>
 							{t('register')}
 						</Link>

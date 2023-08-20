@@ -10,17 +10,21 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
+import { useAppDispatch } from '../../store'
 import { useAppSelector } from '../../store'
+import { setRole } from '../../store/creators/MainCreators'
 import { putRole } from '../../store/reducers/FormReducers/InfoUserReducer'
 
 import { ImagesLayout } from './ImagesLayout'
 
 export const InfoUser = () => {
+	const castDispatch = useAppDispatch()
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 	const roleState = useAppSelector(state => state.InfoUser?.role)
 	const { t } = useTranslation()
 	const handleOk = () => {
+		castDispatch(setRole({ role: roleState }))
 		dispatch(putRole(roleState))
 		navigate('/form')
 	}

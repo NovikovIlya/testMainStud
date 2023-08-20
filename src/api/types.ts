@@ -11,18 +11,34 @@ export interface IAuthRequest {
 	password: string
 }
 
-export interface IError {
+export interface errorItem {
+	field: string
 	message: string
 }
 
-export interface IRegError {
-	errors: IError[]
+export type IRegForm = {
+	surname: string
+	name: string
+	email: string
+	password: string
+	confirmPassword: string
+}
+
+export interface IError {
+	error: string
+	details: errorItem[]
 }
 
 export interface IAuthSuccess {
 	accessToken: string
 	refreshToken: string
 	user: IUserData
+}
+
+interface IRoles {
+	login: string
+	id: number | null
+	type: string
 }
 
 export interface IUserData {
@@ -34,28 +50,22 @@ export interface IUserData {
 	phone: string
 	email: string
 	citizenship: string
-	roles: IRole[]
-}
-
-export interface IRole {
-	login: string
-	id: number | null
-	type: string
+	roles: IRoles[]
 }
 
 export interface IAuthRegState {
 	authData: {
 		accessToken: string | null
-		error: IError[] | null
+		error: IError | null
 	}
 	regData: {
-		error: IError[] | null
+		error: IError | null
 	}
 }
 
 export interface IProfileState {
 	profileData: {
-		error: IError[] | null | String
+		error: IError | null | String
 		CurrentData: IUserData | null
 	}
 }
@@ -72,20 +82,47 @@ export type IGender = 'W' | 'M'
 
 export type ILanguage = 'en' | 'ru'
 
-export type countryItem = {
+export type ICountryRequest = {
 	id: number
 	shortName: string
 }
 
-export type educationLevelItem = {
+export type IEducationLevelRequest = {
 	id: number
 	name: string
 }
 
-export type documentItem = {
+export type IIdentifyDocumentRequest = {
 	id: number
 	type: string
 }
+
+export type IRole = {
+	role: TypeRole
+}
+
+export type formItem = {
+	name: string
+	surName: string
+	patronymic: string
+	birthDay: string
+	gender: IGender
+	phone: string
+	countryId: number
+}
+
+export type IDocument = {
+	documentTypeId: number
+	passportSeries: string
+	passportNumber: string
+	issuedBy: string
+	dateIssue: string
+	divisionCode: string
+	inn: string
+	snils: string
+}
+
+export type IDocumentRequest = { document: IDocument }
 
 export type educationItem = {
 	nameOfInstitute: string
@@ -97,68 +134,50 @@ export type educationItem = {
 	specialization: string
 }
 
-export type workItem = {
-	name: string
-	startDate: string
-	endDate: string
-	isPresent: boolean
-}
-
-export interface IDetailsRequest {
-	role: TypeRole
-	generalInfo: {
-		name: string
-		surName: string
-		patronymic: string
-		birthDay: string
-		gender: IGender
-		phone: string
-		countryId: number
-	}
-	document: {
-		documentTypeId: number
-		passportSeries: string
-		passportNumber: string
-		issuedBy: string
-		dateIssue: string
-		divisionCode: string
-		inn: string
-		snils: string
-	}
-	educations: educationItem[]
-	parent: {
-		name: string
-		surName: string
-		patronymic: string
-		dateIssue: string
-		divisionCode: string
-		eMail: string
-		issuedBy: string
-		documentTypeId: number
-		phone: string
-		passportSeries: string
-		passportNumber: string
-		registrationAddress: string
-	}
-	job: workItem[]
-}
-
-export type IRoleInfo = Pick<IDetailsRequest, 'role'>
-
-export type IFormState = IDetailsRequest['generalInfo']
-
-export type IDocumentState = IDetailsRequest['document']
+export type IEducationRequest = { educations: educationItem[] }
 
 export type IEducationState = educationItem & { id: number }
 
-export type IParentState = Omit<
-	IDetailsRequest['parent'],
-	'name' | 'surName' | 'patronymic'
-> & {
-	FIO: string
+export type IParentRequest = {
+	name: string
+	surName: string
+	patronymic: string
+	dateIssue: string
+	divisionCode: string
+	eMail: string
+	issuedBy: string
+	documentTypeId: number
+	phone: string
+	passportSeries: string
+	passportNumber: string
+	registrationAddress: string
 	residenceAddress: string
 	inn: string
 	snils: string
+}
+
+export type IParentState = Omit<
+	IParentRequest,
+	'name' | 'surName' | 'patronymic'
+> & {
+	FIO: string
+}
+
+export type workItem = {
+	name: string
+	startDate: string
+	endDate: string | null
+	responsibilities: string
+	additionalInfo: string
+}
+
+export type IWorkState = {
+	items: (workItem & { id: number })[]
+	portfolioLink: string
+}
+
+export type IWorkHistoryRequest = {
+	workHistory: Omit<IWorkHistoryRequest, 'items'> & { items: workItem[] }
 }
 
 export interface IRefreshRequest {

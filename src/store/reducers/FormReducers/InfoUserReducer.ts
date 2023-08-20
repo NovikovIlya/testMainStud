@@ -1,9 +1,9 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 import { RootState } from '../..'
-import { IRoleInfo, TypeRole } from '../../../api/types'
+import { IRole, TypeRole } from '../../../api/types'
 
-const initialState: IRoleInfo = {
+const initialState: IRole = {
 	role: 'GUEST'
 }
 

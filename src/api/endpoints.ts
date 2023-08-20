@@ -6,7 +6,14 @@ const endpoints = {
 		APPROVE: '/register/approve'
 	},
 	USER: {
-		DETAILS: '/users/me/details',
+		INFO: {
+			ROLE: '/users/me/role',
+			DOCUMENT: '/users/me/document',
+			EDUCATION: '/users/me/education',
+			PARENT: '/users/me/parent',
+			JOB: '/users/me/work-history',
+			FORM: '/users/me'
+		},
 		COUNTRIES: '/country',
 		EDUCATION_LEVEL: '/education/levels',
 		DOCUMENTS: '/document'

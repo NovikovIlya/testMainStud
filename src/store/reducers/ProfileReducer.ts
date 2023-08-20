@@ -1,10 +1,7 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
-
-
-import { IError, IProfileState, IUserData } from '../../api/types';
-import { RootState } from '../index';
-
+import { IError, IProfileState, IUserData } from '../../api/types'
+import { RootState } from '../index'
 
 const initialState: IProfileState = {
 	profileData: {
@@ -17,29 +14,13 @@ export const ProfileReducer = createSlice({
 	name: 'Profile',
 	initialState,
 	reducers: {
-		ProfileSuccess: (
-			state,
-			action: PayloadAction<IUserData>
-		): IProfileState => {
-			return {
-				...state,
-				profileData: { 
-					...state.profileData,
-					error: null,
-					CurrentData: action.payload
-				}
-			}
+		ProfileSuccess: (state, action: PayloadAction<IUserData>) => {
+			state.profileData.CurrentData = action.payload
+			state.profileData.error = null
 		},
-		ProfileFailure: (
-			state,
-			action: PayloadAction<IError[]>
-		): IProfileState => ({
-			...state,
-			profileData: {
-				...state.profileData,
-				error: action.payload
-			}
-		})
+		ProfileFailure: (state, action: PayloadAction<IError>) => {
+			state.profileData.error = action.payload
+		}
 	}
 })
 

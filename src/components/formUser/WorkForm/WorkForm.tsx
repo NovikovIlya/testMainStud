@@ -1,7 +1,10 @@
-import { Button, DatePicker, Input } from 'antd'
-import enPicker from 'antd/lib/date-picker/locale/en_US'
-import ruPicker from 'antd/lib/date-picker/locale/ru_RU'
+import { Button, ConfigProvider, DatePicker, Input } from 'antd'
+import enPicker from 'antd/locale/en_US'
+import ruPicker from 'antd/locale/ru_RU'
 import clsx from 'clsx'
+import dayjs from 'dayjs'
+import 'dayjs/locale/en'
+import 'dayjs/locale/ru'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
@@ -9,12 +12,14 @@ import { useNavigate } from 'react-router-dom'
 
 import { useAppSelector } from '../../../store'
 import {
-	description,
+	additionalInfo,
+	endDate,
 	idAdd,
 	idDelete,
-	link,
-	place,
-	time
+	name,
+	portfolioLink,
+	responsibilities,
+	startDate
 } from '../../../store/reducers/FormReducers/WorkReducer'
 import { ImagesLayout } from '../ImagesLayout'
 
@@ -23,6 +28,7 @@ const { TextArea } = Input
 export const WorkForm = () => {
 	const data = useAppSelector(state => state.Work)
 	const { t, i18n } = useTranslation()
+	dayjs.locale(i18n.language)
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
 	const [error, setError] = useState(false)
@@ -38,25 +44,29 @@ export const WorkForm = () => {
 		navigate('/user')
 	}
 	const saveInStore = () => {
-		let IsEmpty = data.workItems.some(
-			item => item.place === '' || item.time === ''
+		let IsEmpty = data.items.some(
+			item =>
+				item.name === '' ||
+				item.startDate === '' ||
+				item.startDate === '' ||
+				item.additionalInfo === ''
 		)
-		if (data.description === '' || data.link === '') IsEmpty = true
 		return IsEmpty
 	}
 	const handleDeleteEducation = (id: number) => {
 		dispatch(idDelete(id))
 	}
 	const addWork = () => {
-		dispatch(idAdd(data.workItems[data.workItems.length - 1].id + 1))
+		dispatch(idAdd(data.items[data.items.length - 1].id + 1))
 	}
+	console.log('work')
 	return (
 		<ImagesLayout>
 			<div className="w-full flex justify-center  text-sm">
 				<div className="container max-w-2xl flex flex-col  pч-5">
 					<h3 className="text-xl">{t('work')}</h3>
 					<div className="flex flex-col gap-10 w-full">
-						{data.workItems.map(item => (
+						{data.items.map(item => (
 							<div key={item.id}>
 								<div className=" mt-5 w-full max-sm:gap-4">
 									<span className="flex">
@@ -76,27 +86,90 @@ export const WorkForm = () => {
 										size="large"
 										className={clsx(
 											'mt-2',
-											error &&
-												!data.workItems[item.id].place &&
-												'border-rose-500'
+											error && item.name === '' && 'border-rose-500'
 										)}
 										onChange={e =>
-											dispatch(place({ id: item.id, place: e.target.value }))
+											dispatch(
+												name({
+													id: item.id,
+													name: e.target.value
+												})
+											)
 										}
-										value={data.workItems[item.id].place}
+										value={data.items[item.id].name}
 									/>
 								</div>
 								<p className="mt-4 self-start">{t('periodOperation')}</p>
-								<DatePicker.RangePicker
-									picker="month"
-									className={clsx(
-										'mt-2 shadow w-full',
-										error && item.time === '' && 'border-rose-500'
-									)}
-									locale={i18n.language === 'ru' ? ruPicker : enPicker}
-									size="large"
-									format={'DD.MM.YYYY'}
-								/>
+								<div className="grid grid-cols-2 gap-x-4 max-sm:grid-cols-1">
+									<ConfigProvider
+										locale={i18n.language === 'ru' ? ruPicker : enPicker}
+									>
+										<DatePicker
+											className={clsx(
+												'mt-2 shadow w-full',
+												error &&
+													data.items[item.id].startDate === '' &&
+													'border-rose-500'
+											)}
+											onChange={e =>
+												dispatch(
+													startDate({
+														id: item.id,
+														startDate: e !== null ? e.format('YYYY-MM-DD') : ''
+													})
+												)
+											}
+											size="large"
+											placeholder={t('date')}
+											format={'DD.MM.YYYY'}
+											value={
+												data.items[item.id].startDate !== ''
+													? dayjs(
+															data.items[item.id].startDate
+																.split('-')
+																.reverse()
+																.join('.'),
+															'DD.MM.YYYY'
+													  )
+													: null
+											}
+										/>
+									</ConfigProvider>
+									<ConfigProvider
+										locale={i18n.language === 'ru' ? ruPicker : enPicker}
+									>
+										<DatePicker
+											className={clsx(
+												'mt-2 shadow w-full',
+												error &&
+													data.items[item.id].endDate === '' &&
+													'border-rose-500'
+											)}
+											onChange={e =>
+												dispatch(
+													endDate({
+														id: item.id,
+														endDate: e !== null ? e?.format('YYYY-MM-DD') : null
+													})
+												)
+											}
+											size="large"
+											placeholder={t('date')}
+											format={'DD.MM.YYYY'}
+											value={
+												data.items[item.id].endDate !== null
+													? dayjs(
+															data.items[item.id].endDate
+																?.split('-')
+																.reverse()
+																.join('.'),
+															'DD.MM.YYYY'
+													  )
+													: null
+											}
+										/>
+									</ConfigProvider>
+								</div>
 								<div className="mt-4">
 									<p className="text-black text-sm font-normal">
 										{t('workExperience')}
@@ -105,11 +178,18 @@ export const WorkForm = () => {
 										placeholder={t('tellYourWorkExperience')}
 										className={clsx(
 											'mt-2',
-											error && !data.description && 'border-rose-500'
+											error && item.additionalInfo === '' && 'border-rose-500'
 										)}
 										autoSize={{ minRows: 4, maxRows: 8 }}
-										onChange={e => dispatch(description(e.target.value))}
-										value={data.description}
+										onChange={e =>
+											dispatch(
+												additionalInfo({
+													id: item.id,
+													additionalInfo: e.target.value
+												})
+											)
+										}
+										value={item.additionalInfo}
 									/>
 								</div>
 							</div>
@@ -133,9 +213,12 @@ export const WorkForm = () => {
 					<Input
 						placeholder={t('timeLine')}
 						size="large"
-						className={clsx('mt-2', error && !data.link && 'border-rose-500')}
-						onChange={e => dispatch(link(e.target.value))}
-						value={data.link}
+						className={clsx(
+							'mt-2',
+							error && data.portfolioLink === '' && 'border-rose-500'
+						)}
+						onChange={e => dispatch(portfolioLink(e.target.value))}
+						value={data.portfolioLink}
 					/>
 					<div className="w-full flex justify-center items-center gap-8 mt-[60px]">
 						<Button

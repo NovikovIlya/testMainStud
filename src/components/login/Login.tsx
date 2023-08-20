@@ -1,5 +1,5 @@
-import { Form, Popover, Typography } from 'antd'
-import { FC, useState } from 'react'
+import { Form, Typography } from 'antd'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -8,6 +8,7 @@ import logo from '../../assets/images/group.png'
 import { useAppDispatch } from '../../store'
 import { RootState } from '../../store'
 import { loginUser } from '../../store/creators/MainCreators'
+import { clearLoginErrors } from '../../store/creators/SomeCreators'
 import { BackMainPage } from '../back-main-page/BackMainPage'
 import { Faq } from '../faq/Faq'
 
@@ -19,26 +20,21 @@ const { Title } = Typography
 
 export const Login = () => {
 	const navigate = useNavigate()
-	const { t } = useTranslation()
+	const { t, i18n } = useTranslation()
 	const error = useSelector((state: RootState) => state.AuthReg.authData.error)
 	const dispatch = useAppDispatch()
-	const [value, setValue] = useState(0)
 
-	const onFinish = (values: {
-		email?: string
-		phone?: string
-		password: string
-	}) => {
+	useEffect(() => {
+		dispatch(clearLoginErrors())
+		console.log('success')
+	}, [i18n.language])
+
+	const onFinish = (values: { email: string; password: string }) => {
 		const request = async () => {
 			let res = null
-			if (values?.email) {
+			if (values.email || values.password) {
 				res = await dispatch(
 					loginUser({ username: values.email, password: values.password })
-				)
-			}
-			if (values?.phone) {
-				res = await dispatch(
-					loginUser({ username: values.phone, password: values.password })
 				)
 			}
 			if (res === 200) {
@@ -60,7 +56,7 @@ export const Login = () => {
 				>
 					<Title className={styles.title}>{t('authorization')}</Title>
 
-					<Inputs error={error} value={value} />
+					<Inputs error={error} />
 					<Buttons />
 				</Form>
 				<div className="flex items-start mt-10">

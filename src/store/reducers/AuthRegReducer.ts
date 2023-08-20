@@ -19,55 +19,23 @@ const initialState: IAuthRegState = {
 }
 
 export const AuthRegReducer = createSlice({
-	name: 'AuthReg',
+	name: 'AuthRegReducer',
 	initialState,
 	reducers: {
-		loginSuccess: (
-			state,
-			action: PayloadAction<IloginSuccess>
-		): IAuthRegState => {
+		loginSuccess: (state, action: PayloadAction<IloginSuccess>) => {
 			localStorage.setItem('access', action.payload.accessToken)
 			cookies.set('refresh', action.payload.refreshToken)
-			return {
-				...state,
-				authData: {
-					...state.authData,
-					accessToken: action.payload.accessToken,
-					error: null
-				}
-			}
+			state.authData.accessToken = action.payload.accessToken
+			state.authData.error = null
 		},
-		refreshSuccess: (state, action: PayloadAction<string>): IAuthRegState => {
-			return {
-				...state,
-				authData: {
-					...state.authData,
-					accessToken: action.payload
-				}
-			}
+		refreshSuccess: (state, action: PayloadAction<string>) => {
+			state.authData.accessToken = action.payload
 		},
-		// registrationSuccess: state => {
-		// 	state.regData.error = null
-		// },
-		loginFailure: (state, action: PayloadAction<IError[]>): IAuthRegState => {
-			return {
-				...state,
-				authData: {
-					...state.authData,
-					error: action.payload.length === 0 ? null : action.payload
-				}
-			}
+		loginFailure: (state, action: PayloadAction<IError | null>) => {
+			state.authData.error = action.payload
 		},
-		registrationFailure: (
-			state,
-			action: PayloadAction<IError[]>
-		): IAuthRegState => {
-			return {
-				...state,
-				regData: {
-					error: action.payload.length === 0 ? null : action.payload
-				}
-			}
+		registrationFailure: (state, action: PayloadAction<IError | null>) => {
+			state.regData.error = action.payload
 		},
 		logoutSuccess: (): IAuthRegState => {
 			cookies.remove('refresh')
@@ -82,7 +50,6 @@ export const {
 	loginFailure,
 	loginSuccess,
 	registrationFailure,
-	// registrationSuccess,
 	logoutSuccess,
 	refreshSuccess
 } = AuthRegReducer.actions

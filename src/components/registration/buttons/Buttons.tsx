@@ -1,11 +1,11 @@
-import { Button, Checkbox, Form } from 'antd';
-import { CheckboxChangeEvent } from 'antd/es/checkbox';
+import { Button, Checkbox, Form } from 'antd'
+import { CheckboxChangeEvent } from 'antd/es/checkbox'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import { useAppDispatch } from '../../../store'
-import { DeleteRegistrationErrors } from '../../../store/creators/SomeCreators'
+import { clearRegistrationErrors } from '../../../store/creators/SomeCreators'
 
 import styles from './Buttons.module.scss'
 
@@ -38,7 +38,7 @@ export const Buttons: FC<IButtonsProps> = ({ setCheck, check }) => {
 						<Link
 							className={styles.link}
 							to="/login"
-							onClick={() => dispatch(DeleteRegistrationErrors())}
+							onClick={() => dispatch(clearRegistrationErrors())}
 						>
 							{t('login')}
 						</Link>

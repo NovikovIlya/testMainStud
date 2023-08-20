@@ -2,13 +2,17 @@ import { Button } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
+import { IError } from '../../../../api/types'
 import { useAppSelector } from '../../../../store'
+import { useAppDispatch } from '../../../../store'
+import { setForm } from '../../../../store/creators/MainCreators'
 
 export const Buttons = ({
 	setError
 }: {
-	setError: (value: boolean) => void
+	setError: (error: IError | null) => void
 }) => {
+	const castDispatch = useAppDispatch()
 	const navigate = useNavigate()
 	const userRole = useAppSelector(state => state.InfoUser.role)
 	const data = useAppSelector(state => state.Form)
@@ -20,25 +24,15 @@ export const Buttons = ({
 		if (!saveInStore()) {
 			if (userRole === 'GUEST') navigate('/user')
 			else navigate('/documents')
-		} else {
-			setError(true)
 		}
 	}
-	const saveInStore = () => {
-		if (
-			[
-				data.birthDay,
-				data.countryId,
-				data.gender,
-				data.name,
-				data.phone,
-				data.surName
-			].some(el => el === '') ||
-			data.phone.length !== 11
-		) {
-			setError(true)
-			return true
-		} else return false
+	const saveInStore = async () => {
+		const response = await castDispatch(setForm(data))
+		if (response == null) return true
+		else {
+			setError(response)
+			return false
+		}
 	}
 	const handleSkip = () => {
 		navigate('/user')

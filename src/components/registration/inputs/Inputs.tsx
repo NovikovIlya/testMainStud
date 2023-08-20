@@ -1,5 +1,5 @@
 import { Form, Input } from 'antd'
-import React, { AllHTMLAttributes, FC } from 'react'
+import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { IError } from '../../../api/types'
@@ -7,22 +7,34 @@ import { IError } from '../../../api/types'
 import styles from './Inputs.module.scss'
 
 interface IInputsProps {
-	error: IError[] | null
+	error: IError | null
 	changeEmail: (email: string) => void
 }
 
 export const Inputs: FC<IInputsProps> = ({ error, changeEmail }) => {
 	const { t } = useTranslation()
+
 	return (
 		<>
 			<Form.Item
 				name="surname"
 				style={{ marginBottom: 30 }}
 				className={styles.input}
-				rules={[
-					{ type: 'string' },
-					{ required: true, message: t('errorSurnameName') }
-				]}
+				validateStatus={error !== null ? 'error' : undefined}
+				help={
+					error == null ? (
+						''
+					) : error.details.length > 0 ? (
+						<div>
+							{error.details.map(el => {
+								if (el.field === 'lastName') return <p>{el.message}</p>
+								else return ''
+							})}
+						</div>
+					) : (
+						error.error
+					)
+				}
 			>
 				<Input size="large" placeholder={t('surname')} />
 			</Form.Item>
@@ -30,24 +42,43 @@ export const Inputs: FC<IInputsProps> = ({ error, changeEmail }) => {
 				name="name"
 				className={styles.input}
 				style={{ marginBottom: 30 }}
-				rules={[
-					{ type: 'string' },
-					{ required: true, message: t('errorName') }
-				]}
+				validateStatus={error !== null ? 'error' : undefined}
+				help={
+					error == null ? (
+						''
+					) : error.details.length > 0 ? (
+						<div>
+							{error.details.map(el => {
+								if (el.field === 'firstName') return <p>{el.message}</p>
+								else return ''
+							})}
+						</div>
+					) : (
+						error.error
+					)
+				}
 			>
 				<Input size="large" placeholder={t('name')} />
 			</Form.Item>
 			<Form.Item
-				name="Email"
+				name="email"
 				className={styles.input}
 				style={{ marginBottom: 30 }}
-				rules={[
-					{ type: 'email', message: t('errorEmail') },
-					{
-						required: true,
-						message: t('errorEmail')
-					}
-				]}
+				validateStatus={error !== null ? 'error' : undefined}
+				help={
+					error == null ? (
+						''
+					) : error.details.length > 0 ? (
+						<div>
+							{error.details.map(el => {
+								if (el.field === 'email') return <p>{el.message}</p>
+								else return ''
+							})}
+						</div>
+					) : (
+						error.error
+					)
+				}
 			>
 				<Input
 					size="large"

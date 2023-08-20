@@ -1,14 +1,15 @@
 import { Form, Typography } from 'antd'
-import { AllHTMLAttributes, FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-import { IError } from '../../api/types'
+import { IRegForm } from '../../api/types'
 import logo from '../../assets/images/group.png'
 import { useAppDispatch } from '../../store'
 import { RootState } from '../../store'
 import { registerUser } from '../../store/creators/MainCreators'
+import { clearRegistrationErrors } from '../../store/creators/SomeCreators'
 import { BackMainPage } from '../back-main-page/BackMainPage'
 import { Faq } from '../faq/Faq'
 
@@ -19,31 +20,25 @@ import { Password } from './password/Password'
 
 const { Title } = Typography
 
-interface IRegForm {
-	surname: string
-	name: string
-	email?: string
-	phone?: string
-	password: string
-	confirmPassword: string
-}
-
 interface IRegProps {
 	changeEmail: (email: string) => void
 }
 
 export const Registration: FC<IRegProps> = ({ changeEmail }) => {
 	const navigate = useNavigate()
-	const error = useSelector((state: RootState) => state.AuthReg.regData.error)
 	const dispatch = useAppDispatch()
-	const { t } = useTranslation()
+	const error = useSelector((state: RootState) => state.AuthReg.regData.error)
+	const { t, i18n } = useTranslation()
 	const [check, setCheck] = useState(false)
 	const [confirmPassword, setConfirmPassword] = useState(false)
 
+	useEffect(() => {
+		dispatch(clearRegistrationErrors())
+	}, [i18n.language])
+
 	const onFinish = async (values: IRegForm) => {
 		if (confirmPassword) {
-			if (values.email != null) {
-				navigate('/registration/checkingEmail')
+			if (values.email || values.name || values.password) {
 				const response = await dispatch(
 					registerUser({
 						lastName: values.surname,
@@ -73,6 +68,7 @@ export const Registration: FC<IRegProps> = ({ changeEmail }) => {
 					<Title className={styles.title}>{t('registration')}</Title>
 					<Inputs error={error} changeEmail={changeEmail} />
 					<Password
+						error={error}
 						confirmPassword={confirmPassword}
 						setConfirmPassword={setConfirmPassword}
 					/>

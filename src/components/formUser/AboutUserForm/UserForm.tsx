@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { IError } from '../../../api/types'
 import { ImagesLayout } from '../ImagesLayout'
 
 import { Buttons } from './Buttons/Buttons'
@@ -8,9 +9,13 @@ import { Inputs } from './Inputs/Inputs'
 import { Switcher } from './Radio/Switcher'
 
 export const FormModal = () => {
-	const [error, setError] = useState(false)
+	const [error, setError] = useState<IError | null>(null)
 
-	const { t } = useTranslation()
+	const { t, i18n } = useTranslation()
+
+	useEffect(() => {
+		setError(null)
+	}, [i18n.language])
 	return (
 		<ImagesLayout>
 			<div className="w-full flex justify-center ">

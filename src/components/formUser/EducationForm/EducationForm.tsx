@@ -1,4 +1,4 @@
-import { Button, DatePicker, DatePickerProps, Input, Select } from 'antd'
+import { Button, DatePicker, Input, Select } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { useState } from 'react'

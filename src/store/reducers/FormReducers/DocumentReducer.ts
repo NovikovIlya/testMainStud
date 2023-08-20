@@ -1,9 +1,9 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 import { RootState } from '../..'
-import { IDocumentState } from '../../../api/types'
+import { IDocument } from '../../../api/types'
 
-const initialState: IDocumentState = {
+const initialState: IDocument = {
 	documentTypeId: 2,
 	passportSeries: '',
 	passportNumber: '',

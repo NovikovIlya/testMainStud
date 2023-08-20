@@ -12,14 +12,14 @@ export const logout =
 		dispatch(logoutSuccess())
 	}
 
-export const DeleteLogInErrors =
+export const clearLoginErrors =
 	() =>
 	async (dispatch: Dispatch): Promise<void> => {
-		dispatch(loginFailure([]))
+		dispatch(loginFailure(null))
 	}
 
-export const DeleteRegistrationErrors =
+export const clearRegistrationErrors =
 	() =>
 	async (dispatch: Dispatch): Promise<void> => {
-		dispatch(registrationFailure([]))
+		dispatch(registrationFailure(null))
 	}

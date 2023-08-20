@@ -1,9 +1,9 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 import { RootState } from '../..'
-import { IFormState, IGender } from '../../../api/types'
+import { IGender, formItem } from '../../../api/types'
 
-const initialState: IFormState = {
+const initialState: formItem = {
 	name: '',
 	surName: '',
 	patronymic: '',

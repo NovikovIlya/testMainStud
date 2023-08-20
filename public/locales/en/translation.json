@@ -99,5 +99,7 @@
 	"ShortPopup": "We do not share your data with third parties",
 	"LongPopupTop": "Now you choose your main role, later",
 	"LongPopupMiddle": "in the section “About me” You will be able to connect other roles,",
-	"LongPopupBottom": "by filling out additional information"
+	"LongPopupBottom": "by filling out additional information",
+	"LoginError": "invalid username or password",
+	"DateError": "please specify the date"
 }

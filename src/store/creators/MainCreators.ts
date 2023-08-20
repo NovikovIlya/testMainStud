@@ -2,8 +2,27 @@ import { Dispatch } from '@reduxjs/toolkit'
 import request from 'axios'
 import { Cookies } from 'react-cookie'
 
-import { approve, details, login, refresh, register } from '../../api/index'
-import { IDetailsRequest, IRegError } from '../../api/types'
+import {
+	approve,
+	document,
+	education,
+	form,
+	job,
+	login,
+	parent,
+	refresh,
+	register,
+	role
+} from '../../api/index'
+import {
+	IDocumentRequest,
+	IEducationRequest,
+	IError,
+	IParentRequest,
+	IRole,
+	IWorkHistoryRequest,
+	formItem
+} from '../../api/types'
 import { IApproveRequest, IAuthRequest, IRegRequest } from '../../api/types'
 import {
 	loginFailure,
@@ -31,11 +50,10 @@ export const loginUser =
 			)
 			localStorage.setItem('userInfo', JSON.stringify(res.data.user))
 			dispatch(ProfileSuccess(res.data.user))
-
 			answer = 200
 		} catch (e) {
 			if (request.isAxiosError(e) && e.response) {
-				dispatch(loginFailure((e.response?.data as IRegError).errors))
+				dispatch(loginFailure(e.response?.data as IError))
 			}
 		}
 		return answer
@@ -81,11 +99,11 @@ export const registerUser =
 	async (dispatch: Dispatch): Promise<number> => {
 		try {
 			await register(data)
-			dispatch(registrationFailure([]))
+			dispatch(registrationFailure(null))
 			return 200
 		} catch (e) {
 			if (request.isAxiosError(e) && e.response) {
-				dispatch(registrationFailure((e.response?.data as IRegError).errors))
+				dispatch(registrationFailure(e.response?.data as IError))
 			}
 		}
 		return 400
@@ -106,8 +124,70 @@ export const approveEmail =
 		dispatch(ProfileSuccess(res.data.user))
 	}
 
-export const userDetails = (data: IDetailsRequest) => async () => {
+export const setRole = (data: IRole) => async () => {
 	try {
-		await details(data)
-	} catch (e) {}
+		await role(data)
+		return []
+	} catch (e) {
+		if (request.isAxiosError(e) && e.response) {
+			return e.response?.data as IError
+		}
+	}
+}
+
+export const setForm = (data: formItem) => async (): Promise<IError | null> => {
+	try {
+		await form(data)
+	} catch (e) {
+		if (request.isAxiosError(e) && e.response) {
+			return e.response?.data as IError
+		}
+	}
+	return null
+}
+
+export const setJob =
+	(data: IWorkHistoryRequest) => async (): Promise<IError | null> => {
+		try {
+			await job(data)
+		} catch (e) {
+			if (request.isAxiosError(e) && e.response) {
+				return e.response?.data as IError
+			}
+		}
+		return null
+	}
+
+export const setDocument =
+	(data: IDocumentRequest) => async (): Promise<IError | null> => {
+		try {
+			await document(data)
+		} catch (e) {
+			if (request.isAxiosError(e) && e.response) {
+				return e.response?.data as IError
+			}
+		}
+		return null
+	}
+
+export const setParent = (data: IParentRequest) => async () => {
+	try {
+		await parent(data)
+		return []
+	} catch (e) {
+		if (request.isAxiosError(e) && e.response) {
+			return e.response?.data as IError
+		}
+	}
+}
+
+export const setEducation = (data: IEducationRequest) => async () => {
+	try {
+		await education(data)
+		return []
+	} catch (e) {
+		if (request.isAxiosError(e) && e.response) {
+			return e.response?.data as IError
+		}
+	}
 }

@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const DocumentSvg = ({white}: {white: boolean}) => {
+export const DocumentSvg = ({ white }: { white?: boolean }) => {
 	const color = () => (white ? 'white' : '#1F5CB8')
 
 	return (

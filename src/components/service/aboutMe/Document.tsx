@@ -122,7 +122,7 @@ export const Document = () => {
 					<Typography.Text className="text-black opacity-80 text-sm font-normal leading-none">
 						Прикрепить документы
 					</Typography.Text>
-					<Tooltip title="prompt text">
+					<Tooltip title="Сюда нужно прикрепить документы в формате PDF, данные которых были введены выше, а именно: Паспорт гражданина РФ (2 и 3 страницы), СНИЛС и ИНН">
 						<Button
 							type="default"
 							className="bg-transparent"

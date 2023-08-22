@@ -59,6 +59,7 @@ export const InfoUser = () => {
 							>
 								<ListItemPrefix className="mr-3">
 									<Radio
+										crossOrigin
 										name="vertical-list"
 										id="GUEST"
 										ripple={false}
@@ -86,6 +87,7 @@ export const InfoUser = () => {
 							>
 								<ListItemPrefix className="mr-3">
 									<Radio
+										crossOrigin
 										name="vertical-list"
 										id="SCHOOL"
 										ripple={false}
@@ -113,6 +115,7 @@ export const InfoUser = () => {
 							>
 								<ListItemPrefix className="mr-3">
 									<Radio
+										crossOrigin
 										name="vertical-list"
 										id="ABIT"
 										ripple={false}
@@ -143,6 +146,7 @@ export const InfoUser = () => {
 										name="vertical-list"
 										id="ATTEND"
 										ripple={false}
+										crossOrigin
 										className="hover:before:opacity-0 mt-1"
 										containerProps={{
 											className: 'p-0'
@@ -169,6 +173,7 @@ export const InfoUser = () => {
 									<Radio
 										name="vertical-list"
 										id="SEEKER"
+										crossOrigin
 										ripple={false}
 										className="hover:before:opacity-0 mt-1"
 										containerProps={{

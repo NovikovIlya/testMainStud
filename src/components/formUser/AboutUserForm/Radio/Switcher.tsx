@@ -14,6 +14,7 @@ export const Switcher = () => {
 			<label htmlFor="0" className="flex items-start  w-full cursor-pointer">
 				<ListItemPrefix className="mr-3">
 					<Radio
+						crossOrigin
 						name="vertical-list"
 						id="0"
 						ripple={false}
@@ -35,6 +36,7 @@ export const Switcher = () => {
 			>
 				<ListItemPrefix className="mr-3">
 					<Radio
+						crossOrigin
 						name="vertical-list"
 						id="1"
 						ripple={false}

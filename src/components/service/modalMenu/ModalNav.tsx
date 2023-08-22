@@ -15,7 +15,7 @@ export const ModalNav = ({ close }: TypeModalProps) => {
 		<Row className="h-screen">
 			<Col span={8}>
 				<div
-					onClick={() => handleNavigate('/services/schedule/schedule')}
+					onClick={() => handleNavigate('/services/aboutMe/aboutMe')}
 					className=" h-28 cursor-pointer flex items-center justify-center hover:bg-[#65A1FA] hover:text-white "
 				>
 					Обо мне

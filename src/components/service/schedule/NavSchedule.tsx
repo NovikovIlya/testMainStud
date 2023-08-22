@@ -1,12 +1,11 @@
 import clsx from 'clsx'
-import React, { ReactNode } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
+import { BriefcaseSvg } from '../../../assets/svg/BriefcaseSvg'
+import CalendarSvg from '../../../assets/svg/CalendarSvg'
 
 import { Schedule } from './Schedule'
 import { Services } from './Services'
-import CalendarSvg from '../../../assets/svg/CalendarSvg'
-import { BriefcaseSvg } from '../../../assets/svg/BriefcaseSvg'
 
 const navList = [
 	{
@@ -52,7 +51,7 @@ export const NavSchedule = () => {
 			</div>
 			<div className="bg-[#F5F8FB] w-full">
 				{pathname === navList[0].id && <Schedule />}
-				{pathname === navList[1].id && <Services/>}
+				{pathname === navList[1].id && <Services />}
 			</div>
 		</>
 	)

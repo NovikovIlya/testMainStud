@@ -1,18 +1,18 @@
 import { Button } from 'antd'
 import { useTranslation } from 'react-i18next'
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import { IError } from '../../../../api/types'
 import { useAppSelector } from '../../../../store'
-import { useAppDispatch } from '../../../../store'
 import { setForm } from '../../../../store/creators/MainCreators'
 
 export const Buttons = ({
-	setError
+	changeIsEmpty
 }: {
-	setError: (error: IError | null) => void
+	changeIsEmpty: (IsEmpty: boolean) => void
 }) => {
-	const castDispatch = useAppDispatch()
+	const dispatch = useDispatch()
 	const navigate = useNavigate()
 	const userRole = useAppSelector(state => state.InfoUser.role)
 	const data = useAppSelector(state => state.Form)
@@ -20,18 +20,39 @@ export const Buttons = ({
 	const handleCancel = () => {
 		navigate('/infoUser')
 	}
-	const handleOk = () => {
-		if (!saveInStore()) {
+	const handleOk = async () => {
+		if (await IsOK()) {
 			if (userRole === 'GUEST') navigate('/user')
 			else navigate('/documents')
 		}
 	}
-	const saveInStore = async () => {
-		const response = await castDispatch(setForm(data))
-		if (response == null) return true
-		else {
-			setError(response)
+	const IsOK = async () => {
+		const IsCorrectNS = [data.name, data.surName].some(el =>
+			/^\p{L}+$/u.test(el)
+		)
+
+		const IsCorrectPatronymic =
+			/^\p{L}+$/u.test(data.patronymic) || data.patronymic === ''
+
+		const IsCorrectPhone =
+			/^\+[0-9]\s[0-9]{3}\s[0-9]{3}\-[0-9]{2}\-[0-9]{2}$/.test(data.phone)
+		if (
+			!IsCorrectNS ||
+			!IsCorrectPatronymic ||
+			!IsCorrectPhone ||
+			data.birthDay === ''
+		) {
+			changeIsEmpty(true)
 			return false
+		}
+		const response = await setForm(data, dispatch)
+		if (response === 200) return true
+		else {
+			if (response === 403) {
+				navigate('/')
+			} else {
+				return false
+			}
 		}
 	}
 	const handleSkip = () => {

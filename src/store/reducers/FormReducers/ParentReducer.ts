@@ -7,7 +7,7 @@ const initialState: IParentState = {
 	FIO: '',
 	eMail: '',
 	phone: '',
-	documentTypeId: 2,
+	documentTypeId: 1,
 	divisionCode: '',
 	issuedBy: '',
 	passportSeries: '',

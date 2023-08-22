@@ -9,12 +9,12 @@ import { Inputs } from './Inputs/Inputs'
 import { Switcher } from './Radio/Switcher'
 
 export const FormModal = () => {
-	const [error, setError] = useState<IError | null>(null)
+	const [IsEmpty, changeIsEmpty] = useState<boolean>(false)
 
 	const { t, i18n } = useTranslation()
 
 	useEffect(() => {
-		setError(null)
+		changeIsEmpty(false)
 	}, [i18n.language])
 	return (
 		<ImagesLayout>
@@ -26,8 +26,8 @@ export const FormModal = () => {
 					</p>
 					<h3 className="self-start my-7 text-xl">{t('aboutMe')}</h3>
 					<Switcher />
-					<Inputs error={error} />
-					<Buttons setError={setError} />
+					<Inputs IsEmpty={IsEmpty} />
+					<Buttons changeIsEmpty={changeIsEmpty} />
 				</div>
 			</div>
 		</ImagesLayout>

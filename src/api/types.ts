@@ -37,7 +37,7 @@ export interface IAuthSuccess {
 
 interface IRoles {
 	login: string
-	id: number | null
+	id: string
 	type: string
 }
 
@@ -51,7 +51,16 @@ export interface IUserData {
 	email: string
 	citizenship: string
 	roles: IRoles[]
+	sessionId: string
 }
+
+export type TypeRole =
+	| 'ABIT'
+	| 'STUD'
+	| 'SCHOOL'
+	| 'SEEKER'
+	| 'GUEST'
+	| 'ATTEND'
 
 export interface IAuthRegState {
 	authData: {
@@ -69,14 +78,6 @@ export interface IProfileState {
 		CurrentData: IUserData | null
 	}
 }
-
-export type TypeRole =
-	| 'ABIT'
-	| 'STUD'
-	| 'SCHOOL'
-	| 'SEEKER'
-	| 'GUEST'
-	| 'ATTEND'
 
 export type IGender = 'W' | 'M'
 
@@ -138,7 +139,7 @@ export type IEducationRequest = { educations: educationItem[] }
 
 export type IEducationState = educationItem & { id: number }
 
-export type IParentRequest = {
+type IParent = {
 	name: string
 	surName: string
 	patronymic: string
@@ -156,10 +157,11 @@ export type IParentRequest = {
 	snils: string
 }
 
-export type IParentState = Omit<
-	IParentRequest,
-	'name' | 'surName' | 'patronymic'
-> & {
+export type IParentRequest = {
+	parent: IParent
+}
+
+export type IParentState = Omit<IParent, 'name' | 'surName' | 'patronymic'> & {
 	FIO: string
 }
 
@@ -177,7 +179,8 @@ export type IWorkState = {
 }
 
 export type IWorkHistoryRequest = {
-	workHistory: Omit<IWorkHistoryRequest, 'items'> & { items: workItem[] }
+	items: workItem[]
+	portfolioLink: string
 }
 
 export interface IRefreshRequest {

@@ -1,12 +1,14 @@
 import { Button, DatePicker, Input, Select } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
+import { IError } from '../../../api/types'
 import { useAppSelector } from '../../../store'
+import { setEducation } from '../../../store/creators/MainCreators'
 import {
 	countryId,
 	documentNumber,
@@ -29,30 +31,50 @@ export const EducationForm = () => {
 	const { t, i18n } = useTranslation()
 	const { data: educationLevel } = useGetEducationLevelQuery(i18n.language)
 	const { data: countries } = useGetCountriesQuery(i18n.language)
-	const [error, setError] = useState(false)
+	const [IsEmpty, changeIsEmpty] = useState<boolean>(false)
 	const info = useAppSelector(state => state.Education)
+
+	useEffect(() => {
+		changeIsEmpty(false)
+	}, [i18n.language])
 
 	const handleCancel = () => {
 		navigate('/documents')
 	}
-	const handleOk = () => {
-		if (!saveInStore()) {
+	const handleOk = async () => {
+		if (await IsOK()) {
 			if (userRole === 'SEEKER') navigate('/work')
 			else navigate('/user')
-		} else {
-			setError(true)
 		}
 	}
-	const saveInStore = () => {
-		let IsEmpty = info.some(
-			item =>
-				item.documentNumber === '' ||
-				item.documentSeries === '' ||
-				item.nameOfInstitute === '' ||
-				item.graduateYear === '' ||
-				item.specialization === ''
+
+	const IsOK = async () => {
+		let IsCorrectStrFields = info.some(item =>
+			[item.nameOfInstitute, item.specialization].some(
+				el => /^[\p{L}\s()0-9]+$/u.test(el) && !/\s\s/.test(el)
+			)
 		)
-		return IsEmpty
+		let IsCorrectPasswordData = info.some(item =>
+			[item.documentNumber, item.documentSeries].some(el =>
+				/^[0-9]{4}$/.test(el)
+			)
+		)
+		let IsCorrectDate = info.some(item => item.graduateYear !== '')
+		if (!IsCorrectStrFields || !IsCorrectPasswordData || !IsCorrectDate) {
+			changeIsEmpty(true)
+			return false
+		}
+		const requestData = info.map(({ id, ...rest }) => rest)
+		const response = await setEducation({ educations: requestData }, dispatch)
+
+		if (response == null) return true
+		else {
+			if (response === 403) {
+				navigate('/')
+			} else {
+				return false
+			}
+		}
 	}
 	const handleSkip = () => {
 		navigate('/user')
@@ -85,8 +107,9 @@ export const EducationForm = () => {
 								<div className="grid grid-cols-2 gap-10 mt-5 w-full max-sm:grid-cols-1 max-sm:gap-4">
 									<div>
 										<p>{t('higherEducational')}</p>
+
 										<Select
-											className="block mt-2"
+											className="w-full mt-2"
 											size="large"
 											onChange={e =>
 												dispatch(
@@ -104,16 +127,14 @@ export const EducationForm = () => {
 															label: el.name
 													  }))
 											}
-											value={
-												info.filter(element => element.id === item.id)[0]
-													.educationLevelId
-											}
+											value={item.educationLevelId}
 										/>
 									</div>
 									<div>
 										<p>{t('countryEducation')}</p>
+
 										<Select
-											className="block mt-2"
+											className="w-full mt-2"
 											size="large"
 											onChange={e =>
 												dispatch(
@@ -131,131 +152,172 @@ export const EducationForm = () => {
 															label: el.shortName
 													  }))
 											}
-											value={
-												info.filter(element => element.id === item.id)[0]
-													.countryId
-											}
+											value={item.countryId}
 										/>
 									</div>
 								</div>
 								<p className="mt-4 self-start">{t('nameEducational')}</p>
-								<Input
-									placeholder={t('kfu')}
-									size="large"
-									className={clsx(
-										'mt-2',
-										!info[item.id].nameOfInstitute && error && 'border-rose-500'
-									)}
-									onChange={e => {
-										dispatch(
-											nameOfInstitute({
-												id: item.id,
-												nameOfInstitute: e.target.value
-											})
-										)
-									}}
-									value={info[item.id].nameOfInstitute}
-								/>
+								<div className="mt-2">
+									<Input
+										placeholder={t('kfu')}
+										maxLength={250}
+										size="large"
+										className={clsx(
+											'w-full',
+											IsEmpty &&
+												(!/^[\p{L}\s()0-9]+$/u.test(item.nameOfInstitute) ||
+													/\s\s/.test(item.nameOfInstitute)) &&
+												'border-rose-500'
+										)}
+										onChange={e => {
+											dispatch(
+												nameOfInstitute({
+													id: item.id,
+													nameOfInstitute: e.target.value
+												})
+											)
+										}}
+										value={info[item.id].nameOfInstitute}
+									/>
+									{IsEmpty &&
+										(!/^[\p{L}\s()0-9]+$/u.test(item.nameOfInstitute) ||
+											/\s\s/.test(item.nameOfInstitute)) && (
+											<span className="text-red-500 text-sm">
+												{t('EmptyFolder')}
+											</span>
+										)}
+								</div>
 								<div className="grid grid-cols-2 mt-4 gap-x-10 gap-y-4 w-full max-sm:gap-5">
 									<div>
 										<p>{t('diplomaSeries')}</p>
-										<Input
-											placeholder="0000"
-											size="large"
-											className={clsx(
-												'mt-2',
-												!info.filter(element => element.id === item.id)[0]
-													.documentSeries &&
-													error &&
-													'border-rose-500'
+										<div className="mt-2">
+											<Input
+												placeholder="0000"
+												size="large"
+												className={clsx(
+													'w-full',
+													IsEmpty &&
+														!/^[0-9]{4}$/.test(item.documentSeries) &&
+														'border-rose-500'
+												)}
+												onChange={e =>
+													dispatch(
+														documentSeries({
+															id: item.id,
+															documentSeries: e.target.value
+														})
+													)
+												}
+												value={
+													info.filter(element => element.id === item.id)[0]
+														.documentSeries
+												}
+												maxLength={4}
+											/>
+											{IsEmpty && !/^[0-9]{4}$/.test(item.documentSeries) && (
+												<span className="text-red-500 text-sm">
+													{t('EmptyFolder')}
+												</span>
 											)}
-											onChange={e =>
-												dispatch(
-													documentSeries({
-														id: item.id,
-														documentSeries: e.target.value
-													})
-												)
-											}
-											value={
-												info.filter(element => element.id === item.id)[0]
-													.documentSeries
-											}
-											maxLength={4}
-										/>
+										</div>
 									</div>
 									<div>
 										<p>{t('diplomaNumber')}</p>
-										<Input
-											placeholder="0000"
-											size="large"
-											className={clsx(
-												'mt-2',
-												!info[item.id].documentNumber &&
-													error &&
-													'border-rose-500'
+										<div className="mt-2">
+											<Input
+												placeholder="0000"
+												size="large"
+												className={clsx(
+													'w-full',
+													IsEmpty &&
+														!/^[0-9]{4}$/.test(item.documentNumber) &&
+														'border-rose-500'
+												)}
+												onChange={e =>
+													dispatch(
+														documentNumber({
+															id: item.id,
+															documentNumber: e.target.value
+														})
+													)
+												}
+												value={info[item.id].documentNumber}
+												maxLength={4}
+											/>
+											{IsEmpty && !/^[0-9]{4}$/.test(item.documentNumber) && (
+												<span className="text-red-500 text-sm">
+													{t('EmptyFolder')}
+												</span>
 											)}
-											onChange={e =>
-												dispatch(
-													documentNumber({
-														id: item.id,
-														documentNumber: e.target.value
-													})
-												)
-											}
-											value={info[item.id].documentNumber}
-											maxLength={4}
-										/>
+										</div>
 									</div>
 									<div>
 										<p>{t('graduateYear')}</p>
-										<DatePicker
-											className={clsx(
-												'mt-2 shadow w-full',
-												error &&
-													info[item.id].graduateYear === '' &&
-													'border-rose-500'
+										<div className="mt-2">
+											<DatePicker
+												className={clsx(
+													'shadow w-full',
+													IsEmpty &&
+														item.graduateYear === '' &&
+														'border-rose-500'
+												)}
+												onChange={e => {
+													dispatch(
+														graduateYear({
+															id: item.id,
+															graduateYear:
+																e == null ? '' : e.format('YYYY').toString()
+														})
+													)
+												}}
+												size="large"
+												placeholder={new Date().getFullYear().toString()}
+												picker="year"
+												value={
+													info[item.id].graduateYear !== ''
+														? dayjs(info[item.id].graduateYear, 'YYYY')
+														: null
+												}
+											/>
+											{IsEmpty && item.graduateYear === '' && (
+												<span className="text-red-500 text-sm">
+													{t('DateError')}
+												</span>
 											)}
-											onChange={e => {
-												dispatch(
-													graduateYear({
-														id: item.id,
-														graduateYear:
-															e == null ? '' : e.format('YYYY').toString()
-													})
-												)
-											}}
-											size="large"
-											placeholder={new Date().getFullYear().toString()}
-											picker="year"
-											value={
-												info[item.id].graduateYear !== ''
-													? dayjs(info[item.id].graduateYear, 'YYYY')
-													: null
-											}
-										/>
+										</div>
 									</div>
 									<div>
 										<p>{t('specialization')}</p>
-										<Input
-											placeholder={t('webDesign')}
-											size="large"
-											className={clsx(
-												'mt-2',
-												error &&
-													info[item.id].specialization === '' &&
-													'border-rose-500'
-											)}
-											onChange={e =>
-												dispatch(
-													specialization({
-														id: item.id,
-														specialization: e.target.value
-													})
-												)
-											}
-											value={info[item.id].specialization}
-										/>
+										<div className="mt-2">
+											<Input
+												placeholder={t('webDesign')}
+												size="large"
+												className={clsx(
+													'w-full',
+													IsEmpty &&
+														(!/^[\p{L}\s()]+$/u.test(item.specialization) ||
+															/\s\s/.test(item.specialization)) &&
+														'border-rose-500'
+												)}
+												onChange={e =>
+													dispatch(
+														specialization({
+															id: item.id,
+															specialization: e.target.value
+														})
+													)
+												}
+												value={info[item.id].specialization}
+												maxLength={400}
+											/>
+											{IsEmpty &&
+												(!/^[\p{L}\s()]+$/u.test(item.specialization) ||
+													/\s\s/.test(item.specialization)) && (
+													<span className="text-red-500 text-sm">
+														{t('EmptyFolder')}
+													</span>
+												)}
+										</div>
 									</div>
 								</div>
 							</div>

@@ -10,7 +10,6 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-import { useAppDispatch } from '../../store'
 import { useAppSelector } from '../../store'
 import { setRole } from '../../store/creators/MainCreators'
 import { putRole } from '../../store/reducers/FormReducers/InfoUserReducer'
@@ -18,19 +17,24 @@ import { putRole } from '../../store/reducers/FormReducers/InfoUserReducer'
 import { ImagesLayout } from './ImagesLayout'
 
 export const InfoUser = () => {
-	const castDispatch = useAppDispatch()
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 	const roleState = useAppSelector(state => state.InfoUser?.role)
 	const { t } = useTranslation()
-	const handleOk = () => {
-		castDispatch(setRole({ role: roleState }))
-		dispatch(putRole(roleState))
-		navigate('/form')
+	const handleOk = async () => {
+		const response = await setRole({ role: roleState }, dispatch)
+		if (response === null) {
+			dispatch(putRole(roleState))
+			navigate('/form')
+		} else {
+			navigate('/')
+		}
 	}
 	const handleSkip = () => {
 		navigate('/user')
 	}
+	var userRole = JSON.parse(localStorage.getItem('userInfo') || '').roles
+	userRole = userRole.length > 0 ? userRole[0].type : ''
 	return (
 		<ImagesLayout first>
 			<div className="w-full flex justify-center ">
@@ -58,7 +62,11 @@ export const InfoUser = () => {
 										name="vertical-list"
 										id="GUEST"
 										ripple={false}
-										defaultChecked={roleState === 'GUEST' ? true : false}
+										defaultChecked={
+											[roleState, userRole].some(el => el === 'GUEST')
+												? true
+												: false
+										}
 										className="hover:before:opacity-0 mt-1"
 										containerProps={{
 											className: 'p-0'
@@ -85,7 +93,11 @@ export const InfoUser = () => {
 										containerProps={{
 											className: 'p-0'
 										}}
-										defaultChecked={roleState === 'SCHOOL' ? true : false}
+										defaultChecked={
+											[roleState, userRole].some(el => el === 'SCHOOL')
+												? true
+												: false
+										}
 									/>
 								</ListItemPrefix>
 								<Typography color="blue-gray" className="font-medium text-sm">
@@ -108,7 +120,11 @@ export const InfoUser = () => {
 										containerProps={{
 											className: 'p-0'
 										}}
-										defaultChecked={roleState === 'ABIT' ? true : false}
+										defaultChecked={
+											[roleState, userRole].some(el => el === 'ABIT')
+												? true
+												: false
+										}
 									/>
 								</ListItemPrefix>
 								<Typography color="blue-gray" className="font-medium text-sm">
@@ -131,7 +147,11 @@ export const InfoUser = () => {
 										containerProps={{
 											className: 'p-0'
 										}}
-										defaultChecked={roleState === 'ATTEND' ? true : false}
+										defaultChecked={
+											[roleState, userRole].some(el => el === 'ATTEND')
+												? true
+												: false
+										}
 									/>
 								</ListItemPrefix>
 								<Typography color="blue-gray" className="font-medium text-sm">
@@ -154,7 +174,11 @@ export const InfoUser = () => {
 										containerProps={{
 											className: 'p-0'
 										}}
-										defaultChecked={roleState === 'SEEKER' ? true : false}
+										defaultChecked={
+											[roleState, userRole].some(el => el === 'SEEKER')
+												? true
+												: false
+										}
 									/>
 								</ListItemPrefix>
 								<Typography color="blue-gray" className="font-medium text-sm">

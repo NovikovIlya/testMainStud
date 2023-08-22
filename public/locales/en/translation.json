@@ -101,5 +101,16 @@
 	"LongPopupMiddle": "in the section “About me” You will be able to connect other roles,",
 	"LongPopupBottom": "by filling out additional information",
 	"LoginError": "invalid username or password",
-	"DateError": "please specify the date"
+	"DateError": "please specify the date",
+	"EmptyFolder": "the field cannot be empty or contains invalid characters",
+	"ShortLengthPhoneNumber": "the phone number must consist of 11 characters",
+	"BadSnils": "incorrect SNILS set",
+	"BadInn": "incorrect INN set",
+	"BadDivisionCode": "the unit code is set incorrectly",
+	"BadLink": "the link address is specified incorrectly",
+	"Start": "Start",
+	"End": "End",
+	"BadEmail": "the mail is incorrectly set",
+	"BadPhone": "the phone number is incorrectly specified",
+	"BadPassport": "the passport value is set incorrectly"
 }

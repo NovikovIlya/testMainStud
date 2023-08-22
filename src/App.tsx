@@ -29,7 +29,7 @@ const App = () => {
 	const currentUrl = useLocation()
 
 	const dataApi = async () => {
-		const res = await dispatch(refreshToken())
+		const res = await refreshToken(dispatch)
 		if (res === 200) {
 			const isTrue = [
 				'/form',
@@ -49,6 +49,7 @@ const App = () => {
 		}
 	}
 	useEffect(() => {
+		console.log('here')
 		if (
 			localStorage.getItem('access') !== null ||
 			localStorage.getItem('userInfo') !== null ||
@@ -56,6 +57,7 @@ const App = () => {
 		) {
 			dataApi()
 		} else {
+			console.log('here')
 			const isBasePages = [
 				'/',
 				'/login',
@@ -63,6 +65,7 @@ const App = () => {
 				'/api/register/approve',
 				'/registration/checkingEmail'
 			].some(el => el === currentUrl.pathname)
+			console.log(isBasePages)
 			isBasePages ? navigate(currentUrl.pathname) : navigate('/')
 		}
 	}, [])

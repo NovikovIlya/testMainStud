@@ -11,7 +11,6 @@ import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import { IError } from '../../../api/types'
-import { useAppDispatch } from '../../../store'
 import { useAppSelector } from '../../../store'
 import { setDocument } from '../../../store/creators/MainCreators'
 import {
@@ -25,14 +24,14 @@ import {
 	snils
 } from '../../../store/reducers/FormReducers/DocumentReducer'
 import { useGetDocumentsQuery } from '../../../store/slice/documentSlice'
+import '../GeneralStyles.scss'
 import { ImagesLayout } from '../ImagesLayout'
 
 export const DocumentForm = () => {
 	const { t, i18n } = useTranslation()
-	const [error, setError] = useState<IError | null>(null)
+	const [IsEmpty, changeIsEmpty] = useState<boolean>(false)
 
 	dayjs.locale(i18n.language)
-	const castDispatch = useAppDispatch()
 	const dispatch = useDispatch()
 	const userRole = useAppSelector(state => state.InfoUser.role)
 	const data = useAppSelector(state => state.Document)
@@ -44,8 +43,8 @@ export const DocumentForm = () => {
 	const handleCancel = () => {
 		navigate('/form')
 	}
-	const handleOk = () => {
-		if (!saveInStore()) {
+	const handleOk = async () => {
+		if (await IsOK()) {
 			if (userRole === 'SCHOOL') navigate('/parent')
 			else navigate('/education')
 		}
@@ -54,15 +53,41 @@ export const DocumentForm = () => {
 		navigate('/user')
 	}
 	useEffect(() => {
-		setError(null)
+		changeIsEmpty(false)
 	}, [i18n.language])
 
-	const saveInStore = async () => {
-		const response = await castDispatch(setDocument({ document: data }))
-		if (response == null) return true
-		else {
-			setError(response)
+	const IsOK = async () => {
+		const IsCorrectPasswordData = [
+			data.passportNumber,
+			data.passportSeries
+		].some(el => /^[0-9]{4}$/.test(el))
+
+		const IsCorrectSNILS = /^[0-9]{3}\-[0-9]{3}\-[0-9]{3} [0-9]{2}$/.test(
+			data.snils
+		)
+		const IsCorrectDivisionCode = /^[0-9]{3}\-[0-9]{3}$/.test(data.divisionCode)
+		const IsCorrectINN = /^[0-9]{12}$/.test(data.inn)
+		const IsCorrectWhomIssued =
+			!/\s\s/.test(data.issuedBy) && /^[\p{L}\s]+$/u.test(data.issuedBy)
+		if (
+			!IsCorrectPasswordData ||
+			!IsCorrectSNILS ||
+			!IsCorrectINN ||
+			!IsCorrectDivisionCode ||
+			data.dateIssue === '' ||
+			!IsCorrectWhomIssued
+		) {
+			changeIsEmpty(true)
 			return false
+		}
+		const response = await setDocument({ document: data }, dispatch)
+		if (response === 200) return true
+		else {
+			if (response === 403) {
+				navigate('/')
+			} else {
+				return false
+			}
 		}
 	}
 	return (
@@ -72,16 +97,17 @@ export const DocumentForm = () => {
 					<div className="flex w-full flex-col">
 						<p className="text-xl font-bold">{t('documents')}</p>
 						<span className="mt-4 text-sm">{t('documentType')}</span>
+
 						<Select
-							className="mt-2"
+							className="w-full mt-2 mb-4"
 							size="large"
 							onChange={e => dispatch(documentTypeId(e))}
-							defaultValue={data.documentTypeId}
 							options={
 								documents !== undefined
 									? documents.map(el => ({ value: el.id, label: el.type }))
 									: []
 							}
+							value={data.documentTypeId}
 						/>
 					</div>
 					<div className="flex w-full flex-col mt-4 text-sm">
@@ -89,15 +115,15 @@ export const DocumentForm = () => {
 						<div className="grid grid-cols-2 gap-4 mt-4 max-sm:grid-cols-1 max-sm:gap-4">
 							<div>
 								<p>{t('divisionCode')}</p>
-								<p>
+								<div className="mt-2">
 									<Input
 										placeholder="000-000"
 										size="large"
 										value={data?.divisionCode}
 										className={clsx(
-											'mt-2 shadow ',
-											error !== null &&
-												error.details.some(el => el.field === 'divisionCode') &&
+											'shadow ',
+											IsEmpty &&
+												!/^[0-9]{3}\-[0-9]{3}$/.test(data.divisionCode) &&
 												'border-rose-500'
 										)}
 										maxLength={7}
@@ -105,29 +131,24 @@ export const DocumentForm = () => {
 											dispatch(divisionCode(e.currentTarget.value))
 										}
 									/>
-									{error !== null && (
-										<span className="text-red-500 text-sm">
-											{error.details.map(el => {
-												if (el.field === 'divisionCode')
-													return <p>{el.message}</p>
-												else return ''
-											})}
-										</span>
-									)}
-								</p>
+									{IsEmpty &&
+										!/^[0-9]{3}\-[0-9]{3}$/.test(data.divisionCode) && (
+											<span className="text-red-500 text-sm">
+												{t('BadDivisionCode')}
+											</span>
+										)}
+								</div>
 							</div>
 							<div>
 								<p>{t('whenIssued')}</p>
-								<p>
+								<div className="mt-2">
 									<ConfigProvider
 										locale={i18n.language === 'ru' ? ruPicker : enPicker}
 									>
 										<DatePicker
 											className={clsx(
-												'mt-2 shadow w-full',
-												error !== null &&
-													data.dateIssue === '' &&
-													'border-rose-500'
+												'shadow w-full',
+												IsEmpty && data.dateIssue === '' && 'border-rose-500'
 											)}
 											onChange={e =>
 												dispatch(
@@ -147,23 +168,21 @@ export const DocumentForm = () => {
 											}
 										/>
 									</ConfigProvider>
-									{error !== null && data.dateIssue === '' && (
-										<p className="text-red-500 text-sm">{t('DateError')}</p>
+									{IsEmpty && data.dateIssue === '' && (
+										<div className="text-red-500 text-sm">{t('DateError')}</div>
 									)}
-								</p>
+								</div>
 							</div>
 							<div>
 								<p>{t('series')}</p>
-								<p>
+								<div className="mt-2">
 									<Input
 										placeholder="0000"
 										size="large"
 										className={clsx(
-											'mt-2 shadow ',
-											error &&
-												error.details.some(
-													el => el.field === 'passportSeries'
-												) &&
+											'shadow ',
+											IsEmpty &&
+												!/^[0-9]{4}$/.test(data.passportSeries) &&
 												'border-rose-500'
 										)}
 										maxLength={4}
@@ -172,29 +191,23 @@ export const DocumentForm = () => {
 											data.passportSeries !== '' ? data.passportSeries : ''
 										}
 									/>
-									{error !== null && (
+									{IsEmpty && !/^[0-9]{4}$/.test(data.passportSeries) && (
 										<span className="text-red-500 text-sm">
-											{error.details.map(el => {
-												if (el.field === 'passportSeries')
-													return <p>{el.message}</p>
-												else return ''
-											})}
+											{t('BadPassport')}
 										</span>
 									)}
-								</p>
+								</div>
 							</div>
 							<div>
 								<p>{t('number')}</p>
-								<p>
+								<div className="mt-2">
 									<Input
 										placeholder="0000"
 										size="large"
 										className={clsx(
-											'mt-2 shadow ',
-											error !== null &&
-												error.details.some(
-													el => el.field === 'passportNumber'
-												) &&
+											'shadow',
+											IsEmpty &&
+												!/^[0-9]{4}$/.test(data.passportNumber) &&
 												'border-rose-500'
 										)}
 										maxLength={4}
@@ -203,95 +216,89 @@ export const DocumentForm = () => {
 											data.passportNumber !== '' ? data.passportNumber : ''
 										}
 									/>
-									{error !== null && (
+									{IsEmpty && !/^[0-9]{4}$/.test(data.passportNumber) && (
 										<span className="text-red-500 text-sm">
-											{error.details.map(el => {
-												if (el.field === 'passportNumber')
-													return <p>{el.message}</p>
-												else return ''
-											})}
+											{t('BadPassport')}
 										</span>
 									)}
-								</p>
+								</div>
 							</div>
 						</div>
 						<div className="mt-4">
 							<p>{t('issuedWhom')}</p>
-							<p>
+							<div className="mt-2">
 								<Input
 									placeholder={t('location')}
 									size="large"
+									maxLength={200}
 									className={clsx(
-										'mt-2 shadow ',
-										error != null &&
-											error.details.some(el => el.field === 'issuedBy') &&
+										'shadow ',
+										IsEmpty &&
+											(!/^[\p{L}\s]+$/u.test(data.issuedBy) ||
+												/\s\s/.test(data.issuedBy)) &&
 											'border-rose-500'
 									)}
 									onChange={e => dispatch(issuedBy(e.target.value))}
 									value={data.issuedBy !== '' ? data.issuedBy : ''}
 								/>
-								{error !== null && (
-									<span className="text-red-500 text-sm">
-										{error.details.map(el => {
-											if (el.field === 'issuedBy') return <p>{el.message}</p>
-											else return ''
-										})}
-									</span>
-								)}
-							</p>
+								{IsEmpty &&
+									(!/^[\p{L}\s]+$/u.test(data.issuedBy) ||
+										/\s\s/.test(data.issuedBy)) && (
+										<span className="text-red-500 text-sm">
+											{t('EmptyFolder')}
+										</span>
+									)}
+							</div>
 						</div>
 					</div>
 					<div className="mt-4 w-full">
 						<p className="text-sm">{t('additionalDocuments')}</p>
 						<div className="flex text-sm flex-col w-full mt-4">
 							<p>{t('snils')}</p>
-							<p>
+							<div className="mt-2">
 								<Input
 									size="large"
-									placeholder="0000"
+									placeholder="000-000-000 00"
 									className={clsx(
-										'mt-2 shadow ',
-										error !== null &&
-											error.details.some(el => el.field === 'snils') &&
+										'shadow ',
+										IsEmpty &&
+											!/^[0-9]{3}\-[0-9]{3}\-[0-9]{3} [0-9]{2}$/.test(
+												data.snils
+											) &&
 											'border-rose-500'
 									)}
-									maxLength={4}
+									maxLength={14}
 									onChange={e => dispatch(snils(e.target.value))}
 									value={data.snils}
 								/>
-								{error !== null && (
-									<span className="text-red-500 text-sm">
-										{error.details.map(el => {
-											if (el.field === 'snils') return <p>{el.message}</p>
-											else return ''
-										})}
-									</span>
-								)}
-							</p>
+								{IsEmpty &&
+									!/^[0-9]{3}\-[0-9]{3}\-[0-9]{3} [0-9]{2}$/.test(
+										data.snils
+									) && (
+										<span className="text-red-500 text-sm">
+											{t('BadSnils')}
+										</span>
+									)}
+							</div>
 							<p className="mt-4">{t('inn')}</p>
-							<p>
+							<div className="mt-2">
 								<Input
 									size="large"
-									placeholder="0000"
-									maxLength={4}
+									placeholder="000000000000"
+									maxLength={12}
 									className={clsx(
-										'mt-2 shadow ',
-										error !== null &&
-											error.details.some(el => el.field === 'inn') &&
+										'shadow ',
+										IsEmpty &&
+											!/^[0-9]{12}$/.test(data.inn) &&
 											'border-rose-500'
 									)}
 									onChange={e => dispatch(inn(e.target.value))}
 									value={data.inn}
 								/>
-								{error !== null && (
-									<span className="text-red-500 text-sm">
-										{error.details.map(el => {
-											if (el.field === 'inn') return <p>{el.message}</p>
-											else return ''
-										})}
-									</span>
+								{IsEmpty && !/^[0-9]{12}$/.test(data.inn) && (
+									<span className="text-red-500 text-sm">{t('BadInn')}</span>
 								)}
-							</p>
+							</div>
 						</div>
 					</div>
 					<div className="w-full flex justify-center items-center gap-8 mt-[60px]">

@@ -12,7 +12,8 @@ const endpoints = {
 			EDUCATION: '/users/me/education',
 			PARENT: '/users/me/parent',
 			JOB: '/users/me/work-history',
-			FORM: '/users/me'
+			FORM: '/users/me',
+			ADDRESS: '/users/me/address'
 		},
 		COUNTRIES: '/country',
 		EDUCATION_LEVEL: '/education/levels',

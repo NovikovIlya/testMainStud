@@ -8,6 +8,9 @@ import {
 	document,
 	education,
 	form,
+	getAddress,
+	getForm,
+	getJob,
 	job,
 	login,
 	parent,
@@ -16,6 +19,7 @@ import {
 	role
 } from '../../api/index'
 import {
+	IAdress,
 	IDocumentRequest,
 	IEducationRequest,
 	IError,
@@ -221,4 +225,55 @@ export const setEducation = async (
 		}
 	}
 	return 200
+}
+
+export const getAbUsForm = async (
+	dispatch: Dispatch
+): Promise<formItem | null> => {
+	let response = null
+	try {
+		if ((await refreshToken(dispatch)) === 403) {
+			return null
+		}
+		response = await getForm().then(response => response.data)
+	} catch (e) {
+		if (request.isAxiosError(e) && e.response) {
+			console.log(e.response?.data as IError)
+		}
+	}
+	return response
+}
+
+export const getAbUsAddress = async (
+	dispatch: Dispatch
+): Promise<IAdress | null> => {
+	let response = null
+	try {
+		if ((await refreshToken(dispatch)) === 403) {
+			return null
+		}
+		response = await getAddress().then(response => response.data)
+	} catch (e) {
+		if (request.isAxiosError(e) && e.response) {
+			console.log(e.response?.data as IError)
+		}
+	}
+	return response
+}
+
+export const getAbUsJob = async (
+	dispatch: Dispatch
+): Promise<IWorkHistoryRequest | null> => {
+	let response = null
+	try {
+		if ((await refreshToken(dispatch)) === 403) {
+			return null
+		}
+		response = await getJob().then(response => response.data)
+	} catch (e) {
+		if (request.isAxiosError(e) && e.response) {
+			console.log(e.response?.data as IError)
+		}
+	}
+	return response
 }

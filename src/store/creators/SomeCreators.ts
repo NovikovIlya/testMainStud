@@ -6,11 +6,9 @@ import {
 	registrationFailure
 } from '../reducers/AuthRegReducer'
 
-export const logout =
-	() =>
-	async (dispatch: Dispatch): Promise<void> => {
-		dispatch(logoutSuccess())
-	}
+export const logout = async (dispatch: Dispatch): Promise<void> => {
+	dispatch(logoutSuccess())
+}
 
 export const clearLoginErrors =
 	() =>

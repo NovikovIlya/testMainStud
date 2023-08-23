@@ -9,7 +9,7 @@ import { FC, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 
-import { IError, IUserData } from '../../../../api/types'
+import { IUserData } from '../../../../api/types'
 import { useAppSelector } from '../../../../store'
 import {
 	birthDay,

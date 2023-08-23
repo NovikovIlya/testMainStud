@@ -26,4 +26,4 @@ axiosInstance.interceptors.request.use(
 	error => {
 		console.log(Promise.reject(error))
 	}
-) //${localStorage.getItem('access')}
+)

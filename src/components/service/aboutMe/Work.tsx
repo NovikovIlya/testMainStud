@@ -11,7 +11,11 @@ import {
 } from 'antd'
 import type { UploadProps } from 'antd'
 import clsx from 'clsx'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
+
+import { IWorkHistoryRequest } from '../../../api/types'
+import { getAbUsJob } from '../../../store/creators/MainCreators'
 
 const props: UploadProps = {
 	name: 'file',
@@ -33,6 +37,19 @@ const props: UploadProps = {
 
 export const Work = () => {
 	const [countWork, setCountWork] = useState([0])
+	const dispatch = useDispatch()
+	const [fieldData, setFieldData] = useState<IWorkHistoryRequest | null>(null)
+
+	const getData = async () => {
+		const response = await getAbUsJob(dispatch)
+		setFieldData(response)
+		response !== null && setCountWork([response?.items.length])
+	}
+
+	useEffect(() => {
+		getData()
+	}, [])
+
 	const handleAddWork = () => {
 		setCountWork([...countWork, 1])
 	}

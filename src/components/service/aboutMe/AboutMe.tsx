@@ -1,5 +1,4 @@
 import { DatePicker, Input, Radio, Select, Space, Typography } from 'antd'
-import React from 'react'
 
 import { useAppSelector } from '../../../store'
 

@@ -113,5 +113,6 @@
 	"BadEmail": "the mail is incorrectly set",
 	"BadPhone": "the phone number is incorrectly specified",
 	"BadPassport": "the passport value is set incorrectly",
-	"BadRegEmail": "the email address is incorrect or already occupied"
+	"BadRegEmail": "the email address is incorrect or already occupied",
+	"BadPatronymic": "patronymic contains invalid characters"
 }

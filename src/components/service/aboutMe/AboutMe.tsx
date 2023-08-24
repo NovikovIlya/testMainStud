@@ -1,24 +1,74 @@
-import { DatePicker, Input, Radio, Select, Space, Typography } from 'antd'
+import {
+	Button,
+	ConfigProvider,
+	DatePicker,
+	Input,
+	Radio,
+	Select,
+	Space,
+	Typography
+} from 'antd'
+import ruPicker from 'antd/locale/ru_RU'
+import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 
-import { formItem } from '../../../api/types'
-import { useAppSelector } from '../../../store'
-import { getAbUsForm } from '../../../store/creators/MainCreators'
+import { RootState, useAppSelector } from '../../../store'
+import { getAbUsForm, putAbUsForm } from '../../../store/creators/MainCreators'
+import {
+	allData,
+	birthDay,
+	country,
+	gender,
+	name,
+	patronymic,
+	phone,
+	surName
+} from '../../../store/reducers/FormReducers/FormReducer'
 import { useGetCountriesQuery } from '../../../store/slice/countrySlice'
 
 export const AboutMe = () => {
 	const { t, i18n } = useTranslation()
+	const [IsError, setError] = useState<boolean>(false)
+	const formData = useAppSelector((state: RootState) => state.Form)
 	const { data: countries } = useGetCountriesQuery(i18n.language)
 	const dispatch = useDispatch()
-	let [fieldData, setFieldData] = useState<formItem | null>(null)
+	const user = JSON.parse(localStorage.getItem('userInfo') || '')
 
 	const getData = async () => {
 		const response = await getAbUsForm(dispatch)
 		if (response !== null) {
-			setFieldData(response)
+			dispatch(allData(response))
+		}
+	}
+
+	const setChanges = async () => {
+		const IsCorrectNS = [formData.name, formData.surName].some(el =>
+			/^\p{L}+$/u.test(el)
+		)
+
+		const IsCorrectPatronymic =
+			/^\p{L}+$/u.test(formData.patronymic) || formData.patronymic === ''
+
+		const IsCorrectPhone =
+			/^\+[0-9]\s[0-9]{3}\s[0-9]{3}\-[0-9]{2}\-[0-9]{2}$/.test(formData.phone)
+
+		if (
+			!IsCorrectNS ||
+			!IsCorrectPatronymic ||
+			!IsCorrectPhone ||
+			formData.birthDay === ''
+		) {
+			setError(true)
+		} else {
+			const status = await putAbUsForm(formData, dispatch)
+			if (status === 403) {
+				setError(true)
+			} else {
+				setError(false)
+			}
 		}
 	}
 
@@ -34,9 +84,12 @@ export const AboutMe = () => {
 					<Typography.Text className=" mt-10 opacity-80 text-black text-sm font-normal">
 						Пол
 					</Typography.Text>
-					<Radio.Group defaultValue={1}>
-						<Radio value={1}>Мужской</Radio>
-						<Radio value={2}>Женский</Radio>
+					<Radio.Group
+						onChange={e => dispatch(gender(e.target.value))}
+						value={formData.gender}
+					>
+						<Radio value={'M'}>Мужской</Radio>
+						<Radio value={'W'}>Женский</Radio>
 					</Radio.Group>
 				</Space>
 				<Space direction="vertical" size={'small'}>
@@ -44,43 +97,84 @@ export const AboutMe = () => {
 					<Input
 						placeholder="Фамилия"
 						size="large"
-						className="w-[624px] shadow "
-						defaultValue={fieldData?.surName}
+						maxLength={200}
+						className={clsx(
+							'w-[624px] shadow ',
+							IsError &&
+								!/^\p{L}+$/u.test(formData.surName) &&
+								'border-rose-500'
+						)}
+						onChange={e => dispatch(surName(e.target.value))}
+						value={formData.surName}
 					/>
+					{IsError && !/^\p{L}+$/u.test(formData.surName) && (
+						<div className="text-sm text-rose-500">{t('EmptyFolder')}</div>
+					)}
 				</Space>
 				<Space direction="vertical" size={'small'}>
 					<Typography.Text>Имя</Typography.Text>
 					<Input
 						placeholder="Имя"
 						size="large"
-						className="w-[624px] shadow "
-						defaultValue={fieldData?.name}
+						className={clsx(
+							'w-[624px] shadow ',
+							IsError && !/^\p{L}+$/u.test(formData.name) && 'border-rose-500'
+						)}
+						onChange={e => dispatch(name(e.target.value))}
+						value={formData.name}
 					/>
+					{IsError && !/^\p{L}+$/u.test(formData.name) && (
+						<div className="text-sm text-rose-500">{t('EmptyFolder')}</div>
+					)}
 				</Space>
 				<Space direction="vertical" size={'small'}>
 					<Typography.Text>Отчество</Typography.Text>
 					<Input
 						placeholder="Отчество"
 						size="large"
-						className="w-[624px] shadow "
-						defaultValue={fieldData?.patronymic}
+						className={clsx(
+							'w-[624px] shadow ',
+							IsError &&
+								!/^\p{L}+$/u.test(formData.patronymic) &&
+								formData.patronymic !== '' &&
+								'border-rose-500'
+						)}
+						onChange={e => dispatch(patronymic(e.target.value))}
+						value={formData.patronymic}
 					/>
+					{IsError &&
+						!/^\p{L}+$/u.test(formData.patronymic) &&
+						formData.patronymic !== '' && (
+							<div className="text-sm text-rose-500">{t('BadPatronymic')}</div>
+						)}
 				</Space>
 				<Space direction="vertical" size={'small'}>
 					<Typography.Text>Дата рождения</Typography.Text>
-					<DatePicker
-						placeholder="Дата рождения"
-						size="large"
-						className="w-[624px] shadow "
-						value={
-							fieldData === null
-								? null
-								: dayjs(
-										'DD.MM.YYYY',
-										fieldData?.birthDay.split('-').reverse().join('.')
-								  )
-						}
-					/>
+					<ConfigProvider locale={ruPicker}>
+						<DatePicker
+							placeholder="Дата рождения"
+							size="large"
+							className={clsx(
+								'w-[624px] shadow ',
+								IsError && formData.birthDay === '' && 'border-rose-500'
+							)}
+							format={'DD.MM.YYYY'}
+							onChange={e =>
+								dispatch(birthDay(e == null ? '' : e?.format('YYYY-MM-DD')))
+							}
+							value={
+								formData.birthDay === ''
+									? null
+									: dayjs(
+											formData.birthDay.split('-').reverse().join('.'),
+											'DD.MM.YYYY'
+									  )
+							}
+						/>
+					</ConfigProvider>
+					{IsError && formData.birthDay === '' && (
+						<div className="text-sm text-rose-500">{t('DateError')}</div>
+					)}
 				</Space>
 				<Space direction="vertical" size={'small'}>
 					<Typography.Text>Страна гражданства</Typography.Text>
@@ -88,6 +182,8 @@ export const AboutMe = () => {
 						placeholder="Страна гражданства"
 						size="large"
 						className="w-[624px] shadow "
+						value={formData.countryId}
+						onChange={e => dispatch(country(e))}
 						options={
 							countries == null
 								? []
@@ -98,11 +194,23 @@ export const AboutMe = () => {
 				<Space direction="vertical" size={'small'}>
 					<Typography.Text>Телефон</Typography.Text>
 					<Input
-						placeholder="Телефон"
+						placeholder="+7 999 898-88-00"
 						size="large"
-						className="w-[624px] shadow "
-						defaultValue={fieldData?.phone}
+						className={clsx(
+							'w-[624px] shadow ',
+							IsError &&
+								!/^\+[0-9]\s[0-9]{3}\s[0-9]{3}\-[0-9]{2}\-[0-9]{2}$/.test(
+									formData.phone
+								) &&
+								'border-rose-500'
+						)}
+						onChange={e => dispatch(phone(e.target.value))}
+						value={formData.phone}
 					/>
+					{IsError &&
+						!/^\+[0-9]\s[0-9]{3}\s[0-9]{3}\-[0-9]{2}\-[0-9]{2}$/.test(
+							formData.phone
+						) && <div className="text-sm text-rose-500">{t('BadPhone')}</div>}
 				</Space>
 				<Space direction="vertical" size={'small'}>
 					<Typography.Text>Электронная почта</Typography.Text>
@@ -110,7 +218,16 @@ export const AboutMe = () => {
 						placeholder="Электронная почта"
 						size="large"
 						className="w-[624px] shadow "
+						value={user !== '' ? user.email : ''}
 					/>
+				</Space>
+				<Space direction="vertical" size={'small'} className="mt-4">
+					<Button
+						className="border-solid border-bluekfu border-[1px] text-bluekfu rounded-md"
+						onClick={() => setChanges()}
+					>
+						Изменить
+					</Button>
 				</Space>
 			</Space>
 		</div>

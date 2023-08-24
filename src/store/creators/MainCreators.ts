@@ -1,7 +1,6 @@
 import { Dispatch } from '@reduxjs/toolkit'
 import request from 'axios'
 import { Cookies } from 'react-cookie'
-import { useDispatch } from 'react-redux'
 
 import {
 	approve,
@@ -14,6 +13,9 @@ import {
 	job,
 	login,
 	parent,
+	putAddress,
+	putForm,
+	putJob,
 	refresh,
 	register,
 	role
@@ -276,4 +278,55 @@ export const getAbUsJob = async (
 		}
 	}
 	return response
+}
+
+export const putAbUsJob = async (
+	data: IWorkHistoryRequest,
+	dispatch: Dispatch
+): Promise<number> => {
+	try {
+		if ((await refreshToken(dispatch)) === 403) {
+			return 403
+		}
+		await putJob(data)
+	} catch (e) {
+		if (request.isAxiosError(e) && e.response) {
+			console.log(e.response?.data as IError)
+		}
+	}
+	return 200
+}
+
+export const putAbUsForm = async (
+	data: formItem,
+	dispatch: Dispatch
+): Promise<number> => {
+	try {
+		if ((await refreshToken(dispatch)) === 403) {
+			return 403
+		}
+		await putForm(data)
+	} catch (e) {
+		if (request.isAxiosError(e) && e.response) {
+			console.log(e.response?.data as IError)
+		}
+	}
+	return 200
+}
+
+export const putAbUsAddress = async (
+	data: IAdress,
+	dispatch: Dispatch
+): Promise<number> => {
+	try {
+		if ((await refreshToken(dispatch)) === 403) {
+			return 403
+		}
+		await putAddress(data)
+	} catch (e) {
+		if (request.isAxiosError(e) && e.response) {
+			console.log(e.response?.data as IError)
+		}
+	}
+	return 200
 }

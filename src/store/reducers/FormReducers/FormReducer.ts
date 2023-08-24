@@ -36,12 +36,23 @@ export const FormReducer = createSlice({
 		},
 		country: (state, action: PayloadAction<number>) => {
 			state.countryId = action.payload
+		},
+		allData: (state, action: PayloadAction<formItem>): formItem => {
+			return action.payload
 		}
 	}
 })
 
-export const { name, surName, patronymic, birthDay, gender, phone, country } =
-	FormReducer.actions
+export const {
+	name,
+	surName,
+	patronymic,
+	birthDay,
+	gender,
+	phone,
+	country,
+	allData
+} = FormReducer.actions
 
 export default FormReducer.reducer
 

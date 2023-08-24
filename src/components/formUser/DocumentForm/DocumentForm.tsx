@@ -10,7 +10,6 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-import { IError } from '../../../api/types'
 import { useAppSelector } from '../../../store'
 import { setDocument } from '../../../store/creators/MainCreators'
 import {

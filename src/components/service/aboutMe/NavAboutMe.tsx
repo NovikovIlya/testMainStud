@@ -1,4 +1,7 @@
+import { CloudUploadOutlined, UserOutlined } from '@ant-design/icons'
+import { Avatar, Button, Progress, Typography } from 'antd'
 import clsx from 'clsx'
+import { type } from 'os'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { AboutMeSvg } from '../../../assets/svg/AboutMeSvg'
@@ -6,6 +9,7 @@ import { AddressSvg } from '../../../assets/svg/AddressSvg'
 import { EducationSvg } from '../../../assets/svg/EducationSvg'
 import { MyDocsSvg } from '../../../assets/svg/MyDocsSvg'
 import { WorkSvg } from '../../../assets/svg/WorkSvg'
+import { useAppSelector } from '../../../store'
 
 import { AboutMe } from './AboutMe'
 import { Address } from './Address'
@@ -42,6 +46,7 @@ const navList = [
 ]
 
 export const NavAboutMe = () => {
+	const user = useAppSelector(state => state.Profile.profileData.CurrentData)
 	const { pathname } = useLocation()
 	const navigate = useNavigate()
 	const handleNavigate = (url: string) => {
@@ -66,17 +71,54 @@ export const NavAboutMe = () => {
 	})
 	return (
 		<>
-			<div className="shadowNav">
+			<div className="shadowNav ">
 				<ul className="min-w-[230px] pt-14 flex flex-col gap-4 ">
 					{handleList}
 				</ul>
 			</div>
-			<div className="bg-[#F5F8FB] w-full">
+			<div className="bg-[#F5F8FB] flex w-full">
 				{pathname === navList[0].id && <AboutMe />}
 				{pathname === navList[1].id && <Document />}
 				{pathname === navList[2].id && <Address />}
 				{pathname === navList[3].id && <Education />}
 				{pathname === navList[4].id && <Work />}
+				<div className="p-14 w-full flex justify-center">
+					<div className="h-[630px] bg-white fixed w-full max-w-md rounded-[20px] shadow flex flex-col items-center justify-center">
+						<div>
+							<Avatar
+								size={120}
+								className="bg-[#CBDAF1]"
+								icon={<UserOutlined />}
+							/>
+							<Button
+								type="primary"
+								size="large"
+								shape="circle"
+								className="left-[255px] bottom-[360px] absolute border-4 flex items-center justify-center text-2xl border-solid border-white"
+								icon={<CloudUploadOutlined />}
+							/>
+						</div>
+						<Typography.Text className="text-center text-black text-base font-bold leading-tight mt-5">
+							{user?.firstname} {user?.lastname} {user?.middlename}
+						</Typography.Text>
+						{user?.roles.map(item => (
+							<Typography.Text className="px-5 mt-5 py-[5px] bg-sky-100 rounded-full opacity-60 text-center text-black text-base font-normal leading-tight">
+								{item.type}
+							</Typography.Text>
+						))}
+						<div className="w-[250px] mt-5">
+							<Typography.Text>Профиль заполнен на 69.9%</Typography.Text>
+							<Progress
+								showInfo={false}
+								percent={69.9}
+								strokeColor={{ from: '#108ee9', to: '#87d068' }}
+							/>
+						</div>
+						<Button className="rounded-full mt-5" type="primary" ghost>
+							Посмотреть публичный профиль
+						</Button>
+					</div>
+				</div>
 			</div>
 		</>
 	)

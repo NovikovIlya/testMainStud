@@ -79,7 +79,12 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 		},
 		{
 			label: (
-				<div className="flex items-center gap-[15px] px-[4px] py-[5px]">
+				<div
+					onClick={() => {
+						navigate('/services/aboutMe/aboutMe')
+					}}
+					className="flex items-center gap-[15px] px-[4px] py-[5px]"
+				>
 					<PersonCardSvg />
 					Обо мне
 				</div>

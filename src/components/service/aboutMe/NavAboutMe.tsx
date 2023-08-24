@@ -1,7 +1,6 @@
 import { CloudUploadOutlined, UserOutlined } from '@ant-design/icons'
 import { Avatar, Button, Progress, Typography } from 'antd'
 import clsx from 'clsx'
-import { type } from 'os'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { AboutMeSvg } from '../../../assets/svg/AboutMeSvg'

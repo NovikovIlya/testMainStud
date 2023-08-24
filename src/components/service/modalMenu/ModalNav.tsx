@@ -12,7 +12,7 @@ export const ModalNav = ({ close }: TypeModalProps) => {
 		navigate(url)
 	}
 	return (
-		<Row className="h-screen">
+		<Row>
 			<Col span={8}>
 				<div
 					onClick={() => handleNavigate('/services/aboutMe/aboutMe')}
@@ -35,6 +35,14 @@ export const ModalNav = ({ close }: TypeModalProps) => {
 					className=" h-28 cursor-pointer flex items-center justify-center hover:bg-[#65A1FA] hover:text-white "
 				>
 					Сессия
+				</div>
+			</Col>
+			<Col span={8}>
+				<div
+					onClick={() => handleNavigate('/services/electronicBook/estimation')}
+					className="border-solid border-b-0 border-t border-l-0 border-x-0 border-[#B3B3B3] h-28 cursor-pointer flex items-center justify-center hover:bg-[#65A1FA] hover:text-white "
+				>
+					Электронная зачетная книжка
 				</div>
 			</Col>
 		</Row>

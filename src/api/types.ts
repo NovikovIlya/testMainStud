@@ -200,3 +200,22 @@ export interface IApproveRequest {
 	id: string | null
 	hash: string | null
 }
+
+export type IAdress = {
+	registrationAddress: {
+		countryId: number
+		city: string
+		street: string
+		house: string
+		apartment: string
+		index: string
+	}
+	residenceAddress: {
+		countryId: number
+		city: string
+		street: string
+		house: string
+		apartment: string
+		index: string
+	}
+}

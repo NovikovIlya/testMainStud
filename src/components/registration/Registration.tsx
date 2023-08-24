@@ -22,9 +22,10 @@ const { Title } = Typography
 
 interface IRegProps {
 	changeEmail: (email: string) => void
+	email: string
 }
 
-export const Registration: FC<IRegProps> = ({ changeEmail }) => {
+export const Registration: FC<IRegProps> = ({ changeEmail, email }) => {
 	const navigate = useNavigate()
 	const dispatch = useAppDispatch()
 	const error = useSelector((state: RootState) => state.AuthReg.regData.error)
@@ -66,7 +67,7 @@ export const Registration: FC<IRegProps> = ({ changeEmail }) => {
 					onFinish={onFinish}
 				>
 					<Title className={styles.title}>{t('registration')}</Title>
-					<Inputs error={error} changeEmail={changeEmail} />
+					<Inputs email={email} error={error} changeEmail={changeEmail} />
 					<Password
 						error={error}
 						confirmPassword={confirmPassword}

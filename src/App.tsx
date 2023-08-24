@@ -1,9 +1,7 @@
 import { ConfigProvider } from 'antd'
 import { useEffect, useState } from 'react'
 import { Cookies } from 'react-cookie'
-import { Route, Routes } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
-import { useLocation } from 'react-router-dom'
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 
 import { ApproveEmail } from './components/approve/ApproveEmail'
 import { CheckEmail } from './components/checkEmail/checkEmail'
@@ -31,25 +29,37 @@ const App = () => {
 	const dataApi = async () => {
 		const res = await refreshToken(dispatch)
 		if (res === 200) {
-			const isTrue = [
+			const isRegistrationForms = [
+				'/infoUser',
 				'/form',
 				'/parent',
 				'/work',
 				'/documents',
 				'/education'
 			].some(el => el === currentUrl.pathname)
-			// if (isTrue) {
-			// 	navigate('/infoUser')
-			// } else {
-			// 	navigate(currentUrl.pathname)
-			// }
+			if (isRegistrationForms) {
+				navigate('/infoUser')
+			} else {
+				if (
+					[
+						'/',
+						'/login',
+						'/registration',
+						'/api/register/approve',
+						'/registration/checkingEmail'
+					].some(el => el === currentUrl.pathname)
+				) {
+					navigate('/user')
+				} else {
+					navigate(currentUrl.pathname)
+				}
+			}
 		}
 		if (res === 403) {
 			navigate('/')
 		}
 	}
 	useEffect(() => {
-		console.log('here')
 		if (
 			localStorage.getItem('access') !== null ||
 			localStorage.getItem('userInfo') !== null ||
@@ -57,16 +67,19 @@ const App = () => {
 		) {
 			dataApi()
 		} else {
-			console.log('here')
-			const isBasePages = [
-				'/',
-				'/login',
-				'/registration',
-				'/api/register/approve',
-				'/registration/checkingEmail'
-			].some(el => el === currentUrl.pathname)
-			console.log(isBasePages)
-			isBasePages ? navigate(currentUrl.pathname) : navigate('/')
+			if (
+				[
+					'/',
+					'/login',
+					'/registration',
+					'/api/register/approve',
+					'/registration/checkingEmail'
+				].some(el => el === currentUrl.pathname)
+			) {
+				navigate(currentUrl.pathname)
+			} else {
+				navigate('/')
+			}
 		}
 	}, [])
 
@@ -84,7 +97,7 @@ const App = () => {
 					<Route path="/*" element={<Login />} />
 					<Route
 						path="/registration/*"
-						element={<Registration changeEmail={changeEmail} />}
+						element={<Registration email={email} changeEmail={changeEmail} />}
 					/>
 					<Route path="/user/*" element={<User />} />
 					<Route path="/api/register/approve" element={<ApproveEmail />} />

@@ -15,7 +15,6 @@ export const ApproveEmail = () => {
 	const dispatch = useAppDispatch()
 
 	useEffect(() => {
-		console.log(searchParams.get('id'), searchParams.get('hash'))
 		if (searchParams.get('id') !== null && searchParams.get('hash') !== null) {
 			dispatch(
 				approveEmail({
@@ -23,6 +22,8 @@ export const ApproveEmail = () => {
 					hash: searchParams.get('hash')
 				})
 			)
+		} else {
+			navigate('/')
 		}
 	})
 

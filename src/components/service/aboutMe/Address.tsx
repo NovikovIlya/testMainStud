@@ -1,15 +1,30 @@
 import { Input, Radio, Space, Typography } from 'antd'
 import type { RadioChangeEvent } from 'antd'
 import clsx from 'clsx'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
+
+import { IAdress } from '../../../api/types'
+import { getAbUsAddress } from '../../../store/creators/MainCreators'
 
 export const Address = () => {
 	const [value, setValue] = useState(0)
+	const [fieldData, setFieldData] = useState<IAdress | null>(null)
+	const dispatch = useDispatch()
 
 	const onChange = (e: RadioChangeEvent) => {
 		console.log('radio checked', e.target.value)
 		setValue(e.target.value)
 	}
+
+	const getData = async () => {
+		const response = await getAbUsAddress(dispatch)
+		setFieldData(response)
+	}
+
+	useEffect(() => {
+		getData()
+	}, [])
 
 	return (
 		<div className="m-14 radio">

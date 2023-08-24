@@ -11,8 +11,6 @@ interface IInputsProps {
 }
 export const Inputs: FC<IInputsProps> = ({ error }) => {
 	const { t } = useTranslation()
-	const [values, changeValues] = useState({ email: '', password: '' })
-	console.log(values)
 	return (
 		<>
 			<Form.Item
@@ -20,16 +18,11 @@ export const Inputs: FC<IInputsProps> = ({ error }) => {
 				name="email"
 				style={{ marginBottom: 30 }}
 				validateStatus={error !== null ? 'error' : undefined}
-				help={
-					error == null
-						? ''
-						: error.details.length > 0 && error.details[0].field === 'username'
-						? error.details[0].message
-						: error.error
-				}
+				help={error !== null && <div>{t('LoginError')}</div>}
 			>
 				<Input
 					className="email"
+					maxLength={100}
 					type="text"
 					size="large"
 					placeholder="Email/Login"
@@ -40,26 +33,14 @@ export const Inputs: FC<IInputsProps> = ({ error }) => {
 				className={styles.input}
 				style={{ marginBottom: 30 }}
 				validateStatus={error !== null ? 'error' : undefined}
-				help={
-					error == null
-						? ''
-						: error.details.length > 0 && error.details[0].field === 'password'
-						? error.details[0].message
-						: error.error
-				}
+				help={error !== null && <div>{t('LoginError')}</div>}
 			>
 				<Input.Password
 					className={styles.password}
 					size="large"
+					maxLength={100}
 					type="password"
 					placeholder={t('password')}
-					value={values.password.replaceAll(' ', '6')}
-					onChange={e =>
-						changeValues({
-							...values,
-							password: e.target.value
-						})
-					}
 				/>
 			</Form.Item>
 			<p className={styles.forgot}>{t('rememberPassword')}</p>

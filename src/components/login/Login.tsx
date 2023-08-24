@@ -26,7 +26,6 @@ export const Login = () => {
 
 	useEffect(() => {
 		dispatch(clearLoginErrors())
-		console.log('success')
 	}, [i18n.language])
 
 	const onFinish = (values: { email: string; password: string }) => {

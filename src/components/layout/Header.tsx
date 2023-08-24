@@ -3,6 +3,7 @@ import type { MenuProps } from 'antd'
 import { Dropdown, Space } from 'antd'
 import clsx from 'clsx'
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import {
@@ -19,7 +20,7 @@ import {
 } from '../../assets/svg'
 import { DocumentSvg } from '../../assets/svg/DocumentSvg'
 import PersonalizationSvg from '../../assets/svg/PersonalizationSvg'
-import { useAppDispatch, useAppSelector } from '../../store'
+import { useAppSelector } from '../../store'
 import { logout } from '../../store/creators/SomeCreators'
 import { ModalNav } from '../service/modalMenu/ModalNav'
 
@@ -29,12 +30,36 @@ type TypeHeaderProps = {
 }
 
 export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
-	const dispatch = useAppDispatch()
+	const dispatch = useDispatch()
+	const navigate = useNavigate()
 	const [open, setOpen] = useState(false)
 
 	const user = useAppSelector(state => state.Profile.profileData.CurrentData)
 	const showDrawer = () => {
 		setOpen(!open)
+	}
+
+	const exit = async () => {
+		await logout(dispatch)
+		navigate('/')
+	}
+
+	const getRole = (role: String | undefined) => {
+		switch (role) {
+			case 'ABIT':
+				return 'Абитуриент'
+			case 'STUD':
+				return 'Студент'
+			case 'SCHOOL':
+				return 'Школьник'
+			case 'SEEKER':
+				return 'Слушатель'
+			case undefined:
+			case 'GUEST':
+				return 'Гость'
+			case 'ATTEND':
+				return 'Соискатель'
+		}
 	}
 
 	const onClose = () => {
@@ -83,9 +108,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 			label: (
 				<div
 					className="flex items-center gap-[15px] px-[4px] py-[5px]"
-					onClick={() => {
-						dispatch(logout)
-					}}
+					onClick={() => exit()}
 				>
 					<LogoutSvg />
 					Выйти
@@ -189,9 +212,13 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 									className={clsx('h-full', type === 'service' && 'text-white')}
 								>
 									<div className="font-bold text-sm truncate max-w-[120px]">
-										{user?.lastname}
+										{`${user?.lastname} ${user?.firstname.charAt(0)}. ${
+											user?.middlename === ''
+												? ''
+												: user?.middlename.charAt(0) + '.'
+										}`}
 									</div>
-									<div className="text-sm">{user?.roles[0].type}</div>
+									<div className="text-sm">{getRole(user?.roles[0].type)}</div>
 								</div>
 							</Space>
 						</Dropdown>

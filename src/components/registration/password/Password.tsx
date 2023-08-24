@@ -30,19 +30,23 @@ export const Password: FC<IPasswordProps> = ({
 				name="password"
 				style={{ marginBottom: 30 }}
 				className={styles.input}
-				validateStatus={error !== null ? 'error' : undefined}
+				validateStatus={
+					error !== null &&
+					error.details.length > 0 &&
+					error.details.some(el => el.field === 'password')
+						? 'error'
+						: undefined
+				}
 				help={
-					error == null ? (
-						''
-					) : error.details.length > 0 ? (
+					error !== null &&
+					error.details.length > 0 &&
+					error.details.some(el => el.field === 'password') && (
 						<div>
 							{error.details.map(el => {
 								if (el.field === 'password') return <p>{el.message}</p>
 								else return ''
 							})}
 						</div>
-					) : (
-						error.error
 					)
 				}
 			>

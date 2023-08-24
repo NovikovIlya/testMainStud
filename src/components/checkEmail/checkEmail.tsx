@@ -9,6 +9,7 @@ interface ICheckEmailProps {
 
 export const CheckEmail: FC<ICheckEmailProps> = ({ email }) => {
 	const navigate = useNavigate()
+
 	const buttonEffect = () => {
 		console.log("it's buttons effect")
 	}

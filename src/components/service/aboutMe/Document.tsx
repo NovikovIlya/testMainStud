@@ -11,8 +11,10 @@ import {
 	message
 } from 'antd'
 import type { UploadProps } from 'antd'
+import { useTranslation } from 'react-i18next'
 
 import { useAppSelector } from '../../../store'
+import { useGetDocumentsQuery } from '../../../store/slice/documentSlice'
 
 const props: UploadProps = {
 	name: 'file',
@@ -32,6 +34,8 @@ const props: UploadProps = {
 	}
 }
 export const Document = () => {
+	const [t, i18n] = useTranslation()
+	const { data: documents } = useGetDocumentsQuery()
 	const user = useAppSelector(state => state.Profile.profileData.CurrentData)
 	return (
 		<div className="m-14 radio">
@@ -44,6 +48,11 @@ export const Document = () => {
 						placeholder={user?.citizenship}
 						size="large"
 						className="w-[624px] shadow rounded-lg"
+						options={
+							documents == null
+								? []
+								: documents.map(el => ({ value: el.id, label: el.type }))
+						}
 					/>
 				</Space>
 

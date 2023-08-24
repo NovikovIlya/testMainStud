@@ -201,21 +201,16 @@ export interface IApproveRequest {
 	hash: string | null
 }
 
+export type addressItem = {
+	countryId: number
+	city: string
+	street: string
+	house: string
+	apartment: string
+	index: string
+}
+
 export type IAdress = {
-	registrationAddress: {
-		countryId: number
-		city: string
-		street: string
-		house: string
-		apartment: string
-		index: string
-	}
-	residenceAddress: {
-		countryId: number
-		city: string
-		street: string
-		house: string
-		apartment: string
-		index: string
-	}
+	registrationAddress: addressItem
+	residenceAddress: addressItem | null
 }

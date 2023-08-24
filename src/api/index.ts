@@ -60,3 +60,12 @@ export const getJob = (): AxiosPromise<IWorkHistoryRequest> =>
 
 export const getForm = (): AxiosPromise<formItem> =>
 	axiosInstance.get(endpoints.USER.INFO.FORM)
+
+export const putForm = (params: formItem) =>
+	axiosInstance.put(endpoints.USER.INFO.FORM, params)
+
+export const putJob = (params: IWorkHistoryRequest) =>
+	axiosInstance.put(endpoints.USER.INFO.DOCUMENT, params)
+
+export const putAddress = (params: IAdress) =>
+	axiosInstance.put(endpoints.USER.INFO.ADDRESS, params)

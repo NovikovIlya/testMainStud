@@ -93,11 +93,6 @@ export type IEducationLevelRequest = {
 	name: string
 }
 
-export type IIdentifyDocumentRequest = {
-	id: number
-	type: string
-}
-
 export type IRole = {
 	role: TypeRole
 }
@@ -202,15 +197,25 @@ export interface IApproveRequest {
 }
 
 export type addressItem = {
-	countryId: number
-	city: string
-	street: string
-	house: string
-	apartment: string
-	index: string
+	countryId: number | null
+	city: string | null
+	street: string | null
+	house: string | null
+	apartment: string | null
+	index: string | null
 }
 
-export type IAdress = {
+export type IAddress = {
+	registrationAddress: addressItem
+	residenceAddress: addressItem
+}
+
+export type IAddressRequest = {
 	registrationAddress: addressItem
 	residenceAddress: addressItem | null
+}
+
+export type ICountriesDocumentsState = {
+	countries: ICountryRequest[] | null
+	educations: IEducationLevelRequest[] | null
 }

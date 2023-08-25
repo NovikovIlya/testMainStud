@@ -223,7 +223,7 @@ export const ParentForm = () => {
 						size="large"
 						options={
 							documents !== undefined
-								? documents.map(el => ({ value: el.id, label: el.type }))
+								? documents.map(el => ({ value: el.id, label: el.name }))
 								: []
 						}
 						onChange={e => dispatch(documentTypeId(e))}

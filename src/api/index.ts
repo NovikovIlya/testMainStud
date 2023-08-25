@@ -3,7 +3,8 @@ import { AxiosPromise } from 'axios'
 import endpoints from './endpoints'
 import { axiosInstance } from './instance'
 import {
-	IAdress,
+	IAddress,
+	IAddressRequest,
 	IApproveRequest,
 	IAuthSuccess,
 	IDocumentRequest,
@@ -52,7 +53,7 @@ export const role = (params: IRole) =>
 export const document = (params: IDocumentRequest) =>
 	axiosInstance.post(endpoints.USER.INFO.DOCUMENT, params)
 
-export const getAddress = (): AxiosPromise<IAdress> =>
+export const getAddress = (): AxiosPromise<IAddress> =>
 	axiosInstance.get(endpoints.USER.INFO.ADDRESS)
 
 export const getJob = (): AxiosPromise<IWorkHistoryRequest> =>
@@ -67,5 +68,5 @@ export const putForm = (params: formItem) =>
 export const putJob = (params: IWorkHistoryRequest) =>
 	axiosInstance.put(endpoints.USER.INFO.DOCUMENT, params)
 
-export const putAddress = (params: IAdress) =>
+export const putAddress = (params: IAddressRequest) =>
 	axiosInstance.put(endpoints.USER.INFO.ADDRESS, params)

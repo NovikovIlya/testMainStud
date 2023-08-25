@@ -33,8 +33,12 @@ export const InfoUser = () => {
 	const handleSkip = () => {
 		navigate('/user')
 	}
-	var userRole = JSON.parse(localStorage.getItem('userInfo') || '').roles
-	userRole = userRole.length > 0 ? userRole[0].type : ''
+
+	var userRole = ''
+	if (localStorage.getItem('userInfo')) {
+		var userInfo = JSON.parse(localStorage.getItem('userInfo') || '')
+		userRole = userInfo.roles.length > 0 ? userInfo.roles[0].type : ''
+	}
 	return (
 		<ImagesLayout first>
 			<div className="w-full flex justify-center ">

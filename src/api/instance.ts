@@ -13,7 +13,14 @@ export const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
 	config => {
 		if (
-			['role', 'document', 'education', 'parent', 'work-history'].some(
+			[
+				'role',
+				'document',
+				'education',
+				'parent',
+				'work-history',
+				'address'
+			].some(
 				el => config.url === '/users/me/' + el || config.url === '/users/me'
 			)
 		) {

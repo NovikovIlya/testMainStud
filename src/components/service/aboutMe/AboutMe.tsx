@@ -17,6 +17,7 @@ import { useDispatch } from 'react-redux'
 
 import { RootState, useAppSelector } from '../../../store'
 import { getAbUsForm, putAbUsForm } from '../../../store/creators/MainCreators'
+import { addCountries } from '../../../store/reducers/FormReducers/CountriesEducationReducer'
 import {
 	allData,
 	birthDay,
@@ -31,11 +32,15 @@ import { useGetCountriesQuery } from '../../../store/slice/countrySlice'
 
 export const AboutMe = () => {
 	const { t, i18n } = useTranslation()
+	const [SkipCountriesQuery, changeQuerySkip] = useState<boolean>(true)
 	const [IsError, setError] = useState<boolean>(false)
 	const formData = useAppSelector((state: RootState) => state.Form)
 	const { data: countries } = useGetCountriesQuery(i18n.language)
 	const dispatch = useDispatch()
 	const user = JSON.parse(localStorage.getItem('userInfo') || '')
+	const countryStorage = useAppSelector(
+		(state: RootState) => state.CountriesEducation.countries
+	)
 
 	const getData = async () => {
 		const response = await getAbUsForm(dispatch)
@@ -72,9 +77,19 @@ export const AboutMe = () => {
 		}
 	}
 
+	const { data } = useGetCountriesQuery(i18n.language, {
+		skip: SkipCountriesQuery
+	})
+
 	useEffect(() => {
-		getData()
-	}, [])
+		if (data) {
+			getData()
+			dispatch(addCountries(data))
+			changeQuerySkip(true)
+		} else {
+			changeQuerySkip(false)
+		}
+	}, [data])
 
 	return (
 		<div className="m-14 radio">
@@ -185,9 +200,12 @@ export const AboutMe = () => {
 						value={formData.countryId}
 						onChange={e => dispatch(country(e))}
 						options={
-							countries == null
+							countryStorage == null
 								? []
-								: countries.map(el => ({ value: el.id, label: el.shortName }))
+								: countryStorage.map(el => ({
+										value: el.id,
+										label: el.shortName
+								  }))
 						}
 					/>
 				</Space>

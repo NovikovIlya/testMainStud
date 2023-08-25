@@ -103,7 +103,7 @@ export const DocumentForm = () => {
 							onChange={e => dispatch(documentTypeId(e))}
 							options={
 								documents !== undefined
-									? documents.map(el => ({ value: el.id, label: el.type }))
+									? documents.map(el => ({ value: el.id, label: el.name }))
 									: []
 							}
 							value={data.documentTypeId}

@@ -21,7 +21,8 @@ import {
 	role
 } from '../../api/index'
 import {
-	IAdress,
+	IAddress,
+	IAddressRequest,
 	IDocumentRequest,
 	IEducationRequest,
 	IError,
@@ -248,7 +249,7 @@ export const getAbUsForm = async (
 
 export const getAbUsAddress = async (
 	dispatch: Dispatch
-): Promise<IAdress | null> => {
+): Promise<IAddress | null> => {
 	let response = null
 	try {
 		if ((await refreshToken(dispatch)) === 403) {
@@ -315,7 +316,7 @@ export const putAbUsForm = async (
 }
 
 export const putAbUsAddress = async (
-	data: IAdress,
+	data: IAddressRequest,
 	dispatch: Dispatch
 ): Promise<number> => {
 	try {

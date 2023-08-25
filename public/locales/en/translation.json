@@ -114,5 +114,7 @@
 	"BadPhone": "the phone number is incorrectly specified",
 	"BadPassport": "the passport value is set incorrectly",
 	"BadRegEmail": "the email address is incorrect or already occupied",
-	"BadPatronymic": "patronymic contains invalid characters"
+	"BadPatronymic": "patronymic contains invalid characters",
+	"BadIndex": "the index is specified incorrectly",
+	"BadSymbols": "the field contains invalid characters"
 }

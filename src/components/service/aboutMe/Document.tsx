@@ -51,7 +51,7 @@ export const Document = () => {
 						options={
 							documents == null
 								? []
-								: documents.map(el => ({ value: el.id, label: el.type }))
+								: documents.map(el => ({ value: el.id, label: el.name }))
 						}
 					/>
 				</Space>

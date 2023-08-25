@@ -47,7 +47,7 @@ const navList = [
 	{
 		id: '/services/aboutMe/parent',
 		icon: <ParentSvg />,
-		name: 'Работа'
+		name: 'Родители'
 	}
 ]
 

@@ -7,6 +7,7 @@ import { AboutMeSvg } from '../../../assets/svg/AboutMeSvg'
 import { AddressSvg } from '../../../assets/svg/AddressSvg'
 import { EducationSvg } from '../../../assets/svg/EducationSvg'
 import { MyDocsSvg } from '../../../assets/svg/MyDocsSvg'
+import { ParentSvg } from '../../../assets/svg/ParentSvg'
 import { WorkSvg } from '../../../assets/svg/WorkSvg'
 import { useAppSelector } from '../../../store'
 
@@ -14,6 +15,7 @@ import { AboutMe } from './AboutMe'
 import { Address } from './Address'
 import { Document } from './Document'
 import { Education } from './Education'
+import { Parent } from './Parent'
 import { Work } from './Work'
 
 const navList = [
@@ -40,6 +42,11 @@ const navList = [
 	{
 		id: '/services/aboutMe/work',
 		icon: <WorkSvg />,
+		name: 'Работа'
+	},
+	{
+		id: '/services/aboutMe/parent',
+		icon: <ParentSvg />,
 		name: 'Работа'
 	}
 ]
@@ -81,6 +88,7 @@ export const NavAboutMe = () => {
 				{pathname === navList[2].id && <Address />}
 				{pathname === navList[3].id && <Education />}
 				{pathname === navList[4].id && <Work />}
+				{pathname === navList[5].id && <Parent />}
 				<div className="p-14 w-full flex justify-center">
 					<div className="h-[630px] bg-white fixed w-full max-w-md rounded-[20px] shadow flex flex-col items-center justify-center">
 						<div>

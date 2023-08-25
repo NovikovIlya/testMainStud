@@ -62,7 +62,7 @@ export const Work = () => {
 				<Typography.Title level={3}>Работа</Typography.Title>
 				<Checkbox>Я трудоустроен на данный момент</Checkbox>
 
-				{countWork.map(item => (
+				{countWork.map((item, index) => (
 					<>
 						<Space>
 							<Typography.Text className="text-black text-sm font-bold">
@@ -72,7 +72,7 @@ export const Work = () => {
 								onClick={handleDeleteWork}
 								className={clsx(
 									'cursor-pointer opacity-40 text-center text-black text-sm font-normal leading-[18px]',
-									item === 0 && 'hidden'
+									index === 0 && 'hidden'
 								)}
 							>
 								Удалить

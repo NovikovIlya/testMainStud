@@ -7,6 +7,7 @@ import { AboutMeSvg } from '../../../assets/svg/AboutMeSvg'
 import { AddressSvg } from '../../../assets/svg/AddressSvg'
 import { EducationSvg } from '../../../assets/svg/EducationSvg'
 import { MyDocsSvg } from '../../../assets/svg/MyDocsSvg'
+import { ParentSvg } from '../../../assets/svg/ParentSvg'
 import { WorkSvg } from '../../../assets/svg/WorkSvg'
 import { useAppSelector } from '../../../store'
 
@@ -14,6 +15,7 @@ import { AboutMe } from './AboutMe'
 import { Address } from './Address'
 import { Document } from './Document'
 import { Education } from './Education'
+import { Parent } from './Parent'
 import { Work } from './Work'
 
 const navList = [
@@ -41,6 +43,11 @@ const navList = [
 		id: '/services/aboutMe/work',
 		icon: <WorkSvg />,
 		name: 'Работа'
+	},
+	{
+		id: '/services/aboutMe/parent',
+		icon: <ParentSvg />,
+		name: 'Родители'
 	}
 ]
 

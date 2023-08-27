@@ -5,12 +5,11 @@ import clsx from 'clsx'
 import dayjs from 'dayjs'
 import 'dayjs/locale/en'
 import 'dayjs/locale/ru'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-import { IError } from '../../../api/types'
 import { useAppSelector } from '../../../store'
 import { setJob } from '../../../store/creators/MainCreators'
 import {
@@ -45,9 +44,6 @@ export const WorkForm = () => {
 	const handleSkip = () => {
 		navigate('/user')
 	}
-	useEffect(() => {
-		changeIsEmpty(false)
-	}, [i18n.language])
 
 	const IsOK = async () => {
 		const IsCorrectString = data.items.some(item =>
@@ -58,10 +54,11 @@ export const WorkForm = () => {
 		const IsCorrectDates = data.items.some(item =>
 			[item.startDate, item.endDate].some(el => el !== '')
 		)
-		const IsCorrectLink =
-			/^(?:https?:\/\/)?(?:www\.)?([a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*)(?:\/[^\s]*)?$/.test(
-				data.portfolioLink
-			)
+		const IsCorrectLink = !data.portfolioLink
+			? true
+			: /^(?:https?:\/\/)?(?:www\.)?([a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*)(?:\/[^\s]*)?$/.test(
+					data.portfolioLink
+			  )
 		if (!IsCorrectDates || !IsCorrectString || !IsCorrectLink) {
 			changeIsEmpty(true)
 			return false
@@ -75,12 +72,10 @@ export const WorkForm = () => {
 			dispatch
 		)
 
-		if (response == null) return true
+		if (response === 200) return true
 		else {
 			if (response === 403) {
 				navigate('/')
-			} else {
-				return false
 			}
 		}
 	}
@@ -277,15 +272,17 @@ export const WorkForm = () => {
 							className={clsx(
 								'w-full',
 								IsEmpty &&
+									data.portfolioLink &&
 									!/^(?:https?:\/\/)?(?:www\.)?([a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*)(?:\/[^\s]*)?$/.test(
 										data.portfolioLink
 									) &&
 									'border-rose-500'
 							)}
 							onChange={e => dispatch(portfolioLink(e.target.value))}
-							value={data.portfolioLink}
+							value={!data.portfolioLink ? '' : data.portfolioLink}
 						/>
 						{IsEmpty &&
+							data.portfolioLink &&
 							!/^(?:https?:\/\/)?(?:www\.)?([a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*)(?:\/[^\s]*)?$/.test(
 								data.portfolioLink
 							) && <span className="text-red-500 text-sm">{t('BadLink')}</span>}

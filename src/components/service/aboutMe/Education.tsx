@@ -1,6 +1,7 @@
 import { QuestionOutlined, UploadOutlined } from '@ant-design/icons'
 import {
 	Button,
+	DatePicker,
 	Input,
 	Select,
 	Space,
@@ -10,6 +11,37 @@ import {
 	message
 } from 'antd'
 import type { UploadProps } from 'antd'
+import clsx from 'clsx'
+import dayjs from 'dayjs'
+import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+
+import { IEducationError, IEducationState } from '../../../api/types'
+import { RootState, useAppSelector } from '../../../store'
+import {
+	addEducationItemRequest,
+	deleteEducationItemRequest,
+	getEducationItemRequest,
+	putEducationItemRequest
+} from '../../../store/creators/MainCreators'
+import {
+	addCountries,
+	addEducations
+} from '../../../store/reducers/FormReducers/CountriesEducationReducer'
+import {
+	allData,
+	countryId,
+	documentNumber,
+	documentSeries,
+	educationLevelId,
+	graduateYear,
+	nameOfInstitute,
+	specialization
+} from '../../../store/reducers/FormReducers/EducationReducer'
+import { useGetCountriesQuery } from '../../../store/slice/countrySlice'
+import { useGetEducationLevelQuery } from '../../../store/slice/educationLevelSlice'
 
 const props: UploadProps = {
 	name: 'file',
@@ -30,8 +62,162 @@ const props: UploadProps = {
 }
 
 export const Education = () => {
+	const dispatch = useDispatch()
+	const navigate = useNavigate()
+	const { t, i18n } = useTranslation()
+	const [SkipCountriesQuery, changeQuerySkip] = useState<boolean>(true)
+	const educationData = useAppSelector((state: RootState) => state.Education)
+	const { data: educationLevel } = useGetEducationLevelQuery(i18n.language, {
+		skip: SkipCountriesQuery
+	})
+	const { data: countries } = useGetCountriesQuery(i18n.language, {
+		skip: SkipCountriesQuery
+	})
+	const countriesStorage = useAppSelector(
+		(state: RootState) => state.CountriesEducation.countries
+	)
+	const educationStorage = useAppSelector(
+		(state: RootState) => state.CountriesEducation.educations
+	)
+
+	const getData = async () => {
+		const response = await getEducationItemRequest(dispatch)
+		if (response !== null) {
+			dispatch(allData(response))
+		}
+	}
+
+	const [updateItems, setUpdate] = useState<boolean>(true)
+	const [IsError, setError] = useState<IEducationError | null>(null)
+
+	const convertToString = (field: any): string => {
+		if (typeof field === 'string') {
+			return field
+		} else {
+			return ''
+		}
+	}
+
+	const checkEducationItem = (item: IEducationState): boolean => {
+		var haveError = false
+
+		var errorPattern = {
+			id: item.id,
+			nameOfInstitute: false,
+			documentNumber: false,
+			documentSeries: false,
+			graduateYear: false,
+			specialization: false
+		}
+
+		if (
+			item.documentNumber === null ||
+			(item.documentNumber !== null && !/^[0-9]{4}$/.test(item.documentNumber))
+		) {
+			haveError = true
+			errorPattern.documentNumber = true
+		}
+
+		if (
+			item.documentSeries === null ||
+			(item.documentSeries !== null && !/^[0-9]{4}$/.test(item.documentSeries))
+		) {
+			haveError = true
+			errorPattern.documentSeries = true
+		}
+		if (
+			item.nameOfInstitute === null ||
+			(item.nameOfInstitute !== null &&
+				(/\s\s/.test(item.nameOfInstitute) ||
+					!/^[\p{L}\s()0-9]+$/u.test(item.nameOfInstitute)))
+		) {
+			haveError = true
+			errorPattern.nameOfInstitute = true
+		}
+		if (
+			item.specialization === null ||
+			(item.specialization !== null &&
+				(/\s\s/.test(item.specialization) ||
+					!/^[\p{L}\s.,]+$/u.test(item.specialization)))
+		) {
+			haveError = true
+			errorPattern.specialization = true
+		}
+		if (!item.graduateYear) {
+			haveError = true
+			errorPattern.graduateYear = true
+		}
+
+		haveError && setError(errorPattern)
+		IsError !== null && !haveError && setError(null)
+
+		return haveError
+	}
+
+	const handleUpdateEducation = async (item: IEducationState) => {
+		if (!checkEducationItem(item)) {
+			const status = await putEducationItemRequest(
+				item.id.toString(),
+				{
+					nameOfInstitute: item.nameOfInstitute,
+					documentNumber: item.documentNumber,
+					documentSeries: item.documentSeries,
+					graduateYear: item.graduateYear,
+					specialization: item.specialization,
+					educationLevelId: item.educationLevelId,
+					countryId: item.countryId
+				},
+
+				dispatch
+			)
+			if (status === 200) {
+				setUpdate(true)
+			} else {
+				console.log('403')
+			}
+		}
+	}
+
+	const handleDeleteEducation = async (id: string) => {
+		const response = await deleteEducationItemRequest(id, dispatch)
+		if (response === 200) setUpdate(true)
+		else console.log('403')
+	}
+
+	const handleAddEducation = async () => {
+		const item = {
+			nameOfInstitute: null,
+			documentNumber: null,
+			documentSeries: null,
+			graduateYear: null,
+			specialization: null,
+			educationLevelId: 1,
+			countryId: 1
+		}
+		const response = await addEducationItemRequest(item, dispatch)
+		if (response === 200) setUpdate(true)
+		else console.log('403')
+	}
+
+	useEffect(() => {
+		if (educationLevel && countries) {
+			dispatch(addEducations(educationLevel))
+			dispatch(addCountries(countries))
+			changeQuerySkip(true)
+		} else {
+			changeQuerySkip(false)
+		}
+	}, [educationLevel, countries])
+
+	useEffect(() => {
+		if (updateItems) {
+			getData()
+			setUpdate(false)
+		}
+	}, [updateItems])
+
 	return (
-		<div className="m-14 radio">
+		<div className="m-14 radio lg:m-10 md:m-6 sm:m-2 w-[624px]">
 			<Space direction="vertical" size={20}>
 				<Typography.Title
 					level={3}
@@ -39,81 +225,300 @@ export const Education = () => {
 				>
 					Образование
 				</Typography.Title>
+				{educationData.map(item => (
+					<div key={item.id} className="w-full max-lg:bg-orange-400">
+						<Typography.Text ellipsis className="font-bold mr-3">
+							Данные документа об образовании
+						</Typography.Text>
+						<Typography.Text
+							onClick={() => handleDeleteEducation(item.id.toString())}
+							className="cursor-pointer opacity-40 text-center text-black text-sm font-normal leading-[18px] mr-3"
+						>
+							Удалить
+						</Typography.Text>
+						<Typography.Text
+							onClick={() => handleUpdateEducation(item)}
+							className="cursor-pointer opacity-40 text-center text-black text-sm font-normal leading-[18px]"
+						>
+							Сохранить
+						</Typography.Text>
+						<Space size={'large'} direction="vertical" className="w-full">
+							<div className="grid grid-cols-2 gap-10 mt-5 w-full max-lg:grid-cols-1 max-lg:gap-1">
+								<Space direction="vertical">
+									<Typography.Text>Уровень образования</Typography.Text>
+									<Select
+										placeholder="Основное общее"
+										size="large"
+										className="w-full shadow rounded-lg"
+										defaultValue={
+											educationData.filter(el => el.id === item.id)[0]
+												.educationLevelId
+										}
+										value={
+											educationData.filter(el => el.id === item.id)[0]
+												.educationLevelId
+										}
+										options={
+											!educationStorage
+												? []
+												: educationStorage.map(el => ({
+														value: el.id,
+														label: el.name
+												  }))
+										}
+										onChange={e =>
+											dispatch(
+												educationLevelId({ id: item.id, educationLevelId: e })
+											)
+										}
+									/>
+								</Space>
+								<Space direction="vertical">
+									<Typography.Text>
+										Страна получения образования
+									</Typography.Text>
+									<Select
+										placeholder="Россия"
+										size="large"
+										className="w-full shadow rounded-lg"
+										defaultValue={
+											educationData.filter(el => el.id === item.id)[0].countryId
+										}
+										value={
+											educationData.filter(el => el.id === item.id)[0].countryId
+										}
+										onChange={e =>
+											dispatch(countryId({ id: item.id, countryId: e }))
+										}
+										options={
+											!countriesStorage
+												? []
+												: countriesStorage.map(el => ({
+														value: el.id,
+														label: el.shortName
+												  }))
+										}
+									/>
+								</Space>
+							</div>
 
-				<Typography.Text ellipsis>
-					Данные документа об образовании
-				</Typography.Text>
-
-				<Space size={'large'}>
-					<Space direction="vertical">
-						<Typography.Text>Уровень образования</Typography.Text>
-						<Select
-							placeholder="Основное общее"
-							size="large"
-							className="w-[300px] shadow rounded-lg"
-						/>
-					</Space>
-					<Space direction="vertical">
-						<Typography.Text>Страна получения образования</Typography.Text>
-						<Select
-							placeholder="Россия"
-							size="large"
-							className="w-[300px] shadow rounded-lg"
-						/>
-					</Space>
-				</Space>
-
-				<Space direction="vertical" size={'small'}>
-					<Typography.Text>Наименование учебного заведения</Typography.Text>
-					<Input
-						placeholder="Лицей №8 г. Бугульма"
-						size="large"
-						className="w-[624px] shadow "
-					/>
-				</Space>
-
-				<Space direction="vertical" size={'small'}>
-					<Typography.Text>Номер диплома</Typography.Text>
-					<Input
-						placeholder="12345678901234"
-						size="large"
-						className="w-[624px] shadow "
-					/>
-				</Space>
-
-				<Space size={'large'}>
-					<Space direction="vertical">
-						<Typography.Text>Год окончания</Typography.Text>
-						<Select
-							placeholder="2022"
-							size="large"
-							className="w-[300px] shadow rounded-lg"
-						/>
-					</Space>
-					<Space direction="vertical">
-						<Typography.Text>Специальность</Typography.Text>
-						<Input
-							placeholder="Веб-дизайн"
-							size="large"
-							className="w-[300px] shadow "
-						/>
-					</Space>
-				</Space>
-				<Space size={'small'}>
-					<Typography.Text className="text-black opacity-80 text-sm font-normal leading-none">
-						Прикрепить документы
-					</Typography.Text>
-					<Tooltip title="Сюда нужно прикрепить документы в формате PDF, данные которых были введены выше,а именно: - скан разворота диплома о высшем образовании, где чётко будут видны серия и номер документа, а также специальность">
-						<Button
-							type="default"
-							className="bg-transparent"
-							icon={<QuestionOutlined className="text-xs" />}
-						/>
-					</Tooltip>
-				</Space>
-				<Upload {...props}>
-					<Button icon={<UploadOutlined />}>Добавить файл</Button>
-				</Upload>
+							<Space direction="vertical" size={'small'} className="w-full">
+								<Typography.Text>
+									Наименование учебного заведения
+								</Typography.Text>
+								<Input
+									placeholder="Лицей №8 г. Бугульма"
+									maxLength={200}
+									size="large"
+									className={clsx(
+										'shadow ',
+										IsError &&
+											IsError.id === item.id &&
+											IsError.nameOfInstitute &&
+											'border-rose-500'
+									)}
+									value={convertToString(
+										educationData.filter(el => el.id === item.id)[0]
+											.nameOfInstitute
+									)}
+									onChange={e =>
+										dispatch(
+											nameOfInstitute({
+												id: item.id,
+												nameOfInstitute: e.target.value
+											})
+										)
+									}
+								/>
+								{IsError &&
+									IsError.id === item.id &&
+									IsError.nameOfInstitute && (
+										<div className="text-sm text-rose-500">
+											{t('EmptyFolder')}
+										</div>
+									)}
+							</Space>
+							<div className="grid grid-cols-2 mt-4 gap-x-10 gap-y-4 w-full max-lg:gap-1 max-lg:grid-cols-1">
+								<Space direction="vertical" size={'small'}>
+									<Typography.Text>Номер диплома</Typography.Text>
+									<Input
+										placeholder="1234"
+										size="large"
+										maxLength={4}
+										className={clsx(
+											'shadow ',
+											IsError &&
+												IsError.id === item.id &&
+												IsError.documentNumber &&
+												'border-rose-500'
+										)}
+										value={convertToString(
+											educationData.filter(el => el.id === item.id)[0]
+												.documentNumber
+										)}
+										onChange={e =>
+											dispatch(
+												documentNumber({
+													id: item.id,
+													documentNumber: e.target.value
+												})
+											)
+										}
+									/>
+									{IsError &&
+										IsError.id === item.id &&
+										IsError.documentNumber && (
+											<div className="text-sm text-rose-500">
+												{t('EmptyFolder')}
+											</div>
+										)}
+								</Space>
+								<Space direction="vertical" size={'small'}>
+									<Typography.Text>Серия диплома</Typography.Text>
+									<Input
+										placeholder="1234"
+										size="large"
+										maxLength={4}
+										className={clsx(
+											'shadow ',
+											IsError &&
+												IsError.id === item.id &&
+												IsError.documentSeries &&
+												'border-rose-500'
+										)}
+										value={convertToString(
+											educationData.filter(el => el.id === item.id)[0]
+												.documentSeries
+										)}
+										onChange={e =>
+											dispatch(
+												documentSeries({
+													id: item.id,
+													documentSeries: e.target.value
+												})
+											)
+										}
+									/>
+									{IsError &&
+										IsError.id === item.id &&
+										IsError.documentSeries && (
+											<div className="text-sm text-rose-500">
+												{t('EmptyFolder')}
+											</div>
+										)}
+								</Space>
+								<Space direction="vertical">
+									<Typography.Text>Год окончания</Typography.Text>
+									<DatePicker
+										className={clsx(
+											'shadow w-full',
+											IsError &&
+												IsError.id === item.id &&
+												IsError.graduateYear &&
+												'border-rose-500'
+										)}
+										onChange={e => {
+											dispatch(
+												graduateYear({
+													id: item.id,
+													graduateYear:
+														e == null ? '' : e.format('YYYY').toString()
+												})
+											)
+										}}
+										size="large"
+										placeholder={new Date().getFullYear().toString()}
+										picker="year"
+										value={
+											convertToString(
+												educationData.filter(el => el.id === item.id)[0]
+													.graduateYear
+											) !== ''
+												? dayjs(
+														convertToString(
+															educationData.filter(el => el.id === item.id)[0]
+																.graduateYear
+														),
+														'YYYY'
+												  )
+												: null
+										}
+									/>
+									{IsError &&
+										IsError.id === item.id &&
+										IsError.graduateYear && (
+											<div className="text-sm text-rose-500">
+												{t('DateError')}
+											</div>
+										)}
+								</Space>
+								<Space direction="vertical">
+									<Typography.Text>Специальность</Typography.Text>
+									<Input
+										placeholder="Веб-дизайн"
+										size="large"
+										className={clsx(
+											'w-full shadow ',
+											IsError &&
+												IsError.id === item.id &&
+												IsError.specialization &&
+												'border-rose-500'
+										)}
+										value={convertToString(
+											educationData.filter(el => el.id === item.id)[0]
+												.specialization
+										)}
+										onChange={e =>
+											dispatch(
+												specialization({
+													id: item.id,
+													specialization: e.target.value
+												})
+											)
+										}
+									/>
+									{IsError &&
+										IsError.id === item.id &&
+										IsError.specialization && (
+											<div className="text-sm text-rose-500">
+												{t('EmptyFolder')}
+											</div>
+										)}
+								</Space>
+							</div>
+						</Space>
+						<Space direction="vertical">
+							<Space size={'small'} className="mt-5">
+								<Typography.Text className="text-black opacity-80 text-sm font-normal leading-none">
+									Прикрепить документы
+								</Typography.Text>
+								<Tooltip title="Сюда нужно прикрепить документы в формате PDF, данные которых были введены выше,а именно: - скан разворота диплома о высшем образовании, где чётко будут видны серия и номер документа, а также специальность">
+									<Button
+										type="default"
+										className="bg-transparent"
+										icon={<QuestionOutlined className="text-xs" />}
+									/>
+								</Tooltip>
+							</Space>
+							<Upload {...props}>
+								<Button icon={<UploadOutlined />}>Добавить файл</Button>
+							</Upload>
+						</Space>
+					</div>
+				))}
+			</Space>
+			<Space
+				direction="vertical"
+				size={'large'}
+				className="w-full flex items-center"
+			>
+				<Button
+					className="rounded-full text-center p-0 w-8 h-8 text-xl"
+					type="primary"
+					onClick={handleAddEducation}
+				>
+					+
+				</Button>
 			</Space>
 		</div>
 	)

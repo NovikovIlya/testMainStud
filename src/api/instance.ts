@@ -13,15 +13,12 @@ export const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
 	config => {
 		if (
-			[
-				'role',
-				'document',
-				'education',
-				'parent',
-				'work-history',
-				'address'
-			].some(
-				el => config.url === '/users/me/' + el || config.url === '/users/me'
+			['role', 'document', 'parent', 'address'].some(
+				el =>
+					config.url === '/users/me/' + el ||
+					config.url === '/users/me' ||
+					config.url?.includes('work-history') ||
+					config.url?.includes('education')
 			)
 		) {
 			config.headers['Authorization'] =

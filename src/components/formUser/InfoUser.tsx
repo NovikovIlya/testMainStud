@@ -23,7 +23,7 @@ export const InfoUser = () => {
 	const { t } = useTranslation()
 	const handleOk = async () => {
 		const response = await setRole({ role: roleState }, dispatch)
-		if (response === null) {
+		if (response === 200) {
 			dispatch(putRole(roleState))
 			navigate('/form')
 		} else {

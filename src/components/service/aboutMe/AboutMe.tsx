@@ -35,7 +35,6 @@ export const AboutMe = () => {
 	const [SkipCountriesQuery, changeQuerySkip] = useState<boolean>(true)
 	const [IsError, setError] = useState<boolean>(false)
 	const formData = useAppSelector((state: RootState) => state.Form)
-	const { data: countries } = useGetCountriesQuery(i18n.language)
 	const dispatch = useDispatch()
 	const user = JSON.parse(localStorage.getItem('userInfo') || '')
 	const countryStorage = useAppSelector(
@@ -77,19 +76,24 @@ export const AboutMe = () => {
 		}
 	}
 
-	const { data } = useGetCountriesQuery(i18n.language, {
+	const { data: countries } = useGetCountriesQuery(i18n.language, {
 		skip: SkipCountriesQuery
 	})
 
 	useEffect(() => {
-		if (data) {
-			getData()
-			dispatch(addCountries(data))
+		getData()
+	}, [])
+
+	useEffect(() => {
+		if (!countryStorage) changeQuerySkip(false)
+	}, [countryStorage])
+
+	useEffect(() => {
+		if (countries) {
+			dispatch(addCountries(countries))
 			changeQuerySkip(true)
-		} else {
-			changeQuerySkip(false)
 		}
-	}, [data])
+	}, [countries])
 
 	return (
 		<div className="m-14 radio">

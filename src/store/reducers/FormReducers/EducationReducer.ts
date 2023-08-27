@@ -20,6 +20,12 @@ export const EducationReducer = createSlice({
 	name: 'Education',
 	initialState,
 	reducers: {
+		allData: (
+			state,
+			action: PayloadAction<IEducationState[]>
+		): IEducationState[] => {
+			return action.payload
+		},
 		idAdd: (state, action: PayloadAction<number>) => {
 			state.push({ ...generalState, id: action.payload })
 		},
@@ -30,44 +36,50 @@ export const EducationReducer = createSlice({
 			state,
 			action: PayloadAction<{ id: number; nameOfInstitute: string }>
 		) => {
-			state[action.payload.id].nameOfInstitute = action.payload.nameOfInstitute
+			state.filter(el => el.id === action.payload.id)[0].nameOfInstitute =
+				action.payload.nameOfInstitute
 		},
 		educationLevelId: (
 			state,
 			action: PayloadAction<{ id: number; educationLevelId: number }>
 		) => {
-			state[action.payload.id].educationLevelId =
+			state.filter(el => el.id === action.payload.id)[0].educationLevelId =
 				action.payload.educationLevelId
 		},
 		documentNumber: (
 			state,
 			action: PayloadAction<{ id: number; documentNumber: string }>
 		) => {
-			state[action.payload.id].documentNumber = action.payload.documentNumber
+			state.filter(el => el.id === action.payload.id)[0].documentNumber =
+				action.payload.documentNumber
 		},
 		documentSeries: (
 			state,
 			action: PayloadAction<{ id: number; documentSeries: string }>
 		) => {
-			state[action.payload.id].documentSeries = action.payload.documentSeries
+			state.filter(el => el.id === action.payload.id)[0].documentSeries =
+				action.payload.documentSeries
 		},
 		countryId: (
 			state,
 			action: PayloadAction<{ id: number; countryId: number }>
 		) => {
-			state[action.payload.id].countryId = action.payload.countryId
+			state.filter(el => el.id === action.payload.id)[0].countryId =
+				action.payload.countryId
 		},
 		graduateYear: (
 			state,
 			action: PayloadAction<{ id: number; graduateYear: string }>
 		) => {
-			state[action.payload.id].graduateYear = action.payload.graduateYear
+			state.filter(el => el.id === action.payload.id)[0].graduateYear =
+				action.payload.graduateYear
 		},
 		specialization: (
 			state,
 			action: PayloadAction<{ id: number; specialization: string }>
 		) => {
-			state[action.payload.id].specialization = action.payload.specialization
+			state.filter(el => el.id === action.payload.id)[0].specialization =
+				action.payload.specialization
 		}
 	}
 })
@@ -81,7 +93,8 @@ export const {
 	documentSeries,
 	countryId,
 	graduateYear,
-	specialization
+	specialization,
+	allData
 } = EducationReducer.actions
 
 export default EducationReducer.reducer

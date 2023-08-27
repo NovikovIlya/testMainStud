@@ -11,9 +11,12 @@ import {
 	message
 } from 'antd'
 import type { UploadProps } from 'antd'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useDispatch } from 'react-redux'
 
-import { useAppSelector } from '../../../store'
+import { RootState, useAppSelector } from '../../../store'
+import { addDocuments } from '../../../store/reducers/FormReducers/CountriesEducationReducer'
 import { useGetDocumentsQuery } from '../../../store/slice/documentSlice'
 
 const props: UploadProps = {
@@ -35,8 +38,29 @@ const props: UploadProps = {
 }
 export const Document = () => {
 	const [t, i18n] = useTranslation()
-	const { data: documents } = useGetDocumentsQuery()
+	const dispatch = useDispatch()
+
+	const [SkipCountriesQuery, changeQuerySkip] = useState<boolean>(true)
 	const user = useAppSelector(state => state.Profile.profileData.CurrentData)
+	const documentStorage = useAppSelector(
+		(state: RootState) => state.CountriesEducation.documents
+	)
+
+	const { data: documents } = useGetDocumentsQuery(i18n.language, {
+		skip: SkipCountriesQuery
+	})
+
+	useEffect(() => {
+		if (!documentStorage) changeQuerySkip(false)
+	}, [documentStorage])
+
+	useEffect(() => {
+		if (documents) {
+			dispatch(addDocuments(documents))
+			changeQuerySkip(true)
+		}
+	}, [documents])
+
 	return (
 		<div className="m-14 radio">
 			<Space direction="vertical" size={20}>
@@ -49,10 +73,11 @@ export const Document = () => {
 						size="large"
 						className="w-[624px] shadow rounded-lg"
 						options={
-							documents == null
+							!documentStorage
 								? []
-								: documents.map(el => ({ value: el.id, label: el.name }))
+								: documentStorage.map(el => ({ value: el.id, label: el.type }))
 						}
+						value={1}
 					/>
 				</Space>
 

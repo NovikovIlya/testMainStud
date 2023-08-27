@@ -9,10 +9,14 @@ import {
 	IAuthSuccess,
 	IDocumentRequest,
 	IEducationRequest,
+	IEducationState,
 	IParentRequest,
 	IRole,
 	IWorkHistoryRequest,
-	formItem
+	IWorkState,
+	educationItem,
+	formItem,
+	workItem
 } from './types'
 import {
 	IAuthRequest,
@@ -36,7 +40,7 @@ export const approve = (params: IApproveRequest): AxiosPromise<IAuthSuccess> =>
 	axiosInstance.post(endpoints.REG.APPROVE, params)
 
 export const job = (params: IWorkHistoryRequest) =>
-	axiosInstance.post(endpoints.USER.INFO.JOB, params)
+	axiosInstance.post(endpoints.USER.INFO.JOB.JOB, params)
 
 export const form = (params: formItem) =>
 	axiosInstance.post(endpoints.USER.INFO.FORM, params)
@@ -56,8 +60,8 @@ export const document = (params: IDocumentRequest) =>
 export const getAddress = (): AxiosPromise<IAddress> =>
 	axiosInstance.get(endpoints.USER.INFO.ADDRESS)
 
-export const getJob = (): AxiosPromise<IWorkHistoryRequest> =>
-	axiosInstance.get(endpoints.USER.INFO.JOB)
+export const getJob = (): AxiosPromise<IWorkState> =>
+	axiosInstance.get(endpoints.USER.INFO.JOB.JOB)
 
 export const getForm = (): AxiosPromise<formItem> =>
 	axiosInstance.get(endpoints.USER.INFO.FORM)
@@ -65,8 +69,29 @@ export const getForm = (): AxiosPromise<formItem> =>
 export const putForm = (params: formItem) =>
 	axiosInstance.put(endpoints.USER.INFO.FORM, params)
 
-export const putJob = (params: IWorkHistoryRequest) =>
-	axiosInstance.put(endpoints.USER.INFO.DOCUMENT, params)
+export const putPortfolioLink = (params: { portfolioLink: string }) =>
+	axiosInstance.put(endpoints.USER.INFO.JOB.JOB, params)
+
+export const addJobItem = (params: workItem) =>
+	axiosInstance.post(endpoints.USER.INFO.JOB.JOBITEM, params)
+
+export const updateJobItem = (id: string, data: workItem) =>
+	axiosInstance.put(endpoints.USER.INFO.JOB.JOBITEM + '/' + id, data)
+
+export const deleteJobItem = (id: string) =>
+	axiosInstance.delete(endpoints.USER.INFO.JOB.JOBITEM + '/' + id)
 
 export const putAddress = (params: IAddressRequest) =>
 	axiosInstance.put(endpoints.USER.INFO.ADDRESS, params)
+
+export const getEducation = (): AxiosPromise<IEducationState[]> =>
+	axiosInstance.get(endpoints.USER.INFO.EDUCATION)
+
+export const deleteEducation = (id: string) =>
+	axiosInstance.delete(endpoints.USER.INFO.EDUCATION + '/' + id)
+
+export const putEducation = (id: string, params: educationItem) =>
+	axiosInstance.put(endpoints.USER.INFO.EDUCATION + '/' + id, params)
+
+export const addEducation = (params: educationItem) =>
+	axiosInstance.post(endpoints.USER.INFO.EDUCATION, params)

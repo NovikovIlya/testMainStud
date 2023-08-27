@@ -93,6 +93,11 @@ export type IEducationLevelRequest = {
 	name: string
 }
 
+export type IDocumentsRequest = {
+	id: number
+	type: string
+}
+
 export type IRole = {
 	role: TypeRole
 }
@@ -121,13 +126,13 @@ export type IDocument = {
 export type IDocumentRequest = { document: IDocument }
 
 export type educationItem = {
-	nameOfInstitute: string
-	educationLevelId: number
-	documentNumber: string
-	documentSeries: string
-	countryId: number
-	graduateYear: string
-	specialization: string
+	nameOfInstitute: string | null
+	educationLevelId: number | null
+	documentNumber: string | null
+	documentSeries: string | null
+	countryId: number | null
+	graduateYear: string | null
+	specialization: string | null
 }
 
 export type IEducationRequest = { educations: educationItem[] }
@@ -164,18 +169,18 @@ export type workItem = {
 	name: string
 	startDate: string
 	endDate: string | null
-	responsibilities: string
+	responsibilities: string | null
 	additionalInfo: string
 }
 
 export type IWorkState = {
 	items: (workItem & { id: number })[]
-	portfolioLink: string
+	portfolioLink: string | null
 }
 
 export type IWorkHistoryRequest = {
 	items: workItem[]
-	portfolioLink: string
+	portfolioLink: string | null
 }
 
 export interface IRefreshRequest {
@@ -218,4 +223,27 @@ export type IAddressRequest = {
 export type ICountriesDocumentsState = {
 	countries: ICountryRequest[] | null
 	educations: IEducationLevelRequest[] | null
+	documents: IDocumentsRequest[] | null
+}
+
+export type IWorkItemsError = {
+	id: number
+	name: boolean
+	startDate: boolean
+	responsibilities: boolean
+	additionalInfo: boolean
+}
+
+export type IWorkError = {
+	item: IWorkItemsError | null
+	portfolio: boolean
+}
+
+export type IEducationError = {
+	id: number
+	nameOfInstitute: boolean
+	documentNumber: boolean
+	documentSeries: boolean
+	graduateYear: boolean
+	specialization: boolean
 }

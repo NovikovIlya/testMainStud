@@ -10,9 +10,9 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-import { IError } from '../../../api/types'
-import { useAppSelector } from '../../../store'
+import { RootState, useAppSelector } from '../../../store'
 import { setParent } from '../../../store/creators/MainCreators'
+import { addDocuments } from '../../../store/reducers/FormReducers/CountriesEducationReducer'
 import {
 	FIO,
 	dateIssue,
@@ -36,10 +36,30 @@ export const ParentForm = () => {
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 	dayjs.locale(i18n.language)
+	const [SkipCountriesQuery, changeQuerySkip] = useState<boolean>(true)
 	const [IsEmpty, changeIsEmpty] = useState<boolean>(false)
 	const data = useAppSelector(state => state.Parent)
+	const documentStorage = useAppSelector(
+		(state: RootState) => state.CountriesEducation.documents
+	)
 
-	const { data: documents } = useGetDocumentsQuery()
+	const { data: documents } = useGetDocumentsQuery(i18n.language, {
+		skip: SkipCountriesQuery
+	})
+
+	useEffect(() => {
+		if (documentStorage) {
+			changeQuerySkip(true)
+		} else {
+			changeQuerySkip(false)
+		}
+	}, [documentStorage])
+
+	useEffect(() => {
+		if (documents) {
+			dispatch(addDocuments(documents))
+		}
+	}, [documents])
 
 	const handleCancel = () => {
 		navigate('/form')
@@ -50,9 +70,6 @@ export const ParentForm = () => {
 	const handleSkip = () => {
 		navigate('/user')
 	}
-	useEffect(() => {
-		changeIsEmpty(false)
-	}, [i18n.language])
 
 	const IsOK = async () => {
 		const IsCorrectPasswordData = [
@@ -116,12 +133,10 @@ export const ParentForm = () => {
 			dispatch
 		)
 
-		if (response == null) return true
+		if (response === 200) return true
 		else {
 			if (response === 403) {
 				navigate('/')
-			} else {
-				return false
 			}
 		}
 	}
@@ -222,8 +237,8 @@ export const ParentForm = () => {
 						placeholder={t('documentType')}
 						size="large"
 						options={
-							documents !== undefined
-								? documents.map(el => ({ value: el.id, label: el.name }))
+							documentStorage !== null
+								? documentStorage.map(el => ({ value: el.id, label: el.type }))
 								: []
 						}
 						onChange={e => dispatch(documentTypeId(e))}

@@ -5,12 +5,13 @@ import clsx from 'clsx'
 import dayjs from 'dayjs'
 import 'dayjs/locale/en'
 import 'dayjs/locale/ru'
-import { FC, useEffect } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 
 import { IUserData } from '../../../../api/types'
-import { useAppSelector } from '../../../../store'
+import { RootState, useAppSelector } from '../../../../store'
+import { addCountries } from '../../../../store/reducers/FormReducers/CountriesEducationReducer'
 import {
 	birthDay,
 	country,
@@ -28,9 +29,15 @@ interface IInputProps {
 export const Inputs: FC<IInputProps> = ({ IsEmpty }) => {
 	const dispatch = useDispatch()
 	const info = useAppSelector(state => state.Form)
+	const [SkipCountriesQuery, changeQuerySkip] = useState<boolean>(true)
 	const { t, i18n } = useTranslation()
 	dayjs.locale(i18n.language)
-	const { data } = useGetCountriesQuery(i18n.language)
+	const { data: countries } = useGetCountriesQuery(i18n.language, {
+		skip: SkipCountriesQuery
+	})
+	const countryStorage = useAppSelector(
+		(state: RootState) => state.CountriesEducation.countries
+	)
 
 	const userData: IUserData = JSON.parse(localStorage.getItem('userInfo') || '')
 
@@ -42,10 +49,18 @@ export const Inputs: FC<IInputProps> = ({ IsEmpty }) => {
 	}
 
 	useEffect(() => {
-		if (localStorage.getItem('userInfo') !== null) {
-			InitDefaultValues(userData)
+		if (countryStorage) {
+			changeQuerySkip(true)
+		} else {
+			changeQuerySkip(false)
 		}
-	}, [])
+	}, [countryStorage])
+
+	useEffect(() => {
+		if (countries) {
+			dispatch(addCountries(countries))
+		}
+	}, [countries])
 
 	return (
 		<div className="w-full">
@@ -157,9 +172,9 @@ export const Inputs: FC<IInputProps> = ({ IsEmpty }) => {
 					dispatch(country(e))
 				}}
 				options={
-					data == null
+					countryStorage == null
 						? []
-						: data.map(el => ({ value: el.id, label: el.shortName }))
+						: countryStorage.map(el => ({ value: el.id, label: el.shortName }))
 				}
 				value={info.countryId}
 			/>

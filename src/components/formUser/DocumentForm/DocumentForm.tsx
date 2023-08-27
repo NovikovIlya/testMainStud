@@ -10,8 +10,9 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-import { useAppSelector } from '../../../store'
+import { RootState, useAppSelector } from '../../../store'
 import { setDocument } from '../../../store/creators/MainCreators'
+import { addDocuments } from '../../../store/reducers/FormReducers/CountriesEducationReducer'
 import {
 	dateIssue,
 	divisionCode,
@@ -29,15 +30,34 @@ import { ImagesLayout } from '../ImagesLayout'
 export const DocumentForm = () => {
 	const { t, i18n } = useTranslation()
 	const [IsEmpty, changeIsEmpty] = useState<boolean>(false)
-
+	const [SkipCountriesQuery, changeQuerySkip] = useState<boolean>(true)
 	dayjs.locale(i18n.language)
 	const dispatch = useDispatch()
 	const userRole = useAppSelector(state => state.InfoUser.role)
 	const data = useAppSelector(state => state.Document)
+	const documentStorage = useAppSelector(
+		(state: RootState) => state.CountriesEducation.documents
+	)
 
-	const { data: documents } = useGetDocumentsQuery()
+	const { data: documents } = useGetDocumentsQuery(i18n.language, {
+		skip: SkipCountriesQuery
+	})
 
 	const navigate = useNavigate()
+
+	useEffect(() => {
+		if (documentStorage) {
+			changeQuerySkip(true)
+		} else {
+			changeQuerySkip(false)
+		}
+	}, [documentStorage])
+
+	useEffect(() => {
+		if (documents) {
+			dispatch(addDocuments(documents))
+		}
+	}, [documents])
 
 	const handleCancel = () => {
 		navigate('/form')
@@ -51,9 +71,6 @@ export const DocumentForm = () => {
 	const handleSkip = () => {
 		navigate('/user')
 	}
-	useEffect(() => {
-		changeIsEmpty(false)
-	}, [i18n.language])
 
 	const IsOK = async () => {
 		const IsCorrectPasswordData = [
@@ -84,8 +101,6 @@ export const DocumentForm = () => {
 		else {
 			if (response === 403) {
 				navigate('/')
-			} else {
-				return false
 			}
 		}
 	}
@@ -102,8 +117,11 @@ export const DocumentForm = () => {
 							size="large"
 							onChange={e => dispatch(documentTypeId(e))}
 							options={
-								documents !== undefined
-									? documents.map(el => ({ value: el.id, label: el.name }))
+								documentStorage !== null
+									? documentStorage.map(el => ({
+											value: el.id,
+											label: el.type
+									  }))
 									: []
 							}
 							value={data.documentTypeId}

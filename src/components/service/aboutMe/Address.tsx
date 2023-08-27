@@ -39,19 +39,24 @@ export const Address = () => {
 	)
 	const dispatch = useDispatch()
 
-	const { data } = useGetCountriesQuery(i18n.language, {
+	const { data: countries } = useGetCountriesQuery(i18n.language, {
 		skip: SkipCountriesQuery
 	})
 
 	useEffect(() => {
-		if (data) {
-			dispatch(addCountries(data))
+		getData()
+	}, [])
+
+	useEffect(() => {
+		if (!countryStorage) changeQuerySkip(false)
+	}, [countryStorage])
+
+	useEffect(() => {
+		if (countries) {
+			dispatch(addCountries(countries))
 			changeQuerySkip(true)
-			getData()
-		} else {
-			changeQuerySkip(false)
 		}
-	}, [data])
+	}, [countries])
 
 	const onChange = (e: RadioChangeEvent) => {
 		console.log('radio checked', e.target.value)
@@ -147,7 +152,7 @@ export const Address = () => {
 							dispatch(country({ target: 'registrationAddress', country: e }))
 						}
 						options={
-							countryStorage == null
+							!countryStorage
 								? []
 								: countryStorage.map(el => ({
 										value: el.id,

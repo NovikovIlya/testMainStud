@@ -11,7 +11,10 @@ const endpoints = {
 			DOCUMENT: '/users/me/document',
 			EDUCATION: '/users/me/education',
 			PARENT: '/users/me/parent',
-			JOB: '/users/me/work-history',
+			JOB: {
+				JOB: '/users/me/work-history',
+				JOBITEM: '/users/me/work-history/items'
+			},
 			FORM: '/users/me',
 			ADDRESS: '/users/me/address'
 		},

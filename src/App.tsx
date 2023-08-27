@@ -38,7 +38,7 @@ const App = () => {
 				'/education'
 			].some(el => el === currentUrl.pathname)
 			if (isRegistrationForms) {
-				navigate('/infoUser')
+				navigate(currentUrl.pathname)
 			} else {
 				if (
 					[

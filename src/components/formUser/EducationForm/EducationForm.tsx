@@ -6,9 +6,12 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-import { IError } from '../../../api/types'
-import { useAppSelector } from '../../../store'
+import { RootState, useAppSelector } from '../../../store'
 import { setEducation } from '../../../store/creators/MainCreators'
+import {
+	addCountries,
+	addEducations
+} from '../../../store/reducers/FormReducers/CountriesEducationReducer'
 import {
 	countryId,
 	documentNumber,
@@ -29,14 +32,52 @@ export const EducationForm = () => {
 	const userRole = useAppSelector(state => state.InfoUser.role)
 	const navigate = useNavigate()
 	const { t, i18n } = useTranslation()
-	const { data: educationLevel } = useGetEducationLevelQuery(i18n.language)
-	const { data: countries } = useGetCountriesQuery(i18n.language)
+	const [SkipCountriesQuery, changeQuerySkip] = useState<{
+		countries: boolean
+		educations: boolean
+	}>({ countries: true, educations: true })
+	const { data: educationLevel } = useGetEducationLevelQuery(i18n.language, {
+		skip: SkipCountriesQuery.educations
+	})
+	const { data: countries } = useGetCountriesQuery(i18n.language, {
+		skip: SkipCountriesQuery.countries
+	})
 	const [IsEmpty, changeIsEmpty] = useState<boolean>(false)
 	const info = useAppSelector(state => state.Education)
+	const countriesStorage = useAppSelector(
+		(state: RootState) => state.CountriesEducation.countries
+	)
+	const educationStorage = useAppSelector(
+		(state: RootState) => state.CountriesEducation.educations
+	)
 
 	useEffect(() => {
-		changeIsEmpty(false)
-	}, [i18n.language])
+		if (educationStorage) {
+			changeQuerySkip({ ...SkipCountriesQuery, educations: true })
+		} else {
+			changeQuerySkip({ ...SkipCountriesQuery, educations: false })
+		}
+		if (countriesStorage) {
+			changeQuerySkip({ ...SkipCountriesQuery, countries: true })
+		} else {
+			changeQuerySkip({ ...SkipCountriesQuery, countries: false })
+		}
+	}, [educationStorage, countriesStorage])
+
+	useEffect(() => {
+		if (educationLevel) {
+			dispatch(addEducations(educationLevel))
+			changeQuerySkip({ ...SkipCountriesQuery, educations: true })
+		} else {
+			changeQuerySkip({ ...SkipCountriesQuery, educations: false })
+		}
+		if (countries) {
+			dispatch(addCountries(countries))
+			changeQuerySkip({ ...SkipCountriesQuery, countries: true })
+		} else {
+			changeQuerySkip({ ...SkipCountriesQuery, countries: false })
+		}
+	}, [educationLevel, countries])
 
 	const handleCancel = () => {
 		navigate('/documents')
@@ -48,15 +89,20 @@ export const EducationForm = () => {
 		}
 	}
 
+	const covertToString = (data: any): string => {
+		if (typeof data === 'string') return data
+		else return ''
+	}
+
 	const IsOK = async () => {
 		let IsCorrectStrFields = info.some(item =>
 			[item.nameOfInstitute, item.specialization].some(
-				el => /^[\p{L}\s()0-9]+$/u.test(el) && !/\s\s/.test(el)
+				el => el !== null && /^[\p{L}\s()0-9]+$/u.test(el) && !/\s\s/.test(el)
 			)
 		)
 		let IsCorrectPasswordData = info.some(item =>
-			[item.documentNumber, item.documentSeries].some(el =>
-				/^[0-9]{4}$/.test(el)
+			[item.documentNumber, item.documentSeries].some(
+				el => el !== null && /^[0-9]{4}$/.test(el)
 			)
 		)
 		let IsCorrectDate = info.some(item => item.graduateYear !== '')
@@ -67,12 +113,10 @@ export const EducationForm = () => {
 		const requestData = info.map(({ id, ...rest }) => rest)
 		const response = await setEducation({ educations: requestData }, dispatch)
 
-		if (response == null) return true
+		if (response === 200) return true
 		else {
 			if (response === 403) {
 				navigate('/')
-			} else {
-				return false
 			}
 		}
 	}
@@ -120,9 +164,9 @@ export const EducationForm = () => {
 												)
 											}
 											options={
-												educationLevel == null
+												educationStorage === null
 													? []
-													: educationLevel.map(el => ({
+													: educationStorage.map(el => ({
 															value: el.id,
 															label: el.name
 													  }))
@@ -145,9 +189,9 @@ export const EducationForm = () => {
 												)
 											}
 											options={
-												countries == null
+												countriesStorage === null
 													? []
-													: countries.map(el => ({
+													: countriesStorage.map(el => ({
 															value: el.id,
 															label: el.shortName
 													  }))
@@ -165,6 +209,7 @@ export const EducationForm = () => {
 										className={clsx(
 											'w-full',
 											IsEmpty &&
+												item.nameOfInstitute !== null &&
 												(!/^[\p{L}\s()0-9]+$/u.test(item.nameOfInstitute) ||
 													/\s\s/.test(item.nameOfInstitute)) &&
 												'border-rose-500'
@@ -177,9 +222,10 @@ export const EducationForm = () => {
 												})
 											)
 										}}
-										value={info[item.id].nameOfInstitute}
+										value={covertToString(info[item.id].nameOfInstitute)}
 									/>
 									{IsEmpty &&
+										item.nameOfInstitute !== null &&
 										(!/^[\p{L}\s()0-9]+$/u.test(item.nameOfInstitute) ||
 											/\s\s/.test(item.nameOfInstitute)) && (
 											<span className="text-red-500 text-sm">
@@ -197,6 +243,7 @@ export const EducationForm = () => {
 												className={clsx(
 													'w-full',
 													IsEmpty &&
+														item.documentSeries !== null &&
 														!/^[0-9]{4}$/.test(item.documentSeries) &&
 														'border-rose-500'
 												)}
@@ -208,17 +255,19 @@ export const EducationForm = () => {
 														})
 													)
 												}
-												value={
+												value={covertToString(
 													info.filter(element => element.id === item.id)[0]
 														.documentSeries
-												}
+												)}
 												maxLength={4}
 											/>
-											{IsEmpty && !/^[0-9]{4}$/.test(item.documentSeries) && (
-												<span className="text-red-500 text-sm">
-													{t('EmptyFolder')}
-												</span>
-											)}
+											{IsEmpty &&
+												item.documentSeries !== null &&
+												!/^[0-9]{4}$/.test(item.documentSeries) && (
+													<span className="text-red-500 text-sm">
+														{t('EmptyFolder')}
+													</span>
+												)}
 										</div>
 									</div>
 									<div>
@@ -230,6 +279,7 @@ export const EducationForm = () => {
 												className={clsx(
 													'w-full',
 													IsEmpty &&
+														item.documentNumber !== null &&
 														!/^[0-9]{4}$/.test(item.documentNumber) &&
 														'border-rose-500'
 												)}
@@ -241,14 +291,16 @@ export const EducationForm = () => {
 														})
 													)
 												}
-												value={info[item.id].documentNumber}
+												value={covertToString(info[item.id].documentNumber)}
 												maxLength={4}
 											/>
-											{IsEmpty && !/^[0-9]{4}$/.test(item.documentNumber) && (
-												<span className="text-red-500 text-sm">
-													{t('EmptyFolder')}
-												</span>
-											)}
+											{IsEmpty &&
+												item.documentNumber !== null &&
+												!/^[0-9]{4}$/.test(item.documentNumber) && (
+													<span className="text-red-500 text-sm">
+														{t('EmptyFolder')}
+													</span>
+												)}
 										</div>
 									</div>
 									<div>
@@ -295,6 +347,7 @@ export const EducationForm = () => {
 												className={clsx(
 													'w-full',
 													IsEmpty &&
+														item.specialization !== null &&
 														(!/^[\p{L}\s()]+$/u.test(item.specialization) ||
 															/\s\s/.test(item.specialization)) &&
 														'border-rose-500'
@@ -307,10 +360,11 @@ export const EducationForm = () => {
 														})
 													)
 												}
-												value={info[item.id].specialization}
+												value={covertToString(info[item.id].specialization)}
 												maxLength={400}
 											/>
 											{IsEmpty &&
+												item.specialization !== null &&
 												(!/^[\p{L}\s()]+$/u.test(item.specialization) ||
 													/\s\s/.test(item.specialization)) && (
 													<span className="text-red-500 text-sm">

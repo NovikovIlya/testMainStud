@@ -217,7 +217,7 @@ export const Education = () => {
 	}, [updateItems])
 
 	return (
-		<div className="m-14 radio lg:m-10 md:m-6 sm:m-2 w-[624px]">
+		<div className="m-14 radio  min-w-[624px]">
 			<Space direction="vertical" size={20}>
 				<Typography.Title
 					level={3}
@@ -225,23 +225,28 @@ export const Education = () => {
 				>
 					Образование
 				</Typography.Title>
-				{educationData.map(item => (
-					<div key={item.id} className="w-full">
-						<Typography.Text ellipsis className="font-bold mr-3">
-							Данные документа об образовании
-						</Typography.Text>
-						<Typography.Text
-							onClick={() => handleDeleteEducation(item.id.toString())}
-							className="cursor-pointer opacity-40 text-center text-black text-sm font-normal leading-[18px] mr-3"
-						>
-							Удалить
-						</Typography.Text>
-						<Typography.Text
-							onClick={() => handleUpdateEducation(item)}
-							className="cursor-pointer opacity-40 text-center text-black text-sm font-normal leading-[18px]"
-						>
-							Сохранить
-						</Typography.Text>
+				{educationData.map((item, index) => (
+					<Space direction="vertical" key={item.id} className="w-full">
+						<Space>
+							<Typography.Text ellipsis className="font-bold mr-3">
+								Данные документа об образовании
+							</Typography.Text>
+							<Typography.Text
+								onClick={() => handleDeleteEducation(item.id.toString())}
+								className={clsx(
+									'cursor-pointer opacity-40 text-center text-black text-sm font-normal leading-[18px] mr-3',
+									index === 0 && 'hidden'
+								)}
+							>
+								Удалить
+							</Typography.Text>
+							<Typography.Text
+								onClick={() => handleUpdateEducation(item)}
+								className="cursor-pointer opacity-40 text-center text-black text-sm font-normal leading-[18px]"
+							>
+								Сохранить
+							</Typography.Text>
+						</Space>
 						<Space size={'large'} direction="vertical" className="w-full">
 							<div className="grid grid-cols-2 gap-10 mt-5 w-full max-lg:grid-cols-1 max-lg:gap-1">
 								<Space direction="vertical">
@@ -504,7 +509,7 @@ export const Education = () => {
 								<Button icon={<UploadOutlined />}>Добавить файл</Button>
 							</Upload>
 						</Space>
-					</div>
+					</Space>
 				))}
 			</Space>
 			<Space

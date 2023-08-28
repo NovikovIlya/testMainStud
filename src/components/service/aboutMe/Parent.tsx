@@ -307,12 +307,15 @@ export const Parent = () => {
 			else console.log('403')
 		}
 	}
-
 	return (
 		<div className="m-14 radio">
 			<Space direction="vertical" size={20}>
-				<Space direction="vertical" size={'small'}>
-					<Typography.Title ellipsis className="font-bold text-black text-sm">
+				<Space direction="vertical" size={'small'} className="min-w-[624px]">
+					<Typography.Title
+						level={3}
+						ellipsis
+						className="font-bold text-black text-sm"
+					>
 						{t('infoParents')}
 					</Typography.Title>
 					{parentData.map(item => (

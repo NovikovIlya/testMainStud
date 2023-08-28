@@ -22,9 +22,8 @@ export const ApproveEmail = () => {
 					hash: searchParams.get('hash')
 				})
 			)
-		} else {
-			navigate('/')
 		}
+		navigate('/infoUser')
 	})
 
 	const buttonEffect = () => {

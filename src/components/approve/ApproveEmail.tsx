@@ -14,17 +14,24 @@ export const ApproveEmail = () => {
 	const navigate = useNavigate()
 	const dispatch = useAppDispatch()
 
-	useEffect(() => {
+	const query = async () => {
 		if (searchParams.get('id') !== null && searchParams.get('hash') !== null) {
-			dispatch(
-				approveEmail({
+			const response = await approveEmail(
+				{
 					id: searchParams.get('id'),
 					hash: searchParams.get('hash')
-				})
+				},
+				dispatch
 			)
+			if (response === 200) navigate('/infoUser')
+		} else {
+			navigate('/')
 		}
-		navigate('/infoUser')
-	})
+	}
+
+	useEffect(() => {
+		query()
+	}, [])
 
 	const buttonEffect = () => {
 		if (

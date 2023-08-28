@@ -1,6 +1,7 @@
 import { QuestionOutlined, UploadOutlined } from '@ant-design/icons'
 import {
 	Button,
+	ConfigProvider,
 	DatePicker,
 	Input,
 	Select,
@@ -11,12 +12,30 @@ import {
 	message
 } from 'antd'
 import type { UploadProps } from 'antd'
+import ruPicker from 'antd/locale/ru_RU'
+import clsx from 'clsx'
+import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 
 import { RootState, useAppSelector } from '../../../store'
+import {
+	getDocumentItemRequest,
+	postDocumentItemRequest
+} from '../../../store/creators/MainCreators'
 import { addDocuments } from '../../../store/reducers/FormReducers/CountriesEducationReducer'
+import {
+	allData,
+	dateIssue,
+	divisionCode,
+	documentTypeId,
+	inn,
+	issuedBy,
+	passportNumber,
+	passportSeries,
+	snils
+} from '../../../store/reducers/FormReducers/DocumentReducer'
 import { useGetDocumentsQuery } from '../../../store/slice/documentSlice'
 
 const props: UploadProps = {
@@ -38,17 +57,47 @@ const props: UploadProps = {
 }
 export const Document = () => {
 	const [t, i18n] = useTranslation()
+	dayjs.locale(i18n.language)
 	const dispatch = useDispatch()
 
+	const [IsEmpty, changeIsEmpty] = useState<boolean>(false)
 	const [SkipCountriesQuery, changeQuerySkip] = useState<boolean>(true)
-	const user = useAppSelector(state => state.Profile.profileData.CurrentData)
 	const documentStorage = useAppSelector(
 		(state: RootState) => state.CountriesEducation.documents
 	)
+	const documentData = useAppSelector((state: RootState) => state.Document)
 
 	const { data: documents } = useGetDocumentsQuery(i18n.language, {
 		skip: SkipCountriesQuery
 	})
+
+	const getData = async () => {
+		const response = await getDocumentItemRequest(dispatch)
+		if (response) {
+			dispatch(
+				allData({
+					documentTypeId: !response.documentTypeId
+						? 1
+						: response.documentTypeId,
+					passportSeries: !response.passportSeries
+						? ''
+						: response.passportSeries,
+					passportNumber: !response.passportNumber
+						? ''
+						: response.passportNumber,
+					issuedBy: !response.issuedBy ? '' : response.issuedBy,
+					dateIssue: !response.dateIssue ? '' : response.dateIssue,
+					divisionCode: !response.divisionCode ? '' : response.divisionCode,
+					inn: !response.inn ? '' : response.inn,
+					snils: !response.snils ? '' : response.snils
+				})
+			)
+		} else console.log('403')
+	}
+
+	useEffect(() => {
+		getData()
+	}, [])
 
 	useEffect(() => {
 		if (!documentStorage) changeQuerySkip(false)
@@ -61,6 +110,40 @@ export const Document = () => {
 		}
 	}, [documents])
 
+	const handleAddDocument = async () => {
+		const IsCorrectPasswordData = [
+			documentData.passportNumber,
+			documentData.passportSeries
+		].some(el => /^[0-9]{4}$/.test(el))
+
+		const IsCorrectSNILS = /^[0-9]{3}\-[0-9]{3}\-[0-9]{3} [0-9]{2}$/.test(
+			documentData.snils
+		)
+		const IsCorrectDivisionCode = /^[0-9]{3}\-[0-9]{3}$/.test(
+			documentData.divisionCode
+		)
+		const IsCorrectINN = /^[0-9]{12}$/.test(documentData.inn)
+		const IsCorrectWhomIssued =
+			!/\s\s/.test(documentData.issuedBy) &&
+			/^[\p{L}\s]+$/u.test(documentData.issuedBy)
+		if (
+			!IsCorrectPasswordData ||
+			!IsCorrectSNILS ||
+			!IsCorrectINN ||
+			!IsCorrectDivisionCode ||
+			documentData.dateIssue === '' ||
+			!IsCorrectWhomIssued
+		) {
+			changeIsEmpty(true)
+			return false
+		}
+		const response = await postDocumentItemRequest(documentData, dispatch)
+		if (response === 200) changeIsEmpty(false)
+		else {
+			console.log('403')
+		}
+	}
+
 	return (
 		<div className="m-14 radio">
 			<Space direction="vertical" size={20}>
@@ -69,7 +152,7 @@ export const Document = () => {
 				<Space direction="vertical" size={'small'}>
 					<Typography.Text>Тип документа</Typography.Text>
 					<Select
-						placeholder={user?.citizenship}
+						placeholder={'Российская Федерация'}
 						size="large"
 						className="w-[624px] shadow rounded-lg"
 						options={
@@ -77,7 +160,7 @@ export const Document = () => {
 								? []
 								: documentStorage.map(el => ({ value: el.id, label: el.type }))
 						}
-						value={1}
+						value={documentData.documentTypeId}
 					/>
 				</Space>
 
@@ -86,71 +169,174 @@ export const Document = () => {
 				</Typography.Text>
 
 				<Space size={'large'}>
-					<Space direction="vertical">
+					<Space direction="vertical" className="w-[300px]">
 						<Typography.Text>Код подразделения</Typography.Text>
 						<Input
 							placeholder="000-000"
 							size="large"
-							className="w-[300px] shadow "
+							value={documentData.divisionCode}
+							className={clsx(
+								'shadow w-full',
+								IsEmpty &&
+									!/^[0-9]{3}\-[0-9]{3}$/.test(documentData.divisionCode) &&
+									'border-rose-500'
+							)}
+							maxLength={7}
+							onChange={e => dispatch(divisionCode(e.currentTarget.value))}
 						/>
+						{IsEmpty &&
+							!/^[0-9]{3}\-[0-9]{3}$/.test(documentData.divisionCode) && (
+								<span className="text-red-500 text-sm">
+									{t('BadDivisionCode')}
+								</span>
+							)}
 					</Space>
-					<Space direction="vertical">
+					<Space direction="vertical" className="w-[300px]">
 						<Typography.Text>Когда выдан</Typography.Text>
-						<DatePicker
-							placeholder="ДД. ММ. ГГГГ"
-							size="large"
-							className="w-[300px] shadow "
-						/>
+						<ConfigProvider locale={ruPicker}>
+							<DatePicker
+								className={clsx(
+									'shadow w-full',
+									IsEmpty && documentData.dateIssue === '' && 'border-rose-500'
+								)}
+								onChange={e =>
+									dispatch(dateIssue(e == null ? '' : e?.format('YYYY-MM-DD')))
+								}
+								size="large"
+								placeholder={t('date')}
+								format={'DD.MM.YYYY'}
+								value={
+									documentData.dateIssue !== ''
+										? dayjs(
+												documentData.dateIssue.split('-').reverse().join('.'),
+												'DD.MM.YYYY'
+										  )
+										: null
+								}
+							/>
+						</ConfigProvider>
+						{IsEmpty && documentData.dateIssue === '' && (
+							<div className="text-red-500 text-sm">{t('DateError')}</div>
+						)}
 					</Space>
 				</Space>
 
 				<Space size={'large'}>
-					<Space direction="vertical">
+					<Space direction="vertical" className="w-[300px]">
 						<Typography.Text>Серия</Typography.Text>
 						<Input
-							placeholder="00 00"
+							placeholder="0000"
 							size="large"
-							className="w-[300px] shadow "
+							className={clsx(
+								'shadow ',
+								IsEmpty &&
+									!/^[0-9]{4}$/.test(documentData.passportSeries) &&
+									'border-rose-500'
+							)}
+							maxLength={4}
+							onChange={e => dispatch(passportSeries(e.target.value))}
+							value={
+								documentData.passportSeries !== ''
+									? documentData.passportSeries
+									: ''
+							}
 						/>
+						{IsEmpty && !/^[0-9]{4}$/.test(documentData.passportSeries) && (
+							<span className="text-red-500 text-sm">{t('BadPassport')}</span>
+						)}
 					</Space>
-					<Space direction="vertical">
+					<Space direction="vertical" className="w-[300px]">
 						<Typography.Text>Номер</Typography.Text>
 						<Input
-							placeholder="000000"
+							placeholder="0000"
 							size="large"
-							className="w-[300px] shadow "
+							className={clsx(
+								'shadow',
+								IsEmpty &&
+									!/^[0-9]{4}$/.test(documentData.passportNumber) &&
+									'border-rose-500'
+							)}
+							maxLength={4}
+							onChange={e => dispatch(passportNumber(e.target.value))}
+							value={
+								documentData.passportNumber !== ''
+									? documentData.passportNumber
+									: ''
+							}
 						/>
+						{IsEmpty && !/^[0-9]{4}$/.test(documentData.passportNumber) && (
+							<span className="text-red-500 text-sm">{t('BadPassport')}</span>
+						)}
 					</Space>
 				</Space>
 
-				<Space direction="vertical" size={'small'}>
+				<Space direction="vertical" size={'small'} className="w-full ">
 					<Typography.Text>Кем выдан</Typography.Text>
 					<Input
-						placeholder="МВД ПО РЕСПУБЛИКЕ ТАТАРСТАН"
+						placeholder={t('location')}
 						size="large"
-						className="w-[624px] shadow "
+						maxLength={200}
+						className={clsx(
+							'shadow',
+							IsEmpty &&
+								(!/^[\p{L}\s]+$/u.test(documentData.issuedBy) ||
+									/\s\s/.test(documentData.issuedBy)) &&
+								'border-rose-500'
+						)}
+						onChange={e => dispatch(issuedBy(e.target.value))}
+						value={documentData.issuedBy !== '' ? documentData.issuedBy : ''}
 					/>
+					{IsEmpty &&
+						(!/^[\p{L}\s]+$/u.test(documentData.issuedBy) ||
+							/\s\s/.test(documentData.issuedBy)) && (
+							<span className="text-red-500 text-sm">{t('EmptyFolder')}</span>
+						)}
 				</Space>
 
 				<Typography.Text className="text-black text-sm font-bold">
 					Данные документа
 				</Typography.Text>
 
-				<Space direction="vertical" size={'small'}>
+				<Space direction="vertical" size={'small'} className="w-full">
 					<Typography.Text>СНИЛС</Typography.Text>
 					<Input
-						placeholder="000-000-000 00"
 						size="large"
-						className="w-[624px] shadow "
+						placeholder="000-000-000 00"
+						className={clsx(
+							'shadow ',
+							IsEmpty &&
+								!/^[0-9]{3}\-[0-9]{3}\-[0-9]{3} [0-9]{2}$/.test(
+									documentData.snils
+								) &&
+								'border-rose-500'
+						)}
+						maxLength={14}
+						onChange={e => dispatch(snils(e.target.value))}
+						value={documentData.snils}
 					/>
+					{IsEmpty &&
+						!/^[0-9]{3}\-[0-9]{3}\-[0-9]{3} [0-9]{2}$/.test(
+							documentData.snils
+						) && <span className="text-red-500 text-sm">{t('BadSnils')}</span>}
 				</Space>
-				<Space direction="vertical" size={'small'}>
+				<Space direction="vertical" size={'small'} className="w-full">
 					<Typography.Text>ИНН</Typography.Text>
 					<Input
-						placeholder="123456789012"
 						size="large"
-						className="w-[624px] shadow "
+						placeholder="000000000000"
+						maxLength={12}
+						className={clsx(
+							'shadow ',
+							IsEmpty &&
+								!/^[0-9]{12}$/.test(documentData.inn) &&
+								'border-rose-500'
+						)}
+						onChange={e => dispatch(inn(e.target.value))}
+						value={documentData.inn}
 					/>
+					{IsEmpty && !/^[0-9]{12}$/.test(documentData.inn) && (
+						<span className="text-red-500 text-sm">{t('BadInn')}</span>
+					)}
 				</Space>
 				<Space size={'small'}>
 					<Typography.Text className="text-black opacity-80 text-sm font-normal leading-none">
@@ -168,6 +354,14 @@ export const Document = () => {
 				<Upload {...props}>
 					<Button icon={<UploadOutlined />}>Добавить файл</Button>
 				</Upload>
+				<Space direction="vertical" size={'small'} className="mt-4">
+					<Button
+						className="border-solid border-bluekfu border-[1px] text-bluekfu rounded-md"
+						onClick={handleAddDocument}
+					>
+						Изменить
+					</Button>
+				</Space>
 			</Space>
 		</div>
 	)

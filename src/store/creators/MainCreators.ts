@@ -13,6 +13,7 @@ import {
 	education,
 	form,
 	getAddress,
+	getDocument,
 	getEducation,
 	getForm,
 	getJob,
@@ -20,6 +21,7 @@ import {
 	job,
 	login,
 	parent,
+	postDocument,
 	postParent,
 	putAddress,
 	putEducation,
@@ -35,6 +37,8 @@ import {
 	AbUSParentResponse,
 	IAddress,
 	IAddressRequest,
+	IDocument,
+	IDocumentAbUs,
 	IDocumentRequest,
 	IEducationRequest,
 	IEducationState,
@@ -131,11 +135,12 @@ export const registerUser =
 		return 400
 	}
 
-export const approveEmail =
-	(data: IApproveRequest) =>
-	async (dispatch: Dispatch): Promise<void> => {
+export const approveEmail = async (
+	data: IApproveRequest,
+	dispatch: Dispatch
+): Promise<number> => {
+	try {
 		const res = await approve(data)
-
 		dispatch(
 			loginSuccess({
 				accessToken: res.data.accessToken,
@@ -144,7 +149,14 @@ export const approveEmail =
 		)
 		localStorage.setItem('userInfo', JSON.stringify(res.data.user))
 		dispatch(ProfileSuccess(res.data.user))
+		return 200
+	} catch (e) {
+		if (request.isAxiosError(e) && e.response) {
+			console.log(e.response?.data as IError)
+		}
 	}
+	return 403
+}
 
 export const setRole = async (
 	data: IRole,
@@ -523,4 +535,35 @@ export const postParentItemRequest = async (
 		}
 	}
 	return 403
+}
+
+export const postDocumentItemRequest = async (
+	data: IDocument,
+	dispatch: Dispatch
+): Promise<number> => {
+	try {
+		await refreshToken(dispatch)
+		await postDocument(data)
+		return 200
+	} catch (e) {
+		if (request.isAxiosError(e) && e.response) {
+			console.log(e.response?.data as IError)
+		}
+	}
+	return 403
+}
+
+export const getDocumentItemRequest = async (
+	dispatch: Dispatch
+): Promise<IDocumentAbUs | null> => {
+	try {
+		await refreshToken(dispatch)
+		const response = await getDocument()
+		return response.data
+	} catch (e) {
+		if (request.isAxiosError(e) && e.response) {
+			console.log(e.response?.data as IError)
+		}
+	}
+	return null
 }

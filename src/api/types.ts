@@ -123,6 +123,17 @@ export type IDocument = {
 	snils: string
 }
 
+export type IDocumentAbUs = {
+	documentTypeId: number | null
+	passportSeries: string | null
+	passportNumber: string | null
+	issuedBy: string | null
+	dateIssue: string | null
+	divisionCode: string | null
+	inn: string | null
+	snils: string | null
+}
+
 export type IDocumentRequest = { document: IDocument }
 
 export type educationItem = {

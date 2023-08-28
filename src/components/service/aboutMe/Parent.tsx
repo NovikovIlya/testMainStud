@@ -319,7 +319,7 @@ export const Parent = () => {
 						{t('infoParents')}
 					</Typography.Title>
 					{parentData.map(item => (
-						<div key={item.id}>
+						<Space direction="vertical" key={item.id} className="min-w-[624px]">
 							<Space direction="vertical" size={'small'} className="w-full">
 								<Space>
 									<Typography.Text className="font-bold text-black text-lg">
@@ -338,7 +338,7 @@ export const Parent = () => {
 										{t('Delete')}
 									</Typography.Text>
 								</Space>
-								<Space direction="vertical" size={2} className="w-full">
+								<Space direction="vertical" className="w-full">
 									<Typography.Text className=" text-black">
 										{t('parentFIO')}
 									</Typography.Text>
@@ -366,7 +366,7 @@ export const Parent = () => {
 										</span>
 									)}
 								</Space>
-								<Space direction="vertical" size={2} className="w-full">
+								<Space direction="vertical" className="w-full">
 									<Typography.Text className=" text-black">
 										{t('parentPhone')}
 									</Typography.Text>
@@ -395,7 +395,7 @@ export const Parent = () => {
 									)}
 								</Space>
 
-								<Space direction="vertical" size={2} className="w-full">
+								<Space direction="vertical" className="w-full">
 									<Typography.Text className="text-black">
 										{t('parentEmail')}
 									</Typography.Text>
@@ -424,7 +424,7 @@ export const Parent = () => {
 								</Space>
 							</Space>
 							<Space direction="vertical" size="small" className="w-full mt-8">
-								<Space direction="vertical" size={2} className="w-full">
+								<Space direction="vertical" className="w-full">
 									<Typography.Text className="font-bold text-black text-lg">
 										{t('parentDocument')}
 									</Typography.Text>
@@ -454,12 +454,12 @@ export const Parent = () => {
 										}
 									/>
 								</Space>
-								<Space direction="vertical" size={2} className="w-full">
+								<Space direction="vertical" className="w-full">
 									<Typography.Text className="font-bold text-black">
 										{t('documentInfo')}
 									</Typography.Text>
 									<div className="grid grid-cols-2 w-full gap-4">
-										<Space direction="vertical" size={2} className="w-full">
+										<Space direction="vertical" className="w-full">
 											<Typography.Text className=" text-black">
 												{t('divisionCode')}
 											</Typography.Text>
@@ -495,7 +495,7 @@ export const Parent = () => {
 													</span>
 												)}
 										</Space>
-										<Space direction="vertical" size={2} className="w-full">
+										<Space direction="vertical" className="w-full">
 											<Typography.Text className=" text-black">
 												{t('whenIssued')}
 											</Typography.Text>
@@ -548,7 +548,7 @@ export const Parent = () => {
 													</span>
 												)}
 										</Space>
-										<Space direction="vertical" size={2} className="w-full">
+										<Space direction="vertical" className="w-full">
 											<Typography.Text className=" text-black">
 												{t('series')}
 											</Typography.Text>
@@ -584,7 +584,7 @@ export const Parent = () => {
 													</span>
 												)}
 										</Space>
-										<Space direction="vertical" size={2} className="w-full">
+										<Space direction="vertical" className="w-full">
 											<Typography.Text className=" text-black">
 												{t('number')}
 											</Typography.Text>
@@ -622,7 +622,7 @@ export const Parent = () => {
 										</Space>
 									</div>
 								</Space>
-								<Space direction="vertical" size={2} className="w-full">
+								<Space direction="vertical" className="w-full">
 									<Typography.Text className=" text-black">
 										{t('issuedWhom')}
 									</Typography.Text>
@@ -653,8 +653,8 @@ export const Parent = () => {
 									)}
 								</Space>
 							</Space>
-							<Space direction="vertical" size={2} className="w-full mt-8">
-								<Space direction="vertical" size={2} className="w-full">
+							<Space direction="vertical" className="w-full mt-8">
+								<Space direction="vertical" className="w-full">
 									<Typography.Text className="font-bold text-black">
 										{t('additionalDocuments')}
 									</Typography.Text>
@@ -685,7 +685,7 @@ export const Parent = () => {
 										</span>
 									)}
 								</Space>
-								<Space direction="vertical" size={2} className="w-full">
+								<Space direction="vertical" className="w-full">
 									<Typography.Text className=" text-black">
 										{t('inn')}
 									</Typography.Text>
@@ -711,7 +711,7 @@ export const Parent = () => {
 										<span className="text-red-500 text-sm">{t('BadInn')}</span>
 									)}
 								</Space>
-								<Space direction="vertical" size={2} className="w-full mt-8">
+								<Space direction="vertical" className="w-full mt-8">
 									<Typography.Text className="font-bold text-black text-lg">
 										{t('adress')}
 									</Typography.Text>
@@ -750,7 +750,7 @@ export const Parent = () => {
 											</span>
 										)}
 								</Space>
-								<Space direction="vertical" size={2} className="w-full">
+								<Space direction="vertical" className="w-full">
 									<Typography.Text className=" text-black">
 										{t('ResidenseAdress')}
 									</Typography.Text>
@@ -803,7 +803,7 @@ export const Parent = () => {
 									<Button icon={<UploadOutlined />}>Добавить файл</Button>
 								</Upload>
 							</Space>
-						</div>
+						</Space>
 					))}
 				</Space>
 

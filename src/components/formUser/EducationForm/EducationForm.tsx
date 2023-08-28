@@ -32,15 +32,12 @@ export const EducationForm = () => {
 	const userRole = useAppSelector(state => state.InfoUser.role)
 	const navigate = useNavigate()
 	const { t, i18n } = useTranslation()
-	const [SkipCountriesQuery, changeQuerySkip] = useState<{
-		countries: boolean
-		educations: boolean
-	}>({ countries: true, educations: true })
+	const [SkipCountriesQuery, changeQuerySkip] = useState<boolean>(true)
 	const { data: educationLevel } = useGetEducationLevelQuery(i18n.language, {
-		skip: SkipCountriesQuery.educations
+		skip: SkipCountriesQuery
 	})
 	const { data: countries } = useGetCountriesQuery(i18n.language, {
-		skip: SkipCountriesQuery.countries
+		skip: SkipCountriesQuery
 	})
 	const [IsEmpty, changeIsEmpty] = useState<boolean>(false)
 	const info = useAppSelector(state => state.Education)
@@ -52,30 +49,12 @@ export const EducationForm = () => {
 	)
 
 	useEffect(() => {
-		if (educationStorage) {
-			changeQuerySkip({ ...SkipCountriesQuery, educations: true })
-		} else {
-			changeQuerySkip({ ...SkipCountriesQuery, educations: false })
-		}
-		if (countriesStorage) {
-			changeQuerySkip({ ...SkipCountriesQuery, countries: true })
-		} else {
-			changeQuerySkip({ ...SkipCountriesQuery, countries: false })
-		}
-	}, [educationStorage, countriesStorage])
-
-	useEffect(() => {
-		if (educationLevel) {
+		if (educationLevel && countries) {
 			dispatch(addEducations(educationLevel))
-			changeQuerySkip({ ...SkipCountriesQuery, educations: true })
-		} else {
-			changeQuerySkip({ ...SkipCountriesQuery, educations: false })
-		}
-		if (countries) {
 			dispatch(addCountries(countries))
-			changeQuerySkip({ ...SkipCountriesQuery, countries: true })
+			changeQuerySkip(true)
 		} else {
-			changeQuerySkip({ ...SkipCountriesQuery, countries: false })
+			changeQuerySkip(false)
 		}
 	}, [educationLevel, countries])
 

@@ -4,7 +4,7 @@ import { RootState } from '../..'
 import { IAddress, addressItem } from '../../../api/types'
 
 const initAddressItem: addressItem = {
-	countryId: null,
+	countryId: 1,
 	city: null,
 	street: null,
 	house: null,
@@ -16,7 +16,7 @@ type target = 'registrationAddress' | 'residenceAddress'
 
 const initialState: IAddress = {
 	registrationAddress: initAddressItem,
-	residenceAddress: initAddressItem
+	residenceAddress: null
 }
 
 export const AddressReducer = createSlice({
@@ -33,14 +33,26 @@ export const AddressReducer = createSlice({
 			if (action.payload.target === 'registrationAddress') {
 				state.registrationAddress.countryId = action.payload.country
 			} else {
-				state.residenceAddress.countryId = action.payload.country
+				if (state.residenceAddress)
+					state.residenceAddress.countryId = action.payload.country
+				else
+					state.residenceAddress = {
+						...initAddressItem,
+						countryId: action.payload.country
+					}
 			}
 		},
 		city: (state, action: PayloadAction<{ target: target; city: string }>) => {
 			if (action.payload.target === 'registrationAddress') {
 				state.registrationAddress.city = action.payload.city
 			} else {
-				state.residenceAddress.city = action.payload.city
+				if (state.residenceAddress)
+					state.residenceAddress.city = action.payload.city
+				else
+					state.residenceAddress = {
+						...initAddressItem,
+						city: action.payload.city
+					}
 			}
 		},
 		street: (
@@ -50,7 +62,13 @@ export const AddressReducer = createSlice({
 			if (action.payload.target === 'registrationAddress') {
 				state.registrationAddress.street = action.payload.street
 			} else {
-				state.residenceAddress.street = action.payload.street
+				if (state.residenceAddress)
+					state.residenceAddress.street = action.payload.street
+				else
+					state.residenceAddress = {
+						...initAddressItem,
+						street: action.payload.street
+					}
 			}
 		},
 		house: (
@@ -60,7 +78,13 @@ export const AddressReducer = createSlice({
 			if (action.payload.target === 'registrationAddress') {
 				state.registrationAddress.house = action.payload.house
 			} else {
-				state.residenceAddress.house = action.payload.house
+				if (state.residenceAddress)
+					state.residenceAddress.house = action.payload.house
+				else
+					state.residenceAddress = {
+						...initAddressItem,
+						house: action.payload.house
+					}
 			}
 		},
 		apartment: (
@@ -70,7 +94,13 @@ export const AddressReducer = createSlice({
 			if (action.payload.target === 'registrationAddress') {
 				state.registrationAddress.apartment = action.payload.apartment
 			} else {
-				state.residenceAddress.apartment = action.payload.apartment
+				if (state.residenceAddress)
+					state.residenceAddress.apartment = action.payload.apartment
+				else
+					state.residenceAddress = {
+						...initAddressItem,
+						apartment: action.payload.apartment
+					}
 			}
 		},
 		index: (
@@ -80,7 +110,13 @@ export const AddressReducer = createSlice({
 			if (action.payload.target === 'registrationAddress') {
 				state.registrationAddress.index = action.payload.index
 			} else {
-				state.residenceAddress.index = action.payload.index
+				if (state.residenceAddress)
+					state.residenceAddress.index = action.payload.index
+				else
+					state.residenceAddress = {
+						...initAddressItem,
+						index: action.payload.index
+					}
 			}
 		}
 	}

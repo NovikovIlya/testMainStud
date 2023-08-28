@@ -60,54 +60,87 @@ export const Address = () => {
 
 	const onChange = (e: RadioChangeEvent) => {
 		console.log('radio checked', e.target.value)
+		if (e.target.value !== 0)
+			dispatch(
+				allData({
+					registrationAddress: registrationAddressData,
+					residenceAddress: {
+						countryId: 1,
+						city: null,
+						street: null,
+						house: null,
+						apartment: null,
+						index: null
+					}
+				})
+			)
+		if (e.target.value === 0)
+			dispatch(
+				allData({
+					registrationAddress: registrationAddressData,
+					residenceAddress: null
+				})
+			)
 		setValue(e.target.value)
 	}
 
 	const getData = async () => {
 		const response = await getAbUsAddress(dispatch)
 		if (response !== null) {
+			if (response.residenceAddress) {
+				setValue(1)
+			}
 			dispatch(allData(response))
 		}
 	}
 
 	const setChanges = async () => {
-		const IsCorrectString = [
-			residenceAddressData.city,
-			residenceAddressData.street,
+		const IsBadStringRegistration = [
 			registrationAddressData.city,
 			registrationAddressData.street
-		].some(el => !el || /^[\p{L}]+$/u.test(el))
-
-		const IsCorrectNumber = [
-			residenceAddressData.apartment,
-			residenceAddressData.house,
+		].some(el => !el || (el && !/^[\p{L}]+$/u.test(el)))
+		const IsBadStringResidence = !residenceAddressData
+			? false
+			: [residenceAddressData.city, residenceAddressData.street].some(
+					el => el && !/^[\p{L}]+$/u.test(el)
+			  )
+		const IsBadNumberRegistration = [
 			registrationAddressData.apartment,
 			registrationAddressData.house
-		].some(el => !el || /^[0-9]+$/u.test(el))
+		].some(el => !el || (el && !/^[0-9]+$/u.test(el)))
+		const IsBadNumberResidence = !residenceAddressData
+			? false
+			: [residenceAddressData.apartment, residenceAddressData.house].some(
+					el => el && /^[0-9]+$/u.test(el)
+			  )
 
-		const IsCorrectIndex = [
-			residenceAddressData.index,
-			registrationAddressData.index
-		].some(el => !el || /^[0-9]{5,6}$/.test(el))
+		const IsBadIndexRegistration = [registrationAddressData.index].some(
+			el => !el || (el && !/^[0-9]{5,6}$/.test(el))
+		)
 
-		if (!IsCorrectNumber || !IsCorrectString || !IsCorrectIndex) {
-			console.log(IsCorrectNumber)
-			console.log(IsCorrectString)
-			console.log(IsCorrectIndex)
+		const IsBadIndexResidence = !residenceAddressData
+			? false
+			: [residenceAddressData.index].some(el => el && !/^[0-9]{5,6}$/.test(el))
+
+		if (
+			IsBadStringRegistration ||
+			IsBadStringResidence ||
+			IsBadNumberResidence ||
+			IsBadNumberRegistration ||
+			IsBadIndexRegistration ||
+			IsBadIndexResidence
+		) {
 			setError(true)
 		} else {
-			var isNotEmpty = Object.values(residenceAddressData).some(
-				el => el !== null
-			)
 			const status = await putAbUsAddress(
 				{
 					registrationAddress: registrationAddressData,
 					residenceAddress:
 						value === 0
 							? registrationAddressData
-							: isNotEmpty
-							? residenceAddressData
-							: null
+							: !residenceAddressData
+							? null
+							: residenceAddressData
 				},
 				dispatch
 			)
@@ -344,9 +377,16 @@ export const Address = () => {
 								placeholder="Страна гражданства"
 								size="large"
 								className="w-[624px] shadow "
-								value={residenceAddressData.countryId}
+								value={
+									!residenceAddressData ? '' : residenceAddressData.countryId
+								}
 								onChange={e =>
-									dispatch(country({ target: 'residenceAddress', country: e }))
+									dispatch(
+										country({
+											target: 'residenceAddress',
+											country: typeof e === 'string' ? 1 : e
+										})
+									)
 								}
 								options={
 									countryStorage == null
@@ -368,12 +408,17 @@ export const Address = () => {
 								className={clsx(
 									'w-[624px] shadow',
 									IsError &&
+										residenceAddressData &&
 										residenceAddressData.city &&
 										!/^[\p{L}]+$/u.test(residenceAddressData.city) &&
 										'border-rose-500'
 								)}
 								value={
-									!residenceAddressData.city ? '' : residenceAddressData.city
+									!residenceAddressData
+										? ''
+										: !residenceAddressData.city
+										? ''
+										: residenceAddressData.city
 								}
 								onChange={e =>
 									dispatch(
@@ -382,6 +427,7 @@ export const Address = () => {
 								}
 							/>
 							{IsError &&
+								residenceAddressData &&
 								residenceAddressData.city &&
 								!/^[\p{L}]+$/u.test(residenceAddressData.city) && (
 									<div className="text-sm text-rose-500">{t('BadSymbols')}</div>
@@ -396,12 +442,15 @@ export const Address = () => {
 								className={clsx(
 									'w-[624px] shadow',
 									IsError &&
+										residenceAddressData &&
 										residenceAddressData.street &&
 										!/^[\p{L}]+$/u.test(residenceAddressData.street) &&
 										'border-rose-500'
 								)}
 								value={
-									!residenceAddressData.street
+									!residenceAddressData
+										? ''
+										: !residenceAddressData.street
 										? ''
 										: residenceAddressData.street
 								}
@@ -415,6 +464,7 @@ export const Address = () => {
 								}
 							/>
 							{IsError &&
+								residenceAddressData &&
 								residenceAddressData.street &&
 								!/^[\p{L}]+$/u.test(residenceAddressData.street) && (
 									<div className="text-sm text-rose-500">{t('BadSymbols')}</div>
@@ -429,12 +479,17 @@ export const Address = () => {
 								className={clsx(
 									'w-[624px] shadow',
 									IsError &&
+										residenceAddressData &&
 										residenceAddressData.house &&
 										!/^[0-9]+$/.test(residenceAddressData.house) &&
 										'border-rose-500'
 								)}
 								value={
-									!residenceAddressData.house ? '' : residenceAddressData.house
+									!residenceAddressData
+										? ''
+										: !residenceAddressData.house
+										? ''
+										: residenceAddressData.house
 								}
 								onChange={e =>
 									dispatch(
@@ -443,6 +498,7 @@ export const Address = () => {
 								}
 							/>
 							{IsError &&
+								residenceAddressData &&
 								residenceAddressData.house &&
 								!/^[0-9]+$/.test(residenceAddressData.house) && (
 									<div className="text-sm text-rose-500">{t('BadSymbols')}</div>
@@ -458,12 +514,15 @@ export const Address = () => {
 								className={clsx(
 									'w-[624px] shadow',
 									IsError &&
+										residenceAddressData &&
 										residenceAddressData.apartment &&
 										!/^[0-9]+$/.test(residenceAddressData.apartment) &&
 										'border-rose-500'
 								)}
 								value={
-									!residenceAddressData.apartment
+									!residenceAddressData
+										? ''
+										: !residenceAddressData.apartment
 										? ''
 										: residenceAddressData.apartment
 								}
@@ -477,6 +536,7 @@ export const Address = () => {
 								}
 							/>
 							{IsError &&
+								residenceAddressData &&
 								residenceAddressData.apartment &&
 								!/^[0-9]+$/.test(residenceAddressData.apartment) && (
 									<div className="text-sm text-rose-500">{t('BadSymbols')}</div>
@@ -492,12 +552,17 @@ export const Address = () => {
 								className={clsx(
 									'w-[624px] shadow',
 									IsError &&
+										residenceAddressData &&
 										residenceAddressData.index &&
 										!/^[0-9]{5,6}$/.test(residenceAddressData.index) &&
 										'border-rose-500'
 								)}
 								value={
-									!residenceAddressData.index ? '' : residenceAddressData.index
+									!residenceAddressData
+										? ''
+										: !residenceAddressData.index
+										? ''
+										: residenceAddressData.index
 								}
 								onChange={e =>
 									dispatch(
@@ -506,6 +571,7 @@ export const Address = () => {
 								}
 							/>
 							{IsError &&
+								residenceAddressData &&
 								residenceAddressData.index &&
 								!/^[0-9]{5,6}$/.test(residenceAddressData.index) && (
 									<div className="text-sm text-rose-500">{t('BadIndex')}</div>

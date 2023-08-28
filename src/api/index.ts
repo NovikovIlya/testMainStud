@@ -3,6 +3,7 @@ import { AxiosPromise } from 'axios'
 import endpoints from './endpoints'
 import { axiosInstance } from './instance'
 import {
+	AbUSParentResponse,
 	IAddress,
 	IAddressRequest,
 	IApproveRequest,
@@ -10,6 +11,7 @@ import {
 	IDocumentRequest,
 	IEducationRequest,
 	IEducationState,
+	IParent,
 	IParentRequest,
 	IRole,
 	IWorkHistoryRequest,
@@ -95,3 +97,15 @@ export const putEducation = (id: string, params: educationItem) =>
 
 export const addEducation = (params: educationItem) =>
 	axiosInstance.post(endpoints.USER.INFO.EDUCATION, params)
+
+export const getParent = (): AxiosPromise<AbUSParentResponse[]> =>
+	axiosInstance.get(endpoints.USER.INFO.PARENT)
+
+export const putParent = (id: string, params: IParent) =>
+	axiosInstance.put(endpoints.USER.INFO.PARENT + '/' + id, params)
+
+export const deleteParent = (id: string) =>
+	axiosInstance.delete(endpoints.USER.INFO.PARENT + '/' + id)
+
+export const postParent = (params: IParent) =>
+	axiosInstance.post(endpoints.USER.INFO.PARENT, params)

@@ -3,64 +3,90 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { RootState } from '../..'
 import { IParentState } from '../../../api/types'
 
-const initialState: IParentState = {
-	FIO: '',
-	eMail: '',
-	phone: '',
-	documentTypeId: 1,
-	divisionCode: '',
-	issuedBy: '',
-	passportSeries: '',
-	passportNumber: '',
-	dateIssue: '',
-	inn: '',
-	snils: '',
-	registrationAddress: '',
-	residenceAddress: ''
-}
+const initialState: IParentState[] = []
 
 export const ParentReducer = createSlice({
 	name: 'Parent',
 	initialState,
 	reducers: {
-		FIO: (state, action: PayloadAction<string>) => {
-			state.FIO = action.payload
+		allData: (state, action: PayloadAction<IParentState[]>): IParentState[] => {
+			return action.payload
 		},
-		eMail: (state, action: PayloadAction<string>) => {
-			state.eMail = action.payload
+		FIO: (state, action: PayloadAction<{ id: number; FIO: string }>) => {
+			state.filter(el => el.id === action.payload.id)[0].FIO =
+				action.payload.FIO
 		},
-		phone: (state, action: PayloadAction<string>) => {
-			state.phone = action.payload
+		eMail: (state, action: PayloadAction<{ id: number; email: string }>) => {
+			state.filter(el => el.id === action.payload.id)[0].eMail =
+				action.payload.email
 		},
-		documentTypeId: (state, action: PayloadAction<number>) => {
-			state.documentTypeId = action.payload
+		phone: (state, action: PayloadAction<{ id: number; phone: string }>) => {
+			state.filter(el => el.id === action.payload.id)[0].phone =
+				action.payload.phone
 		},
-		divisionCode: (state, action: PayloadAction<string>) => {
-			state.divisionCode = action.payload
+		documentTypeId: (
+			state,
+			action: PayloadAction<{ id: number; documentTypeId: number }>
+		) => {
+			state.filter(el => el.id === action.payload.id)[0].documentTypeId =
+				action.payload.documentTypeId
 		},
-		issuedBy: (state, action: PayloadAction<string>) => {
-			state.issuedBy = action.payload
+		divisionCode: (
+			state,
+			action: PayloadAction<{ id: number; divisionCode: string }>
+		) => {
+			state.filter(el => el.id === action.payload.id)[0].divisionCode =
+				action.payload.divisionCode
 		},
-		passportSeries: (state, action: PayloadAction<string>) => {
-			state.passportSeries = action.payload
+		issuedBy: (
+			state,
+			action: PayloadAction<{ id: number; issuedBy: string }>
+		) => {
+			state.filter(el => el.id === action.payload.id)[0].issuedBy =
+				action.payload.issuedBy
 		},
-		passportNumber: (state, action: PayloadAction<string>) => {
-			state.passportNumber = action.payload
+		passportSeries: (
+			state,
+			action: PayloadAction<{ id: number; passportSeries: string }>
+		) => {
+			state.filter(el => el.id === action.payload.id)[0].passportSeries =
+				action.payload.passportSeries
 		},
-		dateIssue: (state, action: PayloadAction<string>) => {
-			state.dateIssue = action.payload
+		passportNumber: (
+			state,
+			action: PayloadAction<{ id: number; passportNumber: string }>
+		) => {
+			state.filter(el => el.id === action.payload.id)[0].passportNumber =
+				action.payload.passportNumber
 		},
-		inn: (state, action: PayloadAction<string>) => {
-			state.inn = action.payload
+		dateIssue: (
+			state,
+			action: PayloadAction<{ id: number; dateIssue: string }>
+		) => {
+			state.filter(el => el.id === action.payload.id)[0].dateIssue =
+				action.payload.dateIssue
 		},
-		snils: (state, action: PayloadAction<string>) => {
-			state.snils = action.payload
+		inn: (state, action: PayloadAction<{ id: number; inn: string }>) => {
+			state.filter(el => el.id === action.payload.id)[0].inn =
+				action.payload.inn
 		},
-		registrationAddress: (state, action: PayloadAction<string>) => {
-			state.registrationAddress = action.payload
+		snils: (state, action: PayloadAction<{ id: number; snils: string }>) => {
+			state.filter(el => el.id === action.payload.id)[0].snils =
+				action.payload.snils
 		},
-		residenceAddress: (state, action: PayloadAction<string>) => {
-			state.residenceAddress = action.payload
+		registrationAddress: (
+			state,
+			action: PayloadAction<{ id: number; registrationAddress: string }>
+		) => {
+			state.filter(el => el.id === action.payload.id)[0].registrationAddress =
+				action.payload.registrationAddress
+		},
+		residenceAddress: (
+			state,
+			action: PayloadAction<{ id: number; residenceAddress: string }>
+		) => {
+			state.filter(el => el.id === action.payload.id)[0].residenceAddress =
+				action.payload.residenceAddress
 		}
 	}
 })
@@ -78,7 +104,8 @@ export const {
 	inn,
 	snils,
 	residenceAddress,
-	registrationAddress
+	registrationAddress,
+	allData
 } = ParentReducer.actions
 
 export default ParentReducer.reducer

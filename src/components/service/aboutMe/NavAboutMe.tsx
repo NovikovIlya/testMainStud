@@ -88,6 +88,7 @@ export const NavAboutMe = () => {
 				{pathname === navList[2].id && <Address />}
 				{pathname === navList[3].id && <Education />}
 				{pathname === navList[4].id && <Work />}
+				{pathname === navList[5].id && <Parent />}
 				<div className="p-14 w-full hidden justify-center">
 					<div className="h-[630px] bg-white fixed w-full max-w-md rounded-[20px] shadow flex flex-col items-center justify-center">
 						<div>

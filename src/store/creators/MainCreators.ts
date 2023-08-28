@@ -8,6 +8,7 @@ import {
 	approve,
 	deleteEducation,
 	deleteJobItem,
+	deleteParent,
 	document,
 	education,
 	form,
@@ -15,12 +16,15 @@ import {
 	getEducation,
 	getForm,
 	getJob,
+	getParent,
 	job,
 	login,
 	parent,
+	postParent,
 	putAddress,
 	putEducation,
 	putForm,
+	putParent,
 	putPortfolioLink,
 	refresh,
 	register,
@@ -28,12 +32,14 @@ import {
 	updateJobItem
 } from '../../api/index'
 import {
+	AbUSParentResponse,
 	IAddress,
 	IAddressRequest,
 	IDocumentRequest,
 	IEducationRequest,
 	IEducationState,
 	IError,
+	IParent,
 	IParentRequest,
 	IRole,
 	IWorkHistoryRequest,
@@ -444,6 +450,72 @@ export const addEducationItemRequest = async (
 	try {
 		await refreshToken(dispatch)
 		await addEducation(data)
+		return 200
+	} catch (e) {
+		if (request.isAxiosError(e) && e.response) {
+			console.log(e.response?.data as IError)
+		}
+	}
+	return 403
+}
+
+//граница
+
+export const putParentItemRequest = async (
+	id: string,
+	data: IParent,
+	dispatch: Dispatch
+): Promise<number> => {
+	try {
+		await refreshToken(dispatch)
+		await putParent(id, data)
+		return 200
+	} catch (e) {
+		if (request.isAxiosError(e) && e.response) {
+			console.log(e.response?.data as IError)
+		}
+	}
+	return 403
+}
+
+export const getParentItemRequest = async (
+	dispatch: Dispatch
+): Promise<AbUSParentResponse[] | null> => {
+	try {
+		await refreshToken(dispatch)
+		const response = await getParent()
+		return response.data
+	} catch (e) {
+		if (request.isAxiosError(e) && e.response) {
+			console.log(e.response?.data as IError)
+		}
+	}
+	return null
+}
+
+export const deleteParentItemRequest = async (
+	id: string,
+	dispatch: Dispatch
+): Promise<number> => {
+	try {
+		await refreshToken(dispatch)
+		await deleteParent(id)
+		return 200
+	} catch (e) {
+		if (request.isAxiosError(e) && e.response) {
+			console.log(e.response?.data as IError)
+		}
+	}
+	return 403
+}
+
+export const postParentItemRequest = async (
+	data: IParent,
+	dispatch: Dispatch
+): Promise<number> => {
+	try {
+		await refreshToken(dispatch)
+		await postParent(data)
 		return 200
 	} catch (e) {
 		if (request.isAxiosError(e) && e.response) {

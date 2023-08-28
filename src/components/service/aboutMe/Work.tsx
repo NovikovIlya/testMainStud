@@ -115,21 +115,28 @@ export const Work = () => {
 			additionalInfo: false
 		}
 
-		if (/\s\s/.test(item.name) || !/^[\p{L}\s.,]+$/u.test(item.name)) {
+		if (
+			!item.name ||
+			(item.name &&
+				(/\s\s/.test(item.name) || !/^[\p{L}\s.,]+$/u.test(item.name)))
+		) {
 			haveError = true
 			errorPattern.name = true
 		}
 		if (
-			/\s\s/.test(item.additionalInfo) ||
-			!/^[\p{L}\s.,]+$/u.test(item.additionalInfo)
+			!item.additionalInfo ||
+			(item.additionalInfo &&
+				(/\s\s/.test(item.additionalInfo) ||
+					!/^[\p{L}\s.,]+$/u.test(item.additionalInfo)))
 		) {
 			haveError = true
 			errorPattern.additionalInfo = true
 		}
 		if (
-			item.responsibilities !== null &&
-			(/\s\s/.test(item.responsibilities) ||
-				!/^[\p{L}\s.,]+$/u.test(item.responsibilities))
+			!item.responsibilities ||
+			(item.responsibilities &&
+				(/\s\s/.test(item.responsibilities) ||
+					!/^[\p{L}\s.,]+$/u.test(item.responsibilities)))
 		) {
 			haveError = true
 			errorPattern.responsibilities = true

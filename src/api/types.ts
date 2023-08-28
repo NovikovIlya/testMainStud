@@ -139,30 +139,33 @@ export type IEducationRequest = { educations: educationItem[] }
 
 export type IEducationState = educationItem & { id: number }
 
-type IParent = {
-	name: string
-	surName: string
-	patronymic: string
-	dateIssue: string
-	divisionCode: string
-	eMail: string
-	issuedBy: string
-	documentTypeId: number
-	phone: string
-	passportSeries: string
-	passportNumber: string
-	registrationAddress: string
-	residenceAddress: string
-	inn: string
-	snils: string
+export type IParent = {
+	name: string | null
+	surName: string | null
+	patronymic: string | null
+	dateIssue: string | null
+	divisionCode: string | null
+	eMail: string | null
+	issuedBy: string | null
+	documentTypeId: number | null
+	phone: string | null
+	passportSeries: string | null
+	passportNumber: string | null
+	registrationAddress: string | null
+	residenceAddress: string | null
+	inn: string | null
+	snils: string | null
 }
 
 export type IParentRequest = {
 	parent: IParent
 }
 
+export type AbUSParentResponse = IParent & { id: number }
+
 export type IParentState = Omit<IParent, 'name' | 'surName' | 'patronymic'> & {
-	FIO: string
+	FIO: string | null
+	id: number
 }
 
 export type workItem = {
@@ -212,7 +215,7 @@ export type addressItem = {
 
 export type IAddress = {
 	registrationAddress: addressItem
-	residenceAddress: addressItem
+	residenceAddress: null | addressItem
 }
 
 export type IAddressRequest = {
@@ -246,4 +249,20 @@ export type IEducationError = {
 	documentSeries: boolean
 	graduateYear: boolean
 	specialization: boolean
+}
+
+export type IParentError = {
+	id: number
+	FIO: boolean
+	dateIssue: boolean
+	divisionCode: boolean
+	eMail: boolean
+	issuedBy: boolean
+	phone: boolean
+	passportSeries: boolean
+	passportNumber: boolean
+	registrationAddress: boolean
+	residenceAddress: boolean
+	inn: boolean
+	snils: boolean
 }

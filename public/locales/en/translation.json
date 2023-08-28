@@ -116,5 +116,8 @@
 	"BadRegEmail": "the email address is incorrect or already occupied",
 	"BadPatronymic": "patronymic contains invalid characters",
 	"BadIndex": "the index is specified incorrectly",
-	"BadSymbols": "the field contains invalid characters"
+	"BadSymbols": "the field contains invalid characters",
+	"Save": "Save",
+	"Delete": "Delete",
+	"Parent": "Parent"
 }

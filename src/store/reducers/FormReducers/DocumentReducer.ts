@@ -18,6 +18,9 @@ export const DocumentReducer = createSlice({
 	name: 'Document',
 	initialState,
 	reducers: {
+		allData: (state, action: PayloadAction<IDocument>) => {
+			state = action.payload
+		},
 		documentTypeId: (state, action: PayloadAction<number>) => {
 			state.documentTypeId = action.payload
 		},
@@ -53,7 +56,8 @@ export const {
 	dateIssue,
 	divisionCode,
 	inn,
-	snils
+	snils,
+	allData
 } = DocumentReducer.actions
 
 export default DocumentReducer.reducer

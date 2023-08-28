@@ -8,6 +8,8 @@ import {
 	IAddressRequest,
 	IApproveRequest,
 	IAuthSuccess,
+	IDocument,
+	IDocumentAbUs,
 	IDocumentRequest,
 	IEducationRequest,
 	IEducationState,
@@ -109,3 +111,9 @@ export const deleteParent = (id: string) =>
 
 export const postParent = (params: IParent) =>
 	axiosInstance.post(endpoints.USER.INFO.PARENT, params)
+
+export const postDocument = (params: IDocument) =>
+	axiosInstance.post(endpoints.USER.INFO.DOCUMENT, params)
+
+export const getDocument = (): AxiosPromise<IDocumentAbUs> =>
+	axiosInstance.get(endpoints.USER.INFO.DOCUMENT)

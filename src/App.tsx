@@ -26,6 +26,8 @@ const App = () => {
 	const dispatch = useAppDispatch()
 	const currentUrl = useLocation()
 
+	console.log(currentUrl.pathname)
+
 	const dataApi = async () => {
 		const res = await refreshToken(dispatch)
 		if (res === 200) {
@@ -36,9 +38,13 @@ const App = () => {
 				'/work',
 				'/documents',
 				'/education'
-			].some(el => el === currentUrl.pathname)
+			].some(
+				el =>
+					el === currentUrl.pathname ||
+					currentUrl.pathname.includes('/api/register/approve')
+			)
 			if (isRegistrationForms) {
-				navigate(currentUrl.pathname)
+				navigate('/infoUser')
 			} else {
 				if (
 					[
@@ -68,13 +74,7 @@ const App = () => {
 			dataApi()
 		} else {
 			if (
-				[
-					'/',
-					'/login',
-					'/registration',
-					'/api/register/approve',
-					'/registration/checkingEmail'
-				].some(el => el === currentUrl.pathname)
+				['/', '/login', '/registration'].some(el => el === currentUrl.pathname)
 			) {
 				navigate(currentUrl.pathname)
 			} else {

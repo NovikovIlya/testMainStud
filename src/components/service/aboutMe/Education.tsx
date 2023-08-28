@@ -226,7 +226,7 @@ export const Education = () => {
 					Образование
 				</Typography.Title>
 				{educationData.map(item => (
-					<div key={item.id} className="w-full max-lg:bg-orange-400">
+					<div key={item.id} className="w-full">
 						<Typography.Text ellipsis className="font-bold mr-3">
 							Данные документа об образовании
 						</Typography.Text>

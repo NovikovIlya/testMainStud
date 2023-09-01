@@ -129,7 +129,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	return (
 		<header
 			className={clsx(
-				' z-50  h-[80px] fixed flex items-center justify-center w-full',
+				' z-[1001]  h-[80px] fixed flex items-center justify-center w-full',
 				type === 'main' ? 'bg-white' : 'bg-[#65A1FA]'
 			)}
 		>
@@ -230,7 +230,9 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						<Drawer
 							rootStyle={{ position: 'fixed', top: 75 }}
 							placement="top"
+							size="large"
 							closable={false}
+							className="!bg-[#F5F8FB]"
 							onClose={onClose}
 							open={open}
 							key="top"

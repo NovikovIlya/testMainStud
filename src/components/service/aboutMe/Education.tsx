@@ -25,7 +25,7 @@ import {
 	deleteEducationItemRequest,
 	getEducationItemRequest,
 	putEducationItemRequest
-} from '../../../store/creators/MainCreators'
+} from '../../../store/creators/MainCreators/AbUsUnit'
 import {
 	addCountries,
 	addEducations

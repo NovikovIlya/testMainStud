@@ -16,7 +16,10 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 
 import { RootState, useAppSelector } from '../../../store'
-import { getAbUsForm, putAbUsForm } from '../../../store/creators/MainCreators'
+import {
+	getFormRequest,
+	putFormRequest
+} from '../../../store/creators/MainCreators/AbUsUnit'
 import { addCountries } from '../../../store/reducers/FormReducers/CountriesEducationReducer'
 import {
 	allData,
@@ -42,7 +45,7 @@ export const AboutMe = () => {
 	)
 
 	const getData = async () => {
-		const response = await getAbUsForm(dispatch)
+		const response = await getFormRequest(dispatch)
 		if (response !== null) {
 			dispatch(allData(response))
 		}
@@ -67,7 +70,7 @@ export const AboutMe = () => {
 		) {
 			setError(true)
 		} else {
-			const status = await putAbUsForm(formData, dispatch)
+			const status = await putFormRequest(formData, dispatch)
 			if (status === 403) {
 				setError(true)
 			} else {

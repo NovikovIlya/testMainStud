@@ -4,7 +4,7 @@ import { useSearchParams } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 
 import { useAppDispatch } from '../../store'
-import { approveEmail } from '../../store/creators/MainCreators'
+import { approveEmail } from '../../store/creators/MainCreators/Registration'
 
 import { CardForm } from './cardForm'
 
@@ -15,7 +15,8 @@ export const ApproveEmail = () => {
 	const dispatch = useAppDispatch()
 
 	const query = async () => {
-		if (searchParams.get('id') !== null && searchParams.get('hash') !== null) {
+		var IsFail = true
+		if (searchParams.get('id') === null && searchParams.get('hash') === null) {
 			const response = await approveEmail(
 				{
 					id: searchParams.get('id'),
@@ -23,10 +24,9 @@ export const ApproveEmail = () => {
 				},
 				dispatch
 			)
-			if (response === 200) navigate('/infoUser')
-		} else {
-			navigate('/')
+			if (response === 200) IsFail = false
 		}
+		if (IsFail) navigate('/registration')
 	}
 
 	useEffect(() => {
@@ -44,7 +44,7 @@ export const ApproveEmail = () => {
 	}
 
 	const closeEffect = () => {
-		navigate('/')
+		navigate('/registration')
 	}
 	return (
 		<CardForm

@@ -23,7 +23,7 @@ import { RootState, useAppSelector } from '../../../store'
 import {
 	getDocumentItemRequest,
 	postDocumentItemRequest
-} from '../../../store/creators/MainCreators'
+} from '../../../store/creators/MainCreators/AbUsUnit'
 import { addDocuments } from '../../../store/reducers/FormReducers/CountriesEducationReducer'
 import {
 	allData,

@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import { RootState, useAppSelector } from '../../../store'
-import { setEducation } from '../../../store/creators/MainCreators'
+import { setEducation } from '../../../store/creators/MainCreators/RegistrationForms'
 import {
 	addCountries,
 	addEducations

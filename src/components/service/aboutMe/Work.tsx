@@ -27,10 +27,10 @@ import { useAppSelector } from '../../../store'
 import {
 	addJobItemRequest,
 	deleteJobItemRequest,
-	getAbUsJob,
+	getJobRequest,
 	portfolioLinkRequest,
 	updateJobItemRequest
-} from '../../../store/creators/MainCreators'
+} from '../../../store/creators/MainCreators/AbUsUnit'
 import {
 	additionalInfo,
 	allData,
@@ -72,7 +72,7 @@ export const Work = () => {
 	const workData = useAppSelector((state: RootState) => state.Work)
 
 	const getData = async () => {
-		const response = await getAbUsJob(dispatch)
+		const response = await getJobRequest(dispatch)
 		response !== null && dispatch(allData(response))
 	}
 

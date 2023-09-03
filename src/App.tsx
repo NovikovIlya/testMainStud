@@ -16,7 +16,7 @@ import { Registration } from './components/registration/Registration'
 import Service from './components/service'
 import { User } from './components/user/User'
 import { useAppDispatch } from './store'
-import { refreshToken } from './store/creators/MainCreators'
+import { refreshToken } from './store/creators/MainCreators/Authorization'
 
 const App = () => {
 	const cookies = new Cookies()
@@ -38,26 +38,18 @@ const App = () => {
 				'/work',
 				'/documents',
 				'/education'
-			].some(
-				el =>
-					el === currentUrl.pathname ||
-					currentUrl.pathname.includes('/api/register/approve')
-			)
+			].some(el => el === currentUrl.pathname)
 			if (isRegistrationForms) {
 				navigate('/infoUser')
 			} else {
-				if (
-					[
-						'/',
-						'/login',
-						'/registration',
-						'/api/register/approve',
-						'/registration/checkingEmail'
-					].some(el => el === currentUrl.pathname)
-				) {
+				const IsBasePage = [
+					'/',
+					'/login',
+					'/registration',
+					'/registration/checkingEmail'
+				].some(el => el === currentUrl.pathname)
+				if (IsBasePage) {
 					navigate('/user')
-				} else {
-					navigate(currentUrl.pathname)
 				}
 			}
 		}
@@ -73,11 +65,17 @@ const App = () => {
 		) {
 			dataApi()
 		} else {
-			if (
-				['/', '/login', '/registration'].some(el => el === currentUrl.pathname)
-			) {
-				navigate(currentUrl.pathname)
-			} else {
+			const IsNotBasePage = ![
+				'/',
+				'/login',
+				'/registration',
+				'/registration/checkingEmail'
+			].some(
+				el =>
+					el === currentUrl.pathname ||
+					currentUrl.pathname.includes('/api/register/approve')
+			)
+			if (IsNotBasePage) {
 				navigate('/')
 			}
 		}

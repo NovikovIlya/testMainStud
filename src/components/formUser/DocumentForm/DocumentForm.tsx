@@ -11,7 +11,7 @@ import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import { RootState, useAppSelector } from '../../../store'
-import { setDocument } from '../../../store/creators/MainCreators'
+import { setDocument } from '../../../store/creators/MainCreators/RegistrationForms'
 import { addDocuments } from '../../../store/reducers/FormReducers/CountriesEducationReducer'
 import {
 	dateIssue,

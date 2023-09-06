@@ -2,6 +2,11 @@ import { Table } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 import React from 'react'
 
+import {
+	useCalendarQuery,
+	useExamsScheduleQuery
+} from '../../../store/slice/scheduleSlice'
+
 interface DataType {
 	key: string
 	time: string
@@ -98,6 +103,9 @@ const data: DataType[] = [
 ]
 
 export const Session = () => {
+	const { data: schedule, isLoading } = useCalendarQuery()
+	console.log(schedule, '+++++++++++++++++++++++++++++++')
+
 	return (
 		<div>
 			<div className="text-black text-3xl font-normal leading-7">

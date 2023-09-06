@@ -67,6 +67,8 @@ export const Education = () => {
 	const { t, i18n } = useTranslation()
 	const [SkipCountriesQuery, changeQuerySkip] = useState<boolean>(true)
 	const educationData = useAppSelector((state: RootState) => state.Education)
+	console.log(educationData)
+
 	const { data: educationLevel } = useGetEducationLevelQuery(i18n.language, {
 		skip: SkipCountriesQuery
 	})

@@ -104,7 +104,7 @@ export const getParent = (): AxiosPromise<AbUSParentResponse[]> =>
 	axiosInstance.get(endpoints.USER.INFO.PARENT)
 
 export const putParent = (id: string, params: IParent) =>
-	axiosInstance.put(endpoints.USER.INFO.PARENT + '/' + id, params)
+	axiosInstance.put(endpoints.USER.INFO.PARENT, { ...params, id })
 
 export const deleteParent = (id: string) =>
 	axiosInstance.delete(endpoints.USER.INFO.PARENT + '/' + id)

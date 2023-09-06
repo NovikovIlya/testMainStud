@@ -282,33 +282,31 @@ export const Parent = () => {
 	}
 
 	const handleUpdateParent = async (item: IParentState) => {
-		if (!checkParentItem(item)) {
-			const fioSpliter = !item.FIO ? null : item.FIO.split(' ')
-			if (fioSpliter !== null && fioSpliter.length !== 3) fioSpliter.push('')
-			const response = await putParentItemRequest(
-				item.id.toString(),
-				{
-					name: !fioSpliter ? null : fioSpliter[0],
-					surName: !fioSpliter ? null : fioSpliter[1],
-					patronymic: !fioSpliter ? null : fioSpliter[2],
-					dateIssue: item.dateIssue,
-					divisionCode: item.divisionCode,
-					eMail: item.eMail,
-					issuedBy: item.issuedBy,
-					documentTypeId: item.documentTypeId,
-					phone: item.phone,
-					passportSeries: item.passportSeries,
-					passportNumber: item.passportNumber,
-					registrationAddress: item.registrationAddress,
-					residenceAddress: item.residenceAddress,
-					inn: item.inn,
-					snils: item.snils
-				},
-				dispatch
-			)
-			if (response === 200) setUpdate(true)
-			else console.log('403')
-		}
+		const fioSpliter = !item.FIO ? null : item.FIO.split(' ')
+		if (fioSpliter !== null && fioSpliter.length !== 3) fioSpliter.push('')
+		const response = await putParentItemRequest(
+			item.id.toString(),
+			{
+				name: !fioSpliter ? null : fioSpliter[0],
+				surName: !fioSpliter ? null : fioSpliter[1],
+				patronymic: !fioSpliter ? null : fioSpliter[2],
+				dateIssue: item.dateIssue,
+				divisionCode: item.divisionCode,
+				eMail: item.eMail,
+				issuedBy: item.issuedBy,
+				documentTypeId: item.documentTypeId,
+				phone: item.phone,
+				passportSeries: item.passportSeries,
+				passportNumber: item.passportNumber,
+				registrationAddress: item.registrationAddress,
+				residenceAddress: item.residenceAddress,
+				inn: item.inn,
+				snils: item.snils
+			},
+			dispatch
+		)
+		if (response === 200) setUpdate(true)
+		else console.log('403')
 	}
 	if (!role) return <></>
 	const isStudent = role[0].type === 'STUD'
@@ -452,7 +450,8 @@ export const Parent = () => {
 										size="large"
 										options={
 											documentStorage !== null
-												? documentStorage.map(el => ({
+												? //@ts-ignore
+												  documentStorage.map(el => ({
 														value: el.id,
 														label: el.type
 												  }))

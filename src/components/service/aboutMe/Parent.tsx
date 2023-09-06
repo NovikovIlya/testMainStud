@@ -15,7 +15,7 @@ import type { UploadProps } from 'antd'
 import ruPicker from 'antd/locale/ru_RU'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -72,6 +72,9 @@ export const Parent = () => {
 	dayjs.locale(i18n.language)
 	const [IsError, setError] = useState<IParentError | null>(null)
 	const [SkipCountriesQuery, changeQuerySkip] = useState<boolean>(true)
+	const role = useAppSelector(
+		state => state.Profile.profileData.CurrentData?.roles
+	)
 	const [updateItems, setUpdate] = useState<boolean>(true)
 	const parentData = useAppSelector(state => state.Parent)
 	const documentStorage = useAppSelector(
@@ -307,6 +310,8 @@ export const Parent = () => {
 			else console.log('403')
 		}
 	}
+	if (!role) return <></>
+	const isStudent = role[0].type === 'STUD'
 	return (
 		<div className="m-14 radio">
 			<Space direction="vertical" size={20}>
@@ -318,7 +323,7 @@ export const Parent = () => {
 					>
 						{t('infoParents')}
 					</Typography.Title>
-					{parentData.map(item => (
+					{parentData.map((item, index) => (
 						<Space direction="vertical" key={item.id} className="min-w-[624px]">
 							<Space direction="vertical" size={'small'} className="w-full">
 								<Space>
@@ -332,7 +337,10 @@ export const Parent = () => {
 										{t('Save')}
 									</Typography.Text>
 									<Typography.Text
-										className=" text-black cursor-pointer"
+										className={clsx(
+											' text-black cursor-pointer',
+											index === 0 && 'hidden'
+										)}
 										onClick={() => handleDeleteParent(item.id)}
 									>
 										{t('Delete')}
@@ -340,7 +348,7 @@ export const Parent = () => {
 								</Space>
 								<Space direction="vertical" className="w-full">
 									<Typography.Text className=" text-black">
-										{t('parentFIO')}
+										{isStudent ? 'Мама' : t('parentFIO')}
 									</Typography.Text>
 									<Input
 										placeholder="Безухов Пьер Кириллович"
@@ -366,7 +374,10 @@ export const Parent = () => {
 										</span>
 									)}
 								</Space>
-								<Space direction="vertical" className="w-full">
+								<Space
+									direction="vertical"
+									className={clsx('w-full', isStudent && 'hidden')}
+								>
 									<Typography.Text className=" text-black">
 										{t('parentPhone')}
 									</Typography.Text>
@@ -397,7 +408,7 @@ export const Parent = () => {
 
 								<Space direction="vertical" className="w-full">
 									<Typography.Text className="text-black">
-										{t('parentEmail')}
+										{isStudent ? 'Папа' : t('parentEmail')}
 									</Typography.Text>
 									<Input
 										placeholder="BezuPr@gmail.com"
@@ -423,7 +434,11 @@ export const Parent = () => {
 									)}
 								</Space>
 							</Space>
-							<Space direction="vertical" size="small" className="w-full mt-8">
+							<Space
+								direction="vertical"
+								size="small"
+								className={clsx('w-full mt-8', isStudent && 'hidden')}
+							>
 								<Space direction="vertical" className="w-full">
 									<Typography.Text className="font-bold text-black text-lg">
 										{t('parentDocument')}
@@ -653,7 +668,10 @@ export const Parent = () => {
 									)}
 								</Space>
 							</Space>
-							<Space direction="vertical" className="w-full mt-8">
+							<Space
+								direction="vertical"
+								className={clsx('w-full mt-8', isStudent && 'hidden')}
+							>
 								<Space direction="vertical" className="w-full">
 									<Typography.Text className="font-bold text-black">
 										{t('additionalDocuments')}
@@ -810,7 +828,7 @@ export const Parent = () => {
 				<Space
 					direction="vertical"
 					size={'small'}
-					className="w-full flex items-center"
+					className={clsx('w-full flex items-center', isStudent && 'hidden')}
 				>
 					<Button
 						className="rounded-full text-center p-0 w-8 h-8 text-xl"

@@ -34,7 +34,11 @@ export const AboutMe = () => {
 	const { t, i18n } = useTranslation()
 	const [SkipCountriesQuery, changeQuerySkip] = useState<boolean>(true)
 	const [IsError, setError] = useState<boolean>(false)
-	const formData = useAppSelector((state: RootState) => state.Form)
+	const formData = useAppSelector(state => state.Form)
+	const role = useAppSelector(
+		state => state.Profile.profileData.CurrentData?.roles
+	)
+
 	const dispatch = useDispatch()
 	const user = JSON.parse(localStorage.getItem('userInfo') || '')
 	const countryStorage = useAppSelector(
@@ -94,7 +98,8 @@ export const AboutMe = () => {
 			changeQuerySkip(true)
 		}
 	}, [countries])
-
+	if (!role) return <></>
+	const isStudent = role[0].type === 'STUD'
 	return (
 		<div className="m-14 radio">
 			<Space direction="vertical" size={20}>
@@ -104,6 +109,7 @@ export const AboutMe = () => {
 						Пол
 					</Typography.Text>
 					<Radio.Group
+						disabled={isStudent}
 						onChange={e => dispatch(gender(e.target.value))}
 						value={formData.gender}
 					>
@@ -114,6 +120,7 @@ export const AboutMe = () => {
 				<Space direction="vertical" size={'small'}>
 					<Typography.Text>Фамилия</Typography.Text>
 					<Input
+						disabled={isStudent}
 						placeholder="Фамилия"
 						size="large"
 						maxLength={200}
@@ -133,6 +140,7 @@ export const AboutMe = () => {
 				<Space direction="vertical" size={'small'}>
 					<Typography.Text>Имя</Typography.Text>
 					<Input
+						disabled={isStudent}
 						placeholder="Имя"
 						size="large"
 						className={clsx(
@@ -149,6 +157,7 @@ export const AboutMe = () => {
 				<Space direction="vertical" size={'small'}>
 					<Typography.Text>Отчество</Typography.Text>
 					<Input
+						disabled={isStudent}
 						placeholder="Отчество"
 						size="large"
 						className={clsx(
@@ -171,6 +180,7 @@ export const AboutMe = () => {
 					<Typography.Text>Дата рождения</Typography.Text>
 					<ConfigProvider locale={ruPicker}>
 						<DatePicker
+							disabled={isStudent}
 							placeholder="Дата рождения"
 							size="large"
 							className={clsx(
@@ -198,9 +208,10 @@ export const AboutMe = () => {
 				<Space direction="vertical" size={'small'}>
 					<Typography.Text>Страна гражданства</Typography.Text>
 					<Select
+						disabled={isStudent}
 						placeholder="Страна гражданства"
 						size="large"
-						className="w-[624px] shadow "
+						className="w-[624px] shadow rounded-lg"
 						value={formData.countryId}
 						onChange={e => dispatch(country(e))}
 						options={
@@ -216,6 +227,7 @@ export const AboutMe = () => {
 				<Space direction="vertical" size={'small'}>
 					<Typography.Text>Телефон</Typography.Text>
 					<Input
+						disabled={isStudent}
 						placeholder="+7 999 898-88-00"
 						size="large"
 						className={clsx(
@@ -237,13 +249,19 @@ export const AboutMe = () => {
 				<Space direction="vertical" size={'small'}>
 					<Typography.Text>Электронная почта</Typography.Text>
 					<Input
+						disabled={isStudent}
 						placeholder="Электронная почта"
 						size="large"
 						className="w-[624px] shadow "
 						value={user !== '' ? user.email : ''}
 					/>
 				</Space>
-				<Space direction="vertical" size={'small'} className="mt-4">
+				<Space
+					direction="vertical"
+					size={'small'}
+					//@ts-ignore
+					className={clsx('mt-4', isStudent && 'hidden')}
+				>
 					<Button
 						className="border-solid border-bluekfu border-[1px] text-bluekfu rounded-md"
 						onClick={() => setChanges()}

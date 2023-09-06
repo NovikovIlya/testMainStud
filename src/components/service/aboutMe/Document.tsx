@@ -74,21 +74,11 @@ export const Document = () => {
 	const getData = async () => {
 		const response = await getDocumentItemRequest(dispatch)
 		if (response) {
-			console.log({
-				//@ts-ignore
-				documentTypeId: response.documentTypeId,
-				passportSeries: !response.passportSeries ? '' : response.passportSeries,
-				passportNumber: !response.passportNumber ? '' : response.passportNumber,
-				issuedBy: !response.issuedBy ? '' : response.issuedBy,
-				dateIssue: !response.dateIssue ? '' : response.dateIssue,
-				divisionCode: !response.divisionCode ? '' : response.divisionCode,
-				inn: !response.inn ? '' : response.inn,
-				snils: !response.snils ? '' : response.snils
-			})
 			dispatch(
 				allData({
-					//@ts-ignore
-					documentTypeId: response.documentTypeId,
+					documentTypeId: !response.documentTypeId
+						? 1
+						: response.documentTypeId,
 					passportSeries: !response.passportSeries
 						? ''
 						: response.passportSeries,
@@ -153,7 +143,6 @@ export const Document = () => {
 			console.log('403')
 		}
 	}
-	console.log(documentData, '=============================')
 
 	return (
 		<div className="m-14 radio">

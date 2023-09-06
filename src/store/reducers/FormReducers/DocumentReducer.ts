@@ -19,14 +19,7 @@ export const DocumentReducer = createSlice({
 	initialState,
 	reducers: {
 		allData: (state, action: PayloadAction<IDocument>) => {
-			state.dateIssue = action.payload.dateIssue
-			state.divisionCode = action.payload.divisionCode
-			state.documentTypeId = action.payload.documentTypeId
-			state.inn = action.payload.inn
-			state.issuedBy = action.payload.issuedBy
-			state.passportNumber = action.payload.passportNumber
-			state.passportSeries = action.payload.passportSeries
-			state.snils = action.payload.snils
+			state = action.payload
 		},
 		documentTypeId: (state, action: PayloadAction<number>) => {
 			state.documentTypeId = action.payload

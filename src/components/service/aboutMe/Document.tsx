@@ -298,7 +298,7 @@ export const Document = () => {
 				</Typography.Text>
 
 				<Space direction="vertical" size={'small'} className="w-full">
-					<Typography.Text>СНИЛС</Typography.Text>
+					<Typography.Text>{t('snils')}</Typography.Text>
 					<Input
 						size="large"
 						placeholder="000-000-000 00"
@@ -320,7 +320,7 @@ export const Document = () => {
 						) && <span className="text-red-500 text-sm">{t('BadSnils')}</span>}
 				</Space>
 				<Space direction="vertical" size={'small'} className="w-full">
-					<Typography.Text>ИНН</Typography.Text>
+					<Typography.Text>{t('inn')}</Typography.Text>
 					<Input
 						size="large"
 						placeholder="000000000000"
@@ -340,9 +340,9 @@ export const Document = () => {
 				</Space>
 				<Space size={'small'}>
 					<Typography.Text className="text-black opacity-80 text-sm font-normal leading-none">
-						Прикрепить документы
+						{t('AttachDocuments')}
 					</Typography.Text>
-					<Tooltip title="Сюда нужно прикрепить документы в формате PDF, данные которых были введены выше, а именно: Паспорт гражданина РФ (2 и 3 страницы), СНИЛС и ИНН">
+					<Tooltip title={t('AttachDocumentsDescription')}>
 						<Button
 							type="default"
 							className="bg-transparent"
@@ -352,14 +352,14 @@ export const Document = () => {
 				</Space>
 
 				<Upload {...props}>
-					<Button icon={<UploadOutlined />}>Добавить файл</Button>
+					<Button icon={<UploadOutlined />}>{t('AddFile')}</Button>
 				</Upload>
 				<Space direction="vertical" size={'small'} className="mt-4">
 					<Button
 						className="border-solid border-bluekfu border-[1px] text-bluekfu rounded-md"
 						onClick={handleAddDocument}
 					>
-						Изменить
+						{t('edit')}
 					</Button>
 				</Space>
 			</Space>

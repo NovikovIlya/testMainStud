@@ -208,8 +208,8 @@ export const Work = () => {
 	return (
 		<div className="m-14 radio">
 			<Space direction="vertical" size={20}>
-				<Typography.Title level={3}>Работа</Typography.Title>
-				<Checkbox>Я трудоустроен на данный момент</Checkbox>
+				<Typography.Title level={3}>{t('work')}</Typography.Title>
+				<Checkbox>{t('EmployedMoment')}</Checkbox>
 
 				{workData.items.map((item, index) => (
 					<div key={item.id} className="flex flex-col gap-[10px]">

@@ -225,13 +225,13 @@ export const Education = () => {
 					level={3}
 					className="text-black text-2xl font-bold leading-normal"
 				>
-					Образование
+					{t('education')}
 				</Typography.Title>
 				{educationData.map((item, index) => (
 					<Space direction="vertical" key={item.id} className="w-full">
 						<Space>
 							<Typography.Text ellipsis className="font-bold mr-3">
-								Данные документа об образовании
+								{t('educationDocument')}
 							</Typography.Text>
 							<Typography.Text
 								onClick={() => handleDeleteEducation(item.id.toString())}
@@ -240,13 +240,13 @@ export const Education = () => {
 									index === 0 && 'hidden'
 								)}
 							>
-								Удалить
+								{t('Delete')}
 							</Typography.Text>
 							<Typography.Text
 								onClick={() => handleUpdateEducation(item)}
 								className="cursor-pointer opacity-40 text-center text-black text-sm font-normal leading-[18px]"
 							>
-								Сохранить
+								{t('Save')}
 							</Typography.Text>
 						</Space>
 						<Space size={'large'} direction="vertical" className="w-full">
@@ -281,11 +281,8 @@ export const Education = () => {
 									/>
 								</Space>
 								<Space direction="vertical">
-									<Typography.Text>
-										Страна получения образования
-									</Typography.Text>
+									<Typography.Text>{t('countryEducation')}</Typography.Text>
 									<Select
-										placeholder="Россия"
 										size="large"
 										className="w-full shadow rounded-lg"
 										defaultValue={
@@ -310,11 +307,8 @@ export const Education = () => {
 							</div>
 
 							<Space direction="vertical" size={'small'} className="w-full">
-								<Typography.Text>
-									Наименование учебного заведения
-								</Typography.Text>
+								<Typography.Text>{t('nameEducational')}</Typography.Text>
 								<Input
-									placeholder="Лицей №8 г. Бугульма"
 									maxLength={200}
 									size="large"
 									className={clsx(
@@ -347,7 +341,7 @@ export const Education = () => {
 							</Space>
 							<div className="grid grid-cols-2 mt-4 gap-x-10 gap-y-4 w-full max-lg:gap-1 max-lg:grid-cols-1">
 								<Space direction="vertical" size={'small'}>
-									<Typography.Text>Номер диплома</Typography.Text>
+									<Typography.Text>{t('diplomaNumber')}</Typography.Text>
 									<Input
 										placeholder="1234"
 										size="large"
@@ -381,7 +375,7 @@ export const Education = () => {
 										)}
 								</Space>
 								<Space direction="vertical" size={'small'}>
-									<Typography.Text>Серия диплома</Typography.Text>
+									<Typography.Text>{t('diplomaSeries')}</Typography.Text>
 									<Input
 										placeholder="1234"
 										size="large"
@@ -415,7 +409,7 @@ export const Education = () => {
 										)}
 								</Space>
 								<Space direction="vertical">
-									<Typography.Text>Год окончания</Typography.Text>
+									<Typography.Text>{t('graduateYear')}</Typography.Text>
 									<DatePicker
 										className={clsx(
 											'shadow w-full',
@@ -460,7 +454,7 @@ export const Education = () => {
 										)}
 								</Space>
 								<Space direction="vertical">
-									<Typography.Text>Специальность</Typography.Text>
+									<Typography.Text>{t('specialization')}</Typography.Text>
 									<Input
 										placeholder="Веб-дизайн"
 										size="large"
@@ -497,9 +491,9 @@ export const Education = () => {
 						<Space direction="vertical">
 							<Space size={'small'} className="mt-5">
 								<Typography.Text className="text-black opacity-80 text-sm font-normal leading-none">
-									Прикрепить документы
+									{t('AttachDocuments')}
 								</Typography.Text>
-								<Tooltip title="Сюда нужно прикрепить документы в формате PDF, данные которых были введены выше,а именно: - скан разворота диплома о высшем образовании, где чётко будут видны серия и номер документа, а также специальность">
+								<Tooltip title={t('AttachDocsDescription')}>
 									<Button
 										type="default"
 										className="bg-transparent"
@@ -508,7 +502,7 @@ export const Education = () => {
 								</Tooltip>
 							</Space>
 							<Upload {...props}>
-								<Button icon={<UploadOutlined />}>Добавить файл</Button>
+								<Button icon={<UploadOutlined />}>{t('AddFile')}</Button>
 							</Upload>
 						</Space>
 					</Space>

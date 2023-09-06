@@ -59,7 +59,6 @@ export const Address = () => {
 	}, [countries])
 
 	const onChange = (e: RadioChangeEvent) => {
-		console.log('radio checked', e.target.value)
 		if (e.target.value !== 0)
 			dispatch(
 				allData({
@@ -160,24 +159,22 @@ export const Address = () => {
 						level={3}
 						className="text-black text-2xl font-bold leading-normal"
 					>
-						Адрес
+						{t('adress')}
 					</Typography.Title>
-					<Typography.Text ellipsis>
-						Заполнение полей должно выполняться согласно данным в паспорте
-					</Typography.Text>
+					<Typography.Text ellipsis>{t('FillPassport')}</Typography.Text>
 				</Space>
 
 				<Typography.Text
 					className="text-black text-sm font-bold leading-[18px]"
 					ellipsis
 				>
-					Место постоянного жительства
+					{t('PlaceResidence')}
 				</Typography.Text>
 
 				<Space direction="vertical" size={'small'}>
-					<Typography.Text>Страна</Typography.Text>
+					<Typography.Text>{t('Country')}</Typography.Text>
 					<Select
-						placeholder="Страна гражданства"
+						placeholder={t('citizen')}
 						size="large"
 						className="w-[624px] shadow "
 						value={registrationAddressData.countryId}
@@ -196,9 +193,9 @@ export const Address = () => {
 				</Space>
 
 				<Space direction="vertical" size={'small'}>
-					<Typography.Text>Город</Typography.Text>
+					<Typography.Text>{t('City')}</Typography.Text>
 					<Input
-						placeholder="Казань"
+						placeholder={t('Kazan')}
 						size="large"
 						maxLength={200}
 						className={clsx(
@@ -225,9 +222,8 @@ export const Address = () => {
 				</Space>
 
 				<Space direction="vertical" size={'small'}>
-					<Typography.Text>Улица</Typography.Text>
+					<Typography.Text>{t('Street')}</Typography.Text>
 					<Input
-						placeholder="Арбузова"
 						maxLength={200}
 						size="large"
 						className={clsx(
@@ -259,7 +255,7 @@ export const Address = () => {
 				</Space>
 
 				<Space direction="vertical" size={'small'}>
-					<Typography.Text>Дом</Typography.Text>
+					<Typography.Text>{t('House')}</Typography.Text>
 					<Input
 						placeholder="39"
 						maxLength={5}
@@ -290,7 +286,7 @@ export const Address = () => {
 				</Space>
 
 				<Space direction="vertical" size={'small'}>
-					<Typography.Text>Квартира</Typography.Text>
+					<Typography.Text>{t('Flat')}</Typography.Text>
 					<Input
 						placeholder="88"
 						maxLength={5}
@@ -324,7 +320,7 @@ export const Address = () => {
 				</Space>
 
 				<Space direction="vertical" size={'small'}>
-					<Typography.Text>Индекс</Typography.Text>
+					<Typography.Text>{t('Index')}</Typography.Text>
 					<Input
 						placeholder="456836"
 						size="large"
@@ -355,12 +351,10 @@ export const Address = () => {
 				</Space>
 
 				<Space direction="vertical" size={'small'}>
-					<Typography.Text ellipsis>
-						Совпадает ли адрес регистрации с адресом фактического проживания?
-					</Typography.Text>
+					<Typography.Text ellipsis>{t('MatchAddress')}</Typography.Text>
 					<Radio.Group defaultValue={0} onChange={onChange} value={value}>
-						<Radio value={0}>Да</Radio>
-						<Radio value={1}>Нет</Radio>
+						<Radio value={0}>{t('Yes')}</Radio>
+						<Radio value={1}>{t('No')}</Radio>
 					</Radio.Group>
 				</Space>
 				<div className={clsx(!value && 'hidden')}>
@@ -369,12 +363,11 @@ export const Address = () => {
 							className="text-black text-sm font-bold leading-[18px]"
 							ellipsis
 						>
-							Адрес фактического пребывания
+							{t('AddressStay')}
 						</Typography.Text>
 						<Space direction="vertical" size={'small'}>
-							<Typography.Text>Страна</Typography.Text>
+							<Typography.Text>{t('Country')}</Typography.Text>
 							<Select
-								placeholder="Страна гражданства"
 								size="large"
 								className="w-[624px] shadow "
 								value={
@@ -400,9 +393,8 @@ export const Address = () => {
 						</Space>
 
 						<Space direction="vertical" size={'small'}>
-							<Typography.Text>Город</Typography.Text>
+							<Typography.Text>{t('City')}</Typography.Text>
 							<Input
-								placeholder="Казань"
 								maxLength={200}
 								size="large"
 								className={clsx(
@@ -434,7 +426,7 @@ export const Address = () => {
 								)}
 						</Space>
 						<Space direction="vertical" size={'small'}>
-							<Typography.Text>Улица</Typography.Text>
+							<Typography.Text>{t('Street')}</Typography.Text>
 							<Input
 								placeholder="Арбузова"
 								maxLength={200}
@@ -471,7 +463,7 @@ export const Address = () => {
 								)}
 						</Space>
 						<Space direction="vertical" size={'small'}>
-							<Typography.Text>Дом</Typography.Text>
+							<Typography.Text>{t('House')}</Typography.Text>
 							<Input
 								placeholder="39"
 								size="large"
@@ -506,7 +498,7 @@ export const Address = () => {
 						</Space>
 
 						<Space direction="vertical" size={'small'}>
-							<Typography.Text>Квартира</Typography.Text>
+							<Typography.Text>{t('Flat')}</Typography.Text>
 							<Input
 								placeholder="88"
 								maxLength={5}
@@ -544,7 +536,7 @@ export const Address = () => {
 						</Space>
 
 						<Space direction="vertical" size={'small'}>
-							<Typography.Text>Индекс</Typography.Text>
+							<Typography.Text>{t('Index')}</Typography.Text>
 							<Input
 								placeholder="456836"
 								size="large"
@@ -584,7 +576,7 @@ export const Address = () => {
 						className="border-solid border-bluekfu border-[1px] text-bluekfu rounded-md"
 						onClick={() => setChanges()}
 					>
-						Изменить
+						{t('edit')}
 					</Button>
 				</Space>
 			</Space>

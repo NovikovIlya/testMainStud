@@ -11,7 +11,7 @@ import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import { useAppSelector } from '../../../store'
-import { setJob } from '../../../store/creators/MainCreators'
+import { setJob } from '../../../store/creators/MainCreators/RegistrationForms'
 import {
 	additionalInfo,
 	endDate,

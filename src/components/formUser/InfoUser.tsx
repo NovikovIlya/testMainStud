@@ -11,7 +11,7 @@ import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import { useAppSelector } from '../../store'
-import { setRole } from '../../store/creators/MainCreators'
+import { setRole } from '../../store/creators/MainCreators/RegistrationForms'
 import { putRole } from '../../store/reducers/FormReducers/InfoUserReducer'
 
 import { ImagesLayout } from './ImagesLayout'

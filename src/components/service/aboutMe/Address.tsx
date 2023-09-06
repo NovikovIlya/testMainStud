@@ -7,9 +7,9 @@ import { useDispatch } from 'react-redux'
 
 import { RootState, useAppSelector } from '../../../store'
 import {
-	getAddressRequest,
-	putAddressRequest
-} from '../../../store/creators/MainCreators/AbUsUnit'
+	getAbUsAddress,
+	putAbUsAddress
+} from '../../../store/creators/MainCreators'
 import {
 	allData,
 	apartment,
@@ -85,7 +85,7 @@ export const Address = () => {
 	}
 
 	const getData = async () => {
-		const response = await getAddressRequest(dispatch)
+		const response = await getAbUsAddress(dispatch)
 		if (response !== null) {
 			if (response.residenceAddress) {
 				setValue(1)
@@ -132,7 +132,7 @@ export const Address = () => {
 		) {
 			setError(true)
 		} else {
-			const status = await putAddressRequest(
+			const status = await putAbUsAddress(
 				{
 					registrationAddress: registrationAddressData,
 					residenceAddress:

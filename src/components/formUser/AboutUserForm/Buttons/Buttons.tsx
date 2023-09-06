@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import { useAppSelector } from '../../../../store'
-import { setForm } from '../../../../store/creators/MainCreators/RegistrationForms'
+import { setForm } from '../../../../store/creators/MainCreators'
 
 export const Buttons = ({
 	changeIsEmpty

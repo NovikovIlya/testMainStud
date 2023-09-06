@@ -1,8 +1,9 @@
-import { Button, Divider, Drawer } from 'antd'
+import { Button, Divider, Drawer, Select } from 'antd'
 import type { MenuProps } from 'antd'
 import { Dropdown, Space } from 'antd'
 import clsx from 'clsx'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
@@ -33,6 +34,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 	const [open, setOpen] = useState(false)
+	const { t, i18n } = useTranslation()
 
 	const user = useAppSelector(state => state.Profile.profileData.CurrentData)
 	const showDrawer = () => {
@@ -47,18 +49,19 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const getRole = (role: String | undefined) => {
 		switch (role) {
 			case 'ABIT':
-				return 'Абитуриент'
+				return t('ABIT')
 			case 'STUD':
-				return 'Студент'
+				return t('STUD')
 			case 'SCHOOL':
-				return 'Школьник'
+				return t('SCHOOL')
 			case 'SEEKER':
-				return 'Слушатель'
+				return t('SEEKER')
 			case undefined:
+				return t('ABIT')
 			case 'GUEST':
-				return 'Гость'
+				return t('GUEST')
 			case 'ATTEND':
-				return 'Соискатель'
+				return t('ATTEND')
 		}
 	}
 
@@ -86,7 +89,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 					className="flex items-center gap-[15px] px-[4px] py-[5px]"
 				>
 					<PersonCardSvg />
-					Обо мне
+					{t('AboutMe')}
 				</div>
 			),
 			key: '1'
@@ -95,7 +98,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 			label: (
 				<div className="flex items-center gap-[15px] px-[4px] py-[5px]">
 					<SettingSvg />
-					Настройки
+					{t('Setting')}
 				</div>
 			),
 			key: '3'
@@ -104,7 +107,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 			label: (
 				<div className="flex items-center gap-[15px] px-[4px] py-[5px]">
 					<PersonalizationSvg />
-					Персонализация
+					{t('Personalization')}
 				</div>
 			),
 			key: '4'
@@ -116,7 +119,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 					onClick={() => exit()}
 				>
 					<LogoutSvg />
-					Выйти
+					{t('logout')}
 				</div>
 			),
 			key: '5'
@@ -126,6 +129,9 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 			key: '6'
 		}
 	]
+	const changeLanguage = (language: string) => {
+		i18n.changeLanguage(language)
+	}
 	return (
 		<header
 			className={clsx(
@@ -146,7 +152,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						type="default"
 						icon={<MenuSvg white={type === 'service'} />}
 					>
-						<span className="pl-2">Сервисы</span>
+						<span className="pl-2">{t('services')}</span>
 					</Button>
 					<div className="flex items-center gap-5">
 						<LogoIasSvg white={type === 'service'} />
@@ -154,7 +160,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						<div className="text-white text-base font-bold">{service}</div>
 					</div>
 				</div>
-				<div className="flex gap-20 items-center h-full">
+				<div className="flex gap-5 items-center h-full">
 					<div className="flex h-full items-center">
 						<div
 							className={clsx(
@@ -197,6 +203,19 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 							<EyeSvg white={type === 'service'} />
 						</div>
 					</div>
+					<Select
+						defaultValue={i18n.language}
+						style={{ width: 100 }}
+						bordered={false}
+						className="text-white"
+						dropdownStyle={{ color: 'white' }}
+						popupClassName="text-white"
+						onChange={e => changeLanguage(e.valueOf())}
+						options={[
+							{ value: 'ru', label: 'Рус' },
+							{ value: 'en', label: 'Eng' }
+						]}
+					/>
 					<div
 						className={clsx(
 							'h-full flex items-center cursor-pointer bg-transparent',

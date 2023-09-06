@@ -147,12 +147,12 @@ export const Document = () => {
 	return (
 		<div className="m-14 radio">
 			<Space direction="vertical" size={20}>
-				<Typography.Title level={3}>Документы</Typography.Title>
+				<Typography.Title level={3}>{t('documents')}</Typography.Title>
 
 				<Space direction="vertical" size={'small'}>
-					<Typography.Text>Тип документа</Typography.Text>
+					<Typography.Text>{t('documentType')}</Typography.Text>
 					<Select
-						placeholder={'Российская Федерация'}
+						placeholder={t('rf')}
 						size="large"
 						className="w-[624px] shadow rounded-lg"
 						options={
@@ -165,12 +165,12 @@ export const Document = () => {
 				</Space>
 
 				<Typography.Text className="text-black text-sm font-bold">
-					Данные документа
+					{t('documentInfo')}
 				</Typography.Text>
 
 				<Space size={'large'}>
 					<Space direction="vertical" className="w-[300px]">
-						<Typography.Text>Код подразделения</Typography.Text>
+						<Typography.Text>{t('divisionCode')}</Typography.Text>
 						<Input
 							placeholder="000-000"
 							size="large"
@@ -192,7 +192,7 @@ export const Document = () => {
 							)}
 					</Space>
 					<Space direction="vertical" className="w-[300px]">
-						<Typography.Text>Когда выдан</Typography.Text>
+						<Typography.Text>{t('whenIssued')}</Typography.Text>
 						<ConfigProvider locale={ruPicker}>
 							<DatePicker
 								className={clsx(
@@ -223,7 +223,7 @@ export const Document = () => {
 
 				<Space size={'large'}>
 					<Space direction="vertical" className="w-[300px]">
-						<Typography.Text>Серия</Typography.Text>
+						<Typography.Text>{t('series')}</Typography.Text>
 						<Input
 							placeholder="0000"
 							size="large"
@@ -246,7 +246,7 @@ export const Document = () => {
 						)}
 					</Space>
 					<Space direction="vertical" className="w-[300px]">
-						<Typography.Text>Номер</Typography.Text>
+						<Typography.Text>{t('number')}</Typography.Text>
 						<Input
 							placeholder="0000"
 							size="large"
@@ -271,7 +271,7 @@ export const Document = () => {
 				</Space>
 
 				<Space direction="vertical" size={'small'} className="w-full ">
-					<Typography.Text>Кем выдан</Typography.Text>
+					<Typography.Text>{t('issuedWhom')}</Typography.Text>
 					<Input
 						placeholder={t('location')}
 						size="large"
@@ -294,7 +294,7 @@ export const Document = () => {
 				</Space>
 
 				<Typography.Text className="text-black text-sm font-bold">
-					Данные документа
+					{t('documentInfo')}
 				</Typography.Text>
 
 				<Space direction="vertical" size={'small'} className="w-full">

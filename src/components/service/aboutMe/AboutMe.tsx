@@ -103,25 +103,25 @@ export const AboutMe = () => {
 	return (
 		<div className="m-14 radio">
 			<Space direction="vertical" size={20}>
-				<Typography.Title level={3}>Обо мне</Typography.Title>
+				<Typography.Title level={3}>{t('AboutMe')}</Typography.Title>
 				<Space direction="vertical" size={'small'}>
 					<Typography.Text className=" mt-10 opacity-80 text-black text-sm font-normal">
-						Пол
+						{t('gender')}
 					</Typography.Text>
 					<Radio.Group
 						disabled={isStudent}
 						onChange={e => dispatch(gender(e.target.value))}
 						value={formData.gender}
 					>
-						<Radio value={'M'}>Мужской</Radio>
-						<Radio value={'W'}>Женский</Radio>
+						<Radio value={'M'}>{t('man')}</Radio>
+						<Radio value={'W'}>{t('woman')}</Radio>
 					</Radio.Group>
 				</Space>
 				<Space direction="vertical" size={'small'}>
-					<Typography.Text>Фамилия</Typography.Text>
+					<Typography.Text>{t('surname')}</Typography.Text>
 					<Input
 						disabled={isStudent}
-						placeholder="Фамилия"
+						placeholder={t('surname')}
 						size="large"
 						maxLength={200}
 						className={clsx(
@@ -138,10 +138,10 @@ export const AboutMe = () => {
 					)}
 				</Space>
 				<Space direction="vertical" size={'small'}>
-					<Typography.Text>Имя</Typography.Text>
+					<Typography.Text>{t('name')}</Typography.Text>
 					<Input
 						disabled={isStudent}
-						placeholder="Имя"
+						placeholder={t('name')}
 						size="large"
 						className={clsx(
 							'w-[624px] shadow ',
@@ -155,10 +155,10 @@ export const AboutMe = () => {
 					)}
 				</Space>
 				<Space direction="vertical" size={'small'}>
-					<Typography.Text>Отчество</Typography.Text>
+					<Typography.Text>{t('middleName')}</Typography.Text>
 					<Input
 						disabled={isStudent}
-						placeholder="Отчество"
+						placeholder={t('middleName')}
 						size="large"
 						className={clsx(
 							'w-[624px] shadow ',
@@ -177,11 +177,11 @@ export const AboutMe = () => {
 						)}
 				</Space>
 				<Space direction="vertical" size={'small'}>
-					<Typography.Text>Дата рождения</Typography.Text>
+					<Typography.Text>{t('birth')}</Typography.Text>
 					<ConfigProvider locale={ruPicker}>
 						<DatePicker
 							disabled={isStudent}
-							placeholder="Дата рождения"
+							placeholder={t('birth')}
 							size="large"
 							className={clsx(
 								'w-[624px] shadow ',
@@ -206,10 +206,10 @@ export const AboutMe = () => {
 					)}
 				</Space>
 				<Space direction="vertical" size={'small'}>
-					<Typography.Text>Страна гражданства</Typography.Text>
+					<Typography.Text>{t('citizen')}</Typography.Text>
 					<Select
 						disabled={isStudent}
-						placeholder="Страна гражданства"
+						placeholder={t('citizen')}
 						size="large"
 						className="w-[624px] shadow rounded-lg"
 						value={formData.countryId}
@@ -225,7 +225,7 @@ export const AboutMe = () => {
 					/>
 				</Space>
 				<Space direction="vertical" size={'small'}>
-					<Typography.Text>Телефон</Typography.Text>
+					<Typography.Text>{t('telephone')}</Typography.Text>
 					<Input
 						disabled={isStudent}
 						placeholder="+7 999 898-88-00"
@@ -247,10 +247,10 @@ export const AboutMe = () => {
 						) && <div className="text-sm text-rose-500">{t('BadPhone')}</div>}
 				</Space>
 				<Space direction="vertical" size={'small'}>
-					<Typography.Text>Электронная почта</Typography.Text>
+					<Typography.Text>{t('email')}</Typography.Text>
 					<Input
 						disabled={isStudent}
-						placeholder="Электронная почта"
+						placeholder={t('email')}
 						size="large"
 						className="w-[624px] shadow "
 						value={user !== '' ? user.email : ''}
@@ -266,7 +266,7 @@ export const AboutMe = () => {
 						className="border-solid border-bluekfu border-[1px] text-bluekfu rounded-md"
 						onClick={() => setChanges()}
 					>
-						Изменить
+						{t('edit')}
 					</Button>
 				</Space>
 			</Space>

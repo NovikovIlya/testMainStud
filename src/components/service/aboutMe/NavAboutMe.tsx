@@ -1,6 +1,7 @@
 import { CloudUploadOutlined, UserOutlined } from '@ant-design/icons'
 import { Avatar, Button, Progress, Typography } from 'antd'
 import clsx from 'clsx'
+import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { AboutMeSvg } from '../../../assets/svg/AboutMeSvg'
@@ -18,39 +19,6 @@ import { Education } from './Education'
 import { Parent } from './Parent'
 import { Work } from './Work'
 
-const navList = [
-	{
-		id: '/services/aboutMe/aboutMe',
-		icon: <AboutMeSvg />,
-		name: 'Обо мне'
-	},
-	{
-		id: '/services/aboutMe/document',
-		icon: <MyDocsSvg />,
-		name: 'Документы'
-	},
-	{
-		id: '/services/aboutMe/address',
-		icon: <AddressSvg />,
-		name: 'Адрес'
-	},
-	{
-		id: '/services/aboutMe/education',
-		icon: <EducationSvg />,
-		name: 'Образование'
-	},
-	{
-		id: '/services/aboutMe/work',
-		icon: <WorkSvg />,
-		name: 'Работа'
-	},
-	{
-		id: '/services/aboutMe/parent',
-		icon: <ParentSvg />,
-		name: 'Родители'
-	}
-]
-
 export const NavAboutMe = () => {
 	const user = useAppSelector(state => state.Profile.profileData.CurrentData)
 	const { pathname } = useLocation()
@@ -58,6 +26,39 @@ export const NavAboutMe = () => {
 	const handleNavigate = (url: string) => {
 		navigate(url)
 	}
+	const { t } = useTranslation()
+	const navList = [
+		{
+			id: '/services/aboutMe/aboutMe',
+			icon: <AboutMeSvg />,
+			name: t('aboutMe')
+		},
+		{
+			id: '/services/aboutMe/document',
+			icon: <MyDocsSvg />,
+			name: t('documents')
+		},
+		{
+			id: '/services/aboutMe/address',
+			icon: <AddressSvg />,
+			name: t('adress')
+		},
+		{
+			id: '/services/aboutMe/education',
+			icon: <EducationSvg />,
+			name: t('education')
+		},
+		{
+			id: '/services/aboutMe/work',
+			icon: <WorkSvg />,
+			name: t('work')
+		},
+		{
+			id: '/services/aboutMe/parent',
+			icon: <ParentSvg />,
+			name: t('Parents')
+		}
+	]
 	const handleList = navList.map(({ icon, name, id }, index) => {
 		return (
 			<li
@@ -114,7 +115,7 @@ export const NavAboutMe = () => {
 							</Typography.Text>
 						))}
 						<div className="w-[250px] mt-5">
-							<Typography.Text>Профиль заполнен на 69.9%</Typography.Text>
+							<Typography.Text>{t('FilledOn')} 69.9%</Typography.Text>
 							<Progress
 								showInfo={false}
 								percent={69.9}
@@ -122,7 +123,7 @@ export const NavAboutMe = () => {
 							/>
 						</div>
 						<Button className="rounded-full mt-5" type="primary" ghost>
-							Посмотреть публичный профиль
+							{t('ViewProfile')}
 						</Button>
 					</div>
 				</div>

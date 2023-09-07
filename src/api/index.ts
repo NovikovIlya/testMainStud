@@ -107,7 +107,7 @@ export const putParent = (id: string, params: IParent) =>
 	axiosInstance.put(endpoints.USER.INFO.PARENT, { ...params, id })
 
 export const deleteParent = (id: string) =>
-	axiosInstance.delete(endpoints.USER.INFO.PARENT + '/' + id)
+	axiosInstance.delete(endpoints.USER.INFO.PARENT, { data: { id } })
 
 export const postParent = (params: IParent) =>
 	axiosInstance.post(endpoints.USER.INFO.PARENT, params)

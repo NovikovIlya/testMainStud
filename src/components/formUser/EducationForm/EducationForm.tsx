@@ -1,3 +1,6 @@
+import { QuestionOutlined, UploadOutlined } from '@ant-design/icons'
+import { Space, Tooltip, Typography, Upload, message } from 'antd'
+import type { UploadProps } from 'antd'
 import { Button, DatePicker, Input, Select } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
@@ -6,12 +9,20 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
+import { IEducationError, IEducationState } from '../../../api/types'
 import { RootState, useAppSelector } from '../../../store'
+import {
+	addEducationItemRequest,
+	deleteEducationItemRequest,
+	getEducationItemRequest,
+	putEducationItemRequest
+} from '../../../store/creators/MainCreators'
 import { setEducation } from '../../../store/creators/MainCreators'
 import {
 	addCountries,
 	addEducations
 } from '../../../store/reducers/FormReducers/CountriesEducationReducer'
+import { allData } from '../../../store/reducers/FormReducers/EducationReducer'
 import {
 	countryId,
 	documentNumber,
@@ -19,7 +30,6 @@ import {
 	educationLevelId,
 	graduateYear,
 	idAdd,
-	idDelete,
 	nameOfInstitute,
 	specialization
 } from '../../../store/reducers/FormReducers/EducationReducer'
@@ -41,12 +51,6 @@ export const EducationForm = () => {
 	})
 	const [IsEmpty, changeIsEmpty] = useState<boolean>(false)
 	const info = useAppSelector(state => state.Education)
-	const countriesStorage = useAppSelector(
-		(state: RootState) => state.CountriesEducation.countries
-	)
-	const educationStorage = useAppSelector(
-		(state: RootState) => state.CountriesEducation.educations
-	)
 
 	useEffect(() => {
 		if (educationLevel && countries) {
@@ -62,42 +66,8 @@ export const EducationForm = () => {
 		navigate('/documents')
 	}
 	const handleOk = async () => {
-		if (await IsOK()) {
-			if (userRole === 'SEEKER') navigate('/work')
-			else navigate('/user')
-		}
-	}
-
-	const covertToString = (data: any): string => {
-		if (typeof data === 'string') return data
-		else return ''
-	}
-
-	const IsOK = async () => {
-		let IsCorrectStrFields = info.some(item =>
-			[item.nameOfInstitute, item.specialization].some(
-				el => el !== null && /^[\p{L}\s()0-9]+$/u.test(el) && !/\s\s/.test(el)
-			)
-		)
-		let IsCorrectPasswordData = info.some(item =>
-			[item.documentNumber, item.documentSeries].some(
-				el => el !== null && /^[0-9]{4}$/.test(el)
-			)
-		)
-		let IsCorrectDate = info.some(item => item.graduateYear !== '')
-		if (!IsCorrectStrFields || !IsCorrectPasswordData || !IsCorrectDate) {
-			changeIsEmpty(true)
-			return false
-		}
-		const requestData = info.map(({ id, ...rest }) => rest)
-		const response = await setEducation({ educations: requestData }, dispatch)
-
-		if (response === 200) return true
-		else {
-			if (response === 403) {
-				navigate('/')
-			}
-		}
+		if (userRole === 'SEEKER') navigate('/work')
+		else navigate('/user')
 	}
 	const handleSkip = () => {
 		navigate('/user')
@@ -105,28 +75,179 @@ export const EducationForm = () => {
 	const addEducation = () => {
 		dispatch(idAdd(info[info.length - 1].id + 1))
 	}
-	const handleDeleteEducation = (id: number) => {
-		dispatch(idDelete(id))
+	const countriesStorage = useAppSelector(
+		(state: RootState) => state.CountriesEducation.countries
+	)
+	const educationStorage = useAppSelector(
+		(state: RootState) => state.CountriesEducation.educations
+	)
+	const educationData = useAppSelector(state => state.Education)
+
+	const getData = async () => {
+		const response = await getEducationItemRequest(dispatch)
+		if (response !== null) {
+			dispatch(allData(response))
+		}
 	}
+
+	const [updateItems, setUpdate] = useState<boolean>(true)
+	const [IsError, setError] = useState<IEducationError | null>(null)
+
+	const convertToString = (field: any): string => {
+		if (typeof field === 'string') {
+			return field
+		} else {
+			return ''
+		}
+	}
+
+	const checkEducationItem = (item: IEducationState): boolean => {
+		var haveError = false
+
+		var errorPattern = {
+			id: item.id,
+			nameOfInstitute: false,
+			documentNumber: false,
+			documentSeries: false,
+			graduateYear: false,
+			specialization: false
+		}
+
+		if (
+			item.documentNumber === null ||
+			(item.documentNumber !== null && !/^[0-9]{4}$/.test(item.documentNumber))
+		) {
+			haveError = true
+			errorPattern.documentNumber = true
+		}
+
+		if (
+			item.documentSeries === null ||
+			(item.documentSeries !== null && !/^[0-9]{4}$/.test(item.documentSeries))
+		) {
+			haveError = true
+			errorPattern.documentSeries = true
+		}
+		if (
+			item.nameOfInstitute === null ||
+			(item.nameOfInstitute !== null &&
+				(/\s\s/.test(item.nameOfInstitute) ||
+					!/^[\p{L}\s()0-9]+$/u.test(item.nameOfInstitute)))
+		) {
+			haveError = true
+			errorPattern.nameOfInstitute = true
+		}
+		if (
+			item.specialization === null ||
+			(item.specialization !== null &&
+				(/\s\s/.test(item.specialization) ||
+					!/^[\p{L}\s.,]+$/u.test(item.specialization)))
+		) {
+			haveError = true
+			errorPattern.specialization = true
+		}
+		if (!item.graduateYear) {
+			haveError = true
+			errorPattern.graduateYear = true
+		}
+
+		haveError && setError(errorPattern)
+		IsError !== null && !haveError && setError(null)
+
+		return haveError
+	}
+
+	const handleUpdateEducation = async (item: IEducationState) => {
+		if (!checkEducationItem(item)) {
+			const status = await putEducationItemRequest(
+				item.id.toString(),
+				{
+					nameOfInstitute: item.nameOfInstitute,
+					documentNumber: item.documentNumber,
+					documentSeries: item.documentSeries,
+					graduateYear: item.graduateYear,
+					specialization: item.specialization,
+					educationLevelId: item.educationLevelId,
+					countryId: item.countryId
+				},
+
+				dispatch
+			)
+			if (status === 200) {
+				setUpdate(true)
+			} else {
+				console.log('403')
+			}
+		}
+	}
+
+	const handleDeleteEducation = async (id: string) => {
+		const response = await deleteEducationItemRequest(id, dispatch)
+		if (response === 200) setUpdate(true)
+		else console.log('403')
+	}
+
+	const handleAddEducation = async () => {
+		const item = {
+			nameOfInstitute: null,
+			documentNumber: null,
+			documentSeries: null,
+			graduateYear: null,
+			specialization: null,
+			educationLevelId: 1,
+			countryId: 1
+		}
+		const response = await addEducationItemRequest(item, dispatch)
+		if (response === 200) setUpdate(true)
+		else console.log('403')
+	}
+
+	useEffect(() => {
+		if (educationLevel && countries) {
+			dispatch(addEducations(educationLevel))
+			dispatch(addCountries(countries))
+			changeQuerySkip(true)
+		} else {
+			changeQuerySkip(false)
+		}
+	}, [educationLevel, countries])
+
+	useEffect(() => {
+		if (updateItems) {
+			getData()
+			setUpdate(false)
+		}
+	}, [updateItems])
 	return (
 		<ImagesLayout>
 			<div className="w-full flex justify-center  text-sm">
 				<div className="container max-w-2xl flex flex-col  pч-5">
 					<h3 className="self-start text-xl">{t('education')}</h3>
 					<div className="flex flex-col gap-10 w-full">
-						{info.map(item => (
+						{educationData.map((item, index) => (
 							<div key={item.id}>
-								<div className="flex self-start gap-4 mt-7">
-									<p>{t('educationDocument')}</p>
-									{item.id !== 0 && (
-										<p
-											onClick={() => handleDeleteEducation(item.id)}
-											className="opacity-40 text-sm cursor-pointer"
-										>
-											{t('remove')}
-										</p>
-									)}
-								</div>
+								<Space>
+									<Typography.Text ellipsis className="font-bold mr-3">
+										{t('educationDocument')}
+									</Typography.Text>
+									<Typography.Text
+										onClick={() => handleDeleteEducation(item.id.toString())}
+										className={clsx(
+											'cursor-pointer opacity-40 text-center text-black text-sm font-normal leading-[18px] mr-3',
+											index === 0 && 'hidden'
+										)}
+									>
+										{t('Delete')}
+									</Typography.Text>
+									<Typography.Text
+										onClick={() => handleUpdateEducation(item)}
+										className={clsx(
+											'cursor-pointer opacity-40 text-center text-black text-sm font-normal leading-[18px]'
+										)}
+									>
+										{t('Save')}
+									</Typography.Text>
+								</Space>
 								<div className="grid grid-cols-2 gap-10 mt-5 w-full max-sm:grid-cols-1 max-sm:gap-4">
 									<div>
 										<p>{t('higherEducational')}</p>
@@ -134,23 +255,24 @@ export const EducationForm = () => {
 										<Select
 											className="w-full mt-2"
 											size="large"
-											onChange={e =>
-												dispatch(
-													educationLevelId({
-														id: item.id,
-														educationLevelId: e
-													})
-												)
+											defaultValue={
+												educationData.filter(el => el.id === item.id)[0]
+													.educationLevelId
 											}
+											value={educationData[0].educationLevelId}
 											options={
-												educationStorage === null
+												!educationStorage
 													? []
 													: educationStorage.map(el => ({
 															value: el.id,
 															label: el.name
 													  }))
 											}
-											value={item.educationLevelId}
+											onChange={e =>
+												dispatch(
+													educationLevelId({ id: item.id, educationLevelId: e })
+												)
+											}
 										/>
 									</div>
 									<div>
@@ -186,30 +308,31 @@ export const EducationForm = () => {
 										maxLength={250}
 										size="large"
 										className={clsx(
-											'w-full',
-											IsEmpty &&
-												item.nameOfInstitute !== null &&
-												(!/^[\p{L}\s()0-9]+$/u.test(item.nameOfInstitute) ||
-													/\s\s/.test(item.nameOfInstitute)) &&
+											'shadow ',
+											IsError &&
+												IsError.id === item.id &&
+												IsError.nameOfInstitute &&
 												'border-rose-500'
 										)}
-										onChange={e => {
+										value={convertToString(
+											educationData.filter(el => el.id === item.id)[0]
+												.nameOfInstitute
+										)}
+										onChange={e =>
 											dispatch(
 												nameOfInstitute({
 													id: item.id,
 													nameOfInstitute: e.target.value
 												})
 											)
-										}}
-										value={covertToString(info[item.id].nameOfInstitute)}
+										}
 									/>
-									{IsEmpty &&
-										item.nameOfInstitute !== null &&
-										(!/^[\p{L}\s()0-9]+$/u.test(item.nameOfInstitute) ||
-											/\s\s/.test(item.nameOfInstitute)) && (
-											<span className="text-red-500 text-sm">
+									{IsError &&
+										IsError.id === item.id &&
+										IsError.nameOfInstitute && (
+											<div className="text-sm text-rose-500">
 												{t('EmptyFolder')}
-											</span>
+											</div>
 										)}
 								</div>
 								<div className="grid grid-cols-2 mt-4 gap-x-10 gap-y-4 w-full max-sm:gap-5">
@@ -219,12 +342,17 @@ export const EducationForm = () => {
 											<Input
 												placeholder="0000"
 												size="large"
+												maxLength={4}
 												className={clsx(
-													'w-full',
-													IsEmpty &&
-														item.documentSeries !== null &&
-														!/^[0-9]{4}$/.test(item.documentSeries) &&
+													'shadow ',
+													IsError &&
+														IsError.id === item.id &&
+														IsError.documentSeries &&
 														'border-rose-500'
+												)}
+												value={convertToString(
+													educationData.filter(el => el.id === item.id)[0]
+														.documentSeries
 												)}
 												onChange={e =>
 													dispatch(
@@ -234,18 +362,13 @@ export const EducationForm = () => {
 														})
 													)
 												}
-												value={covertToString(
-													info.filter(element => element.id === item.id)[0]
-														.documentSeries
-												)}
-												maxLength={4}
 											/>
-											{IsEmpty &&
-												item.documentSeries !== null &&
-												!/^[0-9]{4}$/.test(item.documentSeries) && (
-													<span className="text-red-500 text-sm">
+											{IsError &&
+												IsError.id === item.id &&
+												IsError.documentSeries && (
+													<div className="text-sm text-rose-500">
 														{t('EmptyFolder')}
-													</span>
+													</div>
 												)}
 										</div>
 									</div>
@@ -255,12 +378,17 @@ export const EducationForm = () => {
 											<Input
 												placeholder="0000"
 												size="large"
+												maxLength={4}
 												className={clsx(
-													'w-full',
-													IsEmpty &&
-														item.documentNumber !== null &&
-														!/^[0-9]{4}$/.test(item.documentNumber) &&
+													'shadow ',
+													IsError &&
+														IsError.id === item.id &&
+														IsError.documentNumber &&
 														'border-rose-500'
+												)}
+												value={convertToString(
+													educationData.filter(el => el.id === item.id)[0]
+														.documentNumber
 												)}
 												onChange={e =>
 													dispatch(
@@ -270,15 +398,13 @@ export const EducationForm = () => {
 														})
 													)
 												}
-												value={covertToString(info[item.id].documentNumber)}
-												maxLength={4}
 											/>
-											{IsEmpty &&
-												item.documentNumber !== null &&
-												!/^[0-9]{4}$/.test(item.documentNumber) && (
-													<span className="text-red-500 text-sm">
+											{IsError &&
+												IsError.id === item.id &&
+												IsError.documentNumber && (
+													<div className="text-sm text-rose-500">
 														{t('EmptyFolder')}
-													</span>
+													</div>
 												)}
 										</div>
 									</div>
@@ -288,8 +414,9 @@ export const EducationForm = () => {
 											<DatePicker
 												className={clsx(
 													'shadow w-full',
-													IsEmpty &&
-														item.graduateYear === '' &&
+													IsError &&
+														IsError.id === item.id &&
+														IsError.graduateYear &&
 														'border-rose-500'
 												)}
 												onChange={e => {
@@ -305,16 +432,28 @@ export const EducationForm = () => {
 												placeholder={new Date().getFullYear().toString()}
 												picker="year"
 												value={
-													info[item.id].graduateYear !== ''
-														? dayjs(info[item.id].graduateYear, 'YYYY')
+													convertToString(
+														educationData.filter(el => el.id === item.id)[0]
+															.graduateYear
+													) !== ''
+														? dayjs(
+																convertToString(
+																	educationData.filter(
+																		el => el.id === item.id
+																	)[0].graduateYear
+																),
+																'YYYY'
+														  )
 														: null
 												}
 											/>
-											{IsEmpty && item.graduateYear === '' && (
-												<span className="text-red-500 text-sm">
-													{t('DateError')}
-												</span>
-											)}
+											{IsError &&
+												IsError.id === item.id &&
+												IsError.graduateYear && (
+													<div className="text-sm text-rose-500">
+														{t('DateError')}
+													</div>
+												)}
 										</div>
 									</div>
 									<div>
@@ -324,12 +463,15 @@ export const EducationForm = () => {
 												placeholder={t('webDesign')}
 												size="large"
 												className={clsx(
-													'w-full',
-													IsEmpty &&
-														item.specialization !== null &&
-														(!/^[\p{L}\s()]+$/u.test(item.specialization) ||
-															/\s\s/.test(item.specialization)) &&
+													'w-full shadow ',
+													IsError &&
+														IsError.id === item.id &&
+														IsError.specialization &&
 														'border-rose-500'
+												)}
+												value={convertToString(
+													educationData.filter(el => el.id === item.id)[0]
+														.specialization
 												)}
 												onChange={e =>
 													dispatch(
@@ -339,16 +481,13 @@ export const EducationForm = () => {
 														})
 													)
 												}
-												value={covertToString(info[item.id].specialization)}
-												maxLength={400}
 											/>
-											{IsEmpty &&
-												item.specialization !== null &&
-												(!/^[\p{L}\s()]+$/u.test(item.specialization) ||
-													/\s\s/.test(item.specialization)) && (
-													<span className="text-red-500 text-sm">
+											{IsError &&
+												IsError.id === item.id &&
+												IsError.specialization && (
+													<div className="text-sm text-rose-500">
 														{t('EmptyFolder')}
-													</span>
+													</div>
 												)}
 										</div>
 									</div>

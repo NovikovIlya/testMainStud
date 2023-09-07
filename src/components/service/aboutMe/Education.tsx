@@ -261,7 +261,6 @@ export const Education = () => {
 									<Typography.Text>{t('higherEducational')}</Typography.Text>
 									<Select
 										disabled={isStudent}
-										placeholder="Основное общее"
 										size="large"
 										className="w-full shadow rounded-lg"
 										defaultValue={
@@ -296,25 +295,23 @@ export const Education = () => {
 										<Select
 											size="large"
 											className="w-full shadow rounded-lg"
-											defaultValue={
-												educationData.filter(el => el.id === item.id)[0]
-													.countryId
-											}
-											value={
-												educationData.filter(el => el.id === item.id)[0]
-													.countryId
-											}
 											onChange={e =>
-												dispatch(countryId({ id: item.id, countryId: e }))
+												dispatch(
+													countryId({
+														id: item.id,
+														countryId: e
+													})
+												)
 											}
 											options={
-												!countriesStorage
+												countriesStorage === null
 													? []
 													: countriesStorage.map(el => ({
 															value: el.id,
 															label: el.shortName
 													  }))
 											}
+											value={item.countryId}
 										/>
 									)}
 								</Space>

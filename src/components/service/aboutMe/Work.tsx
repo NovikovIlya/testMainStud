@@ -12,9 +12,11 @@ import {
 	message
 } from 'antd'
 import type { UploadProps } from 'antd'
+import enPicker from 'antd/locale/en_US'
 import ruPicker from 'antd/locale/ru_RU'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
+import 'dayjs/locale/en'
 import 'dayjs/locale/ru'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -272,7 +274,9 @@ export const Work = () => {
 							<Typography.Text>{t('periodOperation')}</Typography.Text>
 							<div className="w-[624px] grid grid-cols-2 gap-x-4 max-sm:grid-cols-1">
 								<div>
-									<ConfigProvider locale={ruPicker}>
+									<ConfigProvider
+										locale={i18n.language === 'ru' ? ruPicker : enPicker}
+									>
 										<DatePicker
 											className={clsx(
 												'shadow w-full',

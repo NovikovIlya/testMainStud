@@ -11,9 +11,14 @@ import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import { RootState, useAppSelector } from '../../../store'
-import { setDocument } from '../../../store/creators/MainCreators'
+import {
+	getDocumentItemRequest,
+	postDocumentItemRequest,
+	setDocument
+} from '../../../store/creators/MainCreators'
 import { addDocuments } from '../../../store/reducers/FormReducers/CountriesEducationReducer'
 import {
+	allData,
 	dateIssue,
 	divisionCode,
 	documentTypeId,
@@ -34,24 +39,49 @@ export const DocumentForm = () => {
 	dayjs.locale(i18n.language)
 	const dispatch = useDispatch()
 	const userRole = useAppSelector(state => state.InfoUser.role)
-	const data = useAppSelector(state => state.Document)
+	const documentData = useAppSelector(state => state.Document)
 	const documentStorage = useAppSelector(
 		(state: RootState) => state.CountriesEducation.documents
 	)
-
 	const { data: documents } = useGetDocumentsQuery(i18n.language, {
 		skip: SkipCountriesQuery
 	})
 
 	const navigate = useNavigate()
+	const getData = async () => {
+		const response = await getDocumentItemRequest(dispatch)
+		if (response) {
+			dispatch(
+				allData({
+					documentTypeId: !response.documentTypeId
+						? 1
+						: response.documentTypeId,
+					passportSeries: !response.passportSeries
+						? ''
+						: response.passportSeries,
+					passportNumber: !response.passportNumber
+						? ''
+						: response.passportNumber,
+					issuedBy: !response.issuedBy ? '' : response.issuedBy,
+					dateIssue: !response.dateIssue ? '' : response.dateIssue,
+					divisionCode: !response.divisionCode ? '' : response.divisionCode,
+					inn: !response.inn ? '' : response.inn,
+					snils: !response.snils ? '' : response.snils
+				})
+			)
+		} else console.log('403')
+	}
 
 	useEffect(() => {
-		if (documentStorage) {
+		getData()
+	}, [])
+	useEffect(() => {
+		if (documentData) {
 			changeQuerySkip(true)
 		} else {
 			changeQuerySkip(false)
 		}
-	}, [documentStorage])
+	}, [documentData])
 
 	useEffect(() => {
 		if (documents) {
@@ -62,48 +92,54 @@ export const DocumentForm = () => {
 	const handleCancel = () => {
 		navigate('/form')
 	}
+	const navigating = () => {
+		if (userRole === 'SCHOOL') navigate('/parent')
+		else navigate('/education')
+	}
 	const handleOk = async () => {
-		if (await IsOK()) {
-			if (userRole === 'SCHOOL') navigate('/parent')
-			else navigate('/education')
-		}
+		const response = await handleAddDocument()
+		console.log(response)
+		navigating()
 	}
 	const handleSkip = () => {
 		navigate('/user')
 	}
-
-	const IsOK = async () => {
+	const handleAddDocument = async () => {
 		const IsCorrectPasswordData = [
-			data.passportNumber,
-			data.passportSeries
+			documentData.passportNumber,
+			documentData.passportSeries
 		].some(el => /^[0-9]{4}$/.test(el))
 
 		const IsCorrectSNILS = /^[0-9]{3}\-[0-9]{3}\-[0-9]{3} [0-9]{2}$/.test(
-			data.snils
+			documentData.snils
 		)
-		const IsCorrectDivisionCode = /^[0-9]{3}\-[0-9]{3}$/.test(data.divisionCode)
-		const IsCorrectINN = /^[0-9]{12}$/.test(data.inn)
+		const IsCorrectDivisionCode = /^[0-9]{3}\-[0-9]{3}$/.test(
+			documentData.divisionCode
+		)
+		const IsCorrectINN = /^[0-9]{12}$/.test(documentData.inn)
 		const IsCorrectWhomIssued =
-			!/\s\s/.test(data.issuedBy) && /^[\p{L}\s]+$/u.test(data.issuedBy)
+			!/\s\s/.test(documentData.issuedBy) &&
+			/^[\p{L}\s]+$/u.test(documentData.issuedBy)
 		if (
 			!IsCorrectPasswordData ||
 			!IsCorrectSNILS ||
 			!IsCorrectINN ||
 			!IsCorrectDivisionCode ||
-			data.dateIssue === '' ||
+			documentData.dateIssue === '' ||
 			!IsCorrectWhomIssued
 		) {
 			changeIsEmpty(true)
 			return false
 		}
-		const response = await setDocument({ document: data }, dispatch)
-		if (response === 200) return true
+		const response = await postDocumentItemRequest(documentData, dispatch)
+		if (response === 200) changeIsEmpty(false)
 		else {
-			if (response === 403) {
-				navigate('/')
-			}
+			console.log('403')
 		}
 	}
+	useEffect(() => {
+		if (!documentStorage) changeQuerySkip(false)
+	}, [documentStorage])
 	return (
 		<ImagesLayout>
 			<div className="w-full flex justify-center ">
@@ -124,7 +160,7 @@ export const DocumentForm = () => {
 									  }))
 									: []
 							}
-							value={data.documentTypeId}
+							value={documentData.documentTypeId}
 						/>
 					</div>
 					<div className="flex w-full flex-col mt-4 text-sm">
@@ -136,11 +172,13 @@ export const DocumentForm = () => {
 									<Input
 										placeholder="000-000"
 										size="large"
-										value={data?.divisionCode}
+										value={documentData?.divisionCode}
 										className={clsx(
 											'shadow ',
 											IsEmpty &&
-												!/^[0-9]{3}\-[0-9]{3}$/.test(data.divisionCode) &&
+												!/^[0-9]{3}\-[0-9]{3}$/.test(
+													documentData.divisionCode
+												) &&
 												'border-rose-500'
 										)}
 										maxLength={7}
@@ -149,7 +187,7 @@ export const DocumentForm = () => {
 										}
 									/>
 									{IsEmpty &&
-										!/^[0-9]{3}\-[0-9]{3}$/.test(data.divisionCode) && (
+										!/^[0-9]{3}\-[0-9]{3}$/.test(documentData.divisionCode) && (
 											<span className="text-red-500 text-sm">
 												{t('BadDivisionCode')}
 											</span>
@@ -165,7 +203,9 @@ export const DocumentForm = () => {
 										<DatePicker
 											className={clsx(
 												'shadow w-full',
-												IsEmpty && data.dateIssue === '' && 'border-rose-500'
+												IsEmpty &&
+													documentData.dateIssue === '' &&
+													'border-rose-500'
 											)}
 											onChange={e =>
 												dispatch(
@@ -176,16 +216,19 @@ export const DocumentForm = () => {
 											placeholder={t('date')}
 											format={'DD.MM.YYYY'}
 											value={
-												data.dateIssue !== ''
+												documentData.dateIssue !== ''
 													? dayjs(
-															data.dateIssue.split('-').reverse().join('.'),
+															documentData.dateIssue
+																.split('-')
+																.reverse()
+																.join('.'),
 															'DD.MM.YYYY'
 													  )
 													: null
 											}
 										/>
 									</ConfigProvider>
-									{IsEmpty && data.dateIssue === '' && (
+									{IsEmpty && documentData.dateIssue === '' && (
 										<div className="text-red-500 text-sm">{t('DateError')}</div>
 									)}
 								</div>
@@ -199,20 +242,23 @@ export const DocumentForm = () => {
 										className={clsx(
 											'shadow ',
 											IsEmpty &&
-												!/^[0-9]{4}$/.test(data.passportSeries) &&
+												!/^[0-9]{4}$/.test(documentData.passportSeries) &&
 												'border-rose-500'
 										)}
 										maxLength={4}
 										onChange={e => dispatch(passportSeries(e.target.value))}
 										value={
-											data.passportSeries !== '' ? data.passportSeries : ''
+											documentData.passportSeries !== ''
+												? documentData.passportSeries
+												: ''
 										}
 									/>
-									{IsEmpty && !/^[0-9]{4}$/.test(data.passportSeries) && (
-										<span className="text-red-500 text-sm">
-											{t('BadPassport')}
-										</span>
-									)}
+									{IsEmpty &&
+										!/^[0-9]{4}$/.test(documentData.passportSeries) && (
+											<span className="text-red-500 text-sm">
+												{t('BadPassport')}
+											</span>
+										)}
 								</div>
 							</div>
 							<div>
@@ -224,20 +270,23 @@ export const DocumentForm = () => {
 										className={clsx(
 											'shadow',
 											IsEmpty &&
-												!/^[0-9]{4}$/.test(data.passportNumber) &&
+												!/^[0-9]{4}$/.test(documentData.passportNumber) &&
 												'border-rose-500'
 										)}
 										maxLength={4}
 										onChange={e => dispatch(passportNumber(e.target.value))}
 										value={
-											data.passportNumber !== '' ? data.passportNumber : ''
+											documentData.passportNumber !== ''
+												? documentData.passportNumber
+												: ''
 										}
 									/>
-									{IsEmpty && !/^[0-9]{4}$/.test(data.passportNumber) && (
-										<span className="text-red-500 text-sm">
-											{t('BadPassport')}
-										</span>
-									)}
+									{IsEmpty &&
+										!/^[0-9]{4}$/.test(documentData.passportNumber) && (
+											<span className="text-red-500 text-sm">
+												{t('BadPassport')}
+											</span>
+										)}
 								</div>
 							</div>
 						</div>
@@ -249,18 +298,20 @@ export const DocumentForm = () => {
 									size="large"
 									maxLength={200}
 									className={clsx(
-										'shadow ',
+										'shadow',
 										IsEmpty &&
-											(!/^[\p{L}\s]+$/u.test(data.issuedBy) ||
-												/\s\s/.test(data.issuedBy)) &&
+											(!/^[\p{L}\s]+$/u.test(documentData.issuedBy) ||
+												/\s\s/.test(documentData.issuedBy)) &&
 											'border-rose-500'
 									)}
 									onChange={e => dispatch(issuedBy(e.target.value))}
-									value={data.issuedBy !== '' ? data.issuedBy : ''}
+									value={
+										documentData.issuedBy !== '' ? documentData.issuedBy : ''
+									}
 								/>
 								{IsEmpty &&
-									(!/^[\p{L}\s]+$/u.test(data.issuedBy) ||
-										/\s\s/.test(data.issuedBy)) && (
+									(!/^[\p{L}\s]+$/u.test(documentData.issuedBy) ||
+										/\s\s/.test(documentData.issuedBy)) && (
 										<span className="text-red-500 text-sm">
 											{t('EmptyFolder')}
 										</span>
@@ -280,17 +331,17 @@ export const DocumentForm = () => {
 										'shadow ',
 										IsEmpty &&
 											!/^[0-9]{3}\-[0-9]{3}\-[0-9]{3} [0-9]{2}$/.test(
-												data.snils
+												documentData.snils
 											) &&
 											'border-rose-500'
 									)}
 									maxLength={14}
 									onChange={e => dispatch(snils(e.target.value))}
-									value={data.snils}
+									value={documentData.snils}
 								/>
 								{IsEmpty &&
 									!/^[0-9]{3}\-[0-9]{3}\-[0-9]{3} [0-9]{2}$/.test(
-										data.snils
+										documentData.snils
 									) && (
 										<span className="text-red-500 text-sm">
 											{t('BadSnils')}
@@ -306,13 +357,13 @@ export const DocumentForm = () => {
 									className={clsx(
 										'shadow ',
 										IsEmpty &&
-											!/^[0-9]{12}$/.test(data.inn) &&
+											!/^[0-9]{12}$/.test(documentData.inn) &&
 											'border-rose-500'
 									)}
 									onChange={e => dispatch(inn(e.target.value))}
-									value={data.inn}
+									value={documentData.inn}
 								/>
-								{IsEmpty && !/^[0-9]{12}$/.test(data.inn) && (
+								{IsEmpty && !/^[0-9]{12}$/.test(documentData.inn) && (
 									<span className="text-red-500 text-sm">{t('BadInn')}</span>
 								)}
 							</div>

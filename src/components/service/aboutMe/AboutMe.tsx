@@ -60,8 +60,9 @@ export const AboutMe = () => {
 		const IsCorrectPatronymic =
 			/^\p{L}+$/u.test(formData.patronymic) || formData.patronymic === ''
 
-		const IsCorrectPhone =
-			/^\+[0-9]\s[0-9]{3}\s[0-9]{3}\-[0-9]{2}\-[0-9]{2}$/.test(formData.phone)
+		const IsCorrectPhone = /^\+[0-9][0-9]{3}[0-9]{3}[0-9]{2}[0-9]{2}$/.test(
+			formData.phone
+		)
 
 		if (
 			!IsCorrectNS ||

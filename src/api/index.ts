@@ -92,10 +92,10 @@ export const getEducation = (): AxiosPromise<IEducationState[]> =>
 	axiosInstance.get(endpoints.USER.INFO.EDUCATION)
 
 export const deleteEducation = (id: string) =>
-	axiosInstance.delete(endpoints.USER.INFO.EDUCATION + '/' + id)
+	axiosInstance.delete(endpoints.USER.INFO.EDUCATION, { data: { id: id } })
 
 export const putEducation = (id: string, params: educationItem) =>
-	axiosInstance.put(endpoints.USER.INFO.EDUCATION + '/' + id, params)
+	axiosInstance.put(endpoints.USER.INFO.EDUCATION, { ...params, id })
 
 export const addEducation = (params: educationItem) =>
 	axiosInstance.post(endpoints.USER.INFO.EDUCATION, params)

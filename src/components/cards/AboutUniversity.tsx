@@ -3,26 +3,28 @@ import { useTranslation } from 'react-i18next'
 
 import img from '../../assets/images/image15.png'
 
-export const Applications = () => {
+export const AboutUniversity = () => {
 	const { t } = useTranslation()
 	return (
-		<div className="relative h-full flex gap-2">
-			<div className="h-full flex justify-start flex-col items-start pl-10">
-				<div className="text-neutral-800 text-xl font-bold leading-7 place-content-start mt-8">
-					{t('Applications')}
+		<div className="flex overflow-hidden">
+			<div className="ml-[40px] mt-[40px]">
+				<div>
+					<div className="font-semibold text-xl text-start">
+						Об университете
+					</div>
+					<div className="text-base text-start mt-[30px] max-h-[100px]">
+						Мини-текст в 3-4 строки о том какой КФУ крутой, статистика,
+						инфографика внутри — хвалебные маркетинговые оды университету
+					</div>
 				</div>
-				<span className="text-neutral-800 text-start text-base font-normal leading-normal mt-5  ">
-					{t('ApplicationsDescription')}
-				</span>
-				<Button
-					block
-					className="rounded-full mt-16 h-12 max-w-xs text-black text-base font-bold leading-tight border-black"
-				>
-					{t('GoOver')}
-				</Button>
+				<div className="text-start absolute bottom-[40px]">
+					<Button className="rounded-full border-black  w-[200px] h-[50px] text-base font-semibold mt-[40px]">
+						Посмотреть
+					</Button>
+				</div>
 			</div>
-			<div className="w-32 h-32 opacity-80 bg-indigo-100 rounded-full mt-8 mr-10">
-				<img src={img} alt="" className="-mt-4" />
+			<div className="min-w-[125px] min-h-[125px] ml-[15px] mt-[50px] mr-[50px] max-h-[125px] bg-[#3E89F9] bg-opacity-80 rounded-full">
+				<img className="rounded-b-full -mt-[5px]" src={img} alt="" />
 			</div>
 		</div>
 	)

@@ -62,6 +62,9 @@ export const Document = () => {
 
 	const [IsEmpty, changeIsEmpty] = useState<boolean>(false)
 	const [SkipCountriesQuery, changeQuerySkip] = useState<boolean>(true)
+	const role = useAppSelector(
+		state => state.Profile.profileData.CurrentData?.roles
+	)
 	const documentStorage = useAppSelector(
 		(state: RootState) => state.CountriesEducation.documents
 	)
@@ -143,6 +146,8 @@ export const Document = () => {
 			console.log('403')
 		}
 	}
+	if (!role) return <></>
+	const isStudent = role[0].type === 'STUD'
 
 	return (
 		<div className="m-14 radio">
@@ -152,6 +157,10 @@ export const Document = () => {
 				<Space direction="vertical" size={'small'}>
 					<Typography.Text>{t('documentType')}</Typography.Text>
 					<Select
+						onChange={e => {
+							dispatch(documentTypeId(e))
+						}}
+						disabled={isStudent}
 						placeholder={t('rf')}
 						size="large"
 						className="w-[624px] shadow rounded-lg"
@@ -172,6 +181,7 @@ export const Document = () => {
 					<Space direction="vertical" className="w-[300px]">
 						<Typography.Text>{t('divisionCode')}</Typography.Text>
 						<Input
+							disabled={isStudent}
 							placeholder="000-000"
 							size="large"
 							value={documentData.divisionCode}
@@ -195,6 +205,7 @@ export const Document = () => {
 						<Typography.Text>{t('whenIssued')}</Typography.Text>
 						<ConfigProvider locale={ruPicker}>
 							<DatePicker
+								disabled={isStudent}
 								className={clsx(
 									'shadow w-full',
 									IsEmpty && documentData.dateIssue === '' && 'border-rose-500'
@@ -225,6 +236,7 @@ export const Document = () => {
 					<Space direction="vertical" className="w-[300px]">
 						<Typography.Text>{t('series')}</Typography.Text>
 						<Input
+							disabled={isStudent}
 							placeholder="0000"
 							size="large"
 							className={clsx(
@@ -248,6 +260,7 @@ export const Document = () => {
 					<Space direction="vertical" className="w-[300px]">
 						<Typography.Text>{t('number')}</Typography.Text>
 						<Input
+							disabled={isStudent}
 							placeholder="0000"
 							size="large"
 							className={clsx(
@@ -273,6 +286,7 @@ export const Document = () => {
 				<Space direction="vertical" size={'small'} className="w-full ">
 					<Typography.Text>{t('issuedWhom')}</Typography.Text>
 					<Input
+						disabled={isStudent}
 						placeholder={t('location')}
 						size="large"
 						maxLength={200}
@@ -300,6 +314,7 @@ export const Document = () => {
 				<Space direction="vertical" size={'small'} className="w-full">
 					<Typography.Text>{t('snils')}</Typography.Text>
 					<Input
+						disabled={isStudent}
 						size="large"
 						placeholder="000-000-000 00"
 						className={clsx(
@@ -322,6 +337,7 @@ export const Document = () => {
 				<Space direction="vertical" size={'small'} className="w-full">
 					<Typography.Text>{t('inn')}</Typography.Text>
 					<Input
+						disabled={isStudent}
 						size="large"
 						placeholder="000000000000"
 						maxLength={12}
@@ -338,7 +354,7 @@ export const Document = () => {
 						<span className="text-red-500 text-sm">{t('BadInn')}</span>
 					)}
 				</Space>
-				<Space size={'small'}>
+				<Space size={'small'} className={clsx(isStudent && 'hidden')}>
 					<Typography.Text className="text-black opacity-80 text-sm font-normal leading-none">
 						{t('AttachDocuments')}
 					</Typography.Text>
@@ -351,10 +367,14 @@ export const Document = () => {
 					</Tooltip>
 				</Space>
 
-				<Upload {...props}>
+				<Upload {...props} className={clsx(isStudent && 'hidden')}>
 					<Button icon={<UploadOutlined />}>{t('AddFile')}</Button>
 				</Upload>
-				<Space direction="vertical" size={'small'} className="mt-4">
+				<Space
+					direction="vertical"
+					size={'small'}
+					className={clsx('mt-4', isStudent && 'hidden')}
+				>
 					<Button
 						className="border-solid border-bluekfu border-[1px] text-bluekfu rounded-md"
 						onClick={handleAddDocument}

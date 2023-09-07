@@ -1,4 +1,4 @@
-import { Applications } from '../cards/AboutUniversity'
+import { AboutUniversity } from '../cards/AboutUniversity'
 import { Apply } from '../cards/Apply'
 import { Educational } from '../cards/Educational'
 import { Events } from '../cards/Events'
@@ -13,7 +13,7 @@ export const jsxElements = [
 	},
 	{
 		index: '1',
-		element: <Applications />
+		element: <AboutUniversity />
 	},
 	{
 		index: '2',

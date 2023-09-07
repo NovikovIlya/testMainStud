@@ -66,8 +66,10 @@ export const Education = () => {
 	const navigate = useNavigate()
 	const { t, i18n } = useTranslation()
 	const [SkipCountriesQuery, changeQuerySkip] = useState<boolean>(true)
-	const educationData = useAppSelector((state: RootState) => state.Education)
-	console.log(educationData)
+	const educationData = useAppSelector(state => state.Education)
+	const role = useAppSelector(
+		state => state.Profile.profileData.CurrentData?.roles
+	)
 
 	const { data: educationLevel } = useGetEducationLevelQuery(i18n.language, {
 		skip: SkipCountriesQuery
@@ -217,10 +219,11 @@ export const Education = () => {
 			setUpdate(false)
 		}
 	}, [updateItems])
-
+	if (!role) return <></>
+	const isStudent = role[0].type === 'STUD'
 	return (
-		<div className="m-14 radio  min-w-[624px]">
-			<Space direction="vertical" size={20}>
+		<div className="m-14 radio  min-w-[624px] w-full">
+			<Space direction="vertical" size={20} className="w-full">
 				<Typography.Title
 					level={3}
 					className="text-black text-2xl font-bold leading-normal"
@@ -244,7 +247,10 @@ export const Education = () => {
 							</Typography.Text>
 							<Typography.Text
 								onClick={() => handleUpdateEducation(item)}
-								className="cursor-pointer opacity-40 text-center text-black text-sm font-normal leading-[18px]"
+								className={clsx(
+									'cursor-pointer opacity-40 text-center text-black text-sm font-normal leading-[18px]',
+									isStudent && 'hidden'
+								)}
 							>
 								{t('Save')}
 							</Typography.Text>
@@ -252,8 +258,9 @@ export const Education = () => {
 						<Space size={'large'} direction="vertical" className="w-full">
 							<div className="grid grid-cols-2 gap-10 mt-5 w-full max-lg:grid-cols-1 max-lg:gap-1">
 								<Space direction="vertical">
-									<Typography.Text>Уровень образования</Typography.Text>
+									<Typography.Text>{t('higherEducational')}</Typography.Text>
 									<Select
+										disabled={isStudent}
 										placeholder="Основное общее"
 										size="large"
 										className="w-full shadow rounded-lg"
@@ -282,33 +289,41 @@ export const Education = () => {
 								</Space>
 								<Space direction="vertical">
 									<Typography.Text>{t('countryEducation')}</Typography.Text>
-									<Select
-										size="large"
-										className="w-full shadow rounded-lg"
-										defaultValue={
-											educationData.filter(el => el.id === item.id)[0].countryId
-										}
-										value={
-											educationData.filter(el => el.id === item.id)[0].countryId
-										}
-										onChange={e =>
-											dispatch(countryId({ id: item.id, countryId: e }))
-										}
-										options={
-											!countriesStorage
-												? []
-												: countriesStorage.map(el => ({
-														value: el.id,
-														label: el.shortName
-												  }))
-										}
-									/>
+									{isStudent ? (
+										//@ts-ignore
+										<Input size="large" value={item.studentCountry} disabled />
+									) : (
+										<Select
+											size="large"
+											className="w-full shadow rounded-lg"
+											defaultValue={
+												educationData.filter(el => el.id === item.id)[0]
+													.countryId
+											}
+											value={
+												educationData.filter(el => el.id === item.id)[0]
+													.countryId
+											}
+											onChange={e =>
+												dispatch(countryId({ id: item.id, countryId: e }))
+											}
+											options={
+												!countriesStorage
+													? []
+													: countriesStorage.map(el => ({
+															value: el.id,
+															label: el.shortName
+													  }))
+											}
+										/>
+									)}
 								</Space>
 							</div>
 
 							<Space direction="vertical" size={'small'} className="w-full">
 								<Typography.Text>{t('nameEducational')}</Typography.Text>
 								<Input
+									disabled={isStudent}
 									maxLength={200}
 									size="large"
 									className={clsx(
@@ -343,6 +358,7 @@ export const Education = () => {
 								<Space direction="vertical" size={'small'}>
 									<Typography.Text>{t('diplomaNumber')}</Typography.Text>
 									<Input
+										disabled={isStudent}
 										placeholder="1234"
 										size="large"
 										maxLength={4}
@@ -377,6 +393,7 @@ export const Education = () => {
 								<Space direction="vertical" size={'small'}>
 									<Typography.Text>{t('diplomaSeries')}</Typography.Text>
 									<Input
+										disabled={isStudent}
 										placeholder="1234"
 										size="large"
 										maxLength={4}
@@ -411,6 +428,7 @@ export const Education = () => {
 								<Space direction="vertical">
 									<Typography.Text>{t('graduateYear')}</Typography.Text>
 									<DatePicker
+										disabled={isStudent}
 										className={clsx(
 											'shadow w-full',
 											IsError &&
@@ -453,9 +471,13 @@ export const Education = () => {
 											</div>
 										)}
 								</Space>
-								<Space direction="vertical">
+								<Space
+									direction="vertical"
+									className={clsx(isStudent && 'hidden')}
+								>
 									<Typography.Text>{t('specialization')}</Typography.Text>
 									<Input
+										disabled={isStudent}
 										placeholder={t('web')}
 										size="large"
 										className={clsx(
@@ -488,7 +510,7 @@ export const Education = () => {
 								</Space>
 							</div>
 						</Space>
-						<Space direction="vertical">
+						<Space direction="vertical" className={clsx(isStudent && 'hidden')}>
 							<Space size={'small'} className="mt-5">
 								<Typography.Text className="text-black opacity-80 text-sm font-normal leading-none">
 									{t('AttachDocuments')}
@@ -511,7 +533,7 @@ export const Education = () => {
 			<Space
 				direction="vertical"
 				size={'large'}
-				className="w-full flex items-center"
+				className={clsx('w-full flex items-center', isStudent && 'hidden')}
 			>
 				<Button
 					className="rounded-full text-center p-0 w-8 h-8 text-xl"

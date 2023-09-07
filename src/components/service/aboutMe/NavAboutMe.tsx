@@ -23,6 +23,9 @@ export const NavAboutMe = () => {
 	const user = useAppSelector(state => state.Profile.profileData.CurrentData)
 	const { pathname } = useLocation()
 	const navigate = useNavigate()
+	const role = useAppSelector(
+		state => state.Profile.profileData.CurrentData?.roles
+	)
 	const handleNavigate = (url: string) => {
 		navigate(url)
 	}
@@ -59,7 +62,10 @@ export const NavAboutMe = () => {
 			name: t('Parents')
 		}
 	]
+	if (!role) return <></>
+	const isStudent = role[0].type === 'STUD'
 	const handleList = navList.map(({ icon, name, id }, index) => {
+		if (isStudent && id === '/services/aboutMe/work') return
 		return (
 			<li
 				key={index}
@@ -76,6 +82,7 @@ export const NavAboutMe = () => {
 			</li>
 		)
 	})
+
 	return (
 		<>
 			<div className="shadowNav ">

@@ -84,10 +84,12 @@ export const Parent = () => {
 	const { data: documents } = useGetDocumentsQuery(i18n.language, {
 		skip: SkipCountriesQuery
 	})
+	console.log(parentData)
 
 	useEffect(() => {
 		if (updateItems) {
 			getData()
+
 			setUpdate(false)
 		}
 	}, [updateItems])
@@ -113,118 +115,12 @@ export const Parent = () => {
 		}
 	}
 
-	const checkParentItem = (item: IParentState) => {
-		var errorPattern = {
-			id: item.id,
-			FIO: false,
-			dateIssue: false,
-			divisionCode: false,
-			eMail: false,
-			issuedBy: false,
-			phone: false,
-			passportSeries: false,
-			passportNumber: false,
-			registrationAddress: false,
-			residenceAddress: false,
-			inn: false,
-			snils: false
-		}
-		var hasError = false
-		if (
-			!item.FIO ||
-			(item.FIO && !/^([\p{L}]+)\s([\p{L}]+)\s?([\p{L}]*)$/u.test(item.FIO))
-		) {
-			hasError = true
-			errorPattern.FIO = true
-		}
-		if (!item.dateIssue) {
-			hasError = true
-			errorPattern.dateIssue = true
-		}
-		if (
-			!item.divisionCode ||
-			(item.divisionCode && !/^[0-9]{3}\-[0-9]{3}$/.test(item.divisionCode))
-		) {
-			hasError = true
-			errorPattern.divisionCode = true
-		}
-		if (
-			!item.eMail ||
-			(item.eMail &&
-				!/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(item.eMail))
-		) {
-			hasError = true
-			errorPattern.eMail = true
-		}
-		if (!item.inn || (item.inn && !/^[0-9]{12}$/.test(item.inn))) {
-			hasError = true
-			errorPattern.inn = true
-		}
-		if (
-			!item.issuedBy ||
-			(item.issuedBy &&
-				(/\s\s/.test(item.issuedBy) || !/^[\p{L}\s]+$/u.test(item.issuedBy)))
-		) {
-			hasError = true
-			errorPattern.issuedBy = true
-		}
-		if (
-			!item.passportNumber ||
-			(item.passportNumber && !/^[0-9]{4}$/.test(item.passportNumber))
-		) {
-			hasError = true
-			errorPattern.passportNumber = true
-		}
-		if (
-			!item.passportSeries ||
-			(item.passportSeries && !/^[0-9]{4}$/.test(item.passportSeries))
-		) {
-			hasError = true
-			errorPattern.passportSeries = true
-		}
-		if (
-			!item.phone ||
-			(item.phone &&
-				!/^\+[0-9]\s[0-9]{3}\s[0-9]{3}\-[0-9]{2}\-[0-9]{2}$/.test(item.phone))
-		) {
-			hasError = true
-			errorPattern.phone = true
-		}
-		if (
-			!item.snils ||
-			(item.snils &&
-				!/^[0-9]{3}\-[0-9]{3}\-[0-9]{3} [0-9]{2}$/.test(item.snils))
-		) {
-			hasError = true
-			errorPattern.snils = true
-		}
-		if (
-			!item.registrationAddress ||
-			(item.registrationAddress &&
-				(/\s\s/.test(item.registrationAddress) ||
-					!/^[\p{L}\s.,-:0-9]+$/u.test(item.registrationAddress)))
-		) {
-			hasError = true
-			errorPattern.registrationAddress = true
-		}
-		if (
-			!item.residenceAddress ||
-			(item.residenceAddress &&
-				(/\s\s/.test(item.residenceAddress) ||
-					!/^[\p{L}\s.,-:0-9]+$/u.test(item.residenceAddress)))
-		) {
-			hasError = true
-			errorPattern.residenceAddress = true
-		}
-		hasError && setError(errorPattern)
-		IsError && !hasError && setError(null)
-		return hasError
-	}
-
 	const getData = async () => {
 		const response = await getParentItemRequest(dispatch)
 		if (response) {
 			const corrected: IParentState[] = response.map(el => ({
+				mother: el.mother,
+				father: el.father,
 				id: el.id,
 				FIO:
 					!el.name && !el.surName && !el.patronymic
@@ -310,6 +206,8 @@ export const Parent = () => {
 	}
 	if (!role) return <></>
 	const isStudent = role[0].type === 'STUD'
+	console.log(parentData)
+
 	return (
 		<div className="m-14 radio">
 			<Space direction="vertical" size={20}>
@@ -329,7 +227,10 @@ export const Parent = () => {
 										{t('Parent')}
 									</Typography.Text>
 									<Typography.Text
-										className=" text-black cursor-pointer"
+										className={clsx(
+											' text-black cursor-pointer',
+											isStudent && 'hidden'
+										)}
 										onClick={() => handleUpdateParent(item)}
 									>
 										{t('Save')}
@@ -349,6 +250,7 @@ export const Parent = () => {
 										{isStudent ? t('Mother') : t('parentFIO')}
 									</Typography.Text>
 									<Input
+										disabled={isStudent}
 										placeholder={t('bpk')}
 										size="large"
 										maxLength={250}
@@ -362,9 +264,13 @@ export const Parent = () => {
 										onChange={e => {
 											dispatch(FIO({ id: item.id, FIO: e.target.value }))
 										}}
-										value={convertToString(
-											parentData.filter(el => el.id === item.id)[0].FIO
-										)}
+										value={
+											isStudent
+												? parentData[0].mother
+												: convertToString(
+														parentData.filter(el => el.id === item.id)[0].FIO
+												  )
+										}
 									/>
 									{IsError && IsError.id === item.id && IsError.FIO && (
 										<span className="text-red-500 text-sm">
@@ -409,6 +315,7 @@ export const Parent = () => {
 										{isStudent ? t('Dad') : t('parentEmail')}
 									</Typography.Text>
 									<Input
+										disabled={isStudent}
 										placeholder="BezuPr@gmail.com"
 										size="large"
 										className={clsx(
@@ -421,9 +328,13 @@ export const Parent = () => {
 										onChange={e =>
 											dispatch(eMail({ id: item.id, email: e.target.value }))
 										}
-										value={convertToString(
-											parentData.filter(el => el.id === item.id)[0].eMail
-										)}
+										value={
+											isStudent
+												? parentData[0].father
+												: convertToString(
+														parentData.filter(el => el.id === item.id)[0].eMail
+												  )
+										}
 									/>
 									{IsError && IsError.id === item.id && IsError.eMail && (
 										<span className="text-red-500 text-sm">

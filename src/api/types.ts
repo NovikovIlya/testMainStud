@@ -166,6 +166,8 @@ export type IParent = {
 	residenceAddress: string | null
 	inn: string | null
 	snils: string | null
+	mother?: string
+	father?: string
 }
 
 export type IParentRequest = {
@@ -176,6 +178,7 @@ export type AbUSParentResponse = IParent & { id: number }
 
 export type IParentState = Omit<IParent, 'name' | 'surName' | 'patronymic'> & {
 	FIO: string | null
+
 	id: number
 }
 

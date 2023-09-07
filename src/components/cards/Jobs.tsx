@@ -6,9 +6,7 @@ export const Jobs = () => {
 		<div className="">
 			<div className="mx-[40px] mt-[40px]">
 				<div>
-					<div className="font-semibold text-xl text-start">
-						Об университете
-					</div>
+					<div className="font-semibold text-xl text-start">Вакансии</div>
 					<div className="mt-[30px] w-full">
 						<div className="flex items-center justify-between ">
 							<div className="text-base ">Инженер-программист</div>

@@ -27,7 +27,9 @@ export const Address = () => {
 	const [value, setValue] = useState(0)
 	const [SkipCountriesQuery, changeQuerySkip] = useState<boolean>(true)
 	const [IsError, setError] = useState<boolean>(false)
-
+	const role = useAppSelector(
+		state => state.Profile.profileData.CurrentData?.roles
+	)
 	const registrationAddressData = useAppSelector(
 		(state: RootState) => state.Address.registrationAddress
 	)
@@ -94,6 +96,7 @@ export const Address = () => {
 	}
 
 	const setChanges = async () => {
+		/*
 		const IsBadStringRegistration = [
 			registrationAddressData.city,
 			registrationAddressData.street
@@ -131,25 +134,28 @@ export const Address = () => {
 		) {
 			setError(true)
 		} else {
-			const status = await putAbUsAddress(
-				{
-					registrationAddress: registrationAddressData,
-					residenceAddress:
-						value === 0
-							? registrationAddressData
-							: !residenceAddressData
-							? null
-							: residenceAddressData
-				},
-				dispatch
-			)
-			if (status === 403) {
-				setError(true)
-			} else {
-				setError(false)
-			}
+		}
+			*/
+		const status = await putAbUsAddress(
+			{
+				registrationAddress: registrationAddressData,
+				residenceAddress:
+					value === 0
+						? registrationAddressData
+						: !residenceAddressData
+						? null
+						: residenceAddressData
+			},
+			dispatch
+		)
+		if (status === 403) {
+			setError(true)
+		} else {
+			setError(false)
 		}
 	}
+	if (!role) return <></>
+	const isStudent = role[0].type === 'STUD'
 
 	return (
 		<div className="m-14 radio">
@@ -174,6 +180,7 @@ export const Address = () => {
 				<Space direction="vertical" size={'small'}>
 					<Typography.Text>{t('Country')}</Typography.Text>
 					<Select
+						disabled={isStudent}
 						placeholder={t('citizen')}
 						size="large"
 						className="w-[624px] shadow rounded-lg"
@@ -195,6 +202,7 @@ export const Address = () => {
 				<Space direction="vertical" size={'small'}>
 					<Typography.Text>{t('City')}</Typography.Text>
 					<Input
+						disabled={isStudent}
 						placeholder={t('Kazan')}
 						size="large"
 						maxLength={200}
@@ -224,6 +232,7 @@ export const Address = () => {
 				<Space direction="vertical" size={'small'}>
 					<Typography.Text>{t('Street')}</Typography.Text>
 					<Input
+						disabled={isStudent}
 						maxLength={200}
 						size="large"
 						className={clsx(
@@ -257,6 +266,7 @@ export const Address = () => {
 				<Space direction="vertical" size={'small'}>
 					<Typography.Text>{t('House')}</Typography.Text>
 					<Input
+						disabled={isStudent}
 						placeholder="39"
 						maxLength={5}
 						size="large"
@@ -288,6 +298,7 @@ export const Address = () => {
 				<Space direction="vertical" size={'small'}>
 					<Typography.Text>{t('Flat')}</Typography.Text>
 					<Input
+						disabled={isStudent}
 						placeholder="88"
 						maxLength={5}
 						size="large"
@@ -322,6 +333,7 @@ export const Address = () => {
 				<Space direction="vertical" size={'small'}>
 					<Typography.Text>{t('Index')}</Typography.Text>
 					<Input
+						disabled={isStudent}
 						placeholder="456836"
 						size="large"
 						className={clsx(
@@ -352,7 +364,12 @@ export const Address = () => {
 
 				<Space direction="vertical" size={'small'}>
 					<Typography.Text ellipsis>{t('MatchAddress')}</Typography.Text>
-					<Radio.Group defaultValue={0} onChange={onChange} value={value}>
+					<Radio.Group
+						defaultValue={0}
+						onChange={onChange}
+						value={value}
+						disabled={isStudent}
+					>
 						<Radio value={0}>{t('Yes')}</Radio>
 						<Radio value={1}>{t('No')}</Radio>
 					</Radio.Group>
@@ -368,6 +385,7 @@ export const Address = () => {
 						<Space direction="vertical" size={'small'}>
 							<Typography.Text>{t('Country')}</Typography.Text>
 							<Select
+								disabled={isStudent}
 								size="large"
 								className="w-[624px] shadow rounded-lg"
 								value={
@@ -395,6 +413,7 @@ export const Address = () => {
 						<Space direction="vertical" size={'small'}>
 							<Typography.Text>{t('City')}</Typography.Text>
 							<Input
+								disabled={isStudent}
 								maxLength={200}
 								size="large"
 								className={clsx(
@@ -428,6 +447,7 @@ export const Address = () => {
 						<Space direction="vertical" size={'small'}>
 							<Typography.Text>{t('Street')}</Typography.Text>
 							<Input
+								disabled={isStudent}
 								placeholder="Арбузова"
 								maxLength={200}
 								size="large"
@@ -465,6 +485,7 @@ export const Address = () => {
 						<Space direction="vertical" size={'small'}>
 							<Typography.Text>{t('House')}</Typography.Text>
 							<Input
+								disabled={isStudent}
 								placeholder="39"
 								size="large"
 								maxLength={5}
@@ -500,6 +521,7 @@ export const Address = () => {
 						<Space direction="vertical" size={'small'}>
 							<Typography.Text>{t('Flat')}</Typography.Text>
 							<Input
+								disabled={isStudent}
 								placeholder="88"
 								maxLength={5}
 								size="large"
@@ -538,6 +560,7 @@ export const Address = () => {
 						<Space direction="vertical" size={'small'}>
 							<Typography.Text>{t('Index')}</Typography.Text>
 							<Input
+								disabled={isStudent}
 								placeholder="456836"
 								size="large"
 								maxLength={6}
@@ -571,7 +594,11 @@ export const Address = () => {
 						</Space>
 					</Space>
 				</div>
-				<Space direction="vertical" size={'small'} className="mt-4">
+				<Space
+					direction="vertical"
+					size={'small'}
+					className={clsx('mt-4', isStudent && 'hidden')}
+				>
 					<Button
 						className="border-solid border-bluekfu border-[1px] text-bluekfu rounded-md"
 						onClick={() => setChanges()}

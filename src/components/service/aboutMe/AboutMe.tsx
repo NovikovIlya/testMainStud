@@ -233,7 +233,7 @@ export const AboutMe = () => {
 						className={clsx(
 							'w-[624px] shadow ',
 							IsError &&
-								!/^\+[0-9]\s[0-9]{3}\s[0-9]{3}\-[0-9]{2}\-[0-9]{2}$/.test(
+								!/^\+[0-9][0-9]{3}[0-9]{3}[0-9]{2}[0-9]{2}$/.test(
 									formData.phone
 								) &&
 								'border-rose-500'
@@ -242,7 +242,7 @@ export const AboutMe = () => {
 						value={formData.phone}
 					/>
 					{IsError &&
-						!/^\+[0-9]\s[0-9]{3}\s[0-9]{3}\-[0-9]{2}\-[0-9]{2}$/.test(
+						!/^\+[0-9][0-9]{3}[0-9]{3}[0-9]{2}[0-9]{2}$/.test(
 							formData.phone
 						) && <div className="text-sm text-rose-500">{t('BadPhone')}</div>}
 				</Space>

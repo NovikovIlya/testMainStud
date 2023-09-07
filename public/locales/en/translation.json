@@ -171,5 +171,16 @@
 	"Yes": "Yes",
 	"No": "No",
 	"AttachDocsDescription": "Here you need to attach documents in PDF format, the data of which were entered above, namely: - scan of the spread of the diploma of higher education, where the series and number of the document, as well as the specialty will be clearly visible",
-	"EmployedMoment": "I am employed at the moment"
+	"EmployedMoment": "I am employed at the moment",
+	"PreviousWork": "Previous/current place of work",
+	"Responsibilities": "Responsibilities",
+	"ResponsibilitiesDescription": "Tell us what your work responsibilities were, write about your work experience.",
+	"AdditionalInformation": "Additional information",
+	"AddJob": "add a job",
+	"YourWorks": "Your works",
+	"web": "Web",
+	"bpk": "Bezukhov Pierre Kirillovich",
+	"Mother": "Mother",
+	"Dad": "Dad",
+	"AddParent": "add a parent"
 }

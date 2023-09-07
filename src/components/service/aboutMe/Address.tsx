@@ -176,7 +176,7 @@ export const Address = () => {
 					<Select
 						placeholder={t('citizen')}
 						size="large"
-						className="w-[624px] shadow "
+						className="w-[624px] shadow rounded-lg"
 						value={registrationAddressData.countryId}
 						onChange={e =>
 							dispatch(country({ target: 'registrationAddress', country: e }))
@@ -369,7 +369,7 @@ export const Address = () => {
 							<Typography.Text>{t('Country')}</Typography.Text>
 							<Select
 								size="large"
-								className="w-[624px] shadow "
+								className="w-[624px] shadow rounded-lg"
 								value={
 									!residenceAddressData ? '' : residenceAddressData.countryId
 								}

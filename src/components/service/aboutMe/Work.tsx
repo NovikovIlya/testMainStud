@@ -215,7 +215,7 @@ export const Work = () => {
 					<div key={item.id} className="flex flex-col gap-[10px]">
 						<Space>
 							<Typography.Text className="text-black text-sm font-bold">
-								Место работы
+								{t('placeWork')}
 							</Typography.Text>
 							<Typography.Text
 								onClick={() => handleDeleteWork(item.id.toString())}
@@ -224,7 +224,7 @@ export const Work = () => {
 									index === 0 && 'hidden'
 								)}
 							>
-								Удалить
+								{t('Delete')}
 							</Typography.Text>
 							<Typography.Text
 								onClick={() =>
@@ -241,15 +241,12 @@ export const Work = () => {
 									item.id === 0 && 'hidden'
 								)}
 							>
-								Сохранить
+								{t('Save')}
 							</Typography.Text>
 						</Space>
 						<Space direction="vertical" size={'small'}>
-							<Typography.Text>
-								Предыдущее/нынешнее место работы
-							</Typography.Text>
+							<Typography.Text>{t('PreviousWork')} </Typography.Text>
 							<Input
-								placeholder="Калифорнийский университет в Беркли"
 								size="large"
 								className={clsx(
 									'w-[624px] shadow ',
@@ -272,7 +269,7 @@ export const Work = () => {
 								)}
 						</Space>
 						<Space direction="vertical" size={'small'}>
-							<Typography.Text>Период работы</Typography.Text>
+							<Typography.Text>{t('periodOperation')}</Typography.Text>
 							<div className="w-[624px] grid grid-cols-2 gap-x-4 max-sm:grid-cols-1">
 								<div>
 									<ConfigProvider locale={ruPicker}>
@@ -360,7 +357,7 @@ export const Work = () => {
 							</div>
 						</Space>
 						<Space direction="vertical" size={'small'}>
-							<Typography.Text>Обязанности</Typography.Text>
+							<Typography.Text>{t('Responsibilities')}</Typography.Text>
 							<Input.TextArea
 								className={clsx(
 									'w-[624px] shadow ',
@@ -371,7 +368,7 @@ export const Work = () => {
 								)}
 								maxLength={100}
 								style={{ height: 120, resize: 'none' }}
-								placeholder="Расскажите в чем заключались ваши рабочие обязанности, напишите о Вашем опыте работы."
+								placeholder={t('ResponsibilitiesDescription')}
 								onChange={e =>
 									dispatch(
 										responsibilities({
@@ -394,7 +391,7 @@ export const Work = () => {
 								)}
 						</Space>
 						<Space direction="vertical" size={'small'}>
-							<Typography.Text>Дополнительная информация</Typography.Text>
+							<Typography.Text>{t('AdditionalInformation')}</Typography.Text>
 							<Input.TextArea
 								className={clsx(
 									'w-[624px] shadow ',
@@ -405,7 +402,6 @@ export const Work = () => {
 								)}
 								maxLength={100}
 								style={{ height: 120, resize: 'none' }}
-								placeholder="Введите текст"
 								onChange={e =>
 									dispatch(
 										additionalInfo({
@@ -443,13 +439,13 @@ export const Work = () => {
 						+
 					</Button>
 					<Typography.Text className="opacity-40 text-center text-black text-sm font-normal leading-[18px]">
-						добавить работу
+						{t('AddJob')}
 					</Typography.Text>
 				</Space>
 				<Space direction="vertical" size={'small'}>
 					<Space>
 						<Typography.Text className="font-bold text-small text-black">
-							Ссылка на портфолио
+							{t('linkPortfolio')}
 						</Typography.Text>
 						<Typography.Text
 							onClick={() =>
@@ -459,7 +455,7 @@ export const Work = () => {
 							}
 							className="cursor-pointer opacity-40 text-center text-black text-sm font-normal leading-[18px]"
 						>
-							Сохранить
+							{t('Save')}
 						</Typography.Text>
 					</Space>
 					<Input
@@ -478,9 +474,9 @@ export const Work = () => {
 				</Space>
 				<Space size={'small'}>
 					<Typography.Text className="text-black opacity-80 text-sm font-normal leading-none">
-						Прикрепить документы
+						{t('AttachDocuments')}
 					</Typography.Text>
-					<Tooltip title="Ваши работы">
+					<Tooltip title={t('YourWorks')}>
 						<Button
 							type="default"
 							className="bg-transparent"
@@ -490,7 +486,7 @@ export const Work = () => {
 				</Space>
 
 				<Upload {...props}>
-					<Button icon={<UploadOutlined />}>Добавить файл</Button>
+					<Button icon={<UploadOutlined />}>{t('AddFile')}</Button>
 				</Upload>
 			</Space>
 		</div>

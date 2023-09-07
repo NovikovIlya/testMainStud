@@ -456,7 +456,7 @@ export const Education = () => {
 								<Space direction="vertical">
 									<Typography.Text>{t('specialization')}</Typography.Text>
 									<Input
-										placeholder="Веб-дизайн"
+										placeholder={t('web')}
 										size="large"
 										className={clsx(
 											'w-full shadow ',

@@ -346,10 +346,10 @@ export const Parent = () => {
 								</Space>
 								<Space direction="vertical" className="w-full">
 									<Typography.Text className=" text-black">
-										{isStudent ? 'Мама' : t('parentFIO')}
+										{isStudent ? t('Mother') : t('parentFIO')}
 									</Typography.Text>
 									<Input
-										placeholder="Безухов Пьер Кириллович"
+										placeholder={t('bpk')}
 										size="large"
 										maxLength={250}
 										className={clsx(
@@ -406,7 +406,7 @@ export const Parent = () => {
 
 								<Space direction="vertical" className="w-full">
 									<Typography.Text className="text-black">
-										{isStudent ? 'Папа' : t('parentEmail')}
+										{isStudent ? t('Dad') : t('parentEmail')}
 									</Typography.Text>
 									<Input
 										placeholder="BezuPr@gmail.com"
@@ -805,9 +805,9 @@ export const Parent = () => {
 								</Space>
 								<Space size={'small'} className="mt-8">
 									<Typography.Text className="text-black opacity-80 text-sm font-normal leading-none">
-										Прикрепить документы
+										{t('AttachDocuments')}
 									</Typography.Text>
-									<Tooltip title="Сюда нужно прикрепить документы в формате PDF, данные которых были введены выше, а именно: Паспорт гражданина РФ (2 и 3 страницы), СНИЛС и ИНН">
+									<Tooltip title={t('AttachDocsDescription')}>
 										<Button
 											type="default"
 											className="bg-transparent"
@@ -817,7 +817,7 @@ export const Parent = () => {
 								</Space>
 
 								<Upload {...props}>
-									<Button icon={<UploadOutlined />}>Добавить файл</Button>
+									<Button icon={<UploadOutlined />}>{t('AddFile')}</Button>
 								</Upload>
 							</Space>
 						</Space>
@@ -837,7 +837,7 @@ export const Parent = () => {
 						+
 					</Button>
 					<Typography.Text className="opacity-40 text-center text-black text-sm font-normal leading-[18px]">
-						добавить родителя
+						{t('AddParent')}
 					</Typography.Text>
 				</Space>
 			</Space>

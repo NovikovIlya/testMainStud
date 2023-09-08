@@ -499,7 +499,7 @@ export const EducationForm = () => {
 						<Button
 							className="rounded-full text-center p-0 w-8 h-8 text-xl"
 							type="primary"
-							onClick={addEducation}
+							onClick={handleAddEducation}
 						>
 							+
 						</Button>

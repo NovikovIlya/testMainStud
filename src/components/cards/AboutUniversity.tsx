@@ -10,16 +10,15 @@ export const AboutUniversity = () => {
 			<div className="ml-[40px] mt-[40px]">
 				<div>
 					<div className="font-semibold text-xl text-start">
-						Об университете
+						{t('AboutUniversity')}
 					</div>
 					<div className="text-base text-start mt-[30px] max-h-[100px]">
-						Мини-текст в 3-4 строки о том какой КФУ крутой, статистика,
-						инфографика внутри — хвалебные маркетинговые оды университету
+						{t('AboutUniversityDes')}
 					</div>
 				</div>
 				<div className="text-start absolute bottom-[40px]">
 					<Button className="rounded-full border-black  w-[200px] h-[50px] text-base font-semibold mt-[40px]">
-						Посмотреть
+						{t('Watch')}
 					</Button>
 				</div>
 			</div>

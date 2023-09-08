@@ -191,5 +191,8 @@
 	"SendEmail": "a welcome letter has been sent. To complete the registration, you need to follow the link provided in the letter",
 	"SendTo": "To the post email",
 	"CheckEmail": "Check your email",
-	"Resend": "Resend"
+	"Resend": "Resend",
+	"AboutUniversity": "About the university",
+	"AboutUniversityDes": "Mini-text in 3-4 lines about how cool KFU is, statistics, infographics inside — laudatory marketing odes to the university",
+	"Watch": "Watch"
 }

@@ -35,6 +35,7 @@ export const Inputs: FC<IInputProps> = ({ IsEmpty }) => {
 	const { data: countries } = useGetCountriesQuery(i18n.language, {
 		skip: SkipCountriesQuery
 	})
+	const user = useAppSelector(state => state.Profile.profileData.CurrentData)
 	const countryStorage = useAppSelector(
 		(state: RootState) => state.CountriesEducation.countries
 	)
@@ -70,7 +71,7 @@ export const Inputs: FC<IInputProps> = ({ IsEmpty }) => {
 					id="surName"
 					size="large"
 					type="text"
-					placeholder={t('surname')}
+					placeholder={user?.firstname}
 					maxLength={200}
 					className={clsx(
 						'shadow transition-all duration-500',
@@ -92,7 +93,7 @@ export const Inputs: FC<IInputProps> = ({ IsEmpty }) => {
 				<Input
 					size="large"
 					type="text"
-					placeholder={t('name')}
+					placeholder={user?.lastname}
 					maxLength={200}
 					className={clsx(
 						'shadow transition-all duration-500',

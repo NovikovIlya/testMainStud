@@ -50,6 +50,20 @@ type TypeSchedule = {
 	saturday: Day[]
 }
 const baseQuery = fetchBaseQuery({
+	baseUrl: 'http://192.168.63.96:8085/api/',
+	prepareHeaders: (headers, { getState }) => {
+		const accessToken = localStorage.getItem('access')
+		console.log(accessToken)
+
+		if (accessToken) {
+			headers.set('Authorization', `Bearer ${accessToken}`)
+			headers.set('Content-Type', 'application/json')
+		}
+
+		return headers
+	}
+})
+const baseQuerySession = fetchBaseQuery({
 	baseUrl: 'http://192.168.63.96:8083/api/',
 	prepareHeaders: (headers, { getState }) => {
 		const accessToken = localStorage.getItem('access')
@@ -69,7 +83,13 @@ export const scheduleApi = createApi({
 	endpoints: builder => ({
 		getSchedule: builder.query<TypeSchedule, void>({
 			query: () => `schedule`
-		}),
+		})
+	})
+})
+export const sessionApi = createApi({
+	reducerPath: 'sessionApi',
+	baseQuery: baseQuerySession,
+	endpoints: builder => ({
 		examsSchedule: builder.query<Exam[], void>({
 			query: () => `calendar/examsSchedule`
 		}),
@@ -78,6 +98,5 @@ export const scheduleApi = createApi({
 		})
 	})
 })
-
-export const { useGetScheduleQuery, useExamsScheduleQuery, useCalendarQuery } =
-	scheduleApi
+export const { useGetScheduleQuery } = scheduleApi
+export const { useCalendarQuery, useExamsScheduleQuery } = sessionApi

@@ -1,4 +1,5 @@
 import { FC } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { CardForm } from '../approve/cardForm'
@@ -9,7 +10,7 @@ interface ICheckEmailProps {
 
 export const CheckEmail: FC<ICheckEmailProps> = ({ email }) => {
 	const navigate = useNavigate()
-
+	const { t } = useTranslation()
 	const buttonEffect = () => {
 		console.log("it's buttons effect")
 	}
@@ -22,15 +23,14 @@ export const CheckEmail: FC<ICheckEmailProps> = ({ email }) => {
 			buttonEffect={buttonEffect}
 			closeEffect={closeEffect}
 			withDots={true}
-			mainTittle="Проверьте почту"
+			mainTittle={t('CheckEmail')}
 			secondTittle={
 				<span>
-					На почту <span className="font-bold">{email}</span> выслано
-					приветственное письмо. Для завершения регистрации Вам необходимо
-					перейти по ссылке, указанной в письме
+					{t('SendTo')} <span className="font-bold">{email}</span>
+					{t('SendEmail')}
 				</span>
 			}
-			buttonText="Выслать повторно"
+			buttonText={t('Resend')}
 			buttonBgBlue={true}
 		/>
 	)

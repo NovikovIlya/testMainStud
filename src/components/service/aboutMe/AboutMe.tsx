@@ -101,6 +101,8 @@ export const AboutMe = () => {
 	}, [countries])
 	if (!role) return <></>
 	const isStudent = role[0].type === 'STUD'
+	console.log(formData.birthDay, '=============================')
+
 	return (
 		<div className="m-14 radio">
 			<Space direction="vertical" size={20}>
@@ -193,9 +195,11 @@ export const AboutMe = () => {
 								dispatch(birthDay(e == null ? '' : e?.format('YYYY-MM-DD')))
 							}
 							value={
-								formData.birthDay === ''
+								//@ts-ignore
+								formData || formData.birthDay === '' || null
 									? null
 									: dayjs(
+											//@ts-ignore
 											formData.birthDay.split('-').reverse().join('.'),
 											'DD.MM.YYYY'
 									  )

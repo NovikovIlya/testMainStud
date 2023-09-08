@@ -1,4 +1,5 @@
 import { Button } from 'antd'
+import { t } from 'i18next'
 import { useState } from 'react'
 
 import img from '../../assets/images/avatar.png'
@@ -26,7 +27,7 @@ export const Apply = () => {
 		>
 			<div className="max-w-[53vw] max-2xl:max-w-[40vw] max-xl:max-w-full ">
 				<div className="text-4xl  text-white w-fit font-extrabold  mt-[76px] max-2xl:mt-[36px]">
-					Подать заявление
+					{t('SubmitApplication')}
 				</div>
 				<div className="mt-[40px] flex gap-4 flex-wrap">
 					<Button
@@ -37,7 +38,7 @@ export const Apply = () => {
 						style={activeApply === 'bachelor' ? disableStyle : activeStyle}
 						className={`w-[203px] font-bold h-[62px] text-2xl  hover:border-white hover:border`}
 					>
-						Бакалавриат
+						{t('Bachelor')}
 					</Button>
 					<Button
 						onClick={() => {
@@ -47,7 +48,7 @@ export const Apply = () => {
 						style={activeApply === 'magistracy' ? disableStyle : activeStyle}
 						className={`w-[203px] ml-[40px] font-bold h-[62px] text-2xl  hover:border-white hover:border`}
 					>
-						Магистратура
+						{t('Magistracy')}
 					</Button>
 					<Button
 						onClick={() => {
@@ -57,17 +58,7 @@ export const Apply = () => {
 						type="text"
 						className="w-[203px]  text-white font-bold h-[62px] text-2xl ml-[40px] hover:border-white hover:border"
 					>
-						Аспирантура
-					</Button>
-					<Button
-						onClick={() => {
-							setActiveApply('residency')
-						}}
-						style={activeApply === 'residency' ? disableStyle : activeStyle}
-						type="text"
-						className="w-[203px]  text-white font-bold h-[62px] text-2xl ml-[40px] hover:border-white hover:border transition-all duration-500"
-					>
-						Ординатура
+						{t('Postgraduate')}
 					</Button>
 				</div>
 			</div>

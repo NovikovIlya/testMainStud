@@ -15,7 +15,7 @@ import ProfileReducer from './reducers/ProfileReducer'
 import { countriesAPi } from './slice/countrySlice'
 import { documentsAPi } from './slice/documentSlice'
 import { educationLevelAPi } from './slice/educationLevelSlice'
-import { scheduleApi } from './slice/scheduleSlice'
+import { scheduleApi, sessionApi } from './slice/scheduleSlice'
 
 export const store = configureStore({
 	reducer: {
@@ -29,6 +29,7 @@ export const store = configureStore({
 		Parent: ParentReducer,
 		Address: AddressReducer,
 		CountriesEducation: CountriesEducationReducer,
+		[sessionApi.reducerPath]: sessionApi.reducer,
 		[scheduleApi.reducerPath]: scheduleApi.reducer,
 		[countriesAPi.reducerPath]: countriesAPi.reducer,
 		[educationLevelAPi.reducerPath]: educationLevelAPi.reducer,
@@ -41,6 +42,7 @@ export const store = configureStore({
 			.concat(countriesAPi.middleware)
 			.concat(educationLevelAPi.middleware)
 			.concat(documentsAPi.middleware)
+			.concat(sessionApi.middleware)
 })
 
 export type RootState = ReturnType<typeof store.getState>

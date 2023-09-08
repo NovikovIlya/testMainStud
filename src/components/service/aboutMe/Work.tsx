@@ -320,7 +320,9 @@ export const Work = () => {
 										)}
 								</div>
 								<div>
-									<ConfigProvider locale={ruPicker}>
+									<ConfigProvider
+										locale={i18n.language === 'ru' ? ruPicker : enPicker}
+									>
 										<DatePicker
 											className={clsx('shadow w-full')}
 											onChange={e =>

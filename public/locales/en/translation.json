@@ -187,5 +187,9 @@
 	"Bachelor": "Bachelor",
 	"Magistracy": "Magistracy",
 	"Postgraduate": "Postgraduate",
-	"Residency": "Residency"
+	"Residency": "Residency",
+	"SendEmail": "a welcome letter has been sent. To complete the registration, you need to follow the link provided in the letter",
+	"SendTo": "To the post email",
+	"CheckEmail": "Check your email",
+	"Resend": "Resend"
 }

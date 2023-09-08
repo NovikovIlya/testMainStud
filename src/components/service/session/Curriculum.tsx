@@ -5,6 +5,8 @@ import Column from 'antd/es/table/Column'
 import ColumnGroup from 'antd/es/table/ColumnGroup'
 import React from 'react'
 
+import { useCalendarQuery } from '../../../store/slice/scheduleSlice'
+
 import Styles from './Curriculum.module.scss'
 
 interface DataType {
@@ -72,7 +74,7 @@ const dataExam: DataType[] = [
 ]
 
 type TypeColumn = {
-	discipline: string
+	type_name: string
 	total: number
 	totalGost: number
 	totalLectures: number
@@ -100,8 +102,8 @@ const columns: ColumnsType<TypeColumn> = [
 				Название дисциплины
 			</p>
 		),
-		dataIndex: 'discipline',
-		key: 'discipline',
+		dataIndex: 'type_name',
+		key: 'type_name',
 		width: 580,
 		onCell: (_, index) => ({
 			colSpan: index === 1 ? 19 : 1
@@ -437,13 +439,16 @@ const columns: ColumnsType<TypeColumn> = [
 	}
 ]
 export const Curriculum = () => {
+	const { data: schedule, isLoading } = useCalendarQuery()
+	console.log(schedule)
+
 	const onChange = (e: RadioChangeEvent) => {
 		console.log([e.target.value])
 	}
 	const data: TypeColumn[] = [
 		{
 			control: 0,
-			discipline: 'Иностранный язык',
+			type_name: 'Иностранный язык',
 			independent: 34,
 			total: 198,
 			totalGost: 216,

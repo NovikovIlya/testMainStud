@@ -96,7 +96,6 @@ export const Address = () => {
 	}
 
 	const setChanges = async () => {
-		/*
 		const IsBadStringRegistration = [
 			registrationAddressData.city,
 			registrationAddressData.street
@@ -135,7 +134,7 @@ export const Address = () => {
 			setError(true)
 		} else {
 		}
-			*/
+
 		const status = await putAbUsAddress(
 			{
 				registrationAddress: registrationAddressData,
@@ -181,7 +180,6 @@ export const Address = () => {
 					<Typography.Text>{t('Country')}</Typography.Text>
 					<Select
 						disabled={isStudent}
-						placeholder={t('citizen')}
 						size="large"
 						className="w-[624px] shadow rounded-lg"
 						value={registrationAddressData.countryId}
@@ -203,7 +201,6 @@ export const Address = () => {
 					<Typography.Text>{t('City')}</Typography.Text>
 					<Input
 						disabled={isStudent}
-						placeholder={t('Kazan')}
 						size="large"
 						maxLength={200}
 						className={clsx(
@@ -267,7 +264,6 @@ export const Address = () => {
 					<Typography.Text>{t('House')}</Typography.Text>
 					<Input
 						disabled={isStudent}
-						placeholder="39"
 						maxLength={5}
 						size="large"
 						className={clsx(
@@ -299,7 +295,6 @@ export const Address = () => {
 					<Typography.Text>{t('Flat')}</Typography.Text>
 					<Input
 						disabled={isStudent}
-						placeholder="88"
 						maxLength={5}
 						size="large"
 						className={clsx(
@@ -334,7 +329,6 @@ export const Address = () => {
 					<Typography.Text>{t('Index')}</Typography.Text>
 					<Input
 						disabled={isStudent}
-						placeholder="456836"
 						size="large"
 						className={clsx(
 							'w-[624px] shadow',
@@ -448,7 +442,6 @@ export const Address = () => {
 							<Typography.Text>{t('Street')}</Typography.Text>
 							<Input
 								disabled={isStudent}
-								placeholder="Арбузова"
 								maxLength={200}
 								size="large"
 								className={clsx(
@@ -486,7 +479,6 @@ export const Address = () => {
 							<Typography.Text>{t('House')}</Typography.Text>
 							<Input
 								disabled={isStudent}
-								placeholder="39"
 								size="large"
 								maxLength={5}
 								className={clsx(
@@ -522,7 +514,6 @@ export const Address = () => {
 							<Typography.Text>{t('Flat')}</Typography.Text>
 							<Input
 								disabled={isStudent}
-								placeholder="88"
 								maxLength={5}
 								size="large"
 								className={clsx(
@@ -561,7 +552,6 @@ export const Address = () => {
 							<Typography.Text>{t('Index')}</Typography.Text>
 							<Input
 								disabled={isStudent}
-								placeholder="456836"
 								size="large"
 								maxLength={6}
 								className={clsx(

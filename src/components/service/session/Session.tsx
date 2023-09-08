@@ -103,8 +103,8 @@ const data: DataType[] = [
 ]
 
 export const Session = () => {
-	const { data: schedule, isLoading } = useCalendarQuery()
-	console.log(schedule, '+++++++++++++++++++++++++++++++')
+	const { data: schedule, isLoading } = useExamsScheduleQuery()
+	console.log(schedule)
 
 	return (
 		<div>

@@ -182,7 +182,7 @@ export const Document = () => {
 						<Typography.Text>{t('divisionCode')}</Typography.Text>
 						<Input
 							disabled={isStudent}
-							placeholder="000-000"
+							placeholder={isStudent ? '' : '000-000'}
 							size="large"
 							value={documentData.divisionCode}
 							className={clsx(

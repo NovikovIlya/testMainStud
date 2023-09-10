@@ -2,6 +2,7 @@ import { Form, Typography } from 'antd'
 import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import { IRegForm } from '../../api/types'
@@ -27,28 +28,30 @@ interface IRegProps {
 
 export const Registration: FC<IRegProps> = ({ changeEmail, email }) => {
 	const navigate = useNavigate()
-	const dispatch = useAppDispatch()
+	const dispatch = useDispatch()
 	const error = useSelector((state: RootState) => state.AuthReg.regData.error)
 	const { t, i18n } = useTranslation()
 	const [check, setCheck] = useState(false)
 	const [confirmPassword, setConfirmPassword] = useState(false)
 
 	useEffect(() => {
-		dispatch(clearRegistrationErrors())
+		clearRegistrationErrors(dispatch)
 	}, [i18n.language])
 
 	const onFinish = async (values: IRegForm) => {
 		if (confirmPassword) {
 			if (values.email || values.name || values.password) {
-				const response = await dispatch(
-					registerUser({
+				const response = await registerUser(
+					{
 						lastName: values.surname,
 						password: values.password,
 						firstName: values.name,
 						email: values.email,
 						agreement: 'true'
-					})
+					},
+					dispatch
 				)
+
 				if (response === 200) {
 					navigate('/registration/checkingEmail')
 				}

@@ -101,7 +101,6 @@ export const AboutMe = () => {
 	}, [countries])
 	if (!role) return <></>
 	const isStudent = role[0].type === 'STUD'
-	console.log(formData.birthDay, '=============================')
 
 	return (
 		<div className="m-14 radio">
@@ -192,11 +191,11 @@ export const AboutMe = () => {
 							)}
 							format={'DD.MM.YYYY'}
 							onChange={e =>
-								dispatch(birthDay(e == null ? '' : e?.format('YYYY-MM-DD')))
+								dispatch(birthDay(!e ? '' : e?.format('YYYY-MM-DD')))
 							}
 							value={
 								//@ts-ignore
-								formData || formData.birthDay === '' || null
+								!formData || !formData.birthDay
 									? null
 									: dayjs(
 											//@ts-ignore

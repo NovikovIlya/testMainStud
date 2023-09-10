@@ -1,15 +1,15 @@
 import { Button, Form } from 'antd'
 import { useTranslation } from 'react-i18next'
+import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 import { GosSvg } from '../../../assets/svg'
-import { useAppDispatch } from '../../../store'
 import { clearLoginErrors } from '../../../store/creators/SomeCreators'
 
 import styles from './Buttons.module.scss'
 
 export const Buttons = () => {
-	const dispatch = useAppDispatch()
+	const dispatch = useDispatch()
 	const { t } = useTranslation()
 	return (
 		<Form.Item>
@@ -42,7 +42,7 @@ export const Buttons = () => {
 						<Link
 							className={styles.link}
 							to="/registration"
-							onClick={() => dispatch(clearLoginErrors())}
+							onClick={() => clearLoginErrors(dispatch)}
 						>
 							{t('register')}
 						</Link>

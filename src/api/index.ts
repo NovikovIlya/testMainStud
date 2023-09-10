@@ -117,3 +117,6 @@ export const postDocument = (params: IDocument) =>
 
 export const getDocument = (): AxiosPromise<IDocumentAbUs> =>
 	axiosInstance.get(endpoints.USER.INFO.DOCUMENT)
+
+export const getRole = (): AxiosPromise<IRole[]> =>
+	axiosInstance.get(endpoints.USER.INFO.ROLE)

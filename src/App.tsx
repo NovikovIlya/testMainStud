@@ -26,38 +26,22 @@ const App = () => {
 	const dispatch = useAppDispatch()
 	const currentUrl = useLocation()
 
-	console.log(currentUrl.pathname)
-
 	const dataApi = async () => {
 		const res = await refreshToken(dispatch)
 		if (res === 200) {
-			const isRegistrationForms = [
+			const isForm = [
 				'/infoUser',
 				'/form',
 				'/parent',
 				'/work',
 				'/documents',
 				'/education'
-			].some(
-				el =>
-					el === currentUrl.pathname ||
-					currentUrl.pathname.includes('/api/register/approve')
-			)
-			if (isRegistrationForms) {
+			].some(el => el === currentUrl.pathname)
+			if (isForm || currentUrl.pathname.includes('/api/register/approve')) {
 				navigate('/infoUser')
 			} else {
-				if (
-					[
-						'/',
-						'/login',
-						'/registration',
-						'/api/register/approve',
-						'/registration/checkingEmail'
-					].some(el => el === currentUrl.pathname)
-				) {
+				if (!currentUrl.pathname.includes('/services' || '/user')) {
 					navigate('/user')
-				} else {
-					navigate(currentUrl.pathname)
 				}
 			}
 		}
@@ -73,11 +57,15 @@ const App = () => {
 		) {
 			dataApi()
 		} else {
-			if (
-				['/', '/login', '/registration'].some(el => el === currentUrl.pathname)
-			) {
-				navigate(currentUrl.pathname)
-			} else {
+			const IsBadPage = [
+				'/infoUser',
+				'/form',
+				'/parent',
+				'/work',
+				'/documents',
+				'/education'
+			].some(el => el === currentUrl.pathname)
+			if (IsBadPage || currentUrl.pathname.includes('/services' || '/user')) {
 				navigate('/')
 			}
 		}

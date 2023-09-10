@@ -84,7 +84,6 @@ export const Parent = () => {
 	const { data: documents } = useGetDocumentsQuery(i18n.language, {
 		skip: SkipCountriesQuery
 	})
-	console.log(parentData)
 
 	useEffect(() => {
 		if (updateItems) {
@@ -206,7 +205,6 @@ export const Parent = () => {
 	}
 	if (!role) return <></>
 	const isStudent = role[0].type === 'STUD'
-	console.log(parentData)
 
 	return (
 		<div className="m-14 radio">

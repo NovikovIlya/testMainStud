@@ -18,6 +18,7 @@ import {
 	getForm,
 	getJob,
 	getParent,
+	getRole,
 	job,
 	login,
 	parent,
@@ -65,29 +66,27 @@ import { IWorkState } from './../../api/types'
 
 const cookies = new Cookies()
 
-export const loginUser =
-	(data: IAuthRequest) =>
-	async (dispatch: Dispatch): Promise<number> => {
-		let answer = 403
-		try {
-			const res = await login(data)
+export const loginUser = async (data: IAuthRequest, dispatch: Dispatch) => {
+	let answer = 403
+	try {
+		const res = await login(data)
 
-			dispatch(
-				loginSuccess({
-					accessToken: res.data.accessToken,
-					refreshToken: res.data.refreshToken
-				})
-			)
-			localStorage.setItem('userInfo', JSON.stringify(res.data.user))
-			dispatch(ProfileSuccess(res.data.user))
-			answer = 200
-		} catch (e) {
-			if (request.isAxiosError(e) && e.response) {
-				dispatch(loginFailure(e.response?.data as IError))
-			}
+		dispatch(
+			loginSuccess({
+				accessToken: res.data.accessToken,
+				refreshToken: res.data.refreshToken
+			})
+		)
+		localStorage.setItem('userInfo', JSON.stringify(res.data.user))
+		dispatch(ProfileSuccess(res.data.user))
+		answer = 200
+	} catch (e) {
+		if (request.isAxiosError(e) && e.response) {
+			dispatch(loginFailure(e.response?.data as IError))
 		}
-		return answer
 	}
+	return answer
+}
 
 export const refreshToken = async (dispatch: Dispatch): Promise<number> => {
 	let accessToken = localStorage.getItem('access')
@@ -120,20 +119,21 @@ export const refreshToken = async (dispatch: Dispatch): Promise<number> => {
 	}
 }
 
-export const registerUser =
-	(data: IRegRequest) =>
-	async (dispatch: Dispatch): Promise<number> => {
-		try {
-			await register(data)
-			dispatch(registrationFailure(null))
-			return 200
-		} catch (e) {
-			if (request.isAxiosError(e) && e.response) {
-				dispatch(registrationFailure(e.response?.data as IError))
-			}
+export const registerUser = async (
+	data: IRegRequest,
+	dispatch: Dispatch
+): Promise<number> => {
+	try {
+		await register(data)
+		dispatch(registrationFailure(null))
+		return 200
+	} catch (e) {
+		if (request.isAxiosError(e) && e.response) {
+			dispatch(registrationFailure(e.response?.data as IError))
 		}
-		return 400
 	}
+	return 403
+}
 
 export const approveEmail = async (
 	data: IApproveRequest,
@@ -155,7 +155,7 @@ export const approveEmail = async (
 			console.log(e.response?.data as IError)
 		}
 	}
-	return 403
+	return 400
 }
 
 export const setRole = async (
@@ -565,5 +565,20 @@ export const getDocumentItemRequest = async (
 			console.log(e.response?.data as IError)
 		}
 	}
+	return null
+}
+
+export const getUserRole = async (): Promise<IRole | null> => {
+	try {
+		const response = await getRole()
+		if (response.data && response.data.length > 0) {
+			return response.data[0]
+		}
+	} catch (e) {
+		if (request.isAxiosError(e) && e.response) {
+			console.log(e.response?.data as IError)
+		}
+	}
+
 	return null
 }

@@ -15,6 +15,7 @@ export const ApproveEmail = () => {
 	const dispatch = useAppDispatch()
 
 	const query = async () => {
+		var IsBad = true
 		if (searchParams.get('id') !== null && searchParams.get('hash') !== null) {
 			const response = await approveEmail(
 				{
@@ -23,8 +24,10 @@ export const ApproveEmail = () => {
 				},
 				dispatch
 			)
-			if (response === 200) navigate('/infoUser')
-		} else {
+			if (response === 200) IsBad = false
+			else IsBad = true
+		}
+		if (IsBad) {
 			navigate('/')
 		}
 	}

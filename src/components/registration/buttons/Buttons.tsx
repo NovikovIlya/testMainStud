@@ -2,9 +2,9 @@ import { Button, Checkbox, Form } from 'antd'
 import { CheckboxChangeEvent } from 'antd/es/checkbox'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 
-import { useAppDispatch } from '../../../store'
 import { clearRegistrationErrors } from '../../../store/creators/SomeCreators'
 
 import styles from './Buttons.module.scss'
@@ -15,7 +15,7 @@ interface IButtonsProps {
 }
 
 export const Buttons: FC<IButtonsProps> = ({ setCheck, check }) => {
-	const dispatch = useAppDispatch()
+	const dispatch = useDispatch()
 	const { t } = useTranslation()
 	const onChangeCheckbox = (e: CheckboxChangeEvent) =>
 		setCheck(e.target.checked)
@@ -38,7 +38,7 @@ export const Buttons: FC<IButtonsProps> = ({ setCheck, check }) => {
 						<Link
 							className={styles.link}
 							to="/login"
-							onClick={() => dispatch(clearRegistrationErrors())}
+							onClick={() => clearRegistrationErrors(dispatch)}
 						>
 							{t('login')}
 						</Link>

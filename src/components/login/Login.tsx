@@ -2,10 +2,10 @@ import { Form, Typography } from 'antd'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import logo from '../../assets/images/group.png'
-import { useAppDispatch } from '../../store'
 import { RootState } from '../../store'
 import { loginUser } from '../../store/creators/MainCreators'
 import { clearLoginErrors } from '../../store/creators/SomeCreators'
@@ -22,18 +22,19 @@ export const Login = () => {
 	const navigate = useNavigate()
 	const { t, i18n } = useTranslation()
 	const error = useSelector((state: RootState) => state.AuthReg.authData.error)
-	const dispatch = useAppDispatch()
+	const dispatch = useDispatch()
 
 	useEffect(() => {
-		dispatch(clearLoginErrors())
+		clearLoginErrors(dispatch)
 	}, [i18n.language])
 
 	const onFinish = (values: { email: string; password: string }) => {
 		const request = async () => {
 			let res = null
 			if (values.email || values.password) {
-				res = await dispatch(
-					loginUser({ username: values.email, password: values.password })
+				res = await loginUser(
+					{ username: values.email, password: values.password },
+					dispatch
 				)
 			}
 			if (res === 200) {

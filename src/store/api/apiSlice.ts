@@ -10,7 +10,6 @@ import { logOut, setCredentials } from '../reducers/authSlice'
 
 const baseQuery = fetchBaseQuery({
 	baseUrl: 'https://newlk.kpfu.ru/',
-
 	prepareHeaders(headers, { getState }) {
 		const token = (getState() as RootState).auth.accessToken
 
@@ -27,11 +26,18 @@ const baseQueryWithReAuth = async (
 	extraOptions: {}
 ) => {
 	let result = await baseQuery(args, api, extraOptions)
-	console.log(result)
 
 	if (result?.error?.status === 403) {
 		console.log('sending refresh token')
-		const refreshResult = await baseQuery('user-api/refresh', api, extraOptions)
+		const refreshResult = await baseQuery(
+			{
+				url: 'user-api/refresh',
+				body: {},
+				method: 'POST'
+			},
+			api,
+			extraOptions
+		)
 		console.log(refreshResult)
 		if (refreshResult.data) {
 			//@ts-ignore

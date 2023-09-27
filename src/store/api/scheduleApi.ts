@@ -1,4 +1,3 @@
-import { RootState } from '..'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 import { apiSlice } from './apiSlice'
@@ -51,20 +50,6 @@ type TypeSchedule = {
 	friday: Day[]
 	saturday: Day[]
 }
-const baseQuery = fetchBaseQuery({
-	baseUrl: 'https://newlk.kpfu.ru/schedule-api/',
-	prepareHeaders: (headers, { getState }) => {
-		const accessToken = localStorage.getItem('access')
-		console.log(accessToken)
-
-		if (accessToken) {
-			headers.set('Authorization', `Bearer ${accessToken}`)
-			headers.set('Content-Type', 'application/json')
-		}
-
-		return headers
-	}
-})
 const baseQuerySession = fetchBaseQuery({
 	baseUrl: 'http://192.168.63.96:8083/api/',
 	prepareHeaders: (headers, { getState }) => {

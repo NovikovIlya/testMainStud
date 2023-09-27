@@ -20,6 +20,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { IParent, IParentError, IParentState } from '../../../api/types'
 import { RootState, useAppSelector } from '../../../store'
+import { useGetDocumentsQuery } from '../../../store/api/documentApi'
 import {
 	deleteParentItemRequest,
 	getParentItemRequest,
@@ -43,7 +44,6 @@ import {
 	residenceAddress,
 	snils
 } from '../../../store/reducers/FormReducers/ParentReducer'
-import { useGetDocumentsQuery } from '../../../store/slice/documentSlice'
 import { ImagesLayout } from '../ImagesLayout'
 
 export const ParentForm = () => {

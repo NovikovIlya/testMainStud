@@ -20,6 +20,8 @@ import { useNavigate } from 'react-router-dom'
 
 import { IEducationError, IEducationState } from '../../../api/types'
 import { RootState, useAppSelector } from '../../../store'
+import { useGetCountriesQuery } from '../../../store/api/countryApi'
+import { useGetEducationLevelQuery } from '../../../store/api/educationLevelApi'
 import {
 	addEducationItemRequest,
 	deleteEducationItemRequest,
@@ -40,8 +42,6 @@ import {
 	nameOfInstitute,
 	specialization
 } from '../../../store/reducers/FormReducers/EducationReducer'
-import { useGetCountriesQuery } from '../../../store/slice/countrySlice'
-import { useGetEducationLevelQuery } from '../../../store/slice/educationLevelSlice'
 
 const props: UploadProps = {
 	name: 'file',

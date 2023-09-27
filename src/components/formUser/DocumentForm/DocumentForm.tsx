@@ -11,6 +11,7 @@ import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import { RootState, useAppSelector } from '../../../store'
+import { useGetDocumentsQuery } from '../../../store/api/documentApi'
 import {
 	getDocumentItemRequest,
 	postDocumentItemRequest,
@@ -28,7 +29,6 @@ import {
 	passportSeries,
 	snils
 } from '../../../store/reducers/FormReducers/DocumentReducer'
-import { useGetDocumentsQuery } from '../../../store/slice/documentSlice'
 import '../GeneralStyles.scss'
 import { ImagesLayout } from '../ImagesLayout'
 

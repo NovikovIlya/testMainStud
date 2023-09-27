@@ -1,8 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 import endpoints from '../../api/endpoints'
-
-import { IEducationLevelRequest } from './../../api/types'
+import { IEducationLevelRequest } from '../../api/types'
 
 export const educationLevelAPi = createApi({
 	reducerPath: 'educationLevelAPi',

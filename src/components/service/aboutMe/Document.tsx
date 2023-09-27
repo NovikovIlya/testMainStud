@@ -20,6 +20,7 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 
 import { RootState, useAppSelector } from '../../../store'
+import { useGetDocumentsQuery } from '../../../store/api/documentApi'
 import {
 	getDocumentItemRequest,
 	postDocumentItemRequest
@@ -36,7 +37,6 @@ import {
 	passportSeries,
 	snils
 } from '../../../store/reducers/FormReducers/DocumentReducer'
-import { useGetDocumentsQuery } from '../../../store/slice/documentSlice'
 
 const props: UploadProps = {
 	name: 'file',

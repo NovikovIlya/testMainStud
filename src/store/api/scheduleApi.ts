@@ -1,6 +1,8 @@
 import { RootState } from '..'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
+import { apiSlice } from './apiSlice'
+
 export interface ICalendar {
 	semester: number
 	type_id: number
@@ -50,7 +52,7 @@ type TypeSchedule = {
 	saturday: Day[]
 }
 const baseQuery = fetchBaseQuery({
-	baseUrl: 'http://192.168.63.96:8085/api/',
+	baseUrl: 'https://newlk.kpfu.ru/schedule-api/',
 	prepareHeaders: (headers, { getState }) => {
 		const accessToken = localStorage.getItem('access')
 		console.log(accessToken)
@@ -77,15 +79,7 @@ const baseQuerySession = fetchBaseQuery({
 		return headers
 	}
 })
-export const scheduleApi = createApi({
-	reducerPath: 'scheduleApi',
-	baseQuery,
-	endpoints: builder => ({
-		getSchedule: builder.query<TypeSchedule, void>({
-			query: () => `schedule`
-		})
-	})
-})
+
 export const sessionApi = createApi({
 	reducerPath: 'sessionApi',
 	baseQuery: baseQuerySession,
@@ -95,6 +89,13 @@ export const sessionApi = createApi({
 		}),
 		calendar: builder.query<ICalendar[], void>({
 			query: () => `calendar/studyplan`
+		})
+	})
+})
+export const scheduleApi = apiSlice.injectEndpoints({
+	endpoints: builder => ({
+		getSchedule: builder.query<TypeSchedule, void>({
+			query: () => `schedule-api/schedule`
 		})
 	})
 })

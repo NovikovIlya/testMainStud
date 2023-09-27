@@ -11,6 +11,7 @@ import { useDispatch } from 'react-redux'
 
 import { IUserData } from '../../../../api/types'
 import { RootState, useAppSelector } from '../../../../store'
+import { useGetCountriesQuery } from '../../../../store/api/countryApi'
 import { addCountries } from '../../../../store/reducers/FormReducers/CountriesEducationReducer'
 import {
 	birthDay,
@@ -20,7 +21,6 @@ import {
 	phone,
 	surName
 } from '../../../../store/reducers/FormReducers/FormReducer'
-import { useGetCountriesQuery } from '../../../../store/slice/countrySlice'
 
 interface IInputProps {
 	IsEmpty: boolean

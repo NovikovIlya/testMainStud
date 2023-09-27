@@ -16,6 +16,7 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 
 import { RootState, useAppSelector } from '../../../store'
+import { useGetCountriesQuery } from '../../../store/api/countryApi'
 import { getAbUsForm, putAbUsForm } from '../../../store/creators/MainCreators'
 import { addCountries } from '../../../store/reducers/FormReducers/CountriesEducationReducer'
 import {
@@ -28,7 +29,6 @@ import {
 	phone,
 	surName
 } from '../../../store/reducers/FormReducers/FormReducer'
-import { useGetCountriesQuery } from '../../../store/slice/countrySlice'
 
 export const AboutMe = () => {
 	const { t, i18n } = useTranslation()

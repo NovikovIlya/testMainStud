@@ -23,6 +23,7 @@ import { DocumentSvg } from '../../assets/svg/DocumentSvg'
 import PersonalizationSvg from '../../assets/svg/PersonalizationSvg'
 import { useAppSelector } from '../../store'
 import { logout } from '../../store/creators/SomeCreators'
+import { logOut } from '../../store/reducers/authSlice'
 import { ModalNav } from '../service/modalMenu/ModalNav'
 
 type TypeHeaderProps = {
@@ -116,7 +117,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 			label: (
 				<div
 					className="flex items-center gap-[15px] px-[4px] py-[5px]"
-					onClick={() => exit()}
+					onClick={() => logOut()}
 				>
 					<LogoutSvg />
 					{t('logout')}

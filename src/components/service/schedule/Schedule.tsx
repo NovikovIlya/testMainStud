@@ -2,7 +2,7 @@ import { Radio, RadioChangeEvent, Table } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 import { useEffect, useState } from 'react'
 
-import { useGetScheduleQuery } from '../../../store/slice/scheduleSlice'
+import { useGetScheduleQuery } from '../../../store/api/scheduleApi'
 
 import './StyleSchedule.scss'
 

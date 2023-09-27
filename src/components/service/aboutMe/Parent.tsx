@@ -22,6 +22,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { IParentError, IParentState } from '../../../api/types'
 import { RootState, useAppSelector } from '../../../store'
+import { useGetDocumentsQuery } from '../../../store/api/documentApi'
 import {
 	deleteParentItemRequest,
 	getParentItemRequest,
@@ -45,7 +46,6 @@ import {
 	residenceAddress,
 	snils
 } from '../../../store/reducers/FormReducers/ParentReducer'
-import { useGetDocumentsQuery } from '../../../store/slice/documentSlice'
 
 const props: UploadProps = {
 	name: 'file',

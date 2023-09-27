@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 
 import { RootState, useAppSelector } from '../../../store'
+import { useGetCountriesQuery } from '../../../store/api/countryApi'
 import {
 	getAbUsAddress,
 	putAbUsAddress
@@ -20,7 +21,6 @@ import {
 	street
 } from '../../../store/reducers/FormReducers/AddressReducer'
 import { addCountries } from '../../../store/reducers/FormReducers/CountriesEducationReducer'
-import { useGetCountriesQuery } from '../../../store/slice/countrySlice'
 
 export const Address = () => {
 	const { t, i18n } = useTranslation()

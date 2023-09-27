@@ -1,16 +1,15 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 import endpoints from '../../api/endpoints'
+import { IDocumentsRequest } from '../../api/types'
 
-import { ICountryRequest } from './../../api/types'
-
-export const countriesAPi = createApi({
-	reducerPath: 'countriesAPi',
+export const documentsAPi = createApi({
+	reducerPath: 'documentsAPi',
 	baseQuery: fetchBaseQuery({ baseUrl: 'http://192.168.63.96:8080/api' }),
 	endpoints: build => ({
-		getCountries: build.query<ICountryRequest[], string>({
+		getDocuments: build.query<IDocumentsRequest[], string>({
 			query: language => ({
-				url: endpoints.USER.COUNTRIES,
+				url: endpoints.USER.DOCUMENTS,
 				method: 'GET',
 				headers: {
 					'Content-type': 'application/json; charset=UTF-8',
@@ -21,4 +20,4 @@ export const countriesAPi = createApi({
 	})
 })
 
-export const { useGetCountriesQuery } = countriesAPi
+export const { useGetDocumentsQuery } = documentsAPi

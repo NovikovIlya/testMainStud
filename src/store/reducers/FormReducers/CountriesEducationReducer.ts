@@ -4,9 +4,9 @@ import { RootState } from '../..'
 import {
 	ICountriesDocumentsState,
 	ICountryRequest,
-	IDocumentsRequest,
 	IEducationLevelRequest
 } from '../../../api/types'
+import { IDocumentsRequest } from '../../type'
 
 const initialState: ICountriesDocumentsState = {
 	countries: null,

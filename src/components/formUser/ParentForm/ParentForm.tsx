@@ -20,7 +20,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { IParent, IParentError, IParentState } from '../../../api/types'
 import { RootState, useAppSelector } from '../../../store'
-import { useGetDocumentsQuery } from '../../../store/api/documentApi'
+import { useGetMyDocumentsQuery } from '../../../store/api/formApi'
 import {
 	deleteParentItemRequest,
 	getParentItemRequest,
@@ -59,7 +59,7 @@ export const ParentForm = () => {
 		(state: RootState) => state.CountriesEducation.documents
 	)
 
-	const { data: documents } = useGetDocumentsQuery(i18n.language, {
+	const { data: documents } = useGetMyDocumentsQuery(i18n.language, {
 		skip: SkipCountriesQuery
 	})
 
@@ -78,7 +78,7 @@ export const ParentForm = () => {
 
 	useEffect(() => {
 		if (documents) {
-			dispatch(addDocuments(documents))
+			//	dispatch(addDocuments(documents))
 			changeQuerySkip(true)
 		}
 	}, [documents])

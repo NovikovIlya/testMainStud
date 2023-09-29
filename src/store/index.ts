@@ -3,10 +3,6 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import logger from 'redux-logger'
 
 import { apiSlice } from './api/apiSlice'
-import { countriesAPi } from './api/countryApi'
-import { documentsAPi } from './api/documentApi'
-import { educationLevelAPi } from './api/educationLevelApi'
-import { scheduleApi, sessionApi } from './api/scheduleApi'
 import AuthRegReducer from './reducers/AuthRegReducer'
 import AddressReducer from './reducers/FormReducers/AddressReducer'
 import CountriesEducationReducer from './reducers/FormReducers/CountriesEducationReducer'
@@ -17,7 +13,6 @@ import InfoUserReducer from './reducers/FormReducers/InfoUserReducer'
 import ParentReducer from './reducers/FormReducers/ParentReducer'
 import WorkReducer from './reducers/FormReducers/WorkReducer'
 import ProfileReducer from './reducers/ProfileReducer'
-import authReducer from './reducers/authSlice'
 import authSlice from './reducers/authSlice'
 
 export const store = configureStore({
@@ -33,21 +28,11 @@ export const store = configureStore({
 		Parent: ParentReducer,
 		Address: AddressReducer,
 		CountriesEducation: CountriesEducationReducer,
-		[apiSlice.reducerPath]: apiSlice.reducer,
-		[sessionApi.reducerPath]: sessionApi.reducer,
-		[scheduleApi.reducerPath]: scheduleApi.reducer,
-		[countriesAPi.reducerPath]: countriesAPi.reducer,
-		[educationLevelAPi.reducerPath]: educationLevelAPi.reducer,
-		[documentsAPi.reducerPath]: documentsAPi.reducer
+		[apiSlice.reducerPath]: apiSlice.reducer
 	},
 	middleware: getDefaultMiddleware =>
 		getDefaultMiddleware()
 			.concat(...(process.env.NODE_ENV !== 'production' ? [logger] : []))
-			.concat(scheduleApi.middleware)
-			.concat(countriesAPi.middleware)
-			.concat(educationLevelAPi.middleware)
-			.concat(documentsAPi.middleware)
-			.concat(sessionApi.middleware)
 			.concat(apiSlice.middleware),
 	devTools: true
 })

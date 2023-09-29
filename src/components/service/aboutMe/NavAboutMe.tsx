@@ -20,12 +20,10 @@ import { Parent } from './Parent'
 import { Work } from './Work'
 
 export const NavAboutMe = () => {
-	const user = useAppSelector(state => state.Profile.profileData.CurrentData)
+	const user = useAppSelector(state => state.auth.user)
 	const { pathname } = useLocation()
 	const navigate = useNavigate()
-	const role = useAppSelector(
-		state => state.Profile.profileData.CurrentData?.roles
-	)
+	const role = useAppSelector(state => state.auth.user?.roles)
 	const handleNavigate = (url: string) => {
 		navigate(url)
 	}
@@ -116,8 +114,11 @@ export const NavAboutMe = () => {
 						<Typography.Text className="text-center text-black text-base font-bold leading-tight mt-5">
 							{user?.firstname} {user?.lastname} {user?.middlename}
 						</Typography.Text>
-						{user?.roles.map(item => (
-							<Typography.Text className="px-5 mt-5 py-[5px] bg-sky-100 rounded-full opacity-60 text-center text-black text-base font-normal leading-tight">
+						{user?.roles.map((item, index) => (
+							<Typography.Text
+								key={index}
+								className="px-5 mt-5 py-[5px] bg-sky-100 rounded-full opacity-60 text-center text-black text-base font-normal leading-tight"
+							>
 								{item.type}
 							</Typography.Text>
 						))}

@@ -1,16 +1,14 @@
 import { Button, Input, Radio, Select, Space, Typography } from 'antd'
 import type { RadioChangeEvent } from 'antd'
 import clsx from 'clsx'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 
 import { RootState, useAppSelector } from '../../../store'
-import { useGetCountriesQuery } from '../../../store/api/countryApi'
-import {
-	getAbUsAddress,
-	putAbUsAddress
-} from '../../../store/creators/MainCreators'
+import { useGetAddressQuery } from '../../../store/api/formApi'
+import { useGetCountriesQuery } from '../../../store/api/utilsApi'
+import { putAbUsAddress } from '../../../store/creators/MainCreators'
 import {
 	allData,
 	apartment,
@@ -20,45 +18,26 @@ import {
 	index,
 	street
 } from '../../../store/reducers/FormReducers/AddressReducer'
-import { addCountries } from '../../../store/reducers/FormReducers/CountriesEducationReducer'
 
 export const Address = () => {
 	const { t, i18n } = useTranslation()
-	const [value, setValue] = useState(0)
-	const [SkipCountriesQuery, changeQuerySkip] = useState<boolean>(true)
+	const dispatch = useDispatch()
 	const [IsError, setError] = useState<boolean>(false)
-	const role = useAppSelector(
-		state => state.Profile.profileData.CurrentData?.roles
+	const role = useAppSelector(state => state.auth.user?.roles)
+	const { data: countries } = useGetCountriesQuery(i18n.language)
+	const { data: address } = useGetAddressQuery()
+	if (address !== undefined) dispatch(allData(address))
+
+	const [isResident, setIsResident] = useState(
+		address?.residenceAddress ? 0 : 1
 	)
+
 	const registrationAddressData = useAppSelector(
 		(state: RootState) => state.Address.registrationAddress
 	)
 	const residenceAddressData = useAppSelector(
 		(state: RootState) => state.Address.residenceAddress
 	)
-	const countryStorage = useAppSelector(
-		(state: RootState) => state.CountriesEducation.countries
-	)
-	const dispatch = useDispatch()
-
-	const { data: countries } = useGetCountriesQuery(i18n.language, {
-		skip: SkipCountriesQuery
-	})
-
-	useEffect(() => {
-		getData()
-	}, [])
-
-	useEffect(() => {
-		if (!countryStorage) changeQuerySkip(false)
-	}, [countryStorage])
-
-	useEffect(() => {
-		if (countries) {
-			dispatch(addCountries(countries))
-			changeQuerySkip(true)
-		}
-	}, [countries])
 
 	const onChange = (e: RadioChangeEvent) => {
 		if (e.target.value !== 0)
@@ -82,17 +61,7 @@ export const Address = () => {
 					residenceAddress: null
 				})
 			)
-		setValue(e.target.value)
-	}
-
-	const getData = async () => {
-		const response = await getAbUsAddress(dispatch)
-		if (response !== null) {
-			if (response.residenceAddress) {
-				setValue(1)
-			}
-			dispatch(allData(response))
-		}
+		setIsResident(e.target.value)
 	}
 
 	const setChanges = async () => {
@@ -139,7 +108,7 @@ export const Address = () => {
 			{
 				registrationAddress: registrationAddressData,
 				residenceAddress:
-					value === 0
+					isResident === 0
 						? registrationAddressData
 						: !residenceAddressData
 						? null
@@ -181,15 +150,15 @@ export const Address = () => {
 					<Select
 						disabled={isStudent}
 						size="large"
-						className="w-[624px] shadow rounded-lg"
+						className="w-[624px]  rounded-lg"
 						value={registrationAddressData.countryId}
 						onChange={e =>
 							dispatch(country({ target: 'registrationAddress', country: e }))
 						}
 						options={
-							!countryStorage
+							!countries
 								? []
-								: countryStorage.map(el => ({
+								: countries.map(el => ({
 										value: el.id,
 										label: el.shortName
 								  }))
@@ -204,7 +173,7 @@ export const Address = () => {
 						size="large"
 						maxLength={200}
 						className={clsx(
-							'w-[624px] shadow',
+							'w-[624px] ',
 							IsError &&
 								registrationAddressData.city &&
 								!/^[\p{L}]+$/u.test(registrationAddressData.city) &&
@@ -233,7 +202,7 @@ export const Address = () => {
 						maxLength={200}
 						size="large"
 						className={clsx(
-							'w-[624px] shadow',
+							'w-[624px] ',
 							IsError &&
 								registrationAddressData.street &&
 								!/^[\p{L}]+$/u.test(registrationAddressData.street) &&
@@ -267,7 +236,7 @@ export const Address = () => {
 						maxLength={5}
 						size="large"
 						className={clsx(
-							'w-[624px] shadow',
+							'w-[624px] ',
 							IsError &&
 								registrationAddressData.house &&
 								!/^[0-9]+$/.test(registrationAddressData.house) &&
@@ -298,7 +267,7 @@ export const Address = () => {
 						maxLength={5}
 						size="large"
 						className={clsx(
-							'w-[624px] shadow',
+							'w-[624px] ',
 							IsError &&
 								registrationAddressData.apartment &&
 								!/^[0-9]+$/.test(registrationAddressData.apartment) &&
@@ -331,7 +300,7 @@ export const Address = () => {
 						disabled={isStudent}
 						size="large"
 						className={clsx(
-							'w-[624px] shadow',
+							'w-[624px] ',
 							IsError &&
 								registrationAddressData.index &&
 								!/^[0-9]{5,6}$/.test(registrationAddressData.index) &&
@@ -361,14 +330,14 @@ export const Address = () => {
 					<Radio.Group
 						defaultValue={0}
 						onChange={onChange}
-						value={value}
+						value={isResident}
 						disabled={isStudent}
 					>
 						<Radio value={0}>{t('Yes')}</Radio>
 						<Radio value={1}>{t('No')}</Radio>
 					</Radio.Group>
 				</Space>
-				<div className={clsx(!value && 'hidden')}>
+				<div className={clsx(!isResident && 'hidden')}>
 					<Space direction="vertical" size={20}>
 						<Typography.Text
 							className="text-black text-sm font-bold leading-[18px]"
@@ -381,7 +350,7 @@ export const Address = () => {
 							<Select
 								disabled={isStudent}
 								size="large"
-								className="w-[624px] shadow rounded-lg"
+								className="w-[624px]  rounded-lg"
 								value={
 									!residenceAddressData ? '' : residenceAddressData.countryId
 								}
@@ -394,9 +363,9 @@ export const Address = () => {
 									)
 								}
 								options={
-									countryStorage == null
+									countries == null
 										? []
-										: countryStorage.map(el => ({
+										: countries.map(el => ({
 												value: el.id,
 												label: el.shortName
 										  }))
@@ -411,7 +380,7 @@ export const Address = () => {
 								maxLength={200}
 								size="large"
 								className={clsx(
-									'w-[624px] shadow',
+									'w-[624px] ',
 									IsError &&
 										residenceAddressData &&
 										residenceAddressData.city &&
@@ -445,7 +414,7 @@ export const Address = () => {
 								maxLength={200}
 								size="large"
 								className={clsx(
-									'w-[624px] shadow',
+									'w-[624px] ',
 									IsError &&
 										residenceAddressData &&
 										residenceAddressData.street &&
@@ -482,7 +451,7 @@ export const Address = () => {
 								size="large"
 								maxLength={5}
 								className={clsx(
-									'w-[624px] shadow',
+									'w-[624px] ',
 									IsError &&
 										residenceAddressData &&
 										residenceAddressData.house &&
@@ -517,7 +486,7 @@ export const Address = () => {
 								maxLength={5}
 								size="large"
 								className={clsx(
-									'w-[624px] shadow',
+									'w-[624px] ',
 									IsError &&
 										residenceAddressData &&
 										residenceAddressData.apartment &&
@@ -555,7 +524,7 @@ export const Address = () => {
 								size="large"
 								maxLength={6}
 								className={clsx(
-									'w-[624px] shadow',
+									'w-[624px] ',
 									IsError &&
 										residenceAddressData &&
 										residenceAddressData.index &&

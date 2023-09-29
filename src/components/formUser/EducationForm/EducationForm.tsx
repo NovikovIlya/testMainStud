@@ -1,6 +1,4 @@
-import { QuestionOutlined, UploadOutlined } from '@ant-design/icons'
-import { Space, Tooltip, Typography, Upload, message } from 'antd'
-import type { UploadProps } from 'antd'
+import { Space, Typography } from 'antd'
 import { Button, DatePicker, Input, Select } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
@@ -11,15 +9,16 @@ import { useNavigate } from 'react-router-dom'
 
 import { IEducationError, IEducationState } from '../../../api/types'
 import { RootState, useAppSelector } from '../../../store'
-import { useGetCountriesQuery } from '../../../store/api/countryApi'
-import { useGetEducationLevelQuery } from '../../../store/api/educationLevelApi'
+import {
+	useGetCountriesQuery,
+	useGetEducationLevelQuery
+} from '../../../store/api/utilsApi'
 import {
 	addEducationItemRequest,
 	deleteEducationItemRequest,
 	getEducationItemRequest,
 	putEducationItemRequest
 } from '../../../store/creators/MainCreators'
-import { setEducation } from '../../../store/creators/MainCreators'
 import {
 	addCountries,
 	addEducations
@@ -71,9 +70,6 @@ export const EducationForm = () => {
 	}
 	const handleSkip = () => {
 		navigate('/user')
-	}
-	const addEducation = () => {
-		dispatch(idAdd(info[info.length - 1].id + 1))
 	}
 	const countriesStorage = useAppSelector(
 		(state: RootState) => state.CountriesEducation.countries

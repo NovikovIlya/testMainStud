@@ -11,7 +11,7 @@ import { useDispatch } from 'react-redux'
 
 import { IUserData } from '../../../../api/types'
 import { RootState, useAppSelector } from '../../../../store'
-import { useGetCountriesQuery } from '../../../../store/api/countryApi'
+import { useGetCountriesQuery } from '../../../../store/api/utilsApi'
 import { addCountries } from '../../../../store/reducers/FormReducers/CountriesEducationReducer'
 import {
 	birthDay,

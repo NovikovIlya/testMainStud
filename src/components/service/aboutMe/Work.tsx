@@ -251,7 +251,7 @@ export const Work = () => {
 							<Input
 								size="large"
 								className={clsx(
-									'w-[624px] shadow ',
+									'w-[624px]  ',
 									IsError.item &&
 										IsError.item.id === item.id &&
 										IsError.item.name &&
@@ -279,7 +279,7 @@ export const Work = () => {
 									>
 										<DatePicker
 											className={clsx(
-												'shadow w-full',
+												' w-full',
 												IsError.item &&
 													IsError.item.id === item.id &&
 													IsError.item.startDate &&
@@ -324,7 +324,7 @@ export const Work = () => {
 										locale={i18n.language === 'ru' ? ruPicker : enPicker}
 									>
 										<DatePicker
-											className={clsx('shadow w-full')}
+											className={clsx(' w-full')}
 											onChange={e =>
 												dispatch(
 													endDate({
@@ -366,7 +366,7 @@ export const Work = () => {
 							<Typography.Text>{t('Responsibilities')}</Typography.Text>
 							<Input.TextArea
 								className={clsx(
-									'w-[624px] shadow ',
+									'w-[624px]  ',
 									IsError.item &&
 										IsError.item.id === item.id &&
 										IsError.item.responsibilities &&
@@ -400,7 +400,7 @@ export const Work = () => {
 							<Typography.Text>{t('AdditionalInformation')}</Typography.Text>
 							<Input.TextArea
 								className={clsx(
-									'w-[624px] shadow ',
+									'w-[624px]  ',
 									IsError.item &&
 										IsError.item.id === item.id &&
 										IsError.item.additionalInfo &&
@@ -468,7 +468,7 @@ export const Work = () => {
 						placeholder="https://disk.yandex.ru"
 						size="large"
 						className={clsx(
-							'w-[624px] shadow ',
+							'w-[624px]  ',
 							IsError.portfolio && 'border-rose-500'
 						)}
 						onChange={e => dispatch(portfolioLink(e.target.value))}

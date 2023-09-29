@@ -5,7 +5,7 @@ import Column from 'antd/es/table/Column'
 import ColumnGroup from 'antd/es/table/ColumnGroup'
 import React from 'react'
 
-import { useCalendarQuery } from '../../../store/api/scheduleApi'
+import { useCalendarQuery } from '../../../store/api/serviceApi'
 
 import Styles from './Curriculum.module.scss'
 

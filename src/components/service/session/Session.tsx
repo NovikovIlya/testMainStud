@@ -5,7 +5,7 @@ import React from 'react'
 import {
 	useCalendarQuery,
 	useExamsScheduleQuery
-} from '../../../store/api/scheduleApi'
+} from '../../../store/api/serviceApi'
 
 interface DataType {
 	key: string

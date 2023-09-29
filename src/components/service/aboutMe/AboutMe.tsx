@@ -11,14 +11,14 @@ import {
 import ruPicker from 'antd/locale/ru_RU'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 
-import { RootState, useAppSelector } from '../../../store'
-import { useGetCountriesQuery } from '../../../store/api/countryApi'
-import { getAbUsForm, putAbUsForm } from '../../../store/creators/MainCreators'
-import { addCountries } from '../../../store/reducers/FormReducers/CountriesEducationReducer'
+import { useAppSelector } from '../../../store'
+import { useGetInfoUserQuery } from '../../../store/api/formApi'
+import { useGetCountriesQuery } from '../../../store/api/utilsApi'
+import { putAbUsForm } from '../../../store/creators/MainCreators'
 import {
 	allData,
 	birthDay,
@@ -32,25 +32,14 @@ import {
 
 export const AboutMe = () => {
 	const { t, i18n } = useTranslation()
-	const [SkipCountriesQuery, changeQuerySkip] = useState<boolean>(true)
-	const [IsError, setError] = useState<boolean>(false)
-	const formData = useAppSelector(state => state.Form)
-	const role = useAppSelector(
-		state => state.Profile.profileData.CurrentData?.roles
-	)
-
+	const role = useAppSelector(state => state.auth.user?.roles)
 	const dispatch = useDispatch()
-	const user = JSON.parse(localStorage.getItem('userInfo') || '')
-	const countryStorage = useAppSelector(
-		(state: RootState) => state.CountriesEducation.countries
-	)
-
-	const getData = async () => {
-		const response = await getAbUsForm(dispatch)
-		if (response !== null) {
-			dispatch(allData(response))
-		}
-	}
+	const email = useAppSelector(state => state.auth.user?.email)
+	const { data: me } = useGetInfoUserQuery()
+	const [IsError, setError] = useState<boolean>(false)
+	const { data: countries } = useGetCountriesQuery(i18n.language)
+	if (me !== undefined) dispatch(allData(me))
+	const formData = useAppSelector(state => state.Form)
 
 	const setChanges = async () => {
 		const IsCorrectNS = [formData.name, formData.surName].some(el =>
@@ -81,24 +70,6 @@ export const AboutMe = () => {
 		}
 	}
 
-	const { data: countries } = useGetCountriesQuery(i18n.language, {
-		skip: SkipCountriesQuery
-	})
-
-	useEffect(() => {
-		getData()
-	}, [])
-
-	useEffect(() => {
-		if (!countryStorage) changeQuerySkip(false)
-	}, [countryStorage])
-
-	useEffect(() => {
-		if (countries) {
-			dispatch(addCountries(countries))
-			changeQuerySkip(true)
-		}
-	}, [countries])
 	if (!role) return <></>
 	const isStudent = role[0].type === 'STUD'
 
@@ -127,7 +98,7 @@ export const AboutMe = () => {
 						size="large"
 						maxLength={200}
 						className={clsx(
-							'w-[624px] shadow ',
+							'w-[624px]  ',
 							IsError &&
 								!/^\p{L}+$/u.test(formData.surName) &&
 								'border-rose-500'
@@ -146,7 +117,7 @@ export const AboutMe = () => {
 						placeholder={t('name')}
 						size="large"
 						className={clsx(
-							'w-[624px] shadow ',
+							'w-[624px]  ',
 							IsError && !/^\p{L}+$/u.test(formData.name) && 'border-rose-500'
 						)}
 						onChange={e => dispatch(name(e.target.value))}
@@ -163,7 +134,7 @@ export const AboutMe = () => {
 						placeholder={t('middleName')}
 						size="large"
 						className={clsx(
-							'w-[624px] shadow ',
+							'w-[624px]  ',
 							IsError &&
 								!/^\p{L}+$/u.test(formData.patronymic) &&
 								formData.patronymic !== '' &&
@@ -186,7 +157,7 @@ export const AboutMe = () => {
 							placeholder={t('birth')}
 							size="large"
 							className={clsx(
-								'w-[624px] shadow ',
+								'w-[624px]  ',
 								IsError && formData.birthDay === '' && 'border-rose-500'
 							)}
 							format={'DD.MM.YYYY'}
@@ -215,13 +186,13 @@ export const AboutMe = () => {
 						disabled={isStudent}
 						placeholder={t('citizen')}
 						size="large"
-						className="w-[624px] shadow rounded-lg"
+						className="w-[624px]  rounded-lg"
 						value={formData.countryId}
 						onChange={e => dispatch(country(e))}
 						options={
-							countryStorage == null
+							countries == null
 								? []
-								: countryStorage.map(el => ({
+								: countries.map(el => ({
 										value: el.id,
 										label: el.shortName
 								  }))
@@ -235,7 +206,7 @@ export const AboutMe = () => {
 						placeholder="+7 999 898-88-00"
 						size="large"
 						className={clsx(
-							'w-[624px] shadow ',
+							'w-[624px]  ',
 							IsError &&
 								!/^\+[0-9][0-9]{3}[0-9]{3}[0-9]{2}[0-9]{2}$/.test(
 									formData.phone
@@ -256,14 +227,13 @@ export const AboutMe = () => {
 						disabled={isStudent}
 						placeholder={t('email')}
 						size="large"
-						className="w-[624px] shadow "
-						value={user !== '' ? user.email : ''}
+						className="w-[624px]  "
+						value={email !== '' ? email : ''}
 					/>
 				</Space>
 				<Space
 					direction="vertical"
 					size={'small'}
-					//@ts-ignore
 					className={clsx('mt-4', isStudent && 'hidden')}
 				>
 					<Button

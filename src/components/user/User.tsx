@@ -2,7 +2,7 @@ import clsx from 'clsx'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useGetScheduleQuery } from '../../store/api/scheduleApi'
+import { useGetScheduleQuery } from '../../store/api/serviceApi'
 import DropDrag from '../dnd/DropDrag'
 import { block } from '../dnd/constant'
 import { Faq } from '../faq/Faq'
@@ -14,8 +14,6 @@ export const User = () => {
 			? JSON.parse(localStorage.getItem('dashboard') || '')
 			: block
 	})
-	const { data } = useGetScheduleQuery()
-	console.log(data)
 	const { t } = useTranslation()
 	return (
 		<Layout>

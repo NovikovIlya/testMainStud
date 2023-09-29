@@ -1,32 +1,7 @@
 import { RootState } from '..'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
-export interface InitialState {
-	accessToken: string | null
-	refreshToken: string | null
-	user: User | null
-}
-
-export interface User {
-	username: string
-	firstname: string
-	lastname: string
-	middlename: string
-	birthday: string
-	phone: string
-	email: string
-	citizenship: string
-	roles: Role[]
-	sessionId: string
-	sessionHash: string
-	allId: string
-}
-
-export interface Role {
-	login: string
-	id: string
-	type: string
-}
+import { InitialState } from '../type'
 
 const initialState: InitialState = {
 	accessToken: localStorage.getItem('access'),
@@ -49,9 +24,6 @@ const authSlice = createSlice({
 			state.user = null
 			state.accessToken = null
 			state.refreshToken = null
-			localStorage.removeItem('refresh')
-			localStorage.removeItem('user')
-			localStorage.removeItem('access')
 		}
 	}
 })

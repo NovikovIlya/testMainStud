@@ -1,3 +1,5 @@
+import { IDocumentsRequest } from '../store/type'
+
 export interface IRegRequest {
 	lastName: string
 	password: string
@@ -91,11 +93,6 @@ export type ICountryRequest = {
 export type IEducationLevelRequest = {
 	id: number
 	name: string
-}
-
-export type IDocumentsRequest = {
-	id: number
-	type: string
 }
 
 export type IRole = {

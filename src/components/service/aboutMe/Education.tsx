@@ -13,25 +13,22 @@ import {
 import type { UploadProps } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
 
 import { IEducationError, IEducationState } from '../../../api/types'
-import { RootState, useAppSelector } from '../../../store'
-import { useGetCountriesQuery } from '../../../store/api/countryApi'
-import { useGetEducationLevelQuery } from '../../../store/api/educationLevelApi'
+import { useAppSelector } from '../../../store'
+import { useGetEducationQuery } from '../../../store/api/formApi'
+import {
+	useGetCountriesQuery,
+	useGetEducationLevelQuery
+} from '../../../store/api/utilsApi'
 import {
 	addEducationItemRequest,
 	deleteEducationItemRequest,
-	getEducationItemRequest,
 	putEducationItemRequest
 } from '../../../store/creators/MainCreators'
-import {
-	addCountries,
-	addEducations
-} from '../../../store/reducers/FormReducers/CountriesEducationReducer'
 import {
 	allData,
 	countryId,
@@ -62,34 +59,14 @@ const props: UploadProps = {
 }
 
 export const Education = () => {
-	const dispatch = useDispatch()
-	const navigate = useNavigate()
 	const { t, i18n } = useTranslation()
-	const [SkipCountriesQuery, changeQuerySkip] = useState<boolean>(true)
+	const dispatch = useDispatch()
+	const { data: education } = useGetEducationQuery()
+	if (education !== undefined) dispatch(allData(education))
 	const educationData = useAppSelector(state => state.Education)
-	const role = useAppSelector(
-		state => state.Profile.profileData.CurrentData?.roles
-	)
-
-	const { data: educationLevel } = useGetEducationLevelQuery(i18n.language, {
-		skip: SkipCountriesQuery
-	})
-	const { data: countries } = useGetCountriesQuery(i18n.language, {
-		skip: SkipCountriesQuery
-	})
-	const countriesStorage = useAppSelector(
-		(state: RootState) => state.CountriesEducation.countries
-	)
-	const educationStorage = useAppSelector(
-		(state: RootState) => state.CountriesEducation.educations
-	)
-
-	const getData = async () => {
-		const response = await getEducationItemRequest(dispatch)
-		if (response !== null) {
-			dispatch(allData(response))
-		}
-	}
+	const role = useAppSelector(state => state.auth.user?.roles)
+	const { data: educationLevel } = useGetEducationLevelQuery(i18n.language)
+	const { data: countries } = useGetCountriesQuery(i18n.language)
 
 	const [updateItems, setUpdate] = useState<boolean>(true)
 	const [IsError, setError] = useState<IEducationError | null>(null)
@@ -203,22 +180,6 @@ export const Education = () => {
 		else console.log('403')
 	}
 
-	useEffect(() => {
-		if (educationLevel && countries) {
-			dispatch(addEducations(educationLevel))
-			dispatch(addCountries(countries))
-			changeQuerySkip(true)
-		} else {
-			changeQuerySkip(false)
-		}
-	}, [educationLevel, countries])
-
-	useEffect(() => {
-		if (updateItems) {
-			getData()
-			setUpdate(false)
-		}
-	}, [updateItems])
 	if (!role) return <></>
 	const isStudent = role[0].type === 'STUD'
 	return (
@@ -262,7 +223,7 @@ export const Education = () => {
 									<Select
 										disabled={isStudent}
 										size="large"
-										className="w-full shadow rounded-lg"
+										className="w-full  rounded-lg"
 										defaultValue={
 											educationData.filter(el => el.id === item.id)[0]
 												.educationLevelId
@@ -272,9 +233,9 @@ export const Education = () => {
 												.educationLevelId
 										}
 										options={
-											!educationStorage
+											!educationLevel
 												? []
-												: educationStorage.map(el => ({
+												: educationLevel.map(el => ({
 														value: el.id,
 														label: el.name
 												  }))
@@ -294,7 +255,7 @@ export const Education = () => {
 									) : (
 										<Select
 											size="large"
-											className="w-full shadow rounded-lg"
+											className="w-full  rounded-lg"
 											onChange={e =>
 												dispatch(
 													countryId({
@@ -304,9 +265,9 @@ export const Education = () => {
 												)
 											}
 											options={
-												countriesStorage === null
+												countries === null || countries === undefined
 													? []
-													: countriesStorage.map(el => ({
+													: countries.map(el => ({
 															value: el.id,
 															label: el.shortName
 													  }))
@@ -324,7 +285,7 @@ export const Education = () => {
 									maxLength={200}
 									size="large"
 									className={clsx(
-										'shadow ',
+										' ',
 										IsError &&
 											IsError.id === item.id &&
 											IsError.nameOfInstitute &&
@@ -360,7 +321,7 @@ export const Education = () => {
 										size="large"
 										maxLength={4}
 										className={clsx(
-											'shadow ',
+											' ',
 											IsError &&
 												IsError.id === item.id &&
 												IsError.documentNumber &&
@@ -395,7 +356,7 @@ export const Education = () => {
 										size="large"
 										maxLength={4}
 										className={clsx(
-											'shadow ',
+											' ',
 											IsError &&
 												IsError.id === item.id &&
 												IsError.documentSeries &&
@@ -427,7 +388,7 @@ export const Education = () => {
 									<DatePicker
 										disabled={isStudent}
 										className={clsx(
-											'shadow w-full',
+											' w-full',
 											IsError &&
 												IsError.id === item.id &&
 												IsError.graduateYear &&
@@ -478,7 +439,7 @@ export const Education = () => {
 										placeholder={t('web')}
 										size="large"
 										className={clsx(
-											'w-full shadow ',
+											'w-full  ',
 											IsError &&
 												IsError.id === item.id &&
 												IsError.specialization &&

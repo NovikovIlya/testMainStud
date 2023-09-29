@@ -15,21 +15,21 @@ import type { UploadProps } from 'antd'
 import ruPicker from 'antd/locale/ru_RU'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
 
 import { IParentError, IParentState } from '../../../api/types'
-import { RootState, useAppSelector } from '../../../store'
-import { useGetDocumentsQuery } from '../../../store/api/documentApi'
+import { useAppSelector } from '../../../store'
+import {
+	useGetDocumentsQuery,
+	useGetParentsQuery
+} from '../../../store/api/formApi'
 import {
 	deleteParentItemRequest,
-	getParentItemRequest,
 	postParentItemRequest,
 	putParentItemRequest
 } from '../../../store/creators/MainCreators'
-import { addDocuments } from '../../../store/reducers/FormReducers/CountriesEducationReducer'
 import {
 	FIO,
 	allData,
@@ -68,43 +68,13 @@ const props: UploadProps = {
 export const Parent = () => {
 	const { t, i18n } = useTranslation()
 	const dispatch = useDispatch()
-	const navigate = useNavigate()
 	dayjs.locale(i18n.language)
+	const { data: parent } = useGetParentsQuery()
 	const [IsError, setError] = useState<IParentError | null>(null)
-	const [SkipCountriesQuery, changeQuerySkip] = useState<boolean>(true)
-	const role = useAppSelector(
-		state => state.Profile.profileData.CurrentData?.roles
-	)
-	const [updateItems, setUpdate] = useState<boolean>(true)
+	const role = useAppSelector(state => state.auth.user?.roles)
+	const { data: documents } = useGetDocumentsQuery(i18n.language)
+	if (parent !== undefined) dispatch(allData(parent))
 	const parentData = useAppSelector(state => state.Parent)
-	const documentStorage = useAppSelector(
-		(state: RootState) => state.CountriesEducation.documents
-	)
-
-	const { data: documents } = useGetDocumentsQuery(i18n.language, {
-		skip: SkipCountriesQuery
-	})
-
-	useEffect(() => {
-		if (updateItems) {
-			getData()
-
-			setUpdate(false)
-		}
-	}, [updateItems])
-
-	useEffect(() => {
-		if (!documentStorage) {
-			changeQuerySkip(false)
-		}
-	}, [documentStorage])
-
-	useEffect(() => {
-		if (documents) {
-			dispatch(addDocuments(documents))
-			changeQuerySkip(true)
-		}
-	}, [documents])
 
 	const convertToString = (field: any): string => {
 		if (typeof field === 'string') {
@@ -114,39 +84,8 @@ export const Parent = () => {
 		}
 	}
 
-	const getData = async () => {
-		const response = await getParentItemRequest(dispatch)
-		if (response) {
-			const corrected: IParentState[] = response.map(el => ({
-				mother: el.mother,
-				father: el.father,
-				id: el.id,
-				FIO:
-					!el.name && !el.surName && !el.patronymic
-						? null
-						: (!el.name ? '' : el.name) +
-						  ' ' +
-						  (!el.surName ? '' : el.surName) +
-						  (!el.patronymic ? '' : ' ' + el.patronymic),
-				dateIssue: el.dateIssue,
-				divisionCode: el.divisionCode,
-				eMail: el.eMail,
-				issuedBy: el.issuedBy,
-				documentTypeId: el.documentTypeId,
-				phone: el.phone,
-				passportSeries: el.passportSeries,
-				passportNumber: el.passportNumber,
-				registrationAddress: el.registrationAddress,
-				residenceAddress: el.residenceAddress,
-				inn: el.inn,
-				snils: el.snils
-			}))
-			dispatch(allData(corrected))
-		} else console.log('403')
-	}
-
-	const handleAddParent = async () => {
-		const response = await postParentItemRequest(
+	const handleAddParent = async () =>
+		await postParentItemRequest(
 			{
 				name: null,
 				surName: null,
@@ -166,20 +105,14 @@ export const Parent = () => {
 			},
 			dispatch
 		)
-		if (response === 200) setUpdate(true)
-		else console.log('403')
-	}
 
-	const handleDeleteParent = async (id: number) => {
-		const response = await deleteParentItemRequest(id.toString(), dispatch)
-		if (response === 200) setUpdate(true)
-		else console.log('403')
-	}
+	const handleDeleteParent = async (id: number) =>
+		await deleteParentItemRequest(id.toString(), dispatch)
 
 	const handleUpdateParent = async (item: IParentState) => {
 		const fioSpliter = !item.FIO ? null : item.FIO.split(' ')
 		if (fioSpliter !== null && fioSpliter.length !== 3) fioSpliter.push('')
-		const response = await putParentItemRequest(
+		await putParentItemRequest(
 			item.id.toString(),
 			{
 				name: !fioSpliter ? null : fioSpliter[0],
@@ -200,8 +133,6 @@ export const Parent = () => {
 			},
 			dispatch
 		)
-		if (response === 200) setUpdate(true)
-		else console.log('403')
 	}
 	if (!role) return <></>
 	const isStudent = role[0].type === 'STUD'
@@ -253,7 +184,7 @@ export const Parent = () => {
 										size="large"
 										maxLength={250}
 										className={clsx(
-											'shadow',
+											'',
 											IsError &&
 												IsError.id === item.id &&
 												IsError.FIO &&
@@ -287,7 +218,7 @@ export const Parent = () => {
 										placeholder="+7 999 898-88-00"
 										size="large"
 										className={clsx(
-											'shadow',
+											'',
 											IsError &&
 												IsError.id === item.id &&
 												IsError.phone &&
@@ -317,7 +248,7 @@ export const Parent = () => {
 										placeholder="BezuPr@gmail.com"
 										size="large"
 										className={clsx(
-											'shadow',
+											'',
 											IsError &&
 												IsError.id === item.id &&
 												IsError.eMail &&
@@ -354,13 +285,13 @@ export const Parent = () => {
 										{t('documentType')}
 									</Typography.Text>
 									<Select
-										className="w-full shadow rounded-lg"
+										className="w-full  rounded-lg"
 										placeholder={t('documentType')}
 										size="large"
 										options={
-											documentStorage !== null
+											documents !== null
 												? //@ts-ignore
-												  documentStorage.map(el => ({
+												  documents.map(el => ({
 														value: el.id,
 														label: el.type
 												  }))
@@ -391,7 +322,7 @@ export const Parent = () => {
 												maxLength={7}
 												size="large"
 												className={clsx(
-													'shadow',
+													'',
 													IsError &&
 														IsError.id === item.id &&
 														IsError.divisionCode &&
@@ -425,7 +356,7 @@ export const Parent = () => {
 											<ConfigProvider locale={ruPicker}>
 												<DatePicker
 													className={clsx(
-														'shadow w-full',
+														' w-full',
 														IsError &&
 															IsError.id === item.id &&
 															IsError.dateIssue &&
@@ -479,7 +410,7 @@ export const Parent = () => {
 												placeholder="0000"
 												size="large"
 												className={clsx(
-													'shadow',
+													'',
 													IsError &&
 														IsError.id === item.id &&
 														IsError.passportSeries &&
@@ -516,7 +447,7 @@ export const Parent = () => {
 												size="large"
 												maxLength={4}
 												className={clsx(
-													'shadow',
+													'',
 													IsError &&
 														IsError.id === item.id &&
 														IsError.passportNumber &&
@@ -554,7 +485,7 @@ export const Parent = () => {
 										maxLength={200}
 										size="large"
 										className={clsx(
-											'shadow',
+											'',
 											IsError &&
 												IsError.id === item.id &&
 												IsError.issuedBy &&
@@ -591,7 +522,7 @@ export const Parent = () => {
 										placeholder="000-000-000 00"
 										size="large"
 										className={clsx(
-											'shadow',
+											'',
 											IsError &&
 												IsError.id === item.id &&
 												IsError.snils &&
@@ -620,7 +551,7 @@ export const Parent = () => {
 										maxLength={12}
 										size="large"
 										className={clsx(
-											'mt-2 shadow',
+											'mt-2 ',
 											IsError &&
 												IsError.id === item.id &&
 												IsError.inn &&
@@ -649,7 +580,7 @@ export const Parent = () => {
 										size="large"
 										maxLength={400}
 										className={clsx(
-											'shadow',
+											'',
 											IsError &&
 												IsError.id === item.id &&
 												IsError.registrationAddress &&
@@ -685,7 +616,7 @@ export const Parent = () => {
 										size="large"
 										maxLength={400}
 										className={clsx(
-											'shadow',
+											'',
 											IsError &&
 												IsError.id === item.id &&
 												IsError.residenceAddress &&

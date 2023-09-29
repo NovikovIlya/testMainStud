@@ -15,17 +15,16 @@ import type { UploadProps } from 'antd'
 import ruPicker from 'antd/locale/ru_RU'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 
 import { RootState, useAppSelector } from '../../../store'
-import { useGetDocumentsQuery } from '../../../store/api/documentApi'
 import {
-	getDocumentItemRequest,
-	postDocumentItemRequest
-} from '../../../store/creators/MainCreators'
-import { addDocuments } from '../../../store/reducers/FormReducers/CountriesEducationReducer'
+	useGetDocumentsQuery,
+	useGetMyDocumentsQuery
+} from '../../../store/api/formApi'
+import { postDocumentItemRequest } from '../../../store/creators/MainCreators'
 import {
 	allData,
 	dateIssue,
@@ -61,57 +60,12 @@ export const Document = () => {
 	const dispatch = useDispatch()
 
 	const [IsEmpty, changeIsEmpty] = useState<boolean>(false)
-	const [SkipCountriesQuery, changeQuerySkip] = useState<boolean>(true)
-	const role = useAppSelector(
-		state => state.Profile.profileData.CurrentData?.roles
-	)
-	const documentStorage = useAppSelector(
-		(state: RootState) => state.CountriesEducation.documents
-	)
+	const role = useAppSelector(state => state.auth.user?.roles)
+	const { data: documents } = useGetMyDocumentsQuery(i18n.language)
+	const { data: levelDocuments } = useGetDocumentsQuery(i18n.language)
+
+	if (documents !== undefined) dispatch(allData(documents))
 	const documentData = useAppSelector((state: RootState) => state.Document)
-
-	const { data: documents } = useGetDocumentsQuery(i18n.language, {
-		skip: SkipCountriesQuery
-	})
-
-	const getData = async () => {
-		const response = await getDocumentItemRequest(dispatch)
-		if (response) {
-			dispatch(
-				allData({
-					documentTypeId: !response.documentTypeId
-						? 1
-						: response.documentTypeId,
-					passportSeries: !response.passportSeries
-						? ''
-						: response.passportSeries,
-					passportNumber: !response.passportNumber
-						? ''
-						: response.passportNumber,
-					issuedBy: !response.issuedBy ? '' : response.issuedBy,
-					dateIssue: !response.dateIssue ? '' : response.dateIssue,
-					divisionCode: !response.divisionCode ? '' : response.divisionCode,
-					inn: !response.inn ? '' : response.inn,
-					snils: !response.snils ? '' : response.snils
-				})
-			)
-		} else console.log('403')
-	}
-
-	useEffect(() => {
-		getData()
-	}, [])
-
-	useEffect(() => {
-		if (!documentStorage) changeQuerySkip(false)
-	}, [documentStorage])
-
-	useEffect(() => {
-		if (documents) {
-			dispatch(addDocuments(documents))
-			changeQuerySkip(true)
-		}
-	}, [documents])
 
 	const handleAddDocument = async () => {
 		const IsCorrectPasswordData = [
@@ -163,11 +117,11 @@ export const Document = () => {
 						disabled={isStudent}
 						placeholder={t('rf')}
 						size="large"
-						className="w-[624px] shadow rounded-lg"
+						className="w-[624px]  rounded-lg"
 						options={
-							!documentStorage
+							!levelDocuments
 								? []
-								: documentStorage.map(el => ({ value: el.id, label: el.type }))
+								: levelDocuments.map(el => ({ value: el.id, label: el.type }))
 						}
 						value={documentData.documentTypeId}
 					/>
@@ -186,7 +140,7 @@ export const Document = () => {
 							size="large"
 							value={documentData.divisionCode}
 							className={clsx(
-								'shadow w-full',
+								' w-full',
 								IsEmpty &&
 									!/^[0-9]{3}\-[0-9]{3}$/.test(documentData.divisionCode) &&
 									'border-rose-500'
@@ -207,7 +161,7 @@ export const Document = () => {
 							<DatePicker
 								disabled={isStudent}
 								className={clsx(
-									'shadow w-full',
+									' w-full',
 									IsEmpty && documentData.dateIssue === '' && 'border-rose-500'
 								)}
 								onChange={e =>
@@ -240,7 +194,7 @@ export const Document = () => {
 							placeholder="0000"
 							size="large"
 							className={clsx(
-								'shadow ',
+								' ',
 								IsEmpty &&
 									!/^[0-9]{4}$/.test(documentData.passportSeries) &&
 									'border-rose-500'
@@ -264,7 +218,7 @@ export const Document = () => {
 							placeholder="0000"
 							size="large"
 							className={clsx(
-								'shadow',
+								'',
 								IsEmpty &&
 									!/^[0-9]{4}$/.test(documentData.passportNumber) &&
 									'border-rose-500'
@@ -291,7 +245,7 @@ export const Document = () => {
 						size="large"
 						maxLength={200}
 						className={clsx(
-							'shadow',
+							'',
 							IsEmpty &&
 								(!/^[\p{L}\s]+$/u.test(documentData.issuedBy) ||
 									/\s\s/.test(documentData.issuedBy)) &&
@@ -318,7 +272,7 @@ export const Document = () => {
 						size="large"
 						placeholder="000-000-000 00"
 						className={clsx(
-							'shadow ',
+							' ',
 							IsEmpty &&
 								!/^[0-9]{3}\-[0-9]{3}\-[0-9]{3} [0-9]{2}$/.test(
 									documentData.snils
@@ -342,7 +296,7 @@ export const Document = () => {
 						placeholder="000000000000"
 						maxLength={12}
 						className={clsx(
-							'shadow ',
+							' ',
 							IsEmpty &&
 								!/^[0-9]{12}$/.test(documentData.inn) &&
 								'border-rose-500'

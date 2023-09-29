@@ -21,9 +21,7 @@ export const ModalNav = ({ close }: TypeModalProps) => {
 	const onChange = (e: RadioChangeEvent) => {
 		console.log(e.target.value)
 	}
-	const role = useAppSelector(
-		state => state.Profile.profileData.CurrentData?.roles
-	)
+	const role = useAppSelector(state => state.auth.user?.roles)
 	if (!role) return <></>
 	const isStudent = role[0].type === 'STUD'
 	return (

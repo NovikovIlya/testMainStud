@@ -22,7 +22,6 @@ import {
 import { DocumentSvg } from '../../assets/svg/DocumentSvg'
 import PersonalizationSvg from '../../assets/svg/PersonalizationSvg'
 import { useAppSelector } from '../../store'
-import { logout } from '../../store/creators/SomeCreators'
 import { logOut } from '../../store/reducers/authSlice'
 import { ModalNav } from '../service/modalMenu/ModalNav'
 
@@ -37,14 +36,9 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const [open, setOpen] = useState(false)
 	const { t, i18n } = useTranslation()
 
-	const user = useAppSelector(state => state.Profile.profileData.CurrentData)
+	const user = useAppSelector(state => state.auth.user)
 	const showDrawer = () => {
 		setOpen(!open)
-	}
-
-	const exit = async () => {
-		await logout(dispatch)
-		navigate('/')
 	}
 
 	const getRole = (role: String | undefined) => {
@@ -117,7 +111,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 			label: (
 				<div
 					className="flex items-center gap-[15px] px-[4px] py-[5px]"
-					onClick={() => logOut()}
+					onClick={() => dispatch(logOut())}
 				>
 					<LogoutSvg />
 					{t('logout')}

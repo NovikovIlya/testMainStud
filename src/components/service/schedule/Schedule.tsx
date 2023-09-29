@@ -126,7 +126,7 @@ export const Schedule = () => {
 					columns={columns}
 					dataSource={data}
 					pagination={false}
-					className="max-w-[1050px] w-full drop-shadow-lg shadow-[#d4e3f1] rounded-none"
+					className="max-w-[1050px] w-full drop--lg -[#d4e3f1] rounded-none"
 				/>
 				<div className="flex flex-col gap-6 text-sm">
 					<div className="flex items-center gap-2">

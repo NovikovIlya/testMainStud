@@ -1,110 +1,58 @@
 import { Table } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
-import React from 'react'
 
-import {
-	useCalendarQuery,
-	useExamsScheduleQuery
-} from '../../../store/api/serviceApi'
+import { useGetExamsScheduleQuery } from '../../../store/api/serviceApi'
 
 interface DataType {
-	key: string
-	time: string
-	address: string
-	lecture: string
-	subject: string
-	certification: string
-	teacher: string
+	employee_id: number
+	time_note: string
+	building_name: string
+	room_num: string
+	name: string
+	date_note: string
+	employee_name: string
 }
 const columns: ColumnsType<DataType> = [
 	{
 		title: 'Время',
-		dataIndex: 'time',
-		key: 'time',
+		dataIndex: 'time_note',
+		key: 'time_note',
 		render: item => <p className="text-base ">{item}</p>
 	},
 	{
 		title: 'Адрес',
-		dataIndex: 'address',
-		key: 'address',
+		dataIndex: 'building_name',
+		key: 'building_name',
 		render: item => <p className="text-base">{item}</p>
 	},
 	{
 		title: 'Аудитория',
-		dataIndex: 'lecture',
-		key: 'lecture',
+		dataIndex: 'room_num',
+		key: 'room_num',
 		render: item => <p className="text-base">{item}</p>
 	},
 	{
 		title: 'Предмет',
-		key: 'subject',
-		dataIndex: 'subject',
+		key: 'name',
+		dataIndex: 'name',
 		render: item => <p className="text-base max-w-xs">{item}</p>
 	},
 	{
-		title: 'Форма аттестации',
+		title: 'Дата аттестации',
 		key: 'certification',
 		dataIndex: 'certification',
 		render: item => <p className="text-base">{item}</p>
 	},
 	{
 		title: 'Преподаватель',
-		key: 'teacher',
-		dataIndex: 'teacher',
+		key: 'employee_name',
+		dataIndex: 'employee_name',
 		render: item => <p className="text-base">{item}</p>
-	}
-]
-const data: DataType[] = [
-	{
-		key: '1',
-		time: '08:00',
-		address: 'Корпус 2, ул. Астрономическая, д.5',
-		lecture: '109',
-		subject: 'Общая биология: тренинг по саморазвитию и планированию карьеры',
-		certification: 'Зачет',
-		teacher: 'Малютина Л.В.'
-	},
-	{
-		key: '2',
-		time: '08:00',
-		address: 'Корпус 2, ул. Астрономическая, д.5',
-		lecture: '109',
-		subject: 'Общая биология: тренинг по саморазвитию и планированию карьеры',
-		certification: 'Зачет',
-		teacher: 'Малютина Л.В.'
-	},
-	{
-		key: '3',
-		time: '08:00',
-		address: 'Корпус 2, ул. Астрономическая, д.5',
-		lecture: '109',
-		subject: 'Общая биология: тренинг по саморазвитию и планированию карьеры',
-		certification: 'Зачет',
-		teacher: 'Малютина Л.В.'
-	},
-	{
-		key: '4',
-		time: '08:00',
-		address: 'Корпус 2, ул. Астрономическая, д.5',
-		lecture: '109',
-		subject: 'Общая биология: тренинг по саморазвитию и планированию карьеры',
-		certification: 'Зачет',
-		teacher: 'Малютина Л.В.'
-	},
-	{
-		key: '5',
-		time: '08:00',
-		address: 'Корпус 2, ул. Астрономическая, д.5',
-		lecture: '109',
-		subject: 'Общая биология: тренинг по саморазвитию и планированию карьеры',
-		certification: 'Зачет',
-		teacher: 'Малютина Л.В.'
 	}
 ]
 
 export const Session = () => {
-	const { data: schedule, isLoading } = useExamsScheduleQuery()
-	console.log(schedule)
+	const { data: exam } = useGetExamsScheduleQuery()
 
 	return (
 		<div>
@@ -113,9 +61,9 @@ export const Session = () => {
 			</div>
 			<Table
 				columns={columns}
-				dataSource={data}
+				dataSource={exam}
 				pagination={false}
-				className="drop-shadow-lg mt-[50px] shadow-[#d4e3f1] rounded-none max-w-[1300px]"
+				className=" mt-[50px]  rounded-none max-w-[1300px]"
 			/>
 		</div>
 	)

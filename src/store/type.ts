@@ -27,7 +27,7 @@ export interface Role {
 	id: string
 	type: string
 }
-export interface ICalendar {
+export interface ICalendarItem {
 	semester: number
 	type_id: number
 	type_name: string
@@ -47,6 +47,10 @@ export interface ICalendar {
 	subject_id: number
 	subject_name: string
 	full_shifr: string
+}
+
+export interface ICalendar {
+	subjects: ICalendarItem[]
 }
 
 interface Day {

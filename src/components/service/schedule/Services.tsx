@@ -104,7 +104,7 @@ export const Services = () => {
 				columns={columns}
 				dataSource={data}
 				pagination={false}
-				className=" drop-shadow-lg shadow-[#d4e3f1] rounded-none mt-10 max-w-[1300px]"
+				className=" drop--lg -[#d4e3f1] rounded-none mt-10 max-w-[1300px]"
 			/>
 		</div>
 	)

@@ -1,13 +1,12 @@
 import { Radio, Table } from 'antd'
-import type { RadioChangeEvent } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 import Column from 'antd/es/table/Column'
 import ColumnGroup from 'antd/es/table/ColumnGroup'
-import React from 'react'
+import { useEffect, useState } from 'react'
 
-import { useCalendarQuery } from '../../../store/api/serviceApi'
+import { useGetStudyPlanQuery } from '../../../store/api/serviceApi'
 
-import Styles from './Curriculum.module.scss'
+import './Styles.scss'
 
 interface DataType {
 	key: string
@@ -23,495 +22,601 @@ interface DataType {
 const dataExam: DataType[] = [
 	{
 		key: '1',
-		mainColumn: 'Теоретическое обучение',
-		beginFirstTerm: '1 сентября',
-		endFirstTerm: '1 сентября',
+		mainColumn: 'Theoretical training',
+		beginFirstTerm: 'September 1st',
+		endFirstTerm: 'September 1st',
 		termFirstWeek: '24',
-		beginSecondTerm: '1 сентября',
-		endSecondTerm: '1 сентября',
+		beginSecondTerm: 'September 1st',
+		endSecondTerm: 'September 1st',
 		termSecondWeek: '24'
 	},
 	{
 		key: '2',
-		mainColumn: 'Теоретическое обучение',
-		beginFirstTerm: '1 сентября',
-		endFirstTerm: '1 сентября',
+		mainColumn: 'Non-working holidays',
+		beginFirstTerm: 'September 1st',
+		endFirstTerm: 'September 1st',
 		termFirstWeek: '24',
-		beginSecondTerm: '1 сентября',
-		endSecondTerm: '1 сентября',
+		beginSecondTerm: 'September 1st',
+		endSecondTerm: 'September 1st',
 		termSecondWeek: '24'
 	},
 	{
 		key: '3',
-		mainColumn: 'Теоретическое обучение',
-		beginFirstTerm: '1 сентября',
-		endFirstTerm: '1 сентября',
+		mainColumn: 'Examination session',
+		beginFirstTerm: 'September 1st',
+		endFirstTerm: 'September 1st',
 		termFirstWeek: '24',
-		beginSecondTerm: '1 сентября',
-		endSecondTerm: '1 сентября',
+		beginSecondTerm: 'September 1st',
+		endSecondTerm: 'September 1st',
 		termSecondWeek: '24'
 	},
 	{
 		key: '4',
-		mainColumn: 'Теоретическое обучение',
-		beginFirstTerm: '1 сентября',
-		endFirstTerm: '1 сентября',
+		mainColumn: 'Holidays',
+		beginFirstTerm: 'September 1st',
+		endFirstTerm: 'September 1st',
 		termFirstWeek: '24',
-		beginSecondTerm: '1 сентября',
-		endSecondTerm: '1 сентября',
+		beginSecondTerm: 'September 1st',
+		endSecondTerm: 'September 1st',
 		termSecondWeek: '24'
 	},
 	{
 		key: '5',
-		mainColumn: 'Теоретическое обучение',
-		beginFirstTerm: '1 сентября',
-		endFirstTerm: '1 сентября',
+		mainColumn: 'Educational practice (concenter.)',
+		beginFirstTerm: 'September 1st',
+		endFirstTerm: 'September 1st',
 		termFirstWeek: '24',
-		beginSecondTerm: '1 сентября',
-		endSecondTerm: '1 сентября',
+		beginSecondTerm: 'September 1st',
+		endSecondTerm: 'September 1st',
 		termSecondWeek: '24'
 	}
 ]
 
 type TypeColumn = {
-	type_name: string
-	total: number
-	totalGost: number
-	totalLectures: number
-	lecturesLectures: number
-	practiceLectures: number
-	laboratoryLectures: number
-	independent: number
-	control: number
-	lecturesFirstSemester: number
-	practiceFirstSemester: number
-	laboratoryFirstSemester: number
-	examFirstSemester: string
-	creditsFirstSemester: string
-	lecturesSecondSemester: number
-	practiceSecondSemester: number
-	laboratorySecondSemester: number
-	examSecondSemester: string
-	creditsSecondSemester: string
+	key: string
+	discipline: string
+	total?: number
+	totalGost?: number
+	totalLectures?: number
+	lecturesLectures?: number
+	practiceLectures?: number
+	laboratoryLectures?: number
+	independent?: number
+	control?: number
+	lecturesFirstSemester?: number
+	practiceFirstSemester?: number
+	laboratoryFirstSemester?: number
+	examFirstSemester?: string
+	creditsFirstSemester?: string
+	lecturesSecondSemester?: number
+	practiceSecondSemester?: number
+	laboratorySecondSemester?: number
+	examSecondSemester?: string
+	creditsSecondSemester?: string
 }
 
-const columns: ColumnsType<TypeColumn> = [
-	{
-		title: (
-			<p className="h-[190px] flex items-center justify-center whitespace-normal min-w-[500px]">
-				Название дисциплины
-			</p>
-		),
-		dataIndex: 'type_name',
-		key: 'type_name',
-		width: 580,
-		onCell: (_, index) => ({
-			colSpan: index === 1 ? 19 : 1
-		})
-	},
-	{
-		title: <p className="rotate">Всего</p>,
-		dataIndex: 'total',
-		key: 'total',
-		align: 'center',
-		width: 32,
-		onCell: (_, index) => {
-			if (index === 1) return { colSpan: 0 }
-			else return {}
-		}
-	},
-	{
-		title: <p className="rotate whitespace-nowrap">Всего по ГОСТу</p>,
-		dataIndex: 'totalGost',
-		key: 'totalGost',
-		align: 'center',
-		width: 32,
-		onCell: (_, index) => {
-			if (index === 1) return { colSpan: 0 }
-			else return {}
-		}
-	},
-	{
-		title: (
-			<>
-				<p className="absolute bottom-8">Лекционных</p>
-			</>
-		),
-
-		children: [
-			{
-				title: <p className="rotate bottom-[-28px]">Всего</p>,
-				dataIndex: 'totalLectures',
-				key: 'totalLectures',
-				align: 'center',
-				width: 32,
-				onCell: (_, index) => {
-					if (index === 1) return { colSpan: 0 }
-					else return {}
-				}
-			},
-			{
-				title: <p className="rotate bottom-[-28px]">Лекционных</p>,
-				dataIndex: 'lecturesLectures',
-				key: 'lecturesLectures',
-				align: 'center',
-				width: 32,
-				onCell: (_, index) => {
-					if (index === 1) return { colSpan: 0 }
-					else return {}
-				}
-			},
-			{
-				title: <p className="rotate bottom-[-28px]">Практических</p>,
-				dataIndex: 'practiceLectures',
-				key: 'practiceLectures',
-				align: 'center',
-				width: 32,
-				onCell: (_, index) => {
-					if (index === 1) return { colSpan: 0 }
-					else return {}
-				}
-			},
-			{
-				title: <p className="rotate bottom-[-28px]">Лабораторных</p>,
-				dataIndex: 'laboratoryLectures',
-				key: 'laboratoryLectures',
-				align: 'center',
-				width: 32,
-				onCell: (_, index) => {
-					if (index === 1) return { colSpan: 0 }
-					else return {}
-				}
-			}
-		]
-	},
-	{
-		title: <p className="rotate">Самостоятельных</p>,
-		dataIndex: 'independent',
-		key: 'independent',
-		align: 'center',
-		width: 32,
-		onCell: (_, index) => {
-			if (index === 1) return { colSpan: 0 }
-			else return {}
-		}
-	},
-	{
-		title: <p className="rotate">Контрольных</p>,
-		dataIndex: 'control',
-		key: 'control',
-		align: 'center',
-		width: 32,
-		onCell: (_, index) => {
-			if (index === 1) return { colSpan: 0 }
-			else return {}
-		}
-	},
-	{
-		title: (
-			<>
-				<p className="absolute bottom-8">1 курс - 1 семестр</p>
-			</>
-		),
-
-		children: [
-			{
-				title: <p className="rotate bottom-[-28px]">Лекционных</p>,
-				dataIndex: 'lecturesFirstSemester',
-				key: 'lecturesFirstSemester',
-				align: 'center',
-				width: 32,
-				render: item => {
-					return {
-						props: {
-							style: {
-								background: '#E6F4FF'
-							}
-						},
-						children: <>{item}</>
-					}
-				},
-				onCell: (_, index) => {
-					if (index === 1) return { colSpan: 0 }
-					else return {}
-				}
-			},
-			{
-				title: <p className="rotate bottom-[-28px]">Практических</p>,
-				dataIndex: 'practiceFirstSemester',
-				key: 'practiceFirstSemester',
-				align: 'center',
-				width: 32,
-				render: item => {
-					return {
-						props: {
-							style: {
-								background: '#E6F4FF'
-							}
-						},
-						children: <>{item}</>
-					}
-				},
-				onCell: (_, index) => {
-					if (index === 1) return { colSpan: 0 }
-					else return {}
-				}
-			},
-			{
-				title: <p className="rotate bottom-[-28px]">Лабораторных</p>,
-				dataIndex: 'laboratoryFirstSemester',
-				key: 'laboratoryFirstSemester',
-				align: 'center',
-				width: 32,
-				render: item => {
-					return {
-						props: {
-							style: {
-								background: '#E6F4FF'
-							}
-						},
-						children: <>{item}</>
-					}
-				},
-				onCell: (_, index) => {
-					if (index === 1) return { colSpan: 0 }
-					else return {}
-				}
-			},
-			{
-				title: <p className="rotate bottom-[-28px]">Экзамены</p>,
-				dataIndex: 'examFirstSemester',
-				key: 'examFirstSemester',
-				align: 'center',
-				width: 32,
-				render: item => {
-					return {
-						props: {
-							style: {
-								background: '#C4E4FC'
-							}
-						},
-						children: <>{item}</>
-					}
-				},
-				onCell: (_, index) => {
-					if (index === 1) return { colSpan: 0 }
-					else return {}
-				}
-			},
-			{
-				title: <p className="rotate bottom-[-28px]">Зачеты</p>,
-				dataIndex: 'creditsFirstSemester',
-				key: 'creditsFirstSemester',
-				align: 'center',
-				width: 32,
-				render: item => {
-					return {
-						props: {
-							style: {
-								background: '#C4E4FC'
-							}
-						},
-						children: <>{item}</>
-					}
-				},
-				onCell: (_, index) => {
-					if (index === 1) return { colSpan: 0 }
-					else return {}
-				}
-			}
-		]
-	},
-	{
-		title: (
-			<>
-				<p className="absolute bottom-8">1 курс - 2 семестр</p>
-			</>
-		),
-
-		children: [
-			{
-				title: <p className="rotate bottom-[-28px]">Лекционных</p>,
-				dataIndex: 'lecturesSecondSemester',
-				key: 'lecturesSecondSemester',
-				align: 'center',
-				width: 32,
-				render: item => {
-					return {
-						props: {
-							style: {
-								background: '#E6F4FF'
-							}
-						},
-						children: <>{item}</>
-					}
-				},
-				onCell: (_, index) => {
-					if (index === 1) return { colSpan: 0 }
-					else return {}
-				}
-			},
-			{
-				title: <p className="rotate bottom-[-28px]">Практических</p>,
-				dataIndex: 'practiceSecondSemester',
-				key: 'practiceSecondSemester',
-				align: 'center',
-				width: 32,
-				render: item => {
-					return {
-						props: {
-							style: {
-								background: '#E6F4FF'
-							}
-						},
-						children: <>{item}</>
-					}
-				},
-				onCell: (_, index) => {
-					if (index === 1) return { colSpan: 0 }
-					else return {}
-				}
-			},
-			{
-				title: <p className="rotate bottom-[-28px]">Лабораторных</p>,
-				dataIndex: 'laboratorySecondSemester',
-				key: 'laboratorySecondSemester',
-				align: 'center',
-				width: 32,
-				render: item => {
-					return {
-						props: {
-							style: {
-								background: '#E6F4FF'
-							}
-						},
-						children: <>{item}</>
-					}
-				},
-				onCell: (_, index) => {
-					if (index === 1) return { colSpan: 0 }
-					else return {}
-				}
-			},
-			{
-				title: <p className="rotate bottom-[-28px]">Экзамены</p>,
-				dataIndex: 'examSecondSemester',
-				key: 'examSecondSemester',
-				align: 'center',
-				width: 32,
-				render: item => {
-					return {
-						props: {
-							style: {
-								background: '#C4E4FC'
-							}
-						},
-						children: <>{item}</>
-					}
-				},
-				onCell: (_, index) => {
-					if (index === 1) return { colSpan: 0 }
-					else return {}
-				}
-			},
-			{
-				title: <p className="rotate bottom-[-28px]">Зачеты</p>,
-				dataIndex: 'creditsSecondSemester',
-				key: 'creditsSecondSemester',
-				width: 32,
-				align: 'center',
-				render: item => {
-					return {
-						props: {
-							style: {
-								background: '#C4E4FC'
-							}
-						},
-						children: <>{item}</>
-					}
-				},
-				onCell: (_, index) => {
-					if (index === 1) return { colSpan: 0 }
-					else return {}
-				}
-			}
-		]
-	}
-]
 export const Curriculum = () => {
-	const { data: schedule, isLoading } = useCalendarQuery()
-	console.log(schedule)
+	const [course, changeCourse] = useState<string>('1')
+	const [sortingWords, changeWords] = useState<string[]>([])
 
-	const onChange = (e: RadioChangeEvent) => {
-		console.log([e.target.value])
+	const hideInfo = (blockName: string) => {
+		if (sortingWords.some(el => el === blockName)) return true
+		else return false
 	}
-	const data: TypeColumn[] = [
+
+	let columns: ColumnsType<TypeColumn> = [
 		{
-			control: 0,
-			type_name: 'Иностранный язык',
-			independent: 34,
-			total: 198,
-			totalGost: 216,
-			totalLectures: 164,
-			lecturesLectures: 0,
-			practiceLectures: 164,
-			laboratoryLectures: 0,
-			lecturesFirstSemester: 0,
-			practiceFirstSemester: 0,
-			laboratoryFirstSemester: 0,
-			examFirstSemester: '',
-			creditsFirstSemester: '+',
-			lecturesSecondSemester: 0,
-			practiceSecondSemester: 0,
-			laboratorySecondSemester: 0,
-			examSecondSemester: '',
-			creditsSecondSemester: '+'
+			title: (
+				<p className="h-[190px] flex items-center justify-center whitespace-normal min-w-[500px]">
+					Name of the discipline
+				</p>
+			),
+			dataIndex: 'discipline',
+			key: 'discipline',
+			width: 580,
+			render: item => {
+				if (sortingWords.some(el => el === item))
+					return (
+						<div className="bg-[#e9eff8] justify-start pl-3 items-center p-[16px]">
+							{item}
+						</div>
+					)
+				else
+					return (
+						<div className="absolute top-0 bottom-0">
+							<span className="w-1/4">{item.split('~')[0]}</span>
+							<span className="w-3/4">{item.split('~')[1]}</span>
+						</div>
+					)
+			},
+			onCell: (data, _) => {
+				if (sortingWords.length !== 0 && hideInfo(data.discipline))
+					return { colSpan: 19 }
+				else return { colSpan: 1 }
+			}
+		},
+		{
+			title: <p className="rotate">Total</p>,
+			dataIndex: 'total',
+			key: 'total',
+			align: 'center',
+			width: 32,
+			onCell: (data, _) => {
+				if (sortingWords.length !== 0 && hideInfo(data.discipline))
+					return { colSpan: 0 }
+				else return { colSpan: 1 }
+			}
+		},
+		{
+			title: <p className="rotate whitespace-nowrap">By the state standard</p>,
+			dataIndex: 'totalGost',
+			key: 'totalGost',
+			align: 'center',
+			width: 32,
+			onCell: (data, _) => {
+				if (sortingWords.length !== 0 && hideInfo(data.discipline))
+					return { colSpan: 0 }
+				else return { colSpan: 1 }
+			}
+		},
+		{
+			title: (
+				<>
+					<p className="absolute bottom-8">Lectures</p>
+				</>
+			),
+
+			children: [
+				{
+					title: <p className="rotate bottom-[-28px]">Total</p>,
+					dataIndex: 'totalLectures',
+					key: 'totalLectures',
+					align: 'center',
+					width: 32,
+					onCell: (data, _) => {
+						if (sortingWords.length !== 0 && hideInfo(data.discipline))
+							return { colSpan: 0 }
+						else return { colSpan: 1 }
+					}
+				},
+				{
+					title: <p className="rotate bottom-[-28px]">Lectures</p>,
+					dataIndex: 'lecturesLectures',
+					key: 'lecturesLectures',
+					align: 'center',
+					width: 32,
+					onCell: (data, _) => {
+						if (sortingWords.length !== 0 && hideInfo(data.discipline))
+							return { colSpan: 0 }
+						else return { colSpan: 1 }
+					}
+				},
+				{
+					title: <p className="rotate bottom-[-28px]">Practical</p>,
+					dataIndex: 'practiceLectures',
+					key: 'practiceLectures',
+					align: 'center',
+					width: 32,
+					onCell: (data, _) => {
+						if (sortingWords.length !== 0 && hideInfo(data.discipline))
+							return { colSpan: 0 }
+						else return { colSpan: 1 }
+					}
+				},
+				{
+					title: <p className="rotate bottom-[-28px]">Laboratory</p>,
+					dataIndex: 'laboratoryLectures',
+					key: 'laboratoryLectures',
+					align: 'center',
+					width: 32,
+					onCell: (data, _) => {
+						if (sortingWords.length !== 0 && hideInfo(data.discipline))
+							return { colSpan: 0 }
+						else return { colSpan: 1 }
+					}
+				}
+			]
+		},
+		{
+			title: <p className="rotate">Independent</p>,
+			dataIndex: 'independent',
+			key: 'independent',
+			align: 'center',
+			width: 32,
+			onCell: (data, _) => {
+				if (sortingWords.length !== 0 && hideInfo(data.discipline))
+					return { colSpan: 0 }
+				else return { colSpan: 1 }
+			}
+		},
+		{
+			title: <p className="rotate">Control</p>,
+			dataIndex: 'control',
+			key: 'control',
+			align: 'center',
+			width: 32,
+			onCell: (data, _) => {
+				if (sortingWords.length !== 0 && hideInfo(data.discipline))
+					return { colSpan: 0 }
+				else return { colSpan: 1 }
+			}
+		},
+		{
+			title: (
+				<>
+					<p className="absolute bottom-8">{course}st year - 1 semester</p>
+				</>
+			),
+
+			children: [
+				{
+					title: <p className="rotate bottom-[-28px]">Lectures</p>,
+					dataIndex: 'lecturesFirstSemester',
+					key: 'lecturesFirstSemester',
+					align: 'center',
+					width: 32,
+					render: item => {
+						return {
+							props: {
+								style: {
+									background: '#E6F4FF'
+								}
+							},
+							children: <>{item}</>
+						}
+					},
+					onCell: (data, _) => {
+						if (sortingWords.length !== 0 && hideInfo(data.discipline))
+							return { colSpan: 0 }
+						else return { colSpan: 1 }
+					}
+				},
+				{
+					title: <p className="rotate bottom-[-28px]">Practical</p>,
+					dataIndex: 'practiceFirstSemester',
+					key: 'practiceFirstSemester',
+					align: 'center',
+					width: 32,
+					render: item => {
+						return {
+							props: {
+								style: {
+									background: '#E6F4FF'
+								}
+							},
+							children: <>{item}</>
+						}
+					},
+					onCell: (data, _) => {
+						if (sortingWords.length !== 0 && hideInfo(data.discipline))
+							return { colSpan: 0 }
+						else return { colSpan: 1 }
+					}
+				},
+				{
+					title: <p className="rotate bottom-[-28px]">Laboratory</p>,
+					dataIndex: 'laboratoryFirstSemester',
+					key: 'laboratoryFirstSemester',
+					align: 'center',
+					width: 32,
+					render: item => {
+						return {
+							props: {
+								style: {
+									background: '#E6F4FF'
+								}
+							},
+							children: <>{item}</>
+						}
+					},
+					onCell: (data, _) => {
+						if (sortingWords.length !== 0 && hideInfo(data.discipline))
+							return { colSpan: 0 }
+						else return { colSpan: 1 }
+					}
+				},
+				{
+					title: <p className="rotate bottom-[-28px]">Exams</p>,
+					dataIndex: 'examFirstSemester',
+					key: 'examFirstSemester',
+					align: 'center',
+					width: 32,
+					render: item => {
+						return {
+							props: {
+								style: {
+									background: '#C4E4FC'
+								}
+							},
+							children: <>{item}</>
+						}
+					},
+					onCell: (data, _) => {
+						if (sortingWords.length !== 0 && hideInfo(data.discipline))
+							return { colSpan: 0 }
+						else return { colSpan: 1 }
+					}
+				},
+				{
+					title: <p className="rotate bottom-[-28px]">Test</p>,
+					dataIndex: 'creditsFirstSemester',
+					key: 'creditsFirstSemester',
+					align: 'center',
+					width: 32,
+					render: item => {
+						return {
+							props: {
+								style: {
+									background: '#C4E4FC'
+								}
+							},
+							children: <>{item}</>
+						}
+					},
+					onCell: (data, _) => {
+						if (sortingWords.length !== 0 && hideInfo(data.discipline))
+							return { colSpan: 0 }
+						else return { colSpan: 1 }
+					}
+				}
+			]
+		},
+		{
+			title: (
+				<>
+					<p className="absolute bottom-8">{course}st year - 2 semester</p>
+				</>
+			),
+
+			children: [
+				{
+					title: <p className="rotate bottom-[-28px]">Lectures</p>,
+					dataIndex: 'lecturesSecondSemester',
+					key: 'lecturesSecondSemester',
+					align: 'center',
+					width: 32,
+					render: item => {
+						return {
+							props: {
+								style: {
+									background: '#E6F4FF'
+								}
+							},
+							children: <>{item}</>
+						}
+					},
+					onCell: (data, _) => {
+						if (sortingWords.length !== 0 && hideInfo(data.discipline))
+							return { colSpan: 0 }
+						else return { colSpan: 1 }
+					}
+				},
+				{
+					title: <p className="rotate bottom-[-28px]">Practical</p>,
+					dataIndex: 'practiceSecondSemester',
+					key: 'practiceSecondSemester',
+					align: 'center',
+					width: 32,
+					render: item => {
+						return {
+							props: {
+								style: {
+									background: '#E6F4FF'
+								}
+							},
+							children: <>{item}</>
+						}
+					},
+					onCell: (data, _) => {
+						if (sortingWords.length !== 0 && hideInfo(data.discipline))
+							return { colSpan: 0 }
+						else return { colSpan: 1 }
+					}
+				},
+				{
+					title: <p className="rotate bottom-[-28px]">Laboratory</p>,
+					dataIndex: 'laboratorySecondSemester',
+					key: 'laboratorySecondSemester',
+					align: 'center',
+					width: 32,
+					render: item => {
+						return {
+							props: {
+								style: {
+									background: '#E6F4FF'
+								}
+							},
+							children: <>{item}</>
+						}
+					},
+					onCell: (data, _) => {
+						if (sortingWords.length !== 0 && hideInfo(data.discipline))
+							return { colSpan: 0 }
+						else return { colSpan: 1 }
+					}
+				},
+				{
+					title: <p className="rotate bottom-[-28px]">Exams</p>,
+					dataIndex: 'examSecondSemester',
+					key: 'examSecondSemester',
+					align: 'center',
+					width: 32,
+					render: item => {
+						return {
+							props: {
+								style: {
+									background: '#C4E4FC'
+								}
+							},
+							children: <>{item}</>
+						}
+					},
+					onCell: (data, _) => {
+						if (sortingWords.length !== 0 && hideInfo(data.discipline))
+							return { colSpan: 0 }
+						else return { colSpan: 1 }
+					}
+				},
+				{
+					title: <p className="rotate bottom-[-28px]">Test</p>,
+					dataIndex: 'creditsSecondSemester',
+					key: 'creditsSecondSemester',
+					width: 32,
+					align: 'center',
+					render: item => {
+						return {
+							props: {
+								style: {
+									background: '#C4E4FC'
+								}
+							},
+							children: <>{item}</>
+						}
+					},
+					onCell: (data, _) => {
+						if (sortingWords.length !== 0 && hideInfo(data.discipline))
+							return { colSpan: 0 }
+						else return { colSpan: 1 }
+					}
+				}
+			]
 		}
 	]
+	const { data: studyPlan } = useGetStudyPlanQuery()
+
+	const [tableData, changeData] = useState<TypeColumn[]>([])
+
+	useEffect(() => {
+		if (studyPlan)
+			changeWords(
+				studyPlan.subjects
+					.map(el => el.type_name)
+					.filter((word, index, array) => {
+						return array.indexOf(word) === index
+					})
+			)
+	}, [studyPlan])
+
+	useEffect(() => {
+		const result = getData()
+		changeData(result)
+	}, [course, sortingWords])
+
+	const getData = () => {
+		if (studyPlan && sortingWords.length !== 0) {
+			let result: TypeColumn[] = []
+			let selectedSubject: string[] = []
+			let filtByCourse = studyPlan.subjects.filter(
+				el =>
+					parseInt(course) * 2 - 1 === el.semester ||
+					parseInt(course) * 2 === el.semester
+			)
+			sortingWords.forEach((it, inIt) => {
+				result.push({
+					key: sortingWords[inIt],
+					discipline: sortingWords[inIt]
+				})
+
+				const filtratedBySortWordBySelectWord = filtByCourse.filter(
+					el => el.type_name === sortingWords[inIt]
+				)
+
+				filtratedBySortWordBySelectWord.forEach(el => {
+					if (!selectedSubject.includes(el.subject_name)) {
+						const subjects = filtratedBySortWordBySelectWord.filter(
+							item => item.subject_name === el.subject_name
+						)
+						selectedSubject.push(subjects[0].subject_name)
+
+						result.push({
+							key: subjects[0].full_shifr,
+							discipline:
+								subjects[0].full_shifr + '~' + subjects[0].subject_name,
+							total:
+								subjects[0].total_independent_hours +
+								subjects[0].total_laboratory_hours +
+								subjects[0].total_lecture_hours +
+								subjects[0].total_practice_hours +
+								subjects[0].total_seminar_hours,
+							totalGost: subjects[0].gost_hours,
+							totalLectures:
+								subjects[0].total_lecture_hours +
+								subjects[0].total_practice_hours +
+								subjects[0].total_laboratory_hours,
+							lecturesLectures: subjects[0].total_lecture_hours,
+							practiceLectures: subjects[0].total_practice_hours,
+							laboratoryLectures: subjects[0].total_laboratory_hours,
+							independent: subjects[0].total_independent_hours,
+							control: subjects[0].total_seminar_hours,
+							lecturesFirstSemester: subjects[0].lecture_hours,
+							practiceFirstSemester: subjects[0].practice_hours,
+							laboratoryFirstSemester: subjects[0].laboratory_hours,
+							examFirstSemester: subjects[0].is_exam ? '+' : '-',
+							creditsFirstSemester: subjects[0].is_quiz ? '+' : '-',
+							lecturesSecondSemester:
+								subjects.length > 1 ? subjects[1].lecture_hours : 0,
+							practiceSecondSemester:
+								subjects.length > 1 ? subjects[1].practice_hours : 0,
+							laboratorySecondSemester:
+								subjects.length > 1 ? subjects[1].laboratory_hours : 0,
+							examSecondSemester:
+								subjects.length > 1 ? (subjects[0].is_exam ? '+' : '-') : '-',
+							creditsSecondSemester:
+								subjects.length > 1 ? (subjects[0].is_exam ? '+' : '-') : '-'
+						})
+					}
+				})
+			})
+			return result
+		} else return []
+	}
+
 	return (
 		<div className="radio ">
 			<div className="text-black text-3xl font-normal leading-7 mb-10">
-				Учебный план
+				Curriculum
 			</div>
 			<Radio.Group
-				onChange={onChange}
-				defaultValue="monday"
+				onChange={e => changeCourse(e.target.value)}
+				defaultValue={course}
 				buttonStyle="solid"
 				className="flex gap-[10px] h-9"
 			>
 				<Radio.Button
 					className="rounded-full bg-transparent h-full flex items-center  text-base"
-					value="monday"
+					value="1"
 				>
-					1 курс
+					1st course
 				</Radio.Button>
 				<Radio.Button
 					className="rounded-full h-full flex items-center text-base bg-transparent"
-					value="tuesday"
+					value="2"
 				>
-					2 курс
+					2nd year
 				</Radio.Button>
 				<Radio.Button
 					className="rounded-full h-full flex items-center text-base bg-transparent"
-					value="wednesday"
+					value="3"
 				>
-					3 курс
+					3rd year
 				</Radio.Button>
 				<Radio.Button
 					className="rounded-full h-full flex items-center text-base bg-transparent"
-					value="thursday"
+					value="4"
 				>
-					4 курс
+					4th year
 				</Radio.Button>
 			</Radio.Group>
+
 			<Table
 				bordered
-				dataSource={data}
-				scroll={{ x: 500 }}
+				dataSource={tableData}
+				scroll={{ x: true }}
 				columns={columns}
-				className="max-w-[1250px] w-full mt-10"
+				className="tableCustom mt-10"
+				pagination={false}
+				loading={tableData.length === 0 ? true : false}
 			/>
-
 			<Table
 				dataSource={dataExam}
 				pagination={false}
@@ -519,36 +624,24 @@ export const Curriculum = () => {
 				bordered
 			>
 				<Column title="" dataIndex="mainColumn" key="mainColumn"></Column>
-				<ColumnGroup title="1 семестр">
+				<ColumnGroup title="1 semester">
 					<Column
-						title="Начало"
+						title="Begin"
 						dataIndex="beginFirstTerm"
 						key="beginFirstTerm"
 					/>
-					<Column
-						title="Окончание"
-						dataIndex="endFirstTerm"
-						key="endFirstTerm"
-					/>
-					<Column
-						title="Неделя"
-						dataIndex="termFirstWeek"
-						key="termFirstWeek"
-					/>
+					<Column title="End " dataIndex="endFirstTerm" key="endFirstTerm" />
+					<Column title="Week" dataIndex="termFirstWeek" key="termFirstWeek" />
 				</ColumnGroup>
-				<ColumnGroup title="2 семестр">
+				<ColumnGroup title="2 semester">
 					<Column
-						title="Начало"
+						title="Begin"
 						dataIndex="beginSecondTerm"
 						key="beginSecondTerm"
 					/>
+					<Column title="End" dataIndex="endSecondTerm" key="endSecondTerm" />
 					<Column
-						title="Окончание"
-						dataIndex="endSecondTerm"
-						key="endSecondTerm"
-					/>
-					<Column
-						title="Неделя"
+						title="Week"
 						dataIndex="termSecondWeek"
 						key="termSecondWeek"
 					/>

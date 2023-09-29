@@ -1,0 +1,23 @@
+.tableCustom {
+	@apply max-w-[80%] p-0;
+}
+
+.tableCustom tr > td:first-child {
+	padding: 0 !important;
+}
+
+.tableCustom tr > td:first-child div {
+	width: 100%;
+	display: flex;
+}
+
+.tableCustom tr > td:first-child span {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+}
+
+.tableCustom tr > td:first-child span:first-child {
+	border-right: solid 1px #f0f0f0;
+}

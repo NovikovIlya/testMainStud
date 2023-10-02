@@ -289,7 +289,7 @@ export const Parent = () => {
 										placeholder={t('documentType')}
 										size="large"
 										options={
-											documents !== null
+											documents !== null || documents !== undefined
 												? //@ts-ignore
 												  documents.map(el => ({
 														value: el.id,

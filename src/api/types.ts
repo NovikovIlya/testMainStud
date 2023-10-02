@@ -277,3 +277,23 @@ export type IParentError = {
 	inn: boolean
 	snils: boolean
 }
+export interface ILayout {
+	lg: Lg[]
+	sm: Lg[]
+	xs: Lg[]
+	xxs: Lg[]
+	md: Lg[]
+}
+
+export interface Lg {
+	w: number
+	h: number
+	x: number
+	y: number
+	i: string
+	maxW: number
+	minH: number
+	maxH: number
+	moved: boolean
+	static: boolean
+}

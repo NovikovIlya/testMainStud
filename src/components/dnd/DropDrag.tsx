@@ -2,23 +2,20 @@ import { DeleteOutlined } from '@ant-design/icons'
 import { FunctionComponent, useEffect, useState } from 'react'
 import { Responsive, WidthProvider } from 'react-grid-layout'
 import 'react-grid-layout/css/styles.css'
+import { useDispatch } from 'react-redux'
 import 'react-resizable/css/styles.css'
+
+import { useAppSelector } from '../../store'
+import { changeLayout, removeCard } from '../../store/reducers/LayoutsSlice'
 
 import './DropDrag.scss'
 import { jsxElements } from './defaultElement'
 
-interface IDropDragProps {
-	edit: boolean
-	layouts: { [index: string]: any[] }
-	setLayouts: (value: { [index: string]: any[] }) => void
-}
-
 const ResponsiveReactGridLayout = WidthProvider(Responsive)
-const DropDrag: FunctionComponent<IDropDragProps> = ({
-	edit,
-	layouts,
-	setLayouts
-}) => {
+const DropDrag = () => {
+	const dispatch = useDispatch()
+	const layout = useAppSelector(state => state.Layout)
+	const edit = useAppSelector(state => state.auth.edit)
 	const [currentBreakpoint, setCurrentBreakpoint] = useState<string>('lg')
 	const [mounted, setMounted] = useState(false)
 	const [toolbox, setToolbox] = useState<{ [index: string]: any[] }>({
@@ -28,9 +25,10 @@ const DropDrag: FunctionComponent<IDropDragProps> = ({
 	useEffect(() => {
 		setMounted(true)
 	}, [])
+
 	useEffect(() => {
-		localStorage.setItem('dashboard', JSON.stringify(layouts))
-	}, [layouts])
+		localStorage.setItem('dashboard', JSON.stringify(layout))
+	}, [layout])
 
 	const onBreakpointChange = (breakpoint: any) => {
 		setCurrentBreakpoint(breakpoint)
@@ -41,17 +39,14 @@ const DropDrag: FunctionComponent<IDropDragProps> = ({
 	}
 
 	const onLayoutChange = (layout: any, layouts: any) => {
-		setLayouts({ ...layouts })
+		dispatch(changeLayout(layouts))
 	}
 
-	const onRemoveItem = (i: number) => {
-		setLayouts({
-			...layouts,
-			lg: [...layouts.lg].filter(item => item.i !== i)
-		})
+	const onRemoveItem = (i: string) => {
+		dispatch(removeCard(i))
 	}
 
-	const generateDOM = layouts.lg.map(item => {
+	const generateDOM = layout.lg.map(item => {
 		return (
 			<div
 				key={item.i}
@@ -77,10 +72,10 @@ const DropDrag: FunctionComponent<IDropDragProps> = ({
 			<ResponsiveReactGridLayout
 				className="layout "
 				cols={{ lg: 3, md: 2, sm: 2, xs: 1, xxs: 1 }}
-				rowHeight={150}
+				rowHeight={320}
 				containerPadding={[0, 0]}
 				margin={[20, 20]}
-				layouts={layouts}
+				layouts={layout}
 				measureBeforeMount={true}
 				useCSSTransforms={mounted}
 				onLayoutChange={onLayoutChange}

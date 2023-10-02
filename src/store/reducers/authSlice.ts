@@ -6,7 +6,8 @@ import { InitialState } from '../type'
 const initialState: InitialState = {
 	accessToken: localStorage.getItem('access'),
 	refreshToken: localStorage.getItem('refresh'),
-	user: JSON.parse(localStorage.getItem('user') || '{}')
+	user: JSON.parse(localStorage.getItem('user') || '{}'),
+	edit: false
 }
 
 const authSlice = createSlice({
@@ -24,11 +25,14 @@ const authSlice = createSlice({
 			state.user = null
 			state.accessToken = null
 			state.refreshToken = null
+		},
+		setEdit: state => {
+			state.edit = !state.edit
 		}
 	}
 })
 
-export const { logOut, setCredentials } = authSlice.actions
+export const { logOut, setCredentials, setEdit } = authSlice.actions
 
 export default authSlice.reducer
 

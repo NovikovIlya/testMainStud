@@ -2,18 +2,12 @@ import clsx from 'clsx'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useGetScheduleQuery } from '../../store/api/serviceApi'
 import DropDrag from '../dnd/DropDrag'
 import { block } from '../dnd/constant'
 import { Faq } from '../faq/Faq'
 import { Layout } from '../layout/Layout'
 
 export const User = () => {
-	const [layouts, setLayouts] = useState<{ [index: string]: any[] }>(() => {
-		return localStorage.getItem('dashboard')
-			? JSON.parse(localStorage.getItem('dashboard') || '')
-			: block
-	})
 	const { t } = useTranslation()
 	return (
 		<Layout>
@@ -22,7 +16,7 @@ export const User = () => {
 					<div className={clsx(`mt-[125px] text-2xl font-bold text-[#1F5CB8]`)}>
 						{t('PersonalAccount')} <br />
 					</div>
-					<DropDrag edit={false} layouts={layouts} setLayouts={setLayouts} />
+					<DropDrag />
 					<Faq />
 				</div>
 			</div>

@@ -1,38 +1,35 @@
-import { AboutUniversity } from '../cards/AboutUniversity'
-import { Apply } from '../cards/Apply'
-import { Educational } from '../cards/Educational'
-import { Events } from '../cards/Events'
-import { Jobs } from '../cards/Jobs'
-import { News } from '../cards/News'
-import { Olympics } from '../cards/Olympics'
+import { ElectronicBook } from '../cards/ElectronicBook'
+import { Session } from '../cards/Session'
 
 export const jsxElements = [
 	{
-		index: '0',
-		element: <Apply />
+		index: 'ElectronicBook',
+		element: <ElectronicBook />,
+		place: {
+			w: 1,
+			h: 1,
+			maxH: 4,
+			maxW: 4,
+			x: 0,
+			y: 0,
+			i: 'ElectronicBook',
+			moved: true,
+			static: false
+		}
 	},
 	{
-		index: '1',
-		element: <AboutUniversity />
-	},
-	{
-		index: '2',
-		element: <Olympics />
-	},
-	{
-		index: '3',
-		element: <Events />
-	},
-	{
-		index: '4',
-		element: <Educational />
-	},
-	{
-		index: '5',
-		element: <News />
-	},
-	{
-		index: '6',
-		element: <Jobs />
+		index: 'Session',
+		element: <Session />,
+		place: {
+			w: 1,
+			h: 1,
+			maxH: 4,
+			maxW: 4,
+			x: 1,
+			y: 0,
+			i: 'Session',
+			moved: true,
+			static: false
+		}
 	}
 ]

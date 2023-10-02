@@ -1,11 +1,14 @@
-import { BookOutlined, TagOutlined } from '@ant-design/icons'
+import { TagOutlined } from '@ant-design/icons'
 import { Button, Col, Input, Radio, Row, Typography } from 'antd'
 import { RadioChangeEvent } from 'antd/lib'
 import clsx from 'clsx'
 import { useTranslation } from 'react-i18next'
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import { useAppSelector } from '../../../store'
+import { addCard } from '../../../store/reducers/LayoutsSlice'
+import { jsxElements } from '../../dnd/defaultElement'
 
 type TypeModalProps = {
 	close: () => void
@@ -14,6 +17,9 @@ type TypeModalProps = {
 export const ModalNav = ({ close }: TypeModalProps) => {
 	const navigate = useNavigate()
 	const { t } = useTranslation()
+	const layouts = useAppSelector(state => state.Layout)
+	const dispatch = useDispatch()
+
 	const handleNavigate = (url: string) => {
 		close()
 		navigate(url)
@@ -92,38 +98,25 @@ export const ModalNav = ({ close }: TypeModalProps) => {
 					</Radio.Group>
 				</div>
 			</Col>
-			<Col span={8} className="bg-white">
-				<div
-					onClick={() => handleNavigate('/services/aboutMe/aboutMe')}
-					className=" h-28 cursor-pointer flex items-center justify-center hover:bg-[#65A1FA] hover:text-white "
-				>
-					{t('AboutMe')}
-				</div>
-			</Col>
-			<Col span={8} className={clsx('bg-white', !isStudent && 'hidden')}>
-				<div
-					onClick={() => handleNavigate('/services/schedule/schedule')}
-					className="border-solid border-y-0 border-x border-[#B3B3B3] h-28 cursor-pointer flex items-center justify-center hover:bg-[#65A1FA] hover:text-white "
-				>
-					{t('Schedule')}
-				</div>
-			</Col>
-			<Col span={8} className={clsx('bg-white', !isStudent && 'hidden')}>
-				<div
-					onClick={() => handleNavigate('/services/session/session')}
-					className=" h-28 cursor-pointer flex items-center justify-center hover:bg-[#65A1FA] hover:text-white "
-				>
-					{t('Session')}
-				</div>
-			</Col>
-			<Col span={8} className={clsx('bg-white', !isStudent && 'hidden')}>
-				<div
-					onClick={() => handleNavigate('/services/electronicBook/estimation')}
-					className="border-solid border-b-0 border-t border-l-0 border-x-0 border-[#B3B3B3] h-28 cursor-pointer flex items-center justify-center hover:bg-[#65A1FA] hover:text-white "
-				>
-					{t('ElectronicBook')}
-				</div>
-			</Col>
+			{jsxElements.map(item => {
+				const isLayout = !!layouts.lg.filter(el => el.i === item.index).length
+
+				return (
+					!isLayout && (
+						<Col span={4} key={item.index} className="bg-white">
+							<div
+								onClick={() => {
+									console.log(item.place)
+									dispatch(addCard(item.place))
+								}}
+								className="h-28 cursor-pointer flex items-center justify-center hover:bg-[#65A1FA] hover:text-white"
+							>
+								{t(item.index.toString())}
+							</div>
+						</Col>
+					)
+				)
+			})}
 		</Row>
 	)
 }

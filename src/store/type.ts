@@ -2,6 +2,7 @@ export interface InitialState {
 	accessToken: string | null
 	refreshToken: string | null
 	user: User | null
+	edit: boolean
 }
 
 export interface User {

@@ -22,7 +22,7 @@ import {
 import { DocumentSvg } from '../../assets/svg/DocumentSvg'
 import PersonalizationSvg from '../../assets/svg/PersonalizationSvg'
 import { useAppSelector } from '../../store'
-import { logOut } from '../../store/reducers/authSlice'
+import { logOut, setEdit } from '../../store/reducers/authSlice'
 import { ModalNav } from '../service/modalMenu/ModalNav'
 
 type TypeHeaderProps = {
@@ -100,7 +100,10 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 		},
 		{
 			label: (
-				<div className="flex items-center gap-[15px] px-[4px] py-[5px]">
+				<div
+					onClick={() => dispatch(setEdit())}
+					className="flex items-center gap-[15px] px-[4px] py-[5px]"
+				>
 					<PersonalizationSvg />
 					{t('Personalization')}
 				</div>
@@ -202,7 +205,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						defaultValue={i18n.language}
 						style={{ width: 100 }}
 						bordered={false}
-						className="text-white"
+						className="!text-white"
 						dropdownStyle={{ color: 'white' }}
 						popupClassName="text-white"
 						onChange={e => changeLanguage(e.valueOf())}

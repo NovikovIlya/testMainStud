@@ -12,12 +12,14 @@ import FormReducer from './reducers/FormReducers/FormReducer'
 import InfoUserReducer from './reducers/FormReducers/InfoUserReducer'
 import ParentReducer from './reducers/FormReducers/ParentReducer'
 import WorkReducer from './reducers/FormReducers/WorkReducer'
+import LayoutSlice from './reducers/LayoutsSlice'
 import ProfileReducer from './reducers/ProfileReducer'
 import authSlice from './reducers/authSlice'
 
 export const store = configureStore({
 	reducer: {
 		auth: authSlice,
+		Layout: LayoutSlice,
 		AuthReg: AuthRegReducer,
 		Profile: ProfileReducer,
 		InfoUser: InfoUserReducer,

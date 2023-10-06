@@ -98,25 +98,26 @@ export const ModalNav = ({ close }: TypeModalProps) => {
 					</Radio.Group>
 				</div>
 			</Col>
-			{jsxElements.map(item => {
-				const isLayout = !!layouts.lg.filter(el => el.i === item.index).length
+			{layouts.lg.length === jsxElements.length ? (
+				<div className="text-3xl">Пока сервисов нет</div>
+			) : (
+				jsxElements.map(item => {
+					const isLayout = !!layouts.lg.filter(el => el.i === item.index).length
 
-				return (
-					!isLayout && (
-						<Col span={4} key={item.index} className="bg-white">
-							<div
-								onClick={() => {
-									console.log(item.place)
-									dispatch(addCard(item.place))
-								}}
-								className="h-28 cursor-pointer flex items-center justify-center hover:bg-[#65A1FA] hover:text-white"
-							>
-								{t(item.index.toString())}
-							</div>
-						</Col>
+					return (
+						!isLayout && (
+							<Col span={4} key={item.index} className="bg-white">
+								<div
+									onClick={() => dispatch(addCard(item.place))}
+									className="h-28 cursor-pointer flex items-center justify-center hover:bg-[#65A1FA] hover:text-white"
+								>
+									{t(item.index.toString())}
+								</div>
+							</Col>
+						)
 					)
-				)
-			})}
+				})
+			)}
 		</Row>
 	)
 }

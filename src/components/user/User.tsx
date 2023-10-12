@@ -1,9 +1,7 @@
 import clsx from 'clsx'
-import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import DropDrag from '../dnd/DropDrag'
-import { block } from '../dnd/constant'
 import { Faq } from '../faq/Faq'
 import { Layout } from '../layout/Layout'
 

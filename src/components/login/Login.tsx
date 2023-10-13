@@ -25,7 +25,7 @@ export const Login = () => {
 	const { t, i18n } = useTranslation()
 	const error = useSelector((state: RootState) => state.AuthReg.authData.error)
 	const dispatch = useDispatch()
-	const [login, { isLoading }] = useLoginMutation()
+	const [login] = useLoginMutation()
 
 	useEffect(() => {
 		clearLoginErrors(dispatch)
@@ -45,20 +45,6 @@ export const Login = () => {
 		} catch (e) {
 			console.log(e)
 		}
-
-		// const request = async () => {
-		// 	let res = null
-		// 	if (values.email || values.password) {
-		// 		res = await loginUser(
-		// 			{ username: values.email, password: values.password },
-		// 			dispatch
-		// 		)
-		// 	}
-		// 	if (res === 200) {
-		// 		navigate('/user')
-		// 	}
-		// }
-		// request()
 	}
 
 	return (

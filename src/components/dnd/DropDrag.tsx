@@ -82,6 +82,7 @@ const DropDrag = () => {
 				onBreakpointChange={onBreakpointChange}
 				isDraggable={edit}
 				isResizable={false}
+				compactType={'horizontal'}
 			>
 				{generateDOM}
 			</ResponsiveReactGridLayout>

@@ -41,7 +41,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 		setOpen(!open)
 	}
 
-	const getRole = (role: String | undefined) => {
+	const getRole = (role: string | undefined) => {
 		switch (role) {
 			case 'ABIT':
 				return t('ABIT')

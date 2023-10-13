@@ -1,3 +1,4 @@
+import { Schedule } from '../cards/Schedule'
 import { TemplateCard } from '../cards/Template'
 
 export const jsxElements = [
@@ -245,6 +246,18 @@ export const jsxElements = [
 			x: 1,
 			y: 0,
 			i: 'EducationalCourses'
+		}
+	},
+	{
+		index: 'Schedule',
+		element: <Schedule />,
+		place: {
+			w: 3,
+			h: 1,
+			minW: 3,
+			x: 0,
+			y: 0,
+			i: 'Schedule'
 		}
 	}
 ]

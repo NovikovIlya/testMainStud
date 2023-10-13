@@ -73,6 +73,7 @@ export interface Exam {
 	time_note: string
 }
 export type TypeSchedule = {
+	sunday: Day[]
 	monday: Day[]
 	tuesday: Day[]
 	wednesday: Day[]

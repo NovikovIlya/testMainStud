@@ -254,7 +254,6 @@ export const jsxElements = [
 		place: {
 			w: 3,
 			h: 1,
-			minW: 3,
 			x: 0,
 			y: 0,
 			i: 'Schedule'

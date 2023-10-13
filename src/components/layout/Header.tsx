@@ -33,12 +33,13 @@ type TypeHeaderProps = {
 export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
-	const [open, setOpen] = useState(false)
+	const [openDrawer, setOpenDrawer] = useState(false)
+	const [openMenu, setOpenMenu] = useState(false)
 	const { t, i18n } = useTranslation()
 
 	const user = useAppSelector(state => state.auth.user)
 	const showDrawer = () => {
-		setOpen(!open)
+		setOpenDrawer(!openDrawer)
 	}
 
 	const getRole = (role: string | undefined) => {
@@ -61,7 +62,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	}
 
 	const onClose = () => {
-		setOpen(false)
+		setOpenDrawer(false)
 	}
 	const items: MenuProps['items'] = [
 		{
@@ -79,6 +80,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 			label: (
 				<div
 					onClick={() => {
+						setOpenMenu(false)
 						navigate('/services/aboutMe/aboutMe')
 					}}
 					className="flex items-center gap-[15px] px-[4px] py-[5px]"
@@ -101,7 +103,10 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 		{
 			label: (
 				<div
-					onClick={() => dispatch(setEdit())}
+					onClick={() => {
+						setOpenMenu(false)
+						dispatch(setEdit())
+					}}
 					className="flex items-center gap-[15px] px-[4px] py-[5px]"
 				>
 					<PersonalizationSvg />
@@ -114,7 +119,10 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 			label: (
 				<div
 					className="flex items-center gap-[15px] px-[4px] py-[5px]"
-					onClick={() => dispatch(logOut())}
+					onClick={() => {
+						setOpenMenu(false)
+						dispatch(logOut())
+					}}
 				>
 					<LogoutSvg />
 					{t('logout')}
@@ -130,6 +138,8 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const changeLanguage = (language: string) => {
 		i18n.changeLanguage(language)
 	}
+	console.log(type === 'main' && openMenu && 'bg-[#E3E8ED]')
+
 	return (
 		<header
 			className={clsx(
@@ -216,15 +226,16 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 					/>
 					<div
 						className={clsx(
-							'h-full flex items-center cursor-pointer bg-transparent',
-							type === 'main'
-								? 'hover:bg-[#E3E8ED]'
-								: 'target:bg-[#3073D7] active:bg-[#3073D7] visited:bg-[#3073D7] focus-visible:bg-[#3073D7] focus-within:bg-[#3073D7] focus:bg-[#3073D7] hover:bg-[#3073D7]'
+							'h-full flex items-center cursor-pointer',
+							type === 'main' && openMenu && 'bg-[#E3E8ED]',
+							type !== 'main' && openMenu && 'bg-[#3073D7]',
+							type === 'main' ? 'hover:bg-[#E3E8ED]' : 'target:bg-[#3073D7]'
 						)}
 					>
 						<Dropdown
 							menu={{ items }}
 							placement="bottom"
+							onOpenChange={() => setOpenMenu(prev => !prev)}
 							trigger={['click']}
 							className="cursor-pointer h-full  box-border"
 						>
@@ -251,7 +262,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 							closable={false}
 							className="!bg-[#F5F8FB]"
 							onClose={onClose}
-							open={open}
+							open={openDrawer}
 							key="top"
 						>
 							<ModalNav close={onClose} />

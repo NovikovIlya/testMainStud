@@ -258,5 +258,235 @@ export const jsxElements = [
 			y: 0,
 			i: 'Schedule'
 		}
+	},
+	{
+		index: 'News',
+		element: (
+			<TemplateCard
+				href="/user/#"
+				info="Читайте о новостях и событиях, связанных с Казанским федеральным университетом"
+				title="Новости"
+				img="/image3.png"
+				positionImage="-mt-4"
+				width={177}
+				height={170}
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 1,
+			y: 0,
+			i: 'News'
+		}
+	},
+	{
+		index: 'Testing',
+		element: (
+			<TemplateCard
+				href="/user/#"
+				info="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+				title="Тестирование"
+				buttonText="Пройти"
+				buttonType="primary"
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 1,
+			y: 0,
+			i: 'Testing'
+		}
+	},
+	{
+		index: 'Checklist',
+		element: (
+			<TemplateCard
+				href="/user/#"
+				info="Заглядывайте в чек-лист, в котором мы описали все шаги для устройства на работу в Казанский федеральный университет"
+				title="Чек-лист: как к нам попасть"
+				img="/image4.png"
+				width={115}
+				height={115}
+				positionImage="mt-4"
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 1,
+			y: 0,
+			i: 'Checklist'
+		}
+	},
+	{
+		index: 'JobApplicationStatus',
+		element: (
+			<TemplateCard
+				href="/user/#"
+				info="В разделе отображается ваш текущий статус заявления на работу"
+				title="Статус заявления на работу"
+				img="/image5.png"
+				width={137}
+				height={130}
+				positionImage="ml-4 mt-2"
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 1,
+			y: 0,
+			i: 'JobApplicationStatus'
+		}
+	},
+	{
+		index: 'Resume',
+		element: (
+			<TemplateCard
+				href="/user/#"
+				info="Мы всегда в поиске крутых специалистов. Заполняйте резюме, отправляйте на проверку и мы рассмотрим Вашу кандидатуру."
+				title="Резюме"
+				img="/image6.png"
+				positionImage="ml-2 -mt-2"
+				width={135}
+				height={140}
+				buttonType="primary"
+				buttonText="Отправить"
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 1,
+			y: 0,
+			i: 'Resume'
+		}
+	},
+	{
+		index: 'MyCourses',
+		element: (
+			<TemplateCard
+				href="/user/#"
+				info="Здесь хранится история ваших курсов, которые вы когда-либо проходили, проходите или собираетесь пройти"
+				title="Мои курсы"
+				img="/image7.png"
+				positionImage="mt-3"
+				width={119}
+				height={106}
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 1,
+			y: 0,
+			i: 'MyCourses'
+		}
+	},
+	{
+		index: 'DocumentFlow',
+		element: (
+			<TemplateCard
+				href="/user/#"
+				info="Один из старейших университетов в России, основанный в 1804 году. Университет славится своими сильными школами математики..."
+				title="Документооборот"
+				img="/image8.png"
+				width={120}
+				height={120}
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 1,
+			y: 0,
+			i: 'DocumentFlow'
+		}
+	},
+	{
+		index: 'PaySheet',
+		element: (
+			<TemplateCard
+				href="/user/#"
+				info="Здесь хранится история ваших курсов, которые вы когда-либо проходили, проходите или собираетесь пройти"
+				title="Расчетный лист"
+				img="/image9.png"
+				width={140}
+				height={140}
+				positionImage="-mt-4"
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 1,
+			y: 0,
+			i: 'PaySheet'
+		}
+	},
+	{
+		index: 'TasksProjects',
+		element: (
+			<TemplateCard
+				href="/user/#"
+				info="Один из старейших университетов в России, основанный в 1804 году. Университет славится своими сильными школами математики..."
+				title="Задачи и проекты"
+				img="/image10.png"
+				width={130}
+				height={130}
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 1,
+			y: 0,
+			i: 'TasksProjects'
+		}
+	},
+	{
+		index: 'BusinessTrips',
+		element: (
+			<TemplateCard
+				href="/user/#"
+				info="Как попасть в двойку и многие другие ответы по местоположению зданий КФУ Вы найдете в этом сервисе"
+				title="Командировки"
+				img="/image11.png"
+				buttonText="Изучить"
+				width={120}
+				height={130}
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 1,
+			y: 0,
+			i: 'BusinessTrips'
+		}
+	},
+	{
+		index: 'Vacation',
+		element: (
+			<TemplateCard
+				href="/user/#"
+				info="В разделе отображается рейтинг сотрудника в списке коллег"
+				title="Отпуск"
+				img="/image12.png"
+				buttonText="Изучить"
+				positionImage="pl-6"
+				width={140}
+				height={130}
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 1,
+			y: 0,
+			i: 'Vacation'
+		}
 	}
 ]

@@ -48,14 +48,22 @@ export const Schedule = () => {
 	}
 	return (
 		<div
-			className="py-10 pl-10 flex w-full h-full  rounded-[1vw] text-white"
+			className="py-10 pl-10 max-xl:p-5 max-md:p-10 flex w-full h-full max-[560px]:flex-col rounded-[20px] text-white max-md:justify-center"
 			style={{
 				background: 'linear-gradient(89.94deg, #71AAFF 12.16%, #3D7AD5 104.42%)'
 			}}
 		>
-			<div className="flex flex-col h-full justify-between w-full min-w-[200px] max-w-sm">
-				<span className="bg-none text-4xl font-bold text-start">Schedule</span>
-				<div className="flex w-full flex-wrap gap-1 mb-14">
+			<div className="flex flex-col h-full justify-between w-full  max-w-sm max-md:justify-center max-md:gap-5">
+				<span className="bg-none text-4xl font-bold text-start max-[560px]:text-center max-xl:text-3xl max-md:text-2xl">
+					Schedule
+				</span>
+				<Button
+					className="hidden max-md:flex max-[560px]:hidden !rounded-full w-fit !px-5"
+					size="large"
+				>
+					Go over
+				</Button>
+				<div className="flex w-full flex-wrap gap-1 mb-14 max-md:hidden">
 					<Button
 						style={activeButton === 'monday' ? activeStyles : disableStyle}
 						onClick={() => setActiveButton('monday')}
@@ -100,12 +108,25 @@ export const Schedule = () => {
 					</Button>
 				</div>
 			</div>
-			<hr className="h-full w-[2px]  bg-white mx-3 border-none" />
-			<div className="flex-col justify-start w-full max-w-fit min-w-min p-2 max-h-full overflow-y-auto">
+			<div className="hidden max-md:flex items-center justify-center w-full">
+				<div className="bg-white rounded-full w-[125px] h-[125px]  absolute"></div>
+				<img
+					src={img}
+					alt=""
+					width={160}
+					height={160}
+					className="bottom-[40px] z-10"
+				/>
+			</div>
+			<hr className="h-full w-[2px]  bg-white mx-3 border-none max-md:hidden" />
+			<div className="flex-col justify-start w-full max-w-fit min-w-min p-2 max-h-full overflow-y-auto max-xl:text-sm max-md:hidden">
 				{schedule && schedule[activeButton].length ? (
 					schedule[activeButton].map((el, index) => (
-						<div className="flex w-full gap-x-[40px] mb-[20px]" key={index}>
-							<span className="text-start min-w-[100px]">{el.time}</span>
+						<div
+							className="flex w-full gap-x-10 mb-5 max-xl:gap-x-0 max-xl:mb-3 max-xl:flex-col"
+							key={index}
+						>
+							<span className="text-start ">{el.time}</span>
 							<span className="font-bold text-start">{el.name}</span>
 						</div>
 					))
@@ -113,8 +134,8 @@ export const Schedule = () => {
 					<h3>there are no lessons, we are resting...</h3>
 				)}
 			</div>
-			<div className="hidden  min-[1200px]:flex items-center justify-center w-full">
-				<div className="bg-white rounded-full min-w-[180px] max-w-[180px] max-h-[180px] min-h-[180px] absolute"></div>
+			<div className="flex max-xl:hidden items-center justify-center w-full">
+				<div className="bg-white rounded-full w-44 h-44  absolute"></div>
 				<img
 					src={img}
 					alt=""
@@ -124,7 +145,7 @@ export const Schedule = () => {
 				/>
 			</div>
 			<div
-				className="flex w-fit justify-center items-center "
+				className="flex max-xl:hidden w-fit justify-center items-center "
 				onClick={() => navigate('/services/schedule/schedule')}
 			>
 				<svg

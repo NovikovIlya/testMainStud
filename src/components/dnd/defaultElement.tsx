@@ -111,8 +111,6 @@ export const jsxElements = [
 				width={130}
 				height={137}
 				isRounded
-				mt=""
-				positionImage="-mt-[11px]"
 			/>
 		),
 		place: {
@@ -155,8 +153,6 @@ export const jsxElements = [
 				width={130}
 				height={137}
 				isRounded
-				mt=""
-				positionImage="-mt-[11px]"
 			/>
 		),
 		place: {
@@ -254,6 +250,7 @@ export const jsxElements = [
 		place: {
 			w: 3,
 			h: 1,
+			minW: 2,
 			x: 0,
 			y: 0,
 			i: 'Schedule'

@@ -31,18 +31,18 @@ export const TemplateCard = ({
 }: SessionProps) => {
 	const navigate = useNavigate()
 	return (
-		<div className="flex flex-col px-7 py-8 justify-between h-full">
-			<div className="flex">
+		<div className="flex flex-col px-7 py-8 justify-between h-full max-[874px]:p-0 max-[874px]:py-3 max-[874px]:items-center ">
+			<div className="flex max-[874px]:flex-col max-[874px]:h-full max-[874px]:w-full max-[874px]:items-center">
 				<div className="text-left">
 					<div className="leading-7 text-xl font-bold whitespace-nowrap">
 						{title}
 					</div>
-					<div className="text-base font-normal leading-relaxed mt-7">
+					<div className="text-base font-normal leading-relaxed mt-7 max-[874px]:hidden">
 						{info}
 					</div>
 				</div>
 				{img && (
-					<div className="max-sm:hidden w-60 justify-center flex">
+					<div className="w-60 justify-center flex max-[874px]:h-full max-[874px]:w-full max-[874px]:items-center">
 						<div
 							className={`bg-[#3E89F9] bg-opacity-80 w-[125px] h-[125px] rounded-full absolute -z-10 ${mt}`}
 						/>
@@ -58,7 +58,7 @@ export const TemplateCard = ({
 			</div>
 			<Button
 				type={buttonType}
-				className="rounded-full w-[200px] h-[50px]"
+				className="rounded-full w-[200px] h-[50px] max-[874px]:hidden"
 				onClick={() => navigate(href)}
 			>
 				{buttonText}

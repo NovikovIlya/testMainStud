@@ -37,7 +37,7 @@ export const Buttons: FC<IButtonsProps> = ({ setCheck, check }) => {
 						{t('alreadyProfile')}{' '}
 						<Link
 							className={styles.link}
-							to="/login"
+							to="/"
 							onClick={() => clearRegistrationErrors(dispatch)}
 						>
 							{t('login')}

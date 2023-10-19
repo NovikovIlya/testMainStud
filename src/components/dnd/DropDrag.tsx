@@ -30,6 +30,20 @@ const DropDrag = () => {
 		localStorage.setItem('dashboard', JSON.stringify(layout))
 	}, [layout])
 
+	const [windowSize, setWindowSize] = useState(getWindowSize())
+
+	useEffect(() => {
+		function handleWindowResize() {
+			setWindowSize(getWindowSize())
+		}
+
+		window.addEventListener('resize', handleWindowResize)
+
+		return () => {
+			window.removeEventListener('resize', handleWindowResize)
+		}
+	}, [])
+
 	const onBreakpointChange = (breakpoint: any) => {
 		setCurrentBreakpoint(breakpoint)
 		setToolbox({
@@ -66,13 +80,14 @@ const DropDrag = () => {
 			</div>
 		)
 	})
+	console.log(windowSize, 'windowSize=======================')
 
 	return (
 		<div className=" mt-[40px] w-[min(1600px, 100%)] mb-[100px]">
 			<ResponsiveReactGridLayout
 				className="layout "
-				cols={{ lg: 3, md: 2, sm: 2, xs: 1, xxs: 1 }}
-				rowHeight={320}
+				cols={{ lg: 3, md: 2, sm: 2, xs: 2, xxs: 1 }}
+				rowHeight={windowSize.innerWidth < 768 ? 210 : 320}
 				containerPadding={[0, 0]}
 				margin={[20, 20]}
 				layouts={layout}
@@ -88,6 +103,11 @@ const DropDrag = () => {
 			</ResponsiveReactGridLayout>
 		</div>
 	)
+}
+
+function getWindowSize() {
+	const { innerWidth, innerHeight } = window
+	return { innerWidth, innerHeight }
 }
 
 export default DropDrag

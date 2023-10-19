@@ -482,7 +482,7 @@ export const Curriculum = () => {
 			]
 		}
 	]
-	const { data: studyPlan } = useGetStudyPlanQuery()
+	const { data: studyPlan, isLoading } = useGetStudyPlanQuery()
 
 	const [tableData, changeData] = useState<TypeColumn[]>([])
 
@@ -615,7 +615,7 @@ export const Curriculum = () => {
 				columns={columns}
 				className="tableCustom mt-10"
 				pagination={false}
-				loading={tableData.length === 0 ? true : false}
+				loading={isLoading}
 			/>
 			<Table
 				dataSource={dataExam}

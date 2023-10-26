@@ -13,7 +13,7 @@ import { ParentForm } from './components/formUser/ParentForm/ParentForm'
 import { WorkForm } from './components/formUser/WorkForm/WorkForm'
 import { Login } from './components/login/Login'
 import { Registration } from './components/registration/Registration'
-import Service from './components/service'
+import { Service } from './components/service'
 import { User } from './components/user/User'
 
 const App = () => {
@@ -35,7 +35,11 @@ const App = () => {
 						<Route
 							path="/registration"
 							element={<Registration email={email} changeEmail={changeEmail} />}
-						></Route>
+						/>
+						<Route
+							path="/registration/checkingEmail"
+							element={<CheckEmail email={email} />}
+						/>
 					</Route>
 					<Route element={<RequireAuth />}>
 						<Route path="/user/*" element={<User />} />
@@ -46,10 +50,7 @@ const App = () => {
 						<Route path="/documents" element={<DocumentForm />} />
 						<Route path="/work" element={<WorkForm />} />
 						<Route path="/parent" element={<ParentForm />} />
-						<Route
-							path="/registration/checkingEmail"
-							element={<CheckEmail email={email} />}
-						/>
+
 						<Route path="/services/*" element={<Service />} />
 					</Route>
 				</Routes>

@@ -30,7 +30,6 @@ import {
 	documentSeries,
 	educationLevelId,
 	graduateYear,
-	idAdd,
 	nameOfInstitute,
 	specialization
 } from '../../../store/reducers/FormReducers/EducationReducer'
@@ -80,7 +79,7 @@ export const EducationForm = () => {
 	const educationData = useAppSelector(state => state.Education)
 
 	const getData = async () => {
-		const response = await getEducationItemRequest(dispatch)
+		const response = await getEducationItemRequest()
 		if (response !== null) {
 			dispatch(allData(response))
 		}
@@ -155,20 +154,15 @@ export const EducationForm = () => {
 
 	const handleUpdateEducation = async (item: IEducationState) => {
 		if (!checkEducationItem(item)) {
-			const status = await putEducationItemRequest(
-				item.id.toString(),
-				{
-					nameOfInstitute: item.nameOfInstitute,
-					documentNumber: item.documentNumber,
-					documentSeries: item.documentSeries,
-					graduateYear: item.graduateYear,
-					specialization: item.specialization,
-					educationLevelId: item.educationLevelId,
-					countryId: item.countryId
-				},
-
-				dispatch
-			)
+			const status = await putEducationItemRequest(item.id.toString(), {
+				nameOfInstitute: item.nameOfInstitute,
+				documentNumber: item.documentNumber,
+				documentSeries: item.documentSeries,
+				graduateYear: item.graduateYear,
+				specialization: item.specialization,
+				educationLevelId: item.educationLevelId,
+				countryId: item.countryId
+			})
 			if (status === 200) {
 				setUpdate(true)
 			} else {
@@ -178,7 +172,7 @@ export const EducationForm = () => {
 	}
 
 	const handleDeleteEducation = async (id: string) => {
-		const response = await deleteEducationItemRequest(id, dispatch)
+		const response = await deleteEducationItemRequest(id)
 		if (response === 200) setUpdate(true)
 		else console.log('403')
 	}
@@ -193,7 +187,7 @@ export const EducationForm = () => {
 			educationLevelId: 1,
 			countryId: 1
 		}
-		const response = await addEducationItemRequest(item, dispatch)
+		const response = await addEducationItemRequest(item)
 		if (response === 200) setUpdate(true)
 		else console.log('403')
 	}

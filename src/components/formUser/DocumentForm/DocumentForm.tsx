@@ -14,10 +14,8 @@ import { RootState, useAppSelector } from '../../../store'
 import { useGetMyDocumentsQuery } from '../../../store/api/formApi'
 import {
 	getDocumentItemRequest,
-	postDocumentItemRequest,
-	setDocument
+	postDocumentItemRequest
 } from '../../../store/creators/MainCreators'
-import { addDocuments } from '../../../store/reducers/FormReducers/CountriesEducationReducer'
 import {
 	allData,
 	dateIssue,
@@ -49,7 +47,7 @@ export const DocumentForm = () => {
 
 	const navigate = useNavigate()
 	const getData = async () => {
-		const response = await getDocumentItemRequest(dispatch)
+		const response = await getDocumentItemRequest()
 		if (response) {
 			dispatch(
 				allData({
@@ -131,7 +129,7 @@ export const DocumentForm = () => {
 			changeIsEmpty(true)
 			return false
 		}
-		const response = await postDocumentItemRequest(documentData, dispatch)
+		const response = await postDocumentItemRequest(documentData)
 		if (response === 200) changeIsEmpty(false)
 		else {
 			console.log('403')

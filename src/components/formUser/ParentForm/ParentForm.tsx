@@ -210,7 +210,7 @@ export const ParentForm = () => {
 	}
 
 	const getData = async () => {
-		const response = await getParentItemRequest(dispatch)
+		const response = await getParentItemRequest()
 		if (response) {
 			const corrected: IParentState[] = response.map(el => ({
 				id: el.id,
@@ -237,32 +237,29 @@ export const ParentForm = () => {
 	}
 
 	const handleAddParent = async () => {
-		const response = await postParentItemRequest(
-			{
-				name: null,
-				surName: null,
-				patronymic: null,
-				dateIssue: null,
-				divisionCode: null,
-				eMail: null,
-				issuedBy: null,
-				documentTypeId: 1,
-				phone: null,
-				passportSeries: null,
-				passportNumber: null,
-				registrationAddress: null,
-				residenceAddress: null,
-				inn: null,
-				snils: null
-			},
-			dispatch
-		)
+		const response = await postParentItemRequest({
+			name: null,
+			surName: null,
+			patronymic: null,
+			dateIssue: null,
+			divisionCode: null,
+			eMail: null,
+			issuedBy: null,
+			documentTypeId: 1,
+			phone: null,
+			passportSeries: null,
+			passportNumber: null,
+			registrationAddress: null,
+			residenceAddress: null,
+			inn: null,
+			snils: null
+		})
 		if (response === 200) setUpdate(true)
 		else console.log('403')
 	}
 
 	const handleDeleteParent = async (id: number) => {
-		const response = await deleteParentItemRequest(id.toString(), dispatch)
+		const response = await deleteParentItemRequest(id.toString())
 		if (response === 200) setUpdate(true)
 		else console.log('403')
 	}
@@ -271,27 +268,23 @@ export const ParentForm = () => {
 		if (!checkParentItem(item)) {
 			const fioSpliter = !item.FIO ? null : item.FIO.split(' ')
 			if (fioSpliter !== null && fioSpliter.length !== 3) fioSpliter.push('')
-			const response = await putParentItemRequest(
-				item.id.toString(),
-				{
-					name: !fioSpliter ? null : fioSpliter[0],
-					surName: !fioSpliter ? null : fioSpliter[1],
-					patronymic: !fioSpliter ? null : fioSpliter[2],
-					dateIssue: item.dateIssue,
-					divisionCode: item.divisionCode,
-					eMail: item.eMail,
-					issuedBy: item.issuedBy,
-					documentTypeId: item.documentTypeId,
-					phone: item.phone,
-					passportSeries: item.passportSeries,
-					passportNumber: item.passportNumber,
-					registrationAddress: item.registrationAddress,
-					residenceAddress: item.residenceAddress,
-					inn: item.inn,
-					snils: item.snils
-				},
-				dispatch
-			)
+			const response = await putParentItemRequest(item.id.toString(), {
+				name: !fioSpliter ? null : fioSpliter[0],
+				surName: !fioSpliter ? null : fioSpliter[1],
+				patronymic: !fioSpliter ? null : fioSpliter[2],
+				dateIssue: item.dateIssue,
+				divisionCode: item.divisionCode,
+				eMail: item.eMail,
+				issuedBy: item.issuedBy,
+				documentTypeId: item.documentTypeId,
+				phone: item.phone,
+				passportSeries: item.passportSeries,
+				passportNumber: item.passportNumber,
+				registrationAddress: item.registrationAddress,
+				residenceAddress: item.residenceAddress,
+				inn: item.inn,
+				snils: item.snils
+			})
 			if (response === 200) setUpdate(true)
 			else console.log('403')
 		}

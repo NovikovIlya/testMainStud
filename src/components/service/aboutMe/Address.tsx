@@ -104,18 +104,15 @@ export const Address = () => {
 		} else {
 		}
 
-		const status = await putAbUsAddress(
-			{
-				registrationAddress: registrationAddressData,
-				residenceAddress:
-					isResident === 0
-						? registrationAddressData
-						: !residenceAddressData
-						? null
-						: residenceAddressData
-			},
-			dispatch
-		)
+		const status = await putAbUsAddress({
+			registrationAddress: registrationAddressData,
+			residenceAddress:
+				isResident === 0
+					? registrationAddressData
+					: !residenceAddressData
+					? null
+					: residenceAddressData
+		})
 		if (status === 403) {
 			setError(true)
 		} else {

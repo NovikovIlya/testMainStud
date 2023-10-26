@@ -61,7 +61,7 @@ export const AboutMe = () => {
 		) {
 			setError(true)
 		} else {
-			const status = await putAbUsForm(formData, dispatch)
+			const status = await putAbUsForm(formData)
 			if (status === 403) {
 				setError(true)
 			} else {

@@ -31,14 +31,15 @@ const baseQueryWithReAuth = async (
 		console.log('sending refresh token')
 		const refreshResult = await baseQuery(
 			{
-				url: 'user-api/refresh',
-				body: {},
+				url: 'user-api/toke/refresh',
+				body: {
+					refreshToken: localStorage.getItem('refresh')?.replaceAll('"', '')
+				},
 				method: 'POST'
 			},
 			api,
 			extraOptions
 		)
-		console.log(refreshResult)
 		if (refreshResult.data) {
 			//@ts-ignore
 			const user = api.getState().auth.user
@@ -54,5 +55,5 @@ const baseQueryWithReAuth = async (
 
 export const apiSlice = createApi({
 	baseQuery: baseQueryWithReAuth,
-	endpoints: builder => ({})
+	endpoints: () => ({})
 })

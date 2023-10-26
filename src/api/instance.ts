@@ -2,7 +2,7 @@ import axios from 'axios'
 import { Cookies } from 'react-cookie'
 
 const cookies = new Cookies()
-export const API_URL = `http://192.168.63.96:8080/api`
+export const API_URL = `https://newlk.kpfu.ru/user-api`
 export const axiosInstance = axios.create({
 	baseURL: API_URL,
 	headers: {

@@ -70,7 +70,7 @@ export const Parent = () => {
 	const dispatch = useDispatch()
 	dayjs.locale(i18n.language)
 	const { data: parent } = useGetParentsQuery()
-	const [IsError, setError] = useState<IParentError | null>(null)
+	const [IsError] = useState<IParentError | null>(null)
 	const role = useAppSelector(state => state.auth.user?.roles)
 	const { data: documents } = useGetDocumentsQuery(i18n.language)
 	if (parent !== undefined) dispatch(allData(parent))
@@ -85,54 +85,47 @@ export const Parent = () => {
 	}
 
 	const handleAddParent = async () =>
-		await postParentItemRequest(
-			{
-				name: null,
-				surName: null,
-				patronymic: null,
-				dateIssue: null,
-				divisionCode: null,
-				eMail: null,
-				issuedBy: null,
-				documentTypeId: 1,
-				phone: null,
-				passportSeries: null,
-				passportNumber: null,
-				registrationAddress: null,
-				residenceAddress: null,
-				inn: null,
-				snils: null
-			},
-			dispatch
-		)
+		await postParentItemRequest({
+			name: null,
+			surName: null,
+			patronymic: null,
+			dateIssue: null,
+			divisionCode: null,
+			eMail: null,
+			issuedBy: null,
+			documentTypeId: 1,
+			phone: null,
+			passportSeries: null,
+			passportNumber: null,
+			registrationAddress: null,
+			residenceAddress: null,
+			inn: null,
+			snils: null
+		})
 
 	const handleDeleteParent = async (id: number) =>
-		await deleteParentItemRequest(id.toString(), dispatch)
+		await deleteParentItemRequest(id.toString())
 
 	const handleUpdateParent = async (item: IParentState) => {
 		const fioSpliter = !item.FIO ? null : item.FIO.split(' ')
 		if (fioSpliter !== null && fioSpliter.length !== 3) fioSpliter.push('')
-		await putParentItemRequest(
-			item.id.toString(),
-			{
-				name: !fioSpliter ? null : fioSpliter[0],
-				surName: !fioSpliter ? null : fioSpliter[1],
-				patronymic: !fioSpliter ? null : fioSpliter[2],
-				dateIssue: item.dateIssue,
-				divisionCode: item.divisionCode,
-				eMail: item.eMail,
-				issuedBy: item.issuedBy,
-				documentTypeId: item.documentTypeId,
-				phone: item.phone,
-				passportSeries: item.passportSeries,
-				passportNumber: item.passportNumber,
-				registrationAddress: item.registrationAddress,
-				residenceAddress: item.residenceAddress,
-				inn: item.inn,
-				snils: item.snils
-			},
-			dispatch
-		)
+		await putParentItemRequest(item.id.toString(), {
+			name: !fioSpliter ? null : fioSpliter[0],
+			surName: !fioSpliter ? null : fioSpliter[1],
+			patronymic: !fioSpliter ? null : fioSpliter[2],
+			dateIssue: item.dateIssue,
+			divisionCode: item.divisionCode,
+			eMail: item.eMail,
+			issuedBy: item.issuedBy,
+			documentTypeId: item.documentTypeId,
+			phone: item.phone,
+			passportSeries: item.passportSeries,
+			passportNumber: item.passportNumber,
+			registrationAddress: item.registrationAddress,
+			residenceAddress: item.residenceAddress,
+			inn: item.inn,
+			snils: item.snils
+		})
 	}
 	if (!role) return <></>
 	const isStudent = role[0].type === 'STUD'

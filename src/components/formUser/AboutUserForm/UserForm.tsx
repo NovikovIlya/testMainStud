@@ -21,7 +21,7 @@ export const FormModal = () => {
 	const { t, i18n } = useTranslation()
 
 	const IsNotGuest = async () => {
-		const response = await getAbUsForm(dispatch)
+		const response = await getAbUsForm()
 		if (response && userRole !== 'GUEST') {
 			navigate('/user')
 		} else {

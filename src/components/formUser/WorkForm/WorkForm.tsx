@@ -22,19 +22,15 @@ import { IWorkError, workItem } from '../../../api/types'
 import { RootState } from '../../../store'
 import { useAppSelector } from '../../../store'
 import {
-	addJobItemRequest,
 	deleteJobItemRequest,
 	getAbUsJob,
-	portfolioLinkRequest,
 	updateJobItemRequest
 } from '../../../store/creators/MainCreators'
 import { setJob } from '../../../store/creators/MainCreators'
 import { allData } from '../../../store/reducers/FormReducers/WorkReducer'
 import {
 	additionalInfo,
-	endDate,
 	idAdd,
-	idDelete,
 	name,
 	portfolioLink,
 	startDate
@@ -59,7 +55,7 @@ export const WorkForm = () => {
 	const workData = useAppSelector((state: RootState) => state.Work)
 
 	const getData = async () => {
-		const response = await getAbUsJob(dispatch)
+		const response = await getAbUsJob()
 		response !== null && dispatch(allData(response))
 	}
 
@@ -69,28 +65,6 @@ export const WorkForm = () => {
 			setUpdate(false)
 		}
 	}, [updateItems])
-
-	const convertToString = (field: any): string => {
-		if (typeof field === 'string') {
-			return field
-		} else {
-			return ''
-		}
-	}
-
-	const checkPortfolio = (data: string): boolean => {
-		const IsCorrectLink =
-			/^(?:https?:\/\/)?(?:www\.)?([a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*)(?:\/[^\s]*)?$/.test(
-				data
-			)
-		if (!IsCorrectLink) {
-			setError({ ...IsError, portfolio: true })
-			return true
-		} else {
-			IsError.portfolio && setError({ ...IsError, portfolio: false })
-			return false
-		}
-	}
 
 	const checkWorkItem = (id: string, item: workItem): boolean => {
 		var haveError = false
@@ -139,41 +113,8 @@ export const WorkForm = () => {
 		return haveError
 	}
 
-	const handleUpdatePortfolio = async (data: string) => {
-		if (!checkPortfolio(data)) {
-			const response = await portfolioLinkRequest(
-				{ portfolioLink: data },
-				dispatch
-			)
-			if (response === 403) {
-				console.log('403')
-				//navigate("/")
-			} else {
-				setUpdate(true)
-			}
-		}
-	}
-
-	const handleAddWork = async () => {
-		const response = await addJobItemRequest(
-			{
-				name: '',
-				startDate: '',
-				endDate: null,
-				responsibilities: null,
-				additionalInfo: ''
-			},
-			dispatch
-		)
-		if (response === 403) {
-			console.log('403')
-			//navigate("/")
-		} else {
-			setUpdate(true)
-		}
-	}
 	const handleDeleteWork = async (id: string) => {
-		const response = await deleteJobItemRequest(id, dispatch)
+		const response = await deleteJobItemRequest(id)
 		if (response === 403) {
 			console.log('403')
 			//navigate("/")
@@ -183,7 +124,7 @@ export const WorkForm = () => {
 	}
 	const handleUpdateWork = async (id: string, item: workItem) => {
 		if (!checkWorkItem(id, item)) {
-			const response = await updateJobItemRequest(id, item, dispatch)
+			const response = await updateJobItemRequest(id, item)
 			if (response === 403) {
 				console.log('403')
 				//navigate("/")
@@ -224,13 +165,10 @@ export const WorkForm = () => {
 			return false
 		}
 		const requestData = data.items.map(({ id, ...rest }) => rest)
-		const response = await setJob(
-			{
-				items: requestData,
-				portfolioLink: data.portfolioLink
-			},
-			dispatch
-		)
+		const response = await setJob({
+			items: requestData,
+			portfolioLink: data.portfolioLink
+		})
 
 		if (response === 200) return true
 		else {
@@ -238,9 +176,6 @@ export const WorkForm = () => {
 				navigate('/')
 			}
 		}
-	}
-	const handleDeleteEducation = (id: number) => {
-		dispatch(idDelete(id))
 	}
 	const addWork = () => {
 		dispatch(idAdd(data.items[data.items.length - 1].id + 1))

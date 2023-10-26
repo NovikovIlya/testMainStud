@@ -21,7 +21,6 @@ import 'dayjs/locale/ru'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
 
 import { IWorkError, workItem } from '../../../api/types'
 import { RootState } from '../../../store'
@@ -68,13 +67,12 @@ export const Work = () => {
 		item: null,
 		portfolio: false
 	})
-	const navigate = useNavigate()
 	const [updateItems, setUpdate] = useState<boolean>(true)
 	const dispatch = useDispatch()
 	const workData = useAppSelector((state: RootState) => state.Work)
 
 	const getData = async () => {
-		const response = await getAbUsJob(dispatch)
+		const response = await getAbUsJob()
 		response !== null && dispatch(allData(response))
 	}
 
@@ -156,10 +154,7 @@ export const Work = () => {
 
 	const handleUpdatePortfolio = async (data: string) => {
 		if (!checkPortfolio(data)) {
-			const response = await portfolioLinkRequest(
-				{ portfolioLink: data },
-				dispatch
-			)
+			const response = await portfolioLinkRequest({ portfolioLink: data })
 			if (response === 403) {
 				console.log('403')
 				//navigate("/")
@@ -170,16 +165,13 @@ export const Work = () => {
 	}
 
 	const handleAddWork = async () => {
-		const response = await addJobItemRequest(
-			{
-				name: '',
-				startDate: '',
-				endDate: null,
-				responsibilities: null,
-				additionalInfo: ''
-			},
-			dispatch
-		)
+		const response = await addJobItemRequest({
+			name: '',
+			startDate: '',
+			endDate: null,
+			responsibilities: null,
+			additionalInfo: ''
+		})
 		if (response === 403) {
 			console.log('403')
 			//navigate("/")
@@ -188,7 +180,7 @@ export const Work = () => {
 		}
 	}
 	const handleDeleteWork = async (id: string) => {
-		const response = await deleteJobItemRequest(id, dispatch)
+		const response = await deleteJobItemRequest(id)
 		if (response === 403) {
 			console.log('403')
 			//navigate("/")
@@ -198,7 +190,7 @@ export const Work = () => {
 	}
 	const handleUpdateWork = async (id: string, item: workItem) => {
 		if (!checkWorkItem(id, item)) {
-			const response = await updateJobItemRequest(id, item, dispatch)
+			const response = await updateJobItemRequest(id, item)
 			if (response === 403) {
 				console.log('403')
 				//navigate("/")

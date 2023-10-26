@@ -68,7 +68,7 @@ export const Education = () => {
 	const { data: educationLevel } = useGetEducationLevelQuery(i18n.language)
 	const { data: countries } = useGetCountriesQuery(i18n.language)
 
-	const [updateItems, setUpdate] = useState<boolean>(true)
+	const [_, setUpdate] = useState<boolean>(true)
 	const [IsError, setError] = useState<IEducationError | null>(null)
 
 	const convertToString = (field: any): string => {
@@ -137,20 +137,15 @@ export const Education = () => {
 
 	const handleUpdateEducation = async (item: IEducationState) => {
 		if (!checkEducationItem(item)) {
-			const status = await putEducationItemRequest(
-				item.id.toString(),
-				{
-					nameOfInstitute: item.nameOfInstitute,
-					documentNumber: item.documentNumber,
-					documentSeries: item.documentSeries,
-					graduateYear: item.graduateYear,
-					specialization: item.specialization,
-					educationLevelId: item.educationLevelId,
-					countryId: item.countryId
-				},
-
-				dispatch
-			)
+			const status = await putEducationItemRequest(item.id.toString(), {
+				nameOfInstitute: item.nameOfInstitute,
+				documentNumber: item.documentNumber,
+				documentSeries: item.documentSeries,
+				graduateYear: item.graduateYear,
+				specialization: item.specialization,
+				educationLevelId: item.educationLevelId,
+				countryId: item.countryId
+			})
 			if (status === 200) {
 				setUpdate(true)
 			} else {
@@ -160,7 +155,7 @@ export const Education = () => {
 	}
 
 	const handleDeleteEducation = async (id: string) => {
-		const response = await deleteEducationItemRequest(id, dispatch)
+		const response = await deleteEducationItemRequest(id)
 		if (response === 200) setUpdate(true)
 		else console.log('403')
 	}
@@ -175,7 +170,7 @@ export const Education = () => {
 			educationLevelId: 1,
 			countryId: 1
 		}
-		const response = await addEducationItemRequest(item, dispatch)
+		const response = await addEducationItemRequest(item)
 		if (response === 200) setUpdate(true)
 		else console.log('403')
 	}

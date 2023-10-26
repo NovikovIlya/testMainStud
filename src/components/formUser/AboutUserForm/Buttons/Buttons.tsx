@@ -44,7 +44,7 @@ export const Buttons = ({
 			changeIsEmpty(true)
 			return false
 		}
-		const response = await setForm(data, dispatch)
+		const response = await setForm(data)
 		if (response === 200) return true
 		else {
 			if (response === 403) {

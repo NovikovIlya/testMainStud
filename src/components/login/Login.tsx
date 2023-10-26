@@ -1,15 +1,12 @@
 import { Form, Typography } from 'antd'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
+import { IError } from '../../api/types'
 import logo from '../../assets/images/group.png'
-import { RootState } from '../../store'
-import { loginUser } from '../../store/creators/MainCreators'
-import { clearLoginErrors } from '../../store/creators/SomeCreators'
-import { useLoginMutation } from '../../store/reducers/authApiSlice'
+import { useLoginMutation } from '../../store/api/authApiSlice'
 import { setCredentials } from '../../store/reducers/authSlice'
 import { BackMainPage } from '../back-main-page/BackMainPage'
 import { Faq } from '../faq/Faq'
@@ -22,15 +19,10 @@ const { Title } = Typography
 
 export const Login = () => {
 	const navigate = useNavigate()
-	const { t, i18n } = useTranslation()
-	const error = useSelector((state: RootState) => state.AuthReg.authData.error)
+	const { t } = useTranslation()
 	const dispatch = useDispatch()
 	const [login] = useLoginMutation()
-
-	useEffect(() => {
-		clearLoginErrors(dispatch)
-	}, [i18n.language])
-
+	const [error, setError] = useState<IError | null>(null)
 	const onFinish = async (values: { email: string; password: string }) => {
 		try {
 			const userData = await login({
@@ -42,8 +34,9 @@ export const Login = () => {
 			localStorage.setItem('access', JSON.stringify(userData.accessToken))
 			localStorage.setItem('refresh', JSON.stringify(userData.refreshToken))
 			navigate('/user')
-		} catch (e) {
+		} catch (e: any) {
 			console.log(e)
+			setError(e.data)
 		}
 	}
 

@@ -9,7 +9,7 @@ import { NavElectronicBook } from './electronicBook/NavElectronicBook'
 import { NavSchedule } from './schedule/NavSchedule'
 import { NavSession } from './session/NavSession'
 
-const Service = ({ children }: { children?: ReactNode }) => {
+export const Service = ({ children }: { children?: ReactNode }) => {
 	const { pathname } = useLocation()
 	const { t } = useTranslation()
 	return (
@@ -24,4 +24,3 @@ const Service = ({ children }: { children?: ReactNode }) => {
 		</div>
 	)
 }
-export default Service

@@ -56,6 +56,7 @@ export const Password: FC<IPasswordProps> = ({
 					onChange={e => setPassword(e.currentTarget.value)}
 					size="large"
 					type="password"
+					required
 					placeholder={t('password')}
 				/>
 			</Form.Item>
@@ -75,6 +76,7 @@ export const Password: FC<IPasswordProps> = ({
 					onChange={e => setConfirm(e.currentTarget.value)}
 					size="large"
 					type="password"
+					required
 					placeholder={t('repeatPassword')}
 				/>
 			</Form.Item>

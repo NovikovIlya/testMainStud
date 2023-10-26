@@ -94,7 +94,7 @@ export const Document = () => {
 			changeIsEmpty(true)
 			return false
 		}
-		const response = await postDocumentItemRequest(documentData, dispatch)
+		const response = await postDocumentItemRequest(documentData)
 		if (response === 200) changeIsEmpty(false)
 		else {
 			console.log('403')

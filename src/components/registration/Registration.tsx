@@ -1,16 +1,13 @@
 import { Form, Typography } from 'antd'
-import { FC, useEffect, useState } from 'react'
+import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
-import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-import { IRegForm } from '../../api/types'
+import { IError, IRegForm } from '../../api/types'
 import logo from '../../assets/images/group.png'
-import { useAppDispatch } from '../../store'
 import { RootState } from '../../store'
-import { registerUser } from '../../store/creators/MainCreators'
-import { clearRegistrationErrors } from '../../store/creators/SomeCreators'
+import { useRegisterMutation } from '../../store/api/authApiSlice'
 import { BackMainPage } from '../back-main-page/BackMainPage'
 import { Faq } from '../faq/Faq'
 
@@ -28,34 +25,31 @@ interface IRegProps {
 
 export const Registration: FC<IRegProps> = ({ changeEmail, email }) => {
 	const navigate = useNavigate()
-	const dispatch = useDispatch()
-	const error = useSelector((state: RootState) => state.AuthReg.regData.error)
-	const { t, i18n } = useTranslation()
+	//const error = useSelector((state: RootState) => state.AuthReg.regData.error)
+	const [error, setError] = useState<IError | null>(null)
+
+	const { t } = useTranslation()
 	const [check, setCheck] = useState(false)
 	const [confirmPassword, setConfirmPassword] = useState(false)
 
-	useEffect(() => {
-		clearRegistrationErrors(dispatch)
-	}, [i18n.language])
+	const [register] = useRegisterMutation()
 
 	const onFinish = async (values: IRegForm) => {
-		if (confirmPassword) {
-			if (values.email || values.name || values.password) {
-				const response = await registerUser(
-					{
-						lastName: values.surname,
-						password: values.password,
-						firstName: values.name,
-						email: values.email,
-						agreement: 'true'
-					},
-					dispatch
-				)
+		try {
+			const res: any = await register({
+				lastName: values.surname,
+				password: values.password,
+				firstName: values.name,
+				email: values.email,
+				agreement: 'true'
+			})
+			console.log(res)
 
-				if (response === 200) {
-					navigate('/registration/checkingEmail')
-				}
-			}
+			res?.error?.status
+				? setError(res.error.data)
+				: navigate('/registration/checkingEmail')
+		} catch (e) {
+			console.error(e)
 		}
 	}
 

@@ -18,12 +18,13 @@ export const Inputs: FC<IInputsProps> = ({ error }) => {
 				name="email"
 				style={{ marginBottom: 30 }}
 				validateStatus={error !== null ? 'error' : undefined}
-				help={error !== null && <div>{t('LoginError')}</div>}
+				help={error !== null && <div>{error.error}</div>}
 			>
 				<Input
 					className="email"
 					maxLength={100}
 					type="text"
+					required
 					size="large"
 					placeholder="Email/Login"
 				/>
@@ -33,11 +34,12 @@ export const Inputs: FC<IInputsProps> = ({ error }) => {
 				className={styles.input}
 				style={{ marginBottom: 30 }}
 				validateStatus={error !== null ? 'error' : undefined}
-				help={error !== null && <div>{t('LoginError')}</div>}
+				help={error !== null && <div>{error.error}</div>}
 			>
 				<Input.Password
 					className={styles.password}
 					size="large"
+					required
 					maxLength={100}
 					type="password"
 					placeholder={t('password')}

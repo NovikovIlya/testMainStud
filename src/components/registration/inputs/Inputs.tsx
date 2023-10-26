@@ -41,7 +41,7 @@ export const Inputs: FC<IInputsProps> = ({ error, changeEmail, email }) => {
 					)
 				}
 			>
-				<Input size="large" placeholder={t('surname')} />
+				<Input size="large" placeholder={t('surname')} required />
 			</Form.Item>
 			<Form.Item
 				name="name"
@@ -67,7 +67,7 @@ export const Inputs: FC<IInputsProps> = ({ error, changeEmail, email }) => {
 					)
 				}
 			>
-				<Input size="large" placeholder={t('name')} />
+				<Input size="large" placeholder={t('name')} required />
 			</Form.Item>
 			<Form.Item
 				name="email"
@@ -98,6 +98,7 @@ export const Inputs: FC<IInputsProps> = ({ error, changeEmail, email }) => {
 				<Input
 					size="large"
 					placeholder={t('email')}
+					required
 					onChange={e => changeEmail(e.target.value)}
 				/>
 			</Form.Item>

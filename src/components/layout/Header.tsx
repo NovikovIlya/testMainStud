@@ -147,12 +147,12 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 				type === 'main' ? 'bg-white' : 'bg-[#65A1FA]'
 			)}
 		>
-			<div className="w-screen flex h-full justify-between px-8">
-				<div className="flex gap-8 items-center">
+			<div className="w-screen flex h-full justify-between px-8 max-sm:px-5">
+				<div className="flex gap-8 max-sm:gap-2 items-center">
 					<Button
 						onClick={showDrawer}
 						className={clsx(
-							'h-[40px] rounded-full  font-semibold bg-transparent border-2 flex items-center justify-center w-[130px] ',
+							'py-2.5 rounded-full  font-semibold bg-transparent border-2 flex items-center justify-center ',
 							type === 'main'
 								? 'text-[#1F5CB8] border-[#1F5CB8] '
 								: 'text-white border-white hover:!border-white hover:!text-white'
@@ -160,7 +160,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						type="default"
 						icon={<MenuSvg white={type === 'service'} />}
 					>
-						<span className="pl-2">{t('services')}</span>
+						<span className="pl-2 max-md:!hidden">{t('services')}</span>
 					</Button>
 					<div className="flex items-center gap-5">
 						<LogoIasSvg white={type === 'service'} />
@@ -168,8 +168,8 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						<div className="text-white text-base font-bold">{service}</div>
 					</div>
 				</div>
-				<div className="flex gap-5 items-center h-full">
-					<div className="flex h-full items-center">
+				<div className="flex gap-5 items-center h-full max-[1000px]:gap-0 w-fit justify-center">
+					<div className="flex h-full items-center max-[1000px]:hidden">
 						<div
 							className={clsx(
 								'h-full flex items-center px-3 cursor-pointer ',
@@ -215,7 +215,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						defaultValue={i18n.language}
 						style={{ width: 100 }}
 						bordered={false}
-						className="!text-white"
+						className="max-sm:hidden"
 						dropdownStyle={{ color: 'white' }}
 						popupClassName="text-white"
 						onChange={e => changeLanguage(e.valueOf())}
@@ -226,7 +226,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 					/>
 					<div
 						className={clsx(
-							'h-full flex items-center cursor-pointer',
+							'h-full flex items-center cursor-pointer w-fit',
 							type === 'main' && openMenu && 'bg-[#E3E8ED]',
 							type !== 'main' && openMenu && 'bg-[#3073D7]',
 							type === 'main' ? 'hover:bg-[#E3E8ED]' : 'target:bg-[#3073D7]'
@@ -239,10 +239,13 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 							trigger={['click']}
 							className="cursor-pointer h-full  box-border"
 						>
-							<Space className="px-10">
+							<Space className="px-10 max-sm:px-5 max-[455px]:!gap-0 gap-2">
 								<PersonSvg white={type === 'service'} />
 								<div
-									className={clsx('h-full', type === 'service' && 'text-white')}
+									className={clsx(
+										'h-full max-[455px]:hidden',
+										type === 'service' && 'text-white'
+									)}
 								>
 									<div className="font-bold text-sm truncate max-w-[120px]">
 										{`${user?.lastname} ${user?.firstname.charAt(0)}. ${

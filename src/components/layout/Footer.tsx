@@ -12,8 +12,8 @@ import {
 export const Footer = () => {
 	return (
 		<footer className="w-full min-h-[400px] bg-[#212121] text-white text-base">
-			<div className="flex justify-around my-[100px] ">
-				<div className='flex flex-col justify-center'>
+			<div className="flex justify-around my-[100px] max-md:flex-col max-md:px-10 max-md:pt-10">
+				<div className="flex flex-col justify-center ">
 					<LogoSvg />
 					<div className=" flex flex-col mt-10 mb-5">
 						<span>

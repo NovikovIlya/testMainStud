@@ -5,6 +5,7 @@ import {
 	createApi,
 	fetchBaseQuery
 } from '@reduxjs/toolkit/dist/query/react'
+import i18next from 'i18next'
 
 import { logOut, setCredentials } from '../reducers/authSlice'
 
@@ -16,6 +17,7 @@ const baseQuery = fetchBaseQuery({
 		if (token) {
 			headers.set('authorization', `Bearer ${token.replaceAll('"', '')}`)
 		}
+		headers.set('Accept-Language', i18next.language)
 		return headers
 	}
 })

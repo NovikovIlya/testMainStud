@@ -61,7 +61,7 @@ export const Document = () => {
 
 	const [IsEmpty, changeIsEmpty] = useState<boolean>(false)
 	const role = useAppSelector(state => state.auth.user?.roles)
-	const { data: documents } = useGetMyDocumentsQuery(i18n.language)
+	const { data: documents } = useGetMyDocumentsQuery()
 	const { data: levelDocuments } = useGetDocumentsQuery(i18n.language)
 
 	if (documents !== undefined) dispatch(allData(documents))
@@ -112,6 +112,9 @@ export const Document = () => {
 					<Typography.Text>{t('documentType')}</Typography.Text>
 					<Select
 						onChange={e => {
+							console.log(e, '======================e')
+							console.log(documentData.documentTypeId)
+
 							dispatch(documentTypeId(e))
 						}}
 						disabled={isStudent}
@@ -171,7 +174,7 @@ export const Document = () => {
 								placeholder={t('date')}
 								format={'DD.MM.YYYY'}
 								value={
-									documentData.dateIssue !== ''
+									documentData.dateIssue
 										? dayjs(
 												documentData.dateIssue.split('-').reverse().join('.'),
 												'DD.MM.YYYY'

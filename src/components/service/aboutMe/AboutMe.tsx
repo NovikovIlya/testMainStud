@@ -37,7 +37,7 @@ export const AboutMe = () => {
 	const email = useAppSelector(state => state.auth.user?.email)
 	const { data: me } = useGetInfoUserQuery()
 	const [IsError, setError] = useState<boolean>(false)
-	const { data: countries } = useGetCountriesQuery(i18n.language)
+	const { data: countries, isLoading } = useGetCountriesQuery(i18n.language)
 	if (me !== undefined) dispatch(allData(me))
 	const formData = useAppSelector(state => state.Form)
 

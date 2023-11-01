@@ -80,7 +80,6 @@ const DropDrag = () => {
 			</div>
 		)
 	})
-	console.log(windowSize, 'windowSize=======================')
 
 	return (
 		<div className=" mt-[40px] w-[min(1600px, 100%)] mb-[100px]">

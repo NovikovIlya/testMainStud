@@ -59,9 +59,7 @@ export const ParentForm = () => {
 		(state: RootState) => state.CountriesEducation.documents
 	)
 
-	const { data: documents } = useGetMyDocumentsQuery(i18n.language, {
-		skip: SkipCountriesQuery
-	})
+	const { data: documents } = useGetMyDocumentsQuery()
 
 	useEffect(() => {
 		if (updateItems) {

@@ -4,7 +4,22 @@ export interface InitialState {
 	user: User | null
 	edit: boolean
 }
-
+export type Documentation = {
+	links: {
+		additionalProp1: Template[]
+		additionalProp2: Template[]
+		additionalProp3: Template[]
+	}
+}
+export type Template = {
+	documentName: string
+	link: string
+}
+export type Email = {
+	id: number
+	email: string
+	verified: boolean
+}
 export interface User {
 	username: string
 	firstname: string

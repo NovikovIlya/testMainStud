@@ -5,12 +5,9 @@ import { apiSlice } from './apiSlice'
 
 export const formApi = apiSlice.injectEndpoints({
 	endpoints: build => ({
-		getMyDocuments: build.query<IDocument, string>({
-			query: language => ({
-				url: 'user-api/users/me/document',
-				headers: {
-					'Accept-Language': language
-				}
+		getMyDocuments: build.query<IDocument, void>({
+			query: () => ({
+				url: 'user-api/users/me/document'
 			})
 		}),
 		getDocuments: build.query<IDocumentsRequest[], string>({

@@ -40,18 +40,19 @@ const App = () => {
 							path="/registration/checkingEmail"
 							element={<CheckEmail email={email} />}
 						/>
+						<Route path="/api/register/approve/*" element={<ApproveEmail />} />
 					</Route>
 					<Route element={<RequireAuth />}>
 						<Route path="/user/*" element={<User />} />
-						<Route path="/api/register/approve" element={<ApproveEmail />} />
 						<Route path="/infoUser" element={<InfoUser />} />
 						<Route path="/form" element={<FormModal />} />
 						<Route path="/education" element={<EducationForm />} />
 						<Route path="/documents" element={<DocumentForm />} />
 						<Route path="/work" element={<WorkForm />} />
 						<Route path="/parent" element={<ParentForm />} />
-
 						<Route path="/services/*" element={<Service />} />
+
+						<Route path="/*" element={null} />
 					</Route>
 				</Routes>
 			</ConfigProvider>

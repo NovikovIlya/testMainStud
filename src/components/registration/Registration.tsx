@@ -25,7 +25,6 @@ interface IRegProps {
 
 export const Registration: FC<IRegProps> = ({ changeEmail, email }) => {
 	const navigate = useNavigate()
-	//const error = useSelector((state: RootState) => state.AuthReg.regData.error)
 	const [error, setError] = useState<IError | null>(null)
 
 	const { t } = useTranslation()
@@ -36,19 +35,16 @@ export const Registration: FC<IRegProps> = ({ changeEmail, email }) => {
 
 	const onFinish = async (values: IRegForm) => {
 		try {
-			const res: any = await register({
+			const regData = await register({
 				lastName: values.surname,
 				password: values.password,
 				firstName: values.name,
 				email: values.email,
 				agreement: 'true'
-			})
-			console.log(res)
-
-			res?.error?.status
-				? setError(res.error.data)
-				: navigate('/registration/checkingEmail')
-		} catch (e) {
+			}).unwrap()
+			navigate('/registration/checkingEmail')
+		} catch (e: any) {
+			setError(e.data)
 			console.error(e)
 		}
 	}

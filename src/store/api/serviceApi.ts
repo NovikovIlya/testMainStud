@@ -1,3 +1,4 @@
+import { IApproveRequest } from '../../api/types'
 import {
 	Documentation,
 	Email,
@@ -15,10 +16,10 @@ export const serviceApi = apiSlice.injectEndpoints({
 			query: () => `schedule-api/schedule`
 		}),
 		getExamsSchedule: builder.query<Exam[], void>({
-			query: () => '/study-plan-api/studyplan/examsSchedule'
+			query: () => 'study-plan-api/studyplan/examsSchedule'
 		}),
 		getStudyPlan: builder.query<ICalendar, void>({
-			query: () => '/study-plan-api/studyplan'
+			query: () => 'study-plan-api/studyplan'
 		}),
 		getEmail: builder.query<Email, void>({
 			query: () => 'user-api/settings/emails'
@@ -34,6 +35,33 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		getDocumentation: builder.query<Documentation, void>({
 			query: () => 'unified-center-api/documentation'
+		}),
+		changePassword: builder.mutation({
+			query: ({
+				newPassword,
+				oldPassword
+			}: {
+				oldPassword: string
+				newPassword: string
+			}) => {
+				return {
+					url: 'user-api/settings/password',
+					body: {
+						newPassword,
+						oldPassword
+					},
+					method: 'PUT'
+				}
+			}
+		}),
+		approveEmail: builder.mutation({
+			query: (hash: IApproveRequest) => {
+				return {
+					url: 'user-api/register/approve',
+					body: hash,
+					method: 'POST'
+				}
+			}
 		}),
 		changeEmail: builder.mutation({
 			query: email => {
@@ -65,5 +93,6 @@ export const serviceApi = apiSlice.injectEndpoints({
 export const {
 	useGetScheduleQuery,
 	useGetExamsScheduleQuery,
-	useGetStudyPlanQuery
+	useGetStudyPlanQuery,
+	useApproveEmailMutation
 } = serviceApi

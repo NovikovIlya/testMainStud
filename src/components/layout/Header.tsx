@@ -213,9 +213,12 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 					</div>
 					<Select
 						defaultValue={i18n.language}
-						style={{ width: 100 }}
+						style={{ width: 70 }}
 						bordered={false}
-						className="max-sm:hidden"
+						className={clsx(
+							'max-sm:hidden ',
+							type === 'service' && 'text-white'
+						)}
 						dropdownStyle={{ color: 'white' }}
 						popupClassName="text-white"
 						onChange={e => changeLanguage(e.valueOf())}

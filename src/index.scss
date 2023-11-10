@@ -111,3 +111,7 @@ body {
 		transform: rotateX(35deg) rotateY(55deg) rotateZ(360deg);
 	}
 }
+.ant-select-single .ant-select-selector,
+.ant-select .ant-select-arrow {
+	color: unset;
+}

@@ -112,9 +112,6 @@ export const Document = () => {
 					<Typography.Text>{t('documentType')}</Typography.Text>
 					<Select
 						onChange={e => {
-							console.log(e, '======================e')
-							console.log(documentData.documentTypeId)
-
 							dispatch(documentTypeId(e))
 						}}
 						disabled={isStudent}

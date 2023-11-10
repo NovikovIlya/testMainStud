@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { ElectronicBookSvg } from '../../../assets/svg/ElectronicBookSvg'
 import { TeachersWorkSvg } from '../../../assets/svg/TeachersWorkSvg'
 
+import { AssessmentTeachers } from './AssessmentTeachers'
 import { Estimation } from './Estimation'
 
 const navList = [
@@ -50,6 +51,7 @@ export const NavElectronicBook = () => {
 			</div>
 			<div className="bg-[#F5F8FB] w-full">
 				{pathname === navList[0].id && <Estimation />}
+				{pathname === navList[1].id && <AssessmentTeachers />}
 			</div>
 		</>
 	)

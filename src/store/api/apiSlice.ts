@@ -33,7 +33,7 @@ const baseQueryWithReAuth = async (
 		console.log('sending refresh token')
 		const refreshResult = await baseQuery(
 			{
-				url: 'user-api/toke/refresh',
+				url: 'user-api/token/refresh',
 				body: {
 					refreshToken: localStorage.getItem('refresh')?.replaceAll('"', '')
 				},

@@ -13,17 +13,15 @@ export const Buttons = ({
 }) => {
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
-	const userRole = useAppSelector(state => state.InfoUser.role)
+	const userRole = useAppSelector(state => state.auth.user?.roles[0].type)
 	const data = useAppSelector(state => state.Form)
 	const { t } = useTranslation()
 	const handleCancel = () => {
 		navigate('/infoUser')
 	}
 	const handleOk = async () => {
-		if (await IsOK()) {
-			if (userRole === 'GUEST') navigate('/user')
-			else navigate('/documents')
-		}
+		if (userRole === 'GUEST') navigate('/user')
+		else navigate('/documents')
 	}
 	const IsOK = async () => {
 		const IsCorrectNS = [data.name, data.surName].some(el =>

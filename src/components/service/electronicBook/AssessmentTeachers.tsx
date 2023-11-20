@@ -2,6 +2,7 @@ import { AntDesignOutlined } from '@ant-design/icons'
 import { Avatar, Button, Card, Rate, Select, Space, Typography } from 'antd'
 
 export const AssessmentTeachers = () => {
+	console.log('5' + 2, '=====================')
 	return (
 		<div className="mt-14 mx-14">
 			<div className="mb-14 text-[28px]">Оценка работы преподавателей</div>

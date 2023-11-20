@@ -1,15 +1,16 @@
 import { ConfigProvider, DatePicker, Input, Select } from 'antd'
+import PhoneInput from 'antd-phone-input'
+import FormItem from 'antd/es/form/FormItem'
 import enPicker from 'antd/locale/en_US'
 import ruPicker from 'antd/locale/ru_RU'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import 'dayjs/locale/en'
 import 'dayjs/locale/ru'
-import { FC, useEffect, useState } from 'react'
+import { FC, useLayoutEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 
-import { IUserData } from '../../../../api/types'
 import { RootState, useAppSelector } from '../../../../store'
 import { useGetCountriesQuery } from '../../../../store/api/utilsApi'
 import { addCountries } from '../../../../store/reducers/FormReducers/CountriesEducationReducer'
@@ -35,21 +36,23 @@ export const Inputs: FC<IInputProps> = ({ IsEmpty }) => {
 	const { data: countries } = useGetCountriesQuery(i18n.language, {
 		skip: SkipCountriesQuery
 	})
-	const user = useAppSelector(state => state.Profile.profileData.CurrentData)
+	const user = useAppSelector(state => state.auth.user)
 	const countryStorage = useAppSelector(
 		(state: RootState) => state.CountriesEducation.countries
 	)
-
-	const userData: IUserData = JSON.parse(localStorage.getItem('userInfo') || '')
-
-	const InitDefaultValues = (infoUser: IUserData) => {
-		infoUser.birthday !== '' && dispatch(birthDay(infoUser.birthday))
-		infoUser.firstname !== '' && dispatch(name(infoUser.firstname))
-		infoUser.lastname !== '' && dispatch(surName(infoUser.lastname))
-		infoUser.middlename !== '' && dispatch(patronymic(infoUser.middlename))
+	//@ts-ignore
+	const validator = (_, { valid }) => {
+		if (valid()) return Promise.resolve()
+		return Promise.reject('Invalid phone number')
 	}
+	useLayoutEffect(() => {
+		if (user) {
+			dispatch(surName(user.firstname))
+			dispatch(name(user.lastname))
+		}
+	}, [])
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		if (countryStorage) {
 			changeQuerySkip(true)
 		} else {
@@ -57,7 +60,7 @@ export const Inputs: FC<IInputProps> = ({ IsEmpty }) => {
 		}
 	}, [countryStorage])
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		if (countries) {
 			dispatch(addCountries(countries))
 		}
@@ -71,10 +74,9 @@ export const Inputs: FC<IInputProps> = ({ IsEmpty }) => {
 					id="surName"
 					size="large"
 					type="text"
-					placeholder={user?.firstname}
 					maxLength={200}
 					className={clsx(
-						'shadow transition-all duration-500',
+						' transition-all duration-500',
 						IsEmpty && !/^\p{L}+$/u.test(info.surName) && 'border-rose-500'
 					)}
 					onChange={e => {
@@ -93,10 +95,9 @@ export const Inputs: FC<IInputProps> = ({ IsEmpty }) => {
 				<Input
 					size="large"
 					type="text"
-					placeholder={user?.lastname}
 					maxLength={200}
 					className={clsx(
-						'shadow transition-all duration-500',
+						' transition-all duration-500',
 						IsEmpty && !/^\p{L}+$/u.test(info.name) && 'border-rose-500'
 					)}
 					onChange={e => {
@@ -117,7 +118,7 @@ export const Inputs: FC<IInputProps> = ({ IsEmpty }) => {
 					placeholder={t('middleName')}
 					maxLength={200}
 					className={clsx(
-						'shadow transition-all duration-500',
+						' transition-all duration-500',
 						IsEmpty &&
 							!/^\p{L}+$/u.test(info.patronymic) &&
 							info.patronymic !== '' &&
@@ -140,7 +141,7 @@ export const Inputs: FC<IInputProps> = ({ IsEmpty }) => {
 				<ConfigProvider locale={i18n.language === 'ru' ? ruPicker : enPicker}>
 					<DatePicker
 						className={clsx(
-							'block shadow transition-all duration-500',
+							'block  transition-all duration-500',
 							IsEmpty && info.birthDay === '' && 'border-rose-500'
 						)}
 						onChange={e =>
@@ -167,7 +168,7 @@ export const Inputs: FC<IInputProps> = ({ IsEmpty }) => {
 			<span className="text-sm">{t('citizen')}</span>
 
 			<Select
-				className="mt-2 mb-4 block shadow transition-all duration-500"
+				className="mt-2 mb-4 block  transition-all duration-500"
 				size="large"
 				onChange={e => {
 					dispatch(country(e))
@@ -182,28 +183,16 @@ export const Inputs: FC<IInputProps> = ({ IsEmpty }) => {
 
 			<span className="text-sm">{t('telephone')}</span>
 			<div className="mt-2 mb-4">
-				<Input
-					size="large"
-					type="text"
-					maxLength={16}
-					placeholder={'+7 999 898-88-00'}
-					className={clsx(
-						'shadow transition-all duration-500',
-						IsEmpty &&
-							!/^\+[0-9]\s[0-9]{3}\s[0-9]{3}\-[0-9]{2}\-[0-9]{2}$/.test(
-								info.phone
-							) &&
-							'border-rose-500'
-					)}
-					onChange={e => {
-						dispatch(phone(e.target.value))
-					}}
-					value={info.phone}
-				/>
-				{IsEmpty &&
-					!/^\+[0-9]\s[0-9]{3}\s[0-9]{3}\-[0-9]{2}\-[0-9]{2}$/.test(
-						info.phone
-					) && <span className="text-red-500 text-sm">{t('BadPhone')}</span>}
+				<FormItem name="phone" rules={[{ validator }]}>
+					<PhoneInput
+						size="large"
+						enableSearch
+						onChange={e => {
+							if (e.phoneNumber) dispatch(phone(e.phoneNumber.toString()))
+						}}
+						value={info.phone}
+					/>
+				</FormItem>
 			</div>
 		</div>
 	)

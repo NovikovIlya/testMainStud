@@ -4,7 +4,6 @@ import request from 'axios'
 import {
 	addEducation,
 	addJobItem,
-	approve,
 	deleteEducation,
 	deleteJobItem,
 	deleteParent,
@@ -47,29 +46,6 @@ import { loginSuccess } from '../reducers/AuthRegReducer'
 import { ProfileSuccess } from '../reducers/ProfileReducer'
 
 import { IWorkState } from './../../api/types'
-
-export const approveEmail = async (
-	data: IApproveRequest,
-	dispatch: Dispatch
-): Promise<number> => {
-	try {
-		const res = await approve(data)
-		dispatch(
-			loginSuccess({
-				accessToken: res.data.accessToken,
-				refreshToken: res.data.refreshToken
-			})
-		)
-		localStorage.setItem('userInfo', JSON.stringify(res.data.user))
-		dispatch(ProfileSuccess(res.data.user))
-		return 200
-	} catch (e) {
-		if (request.isAxiosError(e) && e.response) {
-			console.log(e.response?.data as IError)
-		}
-	}
-	return 400
-}
 
 export const setRole = async (data: IRole): Promise<number> => {
 	try {

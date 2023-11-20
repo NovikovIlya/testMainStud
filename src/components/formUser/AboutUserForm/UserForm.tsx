@@ -20,19 +20,6 @@ export const FormModal = () => {
 
 	const { t, i18n } = useTranslation()
 
-	const IsNotGuest = async () => {
-		const response = await getAbUsForm()
-		if (response && userRole !== 'GUEST') {
-			navigate('/user')
-		} else {
-			response && dispatch(allData(response))
-		}
-	}
-
-	useEffect(() => {
-		IsNotGuest()
-	}, [])
-
 	useEffect(() => {
 		changeIsEmpty(false)
 	}, [i18n.language])

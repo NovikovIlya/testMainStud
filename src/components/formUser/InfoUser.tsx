@@ -11,24 +11,20 @@ import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import { useAppSelector } from '../../store'
-import { setRole } from '../../store/creators/MainCreators'
-import { putRole } from '../../store/reducers/FormReducers/InfoUserReducer'
+import { setRole } from '../../store/reducers/authSlice'
 
 import { ImagesLayout } from './ImagesLayout'
 
 export const InfoUser = () => {
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
+
 	const roleState = useAppSelector(state => state.InfoUser?.role)
+	const role = useAppSelector(state => state.auth.user?.roles)
+
 	const { t } = useTranslation()
 	const handleOk = async () => {
-		const response = await setRole({ role: roleState })
-		if (response === 200) {
-			dispatch(putRole(roleState))
-			navigate('/form')
-		} else {
-			navigate('/')
-		}
+		navigate('/form')
 	}
 	const handleSkip = () => {
 		navigate('/user')
@@ -53,7 +49,7 @@ export const InfoUser = () => {
 						className="p-0 mt-5"
 						onChange={e => {
 							//@ts-ignore
-							dispatch(putRole(e.target.id))
+							dispatch(setRole(e.target.id))
 						}}
 					>
 						<ListItem className="p-0">
@@ -63,7 +59,7 @@ export const InfoUser = () => {
 							>
 								<ListItemPrefix className="mr-3">
 									<Radio
-										crossOrigin
+										crossOrigin="true"
 										name="vertical-list"
 										id="GUEST"
 										ripple={false}
@@ -91,7 +87,7 @@ export const InfoUser = () => {
 							>
 								<ListItemPrefix className="mr-3">
 									<Radio
-										crossOrigin
+										crossOrigin="true"
 										name="vertical-list"
 										id="SCHOOL"
 										ripple={false}
@@ -119,7 +115,7 @@ export const InfoUser = () => {
 							>
 								<ListItemPrefix className="mr-3">
 									<Radio
-										crossOrigin
+										crossOrigin="true"
 										name="vertical-list"
 										id="ABIT"
 										ripple={false}
@@ -150,7 +146,7 @@ export const InfoUser = () => {
 										name="vertical-list"
 										id="ATTEND"
 										ripple={false}
-										crossOrigin
+										crossOrigin="true"
 										className="hover:before:opacity-0 mt-1"
 										containerProps={{
 											className: 'p-0'
@@ -177,7 +173,7 @@ export const InfoUser = () => {
 									<Radio
 										name="vertical-list"
 										id="SEEKER"
-										crossOrigin
+										crossOrigin="true"
 										ripple={false}
 										className="hover:before:opacity-0 mt-1"
 										containerProps={{

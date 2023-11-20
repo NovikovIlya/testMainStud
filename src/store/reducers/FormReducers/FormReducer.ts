@@ -10,7 +10,7 @@ const initialState: formItem = {
 	birthDay: '',
 	gender: 'M',
 	phone: '',
-	countryId: 1
+	countryId: 184
 }
 export const FormReducer = createSlice({
 	name: 'Form',

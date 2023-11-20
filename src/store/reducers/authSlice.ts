@@ -28,11 +28,14 @@ const authSlice = createSlice({
 		},
 		setEdit: state => {
 			state.edit = !state.edit
+		},
+		setRole: (state, action: PayloadAction<string>) => {
+			if (state.user) state.user.roles[0].type = action.payload
 		}
 	}
 })
 
-export const { logOut, setCredentials, setEdit } = authSlice.actions
+export const { logOut, setCredentials, setEdit, setRole } = authSlice.actions
 
 export default authSlice.reducer
 

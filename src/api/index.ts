@@ -40,9 +40,6 @@ export const refresh = (
 export const register = (params: IRegRequest): AxiosPromise<number> =>
 	axiosInstance.post(endpoints.REG.REGISTER, params)
 
-export const approve = (params: IApproveRequest): AxiosPromise<IAuthSuccess> =>
-	axiosInstance.post(endpoints.REG.APPROVE, params)
-
 export const job = (params: IWorkHistoryRequest) =>
 	axiosInstance.post(endpoints.USER.INFO.JOB.JOB, params)
 

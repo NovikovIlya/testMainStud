@@ -19,6 +19,7 @@
 		"@types/react-grid-layout": "^1.3.2",
 		"@types/redux-logger": "^3.0.9",
 		"antd": "^5.2.2",
+		"antd-phone-input": "^0.3.1",
 		"autoprefixer": "^10.4.13",
 		"axios": "^1.3.4",
 		"classnames": "^2.3.2",

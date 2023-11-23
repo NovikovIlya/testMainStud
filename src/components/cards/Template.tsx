@@ -60,10 +60,11 @@ export const TemplateCard = ({
 				<Button
 					type={buttonType}
 					className="rounded-full w-[200px] h-[50px] max-[874px]:hidden"
+					onClick={() => {
+						window.open(href)
+					}}
 				>
-					<a href={href} target="_blank">
-						{buttonText}
-					</a>
+					{buttonText}
 				</Button>
 			) : (
 				<Button

@@ -176,7 +176,7 @@ export const AboutMe = () => {
 						disabled={isStudent}
 						placeholder={t('email')}
 						size="large"
-						className="w-[624px]  "
+						className="w-[624px]"
 						value={email !== '' ? email : ''}
 					/>
 				</Space>

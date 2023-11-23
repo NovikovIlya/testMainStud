@@ -222,17 +222,17 @@ export interface IApproveRequest {
 }
 
 export type addressItem = {
-	countryId: number | null
-	city: string | null
-	street: string | null
-	house: string | null
-	apartment: string | null
-	index: string | null
+	countryId: number
+	city: string
+	street: string
+	house: string
+	apartment: string
+	index: string
 }
 
 export type IAddress = {
 	registrationAddress: addressItem
-	residenceAddress: null | addressItem
+	residenceAddress: addressItem
 }
 
 export type IAddressRequest = {

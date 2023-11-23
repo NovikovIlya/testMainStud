@@ -34,10 +34,7 @@ export const DocumentForm = () => {
 	const dispatch = useDispatch()
 	const userRole = useAppSelector(state => state.auth.user?.roles[0].type)
 	const { data: documents } = useGetAllDocumentsQuery()
-	console.log(documents, 'documents')
-
 	const { data: getDocument } = useGetMyDocumentsQuery()
-	console.log(getDocument, 'getDocument')
 
 	if (getDocument !== undefined) dispatch(allData(getDocument))
 	const documentData = useAppSelector(state => state.Document)

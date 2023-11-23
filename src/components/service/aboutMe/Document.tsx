@@ -15,16 +15,16 @@ import type { UploadProps } from 'antd'
 import ruPicker from 'antd/locale/ru_RU'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 
-import { RootState, useAppSelector } from '../../../store'
+import { useAppSelector } from '../../../store'
 import {
 	useGetAllDocumentsQuery,
-	useGetMyDocumentsQuery
+	useGetMyDocumentsQuery,
+	usePostDocumentMutation
 } from '../../../store/api/formApi'
-import { postDocumentItemRequest } from '../../../store/creators/MainCreators'
 import {
 	allData,
 	dateIssue,
@@ -36,6 +36,8 @@ import {
 	passportSeries,
 	snils
 } from '../../../store/reducers/FormReducers/DocumentReducer'
+
+import { SkeletonPage } from './Skeleton'
 
 const props: UploadProps = {
 	name: 'file',
@@ -59,206 +61,186 @@ export const Document = () => {
 	dayjs.locale(i18n.language)
 	const dispatch = useDispatch()
 
-	const [IsEmpty, changeIsEmpty] = useState<boolean>(false)
-	const role = useAppSelector(state => state.auth.user?.roles)
-	const { data: documents } = useGetMyDocumentsQuery()
-	const { data: levelDocuments } = useGetAllDocumentsQuery()
+	const [isEdit, setIsEdit] = useState(false)
+	const role = useAppSelector(state => state.auth.user?.roles[0].type)
+	const {
+		data: documents,
+		refetch,
+		isLoading: isLoadingDocuments
+	} = useGetMyDocumentsQuery()
+	const { data: levelDocuments, isLoading: isLoadingLevelDocs } =
+		useGetAllDocumentsQuery()
+	const [postDocument] = usePostDocumentMutation()
 
-	if (documents !== undefined) dispatch(allData(documents))
-	const documentData = useAppSelector((state: RootState) => state.Document)
+	const documentData = useAppSelector(state => state.Document)
 
-	const handleAddDocument = async () => {
-		const IsCorrectPasswordData = [
-			documentData.passportNumber,
-			documentData.passportSeries
-		].some(el => /^[0-9]{4}$/.test(el))
-
-		const IsCorrectSNILS = /^[0-9]{3}\-[0-9]{3}\-[0-9]{3} [0-9]{2}$/.test(
-			documentData.snils
-		)
-		const IsCorrectDivisionCode = /^[0-9]{3}\-[0-9]{3}$/.test(
-			documentData.divisionCode
-		)
-		const IsCorrectINN = /^[0-9]{12}$/.test(documentData.inn)
-		const IsCorrectWhomIssued =
-			!/\s\s/.test(documentData.issuedBy) &&
-			/^[\p{L}\s]+$/u.test(documentData.issuedBy)
-		if (
-			!IsCorrectPasswordData ||
-			!IsCorrectSNILS ||
-			!IsCorrectINN ||
-			!IsCorrectDivisionCode ||
-			documentData.dateIssue === '' ||
-			!IsCorrectWhomIssued
-		) {
-			changeIsEmpty(true)
-			return false
-		}
-		const response = await postDocumentItemRequest(documentData)
-		if (response === 200) changeIsEmpty(false)
-		else {
-			console.log('403')
-		}
+	const onSubmit = () => {
+		postDocument(documentData)
+		setIsEdit(false)
 	}
-	if (!role) return <></>
-	const isStudent = role[0].type === 'STUD'
-
+	useEffect(() => {
+		refetch()
+		documents && dispatch(allData(documents))
+	}, [])
+	const isStudent = role === 'STUD'
+	if (isLoadingDocuments || isLoadingLevelDocs) return <SkeletonPage />
 	return (
-		<div className="m-14 radio">
-			<Space direction="vertical" size={20}>
+		<div className="m-14 radio w-full">
+			<Space.Compact block direction="vertical" className="gap-5 max-w-2xl">
 				<Typography.Title level={3}>{t('documents')}</Typography.Title>
 
 				<Space direction="vertical" size={'small'}>
 					<Typography.Text>{t('documentType')}</Typography.Text>
-					<Select
-						onChange={e => {
-							dispatch(documentTypeId(e))
-						}}
-						disabled={isStudent}
-						placeholder={t('rf')}
-						size="large"
-						className="w-[624px]  rounded-lg"
-						options={
-							!levelDocuments
-								? []
-								: levelDocuments.map(el => ({ value: el.id, label: el.type }))
-						}
-						value={documentData.documentTypeId}
-					/>
+					{!isEdit ? (
+						<div className="bg-white p-2 h-10 rounded-md">
+							<Typography.Text>
+								{levelDocuments?.find(
+									el => el.id === documentData.documentTypeId
+								)?.type || '-'}
+							</Typography.Text>
+						</div>
+					) : (
+						<Select
+							onChange={e => {
+								dispatch(documentTypeId(e))
+							}}
+							placeholder={t('rf')}
+							size="large"
+							className="rounded-lg w-full"
+							options={
+								!levelDocuments
+									? []
+									: levelDocuments.map(el => ({ value: el.id, label: el.type }))
+							}
+							value={documentData.documentTypeId}
+						/>
+					)}
 				</Space>
 
 				<Typography.Text className="text-black text-sm font-bold">
 					{t('documentInfo')}
 				</Typography.Text>
 
-				<Space size={'large'}>
-					<Space direction="vertical" className="w-[300px]">
-						<Typography.Text>{t('divisionCode')}</Typography.Text>
-						<Input
-							disabled={isStudent}
-							placeholder={isStudent ? '' : '000-000'}
-							size="large"
-							value={documentData.divisionCode}
-							className={clsx(
-								' w-full',
-								IsEmpty &&
-									!/^[0-9]{3}\-[0-9]{3}$/.test(documentData.divisionCode) &&
-									'border-rose-500'
-							)}
-							maxLength={7}
-							onChange={e => dispatch(divisionCode(e.currentTarget.value))}
-						/>
-						{IsEmpty &&
-							!/^[0-9]{3}\-[0-9]{3}$/.test(documentData.divisionCode) && (
-								<span className="text-red-500 text-sm">
-									{t('BadDivisionCode')}
-								</span>
-							)}
-					</Space>
-					<Space direction="vertical" className="w-[300px]">
-						<Typography.Text>{t('whenIssued')}</Typography.Text>
-						<ConfigProvider locale={ruPicker}>
-							<DatePicker
-								disabled={isStudent}
-								className={clsx(
-									' w-full',
-									IsEmpty && documentData.dateIssue === '' && 'border-rose-500'
-								)}
-								onChange={e =>
-									dispatch(dateIssue(e == null ? '' : e?.format('YYYY-MM-DD')))
-								}
+				<Space.Compact block className="gap-3" size={'large'}>
+					<Space direction="vertical" className="w-full">
+						<Typography.Text className="whitespace-nowrap">
+							{t('divisionCode')}
+						</Typography.Text>
+						{!isEdit ? (
+							<div className="bg-white p-2 h-10 rounded-md">
+								<Typography.Text>
+									{documentData.divisionCode || '-'}
+								</Typography.Text>
+							</div>
+						) : (
+							<Input
+								placeholder={isStudent ? '' : '000-000'}
 								size="large"
-								placeholder={t('date')}
-								format={'DD.MM.YYYY'}
+								value={documentData.divisionCode}
+								className={clsx(' w-full !rounded-lg ')}
+								maxLength={7}
+								onChange={e => dispatch(divisionCode(e.currentTarget.value))}
+							/>
+						)}
+					</Space>
+					<Space direction="vertical" className="w-full">
+						<Typography.Text>{t('whenIssued')}</Typography.Text>
+						{!isEdit ? (
+							<div className="bg-white p-2 h-10 rounded-md">
+								<Typography.Text>
+									{documentData.dateIssue || '-'}
+								</Typography.Text>
+							</div>
+						) : (
+							<ConfigProvider locale={ruPicker}>
+								<DatePicker
+									className={clsx(' w-full !rounded-lg ')}
+									onChange={e =>
+										dispatch(
+											dateIssue(e == null ? '' : e?.format('YYYY-MM-DD'))
+										)
+									}
+									size="large"
+									placeholder={t('date')}
+									format={'DD.MM.YYYY'}
+									value={
+										documentData.dateIssue
+											? dayjs(
+													documentData.dateIssue.split('-').reverse().join('.'),
+													'DD.MM.YYYY'
+											  )
+											: null
+									}
+								/>
+							</ConfigProvider>
+						)}
+					</Space>
+				</Space.Compact>
+
+				<Space.Compact size={'large'} className="w-full gap-3">
+					<Space direction="vertical" className="w-full">
+						<Typography.Text>{t('series')}</Typography.Text>
+						{!isEdit ? (
+							<div className="bg-white p-2 h-10 rounded-md">
+								<Typography.Text>
+									{documentData.passportSeries || '-'}
+								</Typography.Text>
+							</div>
+						) : (
+							<Input
+								placeholder="0000"
+								size="large"
+								className={clsx('!rounded-lg  ')}
+								maxLength={4}
+								onChange={e => dispatch(passportSeries(e.target.value))}
 								value={
-									documentData.dateIssue
-										? dayjs(
-												documentData.dateIssue.split('-').reverse().join('.'),
-												'DD.MM.YYYY'
-										  )
-										: null
+									documentData.passportSeries !== ''
+										? documentData.passportSeries
+										: ''
 								}
 							/>
-						</ConfigProvider>
-						{IsEmpty && documentData.dateIssue === '' && (
-							<div className="text-red-500 text-sm">{t('DateError')}</div>
 						)}
 					</Space>
-				</Space>
-
-				<Space size={'large'}>
-					<Space direction="vertical" className="w-[300px]">
-						<Typography.Text>{t('series')}</Typography.Text>
-						<Input
-							disabled={isStudent}
-							placeholder="0000"
-							size="large"
-							className={clsx(
-								' ',
-								IsEmpty &&
-									!/^[0-9]{4}$/.test(documentData.passportSeries) &&
-									'border-rose-500'
-							)}
-							maxLength={4}
-							onChange={e => dispatch(passportSeries(e.target.value))}
-							value={
-								documentData.passportSeries !== ''
-									? documentData.passportSeries
-									: ''
-							}
-						/>
-						{IsEmpty && !/^[0-9]{4}$/.test(documentData.passportSeries) && (
-							<span className="text-red-500 text-sm">{t('BadPassport')}</span>
-						)}
-					</Space>
-					<Space direction="vertical" className="w-[300px]">
+					<Space direction="vertical" className="w-full">
 						<Typography.Text>{t('number')}</Typography.Text>
-						<Input
-							disabled={isStudent}
-							placeholder="0000"
-							size="large"
-							className={clsx(
-								'',
-								IsEmpty &&
-									!/^[0-9]{4}$/.test(documentData.passportNumber) &&
-									'border-rose-500'
-							)}
-							maxLength={4}
-							onChange={e => dispatch(passportNumber(e.target.value))}
-							value={
-								documentData.passportNumber !== ''
-									? documentData.passportNumber
-									: ''
-							}
-						/>
-						{IsEmpty && !/^[0-9]{4}$/.test(documentData.passportNumber) && (
-							<span className="text-red-500 text-sm">{t('BadPassport')}</span>
+						{!isEdit ? (
+							<div className="bg-white p-2 h-10 rounded-md">
+								<Typography.Text>
+									{documentData.passportNumber || '-'}
+								</Typography.Text>
+							</div>
+						) : (
+							<Input
+								placeholder="0000"
+								size="large"
+								className={clsx('!rounded-lg ')}
+								maxLength={4}
+								onChange={e => dispatch(passportNumber(e.target.value))}
+								value={
+									documentData.passportNumber !== ''
+										? documentData.passportNumber
+										: ''
+								}
+							/>
 						)}
 					</Space>
-				</Space>
+				</Space.Compact>
 
 				<Space direction="vertical" size={'small'} className="w-full ">
 					<Typography.Text>{t('issuedWhom')}</Typography.Text>
-					<Input
-						disabled={isStudent}
-						placeholder={t('location')}
-						size="large"
-						maxLength={200}
-						className={clsx(
-							'',
-							IsEmpty &&
-								(!/^[\p{L}\s]+$/u.test(documentData.issuedBy) ||
-									/\s\s/.test(documentData.issuedBy)) &&
-								'border-rose-500'
-						)}
-						onChange={e => dispatch(issuedBy(e.target.value))}
-						value={documentData.issuedBy !== '' ? documentData.issuedBy : ''}
-					/>
-					{IsEmpty &&
-						(!/^[\p{L}\s]+$/u.test(documentData.issuedBy) ||
-							/\s\s/.test(documentData.issuedBy)) && (
-							<span className="text-red-500 text-sm">{t('EmptyFolder')}</span>
-						)}
+					{!isEdit ? (
+						<div className="bg-white p-2 h-10 rounded-md">
+							<Typography.Text>{documentData.issuedBy || '-'}</Typography.Text>
+						</div>
+					) : (
+						<Input
+							placeholder={t('location')}
+							size="large"
+							maxLength={200}
+							onChange={e => dispatch(issuedBy(e.target.value))}
+							value={documentData.issuedBy !== '' ? documentData.issuedBy : ''}
+						/>
+					)}
 				</Space>
 
 				<Typography.Text className="text-black text-sm font-bold">
@@ -267,45 +249,34 @@ export const Document = () => {
 
 				<Space direction="vertical" size={'small'} className="w-full">
 					<Typography.Text>{t('snils')}</Typography.Text>
-					<Input
-						disabled={isStudent}
-						size="large"
-						placeholder="000-000-000 00"
-						className={clsx(
-							' ',
-							IsEmpty &&
-								!/^[0-9]{3}\-[0-9]{3}\-[0-9]{3} [0-9]{2}$/.test(
-									documentData.snils
-								) &&
-								'border-rose-500'
-						)}
-						maxLength={14}
-						onChange={e => dispatch(snils(e.target.value))}
-						value={documentData.snils}
-					/>
-					{IsEmpty &&
-						!/^[0-9]{3}\-[0-9]{3}\-[0-9]{3} [0-9]{2}$/.test(
-							documentData.snils
-						) && <span className="text-red-500 text-sm">{t('BadSnils')}</span>}
+					{!isEdit ? (
+						<div className="bg-white p-2 h-10 rounded-md">
+							<Typography.Text>{documentData.snils || '-'}</Typography.Text>
+						</div>
+					) : (
+						<Input
+							size="large"
+							placeholder="000-000-000 00"
+							maxLength={14}
+							onChange={e => dispatch(snils(e.target.value))}
+							value={documentData.snils}
+						/>
+					)}
 				</Space>
 				<Space direction="vertical" size={'small'} className="w-full">
 					<Typography.Text>{t('inn')}</Typography.Text>
-					<Input
-						disabled={isStudent}
-						size="large"
-						placeholder="000000000000"
-						maxLength={12}
-						className={clsx(
-							' ',
-							IsEmpty &&
-								!/^[0-9]{12}$/.test(documentData.inn) &&
-								'border-rose-500'
-						)}
-						onChange={e => dispatch(inn(e.target.value))}
-						value={documentData.inn}
-					/>
-					{IsEmpty && !/^[0-9]{12}$/.test(documentData.inn) && (
-						<span className="text-red-500 text-sm">{t('BadInn')}</span>
+					{!isEdit ? (
+						<div className="bg-white p-2 h-10 rounded-md">
+							<Typography.Text>{documentData.inn || '-'} </Typography.Text>
+						</div>
+					) : (
+						<Input
+							size="large"
+							placeholder="000000000000"
+							maxLength={12}
+							onChange={e => dispatch(inn(e.target.value))}
+							value={documentData.inn}
+						/>
 					)}
 				</Space>
 				<Space size={'small'} className={clsx(isStudent && 'hidden')}>
@@ -329,14 +300,23 @@ export const Document = () => {
 					size={'small'}
 					className={clsx('mt-4', isStudent && 'hidden')}
 				>
-					<Button
-						className="border-solid border-bluekfu border-[1px] text-bluekfu rounded-md"
-						onClick={handleAddDocument}
-					>
-						{t('edit')}
-					</Button>
+					{!isEdit ? (
+						<Button
+							className="border-solid border-bluekfu border-[1px] text-bluekfu rounded-md"
+							onClick={() => setIsEdit(true)}
+						>
+							{t('edit')}
+						</Button>
+					) : (
+						<Button
+							className="border-solid border-bluekfu border-[1px] text-bluekfu rounded-md"
+							onClick={onSubmit}
+						>
+							{t('save')}
+						</Button>
+					)}
 				</Space>
-			</Space>
+			</Space.Compact>
 		</div>
 	)
 }

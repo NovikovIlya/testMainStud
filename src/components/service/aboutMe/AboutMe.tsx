@@ -1,5 +1,6 @@
 import {
 	Button,
+	Card,
 	ConfigProvider,
 	DatePicker,
 	Input,
@@ -13,7 +14,7 @@ import FormItem from 'antd/es/form/FormItem'
 import ruPicker from 'antd/locale/ru_RU'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
-import { useEffect, useLayoutEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 
@@ -33,21 +34,29 @@ import {
 	phone,
 	surName
 } from '../../../store/reducers/FormReducers/FormReducer'
-import { validator } from '../../../utils/validPhone'
+
+import { SkeletonPage } from './Skeleton'
 
 export const AboutMe = () => {
 	const { t, i18n } = useTranslation()
-	const { data: countries } = useGetCountriesQuery(i18n.language)
+	const { data: countries, isLoading: isLoadingCountry } = useGetCountriesQuery(
+		i18n.language
+	)
 	const email = useAppSelector(state => state.auth.user?.email)
 	const dispatch = useDispatch()
-	const role = useAppSelector(state => state.auth.user?.roles)
+	const role = useAppSelector(state => state.auth.user?.roles[0].type)
 	const [postUser] = usePostInfoUserMutation()
-	const { data: userInfo, refetch } = useGetInfoUserQuery()
-
+	const {
+		data: userInfo,
+		refetch,
+		isLoading: isLoadingUser
+	} = useGetInfoUserQuery()
+	const [isEdit, setIsEdit] = useState(true)
 	const formData = useAppSelector(state => state.Form)
 	const user = useAppSelector(state => state.auth.user)
 	const onSubmit = () => {
 		postUser(formData)
+		setIsEdit(true)
 	}
 	useEffect(() => {
 		if (user) {
@@ -59,140 +68,193 @@ export const AboutMe = () => {
 		refetch()
 		userInfo && dispatch(allData(userInfo))
 	}, [userInfo])
-	console.log(formData.phone)
-
-	if (!role) return <></>
-	const isStudent = role[0].type === 'STUD'
+	const isStudent = role === 'STUD'
+	if (isLoadingCountry || isLoadingUser) return <SkeletonPage />
 	return (
-		<div className="m-14 radio">
-			<Space direction="vertical" size={20}>
+		<div className="m-14 radio w-full max-w-2xl">
+			<Space.Compact block direction="vertical" className="gap-5">
 				<Typography.Title level={3}>{t('AboutMe')}</Typography.Title>
-				<Space direction="vertical" size={'small'}>
+				<Space direction="vertical" size={'small'} className="w-full">
 					<Typography.Text className=" mt-10 opacity-80 text-black text-sm font-normal">
 						{t('gender')}
 					</Typography.Text>
-					<Radio.Group
-						disabled={isStudent}
-						onChange={e => dispatch(gender(e.target.value))}
-						value={formData.gender}
-					>
-						<Radio value={'M'}>{t('man')}</Radio>
-						<Radio value={'W'}>{t('woman')}</Radio>
-					</Radio.Group>
+					{isEdit ? (
+						<div className="bg-white p-2 rounded-md">
+							<Typography.Text>
+								{formData.gender === 'M' ? t('man') : t('woman')}
+							</Typography.Text>
+						</div>
+					) : (
+						<Radio.Group
+							onChange={e => dispatch(gender(e.target.value))}
+							value={formData.gender}
+						>
+							<Radio value={'M'}>{t('man')}</Radio>
+							<Radio value={'W'}>{t('woman')}</Radio>
+						</Radio.Group>
+					)}
 				</Space>
 				<Space direction="vertical" size={'small'}>
 					<Typography.Text>{t('surname')}</Typography.Text>
-					<Input
-						disabled={isStudent}
-						placeholder={t('surname')}
-						size="large"
-						maxLength={200}
-						className="w-[624px]"
-						onChange={e => dispatch(surName(e.target.value))}
-						value={formData.surName}
-					/>
+					{isEdit ? (
+						<div className="bg-white p-2 rounded-md">
+							<Typography.Text>{formData.surName}</Typography.Text>
+						</div>
+					) : (
+						<Input
+							placeholder={t('surname')}
+							size="large"
+							maxLength={200}
+							className=""
+							onChange={e => dispatch(surName(e.target.value))}
+							value={formData.surName}
+						/>
+					)}
 				</Space>
 				<Space direction="vertical" size={'small'}>
 					<Typography.Text>{t('name')}</Typography.Text>
-					<Input
-						disabled={isStudent}
-						placeholder={t('name')}
-						size="large"
-						className="w-[624px]"
-						onChange={e => dispatch(name(e.target.value))}
-						value={formData.name}
-					/>
+					{isEdit ? (
+						<div className="bg-white p-2 rounded-md">
+							<Typography.Text>{formData.name}</Typography.Text>
+						</div>
+					) : (
+						<Input
+							placeholder={t('name')}
+							size="large"
+							className=""
+							onChange={e => dispatch(name(e.target.value))}
+							value={formData.name}
+						/>
+					)}
 				</Space>
 				<Space direction="vertical" size={'small'}>
 					<Typography.Text>{t('middleName')}</Typography.Text>
-					<Input
-						disabled={isStudent}
-						placeholder={t('middleName')}
-						size="large"
-						className="w-[624px]"
-						onChange={e => dispatch(patronymic(e.target.value))}
-						value={formData.patronymic}
-					/>
+					{isEdit ? (
+						<div className="bg-white p-2 rounded-md">
+							<Typography.Text>{formData.patronymic}</Typography.Text>
+						</div>
+					) : (
+						<Input
+							placeholder={t('middleName')}
+							size="large"
+							className=""
+							onChange={e => dispatch(patronymic(e.target.value))}
+							value={formData.patronymic}
+						/>
+					)}
 				</Space>
 				<Space direction="vertical" size={'small'}>
 					<Typography.Text>{t('birth')}</Typography.Text>
-					<ConfigProvider locale={ruPicker}>
-						<DatePicker
-							disabled={isStudent}
-							placeholder={t('birth')}
-							size="large"
-							className="w-[624px]"
-							format={'DD.MM.YYYY'}
-							onChange={e =>
-								dispatch(birthDay(!e ? '' : e.format('YYYY-MM-DD')))
-							}
-							value={
-								formData.birthDay
-									? dayjs(
-											formData.birthDay.split('-').reverse().join('.'),
-											'DD.MM.YYYY'
-									  )
-									: null
-							}
-						/>
-					</ConfigProvider>
+					{isEdit ? (
+						<div className="bg-white p-2 rounded-md">
+							<Typography.Text>{formData.birthDay}</Typography.Text>
+						</div>
+					) : (
+						<ConfigProvider locale={ruPicker}>
+							<DatePicker
+								placeholder={t('birth')}
+								size="large"
+								className="w-full"
+								format={'DD.MM.YYYY'}
+								onChange={e =>
+									dispatch(birthDay(!e ? '' : e.format('YYYY-MM-DD')))
+								}
+								value={
+									formData.birthDay
+										? dayjs(
+												formData.birthDay.split('-').reverse().join('.'),
+												'DD.MM.YYYY'
+										  )
+										: null
+								}
+							/>
+						</ConfigProvider>
+					)}
 				</Space>
 				<Space direction="vertical" size={'small'}>
 					<Typography.Text>{t('citizen')}</Typography.Text>
-					<Select
-						disabled={isStudent}
-						placeholder={t('citizen')}
-						size="large"
-						className="w-[624px]  rounded-lg"
-						value={formData.countryId}
-						onChange={e => dispatch(country(e))}
-						options={
-							countries == null
-								? []
-								: countries.map(el => ({
-										value: el.id,
-										label: el.shortName
-								  }))
-						}
-					/>
+					{isEdit ? (
+						<div className="bg-white p-2 rounded-md">
+							<Typography.Text>
+								{countries?.find(el => el.id === formData.countryId)?.shortName}
+							</Typography.Text>
+						</div>
+					) : (
+						<Select
+							placeholder={t('citizen')}
+							size="large"
+							className="w-full  rounded-lg"
+							value={formData.countryId}
+							onChange={e => dispatch(country(e))}
+							options={
+								countries === undefined
+									? []
+									: countries.map(el => ({
+											value: el.id,
+											label: el.shortName
+									  }))
+							}
+						/>
+					)}
 				</Space>
 				<Space direction="vertical" size={'small'} className="w-full">
 					<Typography.Text>{t('telephone')}</Typography.Text>
-					<FormItem name="phone" rules={[{ validator }]} className="w-full">
-						<PhoneInput
-							size="large"
-							className="w-full"
-							enableSearch
-							onChange={e => {
-								if (e.phoneNumber) dispatch(phone(e.phoneNumber.toString()))
-							}}
-							value={formData.phone}
-						/>
-					</FormItem>
+					{isEdit ? (
+						<div className="bg-white p-2 rounded-md">
+							<Typography.Text>+{formData.phone}</Typography.Text>
+						</div>
+					) : (
+						<FormItem name="phone" className="w-full" initialValue={'123123'}>
+							<PhoneInput
+								size="large"
+								className="w-full"
+								enableSearch
+								onChange={e => {
+									const fullPhone = `${e.countryCode}${e.areaCode}${e.phoneNumber}`
+									dispatch(phone(fullPhone))
+								}}
+								value={formData.phone}
+							/>
+						</FormItem>
+					)}
 				</Space>
 				<Space direction="vertical" size={'small'}>
 					<Typography.Text>{t('email')}</Typography.Text>
-					<Input
-						disabled={isStudent}
-						placeholder={t('email')}
-						size="large"
-						className="w-[624px]"
-						value={email !== '' ? email : ''}
-					/>
+					{isEdit ? (
+						<div className="bg-white p-2 rounded-md">
+							<Typography.Text>{email}</Typography.Text>
+						</div>
+					) : (
+						<Input
+							placeholder={t('email')}
+							size="large"
+							className=""
+							value={email !== '' ? email : ''}
+						/>
+					)}
 				</Space>
 				<Space
 					direction="vertical"
 					size={'small'}
 					className={clsx('mt-4', isStudent && 'hidden')}
 				>
-					<Button
-						className="border-solid border-bluekfu border-[1px] text-bluekfu rounded-md"
-						onClick={() => onSubmit()}
-					>
-						{t('edit')}
-					</Button>
+					{isEdit ? (
+						<Button
+							className="border-solid border-bluekfu border-[1px] text-bluekfu rounded-md"
+							onClick={() => setIsEdit(false)}
+						>
+							{t('edit')}
+						</Button>
+					) : (
+						<Button
+							className="border-solid border-bluekfu border-[1px] text-bluekfu rounded-md"
+							onClick={() => onSubmit()}
+						>
+							{t('save')}
+						</Button>
+					)}
 				</Space>
-			</Space>
+			</Space.Compact>
 		</div>
 	)
 }

@@ -138,7 +138,6 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const changeLanguage = (language: string) => {
 		i18n.changeLanguage(language)
 	}
-	console.log(type === 'main' && openMenu && 'bg-[#E3E8ED]')
 
 	return (
 		<header

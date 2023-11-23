@@ -4,26 +4,26 @@ import { RootState } from '../..'
 import { IAddress, addressItem } from '../../../api/types'
 
 const initAddressItem: addressItem = {
-	countryId: 1,
-	city: null,
-	street: null,
-	house: null,
-	apartment: null,
-	index: null
+	countryId: 184,
+	city: '',
+	street: '',
+	house: '',
+	apartment: '',
+	index: ''
 }
 
 type target = 'registrationAddress' | 'residenceAddress'
 
 const initialState: IAddress = {
 	registrationAddress: initAddressItem,
-	residenceAddress: null
+	residenceAddress: initAddressItem
 }
 
 export const AddressReducer = createSlice({
 	name: 'Address',
 	initialState,
 	reducers: {
-		allData: (state, action: PayloadAction<IAddress>): IAddress => {
+		allData: (_, action: PayloadAction<IAddress>): IAddress => {
 			return action.payload
 		},
 		country: (

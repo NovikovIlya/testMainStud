@@ -68,6 +68,15 @@ export const formApi = apiSlice.injectEndpoints({
 					method: 'POST'
 				}
 			}
+		}),
+		postAddress: build.mutation({
+			query: body => {
+				return {
+					url: 'user-api/users/me/address',
+					body: body,
+					method: 'POST'
+				}
+			}
 		})
 	})
 })
@@ -82,5 +91,6 @@ export const {
 	useGetWorkQuery,
 	usePostInfoUserMutation,
 	usePostDocumentMutation,
-	useGetAllDocumentsQuery
+	useGetAllDocumentsQuery,
+	usePostAddressMutation
 } = formApi

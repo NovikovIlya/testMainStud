@@ -491,7 +491,7 @@ export const jsxElements = [
 		element: (
 			<TemplateCard
 				href="http://10.160.178.202/news_aggregator/news/"
-				info="Новостные статьис указанием источниковдля последующего анализа международных ситуаций"
+				info="Новостные статьис указанием источников для последующего анализа международных ситуаций"
 				title="SitAnKFU"
 				img="/image45.png"
 				buttonText="Посмотреть"

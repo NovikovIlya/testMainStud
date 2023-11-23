@@ -2,34 +2,24 @@ import { Space, Typography } from 'antd'
 import { Button, DatePicker, Input, Select } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
-import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import uuid from 'react-uuid'
 
-import { IEducationError, IEducationState } from '../../../api/types'
-import { RootState, useAppSelector } from '../../../store'
+import { useAppSelector } from '../../../store'
 import {
 	useGetCountriesQuery,
 	useGetEducationLevelQuery
 } from '../../../store/api/utilsApi'
 import {
-	addEducationItemRequest,
-	deleteEducationItemRequest,
-	getEducationItemRequest,
-	putEducationItemRequest
-} from '../../../store/creators/MainCreators'
-import {
-	addCountries,
-	addEducations
-} from '../../../store/reducers/FormReducers/CountriesEducationReducer'
-import { allData } from '../../../store/reducers/FormReducers/EducationReducer'
-import {
+	addEducation,
 	countryId,
 	documentNumber,
 	documentSeries,
 	educationLevelId,
 	graduateYear,
+	idDelete,
 	nameOfInstitute,
 	specialization
 } from '../../../store/reducers/FormReducers/EducationReducer'
@@ -37,29 +27,18 @@ import { ImagesLayout } from '../ImagesLayout'
 
 export const EducationForm = () => {
 	const dispatch = useDispatch()
-	const userRole = useAppSelector(state => state.InfoUser.role)
+	const userRole = useAppSelector(state => state.auth.user?.roles[0].type)
 	const navigate = useNavigate()
 	const { t, i18n } = useTranslation()
-	const [SkipCountriesQuery, changeQuerySkip] = useState<boolean>(true)
-	const { data: educationLevel } = useGetEducationLevelQuery(i18n.language, {
-		skip: SkipCountriesQuery
-	})
-	const { data: countries } = useGetCountriesQuery(i18n.language, {
-		skip: SkipCountriesQuery
-	})
-	const [IsEmpty, changeIsEmpty] = useState<boolean>(false)
-	const info = useAppSelector(state => state.Education)
-
-	useEffect(() => {
-		if (educationLevel && countries) {
-			dispatch(addEducations(educationLevel))
-			dispatch(addCountries(countries))
-			changeQuerySkip(true)
-		} else {
-			changeQuerySkip(false)
-		}
-	}, [educationLevel, countries])
-
+	const { data: educationLevel } = useGetEducationLevelQuery(i18n.language)
+	const { data: countries } = useGetCountriesQuery(i18n.language)
+	const educationData = useAppSelector(state => state.Education)
+	const handleAddEducation = () => {
+		dispatch(addEducation(uuid()))
+	}
+	const handleDeleteEducation = (id: string) => {
+		dispatch(idDelete(id))
+	}
 	const handleCancel = () => {
 		navigate('/documents')
 	}
@@ -70,144 +49,6 @@ export const EducationForm = () => {
 	const handleSkip = () => {
 		navigate('/user')
 	}
-	const countriesStorage = useAppSelector(
-		(state: RootState) => state.CountriesEducation.countries
-	)
-	const educationStorage = useAppSelector(
-		(state: RootState) => state.CountriesEducation.educations
-	)
-	const educationData = useAppSelector(state => state.Education)
-
-	const getData = async () => {
-		const response = await getEducationItemRequest()
-		if (response !== null) {
-			dispatch(allData(response))
-		}
-	}
-
-	const [updateItems, setUpdate] = useState<boolean>(true)
-	const [IsError, setError] = useState<IEducationError | null>(null)
-
-	const convertToString = (field: any): string => {
-		if (typeof field === 'string') {
-			return field
-		} else {
-			return ''
-		}
-	}
-
-	const checkEducationItem = (item: IEducationState): boolean => {
-		var haveError = false
-
-		var errorPattern = {
-			id: item.id,
-			nameOfInstitute: false,
-			documentNumber: false,
-			documentSeries: false,
-			graduateYear: false,
-			specialization: false
-		}
-
-		if (
-			item.documentNumber === null ||
-			(item.documentNumber !== null && !/^[0-9]{4}$/.test(item.documentNumber))
-		) {
-			haveError = true
-			errorPattern.documentNumber = true
-		}
-
-		if (
-			item.documentSeries === null ||
-			(item.documentSeries !== null && !/^[0-9]{4}$/.test(item.documentSeries))
-		) {
-			haveError = true
-			errorPattern.documentSeries = true
-		}
-		if (
-			item.nameOfInstitute === null ||
-			(item.nameOfInstitute !== null &&
-				(/\s\s/.test(item.nameOfInstitute) ||
-					!/^[\p{L}\s()0-9]+$/u.test(item.nameOfInstitute)))
-		) {
-			haveError = true
-			errorPattern.nameOfInstitute = true
-		}
-		if (
-			item.specialization === null ||
-			(item.specialization !== null &&
-				(/\s\s/.test(item.specialization) ||
-					!/^[\p{L}\s.,]+$/u.test(item.specialization)))
-		) {
-			haveError = true
-			errorPattern.specialization = true
-		}
-		if (!item.graduateYear) {
-			haveError = true
-			errorPattern.graduateYear = true
-		}
-
-		haveError && setError(errorPattern)
-		IsError !== null && !haveError && setError(null)
-
-		return haveError
-	}
-
-	const handleUpdateEducation = async (item: IEducationState) => {
-		if (!checkEducationItem(item)) {
-			const status = await putEducationItemRequest(item.id.toString(), {
-				nameOfInstitute: item.nameOfInstitute,
-				documentNumber: item.documentNumber,
-				documentSeries: item.documentSeries,
-				graduateYear: item.graduateYear,
-				specialization: item.specialization,
-				educationLevelId: item.educationLevelId,
-				countryId: item.countryId
-			})
-			if (status === 200) {
-				setUpdate(true)
-			} else {
-				console.log('403')
-			}
-		}
-	}
-
-	const handleDeleteEducation = async (id: string) => {
-		const response = await deleteEducationItemRequest(id)
-		if (response === 200) setUpdate(true)
-		else console.log('403')
-	}
-
-	const handleAddEducation = async () => {
-		const item = {
-			nameOfInstitute: null,
-			documentNumber: null,
-			documentSeries: null,
-			graduateYear: null,
-			specialization: null,
-			educationLevelId: 1,
-			countryId: 1
-		}
-		const response = await addEducationItemRequest(item)
-		if (response === 200) setUpdate(true)
-		else console.log('403')
-	}
-
-	useEffect(() => {
-		if (educationLevel && countries) {
-			dispatch(addEducations(educationLevel))
-			dispatch(addCountries(countries))
-			changeQuerySkip(true)
-		} else {
-			changeQuerySkip(false)
-		}
-	}, [educationLevel, countries])
-
-	useEffect(() => {
-		if (updateItems) {
-			getData()
-			setUpdate(false)
-		}
-	}, [updateItems])
 	return (
 		<ImagesLayout>
 			<div className="w-full flex justify-center  text-sm">
@@ -221,21 +62,15 @@ export const EducationForm = () => {
 										{t('educationDocument')}
 									</Typography.Text>
 									<Typography.Text
-										onClick={() => handleDeleteEducation(item.id.toString())}
+										onClick={() => {
+											handleDeleteEducation(item.id)
+										}}
 										className={clsx(
 											'cursor-pointer opacity-40 text-center text-black text-sm font-normal leading-[18px] mr-3',
 											index === 0 && 'hidden'
 										)}
 									>
 										{t('Delete')}
-									</Typography.Text>
-									<Typography.Text
-										onClick={() => handleUpdateEducation(item)}
-										className={clsx(
-											'cursor-pointer opacity-40 text-center text-black text-sm font-normal leading-[18px]'
-										)}
-									>
-										{t('Save')}
 									</Typography.Text>
 								</Space>
 								<div className="grid grid-cols-2 gap-10 mt-5 w-full max-sm:grid-cols-1 max-sm:gap-4">
@@ -245,15 +80,12 @@ export const EducationForm = () => {
 										<Select
 											className="w-full mt-2"
 											size="large"
-											defaultValue={
-												educationData.filter(el => el.id === item.id)[0]
-													.educationLevelId
-											}
-											value={educationData[0].educationLevelId}
+											defaultValue={item.educationLevelId}
+											value={item.educationLevelId}
 											options={
-												!educationStorage
+												!educationLevel
 													? []
-													: educationStorage.map(el => ({
+													: educationLevel.map(el => ({
 															value: el.id,
 															label: el.name
 													  }))
@@ -280,9 +112,9 @@ export const EducationForm = () => {
 												)
 											}
 											options={
-												countriesStorage === null
+												countries === undefined
 													? []
-													: countriesStorage.map(el => ({
+													: countries.map(el => ({
 															value: el.id,
 															label: el.shortName
 													  }))
@@ -297,17 +129,7 @@ export const EducationForm = () => {
 										placeholder={t('kfu')}
 										maxLength={250}
 										size="large"
-										className={clsx(
-											'shadow ',
-											IsError &&
-												IsError.id === item.id &&
-												IsError.nameOfInstitute &&
-												'border-rose-500'
-										)}
-										value={convertToString(
-											educationData.filter(el => el.id === item.id)[0]
-												.nameOfInstitute
-										)}
+										value={item.nameOfInstitute}
 										onChange={e =>
 											dispatch(
 												nameOfInstitute({
@@ -317,13 +139,6 @@ export const EducationForm = () => {
 											)
 										}
 									/>
-									{IsError &&
-										IsError.id === item.id &&
-										IsError.nameOfInstitute && (
-											<div className="text-sm text-rose-500">
-												{t('EmptyFolder')}
-											</div>
-										)}
 								</div>
 								<div className="grid grid-cols-2 mt-4 gap-x-10 gap-y-4 w-full max-sm:gap-5">
 									<div>
@@ -333,17 +148,7 @@ export const EducationForm = () => {
 												placeholder="0000"
 												size="large"
 												maxLength={4}
-												className={clsx(
-													'shadow ',
-													IsError &&
-														IsError.id === item.id &&
-														IsError.documentSeries &&
-														'border-rose-500'
-												)}
-												value={convertToString(
-													educationData.filter(el => el.id === item.id)[0]
-														.documentSeries
-												)}
+												value={item.documentSeries}
 												onChange={e =>
 													dispatch(
 														documentSeries({
@@ -353,13 +158,6 @@ export const EducationForm = () => {
 													)
 												}
 											/>
-											{IsError &&
-												IsError.id === item.id &&
-												IsError.documentSeries && (
-													<div className="text-sm text-rose-500">
-														{t('EmptyFolder')}
-													</div>
-												)}
 										</div>
 									</div>
 									<div>
@@ -369,17 +167,7 @@ export const EducationForm = () => {
 												placeholder="0000"
 												size="large"
 												maxLength={4}
-												className={clsx(
-													'shadow ',
-													IsError &&
-														IsError.id === item.id &&
-														IsError.documentNumber &&
-														'border-rose-500'
-												)}
-												value={convertToString(
-													educationData.filter(el => el.id === item.id)[0]
-														.documentNumber
-												)}
+												value={item.documentNumber}
 												onChange={e =>
 													dispatch(
 														documentNumber({
@@ -389,26 +177,13 @@ export const EducationForm = () => {
 													)
 												}
 											/>
-											{IsError &&
-												IsError.id === item.id &&
-												IsError.documentNumber && (
-													<div className="text-sm text-rose-500">
-														{t('EmptyFolder')}
-													</div>
-												)}
 										</div>
 									</div>
 									<div>
 										<p>{t('graduateYear')}</p>
 										<div className="mt-2">
 											<DatePicker
-												className={clsx(
-													'shadow w-full',
-													IsError &&
-														IsError.id === item.id &&
-														IsError.graduateYear &&
-														'border-rose-500'
-												)}
+												className="w-full"
 												onChange={e => {
 													dispatch(
 														graduateYear({
@@ -422,28 +197,11 @@ export const EducationForm = () => {
 												placeholder={new Date().getFullYear().toString()}
 												picker="year"
 												value={
-													convertToString(
-														educationData.filter(el => el.id === item.id)[0]
-															.graduateYear
-													) !== ''
-														? dayjs(
-																convertToString(
-																	educationData.filter(
-																		el => el.id === item.id
-																	)[0].graduateYear
-																),
-																'YYYY'
-														  )
+													item.graduateYear !== ''
+														? dayjs(item.graduateYear, 'YYYY')
 														: null
 												}
 											/>
-											{IsError &&
-												IsError.id === item.id &&
-												IsError.graduateYear && (
-													<div className="text-sm text-rose-500">
-														{t('DateError')}
-													</div>
-												)}
 										</div>
 									</div>
 									<div>
@@ -452,17 +210,8 @@ export const EducationForm = () => {
 											<Input
 												placeholder={t('webDesign')}
 												size="large"
-												className={clsx(
-													'w-full shadow ',
-													IsError &&
-														IsError.id === item.id &&
-														IsError.specialization &&
-														'border-rose-500'
-												)}
-												value={convertToString(
-													educationData.filter(el => el.id === item.id)[0]
-														.specialization
-												)}
+												className="w-full"
+												value={item.specialization}
 												onChange={e =>
 													dispatch(
 														specialization({
@@ -472,13 +221,6 @@ export const EducationForm = () => {
 													)
 												}
 											/>
-											{IsError &&
-												IsError.id === item.id &&
-												IsError.specialization && (
-													<div className="text-sm text-rose-500">
-														{t('EmptyFolder')}
-													</div>
-												)}
 										</div>
 									</div>
 								</div>

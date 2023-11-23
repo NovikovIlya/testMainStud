@@ -1,21 +1,19 @@
 import { Button, ConfigProvider, DatePicker, Input, Select } from 'antd'
 import enPicker from 'antd/locale/en_US'
 import ruPicker from 'antd/locale/ru_RU'
-import clsx from 'clsx'
 import dayjs from 'dayjs'
 import 'dayjs/locale/en'
 import 'dayjs/locale/ru'
-import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-import { RootState, useAppSelector } from '../../../store'
-import { useGetMyDocumentsQuery } from '../../../store/api/formApi'
+import { useAppSelector } from '../../../store'
 import {
-	getDocumentItemRequest,
-	postDocumentItemRequest
-} from '../../../store/creators/MainCreators'
+	useGetAllDocumentsQuery,
+	useGetMyDocumentsQuery,
+	usePostDocumentMutation
+} from '../../../store/api/formApi'
 import {
 	allData,
 	dateIssue,
@@ -32,110 +30,32 @@ import { ImagesLayout } from '../ImagesLayout'
 
 export const DocumentForm = () => {
 	const { t, i18n } = useTranslation()
-	const [IsEmpty, changeIsEmpty] = useState<boolean>(false)
-	const [SkipCountriesQuery, changeQuerySkip] = useState<boolean>(true)
 	dayjs.locale(i18n.language)
 	const dispatch = useDispatch()
-	const userRole = useAppSelector(state => state.InfoUser.role)
+	const userRole = useAppSelector(state => state.auth.user?.roles[0].type)
+	const { data: documents } = useGetAllDocumentsQuery()
+	console.log(documents, 'documents')
+
+	const { data: getDocument } = useGetMyDocumentsQuery()
+	console.log(getDocument, 'getDocument')
+
+	if (getDocument !== undefined) dispatch(allData(getDocument))
 	const documentData = useAppSelector(state => state.Document)
-	const documentStorage = useAppSelector(
-		(state: RootState) => state.CountriesEducation.documents
-	)
-	const { data: documents } = useGetMyDocumentsQuery()
+	const [postDocument] = usePostDocumentMutation()
 
 	const navigate = useNavigate()
-	const getData = async () => {
-		const response = await getDocumentItemRequest()
-		if (response) {
-			dispatch(
-				allData({
-					documentTypeId: !response.documentTypeId
-						? 1
-						: response.documentTypeId,
-					passportSeries: !response.passportSeries
-						? ''
-						: response.passportSeries,
-					passportNumber: !response.passportNumber
-						? ''
-						: response.passportNumber,
-					issuedBy: !response.issuedBy ? '' : response.issuedBy,
-					dateIssue: !response.dateIssue ? '' : response.dateIssue,
-					divisionCode: !response.divisionCode ? '' : response.divisionCode,
-					inn: !response.inn ? '' : response.inn,
-					snils: !response.snils ? '' : response.snils
-				})
-			)
-		} else console.log('403')
-	}
-
-	useEffect(() => {
-		getData()
-	}, [])
-	useEffect(() => {
-		if (documentData) {
-			changeQuerySkip(true)
-		} else {
-			changeQuerySkip(false)
-		}
-	}, [documentData])
-
-	useEffect(() => {
-		if (documents) {
-			//dispatch(addDocuments(documents))
-		}
-	}, [documents])
 
 	const handleCancel = () => {
 		navigate('/form')
 	}
-	const navigating = () => {
-		if (userRole === 'SCHOOL') navigate('/parent')
+	const handleOk = () => {
+		postDocument(documentData)
+		if (userRole && userRole === 'SCHOOL') navigate('/parent')
 		else navigate('/education')
-	}
-	const handleOk = async () => {
-		const response = await handleAddDocument()
-		console.log(response)
-		navigating()
 	}
 	const handleSkip = () => {
 		navigate('/user')
 	}
-	const handleAddDocument = async () => {
-		const IsCorrectPasswordData = [
-			documentData.passportNumber,
-			documentData.passportSeries
-		].some(el => /^[0-9]{4}$/.test(el))
-
-		const IsCorrectSNILS = /^[0-9]{3}\-[0-9]{3}\-[0-9]{3} [0-9]{2}$/.test(
-			documentData.snils
-		)
-		const IsCorrectDivisionCode = /^[0-9]{3}\-[0-9]{3}$/.test(
-			documentData.divisionCode
-		)
-		const IsCorrectINN = /^[0-9]{12}$/.test(documentData.inn)
-		const IsCorrectWhomIssued =
-			!/\s\s/.test(documentData.issuedBy) &&
-			/^[\p{L}\s]+$/u.test(documentData.issuedBy)
-		if (
-			!IsCorrectPasswordData ||
-			!IsCorrectSNILS ||
-			!IsCorrectINN ||
-			!IsCorrectDivisionCode ||
-			documentData.dateIssue === '' ||
-			!IsCorrectWhomIssued
-		) {
-			changeIsEmpty(true)
-			return false
-		}
-		const response = await postDocumentItemRequest(documentData)
-		if (response === 200) changeIsEmpty(false)
-		else {
-			console.log('403')
-		}
-	}
-	useEffect(() => {
-		if (!documentStorage) changeQuerySkip(false)
-	}, [documentStorage])
 	return (
 		<ImagesLayout>
 			<div className="w-full flex justify-center ">
@@ -149,8 +69,8 @@ export const DocumentForm = () => {
 							size="large"
 							onChange={e => dispatch(documentTypeId(e))}
 							options={
-								documentStorage !== null
-									? documentStorage.map(el => ({
+								documents !== undefined
+									? documents.map(el => ({
 											value: el.id,
 											label: el.type
 									  }))
@@ -169,25 +89,11 @@ export const DocumentForm = () => {
 										placeholder="000-000"
 										size="large"
 										value={documentData?.divisionCode}
-										className={clsx(
-											'shadow ',
-											IsEmpty &&
-												!/^[0-9]{3}\-[0-9]{3}$/.test(
-													documentData.divisionCode
-												) &&
-												'border-rose-500'
-										)}
 										maxLength={7}
 										onChange={e =>
 											dispatch(divisionCode(e.currentTarget.value))
 										}
 									/>
-									{IsEmpty &&
-										!/^[0-9]{3}\-[0-9]{3}$/.test(documentData.divisionCode) && (
-											<span className="text-red-500 text-sm">
-												{t('BadDivisionCode')}
-											</span>
-										)}
 								</div>
 							</div>
 							<div>
@@ -197,12 +103,7 @@ export const DocumentForm = () => {
 										locale={i18n.language === 'ru' ? ruPicker : enPicker}
 									>
 										<DatePicker
-											className={clsx(
-												'shadow w-full',
-												IsEmpty &&
-													documentData.dateIssue === '' &&
-													'border-rose-500'
-											)}
+											className="w-full"
 											onChange={e =>
 												dispatch(
 													dateIssue(e == null ? '' : e?.format('YYYY-MM-DD'))
@@ -224,9 +125,6 @@ export const DocumentForm = () => {
 											}
 										/>
 									</ConfigProvider>
-									{IsEmpty && documentData.dateIssue === '' && (
-										<div className="text-red-500 text-sm">{t('DateError')}</div>
-									)}
 								</div>
 							</div>
 							<div>
@@ -235,12 +133,6 @@ export const DocumentForm = () => {
 									<Input
 										placeholder="0000"
 										size="large"
-										className={clsx(
-											'shadow ',
-											IsEmpty &&
-												!/^[0-9]{4}$/.test(documentData.passportSeries) &&
-												'border-rose-500'
-										)}
 										maxLength={4}
 										onChange={e => dispatch(passportSeries(e.target.value))}
 										value={
@@ -249,12 +141,6 @@ export const DocumentForm = () => {
 												: ''
 										}
 									/>
-									{IsEmpty &&
-										!/^[0-9]{4}$/.test(documentData.passportSeries) && (
-											<span className="text-red-500 text-sm">
-												{t('BadPassport')}
-											</span>
-										)}
 								</div>
 							</div>
 							<div>
@@ -263,12 +149,6 @@ export const DocumentForm = () => {
 									<Input
 										placeholder="0000"
 										size="large"
-										className={clsx(
-											'shadow',
-											IsEmpty &&
-												!/^[0-9]{4}$/.test(documentData.passportNumber) &&
-												'border-rose-500'
-										)}
 										maxLength={4}
 										onChange={e => dispatch(passportNumber(e.target.value))}
 										value={
@@ -277,12 +157,6 @@ export const DocumentForm = () => {
 												: ''
 										}
 									/>
-									{IsEmpty &&
-										!/^[0-9]{4}$/.test(documentData.passportNumber) && (
-											<span className="text-red-500 text-sm">
-												{t('BadPassport')}
-											</span>
-										)}
 								</div>
 							</div>
 						</div>
@@ -293,25 +167,11 @@ export const DocumentForm = () => {
 									placeholder={t('location')}
 									size="large"
 									maxLength={200}
-									className={clsx(
-										'shadow',
-										IsEmpty &&
-											(!/^[\p{L}\s]+$/u.test(documentData.issuedBy) ||
-												/\s\s/.test(documentData.issuedBy)) &&
-											'border-rose-500'
-									)}
 									onChange={e => dispatch(issuedBy(e.target.value))}
 									value={
 										documentData.issuedBy !== '' ? documentData.issuedBy : ''
 									}
 								/>
-								{IsEmpty &&
-									(!/^[\p{L}\s]+$/u.test(documentData.issuedBy) ||
-										/\s\s/.test(documentData.issuedBy)) && (
-										<span className="text-red-500 text-sm">
-											{t('EmptyFolder')}
-										</span>
-									)}
 							</div>
 						</div>
 					</div>
@@ -323,26 +183,10 @@ export const DocumentForm = () => {
 								<Input
 									size="large"
 									placeholder="000-000-000 00"
-									className={clsx(
-										'shadow ',
-										IsEmpty &&
-											!/^[0-9]{3}\-[0-9]{3}\-[0-9]{3} [0-9]{2}$/.test(
-												documentData.snils
-											) &&
-											'border-rose-500'
-									)}
 									maxLength={14}
 									onChange={e => dispatch(snils(e.target.value))}
 									value={documentData.snils}
 								/>
-								{IsEmpty &&
-									!/^[0-9]{3}\-[0-9]{3}\-[0-9]{3} [0-9]{2}$/.test(
-										documentData.snils
-									) && (
-										<span className="text-red-500 text-sm">
-											{t('BadSnils')}
-										</span>
-									)}
 							</div>
 							<p className="mt-4">{t('inn')}</p>
 							<div className="mt-2">
@@ -350,18 +194,9 @@ export const DocumentForm = () => {
 									size="large"
 									placeholder="000000000000"
 									maxLength={12}
-									className={clsx(
-										'shadow ',
-										IsEmpty &&
-											!/^[0-9]{12}$/.test(documentData.inn) &&
-											'border-rose-500'
-									)}
 									onChange={e => dispatch(inn(e.target.value))}
 									value={documentData.inn}
 								/>
-								{IsEmpty && !/^[0-9]{12}$/.test(documentData.inn) && (
-									<span className="text-red-500 text-sm">{t('BadInn')}</span>
-								)}
 							</div>
 						</div>
 					</div>

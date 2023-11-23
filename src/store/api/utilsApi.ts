@@ -1,4 +1,8 @@
-import { ICountryRequest, IEducationLevelRequest } from '../../api/types'
+import {
+	ICountryRequest,
+	IEducationLevelRequest,
+	IResponse
+} from '../../api/types'
 
 import { apiSlice } from './apiSlice'
 
@@ -19,8 +23,17 @@ export const utilsApi = apiSlice.injectEndpoints({
 					'Accept-Language': language
 				}
 			})
+		}),
+		getDocument: build.query<IResponse[], void>({
+			query: () => ({
+				url: '/user-api/document'
+			})
 		})
 	})
 })
 
-export const { useGetCountriesQuery, useGetEducationLevelQuery } = utilsApi
+export const {
+	useGetCountriesQuery,
+	useGetEducationLevelQuery,
+	useGetDocumentQuery
+} = utilsApi

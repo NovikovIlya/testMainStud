@@ -18,23 +18,21 @@ import clsx from 'clsx'
 import dayjs from 'dayjs'
 import 'dayjs/locale/en'
 import 'dayjs/locale/ru'
-import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
+import uuid from 'react-uuid'
 
-import { IWorkError, workItem } from '../../../api/types'
-import { RootState } from '../../../store'
 import { useAppSelector } from '../../../store'
 import {
-	addJobItemRequest,
-	deleteJobItemRequest,
-	getAbUsJob,
-	portfolioLinkRequest,
-	updateJobItemRequest
-} from '../../../store/creators/MainCreators'
+	useGetEducationQuery,
+	useGetWorkQuery,
+	useGetWorksQuery
+} from '../../../store/api/formApi'
 import {
+	addWork,
 	additionalInfo,
 	allData,
+	deleteWork,
 	endDate,
 	name,
 	portfolioLink,
@@ -63,141 +61,18 @@ const props: UploadProps = {
 export const Work = () => {
 	const { t, i18n } = useTranslation()
 	dayjs.locale(i18n.language)
-	const [IsError, setError] = useState<IWorkError>({
-		item: null,
-		portfolio: false
-	})
-	const [updateItems, setUpdate] = useState<boolean>(true)
 	const dispatch = useDispatch()
-	const workData = useAppSelector((state: RootState) => state.Work)
+	const { data: work } = useGetWorkQuery()
+	const { data: works } = useGetWorksQuery()
+	console.log(works, work, '=================work')
 
-	const getData = async () => {
-		const response = await getAbUsJob()
-		response !== null && dispatch(allData(response))
+	const workData = useAppSelector(state => state.Work)
+	//if (work !== undefined && work.items.length) dispatch(allData(work))
+	const handleDeleteWork = (id: string) => {
+		dispatch(deleteWork(id))
 	}
-
-	useEffect(() => {
-		if (updateItems) {
-			getData()
-			setUpdate(false)
-		}
-	}, [updateItems])
-
-	const convertToString = (field: any): string => {
-		if (typeof field === 'string') {
-			return field
-		} else {
-			return ''
-		}
-	}
-
-	const checkPortfolio = (data: string): boolean => {
-		const IsCorrectLink =
-			/^(?:https?:\/\/)?(?:www\.)?([a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*)(?:\/[^\s]*)?$/.test(
-				data
-			)
-		if (!IsCorrectLink) {
-			setError({ ...IsError, portfolio: true })
-			return true
-		} else {
-			IsError.portfolio && setError({ ...IsError, portfolio: false })
-			return false
-		}
-	}
-
-	const checkWorkItem = (id: string, item: workItem): boolean => {
-		var haveError = false
-		var errorPattern = {
-			id: parseInt(id),
-			name: false,
-			startDate: false,
-			responsibilities: false,
-			additionalInfo: false
-		}
-
-		if (
-			!item.name ||
-			(item.name &&
-				(/\s\s/.test(item.name) || !/^[\p{L}\s.,]+$/u.test(item.name)))
-		) {
-			haveError = true
-			errorPattern.name = true
-		}
-		if (
-			!item.additionalInfo ||
-			(item.additionalInfo &&
-				(/\s\s/.test(item.additionalInfo) ||
-					!/^[\p{L}\s.,]+$/u.test(item.additionalInfo)))
-		) {
-			haveError = true
-			errorPattern.additionalInfo = true
-		}
-		if (
-			!item.responsibilities ||
-			(item.responsibilities &&
-				(/\s\s/.test(item.responsibilities) ||
-					!/^[\p{L}\s.,]+$/u.test(item.responsibilities)))
-		) {
-			haveError = true
-			errorPattern.responsibilities = true
-		}
-		if (!item.startDate) {
-			haveError = true
-			errorPattern.startDate = true
-		}
-
-		haveError && setError({ ...IsError, item: errorPattern })
-		IsError.item !== null && !haveError && setError({ ...IsError, item: null })
-
-		return haveError
-	}
-
-	const handleUpdatePortfolio = async (data: string) => {
-		if (!checkPortfolio(data)) {
-			const response = await portfolioLinkRequest({ portfolioLink: data })
-			if (response === 403) {
-				console.log('403')
-				//navigate("/")
-			} else {
-				setUpdate(true)
-			}
-		}
-	}
-
-	const handleAddWork = async () => {
-		const response = await addJobItemRequest({
-			name: '',
-			startDate: '',
-			endDate: null,
-			responsibilities: null,
-			additionalInfo: ''
-		})
-		if (response === 403) {
-			console.log('403')
-			//navigate("/")
-		} else {
-			setUpdate(true)
-		}
-	}
-	const handleDeleteWork = async (id: string) => {
-		const response = await deleteJobItemRequest(id)
-		if (response === 403) {
-			console.log('403')
-			//navigate("/")
-		} else {
-			setUpdate(true)
-		}
-	}
-	const handleUpdateWork = async (id: string, item: workItem) => {
-		if (!checkWorkItem(id, item)) {
-			const response = await updateJobItemRequest(id, item)
-			if (response === 403) {
-				console.log('403')
-				//navigate("/")
-			} else {
-				setUpdate(true)
-			}
-		}
+	const handleAddWork = () => {
+		dispatch(addWork(uuid()))
 	}
 	return (
 		<div className="m-14 radio">
@@ -212,7 +87,7 @@ export const Work = () => {
 								{t('placeWork')}
 							</Typography.Text>
 							<Typography.Text
-								onClick={() => handleDeleteWork(item.id.toString())}
+								onClick={() => handleDeleteWork(item.id)}
 								className={clsx(
 									'cursor-pointer opacity-40 text-center text-black text-sm font-normal leading-[18px]',
 									index === 0 && 'hidden'
@@ -220,47 +95,17 @@ export const Work = () => {
 							>
 								{t('Delete')}
 							</Typography.Text>
-							<Typography.Text
-								onClick={() =>
-									handleUpdateWork(item.id.toString(), {
-										name: item.name,
-										startDate: item.startDate,
-										endDate: item.endDate,
-										responsibilities: item.responsibilities,
-										additionalInfo: item.additionalInfo
-									})
-								}
-								className={clsx(
-									'cursor-pointer opacity-40 text-center text-black text-sm font-normal leading-[18px]',
-									item.id === 0 && 'hidden'
-								)}
-							>
-								{t('Save')}
-							</Typography.Text>
 						</Space>
 						<Space direction="vertical" size={'small'}>
 							<Typography.Text>{t('PreviousWork')} </Typography.Text>
 							<Input
 								size="large"
-								className={clsx(
-									'w-[624px]  ',
-									IsError.item &&
-										IsError.item.id === item.id &&
-										IsError.item.name &&
-										'border-rose-500'
-								)}
+								className="w-[624px]"
 								onChange={e =>
 									dispatch(name({ id: item.id, name: e.target.value }))
 								}
-								value={workData.items.filter(el => el.id === item.id)[0].name}
+								value={item.name}
 							/>
-							{IsError.item &&
-								IsError.item.id === item.id &&
-								IsError.item.name && (
-									<span className="text-red-500 text-sm">
-										{t('EmptyFolder')}
-									</span>
-								)}
 						</Space>
 						<Space direction="vertical" size={'small'}>
 							<Typography.Text>{t('periodOperation')}</Typography.Text>
@@ -270,13 +115,7 @@ export const Work = () => {
 										locale={i18n.language === 'ru' ? ruPicker : enPicker}
 									>
 										<DatePicker
-											className={clsx(
-												' w-full',
-												IsError.item &&
-													IsError.item.id === item.id &&
-													IsError.item.startDate &&
-													'border-rose-500'
-											)}
+											className="w-full"
 											onChange={e =>
 												dispatch(
 													startDate({
@@ -289,27 +128,15 @@ export const Work = () => {
 											placeholder={t('Start')}
 											format={'DD.MM.YYYY'}
 											value={
-												workData.items.filter(el => el.id === item.id)[0]
-													.startDate
+												item.startDate
 													? dayjs(
-															workData.items
-																.filter(el => el.id === item.id)[0]
-																.startDate.split('-')
-																.reverse()
-																.join('.'),
+															item.startDate.split('-').reverse().join('.'),
 															'DD.MM.YYYY'
 													  )
 													: null
 											}
 										/>
 									</ConfigProvider>
-									{IsError.item &&
-										IsError.item.id === item.id &&
-										IsError.item.startDate && (
-											<span className="text-red-500 text-sm">
-												{t('EmptyFolder')}
-											</span>
-										)}
 								</div>
 								<div>
 									<ConfigProvider
@@ -329,41 +156,22 @@ export const Work = () => {
 											placeholder={t('Start')}
 											format={'DD.MM.YYYY'}
 											value={
-												workData.items.filter(el => el.id === item.id)[0]
-													.endDate
+												item.endDate
 													? dayjs(
-															convertToString(
-																workData.items.filter(
-																	el => el.id === item.id
-																)[0].endDate
-															)
-																.split('-')
-																.reverse()
-																.join('.'),
+															item.endDate.split('-').reverse().join('.'),
 															'DD.MM.YYYY'
 													  )
 													: null
 											}
 										/>
 									</ConfigProvider>
-									{IsError.item &&
-										IsError.item.id === item.id &&
-										IsError.item.startDate && (
-											<span className="text-red-500 text-sm"></span>
-										)}
 								</div>
 							</div>
 						</Space>
 						<Space direction="vertical" size={'small'}>
 							<Typography.Text>{t('Responsibilities')}</Typography.Text>
 							<Input.TextArea
-								className={clsx(
-									'w-[624px]  ',
-									IsError.item &&
-										IsError.item.id === item.id &&
-										IsError.item.responsibilities &&
-										'border-rose-500'
-								)}
+								className="w-[624px]"
 								maxLength={100}
 								style={{ height: 120, resize: 'none' }}
 								placeholder={t('ResponsibilitiesDescription')}
@@ -375,29 +183,13 @@ export const Work = () => {
 										})
 									)
 								}
-								value={convertToString(
-									workData.items.filter(el => el.id === item.id)[0]
-										.responsibilities
-								)}
+								value={item.responsibilities}
 							/>
-							{IsError.item &&
-								IsError.item.id === item.id &&
-								IsError.item.responsibilities && (
-									<span className="text-red-500 text-sm">
-										{t('BadSymbols')}
-									</span>
-								)}
 						</Space>
 						<Space direction="vertical" size={'small'}>
 							<Typography.Text>{t('AdditionalInformation')}</Typography.Text>
 							<Input.TextArea
-								className={clsx(
-									'w-[624px]  ',
-									IsError.item &&
-										IsError.item.id === item.id &&
-										IsError.item.additionalInfo &&
-										'border-rose-500'
-								)}
+								className="w-[624px]"
 								maxLength={100}
 								style={{ height: 120, resize: 'none' }}
 								onChange={e =>
@@ -408,18 +200,8 @@ export const Work = () => {
 										})
 									)
 								}
-								value={
-									workData.items.filter(el => el.id === item.id)[0]
-										.additionalInfo
-								}
+								value={item.additionalInfo}
 							/>
-							{IsError.item &&
-								IsError.item.id === item.id &&
-								IsError.item.additionalInfo && (
-									<span className="text-red-500 text-sm">
-										{t('EmptyFolder')}
-									</span>
-								)}
 						</Space>
 					</div>
 				))}
@@ -445,30 +227,14 @@ export const Work = () => {
 						<Typography.Text className="font-bold text-small text-black">
 							{t('linkPortfolio')}
 						</Typography.Text>
-						<Typography.Text
-							onClick={() =>
-								handleUpdatePortfolio(
-									!workData.portfolioLink ? '' : workData.portfolioLink
-								)
-							}
-							className="cursor-pointer opacity-40 text-center text-black text-sm font-normal leading-[18px]"
-						>
-							{t('Save')}
-						</Typography.Text>
 					</Space>
 					<Input
 						placeholder="https://disk.yandex.ru"
 						size="large"
-						className={clsx(
-							'w-[624px]  ',
-							IsError.portfolio && 'border-rose-500'
-						)}
+						className="w-[624px]"
 						onChange={e => dispatch(portfolioLink(e.target.value))}
 						value={!workData.portfolioLink ? '' : workData.portfolioLink}
 					/>
-					{IsError.portfolio && (
-						<span className="text-red-500 text-sm">{t('BadLink')}</span>
-					)}
 				</Space>
 				<Space size={'small'}>
 					<Typography.Text className="text-black opacity-80 text-sm font-normal leading-none">

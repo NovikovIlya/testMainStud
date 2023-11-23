@@ -15,25 +15,21 @@ import type { UploadProps } from 'antd'
 import ruPicker from 'antd/locale/ru_RU'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
-import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
+import uuid from 'react-uuid'
 
-import { IParentError, IParentState } from '../../../api/types'
 import { useAppSelector } from '../../../store'
 import {
-	useGetDocumentsQuery,
+	useGetAllDocumentsQuery,
 	useGetParentsQuery
 } from '../../../store/api/formApi'
 import {
-	deleteParentItemRequest,
-	postParentItemRequest,
-	putParentItemRequest
-} from '../../../store/creators/MainCreators'
-import {
 	FIO,
+	addParent,
 	allData,
 	dateIssue,
+	deleteParent,
 	divisionCode,
 	documentTypeId,
 	eMail,
@@ -70,63 +66,18 @@ export const Parent = () => {
 	const dispatch = useDispatch()
 	dayjs.locale(i18n.language)
 	const { data: parent } = useGetParentsQuery()
-	const [IsError] = useState<IParentError | null>(null)
 	const role = useAppSelector(state => state.auth.user?.roles)
-	const { data: documents } = useGetDocumentsQuery(i18n.language)
-	if (parent !== undefined) dispatch(allData(parent))
+	const { data: documents } = useGetAllDocumentsQuery()
+	if (parent !== undefined && parent.length) dispatch(allData(parent))
 	const parentData = useAppSelector(state => state.Parent)
 
-	const convertToString = (field: any): string => {
-		if (typeof field === 'string') {
-			return field
-		} else {
-			return ''
-		}
+	const handleDeleteParent = (id: string) => {
+		dispatch(deleteParent(id))
+	}
+	const handleAddParent = () => {
+		dispatch(addParent(uuid()))
 	}
 
-	const handleAddParent = async () =>
-		await postParentItemRequest({
-			name: null,
-			surName: null,
-			patronymic: null,
-			dateIssue: null,
-			divisionCode: null,
-			eMail: null,
-			issuedBy: null,
-			documentTypeId: 1,
-			phone: null,
-			passportSeries: null,
-			passportNumber: null,
-			registrationAddress: null,
-			residenceAddress: null,
-			inn: null,
-			snils: null
-		})
-
-	const handleDeleteParent = async (id: number) =>
-		await deleteParentItemRequest(id.toString())
-
-	const handleUpdateParent = async (item: IParentState) => {
-		const fioSpliter = !item.FIO ? null : item.FIO.split(' ')
-		if (fioSpliter !== null && fioSpliter.length !== 3) fioSpliter.push('')
-		await putParentItemRequest(item.id.toString(), {
-			name: !fioSpliter ? null : fioSpliter[0],
-			surName: !fioSpliter ? null : fioSpliter[1],
-			patronymic: !fioSpliter ? null : fioSpliter[2],
-			dateIssue: item.dateIssue,
-			divisionCode: item.divisionCode,
-			eMail: item.eMail,
-			issuedBy: item.issuedBy,
-			documentTypeId: item.documentTypeId,
-			phone: item.phone,
-			passportSeries: item.passportSeries,
-			passportNumber: item.passportNumber,
-			registrationAddress: item.registrationAddress,
-			residenceAddress: item.residenceAddress,
-			inn: item.inn,
-			snils: item.snils
-		})
-	}
 	if (!role) return <></>
 	const isStudent = role[0].type === 'STUD'
 
@@ -151,15 +102,6 @@ export const Parent = () => {
 									<Typography.Text
 										className={clsx(
 											' text-black cursor-pointer',
-											isStudent && 'hidden'
-										)}
-										onClick={() => handleUpdateParent(item)}
-									>
-										{t('Save')}
-									</Typography.Text>
-									<Typography.Text
-										className={clsx(
-											' text-black cursor-pointer',
 											index === 0 && 'hidden'
 										)}
 										onClick={() => handleDeleteParent(item.id)}
@@ -176,29 +118,11 @@ export const Parent = () => {
 										placeholder={t('bpk')}
 										size="large"
 										maxLength={250}
-										className={clsx(
-											'',
-											IsError &&
-												IsError.id === item.id &&
-												IsError.FIO &&
-												'border-rose-500'
-										)}
 										onChange={e => {
 											dispatch(FIO({ id: item.id, FIO: e.target.value }))
 										}}
-										value={
-											isStudent
-												? parentData[0].mother
-												: convertToString(
-														parentData.filter(el => el.id === item.id)[0].FIO
-												  )
-										}
+										value={isStudent ? item.mother : item.FIO}
 									/>
-									{IsError && IsError.id === item.id && IsError.FIO && (
-										<span className="text-red-500 text-sm">
-											{t('EmptyFolder')}
-										</span>
-									)}
 								</Space>
 								<Space
 									direction="vertical"
@@ -210,26 +134,12 @@ export const Parent = () => {
 									<Input
 										placeholder="+7 999 898-88-00"
 										size="large"
-										className={clsx(
-											'',
-											IsError &&
-												IsError.id === item.id &&
-												IsError.phone &&
-												'border-rose-500'
-										)}
 										onChange={e =>
 											dispatch(phone({ id: item.id, phone: e.target.value }))
 										}
-										value={convertToString(
-											parentData.filter(el => el.id === item.id)[0].phone
-										)}
+										value={item.phone}
 										maxLength={16}
 									/>
-									{IsError && IsError.id === item.id && IsError.phone && (
-										<span className="text-red-500 text-sm">
-											{t('BadPhone')}
-										</span>
-									)}
 								</Space>
 
 								<Space direction="vertical" className="w-full">
@@ -240,29 +150,11 @@ export const Parent = () => {
 										disabled={isStudent}
 										placeholder="BezuPr@gmail.com"
 										size="large"
-										className={clsx(
-											'',
-											IsError &&
-												IsError.id === item.id &&
-												IsError.eMail &&
-												'border-rose-500'
-										)}
 										onChange={e =>
 											dispatch(eMail({ id: item.id, email: e.target.value }))
 										}
-										value={
-											isStudent
-												? parentData[0].father
-												: convertToString(
-														parentData.filter(el => el.id === item.id)[0].eMail
-												  )
-										}
+										value={isStudent ? item.father : item.eMail}
 									/>
-									{IsError && IsError.id === item.id && IsError.eMail && (
-										<span className="text-red-500 text-sm">
-											{t('BadEmail')}
-										</span>
-									)}
 								</Space>
 							</Space>
 							<Space
@@ -282,9 +174,8 @@ export const Parent = () => {
 										placeholder={t('documentType')}
 										size="large"
 										options={
-											documents !== null || documents !== undefined
-												? //@ts-ignore
-												  documents.map(el => ({
+											documents !== undefined
+												? documents.map(el => ({
 														value: el.id,
 														label: el.type
 												  }))
@@ -295,10 +186,7 @@ export const Parent = () => {
 												documentTypeId({ id: item.id, documentTypeId: e })
 											)
 										}
-										value={
-											parentData.filter(el => el.id === item.id)[0]
-												.documentTypeId
-										}
+										value={item.documentTypeId}
 									/>
 								</Space>
 								<Space direction="vertical" className="w-full">
@@ -314,13 +202,6 @@ export const Parent = () => {
 												placeholder="000-000"
 												maxLength={7}
 												size="large"
-												className={clsx(
-													'',
-													IsError &&
-														IsError.id === item.id &&
-														IsError.divisionCode &&
-														'border-rose-500'
-												)}
 												onChange={e =>
 													dispatch(
 														divisionCode({
@@ -329,18 +210,8 @@ export const Parent = () => {
 														})
 													)
 												}
-												value={convertToString(
-													parentData.filter(el => el.id === item.id)[0]
-														.divisionCode
-												)}
+												value={item.divisionCode}
 											/>
-											{IsError &&
-												IsError.id === item.id &&
-												IsError.divisionCode && (
-													<span className="text-red-500 text-sm">
-														{t('BadDivisionCode')}
-													</span>
-												)}
 										</Space>
 										<Space direction="vertical" className="w-full">
 											<Typography.Text className=" text-black">
@@ -348,19 +219,13 @@ export const Parent = () => {
 											</Typography.Text>
 											<ConfigProvider locale={ruPicker}>
 												<DatePicker
-													className={clsx(
-														' w-full',
-														IsError &&
-															IsError.id === item.id &&
-															IsError.dateIssue &&
-															'border-rose-500'
-													)}
+													className="w-full"
 													onChange={e =>
 														dispatch(
 															dateIssue({
 																id: item.id,
 																dateIssue:
-																	e == null ? '' : e?.format('YYYY-MM-DD')
+																	e == null ? '' : e.format('YYYY-MM-DD')
 															})
 														)
 													}
@@ -368,32 +233,15 @@ export const Parent = () => {
 													placeholder={t('date')}
 													format={'DD.MM.YYYY'}
 													value={
-														convertToString(
-															parentData.filter(el => el.id === item.id)[0]
-																.dateIssue
-														)
+														item.dateIssue
 															? dayjs(
-																	convertToString(
-																		parentData.filter(
-																			el => el.id === item.id
-																		)[0].dateIssue
-																	)
-																		.split('-')
-																		.reverse()
-																		.join('.'),
+																	item.dateIssue.split('-').reverse().join('.'),
 																	'DD.MM.YYYY'
 															  )
 															: null
 													}
 												/>
 											</ConfigProvider>
-											{IsError &&
-												IsError.id === item.id &&
-												IsError.dateIssue && (
-													<span className="text-red-500 text-sm">
-														{t('DateError')}
-													</span>
-												)}
 										</Space>
 										<Space direction="vertical" className="w-full">
 											<Typography.Text className=" text-black">
@@ -402,13 +250,6 @@ export const Parent = () => {
 											<Input
 												placeholder="0000"
 												size="large"
-												className={clsx(
-													'',
-													IsError &&
-														IsError.id === item.id &&
-														IsError.passportSeries &&
-														'border-rose-500'
-												)}
 												onChange={e =>
 													dispatch(
 														passportSeries({
@@ -417,19 +258,9 @@ export const Parent = () => {
 														})
 													)
 												}
-												value={convertToString(
-													parentData.filter(el => el.id === item.id)[0]
-														.passportSeries
-												)}
+												value={item.passportSeries}
 												maxLength={4}
 											/>
-											{IsError &&
-												IsError.id === item.id &&
-												IsError.passportSeries && (
-													<span className="text-red-500 text-sm">
-														{t('BadPassport')}
-													</span>
-												)}
 										</Space>
 										<Space direction="vertical" className="w-full">
 											<Typography.Text className=" text-black">
@@ -439,13 +270,6 @@ export const Parent = () => {
 												placeholder="0000"
 												size="large"
 												maxLength={4}
-												className={clsx(
-													'',
-													IsError &&
-														IsError.id === item.id &&
-														IsError.passportNumber &&
-														'border-rose-500'
-												)}
 												onChange={e =>
 													dispatch(
 														passportNumber({
@@ -454,18 +278,8 @@ export const Parent = () => {
 														})
 													)
 												}
-												value={convertToString(
-													parentData.filter(el => el.id === item.id)[0]
-														.passportNumber
-												)}
+												value={item.passportNumber}
 											/>
-											{IsError &&
-												IsError.id === item.id &&
-												IsError.passportNumber && (
-													<span className="text-red-500 text-sm">
-														{t('BadPassport')}
-													</span>
-												)}
 										</Space>
 									</div>
 								</Space>
@@ -477,27 +291,13 @@ export const Parent = () => {
 										placeholder={t('location')}
 										maxLength={200}
 										size="large"
-										className={clsx(
-											'',
-											IsError &&
-												IsError.id === item.id &&
-												IsError.issuedBy &&
-												'border-rose-500'
-										)}
 										onChange={e =>
 											dispatch(
 												issuedBy({ id: item.id, issuedBy: e.target.value })
 											)
 										}
-										value={convertToString(
-											parentData.filter(el => el.id === item.id)[0].issuedBy
-										)}
+										value={item.issuedBy}
 									/>
-									{IsError && IsError.id === item.id && IsError.issuedBy && (
-										<span className="text-red-500 text-sm">
-											{t('EmptyFolder')}
-										</span>
-									)}
 								</Space>
 							</Space>
 							<Space
@@ -514,26 +314,12 @@ export const Parent = () => {
 									<Input
 										placeholder="000-000-000 00"
 										size="large"
-										className={clsx(
-											'',
-											IsError &&
-												IsError.id === item.id &&
-												IsError.snils &&
-												'border-rose-500'
-										)}
 										onChange={e =>
 											dispatch(snils({ id: item.id, snils: e.target.value }))
 										}
-										value={convertToString(
-											parentData.filter(el => el.id === item.id)[0].snils
-										)}
+										value={item.snils}
 										maxLength={14}
 									/>
-									{IsError && IsError.id === item.id && IsError.snils && (
-										<span className="text-red-500 text-sm">
-											{t('BadSnils')}
-										</span>
-									)}
 								</Space>
 								<Space direction="vertical" className="w-full">
 									<Typography.Text className=" text-black">
@@ -543,23 +329,12 @@ export const Parent = () => {
 										placeholder="000000000000"
 										maxLength={12}
 										size="large"
-										className={clsx(
-											'mt-2 ',
-											IsError &&
-												IsError.id === item.id &&
-												IsError.inn &&
-												'border-rose-500'
-										)}
+										className="mt-2"
 										onChange={e =>
 											dispatch(inn({ id: item.id, inn: e.target.value }))
 										}
-										value={convertToString(
-											parentData.filter(el => el.id === item.id)[0].inn
-										)}
+										value={item.inn}
 									/>
-									{IsError && IsError.id === item.id && IsError.inn && (
-										<span className="text-red-500 text-sm">{t('BadInn')}</span>
-									)}
 								</Space>
 								<Space direction="vertical" className="w-full mt-8">
 									<Typography.Text className="font-bold text-black text-lg">
@@ -572,13 +347,6 @@ export const Parent = () => {
 										placeholder={t('AdressLocation')}
 										size="large"
 										maxLength={400}
-										className={clsx(
-											'',
-											IsError &&
-												IsError.id === item.id &&
-												IsError.registrationAddress &&
-												'border-rose-500'
-										)}
 										onChange={e =>
 											dispatch(
 												registrationAddress({
@@ -587,18 +355,8 @@ export const Parent = () => {
 												})
 											)
 										}
-										value={convertToString(
-											parentData.filter(el => el.id === item.id)[0]
-												.registrationAddress
-										)}
+										value={item.registrationAddress}
 									/>
-									{IsError &&
-										IsError.id === item.id &&
-										IsError.registrationAddress && (
-											<span className="text-red-500 text-sm">
-												{t('EmptyFolder')}
-											</span>
-										)}
 								</Space>
 								<Space direction="vertical" className="w-full">
 									<Typography.Text className=" text-black">
@@ -608,13 +366,6 @@ export const Parent = () => {
 										placeholder={t('AdressLocation')}
 										size="large"
 										maxLength={400}
-										className={clsx(
-											'',
-											IsError &&
-												IsError.id === item.id &&
-												IsError.residenceAddress &&
-												'border-rose-500'
-										)}
 										onChange={e =>
 											dispatch(
 												residenceAddress({
@@ -623,18 +374,8 @@ export const Parent = () => {
 												})
 											)
 										}
-										value={convertToString(
-											parentData.filter(el => el.id === item.id)[0]
-												.residenceAddress
-										)}
+										value={item.residenceAddress}
 									/>
-									{IsError &&
-										IsError.id === item.id &&
-										IsError.residenceAddress && (
-											<span className="text-red-500 text-sm">
-												{t('EmptyFolder')}
-											</span>
-										)}
 								</Space>
 								<Space size={'small'} className="mt-8">
 									<Typography.Text className="text-black opacity-80 text-sm font-normal leading-none">

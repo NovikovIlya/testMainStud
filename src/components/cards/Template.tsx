@@ -56,13 +56,26 @@ export const TemplateCard = ({
 					</div>
 				)}
 			</div>
-			<Button
-				type={buttonType}
-				className="rounded-full w-[200px] h-[50px] max-[874px]:hidden"
-				onClick={() => navigate(href)}
-			>
-				{buttonText}
-			</Button>
+			{href.includes('http') ? (
+				<Button
+					type={buttonType}
+					className="rounded-full w-[200px] h-[50px] max-[874px]:hidden"
+				>
+					<a href={href} target="_blank">
+						{buttonText}
+					</a>
+				</Button>
+			) : (
+				<Button
+					type={buttonType}
+					className="rounded-full w-[200px] h-[50px] max-[874px]:hidden"
+					onClick={() => {
+						navigate(href)
+					}}
+				>
+					{buttonText}
+				</Button>
+			)}
 		</div>
 	)
 }

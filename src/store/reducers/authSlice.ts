@@ -16,10 +16,11 @@ const authSlice = createSlice({
 	reducers: {
 		setCredentials: (state, action: PayloadAction<InitialState>) => {
 			state.accessToken = action.payload.accessToken
-			state.refreshToken = action.payload.refreshToken
+			if (action.payload.refreshToken)
+				state.refreshToken = action.payload.refreshToken
 			if (state.user && action.payload.user)
 				state.user.roles = [...action.payload.user.roles]
-			state.user = action.payload.user
+			if (action.payload.user) state.user = action.payload.user
 		},
 		logOut: state => {
 			state.user = null

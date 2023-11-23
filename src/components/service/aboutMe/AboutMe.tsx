@@ -8,17 +8,21 @@ import {
 	Space,
 	Typography
 } from 'antd'
+import PhoneInput from 'antd-phone-input'
+import FormItem from 'antd/es/form/FormItem'
 import ruPicker from 'antd/locale/ru_RU'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
-import { useState } from 'react'
+import { useEffect, useLayoutEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 
 import { useAppSelector } from '../../../store'
-import { useGetInfoUserQuery } from '../../../store/api/formApi'
+import {
+	useGetInfoUserQuery,
+	usePostInfoUserMutation
+} from '../../../store/api/formApi'
 import { useGetCountriesQuery } from '../../../store/api/utilsApi'
-import { putAbUsForm } from '../../../store/creators/MainCreators'
 import {
 	allData,
 	birthDay,
@@ -29,50 +33,36 @@ import {
 	phone,
 	surName
 } from '../../../store/reducers/FormReducers/FormReducer'
+import { validator } from '../../../utils/validPhone'
 
 export const AboutMe = () => {
 	const { t, i18n } = useTranslation()
-	const role = useAppSelector(state => state.auth.user?.roles)
-	const dispatch = useDispatch()
+	const { data: countries } = useGetCountriesQuery(i18n.language)
 	const email = useAppSelector(state => state.auth.user?.email)
-	const { data: me } = useGetInfoUserQuery()
-	const [IsError, setError] = useState<boolean>(false)
-	const { data: countries, isLoading } = useGetCountriesQuery(i18n.language)
-	if (me !== undefined) dispatch(allData(me))
+	const dispatch = useDispatch()
+	const role = useAppSelector(state => state.auth.user?.roles)
+	const [postUser] = usePostInfoUserMutation()
+	const { data: userInfo, refetch } = useGetInfoUserQuery()
+
 	const formData = useAppSelector(state => state.Form)
-
-	const setChanges = async () => {
-		const IsCorrectNS = [formData.name, formData.surName].some(el =>
-			/^\p{L}+$/u.test(el)
-		)
-
-		const IsCorrectPatronymic =
-			/^\p{L}+$/u.test(formData.patronymic) || formData.patronymic === ''
-
-		const IsCorrectPhone = /^\+[0-9][0-9]{3}[0-9]{3}[0-9]{2}[0-9]{2}$/.test(
-			formData.phone
-		)
-
-		if (
-			!IsCorrectNS ||
-			!IsCorrectPatronymic ||
-			!IsCorrectPhone ||
-			formData.birthDay === ''
-		) {
-			setError(true)
-		} else {
-			const status = await putAbUsForm(formData)
-			if (status === 403) {
-				setError(true)
-			} else {
-				setError(false)
-			}
-		}
+	const user = useAppSelector(state => state.auth.user)
+	const onSubmit = () => {
+		postUser(formData)
 	}
+	useEffect(() => {
+		if (user) {
+			dispatch(surName(user.firstname))
+			dispatch(name(user.lastname))
+		}
+	}, [])
+	useEffect(() => {
+		refetch()
+		userInfo && dispatch(allData(userInfo))
+	}, [userInfo])
+	console.log(formData.phone)
 
 	if (!role) return <></>
 	const isStudent = role[0].type === 'STUD'
-
 	return (
 		<div className="m-14 radio">
 			<Space direction="vertical" size={20}>
@@ -97,18 +87,10 @@ export const AboutMe = () => {
 						placeholder={t('surname')}
 						size="large"
 						maxLength={200}
-						className={clsx(
-							'w-[624px]  ',
-							IsError &&
-								!/^\p{L}+$/u.test(formData.surName) &&
-								'border-rose-500'
-						)}
+						className="w-[624px]"
 						onChange={e => dispatch(surName(e.target.value))}
 						value={formData.surName}
 					/>
-					{IsError && !/^\p{L}+$/u.test(formData.surName) && (
-						<div className="text-sm text-rose-500">{t('EmptyFolder')}</div>
-					)}
 				</Space>
 				<Space direction="vertical" size={'small'}>
 					<Typography.Text>{t('name')}</Typography.Text>
@@ -116,16 +98,10 @@ export const AboutMe = () => {
 						disabled={isStudent}
 						placeholder={t('name')}
 						size="large"
-						className={clsx(
-							'w-[624px]  ',
-							IsError && !/^\p{L}+$/u.test(formData.name) && 'border-rose-500'
-						)}
+						className="w-[624px]"
 						onChange={e => dispatch(name(e.target.value))}
 						value={formData.name}
 					/>
-					{IsError && !/^\p{L}+$/u.test(formData.name) && (
-						<div className="text-sm text-rose-500">{t('EmptyFolder')}</div>
-					)}
 				</Space>
 				<Space direction="vertical" size={'small'}>
 					<Typography.Text>{t('middleName')}</Typography.Text>
@@ -133,21 +109,10 @@ export const AboutMe = () => {
 						disabled={isStudent}
 						placeholder={t('middleName')}
 						size="large"
-						className={clsx(
-							'w-[624px]  ',
-							IsError &&
-								!/^\p{L}+$/u.test(formData.patronymic) &&
-								formData.patronymic !== '' &&
-								'border-rose-500'
-						)}
+						className="w-[624px]"
 						onChange={e => dispatch(patronymic(e.target.value))}
 						value={formData.patronymic}
 					/>
-					{IsError &&
-						!/^\p{L}+$/u.test(formData.patronymic) &&
-						formData.patronymic !== '' && (
-							<div className="text-sm text-rose-500">{t('BadPatronymic')}</div>
-						)}
 				</Space>
 				<Space direction="vertical" size={'small'}>
 					<Typography.Text>{t('birth')}</Typography.Text>
@@ -156,29 +121,21 @@ export const AboutMe = () => {
 							disabled={isStudent}
 							placeholder={t('birth')}
 							size="large"
-							className={clsx(
-								'w-[624px]  ',
-								IsError && formData.birthDay === '' && 'border-rose-500'
-							)}
+							className="w-[624px]"
 							format={'DD.MM.YYYY'}
 							onChange={e =>
-								dispatch(birthDay(!e ? '' : e?.format('YYYY-MM-DD')))
+								dispatch(birthDay(!e ? '' : e.format('YYYY-MM-DD')))
 							}
 							value={
-								//@ts-ignore
-								!formData || !formData.birthDay
-									? null
-									: dayjs(
-											//@ts-ignore
+								formData.birthDay
+									? dayjs(
 											formData.birthDay.split('-').reverse().join('.'),
 											'DD.MM.YYYY'
 									  )
+									: null
 							}
 						/>
 					</ConfigProvider>
-					{IsError && formData.birthDay === '' && (
-						<div className="text-sm text-rose-500">{t('DateError')}</div>
-					)}
 				</Space>
 				<Space direction="vertical" size={'small'}>
 					<Typography.Text>{t('citizen')}</Typography.Text>
@@ -199,27 +156,19 @@ export const AboutMe = () => {
 						}
 					/>
 				</Space>
-				<Space direction="vertical" size={'small'}>
+				<Space direction="vertical" size={'small'} className="w-full">
 					<Typography.Text>{t('telephone')}</Typography.Text>
-					<Input
-						disabled={isStudent}
-						placeholder="+7 999 898-88-00"
-						size="large"
-						className={clsx(
-							'w-[624px]  ',
-							IsError &&
-								!/^\+[0-9][0-9]{3}[0-9]{3}[0-9]{2}[0-9]{2}$/.test(
-									formData.phone
-								) &&
-								'border-rose-500'
-						)}
-						onChange={e => dispatch(phone(e.target.value))}
-						value={formData.phone}
-					/>
-					{IsError &&
-						!/^\+[0-9][0-9]{3}[0-9]{3}[0-9]{2}[0-9]{2}$/.test(
-							formData.phone
-						) && <div className="text-sm text-rose-500">{t('BadPhone')}</div>}
+					<FormItem name="phone" rules={[{ validator }]} className="w-full">
+						<PhoneInput
+							size="large"
+							className="w-full"
+							enableSearch
+							onChange={e => {
+								if (e.phoneNumber) dispatch(phone(e.phoneNumber.toString()))
+							}}
+							value={formData.phone}
+						/>
+					</FormItem>
 				</Space>
 				<Space direction="vertical" size={'small'}>
 					<Typography.Text>{t('email')}</Typography.Text>
@@ -238,7 +187,7 @@ export const AboutMe = () => {
 				>
 					<Button
 						className="border-solid border-bluekfu border-[1px] text-bluekfu rounded-md"
-						onClick={() => setChanges()}
+						onClick={() => onSubmit()}
 					>
 						{t('edit')}
 					</Button>

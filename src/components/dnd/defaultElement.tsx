@@ -485,5 +485,25 @@ export const jsxElements = [
 			y: 0,
 			i: 'Vacation'
 		}
+	},
+	{
+		index: 'SitAnKFU',
+		element: (
+			<TemplateCard
+				href="http://10.160.178.202/news_aggregator/news/"
+				info="Новостные статьис указанием источниковдля последующего анализа международных ситуаций"
+				title="SitAnKFU"
+				img="/image45.png"
+				buttonText="Посмотреть"
+				height={160}
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 1,
+			y: 0,
+			i: 'SitAnKFU'
+		}
 	}
 ]

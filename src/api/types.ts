@@ -42,7 +42,12 @@ interface IRoles {
 	id: string
 	type: string
 }
-
+export interface IResponse {
+	id: number
+	name: string
+	type: string
+	shortName: string
+}
 export interface IUserData {
 	username: string
 	firstname: string
@@ -134,35 +139,35 @@ export type IDocumentAbUs = {
 export type IDocumentRequest = { document: IDocument }
 
 export type educationItem = {
-	nameOfInstitute: string | null
-	educationLevelId: number | null
-	documentNumber: string | null
-	documentSeries: string | null
-	countryId: number | null
-	graduateYear: string | null
-	specialization: string | null
+	nameOfInstitute: string
+	educationLevelId: number
+	documentNumber: string
+	documentSeries: string
+	countryId: number
+	graduateYear: string
+	specialization: string
 }
 
 export type IEducationRequest = { educations: educationItem[] }
 
-export type IEducationState = educationItem & { id: number }
+export type IEducationState = educationItem & { id: string }
 
 export type IParent = {
 	name: string | null
 	surName: string | null
 	patronymic: string | null
 	dateIssue: string | null
-	divisionCode: string | null
-	eMail: string | null
-	issuedBy: string | null
-	documentTypeId: number | null
-	phone: string | null
-	passportSeries: string | null
-	passportNumber: string | null
-	registrationAddress: string | null
-	residenceAddress: string | null
-	inn: string | null
-	snils: string | null
+	divisionCode: string
+	eMail: string
+	issuedBy: string
+	documentTypeId: number
+	phone: string
+	passportSeries: string
+	passportNumber: string
+	registrationAddress: string
+	residenceAddress: string
+	inn: string
+	snils: string
 	mother?: string
 	father?: string
 }
@@ -174,21 +179,22 @@ export type IParentRequest = {
 export type AbUSParentResponse = IParent & { id: number }
 
 export type IParentState = Omit<IParent, 'name' | 'surName' | 'patronymic'> & {
-	FIO: string | null
+	FIO: string
 
-	id: number
+	id: string
 }
 
 export type workItem = {
+	id: string
 	name: string
 	startDate: string
 	endDate: string | null
-	responsibilities: string | null
+	responsibilities: string
 	additionalInfo: string
 }
 
 export type IWorkState = {
-	items: (workItem & { id: number })[]
+	items: workItem[]
 	portfolioLink: string | null
 }
 

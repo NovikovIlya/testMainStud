@@ -4,51 +4,23 @@ import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import { useAppSelector } from '../../../../store'
+import { usePostInfoUserMutation } from '../../../../store/api/formApi'
 import { setForm } from '../../../../store/creators/MainCreators'
 
-export const Buttons = ({
-	changeIsEmpty
-}: {
-	changeIsEmpty: (IsEmpty: boolean) => void
-}) => {
+export const Buttons = () => {
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 	const userRole = useAppSelector(state => state.auth.user?.roles[0].type)
 	const data = useAppSelector(state => state.Form)
+	const [postUser] = usePostInfoUserMutation()
 	const { t } = useTranslation()
 	const handleCancel = () => {
 		navigate('/infoUser')
 	}
 	const handleOk = async () => {
+		postUser(data)
 		if (userRole === 'GUEST') navigate('/user')
 		else navigate('/documents')
-	}
-	const IsOK = async () => {
-		const IsCorrectNS = [data.name, data.surName].some(el =>
-			/^\p{L}+$/u.test(el)
-		)
-
-		const IsCorrectPatronymic =
-			/^\p{L}+$/u.test(data.patronymic) || data.patronymic === ''
-
-		const IsCorrectPhone =
-			/^\+[0-9]\s[0-9]{3}\s[0-9]{3}\-[0-9]{2}\-[0-9]{2}$/.test(data.phone)
-		if (
-			!IsCorrectNS ||
-			!IsCorrectPatronymic ||
-			!IsCorrectPhone ||
-			data.birthDay === ''
-		) {
-			changeIsEmpty(true)
-			return false
-		}
-		const response = await setForm(data)
-		if (response === 200) return true
-		else {
-			if (response === 403) {
-				navigate('/')
-			}
-		}
 	}
 	const handleSkip = () => {
 		navigate('/user')

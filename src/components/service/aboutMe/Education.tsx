@@ -13,11 +13,10 @@ import {
 import type { UploadProps } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
-import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
+import uuid from 'react-uuid'
 
-import { IEducationError, IEducationState } from '../../../api/types'
 import { useAppSelector } from '../../../store'
 import { useGetEducationQuery } from '../../../store/api/formApi'
 import {
@@ -25,17 +24,14 @@ import {
 	useGetEducationLevelQuery
 } from '../../../store/api/utilsApi'
 import {
-	addEducationItemRequest,
-	deleteEducationItemRequest,
-	putEducationItemRequest
-} from '../../../store/creators/MainCreators'
-import {
+	addEducation,
 	allData,
 	countryId,
 	documentNumber,
 	documentSeries,
 	educationLevelId,
 	graduateYear,
+	idDelete,
 	nameOfInstitute,
 	specialization
 } from '../../../store/reducers/FormReducers/EducationReducer'
@@ -62,117 +58,18 @@ export const Education = () => {
 	const { t, i18n } = useTranslation()
 	const dispatch = useDispatch()
 	const { data: education } = useGetEducationQuery()
-	if (education !== undefined) dispatch(allData(education))
 	const educationData = useAppSelector(state => state.Education)
+	if (education !== undefined && education.length) dispatch(allData(education))
 	const role = useAppSelector(state => state.auth.user?.roles)
 	const { data: educationLevel } = useGetEducationLevelQuery(i18n.language)
 	const { data: countries } = useGetCountriesQuery(i18n.language)
 
-	const [_, setUpdate] = useState<boolean>(true)
-	const [IsError, setError] = useState<IEducationError | null>(null)
-
-	const convertToString = (field: any): string => {
-		if (typeof field === 'string') {
-			return field
-		} else {
-			return ''
-		}
+	const handleDeleteEducation = (id: string) => {
+		dispatch(idDelete(id))
 	}
 
-	const checkEducationItem = (item: IEducationState): boolean => {
-		var haveError = false
-
-		var errorPattern = {
-			id: item.id,
-			nameOfInstitute: false,
-			documentNumber: false,
-			documentSeries: false,
-			graduateYear: false,
-			specialization: false
-		}
-
-		if (
-			item.documentNumber === null ||
-			(item.documentNumber !== null && !/^[0-9]{4}$/.test(item.documentNumber))
-		) {
-			haveError = true
-			errorPattern.documentNumber = true
-		}
-
-		if (
-			item.documentSeries === null ||
-			(item.documentSeries !== null && !/^[0-9]{4}$/.test(item.documentSeries))
-		) {
-			haveError = true
-			errorPattern.documentSeries = true
-		}
-		if (
-			item.nameOfInstitute === null ||
-			(item.nameOfInstitute !== null &&
-				(/\s\s/.test(item.nameOfInstitute) ||
-					!/^[\p{L}\s()0-9]+$/u.test(item.nameOfInstitute)))
-		) {
-			haveError = true
-			errorPattern.nameOfInstitute = true
-		}
-		if (
-			item.specialization === null ||
-			(item.specialization !== null &&
-				(/\s\s/.test(item.specialization) ||
-					!/^[\p{L}\s.,]+$/u.test(item.specialization)))
-		) {
-			haveError = true
-			errorPattern.specialization = true
-		}
-		if (!item.graduateYear) {
-			haveError = true
-			errorPattern.graduateYear = true
-		}
-
-		haveError && setError(errorPattern)
-		IsError !== null && !haveError && setError(null)
-
-		return haveError
-	}
-
-	const handleUpdateEducation = async (item: IEducationState) => {
-		if (!checkEducationItem(item)) {
-			const status = await putEducationItemRequest(item.id.toString(), {
-				nameOfInstitute: item.nameOfInstitute,
-				documentNumber: item.documentNumber,
-				documentSeries: item.documentSeries,
-				graduateYear: item.graduateYear,
-				specialization: item.specialization,
-				educationLevelId: item.educationLevelId,
-				countryId: item.countryId
-			})
-			if (status === 200) {
-				setUpdate(true)
-			} else {
-				console.log('403')
-			}
-		}
-	}
-
-	const handleDeleteEducation = async (id: string) => {
-		const response = await deleteEducationItemRequest(id)
-		if (response === 200) setUpdate(true)
-		else console.log('403')
-	}
-
-	const handleAddEducation = async () => {
-		const item = {
-			nameOfInstitute: null,
-			documentNumber: null,
-			documentSeries: null,
-			graduateYear: null,
-			specialization: null,
-			educationLevelId: 1,
-			countryId: 1
-		}
-		const response = await addEducationItemRequest(item)
-		if (response === 200) setUpdate(true)
-		else console.log('403')
+	const handleAddEducation = () => {
+		dispatch(addEducation(uuid()))
 	}
 
 	if (!role) return <></>
@@ -193,22 +90,13 @@ export const Education = () => {
 								{t('educationDocument')}
 							</Typography.Text>
 							<Typography.Text
-								onClick={() => handleDeleteEducation(item.id.toString())}
+								onClick={() => handleDeleteEducation(item.id)}
 								className={clsx(
 									'cursor-pointer opacity-40 text-center text-black text-sm font-normal leading-[18px] mr-3',
 									index === 0 && 'hidden'
 								)}
 							>
 								{t('Delete')}
-							</Typography.Text>
-							<Typography.Text
-								onClick={() => handleUpdateEducation(item)}
-								className={clsx(
-									'cursor-pointer opacity-40 text-center text-black text-sm font-normal leading-[18px]',
-									isStudent && 'hidden'
-								)}
-							>
-								{t('Save')}
 							</Typography.Text>
 						</Space>
 						<Space size={'large'} direction="vertical" className="w-full">
@@ -219,14 +107,8 @@ export const Education = () => {
 										disabled={isStudent}
 										size="large"
 										className="w-full  rounded-lg"
-										defaultValue={
-											educationData.filter(el => el.id === item.id)[0]
-												.educationLevelId
-										}
-										value={
-											educationData.filter(el => el.id === item.id)[0]
-												.educationLevelId
-										}
+										defaultValue={item.educationLevelId}
+										value={item.educationLevelId}
 										options={
 											!educationLevel
 												? []
@@ -279,17 +161,7 @@ export const Education = () => {
 									disabled={isStudent}
 									maxLength={200}
 									size="large"
-									className={clsx(
-										' ',
-										IsError &&
-											IsError.id === item.id &&
-											IsError.nameOfInstitute &&
-											'border-rose-500'
-									)}
-									value={convertToString(
-										educationData.filter(el => el.id === item.id)[0]
-											.nameOfInstitute
-									)}
+									value={item.nameOfInstitute}
 									onChange={e =>
 										dispatch(
 											nameOfInstitute({
@@ -299,13 +171,6 @@ export const Education = () => {
 										)
 									}
 								/>
-								{IsError &&
-									IsError.id === item.id &&
-									IsError.nameOfInstitute && (
-										<div className="text-sm text-rose-500">
-											{t('EmptyFolder')}
-										</div>
-									)}
 							</Space>
 							<div className="grid grid-cols-2 mt-4 gap-x-10 gap-y-4 w-full max-lg:gap-1 max-lg:grid-cols-1">
 								<Space direction="vertical" size={'small'}>
@@ -315,17 +180,7 @@ export const Education = () => {
 										placeholder="1234"
 										size="large"
 										maxLength={4}
-										className={clsx(
-											' ',
-											IsError &&
-												IsError.id === item.id &&
-												IsError.documentNumber &&
-												'border-rose-500'
-										)}
-										value={convertToString(
-											educationData.filter(el => el.id === item.id)[0]
-												.documentNumber
-										)}
+										value={item.documentNumber}
 										onChange={e =>
 											dispatch(
 												documentNumber({
@@ -335,13 +190,6 @@ export const Education = () => {
 											)
 										}
 									/>
-									{IsError &&
-										IsError.id === item.id &&
-										IsError.documentNumber && (
-											<div className="text-sm text-rose-500">
-												{t('EmptyFolder')}
-											</div>
-										)}
 								</Space>
 								<Space direction="vertical" size={'small'}>
 									<Typography.Text>{t('diplomaSeries')}</Typography.Text>
@@ -350,17 +198,7 @@ export const Education = () => {
 										placeholder="1234"
 										size="large"
 										maxLength={4}
-										className={clsx(
-											' ',
-											IsError &&
-												IsError.id === item.id &&
-												IsError.documentSeries &&
-												'border-rose-500'
-										)}
-										value={convertToString(
-											educationData.filter(el => el.id === item.id)[0]
-												.documentSeries
-										)}
+										value={item.documentSeries}
 										onChange={e =>
 											dispatch(
 												documentSeries({
@@ -370,25 +208,12 @@ export const Education = () => {
 											)
 										}
 									/>
-									{IsError &&
-										IsError.id === item.id &&
-										IsError.documentSeries && (
-											<div className="text-sm text-rose-500">
-												{t('EmptyFolder')}
-											</div>
-										)}
 								</Space>
 								<Space direction="vertical">
 									<Typography.Text>{t('graduateYear')}</Typography.Text>
 									<DatePicker
 										disabled={isStudent}
-										className={clsx(
-											' w-full',
-											IsError &&
-												IsError.id === item.id &&
-												IsError.graduateYear &&
-												'border-rose-500'
-										)}
+										className="w-full"
 										onChange={e => {
 											dispatch(
 												graduateYear({
@@ -402,27 +227,11 @@ export const Education = () => {
 										placeholder={new Date().getFullYear().toString()}
 										picker="year"
 										value={
-											convertToString(
-												educationData.filter(el => el.id === item.id)[0]
-													.graduateYear
-											) !== ''
-												? dayjs(
-														convertToString(
-															educationData.filter(el => el.id === item.id)[0]
-																.graduateYear
-														),
-														'YYYY'
-												  )
+											item.graduateYear !== ''
+												? dayjs(item.graduateYear, 'YYYY')
 												: null
 										}
 									/>
-									{IsError &&
-										IsError.id === item.id &&
-										IsError.graduateYear && (
-											<div className="text-sm text-rose-500">
-												{t('DateError')}
-											</div>
-										)}
 								</Space>
 								<Space
 									direction="vertical"
@@ -433,17 +242,8 @@ export const Education = () => {
 										disabled={isStudent}
 										placeholder={t('web')}
 										size="large"
-										className={clsx(
-											'w-full  ',
-											IsError &&
-												IsError.id === item.id &&
-												IsError.specialization &&
-												'border-rose-500'
-										)}
-										value={convertToString(
-											educationData.filter(el => el.id === item.id)[0]
-												.specialization
-										)}
+										className="w-full"
+										value={item.specialization}
 										onChange={e =>
 											dispatch(
 												specialization({
@@ -453,13 +253,6 @@ export const Education = () => {
 											)
 										}
 									/>
-									{IsError &&
-										IsError.id === item.id &&
-										IsError.specialization && (
-											<div className="text-sm text-rose-500">
-												{t('EmptyFolder')}
-											</div>
-										)}
 								</Space>
 							</div>
 						</Space>

@@ -11,6 +11,7 @@ import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import { useAppSelector } from '../../store'
+import { useSetRoleMutation } from '../../store/api/serviceApi'
 import { setRole } from '../../store/reducers/authSlice'
 
 import { ImagesLayout } from './ImagesLayout'
@@ -19,22 +20,18 @@ export const InfoUser = () => {
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 
-	const roleState = useAppSelector(state => state.InfoUser?.role)
-	const role = useAppSelector(state => state.auth.user?.roles)
+	const [postRole] = useSetRoleMutation()
+	const role = useAppSelector(state => state.auth.user?.roles[0].type)
 
 	const { t } = useTranslation()
 	const handleOk = async () => {
+		role && postRole({ role: role })
 		navigate('/form')
 	}
 	const handleSkip = () => {
 		navigate('/user')
 	}
 
-	var userRole = ''
-	if (localStorage.getItem('userInfo')) {
-		var userInfo = JSON.parse(localStorage.getItem('userInfo') || '')
-		userRole = userInfo.roles.length > 0 ? userInfo.roles[0].type : ''
-	}
 	return (
 		<ImagesLayout first>
 			<div className="w-full flex justify-center ">
@@ -63,11 +60,7 @@ export const InfoUser = () => {
 										name="vertical-list"
 										id="GUEST"
 										ripple={false}
-										defaultChecked={
-											[roleState, userRole].some(el => el === 'GUEST')
-												? true
-												: false
-										}
+										defaultChecked={role === 'GUEST' ? true : false}
 										className="hover:before:opacity-0 mt-1"
 										containerProps={{
 											className: 'p-0'
@@ -95,11 +88,7 @@ export const InfoUser = () => {
 										containerProps={{
 											className: 'p-0'
 										}}
-										defaultChecked={
-											[roleState, userRole].some(el => el === 'SCHOOL')
-												? true
-												: false
-										}
+										defaultChecked={role === 'SCHOOL' ? true : false}
 									/>
 								</ListItemPrefix>
 								<Typography color="blue-gray" className="font-medium text-sm">
@@ -123,11 +112,7 @@ export const InfoUser = () => {
 										containerProps={{
 											className: 'p-0'
 										}}
-										defaultChecked={
-											[roleState, userRole].some(el => el === 'ABIT')
-												? true
-												: false
-										}
+										defaultChecked={role === 'ABIT' ? true : false}
 									/>
 								</ListItemPrefix>
 								<Typography color="blue-gray" className="font-medium text-sm">
@@ -151,11 +136,7 @@ export const InfoUser = () => {
 										containerProps={{
 											className: 'p-0'
 										}}
-										defaultChecked={
-											[roleState, userRole].some(el => el === 'ATTEND')
-												? true
-												: false
-										}
+										defaultChecked={role === 'ATTEND' ? true : false}
 									/>
 								</ListItemPrefix>
 								<Typography color="blue-gray" className="font-medium text-sm">
@@ -179,11 +160,7 @@ export const InfoUser = () => {
 										containerProps={{
 											className: 'p-0'
 										}}
-										defaultChecked={
-											[roleState, userRole].some(el => el === 'SEEKER')
-												? true
-												: false
-										}
+										defaultChecked={role === 'SEEKER' ? true : false}
 									/>
 								</ListItemPrefix>
 								<Typography color="blue-gray" className="font-medium text-sm">

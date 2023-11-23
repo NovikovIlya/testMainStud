@@ -12,25 +12,17 @@ import clsx from 'clsx'
 import dayjs from 'dayjs'
 import 'dayjs/locale/en'
 import 'dayjs/locale/ru'
-import { useEffect } from 'react'
-import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import uuid from 'react-uuid'
 
-import { IWorkError, workItem } from '../../../api/types'
-import { RootState } from '../../../store'
 import { useAppSelector } from '../../../store'
 import {
-	deleteJobItemRequest,
-	getAbUsJob,
-	updateJobItemRequest
-} from '../../../store/creators/MainCreators'
-import { setJob } from '../../../store/creators/MainCreators'
-import { allData } from '../../../store/reducers/FormReducers/WorkReducer'
-import {
+	addWork,
 	additionalInfo,
-	idAdd,
+	deleteWork,
+	endDate,
 	name,
 	portfolioLink,
 	startDate
@@ -40,145 +32,27 @@ import { ImagesLayout } from '../ImagesLayout'
 const { TextArea } = Input
 
 export const WorkForm = () => {
-	const data = useAppSelector(state => state.Work)
-	const [IsEmpty, changeIsEmpty] = useState<boolean>(false)
-
 	const { t, i18n } = useTranslation()
 	dayjs.locale(i18n.language)
-	const [IsError, setError] = useState<IWorkError>({
-		item: null,
-		portfolio: false
-	})
 	const navigate = useNavigate()
-	const [updateItems, setUpdate] = useState<boolean>(true)
 	const dispatch = useDispatch()
-	const workData = useAppSelector((state: RootState) => state.Work)
+	const workData = useAppSelector(state => state.Work)
 
-	const getData = async () => {
-		const response = await getAbUsJob()
-		response !== null && dispatch(allData(response))
+	const handleDeleteWork = (id: string) => {
+		dispatch(deleteWork(id))
 	}
-
-	useEffect(() => {
-		if (updateItems) {
-			getData()
-			setUpdate(false)
-		}
-	}, [updateItems])
-
-	const checkWorkItem = (id: string, item: workItem): boolean => {
-		var haveError = false
-		var errorPattern = {
-			id: parseInt(id),
-			name: false,
-			startDate: false,
-			responsibilities: false,
-			additionalInfo: false
-		}
-
-		if (
-			!item.name ||
-			(item.name &&
-				(/\s\s/.test(item.name) || !/^[\p{L}\s.,]+$/u.test(item.name)))
-		) {
-			haveError = true
-			errorPattern.name = true
-		}
-		if (
-			!item.additionalInfo ||
-			(item.additionalInfo &&
-				(/\s\s/.test(item.additionalInfo) ||
-					!/^[\p{L}\s.,]+$/u.test(item.additionalInfo)))
-		) {
-			haveError = true
-			errorPattern.additionalInfo = true
-		}
-		if (
-			!item.responsibilities ||
-			(item.responsibilities &&
-				(/\s\s/.test(item.responsibilities) ||
-					!/^[\p{L}\s.,]+$/u.test(item.responsibilities)))
-		) {
-			haveError = true
-			errorPattern.responsibilities = true
-		}
-		if (!item.startDate) {
-			haveError = true
-			errorPattern.startDate = true
-		}
-
-		haveError && setError({ ...IsError, item: errorPattern })
-		IsError.item !== null && !haveError && setError({ ...IsError, item: null })
-
-		return haveError
-	}
-
-	const handleDeleteWork = async (id: string) => {
-		const response = await deleteJobItemRequest(id)
-		if (response === 403) {
-			console.log('403')
-			//navigate("/")
-		} else {
-			setUpdate(true)
-		}
-	}
-	const handleUpdateWork = async (id: string, item: workItem) => {
-		if (!checkWorkItem(id, item)) {
-			const response = await updateJobItemRequest(id, item)
-			if (response === 403) {
-				console.log('403')
-				//navigate("/")
-			} else {
-				setUpdate(true)
-			}
-		}
+	const handleAddWork = () => {
+		dispatch(addWork(uuid()))
 	}
 
 	const handleCancel = () => {
 		navigate('/documents')
 	}
-	const handleOk = async () => {
-		if (await IsOK()) {
-			navigate('/user')
-		}
+	const handleOk = () => {
+		navigate('/user')
 	}
 	const handleSkip = () => {
 		navigate('/user')
-	}
-
-	const IsOK = async () => {
-		const IsCorrectString = data.items.some(item =>
-			[item.name, item.additionalInfo].some(
-				el => !/\s\s/.test(el) && /^[\p{L}\s.,]+$/u.test(el)
-			)
-		)
-		const IsCorrectDates = data.items.some(item =>
-			[item.startDate, item.endDate].some(el => el !== '')
-		)
-		const IsCorrectLink = !data.portfolioLink
-			? true
-			: /^(?:https?:\/\/)?(?:www\.)?([a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*)(?:\/[^\s]*)?$/.test(
-					data.portfolioLink
-			  )
-		if (!IsCorrectDates || !IsCorrectString || !IsCorrectLink) {
-			changeIsEmpty(true)
-			return false
-		}
-		const requestData = data.items.map(({ id, ...rest }) => rest)
-		const response = await setJob({
-			items: requestData,
-			portfolioLink: data.portfolioLink
-		})
-
-		if (response === 200) return true
-		else {
-			if (response === 403) {
-				navigate('/')
-			}
-		}
-	}
-	const addWork = () => {
-		dispatch(idAdd(data.items[data.items.length - 1].id + 1))
 	}
 	return (
 		<ImagesLayout>
@@ -194,7 +68,7 @@ export const WorkForm = () => {
 											{t('placeWork')}
 										</Typography.Text>
 										<Typography.Text
-											onClick={() => handleDeleteWork(item.id.toString())}
+											onClick={() => handleDeleteWork(item.id)}
 											className={clsx(
 												'cursor-pointer opacity-40 text-center text-black text-sm font-normal leading-[18px]',
 												index === 0 && 'hidden'
@@ -202,50 +76,18 @@ export const WorkForm = () => {
 										>
 											{t('Delete')}
 										</Typography.Text>
-										<Typography.Text
-											onClick={() =>
-												handleUpdateWork(item.id.toString(), {
-													name: item.name,
-													startDate: item.startDate,
-													endDate: item.endDate,
-													responsibilities: item.responsibilities,
-													additionalInfo: item.additionalInfo
-												})
-											}
-											className={clsx(
-												'cursor-pointer opacity-40 text-center text-black text-sm font-normal leading-[18px]',
-												item.id === 0 && 'hidden'
-											)}
-										>
-											{t('Save')}
-										</Typography.Text>
 									</Space>
 									<div className="mt-2">
 										<Input
 											placeholder={t('placeholder')}
 											size="large"
 											maxLength={350}
-											className={clsx(
-												'w-full',
-												IsError.item &&
-													IsError.item.id === item.id &&
-													IsError.item.name &&
-													'border-rose-500'
-											)}
+											className="w-full"
 											onChange={e =>
 												dispatch(name({ id: item.id, name: e.target.value }))
 											}
-											value={
-												workData.items.filter(el => el.id === item.id)[0].name
-											}
+											value={item.name}
 										/>
-										{IsError.item &&
-											IsError.item.id === item.id &&
-											IsError.item.name && (
-												<span className="text-rose-500 text-sm">
-													{t('EmptyFolder')}
-												</span>
-											)}
 									</div>
 								</div>
 								<p className="mt-4 self-start">{t('periodOperation')}</p>
@@ -255,13 +97,7 @@ export const WorkForm = () => {
 											locale={i18n.language === 'ru' ? ruPicker : enPicker}
 										>
 											<DatePicker
-												className={clsx(
-													'shadow w-full',
-													IsError.item &&
-														IsError.item.id === item.id &&
-														IsError.item.startDate &&
-														'border-rose-500'
-												)}
+												className="w-full"
 												onChange={e =>
 													dispatch(
 														startDate({
@@ -275,72 +111,43 @@ export const WorkForm = () => {
 												placeholder={t('Start')}
 												format={'DD.MM.YYYY'}
 												value={
-													workData.items.filter(el => el.id === item.id)[0]
-														.startDate
+													item.startDate
 														? dayjs(
-																workData.items
-																	.filter(el => el.id === item.id)[0]
-																	.startDate.split('-')
-																	.reverse()
-																	.join('.'),
+																item.startDate.split('-').reverse().join('.'),
 																'DD.MM.YYYY'
 														  )
 														: null
 												}
 											/>
 										</ConfigProvider>
-										{IsEmpty && item.startDate === '' && (
-											<span className="text-rose-500 text-sm">
-												{t('DateError')}
-											</span>
-										)}
 									</div>
 									<div className="mt-2">
 										<ConfigProvider
 											locale={i18n.language === 'ru' ? ruPicker : enPicker}
 										>
 											<DatePicker
-												className={clsx(
-													'shadow w-full',
-													IsError.item &&
-														IsError.item.id === item.id &&
-														IsError.item.startDate &&
-														'border-rose-500'
-												)}
+												className="w-full"
 												onChange={e =>
 													dispatch(
-														startDate({
+														endDate({
 															id: item.id,
-															startDate:
-																e !== null ? e.format('YYYY-MM-DD') : ''
+															endDate: e !== null ? e.format('YYYY-MM-DD') : ''
 														})
 													)
 												}
 												size="large"
-												placeholder={t('Start')}
+												placeholder={t('End')}
 												format={'DD.MM.YYYY'}
 												value={
-													workData.items.filter(el => el.id === item.id)[0]
-														.startDate
+													item.endDate
 														? dayjs(
-																workData.items
-																	.filter(el => el.id === item.id)[0]
-																	.startDate.split('-')
-																	.reverse()
-																	.join('.'),
+																item.endDate.split('-').reverse().join('.'),
 																'DD.MM.YYYY'
 														  )
 														: null
 												}
 											/>
 										</ConfigProvider>
-										{IsError.item &&
-											IsError.item.id === item.id &&
-											IsError.item.startDate && (
-												<span className="text-rose-500 text-sm">
-													{t('EmptyFolder')}
-												</span>
-											)}
 									</div>
 								</div>
 								<div className="mt-4">
@@ -350,13 +157,6 @@ export const WorkForm = () => {
 									<div className="mt-2">
 										<TextArea
 											placeholder={t('tellYourWorkExperience')}
-											className={clsx(
-												'mt-2',
-												IsEmpty &&
-													(/\s\s/.test(item.additionalInfo) ||
-														!/^[\p{L}\s.,]+$/u.test(item.additionalInfo)) &&
-													'border-rose-500'
-											)}
 											autoSize={{ minRows: 4, maxRows: 8 }}
 											style={{ height: 120, resize: 'none' }}
 											onChange={e =>
@@ -367,18 +167,8 @@ export const WorkForm = () => {
 													})
 												)
 											}
-											value={
-												workData.items.filter(el => el.id === item.id)[0]
-													.additionalInfo
-											}
+											value={item.additionalInfo}
 										/>
-										{IsEmpty &&
-											(/\s\s/.test(item.additionalInfo) ||
-												!/^[\p{L}\s.,]+$/u.test(item.additionalInfo)) && (
-												<span className="text-red-500 text-sm">
-													{t('EmptyFolder')}
-												</span>
-											)}
 									</div>
 								</div>
 							</div>
@@ -389,7 +179,7 @@ export const WorkForm = () => {
 						<Button
 							className="rounded-full text-center p-0 w-8 h-8 text-xl"
 							type="primary"
-							onClick={addWork}
+							onClick={handleAddWork}
 						>
 							+
 						</Button>
@@ -404,23 +194,10 @@ export const WorkForm = () => {
 							placeholder={t('timeLine')}
 							size="large"
 							maxLength={500}
-							className={clsx(
-								'w-full',
-								IsEmpty &&
-									data.portfolioLink &&
-									!/^(?:https?:\/\/)?(?:www\.)?([a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*)(?:\/[^\s]*)?$/.test(
-										data.portfolioLink
-									) &&
-									'border-rose-500'
-							)}
+							className="w-full"
 							onChange={e => dispatch(portfolioLink(e.target.value))}
-							value={!data.portfolioLink ? '' : data.portfolioLink}
+							value={!workData.portfolioLink ? '' : workData.portfolioLink}
 						/>
-						{IsEmpty &&
-							data.portfolioLink &&
-							!/^(?:https?:\/\/)?(?:www\.)?([a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*)(?:\/[^\s]*)?$/.test(
-								data.portfolioLink
-							) && <span className="text-red-500 text-sm">{t('BadLink')}</span>}
 					</div>
 					<div className="w-full flex justify-center items-center gap-8 mt-[60px]">
 						<Button

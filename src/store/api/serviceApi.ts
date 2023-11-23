@@ -30,7 +30,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		getPracticeDocuments: builder.query<Template[], void>({
 			query: () => 'unified-center-api/practice-documents'
 		}),
-		getMyDocuments: builder.query<Template[], void>({
+		getMyQWEDocuments: builder.query<Template[], void>({
 			query: () => 'unified-center-api/my-documents'
 		}),
 		getDocumentation: builder.query<Documentation, void>({
@@ -87,6 +87,15 @@ export const serviceApi = apiSlice.injectEndpoints({
 					method: 'POST'
 				}
 			}
+		}),
+		setRole: builder.mutation({
+			query: (body: { role: string }) => {
+				return {
+					url: 'user-api/users/me/role',
+					body: body,
+					method: 'POST'
+				}
+			}
 		})
 	})
 })
@@ -94,5 +103,6 @@ export const {
 	useGetScheduleQuery,
 	useGetExamsScheduleQuery,
 	useGetStudyPlanQuery,
-	useApproveEmailMutation
+	useApproveEmailMutation,
+	useSetRoleMutation
 } = serviceApi

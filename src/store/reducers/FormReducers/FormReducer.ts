@@ -16,6 +16,9 @@ export const FormReducer = createSlice({
 	name: 'Form',
 	initialState,
 	reducers: {
+		allData: (_, action: PayloadAction<formItem>) => {
+			return action.payload
+		},
 		name: (state, action: PayloadAction<string>) => {
 			state.name = action.payload
 		},
@@ -36,9 +39,6 @@ export const FormReducer = createSlice({
 		},
 		country: (state, action: PayloadAction<number>) => {
 			state.countryId = action.payload
-		},
-		allData: (state, action: PayloadAction<formItem>): formItem => {
-			return action.payload
 		}
 	}
 })

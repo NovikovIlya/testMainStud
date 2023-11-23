@@ -1,18 +1,18 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
-import { RootState } from '../..'
 import { IWorkState, workItem } from '../../../api/types'
 
 const generalArray: workItem = {
+	id: '0',
 	name: '',
 	startDate: '',
 	endDate: null,
-	responsibilities: null,
+	responsibilities: '',
 	additionalInfo: ''
 }
 
 const initialState: IWorkState = {
-	items: [{ ...generalArray, id: 0 }],
+	items: [generalArray],
 	portfolioLink: null
 }
 
@@ -20,16 +20,16 @@ export const WorkReducer = createSlice({
 	name: 'Work',
 	initialState,
 	reducers: {
-		allData: (state, action: PayloadAction<IWorkState>): IWorkState => {
+		allData: (_, action: PayloadAction<IWorkState>): IWorkState => {
 			return action.payload
 		},
-		idAdd: (state, action: PayloadAction<number>) => {
+		addWork: (state, action: PayloadAction<string>) => {
 			state.items.push({ ...generalArray, id: action.payload })
 		},
-		idDelete: (state, action: PayloadAction<number>) => {
+		deleteWork: (state, action: PayloadAction<string>) => {
 			state.items = state.items.filter(e => e.id !== action.payload)
 		},
-		name: (state, action: PayloadAction<{ id: number; name: string }>) => {
+		name: (state, action: PayloadAction<{ id: string; name: string }>) => {
 			state.items.filter(el => el.id === action.payload.id)[0].name =
 				action.payload.name
 		},
@@ -38,7 +38,7 @@ export const WorkReducer = createSlice({
 		},
 		responsibilities: (
 			state,
-			action: PayloadAction<{ id: number; responsibilities: string }>
+			action: PayloadAction<{ id: string; responsibilities: string }>
 		) => {
 			state.items.filter(
 				el => el.id === action.payload.id
@@ -46,21 +46,21 @@ export const WorkReducer = createSlice({
 		},
 		additionalInfo: (
 			state,
-			action: PayloadAction<{ id: number; additionalInfo: string }>
+			action: PayloadAction<{ id: string; additionalInfo: string }>
 		) => {
 			state.items.filter(el => el.id === action.payload.id)[0].additionalInfo =
 				action.payload.additionalInfo
 		},
 		startDate: (
 			state,
-			action: PayloadAction<{ id: number; startDate: string }>
+			action: PayloadAction<{ id: string; startDate: string }>
 		) => {
 			state.items.filter(el => el.id === action.payload.id)[0].startDate =
 				action.payload.startDate
 		},
 		endDate: (
 			state,
-			action: PayloadAction<{ id: number; endDate: string | null }>
+			action: PayloadAction<{ id: string; endDate: string | null }>
 		) => {
 			state.items.filter(el => el.id === action.payload.id)[0].endDate =
 				action.payload.endDate
@@ -69,9 +69,9 @@ export const WorkReducer = createSlice({
 })
 
 export const {
-	idAdd,
+	addWork,
 	name,
-	idDelete,
+	deleteWork,
 	portfolioLink,
 	responsibilities,
 	additionalInfo,
@@ -81,5 +81,3 @@ export const {
 } = WorkReducer.actions
 
 export default WorkReducer.reducer
-
-export const selectState = (state: RootState) => state.Work

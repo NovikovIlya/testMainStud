@@ -21,7 +21,7 @@ import { useDispatch } from 'react-redux'
 
 import { RootState, useAppSelector } from '../../../store'
 import {
-	useGetDocumentsQuery,
+	useGetAllDocumentsQuery,
 	useGetMyDocumentsQuery
 } from '../../../store/api/formApi'
 import { postDocumentItemRequest } from '../../../store/creators/MainCreators'
@@ -62,7 +62,7 @@ export const Document = () => {
 	const [IsEmpty, changeIsEmpty] = useState<boolean>(false)
 	const role = useAppSelector(state => state.auth.user?.roles)
 	const { data: documents } = useGetMyDocumentsQuery()
-	const { data: levelDocuments } = useGetDocumentsQuery(i18n.language)
+	const { data: levelDocuments } = useGetAllDocumentsQuery()
 
 	if (documents !== undefined) dispatch(allData(documents))
 	const documentData = useAppSelector((state: RootState) => state.Document)

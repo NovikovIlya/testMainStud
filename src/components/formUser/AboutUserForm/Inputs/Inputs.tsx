@@ -7,14 +7,15 @@ import clsx from 'clsx'
 import dayjs from 'dayjs'
 import 'dayjs/locale/en'
 import 'dayjs/locale/ru'
-import { FC, useLayoutEffect, useState } from 'react'
+import { FC, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 
-import { RootState, useAppSelector } from '../../../../store'
+import { useAppSelector } from '../../../../store'
+import { useGetInfoUserQuery } from '../../../../store/api/formApi'
 import { useGetCountriesQuery } from '../../../../store/api/utilsApi'
-import { addCountries } from '../../../../store/reducers/FormReducers/CountriesEducationReducer'
 import {
+	allData,
 	birthDay,
 	country,
 	name,
@@ -22,6 +23,7 @@ import {
 	phone,
 	surName
 } from '../../../../store/reducers/FormReducers/FormReducer'
+import { validator } from '../../../../utils/validPhone'
 
 interface IInputProps {
 	IsEmpty: boolean
@@ -29,42 +31,22 @@ interface IInputProps {
 
 export const Inputs: FC<IInputProps> = ({ IsEmpty }) => {
 	const dispatch = useDispatch()
-	const info = useAppSelector(state => state.Form)
-	const [SkipCountriesQuery, changeQuerySkip] = useState<boolean>(true)
+	const { data: userInfo, refetch } = useGetInfoUserQuery()
 	const { t, i18n } = useTranslation()
+	const info = useAppSelector(state => state.Form)
 	dayjs.locale(i18n.language)
-	const { data: countries } = useGetCountriesQuery(i18n.language, {
-		skip: SkipCountriesQuery
-	})
+	const { data: countries } = useGetCountriesQuery(i18n.language)
 	const user = useAppSelector(state => state.auth.user)
-	const countryStorage = useAppSelector(
-		(state: RootState) => state.CountriesEducation.countries
-	)
-	//@ts-ignore
-	const validator = (_, { valid }) => {
-		if (valid()) return Promise.resolve()
-		return Promise.reject('Invalid phone number')
-	}
-	useLayoutEffect(() => {
+	useEffect(() => {
 		if (user) {
 			dispatch(surName(user.firstname))
 			dispatch(name(user.lastname))
 		}
 	}, [])
-
-	useLayoutEffect(() => {
-		if (countryStorage) {
-			changeQuerySkip(true)
-		} else {
-			changeQuerySkip(false)
-		}
-	}, [countryStorage])
-
-	useLayoutEffect(() => {
-		if (countries) {
-			dispatch(addCountries(countries))
-		}
-	}, [countries])
+	useEffect(() => {
+		refetch()
+		userInfo && dispatch(allData(userInfo))
+	}, [userInfo])
 
 	return (
 		<div className="w-full">
@@ -75,19 +57,12 @@ export const Inputs: FC<IInputProps> = ({ IsEmpty }) => {
 					size="large"
 					type="text"
 					maxLength={200}
-					className={clsx(
-						' transition-all duration-500',
-						IsEmpty && !/^\p{L}+$/u.test(info.surName) && 'border-rose-500'
-					)}
+					className={clsx(' transition-all duration-500')}
 					onChange={e => {
 						dispatch(surName(e.target.value))
 					}}
 					value={info.surName}
 				/>
-
-				{IsEmpty && !/^\p{L}+$/u.test(info.surName) && (
-					<span className="text-red-500 text-sm">{t('EmptyFolder')}</span>
-				)}
 			</div>
 
 			<span className="text-sm">{t('name')}</span>
@@ -96,18 +71,12 @@ export const Inputs: FC<IInputProps> = ({ IsEmpty }) => {
 					size="large"
 					type="text"
 					maxLength={200}
-					className={clsx(
-						' transition-all duration-500',
-						IsEmpty && !/^\p{L}+$/u.test(info.name) && 'border-rose-500'
-					)}
+					className={clsx(' transition-all duration-500')}
 					onChange={e => {
 						dispatch(name(e.target.value))
 					}}
 					value={info.name}
 				/>
-				{IsEmpty && !/^\p{L}+$/u.test(info.name) && (
-					<span className="text-red-500 text-sm">{t('EmptyFolder')}</span>
-				)}
 			</div>
 
 			<span className="text-sm">{t('middleName')}</span>
@@ -117,33 +86,19 @@ export const Inputs: FC<IInputProps> = ({ IsEmpty }) => {
 					type="text"
 					placeholder={t('middleName')}
 					maxLength={200}
-					className={clsx(
-						' transition-all duration-500',
-						IsEmpty &&
-							!/^\p{L}+$/u.test(info.patronymic) &&
-							info.patronymic !== '' &&
-							'border-rose-500'
-					)}
+					className={clsx(' transition-all duration-500')}
 					onChange={e => {
 						dispatch(patronymic(e.target.value))
 					}}
 					value={info.patronymic}
 				/>
-				{IsEmpty &&
-					!/^\p{L}+$/u.test(info.patronymic) &&
-					info.patronymic !== '' && (
-						<span className="text-red-500 text-sm">{t('EmptyFolder')}</span>
-					)}
 			</div>
 
 			<span className="text-sm">{t('birth')}</span>
 			<div className="mt-2 mb-4">
 				<ConfigProvider locale={i18n.language === 'ru' ? ruPicker : enPicker}>
 					<DatePicker
-						className={clsx(
-							'block  transition-all duration-500',
-							IsEmpty && info.birthDay === '' && 'border-rose-500'
-						)}
+						className={clsx('block  transition-all duration-500')}
 						onChange={e =>
 							dispatch(birthDay(e == null ? '' : e?.format('YYYY-MM-DD')))
 						}
@@ -151,7 +106,7 @@ export const Inputs: FC<IInputProps> = ({ IsEmpty }) => {
 						size="large"
 						format={'DD.MM.YYYY'}
 						value={
-							info.birthDay !== ''
+							info.birthDay !== null && info.birthDay !== ''
 								? dayjs(
 										info.birthDay.split('-').reverse().join('.'),
 										'DD.MM.YYYY'
@@ -160,9 +115,6 @@ export const Inputs: FC<IInputProps> = ({ IsEmpty }) => {
 						}
 					/>
 				</ConfigProvider>
-				{IsEmpty && info.birthDay === '' && (
-					<span className="text-red-500 text-sm">{t('EmptyFolder')}</span>
-				)}
 			</div>
 
 			<span className="text-sm">{t('citizen')}</span>
@@ -174,9 +126,9 @@ export const Inputs: FC<IInputProps> = ({ IsEmpty }) => {
 					dispatch(country(e))
 				}}
 				options={
-					countryStorage == null
+					countries === undefined
 						? []
-						: countryStorage.map(el => ({ value: el.id, label: el.shortName }))
+						: countries.map(el => ({ value: el.id, label: el.shortName }))
 				}
 				value={info.countryId}
 			/>

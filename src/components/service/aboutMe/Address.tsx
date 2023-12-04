@@ -79,7 +79,9 @@ export const Address = () => {
 					{!isEdit ? (
 						<div className="bg-white p-2 h-10 rounded-md">
 							<Typography.Text>
-								{registrationAddressData.countryId || '-'}
+								{countries?.find(
+									item => item.id === registrationAddressData.countryId
+								)?.shortName || '-'}
 							</Typography.Text>
 						</div>
 					) : (
@@ -258,7 +260,9 @@ export const Address = () => {
 							{!isEdit ? (
 								<div className="bg-white p-2 h-10 rounded-md">
 									<Typography.Text>
-										{residenceAddressData.countryId || '-'}
+										{countries?.find(
+											item => item.id === residenceAddressData.countryId
+										)?.shortName || '-'}
 									</Typography.Text>
 								</div>
 							) : (
@@ -414,7 +418,7 @@ export const Address = () => {
 				>
 					{!isEdit ? (
 						<Button
-							className="border-solid border-bluekfu border-[1px] text-bluekfu rounded-md"
+							className="border-solid border-bluekfu border-[1px] text-bluekfu !rounded-md"
 							onClick={() => {
 								setIsEdit(true)
 							}}
@@ -423,7 +427,7 @@ export const Address = () => {
 						</Button>
 					) : (
 						<Button
-							className="border-solid border-bluekfu border-[1px] text-bluekfu rounded-md"
+							className="border-solid border-bluekfu border-[1px] text-bluekfu !rounded-md"
 							onClick={onSubmit}
 						>
 							{t('save')}

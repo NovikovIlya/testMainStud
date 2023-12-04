@@ -93,7 +93,14 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 		},
 		{
 			label: (
-				<div className="flex items-center gap-[15px] px-[4px] py-[5px]">
+				<div
+					className="flex items-center gap-[15px] px-[4px] py-[5px]"
+					onClick={() => {
+						setOpenMenu(false)
+
+						navigate('/services/setting/contactInformation')
+					}}
+				>
 					<SettingSvg />
 					{t('Setting')}
 				</div>

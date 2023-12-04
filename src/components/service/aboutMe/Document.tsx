@@ -302,14 +302,14 @@ export const Document = () => {
 				>
 					{!isEdit ? (
 						<Button
-							className="border-solid border-bluekfu border-[1px] text-bluekfu rounded-md"
+							className="border-solid border-bluekfu border-[1px] text-bluekfu !rounded-md"
 							onClick={() => setIsEdit(true)}
 						>
 							{t('edit')}
 						</Button>
 					) : (
 						<Button
-							className="border-solid border-bluekfu border-[1px] text-bluekfu rounded-md"
+							className="border-solid border-bluekfu border-[1px] text-bluekfu !rounded-md"
 							onClick={onSubmit}
 						>
 							{t('save')}

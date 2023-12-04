@@ -240,14 +240,14 @@ export const AboutMe = () => {
 				>
 					{isEdit ? (
 						<Button
-							className="border-solid border-bluekfu border-[1px] text-bluekfu rounded-md"
+							className="border-solid border-bluekfu border-[1px] text-bluekfu !rounded-md"
 							onClick={() => setIsEdit(false)}
 						>
 							{t('edit')}
 						</Button>
 					) : (
 						<Button
-							className="border-solid border-bluekfu border-[1px] text-bluekfu rounded-md"
+							className="border-solid border-bluekfu border-[1px] text-bluekfu !rounded-md"
 							onClick={() => onSubmit()}
 						>
 							{t('save')}

@@ -8,6 +8,7 @@ import { NavAboutMe } from './aboutMe/NavAboutMe'
 import { NavElectronicBook } from './electronicBook/NavElectronicBook'
 import { NavSchedule } from './schedule/NavSchedule'
 import { NavSession } from './session/NavSession'
+import { NavSetting } from './setting/NavSetting'
 
 export const Service = ({ children }: { children?: ReactNode }) => {
 	const { pathname } = useLocation()
@@ -20,6 +21,7 @@ export const Service = ({ children }: { children?: ReactNode }) => {
 				{pathname.includes('/services/session') && <NavSession />}
 				{pathname.includes('/services/aboutMe') && <NavAboutMe />}
 				{pathname.includes('/services/electronicBook') && <NavElectronicBook />}
+				{pathname.includes('/services/setting') && <NavSetting />}
 			</div>
 		</div>
 	)

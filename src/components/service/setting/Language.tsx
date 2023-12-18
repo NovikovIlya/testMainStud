@@ -9,6 +9,7 @@ export const Language = () => {
 				showSearch
 				className="w-full mt-7"
 				defaultValue={'1'}
+				size="large"
 				defaultActiveFirstOption
 				optionFilterProp="children"
 				filterOption={(input, option) => (option?.label ?? '').includes(input)}

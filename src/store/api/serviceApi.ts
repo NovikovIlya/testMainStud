@@ -63,7 +63,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			}
 		}),
-		changeEmail: builder.mutation({
+		postEmail: builder.mutation({
 			query: email => {
 				return {
 					url: 'user-api/settings/emails',
@@ -100,9 +100,13 @@ export const serviceApi = apiSlice.injectEndpoints({
 	})
 })
 export const {
+	useVerifyAccMutation,
+	useGetEmailQuery,
 	useGetScheduleQuery,
 	useGetExamsScheduleQuery,
 	useGetStudyPlanQuery,
 	useApproveEmailMutation,
-	useSetRoleMutation
+	useSetRoleMutation,
+	usePostEmailMutation,
+	useChangePasswordMutation
 } = serviceApi

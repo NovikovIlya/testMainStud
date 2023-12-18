@@ -98,7 +98,7 @@ export const AboutMe = () => {
 					<Typography.Text>{t('surname')}</Typography.Text>
 					{isEdit ? (
 						<div className="bg-white p-2 rounded-md">
-							<Typography.Text>{formData.surName}</Typography.Text>
+							<Typography.Text>{formData.surName || '-'}</Typography.Text>
 						</div>
 					) : (
 						<Input
@@ -114,8 +114,8 @@ export const AboutMe = () => {
 				<Space direction="vertical" size={'small'}>
 					<Typography.Text>{t('name')}</Typography.Text>
 					{isEdit ? (
-						<div className="bg-white p-2 rounded-md">
-							<Typography.Text>{formData.name}</Typography.Text>
+						<div className="bg-white p-2  rounded-md">
+							<Typography.Text>{formData.name || '-'}</Typography.Text>
 						</div>
 					) : (
 						<Input
@@ -131,7 +131,7 @@ export const AboutMe = () => {
 					<Typography.Text>{t('middleName')}</Typography.Text>
 					{isEdit ? (
 						<div className="bg-white p-2 rounded-md">
-							<Typography.Text>{formData.patronymic}</Typography.Text>
+							<Typography.Text>{formData.patronymic || '-'}</Typography.Text>
 						</div>
 					) : (
 						<Input
@@ -147,7 +147,7 @@ export const AboutMe = () => {
 					<Typography.Text>{t('birth')}</Typography.Text>
 					{isEdit ? (
 						<div className="bg-white p-2 rounded-md">
-							<Typography.Text>{formData.birthDay}</Typography.Text>
+							<Typography.Text>{formData.birthDay || '-'}</Typography.Text>
 						</div>
 					) : (
 						<ConfigProvider locale={ruPicker}>
@@ -176,14 +176,15 @@ export const AboutMe = () => {
 					{isEdit ? (
 						<div className="bg-white p-2 rounded-md">
 							<Typography.Text>
-								{countries?.find(el => el.id === formData.countryId)?.shortName}
+								{countries?.find(el => el.id === formData.countryId)
+									?.shortName || '-'}
 							</Typography.Text>
 						</div>
 					) : (
 						<Select
 							placeholder={t('citizen')}
 							size="large"
-							className="w-full  rounded-lg"
+							className="w-full rounded-lg"
 							value={formData.countryId}
 							onChange={e => dispatch(country(e))}
 							options={
@@ -201,10 +202,10 @@ export const AboutMe = () => {
 					<Typography.Text>{t('telephone')}</Typography.Text>
 					{isEdit ? (
 						<div className="bg-white p-2 rounded-md">
-							<Typography.Text>+{formData.phone}</Typography.Text>
+							<Typography.Text>+{formData.phone || '-'}</Typography.Text>
 						</div>
 					) : (
-						<FormItem name="phone" className="w-full" initialValue={'123123'}>
+						<FormItem name="phone" className="w-full">
 							<PhoneInput
 								size="large"
 								className="w-full"
@@ -222,7 +223,7 @@ export const AboutMe = () => {
 					<Typography.Text>{t('email')}</Typography.Text>
 					{isEdit ? (
 						<div className="bg-white p-2 rounded-md">
-							<Typography.Text>{email}</Typography.Text>
+							<Typography.Text>{email || '-'}</Typography.Text>
 						</div>
 					) : (
 						<Input

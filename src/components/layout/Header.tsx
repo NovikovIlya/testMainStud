@@ -47,7 +47,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 			case 'ABIT':
 				return t('ABIT')
 			case 'STUD':
-				return t('STUD')
+				return 'test role' //t('STUD')
 			case 'SCHOOL':
 				return t('SCHOOL')
 			case 'SEEKER':
@@ -149,7 +149,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	return (
 		<header
 			className={clsx(
-				' z-[1001]  h-[80px] fixed flex items-center justify-center w-full',
+				' z-[1000]  h-[80px] fixed flex items-center justify-center w-full', // z-10001
 				type === 'main' ? 'bg-white' : 'bg-[#65A1FA]'
 			)}
 		>

@@ -15,6 +15,7 @@ import { Login } from './components/login/Login'
 import { Registration } from './components/registration/Registration'
 import { Service } from './components/service'
 import { User } from './components/user/User'
+import { blue004, blue307 } from './utils/color'
 
 const App = () => {
 	const [email, changeEmail] = useState('')
@@ -24,8 +25,8 @@ const App = () => {
 			<ConfigProvider
 				theme={{
 					token: {
-						colorPrimary: '#3073D7',
-						colorPrimaryHover: '#004EC2'
+						colorPrimary: blue307,
+						colorPrimaryHover: blue004
 					}
 				}}
 			>

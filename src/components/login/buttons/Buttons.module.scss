@@ -4,16 +4,16 @@
 		@apply mb-5 mt-[30px] h-[50px] shadow-lg;
 	}
 	.gos {
-		@apply mt-0 mb-10 flex h-[50px] w-full items-center justify-center bg-white ;
+		@apply mb-10 mt-0 flex h-[50px] w-full items-center justify-center bg-white;
 		svg {
 			@apply ml-[15px] opacity-100;
 		}
 	}
 	.link {
-		@apply text-base text-[#004EC2] opacity-100 ;
+		@apply text-base text-[blue004] opacity-100;
 	}
 	.link:hover {
-		@apply text-base text-[#0E1F81] opacity-100 ;
+		@apply text-base text-[#0E1F81] opacity-100;
 	}
 	.reg {
 		@apply flex items-center justify-between;

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 
 import img from '../../assets/images/image15.png'
 import { useGetScheduleQuery } from '../../store/api/serviceApi'
+import { blue004 } from '../../utils/color'
 
 type week =
 	| 'sunday'
@@ -42,8 +43,8 @@ export const Schedule = () => {
 		backgroundColor: 'inherit'
 	}
 	const activeStyles = {
-		color: '#004EC2',
-		border: 'solid 1px #004EC2',
+		color: blue004,
+		border: 'solid 1px blue004',
 		backgroundColor: 'white'
 	}
 	return (

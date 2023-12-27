@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { useAppSelector } from '../../../store'
 import { addCard } from '../../../store/reducers/LayoutsSlice'
+import { blue1f5 } from '../../../utils/color'
 import { jsxElements } from '../../dnd/defaultElement'
 
 type TypeModalProps = {
@@ -33,7 +34,9 @@ export const ModalNav = ({ close }: TypeModalProps) => {
 	return (
 		<Row>
 			<Col span={24} className="mb-9">
-				<Typography.Text className="text-[#1F5CB8] text-2xl font-bold leading-loose">
+				<Typography.Text
+					className={`text-[${blue1f5}] text-2xl font-bold leading-loose`}
+				>
 					{t('OurServices')}
 				</Typography.Text>
 			</Col>
@@ -44,7 +47,7 @@ export const ModalNav = ({ close }: TypeModalProps) => {
 				<Button
 					type="text"
 					icon={<TagOutlined />}
-					className="text-[#1F5CB8] text-base font-semibold leading-relaxed flex items-center justify-center"
+					className={`text-[${blue1f5}] text-base font-semibold leading-relaxed flex items-center justify-center`}
 				>
 					{t('Favorites')}
 				</Button>

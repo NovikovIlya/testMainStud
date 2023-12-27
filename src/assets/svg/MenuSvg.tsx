@@ -1,10 +1,12 @@
 import React from 'react'
 
+import { blue1f5 } from '../../utils/color'
+
 type TypeMenuSvgProps = {
 	white?: boolean
 }
 export const MenuSvg = ({ white }: TypeMenuSvgProps) => {
-	const color = () => (white ? 'white' : '#1F5CB8')
+	const color = () => (white ? 'white' : blue1f5)
 
 	return (
 		<svg

@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAppSelector } from '../../../../store'
 import { usePostInfoUserMutation } from '../../../../store/api/formApi'
 import { setForm } from '../../../../store/creators/MainCreators'
+import { blue307 } from '../../../../utils/color'
 
 export const Buttons = () => {
 	const dispatch = useDispatch()
@@ -31,7 +32,7 @@ export const Buttons = () => {
 				<Button
 					onClick={handleCancel}
 					type="default"
-					className="w-[200px] font-bold h-[50px] rounded-full border-[#3073D7] text-[#3073D7]"
+					className={`w-[200px] font-bold h-[50px] rounded-full border-[${blue307}] text-[${blue307}]`}
 				>
 					{t('back')}
 				</Button>

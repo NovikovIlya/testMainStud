@@ -23,6 +23,7 @@ import { DocumentSvg } from '../../assets/svg/DocumentSvg'
 import PersonalizationSvg from '../../assets/svg/PersonalizationSvg'
 import { useAppSelector } from '../../store'
 import { logOut, setEdit } from '../../store/reducers/authSlice'
+import { blue1f5, blue307 } from '../../utils/color'
 import { ModalNav } from '../service/modalMenu/ModalNav'
 
 type TypeHeaderProps = {
@@ -67,7 +68,9 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const items: MenuProps['items'] = [
 		{
 			label: (
-				<div className="p-2 text-sm text-[#1F5CB8] font-bold cursor-default">
+				<div
+					className={`p-2 text-sm text-[${blue1f5}] font-bold cursor-default`}
+				>
 					{user?.email}
 				</div>
 			),
@@ -160,7 +163,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						className={clsx(
 							'py-2.5 rounded-full  font-semibold bg-transparent border-2 flex items-center justify-center ',
 							type === 'main'
-								? 'text-[#1F5CB8] border-[#1F5CB8] '
+								? `text-[${blue1f5}] border-[${blue1f5}]`
 								: 'text-white border-white hover:!border-white hover:!text-white'
 						)}
 						type="default"
@@ -179,7 +182,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						<div
 							className={clsx(
 								'h-full flex items-center px-3 cursor-pointer ',
-								type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-[#3073D7]'
+								type === 'main' ? 'hover:bg-[#E3E8ED]' : `hover:bg-[${blue307}]`
 							)}
 						>
 							<SearchSvg white={type === 'service'} />
@@ -187,7 +190,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						<div
 							className={clsx(
 								'h-full flex items-center px-3 cursor-pointer ',
-								type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-[#3073D7]'
+								type === 'main' ? 'hover:bg-[#E3E8ED]' : `hover:bg-[${blue307}]`
 							)}
 						>
 							<MessageSvg white={type === 'service'} />
@@ -195,7 +198,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						<div
 							className={clsx(
 								'h-full flex items-center px-3 cursor-pointer ',
-								type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-[#3073D7]'
+								type === 'main' ? 'hover:bg-[#E3E8ED]' : `hover:bg-[${blue307}]`
 							)}
 						>
 							<MapSvg white={type === 'service'} />
@@ -203,7 +206,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						<div
 							className={clsx(
 								'h-full flex items-center px-3 cursor-pointer ',
-								type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-[#3073D7]'
+								type === 'main' ? 'hover:bg-[#E3E8ED]' : `hover:bg-[${blue307}]`
 							)}
 						>
 							<DocumentSvg white={type === 'service'} />
@@ -211,7 +214,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						<div
 							className={clsx(
 								'h-full flex items-center px-3 cursor-pointer ',
-								type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-[#3073D7]'
+								type === 'main' ? 'hover:bg-[#E3E8ED]' : `hover:bg-[${blue307}]`
 							)}
 						>
 							<EyeSvg white={type === 'service'} />
@@ -237,8 +240,8 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						className={clsx(
 							'h-full flex items-center cursor-pointer w-fit',
 							type === 'main' && openMenu && 'bg-[#E3E8ED]',
-							type !== 'main' && openMenu && 'bg-[#3073D7]',
-							type === 'main' ? 'hover:bg-[#E3E8ED]' : 'target:bg-[#3073D7]'
+							type !== 'main' && openMenu && `bg-[${blue307}]`,
+							type === 'main' ? 'hover:bg-[#E3E8ED]' : `target:bg-[${blue307}]`
 						)}
 					>
 						<Dropdown

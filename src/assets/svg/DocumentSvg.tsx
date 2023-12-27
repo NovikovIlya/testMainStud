@@ -1,7 +1,9 @@
 import React from 'react'
 
+import { blue1f5 } from '../../utils/color'
+
 export const DocumentSvg = ({ white }: { white?: boolean }) => {
-	const color = () => (white ? 'white' : '#1F5CB8')
+	const color = () => (white ? 'white' : blue1f5)
 
 	return (
 		<svg

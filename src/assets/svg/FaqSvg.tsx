@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { blue004 } from '../../utils/color'
+
 export const FaqSvg = () => {
 	return (
 		<svg
@@ -10,7 +12,7 @@ export const FaqSvg = () => {
 			xmlns="http://www.w3.org/2000/svg"
 		>
 			<g filter="url(#filter0_d_305_2032)">
-				<circle cx="49" cy="44" r="31" fill="#004EC2" />
+				<circle cx="49" cy="44" r="31" fill={blue004} />
 			</g>
 			<path
 				fillRule="evenodd"

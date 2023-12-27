@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAppSelector } from '../../store'
 import { useSetRoleMutation } from '../../store/api/serviceApi'
 import { setRole } from '../../store/reducers/authSlice'
+import { blue307 } from '../../utils/color'
 
 import { ImagesLayout } from './ImagesLayout'
 
@@ -36,7 +37,9 @@ export const InfoUser = () => {
 		<ImagesLayout first>
 			<div className="w-full flex justify-center ">
 				<div className="container max-w-2xl flex flex-col items-center justify-center  px-5">
-					<h2 className="text-center text-2xl font-bold border-solid border-0 border-b-2 border-[#3073D7] pb-2">
+					<h2
+						className={`text-center text-2xl font-bold border-solid border-0 border-b-2 border-[${blue307}] pb-2`}
+					>
 						{t('welcome')}
 					</h2>
 
@@ -178,7 +181,7 @@ export const InfoUser = () => {
 						<Button
 							disabled
 							type="default"
-							className="w-[200px] h-[50px] rounded-full cursor-default font-bold border-[#3073D7] text-[#3073D7]"
+							className={`w-[200px] h-[50px] font-bold rounded-full border-[${blue307}] text-[${blue307}]`}
 						>
 							{t('back')}
 						</Button>

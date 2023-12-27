@@ -5,7 +5,7 @@
 			@apply h-[50px] shadow;
 		}
 		.link {
-			@apply text-base text-[#004EC2] opacity-100;
+			@apply text-base text-[blue004] opacity-100;
 		}
 		.check {
 			.termsUse {
@@ -13,12 +13,12 @@
 			}
 		}
 		.link:hover {
-			@apply text-base text-[#0E1F81] opacity-100 ;
+			@apply text-base text-[#0E1F81] opacity-100;
 		}
 		.login {
 			@apply flex items-center justify-between;
 			.kpfu {
-				@apply font-bold text-black opacity-50 flex;
+				@apply flex font-bold text-black opacity-50;
 			}
 		}
 	}

@@ -25,6 +25,7 @@ import {
 	passportSeries,
 	snils
 } from '../../../store/reducers/FormReducers/DocumentReducer'
+import { blue307 } from '../../../utils/color'
 import '../GeneralStyles.scss'
 import { ImagesLayout } from '../ImagesLayout'
 
@@ -201,7 +202,7 @@ export const DocumentForm = () => {
 						<Button
 							onClick={handleCancel}
 							type="default"
-							className="w-[200px] h-[50px] font-bold rounded-full border-[#3073D7] text-[#3073D7]"
+							className={`w-[200px] h-[50px] font-bold rounded-full border-[${blue307}] text-[${blue307}]`}
 						>
 							{t('back')}
 						</Button>

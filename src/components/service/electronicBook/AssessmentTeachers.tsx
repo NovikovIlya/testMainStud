@@ -1,8 +1,9 @@
 import { AntDesignOutlined } from '@ant-design/icons'
 import { Avatar, Button, Card, Rate, Select, Space, Typography } from 'antd'
 
+import { blue307 } from '../../../utils/color'
+
 export const AssessmentTeachers = () => {
-	console.log('5' + 2, '=====================')
 	return (
 		<div className="mt-14 mx-14">
 			<div className="mb-14 text-[28px]">Оценка работы преподавателей</div>
@@ -52,28 +53,28 @@ export const AssessmentTeachers = () => {
 							<div className="flex justify-between">
 								<p>Доброжелательность и тактичность</p>
 								<div className="flex gap-10 items-center">
-									<Rate className="text-[#3073D7]" />
+									<Rate className={`text-[${blue307}]`} />
 									<p>4.4</p>
 								</div>
 							</div>
 							<div className="flex justify-between">
 								<p>Общая эрудиция</p>
 								<div className="flex gap-10 items-center">
-									<Rate className="text-[#3073D7]" />
+									<Rate className={`text-[${blue307}]`} />
 									<p>4.4</p>
 								</div>
 							</div>
 							<div className="flex justify-between">
 								<p>Внешний вид и манера поведения</p>
 								<div className="flex gap-10 items-center">
-									<Rate className="text-[#3073D7]" />
+									<Rate className={`text-[${blue307}]`} />
 									<p>4.4</p>
 								</div>
 							</div>
 							<div className="flex justify-between">
 								<p>Пунктуальность</p>
 								<div className="flex gap-10 items-center">
-									<Rate className="text-[#3073D7]" />
+									<Rate className={`text-[${blue307}]`} />
 									<p>4.4</p>
 								</div>
 							</div>

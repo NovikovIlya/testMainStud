@@ -3,17 +3,16 @@ import PhoneInput from 'antd-phone-input'
 import FormItem from 'antd/es/form/FormItem'
 import enPicker from 'antd/locale/en_US'
 import ruPicker from 'antd/locale/ru_RU'
-import clsx from 'clsx'
 import dayjs from 'dayjs'
 import 'dayjs/locale/en'
 import 'dayjs/locale/ru'
-import { FC, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 
-import { useAppSelector } from '../../../../store'
-import { useGetInfoUserQuery } from '../../../../store/api/formApi'
-import { useGetCountriesQuery } from '../../../../store/api/utilsApi'
+import { useAppSelector } from '../../../store'
+import { useGetInfoUserQuery } from '../../../store/api/formApi'
+import { useGetCountriesQuery } from '../../../store/api/utilsApi'
 import {
 	allData,
 	birthDay,
@@ -22,14 +21,10 @@ import {
 	patronymic,
 	phone,
 	surName
-} from '../../../../store/reducers/FormReducers/FormReducer'
-import { validator } from '../../../../utils/validPhone'
+} from '../../../store/reducers/FormReducers/FormReducer'
+import { validator } from '../../../utils/validPhone'
 
-interface IInputProps {
-	IsEmpty: boolean
-}
-
-export const Inputs: FC<IInputProps> = ({ IsEmpty }) => {
+export const Inputs = () => {
 	const dispatch = useDispatch()
 	const { data: userInfo, refetch } = useGetInfoUserQuery()
 	const { t, i18n } = useTranslation()
@@ -42,11 +37,11 @@ export const Inputs: FC<IInputProps> = ({ IsEmpty }) => {
 			dispatch(surName(user.firstname))
 			dispatch(name(user.lastname))
 		}
-	}, [])
+	}, [user, dispatch])
 	useEffect(() => {
 		refetch()
 		userInfo && dispatch(allData(userInfo))
-	}, [userInfo])
+	}, [userInfo, dispatch, refetch])
 
 	return (
 		<div className="w-full">
@@ -57,7 +52,6 @@ export const Inputs: FC<IInputProps> = ({ IsEmpty }) => {
 					size="large"
 					type="text"
 					maxLength={200}
-					className={clsx(' transition-all duration-500')}
 					onChange={e => {
 						dispatch(surName(e.target.value))
 					}}
@@ -71,7 +65,6 @@ export const Inputs: FC<IInputProps> = ({ IsEmpty }) => {
 					size="large"
 					type="text"
 					maxLength={200}
-					className={clsx(' transition-all duration-500')}
 					onChange={e => {
 						dispatch(name(e.target.value))
 					}}
@@ -86,7 +79,6 @@ export const Inputs: FC<IInputProps> = ({ IsEmpty }) => {
 					type="text"
 					placeholder={t('middleName')}
 					maxLength={200}
-					className={clsx(' transition-all duration-500')}
 					onChange={e => {
 						dispatch(patronymic(e.target.value))
 					}}
@@ -98,7 +90,7 @@ export const Inputs: FC<IInputProps> = ({ IsEmpty }) => {
 			<div className="mt-2 mb-4">
 				<ConfigProvider locale={i18n.language === 'ru' ? ruPicker : enPicker}>
 					<DatePicker
-						className={clsx('block  transition-all duration-500')}
+						className={'block'}
 						onChange={e =>
 							dispatch(birthDay(e == null ? '' : e?.format('YYYY-MM-DD')))
 						}
@@ -120,7 +112,7 @@ export const Inputs: FC<IInputProps> = ({ IsEmpty }) => {
 			<span className="text-sm">{t('citizen')}</span>
 
 			<Select
-				className="mt-2 mb-4 block  transition-all duration-500"
+				className="mt-2 mb-4 block"
 				size="large"
 				onChange={e => {
 					dispatch(country(e))

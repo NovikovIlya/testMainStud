@@ -4,27 +4,17 @@ import { RadioChangeEvent } from 'antd/lib'
 import clsx from 'clsx'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
 
-import { useAppSelector } from '../../../store'
-import { addCard } from '../../../store/reducers/LayoutsSlice'
-import { blue1f5 } from '../../../utils/color'
-import { jsxElements } from '../../dnd/defaultElement'
+import { useAppSelector } from '../../store'
+import { addCard } from '../../store/reducers/LayoutsSlice'
+import { blue1f5 } from '../../utils/color'
+import { jsxElements } from '../dnd/defaultElement'
 
-type TypeModalProps = {
-	close: () => void
-}
-
-export const ModalNav = ({ close }: TypeModalProps) => {
-	const navigate = useNavigate()
+export const ModalNav = () => {
 	const { t } = useTranslation()
 	const layouts = useAppSelector(state => state.Layout)
 	const dispatch = useDispatch()
 
-	const handleNavigate = (url: string) => {
-		close()
-		navigate(url)
-	}
 	const onChange = (e: RadioChangeEvent) => {
 		console.log(e.target.value)
 	}

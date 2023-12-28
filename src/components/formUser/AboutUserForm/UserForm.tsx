@@ -1,20 +1,13 @@
-import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { ImagesLayout } from '../ImagesLayout'
 
-import { Buttons } from './Buttons/Buttons'
-import { Inputs } from './Inputs/Inputs'
-import { Switcher } from './Radio/Switcher'
+import { Buttons } from './Buttons'
+import { Inputs } from './Inputs'
+import { Switcher } from './Switcher'
 
 export const FormModal = () => {
-	const [IsEmpty, changeIsEmpty] = useState<boolean>(false)
-
-	const { t, i18n } = useTranslation()
-
-	useEffect(() => {
-		changeIsEmpty(false)
-	}, [i18n.language])
+	const { t } = useTranslation()
 	return (
 		<ImagesLayout>
 			<div className="w-full flex justify-center ">
@@ -25,7 +18,7 @@ export const FormModal = () => {
 					</p>
 					<h3 className="self-start my-7 text-xl">{t('aboutMe')}</h3>
 					<Switcher />
-					<Inputs IsEmpty={IsEmpty} />
+					<Inputs />
 					<Buttons />
 				</div>
 			</div>

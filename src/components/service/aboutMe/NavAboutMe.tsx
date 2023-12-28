@@ -1,5 +1,3 @@
-import { CloudUploadOutlined, UserOutlined } from '@ant-design/icons'
-import { Avatar, Button, Progress, Typography } from 'antd'
 import clsx from 'clsx'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -20,7 +18,6 @@ import { Parent } from './Parent'
 import { Work } from './Work'
 
 export const NavAboutMe = () => {
-	const user = useAppSelector(state => state.auth.user)
 	const { pathname } = useLocation()
 	const navigate = useNavigate()
 	const role = useAppSelector(state => state.auth.user?.roles)
@@ -63,7 +60,7 @@ export const NavAboutMe = () => {
 	if (!role) return <></>
 	const isStudent = role[0].type === 'STUD'
 	const handleList = navList.map(({ icon, name, id }, index) => {
-		if (isStudent && id === '/services/aboutMe/work') return
+		if (isStudent && id === '/services/aboutMe/work') return null
 		return (
 			<li
 				key={index}

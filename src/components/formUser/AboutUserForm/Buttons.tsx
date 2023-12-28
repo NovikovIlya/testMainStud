@@ -1,15 +1,12 @@
 import { Button } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-import { useAppSelector } from '../../../../store'
-import { usePostInfoUserMutation } from '../../../../store/api/formApi'
-import { setForm } from '../../../../store/creators/MainCreators'
-import { blue307 } from '../../../../utils/color'
+import { useAppSelector } from '../../../store'
+import { usePostInfoUserMutation } from '../../../store/api/formApi'
+import { blue307 } from '../../../utils/color'
 
 export const Buttons = () => {
-	const dispatch = useDispatch()
 	const navigate = useNavigate()
 	const userRole = useAppSelector(state => state.auth.user?.roles[0].type)
 	const data = useAppSelector(state => state.Form)

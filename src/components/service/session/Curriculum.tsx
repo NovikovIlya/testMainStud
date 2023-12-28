@@ -2,7 +2,7 @@ import { Radio, Table } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 import Column from 'antd/es/table/Column'
 import ColumnGroup from 'antd/es/table/ColumnGroup'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import { useGetStudyPlanQuery } from '../../../store/api/serviceApi'
 
@@ -497,12 +497,7 @@ export const Curriculum = () => {
 			)
 	}, [studyPlan])
 
-	useEffect(() => {
-		const result = getData()
-		changeData(result)
-	}, [course, sortingWords])
-
-	const getData = () => {
+	const getData = useCallback(() => {
 		if (studyPlan && sortingWords.length !== 0) {
 			let result: TypeColumn[] = []
 			let selectedSubject: string[] = []
@@ -569,7 +564,12 @@ export const Curriculum = () => {
 			})
 			return result
 		} else return []
-	}
+	}, [course, sortingWords, studyPlan])
+
+	useEffect(() => {
+		const result = getData()
+		changeData(result)
+	}, [course, sortingWords, getData])
 
 	return (
 		<div className="radio ">

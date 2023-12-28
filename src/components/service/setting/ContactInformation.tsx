@@ -1,15 +1,12 @@
 import { Button, Input } from 'antd'
 import { useState } from 'react'
 
-import {
-	useGetEmailQuery,
-	useVerifyAccMutation
-} from '../../../store/api/serviceApi'
+import { useVerifyAccMutation } from '../../../store/api/serviceApi'
 
 export const ContactInformation = () => {
 	const [email, setEmail] = useState('')
 	const [phone, setPhone] = useState('')
-	const { data } = useGetEmailQuery()
+	// const { data } = useGetEmailQuery()
 	const [postEmail] = useVerifyAccMutation()
 
 	const onSubmitEmail = () => {

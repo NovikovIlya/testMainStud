@@ -23,15 +23,10 @@ import { useDispatch } from 'react-redux'
 import uuid from 'react-uuid'
 
 import { useAppSelector } from '../../../store'
-import {
-	useGetEducationQuery,
-	useGetWorkQuery,
-	useGetWorksQuery
-} from '../../../store/api/formApi'
+import { useGetWorkQuery, useGetWorksQuery } from '../../../store/api/formApi'
 import {
 	addWork,
 	additionalInfo,
-	allData,
 	deleteWork,
 	endDate,
 	name,

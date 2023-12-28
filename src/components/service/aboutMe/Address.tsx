@@ -48,7 +48,7 @@ export const Address = () => {
 	useEffect(() => {
 		refetch()
 		address && dispatch(allData(address))
-	}, [])
+	}, [refetch, address, dispatch])
 	const onSubmit = () => {
 		postAddress({ residenceAddressData, registrationAddressData, isResident })
 		setIsEdit(false)

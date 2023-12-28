@@ -2,8 +2,8 @@ import { ListItemPrefix, Radio, Typography } from '@material-tailwind/react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 
-import { useAppSelector } from '../../../../store'
-import { gender } from '../../../../store/reducers/FormReducers/FormReducer'
+import { useAppSelector } from '../../../store'
+import { gender } from '../../../store/reducers/FormReducers/FormReducer'
 
 export const Switcher = () => {
 	const dispatch = useDispatch()

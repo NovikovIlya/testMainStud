@@ -17,7 +17,7 @@ import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import uuid from 'react-uuid'
 
-import { useAppSelector } from '../../../store'
+import { useAppSelector } from '../../store'
 import {
 	addWork,
 	additionalInfo,
@@ -26,9 +26,10 @@ import {
 	name,
 	portfolioLink,
 	startDate
-} from '../../../store/reducers/FormReducers/WorkReducer'
-import { blue307 } from '../../../utils/color'
-import { ImagesLayout } from '../ImagesLayout'
+} from '../../store/reducers/FormReducers/WorkReducer'
+import { blue307 } from '../../utils/color'
+
+import { ImagesLayout } from './ImagesLayout'
 
 const { TextArea } = Input
 

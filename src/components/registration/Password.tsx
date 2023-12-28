@@ -1,35 +1,23 @@
 import { Form, Input } from 'antd'
-import { FC, useEffect, useState } from 'react'
+import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { IError } from '../../../api/types'
-
-import styles from './Password.module.scss'
+import { IError } from '../../api/types'
 
 interface IPasswordProps {
-	confirmPassword: boolean
-	setConfirmPassword: (value: boolean) => void
 	error: IError | null
 }
 
-export const Password: FC<IPasswordProps> = ({
-	confirmPassword,
-	setConfirmPassword,
-	error
-}) => {
+export const Password: FC<IPasswordProps> = ({ error }) => {
 	const { t } = useTranslation()
 	const [password, setPassword] = useState('')
 	const [confirm, setConfirm] = useState('')
-	useEffect(() => {
-		if (password.trim() === confirm.trim() && password) setConfirmPassword(true)
-		else setConfirmPassword(false)
-	}, [password, confirm])
+
 	return (
 		<>
 			<Form.Item
 				name="password"
 				style={{ marginBottom: 30 }}
-				className={styles.input}
 				validateStatus={
 					error !== null &&
 					error.details.length > 0 &&
@@ -51,7 +39,7 @@ export const Password: FC<IPasswordProps> = ({
 				}
 			>
 				<Input.Password
-					className={styles.password}
+					className="px-5 py-3"
 					value={password}
 					onChange={e => setPassword(e.currentTarget.value)}
 					size="large"
@@ -62,11 +50,10 @@ export const Password: FC<IPasswordProps> = ({
 			</Form.Item>
 			<Form.Item
 				name="confirmPassword"
-				className={styles.input}
 				style={{ marginBottom: 30 }}
 				help={
-					!confirmPassword &&
-					confirm && (
+					confirm &&
+					password !== confirm && (
 						<p className="text-rose-500">{t('errorConfirmPassword')}</p>
 					)
 				}
@@ -76,6 +63,7 @@ export const Password: FC<IPasswordProps> = ({
 					onChange={e => setConfirm(e.currentTarget.value)}
 					size="large"
 					type="password"
+					className="px-5 py-3"
 					required
 					placeholder={t('repeatPassword')}
 				/>

@@ -81,7 +81,7 @@ export const Document = () => {
 	useEffect(() => {
 		refetch()
 		documents && dispatch(allData(documents))
-	}, [documents])
+	}, [documents, dispatch, refetch])
 	const isStudent = role === 'STUD'
 	if (isLoadingDocuments || isLoadingLevelDocs) return <SkeletonPage />
 	return (

@@ -1,7 +1,7 @@
 import { Select, Typography } from 'antd'
 import { useTranslation } from 'react-i18next'
 
-import { ArrowLeftSvg } from '../../assets/svg'
+import { ArrowLeftSvg } from '../assets/svg'
 
 const { Link } = Typography
 export const BackMainPage = () => {

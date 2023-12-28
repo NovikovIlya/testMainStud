@@ -1,20 +1,16 @@
-import { FC, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { CardForm } from '../approve/cardForm'
 
-interface ICheckEmailProps {
-	email: string
-}
-
-export const CheckEmail: FC<ICheckEmailProps> = ({ email }) => {
+export const CheckEmail = ({ email }: { email: string }) => {
 	const navigate = useNavigate()
 	const { t } = useTranslation()
 
 	useEffect(() => {
 		if (!email) navigate('/')
-	}, [])
+	}, [email, navigate])
 
 	const buttonEffect = () => {
 		console.log("it's buttons effect")

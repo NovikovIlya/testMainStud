@@ -208,7 +208,7 @@ export const Estimation = () => {
 				</Radio.Button>
 			</Radio.Group>
 			<div className="my-10 gap-5 flex flex-col">
-				{semester == 1 && (
+				{semester === 1 && (
 					<Table
 						dataSource={dataSemester}
 						columns={columnSemester}

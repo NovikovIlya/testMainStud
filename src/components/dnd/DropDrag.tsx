@@ -1,5 +1,5 @@
 import { DeleteOutlined } from '@ant-design/icons'
-import { FunctionComponent, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Responsive, WidthProvider } from 'react-grid-layout'
 import 'react-grid-layout/css/styles.css'
 import { useDispatch } from 'react-redux'
@@ -8,7 +8,6 @@ import 'react-resizable/css/styles.css'
 import { useAppSelector } from '../../store'
 import { changeLayout, removeCard } from '../../store/reducers/LayoutsSlice'
 
-import './DropDrag.scss'
 import { jsxElements } from './defaultElement'
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive)

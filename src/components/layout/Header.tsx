@@ -24,7 +24,7 @@ import PersonalizationSvg from '../../assets/svg/PersonalizationSvg'
 import { useAppSelector } from '../../store'
 import { logOut, setEdit } from '../../store/reducers/authSlice'
 import { blue1f5, blue307 } from '../../utils/color'
-import { ModalNav } from '../service/modalMenu/ModalNav'
+import { ModalNav } from '../service/ModalNav'
 
 type TypeHeaderProps = {
 	type?: 'service' | 'main'
@@ -152,8 +152,8 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	return (
 		<header
 			className={clsx(
-				' z-[1000]  h-[80px] fixed flex items-center justify-center w-full', // z-10001
-				type === 'main' ? 'bg-white' : 'bg-[#65A1FA]'
+				' z-[1001]  h-[80px] fixed flex items-center justify-center w-full',
+				type === 'main' ? 'bg-white' : `bg-[#65A1FA]`
 			)}
 		>
 			<div className="w-screen flex h-full justify-between px-8 max-sm:px-5">
@@ -280,7 +280,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 							open={openDrawer}
 							key="top"
 						>
-							<ModalNav close={onClose} />
+							<ModalNav />
 						</Drawer>
 					</div>
 				</div>

@@ -7,11 +7,11 @@ import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import uuid from 'react-uuid'
 
-import { useAppSelector } from '../../../store'
+import { useAppSelector } from '../../store'
 import {
 	useGetCountriesQuery,
 	useGetEducationLevelQuery
-} from '../../../store/api/utilsApi'
+} from '../../store/api/utilsApi'
 import {
 	addEducation,
 	countryId,
@@ -22,9 +22,10 @@ import {
 	idDelete,
 	nameOfInstitute,
 	specialization
-} from '../../../store/reducers/FormReducers/EducationReducer'
-import { blue307 } from '../../../utils/color'
-import { ImagesLayout } from '../ImagesLayout'
+} from '../../store/reducers/FormReducers/EducationReducer'
+import { blue307 } from '../../utils/color'
+
+import { ImagesLayout } from './ImagesLayout'
 
 export const EducationForm = () => {
 	const dispatch = useDispatch()

@@ -8,12 +8,10 @@ import { IError } from '../../api/types'
 import logo from '../../assets/images/group.png'
 import { useLoginMutation } from '../../store/api/authApiSlice'
 import { setCredentials } from '../../store/reducers/authSlice'
-import { BackMainPage } from '../back-main-page/BackMainPage'
-import { Faq } from '../faq/Faq'
+import { BackMainPage } from '../BackMainPage'
 
-import styles from './Login.module.scss'
-import { Buttons } from './buttons/Buttons'
-import { Inputs } from './inputs/Inputs'
+import { Buttons } from './Buttons'
+import { Inputs } from './Inputs'
 
 const { Title } = Typography
 
@@ -41,17 +39,18 @@ export const Login = () => {
 	}
 
 	return (
-		<div className={styles.wrapper}>
+		<div className="flex flex-col items-center min-h-screen">
 			<BackMainPage />
-			<div className={styles.main}>
+			<div className="flex flex-row justify-center gap-24 text-base max-xl:gap-4 max-lg:flex-col max-lg:items-center h-full w-full">
 				<Form
 					name="login"
-					className={styles.loginForm}
+					className="min-w-[400px] mx-2 max-sm:min-w-[345px] max-[321px]:min-w-[300px]"
 					initialValues={{ remember: true }}
 					onFinish={onFinish}
 				>
-					<Title className={styles.title}>{t('authorization')}</Title>
-
+					<Title className="mb-[20px] text-start text-2xl font-bold">
+						{t('authorization')}
+					</Title>
 					<Inputs error={error} />
 					<Buttons />
 				</Form>
@@ -62,7 +61,6 @@ export const Login = () => {
 						alt="group"
 					/>
 				</div>
-				<Faq />
 			</div>
 		</div>
 	)

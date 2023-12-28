@@ -8,12 +8,12 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-import { useAppSelector } from '../../../store'
+import { useAppSelector } from '../../store'
 import {
 	useGetAllDocumentsQuery,
 	useGetMyDocumentsQuery,
 	usePostDocumentMutation
-} from '../../../store/api/formApi'
+} from '../../store/api/formApi'
 import {
 	allData,
 	dateIssue,
@@ -24,10 +24,10 @@ import {
 	passportNumber,
 	passportSeries,
 	snils
-} from '../../../store/reducers/FormReducers/DocumentReducer'
-import { blue307 } from '../../../utils/color'
-import '../GeneralStyles.scss'
-import { ImagesLayout } from '../ImagesLayout'
+} from '../../store/reducers/FormReducers/DocumentReducer'
+import { blue307 } from '../../utils/color'
+
+import { ImagesLayout } from './ImagesLayout'
 
 export const DocumentForm = () => {
 	const { t, i18n } = useTranslation()

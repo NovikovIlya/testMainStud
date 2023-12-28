@@ -1,6 +1,5 @@
 import {
 	Button,
-	Card,
 	ConfigProvider,
 	DatePicker,
 	Input,
@@ -63,11 +62,11 @@ export const AboutMe = () => {
 			dispatch(surName(user.firstname))
 			dispatch(name(user.lastname))
 		}
-	}, [])
+	}, [user, dispatch])
 	useEffect(() => {
 		refetch()
 		userInfo && dispatch(allData(userInfo))
-	}, [userInfo])
+	}, [userInfo, refetch, dispatch])
 	const isStudent = role === 'STUD'
 	if (isLoadingCountry || isLoadingUser) return <SkeletonPage />
 	return (

@@ -17,8 +17,8 @@ import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import uuid from 'react-uuid'
 
-import { useAppSelector } from '../../../store'
-import { useGetDocumentQuery } from '../../../store/api/utilsApi'
+import { useAppSelector } from '../../store'
+import { useGetDocumentQuery } from '../../store/api/utilsApi'
 import {
 	FIO,
 	addParent,
@@ -35,9 +35,10 @@ import {
 	registrationAddress,
 	residenceAddress,
 	snils
-} from '../../../store/reducers/FormReducers/ParentReducer'
-import { blue307 } from '../../../utils/color'
-import { ImagesLayout } from '../ImagesLayout'
+} from '../../store/reducers/FormReducers/ParentReducer'
+import { blue307 } from '../../utils/color'
+
+import { ImagesLayout } from './ImagesLayout'
 
 export const ParentForm = () => {
 	const { t, i18n } = useTranslation()

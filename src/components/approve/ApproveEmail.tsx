@@ -39,7 +39,7 @@ export const ApproveEmail = () => {
 			navigate('/user')
 			console.error(e)
 		}
-	}, [])
+	}, [approve, dispatch, navigate, searchParams])
 
 	const buttonEffect = () => {
 		navigate('/infoUser')

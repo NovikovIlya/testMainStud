@@ -30,7 +30,7 @@ export const ChangePassword = () => {
 
 	const onSubmit = async () => {
 		if (password.equal && password.newPassword && password.oldPassword) {
-			var res = await putPassword({
+			await putPassword({
 				newPassword: password.newPassword,
 				oldPassword: password.oldPassword
 			})

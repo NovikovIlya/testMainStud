@@ -1,7 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 import { block } from '../../components/dnd/constant'
-import { jsxElements } from '../../components/dnd/defaultElement'
 
 const initialState: ReactGridLayout.Layouts = localStorage.getItem('dashboard')
 	? JSON.parse(localStorage.getItem('dashboard') || '')

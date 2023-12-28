@@ -21,17 +21,6 @@ export const block = {
 			i: 'Session',
 			moved: true,
 			static: false
-		},
-		{
-			w: 1,
-			h: 1,
-			maxH: 4,
-			maxW: 4,
-			x: 2,
-			y: 0,
-			i: 'TestRole',
-			moved: true,
-			static: false
 		}
 	]
 }

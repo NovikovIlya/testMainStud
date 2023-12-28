@@ -5,9 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 
-import { clearRegistrationErrors } from '../../../store/creators/SomeCreators'
-
-import styles from './Buttons.module.scss'
+import { clearRegistrationErrors } from '../../store/creators/SomeCreators'
 
 interface IButtonsProps {
 	check: boolean
@@ -20,30 +18,35 @@ export const Buttons: FC<IButtonsProps> = ({ setCheck, check }) => {
 	const onChangeCheckbox = (e: CheckboxChangeEvent) =>
 		setCheck(e.target.checked)
 	return (
-		<Form.Item className={styles.main}>
-			<div className={styles.buttons}>
-				<Button size="large" type="primary" htmlType="submit" disabled={!check}>
+		<Form.Item>
+			<div className="flex flex-col">
+				<Button
+					size="large"
+					type="primary"
+					htmlType="submit"
+					className="!h-12"
+					disabled={!check}
+				>
 					{t('register')}
 				</Button>
-				<Checkbox
-					className={styles.check}
-					onChange={onChangeCheckbox}
-					checked={check}
-				>
-					<p className={styles.termsUse}>{t('userAgreement')}</p>
+				<Checkbox onChange={onChangeCheckbox} checked={check}>
+					<p className="my-4 text-xs">{t('userAgreement')}</p>
 				</Checkbox>
-				<div className={styles.login}>
+				<div className="flex items-center justify-between">
 					<span>
 						{t('alreadyProfile')}{' '}
 						<Link
-							className={styles.link}
+							className=" "
 							to="/"
 							onClick={() => clearRegistrationErrors(dispatch)}
 						>
 							{t('login')}
 						</Link>
 					</span>
-					<Link to={'https://kpfu.ru/'} className={styles.kpfu}>
+					<Link
+						to={'https://kpfu.ru/'}
+						className="flex font-bold text-black opacity-50"
+					>
 						kpfu.ru
 					</Link>
 				</div>

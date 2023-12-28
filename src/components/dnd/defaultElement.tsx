@@ -1,8 +1,6 @@
 import { Schedule } from '../cards/Schedule'
 import { TemplateCard } from '../cards/Template'
 
-import { Access } from './Access'
-
 export const jsxElements = [
 	{
 		index: 'ElectronicBook',
@@ -506,26 +504,6 @@ export const jsxElements = [
 			x: 1,
 			y: 0,
 			i: 'SitAnKFU'
-		}
-	},
-	{
-		index: 'TestRole',
-		element: (
-			<Access
-				href="/user/#"
-				info="проверка доступа"
-				title="TestRole"
-				img="/image45.png"
-				buttonText="Посмотреть"
-				height={160}
-			/>
-		),
-		place: {
-			w: 1,
-			h: 1,
-			x: 1,
-			y: 0,
-			i: 'TestRole'
 		}
 	}
 ]

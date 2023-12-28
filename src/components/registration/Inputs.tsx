@@ -2,9 +2,7 @@ import { Form, Input } from 'antd'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { IError } from '../../../api/types'
-
-import styles from './Inputs.module.scss'
+import { IError } from '../../api/types'
 
 interface IInputsProps {
 	email: string
@@ -20,7 +18,6 @@ export const Inputs: FC<IInputsProps> = ({ error, changeEmail, email }) => {
 			<Form.Item
 				name="surname"
 				style={{ marginBottom: 30 }}
-				className={styles.input}
 				validateStatus={
 					error !== null &&
 					error.details.length > 0 &&
@@ -41,11 +38,15 @@ export const Inputs: FC<IInputsProps> = ({ error, changeEmail, email }) => {
 					)
 				}
 			>
-				<Input size="large" placeholder={t('surname')} required />
+				<Input
+					size="large"
+					placeholder={t('surname')}
+					required
+					className="px-5 py-3"
+				/>
 			</Form.Item>
 			<Form.Item
 				name="name"
-				className={styles.input}
 				style={{ marginBottom: 30 }}
 				validateStatus={
 					error !== null &&
@@ -67,11 +68,15 @@ export const Inputs: FC<IInputsProps> = ({ error, changeEmail, email }) => {
 					)
 				}
 			>
-				<Input size="large" placeholder={t('name')} required />
+				<Input
+					size="large"
+					placeholder={t('name')}
+					required
+					className="px-5 py-3"
+				/>
 			</Form.Item>
 			<Form.Item
 				name="email"
-				className={styles.input}
 				style={{ marginBottom: 30 }}
 				validateStatus={
 					error !== null &&
@@ -99,6 +104,7 @@ export const Inputs: FC<IInputsProps> = ({ error, changeEmail, email }) => {
 					size="large"
 					placeholder={t('email')}
 					required
+					className="px-5 py-3"
 					onChange={e => changeEmail(e.target.value)}
 				/>
 			</Form.Item>

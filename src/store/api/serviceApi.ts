@@ -36,6 +36,18 @@ export const serviceApi = apiSlice.injectEndpoints({
 		getDocumentation: builder.query<Documentation, void>({
 			query: () => 'unified-center-api/documentation'
 		}),
+		getPhoneUser: builder.query<Array<any>, void>({
+			query: () => 'user-api/settings/phones'
+		}),
+		postPhone: builder.mutation({
+			query: phone => {
+				return {
+					url: 'user-api/settings/phones',
+					body: phone,
+					method: 'POST'
+				}
+			}
+		}),
 		changePassword: builder.mutation({
 			query: ({
 				newPassword,
@@ -108,5 +120,7 @@ export const {
 	useApproveEmailMutation,
 	useSetRoleMutation,
 	usePostEmailMutation,
-	useChangePasswordMutation
+	useChangePasswordMutation,
+	useGetPhoneUserQuery,
+	usePostPhoneMutation
 } = serviceApi

@@ -1,19 +1,23 @@
-import { Button, Input } from 'antd'
+import { Button, Typography } from 'antd'
+import PhoneInput from 'antd-phone-input'
+import FormItem from 'antd/es/form/FormItem'
 import { useState } from 'react'
 
-import { useVerifyAccMutation } from '../../../store/api/serviceApi'
+import { useAppSelector } from '../../../store'
+import {
+	useGetPhoneUserQuery,
+	usePostPhoneMutation
+} from '../../../store/api/serviceApi'
+import { SkeletonPage } from '../aboutMe/Skeleton'
 
 export const ContactInformation = () => {
-	const [email, setEmail] = useState('')
-	const [phone, setPhone] = useState('')
-	// const { data } = useGetEmailQuery()
-	const [postEmail] = useVerifyAccMutation()
+	const [phone, setPhone] = useState<undefined | string>('')
+	const { data, isLoading } = useGetPhoneUserQuery()
+	const email = useAppSelector(state => state.auth.user?.email)
+	const [submit] = usePostPhoneMutation()
+	const onSubmitPhone = () => submit({ phone })
 
-	const onSubmitEmail = () => {
-		postEmail({ email })
-	}
-
-	const onSubmitPhone = () => {}
+	if (data === undefined || isLoading) return <SkeletonPage />
 
 	return (
 		<section className="max-w-2xl">
@@ -28,47 +32,42 @@ export const ContactInformation = () => {
 					<h1 className="opacity-80 text-black text-sm font-normal">
 						Электронная почта
 					</h1>
-					<Input
-						value={email}
-						onChange={e => setEmail(e.target.value)}
-						size="large"
-						className="mt-2.5"
-						placeholder="PerelmanGYA@stud.kpfu.ru"
-					/>
-					<section>
-						<h1 className="opacity-40 text-black text-base font-normal">
-							Необходимо подтвердить номер, нажав на кнопку ниже
-						</h1>
-						<Button
-							className="bg-transparent border-black !rounded-full mt-4"
-							size="large"
-							onClick={onSubmitEmail}
-						>
-							Подтвердить
-						</Button>
-					</section>
+					<div className="bg-white p-2 rounded-md">
+						<Typography.Text>{email}</Typography.Text>
+					</div>
 				</article>
 				<article className="mt-7 mb-2.5">
 					<h1 className="opacity-80 text-black text-sm font-normal">Телефон</h1>
-					<Input
-						value={phone}
-						onChange={e => setPhone(e.target.value)}
-						size="large"
-						className="mt-2.5"
-						placeholder="+7 999 898-88-99"
-					/>
-					<section>
-						<h1 className="opacity-40 text-black text-base font-normal">
-							Необходимо подтвердить номер, нажав на кнопку ниже
-						</h1>
-						<Button
-							className="bg-transparent border-black !rounded-full mt-4"
-							size="large"
-							onClick={onSubmitPhone}
-						>
-							Подтвердить
-						</Button>
-					</section>
+					{data.length ? (
+						<div className="bg-white p-2 rounded-md">{data[0]}</div>
+					) : (
+						<>
+							<FormItem name="phone" className="w-full">
+								<PhoneInput
+									size="large"
+									className="w-full"
+									enableSearch
+									onChange={e => {
+										const fullPhone = `${e.areaCode}${e.phoneNumber}`
+										setPhone(fullPhone)
+									}}
+									value={phone}
+								/>
+							</FormItem>
+							<section>
+								<h1 className="opacity-40 text-black text-base font-normal">
+									Необходимо подтвердить номер, нажав на кнопку ниже
+								</h1>
+								<Button
+									className="bg-transparent border-black !rounded-full mt-4"
+									size="large"
+									onClick={onSubmitPhone}
+								>
+									Подтвердить
+								</Button>
+							</section>
+						</>
+					)}
 				</article>
 			</article>
 		</section>

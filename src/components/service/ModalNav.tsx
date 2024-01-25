@@ -7,7 +7,6 @@ import { useDispatch } from 'react-redux'
 
 import { useAppSelector } from '../../store'
 import { addCard } from '../../store/reducers/LayoutsSlice'
-import { blue1f5 } from '../../utils/color'
 import { jsxElements } from '../dnd/defaultElement'
 
 export const ModalNav = () => {
@@ -25,7 +24,7 @@ export const ModalNav = () => {
 		<Row>
 			<Col span={24} className="mb-9">
 				<Typography.Text
-					className={`text-[${blue1f5}] text-2xl font-bold leading-loose`}
+					className={`text-blue1f5 text-2xl font-bold leading-loose`}
 				>
 					{t('OurServices')}
 				</Typography.Text>
@@ -37,7 +36,7 @@ export const ModalNav = () => {
 				<Button
 					type="text"
 					icon={<TagOutlined />}
-					className={`text-[${blue1f5}] text-base font-semibold leading-relaxed flex items-center justify-center`}
+					className={`text-blue1f5 text-base font-semibold leading-relaxed flex items-center justify-center`}
 				>
 					{t('Favorites')}
 				</Button>

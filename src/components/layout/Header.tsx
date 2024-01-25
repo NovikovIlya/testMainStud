@@ -23,7 +23,6 @@ import { DocumentSvg } from '../../assets/svg/DocumentSvg'
 import PersonalizationSvg from '../../assets/svg/PersonalizationSvg'
 import { useAppSelector } from '../../store'
 import { logOut, setEdit } from '../../store/reducers/authSlice'
-import { blue1f5, blue307 } from '../../utils/color'
 import { ModalNav } from '../service/ModalNav'
 
 type TypeHeaderProps = {
@@ -48,7 +47,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 			case 'ABIT':
 				return t('ABIT')
 			case 'STUD':
-				return 'test role' //t('STUD')
+				return t('STUD')
 			case 'SCHOOL':
 				return t('SCHOOL')
 			case 'SEEKER':
@@ -68,9 +67,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const items: MenuProps['items'] = [
 		{
 			label: (
-				<div
-					className={`p-2 text-sm text-[${blue1f5}] font-bold cursor-default`}
-				>
+				<div className={`p-2 text-sm text-blue1f5 font-bold cursor-default`}>
 					{user?.email}
 				</div>
 			),
@@ -153,7 +150,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 		<header
 			className={clsx(
 				' z-[1001]  h-[80px] fixed flex items-center justify-center w-full',
-				type === 'main' ? 'bg-white' : `bg-[#65A1FA]`
+				type === 'main' ? 'bg-white' : `bg-blue65A`
 			)}
 		>
 			<div className="w-screen flex h-full justify-between px-8 max-sm:px-5">
@@ -163,7 +160,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						className={clsx(
 							'py-2.5 rounded-full  font-semibold bg-transparent border-2 flex items-center justify-center ',
 							type === 'main'
-								? `text-[${blue1f5}] border-[${blue1f5}]`
+								? `text-blue1f5 border-blue1f5`
 								: 'text-white border-white hover:!border-white hover:!text-white'
 						)}
 						type="default"
@@ -182,7 +179,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						<div
 							className={clsx(
 								'h-full flex items-center px-3 cursor-pointer ',
-								type === 'main' ? 'hover:bg-[#E3E8ED]' : `hover:bg-[${blue307}]`
+								type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'
 							)}
 						>
 							<SearchSvg white={type === 'service'} />
@@ -190,7 +187,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						<div
 							className={clsx(
 								'h-full flex items-center px-3 cursor-pointer ',
-								type === 'main' ? 'hover:bg-[#E3E8ED]' : `hover:bg-[${blue307}]`
+								type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'
 							)}
 						>
 							<MessageSvg white={type === 'service'} />
@@ -198,7 +195,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						<div
 							className={clsx(
 								'h-full flex items-center px-3 cursor-pointer ',
-								type === 'main' ? 'hover:bg-[#E3E8ED]' : `hover:bg-[${blue307}]`
+								type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'
 							)}
 						>
 							<MapSvg white={type === 'service'} />
@@ -206,7 +203,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						<div
 							className={clsx(
 								'h-full flex items-center px-3 cursor-pointer ',
-								type === 'main' ? 'hover:bg-[#E3E8ED]' : `hover:bg-[${blue307}]`
+								type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'
 							)}
 						>
 							<DocumentSvg white={type === 'service'} />
@@ -214,7 +211,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						<div
 							className={clsx(
 								'h-full flex items-center px-3 cursor-pointer ',
-								type === 'main' ? 'hover:bg-[#E3E8ED]' : `hover:bg-[${blue307}]`
+								type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'
 							)}
 						>
 							<EyeSvg white={type === 'service'} />
@@ -240,8 +237,8 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						className={clsx(
 							'h-full flex items-center cursor-pointer w-fit',
 							type === 'main' && openMenu && 'bg-[#E3E8ED]',
-							type !== 'main' && openMenu && `bg-[${blue307}]`,
-							type === 'main' ? 'hover:bg-[#E3E8ED]' : `target:bg-[${blue307}]`
+							type !== 'main' && openMenu && 'bg-blue307',
+							type === 'main' ? 'hover:bg-[#E3E8ED]' : 'target:bg-blue307'
 						)}
 					>
 						<Dropdown

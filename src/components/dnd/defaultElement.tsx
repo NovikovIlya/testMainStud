@@ -487,6 +487,24 @@ export const jsxElements = [
 		}
 	},
 	{
+		index: 'Practices',
+		element: (
+			<TemplateCard
+				href="/services/practices"
+				info="Как попасть в двойку и многие другие ответы по местоположению зданий КФУ Вы найдете в этом сервисе"
+				title="Практики"
+				buttonText="Изучить"
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 1,
+			y: 0,
+			i: 'Practices'
+		}
+	},
+	{
 		index: 'SitAnKFU',
 		element: (
 			<TemplateCard

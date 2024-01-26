@@ -8,6 +8,7 @@ import { PrinterSvg } from '../../../assets/svg/PrinterSvg'
 type PropsType = {
 	setIsPreview: (value: boolean) => void
 	setIsCreate: (value: boolean) => void
+	setIsFinalReview: (value: boolean) => void
 }
 interface DataType {
 	key: string
@@ -81,7 +82,11 @@ const columns: TableProps<DataType>['columns'] = [
 	}
 ]
 
-export const PreviewContracts = ({ setIsPreview, setIsCreate }: PropsType) => {
+export const PreviewContracts = ({
+	setIsPreview,
+	setIsCreate,
+	setIsFinalReview
+}: PropsType) => {
 	return (
 		<section className="container">
 			<Space size={10}>
@@ -121,7 +126,11 @@ export const PreviewContracts = ({ setIsPreview, setIsCreate }: PropsType) => {
 				<Col flex={'auto'} />
 				<Col span={9}>
 					<Space className="w-full flex-row-reverse">
-						<Button size="large" className="!rounded-full">
+						<Button
+							size="large"
+							className="!rounded-full"
+							onClick={() => setIsFinalReview(true)}
+						>
 							Посмотреть итоговый реестр
 						</Button>
 						<Button

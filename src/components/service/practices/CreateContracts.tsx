@@ -15,8 +15,9 @@ import { ArrowLeftSvg } from '../../../assets/svg'
 
 type PropsType = {
 	setIsCreate: (value: boolean) => void
+	setIsPreview: (value: boolean) => void
 }
-export const CreateContracts = ({ setIsCreate }: PropsType) => {
+export const CreateContracts = ({ setIsCreate, setIsPreview }: PropsType) => {
 	return (
 		<section className="container">
 			<Space size={10}>
@@ -169,7 +170,13 @@ export const CreateContracts = ({ setIsCreate }: PropsType) => {
 						<Button className="!rounded-full" size="large" type="primary">
 							Сохранить
 						</Button>
-						<Button className="!rounded-full" size="large">
+						<Button
+							className="!rounded-full"
+							size="large"
+							onClick={() => {
+								setIsPreview(true)
+							}}
+						>
 							Режим просмотра
 						</Button>
 					</Space>

@@ -21,9 +21,14 @@ const data = [
 type PropsType = {
 	setIsCreate: (value: boolean) => void
 	setIsPreview: (value: boolean) => void
+	setIsFinalReview: (value: boolean) => void
 }
 
-export const RegisterContracts = ({ setIsCreate, setIsPreview }: PropsType) => {
+export const RegisterContracts = ({
+	setIsCreate,
+	setIsPreview,
+	setIsFinalReview
+}: PropsType) => {
 	return (
 		<section className="container">
 			<Row gutter={[16, 16]}>
@@ -48,7 +53,11 @@ export const RegisterContracts = ({ setIsCreate, setIsPreview }: PropsType) => {
 				</Col>
 				<Col span={8} offset={6}>
 					<Space className="w-full flex-row-reverse">
-						<Button size="large" className="!rounded-full">
+						<Button
+							size="large"
+							className="!rounded-full"
+							onClick={() => setIsFinalReview(true)}
+						>
 							Посмотреть итоговый реестр
 						</Button>
 						<Button

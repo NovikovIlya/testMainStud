@@ -492,7 +492,7 @@ export const jsxElements = [
 			<TemplateCard
 				href="/services/practices"
 				info="Как попасть в двойку и многие другие ответы по местоположению зданий КФУ Вы найдете в этом сервисе"
-				title="Практики"
+				title="Practices"
 				buttonText="Изучить"
 			/>
 		),

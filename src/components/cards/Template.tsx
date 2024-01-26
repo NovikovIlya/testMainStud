@@ -1,5 +1,6 @@
 import { Button } from 'antd'
 import clsx from 'clsx'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 type SessionProps = {
@@ -29,16 +30,18 @@ export const TemplateCard = ({
 	isRounded,
 	buttonType = 'default'
 }: SessionProps) => {
+	const { t } = useTranslation()
+
 	const navigate = useNavigate()
 	return (
 		<div className="flex flex-col px-7 py-8 justify-between h-full max-[874px]:p-0 max-[874px]:py-3 max-[874px]:items-center ">
 			<div className="flex max-[874px]:flex-col max-[874px]:h-full max-[874px]:w-full max-[874px]:items-center">
 				<div className="text-left">
 					<div className="leading-7 text-xl font-bold whitespace-nowrap">
-						{title}
+						{t(title)}
 					</div>
 					<div className="text-base font-normal leading-relaxed mt-7 max-[874px]:hidden">
-						{info}
+						{t(info)}
 					</div>
 				</div>
 				{img && (
@@ -64,7 +67,7 @@ export const TemplateCard = ({
 						window.open(href)
 					}}
 				>
-					{buttonText}
+					{t(buttonText)}
 				</Button>
 			) : (
 				<Button
@@ -74,7 +77,7 @@ export const TemplateCard = ({
 						navigate(href)
 					}}
 				>
-					{buttonText}
+					{t(buttonText)}
 				</Button>
 			)}
 		</div>

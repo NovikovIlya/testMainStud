@@ -1,8 +1,9 @@
 import React from 'react'
 
-export const ArrowLeftSvg = () => {
+export const ArrowLeftSvg = ({ className }: { className?: string }) => {
 	return (
 		<svg
+			className={className}
 			width="8"
 			height="11"
 			viewBox="0 0 8 11"

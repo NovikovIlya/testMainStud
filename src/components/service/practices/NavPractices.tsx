@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { PracticesSvg } from '../../../assets/svg/PracticesSvg'
 
 import './Practices.sass'
-import { RegisterContracts } from './RegisterContracts'
+import { Roster } from './Roster'
 
 type MenuItem = Required<MenuProps>['items'][number]
 
@@ -70,10 +70,12 @@ export const NavPractices = () => {
 				mode="inline"
 				onClick={onClick}
 				onOpenChange={onOpenChange}
-				className="w-60 flex flex-col gap-7"
+				className="min-w-[230px] max-w-[230px] flex flex-col gap-7"
 				items={items}
 			/>
-			{current === 'registerContracts' && <RegisterContracts />}
+			<div className="bg-[#F5F8FB] w-full pt-14 px-14 ">
+				{current === 'registerContracts' && <Roster />}
+			</div>
 		</>
 	)
 }

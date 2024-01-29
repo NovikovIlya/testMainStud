@@ -45,7 +45,7 @@ export const RegisterContracts = ({
 				</Col>
 				<Col span={8}>
 					<Select
-						dropdownMatchSelectWidth={false}
+						popupMatchSelectWidth={false}
 						defaultValue="1"
 						className="w-full"
 						options={[{ value: '1', label: 'Все' }]}
@@ -77,7 +77,7 @@ export const RegisterContracts = ({
 				</Col>
 				<Col span={4}>
 					<Select
-						dropdownMatchSelectWidth={false}
+						popupMatchSelectWidth={false}
 						defaultValue="1"
 						className="w-full"
 						options={[{ value: '1', label: 'Бессрочный' }]}
@@ -90,7 +90,7 @@ export const RegisterContracts = ({
 				</Col>
 				<Col span={6}>
 					<Select
-						dropdownMatchSelectWidth={false}
+						popupMatchSelectWidth={false}
 						defaultValue="1"
 						className="w-full"
 						options={[

@@ -46,10 +46,12 @@ const props: UploadProps = {
 		}
 	}
 }
+
 type PropsType = {
 	setIsCreate: (value: boolean) => void
 	setIsPreview: (value: boolean) => void
 }
+
 export const CreateContracts = ({ setIsCreate, setIsPreview }: PropsType) => {
 	const { control, handleSubmit } = useForm({
 		defaultValues: {
@@ -184,10 +186,8 @@ export const CreateContracts = ({ setIsCreate, setIsPreview }: PropsType) => {
 								control={control}
 								render={({ field, fieldState }) => (
 									<DatePicker
+										{...field}
 										status={fieldState.error ? 'error' : undefined}
-										ref={field.ref}
-										name={field.name}
-										onBlur={field.onBlur}
 										value={field.value ? dayjs(field.value) : null}
 										onChange={date => {
 											field.onChange(date ? date.valueOf() : null)

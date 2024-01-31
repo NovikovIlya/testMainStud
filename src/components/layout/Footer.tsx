@@ -11,11 +11,11 @@ import {
 
 export const Footer = () => {
 	return (
-		<footer className="w-full min-h-[400px] bg-[#212121] text-white text-base">
-			<div className="flex justify-around my-[100px] max-md:flex-col max-md:px-10 max-md:pt-10">
-				<div className="flex flex-col justify-center ">
+		<footer className="w-full min-h-[200px] text-base py-14 flex max-md:flex-col justify-between container mx-auto px-3">
+			<div className="flex  flex-col">
+				<div className="flex mb-10 max-sm:flex-col">
 					<LogoSvg />
-					<div className=" flex flex-col mt-10 mb-5">
+					<div className=" flex flex-col max-sm:mt-7">
 						<span>
 							<strong>Адрес:</strong> 420008 г. Казань, ул. Кремлевская, 18
 						</span>
@@ -23,21 +23,21 @@ export const Footer = () => {
 							<strong>Email:</strong> public.mail@kpfu.ru
 						</span>
 					</div>
-					<span>
-						<strong>© 2023 Казанский федеральный университет</strong>
-					</span>
 				</div>
-				<div className="flex flex-col">
-					<span>
-						<strong>Соцсети:</strong>
-					</span>
-					<div className="flex gap-5 my-5">
-						<VkSvg />
-						<YoutubeSvg />
-						<DzenSvg />
-						<OkSvg />
-						<TelegramSvg />
-					</div>
+				<span>
+					<strong>© 2023 Казанский федеральный университет</strong>
+				</span>
+			</div>
+			<div className="flex flex-col max-sm:mt-7">
+				<span>
+					<strong>Соцсети:</strong>
+				</span>
+				<div className="flex gap-3 mt-5">
+					<VkSvg />
+					<YoutubeSvg />
+					<DzenSvg />
+					<OkSvg />
+					<TelegramSvg />
 				</div>
 			</div>
 		</footer>

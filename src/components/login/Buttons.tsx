@@ -1,13 +1,10 @@
 import { Button, Form } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 import { GosSvg } from '../../assets/svg'
-import { clearLoginErrors } from '../../store/creators/SomeCreators'
 
 export const Buttons = () => {
-	const dispatch = useDispatch()
 	const { t } = useTranslation()
 	return (
 		<Form.Item>
@@ -37,11 +34,7 @@ export const Buttons = () => {
 				<div className="flex items-center justify-between">
 					<span>
 						{t('noProfile')}{' '}
-						<Link
-							className={`text-base `}
-							to="/registration"
-							onClick={() => clearLoginErrors(dispatch)}
-						>
+						<Link className={`text-base `} to="/registration">
 							{t('register')}
 						</Link>
 					</span>

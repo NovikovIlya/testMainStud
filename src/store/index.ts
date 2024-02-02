@@ -3,7 +3,6 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import logger from 'redux-logger'
 
 import { apiSlice } from './api/apiSlice'
-import AuthRegReducer from './reducers/AuthRegReducer'
 import AddressReducer from './reducers/FormReducers/AddressReducer'
 import CountriesEducationReducer from './reducers/FormReducers/CountriesEducationReducer'
 import DocumentReducer from './reducers/FormReducers/DocumentReducer'
@@ -13,15 +12,12 @@ import InfoUserReducer from './reducers/FormReducers/InfoUserReducer'
 import ParentReducer from './reducers/FormReducers/ParentReducer'
 import WorkReducer from './reducers/FormReducers/WorkReducer'
 import LayoutSlice from './reducers/LayoutsSlice'
-import ProfileReducer from './reducers/ProfileReducer'
 import authSlice from './reducers/authSlice'
 
 export const store = configureStore({
 	reducer: {
 		auth: authSlice,
 		Layout: LayoutSlice,
-		AuthReg: AuthRegReducer,
-		Profile: ProfileReducer,
 		InfoUser: InfoUserReducer,
 		Form: FormReducer,
 		Document: DocumentReducer,

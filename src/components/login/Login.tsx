@@ -1,5 +1,4 @@
 import { Form, Typography } from 'antd'
-import Cookies from 'js-cookie'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'

@@ -2,9 +2,9 @@ import { Schedule } from '../cards/Schedule'
 import { TemplateCard } from '../cards/Template'
 
 const cookies = document.cookie.split('; ')
-const sId = cookies[2].split('=')[1]
-const hId = cookies[3].split('=')[1]
-const aId = cookies[4].split('=')[1]
+const sId = cookies[2].split('=')[1] || ''
+const hId = cookies[3].split('=')[1] || ''
+const aId = cookies[4].split('=')[1] || ''
 /**
  * s_id:"22408606452196311228958538938715"
  * h_id:"9BC8497C61F2354B23D2AE0FCDCA318E"

@@ -1,4 +1,5 @@
 import { Form, Typography } from 'antd'
+import Cookies from 'js-cookie'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
@@ -21,6 +22,7 @@ export const Login = () => {
 	const dispatch = useDispatch()
 	const [login] = useLoginMutation()
 	const [error, setError] = useState<IError | null>(null)
+
 	const onFinish = async (values: { email: string; password: string }) => {
 		try {
 			const userData = await login({
@@ -28,6 +30,27 @@ export const Login = () => {
 				password: values.password
 			}).unwrap()
 			dispatch(setCredentials({ ...userData }))
+			document.cookie = `refresh=${
+				userData.refreshToken
+			}; max-age=31536000; domain=${
+				document.domain !== 'localhost' ? 'kpfu.ru' : 'localhost'
+			}; path=/; samesite=strict`
+			document.cookie = `s_id=${
+				userData.user.sessionId
+			}; max-age=31536000; domain=${
+				document.domain !== 'localhost' ? 'kpfu.ru' : 'localhost'
+			}; path=/; samesite=strict`
+			document.cookie = `h_id=${
+				userData.user.sessionHash
+			}; max-age=31536000; domain=${
+				document.domain !== 'localhost' ? 'kpfu.ru' : 'localhost'
+			}; path=/; samesite=strict`
+			document.cookie = `a_id=${
+				userData.user.allId
+			}; max-age=31536000; domain=${
+				document.domain !== 'localhost' ? 'kpfu.ru' : 'localhost'
+			}; path=/; samesite=strict`
+
 			localStorage.setItem('user', JSON.stringify(userData.user))
 			localStorage.setItem('access', JSON.stringify(userData.accessToken))
 			localStorage.setItem('refresh', JSON.stringify(userData.refreshToken))
@@ -51,7 +74,7 @@ export const Login = () => {
 					<Title className="mb-[20px] text-start text-2xl font-bold">
 						{t('authorization')}
 					</Title>
-					<Inputs error={error} />
+					<Inputs error={error!} />
 					<Buttons />
 				</Form>
 				<div className="flex items-start mt-10">

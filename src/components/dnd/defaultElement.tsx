@@ -1,6 +1,14 @@
 import { Schedule } from '../cards/Schedule'
 import { TemplateCard } from '../cards/Template'
 
+const cookies = document.cookie.split('; ')
+const sId = cookies[2].split('=')[1]
+const hId = cookies[3].split('=')[1]
+const aId = cookies[4].split('=')[1]
+/**
+ * s_id:"22408606452196311228958538938715"
+ * h_id:"9BC8497C61F2354B23D2AE0FCDCA318E"
+ */
 export const jsxElements = [
 	{
 		index: 'ElectronicBook',
@@ -44,7 +52,7 @@ export const jsxElements = [
 		index: 'Applications',
 		element: (
 			<TemplateCard
-				href="/user/#"
+				href="https://shelly.kpfu.ru/e-ksu/site_student_sh_pr_ac.offor_document?p_menu=14&p_type_menu_open=151"
 				img="/image31.png"
 				info="Здесь Вы можете подать заявки на оформление различных документов"
 				title="Заявки"
@@ -60,93 +68,93 @@ export const jsxElements = [
 			i: 'Applications'
 		}
 	},
-	{
-		index: 'MyRating',
-		element: (
-			<TemplateCard
-				href="/user/#"
-				img="/image18.png"
-				info="В разделе отображается рейтинг учащегося за все годы обучения"
-				title="Мой рейтинг"
-				width={150}
-				height={150}
-			/>
-		),
-		place: {
-			w: 1,
-			h: 1,
-			x: 1,
-			y: 0,
-			i: 'MyRating'
-		}
-	},
-	{
-		index: 'Grade',
-		element: (
-			<TemplateCard
-				href="/user/#"
-				img="/image725.png"
-				info="Оценки и баллы на протяжении всего учебного времени"
-				title="Успеваемость"
-				width={87}
-				height={140}
-			/>
-		),
-		place: {
-			w: 1,
-			h: 1,
-			x: 1,
-			y: 0,
-			i: 'Grade'
-		}
-	},
-	{
-		index: 'Groupmates',
-		element: (
-			<TemplateCard
-				href="/user/#"
-				img="/image19.png"
-				info="Список одногруппников, адреса их электронной почты, контакты"
-				title="Одногруппники"
-				width={130}
-				height={137}
-				isRounded
-			/>
-		),
-		place: {
-			w: 1,
-			h: 1,
-			x: 1,
-			y: 0,
-			i: 'Groupmates'
-		}
-	},
-	{
-		index: 'Map',
-		element: (
-			<TemplateCard
-				href="/user/#"
-				img="/image21.png"
-				info="Список одногруппников, адреса их электронной почты, контакты"
-				title="Карта зданий КФУ"
-				width={134}
-				height={124}
-				buttonText="Изучить"
-			/>
-		),
-		place: {
-			w: 1,
-			h: 1,
-			x: 1,
-			y: 0,
-			i: 'Map'
-		}
-	},
+	// {
+	// 	index: 'MyRating',
+	// 	element: (
+	// 		<TemplateCard
+	// 			href="/user/#"
+	// 			img="/image18.png"
+	// 			info="В разделе отображается рейтинг учащегося за все годы обучения"
+	// 			title="Мой рейтинг"
+	// 			width={150}
+	// 			height={150}
+	// 		/>
+	// 	),
+	// 	place: {
+	// 		w: 1,
+	// 		h: 1,
+	// 		x: 1,
+	// 		y: 0,
+	// 		i: 'MyRating'
+	// 	}
+	// },
+	// {
+	// 	index: 'Grade',
+	// 	element: (
+	// 		<TemplateCard
+	// 			href="/user/#"
+	// 			img="/image725.png"
+	// 			info="Оценки и баллы на протяжении всего учебного времени"
+	// 			title="Успеваемость"
+	// 			width={87}
+	// 			height={140}
+	// 		/>
+	// 	),
+	// 	place: {
+	// 		w: 1,
+	// 		h: 1,
+	// 		x: 1,
+	// 		y: 0,
+	// 		i: 'Grade'
+	// 	}
+	// },
+	// {
+	// 	index: 'Groupmates',
+	// 	element: (
+	// 		<TemplateCard
+	// 			href="/user/#"
+	// 			img="/image19.png"
+	// 			info="Список одногруппников, адреса их электронной почты, контакты"
+	// 			title="Одногруппники"
+	// 			width={130}
+	// 			height={137}
+	// 			isRounded
+	// 		/>
+	// 	),
+	// 	place: {
+	// 		w: 1,
+	// 		h: 1,
+	// 		x: 1,
+	// 		y: 0,
+	// 		i: 'Groupmates'
+	// 	}
+	// },
+	// {
+	// 	index: 'Map',
+	// 	element: (
+	// 		<TemplateCard
+	// 			href="/user/#"
+	// 			img="/image21.png"
+	// 			info="Список одногруппников, адреса их электронной почты, контакты"
+	// 			title="Карта зданий КФУ"
+	// 			width={134}
+	// 			height={124}
+	// 			buttonText="Изучить"
+	// 		/>
+	// 	),
+	// 	place: {
+	// 		w: 1,
+	// 		h: 1,
+	// 		x: 1,
+	// 		y: 0,
+	// 		i: 'Map'
+	// 	}
+	// },
 	{
 		index: 'Staff',
 		element: (
 			<TemplateCard
-				href="/user/#"
+				href="https://shelly.kpfu.ru/e-ksu/portal_person.kurs_cifra#tab1"
 				img="/image24.png"
 				info="Поиск по списку сотрудников Казанского федерального университета, а также их контакты"
 				title="Сотрудники"
@@ -163,34 +171,34 @@ export const jsxElements = [
 			i: 'Staff'
 		}
 	},
-	{
-		index: 'Contests',
-		element: (
-			<TemplateCard
-				href="/user/#"
-				img="/image1.png"
-				info="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-				title="Конкурсы"
-				width={120}
-				height={120}
-				mt="mt-0"
-				buttonText="Записаться"
-				buttonType="primary"
-			/>
-		),
-		place: {
-			w: 1,
-			h: 1,
-			x: 1,
-			y: 0,
-			i: 'Contests'
-		}
-	},
+	// {
+	// 	index: 'Contests',
+	// 	element: (
+	// 		<TemplateCard
+	// 			href="/user/#"
+	// 			img="/image1.png"
+	// 			info="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+	// 			title="Конкурсы"
+	// 			width={120}
+	// 			height={120}
+	// 			mt="mt-0"
+	// 			buttonText="Записаться"
+	// 			buttonType="primary"
+	// 		/>
+	// 	),
+	// 	place: {
+	// 		w: 1,
+	// 		h: 1,
+	// 		x: 1,
+	// 		y: 0,
+	// 		i: 'Contests'
+	// 	}
+	// },
 	{
 		index: 'Vacancies',
 		element: (
 			<TemplateCard
-				href="/user/#"
+				href="https://career.kpfu.ru/"
 				info="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
 				title="Вакансии студентам"
 			/>
@@ -203,30 +211,30 @@ export const jsxElements = [
 			i: 'Vacancies'
 		}
 	},
-	{
-		index: 'Events',
-		element: (
-			<TemplateCard
-				href="/user/#"
-				info="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-				title="Мероприятия"
-				buttonText="Записаться"
-				buttonType="primary"
-			/>
-		),
-		place: {
-			w: 1,
-			h: 1,
-			x: 1,
-			y: 0,
-			i: 'Events'
-		}
-	},
+	// {
+	// 	index: 'Events',
+	// 	element: (
+	// 		<TemplateCard
+	// 			href="/user/#"
+	// 			info="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+	// 			title="Мероприятия"
+	// 			buttonText="Записаться"
+	// 			buttonType="primary"
+	// 		/>
+	// 	),
+	// 	place: {
+	// 		w: 1,
+	// 		h: 1,
+	// 		x: 1,
+	// 		y: 0,
+	// 		i: 'Events'
+	// 	}
+	// },
 	{
 		index: 'EducationalCourses',
 		element: (
 			<TemplateCard
-				href="/user/#"
+				href="https://shelly.kpfu.ru/e-ksu/portal_person.kurs_cifra?p_type_menu_open=2#tab1"
 				info="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Tincidunt augue interdum velit euismod in pellentesque massa placerat."
 				title="Образовательные курсы"
 				img="/image2.png"
@@ -260,7 +268,7 @@ export const jsxElements = [
 		index: 'News',
 		element: (
 			<TemplateCard
-				href="/user/#"
+				href="https://media.kpfu.ru/news?kn%5B0%5D=Новости%20науки&created="
 				info="Читайте о новостях и событиях, связанных с Казанским федеральным университетом"
 				title="Новости"
 				img="/image3.png"
@@ -281,7 +289,7 @@ export const jsxElements = [
 		index: 'Testing',
 		element: (
 			<TemplateCard
-				href="/user/#"
+				href="https://shelly.kpfu.ru/e-ksu/SITE_STUDENT_SH_PR_AC.test_student_personal"
 				info="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
 				title="Тестирование"
 				buttonText="Пройти"
@@ -296,97 +304,97 @@ export const jsxElements = [
 			i: 'Testing'
 		}
 	},
-	{
-		index: 'Checklist',
-		element: (
-			<TemplateCard
-				href="/user/#"
-				info="Заглядывайте в чек-лист, в котором мы описали все шаги для устройства на работу в Казанский федеральный университет"
-				title="Чек-лист: как к нам попасть"
-				img="/image4.png"
-				width={115}
-				height={115}
-				positionImage="mt-4"
-			/>
-		),
-		place: {
-			w: 1,
-			h: 1,
-			x: 1,
-			y: 0,
-			i: 'Checklist'
-		}
-	},
-	{
-		index: 'JobApplicationStatus',
-		element: (
-			<TemplateCard
-				href="/user/#"
-				info="В разделе отображается ваш текущий статус заявления на работу"
-				title="Статус заявления на работу"
-				img="/image5.png"
-				width={137}
-				height={130}
-				positionImage="ml-4 mt-2"
-			/>
-		),
-		place: {
-			w: 1,
-			h: 1,
-			x: 1,
-			y: 0,
-			i: 'JobApplicationStatus'
-		}
-	},
-	{
-		index: 'Resume',
-		element: (
-			<TemplateCard
-				href="/user/#"
-				info="Мы всегда в поиске крутых специалистов. Заполняйте резюме, отправляйте на проверку и мы рассмотрим Вашу кандидатуру."
-				title="Резюме"
-				img="/image6.png"
-				positionImage="ml-2 -mt-2"
-				width={135}
-				height={140}
-				buttonType="primary"
-				buttonText="Отправить"
-			/>
-		),
-		place: {
-			w: 1,
-			h: 1,
-			x: 1,
-			y: 0,
-			i: 'Resume'
-		}
-	},
-	{
-		index: 'MyCourses',
-		element: (
-			<TemplateCard
-				href="/user/#"
-				info="Здесь хранится история ваших курсов, которые вы когда-либо проходили, проходите или собираетесь пройти"
-				title="Мои курсы"
-				img="/image7.png"
-				positionImage="mt-3"
-				width={119}
-				height={106}
-			/>
-		),
-		place: {
-			w: 1,
-			h: 1,
-			x: 1,
-			y: 0,
-			i: 'MyCourses'
-		}
-	},
+	// {
+	// 	index: 'Checklist',
+	// 	element: (
+	// 		<TemplateCard
+	// 			href="/user/#"
+	// 			info="Заглядывайте в чек-лист, в котором мы описали все шаги для устройства на работу в Казанский федеральный университет"
+	// 			title="Чек-лист: как к нам попасть"
+	// 			img="/image4.png"
+	// 			width={115}
+	// 			height={115}
+	// 			positionImage="mt-4"
+	// 		/>
+	// 	),
+	// 	place: {
+	// 		w: 1,
+	// 		h: 1,
+	// 		x: 1,
+	// 		y: 0,
+	// 		i: 'Checklist'
+	// 	}
+	// },
+	// {
+	// 	index: 'JobApplicationStatus',
+	// 	element: (
+	// 		<TemplateCard
+	// 			href="/user/#"
+	// 			info="В разделе отображается ваш текущий статус заявления на работу"
+	// 			title="Статус заявления на работу"
+	// 			img="/image5.png"
+	// 			width={137}
+	// 			height={130}
+	// 			positionImage="ml-4 mt-2"
+	// 		/>
+	// 	),
+	// 	place: {
+	// 		w: 1,
+	// 		h: 1,
+	// 		x: 1,
+	// 		y: 0,
+	// 		i: 'JobApplicationStatus'
+	// 	}
+	// },
+	// {
+	// 	index: 'Resume',
+	// 	element: (
+	// 		<TemplateCard
+	// 			href="/user/#"
+	// 			info="Мы всегда в поиске крутых специалистов. Заполняйте резюме, отправляйте на проверку и мы рассмотрим Вашу кандидатуру."
+	// 			title="Резюме"
+	// 			img="/image6.png"
+	// 			positionImage="ml-2 -mt-2"
+	// 			width={135}
+	// 			height={140}
+	// 			buttonType="primary"
+	// 			buttonText="Отправить"
+	// 		/>
+	// 	),
+	// 	place: {
+	// 		w: 1,
+	// 		h: 1,
+	// 		x: 1,
+	// 		y: 0,
+	// 		i: 'Resume'
+	// 	}
+	// },
+	// {
+	// 	index: 'MyCourses',
+	// 	element: (
+	// 		<TemplateCard
+	// 			href="/user/#"
+	// 			info="Здесь хранится история ваших курсов, которые вы когда-либо проходили, проходите или собираетесь пройти"
+	// 			title="Мои курсы"
+	// 			img="/image7.png"
+	// 			positionImage="mt-3"
+	// 			width={119}
+	// 			height={106}
+	// 		/>
+	// 	),
+	// 	place: {
+	// 		w: 1,
+	// 		h: 1,
+	// 		x: 1,
+	// 		y: 0,
+	// 		i: 'MyCourses'
+	// 	}
+	// },
 	{
 		index: 'DocumentFlow',
 		element: (
 			<TemplateCard
-				href="/user/#"
+				href="https://shelly.kpfu.ru/e-ksu/site_student_sh_pr_ac.offor_document?p_menu=14&p_type_menu_open=1"
 				info="Один из старейших университетов в России, основанный в 1804 году. Университет славится своими сильными школами математики..."
 				title="Документооборот"
 				img="/image8.png"
@@ -406,7 +414,7 @@ export const jsxElements = [
 		index: 'PaySheet',
 		element: (
 			<TemplateCard
-				href="/user/#"
+				href={`https://shelly.kpfu.ru/e-ksu/student_grants.pay_list?p1=${aId}&p2=${sId}&p_h=${hId}`}
 				info="Здесь хранится история ваших курсов, которые вы когда-либо проходили, проходите или собираетесь пройти"
 				title="Расчетный лист"
 				img="/image9.png"
@@ -423,69 +431,69 @@ export const jsxElements = [
 			i: 'PaySheet'
 		}
 	},
-	{
-		index: 'TasksProjects',
-		element: (
-			<TemplateCard
-				href="/user/#"
-				info="Один из старейших университетов в России, основанный в 1804 году. Университет славится своими сильными школами математики..."
-				title="Задачи и проекты"
-				img="/image10.png"
-				width={130}
-				height={130}
-			/>
-		),
-		place: {
-			w: 1,
-			h: 1,
-			x: 1,
-			y: 0,
-			i: 'TasksProjects'
-		}
-	},
-	{
-		index: 'BusinessTrips',
-		element: (
-			<TemplateCard
-				href="/user/#"
-				info="Как попасть в двойку и многие другие ответы по местоположению зданий КФУ Вы найдете в этом сервисе"
-				title="Командировки"
-				img="/image11.png"
-				buttonText="Изучить"
-				width={120}
-				height={130}
-			/>
-		),
-		place: {
-			w: 1,
-			h: 1,
-			x: 1,
-			y: 0,
-			i: 'BusinessTrips'
-		}
-	},
-	{
-		index: 'Vacation',
-		element: (
-			<TemplateCard
-				href="/user/#"
-				info="В разделе отображается рейтинг сотрудника в списке коллег"
-				title="Отпуск"
-				img="/image12.png"
-				buttonText="Изучить"
-				positionImage="pl-6"
-				width={140}
-				height={130}
-			/>
-		),
-		place: {
-			w: 1,
-			h: 1,
-			x: 1,
-			y: 0,
-			i: 'Vacation'
-		}
-	},
+	// {
+	// 	index: 'TasksProjects',
+	// 	element: (
+	// 		<TemplateCard
+	// 			href="/user/#"
+	// 			info="Один из старейших университетов в России, основанный в 1804 году. Университет славится своими сильными школами математики..."
+	// 			title="Задачи и проекты"
+	// 			img="/image10.png"
+	// 			width={130}
+	// 			height={130}
+	// 		/>
+	// 	),
+	// 	place: {
+	// 		w: 1,
+	// 		h: 1,
+	// 		x: 1,
+	// 		y: 0,
+	// 		i: 'TasksProjects'
+	// 	}
+	// },
+	// {
+	// 	index: 'BusinessTrips',
+	// 	element: (
+	// 		<TemplateCard
+	// 			href=""
+	// 			info="Как попасть в двойку и многие другие ответы по местоположению зданий КФУ Вы найдете в этом сервисе"
+	// 			title="Командировки"
+	// 			img="/image11.png"
+	// 			buttonText="Изучить"
+	// 			width={120}
+	// 			height={130}
+	// 		/>
+	// 	),
+	// 	place: {
+	// 		w: 1,
+	// 		h: 1,
+	// 		x: 1,
+	// 		y: 0,
+	// 		i: 'BusinessTrips'
+	// 	}
+	// },
+	// {
+	// 	index: 'Vacation',
+	// 	element: (
+	// 		<TemplateCard
+	// 			href="/user/#"
+	// 			info="В разделе отображается рейтинг сотрудника в списке коллег"
+	// 			title="Отпуск"
+	// 			img="/image12.png"
+	// 			buttonText="Изучить"
+	// 			positionImage="pl-6"
+	// 			width={140}
+	// 			height={130}
+	// 		/>
+	// 	),
+	// 	place: {
+	// 		w: 1,
+	// 		h: 1,
+	// 		x: 1,
+	// 		y: 0,
+	// 		i: 'Vacation'
+	// 	}
+	// },
 	{
 		index: 'Practices',
 		element: (
@@ -522,6 +530,24 @@ export const jsxElements = [
 			x: 1,
 			y: 0,
 			i: 'SitAnKFU'
+		}
+	},
+	{
+		index: 'Dormitory',
+		element: (
+			<TemplateCard
+				href="https://shelly.kpfu.ru/e-ksu/SITE_STUDENT_SH_PR_AC.dormitory_work_document?p_menu=37"
+				info="Как попасть в двойку и многие другие ответы по местоположению зданий КФУ Вы найдете в этом сервисе"
+				title="Dormitory"
+				buttonText="Изучить"
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 1,
+			y: 0,
+			i: 'Dormitory'
 		}
 	}
 ]

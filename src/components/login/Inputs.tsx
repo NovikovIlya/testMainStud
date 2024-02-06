@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { IError } from '../../api/types'
 
 interface IInputsProps {
-	error: IError | null
+	error?: IError
 }
 export const Inputs: FC<IInputsProps> = ({ error }) => {
 	const { t } = useTranslation()
@@ -15,7 +15,7 @@ export const Inputs: FC<IInputsProps> = ({ error }) => {
 				name="email"
 				style={{ marginBottom: 30 }}
 				validateStatus={error !== null ? 'error' : undefined}
-				help={error !== null && <div>{error.error}</div>}
+				help={error !== null && <div>{error?.error}</div>}
 			>
 				<Input
 					className="rounded-lg mt-5 h-12 px-5 py-3"
@@ -30,7 +30,7 @@ export const Inputs: FC<IInputsProps> = ({ error }) => {
 				name="password"
 				style={{ marginBottom: 30 }}
 				validateStatus={error !== null ? 'error' : undefined}
-				help={error !== null && <div>{error.error}</div>}
+				help={error !== null && <div>{error?.error}</div>}
 			>
 				<Input.Password
 					className="rounded-lg h-12 px-5 py-3"

@@ -20,6 +20,7 @@ import {
 import type { FilterDropdownProps } from 'antd/es/table/interface'
 import { useRef, useState } from 'react'
 import Highlighter from 'react-highlight-words'
+import { useNavigate } from 'react-router-dom'
 
 import { DownloadSvg } from '../../../../assets/svg/DownloadSvg'
 import { PrinterSvg } from '../../../../assets/svg/PrinterSvg'
@@ -31,10 +32,6 @@ interface DataType {
 	name: string
 	type: string
 	tasks: string[]
-}
-
-interface Props {
-	setIsCreate: (value: boolean) => void
 }
 
 type DataIndex = keyof DataType
@@ -53,7 +50,7 @@ const data: DataType[] = [
 	{
 		key: '2',
 		name: '31.08.01 Акушерство и гинекология',
-		type: 'Производственная (клиническая) практика: акушерство и гинекология',
+		type: 'Производственная (клиническая) практика: тест и тест',
 		tasks: [
 			'Овладеть методиками кесарева сечения (корпоральное, истмико-корпоральное, в нижнем сегменте матки, экстракорпоральное;',
 			'Овладеть методиками родоразрешающих и плодоразрушающих операций',
@@ -63,7 +60,7 @@ const data: DataType[] = [
 	{
 		key: '3',
 		name: '31.08.02 Акушерство и гинекология',
-		type: 'Производственная (клиническая) практика: акушерство и гинекология',
+		type: 'Производственная (клиническая) практика: тест и тест',
 		tasks: [
 			'Овладеть методиками кесарева сечения (корпоральное, истмико-корпоральное, в нижнем сегменте матки, экстракорпоральное;',
 			'Овладеть методиками родоразрешающих и плодоразрушающих операций',
@@ -82,7 +79,7 @@ const data: DataType[] = [
 	}
 ]
 
-const IndividualTasks = ({ setIsCreate }: Props) => {
+const IndividualTasks = () => {
 	const [searchText, setSearchText] = useState('')
 	const [searchedColumn, setSearchedColumn] = useState('')
 	const searchInput = useRef<InputRef>(null)
@@ -230,14 +227,29 @@ const IndividualTasks = ({ setIsCreate }: Props) => {
 			],
 			filterSearch: true,
 			//@ts-ignore
-			onFilter: (value: string, record) => record.name.includes(value)
+			onFilter: (value: string, record) => record.name.includes(value),
+			sorter: (a, b) => a.name.length - b.name.length
 		},
 		{
 			title: 'Тип практики',
 			dataIndex: 'type',
 			key: 'type',
 			width: '20%',
-			...getColumnSearchProps('type')
+			filters: [
+				{
+					text: 'Производственная (клиническая) практика: акушерство и гинекология',
+					value:
+						'Производственная (клиническая) практика: акушерство и гинекология'
+				},
+				{
+					text: 'Производственная (клиническая) практика: тест и тест',
+					value: 'Производственная (клиническая) практика: тест и тест'
+				}
+			],
+			filterSearch: true,
+			//@ts-ignore
+			onFilter: (value: string, record) => record.type.includes(value),
+			sorter: (a, b) => a.type.length - b.type.length
 		},
 		{
 			title: 'Индивидуальные задания',
@@ -258,6 +270,7 @@ const IndividualTasks = ({ setIsCreate }: Props) => {
 			)
 		}
 	]
+	const navigate = useNavigate()
 	return (
 		<section className="container">
 			<Row>
@@ -287,7 +300,7 @@ const IndividualTasks = ({ setIsCreate }: Props) => {
 							type="primary"
 							className="!rounded-full"
 							onClick={() => {
-								setIsCreate(true)
+								navigate('/services/practices/individualTasks/createTask')
 							}}
 						>
 							Добавить индивидуальные задания
@@ -330,6 +343,11 @@ const IndividualTasks = ({ setIsCreate }: Props) => {
 				</Col>
 			</Row>
 			<Table
+				locale={{
+					triggerDesc: 'descend sort text',
+					triggerAsc: 'ascend sort text',
+					cancelSort: 'cancel sort text'
+				}}
 				bordered
 				columns={columns}
 				dataSource={data}

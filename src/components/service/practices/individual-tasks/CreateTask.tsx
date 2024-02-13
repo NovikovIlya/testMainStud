@@ -15,6 +15,7 @@ import { Table } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 import React, { useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
 
 import { ArrowLeftSvg } from '../../../../assets/svg'
 
@@ -79,7 +80,7 @@ const Rows = ({ children, ...props }: RowProps) => {
 	)
 }
 
-const CreateTask = ({ setIsCreate }: Props) => {
+const CreateTask = () => {
 	const [task, setTask] = useState('')
 	const { control, handleSubmit } = useForm({
 		defaultValues: {
@@ -169,6 +170,7 @@ const CreateTask = ({ setIsCreate }: Props) => {
 	const onSubmit: SubmitHandler<IFormInput> = data => {
 		console.log({ data, dataSource })
 	}
+	const navigate = useNavigate()
 	return (
 		<section className="container">
 			<Space size={10} align="center">
@@ -177,7 +179,9 @@ const CreateTask = ({ setIsCreate }: Props) => {
 					className="mt-1"
 					icon={<ArrowLeftSvg className="w-4 h-4 cursor-pointer mt-1" />}
 					type="text"
-					onClick={() => setIsCreate(false)}
+					onClick={() => {
+						navigate('/services/practices/individualTasks/')
+					}}
 				/>
 				<Typography.Text className=" text-[28px] font-normal">
 					31.08.01 Акушерство и гинекология

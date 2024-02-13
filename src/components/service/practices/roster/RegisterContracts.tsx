@@ -33,13 +33,13 @@ export const RegisterContracts = ({
 		<section className="container">
 			<Row gutter={[16, 16]}>
 				<Col span={24}>
-					<Typography.Title
-						level={3}
-						className="text-black text-3xl font-normal leading-7"
-					>
+					<Typography.Text className=" text-[28px] mb-14">
 						Реестр договоров
-					</Typography.Title>
+					</Typography.Text>
 				</Col>
+			</Row>
+
+			<Row className="mt-12">
 				<Col span={2}>
 					<Typography.Text>Сортировка</Typography.Text>
 				</Col>
@@ -71,6 +71,7 @@ export const RegisterContracts = ({
 					</Space>
 				</Col>
 			</Row>
+
 			<Row gutter={[16, 16]} className="mt-4">
 				<Col span={2}>
 					<Typography.Text>Тип договора</Typography.Text>

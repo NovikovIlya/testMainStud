@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import { useLocation } from 'react-router-dom'
 
 import CreateTask from './CreateTask'
 import IndividualTasks from './IndividualTasks'
 
 export const Tasks = () => {
-	const [isCreate, setIsCreate] = useState(false)
-	if (isCreate) return <CreateTask setIsCreate={setIsCreate} />
-	else return <IndividualTasks setIsCreate={setIsCreate} />
+	const { pathname } = useLocation()
+	if (pathname.includes('createTask')) return <CreateTask />
+	else return <IndividualTasks />
 }

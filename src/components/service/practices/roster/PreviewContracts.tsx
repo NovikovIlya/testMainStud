@@ -1,9 +1,9 @@
 import { Button, Col, Row, Space, Table, TableProps, Typography } from 'antd'
 import React from 'react'
 
-import { ArrowLeftSvg } from '../../../assets/svg'
-import { DownloadSvg } from '../../../assets/svg/DownloadSvg'
-import { PrinterSvg } from '../../../assets/svg/PrinterSvg'
+import { ArrowLeftSvg } from '../../../../assets/svg'
+import { DownloadSvg } from '../../../../assets/svg/DownloadSvg'
+import { PrinterSvg } from '../../../../assets/svg/PrinterSvg'
 
 type PropsType = {
 	setIsPreview: (value: boolean) => void

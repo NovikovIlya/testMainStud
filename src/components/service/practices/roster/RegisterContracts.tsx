@@ -1,9 +1,9 @@
 import { Button, Col, List, Row, Select, Space, Typography } from 'antd'
 
-import { DeleteSvg } from '../../../assets/svg/DeleteSvg'
-import { DownloadSvg } from '../../../assets/svg/DownloadSvg'
-import { EditSvg } from '../../../assets/svg/EditSvg'
-import { PrinterSvg } from '../../../assets/svg/PrinterSvg'
+import { DeleteSvg } from '../../../../assets/svg/DeleteSvg'
+import { DownloadSvg } from '../../../../assets/svg/DownloadSvg'
+import { EditSvg } from '../../../../assets/svg/EditSvg'
+import { PrinterSvg } from '../../../../assets/svg/PrinterSvg'
 
 const data = [
 	{

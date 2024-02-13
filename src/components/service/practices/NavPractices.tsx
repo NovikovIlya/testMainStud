@@ -1,11 +1,13 @@
 import type { MenuProps } from 'antd'
 import { Menu } from 'antd'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import { PracticesSvg } from '../../../assets/svg/PracticesSvg'
 
 import './Practices.sass'
-import { Roster } from './Roster'
+import { Tasks } from './individual-tasks/Tasks'
+import { Roster } from './roster/Roster'
 
 type MenuItem = Required<MenuProps>['items'][number]
 
@@ -28,7 +30,7 @@ function getItem(
 const items: MenuItem[] = [
 	getItem('Справочники', 'sub1', <PracticesSvg />, [
 		getItem('Реестр договоров', 'registerContracts'),
-		getItem('Индивидуальные задания', '2'),
+		getItem('Индивидуальные задания', 'individualTasks'),
 		getItem('Практики', '3')
 	]),
 	getItem('Формирование документов', 'sub2', <PracticesSvg />, [
@@ -46,9 +48,10 @@ const rootSubmenuKeys = ['sub1', 'sub2', 'sub4']
 export const NavPractices = () => {
 	const [openKeys, setOpenKeys] = useState(['sub1'])
 	const [current, setCurrent] = useState('registerContracts')
+	const navigate = useNavigate()
 
 	const onClick: MenuProps['onClick'] = e => {
-		console.log('click ', e)
+		navigate('/services/practices/' + e.key)
 		setCurrent(e.key)
 	}
 
@@ -75,6 +78,7 @@ export const NavPractices = () => {
 			/>
 			<div className="bg-[#F5F8FB] w-full pt-14 px-14 ">
 				{current === 'registerContracts' && <Roster />}
+				{current === 'individualTasks' && <Tasks />}
 			</div>
 		</>
 	)

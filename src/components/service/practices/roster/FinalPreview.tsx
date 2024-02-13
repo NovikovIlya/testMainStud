@@ -10,10 +10,10 @@ import {
 	Typography
 } from 'antd'
 
-import { ArrowLeftSvg } from '../../../assets/svg'
-import { DownloadSvg } from '../../../assets/svg/DownloadSvg'
-import { LinkSvg } from '../../../assets/svg/LinkSvg'
-import { PrinterSvg } from '../../../assets/svg/PrinterSvg'
+import { ArrowLeftSvg } from '../../../../assets/svg'
+import { DownloadSvg } from '../../../../assets/svg/DownloadSvg'
+import { LinkSvg } from '../../../../assets/svg/LinkSvg'
+import { PrinterSvg } from '../../../../assets/svg/PrinterSvg'
 
 type PropsType = {
 	setIsFinalReview: (value: boolean) => void

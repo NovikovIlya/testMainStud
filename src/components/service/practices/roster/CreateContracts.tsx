@@ -15,7 +15,7 @@ import {
 import dayjs from 'dayjs'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 
-import { ArrowLeftSvg } from '../../../assets/svg'
+import { ArrowLeftSvg } from '../../../../assets/svg'
 
 interface IFormInput {
 	name: string

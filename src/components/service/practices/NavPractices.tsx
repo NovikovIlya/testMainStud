@@ -7,6 +7,7 @@ import { PracticesSvg } from '../../../assets/svg/PracticesSvg'
 
 import './Practices.sass'
 import { Tasks } from './individual-tasks/Tasks'
+import { Practical } from './practical/Practical'
 import { Roster } from './roster/Roster'
 
 type MenuItem = Required<MenuProps>['items'][number]
@@ -31,7 +32,7 @@ const items: MenuItem[] = [
 	getItem('Справочники', 'sub1', <PracticesSvg />, [
 		getItem('Реестр договоров', 'registerContracts'),
 		getItem('Индивидуальные задания', 'individualTasks'),
-		getItem('Практики', '3')
+		getItem('Практики', 'practical')
 	]),
 	getItem('Формирование документов', 'sub2', <PracticesSvg />, [
 		getItem('График практик', '5'),
@@ -79,6 +80,7 @@ export const NavPractices = () => {
 			<div className="bg-[#F5F8FB] w-full pt-14 px-14 ">
 				{current === 'registerContracts' && <Roster />}
 				{current === 'individualTasks' && <Tasks />}
+				{current === 'practical' && <Practical />}
 			</div>
 		</>
 	)

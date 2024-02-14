@@ -171,41 +171,28 @@ const IndividualTasks = () => {
 			}
 		},
 		render: tasks => {
-			if (dataIndex === 'tasks')
-				return searchedColumn === dataIndex ? (
-					<ol className="list-inside gap-2 flex flex-col">
-						{tasks.map?.((task: string, index: number) => (
-							<li key={index}>
-								{
-									<Highlighter
-										highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
-										searchWords={[searchText]}
-										autoEscape
-										textToHighlight={task ? task.toString() : ''}
-									/>
-								}
-							</li>
-						))}
-					</ol>
-				) : (
-					<ol className="list-inside gap-2 flex flex-col">
-						{tasks.map?.((task: string, index: number) => (
-							<li key={index}>{task}</li>
-						))}
-					</ol>
-				)
-			else {
-				return searchedColumn === dataIndex ? (
-					<Highlighter
-						highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
-						searchWords={[searchText]}
-						autoEscape
-						textToHighlight={tasks ? tasks.toString() : ''}
-					/>
-				) : (
-					tasks
-				)
-			}
+			return searchedColumn === dataIndex ? (
+				<ol className="list-inside gap-2 flex flex-col">
+					{tasks.map?.((task: string, index: number) => (
+						<li key={index}>
+							{
+								<Highlighter
+									highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+									searchWords={[searchText]}
+									autoEscape
+									textToHighlight={task ? task.toString() : ''}
+								/>
+							}
+						</li>
+					))}
+				</ol>
+			) : (
+				<ol className="list-inside gap-2 flex flex-col">
+					{tasks.map?.((task: string, index: number) => (
+						<li key={index}>{task}</li>
+					))}
+				</ol>
+			)
 		}
 	})
 
@@ -215,6 +202,7 @@ const IndividualTasks = () => {
 			dataIndex: 'name',
 			key: 'name',
 			width: '20%',
+			render: text => <span className="font-bold">{text}</span>,
 			filters: [
 				{
 					text: '31.08.01',
@@ -296,7 +284,6 @@ const IndividualTasks = () => {
 				<Col span={7}>
 					<Space className="w-full flex-row-reverse">
 						<Button
-							size="large"
 							type="primary"
 							className="!rounded-full"
 							onClick={() => {

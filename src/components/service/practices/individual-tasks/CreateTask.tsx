@@ -18,10 +18,8 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 
 import { ArrowLeftSvg } from '../../../../assets/svg'
+import { DeleteSvg } from '../../../../assets/svg/DeleteSvg'
 
-interface Props {
-	setIsCreate: (value: boolean) => void
-}
 interface IFormInput {
 	type: { label: string; value: string }
 	division: { label: string; value: string }
@@ -135,8 +133,8 @@ const CreateTask = () => {
 			render: (param, __, index) => (
 				<Space size="middle">
 					<Button
-						type="default"
-						icon={<DeleteOutlined />}
+						type="text"
+						icon={<DeleteSvg />}
 						danger
 						onClick={() => handleDeleteTask(param.key)}
 					/>
@@ -274,28 +272,34 @@ const CreateTask = () => {
 						Индивидуальные задания
 					</Typography.Text>
 				</Space>
-
-				<DndContext modifiers={[restrictToVerticalAxis]} onDragEnd={onDragEnd}>
-					<SortableContext
-						// rowKey array
-						items={dataSource.map(i => i.key)}
-						strategy={verticalListSortingStrategy}
-					>
-						<Table
-							components={{
-								body: {
-									row: Rows
-								}
-							}}
-							showHeader={false}
-							pagination={false}
-							rowKey="key"
-							bordered={false}
-							columns={columns}
-							dataSource={dataSource}
-						/>
-					</SortableContext>
-				</DndContext>
+				<Row>
+					<Col span={24}>
+						<DndContext
+							modifiers={[restrictToVerticalAxis]}
+							onDragEnd={onDragEnd}
+						>
+							<SortableContext
+								// rowKey array
+								items={dataSource.map(i => i.key)}
+								strategy={verticalListSortingStrategy}
+							>
+								<Table
+									components={{
+										body: {
+											row: Rows
+										}
+									}}
+									showHeader={false}
+									pagination={false}
+									rowKey="key"
+									bordered={false}
+									columns={columns}
+									dataSource={dataSource}
+								/>
+							</SortableContext>
+						</DndContext>
+					</Col>
+				</Row>
 				<Row gutter={[16, 16]} className="mt-4">
 					<Col xs={24} sm={24} md={18} lg={16} xl={12}>
 						<Space.Compact style={{ width: '100%' }}>

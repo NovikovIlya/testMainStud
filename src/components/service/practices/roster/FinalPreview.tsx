@@ -170,7 +170,6 @@ export const FinalPreview = ({ setIsFinalReview }: PropsType) => {
 		<section className="container">
 			<Space size={10}>
 				<Button
-					size="large"
 					className="mt-1"
 					icon={<ArrowLeftSvg className="w-4 h-4 cursor-pointer mt-1" />}
 					type="text"

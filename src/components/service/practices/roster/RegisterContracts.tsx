@@ -54,14 +54,12 @@ export const RegisterContracts = ({
 				<Col span={8} offset={6}>
 					<Space className="w-full flex-row-reverse">
 						<Button
-							size="large"
 							className="!rounded-full"
 							onClick={() => setIsFinalReview(true)}
 						>
 							Посмотреть итоговый реестр
 						</Button>
 						<Button
-							size="large"
 							type="primary"
 							className="!rounded-full"
 							onClick={() => setIsCreate(true)}

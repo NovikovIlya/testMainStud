@@ -69,6 +69,46 @@ export const jsxElements = [
 			i: 'Applications'
 		}
 	},
+	{
+		index: 'DirectResume',
+		element: (
+			<TemplateCard
+				href="#"
+				img="/directresumeimage.png"
+				info="Мы всегда в поиске крутых специалистов. Заполняйте резюме, отправляйте на проверку и мы рассмотрим Вашу кандидатуру."
+				title="Резюме"
+				buttonText="Создать"
+				buttonType="primary"
+				height={99}
+				width={85}
+				positionImage="mt-2"
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 1,
+			y: 0,
+			i: 'DirectResume'
+		}
+	},
+	{
+		index: 'jobSeeker',
+		element: (
+			<TemplateCard
+				href="/services/jobseeker/catalog"
+				info="Найти и откликнуться на вакансию"
+				title="Соискатель"
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 1,
+			y: 0,
+			i: 'jobSeeker'
+		}
+	},
 	// {
 	// 	index: 'MyRating',
 	// 	element: (

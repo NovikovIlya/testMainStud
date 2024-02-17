@@ -1,11 +1,14 @@
 import { IApproveRequest } from '../../api/types'
 import {
+	CategoryType,
 	Documentation,
 	Email,
 	Exam,
 	ICalendar,
 	Template,
-	TypeSchedule
+	TypeSchedule,
+	VacancyItemType,
+	VacancyViewResponceType
 } from '../type'
 
 import { apiSlice } from './apiSlice'
@@ -38,6 +41,52 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		getPhoneUser: builder.query<Array<any>, void>({
 			query: () => 'user-api/settings/phones'
+		}),
+		getCategories: builder.query<CategoryType[], void>({
+			query: () => ({ url: 'http://localhost:8082/api/v1/category' })
+		}),
+		getDirections: builder.query<{ title: string }[], string>({
+			query: category => ({
+				url: 'http://localhost:8082/api/v1/direction?category=' + category
+			})
+		}),
+		getSubdivisions: builder.query<{ title: string }[], string>({
+			query: category => ({
+				url: 'http://localhost:8082/api/v1/subdivision?category=' + category
+			})
+		}),
+		getVacancyView: builder.query<VacancyViewResponceType, number>({
+			query: id => ({
+				url: 'http://localhost:8082/api/v1/vacancy/' + id
+			})
+		}),
+		getVacancyPreviewByDirection: builder.query<
+			VacancyItemType[],
+			{ category: string; direction: string; page: number }
+		>({
+			query: ({ category, direction, page }) => ({
+				url:
+					'http://localhost:8082/api/v1/vacancy/direction?category=' +
+					category +
+					'&direction=' +
+					direction +
+					'&page=' +
+					page
+			})
+		}),
+		getVacancyPreviewBySubdivision: builder.query<
+			VacancyItemType[],
+			{ category: string; subdivision: string; page: number }
+		>({
+			query: ({ category, subdivision, page }) => ({
+				url:
+					'http://localhost:8082/api/v1/vacancy/subdivisions?category=' +
+					category +
+					'&subdivisions=' +
+					subdivision +
+					'&page=' +
+					page
+			})
 		}),
 		postPhone: builder.mutation({
 			query: phone => {
@@ -108,6 +157,11 @@ export const serviceApi = apiSlice.injectEndpoints({
 					method: 'POST'
 				}
 			}
+		}),
+		postVacancyRespond: builder.mutation<void, number>({
+			query: id => ({
+				url: 'http://localhost:8082/api/v1/vacancy/' + id + '/respond'
+			})
 		})
 	})
 })
@@ -122,5 +176,12 @@ export const {
 	usePostEmailMutation,
 	useChangePasswordMutation,
 	useGetPhoneUserQuery,
-	usePostPhoneMutation
+	usePostPhoneMutation,
+	useGetCategoriesQuery,
+	useGetDirectionsQuery,
+	useGetSubdivisionsQuery,
+	usePostVacancyRespondMutation,
+	useLazyGetVacancyViewQuery,
+	useGetVacancyPreviewByDirectionQuery,
+	useGetVacancyPreviewBySubdivisionQuery
 } = serviceApi

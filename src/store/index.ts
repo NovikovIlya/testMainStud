@@ -3,6 +3,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import logger from 'redux-logger'
 
 import { apiSlice } from './api/apiSlice'
+import CurrentVacancySlice from './reducers/CurrentVacancySlice'
 import AddressReducer from './reducers/FormReducers/AddressReducer'
 import CountriesEducationReducer from './reducers/FormReducers/CountriesEducationReducer'
 import DocumentReducer from './reducers/FormReducers/DocumentReducer'
@@ -26,6 +27,7 @@ export const store = configureStore({
 		Parent: ParentReducer,
 		Address: AddressReducer,
 		CountriesEducation: CountriesEducationReducer,
+		currentVacancy: CurrentVacancySlice,
 		[apiSlice.reducerPath]: apiSlice.reducer
 	},
 	middleware: getDefaultMiddleware =>

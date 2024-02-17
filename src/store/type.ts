@@ -105,3 +105,40 @@ export interface IMe {
 	phone: string
 	countryId: number
 }
+
+export type VacancyItemType = {
+	id: number
+	title: string
+	experience: string
+	employment: string
+	salary: string
+}
+
+export type CategoryType = {
+	title: string
+	direction: boolean
+	subdivision: boolean
+}
+
+export type VacancyViewResponceType = {
+	id: number
+	acf: {
+		experience: string
+		salary: string
+		employment: string
+		responsibilities: string
+		skills: string
+		conditions: string
+	}
+	title: {
+		rendered: string
+	}
+}
+
+export type SelectProps = {
+	onChange: Function
+
+	options: string[]
+
+	z: number
+}

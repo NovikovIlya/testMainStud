@@ -4,6 +4,7 @@ import { useAppSelector } from '../../../store'
 import { usePostVacancyRespondMutation } from '../../../store/api/serviceApi'
 
 import ArrowIcon from './ArrowIcon'
+import { ResponseForm } from './ResponceForm'
 
 export default function VacancyView() {
 	const { currentVacancy } = useAppSelector(state => state.currentVacancy)
@@ -67,7 +68,7 @@ export default function VacancyView() {
 				<div className="flex">
 					<button
 						onClick={() => {
-							navigate('/')
+							navigate('/services/jobseeker/catalog')
 						}}
 						className="h-[38px] w-[46px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black"
 					>
@@ -87,7 +88,7 @@ export default function VacancyView() {
 					<p className="w-[106px] font-content-font font-bold text-black text-[18px]/[21px]">
 						Заработная плата
 					</p>
-					<button
+					{/* <button
 						onClick={() => {
 							if (currentVacancy !== null) {
 								getVacancyRespond(currentVacancy.id)
@@ -100,7 +101,8 @@ export default function VacancyView() {
 						className="h-[40px] w-[143px] rounded-[54px] pt-[12px] pb-[12px] pr-[24px] pl-[24px] bg-dasha-blue text-white font-content-font font-normal text-[16px]/[16px]"
 					>
 						Откликнуться
-					</button>
+					</button> */}
+					<ResponseForm />
 					<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-nowrap">
 						{currentVacancy !== null ? currentVacancy.acf.experience : ''}
 					</p>

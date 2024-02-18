@@ -44,21 +44,21 @@ export default function Catalog() {
 			page: page
 		})
 
-	const scrollHandler = (e: Event) => {
-		const tar = e.target as Element
-		if (tar.scrollHeight - tar.scrollTop - window.innerHeight < 50) {
-			setPage(prev => prev + 1)
-			console.log(page)
-		}
-	}
+	// const scrollHandler = (e: Event) => {
+	// 	const tar = e.target as Element
+	// 	if (tar.scrollHeight - tar.scrollTop - window.innerHeight < 50) {
+	// 		setPage(prev => prev + 1)
+	// 		console.log(page)
+	// 	}
+	// }
 
-	useEffect(() => {
-		document.addEventListener('scroll', scrollHandler)
+	// useEffect(() => {
+	// 	document.addEventListener('scroll', scrollHandler)
 
-		return () => {
-			document.removeEventListener('scroll', scrollHandler)
-		}
-	}, [])
+	// 	return () => {
+	// 		document.removeEventListener('scroll', scrollHandler)
+	// 	}
+	// }, [])
 
 	useEffect(() => {
 		setAllVacancyPreviewsByDirections(prev => [
@@ -109,7 +109,7 @@ export default function Catalog() {
 				</h2>
 
 				<Select
-					style={{ width: 120 }}
+					style={{ width: 622 }}
 					options={categories.map(category => ({
 						value: category.title,
 						label: category.title
@@ -138,7 +138,7 @@ export default function Catalog() {
 				</h2>
 
 				<Select
-					style={{ width: 120 }}
+					style={{ width: 622 }}
 					options={
 						categories.find(category => category.title === categoryTitle)
 							?.direction

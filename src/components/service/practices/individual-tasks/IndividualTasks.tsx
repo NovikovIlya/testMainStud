@@ -18,7 +18,7 @@ import {
 	Typography
 } from 'antd'
 import type { FilterDropdownProps } from 'antd/es/table/interface'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Highlighter from 'react-highlight-words'
 import { useNavigate } from 'react-router-dom'
 
@@ -26,6 +26,41 @@ import { DownloadSvg } from '../../../../assets/svg/DownloadSvg'
 import { PrinterSvg } from '../../../../assets/svg/PrinterSvg'
 
 type InputRef = GetRef<typeof Input>
+
+interface FilterType {
+    value: string
+    label: string
+}
+
+const filterData: FilterType[] = [
+    {
+        value: '',
+        label: 'Все'
+    },
+    {
+        value: 'Производственная (клиническая) практика: акушерство и гинекология',
+        label: 'Производственная (клиническая) практика: акушерство и гинекология'
+    },
+    {
+        value: 'Производственная (клиническая) практика: тест и тест',
+        label: 'Производственная (клиническая) практика: тест и тест'
+    },
+]
+
+const filterSpecializationData: FilterType[] = [
+    {
+        value: '',
+        label: 'Все'
+    },
+    {
+        value: '31.08.01',
+        label: '31.08.01 Акушерство и гинекология'
+    },
+    {
+        value: '31.08.02',
+        label: '31.08.02 Акушерство и гинекология'
+    },
+]
 
 interface DataType {
 	key: string
@@ -83,6 +118,9 @@ const IndividualTasks = () => {
 	const [searchText, setSearchText] = useState('')
 	const [searchedColumn, setSearchedColumn] = useState('')
 	const searchInput = useRef<InputRef>(null)
+	const [dataTable, setDataTable] = useState<DataType[]>(data);
+    const [filters, setFilters] = useState<{type: string, spec: string}>({type: '',spec: ''})
+
 
 	const handleSearch = (
 		selectedKeys: string[],
@@ -98,6 +136,16 @@ const IndividualTasks = () => {
 		clearFilters()
 		setSearchText('')
 	}
+	
+	useEffect(()=>{
+        setDataTable(data.filter(x => x.type.includes(filters.type) && x.name.includes(filters.spec)
+        ))
+    }, [filters])
+
+    const filter = (value: string, index: string) => {
+        setFilters(prev => ({...prev, [index]: value}))
+    }
+
 
 	const getColumnSearchProps = (
 		dataIndex: DataIndex
@@ -275,9 +323,10 @@ const IndividualTasks = () => {
 				<Col span={7}>
 					<Select
 						popupMatchSelectWidth={false}
-						defaultValue="1"
+						defaultValue=""
 						className="w-full"
-						options={[{ value: '1', label: 'Все' }]}
+						options={filterData}
+                        onChange={value => filter(value, 'type')}
 					/>
 				</Col>
 				<Col flex={'auto'} />
@@ -302,11 +351,10 @@ const IndividualTasks = () => {
 				<Col span={7}>
 					<Select
 						popupMatchSelectWidth={false}
-						defaultValue="1"
+						defaultValue=""
 						className="w-full"
-						options={[
-							{ value: '1', label: '31.08.01 Акушерство и гинекология' }
-						]}
+						options={filterSpecializationData}
+                        onChange={value => filter(value, 'spec')}
 					/>
 				</Col>
 				<Col flex={'auto'} />
@@ -337,7 +385,7 @@ const IndividualTasks = () => {
 				}}
 				bordered
 				columns={columns}
-				dataSource={data}
+				dataSource={dataTable}
 				className="my-8"
 				pagination={false}
 			/>

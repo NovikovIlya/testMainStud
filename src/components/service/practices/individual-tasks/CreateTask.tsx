@@ -273,7 +273,7 @@ const CreateTask = () => {
 					</Typography.Text>
 				</Space>
 				<Row>
-					<Col span={24}>
+					<Col span={12}>
 						<DndContext
 							modifiers={[restrictToVerticalAxis]}
 							onDragEnd={onDragEnd}

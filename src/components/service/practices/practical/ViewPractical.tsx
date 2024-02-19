@@ -8,7 +8,6 @@ import {
 	TableProps,
 	Typography
 } from 'antd'
-import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { DownloadSvg } from '../../../../assets/svg/DownloadSvg'
@@ -206,7 +205,7 @@ const columns: TableProps<DataType>['columns'] = [
 		title: 'Код и наименование компетенции',
 		render(value) {
 			return (
-				<ol className="list-inside gap-2 flex flex-col text-xs">
+				<ol className="list-inside gap-2 flex  flex-col text-xs">
 					{value.map((text: string, index: number) => (
 						<li key={index}>{text}</li>
 					))}
@@ -219,7 +218,8 @@ const columns: TableProps<DataType>['columns'] = [
 		key: 'headDepartment',
 		dataIndex: 'headDepartment',
 		title: 'Заведующий опорной кафедрой ',
-		className: 'text-xs !p-2'
+		className: 'text-xs !p-2',
+		render: text => <div className="absolute top-2">{text}</div>
 	}
 ]
 

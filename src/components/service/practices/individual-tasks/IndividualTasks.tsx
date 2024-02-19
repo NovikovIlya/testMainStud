@@ -118,7 +118,7 @@ const IndividualTasks = () => {
 	const [searchText, setSearchText] = useState('')
 	const [searchedColumn, setSearchedColumn] = useState('')
 	const searchInput = useRef<InputRef>(null)
-	const [dataTable, setDataTable] = useState<DataType[]>(data);
+	const [dataTable, setDataTable] = useState<DataType[]>(data)
     const [filters, setFilters] = useState<{type: string, spec: string}>({type: '',spec: ''})
 
 

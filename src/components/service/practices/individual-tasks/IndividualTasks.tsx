@@ -137,15 +137,13 @@ const IndividualTasks = () => {
 		setSearchText('')
 	}
 	
-	useEffect(()=>{
-        setDataTable(data.filter(x => x.type.includes(filters.type) && x.name.includes(filters.spec)
-        ))
+	useEffect(() => {
+        setDataTable(data.filter(x => x.type.includes(filters.type) && x.name.includes(filters.spec)))
     }, [filters])
 
     const filter = (value: string, index: string) => {
         setFilters(prev => ({...prev, [index]: value}))
     }
-
 
 	const getColumnSearchProps = (
 		dataIndex: DataIndex

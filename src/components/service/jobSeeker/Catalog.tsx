@@ -76,31 +76,12 @@ export default function Catalog() {
 		console.log('Change two')
 	}, [vacancyPreviewsBySubdivisions])
 
-	// useEffect(() => {
-	// 	setAllVacancyPreviewsByDirections([])
-	// 	setAllVacancyPreviewsBySubdivisions([])
-	// 	setPage(1)
-	// 	console.log('Change of title')
-	// }, [directoryTitle, subdivisionTitle])
-
-	// useEffect(() => {
-	// 	setAllVacancyPreviewsByDirections([
-	// 		...allVacancyPreviewsByDirections,
-	// 		...vacancyPreviewsByDirections
-	// 	])
-	// 	console.log('Change of array of dirs')
-	// }, [vacancyPreviewsByDirections])
-	// useEffect(() => {
-	// 	setAllVacancyPreviewsBySubdivisions([
-	// 		...allVacancyPreviewsBySubdivisions,
-	// 		...vacancyPreviewsBySubdivisions
-	// 	])
-	// 	console.log('Change of array of subdivs')
-	// }, [vacancyPreviewsBySubdivisions])
-
 	return (
 		<>
-			<div id="wrapper" className="pl-[54px] pr-[54px] pt-[60px]">
+			<div
+				id="wrapper"
+				className="pl-[54px] pr-[54px] pt-[60px] w-full bg-content-gray"
+			>
 				<h1 className="font-content-font font-normal text-[28px]/[28px] text-black">
 					Каталог вакансий
 				</h1>
@@ -109,6 +90,7 @@ export default function Catalog() {
 				</h2>
 
 				<Select
+					className="mt-[16px]"
 					style={{ width: 622 }}
 					options={categories.map(category => ({
 						value: category.title,
@@ -138,6 +120,7 @@ export default function Catalog() {
 				</h2>
 
 				<Select
+					className="mt-[16px]"
 					style={{ width: 622 }}
 					options={
 						categories.find(category => category.title === categoryTitle)

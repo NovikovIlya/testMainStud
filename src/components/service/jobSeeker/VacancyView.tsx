@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 
+import { ArrowLeftSvg } from '../../../assets/svg'
 import { useAppSelector } from '../../../store'
 import { usePostVacancyRespondMutation } from '../../../store/api/serviceApi'
 
@@ -31,7 +32,9 @@ export default function VacancyView() {
 			.replace(/<em>/g, '')
 			.replace(/<\/em'>/g, '')
 
-		responsibilitiesArr = responsibilities.match(/<li>[a-zA-Zа-яА-Я0-9\s\:]+/g)
+		responsibilitiesArr = responsibilities.match(
+			/<li>[a-zA-Zа-яА-Я0-9\s\:\,\.\/\-]+/g
+		)
 
 		skills = currentVacancy.acf.skills
 
@@ -45,7 +48,7 @@ export default function VacancyView() {
 			.replace(/<em>/g, '')
 			.replace(/<\/em'>/g, '')
 
-		skillsArr = skills.match(/<li>[a-zA-Zа-яА-Я0-9\s\:]+/g)
+		skillsArr = skills.match(/<li>[a-zA-Zа-яА-Я0-9\s\:\,\.\/\-]+/g)
 
 		conditions = currentVacancy.acf.conditions
 
@@ -59,7 +62,7 @@ export default function VacancyView() {
 			.replace(/<em>/g, '')
 			.replace(/<\/em'>/g, '')
 
-		conditionsArr = conditions.match(/<li>[a-zA-Zа-яА-Я0-9\s\:]+/g)
+		conditionsArr = conditions.match(/<li>[a-zA-Zа-яА-Я0-9\s\:\,\.\/\-]+/g)
 	}
 
 	return (
@@ -70,7 +73,7 @@ export default function VacancyView() {
 						onClick={() => {
 							navigate('/services/jobseeker/catalog')
 						}}
-						className="h-[38px] w-[46px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black"
+						className="bg-white h-[38px] w-[46px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer"
 					>
 						<ArrowIcon />
 					</button>
@@ -88,20 +91,6 @@ export default function VacancyView() {
 					<p className="w-[106px] font-content-font font-bold text-black text-[18px]/[21px]">
 						Заработная плата
 					</p>
-					{/* <button
-						onClick={() => {
-							if (currentVacancy !== null) {
-								getVacancyRespond(currentVacancy.id)
-									.unwrap()
-									.then(() => {
-										console.log(respond.error)
-									})
-							}
-						}}
-						className="h-[40px] w-[143px] rounded-[54px] pt-[12px] pb-[12px] pr-[24px] pl-[24px] bg-dasha-blue text-white font-content-font font-normal text-[16px]/[16px]"
-					>
-						Откликнуться
-					</button> */}
 					<ResponseForm />
 					<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-nowrap">
 						{currentVacancy !== null ? currentVacancy.acf.experience : ''}

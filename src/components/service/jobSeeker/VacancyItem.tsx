@@ -11,7 +11,7 @@ export default function VacancyItem(props: VacancyItemType) {
 	const dispatch = useDispatch()
 
 	return (
-		<div className="flex w-full bg-white pl-[20px] pr-[105px] pt-[20px] pb-[20px] items-center">
+		<div className="flex w-full bg-white pl-[20px] pr-[105px] pt-[20px] pb-[20px] items-center shadow-custom-shadow">
 			<p className="w-[388px] shrink-0 font-content-font font-normal text-[16px]/[19px] text-black">
 				{props.title}
 			</p>

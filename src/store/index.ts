@@ -13,6 +13,9 @@ import InfoUserReducer from './reducers/FormReducers/InfoUserReducer'
 import ParentReducer from './reducers/FormReducers/ParentReducer'
 import WorkReducer from './reducers/FormReducers/WorkReducer'
 import LayoutSlice from './reducers/LayoutsSlice'
+import AboutMeReducer from './reducers/SeekerFormReducers/AboutMeReducer'
+import FormCompletionReducer from './reducers/SeekerFormReducers/FormCompletionReducer'
+import SkillsReducer from './reducers/SeekerFormReducers/SkillsReducer'
 import authSlice from './reducers/authSlice'
 
 export const store = configureStore({
@@ -28,6 +31,9 @@ export const store = configureStore({
 		Address: AddressReducer,
 		CountriesEducation: CountriesEducationReducer,
 		currentVacancy: CurrentVacancySlice,
+		seekerAboutMe: AboutMeReducer,
+		skills: SkillsReducer,
+		formCompletion: FormCompletionReducer,
 		[apiSlice.reducerPath]: apiSlice.reducer
 	},
 	middleware: getDefaultMiddleware =>

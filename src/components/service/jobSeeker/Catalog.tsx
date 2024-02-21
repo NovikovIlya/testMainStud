@@ -1,6 +1,8 @@
 import { Select } from 'antd'
 import { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 
+import { useAppSelector } from '../../../store'
 import {
 	useGetCategoriesQuery,
 	useGetDirectionsQuery,
@@ -8,11 +10,15 @@ import {
 	useGetVacancyPreviewByDirectionQuery,
 	useGetVacancyPreviewBySubdivisionQuery
 } from '../../../store/api/serviceApi'
+import { allData } from '../../../store/reducers/SeekerFormReducers/AboutMeReducer'
 import { VacancyItemType } from '../../../store/type'
 
 import VacancyItem from './VacancyItem'
 
 export default function Catalog() {
+	const dispatch = useDispatch()
+	const user = useAppSelector(state => state.auth.user)
+
 	const [allVacancyPreviewsByDirections, setAllVacancyPreviewsByDirections] =
 		useState<VacancyItemType[]>([])
 	const [
@@ -44,21 +50,22 @@ export default function Catalog() {
 			page: page
 		})
 
-	// const scrollHandler = (e: Event) => {
-	// 	const tar = e.target as Element
-	// 	if (tar.scrollHeight - tar.scrollTop - window.innerHeight < 50) {
-	// 		setPage(prev => prev + 1)
-	// 		console.log(page)
-	// 	}
-	// }
-
-	// useEffect(() => {
-	// 	document.addEventListener('scroll', scrollHandler)
-
-	// 	return () => {
-	// 		document.removeEventListener('scroll', scrollHandler)
-	// 	}
-	// }, [])
+	useEffect(() => {
+		if (user) {
+			dispatch(
+				allData({
+					name: user.firstname,
+					surName: user.lastname,
+					patronymic: user.middlename,
+					phone: user.phone,
+					email: user.email,
+					birthDay: user.birthday,
+					gender: 'M',
+					countryId: 184
+				})
+			)
+		}
+	}, [])
 
 	useEffect(() => {
 		setAllVacancyPreviewsByDirections(prev => [

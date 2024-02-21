@@ -15,6 +15,7 @@ import WorkReducer from './reducers/FormReducers/WorkReducer'
 import LayoutSlice from './reducers/LayoutsSlice'
 import AboutMeReducer from './reducers/SeekerFormReducers/AboutMeReducer'
 import FormCompletionReducer from './reducers/SeekerFormReducers/FormCompletionReducer'
+import RespondEducationReducer from './reducers/SeekerFormReducers/RespondEducationReducer'
 import SkillsReducer from './reducers/SeekerFormReducers/SkillsReducer'
 import authSlice from './reducers/authSlice'
 
@@ -33,6 +34,7 @@ export const store = configureStore({
 		currentVacancy: CurrentVacancySlice,
 		seekerAboutMe: AboutMeReducer,
 		skills: SkillsReducer,
+		RespondEducation: RespondEducationReducer,
 		formCompletion: FormCompletionReducer,
 		[apiSlice.reducerPath]: apiSlice.reducer
 	},

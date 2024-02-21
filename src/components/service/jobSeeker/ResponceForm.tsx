@@ -17,12 +17,17 @@ import { useLocation, useNavigate } from 'react-router-dom'
 
 import { EditSvg } from '../../../assets/svg/EditSvg'
 import { useAppSelector } from '../../../store'
-import { useGetCountriesQuery } from '../../../store/api/utilsApi'
+import {
+	useGetCountriesQuery,
+	useGetEducationLevelQuery
+} from '../../../store/api/utilsApi'
 import { allData } from '../../../store/reducers/SeekerFormReducers/AboutMeReducer'
 import {
 	completeAboutMe,
+	completeEducation,
 	completeSkills
 } from '../../../store/reducers/SeekerFormReducers/FormCompletionReducer'
+import { setAllData } from '../../../store/reducers/SeekerFormReducers/RespondEducationReducer'
 import { allSkillsData } from '../../../store/reducers/SeekerFormReducers/SkillsReducer'
 
 import ArrowIcon from './ArrowIcon'
@@ -33,20 +38,22 @@ export const ResponseForm = () => {
 	const { data: countries, isLoading: isLoadingCountry } = useGetCountriesQuery(
 		i18n.language
 	)
+	const { data: levels } = useGetEducationLevelQuery(i18n.language)
 	const [isFormOpen, setIsFormOpen] = useState(false)
 	const dispatch = useDispatch()
 
 	const aboutMeData = useAppSelector(state => state.seekerAboutMe)
 	const { currentVacancy } = useAppSelector(state => state.currentVacancy)
-	const { aboutMeCompleted, skillsCompleted } = useAppSelector(
-		state => state.formCompletion
-	)
+	const { aboutMeCompleted, skillsCompleted, educationCompleted } =
+		useAppSelector(state => state.formCompletion)
 	const skillsData = useAppSelector(state => state.skills)
+	const educationData = useAppSelector(state => state.RespondEducation)
 
 	const [currentFormskills, setcurrentFormSkills] = useState<string[]>(
 		skillsData.skills
 	)
 	const [skillInputValue, setSkillInputValue] = useState<string>('')
+	const date = new Date()
 
 	const { pathname } = useLocation()
 	const navigate = useNavigate()
@@ -126,7 +133,7 @@ export const ResponseForm = () => {
 									<p className="font-content-font text-black text-[16px]/[19.2px] font-bold select-none">
 										Образование
 									</p>
-									<EditSvg />
+									{educationCompleted ? <CheckedIcon /> : <EditSvg />}
 								</div>
 								<div
 									onClick={() => {
@@ -372,10 +379,234 @@ export const ResponseForm = () => {
 					)}
 					{pathname.includes(
 						'/services/jobseeker/vacancyview/respond/education'
-					) && <></>}
+					) && (
+						<Form
+							layout="vertical"
+							requiredMark={false}
+							onFinish={values => {
+								dispatch(
+									setAllData({
+										graduateYear: values.graduateYear,
+										specialization: values.specialization,
+										nameOfInstitute: values.instituteName,
+										countryId: values.country,
+										educationLevelId: values.educationLevel
+									})
+								)
+								dispatch(completeEducation())
+								navigate('/services/jobseeker/vacancyview/respond/main')
+							}}
+							initialValues={{
+								specialization: educationData.specialization,
+								instituteName: educationData.nameOfInstitute,
+								country: educationData.countryId,
+								educationLevel: educationData.educationLevelId,
+								graduateYear: educationData.graduateYear
+							}}
+						>
+							<div className="flex items-center mb-[38px]">
+								<button
+									onClick={() => {
+										navigate('/services/jobseeker/vacancyview/respond/main')
+									}}
+									className="bg-white h-[38px] w-[46px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer"
+								>
+									<ArrowIcon />
+								</button>
+								<p className="ml-[15px] font-content-font font-bold text-black text-[18px]/[21.6px]">
+									Образование
+								</p>
+							</div>
+							<Form.Item
+								name={'educationLevel'}
+								label={
+									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
+										Уровень образования
+									</label>
+								}
+								rules={[
+									{ required: true, message: 'Не выбран уровень образования' }
+								]}
+							>
+								<Select
+									className="w-full rounded-lg"
+									options={
+										levels === undefined
+											? []
+											: levels.map(el => ({
+													value: el.id,
+													label: el.name
+											  }))
+									}
+								/>
+							</Form.Item>
+							<Form.Item
+								name={'country'}
+								label={
+									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
+										Страна получения образования
+									</label>
+								}
+								rules={[{ required: true, message: 'Не выбрана страна' }]}
+							>
+								<Select
+									className="w-full rounded-lg"
+									options={
+										countries === undefined
+											? []
+											: countries.map(el => ({
+													value: el.id,
+													label: el.shortName
+											  }))
+									}
+								/>
+							</Form.Item>
+							<Form.Item
+								name={'instituteName'}
+								label={
+									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
+										Учебное заведение
+									</label>
+								}
+								rules={[
+									{ required: true, message: 'Не введено учебное заведение' }
+								]}
+							>
+								<Input
+									onPressEnter={e => {
+										e.preventDefault()
+									}}
+								></Input>
+							</Form.Item>
+							<Form.Item
+								name={'specialization'}
+								label={
+									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
+										Специальность
+									</label>
+								}
+								rules={[
+									{ required: true, message: 'Не введена специальность' }
+								]}
+							>
+								<Input
+									onPressEnter={e => {
+										e.preventDefault()
+									}}
+								></Input>
+							</Form.Item>
+							<Form.Item
+								name={'graduateYear'}
+								label={
+									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
+										Год окончания
+									</label>
+								}
+								rules={[{ required: true, message: 'Не выбран год' }]}
+							>
+								<Select
+									className="w-full rounded-lg"
+									options={Array.from(
+										{
+											length:
+												date.getMonth() >= 6
+													? date.getFullYear() - 1969
+													: date.getFullYear() - 1970
+										},
+										(_, i) => i + 1970
+									).map(year => ({
+										value: year.toString(),
+										label: year.toString()
+									}))}
+								/>
+							</Form.Item>
+							<Form.Item>
+								<div style={{ textAlign: 'right', marginTop: 40 }}>
+									<Button type="primary" htmlType="submit">
+										Сохранить
+									</Button>
+								</div>
+							</Form.Item>
+						</Form>
+					)}
+					{/* {pathname.includes(
+						'/services/jobseeker/vacancyview/respond/experience/main'
+					) && (
+						<Form layout="vertical" requiredMark={false}>
+							<div className="flex items-center mb-[38px]">
+								<button
+									onClick={() => {
+										navigate('/services/jobseeker/vacancyview/respond/main')
+									}}
+									className="bg-white h-[38px] w-[46px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer"
+								>
+									<ArrowIcon />
+								</button>
+								<p className="ml-[15px] font-content-font font-bold text-black text-[18px]/[21.6px]">
+									Опыт работы
+								</p>
+							</div>
+							<Form.Item>
+								<div style={{ textAlign: 'right', marginTop: 40 }}>
+									<Button type="primary" htmlType="submit">
+										Сохранить
+									</Button>
+								</div>
+							</Form.Item>
+						</Form>
+					)}
 					{pathname.includes(
-						'/services/jobseeker/vacancyview/respond/experience'
-					) && <></>}
+						'/services/jobseeker/vacancyview/respond/experience/add'
+					) && (
+						<Form layout="vertical" requiredMark={false}>
+							<div className="flex items-center mb-[38px]">
+								<button
+									onClick={() => {
+										navigate('/services/jobseeker/vacancyview/respond/main')
+									}}
+									className="bg-white h-[38px] w-[46px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer"
+								>
+									<ArrowIcon />
+								</button>
+								<p className="ml-[15px] font-content-font font-bold text-black text-[18px]/[21.6px]">
+									Добавить место работы
+								</p>
+							</div>
+							<Form.Item>
+								<div style={{ textAlign: 'right', marginTop: 40 }}>
+									<Button type="primary" htmlType="submit">
+										Сохранить
+									</Button>
+								</div>
+							</Form.Item>
+						</Form>
+					)}
+					{pathname.includes(
+						'/services/jobseeker/vacancyview/respond/experience/edit'
+					) && (
+						<Form layout="vertical" requiredMark={false}>
+							<div className="flex items-center mb-[38px]">
+								<button
+									onClick={() => {
+										navigate('/services/jobseeker/vacancyview/respond/main')
+									}}
+									className="bg-white h-[38px] w-[46px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer"
+								>
+									<ArrowIcon />
+								</button>
+								<p className="ml-[15px] font-content-font font-bold text-black text-[18px]/[21.6px]">
+									Добавить место работы
+								</p>
+							</div>
+							<Form.Item>
+								<div style={{ textAlign: 'right', marginTop: 40 }}>
+									<Button type="primary" htmlType="submit">
+										Сохранить
+									</Button>
+								</div>
+							</Form.Item>
+						</Form>
+					)} */}
 					{pathname.includes(
 						'/services/jobseeker/vacancyview/respond/skills'
 					) && (

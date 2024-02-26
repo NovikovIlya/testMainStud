@@ -146,26 +146,6 @@ export const Parent = () => {
 										</div>
 									)}
 								</Space>
-								<Space
-									direction="vertical"
-									className={clsx('w-full', isStudent && 'hidden')}
-								>
-									<Typography.Text className=" text-black">
-										{t('parentPhone')}
-									</Typography.Text>
-									<Input
-										placeholder="+7 999 898-88-00"
-										size="large"
-										onChange={e =>
-											dispatch(phone({ id: item.id, phone: e.target.value }))
-										}
-										value={item.phone}
-										maxLength={16}
-									/>
-									<div className="bg-white p-2 h-10 rounded-md">
-										<Typography.Text>{item.phone || '-'}</Typography.Text>
-									</div>
-								</Space>
 
 								<Space direction="vertical" className="w-full">
 									<Typography.Text className="text-black">

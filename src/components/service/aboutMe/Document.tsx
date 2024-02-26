@@ -79,7 +79,6 @@ export const Document = () => {
 		setIsEdit(false)
 	}
 	useEffect(() => {
-		refetch()
 		documents && dispatch(allData(documents))
 	}, [documents, dispatch, refetch])
 	const isStudent = role === 'STUD'

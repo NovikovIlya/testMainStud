@@ -64,7 +64,6 @@ export const AboutMe = () => {
 		}
 	}, [user, dispatch])
 	useEffect(() => {
-		refetch()
 		userInfo && dispatch(allData(userInfo))
 	}, [userInfo, refetch, dispatch])
 	const isStudent = role === 'STUD'

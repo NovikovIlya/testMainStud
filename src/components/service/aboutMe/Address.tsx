@@ -46,7 +46,6 @@ export const Address = () => {
 	)
 	const isStudent = role === 'STUD'
 	useEffect(() => {
-		refetch()
 		address && dispatch(allData(address))
 	}, [refetch, address, dispatch])
 	const onSubmit = () => {

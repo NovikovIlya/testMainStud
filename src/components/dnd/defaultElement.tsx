@@ -537,7 +537,7 @@ export const jsxElements = [
 		index: 'Dormitory',
 		element: (
 			<TemplateCard
-				href="https://shelly.kpfu.ru/e-ksu/SITE_STUDENT_SH_PR_AC.dormitory_work_document?p_menu=37"
+				href="https://portal-dis.kpfu.ru/e-ksu/SITE_STUDENT_SH_PR_AC.dormitory_work_document?p_menu=37"
 				info="Как попасть в двойку и многие другие ответы по местоположению зданий КФУ Вы найдете в этом сервисе"
 				title="Dormitory"
 				buttonText="Изучить"

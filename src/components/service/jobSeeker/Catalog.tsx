@@ -29,7 +29,7 @@ export default function Catalog() {
 	const [categoryTitle, setCategoryTitle] = useState('')
 	const [directoryTitle, setDirectoryTitle] = useState('')
 	const [subdivisionTitle, setSubdivisionTitle] = useState('')
-	const [page, setPage] = useState(1)
+	const [page, setPage] = useState(0)
 	const [secondOption, setSecondOption] = useState<string | null>(null)
 	const { data: categories = [], isLoading: isCategoriesLoading } =
 		useGetCategoriesQuery()
@@ -105,7 +105,7 @@ export default function Catalog() {
 					}))}
 					onChange={(value: string) => {
 						;(() => {
-							setPage(1)
+							setPage(0)
 							setAllVacancyPreviewsByDirections([])
 							setAllVacancyPreviewsBySubdivisions([])
 							setCategoryTitle(value)
@@ -148,13 +148,13 @@ export default function Catalog() {
 						categories.find(category => category.title === categoryTitle)
 							?.direction
 							? (() => {
-									setPage(1)
+									setPage(0)
 									setAllVacancyPreviewsByDirections([])
 									setDirectoryTitle(value)
 									setSecondOption(value)
 							  })()
 							: (() => {
-									setPage(1)
+									setPage(0)
 									setAllVacancyPreviewsBySubdivisions([])
 									setSubdivisionTitle(value)
 									setSecondOption(value)
@@ -216,7 +216,7 @@ export default function Catalog() {
 								? { display: 'none' }
 								: {}
 						}
-						className="ml-auto mr-auto bg-button-blue hover:bg-button-blue-hover focus:border-[2px] focus:border-button-focus-border-blue font-content-font font-normal text-[16px]/[16px] text-white text-center h-[32px] pt-[8px] pb-[8px] pl-[24px] pr-[24px] rounded-[54px]"
+						className="ml-auto mr-auto outline-none border-none bg-button-blue hover:bg-button-blue-hover focus:border-[2px] focus:border-button-focus-border-blue font-content-font font-normal text-[16px]/[16px] text-white text-center h-[32px] pt-[8px] pb-[8px] pl-[24px] pr-[24px] rounded-[54px]"
 						onClick={() => {
 							setPage(page + 1)
 						}}

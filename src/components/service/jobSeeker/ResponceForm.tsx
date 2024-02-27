@@ -1,5 +1,6 @@
 import {
 	Button,
+	Checkbox,
 	ConfigProvider,
 	DatePicker,
 	Form,
@@ -7,21 +8,29 @@ import {
 	Modal,
 	Radio,
 	Select,
-	Tag
+	Tag,
+	Upload
 } from 'antd'
 import dayjs from 'dayjs'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
+import uuid from 'react-uuid'
 
 import { EditSvg } from '../../../assets/svg/EditSvg'
 import { useAppSelector } from '../../../store'
+import { usePostVacancyRespondMutation } from '../../../store/api/serviceApi'
 import {
 	useGetCountriesQuery,
 	useGetEducationLevelQuery
 } from '../../../store/api/utilsApi'
 import { allData } from '../../../store/reducers/SeekerFormReducers/AboutMeReducer'
+import {
+	addExperience,
+	lowerNoExperienceFlag,
+	raiseNoExperienceFlag
+} from '../../../store/reducers/SeekerFormReducers/ExperienceReducer'
 import {
 	completeAboutMe,
 	completeEducation,
@@ -31,6 +40,8 @@ import { setAllData } from '../../../store/reducers/SeekerFormReducers/RespondEd
 import { allSkillsData } from '../../../store/reducers/SeekerFormReducers/SkillsReducer'
 
 import ArrowIcon from './ArrowIcon'
+import { AttachIcon } from './AttachIcon'
+import { ButtonPlusIcon } from './ButtonPlusIcon'
 import { CheckedIcon } from './CheckedIcon'
 
 export const ResponseForm = () => {
@@ -44,19 +55,28 @@ export const ResponseForm = () => {
 
 	const aboutMeData = useAppSelector(state => state.seekerAboutMe)
 	const { currentVacancy } = useAppSelector(state => state.currentVacancy)
-	const { aboutMeCompleted, skillsCompleted, educationCompleted } =
-		useAppSelector(state => state.formCompletion)
+	const {
+		aboutMeCompleted,
+		skillsCompleted,
+		educationCompleted,
+		experienceCompleted
+	} = useAppSelector(state => state.formCompletion)
 	const skillsData = useAppSelector(state => state.skills)
 	const educationData = useAppSelector(state => state.RespondEducation)
+	const experienceData = useAppSelector(state => state.Experience)
 
 	const [currentFormskills, setcurrentFormSkills] = useState<string[]>(
 		skillsData.skills
+	)
+	const [haveNoExprience, setHaveNoExperience] = useState(
+		experienceData.noExperienceFlag
 	)
 	const [skillInputValue, setSkillInputValue] = useState<string>('')
 	const date = new Date()
 
 	const { pathname } = useLocation()
 	const navigate = useNavigate()
+	const [getVacancy, result] = usePostVacancyRespondMutation()
 
 	return (
 		<>
@@ -138,7 +158,7 @@ export const ResponseForm = () => {
 								<div
 									onClick={() => {
 										navigate(
-											'/services/jobseeker/vacancyview/respond/experience'
+											'/services/jobseeker/vacancyview/respond/experience/main'
 										)
 									}}
 									className="h-[43px] pl-[16px] pr-[16px] flex justify-between items-center border-[1px] border-dashed border-blue1f5 rounded-[5px] cursor-pointer"
@@ -146,7 +166,12 @@ export const ResponseForm = () => {
 									<p className="font-content-font text-black text-[16px]/[19.2px] font-bold select-none">
 										Опыт работы
 									</p>
-									<EditSvg />
+									{experienceData.noExperienceFlag ||
+									experienceData.experiences.length !== 0 ? (
+										<CheckedIcon />
+									) : (
+										<EditSvg />
+									)}
 								</div>
 								<div
 									onClick={() => {
@@ -162,8 +187,48 @@ export const ResponseForm = () => {
 								<Button
 									className="w-[103px] ml-auto mt-[40px] rounded-[54.5px]"
 									type="primary"
+									onClick={
+										!aboutMeCompleted
+											? () => {
+													navigate(
+														'/services/jobseeker/vacancyview/respond/aboutme'
+													)
+											  }
+											: !educationCompleted
+											? () => {
+													navigate(
+														'services/jobseeker/vacancyview/respond/education'
+													)
+											  }
+											: !(
+													experienceData.noExperienceFlag ||
+													experienceData.experiences.length !== 0
+											  )
+											? () => {
+													navigate(
+														'services/jobseeker/vacancyview/respond/experience/main'
+													)
+											  }
+											: !skillsCompleted
+											? () => {
+													navigate(
+														'services/jobseeker/vacancyview/respond/skills'
+													)
+											  }
+											: () => {
+													getVacancy(1)
+											  }
+										// () => {
+										// 	currentVacancy !== null && getVacancy(currentVacancy?.id)
+										// }
+									}
 								>
-									Дальше
+									{aboutMeCompleted &&
+									educationCompleted &&
+									experienceCompleted &&
+									skillsCompleted
+										? 'Откликнуться'
+										: 'Дальше'}
 								</Button>
 							</div>
 						</>
@@ -529,7 +594,7 @@ export const ResponseForm = () => {
 							</Form.Item>
 						</Form>
 					)}
-					{/* {pathname.includes(
+					{pathname.includes(
 						'/services/jobseeker/vacancyview/respond/experience/main'
 					) && (
 						<Form layout="vertical" requiredMark={false}>
@@ -546,6 +611,75 @@ export const ResponseForm = () => {
 									Опыт работы
 								</p>
 							</div>
+							{experienceData.noExperienceFlag ? (
+								<div
+									onClick={() => {
+										navigate(
+											'/services/jobseeker/vacancyview/respond/experience/add'
+										)
+									}}
+									className="h-[43px] pl-[16px] pr-[16px] flex justify-between items-center border-b-[1px] border-black cursor-pointer"
+								>
+									<p className="font-content-font text-black text-[16px]/[19.2px] font-bold select-none">
+										Нет опыта
+									</p>
+									<EditSvg />
+								</div>
+							) : (
+								<div>
+									{experienceData.experiences.map(exp => (
+										<div
+											onClick={() => {
+												navigate(
+													'/services/jobseeker/vacancyview/respond/experience/edit'
+												)
+											}}
+											className="h-[90px] pl-[16px] pr-[16px] pb-[20px] mb-[20px] border-solid flex justify-between items-center border-0 border-b-[1px] border-black border-opacity-20 cursor-pointer"
+										>
+											<div className="flex flex-col gap-[12px]">
+												<p className="font-content-font text-black text-[16px]/[16px] font-bold select-none">
+													{exp.experience.seat}
+												</p>
+												<p className="font-content-font text-black text-[16px]/[16px] font-normal select-none">
+													{exp.experience.workplace}
+												</p>
+												<p className="font-content-font text-black text-[14px]/[14px] font-normal select-none">
+													Образование
+												</p>
+											</div>
+											<EditSvg />
+										</div>
+									))}
+									<div
+										style={{ textAlign: 'center' }}
+										className="flex flex-col items-center"
+									>
+										<ConfigProvider
+											theme={{
+												components: {
+													Button: {
+														colorBgTextHover: '#ffffff',
+														colorBgTextActive: '#ffffff'
+													}
+												}
+											}}
+										>
+											<Button
+												onClick={() => {
+													navigate(
+														'/services/jobseeker/vacancyview/respond/experience/add'
+													)
+												}}
+												icon={<ButtonPlusIcon />}
+												type="text"
+											></Button>
+										</ConfigProvider>
+										<p className="mt-[5px] w-[94px] font-main-font font-normal text-[14px]/[18px] opacity-40">
+											добавить место работы
+										</p>
+									</div>
+								</div>
+							)}
 							<Form.Item>
 								<div style={{ textAlign: 'right', marginTop: 40 }}>
 									<Button type="primary" htmlType="submit">
@@ -558,11 +692,37 @@ export const ResponseForm = () => {
 					{pathname.includes(
 						'/services/jobseeker/vacancyview/respond/experience/add'
 					) && (
-						<Form layout="vertical" requiredMark={false}>
+						<Form
+							layout="vertical"
+							requiredMark={false}
+							onFinish={values => {
+								haveNoExprience
+									? dispatch(raiseNoExperienceFlag())
+									: dispatch(lowerNoExperienceFlag()) &&
+									  dispatch(
+											addExperience({
+												id: uuid(),
+												experience: {
+													workplace: values.workplace,
+													seat: values.seat,
+													duties: values.duties,
+													beginWork: '11-09-2001',
+													endWork: '11-09-2001',
+													resume: values.resume
+												}
+											})
+									  )
+								navigate(
+									'/services/jobseeker/vacancyview/respond/experience/main'
+								)
+							}}
+						>
 							<div className="flex items-center mb-[38px]">
 								<button
 									onClick={() => {
-										navigate('/services/jobseeker/vacancyview/respond/main')
+										navigate(
+											'/services/jobseeker/vacancyview/respond/experience/main'
+										)
 									}}
 									className="bg-white h-[38px] w-[46px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer"
 								>
@@ -572,6 +732,91 @@ export const ResponseForm = () => {
 									Добавить место работы
 								</p>
 							</div>
+							<Form.Item name={'haveExperienceFlag'}>
+								<Checkbox
+									checked={haveNoExprience}
+									disabled={experienceData.experiences.length !== 0}
+									onChange={e => {
+										setHaveNoExperience(prev => !prev)
+									}}
+								>
+									Я не имею опыта работы
+								</Checkbox>
+							</Form.Item>
+							<Form.Item
+								name={'workplace'}
+								label={
+									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
+										Место рабты
+									</label>
+								}
+							>
+								<Input
+									onPressEnter={e => {
+										e.preventDefault()
+									}}
+									disabled={haveNoExprience}
+								></Input>
+							</Form.Item>
+							<Form.Item
+								name={'seat'}
+								label={
+									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
+										Должность
+									</label>
+								}
+							>
+								<Input
+									onPressEnter={e => {
+										e.preventDefault()
+									}}
+									disabled={haveNoExprience}
+								></Input>
+							</Form.Item>
+							<Form.Item
+								name={'work'}
+								label={
+									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
+										Период работы
+									</label>
+								}
+							>
+								<DatePicker.RangePicker
+									className="w-full"
+									disabled={haveNoExprience}
+								/>
+							</Form.Item>
+							<Form.Item
+								name={'duties'}
+								label={
+									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
+										Обязанности
+									</label>
+								}
+							>
+								<Input.TextArea
+									autoSize={true}
+									className="!h-[107px]"
+									disabled={haveNoExprience}
+								></Input.TextArea>
+							</Form.Item>
+							<Form.Item
+								name={'resume'}
+								label={
+									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
+										Портфолио
+									</label>
+								}
+							>
+								<Upload disabled={haveNoExprience}>
+									<div className="flex items-center gap-[12px] cursor-pointer">
+										<AttachIcon />
+										<p className="font-content-font font-normal text-[16px]/[16px] text-black underline select-none">
+											Прикрепить файл
+										</p>
+									</div>
+								</Upload>
+							</Form.Item>
 							<Form.Item>
 								<div style={{ textAlign: 'right', marginTop: 40 }}>
 									<Button type="primary" htmlType="submit">
@@ -588,7 +833,9 @@ export const ResponseForm = () => {
 							<div className="flex items-center mb-[38px]">
 								<button
 									onClick={() => {
-										navigate('/services/jobseeker/vacancyview/respond/main')
+										navigate(
+											'/services/jobseeker/vacancyview/respond/experience/main'
+										)
 									}}
 									className="bg-white h-[38px] w-[46px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer"
 								>
@@ -606,7 +853,7 @@ export const ResponseForm = () => {
 								</div>
 							</Form.Item>
 						</Form>
-					)} */}
+					)}
 					{pathname.includes(
 						'/services/jobseeker/vacancyview/respond/skills'
 					) && (
@@ -690,7 +937,11 @@ export const ResponseForm = () => {
 									</label>
 								}
 							>
-								<Input.TextArea autoSize={true} value={skillsData.details} />
+								<Input.TextArea
+									autoSize={true}
+									value={skillsData.details}
+									className="!h-[107px]"
+								/>
 							</Form.Item>
 							<Form.Item>
 								<div style={{ textAlign: 'right', marginTop: 40 }}>

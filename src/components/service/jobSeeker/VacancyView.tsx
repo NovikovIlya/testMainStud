@@ -32,9 +32,17 @@ export default function VacancyView() {
 			.replace(/<em>/g, '')
 			.replace(/<\/em'>/g, '')
 
-		responsibilitiesArr = responsibilities.match(
-			/<li>[a-zA-Zа-яА-Я0-9\s\:\,\.\/\-]+/g
-		)
+		responsibilities.includes('<li>')
+			? (responsibilitiesArr = responsibilities.match(
+					/<li>[a-zA-Zа-яА-ЯёЁ0-9\s\:\,\.\/\–\—\(\)\+\-]+/g
+			  ))
+			: (responsibilitiesArr = responsibilities.match(
+					/\r\n\r\n—[a-zA-Zа-яА-ЯёЁ0-9\s\:\,\.\/\–\—\(\)\+\-]+/g
+			  ))
+
+		// responsibilitiesArr = responsibilities.match(
+		// 	/<li>[a-zA-Zа-яА-ЯёЁ0-9\s\:\,\.\/\–\—\(\)\+\-]+/g
+		// )
 
 		skills = currentVacancy.acf.skills
 
@@ -48,7 +56,7 @@ export default function VacancyView() {
 			.replace(/<em>/g, '')
 			.replace(/<\/em'>/g, '')
 
-		skillsArr = skills.match(/<li>[a-zA-Zа-яА-Я0-9\s\:\,\.\/\-]+/g)
+		skillsArr = skills.match(/<li>[a-zA-Zа-яА-ЯёЁ0-9\s\:\,\.\/\–\—\(\)\+\-]+/g)
 
 		conditions = currentVacancy.acf.conditions
 
@@ -62,7 +70,9 @@ export default function VacancyView() {
 			.replace(/<em>/g, '')
 			.replace(/<\/em'>/g, '')
 
-		conditionsArr = conditions.match(/<li>[a-zA-Zа-яА-Я0-9\s\:\,\.\/\-]+/g)
+		conditionsArr = conditions.match(
+			/<li>[a-zA-Zа-яА-ЯёЁ0-9\s\:\,\.\/\–\—\(\)\+\-]+/g
+		)
 	}
 
 	return (

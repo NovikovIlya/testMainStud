@@ -14,6 +14,7 @@ import ParentReducer from './reducers/FormReducers/ParentReducer'
 import WorkReducer from './reducers/FormReducers/WorkReducer'
 import LayoutSlice from './reducers/LayoutsSlice'
 import AboutMeReducer from './reducers/SeekerFormReducers/AboutMeReducer'
+import ExperienceReducer from './reducers/SeekerFormReducers/ExperienceReducer'
 import FormCompletionReducer from './reducers/SeekerFormReducers/FormCompletionReducer'
 import RespondEducationReducer from './reducers/SeekerFormReducers/RespondEducationReducer'
 import SkillsReducer from './reducers/SeekerFormReducers/SkillsReducer'
@@ -35,6 +36,7 @@ export const store = configureStore({
 		seekerAboutMe: AboutMeReducer,
 		skills: SkillsReducer,
 		RespondEducation: RespondEducationReducer,
+		Experience: ExperienceReducer,
 		formCompletion: FormCompletionReducer,
 		[apiSlice.reducerPath]: apiSlice.reducer
 	},

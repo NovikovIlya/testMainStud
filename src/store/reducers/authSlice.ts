@@ -26,6 +26,9 @@ const authSlice = createSlice({
 			state.user = null
 			state.accessToken = null
 			state.refreshToken = null
+			localStorage.removeItem('user')
+			localStorage.removeItem('access')
+			localStorage.removeItem('refresh')
 		},
 		setEdit: state => {
 			state.edit = !state.edit

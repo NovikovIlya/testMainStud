@@ -84,7 +84,7 @@ export const Document = () => {
 	const isStudent = role === 'STUD'
 	if (isLoadingDocuments || isLoadingLevelDocs) return <SkeletonPage />
 	return (
-		<div className="m-14 radio w-full">
+		<div className="m-14 w-full">
 			<Space.Compact block direction="vertical" className="gap-5 max-w-2xl">
 				<Typography.Title level={3}>{t('documents')}</Typography.Title>
 
@@ -278,21 +278,27 @@ export const Document = () => {
 						/>
 					)}
 				</Space>
-				<Space size={'small'} className={clsx(isStudent && 'hidden')}>
+
+				<Space
+					size={'small'}
+					align="center"
+					className={clsx(isStudent && 'hidden')}
+				>
 					<Typography.Text className="text-black opacity-80 text-sm font-normal leading-none">
 						{t('AttachDocuments')}
 					</Typography.Text>
 					<Tooltip title={t('AttachDocumentsDescription')}>
-						<Button
-							type="default"
-							className="bg-transparent"
-							icon={<QuestionOutlined className="text-xs" />}
-						/>
+						<Button type="default" className="bg-transparent" size="small">
+							?
+						</Button>
 					</Tooltip>
 				</Space>
 
 				<Upload {...props} className={clsx(isStudent && 'hidden')}>
-					<Button icon={<UploadOutlined />}>{t('AddFile')}</Button>
+					<Button type="primary" className="px-8 !rounded gap-2 flex">
+						<span>+</span>
+						{t('AddFile')}
+					</Button>
 				</Upload>
 				<Space
 					direction="vertical"

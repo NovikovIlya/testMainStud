@@ -108,7 +108,7 @@ export const Parent = () => {
 					</Typography.Title>
 					{parentData.map((item, index) => (
 						<Space direction="vertical" key={item.id}>
-							<Space direction="vertical" size={'small'} className="w-full">
+							<Space direction="vertical" size={'large'} className="w-full">
 								<Space>
 									<Typography.Text className="font-bold text-black text-lg">
 										{t('Parent')}
@@ -172,14 +172,14 @@ export const Parent = () => {
 							</Space>
 							<Space
 								direction="vertical"
-								size="small"
-								className={clsx('w-full mt-8', isStudent && 'hidden')}
+								size="large"
+								className={clsx('w-full my-5', isStudent && 'hidden')}
 							>
+								<Typography.Text className="font-bold text-black text-lg">
+									{t('parentDocument')}
+								</Typography.Text>
 								<Space direction="vertical" className="w-full">
-									<Typography.Text className="font-bold text-black text-lg">
-										{t('parentDocument')}
-									</Typography.Text>
-									<Typography.Text className="font-bold text-black">
+									<Typography.Text className="text-black">
 										{t('documentType')}
 									</Typography.Text>
 									{isEdit ? (
@@ -215,7 +215,7 @@ export const Parent = () => {
 									<Typography.Text className="font-bold text-black">
 										{t('documentInfo')}
 									</Typography.Text>
-									<div className="grid grid-cols-2 w-full gap-4">
+									<div className="grid grid-cols-2 w-full gap-5 mt-5">
 										<Space direction="vertical" className="w-full">
 											<Typography.Text className=" text-black">
 												{t('divisionCode')}
@@ -363,14 +363,15 @@ export const Parent = () => {
 									)}
 								</Space>
 							</Space>
+							<Typography.Text className="font-bold text-black">
+								{t('additionalDocuments')}
+							</Typography.Text>
 							<Space
 								direction="vertical"
-								className={clsx('w-full mt-8', isStudent && 'hidden')}
+								size={'large'}
+								className={clsx('w-full my-5', isStudent && 'hidden')}
 							>
 								<Space direction="vertical" className="w-full">
-									<Typography.Text className="font-bold text-black">
-										{t('additionalDocuments')}
-									</Typography.Text>
 									<Typography.Text className=" text-black">
 										{t('snils')}
 									</Typography.Text>
@@ -411,10 +412,17 @@ export const Parent = () => {
 										</div>
 									)}
 								</Space>
-								<Space direction="vertical" className="w-full mt-8">
-									<Typography.Text className="font-bold text-black text-lg">
-										{t('adress')}
-									</Typography.Text>
+							</Space>
+
+							<Typography.Text className="font-bold text-black text-lg">
+								{t('adress')}
+							</Typography.Text>
+							<Space
+								direction="vertical"
+								className="w-full mt-5"
+								size={'large'}
+							>
+								<Space direction="vertical" className="w-full">
 									<Typography.Text className=" text-black">
 										{t('RegAdress')}
 									</Typography.Text>
@@ -468,25 +476,25 @@ export const Parent = () => {
 										</div>
 									)}
 								</Space>
-								<Space size={'small'} className="mt-8">
-									<Typography.Text className="text-black opacity-80 text-sm font-normal leading-none">
-										{t('AttachDocuments')}
-									</Typography.Text>
-									<Tooltip title={t('AttachDocsDescription')}>
-										<Button
-											type="default"
-											className="bg-transparent"
-											icon={<QuestionOutlined className="text-xs" />}
-										/>
-									</Tooltip>
-								</Space>
+							</Space>
+							{isEdit && (
+								<>
+									<Space size={'small'} className="mt-5" align="center">
+										<Typography.Text className="text-black opacity-80 text-sm font-normal leading-none">
+											{t('AttachDocuments')}
+										</Typography.Text>
+										<Tooltip title={t('AttachDocsDescription')}>
+											<Button type="default" className="bg-transparent w-6 h-6">
+												?
+											</Button>
+										</Tooltip>
+									</Space>
 
-								{isEdit && (
 									<Upload {...props}>
 										<Button icon={<UploadOutlined />}>{t('AddFile')}</Button>
 									</Upload>
-								)}
-							</Space>
+								</>
+							)}
 						</Space>
 					))}
 				</Space.Compact>
@@ -497,7 +505,7 @@ export const Parent = () => {
 					className={clsx('w-full flex items-center', isStudent && 'hidden')}
 				>
 					<Button
-						className="rounded-full text-center p-0 w-8 h-8 text-xl"
+						className="!rounded-full text-center p-0 w-8 h-8 text-xl"
 						type="primary"
 						onClick={handleAddParent}
 					>

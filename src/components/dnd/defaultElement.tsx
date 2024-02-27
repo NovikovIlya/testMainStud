@@ -517,7 +517,7 @@ export const jsxElements = [
 		index: 'SitAnKFU',
 		element: (
 			<TemplateCard
-				href="http://10.160.178.202/news_aggregator/news/"
+				href="https://sa.kpfu.ru/news_aggregator/news/"
 				info="Новостные статьис указанием источников для последующего анализа международных ситуаций"
 				title="SitAnKFU"
 				img="/image45.png"

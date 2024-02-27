@@ -9,6 +9,7 @@ import { MyDocsSvg } from '../../../assets/svg/MyDocsSvg'
 import { ParentSvg } from '../../../assets/svg/ParentSvg'
 import { WorkSvg } from '../../../assets/svg/WorkSvg'
 import { useAppSelector } from '../../../store'
+import { Header } from '../../layout/Header'
 
 import { AboutMe } from './AboutMe'
 import { Address } from './Address'
@@ -27,9 +28,9 @@ export const NavAboutMe = () => {
 	const { t } = useTranslation()
 	const navList = [
 		{
-			id: '/services/aboutMe/aboutMe',
+			id: '/services/aboutMe/personalData',
 			icon: <AboutMeSvg />,
-			name: t('aboutMe')
+			name: t('PersonalData')
 		},
 		{
 			id: '/services/aboutMe/document',
@@ -71,7 +72,7 @@ export const NavAboutMe = () => {
 				onClick={() => handleNavigate(id)}
 			>
 				<div className="flex items-center gap-[10px]">
-					{icon}
+					<div className="w-5 h-5">{icon}</div>
 					<p className="text-base">{name}</p>
 				</div>
 			</li>
@@ -80,12 +81,14 @@ export const NavAboutMe = () => {
 
 	return (
 		<>
-			<div className="shadowNav ">
+			<Header type="service" service={t('AboutMeService')} />
+
+			<div className="shadowNav mt-20">
 				<ul className="min-w-[230px] pt-14 flex flex-col gap-4 ">
 					{handleList}
 				</ul>
 			</div>
-			<div className="bg-[#F5F8FB] flex w-full">
+			<div className="bg-[#F5F8FB] flex w-full mt-20">
 				{pathname === navList[0].id && <AboutMe />}
 				{pathname === navList[1].id && <Document />}
 				{pathname === navList[2].id && <Address />}

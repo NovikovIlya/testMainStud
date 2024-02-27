@@ -81,7 +81,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 				<div
 					onClick={() => {
 						setOpenMenu(false)
-						navigate('/services/aboutMe/aboutMe')
+						navigate('/services/aboutMe/personalData')
 					}}
 					className="flex items-center gap-[15px] px-[4px] py-[5px]"
 				>
@@ -158,12 +158,12 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 					<Button
 						onClick={showDrawer}
 						className={clsx(
-							'py-2.5 rounded-full  font-semibold bg-transparent border-2 flex items-center justify-center ',
+							'py-2.5 rounded-full hover:!bg-transparent font-semibold bg-transparent border-2 flex items-center justify-center ',
 							type === 'main'
-								? `text-blue1f5 border-blue1f5`
-								: 'text-white border-white hover:!border-white hover:!text-white'
+								? `text-blue1f5 border-blue1f5 hover:!text-blue1f5`
+								: 'text-white border-white '
 						)}
-						type="default"
+						type="primary"
 						icon={<MenuSvg white={type === 'service'} />}
 					>
 						<span className="pl-2 max-md:!hidden">{t('services')}</span>

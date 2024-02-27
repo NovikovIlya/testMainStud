@@ -71,26 +71,20 @@ export const AboutMe = () => {
 	return (
 		<div className="m-14 radio w-full max-w-2xl">
 			<Space.Compact block direction="vertical" className="gap-5">
-				<Typography.Title level={3}>{t('AboutMe')}</Typography.Title>
+				<Typography.Title level={3}>{t('PersonalData')}</Typography.Title>
 				<Space direction="vertical" size={'small'} className="w-full">
 					<Typography.Text className=" mt-10 opacity-80 text-black text-sm font-normal">
 						{t('gender')}
 					</Typography.Text>
-					{isEdit ? (
-						<div className="bg-white p-2 rounded-md">
-							<Typography.Text>
-								{formData.gender === 'M' ? t('man') : t('woman')}
-							</Typography.Text>
-						</div>
-					) : (
-						<Radio.Group
-							onChange={e => dispatch(gender(e.target.value))}
-							value={formData.gender}
-						>
-							<Radio value={'M'}>{t('man')}</Radio>
-							<Radio value={'W'}>{t('woman')}</Radio>
-						</Radio.Group>
-					)}
+
+					<Radio.Group
+						disabled={isEdit}
+						onChange={e => dispatch(gender(e.target.value))}
+						value={formData.gender}
+					>
+						<Radio value={'M'}>{t('man')}</Radio>
+						<Radio value={'W'}>{t('woman')}</Radio>
+					</Radio.Group>
 				</Space>
 				<Space direction="vertical" size={'small'}>
 					<Typography.Text>{t('surname')}</Typography.Text>

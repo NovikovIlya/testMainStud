@@ -70,13 +70,13 @@ export const Work = () => {
 		dispatch(addWork(uuid()))
 	}
 	return (
-		<div className="m-14 radio">
+		<div className="m-14">
 			<Space direction="vertical" size={20}>
 				<Typography.Title level={3}>{t('work')}</Typography.Title>
 				<Checkbox>{t('EmployedMoment')}</Checkbox>
 
 				{workData.items.map((item, index) => (
-					<div key={item.id} className="flex flex-col gap-[10px]">
+					<div key={item.id} className="flex flex-col gap-[20px]">
 						<Space>
 							<Typography.Text className="text-black text-sm font-bold">
 								{t('placeWork')}
@@ -231,21 +231,23 @@ export const Work = () => {
 						value={!workData.portfolioLink ? '' : workData.portfolioLink}
 					/>
 				</Space>
+
 				<Space size={'small'}>
 					<Typography.Text className="text-black opacity-80 text-sm font-normal leading-none">
 						{t('AttachDocuments')}
 					</Typography.Text>
 					<Tooltip title={t('YourWorks')}>
-						<Button
-							type="default"
-							className="bg-transparent"
-							icon={<QuestionOutlined className="text-xs" />}
-						/>
+						<Button type="default" className="bg-transparent" size="small">
+							?
+						</Button>
 					</Tooltip>
 				</Space>
 
 				<Upload {...props}>
-					<Button icon={<UploadOutlined />}>{t('AddFile')}</Button>
+					<Button type="primary" className="px-8 !rounded gap-2 flex">
+						<span>+</span>
+						{t('AddFile')}
+					</Button>
 				</Upload>
 			</Space>
 		</div>

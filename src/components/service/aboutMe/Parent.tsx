@@ -505,7 +505,7 @@ export const Parent = () => {
 					className={clsx('w-full flex items-center', isStudent && 'hidden')}
 				>
 					<Button
-						className="!rounded-full text-center p-0 w-8 h-8 text-xl"
+						className="!rounded-full flex items-center justify-center p-0 w-8 h-8 text-xl"
 						type="primary"
 						onClick={handleAddParent}
 					>

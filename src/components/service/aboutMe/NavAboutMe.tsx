@@ -7,6 +7,7 @@ import { AddressSvg } from '../../../assets/svg/AddressSvg'
 import { EducationSvg } from '../../../assets/svg/EducationSvg'
 import { MyDocsSvg } from '../../../assets/svg/MyDocsSvg'
 import { ParentSvg } from '../../../assets/svg/ParentSvg'
+import { ProfessionalSkillsSvg } from '../../../assets/svg/ProfessionalSkillsSvg'
 import { WorkSvg } from '../../../assets/svg/WorkSvg'
 import { useAppSelector } from '../../../store'
 import { Header } from '../../layout/Header'
@@ -16,6 +17,7 @@ import { Address } from './Address'
 import { Document } from './Document'
 import { Education } from './Education'
 import { Parent } from './Parent'
+import { ProfessionalSkills } from './ProfessionalSkills'
 import { Work } from './Work'
 
 export const NavAboutMe = () => {
@@ -56,6 +58,11 @@ export const NavAboutMe = () => {
 			id: '/services/aboutMe/parent',
 			icon: <ParentSvg />,
 			name: t('Parents')
+		},
+		{
+			id: '/services/aboutMe/professionalSkills',
+			icon: <ProfessionalSkillsSvg />,
+			name: t('ProfessionalSkills')
 		}
 	]
 	if (!role) return <></>
@@ -95,6 +102,7 @@ export const NavAboutMe = () => {
 				{pathname === navList[3].id && <Education />}
 				{pathname === navList[4].id && <Work />}
 				{pathname === navList[5].id && <Parent />}
+				{pathname === navList[6].id && <ProfessionalSkills />}
 			</div>
 		</>
 	)

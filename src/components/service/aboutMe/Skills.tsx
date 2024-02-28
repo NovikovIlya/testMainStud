@@ -1,10 +1,8 @@
-import { PlusOutlined } from '@ant-design/icons'
 import type { InputRef } from 'antd'
-import { Input, Space, Tag, Tooltip, theme } from 'antd'
+import { Input, Space, Tag, Tooltip } from 'antd'
 import React, { useEffect, useRef, useState } from 'react'
 
 export const Skills: React.FC = () => {
-	const { token } = theme.useToken()
 	const [tags, setTags] = useState(['Unremovable', 'Tag 2', 'Tag 3'])
 	const [inputVisible, setInputVisible] = useState(false)
 	const [inputValue, setInputValue] = useState('')
@@ -27,10 +25,6 @@ export const Skills: React.FC = () => {
 		const newTags = tags.filter(tag => tag !== removedTag)
 		console.log(newTags)
 		setTags(newTags)
-	}
-
-	const showInput = () => {
-		setInputVisible(true)
 	}
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

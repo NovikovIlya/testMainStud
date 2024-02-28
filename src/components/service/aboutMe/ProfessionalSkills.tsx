@@ -1,8 +1,5 @@
-import { PlusOutlined } from '@ant-design/icons'
-import { Input, InputRef, Space, Tag, Typography, theme } from 'antd'
-import { TweenOneGroup } from 'rc-tween-one'
-import { useEffect, useRef, useState } from 'react'
-import { Controller, SubmitHandler, useForm } from 'react-hook-form'
+import { Input, Space, Typography } from 'antd'
+import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { Skills } from './Skills'

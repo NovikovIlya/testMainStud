@@ -43,21 +43,25 @@ export const serviceApi = apiSlice.injectEndpoints({
 			query: () => 'user-api/settings/phones'
 		}),
 		getCategories: builder.query<CategoryType[], void>({
-			query: () => ({ url: 'http://localhost:8082/api/v1/category' })
+			query: () => ({ url: 'http://localhost:8082/employment-api/v1/category' })
 		}),
 		getDirections: builder.query<{ title: string }[], string>({
 			query: category => ({
-				url: 'http://localhost:8082/api/v1/direction?category=' + category
+				url:
+					'http://localhost:8082/employment-api/v1/direction?category=' +
+					category
 			})
 		}),
 		getSubdivisions: builder.query<{ title: string }[], string>({
 			query: category => ({
-				url: 'http://localhost:8082/api/v1/subdivision?category=' + category
+				url:
+					'http://localhost:8082/employment-api/v1/subdivision?category=' +
+					category
 			})
 		}),
 		getVacancyView: builder.query<VacancyViewResponceType, number>({
 			query: id => ({
-				url: 'http://localhost:8082/api/v1/vacancy/' + id
+				url: 'http://localhost:8082/employment-api/v1/vacancy/' + id
 			})
 		}),
 		getVacancyPreviewByDirection: builder.query<
@@ -66,7 +70,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		>({
 			query: ({ category, direction, page }) => ({
 				url:
-					'http://localhost:8082/api/v1/vacancy/direction?category=' +
+					'http://localhost:8082/employment-api/v1/vacancy/direction?category=' +
 					category +
 					'&direction=' +
 					direction +
@@ -80,7 +84,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		>({
 			query: ({ category, subdivision, page }) => ({
 				url:
-					'http://localhost:8082/api/v1/vacancy/subdivisions?category=' +
+					'http://localhost:8082/employment-api/v1/vacancy/subdivisions?category=' +
 					category +
 					'&subdivisions=' +
 					subdivision +
@@ -160,7 +164,8 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		postVacancyRespond: builder.mutation<void, number>({
 			query: id => ({
-				url: 'http://localhost:8082/api/v1/vacancy/' + id + '/respond'
+				url:
+					'http://localhost:8082/employment-api/v1/vacancy/' + id + '/respond'
 			})
 		})
 	})

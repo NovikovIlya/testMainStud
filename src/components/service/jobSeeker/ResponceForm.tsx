@@ -216,7 +216,8 @@ export const ResponseForm = () => {
 													)
 											  }
 											: () => {
-													getVacancy(1)
+													currentVacancy !== null &&
+														getVacancy(currentVacancy?.id)
 											  }
 										// () => {
 										// 	currentVacancy !== null && getVacancy(currentVacancy?.id)
@@ -225,7 +226,8 @@ export const ResponseForm = () => {
 								>
 									{aboutMeCompleted &&
 									educationCompleted &&
-									experienceCompleted &&
+									(experienceData.noExperienceFlag ||
+										experienceData.experiences.length !== 0) &&
 									skillsCompleted
 										? 'Откликнуться'
 										: 'Дальше'}

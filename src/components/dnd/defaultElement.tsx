@@ -1,4 +1,6 @@
+import { DirectResume } from '../cards/DirectResume'
 import { Schedule } from '../cards/Schedule'
+import { Seeker } from '../cards/Seeker'
 import { TemplateCard } from '../cards/Template'
 
 const cookies = document.cookie.split('; ')
@@ -72,7 +74,7 @@ export const jsxElements = [
 	{
 		index: 'DirectResume',
 		element: (
-			<TemplateCard
+			<DirectResume
 				href="#"
 				img="/directresumeimage.png"
 				info="Мы всегда в поиске крутых специалистов. Заполняйте резюме, отправляйте на проверку и мы рассмотрим Вашу кандидатуру."
@@ -94,17 +96,12 @@ export const jsxElements = [
 	},
 	{
 		index: 'jobSeeker',
-		element: (
-			<TemplateCard
-				href="/services/jobseeker/catalog"
-				info="Найти и откликнуться на вакансию"
-				title="Соискатель"
-			/>
-		),
+		element: <Seeker />,
 		place: {
-			w: 1,
+			w: 3,
+			minW: 2,
 			h: 1,
-			x: 1,
+			x: 0,
 			y: 0,
 			i: 'jobSeeker'
 		}

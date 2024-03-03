@@ -1,4 +1,4 @@
-import { Select } from 'antd'
+import { Select, Skeleton, Space } from 'antd'
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
@@ -12,6 +12,7 @@ import {
 } from '../../../store/api/serviceApi'
 import { allData } from '../../../store/reducers/SeekerFormReducers/AboutMeReducer'
 import { VacancyItemType } from '../../../store/type'
+import { SkeletonPage } from '../aboutMe/Skeleton'
 
 import VacancyItem from './VacancyItem'
 
@@ -26,11 +27,11 @@ export default function Catalog() {
 		setAllVacancyPreviewsBySubdivisions
 	] = useState<VacancyItemType[]>([])
 
-	const [categoryTitle, setCategoryTitle] = useState('')
-	const [directoryTitle, setDirectoryTitle] = useState('')
+	const [categoryTitle, setCategoryTitle] = useState('АУП')
+	const [directoryTitle, setDirectoryTitle] = useState('Все')
 	const [subdivisionTitle, setSubdivisionTitle] = useState('')
 	const [page, setPage] = useState(0)
-	const [secondOption, setSecondOption] = useState<string | null>(null)
+	const [secondOption, setSecondOption] = useState<string | null>('Все')
 	const { data: categories = [], isLoading: isCategoriesLoading } =
 		useGetCategoriesQuery()
 	const { data: directions = [], isLoading: isDirectionsLoading } =
@@ -83,6 +84,17 @@ export default function Catalog() {
 		console.log('Change two')
 	}, [vacancyPreviewsBySubdivisions])
 
+	if (isCategoriesLoading && isDirectionsLoading) {
+		return (
+			<>
+				<Space.Compact direction="vertical" block>
+					<Skeleton title={{ width: 0 }} active paragraph={{ rows: 2 }} />
+					<Skeleton title={{ width: 0 }} active paragraph={{ rows: 10 }} />
+				</Space.Compact>
+			</>
+		)
+	}
+
 	return (
 		<>
 			<div
@@ -103,6 +115,7 @@ export default function Catalog() {
 						value: category.title,
 						label: category.title
 					}))}
+					defaultValue={'АУП'}
 					onChange={(value: string) => {
 						;(() => {
 							setPage(0)
@@ -144,6 +157,7 @@ export default function Catalog() {
 									label: sub.title
 							  }))
 					}
+					defaultValue={'Все'}
 					onChange={(value: string) => {
 						categories.find(category => category.title === categoryTitle)
 							?.direction

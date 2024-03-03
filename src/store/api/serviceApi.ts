@@ -165,7 +165,8 @@ export const serviceApi = apiSlice.injectEndpoints({
 		postVacancyRespond: builder.mutation<void, number>({
 			query: id => ({
 				url:
-					'http://localhost:8082/employment-api/v1/vacancy/' + id + '/respond'
+					'http://localhost:8082/employment-api/v1/vacancy/' + id + '/respond',
+				method: 'POST'
 			})
 		})
 	})

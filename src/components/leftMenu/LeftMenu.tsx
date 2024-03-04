@@ -1,7 +1,7 @@
 import React from 'react';
 import clsx from "clsx";
 import {useLocation, useNavigate} from "react-router-dom";
-import {NavLink} from "../../../../utils/navListForLeftMenu/navBusinessTrip";
+import {NavLink} from "../../utils/navListForLeftMenu/navBusinessTrip";
 
 interface LeftMenu {
     navList: NavLink[]

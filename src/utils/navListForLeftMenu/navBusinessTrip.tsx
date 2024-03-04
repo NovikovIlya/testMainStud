@@ -20,7 +20,7 @@ export const navListBusinessTrip = [
     {
         id: '/services/businessTrip/currentBusinessTrip',
         icon: <CurrentBusinessTrip/>,
-        name: 'Текущие Командировки'
+        name: 'Текущие командировки'
     },
     {
         id: '/services/businessTrip/forRevision',

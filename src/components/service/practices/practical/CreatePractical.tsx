@@ -1,24 +1,9 @@
-import { PlusOutlined } from '@ant-design/icons'
-import { MenuOutlined } from '@ant-design/icons'
-import type { DragEndEvent } from '@dnd-kit/core'
-import { DndContext } from '@dnd-kit/core'
-import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
-import {
-	SortableContext,
-	arrayMove,
-	useSortable,
-	verticalListSortingStrategy
-} from '@dnd-kit/sortable'
-import { CSS } from '@dnd-kit/utilities'
-import { Button, Col, Input, Row, Select, Space, Typography } from 'antd'
-import { Table } from 'antd'
-import type { ColumnsType } from 'antd/es/table'
-import React, { useState } from 'react'
+import { Button, Col, DatePicker, Row, Select, Space, Typography } from 'antd'
+import dayjs from 'dayjs'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 
 import { ArrowLeftSvg } from '../../../../assets/svg'
-import { DeleteSvg } from '../../../../assets/svg/DeleteSvg'
 
 interface IFormInput {
 	type: { label: string; value: string }
@@ -27,66 +12,13 @@ interface IFormInput {
 	department: { label: string; value: string }
 	groupNumber: { label: string; value: string }
 	term: { label: string; value: string }
-	academicYear: { label: string; value: string }
+	academicYear: any
 	courseStudy: { label: string; value: string }
-	practicePeriod: { label: string; value: string }
+	practicePeriod: any
 	numberPractice: { label: string; value: string }
 }
 
-interface DataType {
-	key: string
-	name: string
-}
-
-interface RowProps extends React.HTMLAttributes<HTMLTableRowElement> {
-	'data-row-key': string
-}
-
-const Rows = ({ children, ...props }: RowProps) => {
-	const {
-		attributes,
-		listeners,
-		setNodeRef,
-		setActivatorNodeRef,
-		transform,
-		transition,
-		isDragging
-	} = useSortable({
-		id: props['data-row-key']
-	})
-
-	const style: React.CSSProperties = {
-		...props.style,
-		transform: CSS.Transform.toString(transform && { ...transform, scaleY: 1 }),
-		transition,
-		...(isDragging ? { position: 'relative', zIndex: 9999 } : {})
-	}
-
-	return (
-		<tr {...props} ref={setNodeRef} style={style} {...attributes}>
-			{
-				//@ts-ignore
-				(React.Children as any).map(children, child => {
-					if ((child as React.ReactElement).key === 'sort') {
-						return React.cloneElement(child as React.ReactElement, {
-							children: (
-								<MenuOutlined
-									ref={setActivatorNodeRef}
-									style={{ touchAction: 'none', cursor: 'move' }}
-									{...listeners}
-								/>
-							)
-						})
-					}
-					return child
-				})
-			}
-		</tr>
-	)
-}
-
 export const CreatePractical = () => {
-	const [task, setTask] = useState('')
 	const { control, handleSubmit } = useForm({
 		defaultValues: {
 			division: {
@@ -103,112 +35,32 @@ export const CreatePractical = () => {
 				value: '1'
 			},
 			department: {
-				label:
-					'Производственная (клиническая) практика: акушерство и гинекология',
+				label: 'Кафедра хирургических болезней постдипломного образования',
 				value: '1'
 			},
 			groupNumber: {
-				label:
-					'Производственная (клиническая) практика: акушерство и гинекология',
+				label: '10.4-134',
 				value: '1'
 			},
 			term: {
-				label:
-					'Производственная (клиническая) практика: акушерство и гинекология',
+				label: '2',
 				value: '1'
 			},
-			academicYear: {
-				label:
-					'Производственная (клиническая) практика: акушерство и гинекология',
-				value: '1'
-			},
+			academicYear: ['', ''],
 			courseStudy: {
-				label:
-					'Производственная (клиническая) практика: акушерство и гинекология',
+				label: '1',
 				value: '1'
 			},
-			practicePeriod: {
-				label:
-					'Производственная (клиническая) практика: акушерство и гинекология',
-				value: '1'
-			},
+			practicePeriod: ['', ''],
 			numberPractice: {
-				label:
-					'Производственная (клиническая) практика: акушерство и гинекология',
+				label: '120',
 				value: '1'
 			}
 		}
 	})
-	const [dataSource, setDataSource] = useState([
-		{
-			key: '1',
-			name: 'Овладеть методиками кесарева сечения (корпоральное, истмико-корпоральное, в нижнем сегменте матки, экстракорпоральное '
-		},
-		{
-			key: '2',
-			name: 'Овладеть методиками родоразрешающих и плодоразрушающих операций'
-		},
-		{
-			key: '3',
-			name: 'Акушерский травматизм матери и плода'
-		}
-	])
-	const columns: ColumnsType<DataType> = [
-		{
-			key: 'sort'
-		},
-		{
-			key: 'x',
-			render(_, __, index) {
-				return <>{++index}</>
-			}
-		},
-		{
-			width: '100%',
-			title: '',
-			dataIndex: 'name'
-		},
-		{
-			title: '',
-			dataIndex: '',
-			key: 'x',
-			render: (param, __, index) => (
-				<Space size="middle">
-					<Button
-						type="text"
-						icon={<DeleteSvg />}
-						danger
-						onClick={() => handleDeleteTask(param.key)}
-					/>
-				</Space>
-			)
-		}
-	]
-	const onDragEnd = ({ active, over }: DragEndEvent) => {
-		if (active.id !== over?.id) {
-			setDataSource(previous => {
-				const activeIndex = previous.findIndex(i => i.key === active.id)
-				const overIndex = previous.findIndex(i => i.key === over?.id)
-				return arrayMove(previous, activeIndex, overIndex)
-			})
-		}
-	}
-
-	const handleAddTask = () => {
-		setDataSource(prev => [
-			...prev,
-			{
-				key: `${++prev.length}`,
-				name: task
-			}
-		])
-		setTask('')
-	}
-	const handleDeleteTask = (key: string) =>
-		setDataSource(prev => [...prev.filter(item => item.key !== key)])
 
 	const onSubmit: SubmitHandler<IFormInput> = data => {
-		console.log({ data, dataSource })
+		console.log({ data })
 	}
 	const navigate = useNavigate()
 	return (
@@ -314,7 +166,7 @@ export const CreatePractical = () => {
 						<Space direction="vertical" className="w-full">
 							<Typography.Text>Кафедра</Typography.Text>
 							<Controller
-								name="term"
+								name="department"
 								control={control}
 								render={({ field }) => (
 									<Select
@@ -337,7 +189,7 @@ export const CreatePractical = () => {
 					</Col>
 				</Row>
 				<Row gutter={[16, 16]} className="mt-4">
-					<Col xs={24} sm={24} md={18} lg={16} xl={12}>
+					<Col xs={12} sm={12} md={9} lg={8} xl={6}>
 						<Space direction="vertical" className="w-full">
 							<Typography.Text>Номер группы</Typography.Text>
 							<Controller
@@ -361,11 +213,37 @@ export const CreatePractical = () => {
 							/>
 						</Space>
 					</Col>
+					<Col xs={12} sm={12} md={9} lg={8} xl={6}>
+						<Space direction="vertical" className="w-full">
+							<Typography.Text>
+								Общее количество часов по практике
+							</Typography.Text>
+							<Controller
+								name="numberPractice"
+								control={control}
+								render={({ field }) => (
+									<Select
+										{...field}
+										size="large"
+										popupMatchSelectWidth={false}
+										placeholder=""
+										className="w-full"
+										options={[
+											{
+												value: 1,
+												label: '120'
+											}
+										]}
+									/>
+								)}
+							/>
+						</Space>
+					</Col>
 				</Row>
 				<Row gutter={[16, 16]} className="mt-4">
-					<Col xs={24} sm={24} md={18} lg={16} xl={12}>
+					<Col xs={12} sm={12} md={9} lg={8} xl={6}>
 						<Space direction="vertical" className="w-full">
-							<Typography.Text>Номер группы</Typography.Text>
+							<Typography.Text>Семестр</Typography.Text>
 							<Controller
 								name="term"
 								control={control}
@@ -379,9 +257,116 @@ export const CreatePractical = () => {
 										options={[
 											{
 												value: 1,
-												label: '10.4-134'
+												label: '1'
+											},
+											{
+												value: 2,
+												label: '2'
+											},
+											{
+												value: 3,
+												label: '3'
+											},
+											{
+												value: 4,
+												label: '4'
 											}
 										]}
+									/>
+								)}
+							/>
+						</Space>
+					</Col>
+					<Col xs={12} sm={12} md={9} lg={8} xl={6}>
+						<Space direction="vertical" className="w-full">
+							<Typography.Text>Учебный год</Typography.Text>
+							<Controller
+								name="academicYear"
+								control={control}
+								render={({ field, fieldState }) => (
+									<DatePicker.RangePicker
+										status={fieldState.error ? 'error' : undefined}
+										ref={field.ref}
+										name={field.name}
+										onBlur={field.onBlur}
+										value={
+											field.value[0] && field.value[1]
+												? [dayjs(field.value[0]), dayjs(field.value[1])]
+												: null
+										}
+										onChange={date => {
+											field.onChange(date ? date.valueOf() : null)
+										}}
+										size="large"
+										format="YYYY"
+										className="w-full"
+										picker="year"
+									/>
+								)}
+							/>
+						</Space>
+					</Col>
+				</Row>
+				<Row gutter={[16, 16]} className="mt-4">
+					<Col xs={12} sm={12} md={9} lg={8} xl={6}>
+						<Space direction="vertical" className="w-full">
+							<Typography.Text>Курс обучения </Typography.Text>
+							<Controller
+								name="courseStudy"
+								control={control}
+								render={({ field }) => (
+									<Select
+										{...field}
+										size="large"
+										popupMatchSelectWidth={false}
+										placeholder=""
+										className="w-full"
+										options={[
+											{
+												value: 1,
+												label: '1'
+											},
+											{
+												value: 2,
+												label: '2'
+											},
+											{
+												value: 3,
+												label: '3'
+											},
+											{
+												value: 4,
+												label: '4'
+											}
+										]}
+									/>
+								)}
+							/>
+						</Space>
+					</Col>
+					<Col xs={12} sm={12} md={9} lg={8} xl={6}>
+						<Space direction="vertical" className="w-full">
+							<Typography.Text>Период практики</Typography.Text>
+							<Controller
+								name="practicePeriod"
+								control={control}
+								render={({ field, fieldState }) => (
+									<DatePicker.RangePicker
+										status={fieldState.error ? 'error' : undefined}
+										ref={field.ref}
+										name={field.name}
+										onBlur={field.onBlur}
+										value={
+											field.value[0] && field.value[1]
+												? [dayjs(field.value[0]), dayjs(field.value[1])]
+												: null
+										}
+										onChange={date => {
+											field.onChange(date ? date.valueOf() : null)
+										}}
+										size="large"
+										format="DD-MM-YYYY"
+										className="w-full"
 									/>
 								)}
 							/>
@@ -394,51 +379,9 @@ export const CreatePractical = () => {
 					</Typography.Text>
 				</Space>
 				<Row>
-					<Col span={12}>
-						<DndContext
-							modifiers={[restrictToVerticalAxis]}
-							onDragEnd={onDragEnd}
-						>
-							<SortableContext
-								// rowKey array
-								items={dataSource.map(i => i.key)}
-								strategy={verticalListSortingStrategy}
-							>
-								<Table
-									components={{
-										body: {
-											row: Rows
-										}
-									}}
-									showHeader={false}
-									pagination={false}
-									rowKey="key"
-									bordered={false}
-									columns={columns}
-									dataSource={dataSource}
-								/>
-							</SortableContext>
-						</DndContext>
-					</Col>
+					<Col span={12}></Col>
 				</Row>
-				<Row gutter={[16, 16]} className="mt-4">
-					<Col xs={24} sm={24} md={18} lg={16} xl={12}>
-						<Space.Compact style={{ width: '100%' }}>
-							<Input
-								size="large"
-								placeholder="type task..."
-								value={task}
-								onChange={e => setTask(e.target.value)}
-							/>
-							<Button
-								size="large"
-								type="primary"
-								icon={<PlusOutlined />}
-								onClick={handleAddTask}
-							/>
-						</Space.Compact>
-					</Col>
-				</Row>
+
 				<Row gutter={[16, 16]} className="my-8">
 					<Col xs={24} sm={24} md={18} lg={8} xl={6}>
 						<Space className="w-full">

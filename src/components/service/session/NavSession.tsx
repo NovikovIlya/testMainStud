@@ -10,23 +10,23 @@ import { Header } from '../../layout/Header'
 import { Curriculum } from './Curriculum'
 import { Session } from './Session'
 
-const navList = [
-	{
-		id: '/services/session/session',
-		icon: <CalendarSvg />,
-		name: 'Расписание сессии'
-	},
-	{
-		id: '/services/session/curriculum',
-		icon: <SubtractSVG />,
-		name: 'Учебный план'
-	}
-]
-
 export const NavSession = () => {
 	const { pathname } = useLocation()
 	const navigate = useNavigate()
 	const { t } = useTranslation()
+
+	const navList = [
+		{
+			id: '/services/session/session',
+			icon: <CalendarSvg />,
+			name: t('SessionSchedule')
+		},
+		{
+			id: '/services/session/curriculum',
+			icon: <SubtractSVG />,
+			name: t('Curriculum')
+		}
+	]
 
 	const handleNavigate = (url: string) => {
 		navigate(url)

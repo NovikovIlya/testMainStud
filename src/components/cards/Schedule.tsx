@@ -1,5 +1,6 @@
 import { Button } from 'antd'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import img from '../../assets/images/image15.png'
@@ -32,6 +33,7 @@ export const Schedule = () => {
 	let date = new Date(Date.now())
 	const [activeButton, changeActive] = useState<week>(getWeekDay(date))
 	const { data: schedule } = useGetScheduleQuery()
+	const { t } = useTranslation()
 
 	const setActiveButton = (buttonName: week) => {
 		if (activeButton !== buttonName) changeActive(buttonName)
@@ -56,13 +58,13 @@ export const Schedule = () => {
 		>
 			<div className="flex flex-col h-full justify-between w-full  max-w-sm max-md:justify-center max-md:gap-5">
 				<span className="bg-none text-4xl font-bold text-start max-[560px]:text-center max-xl:text-3xl max-md:text-2xl">
-					Schedule
+					{t('Schedule')}
 				</span>
 				<Button
 					className="hidden max-md:flex max-[560px]:hidden !rounded-full w-fit !px-5"
 					size="large"
 				>
-					Go over
+					{t('GoOver')}
 				</Button>
 				<div className="flex w-full flex-wrap gap-1 mb-14 max-md:hidden">
 					<Button
@@ -70,42 +72,42 @@ export const Schedule = () => {
 						onClick={() => setActiveButton('monday')}
 						className="text-lg font-bold h-[40px]"
 					>
-						Mon
+						{t('Mon')}
 					</Button>
 					<Button
 						style={activeButton === 'tuesday' ? activeStyles : disableStyle}
 						onClick={() => setActiveButton('tuesday')}
 						className="text-lg font-bold h-[40px]"
 					>
-						Tue
+						{t('Tue')}
 					</Button>
 					<Button
 						style={activeButton === 'wednesday' ? activeStyles : disableStyle}
 						onClick={() => setActiveButton('wednesday')}
 						className="text-lg font-bold h-[40px]"
 					>
-						Wed
+						{t('Wed')}
 					</Button>
 					<Button
 						style={activeButton === 'thursday' ? activeStyles : disableStyle}
 						onClick={() => setActiveButton('thursday')}
 						className="text-lg font-bold h-[40px]"
 					>
-						Thu
+						{t('Thu')}
 					</Button>
 					<Button
 						style={activeButton === 'friday' ? activeStyles : disableStyle}
 						onClick={() => setActiveButton('friday')}
 						className="text-lg font-bold h-[40px]"
 					>
-						Fri
+						{t('Fri')}
 					</Button>
 					<Button
 						style={activeButton === 'saturday' ? activeStyles : disableStyle}
 						onClick={() => setActiveButton('saturday')}
 						className="text-lg font-bold h-[40px]"
 					>
-						Sat
+						{t('Sat')}
 					</Button>
 				</div>
 			</div>
@@ -132,7 +134,7 @@ export const Schedule = () => {
 						</div>
 					))
 				) : (
-					<h3>there are no lessons, we are resting...</h3>
+					<h3>{t('NoLesson')}</h3>
 				)}
 			</div>
 			<div className="flex max-xl:hidden items-center justify-center w-full">

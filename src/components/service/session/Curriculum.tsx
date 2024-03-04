@@ -3,6 +3,7 @@ import type { ColumnsType } from 'antd/es/table'
 import Column from 'antd/es/table/Column'
 import ColumnGroup from 'antd/es/table/ColumnGroup'
 import { useCallback, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { useGetStudyPlanQuery } from '../../../store/api/serviceApi'
 
@@ -98,6 +99,7 @@ type TypeColumn = {
 export const Curriculum = () => {
 	const [course, changeCourse] = useState<string>('1')
 	const [sortingWords, changeWords] = useState<string[]>([])
+	const { t } = useTranslation()
 
 	const hideInfo = (blockName: string) => {
 		if (sortingWords.some(el => el === blockName)) return true
@@ -108,7 +110,7 @@ export const Curriculum = () => {
 		{
 			title: (
 				<p className="h-[190px] flex items-center justify-center whitespace-normal min-w-[500px]">
-					Name of the discipline
+					{t('NameDiscipline')}
 				</p>
 			),
 			dataIndex: 'discipline',
@@ -136,7 +138,7 @@ export const Curriculum = () => {
 			}
 		},
 		{
-			title: <p className="rotate">Total</p>,
+			title: <p className="rotate">{t('Total')}</p>,
 			dataIndex: 'total',
 			key: 'total',
 			align: 'center',
@@ -148,7 +150,7 @@ export const Curriculum = () => {
 			}
 		},
 		{
-			title: <p className="rotate whitespace-nowrap">By the state standard</p>,
+			title: <p className="rotate whitespace-nowrap">{t('ByStandard')}</p>,
 			dataIndex: 'totalGost',
 			key: 'totalGost',
 			align: 'center',
@@ -162,13 +164,13 @@ export const Curriculum = () => {
 		{
 			title: (
 				<>
-					<p className="absolute bottom-8">Lectures</p>
+					<p className="absolute bottom-8">{t('Lectures')}</p>
 				</>
 			),
 
 			children: [
 				{
-					title: <p className="rotate bottom-[-28px]">Total</p>,
+					title: <p className="rotate bottom-[-28px]">{t('Total')}</p>,
 					dataIndex: 'totalLectures',
 					key: 'totalLectures',
 					align: 'center',
@@ -180,7 +182,7 @@ export const Curriculum = () => {
 					}
 				},
 				{
-					title: <p className="rotate bottom-[-28px]">Lectures</p>,
+					title: <p className="rotate bottom-[-28px]">{t('Lectures')}</p>,
 					dataIndex: 'lecturesLectures',
 					key: 'lecturesLectures',
 					align: 'center',
@@ -192,7 +194,7 @@ export const Curriculum = () => {
 					}
 				},
 				{
-					title: <p className="rotate bottom-[-28px]">Practical</p>,
+					title: <p className="rotate bottom-[-28px]">{t('Practical')}</p>,
 					dataIndex: 'practiceLectures',
 					key: 'practiceLectures',
 					align: 'center',
@@ -204,7 +206,7 @@ export const Curriculum = () => {
 					}
 				},
 				{
-					title: <p className="rotate bottom-[-28px]">Laboratory</p>,
+					title: <p className="rotate bottom-[-28px]">{t('Laboratory')}</p>,
 					dataIndex: 'laboratoryLectures',
 					key: 'laboratoryLectures',
 					align: 'center',
@@ -218,7 +220,7 @@ export const Curriculum = () => {
 			]
 		},
 		{
-			title: <p className="rotate">Independent</p>,
+			title: <p className="rotate">{t('Independent')}</p>,
 			dataIndex: 'independent',
 			key: 'independent',
 			align: 'center',
@@ -230,7 +232,7 @@ export const Curriculum = () => {
 			}
 		},
 		{
-			title: <p className="rotate">Control</p>,
+			title: <p className="rotate">{t('Control')}</p>,
 			dataIndex: 'control',
 			key: 'control',
 			align: 'center',
@@ -244,13 +246,16 @@ export const Curriculum = () => {
 		{
 			title: (
 				<>
-					<p className="absolute bottom-8">{course}st year - 1 semester</p>
+					<p className="absolute bottom-8">
+						{course}
+						{t('FirstSemester')}
+					</p>
 				</>
 			),
 
 			children: [
 				{
-					title: <p className="rotate bottom-[-28px]">Lectures</p>,
+					title: <p className="rotate bottom-[-28px]">{t('Lectures')}</p>,
 					dataIndex: 'lecturesFirstSemester',
 					key: 'lecturesFirstSemester',
 					align: 'center',
@@ -272,7 +277,7 @@ export const Curriculum = () => {
 					}
 				},
 				{
-					title: <p className="rotate bottom-[-28px]">Practical</p>,
+					title: <p className="rotate bottom-[-28px]">{t('Practical')}</p>,
 					dataIndex: 'practiceFirstSemester',
 					key: 'practiceFirstSemester',
 					align: 'center',
@@ -294,7 +299,7 @@ export const Curriculum = () => {
 					}
 				},
 				{
-					title: <p className="rotate bottom-[-28px]">Laboratory</p>,
+					title: <p className="rotate bottom-[-28px]">{t('Laboratory')}</p>,
 					dataIndex: 'laboratoryFirstSemester',
 					key: 'laboratoryFirstSemester',
 					align: 'center',
@@ -316,7 +321,7 @@ export const Curriculum = () => {
 					}
 				},
 				{
-					title: <p className="rotate bottom-[-28px]">Exams</p>,
+					title: <p className="rotate bottom-[-28px]">{t('Exams')}</p>,
 					dataIndex: 'examFirstSemester',
 					key: 'examFirstSemester',
 					align: 'center',
@@ -338,7 +343,7 @@ export const Curriculum = () => {
 					}
 				},
 				{
-					title: <p className="rotate bottom-[-28px]">Test</p>,
+					title: <p className="rotate bottom-[-28px]">{t('Test')}</p>,
 					dataIndex: 'creditsFirstSemester',
 					key: 'creditsFirstSemester',
 					align: 'center',
@@ -364,13 +369,16 @@ export const Curriculum = () => {
 		{
 			title: (
 				<>
-					<p className="absolute bottom-8">{course}st year - 2 semester</p>
+					<p className="absolute bottom-8">
+						{course}
+						{t('SecondSemester')}
+					</p>
 				</>
 			),
 
 			children: [
 				{
-					title: <p className="rotate bottom-[-28px]">Lectures</p>,
+					title: <p className="rotate bottom-[-28px]">{t('Lectures')}</p>,
 					dataIndex: 'lecturesSecondSemester',
 					key: 'lecturesSecondSemester',
 					align: 'center',
@@ -392,7 +400,7 @@ export const Curriculum = () => {
 					}
 				},
 				{
-					title: <p className="rotate bottom-[-28px]">Practical</p>,
+					title: <p className="rotate bottom-[-28px]">{t('Practical')}</p>,
 					dataIndex: 'practiceSecondSemester',
 					key: 'practiceSecondSemester',
 					align: 'center',
@@ -414,7 +422,7 @@ export const Curriculum = () => {
 					}
 				},
 				{
-					title: <p className="rotate bottom-[-28px]">Laboratory</p>,
+					title: <p className="rotate bottom-[-28px]">{t('Laboratory')}</p>,
 					dataIndex: 'laboratorySecondSemester',
 					key: 'laboratorySecondSemester',
 					align: 'center',
@@ -436,7 +444,7 @@ export const Curriculum = () => {
 					}
 				},
 				{
-					title: <p className="rotate bottom-[-28px]">Exams</p>,
+					title: <p className="rotate bottom-[-28px]">{t('Exams')}</p>,
 					dataIndex: 'examSecondSemester',
 					key: 'examSecondSemester',
 					align: 'center',
@@ -458,7 +466,7 @@ export const Curriculum = () => {
 					}
 				},
 				{
-					title: <p className="rotate bottom-[-28px]">Test</p>,
+					title: <p className="rotate bottom-[-28px]">{t('Test')}</p>,
 					dataIndex: 'creditsSecondSemester',
 					key: 'creditsSecondSemester',
 					width: 32,
@@ -574,7 +582,7 @@ export const Curriculum = () => {
 	return (
 		<div className="radio ">
 			<div className="text-black text-3xl font-normal leading-7 mb-10">
-				Curriculum
+				{t('Curriculum')}
 			</div>
 			<Radio.Group
 				onChange={e => changeCourse(e.target.value)}
@@ -586,25 +594,25 @@ export const Curriculum = () => {
 					className="rounded-full bg-transparent h-full flex items-center  text-base"
 					value="1"
 				>
-					1st course
+					{t('FirstYear')}
 				</Radio.Button>
 				<Radio.Button
 					className="rounded-full h-full flex items-center text-base bg-transparent"
 					value="2"
 				>
-					2nd year
+					{t('SecondYear')}
 				</Radio.Button>
 				<Radio.Button
 					className="rounded-full h-full flex items-center text-base bg-transparent"
 					value="3"
 				>
-					3rd year
+					{t('ThirdYear')}
 				</Radio.Button>
 				<Radio.Button
 					className="rounded-full h-full flex items-center text-base bg-transparent"
 					value="4"
 				>
-					4th year
+					{t('FourthYear')}
 				</Radio.Button>
 			</Radio.Group>
 
@@ -613,40 +621,10 @@ export const Curriculum = () => {
 				dataSource={tableData}
 				scroll={{ x: true }}
 				columns={columns}
-				className="tableCustom mt-10"
+				className="tableCustom my-10"
 				pagination={false}
 				loading={isLoading}
 			/>
-			<Table
-				dataSource={dataExam}
-				pagination={false}
-				className="my-[50px] max-w-[1000px] rounded-none border-[2px] shadow-[#d4e3f1] drop-shadow-lg;"
-				bordered
-			>
-				<Column title="" dataIndex="mainColumn" key="mainColumn"></Column>
-				<ColumnGroup title="1 semester">
-					<Column
-						title="Begin"
-						dataIndex="beginFirstTerm"
-						key="beginFirstTerm"
-					/>
-					<Column title="End " dataIndex="endFirstTerm" key="endFirstTerm" />
-					<Column title="Week" dataIndex="termFirstWeek" key="termFirstWeek" />
-				</ColumnGroup>
-				<ColumnGroup title="2 semester">
-					<Column
-						title="Begin"
-						dataIndex="beginSecondTerm"
-						key="beginSecondTerm"
-					/>
-					<Column title="End" dataIndex="endSecondTerm" key="endSecondTerm" />
-					<Column
-						title="Week"
-						dataIndex="termSecondWeek"
-						key="termSecondWeek"
-					/>
-				</ColumnGroup>
-			</Table>
 		</div>
 	)
 }

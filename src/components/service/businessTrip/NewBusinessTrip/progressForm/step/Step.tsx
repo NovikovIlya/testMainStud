@@ -1,6 +1,6 @@
 import React from 'react';
-import {ButtonLeftBusinessTripSvg} from "../../../../../assets/svg/ButtonLeftBusinessTripSvg";
-import {ButtonRightBusinessTripSvg} from "../../../../../assets/svg/ButtonRightBusinessTripSvg";
+import {ButtonLeftBusinessTripSvg} from "../../../../../../assets/svg/ButtonLeftBusinessTripSvg";
+import {ButtonRightBusinessTripSvg} from "../../../../../../assets/svg/ButtonRightBusinessTripSvg";
 
 interface IStep {
     stepNumber: number

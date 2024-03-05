@@ -13,7 +13,7 @@ export const NavBusinessTrip = () => {
 
     return (
         <>
-            <Header type={'service'} service={t('Модуль Командировка')}/>
+            <Header type={'service'} service={t("BusinessTripModule")}/>
             <LeftMenu navList={navListBusinessTrip}/>
             <WrapperForServices>
                 {pathname === navListBusinessTrip[0].id && <NewBusinessTrip/>}

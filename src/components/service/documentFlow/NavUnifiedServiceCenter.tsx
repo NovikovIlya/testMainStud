@@ -41,7 +41,7 @@ export const NavUnifiedServiceCenter = () => {
 	})
 	return (
 		<>
-			<Header type="service" service={t('ElectronicBookService')} />
+			<Header type="service" service={t('UnifiedServiceCenter')} />
 
 			<div className="shadowNav mt-20">
 				<ul className="min-w-[230px] pt-14 flex flex-col gap-4 ">

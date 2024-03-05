@@ -264,5 +264,11 @@
 	"1st year": "1st year",
 	"2st year": "2st year",
 	"3st year": "3st year",
-	"4st year": "4st year"
+	"4st year": "4st year",
+	"ElectronicBookService": "Electronic book service",
+	"UnifiedServiceCenter": "Unified service center",
+	"AboutMeService": "About me",
+	"PracticesService": "Practices service",
+	"ScheduleService": "Schedule service",
+	"SessionService": "Session service"
 }

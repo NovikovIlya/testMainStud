@@ -1,5 +1,7 @@
 import { IApproveRequest } from '../../api/types'
 import {
+	DocumentDocumentation,
+	DocumentLib,
 	Documentation,
 	Email,
 	Exam,
@@ -33,6 +35,21 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		getPracticeDocuments: builder.query<Template[], void>({
 			query: () => 'unified-center-api/practice-documents'
+		}),
+		getDocumentsLibraries: builder.query<DocumentLib[], void>({
+			query: () => 'unified-center-api/documents/online-libraries'
+		}),
+		getDocumentsTemplates: builder.query<DocumentLib[], void>({
+			query: () => 'unified-center-api/documents/templates'
+		}),
+		getDocumentsPractice: builder.query<DocumentLib[], void>({
+			query: () => 'unified-center-api/documents/practice-documents'
+		}),
+		getDocumentsMy: builder.query<DocumentLib[], void>({
+			query: () => 'unified-center-api/documents/my-documents'
+		}),
+		getDocumentsDocumentation: builder.query<DocumentDocumentation, void>({
+			query: () => 'unified-center-api/documents/documentation'
 		}),
 		getMyQWEDocuments: builder.query<Template[], void>({
 			query: () => 'unified-center-api/my-documents'
@@ -116,6 +133,11 @@ export const serviceApi = apiSlice.injectEndpoints({
 	})
 })
 export const {
+	useGetDocumentsDocumentationQuery,
+	useGetDocumentsMyQuery,
+	useGetDocumentsPracticeQuery,
+	useGetDocumentsTemplatesQuery,
+	useGetDocumentsLibrariesQuery,
 	useGetPerformanceQuery,
 	useVerifyAccMutation,
 	useGetEmailQuery,

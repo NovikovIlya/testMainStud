@@ -97,7 +97,12 @@ export const DocumentFlow = () => {
 							настроить на своем компьютере VPN-подключение к внутренней сети
 							КФУ. Объяснение{' '}
 						</Typography.Text>
-						<Typography.Link className="!underline">здесь.</Typography.Link>
+						<Typography.Link
+							className="!underline"
+							href="https://kpfu.ru/portal/docs/F2100705556/VPN.pdf"
+						>
+							здесь.
+						</Typography.Link>
 					</Col>
 				</Row>
 			)}

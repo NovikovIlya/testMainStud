@@ -2,6 +2,8 @@ import React from 'react';
 import {Form, Input, Select} from "antd";
 
 export const EmployeeDataPageForm = () => {
+
+    //нужно использовать гриды(см в разделе /services/aboutMe/education)
     return (
         <div className={'flex flex-col gap-5'}>
             <span className={'text-xl'}>Данные о сотруднике</span>

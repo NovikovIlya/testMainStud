@@ -1,3 +1,5 @@
+import { performanceItem } from '../api/types'
+
 export interface InitialState {
 	accessToken: string | null
 	refreshToken: string | null
@@ -19,6 +21,9 @@ export type Email = {
 	id: number
 	email: string
 	verified: boolean
+}
+export interface IPerformance {
+	journal: performanceItem[]
 }
 export interface User {
 	username: string

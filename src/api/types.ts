@@ -7,7 +7,21 @@ export interface IRegRequest {
 	email: string | null
 	agreement: string | null
 }
-
+export interface performanceItem {
+	semester: number
+	type: string
+	hours: number
+	credit: number
+	is_test: IAnswer
+	is_exam: IAnswer
+	semester_points: number
+	subject_name: string
+	points_string: string
+	exam_points: number
+	pass_date: string
+	total_points: number
+}
+export type IAnswer = 'y' | 'n'
 export interface IAuthRequest {
 	username: string
 	password: string

@@ -27,6 +27,7 @@ const DropDrag = () => {
 
 	useEffect(() => {
 		localStorage.setItem('dashboard', JSON.stringify(layout))
+		return () => {}
 	}, [layout])
 
 	const [windowSize, setWindowSize] = useState(getWindowSize())

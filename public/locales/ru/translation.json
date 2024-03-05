@@ -247,5 +247,21 @@
 	"Subject": "Предмет",
 	"DateCertification": "Дата аттестации",
 	"Teacher": "Преподаватель",
-	"SessionSchedule": "Расписание сессии"
+	"SessionSchedule": "Расписание сессии",
+	"Semester": "Семестр",
+	"SemesterRating": "Оценка за семестр",
+	"Discipline": "Дисциплина",
+	"ScoreSemester": "Оценка за работу в семестре",
+	"Type": "Тип",
+	"ScoreReceived": "Полученный балл",
+	"DateDelivery": "Дата поставки",
+	"FinalScore": "Окончательный счет",
+	"FinalAssessment": "Окончательная оценка",
+	"AcademicHours": "Академические часы",
+	"Credits": "Кредиты",
+	"AllYears": "Все годы",
+	"1st year": "1-й курс",
+	"2nd year": "2-й курс",
+	"3rd year": "3-й курс",
+	"4th year": "4-й курс"
 }

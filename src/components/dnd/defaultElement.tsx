@@ -395,7 +395,7 @@ export const jsxElements = [
 		index: 'DocumentFlow',
 		element: (
 			<TemplateCard
-				href="https://shelly.kpfu.ru/e-ksu/site_student_sh_pr_ac.offor_document?p_menu=14&p_type_menu_open=1"
+				href="/services/unifiedServiceCenter/documentFlow"
 				info="DocumentFlowInfo"
 				title="DocumentFlow"
 				img="/image8.png"

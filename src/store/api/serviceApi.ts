@@ -4,6 +4,7 @@ import {
 	Email,
 	Exam,
 	ICalendar,
+	IPerformance,
 	Template,
 	TypeSchedule
 } from '../type'
@@ -14,6 +15,9 @@ export const serviceApi = apiSlice.injectEndpoints({
 	endpoints: builder => ({
 		getSchedule: builder.query<TypeSchedule, void>({
 			query: () => `schedule-api/schedule`
+		}),
+		getPerformance: builder.query<IPerformance, void>({
+			query: () => 'academic-performance-api/performance'
 		}),
 		getExamsSchedule: builder.query<Exam[], void>({
 			query: () => 'study-plan-api/studyplan/examsSchedule'
@@ -112,6 +116,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 	})
 })
 export const {
+	useGetPerformanceQuery,
 	useVerifyAccMutation,
 	useGetEmailQuery,
 	useGetScheduleQuery,

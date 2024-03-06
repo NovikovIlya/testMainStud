@@ -1,8 +1,9 @@
 import React from 'react';
 import {AutoComplete, Button, Col, ConfigProvider, Form, Input, Row, Select, Upload} from "antd";
 import {LabelFormItem} from "../../labelFormItem/labelFormItem";
-import {UploadSvg} from "../../../../../assets/svg";
 import {UploadFileSvg} from "../../../../../assets/svg/UploadFileSvg";
+import clsx from 'clsx'
+import InputMask from 'react-input-mask'
 
 const optionsGoals = [
     {value: 'Цель 1'},
@@ -23,27 +24,6 @@ const selectOptions = [
 ]
 
 export const EmployeeDataPageForm = () => {
-
-
-    // const props: UploadProps = {
-    //     name: 'file',
-    //     multiple: true,
-    //     action: 'https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188',
-    //     onChange(info) {
-    //         const { status } = info.file;
-    //         if (status !== 'uploading') {
-    //             console.log(info.file, info.fileList);
-    //         }
-    //         if (status === 'done') {
-    //             message.success(`${info.file.name} file uploaded successfully.`);
-    //         } else if (status === 'error') {
-    //             message.error(`${info.file.name} file upload failed.`);
-    //         }
-    //     },
-    //     onDrop(e) {
-    //         console.log('Dropped files', e.dataTransfer.files);
-    //     },
-    // };
 
     return (
         <div className={'flex flex-col gap-5'}>
@@ -73,7 +53,10 @@ export const EmployeeDataPageForm = () => {
 
                     <Col span={12}>
                         <Form.Item label={<LabelFormItem label={'Номер телефона'}/>}>
-                            <Input className={'text-base'} placeholder={'Ввести'}/>
+                            <InputMask mask={'8 (999) 999-99-99'}
+                                       placeholder={'8 (XXX) XXX-XX-XX'}
+                                       className={'text-base ant-input css-dev-only-do-not-override-1wtk8bc ant-input-outlined phoneNumberMask'}
+                            />
                         </Form.Item>
                     </Col>
 

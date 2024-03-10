@@ -81,6 +81,7 @@ export const ResponseForm = () => {
 	return (
 		<>
 			<Button
+				className="rounded-[54.5px]"
 				type="primary"
 				onMouseDown={e => {
 					e.preventDefault()
@@ -102,10 +103,7 @@ export const ResponseForm = () => {
 			>
 				<Modal
 					bodyStyle={{
-						paddingBottom: 52,
-						paddingLeft: 52,
-						paddingRight: 52,
-						paddingTop: 52
+						padding: '26px'
 					}}
 					width={622}
 					className="pr-[52px] pl-[52px] pb-[52px]"
@@ -185,7 +183,7 @@ export const ResponseForm = () => {
 									{skillsCompleted ? <CheckedIcon /> : <EditSvg />}
 								</div>
 								<Button
-									className="w-[103px] ml-auto mt-[40px] rounded-[54.5px]"
+									className="ml-auto mt-[40px] rounded-[54.5px]"
 									type="primary"
 									onClick={
 										!aboutMeCompleted
@@ -218,10 +216,11 @@ export const ResponseForm = () => {
 											: () => {
 													currentVacancy !== null &&
 														getVacancy(currentVacancy?.id)
+															.unwrap()
+															.then(() => {
+																!result.isSuccess && setIsFormOpen(false)
+															})
 											  }
-										// () => {
-										// 	currentVacancy !== null && getVacancy(currentVacancy?.id)
-										// }
 									}
 								>
 									{aboutMeCompleted &&

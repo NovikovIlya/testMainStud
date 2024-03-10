@@ -27,7 +27,7 @@ export default function VacancyItem(props: VacancyItemType) {
 				{props.salary}
 			</p>
 			<button
-				className="ml-auto bg-button-blue outline-none border-none hover:bg-button-blue-hover focus:border-[2px] focus:border-button-focus-border-blue font-content-font font-normal text-[16px]/[16px] text-white text-center w-[127px] h-[32px] pt-[8px] pb-[8px] pl-[24px] pr-[24px] rounded-[54px]"
+				className="ml-auto mb-[4px] bg-button-blue outline-none border-none hover:bg-button-blue-hover focus:border-[2px] focus:border-button-focus-border-blue font-content-font font-normal text-[16px]/[16px] text-white text-center w-[127px] h-[32px] pt-[8px] pb-[8px] pl-[24px] pr-[24px] rounded-[54px]"
 				onClick={() => {
 					getVacancy(props.id)
 						.unwrap()

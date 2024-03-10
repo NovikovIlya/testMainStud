@@ -14,23 +14,37 @@ export const Seeker = () => {
 		>
 			<div className="flex flex-col h-full justify-between w-full  max-w-sm max-md:justify-center max-md:gap-5">
 				<span className="bg-none text-4xl font-bold text-start max-[560px]:text-center max-xl:text-3xl max-md:text-2xl">
-					Schedule
+					Вакансии
 				</span>
-				<p className="w-[380px] ">Инженер-программист</p>
-				<p>Медицинская сестра</p>
+				<div className="flex justify-between w-[720px] border-dashed border-white border-0 border-b-2 pb-[20px]">
+					<p className="font-main-font font-normal text-[16px]/[28px]">
+						Инженер-программист
+					</p>
+					<p className="font-main-font font-bold text-[16px]/[28px]">
+						от 300 000 р.
+					</p>
+				</div>
+				<div className="flex justify-between w-[720px] border-dashed border-white border-0 border-b-2 pb-[20px]">
+					<p className="font-main-font font-normal text-[16px]/[28px]">
+						Медицинская сестра
+					</p>
+					<p className="font-main-font font-bold text-[16px]/[28px]">
+						от 100 000 р.
+					</p>
+				</div>
 			</div>
-			<div className="flex max-xl:hidden items-center justify-center w-full">
-				<div className="bg-white rounded-full w-44 h-44  absolute"></div>
+			<div className="ml-[20%] flex max-[560px]:hidden items-center justify-center w-full">
+				<div className="bg-white rounded-full w-[256px] h-[245px]  absolute"></div>
 				<img
 					src={img}
 					alt=""
-					width={'160px'}
-					height={'163px'}
+					width={'231px'}
+					height={'233px'}
 					className="ml-6 mt-4 mb-2 bottom-[40px] z-10"
 				/>
 			</div>
 			<div
-				className="flex max-xl:hidden w-fit justify-center items-center "
+				className="flex w-fit max-[560px]:w-full justify-center items-center mr-[10%]"
 				onClick={() => navigate('/services/jobseeker/catalog')}
 			>
 				<svg

@@ -12,6 +12,7 @@ import {
 } from '../../../store/api/serviceApi'
 import { allData } from '../../../store/reducers/SeekerFormReducers/AboutMeReducer'
 import { VacancyItemType } from '../../../store/type'
+import { DirectResume } from '../../cards/DirectResume'
 import { SkeletonPage } from '../aboutMe/Skeleton'
 
 import VacancyItem from './VacancyItem'
@@ -38,12 +39,14 @@ export default function Catalog() {
 		useGetDirectionsQuery(categoryTitle)
 	const { data: subdivisions = [], isLoading: isSubdivisionsLoading } =
 		useGetSubdivisionsQuery(categoryTitle)
-	const { data: vacancyPreviewsByDirections = [] } =
-		useGetVacancyPreviewByDirectionQuery({
-			category: categoryTitle,
-			direction: directoryTitle,
-			page: page
-		})
+	const {
+		data: vacancyPreviewsByDirections = [],
+		isLoading: isVacancyPreviewsByDirectionsLoading
+	} = useGetVacancyPreviewByDirectionQuery({
+		category: categoryTitle,
+		direction: directoryTitle,
+		page: page
+	})
 	const { data: vacancyPreviewsBySubdivisions = [] } =
 		useGetVacancyPreviewBySubdivisionQuery({
 			category: categoryTitle,
@@ -84,7 +87,7 @@ export default function Catalog() {
 		console.log('Change two')
 	}, [vacancyPreviewsBySubdivisions])
 
-	if (isCategoriesLoading && isDirectionsLoading) {
+	if (isVacancyPreviewsByDirectionsLoading) {
 		return (
 			<>
 				<Space.Compact direction="vertical" block>

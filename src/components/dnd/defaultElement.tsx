@@ -99,8 +99,9 @@ export const jsxElements = [
 		element: <Seeker />,
 		place: {
 			w: 3,
-			minW: 2,
 			h: 1,
+			minW: 3,
+			maxW: 3,
 			x: 0,
 			y: 0,
 			i: 'jobSeeker'

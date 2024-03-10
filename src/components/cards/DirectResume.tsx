@@ -46,6 +46,7 @@ export const DirectResume = ({
 }: SessionProps) => {
 	const { t } = useTranslation()
 	const [isOpen, setIsOpen] = useState(false)
+	const [filename, setFilename] = useState<string | undefined>('')
 
 	const { control, register, handleSubmit, formState } = useForm({
 		defaultValues: {
@@ -76,7 +77,6 @@ export const DirectResume = ({
 		fetch('http://localhost:8082/employment-api/v1/resume', {
 			method: 'POST',
 			body: formData
-			// headers: { 'Content-Type': 'multipart/form-data' }
 		}).then(response => {
 			if (response.ok) {
 				response.json().then(data => {
@@ -128,6 +128,7 @@ export const DirectResume = ({
 								}}
 								render={({ field }) => (
 									<Input
+										className={`${errors.lastname && 'border-[#C11616]'}`}
 										onPressEnter={e => e.preventDefault()}
 										type="text"
 										placeholder="Фамилия*"
@@ -152,6 +153,7 @@ export const DirectResume = ({
 								render={({ field }) => (
 									<Input
 										onPressEnter={e => e.preventDefault()}
+										className={`${errors.name && 'border-[#C11616]'}`}
 										type="text"
 										placeholder="Имя*"
 										{...field}
@@ -175,6 +177,7 @@ export const DirectResume = ({
 								render={({ field }) => (
 									<Input
 										onPressEnter={e => e.preventDefault()}
+										className={`${errors.middlename && 'border-[#C11616]'}`}
 										type="text"
 										placeholder="Отчество"
 										{...field}
@@ -198,6 +201,7 @@ export const DirectResume = ({
 								render={({ field }) => (
 									<Input
 										onPressEnter={e => e.preventDefault()}
+										className={`${errors.email && 'border-[#C11616]'}`}
 										type="text"
 										placeholder="E-mail*"
 										{...field}
@@ -221,6 +225,7 @@ export const DirectResume = ({
 								render={({ field }) => (
 									<Input
 										onPressEnter={e => e.preventDefault()}
+										className={`${errors.phone && 'border-[#C11616]'}`}
 										type="text"
 										placeholder="Моб.телефон"
 										{...field}
@@ -244,6 +249,7 @@ export const DirectResume = ({
 								render={({ field }) => (
 									<Input
 										onPressEnter={e => e.preventDefault()}
+										className={`${errors.vacancy && 'border-[#C11616]'}`}
 										type="text"
 										placeholder="Желаемая должность"
 										{...field}
@@ -256,7 +262,7 @@ export const DirectResume = ({
 								</p>
 							)}
 						</div>
-						<div className="flex gap-[18px]">
+						<div className="flex gap-[18px] mt-[36px]">
 							<AttachIcon />
 							<Controller
 								name="resumeFile"
@@ -279,6 +285,9 @@ export const DirectResume = ({
 													message: 'Пожалуйста, прикрепите резюме'
 												}
 											})}
+											onChange={e => {
+												setFilename(e.target.files?.[0].name)
+											}}
 										></input>
 									</div>
 								)}
@@ -289,6 +298,18 @@ export const DirectResume = ({
 								{errors.resumeFile?.message}
 							</p>
 						)}
+						<p className="w-[80%] whitespace-nowrap text-ellipsis overflow-auto mt-[5px] font-content-font text-[14px]/[14px] font-normal text-black">
+							{filename}
+						</p>
+						<p className="mt-[12px] font-content-font font-normal text-black text-[12px]/[15.53px]">
+							Если у вас нет готового резюме скачайте и заполните{' '}
+							<a
+								className="underline text-black hover:text-black hover:underline"
+								href="https://kadry.kpfu.ru/wp-content/uploads/2023/01/01_.zayavlenie.o.prieme.na_.rabotu._list.soglasovaniya__i_o.2022._2_.docx"
+							>
+								шаблон
+							</a>
+						</p>
 						<Button
 							htmlType="submit"
 							className="ml-auto mt-[40px] rounded-[54.5px]"

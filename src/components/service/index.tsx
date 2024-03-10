@@ -7,6 +7,7 @@ import { Header } from '../layout/Header'
 import { NavAboutMe } from './aboutMe/NavAboutMe'
 import { NavElectronicBook } from './electronicBook/NavElectronicBook'
 import { NavJobSeeker } from './jobSeeker/NavJobSeeker'
+import { NavMyResponds } from './myResponds/NavMyResponds'
 import { NavPractices } from './practices/NavPractices'
 import { NavSchedule } from './schedule/NavSchedule'
 import { NavSession } from './session/NavSession'
@@ -26,6 +27,7 @@ export const Service = ({ children }: { children?: ReactNode }) => {
 				{pathname.includes('/services/setting') && <NavSetting />}
 				{pathname.includes('/services/practices') && <NavPractices />}
 				{pathname.includes('/services/jobseeker') && <NavJobSeeker />}
+				{pathname.includes('/services/myresponds') && <NavMyResponds />}
 			</div>
 		</div>
 	)

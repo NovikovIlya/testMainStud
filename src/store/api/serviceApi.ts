@@ -5,10 +5,12 @@ import {
 	Email,
 	Exam,
 	ICalendar,
+	RespondItemType,
 	Template,
 	TypeSchedule,
 	VacancyItemType,
-	VacancyViewResponceType
+	VacancyViewResponceType,
+	respondStatus
 } from '../type'
 
 import { apiSlice } from './apiSlice'
@@ -90,6 +92,13 @@ export const serviceApi = apiSlice.injectEndpoints({
 					subdivision +
 					'&page=' +
 					page
+			})
+		}),
+		getSeekerResponds: builder.query<RespondItemType[], string>({
+			query: status => ({
+				url:
+					'http://localhost:8082/employment-api/v1/seeker/responds?status=' +
+					status
 			})
 		}),
 		postPhone: builder.mutation({
@@ -189,5 +198,6 @@ export const {
 	usePostVacancyRespondMutation,
 	useLazyGetVacancyViewQuery,
 	useGetVacancyPreviewByDirectionQuery,
-	useGetVacancyPreviewBySubdivisionQuery
+	useGetVacancyPreviewBySubdivisionQuery,
+	useGetSeekerRespondsQuery
 } = serviceApi

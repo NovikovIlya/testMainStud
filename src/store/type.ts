@@ -135,10 +135,17 @@ export type VacancyViewResponceType = {
 	}
 }
 
-export type SelectProps = {
-	onChange: Function
+export enum respondStatus {
+	'IN_REVIEW',
+	'IN_SUPERVISOR_REVIEW',
+	'IN_PERSONNEL_DEPT_REVIEW',
+	'INVITATION',
+	'REJECTED',
+	'ARCHIVE'
+}
 
-	options: string[]
-
-	z: number
+export type RespondItemType = {
+	name: string
+	respondDate: string
+	status: string
 }

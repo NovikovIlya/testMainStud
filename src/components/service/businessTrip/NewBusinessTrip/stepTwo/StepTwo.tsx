@@ -18,10 +18,18 @@ import {ToolTipSvg} from "../../../../../assets/svg/ToolTipSvg";
 import {LabelFormItem} from "../../labelFormItem/labelFormItem";
 import InputMask from "react-input-mask";
 import {UploadFileSvg} from "../../../../../assets/svg/UploadFileSvg";
+import ruPicker from "antd/locale/ru_RU";
+import enPicker from "antd/locale/en_US";
+import i18n from "i18next";
 
-const toolTip = 'В блоке фиксируются место и сроки командирования работника (подотчетного лица). Если работник едет последовательно в несколько мест, то необходимо внести данные про все места командирования.'
 
-export const StepTwo = () => {
+interface IStepTwo {
+    previousStep: () => void
+}
+
+export const StepTwo = ({previousStep}: IStepTwo) => {
+    const toolTip = 'В блоке фиксируются место и сроки командирования работника (подотчетного лица). Если работник едет последовательно в несколько мест, то необходимо внести данные про все места командирования.'
+
     return (
         <div className={'flex flex-col gap-5'}>
             <div className={'flex gap-2 items-center'}>
@@ -72,9 +80,52 @@ export const StepTwo = () => {
                     </Col>
                     <Col span={12}>
                         <Form.Item label={<LabelFormItem label={'Дата начала'}/>}>
-                            <DatePicker style={{width: '100%'}}/>
+                            <ConfigProvider locale={i18n.language === 'ru' ? ruPicker : enPicker}>
+                                <DatePicker
+                                    placeholder={'ДД.ММ.ГГ'}
+                                    className={'text-2xl w-full'}
+                                    format={'DD.MM.YYYY'}
+                                />
+                            </ConfigProvider>
                         </Form.Item>
                     </Col>
+                    <Col span={12}>
+                        <Form.Item label={<LabelFormItem label={'Дата окончания'}/>}>
+                            <ConfigProvider locale={i18n.language === 'ru' ? ruPicker : enPicker}>
+                                <DatePicker
+                                    placeholder={'ДД.ММ.ГГ'}
+                                    className={'text-2xl w-full'}
+                                    format={'DD.MM.YYYY'}
+                                />
+                            </ConfigProvider>
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item label={<LabelFormItem label={'Продолжительность'}/>}>
+                            <Input className={'text-base'} placeholder={'Автоматический подсчет'}/>
+                        </Form.Item>
+                    </Col>
+                    <Col span={2}>
+                        <Button
+                            type={'primary'}
+                            shape={'round'}
+                            className={'h-10 w-max'}
+                            onClick={previousStep}
+                        >
+                            <span className={'text-lg'}>Назад</span>
+                        </Button>
+                    </Col>
+
+                    <Col span={4}>
+                        <Button
+                            type={'primary'}
+                            shape={'round'}
+                            className={'h-10 w-max'}
+                        >
+                            <span className={'text-lg'}>Сохранить</span>
+                        </Button>
+                    </Col>
+
                 </Row>
             </Form>
         </div>

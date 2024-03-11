@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {TitleForm} from "../titleForm/TitleForm";
 import {
     AutoComplete,
@@ -16,11 +16,12 @@ import {
 } from "antd";
 import {ToolTipSvg} from "../../../../../assets/svg/ToolTipSvg";
 import {LabelFormItem} from "../../labelFormItem/labelFormItem";
-import InputMask from "react-input-mask";
-import {UploadFileSvg} from "../../../../../assets/svg/UploadFileSvg";
 import ruPicker from "antd/locale/ru_RU";
 import enPicker from "antd/locale/en_US";
 import i18n from "i18next";
+import {ThemeProvider} from "@material-tailwind/react";
+import value = ThemeProvider.propTypes.value;
+import dayjs from "dayjs";
 
 
 interface IStepTwo {
@@ -29,6 +30,14 @@ interface IStepTwo {
 
 export const StepTwo = ({previousStep}: IStepTwo) => {
     const toolTip = 'В блоке фиксируются место и сроки командирования работника (подотчетного лица). Если работник едет последовательно в несколько мест, то необходимо внести данные про все места командирования.'
+
+    const [startDate, setStartDate] = useState(new Date);
+    const [endDate, setEndDate] = useState(new Date)
+    const dayJsEnd = dayjs(endDate)
+    const dayJsStart = dayjs(startDate)
+    const rangeStartToEnd = dayJsEnd.diff(dayJsStart, 'day')
+
+
 
     return (
         <div className={'flex flex-col gap-5'}>
@@ -85,6 +94,7 @@ export const StepTwo = ({previousStep}: IStepTwo) => {
                                     placeholder={'ДД.ММ.ГГ'}
                                     className={'text-2xl w-full'}
                                     format={'DD.MM.YYYY'}
+                                    onChange={(date) => {setStartDate(date && date.toDate())}}
                                 />
                             </ConfigProvider>
                         </Form.Item>
@@ -96,13 +106,17 @@ export const StepTwo = ({previousStep}: IStepTwo) => {
                                     placeholder={'ДД.ММ.ГГ'}
                                     className={'text-2xl w-full'}
                                     format={'DD.MM.YYYY'}
+                                    onChange={(date) => {setEndDate(date && date.toDate())}}
                                 />
                             </ConfigProvider>
                         </Form.Item>
                     </Col>
                     <Col span={12}>
                         <Form.Item label={<LabelFormItem label={'Продолжительность'}/>}>
-                            <Input className={'text-base'} placeholder={'Автоматический подсчет'}/>
+                            <Input className={'text-base'}
+                                   placeholder={'Автоматический подсчет'}
+                                   value={!rangeStartToEnd ? 0 : rangeStartToEnd}
+                            />
                         </Form.Item>
                     </Col>
                     <Col span={2}>

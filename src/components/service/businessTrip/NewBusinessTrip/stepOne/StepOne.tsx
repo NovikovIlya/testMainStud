@@ -4,6 +4,7 @@ import {LabelFormItem} from "../../labelFormItem/labelFormItem";
 import {UploadFileSvg} from "../../../../../assets/svg/UploadFileSvg";
 import clsx from 'clsx'
 import InputMask from 'react-input-mask'
+import {TitleForm} from "../titleForm/TitleForm";
 
 const optionsGoals = [
     {value: 'Цель 1'},
@@ -23,11 +24,14 @@ const selectOptions = [
     {value: 'test 3', name: 'Тест 3'},
 ]
 
-export const EmployeeDataPageForm = () => {
+interface IStepOne {
+    nextStep: () => void
+}
 
+export const StepOne = ({nextStep}: IStepOne) => {
     return (
         <div className={'flex flex-col gap-5'}>
-            <span className={'text-xl'}>Данные о сотруднике</span>
+            <TitleForm title={'Данные о сотруднике'}/>
             <Form layout={'vertical'}>
                 <Row gutter={[16, 0]} className={'w-full'}>
                     <Col span={12}>
@@ -122,11 +126,14 @@ export const EmployeeDataPageForm = () => {
 
                     <Col span={13}>
                         <Button
-                            type={'primary'} shape={'round'} className={'h-10 w-20'}>
+                            type={'primary'}
+                            shape={'round'}
+                            className={'h-10 w-20'}
+                            onClick={nextStep}
+                        >
                             <span className={'text-lg'}>Далее</span>
                         </Button>
                     </Col>
-
 
                 </Row>
 

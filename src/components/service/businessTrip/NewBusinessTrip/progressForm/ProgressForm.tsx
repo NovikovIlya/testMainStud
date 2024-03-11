@@ -4,15 +4,22 @@ import {ProgressPart} from "./progressPart/ProgressPart";
 
 interface IProgressForm {
     step: number
-    //позже нужно добавить ссылку на переход в другую страницу для компонента Step
-    //позже нужно добавить состояния недоступности кнопки для компонента Step
+    nextStep: () => void
+    previousStep: () => void
+    availableLeftButton?: boolean
+    availableRightButton?: boolean
 }
 
-export const ProgressForm = ({step}: IProgressForm) => {
+export const ProgressForm = (props: IProgressForm) => {
     return (
         <article className={'flex items-center justify-between'}>
-            <Step stepNumber={step}/>
-            <ProgressPart step={step}/>
+            <Step stepNumber={props.step}
+                  availableLeftButton={props.availableLeftButton}
+                  availableRightButton={props.availableRightButton}
+                  nextStep={props.nextStep}
+                  previousStep={props.previousStep}
+            />
+            <ProgressPart step={props.step}/>
         </article>
     );
 };

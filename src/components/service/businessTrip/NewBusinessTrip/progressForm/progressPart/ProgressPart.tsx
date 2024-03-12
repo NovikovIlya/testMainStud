@@ -16,13 +16,13 @@ export const ProgressPart = ({step}: IProgressPart) => {
                         }
                     }
                 }}>
-                <Progress percent={25 * step}
+                <Progress percent={20 * step}
                           showInfo={false}
                           size={[230, 16]}
 
                 />
             </ConfigProvider>
-            <span className={'text-lg'}>{step} из 4</span>
+            <span className={'text-lg'}>{step} из 5</span>
         </div>
     );
 };

@@ -3,10 +3,11 @@ import {Button, Col, ConfigProvider, Table, TableProps} from "antd";
 import {TitleHeadCell} from "./titleHeadCell/TitleHeadCell";
 import {useSelector} from "react-redux";
 import {RootState} from "../../../../../../store";
+import {IDataFormStepTwo} from "../../../../../../store/reducers/FormReducers/FormStepTwoReducer";
 
 
 interface DataType {
-    key: string
+    // key: string
     address: string
     inn: string
     organization: string
@@ -54,19 +55,21 @@ interface ITableStepTwo{
     nextStep: () => void
 }
 
+export const tableData: IDataFormStepTwo[] = []
+
 export const TableStepTwo = ({notVisibleTable, nextStep}: ITableStepTwo) => {
 
-    const data: DataType[] = [
-        {
-            key: '1',
-            address: useSelector((state: RootState) => state.FormStepTwo.address),
-            inn: useSelector((state: RootState) => state.FormStepTwo.inn),
-            organization:  useSelector((state: RootState) => state.FormStepTwo.organisation),
-            startDate:  useSelector((state: RootState) => state.FormStepTwo.startDate),
-            endDate:  useSelector((state: RootState) => state.FormStepTwo.endDate),
-            rangeDate:  useSelector((state: RootState) => state.FormStepTwo.rangeDate),
-        }
-    ]
+    // const data: DataType[] = [
+    //     {
+    //         // key: '1',
+    //         address: useSelector((state: RootState) => state.FormStepTwo.address),
+    //         inn: useSelector((state: RootState) => state.FormStepTwo.inn),
+    //         organization:  useSelector((state: RootState) => state.FormStepTwo.organisation),
+    //         startDate:  useSelector((state: RootState) => state.FormStepTwo.startDate),
+    //         endDate:  useSelector((state: RootState) => state.FormStepTwo.endDate),
+    //         rangeDate:  useSelector((state: RootState) => state.FormStepTwo.rangeDate),
+    //     }
+    // ]
 
 
     return (
@@ -81,7 +84,7 @@ export const TableStepTwo = ({notVisibleTable, nextStep}: ITableStepTwo) => {
                 <Table
                     bordered
                     columns={columns}
-                    dataSource={data}
+                    dataSource={tableData}
                     pagination={false}
                 />
             </ConfigProvider>

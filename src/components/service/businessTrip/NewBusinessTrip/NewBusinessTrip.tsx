@@ -10,7 +10,7 @@ export const NewBusinessTrip = () => {
     const [step, setStep] = useState(1)
 
     function nextStep() {
-        if (step < 4) setStep(step => step + 1)
+        if (step < 5) setStep(step => step + 1)
     }
 
     function previousStep() {
@@ -24,7 +24,7 @@ export const NewBusinessTrip = () => {
             <ProgressForm
                 step={step}
                 availableLeftButton={step !== 1}
-                availableRightButton={step !== 4}
+                availableRightButton={step !== 5}
                 nextStep={nextStep}
                 previousStep={previousStep}
             />

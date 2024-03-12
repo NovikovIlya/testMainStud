@@ -7,27 +7,21 @@ import enPicker from "antd/locale/en_US";
 import dayjs from "dayjs";
 import {useDispatch, useSelector} from "react-redux";
 import {
+    IDataFormStepTwo,
     setAddress,
-    setAtRussia, setEndDateAction,
+    // setAtRussia,
+    setEndDateAction,
     setInn, setOrganisation,
     setRangeDate, setStartDateAction
 } from "../../../../../../store/reducers/FormReducers/FormStepTwoReducer";
 import {RootState} from "../../../../../../store";
+import {tableData} from "../tableStepTwo/tableStepTwo";
 
 interface IFormStepTwo {
     previousStep: () => void
     setTableDisplay: () => void
 }
 
-// interface IDataFormStepTwo {
-//     atRussia: string,
-//     address: string,
-//     inn: string
-//     organisation: string
-//     startDate: string | string[],
-//     endDate: string | string[],
-//     rangeDate: string
-// }
 
 export const FormStepTwo = ({previousStep, setTableDisplay}: IFormStepTwo) => {
     const [startDate, setStartDate] = useState(new Date);
@@ -37,30 +31,35 @@ export const FormStepTwo = ({previousStep, setTableDisplay}: IFormStepTwo) => {
     const rangeStartToEnd = dayJsEnd.diff(dayJsStart, 'day')
     const dispatch = useDispatch()
 
-    const savedData = {
-        atRussia: useSelector((state: RootState) => state.FormStepTwo.atRussia),
-        address: useSelector((state: RootState) => state.FormStepTwo.address),
-        inn: useSelector((state: RootState) => state.FormStepTwo.inn),
-        organisation: useSelector((state: RootState) => state.FormStepTwo.organisation),
-        startDate: useSelector((state: RootState) => state.FormStepTwo.startDate),
-        endDate: useSelector((state: RootState) => state.FormStepTwo.endDate),
-        rangeDate: useSelector((state: RootState) => state.FormStepTwo.rangeDate),
-    }
+    const [dataInTable, setDataInTable] = useState<IDataFormStepTwo>({
+        address: '',
+        inn: '',
+        organization: '',
+        startDate: '',
+        endDate: '',
+        rangeDate: ''
+    })
+
+
 
     useEffect(() => {
         dispatch(setRangeDate(String(rangeStartToEnd)))
+        setDataInTable({
+            ...dataInTable,
+            rangeDate: String(rangeStartToEnd)
+        })
     }, [rangeStartToEnd])
 
+    function addListTableData() {
+        tableData.push(dataInTable)
+    }
 
     return (
         <Form layout={'vertical'}>
             <Row gutter={[16, 0]} className={'w-full'}>
                 <Col span={13}>
                     <Form.Item label={<LabelFormItem label={'Командировка в России'}/>}>
-                        <Radio.Group
-                            onChange={e => dispatch(setAtRussia(e.target.value))}
-                            value={savedData.atRussia}
-                        >
+                        <Radio.Group>
                             <Radio value={'Да'}>Да</Radio>
                             <Radio value={'Нет'}>Нет</Radio>
                         </Radio.Group>
@@ -71,8 +70,13 @@ export const FormStepTwo = ({previousStep, setTableDisplay}: IFormStepTwo) => {
                         <Input
                             className={'text-base'}
                             placeholder={'Ввести'}
-                            onChange={e => dispatch(setAddress(e.target.value))}
-                            value={savedData.address}
+                            onChange={e => {
+                                dispatch(setAddress(e.target.value))
+                                setDataInTable({
+                                    ...dataInTable,
+                                    address: e.target.value,
+                                })
+                            }}
                         />
                     </Form.Item>
                 </Col>
@@ -81,8 +85,14 @@ export const FormStepTwo = ({previousStep, setTableDisplay}: IFormStepTwo) => {
                         <Input
                             className={'text-base'}
                             placeholder={'Ввести'}
-                            onChange={(e) => dispatch(setInn(e.target.value))}
-                            value={savedData.inn}
+                            onChange={(e) => {
+                                dispatch(setInn(e.target.value))
+                                setDataInTable({
+                                    ...dataInTable,
+                                    inn: e.target.value
+                                })
+                            }}
+
                         />
                     </Form.Item>
                 </Col>
@@ -91,8 +101,13 @@ export const FormStepTwo = ({previousStep, setTableDisplay}: IFormStepTwo) => {
                         <Input
                             className={'text-base'}
                             placeholder={'Автоматический подбор'}
-                            onChange={(e) => dispatch(setOrganisation(e.target.value))}
-                            value={savedData.organisation}
+                            onChange={(e) => {
+                                dispatch(setOrganisation(e.target.value))
+                                setDataInTable({
+                                    ...dataInTable,
+                                    organization: e.target.value
+                                })
+                            }}
                         />
                     </Form.Item>
                 </Col>
@@ -105,12 +120,12 @@ export const FormStepTwo = ({previousStep, setTableDisplay}: IFormStepTwo) => {
                                 format={'DD.MM.YYYY'}
                                 onChange={(date) => {
                                     setStartDate(date && date.toDate())
-                                    date && dispatch(setStartDateAction(date?.format('DD.MM.YYYY')))
+                                    date && dispatch(setStartDateAction(date.format('DD.MM.YYYY')))
+                                    date && setDataInTable({
+                                        ...dataInTable,
+                                        startDate: date.format('DD.MM.YYYY')
+                                    })
                                 }}
-                                value={
-                                    savedData.startDate === '' ? null : dayjs(savedData.startDate, "DD.MM.YYYY")
-                                }
-
                             />
                         </ConfigProvider>
                     </Form.Item>
@@ -125,11 +140,11 @@ export const FormStepTwo = ({previousStep, setTableDisplay}: IFormStepTwo) => {
                                 onChange={(date,) => {
                                     setEndDate(date && date.toDate())
                                     date && dispatch(setEndDateAction(date.format('DD.MM.YYYY')))
+                                    date && setDataInTable({
+                                        ...dataInTable,
+                                        endDate: date.format('DD.MM.YYYY')
+                                    })
                                 }}
-                                value={
-                                    savedData.endDate === '' ? null : dayjs(savedData.endDate, "DD.MM.YYYY")
-                                }
-
                             />
                         </ConfigProvider>
                     </Form.Item>
@@ -153,15 +168,43 @@ export const FormStepTwo = ({previousStep, setTableDisplay}: IFormStepTwo) => {
                     </Button>
                 </Col>
 
-                <Col span={4}>
+                <Col span={3}>
                     <Button
                         type={'primary'}
                         shape={'round'}
                         className={'h-10 w-max'}
-                        onClick={setTableDisplay}
+                        onClick={() => {
+                            setTableDisplay()
+                            addListTableData()
+                        }}
                     >
                         <span className={'text-lg'}>Сохранить</span>
                     </Button>
+                </Col>
+                <Col span={4}>
+                    <ConfigProvider theme={{
+                        components: {
+                            Button: {
+                                defaultColor: '#0958d9',
+                                defaultBorderColor: '#0958d9',
+                                defaultHoverColor: 'white',
+                                defaultHoverBg: '#0958d9',
+                            }
+                        }
+                    }}>
+                        <Button
+                            type={'default'}
+                            shape={'round'}
+                            className={'h-10 w-max'}
+                            onClick={() => {
+                                setTableDisplay()
+                                addListTableData()
+                            }}
+                        >
+                            <span className={'text-lg'}>Добавить данные</span>
+                        </Button>
+                    </ConfigProvider>
+
                 </Col>
             </Row>
         </Form>

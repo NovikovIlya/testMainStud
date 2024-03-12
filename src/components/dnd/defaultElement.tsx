@@ -107,6 +107,23 @@ export const jsxElements = [
 			i: 'jobSeeker'
 		}
 	},
+	{
+		index: 'myResponds',
+		element: (
+			<TemplateCard
+				title="Мои отклики"
+				info=""
+				href="/services/myresponds/responds"
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 0,
+			y: 0,
+			i: 'myResponds'
+		}
+	},
 	// {
 	// 	index: 'MyRating',
 	// 	element: (

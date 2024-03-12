@@ -40,6 +40,17 @@ export const MyResponds = () => {
 						}}
 					/>
 				</div>
+				<div className="flex mb-[16px] pl-[20px]">
+					<h3 className="font-content-font text-black font-normal text-[14px]/[14px] opacity-[60%]">
+						Вакансия
+					</h3>
+					<h3 className="ml-[245px] font-content-font text-black font-normal text-[14px]/[14px] opacity-[60%]">
+						Дата отклика
+					</h3>
+					<h3 className="ml-[105px] font-content-font text-black font-normal text-[14px]/[14px] opacity-[60%]">
+						Статус
+					</h3>
+				</div>
 				{responds.map(respond => (
 					<RespondItem {...respond} refetch={refetch} />
 				))}

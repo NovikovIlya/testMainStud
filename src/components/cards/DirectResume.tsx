@@ -285,9 +285,9 @@ export const DirectResume = ({
 													message: 'Пожалуйста, прикрепите резюме'
 												}
 											})}
-											onChange={e => {
-												setFilename(e.target.files?.[0].name)
-											}}
+											// onChange={e => {
+											// 	setFilename(e.target.files?.[0].name)
+											// }}
 										></input>
 									</div>
 								)}

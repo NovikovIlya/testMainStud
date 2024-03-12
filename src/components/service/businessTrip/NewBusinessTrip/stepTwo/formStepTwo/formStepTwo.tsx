@@ -5,23 +5,29 @@ import i18n from "i18next";
 import ruPicker from "antd/locale/ru_RU";
 import enPicker from "antd/locale/en_US";
 import dayjs from "dayjs";
-import {ThemeProvider} from "@material-tailwind/react";
-import value = ThemeProvider.propTypes.value;
+import {useDispatch, useSelector} from "react-redux";
+import {
+    setAddress,
+    setAtRussia, setEndDateAction,
+    setInn, setOrganisation,
+    setRangeDate, setStartDateAction
+} from "../../../../../../store/reducers/FormReducers/FormStepTwoReducer";
+import {RootState} from "../../../../../../store";
 
 interface IFormStepTwo {
     previousStep: () => void
     setTableDisplay: () => void
 }
 
-interface IDataFormStepTwo {
-    atRussia: string,
-    address: string,
-    inn: string
-    organisation: string
-    startDate: string | string[],
-    endDate: string | string[],
-    rangeDate: string
-}
+// interface IDataFormStepTwo {
+//     atRussia: string,
+//     address: string,
+//     inn: string
+//     organisation: string
+//     startDate: string | string[],
+//     endDate: string | string[],
+//     rangeDate: string
+// }
 
 export const FormStepTwo = ({previousStep, setTableDisplay}: IFormStepTwo) => {
     const [startDate, setStartDate] = useState(new Date);
@@ -29,25 +35,20 @@ export const FormStepTwo = ({previousStep, setTableDisplay}: IFormStepTwo) => {
     const dayJsEnd = dayjs(endDate)
     const dayJsStart = dayjs(startDate)
     const rangeStartToEnd = dayJsEnd.diff(dayJsStart, 'day')
+    const dispatch = useDispatch()
 
-    const [test, setTest] = useState<IDataFormStepTwo>({
-        atRussia: '',
-        address: '',
-        inn: '',
-        organisation: '',
-        startDate: '',
-        endDate: '',
-        rangeDate: ''
-    })
-
-    console.log(test)
+    const savedData = {
+        atRussia: useSelector((state: RootState) => state.FormStepTwo.atRussia),
+        address: useSelector((state: RootState) => state.FormStepTwo.address),
+        inn: useSelector((state: RootState) => state.FormStepTwo.inn),
+        organisation: useSelector((state: RootState) => state.FormStepTwo.organisation),
+        startDate: useSelector((state: RootState) => state.FormStepTwo.startDate),
+        endDate: useSelector((state: RootState) => state.FormStepTwo.endDate),
+        rangeDate: useSelector((state: RootState) => state.FormStepTwo.rangeDate),
+    }
 
     useEffect(() => {
-        console.log('asdf')
-        setTest({
-            ...test,
-            rangeDate: String(rangeStartToEnd)
-        })
+        dispatch(setRangeDate(String(rangeStartToEnd)))
     }, [rangeStartToEnd])
 
 
@@ -56,10 +57,10 @@ export const FormStepTwo = ({previousStep, setTableDisplay}: IFormStepTwo) => {
             <Row gutter={[16, 0]} className={'w-full'}>
                 <Col span={13}>
                     <Form.Item label={<LabelFormItem label={'Командировка в России'}/>}>
-                        <Radio.Group onChange={e => setTest({
-                            ...test,
-                            atRussia: e.target.value
-                        })}>
+                        <Radio.Group
+                            onChange={e => dispatch(setAtRussia(e.target.value))}
+                            value={savedData.atRussia}
+                        >
                             <Radio value={'Да'}>Да</Radio>
                             <Radio value={'Нет'}>Нет</Radio>
                         </Radio.Group>
@@ -70,10 +71,8 @@ export const FormStepTwo = ({previousStep, setTableDisplay}: IFormStepTwo) => {
                         <Input
                             className={'text-base'}
                             placeholder={'Ввести'}
-                            onChange={event => setTest({
-                                ...test,
-                                address: event.target.value
-                            })}
+                            onChange={e => dispatch(setAddress(e.target.value))}
+                            value={savedData.address}
                         />
                     </Form.Item>
                 </Col>
@@ -82,12 +81,8 @@ export const FormStepTwo = ({previousStep, setTableDisplay}: IFormStepTwo) => {
                         <Input
                             className={'text-base'}
                             placeholder={'Ввести'}
-                            onChange={(e) => {
-                                setTest({
-                                    ...test,
-                                    inn: e.target.value,
-                                })
-                            }}
+                            onChange={(e) => dispatch(setInn(e.target.value))}
+                            value={savedData.inn}
                         />
                     </Form.Item>
                 </Col>
@@ -96,12 +91,8 @@ export const FormStepTwo = ({previousStep, setTableDisplay}: IFormStepTwo) => {
                         <Input
                             className={'text-base'}
                             placeholder={'Автоматический подбор'}
-                            onChange={(e) => {
-                                setTest({
-                                    ...test,
-                                    organisation: e.target.value
-                                })
-                            }}
+                            onChange={(e) => dispatch(setOrganisation(e.target.value))}
+                            value={savedData.organisation}
                         />
                     </Form.Item>
                 </Col>
@@ -112,13 +103,14 @@ export const FormStepTwo = ({previousStep, setTableDisplay}: IFormStepTwo) => {
                                 placeholder={'ДД.ММ.ГГ'}
                                 className={'text-2xl w-full'}
                                 format={'DD.MM.YYYY'}
-                                onChange={(date, dates) => {
+                                onChange={(date) => {
                                     setStartDate(date && date.toDate())
-                                    setTest({
-                                        ...test,
-                                        startDate: date && dates
-                                    })
+                                    date && dispatch(setStartDateAction(date?.format('DD.MM.YYYY')))
                                 }}
+                                value={
+                                    savedData.startDate === '' ? null : dayjs(savedData.startDate, "DD.MM.YYYY")
+                                }
+
                             />
                         </ConfigProvider>
                     </Form.Item>
@@ -130,14 +122,14 @@ export const FormStepTwo = ({previousStep, setTableDisplay}: IFormStepTwo) => {
                                 placeholder={'ДД.ММ.ГГ'}
                                 className={'text-2xl w-full'}
                                 format={'DD.MM.YYYY'}
-                                onChange={(date, dates) => {
+                                onChange={(date,) => {
                                     setEndDate(date && date.toDate())
-                                    setTest({
-                                        ...test,
-                                        endDate: date && dates,
-                                        rangeDate: String(rangeStartToEnd)
-                                    })
+                                    date && dispatch(setEndDateAction(date.format('DD.MM.YYYY')))
                                 }}
+                                value={
+                                    savedData.endDate === '' ? null : dayjs(savedData.endDate, "DD.MM.YYYY")
+                                }
+
                             />
                         </ConfigProvider>
                     </Form.Item>

@@ -1,12 +1,14 @@
 import React from 'react';
 import {Button, Col, ConfigProvider, Table, TableProps} from "antd";
 import {TitleHeadCell} from "./titleHeadCell/TitleHeadCell";
+import {useSelector} from "react-redux";
+import {RootState} from "../../../../../../store";
 
 
 interface DataType {
     key: string
     address: string
-    inn: number
+    inn: string
     organization: string
     startDate: string
     endDate: string
@@ -46,17 +48,6 @@ const columns: TableProps<DataType>['columns'] = [
     }
 ];
 
-const data: DataType[] = [
-    {
-        key: '1',
-        address: 'Москва, Кремлёвская наб., 1, к1, кв 111',
-        inn: 1234567890,
-        organization: 'МГУ',
-        startDate: '01.01.2024',
-        endDate: '07.01.2024',
-        rangeDate: '6'
-    }
-]
 
 interface ITableStepTwo{
     notVisibleTable: () => void
@@ -64,6 +55,20 @@ interface ITableStepTwo{
 }
 
 export const TableStepTwo = ({notVisibleTable, nextStep}: ITableStepTwo) => {
+
+    const data: DataType[] = [
+        {
+            key: '1',
+            address: useSelector((state: RootState) => state.FormStepTwo.address),
+            inn: useSelector((state: RootState) => state.FormStepTwo.inn),
+            organization:  useSelector((state: RootState) => state.FormStepTwo.organisation),
+            startDate:  useSelector((state: RootState) => state.FormStepTwo.startDate),
+            endDate:  useSelector((state: RootState) => state.FormStepTwo.endDate),
+            rangeDate:  useSelector((state: RootState) => state.FormStepTwo.rangeDate),
+        }
+    ]
+
+
     return (
         <div className={'flex flex-col gap-5'}>
             <ConfigProvider

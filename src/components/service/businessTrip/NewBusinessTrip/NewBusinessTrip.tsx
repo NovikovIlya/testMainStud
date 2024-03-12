@@ -29,7 +29,8 @@ export const NewBusinessTrip = () => {
                 previousStep={previousStep}
             />
             {step === 1 && <StepOne nextStep={nextStep}/>}
-            {step === 2 && <StepTwo previousStep={previousStep}/>}
+            {step === 2 && <StepTwo nextStep={nextStep} previousStep={previousStep}/>}
+            {step === 3 && <span>Шаг 3</span>}
 
         </section>
     );

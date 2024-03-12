@@ -7,9 +7,22 @@ import InputMask from 'react-input-mask'
 import {TitleForm} from "../titleForm/TitleForm";
 
 const optionsGoals = [
-    {value: 'Цель 1'},
-    {value: 'Цель 2'},
-    {value: 'Цель 3'},
+    {value: 'Административный визит'},
+    {value: 'Выполнение научно-исследовательской работы'},
+    {value: 'Повышение квалификации, переподготовка'},
+    {value: 'Профориентационная работа'},
+    {value: 'Сбор учебно-методического материала'},
+    {value: 'Сопровождение учащихся на различные мероприятия'},
+    {value: 'Стажировка (научная)'},
+    {value: 'Стажировка (образовательная)'},
+    {value: 'Участие в выставке (без экспоната)'},
+    {value: 'Участие в выставке (с экспонатом)'},
+    {value: 'Участие в конференции (без доклада)'},
+    {value: 'Участие в конференции (с докладом)'},
+    {value: 'Участие в мероприятиях по привлечению студентов'},
+    {value: 'Участие в симпозиуме, семинаре и т.п. (без доклада)'},
+    {value: 'Участие в симпозиуме, семинаре и т.п. (с докладом)'},
+    {value: 'Чтение лекций, проведение семинаров, практических занятий, мастер-классов, проведение консультаций'},
 ];
 
 const optionsTypeDocuments = [
@@ -92,15 +105,7 @@ export const StepOne = ({nextStep}: IStepOne) => {
 
                     <Col span={12}>
                         <Form.Item label={<LabelFormItem label={'Мероприятие'}/>}>
-                            <Select placeholder={'Выбрать'}>
-                                {
-                                    selectOptions.map(elem => (
-                                        <Select.Option value={elem.value} key={elem.value}>
-                                            {elem.name}
-                                        </Select.Option>
-                                    ))
-                                }
-                            </Select>
+                            <Input className={'text-base'} placeholder={'Ввести'}/>
                         </Form.Item>
                     </Col>
 

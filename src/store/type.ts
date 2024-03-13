@@ -1,3 +1,5 @@
+import { IGender } from '../api/types'
+
 export interface InitialState {
 	accessToken: string | null
 	refreshToken: string | null
@@ -148,4 +150,42 @@ export type RespondItemType = {
 	name: string
 	respondDate: string
 	status: string
+}
+
+type experienceResponceType = {
+	workPlace: string
+	position: string
+	beginWork: string
+	endWork: string
+	duties: string
+}
+
+type educationResponceType = {
+	educationLevel: string
+	country: string
+	institution: string
+	specialty: string
+	endYear: string
+}
+
+export type ResponceType = {
+	aboutMe: {
+		gender: IGender
+		lastname: string
+		firstname: string
+		patronymic: string
+		birthday: string
+		citizenship: string
+		phone: string
+		email: string
+	}
+	educations: educationResponceType[]
+	portfolio: {
+		url: string
+		workExperiences: experienceResponceType[]
+	}
+	skills: {
+		keySkills: string[]
+		aboutMe: string
+	}
 }

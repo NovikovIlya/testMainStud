@@ -5,6 +5,7 @@ import {
 	Email,
 	Exam,
 	ICalendar,
+	ResponceType,
 	RespondItemType,
 	Template,
 	TypeSchedule,
@@ -171,11 +172,14 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			}
 		}),
-		postVacancyRespond: builder.mutation<void, number>({
-			query: id => ({
+		postVacancyRespond: builder.mutation<void, { id: number } & ResponceType>({
+			query: arg => ({
 				url:
-					'http://localhost:8082/employment-api/v1/vacancy/' + id + '/respond',
-				method: 'POST'
+					'http://localhost:8082/employment-api/v1/vacancy/' +
+					arg.id +
+					'/respond',
+				method: 'POST',
+				body: arg
 			})
 		})
 	})

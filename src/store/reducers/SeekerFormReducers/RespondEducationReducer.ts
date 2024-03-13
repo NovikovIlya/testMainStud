@@ -3,6 +3,23 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { RootState } from '../..'
 import { educationItem } from '../../../api/types'
 
+type educationResponceType = {
+	nameofInstitute: ''
+	educationLevelId: 4
+	countryId: 184
+	graduateYear: ''
+	specialization?: string
+}
+
+type educationResponceItemType = {
+	id: string
+	education: educationResponceType
+}
+
+type educationRespondStateType = {
+	educations: educationResponceItemType[]
+}
+
 const initialState: Omit<educationItem, 'documentNumber' | 'documentSeries'> = {
 	nameOfInstitute: '',
 	educationLevelId: 4,

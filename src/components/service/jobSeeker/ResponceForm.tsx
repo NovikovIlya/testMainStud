@@ -160,7 +160,7 @@ export const ResponseForm = () => {
 								<div
 									onClick={() => {
 										navigate(
-											'/services/jobseeker/vacancyview/respond/education'
+											'/services/jobseeker/vacancyview/respond/education/main'
 										)
 									}}
 									className="h-[43px] pl-[16px] pr-[16px] flex justify-between items-center border-[1px] border-dashed border-blue1f5 rounded-[5px] cursor-pointer"
@@ -212,7 +212,7 @@ export const ResponseForm = () => {
 											: !educationCompleted
 											? () => {
 													navigate(
-														'services/jobseeker/vacancyview/respond/education'
+														'services/jobseeker/vacancyview/respond/education/main'
 													)
 											  }
 											: !(
@@ -232,7 +232,45 @@ export const ResponseForm = () => {
 											  }
 											: () => {
 													currentVacancy !== null &&
-														getVacancy(currentVacancy?.id)
+														getVacancy({
+															id: currentVacancy?.id,
+															aboutMe: {
+																gender: aboutMeData.gender,
+																lastname: aboutMeData.surName,
+																firstname: aboutMeData.name,
+																patronymic: aboutMeData.patronymic,
+																birthday: aboutMeData.birthDay
+																	.split('-')
+																	.reverse()
+																	.join('-'),
+																citizenship: 'Российская федерация (РФ)',
+																phone: aboutMeData.phone,
+																email: aboutMeData.email
+															},
+															educations: [],
+															portfolio: {
+																url: '',
+																workExperiences: experienceData.experiences.map(
+																	exp => ({
+																		workPlace: exp.experience.workplace,
+																		beginWork: exp.experience.beginWork
+																			.split('-')
+																			.reverse()
+																			.join('-'),
+																		endWork: exp.experience.endWork
+																			.split('-')
+																			.reverse()
+																			.join('-'),
+																		position: exp.experience.seat,
+																		duties: exp.experience.duties
+																	})
+																)
+															},
+															skills: {
+																keySkills: skillsData.skills,
+																aboutMe: skillsData.details
+															}
+														})
 															.unwrap()
 															.then(() => {
 																!result.isSuccess && setIsFormOpen(false)
@@ -467,7 +505,99 @@ export const ResponseForm = () => {
 						</Form>
 					)}
 					{pathname.includes(
-						'/services/jobseeker/vacancyview/respond/education'
+						'/services/jobseeker/vacancyview/respond/education/main'
+					) && (
+						<Form layout="vertical" requiredMark={false}>
+							<div className="flex items-center mb-[38px]">
+								<button
+									onClick={() => {
+										navigate('/services/jobseeker/vacancyview/respond/main')
+									}}
+									className="bg-white h-[38px] w-[46px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer"
+								>
+									<ArrowIcon />
+								</button>
+								<p className="ml-[15px] font-content-font font-bold text-black text-[18px]/[21.6px]">
+									Образование
+								</p>
+							</div>
+							<div className="mt-[40px]">
+								{experienceData.experiences.map(exp => (
+									<div
+										key={exp.id}
+										className="h-[90px] pl-[16px] pr-[16px] pb-[20px] mb-[20px] border-solid flex justify-between items-center border-0 border-b-[1px] border-black border-opacity-20 cursor-pointer"
+									>
+										<div className="flex flex-col gap-[12px]">
+											<p className="font-content-font text-black text-[16px]/[16px] font-bold select-none">
+												{exp.experience.seat}
+											</p>
+											<p className="font-content-font text-black text-[16px]/[16px] font-normal select-none">
+												{exp.experience.workplace}
+											</p>
+											<p className="font-content-font text-black text-[14px]/[14px] font-normal select-none opacity-60">
+												{exp.experience.beginWork} - {exp.experience.endWork}
+											</p>
+										</div>
+										<div className="flex gap-[12px]">
+											<Button
+												type="text"
+												icon={<EditSvg />}
+												onClick={() => {
+													setExperienceToEdit(
+														experienceData.experiences.find(
+															expa => expa.id === exp.id
+														)
+													)
+													navigate(
+														'/services/jobseeker/vacancyview/respond/experience/edit'
+													)
+												}}
+											/>
+											<Button
+												type="text"
+												icon={<DeleteSvg />}
+												onClick={() => {
+													dispatch(deleteExperience(exp.id))
+												}}
+											/>
+										</div>
+									</div>
+								))}
+							</div>
+							<div
+								style={{ textAlign: 'center' }}
+								className={`flex flex-col items-center ${
+									haveNoExprience && 'opacity-50 pointer-events-none'
+								}`}
+							>
+								<ConfigProvider
+									theme={{
+										components: {
+											Button: {
+												colorBgTextHover: '#ffffff',
+												colorBgTextActive: '#ffffff'
+											}
+										}
+									}}
+								>
+									<Button
+										onClick={() => {
+											navigate(
+												'/services/jobseeker/vacancyview/respond/education/add'
+											)
+										}}
+										icon={<ButtonPlusIcon />}
+										type="text"
+									></Button>
+								</ConfigProvider>
+								<p className="mt-[5px] w-[94px] font-main-font font-normal text-[14px]/[18px] opacity-40">
+									добавить образование
+								</p>
+							</div>
+						</Form>
+					)}
+					{pathname.includes(
+						'/services/jobseeker/vacancyview/respond/education/add'
 					) && (
 						<Form
 							layout="vertical"
@@ -483,7 +613,9 @@ export const ResponseForm = () => {
 									})
 								)
 								dispatch(completeEducation())
-								navigate('/services/jobseeker/vacancyview/respond/main')
+								navigate(
+									'/services/jobseeker/vacancyview/respond/education/main'
+								)
 							}}
 							initialValues={{
 								specialization: educationData.specialization,
@@ -496,14 +628,172 @@ export const ResponseForm = () => {
 							<div className="flex items-center mb-[38px]">
 								<button
 									onClick={() => {
-										navigate('/services/jobseeker/vacancyview/respond/main')
+										navigate(
+											'/services/jobseeker/vacancyview/respond/education/main'
+										)
 									}}
 									className="bg-white h-[38px] w-[46px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer"
 								>
 									<ArrowIcon />
 								</button>
 								<p className="ml-[15px] font-content-font font-bold text-black text-[18px]/[21.6px]">
-									Образование
+									Добавить образование
+								</p>
+							</div>
+							<Form.Item
+								name={'educationLevel'}
+								label={
+									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
+										Уровень образования
+									</label>
+								}
+								rules={[
+									{ required: true, message: 'Не выбран уровень образования' }
+								]}
+							>
+								<Select
+									className="w-full rounded-lg"
+									options={
+										levels === undefined
+											? []
+											: levels.map(el => ({
+													value: el.id,
+													label: el.name
+											  }))
+									}
+								/>
+							</Form.Item>
+							<Form.Item
+								name={'country'}
+								label={
+									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
+										Страна получения образования
+									</label>
+								}
+								rules={[{ required: true, message: 'Не выбрана страна' }]}
+							>
+								<Select
+									className="w-full rounded-lg"
+									options={
+										countries === undefined
+											? []
+											: countries.map(el => ({
+													value: el.id,
+													label: el.shortName
+											  }))
+									}
+								/>
+							</Form.Item>
+							<Form.Item
+								name={'instituteName'}
+								label={
+									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
+										Учебное заведение
+									</label>
+								}
+								rules={[
+									{ required: true, message: 'Не введено учебное заведение' }
+								]}
+							>
+								<Input
+									onPressEnter={e => {
+										e.preventDefault()
+									}}
+								></Input>
+							</Form.Item>
+							<Form.Item
+								name={'specialization'}
+								label={
+									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
+										Специальность
+									</label>
+								}
+								rules={[
+									{ required: true, message: 'Не введена специальность' }
+								]}
+							>
+								<Input
+									onPressEnter={e => {
+										e.preventDefault()
+									}}
+								></Input>
+							</Form.Item>
+							<Form.Item
+								name={'graduateYear'}
+								label={
+									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
+										Год окончания
+									</label>
+								}
+								rules={[{ required: true, message: 'Не выбран год' }]}
+							>
+								<Select
+									className="w-full rounded-lg"
+									options={Array.from(
+										{
+											length:
+												date.getMonth() >= 6
+													? date.getFullYear() - 1969
+													: date.getFullYear() - 1970
+										},
+										(_, i) => i + 1970
+									).map(year => ({
+										value: year.toString(),
+										label: year.toString()
+									}))}
+								/>
+							</Form.Item>
+							<Form.Item>
+								<div style={{ textAlign: 'right', marginTop: 40 }}>
+									<Button type="primary" htmlType="submit">
+										Сохранить
+									</Button>
+								</div>
+							</Form.Item>
+						</Form>
+					)}
+					{pathname.includes(
+						'/services/jobseeker/vacancyview/respond/education/edit'
+					) && (
+						<Form
+							layout="vertical"
+							requiredMark={false}
+							onFinish={values => {
+								dispatch(
+									setAllData({
+										graduateYear: values.graduateYear,
+										specialization: values.specialization,
+										nameOfInstitute: values.instituteName,
+										countryId: values.country,
+										educationLevelId: values.educationLevel
+									})
+								)
+								dispatch(completeEducation())
+								navigate(
+									'/services/jobseeker/vacancyview/respond/education/main'
+								)
+							}}
+							initialValues={{
+								specialization: educationData.specialization,
+								instituteName: educationData.nameOfInstitute,
+								country: educationData.countryId,
+								educationLevel: educationData.educationLevelId,
+								graduateYear: educationData.graduateYear
+							}}
+						>
+							<div className="flex items-center mb-[38px]">
+								<button
+									onClick={() => {
+										navigate(
+											'/services/jobseeker/vacancyview/respond/education/main'
+										)
+									}}
+									className="bg-white h-[38px] w-[46px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer"
+								>
+									<ArrowIcon />
+								</button>
+								<p className="ml-[15px] font-content-font font-bold text-black text-[18px]/[21.6px]">
+									Изменить образование
 								</p>
 							</div>
 							<Form.Item

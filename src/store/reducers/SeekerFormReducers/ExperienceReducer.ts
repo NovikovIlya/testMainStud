@@ -8,10 +8,9 @@ type experienceType = {
 	beginWork: string
 	endWork: string
 	duties: string
-	resume: File
 }
 
-type experienceItemType = {
+export type experienceItemType = {
 	id: string
 	experience: experienceType
 }
@@ -39,10 +38,33 @@ const ExperienceReducer = createSlice({
 		addExperience: (state, action: PayloadAction<experienceItemType>) => {
 			state.experiences.push(action.payload)
 		},
-		deleteExperience: (state, action: PayloadAction<experienceItemType>) => {
-			state.experiences.filter(exp => {
-				return exp.id !== action.payload.id
+		deleteExperience: (state, action: PayloadAction<string>) => {
+			state.experiences = state.experiences.filter(exp => {
+				return exp.id !== action.payload
 			})
+		},
+		alterExperience: (
+			state,
+			action: PayloadAction<{ id: string } & experienceType>
+		) => {
+			const newExp = state.experiences.find(exp => {
+				return exp.id === action.payload.id
+			})
+			newExp !== undefined &&
+				(newExp.experience = {
+					workplace: action.payload.workplace,
+					endWork: action.payload.endWork,
+					beginWork: action.payload.beginWork,
+					seat: action.payload.seat,
+					duties: action.payload.duties
+				})
+			newExp !== undefined &&
+				(state = {
+					...state,
+					experiences: state.experiences.map(exp =>
+						exp.id === action.payload.id ? newExp : exp
+					)
+				})
 		}
 	}
 })
@@ -51,7 +73,8 @@ export const {
 	raiseNoExperienceFlag,
 	lowerNoExperienceFlag,
 	addExperience,
-	deleteExperience
+	deleteExperience,
+	alterExperience
 } = ExperienceReducer.actions
 
 export default ExperienceReducer.reducer

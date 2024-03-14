@@ -112,7 +112,7 @@ export default function VacancyView() {
 						{currentVacancy !== null ? currentVacancy.acf.salary : ''}
 					</p>
 				</div>
-				<div className="w-[50%] mt-[60px] mb-[86px] grid grid-cols-[auto_auto] gap-x-[154px] gap-y-[40px]">
+				<div className="w-[60%] mt-[60px] mb-[86px] grid grid-cols-[auto_auto] gap-x-[154px] gap-y-[40px]">
 					<p className="font-content-font font-bold text-black text-[18px]/[21px] whitespace-nowrap">
 						Задачи:
 					</p>

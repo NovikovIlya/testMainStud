@@ -1,4 +1,5 @@
-import { Select, Skeleton, Space } from 'antd'
+import { LoadingOutlined } from '@ant-design/icons'
+import { Select, Spin } from 'antd'
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
@@ -12,8 +13,6 @@ import {
 } from '../../../store/api/serviceApi'
 import { allData } from '../../../store/reducers/SeekerFormReducers/AboutMeReducer'
 import { VacancyItemType } from '../../../store/type'
-import { DirectResume } from '../../cards/DirectResume'
-import { SkeletonPage } from '../aboutMe/Skeleton'
 
 import VacancyItem from './VacancyItem'
 
@@ -90,10 +89,16 @@ export default function Catalog() {
 	if (isVacancyPreviewsByDirectionsLoading) {
 		return (
 			<>
-				<Space.Compact direction="vertical" block>
-					<Skeleton title={{ width: 0 }} active paragraph={{ rows: 2 }} />
-					<Skeleton title={{ width: 0 }} active paragraph={{ rows: 10 }} />
-				</Space.Compact>
+				<div className="w-screen h-screen flex items-center">
+					<div className="text-center ml-auto mr-auto mb-[10%]">
+						<Spin
+							indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}
+						></Spin>
+						<p className="font-content-font font-normal text-black text-[18px]/[18px]">
+							Идёт загрузка вакансий...
+						</p>
+					</div>
+				</div>
 			</>
 		)
 	}

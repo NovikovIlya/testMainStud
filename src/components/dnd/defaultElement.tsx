@@ -77,7 +77,7 @@ export const jsxElements = [
 			<DirectResume
 				href="#"
 				img="/directresumeimage.png"
-				info="Мы всегда в поиске крутых специалистов. Заполняйте резюме, отправляйте на проверку и мы рассмотрим Вашу кандидатуру."
+				info="Не нашли подходящую вакансию? Заполняйте резюме, отправляйте на проверку и мы рассмотрим вашу кандидатуру"
 				title="Резюме"
 				buttonText="Создать"
 				buttonType="primary"
@@ -112,8 +112,12 @@ export const jsxElements = [
 		element: (
 			<TemplateCard
 				title="Мои отклики"
-				info=""
+				info="В разделе отображается ваш текущий статус заявления на работу"
 				href="/services/myresponds/responds"
+				img="/myrespondsicon.png"
+				width={146}
+				height={136}
+				mt="mt-[25px]"
 			/>
 		),
 		place: {

@@ -42,7 +42,7 @@ export const RespondItem = (props: RespondItemType & { refetch: Function }) => {
 			</ConfigProvider>
 			<div className="w-full mb-[12px] flex justify-between items-center bg-white shadow-custom-shadow pl-[20px] pr-[55px] pt-[20px] pb-[20px]">
 				<p>{props.name}</p>
-				<p>{props.respondDate.split('-').join('.')}</p>
+				<p>{props.respondDate.split('-').reverse().join('.')}</p>
 				<p>
 					{props.status ===
 					respondStatus[respondStatus.IN_PERSONNEL_DEPT_REVIEW]

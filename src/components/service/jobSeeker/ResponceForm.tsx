@@ -113,6 +113,8 @@ export const ResponseForm = () => {
 		}
 	})
 
+	const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
+
 	return (
 		<>
 			<Button
@@ -128,6 +130,44 @@ export const ResponseForm = () => {
 			>
 				Откликнуться
 			</Button>
+
+			<ConfigProvider
+				theme={{
+					token: {
+						boxShadow: '0 0 19px 0 rgba(212, 227, 241, 0.6)'
+					}
+				}}
+			>
+				<Modal
+					centered
+					open={isSuccessModalOpen}
+					bodyStyle={{
+						padding: '26px'
+					}}
+					width={407}
+					className="pr-[52px] pl-[52px] pb-[52px]"
+					footer={null}
+					title={null}
+					onCancel={() => {
+						setIsSuccessModalOpen(false)
+					}}
+				>
+					<div className="text-center">
+						<p className="font-content-font font-normal text-black text-[16px]/[20px] mb-[40px]">
+							Спасибо, ваш отклик успешно отправлен
+						</p>
+						<Button
+							type="primary"
+							className="w-full rounded-[55.5px]"
+							onClick={() => {
+								setIsSuccessModalOpen(false)
+							}}
+						>
+							Ок
+						</Button>
+					</div>
+				</Modal>
+			</ConfigProvider>
 
 			<ConfigProvider
 				theme={{
@@ -302,6 +342,9 @@ export const ResponseForm = () => {
 															.unwrap()
 															.then(() => {
 																!result.isSuccess && setIsFormOpen(false)
+															})
+															.then(() => {
+																!result.isSuccess && setIsSuccessModalOpen(true)
 															})
 											  }
 									}

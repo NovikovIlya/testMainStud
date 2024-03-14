@@ -46,6 +46,7 @@ export const DirectResume = ({
 }: SessionProps) => {
 	const { t } = useTranslation()
 	const [isOpen, setIsOpen] = useState(false)
+	const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
 	const [filename, setFilename] = useState<string | undefined>('')
 
 	const { control, register, handleSubmit, formState } = useForm({
@@ -79,13 +80,8 @@ export const DirectResume = ({
 			body: formData
 		}).then(response => {
 			if (response.ok) {
-				response.json().then(data => {
-					messageApi.open({
-						type: 'success',
-						content: 'Успешно отправлено резюме'
-					})
-				})
 				setIsOpen(false)
+				setIsSuccessModalOpen(true)
 			} else {
 				response.json().then(data => {
 					messageApi.open({ type: 'error', content: data.errors[0].message })
@@ -97,6 +93,45 @@ export const DirectResume = ({
 	return (
 		<>
 			{contextHolder}
+
+			<ConfigProvider
+				theme={{
+					token: {
+						boxShadow: '0 0 19px 0 rgba(212, 227, 241, 0.6)'
+					}
+				}}
+			>
+				<Modal
+					centered
+					open={isSuccessModalOpen}
+					bodyStyle={{
+						padding: '26px'
+					}}
+					width={407}
+					className="pr-[52px] pl-[52px] pb-[52px]"
+					footer={null}
+					title={null}
+					onCancel={() => {
+						setIsSuccessModalOpen(false)
+					}}
+				>
+					<div className="text-center">
+						<p className="font-content-font font-normal text-black text-[16px]/[20px] mb-[40px]">
+							Спасибо, ваше резюме успешно отправлено
+						</p>
+						<Button
+							type="primary"
+							className="w-full rounded-[55.5px]"
+							onClick={() => {
+								setIsSuccessModalOpen(false)
+							}}
+						>
+							Ок
+						</Button>
+					</div>
+				</Modal>
+			</ConfigProvider>
+
 			<ConfigProvider
 				theme={{
 					token: {
@@ -331,7 +366,7 @@ export const DirectResume = ({
 						</div>
 					</div>
 					{img && (
-						<div className="w-60 justify-center flex max-[874px]:h-full max-[874px]:w-full max-[874px]:items-center">
+						<div className="mr-6 w-60 justify-center flex max-[874px]:h-full max-[874px]:w-full max-[874px]:items-center">
 							<div
 								className={`bg-[#3E89F9] bg-opacity-80 w-[125px] h-[125px] rounded-full absolute -z-10 ${mt}`}
 							/>

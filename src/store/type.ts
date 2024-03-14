@@ -164,7 +164,7 @@ type educationResponceType = {
 	educationLevel: string
 	country: string
 	institution: string
-	specialty: string
+	specialty?: string
 	endYear: string
 }
 

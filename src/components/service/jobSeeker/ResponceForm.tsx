@@ -40,7 +40,12 @@ import {
 	completeEducation,
 	completeSkills
 } from '../../../store/reducers/SeekerFormReducers/FormCompletionReducer'
-import { setAllData } from '../../../store/reducers/SeekerFormReducers/RespondEducationReducer'
+import {
+	addEducation,
+	alterEducation,
+	deleteEducation,
+	educationResponceItemType
+} from '../../../store/reducers/SeekerFormReducers/RespondEducationReducer'
 import { allSkillsData } from '../../../store/reducers/SeekerFormReducers/SkillsReducer'
 
 import ArrowIcon from './ArrowIcon'
@@ -92,6 +97,19 @@ export const ResponseForm = () => {
 			endWork: '',
 			seat: '',
 			duties: ''
+		}
+	})
+
+	const [educationToEdit, setEducationToEdit] = useState<
+		educationResponceItemType | undefined
+	>({
+		id: '',
+		education: {
+			nameofInstitute: '',
+			graduateYear: '',
+			countryId: 184,
+			educationLevelId: 4,
+			specialization: ''
 		}
 	})
 
@@ -168,7 +186,11 @@ export const ResponseForm = () => {
 									<p className="font-content-font text-black text-[16px]/[19.2px] font-bold select-none">
 										Образование
 									</p>
-									{educationCompleted ? <CheckedIcon /> : <EditSvg />}
+									{educationData.educations.length !== 0 ? (
+										<CheckedIcon />
+									) : (
+										<EditSvg />
+									)}
 								</div>
 								<div
 									onClick={() => {
@@ -209,7 +231,7 @@ export const ResponseForm = () => {
 														'/services/jobseeker/vacancyview/respond/aboutme'
 													)
 											  }
-											: !educationCompleted
+											: educationData.educations.length === 0
 											? () => {
 													navigate(
 														'services/jobseeker/vacancyview/respond/education/main'
@@ -247,7 +269,13 @@ export const ResponseForm = () => {
 																phone: aboutMeData.phone,
 																email: aboutMeData.email
 															},
-															educations: [],
+															educations: educationData.educations.map(edu => ({
+																institution: edu.education.nameofInstitute,
+																endYear: edu.education.graduateYear,
+																country: 'РФ',
+																educationLevel: 'Высшее',
+																specialty: edu.education.specialization
+															})),
 															portfolio: {
 																url: '',
 																workExperiences: experienceData.experiences.map(
@@ -279,7 +307,7 @@ export const ResponseForm = () => {
 									}
 								>
 									{aboutMeCompleted &&
-									educationCompleted &&
+									educationData.educations.length !== 0 &&
 									(experienceData.noExperienceFlag ||
 										experienceData.experiences.length !== 0) &&
 									skillsCompleted
@@ -522,20 +550,21 @@ export const ResponseForm = () => {
 								</p>
 							</div>
 							<div className="mt-[40px]">
-								{experienceData.experiences.map(exp => (
+								{educationData.educations.map(edu => (
 									<div
-										key={exp.id}
+										key={edu.id}
 										className="h-[90px] pl-[16px] pr-[16px] pb-[20px] mb-[20px] border-solid flex justify-between items-center border-0 border-b-[1px] border-black border-opacity-20 cursor-pointer"
 									>
 										<div className="flex flex-col gap-[12px]">
 											<p className="font-content-font text-black text-[16px]/[16px] font-bold select-none">
-												{exp.experience.seat}
+												{edu.education.nameofInstitute}
 											</p>
 											<p className="font-content-font text-black text-[16px]/[16px] font-normal select-none">
-												{exp.experience.workplace}
+												{edu.education.specialization},{' '}
+												{edu.education.educationLevelId}
 											</p>
 											<p className="font-content-font text-black text-[14px]/[14px] font-normal select-none opacity-60">
-												{exp.experience.beginWork} - {exp.experience.endWork}
+												{edu.education.graduateYear}
 											</p>
 										</div>
 										<div className="flex gap-[12px]">
@@ -543,13 +572,13 @@ export const ResponseForm = () => {
 												type="text"
 												icon={<EditSvg />}
 												onClick={() => {
-													setExperienceToEdit(
-														experienceData.experiences.find(
-															expa => expa.id === exp.id
+													setEducationToEdit(
+														educationData.educations.find(
+															educa => educa.id === edu.id
 														)
 													)
 													navigate(
-														'/services/jobseeker/vacancyview/respond/experience/edit'
+														'/services/jobseeker/vacancyview/respond/education/edit'
 													)
 												}}
 											/>
@@ -557,7 +586,7 @@ export const ResponseForm = () => {
 												type="text"
 												icon={<DeleteSvg />}
 												onClick={() => {
-													dispatch(deleteExperience(exp.id))
+													dispatch(deleteEducation(edu.id))
 												}}
 											/>
 										</div>
@@ -604,25 +633,21 @@ export const ResponseForm = () => {
 							requiredMark={false}
 							onFinish={values => {
 								dispatch(
-									setAllData({
-										graduateYear: values.graduateYear,
-										specialization: values.specialization,
-										nameOfInstitute: values.instituteName,
-										countryId: values.country,
-										educationLevelId: values.educationLevel
+									addEducation({
+										id: uuid(),
+										education: {
+											graduateYear: values.graduateYear,
+											specialization: values.specialization,
+											nameofInstitute: values.instituteName,
+											countryId: values.country,
+											educationLevelId: values.educationLevel
+										}
 									})
 								)
 								dispatch(completeEducation())
 								navigate(
 									'/services/jobseeker/vacancyview/respond/education/main'
 								)
-							}}
-							initialValues={{
-								specialization: educationData.specialization,
-								instituteName: educationData.nameOfInstitute,
-								country: educationData.countryId,
-								educationLevel: educationData.educationLevelId,
-								graduateYear: educationData.graduateYear
 							}}
 						>
 							<div className="flex items-center mb-[38px]">
@@ -759,26 +784,28 @@ export const ResponseForm = () => {
 							layout="vertical"
 							requiredMark={false}
 							onFinish={values => {
-								dispatch(
-									setAllData({
-										graduateYear: values.graduateYear,
-										specialization: values.specialization,
-										nameOfInstitute: values.instituteName,
-										countryId: values.country,
-										educationLevelId: values.educationLevel
-									})
-								)
+								educationToEdit !== undefined &&
+									dispatch(
+										alterEducation({
+											id: educationToEdit?.id,
+											nameofInstitute: values.instituteName,
+											countryId: values.country,
+											educationLevelId: values.educationLevel,
+											graduateYear: values.graduateYear,
+											specialization: values.specialization
+										})
+									)
 								dispatch(completeEducation())
 								navigate(
 									'/services/jobseeker/vacancyview/respond/education/main'
 								)
 							}}
 							initialValues={{
-								specialization: educationData.specialization,
-								instituteName: educationData.nameOfInstitute,
-								country: educationData.countryId,
-								educationLevel: educationData.educationLevelId,
-								graduateYear: educationData.graduateYear
+								specialization: educationToEdit?.education.specialization,
+								instituteName: educationToEdit?.education.nameofInstitute,
+								country: educationToEdit?.education.countryId,
+								educationLevel: educationToEdit?.education.educationLevelId,
+								graduateYear: educationToEdit?.education.graduateYear
 							}}
 						>
 							<div className="flex items-center mb-[38px]">

@@ -290,7 +290,7 @@ export const jsxElements = [
 		index: 'Testing',
 		element: (
 			<TemplateCard
-				href="https://shelly.kpfu.ru/e-ksu/SITE_STUDENT_SH_PR_AC.test_student_personal"
+				href="https://shelly.kpfu.ru/e-ksu/SITE_STUDENT_SH_PR_AC.test_student_personal?p_menu=28"
 				info="TestingInfo"
 				title="Testing"
 				buttonText="Pass"
@@ -561,7 +561,7 @@ export const jsxElements = [
 		index: 'VirtualAudience',
 		element: (
 			<TemplateCard
-				href="#"
+				href="https://shelly.kpfu.ru/e-ksu/site_student_services.study_tasks"
 				info="VirtualAudienceInfo"
 				title="VirtualAudience"
 				buttonText="Watch"
@@ -583,7 +583,7 @@ export const jsxElements = [
 		index: 'PsychologicalHelp',
 		element: (
 			<TemplateCard
-				href="#"
+				href="https://shelly.kpfu.ru/e-ksu/student_psi_test.record_medic?p_menu=42"
 				info="PsychologicalHelpInfo"
 				title="PsychologicalHelp"
 				buttonText="Watch"
@@ -604,7 +604,7 @@ export const jsxElements = [
 		index: 'DigitalDepartments',
 		element: (
 			<TemplateCard
-				href="#"
+				href="https://shelly.kpfu.ru/e-ksu/portal_person.kurs_cifra#tab1"
 				info="DigitalDepartmentsInfo"
 				title="DigitalDepartments"
 				buttonText="Watch"
@@ -626,7 +626,7 @@ export const jsxElements = [
 		index: 'ManagementScientificProjects',
 		element: (
 			<TemplateCard
-				href="#"
+				href="https://shelly.kpfu.ru/e-ksu/portal_person.kurs_cifra?p_type_menu_open=2#tab1"
 				info="ManagementScientificProjectsInfo"
 				title="ManagementScientificProjects"
 				buttonText="Watch"

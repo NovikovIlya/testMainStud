@@ -55,7 +55,7 @@ export const StepOne = ({nextStep}: IStepOne) => {
                             <Input className={'text-base'} placeholder={'Ввести'}/>
                         </Form.Item>
                     </Col>
-
+                    
                     <Col span={12}>
                         <Form.Item label={<LabelFormItem label={'Должность'}/>}>
                             <Select placeholder={'Выбрать'}>

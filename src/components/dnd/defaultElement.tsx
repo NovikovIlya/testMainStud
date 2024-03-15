@@ -17,8 +17,8 @@ export const jsxElements = [
 			<TemplateCard
 				href="/services/electronicBook/estimation"
 				img="/image23.png"
-				info="Здесь находится план вашего обучения, предметы и отведенные для них часы"
-				title="Академический календарь"
+				info="ElectronicBookInfo"
+				title="ElectronicBook"
 			/>
 		),
 		place: {
@@ -35,8 +35,8 @@ export const jsxElements = [
 			<TemplateCard
 				href="/services/session/session"
 				img="/image28.png"
-				info="Вся информация по сессии, материалы и баллы отображаются здесь"
-				title="Сессия"
+				info="SessionInfo"
+				title="Session"
 				width={102}
 				height={172}
 			/>
@@ -55,8 +55,8 @@ export const jsxElements = [
 			<TemplateCard
 				href="https://shelly.kpfu.ru/e-ksu/site_student_sh_pr_ac.offor_document?p_menu=14&p_type_menu_open=151"
 				img="/image31.png"
-				info="Здесь Вы можете подать заявки на оформление различных документов"
-				title="Заявки"
+				info="ApplicationsInfo"
+				title="Applications"
 				width={96}
 				height={114}
 			/>
@@ -157,8 +157,8 @@ export const jsxElements = [
 			<TemplateCard
 				href="https://shelly.kpfu.ru/e-ksu/portal_person.kurs_cifra#tab1"
 				img="/image24.png"
-				info="Поиск по списку сотрудников Казанского федерального университета, а также их контакты"
-				title="Сотрудники"
+				info="StaffInfo"
+				title="Staff"
 				width={130}
 				height={137}
 				isRounded
@@ -201,7 +201,7 @@ export const jsxElements = [
 			<TemplateCard
 				href="https://career.kpfu.ru/"
 				info="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-				title="Вакансии студентам"
+				title="VacanciesStudents"
 			/>
 		),
 		place: {
@@ -237,11 +237,11 @@ export const jsxElements = [
 			<TemplateCard
 				href="https://shelly.kpfu.ru/e-ksu/portal_person.kurs_cifra?p_type_menu_open=2#tab1"
 				info="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Tincidunt augue interdum velit euismod in pellentesque massa placerat."
-				title="Образовательные курсы"
+				title="EducationalCourses"
 				img="/image2.png"
 				width={177}
 				height={150}
-				buttonText="Записаться"
+				buttonText="SignUp"
 				buttonType="primary"
 			/>
 		),
@@ -270,8 +270,8 @@ export const jsxElements = [
 		element: (
 			<TemplateCard
 				href="https://media.kpfu.ru/news?kn%5B0%5D=Новости%20науки&created="
-				info="Читайте о новостях и событиях, связанных с Казанским федеральным университетом"
-				title="Новости"
+				info="NewsInfo"
+				title="News"
 				img="/image3.png"
 				positionImage="-mt-4"
 				width={177}
@@ -292,8 +292,8 @@ export const jsxElements = [
 			<TemplateCard
 				href="https://shelly.kpfu.ru/e-ksu/SITE_STUDENT_SH_PR_AC.test_student_personal"
 				info="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-				title="Тестирование"
-				buttonText="Пройти"
+				title="Testing"
+				buttonText="Pass"
 				buttonType="primary"
 			/>
 		),
@@ -395,9 +395,9 @@ export const jsxElements = [
 		index: 'DocumentFlow',
 		element: (
 			<TemplateCard
-				href="https://shelly.kpfu.ru/e-ksu/site_student_sh_pr_ac.offor_document?p_menu=14&p_type_menu_open=1"
-				info="Один из старейших университетов в России, основанный в 1804 году. Университет славится своими сильными школами математики..."
-				title="Документооборот"
+				href="/services/unifiedServiceCenter/documentFlow"
+				info="DocumentFlowInfo"
+				title="DocumentFlow"
 				img="/image8.png"
 				width={120}
 				height={120}
@@ -416,8 +416,8 @@ export const jsxElements = [
 		element: (
 			<TemplateCard
 				href={`https://shelly.kpfu.ru/e-ksu/student_grants.pay_list?p1=${aId}&p2=${sId}&p_h=${hId}`}
-				info="Здесь хранится история ваших курсов, которые вы когда-либо проходили, проходите или собираетесь пройти"
-				title="Расчетный лист"
+				info="PaySheetInfo"
+				title="PaySheet"
 				img="/image9.png"
 				width={140}
 				height={140}
@@ -500,9 +500,9 @@ export const jsxElements = [
 		element: (
 			<TemplateCard
 				href="/services/practices"
-				info="Как попасть в двойку и многие другие ответы по местоположению зданий КФУ Вы найдете в этом сервисе"
+				info="PracticesInfo"
 				title="Practices"
-				buttonText="Изучить"
+				buttonText="Study"
 			/>
 		),
 		place: {
@@ -518,10 +518,10 @@ export const jsxElements = [
 		element: (
 			<TemplateCard
 				href="https://sa.kpfu.ru/news_aggregator/news/"
-				info="Новостные статьис указанием источников для последующего анализа международных ситуаций"
+				info="SitAnKFUInfo"
 				title="SitAnKFU"
 				img="/image45.png"
-				buttonText="Посмотреть"
+				buttonText="Watch"
 				height={160}
 			/>
 		),
@@ -537,10 +537,10 @@ export const jsxElements = [
 		index: 'Dormitory',
 		element: (
 			<TemplateCard
-				href="https://portal-dis.kpfu.ru/e-ksu/SITE_STUDENT_SH_PR_AC.dormitory_work_document?p_menu=37"
-				info="Как попасть в двойку и многие другие ответы по местоположению зданий КФУ Вы найдете в этом сервисе"
+				href="https://shelly.kpfu.ru/e-ksu/SITE_STUDENT_SH_PR_AC.dormitory_work_document?p_menu=37"
+				info="DormitoryInfo"
 				title="Dormitory"
-				buttonText="Изучить"
+				buttonText="Study"
 			/>
 		),
 		place: {

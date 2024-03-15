@@ -1,22 +1,10 @@
 import { Input, Space, Typography } from 'antd'
-import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { Skills } from './Skills'
 
-interface IFormInput {
-	skills: Array<string>
-	story: string
-}
-
 export const ProfessionalSkills = () => {
 	const { t } = useTranslation()
-	const { control, handleSubmit } = useForm({
-		defaultValues: {
-			skills: [''],
-			story: ''
-		}
-	})
 
 	return (
 		<div className="m-14 radio w-full max-w-2xl">
@@ -30,18 +18,11 @@ export const ProfessionalSkills = () => {
 				</Space>
 				<Space direction="vertical" size={'small'} className="w-full">
 					<Typography.Text>О себе (не обязательно)</Typography.Text>
-					<Controller
-						name="story"
-						control={control}
-						render={({ field }) => (
-							<Input.TextArea
-								{...field}
-								rows={4}
-								size="large"
-								placeholder=""
-								className="w-full"
-							/>
-						)}
+					<Input.TextArea
+						rows={4}
+						size="large"
+						placeholder=""
+						className="w-full"
 					/>
 				</Space>
 			</Space.Compact>

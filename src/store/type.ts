@@ -1,3 +1,5 @@
+import { performanceItem } from '../api/types'
+
 export interface InitialState {
 	accessToken: string | null
 	refreshToken: string | null
@@ -11,14 +13,30 @@ export type Documentation = {
 		additionalProp3: Template[]
 	}
 }
+
+export interface DocumentDocumentation {
+	links: {
+		CorporateNetwork: DocumentLib[]
+		YandexServices: DocumentLib[]
+		StudentCabinet: DocumentLib[]
+	}
+}
+
 export type Template = {
 	documentName: string
+	link: string
+}
+export interface DocumentLib {
+	resourceName: string
 	link: string
 }
 export type Email = {
 	id: number
 	email: string
 	verified: boolean
+}
+export interface IPerformance {
+	journal: performanceItem[]
 }
 export interface User {
 	username: string

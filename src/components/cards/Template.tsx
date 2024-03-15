@@ -23,7 +23,7 @@ export const TemplateCard = ({
 	title,
 	height = 112,
 	width = 112,
-	buttonText = 'Посмотреть',
+	buttonText = 'Watch',
 	mt = 'mt-3',
 	positionImage,
 	isRounded,

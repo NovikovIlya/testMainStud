@@ -1,32 +1,23 @@
 import clsx from 'clsx'
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-import CalendarSvg from '../../../assets/svg/CalendarSvg'
-import { SubtractSVG } from '../../../assets/svg/SubtractSVG'
+import { ElectronicBookSvg } from '../../../assets/svg/ElectronicBookSvg'
 import { Header } from '../../layout/Header'
 
-import { Curriculum } from './Curriculum'
-import { Session } from './Session'
+import { DocumentFlow } from './DocumentFlow'
 
-export const NavSession = () => {
+const navList = [
+	{
+		id: '/services/unifiedServiceCenter/documentFlow',
+		icon: <ElectronicBookSvg />,
+		name: 'Документы'
+	}
+]
+export const NavUnifiedServiceCenter = () => {
 	const { pathname } = useLocation()
 	const navigate = useNavigate()
 	const { t } = useTranslation()
-
-	const navList = [
-		{
-			id: '/services/session/session',
-			icon: <CalendarSvg />,
-			name: t('SessionSchedule')
-		},
-		{
-			id: '/services/session/curriculum',
-			icon: <SubtractSVG />,
-			name: t('Curriculum')
-		}
-	]
 
 	const handleNavigate = (url: string) => {
 		navigate(url)
@@ -50,16 +41,15 @@ export const NavSession = () => {
 	})
 	return (
 		<>
-			<Header type="service" service={t('SessionService')} />
+			<Header type="service" service={t('UnifiedServiceCenter')} />
 
 			<div className="shadowNav mt-20">
 				<ul className="min-w-[230px] pt-14 flex flex-col gap-4 ">
 					{handleList}
 				</ul>
 			</div>
-			<div className="bg-[#F5F8FB] w-full pt-14 px-14 mt-20">
-				{pathname === navList[0].id && <Session />}
-				{pathname === navList[1].id && <Curriculum />}
+			<div className="bg-[#F5F8FB] w-full mt-20">
+				{pathname === navList[0].id && <DocumentFlow />}
 			</div>
 		</>
 	)

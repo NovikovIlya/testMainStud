@@ -1,5 +1,6 @@
 import { Table } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
+import { useTranslation } from 'react-i18next'
 
 import { useGetExamsScheduleQuery } from '../../../store/api/serviceApi'
 
@@ -12,52 +13,53 @@ interface DataType {
 	date_note: string
 	employee_name: string
 }
-const columns: ColumnsType<DataType> = [
-	{
-		title: 'Время',
-		dataIndex: 'time_note',
-		key: 'time_note',
-		render: item => <p className="text-base ">{item}</p>
-	},
-	{
-		title: 'Адрес',
-		dataIndex: 'building_name',
-		key: 'building_name',
-		render: item => <p className="text-base">{item}</p>
-	},
-	{
-		title: 'Аудитория',
-		dataIndex: 'room_num',
-		key: 'room_num',
-		render: item => <p className="text-base">{item}</p>
-	},
-	{
-		title: 'Предмет',
-		key: 'name',
-		dataIndex: 'name',
-		render: item => <p className="text-base max-w-xs">{item}</p>
-	},
-	{
-		title: 'Дата аттестации',
-		key: 'certification',
-		dataIndex: 'certification',
-		render: item => <p className="text-base">{item}</p>
-	},
-	{
-		title: 'Преподаватель',
-		key: 'employee_name',
-		dataIndex: 'employee_name',
-		render: item => <p className="text-base">{item}</p>
-	}
-]
 
 export const Session = () => {
 	const { data: exam } = useGetExamsScheduleQuery()
+	const { t } = useTranslation()
 
+	const columns: ColumnsType<DataType> = [
+		{
+			title: t('Time'),
+			dataIndex: 'time_note',
+			key: 'time_note',
+			render: item => <p className="text-base ">{item}</p>
+		},
+		{
+			title: t('adress'),
+			dataIndex: 'building_name',
+			key: 'building_name',
+			render: item => <p className="text-base">{item}</p>
+		},
+		{
+			title: t('LectureHall'),
+			dataIndex: 'room_num',
+			key: 'room_num',
+			render: item => <p className="text-base">{item}</p>
+		},
+		{
+			title: t('Subject'),
+			key: 'name',
+			dataIndex: 'name',
+			render: item => <p className="text-base max-w-xs">{item}</p>
+		},
+		{
+			title: t('DateCertification'),
+			key: 'certification',
+			dataIndex: 'certification',
+			render: item => <p className="text-base">{item}</p>
+		},
+		{
+			title: t('Teacher'),
+			key: 'employee_name',
+			dataIndex: 'employee_name',
+			render: item => <p className="text-base">{item}</p>
+		}
+	]
 	return (
 		<div>
 			<div className="text-black text-3xl font-normal leading-7">
-				Расписание сессии
+				{t('SessionSchedule')}
 			</div>
 			<Table
 				columns={columns}

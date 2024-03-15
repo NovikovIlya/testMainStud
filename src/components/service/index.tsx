@@ -2,6 +2,7 @@ import { ReactNode } from 'react'
 import { useLocation } from 'react-router-dom'
 
 import { NavAboutMe } from './aboutMe/NavAboutMe'
+import { NavUnifiedServiceCenter } from './documentFlow/NavUnifiedServiceCenter'
 import { NavElectronicBook } from './electronicBook/NavElectronicBook'
 import { NavPractices } from './practices/NavPractices'
 import { NavSchedule } from './schedule/NavSchedule'
@@ -21,6 +22,9 @@ export const Service = () => {
 				{pathname.includes('/services/setting') && <NavSetting />}
 				{pathname.includes('/services/practices') && <NavPractices />}
 				{pathname.includes('/services/businessTrip') && <NavBusinessTrip />}
+				{pathname.includes('/services/unifiedServiceCenter') && (
+					<NavUnifiedServiceCenter />
+				)}
 			</div>
 		</div>
 	)

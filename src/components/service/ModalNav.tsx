@@ -91,7 +91,7 @@ export const ModalNav = () => {
 				</div>
 			</Col>
 			{layouts.lg.length === jsxElements.length ? (
-				<div className="text-3xl">Пока сервисов нет</div>
+				<div className="text-3xl">{t('NoService')}</div>
 			) : (
 				jsxElements.map(item => {
 					const isLayout = !!layouts.lg.filter(el => el.i === item.index).length

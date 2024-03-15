@@ -3,29 +3,21 @@ import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { ElectronicBookSvg } from '../../../assets/svg/ElectronicBookSvg'
-import { TeachersWorkSvg } from '../../../assets/svg/TeachersWorkSvg'
 import { Header } from '../../layout/Header'
 
-import { AssessmentTeachers } from './AssessmentTeachers'
 import { Estimation } from './Estimation'
 
-const navList = [
-	{
-		id: '/services/electronicBook/estimation',
-		icon: <ElectronicBookSvg />,
-		name: 'Электронная зачетная книжка'
-	}
-	// {
-	// 	id: '/services/electronicBook/teachersWork',
-	// 	icon: <TeachersWorkSvg />,
-	// 	name: 'Оценка работы преподавателей'
-	// }
-]
 export const NavElectronicBook = () => {
 	const { pathname } = useLocation()
 	const navigate = useNavigate()
 	const { t } = useTranslation()
-
+	const navList = [
+		{
+			id: '/services/electronicBook/estimation',
+			icon: <ElectronicBookSvg />,
+			name: t('ElectronicBook')
+		}
+	]
 	const handleNavigate = (url: string) => {
 		navigate(url)
 	}
@@ -57,7 +49,6 @@ export const NavElectronicBook = () => {
 			</div>
 			<div className="bg-[#F5F8FB] w-full mt-20">
 				{pathname === navList[0].id && <Estimation />}
-				{/* {pathname === navList[1].id && <AssessmentTeachers />} */}
 			</div>
 		</>
 	)

@@ -1,13 +1,12 @@
 import type { MenuProps } from 'antd'
 import { Menu } from 'antd'
 import { useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { PracticesSvg } from '../../../assets/svg/PracticesSvg'
-import { Header } from '../../layout/Header'
 
 import './Practices.sass'
+import { Schedule } from './forming-schedule/Schedule'
 import { Tasks } from './individual-tasks/Tasks'
 import { Practical } from './practical/Practical'
 import { Roster } from './roster/Roster'
@@ -37,7 +36,7 @@ const items: MenuItem[] = [
 		getItem('Практики', 'practical')
 	]),
 	getItem('Формирование документов', 'sub2', <PracticesSvg />, [
-		getItem('График практик', '5'),
+		getItem('График практик', 'formingSchedule'),
 		getItem('Представление в приказ', '6'),
 		getItem('Приказ по практике', '7')
 	]),
@@ -52,7 +51,6 @@ export const NavPractices = () => {
 	const [openKeys, setOpenKeys] = useState(['sub1'])
 	const [current, setCurrent] = useState('registerContracts')
 	const navigate = useNavigate()
-	const { t } = useTranslation()
 
 	const onClick: MenuProps['onClick'] = e => {
 		navigate('/services/practices/' + e.key)
@@ -70,7 +68,6 @@ export const NavPractices = () => {
 
 	return (
 		<>
-			<Header type="service" service={t('PracticesService')} />
 			<Menu
 				defaultOpenKeys={['sub1']}
 				selectedKeys={[current]}
@@ -78,13 +75,14 @@ export const NavPractices = () => {
 				mode="inline"
 				onClick={onClick}
 				onOpenChange={onOpenChange}
-				className="min-w-[230px] max-w-[230px] flex flex-col gap-7 mt-28 "
+				className="min-w-[230px] max-w-[230px] flex flex-col gap-7"
 				items={items}
 			/>
-			<div className="bg-[#F5F8FB] w-full pt-14 px-14 mt-20">
+			<div className="bg-[#F5F8FB] w-full pt-14 px-14 ">
 				{current === 'registerContracts' && <Roster />}
 				{current === 'individualTasks' && <Tasks />}
 				{current === 'practical' && <Practical />}
+				{current === 'formingSchedule' && <Schedule />}
 			</div>
 		</>
 	)

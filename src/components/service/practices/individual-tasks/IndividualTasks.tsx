@@ -24,103 +24,75 @@ import { useNavigate } from 'react-router-dom'
 
 import { DownloadSvg } from '../../../../assets/svg/DownloadSvg'
 import { PrinterSvg } from '../../../../assets/svg/PrinterSvg'
+import {
+	useDeleteTaskMutation,
+	useGetTasksQuery
+} from '../../../../store/practiceApi/taskService'
+import { ContentItem, ITaskFull, TypeGetTasks } from '../../../../store/type'
 
 type InputRef = GetRef<typeof Input>
 
 interface FilterType {
-    value: string
-    label: string
+	value: string
+	label: string
 }
 
 const filterData: FilterType[] = [
-    {
-        value: '',
-        label: 'Все'
-    },
-    {
-        value: 'Производственная (клиническая) практика: акушерство и гинекология',
-        label: 'Производственная (клиническая) практика: акушерство и гинекология'
-    },
-    {
-        value: 'Производственная (клиническая) практика: тест и тест',
-        label: 'Производственная (клиническая) практика: тест и тест'
-    },
-]
-
-const filterSpecializationData: FilterType[] = [
-    {
-        value: '',
-        label: 'Все'
-    },
-    {
-        value: '31.08.01',
-        label: '31.08.01 Акушерство и гинекология'
-    },
-    {
-        value: '31.08.02',
-        label: '31.08.02 Акушерство и гинекология'
-    },
-]
-
-interface DataType {
-	key: string
-	name: string
-	type: string
-	tasks: string[]
-}
-
-type DataIndex = keyof DataType
-
-const data: DataType[] = [
 	{
-		key: '1',
-		name: '31.08.01 Акушерство и гинекология',
-		type: 'Производственная (клиническая) практика: акушерство и гинекология',
-		tasks: [
-			'Овладеть методиками кесарева сечения (корпоральное, истмико-корпоральное, в нижнем сегменте матки, экстракорпоральное;',
-			'Овладеть методиками родоразрешающих и плодоразрушающих операций',
-			'Акушерский травматизм матери и плода'
-		]
+		value: '',
+		label: 'Все'
 	},
 	{
-		key: '2',
-		name: '31.08.01 Акушерство и гинекология',
-		type: 'Производственная (клиническая) практика: тест и тест',
-		tasks: [
-			'Овладеть методиками кесарева сечения (корпоральное, истмико-корпоральное, в нижнем сегменте матки, экстракорпоральное;',
-			'Овладеть методиками родоразрешающих и плодоразрушающих операций',
-			'Акушерский травматизм матери и плода'
-		]
+		value: 'Производственная',
+		label: 'Производственная'
 	},
 	{
-		key: '3',
-		name: '31.08.02 Акушерство и гинекология',
-		type: 'Производственная (клиническая) практика: тест и тест',
-		tasks: [
-			'Овладеть методиками кесарева сечения (корпоральное, истмико-корпоральное, в нижнем сегменте матки, экстракорпоральное;',
-			'Овладеть методиками родоразрешающих и плодоразрушающих операций',
-			'Акушерский травматизм матери и плода'
-		]
-	},
-	{
-		key: '4',
-		name: '31.08.02 Акушерство и гинекология',
-		type: 'Производственная (клиническая) практика: акушерство и гинекология',
-		tasks: [
-			'Овладеть методиками кесарева сечения (корпоральное, истмико-корпоральное, в нижнем сегменте матки, экстракорпоральное;',
-			'Овладеть методиками родоразрешающих и плодоразрушающих операций',
-			'Акушерский травматизм матери и плода'
-		]
+		value: 'Учебная',
+		label: 'Учебная'
 	}
 ]
 
-const IndividualTasks = () => {
+const filterSpecializationData: FilterType[] = [
+	{
+		value: '',
+		label: 'Все'
+	},
+	{
+		value: '31.08.01',
+		label: '31.08.01 Акушерство и гинекология'
+	},
+	{
+		value: '31.08.12',
+		label: '31.08.12 Педиатрия'
+	}
+]
+
+type DataIndex = keyof ContentItem
+type PropsType = {
+	setEdit: (edit: string) => void
+}
+
+const IndividualTasks = ({ setEdit }: PropsType) => {
+	const { data } = useGetTasksQuery({ page: 0, size: 20, sort: [''] })
+	const [deleteTask] = useDeleteTaskMutation()
 	const [searchText, setSearchText] = useState('')
 	const [searchedColumn, setSearchedColumn] = useState('')
 	const searchInput = useRef<InputRef>(null)
-	const [dataTable, setDataTable] = useState<DataType[]>(data)
-    const [filters, setFilters] = useState<{type: string, spec: string}>({type: '',spec: ''})
+	const [dataTable, setDataTable] = useState<any>()
+	const [filters, setFilters] = useState<{ type: string; spec: string }>({
+		type: '',
+		spec: ''
+	})
 
+	useEffect(() => {
+		if (data) {
+			setDataTable(data.content)
+		}
+	}, [data])
+
+	const deleteTaskOnClick = (id: string) => {
+		deleteTask(id).unwrap()
+	}
 
 	const handleSearch = (
 		selectedKeys: string[],
@@ -136,18 +108,26 @@ const IndividualTasks = () => {
 		clearFilters()
 		setSearchText('')
 	}
-	
-	useEffect(() => {
-        setDataTable(data.filter(x => x.type.includes(filters.type) && x.name.includes(filters.spec)))
-    }, [filters])
 
-    const filter = (value: string, index: string) => {
-        setFilters(prev => ({...prev, [index]: value}))
-    }
+	useEffect(() => {
+		if (data) {
+			setDataTable(
+				data.content.filter(
+					x =>
+						x.practiceType.includes(filters.type) &&
+						x.specialityName.includes(filters.spec)
+				)
+			)
+		}
+	}, [filters])
+
+	const filter = (value: string, index: string) => {
+		setFilters(prev => ({ ...prev, [index]: value }))
+	}
 
 	const getColumnSearchProps = (
 		dataIndex: DataIndex
-	): TableColumnType<DataType> => ({
+	): TableColumnType<ContentItem> => ({
 		filterDropdown: ({
 			setSelectedKeys,
 			selectedKeys,
@@ -242,11 +222,11 @@ const IndividualTasks = () => {
 		}
 	})
 
-	const columns: TableColumnsType<DataType> = [
+	const columns: TableColumnsType<ContentItem> = [
 		{
 			title: 'Шифр и наименование специальности',
-			dataIndex: 'name',
-			key: 'name',
+			dataIndex: 'specialityName',
+			key: 'specialityName',
 			width: '20%',
 			render: text => <span className="font-bold">{text}</span>,
 			filters: [
@@ -262,12 +242,12 @@ const IndividualTasks = () => {
 			filterSearch: true,
 			//@ts-ignore
 			onFilter: (value: string, record) => record.name.includes(value),
-			sorter: (a, b) => a.name.length - b.name.length
+			sorter: (a, b) => a.specialityName.length - b.specialityName.length
 		},
 		{
 			title: 'Тип практики',
-			dataIndex: 'type',
-			key: 'type',
+			dataIndex: 'practiceType',
+			key: 'practiceType',
 			width: '20%',
 			filters: [
 				{
@@ -283,7 +263,7 @@ const IndividualTasks = () => {
 			filterSearch: true,
 			//@ts-ignore
 			onFilter: (value: string, record) => record.type.includes(value),
-			sorter: (a, b) => a.type.length - b.type.length
+			sorter: (a, b) => a.practiceType.length - b.practiceType.length
 		},
 		{
 			title: 'Индивидуальные задания',
@@ -293,13 +273,23 @@ const IndividualTasks = () => {
 		},
 		{
 			title: '',
-			dataIndex: '',
-			key: 'x',
-			render: _ => (
+			dataIndex: 'id',
+			key: 'id',
+			render: key => (
 				<Space size="middle">
-					<Button type="default" icon={<EditOutlined />} />
+					<Button
+						type="default"
+						icon={<EditOutlined />}
+						onClick={() => setEdit(key)}
+					/>
 					<Button type="link" icon={<PrinterOutlined />} />
-					<Button type="default" icon={<DeleteOutlined />} danger />
+					<Button
+						type="default"
+						onClick={() => deleteTaskOnClick(key)}
+						value={key}
+						icon={<DeleteOutlined />}
+						danger
+					/>
 				</Space>
 			)
 		}
@@ -316,7 +306,7 @@ const IndividualTasks = () => {
 			</Row>
 			<Row gutter={[16, 16]} className="mt-12">
 				<Col span={5}>
-					<Typography.Text>Сортировка</Typography.Text>
+					<Typography.Text>Тип практики</Typography.Text>
 				</Col>
 				<Col span={7}>
 					<Select
@@ -324,7 +314,7 @@ const IndividualTasks = () => {
 						defaultValue=""
 						className="w-full"
 						options={filterData}
-                        onChange={value => filter(value, 'type')}
+						onChange={value => filter(value, 'type')}
 					/>
 				</Col>
 				<Col flex={'auto'} />
@@ -352,7 +342,7 @@ const IndividualTasks = () => {
 						defaultValue=""
 						className="w-full"
 						options={filterSpecializationData}
-                        onChange={value => filter(value, 'spec')}
+						onChange={value => filter(value, 'spec')}
 					/>
 				</Col>
 				<Col flex={'auto'} />

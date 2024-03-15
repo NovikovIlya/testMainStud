@@ -4,11 +4,13 @@ import React from 'react'
 import { ArrowLeftSvg } from '../../../../assets/svg'
 import { DownloadSvg } from '../../../../assets/svg/DownloadSvg'
 import { PrinterSvg } from '../../../../assets/svg/PrinterSvg'
+import { useGetContractQuery } from '../../../../store/practiceApi/taskService'
 
 type PropsType = {
 	setIsPreview: (value: boolean) => void
 	setIsCreate: (value: boolean) => void
 	setIsFinalReview: (value: boolean) => void
+	preview: string
 }
 interface DataType {
 	key: string
@@ -85,8 +87,62 @@ const columns: TableProps<DataType>['columns'] = [
 export const PreviewContracts = ({
 	setIsPreview,
 	setIsCreate,
-	setIsFinalReview
+	setIsFinalReview,
+	preview
 }: PropsType) => {
+	const { data: contract } = useGetContractQuery(preview)
+	const data: DataType[] = [
+		{
+			key: '1',
+			name: 'Номер договора',
+			medic: contract?.contractNumber || ''
+		},
+		{
+			key: '2',
+			name: 'Дата заключения договора',
+			medic: contract?.dateConclusionContract || ''
+		},
+		{
+			key: '3',
+			name: 'Тип договора',
+			medic: contract?.contractType || ''
+		},
+		{
+			key: '4',
+			name: 'Срок действия договора',
+			medic: contract?.prolongation?.toString() || ''
+		},
+		{
+			key: '5',
+			name: 'Шифр и наименование специальности',
+			medic: contract?.specialtyName || ''
+		},
+		{
+			key: '6',
+			name: 'Юридический адрес организации',
+			medic: contract?.legalFacility || ''
+		},
+		{
+			key: '7',
+			name: 'Фактический адрес организации ',
+			medic: contract?.actualFacility || ''
+		},
+		{
+			key: '8',
+			name: 'Количество мест',
+			medic: contract?.placeNumber.toString() || ''
+		},
+		{
+			key: '9',
+			name: 'Ссылка на скан договора',
+			medic: 'Скан договора.pdf'
+		},
+		{
+			key: '10',
+			name: 'Ссылка на дополнительное соглашение к договору',
+			medic: 'ДопСоглашение.pdf'
+		}
+	]
 	return (
 		<section className="container">
 			<Space size={10}>

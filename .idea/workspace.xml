@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="c63f03ff-c7f5-423d-80f7-9dea0e8a734e" name="Changes" comment="исправил ошибку перевода">
+      <change afterPath="$PROJECT_DIR$/public/image46.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/locales/en/translation.json" beforeDir="false" afterPath="$PROJECT_DIR$/public/locales/en/translation.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/locales/ru/translation.json" beforeDir="false" afterPath="$PROJECT_DIR$/public/locales/ru/translation.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/dnd/defaultElement.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/dnd/defaultElement.tsx" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="businessTrip" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
+  <component name="ProjectId" id="2dB2REluApgplYW3f6UCehNuxqZ" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "ts.external.directory.path": "D:\\Frontend_projects\\personal-area\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Frontend_projects\personal-area\public" />
+      <recent name="D:\Frontend_projects\personal-area\src\components\service\businessTrip\NewBusinessTrip\stepTwo\tableStepTwo" />
+      <recent name="D:\Frontend_projects\personal-area\src\components\service\businessTrip\NewBusinessTrip\stepTwo\formStepTwo" />
+      <recent name="D:\Frontend_projects\personal-area\src\components\service\businessTrip\NewBusinessTrip\progressForm" />
+      <recent name="D:\Frontend_projects\personal-area\src\components" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="start" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="start" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="npm.start" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c63f03ff-c7f5-423d-80f7-9dea0e8a734e" name="Changes" comment="" />
+      <created>1709467140826</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1709467140826</updated>
+      <workItem from="1709467142242" duration="6720000" />
+      <workItem from="1709534353867" duration="5130000" />
+      <workItem from="1709559613022" duration="3000" />
+      <workItem from="1709572499961" duration="6188000" />
+      <workItem from="1709579117929" duration="156000" />
+      <workItem from="1709618832506" duration="1876000" />
+      <workItem from="1709644398389" duration="5647000" />
+      <workItem from="1709653752067" duration="2857000" />
+      <workItem from="1709709963353" duration="3628000" />
+      <workItem from="1709717668208" duration="97000" />
+      <workItem from="1709726469307" duration="677000" />
+      <workItem from="1709801664393" duration="5000" />
+      <workItem from="1709802450024" duration="397000" />
+      <workItem from="1709880996392" duration="148000" />
+      <workItem from="1709884558719" duration="529000" />
+      <workItem from="1709886942436" duration="11000" />
+      <workItem from="1710139642687" duration="14615000" />
+      <workItem from="1710173779827" duration="70000" />
+      <workItem from="1710174228208" duration="4310000" />
+      <workItem from="1710225393049" duration="23159000" />
+      <workItem from="1710314050340" duration="1661000" />
+      <workItem from="1710398107215" duration="461000" />
+      <workItem from="1710483786048" duration="718000" />
+      <workItem from="1710493543819" duration="1953000" />
+      <workItem from="1710507974996" duration="2332000" />
+    </task>
+    <task id="LOCAL-00001" summary="добавляю вёрстку первого шага">
+      <option name="closed" value="true" />
+      <created>1709538672624</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1709538672624</updated>
+    </task>
+    <task id="LOCAL-00002" summary="добавил вёрстку по прогресс-бару">
+      <option name="closed" value="true" />
+      <created>1709576341447</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1709576341447</updated>
+    </task>
+    <task id="LOCAL-00003" summary="добавляю форму">
+      <option name="closed" value="true" />
+      <created>1709579064819</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1709579064819</updated>
+    </task>
+    <task id="LOCAL-00004" summary="test 1">
+      <option name="closed" value="true" />
+      <created>1709620603587</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1709620603587</updated>
+    </task>
+    <task id="LOCAL-00005" summary="доделал вёрстку шага 1">
+      <option name="closed" value="true" />
+      <created>1709656623368</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1709656623368</updated>
+    </task>
+    <task id="LOCAL-00006" summary="добавил маску в инпут номера телефона">
+      <option name="closed" value="true" />
+      <created>1709713356782</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1709713356782</updated>
+    </task>
+    <task id="LOCAL-00007" summary="добавляю второй шаг">
+      <option name="closed" value="true" />
+      <created>1710153278166</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1710153278167</updated>
+    </task>
+    <task id="LOCAL-00008" summary="добавил вёрстку второго шага">
+      <option name="closed" value="true" />
+      <created>1710165013980</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1710165013980</updated>
+    </task>
+    <task id="LOCAL-00009" summary="добавил расчёт продолжительности командировки">
+      <option name="closed" value="true" />
+      <created>1710178568983</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1710178568983</updated>
+    </task>
+    <task id="LOCAL-00010" summary="добавил таблицу второго шага">
+      <option name="closed" value="true" />
+      <created>1710237006316</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1710237006316</updated>
+    </task>
+    <task id="LOCAL-00011" summary="добавляю работу с данными">
+      <option name="closed" value="true" />
+      <created>1710250658644</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1710250658644</updated>
+    </task>
+    <task id="LOCAL-00012" summary="добавил временное решение с добавлением новых таблиц">
+      <option name="closed" value="true" />
+      <created>1710260027343</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1710260027343</updated>
+    </task>
+    <task id="LOCAL-00013" summary="тест">
+      <option name="closed" value="true" />
+      <created>1710483824937</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1710483824937</updated>
+    </task>
+    <task id="LOCAL-00014" summary="тест 2">
+      <option name="closed" value="true" />
+      <created>1710484111195</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1710484111195</updated>
+    </task>
+    <task id="LOCAL-00015" summary="исправил ошибку перевода">
+      <option name="closed" value="true" />
+      <created>1710484458810</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1710484458810</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="добавляю вёрстку первого шага" />
+    <MESSAGE value="добавил вёрстку по прогресс-бару" />
+    <MESSAGE value="добавляю форму" />
+    <MESSAGE value="test 1" />
+    <MESSAGE value="доделал вёрстку шага 1" />
+    <MESSAGE value="добавил маску в инпут номера телефона" />
+    <MESSAGE value="добавляю второй шаг" />
+    <MESSAGE value="добавил вёрстку второго шага" />
+    <MESSAGE value="добавил расчёт продолжительности командировки" />
+    <MESSAGE value="добавил таблицу второго шага" />
+    <MESSAGE value="добавляю работу с данными" />
+    <MESSAGE value="добавил временное решение с добавлением новых таблиц" />
+    <MESSAGE value="тест" />
+    <MESSAGE value="тест 2" />
+    <MESSAGE value="исправил ошибку перевода" />
+    <option name="LAST_COMMIT_MESSAGE" value="исправил ошибку перевода" />
+    <option name="GROUP_MULTIFILE_MERGE_BY_DIRECTORY" value="true" />
+  </component>
+</project>

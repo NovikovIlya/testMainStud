@@ -214,11 +214,13 @@
 	"StaffInfo": "Search through the list of employees of Kazan Federal University, as well as their contacts",
 	"VacanciesStudents": "Vacancies for students",
 	"EducationalCourses": "Educational courses",
+	"EducationalCoursesInfo": "We offer a wide range of subjects and disciplines. From classical sciences, language courses to advanced knowledge in the field of programming. This is an opportunity to receive feedback from qualified teachers and specialists in relevant fields of knowledge. Expand your horizons with us!",
 	"SignUp": "Sign up",
 	"News": "News",
 	"NewsInfo": "Read about the news and events related to Kazan Federal University",
 	"Pass": "Pass",
 	"Testing": "Testing",
+	"TestingInfo": "Test your knowledge with the help of test materials",
 	"DocumentFlow": "Document management",
 	"DocumentFlowInfo": "One of the oldest universities in Russia, founded in 1804. The university is famous for its strong schools of mathematics...",
 	"PaySheet": "The pay sheet",
@@ -270,5 +272,13 @@
 	"AboutMeService": "About me",
 	"PracticesService": "Practices service",
 	"ScheduleService": "Schedule service",
-	"SessionService": "Session service"
+	"SessionService": "Session service",
+	"VirtualAudience": "Virtual audience",
+	"VirtualAudienceInfo": "Educational materials and homework are stored here",
+	"PsychologicalHelp": "Psychological help",
+	"PsychologicalHelpInfo": "The service will help you get psychological support",
+	"DigitalDepartments": "Digital Departments",
+	"DigitalDepartmentsInfo": "Get a qualification in the field of IT and put your knowledge into practice",
+	"ManagementScientificProjects": "Management of scientific projects",
+	"ManagementScientificProjectsInfo": "Management of scientific projects"
 }

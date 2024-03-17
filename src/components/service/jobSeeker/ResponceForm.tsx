@@ -1405,6 +1405,7 @@ export const ResponseForm = () => {
 								{currentFormskills.map(skill => (
 									<Tag
 										closable={true}
+										key={uuid()}
 										// onClose={() => {
 										// 	setcurrentFormSkills(
 										// 		currentFormskills.filter(currentSkill => {
@@ -1414,9 +1415,9 @@ export const ResponseForm = () => {
 										// }}
 										onClose={() => {
 											console.log(currentFormskills)
-											setcurrentFormSkills(prev =>
-												prev.filter(currentSkill => currentSkill !== skill)
-											)
+											setcurrentFormSkills(prev => [
+												...prev.filter(currentSkill => currentSkill !== skill)
+											])
 											console.log(currentFormskills)
 										}}
 									>

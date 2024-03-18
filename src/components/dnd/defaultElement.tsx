@@ -236,7 +236,7 @@ export const jsxElements = [
 		element: (
 			<TemplateCard
 				href="https://shelly.kpfu.ru/e-ksu/portal_person.kurs_cifra?p_type_menu_open=2#tab1"
-				info="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Tincidunt augue interdum velit euismod in pellentesque massa placerat."
+				info="EducationalCoursesInfo"
 				title="EducationalCourses"
 				img="/image2.png"
 				width={177}
@@ -290,11 +290,16 @@ export const jsxElements = [
 		index: 'Testing',
 		element: (
 			<TemplateCard
-				href="https://shelly.kpfu.ru/e-ksu/SITE_STUDENT_SH_PR_AC.test_student_personal"
-				info="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+				href="https://shelly.kpfu.ru/e-ksu/SITE_STUDENT_SH_PR_AC.test_student_personal?p_menu=28"
+				info="TestingInfo"
 				title="Testing"
 				buttonText="Pass"
 				buttonType="primary"
+				img="/image46.png"
+				width={98}
+				height={125}
+				positionImage={'mt-2'}
+
 			/>
 		),
 		place: {
@@ -541,6 +546,8 @@ export const jsxElements = [
 				info="DormitoryInfo"
 				title="Dormitory"
 				buttonText="Study"
+				img={'/image47.png'}
+				positionImage={'mt-6'}
 			/>
 		),
 		place: {
@@ -550,5 +557,92 @@ export const jsxElements = [
 			y: 0,
 			i: 'Dormitory'
 		}
-	}
+	},
+	{
+		index: 'VirtualAudience',
+		element: (
+			<TemplateCard
+				href="https://shelly.kpfu.ru/e-ksu/site_student_services.study_tasks"
+				info="VirtualAudienceInfo"
+				title="VirtualAudience"
+				buttonText="Watch"
+				img={'./image48.png'}
+				width={137}
+				height={106}
+				positionImage={'mt-6'}
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 1,
+			y: 0,
+			i: 'VirtualAudience'
+		}
+	},
+	{
+		index: 'PsychologicalHelp',
+		element: (
+			<TemplateCard
+				href="https://shelly.kpfu.ru/e-ksu/student_psi_test.record_medic?p_menu=42"
+				info="PsychologicalHelpInfo"
+				title="PsychologicalHelp"
+				buttonText="Watch"
+				img={'/image50.png'}
+				width={110}
+				height={132}
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 1,
+			y: 0,
+			i: 'PsychologicalHelp'
+		}
+	},
+	{
+		index: 'DigitalDepartments',
+		element: (
+			<TemplateCard
+				href="https://shelly.kpfu.ru/e-ksu/portal_person.kurs_cifra#tab1"
+				info="DigitalDepartmentsInfo"
+				title="DigitalDepartments"
+				buttonText="Watch"
+				img={'/image52.png'}
+				width={99}
+				height={97}
+				positionImage={'mt-7 ml-2'}
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 1,
+			y: 0,
+			i: 'DigitalDepartments'
+		}
+	},
+	{
+		index: 'ManagementScientificProjects',
+		element: (
+			<TemplateCard
+				href="https://shelly.kpfu.ru/e-ksu/portal_person.kurs_cifra?p_type_menu_open=2#tab1"
+				info="ManagementScientificProjectsInfo"
+				title="ManagementScientificProjects"
+				buttonText="Watch"
+				img={'/image54.png'}
+				width={113}
+				height={95}
+				positionImage={'mt-7'}
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 1,
+			y: 0,
+			i: 'ManagementScientificProjects'
+		}
+	},
 ]

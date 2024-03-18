@@ -299,6 +299,7 @@ export const jsxElements = [
 				width={98}
 				height={125}
 				positionImage={'mt-2'}
+
 			/>
 		),
 		place: {

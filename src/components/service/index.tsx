@@ -1,3 +1,4 @@
+import { ReactNode } from 'react'
 import { useLocation } from 'react-router-dom'
 
 import { NavAboutMe } from './aboutMe/NavAboutMe'
@@ -7,6 +8,7 @@ import { NavPractices } from './practices/NavPractices'
 import { NavSchedule } from './schedule/NavSchedule'
 import { NavSession } from './session/NavSession'
 import { NavSetting } from './setting/NavSetting'
+import {NavBusinessTrip} from "./businessTrip/NavBusinessTrip";
 
 export const Service = () => {
 	const { pathname } = useLocation()
@@ -19,6 +21,7 @@ export const Service = () => {
 				{pathname.includes('/services/electronicBook') && <NavElectronicBook />}
 				{pathname.includes('/services/setting') && <NavSetting />}
 				{pathname.includes('/services/practices') && <NavPractices />}
+				{pathname.includes('/services/businessTrip') && <NavBusinessTrip />}
 				{pathname.includes('/services/unifiedServiceCenter') && (
 					<NavUnifiedServiceCenter />
 				)}

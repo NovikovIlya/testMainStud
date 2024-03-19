@@ -9,7 +9,9 @@ import {
 	RespondItemType,
 	Template,
 	TypeSchedule,
+	VacancyGroupedResponcesType,
 	VacancyItemType,
+	VacancyRespondItemType,
 	VacancyViewResponceType,
 	respondStatus
 } from '../type'
@@ -102,6 +104,24 @@ export const serviceApi = apiSlice.injectEndpoints({
 					status
 			})
 		}),
+		getVacancyGroupedResponces: builder.query<
+			VacancyGroupedResponcesType[],
+			{ category: string; direction?: string }
+		>({
+			query: ({ category, direction }) => ({
+				url: `http://localhost:8082/employment-api/v1/responds/grouped?category=${category}${
+					direction !== undefined ? '&direction=' + direction : ''
+				}`
+			})
+		}),
+		getResponcesByVacancy: builder.query<
+			VacancyRespondItemType[],
+			{ id: number; status: string }
+		>({
+			query: ({ id, status }) => ({
+				url: `http://localhost:8082/employment-api/v1/vacancy/${id}/responds?status=${status}`
+			})
+		}),
 		postPhone: builder.mutation({
 			query: phone => {
 				return {
@@ -181,6 +201,12 @@ export const serviceApi = apiSlice.injectEndpoints({
 				method: 'POST',
 				body: arg
 			})
+		}),
+		deleteVacancyRespond: builder.mutation<void, number>({
+			query: id => ({
+				url: `http://localhost:8082/employment-api/v1/respond/${id}`,
+				method: 'DELETE'
+			})
 		})
 	})
 })
@@ -203,5 +229,7 @@ export const {
 	useLazyGetVacancyViewQuery,
 	useGetVacancyPreviewByDirectionQuery,
 	useGetVacancyPreviewBySubdivisionQuery,
-	useGetSeekerRespondsQuery
+	useGetSeekerRespondsQuery,
+	useGetVacancyGroupedResponcesQuery,
+	useGetResponcesByVacancyQuery
 } = serviceApi

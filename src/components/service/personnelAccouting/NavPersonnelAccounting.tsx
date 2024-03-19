@@ -4,34 +4,47 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { BriefcaseSvg } from '../../../assets/svg/BriefcaseSvg'
 import CalendarSvg from '../../../assets/svg/CalendarSvg'
 import { MyDocsSvg } from '../../../assets/svg/MyDocsSvg'
+import { useAppSelector } from '../../../store'
 
-import { Chat } from './Chat'
-import { Employment } from './Employment'
-import { MyResponds } from './MyResponds'
+import { Responds } from './Responds'
+import { VacancyResponces } from './VacancyResponces'
 
-export const NavMyResponds = () => {
+export const NavPesonnelAccounting = () => {
 	const { pathname } = useLocation()
 	const navigate = useNavigate()
+	const roles = useAppSelector(state => state.auth.user?.roles)
 
 	const handleNavigate = (url: string) => {
 		navigate(url)
 	}
 
+	const isEmployee = roles?.find(role => role.type === 'EMPL')
+
 	const navList = [
 		{
-			id: '/services/myresponds/responds',
+			id: '/services/personnelaccounting/responds',
 			icon: <BriefcaseSvg />,
-			name: 'Мои отклики'
+			name: 'Отклики'
 		},
 		{
-			id: '/services/myresponds/chat',
+			id: '/services/personnelaccounting/chat',
 			icon: <MyDocsSvg />,
 			name: 'Сообщения'
 		},
 		{
-			id: '/services/myresponds/employment',
+			id: '/services/personnelaccounting/employment',
 			icon: <CalendarSvg />,
 			name: 'Этап трудоустройства'
+		},
+		{
+			id: '/services/personnelaccounting/vacancies',
+			icon: <CalendarSvg />,
+			name: 'Вакансии'
+		},
+		{
+			id: '/services/personnelaccounting/reserve',
+			icon: <CalendarSvg />,
+			name: 'Кадровый резерв'
 		}
 	]
 
@@ -53,6 +66,8 @@ export const NavMyResponds = () => {
 		)
 	})
 
+	if (!isEmployee) return <></>
+
 	return (
 		<>
 			<div className="shadowNav">
@@ -61,9 +76,14 @@ export const NavMyResponds = () => {
 				</ul>
 			</div>
 			<div className="bg-[#F5F8FB] flex w-full">
-				{pathname === navList[0].id && <MyResponds />}
-				{pathname === navList[1].id && <Chat />}
-				{pathname === navList[2].id && <Employment />}
+				{pathname === navList[0].id && <Responds />}
+				{pathname.match(
+					'services/personnelaccounting/responds/byvacancy/*'
+				) && <VacancyResponces />}
+				{pathname === navList[1].id && <></>}
+				{pathname === navList[2].id && <></>}
+				{pathname === navList[3].id && <></>}
+				{pathname === navList[4].id && <></>}
 			</div>
 		</>
 	)

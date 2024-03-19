@@ -2,6 +2,7 @@ import { TagOutlined } from '@ant-design/icons'
 import { Button, Col, Input, Radio, Row, Typography } from 'antd'
 import { RadioChangeEvent } from 'antd/lib'
 import clsx from 'clsx'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 
@@ -14,12 +15,16 @@ export const ModalNav = () => {
 	const layouts = useAppSelector(state => state.Layout)
 	const dispatch = useDispatch()
 
+	const [currentRole, setCurrentRole] = useState<string>('STUD')
+
 	const onChange = (e: RadioChangeEvent) => {
 		console.log(e.target.value)
+		setCurrentRole(e.target.value)
 	}
 	const role = useAppSelector(state => state.auth.user?.roles)
 	if (!role) return <></>
 	const isStudent = role[0].type === 'STUD'
+	const isEmployee = role[1]?.type === 'EMPL'
 	return (
 		<Row>
 			<Col span={24} className="mb-9">
@@ -59,13 +64,13 @@ export const ModalNav = () => {
 						</Radio.Button>
 						<Radio.Button
 							className="rounded-full h-full flex items-center justify-center text-base bg-transparent w-60"
-							value="tuesday"
+							value="STUD"
 						>
 							{t('ToStudent')}
 						</Radio.Button>
 						<Radio.Button
 							className="rounded-full h-full flex items-center justify-center text-base bg-transparent w-60"
-							value="wednesday"
+							value="EMPL"
 						>
 							{t('Employee')}
 						</Radio.Button>
@@ -92,7 +97,7 @@ export const ModalNav = () => {
 			</Col>
 			{layouts.lg.length === jsxElements.length ? (
 				<div className="text-3xl">Пока сервисов нет</div>
-			) : (
+			) : currentRole === 'STUD' ? (
 				jsxElements.map(item => {
 					const isLayout = !!layouts.lg.filter(el => el.i === item.index).length
 
@@ -109,6 +114,27 @@ export const ModalNav = () => {
 						)
 					)
 				})
+			) : currentRole === 'EMPL' ? (
+				jsxElements.map(item => {
+					const isLayout = !!layouts.lg.filter(el => el.i === item.index).length
+					const isAppropriatedRole = item.index === 'personnelAccounting'
+					return (
+						!isLayout &&
+						isAppropriatedRole &&
+						isEmployee && (
+							<Col span={4} key={item.index} className="bg-white">
+								<div
+									onClick={() => dispatch(addCard(item.place))}
+									className="h-28 cursor-pointer flex items-center justify-center hover:bg-[#65A1FA] hover:text-white"
+								>
+									{t(item.index.toString())}
+								</div>
+							</Col>
+						)
+					)
+				})
+			) : (
+				<></>
 			)}
 		</Row>
 	)

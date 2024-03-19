@@ -147,6 +147,7 @@ export enum respondStatus {
 }
 
 export type RespondItemType = {
+	id: number
 	name: string
 	respondDate: string
 	status: string
@@ -188,4 +189,24 @@ export type ResponceType = {
 		keySkills: string[]
 		aboutMe: string
 	}
+}
+
+export type VacancyGroupedResponcesType = {
+	vacancyId: number
+	vacancyTitle: string
+	respondsCount: number
+}
+
+export type VacancyRespondItemType = {
+	id: number
+	responseDate: string
+	vacancyName: string
+	status: string
+	recipient: string
+	userData: null | {
+		firstname: string
+		lastname: String
+		middlename: string
+	}
+	educations: []
 }

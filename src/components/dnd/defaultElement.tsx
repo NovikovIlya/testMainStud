@@ -1,3 +1,4 @@
+import { useAppSelector } from '../../store'
 import { DirectResume } from '../cards/DirectResume'
 import { Schedule } from '../cards/Schedule'
 import { Seeker } from '../cards/Seeker'
@@ -126,6 +127,23 @@ export const jsxElements = [
 			x: 0,
 			y: 0,
 			i: 'myResponds'
+		}
+	},
+	{
+		index: 'personnelAccounting',
+		element: (
+			<TemplateCard
+				title="Кадровый учёт"
+				info="Отклики на вакансии, чат, редактирование вакансий и многое другое в этом разделе"
+				href="/services/personnelaccounting/responds"
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 0,
+			y: 0,
+			i: 'personnelAccounting'
 		}
 	},
 	// {

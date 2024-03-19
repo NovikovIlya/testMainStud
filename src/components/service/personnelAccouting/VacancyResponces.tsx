@@ -1,21 +1,43 @@
 import { Select } from 'antd'
 import { useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 
-import { useGetSeekerRespondsQuery } from '../../../store/api/serviceApi'
+import { useGetResponcesByVacancyQuery } from '../../../store/api/serviceApi'
 import { respondStatus } from '../../../store/type'
+import ArrowIcon from '../jobSeeker/ArrowIcon'
 
-import { RespondItem } from './RespondItem'
+import { VacancyRespondItem } from './VacancyRespondItem'
 
-export const MyResponds = () => {
+export const VacancyResponces = () => {
+	const { pathname } = useLocation()
+	const navigate = useNavigate()
+
+	const pathVacancyId = pathname.split('/').pop() as string
+
+	const vacancyId = parseInt(pathVacancyId)
+
 	const [status, setStatus] = useState('')
-	const { data: responds = [], refetch } = useGetSeekerRespondsQuery(status)
+	const { data: responds = [] } = useGetResponcesByVacancyQuery({
+		id: vacancyId,
+		status: status
+	})
 
 	return (
 		<>
 			<div className="w-full pl-[52px] pr-[52px] pt-[60px]">
-				<h1 className="font-content-font font-normal text-black text-[28px]/[28px]">
-					Мои отклики
-				</h1>
+				<div className="flex">
+					<button
+						onClick={() => {
+							navigate('/services/personnelaccounting/responds')
+						}}
+						className="bg-white h-[38px] w-[46px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer"
+					>
+						<ArrowIcon />
+					</button>
+					<p className="ml-[40px] font-content-font font-normal text-black text-[28px]/[33.6px]">
+						{}
+					</p>
+				</div>
 				<div className="mt-[52px] mb-[60px] flex items-center gap-[16px]">
 					<p className="font-content-font font-normal text-black text-[16px]/[16px]">
 						Статус
@@ -52,7 +74,7 @@ export const MyResponds = () => {
 					</h3>
 				</div>
 				{responds.map(respond => (
-					<RespondItem key={respond.id} {...respond} refetch={refetch} />
+					<VacancyRespondItem {...respond} />
 				))}
 			</div>
 		</>

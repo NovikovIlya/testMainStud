@@ -6,7 +6,7 @@ export const block = {
 			maxH: 4,
 			maxW: 4,
 			x: 0,
-			y: 0,
+			y: 1,
 			i: 'ElectronicBook',
 			moved: true,
 			static: false
@@ -17,7 +17,7 @@ export const block = {
 			maxH: 4,
 			maxW: 4,
 			x: 1,
-			y: 0,
+			y: 1,
 			i: 'Session',
 			moved: true,
 			static: false

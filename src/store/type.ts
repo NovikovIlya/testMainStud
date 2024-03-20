@@ -166,7 +166,7 @@ type educationResponceType = {
 	country: string
 	institution: string
 	specialty?: string
-	endYear: string
+	endYear: number
 }
 
 export type ResponceType = {

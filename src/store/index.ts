@@ -3,6 +3,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import logger from 'redux-logger'
 
 import { apiSlice } from './api/apiSlice'
+import CurrentVacancyNameSlice from './reducers/CurrentVacancyNameSlice'
 import CurrentVacancySlice from './reducers/CurrentVacancySlice'
 import AddressReducer from './reducers/FormReducers/AddressReducer'
 import CountriesEducationReducer from './reducers/FormReducers/CountriesEducationReducer'
@@ -33,6 +34,7 @@ export const store = configureStore({
 		Address: AddressReducer,
 		CountriesEducation: CountriesEducationReducer,
 		currentVacancy: CurrentVacancySlice,
+		currentVacancyName: CurrentVacancyNameSlice,
 		seekerAboutMe: AboutMeReducer,
 		skills: SkillsReducer,
 		RespondEducation: RespondEducationReducer,

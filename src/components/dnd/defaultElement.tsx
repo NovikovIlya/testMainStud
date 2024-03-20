@@ -15,87 +15,6 @@ const aId = cookies[4]?.split('=')[1] || ''
  */
 export const jsxElements = [
 	{
-		index: 'ElectronicBook',
-		element: (
-			<TemplateCard
-				href="/services/electronicBook/estimation"
-				img="/image23.png"
-				info="Здесь находится план вашего обучения, предметы и отведенные для них часы"
-				title="Академический календарь"
-			/>
-		),
-		place: {
-			w: 1,
-			h: 1,
-			x: 1,
-			y: 0,
-			i: 'ElectronicBook'
-		}
-	},
-	{
-		index: 'Session',
-		element: (
-			<TemplateCard
-				href="/services/session/session"
-				img="/image28.png"
-				info="Вся информация по сессии, материалы и баллы отображаются здесь"
-				title="Сессия"
-				width={102}
-				height={172}
-			/>
-		),
-		place: {
-			w: 1,
-			h: 1,
-			x: 1,
-			y: 0,
-			i: 'Session'
-		}
-	},
-	{
-		index: 'Applications',
-		element: (
-			<TemplateCard
-				href="https://shelly.kpfu.ru/e-ksu/site_student_sh_pr_ac.offor_document?p_menu=14&p_type_menu_open=151"
-				img="/image31.png"
-				info="Здесь Вы можете подать заявки на оформление различных документов"
-				title="Заявки"
-				width={96}
-				height={114}
-			/>
-		),
-		place: {
-			w: 1,
-			h: 1,
-			x: 1,
-			y: 0,
-			i: 'Applications'
-		}
-	},
-	{
-		index: 'DirectResume',
-		element: (
-			<DirectResume
-				href="#"
-				img="/directresumeimage.png"
-				info="Не нашли подходящую вакансию? Заполняйте резюме, отправляйте на проверку и мы рассмотрим вашу кандидатуру"
-				title="Резюме"
-				buttonText="Создать"
-				buttonType="primary"
-				height={99}
-				width={85}
-				positionImage="mt-2"
-			/>
-		),
-		place: {
-			w: 1,
-			h: 1,
-			x: 1,
-			y: 0,
-			i: 'DirectResume'
-		}
-	},
-	{
 		index: 'jobSeeker',
 		element: <Seeker />,
 		place: {
@@ -130,20 +49,102 @@ export const jsxElements = [
 		}
 	},
 	{
+		index: 'DirectResume',
+		element: (
+			<DirectResume
+				href="#"
+				img="/directresumeimage.png"
+				info="Не нашли подходящую вакансию? Заполняйте резюме, отправляйте на проверку и мы рассмотрим вашу кандидатуру"
+				title="Резюме"
+				buttonText="Создать"
+				buttonType="primary"
+				height={99}
+				width={85}
+				positionImage="mt-2"
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 1,
+			y: 0,
+			i: 'DirectResume'
+		}
+	},
+	{
 		index: 'personnelAccounting',
 		element: (
 			<TemplateCard
-				title="Кадровый учёт"
-				info="Отклики на вакансии, чат, редактирование вакансий и многое другое в этом разделе"
+				title="Трудоустройство"
+				info=""
 				href="/services/personnelaccounting/responds"
+				buttonText="Изучить"
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 2,
+			y: 0,
+			i: 'personnelAccounting'
+		}
+	},
+	{
+		index: 'ElectronicBook',
+		element: (
+			<TemplateCard
+				href="/services/electronicBook/estimation"
+				img="/image23.png"
+				info="Здесь находится план вашего обучения, предметы и отведенные для них часы"
+				title="Академический календарь"
 			/>
 		),
 		place: {
 			w: 1,
 			h: 1,
 			x: 0,
+			y: 2,
+			i: 'ElectronicBook'
+		}
+	},
+	{
+		index: 'Session',
+		element: (
+			<TemplateCard
+				href="/services/session/session"
+				img="/image28.png"
+				info="Вся информация по сессии, материалы и баллы отображаются здесь"
+				title="Сессия"
+				width={102}
+				height={172}
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 1,
+			y: 2,
+			i: 'Session'
+		}
+	},
+	{
+		index: 'Applications',
+		element: (
+			<TemplateCard
+				href="https://shelly.kpfu.ru/e-ksu/site_student_sh_pr_ac.offor_document?p_menu=14&p_type_menu_open=151"
+				img="/image31.png"
+				info="Здесь Вы можете подать заявки на оформление различных документов"
+				title="Заявки"
+				width={96}
+				height={114}
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 1,
 			y: 0,
-			i: 'personnelAccounting'
+			i: 'Applications'
 		}
 	},
 	// {

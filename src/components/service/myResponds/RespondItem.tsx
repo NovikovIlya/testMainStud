@@ -3,11 +3,13 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { DeleteSvg } from '../../../assets/svg/DeleteSvg'
+import { useDeleteVacancyRespondMutation } from '../../../store/api/serviceApi'
 import { RespondItemType, respondStatus } from '../../../store/type'
 
 export const RespondItem = (props: RespondItemType & { refetch: Function }) => {
 	const navigate = useNavigate()
 	const [isModalOpen, setModalOpen] = useState(false)
+	const [deleteVacancy, deleteResult] = useDeleteVacancyRespondMutation()
 
 	return (
 		<>
@@ -33,15 +35,33 @@ export const RespondItem = (props: RespondItemType & { refetch: Function }) => {
 						Вы действительно хотите удалить отклик?
 					</p>
 					<div className="mt-[40px] flex gap-[12px]">
-						<Button>Отменить</Button>
-						<Button type="primary" className="rounded-[54.5px]">
+						<Button
+							className="ml-auto"
+							onClick={() => {
+								setModalOpen(false)
+							}}
+						>
+							Отменить
+						</Button>
+						<Button
+							type="primary"
+							className="rounded-[54.5px] mr-auto"
+							onClick={() => {
+								deleteVacancy(props.id)
+									.unwrap()
+									.then(() => {
+										setModalOpen(false)
+										props.refetch()
+									})
+							}}
+						>
 							Удалить
 						</Button>
 					</div>
 				</Modal>
 			</ConfigProvider>
 			<div className="w-full mb-[12px] flex justify-between items-center bg-white shadow-custom-shadow pl-[20px] pr-[55px] pt-[20px] pb-[20px]">
-				<p>{props.name}</p>
+				<p className="w-[250px]">{props.name}</p>
 				<p>{props.respondDate.split('-').reverse().join('.')}</p>
 				<p>
 					{props.status ===

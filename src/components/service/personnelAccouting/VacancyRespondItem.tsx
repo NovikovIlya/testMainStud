@@ -9,7 +9,7 @@ export const VacancyRespondItem = (props: VacancyRespondItemType) => {
 	return (
 		<>
 			<div className="w-full mb-[12px] flex justify-between items-center bg-white shadow-custom-shadow pl-[20px] pr-[55px] pt-[20px] pb-[20px]">
-				<p>
+				<p className="w-[270px] shrink-0">
 					{props.userData
 						? props.userData.lastname +
 						  ' ' +
@@ -18,19 +18,24 @@ export const VacancyRespondItem = (props: VacancyRespondItemType) => {
 						  props.userData.middlename
 						: 'Толстой Лев Николаевич'}
 				</p>
-				<p>{props.responseDate.split('-').reverse().join('.')}</p>
-				<p>
-					{props.status ===
-					respondStatus[respondStatus.IN_PERSONNEL_DEPT_REVIEW]
-						? 'на рассмотрении у отдела кадров'
-						: props.status === respondStatus[respondStatus.IN_SUPERVISOR_REVIEW]
-						? 'на рассмотрении у руководителя'
-						: props.status === respondStatus[respondStatus.INVITATION]
-						? 'приглашение'
-						: props.status === respondStatus[respondStatus.REJECTED]
-						? 'отклонено'
-						: 'отклонено'}
-				</p>
+				<div className="flex gap-[20px] mr-[312px]">
+					<p className="w-[90px]">
+						{props.responseDate.split('-').reverse().join('.')}
+					</p>
+					<p>
+						{props.status ===
+						respondStatus[respondStatus.IN_PERSONNEL_DEPT_REVIEW]
+							? 'на рассмотрении у отдела кадров'
+							: props.status ===
+							  respondStatus[respondStatus.IN_SUPERVISOR_REVIEW]
+							? 'на рассмотрении у руководителя'
+							: props.status === respondStatus[respondStatus.INVITATION]
+							? 'приглашение'
+							: props.status === respondStatus[respondStatus.REJECTED]
+							? 'отклонено'
+							: 'на рассмотрении'}
+					</p>
+				</div>
 				<Button
 					onClick={() => {}}
 					className="font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black"

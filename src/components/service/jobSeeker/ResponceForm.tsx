@@ -311,7 +311,7 @@ export const ResponseForm = () => {
 															},
 															educations: educationData.educations.map(edu => ({
 																institution: edu.education.nameofInstitute,
-																endYear: edu.education.graduateYear,
+																endYear: parseInt(edu.education.graduateYear),
 																country: 'РФ',
 																educationLevel: 'Высшее',
 																specialty: edu.education.specialization
@@ -604,7 +604,11 @@ export const ResponseForm = () => {
 											</p>
 											<p className="font-content-font text-black text-[16px]/[16px] font-normal select-none">
 												{edu.education.specialization},{' '}
-												{edu.education.educationLevelId}
+												{
+													levels?.find(
+														educ => educ.id === edu.education.educationLevelId
+													)?.name
+												}
 											</p>
 											<p className="font-content-font text-black text-[14px]/[14px] font-normal select-none opacity-60">
 												{edu.education.graduateYear}

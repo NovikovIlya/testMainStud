@@ -55,14 +55,14 @@ export const NavMyResponds = () => {
 
 	return (
 		<>
-			<div className="shadowNav">
+			<div className="shadowNav bg-white">
 				<ul className="min-w-[230px] pt-14 flex flex-col gap-4">
 					{handleList}
 				</ul>
 			</div>
 			<div className="bg-[#F5F8FB] flex w-full">
 				{pathname === navList[0].id && <MyResponds />}
-				{pathname === navList[1].id && <Chat />}
+				{pathname.includes(navList[1].id) && <Chat />}
 				{pathname === navList[2].id && <Employment />}
 			</div>
 		</>

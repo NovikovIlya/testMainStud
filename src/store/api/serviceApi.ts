@@ -231,5 +231,6 @@ export const {
 	useGetVacancyPreviewBySubdivisionQuery,
 	useGetSeekerRespondsQuery,
 	useGetVacancyGroupedResponcesQuery,
-	useGetResponcesByVacancyQuery
+	useGetResponcesByVacancyQuery,
+	useDeleteVacancyRespondMutation
 } = serviceApi

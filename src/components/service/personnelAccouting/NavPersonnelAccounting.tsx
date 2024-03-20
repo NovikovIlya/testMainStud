@@ -5,8 +5,12 @@ import { BriefcaseSvg } from '../../../assets/svg/BriefcaseSvg'
 import CalendarSvg from '../../../assets/svg/CalendarSvg'
 import { MyDocsSvg } from '../../../assets/svg/MyDocsSvg'
 import { useAppSelector } from '../../../store'
+import { Chat } from '../myResponds/Chat'
 
+import { ChatIcon } from './ChatIcon'
 import { Responds } from './Responds'
+import { RespondsIcon } from './RespondsIcon'
+import { VacanciesIcon } from './VacanciesIcon'
 import { VacancyResponces } from './VacancyResponces'
 
 export const NavPesonnelAccounting = () => {
@@ -23,27 +27,27 @@ export const NavPesonnelAccounting = () => {
 	const navList = [
 		{
 			id: '/services/personnelaccounting/responds',
-			icon: <BriefcaseSvg />,
+			icon: <RespondsIcon />,
 			name: 'Отклики'
 		},
 		{
 			id: '/services/personnelaccounting/chat',
-			icon: <MyDocsSvg />,
+			icon: <ChatIcon />,
 			name: 'Сообщения'
 		},
 		{
 			id: '/services/personnelaccounting/employment',
-			icon: <CalendarSvg />,
+			icon: <BriefcaseSvg />,
 			name: 'Этап трудоустройства'
 		},
 		{
 			id: '/services/personnelaccounting/vacancies',
-			icon: <CalendarSvg />,
+			icon: <VacanciesIcon />,
 			name: 'Вакансии'
 		},
 		{
 			id: '/services/personnelaccounting/reserve',
-			icon: <CalendarSvg />,
+			icon: <RespondsIcon />,
 			name: 'Кадровый резерв'
 		}
 	]
@@ -80,7 +84,7 @@ export const NavPesonnelAccounting = () => {
 				{pathname.match(
 					'services/personnelaccounting/responds/byvacancy/*'
 				) && <VacancyResponces />}
-				{pathname === navList[1].id && <></>}
+				{pathname === navList[1].id && <Chat />}
 				{pathname === navList[2].id && <></>}
 				{pathname === navList[3].id && <></>}
 				{pathname === navList[4].id && <></>}

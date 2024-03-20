@@ -2,6 +2,7 @@ import { Select } from 'antd'
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
+import { useAppSelector } from '../../../store'
 import { useGetResponcesByVacancyQuery } from '../../../store/api/serviceApi'
 import { respondStatus } from '../../../store/type'
 import ArrowIcon from '../jobSeeker/ArrowIcon'
@@ -11,6 +12,7 @@ import { VacancyRespondItem } from './VacancyRespondItem'
 export const VacancyResponces = () => {
 	const { pathname } = useLocation()
 	const navigate = useNavigate()
+	const currentVacancyTitle = useAppSelector(state => state.currentVacancyName)
 
 	const pathVacancyId = pathname.split('/').pop() as string
 
@@ -35,7 +37,7 @@ export const VacancyResponces = () => {
 						<ArrowIcon />
 					</button>
 					<p className="ml-[40px] font-content-font font-normal text-black text-[28px]/[33.6px]">
-						{}
+						Отклики на вакансию «{currentVacancyTitle.vacancyTitle}»
 					</p>
 				</div>
 				<div className="mt-[52px] mb-[60px] flex items-center gap-[16px]">
@@ -63,15 +65,17 @@ export const VacancyResponces = () => {
 					/>
 				</div>
 				<div className="flex mb-[16px] pl-[20px]">
-					<h3 className="font-content-font text-black font-normal text-[14px]/[14px] opacity-[60%]">
+					<h3 className="w-[270px] font-content-font text-black font-normal text-[14px]/[14px] opacity-[60%]">
 						Вакансия
 					</h3>
-					<h3 className="ml-[245px] font-content-font text-black font-normal text-[14px]/[14px] opacity-[60%]">
-						Дата отклика
-					</h3>
-					<h3 className="ml-[105px] font-content-font text-black font-normal text-[14px]/[14px] opacity-[60%]">
-						Статус
-					</h3>
+					<div className="flex gap-[20px] ml-[90px]">
+						<h3 className="w-[90px] font-content-font text-black font-normal text-[14px]/[14px] opacity-[60%]">
+							Дата отклика
+						</h3>
+						<h3 className="font-content-font text-black font-normal text-[14px]/[14px] opacity-[60%]">
+							Статус
+						</h3>
+					</div>
 				</div>
 				{responds.map(respond => (
 					<VacancyRespondItem {...respond} />

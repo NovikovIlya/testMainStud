@@ -4,6 +4,7 @@ import {Layout} from './layout/Layout'
 import {Button, Popover} from "antd";
 import {useState} from "react";
 import {SupportCenterSvg} from "../assets/svg/SupportCenterSvg";
+import {FeedbackWindow} from "./feedbackWindow/FeedbackWindow";
 
 export const User = () => {
     const {t} = useTranslation()
@@ -25,7 +26,7 @@ export const User = () => {
                     <DropDrag/>
                 </div>
                 <Popover trigger="click"
-                         content={<a onClick={hide}>Close</a>}
+                         content={<FeedbackWindow closeWindow={hide}/>}
                          placement={"topLeft"}
                          arrow={false}
                          open={open}
@@ -35,7 +36,7 @@ export const User = () => {
                         className={`
                         flex items-center justify-center 
                         fixed rounded-full w-[62px] h-[62px] 
-                        right-[3%] bottom-[50px]
+                        right-[3%] bottom-[25px]
                         shadow-2xl`}>
                         <SupportCenterSvg/>
                     </Button>

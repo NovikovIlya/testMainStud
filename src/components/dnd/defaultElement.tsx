@@ -591,6 +591,7 @@ export const jsxElements = [
 				img={'/image50.png'}
 				width={110}
 				height={132}
+				mt={'mt-1'}
 			/>
 		),
 		place: {

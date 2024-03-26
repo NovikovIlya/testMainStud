@@ -24,6 +24,7 @@ import PersonalizationSvg from '../../assets/svg/PersonalizationSvg'
 import { useAppSelector } from '../../store'
 import { logOut, setEdit } from '../../store/reducers/authSlice'
 import { ModalNav } from '../service/ModalNav'
+import {ArrowLeftBackInOldAccount} from "../../assets/svg/ArrowLeftBackInOldAccount";
 
 type TypeHeaderProps = {
 	type?: 'service' | 'main'
@@ -176,6 +177,18 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 				</div>
 				<div className="flex gap-5 items-center h-full max-[1000px]:gap-0 w-fit justify-center">
 					<div className="flex h-full items-center max-[1000px]:hidden">
+
+						<a
+							className={clsx(
+								'h-full flex gap-2 items-center px-3 cursor-pointer no-underline',
+								type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'
+							)}
+							href={'https://shelly.kpfu.ru/e-ksu/main_blocks.startpage'}
+						>
+							<ArrowLeftBackInOldAccount/>
+							<span className={`text-[14px]/[14px] text-[#3073D7]`}>в старый ЛК</span>
+						</a>
+
 						<div
 							className={clsx(
 								'h-full flex items-center px-3 cursor-pointer ',
@@ -184,30 +197,30 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						>
 							<SearchSvg white={type === 'service'} />
 						</div>
-						<div
-							className={clsx(
-								'h-full flex items-center px-3 cursor-pointer ',
-								type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'
-							)}
-						>
-							<MessageSvg white={type === 'service'} />
-						</div>
-						<div
-							className={clsx(
-								'h-full flex items-center px-3 cursor-pointer ',
-								type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'
-							)}
-						>
-							<MapSvg white={type === 'service'} />
-						</div>
-						<div
-							className={clsx(
-								'h-full flex items-center px-3 cursor-pointer ',
-								type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'
-							)}
-						>
-							<DocumentSvg white={type === 'service'} />
-						</div>
+						{/*<div*/}
+						{/*	className={clsx(*/}
+						{/*		'h-full flex items-center px-3 cursor-pointer ',*/}
+						{/*		type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'*/}
+						{/*	)}*/}
+						{/*>*/}
+						{/*	<MessageSvg white={type === 'service'} />*/}
+						{/*</div>*/}
+						{/*<div*/}
+						{/*	className={clsx(*/}
+						{/*		'h-full flex items-center px-3 cursor-pointer ',*/}
+						{/*		type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'*/}
+						{/*	)}*/}
+						{/*>*/}
+						{/*	<MapSvg white={type === 'service'} />*/}
+						{/*</div>*/}
+						{/*<div*/}
+						{/*	className={clsx(*/}
+						{/*		'h-full flex items-center px-3 cursor-pointer ',*/}
+						{/*		type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'*/}
+						{/*	)}*/}
+						{/*>*/}
+						{/*	<DocumentSvg white={type === 'service'} />*/}
+						{/*</div>*/}
 						<div
 							className={clsx(
 								'h-full flex items-center px-3 cursor-pointer ',

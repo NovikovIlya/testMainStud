@@ -1,6 +1,8 @@
 import { Button } from 'antd'
 import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useLocation } from 'react-router-dom'
+import SockJS from 'sockjs-client'
 
 import { MessageReadSvg } from '../../../assets/svg/MessageReadSvg'
 import { MessageUnreadSvg } from '../../../assets/svg/MessageUnreadSvg'
@@ -14,10 +16,17 @@ import {
 } from '../../../store/type'
 import { AttachIcon } from '../jobSeeker/AttachIcon'
 
-export const ChatPage = () => {
+const Stomp = require('stompjs/lib/stomp').Stomp
+
+const seekerToken =
+	'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJJQU1pdHJvZmFub3ZAc3R1ZC5rcGZ1LnJ1IiwiaWF0IjoxNzExNTc3OTMwLCJleHAiOjE3MTE1ODg3MzAsInNjb3BlIjoidXNlciIsInJvbGVzIjpbeyJ1c2VySWQiOiI2Iiwic2Vzc2lvbklkIjoiMjQwMzIyNzE0ODc1MTk0ODI5NzMzMDkwNDczNTM2NjciLCJzZXNzaW9uSGFzaCI6IkQyQTIyNUE3NDk5RjFDRTE2Q0JFMDJCOUY2QzkxN0UxIiwiZG9jdW1lbnRzSGFzaCI6IkIyNkNCMEMzRThBQzM2RDZBMENCNTEyQ0YzMDIzNzc3IiwibG9naW4iOiJJQU1pdHJvZmFub3YiLCJ0eXBlIjoiU0VFS0VSIn1dLCJzZXNzaW9uSWQiOiIyNDAzMjI3MTQ4NzUxOTQ4Mjk3MzMwOTA0NzM1MzY2NyIsInNlc3Npb25IYXNoIjoiRDJBMjI1QTc0OTlGMUNFMTZDQkUwMkI5RjZDOTE3RTEiLCJhbGxJZCI6IjE3ODQ0MCIsImVtYWlsIjoibWl0cm9fMDJAbWFpbC5ydSJ9.rbdEbs6b2NVFyFa65GW5rpy8VBd7TKpNxaTrVBMh5i0'
+
+export const ChatPage = (props: { stompClient: any }) => {
 	const [getChatMessages, chatMessages] = useLazyGetChatMessagesQuery()
 	const [postMsg, postMsgResult] = usePostChatMessageMutation()
 	const chatPageRef = useRef<null | HTMLDivElement>(null)
+
+	const { pathname } = useLocation()
 
 	const [msgInputText, setMsgInputText] = useState<string>('')
 	const msgDate = useRef<string>('')
@@ -26,13 +35,68 @@ export const ChatPage = () => {
 		chatPageRef.current?.scrollIntoView()
 	}
 
-	useEffect(() => {
-		console.log('I AM... SCROOOOOOLING')
-		console.log(chatPageRef.current)
-		scrollToBottom()
-	}, [chatPageRef])
+	// useEffect(() => {
+	// 	console.log('I AM... SCROOOOOOLING')
+	// 	console.log(chatPageRef.current)
+	// 	scrollToBottom()
+	// }, [chatPageRef])
 
 	const [messages, setMessages] = useState<ChatMessageType[]>([])
+
+	const [stompClient, setStompClient] = useState<any>(null)
+
+	// useEffect(() => {
+	// 	console.log(props.stompClient)
+	// 	props.stompClient.connect({}, (message: any) => {
+	// 		console.log(message)
+	// 	})
+	// 	return () => {
+	// 		props.stompClient.disconnect()
+	// 	}
+	// }, [])
+
+	useEffect(() => {
+		const socket = new SockJS(
+			`http://localhost:8082/employment-api/v1/ws?token=Bearer ${seekerToken}`
+		)
+		socket.onopen = () => {
+			console.log('WS Open')
+		}
+		socket.onclose = () => {
+			console.log('WS Close')
+		}
+		const client = Stomp.over(socket)
+
+		client.heartbeat.outgoing = 0
+		client.heartbeat.incoming = 0
+
+		client.connect({}, (message: any) => {
+			console.log(message.headers['user-name'])
+			client.subscribe(`/chat/topic/${1}`, (message: any) => {
+				console.log(message)
+				const msgBody = JSON.parse(message.body)
+				msgBody.type === 'MESSAGE' &&
+					setMessages(prev => [msgBody.message as ChatMessageType, ...prev])
+			})
+		})
+
+		setStompClient(client)
+		return () => {
+			client.disconnect()
+			socket.close()
+		}
+	}, [])
+
+	// useEffect(() => {
+	// 	if (stompClient !== null) {
+	// 		stompClient.subscribe(`/chat/topic/${1}`, (message: any) => {
+	// 			console.log(message)
+	// 		})
+	// 	}
+	// 	return () => {
+	// 		stompClient.unsubscribe()
+	// 	}
+	// }, [pathname, stompClient])
 
 	useEffect(() => {
 		getChatMessages({ chatId: 1, size: 5 })
@@ -60,7 +124,7 @@ export const ChatPage = () => {
 				<div className="w-full h-full flex flex-col justify-between pt-[60px] pr-[85px] pl-[40px] overflow-auto">
 					{[...messages].reverse().map(msg => (
 						<>
-							{msg.sendDate.substring(0, 10) !== msgDate.current &&
+							{/* {msg.sendDate.substring(0, 10) !== msgDate.current &&
 								((msgDate.current = msg.sendDate.substring(0, 10)),
 								console.log(msg.sendDate.substring(0, 10)),
 								(
@@ -71,7 +135,7 @@ export const ChatPage = () => {
 												parseInt(msg.sendDate.substring(5, 7)) - 1
 											]}
 									</div>
-								))}
+								))} */}
 							<div
 								key={msg.id}
 								ref={
@@ -84,7 +148,7 @@ export const ChatPage = () => {
 								<p className="whitespace-pre-line">{msg.text}</p>
 								<div className="flex items-center gap-[12px]">
 									<p className="ml-auto font-content-font font-normal text-black text-[12px]/[14.4px] opacity-[52%]">
-										{msg.sendDate.substring(11, 16)}
+										{/* {msg.sendDate.substring(11, 16)} */}
 									</p>
 									{msg.read ? <MessageReadSvg /> : <MessageUnreadSvg />}
 								</div>

@@ -12,22 +12,20 @@ const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
 root.render(
 	<BrowserRouter>
-		<React.StrictMode>
-			<Suspense
-				fallback={
-					<div className="screen">
-						<div className="loader">
-							<div className="inner one"></div>
-							<div className="inner two"></div>
-							<div className="inner three"></div>
-						</div>
+		<Suspense
+			fallback={
+				<div className="screen">
+					<div className="loader">
+						<div className="inner one"></div>
+						<div className="inner two"></div>
+						<div className="inner three"></div>
 					</div>
-				}
-			>
-				<Provider store={store}>
-					<App />
-				</Provider>
-			</Suspense>
-		</React.StrictMode>
+				</div>
+			}
+		>
+			<Provider store={store}>
+				<App />
+			</Provider>
+		</Suspense>
 	</BrowserRouter>
 )

@@ -1,15 +1,22 @@
-import React from 'react';
+import React, {ReactNode} from 'react';
 import clsx from "clsx";
 import {useLocation, useNavigate} from "react-router-dom";
-import {NavLink} from "../../utils/navListForLeftMenu/navBusinessTrip";
+import {useTranslation} from "react-i18next";
 
-interface LeftMenu {
+export interface NavLink {
+    id: string,
+    icon: ReactNode,
+    name: string,
+}
+
+interface ILeftMenu {
     navList: NavLink[]
 }
 
-export const LeftMenu = (props: LeftMenu) => {
+export const LeftMenu = (props: ILeftMenu) => {
     const { pathname } = useLocation()
     const navigate = useNavigate()
+    const { t } = useTranslation()
     const handleNavigate = (url: string) => {
         navigate(url)
     }

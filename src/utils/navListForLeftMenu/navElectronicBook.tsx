@@ -1,12 +1,10 @@
+import React from 'react';
 import {NewBusinessTripSvg} from "../../assets/svg/NewBusinessTripSvg";
 import {CurrentBusinessTrip} from "../../assets/svg/CurrentBusinessTrip";
 import {ForRevisionSvg} from "../../assets/svg/ForRevisionSvg";
 import {Archive} from "../../assets/svg/Archive";
-import React, {ReactNode} from "react";
 
-
-
-export const navListBusinessTrip = [
+export const navElectronicBook = [
     {
         id: '/services/businessTrip/newBusinessTrip',
         icon: <NewBusinessTripSvg/>,
@@ -17,14 +15,5 @@ export const navListBusinessTrip = [
         icon: <CurrentBusinessTrip/>,
         name: 'Текущие командировки'
     },
-    {
-        id: '/services/businessTrip/forRevision',
-        icon: <ForRevisionSvg/>,
-        name: 'На доработку'
-    },
-    {
-        id: '/services/businessTrip/archive',
-        icon: <Archive/>,
-        name: 'Архив'
-    },
+
 ]

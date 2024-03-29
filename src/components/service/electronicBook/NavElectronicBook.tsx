@@ -6,6 +6,7 @@ import { ElectronicBookSvg } from '../../../assets/svg/ElectronicBookSvg'
 import { Header } from '../../layout/Header'
 
 import { Estimation } from './Estimation'
+import {EvaluationTeachersWorkSvg} from "../../../assets/svg/EvaluationTeachersWorkSvg";
 
 export const NavElectronicBook = () => {
 	const { pathname } = useLocation()
@@ -16,6 +17,11 @@ export const NavElectronicBook = () => {
 			id: '/services/electronicBook/estimation',
 			icon: <ElectronicBookSvg />,
 			name: t('ElectronicBook')
+		},
+		{
+			id: '/services/electronicBook/evaluationTeachers',
+			icon: <EvaluationTeachersWorkSvg/>,
+			name: t('EvaluationTeachersWork')
 		}
 	]
 	const handleNavigate = (url: string) => {

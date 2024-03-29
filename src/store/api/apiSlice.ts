@@ -14,7 +14,7 @@ const baseQuery = fetchBaseQuery({
 	prepareHeaders(headers, { getState }) {
 		const token = (getState() as RootState).auth.accessToken
 
-		if (token) {
+		if (token && !headers.has('Authorization')) {
 			headers.set('authorization', `Bearer ${token.replaceAll('"', '')}`)
 		}
 		headers.set('Accept-Language', i18next.language)

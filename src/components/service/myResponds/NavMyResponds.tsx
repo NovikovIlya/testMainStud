@@ -4,8 +4,8 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { BriefcaseSvg } from '../../../assets/svg/BriefcaseSvg'
 import CalendarSvg from '../../../assets/svg/CalendarSvg'
 import { MyDocsSvg } from '../../../assets/svg/MyDocsSvg'
+import { Chat } from '../Chat/Chat'
 
-import { Chat } from './Chat'
 import { Employment } from './Employment'
 import { MyResponds } from './MyResponds'
 
@@ -55,8 +55,8 @@ export const NavMyResponds = () => {
 
 	return (
 		<>
-			<div className="shadowNav bg-white">
-				<ul className="min-w-[230px] pt-14 flex flex-col gap-4">
+			<div className="shadowNav bg-white relative">
+				<ul className="min-w-[230px] pt-14 flex flex-col gap-4 sticky top-[80px]">
 					{handleList}
 				</ul>
 			</div>

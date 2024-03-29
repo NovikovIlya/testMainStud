@@ -2,10 +2,8 @@ import clsx from 'clsx'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { BriefcaseSvg } from '../../../assets/svg/BriefcaseSvg'
-import CalendarSvg from '../../../assets/svg/CalendarSvg'
-import { MyDocsSvg } from '../../../assets/svg/MyDocsSvg'
 import { useAppSelector } from '../../../store'
-import { Chat } from '../myResponds/Chat'
+import { Chat } from '../Chat/Chat'
 
 import { ChatIcon } from './ChatIcon'
 import { Responds } from './Responds'
@@ -84,7 +82,7 @@ export const NavPesonnelAccounting = () => {
 				{pathname.match(
 					'services/personnelaccounting/responds/byvacancy/*'
 				) && <VacancyResponces />}
-				{pathname === navList[1].id && <Chat />}
+				{pathname.includes(navList[1].id) && <Chat />}
 				{pathname === navList[2].id && <></>}
 				{pathname === navList[3].id && <></>}
 				{pathname === navList[4].id && <></>}

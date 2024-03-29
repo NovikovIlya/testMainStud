@@ -1,4 +1,5 @@
 import clsx from 'clsx'
+import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import uuid from 'react-uuid'
 
@@ -8,6 +9,24 @@ import { ChatPage } from './ChatPage'
 
 export const Chat = () => {
 	const { data: responds = [] } = useGetSeekerRespondsQuery('')
+
+	// const unreadCounts = (async () => {
+	// 	await Promise.all(
+	// 		responds.map(resp => {
+	// 			getChatId(resp.id)
+	// 				.unwrap()
+	// 				.then(chatId => {
+	// 					getUnreadCount(chatId)
+	// 						.unwrap()
+	// 						.then(count => count)
+	// 				})
+	// 		})
+	// 	)
+	// })()
+
+	// console.log(unreadCounts)
+
+	useEffect(() => {}, [])
 
 	const { pathname } = useLocation()
 	const navigate = useNavigate()
@@ -45,12 +64,14 @@ export const Chat = () => {
 		<>
 			{' '}
 			<div className="shadowNav bg-white relative z-[5]">
-				<div className="">
-					<p className="pl-[53px] pt-14 pb-[40px] font-content-font font-normal text-black text-[20px]/[20px] ">
-						Все отклики
-					</p>
+				<div className="sticky top-[80px]">
+					<div className="">
+						<p className="pl-[53px] pt-14 pb-[40px] font-content-font font-normal text-black text-[20px]/[20px] ">
+							Все отклики
+						</p>
+					</div>
+					<ul className="w-[461px] flex flex-col gap-4">{handleList}</ul>
 				</div>
-				<ul className="w-[461px] flex flex-col gap-4 ">{handleList}</ul>
 			</div>
 			<ChatPage />
 		</>

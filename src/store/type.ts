@@ -210,3 +210,34 @@ export type VacancyRespondItemType = {
 	}
 	educations: []
 }
+
+export type ChatMessageType = {
+	id: number
+	sender: 'SEEKER' | 'PERSONNEL_DEPARTMENT'
+	text: string
+	read: boolean
+	sendDate: string
+	type:
+		| 'TEXT'
+		| 'FILE'
+		| 'RESPOND'
+		| 'IN_SUPERVISOR_REVIEW'
+		| 'INVITATION'
+		| 'REJECTED'
+	fileInfos: { id: number; name: string }[] | null
+}
+
+export enum ChatMessageDateDisplayEnum {
+	'января',
+	'февраля',
+	'марта',
+	'апреля',
+	'мая',
+	'июня',
+	'июля',
+	'августа',
+	'сентября',
+	'октября',
+	'ноября',
+	'декабря'
+}

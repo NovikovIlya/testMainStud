@@ -35,7 +35,7 @@ export const LeftMenu = (props: ILeftMenu) => {
                         >
                             <div className="flex items-center gap-[10px]">
                                 {elem.icon}
-                                <p className="text-base">{elem.name}</p>
+                                <p className="text-base">{t(elem.name)}</p>
                             </div>
                         </li>
                     ))

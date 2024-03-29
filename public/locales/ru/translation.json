@@ -281,5 +281,9 @@
 	"DigitalDepartmentsInfo": "Получите квалификацию в сфере IT и применяйте знания на практике",
 	"ManagementScientificProjects": "Менеджмент научных проектов",
 	"ManagementScientificProjectsInfo": "Менеджмент научных проектов",
-	"EvaluationTeachersWork": "Оценка работы преподавателей"
+	"EvaluationTeachersWork": "Оценка работы преподавателей",
+	"NewBusinessTrip": "Новая командировка",
+	"CurrentBusinessTrips": "Текущие командировки",
+	"ForRevision": "На доработку",
+	"Archive": "Архив"
 }

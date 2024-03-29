@@ -172,7 +172,7 @@ export const Estimation = () => {
 		return result.sort((a, b) => a.term - b.term)
 	}
 	return (
-		<div className="mt-14 mx-14 radio">
+		<div className="radio">
 			<div className="mb-14 text-[28px]">{t('ElectronicBook')}</div>
 			<Radio.Group
 				defaultValue="0"

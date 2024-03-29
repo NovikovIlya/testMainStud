@@ -282,5 +282,9 @@
 	"DigitalDepartmentsInfo": "Get a qualification in the field of IT and put your knowledge into practice",
 	"ManagementScientificProjects": "Management of scientific projects",
 	"ManagementScientificProjectsInfo": "Management of scientific projects",
-	"EvaluationTeachersWork": "Evaluation of teachers' work"
+	"EvaluationTeachersWork": "Evaluation of teachers' work",
+	"NewBusinessTrip": "New business trip",
+	"CurrentBusinessTrips": "Current business trips",
+	"ForRevision": "For revision",
+	"Archive": "Archive"
 }

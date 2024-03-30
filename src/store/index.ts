@@ -20,6 +20,7 @@ import FormCompletionReducer from './reducers/SeekerFormReducers/FormCompletionR
 import RespondEducationReducer from './reducers/SeekerFormReducers/RespondEducationReducer'
 import SkillsReducer from './reducers/SeekerFormReducers/SkillsReducer'
 import authSlice from './reducers/authSlice'
+import chatIdSlice from './reducers/chatIdSlice'
 
 export const store = configureStore({
 	reducer: {
@@ -40,6 +41,7 @@ export const store = configureStore({
 		RespondEducation: RespondEducationReducer,
 		Experience: ExperienceReducer,
 		formCompletion: FormCompletionReducer,
+		chatId: chatIdSlice,
 		[apiSlice.reducerPath]: apiSlice.reducer
 	},
 	middleware: getDefaultMiddleware =>

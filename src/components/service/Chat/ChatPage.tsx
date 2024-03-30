@@ -6,6 +6,7 @@ import SockJS from 'sockjs-client'
 
 import { MessageReadSvg } from '../../../assets/svg/MessageReadSvg'
 import { MessageUnreadSvg } from '../../../assets/svg/MessageUnreadSvg'
+import { useAppSelector } from '../../../store'
 import {
 	useLazyGetChatMessagesQuery,
 	usePostChatMessageMutation
@@ -16,12 +17,15 @@ import {
 } from '../../../store/type'
 import { AttachIcon } from '../jobSeeker/AttachIcon'
 
+import { ChatMessage } from './ChatMessage'
+
 const Stomp = require('stompjs/lib/stomp').Stomp
 
 const seekerToken =
 	'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJJQU1pdHJvZmFub3ZAc3R1ZC5rcGZ1LnJ1IiwiaWF0IjoxNzExNTc3OTMwLCJleHAiOjE3MTE1ODg3MzAsInNjb3BlIjoidXNlciIsInJvbGVzIjpbeyJ1c2VySWQiOiI2Iiwic2Vzc2lvbklkIjoiMjQwMzIyNzE0ODc1MTk0ODI5NzMzMDkwNDczNTM2NjciLCJzZXNzaW9uSGFzaCI6IkQyQTIyNUE3NDk5RjFDRTE2Q0JFMDJCOUY2QzkxN0UxIiwiZG9jdW1lbnRzSGFzaCI6IkIyNkNCMEMzRThBQzM2RDZBMENCNTEyQ0YzMDIzNzc3IiwibG9naW4iOiJJQU1pdHJvZmFub3YiLCJ0eXBlIjoiU0VFS0VSIn1dLCJzZXNzaW9uSWQiOiIyNDAzMjI3MTQ4NzUxOTQ4Mjk3MzMwOTA0NzM1MzY2NyIsInNlc3Npb25IYXNoIjoiRDJBMjI1QTc0OTlGMUNFMTZDQkUwMkI5RjZDOTE3RTEiLCJhbGxJZCI6IjE3ODQ0MCIsImVtYWlsIjoibWl0cm9fMDJAbWFpbC5ydSJ9.rbdEbs6b2NVFyFa65GW5rpy8VBd7TKpNxaTrVBMh5i0'
 
 export const ChatPage = (props: { stompClient: any }) => {
+	const chatIdState = useAppSelector(state => state.chatId)
 	const [getChatMessages, chatMessages] = useLazyGetChatMessagesQuery()
 	const [postMsg, postMsgResult] = usePostChatMessageMutation()
 	const chatPageRef = useRef<null | HTMLDivElement>(null)
@@ -72,7 +76,7 @@ export const ChatPage = (props: { stompClient: any }) => {
 
 		client.connect({}, (message: any) => {
 			console.log(message.headers['user-name'])
-			client.subscribe(`/chat/topic/${1}`, (message: any) => {
+			client.subscribe(`/chat/topic/${chatIdState.chatId}`, (message: any) => {
 				console.log(message)
 				const msgBody = JSON.parse(message.body)
 				msgBody.type === 'MESSAGE' &&
@@ -85,7 +89,7 @@ export const ChatPage = (props: { stompClient: any }) => {
 			client.disconnect()
 			socket.close()
 		}
-	}, [])
+	}, [chatIdState])
 
 	// useEffect(() => {
 	// 	if (stompClient !== null) {
@@ -99,17 +103,17 @@ export const ChatPage = (props: { stompClient: any }) => {
 	// }, [pathname, stompClient])
 
 	useEffect(() => {
-		getChatMessages({ chatId: 1, size: 5 })
+		getChatMessages({ chatId: chatIdState.chatId, size: 5 })
 			.unwrap()
 			.then(msg => {
 				setMessages(msg)
 			})
-	}, [])
+	}, [chatIdState])
 
 	const { control, handleSubmit } = useForm()
 
 	const handleMessage = () => {
-		postMsg({ id: 1, text: msgInputText, name: 'Ilya' })
+		postMsg({ id: chatIdState.chatId, text: msgInputText, name: 'Ilya' })
 			.unwrap()
 			.then(msgData => setMessages([msgData, ...messages]))
 		setMsgInputText('')
@@ -136,23 +140,7 @@ export const ChatPage = (props: { stompClient: any }) => {
 											]}
 									</div>
 								))} */}
-							<div
-								key={msg.id}
-								ref={
-									msg.id === messages[messages.length - 1].id
-										? chatPageRef
-										: undefined
-								}
-								className="self-end w-[50%] rounded-[16px] rounded-br-none bg-[#4F6AFB1A] bg-opacity-10 p-[20px] flex flex-col font-content-font font-normal text-black text-[16px]/[19.2px]"
-							>
-								<p className="whitespace-pre-line">{msg.text}</p>
-								<div className="flex items-center gap-[12px]">
-									<p className="ml-auto font-content-font font-normal text-black text-[12px]/[14.4px] opacity-[52%]">
-										{/* {msg.sendDate.substring(11, 16)} */}
-									</p>
-									{msg.read ? <MessageReadSvg /> : <MessageUnreadSvg />}
-								</div>
-							</div>
+							<ChatMessage msgData={msg} />
 						</>
 					))}
 					{/* <div className="self-start w-[355px] rounded-[16px] rounded-bl-none bg-white p-[20px] flex flex-col font-content-font font-normal text-black text-[16px]/[19.2px]">

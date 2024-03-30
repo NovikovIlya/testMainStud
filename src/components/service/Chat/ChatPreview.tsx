@@ -1,11 +1,13 @@
 import { Badge } from 'antd'
 import clsx from 'clsx'
+import { useDispatch } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import {
 	useGetChatIdByRespondIdQuery,
 	useGetUnreadMessagesCountQuery
 } from '../../../store/api/serviceApi'
+import { setChatId } from '../../../store/reducers/chatIdSlice'
 
 export const ChatPreview = (props: { respondId: number; respName: string }) => {
 	const { data: chatId = 0, isLoading: isChatIdLoading } =
@@ -14,9 +16,11 @@ export const ChatPreview = (props: { respondId: number; respName: string }) => {
 		useGetUnreadMessagesCountQuery(chatId)
 
 	const { pathname } = useLocation()
+	const dispatch = useDispatch()
 	const navigate = useNavigate()
 
 	const handleNavigate = (url: string) => {
+		dispatch(setChatId(props.respondId))
 		navigate(url)
 	}
 

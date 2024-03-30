@@ -35,7 +35,7 @@ export const ChatMessage = (props: { msgData: ChatMessageType }) => {
 				<p className="whitespace-pre-line">{props.msgData.text}</p>
 				<div className="flex items-center gap-[12px]">
 					<p className="ml-auto font-content-font font-normal text-black text-[12px]/[14.4px] opacity-[52%]">
-						{/* {msg.sendDate.substring(11, 16)} */}
+						{props.msgData.sendDate.substring(11, 16)}
 					</p>
 					{(props.msgData.sender === 'SEEKER' && !isEmpDep) ||
 					(props.msgData.sender === 'PERSONNEL_DEPARTMENT' && isEmpDep) ? (

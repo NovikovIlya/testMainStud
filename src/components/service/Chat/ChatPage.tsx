@@ -120,7 +120,7 @@ export const ChatPage = (props: { stompClient: any }) => {
 				<div className="w-full h-full flex flex-col justify-between pt-[60px] pr-[85px] pl-[40px] overflow-auto">
 					{[...messages].reverse().map(msg => (
 						<>
-							{/* {msg.sendDate.substring(0, 10) !== msgDate.current &&
+							{msg.sendDate.substring(0, 10) !== msgDate.current &&
 								((msgDate.current = msg.sendDate.substring(0, 10)),
 								console.log(msg.sendDate.substring(0, 10)),
 								(
@@ -131,7 +131,7 @@ export const ChatPage = (props: { stompClient: any }) => {
 												parseInt(msg.sendDate.substring(5, 7)) - 1
 											]}
 									</div>
-								))} */}
+								))}
 							<ChatMessage key={msg.id} msgData={msg} />
 						</>
 					))}

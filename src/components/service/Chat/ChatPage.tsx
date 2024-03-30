@@ -9,7 +9,8 @@ import { MessageUnreadSvg } from '../../../assets/svg/MessageUnreadSvg'
 import { useAppSelector } from '../../../store'
 import {
 	useLazyGetChatMessagesQuery,
-	usePostChatMessageMutation
+	usePostChatMessageMutation,
+	useReadChatMessageMutation
 } from '../../../store/api/serviceApi'
 import {
 	ChatMessageDateDisplayEnum,
@@ -28,6 +29,7 @@ export const ChatPage = (props: { stompClient: any }) => {
 	const chatIdState = useAppSelector(state => state.chatId)
 	const [getChatMessages, chatMessages] = useLazyGetChatMessagesQuery()
 	const [postMsg, postMsgResult] = usePostChatMessageMutation()
+	const [readMsg, readMsgResult] = useReadChatMessageMutation()
 	const chatPageRef = useRef<null | HTMLDivElement>(null)
 
 	const { pathname } = useLocation()
@@ -76,11 +78,19 @@ export const ChatPage = (props: { stompClient: any }) => {
 
 		client.connect({}, (message: any) => {
 			console.log(message.headers['user-name'])
+			const sessionId = message.headers['user-name']
 			client.subscribe(`/chat/topic/${chatIdState.chatId}`, (message: any) => {
 				console.log(message)
 				const msgBody = JSON.parse(message.body)
 				msgBody.type === 'MESSAGE' &&
-					setMessages(prev => [msgBody.message as ChatMessageType, ...prev])
+					(setMessages(prev => [msgBody.message as ChatMessageType, ...prev]),
+					readMsg({
+						chatId: chatIdState.chatId,
+						messageId: msgBody.message.id,
+						sessionId: sessionId
+					}))
+				msgBody.type === 'READ' &&
+					(msgBody.message.ids as number[]).map(id => console.log(id))
 			})
 		})
 

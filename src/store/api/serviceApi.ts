@@ -255,6 +255,19 @@ export const serviceApi = apiSlice.injectEndpoints({
 					'X-User-Name': name
 				}
 			})
+		}),
+		readChatMessage: builder.mutation<
+			void,
+			{ chatId: number; messageId: number; sessionId: string }
+		>({
+			query: ({ chatId, messageId, sessionId }) => ({
+				url: `http://localhost:8082/employment-api/v1/chat/${chatId}/message/${messageId}/read`,
+				method: 'PUT',
+				headers: {
+					Authorization: `Bearer ${seekerToken}`,
+					'X-User-Name': sessionId
+				}
+			})
 		})
 	})
 })
@@ -284,5 +297,6 @@ export const {
 	useGetChatIdByRespondIdQuery,
 	useGetUnreadMessagesCountQuery,
 	useLazyGetChatMessagesQuery,
-	usePostChatMessageMutation
+	usePostChatMessageMutation,
+	useReadChatMessageMutation
 } = serviceApi

@@ -51,15 +51,7 @@ export const ChatPage = (props: { stompClient: any }) => {
 
 	const [stompClient, setStompClient] = useState<any>(null)
 
-	// useEffect(() => {
-	// 	console.log(props.stompClient)
-	// 	props.stompClient.connect({}, (message: any) => {
-	// 		console.log(message)
-	// 	})
-	// 	return () => {
-	// 		props.stompClient.disconnect()
-	// 	}
-	// }, [])
+	const [sessionId, setSessionId] = useState<string>('')
 
 	useEffect(() => {
 		const socket = new SockJS(
@@ -79,6 +71,7 @@ export const ChatPage = (props: { stompClient: any }) => {
 		client.connect({}, (message: any) => {
 			console.log(message.headers['user-name'])
 			const sessionId = message.headers['user-name']
+			setSessionId(message.headers['user-name'])
 			client.subscribe(`/chat/topic/${chatIdState.chatId}`, (message: any) => {
 				console.log(message)
 				const msgBody = JSON.parse(message.body)
@@ -101,19 +94,8 @@ export const ChatPage = (props: { stompClient: any }) => {
 		}
 	}, [chatIdState])
 
-	// useEffect(() => {
-	// 	if (stompClient !== null) {
-	// 		stompClient.subscribe(`/chat/topic/${1}`, (message: any) => {
-	// 			console.log(message)
-	// 		})
-	// 	}
-	// 	return () => {
-	// 		stompClient.unsubscribe()
-	// 	}
-	// }, [pathname, stompClient])
-
 	useEffect(() => {
-		getChatMessages({ chatId: chatIdState.chatId, size: 5 })
+		getChatMessages({ chatId: chatIdState.chatId, size: 60 })
 			.unwrap()
 			.then(msg => {
 				setMessages(msg)
@@ -123,7 +105,7 @@ export const ChatPage = (props: { stompClient: any }) => {
 	const { control, handleSubmit } = useForm()
 
 	const handleMessage = () => {
-		postMsg({ id: chatIdState.chatId, text: msgInputText, name: 'Ilya' })
+		postMsg({ id: chatIdState.chatId, text: msgInputText, name: sessionId })
 			.unwrap()
 			.then(msgData => setMessages([msgData, ...messages]))
 		setMsgInputText('')
@@ -150,7 +132,7 @@ export const ChatPage = (props: { stompClient: any }) => {
 											]}
 									</div>
 								))} */}
-							<ChatMessage msgData={msg} />
+							<ChatMessage key={msg.id} msgData={msg} />
 						</>
 					))}
 					{/* <div className="self-start w-[355px] rounded-[16px] rounded-bl-none bg-white p-[20px] flex flex-col font-content-font font-normal text-black text-[16px]/[19.2px]">

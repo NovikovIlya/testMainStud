@@ -20,7 +20,7 @@ export const ChatPreview = (props: { respondId: number; respName: string }) => {
 	const navigate = useNavigate()
 
 	const handleNavigate = (url: string) => {
-		dispatch(setChatId(props.respondId))
+		dispatch(setChatId(chatId))
 		navigate(url)
 	}
 
@@ -31,9 +31,7 @@ export const ChatPreview = (props: { respondId: number; respName: string }) => {
 					'w-full flex items-center py-2 pl-[53px] pr-[53px] pb-[16px] hover:bg-[#F5F8FB]  cursor-pointer',
 					pathname.includes(props.respondId.toString()) && 'bg-[#F5F8FB]'
 				)}
-				onClick={() =>
-					handleNavigate(`/services/myresponds/chat/id/${props.respondId}`)
-				}
+				onClick={() => handleNavigate(`/services/myresponds/chat/id/${chatId}`)}
 			>
 				<div className="w-full flex flex-col gap-[10px]">
 					<p className=" font-content-font font-normal text-black text-[16px]/[19.2px] opacity-50">

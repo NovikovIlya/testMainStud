@@ -141,7 +141,8 @@ export const serviceApi = apiSlice.injectEndpoints({
 				headers: {
 					Authorization: `Bearer ${seekerToken}`
 				}
-			})
+			}),
+			keepUnusedDataFor: 0
 		}),
 		getChatMessages: builder.query<
 			ChatMessageType[],

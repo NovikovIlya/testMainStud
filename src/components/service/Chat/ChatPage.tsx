@@ -1,11 +1,8 @@
 import { Button } from 'antd'
 import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useLocation } from 'react-router-dom'
 import SockJS from 'sockjs-client'
 
-import { MessageReadSvg } from '../../../assets/svg/MessageReadSvg'
-import { MessageUnreadSvg } from '../../../assets/svg/MessageUnreadSvg'
 import { useAppSelector } from '../../../store'
 import {
 	useLazyGetChatMessagesQuery,
@@ -24,15 +21,17 @@ const Stomp = require('stompjs/lib/stomp').Stomp
 
 const seekerToken =
 	'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJJQU1pdHJvZmFub3ZAc3R1ZC5rcGZ1LnJ1IiwiaWF0IjoxNzExNTc3OTMwLCJleHAiOjE3MTE1ODg3MzAsInNjb3BlIjoidXNlciIsInJvbGVzIjpbeyJ1c2VySWQiOiI2Iiwic2Vzc2lvbklkIjoiMjQwMzIyNzE0ODc1MTk0ODI5NzMzMDkwNDczNTM2NjciLCJzZXNzaW9uSGFzaCI6IkQyQTIyNUE3NDk5RjFDRTE2Q0JFMDJCOUY2QzkxN0UxIiwiZG9jdW1lbnRzSGFzaCI6IkIyNkNCMEMzRThBQzM2RDZBMENCNTEyQ0YzMDIzNzc3IiwibG9naW4iOiJJQU1pdHJvZmFub3YiLCJ0eXBlIjoiU0VFS0VSIn1dLCJzZXNzaW9uSWQiOiIyNDAzMjI3MTQ4NzUxOTQ4Mjk3MzMwOTA0NzM1MzY2NyIsInNlc3Npb25IYXNoIjoiRDJBMjI1QTc0OTlGMUNFMTZDQkUwMkI5RjZDOTE3RTEiLCJhbGxJZCI6IjE3ODQ0MCIsImVtYWlsIjoibWl0cm9fMDJAbWFpbC5ydSJ9.rbdEbs6b2NVFyFa65GW5rpy8VBd7TKpNxaTrVBMh5i0'
+const personnelDeparmentToken =
+	'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJTdWJCQXNhZHVsbG9ldkBzdHVkLmtwZnUucnUiLCJpYXQiOjE3MTE3MjQ1NDQsImV4cCI6MTcxMTczNTM0NCwic2NvcGUiOiJ1c2VyIiwicm9sZXMiOlt7InVzZXJJZCI6IjciLCJzZXNzaW9uSWQiOiIyNDA0NzM4MTc3NzI3MjIwMTMzMDkwNzU0ODQ2ODU5MSIsInNlc3Npb25IYXNoIjoiNTZEMTZENTNDOTc5MDk5MTk0QTY4OEY4Qjk0M0I0N0MiLCJkb2N1bWVudHNIYXNoIjoiQTdCMkI0MUU4MjQ4NDYzNkY2ODZDNTQ3NEY0NEREMjYiLCJsb2dpbiI6IlNCQXNhZHVsbG9ldiIsInR5cGUiOiJQRVJTT05ORUxfREVQQVJUTUVOVCJ9LHsidXNlcklkIjoiMzQ4NTQxIiwic2Vzc2lvbklkIjoiMjQwNDczODA1NjYxMjc2MDM3NTM5NjI3MjY1MTM0OTQiLCJzZXNzaW9uSGFzaCI6IkUzQUZFMTUzNUVCMTU3NEUyMkZCNUJDNEYxNUFERkUwIiwiZG9jdW1lbnRzSGFzaCI6IiIsImxvZ2luIjoiU3ViQkFzYWR1bGxvZXYiLCJ0eXBlIjoiRU1QTCJ9LHsidXNlcklkIjoiMzM2MDM3Iiwic2Vzc2lvbklkIjoiMjQwNDczODI0NDUwMjI3MTM5NzgzNzQ5OTMwNjk4MDciLCJzZXNzaW9uSGFzaCI6IjcxMEExMTFFM0FCN0Q4NDczNTVFOEM0QkUxMDI4RTZBIiwiZG9jdW1lbnRzSGFzaCI6IkEyMkE3NURCRTBBNzg4MDE4OTY4NjZCQjgzNUIxNDQxIiwibG9naW4iOiJTdUJBc2FkdWxsb2V2IiwidHlwZSI6IlNUVUQifV0sInNlc3Npb25JZCI6IjI0MDQ3MzgxNzc3MjcyMjAxMzMwOTA3NTQ4NDY4NTkxIiwic2Vzc2lvbkhhc2giOiI1NkQxNkQ1M0M5NzkwOTkxOTRBNjg4RjhCOTQzQjQ3QyIsImFsbElkIjoiMjM5MTc0IiwiZW1haWwiOiJCYXN1YmhvbmJla0BnbWFpbC5jb20ifQ.MMK47Gd4AKG8tPzmPAwgNq79zVEmfzdFCuoZjcXeW_o'
 
-export const ChatPage = (props: { stompClient: any }) => {
+export const ChatPage = () => {
 	const chatIdState = useAppSelector(state => state.chatId)
+	const user = useAppSelector(state => state.auth.user)
+	const isEmpDemp = user?.roles.find(role => role.type === 'EMPL')
 	const [getChatMessages, chatMessages] = useLazyGetChatMessagesQuery()
 	const [postMsg, postMsgResult] = usePostChatMessageMutation()
 	const [readMsg, readMsgResult] = useReadChatMessageMutation()
 	const chatPageRef = useRef<null | HTMLDivElement>(null)
-
-	const { pathname } = useLocation()
 
 	const [msgInputText, setMsgInputText] = useState<string>('')
 	const msgDate = useRef<string>('')
@@ -49,13 +48,13 @@ export const ChatPage = (props: { stompClient: any }) => {
 
 	const [messages, setMessages] = useState<ChatMessageType[]>([])
 
-	const [stompClient, setStompClient] = useState<any>(null)
-
 	const [sessionId, setSessionId] = useState<string>('')
 
 	useEffect(() => {
 		const socket = new SockJS(
-			`http://localhost:8082/employment-api/v1/ws?token=Bearer ${seekerToken}`
+			`http://localhost:8082/employment-api/v1/ws?token=Bearer ${
+				isEmpDemp ? personnelDeparmentToken : seekerToken
+			}`
 		)
 		socket.onopen = () => {
 			console.log('WS Open')
@@ -80,14 +79,17 @@ export const ChatPage = (props: { stompClient: any }) => {
 					readMsg({
 						chatId: chatIdState.chatId,
 						messageId: msgBody.message.id,
-						sessionId: sessionId
+						sessionId: sessionId,
+						role: isEmpDemp ? 'PERSONNEL_DEPARTMENT' : 'SEEKER'
 					}))
 				msgBody.type === 'READ' &&
-					(msgBody.message.ids as number[]).map(id => console.log(id))
+					(msgBody.message.ids as number[]).map(id =>
+						setMessages(prev => [
+							...prev.map(msg => (msg.id === id ? { ...msg, read: true } : msg))
+						])
+					)
 			})
 		})
-
-		setStompClient(client)
 		return () => {
 			client.disconnect()
 			socket.close()
@@ -95,7 +97,11 @@ export const ChatPage = (props: { stompClient: any }) => {
 	}, [chatIdState])
 
 	useEffect(() => {
-		getChatMessages({ chatId: chatIdState.chatId, size: 60 })
+		getChatMessages({
+			chatId: chatIdState.chatId,
+			size: 60,
+			role: isEmpDemp ? 'PERSONNEL_DEPARTMENT' : 'SEEKER'
+		})
 			.unwrap()
 			.then(msg => {
 				setMessages(msg)
@@ -105,7 +111,12 @@ export const ChatPage = (props: { stompClient: any }) => {
 	const { control, handleSubmit } = useForm()
 
 	const handleMessage = () => {
-		postMsg({ id: chatIdState.chatId, text: msgInputText, name: sessionId })
+		postMsg({
+			id: chatIdState.chatId,
+			text: msgInputText,
+			name: sessionId,
+			role: isEmpDemp ? 'PERSONNEL_DEPARTMENT' : 'SEEKER'
+		})
 			.unwrap()
 			.then(msgData => setMessages([msgData, ...messages]))
 		setMsgInputText('')

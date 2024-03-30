@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 
 import { BriefcaseSvg } from '../../../assets/svg/BriefcaseSvg'
 import { useAppSelector } from '../../../store'
-import { Chat } from '../Chat/Chat'
+import { ChatEmpDemp } from '../Chat/ChatEmpDemp'
 
 import { ChatIcon } from './ChatIcon'
 import { Responds } from './Responds'
@@ -82,7 +82,7 @@ export const NavPesonnelAccounting = () => {
 				{pathname.match(
 					'services/personnelaccounting/responds/byvacancy/*'
 				) && <VacancyResponces />}
-				{pathname.includes(navList[1].id) && <Chat />}
+				{pathname.includes(navList[1].id) && <ChatEmpDemp />}
 				{pathname === navList[2].id && <></>}
 				{pathname === navList[3].id && <></>}
 				{pathname === navList[4].id && <></>}

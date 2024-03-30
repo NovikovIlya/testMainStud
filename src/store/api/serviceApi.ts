@@ -146,14 +146,18 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		getChatMessages: builder.query<
 			ChatMessageType[],
-			{ chatId: number; lastMessageId?: number; size?: number }
+			{ chatId: number; lastMessageId?: number; size?: number; role: string }
 		>({
-			query: ({ chatId, lastMessageId, size }) => ({
+			query: ({ chatId, lastMessageId, size, role }) => ({
 				url: `http://localhost:8082/employment-api/v1/chat/${chatId}/messages?${
 					lastMessageId !== undefined ? `last_message_id=${lastMessageId}&` : ''
 				}${size !== undefined ? `size=${size}&` : ''}`,
 				headers: {
-					Authorization: `Bearer ${seekerToken}`
+					Authorization: `Bearer ${
+						role === 'PERSONNEL_DEPARTMENT'
+							? personnelDeparmentToken
+							: seekerToken
+					}`
 				}
 			})
 		}),
@@ -245,27 +249,35 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		postChatMessage: builder.mutation<
 			ChatMessageType,
-			{ id: number; text: string; name: string }
+			{ id: number; text: string; name: string; role: string }
 		>({
-			query: ({ id, text, name }) => ({
+			query: ({ id, text, name, role }) => ({
 				url: `http://localhost:8082/employment-api/v1/chat/${id}/text`,
 				method: 'POST',
 				body: { text: text },
 				headers: {
-					Authorization: `Bearer ${seekerToken}`,
+					Authorization: `Bearer ${
+						role === 'PERSONNEL_DEPARTMENT'
+							? personnelDeparmentToken
+							: seekerToken
+					}`,
 					'X-User-Name': name
 				}
 			})
 		}),
 		readChatMessage: builder.mutation<
 			void,
-			{ chatId: number; messageId: number; sessionId: string }
+			{ chatId: number; messageId: number; sessionId: string; role: string }
 		>({
-			query: ({ chatId, messageId, sessionId }) => ({
+			query: ({ chatId, messageId, sessionId, role }) => ({
 				url: `http://localhost:8082/employment-api/v1/chat/${chatId}/message/${messageId}/read`,
 				method: 'PUT',
 				headers: {
-					Authorization: `Bearer ${seekerToken}`,
+					Authorization: `Bearer ${
+						role === 'PERSONNEL_DEPARTMENT'
+							? personnelDeparmentToken
+							: seekerToken
+					}`,
 					'X-User-Name': sessionId
 				}
 			})
@@ -299,5 +311,6 @@ export const {
 	useGetUnreadMessagesCountQuery,
 	useLazyGetChatMessagesQuery,
 	usePostChatMessageMutation,
-	useReadChatMessageMutation
+	useReadChatMessageMutation,
+	useLazyGetResponcesByVacancyQuery
 } = serviceApi

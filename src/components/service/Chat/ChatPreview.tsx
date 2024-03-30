@@ -3,6 +3,7 @@ import clsx from 'clsx'
 import { useDispatch } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 
+import { useAppSelector } from '../../../store'
 import {
 	useGetChatIdByRespondIdQuery,
 	useGetUnreadMessagesCountQuery
@@ -14,6 +15,9 @@ export const ChatPreview = (props: { respondId: number; respName: string }) => {
 		useGetChatIdByRespondIdQuery(props.respondId)
 	const { data: unreadCount, isLoading: isUnreadCountLoading } =
 		useGetUnreadMessagesCountQuery(chatId)
+
+	const user = useAppSelector(state => state.auth.user)
+	const isEmpDemp = user?.roles.find(role => role.type === 'EMPL')
 
 	const { pathname } = useLocation()
 	const dispatch = useDispatch()
@@ -31,7 +35,13 @@ export const ChatPreview = (props: { respondId: number; respName: string }) => {
 					'w-full flex items-center py-2 pl-[53px] pr-[53px] pb-[16px] hover:bg-[#F5F8FB]  cursor-pointer',
 					pathname.includes(props.respondId.toString()) && 'bg-[#F5F8FB]'
 				)}
-				onClick={() => handleNavigate(`/services/myresponds/chat/id/${chatId}`)}
+				onClick={() =>
+					handleNavigate(
+						isEmpDemp
+							? `/services/personnelaccounting/chat/id/${chatId}`
+							: `/services/myresponds/chat/id/${chatId}`
+					)
+				}
 			>
 				<div className="w-full flex flex-col gap-[10px]">
 					<p className=" font-content-font font-normal text-black text-[16px]/[19.2px] opacity-50">

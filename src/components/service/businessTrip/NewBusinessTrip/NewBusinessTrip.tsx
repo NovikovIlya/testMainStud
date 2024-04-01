@@ -1,36 +1,50 @@
-import React, {useState} from 'react';
-import {StepOne} from "./stepOne/StepOne";
-import {ProgressForm} from "./progressForm/ProgressForm";
-import {StepTwo} from "./stepTwo/StepTwo";
+import React from 'react';
+import {ConfigProvider, Tabs} from "antd";
+import {PlacesAndDated} from "./PlacesAndDated";
+import './NewBusinessTrip.scss'
+
+const itemsTabs = [
+    {key: '1', label: 'Места и сроки командирования', children: <PlacesAndDated/>},
+    {key: '2', label: 'Условия проезда', children: 'Условия проезда'},
+    {key: '3', label: 'Условия проживания', children: 'Условия проживания'},
+    {key: '4', label: 'Финансирование', children: 'Финансирование'},
+]
 
 
 
 export const NewBusinessTrip = () => {
 
-    const [step, setStep] = useState(1)
+    const onChange = (key: string) => {
+        console.log(key);
+    };
 
-    function nextStep() {
-        if (step < 5) setStep(step => step + 1)
-    }
-
-    function previousStep() {
-        if (step > 1) setStep(step => step - 1)
-    }
-
-    //availableRightButton должен ещё зависеть от того, заполнена ли форма(но это надо уточнить)
     return (
         <section className={'flex flex-col gap-5'}>
             <span className={'text-2xl'}>Новая командировка</span>
-            <ProgressForm
-                step={step}
-                availableLeftButton={step !== 1}
-                availableRightButton={step !== 5}
-                nextStep={nextStep}
-                previousStep={previousStep}
-            />
-            {step === 1 && <StepOne nextStep={nextStep}/>}
-            {step === 2 && <StepTwo nextStep={nextStep} previousStep={previousStep}/>}
-            {step === 3 && <span>Шаг 3</span>}
+
+            <ConfigProvider theme={{
+                components: {
+                    Tabs: {
+                        titleFontSize: 20,
+                        itemSelectedColor: 'rgba(0, 0, 0, 0.88)',
+                        itemColor: 'rgba(0, 0, 0, 0.88)',
+                        cardBg: 'white',
+
+                    }
+                },
+
+            }}>
+                <Tabs
+                    onChange={onChange}
+                    type="card"
+                    items={itemsTabs}
+                    className={`
+                        newBusinessTrip
+                    `}
+                />
+            </ConfigProvider>
+
+
 
         </section>
     );

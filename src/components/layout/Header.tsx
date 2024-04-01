@@ -269,14 +269,15 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 										type === 'service' && 'text-white'
 									)}
 								>
-									<div className="font-bold text-sm truncate max-w-[120px]">
-										{`${user?.lastname} ${user?.firstname.charAt(0)}. ${
-											user?.middlename === ''
-												? ''
-												: user?.middlename.charAt(0) + '.'
-										}`}
-									</div>
-									<div className="text-sm">{getRole(user?.roles[0].type)}</div>
+									{/*<div className="font-bold text-sm truncate max-w-[120px]">*/}
+									{/*	{`${user?.lastname} ${user?.firstname.charAt(0)}. ${*/}
+									{/*		user?.middlename === ''*/}
+									{/*			? ''*/}
+									{/*			: user?.middlename.charAt(0) + '.'*/}
+									{/*	}`}*/}
+									{/*</div>*/}
+									{/*<div className="text-sm">{getRole(user?.roles[0].type)}</div>*/}
+									{/*РАСКОМЕНТИРОВАТЬ КОД ПОСЛЕ ПОЧИНКИ API*/}
 								</div>
 							</Space>
 						</Dropdown>

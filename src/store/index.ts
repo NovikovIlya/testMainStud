@@ -13,8 +13,7 @@ import ParentReducer from './reducers/FormReducers/ParentReducer'
 import WorkReducer from './reducers/FormReducers/WorkReducer'
 import LayoutSlice from './reducers/LayoutsSlice'
 import authSlice from './reducers/authSlice'
-import {FormStepTwo} from "../components/service/businessTrip/NewBusinessTrip/stepTwo/formStepTwo/formStepTwo";
-import FormStepTwoReducer from "./reducers/FormReducers/FormStepTwoReducer";
+import StepFormBusinessTrip from "./reducers/FormReducers/StepFormBusinessTrip";
 
 export const store = configureStore({
 	reducer: {
@@ -28,7 +27,7 @@ export const store = configureStore({
 		Parent: ParentReducer,
 		Address: AddressReducer,
 		CountriesEducation: CountriesEducationReducer,
-		FormStepTwo: FormStepTwoReducer,
+		StepFormBusinessTrip: StepFormBusinessTrip,
 		[apiSlice.reducerPath]: apiSlice.reducer
 	},
 	middleware: getDefaultMiddleware =>

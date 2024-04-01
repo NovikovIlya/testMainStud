@@ -3,7 +3,7 @@ import {Button, Col, ConfigProvider, Table, TableProps} from "antd";
 import {TitleHeadCell} from "./titleHeadCell/TitleHeadCell";
 import {useSelector} from "react-redux";
 import {RootState} from "../../../../../../store";
-import {IDataFormStepTwo} from "../../../../../../store/reducers/FormReducers/FormStepTwoReducer";
+// import {IDataFormStepTwo} from "../../../../../../store/reducers/FormReducers/StepFormBusinessTrip";
 
 
 interface DataType {
@@ -55,7 +55,7 @@ interface ITableStepTwo{
     nextStep: () => void
 }
 
-export const tableData: IDataFormStepTwo[] = []
+
 
 export const TableStepTwo = ({notVisibleTable, nextStep}: ITableStepTwo) => {
 
@@ -81,12 +81,12 @@ export const TableStepTwo = ({notVisibleTable, nextStep}: ITableStepTwo) => {
                     },
                 }}
             >
-                <Table
-                    bordered
-                    columns={columns}
-                    dataSource={tableData}
-                    pagination={false}
-                />
+                {/*<Table*/}
+                {/*    bordered*/}
+                {/*    columns={columns}*/}
+                {/*    dataSource={tableData}*/}
+                {/*    pagination={false}*/}
+                {/*/>*/}
             </ConfigProvider>
             <div className={'flex gap-5'}>
                 <Button

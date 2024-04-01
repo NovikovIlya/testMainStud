@@ -1,3 +1,23 @@
 .ant-tabs-card > .ant-tabs-nav .ant-tabs-tab-active {
   background: #E9EFF8;
 }
+
+.ant-picker .ant-picker-input {
+  width: max-content;
+}
+
+.ant-picker .ant-picker-input > input {
+  width: 70px;
+  color: rgba(0, 0, 0, 0.3);
+}
+
+.ant-picker-range .ant-picker-range-separator {
+  display: flex;
+  height: 24px;
+  padding-bottom: 4px;
+  color: rgba(0, 0, 0, 0.3);
+}
+.ant-picker .ant-picker-suffix {
+  position: absolute;
+  right: 10px;
+}

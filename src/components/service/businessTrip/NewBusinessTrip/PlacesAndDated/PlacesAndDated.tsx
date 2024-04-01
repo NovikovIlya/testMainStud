@@ -1,11 +1,13 @@
-import React from 'react';
-import {AutoComplete, Col, ConfigProvider, DatePicker, Form, Input, Radio, Row, Upload} from "antd";
-import {LabelFormItem} from "../labelFormItem/labelFormItem";
-import {UploadFileSvg} from "../../../../assets/svg/UploadFileSvg";
-import {setInn, setOrganisation, setStartDateAction} from "../../../../store/reducers/FormReducers/FormStepTwoReducer";
-import i18n from "i18next";
-import ruPicker from "antd/locale/ru_RU";
-import enPicker from "antd/locale/en_US";
+import React, {ReactNode, useState} from 'react';
+import {AutoComplete, Button, Col, ConfigProvider, DatePicker, Form, Input, Radio, Row, Upload} from "antd";
+import {LabelFormItem} from "../../labelFormItem/labelFormItem";
+import {UploadFileSvg} from "../../../../../assets/svg/UploadFileSvg";
+import dayjs from "dayjs";
+import {PlusSvg} from "../../../../../assets/svg/PlusSvg";
+import {useDispatch} from "react-redux";
+import {keysTabsBusinessTrip, setCondition} from "../../../../../store/reducers/FormReducers/StepFormBusinessTrip";
+import {NewOrganization} from "./NewOrganization";
+
 
 const optionsGoals = [
     {value: 'Административный визит'},
@@ -32,7 +34,21 @@ const optionsTypeDocuments = [
     {value: 'Тип документа 3'},
 ];
 
+interface IFormOrganization {
+    id: number
+    formOrg: ReactNode
+}
+
 export const PlacesAndDated = () => {
+    const dispatch = useDispatch()
+
+    //нужно отрефакторить код добавления формы, т.к после
+    //добавления и сохранения их нужно будет откуда-то вытаскивать
+    //Нужно обсудить данный вопрос с бэком
+    const [listOrg, setListOrg] = useState<IFormOrganization[]>([
+        {id: 1, formOrg: <NewOrganization/>},
+    ])
+
     return (
         <Form layout={'vertical'}>
             <Row
@@ -95,74 +111,72 @@ export const PlacesAndDated = () => {
 
             </Row>
 
+
+
             <Row gutter={[16, 0]} className={`w-[87%]`}>
                 {/*Нужно отрефакторить*/}
-                <Col span={12}>
-                    <Form.Item label={<LabelFormItem label={'ИНН организации'}/>}>
-                        <Input
-                            className={`
-                            text-base
-                            `}
-                            placeholder={'Ввести'}
-                        />
-                    </Form.Item>
-                </Col>
-                <Col span={12} className={`
-                relative 
-                mb-[30px]`}>
-                        <Form.Item
-                            label={<LabelFormItem label={'Организация'}/>}>
-                            <Input
-                                className={`
-                                text-base`}
-                                placeholder={'Автоматический подбор'}
-                            />
-                        </Form.Item>
-                        <span className={`
-                        absolute 
-                        bottom-[-5px] 
-                        left-[7px]
-                        text-[#3073D7]
-                        cursor-pointer
-                        `}>
-                            Нет подходящей организации?
-                        </span>
 
-                </Col>
-                <Col span={12}>
-                    <Form.Item label={<LabelFormItem label={'Юридический адрес'}/>}>
-                        <Input
+                {
+                    listOrg.map((elem) => (
+                        <NewOrganization key={elem.id}/>
+                    ))
+                }
+
+
+
+                <Col span={13}>
+                    <div className={`
+                        flex
+                        gap-4
+                    `}>
+                        <Button
+                            icon={<PlusSvg/>}
+                            type={'primary'}
                             className={`
-                            text-base`}
-                            placeholder={'Автоматический подбор'}
-                        />
-                    </Form.Item>
+                                h-[32px]
+                                rounded-full
+                            `}
+                            onClick={() => {
+                                setListOrg([
+                                    ...listOrg,
+                                    {
+                                        id: 2,
+                                        formOrg: <NewOrganization/>
+                                    }
+                                ])
+                            }}
+                        >
+                        </Button>
+                        <span className={`
+                            text-[#B3B3B3]
+                            text-lg
+                        `}>
+                            Добавить организацию
+                        </span>
+                    </div>
                 </Col>
-                <Col span={12}>
-                    <Form.Item label={<LabelFormItem label={'Фактический адрес'}/>}>
-                        <Input
-                            className={`
-                            text-base`}
-                            placeholder={'Ввести'}
-                        />
-                    </Form.Item>
+
+                <Col span={13}>
+                    <Button
+                        className={`
+                            mt-5
+                            rounded-[40px]
+                            h-[40px]
+                            
+                            `}
+                        type={'primary'}
+                        onClick={() => {
+                            dispatch(setCondition(keysTabsBusinessTrip.travelConditions))
+                        }}
+                    >
+                    <span className={`
+                            text-lg
+                        `}>
+                        Далее
+                    </span>
+                    </Button>
                 </Col>
-                <Col span={12}>
-                    <Form.Item label={<LabelFormItem label={'Дата начала и окончания'}/>}>
-                        <ConfigProvider locale={i18n.language === 'ru' ? ruPicker : enPicker}>
-                            <DatePicker.RangePicker
-                                placeholder={['ДД.ММ.ГГ', 'ДД.ММ.ГГ']}
-                                className={'text-2xl w-full'}
-                                format={'DD.MM.YYYY'}
-                                onChange={(dates) => {
-                                    console.log(
-                                        // dates[0]?.diff(dates[1], 'day')
-                                        dates && dates[1]?.diff(dates[0], 'day')
-                                    )}}
-                            />
-                        </ConfigProvider>
-                    </Form.Item>
-                </Col>
+
             </Row>
 
         </Form>

@@ -6,7 +6,7 @@ import {
 } from "antd";
 import {ToolTipSvg} from "../../../../../assets/svg/ToolTipSvg";
 import {FormStepTwo} from "./formStepTwo/formStepTwo";
-import {TableStepTwo} from "./tableStepTwo/tableStepTwo";
+// import {TableStepTwo} from "./tableStepTwo/tableStepTwo";
 
 
 interface IStepTwo {
@@ -47,13 +47,13 @@ export const StepTwo = ({previousStep, nextStep}: IStepTwo) => {
                     </Tooltip>
                 </ConfigProvider>
             </div>
-            {
-                tableDisplay
-                ?
-                    <TableStepTwo notVisibleTable={notVisibleTable} nextStep={nextStep}/>
-                    :
-                    <FormStepTwo previousStep={previousStep} setTableDisplay={visibleTable}/>
-            }
+            {/*{*/}
+            {/*    tableDisplay*/}
+            {/*    ?*/}
+            {/*        // <TableStepTwo notVisibleTable={notVisibleTable} nextStep={nextStep}/>*/}
+            {/*        :*/}
+            {/*        <FormStepTwo previousStep={previousStep} setTableDisplay={visibleTable}/>*/}
+            {/*}*/}
         </div>
     );
 };

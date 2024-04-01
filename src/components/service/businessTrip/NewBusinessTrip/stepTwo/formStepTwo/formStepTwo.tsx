@@ -6,16 +6,7 @@ import ruPicker from "antd/locale/ru_RU";
 import enPicker from "antd/locale/en_US";
 import dayjs from "dayjs";
 import {useDispatch, useSelector} from "react-redux";
-import {
-    IDataFormStepTwo,
-    setAddress,
-    // setAtRussia,
-    setEndDateAction,
-    setInn, setOrganisation,
-    setRangeDate, setStartDateAction
-} from "../../../../../../store/reducers/FormReducers/FormStepTwoReducer";
-import {RootState} from "../../../../../../store";
-import {tableData} from "../tableStepTwo/tableStepTwo";
+
 
 interface IFormStepTwo {
     previousStep: () => void
@@ -31,28 +22,28 @@ export const FormStepTwo = ({previousStep, setTableDisplay}: IFormStepTwo) => {
     const rangeStartToEnd = dayJsEnd.diff(dayJsStart, 'day')
     const dispatch = useDispatch()
 
-    const [dataInTable, setDataInTable] = useState<IDataFormStepTwo>({
-        address: '',
-        inn: '',
-        organization: '',
-        startDate: '',
-        endDate: '',
-        rangeDate: ''
-    })
+    // const [dataInTable, setDataInTable] = useState<IDataFormStepTwo>({
+    //     address: '',
+    //     inn: '',
+    //     organization: '',
+    //     startDate: '',
+    //     endDate: '',
+    //     rangeDate: ''
+    // })
 
 
 
-    useEffect(() => {
-        dispatch(setRangeDate(String(rangeStartToEnd)))
-        setDataInTable({
-            ...dataInTable,
-            rangeDate: String(rangeStartToEnd)
-        })
-    }, [rangeStartToEnd])
-
-    function addListTableData() {
-        tableData.push(dataInTable)
-    }
+    // useEffect(() => {
+    //     dispatch(setRangeDate(String(rangeStartToEnd)))
+    //     setDataInTable({
+    //         ...dataInTable,
+    //         rangeDate: String(rangeStartToEnd)
+    //     })
+    // }, [rangeStartToEnd])
+    //
+    // function addListTableData() {
+    //     tableData.push(dataInTable)
+    // }
 
     return (
         <Form layout={'vertical'}>
@@ -70,13 +61,13 @@ export const FormStepTwo = ({previousStep, setTableDisplay}: IFormStepTwo) => {
                         <Input
                             className={'text-base'}
                             placeholder={'Ввести'}
-                            onChange={e => {
-                                dispatch(setAddress(e.target.value))
-                                setDataInTable({
-                                    ...dataInTable,
-                                    address: e.target.value,
-                                })
-                            }}
+                            // onChange={e => {
+                            //     dispatch(setAddress(e.target.value))
+                            //     setDataInTable({
+                            //         ...dataInTable,
+                            //         address: e.target.value,
+                            //     })
+                            // }}
                         />
                     </Form.Item>
                 </Col>
@@ -85,13 +76,13 @@ export const FormStepTwo = ({previousStep, setTableDisplay}: IFormStepTwo) => {
                         <Input
                             className={'text-base'}
                             placeholder={'Ввести'}
-                            onChange={(e) => {
-                                dispatch(setInn(e.target.value))
-                                setDataInTable({
-                                    ...dataInTable,
-                                    inn: e.target.value
-                                })
-                            }}
+                            // onChange={(e) => {
+                            //     dispatch(setInn(e.target.value))
+                            //     setDataInTable({
+                            //         ...dataInTable,
+                            //         inn: e.target.value
+                            //     })
+                            // }}
 
                         />
                     </Form.Item>
@@ -101,13 +92,13 @@ export const FormStepTwo = ({previousStep, setTableDisplay}: IFormStepTwo) => {
                         <Input
                             className={'text-base'}
                             placeholder={'Автоматический подбор'}
-                            onChange={(e) => {
-                                dispatch(setOrganisation(e.target.value))
-                                setDataInTable({
-                                    ...dataInTable,
-                                    organization: e.target.value
-                                })
-                            }}
+                            // onChange={(e) => {
+                            //     dispatch(setOrganisation(e.target.value))
+                            //     setDataInTable({
+                            //         ...dataInTable,
+                            //         organization: e.target.value
+                            //     })
+                            // }}
                         />
                     </Form.Item>
                 </Col>
@@ -117,15 +108,15 @@ export const FormStepTwo = ({previousStep, setTableDisplay}: IFormStepTwo) => {
                             <DatePicker
                                 placeholder={'ДД.ММ.ГГ'}
                                 className={'text-2xl w-full'}
-                                format={'DD.MM.YYYY'}
-                                onChange={(date) => {
-                                    setStartDate(date && date.toDate())
-                                    date && dispatch(setStartDateAction(date.format('DD.MM.YYYY')))
-                                    date && setDataInTable({
-                                        ...dataInTable,
-                                        startDate: date.format('DD.MM.YYYY')
-                                    })
-                                }}
+                                // format={'DD.MM.YYYY'}
+                                // onChange={(date) => {
+                                //     setStartDate(date && date.toDate())
+                                //     date && dispatch(setStartDateAction(date.format('DD.MM.YYYY')))
+                                //     date && setDataInTable({
+                                //         ...dataInTable,
+                                //         startDate: date.format('DD.MM.YYYY')
+                                //     })
+                                // }}
                             />
                         </ConfigProvider>
                     </Form.Item>
@@ -137,14 +128,14 @@ export const FormStepTwo = ({previousStep, setTableDisplay}: IFormStepTwo) => {
                                 placeholder={'ДД.ММ.ГГ'}
                                 className={'text-2xl w-full'}
                                 format={'DD.MM.YYYY'}
-                                onChange={(date,) => {
-                                    setEndDate(date && date.toDate())
-                                    date && dispatch(setEndDateAction(date.format('DD.MM.YYYY')))
-                                    date && setDataInTable({
-                                        ...dataInTable,
-                                        endDate: date.format('DD.MM.YYYY')
-                                    })
-                                }}
+                                // onChange={(date,) => {
+                                //     setEndDate(date && date.toDate())
+                                //     date && dispatch(setEndDateAction(date.format('DD.MM.YYYY')))
+                                //     date && setDataInTable({
+                                //         ...dataInTable,
+                                //         endDate: date.format('DD.MM.YYYY')
+                                //     })
+                                // }}
                             />
                         </ConfigProvider>
                     </Form.Item>
@@ -175,7 +166,7 @@ export const FormStepTwo = ({previousStep, setTableDisplay}: IFormStepTwo) => {
                         className={'h-10 w-max'}
                         onClick={() => {
                             setTableDisplay()
-                            addListTableData()
+                            // addListTableData()
                         }}
                     >
                         <span className={'text-lg'}>Сохранить</span>
@@ -198,7 +189,7 @@ export const FormStepTwo = ({previousStep, setTableDisplay}: IFormStepTwo) => {
                             className={'h-10 w-max'}
                             onClick={() => {
                                 setTableDisplay()
-                                addListTableData()
+                                // addListTableData()
                             }}
                         >
                             <span className={'text-lg'}>Добавить данные</span>

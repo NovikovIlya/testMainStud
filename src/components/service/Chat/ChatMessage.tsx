@@ -14,14 +14,8 @@ export const ChatMessage = (props: { msgData: ChatMessageType }) => {
 		<>
 			{' '}
 			<div
-				// ref={
-				//     props.msgData.id === messages[messages.length - 1].id
-				//         ? chatPageRef
-				//         : undefined
-				// }
-				// className="self-end w-[50%] rounded-[16px] rounded-br-none bg-[#4F6AFB1A] bg-opacity-10 p-[20px] flex flex-col font-content-font font-normal text-black text-[16px]/[19.2px]"
 				className={clsx(
-					'rounded-[16px] w-[50%] p-[20px] flex flex-col font-content-font font-normal text-black text-[16px]/[19.2px]',
+					'rounded-[16px] max-w-[50%] p-[20px] flex flex-col font-content-font font-normal text-black text-[16px]/[19.2px]',
 					{
 						'self-start rounded-bl-none bg-white':
 							(props.msgData.sender === 'SEEKER' && isEmpDep) ||

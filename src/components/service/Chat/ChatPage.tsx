@@ -38,13 +38,8 @@ export const ChatPage = () => {
 
 	const scrollToBottom = () => {
 		chatPageRef.current?.scrollIntoView()
+		console.log('func scrolling')
 	}
-
-	// useEffect(() => {
-	// 	console.log('I AM... SCROOOOOOLING')
-	// 	console.log(chatPageRef.current)
-	// 	scrollToBottom()
-	// }, [chatPageRef])
 
 	const [messages, setMessages] = useState<ChatMessageType[]>([])
 
@@ -74,14 +69,15 @@ export const ChatPage = () => {
 			client.subscribe(`/chat/topic/${chatIdState.chatId}`, (message: any) => {
 				console.log(message)
 				const msgBody = JSON.parse(message.body)
-				msgBody.type === 'MESSAGE' &&
-					(setMessages(prev => [msgBody.message as ChatMessageType, ...prev]),
+				if (msgBody.type === 'MESSAGE') {
+					setMessages(prev => [msgBody.message as ChatMessageType, ...prev])
 					readMsg({
 						chatId: chatIdState.chatId,
 						messageId: msgBody.message.id,
 						sessionId: sessionId,
 						role: isEmpDemp ? 'PERSONNEL_DEPARTMENT' : 'SEEKER'
-					}))
+					})
+				}
 				msgBody.type === 'READ' &&
 					(msgBody.message.ids as number[]).map(id =>
 						setMessages(prev => [
@@ -108,6 +104,13 @@ export const ChatPage = () => {
 			})
 	}, [chatIdState])
 
+	useEffect(() => {
+		console.log('I AM... SCROOOOOOLING')
+		console.log(chatPageRef.current)
+		scrollToBottom()
+		return () => {}
+	}, [messages])
+
 	const { control, handleSubmit } = useForm()
 
 	const handleMessage = () => {
@@ -128,7 +131,7 @@ export const ChatPage = () => {
 	return (
 		<>
 			<div className="flex flex-col w-full">
-				<div className="w-full h-full flex flex-col justify-between pt-[60px] pr-[85px] pl-[40px] overflow-auto">
+				<div className="w-full h-full flex flex-col justify-between pt-[60px] pr-[85px] pl-[40px] overflow-auto [overflow-anchor:none]">
 					{[...messages].reverse().map(msg => (
 						<>
 							{msg.sendDate.substring(0, 10) !== msgDate.current &&
@@ -154,7 +157,11 @@ export const ChatPage = () => {
 							14:01
 						</p>
 					</div> */}
-					<div key={'osobyi_kluch'} />
+					<div
+						className="h-[1px] [overflow-anchor:auto]"
+						key={'osobyi_kluch'}
+						ref={chatPageRef}
+					/>
 				</div>
 				<div className="sticky bottom-0 h-[80px] w-full bg-white">
 					<form

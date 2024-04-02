@@ -4,7 +4,7 @@ import {
     ConfigProvider,
     Tooltip,
 } from "antd";
-import {ToolTipSvg} from "../../../../../assets/svg/ToolTipSvg";
+import {ToolTipSvg} from "../../../../../../assets/svg/ToolTipSvg";
 import {FormStepTwo} from "./formStepTwo/formStepTwo";
 // import {TableStepTwo} from "./tableStepTwo/tableStepTwo";
 

@@ -5,10 +5,11 @@ import './NewBusinessTrip.scss'
 import {keysTabsBusinessTrip, setCondition} from "../../../../store/reducers/FormReducers/StepFormBusinessTrip";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../../../store";
+import {TravelConditions} from "./TravelConditions/TravelConditions";
 
 const itemsTabs = [
     {key: keysTabsBusinessTrip.placesAndDated, label: 'Места и сроки командирования', children: <PlacesAndDated/>},
-    {key: keysTabsBusinessTrip.travelConditions, label: 'Условия проезда', children: 'Условия проезда'},
+    {key: keysTabsBusinessTrip.travelConditions, label: 'Условия проезда', children: <TravelConditions/>},
     {key: keysTabsBusinessTrip.livingConditions, label: 'Условия проживания', children: 'Условия проживания'},
     {key: keysTabsBusinessTrip.financing, label: 'Финансирование', children: 'Финансирование'},
 ]
@@ -19,9 +20,6 @@ export const NewBusinessTrip = () => {
 
     const test = useSelector((state: RootState) => state.StepFormBusinessTrip.step)
     const dispatch = useDispatch()
-    const onChange = (key: string) => {
-        console.log(key);
-    };
 
     useEffect(() => {
         console.log(test)
@@ -44,7 +42,6 @@ export const NewBusinessTrip = () => {
 
             }}>
                 <Tabs
-                    onChange={onChange}
                     type="card"
                     items={itemsTabs}
                     className={`

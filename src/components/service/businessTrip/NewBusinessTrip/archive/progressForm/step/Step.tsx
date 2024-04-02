@@ -1,9 +1,9 @@
 import React from 'react';
-import {ButtonLeftBusinessTripSvg} from "../../../../../../assets/svg/ButtonLeftBusinessTripSvg";
-import {ButtonRightBusinessTripSvg} from "../../../../../../assets/svg/ButtonRightBusinessTripSvg";
+import {ButtonLeftBusinessTripSvg} from "../../../../../../../assets/svg/ButtonLeftBusinessTripSvg";
+import {ButtonRightBusinessTripSvg} from "../../../../../../../assets/svg/ButtonRightBusinessTripSvg";
 import clsx from "clsx";
 import {NavLink, useNavigate} from "react-router-dom";
-import {stepBusinessTrip} from "../../../../../../utils/navListForLeftMenu/stepBusinessTrip";
+import {stepBusinessTrip} from "../../../../../../../utils/navListForLeftMenu/stepBusinessTrip";
 
 interface IStep {
     stepNumber: number

@@ -2,18 +2,18 @@ import React, {useState} from 'react';
 import {Col, DatePicker, Form, Input, Row} from "antd";
 import {LabelFormItem} from "../../labelFormItem/labelFormItem";
 import dayjs from "dayjs";
+import {CustomRangePicker} from "../customRangePicker/customRangePicker";
 
-export const NewOrganization = () => {
 
-    const [sumDay, setSumDay] = useState('0')
+export interface INewOrganization {
+    id: number
+    innOrg: string
+    nameOrg: string
+    legalAddress: string
+    actualAddress: string
+}
 
-    function changeDatePicker(dates: Array<dayjs.Dayjs | null>) {
-        if (dates) {
-            setSumDay(String(dates[1]!.diff(dates[0], 'day') + 1))
-        } else {
-            setSumDay('0')
-        }
-    }
+export const NewOrganization = (props: INewOrganization) => {
 
     return (
         <Row gutter={[16, 0]} className={`w-[87%]`}>
@@ -25,6 +25,7 @@ export const NewOrganization = () => {
                             text-base
                             `}
                         placeholder={'Ввести'}
+                        value={props.innOrg}
                     />
                 </Form.Item>
             </Col>
@@ -37,6 +38,7 @@ export const NewOrganization = () => {
                         className={`
                                 text-base`}
                         placeholder={'Автоматический подбор'}
+                        value={props.nameOrg}
                     />
                 </Form.Item>
                 <span className={`
@@ -56,6 +58,7 @@ export const NewOrganization = () => {
                         className={`
                             text-base`}
                         placeholder={'Автоматический подбор'}
+                        value={props.legalAddress}
                     />
                 </Form.Item>
             </Col>
@@ -65,28 +68,13 @@ export const NewOrganization = () => {
                         className={`
                             text-base`}
                         placeholder={'Ввести'}
+                        value={props.actualAddress}
                     />
                 </Form.Item>
             </Col>
             <Col span={12}>
                 <Form.Item label={<LabelFormItem label={'Дата начала и окончания'}/>}>
-                    <DatePicker.RangePicker
-                        placeholder={['ДД.ММ.ГГ', 'ДД.ММ.ГГ']}
-                        className={`text-2xl w-full`}
-                        format={'DD.MM.YYYY'}
-                        onChange={(dates) => {
-                            changeDatePicker(dates)
-                        }}
-                        separator={'—'}
-                    />
-                    <span className={`
-                        absolute 
-                        right-[150px] 
-                        top-[5px]
-                        text-[#B3B3B3]
-                        `}>
-                            {sumDay} дней
-                        </span>
+                    <CustomRangePicker/>
                 </Form.Item>
             </Col>
 

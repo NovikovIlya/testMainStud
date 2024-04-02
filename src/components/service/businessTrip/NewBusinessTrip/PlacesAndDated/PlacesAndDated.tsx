@@ -1,4 +1,4 @@
-import React, {ReactNode, useState} from 'react';
+import React, {ReactNode, useEffect, useState} from 'react';
 import {AutoComplete, Button, Col, ConfigProvider, DatePicker, Form, Input, Radio, Row, Upload} from "antd";
 import {LabelFormItem} from "../../labelFormItem/labelFormItem";
 import {UploadFileSvg} from "../../../../../assets/svg/UploadFileSvg";
@@ -6,7 +6,8 @@ import dayjs from "dayjs";
 import {PlusSvg} from "../../../../../assets/svg/PlusSvg";
 import {useDispatch} from "react-redux";
 import {keysTabsBusinessTrip, setCondition} from "../../../../../store/reducers/FormReducers/StepFormBusinessTrip";
-import {NewOrganization} from "./NewOrganization";
+import {INewOrganization, NewOrganization} from "./NewOrganization";
+import {ButtonAddData} from "../buttonAddData/buttonAddData";
 
 
 const optionsGoals = [
@@ -34,10 +35,6 @@ const optionsTypeDocuments = [
     {value: 'Тип документа 3'},
 ];
 
-interface IFormOrganization {
-    id: number
-    formOrg: ReactNode
-}
 
 export const PlacesAndDated = () => {
     const dispatch = useDispatch()
@@ -45,18 +42,28 @@ export const PlacesAndDated = () => {
     //нужно отрефакторить код добавления формы, т.к после
     //добавления и сохранения их нужно будет откуда-то вытаскивать
     //Нужно обсудить данный вопрос с бэком
-    const [listOrg, setListOrg] = useState<IFormOrganization[]>([
-        {id: 1, formOrg: <NewOrganization/>},
+    const [listOrg, setListOrg] = useState<INewOrganization[]>([
+        {id: 1, innOrg: '', nameOrg: '', legalAddress: '', actualAddress: ''},
     ])
+
+    function addNewOrg() {
+        setListOrg([
+            ...listOrg,
+            {
+                id: listOrg.length + 1,
+                innOrg: '',
+                nameOrg: '',
+                legalAddress: '',
+                actualAddress: '',
+            }
+        ])
+    }
 
     return (
         <Form layout={'vertical'}>
-            <Row
-                gutter={[16, 0]}
-                className={`
+            <Row gutter={[16, 0]} className={`
                 w-[80%]
-                `}
-            >
+                `}>
                 <Col span={13}>
                     <Form.Item label={<LabelFormItem label={'Цель'}/>}>
                         <AutoComplete options={optionsGoals} placeholder={'Ввести или выбрать'}/>
@@ -107,75 +114,51 @@ export const PlacesAndDated = () => {
                         </Radio.Group>
                     </Form.Item>
                 </Col>
-
-
             </Row>
 
 
 
-            <Row gutter={[16, 0]} className={`w-[87%]`}>
+            <Row gutter={[16, 0]} className={`w-87%`}>
                 {/*Нужно отрефакторить*/}
 
                 {
                     listOrg.map((elem) => (
-                        <NewOrganization key={elem.id}/>
+                        <NewOrganization
+                            id={elem.id}
+                            innOrg={elem.innOrg}
+                            nameOrg={elem.nameOrg}
+                            legalAddress={elem.legalAddress}
+                            actualAddress={elem.actualAddress}
+                            key={elem.id}
+                        />
                     ))
                 }
 
 
+                <Row gutter={[16, 0]} className={`w-[87%]`}>
+                    <Col span={13}>
+                        <ButtonAddData addData={addNewOrg} nameData={'организацию'}/>
+                    </Col>
 
-                <Col span={13}>
-                    <div className={`
-                        flex
-                        gap-4
-                    `}>
+                    <Col span={13}>
                         <Button
-                            icon={<PlusSvg/>}
-                            type={'primary'}
                             className={`
-                                h-[32px]
-                                rounded-full
-                            `}
-                            onClick={() => {
-                                setListOrg([
-                                    ...listOrg,
-                                    {
-                                        id: 2,
-                                        formOrg: <NewOrganization/>
-                                    }
-                                ])
-                            }}
-                        >
-                        </Button>
-                        <span className={`
-                            text-[#B3B3B3]
-                            text-lg
-                        `}>
-                            Добавить организацию
-                        </span>
-                    </div>
-                </Col>
-
-                <Col span={13}>
-                    <Button
-                        className={`
                             mt-5
                             rounded-[40px]
                             h-[40px]
-                            
                             `}
-                        type={'primary'}
-                        onClick={() => {
-                            dispatch(setCondition(keysTabsBusinessTrip.travelConditions))
-                        }}
-                    >
+                            type={'primary'}
+                            onClick={() => {dispatch(setCondition(keysTabsBusinessTrip.travelConditions))}}
+                        >
                     <span className={`
                             text-lg
                         `}>
                         Далее
                     </span>
-                    </Button>
-                </Col>
+                        </Button>
+                    </Col>
+                </Row>
+
 
             </Row>
 

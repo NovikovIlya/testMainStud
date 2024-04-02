@@ -1,12 +1,12 @@
 import React, {useEffect} from 'react';
 import {AutoComplete, Button, Col, ConfigProvider, Form, Input, Row, Select, Upload} from "antd";
-import {LabelFormItem} from "../../labelFormItem/labelFormItem";
-import {UploadFileSvg} from "../../../../../assets/svg/UploadFileSvg";
+import {LabelFormItem} from "../../../labelFormItem/labelFormItem";
+import {UploadFileSvg} from "../../../../../../assets/svg/UploadFileSvg";
 import clsx from 'clsx'
 import InputMask from 'react-input-mask'
 import {TitleForm} from "../titleForm/TitleForm";
 import {useSelector} from "react-redux";
-import {RootState} from "../../../../../store";
+import {RootState} from "../../../../../../store";
 
 const optionsGoals = [
     {value: 'Административный визит'},

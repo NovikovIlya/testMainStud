@@ -2,7 +2,7 @@ import React from 'react';
 import {Button, Col, ConfigProvider, Table, TableProps} from "antd";
 import {TitleHeadCell} from "./titleHeadCell/TitleHeadCell";
 import {useSelector} from "react-redux";
-import {RootState} from "../../../../../../store";
+import {RootState} from "../../../../../../../store";
 // import {IDataFormStepTwo} from "../../../../../../store/reducers/FormReducers/StepFormBusinessTrip";
 
 

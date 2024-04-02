@@ -51,12 +51,9 @@ const App = () => {
 						<Route path="/documents" element={<DocumentForm />} />
 						<Route path="/work" element={<WorkForm />} />
 						<Route path="/parent" element={<ParentForm />} />
-						{/*<Route path="/services/*" element={<Service />} />*/}
-						{/*РАСКОМЕНТИРОВАТЬ КОД ПОСЛЕ ПОЧИНКИ API*/}
-
+						<Route path="/services/*" element={<Service />} />
 						<Route path="/*" element={null} />
 					</Route>
-					<Route path="/services/*" element={<Service />} />
 				</Routes>
 			</ConfigProvider>
 		</>

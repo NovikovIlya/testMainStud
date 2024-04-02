@@ -123,3 +123,46 @@ export interface IMe {
 	phone: string
 	countryId: number
 }
+
+export interface ITeacher {
+	id: number
+	lastname: string
+	firstname: string
+	middleName: string
+}
+
+export interface IListTeacher {
+	teachers: ITeacher[]
+}
+
+export interface TeacherData {
+	id: number,
+	lastName: string,
+	firstName: string,
+	middleName: string,
+	post: string,
+	subDivision: string,
+	photoLink: string
+}
+
+export interface Rating {
+	["Доброжелательность и тактичность"]: number
+	["Внешний вид и манера поведения"]: number
+	["Общая эрудиция"]: number
+	["Пунктуальность"]: number
+}
+
+export interface UserRating {
+	["Доброжелательность и тактичность"]: number
+}
+
+export interface Total {
+	["Всего оценок"]: number
+}
+
+export interface MainTeacherData {
+	teacherData: TeacherData
+	rating: Rating
+	userRating: UserRating
+	total: Total
+}

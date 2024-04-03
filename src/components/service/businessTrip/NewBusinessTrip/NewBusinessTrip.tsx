@@ -6,11 +6,12 @@ import {keysTabsBusinessTrip, setCondition} from "../../../../store/reducers/For
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../../../store";
 import {TravelConditions} from "./TravelConditions/TravelConditions";
+import {LivingConditions} from "./LivingConditions/LivingConditions";
 
 const itemsTabs = [
     {key: keysTabsBusinessTrip.placesAndDated, label: 'Места и сроки командирования', children: <PlacesAndDated/>},
     {key: keysTabsBusinessTrip.travelConditions, label: 'Условия проезда', children: <TravelConditions/>},
-    {key: keysTabsBusinessTrip.livingConditions, label: 'Условия проживания', children: 'Условия проживания'},
+    {key: keysTabsBusinessTrip.livingConditions, label: 'Условия проживания', children: <LivingConditions/>},
     {key: keysTabsBusinessTrip.financing, label: 'Финансирование', children: 'Финансирование'},
 ]
 

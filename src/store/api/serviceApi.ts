@@ -23,7 +23,7 @@ export const serviceApi = apiSlice.injectEndpoints({
             query: () => 'academic-performance-api/performance'
         }),
 
-
+        //нужно сделать в отдельном файле
         getTeachersRating: builder.query<IListTeacher, void>({
             query: () => 'academic-performance-api/teachers-rating'
         }),

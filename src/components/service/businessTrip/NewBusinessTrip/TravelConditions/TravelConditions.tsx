@@ -6,7 +6,10 @@ import {ButtonAddData} from "../buttonAddData/buttonAddData";
 import {useDispatch} from "react-redux";
 import {keysTabsBusinessTrip, setCondition} from "../../../../../store/reducers/FormReducers/StepFormBusinessTrip";
 import {INewDataTravelConditions, NewDataTravelConditions} from "./NewDataTravelConditions";
-import {CardData} from "./CardData";
+import {TravelCardData} from "../cardsData/TravelCardData";
+import {WrapperForConditionsTabs} from "../WrapperForConditionsTabs/WrapperForConditionsTabs";
+import {ColSpan16RowGutter16} from "../WrapperForConditionsTabs/ColSpan16RowGutter16";
+import {ColSpan8} from "../WrapperForConditionsTabs/ColSpan8";
 
 export const TravelConditions = () => {
 
@@ -29,72 +32,62 @@ export const TravelConditions = () => {
     }
 
     return (
-        <Form layout={'vertical'}>
-            <Row gutter={[16, 0]} className={`
-                w-full
-            `}>
-                <Col span={16}>
-                    <Row gutter={[16, 16]}>
+        <WrapperForConditionsTabs>
+            <ColSpan16RowGutter16>
+                {
+                    listTravelCondition.map((elem) => (
+                        <NewDataTravelConditions
+                            id={elem.id}
+                            typeTransport={elem.typeTransport}
+                            departurePoint={elem.departurePoint}
+                            destinationPoint={elem.destinationPoint}
+                        />
+                    ))
+                }
 
-                        {
-                            listTravelCondition.map((elem) => (
-                                <NewDataTravelConditions
-                                    id={elem.id}
-                                    typeTransport={elem.typeTransport}
-                                    departurePoint={elem.departurePoint}
-                                    destinationPoint={elem.destinationPoint}
-                                />
-                            ))
-                        }
+                <Col span={13}>
+                    <ButtonAddData addData={addDataTravelCondition} nameData={'данные'}/>
+                </Col>
 
-                        <Col span={13}>
-                            <ButtonAddData addData={addDataTravelCondition} nameData={'данные'}/>
-                        </Col>
-
-                        <Col span={12}>
-                            <div className={`
+                <Col span={12}>
+                    <div className={`
                             flex 
                             gap-5
                             mt-5
                             `}>
-                                <Button
-                                    type={'default'}
-                                    shape={'round'}
-                                    className={`
+                        <Button
+                            type={'default'}
+                            shape={'round'}
+                            className={`
                                     h-10 
                                     w-max 
                                     border-[#3073D7]`}
-                                    onClick={() => {dispatch(setCondition(keysTabsBusinessTrip.placesAndDated))}}
-                                >
-                                    <span className={`
-                                    text-lg 
-                                    text-[#3073D7]`}>
-                                        Назад
-                                    </span>
-                                </Button>
+                            onClick={() => {
+                                dispatch(setCondition(keysTabsBusinessTrip.placesAndDated))
+                            }}>
+                         <span className={`text-lg 
+                         text-[#3073D7]`}>
+                             Назад
+                         </span>
+                        </Button>
 
-                                <Button
-                                    type={'primary'}
-                                    shape={'round'}
-                                    className={'h-10 w-max'}
-                                    onClick={() => {dispatch(setCondition(keysTabsBusinessTrip.livingConditions))}}
-                                >
-                                    <span className={'text-lg'}>Далее</span>
-                                </Button>
-
-                            </div>
-
-                        </Col>
-
-                    </Row>
+                        <Button
+                            type={'primary'}
+                            shape={'round'}
+                            className={'h-10 w-max'}
+                            onClick={() => {
+                                dispatch(setCondition(keysTabsBusinessTrip.livingConditions))
+                            }}
+                        >
+                            <span className={'text-lg'}>Далее</span>
+                        </Button>
+                    </div>
                 </Col>
-
-                <Col span={8}>
-                    <CardData/>
-                </Col>
-            </Row>
-
-        </Form>
+            </ColSpan16RowGutter16>
+            <ColSpan8>
+                <TravelCardData/>
+            </ColSpan8>
+        </WrapperForConditionsTabs>
     );
 };
 

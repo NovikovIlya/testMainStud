@@ -1,12 +1,10 @@
 import React, {useState} from 'react';
-import {AutoComplete, Button, Col, Form, Row} from "antd";
-import {LabelFormItem} from "../../labelFormItem/labelFormItem";
-import {CustomRangePicker} from "../customRangePicker/customRangePicker";
+import {Button, Col} from "antd";
 import {ButtonAddData} from "../buttonAddData/buttonAddData";
 import {useDispatch} from "react-redux";
 import {keysTabsBusinessTrip, setCondition} from "../../../../../store/reducers/FormReducers/StepFormBusinessTrip";
 import {INewDataTravelConditions, NewDataTravelConditions} from "./NewDataTravelConditions";
-import {TravelCardData} from "../cardsData/TravelCardData";
+import {TravelCard} from "../cardsData/TravelCard";
 import {WrapperForConditionsTabs} from "../WrapperForConditionsTabs/WrapperForConditionsTabs";
 import {ColSpan16RowGutter16} from "../WrapperForConditionsTabs/ColSpan16RowGutter16";
 import {ColSpan8} from "../WrapperForConditionsTabs/ColSpan8";
@@ -50,17 +48,11 @@ export const TravelConditions = () => {
                 </Col>
 
                 <Col span={12}>
-                    <div className={`
-                            flex 
-                            gap-5
-                            mt-5
-                            `}>
+                    <div className={`flex gap-5 mt-5`}>
                         <Button
                             type={'default'}
                             shape={'round'}
-                            className={`
-                                    h-10 
-                                    w-max 
+                            className={`h-10 w-max 
                                     border-[#3073D7]`}
                             onClick={() => {
                                 dispatch(setCondition(keysTabsBusinessTrip.placesAndDated))
@@ -85,7 +77,7 @@ export const TravelConditions = () => {
                 </Col>
             </ColSpan16RowGutter16>
             <ColSpan8>
-                <TravelCardData/>
+                <TravelCard/>
             </ColSpan8>
         </WrapperForConditionsTabs>
     );

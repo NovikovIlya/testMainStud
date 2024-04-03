@@ -6,6 +6,7 @@ export const keysTabsBusinessTrip = {
     travelConditions: 'TravelConditions',
     livingConditions: 'LivingConditions',
     financing: 'Financing',
+    result: 'Result'
 }
 
 export interface IStepFormBusinessTrip {

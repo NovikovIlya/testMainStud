@@ -21,3 +21,12 @@
   position: absolute;
   right: 10px;
 }
+.ant-tabs-card.ant-tabs-top >.ant-tabs-nav .ant-tabs-tab+.ant-tabs-tab:nth-last-child(-n+2) {
+  background-color: #3073D7;
+  margin-left: 40px;
+  color: white;
+}
+
+.ant-tabs .ant-tabs-tab:nth-last-child(-n+2).ant-tabs-tab-active .ant-tabs-tab-btn{
+  color: white;
+}

@@ -7,12 +7,14 @@ import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../../../store";
 import {TravelConditions} from "./TravelConditions/TravelConditions";
 import {LivingConditions} from "./LivingConditions/LivingConditions";
+import {Financing} from "./Financing/Financing";
 
 const itemsTabs = [
     {key: keysTabsBusinessTrip.placesAndDated, label: 'Места и сроки командирования', children: <PlacesAndDated/>},
     {key: keysTabsBusinessTrip.travelConditions, label: 'Условия проезда', children: <TravelConditions/>},
     {key: keysTabsBusinessTrip.livingConditions, label: 'Условия проживания', children: <LivingConditions/>},
-    {key: keysTabsBusinessTrip.financing, label: 'Финансирование', children: 'Финансирование'},
+    {key: keysTabsBusinessTrip.financing, label: 'Финансирование', children: <Financing/>},
+    {key: keysTabsBusinessTrip.result, label: 'Итог', children: 'Итог'},
 ]
 
 
@@ -37,7 +39,6 @@ export const NewBusinessTrip = () => {
                         itemSelectedColor: 'rgba(0, 0, 0, 0.88)',
                         itemColor: 'rgba(0, 0, 0, 0.88)',
                         cardBg: 'white',
-
                     }
                 },
 
@@ -45,9 +46,7 @@ export const NewBusinessTrip = () => {
                 <Tabs
                     type="card"
                     items={itemsTabs}
-                    className={`
-                        newBusinessTrip
-                    `}
+                    className={`newBusinessTrip`}
                     defaultActiveKey={test}
                     activeKey={test}
                     onTabClick={(key) => {

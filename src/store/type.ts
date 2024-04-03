@@ -1,5 +1,6 @@
 import { performanceItem } from '../api/types'
 
+
 export interface InitialState {
 	accessToken: string | null
 	refreshToken: string | null
@@ -123,7 +124,7 @@ export interface IMe {
 	phone: string
 	countryId: number
 }
-
+//////////////////////////////////////////////////
 export interface ITeacher {
 	id: number
 	lastname: string
@@ -146,10 +147,10 @@ export interface TeacherData {
 }
 
 export interface Rating {
-	["Доброжелательность и тактичность"]: number
-	["Внешний вид и манера поведения"]: number
-	["Общая эрудиция"]: number
-	["Пунктуальность"]: number
+	kindnessAndTact: number
+	appearanceAndDemeanor: number
+	generalErudition: number
+	punctuality: number
 }
 
 export interface UserRating {
@@ -165,4 +166,26 @@ export interface MainTeacherData {
 	rating: Rating
 	userRating: UserRating
 	total: Total
+}
+
+export interface IValuesAssessment {
+	KindnessTact: number
+	GeneralErudition: number
+	AppearanceDemeanor: number
+	Punctuality: number
+}
+
+export interface IAssessmentNumber {
+	teacherId: number
+	questId: number
+	answerNumber: number
+}
+
+export interface ObjRating {
+	rating: Array<IAssessmentNumber>
+}
+
+export interface TestQuery {
+	rating: ObjRating
+	id: number
 }

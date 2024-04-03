@@ -8,7 +8,7 @@ import {
     ICalendar,
     IPerformance,
     Template,
-    TypeSchedule, IListTeacher, MainTeacherData
+    TypeSchedule, IListTeacher, MainTeacherData, TestQuery
 } from '../type'
 
 import {apiSlice} from './apiSlice'
@@ -35,6 +35,16 @@ export const serviceApi = apiSlice.injectEndpoints({
                     'Accept-Language': i18n.language
                 }
             })
+        }),
+
+        postTeacherRating: builder.mutation({
+            query: (arg: TestQuery) => {
+                return {
+                    url: `academic-performance-api/teachers-rating/${arg.id}`,
+                    body: arg.rating,
+                    method: 'POST',
+                }
+            }
         }),
 
 
@@ -169,4 +179,5 @@ export const {
     usePostPhoneMutation,
     useGetTeachersRatingQuery,
     useGetTeacherInfoQuery,
+    usePostTeacherRatingMutation,
 } = serviceApi

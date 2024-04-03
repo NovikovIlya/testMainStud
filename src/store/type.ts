@@ -154,18 +154,18 @@ export interface Rating {
 }
 
 export interface UserRating {
-	["Доброжелательность и тактичность"]: number
+	kindnessAndTact: number
 }
 
 export interface Total {
-	["Всего оценок"]: number
+	total: number
 }
 
 export interface MainTeacherData {
 	teacherData: TeacherData
 	rating: Rating
 	userRating: UserRating
-	total: Total
+	total: number
 }
 
 export interface IValuesAssessment {

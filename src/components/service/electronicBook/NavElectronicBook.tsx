@@ -6,7 +6,7 @@ import { Estimation } from './Estimation'
 import {LeftMenu} from "../../leftMenu/LeftMenu";
 import {navElectronicBook} from "../../../utils/navListForLeftMenu/navElectronicBook";
 import {WrapperForServices} from "../../wrapperForServices/WrapperForServices";
-import {AssessmentTeachers} from "./AssessmentTeachers";
+import {AssessmentTeachers} from "./AssessmentTeachers/AssessmentTeachers";
 
 export const NavElectronicBook = () => {
 	const { pathname } = useLocation()

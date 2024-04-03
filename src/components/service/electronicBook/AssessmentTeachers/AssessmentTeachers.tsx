@@ -1,21 +1,14 @@
-import {AntDesignOutlined} from '@ant-design/icons'
 import {Avatar, Button, Card, Form, Rate, Select, Space, Typography} from 'antd'
-import {blue307} from '../../../utils/color'
+import {blue307} from '../../../../utils/color'
 import {
     useGetTeacherInfoQuery,
     useGetTeachersRatingQuery,
     usePostTeacherRatingMutation
-} from "../../../store/api/serviceApi";
-import {SetStateAction, useEffect, useState} from "react";
-import {IAssessmentNumber, ITeacher, IValuesAssessment, TestQuery} from "../../../store/type";
-import {ThemeProvider} from "@material-tailwind/react";
-import value = ThemeProvider.propTypes.value;
+} from "../../../../store/api/assessmentTeacher";
+import {useState} from "react";
+import {IAssessmentNumber, IValuesAssessment, TestQuery} from "../../../../store/type";
+import {RatingTeacher} from "./RatingTeacher/RatingTeacher";
 
-
-interface IOptionTeacher {
-    value: number
-    label: string
-}
 
 const objQuestId = {
     GeneralErudition: 5,
@@ -35,6 +28,7 @@ export const AssessmentTeachers = () => {
     const [idTeacher, setIdTeacher] = useState<number>(0)
     const { data: teacherData, isFetching: isFetchingTeacherData } = useGetTeacherInfoQuery(idTeacher)
     const [postAssessmentTeachers] = usePostTeacherRatingMutation()
+    console.log(teacherData)
 
     function onFinish(values: IValuesAssessment) {
         const rating: Array<IAssessmentNumber> = [
@@ -52,6 +46,7 @@ export const AssessmentTeachers = () => {
             id: idTeacher
         }
         postAssessmentTeachers(query)
+        console.log(ratingObj)
 
     }
 
@@ -124,89 +119,15 @@ export const AssessmentTeachers = () => {
                     <Form className={`
 					w-full`}
                           onFinish={(values) => {onFinish(values)}}
+                          onFieldsChange={() => {
+                              console.log('Добавить включение кнопку отсюда')}}
                     >
-                        <p className={`
-						text-black 
-						text-base 
-						font-bold`}>
-                            Рейтинг преподавателя
-                        </p>
-                        <div className={`
-						w-full 
-						flex 
-						flex-col 
-						mt-5`}>
-                            <div className={`
-							flex 
-							justify-between`}>
-                                <p>Доброжелательность и тактичность</p>
-                                <div className={`
-								flex 
-								gap-10 
-								items-center`}>
-                                    <Form.Item name={'KindnessTact'}>
-                                        <Rate className={`text-[${blue307}]`}/>
-                                    </Form.Item>
-                                    <p>{teacherData?.rating.kindnessAndTact}</p>
-                                </div>
-                            </div>
-                            <div className={`
-							flex 
-							justify-between`}>
-                                <p>Общая эрудиция</p>
-                                <div className={`
-								flex 
-								gap-10 
-								items-center`}>
-                                    <Form.Item name={'GeneralErudition'}>
-                                        <Rate className={`text-[${blue307}]`}/>
-                                    </Form.Item>
-                                    <p>{teacherData?.rating.generalErudition}</p>
-                                </div>
-                            </div>
-                            <div className={`
-							flex 
-							justify-between`}>
-                                <p>Внешний вид и манера поведения</p>
-                                <div className={`
-								flex 
-								gap-10 
-								items-center`}>
-                                    <Form.Item name={'AppearanceDemeanor'}>
-                                        <Rate className={`text-[${blue307}]`}/>
-                                    </Form.Item>
-                                    <p>{teacherData?.rating.appearanceAndDemeanor}</p>
-                                </div>
-                            </div>
-                            <div className={`
-							flex 
-							justify-between`}>
-                                <p>Пунктуальность</p>
-                                <div className={`
-								flex 
-								gap-10 
-								items-center`}>
-                                    <Form.Item name={'Punctuality'}>
-                                        <Rate className={`text-[${blue307}]`}/>
-                                    </Form.Item>
-                                    <p>{teacherData?.rating.punctuality}</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div className={`
-						flex 
-						justify-between 
-						mt-10`}>
-                            <p>Всего: {teacherData?.total["Всего оценок"]} голосов</p>
-                            <Button className={`
-							!rounded-full`}
-                                    type="primary"
-                                    size="large"
-                                    htmlType={'submit'}
-                            >
-                                Сохранить
-                            </Button>
-                        </div>
+                        <RatingTeacher
+                            kindnessAndTact={teacherData?.rating.kindnessAndTact}
+                            generalErudition={teacherData?.rating.generalErudition}
+                            appearanceAndDemeanor={teacherData?.rating.appearanceAndDemeanor}
+                            punctuality={teacherData?.rating.punctuality}
+                            total={teacherData?.total}/>
                     </Form>
                 </div>
             </Card>

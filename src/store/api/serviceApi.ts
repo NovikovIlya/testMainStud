@@ -23,29 +23,29 @@ export const serviceApi = apiSlice.injectEndpoints({
             query: () => 'academic-performance-api/performance'
         }),
 
-        //нужно сделать в отдельном файле
-        getTeachersRating: builder.query<IListTeacher, void>({
-            query: () => 'academic-performance-api/teachers-rating'
-        }),
-
-        getTeacherInfo: builder.query<MainTeacherData, number>({
-            query: (id) => ({
-                url: `academic-performance-api/teachers-rating/${id}`,
-                headers: {
-                    'Accept-Language': i18n.language
-                }
-            })
-        }),
-
-        postTeacherRating: builder.mutation({
-            query: (arg: TestQuery) => {
-                return {
-                    url: `academic-performance-api/teachers-rating/${arg.id}`,
-                    body: arg.rating,
-                    method: 'POST',
-                }
-            }
-        }),
+        // //нужно сделать в отдельном файле
+        // getTeachersRating: builder.query<IListTeacher, void>({
+        //     query: () => 'academic-performance-api/teachers-rating'
+        // }),
+        //
+        // getTeacherInfo: builder.query<MainTeacherData, number>({
+        //     query: (id) => ({
+        //         url: `academic-performance-api/teachers-rating/${id}`,
+        //         headers: {
+        //             'Accept-Language': i18n.language
+        //         }
+        //     })
+        // }),
+        //
+        // postTeacherRating: builder.mutation({
+        //     query: (arg: TestQuery) => {
+        //         return {
+        //             url: `academic-performance-api/teachers-rating/${arg.id}`,
+        //             body: arg.rating,
+        //             method: 'POST',
+        //         }
+        //     }
+        // }),
 
 
         getExamsSchedule: builder.query<Exam[], void>({
@@ -177,7 +177,4 @@ export const {
     useChangePasswordMutation,
     useGetPhoneUserQuery,
     usePostPhoneMutation,
-    useGetTeachersRatingQuery,
-    useGetTeacherInfoQuery,
-    usePostTeacherRatingMutation,
 } = serviceApi

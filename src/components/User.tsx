@@ -1,7 +1,7 @@
 import {useTranslation} from 'react-i18next'
 import DropDrag from './dnd/DropDrag'
 import {Layout} from './layout/Layout'
-import {Button, Popover} from "antd";
+import {Button, ConfigProvider, Popover} from "antd";
 import {useState} from "react";
 import {SupportCenterSvg} from "../assets/svg/SupportCenterSvg";
 import {FeedbackWindow} from "./feedbackWindow/FeedbackWindow";
@@ -25,22 +25,34 @@ export const User = () => {
                     </div>
                     <DropDrag/>
                 </div>
-                <Popover trigger="click"
-                         content={<FeedbackWindow closeWindow={hide}/>}
-                         placement={"topLeft"}
-                         arrow={false}
-                         open={open}
-                         onOpenChange={handleOpenChange}>
-                    <Button
-                        type={"primary"}
-                        className={`
+
+                <ConfigProvider
+                    theme={{
+                        token: {
+                            borderRadiusLG: 20
+                        }
+                    }}
+                >
+                    <Popover trigger="click"
+                             content={<FeedbackWindow closeWindow={hide}/>}
+                             placement={"topLeft"}
+                             arrow={false}
+                             open={open}
+                             onOpenChange={handleOpenChange}>
+                        <Button
+                            type={"primary"}
+                            className={`
                         flex items-center justify-center 
                         fixed rounded-full w-[62px] h-[62px] 
                         right-[3%] bottom-[25px]
                         shadow-2xl`}>
-                        <SupportCenterSvg/>
-                    </Button>
-                </Popover>
+                            <SupportCenterSvg/>
+                        </Button>
+                    </Popover>
+
+                </ConfigProvider>
+
+
             </div>
         </Layout>
     );

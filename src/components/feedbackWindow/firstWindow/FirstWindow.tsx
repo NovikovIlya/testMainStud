@@ -23,14 +23,14 @@ export const FirstWindow = ({closeWindow, setIsFirstWindow}: TypeFirstWindow) =>
     return (
         <div className={`
         flex flex-col items-center 
-        justify-center w-[324px] 
-        h-[468px] bg-white
+        justify-center w-[324px]
+         bg-white
         `}>
             <div className={`
             bg-white shadow-lg
-            w-[348px] h-[150px]
-            absolute left-0 top-0 
-            rounded-lg flex items-center 
+            w-[348px]
+            rounded-[20px]
+            flex items-center 
             justify-center`}>
                 <Button className={`border-none shadow-none absolute top-[10px] right-0`}
                         onClick={closeWindow}>
@@ -39,13 +39,13 @@ export const FirstWindow = ({closeWindow, setIsFirstWindow}: TypeFirstWindow) =>
                 <div className={'flex flex-col gap-2 justify-center items-center'}>
                     <span className={`font-bold text-[18px]/[25px]`}>Центр поддержки</span>
                     <span className={`text-[12px]/[17px] text-[#808080]`}>Работаем с Пн - Пт, 8:00 - 18:00</span>
-                    <div className={'flex gap-5'}>
+                    <div className={'flex gap-5 mb-[20px]'}>
                         <MailFeedbackWindowSgv/>
                         <PhoneFeedbackWindow/>
                     </div>
                 </div>
             </div>
-            <div className={`flex flex-col absolute bottom-[25px] w-full px-[10px]`}>
+            <div className={`flex flex-col w-full px-[10px]`}>
                 <div className={`flex w-full pt-4 pb-4 border-solid border-b-2 border-0 border-[#D9D9D9]`}>
                     <div className={`flex flex-col`}>
                         {

@@ -1,7 +1,7 @@
 import React from 'react';
 import {LeftBack} from "../../../assets/svg/LeftBack";
 import {CloseFeedbackWindow} from "../../../assets/svg/CloseFeedbackWindow";
-import {Button, Input, Upload} from "antd";
+import {Button, Form, Input, Upload} from "antd";
 import {PaperClip} from "../../../assets/svg/PaperClip";
 import {Contacts} from "../contacts/Contacts";
 
@@ -39,38 +39,60 @@ export const FeedbackForm = ({closeWindow, setIsFirstWindow}: TypeFeedbackForm) 
                 </span>
             </div>
 
-            <div className={`flex flex-col gap-2 w-full`}>
-                <Input placeholder={'Имя'} className={`
+            <Form className={`
+            flex flex-col gap-2 w-full`}
+                  onFinish={values => {
+                      console.log(values)
+                  }}
+            >
+                <Form.Item className={`mb-0`}
+                           name={'name'}>
+                    <Input placeholder={'Имя'} className={`
                 shadow-[0_3px_5px_0px_#00000026] 
                 placeholder:text-[#808080]`}/>
-                <Input placeholder={'Email для ответа'} className={`
+                </Form.Item>
+                <Form.Item className={`mb-0`}
+                           name={'emailForAnswer'}>
+                    <Input placeholder={'Email для ответа'} className={`
                 shadow-[0_3px_5px_0px_#00000026] 
                 placeholder:text-[#808080]`}/>
-                <Input.TextArea rows={4} placeholder={'Текст'} className={`
+                </Form.Item>
+                <Form.Item className={`mb-0`}
+                           name={'text'}>
+                    <Input.TextArea rows={4} placeholder={'Текст'} className={`
                 shadow-[0_3px_5px_0px_#00000026] 
                 placeholder:text-[#808080]
                 `}/>
-                <div className={`flex w-full justify-between items-start`}>
-                    <Upload name={'file'} multiple={true}>
-                        <Button className={`
+                </Form.Item>
+
+                <Form.Item className={`mb-0`} name={'file'}>
+                    <div className={`
+                flex w-full justify-between items-start`}>
+                        <Upload
+                            onChange={info => {
+                            console.log(info)
+                        }}
+                            beforeUpload={(file, FileList) => false}
+                        >
+                            <Button className={`
                             bg-none shadow-none border-none gap-2 p-0 h-max flex items-center`}>
-                            <PaperClip/>
-                            <span className={`
+                                <PaperClip/>
+                                <span className={`
                                 text-[12px]/[16px] 
-                                text-[#808080]`}>
-                                Прикрепить файл
-                            </span>
-                        </Button>
-                    </Upload>
-                    <span className={`
-                        mt-[3px] text-[12px]/[16px] text-[#808080]`}>
-                        Максимум 8 МБ
-                    </span>
-                </div>
+                                text-[#808080]`}>Прикрепить файл</span>
+                            </Button>
+                        </Upload>
+                        <span className={`
+                        mt-[3px] text-[12px]/[16px] text-[#808080]`}>Максимум 8 МБ </span>
+                    </div>
+                </Form.Item>
+
                 <div className={`
                     flex flex-col gap-2
                     `}>
-                    <Button type={'primary'}>
+                    <Button type={'primary'}
+                            htmlType={'submit'}
+                    >
                         Отправить письмо
                     </Button>
                     <span className={`
@@ -80,7 +102,7 @@ export const FeedbackForm = ({closeWindow, setIsFirstWindow}: TypeFeedbackForm) 
                     </span>
                 </div>
                 <Contacts/>
-            </div>
+            </Form>
 
         </div>
     );

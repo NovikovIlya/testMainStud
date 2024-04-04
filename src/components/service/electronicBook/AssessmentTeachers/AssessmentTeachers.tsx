@@ -1,11 +1,11 @@
-import {Avatar, Button, Card, Form, Rate, Select, Space, Typography} from 'antd'
+import {Avatar, Button, Card, Form, Rate, Select, Skeleton, Space, Typography} from 'antd'
 import {blue307} from '../../../../utils/color'
 import {
     useGetTeacherInfoQuery,
     useGetTeachersRatingQuery,
     usePostTeacherRatingMutation
 } from "../../../../store/api/assessmentTeacher";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {IAssessmentNumber, IValuesAssessment, TestQuery} from "../../../../store/type";
 import {RatingTeacher} from "./RatingTeacher/RatingTeacher";
 
@@ -26,9 +26,11 @@ export const AssessmentTeachers = () => {
         }
     ))
     const [idTeacher, setIdTeacher] = useState<number>(0)
-    const { data: teacherData, isFetching: isFetchingTeacherData } = useGetTeacherInfoQuery(idTeacher)
+    const {data: teacherData, isFetching: isFetchingTeacherData} = useGetTeacherInfoQuery(idTeacher)
     const [postAssessmentTeachers] = usePostTeacherRatingMutation()
-    console.log(teacherData)
+    const [disabledButton, setDisabledButton] = useState(true)
+    const [sendData, setSendData] = useState(false)
+
 
     function onFinish(values: IValuesAssessment) {
         const rating: Array<IAssessmentNumber> = [
@@ -46,7 +48,7 @@ export const AssessmentTeachers = () => {
             id: idTeacher
         }
         postAssessmentTeachers(query)
-        console.log(ratingObj)
+        setSendData(true)
 
     }
 
@@ -63,7 +65,10 @@ export const AssessmentTeachers = () => {
                     Выбрать преподавателя
                 </Typography.Text>
                 <Select
-                    onChange={(value) => {setIdTeacher(value)}}
+                    onChange={(value) => {
+                        setIdTeacher(value)
+                        setSendData(false)
+                    }}
                     placeholder={'Выбрать'}
                     size="large"
                     className={`w-[624px] rounded-lg
@@ -72,65 +77,92 @@ export const AssessmentTeachers = () => {
                     loading={isFetching}
                 />
             </Space>
-            <Card className={`w-full  mt-16 p-6
-            `}>
-                <div className={`flex gap-14
-                `}>
-                    <Avatar
-                        className={`w-full min-w-[100px]
-                        `}
-                        size={100}
-                        src={teacherData?.teacherData.photoLink}
-                    />
-                    <div className={`flex flex-col gap-[20px]
-					`}>
-                        <p className={`text-black text-lg font-bold
-						`}>
-                            {teacherData?.teacherData.lastName} {teacherData?.teacherData.firstName} {teacherData?.teacherData.middleName}
-                        </p>
-                        <div className={`flex flex-col gap-[10px]
-						`}>
-                            <p className={`text-black text-base font-bold
-                            `}>
-                                Должность:
-                            </p>
-                            <p className={`
-							max-w-sm 
-							min-w-[384px]`}>
-                                {teacherData?.teacherData.post}
-                            </p>
-                        </div>
-                        {/*<div className={`*/}
-						{/*	flex*/}
-						{/*	flex-col*/}
-						{/*	gap-[10px]*/}
-						{/*	`}>*/}
-                        {/*    <p className={`*/}
-						{/*	text-black */}
-						{/*	text-base */}
-						{/*	font-bold*/}
-						{/*	`}>*/}
-                        {/*        Преподаваемые дисциплины:*/}
-                        {/*    </p>*/}
-                        {/*    <p></p>*/}
-                        {/*</div>*/}
-                    </div>
 
-                    <Form className={`
-					w-full`}
-                          onFinish={(values) => {onFinish(values)}}
-                          onFieldsChange={() => {
-                              console.log('Добавить включение кнопку отсюда')}}
-                    >
-                        <RatingTeacher
-                            kindnessAndTact={teacherData?.rating.kindnessAndTact}
-                            generalErudition={teacherData?.rating.generalErudition}
-                            appearanceAndDemeanor={teacherData?.rating.appearanceAndDemeanor}
-                            punctuality={teacherData?.rating.punctuality}
-                            total={teacherData?.total}/>
-                    </Form>
-                </div>
-            </Card>
+
+            {
+                idTeacher === 0
+                    ?
+                    <></>
+                    :
+                    <Card className={`
+                    w-full  
+                    mt-16 p-6`}>
+
+                        {
+                            isFetchingTeacherData
+                                ?
+                                <Skeleton active={true}/>
+                                :
+                                <div className={`flex
+                         gap-14
+                        `}>
+                                    <Avatar
+                                        className={`w-full 
+                                min-w-[100px]
+                                `}
+                                        size={100}
+                                        src={teacherData?.teacherData.photoLink}
+                                    />
+                                    <div className={`flex 
+                            flex-col 
+                            gap-[20px]`}>
+                                        <p className={`text-black 
+                                text-lg 
+                                font-bold
+                                `}>
+                                            {teacherData?.teacherData.lastName} {teacherData?.teacherData.firstName} {teacherData?.teacherData.middleName}
+                                        </p>
+                                        <div className={`flex 
+                                flex-col 
+                                gap-[10px]`}>
+                                            <p className={`text-black 
+                                    text-base 
+                                    font-bold`}>
+                                                Должность:
+                                            </p>
+                                            <p className={`max-w-sm 
+                                    min-w-[384px]`}>
+                                                {teacherData?.teacherData.post}
+                                            </p>
+                                        </div>
+                                        {/*<div className={`*/}
+                                        {/*	flex*/}
+                                        {/*	flex-col*/}
+                                        {/*	gap-[10px]*/}
+                                        {/*	`}>*/}
+                                        {/*    <p className={`*/}
+                                        {/*	text-black */}
+                                        {/*	text-base */}
+                                        {/*	font-bold*/}
+                                        {/*	`}>*/}
+                                        {/*        Преподаваемые дисциплины:*/}
+                                        {/*    </p>*/}
+                                        {/*    <p></p>*/}
+                                        {/*</div>*/}
+                                    </div>
+                                    <Form className={`
+                            w-full`}
+                                          onFinish={(values) => {
+                                              onFinish(values)
+                                          }}
+                                          onFieldsChange={() => {
+                                              setDisabledButton(false)
+                                          }}
+                                    >
+                                        <RatingTeacher
+                                            sendData={sendData}
+                                            disabledButton={disabledButton}
+                                            kindnessAndTact={teacherData?.rating.kindnessAndTact}
+                                            generalErudition={teacherData?.rating.generalErudition}
+                                            appearanceAndDemeanor={teacherData?.rating.appearanceAndDemeanor}
+                                            punctuality={teacherData?.rating.punctuality}
+                                            total={teacherData?.total}/>
+                                    </Form>
+                                </div>
+                        }
+                    </Card>
+            }
+
         </>
     )
 }

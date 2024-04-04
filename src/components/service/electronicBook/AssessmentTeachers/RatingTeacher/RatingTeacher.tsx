@@ -8,6 +8,8 @@ interface IRatingTeacher {
     appearanceAndDemeanor: number | undefined
     punctuality: number | undefined
     total: number | undefined
+    disabledButton: boolean
+    sendData: boolean
 }
 
 export const RatingTeacher = (props: IRatingTeacher) => {
@@ -32,9 +34,7 @@ export const RatingTeacher = (props: IRatingTeacher) => {
 								flex 
 								gap-10 
 								items-center`}>
-                        <Form.Item name={'KindnessTact'}
-
-                        >
+                        <Form.Item name={'KindnessTact'}>
                             <Rate className={`text-[${blue307}]`}/>
                         </Form.Item>
                         <p>{props.kindnessAndTact}</p>
@@ -75,9 +75,7 @@ export const RatingTeacher = (props: IRatingTeacher) => {
                     <div className={`
 								flex 
 								gap-10`}>
-                        <Form.Item name={'Punctuality'}
-                                   trigger={'asdf'}
-                        >
+                        <Form.Item name={'Punctuality'}>
                             <Rate className={`text-[${blue307}]`}/>
                         </Form.Item>
                         <p>{props.punctuality}</p>
@@ -94,11 +92,12 @@ export const RatingTeacher = (props: IRatingTeacher) => {
                         type="primary"
                         size="large"
                         htmlType={'submit'}
-                        disabled={true}
+                        disabled={props.disabledButton}
                 >
                     Сохранить
                 </Button>
             </div>
+            {props.sendData && <span className={`text-[green]`}>Данные отправлены</span>}
         </>
     );
 };

@@ -33,6 +33,14 @@ interface ColumnsThree extends GeneralProperty {
     departureDate: string
     costPerDay: number
 }
+interface ColumnsFour extends GeneralProperty {
+    code: string
+    name: string
+    decoding: string
+    currency: string
+    cost: number
+    topic: string
+}
 
 
 const columnsOne: TableProps<ColumnsOne>['columns'] = [
@@ -151,6 +159,43 @@ const columnsThree: TableProps<ColumnsThree>['columns'] = [
 
     },
 ]
+const columnsFour: TableProps<ColumnsFour>['columns'] = [
+    {
+        title: <TitleHeadCell title={'Код'}/>,
+        dataIndex: 'code',
+        align: "left",
+        width: 200
+    },
+    {
+        title: <TitleHeadCell title={'Наименования'}/>,
+        dataIndex: 'name',
+        align: "left",
+        width: 150
+    },
+    {
+        title: <TitleHeadCell title={'Расшифровка'}/>,
+        dataIndex: 'decoding',
+        align: "left",
+        width: 150
+    },
+    {
+        title: <TitleHeadCell title={'Валюта'}/>,
+        dataIndex: 'currency',
+        align: "left",
+        width: 150
+    },
+    {
+        title: <TitleHeadCell title={'Стоимость'}/>,
+        dataIndex: 'cost',
+        align: "left",
+        width: 150
+    },
+    {
+        title: <TitleHeadCell title={'Тема'}/>,
+        dataIndex: 'topic',
+        align: "left",
+    },
+]
 
 export const ResultTable = () => {
 
@@ -188,6 +233,18 @@ export const ResultTable = () => {
         }
     ]
 
+    const dataColumnsFour: ColumnsFour[] = [
+        {
+            key: '1',
+            code: 'Россия',
+            name: 'Мероприятие',
+            decoding: 'Повышение квалификации',
+            currency: 'Рубли',
+            cost: 999999,
+            topic: 'Повышение квалификации',
+        }
+    ]
+
 
 
 
@@ -219,7 +276,14 @@ export const ResultTable = () => {
                     size={"middle"}
                     dataSource={dataColumnsThree}
                 />
-
+            </Col>
+            <Col span={24}>
+                <Table
+                    columns={columnsFour}
+                    pagination={false}
+                    size={"middle"}
+                    dataSource={dataColumnsFour}
+                />
             </Col>
 
         </Row>

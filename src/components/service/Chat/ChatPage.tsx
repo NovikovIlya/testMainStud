@@ -131,7 +131,7 @@ export const ChatPage = () => {
 	return (
 		<>
 			<div className="flex flex-col w-full">
-				<div className="w-full h-full flex flex-col justify-between pt-[60px] pr-[85px] pl-[40px] overflow-auto [overflow-anchor:none]">
+				<div className="w-full h-full flex flex-col pt-[60px] pr-[85px] pl-[40px] overflow-auto [overflow-anchor:none]">
 					{[...messages].reverse().map((msg, msgIndex, msgArray) => (
 						<>
 							{msg.sendDate.substring(0, 10) !== msgDate.current &&

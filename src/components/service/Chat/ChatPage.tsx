@@ -132,7 +132,7 @@ export const ChatPage = () => {
 		<>
 			<div className="flex flex-col w-full">
 				<div className="w-full h-full flex flex-col justify-between pt-[60px] pr-[85px] pl-[40px] overflow-auto [overflow-anchor:none]">
-					{[...messages].reverse().map(msg => (
+					{[...messages].reverse().map((msg, msgIndex, msgArray) => (
 						<>
 							{msg.sendDate.substring(0, 10) !== msgDate.current &&
 								((msgDate.current = msg.sendDate.substring(0, 10)),
@@ -146,7 +146,17 @@ export const ChatPage = () => {
 											]}
 									</div>
 								))}
-							<ChatMessage key={msg.id} msgData={msg} />
+							<ChatMessage
+								key={msg.id}
+								msgData={msg}
+								senderChange={
+									msgArray[msgIndex - 1]
+										? msgArray[msgIndex - 1].sender !== msg.sender
+											? true
+											: false
+										: false
+								}
+							/>
 						</>
 					))}
 					{/* <div className="self-start w-[355px] rounded-[16px] rounded-bl-none bg-white p-[20px] flex flex-col font-content-font font-normal text-black text-[16px]/[19.2px]">

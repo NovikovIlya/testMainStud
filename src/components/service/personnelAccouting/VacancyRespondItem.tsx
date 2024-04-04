@@ -1,10 +1,15 @@
 import { Button } from 'antd'
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
+import { useLazyGetRespondFullInfoQuery } from '../../../store/api/serviceApi'
+import { setCurrentResponce } from '../../../store/reducers/CurrentResponceSlice'
 import { VacancyRespondItemType, respondStatus } from '../../../store/type'
 
 export const VacancyRespondItem = (props: VacancyRespondItemType) => {
+	const [getResponceInfo] = useLazyGetRespondFullInfoQuery()
 	const navigate = useNavigate()
+	const dispatch = useDispatch()
 
 	return (
 		<>
@@ -37,7 +42,10 @@ export const VacancyRespondItem = (props: VacancyRespondItemType) => {
 					</p>
 				</div>
 				<Button
-					onClick={() => {}}
+					onClick={() => {
+						dispatch(setCurrentResponce(props.id))
+						navigate(`services/personnelaccounting/responds/fullinfo`)
+					}}
 					className="font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black"
 				>
 					Подробнее

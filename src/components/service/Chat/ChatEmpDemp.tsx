@@ -18,16 +18,16 @@ const personnelDeparmentToken =
 
 export const ChatEmpDemp = () => {
 	const [getResponds] = useLazyGetResponcesByVacancyQuery()
-	const { data: gropedResponds = [] } = useGetVacancyGroupedResponcesQuery({
+	const { data: groupedResponds = [] } = useGetVacancyGroupedResponcesQuery({
 		category: 'АУП'
 	})
 	const [responds, setResponds] = useState<VacancyRespondItemType[]>([])
 
 	useEffect(() => {
-		gropedResponds.map(vacResp => {
+		groupedResponds.map(vacResp => {
 			getResponds({ id: vacResp.vacancyId, status: '' })
 				.unwrap()
-				.then(data => setResponds([...responds, ...data]))
+				.then(data => setResponds(prev => [...prev, ...data]))
 		})
 	}, [])
 

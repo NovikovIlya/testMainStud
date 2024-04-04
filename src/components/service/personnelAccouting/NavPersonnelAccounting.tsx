@@ -6,6 +6,7 @@ import { useAppSelector } from '../../../store'
 import { ChatEmpDemp } from '../Chat/ChatEmpDemp'
 
 import { ChatIcon } from './ChatIcon'
+import { RespondInfo } from './RespondInfo'
 import { Responds } from './Responds'
 import { RespondsIcon } from './RespondsIcon'
 import { VacanciesIcon } from './VacanciesIcon'
@@ -73,7 +74,7 @@ export const NavPesonnelAccounting = () => {
 	return (
 		<>
 			<div className="shadowNav">
-				<ul className="min-w-[230px] pt-14 flex flex-col gap-4">
+				<ul className="min-w-[230px] pt-14 flex flex-col gap-4 sticky top-[80px]">
 					{handleList}
 				</ul>
 			</div>
@@ -82,6 +83,9 @@ export const NavPesonnelAccounting = () => {
 				{pathname.match(
 					'services/personnelaccounting/responds/byvacancy/*'
 				) && <VacancyResponces />}
+				{pathname.match('services/personnelaccounting/responds/fullinfo') && (
+					<RespondInfo />
+				)}
 				{pathname.includes(navList[1].id) && <ChatEmpDemp />}
 				{pathname === navList[2].id && <></>}
 				{pathname === navList[3].id && <></>}

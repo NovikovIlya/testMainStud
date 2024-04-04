@@ -5,7 +5,9 @@ import { MessageUnreadSvg } from '../../../assets/svg/MessageUnreadSvg'
 import { useAppSelector } from '../../../store'
 import { ChatMessageType } from '../../../store/type'
 
-export const ChatMessage = (props: { msgData: ChatMessageType }) => {
+export const ChatMessage = (
+	props: { msgData: ChatMessageType } & { senderChange: boolean }
+) => {
 	const { user } = useAppSelector(state => state.auth)
 	const isSeeker = user?.roles[0].type === 'STUD'
 	const isEmpDep = user?.roles.find(role => role.type === 'EMPL')
@@ -23,6 +25,10 @@ export const ChatMessage = (props: { msgData: ChatMessageType }) => {
 						'self-end rounded-br-none bg-[#4F6AFB1A] bg-opacity-10':
 							(props.msgData.sender === 'SEEKER' && !isEmpDep) ||
 							(props.msgData.sender === 'PERSONNEL_DEPARTMENT' && isEmpDep)
+					},
+					{
+						'mt-[24px]': props.senderChange,
+						'mt-[12px]': !props.senderChange
 					}
 				)}
 			>

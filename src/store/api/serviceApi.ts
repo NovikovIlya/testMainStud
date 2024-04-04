@@ -130,6 +130,11 @@ export const serviceApi = apiSlice.injectEndpoints({
 				url: `http://localhost:8082/employment-api/v1/vacancy/${id}/responds?status=${status}`
 			})
 		}),
+		getRespondFullInfo: builder.query<VacancyRespondItemType, number>({
+			query: id => ({
+				url: `http://localhost:8082/employment-api/v1/respond/${id}`
+			})
+		}),
 		getChatIdByRespondId: builder.query<number, number>({
 			query: respId => ({
 				url: `http://localhost:8082/employment-api/v1/respond/${respId}/chat`
@@ -312,5 +317,7 @@ export const {
 	useLazyGetChatMessagesQuery,
 	usePostChatMessageMutation,
 	useReadChatMessageMutation,
-	useLazyGetResponcesByVacancyQuery
+	useLazyGetResponcesByVacancyQuery,
+	useLazyGetRespondFullInfoQuery,
+	useGetRespondFullInfoQuery
 } = serviceApi

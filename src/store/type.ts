@@ -207,8 +207,26 @@ export type VacancyRespondItemType = {
 		firstname: string
 		lastname: String
 		middlename: string
+		email: string
+		phone: string
 	}
-	educations: []
+	respondData: {
+		portfolio: {
+			url: string
+			workExperiences: experienceResponceType[]
+		}
+		skills: {
+			keySkills: string[]
+			aboutMe: string
+		}
+	}
+	educations: {
+		educationLevel: string
+		country: string
+		endYear: string
+		speciality: string | null
+		nameOfInstitute: string
+	}[]
 }
 
 export type ChatMessageType = {

@@ -18,7 +18,7 @@ interface DataType {
 
 const columns: TableProps<DataType>['columns'] = [
     {
-        title: <TitleHeadCell title={'Адрес'}/>,
+        title: 'Адрес',
         dataIndex: 'address',
         align: "center",
     },

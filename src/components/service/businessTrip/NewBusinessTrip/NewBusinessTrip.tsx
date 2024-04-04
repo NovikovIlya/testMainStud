@@ -8,13 +8,14 @@ import {RootState} from "../../../../store";
 import {TravelConditions} from "./TravelConditions/TravelConditions";
 import {LivingConditions} from "./LivingConditions/LivingConditions";
 import {Financing} from "./Financing/Financing";
+import {ResultTable} from "./ResultTable/ResultTable";
 
 const itemsTabs = [
     {key: keysTabsBusinessTrip.placesAndDated, label: 'Места и сроки командирования', children: <PlacesAndDated/>},
     {key: keysTabsBusinessTrip.travelConditions, label: 'Условия проезда', children: <TravelConditions/>},
     {key: keysTabsBusinessTrip.livingConditions, label: 'Условия проживания', children: <LivingConditions/>},
     {key: keysTabsBusinessTrip.financing, label: 'Финансирование', children: <Financing/>},
-    {key: keysTabsBusinessTrip.result, label: 'Итог', children: 'Итог'},
+    {key: keysTabsBusinessTrip.result, label: 'Итог', children: <ResultTable/>},
 ]
 
 

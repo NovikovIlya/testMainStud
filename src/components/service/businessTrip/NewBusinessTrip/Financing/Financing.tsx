@@ -34,7 +34,7 @@ export const Financing = () => {
                             shape={'round'}
                             className={'h-10 w-max'}
                             onClick={() => {
-                                dispatch(setCondition(keysTabsBusinessTrip.financing))
+                                dispatch(setCondition(keysTabsBusinessTrip.result))
                             }}
                         >
                             <span className={'text-lg'}>Далее</span>

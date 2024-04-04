@@ -6,7 +6,7 @@ interface ITitleHeadCell {
 
 export const TitleHeadCell = ({title}: ITitleHeadCell) => {
     return (
-        <span className={'text-lg font-bold'}>
+        <span className={'opacity-60 text-[14px]'}>
             {title}
         </span>
     );

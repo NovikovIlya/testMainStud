@@ -1,5 +1,5 @@
 import React, {ReactNode, useEffect, useState} from 'react';
-import {AutoComplete, Button, Col, ConfigProvider, DatePicker, Form, Input, Radio, Row, Upload} from "antd";
+import {AutoComplete, Button, Col, ConfigProvider, DatePicker, Form, Input, Radio, Row, Select, Upload} from "antd";
 import {LabelFormItem} from "../../labelFormItem/labelFormItem";
 import {UploadFileSvg} from "../../../../../assets/svg/UploadFileSvg";
 import dayjs from "dayjs";
@@ -30,10 +30,14 @@ const optionsGoals = [
 ];
 
 const optionsTypeDocuments = [
-    {value: 'Тип документа 1'},
-    {value: 'Тип документа 2'},
-    {value: 'Тип документа 3'},
+    {value: 'Приказ'},
+    {value: 'Приглашение'},
+    {value: 'Служебная записка'},
+    {value: 'План-график'},
+    {value: 'Иной документ'},
 ];
+
+
 
 
 export const PlacesAndDated = () => {
@@ -59,26 +63,43 @@ export const PlacesAndDated = () => {
         ])
     }
 
+    const validateMessages = {
+        required: "Обязательное поле",
+        string: {
+            max: "Не больше ${max} символов",
+        },
+
+    };
+
     return (
-        <Form layout={'vertical'}>
+        <Form layout={'vertical'} validateMessages={validateMessages}>
             <Row gutter={[16, 0]} className={`
                 w-[80%]
                 `}>
                 <Col span={13}>
-                    <Form.Item label={<LabelFormItem label={'Цель'}/>}>
-                        <AutoComplete options={optionsGoals} placeholder={'Ввести или выбрать'}/>
+                    <Form.Item label={<LabelFormItem label={'Цель'}/>}
+                               rules={[{required: true}]}
+                               name={'goal'}>
+                        <Select options={optionsGoals} placeholder={'Выбрать'}/>
                     </Form.Item>
                 </Col>
 
                 <Col span={13}>
-                    <Form.Item label={<LabelFormItem label={'Мероприятие'}/>}>
+                    <Form.Item label={<LabelFormItem label={'Мероприятие'}/>}
+                               rules={[{
+                                   required: true,
+                                   max: 100
+                               }]}
+                               name={'event'}>
                         <Input className={'text-base'} placeholder={'Ввести'}/>
                     </Form.Item>
                 </Col>
 
                 <Col span={13}>
-                    <Form.Item label={<LabelFormItem label={'Тип документа-основания'}/>}>
-                        <AutoComplete options={optionsTypeDocuments} placeholder={'Ввести или выбрать'}/>
+                    <Form.Item label={<LabelFormItem label={'Тип документа-основания'}/>}
+                               name={'typeDocument'}
+                               rules={[{required: true}]}>
+                        <Select options={optionsTypeDocuments} placeholder={'Выбрать'}/>
                     </Form.Item>
                 </Col>
 
@@ -107,7 +128,10 @@ export const PlacesAndDated = () => {
                 </Col>
 
                 <Col span={13}>
-                    <Form.Item label={<LabelFormItem label={'Командировка в России'}/>}>
+                    <Form.Item label={<LabelFormItem label={'Командировка в России'}/>}
+                               rules={[{required: true}]}
+                               name={'isRussia'}
+                    >
                         <Radio.Group>
                             <Radio value={'Да'}>Да</Radio>
                             <Radio value={'Нет'}>Нет</Radio>
@@ -115,7 +139,6 @@ export const PlacesAndDated = () => {
                     </Form.Item>
                 </Col>
             </Row>
-
 
 
             <Row gutter={[16, 0]} className={`w-87%`}>
@@ -143,18 +166,20 @@ export const PlacesAndDated = () => {
                     <Col span={13}>
                         <Button
                             className={`
-                            mt-5
-                            rounded-[40px]
-                            h-[40px]
-                            `}
+                                mt-5
+                                rounded-[40px]
+                                h-[40px]
+                                `}
                             type={'primary'}
-                            onClick={() => {dispatch(setCondition(keysTabsBusinessTrip.travelConditions))}}
+                            htmlType={'submit'}
+                            onClick={() => {
+                            }}
                         >
-                    <span className={`
-                            text-lg
-                        `}>
-                        Далее
-                    </span>
+                        <span className={`
+                                text-lg
+                            `}>
+                            Далее
+                        </span>
                         </Button>
                     </Col>
                 </Row>

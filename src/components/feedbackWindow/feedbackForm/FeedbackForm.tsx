@@ -1,9 +1,10 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {LeftBack} from "../../../assets/svg/LeftBack";
 import {CloseFeedbackWindow} from "../../../assets/svg/CloseFeedbackWindow";
 import {Button, Form, Input, Upload} from "antd";
 import {PaperClip} from "../../../assets/svg/PaperClip";
 import {Contacts} from "../contacts/Contacts";
+import {RcFile} from "antd/es/upload";
 
 type TypeFeedbackForm = {
     closeWindow: () => void
@@ -11,6 +12,9 @@ type TypeFeedbackForm = {
 }
 
 export const FeedbackForm = ({closeWindow, setIsFirstWindow}: TypeFeedbackForm) => {
+
+    const [file, setFile] = useState<RcFile>()
+
     return (
         <div className={`
         flex flex-col items-center 
@@ -42,6 +46,7 @@ export const FeedbackForm = ({closeWindow, setIsFirstWindow}: TypeFeedbackForm) 
             <Form className={`
             flex flex-col gap-2 w-full`}
                   onFinish={values => {
+                      values.file = file
                       console.log(values)
                   }}
             >
@@ -69,10 +74,12 @@ export const FeedbackForm = ({closeWindow, setIsFirstWindow}: TypeFeedbackForm) 
                     <div className={`
                 flex w-full justify-between items-start`}>
                         <Upload
-                            onChange={info => {
-                            console.log(info)
-                        }}
-                            beforeUpload={(file, FileList) => false}
+                            accept={'.img, .jpeg, .jpg'}
+                            beforeUpload={(file, FileList) => {
+                                setFile(file)
+                                //проверку на размер файла можно сделать через file.size
+                                return false
+                            }}
                         >
                             <Button className={`
                             bg-none shadow-none border-none gap-2 p-0 h-max flex items-center`}>

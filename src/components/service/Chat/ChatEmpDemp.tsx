@@ -4,7 +4,8 @@ import { useLocation } from 'react-router-dom'
 import {
 	useGetSeekerRespondsQuery,
 	useGetVacancyGroupedResponcesQuery,
-	useLazyGetResponcesByVacancyQuery
+	useLazyGetResponcesByVacancyQuery,
+	useLazyGetVacancyGroupedResponcesQuery
 } from '../../../store/api/serviceApi'
 import { VacancyRespondItemType } from '../../../store/type'
 
@@ -18,17 +19,19 @@ const personnelDeparmentToken =
 
 export const ChatEmpDemp = () => {
 	const [getResponds] = useLazyGetResponcesByVacancyQuery()
-	const { data: groupedResponds = [] } = useGetVacancyGroupedResponcesQuery({
-		category: 'АУП'
-	})
 	const [responds, setResponds] = useState<VacancyRespondItemType[]>([])
+	const [getGroupedResponds] = useLazyGetVacancyGroupedResponcesQuery()
 
 	useEffect(() => {
-		groupedResponds.map(vacResp => {
-			getResponds({ id: vacResp.vacancyId, status: '' })
-				.unwrap()
-				.then(data => setResponds(prev => [...prev, ...data]))
-		})
+		getGroupedResponds({ category: 'АУП' })
+			.unwrap()
+			.then(grData => {
+				grData.map(vacResp => {
+					getResponds({ id: vacResp.vacancyId, status: '' })
+						.unwrap()
+						.then(data => setResponds(prev => [...prev, ...data]))
+				})
+			})
 	}, [])
 
 	const { pathname } = useLocation()

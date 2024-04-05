@@ -42,12 +42,12 @@ const optionsTypeDocuments = [
 
 export const PlacesAndDated = () => {
     const dispatch = useDispatch()
-
+    const [form] = Form.useForm()
     //нужно отрефакторить код добавления формы, т.к после
     //добавления и сохранения их нужно будет откуда-то вытаскивать
     //Нужно обсудить данный вопрос с бэком
     const [listOrg, setListOrg] = useState<INewOrganization[]>([
-        {id: 1, innOrg: '', nameOrg: '', legalAddress: '', actualAddress: ''},
+        {id: 1, innOrg: +'', nameOrg: 'Тесl', legalAddress: 'Тест', actualAddress: ''},
     ])
 
     function addNewOrg() {
@@ -55,12 +55,13 @@ export const PlacesAndDated = () => {
             ...listOrg,
             {
                 id: listOrg.length + 1,
-                innOrg: '',
-                nameOrg: '',
-                legalAddress: '',
+                innOrg: +'',
+                nameOrg: 'Тест',
+                legalAddress: 'Тест',
                 actualAddress: '',
             }
         ])
+        // form.setFieldValue('goal', 'GOAL')
     }
 
     const validateMessages = {
@@ -72,7 +73,9 @@ export const PlacesAndDated = () => {
     };
 
     return (
-        <Form layout={'vertical'} validateMessages={validateMessages}>
+        <Form layout={'vertical'}
+              validateMessages={validateMessages}
+              form={form}>
             <Row gutter={[16, 0]} className={`
                 w-[80%]
                 `}>
@@ -98,7 +101,9 @@ export const PlacesAndDated = () => {
                 <Col span={13}>
                     <Form.Item label={<LabelFormItem label={'Тип документа-основания'}/>}
                                name={'typeDocument'}
-                               rules={[{required: true}]}>
+                               rules={[{
+                                   required: true
+                               }]}>
                         <Select options={optionsTypeDocuments} placeholder={'Выбрать'}/>
                     </Form.Item>
                 </Col>
@@ -129,9 +134,10 @@ export const PlacesAndDated = () => {
 
                 <Col span={13}>
                     <Form.Item label={<LabelFormItem label={'Командировка в России'}/>}
-                               rules={[{required: true}]}
-                               name={'isRussia'}
-                    >
+                               rules={[{
+                                   required: true
+                               }]}
+                               name={'isRussia'}>
                         <Radio.Group>
                             <Radio value={'Да'}>Да</Radio>
                             <Radio value={'Нет'}>Нет</Radio>

@@ -5,15 +5,35 @@ import {Button, Form, Input, Upload} from "antd";
 import {PaperClip} from "../../../assets/svg/PaperClip";
 import {Contacts} from "../contacts/Contacts";
 import {RcFile} from "antd/es/upload";
+import {FeedBackData, FeedBackDataWithoutImage} from "../../../models/FeedBack";
+import {usePostFeedBackMutation} from "../../../store/api/feedBack";
 
 type TypeFeedbackForm = {
     closeWindow: () => void
     setIsFirstWindow: (step: boolean) => void
 }
 
+
 export const FeedbackForm = ({closeWindow, setIsFirstWindow}: TypeFeedbackForm) => {
 
     const [file, setFile] = useState<RcFile>()
+    const [sendFeedBackData] = usePostFeedBackMutation()
+
+    function sendData(values: FeedBackData) {
+        const formDataFeedback = new FormData()
+        values.image = file!
+        if (values.image === undefined) {
+            for (let key in values) {
+                formDataFeedback.append(key, values[key as keyof FeedBackDataWithoutImage])
+            }
+        } else {
+            for (let key in values) {
+                formDataFeedback.append(key, values[key as keyof FeedBackData])
+            }
+        }
+        console.log(values)
+        sendFeedBackData(formDataFeedback)
+    }
 
     return (
         <div className={`
@@ -25,7 +45,10 @@ export const FeedbackForm = ({closeWindow, setIsFirstWindow}: TypeFeedbackForm) 
                 <div className={`
                 flex justify-between w-full items-center`}>
                     <Button className={`
-                border-none flex items-center shadow-none p-0 h-max`} onClick={() => {setIsFirstWindow(true)}}>
+                border-none flex items-center shadow-none p-0 h-max`}
+                            onClick={() => {
+                                setIsFirstWindow(true)
+                            }}>
                         <LeftBack/>
                     </Button>
                     <span className={`
@@ -43,38 +66,35 @@ export const FeedbackForm = ({closeWindow, setIsFirstWindow}: TypeFeedbackForm) 
                 </span>
             </div>
 
-            <Form className={`
+            <Form<FeedBackData> className={`
             flex flex-col gap-2 w-full`}
                   onFinish={values => {
-                      values.file = file
-                      console.log(values)
-                  }}
-            >
+                      sendData(values)
+                  }}>
                 <Form.Item className={`mb-0`}
-                           name={'name'}>
-                    <Input placeholder={'Имя'} className={`
-                shadow-[0_3px_5px_0px_#00000026] 
-                placeholder:text-[#808080]`}/>
-                </Form.Item>
-                <Form.Item className={`mb-0`}
-                           name={'emailForAnswer'}>
+                           name={'email'}
+                           rules={[{
+                               required: true
+                           }]}>
                     <Input placeholder={'Email для ответа'} className={`
                 shadow-[0_3px_5px_0px_#00000026] 
                 placeholder:text-[#808080]`}/>
                 </Form.Item>
                 <Form.Item className={`mb-0`}
-                           name={'text'}>
+                           name={'message'}
+                           rules={[{
+                               required: true
+                           }]}>
                     <Input.TextArea rows={4} placeholder={'Текст'} className={`
                 shadow-[0_3px_5px_0px_#00000026] 
                 placeholder:text-[#808080]
                 `}/>
                 </Form.Item>
 
-                <Form.Item className={`mb-0`} name={'file'}>
+                <Form.Item className={`mb-0`} name={'image'}>
                     <div className={`
                 flex w-full justify-between items-start`}>
                         <Upload
-                            accept={'.img, .jpeg, .jpg'}
                             beforeUpload={(file, FileList) => {
                                 setFile(file)
                                 //проверку на размер файла можно сделать через file.size

@@ -8,6 +8,7 @@ import {useDispatch} from "react-redux";
 import {keysTabsBusinessTrip, setCondition} from "../../../../../store/reducers/FormReducers/StepFormBusinessTrip";
 import {INewOrganization, NewOrganization} from "./NewOrganization";
 import {ButtonAddData} from "../buttonAddData/buttonAddData";
+import {validateMessages} from "../../../../../utils/validateMessage";
 
 
 const optionsGoals = [
@@ -61,21 +62,24 @@ export const PlacesAndDated = () => {
                 actualAddress: '',
             }
         ])
-        // form.setFieldValue('goal', 'GOAL')
+
     }
 
-    const validateMessages = {
-        required: "Обязательное поле",
-        string: {
-            max: "Не больше ${max} символов",
-        },
-
-    };
 
     return (
         <Form layout={'vertical'}
+              name={'MyForm'}
               validateMessages={validateMessages}
-              form={form}>
+              form={form}
+              onFinish={values => {
+                  //const rangeValue = values['rangePicker']
+                  const valuesData = {
+                      ...values,
+                      sumDay: 10,
+                  }
+                  console.log(valuesData)
+              }}
+        >
             <Row gutter={[16, 0]} className={`
                 w-[80%]
                 `}>
@@ -178,8 +182,7 @@ export const PlacesAndDated = () => {
                                 `}
                             type={'primary'}
                             htmlType={'submit'}
-                            onClick={() => {
-                            }}
+                            // onClick={() => {dispatch(setCondition(keysTabsBusinessTrip.travelConditions))}}
                         >
                         <span className={`
                                 text-lg

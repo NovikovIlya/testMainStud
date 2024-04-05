@@ -16,6 +16,16 @@ export interface INewOrganization {
 
 export const NewOrganization = (props: INewOrganization) => {
 
+    const [sumDay, setSumDay] = useState('0')
+
+    function changeDatePicker(dates: Array<dayjs.Dayjs | null>) {
+        if (dates) {
+            setSumDay(String(dates[1]!.diff(dates[0], 'day') + 1))
+        } else {
+            setSumDay('0')
+        }
+    }
+
 
     const [fetch, setFetch] = useState(0)
     const [test, setTest] = useState('Орг')
@@ -23,6 +33,7 @@ export const NewOrganization = (props: INewOrganization) => {
     useEffect(() => {
         console.log(fetch)
         setTest('Организация 11')
+        // form.setFieldValue('goal', 'GOAL') нужно использовать данный метод, чтобы менять значение
     }, [fetch]);
 
     return (
@@ -105,14 +116,36 @@ export const NewOrganization = (props: INewOrganization) => {
                         className={`
                             text-base`}
                         placeholder={'Ввести'}
-                        value={props.actualAddress}
                     />
                 </Form.Item>
             </Col>
             <Col span={12}>
-                <Form.Item label={<LabelFormItem label={'Дата начала и окончания'}/>}>
-                    <CustomRangePicker/>
+                <Form.Item
+                    label={<LabelFormItem label={'Дата начала и окончания'}/>}
+                    name={'date'}
+                    rules={[{
+                        required: true,
+                        type: 'array',
+                    }]}>
+                    <DatePicker.RangePicker
+                        placeholder={['ДД.ММ.ГГ', 'ДД.ММ.ГГ']}
+                        className={`text-2xl w-full`}
+                        format={'DD.MM.YYYY'}
+                        onChange={(dates) => {
+                            changeDatePicker(dates)
+
+                        }}
+                        separator={'—'}
+                    />
+                    <span className={`
+                        absolute 
+                        right-28
+                        top-[5px]
+                        text-[#B3B3B3]
+                        `}>{sumDay} дней</span>
                 </Form.Item>
+
+
             </Col>
 
         </Row>

@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
-import {DatePicker} from "antd";
+import {DatePicker, Form} from "antd";
 import dayjs from "dayjs";
+import {LabelFormItem} from "../../labelFormItem/labelFormItem";
 
 export const CustomRangePicker = () => {
 
@@ -16,13 +17,17 @@ export const CustomRangePicker = () => {
     }
 
     return (
-        <>
+        <Form.Item
+            label={<LabelFormItem label={'Дата начала и окончания'}/>}
+            name={'date'}
+        >
             <DatePicker.RangePicker
                 placeholder={['ДД.ММ.ГГ', 'ДД.ММ.ГГ']}
                 className={`text-2xl w-full`}
                 format={'DD.MM.YYYY'}
                 onChange={(dates) => {
                     changeDatePicker(dates)
+                    console.log(dates)
                 }}
                 separator={'—'}
             />
@@ -35,7 +40,7 @@ export const CustomRangePicker = () => {
                 {sumDay} дней
             </span>
 
-        </>
+        </Form.Item>
     );
 };
 

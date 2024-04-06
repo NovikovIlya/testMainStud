@@ -24,14 +24,16 @@ export const Chat = () => {
 	return (
 		<>
 			{' '}
-			<div className="shadowNav bg-white relative z-[5]">
+			<div className=" shadowNav bg-white relative z-[5]">
 				<div className="sticky top-[80px]">
 					<div className="">
 						<p className="pl-[53px] pt-14 pb-[40px] font-content-font font-normal text-black text-[20px]/[20px] ">
 							Все отклики
 						</p>
 					</div>
-					<ul className="w-[461px] flex flex-col gap-4">{handleList}</ul>
+					<ul className="h-[500px] w-[461px] flex flex-col gap-4 overflow-auto">
+						{handleList}
+					</ul>
 				</div>
 			</div>
 			{pathname.match('services/myresponds/chat/id/*') && <ChatPage />}

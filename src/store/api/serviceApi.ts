@@ -243,7 +243,10 @@ export const serviceApi = apiSlice.injectEndpoints({
 					arg.id +
 					'/respond',
 				method: 'POST',
-				body: arg
+				body: arg,
+				headers: {
+					Authorization: `Bearer ${seekerToken}`
+				}
 			})
 		}),
 		deleteVacancyRespond: builder.mutation<void, number>({
@@ -319,5 +322,6 @@ export const {
 	useReadChatMessageMutation,
 	useLazyGetResponcesByVacancyQuery,
 	useLazyGetRespondFullInfoQuery,
-	useGetRespondFullInfoQuery
+	useGetRespondFullInfoQuery,
+	useLazyGetVacancyGroupedResponcesQuery
 } = serviceApi

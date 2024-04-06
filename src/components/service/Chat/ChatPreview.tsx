@@ -1,5 +1,6 @@
 import { Badge } from 'antd'
 import clsx from 'clsx'
+import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 
@@ -28,6 +29,8 @@ export const ChatPreview = (props: { respondId: number; respName: string }) => {
 		navigate(url)
 	}
 
+	const [isChatOpen, setIsChatOpen] = useState<boolean>(false)
+
 	return (
 		<>
 			<li
@@ -35,13 +38,14 @@ export const ChatPreview = (props: { respondId: number; respName: string }) => {
 					'w-full flex items-center py-2 pl-[53px] pr-[53px] pb-[16px] hover:bg-[#F5F8FB]  cursor-pointer',
 					pathname.includes(props.respondId.toString()) && 'bg-[#F5F8FB]'
 				)}
-				onClick={() =>
+				onClick={() => {
 					handleNavigate(
 						isEmpDemp
 							? `/services/personnelaccounting/chat/id/${chatId}`
 							: `/services/myresponds/chat/id/${chatId}`
 					)
-				}
+					setIsChatOpen(true)
+				}}
 			>
 				<div className="w-full flex flex-col gap-[10px]">
 					<p className=" font-content-font font-normal text-black text-[16px]/[19.2px] opacity-50">
@@ -53,7 +57,7 @@ export const ChatPreview = (props: { respondId: number; respName: string }) => {
 							<p className=" font-content-font font-normal text-black text-[12px]/[14.4px] opacity-[52%]">
 								5 окт 12:23
 							</p>
-							{unreadCount !== 0 && (
+							{unreadCount !== 0 && !isChatOpen && (
 								<Badge
 									className="ml-auto mt-[4px]"
 									count={unreadCount}

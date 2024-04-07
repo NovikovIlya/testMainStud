@@ -314,7 +314,7 @@ export const ResponseForm = () => {
 																endYear: parseInt(edu.education.graduateYear),
 																country: 'РФ',
 																educationLevel: 'Высшее',
-																specialty: edu.education.specialization
+																speciality: edu.education.specialization
 															})),
 															portfolio: {
 																url: '',

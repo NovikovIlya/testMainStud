@@ -31,13 +31,18 @@ export const ChatPage = () => {
 	const [getChatMessages, chatMessages] = useLazyGetChatMessagesQuery()
 	const [postMsg, postMsgResult] = usePostChatMessageMutation()
 	const [readMsg, readMsgResult] = useReadChatMessageMutation()
+	const chatPageLowerRef = useRef<null | HTMLDivElement>(null)
+	const chatPageUpperRef = useRef<null | HTMLDivElement>(null)
 	const chatPageRef = useRef<null | HTMLDivElement>(null)
+
+	const [isBottomOfChatVisible, setIsBottomOfChatVisible] =
+		useState<boolean>(true)
 
 	const [msgInputText, setMsgInputText] = useState<string>('')
 	const msgDate = useRef<string>('')
 
 	const scrollToBottom = () => {
-		chatPageRef.current?.scrollIntoView()
+		chatPageLowerRef.current?.scrollIntoView()
 		console.log('func scrolling')
 	}
 
@@ -95,7 +100,7 @@ export const ChatPage = () => {
 	useEffect(() => {
 		getChatMessages({
 			chatId: chatIdState.chatId,
-			size: 60,
+			size: 20,
 			role: isEmpDemp ? 'PERSONNEL_DEPARTMENT' : 'SEEKER'
 		})
 			.unwrap()
@@ -106,10 +111,71 @@ export const ChatPage = () => {
 
 	useEffect(() => {
 		console.log('I AM... SCROOOOOOLING')
-		console.log(chatPageRef.current)
-		scrollToBottom()
-		return () => {}
-	}, [messages])
+		if (isBottomOfChatVisible) {
+			console.log('Bottom visible from scrolling hook')
+			scrollToBottom()
+		} else {
+			console.log('Bottom invisible from scrolling hook')
+		}
+	}, [messages.length])
+
+	useEffect(() => {
+		const lowerObserver = new IntersectionObserver(entries => {
+			const target = entries[0]
+			if (target.isIntersecting) {
+				console.log('I see the depths of hell below')
+				setIsBottomOfChatVisible(true)
+			}
+			if (!target.isIntersecting) {
+				setIsBottomOfChatVisible(false)
+			}
+		})
+
+		if (chatPageLowerRef.current) {
+			lowerObserver.observe(chatPageLowerRef.current)
+		}
+
+		return () => {
+			if (chatPageLowerRef.current) {
+				lowerObserver.unobserve(chatPageLowerRef.current)
+			}
+		}
+	}, [])
+
+	useEffect(() => {
+		const upperObserver = new IntersectionObserver(entries => {
+			const target = entries[0]
+			if (target.isIntersecting) {
+				console.log('I see you!')
+				if (messages.length !== 0) {
+					console.log(messages)
+					getChatMessages({
+						chatId: chatIdState.chatId,
+						size: 20,
+						lastMessageId: messages[messages.length - 1].id,
+						role: isEmpDemp ? 'PERSONNEL_DEPARTMENT' : 'SEEKER'
+					})
+						.unwrap()
+						.then(msg => {
+							setMessages(prev => [...prev, ...msg])
+						})
+						.then(() => {
+							console.log(messages)
+						})
+				}
+			}
+		})
+
+		if (chatPageUpperRef.current) {
+			upperObserver.observe(chatPageUpperRef.current)
+		}
+
+		return () => {
+			if (chatPageUpperRef.current) {
+				upperObserver.unobserve(chatPageUpperRef.current)
+			}
+		}
+	}, [messages.length])
 
 	const { control, handleSubmit } = useForm()
 
@@ -123,7 +189,7 @@ export const ChatPage = () => {
 			.unwrap()
 			.then(msgData => setMessages([msgData, ...messages]))
 		setMsgInputText('')
-		scrollToBottom()
+		// scrollToBottom()
 	}
 
 	console.log('Chat render')
@@ -131,7 +197,15 @@ export const ChatPage = () => {
 	return (
 		<>
 			<div className="flex flex-col w-full">
-				<div className="w-full h-full flex flex-col pt-[60px] pr-[85px] pl-[40px] overflow-auto [overflow-anchor:none]">
+				<div
+					ref={chatPageRef}
+					className="w-full h-full flex flex-col pt-[60px] pr-[85px] pl-[40px] overflow-auto"
+				>
+					<div
+						className="h-[1px]"
+						key={'verkhnyi_osobyi_kluch'}
+						ref={chatPageUpperRef}
+					/>
 					{[...messages].reverse().map((msg, msgIndex, msgArray) => (
 						<>
 							{msg.sendDate.substring(0, 10) !== msgDate.current &&
@@ -168,9 +242,9 @@ export const ChatPage = () => {
 						</p>
 					</div> */}
 					<div
-						className="h-[1px] [overflow-anchor:auto]"
+						className="h-[1px]"
 						key={'osobyi_kluch'}
-						ref={chatPageRef}
+						ref={chatPageLowerRef}
 					/>
 				</div>
 				<div className="sticky bottom-0 h-[80px] w-full bg-white">

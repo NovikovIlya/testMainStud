@@ -3,5 +3,8 @@ export const validateMessages = {
     string: {
         max: "Не больше ${max} символов",
     },
+    types: {
+        email: 'Введите корректную почту',
+    },
 
 };

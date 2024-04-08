@@ -7,6 +7,10 @@ import {Contacts} from "../contacts/Contacts";
 import {RcFile} from "antd/es/upload";
 import {FeedBackData, FeedBackDataWithoutImage} from "../../../models/FeedBack";
 import {usePostFeedBackMutation} from "../../../store/api/feedBack";
+import {validateMessages} from "../../../utils/validateMessage";
+import {RootState} from "../../../store";
+import {log} from "util";
+import {useForm} from "react-hook-form";
 
 type TypeFeedbackForm = {
     closeWindow: () => void
@@ -18,10 +22,13 @@ export const FeedbackForm = ({closeWindow, setIsFirstWindow}: TypeFeedbackForm) 
 
     const [file, setFile] = useState<RcFile>()
     const [sendFeedBackData] = usePostFeedBackMutation()
-
+    const [success, setSuccess] = useState(false)
+    const [form] = Form.useForm()
     function sendData(values: FeedBackData) {
         const formDataFeedback = new FormData()
-        values.image = file!
+
+        // const test = new FormData(['feedBackForm'])
+
         if (values.image === undefined) {
             for (let key in values) {
                 formDataFeedback.append(key, values[key as keyof FeedBackDataWithoutImage])
@@ -31,13 +38,29 @@ export const FeedbackForm = ({closeWindow, setIsFirstWindow}: TypeFeedbackForm) 
                 formDataFeedback.append(key, values[key as keyof FeedBackData])
             }
         }
-        console.log(values)
-        sendFeedBackData(formDataFeedback)
+        const token = localStorage.getItem('access')
+        const newToken = token?.replaceAll('"', '')
+
+
+        fetch('https://newlk.kpfu.ru/feedback-api/send', {
+            method: 'POST',
+            headers: {
+                'authorization': `Bearer ${newToken}`
+            },
+            body: formDataFeedback,
+        }).then(res => {
+            setSuccess(true)
+        }).catch(req => console.log(req))
+
+
+        // console.log(formDataFeedback)
+        // sendFeedBackData(formDataFeedback)
+
     }
 
     return (
         <div className={`
-        flex flex-col items-center 
+flex flex-col items-center 
         justify-center w-[324px] bg-white gap-3
         `}>
             <div className={`
@@ -66,15 +89,22 @@ export const FeedbackForm = ({closeWindow, setIsFirstWindow}: TypeFeedbackForm) 
                 </span>
             </div>
 
-            <Form<FeedBackData> className={`
+            <Form<FeedBackData>
+                className={`
             flex flex-col gap-2 w-full`}
-                  onFinish={values => {
-                      sendData(values)
-                  }}>
+                onFinish={values => {
+                    sendData(values)
+
+                }}
+                validateMessages={validateMessages}
+                form={form}
+                // id={'feedBackForm'}
+            >
                 <Form.Item className={`mb-0`}
                            name={'email'}
                            rules={[{
-                               required: true
+                               required: true,
+                               type: 'email'
                            }]}>
                     <Input placeholder={'Email для ответа'} className={`
                 shadow-[0_3px_5px_0px_#00000026] 
@@ -106,7 +136,9 @@ export const FeedbackForm = ({closeWindow, setIsFirstWindow}: TypeFeedbackForm) 
                                 <PaperClip/>
                                 <span className={`
                                 text-[12px]/[16px] 
-                                text-[#808080]`}>Прикрепить файл</span>
+                                text-[#808080]`}>
+                                    Прикрепить файл
+                                </span>
                             </Button>
                         </Upload>
                         <span className={`
@@ -118,10 +150,10 @@ export const FeedbackForm = ({closeWindow, setIsFirstWindow}: TypeFeedbackForm) 
                     flex flex-col gap-2
                     `}>
                     <Button type={'primary'}
-                            htmlType={'submit'}
-                    >
+                            htmlType={'submit'}>
                         Отправить письмо
                     </Button>
+                    {success && <span className={'text-[green]'}>Письмо отправлено</span>}
                     <span className={`
                         text-center text-[12px]/[16px] text-[#808080]
                     `}>

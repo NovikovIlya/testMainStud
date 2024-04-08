@@ -4,6 +4,9 @@ import {LabelFormItem} from "../../labelFormItem/labelFormItem";
 import dayjs from "dayjs";
 import {CustomRangePicker} from "../customRangePicker/customRangePicker";
 import {useForm} from "react-hook-form";
+import {useDispatch} from "react-redux";
+import {setNewSumDay} from "../../../../../store/reducers/FormReducers/SumDayReducer";
+import {SumDay} from "../SumDay";
 
 
 export interface INewOrganization {
@@ -12,17 +15,21 @@ export interface INewOrganization {
     nameOrg: string
     legalAddress: string
     actualAddress: string
+    date: Array<dayjs.Dayjs> | Array<null>
 }
 
 export const NewOrganization = (props: INewOrganization) => {
 
-    const [sumDay, setSumDay] = useState('0')
+    const [sumDay, setSumDay] = useState(0)
+    const dispatch = useDispatch()
 
-    function changeDatePicker(dates: Array<dayjs.Dayjs | null>) {
+    function changeSumDay(dates: Array<dayjs.Dayjs | null>) {
         if (dates) {
-            setSumDay(String(dates[1]!.diff(dates[0], 'day') + 1))
+            const sumDay = dates[1]!.diff(dates[0], 'day') + 1
+            setSumDay(sumDay)
+            dispatch(setNewSumDay(sumDay))
         } else {
-            setSumDay('0')
+            setSumDay(0)
         }
     }
 
@@ -122,32 +129,26 @@ export const NewOrganization = (props: INewOrganization) => {
             <Col span={12}>
                 <Form.Item
                     label={<LabelFormItem label={'Дата начала и окончания'}/>}
-                    name={'date'}
+                    name={'datePicker'}
                     rules={[{
-                        required: true,
                         type: 'array',
-                    }]}>
+                        required: true,
+                    }]}
+                    initialValue={props.date}>
                     <DatePicker.RangePicker
                         placeholder={['ДД.ММ.ГГ', 'ДД.ММ.ГГ']}
                         className={`text-2xl w-full`}
                         format={'DD.MM.YYYY'}
                         onChange={(dates) => {
-                            changeDatePicker(dates)
-
+                            changeSumDay(dates)
                         }}
                         separator={'—'}
                     />
-                    <span className={`
-                        absolute 
-                        right-28
-                        top-[5px]
-                        text-[#B3B3B3]
-                        `}>{sumDay} дней</span>
                 </Form.Item>
-
-
+                <SumDay>
+                    {sumDay} дней
+                </SumDay>
             </Col>
-
         </Row>
 
     );

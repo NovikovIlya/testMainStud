@@ -1,17 +1,32 @@
 import {apiSlice} from './apiSlice'
+import {FeedBackData, FeedBackDataWithoutImage} from "../../models/FeedBack";
 
 
 export const feedBackApi = apiSlice.injectEndpoints({
     endpoints: builder => ({
         postFeedBack: builder.mutation({
-            query: (formData: FormData) => {
+            query: (values) => {
+                const formDataFeedback = new FormData()
+
+                if (values.image === undefined) {
+                    for (let key in values) {
+                        formDataFeedback.append(key, values[key as keyof FeedBackDataWithoutImage])
+                    }
+                } else {
+                    for (let key in values) {
+                        formDataFeedback.append(key, values[key as keyof FeedBackData])
+                    }
+                }
+
+                console.log(values)
                 return {
                     url: `feedback-api/send`,
-                    body: formData,
+                    body: formDataFeedback,
                     method: 'POST',
                     headers: {
-                        "Content-Type": "multipart/form-data",
-                    }
+                        'Content-Type': 'multipart/form-data;'
+                    },
+                    formData:true
                 }
             }
         }),

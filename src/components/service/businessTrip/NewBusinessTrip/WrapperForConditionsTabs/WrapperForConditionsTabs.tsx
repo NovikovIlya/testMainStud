@@ -9,8 +9,7 @@ interface IWrapperForConditionsTabs {
 export const WrapperForConditionsTabs = ({children}: IWrapperForConditionsTabs) => {
     return (
         <Form layout={'vertical'} validateMessages={validateMessages}>
-            <Row gutter={[16, 0]} className={`w-full
-            `}>
+            <Row gutter={[16, 0]} className={`w-full`}>
                 {children}
             </Row>
         </Form>

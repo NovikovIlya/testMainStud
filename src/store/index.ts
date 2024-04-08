@@ -14,6 +14,7 @@ import WorkReducer from './reducers/FormReducers/WorkReducer'
 import LayoutSlice from './reducers/LayoutsSlice'
 import authSlice from './reducers/authSlice'
 import StepFormBusinessTrip from "./reducers/FormReducers/StepFormBusinessTrip";
+import SumDayReducer from "./reducers/FormReducers/SumDayReducer";
 
 export const store = configureStore({
 	reducer: {
@@ -28,6 +29,7 @@ export const store = configureStore({
 		Address: AddressReducer,
 		CountriesEducation: CountriesEducationReducer,
 		StepFormBusinessTrip: StepFormBusinessTrip,
+		SumDay: SumDayReducer,
 		[apiSlice.reducerPath]: apiSlice.reducer
 	},
 	middleware: getDefaultMiddleware =>

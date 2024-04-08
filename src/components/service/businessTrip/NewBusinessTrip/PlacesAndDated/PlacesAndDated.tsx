@@ -4,11 +4,12 @@ import {LabelFormItem} from "../../labelFormItem/labelFormItem";
 import {UploadFileSvg} from "../../../../../assets/svg/UploadFileSvg";
 import dayjs from "dayjs";
 import {PlusSvg} from "../../../../../assets/svg/PlusSvg";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {keysTabsBusinessTrip, setCondition} from "../../../../../store/reducers/FormReducers/StepFormBusinessTrip";
 import {INewOrganization, NewOrganization} from "./NewOrganization";
 import {ButtonAddData} from "../buttonAddData/buttonAddData";
 import {validateMessages} from "../../../../../utils/validateMessage";
+import {RootState} from "../../../../../store";
 
 
 const optionsGoals = [
@@ -43,12 +44,13 @@ const optionsTypeDocuments = [
 
 export const PlacesAndDated = () => {
     const dispatch = useDispatch()
+    const sumDay = useSelector((state: RootState) => state.SumDay.sumDay)
     const [form] = Form.useForm()
     //нужно отрефакторить код добавления формы, т.к после
     //добавления и сохранения их нужно будет откуда-то вытаскивать
     //Нужно обсудить данный вопрос с бэком
     const [listOrg, setListOrg] = useState<INewOrganization[]>([
-        {id: 1, innOrg: +'', nameOrg: 'Тесl', legalAddress: 'Тест', actualAddress: ''},
+        {id: 1, innOrg: +'', nameOrg: 'Тесl', legalAddress: 'Тест', actualAddress: '', date: []},
     ])
 
     function addNewOrg() {
@@ -60,29 +62,28 @@ export const PlacesAndDated = () => {
                 nameOrg: 'Тест',
                 legalAddress: 'Тест',
                 actualAddress: '',
+                date: [],
             }
         ])
 
     }
 
+    function sendDataFormPlaceAndDate(values: INewOrganization) {
+        console.log({
+            ...values,
+            sumDay: sumDay
+        })
+    }
+
 
     return (
         <Form layout={'vertical'}
-              name={'MyForm'}
+
               validateMessages={validateMessages}
               form={form}
-              onFinish={values => {
-                  //const rangeValue = values['rangePicker']
-                  const valuesData = {
-                      ...values,
-                      sumDay: 10,
-                  }
-                  console.log(valuesData)
-              }}
+              onFinish={values => {sendDataFormPlaceAndDate(values)}}
         >
-            <Row gutter={[16, 0]} className={`
-                w-[80%]
-                `}>
+            <Row gutter={[16, 0]} className={`w-[80%]`}>
                 <Col span={13}>
                     <Form.Item label={<LabelFormItem label={'Цель'}/>}
                                rules={[{required: true}]}
@@ -115,21 +116,13 @@ export const PlacesAndDated = () => {
                 <Col span={13}>
                     <Form.Item label={<LabelFormItem label={'Прикрепить документ'}/>}>
                         <Upload.Dragger name={'file'} multiple={true}>
-                            <div className={`
-                            flex 
-                            flex-col 
-                            gap-2`}>
+                            <div className={`flex flex-col gap-2`}>
                                 <span className={'text-lg'}>Перетащите файлы или выберите на компьютере</span>
-                                <div className={`
-                                flex 
-                                items-center 
-                                justify-center 
-                                gap-2`}>
+                                <div className={`flex items-center justify-center gap-2`}>
                                     <UploadFileSvg/>
-                                    <span className={`
-                                    text-lg 
-                                    mb-0.5 
-                                    text-[#3073D7]`}>Выбрать файл</span>
+                                    <span className={`text-lg mb-0.5 text-[#3073D7]`}>
+                                        Выбрать файл
+                                    </span>
                                 </div>
                             </div>
                         </Upload.Dragger>
@@ -162,6 +155,7 @@ export const PlacesAndDated = () => {
                             nameOrg={elem.nameOrg}
                             legalAddress={elem.legalAddress}
                             actualAddress={elem.actualAddress}
+                            date={elem.date}
                             key={elem.id}
                         />
                     ))
@@ -175,18 +169,12 @@ export const PlacesAndDated = () => {
 
                     <Col span={13}>
                         <Button
-                            className={`
-                                mt-5
-                                rounded-[40px]
-                                h-[40px]
-                                `}
+                            className={`mt-5rounded-[40px]h-[40px]`}
                             type={'primary'}
                             htmlType={'submit'}
-                            // onClick={() => {dispatch(setCondition(keysTabsBusinessTrip.travelConditions))}}
+                            onClick={() => {dispatch(setCondition(keysTabsBusinessTrip.travelConditions))}}
                         >
-                        <span className={`
-                                text-lg
-                            `}>
+                        <span className={`text-lg`}>
                             Далее
                         </span>
                         </Button>

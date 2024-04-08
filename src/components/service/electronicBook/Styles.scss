@@ -1,6 +1,7 @@
 th,
 td,
 tr {
-	text-align: center !important;
-	vertical-align: middle !important;
+	//text-align: center !important;
+	// Нельзя таким образом менять стили, так это влияет на все селекторы по всему проекту!!!
+	//vertical-align: middle !important;
 }

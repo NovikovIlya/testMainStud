@@ -4,32 +4,27 @@ import {ForRevisionSvg} from "../../assets/svg/ForRevisionSvg";
 import {Archive} from "../../assets/svg/Archive";
 import React, {ReactNode} from "react";
 
-export interface NavLink {
-    id: string,
-    icon: ReactNode,
-    name: string,
-}
 
 
 export const navListBusinessTrip = [
     {
         id: '/services/businessTrip/newBusinessTrip',
         icon: <NewBusinessTripSvg/>,
-        name: 'Новая Командировки'
+        name: 'NewBusinessTrip'
     },
     {
         id: '/services/businessTrip/currentBusinessTrip',
         icon: <CurrentBusinessTrip/>,
-        name: 'Текущие командировки'
+        name: 'CurrentBusinessTrips'
     },
     {
         id: '/services/businessTrip/forRevision',
         icon: <ForRevisionSvg/>,
-        name: 'На доработку'
+        name: 'ForRevision'
     },
     {
         id: '/services/businessTrip/archive',
         icon: <Archive/>,
-        name: 'Архив'
+        name: 'Archive'
     },
 ]

@@ -1,36 +1,62 @@
-import React, {useState} from 'react';
-import {StepOne} from "./stepOne/StepOne";
-import {ProgressForm} from "./progressForm/ProgressForm";
-import {StepTwo} from "./stepTwo/StepTwo";
+import React, {useEffect, useState} from 'react';
+import {ConfigProvider, Tabs} from "antd";
+import {PlacesAndDated} from "./PlacesAndDated/PlacesAndDated";
+import './NewBusinessTrip.scss'
+import {keysTabsBusinessTrip, setCondition} from "../../../../store/reducers/FormReducers/StepFormBusinessTrip";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "../../../../store";
+import {TravelConditions} from "./TravelConditions/TravelConditions";
+import {LivingConditions} from "./LivingConditions/LivingConditions";
+import {Financing} from "./Financing/Financing";
+import {ResultTable} from "./ResultTable/ResultTable";
+
+const itemsTabs = [
+    {key: keysTabsBusinessTrip.placesAndDated, label: 'Места и сроки командирования', children: <PlacesAndDated/>},
+    {key: keysTabsBusinessTrip.travelConditions, label: 'Условия проезда', children: <TravelConditions/>},
+    {key: keysTabsBusinessTrip.livingConditions, label: 'Условия проживания', children: <LivingConditions/>},
+    {key: keysTabsBusinessTrip.financing, label: 'Финансирование', children: <Financing/>},
+    {key: keysTabsBusinessTrip.result, label: 'Итог', children: <ResultTable/>},
+]
 
 
 
 export const NewBusinessTrip = () => {
 
-    const [step, setStep] = useState(1)
+    const test = useSelector((state: RootState) => state.StepFormBusinessTrip.step)
+    const dispatch = useDispatch()
 
-    function nextStep() {
-        if (step < 5) setStep(step => step + 1)
-    }
+    useEffect(() => {
+        console.log(test)
+    }, [test]);
 
-    function previousStep() {
-        if (step > 1) setStep(step => step - 1)
-    }
-
-    //availableRightButton должен ещё зависеть от того, заполнена ли форма(но это надо уточнить)
     return (
         <section className={'flex flex-col gap-5'}>
             <span className={'text-2xl'}>Новая командировка</span>
-            <ProgressForm
-                step={step}
-                availableLeftButton={step !== 1}
-                availableRightButton={step !== 5}
-                nextStep={nextStep}
-                previousStep={previousStep}
-            />
-            {step === 1 && <StepOne nextStep={nextStep}/>}
-            {step === 2 && <StepTwo nextStep={nextStep} previousStep={previousStep}/>}
-            {step === 3 && <span>Шаг 3</span>}
+
+            <ConfigProvider theme={{
+                components: {
+                    Tabs: {
+                        titleFontSize: 20,
+                        itemSelectedColor: 'rgba(0, 0, 0, 0.88)',
+                        itemColor: 'rgba(0, 0, 0, 0.88)',
+                        cardBg: 'white',
+                    }
+                },
+
+            }}>
+                <Tabs
+                    type="card"
+                    items={itemsTabs}
+                    className={`newBusinessTrip`}
+                    defaultActiveKey={test}
+                    activeKey={test}
+                    onTabClick={(key) => {
+                        dispatch(setCondition(key))
+                    }}
+                />
+            </ConfigProvider>
+
+
 
         </section>
     );

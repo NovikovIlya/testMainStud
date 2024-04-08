@@ -67,61 +67,71 @@ export const Estimation = () => {
 			title: t('Semester'),
 			dataIndex: 'term',
 			key: 'term',
-			render: item => <p className="text-base max-w-xs">{item}</p>
+			render: item => <p className="text-base max-w-xs">{item}</p>,
+			align: "center",
 		},
 		{
 			title: t('Discipline'),
 			dataIndex: 'discipline',
 			key: 'discipline',
-			render: item => <p className="text-bas">{item}</p>
+			render: item => <p className="text-bas">{item}</p>,
+			align: "center",
 		},
 		{
 			title: t('ScoreSemester'),
 			dataIndex: 'scoreSemester',
 			key: 'scoreSemester',
-			render: item => <p className="text-base">{item}</p>
+			render: item => <p className="text-base">{item}</p>,
+			align: "center",
 		},
 		{
 			title: t('Type'),
 			key: 'type',
 			dataIndex: 'type',
-			render: item => <p className="text-base">{item}</p>
+			render: item => <p className="text-base">{item}</p>,
+			align: "center",
 		},
 		{
 			title: t('ScoreReceived'),
 			key: 'scoreReceived',
 			dataIndex: 'scoreReceived',
-			render: item => <p className="text-base">{item}</p>
+			render: item => <p className="text-base">{item}</p>,
+			align: "center",
 		},
 		{
 			title: t('DateDelivery'),
 			key: 'dateDelivery',
 			dataIndex: 'dateDelivery',
-			render: item => <p className="text-base">{item}</p>
+			render: item => <p className="text-base">{item}</p>,
+			align: "center",
 		},
 		{
 			title: t('FinalScore'),
 			key: 'finalScore',
 			dataIndex: 'finalScore',
-			render: item => <p className="text-base">{item}</p>
+			render: item => <p className="text-base">{item}</p>,
+			align: "center",
 		},
 		{
 			title: t('FinalAssessment'),
 			key: 'finalAssessment',
 			dataIndex: 'finalAssessment',
-			render: item => <p className="text-base">{item}</p>
+			render: item => <p className="text-base">{item}</p>,
+			align: "center",
 		},
 		{
 			title: t('AcademicHours'),
 			key: 'academicHours',
 			dataIndex: 'academicHours',
-			render: item => <p className="text-base">{item}</p>
+			render: item => <p className="text-base">{item}</p>,
+			align: "center",
 		},
 		{
 			title: t('Credits'),
 			key: 'credits',
 			dataIndex: 'credits',
-			render: item => <p className="text-base">{item}</p>
+			render: item => <p className="text-base">{item}</p>,
+			align: "center",
 		}
 	]
 	const changeSemester = (semester: number) => {
@@ -172,7 +182,7 @@ export const Estimation = () => {
 		return result.sort((a, b) => a.term - b.term)
 	}
 	return (
-		<div className="mt-14 mx-14 radio">
+		<div className="radio">
 			<div className="mb-14 text-[28px]">{t('ElectronicBook')}</div>
 			<Radio.Group
 				defaultValue="0"

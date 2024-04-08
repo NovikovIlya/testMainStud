@@ -52,7 +52,6 @@ const App = () => {
 						<Route path="/work" element={<WorkForm />} />
 						<Route path="/parent" element={<ParentForm />} />
 						<Route path="/services/*" element={<Service />} />
-
 						<Route path="/*" element={null} />
 					</Route>
 				</Routes>

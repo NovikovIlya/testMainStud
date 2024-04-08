@@ -21,13 +21,20 @@ type TypeFeedbackForm = {
 export const FeedbackForm = ({closeWindow, setIsFirstWindow}: TypeFeedbackForm) => {
 
     const [file, setFile] = useState<RcFile>()
-    const [sendFeedBackData] = usePostFeedBackMutation()
-    const [success, setSuccess] = useState(false)
+    const [sendFeedBackData,
+        {
+            isSuccess: isSuccessSendData,
+            isError: isErrorSendData
+        }] = usePostFeedBackMutation()
     const [form] = Form.useForm()
-    function sendData(values: FeedBackData) {
-        const formDataFeedback = new FormData()
+    // const formTest: HTMLFormElement = document.querySelector('#feedBackForm')!
+    // console.log(formTest)
 
-        // const test = new FormData(['feedBackForm'])
+    function sendData(values: FeedBackData) {
+
+        // const formTest: HTMLFormElement = document.querySelector('#feedBackForm')!
+        //
+        const formDataFeedback = new FormData()
 
         if (values.image === undefined) {
             for (let key in values) {
@@ -38,25 +45,11 @@ export const FeedbackForm = ({closeWindow, setIsFirstWindow}: TypeFeedbackForm) 
                 formDataFeedback.append(key, values[key as keyof FeedBackData])
             }
         }
-        const token = localStorage.getItem('access')
-        const newToken = token?.replaceAll('"', '')
 
-
-        fetch('https://newlk.kpfu.ru/feedback-api/send', {
-            method: 'POST',
-            headers: {
-                'authorization': `Bearer ${newToken}`
-            },
-            body: formDataFeedback,
-        }).then(res => {
-            setSuccess(true)
-        }).catch(req => console.log(req))
-
-
-        // console.log(formDataFeedback)
-        // sendFeedBackData(formDataFeedback)
-
+        console.log(formDataFeedback)
+        sendFeedBackData(formDataFeedback)
     }
+
 
     return (
         <div className={`
@@ -94,11 +87,11 @@ flex flex-col items-center
             flex flex-col gap-2 w-full`}
                 onFinish={values => {
                     sendData(values)
-
                 }}
                 validateMessages={validateMessages}
                 form={form}
-                // id={'feedBackForm'}
+                // name={'feedBackForm'}
+                id={'feedBackForm'}
             >
                 <Form.Item className={`mb-0`}
                            name={'email'}
@@ -122,8 +115,7 @@ flex flex-col items-center
                 </Form.Item>
 
                 <Form.Item className={`mb-0`} name={'image'}>
-                    <div className={`
-                flex w-full justify-between items-start`}>
+                    <div className={`flex w-full justify-between items-start`}>
                         <Upload
                             beforeUpload={(file, FileList) => {
                                 setFile(file)
@@ -153,7 +145,8 @@ flex flex-col items-center
                             htmlType={'submit'}>
                         Отправить письмо
                     </Button>
-                    {success && <span className={'text-[green]'}>Письмо отправлено</span>}
+                    {isSuccessSendData && <span className={'text-[green]'}>Письмо отправлено</span>}
+                    {isErrorSendData && <span className={'text-[red]'}>Ошибка, письмо не отправлено</span>}
                     <span className={`
                         text-center text-[12px]/[16px] text-[#808080]
                     `}>

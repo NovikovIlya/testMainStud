@@ -62,7 +62,7 @@ export const FirstWindow = ({closeWindow, setIsFirstWindow}: TypeFirstWindow) =>
                         >
                             <TextWithSvg text={'Написать письмо'} icon={<MiniMailFeedback/>}/>
                         </div>
-                        <TextWithSvg text={'Позвонить'} icon={<MiniPhoneFeedback/>}/>
+                        {/*<TextWithSvg text={'Позвонить'} icon={<MiniPhoneFeedback/>}/>*/}
                     </div>
                 </div>
                 <Contacts/>

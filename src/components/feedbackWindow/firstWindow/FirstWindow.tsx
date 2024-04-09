@@ -36,13 +36,13 @@ export const FirstWindow = ({closeWindow, setIsFirstWindow}: TypeFirstWindow) =>
                         onClick={closeWindow}>
                     <CloseFeedbackWindow/>
                 </Button>
-                <div className={'flex flex-col gap-2 justify-center items-center'}>
+                <div className={'flex flex-col gap-2 justify-center items-center pt-[10px] pb-[15px]'}>
                     <span className={`font-bold text-[18px]/[25px]`}>Центр поддержки</span>
                     <span className={`text-[12px]/[17px] text-[#808080]`}>Работаем с Пн - Пт, 8:00 - 18:00</span>
-                    <div className={'flex gap-5 mb-[20px]'}>
-                        <MailFeedbackWindowSgv/>
-                        <PhoneFeedbackWindow/>
-                    </div>
+                    {/*<div className={'flex gap-5 mb-[20px]'}>*/}
+                    {/*    <MailFeedbackWindowSgv/>*/}
+                    {/*    <PhoneFeedbackWindow/>*/}
+                    {/*</div>*/}
                 </div>
             </div>
             <div className={`flex flex-col w-full px-[10px]`}>

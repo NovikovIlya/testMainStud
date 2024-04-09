@@ -29,14 +29,14 @@ export const RespondInfo = () => {
 							onClick={() => {
 								navigate('/services/personnelaccounting/responds')
 							}}
-							className="bg-white h-[38px] w-[99px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer font-normal text-black text-[16px]/[16px] flex gap-[8px]"
+							className="bg-inherit h-[38px] w-[99px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer font-normal text-black text-[16px]/[16px] flex gap-[8px]"
 						>
 							<ArrowIcon />
 							Назад
 						</Button>
 					</div>
 					<div className="mt-[52px] flex flex-col gap-[36px]">
-						<div className="flex flex-wrap gap-[20px]">
+						<div className="flex flex-wrap gap-[150px]">
 							<div className="flex gap-[20px]">
 								<div className="flex h-[167px] w-[167px] bg-[#D9D9D9]">
 									<AvatartandardSvg />
@@ -85,7 +85,7 @@ export const RespondInfo = () => {
 									</div>
 								</div>
 							</div>
-							<div className="mt-auto mb-[10px] grid grid-cols-2 grid-rows-[40px_40px] gap-x-[12px] gap-y-[12px]">
+							<div className="self-center grid grid-cols-2 grid-rows-[40px_40px] gap-x-[12px] gap-y-[12px]">
 								<Button
 									onClick={() => {}}
 									type="primary"
@@ -95,19 +95,19 @@ export const RespondInfo = () => {
 								</Button>
 								<Button
 									onClick={() => {}}
-									className="font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
+									className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
 								>
 									Отказать
 								</Button>
 								<Button
 									onClick={() => {}}
-									className="font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
+									className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
 								>
 									Отправить в резерв
 								</Button>
 								<Button
 									onClick={() => {}}
-									className="font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
+									className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
 								>
 									Перейти в чат
 								</Button>

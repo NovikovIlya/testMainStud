@@ -24,7 +24,7 @@ export const jsxElements = [
 		place: {
 			w: 1,
 			h: 1,
-			x: 1,
+			x: 0,
 			y: 0,
 			i: 'ElectronicBook'
 		}
@@ -44,7 +44,7 @@ export const jsxElements = [
 		place: {
 			w: 1,
 			h: 1,
-			x: 1,
+			x: 0,
 			y: 0,
 			i: 'Session'
 		}
@@ -64,93 +64,11 @@ export const jsxElements = [
 		place: {
 			w: 1,
 			h: 1,
-			x: 1,
+			x: 0,
 			y: 0,
 			i: 'Applications'
 		}
 	},
-	// {
-	// 	index: 'MyRating',
-	// 	element: (
-	// 		<TemplateCard
-	// 			href="/user/#"
-	// 			img="/image18.png"
-	// 			info="В разделе отображается рейтинг учащегося за все годы обучения"
-	// 			title="Мой рейтинг"
-	// 			width={150}
-	// 			height={150}
-	// 		/>
-	// 	),
-	// 	place: {
-	// 		w: 1,
-	// 		h: 1,
-	// 		x: 1,
-	// 		y: 0,
-	// 		i: 'MyRating'
-	// 	}
-	// },
-	// {
-	// 	index: 'Grade',
-	// 	element: (
-	// 		<TemplateCard
-	// 			href="/user/#"
-	// 			img="/image725.png"
-	// 			info="Оценки и баллы на протяжении всего учебного времени"
-	// 			title="Успеваемость"
-	// 			width={87}
-	// 			height={140}
-	// 		/>
-	// 	),
-	// 	place: {
-	// 		w: 1,
-	// 		h: 1,
-	// 		x: 1,
-	// 		y: 0,
-	// 		i: 'Grade'
-	// 	}
-	// },
-	// {
-	// 	index: 'Groupmates',
-	// 	element: (
-	// 		<TemplateCard
-	// 			href="/user/#"
-	// 			img="/image19.png"
-	// 			info="Список одногруппников, адреса их электронной почты, контакты"
-	// 			title="Одногруппники"
-	// 			width={130}
-	// 			height={137}
-	// 			isRounded
-	// 		/>
-	// 	),
-	// 	place: {
-	// 		w: 1,
-	// 		h: 1,
-	// 		x: 1,
-	// 		y: 0,
-	// 		i: 'Groupmates'
-	// 	}
-	// },
-	// {
-	// 	index: 'Map',
-	// 	element: (
-	// 		<TemplateCard
-	// 			href="/user/#"
-	// 			img="/image21.png"
-	// 			info="Список одногруппников, адреса их электронной почты, контакты"
-	// 			title="Карта зданий КФУ"
-	// 			width={134}
-	// 			height={124}
-	// 			buttonText="Изучить"
-	// 		/>
-	// 	),
-	// 	place: {
-	// 		w: 1,
-	// 		h: 1,
-	// 		x: 1,
-	// 		y: 0,
-	// 		i: 'Map'
-	// 	}
-	// },
 	{
 		index: 'Staff',
 		element: (
@@ -167,70 +85,30 @@ export const jsxElements = [
 		place: {
 			w: 1,
 			h: 1,
-			x: 1,
+			x: 0,
 			y: 0,
 			i: 'Staff'
 		}
 	},
-	// {
-	// 	index: 'Contests',
-	// 	element: (
-	// 		<TemplateCard
-	// 			href="/user/#"
-	// 			img="/image1.png"
-	// 			info="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-	// 			title="Конкурсы"
-	// 			width={120}
-	// 			height={120}
-	// 			mt="mt-0"
-	// 			buttonText="Записаться"
-	// 			buttonType="primary"
-	// 		/>
-	// 	),
-	// 	place: {
-	// 		w: 1,
-	// 		h: 1,
-	// 		x: 1,
-	// 		y: 0,
-	// 		i: 'Contests'
-	// 	}
-	// },
 	{
 		index: 'Vacancies',
 		element: (
 			<TemplateCard
 				href="https://career.kpfu.ru/"
-				info="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-				title="VacanciesStudents"
+				info="VacanciesInfo"
+				title="Vacancies"
+				img={'/image55.png'}
+				positionImage={'mt-8 ml-5'}
 			/>
 		),
 		place: {
 			w: 1,
 			h: 1,
-			x: 1,
+			x: 0,
 			y: 0,
 			i: 'Vacancies'
 		}
 	},
-	// {
-	// 	index: 'Events',
-	// 	element: (
-	// 		<TemplateCard
-	// 			href="/user/#"
-	// 			info="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-	// 			title="Мероприятия"
-	// 			buttonText="Записаться"
-	// 			buttonType="primary"
-	// 		/>
-	// 	),
-	// 	place: {
-	// 		w: 1,
-	// 		h: 1,
-	// 		x: 1,
-	// 		y: 0,
-	// 		i: 'Events'
-	// 	}
-	// },
 	{
 		index: 'EducationalCourses',
 		element: (
@@ -248,7 +126,7 @@ export const jsxElements = [
 		place: {
 			w: 2,
 			h: 1,
-			x: 1,
+			x: 0,
 			y: 0,
 			i: 'EducationalCourses'
 		}
@@ -281,7 +159,7 @@ export const jsxElements = [
 		place: {
 			w: 1,
 			h: 1,
-			x: 1,
+			x: 0,
 			y: 0,
 			i: 'News'
 		}
@@ -305,97 +183,11 @@ export const jsxElements = [
 		place: {
 			w: 1,
 			h: 1,
-			x: 1,
+			x: 0,
 			y: 0,
 			i: 'Testing'
 		}
 	},
-	// {
-	// 	index: 'Checklist',
-	// 	element: (
-	// 		<TemplateCard
-	// 			href="/user/#"
-	// 			info="Заглядывайте в чек-лист, в котором мы описали все шаги для устройства на работу в Казанский федеральный университет"
-	// 			title="Чек-лист: как к нам попасть"
-	// 			img="/image4.png"
-	// 			width={115}
-	// 			height={115}
-	// 			positionImage="mt-4"
-	// 		/>
-	// 	),
-	// 	place: {
-	// 		w: 1,
-	// 		h: 1,
-	// 		x: 1,
-	// 		y: 0,
-	// 		i: 'Checklist'
-	// 	}
-	// },
-	// {
-	// 	index: 'JobApplicationStatus',
-	// 	element: (
-	// 		<TemplateCard
-	// 			href="/user/#"
-	// 			info="В разделе отображается ваш текущий статус заявления на работу"
-	// 			title="Статус заявления на работу"
-	// 			img="/image5.png"
-	// 			width={137}
-	// 			height={130}
-	// 			positionImage="ml-4 mt-2"
-	// 		/>
-	// 	),
-	// 	place: {
-	// 		w: 1,
-	// 		h: 1,
-	// 		x: 1,
-	// 		y: 0,
-	// 		i: 'JobApplicationStatus'
-	// 	}
-	// },
-	// {
-	// 	index: 'Resume',
-	// 	element: (
-	// 		<TemplateCard
-	// 			href="/user/#"
-	// 			info="Мы всегда в поиске крутых специалистов. Заполняйте резюме, отправляйте на проверку и мы рассмотрим Вашу кандидатуру."
-	// 			title="Резюме"
-	// 			img="/image6.png"
-	// 			positionImage="ml-2 -mt-2"
-	// 			width={135}
-	// 			height={140}
-	// 			buttonType="primary"
-	// 			buttonText="Отправить"
-	// 		/>
-	// 	),
-	// 	place: {
-	// 		w: 1,
-	// 		h: 1,
-	// 		x: 1,
-	// 		y: 0,
-	// 		i: 'Resume'
-	// 	}
-	// },
-	// {
-	// 	index: 'MyCourses',
-	// 	element: (
-	// 		<TemplateCard
-	// 			href="/user/#"
-	// 			info="Здесь хранится история ваших курсов, которые вы когда-либо проходили, проходите или собираетесь пройти"
-	// 			title="Мои курсы"
-	// 			img="/image7.png"
-	// 			positionImage="mt-3"
-	// 			width={119}
-	// 			height={106}
-	// 		/>
-	// 	),
-	// 	place: {
-	// 		w: 1,
-	// 		h: 1,
-	// 		x: 1,
-	// 		y: 0,
-	// 		i: 'MyCourses'
-	// 	}
-	// },
 	{
 		index: 'DocumentFlow',
 		element: (
@@ -411,7 +203,7 @@ export const jsxElements = [
 		place: {
 			w: 1,
 			h: 1,
-			x: 1,
+			x: 0,
 			y: 0,
 			i: 'DocumentFlow'
 		}
@@ -432,74 +224,11 @@ export const jsxElements = [
 		place: {
 			w: 1,
 			h: 1,
-			x: 1,
+			x: 0,
 			y: 0,
 			i: 'PaySheet'
 		}
 	},
-	// {
-	// 	index: 'TasksProjects',
-	// 	element: (
-	// 		<TemplateCard
-	// 			href="/user/#"
-	// 			info="Один из старейших университетов в России, основанный в 1804 году. Университет славится своими сильными школами математики..."
-	// 			title="Задачи и проекты"
-	// 			img="/image10.png"
-	// 			width={130}
-	// 			height={130}
-	// 		/>
-	// 	),
-	// 	place: {
-	// 		w: 1,
-	// 		h: 1,
-	// 		x: 1,
-	// 		y: 0,
-	// 		i: 'TasksProjects'
-	// 	}
-	// },
-	// {
-	// 	index: 'BusinessTrips',
-	// 	element: (
-	// 		<TemplateCard
-	// 			href=""
-	// 			info="Как попасть в двойку и многие другие ответы по местоположению зданий КФУ Вы найдете в этом сервисе"
-	// 			title="Командировки"
-	// 			img="/image11.png"
-	// 			buttonText="Изучить"
-	// 			width={120}
-	// 			height={130}
-	// 		/>
-	// 	),
-	// 	place: {
-	// 		w: 1,
-	// 		h: 1,
-	// 		x: 1,
-	// 		y: 0,
-	// 		i: 'BusinessTrips'
-	// 	}
-	// },
-	// {
-	// 	index: 'Vacation',
-	// 	element: (
-	// 		<TemplateCard
-	// 			href="/user/#"
-	// 			info="В разделе отображается рейтинг сотрудника в списке коллег"
-	// 			title="Отпуск"
-	// 			img="/image12.png"
-	// 			buttonText="Изучить"
-	// 			positionImage="pl-6"
-	// 			width={140}
-	// 			height={130}
-	// 		/>
-	// 	),
-	// 	place: {
-	// 		w: 1,
-	// 		h: 1,
-	// 		x: 1,
-	// 		y: 0,
-	// 		i: 'Vacation'
-	// 	}
-	// },
 	{
 		index: 'Practices',
 		element: (
@@ -513,7 +242,7 @@ export const jsxElements = [
 		place: {
 			w: 1,
 			h: 1,
-			x: 1,
+			x: 0,
 			y: 0,
 			i: 'Practices'
 		}
@@ -533,7 +262,7 @@ export const jsxElements = [
 		place: {
 			w: 1,
 			h: 1,
-			x: 1,
+			x: 0,
 			y: 0,
 			i: 'SitAnKFU'
 		}
@@ -553,7 +282,7 @@ export const jsxElements = [
 		place: {
 			w: 1,
 			h: 1,
-			x: 1,
+			x: 0,
 			y: 0,
 			i: 'Dormitory'
 		}
@@ -575,7 +304,7 @@ export const jsxElements = [
 		place: {
 			w: 1,
 			h: 1,
-			x: 1,
+			x: 0,
 			y: 0,
 			i: 'VirtualAudience'
 		}
@@ -597,7 +326,7 @@ export const jsxElements = [
 		place: {
 			w: 1,
 			h: 1,
-			x: 1,
+			x: 0,
 			y: 0,
 			i: 'PsychologicalHelp'
 		}
@@ -619,7 +348,7 @@ export const jsxElements = [
 		place: {
 			w: 1,
 			h: 1,
-			x: 1,
+			x: 0,
 			y: 0,
 			i: 'DigitalDepartments'
 		}
@@ -641,7 +370,7 @@ export const jsxElements = [
 		place: {
 			w: 1,
 			h: 1,
-			x: 1,
+			x: 0,
 			y: 0,
 			i: 'ManagementScientificProjects'
 		}

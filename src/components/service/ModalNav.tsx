@@ -9,6 +9,7 @@ import { useAppSelector } from '../../store'
 import { addCard } from '../../store/reducers/LayoutsSlice'
 import { jsxElements } from '../dnd/defaultElement'
 
+
 export const ModalNav = () => {
 	const { t } = useTranslation()
 	const layouts = useAppSelector(state => state.Layout)
@@ -94,13 +95,20 @@ export const ModalNav = () => {
 				<div className="text-3xl">{t('NoService')}</div>
 			) : (
 				jsxElements.map(item => {
+					///
+
+					///
+					//фильтруем массив из localStorage: если элемент есть в localStorage, добавляем в isLayout
 					const isLayout = !!layouts.lg.filter(el => el.i === item.index).length
 
+					//Если элемент уже есть в localStorage, то не отображаем его
 					return (
 						!isLayout && (
 							<Col span={4} key={item.index} className="bg-white">
 								<div
-									onClick={() => dispatch(addCard(item.place))}
+									onClick={() => {
+										dispatch(addCard(item.place))
+									}}
 									className="h-28 cursor-pointer flex items-center justify-center hover:bg-[#65A1FA] hover:text-white"
 								>
 									{t(item.index.toString())}

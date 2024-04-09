@@ -6,7 +6,7 @@ interface ISumDay {
 
 export const SumDay = ({children}: ISumDay) => {
     return (
-        <span className={'absolute right-28 top-[41px] text-[#B3B3B3]'}>
+        <span className={'absolute right-28 bottom-[62px] text-[#B3B3B3]'}>
             {children}
         </span>
     );

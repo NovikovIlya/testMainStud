@@ -44,13 +44,12 @@ const optionsTypeDocuments = [
 
 export const PlacesAndDated = () => {
     const dispatch = useDispatch()
-    const sumDay = useSelector((state: RootState) => state.SumDay.sumDay)
     const [form] = Form.useForm()
     //нужно отрефакторить код добавления формы, т.к после
     //добавления и сохранения их нужно будет откуда-то вытаскивать
     //Нужно обсудить данный вопрос с бэком
     const [listOrg, setListOrg] = useState<INewOrganization[]>([
-        {id: 1, innOrg: +'', nameOrg: 'Тесl', legalAddress: 'Тест', actualAddress: '', date: []},
+        {id: 1, innOrg: +'', nameOrg: 'Тесl', legalAddress: 'Тест', actualAddress: '', date: [], setFieldValue: form.setFieldValue},
     ])
 
     function addNewOrg() {
@@ -63,6 +62,7 @@ export const PlacesAndDated = () => {
                 legalAddress: 'Тест',
                 actualAddress: '',
                 date: [],
+                setFieldValue: form.setFieldValue
             }
         ])
 
@@ -71,14 +71,12 @@ export const PlacesAndDated = () => {
     function sendDataFormPlaceAndDate(values: INewOrganization) {
         console.log({
             ...values,
-            sumDay: sumDay
         })
     }
 
 
     return (
         <Form layout={'vertical'}
-
               validateMessages={validateMessages}
               form={form}
               onFinish={values => {sendDataFormPlaceAndDate(values)}}
@@ -157,9 +155,11 @@ export const PlacesAndDated = () => {
                             actualAddress={elem.actualAddress}
                             date={elem.date}
                             key={elem.id}
+                            setFieldValue={form.setFieldValue}
                         />
                     ))
                 }
+
 
 
                 <Row gutter={[16, 0]} className={`w-[87%]`}>
@@ -169,10 +169,10 @@ export const PlacesAndDated = () => {
 
                     <Col span={13}>
                         <Button
-                            className={`mt-5rounded-[40px]h-[40px]`}
+                            className={`mt-5 rounded-[40px]h-[40px]`}
                             type={'primary'}
                             htmlType={'submit'}
-                            onClick={() => {dispatch(setCondition(keysTabsBusinessTrip.travelConditions))}}
+                            // onClick={() => {dispatch(setCondition(keysTabsBusinessTrip.travelConditions))}}
                         >
                         <span className={`text-lg`}>
                             Далее

@@ -21,6 +21,7 @@ export const Service = () => {
 				{pathname.includes('/services/electronicBook') && <NavElectronicBook />}
 				{pathname.includes('/services/setting') && <NavSetting />}
 				{pathname.includes('/services/practices') && <NavPractices />}
+				{/*{pathname.includes('/services/businessTrip') && <NavBusinessTrip />}*/}
 				{pathname.includes('/services/unifiedServiceCenter') && (
 					<NavUnifiedServiceCenter />
 				)}

@@ -1,5 +1,5 @@
 import { Button } from 'antd'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import SockJS from 'sockjs-client'
 
@@ -9,6 +9,7 @@ import {
 	usePostChatMessageMutation,
 	useReadChatMessageMutation
 } from '../../../store/api/serviceApi'
+import { setChatId } from '../../../store/reducers/chatIdSlice'
 import {
 	ChatMessageDateDisplayEnum,
 	ChatMessageType
@@ -37,6 +38,10 @@ export const ChatPage = () => {
 
 	const [isBottomOfChatVisible, setIsBottomOfChatVisible] =
 		useState<boolean>(true)
+	const [isTopOfChatVisible, setIsTopOfChatVisible] = useState<boolean>(false)
+	const [lastMessageId, setLastMessageId] = useState<number>(0)
+	const [initialLoadingFinished, setInitialLoadingFinished] =
+		useState<boolean>(false)
 
 	const [msgInputText, setMsgInputText] = useState<string>('')
 	const msgDate = useRef<string>('')
@@ -49,6 +54,11 @@ export const ChatPage = () => {
 	const [messages, setMessages] = useState<ChatMessageType[]>([])
 
 	const [sessionId, setSessionId] = useState<string>('')
+
+	useEffect(() => {
+		setInitialLoadingFinished(false)
+		setLastMessageId(0)
+	}, [chatIdState])
 
 	useEffect(() => {
 		const socket = new SockJS(
@@ -106,6 +116,10 @@ export const ChatPage = () => {
 			.unwrap()
 			.then(msg => {
 				setMessages(msg)
+				if (msg.length !== 0) {
+					setLastMessageId(msg[msg.length - 1].id)
+					setInitialLoadingFinished(true)
+				}
 			})
 	}, [chatIdState])
 
@@ -142,27 +156,33 @@ export const ChatPage = () => {
 		}
 	}, [])
 
+	const loadMessagesFromTop = () => {
+		console.log(lastMessageId)
+		getChatMessages({
+			chatId: chatIdState.chatId,
+			lastMessageId: lastMessageId,
+			size: 20,
+			role: isEmpDemp ? 'PERSONNEL_DEPARTMENT' : 'SEEKER'
+		})
+			.unwrap()
+			.then(msg => {
+				setMessages(prev => [...prev, ...msg])
+				if (msg.length !== 0) {
+					setLastMessageId(msg[msg.length - 1].id)
+				}
+			})
+	}
+
 	useEffect(() => {
 		const upperObserver = new IntersectionObserver(entries => {
 			const target = entries[0]
 			if (target.isIntersecting) {
-				console.log('I see you!')
-				if (messages.length !== 0) {
-					console.log(messages)
-					getChatMessages({
-						chatId: chatIdState.chatId,
-						size: 20,
-						lastMessageId: messages[messages.length - 1].id,
-						role: isEmpDemp ? 'PERSONNEL_DEPARTMENT' : 'SEEKER'
-					})
-						.unwrap()
-						.then(msg => {
-							setMessages(prev => [...prev, ...msg])
-						})
-						.then(() => {
-							console.log(messages)
-						})
-				}
+				console.log("Knocking on heaven's door")
+				setIsTopOfChatVisible(true)
+			}
+			if (!target.isIntersecting) {
+				console.log('Gates of heaven are shut for the sinful you')
+				setIsTopOfChatVisible(false)
 			}
 		})
 
@@ -175,7 +195,15 @@ export const ChatPage = () => {
 				upperObserver.unobserve(chatPageUpperRef.current)
 			}
 		}
-	}, [messages.length])
+	}, [])
+
+	useEffect(() => {
+		if (isTopOfChatVisible) {
+			if (initialLoadingFinished) {
+				loadMessagesFromTop()
+			}
+		}
+	}, [isTopOfChatVisible])
 
 	const { control, handleSubmit } = useForm()
 

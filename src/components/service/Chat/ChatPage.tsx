@@ -35,6 +35,7 @@ export const ChatPage = () => {
 	const chatPageLowerRef = useRef<null | HTMLDivElement>(null)
 	const chatPageUpperRef = useRef<null | HTMLDivElement>(null)
 	const chatPageRef = useRef<null | HTMLDivElement>(null)
+	const chatPageMessagesRef = useRef<Array<HTMLDivElement | null>>([])
 
 	const [isBottomOfChatVisible, setIsBottomOfChatVisible] =
 		useState<boolean>(true)
@@ -56,9 +57,19 @@ export const ChatPage = () => {
 	const [sessionId, setSessionId] = useState<string>('')
 
 	useEffect(() => {
-		setInitialLoadingFinished(false)
 		setLastMessageId(0)
 	}, [chatIdState])
+
+	useEffect(() => {
+		chatPageMessagesRef.current = chatPageMessagesRef.current.slice(
+			0,
+			messages.length
+		)
+	}, [messages])
+
+	// useEffect(() => {
+	// 	chatPageMessagesRef.current[19]?.scrollIntoView()
+	// }, [messages.length])
 
 	useEffect(() => {
 		const socket = new SockJS(
@@ -121,6 +132,9 @@ export const ChatPage = () => {
 					setInitialLoadingFinished(true)
 				}
 			})
+		return () => {
+			setInitialLoadingFinished(false)
+		}
 	}, [chatIdState])
 
 	useEffect(() => {
@@ -166,7 +180,10 @@ export const ChatPage = () => {
 		})
 			.unwrap()
 			.then(msg => {
+				// console.log(chatPageMessagesRef.current[19])
 				setMessages(prev => [...prev, ...msg])
+				// console.log(chatPageMessagesRef.current[19])
+				// chatPageMessagesRef.current[19]?.scrollIntoView()
 				if (msg.length !== 0) {
 					setLastMessageId(msg[msg.length - 1].id)
 				}
@@ -217,7 +234,6 @@ export const ChatPage = () => {
 			.unwrap()
 			.then(msgData => setMessages([msgData, ...messages]))
 		setMsgInputText('')
-		// scrollToBottom()
 	}
 
 	console.log('Chat render')
@@ -249,6 +265,7 @@ export const ChatPage = () => {
 									</div>
 								))}
 							<ChatMessage
+								ref={el => (chatPageMessagesRef.current[msgIndex] = el)}
 								key={msg.id}
 								msgData={msg}
 								senderChange={

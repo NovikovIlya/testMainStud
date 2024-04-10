@@ -67,9 +67,10 @@ export const ChatPage = () => {
 		)
 	}, [messages])
 
-	// useEffect(() => {
-	// 	chatPageMessagesRef.current[19]?.scrollIntoView()
-	// }, [messages.length])
+	const keepScrollPosition = () => {
+		console.log(chatPageMessagesRef.current[19])
+		chatPageMessagesRef.current[19]?.scrollIntoView()
+	}
 
 	useEffect(() => {
 		const socket = new SockJS(
@@ -180,11 +181,9 @@ export const ChatPage = () => {
 		})
 			.unwrap()
 			.then(msg => {
-				// console.log(chatPageMessagesRef.current[19])
 				setMessages(prev => [...prev, ...msg])
-				// console.log(chatPageMessagesRef.current[19])
-				// chatPageMessagesRef.current[19]?.scrollIntoView()
 				if (msg.length !== 0) {
+					keepScrollPosition()
 					setLastMessageId(msg[msg.length - 1].id)
 				}
 			})

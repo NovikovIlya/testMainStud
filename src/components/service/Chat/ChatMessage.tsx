@@ -6,6 +6,8 @@ import { MessageUnreadSvg } from '../../../assets/svg/MessageUnreadSvg'
 import { useAppSelector } from '../../../store'
 import { ChatMessageType } from '../../../store/type'
 
+import { ChatMessageFile } from './ChatMessageFile'
+
 type Props = { msgData: ChatMessageType } & { senderChange: boolean }
 type Ref = HTMLDivElement
 
@@ -20,7 +22,7 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 			<div
 				ref={ref}
 				className={clsx(
-					'rounded-[16px] max-w-[50%] p-[20px] flex flex-col font-content-font font-normal text-black text-[16px]/[19.2px]',
+					'rounded-[16px] max-w-[50%] p-[20px] flex flex-col gap-[16px] font-content-font font-normal text-black text-[16px]/[19.2px]',
 					{
 						'self-start rounded-bl-none bg-white':
 							(props.msgData.sender === 'SEEKER' && isEmpDep) ||
@@ -36,6 +38,13 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 				)}
 			>
 				<p className="whitespace-pre-line">{props.msgData.text}</p>
+				{props.msgData.fileInfos && (
+					<div>
+						{props.msgData.fileInfos.map(fileInfo => (
+							<ChatMessageFile {...fileInfo} />
+						))}
+					</div>
+				)}
 				<div className="flex items-center gap-[12px]">
 					<p className="ml-auto font-content-font font-normal text-black text-[12px]/[14.4px] opacity-[52%]">
 						{props.msgData.sendDate.substring(11, 16)}

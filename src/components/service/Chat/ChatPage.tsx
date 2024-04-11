@@ -1,6 +1,6 @@
 import { Button } from 'antd'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import SockJS from 'sockjs-client'
 
 import { useAppSelector } from '../../../store'
@@ -24,6 +24,11 @@ const seekerToken =
 	'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJJQU1pdHJvZmFub3ZAc3R1ZC5rcGZ1LnJ1IiwiaWF0IjoxNzExNTc3OTMwLCJleHAiOjE3MTE1ODg3MzAsInNjb3BlIjoidXNlciIsInJvbGVzIjpbeyJ1c2VySWQiOiI2Iiwic2Vzc2lvbklkIjoiMjQwMzIyNzE0ODc1MTk0ODI5NzMzMDkwNDczNTM2NjciLCJzZXNzaW9uSGFzaCI6IkQyQTIyNUE3NDk5RjFDRTE2Q0JFMDJCOUY2QzkxN0UxIiwiZG9jdW1lbnRzSGFzaCI6IkIyNkNCMEMzRThBQzM2RDZBMENCNTEyQ0YzMDIzNzc3IiwibG9naW4iOiJJQU1pdHJvZmFub3YiLCJ0eXBlIjoiU0VFS0VSIn1dLCJzZXNzaW9uSWQiOiIyNDAzMjI3MTQ4NzUxOTQ4Mjk3MzMwOTA0NzM1MzY2NyIsInNlc3Npb25IYXNoIjoiRDJBMjI1QTc0OTlGMUNFMTZDQkUwMkI5RjZDOTE3RTEiLCJhbGxJZCI6IjE3ODQ0MCIsImVtYWlsIjoibWl0cm9fMDJAbWFpbC5ydSJ9.rbdEbs6b2NVFyFa65GW5rpy8VBd7TKpNxaTrVBMh5i0'
 const personnelDeparmentToken =
 	'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJTdWJCQXNhZHVsbG9ldkBzdHVkLmtwZnUucnUiLCJpYXQiOjE3MTE3MjQ1NDQsImV4cCI6MTcxMTczNTM0NCwic2NvcGUiOiJ1c2VyIiwicm9sZXMiOlt7InVzZXJJZCI6IjciLCJzZXNzaW9uSWQiOiIyNDA0NzM4MTc3NzI3MjIwMTMzMDkwNzU0ODQ2ODU5MSIsInNlc3Npb25IYXNoIjoiNTZEMTZENTNDOTc5MDk5MTk0QTY4OEY4Qjk0M0I0N0MiLCJkb2N1bWVudHNIYXNoIjoiQTdCMkI0MUU4MjQ4NDYzNkY2ODZDNTQ3NEY0NEREMjYiLCJsb2dpbiI6IlNCQXNhZHVsbG9ldiIsInR5cGUiOiJQRVJTT05ORUxfREVQQVJUTUVOVCJ9LHsidXNlcklkIjoiMzQ4NTQxIiwic2Vzc2lvbklkIjoiMjQwNDczODA1NjYxMjc2MDM3NTM5NjI3MjY1MTM0OTQiLCJzZXNzaW9uSGFzaCI6IkUzQUZFMTUzNUVCMTU3NEUyMkZCNUJDNEYxNUFERkUwIiwiZG9jdW1lbnRzSGFzaCI6IiIsImxvZ2luIjoiU3ViQkFzYWR1bGxvZXYiLCJ0eXBlIjoiRU1QTCJ9LHsidXNlcklkIjoiMzM2MDM3Iiwic2Vzc2lvbklkIjoiMjQwNDczODI0NDUwMjI3MTM5NzgzNzQ5OTMwNjk4MDciLCJzZXNzaW9uSGFzaCI6IjcxMEExMTFFM0FCN0Q4NDczNTVFOEM0QkUxMDI4RTZBIiwiZG9jdW1lbnRzSGFzaCI6IkEyMkE3NURCRTBBNzg4MDE4OTY4NjZCQjgzNUIxNDQxIiwibG9naW4iOiJTdUJBc2FkdWxsb2V2IiwidHlwZSI6IlNUVUQifV0sInNlc3Npb25JZCI6IjI0MDQ3MzgxNzc3MjcyMjAxMzMwOTA3NTQ4NDY4NTkxIiwic2Vzc2lvbkhhc2giOiI1NkQxNkQ1M0M5NzkwOTkxOTRBNjg4RjhCOTQzQjQ3QyIsImFsbElkIjoiMjM5MTc0IiwiZW1haWwiOiJCYXN1YmhvbmJla0BnbWFpbC5jb20ifQ.MMK47Gd4AKG8tPzmPAwgNq79zVEmfzdFCuoZjcXeW_o'
+
+type ChatMessageFormDataType = {
+	text: string
+	files: FileList | null
+}
 
 export const ChatPage = () => {
 	const chatIdState = useAppSelector(state => state.chatId)
@@ -221,18 +226,47 @@ export const ChatPage = () => {
 		}
 	}, [isTopOfChatVisible])
 
-	const { control, handleSubmit } = useForm()
+	const { control, handleSubmit, register } = useForm({
+		defaultValues: { text: '', files: null }
+	})
 
-	const handleMessage = () => {
-		postMsg({
-			id: chatIdState.chatId,
-			text: msgInputText,
-			name: sessionId,
-			role: isEmpDemp ? 'PERSONNEL_DEPARTMENT' : 'SEEKER'
-		})
-			.unwrap()
-			.then(msgData => setMessages([msgData, ...messages]))
-		setMsgInputText('')
+	const handleMessage: SubmitHandler<ChatMessageFormDataType> = data => {
+		if (data.files) {
+			console.log(data.files)
+			const formData = new FormData()
+			for (let i = 0; i < data.files.length; i++) {
+				formData.append('files', data.files[i])
+			}
+			formData.append('text', data.text)
+			fetch(
+				`http://localhost:8082/employment-api/v1/chat/${chatIdState.chatId}/file`,
+				{
+					method: 'POST',
+					body: formData,
+					headers: {
+						Authorization: isEmpDemp
+							? `Bearer ${personnelDeparmentToken}`
+							: `Bearer ${seekerToken}`,
+						'X-User-Name': sessionId
+					}
+				}
+			).then(res => {
+				res.json().then(resData => {
+					const typedData = resData as ChatMessageType
+					setMessages([typedData, ...messages])
+				})
+			})
+		} else {
+			postMsg({
+				id: chatIdState.chatId,
+				text: data.text,
+				name: sessionId,
+				role: isEmpDemp ? 'PERSONNEL_DEPARTMENT' : 'SEEKER'
+			})
+				.unwrap()
+				.then(msgData => setMessages([msgData, ...messages]))
+			setMsgInputText('')
+		}
 	}
 
 	console.log('Chat render')
@@ -296,16 +330,48 @@ export const ChatPage = () => {
 						onSubmit={handleSubmit(handleMessage)}
 						className="w-full flex py-[24px] pl-[40px] pr-[85px]"
 					>
-						<textarea
-							value={msgInputText}
-							onChange={e => {
-								setMsgInputText(e.target.value)
-							}}
-							className="w-full h-full font-content-font font-normal text-black text-[16px]/[16px] placeholder:opacity-50 resize-none border-none focus:outline-none pt-[8px]"
-							placeholder="Ввести сообщение"
-						></textarea>
+						<Controller
+							name="text"
+							control={control}
+							render={({ field }) => (
+								<textarea
+									{...register('text', {
+										required: {
+											value: true,
+											message: 'Нельзя отправлять сообщение с пустым текстом'
+										}
+									})}
+									value={msgInputText}
+									onChange={e => {
+										setMsgInputText(e.target.value)
+									}}
+									className="w-full h-full font-content-font font-normal text-black text-[16px]/[16px] placeholder:opacity-50 resize-none border-none focus:outline-none pt-[8px]"
+									placeholder="Ввести сообщение"
+								></textarea>
+							)}
+						/>
 						<div className="ml-auto flex gap-[8px]">
-							<Button type="text" icon={<AttachIcon />} />
+							<Controller
+								name="files"
+								control={control}
+								render={({ field }) => (
+									<>
+										<input
+											{...register('files')}
+											id="files"
+											className="hidden"
+											type="file"
+											multiple={true}
+										></input>
+										<label
+											htmlFor="files"
+											className="self-center cursor-pointer"
+										>
+											<AttachIcon />
+										</label>
+									</>
+								)}
+							/>
 							<Button
 								className="rounded-[54.5px] h-[32px] px-[24px]"
 								type="primary"

@@ -10,6 +10,7 @@ import {INewOrganization, NewOrganization} from "./NewOrganization";
 import {ButtonAddData} from "../buttonAddData/buttonAddData";
 import {validateMessages} from "../../../../../utils/validateMessage";
 import {RootState} from "../../../../../store";
+import {RcFile} from "antd/es/upload";
 
 
 const optionsGoals = [
@@ -39,7 +40,14 @@ const optionsTypeDocuments = [
     {value: 'Иной документ'},
 ];
 
-
+interface IFormPlacesAndDate {
+    goal: string
+    event: string
+    typeDocument: string
+    file?: RcFile | Blob
+    isRussia: string
+    organisations: Array<INewOrganization>
+}
 
 
 export const PlacesAndDated = () => {
@@ -48,30 +56,24 @@ export const PlacesAndDated = () => {
     //нужно отрефакторить код добавления формы, т.к после
     //добавления и сохранения их нужно будет откуда-то вытаскивать
     //Нужно обсудить данный вопрос с бэком
+
     const [listOrg, setListOrg] = useState<INewOrganization[]>([
-        {id: 1, innOrg: +'', nameOrg: 'Тесl', legalAddress: 'Тест', actualAddress: '', date: [], setFieldValue: form.setFieldValue},
+        {id: 1, innOrg: +'', nameOrg: 'Тест', legalAddress: 'Тест', actualAddress: '', date: [], setFieldValue: form.setFieldsValue, sumDay: 0},
     ])
 
-    function addNewOrg() {
-        setListOrg([
-            ...listOrg,
-            {
-                id: listOrg.length + 1,
-                innOrg: +'',
-                nameOrg: 'Тест',
-                legalAddress: 'Тест',
-                actualAddress: '',
-                date: [],
-                setFieldValue: form.setFieldValue
-            }
-        ])
+    function sendDataFormPlaceAndDate(values: IFormPlacesAndDate) {
+        //1) собираем только организации
+        const onlyOrganisations = values.organisations
 
-    }
+        for (let org of onlyOrganisations) {
+            //2) вычисляем, сколько дней человек будет в командировке в данной организации
+            const sumDayOrg = org.date[1]!.diff(org.date[0], 'day') + 1
 
-    function sendDataFormPlaceAndDate(values: INewOrganization) {
-        console.log({
-            ...values,
-        })
+            //3) добавляем количество дней в объект данной организации
+            org.sumDay = sumDayOrg
+
+        }
+        console.log(values)
     }
 
 
@@ -84,7 +86,9 @@ export const PlacesAndDated = () => {
             <Row gutter={[16, 0]} className={`w-[80%]`}>
                 <Col span={13}>
                     <Form.Item label={<LabelFormItem label={'Цель'}/>}
-                               rules={[{required: true}]}
+                               rules={[{
+                                   //required: true
+                               }]}
                                name={'goal'}>
                         <Select options={optionsGoals} placeholder={'Выбрать'}/>
                     </Form.Item>
@@ -93,7 +97,7 @@ export const PlacesAndDated = () => {
                 <Col span={13}>
                     <Form.Item label={<LabelFormItem label={'Мероприятие'}/>}
                                rules={[{
-                                   required: true,
+                                   //required: true,
                                    max: 100
                                }]}
                                name={'event'}>
@@ -105,15 +109,17 @@ export const PlacesAndDated = () => {
                     <Form.Item label={<LabelFormItem label={'Тип документа-основания'}/>}
                                name={'typeDocument'}
                                rules={[{
-                                   required: true
+                                   //required: true
                                }]}>
                         <Select options={optionsTypeDocuments} placeholder={'Выбрать'}/>
                     </Form.Item>
                 </Col>
 
                 <Col span={13}>
-                    <Form.Item label={<LabelFormItem label={'Прикрепить документ'}/>}>
-                        <Upload.Dragger name={'file'} multiple={true}>
+                    <Form.Item label={<LabelFormItem label={'Прикрепить документ'}/>}
+                                name={'file'}
+                    >
+                        <Upload.Dragger multiple={true}>
                             <div className={`flex flex-col gap-2`}>
                                 <span className={'text-lg'}>Перетащите файлы или выберите на компьютере</span>
                                 <div className={`flex items-center justify-center gap-2`}>
@@ -130,7 +136,7 @@ export const PlacesAndDated = () => {
                 <Col span={13}>
                     <Form.Item label={<LabelFormItem label={'Командировка в России'}/>}
                                rules={[{
-                                   required: true
+                                   //required: true
                                }]}
                                name={'isRussia'}>
                         <Radio.Group>
@@ -155,7 +161,8 @@ export const PlacesAndDated = () => {
                             actualAddress={elem.actualAddress}
                             date={elem.date}
                             key={elem.id}
-                            setFieldValue={form.setFieldValue}
+                            setFieldValue={elem.setFieldValue}
+                            sumDay={0}
                         />
                     ))
                 }
@@ -164,7 +171,7 @@ export const PlacesAndDated = () => {
 
                 <Row gutter={[16, 0]} className={`w-[87%]`}>
                     <Col span={13}>
-                        <ButtonAddData addData={addNewOrg} nameData={'организацию'}/>
+                        <ButtonAddData nameData={'организацию'}/>
                     </Col>
 
                     <Col span={13}>

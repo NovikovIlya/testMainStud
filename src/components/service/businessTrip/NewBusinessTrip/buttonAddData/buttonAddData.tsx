@@ -3,7 +3,7 @@ import {Button} from "antd";
 import {PlusSvg} from "../../../../../assets/svg/PlusSvg";
 
 interface IButtonAddData {
-    addData: () => void
+    addData?: () => void
     nameData: string
 }
 

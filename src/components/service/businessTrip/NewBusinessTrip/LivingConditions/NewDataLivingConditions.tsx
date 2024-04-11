@@ -4,12 +4,18 @@ import {LabelFormItem} from "../../labelFormItem/labelFormItem";
 import {CustomRangePicker} from "../customRangePicker/customRangePicker";
 import {RangePickerFormItem} from "../PlacesAndDated/RangePickerFormItem";
 import {ButtonAddData} from "../buttonAddData/buttonAddData";
+import dayjs from "dayjs";
 
 export interface INewDataLivingConditions {
-    id: number
     country: string
     locality: string
     livingConditions: string
+    sumDay: number
+    dateCheckInOut: Array<dayjs.Dayjs> | Array<null>
+}
+
+export interface ILivingCondition {
+    dataLivingConditions: Array<INewDataLivingConditions>
 }
 
 export const NewDataLivingConditions = () => {
@@ -18,7 +24,6 @@ export const NewDataLivingConditions = () => {
         <Form.List name={'dataLivingConditions'}
                    initialValue={[{
                        country: '',
-                       livingConditions: '',
                        dateCheckInOut: [],
                    }]}>
             {(fields, operation) => (
@@ -30,6 +35,10 @@ export const NewDataLivingConditions = () => {
                                     <Form.Item
                                         label={<LabelFormItem label={'Страна'}/>}
                                         name={[elem.name, 'country']}
+                                        rules={[{
+                                            required: true,
+                                            max: 100,
+                                        }]}
                                     >
                                         <AutoComplete
                                             options={[{value: 'test'}]}
@@ -41,6 +50,10 @@ export const NewDataLivingConditions = () => {
                                     <Form.Item
                                         label={<LabelFormItem label={'Населенный пункт'}/>}
                                         name={[elem.name, 'locality']}
+                                        rules={[{
+                                            required: true,
+                                            max: 100,
+                                        }]}
                                     >
                                         <Select
                                             options={[{value: 'test'}]}
@@ -53,8 +66,8 @@ export const NewDataLivingConditions = () => {
                                         label={<LabelFormItem label={'Условия проживания'}/>}
                                         name={[elem.name, 'livingConditions']}
                                     >
-                                        <AutoComplete
-                                            options={[{value: 'test'}]}
+                                        <Select
+                                            options={[{value: 'Гостиница'}]}
                                             placeholder={'Ввести или выбрать'}
                                         />
                                     </Form.Item>

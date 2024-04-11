@@ -50,7 +50,7 @@ export const NewDataTravelConditions = () => {
                                     <Form.Item label={<LabelFormItem label={'Вид транспорта'}/>}
                                                name={[elem.name, 'typeTransport']}
                                                rules={[{
-                                                   //required: true
+                                                   required: true
                                                }]}>
                                         <Select options={typeTransportOptions} placeholder={'Выбрать'}/>
                                     </Form.Item>
@@ -59,8 +59,8 @@ export const NewDataTravelConditions = () => {
                                     <Form.Item label={<LabelFormItem label={'Пункт отправления'}/>}
                                                name={[elem.name, 'departurePoint']}
                                                rules={[{
-                                                   //required: true,
-                                                   //max: 100
+                                                   required: true,
+                                                   max: 100
                                                }]}>
                                         <AutoComplete
                                             options={[{value: 'test'}]}
@@ -72,8 +72,8 @@ export const NewDataTravelConditions = () => {
                                     <Form.Item
                                         label={<LabelFormItem label={'Пункт назначения'}/>}
                                         rules={[{
-                                            //required: true,
-                                            //max: 100
+                                            required: true,
+                                            max: 100
                                         }]}
                                         name={[elem.name, 'destinationPoint']}>
                                         <AutoComplete

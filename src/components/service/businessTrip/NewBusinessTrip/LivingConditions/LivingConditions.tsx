@@ -3,8 +3,12 @@ import {WrapperForConditionsTabs} from "../WrapperForConditionsTabs/WrapperForCo
 import {ColSpan16RowGutter16} from "../WrapperForConditionsTabs/ColSpan16RowGutter16";
 import {ColSpan8} from "../WrapperForConditionsTabs/ColSpan8";
 import {useDispatch} from "react-redux";
-import {INewDataTravelConditions, NewDataTravelConditions} from "../TravelConditions/NewDataTravelConditions";
-import {NewDataLivingConditions} from "./NewDataLivingConditions";
+import {
+    INewDataTravelConditions,
+    ITravelConditions,
+    NewDataTravelConditions
+} from "../TravelConditions/NewDataTravelConditions";
+import {ILivingCondition, NewDataLivingConditions} from "./NewDataLivingConditions";
 import {Button, Col, Form, Row} from "antd";
 import {ButtonAddData} from "../buttonAddData/buttonAddData";
 import {keysTabsBusinessTrip, setCondition} from "../../../../../store/reducers/FormReducers/StepFormBusinessTrip";
@@ -16,9 +20,24 @@ export const LivingConditions = () => {
 
     const dispatch = useDispatch()
 
+    function sendDataLivingCondition({dataLivingConditions}: ILivingCondition) {
+
+        for (let elem of dataLivingConditions) {
+            if (elem.dateCheckInOut) {
+                const sumDayLiving = elem.dateCheckInOut[1]!.diff(elem.dateCheckInOut[0], 'day') + 1
+                elem.sumDay = sumDayLiving
+            }
+        }
+        console.log(dataLivingConditions)
+    }
 
     return (
-        <Form layout={'vertical'} validateMessages={validateMessages}>
+        <Form layout={'vertical'}
+              validateMessages={validateMessages}
+              onFinish={values => {
+                  sendDataLivingCondition(values)
+              }}
+        >
             <Row gutter={[16, 0]} className={`w-full`} style={{marginLeft: '0px'}}>
                 <Col span={16}>
                     <NewDataLivingConditions/>
@@ -36,9 +55,12 @@ export const LivingConditions = () => {
                             <span className={`text-lg text-[#3073D7]`}> Назад </span>
                         </Button>
 
-                        <Button type={'primary'} shape={'round'} className={'h-10 w-max'}
+                        <Button type={'primary'}
+                                htmlType={'submit'}
+                                shape={'round'}
+                                className={'h-10 w-max'}
                                 onClick={() => {
-                                    dispatch(setCondition(keysTabsBusinessTrip.financing))
+                                    //dispatch(setCondition(keysTabsBusinessTrip.financing))
                                 }}>
                             <span className={'text-lg'}>Далее</span>
                         </Button>

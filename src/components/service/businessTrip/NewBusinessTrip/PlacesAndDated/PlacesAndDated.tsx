@@ -57,9 +57,6 @@ export const PlacesAndDated = () => {
     //добавления и сохранения их нужно будет откуда-то вытаскивать
     //Нужно обсудить данный вопрос с бэком
 
-    const [listOrg, setListOrg] = useState<INewOrganization[]>([
-        {id: 1, innOrg: +'', nameOrg: 'Тест', legalAddress: 'Тест', actualAddress: '', date: [], setFieldValue: form.setFieldsValue, sumDay: 0},
-    ])
 
     function sendDataFormPlaceAndDate(values: IFormPlacesAndDate) {
         //1) собираем только организации
@@ -67,10 +64,12 @@ export const PlacesAndDated = () => {
 
         for (let org of onlyOrganisations) {
             //2) вычисляем, сколько дней человек будет в командировке в данной организации
-            const sumDayOrg = org.date[1]!.diff(org.date[0], 'day') + 1
+            if (org.date) {
+                const sumDayOrg = org.date[1]!.diff(org.date[0], 'day') + 1
 
-            //3) добавляем количество дней в объект данной организации
-            org.sumDay = sumDayOrg
+                //3) добавляем количество дней в объект данной организации
+                org.sumDay = sumDayOrg
+            }
 
         }
         console.log(values)
@@ -81,7 +80,9 @@ export const PlacesAndDated = () => {
         <Form layout={'vertical'}
               validateMessages={validateMessages}
               form={form}
-              onFinish={values => {sendDataFormPlaceAndDate(values)}}
+              onFinish={values => {
+                  sendDataFormPlaceAndDate(values)
+              }}
         >
             <Row gutter={[16, 0]} className={`w-[80%]`}>
                 <Col span={13}>
@@ -117,7 +118,7 @@ export const PlacesAndDated = () => {
 
                 <Col span={13}>
                     <Form.Item label={<LabelFormItem label={'Прикрепить документ'}/>}
-                                name={'file'}
+                               name={'file'}
                     >
                         <Upload.Dragger multiple={true}>
                             <div className={`flex flex-col gap-2`}>
@@ -150,33 +151,15 @@ export const PlacesAndDated = () => {
 
             <Row gutter={[16, 0]} className={`w-87%`}>
                 {/*Нужно отрефакторить*/}
-
-                {
-                    listOrg.map((elem) => (
-                        <NewOrganization
-                            id={elem.id}
-                            innOrg={elem.innOrg}
-                            nameOrg={elem.nameOrg}
-                            legalAddress={elem.legalAddress}
-                            actualAddress={elem.actualAddress}
-                            date={elem.date}
-                            key={elem.id}
-                            setFieldValue={elem.setFieldValue}
-                            sumDay={0}
-                        />
-                    ))
-                }
-
+                <NewOrganization
+                    setFieldValue={form.setFieldValue}
+                />
 
 
                 <Row gutter={[16, 0]} className={`w-[87%]`}>
                     <Col span={13}>
-                        <ButtonAddData nameData={'организацию'}/>
-                    </Col>
-
-                    <Col span={13}>
                         <Button
-                            className={`mt-5 rounded-[40px]h-[40px]`}
+                            className={`mt-5 rounded-[40px] h-[40px]`}
                             type={'primary'}
                             htmlType={'submit'}
                             // onClick={() => {dispatch(setCondition(keysTabsBusinessTrip.travelConditions))}}

@@ -9,39 +9,25 @@ import {setNewSumDay} from "../../../../../store/reducers/FormReducers/SumDayRed
 import {SumDay} from "../SumDay";
 import {NamePath} from "rc-field-form/es/interface";
 import {RangePickerFormItem} from "./RangePickerFormItem";
+import {ButtonAddData} from "../buttonAddData/buttonAddData";
+import {CloseOutlined} from "@ant-design/icons";
 
 
 export interface INewOrganization {
-    id: number
-    innOrg: number
-    nameOrg: string
-    legalAddress: string
-    actualAddress: string
-    date: Array<dayjs.Dayjs> | Array<null>
+    innOrg?: number
+    nameOrg?: string
+    legalAddress?: string
+    actualAddress?: string
+    date?: Array<dayjs.Dayjs> | Array<null>
     setFieldValue: (name: NamePath, value: any) => void;
-    sumDay: number;
+    sumDay?: number;
 }
 
 export const NewOrganization = ({setFieldValue, ...props}: INewOrganization) => {
-
-    const [sumDay, setSumDay] = useState(0)
-    const dispatch = useDispatch()
-
-    function changeSumDay(dates: Array<dayjs.Dayjs | null>, elemName: number) {
-        if (dates) {
-            const sumDay = dates[1]!.diff(dates[0], 'day') + 1
-            setSumDay(sumDay)
-        } else {
-            setSumDay(0)
-        }
-    }
-
-
     const [fetch, setFetch] = useState(0)
     const [test, setTest] = useState('Орг')
 
     useEffect(() => {
-        console.log(fetch)
         setTest('Организация 11')
         // form.setFieldValue('goal', 'GOAL') нужно использовать данный метод, чтобы менять значение
     }, [fetch]);
@@ -55,13 +41,12 @@ export const NewOrganization = ({setFieldValue, ...props}: INewOrganization) => 
                        actualAddress: props.actualAddress,
                        date: props.date,
                    }]}
-
         >
             {(fields, operation) => (
                 <Row gutter={[16, 0]} className={`w-[87%]`}>
 
                     {fields.map((elem) => (
-                        <>
+                        <Row gutter={[16, 0]} key={elem.key}>
                             <Col span={12}>
                                 <Form.Item
                                     initialValue={props.innOrg}
@@ -134,33 +119,24 @@ export const NewOrganization = ({setFieldValue, ...props}: INewOrganization) => 
                                 </Form.Item>
                             </Col>
                             <Col span={12} className={'mr-[30px]'}>
-                                {/*<Form.Item*/}
-                                {/*    label={<LabelFormItem label={'Дата начала и окончания'}/>}*/}
-                                {/*    name={[elem.name, 'date']}*/}
-                                {/*    rules={[{*/}
-                                {/*        type: 'array',*/}
-                                {/*        required: true,*/}
-                                {/*    }]}*/}
-                                {/*    initialValue={props.date}>*/}
-                                {/*    <DatePicker.RangePicker*/}
-                                {/*        placeholder={['ДД.ММ.ГГ', 'ДД.ММ.ГГ']}*/}
-                                {/*        className={`text-2xl w-full`}*/}
-                                {/*        format={'DD.MM.YYYY'}*/}
-                                {/*        onChange={(dates) => {*/}
-                                {/*            changeSumDay(dates, elem.name)*/}
-                                {/*        }}*/}
-                                {/*        separator={'—'}*/}
-                                {/*    />*/}
-                                {/*</Form.Item>*/}
-                                {/*<SumDay>{sumDay} дней</SumDay>*/}
-                                <RangePickerFormItem elem={elem} date={props.date}/>
+                                <RangePickerFormItem
+                                    elem={elem}
+                                />
                             </Col>
-                        </>
+
+                            <CloseOutlined onClick={() => {
+                                operation.remove(elem.name)
+                            }}/>
+
+                        </Row>
                     ))}
 
-                    <Button type="dashed" onClick={() => operation.add()} block>
-                        + Add Item
-                    </Button>
+                    <Col span={24}>
+                        <ButtonAddData
+                            nameData={'организацию'}
+                            addData={() => operation.add()}
+                        />
+                    </Col>
 
                 </Row>
             )}

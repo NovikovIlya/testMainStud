@@ -25,9 +25,6 @@ export const NewBusinessTrip = () => {
     const test = useSelector((state: RootState) => state.StepFormBusinessTrip.step)
     const dispatch = useDispatch()
 
-    useEffect(() => {
-        console.log(test)
-    }, [test]);
 
     return (
         <section className={'flex flex-col gap-5'}>

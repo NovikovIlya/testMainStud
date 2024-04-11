@@ -17,9 +17,6 @@ const itemsTabs = [
     {key: keysTabsBusinessTrip.financing, label: 'Финансирование', children: <Financing/>},
     {key: keysTabsBusinessTrip.result, label: 'Итог', children: <ResultTable/>},
 ]
-
-
-
 export const NewBusinessTrip = () => {
 
     const test = useSelector((state: RootState) => state.StepFormBusinessTrip.step)

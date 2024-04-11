@@ -6,14 +6,15 @@ import dayjs from "dayjs";
 
 interface IRangePickerFormItem {
     elem: FormListFieldData
-    //date?: Array<dayjs.Dayjs> | Array<null>
+    nameField: string
+    label: string
 }
 
 // Данный код нужно было изолировать в отдельный компонент,
 // чтобы состояние sumDay было уникальным для каждого RangePicker
 
 
-export const RangePickerFormItem = ({elem}: IRangePickerFormItem) => {
+export const RangePickerFormItem = ({elem, label, nameField}: IRangePickerFormItem) => {
     const [sumDay, setSumDay] = useState(0)
     function changeSumDay(dates: Array<dayjs.Dayjs | null>) {
         if (dates) {
@@ -27,8 +28,8 @@ export const RangePickerFormItem = ({elem}: IRangePickerFormItem) => {
     return (
         <>
             <Form.Item
-                label={<LabelFormItem label={'Дата начала и окончания'}/>}
-                name={[elem.name, 'date']}
+                label={<LabelFormItem label={label}/>}
+                name={[elem.name, nameField]}
                 rules={[{
                     type: 'array',
                     required: true,

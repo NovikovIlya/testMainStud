@@ -88,7 +88,7 @@ export const PlacesAndDated = () => {
                 <Col span={13}>
                     <Form.Item label={<LabelFormItem label={'Цель'}/>}
                                rules={[{
-                                   //required: true
+                                   required: true
                                }]}
                                name={'goal'}>
                         <Select options={optionsGoals} placeholder={'Выбрать'}/>
@@ -98,7 +98,7 @@ export const PlacesAndDated = () => {
                 <Col span={13}>
                     <Form.Item label={<LabelFormItem label={'Мероприятие'}/>}
                                rules={[{
-                                   //required: true,
+                                   required: true,
                                    max: 100
                                }]}
                                name={'event'}>
@@ -110,7 +110,7 @@ export const PlacesAndDated = () => {
                     <Form.Item label={<LabelFormItem label={'Тип документа-основания'}/>}
                                name={'typeDocument'}
                                rules={[{
-                                   //required: true
+                                   required: true
                                }]}>
                         <Select options={optionsTypeDocuments} placeholder={'Выбрать'}/>
                     </Form.Item>
@@ -137,7 +137,7 @@ export const PlacesAndDated = () => {
                 <Col span={13}>
                     <Form.Item label={<LabelFormItem label={'Командировка в России'}/>}
                                rules={[{
-                                   //required: true
+                                   required: true
                                }]}
                                name={'isRussia'}>
                         <Radio.Group>
@@ -147,32 +147,26 @@ export const PlacesAndDated = () => {
                     </Form.Item>
                 </Col>
             </Row>
-
-
-            <Row gutter={[16, 0]} className={`w-87%`}>
-                {/*Нужно отрефакторить*/}
-                <NewOrganization
-                    setFieldValue={form.setFieldValue}
-                />
-
-
-                <Row gutter={[16, 0]} className={`w-[87%]`}>
-                    <Col span={13}>
-                        <Button
-                            className={`mt-5 rounded-[40px] h-[40px]`}
-                            type={'primary'}
-                            htmlType={'submit'}
-                            // onClick={() => {dispatch(setCondition(keysTabsBusinessTrip.travelConditions))}}
-                        >
+            <NewOrganization
+                setFieldValue={form.setFieldValue}
+                nameOrg={'Test'}
+                legalAddress={'Test2'}
+            />
+            <Row gutter={[16, 0]} className={`w-[87%]`}>
+                <Col span={13}>
+                    <Button
+                        className={`mt-5 rounded-[40px] h-[40px]`}
+                        type={'primary'}
+                        htmlType={'submit'}
+                        // onClick={() => {dispatch(setCondition(keysTabsBusinessTrip.travelConditions))}}
+                    >
                         <span className={`text-lg`}>
                             Далее
                         </span>
-                        </Button>
-                    </Col>
-                </Row>
-
-
+                    </Button>
+                </Col>
             </Row>
+
 
         </Form>
     );

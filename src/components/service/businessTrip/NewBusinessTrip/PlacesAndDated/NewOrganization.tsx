@@ -2,11 +2,6 @@ import React, {useEffect, useState} from 'react';
 import {Button, Col, DatePicker, Form, Input, InputNumber, Row, Tooltip} from "antd";
 import {LabelFormItem} from "../../labelFormItem/labelFormItem";
 import dayjs from "dayjs";
-import {CustomRangePicker} from "../customRangePicker/customRangePicker";
-import {useForm} from "react-hook-form";
-import {useDispatch} from "react-redux";
-import {setNewSumDay} from "../../../../../store/reducers/FormReducers/SumDayReducer";
-import {SumDay} from "../SumDay";
 import {NamePath} from "rc-field-form/es/interface";
 import {RangePickerFormItem} from "./RangePickerFormItem";
 import {ButtonAddData} from "../buttonAddData/buttonAddData";
@@ -43,7 +38,7 @@ export const NewOrganization = ({setFieldValue, ...props}: INewOrganization) => 
                    }]}
         >
             {(fields, operation) => (
-                <Row gutter={[16, 0]} className={`w-[87%]`}>
+                <Row gutter={[16, 0]} className={`w-[87%]`} style={{marginLeft: '0px'}}>
 
                     {fields.map((elem) => (
                         <Row gutter={[16, 0]} key={elem.key}>
@@ -76,7 +71,7 @@ export const NewOrganization = ({setFieldValue, ...props}: INewOrganization) => 
                                     name={[elem.name, 'nameOrg']}
                                     initialValue={props.nameOrg}
                                     rules={[{
-                                        //required: true
+                                        required: true
                                     }]}>
                                     <Input
                                         className={`text-base`}
@@ -94,7 +89,7 @@ export const NewOrganization = ({setFieldValue, ...props}: INewOrganization) => 
                                     label={<LabelFormItem label={'Юридический адрес'}/>}
                                     name={[elem.name, 'legalAddress']}
                                     rules={[{
-                                        //required: true
+                                        required: true
                                     }]}
                                     initialValue={props.legalAddress}>
                                     <Input
@@ -120,6 +115,8 @@ export const NewOrganization = ({setFieldValue, ...props}: INewOrganization) => 
                             </Col>
                             <Col span={12} className={'mr-[30px]'}>
                                 <RangePickerFormItem
+                                    label={'Дата начала и окончания'}
+                                    nameField={'dateStartEnd'}
                                     elem={elem}
                                 />
                             </Col>

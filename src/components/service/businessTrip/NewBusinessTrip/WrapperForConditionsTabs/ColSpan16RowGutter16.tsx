@@ -7,7 +7,7 @@ interface IColSpan16RowGutter16 {
 
 export const ColSpan16RowGutter16 = ({children}: IColSpan16RowGutter16) => {
     return (
-        <Col span={16}>
+        <Col span={24}>
             <Row gutter={[16, 16]}>
                 {children}
             </Row>

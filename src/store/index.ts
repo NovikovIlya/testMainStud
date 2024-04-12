@@ -1,7 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import logger from 'redux-logger'
-
 import { apiSlice } from './api/apiSlice'
 import AddressReducer from './reducers/FormReducers/AddressReducer'
 import CountriesEducationReducer from './reducers/FormReducers/CountriesEducationReducer'
@@ -14,7 +13,8 @@ import WorkReducer from './reducers/FormReducers/WorkReducer'
 import LayoutSlice from './reducers/LayoutsSlice'
 import authSlice from './reducers/authSlice'
 import StepFormBusinessTrip from "./reducers/FormReducers/StepFormBusinessTrip";
-import SumDayReducer from "./reducers/FormReducers/SumDayReducer";
+import ItemTabsReducer from "./reducers/FormReducers/ItemTabs";
+
 
 export const store = configureStore({
 	reducer: {
@@ -29,7 +29,7 @@ export const store = configureStore({
 		Address: AddressReducer,
 		CountriesEducation: CountriesEducationReducer,
 		StepFormBusinessTrip: StepFormBusinessTrip,
-		SumDay: SumDayReducer,
+		ItemTabs: ItemTabsReducer,
 		[apiSlice.reducerPath]: apiSlice.reducer
 	},
 	middleware: getDefaultMiddleware =>

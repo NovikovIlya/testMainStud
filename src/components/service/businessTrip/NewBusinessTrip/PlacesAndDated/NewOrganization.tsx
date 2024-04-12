@@ -3,7 +3,7 @@ import {Button, Col, DatePicker, Form, Input, InputNumber, Row, Tooltip} from "a
 import {LabelFormItem} from "../../labelFormItem/labelFormItem";
 import dayjs from "dayjs";
 import {NamePath} from "rc-field-form/es/interface";
-import {RangePickerFormItem} from "./RangePickerFormItem";
+import {RangePickerFormItem} from "../RangePickerFormItem";
 import {ButtonAddData} from "../buttonAddData/buttonAddData";
 import {CloseOutlined} from "@ant-design/icons";
 
@@ -13,7 +13,7 @@ export interface INewOrganization {
     nameOrg?: string
     legalAddress?: string
     actualAddress?: string
-    date?: Array<dayjs.Dayjs> | Array<null>
+    dateStartEnd?: Array<dayjs.Dayjs> | Array<null>
     setFieldValue: (name: NamePath, value: any) => void;
     sumDay?: number;
 }
@@ -34,7 +34,6 @@ export const NewOrganization = ({setFieldValue, ...props}: INewOrganization) => 
                        nameOrg: props.nameOrg,
                        legalAddress: props.legalAddress,
                        actualAddress: props.actualAddress,
-                       date: props.date,
                    }]}
         >
             {(fields, operation) => (
@@ -104,7 +103,7 @@ export const NewOrganization = ({setFieldValue, ...props}: INewOrganization) => 
                                     label={<LabelFormItem label={'Фактический адрес'}/>}
                                     name={[elem.name, 'actualAddress']}
                                     rules={[{
-                                        //required: true
+                                        required: true
                                     }]}
                                 >
                                     <Input

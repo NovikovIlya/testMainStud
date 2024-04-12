@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {DatePicker, Form, FormListFieldData} from "antd";
-import {LabelFormItem} from "../../labelFormItem/labelFormItem";
-import {SumDay} from "../SumDay";
+import {LabelFormItem} from "../labelFormItem/labelFormItem";
+import {SumDay} from "./SumDay";
 import dayjs from "dayjs";
 
 interface IRangePickerFormItem {
@@ -19,7 +19,6 @@ export const RangePickerFormItem = ({elem, label, nameField}: IRangePickerFormIt
     function changeSumDay(dates: Array<dayjs.Dayjs | null>) {
         if (dates) {
             const sumDay = dates[1]!.diff(dates[0], 'day') + 1
-            setSumDay(sumDay)
             setSumDay(sumDay)
         } else {
             setSumDay(0)

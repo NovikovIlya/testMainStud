@@ -9,6 +9,7 @@ import {WrapperForConditionsTabs} from "../WrapperForConditionsTabs/WrapperForCo
 import {ColSpan16RowGutter16} from "../WrapperForConditionsTabs/ColSpan16RowGutter16";
 import {ColSpan8} from "../WrapperForConditionsTabs/ColSpan8";
 import {validateMessages} from "../../../../../utils/validateMessage";
+import {setTravelConditionsItemTabs} from "../../../../../store/reducers/FormReducers/ItemTabs";
 
 export const TravelConditions = () => {
 
@@ -22,6 +23,8 @@ export const TravelConditions = () => {
                 elem.sumDay = sumDayTravel
             }
         }
+        dispatch(setCondition(keysTabsBusinessTrip.livingConditions))
+        dispatch(setTravelConditionsItemTabs(true))
         console.log(travelConditions)
     }
 
@@ -45,11 +48,7 @@ export const TravelConditions = () => {
                         <span className={`text-lg text-[#3073D7]`}>Назад</span>
                     </Button>
 
-                    <Button type={'primary'} shape={'round'} className={'h-10 w-max'} htmlType={'submit'}
-                        // onClick={() => {
-                        //     dispatch(setCondition(keysTabsBusinessTrip.livingConditions))
-                        // }}
-                    >
+                    <Button type={'primary'} shape={'round'} className={'h-10 w-max'} htmlType={'submit'}>
                         <span className={'text-lg'}>Далее</span>
                     </Button>
                 </div>

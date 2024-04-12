@@ -44,7 +44,7 @@ export const Financing = () => {
             </ColSpan16RowGutter16>
 
             <ColSpan8>
-                <LivingCard/>
+
             </ColSpan8>
         </WrapperForConditionsTabs>
     );

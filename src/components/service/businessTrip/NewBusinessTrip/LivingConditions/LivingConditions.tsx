@@ -15,6 +15,7 @@ import {keysTabsBusinessTrip, setCondition} from "../../../../../store/reducers/
 import {LivingCard} from "../cardsData/LivingCard";
 import {validateMessages} from "../../../../../utils/validateMessage";
 import {TravelCard} from "../cardsData/TravelCard";
+import {setLivingConditionsItemTabs} from "../../../../../store/reducers/FormReducers/ItemTabs";
 
 export const LivingConditions = () => {
 
@@ -28,6 +29,8 @@ export const LivingConditions = () => {
                 elem.sumDay = sumDayLiving
             }
         }
+        dispatch(setCondition(keysTabsBusinessTrip.financing))
+        dispatch(setLivingConditionsItemTabs(true))
         console.log(dataLivingConditions)
     }
 

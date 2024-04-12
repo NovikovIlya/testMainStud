@@ -1,13 +1,9 @@
-import React, {useState} from 'react';
-import {AutoComplete, Col, DatePicker, Form, Row, Select} from "antd";
+import React from 'react';
+import {AutoComplete, Col, Form, Row, Select} from "antd";
 import {LabelFormItem} from "../../labelFormItem/labelFormItem";
-import {CustomRangePicker} from "../customRangePicker/customRangePicker";
 import dayjs from "dayjs";
-import {useDispatch} from "react-redux";
-import {setNewSumDay} from "../../../../../store/reducers/FormReducers/SumDayReducer";
-import {SumDay} from "../SumDay";
 import {ButtonAddData} from "../buttonAddData/buttonAddData";
-import {RangePickerFormItem} from "../PlacesAndDated/RangePickerFormItem";
+import {RangePickerFormItem} from "../RangePickerFormItem";
 
 export interface INewDataTravelConditions {
     typeTransport: string

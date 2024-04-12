@@ -2,7 +2,7 @@ import React from 'react';
 import {AutoComplete, Col, Form, Row, Select} from "antd";
 import {LabelFormItem} from "../../labelFormItem/labelFormItem";
 import {CustomRangePicker} from "../customRangePicker/customRangePicker";
-import {RangePickerFormItem} from "../PlacesAndDated/RangePickerFormItem";
+import {RangePickerFormItem} from "../RangePickerFormItem";
 import {ButtonAddData} from "../buttonAddData/buttonAddData";
 import dayjs from "dayjs";
 
@@ -65,6 +65,9 @@ export const NewDataLivingConditions = () => {
                                     <Form.Item
                                         label={<LabelFormItem label={'Условия проживания'}/>}
                                         name={[elem.name, 'livingConditions']}
+                                        rules={[{
+                                            required: true
+                                        }]}
                                     >
                                         <Select
                                             options={[{value: 'Гостиница'}]}

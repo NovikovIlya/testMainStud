@@ -1,16 +1,13 @@
-import React, {ReactNode, useEffect, useState} from 'react';
-import {AutoComplete, Button, Col, ConfigProvider, DatePicker, Form, Input, Radio, Row, Select, Upload} from "antd";
+import React from 'react';
+import {Button, Col, Form, Input, Radio, Row, Select, Upload} from "antd";
 import {LabelFormItem} from "../../labelFormItem/labelFormItem";
 import {UploadFileSvg} from "../../../../../assets/svg/UploadFileSvg";
-import dayjs from "dayjs";
-import {PlusSvg} from "../../../../../assets/svg/PlusSvg";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {keysTabsBusinessTrip, setCondition} from "../../../../../store/reducers/FormReducers/StepFormBusinessTrip";
 import {INewOrganization, NewOrganization} from "./NewOrganization";
-import {ButtonAddData} from "../buttonAddData/buttonAddData";
 import {validateMessages} from "../../../../../utils/validateMessage";
-import {RootState} from "../../../../../store";
 import {RcFile} from "antd/es/upload";
+import {setPlaceAndDateItemTabs} from "../../../../../store/reducers/FormReducers/ItemTabs";
 
 
 const optionsGoals = [
@@ -53,10 +50,6 @@ interface IFormPlacesAndDate {
 export const PlacesAndDated = () => {
     const dispatch = useDispatch()
     const [form] = Form.useForm()
-    //нужно отрефакторить код добавления формы, т.к после
-    //добавления и сохранения их нужно будет откуда-то вытаскивать
-    //Нужно обсудить данный вопрос с бэком
-
 
     function sendDataFormPlaceAndDate(values: IFormPlacesAndDate) {
         //1) собираем только организации
@@ -64,8 +57,8 @@ export const PlacesAndDated = () => {
 
         for (let org of onlyOrganisations) {
             //2) вычисляем, сколько дней человек будет в командировке в данной организации
-            if (org.date) {
-                const sumDayOrg = org.date[1]!.diff(org.date[0], 'day') + 1
+            if (org.dateStartEnd) {
+                const sumDayOrg = org.dateStartEnd[1]!.diff(org.dateStartEnd[0], 'day') + 1
 
                 //3) добавляем количество дней в объект данной организации
                 org.sumDay = sumDayOrg
@@ -73,6 +66,8 @@ export const PlacesAndDated = () => {
 
         }
         console.log(values)
+        //dispatch(setCondition(keysTabsBusinessTrip.travelConditions))
+        dispatch(setPlaceAndDateItemTabs(true))
     }
 
 
@@ -80,9 +75,14 @@ export const PlacesAndDated = () => {
         <Form layout={'vertical'}
               validateMessages={validateMessages}
               form={form}
-              onFinish={values => {
-                  sendDataFormPlaceAndDate(values)
+              onFinish={values => {sendDataFormPlaceAndDate(values)}}
+              onFinishFailed={errorInfo => console.log(errorInfo)}
+              onFieldsChange={(changedFields, allFields) => {
+                  for (let field of allFields) {
+                      console.log(field.name, field.validated)
+                  }
               }}
+
         >
             <Row gutter={[16, 0]} className={`w-[80%]`}>
                 <Col span={13}>
@@ -166,8 +166,6 @@ export const PlacesAndDated = () => {
                     </Button>
                 </Col>
             </Row>
-
-
         </Form>
     );
 };

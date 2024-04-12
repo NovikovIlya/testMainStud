@@ -66,10 +66,9 @@ export const PlacesAndDated = () => {
 
         }
         console.log(values)
-        //dispatch(setCondition(keysTabsBusinessTrip.travelConditions))
+        dispatch(setCondition(keysTabsBusinessTrip.travelConditions))
         dispatch(setPlaceAndDateItemTabs(true))
     }
-
 
     return (
         <Form layout={'vertical'}
@@ -78,10 +77,49 @@ export const PlacesAndDated = () => {
               onFinish={values => {sendDataFormPlaceAndDate(values)}}
               onFinishFailed={errorInfo => console.log(errorInfo)}
               onFieldsChange={(changedFields, allFields) => {
+                  const onlyValidatedNotOrg = []
+                  const onlyOrg = []
                   for (let field of allFields) {
-                      console.log(field.name, field.validated)
+                      if ((field.name[0] === 'goal' && field.validated)
+                          ||
+                          (field.name[0] === 'event' && field.validated)
+                          ||
+                          (field.name[0] === 'typeDocument' && field.validated)
+                          ||
+                          (field.name[0] === 'isRussia' && field.validated)) {
+                          //console.log(field.name[0])
+                          onlyValidatedNotOrg.push(field.name[0])
+                      } else if ((field.name[0] === 'organisations' && field.validated)) {
+                          onlyOrg.push(field.name[0])
+                      }
+                  }
+                  const setVal = new Set(onlyValidatedNotOrg)
+                  if (setVal.size === 4) {
+                      if (onlyOrg.length !== 0 && onlyOrg.length % 3 === 0) {
+                          //dispatch(setPlaceAndDateItemTabs(true))
+                      }
                   }
               }}
+              onValuesChange={(changedValues, values) => {
+
+                  for (let elem of Object.keys(values)) {
+                      if (values[elem] === undefined || values[elem] === '') {
+                          dispatch(setPlaceAndDateItemTabs(false))
+                          //break
+                      } else if (elem === 'organisations') {
+                          const onlyOrg = values[elem]
+                          //console.log(onlyOrg)
+                          //console.log(values[elem])
+                          for (let org of onlyOrg) {
+                              console.log(org)
+                          }
+
+
+                      }
+                      dispatch(setPlaceAndDateItemTabs(true))
+                  }
+              }}
+
 
         >
             <Row gutter={[16, 0]} className={`w-[80%]`}>
@@ -90,7 +128,8 @@ export const PlacesAndDated = () => {
                                rules={[{
                                    required: true
                                }]}
-                               name={'goal'}>
+                               name={'goal'}
+                    >
                         <Select options={optionsGoals} placeholder={'Выбрать'}/>
                     </Form.Item>
                 </Col>
@@ -119,8 +158,11 @@ export const PlacesAndDated = () => {
                 <Col span={13}>
                     <Form.Item label={<LabelFormItem label={'Прикрепить документ'}/>}
                                name={'file'}
+                               rules={[{
+                                   required: true
+                               }]}
                     >
-                        <Upload.Dragger multiple={true}>
+                        <Upload.Dragger multiple={true} beforeUpload={() => false}>
                             <div className={`flex flex-col gap-2`}>
                                 <span className={'text-lg'}>Перетащите файлы или выберите на компьютере</span>
                                 <div className={`flex items-center justify-center gap-2`}>

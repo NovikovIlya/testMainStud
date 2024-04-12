@@ -32,7 +32,9 @@ export const RangePickerFormItem = ({elem, label, nameField}: IRangePickerFormIt
                 rules={[{
                     type: 'array',
                     required: true,
-                }]}>
+                }]}
+                initialValue={[undefined]}
+            >
                 <DatePicker.RangePicker
                     placeholder={['ДД.ММ.ГГ', 'ДД.ММ.ГГ']}
                     className={`text-2xl w-full`}

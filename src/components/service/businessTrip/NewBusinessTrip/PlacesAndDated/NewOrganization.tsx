@@ -30,10 +30,10 @@ export const NewOrganization = ({setFieldValue, ...props}: INewOrganization) => 
     return (
         <Form.List name={'organisations'}
                    initialValue={[{
-                       innOrg: props.innOrg,
+                       innOrg: undefined,
                        nameOrg: props.nameOrg,
-                       legalAddress: props.legalAddress,
-                       actualAddress: props.actualAddress,
+                       legalAddress: props.nameOrg,
+                       actualAddress: undefined,
                    }]}
         >
             {(fields, operation) => (
@@ -90,7 +90,8 @@ export const NewOrganization = ({setFieldValue, ...props}: INewOrganization) => 
                                     rules={[{
                                         required: true
                                     }]}
-                                    initialValue={props.legalAddress}>
+                                    initialValue={props.legalAddress}
+                                >
                                     <Input
                                         className={`text-base`}
                                         placeholder={'Автоматический подбор'}

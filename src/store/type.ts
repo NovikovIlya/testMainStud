@@ -170,6 +170,7 @@ type educationResponceType = {
 }
 
 export type ResponceType = {
+	coverLetter: string
 	aboutMe: {
 		gender: IGender
 		lastname: string

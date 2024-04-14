@@ -18,6 +18,7 @@ import { useDispatch } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 import uuid from 'react-uuid'
 
+import { ArrowToTheRight } from '../../../assets/svg/ArrowToTheRight'
 import { DeleteSvg } from '../../../assets/svg/DeleteSvg'
 import { EditSvg } from '../../../assets/svg/EditSvg'
 import { useAppSelector } from '../../../store'
@@ -81,6 +82,7 @@ export const ResponseForm = () => {
 		experienceData.noExperienceFlag
 	)
 	const [skillInputValue, setSkillInputValue] = useState<string>('')
+	const [coverLetter, setCoverLetter] = useState('')
 	const date = new Date()
 
 	const { pathname } = useLocation()
@@ -293,59 +295,62 @@ export const ResponseForm = () => {
 													)
 											  }
 											: () => {
-													currentVacancy !== null &&
-														getVacancy({
-															id: currentVacancy?.id,
-															aboutMe: {
-																gender: aboutMeData.gender,
-																lastname: aboutMeData.surName,
-																firstname: aboutMeData.name,
-																patronymic: aboutMeData.patronymic,
-																birthday: aboutMeData.birthDay
-																	.split('-')
-																	.reverse()
-																	.join('-'),
-																citizenship: 'Российская федерация (РФ)',
-																phone: aboutMeData.phone,
-																email: aboutMeData.email
-															},
-															educations: educationData.educations.map(edu => ({
-																institution: edu.education.nameofInstitute,
-																endYear: parseInt(edu.education.graduateYear),
-																country: 'РФ',
-																educationLevel: 'Высшее',
-																speciality: edu.education.specialization
-															})),
-															portfolio: {
-																url: '',
-																workExperiences: experienceData.experiences.map(
-																	exp => ({
-																		workPlace: exp.experience.workplace,
-																		beginWork: exp.experience.beginWork
-																			.split('-')
-																			.reverse()
-																			.join('-'),
-																		endWork: exp.experience.endWork
-																			.split('-')
-																			.reverse()
-																			.join('-'),
-																		position: exp.experience.seat,
-																		duties: exp.experience.duties
-																	})
-																)
-															},
-															skills: {
-																keySkills: skillsData.skills,
-																aboutMe: skillsData.details
-															}
-														})
-															.unwrap()
-															.then(() => {
-																!result.isSuccess && setIsFormOpen(false)
-															})
-															.then(() => {
-																!result.isSuccess && setIsSuccessModalOpen(true)
-															})
+													// currentVacancy !== null &&
+													// 	getVacancy({
+													// 		id: currentVacancy?.id,
+													// 		aboutMe: {
+													// 			gender: aboutMeData.gender,
+													// 			lastname: aboutMeData.surName,
+													// 			firstname: aboutMeData.name,
+													// 			patronymic: aboutMeData.patronymic,
+													// 			birthday: aboutMeData.birthDay
+													// 				.split('-')
+													// 				.reverse()
+													// 				.join('-'),
+													// 			citizenship: 'Российская федерация (РФ)',
+													// 			phone: aboutMeData.phone,
+													// 			email: aboutMeData.email
+													// 		},
+													// 		educations: educationData.educations.map(edu => ({
+													// 			institution: edu.education.nameofInstitute,
+													// 			endYear: parseInt(edu.education.graduateYear),
+													// 			country: 'РФ',
+													// 			educationLevel: 'Высшее',
+													// 			speciality: edu.education.specialization
+													// 		})),
+													// 		portfolio: {
+													// 			url: '',
+													// 			workExperiences: experienceData.experiences.map(
+													// 				exp => ({
+													// 					workPlace: exp.experience.workplace,
+													// 					beginWork: exp.experience.beginWork
+													// 						.split('-')
+													// 						.reverse()
+													// 						.join('-'),
+													// 					endWork: exp.experience.endWork
+													// 						.split('-')
+													// 						.reverse()
+													// 						.join('-'),
+													// 					position: exp.experience.seat,
+													// 					duties: exp.experience.duties
+													// 				})
+													// 			)
+													// 		},
+													// 		skills: {
+													// 			keySkills: skillsData.skills,
+													// 			aboutMe: skillsData.details
+													// 		}
+													// 	})
+													// 		.unwrap()
+													// 		.then(() => {
+													// 			!result.isSuccess && setIsFormOpen(false)
+													// 		})
+													// 		.then(() => {
+													// 			!result.isSuccess && setIsSuccessModalOpen(true)
+													// 		})
+													navigate(
+														'/services/jobseeker/vacancyview/respond/coverletter'
+													)
 											  }
 									}
 								>
@@ -358,6 +363,105 @@ export const ResponseForm = () => {
 										: 'Дальше'}
 								</Button>
 							</div>
+						</>
+					)}
+					{pathname.includes(
+						'/services/jobseeker/vacancyview/respond/coverletter'
+					) && (
+						<>
+							<p className="mb-[36px] font-content-font text-black text-[18px]/[18px] font-normal">
+								Откликнуться
+							</p>
+							<div className="mb-[20px] rounded-[8px] bg-[#E5EBFB] py-[12px] px-[20px] relative">
+								<p className="font-content-font text-black text-[16px]/[19.2px] font-normal opacity-40">
+									Вакансия
+								</p>
+								<p className="font-content-font text-black text-[16px]/[19.2px] font-normal w-[90%]">
+									{currentVacancy?.title.rendered}
+								</p>
+								<div
+									onClick={() => {
+										navigate('/services/jobseeker/vacancyview/respond/main')
+									}}
+									className="absolute top-[50%] bottom-[50%] right-[29px] cursor-pointer"
+								>
+									<ArrowToTheRight />
+								</div>
+							</div>
+							<p className="mb-[16px] font-content-font text-black text-[16px]/[16px] font-normal">
+								Сопроводительное письмо
+							</p>
+							<Input.TextArea
+								autoSize={true}
+								className="!h-[185px] !px-[16px] !py-[11px]"
+								placeholder="Введите сообщение"
+								value={coverLetter}
+								onChange={e => {
+									setCoverLetter(e.target.value)
+								}}
+							/>
+							<Button
+								className="mr-auto mt-[40px] rounded-[54.5px]"
+								type="primary"
+								onClick={() => {
+									currentVacancy !== null &&
+										getVacancy({
+											id: currentVacancy?.id,
+											coverLetter: coverLetter,
+											aboutMe: {
+												gender: aboutMeData.gender,
+												lastname: aboutMeData.surName,
+												firstname: aboutMeData.name,
+												patronymic: aboutMeData.patronymic,
+												birthday: aboutMeData.birthDay
+													.split('-')
+													.reverse()
+													.join('-'),
+												citizenship: 'Российская федерация (РФ)',
+												phone: aboutMeData.phone,
+												email: aboutMeData.email
+											},
+											educations: educationData.educations.map(edu => ({
+												institution: edu.education.nameofInstitute,
+												endYear: parseInt(edu.education.graduateYear),
+												country: 'РФ',
+												educationLevel: 'Высшее',
+												speciality: edu.education.specialization
+											})),
+											portfolio: {
+												url: '',
+												workExperiences: experienceData.experiences.map(
+													exp => ({
+														workPlace: exp.experience.workplace,
+														beginWork: exp.experience.beginWork
+															.split('-')
+															.reverse()
+															.join('-'),
+														endWork: exp.experience.endWork
+															.split('-')
+															.reverse()
+															.join('-'),
+														position: exp.experience.seat,
+														duties: exp.experience.duties
+													})
+												)
+											},
+											skills: {
+												keySkills: skillsData.skills,
+												aboutMe: skillsData.details
+											}
+										})
+											.unwrap()
+											.then(() => {
+												!result.isSuccess && setIsFormOpen(false)
+											})
+											.then(() => {
+												!result.isSuccess && setIsSuccessModalOpen(true)
+											})
+								}}
+							>
+								Отправить
+							</Button>
 						</>
 					)}
 					{pathname.includes(

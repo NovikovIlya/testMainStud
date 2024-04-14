@@ -14,6 +14,7 @@ import {
 	openChat
 } from '../../../store/reducers/ChatRespondStatusSlice'
 import { setChatId } from '../../../store/reducers/chatIdSlice'
+import { respondStatus } from '../../../store/type'
 
 export const ChatPreview = (props: {
 	respondId: number
@@ -34,7 +35,10 @@ export const ChatPreview = (props: {
 
 	const handleNavigate = (url: string) => {
 		if (props.checkableStatus) {
-			if (props.checkableStatus === 'IN_PERSONNEL_DEPT_REVIEW') {
+			if (
+				props.checkableStatus ===
+				respondStatus[respondStatus.IN_PERSONNEL_DEPT_REVIEW]
+			) {
 				dispatch(closeChat())
 			}
 		} else {

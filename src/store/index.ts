@@ -3,6 +3,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import logger from 'redux-logger'
 
 import { apiSlice } from './api/apiSlice'
+import ChatRespondStatusSlice from './reducers/ChatRespondStatusSlice'
 import CurrentResponceSlice from './reducers/CurrentResponceSlice'
 import CurrentVacancyNameSlice from './reducers/CurrentVacancyNameSlice'
 import CurrentVacancySlice from './reducers/CurrentVacancySlice'
@@ -44,6 +45,7 @@ export const store = configureStore({
 		formCompletion: FormCompletionReducer,
 		chatId: chatIdSlice,
 		currentResponce: CurrentResponceSlice,
+		chatResponceStatus: ChatRespondStatusSlice,
 		[apiSlice.reducerPath]: apiSlice.reducer
 	},
 	middleware: getDefaultMiddleware =>

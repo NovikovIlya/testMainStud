@@ -17,7 +17,12 @@ export const Chat = () => {
 
 	const handleList = responds.map(resp => {
 		return (
-			<ChatPreview respondId={resp.id} respName={resp.name} key={resp.id} />
+			<ChatPreview
+				respondId={resp.id}
+				respName={resp.name}
+				checkableStatus={resp.status}
+				key={resp.id}
+			/>
 		)
 	})
 

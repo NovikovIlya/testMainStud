@@ -32,6 +32,7 @@ type ChatMessageFormDataType = {
 
 export const ChatPage = () => {
 	const chatIdState = useAppSelector(state => state.chatId)
+	const ChatStatus = useAppSelector(state => state.chatResponceStatus)
 	const user = useAppSelector(state => state.auth.user)
 	const isEmpDemp = user?.roles.find(role => role.type === 'EMPL')
 	const [getChatMessages, chatMessages] = useLazyGetChatMessagesQuery()
@@ -319,6 +320,12 @@ export const ChatPage = () => {
 							14:01
 						</p>
 					</div> */}
+					{ChatStatus.chatClosed && (
+						<div className="bg-white rounded-[16px] text-center mt-[10px]">
+							У вас появится возможность писать в чате после того, как ваш
+							отклик перейдёт на рассмотрение у руководителя
+						</div>
+					)}
 					<div
 						className="h-[1px]"
 						key={'osobyi_kluch'}
@@ -335,6 +342,7 @@ export const ChatPage = () => {
 							control={control}
 							render={({ field }) => (
 								<textarea
+									disabled={ChatStatus.chatClosed}
 									{...register('text', {
 										required: {
 											value: true,
@@ -345,7 +353,7 @@ export const ChatPage = () => {
 									onChange={e => {
 										setMsgInputText(e.target.value)
 									}}
-									className="w-full h-full font-content-font font-normal text-black text-[16px]/[16px] placeholder:opacity-50 resize-none border-none focus:outline-none pt-[8px]"
+									className="w-full h-full font-content-font font-normal text-black text-[16px]/[16px] placeholder:opacity-50 resize-none border-none focus:outline-none pt-[8px] disabled:bg-white"
 									placeholder="Ввести сообщение"
 								></textarea>
 							)}
@@ -357,6 +365,7 @@ export const ChatPage = () => {
 								render={({ field }) => (
 									<>
 										<input
+											disabled={ChatStatus.chatClosed}
 											{...register('files')}
 											id="files"
 											className="hidden"
@@ -373,6 +382,7 @@ export const ChatPage = () => {
 								)}
 							/>
 							<Button
+								disabled={ChatStatus.chatClosed}
 								className="rounded-[54.5px] h-[32px] px-[24px]"
 								type="primary"
 								htmlType="submit"

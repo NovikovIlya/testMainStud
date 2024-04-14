@@ -9,9 +9,17 @@ import {
 	useGetChatIdByRespondIdQuery,
 	useGetUnreadMessagesCountQuery
 } from '../../../store/api/serviceApi'
+import {
+	closeChat,
+	openChat
+} from '../../../store/reducers/ChatRespondStatusSlice'
 import { setChatId } from '../../../store/reducers/chatIdSlice'
 
-export const ChatPreview = (props: { respondId: number; respName: string }) => {
+export const ChatPreview = (props: {
+	respondId: number
+	respName: string
+	checkableStatus?: string
+}) => {
 	const { data: chatId = 0, isLoading: isChatIdLoading } =
 		useGetChatIdByRespondIdQuery(props.respondId)
 	const { data: unreadCount, isLoading: isUnreadCountLoading } =
@@ -25,6 +33,13 @@ export const ChatPreview = (props: { respondId: number; respName: string }) => {
 	const navigate = useNavigate()
 
 	const handleNavigate = (url: string) => {
+		if (props.checkableStatus) {
+			if (props.checkableStatus === 'IN_PERSONNEL_DEPT_REVIEW') {
+				dispatch(closeChat())
+			}
+		} else {
+			dispatch(openChat())
+		}
 		dispatch(setChatId(chatId))
 		navigate(url)
 	}

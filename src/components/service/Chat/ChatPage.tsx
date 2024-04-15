@@ -286,7 +286,8 @@ export const ChatPage = () => {
 					/>
 					{[...messages].reverse().map((msg, msgIndex, msgArray) => (
 						<>
-							{msg.sendDate.substring(0, 10) !== msgDate.current &&
+							{(msg.sendDate.substring(0, 10) !== msgDate.current ||
+								msgIndex === 0) &&
 								((msgDate.current = msg.sendDate.substring(0, 10)),
 								console.log(msg.sendDate.substring(0, 10)),
 								(

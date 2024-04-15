@@ -3,6 +3,8 @@ import {Col, Form, Input, Row, Select, Upload} from "antd";
 import {validateMessages} from "../../../../../utils/validateMessage";
 import {LabelFormItem} from "../utilsComponent/labelFormItem";
 import {UploadFileSvg} from "../../../../../assets/svg/UploadFileSvg";
+import PhoneInput from "antd-phone-input";
+import {validator} from "../../../../../utils/validPhone";
 
 
 export const StaffDate = () => {
@@ -25,7 +27,8 @@ export const StaffDate = () => {
                 <Col span={13}>
                     <Form.Item label={<LabelFormItem label={'Номер телефона '}/>}
                                name={'numberPhone'}>
-                        <Input placeholder={'8(ХХХ)ХХХ-ХХ-ХХ'}/>
+                        {/*<Input placeholder={'+7 (ХХХ) ХХХ-ХХ-ХХ'}/>*/}
+                        <PhoneInput maxLength={18} />
                     </Form.Item>
                 </Col>
                 <Col span={13}>

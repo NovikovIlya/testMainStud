@@ -16,9 +16,10 @@ import {LivingCard} from "../cardsData/LivingCard";
 import {validateMessages} from "../../../../../utils/validateMessage";
 import {TravelCard} from "../cardsData/TravelCard";
 import {setLivingConditionsItemTabs} from "../../../../../store/reducers/FormReducers/ItemTabs";
+import {isFormCompleted} from "../utils/isFormCompleted";
 
 export const LivingConditions = () => {
-
+    const [form] = Form.useForm()
     const dispatch = useDispatch()
 
     function sendDataLivingCondition({dataLivingConditions}: ILivingCondition) {
@@ -36,9 +37,16 @@ export const LivingConditions = () => {
 
     return (
         <Form layout={'vertical'}
+              form={form}
               validateMessages={validateMessages}
-              onFinish={values => {
-                  sendDataLivingCondition(values)
+              onFinish={values => {sendDataLivingCondition(values)}}
+              onValuesChange={() => {
+                  isFormCompleted({
+                      form: form,
+                      setTrue: () => dispatch(setLivingConditionsItemTabs(true)),
+                      setFalse: () => dispatch(setLivingConditionsItemTabs(false)),
+                      nameList: ['dataLivingConditions']
+                  })
               }}
         >
             <Row gutter={[16, 0]} className={`w-full`} style={{marginLeft: '0px'}}>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Button, Col, Form, Input, Radio, Row, Select, Upload} from "antd";
 import {LabelFormItem} from "../../labelFormItem/labelFormItem";
 import {UploadFileSvg} from "../../../../../assets/svg/UploadFileSvg";
@@ -8,7 +8,7 @@ import {INewOrganization, NewOrganization} from "./NewOrganization";
 import {validateMessages} from "../../../../../utils/validateMessage";
 import {RcFile} from "antd/es/upload";
 import {setPlaceAndDateItemTabs} from "../../../../../store/reducers/FormReducers/ItemTabs";
-
+import {isFormCompleted} from "../utils/isFormCompleted";
 
 const optionsGoals = [
     {value: 'Административный визит'},
@@ -65,7 +65,7 @@ export const PlacesAndDated = () => {
             }
 
         }
-        console.log(values)
+        //console.log(values)
         dispatch(setCondition(keysTabsBusinessTrip.travelConditions))
         dispatch(setPlaceAndDateItemTabs(true))
     }
@@ -75,49 +75,13 @@ export const PlacesAndDated = () => {
               validateMessages={validateMessages}
               form={form}
               onFinish={values => {sendDataFormPlaceAndDate(values)}}
-              onFinishFailed={errorInfo => console.log(errorInfo)}
-              onFieldsChange={(changedFields, allFields) => {
-                  const onlyValidatedNotOrg = []
-                  const onlyOrg = []
-                  for (let field of allFields) {
-                      if ((field.name[0] === 'goal' && field.validated)
-                          ||
-                          (field.name[0] === 'event' && field.validated)
-                          ||
-                          (field.name[0] === 'typeDocument' && field.validated)
-                          ||
-                          (field.name[0] === 'isRussia' && field.validated)) {
-                          //console.log(field.name[0])
-                          onlyValidatedNotOrg.push(field.name[0])
-                      } else if ((field.name[0] === 'organisations' && field.validated)) {
-                          onlyOrg.push(field.name[0])
-                      }
-                  }
-                  const setVal = new Set(onlyValidatedNotOrg)
-                  if (setVal.size === 4) {
-                      if (onlyOrg.length !== 0 && onlyOrg.length % 3 === 0) {
-                          //dispatch(setPlaceAndDateItemTabs(true))
-                      }
-                  }
-              }}
-              onValuesChange={(changedValues, values) => {
-
-                  for (let elem of Object.keys(values)) {
-                      if (values[elem] === undefined || values[elem] === '') {
-                          dispatch(setPlaceAndDateItemTabs(false))
-                          //break
-                      } else if (elem === 'organisations') {
-                          const onlyOrg = values[elem]
-                          //console.log(onlyOrg)
-                          //console.log(values[elem])
-                          for (let org of onlyOrg) {
-                              console.log(org)
-                          }
-
-
-                      }
-                      dispatch(setPlaceAndDateItemTabs(true))
-                  }
+              onValuesChange={() => {
+                  isFormCompleted({
+                      form,
+                      setTrue: () => dispatch(setPlaceAndDateItemTabs(true)),
+                      setFalse: () => dispatch(setPlaceAndDateItemTabs(false)),
+                      nameList: ['goal', 'event', 'typeDocument', 'file', 'isRussia', 'organisations'],
+                  })
               }}
 
 

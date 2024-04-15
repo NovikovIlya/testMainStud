@@ -10,9 +10,10 @@ import {ColSpan16RowGutter16} from "../WrapperForConditionsTabs/ColSpan16RowGutt
 import {ColSpan8} from "../WrapperForConditionsTabs/ColSpan8";
 import {validateMessages} from "../../../../../utils/validateMessage";
 import {setTravelConditionsItemTabs} from "../../../../../store/reducers/FormReducers/ItemTabs";
+import {isFormCompleted} from "../utils/isFormCompleted";
 
 export const TravelConditions = () => {
-
+    const [form] = Form.useForm()
     const dispatch = useDispatch()
 
     function sendDataTravelCondition({travelConditions}: ITravelConditions) {
@@ -29,8 +30,19 @@ export const TravelConditions = () => {
     }
 
     return (
-        <Form layout={'vertical'} validateMessages={validateMessages}
-              onFinish={values => sendDataTravelCondition(values)}>
+        <Form layout={'vertical'}
+              form={form}
+              validateMessages={validateMessages}
+              onFinish={values => sendDataTravelCondition(values)}
+              onValuesChange={() => {
+                  isFormCompleted({
+                      form: form,
+                      setTrue: () => dispatch(setTravelConditionsItemTabs(true)),
+                      setFalse: () => dispatch(setTravelConditionsItemTabs(false)),
+                      nameList: ['travelConditions'],
+                  })
+              }}
+        >
             <Row gutter={[16, 0]} className={`w-full`} style={{marginLeft: '0px'}}>
                 <Col span={16}>
                     <NewDataTravelConditions/>

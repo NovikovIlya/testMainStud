@@ -13,7 +13,7 @@ export interface INewOrganization {
     nameOrg?: string
     legalAddress?: string
     actualAddress?: string
-    dateStartEnd?: Array<dayjs.Dayjs> | Array<null>
+    dateStartEnd?: Array<dayjs.Dayjs> | Array<null | undefined>
     setFieldValue: (name: NamePath, value: any) => void;
     sumDay?: number;
 }

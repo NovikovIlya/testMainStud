@@ -33,7 +33,7 @@ export const RangePickerFormItem = ({elem, label, nameField}: IRangePickerFormIt
                     type: 'array',
                     required: true,
                 }]}
-                initialValue={[undefined]}
+
             >
                 <DatePicker.RangePicker
                     placeholder={['ДД.ММ.ГГ', 'ДД.ММ.ГГ']}

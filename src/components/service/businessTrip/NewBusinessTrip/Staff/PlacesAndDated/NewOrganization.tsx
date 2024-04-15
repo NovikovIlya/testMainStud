@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Col, DatePicker, Form, Input, InputNumber, Row, Tooltip} from "antd";
-import {LabelFormItem} from "../../labelFormItem/labelFormItem";
+import {LabelFormItem} from "../../utilsComponent/labelFormItem";
 import dayjs from "dayjs";
 import {NamePath} from "rc-field-form/es/interface";
-import {RangePickerFormItem} from "../RangePickerFormItem";
-import {ButtonAddData} from "../buttonAddData/buttonAddData";
+import {RangePickerFormItem} from "../../utilsComponent/RangePickerFormItem";
+import {ButtonAddData} from "../../utilsComponent/buttonAddData";
 import {CloseOutlined} from "@ant-design/icons";
 
 

@@ -1,14 +1,14 @@
 import React, {useEffect} from 'react';
 import {Button, Col, Form, Input, Radio, Row, Select, Upload} from "antd";
-import {LabelFormItem} from "../../labelFormItem/labelFormItem";
-import {UploadFileSvg} from "../../../../../assets/svg/UploadFileSvg";
+import {LabelFormItem} from "../../utilsComponent/labelFormItem";
+import {UploadFileSvg} from "../../../../../../assets/svg/UploadFileSvg";
 import {useDispatch} from "react-redux";
-import {keysTabsBusinessTrip, setCondition} from "../../../../../store/reducers/FormReducers/StepFormBusinessTrip";
+import {keysTabsBusinessTrip, setCondition} from "../../../../../../store/reducers/FormReducers/StaffStepFormBusinessTrip";
 import {INewOrganization, NewOrganization} from "./NewOrganization";
-import {validateMessages} from "../../../../../utils/validateMessage";
+import {validateMessages} from "../../../../../../utils/validateMessage";
 import {RcFile} from "antd/es/upload";
-import {setPlaceAndDateItemTabs} from "../../../../../store/reducers/FormReducers/ItemTabs";
-import {isFormCompleted} from "../utils/isFormCompleted";
+import {setPlaceAndDateItemTabs} from "../../../../../../store/reducers/FormReducers/StaffItemTabsReducer";
+import {isFormCompleted} from "../../utilsFunctions/isFormCompleted";
 
 const optionsGoals = [
     {value: 'Административный визит'},
@@ -83,8 +83,6 @@ export const PlacesAndDated = () => {
                       nameList: ['goal', 'event', 'typeDocument', 'file', 'isRussia', 'organisations'],
                   })
               }}
-
-
         >
             <Row gutter={[16, 0]} className={`w-[80%]`}>
                 <Col span={13}>

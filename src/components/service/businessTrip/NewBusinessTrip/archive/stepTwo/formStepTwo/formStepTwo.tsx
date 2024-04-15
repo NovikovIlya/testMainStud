@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Col, ConfigProvider, DatePicker, Form, Input, Radio, Row} from "antd";
-import {LabelFormItem} from "../../../../labelFormItem/labelFormItem";
+import {LabelFormItem} from "../../../utilsComponent/labelFormItem";
 import i18n from "i18next";
 import ruPicker from "antd/locale/ru_RU";
 import enPicker from "antd/locale/en_US";

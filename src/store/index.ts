@@ -12,8 +12,10 @@ import ParentReducer from './reducers/FormReducers/ParentReducer'
 import WorkReducer from './reducers/FormReducers/WorkReducer'
 import LayoutSlice from './reducers/LayoutsSlice'
 import authSlice from './reducers/authSlice'
-import StepFormBusinessTrip from "./reducers/FormReducers/StepFormBusinessTrip";
-import ItemTabsReducer from "./reducers/FormReducers/ItemTabs";
+import StaffStepFormBusinessTrip from "./reducers/FormReducers/StaffStepFormBusinessTrip";
+import StaffItemTabsReducer from "./reducers/FormReducers/StaffItemTabsReducer";
+import SecretaryStepFormBusinessTrip from "./reducers/FormReducers/SecretaryStepFormBusinessTrip";
+import SecretaryItemTabsReducer from "./reducers/FormReducers/SecretaryItemTabsReducer";
 
 
 export const store = configureStore({
@@ -28,8 +30,10 @@ export const store = configureStore({
 		Parent: ParentReducer,
 		Address: AddressReducer,
 		CountriesEducation: CountriesEducationReducer,
-		StepFormBusinessTrip: StepFormBusinessTrip,
-		ItemTabs: ItemTabsReducer,
+		StaffStepFormBusinessTrip: StaffStepFormBusinessTrip,
+		StaffItemTabs: StaffItemTabsReducer,
+		SecretaryStepFormBusinessTrip: SecretaryStepFormBusinessTrip,
+		SecretaryItemTabs: SecretaryItemTabsReducer,
 		[apiSlice.reducerPath]: apiSlice.reducer
 	},
 	middleware: getDefaultMiddleware =>

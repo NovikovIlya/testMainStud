@@ -1,5 +1,4 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {RootState} from "../../index";
 
 
 export interface IItemTabs {
@@ -16,7 +15,7 @@ const initialStateFormStepTwo: IItemTabs = {
     financing: false,
 }
 
-export const ItemTabsReducer = createSlice({
+export const StaffItemTabsReducer = createSlice({
     name: 'ItemTabs',
     initialState: initialStateFormStepTwo,
     reducers: {
@@ -40,7 +39,7 @@ export const {
     setTravelConditionsItemTabs,
     setFinancingItemTabs,
     setPlaceAndDateItemTabs
-} = ItemTabsReducer.actions
-export default ItemTabsReducer.reducer
+} = StaffItemTabsReducer.actions
+export default StaffItemTabsReducer.reducer
 
 //export const itemTabsReducer = (state: RootState) => state.ItemTabs

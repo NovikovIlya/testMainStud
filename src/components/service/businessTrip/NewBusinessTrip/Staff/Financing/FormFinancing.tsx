@@ -1,7 +1,7 @@
 import React from 'react';
 import {AutoComplete, Col, Form, Input, Select} from "antd";
-import {LabelFormItem} from "../../labelFormItem/labelFormItem";
-import {CustomRangePicker} from "../customRangePicker/customRangePicker";
+import {LabelFormItem} from "../../utilsComponent/labelFormItem";
+import {CustomRangePicker} from "../../utilsComponent/customRangePicker";
 
 
 

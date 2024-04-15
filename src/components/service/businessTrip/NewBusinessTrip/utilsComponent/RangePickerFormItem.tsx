@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {DatePicker, Form, FormListFieldData} from "antd";
-import {LabelFormItem} from "../labelFormItem/labelFormItem";
+import {LabelFormItem} from "./labelFormItem";
 import {SumDay} from "./SumDay";
 import dayjs from "dayjs";
 

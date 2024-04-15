@@ -1,22 +1,12 @@
 import React, {useState} from 'react';
-import {WrapperForConditionsTabs} from "../WrapperForConditionsTabs/WrapperForConditionsTabs";
-import {ColSpan16RowGutter16} from "../WrapperForConditionsTabs/ColSpan16RowGutter16";
-import {ColSpan8} from "../WrapperForConditionsTabs/ColSpan8";
 import {useDispatch} from "react-redux";
-import {
-    INewDataTravelConditions,
-    ITravelConditions,
-    NewDataTravelConditions
-} from "../TravelConditions/NewDataTravelConditions";
 import {ILivingCondition, NewDataLivingConditions} from "./NewDataLivingConditions";
 import {Button, Col, Form, Row} from "antd";
-import {ButtonAddData} from "../buttonAddData/buttonAddData";
-import {keysTabsBusinessTrip, setCondition} from "../../../../../store/reducers/FormReducers/StepFormBusinessTrip";
-import {LivingCard} from "../cardsData/LivingCard";
-import {validateMessages} from "../../../../../utils/validateMessage";
-import {TravelCard} from "../cardsData/TravelCard";
-import {setLivingConditionsItemTabs} from "../../../../../store/reducers/FormReducers/ItemTabs";
-import {isFormCompleted} from "../utils/isFormCompleted";
+import {keysTabsBusinessTrip, setCondition} from "../../../../../../store/reducers/FormReducers/StaffStepFormBusinessTrip";
+import {LivingCard} from "../../cardsData/LivingCard";
+import {validateMessages} from "../../../../../../utils/validateMessage";
+import {setLivingConditionsItemTabs} from "../../../../../../store/reducers/FormReducers/StaffItemTabsReducer";
+import {isFormCompleted} from "../../utilsFunctions/isFormCompleted";
 
 export const LivingConditions = () => {
     const [form] = Form.useForm()

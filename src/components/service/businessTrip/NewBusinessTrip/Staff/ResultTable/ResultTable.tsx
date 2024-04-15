@@ -1,9 +1,9 @@
 import React, {ReactNode} from 'react';
 import {Col, Row, Table, TableProps} from "antd";
-import {TitleHeadCell} from "../archive/stepTwo/tableStepTwo/titleHeadCell/TitleHeadCell";
-import {PaperClip} from "../../../../../assets/svg/PaperClip";
-import {EditSvg} from "../../../../../assets/svg/EditSvg";
-import {DeleteSvg} from "../../../../../assets/svg/DeleteSvg";
+import {TitleHeadCell} from "../../archive/stepTwo/tableStepTwo/titleHeadCell/TitleHeadCell";
+import {PaperClip} from "../../../../../../assets/svg/PaperClip";
+import {EditSvg} from "../../../../../../assets/svg/EditSvg";
+import {DeleteSvg} from "../../../../../../assets/svg/DeleteSvg";
 
 interface GeneralProperty {
     key: string

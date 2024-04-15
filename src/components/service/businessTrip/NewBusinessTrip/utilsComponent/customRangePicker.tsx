@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {DatePicker, Form} from "antd";
 import dayjs from "dayjs";
-import {LabelFormItem} from "../../labelFormItem/labelFormItem";
+import {LabelFormItem} from "./labelFormItem";
 
 export const CustomRangePicker = () => {
 

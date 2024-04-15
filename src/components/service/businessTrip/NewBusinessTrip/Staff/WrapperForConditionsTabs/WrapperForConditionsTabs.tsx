@@ -1,6 +1,6 @@
 import React, {ReactNode} from 'react';
 import {Col, Form, Row} from "antd";
-import {validateMessages} from "../../../../../utils/validateMessage";
+import {validateMessages} from "../../../../../../utils/validateMessage";
 
 interface IWrapperForConditionsTabs {
     children: ReactNode

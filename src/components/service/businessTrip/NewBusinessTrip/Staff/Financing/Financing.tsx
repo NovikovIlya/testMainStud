@@ -1,12 +1,11 @@
 import React from 'react';
-import {WrapperForConditionsTabs} from "../WrapperForConditionsTabs/WrapperForConditionsTabs";
-import {ColSpan16RowGutter16} from "../WrapperForConditionsTabs/ColSpan16RowGutter16";
 import {ColSpan8} from "../WrapperForConditionsTabs/ColSpan8";
 import {FormFinancing} from "./FormFinancing";
 import {Button, Col} from "antd";
-import {keysTabsBusinessTrip, setCondition} from "../../../../../store/reducers/FormReducers/StepFormBusinessTrip";
+import {keysTabsBusinessTrip, setCondition} from "../../../../../../store/reducers/FormReducers/StaffStepFormBusinessTrip";
 import {useDispatch} from "react-redux";
-import {LivingCard} from "../cardsData/LivingCard";
+import {WrapperForConditionsTabs} from "../WrapperForConditionsTabs/WrapperForConditionsTabs";
+import {ColSpan16RowGutter16} from "../WrapperForConditionsTabs/ColSpan16RowGutter16";
 
 export const Financing = () => {
 

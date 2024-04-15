@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {AutoComplete, Button, Col, ConfigProvider, Form, Input, Row, Select, Upload} from "antd";
-import {LabelFormItem} from "../../../labelFormItem/labelFormItem";
+import {LabelFormItem} from "../../utilsComponent/labelFormItem";
 import {UploadFileSvg} from "../../../../../../assets/svg/UploadFileSvg";
 import clsx from 'clsx'
 import InputMask from 'react-input-mask'

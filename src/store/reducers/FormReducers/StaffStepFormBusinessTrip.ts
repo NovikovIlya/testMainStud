@@ -1,5 +1,4 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {RootState} from "../../index";
 
 export const keysTabsBusinessTrip = {
     placesAndDated: 'PlacesAndDated',
@@ -17,8 +16,8 @@ const initialStateFormStepTwo: IStepFormBusinessTrip = {
     step: 'PlacesAndDated'
 }
 
-export const StepFormBusinessTrip = createSlice({
-    name: 'StepFormBusinessTrip',
+export const StaffStepFormBusinessTrip = createSlice({
+    name: 'StaffStepFormBusinessTrip',
     initialState: initialStateFormStepTwo,
     reducers: {
         setCondition: (state, action: PayloadAction<string>) => {
@@ -30,7 +29,7 @@ export const StepFormBusinessTrip = createSlice({
 
 export const {
     setCondition,
-} = StepFormBusinessTrip.actions
-export default StepFormBusinessTrip.reducer
+} = StaffStepFormBusinessTrip.actions
+export default StaffStepFormBusinessTrip.reducer
 
-export const stepFormBusinessTrip = (state: RootState) => state.StepFormBusinessTrip
+//export const staffStepFormBusinessTrip = (state: RootState) => state.StaffStepFormBusinessTrip

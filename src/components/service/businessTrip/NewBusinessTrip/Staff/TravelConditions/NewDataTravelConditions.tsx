@@ -1,9 +1,9 @@
 import React from 'react';
 import {AutoComplete, Col, Form, Row, Select} from "antd";
-import {LabelFormItem} from "../../labelFormItem/labelFormItem";
+import {LabelFormItem} from "../../utilsComponent/labelFormItem";
 import dayjs from "dayjs";
-import {ButtonAddData} from "../buttonAddData/buttonAddData";
-import {RangePickerFormItem} from "../RangePickerFormItem";
+import {ButtonAddData} from "../../utilsComponent/buttonAddData";
+import {RangePickerFormItem} from "../../utilsComponent/RangePickerFormItem";
 
 export interface INewDataTravelConditions {
     typeTransport: string

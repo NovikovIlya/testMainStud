@@ -1,9 +1,9 @@
 import React from 'react';
 import {AutoComplete, Col, Form, Row, Select} from "antd";
-import {LabelFormItem} from "../../labelFormItem/labelFormItem";
-import {CustomRangePicker} from "../customRangePicker/customRangePicker";
-import {RangePickerFormItem} from "../RangePickerFormItem";
-import {ButtonAddData} from "../buttonAddData/buttonAddData";
+import {LabelFormItem} from "../../utilsComponent/labelFormItem";
+import {CustomRangePicker} from "../../utilsComponent/customRangePicker";
+import {RangePickerFormItem} from "../../utilsComponent/RangePickerFormItem";
+import {ButtonAddData} from "../../utilsComponent/buttonAddData";
 import dayjs from "dayjs";
 
 export interface INewDataLivingConditions {

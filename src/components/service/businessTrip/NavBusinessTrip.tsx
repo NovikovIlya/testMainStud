@@ -12,6 +12,7 @@ export const NavBusinessTrip = () => {
     const {pathname} = useLocation()
     const { t } = useTranslation()
 
+
     return (
         <>
             <Header type={'service'} service={t("BusinessTripModule")}/>

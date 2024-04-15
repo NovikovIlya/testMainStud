@@ -1,16 +1,13 @@
 import React, {useState} from 'react';
 import {Button, Col, Form, Row} from "antd";
-import {ButtonAddData} from "../buttonAddData/buttonAddData";
+import {ButtonAddData} from "../../utilsComponent/buttonAddData";
 import {useDispatch} from "react-redux";
-import {keysTabsBusinessTrip, setCondition} from "../../../../../store/reducers/FormReducers/StepFormBusinessTrip";
+import {keysTabsBusinessTrip, setCondition} from "../../../../../../store/reducers/FormReducers/StaffStepFormBusinessTrip";
 import {INewDataTravelConditions, ITravelConditions, NewDataTravelConditions} from "./NewDataTravelConditions";
-import {TravelCard} from "../cardsData/TravelCard";
-import {WrapperForConditionsTabs} from "../WrapperForConditionsTabs/WrapperForConditionsTabs";
-import {ColSpan16RowGutter16} from "../WrapperForConditionsTabs/ColSpan16RowGutter16";
-import {ColSpan8} from "../WrapperForConditionsTabs/ColSpan8";
-import {validateMessages} from "../../../../../utils/validateMessage";
-import {setTravelConditionsItemTabs} from "../../../../../store/reducers/FormReducers/ItemTabs";
-import {isFormCompleted} from "../utils/isFormCompleted";
+import {TravelCard} from "../../cardsData/TravelCard";
+import {validateMessages} from "../../../../../../utils/validateMessage";
+import {setTravelConditionsItemTabs} from "../../../../../../store/reducers/FormReducers/StaffItemTabsReducer";
+import {isFormCompleted} from "../../utilsFunctions/isFormCompleted";
 
 export const TravelConditions = () => {
     const [form] = Form.useForm()

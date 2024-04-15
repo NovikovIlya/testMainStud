@@ -1,25 +1,28 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {ConfigProvider, Tabs} from "antd";
-import {PlacesAndDated} from "./PlacesAndDated/PlacesAndDated";
+import {PlacesAndDated} from "./Staff/PlacesAndDated/PlacesAndDated";
 import './NewBusinessTrip.scss'
-import {keysTabsBusinessTrip, setCondition} from "../../../../store/reducers/FormReducers/StepFormBusinessTrip";
+import {keysTabsBusinessTrip, setCondition} from "../../../../store/reducers/FormReducers/StaffStepFormBusinessTrip";
+import {secretaryKeysTabsBusinessTrip, setSecretaryCondition} from '../../../../store/reducers/FormReducers/SecretaryStepFormBusinessTrip'
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../../../store";
-import {TravelConditions} from "./TravelConditions/TravelConditions";
-import {LivingConditions} from "./LivingConditions/LivingConditions";
-import {Financing} from "./Financing/Financing";
-import {ResultTable} from "./ResultTable/ResultTable";
+import {TravelConditions} from "./Staff/TravelConditions/TravelConditions";
+import {LivingConditions} from "./Staff/LivingConditions/LivingConditions";
+import {Financing} from "./Staff/Financing/Financing";
+import {ResultTable} from "./Staff/ResultTable/ResultTable";
 import clsx from "clsx";
+import {StaffDate} from "./Secretary/StaffDate";
 
 
 export const NewBusinessTrip = () => {
-    const stateItem = useSelector((state: RootState) => state.ItemTabs)
+    const dispatch = useDispatch()
+    const staffStateItem = useSelector((state: RootState) => state.StaffItemTabs)
     const styleBorderBottom = 'border-b-green-600 border-x-0 border-t-0 border-solid'
-    const itemsTabs = [
+    const staffItemsTabs = [
         {
             key: keysTabsBusinessTrip.placesAndDated,
             label:
-                <div className={clsx(stateItem.placesAndDated && styleBorderBottom)}>
+                <div className={clsx(staffStateItem.placesAndDated && styleBorderBottom)}>
                     Места и сроки командирования
                 </div>,
             children: <PlacesAndDated/>
@@ -27,7 +30,7 @@ export const NewBusinessTrip = () => {
         {
             key: keysTabsBusinessTrip.travelConditions,
             label:
-                <div className={clsx(stateItem.travelConditions && styleBorderBottom)}>
+                <div className={clsx(staffStateItem.travelConditions && styleBorderBottom)}>
                     Условия проезда
                 </div>,
             children: <TravelConditions/>
@@ -35,7 +38,7 @@ export const NewBusinessTrip = () => {
         {
             key: keysTabsBusinessTrip.livingConditions,
             label:
-                <div className={clsx(stateItem.livingConditions && styleBorderBottom)}>
+                <div className={clsx(staffStateItem.livingConditions && styleBorderBottom)}>
                     Условия проживания
                 </div>,
             children: <LivingConditions/>
@@ -43,7 +46,7 @@ export const NewBusinessTrip = () => {
         {
             key: keysTabsBusinessTrip.financing,
             label:
-                <div className={clsx(stateItem.financing && styleBorderBottom)}>
+                <div className={clsx(staffStateItem.financing && styleBorderBottom)}>
                     Финансирование
                 </div>,
             children: <Financing/>
@@ -54,39 +57,113 @@ export const NewBusinessTrip = () => {
             children: <ResultTable/>
         },
     ]
+    const staffKey = useSelector((state: RootState) => state.StaffStepFormBusinessTrip.step)
 
+    const secretaryStateItem = useSelector((state: RootState) => state.SecretaryItemTabs)
+    const secretaryKey = useSelector((state: RootState) => state.SecretaryStepFormBusinessTrip.step)
+    const secretaryItemsTabs = [
+        {
+            key: secretaryKeysTabsBusinessTrip.staffDate,
+            label:
+                <div className={clsx(secretaryStateItem.staffDate && styleBorderBottom)}>
+                    Данные о сотруднике
+                </div>,
+            children: <StaffDate/>
+        },
+        {
+            key: secretaryKeysTabsBusinessTrip.placesAndDated,
+            label:
+                <div className={clsx(secretaryStateItem.placesAndDated && styleBorderBottom)}>
+                    Места и сроки командирования
+                </div>,
+            children: <>Места и сроки командирования</>
+        },
+        {
+            key: secretaryKeysTabsBusinessTrip.travelConditions,
+            label:
+                <div className={clsx(secretaryStateItem.travelConditions && styleBorderBottom)}>
+                    Условия проезда
+                </div>,
+            children: <>Условия проезда</>
+        },
+        {
+            key: secretaryKeysTabsBusinessTrip.livingConditions,
+            label:
+                <div className={clsx(secretaryStateItem.livingConditions && styleBorderBottom)}>
+                    Условия проживания
+                </div>,
+            children: <>Условия проживания</>
+        },
+        {
+            key: secretaryKeysTabsBusinessTrip.financing,
+            label:
+                <div className={clsx(secretaryStateItem.financing && styleBorderBottom)}>
+                    Финансирование
+                </div>,
+            children: <>Финансирование</>
+        },
+        {
+            key: secretaryKeysTabsBusinessTrip.result,
+            label:
+                <div>
+                    Итог
+                </div>,
+            children: <>Итог</>
+        },
+    ]
 
-    const keyStepBusinessTrip = useSelector((state: RootState) => state.StepFormBusinessTrip.step)
-    const dispatch = useDispatch()
-
+    const [role, setRole] = useState<string>('staf')
     //window.onbeforeunload = () => false
 
     return (
         <section className={'flex flex-col gap-5'}>
             <span className={'text-2xl'}>Новая командировка</span>
+            {
+                role === 'staff'
+                    ?
+                    <ConfigProvider theme={{
+                        components: {
+                            Tabs: {
+                                titleFontSize: 20,
+                                itemSelectedColor: 'rgba(0, 0, 0, 0.88)',
+                                itemColor: 'rgba(0, 0, 0, 0.88)',
+                                cardBg: 'white',
+                            }
+                        },
 
-            <ConfigProvider theme={{
-                components: {
-                    Tabs: {
-                        titleFontSize: 20,
-                        itemSelectedColor: 'rgba(0, 0, 0, 0.88)',
-                        itemColor: 'rgba(0, 0, 0, 0.88)',
-                        cardBg: 'white',
-                    }
-                },
-
-            }}>
-                <Tabs
-                    type="card"
-                    items={itemsTabs}
-                    className={`newBusinessTrip`}
-                    defaultActiveKey={keyStepBusinessTrip}
-                    activeKey={keyStepBusinessTrip}
-                    onTabClick={(key) => {
-                        dispatch(setCondition(key))
-                    }}
-                />
-            </ConfigProvider>
+                    }}>
+                        <Tabs
+                            type="card"
+                            items={staffItemsTabs}
+                            defaultActiveKey={staffKey}
+                            activeKey={staffKey}
+                            onTabClick={(key) => {
+                                dispatch(setCondition(key))
+                            }}
+                        />
+                    </ConfigProvider>
+                    :
+                    <ConfigProvider theme={{
+                        components: {
+                            Tabs: {
+                                titleFontSize: 18,
+                                itemSelectedColor: 'rgba(0, 0, 0, 0.88)',
+                                itemColor: 'rgba(0, 0, 0, 0.88)',
+                                cardBg: 'white',
+                            }
+                        }
+                    }}>
+                        <Tabs
+                            type="card"
+                            items={secretaryItemsTabs}
+                            defaultActiveKey={secretaryKey}
+                            activeKey={secretaryKey}
+                            onTabClick={(key) => {
+                                dispatch(setSecretaryCondition(key))
+                            }}
+                        />
+                    </ConfigProvider>
+            }
         </section>
     );
 };

@@ -14,6 +14,9 @@ import clsx from "clsx";
 import {SecretaryDate} from "./Secretary/SecretaryDate";
 import {SecretaryPlaceAndDate} from "./Secretary/SecretaryPlaceAndDate";
 import {SecretaryTravelConditions} from "./Secretary/SecretaryTravelConditions";
+import {SecretaryLivingConditions} from "./Secretary/SecretaryLivingConditions";
+import {SecretaryFinancing} from "./Secretary/SecretaryFinancing";
+import {SecretaryResultTable} from "./Secretary/SecretaryResultTable";
 
 
 export const NewBusinessTrip = () => {
@@ -94,7 +97,7 @@ export const NewBusinessTrip = () => {
                 <div className={clsx(secretaryStateItem.livingConditions && styleBorderBottom)}>
                     Условия проживания
                 </div>,
-            children: <>Условия проживания</>
+            children: <SecretaryLivingConditions/>
         },
         {
             key: secretaryKeysTabsBusinessTrip.financing,
@@ -102,7 +105,7 @@ export const NewBusinessTrip = () => {
                 <div className={clsx(secretaryStateItem.financing && styleBorderBottom)}>
                     Финансирование
                 </div>,
-            children: <>Финансирование</>
+            children: <SecretaryFinancing/>
         },
         {
             key: secretaryKeysTabsBusinessTrip.result,
@@ -110,7 +113,7 @@ export const NewBusinessTrip = () => {
                 <div>
                     Итог
                 </div>,
-            children: <>Итог</>
+            children: <SecretaryResultTable/>
         },
     ]
 

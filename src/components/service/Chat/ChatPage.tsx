@@ -50,6 +50,8 @@ export const ChatPage = () => {
 	const [initialLoadingFinished, setInitialLoadingFinished] =
 		useState<boolean>(false)
 
+	const [scrollPosition, setScrollPosition] = useState<number | undefined>(0)
+
 	const [msgInputText, setMsgInputText] = useState<string>('')
 	const msgDate = useRef<string>('')
 
@@ -73,9 +75,25 @@ export const ChatPage = () => {
 		)
 	}, [messages])
 
-	const keepScrollPosition = () => {
-		console.log(chatPageMessagesRef.current[19])
-		chatPageMessagesRef.current[19]?.scrollIntoView()
+	useEffect(() => {
+		console.log(chatPageRef.current?.scrollHeight)
+		console.log(scrollPosition)
+		console.log(chatPageRef.current?.children[19])
+		if (scrollPosition) {
+			if (chatPageRef.current) {
+				console.log(chatPageRef.current.scrollHeight - scrollPosition)
+				document
+					.querySelector('body')
+					?.scrollTo(0, chatPageRef.current.scrollHeight - scrollPosition)
+				// chatPageRef.current.scrollTo(0, 500)
+				// chatPageRef.current.children[19].scrollIntoView()
+			}
+		}
+	}, [lastMessageId])
+
+	const keepScrollPosition = (msgCount: number) => {
+		console.log(chatPageMessagesRef.current[msgCount - 1])
+		// chatPageMessagesRef.current[msgCount - 1]?.scrollIntoView()
 	}
 
 	useEffect(() => {
@@ -187,9 +205,11 @@ export const ChatPage = () => {
 		})
 			.unwrap()
 			.then(msg => {
-				setMessages(prev => [...prev, ...msg])
+				// setMessages(prev => [...prev, ...msg])
 				if (msg.length !== 0) {
-					keepScrollPosition()
+					setMessages(prev => [...prev, ...msg])
+					setScrollPosition(chatPageRef.current?.scrollHeight)
+					keepScrollPosition(msg.length)
 					setLastMessageId(msg[msg.length - 1].id)
 				}
 			})
@@ -277,7 +297,7 @@ export const ChatPage = () => {
 			<div className="flex flex-col w-full">
 				<div
 					ref={chatPageRef}
-					className="w-full h-full flex flex-col pt-[60px] pr-[85px] pl-[40px] overflow-auto"
+					className="w-full h-full flex flex-col pt-[60px] pr-[85px] pl-[40px] overflow-scroll"
 				>
 					<div
 						className="h-[1px]"

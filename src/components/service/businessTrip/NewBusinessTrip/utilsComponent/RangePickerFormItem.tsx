@@ -5,7 +5,7 @@ import {SumDay} from "./SumDay";
 import dayjs from "dayjs";
 
 interface IRangePickerFormItem {
-    elem: FormListFieldData
+    elem?: FormListFieldData
     nameField: string
     label: string
 }
@@ -28,13 +28,11 @@ export const RangePickerFormItem = ({elem, label, nameField}: IRangePickerFormIt
         <>
             <Form.Item
                 label={<LabelFormItem label={label}/>}
-                name={[elem.name, nameField]}
+                name={elem ? [elem.name, nameField] : nameField}
                 rules={[{
                     type: 'array',
                     required: true,
-                }]}
-
-            >
+                }]}>
                 <DatePicker.RangePicker
                     placeholder={['ДД.ММ.ГГ', 'ДД.ММ.ГГ']}
                     className={`text-2xl w-full`}
@@ -46,7 +44,6 @@ export const RangePickerFormItem = ({elem, label, nameField}: IRangePickerFormIt
                 />
             </Form.Item>
             <SumDay>{sumDay} дней</SumDay>
-
         </>
     );
 };

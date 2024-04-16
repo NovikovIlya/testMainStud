@@ -60,7 +60,6 @@ export const NewOrganization = ({setFieldValue, ...props}: INewOrganization) => 
                                                 setFetch(+value)
                                             }
                                         }}
-
                                     />
                                 </Form.Item>
                             </Col>

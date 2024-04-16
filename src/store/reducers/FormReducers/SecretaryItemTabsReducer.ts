@@ -21,7 +21,7 @@ export const SecretaryItemTabsReducer = createSlice({
     name: 'ItemTabs',
     initialState: initialStateFormStepTwo,
     reducers: {
-        setSecretaryStaffDate: (state, action: PayloadAction<boolean>) => {
+        setSecretaryStaffDateItemTabs: (state, action: PayloadAction<boolean>) => {
             state.staffDate = action.payload
         },
         setSecretaryPlaceAndDateItemTabs: (state, action: PayloadAction<boolean>) => {
@@ -44,7 +44,7 @@ export const {
     setSecretaryLivingConditionsItemTabs,
     setSecretaryTravelConditionsItemTabs,
     setSecretaryFinancingItemTabs,
-    setSecretaryStaffDate,
+    setSecretaryStaffDateItemTabs,
 } = SecretaryItemTabsReducer.actions
 export default SecretaryItemTabsReducer.reducer
 

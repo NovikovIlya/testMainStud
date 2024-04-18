@@ -39,7 +39,7 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 			>
 				<p className="whitespace-pre-line">{props.msgData.text}</p>
 				{props.msgData.fileInfos && (
-					<div>
+					<div className="flex flex-col gap-[8px]">
 						{props.msgData.fileInfos.map(fileInfo => (
 							<ChatMessageFile {...fileInfo} />
 						))}

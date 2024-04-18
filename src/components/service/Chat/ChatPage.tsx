@@ -247,7 +247,14 @@ export const ChatPage = () => {
 		}
 	}, [isTopOfChatVisible])
 
-	const { control, handleSubmit, register } = useForm({
+	const {
+		control,
+		handleSubmit,
+		register,
+		reset,
+		formState,
+		formState: { isSubmitSuccessful }
+	} = useForm({
 		defaultValues: { text: '', files: null }
 	})
 
@@ -275,20 +282,29 @@ export const ChatPage = () => {
 				res.json().then(resData => {
 					const typedData = resData as ChatMessageType
 					setMessages([typedData, ...messages])
+					setMsgInputText('')
 				})
 			})
 		} else {
-			postMsg({
-				id: chatIdState.chatId,
-				text: data.text,
-				name: sessionId,
-				role: isEmpDemp ? 'PERSONNEL_DEPARTMENT' : 'SEEKER'
-			})
-				.unwrap()
-				.then(msgData => setMessages([msgData, ...messages]))
+			data.text !== '' &&
+				postMsg({
+					id: chatIdState.chatId,
+					text: data.text,
+					name: sessionId,
+					role: isEmpDemp ? 'PERSONNEL_DEPARTMENT' : 'SEEKER'
+				})
+					.unwrap()
+					.then(msgData => setMessages([msgData, ...messages]))
 			setMsgInputText('')
 		}
 	}
+
+	useEffect(() => {
+		if (formState.isSubmitSuccessful) {
+			reset()
+			console.log('Success')
+		}
+	}, [formState])
 
 	console.log('Chat render')
 
@@ -364,12 +380,7 @@ export const ChatPage = () => {
 							render={({ field }) => (
 								<textarea
 									disabled={ChatStatus.chatClosed}
-									{...register('text', {
-										required: {
-											value: true,
-											message: 'Нельзя отправлять сообщение с пустым текстом'
-										}
-									})}
+									{...register('text')}
 									value={msgInputText}
 									onChange={e => {
 										setMsgInputText(e.target.value)

@@ -23,7 +23,7 @@ export const ChatEmpDemp = () => {
 	const [getGroupedResponds] = useLazyGetVacancyGroupedResponcesQuery()
 
 	useEffect(() => {
-		getGroupedResponds({ category: 'АУП' })
+		getGroupedResponds({ category: 'ППС' })
 			.unwrap()
 			.then(grData => {
 				grData.map(vacResp => {

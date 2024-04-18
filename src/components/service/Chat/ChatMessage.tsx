@@ -41,7 +41,7 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 				{props.msgData.fileInfos && (
 					<div className="flex flex-col gap-[8px]">
 						{props.msgData.fileInfos.map(fileInfo => (
-							<ChatMessageFile {...fileInfo} />
+							<ChatMessageFile {...fileInfo} msgId={props.msgData.id} />
 						))}
 					</div>
 				)}

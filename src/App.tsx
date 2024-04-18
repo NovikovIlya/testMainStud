@@ -16,6 +16,7 @@ import { Login } from './components/login/Login'
 import { Registration } from './components/registration/Registration'
 import { Service } from './components/service'
 import { blue004, blue307 } from './utils/color'
+import {Redirect} from "./components/redirect/Redirect";
 
 const App = () => {
 	const [email, changeEmail] = useState('')
@@ -32,6 +33,7 @@ const App = () => {
 			>
 				<Routes>
 					<Route path="/">
+						{/*<Route path={"/redirect/:id"} element={<Redirect/>}/>*/}
 						<Route path="/" element={<Login />} />
 						<Route
 							path="/registration"

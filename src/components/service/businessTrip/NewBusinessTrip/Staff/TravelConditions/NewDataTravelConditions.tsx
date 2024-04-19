@@ -9,13 +9,12 @@ export interface INewDataTravelConditions {
     typeTransport: string
     departurePoint: string
     destinationPoint: string
-    dateDepartureDestination: Array<dayjs.Dayjs> | Array<null>
+    dateStartEnd: Array<dayjs.Dayjs> | Array<null>
     sumDay: number
 }
 
 export interface ITravelConditions {
     travelConditions: Array<INewDataTravelConditions>
-
 }
 
 const typeTransportOptions = [
@@ -81,7 +80,7 @@ export const NewDataTravelConditions = () => {
                                 <Col span={12}>
                                     <RangePickerFormItem
                                         elem={elem}
-                                        nameField={'dateDepartureDestination'}
+                                        nameField={'dateStartEnd'}
                                         label={'Дата отправления и прибытия'}/>
                                 </Col>
                             </Row>

@@ -8,22 +8,16 @@ import {TravelCard} from "../../cardsData/TravelCard";
 import {validateMessages} from "../../../../../../utils/validateMessage";
 import {setTravelConditionsItemTabs} from "../../../../../../store/reducers/FormReducers/StaffItemTabsReducer";
 import {isFormCompleted} from "../../utilsFunctions/isFormCompleted";
+import {getAmountDay} from "../../utilsFunctions/getAmounDay";
 
 export const TravelConditions = () => {
     const [form] = Form.useForm()
     const dispatch = useDispatch()
 
-    function sendDataTravelCondition({travelConditions}: ITravelConditions) {
-
-        for (let elem of travelConditions) {
-            if (elem.dateDepartureDestination) {
-                const sumDayTravel = elem.dateDepartureDestination[1]!.diff(elem.dateDepartureDestination[0], 'day') + 1
-                elem.sumDay = sumDayTravel
-            }
-        }
+    function sendDataTravelCondition(values: ITravelConditions) {
+        const valuesWithSumDay = getAmountDay({values})
         dispatch(setCondition(keysTabsBusinessTrip.livingConditions))
-        dispatch(setTravelConditionsItemTabs(true))
-        console.log(travelConditions)
+        console.log(valuesWithSumDay)
     }
 
     return (

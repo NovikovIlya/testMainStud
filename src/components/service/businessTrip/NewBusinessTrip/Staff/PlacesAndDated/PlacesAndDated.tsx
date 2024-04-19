@@ -9,6 +9,7 @@ import {validateMessages} from "../../../../../../utils/validateMessage";
 import {RcFile} from "antd/es/upload";
 import {setPlaceAndDateItemTabs} from "../../../../../../store/reducers/FormReducers/StaffItemTabsReducer";
 import {isFormCompleted} from "../../utilsFunctions/isFormCompleted";
+import {getAmountDay} from "../../utilsFunctions/getAmounDay";
 
 const optionsGoals = [
     {value: 'Административный визит'},
@@ -37,7 +38,7 @@ const optionsTypeDocuments = [
     {value: 'Иной документ'},
 ];
 
-interface IFormPlacesAndDate {
+export interface IFormPlacesAndDate {
     goal: string
     event: string
     typeDocument: string
@@ -52,20 +53,10 @@ export const PlacesAndDated = () => {
     const [form] = Form.useForm()
 
     function sendDataFormPlaceAndDate(values: IFormPlacesAndDate) {
-        //1) собираем только организации
-        const onlyOrganisations = values.organisations
 
-        for (let org of onlyOrganisations) {
-            //2) вычисляем, сколько дней человек будет в командировке в данной организации
-            if (org.dateStartEnd) {
-                const sumDayOrg = org.dateStartEnd[1]!.diff(org.dateStartEnd[0], 'day') + 1
+        const valuesWithSumDay = getAmountDay({values})
 
-                //3) добавляем количество дней в объект данной организации
-                org.sumDay = sumDayOrg
-            }
-
-        }
-        //console.log(values)
+        console.log(valuesWithSumDay)
         dispatch(setCondition(keysTabsBusinessTrip.travelConditions))
         dispatch(setPlaceAndDateItemTabs(true))
     }

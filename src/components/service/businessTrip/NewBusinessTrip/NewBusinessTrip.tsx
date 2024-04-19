@@ -117,7 +117,7 @@ export const NewBusinessTrip = () => {
         },
     ]
 
-    const [role, setRole] = useState<string>('staf')
+    const [role, setRole] = useState<string>('staff')
     //window.onbeforeunload = () => false
 
     return (

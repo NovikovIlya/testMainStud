@@ -7,22 +7,16 @@ import {LivingCard} from "../../cardsData/LivingCard";
 import {validateMessages} from "../../../../../../utils/validateMessage";
 import {setLivingConditionsItemTabs} from "../../../../../../store/reducers/FormReducers/StaffItemTabsReducer";
 import {isFormCompleted} from "../../utilsFunctions/isFormCompleted";
+import {getAmountDay} from "../../utilsFunctions/getAmounDay";
 
 export const LivingConditions = () => {
     const [form] = Form.useForm()
     const dispatch = useDispatch()
 
-    function sendDataLivingCondition({dataLivingConditions}: ILivingCondition) {
-
-        for (let elem of dataLivingConditions) {
-            if (elem.dateCheckInOut) {
-                const sumDayLiving = elem.dateCheckInOut[1]!.diff(elem.dateCheckInOut[0], 'day') + 1
-                elem.sumDay = sumDayLiving
-            }
-        }
+    function sendDataLivingCondition(values: ILivingCondition) {
+        const valuesWithSumDay = getAmountDay({values})
         dispatch(setCondition(keysTabsBusinessTrip.financing))
-        dispatch(setLivingConditionsItemTabs(true))
-        console.log(dataLivingConditions)
+        console.log(valuesWithSumDay)
     }
 
     return (

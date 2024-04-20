@@ -1,3 +1,4 @@
+import { resolve } from 'path'
 import { useEffect, useRef } from 'react'
 
 import { DocxIcon } from '../../../assets/svg/DocxIcon'
@@ -31,10 +32,8 @@ export const ChatMessageFile = (props: {
 				return res.blob()
 			})
 			.then(blob => {
-				const file = new Blob([blob], { type: 'application/pdf' })
-				const url = window.URL.createObjectURL(
-					new Blob([blob], { type: 'application/pdf' })
-				)
+				const file = new Blob([blob])
+				const url = window.URL.createObjectURL(file)
 				if (linkRef.current) {
 					linkRef.current.href = url
 				}
@@ -51,12 +50,15 @@ export const ChatMessageFile = (props: {
 					props.name.substring(props.name.length - 5) === '.docx' && (
 						<DocxIcon />
 					)}
-				<p className="font-content-font text-black font-normal text-[16px]/[19.2px]">
+				<p className="font-content-font text-black font-normal text-[16px]/[19.2px] w-[70%] overflow-hidden text-ellipsis">
 					{props.name}
 				</p>
-				<a download={true} ref={linkRef}>
-					<FileDownloadIcon />
-				</a>
+				<div className="flex items-center gap-[20px]">
+					<hr className="h-[64px] opacity-30" />
+					<a download={true} ref={linkRef}>
+						<FileDownloadIcon />
+					</a>
+				</div>
 			</div>
 		</>
 	)

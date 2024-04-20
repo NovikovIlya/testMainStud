@@ -97,7 +97,7 @@ export const ModalNav = () => {
 			</Col>
 			{layouts.lg.length === jsxElements.length ? (
 				<div className="text-3xl">Пока сервисов нет</div>
-			) : currentRole === 'STUD' ? (
+			) : (
 				jsxElements.map(item => {
 					const isLayout = !!layouts.lg.filter(el => el.i === item.index).length
 
@@ -114,27 +114,6 @@ export const ModalNav = () => {
 						)
 					)
 				})
-			) : currentRole === 'EMPL' ? (
-				jsxElements.map(item => {
-					const isLayout = !!layouts.lg.filter(el => el.i === item.index).length
-					const isAppropriatedRole = item.index === 'personnelAccounting'
-					return (
-						!isLayout &&
-						isAppropriatedRole &&
-						isEmployee && (
-							<Col span={4} key={item.index} className="bg-white">
-								<div
-									onClick={() => dispatch(addCard(item.place))}
-									className="h-28 cursor-pointer flex items-center justify-center hover:bg-[#65A1FA] hover:text-white"
-								>
-									{t(item.index.toString())}
-								</div>
-							</Col>
-						)
-					)
-				})
-			) : (
-				<></>
 			)}
 		</Row>
 	)

@@ -35,6 +35,8 @@ export const Schedule = () => {
 	const { data: schedule } = useGetScheduleQuery()
 	const { t } = useTranslation()
 
+	//console.log(schedule[activeButton])
+
 	const setActiveButton = (buttonName: week) => {
 		if (activeButton !== buttonName) changeActive(buttonName)
 	}
@@ -123,7 +125,8 @@ export const Schedule = () => {
 			</div>
 			<hr className="h-full w-[2px]  bg-white mx-3 border-none max-md:hidden" />
 			<div className="flex-col justify-start w-full max-w-fit min-w-min p-2 max-h-full overflow-y-auto max-xl:text-sm max-md:hidden">
-				{schedule && schedule[activeButton].length ? (
+				{schedule && schedule[activeButton] !== undefined ? (
+					// schedule[activeButton].length - если сейчас вскр, то крашает весь фронт
 					schedule[activeButton].map((el, index) => (
 						<div
 							className="flex w-full gap-x-10 mb-5 max-xl:gap-x-0 max-xl:mb-3 max-xl:flex-col"

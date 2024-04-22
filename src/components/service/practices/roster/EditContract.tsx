@@ -16,34 +16,50 @@ import {
 } from 'antd'
 import { format } from 'date-fns/format'
 import dayjs from 'dayjs'
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 
 import { ArrowLeftSvg } from '../../../../assets/svg'
-import { useCreateContractMutation } from '../../../../store/practiceApi/taskService'
-import { ICreateContract } from '../../../../store/type'
+import {
+	useChangeContractMutation,
+	useCreateContractMutation,
+	useGetContractQuery
+} from '../../../../store/practiceApi/taskService'
+import { ICreateContract, ICreateContractFull } from '../../../../store/type'
 import { SignInSchema } from '../validation'
 
 type PropsType = {
-	setIsCreate: (value: boolean) => void
-	setIsPreview: (value: boolean) => void
+	edit: string
+	setEdit: Dispatch<SetStateAction<string>>
 }
 
-export const CreateContracts = ({ setIsCreate, setIsPreview }: PropsType) => {
+export const EditContract = ({ edit, setEdit }: PropsType) => {
+	const { data: contract } = useGetContractQuery(edit)
 	const {
 		control,
 		handleSubmit,
-		formState: { errors }
+		formState: { errors },
+		reset
 	} = useForm<any>({
 		resolver: yupResolver(SignInSchema),
 		mode: 'onBlur'
 	})
+
 	const [pdfContract, setPdfContract] = useState<File>()
 	const [pdfAgreement, setPdfAgreement] = useState<File>()
 
-	const [newContract] = useCreateContractMutation()
+	const [editContract] = useChangeContractMutation()
+	const [dataContract, setDataContract] = useState<any>()
 
+	useEffect(() => {
+		if (contract) {
+			reset(contract)
+			setDataContract(contract)
+		}
+	}, [contract])
+
+	console.log(dataContract)
 	const props: UploadProps = {
 		name: 'pdfContract',
 		beforeUpload: file => {
@@ -64,30 +80,16 @@ export const CreateContracts = ({ setIsCreate, setIsPreview }: PropsType) => {
 
 	const navigate = useNavigate()
 
-	const onSubmit: SubmitHandler<ICreateContract> = data => {
-		const payload = new FormData()
-		const jsonData = JSON.stringify({
-			...data,
-			contractType: data?.contractType,
-			dateConclusionContract: format(
-				new Date(data.dateConclusionContract),
-				'MM.dd.yyyy'
-			),
-			contractTime: format(new Date(data.contractTime), 'MM.dd.yyyy')
-		})
-		const blob = new Blob([jsonData], { type: 'application/json' })
-		payload.append('contract', blob)
-		if (pdfContract) {
-			payload.append('pdfContract', pdfContract)
-		}
-		if (pdfAgreement) {
-			payload.append('pdfAgreement', pdfAgreement)
-		}
-		console.log(payload)
-		newContract(payload)
+	const onSubmit: SubmitHandler<ICreateContractFull> = data => {
+		data.id = edit
+		data.prolongation = 3
+		data.dateConclusionContract = dataContract?.dateConclusionContract
+		data.contractTime = dataContract?.contractTime
+		console.log(data)
+		editContract(data)
 			.unwrap()
 			.then(() => {
-				setIsCreate(false)
+				setEdit('')
 			})
 	}
 	return (
@@ -98,10 +100,10 @@ export const CreateContracts = ({ setIsCreate, setIsPreview }: PropsType) => {
 					className="mt-1"
 					icon={<ArrowLeftSvg className="w-4 h-4 cursor-pointer mt-1" />}
 					type="text"
-					onClick={() => setIsCreate(false)}
+					onClick={() => setEdit('')}
 				/>
 				<Typography.Text className="text-black text-3xl font-normal">
-					Название
+					Номер договора {dataContract?.contractNumber}
 				</Typography.Text>
 			</Space>
 			<form onSubmit={handleSubmit(onSubmit)}>
@@ -207,41 +209,11 @@ export const CreateContracts = ({ setIsCreate, setIsPreview }: PropsType) => {
 										size="large"
 										popupMatchSelectWidth={false}
 										placeholder=""
-										defaultValue=""
 										className="w-full"
 										options={[
 											{ value: 'Бессрочный', label: 'Бессрочный' },
-											{
-												value: 'Указать пролонгацию',
-												label: 'Указать пролонгацию'
-											}
+											{ value: 'С пролонгацией', label: 'С пролонгацией' }
 										]}
-									/>
-								)}
-							/>
-						</Space>
-					</Col>
-					<Col xs={24} sm={24} md={18} lg={8} xl={6}>
-						<Space direction="vertical" className="w-full">
-							<Typography.Text>Пролонгация</Typography.Text>
-							<Controller
-								name="prolongation"
-								control={control}
-								render={({ field }) => (
-									<Input
-										type="text"
-										className="w-full"
-										defaultValue=""
-										size="large"
-										{...field}
-										suffix={
-											errors.prolongation &&
-											errors.prolongation.message && (
-												<Typography.Text type="danger">
-													{errors.prolongation.message as any}
-												</Typography.Text>
-											)
-										}
 									/>
 								)}
 							/>
@@ -265,7 +237,6 @@ export const CreateContracts = ({ setIsCreate, setIsPreview }: PropsType) => {
 										}}
 										size="large"
 										format="DD-MM-YYYY"
-										placeholder=""
 										className="w-full"
 										renderExtraFooter={() =>
 											errors.contractTime &&
@@ -441,15 +412,6 @@ export const CreateContracts = ({ setIsCreate, setIsPreview }: PropsType) => {
 								htmlType="submit"
 							>
 								Сохранить
-							</Button>
-							<Button
-								className="!rounded-full"
-								size="large"
-								onClick={() => {
-									setIsPreview(true)
-								}}
-							>
-								Режим просмотра
 							</Button>
 						</Space>
 					</Col>

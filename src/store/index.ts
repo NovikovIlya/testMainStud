@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import logger from 'redux-logger'
 import { apiSlice } from './api/apiSlice'
+import { practiceApi } from './practiceApi/practiceApi'
 import AddressReducer from './reducers/FormReducers/AddressReducer'
 import CountriesEducationReducer from './reducers/FormReducers/CountriesEducationReducer'
 import DocumentReducer from './reducers/FormReducers/DocumentReducer'
@@ -12,11 +13,10 @@ import ParentReducer from './reducers/FormReducers/ParentReducer'
 import WorkReducer from './reducers/FormReducers/WorkReducer'
 import LayoutSlice from './reducers/LayoutsSlice'
 import authSlice from './reducers/authSlice'
-import StaffStepFormBusinessTrip from "./reducers/FormReducers/StaffStepFormBusinessTrip";
-import StaffItemTabsReducer from "./reducers/FormReducers/StaffItemTabsReducer";
-import SecretaryStepFormBusinessTrip from "./reducers/FormReducers/SecretaryStepFormBusinessTrip";
 import SecretaryItemTabsReducer from "./reducers/FormReducers/SecretaryItemTabsReducer";
-
+import StaffItemTabsReducer from "./reducers/FormReducers/StaffItemTabsReducer";
+import StaffStepFormBusinessTrip from "./reducers/FormReducers/StaffStepFormBusinessTrip";
+import SecretaryStepFormBusinessTrip from "./reducers/FormReducers/SecretaryStepFormBusinessTrip";
 
 export const store = configureStore({
 	reducer: {
@@ -34,12 +34,13 @@ export const store = configureStore({
 		StaffItemTabs: StaffItemTabsReducer,
 		SecretaryStepFormBusinessTrip: SecretaryStepFormBusinessTrip,
 		SecretaryItemTabs: SecretaryItemTabsReducer,
+		[practiceApi.reducerPath]: practiceApi.reducer,
 		[apiSlice.reducerPath]: apiSlice.reducer
 	},
 	middleware: getDefaultMiddleware =>
 		getDefaultMiddleware()
 			.concat(...(process.env.NODE_ENV !== 'production' ? [logger] : []))
-			.concat(apiSlice.middleware),
+			.concat(apiSlice.middleware, practiceApi.middleware),
 	devTools: true
 })
 

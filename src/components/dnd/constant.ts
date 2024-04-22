@@ -77,17 +77,17 @@ export const block = {
             moved: true,
             static: false
         },
-        {
-            w: 1,
-            h: 1,
-            x: 2,
-            y: 2,
-            i: 'Practices',
-            maxH: 4,
-            maxW: 4,
-            moved: true,
-            static: false
-        },
+        // {
+        //     w: 1,
+        //     h: 1,
+        //     x: 2,
+        //     y: 2,
+        //     i: 'Practices',
+        //     maxH: 4,
+        //     maxW: 4,
+        //     moved: true,
+        //     static: false
+        // },
 
         //3-ья тройка
         {
@@ -187,8 +187,8 @@ export const block = {
         {
             w: 1,
             h: 1,
-            x: 0,
-            y: 6,
+            x: 2,
+            y: 2,
             i: 'VirtualAudience',
             maxH: 4,
             maxW: 4,

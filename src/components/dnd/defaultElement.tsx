@@ -229,24 +229,24 @@ export const jsxElements = [
 			i: 'PaySheet'
 		}
 	},
-	{
-		index: 'Practices',
-		element: (
-			<TemplateCard
-				href="/services/practices"
-				info="PracticesInfo"
-				title="Practices"
-				buttonText="Study"
-			/>
-		),
-		place: {
-			w: 1,
-			h: 1,
-			x: 0,
-			y: 0,
-			i: 'Practices'
-		}
-	},
+	// {
+	// 	index: 'Practices',
+	// 	element: (
+	// 		<TemplateCard
+	// 			href="/services/practices"
+	// 			info="PracticesInfo"
+	// 			title="Practices"
+	// 			buttonText="Study"
+	// 		/>
+	// 	),
+	// 	place: {
+	// 		w: 1,
+	// 		h: 1,
+	// 		x: 0,
+	// 		y: 0,
+	// 		i: 'Practices'
+	// 	}
+	// },
 	{
 		index: 'SitAnKFU',
 		element: (

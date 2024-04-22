@@ -18,6 +18,7 @@ export const Buttons = () => {
 					{t('enter')}
 				</Button>
 
+
 				{/*<Button*/}
 				{/*	className="mb-10 mt-0 flex !h-12 w-full items-center justify-center bg-white gap-3"*/}
 				{/*	onClick={e => {*/}

@@ -66,17 +66,17 @@ export const block = {
             moved: true,
             static: false
         },
-        {
-            w: 1,
-            h: 1,
-            x: 1,
-            y: 2,
-            i: 'PaySheet',
-            maxH: 4,
-            maxW: 4,
-            moved: true,
-            static: false
-        },
+        // {
+        //     w: 1,
+        //     h: 1,
+        //     x: 1,
+        //     y: 2,
+        //     i: 'PaySheet',
+        //     maxH: 4,
+        //     maxW: 4,
+        //     moved: true,
+        //     static: false
+        // },
         // {
         //     w: 1,
         //     h: 1,
@@ -171,17 +171,17 @@ export const block = {
             moved: true,
             static: false
         },
-        {
-            w: 1,
-            h: 1,
-            x: 2,
-            y: 5,
-            i: 'SitAnKFU',
-            maxH: 4,
-            maxW: 4,
-            moved: true,
-            static: false
-        },
+        // {
+        //     w: 1,
+        //     h: 1,
+        //     x: 2,
+        //     y: 5,
+        //     i: 'SitAnKFU',
+        //     maxH: 4,
+        //     maxW: 4,
+        //     moved: true,
+        //     static: false
+        // },
 
         //6-ая тройка
         {
@@ -199,7 +199,7 @@ export const block = {
             w: 1,
             h: 1,
             x: 1,
-            y: 6,
+            y: 5,
             i: 'DigitalDepartments',
             maxH: 4,
             maxW: 4,
@@ -210,7 +210,7 @@ export const block = {
             w: 1,
             h: 1,
             x: 2,
-            y: 6,
+            y: 2,
             i: 'ManagementScientificProjects',
             maxH: 4,
             maxW: 4,

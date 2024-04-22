@@ -208,27 +208,27 @@ export const jsxElements = [
 			i: 'DocumentFlow'
 		}
 	},
-	{
-		index: 'PaySheet',
-		element: (
-			<TemplateCard
-				href={`https://shelly.kpfu.ru/e-ksu/student_grants.pay_list?p1=${aId}&p2=${sId}&p_h=${hId}`}
-				info="PaySheetInfo"
-				title="PaySheet"
-				img="/image9.png"
-				width={140}
-				height={140}
-				positionImage="-mt-4"
-			/>
-		),
-		place: {
-			w: 1,
-			h: 1,
-			x: 0,
-			y: 0,
-			i: 'PaySheet'
-		}
-	},
+	// {
+	// 	index: 'PaySheet',
+	// 	element: (
+	// 		<TemplateCard
+	// 			href={`https://shelly.kpfu.ru/e-ksu/student_grants.pay_list?p1=${aId}&p2=${sId}&p_h=${hId}`}
+	// 			info="PaySheetInfo"
+	// 			title="PaySheet"
+	// 			img="/image9.png"
+	// 			width={140}
+	// 			height={140}
+	// 			positionImage="-mt-4"
+	// 		/>
+	// 	),
+	// 	place: {
+	// 		w: 1,
+	// 		h: 1,
+	// 		x: 0,
+	// 		y: 0,
+	// 		i: 'PaySheet'
+	// 	}
+	// },
 	// {
 	// 	index: 'Practices',
 	// 	element: (
@@ -247,26 +247,26 @@ export const jsxElements = [
 	// 		i: 'Practices'
 	// 	}
 	// },
-	{
-		index: 'SitAnKFU',
-		element: (
-			<TemplateCard
-				href="https://sa.kpfu.ru/news_aggregator/news/"
-				info="SitAnKFUInfo"
-				title="SitAnKFU"
-				img="/image45.png"
-				buttonText="Watch"
-				height={160}
-			/>
-		),
-		place: {
-			w: 1,
-			h: 1,
-			x: 0,
-			y: 0,
-			i: 'SitAnKFU'
-		}
-	},
+	// {
+	// 	index: 'SitAnKFU',
+	// 	element: (
+	// 		<TemplateCard
+	// 			href="https://sa.kpfu.ru/news_aggregator/news/"
+	// 			info="SitAnKFUInfo"
+	// 			title="SitAnKFU"
+	// 			img="/image45.png"
+	// 			buttonText="Watch"
+	// 			height={160}
+	// 		/>
+	// 	),
+	// 	place: {
+	// 		w: 1,
+	// 		h: 1,
+	// 		x: 0,
+	// 		y: 0,
+	// 		i: 'SitAnKFU'
+	// 	}
+	// },
 	{
 		index: 'Dormitory',
 		element: (

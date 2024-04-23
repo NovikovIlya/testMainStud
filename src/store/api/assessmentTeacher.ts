@@ -1,4 +1,4 @@
-import {IListTeacher, MainTeacherData, TestQuery} from '../type'
+import {IListTeacher, MainTeacherData, TestQuery} from '../../models/Teacher'
 
 import {apiSlice} from './apiSlice'
 import i18n from "i18next";

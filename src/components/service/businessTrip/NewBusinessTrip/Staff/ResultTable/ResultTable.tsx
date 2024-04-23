@@ -255,7 +255,6 @@ export const ResultTable = () => {
                     pagination={false}
                     size={"middle"}
                     dataSource={dataColumnsOne}
-
                 />
             </Col>
             <Col span={24}>

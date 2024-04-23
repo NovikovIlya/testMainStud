@@ -6,14 +6,13 @@ import {
     Radio,
     Row,
     Select,
-    Space,
+    Space, Tabs,
     Typography
 } from 'antd'
 import type {CheckboxProps, GetProp} from 'antd'
 import {useEffect, useState} from 'react'
-
-import {EditSvg} from '../../../../assets/svg/EditSvg'
-import {PointsSvg} from '../../../../assets/svg/PointsSvg'
+import {CompressedView} from "./CompressedView";
+import {TableView} from "./TableView";
 
 type CheckboxValueType = GetProp<typeof Checkbox.Group, 'value'>[number]
 
@@ -173,10 +172,10 @@ export const PracticeSchedule = ({
                                      setIsPreview,
                                      setIsFinalReview
                                  }: PropsType) => {
-    const [checkedList, setCheckedList] = useState<CheckboxValueType[]>([])
-    const checkAll = plainOptions.length === checkedList.length
-    const indeterminate =
-        checkedList.length > 0 && checkedList.length < plainOptions.length
+    const [stateSchedule, setStateSchedule] = useState({
+        compressed: true,
+        table: false,
+    })
     const [dataTable, setDataTable] = useState<DataType[]>(data)
     const [filters, setFilters] = useState<{
         type: string
@@ -203,18 +202,23 @@ export const PracticeSchedule = ({
         setFilters(prev => ({...prev, [index]: value}))
     }
 
-    const onCheckboxClick: CheckboxProps['onChange'] = e => {
-        const item = e.target.value
-        setCheckedList(prev =>
-            checkedList.includes(item)
-                ? prev.filter(x => x !== item)
-                : [...prev, ...e.target.value]
-        )
+    function isCompressedView() {
+        setStateSchedule({
+            ...stateSchedule,
+            compressed: true,
+            table: false
+        })
     }
 
-    const onCheckAllClick: CheckboxProps['onChange'] = e => {
-        setCheckedList(e.target.checked ? plainOptions : [])
+    function isTableView() {
+        setStateSchedule({
+            ...stateSchedule,
+            compressed: false,
+            table: true,
+        })
     }
+
+
 
     return (
         <section className="container">
@@ -301,10 +305,16 @@ export const PracticeSchedule = ({
             <Row className="mt-4 flex items-center">
                 <Col span={12} flex="50%">
                     <Radio.Group defaultValue="compressedView" buttonStyle="solid">
-                        <Radio.Button value="compressedView" className="!rounded-l-full">
+                        <Radio.Button
+                            value="compressedView"
+                            className="!rounded-l-full"
+                            onClick={isCompressedView}>
                             Посмотреть в сжатом виде
                         </Radio.Button>
-                        <Radio.Button value="tableView" className="!rounded-r-full">
+                        <Radio.Button
+                            value="tableView"
+                            className="!rounded-r-full"
+                            onClick={isTableView}>
                             Посмотреть данные в таблице
                         </Radio.Button>
                     </Radio.Group>
@@ -324,62 +334,8 @@ export const PracticeSchedule = ({
 
             <Row className="mt-4">
                 <Col flex={'auto'}>
-                    <List
-                        size="large"
-                        header={
-                            <div className="w-full justify-between flex items-center px-[24px]">
-                                <Checkbox
-                                    indeterminate={indeterminate}
-                                    onChange={onCheckAllClick}
-                                    checked={checkAll}
-                                />
-                                <Space size={40} className="max-w-xs min-w-[300px]">
-                                    <Typography.Text>
-                                        Шифр и наименование специальности
-                                    </Typography.Text>
-                                    <Button
-                                        type="text"
-                                        icon={<EditSvg/>}
-                                        className="opacity-0"
-                                    />
-                                </Space>
-                                <Typography.Text>Дата заполнения</Typography.Text>
-                                <Typography.Text>Вид практики</Typography.Text>
-                                <Typography.Text>Курс</Typography.Text>
-                                <Space size={40}>
-                                    <Button type="text" icon={<PointsSvg/>}/>
-                                </Space>
-                            </div>
-                        }
-                        dataSource={dataTable}
-                        renderItem={item => (
-                            <List.Item className="bg-white mb-3">
-                                <Checkbox
-                                    checked={checkedList.includes(item.key)}
-                                    value={item.key}
-                                    onChange={onCheckboxClick}
-                                />
-                                <Space size={40} className="max-w-xs min-w-[300px]">
-                                    <Typography.Text>{item.specialization}</Typography.Text>
-                                    <Button
-                                        type="text"
-                                        icon={<EditSvg/>}
-                                        onClick={() => setIsCreate(true)}
-                                    />
-                                </Space>
-                                <Typography.Text>{item.fillingDate}</Typography.Text>
-                                <Typography.Text className={'text-center min-w-[100px]'}>{item.type}</Typography.Text>
-                                <Typography.Text>{item.course}</Typography.Text>
-                                <Space size={40}>
-                                    <Button
-                                        type="text"
-                                        className="opacity-50"
-                                        icon={<PointsSvg/>}
-                                    />
-                                </Space>
-                            </List.Item>
-                        )}
-                    />
+                    { stateSchedule.compressed && <CompressedView/> }
+                    { stateSchedule.table && <TableView/>}
                 </Col>
             </Row>
         </section>

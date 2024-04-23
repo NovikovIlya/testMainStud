@@ -121,7 +121,7 @@ export const NewBusinessTrip = () => {
     //window.onbeforeunload = () => false
 
     return (
-        <section className={'flex flex-col gap-5'}>
+        <section className={'flex flex-col gap-5 newBusinessTrip'}>
             <span className={'text-2xl'}>Новая командировка</span>
             {
                 role === 'staff'

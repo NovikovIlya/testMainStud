@@ -6,7 +6,7 @@ import {
     usePostTeacherRatingMutation
 } from "../../../../store/api/assessmentTeacher";
 import {useEffect, useState} from "react";
-import {IAssessmentNumber, IValuesAssessment, TestQuery} from "../../../../store/type";
+import {IAssessmentNumber, IValuesAssessment, TestQuery} from "../../../../store/types/type";
 import {RatingTeacher} from "./RatingTeacher/RatingTeacher";
 
 

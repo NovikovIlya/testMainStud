@@ -15,14 +15,17 @@ import { Button, Col, Input, Row, Select, Space, Typography } from 'antd'
 import { Table } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 import dayjs from 'dayjs'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
-import { isDataView } from 'util/types'
 
 import { ArrowLeftSvg } from '../../../../assets/svg'
 import { DeleteSvg } from '../../../../assets/svg/DeleteSvg'
-import { useCreateTaskMutation } from '../../../../store/api/practiceApi/taskService'
+import {
+	useChangeTaskMutation,
+	useCreateTaskMutation,
+	useGetTaskQuery
+} from '../../../../store/api/practiceApi/taskService'
 import { INewTaskType, NewTaskSchema } from '../validation'
 
 interface IFormInput {
@@ -82,15 +85,22 @@ const Rows = ({ children, ...props }: RowProps) => {
 	)
 }
 
-const CreateTask = () => {
-	const [createTask] = useCreateTaskMutation()
+type PropsType = {
+	edit: string
+	setEdit: (edit: string) => void
+}
+
+const EditTask = ({ edit, setEdit }: PropsType) => {
+	const { data: task } = useGetTaskQuery(edit)
+	const [editTask] = useChangeTaskMutation()
 	const {
 		control,
 		handleSubmit,
 		watch,
 		setValue,
 		getValues,
-		formState: { errors }
+		formState: { errors },
+		reset
 	} = useForm<INewTaskType>({
 		resolver: yupResolver(NewTaskSchema),
 		mode: 'onBlur',
@@ -98,6 +108,20 @@ const CreateTask = () => {
 			dataSource: []
 		}
 	})
+
+	useEffect(() => {
+		if (task) {
+			reset(task)
+			const currentDataSource = getValues('dataSource') || []
+			const initialTasks = task.tasks.map((item, index) => {
+				return {
+					key: index,
+					name: item
+				}
+			})
+			setValue('dataSource', initialTasks, { shouldValidate: true })
+		}
+	}, [task])
 
 	const [dataSource, setDataSource] = useState<{ key: string; name: string }[]>(
 		[]
@@ -143,6 +167,7 @@ const CreateTask = () => {
 			const overIndex = currentDataSource.findIndex(
 				(i: any) => i.key === over?.id
 			)
+
 			const updatedDataSource = arrayMove(
 				currentDataSource,
 				activeIndex,
@@ -182,17 +207,19 @@ const CreateTask = () => {
 
 	const onSubmit: SubmitHandler<INewTaskType> = data => {
 		const { specialityName, practiceType } = data
-		const namesArray = data.dataSource?.map((item: { name: any }) => item.name)
+		const namesArray = data.dataSource?.map(item => item.name)
 		if (namesArray) {
 			const newTask = {
+				id: edit,
 				specialityName: specialityName,
 				practiceType: practiceType,
 				tasks: namesArray
 			}
-			createTask(newTask)
+			console.log(newTask)
+			editTask(newTask)
 				.unwrap()
 				.then(() => {
-					navigate('/services/practices/individualTasks/')
+					setEdit('')
 				})
 		}
 	}
@@ -205,12 +232,10 @@ const CreateTask = () => {
 					className="mt-1"
 					icon={<ArrowLeftSvg className="w-4 h-4 cursor-pointer mt-1" />}
 					type="text"
-					onClick={() => {
-						navigate('/services/practices/individualTasks/')
-					}}
+					onClick={() => setEdit('')}
 				/>
 				<Typography.Text className=" text-[28px] font-normal">
-					Выберите
+					Изменить
 				</Typography.Text>
 			</Space>
 			<form onSubmit={handleSubmit(onSubmit)}>
@@ -322,14 +347,14 @@ const CreateTask = () => {
 										{...field}
 										size="large"
 										placeholder="type task..."
-										// suffix={
-										// 	errors.dataSource &&
-										// 	errors.dataSource.message && (
-										// 		<Typography.Text type="danger">
-										// 			{errors.dataSource.message}
-										// 		</Typography.Text>
-										// 	)
-										// }
+										suffix={
+											errors.dataSource &&
+											errors.dataSource.message && (
+												<Typography.Text type="danger">
+													{errors.dataSource.message}
+												</Typography.Text>
+											)
+										}
 									/>
 									<Button
 										size="large"
@@ -361,4 +386,4 @@ const CreateTask = () => {
 	)
 }
 
-export default CreateTask
+export default EditTask

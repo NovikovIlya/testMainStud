@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { useApproveEmailMutation } from '../../store/api/serviceApi'
 import { setCredentials } from '../../store/reducers/authSlice'
-import { InitialState } from '../../store/type'
+import { InitialState } from '../../store/types/type'
 
 import { CardForm } from './cardForm'
 

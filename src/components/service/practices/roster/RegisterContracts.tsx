@@ -1,34 +1,64 @@
 import { Button, Col, List, Row, Select, Space, Typography } from 'antd'
+import { useEffect, useState } from 'react'
 
 import { DeleteSvg } from '../../../../assets/svg/DeleteSvg'
 import { DownloadSvg } from '../../../../assets/svg/DownloadSvg'
 import { EditSvg } from '../../../../assets/svg/EditSvg'
 import { PrinterSvg } from '../../../../assets/svg/PrinterSvg'
+import {
+	useDeleteContractMutation,
+	useGetContractsQuery
+} from '../../../../store/api/practiceApi/taskService'
 
-const data = [
-	{
-		name: 'Лечебно-профилактическое учреждение по договору',
-		date: '00.00.00, 00:00',
-		type: 'Бессрочный'
-	},
-	{
-		name: 'Лечебно-профилактическое учреждение по договору',
-		date: '00.00.00, 00:00',
-		type: 'С пролонгацией'
-	}
-]
+import { EditContract } from './EditContract'
 
 type PropsType = {
 	setIsCreate: (value: boolean) => void
 	setIsPreview: (value: boolean) => void
 	setIsFinalReview: (value: boolean) => void
+	setEdit: (value: string) => void
+	setPreview: (value: string) => void
 }
 
 export const RegisterContracts = ({
-	setIsCreate,
-	setIsPreview,
-	setIsFinalReview
-}: PropsType) => {
+									  setIsCreate,
+									  setIsPreview,
+									  setIsFinalReview,
+									  setEdit,
+									  setPreview
+								  }: PropsType) => {
+	const [deleteContract] = useDeleteContractMutation()
+	const { data } = useGetContractsQuery({ page: 0, size: 20, sort: [''] })
+	const [tableData, setTableData] = useState(data?.content)
+	const [filters, setFilters] = useState<{
+		type: string
+		spec: string
+		name: string
+	}>({ type: '', spec: '', name: '' })
+
+	useEffect(() => {
+		setTableData(data?.content)
+	}, [data])
+
+	const filter = (value: string, index: string) => {
+		setFilters(prev => ({ ...prev, [index]: value }))
+	}
+
+	useEffect(() => {
+		setTableData(
+			data?.content?.filter(
+				(x: any) =>
+					x.contractType.includes(filters.type) &&
+					x.specialtyName.includes(filters.spec) &&
+					x.contractFacility.includes(filters.name)
+			)
+		)
+	}, [filters])
+
+	const deleteContractOnClick = (id: string) => {
+		deleteContract(id).unwrap()
+	}
+
 	return (
 		<section className="container">
 			<Row gutter={[16, 16]}>
@@ -41,14 +71,21 @@ export const RegisterContracts = ({
 
 			<Row className="mt-12">
 				<Col span={2}>
-					<Typography.Text>Сортировка</Typography.Text>
+					<Typography.Text>Наименование специальности</Typography.Text>
 				</Col>
 				<Col span={8}>
 					<Select
 						popupMatchSelectWidth={false}
-						defaultValue="1"
+						defaultValue=""
 						className="w-full"
-						options={[{ value: '1', label: 'Все' }]}
+						options={[
+							{ value: '', label: 'Все' },
+							{
+								value: '31.08.01 Акушерство и гинекология',
+								label: '31.08.01 Акушерство и гинекология'
+							}
+						]}
+						onChange={value => filter(value, 'spec')}
 					/>
 				</Col>
 				<Col span={8} offset={6}>
@@ -77,9 +114,14 @@ export const RegisterContracts = ({
 				<Col span={4}>
 					<Select
 						popupMatchSelectWidth={false}
-						defaultValue="1"
+						defaultValue=""
 						className="w-full"
-						options={[{ value: '1', label: 'Бессрочный' }]}
+						options={[
+							{ value: '', label: 'Все' },
+							{ value: 'Бессрочный', label: 'Бессрочный' },
+							{ value: 'С пролонгацией', label: 'С пролонгацией' }
+						]}
+						onChange={value => filter(value, 'type')}
 					/>
 				</Col>
 			</Row>
@@ -90,14 +132,16 @@ export const RegisterContracts = ({
 				<Col span={6}>
 					<Select
 						popupMatchSelectWidth={false}
-						defaultValue="1"
+						defaultValue=""
 						className="w-full"
 						options={[
+							{ value: '', label: 'Все' },
 							{
-								value: '1',
+								value: 'Лечебно-профилактическое учреждение по договору',
 								label: 'Лечебно-профилактическое учреждение по договору'
 							}
 						]}
+						onChange={value => filter(value, 'name')}
 					/>
 				</Col>
 			</Row>
@@ -127,19 +171,19 @@ export const RegisterContracts = ({
 								</Space>
 							</div>
 						}
-						dataSource={data}
+						dataSource={tableData}
 						renderItem={item => (
 							<List.Item className="bg-white mb-3">
 								<Space size={40} className="max-w-xs min-w-[300px]">
-									<Typography.Text>{item.name}</Typography.Text>
+									<Typography.Text>{item.contractFacility}</Typography.Text>
 									<Button
 										type="text"
 										icon={<EditSvg />}
-										onClick={() => setIsCreate(true)}
+										onClick={() => setEdit(item.id)}
 									/>
 								</Space>
-								<Typography.Text>{item.date}</Typography.Text>
-								<Typography.Text>{item.type}</Typography.Text>
+								<Typography.Text>{item.dateConclusionContract}</Typography.Text>
+								<Typography.Text>{item.contractType}</Typography.Text>
 								<Space>
 									<Button type="text" icon={<DownloadSvg />} />
 									<Button type="text" icon={<PrinterSvg />} />
@@ -147,11 +191,19 @@ export const RegisterContracts = ({
 								<Space size={40}>
 									<Button
 										className="!rounded-full"
-										onClick={() => setIsPreview(true)}
+										onClick={() => {
+											setIsPreview(true)
+											setPreview(item.id)
+										}}
 									>
 										Режим просмотра
 									</Button>
-									<Button type="text" icon={<DeleteSvg />} />
+									<Button
+										type="text"
+										icon={<DeleteSvg />}
+										value={item.id}
+										onClick={() => deleteContractOnClick(item.id)}
+									/>
 								</Space>
 							</List.Item>
 						)}

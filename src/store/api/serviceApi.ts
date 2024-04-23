@@ -9,7 +9,7 @@ import {
     IPerformance,
     Template,
     TypeSchedule, IListTeacher, MainTeacherData, TestQuery
-} from '../type'
+} from '../types/type'
 
 import {apiSlice} from './apiSlice'
 import i18n from "i18next";

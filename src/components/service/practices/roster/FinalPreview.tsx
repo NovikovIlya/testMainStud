@@ -9,163 +9,110 @@ import {
 	TableProps,
 	Typography
 } from 'antd'
+import { useEffect, useState } from 'react'
 
 import { ArrowLeftSvg } from '../../../../assets/svg'
 import { DownloadSvg } from '../../../../assets/svg/DownloadSvg'
 import { LinkSvg } from '../../../../assets/svg/LinkSvg'
 import { PrinterSvg } from '../../../../assets/svg/PrinterSvg'
+import { useGetContractsQuery } from '../../../../store/api/practiceApi/taskService'
+import { IContractInfoFull } from '../../../../store/types/practiceType/practiceType'
 
 type PropsType = {
 	setIsFinalReview: (value: boolean) => void
 }
 
-interface DataType {
-	key: string
-	organizations: string
-	specialties: string
-	number: string
-	date: string
-	type: string
-	term: string
-	code: string
-	juridical: string
-	actual: string
-	quantity: string
-	contract: string
-	agreement: string
-}
-const data: DataType[] = [
-	{
-		key: '1',
-		organizations: 'Медико-санитарная часть ФГАОУ ВО КФУ',
-		specialties: '12.456 Лечебное дело',
-		number: '№1.1.2.77.2.45-04/10/2022',
-		date: '02.09.2022',
-		type: 'Пролонгация 1 год. Потом бессрочный',
-		term: 'Бессрочный',
-		code: 'Ортодонтия',
-		juridical: 'ул. Оренбургский тракт, 138, Казань, Респ. Татарстан',
-		actual: 'ул. Оренбургский тракт, 138, Казань, Респ. Татарстан',
-		quantity: '150',
-		contract: '#',
-		agreement: '#'
-	},
-	{
-		key: '2',
-		organizations: 'Организация',
-		specialties: '13.666 Хирургия',
-		number: '№1.1.2.77.2.45-04/10/2022',
-		date: '02.09.2022',
-		type: 'Пролонгация 1 год. Потом бессрочный',
-		term: 'Бессрочный',
-		code: 'Ортодонтия',
-		juridical: 'ул. Оренбургский тракт, 138, Казань, Респ. Татарстан',
-		actual: 'ул. Оренбургский тракт, 138, Казань, Респ. Татарстан',
-		quantity: '150',
-		contract: '#',
-		agreement: '#'
-	},
-	{
-		key: '3',
-		organizations: 'Медико-санитарная часть ФГАОУ ВО КФУ',
-		specialties: '13.676 Ортодонтия',
-		number: '№1.1.2.77.2.45-04/10/2022',
-		date: '02.09.2022',
-		type: 'Пролонгация 1 год. Потом бессрочный',
-		term: 'Бессрочный',
-		code: 'Ортодонтия',
-		juridical: 'ул. Оренбургский тракт, 138, Казань, Респ. Татарстан',
-		actual: 'ул. Оренбургский тракт, 138, Казань, Респ. Татарстан',
-		quantity: '150',
-		contract: '#',
-		agreement: '#'
-	},
-	{
-		key: '4',
-		organizations: 'Медико-санитарная часть ФГАОУ ВО КФУ',
-		specialties: '14.555 Стоматология',
-		number: '№1.1.2.77.2.45-04/10/2022',
-		date: '02.09.2022',
-		type: 'Пролонгация 1 год. Потом бессрочный',
-		term: 'Бессрочный',
-		code: 'Ортодонтия',
-		juridical: 'ул. Оренбургский тракт, 138, Казань, Респ. Татарстан',
-		actual: 'ул. Оренбургский тракт, 138, Казань, Респ. Татарстан',
-		quantity: '150',
-		contract: '#',
-		agreement: '#'
-	}
-]
-const columns: TableProps<DataType>['columns'] = [
-	{
-		title: 'Наименование организации',
-		dataIndex: 'organizations',
-		key: 'organizations'
-	},
-	{
-		title: 'Наименование специальности',
-		dataIndex: 'specialties',
-		key: 'specialties'
-	},
-	{
-		title: 'Номер договора',
-		dataIndex: 'number',
-		key: 'number'
-	},
-	{
-		title: 'Дата заключения договора',
-		dataIndex: 'date',
-		key: 'date'
-	},
-	{
-		title: 'Тип договора',
-		dataIndex: 'type',
-		key: 'type'
-	},
-	{
-		title: 'Срок действия договора',
-		dataIndex: 'term',
-		key: 'term'
-	},
-	{
-		title: 'Шифр и наименование специальности',
-		dataIndex: 'code',
-		key: 'code'
-	},
-	{
-		title: 'Юридический адрес организации',
-		dataIndex: 'juridical',
-		key: 'juridical'
-	},
-	{
-		title: 'Фактический адрес организации',
-		dataIndex: 'actual',
-		key: 'actual'
-	},
-	{
-		title: 'Количество мест',
-		dataIndex: 'quantity',
-		key: 'quantity'
-	},
-	{
-		title: 'Ссылка на скан договора',
-		dataIndex: 'contract',
-		key: 'contract',
-		render: item => (
-			<Button type="text" size="large" icon={<LinkSvg />} href={item} />
-		)
-	},
-	{
-		title: 'Ссылка на доп. соглашение к договору',
-		dataIndex: 'agreement',
-		key: 'agreement',
-		render: item => (
-			<Button type="text" size="large" icon={<LinkSvg />} href={item} />
-		)
-	}
-]
-
 export const FinalPreview = ({ setIsFinalReview }: PropsType) => {
+	const { data } = useGetContractsQuery({ page: 0, size: 20, sort: [''] })
+	const [tableData, setTableData] = useState(data?.content)
+	const [filters, setFilters] = useState<{
+		type: string
+		spec: string
+		name: string
+	}>({ type: '', spec: '', name: '' })
+
+	const filter = (value: string, index: string) => {
+		setFilters(prev => ({ ...prev, [index]: value }))
+	}
+
+	useEffect(() => {
+		setTableData(data?.content)
+	}, [data])
+
+	useEffect(() => {
+		setTableData(
+			data?.content?.filter(
+				(x: any) =>
+					x.contractType.includes(filters.type) &&
+					x.specialtyName.includes(filters.spec) &&
+					x.contractFacility.includes(filters.name)
+			)
+		)
+	}, [filters])
+
+	const columns: TableProps<IContractInfoFull>['columns'] = [
+		{
+			title: 'Наименование организации',
+			dataIndex: 'contractFacility',
+			key: 'contractFacility'
+		},
+		{
+			title: 'Наименование специальности',
+			dataIndex: 'specialtyName',
+			key: 'specialtyName'
+		},
+		{
+			title: 'Номер договора',
+			dataIndex: 'contractNumber',
+			key: 'contractNumber'
+		},
+		{
+			title: 'Дата заключения договора',
+			dataIndex: 'dateConclusionContract',
+			key: 'dateConclusionContract'
+		},
+		{
+			title: 'Тип договора',
+			dataIndex: 'contractType',
+			key: 'contractType'
+		},
+		{
+			title: 'Срок действия договора',
+			dataIndex: 'prolongation',
+			key: 'prolongation'
+		},
+		{
+			title: 'Юридический адрес организации',
+			dataIndex: 'legalFacility',
+			key: 'legalFacility'
+		},
+		{
+			title: 'Фактический адрес организации',
+			dataIndex: 'actualFacility',
+			key: 'actualFacility'
+		},
+		{
+			title: 'Количество мест',
+			dataIndex: 'placeNumber',
+			key: 'placeNumber'
+		},
+		{
+			title: 'Ссылка на скан договора',
+			dataIndex: 'contract',
+			key: 'contract',
+			render: item => (
+				<Button type="text" size="large" icon={<LinkSvg />} href={item} />
+			)
+		},
+		{
+			title: 'Ссылка на доп. соглашение к договору',
+			dataIndex: 'agreement',
+			key: 'agreement',
+			render: item => (
+				<Button type="text" size="large" icon={<LinkSvg />} href={item} />
+			)
+		}
+	]
 	return (
 		<section className="container">
 			<Space size={10}>
@@ -181,14 +128,21 @@ export const FinalPreview = ({ setIsFinalReview }: PropsType) => {
 			</Space>
 			<Row gutter={[16, 16]} className="mt-12">
 				<Col span={2}>
-					<Typography.Text>Сортировка</Typography.Text>
+					<Typography.Text>Наименование специальности</Typography.Text>
 				</Col>
-				<Col span={6}>
+				<Col span={8}>
 					<Select
 						popupMatchSelectWidth={false}
-						defaultValue="1"
+						defaultValue=""
 						className="w-full"
-						options={[{ value: '1', label: 'Все' }]}
+						options={[
+							{ value: '', label: 'Все' },
+							{
+								value: '31.08.01 Акушерство и гинекология',
+								label: '31.08.01 Акушерство и гинекология'
+							}
+						]}
+						onChange={value => filter(value, 'spec')}
 					/>
 				</Col>
 				<Col flex={'auto'} />
@@ -213,80 +167,45 @@ export const FinalPreview = ({ setIsFinalReview }: PropsType) => {
 			</Row>
 			<Row gutter={[16, 16]} className="mt-4">
 				<Col span={2}>
-					<Typography.Text>Количество мест</Typography.Text>
-				</Col>
-				<Col span={2}>
-					<Select
-						popupMatchSelectWidth={false}
-						defaultValue="1"
-						className="w-full"
-						options={[{ value: '1', label: '100' }]}
-					/>
-				</Col>
-				<Col span={3} offset={1}>
-					<Typography.Text>Дата заключения договора</Typography.Text>
+					<Typography.Text>Тип договора</Typography.Text>
 				</Col>
 				<Col span={4}>
-					<DatePicker placeholder="" className="w-full"></DatePicker>
+					<Select
+						popupMatchSelectWidth={false}
+						defaultValue=""
+						className="w-full"
+						options={[
+							{ value: '', label: 'Все' },
+							{ value: 'Бессрочный', label: 'Бессрочный' },
+							{ value: 'С пролонгацией', label: 'С пролонгацией' }
+						]}
+						onChange={value => filter(value, 'type')}
+					/>
 				</Col>
 			</Row>
 			<Row gutter={[16, 16]} className="mt-4">
 				<Col span={4}>
 					<Typography.Text>Наименование организации</Typography.Text>
 				</Col>
-				<Col span={8}>
+				<Col span={6}>
 					<Select
 						popupMatchSelectWidth={false}
-						defaultValue="1"
+						defaultValue=""
 						className="w-full"
 						options={[
+							{ value: '', label: 'Все' },
 							{
-								value: '1',
+								value: 'Лечебно-профилактическое учреждение по договору',
 								label: 'Лечебно-профилактическое учреждение по договору'
 							}
 						]}
-					/>
-				</Col>
-			</Row>
-			<Row gutter={[16, 16]} className="mt-4">
-				<Col span={4}>
-					<Typography.Text>Наименование специальности</Typography.Text>
-				</Col>
-				<Col span={8}>
-					<Select
-						popupMatchSelectWidth={false}
-						defaultValue="1"
-						className="w-full"
-						options={[
-							{
-								value: '1',
-								label: '31.08.01 Акушерство и гинекология'
-							}
-						]}
-					/>
-				</Col>
-			</Row>
-			<Row gutter={[16, 16]} className="mt-4">
-				<Col span={2}>
-					<Typography.Text>Тип договора</Typography.Text>
-				</Col>
-				<Col span={4}>
-					<Select
-						popupMatchSelectWidth={false}
-						defaultValue="1"
-						className="w-full"
-						options={[
-							{
-								value: '1',
-								label: 'Бессрочный'
-							}
-						]}
+						onChange={value => filter(value, 'name')}
 					/>
 				</Col>
 			</Row>
 			<Table
 				columns={columns}
-				dataSource={data}
+				dataSource={tableData}
 				bordered
 				pagination={false}
 				className="my-10"

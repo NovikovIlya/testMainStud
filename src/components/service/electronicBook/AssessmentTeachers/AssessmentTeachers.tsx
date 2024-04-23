@@ -1,12 +1,11 @@
-import {Avatar, Button, Card, Form, Rate, Select, Skeleton, Space, Typography} from 'antd'
-import {blue307} from '../../../../utils/color'
+import {Avatar, Card, Form, Select, Skeleton, Space, Typography} from 'antd'
 import {
     useGetTeacherInfoQuery,
     useGetTeachersRatingQuery,
     usePostTeacherRatingMutation
 } from "../../../../store/api/assessmentTeacher";
+import {IAssessmentNumber, IValuesAssessment, TestQuery} from "../../../../models/Teacher";
 import {useEffect, useState} from "react";
-import {IAssessmentNumber, IValuesAssessment, TestQuery} from "../../../../store/reducers/type";
 import {RatingTeacher} from "./RatingTeacher/RatingTeacher";
 
 

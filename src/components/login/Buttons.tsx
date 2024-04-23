@@ -18,19 +18,20 @@ export const Buttons = () => {
 					{t('enter')}
 				</Button>
 
-				<Button
-					className="mb-10 mt-0 flex !h-12 w-full items-center justify-center bg-white gap-3"
-					onClick={e => {
-						e.preventDefault()
-					}}
-					size="large"
-					type="primary"
-					ghost
-					htmlType="submit"
-				>
-					{t('loginVia')}
-					<GosSvg />
-				</Button>
+
+				{/*<Button*/}
+				{/*	className="mb-10 mt-0 flex !h-12 w-full items-center justify-center bg-white gap-3"*/}
+				{/*	onClick={e => {*/}
+				{/*		e.preventDefault()*/}
+				{/*	}}*/}
+				{/*	size="large"*/}
+				{/*	type="primary"*/}
+				{/*	ghost*/}
+				{/*	htmlType="submit"*/}
+				{/*>*/}
+				{/*	{t('loginVia')}*/}
+				{/*	<GosSvg />*/}
+				{/*</Button>*/}
 				<div className="flex items-center justify-between">
 					<span>
 						{t('noProfile')}{' '}

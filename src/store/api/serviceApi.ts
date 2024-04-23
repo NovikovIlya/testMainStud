@@ -8,7 +8,7 @@ import {
     ICalendar,
     IPerformance,
     Template,
-    TypeSchedule, IListTeacher, MainTeacherData, TestQuery
+    TypeSchedule,
 } from '../reducers/type'
 
 import {apiSlice} from './apiSlice'

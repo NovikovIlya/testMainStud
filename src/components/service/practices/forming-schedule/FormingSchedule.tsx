@@ -19,7 +19,7 @@ import {
     useCreateDocumentMutation,
     useCreatePracticSceduleMutation
 } from '../../../../store/api/practiceApi/taskService'
-import {IDocumentInfo} from "../../../../store/types/practiceType/practiceType";
+import {IDocumentInfo} from "../../../../models/Practice";
 
 
 type PropsType = {

@@ -22,7 +22,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { ArrowLeftSvg } from '../../../../assets/svg'
 import { useCreateContractMutation } from '../../../../store/api/practiceApi/taskService'
-import { ICreateContract } from '../../../../store/types/practiceType/practiceType'
+import { ICreateContract } from '../../../../models/Practice'
 import { SignInSchema } from '../validation'
 
 type PropsType = {

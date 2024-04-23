@@ -26,7 +26,7 @@ import {
 	useCreateContractMutation,
 	useGetContractQuery
 } from '../../../../store/api/practiceApi/taskService'
-import { ICreateContract, ICreateContractFull } from '../../../../store/types/practiceType/practiceType'
+import { ICreateContract, ICreateContractFull } from '../../../../models/Practice'
 import { SignInSchema } from '../validation'
 
 type PropsType = {

@@ -15,7 +15,7 @@ import {
     ITasksResponse,
     TypeGetPractices,
     TypeGetTasks
-} from '../../types/practiceType/practiceType'
+} from '../../../models/Practice'
 
 import {practiceApi} from './practiceApi'
 

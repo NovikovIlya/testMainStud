@@ -5,7 +5,7 @@ import {
 	IWorkState,
 	formItem
 } from '../../api/types'
-import { IDocumentsRequest } from '../types/type'
+import { IDocumentsRequest } from '../reducers/type'
 
 import { apiSlice } from './apiSlice'
 

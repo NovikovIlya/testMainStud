@@ -28,7 +28,7 @@ import {
 	useDeleteTaskMutation,
 	useGetTasksQuery
 } from '../../../../store/api/practiceApi/taskService'
-import { ContentItem, ITaskFull, TypeGetTasks } from '../../../../store/types/practiceType/practiceType'
+import { ContentItem, ITaskFull, TypeGetTasks } from '../../../../models/Practice'
 
 type InputRef = GetRef<typeof Input>
 

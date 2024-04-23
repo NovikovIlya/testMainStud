@@ -18,7 +18,7 @@ import {
 	useGetTaskQuery,
 	useLazyGetTaskQuery
 } from '../../../../store/api/practiceApi/taskService'
-import { IPracticeInfoFull, IPracticesResponse } from '../../../../store/types/practiceType/practiceType'
+import { IPracticeInfoFull, IPracticesResponse } from '../../../../models/Practice'
 
 interface FilterType {
 	value: string

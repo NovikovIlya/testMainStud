@@ -6,7 +6,7 @@ import {
 	ICountryRequest,
 	IEducationLevelRequest
 } from '../../../api/types'
-import { IDocumentsRequest } from '../../types/type'
+import { IDocumentsRequest } from '../type'
 
 const initialState: ICountriesDocumentsState = {
 	countries: null,

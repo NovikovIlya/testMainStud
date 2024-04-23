@@ -16,7 +16,7 @@ import { DownloadSvg } from '../../../../assets/svg/DownloadSvg'
 import { LinkSvg } from '../../../../assets/svg/LinkSvg'
 import { PrinterSvg } from '../../../../assets/svg/PrinterSvg'
 import { useGetContractsQuery } from '../../../../store/api/practiceApi/taskService'
-import { IContractInfoFull } from '../../../../store/types/practiceType/practiceType'
+import { IContractInfoFull } from '../../../../models/Practice'
 
 type PropsType = {
 	setIsFinalReview: (value: boolean) => void

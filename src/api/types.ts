@@ -1,4 +1,4 @@
-import { IDocumentsRequest } from '../store/types/type'
+import { IDocumentsRequest } from '../store/reducers/type'
 
 export interface IRegRequest {
 	lastName: string

@@ -141,7 +141,7 @@ export const CompressedView = () => {
                         <Button
                             type="text"
                             icon={<EditSvg/>}
-                            // onClick={() => setIsCreate(true)}
+                            //onClick={() => setIsCreate(true)}
                         />
                     </Space>
                     <Typography.Text>{item.fillingDate}</Typography.Text>

@@ -39,7 +39,6 @@ const filterSpecialization: FilterType[] = [
 		label: '31.08.12 Педиатрия'
 	}
 ]
-
 const filterDepartment: FilterType[] = [
 	{
 		value: '',
@@ -54,7 +53,6 @@ const filterDepartment: FilterType[] = [
 		label: 'Кафедра онкологических болезней'
 	}
 ]
-
 const filterCourse: FilterType[] = [
 	{
 		value: '',
@@ -85,7 +83,6 @@ const filterCourse: FilterType[] = [
 		label: '6'
 	}
 ]
-
 const filterSemestr: FilterType[] = [
 	{
 		value: '',
@@ -100,7 +97,6 @@ const filterSemestr: FilterType[] = [
 		label: '2'
 	}
 ]
-
 const filterType: FilterType[] = [
 	{
 		value: '',
@@ -201,7 +197,7 @@ const columns: TableProps<IPracticeInfoFull>['columns'] = [
 	{
 		key: 'departmentDirector',
 		dataIndex: 'departmentDirector',
-		title: 'Заведующий опорной кафедрой ',
+		title: 'Заведующий опорной кафедрой',
 		className: 'text-xs !p-2'
 	}
 ]

@@ -13,6 +13,7 @@ import type {CheckboxProps, GetProp} from 'antd'
 import {useEffect, useState} from 'react'
 import {CompressedView} from "./CompressedView";
 import {TableView} from "./TableView";
+import {useNavigate} from "react-router-dom";
 
 type CheckboxValueType = GetProp<typeof Checkbox.Group, 'value'>[number]
 
@@ -35,7 +36,6 @@ const filterSpecialization: FilterType[] = [
         label: '31.08.01 Педиатрия'
     }
 ]
-
 const filterCourse: FilterType[] = [
     {
         value: '',
@@ -66,7 +66,6 @@ const filterCourse: FilterType[] = [
         label: '6'
     }
 ]
-
 const filterType: FilterType[] = [
     {
         value: '',
@@ -81,7 +80,6 @@ const filterType: FilterType[] = [
         label: 'Технологическая'
     }
 ]
-
 const filterEducationLevel: FilterType[] = [
     {
         value: '',
@@ -96,7 +94,6 @@ const filterEducationLevel: FilterType[] = [
         label: 'Интернатура'
     }
 ]
-
 const filterEducationForm: FilterType[] = [
     {
         value: '',
@@ -161,17 +158,9 @@ const data: DataType[] = [
 
 const plainOptions = data.map(item => item.key)
 
-type PropsType = {
-    setIsCreate: (value: boolean) => void
-    setIsPreview: (value: boolean) => void
-    setIsFinalReview: (value: boolean) => void
-}
 
-export const PracticeSchedule = ({
-                                     setIsCreate,
-                                     setIsPreview,
-                                     setIsFinalReview
-                                 }: PropsType) => {
+export const PracticeSchedule = () => {
+    const navigate = useNavigate()
     const [stateSchedule, setStateSchedule] = useState({
         compressed: true,
         table: false,
@@ -219,7 +208,6 @@ export const PracticeSchedule = ({
     }
 
 
-
     return (
         <section className="container">
             <Row gutter={[16, 16]}>
@@ -243,7 +231,9 @@ export const PracticeSchedule = ({
                     />
                 </Col>
                 <Col offset={8}>
-                    <Button type="primary" className="rounded-full" onClick={() => setIsCreate(true)}>
+                    <Button type="primary" className="rounded-full" onClick={() => {
+                        navigate('/services/practices/formingSchedule/createSchedule')
+                    }}>
                         Добавить график практик
                     </Button>
                 </Col>
@@ -274,34 +264,40 @@ export const PracticeSchedule = ({
                     />
                 </Col>
             </Row>
-            <Row gutter={[16, 16]} className="mt-4 flex items-center">
-                <Col span={4}>
-                    <Typography.Text>Уровень образования</Typography.Text>
-                </Col>
-                <Col span={8}>
-                    <Select
-                        popupMatchSelectWidth={false}
-                        defaultValue=""
-                        className="w-full"
-                        options={filterEducationLevel}
-                        onChange={value => filter(value, 'level')}
-                    />
-                </Col>
-            </Row>
-            <Row gutter={[16, 16]} className="mt-4 flex items-center">
-                <Col span={4}>
-                    <Typography.Text>Форма обучения</Typography.Text>
-                </Col>
-                <Col span={8}>
-                    <Select
-                        popupMatchSelectWidth={false}
-                        defaultValue=""
-                        className="w-full"
-                        options={filterEducationForm}
-                        onChange={value => filter(value, 'form')}
-                    />
-                </Col>
-            </Row>
+            {
+                stateSchedule.table
+                &&
+                <>
+                    <Row gutter={[16, 16]} className="mt-4 flex items-center">
+                        <Col span={4}>
+                            <Typography.Text>Уровень образования</Typography.Text>
+                        </Col>
+                        <Col span={8}>
+                            <Select
+                                popupMatchSelectWidth={false}
+                                defaultValue=""
+                                className="w-full"
+                                options={filterEducationLevel}
+                                onChange={value => filter(value, 'level')}
+                            />
+                        </Col>
+                    </Row>
+                    <Row gutter={[16, 16]} className="mt-4 flex items-center">
+                        <Col span={4}>
+                            <Typography.Text>Форма обучения</Typography.Text>
+                        </Col>
+                        <Col span={8}>
+                            <Select
+                                popupMatchSelectWidth={false}
+                                defaultValue=""
+                                className="w-full"
+                                options={filterEducationForm}
+                                onChange={value => filter(value, 'form')}
+                            />
+                        </Col>
+                    </Row>
+                </>
+            }
             <Row className="mt-4 flex items-center">
                 <Col span={12} flex="50%">
                     <Radio.Group defaultValue="compressedView" buttonStyle="solid">
@@ -334,8 +330,8 @@ export const PracticeSchedule = ({
 
             <Row className="mt-4">
                 <Col flex={'auto'}>
-                    { stateSchedule.compressed && <CompressedView/> }
-                    { stateSchedule.table && <TableView/>}
+                    {stateSchedule.compressed && <CompressedView/>}
+                    {stateSchedule.table && <TableView/>}
                 </Col>
             </Row>
         </section>

@@ -1,19 +1,13 @@
-import { useState } from 'react'
 import { FormingSchedule } from './FormingSchedule'
 import PracticeSchedule from './PracticeSchedule'
+import {useLocation} from "react-router-dom";
 
 
 export const Schedule = () => {
-	const [isCreate, setIsCreate] = useState(false)
-	const [isPreview, setIsPreview] = useState(false)
-	const [isFinalReview, setIsFinalReview] = useState(false)
-	if (isCreate) return <FormingSchedule setIsCreate={setIsCreate} />
-
-	return (
-		<PracticeSchedule
-			setIsCreate={setIsCreate}
-			setIsPreview={setIsPreview}
-			setIsFinalReview={setIsFinalReview}
-		/>
-	)
+	const { pathname } = useLocation()
+	if (pathname.includes('createSchedule')) {
+		return <FormingSchedule />
+	} else {
+		return <PracticeSchedule/>
+	}
 }

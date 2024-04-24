@@ -1,7 +1,7 @@
 import {
     Button,
     Col,
-    DatePicker,
+    DatePicker, Form,
     Input,
     Row,
     Select,
@@ -21,12 +21,21 @@ import {
 } from '../../../../store/api/practiceApi/taskService'
 import {IDocumentInfo} from "../../../../models/Practice";
 
+const optionsDivision = [
+    {
+        value:
+            'Институт фундаментальной медицины и биологии. Ординатура',
+        label:
+            'Институт фундаментальной медицины и биологии. Ординатура'
+    },
+    {
+        value: 'Институт фундаментальной медицины',
+        label: 'Институт фундаментальной медицины'
+    }
+]
 
-type PropsType = {
-    setIsCreate: (value: boolean) => void
-}
 
-export const FormingSchedule = ({setIsCreate}: PropsType) => {
+export const FormingSchedule = () => {
     const {
         control,
         handleSubmit,
@@ -69,9 +78,15 @@ export const FormingSchedule = ({setIsCreate}: PropsType) => {
         scedule(data)
             .unwrap()
             .then(() => {
-                setIsCreate(false)
+                //setIsCreate(false)
+                //здесь должна быть переадресация на PracticeSchedule
             })
     }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////
+    const [form] = Form.useForm()
+
+
     return (
         <section className="container">
             <Space size={10}>
@@ -80,101 +95,108 @@ export const FormingSchedule = ({setIsCreate}: PropsType) => {
                     className="mt-1"
                     icon={<ArrowLeftSvg className="w-4 h-4 cursor-pointer mt-1"/>}
                     type="text"
-                    onClick={() => setIsCreate(false)}
+                    onClick={() => {
+                        navigate('/services/practices/formingSchedule')
+                    }}
                 />
                 <Typography.Text className="text-black text-3xl font-normal">
                     Формирование графика практик
                 </Typography.Text>
             </Space>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <Form layout={'vertical'}
+                  form={form}
+                  onFinish={(values) => {
+                      console.log(values)
+                  }}>
                 <Row gutter={[16, 16]} className="mt-12">
                     <Col xs={24} sm={24} md={18} lg={16} xl={12}>
-                        <Space direction="vertical" className="w-full">
-                            <Typography.Text>Подразделение</Typography.Text>
-                            <Controller
-                                name="specialtyName"
-                                control={control}
-                                render={({field}) => (
-                                    <Select
-                                        {...field}
-                                        size="large"
-                                        popupMatchSelectWidth={false}
-                                        placeholder=""
-                                        defaultValue=""
-                                        className="w-full"
-                                        options={[
-                                            {
-                                                value:
-                                                    'Институт фундаментальной медицины и биологии. Ординатура',
-                                                label:
-                                                    'Институт фундаментальной медицины и биологии. Ординатура'
-                                            },
-                                            {
-                                                value: 'Институт фундаментальной медицины',
-                                                label: 'Институт фундаментальной медицины'
-                                            }
-                                        ]}
-                                    />
-                                )}
+                        <Form.Item label={'Подразделение'}
+                                   name={'division'}>
+                            <Select size="large"
+                                    popupMatchSelectWidth={false}
+                                    options={optionsDivision}
                             />
-                        </Space>
+                        </Form.Item>
                     </Col>
                 </Row>
-                <Row gutter={[16, 16]} className="mt-4">
+
+                <Row gutter={[16, 16]}>
                     <Col xs={24} sm={24} md={18} lg={8} xl={6}>
-                        <Space direction="vertical" className="w-full">
-                            <Typography.Text>Учебный год</Typography.Text>
-                            <Controller
-                                name="firstYear"
-                                control={control}
-                                render={({field, fieldState}) => (
-                                    <Select
-                                        {...field}
-                                        size="large"
-                                        popupMatchSelectWidth={false}
-                                        placeholder=""
-                                        defaultValue=""
-                                        className="w-full"
-                                        options={[
-                                            {value: '2023', label: '2023'},
-                                            {
-                                                value: '2024',
-                                                label: '2024'
-                                            }
-                                        ]}
-                                    />
-                                )}
+                        <Form.Item label={'Учебный год'} name={'firstYear'}>
+                            <Select
+                                size="large"
+                                popupMatchSelectWidth={false}
+                                placeholder=""
+                                defaultValue=""
+                                className="w-full"
+                                options={[
+                                    {value: '2023', label: '2023'},
+                                    {
+                                        value: '2024',
+                                        label: '2024'
+                                    }
+                                ]}
                             />
-                        </Space>
-                    </Col>
-                    <Col xs={24} sm={24} md={18} lg={8} xl={6}>
-                        <Space direction="vertical" className="w-full">
-                            <Typography.Text>Курс обучения</Typography.Text>
-                            <Controller
-                                name="courseNumber"
-                                control={control}
-                                render={({field}) => (
-                                    <Select
-                                        {...field}
-                                        size="large"
-                                        popupMatchSelectWidth={false}
-                                        placeholder=""
-                                        defaultValue=""
-                                        className="w-full"
-                                        options={[
-                                            {value: '1', label: '1'},
-                                            {value: '2', label: '2'},
-                                            {value: '3', label: '3'},
-                                            {value: '4', label: '4'},
-                                            {value: '5', label: '5'},
-                                            {value: '6', label: '6'}
-                                        ]}
-                                    />
-                                )}
-                            />
-                        </Space>
+                        </Form.Item>
                     </Col>
                 </Row>
+
+
+                {/*<Row gutter={[16, 16]} className="mt-4">*/}
+                {/*    <Col xs={24} sm={24} md={18} lg={8} xl={6}>*/}
+                {/*        <Space direction="vertical" className="w-full">*/}
+                {/*            <Typography.Text>Учебный год</Typography.Text>*/}
+                {/*            <Controller*/}
+                {/*                name="firstYear"*/}
+                {/*                control={control}*/}
+                {/*                render={({field, fieldState}) => (*/}
+                {/*                    <Select*/}
+                {/*                        {...field}*/}
+                {/*                        size="large"*/}
+                {/*                        popupMatchSelectWidth={false}*/}
+                {/*                        placeholder=""*/}
+                {/*                        defaultValue=""*/}
+                {/*                        className="w-full"*/}
+                {/*                        options={[*/}
+                {/*                            {value: '2023', label: '2023'},*/}
+                {/*                            {*/}
+                {/*                                value: '2024',*/}
+                {/*                                label: '2024'*/}
+                {/*                            }*/}
+                {/*                        ]}*/}
+                {/*                    />*/}
+                {/*                )}*/}
+                {/*            />*/}
+                {/*        </Space>*/}
+                {/*    </Col>*/}
+                {/*    <Col xs={24} sm={24} md={18} lg={8} xl={6}>*/}
+                {/*        <Space direction="vertical" className="w-full">*/}
+                {/*            <Typography.Text>Курс обучения</Typography.Text>*/}
+                {/*            <Controller*/}
+                {/*                name="courseNumber"*/}
+                {/*                control={control}*/}
+                {/*                render={({field}) => (*/}
+                {/*                    <Select*/}
+                {/*                        {...field}*/}
+                {/*                        size="large"*/}
+                {/*                        popupMatchSelectWidth={false}*/}
+                {/*                        placeholder=""*/}
+                {/*                        defaultValue=""*/}
+                {/*                        className="w-full"*/}
+                {/*                        options={[*/}
+                {/*                            {value: '1', label: '1'},*/}
+                {/*                            {value: '2', label: '2'},*/}
+                {/*                            {value: '3', label: '3'},*/}
+                {/*                            {value: '4', label: '4'},*/}
+                {/*                            {value: '5', label: '5'},*/}
+                {/*                            {value: '6', label: '6'}*/}
+                {/*                        ]}*/}
+                {/*                    />*/}
+                {/*                )}*/}
+                {/*            />*/}
+                {/*        </Space>*/}
+                {/*    </Col>*/}
+                {/*</Row>*/}
 
                 <Row gutter={[16, 16]} className="mt-4">
                     <Col xs={24} sm={24} md={18} lg={16} xl={12}>
@@ -438,7 +460,7 @@ export const FormingSchedule = ({setIsCreate}: PropsType) => {
                         </Space>
                     </Col>
                 </Row>
-            </form>
+            </Form>
         </section>
     )
 }

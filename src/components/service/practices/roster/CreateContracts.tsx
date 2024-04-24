@@ -19,7 +19,6 @@ import dayjs from 'dayjs'
 import { useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
-
 import { ArrowLeftSvg } from '../../../../assets/svg'
 import { useCreateContractMutation } from '../../../../store/api/practiceApi/taskService'
 import { ICreateContract } from '../../../../models/Practice'

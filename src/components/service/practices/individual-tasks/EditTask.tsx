@@ -10,7 +10,7 @@ import {
 	verticalListSortingStrategy
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { yupResolver } from '@hookform/resolvers/yup'
+
 import { Button, Col, Input, Row, Select, Space, Typography } from 'antd'
 import { Table } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
@@ -27,6 +27,7 @@ import {
 	useGetTaskQuery
 } from '../../../../store/api/practiceApi/taskService'
 import { INewTaskType, NewTaskSchema } from '../validation'
+import {yupResolver} from "@hookform/resolvers/yup";
 
 interface IFormInput {
 	practiceType: { label: string }

@@ -21,7 +21,7 @@ import type { FilterDropdownProps } from 'antd/es/table/interface'
 import { useEffect, useRef, useState } from 'react'
 import Highlighter from 'react-highlight-words'
 import { useNavigate } from 'react-router-dom'
-
+import {read, utils, writeFile, writeFileXLSX} from 'xlsx';
 import { DownloadSvg } from '../../../../assets/svg/DownloadSvg'
 import { PrinterSvg } from '../../../../assets/svg/PrinterSvg'
 import {
@@ -78,7 +78,18 @@ const IndividualTasks = ({ setEdit }: PropsType) => {
 	const [searchText, setSearchText] = useState('')
 	const [searchedColumn, setSearchedColumn] = useState('')
 	const searchInput = useRef<InputRef>(null)
-	const [dataTable, setDataTable] = useState<any>()
+	const [dataTable, setDataTable] = useState<ContentItem[]>([{
+		id: '1', specialityName: 'Тест 1', practiceType: 'Test 1', tasks: ['Test 1']
+	}])
+
+	function testExel() {
+		const ws = utils.json_to_sheet(dataTable);
+		const wb = utils.book_new();
+		utils.book_append_sheet(wb, ws, "Data");
+		writeFileXLSX(wb, "SheetJSReactAoO.xlsx");
+	}
+
+
 	const [filters, setFilters] = useState<{ type: string; spec: string }>({
 		type: '',
 		spec: ''
@@ -353,14 +364,14 @@ const IndividualTasks = ({ setEdit }: PropsType) => {
 							type="text"
 							icon={<DownloadSvg />}
 							className="flex items-center"
+							onClick={testExel}
 						>
 							Скачать
 						</Button>
 						<Button
 							type="text"
 							icon={<PrinterSvg />}
-							className="flex items-center"
-						>
+							className="flex items-center">
 							Печать
 						</Button>
 					</Space>

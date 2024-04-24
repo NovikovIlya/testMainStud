@@ -8,7 +8,7 @@ import {
     Space,
     Typography,
 } from 'antd'
-import {format} from 'date-fns/format'
+// import {format} from 'date-fns/format'
 import dayjs from 'dayjs'
 import {useEffect, useState} from 'react'
 import {Controller, SubmitHandler, useForm} from 'react-hook-form'
@@ -20,6 +20,7 @@ import {
     useCreatePracticSceduleMutation
 } from '../../../../store/api/practiceApi/taskService'
 import {IDocumentInfo} from "../../../../models/Practice";
+import {format} from "date-fns/format";
 
 const optionsDivision = [
     {
@@ -33,6 +34,25 @@ const optionsDivision = [
         label: 'Институт фундаментальной медицины'
     }
 ]
+const optionsAcademicYear = [
+    {
+        value: '2023',
+        label: '2023'
+    },
+    {
+        value: '2024',
+        label: '2024'
+    }
+]
+const optionsCourseStudy = [
+    {value: '1', label: '1'},
+    {value: '2', label: '2'},
+    {value: '3', label: '3'},
+    {value: '4', label: '4'},
+    {value: '5', label: '5'},
+    {value: '6', label: '6'}
+]
+
 
 
 export const FormingSchedule = () => {
@@ -105,9 +125,7 @@ export const FormingSchedule = () => {
             </Space>
             <Form layout={'vertical'}
                   form={form}
-                  onFinish={(values) => {
-                      console.log(values)
-                  }}>
+                  onFinish={(values) => {console.log(values)}}>
                 <Row gutter={[16, 16]} className="mt-12">
                     <Col xs={24} sm={24} md={18} lg={16} xl={12}>
                         <Form.Item label={'Подразделение'}
@@ -119,84 +137,30 @@ export const FormingSchedule = () => {
                         </Form.Item>
                     </Col>
                 </Row>
-
-                <Row gutter={[16, 16]}>
+                <Row gutter={[16, 16]} className={'mt-4'}>
                     <Col xs={24} sm={24} md={18} lg={8} xl={6}>
-                        <Form.Item label={'Учебный год'} name={'firstYear'}>
+                        <Form.Item label={'Учебный год'} name={'academicYear'}>
                             <Select
                                 size="large"
                                 popupMatchSelectWidth={false}
                                 placeholder=""
                                 defaultValue=""
                                 className="w-full"
-                                options={[
-                                    {value: '2023', label: '2023'},
-                                    {
-                                        value: '2024',
-                                        label: '2024'
-                                    }
-                                ]}
+                                options={optionsAcademicYear}
+                            />
+                        </Form.Item>
+                    </Col>
+                    <Col xs={24} sm={24} md={18} lg={8} xl={6}>
+                        <Form.Item label={'Курс обучения'} name={'courseStudy'}>
+                            <Select
+                                size="large"
+                                popupMatchSelectWidth={false}
+                                className="w-full"
+                                options={optionsCourseStudy}
                             />
                         </Form.Item>
                     </Col>
                 </Row>
-
-
-                {/*<Row gutter={[16, 16]} className="mt-4">*/}
-                {/*    <Col xs={24} sm={24} md={18} lg={8} xl={6}>*/}
-                {/*        <Space direction="vertical" className="w-full">*/}
-                {/*            <Typography.Text>Учебный год</Typography.Text>*/}
-                {/*            <Controller*/}
-                {/*                name="firstYear"*/}
-                {/*                control={control}*/}
-                {/*                render={({field, fieldState}) => (*/}
-                {/*                    <Select*/}
-                {/*                        {...field}*/}
-                {/*                        size="large"*/}
-                {/*                        popupMatchSelectWidth={false}*/}
-                {/*                        placeholder=""*/}
-                {/*                        defaultValue=""*/}
-                {/*                        className="w-full"*/}
-                {/*                        options={[*/}
-                {/*                            {value: '2023', label: '2023'},*/}
-                {/*                            {*/}
-                {/*                                value: '2024',*/}
-                {/*                                label: '2024'*/}
-                {/*                            }*/}
-                {/*                        ]}*/}
-                {/*                    />*/}
-                {/*                )}*/}
-                {/*            />*/}
-                {/*        </Space>*/}
-                {/*    </Col>*/}
-                {/*    <Col xs={24} sm={24} md={18} lg={8} xl={6}>*/}
-                {/*        <Space direction="vertical" className="w-full">*/}
-                {/*            <Typography.Text>Курс обучения</Typography.Text>*/}
-                {/*            <Controller*/}
-                {/*                name="courseNumber"*/}
-                {/*                control={control}*/}
-                {/*                render={({field}) => (*/}
-                {/*                    <Select*/}
-                {/*                        {...field}*/}
-                {/*                        size="large"*/}
-                {/*                        popupMatchSelectWidth={false}*/}
-                {/*                        placeholder=""*/}
-                {/*                        defaultValue=""*/}
-                {/*                        className="w-full"*/}
-                {/*                        options={[*/}
-                {/*                            {value: '1', label: '1'},*/}
-                {/*                            {value: '2', label: '2'},*/}
-                {/*                            {value: '3', label: '3'},*/}
-                {/*                            {value: '4', label: '4'},*/}
-                {/*                            {value: '5', label: '5'},*/}
-                {/*                            {value: '6', label: '6'}*/}
-                {/*                        ]}*/}
-                {/*                    />*/}
-                {/*                )}*/}
-                {/*            />*/}
-                {/*        </Space>*/}
-                {/*    </Col>*/}
-                {/*</Row>*/}
 
                 <Row gutter={[16, 16]} className="mt-4">
                     <Col xs={24} sm={24} md={18} lg={16} xl={12}>

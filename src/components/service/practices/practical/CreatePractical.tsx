@@ -23,7 +23,7 @@ import {
 } from 'antd'
 import { Table } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
-import { format } from 'date-fns'
+import { format } from 'date-fns/format'
 import dayjs from 'dayjs'
 import React, { useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'

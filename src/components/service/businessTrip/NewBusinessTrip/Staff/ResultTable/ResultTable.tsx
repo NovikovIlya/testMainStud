@@ -4,6 +4,7 @@ import {TitleHeadCell} from "../../archive/stepTwo/tableStepTwo/titleHeadCell/Ti
 import {PaperClip} from "../../../../../../assets/svg/PaperClip";
 import {EditSvg} from "../../../../../../assets/svg/EditSvg";
 import {DeleteSvg} from "../../../../../../assets/svg/DeleteSvg";
+import './Result.scss'
 
 interface GeneralProperty {
     key: string
@@ -47,7 +48,7 @@ const columnsOne: TableProps<ColumnsOne>['columns'] = [
         title: <TitleHeadCell title={'Адрес'}/>,
         dataIndex: 'address',
         align: "left",
-        width: 200
+        width: 200,
     },
     {
         title: <TitleHeadCell title={'Начало'}/>,
@@ -197,7 +198,6 @@ const columnsFour: TableProps<ColumnsFour>['columns'] = [
 ]
 
 export const ResultTable = () => {
-
     const dataColumnsOne: ColumnsOne[] = [
         {
             key: '1',
@@ -206,6 +206,13 @@ export const ResultTable = () => {
             endDate: '30.10.23',
             rangeDate: '9',
         },
+        {
+            key: '1',
+            address: 'Москва, Кремлёвская наб., 1, к1, кв 111',
+            startDate: '21.10.23',
+            endDate: '30.10.23',
+            rangeDate: '9',
+        }
     ]
 
     const dataColumnsTwo: ColumnsTwo[] = [
@@ -250,12 +257,15 @@ export const ResultTable = () => {
     return (
         <Row gutter={[16, 16]}>
             <Col span={24}>
-                <Table
-                    columns={columnsOne}
-                    pagination={false}
-                    size={"middle"}
-                    dataSource={dataColumnsOne}
-                />
+                <div className="result">
+                    <Table
+                        columns={columnsOne}
+                        pagination={false}
+                        size={"middle"}
+                        dataSource={dataColumnsOne}
+                    />
+                </div>
+
             </Col>
             <Col span={24}>
                 <Table

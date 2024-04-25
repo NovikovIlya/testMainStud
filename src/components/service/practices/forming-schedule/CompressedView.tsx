@@ -55,7 +55,6 @@ const data: DataType[] = [
         periodPractice: '2020-2021'
     }
 ]
-
 const plainOptions = data.map(item => item.key)
 
 export const CompressedView = () => {

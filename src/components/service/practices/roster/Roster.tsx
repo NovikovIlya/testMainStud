@@ -29,12 +29,6 @@ export const Roster = () => {
 		)
 
 	return (
-		<RegisterContracts
-			setIsCreate={setIsCreate}
-			setIsPreview={setIsPreview}
-			setIsFinalReview={setIsFinalReview}
-			setEdit={setEdit}
-			setPreview={setPreview}
-		/>
+		<RegisterContracts/>
 	)
 }

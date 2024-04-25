@@ -35,7 +35,6 @@ const columnsTableSchedule: TableProps<TablePracticeSchedule>['columns'] = [
                         onClick={() => console.log(record.key)}
                     />
                 </div>
-
     },
     {
         title: 'Учебный год',
@@ -94,7 +93,7 @@ const columnsTableSchedule: TableProps<TablePracticeSchedule>['columns'] = [
             />,
         width: 200,
         align: 'left',
-        render: (_, record) =>
+        render: (record) =>
             <Button
                 type="text"
                 className="opacity-50"

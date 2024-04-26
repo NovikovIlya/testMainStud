@@ -223,24 +223,32 @@ const columnsFullView: TableProps<ColumnsTableFull>['columns'] = [
 
 const optionsNameSpecialty = [
     {
-        value: '',
+        value: 'Все',
         label: 'Все'
     },
     {
         value: '31.08.01 Акушерство и гинекология',
         label: '31.08.01 Акушерство и гинекология'
+    },
+    {
+        value: 'Тест 2',
+        label: 'Тест 2'
     }
 ]
 const optionsTypeContract = [
-    {value: '', label: 'Все'},
+    {value: 'Все', label: 'Все'},
     {value: 'Бессрочный', label: 'Бессрочный'},
     {value: 'С пролонгацией', label: 'С пролонгацией'}
 ]
 const optionsNameOrg = [
-    {value: '', label: 'Все'},
+    {value: 'Все', label: 'Все'},
     {
         value: 'Лечебно-профилактическое учреждение по договору',
         label: 'Лечебно-профилактическое учреждение по договору'
+    },
+    {
+        value: 'Тест 3',
+        label: 'Тест 3'
     }
 ]
 const mockDataCompressed: ColumnsTableCompressedView[] = [
@@ -255,48 +263,75 @@ const mockDataCompressed: ColumnsTableCompressedView[] = [
         key: '2',
         contractFacility: 'Лечебно-профилактическое учреждение по договору',
         dateConclusionContract: '12.12.2012',
+        contractType: 'С пролонгацией',
+        dateFiling: '00.00.00, 00:00'
+    },
+    {
+        key: '3',
+        contractFacility: 'Тест 3',
+        dateConclusionContract: '12.12.2012',
         contractType: 'Бессрочный',
         dateFiling: '00.00.00, 00:00'
     },
-]
-const mockDataFull: ColumnsTableFull[] = [
     {
-        key: '1',
-        nameOrg: 'Медико-санитарная часть ФГАОУ ВО КФУ',
-        nameSpecialty: '12.456 Лечебное дело',
-        contractNumber: '№1.1.2.77.2.45-04/10/2022',
-        dateConclusionContract: '02.09.2022',
-        contractType: 'Пролонгация 1 год. Потом бессрочный',
-        contractPeriod: 'Бессрочный',
-        cipherNameSpecialty: 'Ортодонтия',
-        legalAddress: 'ул. Оренбургский тракт, 138, Казань, Респ. Татарстан',
-        actualAddress: 'ул. Оренбургский тракт, 138, Казань, Респ. Татарстан',
-        numberSeats: '150',
-        links: 'Cкан договора'
-    }
+        key: '4',
+        contractFacility: 'Тест 4',
+        dateConclusionContract: '12.12.2012',
+        contractType: 'С пролонгацией',
+        dateFiling: '00.00.00, 00:00'
+    },
 ]
 
+
 export const RegisterContracts = () => {
+    const [filter, setFilter] = useState({
+        contractType: 'Все',
+        nameOrg: 'Все',
+    })
+
     const [tableDataCompressed, setTableDataCompressed] = useState<ColumnsTableCompressedView[]>(mockDataCompressed)
-    const [tableDataFull, setTableDataFull] = useState<ColumnsTableFull[]>(mockDataFull)
+    const [tableDataFull, setTableDataFull] = useState<ColumnsTableFull[]>()
     const [tableView, setTableView] = useState({
         compressed: true,
         table: false
     })
-
     function isCompressedTable() {
         setTableView({
             compressed: true,
             table: false
         })
     }
-
     function isFullTable() {
         setTableView({
             compressed: false,
             table: true
         })
     }
+
+
+    function allFilter() {
+        const filterData = mockDataCompressed.filter(elem => {
+            if (filter.nameOrg === 'Все') {
+                return elem
+            } else {
+                return elem.contractFacility === filter.nameOrg
+            }
+        }).filter(elem => {
+            if (filter.contractType === 'Все') {
+                return elem
+            } else {
+                return elem.contractType === filter.contractType
+            }
+        })
+        return filterData
+    }
+
+    useEffect(() => {
+        console.log(filter)
+        const filterData = allFilter()
+        setTableDataCompressed(filterData)
+
+    }, [filter])
 
     return (
         <section className={'container'}>
@@ -344,9 +379,15 @@ export const RegisterContracts = () => {
                     <Col span={16}>
                         <Select
                             popupMatchSelectWidth={false}
-                            defaultValue=""
+                            defaultValue="Все"
                             className="w-full"
                             options={optionsNameOrg}
+                            onChange={(value, option) => {
+                                setFilter({
+                                    ...filter,
+                                    nameOrg: value
+                                })
+                            }}
                         />
                     </Col>
                 </Col>
@@ -378,9 +419,16 @@ export const RegisterContracts = () => {
                     <Col span={16}>
                         <Select
                             popupMatchSelectWidth={false}
-                            defaultValue=""
+                            defaultValue="Все"
                             className="w-full"
                             options={optionsTypeContract}
+                            onChange={value => {
+                                setFilter({
+                                    ...filter,
+                                    contractType: value,
+                                })
+
+                            }}
                         />
                     </Col>
                 </Col>

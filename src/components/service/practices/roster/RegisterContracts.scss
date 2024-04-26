@@ -2,13 +2,16 @@
   .ant-table-wrapper .ant-table-thead > tr > th {
     background-color: #F5F8FB !important;
   }
+
   .ant-table-wrapper table {
     border-spacing: 0 10px;
     background-color: #F5F8FB;
   }
+
   .ant-table-cell {
     background-color: white;
   }
+
   .ant-checkbox .ant-checkbox-inner:after {
     box-sizing: border-box;
     position: absolute;
@@ -33,6 +36,6 @@
     opacity: 1;
     content: "";
   }
-
-
 }
+
+

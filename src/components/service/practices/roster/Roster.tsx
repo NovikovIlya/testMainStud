@@ -4,7 +4,7 @@ import { CreateContracts } from './CreateContracts'
 import { EditContract } from './EditContract'
 import { FinalPreview } from './FinalPreview'
 import { PreviewContracts } from './PreviewContracts'
-import { RegisterContracts } from './RegisterContracts'
+import { RegisterContracts } from './registerContracts/RegisterContracts'
 
 export const Roster = () => {
 	const [isCreate, setIsCreate] = useState(false)

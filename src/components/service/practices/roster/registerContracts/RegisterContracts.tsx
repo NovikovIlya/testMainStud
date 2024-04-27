@@ -1,17 +1,30 @@
-import {Button, Col, DatePicker, Input, InputNumber, Radio, Row, Select, Table, TableProps, Typography} from 'antd'
+import {
+    Button,
+    Col,
+    DatePicker,
+    Input,
+    InputNumber,
+    Popover,
+    Radio,
+    Row,
+    Select,
+    Table,
+    TableProps,
+    Typography
+} from 'antd'
 import React, {ChangeEvent, useEffect, useState} from 'react'
 import './RegisterContracts.scss'
 import {
     TitleHeadCell
-} from "../../businessTrip/NewBusinessTrip/archive/stepTwo/tableStepTwo/titleHeadCell/TitleHeadCell";
-import {EditSvg} from "../../../../assets/svg/EditSvg";
-import {PointsSvg} from "../../../../assets/svg/PointsSvg";
+} from "../../../businessTrip/NewBusinessTrip/archive/stepTwo/tableStepTwo/titleHeadCell/TitleHeadCell";
+import {EditSvg} from "../../../../../assets/svg/EditSvg";
+import {PointsSvg} from "../../../../../assets/svg/PointsSvg";
 import dayjs from "dayjs";
 import clsx from "clsx";
+import {PopoverContent} from "./popoverContent";
 
 
-
-interface ColumnsTableCompressedView {
+export interface ColumnsTableCompressedView {
     key: string
     contractFacility: string
     dateFiling: string
@@ -19,7 +32,7 @@ interface ColumnsTableCompressedView {
     dateConclusionContract: string
 }
 
-interface ColumnsTableFull {
+export interface ColumnsTableFull {
     key: string
     nameOrg: string
     nameSpecialty: string
@@ -55,39 +68,43 @@ const columnsCompressedView: TableProps<ColumnsTableCompressedView>['columns'] =
     {
         title: <TitleHeadCell title={'Дата заполнения'}/>,
         dataIndex: 'dateFiling',
-        align: "center",
+        align: "left",
         width: 150
     },
     {
         title: <TitleHeadCell title={'Тип договора'}/>,
         dataIndex: 'contractType',
-        align: "center",
+        align: "left",
         width: 150
 
     },
     {
         title: <TitleHeadCell title={'Дата заключения договора'}/>,
         dataIndex: 'dateConclusionContract',
-        align: "center",
+        align: "left",
         width: 150,
         render: (text) => dayjs(text).format('DD.MM.YYYY')
     },
     {
         title:
-            <Button
-                type="text"
-                className="opacity-50"
-                icon={<PointsSvg/>}
-            />,
+            <Popover trigger={'click'}>
+                <Button
+                    type="text"
+                    className="opacity-50"
+                    icon={<PointsSvg/>}
+                />
+            </Popover>,
         width: 200,
         align: 'center',
         render: (record) =>
-            <Button
-                type="text"
-                className="opacity-50"
-                icon={<PointsSvg/>}
-                onClick={() => console.log(record.key)}
-            />,
+            <Popover content={<PopoverContent record={record}/>} trigger={'click'}>
+                <Button
+                    type="text"
+                    className="opacity-50"
+                    icon={<PointsSvg/>}
+                />
+            </Popover>
+
     }
 ]
 const columnsFullView: TableProps<ColumnsTableFull>['columns'] = [

@@ -23,8 +23,12 @@ export const Responds = () => {
 		useGetSubdivisionsQuery(categoryTitle)
 	const { data: responds = [] } = useGetVacancyGroupedResponcesQuery(
 		directoryTitle === 'Все'
-			? { category: categoryTitle }
-			: { category: categoryTitle, direction: directoryTitle }
+			? { category: categoryTitle, role: 'PERSONNEL_DEPARTMENT' }
+			: {
+					category: categoryTitle,
+					direction: directoryTitle,
+					role: 'PERSONNEL_DEPARTMENT'
+			  }
 	)
 
 	return (

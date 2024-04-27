@@ -23,11 +23,15 @@ export const ChatEmpDemp = () => {
 	const [getGroupedResponds] = useLazyGetVacancyGroupedResponcesQuery()
 
 	useEffect(() => {
-		getGroupedResponds({ category: 'АУП' })
+		getGroupedResponds({ category: 'АУП', role: 'PERSONNEL_DEPARTMENT' })
 			.unwrap()
 			.then(grData => {
 				grData.map(vacResp => {
-					getResponds({ id: vacResp.vacancyId, status: '' })
+					getResponds({
+						id: vacResp.vacancyId,
+						status: '',
+						role: 'PERSONNEL_DEPARTMENT'
+					})
 						.unwrap()
 						.then(data => setResponds(prev => [...prev, ...data]))
 				})

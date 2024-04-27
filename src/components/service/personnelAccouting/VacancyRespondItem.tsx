@@ -6,7 +6,11 @@ import { useLazyGetRespondFullInfoQuery } from '../../../store/api/serviceApi'
 import { setCurrentResponce } from '../../../store/reducers/CurrentResponceSlice'
 import { VacancyRespondItemType, respondStatus } from '../../../store/type'
 
-export const VacancyRespondItem = (props: VacancyRespondItemType) => {
+export const VacancyRespondItem = (
+	props: VacancyRespondItemType & {
+		type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
+	}
+) => {
 	const [getResponceInfo] = useLazyGetRespondFullInfoQuery()
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
@@ -23,28 +27,41 @@ export const VacancyRespondItem = (props: VacancyRespondItemType) => {
 						  props.userData.middlename
 						: 'Толстой Лев Николаевич'}
 				</p>
-				<div className="flex gap-[20px] mr-[312px]">
-					<p className="w-[90px]">
-						{props.responseDate.split('-').reverse().join('.')}
-					</p>
-					<p>
-						{props.status ===
-						respondStatus[respondStatus.IN_PERSONNEL_DEPT_REVIEW]
-							? 'на рассмотрении у отдела кадров'
-							: props.status ===
-							  respondStatus[respondStatus.IN_SUPERVISOR_REVIEW]
-							? 'на рассмотрении у руководителя'
-							: props.status === respondStatus[respondStatus.INVITATION]
-							? 'приглашение'
-							: props.status === respondStatus[respondStatus.REJECTED]
-							? 'отклонено'
-							: 'на рассмотрении'}
-					</p>
-				</div>
+				{props.type === 'PERSONNEL_DEPARTMENT' ? (
+					<div className="flex gap-[20px] mr-[312px]">
+						<p className="w-[90px]">
+							{props.responseDate.split('-').reverse().join('.')}
+						</p>
+						<p>
+							{props.status ===
+							respondStatus[respondStatus.IN_PERSONNEL_DEPT_REVIEW]
+								? 'на рассмотрении у отдела кадров'
+								: props.status ===
+								  respondStatus[respondStatus.IN_SUPERVISOR_REVIEW]
+								? 'на рассмотрении у руководителя'
+								: props.status === respondStatus[respondStatus.INVITATION]
+								? 'приглашение'
+								: props.status === respondStatus[respondStatus.REJECTED]
+								? 'отклонено'
+								: 'на рассмотрении'}
+						</p>
+					</div>
+				) : (
+					<>
+						<p>{props.vacancyName}</p>
+						<p className="w-[90px]">
+							{props.responseDate.split('-').reverse().join('.')}
+						</p>
+					</>
+				)}
 				<Button
 					onClick={() => {
 						dispatch(setCurrentResponce(props.id))
-						navigate(`services/personnelaccounting/responds/fullinfo`)
+						props.type === 'PERSONNEL_DEPARTMENT'
+							? navigate(`services/personnelaccounting/responds/fullinfo`)
+							: navigate(
+									'services/personnelaccounting/supervisor/responds/fullinfo'
+							  )
 					}}
 					className="font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black"
 				>

@@ -21,7 +21,8 @@ export const VacancyResponces = () => {
 	const [status, setStatus] = useState('')
 	const { data: responds = [] } = useGetResponcesByVacancyQuery({
 		id: vacancyId,
-		status: status
+		status: status,
+		role: 'PERSONNEL_DEPARTMENT'
 	})
 
 	return (
@@ -78,7 +79,7 @@ export const VacancyResponces = () => {
 					</div>
 				</div>
 				{responds.map(respond => (
-					<VacancyRespondItem {...respond} />
+					<VacancyRespondItem {...respond} type="PERSONNEL_DEPARTMENT" />
 				))}
 			</div>
 		</>

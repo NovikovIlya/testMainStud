@@ -11,7 +11,9 @@ import {
 } from '../../../store/api/serviceApi'
 import ArrowIcon from '../jobSeeker/ArrowIcon'
 
-export const RespondInfo = () => {
+export const RespondInfo = (props: {
+	type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
+}) => {
 	const respondId = useAppSelector(state => state.currentResponce)
 
 	const { data: res } = useGetRespondFullInfoQuery(respondId.respondId)
@@ -27,7 +29,11 @@ export const RespondInfo = () => {
 					<div>
 						<Button
 							onClick={() => {
-								navigate('/services/personnelaccounting/responds')
+								props.type === 'PERSONNEL_DEPARTMENT'
+									? navigate('/services/personnelaccounting/responds')
+									: navigate(
+											'/services/personnelaccounting/supervisor/responds'
+									  )
 							}}
 							className="bg-inherit h-[38px] w-[99px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer font-normal text-black text-[16px]/[16px] flex gap-[8px]"
 						>
@@ -85,33 +91,52 @@ export const RespondInfo = () => {
 									</div>
 								</div>
 							</div>
-							<div className="self-center grid grid-cols-2 grid-rows-[40px_40px] gap-x-[12px] gap-y-[12px]">
-								<Button
-									onClick={() => {}}
-									type="primary"
-									className="font-content-font font-normal text-white text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px]"
-								>
-									Отправить руководителю
-								</Button>
-								<Button
-									onClick={() => {}}
-									className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
-								>
-									Отказать
-								</Button>
-								<Button
-									onClick={() => {}}
-									className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
-								>
-									Отправить в резерв
-								</Button>
-								<Button
-									onClick={() => {}}
-									className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
-								>
-									Перейти в чат
-								</Button>
-							</div>
+							{props.type === 'PERSONNEL_DEPARTMENT' && (
+								<div className="self-center grid grid-cols-2 grid-rows-[40px_40px] gap-x-[12px] gap-y-[12px]">
+									<Button
+										onClick={() => {}}
+										type="primary"
+										className="font-content-font font-normal text-white text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px]"
+									>
+										Отправить руководителю
+									</Button>
+									<Button
+										onClick={() => {}}
+										className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
+									>
+										Отказать
+									</Button>
+									<Button
+										onClick={() => {}}
+										className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
+									>
+										Отправить в резерв
+									</Button>
+									<Button
+										onClick={() => {}}
+										className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
+									>
+										Перейти в чат
+									</Button>
+								</div>
+							)}
+							{props.type === 'SUPERVISOR' && (
+								<div className="self-center grid grid-cols-1 grid-rows-[40px_40px] gap-y-[12px]">
+									<Button
+										onClick={() => {}}
+										type="primary"
+										className="font-content-font font-normal text-white text-[16px]/[16px] rounded-[54.5px] w-[257px] h-[40px] py-[8px] px-[24px]"
+									>
+										Пригласить на собеседование
+									</Button>
+									<Button
+										onClick={() => {}}
+										className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[257px] h-[40px] py-[8px] px-[24px] border-black"
+									>
+										Отказать
+									</Button>
+								</div>
+							)}
 						</div>
 						<hr />
 						<div className="flex flex-col gap-[24px]">

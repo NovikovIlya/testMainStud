@@ -1,5 +1,5 @@
-import {Button, Col, DatePicker, Radio, Row, Select, Table, TableProps, Typography} from 'antd'
-import React, {useEffect, useState} from 'react'
+import {Button, Col, DatePicker, Input, InputNumber, Radio, Row, Select, Table, TableProps, Typography} from 'antd'
+import React, {ChangeEvent, useEffect, useState} from 'react'
 import './RegisterContracts.scss'
 import {
     TitleHeadCell
@@ -7,15 +7,9 @@ import {
 import {EditSvg} from "../../../../assets/svg/EditSvg";
 import {PointsSvg} from "../../../../assets/svg/PointsSvg";
 import dayjs from "dayjs";
+import clsx from "clsx";
 
 
-type PropsType = {
-    setIsCreate: (value: boolean) => void
-    setIsPreview: (value: boolean) => void
-    setIsFinalReview: (value: boolean) => void
-    setEdit: (value: string) => void
-    setPreview: (value: string) => void
-}
 
 interface ColumnsTableCompressedView {
     key: string
@@ -102,10 +96,10 @@ const columnsFullView: TableProps<ColumnsTableFull>['columns'] = [
         dataIndex: 'nameOrg',
         align: "left",
         className: 'text-xs',
-        width: 100,
+        width: 200,
         render: (text, record) =>
             <div className={'flex items-center'}>
-                    <span className={'underline flex w-[200px]'}>
+                    <span className={'underline flex'}>
                         {text}
                     </span>
                 <Button
@@ -133,8 +127,8 @@ const columnsFullView: TableProps<ColumnsTableFull>['columns'] = [
         title: <span className={'text-xs'}>Дата заключения договора</span>,
         dataIndex: 'dateConclusionContract',
         align: "center",
-        className: 'text-xs'
-        //width: 100
+        className: 'text-xs',
+        render: (text) => dayjs(text).format('DD.MM.YYYY')
     },
     {
         title: <span className={'text-xs'}>Тип договора</span>,
@@ -205,8 +199,6 @@ const columnsFullView: TableProps<ColumnsTableFull>['columns'] = [
 
     }
 ]
-
-
 const optionsNameSpecialty = [
     {
         value: 'Все',
@@ -217,8 +209,8 @@ const optionsNameSpecialty = [
         label: '31.08.01 Акушерство и гинекология'
     },
     {
-        value: 'Тест 2',
-        label: 'Тест 2'
+        value: '12.456 Лечебное дело',
+        label: '12.456 Лечебное дело'
     }
 ]
 const optionsTypeContract = [
@@ -278,6 +270,50 @@ const mockDataCompressed: ColumnsTableCompressedView[] = [
         dateFiling: '00.00.00, 00:00'
     },
 ]
+const mockDataFull: ColumnsTableFull[] = [
+    {
+        key: '1',
+        nameOrg: 'Лечебно-профилактическое учреждение по договору',
+        nameSpecialty: '12.456 Лечебное дело',
+        contractNumber: '№1.1.2.77.2.45-04/10/2022',
+        dateConclusionContract: '2024-04-27',
+        contractType: 'С пролонгацией',
+        contractPeriod: 'Бессрочный',
+        cipherNameSpecialty: 'Ортодонтия',
+        legalAddress: 'ул. Оренбургский тракт, 138, Казань, Респ. Татарстан',
+        actualAddress: 'ул. Оренбургский тракт, 138, Казань, Респ. Татарстан',
+        numberSeats: '150',
+        links: 'Cкан договора'
+    },
+    {
+        key: '2',
+        nameOrg: 'Тест 3',
+        nameSpecialty: '12.456 Лечебное дело',
+        contractNumber: '№1.1.2.77.2.45-04/10/2022',
+        dateConclusionContract: '2024-04-25',
+        contractType: 'Бессрочный',
+        contractPeriod: 'Бессрочный',
+        cipherNameSpecialty: 'Ортодонтия',
+        legalAddress: 'ул. Оренбургский тракт, 138, Казань, Респ. Татарстан',
+        actualAddress: 'ул. Оренбургский тракт, 138, Казань, Респ. Татарстан',
+        numberSeats: '100',
+        links: 'Cкан договора'
+    },
+    {
+        key: '3',
+        nameOrg: 'Тест 3',
+        nameSpecialty: '31.08.01 Акушерство и гинекология',
+        contractNumber: '№1.1.2.77.2.45-04/10/2022',
+        dateConclusionContract: '2024-04-25',
+        contractType: 'Бессрочный',
+        contractPeriod: 'Бессрочный',
+        cipherNameSpecialty: 'Ортодонтия',
+        legalAddress: 'ул. Оренбургский тракт, 138, Казань, Респ. Татарстан',
+        actualAddress: 'ул. Оренбургский тракт, 138, Казань, Респ. Татарстан',
+        numberSeats: '100',
+        links: 'Cкан договора'
+    }
+]
 
 
 export const RegisterContracts = () => {
@@ -285,20 +321,25 @@ export const RegisterContracts = () => {
         contractType: 'Все',
         nameOrg: 'Все',
         dateConclusionContract: 'Все',
-    })
+        sortDateConclusionContract: 'По дате (сначала новые)',
+        nameSpecialty: 'Все',
+        numberSeats: 'Все',
 
+    })
     const [tableDataCompressed, setTableDataCompressed] = useState<ColumnsTableCompressedView[]>(mockDataCompressed)
-    const [tableDataFull, setTableDataFull] = useState<ColumnsTableFull[]>()
+    const [tableDataFull, setTableDataFull] = useState<ColumnsTableFull[]>(mockDataFull)
     const [tableView, setTableView] = useState({
         compressed: true,
         table: false
     })
+
     function isCompressedTable() {
         setTableView({
             compressed: true,
             table: false
         })
     }
+
     function isFullTable() {
         setTableView({
             compressed: false,
@@ -310,7 +351,7 @@ export const RegisterContracts = () => {
         if (date) {
             setFilter({
                 ...filter,
-                dateConclusionContract: date.format('DD.MM.YYYY')
+                dateConclusionContract: date.format('YYYY-MM-DD')
             })
         } else {
             setFilter({
@@ -320,8 +361,21 @@ export const RegisterContracts = () => {
         }
     }
 
+    function setFilterNumberSeats(value: number | string | null) {
+        if (value) {
+            setFilter({
+                ...filter,
+                numberSeats: String(value)
+            })
+        } else {
+            setFilter({
+                ...filter,
+                numberSeats: 'Все'
+            })
+        }
+    }
 
-    function allFilter() {
+    function filterDataCompressed() {
         function filterNameOrg(elem: ColumnsTableCompressedView) {
             if (filter.nameOrg === 'Все') {
                 return elem
@@ -329,6 +383,7 @@ export const RegisterContracts = () => {
                 return elem.contractFacility === filter.nameOrg
             }
         }
+
         function filterContractType(elem: ColumnsTableCompressedView) {
             if (filter.contractType === 'Все') {
                 return elem
@@ -345,29 +400,89 @@ export const RegisterContracts = () => {
             }
         }
 
+        function sortDateConclusionContract(a: ColumnsTableCompressedView, b: ColumnsTableCompressedView) {
+            if (filter.sortDateConclusionContract === 'По дате (сначала новые)') {
+                return +new Date(b.dateConclusionContract) - +new Date(a.dateConclusionContract)
+            }
+            if (filter.sortDateConclusionContract === 'По дате (сначала старые)') {
+                return +new Date(a.dateConclusionContract) - +new Date(b.dateConclusionContract)
+            }
+            return 0
+        }
+
         return mockDataCompressed
             .filter(elem => filterNameOrg(elem))
             .filter(elem => filterContractType(elem))
             .filter(elem => filterDateConclusionContract(elem))
-            // .sort((a, b) => {
-            //     return new Date(a.dateConclusionContract) - new Date(b.dateConclusionContract)
-            // })
+            .sort((a, b) => sortDateConclusionContract(a, b))
+
+    }
+
+    function filterDataFull() {
+        function filterNameOrg(elem: ColumnsTableFull) {
+            if (filter.nameOrg === 'Все') {
+                return elem
+            } else {
+                return elem.nameOrg === filter.nameOrg
+            }
+        }
+
+        function filterContractType(elem: ColumnsTableFull) {
+            if (filter.contractType === 'Все') {
+                return elem
+            } else {
+                return elem.contractType === filter.contractType
+            }
+        }
+
+        function filterDateConclusionContract(elem: ColumnsTableFull) {
+            if (filter.dateConclusionContract === 'Все') {
+                return elem
+            } else {
+                return elem.dateConclusionContract === filter.dateConclusionContract
+            }
+        }
+
+        function filterDataNameSpecialty(elem: ColumnsTableFull) {
+            if (filter.nameSpecialty === 'Все') {
+                return elem
+            } else {
+                return elem.nameSpecialty === filter.nameSpecialty
+            }
+        }
+
+        function filterNumberSeats(elem: ColumnsTableFull) {
+            if (filter.numberSeats === 'Все') {
+                return elem
+            } else {
+                return elem.numberSeats === filter.numberSeats
+            }
+        }
+
+        function sortDateConclusionContract(a: ColumnsTableFull, b: ColumnsTableFull) {
+            if (filter.sortDateConclusionContract === 'По дате (сначала новые)') {
+                return +new Date(b.dateConclusionContract) - +new Date(a.dateConclusionContract)
+            }
+            if (filter.sortDateConclusionContract === 'По дате (сначала старые)') {
+                return +new Date(a.dateConclusionContract) - +new Date(b.dateConclusionContract)
+            }
+            return 0
+        }
+
+        return mockDataFull
+            .filter(elem => filterNameOrg(elem))
+            .filter(elem => filterContractType(elem))
+            .filter(elem => filterDateConclusionContract(elem))
+            .filter(elem => filterDataNameSpecialty(elem))
+            .filter(elem => filterNumberSeats(elem))
+            .sort((a, b) => sortDateConclusionContract(a, b))
 
     }
 
     useEffect(() => {
-        setTableDataCompressed(allFilter())
+        setTableDataCompressed(filterDataCompressed())
+        setTableDataFull(filterDataFull())
     }, [filter])
-
-
-    const testArr = [
-        {id: 1, value: '2024-04-26'},
-        {id: 2, value: '2024-06-30'},
-    ]
-    const newTest = testArr.sort((a, b) => {
-        return +new Date(b.value) - +new Date(a.value)
-    })
-    console.log(newTest)
 
 
     return (
@@ -379,20 +494,19 @@ export const RegisterContracts = () => {
                     </Typography.Text>
                 </Col>
             </Row>
-
             <Row gutter={[16, 16]} className={'mt-12'}>
                 <Col span={12} className={'flex items-center gap-0'}>
-                    {tableView.table &&
-                        <Col span={8} className={'flex items-center gap-2'}>
-                            <span className={'whitespace-nowrap'}>Количество мест</span>
-                            <Select
-                                popupMatchSelectWidth={false}
-                                defaultValue={""}
-                                options={[{value: 100, label: 100}]}
-                            />
-                        </Col>
-                    }
-
+                    <Col span={8} className={clsx(
+                        'flex items-center gap-2',
+                        !tableView.table && 'hidden')}
+                    >
+                        <span className={'whitespace-nowrap'}>Количество мест</span>
+                        <InputNumber
+                            controls={false}
+                            type={'number'}
+                            onChange={value => setFilterNumberSeats(value)}
+                        />
+                    </Col>
                     <Col span={16} className={'flex gap-2 items-center'}
                          style={{
                              paddingRight: 0,
@@ -431,25 +545,32 @@ export const RegisterContracts = () => {
                     </Col>
                 </Col>
             </Row>
-            {
-                tableView.table
-                &&
-                <Row gutter={[16, 16]} className={'mt-4'}>
-                    <Col span={12} className={'flex items-center gap-2'}>
-                        <Col span={8}>
-                            <span className={'whitespace-nowrap'}>Наименование специальности</span>
-                        </Col>
-                        <Col span={16}>
-                            <Select
-                                popupMatchSelectWidth={false}
-                                defaultValue=""
-                                className="w-full"
-                                options={optionsNameSpecialty}
-                            />
-                        </Col>
+
+            <Row gutter={[16, 16]} className={clsx(
+                'mt-4',
+                !tableView.table && 'hidden'
+            )}>
+                <Col span={12} className={'flex items-center gap-2'}>
+                    <Col span={8}>
+                        <span className={'whitespace-nowrap'}>Наименование специальности</span>
                     </Col>
-                </Row>
-            }
+                    <Col span={16}>
+                        <Select
+                            popupMatchSelectWidth={false}
+                            defaultValue="Все"
+                            className="w-full"
+                            options={optionsNameSpecialty}
+                            onChange={value => {
+                                setFilter({
+                                    ...filter,
+                                    nameSpecialty: value,
+                                })
+                            }}
+                        />
+                    </Col>
+                </Col>
+            </Row>
+
             <Row gutter={[16, 16]} className={'mt-4'}>
                 <Col span={12} className={'flex items-center gap-2'}>
                     <Col span={8}>
@@ -496,13 +617,18 @@ export const RegisterContracts = () => {
                             defaultValue="По дате (сначала новые)"
                             className="w-full"
                             options={optionsSort}
+                            onChange={value => {
+                                setFilter({
+                                    ...filter,
+                                    sortDateConclusionContract: value
+                                })
+                            }}
 
                         />
                     </div>
 
                 </Col>
             </Row>
-
             {
                 tableView.compressed
                 &&
@@ -515,22 +641,17 @@ export const RegisterContracts = () => {
                     />
                 </div>
             }
-
             {
                 tableView.table
                 &&
 
-                    <Table columns={columnsFullView}
-                           pagination={false}
-                           dataSource={tableDataFull}
-                           size={"middle"}
-                           className={'mt-5'}
-                    />
-
-
+                <Table columns={columnsFullView}
+                       pagination={false}
+                       dataSource={tableDataFull}
+                       size={"middle"}
+                       className={'mt-5'}
+                />
             }
-
-
         </section>
     )
 }

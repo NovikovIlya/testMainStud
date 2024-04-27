@@ -1,17 +1,4 @@
-import {
-    Button,
-    Checkbox,
-    CheckboxProps,
-    Col, DatePicker,
-    GetProp,
-    List,
-    Radio,
-    Row,
-    Select,
-    Space, Table,
-    TableProps,
-    Typography
-} from 'antd'
+import {Button, Col, DatePicker, Radio, Row, Select, Table, TableProps, Typography} from 'antd'
 import React, {useEffect, useState} from 'react'
 import './RegisterContracts.scss'
 import {
@@ -19,6 +6,8 @@ import {
 } from "../../businessTrip/NewBusinessTrip/archive/stepTwo/tableStepTwo/titleHeadCell/TitleHeadCell";
 import {EditSvg} from "../../../../assets/svg/EditSvg";
 import {PointsSvg} from "../../../../assets/svg/PointsSvg";
+import dayjs from "dayjs";
+
 
 type PropsType = {
     setIsCreate: (value: boolean) => void
@@ -50,10 +39,6 @@ interface ColumnsTableFull {
     numberSeats: string
     links: string
 }
-
-
-
-
 
 const columnsCompressedView: TableProps<ColumnsTableCompressedView>['columns'] = [
     {
@@ -90,7 +75,8 @@ const columnsCompressedView: TableProps<ColumnsTableCompressedView>['columns'] =
         title: <TitleHeadCell title={'Дата заключения договора'}/>,
         dataIndex: 'dateConclusionContract',
         align: "center",
-        width: 150
+        width: 150,
+        render: (text) => dayjs(text).format('DD.MM.YYYY')
     },
     {
         title:
@@ -251,32 +237,43 @@ const optionsNameOrg = [
         label: 'Тест 3'
     }
 ]
+const optionsSort = [
+    {value: 'По дате (сначала новые)', label: 'По дате (сначала новые)'},
+    {value: 'По дате (сначала старые)', label: 'По дате (сначала старые)'},
+]
 const mockDataCompressed: ColumnsTableCompressedView[] = [
     {
         key: '1',
         contractFacility: 'Лечебно-профилактическое учреждение по договору',
         dateFiling: '00.00.00, 00:00',
         contractType: 'Бессрочный',
-        dateConclusionContract: '12.12.2012'
+        dateConclusionContract: '2024-04-24'
     },
     {
         key: '2',
         contractFacility: 'Лечебно-профилактическое учреждение по договору',
-        dateConclusionContract: '12.12.2012',
+        dateConclusionContract: '2024-04-25',
         contractType: 'С пролонгацией',
         dateFiling: '00.00.00, 00:00'
     },
     {
         key: '3',
         contractFacility: 'Тест 3',
-        dateConclusionContract: '12.12.2012',
+        dateConclusionContract: '2024-04-26',
         contractType: 'Бессрочный',
         dateFiling: '00.00.00, 00:00'
     },
     {
         key: '4',
         contractFacility: 'Тест 4',
-        dateConclusionContract: '12.12.2012',
+        dateConclusionContract: '2024-04-27',
+        contractType: 'С пролонгацией',
+        dateFiling: '00.00.00, 00:00'
+    },
+    {
+        key: '5',
+        contractFacility: 'Тест 4',
+        dateConclusionContract: '2024-04-26',
         contractType: 'С пролонгацией',
         dateFiling: '00.00.00, 00:00'
     },
@@ -287,6 +284,7 @@ export const RegisterContracts = () => {
     const [filter, setFilter] = useState({
         contractType: 'Все',
         nameOrg: 'Все',
+        dateConclusionContract: 'Все',
     })
 
     const [tableDataCompressed, setTableDataCompressed] = useState<ColumnsTableCompressedView[]>(mockDataCompressed)
@@ -308,36 +306,75 @@ export const RegisterContracts = () => {
         })
     }
 
+    function setFilterDate(date: dayjs.Dayjs) {
+        if (date) {
+            setFilter({
+                ...filter,
+                dateConclusionContract: date.format('DD.MM.YYYY')
+            })
+        } else {
+            setFilter({
+                ...filter,
+                dateConclusionContract: 'Все'
+            })
+        }
+    }
+
 
     function allFilter() {
-        const filterData = mockDataCompressed.filter(elem => {
+        function filterNameOrg(elem: ColumnsTableCompressedView) {
             if (filter.nameOrg === 'Все') {
                 return elem
             } else {
                 return elem.contractFacility === filter.nameOrg
             }
-        }).filter(elem => {
+        }
+        function filterContractType(elem: ColumnsTableCompressedView) {
             if (filter.contractType === 'Все') {
                 return elem
             } else {
                 return elem.contractType === filter.contractType
             }
-        })
-        return filterData
+        }
+
+        function filterDateConclusionContract(elem: ColumnsTableCompressedView) {
+            if (filter.dateConclusionContract === 'Все') {
+                return elem
+            } else {
+                return elem.dateConclusionContract === filter.dateConclusionContract
+            }
+        }
+
+        return mockDataCompressed
+            .filter(elem => filterNameOrg(elem))
+            .filter(elem => filterContractType(elem))
+            .filter(elem => filterDateConclusionContract(elem))
+            // .sort((a, b) => {
+            //     return new Date(a.dateConclusionContract) - new Date(b.dateConclusionContract)
+            // })
+
     }
 
     useEffect(() => {
-        console.log(filter)
-        const filterData = allFilter()
-        setTableDataCompressed(filterData)
-
+        setTableDataCompressed(allFilter())
     }, [filter])
+
+
+    const testArr = [
+        {id: 1, value: '2024-04-26'},
+        {id: 2, value: '2024-06-30'},
+    ]
+    const newTest = testArr.sort((a, b) => {
+        return +new Date(b.value) - +new Date(a.value)
+    })
+    console.log(newTest)
+
 
     return (
         <section className={'container'}>
             <Row gutter={[16, 16]}>
                 <Col span={24}>
-                    <Typography.Text className=" text-[28px] mb-14">
+                    <Typography.Text className="text-[28px] mb-14">
                         Реестр договоров
                     </Typography.Text>
                 </Col>
@@ -363,8 +400,10 @@ export const RegisterContracts = () => {
                          }}>
                         <span className={'whitespace-nowrap'}>Дата заключения договора</span>
                         <DatePicker className={'w-full'}
-                                    placeholder={'ДД.ММ.ГГ'}
-                                    format={'DD.MM.YYYY'}/>
+                                    placeholder={'ДД.ММ.ГГГГ'}
+                                    format={'DD.MM.YYYY'}
+                                    onChange={date => setFilterDate(date)}
+                        />
                     </Col>
                 </Col>
                 <Col span={3} offset={9}>
@@ -427,7 +466,6 @@ export const RegisterContracts = () => {
                                     ...filter,
                                     contractType: value,
                                 })
-
                             }}
                         />
                     </Col>
@@ -455,9 +493,11 @@ export const RegisterContracts = () => {
                         <span className={'mr-2'}>Сортировка</span>
                         <Select
                             popupMatchSelectWidth={false}
-                            defaultValue="1"
+                            defaultValue="По дате (сначала новые)"
                             className="w-full"
-                            options={[{value: '1', label: 'Все'}]}/>
+                            options={optionsSort}
+
+                        />
                     </div>
 
                 </Col>
@@ -472,7 +512,6 @@ export const RegisterContracts = () => {
                         pagination={false}
                         size={"middle"}
                         dataSource={tableDataCompressed}
-                        rowSelection={{type: "checkbox"}}
                     />
                 </div>
             }

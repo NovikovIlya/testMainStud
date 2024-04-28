@@ -305,6 +305,15 @@ export const serviceApi = apiSlice.injectEndpoints({
 					'X-User-Name': sessionId
 				}
 			})
+		}),
+		approveRespond: builder.mutation<VacancyRespondItemType, number>({
+			query: respondId => ({
+				url: `http://localhost:8082/employment-api/v1/respond/${respondId}/status/approve`,
+				method: 'PUT',
+				headers: {
+					Authorization: `Bearer ${personnelDeparmentToken}`
+				}
+			})
 		})
 	})
 })
@@ -339,5 +348,6 @@ export const {
 	useLazyGetResponcesByVacancyQuery,
 	useLazyGetRespondFullInfoQuery,
 	useGetRespondFullInfoQuery,
-	useLazyGetVacancyGroupedResponcesQuery
+	useLazyGetVacancyGroupedResponcesQuery,
+	useApproveRespondMutation
 } = serviceApi

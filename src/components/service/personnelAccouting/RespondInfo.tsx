@@ -1,11 +1,12 @@
 import { Button, Tag } from 'antd'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import uuid from 'react-uuid'
 
 import { AvatartandardSvg } from '../../../assets/svg/AvatarStandardSvg'
 import { useAppSelector } from '../../../store'
 import {
+	useApproveRespondMutation,
 	useGetRespondFullInfoQuery,
 	useLazyGetRespondFullInfoQuery
 } from '../../../store/api/serviceApi'
@@ -17,6 +18,14 @@ export const RespondInfo = (props: {
 	const respondId = useAppSelector(state => state.currentResponce)
 
 	const { data: res } = useGetRespondFullInfoQuery(respondId.respondId)
+	const [approveRespond] = useApproveRespondMutation()
+
+	const [isRespondSentToSupervisor, setIsRespondSentToSupervisor] =
+		useState<boolean>(res?.status === 'IN_SUPERVISOR_REVIEW')
+
+	useEffect(() => {
+		setIsRespondSentToSupervisor(res?.status === 'IN_SUPERVISOR_REVIEW')
+	}, [res])
 
 	const navigate = useNavigate()
 
@@ -94,7 +103,14 @@ export const RespondInfo = (props: {
 							{props.type === 'PERSONNEL_DEPARTMENT' && (
 								<div className="self-center grid grid-cols-2 grid-rows-[40px_40px] gap-x-[12px] gap-y-[12px]">
 									<Button
-										onClick={() => {}}
+										onClick={() => {
+											approveRespond(respondId.respondId)
+												.unwrap()
+												.then(() => {
+													setIsRespondSentToSupervisor(true)
+												})
+										}}
+										disabled={isRespondSentToSupervisor}
 										type="primary"
 										className="font-content-font font-normal text-white text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px]"
 									>

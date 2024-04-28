@@ -314,6 +314,28 @@ export const serviceApi = apiSlice.injectEndpoints({
 					Authorization: `Bearer ${personnelDeparmentToken}`
 				}
 			})
+		}),
+		inviteSeeker: builder.mutation<
+			VacancyRespondItemType,
+			{
+				respondId: number
+				format: 'OFFLINE' | 'ONLINE'
+				mainTime: string
+				reservedTime: string
+			}
+		>({
+			query: ({ respondId, format, mainTime, reservedTime }) => ({
+				url: `http://localhost:8082/employment-api/v1/respond/${respondId}/status/invite`,
+				method: 'PUT',
+				body: {
+					format: format,
+					mainTime: mainTime,
+					reserveTime: reservedTime
+				},
+				headers: {
+					Autorization: `Bearer ${supervisorToken}`
+				}
+			})
 		})
 	})
 })
@@ -349,5 +371,6 @@ export const {
 	useLazyGetRespondFullInfoQuery,
 	useGetRespondFullInfoQuery,
 	useLazyGetVacancyGroupedResponcesQuery,
-	useApproveRespondMutation
+	useApproveRespondMutation,
+	useInviteSeekerMutation
 } = serviceApi

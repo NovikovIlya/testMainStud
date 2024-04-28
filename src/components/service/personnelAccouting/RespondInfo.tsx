@@ -12,6 +12,8 @@ import {
 } from '../../../store/api/serviceApi'
 import ArrowIcon from '../jobSeeker/ArrowIcon'
 
+import { InviteSeekerForm } from './supervisor/InviteSeekerForm'
+
 export const RespondInfo = (props: {
 	type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 }) => {
@@ -138,13 +140,7 @@ export const RespondInfo = (props: {
 							)}
 							{props.type === 'SUPERVISOR' && (
 								<div className="self-center grid grid-cols-1 grid-rows-[40px_40px] gap-y-[12px]">
-									<Button
-										onClick={() => {}}
-										type="primary"
-										className="font-content-font font-normal text-white text-[16px]/[16px] rounded-[54.5px] w-[257px] h-[40px] py-[8px] px-[24px]"
-									>
-										Пригласить на собеседование
-									</Button>
+									<InviteSeekerForm respondId={respondId.respondId} />
 									<Button
 										onClick={() => {}}
 										className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[257px] h-[40px] py-[8px] px-[24px] border-black"

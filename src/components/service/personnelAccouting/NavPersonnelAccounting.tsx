@@ -13,6 +13,7 @@ import { RespondsIcon } from './RespondsIcon'
 import { VacanciesIcon } from './VacanciesIcon'
 import { VacancyResponces } from './VacancyResponces'
 import { RespondsSupervisor } from './supervisor/RespondsSupervisor'
+import { SupervisorVacancies } from './supervisor/SupervisorVacancies'
 
 export const NavPesonnelAccounting = () => {
 	const { pathname } = useLocation()
@@ -83,8 +84,22 @@ export const NavPesonnelAccounting = () => {
 			),
 			children: (
 				<div>
-					<p className="text-base">Все вакансии</p>
-					<p className="text-base">Создать вакансию</p>
+					<p
+						className="text-base"
+						onClick={() => {
+							navigate('/services/personnelaccounting/supervisor/vacancies')
+						}}
+					>
+						Все вакансии
+					</p>
+					<p
+						className="text-base"
+						onClick={() => {
+							navigate('/services/personnelaccounting/supervisor/createvacancy')
+						}}
+					>
+						Создать вакансию
+					</p>
 				</div>
 			)
 		}
@@ -193,7 +208,7 @@ export const NavPesonnelAccounting = () => {
 				{pathname === navEmployeeList[4].id && <></>}
 				{pathname === navSupervisorList[0].id && <RespondsSupervisor />}
 				{pathname === navSupervisorList[1].id && <></>}
-				{pathname === navSupervisorList[2].id && <></>}
+				{pathname === navSupervisorList[2].id && <SupervisorVacancies />}
 			</div>
 		</>
 	)

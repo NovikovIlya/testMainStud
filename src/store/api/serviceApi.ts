@@ -182,6 +182,14 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
+		getSupervisorVacancy: builder.query<VacancyItemType[], void>({
+			query: () => ({
+				url: `http://localhost:8082/employment-api/v1/management/supervisor/vacancy`,
+				headers: {
+					Authorization: `Bearer ${supervisorToken}`
+				}
+			})
+		}),
 		postPhone: builder.mutation({
 			query: phone => {
 				return {
@@ -336,6 +344,16 @@ export const serviceApi = apiSlice.injectEndpoints({
 					Autorization: `Bearer ${supervisorToken}`
 				}
 			})
+		}),
+		requestDeleteVacancy: builder.mutation<void, number>({
+			query: id => ({
+				url: `http://localhost:8082/employment-api/v1/management/vacancy-requests/for-delete`,
+				method: 'POST',
+				body: { vacancyId: id },
+				headers: {
+					Authorization: `Bearer ${supervisorToken}`
+				}
+			})
 		})
 	})
 })
@@ -372,5 +390,7 @@ export const {
 	useGetRespondFullInfoQuery,
 	useLazyGetVacancyGroupedResponcesQuery,
 	useApproveRespondMutation,
-	useInviteSeekerMutation
+	useInviteSeekerMutation,
+	useGetSupervisorVacancyQuery,
+	useRequestDeleteVacancyMutation
 } = serviceApi

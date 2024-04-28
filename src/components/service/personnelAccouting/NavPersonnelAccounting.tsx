@@ -13,6 +13,7 @@ import { RespondsIcon } from './RespondsIcon'
 import { VacanciesIcon } from './VacanciesIcon'
 import { VacancyResponces } from './VacancyResponces'
 import { RespondsSupervisor } from './supervisor/RespondsSupervisor'
+import { SupervisorCreateVacancyForm } from './supervisor/SupervisorCreateVacancyForm'
 import { SupervisorVacancies } from './supervisor/SupervisorVacancies'
 
 export const NavPesonnelAccounting = () => {
@@ -209,6 +210,10 @@ export const NavPesonnelAccounting = () => {
 				{pathname === navSupervisorList[0].id && <RespondsSupervisor />}
 				{pathname === navSupervisorList[1].id && <></>}
 				{pathname === navSupervisorList[2].id && <SupervisorVacancies />}
+				{pathname ===
+					'/services/personnelaccounting/supervisor/createvacancy' && (
+					<SupervisorCreateVacancyForm />
+				)}
 			</div>
 		</>
 	)

@@ -260,3 +260,15 @@ export enum ChatMessageDateDisplayEnum {
 	'ноября',
 	'декабря'
 }
+
+export type VacancyRequestType = {
+	post: string
+	experience: string
+	salary: string
+	employmentType: string
+	responsibilities: string
+	skills: string
+	conditions: string
+	category: string
+	direction: string
+}

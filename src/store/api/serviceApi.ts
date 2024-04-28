@@ -12,6 +12,7 @@ import {
 	TypeSchedule,
 	VacancyGroupedResponcesType,
 	VacancyItemType,
+	VacancyRequestType,
 	VacancyRespondItemType,
 	VacancyViewResponceType,
 	respondStatus
@@ -354,6 +355,16 @@ export const serviceApi = apiSlice.injectEndpoints({
 					Authorization: `Bearer ${supervisorToken}`
 				}
 			})
+		}),
+		requestCreateVacancy: builder.mutation<void, VacancyRequestType>({
+			query: arg => ({
+				url: `http://localhost:8082/employment-api/v1/management/vacancy-requests/for-create`,
+				method: 'POST',
+				body: arg,
+				headers: {
+					Authorization: `Bearer ${supervisorToken}`
+				}
+			})
 		})
 	})
 })
@@ -392,5 +403,6 @@ export const {
 	useApproveRespondMutation,
 	useInviteSeekerMutation,
 	useGetSupervisorVacancyQuery,
-	useRequestDeleteVacancyMutation
+	useRequestDeleteVacancyMutation,
+	useRequestCreateVacancyMutation
 } = serviceApi

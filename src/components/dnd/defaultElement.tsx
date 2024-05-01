@@ -77,7 +77,7 @@ export const jsxElements = [
 			<TemplateCard
 				title="Трудоустройство"
 				info=""
-				href="/services/personnelaccounting/responds"
+				href="/services/personnelaccounting"
 				buttonText="Изучить"
 			/>
 		),

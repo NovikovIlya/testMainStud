@@ -2,19 +2,16 @@ import { Button, Form, Input, Select } from 'antd'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { useAppSelector } from '../../../store'
+import { useAppSelector } from '../../../../store'
 import {
 	useGetCategoriesQuery,
 	useGetDirectionsQuery,
 	useGetSubdivisionsQuery,
 	useRequestUpdateVacancyMutation
-} from '../../../store/api/serviceApi'
-import ArrowIcon from '../jobSeeker/ArrowIcon'
+} from '../../../../store/api/serviceApi'
+import ArrowIcon from '../../jobSeeker/ArrowIcon'
 
-export const VacancyRequestPage = (props: {
-	role: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
-	type: 'CREATE' | 'DELETE' | 'UPDATE'
-}) => {
+export const SupervisorUpdateVacancy = () => {
 	const { currentVacancy } = useAppSelector(state => state.currentVacancy)
 
 	const { data: categories = [] } = useGetCategoriesQuery()
@@ -292,7 +289,7 @@ export const VacancyRequestPage = (props: {
 						</div>
 						<Form.Item>
 							<Button type="primary" htmlType="submit">
-								Отправить
+								Сохранить
 							</Button>
 						</Form.Item>
 					</Form>

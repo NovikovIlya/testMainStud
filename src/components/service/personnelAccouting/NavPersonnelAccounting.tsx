@@ -11,10 +11,10 @@ import { RespondInfo } from './RespondInfo'
 import { Responds } from './Responds'
 import { RespondsIcon } from './RespondsIcon'
 import { VacanciesIcon } from './VacanciesIcon'
-import { VacancyRequestPage } from './VacancyRequestPage'
 import { VacancyResponces } from './VacancyResponces'
 import { RespondsSupervisor } from './supervisor/RespondsSupervisor'
 import { SupervisorCreateVacancyForm } from './supervisor/SupervisorCreateVacancyForm'
+import { SupervisorUpdateVacancy } from './supervisor/SupervisorUpdateVacancy'
 import { SupervisorVacancies } from './supervisor/SupervisorVacancies'
 
 export const NavPesonnelAccounting = () => {
@@ -217,7 +217,7 @@ export const NavPesonnelAccounting = () => {
 				)}
 				{pathname ===
 					'/services/personnelaccounting/supervisor/vacancyview' && (
-					<VacancyRequestPage role="SUPERVISOR" type="UPDATE" />
+					<SupervisorUpdateVacancy />
 				)}
 			</div>
 		</>

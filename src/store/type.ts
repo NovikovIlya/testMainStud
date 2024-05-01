@@ -131,6 +131,9 @@ export type VacancyViewResponceType = {
 		responsibilities: string
 		skills: string
 		conditions: string
+		category: string
+		direction: string
+		subdivision: string
 	}
 	title: {
 		rendered: string

@@ -365,6 +365,19 @@ export const serviceApi = apiSlice.injectEndpoints({
 					Authorization: `Bearer ${supervisorToken}`
 				}
 			})
+		}),
+		requestUpdateVacancy: builder.mutation<
+			void,
+			VacancyRequestType & { vacancyId: number }
+		>({
+			query: arg => ({
+				url: `http://localhost:8082/employment-api/v1/management/vacancy-requests/for-update`,
+				method: 'POST',
+				body: arg,
+				headers: {
+					Authorization: `Bearer ${supervisorToken}`
+				}
+			})
 		})
 	})
 })
@@ -404,5 +417,6 @@ export const {
 	useInviteSeekerMutation,
 	useGetSupervisorVacancyQuery,
 	useRequestDeleteVacancyMutation,
-	useRequestCreateVacancyMutation
+	useRequestCreateVacancyMutation,
+	useRequestUpdateVacancyMutation
 } = serviceApi

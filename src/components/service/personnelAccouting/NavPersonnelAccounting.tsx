@@ -11,6 +11,7 @@ import { RespondInfo } from './RespondInfo'
 import { Responds } from './Responds'
 import { RespondsIcon } from './RespondsIcon'
 import { VacanciesIcon } from './VacanciesIcon'
+import { VacancyRequestPage } from './VacancyRequestPage'
 import { VacancyResponces } from './VacancyResponces'
 import { RespondsSupervisor } from './supervisor/RespondsSupervisor'
 import { SupervisorCreateVacancyForm } from './supervisor/SupervisorCreateVacancyForm'
@@ -213,6 +214,10 @@ export const NavPesonnelAccounting = () => {
 				{pathname ===
 					'/services/personnelaccounting/supervisor/createvacancy' && (
 					<SupervisorCreateVacancyForm />
+				)}
+				{pathname ===
+					'/services/personnelaccounting/supervisor/vacancyview' && (
+					<VacancyRequestPage role="SUPERVISOR" type="UPDATE" />
 				)}
 			</div>
 		</>

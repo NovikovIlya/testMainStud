@@ -15,12 +15,48 @@ export default function VacancyItem(props: VacancyItemType) {
 	const [getVacancy, result] = useLazyGetVacancyViewQuery()
 	const navigate = useNavigate()
 	const [isModalOpen, setModalOpen] = useState(false)
+	const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
 	const dispatch = useDispatch()
 
 	const [requestDeleteVacancy] = useRequestDeleteVacancyMutation()
 
 	return (
 		<>
+			<ConfigProvider
+				theme={{
+					token: {
+						boxShadow: '0 0 19px 0 rgba(212, 227, 241, 0.6)'
+					}
+				}}
+			>
+				<Modal
+					bodyStyle={{ padding: 53 }}
+					centered
+					open={isSuccessModalOpen}
+					onCancel={() => {
+						setIsSuccessModalOpen(false)
+					}}
+					title={null}
+					footer={null}
+					width={407}
+				>
+					<p className="font-content-font font-normal text-black text-[16px]/[20px] text-center">
+						Ваша заявка успешно отправлена. Вакансия будет удалена после
+						рассмотрения заявки кадрами.
+					</p>
+					<div className="mt-[40px] flex gap-[12px]">
+						<Button
+							className="ml-auto mr-auto"
+							type="primary"
+							onClick={() => {
+								setIsSuccessModalOpen(false)
+							}}
+						>
+							ОК
+						</Button>
+					</div>
+				</Modal>
+			</ConfigProvider>
 			<ConfigProvider
 				theme={{
 					token: {
@@ -40,7 +76,7 @@ export default function VacancyItem(props: VacancyItemType) {
 					width={407}
 				>
 					<p className="font-content-font font-normal text-black text-[16px]/[20px] text-center">
-						Вы действительно хотите удалить отклик?
+						Вы действительно хотите удалить вакансию?
 					</p>
 					<div className="mt-[40px] flex gap-[12px]">
 						<Button
@@ -59,6 +95,7 @@ export default function VacancyItem(props: VacancyItemType) {
 									.unwrap()
 									.then(() => {
 										setModalOpen(false)
+										setIsSuccessModalOpen(true)
 									})
 							}}
 						>

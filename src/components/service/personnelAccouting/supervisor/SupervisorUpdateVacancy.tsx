@@ -1,4 +1,4 @@
-import { Button, Form, Input, Select } from 'antd'
+import { Button, ConfigProvider, Form, Input, Modal, Select } from 'antd'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -96,8 +96,45 @@ export const SupervisorUpdateVacancy = () => {
 			.replace(/<\/li>/g, '')
 	)
 
+	const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
+
 	return (
 		<>
+			<ConfigProvider
+				theme={{
+					token: {
+						boxShadow: '0 0 19px 0 rgba(212, 227, 241, 0.6)'
+					}
+				}}
+			>
+				<Modal
+					bodyStyle={{ padding: 53 }}
+					centered
+					open={isSuccessModalOpen}
+					onCancel={() => {
+						setIsSuccessModalOpen(false)
+					}}
+					title={null}
+					footer={null}
+					width={407}
+				>
+					<p className="font-content-font font-normal text-black text-[16px]/[20px] text-center">
+						Ваша заявка успешно отправлена. Вакансия будет обновлена после
+						рассмотрения заявки кадрами.
+					</p>
+					<div className="mt-[40px] flex gap-[12px]">
+						<Button
+							className="ml-auto mr-auto"
+							type="primary"
+							onClick={() => {
+								setIsSuccessModalOpen(false)
+							}}
+						>
+							ОК
+						</Button>
+					</div>
+				</Modal>
+			</ConfigProvider>
 			<div id="wrapper" className="pl-[54px] pr-[54px] pt-[60px] w-full">
 				<div className="flex">
 					<button
@@ -399,6 +436,10 @@ export const SupervisorUpdateVacancy = () => {
 											direction: direction as string,
 											vacancyId: currentVacancy?.id as number
 										})
+											.unwrap()
+											.then(() => {
+												setIsSuccessModalOpen(true)
+											})
 									}}
 									type="primary"
 									className="rounded-[54.5px] w-[121px]"

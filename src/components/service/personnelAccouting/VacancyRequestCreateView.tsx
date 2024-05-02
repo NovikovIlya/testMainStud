@@ -105,6 +105,10 @@ export const VacancyRequestCreateView = () => {
 						<Button
 							onClick={() => {
 								denyRequest(requestId)
+									.unwrap()
+									.then(() => {
+										navigate('/services/personnelaccounting/vacancyrequests')
+									})
 							}}
 							className="w-[151px] font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black bg-inherit"
 						>
@@ -113,6 +117,10 @@ export const VacancyRequestCreateView = () => {
 						<Button
 							onClick={() => {
 								acceptRequest(requestId)
+									.unwrap()
+									.then(() => {
+										navigate('/services/personnelaccounting/vacancyrequests')
+									})
 							}}
 							type="primary"
 							className="rounded-[54.5px] w-[121px]"

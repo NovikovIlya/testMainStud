@@ -1,4 +1,4 @@
-import { Button, Form, Input, Select } from 'antd'
+import { Button, ConfigProvider, Form, Input, Modal, Select } from 'antd'
 import { useState } from 'react'
 
 import {
@@ -16,8 +16,45 @@ export const SupervisorCreateVacancyForm = () => {
 
 	const [requestCreateVacancy] = useRequestCreateVacancyMutation()
 
+	const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
+
 	return (
 		<>
+			<ConfigProvider
+				theme={{
+					token: {
+						boxShadow: '0 0 19px 0 rgba(212, 227, 241, 0.6)'
+					}
+				}}
+			>
+				<Modal
+					bodyStyle={{ padding: 53 }}
+					centered
+					open={isSuccessModalOpen}
+					onCancel={() => {
+						setIsSuccessModalOpen(false)
+					}}
+					title={null}
+					footer={null}
+					width={407}
+				>
+					<p className="font-content-font font-normal text-black text-[16px]/[20px] text-center">
+						Ваша заявка успешно отправлена. Вакансия будет добавлена после
+						рассмотрения заявки кадрами.
+					</p>
+					<div className="mt-[40px] flex gap-[12px]">
+						<Button
+							className="ml-auto mr-auto"
+							type="primary"
+							onClick={() => {
+								setIsSuccessModalOpen(false)
+							}}
+						>
+							ОК
+						</Button>
+					</div>
+				</Modal>
+			</ConfigProvider>
 			<div className="pl-[54px] pr-[54px] pt-[60px] w-full bg-content-gray">
 				<h1 className="font-content-font font-normal text-[28px]/[28px] text-black">
 					Создать вакансию
@@ -26,7 +63,13 @@ export const SupervisorCreateVacancyForm = () => {
 					layout="vertical"
 					requiredMark={false}
 					className="w-[50%] mt-[52px]"
-					onFinish={values => requestCreateVacancy(values)}
+					onFinish={values => {
+						requestCreateVacancy(values)
+							.unwrap()
+							.then(() => {
+								setIsSuccessModalOpen(true)
+							})
+					}}
 				>
 					<Form.Item
 						name={'post'}

@@ -81,6 +81,7 @@ export const PopoverContentMain = ({recordCompressed, recordFull}: Props) => {
             printable: translateColumnsIntoRussia(),
             properties: properties(),
             type: 'json',
+            style: 'body {font-size: 10px}'
         })
     }
 

@@ -1,3 +1,5 @@
+import {RcFile} from "antd/es/upload";
+
 export interface ITask {
     specialityName: string
     practiceType: string
@@ -91,16 +93,17 @@ export type TypeGetPractices = {
 }
 
 export interface IContractInfo {
+    inn: string
     contractNumber: string
     contractFacility: string
     dateConclusionContract: string
     contractType: string
-    prolongation: number
+    prolongation: string
     contractTime: string
     specialtyName: string
     legalFacility: string
     actualFacility: string
-    placeNumber: number
+    placeNumber: string
 }
 
 export interface IContractInfoFull extends IContractInfo {
@@ -108,8 +111,8 @@ export interface IContractInfoFull extends IContractInfo {
 }
 
 export interface ICreateContract extends IContractInfo {
-    pdfContract: string
-    pdfAgreement: string
+    pdfContract: RcFile | Blob
+    pdfAgreement: RcFile | Blob
 }
 
 export interface ICreateContractFull extends IContractInfoFull {

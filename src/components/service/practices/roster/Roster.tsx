@@ -37,9 +37,9 @@ export const Roster = () => {
     if (pathname.includes('previewContracts')) {
         return <PreviewContracts/>
     } else if (pathname.includes('createContract')) {
-        return (
-            <CreateContracts/>
-        )
+        return <CreateContracts/>
+    } else if (pathname.includes('editContract')) {
+        return <EditContract/>
     } else {
         return <RegisterContracts/>
     }

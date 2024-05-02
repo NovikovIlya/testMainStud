@@ -48,6 +48,7 @@ export interface ColumnsTableFull {
     numberSeats: string
     links: string
 }
+
 const mockDataCompressed: ColumnsTableCompressedView[] = [
     {
         key: '1',
@@ -162,7 +163,9 @@ export const RegisterContracts = () => {
                     <Button
                         type="text"
                         icon={<EditSvg/>}
-                        onClick={() => console.log(record.key)}
+                        onClick={() => {
+                            nav(`/services/practices/registerContracts/editContract/${record.key}`)
+                        }}
                     />
                 </div>
         },
@@ -225,7 +228,7 @@ export const RegisterContracts = () => {
                     <Button
                         type="text"
                         icon={<EditSvg/>}
-                        onClick={() => console.log(record.key)}
+                        onClick={() => nav(`/services/practices/registerContracts/editContract/${record.key}`)}
                     />
                 </div>
         },

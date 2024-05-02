@@ -28,21 +28,44 @@ export const VacancyRequestItem = (props: {
 						: 'Удаление'}
 				</p>
 				<Button
-					onClick={() => {
+					// onClick={() => {
+					// 	props.action === 'CREATE'
+					// 		? navigate(`/services/personnelaccounting/request/create`)
+					// 		: props.action === 'UPDATE'
+					// 		? navigate('/services/personnelaccounting/request/update')
+					// 		: getVacancy(props.vacancyId)
+					// 				.unwrap()
+					// 				.then(result => {
+					// 					dispatch(setCurrentVacancy(result))
+					// 					dispatch(setRequestId(props.requestId))
+					// 					console.log(result)
+					// 					console.log(result.acf.responsibilities)
+					// 					navigate('/services/personnelaccounting/request/delete')
+					// 				})
+					// }}
+					onClick={
 						props.action === 'CREATE'
-							? navigate(`/services/personnelaccounting/request/create`)
+							? () => {
+									dispatch(setRequestId(props.requestId))
+									navigate(`/services/personnelaccounting/request/create`)
+							  }
 							: props.action === 'UPDATE'
-							? navigate('/services/personnelaccounting/request/update')
-							: getVacancy(props.vacancyId)
-									.unwrap()
-									.then(result => {
-										dispatch(setCurrentVacancy(result))
-										dispatch(setRequestId(props.requestId))
-										console.log(result)
-										console.log(result.acf.responsibilities)
-										navigate('/services/personnelaccounting/request/delete')
-									})
-					}}
+							? () => {
+									dispatch(setRequestId(props.requestId))
+									navigate(`/services/personnelaccounting/request/update`)
+							  }
+							: () => {
+									getVacancy(props.vacancyId)
+										.unwrap()
+										.then(result => {
+											dispatch(setCurrentVacancy(result))
+											dispatch(setRequestId(props.requestId))
+											console.log(result)
+											console.log(result.acf.responsibilities)
+											navigate('/services/personnelaccounting/request/delete')
+										})
+							  }
+					}
 					className="font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black"
 				>
 					Подробнее

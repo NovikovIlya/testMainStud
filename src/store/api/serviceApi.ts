@@ -146,7 +146,8 @@ export const serviceApi = apiSlice.injectEndpoints({
 							? personnelDeparmentToken
 							: supervisorToken
 					}`
-				}
+				},
+				keepUnusedDataFor: 0
 			})
 		}),
 		getRespondFullInfo: builder.query<VacancyRespondItemType, number>({
@@ -200,7 +201,8 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}`,
 				headers: {
 					Authorization: `Bearer ${personnelDeparmentToken}`
-				}
+				},
+				keepUnusedDataFor: 0
 			})
 		}),
 		getVacancyRequestView: builder.query<VacancyRequestViewType, number>({

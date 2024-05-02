@@ -13,6 +13,7 @@ import { RespondsIcon } from './RespondsIcon'
 import { VacanciesIcon } from './VacanciesIcon'
 import { VacancyRequestCreateView } from './VacancyRequestCreateView'
 import { VacancyRequestDeleteView } from './VacancyRequestDeleteView'
+import { VacancyRequestUpdateView } from './VacancyRequestUpdateView'
 import { VacancyRequestsPage } from './VacancyRequestsPage'
 import { VacancyResponces } from './VacancyResponces'
 import { RespondsSupervisor } from './supervisor/RespondsSupervisor'
@@ -279,7 +280,9 @@ export const NavPesonnelAccounting = () => {
 				{pathname === '/services/personnelaccounting/request/create' && (
 					<VacancyRequestCreateView />
 				)}
-				{pathname === '/services/personnelaccounting/request/update' && <></>}
+				{pathname === '/services/personnelaccounting/request/update' && (
+					<VacancyRequestUpdateView />
+				)}
 				{pathname === '/services/personnelaccounting/request/delete' && (
 					<VacancyRequestDeleteView />
 				)}

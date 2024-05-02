@@ -4,6 +4,7 @@ import logger from 'redux-logger'
 
 import { apiSlice } from './api/apiSlice'
 import ChatRespondStatusSlice from './reducers/ChatRespondStatusSlice'
+import CurrentRequestSlice from './reducers/CurrentRequestSlice'
 import CurrentResponceSlice from './reducers/CurrentResponceSlice'
 import CurrentVacancyNameSlice from './reducers/CurrentVacancyNameSlice'
 import CurrentVacancySlice from './reducers/CurrentVacancySlice'
@@ -46,6 +47,7 @@ export const store = configureStore({
 		chatId: chatIdSlice,
 		currentResponce: CurrentResponceSlice,
 		chatResponceStatus: ChatRespondStatusSlice,
+		currentRequest: CurrentRequestSlice,
 		[apiSlice.reducerPath]: apiSlice.reducer
 	},
 	middleware: getDefaultMiddleware =>

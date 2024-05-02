@@ -12,7 +12,9 @@ import {
 	TypeSchedule,
 	VacancyGroupedResponcesType,
 	VacancyItemType,
+	VacancyRequestItemType,
 	VacancyRequestType,
+	VacancyRequestViewType,
 	VacancyRespondItemType,
 	VacancyViewResponceType,
 	respondStatus
@@ -188,6 +190,24 @@ export const serviceApi = apiSlice.injectEndpoints({
 				url: `http://localhost:8082/employment-api/v1/management/supervisor/vacancy`,
 				headers: {
 					Authorization: `Bearer ${supervisorToken}`
+				}
+			})
+		}),
+		getVacancyRequests: builder.query<VacancyRequestItemType[], string>({
+			query: action => ({
+				url: `http://localhost:8082/employment-api/v1/management/vacancy-requests${
+					action === 'все' ? '' : `?action=${action}`
+				}`,
+				headers: {
+					Authorization: `Bearer ${personnelDeparmentToken}`
+				}
+			})
+		}),
+		getVacancyRequestView: builder.query<VacancyRequestViewType, number>({
+			query: id => ({
+				url: `http://localhost:8082/employment-api/v1/management/vacancy-requests/${id}`,
+				headers: {
+					Authorization: `Bearer ${personnelDeparmentToken}`
 				}
 			})
 		}),
@@ -378,6 +398,24 @@ export const serviceApi = apiSlice.injectEndpoints({
 					Authorization: `Bearer ${supervisorToken}`
 				}
 			})
+		}),
+		acceptVacancyRequest: builder.mutation<void, number>({
+			query: id => ({
+				url: `http://localhost:8082/employment-api/v1/management/vacancy-requests/${id}/accept`,
+				method: 'PUT',
+				headers: {
+					Authorization: `Bearer ${personnelDeparmentToken}`
+				}
+			})
+		}),
+		denyVacancyRequest: builder.mutation<void, number>({
+			query: id => ({
+				url: `http://localhost:8082/employment-api/v1/management/vacancy-requests/${id}/deny`,
+				method: 'POST',
+				headers: {
+					Authorization: `Bearer ${personnelDeparmentToken}`
+				}
+			})
 		})
 	})
 })
@@ -418,5 +456,9 @@ export const {
 	useGetSupervisorVacancyQuery,
 	useRequestDeleteVacancyMutation,
 	useRequestCreateVacancyMutation,
-	useRequestUpdateVacancyMutation
+	useRequestUpdateVacancyMutation,
+	useGetVacancyRequestsQuery,
+	useGetVacancyRequestViewQuery,
+	useAcceptVacancyRequestMutation,
+	useDenyVacancyRequestMutation
 } = serviceApi

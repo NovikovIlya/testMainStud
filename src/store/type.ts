@@ -275,3 +275,23 @@ export type VacancyRequestType = {
 	category: string
 	direction: string
 }
+
+export type VacancyRequestItemType = {
+	id: number
+	vacancy: {
+		id: number
+		post: string
+	}
+	action: 'CREATE' | 'UPDATE' | 'DELETE'
+	status: string
+}
+
+export type VacancyRequestViewType = {
+	id: number
+	authorId: number
+	vacancyId: number | null
+	action: 'CREATE' | 'UPDATE' | 'DELETE'
+	status: string
+	newData: VacancyRequestType
+	oldData: VacancyRequestType | null
+}

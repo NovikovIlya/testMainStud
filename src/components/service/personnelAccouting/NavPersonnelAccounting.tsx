@@ -11,6 +11,9 @@ import { RespondInfo } from './RespondInfo'
 import { Responds } from './Responds'
 import { RespondsIcon } from './RespondsIcon'
 import { VacanciesIcon } from './VacanciesIcon'
+import { VacancyRequestCreateView } from './VacancyRequestCreateView'
+import { VacancyRequestDeleteView } from './VacancyRequestDeleteView'
+import { VacancyRequestsPage } from './VacancyRequestsPage'
 import { VacancyResponces } from './VacancyResponces'
 import { RespondsSupervisor } from './supervisor/RespondsSupervisor'
 import { SupervisorCreateVacancyForm } from './supervisor/SupervisorCreateVacancyForm'
@@ -75,6 +78,38 @@ export const NavPesonnelAccounting = () => {
 		}
 	]
 
+	const navEmployeeListVacancyItems: CollapseProps['items'] = [
+		{
+			key: 'allVacancies',
+			label: (
+				<div className="flex items-center gap-[10px]">
+					{<VacanciesIcon />}
+					<p className="text-base">{'Вакансии'}</p>
+				</div>
+			),
+			children: (
+				<div>
+					<p
+						className="text-base"
+						onClick={() => {
+							navigate('/services/personnelaccounting/vacancies')
+						}}
+					>
+						Все вакансии
+					</p>
+					<p
+						className="text-base"
+						onClick={() => {
+							navigate('/services/personnelaccounting/vacancyrequests')
+						}}
+					>
+						Заявки от руководилей
+					</p>
+				</div>
+			)
+		}
+	]
+
 	const navSupervisorListVacancyItems: CollapseProps['items'] = [
 		{
 			key: 'allVacancies',
@@ -108,21 +143,52 @@ export const NavPesonnelAccounting = () => {
 	]
 
 	const handleList = navEmployeeList.map(({ id, icon, name }, index) => {
-		return (
-			<li
-				key={index}
-				className={clsx(
-					'w-full flex items-center py-2 pl-8 hover:bg-[#F5F8FB]  cursor-pointer',
-					id === pathname && 'bg-[#F5F8FB]'
-				)}
-				onClick={() => handleNavigate(id)}
-			>
-				<div className="flex items-center gap-[10px]">
-					{icon}
-					<p className="text-base">{name}</p>
-				</div>
-			</li>
-		)
+		if (name === 'Вакансии') {
+			return (
+				<li
+					key={index}
+					className={clsx(
+						'w-full flex items-center py-2 pl-8 hover:bg-[#F5F8FB]  cursor-pointer',
+						id === pathname && 'bg-[#F5F8FB]'
+					)}
+				>
+					<ConfigProvider
+						theme={{
+							components: {
+								Collapse: {
+									headerBg: '#ffffff',
+									headerPadding: '0px 20px 0px 0px'
+								}
+							}
+						}}
+					>
+						<Collapse
+							className="w-full"
+							items={navEmployeeListVacancyItems}
+							expandIconPosition="end"
+							bordered={false}
+							style={{}}
+						/>
+					</ConfigProvider>
+				</li>
+			)
+		} else {
+			return (
+				<li
+					key={index}
+					className={clsx(
+						'w-full flex items-center py-2 pl-8 hover:bg-[#F5F8FB]  cursor-pointer',
+						id === pathname && 'bg-[#F5F8FB]'
+					)}
+					onClick={() => handleNavigate(id)}
+				>
+					<div className="flex items-center gap-[10px]">
+						{icon}
+						<p className="text-base">{name}</p>
+					</div>
+				</li>
+			)
+		}
 	})
 
 	const handleSupervisorList = navSupervisorList.map(
@@ -207,6 +273,16 @@ export const NavPesonnelAccounting = () => {
 				{pathname.includes(navEmployeeList[1].id) && <ChatEmpDemp />}
 				{pathname === navEmployeeList[2].id && <></>}
 				{pathname === navEmployeeList[3].id && <></>}
+				{pathname === '/services/personnelaccounting/vacancyrequests' && (
+					<VacancyRequestsPage />
+				)}
+				{pathname === '/services/personnelaccounting/request/create' && (
+					<VacancyRequestCreateView />
+				)}
+				{pathname === '/services/personnelaccounting/request/update' && <></>}
+				{pathname === '/services/personnelaccounting/request/delete' && (
+					<VacancyRequestDeleteView />
+				)}
 				{pathname === navEmployeeList[4].id && <></>}
 				{pathname === navSupervisorList[0].id && <RespondsSupervisor />}
 				{pathname === navSupervisorList[1].id && <></>}

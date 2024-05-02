@@ -12,7 +12,7 @@ import {
 	Upload,
 	UploadFile,
 	UploadProps,
-	message
+	message, Form
 } from 'antd'
 import { format } from 'date-fns/format'
 import dayjs from 'dayjs'
@@ -23,13 +23,14 @@ import { ArrowLeftSvg } from '../../../../assets/svg'
 import { useCreateContractMutation } from '../../../../store/api/practiceApi/taskService'
 import { ICreateContract } from '../../../../models/Practice'
 import { SignInSchema } from '../validation'
+import {validateMessages} from "../../../../utils/validateMessage";
 
 type PropsType = {
 	setIsCreate: (value: boolean) => void
 	setIsPreview: (value: boolean) => void
 }
 
-export const CreateContracts = ({ setIsCreate, setIsPreview }: PropsType) => {
+export const CreateContracts = () => {
 	const {
 		control,
 		handleSubmit,
@@ -85,9 +86,9 @@ export const CreateContracts = ({ setIsCreate, setIsPreview }: PropsType) => {
 		console.log(payload)
 		newContract(payload)
 			.unwrap()
-			.then(() => {
-				setIsCreate(false)
-			})
+			// .then(() => {
+			// 	setIsCreate(false)
+			// })
 	}
 	return (
 		<section className="container">
@@ -97,40 +98,27 @@ export const CreateContracts = ({ setIsCreate, setIsPreview }: PropsType) => {
 					className="mt-1"
 					icon={<ArrowLeftSvg className="w-4 h-4 cursor-pointer mt-1" />}
 					type="text"
-					onClick={() => setIsCreate(false)}
+					//onClick={() => setIsCreate(false)}
 				/>
 				<Typography.Text className="text-black text-3xl font-normal">
-					Название
+					Новый документ
 				</Typography.Text>
 			</Space>
-			<form onSubmit={handleSubmit(onSubmit)}>
+			<Form validateMessages={validateMessages}
+				  layout={'vertical'}
+				  onFinish={values => console.log(values)}
+			>
 				<Row gutter={[16, 16]} className="mt-12">
 					<Col xs={24} sm={24} md={18} lg={16} xl={12}>
-						<Space direction="vertical" className="w-full">
-							<Typography.Text>
-								Наименование организации по договору
-							</Typography.Text>
-							<Controller
-								name="contractFacility"
-								control={control}
-								render={({ field }) => (
-									<Input
-										type="text"
-										className="w-full"
-										size="large"
-										{...field}
-										suffix={
-											errors.contractFacility &&
-											errors.contractFacility.message && (
-												<Typography.Text type="danger">
-													{errors.contractFacility.message as any}
-												</Typography.Text>
-											)
-										}
-									/>
-								)}
+						<Form.Item label={'Наименование организации по договору'}
+								   name={'contractFacility'}
+								   rules={[{required: true}]}>
+							<Input
+								className="w-full"
+								size="large"
 							/>
-						</Space>
+						</Form.Item>
+
 					</Col>
 				</Row>
 				<Row gutter={[16, 16]} className="mt-4">
@@ -445,7 +433,7 @@ export const CreateContracts = ({ setIsCreate, setIsPreview }: PropsType) => {
 								className="!rounded-full"
 								size="large"
 								onClick={() => {
-									setIsPreview(true)
+									//setIsPreview(true)
 								}}
 							>
 								Режим просмотра
@@ -453,7 +441,7 @@ export const CreateContracts = ({ setIsCreate, setIsPreview }: PropsType) => {
 						</Space>
 					</Col>
 				</Row>
-			</form>
+			</Form>
 		</section>
 	)
 }

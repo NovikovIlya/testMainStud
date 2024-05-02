@@ -84,65 +84,60 @@ const columns: TableProps<DataType>['columns'] = [
 	}
 ]
 
-export const PreviewContracts = ({
-									 setIsPreview,
-									 setIsCreate,
-									 setIsFinalReview,
-									 preview
-								 }: PropsType) => {
-	const { data: contract } = useGetContractQuery(preview)
-	const data: DataType[] = [
-		{
-			key: '1',
-			name: 'Номер договора',
-			medic: contract?.contractNumber || ''
-		},
-		{
-			key: '2',
-			name: 'Дата заключения договора',
-			medic: contract?.dateConclusionContract || ''
-		},
-		{
-			key: '3',
-			name: 'Тип договора',
-			medic: contract?.contractType || ''
-		},
-		{
-			key: '4',
-			name: 'Срок действия договора',
-			medic: contract?.prolongation?.toString() || ''
-		},
-		{
-			key: '5',
-			name: 'Шифр и наименование специальности',
-			medic: contract?.specialtyName || ''
-		},
-		{
-			key: '6',
-			name: 'Юридический адрес организации',
-			medic: contract?.legalFacility || ''
-		},
-		{
-			key: '7',
-			name: 'Фактический адрес организации ',
-			medic: contract?.actualFacility || ''
-		},
-		{
-			key: '8',
-			name: 'Количество мест',
-			medic: contract?.placeNumber.toString() || ''
-		},
-		{
-			key: '9',
-			name: 'Ссылка на скан договора',
-			medic: 'Скан договора.pdf'
-		},
-		{
-			key: '10',
-			name: 'Ссылка на дополнительное соглашение к договору',
-			medic: 'ДопСоглашение.pdf'
-		}
-	]
+export const PreviewContracts = () => {
+	//const { data: contract } = useGetContractQuery(preview)
+	// const data: DataType[] = [
+	// 	{
+	// 		key: '1',
+	// 		name: 'Номер договора',
+	// 		medic: contract?.contractNumber || ''
+	// 	},
+	// 	{
+	// 		key: '2',
+	// 		name: 'Дата заключения договора',
+	// 		medic: contract?.dateConclusionContract || ''
+	// 	},
+	// 	{
+	// 		key: '3',
+	// 		name: 'Тип договора',
+	// 		medic: contract?.contractType || ''
+	// 	},
+	// 	{
+	// 		key: '4',
+	// 		name: 'Срок действия договора',
+	// 		medic: contract?.prolongation?.toString() || ''
+	// 	},
+	// 	{
+	// 		key: '5',
+	// 		name: 'Шифр и наименование специальности',
+	// 		medic: contract?.specialtyName || ''
+	// 	},
+	// 	{
+	// 		key: '6',
+	// 		name: 'Юридический адрес организации',
+	// 		medic: contract?.legalFacility || ''
+	// 	},
+	// 	{
+	// 		key: '7',
+	// 		name: 'Фактический адрес организации ',
+	// 		medic: contract?.actualFacility || ''
+	// 	},
+	// 	{
+	// 		key: '8',
+	// 		name: 'Количество мест',
+	// 		medic: contract?.placeNumber.toString() || ''
+	// 	},
+	// 	{
+	// 		key: '9',
+	// 		name: 'Ссылка на скан договора',
+	// 		medic: 'Скан договора.pdf'
+	// 	},
+	// 	{
+	// 		key: '10',
+	// 		name: 'Ссылка на дополнительное соглашение к договору',
+	// 		medic: 'ДопСоглашение.pdf'
+	// 	}
+	// ]
 	return (
 		<section className="container">
 			<Space size={10}>
@@ -151,7 +146,7 @@ export const PreviewContracts = ({
 					className="mt-1"
 					icon={<ArrowLeftSvg className="w-4 h-4 cursor-pointer mt-1" />}
 					type="text"
-					onClick={() => setIsPreview(false)}
+					//onClick={() => setIsPreview(false)}
 				/>
 				<Typography.Text className="text-black text-3xl font-normal">
 					Название
@@ -182,14 +177,14 @@ export const PreviewContracts = ({
 					<Space className="w-full flex-row-reverse">
 						<Button
 							className="!rounded-full"
-							onClick={() => setIsFinalReview(true)}
+							//onClick={() => setIsFinalReview(true)}
 						>
 							Посмотреть итоговый реестр
 						</Button>
 						<Button
 							type="primary"
 							className="!rounded-full"
-							onClick={() => setIsCreate(true)}
+							//onClick={() => setIsCreate(true)}
 						>
 							Создать договор
 						</Button>

@@ -22,6 +22,8 @@ import {PointsSvg} from "../../../../../assets/svg/PointsSvg";
 import dayjs from "dayjs";
 import clsx from "clsx";
 import {PopoverContent} from "./popoverContent";
+import {PopoverContentMain} from "./PopoverContentMain";
+import {useNavigate} from "react-router-dom";
 
 
 export interface ColumnsTableCompressedView {
@@ -46,215 +48,11 @@ export interface ColumnsTableFull {
     numberSeats: string
     links: string
 }
-
-const columnsCompressedView: TableProps<ColumnsTableCompressedView>['columns'] = [
-    {
-        title: <TitleHeadCell title={'Наименование организации'}/>,
-        dataIndex: 'contractFacility',
-        align: "left",
-        width: 150,
-        render: (text, record) =>
-            <div className={'flex items-center'}>
-                    <span className={'underline flex w-[200px]'}>
-                        {text}
-                    </span>
-                <Button
-                    type="text"
-                    icon={<EditSvg/>}
-                    onClick={() => console.log(record.key)}
-                />
-            </div>
-    },
-    {
-        title: <TitleHeadCell title={'Дата заполнения'}/>,
-        dataIndex: 'dateFiling',
-        align: "left",
-        width: 150
-    },
-    {
-        title: <TitleHeadCell title={'Тип договора'}/>,
-        dataIndex: 'contractType',
-        align: "left",
-        width: 150
-
-    },
-    {
-        title: <TitleHeadCell title={'Дата заключения договора'}/>,
-        dataIndex: 'dateConclusionContract',
-        align: "left",
-        width: 150,
-        render: (text) => dayjs(text).format('DD.MM.YYYY')
-    },
-    {
-        title:
-            <Popover trigger={'click'}>
-                <Button
-                    type="text"
-                    className="opacity-50"
-                    icon={<PointsSvg/>}
-                />
-            </Popover>,
-        width: 200,
-        align: 'center',
-        render: (record) =>
-            <Popover content={<PopoverContent record={record}/>} trigger={'click'}>
-                <Button
-                    type="text"
-                    className="opacity-50"
-                    icon={<PointsSvg/>}
-                />
-            </Popover>
-
-    }
-]
-const columnsFullView: TableProps<ColumnsTableFull>['columns'] = [
-    {
-        title: <span className={'text-xs'}>Наименование организации</span>,
-        dataIndex: 'nameOrg',
-        align: "left",
-        className: 'text-xs',
-        width: 200,
-        render: (text, record) =>
-            <div className={'flex items-center'}>
-                    <span className={'underline flex'}>
-                        {text}
-                    </span>
-                <Button
-                    type="text"
-                    icon={<EditSvg/>}
-                    onClick={() => console.log(record.key)}
-                />
-            </div>
-    },
-    {
-        title: <span className={'text-xs'}>Наименование специальности</span>,
-        dataIndex: 'nameSpecialty',
-        align: "left",
-        className: 'text-xs'
-        //width: '10%'
-    },
-    {
-        title: <span className={'text-xs'}>Номер договора</span>,
-        dataIndex: 'contractNumber',
-        align: "center",
-        className: 'text-xs'
-        //width: 100
-    },
-    {
-        title: <span className={'text-xs'}>Дата заключения договора</span>,
-        dataIndex: 'dateConclusionContract',
-        align: "center",
-        className: 'text-xs',
-        render: (text) => dayjs(text).format('DD.MM.YYYY')
-    },
-    {
-        title: <span className={'text-xs'}>Тип договора</span>,
-        dataIndex: 'contractType',
-        align: "center",
-        className: 'text-xs'
-        //width: 100
-    },
-    {
-        title: <span className={'text-xs'}>Срок действия договора</span>,
-        dataIndex: 'contractPeriod',
-        align: "center",
-        className: 'text-xs'
-        //width: 100
-    },
-    {
-        title: <span className={'text-xs'}>Шифр и наименование специальности</span>,
-        dataIndex: 'cipherNameSpecialty',
-        align: "center",
-        className: 'text-xs'
-        //width: 100
-    },
-    {
-        title: <span className={'text-xs'}>Юридический адрес организации</span>,
-        dataIndex: 'legalAddress',
-        align: "center",
-        className: 'text-xs'
-        //width: 100
-    },
-    {
-        title: <span className={'text-xs'}>Фактический адрес организации</span>,
-        dataIndex: 'actualAddress',
-        align: "center",
-        className: 'text-xs'
-        //width: 100
-    },
-    {
-        title: <span className={'text-xs'}>Количество мест</span>,
-        dataIndex: 'numberSeats',
-        align: "center",
-        className: 'text-xs'
-        //width: 100
-    },
-    {
-        title: <span className={'text-xs'}>Ссылки</span>,
-        dataIndex: 'links',
-        align: "center",
-        width: 100,
-        className: 'text-xs'
-    },
-    {
-        title:
-            <Button
-                type="text"
-                className="opacity-50"
-                icon={<PointsSvg/>}
-            />,
-        align: 'center',
-        render: (record) =>
-            <Button
-                type="text"
-                className="opacity-50"
-                icon={<PointsSvg/>}
-                onClick={() => console.log(record.key)}
-            />,
-        fixed: "right",
-        width: 50
-
-    }
-]
-const optionsNameSpecialty = [
-    {
-        value: 'Все',
-        label: 'Все'
-    },
-    {
-        value: '31.08.01 Акушерство и гинекология',
-        label: '31.08.01 Акушерство и гинекология'
-    },
-    {
-        value: '12.456 Лечебное дело',
-        label: '12.456 Лечебное дело'
-    }
-]
-const optionsTypeContract = [
-    {value: 'Все', label: 'Все'},
-    {value: 'Бессрочный', label: 'Бессрочный'},
-    {value: 'С пролонгацией', label: 'С пролонгацией'}
-]
-const optionsNameOrg = [
-    {value: 'Все', label: 'Все'},
-    {
-        value: 'Лечебно-профилактическое учреждение по договору',
-        label: 'Лечебно-профилактическое учреждение по договору'
-    },
-    {
-        value: 'Тест 3',
-        label: 'Тест 3'
-    }
-]
-const optionsSort = [
-    {value: 'По дате (сначала новые)', label: 'По дате (сначала новые)'},
-    {value: 'По дате (сначала старые)', label: 'По дате (сначала старые)'},
-]
 const mockDataCompressed: ColumnsTableCompressedView[] = [
     {
         key: '1',
         contractFacility: 'Лечебно-профилактическое учреждение по договору',
-        dateFiling: '00.00.00, 00:00',
+        dateFiling: '00.00.00',
         contractType: 'Бессрочный',
         dateConclusionContract: '2024-04-24'
     },
@@ -263,28 +61,28 @@ const mockDataCompressed: ColumnsTableCompressedView[] = [
         contractFacility: 'Лечебно-профилактическое учреждение по договору',
         dateConclusionContract: '2024-04-25',
         contractType: 'С пролонгацией',
-        dateFiling: '00.00.00, 00:00'
+        dateFiling: '00.00.00'
     },
     {
         key: '3',
         contractFacility: 'Тест 3',
         dateConclusionContract: '2024-04-26',
         contractType: 'Бессрочный',
-        dateFiling: '00.00.00, 00:00'
+        dateFiling: '00.00.00'
     },
     {
         key: '4',
         contractFacility: 'Тест 4',
         dateConclusionContract: '2024-04-27',
         contractType: 'С пролонгацией',
-        dateFiling: '00.00.00, 00:00'
+        dateFiling: '00.00.00'
     },
     {
         key: '5',
         contractFacility: 'Тест 4',
         dateConclusionContract: '2024-04-26',
         contractType: 'С пролонгацией',
-        dateFiling: '00.00.00, 00:00'
+        dateFiling: '00.00.00'
     },
 ]
 const mockDataFull: ColumnsTableFull[] = [
@@ -332,8 +130,8 @@ const mockDataFull: ColumnsTableFull[] = [
     }
 ]
 
-
 export const RegisterContracts = () => {
+    const nav = useNavigate()
     const [filter, setFilter] = useState({
         contractType: 'Все',
         nameOrg: 'Все',
@@ -349,6 +147,211 @@ export const RegisterContracts = () => {
         compressed: true,
         table: false
     })
+
+    const columnsCompressedView: TableProps<ColumnsTableCompressedView>['columns'] = [
+        {
+            title: <TitleHeadCell title={'Наименование организации'}/>,
+            dataIndex: 'contractFacility',
+            align: "left",
+            width: 150,
+            render: (text, record) =>
+                <div className={'flex items-center'}>
+                    <span className={'underline flex w-[200px]'}>
+                        {text}
+                    </span>
+                    <Button
+                        type="text"
+                        icon={<EditSvg/>}
+                        onClick={() => console.log(record.key)}
+                    />
+                </div>
+        },
+        {
+            title: <TitleHeadCell title={'Дата заполнения'}/>,
+            dataIndex: 'dateFiling',
+            align: "left",
+            width: 150
+        },
+        {
+            title: <TitleHeadCell title={'Тип договора'}/>,
+            dataIndex: 'contractType',
+            align: "left",
+            width: 150
+
+        },
+        {
+            title: <TitleHeadCell title={'Дата заключения договора'}/>,
+            dataIndex: 'dateConclusionContract',
+            align: "left",
+            width: 150,
+            render: (text) => dayjs(text).format('DD.MM.YYYY')
+        },
+        {
+            title:
+                <Popover trigger={'click'} content={<PopoverContentMain recordCompressed={mockDataCompressed}/>}>
+                    <Button
+                        type="text"
+                        className="opacity-50"
+                        icon={<PointsSvg/>}
+                    />
+                </Popover>,
+            width: 200,
+            align: 'center',
+            render: (record) =>
+                <Popover content={<PopoverContent recordCompressed={record}
+                                                  tableDataCompressed={tableDataCompressed}
+                                                  setTableDataCompressed={setTableDataCompressed}/>}
+                         trigger={'click'}>
+                    <Button
+                        type="text"
+                        className="opacity-50"
+                        icon={<PointsSvg/>}
+                    />
+                </Popover>
+        }
+    ]
+    const columnsFullView: TableProps<ColumnsTableFull>['columns'] = [
+        {
+            title: <span className={'text-xs'}>Наименование организации</span>,
+            dataIndex: 'nameOrg',
+            align: "left",
+            className: 'text-xs',
+            width: 200,
+            render: (text, record) =>
+                <div className={'flex items-center'}>
+                    <span className={'underline flex w-[150px]'}>
+                        {text}
+                    </span>
+                    <Button
+                        type="text"
+                        icon={<EditSvg/>}
+                        onClick={() => console.log(record.key)}
+                    />
+                </div>
+        },
+        {
+            title: <span className={'text-xs'}>Наименование специальности</span>,
+            dataIndex: 'nameSpecialty',
+            align: "left",
+            className: 'text-xs'
+        },
+        {
+            title: <span className={'text-xs'}>Номер договора</span>,
+            dataIndex: 'contractNumber',
+            align: "center",
+            className: 'text-xs'
+        },
+        {
+            title: <span className={'text-xs'}>Дата заключения договора</span>,
+            dataIndex: 'dateConclusionContract',
+            align: "center",
+            className: 'text-xs',
+            render: (text) => dayjs(text).format('DD.MM.YYYY')
+        },
+        {
+            title: <span className={'text-xs'}>Тип договора</span>,
+            dataIndex: 'contractType',
+            align: "center",
+            className: 'text-xs'
+        },
+        {
+            title: <span className={'text-xs'}>Срок действия договора</span>,
+            dataIndex: 'contractPeriod',
+            align: "center",
+            className: 'text-xs'
+        },
+        {
+            title: <span className={'text-xs'}>Шифр и наименование специальности</span>,
+            dataIndex: 'cipherNameSpecialty',
+            align: "center",
+            className: 'text-xs'
+        },
+        {
+            title: <span className={'text-xs'}>Юридический адрес организации</span>,
+            dataIndex: 'legalAddress',
+            align: "center",
+            className: 'text-xs'
+        },
+        {
+            title: <span className={'text-xs'}>Фактический адрес организации</span>,
+            dataIndex: 'actualAddress',
+            align: "center",
+            className: 'text-xs'
+        },
+        {
+            title: <span className={'text-xs'}>Количество мест</span>,
+            dataIndex: 'numberSeats',
+            align: "center",
+            className: 'text-xs'
+        },
+        {
+            title: <span className={'text-xs'}>Ссылки</span>,
+            dataIndex: 'links',
+            align: "center",
+            width: 100,
+            className: 'text-xs'
+        },
+        {
+            title:
+                <Popover trigger={'click'} content={<PopoverContentMain recordFull={mockDataFull}/>}>
+                    <Button
+                        type="text"
+                        className="opacity-50"
+                        icon={<PointsSvg/>}
+                    />
+                </Popover>,
+            align: 'center',
+            render: (record) =>
+                <Popover trigger={'click'}
+                         content={<PopoverContent recordFull={record}
+                                                  tableDataFull={tableDataFull}
+                                                  setTableDataFull={setTableDataFull}/>}>
+                    <Button
+                        type="text"
+                        className="opacity-50"
+                        icon={<PointsSvg/>}
+                    />
+                </Popover>,
+            fixed: "right",
+            width: 50
+
+        }
+    ]
+    const optionsNameSpecialty = [
+        {
+            value: 'Все',
+            label: 'Все'
+        },
+        {
+            value: '31.08.01 Акушерство и гинекология',
+            label: '31.08.01 Акушерство и гинекология'
+        },
+        {
+            value: '12.456 Лечебное дело',
+            label: '12.456 Лечебное дело'
+        }
+    ]
+    const optionsTypeContract = [
+        {value: 'Все', label: 'Все'},
+        {value: 'Бессрочный', label: 'Бессрочный'},
+        {value: 'С пролонгацией', label: 'С пролонгацией'}
+    ]
+    const optionsNameOrg = [
+        {value: 'Все', label: 'Все'},
+        {
+            value: 'Лечебно-профилактическое учреждение по договору',
+            label: 'Лечебно-профилактическое учреждение по договору'
+        },
+        {
+            value: 'Тест 3',
+            label: 'Тест 3'
+        }
+    ]
+    const optionsSort = [
+        {value: 'По дате (сначала новые)', label: 'По дате (сначала новые)'},
+        {value: 'По дате (сначала старые)', label: 'По дате (сначала старые)'},
+    ]
+
 
     function isCompressedTable() {
         setTableView({
@@ -538,7 +541,13 @@ export const RegisterContracts = () => {
                     </Col>
                 </Col>
                 <Col span={3} offset={9}>
-                    <Button type={"primary"}>Создать договор</Button>
+                    <Button type={"primary"}
+                            onClick={() => {
+                                nav('/services/practices/registerContracts/createContract')
+                            }}
+                    >
+                        Создать договор
+                    </Button>
                 </Col>
             </Row>
             <Row gutter={[16, 16]} className={'mt-4'}>

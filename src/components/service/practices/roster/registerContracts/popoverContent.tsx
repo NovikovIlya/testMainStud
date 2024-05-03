@@ -49,7 +49,6 @@ export const PopoverContent = ({
                 "Юридический адрес организации": recordFull.legalAddress,
                 "Фактический адрес организации": recordFull.actualAddress,
                 "Количество мест": recordFull.numberSeats,
-                "Ссылки": recordFull.links,
             }
         }
 

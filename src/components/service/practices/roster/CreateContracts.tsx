@@ -19,13 +19,13 @@ import {ICreateContract} from '../../../../models/Practice'
 import {validateMessages} from "../../../../utils/validateMessage";
 import {useNavigate} from "react-router-dom";
 import getFieldValue from "react-hook-form/dist/logic/getFieldValue";
+import {log} from "util";
 
 
 export const CreateContracts = () => {
     const [form] = Form.useForm()
-    const [errorInn, setErrorInn] = useState(false)
     const [inn, setInn] = useState<string | number | null>(0)
-    const [nameOrg, setNameOrg] = useState<string>('')
+    const [nameOrg, setNameOrg] = useState(true)
     const nav = useNavigate()
     const optionsContractsType = [
         {
@@ -51,8 +51,6 @@ export const CreateContracts = () => {
     }
 
 
-
-
     useEffect(() => {
 
         let url = "http://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/party";
@@ -74,20 +72,24 @@ export const CreateContracts = () => {
                 .then(response => response.json())
                 .then(res => {
                     if (res.suggestions.length !== 0) {
-                        console.log(res.suggestions[0].data.name.full_with_opf)
+                        console.log(res.suggestions)
+                        setNameOrg(true)
                         form.setFieldValue('contractFacility', res.suggestions[0].data.name.full_with_opf)
                     } else {
                         console.log('Организация не найдена. Проверьте ИНН.')
+                        setNameOrg(false)
                     }
                 })
                 .catch(error => console.log("error", error));
         } else {
+            setNameOrg(true)
             form.resetFields(['contractFacility'])
         }
-
-
     }, [inn]);
 
+    useEffect(() => {
+        console.log(nameOrg)
+    }, [nameOrg]);
 
     return (
         <section className="container">
@@ -119,15 +121,6 @@ export const CreateContracts = () => {
                                            pattern: new RegExp('^[0-9]{10}$'),
                                            message: 'ИНН содержит 10 цифр',
                                        },
-                                       ({}) => ({
-                                           validator(_, value) {
-                                               if (form.getFieldValue('contractFacility')) {
-                                                   return Promise.resolve()
-                                               }
-                                               console.log(form.getFieldValue('contractFacility'))
-                                               return Promise.reject(new Error('Организация не найдена. Проверьте ИНН.'));
-                                           },
-                                       }),
                                    ]}>
                             <InputNumber
                                 type={'number'}
@@ -137,22 +130,22 @@ export const CreateContracts = () => {
                                 onChange={value => setInn(value)}
                             />
                         </Form.Item>
-
+                        {!nameOrg &&
+                            <span className={'absolute top-[70px] text-[#FF4d4F]'}>
+                                Организация не найдена. Проверьте ИНН.
+                            </span>}
                     </Col>
                 </Row>
                 <Row gutter={[16, 16]}>
                     <Col xs={24} sm={24} md={18} lg={16} xl={12}>
                         <Form.Item label={'Наименование организации по договору'}
                                    name={'contractFacility'}
-                                   shouldUpdate
-                            //initialValue={nameOrg}
                                    rules={[{required: true}]}>
                             <Input
                                 className="w-full"
                                 size="large"
                             />
                         </Form.Item>
-
                     </Col>
                 </Row>
                 <Row gutter={[16, 16]}>
@@ -200,23 +193,26 @@ export const CreateContracts = () => {
                             />
                         </Form.Item>
                     </Col>
-                    {
-                        prolongation
-                        &&
-                        <Col xs={24} sm={24} md={18} lg={8} xl={6}>
-                            <Form.Item label={'Пролонгация'}
+                </Row>
+                {
+                    prolongation
+                    &&
+                    <Row gutter={[16, 16]}>
+                        <Col xs={24} sm={24} md={18} lg={16} xl={12}>
+                            <Form.Item label={'Пролонгация (укажите количество лет)'}
                                        name={'prolongation'}
                                        rules={[{required: true}]}>
                                 <InputNumber
+                                    type={"number"}
                                     className="w-full"
                                     size="large"
                                     controls={false}
                                 />
                             </Form.Item>
                         </Col>
-                    }
+                    </Row>
+                }
 
-                </Row>
                 <Row gutter={[16, 16]}>
                     <Col xs={24} sm={24} md={18} lg={8} xl={6}>
                         <Form.Item label={'Срок действия договора'}

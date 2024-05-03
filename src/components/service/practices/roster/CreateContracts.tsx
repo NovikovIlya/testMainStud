@@ -12,26 +12,31 @@ import {
     Form, InputNumber
 } from 'antd'
 import dayjs from 'dayjs'
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {ArrowLeftSvg} from '../../../../assets/svg'
 import {useCreateContractMutation} from '../../../../store/api/practiceApi/taskService'
 import {ICreateContract} from '../../../../models/Practice'
 import {validateMessages} from "../../../../utils/validateMessage";
 import {useNavigate} from "react-router-dom";
+import getFieldValue from "react-hook-form/dist/logic/getFieldValue";
 
 
 export const CreateContracts = () => {
-	const nav = useNavigate()
+    const [form] = Form.useForm()
+    const [errorInn, setErrorInn] = useState(false)
+    const [inn, setInn] = useState<string | number | null>(0)
+    const [nameOrg, setNameOrg] = useState<string>('')
+    const nav = useNavigate()
     const optionsContractsType = [
-		{
-			value: 'Бессрочный',
-			label: 'Бессрочный'
-		},
+        {
+            value: 'Бессрочный',
+            label: 'Бессрочный'
+        },
         {
             value: 'Указать пролонгацию',
             label: 'Указать пролонгацию'
         }]
-	const [prolongation, setProlongation] = useState(false)
+    const [prolongation, setProlongation] = useState(false)
     const [newContract] = useCreateContractMutation()
 
     function onFinish(values: ICreateContract) {
@@ -41,9 +46,48 @@ export const CreateContracts = () => {
         for (let key in values) {
             formDataCreateContract.append(key, values[key as keyof ICreateContract])
         }
-		console.log(values)
+        console.log(values)
         console.log(formDataCreateContract)
     }
+
+
+
+
+    useEffect(() => {
+
+        let url = "http://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/party";
+        let token = "2491c0a94273928cee7e6656455eb71f1d74a54b";
+        let query = "1655018018";
+
+        let options = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "Authorization": "Token " + token
+            },
+            body: JSON.stringify({query: inn})
+        }
+
+        if (String(inn).length === 10) {
+            fetch(url, options)
+                .then(response => response.json())
+                .then(res => {
+                    if (res.suggestions.length !== 0) {
+                        console.log(res.suggestions[0].data.name.full_with_opf)
+                        form.setFieldValue('contractFacility', res.suggestions[0].data.name.full_with_opf)
+                    } else {
+                        console.log('Организация не найдена. Проверьте ИНН.')
+                    }
+                })
+                .catch(error => console.log("error", error));
+        } else {
+            form.resetFields(['contractFacility'])
+        }
+
+
+    }, [inn]);
+
 
     return (
         <section className="container">
@@ -62,24 +106,46 @@ export const CreateContracts = () => {
             <Form validateMessages={validateMessages}
                   layout={'vertical'}
                   onFinish={values => onFinish(values)}
+                  form={form}
             >
-				<Row gutter={[16, 16]} className="mt-12">
-					<Col xs={24} sm={24} md={18} lg={16} xl={12}>
-						<Form.Item label={'ИНН'}
-								   name={'inn'}
-								   rules={[{required: true}]}>
-							<InputNumber
-								className="w-full"
-								size="large"
-							/>
-						</Form.Item>
+                <Row gutter={[16, 16]} className="mt-12">
+                    <Col xs={24} sm={24} md={18} lg={16} xl={12}>
+                        <Form.Item label={'ИНН'}
+                                   dependencies={['contractFacility']}
+                                   name={'inn'}
+                                   rules={[
+                                       {
+                                           required: true,
+                                           pattern: new RegExp('^[0-9]{10}$'),
+                                           message: 'ИНН содержит 10 цифр',
+                                       },
+                                       ({}) => ({
+                                           validator(_, value) {
+                                               if (form.getFieldValue('contractFacility')) {
+                                                   return Promise.resolve()
+                                               }
+                                               console.log(form.getFieldValue('contractFacility'))
+                                               return Promise.reject(new Error('Организация не найдена. Проверьте ИНН.'));
+                                           },
+                                       }),
+                                   ]}>
+                            <InputNumber
+                                type={'number'}
+                                controls={false}
+                                className="w-full"
+                                size="large"
+                                onChange={value => setInn(value)}
+                            />
+                        </Form.Item>
 
-					</Col>
-				</Row>
+                    </Col>
+                </Row>
                 <Row gutter={[16, 16]}>
                     <Col xs={24} sm={24} md={18} lg={16} xl={12}>
                         <Form.Item label={'Наименование организации по договору'}
                                    name={'contractFacility'}
+                                   shouldUpdate
+                            //initialValue={nameOrg}
                                    rules={[{required: true}]}>
                             <Input
                                 className="w-full"
@@ -126,29 +192,29 @@ export const CreateContracts = () => {
                                 defaultValue=""
                                 className="w-full"
                                 options={optionsContractsType}
-								onChange={value => {
-									if (value === 'Указать пролонгацию') {
-										setProlongation(true)
-									} else setProlongation(false)
-								}}
+                                onChange={value => {
+                                    if (value === 'Указать пролонгацию') {
+                                        setProlongation(true)
+                                    } else setProlongation(false)
+                                }}
                             />
                         </Form.Item>
                     </Col>
-					{
-						prolongation
-						&&
-						<Col xs={24} sm={24} md={18} lg={8} xl={6}>
-							<Form.Item label={'Пролонгация'}
-									   name={'prolongation'}
-									   rules={[{required: true}]}>
-								<InputNumber
-									className="w-full"
-									size="large"
-									controls={false}
-								/>
-							</Form.Item>
-						</Col>
-					}
+                    {
+                        prolongation
+                        &&
+                        <Col xs={24} sm={24} md={18} lg={8} xl={6}>
+                            <Form.Item label={'Пролонгация'}
+                                       name={'prolongation'}
+                                       rules={[{required: true}]}>
+                                <InputNumber
+                                    className="w-full"
+                                    size="large"
+                                    controls={false}
+                                />
+                            </Form.Item>
+                        </Col>
+                    }
 
                 </Row>
                 <Row gutter={[16, 16]}>

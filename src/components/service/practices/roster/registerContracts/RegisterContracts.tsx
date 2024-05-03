@@ -340,7 +340,10 @@ export const RegisterContracts = () => {
         {value: 'С пролонгацией', label: 'С пролонгацией'}
     ]
     const optionsNameOrg = [
-        {value: 'Все', label: 'Все'},
+        {
+            value: 'Все',
+            label: 'Все'
+        },
         {
             value: 'Лечебно-профилактическое учреждение по договору',
             label: 'Лечебно-профилактическое учреждение по договору'

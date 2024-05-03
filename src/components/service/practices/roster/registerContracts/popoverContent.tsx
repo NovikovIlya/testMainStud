@@ -6,6 +6,8 @@ import {ColumnsTableCompressedView, ColumnsTableFull} from "./RegisterContracts"
 import {utils, writeFileXLSX} from "xlsx";
 import dayjs from "dayjs";
 import {useNavigate} from "react-router-dom";
+import printJS from "print-js";
+import {PrintSvg} from "../../../../../assets/svg/PrintSvg";
 
 interface Props {
     recordCompressed?: ColumnsTableCompressedView
@@ -26,41 +28,67 @@ export const PopoverContent = ({
                                }: Props) => {
     const nav = useNavigate()
 
-    function downLoad() {
-        function translateColumnIntoRussia() {
-            if (recordCompressed) {
-                return {
-                    "Наименование организации": recordCompressed.contractFacility,
-                    "Дата заполнения": recordCompressed.dateFiling,
-                    "Тип договора": recordCompressed.contractType,
-                    "Дата заключения договора": dayjs(recordCompressed.dateConclusionContract).format('DD.MM.YYYY'),
-                }
+    function translateColumnIntoRussia() {
+        if (recordCompressed) {
+            return {
+                "Наименование организации": recordCompressed.contractFacility,
+                "Дата заполнения": recordCompressed.dateFiling,
+                "Тип договора": recordCompressed.contractType,
+                "Дата заключения договора": dayjs(recordCompressed.dateConclusionContract).format('DD.MM.YYYY'),
             }
-            if (recordFull) {
-                return {
-                    "Наименование организации": recordFull.nameOrg,
-                    "Наименование специальности": recordFull.nameSpecialty,
-                    "Номер договора": recordFull.contractNumber,
-                    "Дата заключения договора": dayjs(recordFull.dateConclusionContract).format('DD.MM.YYYY'),
-                    "Тип договора": recordFull.contractType,
-                    "Срок действия договора": recordFull.contractPeriod,
-                    "Шифр и наименование специальности": recordFull.cipherNameSpecialty,
-                    "Юридический адрес организации": recordFull.legalAddress,
-                    "Фактический адрес организации": recordFull.actualAddress,
-                    "Количество мест": recordFull.numberSeats,
-                    "Ссылки": recordFull.links,
-                }
+        }
+        if (recordFull) {
+            return {
+                "Наименование организации": recordFull.nameOrg,
+                "Наименование специальности": recordFull.nameSpecialty,
+                "Номер договора": recordFull.contractNumber,
+                "Дата заключения договора": dayjs(recordFull.dateConclusionContract).format('DD.MM.YYYY'),
+                "Тип договора": recordFull.contractType,
+                "Срок действия договора": recordFull.contractPeriod,
+                "Шифр и наименование специальности": recordFull.cipherNameSpecialty,
+                "Юридический адрес организации": recordFull.legalAddress,
+                "Фактический адрес организации": recordFull.actualAddress,
+                "Количество мест": recordFull.numberSeats,
+                "Ссылки": recordFull.links,
             }
-
         }
 
+    }
+    function printTable() {
+        function properties() {
+            if (recordCompressed) {
+                return ["Наименование организации", "Дата заполнения", "Тип договора", "Дата заключения договора"]
+            }
+            if (recordFull) {
+                return [
+                    "Наименование организации",
+                    "Наименование специальности",
+                    "Номер договора",
+                    "Дата заключения договора",
+                    "Тип договора",
+                    "Срок действия договора",
+                    "Шифр и наименование специальности",
+                    "Юридический адрес организации",
+                    "Фактический адрес организации",
+                    "Количество мест",
+                ]
+            }
+        }
+
+        printJS({
+            printable: [translateColumnIntoRussia()],
+            properties: properties(),
+            type: 'json',
+            style: 'body {font-size: 10px}'
+        })
+    }
+    function downLoad() {
         const ws = utils.json_to_sheet([translateColumnIntoRussia()]);
         const wb = utils.book_new();
         utils.book_append_sheet(wb, ws, "Data");
         writeFileXLSX(wb, "File.xlsx");
 
     }
-
     function navPreview() {
         if (recordCompressed) {
             nav(`/services/practices/registerContracts/previewContracts/${recordCompressed.key}`)
@@ -101,8 +129,16 @@ export const PopoverContent = ({
                  onClick={downLoad}
             >
                 <Load/>
-                <span>Скачать выбранное</span>
+                <span>Скачать</span>
             </div>
+
+            <div className={'flex gap-2 w-[178px] bg-[#D7E2F2] p-[10px] rounded-[5px] cursor-pointer items-center'}
+                 onClick={printTable}
+            >
+                <PrintSvg/>
+                <span>Печать</span>
+            </div>
+
             <div className={'flex gap-2 w-[178px] bg-[#FBE5E5] p-[10px] rounded-[5px] cursor-pointer items-center'}
                  onClick={deleteData}
             >

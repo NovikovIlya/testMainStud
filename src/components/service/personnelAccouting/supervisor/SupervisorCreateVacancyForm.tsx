@@ -102,7 +102,7 @@ export const SupervisorCreateVacancyForm = () => {
 							></Select>
 						</Form.Item>
 						<Form.Item
-							name={'employmentType'}
+							name={'employment'}
 							label={
 								<label className="text-black text-[18px]/[18px] font-content-font font-normal">
 									Тип занятости

@@ -160,7 +160,7 @@ export const SupervisorUpdateVacancy = () => {
 							category: category,
 							direction: direction,
 							experience: experience,
-							employmentType: employment
+							employment: employment
 						}}
 						layout="vertical"
 						requiredMark={false}
@@ -202,7 +202,7 @@ export const SupervisorUpdateVacancy = () => {
 								></Select>
 							</Form.Item>
 							<Form.Item
-								name={'employmentType'}
+								name={'employment'}
 								label={
 									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
 										Тип занятости
@@ -428,7 +428,7 @@ export const SupervisorUpdateVacancy = () => {
 											post: post as string,
 											experience: experience as string,
 											salary: salary as string,
-											employmentType: employment as string,
+											employment: employment as string,
 											responsibilities: responsibilities as string,
 											skills: skills as string,
 											conditions: conditions as string,

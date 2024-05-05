@@ -418,6 +418,19 @@ export const serviceApi = apiSlice.injectEndpoints({
 					Authorization: `Bearer ${personnelDeparmentToken}`
 				}
 			})
+		}),
+		alterCreateVacancyRequest: builder.mutation<
+			void,
+			VacancyRequestType & { vacancyRequestId: number }
+		>({
+			query: body => ({
+				url: `http://localhost:8082/employment-api/v1/management/vacancy-requests/for-create`,
+				method: 'PATCH',
+				body: body,
+				headers: {
+					Authorization: `Bearer ${personnelDeparmentToken}`
+				}
+			})
 		})
 	})
 })
@@ -461,6 +474,8 @@ export const {
 	useRequestUpdateVacancyMutation,
 	useGetVacancyRequestsQuery,
 	useGetVacancyRequestViewQuery,
+	useLazyGetVacancyRequestViewQuery,
 	useAcceptVacancyRequestMutation,
-	useDenyVacancyRequestMutation
+	useDenyVacancyRequestMutation,
+	useAlterCreateVacancyRequestMutation
 } = serviceApi

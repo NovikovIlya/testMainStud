@@ -268,7 +268,7 @@ export type VacancyRequestType = {
 	post: string
 	experience: string
 	salary: string
-	employmentType: string
+	employment: string
 	responsibilities: string
 	skills: string
 	conditions: string

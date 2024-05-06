@@ -1,11 +1,11 @@
 import React from 'react';
-import {Load} from "../../../../../assets/svg/Load";
+import {Load} from "../../../../assets/svg/Load";
 import dayjs from "dayjs";
 import {utils, writeFileXLSX} from "xlsx";
-import {ColumnsTableCompressedView, ColumnsTableFull} from "./RegisterContracts";
+import {ColumnsTableCompressedView, ColumnsTableFull} from "../roster/registerContracts/RegisterContracts";
 import printJS from "print-js";
-import {PrinterSvg} from "../../../../../assets/svg/PrinterSvg";
-import {PrintSvg} from "../../../../../assets/svg/PrintSvg";
+import {PrinterSvg} from "../../../../assets/svg/PrinterSvg";
+import {PrintSvg} from "../../../../assets/svg/PrintSvg";
 
 interface Props {
     recordCompressed?: ColumnsTableCompressedView[]

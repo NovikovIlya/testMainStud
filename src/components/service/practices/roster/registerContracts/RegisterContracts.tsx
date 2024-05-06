@@ -21,8 +21,8 @@ import {EditSvg} from "../../../../../assets/svg/EditSvg";
 import {PointsSvg} from "../../../../../assets/svg/PointsSvg";
 import dayjs from "dayjs";
 import clsx from "clsx";
-import {PopoverContent} from "./popoverContent";
-import {PopoverContentMain} from "./PopoverContentMain";
+import {PopoverContent} from "../../popover/popoverContent";
+import {PopoverContentMain} from "../../popover/PopoverContentMain";
 import {useNavigate} from "react-router-dom";
 
 
@@ -129,7 +129,28 @@ const mockDataFull: ColumnsTableFull[] = [
     }
 ]
 
+interface Test2 {
+    cat: number
+}
+
+interface Test1 {
+    fish: string
+}
+
+interface TestData {
+    ob: Test1 | Test2
+}
+
 export const RegisterContracts = () => {
+
+    const test: Test1 | Test2 = {
+        fish: 'st'
+    }
+
+
+
+
+
     const nav = useNavigate()
     const [filter, setFilter] = useState({
         contractType: 'Все',
@@ -509,6 +530,7 @@ export const RegisterContracts = () => {
     }, [filter])
 
 
+
     return (
         <section className={'container'}>
             <Row gutter={[16, 16]}>
@@ -674,7 +696,6 @@ export const RegisterContracts = () => {
             {
                 tableView.table
                 &&
-
                 <Table columns={columnsFullView}
                        pagination={false}
                        dataSource={tableDataFull}

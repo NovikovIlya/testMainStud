@@ -12,6 +12,7 @@ export interface ITaskFull extends ITask {
 
 export interface ContentItem {
     id: string
+    key: string
     specialityName: string
     practiceType: string
     tasks: string[]

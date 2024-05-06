@@ -1,16 +1,21 @@
 import React from 'react';
-import {Load} from "../../../../../assets/svg/Load";
-import {Doc} from "../../../../../assets/svg/Doc";
-import {DeleteRedSvg} from "../../../../../assets/svg/DeleteRedSvg";
-import {ColumnsTableCompressedView, ColumnsTableFull} from "./RegisterContracts";
+import {Load} from "../../../../assets/svg/Load";
+import {Doc} from "../../../../assets/svg/Doc";
+import {DeleteRedSvg} from "../../../../assets/svg/DeleteRedSvg";
+import {ColumnsTableCompressedView, ColumnsTableFull} from "../roster/registerContracts/RegisterContracts";
 import {utils, writeFileXLSX} from "xlsx";
 import dayjs from "dayjs";
 import {useNavigate} from "react-router-dom";
 import printJS from "print-js";
-import {PrintSvg} from "../../../../../assets/svg/PrintSvg";
+import {PrintSvg} from "../../../../assets/svg/PrintSvg";
+import {CompressedIndividualTask} from "../individual-tasks/IndividualTasks";
+
+type RecordCompressed = ColumnsTableCompressedView | CompressedIndividualTask
+type TableDataCompressed = ColumnsTableCompressedView[] | CompressedIndividualTask[]
+
 
 interface Props {
-    recordCompressed?: ColumnsTableCompressedView
+    recordCompressed?: RecordCompressed
     recordFull?: ColumnsTableFull
     tableDataCompressed?: ColumnsTableCompressedView[]
     setTableDataCompressed?: (arg: ColumnsTableCompressedView[]) => void
@@ -30,12 +35,22 @@ export const PopoverContent = ({
 
     function translateColumnIntoRussia() {
         if (recordCompressed) {
-            return {
-                "Наименование организации": recordCompressed.contractFacility,
-                "Дата заполнения": recordCompressed.dateFiling,
-                "Тип договора": recordCompressed.contractType,
-                "Дата заключения договора": dayjs(recordCompressed.dateConclusionContract).format('DD.MM.YYYY'),
+            if ("contractFacility" in recordCompressed) {
+                return {
+                    "Наименование организации": recordCompressed.contractFacility,
+                    "Дата заполнения": recordCompressed.dateFiling,
+                    "Тип договора": recordCompressed.contractType,
+                    "Дата заключения договора": dayjs(recordCompressed.dateConclusionContract).format('DD.MM.YYYY'),
+                }
             }
+            if ("specialityName" in recordCompressed) {
+                return {
+                    "Шифр и наименование специальности": recordCompressed.specialityName,
+                    "Тип практики": recordCompressed.practiceType,
+                    "Дата заполнения": recordCompressed.dateFilling,
+                }
+            }
+
         }
         if (recordFull) {
             return {
@@ -56,7 +71,22 @@ export const PopoverContent = ({
     function printTable() {
         function properties() {
             if (recordCompressed) {
-                return ["Наименование организации", "Дата заполнения", "Тип договора", "Дата заключения договора"]
+                if ("contractFacility" in recordCompressed) {
+                    return [
+                        "Наименование организации",
+                        "Дата заполнения",
+                        "Тип договора",
+                        "Дата заключения договора"
+                    ]
+                }
+                if ("specialityName" in recordCompressed) {
+                    return [
+                        "Шифр и наименование специальности",
+                        "Дата заполнения",
+                        "Тип практики",
+                    ]
+                }
+
             }
             if (recordFull) {
                 return [

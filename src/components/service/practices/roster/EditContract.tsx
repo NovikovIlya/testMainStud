@@ -32,7 +32,7 @@ import {validateMessages} from "../../../../utils/validateMessage";
 
 
 export const EditContract = () => {
-
+    const [form] = Form.useForm()
     const nav = useNavigate()
     const optionsContractsType = [
         {
@@ -78,6 +78,7 @@ export const EditContract = () => {
             <Form validateMessages={validateMessages}
                   layout={'vertical'}
                   onFinish={values => onFinish(values)}
+                  form={form}
             >
                 <Row gutter={[16, 16]} className="mt-12">
                     <Col xs={24} sm={24} md={18} lg={16} xl={12}>
@@ -259,7 +260,15 @@ export const EditContract = () => {
                     <Col xs={24} sm={24} md={18} lg={8} xl={6}>
                         <Form.Item label={'Прикрепить скан договора в формате pdf'}
                                    name={'pdfContract'}
-                                   rules={[{required: true}]}>
+                                   initialValue={[
+                                       {
+                                           uid: '2',
+                                           name: 'yyy.png',
+                                           url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+                                       },
+                                   ]}
+                                   rules={[{required: true}]}
+                        >
                             <Upload
                                 beforeUpload={() => {
                                     return false
@@ -267,12 +276,20 @@ export const EditContract = () => {
                                 maxCount={1}
                                 accept={'.pdf'}
                                 name={'pdfContract'}
-								defaultFileList={[
-									{
-										uid: '2',
-										name: 'yyy.png',
-									}
-								]}
+                                defaultFileList={[
+                                	{
+                                		uid: '2',
+                                		name: 'yyy.png',
+                                        status: 'done',
+                                        url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+                                	}
+                                ]}
+                                onChange={info => {
+                                    if (info.file.status === "removed") {
+                                        form.setFieldValue('pdfContract', undefined)
+                                    }
+                                }}
+
                             >
                                 <Button
                                     className="w-full"
@@ -291,14 +308,33 @@ export const EditContract = () => {
                     <Col xs={24} sm={24} md={18} lg={8} xl={6}>
                         <Form.Item label={'Прикрепить дополнительный документ в формате pdf'}
                                    name={'pdfAgreement'}
-                                   rules={[{required: true}]}>
+                                   initialValue={[
+                                       {
+                                           uid: '2',
+                                           name: 'yyy.png',
+                                           url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+                                       },
+                                   ]}
+                                   rules={[{required: true}]}
+                        >
                             <Upload
-                                beforeUpload={() => {
-                                    return false
-                                }}
+                                beforeUpload={() => {return false}}
                                 maxCount={1}
                                 accept={'.pdf'}
                                 name={'pdfAgreement'}
+                                defaultFileList={[
+                                    {
+                                        uid: '2',
+                                        name: 'yyy.png',
+                                        status: 'done',
+                                        url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+                                    }
+                                ]}
+                                onChange={info => {
+                                    if (info.file.status === "removed") {
+                                        form.setFieldValue('pdfAgreement', undefined)
+                                    }
+                                }}
                             >
                                 <Button
                                     className="w-full"

@@ -18,8 +18,6 @@ import {useCreateContractMutation} from '../../../../store/api/practiceApi/taskS
 import {ICreateContract} from '../../../../models/Practice'
 import {validateMessages} from "../../../../utils/validateMessage";
 import {useNavigate} from "react-router-dom";
-import getFieldValue from "react-hook-form/dist/logic/getFieldValue";
-import {log} from "util";
 
 
 export const CreateContracts = () => {
@@ -52,9 +50,7 @@ export const CreateContracts = () => {
 
 
     useEffect(() => {
-
         let url = "http://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/party";
-        let token = "2491c0a94273928cee7e6656455eb71f1d74a54b";
         let query = "1655018018";
 
         let options = {
@@ -62,7 +58,7 @@ export const CreateContracts = () => {
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "application/json",
-                "Authorization": "Token " + token
+                "Authorization": "Token 2491c0a94273928cee7e6656455eb71f1d74a54b",
             },
             body: JSON.stringify({query: inn})
         }
@@ -72,18 +68,17 @@ export const CreateContracts = () => {
                 .then(response => response.json())
                 .then(res => {
                     if (res.suggestions.length !== 0) {
-                        console.log(res.suggestions)
                         setNameOrg(true)
                         form.setFieldValue('contractFacility', res.suggestions[0].data.name.full_with_opf)
+                        form.setFieldValue('legalFacility', res.suggestions[0].data.address.unrestricted_value)
                     } else {
-                        console.log('Организация не найдена. Проверьте ИНН.')
                         setNameOrg(false)
                     }
                 })
                 .catch(error => console.log("error", error));
         } else {
             setNameOrg(true)
-            form.resetFields(['contractFacility'])
+            form.resetFields(['contractFacility', 'legalFacility'])
         }
     }, [inn]);
 
@@ -133,7 +128,8 @@ export const CreateContracts = () => {
                         {!nameOrg &&
                             <span className={'absolute top-[70px] text-[#FF4d4F]'}>
                                 Организация не найдена. Проверьте ИНН.
-                            </span>}
+                            </span>
+                        }
                     </Col>
                 </Row>
                 <Row gutter={[16, 16]}>

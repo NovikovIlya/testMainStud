@@ -33,7 +33,6 @@ export interface ColumnsTableCompressedView {
     contractType: string
     dateConclusionContract: string
 }
-
 export interface ColumnsTableFull {
     key: string
     nameOrg: string
@@ -48,7 +47,6 @@ export interface ColumnsTableFull {
     numberSeats: string
     links: string
 }
-
 const mockDataCompressed: ColumnsTableCompressedView[] = [
     {
         key: '1',

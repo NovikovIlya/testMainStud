@@ -358,9 +358,9 @@ export const ChatPage = () => {
 						</p>
 					</div> */}
 					{ChatStatus.chatClosed && (
-						<div className="bg-white rounded-[16px] text-center mt-[10px]">
-							У вас появится возможность писать в чате после того, как ваш
-							отклик перейдёт на рассмотрение у руководителя
+						<div className="mt-auto mb-[40px] text-center font-content-font font-normal text-[16px]/[16px] text-black text-opacity-40">
+							Вы сможете писать в чат после того, как руководитель пригласит вас
+							на собеседование
 						</div>
 					)}
 					<div

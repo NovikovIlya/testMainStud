@@ -34,16 +34,13 @@ export const ChatPreview = (props: {
 	const navigate = useNavigate()
 
 	const handleNavigate = (url: string) => {
-		// if (props.checkableStatus) {
-		// 	if (
-		// 		props.checkableStatus ===
-		// 		respondStatus[respondStatus.IN_PERSONNEL_DEPT_REVIEW]
-		// 	) {
-		// 		dispatch(closeChat())
-		// 	}
-		// } else {
-		// 	dispatch(openChat())
-		// }
+		if (props.checkableStatus) {
+			if (props.checkableStatus !== respondStatus[respondStatus.INVITATION]) {
+				dispatch(closeChat())
+			}
+		} else {
+			dispatch(openChat())
+		}
 		dispatch(setChatId(chatId))
 		navigate(url)
 	}

@@ -1,6 +1,7 @@
 import clsx from 'clsx'
 import { forwardRef } from 'react'
 
+import { ArrowToTheRight } from '../../../assets/svg/ArrowToTheRight'
 import { MessageReadSvg } from '../../../assets/svg/MessageReadSvg'
 import { MessageUnreadSvg } from '../../../assets/svg/MessageUnreadSvg'
 import { useAppSelector } from '../../../store'
@@ -13,6 +14,7 @@ type Ref = HTMLDivElement
 
 export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 	const { user } = useAppSelector(state => state.auth)
+	const { vacancyTitle } = useAppSelector(state => state.currentVacancyName)
 	const isSeeker = user?.roles[0].type === 'STUD'
 	const isEmpDep = user?.roles.find(role => role.type === 'EMPL')
 
@@ -37,6 +39,18 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 					}
 				)}
 			>
+				{props.msgData.type === 'RESPOND' && (
+					<div className="cursor-pointer" onClick={() => {}}>
+						<div className="flex items-center justify-between">
+							<div>
+								<p className="font-bold">Отклик на вакансию</p>
+								<p>{vacancyTitle}</p>
+							</div>
+							<ArrowToTheRight />
+						</div>
+						<div className="h-[1px] bg-black bg-opacity-[24%] mt-[16px]"></div>
+					</div>
+				)}
 				<p className="whitespace-pre-line">{props.msgData.text}</p>
 				{props.msgData.fileInfos && (
 					<div className="flex flex-col gap-[8px]">

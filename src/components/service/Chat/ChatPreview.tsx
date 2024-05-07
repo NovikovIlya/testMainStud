@@ -13,6 +13,7 @@ import {
 	closeChat,
 	openChat
 } from '../../../store/reducers/ChatRespondStatusSlice'
+import { setCurrentVacancyName } from '../../../store/reducers/CurrentVacancyNameSlice'
 import { setChatId } from '../../../store/reducers/chatIdSlice'
 import { respondStatus } from '../../../store/type'
 
@@ -55,6 +56,7 @@ export const ChatPreview = (props: {
 					pathname.includes(props.respondId.toString()) && 'bg-[#F5F8FB]'
 				)}
 				onClick={() => {
+					dispatch(setCurrentVacancyName(props.respName))
 					handleNavigate(
 						isEmpDemp
 							? `/services/personnelaccounting/chat/id/${chatId}`

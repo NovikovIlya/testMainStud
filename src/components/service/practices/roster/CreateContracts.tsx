@@ -14,7 +14,7 @@ import {
 import dayjs from 'dayjs'
 import React, {useEffect, useState} from 'react'
 import {ArrowLeftSvg} from '../../../../assets/svg'
-import {useCreateContractMutation} from '../../../../store/api/practiceApi/taskService'
+import {useCreateContractMutation} from '../../../../store/api/practiceApi/contracts'
 import {ICreateContract} from '../../../../models/Practice'
 import {validateMessages} from "../../../../utils/validateMessage";
 import {useNavigate} from "react-router-dom";
@@ -38,14 +38,29 @@ export const CreateContracts = () => {
     const [newContract] = useCreateContractMutation()
 
     function onFinish(values: ICreateContract) {
+
+
+
         const formDataCreateContract = new FormData()
-        values.dateConclusionContract = dayjs(values.dateConclusionContract).format('DD.MM.YYYY')
-        values.contractTime = dayjs(values.contractTime).format('DD.MM.YYYY')
-        for (let key in values) {
-            formDataCreateContract.append(key, values[key as keyof ICreateContract])
-        }
-        console.log(values)
+        //values.specialtyNameId = 123
+        values.placesAmount = String(values.placesAmount)
+        values.ITN = String(values.ITN)
+        values.conclusionDate = dayjs(values.conclusionDate).format('DD.MM.YYYY')
+        values.endDate = dayjs(values.endDate).format('DD.MM.YYYY')
+        // for (let key in values) {
+        //     formDataCreateContract.append(key, values[key as keyof ICreateContract])
+        // }
+        //console.log(values)
+        const {pdfAgreement, pdfContract, ...contract} = values
+        //console.log(contract)
+        formDataCreateContract.append('contract', JSON.stringify(contract))
+        formDataCreateContract.append('pdfAgreement', pdfAgreement)
+        formDataCreateContract.append('pdfContract', pdfContract)
+        console.log(contract)
         console.log(formDataCreateContract)
+        newContract(formDataCreateContract)
+            .then(res => console.log(res))
+            .catch(e => console.log(e))
     }
 
 
@@ -109,7 +124,7 @@ export const CreateContracts = () => {
                     <Col xs={24} sm={24} md={18} lg={16} xl={12}>
                         <Form.Item label={'ИНН'}
                                    dependencies={['contractFacility']}
-                                   name={'inn'}
+                                   name={'ITN'}
                                    rules={[
                                        {
                                            required: true,
@@ -159,7 +174,7 @@ export const CreateContracts = () => {
                 <Row gutter={[16, 16]}>
                     <Col xs={24} sm={24} md={18} lg={8} xl={6}>
                         <Form.Item label={'Дата заключения договора'}
-                                   name={'dateConclusionContract'}
+                                   name={'conclusionDate'}
                                    rules={[{required: true}]}>
                             <DatePicker
                                 format={'DD.MM.YYYY'}
@@ -212,7 +227,7 @@ export const CreateContracts = () => {
                 <Row gutter={[16, 16]}>
                     <Col xs={24} sm={24} md={18} lg={8} xl={6}>
                         <Form.Item label={'Срок действия договора'}
-                                   name={'contractTime'}
+                                   name={'endDate'}
                                    rules={[{required: true}]}>
                             <DatePicker
                                 format={'DD.MM.YYYY'}
@@ -224,7 +239,7 @@ export const CreateContracts = () => {
                     </Col>
                     <Col xs={24} sm={24} md={18} lg={8} xl={6}>
                         <Form.Item label={'Шифр и наименование специальности'}
-                                   name={'specialtyName'}
+                                   name={'specialtyNameId'}
                                    rules={[{required: true}]}>
                             <Select
                                 size="large"
@@ -274,7 +289,7 @@ export const CreateContracts = () => {
                 <Row gutter={[16, 16]}>
                     <Col xs={24} sm={24} md={18} lg={16} xl={12}>
                         <Form.Item label={'Количество мест'}
-                                   name={'placeNumber'}
+                                   name={'placesAmount'}
                                    rules={[{required: true}]}>
                             <InputNumber
                                 className="w-full"

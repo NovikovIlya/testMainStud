@@ -79,6 +79,7 @@ const IndividualTasks = ({setEdit}: PropsType) => {
     const [filter, setFilter] = useState({
         practiceType: 'Все',
         specialityName: 'Все',
+        dateFilling: 'По дате (сначала новые)',
     })
     function isCompressedTable() {
         setTableView({
@@ -131,7 +132,7 @@ const IndividualTasks = ({setEdit}: PropsType) => {
             dataIndex: 'specialityName',
             key: 'specialityName',
             width: '20%',
-            render: text => <span className="font-bold">{text}</span>,
+            render: text => <span className="font-bold underline">{text}</span>,
         },
         {
             title: <TitleHeadCell title={'Дата заполнения'}/>,
@@ -180,7 +181,7 @@ const IndividualTasks = ({setEdit}: PropsType) => {
             dataIndex: 'specialityName',
             key: 'specialityName',
             width: '20%',
-            render: text => <span className="font-bold">{text}</span>,
+            render: text => <span className="font-bold underline">{text}</span>,
         },
         {
             title: <span className={'text-base'}>Тип практики</span>,
@@ -245,18 +246,20 @@ const IndividualTasks = ({setEdit}: PropsType) => {
                 return elem.specialityName === filter.specialityName
             }
         }
-        // function sortDateConclusionContract(a: ColumnsTableCompressedView, b: ColumnsTableCompressedView) {
-        //     if (filter.sortDateConclusionContract === 'По дате (сначала новые)') {
-        //         return +new Date(b.dateConclusionContract) - +new Date(a.dateConclusionContract)
-        //     }
-        //     if (filter.sortDateConclusionContract === 'По дате (сначала старые)') {
-        //         return +new Date(a.dateConclusionContract) - +new Date(b.dateConclusionContract)
-        //     }
-        //     return 0
-        // }
+        function sortDateFilling(a: CompressedIndividualTask, b: CompressedIndividualTask) {
+            console.log('asdf')
+            if (filter.dateFilling === 'По дате (сначала новые)') {
+                return +new Date(b.dateFilling) - +new Date(a.dateFilling)
+            }
+            if (filter.dateFilling === 'По дате (сначала старые)') {
+                return +new Date(a.dateFilling) - +new Date(b.dateFilling)
+            }
+            return 0
+        }
         return mockDataCompressedIndividualTask
             .filter(elem => filterPracticeType(elem))
             .filter(elem => filterNameSpecialty(elem))
+            .sort((a, b) => sortDateFilling(a, b))
     }
 
     function filterDataFull() {
@@ -379,6 +382,13 @@ const IndividualTasks = ({setEdit}: PropsType) => {
                             defaultValue="По дате (сначала новые)"
                             className="w-full"
                             options={optionsSortDate}
+                            onChange={value => {
+                                console.log(value)
+                                setFilter({
+                                    ...filter,
+                                    dateFilling: value
+                                })
+                            }}
                         />
                     </div>
 

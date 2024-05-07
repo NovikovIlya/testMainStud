@@ -51,8 +51,8 @@ export const EditContract = () => {
 
     function onFinish(values: ICreateContract) {
         const formDataCreateContract = new FormData()
-        values.dateConclusionContract = dayjs(values.dateConclusionContract).format('DD.MM.YYYY')
-        values.contractTime = dayjs(values.contractTime).format('DD.MM.YYYY')
+        values.conclusionDate = dayjs(values.conclusionDate).format('DD.MM.YYYY')
+        values.endDate = dayjs(values.endDate).format('DD.MM.YYYY')
         for (let key in values) {
             formDataCreateContract.append(key, values[key as keyof ICreateContract])
         }

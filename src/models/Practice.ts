@@ -94,17 +94,18 @@ export type TypeGetPractices = {
 }
 
 export interface IContractInfo {
-    inn: string
+    ITN: string
     contractNumber: string
     contractFacility: string
-    dateConclusionContract: string
+    conclusionDate: string
     contractType: string
     prolongation: string
-    contractTime: string
-    specialtyName: string
+    endDate: string
+    specialtyNameId: string
     legalFacility: string
     actualFacility: string
-    placeNumber: string
+    placesAmount: string
+
 }
 
 export interface IContractInfoFull extends IContractInfo {

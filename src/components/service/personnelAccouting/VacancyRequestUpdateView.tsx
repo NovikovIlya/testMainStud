@@ -1,4 +1,5 @@
 import { Button } from 'antd'
+import { diff_match_patch } from 'diff-match-patch'
 import { useNavigate } from 'react-router-dom'
 
 import { useAppSelector } from '../../../store'
@@ -16,6 +17,10 @@ export const VacancyRequestUpdateView = () => {
 	const [acceptRequest] = useAcceptVacancyRequestMutation()
 	const [denyRequest] = useDenyVacancyRequestMutation()
 
+	const dmp = new diff_match_patch()
+
+	dmp.diff_cleanupSemantic(dmp.diff_main('', ''))
+
 	return (
 		<>
 			<div id="wrapper" className="pl-[54px] pr-[54px] pt-[60px] w-full">
@@ -29,7 +34,26 @@ export const VacancyRequestUpdateView = () => {
 						<ArrowIcon />
 					</button>
 					<p className="ml-[40px] font-content-font font-normal text-black text-[28px]/[33.6px]">
-						{requestView !== undefined ? requestView.newData.post : ''}
+						{requestView !== undefined && requestView.oldData !== null
+							? (() => {
+									var test = dmp.diff_main(
+										requestView.oldData.post,
+										requestView.newData.post
+									)
+									dmp.diff_cleanupSemantic(test)
+									return test
+							  })().map(diff =>
+									diff[0] < 0 ? (
+										<span className="bg-red-400 bg-opacity-60">{diff[1]}</span>
+									) : diff[0] > 0 ? (
+										<span className="bg-green-400 bg-opacity-60">
+											{diff[1]}
+										</span>
+									) : (
+										<span>{diff[1]}</span>
+									)
+							  )
+							: ''}
 					</p>
 				</div>
 				<div className="w-[50%] mt-[80px] flex flex-col gap-[40px]">
@@ -39,7 +63,28 @@ export const VacancyRequestUpdateView = () => {
 								Требуемый опыт работы:
 							</p>
 							<p className="font-content-font font-normal text-black text-[18px]/[21px]">
-								{requestView?.newData.experience}
+								{requestView !== undefined && requestView.oldData !== null
+									? (() => {
+											var test = dmp.diff_main(
+												requestView.oldData.experience,
+												requestView.newData.experience
+											)
+											dmp.diff_cleanupSemantic(test)
+											return test
+									  })().map(diff =>
+											diff[0] < 0 ? (
+												<span className="bg-red-400 bg-opacity-60">
+													{diff[1]}
+												</span>
+											) : diff[0] > 0 ? (
+												<span className="bg-green-400 bg-opacity-60">
+													{diff[1]}
+												</span>
+											) : (
+												<span>{diff[1]}</span>
+											)
+									  )
+									: ''}
 							</p>
 						</div>
 						<div className="flex flex-col gap-[16px]">
@@ -47,7 +92,28 @@ export const VacancyRequestUpdateView = () => {
 								Тип занятости:
 							</p>
 							<p className="font-content-font font-normal text-black text-[18px]/[21px]">
-								{requestView?.newData.experience}
+								{requestView !== undefined && requestView.oldData !== null
+									? (() => {
+											var test = dmp.diff_main(
+												requestView.oldData.employment,
+												requestView.newData.employment
+											)
+											dmp.diff_cleanupSemantic(test)
+											return test
+									  })().map(diff =>
+											diff[0] < 0 ? (
+												<span className="bg-red-400 bg-opacity-60">
+													{diff[1]}
+												</span>
+											) : diff[0] > 0 ? (
+												<span className="bg-green-400 bg-opacity-60">
+													{diff[1]}
+												</span>
+											) : (
+												<span>{diff[1]}</span>
+											)
+									  )
+									: ''}
 							</p>
 						</div>
 						<div className="flex flex-col gap-[16px]">
@@ -55,7 +121,28 @@ export const VacancyRequestUpdateView = () => {
 								Заработная плата:
 							</p>
 							<p className="font-content-font font-normal text-black text-[18px]/[21px]">
-								{requestView?.newData.salary}
+								{requestView !== undefined && requestView.oldData !== null
+									? (() => {
+											var test = dmp.diff_main(
+												requestView.oldData.salary,
+												requestView.newData.salary
+											)
+											dmp.diff_cleanupSemantic(test)
+											return test
+									  })().map(diff =>
+											diff[0] < 0 ? (
+												<span className="bg-red-400 bg-opacity-60">
+													{diff[1]}
+												</span>
+											) : diff[0] > 0 ? (
+												<span className="bg-green-400 bg-opacity-60">
+													{diff[1]}
+												</span>
+											) : (
+												<span>{diff[1]}</span>
+											)
+									  )
+									: ''}
 							</p>
 						</div>
 					</div>
@@ -64,7 +151,28 @@ export const VacancyRequestUpdateView = () => {
 							Задачи:
 						</p>
 						<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-pre-line">
-							{requestView?.newData.responsibilities}
+							{requestView !== undefined && requestView.oldData !== null
+								? (() => {
+										var test = dmp.diff_main(
+											requestView.oldData.responsibilities,
+											requestView.newData.responsibilities
+										)
+										dmp.diff_cleanupSemantic(test)
+										return test
+								  })().map(diff =>
+										diff[0] < 0 ? (
+											<span className="bg-red-400 bg-opacity-60">
+												{diff[1]}
+											</span>
+										) : diff[0] > 0 ? (
+											<span className="bg-green-400 bg-opacity-60">
+												{diff[1]}
+											</span>
+										) : (
+											<span>{diff[1]}</span>
+										)
+								  )
+								: ''}
 						</p>
 					</div>
 					<div className="flex flex-col gap-[16px]">
@@ -72,7 +180,28 @@ export const VacancyRequestUpdateView = () => {
 							Требования:
 						</p>
 						<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-pre-line">
-							{requestView?.newData.skills}
+							{requestView !== undefined && requestView.oldData !== null
+								? (() => {
+										var test = dmp.diff_main(
+											requestView.oldData.skills,
+											requestView.newData.skills
+										)
+										dmp.diff_cleanupSemantic(test)
+										return test
+								  })().map(diff =>
+										diff[0] < 0 ? (
+											<span className="bg-red-400 bg-opacity-60">
+												{diff[1]}
+											</span>
+										) : diff[0] > 0 ? (
+											<span className="bg-green-400 bg-opacity-60">
+												{diff[1]}
+											</span>
+										) : (
+											<span>{diff[1]}</span>
+										)
+								  )
+								: ''}
 						</p>
 					</div>
 					<div className="flex flex-col gap-[16px]">
@@ -80,7 +209,28 @@ export const VacancyRequestUpdateView = () => {
 							Условия:
 						</p>
 						<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-pre-line">
-							{requestView?.newData.conditions}
+							{requestView !== undefined && requestView.oldData !== null
+								? (() => {
+										var test = dmp.diff_main(
+											requestView.oldData.conditions,
+											requestView.newData.conditions
+										)
+										dmp.diff_cleanupSemantic(test)
+										return test
+								  })().map(diff =>
+										diff[0] < 0 ? (
+											<span className="bg-red-400 bg-opacity-60">
+												{diff[1]}
+											</span>
+										) : diff[0] > 0 ? (
+											<span className="bg-green-400 bg-opacity-60">
+												{diff[1]}
+											</span>
+										) : (
+											<span>{diff[1]}</span>
+										)
+								  )
+								: ''}
 						</p>
 					</div>
 					<div className="flex gap-[40px]">
@@ -89,7 +239,28 @@ export const VacancyRequestUpdateView = () => {
 								Категория сотрудников
 							</p>
 							<p className="font-content-font font-normal text-black text-[18px]/[21px]">
-								{requestView?.newData.category}
+								{requestView !== undefined && requestView.oldData !== null
+									? (() => {
+											var test = dmp.diff_main(
+												requestView.oldData.category,
+												requestView.newData.category
+											)
+											dmp.diff_cleanupSemantic(test)
+											return test
+									  })().map(diff =>
+											diff[0] < 0 ? (
+												<span className="bg-red-400 bg-opacity-60">
+													{diff[1]}
+												</span>
+											) : diff[0] > 0 ? (
+												<span className="bg-green-400 bg-opacity-60">
+													{diff[1]}
+												</span>
+											) : (
+												<span>{diff[1]}</span>
+											)
+									  )
+									: ''}
 							</p>
 						</div>
 						<div className="flex flex-col gap-[16px]">
@@ -97,7 +268,28 @@ export const VacancyRequestUpdateView = () => {
 								Профобласть
 							</p>
 							<p className="font-content-font font-normal text-black text-[18px]/[21px]">
-								{requestView?.newData.direction}
+								{requestView !== undefined && requestView.oldData !== null
+									? (() => {
+											var test = dmp.diff_main(
+												requestView.oldData.direction,
+												requestView.newData.direction
+											)
+											dmp.diff_cleanupSemantic(test)
+											return test
+									  })().map(diff =>
+											diff[0] < 0 ? (
+												<span className="bg-red-400 bg-opacity-60">
+													{diff[1]}
+												</span>
+											) : diff[0] > 0 ? (
+												<span className="bg-green-400 bg-opacity-60">
+													{diff[1]}
+												</span>
+											) : (
+												<span>{diff[1]}</span>
+											)
+									  )
+									: ''}
 							</p>
 						</div>
 					</div>

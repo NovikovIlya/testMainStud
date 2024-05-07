@@ -154,14 +154,14 @@ export const NavPesonnelAccounting = () => {
 					)}
 				>
 					<ConfigProvider
-						theme={{
-							components: {
-								Collapse: {
-									headerBg: '#ffffff',
-									headerPadding: '0px 20px 0px 0px'
-								}
-							}
-						}}
+					// theme={{
+					// 	components: {
+					// 		Collapse: {
+					// 			headerBg: '#ffffff',
+					// 			headerPadding: '0px 20px 0px 0px'
+					// 		}
+					// 	}
+					// }}
 					>
 						<Collapse
 							className="w-full"
@@ -204,14 +204,14 @@ export const NavPesonnelAccounting = () => {
 						)}
 					>
 						<ConfigProvider
-							theme={{
-								components: {
-									Collapse: {
-										headerBg: '#ffffff',
-										headerPadding: '0px 20px 0px 0px'
-									}
-								}
-							}}
+						// theme={{
+						// 	components: {
+						// 		Collapse: {
+						// 			headerBg: '#ffffff',
+						// 			headerPadding: '0px 20px 0px 0px'
+						// 		}
+						// 	}
+						// }}
 						>
 							<Collapse
 								className="w-full"

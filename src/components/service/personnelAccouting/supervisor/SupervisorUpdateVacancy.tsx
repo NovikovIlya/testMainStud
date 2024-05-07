@@ -167,6 +167,14 @@ export const SupervisorUpdateVacancy = () => {
 						className="w-[50%] mt-[52px]"
 						onFinish={values => {
 							setPost(prev => values.post)
+							setExperience(prev => values.experience)
+							setEmployment(prev => values.employment)
+							setSalary(prev => values.salary)
+							setCategory(prev => values.category)
+							setDirection(prev => values.direction)
+							setResponsibilities(prev => values.responsibilities)
+							setSkills(prev => values.skills)
+							setConditions(prev => values.conditions)
 							setIsSendRequestButtonActivated(true)
 							setIsEdit(false)
 						}}

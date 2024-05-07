@@ -1,21 +1,18 @@
 import React from 'react';
-import {Load} from "../../../../assets/svg/Load";
-import {Doc} from "../../../../assets/svg/Doc";
-import {DeleteRedSvg} from "../../../../assets/svg/DeleteRedSvg";
-import {ColumnsTableCompressedView, ColumnsTableFull} from "../roster/registerContracts/RegisterContracts";
+import {Load} from "../../../../../assets/svg/Load";
+import {Doc} from "../../../../../assets/svg/Doc";
+import {DeleteRedSvg} from "../../../../../assets/svg/DeleteRedSvg";
+import {ColumnsTableCompressedView, ColumnsTableFull} from "../../roster/registerContracts/RegisterContracts";
 import {utils, writeFileXLSX} from "xlsx";
 import dayjs from "dayjs";
 import {useNavigate} from "react-router-dom";
 import printJS from "print-js";
-import {PrintSvg} from "../../../../assets/svg/PrintSvg";
-import {CompressedIndividualTask} from "../individual-tasks/IndividualTasks";
-
-type RecordCompressed = ColumnsTableCompressedView | CompressedIndividualTask
-type TableDataCompressed = ColumnsTableCompressedView[] | CompressedIndividualTask[]
+import {PrintSvg} from "../../../../../assets/svg/PrintSvg";
+import {WrapperButton} from "../WrapperButton";
 
 
 interface Props {
-    recordCompressed?: RecordCompressed
+    recordCompressed?: ColumnsTableCompressedView
     recordFull?: ColumnsTableFull
     tableDataCompressed?: ColumnsTableCompressedView[]
     setTableDataCompressed?: (arg: ColumnsTableCompressedView[]) => void
@@ -23,34 +20,24 @@ interface Props {
     setTableDataFull?: (arg: ColumnsTableFull[]) => void
 }
 
-export const PopoverContent = ({
-                                   recordCompressed,
-                                   recordFull,
-                                   setTableDataCompressed,
-                                   tableDataCompressed,
-                                   setTableDataFull,
-                                   tableDataFull
-                               }: Props) => {
+export const RegisterPopoverContent = ({
+                                           recordCompressed,
+                                           recordFull,
+                                           setTableDataCompressed,
+                                           tableDataCompressed,
+                                           setTableDataFull,
+                                           tableDataFull
+                                       }: Props) => {
     const nav = useNavigate()
 
     function translateColumnIntoRussia() {
         if (recordCompressed) {
-            if ("contractFacility" in recordCompressed) {
-                return {
-                    "Наименование организации": recordCompressed.contractFacility,
-                    "Дата заполнения": recordCompressed.dateFiling,
-                    "Тип договора": recordCompressed.contractType,
-                    "Дата заключения договора": dayjs(recordCompressed.dateConclusionContract).format('DD.MM.YYYY'),
-                }
+            return {
+                "Наименование организации": recordCompressed.contractFacility,
+                "Дата заполнения": recordCompressed.dateFiling,
+                "Тип договора": recordCompressed.contractType,
+                "Дата заключения договора": dayjs(recordCompressed.dateConclusionContract).format('DD.MM.YYYY'),
             }
-            if ("specialityName" in recordCompressed) {
-                return {
-                    "Шифр и наименование специальности": recordCompressed.specialityName,
-                    "Тип практики": recordCompressed.practiceType,
-                    "Дата заполнения": recordCompressed.dateFilling,
-                }
-            }
-
         }
         if (recordFull) {
             return {
@@ -66,27 +53,17 @@ export const PopoverContent = ({
                 "Количество мест": recordFull.numberSeats,
             }
         }
-
     }
+
     function printTable() {
         function properties() {
             if (recordCompressed) {
-                if ("contractFacility" in recordCompressed) {
-                    return [
-                        "Наименование организации",
-                        "Дата заполнения",
-                        "Тип договора",
-                        "Дата заключения договора"
-                    ]
-                }
-                if ("specialityName" in recordCompressed) {
-                    return [
-                        "Шифр и наименование специальности",
-                        "Дата заполнения",
-                        "Тип практики",
-                    ]
-                }
-
+                return [
+                    "Наименование организации",
+                    "Дата заполнения",
+                    "Тип договора",
+                    "Дата заключения договора"
+                ]
             }
             if (recordFull) {
                 return [
@@ -111,6 +88,7 @@ export const PopoverContent = ({
             style: 'body {font-size: 10px}'
         })
     }
+
     function downLoad() {
         const ws = utils.json_to_sheet([translateColumnIntoRussia()]);
         const wb = utils.book_new();
@@ -118,6 +96,7 @@ export const PopoverContent = ({
         writeFileXLSX(wb, "File.xlsx");
 
     }
+
     function navPreview() {
         if (recordCompressed) {
             nav(`/services/practices/registerContracts/previewContracts/${recordCompressed.key}`)
@@ -148,32 +127,25 @@ export const PopoverContent = ({
 
     return (
         <div className={'flex flex-col gap-2 '}>
-            <div className={'flex gap-2 w-[178px] bg-[#E9EFF8] p-[10px] rounded-[5px] cursor-pointer items-center'}
-                 onClick={navPreview}
-            >
+            <WrapperButton color={'#E9EFF8'} onClick={navPreview}>
                 <Doc/>
                 <span>Режим просмотра</span>
-            </div>
-            <div className={'flex gap-2 w-[178px] bg-[#D7E2F2] p-[10px] rounded-[5px] cursor-pointer items-center'}
-                 onClick={downLoad}
-            >
+            </WrapperButton>
+
+            <WrapperButton color={'#D7E2F2'} onClick={downLoad}>
                 <Load/>
                 <span>Скачать</span>
-            </div>
+            </WrapperButton>
 
-            <div className={'flex gap-2 w-[178px] bg-[#D7E2F2] p-[10px] rounded-[5px] cursor-pointer items-center'}
-                 onClick={printTable}
-            >
+            <WrapperButton color={'#D7E2F2'} onClick={printTable}>
                 <PrintSvg/>
                 <span>Печать</span>
-            </div>
+            </WrapperButton>
 
-            <div className={'flex gap-2 w-[178px] bg-[#FBE5E5] p-[10px] rounded-[5px] cursor-pointer items-center'}
-                 onClick={deleteData}
-            >
+            <WrapperButton color={'#FBE5E5'} onClick={deleteData}>
                 <DeleteRedSvg/>
                 <span className={'text-[#E04545]'}>Удалить</span>
-            </div>
+            </WrapperButton>
         </div>
     );
 };

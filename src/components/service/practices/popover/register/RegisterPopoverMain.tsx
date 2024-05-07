@@ -1,18 +1,19 @@
 import React from 'react';
-import {Load} from "../../../../assets/svg/Load";
+import {Load} from "../../../../../assets/svg/Load";
 import dayjs from "dayjs";
 import {utils, writeFileXLSX} from "xlsx";
-import {ColumnsTableCompressedView, ColumnsTableFull} from "../roster/registerContracts/RegisterContracts";
+import {ColumnsTableCompressedView, ColumnsTableFull} from "../../roster/registerContracts/RegisterContracts";
 import printJS from "print-js";
-import {PrinterSvg} from "../../../../assets/svg/PrinterSvg";
-import {PrintSvg} from "../../../../assets/svg/PrintSvg";
+import {PrinterSvg} from "../../../../../assets/svg/PrinterSvg";
+import {PrintSvg} from "../../../../../assets/svg/PrintSvg";
+import {WrapperButton} from "../WrapperButton";
 
 interface Props {
     recordCompressed?: ColumnsTableCompressedView[]
     recordFull?: ColumnsTableFull[]
 }
 
-export const PopoverContentMain = ({recordCompressed, recordFull}: Props) => {
+export const RegisterPopoverMain = ({recordCompressed, recordFull}: Props) => {
 
     function translateColumnsIntoRussia() {
         const newData: any = []
@@ -87,19 +88,15 @@ export const PopoverContentMain = ({recordCompressed, recordFull}: Props) => {
 
     return (
         <div className={'flex flex-col gap-2 '}>
-            <div className={'flex gap-2 w-[178px] bg-[#D7E2F2] p-[10px] rounded-[5px] cursor-pointer items-center'}
-                onClick={downLoad}
-            >
+            <WrapperButton color={'#D7E2F2'} onClick={downLoad}>
                 <Load/>
                 <span>Скачать</span>
-            </div>
-            <div className={'flex gap-2 w-[178px] bg-[#D7E2F2] p-[10px] rounded-[5px] cursor-pointer items-center'}
-                 onClick={printTable}
-            >
+            </WrapperButton>
+
+            <WrapperButton color={'#D7E2F2'} onClick={printTable}>
                 <PrintSvg/>
                 <span>Печать</span>
-            </div>
-
+            </WrapperButton>
         </div>
     );
 };

@@ -21,9 +21,10 @@ import {EditSvg} from "../../../../../assets/svg/EditSvg";
 import {PointsSvg} from "../../../../../assets/svg/PointsSvg";
 import dayjs from "dayjs";
 import clsx from "clsx";
-import {PopoverContent} from "../../popover/popoverContent";
-import {PopoverContentMain} from "../../popover/PopoverContentMain";
+import {RegisterPopoverContent} from "../../popover/register/RegisterPopoverContent";
+import {RegisterPopoverMain} from "../../popover/register/RegisterPopoverMain";
 import {useNavigate} from "react-router-dom";
+import printJS from "print-js";
 
 
 export interface ColumnsTableCompressedView {
@@ -33,6 +34,7 @@ export interface ColumnsTableCompressedView {
     contractType: string
     dateConclusionContract: string
 }
+
 export interface ColumnsTableFull {
     key: string
     nameOrg: string
@@ -47,6 +49,7 @@ export interface ColumnsTableFull {
     numberSeats: string
     links: string
 }
+
 const mockDataCompressed: ColumnsTableCompressedView[] = [
     {
         key: '1',
@@ -128,28 +131,7 @@ const mockDataFull: ColumnsTableFull[] = [
         links: 'Cкан договора'
     }
 ]
-
-interface Test2 {
-    cat: number
-}
-
-interface Test1 {
-    fish: string
-}
-
-interface TestData {
-    ob: Test1 | Test2
-}
-
 export const RegisterContracts = () => {
-
-    const test: Test1 | Test2 = {
-        fish: 'st'
-    }
-
-
-
-
 
     const nav = useNavigate()
     const [filter, setFilter] = useState({
@@ -167,6 +149,7 @@ export const RegisterContracts = () => {
         compressed: true,
         table: false
     })
+
 
     const columnsCompressedView: TableProps<ColumnsTableCompressedView>['columns'] = [
         {
@@ -210,7 +193,7 @@ export const RegisterContracts = () => {
         },
         {
             title:
-                <Popover trigger={'click'} content={<PopoverContentMain recordCompressed={mockDataCompressed}/>}>
+                <Popover trigger={'click'} content={<RegisterPopoverMain recordCompressed={mockDataCompressed}/>}>
                     <Button
                         type="text"
                         className="opacity-50"
@@ -220,9 +203,9 @@ export const RegisterContracts = () => {
             width: 200,
             align: 'center',
             render: (record) =>
-                <Popover content={<PopoverContent recordCompressed={record}
-                                                  tableDataCompressed={tableDataCompressed}
-                                                  setTableDataCompressed={setTableDataCompressed}/>}
+                <Popover content={<RegisterPopoverContent recordCompressed={record}
+                                                          tableDataCompressed={tableDataCompressed}
+                                                          setTableDataCompressed={setTableDataCompressed}/>}
                          trigger={'click'}>
                     <Button
                         type="text"
@@ -315,7 +298,7 @@ export const RegisterContracts = () => {
         },
         {
             title:
-                <Popover trigger={'click'} content={<PopoverContentMain recordFull={mockDataFull}/>}>
+                <Popover trigger={'click'} content={<RegisterPopoverMain recordFull={mockDataFull}/>}>
                     <Button
                         type="text"
                         className="opacity-50"
@@ -325,9 +308,9 @@ export const RegisterContracts = () => {
             align: 'center',
             render: (record) =>
                 <Popover trigger={'click'}
-                         content={<PopoverContent recordFull={record}
-                                                  tableDataFull={tableDataFull}
-                                                  setTableDataFull={setTableDataFull}/>}>
+                         content={<RegisterPopoverContent recordFull={record}
+                                                          tableDataFull={tableDataFull}
+                                                          setTableDataFull={setTableDataFull}/>}>
                     <Button
                         type="text"
                         className="opacity-50"
@@ -528,7 +511,6 @@ export const RegisterContracts = () => {
         setTableDataCompressed(filterDataCompressed())
         setTableDataFull(filterDataFull())
     }, [filter])
-
 
 
     return (

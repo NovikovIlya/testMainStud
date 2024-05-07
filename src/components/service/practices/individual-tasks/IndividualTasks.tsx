@@ -14,9 +14,12 @@ import './IndividualTasks.scss'
 import {
     TitleHeadCell
 } from "../../businessTrip/NewBusinessTrip/archive/stepTwo/tableStepTwo/titleHeadCell/TitleHeadCell";
-import {PopoverContentMain} from "../popover/PopoverContentMain";
+import {RegisterPopoverMain} from "../popover/register/RegisterPopoverMain";
 import {PointsSvg} from "../../../../assets/svg/PointsSvg";
-import {PopoverContent} from "../popover/popoverContent";
+import {RegisterPopoverContent} from "../popover/register/RegisterPopoverContent";
+import {ColumnsTableCompressedView, ColumnsTableFull} from "../roster/registerContracts/RegisterContracts";
+import {IndTaskPopoverContent} from "../popover/individualTask/IndTaskPopoverContent";
+import {IndTaskPopoverMain} from "../popover/individualTask/IndTaskPopoverMain";
 
 
 interface FilterType {
@@ -36,18 +39,63 @@ export interface CompressedIndividualTask {
     dateFilling: string
 }
 
+const mockDataCompressedIndividualTask: CompressedIndividualTask[] = [
+    {id: '1', key: '1', specialityName: '31.08.01 Акушерство и гинекология', dateFilling: '2024-12-12', practiceType: 'Производственная'},
+    {id: '2', key: '2', specialityName: '31.08.12 Педиатрия', dateFilling: '2024-05-12', practiceType: 'Учебная'},
+    {id: '3', key: '3', specialityName: '31.08.12 Педиатрия', dateFilling: '2024-05-12', practiceType: 'Производственная'},
+]
+
+export interface FullIndividualTask {
+    id: string
+    key: string
+    specialityName: string
+    practiceType: string
+    tasks: string[]
+}
+
+const mockDataFullIndividualTask: FullIndividualTask[] = [
+    {id: '1', key: '1', specialityName: '31.08.01 Акушерство и гинекология', practiceType: 'Производственная', tasks: ['1. Test3', '2. Test4']},
+    {id: '2', key: '2', specialityName: '31.08.12 Педиатрия', practiceType: 'Учебная', tasks: ['1. Test3', '2. Test4']},
+    {id: '3', key: '3', specialityName: '31.08.12 Педиатрия', practiceType: 'Производственная', tasks: ['1. Test3', '2. Test4']},
+]
+
+
+
 const IndividualTasks = ({setEdit}: PropsType) => {
-    const [dataTable, setDataTable] = useState<CompressedIndividualTask[]>([
-        {id: '1', key: '1', specialityName: 'Тест 1', dateFilling: '12.12.2024', practiceType: 'Test 1'},
-        {id: '2', key: '2', specialityName: 'Тест 12', dateFilling: '12.12.2024', practiceType: 'Test 1'},
-    ])
+    const navigate = useNavigate()
+    const [
+        tableDataCompressed,
+        setTableDataCompressed
+    ] = useState<CompressedIndividualTask[]>(mockDataCompressedIndividualTask)
+
+    const [
+        tableDataFull,
+        setTableDataFull
+    ] = useState<FullIndividualTask[]>(mockDataFullIndividualTask)
     const [tableView, setTableView] = useState({
         compressed: true,
-        table: false
+        full: false
     })
-    const filterData: FilterType[] = [
+    const [filter, setFilter] = useState({
+        practiceType: 'Все',
+        specialityName: 'Все',
+    })
+    function isCompressedTable() {
+        setTableView({
+            compressed: true,
+            full: false
+        })
+    }
+    function isFullTable() {
+        setTableView({
+            compressed: false,
+            full: true
+        })
+    }
+
+    const optionsTypePractice: FilterType[] = [
         {
-            value: '',
+            value: 'Все',
             label: 'Все'
         },
         {
@@ -59,27 +107,25 @@ const IndividualTasks = ({setEdit}: PropsType) => {
             label: 'Учебная'
         }
     ]
-    const filterSpecializationData: FilterType[] = [
+    const optionsSpecName: FilterType[] = [
         {
-            value: '',
+            value: 'Все',
             label: 'Все'
         },
         {
-            value: '31.08.01',
+            value: '31.08.01 Акушерство и гинекология',
             label: '31.08.01 Акушерство и гинекология'
         },
         {
-            value: '31.08.12',
+            value: '31.08.12 Педиатрия',
             label: '31.08.12 Педиатрия'
         }
     ]
-
-    const [filters, setFilters] = useState<{ type: string; spec: string }>({
-        type: '',
-        spec: ''
-    })
-
-    const columns: TableColumnsType<CompressedIndividualTask> = [
+    const optionsSortDate: FilterType[] = [
+        {value: 'По дате(сначала новые)', label: 'По дате(сначала новые)'},
+        {value: 'По дате(сначала старые)', label: 'По дате(сначала старые)'},
+    ]
+    const columnsCompressed: TableColumnsType<CompressedIndividualTask> = [
         {
             title: <TitleHeadCell title={'Шифр и наименование специальности'}/>,
             dataIndex: 'specialityName',
@@ -102,7 +148,9 @@ const IndividualTasks = ({setEdit}: PropsType) => {
         },
         {
             title:
-                <Popover>
+                <Popover trigger={'click'}
+                         content={<IndTaskPopoverMain recordCompressed={tableDataCompressed}/>}
+                >
                     <Button
                         type="text"
                         className="opacity-50"
@@ -112,7 +160,11 @@ const IndividualTasks = ({setEdit}: PropsType) => {
             width: 100,
             align: 'center',
             render: (record) =>
-                <Popover trigger={'click'} content={<PopoverContent recordCompressed={record}/>}>
+                <Popover
+                    trigger={'click'}
+                    content={<IndTaskPopoverContent recordCompressed={record}
+                                                    tableDataCompressed={tableDataCompressed}
+                                                    setTableDataCompressed={setTableDataCompressed}/>}>
                     <Button
                         type="text"
                         className="opacity-50"
@@ -122,21 +174,124 @@ const IndividualTasks = ({setEdit}: PropsType) => {
                 </Popover>
         }
     ]
-    const navigate = useNavigate()
+    const columnsFull: TableColumnsType<FullIndividualTask> = [
+        {
+            title: <span className={'text-base'}>Шифр и наименование специальности</span>,
+            dataIndex: 'specialityName',
+            key: 'specialityName',
+            width: '20%',
+            render: text => <span className="font-bold">{text}</span>,
+        },
+        {
+            title: <span className={'text-base'}>Тип практики</span>,
+            dataIndex: 'practiceType',
+            key: 'practiceType',
+            width: '20%',
+        },
+        {
+            title: <span className={'text-base'}>Индивидуальные задания</span>,
+            dataIndex: 'tasks',
+            key: 'tasks',
+            width: '40%',
+            render: (value) => (
+                <div className={'flex flex-col gap-2'}>
+                    {value.map((elem: string) => (
+                        <span key={elem}>{elem}</span>
+                    ))}
+                </div>
+            )
+        },
+        {
+            title:
+                <Popover trigger={"click"}
+                         content={<IndTaskPopoverMain recordFull={tableDataFull}/>}
+                >
+                    <Button
+                        type="text"
+                        className="opacity-50"
+                        icon={<PointsSvg/>}
+                    />
+                </Popover>,
+            width: 100,
+            align: 'center',
+            render: (record) =>
+                <Popover trigger={'click'}
+                         content={<IndTaskPopoverContent recordFull={record}
+                                                         tableDataFull={tableDataFull}
+                                                         setTableDataFull={setTableDataFull}
+                         />}
+                >
+                    <Button
+                        type="text"
+                        className="opacity-50"
+                        icon={<PointsSvg/>}
+                    />
+                </Popover>
+        }
+    ]
 
-    function isCompressedTable() {
-        setTableView({
-            compressed: true,
-            table: false
-        })
+    function filterDataCompressed() {
+        function filterPracticeType(elem: CompressedIndividualTask) {
+            if (filter.practiceType === 'Все') {
+                return elem
+            } else {
+                return elem.practiceType === filter.practiceType
+            }
+        }
+        function filterNameSpecialty(elem: CompressedIndividualTask) {
+            if (filter.specialityName === 'Все') {
+                return elem
+            } else {
+                return elem.specialityName === filter.specialityName
+            }
+        }
+        // function sortDateConclusionContract(a: ColumnsTableCompressedView, b: ColumnsTableCompressedView) {
+        //     if (filter.sortDateConclusionContract === 'По дате (сначала новые)') {
+        //         return +new Date(b.dateConclusionContract) - +new Date(a.dateConclusionContract)
+        //     }
+        //     if (filter.sortDateConclusionContract === 'По дате (сначала старые)') {
+        //         return +new Date(a.dateConclusionContract) - +new Date(b.dateConclusionContract)
+        //     }
+        //     return 0
+        // }
+        return mockDataCompressedIndividualTask
+            .filter(elem => filterPracticeType(elem))
+            .filter(elem => filterNameSpecialty(elem))
     }
 
-    function isFullTable() {
-        setTableView({
-            compressed: false,
-            table: true
-        })
+    function filterDataFull() {
+        function filterPracticeType(elem: FullIndividualTask) {
+            if (filter.practiceType === 'Все') {
+                return elem
+            } else {
+                return elem.practiceType === filter.practiceType
+            }
+        }
+        function filterNameSpecialty(elem: FullIndividualTask) {
+            if (filter.specialityName === 'Все') {
+                return elem
+            } else {
+                return elem.specialityName === filter.specialityName
+            }
+        }
+        // function sortDateConclusionContract(a: ColumnsTableCompressedView, b: ColumnsTableCompressedView) {
+        //     if (filter.sortDateConclusionContract === 'По дате (сначала новые)') {
+        //         return +new Date(b.dateConclusionContract) - +new Date(a.dateConclusionContract)
+        //     }
+        //     if (filter.sortDateConclusionContract === 'По дате (сначала старые)') {
+        //         return +new Date(a.dateConclusionContract) - +new Date(b.dateConclusionContract)
+        //     }
+        //     return 0
+        // }
+        return mockDataFullIndividualTask
+            .filter(elem => filterPracticeType(elem))
+            .filter(elem => filterNameSpecialty(elem))
     }
+
+    useEffect(() => {
+        setTableDataCompressed(filterDataCompressed())
+        setTableDataFull(filterDataFull())
+    }, [filter]);
 
 
     return (
@@ -155,10 +310,14 @@ const IndividualTasks = ({setEdit}: PropsType) => {
                 <Col span={7}>
                     <Select
                         popupMatchSelectWidth={false}
-                        defaultValue=""
+                        defaultValue="Все"
                         className="w-full"
-                        options={filterSpecializationData}
+                        options={optionsSpecName}
                         onChange={value => {
+                            setFilter({
+                                ...filter,
+                                specialityName: value
+                            })
                         }}
                     />
                 </Col>
@@ -183,10 +342,14 @@ const IndividualTasks = ({setEdit}: PropsType) => {
                 <Col span={7}>
                     <Select
                         popupMatchSelectWidth={false}
-                        defaultValue=""
+                        defaultValue="Все"
                         className="w-full"
-                        options={filterData}
+                        options={optionsTypePractice}
                         onChange={value => {
+                            setFilter({
+                                ...filter,
+                                practiceType: value
+                            })
                         }}
                     />
                 </Col>
@@ -215,14 +378,7 @@ const IndividualTasks = ({setEdit}: PropsType) => {
                             popupMatchSelectWidth={false}
                             defaultValue="По дате (сначала новые)"
                             className="w-full"
-                            // options={optionsSort}
-                            // onChange={value => {
-                            // 	setFilter({
-                            // 		...filter,
-                            // 		sortDateConclusionContract: value
-                            // 	})
-                            // }}
-
+                            options={optionsSortDate}
                         />
                     </div>
 
@@ -233,11 +389,21 @@ const IndividualTasks = ({setEdit}: PropsType) => {
                 &&
                 <div className={'individualTasks'}>
                     <Table
-                        columns={columns}
-                        dataSource={dataTable}
+                        columns={columnsCompressed}
+                        dataSource={tableDataCompressed}
                         pagination={false}
                     />
                 </div>
+            }
+            {
+                tableView.full
+                &&
+                <Table
+                    className={'mt-5'}
+                    columns={columnsFull}
+                    dataSource={tableDataFull}
+                    pagination={false}
+                />
             }
 
 

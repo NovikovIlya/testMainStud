@@ -7,6 +7,7 @@ import {
 	Modal,
 	Select
 } from 'antd'
+import dayjs from 'dayjs'
 import { useState } from 'react'
 import uuid from 'react-uuid'
 
@@ -18,7 +19,7 @@ export const InviteSeekerForm = (props: { respondId: number }) => {
 	const [isFormOpen, setIsFormOpen] = useState<boolean>(false)
 	const [format, setFormat] = useState<'OFFLINE' | 'ONLINE'>('OFFLINE')
 	const [reservedTime, setReservedTimes] = useState<
-		{ id: string; time: string }[]
+		{ id: string; time: string; timeToSend: any }[]
 	>([])
 
 	const [inviteSeeker] = useInviteSeekerMutation()
@@ -89,7 +90,9 @@ export const InviteSeekerForm = (props: { respondId: number }) => {
 										? values.mainTime.$M + 1
 										: '0' + (values.mainTime.$M + 1)) +
 									'-' +
-									values.mainTime.$D +
+									(values.mainTime.$D >= 10
+										? values.mainTime.$D
+										: '0' + values.mainTime.$D) +
 									'T' +
 									values.mainTime.$H +
 									':' +
@@ -102,24 +105,28 @@ export const InviteSeekerForm = (props: { respondId: number }) => {
 										: '0' + values.mainTime.$s) +
 									'.020Z',
 								reservedTime:
-									values.mainTime.$y +
+									reservedTime[0].timeToSend.$y +
 									'-' +
-									(values.mainTime.$M + 1 >= 10
-										? values.mainTime.$M + 1
-										: '0' + (values.mainTime.$M + 1)) +
+									(reservedTime[0].timeToSend.$M + 1 >= 10
+										? reservedTime[0].timeToSend.$M + 1
+										: '0' + (reservedTime[0].timeToSend.$M + 1)) +
 									'-' +
-									values.mainTime.$D +
+									(reservedTime[0].timeToSend.$D >= 10
+										? reservedTime[0].timeToSend.$D
+										: '0' + reservedTime[0].timeToSend.$D) +
 									'T' +
-									values.mainTime.$H +
+									reservedTime[0].timeToSend.$H +
 									':' +
-									(values.mainTime.$m >= 10
-										? values.mainTime.$m
-										: '0' + values.mainTime.$m) +
+									(reservedTime[0].timeToSend.$m >= 10
+										? reservedTime[0].timeToSend.$m
+										: '0' + reservedTime[0].timeToSend.$m) +
 									':' +
-									(values.mainTime.$s >= 10
-										? values.mainTime.$s
-										: '0' + values.mainTime.$s) +
-									'.020Z'
+									(reservedTime[0].timeToSend.$s >= 10
+										? reservedTime[0].timeToSend.$s
+										: '0' + reservedTime[0].timeToSend.$s) +
+									'.020Z',
+								additionalInfo:
+									format === 'OFFLINE' ? values.details : undefined
 							})
 								.unwrap()
 								.then(() => {
@@ -158,8 +165,8 @@ export const InviteSeekerForm = (props: { respondId: number }) => {
 							rules={[{ required: true, message: 'Не выбрано основное время' }]}
 						>
 							<DatePicker
-								format={'DD.MM.YYYY, h:mm:ss'}
-								showTime
+								format={'DD.MM.YYYY, h:mm'}
+								showTime={{ minuteStep: 15 }}
 								className="w-full"
 								onChange={(e, dateString) => {
 									console.log(e)
@@ -186,13 +193,13 @@ export const InviteSeekerForm = (props: { respondId: number }) => {
 							]}
 						>
 							<DatePicker
-								format={'DD.MM.YYYY, h:mm:ss'}
-								showTime
+								format={'DD.MM.YYYY, h:mm'}
+								showTime={{ minuteStep: 15 }}
 								className="w-full"
 								onChange={(e, dateString) => {
 									setReservedTimes([
 										...reservedTime,
-										{ id: uuid(), time: dateString as string }
+										{ id: uuid(), time: dateString as string, timeToSend: e }
 									])
 								}}
 							></DatePicker>
@@ -220,18 +227,12 @@ export const InviteSeekerForm = (props: { respondId: number }) => {
 						</Form.Item>
 						{format === 'OFFLINE' && (
 							<Form.Item
-								name={'deatails'}
+								name={'details'}
 								label={
 									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
 										Адрес и дополнительная информация
 									</label>
 								}
-								rules={[
-									{
-										required: format === 'OFFLINE',
-										message: 'Не дана подробная информация'
-									}
-								]}
 							>
 								<Input.TextArea
 									autoSize

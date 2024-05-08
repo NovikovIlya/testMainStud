@@ -353,18 +353,26 @@ export const serviceApi = apiSlice.injectEndpoints({
 				format: 'OFFLINE' | 'ONLINE'
 				mainTime: string
 				reservedTime: string
+				additionalInfo?: string
 			}
 		>({
-			query: ({ respondId, format, mainTime, reservedTime }) => ({
+			query: ({
+				respondId,
+				format,
+				mainTime,
+				reservedTime,
+				additionalInfo
+			}) => ({
 				url: `http://localhost:8082/employment-api/v1/respond/${respondId}/status/invite`,
 				method: 'PUT',
 				body: {
 					format: format,
 					mainTime: mainTime,
-					reserveTime: reservedTime
+					reserveTime: reservedTime,
+					additionalInfo: additionalInfo
 				},
 				headers: {
-					Autorization: `Bearer ${supervisorToken}`
+					Authorization: `Bearer ${supervisorToken}`
 				}
 			})
 		}),

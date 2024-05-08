@@ -101,7 +101,7 @@ export interface IContractInfo {
     contractType: string
     prolongation: string
     endDate: string
-    specialtyNameId: string
+    specialtyNameId: number
     legalFacility: string
     actualFacility: string
     placesAmount: string
@@ -113,8 +113,8 @@ export interface IContractInfoFull extends IContractInfo {
 }
 
 export interface ICreateContract extends IContractInfo {
-    pdfContract: RcFile | Blob
-    pdfAgreement: RcFile | Blob
+    pdfContract: Blob
+    pdfAgreement: Blob
 }
 
 export interface ICreateContractFull extends IContractInfoFull {

@@ -18,11 +18,21 @@ import {useCreateContractMutation} from '../../../../store/api/practiceApi/contr
 import {ICreateContract} from '../../../../models/Practice'
 import {validateMessages} from "../../../../utils/validateMessage";
 import {useNavigate} from "react-router-dom";
+import {RcFile} from "antd/es/upload";
+
+
 
 
 export const CreateContracts = () => {
     const [form] = Form.useForm()
     const [inn, setInn] = useState<string | number | null>(0)
+    const [files, setFiles] = useState<{
+        pdfAgreement: Blob | null
+        pdfContract: Blob | null
+    }>({
+        pdfAgreement: null,
+        pdfContract: null,
+    })
     const [nameOrg, setNameOrg] = useState(true)
     const nav = useNavigate()
     const optionsContractsType = [
@@ -38,32 +48,40 @@ export const CreateContracts = () => {
     const [newContract] = useCreateContractMutation()
 
     function onFinish(values: ICreateContract) {
-
-
-
-        const formDataCreateContract = new FormData()
-        //values.specialtyNameId = 123
+        const newForm = new FormData()
+        values.specialtyNameId = 123
+        values.pdfContract = files.pdfContract!
+        values.pdfAgreement = files.pdfAgreement!
         values.placesAmount = String(values.placesAmount)
         values.ITN = String(values.ITN)
         values.conclusionDate = dayjs(values.conclusionDate).format('DD.MM.YYYY')
         values.endDate = dayjs(values.endDate).format('DD.MM.YYYY')
-        // for (let key in values) {
-        //     formDataCreateContract.append(key, values[key as keyof ICreateContract])
-        // }
-        //console.log(values)
-        const {pdfAgreement, pdfContract, ...contract} = values
-        //console.log(contract)
-        formDataCreateContract.append('contract', JSON.stringify(contract))
-        formDataCreateContract.append('pdfAgreement', pdfAgreement)
-        formDataCreateContract.append('pdfContract', pdfContract)
-        console.log(contract)
-        console.log(formDataCreateContract)
-        newContract(formDataCreateContract)
+
+        const jsonData = JSON.stringify(values)
+        const blob = new Blob([jsonData], { type: 'application/json' })
+        // const {pdfAgreement, pdfContract, ...contract} = values
+        // const blob: any = {}
+        // blob.contract = JSON.stringify(contract)
+
+        newForm.append('contract', blob)
+        if (files.pdfContract) {
+            newForm.append('pdfContract', files.pdfContract)
+        }
+        if (files.pdfAgreement) {
+            newForm.append('pdfAgreement', files.pdfAgreement)
+        }
+
+        // newForm.append('contract', formDataCreateContract.contract)
+        // newForm.append('pdfAgreement', formDataCreateContract.pdfAgreement)
+        // newForm.append('pdfContract', formDataCreateContract.pdfContract)
+
+        newContract(newForm)
             .then(res => console.log(res))
             .catch(e => console.log(e))
     }
 
 
+    
     useEffect(() => {
         let url = "http://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/party";
         let query = "1655018018";
@@ -306,12 +324,16 @@ export const CreateContracts = () => {
                                    name={'pdfContract'}
                                    rules={[{required: true}]}>
                             <Upload
-                                beforeUpload={() => {
+                                beforeUpload={(file) => {
+                                    setFiles({
+                                        ...files,
+                                        pdfContract: file
+                                    })
                                     return false
                                 }}
-                                maxCount={1}
                                 accept={'.pdf'}
-                                name={'pdfContract'}
+                                maxCount={1}
+
                             >
                                 <Button
                                     className="w-full"
@@ -332,12 +354,15 @@ export const CreateContracts = () => {
                                    name={'pdfAgreement'}
                                    rules={[{required: true}]}>
                             <Upload
-                                beforeUpload={() => {
+                                beforeUpload={(file) => {
+                                    setFiles({
+                                        ...files,
+                                        pdfAgreement: file
+                                    })
                                     return false
                                 }}
                                 maxCount={1}
                                 accept={'.pdf'}
-                                name={'pdfAgreement'}
                             >
                                 <Button
                                     className="w-full"

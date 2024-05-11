@@ -164,7 +164,7 @@ export const NavPesonnelAccounting = () => {
 					// }}
 					>
 						<Collapse
-							className="w-full"
+							className="w-full !bg-inherit"
 							items={navEmployeeListVacancyItems}
 							expandIconPosition="end"
 							bordered={false}
@@ -214,7 +214,7 @@ export const NavPesonnelAccounting = () => {
 						// }}
 						>
 							<Collapse
-								className="w-full"
+								className="w-full !bg-inherit"
 								items={navSupervisorListVacancyItems}
 								expandIconPosition="end"
 								bordered={false}

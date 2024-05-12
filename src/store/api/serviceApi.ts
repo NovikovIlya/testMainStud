@@ -152,7 +152,10 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		getRespondFullInfo: builder.query<VacancyRespondItemType, number>({
 			query: id => ({
-				url: `http://localhost:8082/employment-api/v1/respond/${id}`
+				url: `http://localhost:8082/employment-api/v1/respond/${id}`,
+				headers: {
+					Authorization: `Bearer ${personnelDeparmentToken}`
+				}
 			})
 		}),
 		getChatIdByRespondId: builder.query<number, number>({

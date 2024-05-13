@@ -4,7 +4,7 @@ import {useNavigate} from "react-router-dom";
 import dayjs from "dayjs";
 import printJS from "print-js";
 import {utils, writeFileXLSX} from "xlsx";
-import {WrapperButton} from "../WrapperButton";
+import {ColorBg, WrapperButton} from "../WrapperButton";
 import {Doc} from "../../../../../assets/svg/Doc";
 import {Load} from "../../../../../assets/svg/Load";
 import {PrintSvg} from "../../../../../assets/svg/PrintSvg";
@@ -111,22 +111,22 @@ export const IndTaskPopoverContent = ({
 
     return (
         <div className={'flex flex-col gap-2 '}>
-            <WrapperButton color={'#E9EFF8'} onClick={navPreview}>
+            <WrapperButton color={ColorBg.BLUEF8} onClick={navPreview}>
                 <Doc/>
                 <span>Режим просмотра</span>
             </WrapperButton>
 
-            <WrapperButton color={'#D7E2F2'} onClick={downLoad}>
+            <WrapperButton color={ColorBg.BLUEF2} onClick={downLoad}>
                 <Load/>
                 <span>Скачать</span>
             </WrapperButton>
 
-            <WrapperButton color={'#D7E2F2'} onClick={printTable}>
+            <WrapperButton color={ColorBg.BLUEF2} onClick={printTable}>
                 <PrintSvg/>
                 <span>Печать</span>
             </WrapperButton>
 
-            <WrapperButton color={'#FBE5E5'} onClick={deleteData}>
+            <WrapperButton color={ColorBg.REDE5} onClick={deleteData}>
                 <DeleteRedSvg/>
                 <span className={'text-[#E04545]'}>Удалить</span>
             </WrapperButton>

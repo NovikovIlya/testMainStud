@@ -8,7 +8,7 @@ import dayjs from "dayjs";
 import {useNavigate} from "react-router-dom";
 import printJS from "print-js";
 import {PrintSvg} from "../../../../../assets/svg/PrintSvg";
-import {WrapperButton} from "../WrapperButton";
+import {ColorBg, WrapperButton} from "../WrapperButton";
 
 
 interface Props {
@@ -125,24 +125,25 @@ export const RegisterPopoverContent = ({
 
     }
 
+
     return (
         <div className={'flex flex-col gap-2 '}>
-            <WrapperButton color={'#E9EFF8'} onClick={navPreview}>
+            <WrapperButton color={ColorBg.BLUEF8} onClick={navPreview}>
                 <Doc/>
                 <span>Режим просмотра</span>
             </WrapperButton>
 
-            <WrapperButton color={'#D7E2F2'} onClick={downLoad}>
+            <WrapperButton color={ColorBg.BLUEF2} onClick={downLoad}>
                 <Load/>
                 <span>Скачать</span>
             </WrapperButton>
 
-            <WrapperButton color={'#D7E2F2'} onClick={printTable}>
+            <WrapperButton color={ColorBg.BLUEF2} onClick={printTable}>
                 <PrintSvg/>
                 <span>Печать</span>
             </WrapperButton>
 
-            <WrapperButton color={'#FBE5E5'} onClick={deleteData}>
+            <WrapperButton color={ColorBg.REDE5} onClick={deleteData}>
                 <DeleteRedSvg/>
                 <span className={'text-[#E04545]'}>Удалить</span>
             </WrapperButton>

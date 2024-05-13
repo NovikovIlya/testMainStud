@@ -20,6 +20,7 @@ import {RegisterPopoverContent} from "../popover/register/RegisterPopoverContent
 import {ColumnsTableCompressedView, ColumnsTableFull} from "../roster/registerContracts/RegisterContracts";
 import {IndTaskPopoverContent} from "../popover/individualTask/IndTaskPopoverContent";
 import {IndTaskPopoverMain} from "../popover/individualTask/IndTaskPopoverMain";
+import dayjs from "dayjs";
 
 
 interface FilterType {
@@ -123,29 +124,26 @@ const IndividualTasks = ({setEdit}: PropsType) => {
         }
     ]
     const optionsSortDate: FilterType[] = [
-        {value: 'По дате(сначала новые)', label: 'По дате(сначала новые)'},
-        {value: 'По дате(сначала старые)', label: 'По дате(сначала старые)'},
+        {value: 'По дате (сначала новые)', label: 'По дате (сначала новые)'},
+        {value: 'По дате (сначала старые)', label: 'По дате (сначала старые)'},
     ]
     const columnsCompressed: TableColumnsType<CompressedIndividualTask> = [
         {
             title: <TitleHeadCell title={'Шифр и наименование специальности'}/>,
             dataIndex: 'specialityName',
-            key: 'specialityName',
             width: '20%',
             render: text => <span className="font-bold underline">{text}</span>,
         },
         {
             title: <TitleHeadCell title={'Дата заполнения'}/>,
             dataIndex: 'dateFilling',
-            key: 'dateFilling',
-            width: '20%'
+            width: '20%',
+            render: (text) => dayjs(text).format('DD.MM.YYYY')
         },
         {
             title: <TitleHeadCell title={'Тип практики'}/>,
             dataIndex: 'practiceType',
-            key: 'practiceType',
             width: '20%',
-
         },
         {
             title:
@@ -179,20 +177,17 @@ const IndividualTasks = ({setEdit}: PropsType) => {
         {
             title: <span className={'text-base'}>Шифр и наименование специальности</span>,
             dataIndex: 'specialityName',
-            key: 'specialityName',
             width: '20%',
             render: text => <span className="font-bold underline">{text}</span>,
         },
         {
             title: <span className={'text-base'}>Тип практики</span>,
             dataIndex: 'practiceType',
-            key: 'practiceType',
             width: '20%',
         },
         {
             title: <span className={'text-base'}>Индивидуальные задания</span>,
             dataIndex: 'tasks',
-            key: 'tasks',
             width: '40%',
             render: (value) => (
                 <div className={'flex flex-col gap-2'}>
@@ -247,7 +242,6 @@ const IndividualTasks = ({setEdit}: PropsType) => {
             }
         }
         function sortDateFilling(a: CompressedIndividualTask, b: CompressedIndividualTask) {
-            console.log('asdf')
             if (filter.dateFilling === 'По дате (сначала новые)') {
                 return +new Date(b.dateFilling) - +new Date(a.dateFilling)
             }
@@ -383,7 +377,6 @@ const IndividualTasks = ({setEdit}: PropsType) => {
                             className="w-full"
                             options={optionsSortDate}
                             onChange={value => {
-                                console.log(value)
                                 setFilter({
                                     ...filter,
                                     dateFilling: value

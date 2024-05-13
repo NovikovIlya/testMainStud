@@ -3,7 +3,7 @@ import {CompressedIndividualTask, FullIndividualTask} from "../../individual-tas
 import dayjs from "dayjs";
 import {utils, writeFileXLSX} from "xlsx";
 import printJS from "print-js";
-import {WrapperButton} from "../WrapperButton";
+import {ColorBg, WrapperButton} from "../WrapperButton";
 import {Load} from "../../../../../assets/svg/Load";
 import {PrintSvg} from "../../../../../assets/svg/PrintSvg";
 
@@ -75,12 +75,12 @@ export const IndTaskPopoverMain = ({recordCompressed, recordFull}: Props) => {
 
     return (
         <div className={'flex flex-col gap-2 '}>
-            <WrapperButton color={'#D7E2F2'} onClick={downLoad}>
+            <WrapperButton color={ColorBg.BLUEF2} onClick={downLoad}>
                 <Load/>
                 <span>Скачать</span>
             </WrapperButton>
 
-            <WrapperButton color={'#D7E2F2'} onClick={printTable}>
+            <WrapperButton color={ColorBg.BLUEF2} onClick={printTable}>
                 <PrintSvg/>
                 <span>Печать</span>
             </WrapperButton>

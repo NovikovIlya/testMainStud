@@ -59,21 +59,9 @@ export const CreateContracts = () => {
 
         const jsonData = JSON.stringify(values)
         const blob = new Blob([jsonData], { type: 'application/json' })
-        // const {pdfAgreement, pdfContract, ...contract} = values
-        // const blob: any = {}
-        // blob.contract = JSON.stringify(contract)
-
         newForm.append('contract', blob)
-        if (files.pdfContract) {
-            newForm.append('pdfContract', files.pdfContract)
-        }
-        if (files.pdfAgreement) {
-            newForm.append('pdfAgreement', files.pdfAgreement)
-        }
-
-        // newForm.append('contract', formDataCreateContract.contract)
-        // newForm.append('pdfAgreement', formDataCreateContract.pdfAgreement)
-        // newForm.append('pdfContract', formDataCreateContract.pdfContract)
+        if (files.pdfContract) newForm.append('pdfContract', files.pdfContract)
+        if (files.pdfAgreement) newForm.append('pdfAgreement', files.pdfAgreement)
 
         newContract(newForm)
             .then(res => console.log(res))

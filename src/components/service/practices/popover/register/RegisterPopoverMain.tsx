@@ -4,9 +4,8 @@ import dayjs from "dayjs";
 import {utils, writeFileXLSX} from "xlsx";
 import {ColumnsTableCompressedView, ColumnsTableFull} from "../../roster/registerContracts/RegisterContracts";
 import printJS from "print-js";
-import {PrinterSvg} from "../../../../../assets/svg/PrinterSvg";
 import {PrintSvg} from "../../../../../assets/svg/PrintSvg";
-import {WrapperButton} from "../WrapperButton";
+import {ColorBg, WrapperButton} from "../WrapperButton";
 
 interface Props {
     recordCompressed?: ColumnsTableCompressedView[]
@@ -88,12 +87,12 @@ export const RegisterPopoverMain = ({recordCompressed, recordFull}: Props) => {
 
     return (
         <div className={'flex flex-col gap-2 '}>
-            <WrapperButton color={'#D7E2F2'} onClick={downLoad}>
+            <WrapperButton color={ColorBg.BLUEF2} onClick={downLoad}>
                 <Load/>
                 <span>Скачать</span>
             </WrapperButton>
 
-            <WrapperButton color={'#D7E2F2'} onClick={printTable}>
+            <WrapperButton color={ColorBg.BLUEF2} onClick={printTable}>
                 <PrintSvg/>
                 <span>Печать</span>
             </WrapperButton>

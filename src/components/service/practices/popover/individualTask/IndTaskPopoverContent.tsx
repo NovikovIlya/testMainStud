@@ -27,7 +27,6 @@ export const IndTaskPopoverContent = ({
                                           setTableDataFull,
                                           tableDataFull
                                       }: Props) => {
-    const nav = useNavigate()
 
     function translateColumnIntoRussia() {
         if (recordCompressed) {
@@ -81,15 +80,6 @@ export const IndTaskPopoverContent = ({
 
     }
 
-    function navPreview() {
-        if (recordCompressed) {
-            //nav(`/services/practices/registerContracts/previewContracts/${recordCompressed.key}`)
-        }
-        if (recordFull) {
-            //nav(`/services/practices/registerContracts/previewContracts/${recordFull?.key}`)
-        }
-    }
-
     function deleteData() {
         if (setTableDataCompressed && tableDataCompressed) {
             const newArr = tableDataCompressed.filter(elem => {
@@ -111,11 +101,6 @@ export const IndTaskPopoverContent = ({
 
     return (
         <div className={'flex flex-col gap-2 '}>
-            <WrapperButton color={ColorBg.BLUEF8} onClick={navPreview}>
-                <Doc/>
-                <span>Режим просмотра</span>
-            </WrapperButton>
-
             <WrapperButton color={ColorBg.BLUEF2} onClick={downLoad}>
                 <Load/>
                 <span>Скачать</span>

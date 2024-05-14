@@ -25,9 +25,11 @@ import {RegisterPopoverContent} from "../../popover/register/RegisterPopoverCont
 import {RegisterPopoverMain} from "../../popover/register/RegisterPopoverMain";
 import {useNavigate} from "react-router-dom";
 import printJS from "print-js";
+import {CompressedIndividualTask, FullIndividualTask} from "../../individual-tasks/IndividualTasks";
 
 
 export interface ColumnsTableCompressedView {
+    id: string
     key: string
     contractFacility: string
     dateFiling: string
@@ -36,6 +38,7 @@ export interface ColumnsTableCompressedView {
 }
 
 export interface ColumnsTableFull {
+    id: string
     key: string
     nameOrg: string
     nameSpecialty: string
@@ -52,6 +55,7 @@ export interface ColumnsTableFull {
 
 const mockDataCompressed: ColumnsTableCompressedView[] = [
     {
+        id: '1',
         key: '1',
         contractFacility: 'Лечебно-профилактическое учреждение по договору',
         dateFiling: '00.00.00',
@@ -59,6 +63,7 @@ const mockDataCompressed: ColumnsTableCompressedView[] = [
         dateConclusionContract: '2024-04-24'
     },
     {
+        id: '2',
         key: '2',
         contractFacility: 'Лечебно-профилактическое учреждение по договору',
         dateConclusionContract: '2024-04-25',
@@ -66,6 +71,7 @@ const mockDataCompressed: ColumnsTableCompressedView[] = [
         dateFiling: '00.00.00'
     },
     {
+        id: '3',
         key: '3',
         contractFacility: 'Тест 3',
         dateConclusionContract: '2024-04-26',
@@ -73,6 +79,7 @@ const mockDataCompressed: ColumnsTableCompressedView[] = [
         dateFiling: '00.00.00'
     },
     {
+        id: '4',
         key: '4',
         contractFacility: 'Тест 4',
         dateConclusionContract: '2024-04-27',
@@ -80,6 +87,7 @@ const mockDataCompressed: ColumnsTableCompressedView[] = [
         dateFiling: '00.00.00'
     },
     {
+        id: '5',
         key: '5',
         contractFacility: 'Тест 4',
         dateConclusionContract: '2024-04-26',
@@ -89,6 +97,7 @@ const mockDataCompressed: ColumnsTableCompressedView[] = [
 ]
 const mockDataFull: ColumnsTableFull[] = [
     {
+        id: '1',
         key: '1',
         nameOrg: 'Лечебно-профилактическое учреждение по договору',
         nameSpecialty: '12.456 Лечебное дело',
@@ -103,6 +112,7 @@ const mockDataFull: ColumnsTableFull[] = [
         links: 'Cкан договора'
     },
     {
+        id: '2',
         key: '2',
         nameOrg: 'Тест 3',
         nameSpecialty: '12.456 Лечебное дело',
@@ -117,6 +127,7 @@ const mockDataFull: ColumnsTableFull[] = [
         links: 'Cкан договора'
     },
     {
+        id: '3',
         key: '3',
         nameOrg: 'Тест 3',
         nameSpecialty: '31.08.01 Акушерство и гинекология',
@@ -143,14 +154,27 @@ export const RegisterContracts = () => {
         numberSeats: 'Все',
 
     })
-    const [tableDataCompressed, setTableDataCompressed] = useState<ColumnsTableCompressedView[]>(mockDataCompressed)
-    const [tableDataFull, setTableDataFull] = useState<ColumnsTableFull[]>(mockDataFull)
+    const [
+        tableDataCompressed,
+        setTableDataCompressed
+    ] = useState<ColumnsTableCompressedView[]>(mockDataCompressed)
+    const [
+        tableDataFull,
+        setTableDataFull
+    ] = useState<ColumnsTableFull[]>(mockDataFull)
     const [tableView, setTableView] = useState({
         compressed: true,
         table: false
     })
+    const [
+        selectedFieldsCompressed,
+        setSelectedFieldsCompressed
+    ] = useState<ColumnsTableCompressedView[]>()
 
-
+    const [
+        selectedFieldsFull,
+        setSelectedFieldFull
+    ] = useState<ColumnsTableFull[]>()
     const columnsCompressedView: TableProps<ColumnsTableCompressedView>['columns'] = [
         {
             title: <TitleHeadCell title={'Наименование организации'}/>,
@@ -193,7 +217,12 @@ export const RegisterContracts = () => {
         },
         {
             title:
-                <Popover trigger={'click'} content={<RegisterPopoverMain recordCompressed={mockDataCompressed}/>}>
+                <Popover trigger={'click'}
+                         content={<RegisterPopoverMain
+                             recordCompressed={selectedFieldsCompressed}
+                             recordCompressedAll={mockDataCompressed}
+                             setRecordCompressed={setTableDataCompressed}
+                         />}>
                     <Button
                         type="text"
                         className="opacity-50"
@@ -298,7 +327,12 @@ export const RegisterContracts = () => {
         },
         {
             title:
-                <Popover trigger={'click'} content={<RegisterPopoverMain recordFull={mockDataFull}/>}>
+                <Popover trigger={'click'}
+                         content={<RegisterPopoverMain
+                             recordFull={selectedFieldsFull}
+                             recordFullAll={mockDataFull}
+                             setRecordFull={setTableDataFull}
+                         />}>
                     <Button
                         type="text"
                         className="opacity-50"
@@ -512,6 +546,9 @@ export const RegisterContracts = () => {
         setTableDataFull(filterDataFull())
     }, [filter])
 
+    useEffect(() => {
+        console.log(selectedFieldsFull)
+    }, [selectedFieldsFull]);
 
     return (
         <section className={'container'}>
@@ -672,6 +709,15 @@ export const RegisterContracts = () => {
                         pagination={false}
                         size={"middle"}
                         dataSource={tableDataCompressed}
+                        rowSelection={{
+                            type: "checkbox",
+                            onSelect: (record, selected, selectedRows, nativeEvent) => {
+                                setSelectedFieldsCompressed(selectedRows)
+                            },
+                            onSelectAll: ( selected, selectedRows, changeRows) => {
+                                setSelectedFieldsCompressed(selectedRows)
+                            }
+                        }}
                     />
                 </div>
             }
@@ -683,6 +729,15 @@ export const RegisterContracts = () => {
                        dataSource={tableDataFull}
                        size={"middle"}
                        className={'mt-5'}
+                       rowSelection={{
+                           type: "checkbox",
+                           onSelect: (record, selected, selectedRows, nativeEvent) => {
+                               setSelectedFieldFull(selectedRows)
+                           },
+                           onSelectAll: ( selected, selectedRows, changeRows) => {
+                               setSelectedFieldFull(selectedRows)
+                           }
+                       }}
                 />
             }
         </section>

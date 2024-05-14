@@ -21,6 +21,7 @@ import {ColumnsTableCompressedView, ColumnsTableFull} from "../roster/registerCo
 import {IndTaskPopoverContent} from "../popover/individualTask/IndTaskPopoverContent";
 import {IndTaskPopoverMain} from "../popover/individualTask/IndTaskPopoverMain";
 import dayjs from "dayjs";
+import {EditSvg} from "../../../../assets/svg/EditSvg";
 
 
 interface FilterType {
@@ -51,13 +52,14 @@ export interface FullIndividualTask {
     key: string
     specialityName: string
     practiceType: string
+    dateFilling: string
     tasks: string[]
 }
 
 const mockDataFullIndividualTask: FullIndividualTask[] = [
-    {id: '1', key: '1', specialityName: '31.08.01 Акушерство и гинекология', practiceType: 'Производственная', tasks: ['1. Test3', '2. Test4']},
-    {id: '2', key: '2', specialityName: '31.08.12 Педиатрия', practiceType: 'Учебная', tasks: ['1. Test3', '2. Test4']},
-    {id: '3', key: '3', specialityName: '31.08.12 Педиатрия', practiceType: 'Производственная', tasks: ['1. Test3', '2. Test4']},
+    {id: '1', key: '1', specialityName: '31.08.01 Акушерство и гинекология', dateFilling: '2024-12-12', practiceType: 'Производственная', tasks: ['Test3', 'Test4']},
+    {id: '2', key: '2', specialityName: '31.08.12 Педиатрия', dateFilling: '2023-05-12', practiceType: 'Учебная', tasks: ['Test3', 'Test4']},
+    {id: '3', key: '3', specialityName: '31.08.12 Педиатрия', dateFilling: '2022-05-12', practiceType: 'Производственная', tasks: ['Test3', 'Test4']},
 ]
 
 
@@ -73,6 +75,17 @@ const IndividualTasks = ({setEdit}: PropsType) => {
         tableDataFull,
         setTableDataFull
     ] = useState<FullIndividualTask[]>(mockDataFullIndividualTask)
+
+    const [
+        selectedFieldsCompressed,
+        setSelectedFieldsCompressed
+    ] = useState<CompressedIndividualTask[]>()
+
+    const [
+        selectedFieldsFull,
+        setSelectedFieldFull
+    ] = useState<FullIndividualTask[]>()
+
     const [tableView, setTableView] = useState({
         compressed: true,
         full: false
@@ -132,7 +145,19 @@ const IndividualTasks = ({setEdit}: PropsType) => {
             title: <TitleHeadCell title={'Шифр и наименование специальности'}/>,
             dataIndex: 'specialityName',
             width: '20%',
-            render: text => <span className="font-bold underline">{text}</span>,
+            render: (text, record) =>
+                <div className={'flex items-center'}>
+                    <span className={'underline flex w-[200px]'}>
+                        {text}
+                    </span>
+                    <Button
+                        type="text"
+                        icon={<EditSvg/>}
+                        onClick={() => {
+                            navigate(`/services/practices/individualTasks/editTask/${record.id}`)
+                        }}
+                    />
+                </div>
         },
         {
             title: <TitleHeadCell title={'Дата заполнения'}/>,
@@ -148,7 +173,11 @@ const IndividualTasks = ({setEdit}: PropsType) => {
         {
             title:
                 <Popover trigger={'click'}
-                         content={<IndTaskPopoverMain recordCompressed={tableDataCompressed}/>}
+                         content={<IndTaskPopoverMain
+                             recordCompressedAll={tableDataCompressed}
+                             recordCompressed={selectedFieldsCompressed}
+                             setRecordCompressed={setTableDataCompressed}
+                         />}
                 >
                     <Button
                         type="text"
@@ -168,7 +197,6 @@ const IndividualTasks = ({setEdit}: PropsType) => {
                         type="text"
                         className="opacity-50"
                         icon={<PointsSvg/>}
-                        onClick={() => console.log(record.specialityName)}
                     />
                 </Popover>
         }
@@ -178,21 +206,42 @@ const IndividualTasks = ({setEdit}: PropsType) => {
             title: <span className={'text-base'}>Шифр и наименование специальности</span>,
             dataIndex: 'specialityName',
             width: '20%',
-            render: text => <span className="font-bold underline">{text}</span>,
+            render: (text, record) =>
+                <div className={'flex items-center'}>
+                    <span className={'underline flex w-[200px] font-bold'}>
+                        {text}
+                    </span>
+                    <Button
+                        type="text"
+                        icon={<EditSvg/>}
+                        onClick={() => {
+                            console.log(record.id)
+                            navigate(`/services/practices/individualTasks/editTask/${record.id}`)
+                        }}
+                    />
+                </div>
         },
         {
             title: <span className={'text-base'}>Тип практики</span>,
             dataIndex: 'practiceType',
             width: '20%',
+            align: 'left',
         },
+        // {
+        //     title: <span className={'text-base'}>Дата заполнения</span>,
+        //     dataIndex: 'dateFilling',
+        //     align: 'center',
+        //     width: '15%'
+        // },
         {
             title: <span className={'text-base'}>Индивидуальные задания</span>,
             dataIndex: 'tasks',
             width: '40%',
+            align: 'left',
             render: (value) => (
                 <div className={'flex flex-col gap-2'}>
-                    {value.map((elem: string) => (
-                        <span key={elem}>{elem}</span>
+                    {value.map((elem: string, index: number) => (
+                        <span key={elem}>{index + 1}. {elem}</span>
                     ))}
                 </div>
             )
@@ -200,7 +249,10 @@ const IndividualTasks = ({setEdit}: PropsType) => {
         {
             title:
                 <Popover trigger={"click"}
-                         content={<IndTaskPopoverMain recordFull={tableDataFull}/>}
+                         content={<IndTaskPopoverMain recordFull={selectedFieldsFull}
+                                                      recordFullAll={tableDataFull}
+                                                      setRecordFull={setTableDataFull}
+                         />}
                 >
                     <Button
                         type="text"
@@ -255,7 +307,6 @@ const IndividualTasks = ({setEdit}: PropsType) => {
             .filter(elem => filterNameSpecialty(elem))
             .sort((a, b) => sortDateFilling(a, b))
     }
-
     function filterDataFull() {
         function filterPracticeType(elem: FullIndividualTask) {
             if (filter.practiceType === 'Все') {
@@ -271,24 +322,27 @@ const IndividualTasks = ({setEdit}: PropsType) => {
                 return elem.specialityName === filter.specialityName
             }
         }
-        // function sortDateConclusionContract(a: ColumnsTableCompressedView, b: ColumnsTableCompressedView) {
-        //     if (filter.sortDateConclusionContract === 'По дате (сначала новые)') {
-        //         return +new Date(b.dateConclusionContract) - +new Date(a.dateConclusionContract)
-        //     }
-        //     if (filter.sortDateConclusionContract === 'По дате (сначала старые)') {
-        //         return +new Date(a.dateConclusionContract) - +new Date(b.dateConclusionContract)
-        //     }
-        //     return 0
-        // }
+        function sortDateFilling(a: FullIndividualTask, b: FullIndividualTask) {
+            if (filter.dateFilling === 'По дате (сначала новые)') {
+                return +new Date(b.dateFilling) - +new Date(a.dateFilling)
+            }
+            if (filter.dateFilling === 'По дате (сначала старые)') {
+                return +new Date(a.dateFilling) - +new Date(b.dateFilling)
+            }
+            return 0
+        }
         return mockDataFullIndividualTask
             .filter(elem => filterPracticeType(elem))
             .filter(elem => filterNameSpecialty(elem))
+            .sort((a, b) => sortDateFilling(a, b))
     }
 
     useEffect(() => {
         setTableDataCompressed(filterDataCompressed())
         setTableDataFull(filterDataFull())
     }, [filter]);
+
+
 
 
     return (
@@ -395,6 +449,15 @@ const IndividualTasks = ({setEdit}: PropsType) => {
                         columns={columnsCompressed}
                         dataSource={tableDataCompressed}
                         pagination={false}
+                        rowSelection={{
+                            type: 'checkbox',
+                            onSelect: (record, selected, selectedRows, nativeEvent) => {
+                                setSelectedFieldsCompressed(selectedRows)
+                            },
+                            onSelectAll: ( selected, selectedRows, changeRows) => {
+                                setSelectedFieldsCompressed(selectedRows)
+                            }
+                        }}
                     />
                 </div>
             }
@@ -406,6 +469,15 @@ const IndividualTasks = ({setEdit}: PropsType) => {
                     columns={columnsFull}
                     dataSource={tableDataFull}
                     pagination={false}
+                    rowSelection={{
+                        type: 'checkbox',
+                        onSelect: (record, selected, selectedRows, nativeEvent) => {
+                            setSelectedFieldFull(selectedRows)
+                        },
+                        onSelectAll: ( selected, selectedRows, changeRows) => {
+                            setSelectedFieldFull(selectedRows)
+                        }
+                    }}
                 />
             }
 

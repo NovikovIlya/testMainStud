@@ -8,7 +8,12 @@ import IndividualTasks from './IndividualTasks'
 export const Tasks = () => {
 	const [edit, setEdit] = useState('')
 	const { pathname } = useLocation()
-	if (pathname.includes('createTask')) return <CreateTask />
-	else if (edit !== '') return <EditTask edit={edit} setEdit={setEdit} />
-	else return <IndividualTasks setEdit={setEdit} />
+	if (pathname.includes('createTask')) {
+		return <CreateTask/>
+	} else if (pathname.includes('editTask')) {
+		return <EditTask/>
+	}
+	else {
+		return <IndividualTasks setEdit={setEdit}/>
+	}
 }

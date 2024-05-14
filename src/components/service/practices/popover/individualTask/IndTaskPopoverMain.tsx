@@ -6,14 +6,27 @@ import printJS from "print-js";
 import {ColorBg, WrapperButton} from "../WrapperButton";
 import {Load} from "../../../../../assets/svg/Load";
 import {PrintSvg} from "../../../../../assets/svg/PrintSvg";
+import {DeleteRedSvg} from "../../../../../assets/svg/DeleteRedSvg";
 
 interface Props {
+    recordCompressedAll?: CompressedIndividualTask[]
     recordCompressed?: CompressedIndividualTask[]
+    setRecordCompressed?: (arg: CompressedIndividualTask[]) => void
+
+    recordFullAll?: FullIndividualTask[]
     recordFull?: FullIndividualTask[]
+    setRecordFull?: (arg: FullIndividualTask[]) => void
 }
 
 
-export const IndTaskPopoverMain = ({recordCompressed, recordFull}: Props) => {
+export const IndTaskPopoverMain = ({
+                                       recordCompressed,
+                                       recordFull,
+                                       setRecordCompressed,
+                                       recordCompressedAll,
+                                       recordFullAll,
+                                       setRecordFull
+                                   }: Props) => {
     function translateColumnsIntoRussia() {
         const newData: any = []
         if (recordCompressed) {
@@ -73,16 +86,35 @@ export const IndTaskPopoverMain = ({recordCompressed, recordFull}: Props) => {
         })
     }
 
+    function deleteData() {
+        if (setRecordCompressed && recordCompressed && recordCompressedAll) {
+            const listId = recordCompressed.map(elem => elem.id)
+            setRecordCompressed(recordCompressedAll.filter(elem => {
+                return !listId.includes(elem.id)
+            }))
+        }
+        if (setRecordFull && recordFull && recordFullAll) {
+            const listId = recordFull.map(elem => elem.id)
+            setRecordFull(recordFullAll.filter(elem => {
+                return !listId.includes(elem.id)
+            }))
+        }
+    }
+
     return (
         <div className={'flex flex-col gap-2 '}>
             <WrapperButton color={ColorBg.BLUEF2} onClick={downLoad}>
                 <Load/>
-                <span>Скачать</span>
+                <span>Скачать выбранное</span>
             </WrapperButton>
 
             <WrapperButton color={ColorBg.BLUEF2} onClick={printTable}>
                 <PrintSvg/>
-                <span>Печать</span>
+                <span>Печать выбранного</span>
+            </WrapperButton>
+            <WrapperButton color={ColorBg.REDE5} onClick={deleteData}>
+                <DeleteRedSvg/>
+                <span className={'text-[#E04545]'}>Удалить выбранное</span>
             </WrapperButton>
         </div>
     );

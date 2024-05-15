@@ -1,5 +1,4 @@
 import {PlusOutlined} from '@ant-design/icons'
-import {yupResolver} from '@hookform/resolvers/yup'
 import {
     Button,
     Col,

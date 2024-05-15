@@ -14,7 +14,7 @@ import {
     UploadProps,
     message, Form, InputNumber
 } from 'antd'
-import {format} from 'date-fns/format'
+import {format} from 'date-fns'
 import dayjs from 'dayjs'
 import React, {Dispatch, SetStateAction, useEffect, useState} from 'react'
 import {Controller, SubmitHandler, useForm} from 'react-hook-form'

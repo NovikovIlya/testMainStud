@@ -6,6 +6,8 @@ import { BriefcaseSvg } from '../../../assets/svg/BriefcaseSvg'
 import { useAppSelector } from '../../../store'
 import { ChatEmpDemp } from '../Chat/ChatEmpDemp'
 
+import { Archive } from './Archive'
+import { ArchiveRespondInfo } from './ArchiveRespondInfo'
 import { ChatIcon } from './ChatIcon'
 import { RespondInfo } from './RespondInfo'
 import { Responds } from './Responds'
@@ -111,6 +113,38 @@ export const NavPesonnelAccounting = () => {
 		}
 	]
 
+	const navEmployeeListReserveItems: CollapseProps['items'] = [
+		{
+			key: 'allVacancies',
+			label: (
+				<div className="flex items-center gap-[10px]">
+					{<VacanciesIcon />}
+					<p className="text-base">{'Кадровый резерв'}</p>
+				</div>
+			),
+			children: (
+				<div>
+					<p
+						className="text-base"
+						onClick={() => {
+							navigate('/services/personnelaccounting/reserve')
+						}}
+					>
+						Резерв
+					</p>
+					<p
+						className="text-base"
+						onClick={() => {
+							navigate('/services/personnelaccounting/archive')
+						}}
+					>
+						Архив
+					</p>
+				</div>
+			)
+		}
+	]
+
 	const navSupervisorListVacancyItems: CollapseProps['items'] = [
 		{
 			key: 'allVacancies',
@@ -171,6 +205,24 @@ export const NavPesonnelAccounting = () => {
 							style={{}}
 						/>
 					</ConfigProvider>
+				</li>
+			)
+		} else if (name === 'Кадровый резерв') {
+			return (
+				<li
+					key={index}
+					className={clsx(
+						'w-full flex items-center py-2 pl-8 hover:bg-[#F5F8FB]  cursor-pointer',
+						id === pathname && 'bg-[#F5F8FB]'
+					)}
+				>
+					<Collapse
+						className="w-full !bg-inherit"
+						items={navEmployeeListReserveItems}
+						expandIconPosition="end"
+						bordered={false}
+						style={{}}
+					/>
 				</li>
 			)
 		} else {
@@ -287,6 +339,10 @@ export const NavPesonnelAccounting = () => {
 					<VacancyRequestDeleteView />
 				)}
 				{pathname === navEmployeeList[4].id && <></>}
+				{pathname === '/services/personnelaccounting/archive' && <Archive />}
+				{pathname.match('services/personnelaccounting/archive/fullinfo') && (
+					<ArchiveRespondInfo type="PERSONNEL_DEPARTMENT" />
+				)}
 				{pathname === navSupervisorList[0].id && <RespondsSupervisor />}
 				{pathname === navSupervisorList[1].id && <></>}
 				{pathname === navSupervisorList[2].id && <SupervisorVacancies />}

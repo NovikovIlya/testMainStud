@@ -216,6 +216,22 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
+		getArchivedResponces: builder.query<VacancyRespondItemType[], void>({
+			query: () => ({
+				url: `http://localhost:8082/employment-api/v1/archive`,
+				headers: {
+					Authorization: `Bearer ${personnelDeparmentToken}`
+				}
+			})
+		}),
+		getArchivedRespondFullInfo: builder.query<VacancyRespondItemType, number>({
+			query: id => ({
+				url: `http://localhost:8082/employment-api/v1/archive/${id}`,
+				headers: {
+					Authorization: `Bearer ${personnelDeparmentToken}`
+				}
+			})
+		}),
 		postPhone: builder.mutation({
 			query: phone => {
 				return {
@@ -442,6 +458,33 @@ export const serviceApi = apiSlice.injectEndpoints({
 					Authorization: `Bearer ${personnelDeparmentToken}`
 				}
 			})
+		}),
+		sendRespondToArchive: builder.mutation<VacancyRespondItemType, number>({
+			query: id => ({
+				url: `http://localhost:8082/employment-api/v1/respond/${id}/status/archive`,
+				method: 'PUT',
+				headers: {
+					Authorization: `Bearer ${personnelDeparmentToken}`
+				}
+			})
+		}),
+		deleteRespondFromArchive: builder.mutation<void, number>({
+			query: id => ({
+				url: `http://localhost:8082/employment-api/v1/archive/${id}`,
+				method: 'DELETE',
+				headers: {
+					Authorization: `Bearer ${personnelDeparmentToken}`
+				}
+			})
+		}),
+		approveArchivedRespond: builder.mutation<VacancyRespondItemType, number>({
+			query: respondId => ({
+				url: `http://localhost:8082/employment-api/v1/archive/${respondId}/status/approve`,
+				method: 'PUT',
+				headers: {
+					Authorization: `Bearer ${personnelDeparmentToken}`
+				}
+			})
 		})
 	})
 })
@@ -488,5 +531,10 @@ export const {
 	useLazyGetVacancyRequestViewQuery,
 	useAcceptVacancyRequestMutation,
 	useDenyVacancyRequestMutation,
-	useAlterCreateVacancyRequestMutation
+	useAlterCreateVacancyRequestMutation,
+	useGetArchivedResponcesQuery,
+	useSendRespondToArchiveMutation,
+	useDeleteRespondFromArchiveMutation,
+	useGetArchivedRespondFullInfoQuery,
+	useApproveArchivedRespondMutation
 } = serviceApi

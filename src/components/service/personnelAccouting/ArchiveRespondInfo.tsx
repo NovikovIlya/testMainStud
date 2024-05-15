@@ -6,33 +6,30 @@ import uuid from 'react-uuid'
 import { AvatartandardSvg } from '../../../assets/svg/AvatarStandardSvg'
 import { useAppSelector } from '../../../store'
 import {
-	useApproveRespondMutation,
-	useGetRespondFullInfoQuery,
-	useLazyGetRespondFullInfoQuery,
-	useSendRespondToArchiveMutation
+	useApproveArchivedRespondMutation,
+	useDeleteRespondFromArchiveMutation,
+	useGetArchivedResponcesQuery,
+	useGetArchivedRespondFullInfoQuery
 } from '../../../store/api/serviceApi'
 import ArrowIcon from '../jobSeeker/ArrowIcon'
 
 import { InviteSeekerForm } from './supervisor/InviteSeekerForm'
 
-export const RespondInfo = (props: {
+export const ArchiveRespondInfo = (props: {
 	type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 }) => {
 	const respondId = useAppSelector(state => state.currentResponce)
 
-	const { data: res } = useGetRespondFullInfoQuery(respondId.respondId)
-	const [approveRespond] = useApproveRespondMutation()
-	const [sendToArchive] = useSendRespondToArchiveMutation()
+	const { data: res } = useGetArchivedRespondFullInfoQuery(respondId.respondId)
+	const { refetch } = useGetArchivedResponcesQuery()
+	const [approveRespond] = useApproveArchivedRespondMutation()
+	const [deleteRespond] = useDeleteRespondFromArchiveMutation()
 
 	const [isRespondSentToSupervisor, setIsRespondSentToSupervisor] =
 		useState<boolean>(res?.status === 'IN_SUPERVISOR_REVIEW')
-	const [isRespondSentToArchive, setIsRespondSentToArchive] = useState<boolean>(
-		res?.status === 'ARCHIVE'
-	)
 
 	useEffect(() => {
 		setIsRespondSentToSupervisor(res?.status === 'IN_SUPERVISOR_REVIEW')
-		setIsRespondSentToArchive(res?.status === 'ARCHIVE')
 	}, [res])
 
 	const navigate = useNavigate()
@@ -47,7 +44,7 @@ export const RespondInfo = (props: {
 						<Button
 							onClick={() => {
 								props.type === 'PERSONNEL_DEPARTMENT'
-									? navigate('/services/personnelaccounting/responds')
+									? navigate('/services/personnelaccounting/archive')
 									: navigate(
 											'/services/personnelaccounting/supervisor/responds'
 									  )
@@ -109,13 +106,15 @@ export const RespondInfo = (props: {
 								</div>
 							</div>
 							{props.type === 'PERSONNEL_DEPARTMENT' && (
-								<div className="self-center grid grid-cols-2 grid-rows-[40px_40px] gap-x-[12px] gap-y-[12px]">
+								<div className="self-center flex flex-col gap-[12px]">
 									<Button
 										onClick={() => {
 											approveRespond(respondId.respondId)
 												.unwrap()
 												.then(() => {
 													setIsRespondSentToSupervisor(true)
+													refetch()
+													navigate('/services/personnelaccounting/archive')
 												})
 										}}
 										disabled={isRespondSentToSupervisor}
@@ -125,29 +124,23 @@ export const RespondInfo = (props: {
 										Отправить руководителю
 									</Button>
 									<Button
-										onClick={() => {
-											sendToArchive(respondId.respondId)
-												.unwrap()
-												.then(() => {
-													setIsRespondSentToArchive(true)
-												})
-										}}
-										disabled={isRespondSentToArchive}
-										className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
-									>
-										Отказать
-									</Button>
-									<Button
-										onClick={() => {}}
-										className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
-									>
-										Отправить в резерв
-									</Button>
-									<Button
 										onClick={() => {}}
 										className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
 									>
 										Перейти в чат
+									</Button>
+									<Button
+										onClick={() => {
+											deleteRespond(respondId.respondId)
+												.unwrap()
+												.then(() => {
+													refetch()
+													navigate('/services/personnelaccounting/archive')
+												})
+										}}
+										className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
+									>
+										Удалить
 									</Button>
 								</div>
 							)}

@@ -4,8 +4,8 @@ import {
     useGetTeachersRatingQuery,
     usePostTeacherRatingMutation
 } from "../../../../store/api/assessmentTeacher";
-import {useState} from "react";
 import {IAssessmentNumber, IValuesAssessment, TestQuery} from "../../../../models/Teacher";
+import {useEffect, useState} from "react";
 import {RatingTeacher} from "./RatingTeacher/RatingTeacher";
 
 

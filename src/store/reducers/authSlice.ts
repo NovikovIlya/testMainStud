@@ -1,7 +1,7 @@
 import { RootState } from '..'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
-import { InitialState } from '../type'
+import { InitialState } from './type'
 
 const initialState: InitialState = {
 	accessToken: localStorage.getItem('access'),

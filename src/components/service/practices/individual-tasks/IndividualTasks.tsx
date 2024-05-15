@@ -1,394 +1,489 @@
 import {
-	DeleteOutlined,
-	EditOutlined,
-	PrinterOutlined,
-	SearchOutlined
-} from '@ant-design/icons'
-import {
-	Button,
-	Col,
-	GetRef,
-	Input,
-	Row,
-	Select,
-	Space,
-	Table,
-	TableColumnType,
-	TableColumnsType,
-	Typography
+    Button,
+    Col, Popover, Radio,
+    Row,
+    Select,
+    Space,
+    Table,
+    TableColumnsType,
 } from 'antd'
-import type { FilterDropdownProps } from 'antd/es/table/interface'
-import { useEffect, useRef, useState } from 'react'
-import Highlighter from 'react-highlight-words'
-import { useNavigate } from 'react-router-dom'
+import React, {useEffect, useRef, useState} from 'react'
+import {useNavigate} from 'react-router-dom'
+import {ContentItem, ITaskFull, TypeGetTasks} from '../../../../models/Practice'
+import './IndividualTasks.scss'
+import {
+    TitleHeadCell
+} from "../../businessTrip/NewBusinessTrip/archive/stepTwo/tableStepTwo/titleHeadCell/TitleHeadCell";
+import {RegisterPopoverMain} from "../popover/register/RegisterPopoverMain";
+import {PointsSvg} from "../../../../assets/svg/PointsSvg";
+import {RegisterPopoverContent} from "../popover/register/RegisterPopoverContent";
+import {ColumnsTableCompressedView, ColumnsTableFull} from "../roster/registerContracts/RegisterContracts";
+import {IndTaskPopoverContent} from "../popover/individualTask/IndTaskPopoverContent";
+import {IndTaskPopoverMain} from "../popover/individualTask/IndTaskPopoverMain";
+import dayjs from "dayjs";
+import {EditSvg} from "../../../../assets/svg/EditSvg";
 
-import { DownloadSvg } from '../../../../assets/svg/DownloadSvg'
-import { PrinterSvg } from '../../../../assets/svg/PrinterSvg'
-
-type InputRef = GetRef<typeof Input>
 
 interface FilterType {
     value: string
     label: string
 }
 
-const filterData: FilterType[] = [
-    {
-        value: '',
-        label: 'Все'
-    },
-    {
-        value: 'Производственная (клиническая) практика: акушерство и гинекология',
-        label: 'Производственная (клиническая) практика: акушерство и гинекология'
-    },
-    {
-        value: 'Производственная (клиническая) практика: тест и тест',
-        label: 'Производственная (клиническая) практика: тест и тест'
-    },
-]
-
-const filterSpecializationData: FilterType[] = [
-    {
-        value: '',
-        label: 'Все'
-    },
-    {
-        value: '31.08.01',
-        label: '31.08.01 Акушерство и гинекология'
-    },
-    {
-        value: '31.08.02',
-        label: '31.08.02 Акушерство и гинекология'
-    },
-]
-
-interface DataType {
-	key: string
-	name: string
-	type: string
-	tasks: string[]
+type PropsType = {
+    setEdit: (edit: string) => void
 }
 
-type DataIndex = keyof DataType
+export interface CompressedIndividualTask {
+    id: string
+    key: string
+    specialityName: string
+    practiceType: string
+    dateFilling: string
+}
 
-const data: DataType[] = [
-	{
-		key: '1',
-		name: '31.08.01 Акушерство и гинекология',
-		type: 'Производственная (клиническая) практика: акушерство и гинекология',
-		tasks: [
-			'Овладеть методиками кесарева сечения (корпоральное, истмико-корпоральное, в нижнем сегменте матки, экстракорпоральное;',
-			'Овладеть методиками родоразрешающих и плодоразрушающих операций',
-			'Акушерский травматизм матери и плода'
-		]
-	},
-	{
-		key: '2',
-		name: '31.08.01 Акушерство и гинекология',
-		type: 'Производственная (клиническая) практика: тест и тест',
-		tasks: [
-			'Овладеть методиками кесарева сечения (корпоральное, истмико-корпоральное, в нижнем сегменте матки, экстракорпоральное;',
-			'Овладеть методиками родоразрешающих и плодоразрушающих операций',
-			'Акушерский травматизм матери и плода'
-		]
-	},
-	{
-		key: '3',
-		name: '31.08.02 Акушерство и гинекология',
-		type: 'Производственная (клиническая) практика: тест и тест',
-		tasks: [
-			'Овладеть методиками кесарева сечения (корпоральное, истмико-корпоральное, в нижнем сегменте матки, экстракорпоральное;',
-			'Овладеть методиками родоразрешающих и плодоразрушающих операций',
-			'Акушерский травматизм матери и плода'
-		]
-	},
-	{
-		key: '4',
-		name: '31.08.02 Акушерство и гинекология',
-		type: 'Производственная (клиническая) практика: акушерство и гинекология',
-		tasks: [
-			'Овладеть методиками кесарева сечения (корпоральное, истмико-корпоральное, в нижнем сегменте матки, экстракорпоральное;',
-			'Овладеть методиками родоразрешающих и плодоразрушающих операций',
-			'Акушерский травматизм матери и плода'
-		]
-	}
+const mockDataCompressedIndividualTask: CompressedIndividualTask[] = [
+    {id: '1', key: '1', specialityName: '31.08.01 Акушерство и гинекология', dateFilling: '2024-12-12', practiceType: 'Производственная'},
+    {id: '2', key: '2', specialityName: '31.08.12 Педиатрия', dateFilling: '2024-05-12', practiceType: 'Учебная'},
+    {id: '3', key: '3', specialityName: '31.08.12 Педиатрия', dateFilling: '2024-05-12', practiceType: 'Производственная'},
 ]
 
-const IndividualTasks = () => {
-	const [searchText, setSearchText] = useState('')
-	const [searchedColumn, setSearchedColumn] = useState('')
-	const searchInput = useRef<InputRef>(null)
-	const [dataTable, setDataTable] = useState<DataType[]>(data)
-    const [filters, setFilters] = useState<{type: string, spec: string}>({type: '',spec: ''})
+export interface FullIndividualTask {
+    id: string
+    key: string
+    specialityName: string
+    practiceType: string
+    dateFilling: string
+    tasks: string[]
+}
+
+const mockDataFullIndividualTask: FullIndividualTask[] = [
+    {id: '1', key: '1', specialityName: '31.08.01 Акушерство и гинекология', dateFilling: '2024-12-12', practiceType: 'Производственная', tasks: ['Test3', 'Test4']},
+    {id: '2', key: '2', specialityName: '31.08.12 Педиатрия', dateFilling: '2023-05-12', practiceType: 'Учебная', tasks: ['Test3', 'Test4']},
+    {id: '3', key: '3', specialityName: '31.08.12 Педиатрия', dateFilling: '2022-05-12', practiceType: 'Производственная', tasks: ['Test3', 'Test4']},
+]
 
 
-	const handleSearch = (
-		selectedKeys: string[],
-		confirm: FilterDropdownProps['confirm'],
-		dataIndex: DataIndex
-	) => {
-		confirm()
-		setSearchText(selectedKeys[0])
-		setSearchedColumn(dataIndex)
-	}
 
-	const handleReset = (clearFilters: () => void) => {
-		clearFilters()
-		setSearchText('')
-	}
-	
-	useEffect(() => {
-        setDataTable(data.filter(x => x.type.includes(filters.type) && x.name.includes(filters.spec)))
-    }, [filters])
+const IndividualTasks = ({setEdit}: PropsType) => {
+    const navigate = useNavigate()
+    const [
+        tableDataCompressed,
+        setTableDataCompressed
+    ] = useState<CompressedIndividualTask[]>(mockDataCompressedIndividualTask)
 
-    const filter = (value: string, index: string) => {
-        setFilters(prev => ({...prev, [index]: value}))
+    const [
+        tableDataFull,
+        setTableDataFull
+    ] = useState<FullIndividualTask[]>(mockDataFullIndividualTask)
+
+    const [
+        selectedFieldsCompressed,
+        setSelectedFieldsCompressed
+    ] = useState<CompressedIndividualTask[]>()
+
+    const [
+        selectedFieldsFull,
+        setSelectedFieldFull
+    ] = useState<FullIndividualTask[]>()
+
+    const [tableView, setTableView] = useState({
+        compressed: true,
+        full: false
+    })
+    const [filter, setFilter] = useState({
+        practiceType: 'Все',
+        specialityName: 'Все',
+        dateFilling: 'По дате (сначала новые)',
+    })
+    function isCompressedTable() {
+        setTableView({
+            compressed: true,
+            full: false
+        })
+    }
+    function isFullTable() {
+        setTableView({
+            compressed: false,
+            full: true
+        })
     }
 
-	const getColumnSearchProps = (
-		dataIndex: DataIndex
-	): TableColumnType<DataType> => ({
-		filterDropdown: ({
-			setSelectedKeys,
-			selectedKeys,
-			confirm,
-			clearFilters,
-			close
-		}) => (
-			<div style={{ padding: 8 }} onKeyDown={e => e.stopPropagation()}>
-				<Input
-					ref={searchInput}
-					placeholder={`Search ${dataIndex}`}
-					value={selectedKeys[0]}
-					onChange={e =>
-						setSelectedKeys(e.target.value ? [e.target.value] : [])
-					}
-					onPressEnter={() =>
-						handleSearch(selectedKeys as string[], confirm, dataIndex)
-					}
-					style={{ marginBottom: 8, display: 'block' }}
-				/>
-				<Space>
-					<Button
-						type="primary"
-						onClick={() =>
-							handleSearch(selectedKeys as string[], confirm, dataIndex)
-						}
-						icon={<SearchOutlined />}
-						size="small"
-						style={{ width: 90 }}
-					>
-						Search
-					</Button>
-					<Button
-						onClick={() => clearFilters && handleReset(clearFilters)}
-						size="small"
-						style={{ width: 90 }}
-					>
-						Reset
-					</Button>
-					<Button
-						type="link"
-						size="small"
-						onClick={() => {
-							close()
-						}}
-					>
-						close
-					</Button>
-				</Space>
-			</div>
-		),
-		filterIcon: (filtered: boolean) => (
-			<SearchOutlined
-				className="h-5 w-5 flex items-center justify-center"
-				style={{ color: filtered ? '#1677ff' : undefined }}
-			/>
-		),
-		onFilter: (value, record) =>
-			record[dataIndex]
-				.toString()
-				.toLowerCase()
-				.includes((value as string).toLowerCase()),
-		onFilterDropdownOpenChange: visible => {
-			if (visible) {
-				//@ts-ignore
-				setTimeout(() => searchInput.current?.select(), 100)
-			}
-		},
-		render: tasks => {
-			return searchedColumn === dataIndex ? (
-				<ol className="list-inside gap-2 flex flex-col">
-					{tasks.map?.((task: string, index: number) => (
-						<li key={index}>
-							{
-								<Highlighter
-									highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
-									searchWords={[searchText]}
-									autoEscape
-									textToHighlight={task ? task.toString() : ''}
-								/>
-							}
-						</li>
-					))}
-				</ol>
-			) : (
-				<ol className="list-inside gap-2 flex flex-col">
-					{tasks.map?.((task: string, index: number) => (
-						<li key={index}>{task}</li>
-					))}
-				</ol>
-			)
-		}
-	})
+    const optionsTypePractice: FilterType[] = [
+        {
+            value: 'Все',
+            label: 'Все'
+        },
+        {
+            value: 'Производственная',
+            label: 'Производственная'
+        },
+        {
+            value: 'Учебная',
+            label: 'Учебная'
+        }
+    ]
+    const optionsSpecName: FilterType[] = [
+        {
+            value: 'Все',
+            label: 'Все'
+        },
+        {
+            value: '31.08.01 Акушерство и гинекология',
+            label: '31.08.01 Акушерство и гинекология'
+        },
+        {
+            value: '31.08.12 Педиатрия',
+            label: '31.08.12 Педиатрия'
+        }
+    ]
+    const optionsSortDate: FilterType[] = [
+        {value: 'По дате (сначала новые)', label: 'По дате (сначала новые)'},
+        {value: 'По дате (сначала старые)', label: 'По дате (сначала старые)'},
+    ]
+    const columnsCompressed: TableColumnsType<CompressedIndividualTask> = [
+        {
+            title: <TitleHeadCell title={'Шифр и наименование специальности'}/>,
+            dataIndex: 'specialityName',
+            width: '20%',
+            render: (text, record) =>
+                <div className={'flex items-center'}>
+                    <span className={'underline flex w-[200px]'}>
+                        {text}
+                    </span>
+                    <Button
+                        type="text"
+                        icon={<EditSvg/>}
+                        onClick={() => {
+                            navigate(`/services/practices/individualTasks/editTask/${record.id}`)
+                        }}
+                    />
+                </div>
+        },
+        {
+            title: <TitleHeadCell title={'Дата заполнения'}/>,
+            dataIndex: 'dateFilling',
+            width: '20%',
+            render: (text) => dayjs(text).format('DD.MM.YYYY')
+        },
+        {
+            title: <TitleHeadCell title={'Тип практики'}/>,
+            dataIndex: 'practiceType',
+            width: '20%',
+        },
+        {
+            title:
+                <Popover trigger={'click'}
+                         content={<IndTaskPopoverMain
+                             recordCompressedAll={tableDataCompressed}
+                             recordCompressed={selectedFieldsCompressed}
+                             setRecordCompressed={setTableDataCompressed}
+                         />}
+                >
+                    <Button
+                        type="text"
+                        className="opacity-50"
+                        icon={<PointsSvg/>}
+                    />
+                </Popover>,
+            width: 100,
+            align: 'center',
+            render: (record) =>
+                <Popover
+                    trigger={'click'}
+                    content={<IndTaskPopoverContent recordCompressed={record}
+                                                    tableDataCompressed={tableDataCompressed}
+                                                    setTableDataCompressed={setTableDataCompressed}/>}>
+                    <Button
+                        type="text"
+                        className="opacity-50"
+                        icon={<PointsSvg/>}
+                    />
+                </Popover>
+        }
+    ]
+    const columnsFull: TableColumnsType<FullIndividualTask> = [
+        {
+            title: <span className={'text-base'}>Шифр и наименование специальности</span>,
+            dataIndex: 'specialityName',
+            width: '20%',
+            render: (text, record) =>
+                <div className={'flex items-center'}>
+                    <span className={'underline flex w-[200px] font-bold'}>
+                        {text}
+                    </span>
+                    <Button
+                        type="text"
+                        icon={<EditSvg/>}
+                        onClick={() => {
+                            console.log(record.id)
+                            navigate(`/services/practices/individualTasks/editTask/${record.id}`)
+                        }}
+                    />
+                </div>
+        },
+        {
+            title: <span className={'text-base'}>Тип практики</span>,
+            dataIndex: 'practiceType',
+            width: '20%',
+            align: 'left',
+        },
+        // {
+        //     title: <span className={'text-base'}>Дата заполнения</span>,
+        //     dataIndex: 'dateFilling',
+        //     align: 'center',
+        //     width: '15%'
+        // },
+        {
+            title: <span className={'text-base'}>Индивидуальные задания</span>,
+            dataIndex: 'tasks',
+            width: '40%',
+            align: 'left',
+            render: (value) => (
+                <div className={'flex flex-col gap-2'}>
+                    {value.map((elem: string, index: number) => (
+                        <span key={elem}>{index + 1}. {elem}</span>
+                    ))}
+                </div>
+            )
+        },
+        {
+            title:
+                <Popover trigger={"click"}
+                         content={<IndTaskPopoverMain recordFull={selectedFieldsFull}
+                                                      recordFullAll={tableDataFull}
+                                                      setRecordFull={setTableDataFull}
+                         />}
+                >
+                    <Button
+                        type="text"
+                        className="opacity-50"
+                        icon={<PointsSvg/>}
+                    />
+                </Popover>,
+            width: 100,
+            align: 'center',
+            render: (record) =>
+                <Popover trigger={'click'}
+                         content={<IndTaskPopoverContent recordFull={record}
+                                                         tableDataFull={tableDataFull}
+                                                         setTableDataFull={setTableDataFull}
+                         />}
+                >
+                    <Button
+                        type="text"
+                        className="opacity-50"
+                        icon={<PointsSvg/>}
+                    />
+                </Popover>
+        }
+    ]
 
-	const columns: TableColumnsType<DataType> = [
-		{
-			title: 'Шифр и наименование специальности',
-			dataIndex: 'name',
-			key: 'name',
-			width: '20%',
-			render: text => <span className="font-bold">{text}</span>,
-			filters: [
-				{
-					text: '31.08.01',
-					value: '31.08.01'
-				},
-				{
-					text: '31.08.02',
-					value: '31.08.02'
-				}
-			],
-			filterSearch: true,
-			//@ts-ignore
-			onFilter: (value: string, record) => record.name.includes(value),
-			sorter: (a, b) => a.name.length - b.name.length
-		},
-		{
-			title: 'Тип практики',
-			dataIndex: 'type',
-			key: 'type',
-			width: '20%',
-			filters: [
-				{
-					text: 'Производственная (клиническая) практика: акушерство и гинекология',
-					value:
-						'Производственная (клиническая) практика: акушерство и гинекология'
-				},
-				{
-					text: 'Производственная (клиническая) практика: тест и тест',
-					value: 'Производственная (клиническая) практика: тест и тест'
-				}
-			],
-			filterSearch: true,
-			//@ts-ignore
-			onFilter: (value: string, record) => record.type.includes(value),
-			sorter: (a, b) => a.type.length - b.type.length
-		},
-		{
-			title: 'Индивидуальные задания',
-			dataIndex: 'tasks',
-			key: 'tasks',
-			...getColumnSearchProps('tasks')
-		},
-		{
-			title: '',
-			dataIndex: '',
-			key: 'x',
-			render: _ => (
-				<Space size="middle">
-					<Button type="default" icon={<EditOutlined />} />
-					<Button type="link" icon={<PrinterOutlined />} />
-					<Button type="default" icon={<DeleteOutlined />} danger />
-				</Space>
-			)
-		}
-	]
-	const navigate = useNavigate()
-	return (
-		<section className="container">
-			<Row>
-				<Col flex={'auto'}>
-					<Typography.Text className="mb-14 text-[28px]">
+    function filterDataCompressed() {
+        function filterPracticeType(elem: CompressedIndividualTask) {
+            if (filter.practiceType === 'Все') {
+                return elem
+            } else {
+                return elem.practiceType === filter.practiceType
+            }
+        }
+        function filterNameSpecialty(elem: CompressedIndividualTask) {
+            if (filter.specialityName === 'Все') {
+                return elem
+            } else {
+                return elem.specialityName === filter.specialityName
+            }
+        }
+        function sortDateFilling(a: CompressedIndividualTask, b: CompressedIndividualTask) {
+            if (filter.dateFilling === 'По дате (сначала новые)') {
+                return +new Date(b.dateFilling) - +new Date(a.dateFilling)
+            }
+            if (filter.dateFilling === 'По дате (сначала старые)') {
+                return +new Date(a.dateFilling) - +new Date(b.dateFilling)
+            }
+            return 0
+        }
+        return mockDataCompressedIndividualTask
+            .filter(elem => filterPracticeType(elem))
+            .filter(elem => filterNameSpecialty(elem))
+            .sort((a, b) => sortDateFilling(a, b))
+    }
+    function filterDataFull() {
+        function filterPracticeType(elem: FullIndividualTask) {
+            if (filter.practiceType === 'Все') {
+                return elem
+            } else {
+                return elem.practiceType === filter.practiceType
+            }
+        }
+        function filterNameSpecialty(elem: FullIndividualTask) {
+            if (filter.specialityName === 'Все') {
+                return elem
+            } else {
+                return elem.specialityName === filter.specialityName
+            }
+        }
+        function sortDateFilling(a: FullIndividualTask, b: FullIndividualTask) {
+            if (filter.dateFilling === 'По дате (сначала новые)') {
+                return +new Date(b.dateFilling) - +new Date(a.dateFilling)
+            }
+            if (filter.dateFilling === 'По дате (сначала старые)') {
+                return +new Date(a.dateFilling) - +new Date(b.dateFilling)
+            }
+            return 0
+        }
+        return mockDataFullIndividualTask
+            .filter(elem => filterPracticeType(elem))
+            .filter(elem => filterNameSpecialty(elem))
+            .sort((a, b) => sortDateFilling(a, b))
+    }
+
+    useEffect(() => {
+        setTableDataCompressed(filterDataCompressed())
+        setTableDataFull(filterDataFull())
+    }, [filter]);
+
+
+
+
+    return (
+        <section className="container">
+            <Row>
+                <Col>
+					<span className="mb-14 text-[28px]">
 						Индивидуальные задания
-					</Typography.Text>
-				</Col>
-			</Row>
-			<Row gutter={[16, 16]} className="mt-12">
-				<Col span={5}>
-					<Typography.Text>Сортировка</Typography.Text>
-				</Col>
-				<Col span={7}>
-					<Select
-						popupMatchSelectWidth={false}
-						defaultValue=""
-						className="w-full"
-						options={filterData}
-                        onChange={value => filter(value, 'type')}
-					/>
-				</Col>
-				<Col flex={'auto'} />
-				<Col span={7}>
-					<Space className="w-full flex-row-reverse">
-						<Button
-							type="primary"
-							className="!rounded-full"
-							onClick={() => {
-								navigate('/services/practices/individualTasks/createTask')
-							}}
-						>
-							Добавить индивидуальные задания
-						</Button>
-					</Space>
-				</Col>
-			</Row>
-			<Row gutter={[16, 16]} className="mt-4">
-				<Col span={5}>
-					<Typography.Text>Наименование специальности</Typography.Text>
-				</Col>
-				<Col span={7}>
-					<Select
-						popupMatchSelectWidth={false}
-						defaultValue=""
-						className="w-full"
-						options={filterSpecializationData}
-                        onChange={value => filter(value, 'spec')}
-					/>
-				</Col>
-				<Col flex={'auto'} />
-				<Col span={5}>
-					<Space className="w-full flex justify-end">
-						<Button
-							type="text"
-							icon={<DownloadSvg />}
-							className="flex items-center"
-						>
-							Скачать
-						</Button>
-						<Button
-							type="text"
-							icon={<PrinterSvg />}
-							className="flex items-center"
-						>
-							Печать
-						</Button>
-					</Space>
-				</Col>
-			</Row>
-			<Table
-				locale={{
-					triggerDesc: 'descend sort text',
-					triggerAsc: 'ascend sort text',
-					cancelSort: 'cancel sort text'
-				}}
-				bordered
-				columns={columns}
-				dataSource={dataTable}
-				className="my-8"
-				pagination={false}
-			/>
-		</section>
-	)
+					</span>
+                </Col>
+            </Row>
+            <Row gutter={[16, 16]} className="mt-12">
+                <Col span={5}>
+                    <span>Наименование специальности</span>
+                </Col>
+                <Col span={7}>
+                    <Select
+                        popupMatchSelectWidth={false}
+                        defaultValue="Все"
+                        className="w-full"
+                        options={optionsSpecName}
+                        onChange={value => {
+                            setFilter({
+                                ...filter,
+                                specialityName: value
+                            })
+                        }}
+                    />
+                </Col>
+                <Col span={7} offset={5}>
+                    <Space className="w-full flex-row-reverse">
+                        <Button
+                            type="primary"
+                            className="!rounded-full"
+                            onClick={() => {
+                                navigate('/services/practices/individualTasks/createTask')
+                            }}
+                        >
+                            Добавить индивидуальные задания
+                        </Button>
+                    </Space>
+                </Col>
+            </Row>
+            <Row gutter={[16, 16]} className="mt-4">
+                <Col span={5}>
+                    <span>Тип практики</span>
+                </Col>
+                <Col span={7}>
+                    <Select
+                        popupMatchSelectWidth={false}
+                        defaultValue="Все"
+                        className="w-full"
+                        options={optionsTypePractice}
+                        onChange={value => {
+                            setFilter({
+                                ...filter,
+                                practiceType: value
+                            })
+                        }}
+                    />
+                </Col>
+            </Row>
+            <Row className="mt-4 flex items-center">
+                <Col span={12} flex="50%">
+                    <Radio.Group defaultValue="compressedView" buttonStyle="solid">
+                        <Radio.Button
+                            onClick={isCompressedTable}
+                            value="compressedView"
+                            className="!rounded-l-full">
+                            Посмотреть в сжатом виде
+                        </Radio.Button>
+                        <Radio.Button
+                            onClick={isFullTable}
+                            value="tableView"
+                            className="!rounded-r-full">
+                            Посмотреть данные в таблице
+                        </Radio.Button>
+                    </Radio.Group>
+                </Col>
+                <Col span={8} offset={4}>
+                    <div className={'flex gap-2 items-center'}>
+                        <span className={'mr-2'}>Сортировка</span>
+                        <Select
+                            popupMatchSelectWidth={false}
+                            defaultValue="По дате (сначала новые)"
+                            className="w-full"
+                            options={optionsSortDate}
+                            onChange={value => {
+                                setFilter({
+                                    ...filter,
+                                    dateFilling: value
+                                })
+                            }}
+                        />
+                    </div>
+
+                </Col>
+            </Row>
+            {
+                tableView.compressed
+                &&
+                <div className={'individualTasks'}>
+                    <Table
+                        columns={columnsCompressed}
+                        dataSource={tableDataCompressed}
+                        pagination={false}
+                        rowSelection={{
+                            type: 'checkbox',
+                            onSelect: (record, selected, selectedRows, nativeEvent) => {
+                                setSelectedFieldsCompressed(selectedRows)
+                            },
+                            onSelectAll: ( selected, selectedRows, changeRows) => {
+                                setSelectedFieldsCompressed(selectedRows)
+                            }
+                        }}
+                    />
+                </div>
+            }
+            {
+                tableView.full
+                &&
+                <Table
+                    className={'mt-5'}
+                    columns={columnsFull}
+                    dataSource={tableDataFull}
+                    pagination={false}
+                    rowSelection={{
+                        type: 'checkbox',
+                        onSelect: (record, selected, selectedRows, nativeEvent) => {
+                            setSelectedFieldFull(selectedRows)
+                        },
+                        onSelectAll: ( selected, selectedRows, changeRows) => {
+                            setSelectedFieldFull(selectedRows)
+                        }
+                    }}
+                />
+            }
+
+
+        </section>
+    )
 }
 
 export default IndividualTasks

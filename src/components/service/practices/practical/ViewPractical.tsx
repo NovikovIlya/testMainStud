@@ -8,131 +8,129 @@ import {
 	TableProps,
 	Typography
 } from 'antd'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { DownloadSvg } from '../../../../assets/svg/DownloadSvg'
 import { PrinterSvg } from '../../../../assets/svg/PrinterSvg'
+import {
+	useGetPracticesQuery,
+	useGetTaskQuery,
+	useLazyGetTaskQuery
+} from '../../../../store/api/practiceApi/taskService'
+import { IPracticeInfoFull, IPracticesResponse } from '../../../../models/Practice'
 
-interface DataType {
-	key: string
-	cipher: string
-	type: string
-	department: string
-	groupNumber: string
-	term: string
-	academicYear: string
-	course: string
-	practicePeriod: string
-	numberHoursPractice: string
-	individualTasks: string[]
-	codeNameCompetence: string[]
-	headDepartment: string
+interface FilterType {
+	value: string
+	label: string
 }
-const data: DataType[] = [
+
+const filterSpecialization: FilterType[] = [
 	{
-		key: '1',
-		cipher: '31.08.01 Акушерствои гинекология',
-		type: 'Производственная (клиническая) практика: акушерство и гинекология',
-		department: 'Кафедра хирургических болезней постдипломного образования',
-		groupNumber: '10.4-134',
-		term: '2',
-		academicYear: '2022/2023',
-		course: '1',
-		practicePeriod: '30.03.2023 - 10.04.2023',
-		numberHoursPractice: '120',
-		individualTasks: [
-			'Овладеть методиками кесарева сечения (корпоральное, истмико-корпоральное, в нижнем сегменте матки, экстракорпоральное;',
-			'Овладеть методиками родоразрешающих и плодоразрушающих операций',
-			'Акушерский травматизм матери и плода'
-		],
-		codeNameCompetence: [
-			'ПК-2 Овладеть методиками кесарева сечения (корпоральное, истмико-корпоральное, в нижнем сегменте матки, экстракорпоральное;',
-			'ПК-6 Овладеть методиками родоразрешающих и плодоразрушающих операций',
-			'ПК-7 Акушерский травматизм матери и плода'
-		],
-		headDepartment: 'Бурмистров М. В.'
+		value: '',
+		label: 'Все'
 	},
 	{
-		key: '2',
-		cipher: '31.08.01 Акушерствои гинекология',
-		type: 'Производственная (клиническая) практика: акушерство и гинекология',
-		department: 'Кафедра хирургических болезней постдипломного образования',
-		groupNumber: '10.4-134',
-		term: '2',
-		academicYear: '2022/2023',
-		course: '1',
-		practicePeriod: '30.03.2023 - 10.04.2023',
-		numberHoursPractice: '120',
-		individualTasks: [
-			'Овладеть методиками кесарева сечения (корпоральное, истмико-корпоральное, в нижнем сегменте матки, экстракорпоральное;',
-			'Овладеть методиками родоразрешающих и плодоразрушающих операций',
-			'Акушерский травматизм матери и плода'
-		],
-		codeNameCompetence: [
-			'ПК-2 Овладеть методиками кесарева сечения (корпоральное, истмико-корпоральное, в нижнем сегменте матки, экстракорпоральное;',
-			'ПК-6 Овладеть методиками родоразрешающих и плодоразрушающих операций',
-			'ПК-7 Акушерский травматизм матери и плода'
-		],
-		headDepartment: 'Бурмистров М. В.'
+		value: '31.08.01 Акушерство и гинекология',
+		label: '31.08.01 Акушерство и гинекология'
 	},
 	{
-		key: '3',
-		cipher: '31.08.01 Акушерствои гинекология',
-		type: 'Производственная (клиническая) практика: акушерство и гинекология',
-		department: 'Кафедра хирургических болезней постдипломного образования',
-		groupNumber: '10.4-134',
-		term: '2',
-		academicYear: '2022/2023',
-		course: '1',
-		practicePeriod: '30.03.2023 - 10.04.2023',
-		numberHoursPractice: '120',
-		individualTasks: [
-			'Овладеть методиками кесарева сечения (корпоральное, истмико-корпоральное, в нижнем сегменте матки, экстракорпоральное;',
-			'Овладеть методиками родоразрешающих и плодоразрушающих операций',
-			'Акушерский травматизм матери и плода'
-		],
-		codeNameCompetence: [
-			'ПК-2 Овладеть методиками кесарева сечения (корпоральное, истмико-корпоральное, в нижнем сегменте матки, экстракорпоральное;',
-			'ПК-6 Овладеть методиками родоразрешающих и плодоразрушающих операций',
-			'ПК-7 Акушерский травматизм матери и плода'
-		],
-		headDepartment: 'Бурмистров М. В.'
+		value: '31.08.12 Педиатрия',
+		label: '31.08.12 Педиатрия'
+	}
+]
+const filterDepartment: FilterType[] = [
+	{
+		value: '',
+		label: 'Все'
 	},
 	{
-		key: '4',
-		cipher: '31.08.01 Акушерствои гинекология',
-		type: 'Производственная (клиническая) практика: акушерство и гинекология',
-		department: 'Кафедра хирургических болезней постдипломного образования',
-		groupNumber: '10.4-134',
-		term: '2',
-		academicYear: '2022/2023',
-		course: '1',
-		practicePeriod: '30.03.2023 - 10.04.2023',
-		numberHoursPractice: '120',
-		individualTasks: [
-			'Овладеть методиками кесарева сечения (корпоральное, истмико-корпоральное, в нижнем сегменте матки, экстракорпоральное;',
-			'Овладеть методиками родоразрешающих и плодоразрушающих операций',
-			'Акушерский травматизм матери и плода'
-		],
-		codeNameCompetence: [
-			'ПК-2 Овладеть методиками кесарева сечения (корпоральное, истмико-корпоральное, в нижнем сегменте матки, экстракорпоральное;',
-			'ПК-6 Овладеть методиками родоразрешающих и плодоразрушающих операций',
-			'ПК-7 Акушерский травматизм матери и плода'
-		],
-		headDepartment: 'Бурмистров М. В.'
+		value: 'Кафедра хирургических болезней постдипломного образования',
+		label: 'Кафедра хирургических болезней постдипломного образования'
+	},
+	{
+		value: 'Кафедра онкологических болезней',
+		label: 'Кафедра онкологических болезней'
+	}
+]
+const filterCourse: FilterType[] = [
+	{
+		value: '',
+		label: 'Все'
+	},
+	{
+		value: '1',
+		label: '1'
+	},
+	{
+		value: '2',
+		label: '2'
+	},
+	{
+		value: '3',
+		label: '3'
+	},
+	{
+		value: '4',
+		label: '4'
+	},
+	{
+		value: '5',
+		label: '5'
+	},
+	{
+		value: '6',
+		label: '6'
+	}
+]
+const filterSemestr: FilterType[] = [
+	{
+		value: '',
+		label: 'Все'
+	},
+	{
+		value: '1',
+		label: '1'
+	},
+	{
+		value: '2',
+		label: '2'
+	}
+]
+const filterType: FilterType[] = [
+	{
+		value: '',
+		label: 'Все'
+	},
+	{
+		value: 'Производственная',
+		label: 'Производственная'
+	},
+	{
+		value: 'Технологическая',
+		label: 'Технологическая'
 	}
 ]
 
-const columns: TableProps<DataType>['columns'] = [
+const uniqueId = (length = 16) => {
+	return parseInt(
+		Math.ceil(Math.random() * Date.now())
+			.toPrecision(length)
+			.toString()
+			.replace('.', '')
+	)
+}
+
+const columns: TableProps<IPracticeInfoFull>['columns'] = [
 	{
-		key: 'cipher',
-		dataIndex: 'cipher',
+		key: 'specialtyName',
+		dataIndex: 'specialtyName',
 		title: 'Шифр и наименование специальности',
 		className: 'text-xs !p-2'
 	},
 	{
-		key: 'type',
-		dataIndex: 'type',
+		key: 'practiceType',
+		dataIndex: 'practiceType',
 		title: 'Тип практики',
 		className: 'text-xs !p-2'
 	},
@@ -150,8 +148,8 @@ const columns: TableProps<DataType>['columns'] = [
 		className: 'text-xs !p-2'
 	},
 	{
-		key: 'term',
-		dataIndex: 'term',
+		key: 'semester',
+		dataIndex: 'semester',
 		title: 'Семестр',
 		align: 'center',
 		className: 'text-xs !p-2'
@@ -164,22 +162,22 @@ const columns: TableProps<DataType>['columns'] = [
 		className: 'text-xs !p-2'
 	},
 	{
-		key: 'course',
-		dataIndex: 'course',
+		key: 'courseStudy',
+		dataIndex: 'courseStudy',
 		title: 'Курс',
 		align: 'center',
 		className: 'text-xs !p-2'
 	},
 	{
-		key: 'practicePeriod',
-		dataIndex: 'practicePeriod',
+		key: 'practiceStartDate',
+		dataIndex: 'practiceStartDate',
 		title: 'Период практики',
 		align: 'center',
 		className: 'text-xs !p-2'
 	},
 	{
-		key: 'numberHoursPractice',
-		dataIndex: 'numberHoursPractice',
+		key: 'totalHours',
+		dataIndex: 'totalHours',
 		title: 'Кол-во часов по практике',
 		align: 'center',
 		className: 'text-xs !p-2'
@@ -188,43 +186,66 @@ const columns: TableProps<DataType>['columns'] = [
 		key: 'individualTasks',
 		dataIndex: 'individualTasks',
 		title: 'Индивидуальные задания',
-		render(value, _, index) {
-			return (
-				<ol className="list-inside gap-2 flex flex-col">
-					{value.map((text: string) => (
-						<li key={index}>{text}</li>
-					))}
-				</ol>
-			)
-		},
 		className: 'text-xs !p-2'
 	},
 	{
-		key: 'codeNameCompetence',
-		dataIndex: 'codeNameCompetence',
+		key: 'competence',
+		dataIndex: 'competence',
 		title: 'Код и наименование компетенции',
-		render(value) {
-			return (
-				<ol className="list-inside gap-2 flex  flex-col text-xs">
-					{value.map((text: string, index: number) => (
-						<li key={index}>{text}</li>
-					))}
-				</ol>
-			)
-		},
 		className: 'text-xs !p-2'
 	},
 	{
-		key: 'headDepartment',
-		dataIndex: 'headDepartment',
-		title: 'Заведующий опорной кафедрой ',
-		className: 'text-xs !p-2',
-		render: text => <div className="absolute top-2">{text}</div>
+		key: 'departmentDirector',
+		dataIndex: 'departmentDirector',
+		title: 'Заведующий опорной кафедрой',
+		className: 'text-xs !p-2'
 	}
 ]
 
 export const ViewPractical = () => {
+	const [sort, setSort] = useState<string>('')
+	const { data } = useGetPracticesQuery({
+		page: 0,
+		size: 10,
+		sort: sort || sort
+	})
 	const navigate = useNavigate()
+
+	const [dataFilter, setDataFilter] = useState<any>([])
+
+	const [filters, setFilters] = useState<{
+		type: string
+		spec: string
+		course: string
+		semestr: string
+		department: string
+	}>({ type: '', spec: '', course: '', semestr: '', department: '' })
+
+	useEffect(() => {
+		if (data) {
+			setDataFilter(data?.content)
+		}
+	}, [data])
+
+	useEffect(() => {
+		if (filters) {
+			setDataFilter(
+				data?.content?.filter(
+					(x: any) =>
+						x.practiceType.includes(filters.type) &&
+						x.specialtyName.includes(filters.spec) &&
+						x.courseStudy.toString().includes(filters.course) &&
+						x.semester.toString().includes(filters.semestr) &&
+						x.department.includes(filters.department)
+				)
+			)
+		}
+	}, [filters])
+
+	const filter = (value: string, index: string) => {
+		setFilters(prev => ({ ...prev, [index]: value }))
+	}
+
 	return (
 		<>
 			<section className="container ">
@@ -237,14 +258,15 @@ export const ViewPractical = () => {
 				</Row>
 				<Row gutter={[16, 16]} className="mt-12">
 					<Col span={5}>
-						<Typography.Text>Сортировка</Typography.Text>
+						<Typography.Text>Наименование специальности</Typography.Text>
 					</Col>
 					<Col span={8}>
 						<Select
 							popupMatchSelectWidth={false}
-							defaultValue="1"
+							defaultValue=""
 							className="w-full"
-							options={[{ value: '1', label: 'Все' }]}
+							options={filterSpecialization}
+							onChange={value => filter(value, 'spec')}
 						/>
 					</Col>
 					<Col flex={'auto'} />
@@ -264,16 +286,15 @@ export const ViewPractical = () => {
 				</Row>
 				<Row gutter={[16, 16]} className="mt-4">
 					<Col span={5}>
-						<Typography.Text>Наименование специальности</Typography.Text>
+						<Typography.Text>Кафедра</Typography.Text>
 					</Col>
 					<Col span={8}>
 						<Select
 							popupMatchSelectWidth={false}
-							defaultValue="1"
+							defaultValue=""
 							className="w-full"
-							options={[
-								{ value: '1', label: '31.08.01 Акушерство и гинекология' }
-							]}
+							options={filterDepartment}
+							onChange={value => filter(value, 'department')}
 						/>
 					</Col>
 					<Col flex={'auto'} />
@@ -297,25 +318,6 @@ export const ViewPractical = () => {
 					</Col>
 				</Row>
 				<Row gutter={[16, 16]} className="mt-4">
-					<Col span={5}>
-						<Typography.Text>Кафедра</Typography.Text>
-					</Col>
-					<Col span={8}>
-						<Select
-							popupMatchSelectWidth={false}
-							defaultValue="1"
-							className="w-full"
-							options={[
-								{
-									value: '1',
-									label:
-										'Кафедра хирургических болезней постдипломного образования'
-								}
-							]}
-						/>
-					</Col>
-				</Row>
-				<Row gutter={[16, 16]} className="mt-4">
 					<Col span={1}>
 						<Typography.Text className="whitespace-nowrap">
 							Курс
@@ -324,14 +326,10 @@ export const ViewPractical = () => {
 					<Col span={2}>
 						<Select
 							popupMatchSelectWidth={false}
-							defaultValue="1"
+							defaultValue=""
 							className="w-full"
-							options={[
-								{
-									value: '1',
-									label: '1'
-								}
-							]}
+							options={filterCourse}
+							onChange={value => filter(value, 'course')}
 						/>
 					</Col>
 					<Col span={2}>
@@ -340,14 +338,10 @@ export const ViewPractical = () => {
 					<Col span={2}>
 						<Select
 							popupMatchSelectWidth={false}
-							defaultValue="1"
+							defaultValue=""
 							className="w-full"
-							options={[
-								{
-									value: '2',
-									label: '2'
-								}
-							]}
+							options={filterSemestr}
+							onChange={value => filter(value, 'semestr')}
 						/>
 					</Col>
 					<Col span={2}>
@@ -358,14 +352,10 @@ export const ViewPractical = () => {
 					<Col span={4}>
 						<Select
 							popupMatchSelectWidth={false}
-							defaultValue="1"
+							defaultValue=""
 							className="w-full"
-							options={[
-								{
-									value: '1',
-									label: 'Производственная'
-								}
-							]}
+							options={filterType}
+							onChange={value => filter(value, 'type')}
 						/>
 					</Col>
 				</Row>
@@ -373,7 +363,7 @@ export const ViewPractical = () => {
 			<Table
 				size="small"
 				columns={columns}
-				dataSource={data}
+				dataSource={dataFilter && dataFilter}
 				bordered
 				pagination={false}
 				className="my-10"

@@ -8,8 +8,8 @@ import {
     ICalendar,
     IPerformance,
     Template,
-    TypeSchedule
-} from '../type'
+    TypeSchedule,
+} from '../reducers/type'
 
 import {apiSlice} from './apiSlice'
 import i18n from "i18next";

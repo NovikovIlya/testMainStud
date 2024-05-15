@@ -1,4 +1,4 @@
-import { performanceItem } from '../api/types'
+import { performanceItem } from '../../api/types'
 
 
 export interface InitialState {

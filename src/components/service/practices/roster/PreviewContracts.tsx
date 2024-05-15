@@ -1,152 +1,255 @@
-import { Button, Col, Row, Space, Table, TableProps, Typography } from 'antd'
+import {Button, Col, Row, Space, Table, TableProps, Typography} from 'antd'
 import React from 'react'
 
-import { ArrowLeftSvg } from '../../../../assets/svg'
-import { DownloadSvg } from '../../../../assets/svg/DownloadSvg'
-import { PrinterSvg } from '../../../../assets/svg/PrinterSvg'
+import {ArrowLeftSvg} from '../../../../assets/svg'
+import {DownloadSvg} from '../../../../assets/svg/DownloadSvg'
+import {PrinterSvg} from '../../../../assets/svg/PrinterSvg'
+import {useGetContractQuery} from '../../../../store/api/practiceApi/taskService'
+import {useNavigate} from "react-router-dom";
+import {utils, writeFileXLSX} from "xlsx";
+import dayjs from "dayjs";
+import printJS from "print-js";
 
 type PropsType = {
-	setIsPreview: (value: boolean) => void
-	setIsCreate: (value: boolean) => void
-	setIsFinalReview: (value: boolean) => void
+    setIsPreview: (value: boolean) => void
+    setIsCreate: (value: boolean) => void
+    setIsFinalReview: (value: boolean) => void
+    preview: string
 }
+
 interface DataType {
-	key: string
-	name: string
-	medic: string
+    key: string
+    name: string
+    medic: string
 }
+
 const data: DataType[] = [
-	{
-		key: '1',
-		name: 'Номер договора',
-		medic: '№1.1.2.77.2.45-04/10/2022'
-	},
-	{
-		key: '2',
-		name: 'Дата заключения договора',
-		medic: '02.09.2022'
-	},
-	{
-		key: '3',
-		name: 'Тип договора',
-		medic: 'Пролонгация 1 год. Потом бессрочный'
-	},
-	{
-		key: '4',
-		name: 'Срок действия договора',
-		medic: 'Бессрочный'
-	},
-	{
-		key: '5',
-		name: 'Шифр и наименование специальности',
-		medic: '12.456 Лечебное дело'
-	},
-	{
-		key: '6',
-		name: 'Юридический адрес организации',
-		medic: 'ул. Оренбургский тракт, 138, Казань, Респ. Татарстан'
-	},
-	{
-		key: '7',
-		name: 'Фактический адрес организации ',
-		medic: 'ул. Оренбургский тракт, 138, Казань, Респ. Татарстан'
-	},
-	{
-		key: '8',
-		name: 'Количество мест',
-		medic: '150'
-	},
-	{
-		key: '9',
-		name: 'Ссылка на скан договора',
-		medic: 'Скан договора.pdf'
-	},
-	{
-		key: '10',
-		name: 'Ссылка на дополнительное соглашение к договору',
-		medic: 'ДопСоглашение.pdf'
-	}
+    {
+        key: '1',
+        name: 'Номер договора',
+        medic: '№1.1.2.77.2.45-04/10/2022'
+    },
+    {
+        key: '2',
+        name: 'Дата заключения договора',
+        medic: '02.09.2022'
+    },
+    {
+        key: '3',
+        name: 'Тип договора',
+        medic: 'Пролонгация 1 год. Потом бессрочный'
+    },
+    {
+        key: '4',
+        name: 'Срок действия договора',
+        medic: 'Бессрочный'
+    },
+    {
+        key: '5',
+        name: 'Шифр и наименование специальности',
+        medic: '12.456 Лечебное дело'
+    },
+    {
+        key: '6',
+        name: 'Юридический адрес организации',
+        medic: 'ул. Оренбургский тракт, 138, Казань, Респ. Татарстан'
+    },
+    {
+        key: '7',
+        name: 'Фактический адрес организации ',
+        medic: 'ул. Оренбургский тракт, 138, Казань, Респ. Татарстан'
+    },
+    {
+        key: '8',
+        name: 'Количество мест',
+        medic: '150'
+    },
+    {
+        key: '9',
+        name: 'Ссылка на скан договора',
+        medic: 'Скан договора.pdf'
+    },
+    {
+        key: '10',
+        name: 'Ссылка на дополнительное соглашение к договору',
+        medic: 'ДопСоглашение.pdf'
+    }
 ]
 const columns: TableProps<DataType>['columns'] = [
-	{
-		title: 'Наименование организации договору',
-		dataIndex: 'name',
-		key: 'name',
-		width: 400,
-		render: (text: string) => <span>{text}</span>
-	},
-	{
-		title: 'Медико-санитарная часть ФГАОУ ВО КФУ',
-		dataIndex: 'medic',
-		key: 'medic'
-	}
+    {
+        title: 'Наименование организации договору',
+        dataIndex: 'name',
+        key: 'name',
+        width: 400,
+        render: (text: string) => <span>{text}</span>
+    },
+    {
+        title: 'Медико-санитарная часть ФГАОУ ВО КФУ',
+        dataIndex: 'medic',
+        key: 'medic'
+    }
 ]
 
-export const PreviewContracts = ({
-	setIsPreview,
-	setIsCreate,
-	setIsFinalReview
-}: PropsType) => {
-	return (
-		<section className="container">
-			<Space size={10}>
-				<Button
-					size="large"
-					className="mt-1"
-					icon={<ArrowLeftSvg className="w-4 h-4 cursor-pointer mt-1" />}
-					type="text"
-					onClick={() => setIsPreview(false)}
-				/>
-				<Typography.Text className="text-black text-3xl font-normal">
-					Название
-				</Typography.Text>
-			</Space>
+export const PreviewContracts = () => {
+    const nav = useNavigate()
+    //const { data: contract } = useGetContractQuery(preview)
+    // const data: DataType[] = [
+    // 	{
+    // 		key: '1',
+    // 		name: 'Номер договора',
+    // 		medic: contract?.contractNumber || ''
+    // 	},
+    // 	{
+    // 		key: '2',
+    // 		name: 'Дата заключения договора',
+    // 		medic: contract?.dateConclusionContract || ''
+    // 	},
+    // 	{
+    // 		key: '3',
+    // 		name: 'Тип договора',
+    // 		medic: contract?.contractType || ''
+    // 	},
+    // 	{
+    // 		key: '4',
+    // 		name: 'Срок действия договора',
+    // 		medic: contract?.prolongation?.toString() || ''
+    // 	},
+    // 	{
+    // 		key: '5',
+    // 		name: 'Шифр и наименование специальности',
+    // 		medic: contract?.specialtyName || ''
+    // 	},
+    // 	{
+    // 		key: '6',
+    // 		name: 'Юридический адрес организации',
+    // 		medic: contract?.legalFacility || ''
+    // 	},
+    // 	{
+    // 		key: '7',
+    // 		name: 'Фактический адрес организации ',
+    // 		medic: contract?.actualFacility || ''
+    // 	},
+    // 	{
+    // 		key: '8',
+    // 		name: 'Количество мест',
+    // 		medic: contract?.placeNumber.toString() || ''
+    // 	},
+    // 	{
+    // 		key: '9',
+    // 		name: 'Ссылка на скан договора',
+    // 		medic: 'Скан договора.pdf'
+    // 	},
+    // 	{
+    // 		key: '10',
+    // 		name: 'Ссылка на дополнительное соглашение к договору',
+    // 		medic: 'ДопСоглашение.pdf'
+    // 	}
+    // ]
+    function translateColumnIntoRussia() {
+        return {
+            "Наименование организации": 'test1',
+            "Наименование специальности": 'test1',
+            "Номер договора": 'test1',
+            "Дата заключения договора": 'test1',
+            "Тип договора": 'test1',
+            "Срок действия договора": 'test1',
+            "Шифр и наименование специальности": 'test1',
+            "Юридический адрес организации": 'test1',
+            "Фактический адрес организации": 'test1',
+            "Количество мест": 'test1',
+        }
+    }
+    function downLoad() {
+        const ws = utils.json_to_sheet([translateColumnIntoRussia()]);
+        const wb = utils.book_new();
+        utils.book_append_sheet(wb, ws, "Data");
+        writeFileXLSX(wb, "File.xlsx");
+    }
 
-			<Row gutter={[16, 16]} className="mt-12">
-				<Col span={7}>
-					<Space>
-						<Button
-							type="text"
-							icon={<DownloadSvg />}
-							className="flex items-center"
-						>
-							Скачать
-						</Button>
-						<Button
-							type="text"
-							icon={<PrinterSvg />}
-							className="flex items-center"
-						>
-							Печать
-						</Button>
-					</Space>
-				</Col>
-				<Col flex={'auto'} />
-				<Col span={9}>
-					<Space className="w-full flex-row-reverse">
-						<Button
-							className="!rounded-full"
-							onClick={() => setIsFinalReview(true)}
-						>
-							Посмотреть итоговый реестр
-						</Button>
-						<Button
-							type="primary"
-							className="!rounded-full"
-							onClick={() => setIsCreate(true)}
-						>
-							Создать договор
-						</Button>
-					</Space>
-				</Col>
-			</Row>
-			<Table
-				columns={columns}
-				dataSource={data}
-				bordered
-				pagination={false}
-				className="my-10"
-			/>
-		</section>
-	)
+    function printTable() {
+        function properties() {
+                return [
+                    "Наименование организации",
+                    "Наименование специальности",
+                    "Номер договора",
+                    "Дата заключения договора",
+                    "Тип договора",
+                    "Срок действия договора",
+                    "Шифр и наименование специальности",
+                    "Юридический адрес организации",
+                    "Фактический адрес организации",
+                    "Количество мест",
+                ]
+        }
+        printJS({
+            printable: [translateColumnIntoRussia()],
+            properties: properties(),
+            type: 'json',
+            style: 'body {font-size: 10px}'
+        })
+    }
+    return (
+        <section className="container">
+            <Space size={10}>
+                <Button
+                    size="large"
+                    className="mt-1"
+                    icon={<ArrowLeftSvg className="w-4 h-4 cursor-pointer mt-1"/>}
+                    type="text"
+                    onClick={() => nav('/services/practices/registerContracts')}
+                />
+                <Typography.Text className="text-black text-3xl font-normal">
+                    Название
+                </Typography.Text>
+            </Space>
+
+            <Row gutter={[16, 16]} className="mt-12">
+                <Col span={7}>
+                    <Space>
+                        <Button
+                            type="text"
+                            icon={<DownloadSvg/>}
+                            className="flex items-center"
+                            onClick={downLoad}
+                        >
+                            Скачать
+                        </Button>
+                        <Button
+                            type="text"
+                            icon={<PrinterSvg/>}
+                            className="flex items-center"
+                            onClick={printTable}
+                        >
+                            Печать
+                        </Button>
+                    </Space>
+                </Col>
+                <Col flex={'auto'}/>
+                <Col span={9}>
+                    <Space className="w-full flex-row-reverse">
+                        <Button
+                            className="!rounded-full"
+                            onClick={() => nav('/services/practices/registerContracts')}
+                        >
+                            Посмотреть итоговый реестр
+                        </Button>
+                        <Button
+                            type="primary"
+                            className="!rounded-full"
+                            onClick={() => nav('/services/practices/registerContracts/createContract')}
+                        >
+                            Создать договор
+                        </Button>
+                    </Space>
+                </Col>
+            </Row>
+            <Table
+                columns={columns}
+                dataSource={data}
+                bordered
+                pagination={false}
+                className="my-10"
+            />
+        </section>
+    )
 }

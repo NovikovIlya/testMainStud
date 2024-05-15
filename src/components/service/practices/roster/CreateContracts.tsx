@@ -71,7 +71,7 @@ export const CreateContracts = () => {
 
     
     useEffect(() => {
-        let url = "http://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/party";
+        let url = "https://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/party";
         let query = "1655018018";
 
         let options = {

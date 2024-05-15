@@ -108,7 +108,7 @@ const mockDataFull: ColumnsTableFull[] = [
         legalAddress: 'ул. Оренбургский тракт, 138, Казань, Респ. Татарстан',
         actualAddress: 'ул. Оренбургский тракт, 138, Казань, Респ. Татарстан',
         numberSeats: '150',
-        links: 'Cкан договора'
+        links: 'Cкан договоров'
     },
     {
         id: '2',

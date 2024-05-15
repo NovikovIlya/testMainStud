@@ -91,9 +91,13 @@ export const NavPesonnelAccounting = () => {
 				</div>
 			),
 			children: (
-				<div>
+				<div className="flex flex-col gap-[12px] ml-[24px]">
 					<p
-						className="text-base"
+						className={clsx(
+							'font-content-font text-black text-[14px]/[14px] font-normal',
+							pathname !== '/services/personnelaccounting/vacancies' &&
+								'opacity-[52%]'
+						)}
 						onClick={() => {
 							navigate('/services/personnelaccounting/vacancies')
 						}}
@@ -101,7 +105,11 @@ export const NavPesonnelAccounting = () => {
 						Все вакансии
 					</p>
 					<p
-						className="text-base"
+						className={clsx(
+							'font-content-font text-black text-[14px]/[14px] font-normal',
+							pathname !== '/services/personnelaccounting/vacancyrequests' &&
+								'opacity-[52%]'
+						)}
 						onClick={() => {
 							navigate('/services/personnelaccounting/vacancyrequests')
 						}}
@@ -123,9 +131,13 @@ export const NavPesonnelAccounting = () => {
 				</div>
 			),
 			children: (
-				<div>
+				<div className="flex flex-col gap-[12px] ml-[24px]">
 					<p
-						className="text-base"
+						className={clsx(
+							'font-content-font text-black text-[14px]/[14px] font-normal',
+							pathname !== '/services/personnelaccounting/reserve' &&
+								'opacity-[52%]'
+						)}
 						onClick={() => {
 							navigate('/services/personnelaccounting/reserve')
 						}}
@@ -133,7 +145,11 @@ export const NavPesonnelAccounting = () => {
 						Резерв
 					</p>
 					<p
-						className="text-base"
+						className={clsx(
+							'font-content-font text-black text-[14px]/[14px] font-normal',
+							pathname !== '/services/personnelaccounting/archive' &&
+								'opacity-[52%]'
+						)}
 						onClick={() => {
 							navigate('/services/personnelaccounting/archive')
 						}}
@@ -183,7 +199,7 @@ export const NavPesonnelAccounting = () => {
 				<li
 					key={index}
 					className={clsx(
-						'w-full flex items-center py-2 pl-8 hover:bg-[#F5F8FB]  cursor-pointer',
+						'w-full flex items-center pl-5 hover:bg-[#F5F8FB]  cursor-pointer',
 						id === pathname && 'bg-[#F5F8FB]'
 					)}
 				>
@@ -212,7 +228,7 @@ export const NavPesonnelAccounting = () => {
 				<li
 					key={index}
 					className={clsx(
-						'w-full flex items-center py-2 pl-8 hover:bg-[#F5F8FB]  cursor-pointer',
+						'w-full flex items-center pl-5 hover:bg-[#F5F8FB]  cursor-pointer',
 						id === pathname && 'bg-[#F5F8FB]'
 					)}
 				>

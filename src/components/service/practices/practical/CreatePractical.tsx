@@ -10,7 +10,6 @@ import {
 	verticalListSortingStrategy
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { yupResolver } from '@hookform/resolvers/yup'
 import {
 	Button,
 	Col,
@@ -118,7 +117,7 @@ const CreatePractical = () => {
 		getValues,
 		formState: { errors }
 	} = useForm<INewPracticeType>({
-		resolver: yupResolver(NewPracticeSchema),
+		//resolver: yupResolver(NewPracticeSchema),
 		mode: 'onBlur',
 		defaultValues: {
 			dataSource: []

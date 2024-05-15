@@ -8,7 +8,7 @@ import {
     Space,
     Typography,
 } from 'antd'
-// import {format} from 'date-fns/format'
+// import {format} from 'date-fns'
 import dayjs from 'dayjs'
 import {useEffect, useState} from 'react'
 import {Controller, SubmitHandler, useForm} from 'react-hook-form'
@@ -20,7 +20,7 @@ import {
     useCreatePracticSceduleMutation
 } from '../../../../store/api/practiceApi/taskService'
 import {IDocumentInfo} from "../../../../models/Practice";
-import {format} from "date-fns/format";
+import {format} from "date-fns";
 
 const optionsDivision = [
     {

@@ -43,16 +43,15 @@ export const RegisterPopoverMain = ({
         if (recordFull) {
             for (let elem of recordFull) {
                 const newObj = {
-                    "Наименование организации": elem.nameOrg,
-                    "Наименование специальности": elem.nameSpecialty,
+                    "Наименование организации": elem.contractFacility,
+                    "Шифр и наименование специальности": elem.specialtyName,
                     "Номер договора": elem.contractNumber,
-                    "Дата заключения договора": dayjs(elem.dateConclusionContract).format('DD.MM.YYYY'),
+                    "Дата заключения договора": dayjs(elem.conclusionDate).format('DD.MM.YYYY'),
                     "Тип договора": elem.contractType,
-                    "Срок действия договора": elem.contractPeriod,
-                    "Шифр и наименование специальности": elem.cipherNameSpecialty,
-                    "Юридический адрес организации": elem.legalAddress,
-                    "Фактический адрес организации": elem.actualAddress,
-                    "Количество мест": elem.numberSeats,
+                    "Срок действия договора": elem.endDate,
+                    "Юридический адрес организации": elem.legalFacility,
+                    "Фактический адрес организации": elem.actualFacility,
+                    "Количество мест": elem.placesAmount,
                 }
                 newData.push(newObj)
             }

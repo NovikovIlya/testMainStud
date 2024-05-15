@@ -25,6 +25,8 @@ import {RegisterPopoverContent} from "../../popover/register/RegisterPopoverCont
 import {RegisterPopoverMain} from "../../popover/register/RegisterPopoverMain";
 import {useNavigate} from "react-router-dom";
 import {useGetContractsAllQuery, useGetContractsShortQuery} from "../../../../../store/api/practiceApi/roster";
+import {ThemeProvider} from "@material-tailwind/react";
+import value = ThemeProvider.propTypes.value;
 
 
 export interface ColumnsTableCompressedView {
@@ -36,20 +38,30 @@ export interface ColumnsTableCompressedView {
     dateConclusionContract: string
 }
 
+interface Links {
+    documentCopyId: string
+    documentAgreementId: string
+}
+
 export interface ColumnsTableFull {
     id: string
     key: string
-    nameOrg: string
-    nameSpecialty: string
+    contractFacility: string
+    specialtyName: string
     contractNumber: string
-    dateConclusionContract: string
+    conclusionDate: string
     contractType: string
-    contractPeriod: string
-    cipherNameSpecialty: string
-    legalAddress: string
-    actualAddress: string
-    numberSeats: string
-    links: string
+    endDate: string
+    legalFacility: string
+    actualFacility: string
+    placesAmount: string
+    prolongation: string | null
+    links: Links
+}
+
+interface ListDataFull {
+    firstDataTable: ColumnsTableFull[]
+    filteredDataTable: ColumnsTableFull[]
 }
 
 const mockDataCompressed: ColumnsTableCompressedView[] = [
@@ -98,51 +110,22 @@ const mockDataFull: ColumnsTableFull[] = [
     {
         id: '1',
         key: '1',
-        nameOrg: 'Лечебно-профилактическое учреждение по договору',
-        nameSpecialty: '12.456 Лечебное дело',
+        contractFacility: 'Лечебно-профилактическое учреждение по договору',
+        specialtyName: '12.456 Лечебное дело',
         contractNumber: '№1.1.2.77.2.45-04/10/2022',
-        dateConclusionContract: '2024-04-27',
+        conclusionDate: '2024-04-27',
         contractType: 'С пролонгацией',
-        contractPeriod: 'Бессрочный',
-        cipherNameSpecialty: 'Ортодонтия',
-        legalAddress: 'ул. Оренбургский тракт, 138, Казань, Респ. Татарстан',
-        actualAddress: 'ул. Оренбургский тракт, 138, Казань, Респ. Татарстан',
-        numberSeats: '150',
-        links: 'Cкан договоров'
+        endDate: '2024-12-12',
+        legalFacility: 'ул. Оренбургский тракт, 138, Казань, Респ. Татарстан',
+        actualFacility: 'ул. Оренбургский тракт, 138, Казань, Респ. Татарстан',
+        placesAmount: '150',
+        prolongation: '3',
+        links: {documentCopyId: 'sdf', documentAgreementId: '123'}
     },
-    {
-        id: '2',
-        key: '2',
-        nameOrg: 'Тест 3',
-        nameSpecialty: '12.456 Лечебное дело',
-        contractNumber: '№1.1.2.77.2.45-04/10/2022',
-        dateConclusionContract: '2024-04-25',
-        contractType: 'Бессрочный',
-        contractPeriod: 'Бессрочный',
-        cipherNameSpecialty: 'Ортодонтия',
-        legalAddress: 'ул. Оренбургский тракт, 138, Казань, Респ. Татарстан',
-        actualAddress: 'ул. Оренбургский тракт, 138, Казань, Респ. Татарстан',
-        numberSeats: '100',
-        links: 'Cкан договора'
-    },
-    {
-        id: '3',
-        key: '3',
-        nameOrg: 'Тест 3',
-        nameSpecialty: '31.08.01 Акушерство и гинекология',
-        contractNumber: '№1.1.2.77.2.45-04/10/2022',
-        dateConclusionContract: '2024-04-25',
-        contractType: 'Бессрочный',
-        contractPeriod: 'Бессрочный',
-        cipherNameSpecialty: 'Ортодонтия',
-        legalAddress: 'ул. Оренбургский тракт, 138, Казань, Респ. Татарстан',
-        actualAddress: 'ул. Оренбургский тракт, 138, Казань, Респ. Татарстан',
-        numberSeats: '100',
-        links: 'Cкан договора'
-    }
 ]
 export const RegisterContracts = () => {
-
+    const {data: dataAll, isSuccess} = useGetContractsAllQuery()
+    const {data: dataShort} = useGetContractsShortQuery()
     const nav = useNavigate()
     const [filter, setFilter] = useState({
         contractType: 'Все',
@@ -160,7 +143,7 @@ export const RegisterContracts = () => {
     const [
         tableDataFull,
         setTableDataFull
-    ] = useState<ColumnsTableFull[]>(mockDataFull)
+    ] = useState<ColumnsTableFull[]>()
     const [tableView, setTableView] = useState({
         compressed: true,
         table: false
@@ -174,6 +157,19 @@ export const RegisterContracts = () => {
         selectedFieldsFull,
         setSelectedFieldFull
     ] = useState<ColumnsTableFull[]>()
+
+    function prolonAge(prolon: string) {
+        if (prolon === '1') {
+            return 'год'
+        } else if (prolon === '2' || prolon === '3' || prolon === '4') {
+            return 'года'
+        } else if (prolon.at(-1) === '2' || prolon.at(-1) === '3' || prolon.at(-1) === '4') {
+            return 'года'
+        } else {
+            return 'лет'
+        }
+    }
+
     const columnsCompressedView: TableProps<ColumnsTableCompressedView>['columns'] = [
         {
             title: <TitleHeadCell title={'Наименование организации'}/>,
@@ -246,7 +242,7 @@ export const RegisterContracts = () => {
     const columnsFullView: TableProps<ColumnsTableFull>['columns'] = [
         {
             title: <span className={'text-xs'}>Наименование организации</span>,
-            dataIndex: 'nameOrg',
+            dataIndex: 'contractFacility',
             align: "left",
             className: 'text-xs',
             width: 200,
@@ -263,8 +259,8 @@ export const RegisterContracts = () => {
                 </div>
         },
         {
-            title: <span className={'text-xs'}>Наименование специальности</span>,
-            dataIndex: 'nameSpecialty',
+            title: <span className={'text-xs'}>Шифр и наименование специальности</span>,
+            dataIndex: 'specialtyName',
             align: "left",
             className: 'text-xs'
         },
@@ -276,7 +272,7 @@ export const RegisterContracts = () => {
         },
         {
             title: <span className={'text-xs'}>Дата заключения договора</span>,
-            dataIndex: 'dateConclusionContract',
+            dataIndex: 'conclusionDate',
             align: "center",
             className: 'text-xs',
             render: (text) => dayjs(text).format('DD.MM.YYYY')
@@ -285,35 +281,38 @@ export const RegisterContracts = () => {
             title: <span className={'text-xs'}>Тип договора</span>,
             dataIndex: 'contractType',
             align: "center",
-            className: 'text-xs'
+            className: 'text-xs',
+            render: (value, record, index) =>
+                <div className={'flex flex-col gap-2'}>
+                    <span>{value}</span>
+                    {record.prolongation
+                        &&
+                        <span>
+                            на {record.prolongation} {prolonAge(record.prolongation)}
+                        </span>}
+                </div>
         },
         {
             title: <span className={'text-xs'}>Срок действия договора</span>,
-            dataIndex: 'contractPeriod',
-            align: "center",
-            className: 'text-xs'
-        },
-        {
-            title: <span className={'text-xs'}>Шифр и наименование специальности</span>,
-            dataIndex: 'cipherNameSpecialty',
+            dataIndex: 'endDate',
             align: "center",
             className: 'text-xs'
         },
         {
             title: <span className={'text-xs'}>Юридический адрес организации</span>,
-            dataIndex: 'legalAddress',
+            dataIndex: 'legalFacility',
             align: "center",
             className: 'text-xs'
         },
         {
             title: <span className={'text-xs'}>Фактический адрес организации</span>,
-            dataIndex: 'actualAddress',
+            dataIndex: 'actualFacility',
             align: "center",
             className: 'text-xs'
         },
         {
             title: <span className={'text-xs'}>Количество мест</span>,
-            dataIndex: 'numberSeats',
+            dataIndex: 'placesAmount',
             align: "center",
             className: 'text-xs'
         },
@@ -322,7 +321,12 @@ export const RegisterContracts = () => {
             dataIndex: 'links',
             align: "center",
             width: 100,
-            className: 'text-xs'
+            className: 'text-xs',
+            render: (value, record, index) =>
+                <div className={'flex flex-col gap-2'}>
+                    <a href={`${record.links.documentCopyId}`}>Cкан договора</a>
+                    <a href={`${record.links.documentAgreementId}`}>Доп. соглашение к договору</a>
+                </div>
         },
         {
             title:
@@ -484,7 +488,7 @@ export const RegisterContracts = () => {
             if (filter.nameOrg === 'Все') {
                 return elem
             } else {
-                return elem.nameOrg === filter.nameOrg
+                return elem.contractFacility === filter.nameOrg
             }
         }
 
@@ -500,7 +504,7 @@ export const RegisterContracts = () => {
             if (filter.dateConclusionContract === 'Все') {
                 return elem
             } else {
-                return elem.dateConclusionContract === filter.dateConclusionContract
+                return elem.conclusionDate === filter.dateConclusionContract
             }
         }
 
@@ -508,7 +512,7 @@ export const RegisterContracts = () => {
             if (filter.nameSpecialty === 'Все') {
                 return elem
             } else {
-                return elem.nameSpecialty === filter.nameSpecialty
+                return elem.specialtyName === filter.nameSpecialty
             }
         }
 
@@ -516,28 +520,50 @@ export const RegisterContracts = () => {
             if (filter.numberSeats === 'Все') {
                 return elem
             } else {
-                return elem.numberSeats === filter.numberSeats
+                return elem.placesAmount === filter.numberSeats
             }
         }
 
         function sortDateConclusionContract(a: ColumnsTableFull, b: ColumnsTableFull) {
             if (filter.sortDateConclusionContract === 'По дате (сначала новые)') {
-                return +new Date(b.dateConclusionContract) - +new Date(a.dateConclusionContract)
+                return +new Date(b.conclusionDate) - +new Date(a.conclusionDate)
             }
             if (filter.sortDateConclusionContract === 'По дате (сначала старые)') {
-                return +new Date(a.dateConclusionContract) - +new Date(b.dateConclusionContract)
+                return +new Date(a.conclusionDate) - +new Date(b.conclusionDate)
             }
             return 0
         }
 
-        return mockDataFull
-            .filter(elem => filterNameOrg(elem))
-            .filter(elem => filterContractType(elem))
-            .filter(elem => filterDateConclusionContract(elem))
-            .filter(elem => filterDataNameSpecialty(elem))
-            .filter(elem => filterNumberSeats(elem))
-            .sort((a, b) => sortDateConclusionContract(a, b))
+        if (isSuccess) {
+            const mockDataFull: ColumnsTableFull[] = dataAll.map(elem => (
+                {
+                    id: elem.id,
+                    key: elem.id,
+                    contractFacility: elem.contractFacility,
+                    specialtyName: elem.specialtyName,
+                    contractNumber: elem.contractNumber,
+                    conclusionDate: elem.conclusionDate,
+                    contractType: elem.contractType,
+                    endDate: elem.endDate,
+                    legalFacility: elem.legalFacility,
+                    actualFacility: elem.actualFacility,
+                    placesAmount: elem.placesAmount,
+                    prolongation: elem.prolongation,
+                    links: {
+                        documentCopyId: elem.documentCopyId,
+                        documentAgreementId: elem.documentAgreementId
+                    },
+                }
+            ))
 
+            return mockDataFull
+                .filter(elem => filterNameOrg(elem))
+                .filter(elem => filterContractType(elem))
+                .filter(elem => filterDateConclusionContract(elem))
+                .filter(elem => filterDataNameSpecialty(elem))
+                .filter(elem => filterNumberSeats(elem))
+                .sort((a, b) => sortDateConclusionContract(a, b))
+        }
     }
 
     useEffect(() => {
@@ -545,12 +571,35 @@ export const RegisterContracts = () => {
         setTableDataFull(filterDataFull())
     }, [filter])
 
-    const {data: dataAll} = useGetContractsAllQuery()
-    const {data: dataShort} = useGetContractsShortQuery()
+
 
 
     useEffect(() => {
         console.log(dataAll)
+        if (isSuccess) {
+            const newDataAll: ColumnsTableFull[] = dataAll.map(elem => (
+                {
+                    id: elem.id,
+                    key: elem.id,
+                    contractFacility: elem.contractFacility,
+                    specialtyName: elem.specialtyName,
+                    contractNumber: elem.contractNumber,
+                    conclusionDate: elem.conclusionDate,
+                    contractType: elem.contractType,
+                    endDate: elem.endDate,
+                    legalFacility: elem.legalFacility,
+                    actualFacility: elem.actualFacility,
+                    placesAmount: elem.placesAmount,
+                    prolongation: elem.prolongation,
+                    links: {
+                        documentCopyId: elem.documentCopyId,
+                        documentAgreementId: elem.documentAgreementId
+                    },
+                }
+            ))
+            console.log(newDataAll)
+            setTableDataFull(newDataAll)
+        }
 
     }, [dataAll]);
 

@@ -2,9 +2,9 @@ import {DeleteOutlined, PlusOutlined} from '@ant-design/icons'
 import {Button, Col, Form, Row, Select, Space} from 'antd'
 import React from 'react'
 import {useNavigate} from 'react-router-dom'
-import {ArrowLeftSvg} from '../../../../assets/svg'
-import {useCreateTaskMutation} from '../../../../store/api/practiceApi/taskService'
-import {validateMessages} from "../../../../utils/validateMessage";
+import {ArrowLeftSvg} from '../../../../../assets/svg'
+import {useCreateTaskMutation} from '../../../../../store/api/practiceApi/taskService'
+import {validateMessages} from "../../../../../utils/validateMessage";
 import TextArea from "antd/es/input/TextArea";
 import './CreateTask.scss'
 

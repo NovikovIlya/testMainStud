@@ -6,7 +6,7 @@ import {ArrowLeftSvg} from '../../../../assets/svg'
 import {useCreateTaskMutation} from '../../../../store/api/practiceApi/taskService'
 import {validateMessages} from "../../../../utils/validateMessage";
 import TextArea from "antd/es/input/TextArea";
-import './CreateTask.scss'
+import './createTask/CreateTask.scss'
 
 const EditTask = () => {
 	const navigate = useNavigate()

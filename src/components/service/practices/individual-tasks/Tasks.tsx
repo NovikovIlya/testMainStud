@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 
-import CreateTask from './CreateTask'
+import CreateTask from './createTask/CreateTask'
 import EditTask from './EditTask'
 import IndividualTasks from './IndividualTasks'
 

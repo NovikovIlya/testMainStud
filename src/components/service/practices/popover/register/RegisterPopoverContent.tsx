@@ -41,16 +41,15 @@ export const RegisterPopoverContent = ({
         }
         if (recordFull) {
             return {
-                "Наименование организации": recordFull.nameOrg,
-                "Наименование специальности": recordFull.nameSpecialty,
+                "Наименование организации": recordFull.contractFacility,
+                "Шифр и наименование специальности": recordFull.specialtyName,
                 "Номер договора": recordFull.contractNumber,
-                "Дата заключения договора": dayjs(recordFull.dateConclusionContract).format('DD.MM.YYYY'),
+                "Дата заключения договора": dayjs(recordFull.conclusionDate).format('DD.MM.YYYY'),
                 "Тип договора": recordFull.contractType,
-                "Срок действия договора": recordFull.contractPeriod,
-                "Шифр и наименование специальности": recordFull.cipherNameSpecialty,
-                "Юридический адрес организации": recordFull.legalAddress,
-                "Фактический адрес организации": recordFull.actualAddress,
-                "Количество мест": recordFull.numberSeats,
+                "Срок действия договора": recordFull.endDate,
+                "Юридический адрес организации": recordFull.legalFacility,
+                "Фактический адрес организации": recordFull.actualFacility,
+                "Количество мест": recordFull.placesAmount,
             }
         }
     }

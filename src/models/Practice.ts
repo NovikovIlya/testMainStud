@@ -154,30 +154,12 @@ export interface ContractsAll {
     contractFacility: string,
     conclusionDate: string,
     contractType: string,
-    prolongation: string, //в таблице нет
-    endDate: string, //в таблице нет
+    prolongation: string,
+    endDate: string,
     specialtyName: string,
     legalFacility: string,
     actualFacility: string,
     placesAmount: string,
-    documentCopyId: string,
-    documentAgreementId: string
-}
-
-interface ColumnsTableFull {
-    id: string
-    key: string
-    contractNumber: string
-    contractFacility: string
-    conclusionDate: string
-    contractType: string
-    specialtyName: string
-    legalFacility: string
-    actualFacility: string
-    placesAmount: string,
-
-    contractPeriod: string
-
     documentCopyId: string,
     documentAgreementId: string
 }

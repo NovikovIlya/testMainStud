@@ -147,3 +147,37 @@ export interface IDocumentStatus {
     description: string
     status: string
 }
+
+export interface ContractsAll {
+    id: string,
+    contractNumber: string,
+    contractFacility: string,
+    conclusionDate: string,
+    contractType: string,
+    prolongation: string, //в таблице нет
+    endDate: string, //в таблице нет
+    specialtyName: string,
+    legalFacility: string,
+    actualFacility: string,
+    placesAmount: string,
+    documentCopyId: string,
+    documentAgreementId: string
+}
+
+interface ColumnsTableFull {
+    id: string
+    key: string
+    contractNumber: string
+    contractFacility: string
+    conclusionDate: string
+    contractType: string
+    specialtyName: string
+    legalFacility: string
+    actualFacility: string
+    placesAmount: string,
+
+    contractPeriod: string
+
+    documentCopyId: string,
+    documentAgreementId: string
+}

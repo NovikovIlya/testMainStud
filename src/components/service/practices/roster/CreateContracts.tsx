@@ -49,7 +49,7 @@ export const CreateContracts = () => {
 
     function onFinish(values: ICreateContract) {
         const newForm = new FormData()
-        values.specialtyNameId = 123
+        values.specialtyNameId = 1
         values.pdfContract = files.pdfContract!
         values.pdfAgreement = files.pdfAgreement!
         values.placesAmount = String(values.placesAmount)

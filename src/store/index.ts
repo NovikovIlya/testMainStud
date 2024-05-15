@@ -40,7 +40,7 @@ export const store = configureStore({
 	},
 	middleware: getDefaultMiddleware =>
 		getDefaultMiddleware()
-			.concat(...(process.env.NODE_ENV !== 'production' ? [logger] : []))
+			//.concat(...(process.env.NODE_ENV !== 'production' ? [logger] : []))
 			.concat(apiSlice.middleware, practiceApi.middleware),
 	devTools: true
 })

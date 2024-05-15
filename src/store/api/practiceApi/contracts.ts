@@ -10,7 +10,7 @@ export const contractService = practiceApi.injectEndpoints({
                     method: 'POST'
                 }
             }
-        })
+        }),
 
     })
 })

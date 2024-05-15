@@ -24,8 +24,7 @@ import clsx from "clsx";
 import {RegisterPopoverContent} from "../../popover/register/RegisterPopoverContent";
 import {RegisterPopoverMain} from "../../popover/register/RegisterPopoverMain";
 import {useNavigate} from "react-router-dom";
-import printJS from "print-js";
-import {CompressedIndividualTask, FullIndividualTask} from "../../individual-tasks/IndividualTasks";
+import {useGetContractsAllQuery, useGetContractsShortQuery} from "../../../../../store/api/practiceApi/roster";
 
 
 export interface ColumnsTableCompressedView {
@@ -546,9 +545,14 @@ export const RegisterContracts = () => {
         setTableDataFull(filterDataFull())
     }, [filter])
 
+    const {data: dataAll} = useGetContractsAllQuery()
+    const {data: dataShort} = useGetContractsShortQuery()
+
+
     useEffect(() => {
-        console.log(selectedFieldsFull)
-    }, [selectedFieldsFull]);
+        console.log(dataAll)
+
+    }, [dataAll]);
 
     return (
         <section className={'container'}>

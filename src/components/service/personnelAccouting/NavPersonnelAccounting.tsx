@@ -171,9 +171,14 @@ export const NavPesonnelAccounting = () => {
 				</div>
 			),
 			children: (
-				<div>
+				<div className="flex flex-col gap-[12px] ml-[24px]">
 					<p
-						className="text-base"
+						className={clsx(
+							'font-content-font text-black text-[14px]/[14px] font-normal',
+							pathname !==
+								'/services/personnelaccounting/supervisor/vacancies' &&
+								'opacity-[52%]'
+						)}
 						onClick={() => {
 							navigate('/services/personnelaccounting/supervisor/vacancies')
 						}}
@@ -181,7 +186,12 @@ export const NavPesonnelAccounting = () => {
 						Все вакансии
 					</p>
 					<p
-						className="text-base"
+						className={clsx(
+							'font-content-font text-black text-[14px]/[14px] font-normal',
+							pathname !==
+								'/services/personnelaccounting/supervisor/createvacancy' &&
+								'opacity-[52%]'
+						)}
 						onClick={() => {
 							navigate('/services/personnelaccounting/supervisor/createvacancy')
 						}}

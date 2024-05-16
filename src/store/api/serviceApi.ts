@@ -387,7 +387,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 				respondId: number
 				format: 'OFFLINE' | 'ONLINE'
 				mainTime: string
-				reservedTime: string
+				reservedTimes: string[]
 				additionalInfo?: string
 			}
 		>({
@@ -395,7 +395,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 				respondId,
 				format,
 				mainTime,
-				reservedTime,
+				reservedTimes,
 				additionalInfo
 			}) => ({
 				url: `http://localhost:8082/employment-api/v1/respond/${respondId}/status/invite`,
@@ -403,7 +403,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 				body: {
 					format: format,
 					mainTime: mainTime,
-					reserveTimes: reservedTime,
+					reserveTimes: reservedTimes,
 					additionalInfo: additionalInfo
 				},
 				headers: {

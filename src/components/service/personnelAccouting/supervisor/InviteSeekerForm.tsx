@@ -104,27 +104,28 @@ export const InviteSeekerForm = (props: { respondId: number }) => {
 										? values.mainTime.$s
 										: '0' + values.mainTime.$s) +
 									'.020Z',
-								reservedTime:
-									reservedTime[0].timeToSend.$y +
-									'-' +
-									(reservedTime[0].timeToSend.$M + 1 >= 10
-										? reservedTime[0].timeToSend.$M + 1
-										: '0' + (reservedTime[0].timeToSend.$M + 1)) +
-									'-' +
-									(reservedTime[0].timeToSend.$D >= 10
-										? reservedTime[0].timeToSend.$D
-										: '0' + reservedTime[0].timeToSend.$D) +
-									'T' +
-									reservedTime[0].timeToSend.$H +
-									':' +
-									(reservedTime[0].timeToSend.$m >= 10
-										? reservedTime[0].timeToSend.$m
-										: '0' + reservedTime[0].timeToSend.$m) +
-									':' +
-									(reservedTime[0].timeToSend.$s >= 10
-										? reservedTime[0].timeToSend.$s
-										: '0' + reservedTime[0].timeToSend.$s) +
-									'.020Z',
+								reservedTimes:
+									// reservedTime[0].timeToSend.$y +
+									// '-' +
+									// (reservedTime[0].timeToSend.$M + 1 >= 10
+									// 	? reservedTime[0].timeToSend.$M + 1
+									// 	: '0' + (reservedTime[0].timeToSend.$M + 1)) +
+									// '-' +
+									// (reservedTime[0].timeToSend.$D >= 10
+									// 	? reservedTime[0].timeToSend.$D
+									// 	: '0' + reservedTime[0].timeToSend.$D) +
+									// 'T' +
+									// reservedTime[0].timeToSend.$H +
+									// ':' +
+									// (reservedTime[0].timeToSend.$m >= 10
+									// 	? reservedTime[0].timeToSend.$m
+									// 	: '0' + reservedTime[0].timeToSend.$m) +
+									// ':' +
+									// (reservedTime[0].timeToSend.$s >= 10
+									// 	? reservedTime[0].timeToSend.$s
+									// 	: '0' + reservedTime[0].timeToSend.$s) +
+									// '.020Z',
+									['2024-05-17T13:40:00+03:00'],
 								additionalInfo:
 									format === 'OFFLINE' ? values.details : undefined
 							})

@@ -31,10 +31,14 @@ export const RespondInfo = (props: {
 	const [isRespondSentToArchive, setIsRespondSentToArchive] = useState<boolean>(
 		res?.status === 'ARCHIVE'
 	)
+	const [isRespondSentToReserve, setIsRespondSentToReserve] = useState<boolean>(
+		res?.status === 'IN_RESERVE'
+	)
 
 	useEffect(() => {
 		setIsRespondSentToSupervisor(res?.status === 'IN_SUPERVISOR_REVIEW')
 		setIsRespondSentToArchive(res?.status === 'ARCHIVE')
+		setIsRespondSentToReserve(res?.status === 'IN_RESERVE')
 	}, [res])
 
 	const navigate = useNavigate()
@@ -140,11 +144,12 @@ export const RespondInfo = (props: {
 										Отказать
 									</Button>
 									<Button
+										disabled={isRespondSentToReserve}
 										onClick={() => {
 											sendToReserve(respondId.respondId)
 												.unwrap()
 												.then(() => {
-													setIsRespondSentToArchive(true)
+													setIsRespondSentToReserve(true)
 												})
 										}}
 										className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"

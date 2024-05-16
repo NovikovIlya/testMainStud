@@ -257,7 +257,103 @@ export const ReserveRespondInfo = (props: {
 				</>
 			)
 		} else {
-			return <></>
+			return (
+				<>
+					<div className="pl-[52px] pr-[10%] py-[60px] w-full">
+						<div>
+							<Button
+								onClick={() => {
+									props.type === 'PERSONNEL_DEPARTMENT'
+										? navigate('/services/personnelaccounting/reserve')
+										: navigate(
+												'/services/personnelaccounting/supervisor/responds'
+										  )
+								}}
+								className="bg-inherit h-[38px] w-[99px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer font-normal text-black text-[16px]/[16px] flex gap-[8px]"
+							>
+								<ArrowIcon />
+								Назад
+							</Button>
+						</div>
+						<div className="mt-[52px] flex flex-col gap-[36px]">
+							<div className="flex flex-wrap gap-[150px]">
+								<div className="flex gap-[20px]">
+									<div className="flex h-[167px] w-[167px] bg-[#D9D9D9]">
+										<AvatartandardSvg />
+									</div>
+									<div className="flex flex-col gap-[8px]">
+										<p className="font-content-font font-normal text-black text-[24px]/[28.8px]">
+											{res?.userData?.lastname +
+												' ' +
+												res?.userData?.firstname +
+												' ' +
+												res?.userData?.middlename}
+										</p>
+										<div className="flex flex-col gap-[8px]">
+											<p className="font-content-font font-normal text-black text-[12px]/[14.4x] opacity-40">
+												Контакты:
+											</p>
+											<div className="flex gap-[24px]">
+												<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
+													{res?.userData?.phone}
+												</p>
+												<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
+													{res?.userData?.email}
+												</p>
+											</div>
+										</div>
+										<p className="font-content-font font-normal text-black text-[12px]/[14.4x] opacity-40">
+											Желаемая должность:
+										</p>
+										<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
+											{res?.desiredJob}
+										</p>
+									</div>
+								</div>
+								{props.type === 'PERSONNEL_DEPARTMENT' && (
+									<div className="self-center flex flex-col gap-[12px]">
+										<Button
+											onClick={() => {
+												approveRespond(respondId.respondId)
+													.unwrap()
+													.then(() => {
+														setIsRespondSentToSupervisor(true)
+														refetch()
+														navigate('/services/personnelaccounting/reserve')
+													})
+											}}
+											disabled={isRespondSentToSupervisor}
+											type="primary"
+											className="font-content-font font-normal text-white text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px]"
+										>
+											Отправить руководителю
+										</Button>
+										<Button
+											onClick={() => {}}
+											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
+										>
+											Перейти в чат
+										</Button>
+										<Button
+											onClick={() => {
+												deleteRespond(respondId.respondId)
+													.unwrap()
+													.then(() => {
+														refetch()
+														navigate('/services/personnelaccounting/reserve')
+													})
+											}}
+											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
+										>
+											Удалить
+										</Button>
+									</div>
+								)}
+							</div>
+						</div>
+					</div>
+				</>
+			)
 		}
 	}
 }

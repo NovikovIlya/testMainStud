@@ -129,7 +129,7 @@ export const PreviewContracts = () => {
     	{
     		key: '2',
     		name: 'Дата заключения договора',
-    		medic: contract?.conclusionDate || ''
+    		medic: dayjs(contract?.conclusionDate).format('DD.MM.YYYY') || ''
     	},
     	{
     		key: '3',
@@ -144,7 +144,7 @@ export const PreviewContracts = () => {
         {
             key: '5',
             name: 'Пролонгация',
-            medic: `${contract?.prolongation} ${prolonAge(contract!.prolongation)}` || '-'
+            medic: contract?.prolongation ? `${contract?.prolongation} ${prolonAge(contract!.prolongation)}` : '-'
         },
     	{
     		key: '6',

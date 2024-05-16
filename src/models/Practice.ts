@@ -1,4 +1,5 @@
 import {RcFile} from "antd/es/upload";
+import {string} from "yup";
 
 export interface ITask {
     specialityName: string
@@ -181,4 +182,8 @@ export interface NameSpecialty {
 export interface ContractFacilities {
     value: string
     label: string
+}
+
+export interface ListIdDeleteContracts {
+    listIdDelete: string[]
 }

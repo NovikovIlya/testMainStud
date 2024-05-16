@@ -7,13 +7,29 @@ export const rosterService = practiceApi.injectEndpoints({
             query: () => ({
                 url: 'contracts/all',
                 method: 'GET',
-            })
+            }),
+            providesTags: (result) => result
+                ?
+                [
+                    ...result.map(({ id }) => ({ type: 'Contracts' as const, id })),
+                    {type: 'Contracts', id: 'LIST'},
+                ]
+                :
+                [{type: 'Contracts', id: 'LIST'}],
         }),
         getContractsShort: builder.query<ContractShort[], void>({
             query: () => ({
                 url: 'contracts/all-short',
                 method: 'GET',
-            })
+            }),
+            providesTags: (result) => result
+                ?
+                [
+                    ...result.map(({ id }) => ({ type: 'Contracts' as const, id })),
+                    {type: 'Contracts', id: 'LIST'},
+                ]
+                :
+                [{type: 'Contracts', id: 'LIST'}],
         }),
         getSpecialtyNames: builder.query<NameSpecialty[], void>({
             query: () => ({

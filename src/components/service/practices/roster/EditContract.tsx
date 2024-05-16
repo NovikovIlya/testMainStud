@@ -15,15 +15,19 @@ import {
 } from 'antd'
 import dayjs from 'dayjs'
 import React, {Dispatch, SetStateAction, useEffect, useState} from 'react'
-import {useNavigate} from 'react-router-dom'
+import {useLocation, useNavigate} from 'react-router-dom'
 import {ArrowLeftSvg} from '../../../../assets/svg'
 import {ICreateContract, ICreateContractFull} from '../../../../models/Practice'
 import {validateMessages} from "../../../../utils/validateMessage";
+import {useGetContractQuery} from "../../../../store/api/practiceApi/contracts";
 
 
 export const EditContract = () => {
     const [form] = Form.useForm()
+    const path = useLocation()
     const nav = useNavigate()
+    const id: string = path.pathname.split('/').at(-1)!
+    const {data, isSuccess} = useGetContractQuery(id)
     const optionsContractsType = [
         {
             value: 'Бессрочный',
@@ -34,10 +38,25 @@ export const EditContract = () => {
             label: 'Указать пролонгацию'
         }]
     const [prolongation, setProlongation] = useState(false)
+    const [inn, setInn] = useState<string | number | null>(0)
+    const [files, setFiles] = useState<{
+        pdfAgreement: Blob | null
+        pdfContract: Blob | null
+    }>({
+        pdfAgreement: null,
+        pdfContract: null,
+    })
+    const [nameOrg, setNameOrg] = useState(true)
 
     useEffect(() => {
+        if (isSuccess) {
+            console.log(data)
+        }
+        form.setFieldValue('contractFacility', data?.contractFacility)
+        form.setFieldValue('contractNumber', data?.contractNumber)
+        form.setFieldValue('conclusionDate', dayjs(data?.conclusionDate))
         //при загруке данных проверять, есть ли пролонгация. Если есть, то ставить setProlongation(true)
-    }, []);
+    }, [data]);
 
     function onFinish(values: ICreateContract) {
         const formDataCreateContract = new FormData()
@@ -49,6 +68,43 @@ export const EditContract = () => {
         console.log(values)
         console.log(formDataCreateContract)
     }
+
+    useEffect(() => {
+        let url = "https://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/party";
+        let query = "1655018018";
+
+        let options = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "Authorization": "Token 2491c0a94273928cee7e6656455eb71f1d74a54b",
+            },
+            body: JSON.stringify({query: inn})
+        }
+
+        if (String(inn).length === 10) {
+            fetch(url, options)
+                .then(response => response.json())
+                .then(res => {
+                    if (res.suggestions.length !== 0) {
+                        setNameOrg(true)
+                        form.setFieldValue('contractFacility', res.suggestions[0].data.name.full_with_opf)
+                        form.setFieldValue('legalFacility', res.suggestions[0].data.address.unrestricted_value)
+                    } else {
+                        setNameOrg(false)
+                    }
+                })
+                .catch(error => console.log("error", error));
+        } else {
+            setNameOrg(true)
+            form.resetFields(['contractFacility', 'legalFacility'])
+        }
+    }, [inn]);
+
+    useEffect(() => {
+        console.log(nameOrg)
+    }, [nameOrg]);
 
 
     return (
@@ -62,10 +118,11 @@ export const EditContract = () => {
                     onClick={() => nav('/services/practices/registerContracts')}
                 />
                 <Typography.Text className="text-black text-3xl font-normal">
-                    Договор №
+                    Договор № {data?.contractNumber}
                 </Typography.Text>
             </Space>
-            <Form validateMessages={validateMessages}
+            <Form<ICreateContract>
+                validateMessages={validateMessages}
                   layout={'vertical'}
                   onFinish={values => onFinish(values)}
                   form={form}
@@ -73,23 +130,35 @@ export const EditContract = () => {
                 <Row gutter={[16, 16]} className="mt-12">
                     <Col xs={24} sm={24} md={18} lg={16} xl={12}>
                         <Form.Item label={'ИНН'}
-                                   name={'inn'}
-                                   rules={[{required: true}]}
+                                   name={'ITN'}
+                                   rules={[
+                                       {
+                                           required: true,
+                                           pattern: new RegExp('^[0-9]{10}$'),
+                                           message: 'ИНН содержит 10 цифр',
+                                       },
+                                   ]}
                                    initialValue={1234567890}
                         >
                             <InputNumber
+                                type={'number'}
+                                controls={false}
                                 className="w-full"
                                 size="large"
+                                onChange={value => setInn(value)}
                             />
                         </Form.Item>
-
+                        {!nameOrg &&
+                            <span className={'absolute top-[70px] text-[#FF4d4F]'}>
+                                Организация не найдена. Проверьте ИНН.
+                            </span>
+                        }
                     </Col>
                 </Row>
                 <Row gutter={[16, 16]}>
                     <Col xs={24} sm={24} md={18} lg={16} xl={12}>
                         <Form.Item label={'Наименование организации по договору'}
                                    name={'contractFacility'}
-                                   initialValue={'Тест 1'}
                                    rules={[{required: true}]}>
                             <Input
                                 className="w-full"
@@ -103,7 +172,6 @@ export const EditContract = () => {
                     <Col xs={24} sm={24} md={18} lg={16} xl={12}>
                         <Form.Item label={'Номер договора'}
                                    name={'contractNumber'}
-                                   initialValue={'Тест 1'}
                                    rules={[{required: true}]}>
                             <Input
                                 className="w-full"
@@ -115,8 +183,7 @@ export const EditContract = () => {
                 <Row gutter={[16, 16]}>
                     <Col xs={24} sm={24} md={18} lg={8} xl={6}>
                         <Form.Item label={'Дата заключения договора'}
-                                   name={'dateConclusionContract'}
-                                   initialValue={dayjs('12.12.2024')}
+                                   name={'conclusionDate'}
                                    rules={[{required: true}]}>
                             <DatePicker
                                 format={'DD.MM.YYYY'}
@@ -168,7 +235,7 @@ export const EditContract = () => {
                 <Row gutter={[16, 16]}>
                     <Col xs={24} sm={24} md={18} lg={8} xl={6}>
                         <Form.Item label={'Срок действия договора'}
-                                   name={'contractTime'}
+                                   name={'endDate'}
                                    initialValue={dayjs('12.12.2024')}
                                    rules={[{required: true}]}>
                             <DatePicker
@@ -181,7 +248,7 @@ export const EditContract = () => {
                     </Col>
                     <Col xs={24} sm={24} md={18} lg={8} xl={6}>
                         <Form.Item label={'Шифр и наименование специальности'}
-                                   name={'specialtyName'}
+                                   name={'specialtyNameId'}
                                    initialValue={'31.08.01 Акушерство и гинекология'}
                                    rules={[{required: true}]}>
                             <Select
@@ -234,7 +301,7 @@ export const EditContract = () => {
                 <Row gutter={[16, 16]}>
                     <Col xs={24} sm={24} md={18} lg={16} xl={12}>
                         <Form.Item label={'Количество мест'}
-                                   name={'placeNumber'}
+                                   name={'placesAmount'}
                                    initialValue={100}
                                    rules={[{required: true}]}>
                             <InputNumber

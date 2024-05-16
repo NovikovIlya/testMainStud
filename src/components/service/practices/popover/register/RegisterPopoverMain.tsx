@@ -7,6 +7,8 @@ import printJS from "print-js";
 import {PrintSvg} from "../../../../../assets/svg/PrintSvg";
 import {ColorBg, WrapperButton} from "../WrapperButton";
 import {DeleteRedSvg} from "../../../../../assets/svg/DeleteRedSvg";
+import {useDeleteSeveralContractMutation} from "../../../../../store/api/practiceApi/contracts";
+import {ListIdDeleteContracts} from "../../../../../models/Practice";
 
 interface Props {
     recordCompressedAll?: ColumnsTableCompressedView[]
@@ -26,7 +28,7 @@ export const RegisterPopoverMain = ({
                                         recordFullAll,
                                         setRecordFull,
                                     }: Props) => {
-
+    const [deleteSeveralContracts] = useDeleteSeveralContractMutation()
     function translateColumnsIntoRussia() {
         const newData: any = []
         if (recordCompressed) {
@@ -103,12 +105,21 @@ export const RegisterPopoverMain = ({
             setRecordCompressed(recordCompressedAll.filter(elem => {
                 return !listId.includes(elem.id)
             }))
+            const objIdList: ListIdDeleteContracts = {
+                listIdDelete: listId
+            }
+            deleteSeveralContracts(objIdList)
+
         }
         if (setRecordFull && recordFull && recordFullAll) {
             const listId = recordFull.map(elem => elem.id)
             setRecordFull(recordFullAll.filter(elem => {
                 return !listId.includes(elem.id)
             }))
+            const objIdList: ListIdDeleteContracts = {
+                listIdDelete: listId
+            }
+            deleteSeveralContracts(objIdList)
         }
     }
 

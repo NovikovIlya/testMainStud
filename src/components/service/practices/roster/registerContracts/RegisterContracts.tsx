@@ -197,20 +197,21 @@ export const RegisterContracts = () => {
         {
             title: <TitleHeadCell title={'Дата заполнения'}/>,
             dataIndex: 'fillingDate',
-            align: "left",
-            width: 150
+            align: "center",
+            width: 150,
+            render: (value, record, index) => dayjs(value).format('DD.MM.YYYY')
         },
         {
             title: <TitleHeadCell title={'Тип договора'}/>,
             dataIndex: 'contractType',
-            align: "left",
+            align: "center",
             width: 150
 
         },
         {
             title: <TitleHeadCell title={'Дата заключения договора'}/>,
             dataIndex: 'conclusionDate',
-            align: "left",
+            align: "center",
             width: 150,
             render: (text) => dayjs(text).format('DD.MM.YYYY')
         },
@@ -265,7 +266,7 @@ export const RegisterContracts = () => {
         {
             title: <span className={'text-xs'}>Шифр и наименование специальности</span>,
             dataIndex: 'specialtyName',
-            align: "left",
+            align: "center",
             className: 'text-xs'
         },
         {
@@ -300,7 +301,8 @@ export const RegisterContracts = () => {
             title: <span className={'text-xs'}>Срок действия договора</span>,
             dataIndex: 'endDate',
             align: "center",
-            className: 'text-xs'
+            className: 'text-xs',
+            render: (value, record, index) => dayjs(value).format('DD.MM.YYYY')
         },
         {
             title: <span className={'text-xs'}>Юридический адрес организации</span>,

@@ -13,20 +13,11 @@ import {
     UploadProps,
     message, Form, InputNumber
 } from 'antd'
-import {format} from 'date-fns'
 import dayjs from 'dayjs'
 import React, {Dispatch, SetStateAction, useEffect, useState} from 'react'
-import {Controller, SubmitHandler, useForm} from 'react-hook-form'
 import {useNavigate} from 'react-router-dom'
-
 import {ArrowLeftSvg} from '../../../../assets/svg'
-import {
-    useChangeContractMutation,
-    useCreateContractMutation,
-    useGetContractQuery
-} from '../../../../store/api/practiceApi/taskService'
 import {ICreateContract, ICreateContractFull} from '../../../../models/Practice'
-import {SignInSchema} from '../validation'
 import {validateMessages} from "../../../../utils/validateMessage";
 
 

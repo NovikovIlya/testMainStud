@@ -1,5 +1,5 @@
 import {practiceApi} from './practiceApi'
-import {ContractsAll} from "../../../models/Practice";
+import {ContractFacilities, ContractsAll, ContractShort, NameSpecialty} from "../../../models/Practice";
 
 export const rosterService = practiceApi.injectEndpoints({
     endpoints: builder => ({
@@ -9,16 +9,29 @@ export const rosterService = practiceApi.injectEndpoints({
                 method: 'GET',
             })
         }),
-        getContractsShort: builder.query<any, void>({
+        getContractsShort: builder.query<ContractShort[], void>({
             query: () => ({
                 url: 'contracts/all-short',
                 method: 'GET',
             })
+        }),
+        getSpecialtyNames: builder.query<NameSpecialty[], void>({
+            query: () => ({
+                url: 'kpfu/specialty-names',
+                method: 'GET',
+            })
+        }),
+        getContractFacilities: builder.query<ContractFacilities[], void>({
+            query: () => ({
+                url: 'kpfu/contract-facilities',
+                method: 'GET',
+            })
         })
-
     })
 })
 export const {
     useGetContractsAllQuery,
-    useGetContractsShortQuery
+    useGetContractsShortQuery,
+    useGetSpecialtyNamesQuery,
+    useGetContractFacilitiesQuery,
 } = rosterService

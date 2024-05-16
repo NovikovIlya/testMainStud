@@ -33,9 +33,9 @@ export const RegisterPopoverMain = ({
             for (let elem of recordCompressed) {
                 const newObj = {
                     "Наименование организации": elem.contractFacility,
-                    "Дата заполнения": elem.dateFiling,
+                    "Дата заполнения": elem.fillingDate,
                     "Тип договора": elem.contractType,
-                    "Дата заключения договора": dayjs(elem.dateConclusionContract).format('DD.MM.YYYY'),
+                    "Дата заключения договора": dayjs(elem.conclusionDate).format('DD.MM.YYYY'),
                 }
                 newData.push(newObj)
             }

@@ -163,3 +163,22 @@ export interface ContractsAll {
     documentCopyId: string,
     documentAgreementId: string
 }
+
+export interface ContractShort {
+    id: string
+    contractFacility: string
+    fillingDate: string
+    contractType: string
+    conclusionDate: string
+}
+
+export interface NameSpecialty {
+    id: number
+    value: string
+    label: string
+}
+
+export interface ContractFacilities {
+    value: string
+    label: string
+}

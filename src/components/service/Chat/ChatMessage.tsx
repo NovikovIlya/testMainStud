@@ -5,6 +5,7 @@ import { ArrowToTheRight } from '../../../assets/svg/ArrowToTheRight'
 import { MessageReadSvg } from '../../../assets/svg/MessageReadSvg'
 import { MessageUnreadSvg } from '../../../assets/svg/MessageUnreadSvg'
 import { useAppSelector } from '../../../store'
+import { useAnswerToInivitationMainTimeMutation } from '../../../store/api/serviceApi'
 import { ChatMessageType } from '../../../store/type'
 
 import { ChatMessageFile } from './ChatMessageFile'
@@ -15,8 +16,11 @@ type Ref = HTMLDivElement
 export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 	const { user } = useAppSelector(state => state.auth)
 	const { vacancyTitle } = useAppSelector(state => state.currentVacancyName)
+	const { respondId } = useAppSelector(state => state.respondId)
 	const isSeeker = user?.roles[0].type === 'STUD'
 	const isEmpDep = user?.roles.find(role => role.type === 'EMPL')
+
+	const [answerMainTime] = useAnswerToInivitationMainTimeMutation()
 
 	return (
 		<>
@@ -75,6 +79,34 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 					)}
 				</div>
 			</div>
+			{props.msgData.type === 'INVITATION' && (
+				<div className="mt-[24px] max-w-[50%] grid grid-cols-2 grid-rows-[40px_40px] gap-[20px]">
+					<button
+						onClick={() => {
+							answerMainTime({ id: respondId, ans: 'YES' })
+						}}
+						className="rounded-[54.5px] bg-inherit outline-none border cursor-pointer"
+					>
+						Да
+					</button>
+					<button
+						onClick={() => {
+							answerMainTime({ id: respondId, ans: 'NO' })
+						}}
+						className="rounded-[54.5px] bg-inherit outline-none border cursor-pointer"
+					>
+						Не удобно
+					</button>
+					<button
+						onClick={() => {
+							answerMainTime({ id: respondId, ans: 'NOT_RELEVANT' })
+						}}
+						className="col-span-2 rounded-[54.5px] bg-inherit outline-none border cursor-pointer"
+					>
+						Вакансия не актуальна
+					</button>
+				</div>
+			)}
 		</>
 	)
 })

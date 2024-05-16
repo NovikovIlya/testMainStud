@@ -387,7 +387,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 				body: {
 					format: format,
 					mainTime: mainTime,
-					reserveTime: reservedTime,
+					reserveTimes: reservedTime,
 					additionalInfo: additionalInfo
 				},
 				headers: {
@@ -485,6 +485,18 @@ export const serviceApi = apiSlice.injectEndpoints({
 					Authorization: `Bearer ${personnelDeparmentToken}`
 				}
 			})
+		}),
+		answerToInivitationMainTime: builder.mutation<
+			void,
+			{ id: number; ans: string }
+		>({
+			query: ({ id, ans }) => ({
+				url: `http://localhost:8082/employment-api/v1/respond/${id}/chat/buttons/interview/main-time?answer=${ans}`,
+				method: 'POST',
+				headers: {
+					Authorization: `Bearer ${seekerToken}`
+				}
+			})
 		})
 	})
 })
@@ -536,5 +548,6 @@ export const {
 	useSendRespondToArchiveMutation,
 	useDeleteRespondFromArchiveMutation,
 	useGetArchivedRespondFullInfoQuery,
-	useApproveArchivedRespondMutation
+	useApproveArchivedRespondMutation,
+	useAnswerToInivitationMainTimeMutation
 } = serviceApi

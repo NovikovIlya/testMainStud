@@ -13,6 +13,7 @@ import {
 	closeChat,
 	openChat
 } from '../../../store/reducers/ChatRespondStatusSlice'
+import { setRespondId } from '../../../store/reducers/CurrentRespondIdSlice'
 import { setCurrentVacancyName } from '../../../store/reducers/CurrentVacancyNameSlice'
 import { setChatId } from '../../../store/reducers/chatIdSlice'
 import { respondStatus } from '../../../store/type'
@@ -38,11 +39,14 @@ export const ChatPreview = (props: {
 		if (props.checkableStatus) {
 			if (props.checkableStatus !== respondStatus[respondStatus.INVITATION]) {
 				dispatch(closeChat())
+			} else {
+				dispatch(openChat())
 			}
 		} else {
 			dispatch(openChat())
 		}
 		dispatch(setChatId(chatId))
+		dispatch(setRespondId(props.respondId))
 		navigate(url)
 	}
 

@@ -6,6 +6,7 @@ import { apiSlice } from './api/apiSlice'
 import ChatRespondStatusSlice from './reducers/ChatRespondStatusSlice'
 import CurrentRequestSlice from './reducers/CurrentRequestSlice'
 import CurrentResponceSlice from './reducers/CurrentResponceSlice'
+import CurrentRespondIdSlice from './reducers/CurrentRespondIdSlice'
 import CurrentVacancyNameSlice from './reducers/CurrentVacancyNameSlice'
 import CurrentVacancySlice from './reducers/CurrentVacancySlice'
 import AddressReducer from './reducers/FormReducers/AddressReducer'
@@ -48,6 +49,7 @@ export const store = configureStore({
 		currentResponce: CurrentResponceSlice,
 		chatResponceStatus: ChatRespondStatusSlice,
 		currentRequest: CurrentRequestSlice,
+		respondId: CurrentRespondIdSlice,
 		[apiSlice.reducerPath]: apiSlice.reducer
 	},
 	middleware: getDefaultMiddleware =>

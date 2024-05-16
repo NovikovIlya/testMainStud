@@ -72,8 +72,8 @@ export const RespondItem = (props: RespondItemType & { refetch: Function }) => {
 						: props.status === respondStatus[respondStatus.INVITATION]
 						? 'приглашение'
 						: props.status === respondStatus[respondStatus.REJECTED]
-						? 'отклонено'
-						: 'отклонено'}
+						? 'отказано'
+						: 'отказано'}
 				</p>
 				<Button
 					onClick={() => {

@@ -232,6 +232,22 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
+		getReservedResponces: builder.query<VacancyRespondItemType[], void>({
+			query: () => ({
+				url: `http://localhost:8082/employment-api/v1/reserve`,
+				headers: {
+					Authorization: `Bearer ${personnelDeparmentToken}`
+				}
+			})
+		}),
+		getReservedRespondFullInfo: builder.query<VacancyRespondItemType, number>({
+			query: id => ({
+				url: `http://localhost:8082/employment-api/v1/reserve/${id}`,
+				headers: {
+					Authorization: `Bearer ${personnelDeparmentToken}`
+				}
+			})
+		}),
 		postPhone: builder.mutation({
 			query: phone => {
 				return {
@@ -497,6 +513,15 @@ export const serviceApi = apiSlice.injectEndpoints({
 					Authorization: `Bearer ${seekerToken}`
 				}
 			})
+		}),
+		sendRespondToReserve: builder.mutation<VacancyRespondItemType, number>({
+			query: id => ({
+				url: `http://localhost:8082/employment-api/v1/respond/${id}/status/reserve`,
+				method: 'PUT',
+				headers: {
+					Authorization: `Bearer ${personnelDeparmentToken}`
+				}
+			})
 		})
 	})
 })
@@ -549,5 +574,8 @@ export const {
 	useDeleteRespondFromArchiveMutation,
 	useGetArchivedRespondFullInfoQuery,
 	useApproveArchivedRespondMutation,
-	useAnswerToInivitationMainTimeMutation
+	useAnswerToInivitationMainTimeMutation,
+	useGetReservedResponcesQuery,
+	useGetReservedRespondFullInfoQuery,
+	useSendRespondToReserveMutation
 } = serviceApi

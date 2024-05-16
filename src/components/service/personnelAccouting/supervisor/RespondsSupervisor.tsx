@@ -42,7 +42,7 @@ export const RespondsSupervisor = () => {
 					</h3>
 				</div>
 				{responds.map(resp => (
-					<VacancyRespondItem {...resp} type="SUPERVISOR" />
+					<VacancyRespondItem {...resp} itemType="SUPERVISOR" />
 				))}
 			</div>
 		</>

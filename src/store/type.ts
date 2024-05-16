@@ -204,9 +204,12 @@ export type VacancyGroupedResponcesType = {
 export type VacancyRespondItemType = {
 	id: number
 	responseDate: string
+	respondDate: string
 	vacancyName: string
 	status: string
 	recipient: string
+	desiredJob: string
+	type: 'DIRECTLY' | 'RESERVE'
 	userData: null | {
 		firstname: string
 		lastname: String

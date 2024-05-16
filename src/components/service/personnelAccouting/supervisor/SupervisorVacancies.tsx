@@ -9,7 +9,7 @@ export const SupervisorVacancies = () => {
 		<>
 			<div className="pl-[54px] pr-[54px] pt-[60px] w-full bg-content-gray">
 				<h1 className="font-content-font font-normal text-[28px]/[28px] text-black">
-					Отклики
+					Вакансии
 				</h1>
 				<div className="mt-[60px] ml-[20px] flex">
 					<h3 className="w-[238px] shrink-0 font-content-font font-normal text-[14px]/[14px] text-text-gray">

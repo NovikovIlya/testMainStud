@@ -8,7 +8,7 @@ import { VacancyRespondItemType, respondStatus } from '../../../store/type'
 
 export const VacancyRespondItem = (
 	props: VacancyRespondItemType & {
-		type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
+		itemType: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 	}
 ) => {
 	const [getResponceInfo] = useLazyGetRespondFullInfoQuery()
@@ -27,7 +27,7 @@ export const VacancyRespondItem = (
 						  props.userData.middlename
 						: 'Толстой Лев Николаевич'}
 				</p>
-				{props.type === 'PERSONNEL_DEPARTMENT' ? (
+				{props.itemType === 'PERSONNEL_DEPARTMENT' ? (
 					<div className="flex gap-[20px] mr-[312px]">
 						<p className="w-[90px]">
 							{props.responseDate.split('-').reverse().join('.')}
@@ -57,7 +57,7 @@ export const VacancyRespondItem = (
 				<Button
 					onClick={() => {
 						dispatch(setCurrentResponce(props.id))
-						props.type === 'PERSONNEL_DEPARTMENT'
+						props.itemType === 'PERSONNEL_DEPARTMENT'
 							? navigate(`services/personnelaccounting/responds/fullinfo`)
 							: navigate(
 									'services/personnelaccounting/supervisor/responds/fullinfo'

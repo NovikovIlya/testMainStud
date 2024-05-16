@@ -79,7 +79,7 @@ export const VacancyResponces = () => {
 					</div>
 				</div>
 				{responds.map(respond => (
-					<VacancyRespondItem {...respond} type="PERSONNEL_DEPARTMENT" />
+					<VacancyRespondItem {...respond} itemType="PERSONNEL_DEPARTMENT" />
 				))}
 			</div>
 		</>

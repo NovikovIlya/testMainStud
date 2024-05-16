@@ -9,6 +9,8 @@ import { ChatEmpDemp } from '../Chat/ChatEmpDemp'
 import { Archive } from './Archive'
 import { ArchiveRespondInfo } from './ArchiveRespondInfo'
 import { ChatIcon } from './ChatIcon'
+import { Reserve } from './Reserve'
+import { ReserveRespondInfo } from './ReserveRespondInfo'
 import { RespondInfo } from './RespondInfo'
 import { Responds } from './Responds'
 import { RespondsIcon } from './RespondsIcon'
@@ -277,7 +279,7 @@ export const NavPesonnelAccounting = () => {
 					<li
 						key={index}
 						className={clsx(
-							'w-full flex items-center py-2 pl-8 hover:bg-[#F5F8FB]  cursor-pointer',
+							'w-full flex items-center pl-5 hover:bg-[#F5F8FB]  cursor-pointer',
 							id === pathname && 'bg-[#F5F8FB]'
 						)}
 					>
@@ -364,7 +366,10 @@ export const NavPesonnelAccounting = () => {
 				{pathname === '/services/personnelaccounting/request/delete' && (
 					<VacancyRequestDeleteView />
 				)}
-				{pathname === navEmployeeList[4].id && <></>}
+				{pathname === navEmployeeList[4].id && <Reserve />}
+				{pathname.match('/services/personnelaccounting/reserve/fullinfo') && (
+					<ReserveRespondInfo type="PERSONNEL_DEPARTMENT" />
+				)}
 				{pathname === '/services/personnelaccounting/archive' && <Archive />}
 				{pathname.match('services/personnelaccounting/archive/fullinfo') && (
 					<ArchiveRespondInfo type="PERSONNEL_DEPARTMENT" />

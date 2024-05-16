@@ -9,7 +9,8 @@ import {
 	useApproveRespondMutation,
 	useGetRespondFullInfoQuery,
 	useLazyGetRespondFullInfoQuery,
-	useSendRespondToArchiveMutation
+	useSendRespondToArchiveMutation,
+	useSendRespondToReserveMutation
 } from '../../../store/api/serviceApi'
 import ArrowIcon from '../jobSeeker/ArrowIcon'
 
@@ -23,6 +24,7 @@ export const RespondInfo = (props: {
 	const { data: res } = useGetRespondFullInfoQuery(respondId.respondId)
 	const [approveRespond] = useApproveRespondMutation()
 	const [sendToArchive] = useSendRespondToArchiveMutation()
+	const [sendToReserve] = useSendRespondToReserveMutation()
 
 	const [isRespondSentToSupervisor, setIsRespondSentToSupervisor] =
 		useState<boolean>(res?.status === 'IN_SUPERVISOR_REVIEW')
@@ -138,7 +140,13 @@ export const RespondInfo = (props: {
 										Отказать
 									</Button>
 									<Button
-										onClick={() => {}}
+										onClick={() => {
+											sendToReserve(respondId.respondId)
+												.unwrap()
+												.then(() => {
+													setIsRespondSentToArchive(true)
+												})
+										}}
 										className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
 									>
 										Отправить в резерв

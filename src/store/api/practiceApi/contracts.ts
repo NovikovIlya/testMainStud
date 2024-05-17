@@ -38,6 +38,16 @@ export const contractService = practiceApi.injectEndpoints({
         }),
         getContractForEdit: builder.query<ResponseEditContract, string>({
             query: id => `contracts/${id}`
+        }),
+        editContract: builder.mutation<void, FormData>({
+            query: (body: FormData) => {
+                return {
+                    url: 'contracts',
+                    body: body,
+                    method: 'PATCH',
+                }
+            },
+            invalidatesTags: [{type: 'Contracts', id: 'LIST'}]
         })
 
     })
@@ -48,4 +58,5 @@ export const {
     useGetContractQuery,
     useDeleteSeveralContractMutation,
     useGetContractForEditQuery,
+    useEditContractMutation,
 } = contractService

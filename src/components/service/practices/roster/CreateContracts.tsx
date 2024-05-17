@@ -62,7 +62,6 @@ export const CreateContracts = () => {
         newForm.append('contract', blob)
         if (files.pdfContract) newForm.append('pdfContract', files.pdfContract)
         if (files.pdfAgreement) newForm.append('pdfAgreement', files.pdfAgreement)
-        console.log(values)
         newContract(newForm)
             .then(res => console.log(res))
             .catch(e => console.log(e))

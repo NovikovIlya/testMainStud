@@ -290,7 +290,7 @@ export const RegisterContracts = () => {
             render: (value, record, index) =>
                 <div className={'flex flex-col gap-2'}>
                     <span>{value}</span>
-                    {record.prolongation
+                    {record.prolongation && value !== 'Бессрочный'
                         &&
                         <span>
                             на {record.prolongation} {prolonAge(record.prolongation)}

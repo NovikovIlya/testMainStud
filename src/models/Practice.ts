@@ -119,6 +119,7 @@ export interface ICreateContract extends IContractInfo {
 
 ////////////////////////////////////
 export interface ResponseEditContract {
+    id: string
     itn: string
     contractNumber: string
     contractFacility: string

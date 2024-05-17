@@ -17,9 +17,14 @@ import dayjs from 'dayjs'
 import React, {Dispatch, SetStateAction, useEffect, useState} from 'react'
 import {useLocation, useNavigate} from 'react-router-dom'
 import {ArrowLeftSvg} from '../../../../assets/svg'
-import {ICreateContract, ICreateContractFull} from '../../../../models/Practice'
+import {IContractInfo, IContractInfoFull, ICreateContract, ICreateContractFull} from '../../../../models/Practice'
 import {validateMessages} from "../../../../utils/validateMessage";
-import {useGetContractForEditQuery, useGetContractQuery} from "../../../../store/api/practiceApi/contracts";
+import {
+    useEditContractMutation,
+    useGetContractForEditQuery,
+    useGetContractQuery
+} from "../../../../store/api/practiceApi/contracts";
+import {string} from "yup";
 
 export interface PdfContract {
     uid: string,
@@ -34,7 +39,8 @@ export const EditContract = () => {
     const nav = useNavigate()
     const id: string = path.pathname.split('/').at(-1)!
     const {data, isSuccess} = useGetContractForEditQuery(id)
-    //console.log(data)
+    const [editContract] = useEditContractMutation()
+    console.log(data)
     const optionsContractsType = [
         {
             value: 'Бессрочный',
@@ -101,11 +107,37 @@ export const EditContract = () => {
     }, [data]);
 
     function onFinish(values: ICreateContract) {
-        const formDataCreateContract = new FormData()
+        const formDataEditContract = new FormData()
+        values.specialtyNameId = 1
+        values.placesAmount = String(values.placesAmount)
+        values.ITN = String(values.ITN)
         values.conclusionDate = dayjs(values.conclusionDate).format('DD.MM.YYYY')
         values.endDate = dayjs(values.endDate).format('DD.MM.YYYY')
-        console.log(values)
-        console.log(formDataCreateContract)
+
+        const contract: IContractInfoFull = {
+            id: data?.id!,
+            ITN: values.ITN,
+            contractNumber: values.contractNumber,
+            contractFacility: values.contractFacility,
+            conclusionDate: values.conclusionDate,
+            contractType: values.contractType,
+            prolongation: values.prolongation,
+            endDate: values.endDate,
+            specialtyNameId: values.specialtyNameId,
+            legalFacility: values.legalFacility,
+            actualFacility: values.actualFacility,
+            placesAmount: values.placesAmount
+        }
+
+        const jsonData = JSON.stringify(contract)
+        const blob = new Blob([jsonData], { type: 'application/json' })
+        formDataEditContract.append('contract', blob)
+        if (files.pdfContract) formDataEditContract.append('pdfContract', files.pdfContract)
+        if (files.pdfAgreement) formDataEditContract.append('pdfAgreement', files.pdfAgreement)
+        editContract(formDataEditContract)
+            .then(data => console.log(data))
+            .catch(e => console.log(e))
+
     }
 
     useEffect(() => {
@@ -160,12 +192,6 @@ export const EditContract = () => {
                 layout={'vertical'}
                 onFinish={values => onFinish(values)}
                 form={form}
-                // onFieldsChange={(changedFields, allFields) => {
-                //     console.log(changedFields)
-                // }}
-                onValuesChange={(changedValues, values) => {
-                    console.log(changedValues, values)
-                }}
             >
                 <Row gutter={[16, 16]} className="mt-12">
                     <Col xs={24} sm={24} md={18} lg={16} xl={12}>
@@ -354,7 +380,11 @@ export const EditContract = () => {
                                    rules={[{required: true}]}
                         >
                             <Upload
-                                beforeUpload={() => {
+                                beforeUpload={(file) => {
+                                    setFiles({
+                                        ...files,
+                                        pdfContract: file
+                                    })
                                     return false
                                 }}
                                 maxCount={1}
@@ -391,7 +421,11 @@ export const EditContract = () => {
                                    rules={[{required: true}]}
                         >
                             <Upload
-                                beforeUpload={() => {
+                                beforeUpload={(file) => {
+                                    setFiles({
+                                        ...files,
+                                        pdfAgreement: file
+                                    })
                                     return false
                                 }}
                                 maxCount={1}

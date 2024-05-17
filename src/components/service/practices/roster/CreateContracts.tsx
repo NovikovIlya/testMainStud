@@ -63,11 +63,11 @@ export const CreateContracts = () => {
         if (files.pdfContract) newForm.append('pdfContract', files.pdfContract)
         if (files.pdfAgreement) newForm.append('pdfAgreement', files.pdfAgreement)
         console.log(values)
-        // newContract(newForm)
-        //     .then(res => console.log(res))
-        //     .catch(e => console.log(e))
-        //
-        // nav('/services/practices/registerContracts')
+        newContract(newForm)
+            .then(res => console.log(res))
+            .catch(e => console.log(e))
+
+        nav('/services/practices/registerContracts')
     }
 
 

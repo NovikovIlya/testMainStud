@@ -106,7 +106,6 @@ export interface IContractInfo {
     legalFacility: string
     actualFacility: string
     placesAmount: string
-
 }
 
 export interface IContractInfoFull extends IContractInfo {
@@ -117,6 +116,24 @@ export interface ICreateContract extends IContractInfo {
     pdfContract: Blob
     pdfAgreement: Blob
 }
+
+////////////////////////////////////
+export interface ResponseEditContract {
+    itn: string
+    contractNumber: string
+    contractFacility: string
+    conclusionDate: string
+    contractType: string
+    prolongation: string
+    endDate: string
+    specialtyName: number
+    legalFacility: string
+    actualFacility: string
+    placesAmount: string
+    documentCopyId: string
+    documentAgreementId: string
+}
+///////////////////////////////////////////
 
 export interface ICreateContractFull extends IContractInfoFull {
     pdfContract: string

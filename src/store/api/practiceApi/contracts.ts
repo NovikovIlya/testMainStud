@@ -1,5 +1,5 @@
 import {practiceApi} from './practiceApi'
-import {ContractsAll, ListIdDeleteContracts} from "../../../models/Practice";
+import {ContractsAll, ICreateContract, ResponseEditContract, ListIdDeleteContracts} from "../../../models/Practice";
 
 export const contractService = practiceApi.injectEndpoints({
     endpoints: builder => ({
@@ -35,6 +35,9 @@ export const contractService = practiceApi.injectEndpoints({
         }),
         getContract: builder.query<ContractsAll, string>({
             query: id => `contracts/${id}`
+        }),
+        getContractForEdit: builder.query<ResponseEditContract, string>({
+            query: id => `contracts/${id}`
         })
 
     })
@@ -43,5 +46,6 @@ export const {
     useCreateContractMutation,
     useDeleteContractMutation,
     useGetContractQuery,
-    useDeleteSeveralContractMutation
+    useDeleteSeveralContractMutation,
+    useGetContractForEditQuery,
 } = contractService

@@ -243,3 +243,7 @@ export interface Task {
     practiceType: string
     tasks: OneTaskForm[]
 }
+
+export interface ListIdDeleteTasks {
+    listIdDelete: string[]
+}

@@ -1,6 +1,6 @@
 import React from 'react';
 import {CompressedIndividualTask, FullIndividualTask} from "../../individual-tasks/IndividualTasks";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import dayjs from "dayjs";
 import printJS from "print-js";
 import {utils, writeFileXLSX} from "xlsx";
@@ -9,6 +9,7 @@ import {Doc} from "../../../../../assets/svg/Doc";
 import {Load} from "../../../../../assets/svg/Load";
 import {PrintSvg} from "../../../../../assets/svg/PrintSvg";
 import {DeleteRedSvg} from "../../../../../assets/svg/DeleteRedSvg";
+import {useDeleteTaskMutation} from "../../../../../store/api/practiceApi/individualTask";
 
 interface Props {
     recordCompressed?: CompressedIndividualTask
@@ -27,7 +28,7 @@ export const IndTaskPopoverContent = ({
                                           setTableDataFull,
                                           tableDataFull
                                       }: Props) => {
-
+    const [deleteTask] = useDeleteTaskMutation()
     function translateColumnIntoRussia() {
         if (recordCompressed) {
             return {
@@ -85,16 +86,16 @@ export const IndTaskPopoverContent = ({
             const newArr = tableDataCompressed.filter(elem => {
                 return elem.key !== recordCompressed?.key
             })
+            deleteTask(recordCompressed!.id)
             setTableDataCompressed(newArr)
-            //пишем запрос на удаление
         }
 
         if (setTableDataFull && tableDataFull) {
             const newArr = tableDataFull.filter(elem => {
                 return elem.key !== recordFull?.key
             })
+            deleteTask(recordFull!.id)
             setTableDataFull(newArr)
-            //пишем запрос на удаление
         }
 
     }

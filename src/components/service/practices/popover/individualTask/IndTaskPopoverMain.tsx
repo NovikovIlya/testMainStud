@@ -7,6 +7,9 @@ import {ColorBg, WrapperButton} from "../WrapperButton";
 import {Load} from "../../../../../assets/svg/Load";
 import {PrintSvg} from "../../../../../assets/svg/PrintSvg";
 import {DeleteRedSvg} from "../../../../../assets/svg/DeleteRedSvg";
+import {ListIdDeleteTasks} from "../../../../../models/Practice";
+import {useDeleteSeveralContractMutation} from "../../../../../store/api/practiceApi/contracts";
+import {useDeleteSeveralTasksMutation} from "../../../../../store/api/practiceApi/individualTask";
 
 interface Props {
     recordCompressedAll?: CompressedIndividualTask[]
@@ -27,6 +30,8 @@ export const IndTaskPopoverMain = ({
                                        recordFullAll,
                                        setRecordFull
                                    }: Props) => {
+
+    const [severalDelete] = useDeleteSeveralTasksMutation()
     function translateColumnsIntoRussia() {
         const newData: any = []
         if (recordCompressed) {
@@ -89,12 +94,20 @@ export const IndTaskPopoverMain = ({
     function deleteData() {
         if (setRecordCompressed && recordCompressed && recordCompressedAll) {
             const listId = recordCompressed.map(elem => elem.id)
+            const listIdDelete: ListIdDeleteTasks = {
+                listIdDelete: listId
+            }
+            severalDelete(listIdDelete)
             setRecordCompressed(recordCompressedAll.filter(elem => {
                 return !listId.includes(elem.id)
             }))
         }
         if (setRecordFull && recordFull && recordFullAll) {
             const listId = recordFull.map(elem => elem.id)
+            const listIdDelete: ListIdDeleteTasks = {
+                listIdDelete: listId
+            }
+            severalDelete(listIdDelete)
             setRecordFull(recordFullAll.filter(elem => {
                 return !listId.includes(elem.id)
             }))

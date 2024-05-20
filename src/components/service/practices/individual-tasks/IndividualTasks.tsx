@@ -252,7 +252,6 @@ const IndividualTasks = () => {
                         type="text"
                         icon={<EditSvg/>}
                         onClick={() => {
-                            console.log(record.id)
                             navigate(`/services/practices/individualTasks/editTask/${record.id}`)
                         }}
                     />
@@ -264,12 +263,6 @@ const IndividualTasks = () => {
             width: '20%',
             align: 'left',
         },
-        // {
-        //     title: <span className={'text-base'}>Дата заполнения</span>,
-        //     dataIndex: 'dateFilling',
-        //     align: 'center',
-        //     width: '15%'
-        // },
         {
             title: <span className={'text-base'}>Индивидуальные задания</span>,
             dataIndex: 'tasks',

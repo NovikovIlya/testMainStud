@@ -1,5 +1,5 @@
 import {
-    ITask, TaskEdit, TasksAll, TaskSend,
+    ITask, ListIdDeleteTasks, TaskEdit, TasksAll, TaskSend,
 } from '../../../models/Practice'
 
 import {practiceApi} from './practiceApi'
@@ -14,13 +14,23 @@ export const individualTasks = practiceApi.injectEndpoints({
                     method: 'POST'
                 }
             },
+            invalidatesTags: [{type: 'Tasks', id: 'LIST'}]
+
         }),
 
         getOneTask: builder.query<TasksAll, string>({
-           query: (id) => ({
-               url: `tasks/${id}`,
-               method: 'GET',
-           })
+            query: (id) => ({
+                url: `tasks/${id}`,
+                method: 'GET',
+            }),
+            providesTags: (result) => result
+                ?
+                [
+                    ...result.tasks.map(({id}) => ({type: 'Tasks' as const, id})),
+                    {type: 'Tasks', id: 'LIST'},
+                ]
+                :
+                [{type: 'Tasks', id: 'LIST'}],
         }),
 
         editTask: builder.mutation<void, TaskEdit>({
@@ -30,7 +40,9 @@ export const individualTasks = practiceApi.injectEndpoints({
                     body: body,
                     method: 'PATCH',
                 }
-            }
+            },
+            invalidatesTags: [{type: 'Tasks', id: 'LIST'}]
+
         }),
 
         deleteTask: builder.mutation<void, string>({
@@ -39,14 +51,34 @@ export const individualTasks = practiceApi.injectEndpoints({
                     url: `tasks/${id}`,
                     method: 'DELETE',
                 }
-            }
+            },
+            invalidatesTags: [{type: 'Tasks', id: 'LIST'}]
+        }),
+
+        deleteSeveralTasks: builder.mutation<void, ListIdDeleteTasks>({
+            query: body => {
+                return {
+                    url: 'tasks/several',
+                    body: body,
+                    method: 'DELETE'
+                }
+            },
+            invalidatesTags: [{type: 'Tasks', id: 'LIST'}]
         }),
 
         getAllTasks: builder.query<TasksAll[], void>({
             query: () => ({
                 url: 'tasks/all',
                 method: 'GET',
-            })
+            }),
+            providesTags: (result) => result
+                ?
+                [
+                    ...result.map(({id}) => ({type: 'Tasks' as const, id})),
+                    {type: 'Tasks', id: 'LIST'},
+                ]
+                :
+                [{type: 'Tasks', id: 'LIST'}],
         }),
 
     })
@@ -57,4 +89,5 @@ export const {
     useEditTaskMutation,
     useGetAllTasksQuery,
     useGetOneTaskQuery,
+    useDeleteSeveralTasksMutation,
 } = individualTasks

@@ -52,10 +52,10 @@ const CreateTask = () => {
             subdivisionNameId: '1',
             tasks: values.tasks.map(elem => elem.task)
         }
-        console.log(newData)
         createTask(newData)
             .then(data => console.log(data))
             .catch(e => console.log(e))
+        navigate('services/practices/individualTasks/')
     }
 
     return (

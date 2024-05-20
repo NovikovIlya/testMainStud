@@ -35,13 +35,21 @@ export const rosterService = practiceApi.injectEndpoints({
             query: () => ({
                 url: 'kpfu/specialty-names',
                 method: 'GET',
-            })
+            }),
         }),
         getContractFacilities: builder.query<ContractFacilities[], void>({
             query: () => ({
                 url: 'kpfu/contract-facilities',
                 method: 'GET',
-            })
+            }),
+            providesTags: (result) => result
+                ?
+                [
+                    ...result.map(({ value }) => ({ type: 'Contracts' as const, value })),
+                    {type: 'Contracts', id: 'LIST'},
+                ]
+                :
+                [{type: 'Contracts', id: 'LIST'}],
         })
     })
 })

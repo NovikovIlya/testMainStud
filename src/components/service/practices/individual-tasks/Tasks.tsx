@@ -14,6 +14,6 @@ export const Tasks = () => {
 		return <EditTask/>
 	}
 	else {
-		return <IndividualTasks setEdit={setEdit}/>
+		return <IndividualTasks/>
 	}
 }

@@ -47,8 +47,8 @@ export const EditContract = () => {
             label: 'Бессрочный'
         },
         {
-            value: 'Указать пролонгацию',
-            label: 'Указать пролонгацию'
+            value: 'С пролонгацией',
+            label: 'С пролонгацией'
         }]
     const [prolongation, setProlongation] = useState(false)
     const [inn, setInn] = useState<string | number | null>(0)
@@ -137,6 +137,7 @@ export const EditContract = () => {
         editContract(formDataEditContract)
             .then(data => console.log(data))
             .catch(e => console.log(e))
+        nav('/services/practices/registerContracts')
 
     }
 
@@ -271,7 +272,7 @@ export const EditContract = () => {
                                 className="w-full"
                                 options={optionsContractsType}
                                 onChange={value => {
-                                    if (value === 'Указать пролонгацию') {
+                                    if (value === 'С пролонгацией') {
                                         setProlongation(true)
                                     } else setProlongation(false)
                                 }}

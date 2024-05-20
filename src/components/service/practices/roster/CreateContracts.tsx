@@ -41,8 +41,8 @@ export const CreateContracts = () => {
             label: 'Бессрочный'
         },
         {
-            value: 'Указать пролонгацию',
-            label: 'Указать пролонгацию'
+            value: 'С пролонгацией',
+            label: 'С пролонгацией'
         }]
     const [prolongation, setProlongation] = useState(false)
     const [newContract] = useCreateContractMutation()
@@ -205,7 +205,7 @@ export const CreateContracts = () => {
                                 className="w-full"
                                 options={optionsContractsType}
                                 onChange={value => {
-                                    if (value === 'Указать пролонгацию') {
+                                    if (value === 'С пролонгацией') {
                                         setProlongation(true)
                                     } else setProlongation(false)
                                 }}

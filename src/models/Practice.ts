@@ -134,6 +134,7 @@ export interface ResponseEditContract {
     documentCopyId: string
     documentAgreementId: string
 }
+
 ///////////////////////////////////////////
 
 export interface ICreateContractFull extends IContractInfoFull {
@@ -204,4 +205,41 @@ export interface ContractFacilities {
 
 export interface ListIdDeleteContracts {
     listIdDelete: string[]
+}
+
+export interface TaskSend {
+    specialityNameId: string
+    practiceTypeId: string
+    subdivisionNameId: string
+    tasks: string[]
+}
+
+export interface TaskEdit extends TaskSend {
+    id: string
+}
+
+export interface OneTask {
+    id: string,
+    taskDescription: string
+}
+
+export interface TasksAll {
+    id: string,
+    key: string,
+    specialityName: string,
+    practiceType: string,
+    subdivisionName: string,
+    dateFilling: string,
+    tasks: OneTask[]
+}
+
+export interface OneTaskForm {
+    task: string
+}
+
+export interface Task {
+    subDivision: string
+    specialityName: string
+    practiceType: string
+    tasks: OneTaskForm[]
 }

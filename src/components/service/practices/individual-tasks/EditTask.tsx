@@ -1,22 +1,27 @@
 import {DeleteOutlined, PlusOutlined} from '@ant-design/icons'
 import {Button, Col, Form, Row, Select, Space} from 'antd'
 import React, {useEffect} from 'react'
-import {useNavigate} from 'react-router-dom'
+import {useLocation, useNavigate} from 'react-router-dom'
 import {ArrowLeftSvg} from '../../../../assets/svg'
 import {useCreateTaskMutation} from '../../../../store/api/practiceApi/taskService'
 import {validateMessages} from "../../../../utils/validateMessage";
 import TextArea from "antd/es/input/TextArea";
 import './createTask/CreateTask.scss'
+import {useEditTaskMutation, useGetOneTaskQuery} from "../../../../store/api/practiceApi/individualTask";
+import {Task, TaskEdit, TaskSend} from "../../../../models/Practice";
 
 const EditTask = () => {
+	const path = useLocation()
+	const id: string = path.pathname.split('/').at(-1)!
 	const navigate = useNavigate()
 	const [form] = Form.useForm()
+	const {data, isSuccess} = useGetOneTaskQuery(id)
+	const [edit] = useEditTaskMutation()
 	//приходить с бэка
 	const optionsSpecialityName = [
 		{value: '31.08.01 Акушерство и гинекология', label: '31.08.01 Акушерство и гинекология'},
 		{value: '31.08.12 Педиатрия', label: '31.08.12 Педиатрия'}
 	]
-	//
 	const optionsPracticeType = [
 		{
 			value: 'Производственная',
@@ -29,8 +34,20 @@ const EditTask = () => {
 	]
 
 	useEffect(() => {
+		console.log(data)
 		//должено быть запрос на получение данных с бэка
-	}, []);
+	}, [data]);
+
+	function onFinish(values: Task) {
+		const newData: TaskEdit = {
+			id: '2',
+			specialityNameId: '1',
+			practiceTypeId: '1',
+			subdivisionNameId: '1',
+			tasks: values.tasks.map(elem => elem.task)
+		}
+		console.log(values)
+	}
 
 	return (
 		<section className="container">
@@ -48,8 +65,9 @@ const EditTask = () => {
 					Добавить задание
 				</span>
 			</Space>
-			<Form validateMessages={validateMessages}
-				  onFinish={(values) => console.log(values)}
+			<Form<Task>
+				  validateMessages={validateMessages}
+				  onFinish={(values) => onFinish(values)}
 				  layout={'vertical'}
 				  form={form}
 			>

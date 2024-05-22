@@ -7,6 +7,8 @@ import printJS from "print-js";
 import {PrintSvg} from "../../../../../assets/svg/PrintSvg";
 import {ColorBg, WrapperButton} from "../WrapperButton";
 import {DeleteRedSvg} from "../../../../../assets/svg/DeleteRedSvg";
+import {useDeleteSeveralContractMutation} from "../../../../../store/api/practiceApi/contracts";
+import {ListIdDeleteContracts} from "../../../../../models/Practice";
 
 interface Props {
     recordCompressedAll?: ColumnsTableCompressedView[]
@@ -26,16 +28,16 @@ export const RegisterPopoverMain = ({
                                         recordFullAll,
                                         setRecordFull,
                                     }: Props) => {
-
+    const [deleteSeveralContracts] = useDeleteSeveralContractMutation()
     function translateColumnsIntoRussia() {
         const newData: any = []
         if (recordCompressed) {
             for (let elem of recordCompressed) {
                 const newObj = {
                     "Наименование организации": elem.contractFacility,
-                    "Дата заполнения": elem.dateFiling,
+                    "Дата заполнения": elem.fillingDate,
                     "Тип договора": elem.contractType,
-                    "Дата заключения договора": dayjs(elem.dateConclusionContract).format('DD.MM.YYYY'),
+                    "Дата заключения договора": dayjs(elem.conclusionDate).format('DD.MM.YYYY'),
                 }
                 newData.push(newObj)
             }
@@ -43,16 +45,15 @@ export const RegisterPopoverMain = ({
         if (recordFull) {
             for (let elem of recordFull) {
                 const newObj = {
-                    "Наименование организации": elem.nameOrg,
-                    "Наименование специальности": elem.nameSpecialty,
+                    "Наименование организации": elem.contractFacility,
+                    "Шифр и наименование специальности": elem.specialtyName,
                     "Номер договора": elem.contractNumber,
-                    "Дата заключения договора": dayjs(elem.dateConclusionContract).format('DD.MM.YYYY'),
+                    "Дата заключения договора": dayjs(elem.conclusionDate).format('DD.MM.YYYY'),
                     "Тип договора": elem.contractType,
-                    "Срок действия договора": elem.contractPeriod,
-                    "Шифр и наименование специальности": elem.cipherNameSpecialty,
-                    "Юридический адрес организации": elem.legalAddress,
-                    "Фактический адрес организации": elem.actualAddress,
-                    "Количество мест": elem.numberSeats,
+                    "Срок действия договора": elem.endDate,
+                    "Юридический адрес организации": elem.legalFacility,
+                    "Фактический адрес организации": elem.actualFacility,
+                    "Количество мест": elem.placesAmount,
                 }
                 newData.push(newObj)
             }
@@ -104,12 +105,21 @@ export const RegisterPopoverMain = ({
             setRecordCompressed(recordCompressedAll.filter(elem => {
                 return !listId.includes(elem.id)
             }))
+            const objIdList: ListIdDeleteContracts = {
+                listIdDelete: listId
+            }
+            deleteSeveralContracts(objIdList)
+
         }
         if (setRecordFull && recordFull && recordFullAll) {
             const listId = recordFull.map(elem => elem.id)
             setRecordFull(recordFullAll.filter(elem => {
                 return !listId.includes(elem.id)
             }))
+            const objIdList: ListIdDeleteContracts = {
+                listIdDelete: listId
+            }
+            deleteSeveralContracts(objIdList)
         }
     }
 

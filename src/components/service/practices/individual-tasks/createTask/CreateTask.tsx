@@ -2,25 +2,17 @@ import {DeleteOutlined, PlusOutlined} from '@ant-design/icons'
 import {Button, Col, Form, Row, Select, Space} from 'antd'
 import React from 'react'
 import {useNavigate} from 'react-router-dom'
-import {ArrowLeftSvg} from '../../../../assets/svg'
-import {useCreateTaskMutation} from '../../../../store/api/practiceApi/taskService'
-import {validateMessages} from "../../../../utils/validateMessage";
+import {ArrowLeftSvg} from '../../../../../assets/svg'
+import {validateMessages} from "../../../../../utils/validateMessage";
 import TextArea from "antd/es/input/TextArea";
 import './CreateTask.scss'
+import {Task, TaskSend} from "../../../../../models/Practice";
+import {useCreateTaskMutation} from "../../../../../store/api/practiceApi/individualTask";
 
-export interface OneTask {
-    task: string
-}
 
-export interface Task {
-    specialityName: string
-    practiceType: string
-    tasks: OneTask[]
-}
 
-export interface TaskSend extends Omit<Task, 'tasks'>{
-    tasks: string[]
-}
+
+
 
 const CreateTask = () => {
     const [createTask] = useCreateTaskMutation()
@@ -42,6 +34,29 @@ const CreateTask = () => {
             label: 'Учебная'
         }
     ]
+    const optionsSubDivision = [
+        {
+            value: 'Институт фундаментальной медицины и биологии. Ординатура',
+            label: 'Институт фундаментальной медицины и биологии. Ординатура',
+        },
+        {
+            value: 'ИТИС',
+            label: 'ИТИС'
+        }
+    ]
+
+    function onFinish(values: Task) {
+        const newData: TaskSend = {
+            specialityNameId: '1',
+            practiceTypeId: '1',
+            subdivisionNameId: '1',
+            tasks: values.tasks.map(elem => elem.task)
+        }
+        createTask(newData)
+            .then(data => console.log(data))
+            .catch(e => console.log(e))
+        navigate('services/practices/individualTasks/')
+    }
 
     return (
         <section className="container">
@@ -61,18 +76,27 @@ const CreateTask = () => {
             </Space>
             <Form<Task>
                 validateMessages={validateMessages}
-                  onFinish={(values) => {
-                      const newTasks: TaskSend = {
-                          specialityName: values.specialityName,
-                          practiceType: values.practiceType,
-                          tasks: values.tasks.map(elem => elem.task)
-                      }
-                      console.log(newTasks)
-                  }}
+                  onFinish={(values) => {onFinish(values)}}
                   layout={'vertical'}
                   form={form}
             >
                 <Row gutter={[16, 16]} className="mt-4">
+                    <Col xs={24} sm={24} md={18} lg={16} xl={12}>
+                        <Space direction={'vertical'} className={'w-full'}>
+                            <Form.Item label={'Подразделение'}
+                                       rules={[{required: true}]}
+                                       name={'subDivision'}>
+                                <Select
+                                    size="large"
+                                    popupMatchSelectWidth={false}
+                                    className="w-full"
+                                    options={optionsSubDivision}
+                                />
+                            </Form.Item>
+                        </Space>
+                    </Col>
+                </Row>
+                <Row gutter={[16, 16]}>
                     <Col xs={24} sm={24} md={18} lg={16} xl={12}>
                         <Space direction={'vertical'} className={'w-full'}>
                             <Form.Item label={'Шифр и наименование специальности'}

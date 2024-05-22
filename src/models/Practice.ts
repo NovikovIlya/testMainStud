@@ -1,4 +1,5 @@
 import {RcFile} from "antd/es/upload";
+import {string} from "yup";
 
 export interface ITask {
     specialityName: string
@@ -105,7 +106,6 @@ export interface IContractInfo {
     legalFacility: string
     actualFacility: string
     placesAmount: string
-
 }
 
 export interface IContractInfoFull extends IContractInfo {
@@ -116,6 +116,26 @@ export interface ICreateContract extends IContractInfo {
     pdfContract: Blob
     pdfAgreement: Blob
 }
+
+////////////////////////////////////
+export interface ResponseEditContract {
+    id: string
+    itn: string
+    contractNumber: string
+    contractFacility: string
+    conclusionDate: string
+    contractType: string
+    prolongation: string
+    endDate: string
+    specialtyName: number
+    legalFacility: string
+    actualFacility: string
+    placesAmount: string
+    documentCopyId: string
+    documentAgreementId: string
+}
+
+///////////////////////////////////////////
 
 export interface ICreateContractFull extends IContractInfoFull {
     pdfContract: string
@@ -154,8 +174,8 @@ export interface ContractsAll {
     contractFacility: string,
     conclusionDate: string,
     contractType: string,
-    prolongation: string, //в таблице нет
-    endDate: string, //в таблице нет
+    prolongation: string,
+    endDate: string,
     specialtyName: string,
     legalFacility: string,
     actualFacility: string,
@@ -164,20 +184,66 @@ export interface ContractsAll {
     documentAgreementId: string
 }
 
-interface ColumnsTableFull {
+export interface ContractShort {
     id: string
-    key: string
-    contractNumber: string
     contractFacility: string
-    conclusionDate: string
+    fillingDate: string
     contractType: string
-    specialtyName: string
-    legalFacility: string
-    actualFacility: string
-    placesAmount: string,
+    conclusionDate: string
+}
 
-    contractPeriod: string
+export interface NameSpecialty {
+    id: number
+    value: string
+    label: string
+}
 
-    documentCopyId: string,
-    documentAgreementId: string
+export interface ContractFacilities {
+    value: string
+    label: string
+}
+
+export interface ListIdDeleteContracts {
+    listIdDelete: string[]
+}
+
+export interface TaskSend {
+    specialityNameId: string
+    practiceTypeId: string
+    subdivisionNameId: string
+    tasks: string[]
+}
+
+export interface TaskEdit extends TaskSend {
+    id: string
+}
+
+export interface OneTask {
+    id: string,
+    taskDescription: string
+}
+
+export interface TasksAll {
+    id: string,
+    key: string,
+    specialityName: string,
+    practiceType: string,
+    subdivisionName: string,
+    dateFilling: string,
+    tasks: OneTask[]
+}
+
+export interface OneTaskForm {
+    task: string
+}
+
+export interface Task {
+    subDivision: string
+    specialityName: string
+    practiceType: string
+    tasks: OneTaskForm[]
+}
+
+export interface ListIdDeleteTasks {
+    listIdDelete: string[]
 }

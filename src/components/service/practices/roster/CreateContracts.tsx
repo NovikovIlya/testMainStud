@@ -41,8 +41,8 @@ export const CreateContracts = () => {
             label: 'Бессрочный'
         },
         {
-            value: 'Указать пролонгацию',
-            label: 'Указать пролонгацию'
+            value: 'С пролонгацией',
+            label: 'С пролонгацией'
         }]
     const [prolongation, setProlongation] = useState(false)
     const [newContract] = useCreateContractMutation()
@@ -62,10 +62,11 @@ export const CreateContracts = () => {
         newForm.append('contract', blob)
         if (files.pdfContract) newForm.append('pdfContract', files.pdfContract)
         if (files.pdfAgreement) newForm.append('pdfAgreement', files.pdfAgreement)
-
         newContract(newForm)
             .then(res => console.log(res))
             .catch(e => console.log(e))
+
+        nav('/services/practices/registerContracts')
     }
 
 
@@ -121,7 +122,8 @@ export const CreateContracts = () => {
                     Новый документ
                 </Typography.Text>
             </Space>
-            <Form validateMessages={validateMessages}
+            <Form<ICreateContract>
+                  validateMessages={validateMessages}
                   layout={'vertical'}
                   onFinish={values => onFinish(values)}
                   form={form}
@@ -129,7 +131,7 @@ export const CreateContracts = () => {
                 <Row gutter={[16, 16]} className="mt-12">
                     <Col xs={24} sm={24} md={18} lg={16} xl={12}>
                         <Form.Item label={'ИНН'}
-                                   dependencies={['contractFacility']}
+                                   //dependencies={['contractFacility']}
                                    name={'ITN'}
                                    rules={[
                                        {
@@ -203,7 +205,7 @@ export const CreateContracts = () => {
                                 className="w-full"
                                 options={optionsContractsType}
                                 onChange={value => {
-                                    if (value === 'Указать пролонгацию') {
+                                    if (value === 'С пролонгацией') {
                                         setProlongation(true)
                                     } else setProlongation(false)
                                 }}
@@ -321,7 +323,12 @@ export const CreateContracts = () => {
                                 }}
                                 accept={'.pdf'}
                                 maxCount={1}
-
+                                name={'pdfContract'}
+                                onChange={info => {
+                                    if (info.file.status === "removed") {
+                                        form.setFieldValue('pdfContract', undefined)
+                                    }
+                                }}
                             >
                                 <Button
                                     className="w-full"
@@ -351,6 +358,12 @@ export const CreateContracts = () => {
                                 }}
                                 maxCount={1}
                                 accept={'.pdf'}
+                                name={'pdfAgreement'}
+                                onChange={info => {
+                                    if (info.file.status === "removed") {
+                                        form.setFieldValue('pdfAgreement', undefined)
+                                    }
+                                }}
                             >
                                 <Button
                                     className="w-full"

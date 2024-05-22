@@ -200,7 +200,6 @@ export const {
     useChangeContractMutation,
     useCreateContractMutation,
     useDeleteContractMutation,
-    useGetContractQuery,
     useGetContractsQuery,
     useCreateDocumentMutation,
     useCreatePracticSceduleMutation

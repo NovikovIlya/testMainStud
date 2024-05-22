@@ -9,7 +9,7 @@ import {
 } from 'antd'
 import React, {useEffect, useRef, useState} from 'react'
 import {useNavigate} from 'react-router-dom'
-import {ContentItem, ITaskFull, TypeGetTasks} from '../../../../models/Practice'
+import {ContentItem, ITaskFull, TasksAll, TypeGetTasks} from '../../../../models/Practice'
 import './IndividualTasks.scss'
 import {
     TitleHeadCell
@@ -22,6 +22,7 @@ import {IndTaskPopoverContent} from "../popover/individualTask/IndTaskPopoverCon
 import {IndTaskPopoverMain} from "../popover/individualTask/IndTaskPopoverMain";
 import dayjs from "dayjs";
 import {EditSvg} from "../../../../assets/svg/EditSvg";
+import {useGetAllTasksQuery} from "../../../../store/api/practiceApi/individualTask";
 
 
 interface FilterType {
@@ -42,9 +43,13 @@ export interface CompressedIndividualTask {
 }
 
 const mockDataCompressedIndividualTask: CompressedIndividualTask[] = [
-    {id: '1', key: '1', specialityName: '31.08.01 Акушерство и гинекология', dateFilling: '2024-12-12', practiceType: 'Производственная'},
-    {id: '2', key: '2', specialityName: '31.08.12 Педиатрия', dateFilling: '2024-05-12', practiceType: 'Учебная'},
-    {id: '3', key: '3', specialityName: '31.08.12 Педиатрия', dateFilling: '2024-05-12', practiceType: 'Производственная'},
+    {
+        id: '1',
+        key: '1',
+        specialityName: '31.08.01 Акушерство и гинекология',
+        dateFilling: '2024-12-12',
+        practiceType: 'Производственная',
+    },
 ]
 
 export interface FullIndividualTask {
@@ -57,24 +62,32 @@ export interface FullIndividualTask {
 }
 
 const mockDataFullIndividualTask: FullIndividualTask[] = [
-    {id: '1', key: '1', specialityName: '31.08.01 Акушерство и гинекология', dateFilling: '2024-12-12', practiceType: 'Производственная', tasks: ['Test3', 'Test4']},
-    {id: '2', key: '2', specialityName: '31.08.12 Педиатрия', dateFilling: '2023-05-12', practiceType: 'Учебная', tasks: ['Test3', 'Test4']},
-    {id: '3', key: '3', specialityName: '31.08.12 Педиатрия', dateFilling: '2022-05-12', practiceType: 'Производственная', tasks: ['Test3', 'Test4']},
+    {
+        id: '1',
+        key: '1',
+        specialityName: '31.08.01 Акушерство и гинекология',
+        dateFilling: '2024-12-12',
+        practiceType: 'Производственная',
+        tasks: ['Test3', 'Test4']
+    },
 ]
 
 
 
-const IndividualTasks = ({setEdit}: PropsType) => {
+
+
+const IndividualTasks = () => {
     const navigate = useNavigate()
+    const {data, isSuccess} = useGetAllTasksQuery()
     const [
         tableDataCompressed,
         setTableDataCompressed
-    ] = useState<CompressedIndividualTask[]>(mockDataCompressedIndividualTask)
+    ] = useState<CompressedIndividualTask[]>()
 
     const [
         tableDataFull,
         setTableDataFull
-    ] = useState<FullIndividualTask[]>(mockDataFullIndividualTask)
+    ] = useState<FullIndividualTask[]>()
 
     const [
         selectedFieldsCompressed,
@@ -95,6 +108,30 @@ const IndividualTasks = ({setEdit}: PropsType) => {
         specialityName: 'Все',
         dateFilling: 'По дате (сначала новые)',
     })
+
+    function changeListDataShort(data: TasksAll) {
+        const newData: CompressedIndividualTask = {
+            id: data.id,
+            key: data.key,
+            specialityName: data.specialityName,
+            practiceType: data.practiceType,
+            dateFilling: data.dateFilling,
+        }
+        return newData
+    }
+
+    function changeListDataAll(data: TasksAll) {
+        const newData: FullIndividualTask = {
+            id: data.id,
+            key: data.key,
+            specialityName: data.specialityName,
+            practiceType: data.practiceType,
+            dateFilling: data.dateFilling,
+            tasks: data.tasks.map(elem => elem.taskDescription)
+        }
+        return newData
+    }
+
     function isCompressedTable() {
         setTableView({
             compressed: true,
@@ -215,7 +252,6 @@ const IndividualTasks = ({setEdit}: PropsType) => {
                         type="text"
                         icon={<EditSvg/>}
                         onClick={() => {
-                            console.log(record.id)
                             navigate(`/services/practices/individualTasks/editTask/${record.id}`)
                         }}
                     />
@@ -227,12 +263,6 @@ const IndividualTasks = ({setEdit}: PropsType) => {
             width: '20%',
             align: 'left',
         },
-        // {
-        //     title: <span className={'text-base'}>Дата заполнения</span>,
-        //     dataIndex: 'dateFilling',
-        //     align: 'center',
-        //     width: '15%'
-        // },
         {
             title: <span className={'text-base'}>Индивидуальные задания</span>,
             dataIndex: 'tasks',
@@ -302,10 +332,15 @@ const IndividualTasks = ({setEdit}: PropsType) => {
             }
             return 0
         }
-        return mockDataCompressedIndividualTask
-            .filter(elem => filterPracticeType(elem))
-            .filter(elem => filterNameSpecialty(elem))
-            .sort((a, b) => sortDateFilling(a, b))
+
+        if (isSuccess) {
+            const dataCompressed: CompressedIndividualTask[] = data.map(elem => changeListDataShort(elem))
+            return dataCompressed
+                .filter(elem => filterPracticeType(elem))
+                .filter(elem => filterNameSpecialty(elem))
+                .sort((a, b) => sortDateFilling(a, b))
+        }
+
     }
     function filterDataFull() {
         function filterPracticeType(elem: FullIndividualTask) {
@@ -331,10 +366,14 @@ const IndividualTasks = ({setEdit}: PropsType) => {
             }
             return 0
         }
-        return mockDataFullIndividualTask
-            .filter(elem => filterPracticeType(elem))
-            .filter(elem => filterNameSpecialty(elem))
-            .sort((a, b) => sortDateFilling(a, b))
+
+        if (isSuccess) {
+            const dataFull: FullIndividualTask[] = data.map(elem => changeListDataAll(elem))
+            return dataFull
+                .filter(elem => filterPracticeType(elem))
+                .filter(elem => filterNameSpecialty(elem))
+                .sort((a, b) => sortDateFilling(a, b))
+        }
     }
 
     useEffect(() => {
@@ -342,7 +381,14 @@ const IndividualTasks = ({setEdit}: PropsType) => {
         setTableDataFull(filterDataFull())
     }, [filter]);
 
-
+    useEffect(() => {
+        if (isSuccess) {
+            const dataCompressed: CompressedIndividualTask[] = data.map(elem => changeListDataShort(elem))
+            setTableDataCompressed(dataCompressed)
+            const dataFull: FullIndividualTask[] = data.map(elem => changeListDataAll(elem))
+            setTableDataFull(dataFull)
+        }
+    }, [data]);
 
 
     return (

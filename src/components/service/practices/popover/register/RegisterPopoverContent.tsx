@@ -9,6 +9,7 @@ import {useNavigate} from "react-router-dom";
 import printJS from "print-js";
 import {PrintSvg} from "../../../../../assets/svg/PrintSvg";
 import {ColorBg, WrapperButton} from "../WrapperButton";
+import {useDeleteContractMutation} from "../../../../../store/api/practiceApi/contracts";
 
 
 interface Props {
@@ -29,28 +30,28 @@ export const RegisterPopoverContent = ({
                                            tableDataFull
                                        }: Props) => {
     const nav = useNavigate()
+    const [deleteContract] = useDeleteContractMutation()
 
     function translateColumnIntoRussia() {
         if (recordCompressed) {
             return {
                 "Наименование организации": recordCompressed.contractFacility,
-                "Дата заполнения": recordCompressed.dateFiling,
+                "Дата заполнения": recordCompressed.fillingDate,
                 "Тип договора": recordCompressed.contractType,
-                "Дата заключения договора": dayjs(recordCompressed.dateConclusionContract).format('DD.MM.YYYY'),
+                "Дата заключения договора": dayjs(recordCompressed.conclusionDate).format('DD.MM.YYYY'),
             }
         }
         if (recordFull) {
             return {
-                "Наименование организации": recordFull.nameOrg,
-                "Наименование специальности": recordFull.nameSpecialty,
+                "Наименование организации": recordFull.contractFacility,
+                "Шифр и наименование специальности": recordFull.specialtyName,
                 "Номер договора": recordFull.contractNumber,
-                "Дата заключения договора": dayjs(recordFull.dateConclusionContract).format('DD.MM.YYYY'),
+                "Дата заключения договора": dayjs(recordFull.conclusionDate).format('DD.MM.YYYY'),
                 "Тип договора": recordFull.contractType,
-                "Срок действия договора": recordFull.contractPeriod,
-                "Шифр и наименование специальности": recordFull.cipherNameSpecialty,
-                "Юридический адрес организации": recordFull.legalAddress,
-                "Фактический адрес организации": recordFull.actualAddress,
-                "Количество мест": recordFull.numberSeats,
+                "Срок действия договора": recordFull.endDate,
+                "Юридический адрес организации": recordFull.legalFacility,
+                "Фактический адрес организации": recordFull.actualFacility,
+                "Количество мест": recordFull.placesAmount,
             }
         }
     }
@@ -99,10 +100,10 @@ export const RegisterPopoverContent = ({
 
     function navPreview() {
         if (recordCompressed) {
-            nav(`/services/practices/registerContracts/previewContracts/${recordCompressed.key}`)
+            nav(`/services/practices/registerContracts/previewContracts/${recordCompressed.id}`)
         }
         if (recordFull) {
-            nav(`/services/practices/registerContracts/previewContracts/${recordFull?.key}`)
+            nav(`/services/practices/registerContracts/previewContracts/${recordFull?.id}`)
         }
     }
 
@@ -112,7 +113,9 @@ export const RegisterPopoverContent = ({
                 return elem.key !== recordCompressed?.key
             })
             setTableDataCompressed(newArr)
-            //пишем запрос на удаление
+            if (recordCompressed) {
+                deleteContract(recordCompressed.id)
+            }
         }
 
         if (setTableDataFull && tableDataFull) {
@@ -120,7 +123,9 @@ export const RegisterPopoverContent = ({
                 return elem.key !== recordFull?.key
             })
             setTableDataFull(newArr)
-            //пишем запрос на удаление
+            if (recordFull) {
+                deleteContract(recordFull.id)
+            }
         }
 
     }

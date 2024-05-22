@@ -13,51 +13,165 @@ import {
     UploadProps,
     message, Form, InputNumber
 } from 'antd'
-import {format} from 'date-fns'
 import dayjs from 'dayjs'
 import React, {Dispatch, SetStateAction, useEffect, useState} from 'react'
-import {Controller, SubmitHandler, useForm} from 'react-hook-form'
-import {useNavigate} from 'react-router-dom'
-
+import {useLocation, useNavigate} from 'react-router-dom'
 import {ArrowLeftSvg} from '../../../../assets/svg'
-import {
-    useChangeContractMutation,
-    useCreateContractMutation,
-    useGetContractQuery
-} from '../../../../store/api/practiceApi/taskService'
-import {ICreateContract, ICreateContractFull} from '../../../../models/Practice'
-import {SignInSchema} from '../validation'
+import {IContractInfo, IContractInfoFull, ICreateContract, ICreateContractFull} from '../../../../models/Practice'
 import {validateMessages} from "../../../../utils/validateMessage";
+import {
+    useEditContractMutation,
+    useGetContractForEditQuery,
+    useGetContractQuery
+} from "../../../../store/api/practiceApi/contracts";
+import {string} from "yup";
 
+export interface PdfContract {
+    uid: string,
+    name: string,
+    status: string,
+    url: string,
+}
 
 export const EditContract = () => {
     const [form] = Form.useForm()
+    const path = useLocation()
     const nav = useNavigate()
+    const id: string = path.pathname.split('/').at(-1)!
+    const {data, isSuccess} = useGetContractForEditQuery(id)
+    const [editContract] = useEditContractMutation()
+    console.log(data)
     const optionsContractsType = [
         {
             value: 'Бессрочный',
             label: 'Бессрочный'
         },
         {
-            value: 'Указать пролонгацию',
-            label: 'Указать пролонгацию'
+            value: 'С пролонгацией',
+            label: 'С пролонгацией'
         }]
     const [prolongation, setProlongation] = useState(false)
+    const [inn, setInn] = useState<string | number | null>(0)
+    const [files, setFiles] = useState<{
+        pdfAgreement: Blob | null
+        pdfContract: Blob | null
+    }>({
+        pdfAgreement: null,
+        pdfContract: null,
+    })
+    const [nameOrg, setNameOrg] = useState(true)
+
+    const [pdfContract, setPdfContract] = useState<any[]>()
+    const [pdfAgreement, setPdfAgreement] = useState<any[]>()
 
     useEffect(() => {
+        if (isSuccess) {
+            form.setFieldValue('ITN', data.itn)
+            setInn(data.itn)
+
+            //form.setFieldValue('contractFacility', data.contractFacility) - нет смысла устанавливать ,
+            //название организации и юр.адрес подтягивается из api DaData
+
+            if (data.contractType === 'С пролонгацией') {
+                form.setFieldValue('contractType', data.contractType)
+                setProlongation(true)
+                form.setFieldValue('prolongation', data.prolongation)
+            } else {
+                form.setFieldValue('contractType', data.contractType)
+            }
+
+            form.setFieldValue('contractNumber', data.contractNumber)
+            form.setFieldValue('conclusionDate', dayjs(data.conclusionDate))
+            form.setFieldValue('endDate', dayjs(data.endDate))
+            form.setFieldValue('specialtyNameId', data.specialtyName)
+            form.setFieldValue('actualFacility', data.actualFacility)
+            form.setFieldValue('placesAmount', data.placesAmount)
+            form.setFieldValue('pdfContract', data.documentCopyId)
+            setPdfContract([{
+                uid: '1',
+                name: 'Скан договора',
+                status: 'done',
+                url: `http://192.168.63.96:8081/contracts/copy-file/${data.documentCopyId}`
+            }])
+
+            form.setFieldValue('pdfAgreement', data.documentAgreementId)
+            setPdfAgreement([{
+                uid: '2',
+                name: 'Доп.соглашение',
+                status: 'done',
+                url: `http://192.168.63.96:8081/contracts/agreement-file/${data.documentAgreementId}`
+            }])
+        }
+
         //при загруке данных проверять, есть ли пролонгация. Если есть, то ставить setProlongation(true)
-    }, []);
+    }, [data]);
 
     function onFinish(values: ICreateContract) {
-        const formDataCreateContract = new FormData()
+        const formDataEditContract = new FormData()
+        values.specialtyNameId = 1
+        values.placesAmount = String(values.placesAmount)
+        values.ITN = String(values.ITN)
         values.conclusionDate = dayjs(values.conclusionDate).format('DD.MM.YYYY')
         values.endDate = dayjs(values.endDate).format('DD.MM.YYYY')
-        // for (let key in values) {
-        //     formDataCreateContract.append(key, values[key as keyof ICreateContract])
-        // }
-        console.log(values)
-        console.log(formDataCreateContract)
+
+        const contract: IContractInfoFull = {
+            id: data?.id!,
+            ITN: values.ITN,
+            contractNumber: values.contractNumber,
+            contractFacility: values.contractFacility,
+            conclusionDate: values.conclusionDate,
+            contractType: values.contractType,
+            prolongation: values.prolongation,
+            endDate: values.endDate,
+            specialtyNameId: values.specialtyNameId,
+            legalFacility: values.legalFacility,
+            actualFacility: values.actualFacility,
+            placesAmount: values.placesAmount
+        }
+
+        const jsonData = JSON.stringify(contract)
+        const blob = new Blob([jsonData], { type: 'application/json' })
+        formDataEditContract.append('contract', blob)
+        if (files.pdfContract) formDataEditContract.append('pdfContract', files.pdfContract)
+        if (files.pdfAgreement) formDataEditContract.append('pdfAgreement', files.pdfAgreement)
+        editContract(formDataEditContract)
+            .then(data => console.log(data))
+            .catch(e => console.log(e))
+        nav('/services/practices/registerContracts')
+
     }
+
+    useEffect(() => {
+        let url = "https://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/party";
+        let options = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "Authorization": "Token 2491c0a94273928cee7e6656455eb71f1d74a54b",
+            },
+            body: JSON.stringify({query: inn})
+        }
+
+        if (String(inn).length === 10) {
+            fetch(url, options)
+                .then(response => response.json())
+                .then(res => {
+                    if (res.suggestions.length !== 0) {
+                        setNameOrg(true)
+                        form.setFieldValue('contractFacility', res.suggestions[0].data.name.full_with_opf)
+                        form.setFieldValue('legalFacility', res.suggestions[0].data.address.unrestricted_value)
+                    } else {
+                        setNameOrg(false)
+                    }
+                })
+                .catch(error => console.log("error", error));
+        } else {
+            setNameOrg(true)
+            form.resetFields(['contractFacility', 'legalFacility'])
+            //проверить, будет ли работать, когда будет приходить ITN
+        }
+    }, [inn]);
 
 
     return (
@@ -71,48 +185,59 @@ export const EditContract = () => {
                     onClick={() => nav('/services/practices/registerContracts')}
                 />
                 <Typography.Text className="text-black text-3xl font-normal">
-                    Договор №
+                    Договор № {data?.contractNumber}
                 </Typography.Text>
             </Space>
-            <Form validateMessages={validateMessages}
-                  layout={'vertical'}
-                  onFinish={values => onFinish(values)}
-                  form={form}
+            <Form<ICreateContract>
+                validateMessages={validateMessages}
+                layout={'vertical'}
+                onFinish={values => onFinish(values)}
+                form={form}
             >
                 <Row gutter={[16, 16]} className="mt-12">
                     <Col xs={24} sm={24} md={18} lg={16} xl={12}>
                         <Form.Item label={'ИНН'}
-                                   name={'inn'}
-                                   rules={[{required: true}]}
-                                   initialValue={1234567890}
+                                   name={'ITN'}
+                                   rules={[
+                                       {
+                                           required: true,
+                                           pattern: new RegExp('^[0-9]{10}$'),
+                                           message: 'ИНН содержит 10 цифр',
+                                       },
+                                   ]}
                         >
                             <InputNumber
+                                type={'number'}
+                                controls={false}
                                 className="w-full"
                                 size="large"
+                                onChange={value => setInn(value)}
                             />
                         </Form.Item>
-
+                        {!nameOrg &&
+                            <span className={'absolute top-[70px] text-[#FF4d4F]'}>
+                                Организация не найдена. Проверьте ИНН.
+                            </span>
+                        }
                     </Col>
                 </Row>
                 <Row gutter={[16, 16]}>
                     <Col xs={24} sm={24} md={18} lg={16} xl={12}>
                         <Form.Item label={'Наименование организации по договору'}
                                    name={'contractFacility'}
-                                   initialValue={'Тест 1'}
                                    rules={[{required: true}]}>
                             <Input
                                 className="w-full"
                                 size="large"
+                                onChange={elem => console.log(elem)}
                             />
                         </Form.Item>
-
                     </Col>
                 </Row>
                 <Row gutter={[16, 16]}>
                     <Col xs={24} sm={24} md={18} lg={16} xl={12}>
                         <Form.Item label={'Номер договора'}
                                    name={'contractNumber'}
-                                   initialValue={'Тест 1'}
                                    rules={[{required: true}]}>
                             <Input
                                 className="w-full"
@@ -124,8 +249,7 @@ export const EditContract = () => {
                 <Row gutter={[16, 16]}>
                     <Col xs={24} sm={24} md={18} lg={8} xl={6}>
                         <Form.Item label={'Дата заключения договора'}
-                                   name={'dateConclusionContract'}
-                                   initialValue={dayjs('12.12.2024')}
+                                   name={'conclusionDate'}
                                    rules={[{required: true}]}>
                             <DatePicker
                                 format={'DD.MM.YYYY'}
@@ -139,7 +263,6 @@ export const EditContract = () => {
                     <Col xs={24} sm={24} md={18} lg={8} xl={6}>
                         <Form.Item label={'Тип договора'}
                                    name={'contractType'}
-                                   initialValue={'Указать пролонгацию'}
                                    rules={[{required: true}]}>
                             <Select
                                 size="large"
@@ -149,20 +272,21 @@ export const EditContract = () => {
                                 className="w-full"
                                 options={optionsContractsType}
                                 onChange={value => {
-                                    if (value === 'Указать пролонгацию') {
+                                    if (value === 'С пролонгацией') {
                                         setProlongation(true)
                                     } else setProlongation(false)
                                 }}
                             />
                         </Form.Item>
                     </Col>
-                    {
-                        prolongation
-                        &&
-                        <Col xs={24} sm={24} md={18} lg={8} xl={6}>
+                </Row>
+                {
+                    prolongation
+                    &&
+                    <Row gutter={[16, 16]}>
+                        <Col xs={24} sm={24} md={18} lg={16} xl={12}>
                             <Form.Item label={'Пролонгация'}
                                        name={'prolongation'}
-                                       initialValue={12}
                                        rules={[{required: true}]}>
                                 <InputNumber
                                     className="w-full"
@@ -171,14 +295,13 @@ export const EditContract = () => {
                                 />
                             </Form.Item>
                         </Col>
-                    }
+                    </Row>
 
-                </Row>
+                }
                 <Row gutter={[16, 16]}>
                     <Col xs={24} sm={24} md={18} lg={8} xl={6}>
                         <Form.Item label={'Срок действия договора'}
-                                   name={'contractTime'}
-                                   initialValue={dayjs('12.12.2024')}
+                                   name={'endDate'}
                                    rules={[{required: true}]}>
                             <DatePicker
                                 format={'DD.MM.YYYY'}
@@ -190,8 +313,7 @@ export const EditContract = () => {
                     </Col>
                     <Col xs={24} sm={24} md={18} lg={8} xl={6}>
                         <Form.Item label={'Шифр и наименование специальности'}
-                                   name={'specialtyName'}
-                                   initialValue={'31.08.01 Акушерство и гинекология'}
+                                   name={'specialtyNameId'}
                                    rules={[{required: true}]}>
                             <Select
                                 size="large"
@@ -218,7 +340,6 @@ export const EditContract = () => {
                     <Col xs={24} sm={24} md={18} lg={16} xl={12}>
                         <Form.Item label={'Юридический адрес организации'}
                                    name={'legalFacility'}
-                                   initialValue={'Тест 1'}
                                    rules={[{required: true}]}>
                             <Input
                                 className="w-full"
@@ -231,7 +352,6 @@ export const EditContract = () => {
                     <Col xs={24} sm={24} md={18} lg={16} xl={12}>
                         <Form.Item label={'Фактический адрес организации'}
                                    name={'actualFacility'}
-                                   initialValue={'Тест 2'}
                                    rules={[{required: true}]}>
                             <Input
                                 className="w-full"
@@ -243,8 +363,7 @@ export const EditContract = () => {
                 <Row gutter={[16, 16]}>
                     <Col xs={24} sm={24} md={18} lg={16} xl={12}>
                         <Form.Item label={'Количество мест'}
-                                   name={'placeNumber'}
-                                   initialValue={100}
+                                   name={'placesAmount'}
                                    rules={[{required: true}]}>
                             <InputNumber
                                 className="w-full"
@@ -259,34 +378,27 @@ export const EditContract = () => {
                     <Col xs={24} sm={24} md={18} lg={8} xl={6}>
                         <Form.Item label={'Прикрепить скан договора в формате pdf'}
                                    name={'pdfContract'}
-                                   initialValue={[
-                                       {
-                                           uid: '2',
-                                           name: 'yyy.png',
-                                           url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-                                       },
-                                   ]}
                                    rules={[{required: true}]}
                         >
                             <Upload
-                                beforeUpload={() => {
+                                beforeUpload={(file) => {
+                                    setFiles({
+                                        ...files,
+                                        pdfContract: file
+                                    })
                                     return false
                                 }}
                                 maxCount={1}
                                 accept={'.pdf'}
                                 name={'pdfContract'}
-                                defaultFileList={[
-                                	{
-                                		uid: '2',
-                                		name: 'yyy.png',
-                                        status: 'done',
-                                        url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-                                	}
-                                ]}
+                                fileList={pdfContract}
                                 onChange={info => {
                                     if (info.file.status === "removed") {
                                         form.setFieldValue('pdfContract', undefined)
                                     }
+                                }}
+                                onRemove={file => {
+                                    setPdfContract(undefined)
                                 }}
 
                             >
@@ -307,32 +419,27 @@ export const EditContract = () => {
                     <Col xs={24} sm={24} md={18} lg={8} xl={6}>
                         <Form.Item label={'Прикрепить дополнительный документ в формате pdf'}
                                    name={'pdfAgreement'}
-                                   initialValue={[
-                                       {
-                                           uid: '2',
-                                           name: 'yyy.png',
-                                           url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-                                       },
-                                   ]}
                                    rules={[{required: true}]}
                         >
                             <Upload
-                                beforeUpload={() => {return false}}
+                                beforeUpload={(file) => {
+                                    setFiles({
+                                        ...files,
+                                        pdfAgreement: file
+                                    })
+                                    return false
+                                }}
                                 maxCount={1}
                                 accept={'.pdf'}
                                 name={'pdfAgreement'}
-                                defaultFileList={[
-                                    {
-                                        uid: '2',
-                                        name: 'yyy.png',
-                                        status: 'done',
-                                        url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-                                    }
-                                ]}
+                                fileList={pdfAgreement}
                                 onChange={info => {
                                     if (info.file.status === "removed") {
                                         form.setFieldValue('pdfAgreement', undefined)
                                     }
+                                }}
+                                onRemove={file => {
+                                    setPdfAgreement(undefined)
                                 }}
                             >
                                 <Button

@@ -1,11 +1,11 @@
 import {Button, Col, Row, Space, Table, TableProps, Typography} from 'antd'
-import React from 'react'
+import React, {ReactNode, useEffect} from 'react'
 
 import {ArrowLeftSvg} from '../../../../assets/svg'
 import {DownloadSvg} from '../../../../assets/svg/DownloadSvg'
 import {PrinterSvg} from '../../../../assets/svg/PrinterSvg'
-import {useGetContractQuery} from '../../../../store/api/practiceApi/taskService'
-import {useNavigate} from "react-router-dom";
+import {useGetContractQuery} from '../../../../store/api/practiceApi/contracts'
+import {useLocation, useNavigate, useParams} from "react-router-dom";
 import {utils, writeFileXLSX} from "xlsx";
 import dayjs from "dayjs";
 import printJS from "print-js";
@@ -20,7 +20,7 @@ type PropsType = {
 interface DataType {
     key: string
     name: string
-    medic: string
+    medic: ReactNode
 }
 
 const data: DataType[] = [
@@ -75,88 +75,128 @@ const data: DataType[] = [
         medic: 'ДопСоглашение.pdf'
     }
 ]
-const columns: TableProps<DataType>['columns'] = [
-    {
-        title: 'Наименование организации договору',
-        dataIndex: 'name',
-        key: 'name',
-        width: 400,
-        render: (text: string) => <span>{text}</span>
-    },
-    {
-        title: 'Медико-санитарная часть ФГАОУ ВО КФУ',
-        dataIndex: 'medic',
-        key: 'medic'
-    }
-]
+
 
 export const PreviewContracts = () => {
+    const path = useLocation()
+    const id: string = path.pathname.split('/').at(-1)!
     const nav = useNavigate()
-    //const { data: contract } = useGetContractQuery(preview)
-    // const data: DataType[] = [
-    // 	{
-    // 		key: '1',
-    // 		name: 'Номер договора',
-    // 		medic: contract?.contractNumber || ''
-    // 	},
-    // 	{
-    // 		key: '2',
-    // 		name: 'Дата заключения договора',
-    // 		medic: contract?.dateConclusionContract || ''
-    // 	},
-    // 	{
-    // 		key: '3',
-    // 		name: 'Тип договора',
-    // 		medic: contract?.contractType || ''
-    // 	},
-    // 	{
-    // 		key: '4',
-    // 		name: 'Срок действия договора',
-    // 		medic: contract?.prolongation?.toString() || ''
-    // 	},
-    // 	{
-    // 		key: '5',
-    // 		name: 'Шифр и наименование специальности',
-    // 		medic: contract?.specialtyName || ''
-    // 	},
-    // 	{
-    // 		key: '6',
-    // 		name: 'Юридический адрес организации',
-    // 		medic: contract?.legalFacility || ''
-    // 	},
-    // 	{
-    // 		key: '7',
-    // 		name: 'Фактический адрес организации ',
-    // 		medic: contract?.actualFacility || ''
-    // 	},
-    // 	{
-    // 		key: '8',
-    // 		name: 'Количество мест',
-    // 		medic: contract?.placeNumber.toString() || ''
-    // 	},
-    // 	{
-    // 		key: '9',
-    // 		name: 'Ссылка на скан договора',
-    // 		medic: 'Скан договора.pdf'
-    // 	},
-    // 	{
-    // 		key: '10',
-    // 		name: 'Ссылка на дополнительное соглашение к договору',
-    // 		medic: 'ДопСоглашение.pdf'
-    // 	}
-    // ]
+    const { data: contract, isSuccess } = useGetContractQuery(id)
+
+    useEffect(() => {
+        if (isSuccess) {
+            console.log(contract)
+        }
+    }, [contract]);
+
+    function prolonAge(prolon: string) {
+        if (prolon === '1') {
+            return 'год'
+        } else if (prolon === '2' || prolon === '3' || prolon === '4') {
+            return 'года'
+        } else if (prolon === '11' || prolon === '12') {
+            return 'лет'
+        } else if (prolon.length > 1 && prolon.at(-1) === '1') {
+            return 'лет'
+        } else if (prolon.at(-1) === '2' || prolon.at(-1) === '3' || prolon.at(-1) === '4') {
+            return 'года'
+        } else {
+            return 'лет'
+        }
+    }
+
+    const columns: TableProps<DataType>['columns'] = [
+        {
+            title: 'Наименование организации договору',
+            dataIndex: 'name',
+            key: 'name',
+            width: 400,
+            render: (text: string) => <span>{text}</span>
+        },
+        {
+            title: contract?.contractFacility,
+            dataIndex: 'medic',
+            key: 'medic'
+        }
+    ]
+
+    const dataTest: DataType[] = [
+    	{
+    		key: '1',
+    		name: 'Номер договора',
+    		medic: contract?.contractNumber || ''
+    	},
+    	{
+    		key: '2',
+    		name: 'Дата заключения договора',
+    		medic: dayjs(contract?.conclusionDate).format('DD.MM.YYYY') || ''
+    	},
+    	{
+    		key: '3',
+    		name: 'Тип договора',
+    		medic: contract?.contractType || ''
+    	},
+    	{
+    		key: '4',
+    		name: 'Срок действия договора',
+    		medic: contract?.endDate || ''
+    	},
+        {
+            key: '5',
+            name: 'Пролонгация',
+            medic: contract?.prolongation ? `${contract?.prolongation} ${prolonAge(contract!.prolongation)}` : '-'
+        },
+    	{
+    		key: '6',
+    		name: 'Шифр и наименование специальности',
+    		medic: contract?.specialtyName || ''
+    	},
+    	{
+    		key: '7',
+    		name: 'Юридический адрес организации',
+    		medic: contract?.legalFacility || ''
+    	},
+    	{
+    		key: '8',
+    		name: 'Фактический адрес организации',
+    		medic: contract?.actualFacility || ''
+    	},
+    	{
+    		key: '9',
+    		name: 'Количество мест',
+    		medic: contract?.placesAmount || ''
+    	},
+    	{
+    		key: '10',
+    		name: 'Ссылка на скан договора',
+            medic:
+                <a href={`http://192.168.63.96:8081/contracts/copy-file/${contract?.documentCopyId}`}
+                   target={'_blank'}>
+                    Скан договора
+                </a>,
+    	},
+    	{
+    		key: '11',
+    		name: 'Ссылка на дополнительное соглашение к договору',
+    		medic:
+                <a href={`http://192.168.63.96:8081/contracts/agreement-file/${contract?.documentAgreementId}`}
+                   target={'_blank'}>
+                    Доп.соглашение
+                </a>
+    	}
+    ]
     function translateColumnIntoRussia() {
         return {
-            "Наименование организации": 'test1',
-            "Наименование специальности": 'test1',
-            "Номер договора": 'test1',
-            "Дата заключения договора": 'test1',
-            "Тип договора": 'test1',
-            "Срок действия договора": 'test1',
-            "Шифр и наименование специальности": 'test1',
-            "Юридический адрес организации": 'test1',
-            "Фактический адрес организации": 'test1',
-            "Количество мест": 'test1',
+            "Наименование организации": contract?.contractFacility,
+            "Шифр и наименование специальности": contract?.specialtyName,
+            "Номер договора": contract?.contractNumber,
+            "Дата заключения договора": contract?.conclusionDate,
+            "Тип договора": contract?.contractType,
+            "Срок действия договора": contract?.endDate,
+            "Пролонгация": `${contract?.prolongation} ${prolonAge(contract!.prolongation)}` || '-',
+            "Юридический адрес организации": contract?.legalFacility,
+            "Фактический адрес организации": contract?.actualFacility,
+            "Количество мест": contract?.placesAmount,
         }
     }
     function downLoad() {
@@ -170,12 +210,12 @@ export const PreviewContracts = () => {
         function properties() {
                 return [
                     "Наименование организации",
-                    "Наименование специальности",
+                    "Шифр и наименование специальности",
                     "Номер договора",
                     "Дата заключения договора",
                     "Тип договора",
                     "Срок действия договора",
-                    "Шифр и наименование специальности",
+                    "Пролонгация",
                     "Юридический адрес организации",
                     "Фактический адрес организации",
                     "Количество мест",
@@ -245,7 +285,7 @@ export const PreviewContracts = () => {
             </Row>
             <Table
                 columns={columns}
-                dataSource={data}
+                dataSource={dataTest}
                 bordered
                 pagination={false}
                 className="my-10"

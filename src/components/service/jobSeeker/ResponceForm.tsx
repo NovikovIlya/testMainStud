@@ -1220,7 +1220,9 @@ export const ResponseForm = () => {
 							layout="vertical"
 							requiredMark={false}
 							onFinish={values => {
-								console.log(values.work)
+								console.log(
+									values.beginWork.$d.toLocaleDateString().split('.').join('-')
+								)
 								dispatch(
 									addExperience({
 										id: uuid(),
@@ -1228,11 +1230,11 @@ export const ResponseForm = () => {
 											workplace: values.workplace,
 											seat: values.seat,
 											duties: values.duties,
-											beginWork: values.work[0].$d
+											beginWork: values.beginWork.$d
 												.toLocaleDateString()
 												.split('.')
 												.join('-'),
-											endWork: values.work[1].$d
+											endWork: values.endWork.$d
 												.toLocaleDateString()
 												.split('.')
 												.join('-')
@@ -1264,7 +1266,7 @@ export const ResponseForm = () => {
 								rules={[{ required: true, message: 'Введите место работы' }]}
 								label={
 									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
-										Место рабты
+										Место работы
 									</label>
 								}
 							>
@@ -1291,20 +1293,33 @@ export const ResponseForm = () => {
 									disabled={haveNoExprience}
 								></Input>
 							</Form.Item>
-							<Form.Item
-								name={'work'}
-								rules={[{ required: true, message: 'Укажите период работы' }]}
-								label={
-									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
-										Период работы
-									</label>
-								}
-							>
-								<DatePicker.RangePicker
-									className="w-full"
-									disabled={haveNoExprience}
-								/>
-							</Form.Item>
+							<div className="flex w-full">
+								<Form.Item
+									className="w-[50%]"
+									name={'beginWork'}
+									rules={[{ required: true, message: 'Укажите период работы' }]}
+									label={
+										<label className="text-black text-[18px]/[18px] font-content-font font-normal">
+											Период работы
+										</label>
+									}
+								>
+									<DatePicker.MonthPicker
+										className="w-full"
+										disabled={haveNoExprience}
+									/>
+								</Form.Item>
+								<Form.Item
+									name={'endWork'}
+									className="w-[50%] mt-auto"
+									rules={[{ required: true, message: 'Укажите период работы' }]}
+								>
+									<DatePicker.MonthPicker
+										className="w-full"
+										disabled={haveNoExprience}
+									/>
+								</Form.Item>
+							</div>
 							<Form.Item
 								name={'duties'}
 								rules={[
@@ -1339,10 +1354,14 @@ export const ResponseForm = () => {
 							requiredMark={false}
 							initialValues={{
 								workplace: experienceToEdit?.experience.workplace,
-								work: [
-									dayjs(experienceToEdit?.experience.beginWork, 'DD.MM.YYYY'),
-									dayjs(experienceToEdit?.experience.endWork, 'DD.MM.YYYY')
-								],
+								beginWork: dayjs(
+									experienceToEdit?.experience.beginWork,
+									'DD.MM.YYYY'
+								),
+								endWork: dayjs(
+									experienceToEdit?.experience.endWork,
+									'DD.MM.YYYY'
+								),
 								seat: experienceToEdit?.experience.seat,
 								duties: experienceToEdit?.experience.duties
 							}}
@@ -1352,11 +1371,11 @@ export const ResponseForm = () => {
 										alterExperience({
 											id: experienceToEdit.id,
 											workplace: values.workplace,
-											beginWork: values.work[0].$d
+											beginWork: values.beginWork.$d
 												.toLocaleDateString()
 												.split('.')
 												.join('-'),
-											endWork: values.work[1].$d
+											endWork: values.endWork.$d
 												.toLocaleDateString()
 												.split('.')
 												.join('-'),
@@ -1388,7 +1407,7 @@ export const ResponseForm = () => {
 								name={'workplace'}
 								label={
 									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
-										Место рабты
+										Место работы
 									</label>
 								}
 							>
@@ -1414,19 +1433,33 @@ export const ResponseForm = () => {
 									disabled={haveNoExprience}
 								></Input>
 							</Form.Item>
-							<Form.Item
-								name={'work'}
-								label={
-									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
-										Период работы
-									</label>
-								}
-							>
-								<DatePicker.RangePicker
-									className="w-full"
-									disabled={haveNoExprience}
-								/>
-							</Form.Item>
+							<div className="flex w-full">
+								<Form.Item
+									className="w-[50%]"
+									name={'beginWork'}
+									rules={[{ required: true, message: 'Укажите период работы' }]}
+									label={
+										<label className="text-black text-[18px]/[18px] font-content-font font-normal">
+											Период работы
+										</label>
+									}
+								>
+									<DatePicker.MonthPicker
+										className="w-full"
+										disabled={haveNoExprience}
+									/>
+								</Form.Item>
+								<Form.Item
+									name={'endWork'}
+									className="w-[50%] mt-auto"
+									rules={[{ required: true, message: 'Укажите период работы' }]}
+								>
+									<DatePicker.MonthPicker
+										className="w-full"
+										disabled={haveNoExprience}
+									/>
+								</Form.Item>
+							</div>
 							<Form.Item
 								name={'duties'}
 								label={

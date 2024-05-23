@@ -4,15 +4,17 @@ import { useNavigate } from 'react-router-dom'
 import uuid from 'react-uuid'
 
 import { AvatartandardSvg } from '../../../assets/svg/AvatarStandardSvg'
+import { MyDocsSvg } from '../../../assets/svg/MyDocsSvg'
 import { useAppSelector } from '../../../store'
 import {
-	useApproveArchivedRespondMutation,
+	useApproveReservedRespondMutation,
 	useDeleteRespondFromArchiveMutation,
 	useGetReservedResponcesQuery,
 	useGetReservedRespondFullInfoQuery
 } from '../../../store/api/serviceApi'
 import ArrowIcon from '../jobSeeker/ArrowIcon'
 
+import { ApproveRespondForm } from './ApproveRespondForm'
 import { InviteSeekerForm } from './supervisor/InviteSeekerForm'
 
 export const ReserveRespondInfo = (props: {
@@ -22,7 +24,7 @@ export const ReserveRespondInfo = (props: {
 
 	const { data: res } = useGetReservedRespondFullInfoQuery(respondId.respondId)
 	const { refetch } = useGetReservedResponcesQuery()
-	const [approveRespond] = useApproveArchivedRespondMutation()
+	const [approveRespond] = useApproveReservedRespondMutation()
 	const [deleteRespond] = useDeleteRespondFromArchiveMutation()
 
 	const [isRespondSentToSupervisor, setIsRespondSentToSupervisor] =
@@ -108,9 +110,12 @@ export const ReserveRespondInfo = (props: {
 								</div>
 								{props.type === 'PERSONNEL_DEPARTMENT' && (
 									<div className="self-center flex flex-col gap-[12px]">
-										<Button
+										{/* <Button
 											onClick={() => {
-												approveRespond(respondId.respondId)
+												approveRespond({
+													respondId: respondId.respondId,
+													vacancyId: 2
+												})
 													.unwrap()
 													.then(() => {
 														setIsRespondSentToSupervisor(true)
@@ -123,7 +128,15 @@ export const ReserveRespondInfo = (props: {
 											className="font-content-font font-normal text-white text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px]"
 										>
 											Отправить руководителю
-										</Button>
+										</Button> */}
+										<ApproveRespondForm
+											respondId={0}
+											vacancyId={0}
+											isRespondSentToSupervisor={
+												res.status === 'IN_SUPERVISOR_REVIEW'
+											}
+											mode={res.type}
+										/>
 										<Button
 											onClick={() => {}}
 											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
@@ -302,19 +315,16 @@ export const ReserveRespondInfo = (props: {
 												</p>
 											</div>
 										</div>
-										<p className="font-content-font font-normal text-black text-[12px]/[14.4x] opacity-40">
-											Желаемая должность:
-										</p>
-										<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-											{res?.desiredJob}
-										</p>
 									</div>
 								</div>
 								{props.type === 'PERSONNEL_DEPARTMENT' && (
 									<div className="self-center flex flex-col gap-[12px]">
-										<Button
+										{/* <Button
 											onClick={() => {
-												approveRespond(respondId.respondId)
+												approveRespond({
+													respondId: respondId.respondId,
+													vacancyId: 2
+												})
 													.unwrap()
 													.then(() => {
 														setIsRespondSentToSupervisor(true)
@@ -327,7 +337,13 @@ export const ReserveRespondInfo = (props: {
 											className="font-content-font font-normal text-white text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px]"
 										>
 											Отправить руководителю
-										</Button>
+										</Button> */}
+										<ApproveRespondForm
+											respondId={0}
+											vacancyId={0}
+											isRespondSentToSupervisor={false}
+											mode={res.type}
+										/>
 										<Button
 											onClick={() => {}}
 											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
@@ -349,6 +365,39 @@ export const ReserveRespondInfo = (props: {
 										</Button>
 									</div>
 								)}
+							</div>
+							<hr />
+							<div className="flex flex-col gap-[24px]">
+								<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
+									<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
+										Желаемая должность
+									</p>
+									<p className="font-content-font font-bold text-black text-[16px]/[19.2px]">
+										{res?.desiredJob}
+									</p>
+								</div>
+							</div>
+							<hr />
+							<div className="flex flex-col gap-[24px]">
+								<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
+									<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
+										Резюме
+									</p>
+									<div className="bg-white rounded-[16px] shadow-custom-shadow h-[59px] w-[65%] p-[20px] flex">
+										<MyDocsSvg />
+										<p className="ml-[20px] font-content-font font-normal text-black text-[16px]/[19.2px] underline">
+											{'Резюме ' +
+												res.userData?.lastname +
+												' ' +
+												res.userData?.firstname +
+												' ' +
+												res.userData?.middlename}
+										</p>
+										<p className="ml-auto font-content-font font-normal text-black text-[16px]/[19.2px] opacity-70">
+											123 кб
+										</p>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>

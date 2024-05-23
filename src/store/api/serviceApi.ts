@@ -248,6 +248,14 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
+		getAllVacancies: builder.query<{ id: number; post: string }[], void>({
+			query: () => ({
+				url: `http://localhost:8082/employment-api/v1/vacancy/search/by-name`,
+				headers: {
+					Authorization: `Bearer ${personnelDeparmentToken}`
+				}
+			})
+		}),
 		postPhone: builder.mutation({
 			query: phone => {
 				return {
@@ -522,6 +530,21 @@ export const serviceApi = apiSlice.injectEndpoints({
 					Authorization: `Bearer ${personnelDeparmentToken}`
 				}
 			})
+		}),
+		approveReservedRespond: builder.mutation<
+			VacancyRespondItemType,
+			{ respondId: number; vacancyId: number }
+		>({
+			query: ({ respondId, vacancyId }) => ({
+				url: `http://localhost:8082/employment-api/v1/reserve/${respondId}/status/approve`,
+				method: 'PUT',
+				body: {
+					vacancyId: vacancyId
+				},
+				headers: {
+					Authorization: `Bearer ${personnelDeparmentToken}`
+				}
+			})
 		})
 	})
 })
@@ -577,5 +600,7 @@ export const {
 	useAnswerToInivitationMainTimeMutation,
 	useGetReservedResponcesQuery,
 	useGetReservedRespondFullInfoQuery,
-	useSendRespondToReserveMutation
+	useSendRespondToReserveMutation,
+	useApproveReservedRespondMutation,
+	useGetAllVacanciesQuery
 } = serviceApi

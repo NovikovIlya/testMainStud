@@ -60,10 +60,12 @@ export const RespondItem = (props: RespondItemType & { refetch: Function }) => {
 					</div>
 				</Modal>
 			</ConfigProvider>
-			<div className="w-full mb-[12px] flex justify-between items-center bg-white shadow-custom-shadow pl-[20px] pr-[55px] pt-[20px] pb-[20px]">
-				<p className="w-[250px]">{props.name}</p>
-				<p>{props.respondDate.split('-').reverse().join('.')}</p>
-				<p>
+			<div className="w-full mb-[12px] flex items-center bg-white shadow-custom-shadow pl-[20px] pr-[55px] pt-[20px] pb-[20px]">
+				<p className="min-w-[25%]">{props.name}</p>
+				<p className="ml-[5%] min-w-[8%]">
+					{props.respondDate.split('-').reverse().join('.')}
+				</p>
+				<p className="ml-[5%] w-[25%]">
 					{props.status ===
 					respondStatus[respondStatus.IN_PERSONNEL_DEPT_REVIEW]
 						? 'на рассмотрении у отдела кадров'
@@ -79,11 +81,12 @@ export const RespondItem = (props: RespondItemType & { refetch: Function }) => {
 					onClick={() => {
 						navigate('/services/myresponds/chat')
 					}}
-					className="font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black"
+					className="ml-[15%] font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black"
 				>
 					Перейти в чат
 				</Button>
 				<Button
+					className="ml-[5%]"
 					onClick={() => {
 						setModalOpen(true)
 					}}

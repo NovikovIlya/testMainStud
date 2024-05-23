@@ -12,11 +12,11 @@ export default function VacancyView() {
 	const navigate = useNavigate()
 	const [getVacancyRespond, respond] = usePostVacancyRespondMutation()
 
-	let responsibilities: string
+	let responsibilities: string = ''
 	let responsibilitiesArr: RegExpMatchArray | null = null
-	let skills = undefined
+	let skills: string = ''
 	let skillsArr: RegExpMatchArray | null = null
-	let conditions = undefined
+	let conditions: string = ''
 	let conditionsArr: RegExpMatchArray | null = null
 
 	if (currentVacancy !== null) {
@@ -116,36 +116,72 @@ export default function VacancyView() {
 					<p className="font-content-font font-bold text-black text-[18px]/[21px] whitespace-nowrap">
 						Задачи:
 					</p>
-					<ul className="list-disc">
+					{responsibilities.includes('<li>') ? (
+						<ul className="list-disc">
+							{responsibilitiesArr !== null &&
+								responsibilitiesArr.map(resp => (
+									<li className="font-content-font font-normal text-black text-[16px]/[19.2px]">
+										{resp.substring(4)}
+									</li>
+								))}
+						</ul>
+					) : (
+						<p>{responsibilities}</p>
+					)}
+					{/* <ul className="list-disc">
 						{responsibilitiesArr !== null &&
 							responsibilitiesArr.map(resp => (
 								<li className="font-content-font font-normal text-black text-[16px]/[19.2px]">
 									{resp.substring(4)}
 								</li>
 							))}
-					</ul>
+					</ul> */}
 					<p className="font-content-font font-bold text-black text-[18px]/[21px] whitespace-nowrap">
 						Требования:
 					</p>
-					<ul className="list-disc">
+					{skills.includes('<li>') ? (
+						<ul className="list-disc">
+							{skillsArr !== null &&
+								skillsArr.map(skill => (
+									<li className="font-content-font font-normal text-black text-[16px]/[19.2px]">
+										{skill.substring(4)}
+									</li>
+								))}
+						</ul>
+					) : (
+						<p>{skills}</p>
+					)}
+					{/* <ul className="list-disc">
 						{skillsArr !== null &&
 							skillsArr.map(skill => (
 								<li className="font-content-font font-normal text-black text-[16px]/[19.2px]">
 									{skill.substring(4)}
 								</li>
 							))}
-					</ul>
+					</ul> */}
 					<p className="font-content-font font-bold text-black text-[18px]/[21px] whitespace-nowrap">
 						Условия:
 					</p>
-					<ul className="list-disc">
+					{conditions.includes('<li>') ? (
+						<ul className="list-disc">
+							{conditionsArr !== null &&
+								conditionsArr.map(cond => (
+									<li className="font-content-font font-normal text-black text-[16px]/[19.2px]">
+										{cond.substring(4)}
+									</li>
+								))}
+						</ul>
+					) : (
+						<p>{conditions}</p>
+					)}
+					{/* <ul className="list-disc">
 						{conditionsArr !== null &&
 							conditionsArr.map(cond => (
 								<li className="font-content-font font-normal text-black text-[16px]/[19.2px]">
 									{cond.substring(4)}
 								</li>
 							))}
-					</ul>
+					</ul> */}
 				</div>
 			</div>
 		</>

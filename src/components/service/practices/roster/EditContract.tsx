@@ -17,7 +17,13 @@ import dayjs from 'dayjs'
 import React, {Dispatch, SetStateAction, useEffect, useState} from 'react'
 import {useLocation, useNavigate} from 'react-router-dom'
 import {ArrowLeftSvg} from '../../../../assets/svg'
-import {IContractInfo, IContractInfoFull, ICreateContract, ICreateContractFull} from '../../../../models/Practice'
+import {
+    IContractInfo,
+    IContractInfoFull,
+    ICreateContract,
+    ICreateContractFull,
+    NameSpecialty
+} from '../../../../models/Practice'
 import {validateMessages} from "../../../../utils/validateMessage";
 import {
     useEditContractMutation,
@@ -25,6 +31,7 @@ import {
     useGetContractQuery
 } from "../../../../store/api/practiceApi/contracts";
 import {string} from "yup";
+import {useGetSpecialtyNamesQuery} from "../../../../store/api/practiceApi/roster";
 
 export interface PdfContract {
     uid: string,
@@ -40,7 +47,6 @@ export const EditContract = () => {
     const id: string = path.pathname.split('/').at(-1)!
     const {data, isSuccess} = useGetContractForEditQuery(id)
     const [editContract] = useEditContractMutation()
-    console.log(data)
     const optionsContractsType = [
         {
             value: 'Бессрочный',
@@ -63,7 +69,14 @@ export const EditContract = () => {
 
     const [pdfContract, setPdfContract] = useState<any[]>()
     const [pdfAgreement, setPdfAgreement] = useState<any[]>()
+    const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery()
+    const [optionsNameSpec, setOptionsNameSpec] = useState<NameSpecialty[]>([])
 
+    useEffect(() => {
+        if (isSuccessNameSpecialty) {
+            setOptionsNameSpec(dataNameSpecialty)
+        }
+    }, [dataNameSpecialty]);
     useEffect(() => {
         if (isSuccess) {
             form.setFieldValue('ITN', data.itn)
@@ -91,7 +104,7 @@ export const EditContract = () => {
                 uid: '1',
                 name: 'Скан договора',
                 status: 'done',
-                url: `http://192.168.63.96:8081/contracts/copy-file/${data.documentCopyId}`
+                url: `https://newlk.kpfu.ru/services/api-practices/contracts/copy-file/${data.documentCopyId}`
             }])
 
             form.setFieldValue('pdfAgreement', data.documentAgreementId)
@@ -99,7 +112,7 @@ export const EditContract = () => {
                 uid: '2',
                 name: 'Доп.соглашение',
                 status: 'done',
-                url: `http://192.168.63.96:8081/contracts/agreement-file/${data.documentAgreementId}`
+                url: `https://newlk.kpfu.ru/services/api-practices/contracts/agreement-file/${data.documentAgreementId}`
             }])
         }
 
@@ -108,7 +121,12 @@ export const EditContract = () => {
 
     function onFinish(values: ICreateContract) {
         const formDataEditContract = new FormData()
-        values.specialtyNameId = 1
+        const specName = dataNameSpecialty!.find(elem => {
+            if (elem.value === values.specialtyNameId) {
+                return elem
+            }
+        })
+        values.specialtyNameId = specName!.id
         values.placesAmount = String(values.placesAmount)
         values.ITN = String(values.ITN)
         values.conclusionDate = dayjs(values.conclusionDate).format('DD.MM.YYYY')
@@ -321,16 +339,7 @@ export const EditContract = () => {
                                 placeholder=""
                                 defaultValue=""
                                 className="w-full"
-                                options={[
-                                    {
-                                        value: '31.08.01 Акушерство и гинекология',
-                                        label: '31.08.01 Акушерство и гинекология'
-                                    },
-                                    {
-                                        value: '31.08.11 Педиатрия',
-                                        label: '31.08.11 Педиатрия'
-                                    }
-                                ]}
+                                options={optionsNameSpec}
                             />
                         </Form.Item>
 

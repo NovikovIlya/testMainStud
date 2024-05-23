@@ -31,7 +31,6 @@ import {
     useGetSpecialtyNamesQuery
 } from "../../../../../store/api/practiceApi/roster";
 import {ThemeProvider} from "@material-tailwind/react";
-import value = ThemeProvider.propTypes.value;
 import {ContractFacilities, ContractsAll, ContractShort, NameSpecialty} from "../../../../../models/Practice";
 
 
@@ -330,11 +329,11 @@ export const RegisterContracts = () => {
             className: 'text-xs',
             render: (value, record, index) =>
                 <div className={'flex flex-col gap-2'}>
-                    <a href={`http://192.168.63.96:8081/contracts/copy-file/${record.links.documentCopyId}`}
+                    <a href={`https://newlk.kpfu.ru/services/api-practices/contracts/copy-file/${record.links.documentCopyId}`}
                        target={'_blank'}>
                         Cкан договора
                     </a>
-                    <a href={`http://192.168.63.96:8081/contracts/agreement-file/${record.links.documentAgreementId}`}
+                    <a href={`https://newlk.kpfu.ru/services/api-practices/contracts/agreement-file/${record.links.documentAgreementId}`}
                        target={'_blank'}>
                         Доп. соглашение к договору
                     </a>

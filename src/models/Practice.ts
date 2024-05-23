@@ -102,7 +102,7 @@ export interface IContractInfo {
     contractType: string
     prolongation: string
     endDate: string
-    specialtyNameId: number
+    specialtyNameId: number | string
     legalFacility: string
     actualFacility: string
     placesAmount: string

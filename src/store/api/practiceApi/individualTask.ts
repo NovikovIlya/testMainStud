@@ -3,13 +3,14 @@ import {
 } from '../../../models/Practice'
 
 import {practiceApi} from './practiceApi'
+import {apiSlice} from "../apiSlice";
 
-export const individualTasks = practiceApi.injectEndpoints({
+export const individualTasks = apiSlice.injectEndpoints({
     endpoints: builder => ({
         createTask: builder.mutation<void, TaskSend>({
             query: body => {
                 return {
-                    url: 'tasks',
+                    url: 'services/api-practices/tasks',
                     body: body,
                     method: 'POST'
                 }
@@ -20,7 +21,7 @@ export const individualTasks = practiceApi.injectEndpoints({
 
         getOneTask: builder.query<TasksAll, string>({
             query: (id) => ({
-                url: `tasks/${id}`,
+                url: `services/api-practices/tasks/${id}`,
                 method: 'GET',
             }),
             providesTags: (result) => result
@@ -36,7 +37,7 @@ export const individualTasks = practiceApi.injectEndpoints({
         editTask: builder.mutation<void, TaskEdit>({
             query: body => {
                 return {
-                    url: 'tasks',
+                    url: 'services/api-practices/tasks',
                     body: body,
                     method: 'PATCH',
                 }
@@ -48,7 +49,7 @@ export const individualTasks = practiceApi.injectEndpoints({
         deleteTask: builder.mutation<void, string>({
             query: id => {
                 return {
-                    url: `tasks/${id}`,
+                    url: `services/api-practices/tasks/${id}`,
                     method: 'DELETE',
                 }
             },
@@ -58,7 +59,7 @@ export const individualTasks = practiceApi.injectEndpoints({
         deleteSeveralTasks: builder.mutation<void, ListIdDeleteTasks>({
             query: body => {
                 return {
-                    url: 'tasks/several',
+                    url: 'services/api-practices/tasks/several',
                     body: body,
                     method: 'DELETE'
                 }
@@ -68,7 +69,7 @@ export const individualTasks = practiceApi.injectEndpoints({
 
         getAllTasks: builder.query<TasksAll[], void>({
             query: () => ({
-                url: 'tasks/all',
+                url: 'services/api-practices/tasks/all',
                 method: 'GET',
             }),
             providesTags: (result) => result

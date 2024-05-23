@@ -1,11 +1,12 @@
 import {practiceApi} from './practiceApi'
 import {ContractFacilities, ContractsAll, ContractShort, NameSpecialty} from "../../../models/Practice";
+import {apiSlice} from "../apiSlice";
 
-export const rosterService = practiceApi.injectEndpoints({
+export const rosterService = apiSlice.injectEndpoints({
     endpoints: builder => ({
         getContractsAll: builder.query<ContractsAll[], void>({
             query: () => ({
-                url: 'contracts/all',
+                url: 'services/api-practices/contracts/all',
                 method: 'GET',
             }),
             providesTags: (result) => result
@@ -19,7 +20,7 @@ export const rosterService = practiceApi.injectEndpoints({
         }),
         getContractsShort: builder.query<ContractShort[], void>({
             query: () => ({
-                url: 'contracts/all-short',
+                url: 'services/api-practices/contracts/all-short',
                 method: 'GET',
             }),
             providesTags: (result) => result
@@ -33,13 +34,13 @@ export const rosterService = practiceApi.injectEndpoints({
         }),
         getSpecialtyNames: builder.query<NameSpecialty[], void>({
             query: () => ({
-                url: 'kpfu/specialty-names',
+                url: 'services/api-practices/kpfu/specialty-names',
                 method: 'GET',
             }),
         }),
         getContractFacilities: builder.query<ContractFacilities[], void>({
             query: () => ({
-                url: 'kpfu/contract-facilities',
+                url: 'services/api-practices/kpfu/contract-facilities',
                 method: 'GET',
             }),
             providesTags: (result) => result

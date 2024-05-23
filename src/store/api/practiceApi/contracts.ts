@@ -1,12 +1,13 @@
 import {practiceApi} from './practiceApi'
 import {ContractsAll, ICreateContract, ResponseEditContract, ListIdDeleteContracts} from "../../../models/Practice";
+import {apiSlice} from "../apiSlice";
 
-export const contractService = practiceApi.injectEndpoints({
+export const contractService = apiSlice.injectEndpoints({
     endpoints: builder => ({
         createContract: builder.mutation<void, FormData>({
             query: (body: FormData) => {
                 return {
-                    url: 'contracts',
+                    url: 'services/api-practices/contracts',
                     body: body,
                     method: 'POST'
                 }
@@ -16,7 +17,7 @@ export const contractService = practiceApi.injectEndpoints({
         deleteContract: builder.mutation<void, string>({
             query: id => {
                 return {
-                    url: `contracts/${id}`,
+                    url: `services/api-practices/contracts/${id}`,
                     method: 'DELETE',
                 }
             },
@@ -25,7 +26,7 @@ export const contractService = practiceApi.injectEndpoints({
         deleteSeveralContract: builder.mutation<void, ListIdDeleteContracts>({
             query: (body: ListIdDeleteContracts) => {
                 return {
-                    url: 'contracts/several',
+                    url: 'services/api-practices/contracts/several',
                     body: body,
                     method: 'DELETE'
                 }
@@ -34,15 +35,17 @@ export const contractService = practiceApi.injectEndpoints({
 
         }),
         getContract: builder.query<ContractsAll, string>({
-            query: id => `contracts/${id}`
+            query: id => `services/api-practices/contracts/${id}`,
+            providesTags: () => [{ type: 'Contracts', id: 'LIST' }],
         }),
         getContractForEdit: builder.query<ResponseEditContract, string>({
-            query: id => `contracts/${id}`
+            query: id => `services/api-practices/contracts/${id}`,
+            providesTags: () => [{ type: 'Contracts', id: 'LIST' }],
         }),
         editContract: builder.mutation<void, FormData>({
             query: (body: FormData) => {
                 return {
-                    url: 'contracts',
+                    url: 'services/api-practices/contracts',
                     body: body,
                     method: 'PATCH',
                 }

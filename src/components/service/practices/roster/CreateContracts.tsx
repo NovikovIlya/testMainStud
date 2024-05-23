@@ -15,10 +15,11 @@ import dayjs from 'dayjs'
 import React, {useEffect, useState} from 'react'
 import {ArrowLeftSvg} from '../../../../assets/svg'
 import {useCreateContractMutation} from '../../../../store/api/practiceApi/contracts'
-import {ICreateContract} from '../../../../models/Practice'
+import {ICreateContract, NameSpecialty} from '../../../../models/Practice'
 import {validateMessages} from "../../../../utils/validateMessage";
 import {useNavigate} from "react-router-dom";
 import {RcFile} from "antd/es/upload";
+import {useGetSpecialtyNamesQuery} from "../../../../store/api/practiceApi/roster";
 
 
 
@@ -46,10 +47,29 @@ export const CreateContracts = () => {
         }]
     const [prolongation, setProlongation] = useState(false)
     const [newContract] = useCreateContractMutation()
+    const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery()
+    const [optionsNameSpec, setOptionsNameSpec] = useState<NameSpecialty[]>([])
+    //const [selected, setSelected] = useState<number>()
+
+    // useEffect(() => {
+    //     form.setFieldValue('specialtyNameId', selected)
+    // }, [selected]);
+
+    useEffect(() => {
+        if (isSuccessNameSpecialty) {
+            setOptionsNameSpec(dataNameSpecialty)
+        }
+    }, [dataNameSpecialty]);
+
 
     function onFinish(values: ICreateContract) {
         const newForm = new FormData()
-        values.specialtyNameId = 1
+        const specName = dataNameSpecialty!.find(elem => {
+            if (elem.value === values.specialtyNameId) {
+                return elem
+            }
+        })
+        values.specialtyNameId = specName!.id
         values.pdfContract = files.pdfContract!
         values.pdfAgreement = files.pdfAgreement!
         values.placesAmount = String(values.placesAmount)
@@ -62,6 +82,7 @@ export const CreateContracts = () => {
         newForm.append('contract', blob)
         if (files.pdfContract) newForm.append('pdfContract', files.pdfContract)
         if (files.pdfAgreement) newForm.append('pdfAgreement', files.pdfAgreement)
+        console.log(values)
         newContract(newForm)
             .then(res => console.log(res))
             .catch(e => console.log(e))
@@ -255,16 +276,7 @@ export const CreateContracts = () => {
                                 placeholder=""
                                 defaultValue=""
                                 className="w-full"
-                                options={[
-                                    {
-                                        value: '31.08.01 Акушерство и гинекология',
-                                        label: '31.08.01 Акушерство и гинекология'
-                                    },
-                                    {
-                                        value: '31.08.11 Педиатрия',
-                                        label: '31.08.11 Педиатрия'
-                                    }
-                                ]}
+                                options={optionsNameSpec}
                             />
                         </Form.Item>
 

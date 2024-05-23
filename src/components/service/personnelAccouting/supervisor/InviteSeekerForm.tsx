@@ -7,7 +7,6 @@ import {
 	Modal,
 	Select
 } from 'antd'
-import dayjs from 'dayjs'
 import { useState } from 'react'
 import uuid from 'react-uuid'
 
@@ -125,7 +124,30 @@ export const InviteSeekerForm = (props: { respondId: number }) => {
 									// 	? reservedTime[0].timeToSend.$s
 									// 	: '0' + reservedTime[0].timeToSend.$s) +
 									// '.020Z',
-									['2024-05-17T13:40:00+03:00'],
+									// ['2024-05-17T13:40:00+03:00'],
+									reservedTime.map(
+										reserve =>
+											reserve.timeToSend.$y +
+											'-' +
+											(reserve.timeToSend.$M + 1 >= 10
+												? reserve.timeToSend.$M + 1
+												: '0' + (reserve.timeToSend.$M + 1)) +
+											'-' +
+											(reserve.timeToSend.$D >= 10
+												? reserve.timeToSend.$D
+												: '0' + reserve.timeToSend.$D) +
+											'T' +
+											reserve.timeToSend.$H +
+											':' +
+											(reserve.timeToSend.$m >= 10
+												? reserve.timeToSend.$m
+												: '0' + reserve.timeToSend.$m) +
+											':' +
+											(reserve.timeToSend.$s >= 10
+												? reserve.timeToSend.$s
+												: '0' + reserve.timeToSend.$s) +
+											'.020Z'
+									),
 								additionalInfo:
 									format === 'OFFLINE' ? values.details : undefined
 							})
@@ -167,7 +189,13 @@ export const InviteSeekerForm = (props: { respondId: number }) => {
 						>
 							<DatePicker
 								format={'DD.MM.YYYY, h:mm'}
-								showTime={{ minuteStep: 15 }}
+								showTime={{
+									minuteStep: 15,
+									disabledHours: () => {
+										return [0, 1, 2, 3, 4, 5, 6, 7, 20, 21, 22, 23]
+									},
+									hideDisabledOptions: true
+								}}
 								className="w-full"
 								onChange={(e, dateString) => {
 									console.log(e)
@@ -195,7 +223,13 @@ export const InviteSeekerForm = (props: { respondId: number }) => {
 						>
 							<DatePicker
 								format={'DD.MM.YYYY, h:mm'}
-								showTime={{ minuteStep: 15 }}
+								showTime={{
+									minuteStep: 15,
+									disabledHours: () => {
+										return [0, 1, 2, 3, 4, 5, 6, 7, 20, 21, 22, 23]
+									},
+									hideDisabledOptions: true
+								}}
 								className="w-full"
 								onChange={(e, dateString) => {
 									setReservedTimes([

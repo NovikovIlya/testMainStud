@@ -179,6 +179,15 @@ export const RespondInfo = (props: {
 						<hr />
 						<div className="flex flex-col gap-[24px]">
 							<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">
+								Сопроводительное письмо
+							</p>
+							<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
+								{res.respondData.coverLetter}
+							</p>
+						</div>
+						<hr />
+						<div className="flex flex-col gap-[24px]">
+							<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">
 								Опыт работы
 							</p>
 							<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
@@ -259,7 +268,7 @@ export const RespondInfo = (props: {
 								{/* <div className="col-start-2">
 									{res.respondData.skills.aboutMe}
 								</div> */}
-								<div className="col-start-2 mt-[111px] flex gap-[8px] flex-wrap">
+								<div className="col-start-2 flex gap-[8px] flex-wrap">
 									{res.respondData.skills.keySkills.map(skill => (
 										<Tag
 											className="bg-black bg-opacity-10 rounded-[40px] py-[8px] px-[16px] font-content-font font-normal text-black text-[16px]/[19.2px]"

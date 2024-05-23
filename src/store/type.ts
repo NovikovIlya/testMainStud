@@ -218,6 +218,7 @@ export type VacancyRespondItemType = {
 		phone: string
 	}
 	respondData: {
+		coverLetter: string
 		portfolio: {
 			url: string
 			workExperiences: experienceResponceType[]

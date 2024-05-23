@@ -30,14 +30,14 @@ export const RespondsSupervisor = () => {
 				<h1 className="font-content-font font-normal text-[28px]/[28px] text-black">
 					Отклики
 				</h1>
-				<div className="flex mt-[60px] mb-[16px] pl-[20px]">
-					<h3 className="w-[388px] font-content-font text-black font-normal text-[14px]/[14px] opacity-[60%]">
+				<div className="flex mt-[60px] mb-[16px] pl-[20px] pr-[55px]">
+					<h3 className="w-[25%] font-content-font text-black font-normal text-[14px]/[14px] opacity-[60%]">
 						Соискатель
 					</h3>
-					<h3 className="ml-[53px] font-content-font text-black font-normal text-[14px]/[14px] opacity-[60%]">
+					<h3 className="ml-[5%] w-[15%] font-content-font text-black font-normal text-[14px]/[14px] opacity-[60%]">
 						Вакансия
 					</h3>
-					<h3 className="ml-[228px] font-content-font text-black font-normal text-[14px]/[14px] opacity-[60%]">
+					<h3 className="ml-[5%] w-[8%] font-content-font text-black font-normal text-[14px]/[14px] opacity-[60%]">
 						Дата отклика
 					</h3>
 				</div>

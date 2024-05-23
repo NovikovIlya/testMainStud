@@ -65,18 +65,17 @@ export const VacancyResponces = () => {
 						}}
 					/>
 				</div>
-				<div className="flex mb-[16px] pl-[20px]">
-					<h3 className="w-[270px] font-content-font text-black font-normal text-[14px]/[14px] opacity-[60%]">
+				<div className="flex mb-[16px] pl-[20px] pr-[55px]">
+					<h3 className="w-[25%] font-content-font text-black font-normal text-[14px]/[14px] opacity-[60%]">
 						Вакансия
 					</h3>
-					<div className="flex gap-[20px] ml-[90px]">
-						<h3 className="w-[90px] font-content-font text-black font-normal text-[14px]/[14px] opacity-[60%]">
-							Дата отклика
-						</h3>
-						<h3 className="font-content-font text-black font-normal text-[14px]/[14px] opacity-[60%]">
-							Статус
-						</h3>
-					</div>
+
+					<h3 className="ml-[5%] w-[8%] font-content-font text-black font-normal text-[14px]/[14px] opacity-[60%]">
+						Дата отклика
+					</h3>
+					<h3 className="ml-[5%] w-[25%] font-content-font text-black font-normal text-[14px]/[14px] opacity-[60%]">
+						Статус
+					</h3>
 				</div>
 				{responds.map(respond => (
 					<VacancyRespondItem {...respond} itemType="PERSONNEL_DEPARTMENT" />

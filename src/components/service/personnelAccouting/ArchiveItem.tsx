@@ -68,20 +68,23 @@ export const ArchiveItem = (props: {
 					</div>
 				</Modal>
 			</ConfigProvider>
-			<div className="w-full mb-[12px] flex justify-between items-center bg-white shadow-custom-shadow pl-[20px] pr-[55px] pt-[20px] pb-[20px]">
-				<p className="w-[250px]">{props.post}</p>
-				<p>{props.name}</p>
-				<p>{props.respondDate.split('-').reverse().join('.')}</p>
+			<div className="w-full mb-[12px] flex items-center bg-white shadow-custom-shadow pl-[20px] pr-[55px] pt-[20px] pb-[20px]">
+				<p className="min-w-[25%]">{props.post}</p>
+				<p className="ml-[5%] min-w-[20%]">{props.name}</p>
+				<p className="ml-[5%] min-w-[8%]">
+					{props.respondDate.split('-').reverse().join('.')}
+				</p>
 				<Button
 					onClick={() => {
 						dispatch(setCurrentResponce(props.id))
 						navigate('services/personnelaccounting/archive/fullinfo')
 					}}
-					className="font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black"
+					className="ml-[15%] font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black"
 				>
 					Подробнее
 				</Button>
 				<Button
+					className="ml-[5%]"
 					onClick={() => {
 						setModalOpen(true)
 					}}

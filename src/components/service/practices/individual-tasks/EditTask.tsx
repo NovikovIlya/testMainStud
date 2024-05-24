@@ -7,8 +7,14 @@ import {useCreateTaskMutation} from '../../../../store/api/practiceApi/taskServi
 import {validateMessages} from "../../../../utils/validateMessage";
 import TextArea from "antd/es/input/TextArea";
 import './createTask/CreateTask.scss'
-import {useEditTaskMutation, useGetOneTaskQuery} from "../../../../store/api/practiceApi/individualTask";
-import {Task, TaskEdit, TaskSend} from "../../../../models/Practice";
+import {
+    useEditTaskMutation,
+    useGetOneTaskQuery,
+    useGetPracticeTypeQuery
+} from "../../../../store/api/practiceApi/individualTask";
+import {PracticeType, Task, TaskEdit, TaskSend} from "../../../../models/Practice";
+import {OptionsNameSpecialty} from "../roster/registerContracts/RegisterContracts";
+import {useGetSpecialtyNamesQuery} from "../../../../store/api/practiceApi/roster";
 
 const EditTask = () => {
     const path = useLocation()
@@ -19,29 +25,34 @@ const EditTask = () => {
     const [edit] = useEditTaskMutation()
     const [msg, setMsg] = useState('')
     //приходить с бэка
-    const optionsSpecialityName = [
-        {value: '31.08.01 Акушерство и гинекология', label: '31.08.01 Акушерство и гинекология'},
-        {value: '31.08.12 Педиатрия', label: '31.08.12 Педиатрия'}
-    ]
-    const optionsPracticeType = [
-        {
-            value: 'Производственная',
-            label: 'Производственная'
-        },
-        {
-            value: 'Учебная',
-            label: 'Учебная'
+    const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
+    const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery()
+
+    useEffect(() => {
+        if (isSuccessNameSpecialty) {
+            setNameSpecialty(dataNameSpecialty)
         }
-    ]
+    }, [dataNameSpecialty]);
+
+    const [practiceType, setPracticeType] = useState<PracticeType[]>()
+    const {data: dataPracticeType, isSuccess: isSuccessPracticeType} = useGetPracticeTypeQuery()
+
+
+    useEffect(() => {
+        if (isSuccessPracticeType) {
+            setPracticeType(dataPracticeType)
+        }
+    }, [dataPracticeType]);
+
     const optionsSubDivision = [
         {
-            value: 'Институт фундаментальной медицины и биологии. Ординатура',
-            label: 'Институт фундаментальной медицины и биологии. Ординатура',
+            value: 'Институт фундаментальной медицины и биологии(Высшая школа биологии)',
+            label: 'Институт фундаментальной медицины и биологии(Высшая школа биологии)',
         },
         {
-            value: 'ИТИС',
-            label: 'ИТИС'
-        }
+            value: 'Институт фундаментальной медицины и биологии(Высшая школа медицины)',
+            label: 'Институт фундаментальной медицины и биологии(Высшая школа медицины)'
+        },
     ]
 
     useEffect(() => {
@@ -59,14 +70,24 @@ const EditTask = () => {
         }
     }, [data]);
 
-    function onFinish(values: Task) {
+    function onFinish(values: Task) {        const specName = dataNameSpecialty!.find(elem => {
+        if (elem.value === values.specialityName) {
+            return elem
+        }
+    })
+        const practiceType = dataPracticeType!.find(elem => {
+            if (elem.value === values.practiceType) {
+                return elem
+            }
+        })
         const newData: TaskEdit = {
             id: data!.id,
-            specialityNameId: '1',
-            practiceTypeId: '3',
-            subdivisionNameId: '3',
+            specialityNameId: String(specName!.id),
+            practiceTypeId: String(practiceType!.id),
+            subdivisionNameId: '1',
             tasks: values.tasks.map(elem => elem.task)
         }
+
         edit(newData)
             .then(() => {
                 setMsg('Данные сохранены')
@@ -125,7 +146,7 @@ const EditTask = () => {
                                     size="large"
                                     popupMatchSelectWidth={false}
                                     className="w-full"
-                                    options={optionsSpecialityName}
+                                    options={nameSpecialty}
                                 />
                             </Form.Item>
                         </Space>
@@ -143,7 +164,7 @@ const EditTask = () => {
                                     size="large"
                                     popupMatchSelectWidth={false}
                                     className="w-full"
-                                    options={optionsPracticeType}
+                                    options={practiceType}
                                 />
                             </Form.Item>
                         </Space>

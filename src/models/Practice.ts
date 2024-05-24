@@ -247,3 +247,9 @@ export interface Task {
 export interface ListIdDeleteTasks {
     listIdDelete: string[]
 }
+
+export interface PracticeType {
+    id: string
+    value: string
+    label: string
+}

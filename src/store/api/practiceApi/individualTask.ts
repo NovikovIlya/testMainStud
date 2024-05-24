@@ -1,5 +1,5 @@
 import {
-    ITask, ListIdDeleteTasks, TaskEdit, TasksAll, TaskSend,
+    ITask, ListIdDeleteTasks, PracticeType, TaskEdit, TasksAll, TaskSend,
 } from '../../../models/Practice'
 
 import {practiceApi} from './practiceApi'
@@ -82,6 +82,13 @@ export const individualTasks = apiSlice.injectEndpoints({
                 [{type: 'Tasks', id: 'LIST'}],
         }),
 
+        getPracticeType: builder.query<PracticeType[], void>({
+            query: () => ({
+                url: 'services/api-practices/kpfu/practice-types',
+                method: 'GET',
+            })
+        })
+
     })
 })
 export const {
@@ -91,4 +98,5 @@ export const {
     useGetAllTasksQuery,
     useGetOneTaskQuery,
     useDeleteSeveralTasksMutation,
+    useGetPracticeTypeQuery,
 } = individualTasks

@@ -9,29 +9,24 @@ import {
 } from 'antd'
 import React, {useEffect, useRef, useState} from 'react'
 import {useNavigate} from 'react-router-dom'
-import {ContentItem, ITaskFull, TasksAll, TypeGetTasks} from '../../../../models/Practice'
+import {NameSpecialty, PracticeType, TasksAll} from '../../../../models/Practice'
 import './IndividualTasks.scss'
 import {
     TitleHeadCell
 } from "../../businessTrip/NewBusinessTrip/archive/stepTwo/tableStepTwo/titleHeadCell/TitleHeadCell";
-import {RegisterPopoverMain} from "../popover/register/RegisterPopoverMain";
 import {PointsSvg} from "../../../../assets/svg/PointsSvg";
-import {RegisterPopoverContent} from "../popover/register/RegisterPopoverContent";
-import {ColumnsTableCompressedView, ColumnsTableFull} from "../roster/registerContracts/RegisterContracts";
 import {IndTaskPopoverContent} from "../popover/individualTask/IndTaskPopoverContent";
 import {IndTaskPopoverMain} from "../popover/individualTask/IndTaskPopoverMain";
 import dayjs from "dayjs";
 import {EditSvg} from "../../../../assets/svg/EditSvg";
-import {useGetAllTasksQuery} from "../../../../store/api/practiceApi/individualTask";
+import {useGetAllTasksQuery, useGetPracticeTypeQuery} from "../../../../store/api/practiceApi/individualTask";
+import {useGetSpecialtyNamesQuery} from "../../../../store/api/practiceApi/roster";
+import {OptionsNameSpecialty} from "../roster/registerContracts/RegisterContracts";
 
 
 interface FilterType {
     value: string
     label: string
-}
-
-type PropsType = {
-    setEdit: (edit: string) => void
 }
 
 export interface CompressedIndividualTask {
@@ -42,15 +37,6 @@ export interface CompressedIndividualTask {
     dateFilling: string
 }
 
-const mockDataCompressedIndividualTask: CompressedIndividualTask[] = [
-    {
-        id: '1',
-        key: '1',
-        specialityName: '31.08.01 Акушерство и гинекология',
-        dateFilling: '2024-12-12',
-        practiceType: 'Производственная',
-    },
-]
 
 export interface FullIndividualTask {
     id: string
@@ -61,23 +47,51 @@ export interface FullIndividualTask {
     tasks: string[]
 }
 
-const mockDataFullIndividualTask: FullIndividualTask[] = [
-    {
-        id: '1',
-        key: '1',
-        specialityName: '31.08.01 Акушерство и гинекология',
-        dateFilling: '2024-12-12',
-        practiceType: 'Производственная',
-        tasks: ['Test3', 'Test4']
-    },
-]
-
-
-
-
 
 const IndividualTasks = () => {
     const navigate = useNavigate()
+    const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
+    const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery()
+    function changeListNameSpecialty(list: NameSpecialty[]) {
+        function changeElemNameSpecialty(elem: NameSpecialty) {
+            const newElem: OptionsNameSpecialty = {
+                value: elem.value,
+                label: elem.label,
+            }
+            return newElem
+        }
+        const finalList: OptionsNameSpecialty[] = [{value: 'Все', label: 'Все'}]
+        const newList: OptionsNameSpecialty[] = list.map(elem => changeElemNameSpecialty(elem))
+        return finalList.concat(newList)
+    }
+
+    useEffect(() => {
+        if (isSuccessNameSpecialty) {
+            setNameSpecialty(changeListNameSpecialty(dataNameSpecialty))
+        }
+    }, [dataNameSpecialty]);
+
+    const [practiceType, setPracticeType] = useState<FilterType[]>()
+    const {data: dataPracticeType, isSuccess: isSuccessPracticeType} = useGetPracticeTypeQuery()
+    function changeListPracticeType(list: PracticeType[]) {
+        function changeElemPracticeType(elem: PracticeType) {
+            const newElem: FilterType = {
+                value: elem.value,
+                label: elem.label,
+            }
+            return newElem
+        }
+        const finalList: FilterType[] = [{value: 'Все', label: 'Все'}]
+        const newList: FilterType[] = list.map(elem => changeElemPracticeType(elem))
+        return finalList.concat(newList)
+    }
+
+    useEffect(() => {
+        if (isSuccessPracticeType) {
+            setPracticeType(changeListPracticeType(dataPracticeType))
+        }
+    }, [dataPracticeType]);
+
     const {data, isSuccess} = useGetAllTasksQuery()
     const [
         tableDataCompressed,
@@ -145,34 +159,7 @@ const IndividualTasks = () => {
         })
     }
 
-    const optionsTypePractice: FilterType[] = [
-        {
-            value: 'Все',
-            label: 'Все'
-        },
-        {
-            value: 'Производственная',
-            label: 'Производственная'
-        },
-        {
-            value: 'Учебная',
-            label: 'Учебная'
-        }
-    ]
-    const optionsSpecName: FilterType[] = [
-        {
-            value: 'Все',
-            label: 'Все'
-        },
-        {
-            value: '31.08.01 Акушерство и гинекология',
-            label: '31.08.01 Акушерство и гинекология'
-        },
-        {
-            value: '31.08.12 Педиатрия',
-            label: '31.08.12 Педиатрия'
-        }
-    ]
+
     const optionsSortDate: FilterType[] = [
         {value: 'По дате (сначала новые)', label: 'По дате (сначала новые)'},
         {value: 'По дате (сначала старые)', label: 'По дате (сначала старые)'},
@@ -271,7 +258,7 @@ const IndividualTasks = () => {
             render: (value) => (
                 <div className={'flex flex-col gap-2'}>
                     {value.map((elem: string, index: number) => (
-                        <span key={elem}>{index + 1}. {elem}</span>
+                        <span key={index - 1}>{index + 1}. {elem}</span>
                     ))}
                 </div>
             )
@@ -307,7 +294,6 @@ const IndividualTasks = () => {
                 </Popover>
         }
     ]
-
     function filterDataCompressed() {
         function filterPracticeType(elem: CompressedIndividualTask) {
             if (filter.practiceType === 'Все') {
@@ -409,7 +395,7 @@ const IndividualTasks = () => {
                         popupMatchSelectWidth={false}
                         defaultValue="Все"
                         className="w-full"
-                        options={optionsSpecName}
+                        options={nameSpecialty}
                         onChange={value => {
                             setFilter({
                                 ...filter,
@@ -441,7 +427,7 @@ const IndividualTasks = () => {
                         popupMatchSelectWidth={false}
                         defaultValue="Все"
                         className="w-full"
-                        options={optionsTypePractice}
+                        options={practiceType}
                         onChange={value => {
                             setFilter({
                                 ...filter,

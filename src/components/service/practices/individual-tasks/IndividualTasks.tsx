@@ -437,7 +437,7 @@ const IndividualTasks = () => {
                     />
                 </Col>
             </Row>
-            <Row className="mt-4 flex items-center">
+            <Row className="mt-12 flex items-center">
                 <Col span={12} flex="50%">
                     <Radio.Group defaultValue="compressedView" buttonStyle="solid">
                         <Radio.Button

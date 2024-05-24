@@ -6,8 +6,12 @@ import {ArrowLeftSvg} from '../../../../../assets/svg'
 import {validateMessages} from "../../../../../utils/validateMessage";
 import TextArea from "antd/es/input/TextArea";
 import './CreateTask.scss'
-import {NameSpecialty, PracticeType, Task, TaskSend} from "../../../../../models/Practice";
-import {useCreateTaskMutation, useGetPracticeTypeQuery} from "../../../../../store/api/practiceApi/individualTask";
+import {Department, NameSpecialty, PracticeType, Task, TaskSend} from "../../../../../models/Practice";
+import {
+    useCreateTaskMutation,
+    useGetDepartmentsQuery,
+    useGetPracticeTypeQuery
+} from "../../../../../store/api/practiceApi/individualTask";
 import {OptionsNameSpecialty} from "../../roster/registerContracts/RegisterContracts";
 import {useGetSpecialtyNamesQuery} from "../../../../../store/api/practiceApi/roster";
 
@@ -39,17 +43,15 @@ const CreateTask = () => {
         }
     }, [dataPracticeType]);
 
+    const [departments, setDepartments] = useState<Department[]>()
+    const {data: dataDepartments, isSuccess: isSuccessDepartments} = useGetDepartmentsQuery()
 
-    const optionsSubDivision = [
-        {
-            value: 'Институт фундаментальной медицины и биологии(Высшая школа биологии)',
-            label: 'Институт фундаментальной медицины и биологии(Высшая школа биологии)',
-        },
-        {
-            value: 'Институт фундаментальной медицины и биологии(Высшая школа медицины)',
-            label: 'Институт фундаментальной медицины и биологии(Высшая школа медицины)'
-        },
-    ]
+    useEffect(() => {
+        if (isSuccessDepartments) {
+            setDepartments(dataDepartments)
+        }
+    }, [dataDepartments]);
+
 
     function onFinish(values: Task) {
         const specName = dataNameSpecialty!.find(elem => {
@@ -62,10 +64,15 @@ const CreateTask = () => {
                 return elem
             }
         })
+        const subDivision = dataDepartments!.find(elem => {
+            if (elem.value === values.subDivision) {
+                return elem
+            }
+        })
         const newData: TaskSend = {
             specialityNameId: String(specName!.id),
             practiceTypeId: String(practiceType!.id),
-            subdivisionNameId: '1',
+            subdivisionNameId: String(subDivision!.id),
             tasks: values.tasks.map(elem => elem.task)
         }
         createTask(newData)
@@ -106,7 +113,7 @@ const CreateTask = () => {
                                     size="large"
                                     popupMatchSelectWidth={false}
                                     className="w-full"
-                                    options={optionsSubDivision}
+                                    options={departments}
                                 />
                             </Form.Item>
                         </Space>

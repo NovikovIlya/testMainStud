@@ -17,7 +17,7 @@ import { Registration } from './components/registration/Registration'
 import { Service } from './components/service'
 import { blue004, blue307 } from './utils/color'
 import {Redirect} from "./components/redirect/Redirect";
-
+import ru_RU from 'antd/locale/ru_RU';
 const App = () => {
 	const [email, changeEmail] = useState('')
 
@@ -30,6 +30,7 @@ const App = () => {
 						colorPrimaryHover: blue004
 					}
 				}}
+				locale={ru_RU}
 			>
 				<Routes>
 					<Route path="/">

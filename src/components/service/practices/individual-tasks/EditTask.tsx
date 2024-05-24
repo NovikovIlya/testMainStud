@@ -8,11 +8,11 @@ import {validateMessages} from "../../../../utils/validateMessage";
 import TextArea from "antd/es/input/TextArea";
 import './createTask/CreateTask.scss'
 import {
-    useEditTaskMutation,
+    useEditTaskMutation, useGetDepartmentsQuery,
     useGetOneTaskQuery,
     useGetPracticeTypeQuery
 } from "../../../../store/api/practiceApi/individualTask";
-import {PracticeType, Task, TaskEdit, TaskSend} from "../../../../models/Practice";
+import {Department, PracticeType, Task, TaskEdit, TaskSend} from "../../../../models/Practice";
 import {OptionsNameSpecialty} from "../roster/registerContracts/RegisterContracts";
 import {useGetSpecialtyNamesQuery} from "../../../../store/api/practiceApi/roster";
 
@@ -44,16 +44,15 @@ const EditTask = () => {
         }
     }, [dataPracticeType]);
 
-    const optionsSubDivision = [
-        {
-            value: 'Институт фундаментальной медицины и биологии(Высшая школа биологии)',
-            label: 'Институт фундаментальной медицины и биологии(Высшая школа биологии)',
-        },
-        {
-            value: 'Институт фундаментальной медицины и биологии(Высшая школа медицины)',
-            label: 'Институт фундаментальной медицины и биологии(Высшая школа медицины)'
-        },
-    ]
+
+    const [departments, setDepartments] = useState<Department[]>()
+    const {data: dataDepartments, isSuccess: isSuccessDepartments} = useGetDepartmentsQuery()
+
+    useEffect(() => {
+        if (isSuccessDepartments) {
+            setDepartments(dataDepartments)
+        }
+    }, [dataDepartments]);
 
     useEffect(() => {
         if (isSuccess) {
@@ -61,7 +60,7 @@ const EditTask = () => {
             form.setFieldValue('specialityName', data.specialityName)
             form.setFieldValue('practiceType', data.practiceType)
             const listTasks = data.tasks.map(elem => {
-                return  {
+                return {
                     task: elem.taskDescription
                 }
             })
@@ -70,13 +69,19 @@ const EditTask = () => {
         }
     }, [data]);
 
-    function onFinish(values: Task) {        const specName = dataNameSpecialty!.find(elem => {
-        if (elem.value === values.specialityName) {
-            return elem
-        }
-    })
+    function onFinish(values: Task) {
+        const specName = dataNameSpecialty!.find(elem => {
+            if (elem.value === values.specialityName) {
+                return elem
+            }
+        })
         const practiceType = dataPracticeType!.find(elem => {
             if (elem.value === values.practiceType) {
+                return elem
+            }
+        })
+        const subDivision = dataDepartments!.find(elem => {
+            if (elem.value === values.subDivision) {
                 return elem
             }
         })
@@ -84,7 +89,7 @@ const EditTask = () => {
             id: data!.id,
             specialityNameId: String(specName!.id),
             practiceTypeId: String(practiceType!.id),
-            subdivisionNameId: '1',
+            subdivisionNameId: String(subDivision!.id),
             tasks: values.tasks.map(elem => elem.task)
         }
 
@@ -94,7 +99,6 @@ const EditTask = () => {
             })
             .catch(e => console.log(e))
     }
-
 
 
     return (
@@ -129,7 +133,7 @@ const EditTask = () => {
                                     size="large"
                                     popupMatchSelectWidth={false}
                                     className="w-full"
-                                    options={optionsSubDivision}
+                                    options={departments}
                                 />
                             </Form.Item>
                         </Space>

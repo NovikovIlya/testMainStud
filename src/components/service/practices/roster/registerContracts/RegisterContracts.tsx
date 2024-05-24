@@ -594,13 +594,13 @@ export const RegisterContracts = () => {
                             onChange={value => setFilterNumberSeats(value)}
                         />
                     </Col>
-                    <Col span={16} className={'flex gap-2 items-center'}
+                    <Col span={!tableView.table ? 24 : 16} className={'flex items-center gap-10 justify-between'}
                          style={{
                              paddingRight: 0,
                              paddingLeft: tableView.table ? 16 : 8
                          }}>
                         <span className={'whitespace-nowrap'}>Дата заключения договора</span>
-                        <DatePicker className={'w-full'}
+                        <DatePicker className={'w-[90%]'}
                                     placeholder={'ДД.ММ.ГГГГ'}
                                     format={'DD.MM.YYYY'}
                                     onChange={date => setFilterDate(date)}
@@ -612,6 +612,7 @@ export const RegisterContracts = () => {
                             onClick={() => {
                                 nav('/services/practices/registerContracts/createContract')
                             }}
+                            className={'rounded-full'}
                     >
                         Создать договор
                     </Button>
@@ -685,7 +686,7 @@ export const RegisterContracts = () => {
                     </Col>
                 </Col>
             </Row>
-            <Row className="mt-4 flex items-center">
+            <Row className="mt-12 flex items-center">
                 <Col span={12} flex="50%">
                     <Radio.Group defaultValue="compressedView" buttonStyle="solid">
                         <Radio.Button

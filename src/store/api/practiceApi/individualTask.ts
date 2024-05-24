@@ -1,4 +1,5 @@
 import {
+    Department,
     ITask, ListIdDeleteTasks, PracticeType, TaskEdit, TasksAll, TaskSend,
 } from '../../../models/Practice'
 
@@ -87,6 +88,12 @@ export const individualTasks = apiSlice.injectEndpoints({
                 url: 'services/api-practices/kpfu/practice-types',
                 method: 'GET',
             })
+        }),
+        getDepartments: builder.query<Department[], void>({
+            query: () => ({
+                url: 'services/api-practices/kpfu/departments',
+                method: 'GET',
+            })
         })
 
     })
@@ -99,4 +106,5 @@ export const {
     useGetOneTaskQuery,
     useDeleteSeveralTasksMutation,
     useGetPracticeTypeQuery,
+    useGetDepartmentsQuery,
 } = individualTasks

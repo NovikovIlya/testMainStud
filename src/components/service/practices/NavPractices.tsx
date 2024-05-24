@@ -79,7 +79,7 @@ export const NavPractices = () => {
 				mode="inline"
 				onClick={onClick}
 				onOpenChange={onOpenChange}
-				className="min-w-[230px] max-w-[230px] flex flex-col gap-7 mt-14"
+				className="min-w-[230px] max-w-[230px] flex flex-col gap-7 mt-28"
 				items={items}
 			/>
 			<div className="bg-[#F5F8FB] w-full pt-14 px-14 mt-20">

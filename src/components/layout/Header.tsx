@@ -185,8 +185,15 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 							)}
 							href={'https://shelly.kpfu.ru/e-ksu/main_blocks.startpage'}
 						>
-							<ArrowLeftBackInOldAccount/>
-							<span className={`text-[14px]/[14px] text-[#3073D7]`}>в старый ЛК</span>
+							<ArrowLeftBackInOldAccount white={type === 'service'}/>
+							<span className={clsx(
+								`text-[14px]/[14px] text-[#3073D7]`
+								&&
+								type === 'service' ? 'text-white' : 'text-[#3073D7]'
+
+							)}>
+								в старый ЛК
+							</span>
 						</a>
 
 						<div

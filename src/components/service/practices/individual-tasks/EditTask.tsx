@@ -7,8 +7,14 @@ import {useCreateTaskMutation} from '../../../../store/api/practiceApi/taskServi
 import {validateMessages} from "../../../../utils/validateMessage";
 import TextArea from "antd/es/input/TextArea";
 import './createTask/CreateTask.scss'
-import {useEditTaskMutation, useGetOneTaskQuery} from "../../../../store/api/practiceApi/individualTask";
-import {Task, TaskEdit, TaskSend} from "../../../../models/Practice";
+import {
+    useEditTaskMutation, useGetDepartmentsQuery,
+    useGetOneTaskQuery,
+    useGetPracticeTypeQuery
+} from "../../../../store/api/practiceApi/individualTask";
+import {Department, PracticeType, Task, TaskEdit, TaskSend} from "../../../../models/Practice";
+import {OptionsNameSpecialty} from "../roster/registerContracts/RegisterContracts";
+import {useGetSpecialtyNamesQuery} from "../../../../store/api/practiceApi/roster";
 
 const EditTask = () => {
     const path = useLocation()
@@ -19,30 +25,34 @@ const EditTask = () => {
     const [edit] = useEditTaskMutation()
     const [msg, setMsg] = useState('')
     //приходить с бэка
-    const optionsSpecialityName = [
-        {value: '31.08.01 Акушерство и гинекология', label: '31.08.01 Акушерство и гинекология'},
-        {value: '31.08.12 Педиатрия', label: '31.08.12 Педиатрия'}
-    ]
-    const optionsPracticeType = [
-        {
-            value: 'Производственная',
-            label: 'Производственная'
-        },
-        {
-            value: 'Учебная',
-            label: 'Учебная'
+    const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
+    const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery()
+
+    useEffect(() => {
+        if (isSuccessNameSpecialty) {
+            setNameSpecialty(dataNameSpecialty)
         }
-    ]
-    const optionsSubDivision = [
-        {
-            value: 'Институт фундаментальной медицины и биологии. Ординатура',
-            label: 'Институт фундаментальной медицины и биологии. Ординатура',
-        },
-        {
-            value: 'ИТИС',
-            label: 'ИТИС'
+    }, [dataNameSpecialty]);
+
+    const [practiceType, setPracticeType] = useState<PracticeType[]>()
+    const {data: dataPracticeType, isSuccess: isSuccessPracticeType} = useGetPracticeTypeQuery()
+
+
+    useEffect(() => {
+        if (isSuccessPracticeType) {
+            setPracticeType(dataPracticeType)
         }
-    ]
+    }, [dataPracticeType]);
+
+
+    const [departments, setDepartments] = useState<Department[]>()
+    const {data: dataDepartments, isSuccess: isSuccessDepartments} = useGetDepartmentsQuery()
+
+    useEffect(() => {
+        if (isSuccessDepartments) {
+            setDepartments(dataDepartments)
+        }
+    }, [dataDepartments]);
 
     useEffect(() => {
         if (isSuccess) {
@@ -50,7 +60,7 @@ const EditTask = () => {
             form.setFieldValue('specialityName', data.specialityName)
             form.setFieldValue('practiceType', data.practiceType)
             const listTasks = data.tasks.map(elem => {
-                return  {
+                return {
                     task: elem.taskDescription
                 }
             })
@@ -60,20 +70,35 @@ const EditTask = () => {
     }, [data]);
 
     function onFinish(values: Task) {
+        const specName = dataNameSpecialty!.find(elem => {
+            if (elem.value === values.specialityName) {
+                return elem
+            }
+        })
+        const practiceType = dataPracticeType!.find(elem => {
+            if (elem.value === values.practiceType) {
+                return elem
+            }
+        })
+        const subDivision = dataDepartments!.find(elem => {
+            if (elem.value === values.subDivision) {
+                return elem
+            }
+        })
         const newData: TaskEdit = {
             id: data!.id,
-            specialityNameId: '1',
-            practiceTypeId: '3',
-            subdivisionNameId: '3',
+            specialityNameId: String(specName!.id),
+            practiceTypeId: String(practiceType!.id),
+            subdivisionNameId: String(subDivision!.id),
             tasks: values.tasks.map(elem => elem.task)
         }
+
         edit(newData)
             .then(() => {
                 setMsg('Данные сохранены')
             })
             .catch(e => console.log(e))
     }
-
 
 
     return (
@@ -108,7 +133,7 @@ const EditTask = () => {
                                     size="large"
                                     popupMatchSelectWidth={false}
                                     className="w-full"
-                                    options={optionsSubDivision}
+                                    options={departments}
                                 />
                             </Form.Item>
                         </Space>
@@ -125,7 +150,7 @@ const EditTask = () => {
                                     size="large"
                                     popupMatchSelectWidth={false}
                                     className="w-full"
-                                    options={optionsSpecialityName}
+                                    options={nameSpecialty}
                                 />
                             </Form.Item>
                         </Space>
@@ -143,7 +168,7 @@ const EditTask = () => {
                                     size="large"
                                     popupMatchSelectWidth={false}
                                     className="w-full"
-                                    options={optionsPracticeType}
+                                    options={practiceType}
                                 />
                             </Form.Item>
                         </Space>

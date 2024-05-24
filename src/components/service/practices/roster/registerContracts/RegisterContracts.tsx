@@ -31,7 +31,6 @@ import {
     useGetSpecialtyNamesQuery
 } from "../../../../../store/api/practiceApi/roster";
 import {ThemeProvider} from "@material-tailwind/react";
-import value = ThemeProvider.propTypes.value;
 import {ContractFacilities, ContractsAll, ContractShort, NameSpecialty} from "../../../../../models/Practice";
 
 
@@ -330,11 +329,11 @@ export const RegisterContracts = () => {
             className: 'text-xs',
             render: (value, record, index) =>
                 <div className={'flex flex-col gap-2'}>
-                    <a href={`http://192.168.63.96:8081/contracts/copy-file/${record.links.documentCopyId}`}
+                    <a href={`https://newlk.kpfu.ru/services/api-practices/contracts/copy-file/${record.links.documentCopyId}`}
                        target={'_blank'}>
                         Cкан договора
                     </a>
-                    <a href={`http://192.168.63.96:8081/contracts/agreement-file/${record.links.documentAgreementId}`}
+                    <a href={`https://newlk.kpfu.ru/services/api-practices/contracts/agreement-file/${record.links.documentAgreementId}`}
                        target={'_blank'}>
                         Доп. соглашение к договору
                     </a>
@@ -595,13 +594,13 @@ export const RegisterContracts = () => {
                             onChange={value => setFilterNumberSeats(value)}
                         />
                     </Col>
-                    <Col span={16} className={'flex gap-2 items-center'}
+                    <Col span={!tableView.table ? 24 : 16} className={'flex items-center gap-10 justify-between'}
                          style={{
                              paddingRight: 0,
                              paddingLeft: tableView.table ? 16 : 8
                          }}>
                         <span className={'whitespace-nowrap'}>Дата заключения договора</span>
-                        <DatePicker className={'w-full'}
+                        <DatePicker className={'w-[90%]'}
                                     placeholder={'ДД.ММ.ГГГГ'}
                                     format={'DD.MM.YYYY'}
                                     onChange={date => setFilterDate(date)}
@@ -613,6 +612,7 @@ export const RegisterContracts = () => {
                             onClick={() => {
                                 nav('/services/practices/registerContracts/createContract')
                             }}
+                            className={'rounded-full'}
                     >
                         Создать договор
                     </Button>
@@ -686,7 +686,7 @@ export const RegisterContracts = () => {
                     </Col>
                 </Col>
             </Row>
-            <Row className="mt-4 flex items-center">
+            <Row className="mt-12 flex items-center">
                 <Col span={12} flex="50%">
                     <Radio.Group defaultValue="compressedView" buttonStyle="solid">
                         <Radio.Button

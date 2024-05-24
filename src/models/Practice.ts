@@ -102,7 +102,7 @@ export interface IContractInfo {
     contractType: string
     prolongation: string
     endDate: string
-    specialtyNameId: number
+    specialtyNameId: number | string
     legalFacility: string
     actualFacility: string
     placesAmount: string
@@ -246,4 +246,16 @@ export interface Task {
 
 export interface ListIdDeleteTasks {
     listIdDelete: string[]
+}
+
+export interface PracticeType {
+    id: string
+    value: string
+    label: string
+}
+
+export interface Department {
+    id: string
+    value: string
+    label: string
 }

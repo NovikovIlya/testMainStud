@@ -116,16 +116,28 @@ export const IndTaskPopoverMain = ({
 
     return (
         <div className={'flex flex-col gap-2 '}>
-            <WrapperButton color={ColorBg.BLUEF2} onClick={downLoad}>
+            <WrapperButton
+                color={ColorBg.BLUEF2}
+                onClick={downLoad}
+                disabled={translateColumnsIntoRussia().length === 0}
+            >
                 <Load/>
                 <span>Скачать выбранное</span>
             </WrapperButton>
 
-            <WrapperButton color={ColorBg.BLUEF2} onClick={printTable}>
+            <WrapperButton
+                color={ColorBg.BLUEF2}
+                onClick={printTable}
+                disabled={translateColumnsIntoRussia().length === 0}
+            >
                 <PrintSvg/>
                 <span>Печать выбранного</span>
             </WrapperButton>
-            <WrapperButton color={ColorBg.REDE5} onClick={deleteData}>
+            <WrapperButton
+                color={ColorBg.REDE5}
+                onClick={deleteData}
+                disabled={translateColumnsIntoRussia().length === 0}
+            >
                 <DeleteRedSvg/>
                 <span className={'text-[#E04545]'}>Удалить выбранное</span>
             </WrapperButton>

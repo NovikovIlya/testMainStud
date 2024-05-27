@@ -364,7 +364,6 @@ export const ViewPractical = () => {
 				size="small"
 				columns={columns}
 				dataSource={dataFilter && dataFilter}
-				bordered
 				pagination={false}
 				className="my-10"
 			/>

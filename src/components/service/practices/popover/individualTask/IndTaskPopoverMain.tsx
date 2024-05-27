@@ -35,7 +35,9 @@ export const IndTaskPopoverMain = ({
     function translateColumnsIntoRussia() {
         const newData: any = []
         if (recordCompressed) {
-            for (let elem of recordCompressed) {
+            const recordCompressedWithoutUndefinedElem = recordCompressed.filter(elem => elem !== undefined)
+
+            for (let elem of recordCompressedWithoutUndefinedElem) {
                 const newObj = {
                     "Шифр и наименование специальности": elem.specialityName,
                     "Дата заполнения": dayjs(elem.dateFilling).format('DD.MM.YYYY'),
@@ -45,7 +47,9 @@ export const IndTaskPopoverMain = ({
             }
         }
         if (recordFull) {
-            for (let elem of recordFull) {
+            const recordFullWithoutUndefinedElem = recordFull.filter(elem => elem !== undefined)
+
+            for (let elem of recordFullWithoutUndefinedElem) {
                 const newObj = {
                     "Шифр и наименование специальности": elem.specialityName,
                     "Тип практики": elem.practiceType,
@@ -93,7 +97,9 @@ export const IndTaskPopoverMain = ({
 
     function deleteData() {
         if (setRecordCompressed && recordCompressed && recordCompressedAll) {
-            const listId = recordCompressed.map(elem => elem.id)
+            const recordCompressedWithoutUndefinedElem = recordCompressed.filter(elem => elem !== undefined)
+
+            const listId = recordCompressedWithoutUndefinedElem.map(elem => elem.id)
             const listIdDelete: ListIdDeleteTasks = {
                 listIdDelete: listId
             }
@@ -103,7 +109,9 @@ export const IndTaskPopoverMain = ({
             }))
         }
         if (setRecordFull && recordFull && recordFullAll) {
-            const listId = recordFull.map(elem => elem.id)
+            const recordFullWithoutUndefinedElem = recordFull.filter(elem => elem !== undefined)
+
+            const listId = recordFullWithoutUndefinedElem.map(elem => elem.id)
             const listIdDelete: ListIdDeleteTasks = {
                 listIdDelete: listId
             }

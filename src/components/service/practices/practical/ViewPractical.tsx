@@ -23,6 +23,7 @@ import {PointsSvg} from "../../../../assets/svg/PointsSvg";
 import {RegisterPopoverContent} from "../popover/register/RegisterPopoverContent";
 import {PracticalPopoverMain} from "../popover/practical/PracticalPopoverMain";
 import {ColumnsTableFull} from "../roster/registerContracts/RegisterContracts";
+import {PracticalPopoverContent} from "../popover/practical/PracticalPopoverContent";
 
 interface FilterType {
 	value: string
@@ -342,11 +343,19 @@ export const ViewPractical = () => {
 			</Popover>,
 			align: 'center',
 			render: (record) =>
-					<Button
-						type="text"
-						className="opacity-50"
-						icon={<PointsSvg/>}
-					/>,
+					<Popover trigger={'click'}
+							 content={<PracticalPopoverContent
+								 recordFull={record}
+								 recordFullAll={tableData}
+								 setRecordFull={setTableData}
+							 />}>
+						<Button
+							type="text"
+							className="opacity-50"
+							icon={<PointsSvg/>}
+						/>
+					</Popover>
+				,
 			fixed: "right",
 			width: 50
 		}

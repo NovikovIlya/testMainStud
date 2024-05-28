@@ -23,14 +23,23 @@ export const PracticalPopoverMain = ({
                                          setSelectedFieldFull
                                      }: Props) => {
 
-    function translateColumnsIntoRussia() {
+    function translateColumnsIntoRussia({isPrint}: {isPrint: boolean}) {
         const newData: any = []
         if (recordFull) {
             const recordFullWithoutUndefinedElem = recordFull.filter(elem => elem !== undefined)
             for (let elem of recordFullWithoutUndefinedElem) {
 
-                const stringIndTask = elem.individualTasks.join(', ')
-                const stringCompetencies = elem.competencies.join(', ')
+                const stringIndTask = isPrint
+                    ?
+                    elem.individualTasks.map((elem, index) => `${index + 1}.${elem} `).join('</br>')
+                    :
+                    elem.individualTasks.map((elem, index) => `${index + 1}.${elem} `).join('\n')
+
+                const stringCompetencies = isPrint
+                    ?
+                    elem.competencies.map((elem, index) => `${index + 1}.${elem} `).join('</br>')
+                    :
+                    elem.competencies.map((elem, index) => `${index + 1}.${elem} `).join('\n')
 
                 const startPractice = `${dayjs(elem.practicePeriod[0]).format('DD.MM.YYYY')}`
                 const endPractice = `${dayjs(elem.practicePeriod[1]).format('DD.MM.YYYY')}`
@@ -57,7 +66,7 @@ export const PracticalPopoverMain = ({
     }
 
     function downLoad() {
-        const ws = utils.json_to_sheet(translateColumnsIntoRussia());
+        const ws = utils.json_to_sheet(translateColumnsIntoRussia({isPrint: false}));
         const wb = utils.book_new();
         utils.book_append_sheet(wb, ws, "Data");
         writeFileXLSX(wb, "File.xlsx");
@@ -84,7 +93,7 @@ export const PracticalPopoverMain = ({
         }
 
         printJS({
-            printable: translateColumnsIntoRussia(),
+            printable: translateColumnsIntoRussia({isPrint: true}),
             properties: properties(),
             type: 'json',
             style: 'body {font-size: 10px}'
@@ -99,9 +108,9 @@ export const PracticalPopoverMain = ({
             setRecordFull(recordFullAll.filter(elem => {
                 return !listId.includes(elem.id)
             }))
-            if (setSelectedFieldFull) {
-                setSelectedFieldFull([])
-            }
+            // if (setSelectedFieldFull) {
+            //     setSelectedFieldFull([])
+            // }
             console.log(recordFull)
             // const objIdList: ListIdDeleteContracts = {
             //     listIdDelete: listId

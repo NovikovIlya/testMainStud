@@ -1,11 +1,9 @@
 import React from 'react';
 import {CompressedIndividualTask, FullIndividualTask} from "../../individual-tasks/IndividualTasks";
-import {useLocation, useNavigate} from "react-router-dom";
 import dayjs from "dayjs";
 import printJS from "print-js";
 import {utils, writeFileXLSX} from "xlsx";
 import {ColorBg, WrapperButton} from "../WrapperButton";
-import {Doc} from "../../../../../assets/svg/Doc";
 import {Load} from "../../../../../assets/svg/Load";
 import {PrintSvg} from "../../../../../assets/svg/PrintSvg";
 import {DeleteRedSvg} from "../../../../../assets/svg/DeleteRedSvg";

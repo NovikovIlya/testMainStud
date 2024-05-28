@@ -106,10 +106,11 @@ export const CreateContracts = () => {
             body: JSON.stringify({query: inn})
         }
 
-        if (String(inn).length === 10) {
+        if (String(inn).length === 10 || String(inn).length === 12) {
             fetch(url, options)
                 .then(response => response.json())
                 .then(res => {
+                    console.log(res)
                     if (res.suggestions.length !== 0) {
                         setNameOrg(true)
                         form.setFieldValue('contractFacility', res.suggestions[0].data.name.full_with_opf)
@@ -157,8 +158,8 @@ export const CreateContracts = () => {
                                    rules={[
                                        {
                                            required: true,
-                                           pattern: new RegExp('^[0-9]{10}$'),
-                                           message: 'ИНН содержит 10 цифр',
+                                           pattern: new RegExp('^([0-9]{10}|[0-9]{12})$'),
+                                           message: 'ИНН содержит 10 или 12 цифр',
                                        },
                                    ]}>
                             <InputNumber

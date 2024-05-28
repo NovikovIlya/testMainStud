@@ -29,7 +29,8 @@ export const IndTaskPopoverContent = ({
                                           tableDataFull
                                       }: Props) => {
     const [deleteTask] = useDeleteTaskMutation()
-    function translateColumnIntoRussia() {
+
+    function translateColumnIntoRussia({isPrint}: { isPrint: boolean }) {
         if (recordCompressed) {
             return {
                 "Шифр и наименование специальности": recordCompressed.specialityName,
@@ -38,10 +39,21 @@ export const IndTaskPopoverContent = ({
             }
         }
         if (recordFull) {
-            return {
-                "Шифр и наименование специальности": recordFull.specialityName,
-                "Тип договора": recordFull.practiceType,
-                "Индивидуальные задания": recordFull.tasks.join('\n')
+            const numberedList = recordFull.tasks.map((elem, index) => {
+                return `${index + 1}.${elem} `
+            })
+            if (isPrint) {
+                return {
+                    "Шифр и наименование специальности": recordFull.specialityName,
+                    "Тип договора": recordFull.practiceType,
+                    "Индивидуальные задания": numberedList.join('</br>')
+                }
+            } else {
+                return {
+                    "Шифр и наименование специальности": recordFull.specialityName,
+                    "Тип договора": recordFull.practiceType,
+                    "Индивидуальные задания": numberedList.join('\n')
+                }
             }
         }
 
@@ -66,7 +78,7 @@ export const IndTaskPopoverContent = ({
         }
 
         printJS({
-            printable: [translateColumnIntoRussia()],
+            printable: [translateColumnIntoRussia({isPrint: true})],
             properties: properties(),
             type: 'json',
             style: 'body {font-size: 10px}'
@@ -74,7 +86,7 @@ export const IndTaskPopoverContent = ({
     }
 
     function downLoad() {
-        const ws = utils.json_to_sheet([translateColumnIntoRussia()]);
+        const ws = utils.json_to_sheet([translateColumnIntoRussia({isPrint: false})]);
         const wb = utils.book_new();
         utils.book_append_sheet(wb, ws, "Data");
         writeFileXLSX(wb, "File.xlsx");

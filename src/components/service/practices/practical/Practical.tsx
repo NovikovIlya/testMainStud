@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router-dom'
 
-import CreatePractical from './CreatePractical'
+import {CreatePractical} from './CreatePractical'
 import { ViewPractical } from './ViewPractical'
 
 export const Practical = () => {

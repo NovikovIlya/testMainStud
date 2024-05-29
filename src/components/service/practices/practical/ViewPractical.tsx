@@ -6,33 +6,24 @@ import {
 	Space,
 	Table,
 	TableProps,
-	Typography
 } from 'antd'
 import React, {useEffect, useState} from 'react'
 import {useNavigate} from 'react-router-dom'
-
-import {DownloadSvg} from '../../../../assets/svg/DownloadSvg'
-import {PrinterSvg} from '../../../../assets/svg/PrinterSvg'
-
-import {IPracticeInfoFull, IPracticesResponse} from '../../../../models/Practice'
-import {string} from "yup";
 import dayjs from "dayjs";
 import {EditSvg} from "../../../../assets/svg/EditSvg";
-import {RegisterPopoverMain} from "../popover/register/RegisterPopoverMain";
 import {PointsSvg} from "../../../../assets/svg/PointsSvg";
-import {RegisterPopoverContent} from "../popover/register/RegisterPopoverContent";
-import {PracticalPopoverMain} from "../popover/practical/PracticalPopoverMain";
-import {ColumnsTableFull} from "../roster/registerContracts/RegisterContracts";
 import {PracticalPopoverContent} from "../popover/practical/PracticalPopoverContent";
+import {PracticalPopoverMain} from "../popover/practical/PracticalPopoverMain";
+import {FullIndividualTask} from "../individual-tasks/IndividualTasks";
 
 interface FilterType {
-	value: string
-	label: string
+	value: string | number
+	label: string | number
 }
 
 const filterSpecialization: FilterType[] = [
 	{
-		value: '',
+		value: 'Все',
 		label: 'Все'
 	},
 	{
@@ -46,7 +37,7 @@ const filterSpecialization: FilterType[] = [
 ]
 const filterDepartment: FilterType[] = [
 	{
-		value: '',
+		value: 'Все',
 		label: 'Все'
 	},
 	{
@@ -60,7 +51,7 @@ const filterDepartment: FilterType[] = [
 ]
 const filterCourse: FilterType[] = [
 	{
-		value: '',
+		value: 'Все',
 		label: 'Все'
 	},
 	{
@@ -88,9 +79,9 @@ const filterCourse: FilterType[] = [
 		label: '6'
 	}
 ]
-const filterSemestr: FilterType[] = [
+const filterSemester: FilterType[] = [
 	{
-		value: '',
+		value: 'Все',
 		label: 'Все'
 	},
 	{
@@ -104,7 +95,7 @@ const filterSemestr: FilterType[] = [
 ]
 const filterType: FilterType[] = [
 	{
-		value: '',
+		value: 'Все',
 		label: 'Все'
 	},
 	{
@@ -124,9 +115,9 @@ export interface TablePractical {
 	practiceType: string
 	department: string
 	groupNumber: string
-	semester: number
+	semester: string
 	academicYear: string
-	courseStudy: number
+	courseStudy: string
 	practicePeriod: string[]
 	totalHours: number
 	individualTasks: string[]
@@ -139,12 +130,12 @@ const mockData: TablePractical[] = [
 		id: '1',
 		key: '1',
 		specialtyName: '31.08.01 Акушерство и гинекология',
-		practiceType: 'Производственная (клиническая) практика: акушерство и гинекология',
+		practiceType: 'Производственная',
 		department: 'Кафедра хирургических болезней постдипломного образования',
 		groupNumber: '10.4-134',
-		semester: 2,
+		semester: '1',
 		academicYear: '2022/2023',
-		courseStudy: 1,
+		courseStudy: '2',
 		practicePeriod: ['2023/03/30', '2023/05/30'],
 		totalHours: 120,
 		individualTasks: [
@@ -162,13 +153,13 @@ const mockData: TablePractical[] = [
 	{
 		id: '2',
 		key: '2',
-		specialtyName: '31.08.01 Акушерство и гинекология',
-		practiceType: 'Производственная (клиническая) практика: акушерство и гинекология',
-		department: 'Кафедра хирургических болезней постдипломного образования',
+		specialtyName: '31.08.12 Педиатрия',
+		practiceType: 'Технологическая',
+		department: 'Кафедра онкологических болезней',
 		groupNumber: '10.4-134',
-		semester: 4,
+		semester: '2',
 		academicYear: '2022/2023',
-		courseStudy: 1,
+		courseStudy: '4',
 		practicePeriod: ['2023/03/30', '2023/05/30'],
 		totalHours: 120,
 		individualTasks: [
@@ -204,7 +195,7 @@ export const ViewPractical = () => {
 		nameSpecialty: 'Все',
 		department: 'Все',
 		course: 'Все',
-		semestr: 'Все',
+		semester: 'Все',
 		practiceType: 'Все',
 	})
 
@@ -361,6 +352,75 @@ export const ViewPractical = () => {
 		}
 	]
 
+	function filterDataFull() {
+		function filterPracticeType(elem: TablePractical) {
+			if (filter.practiceType === 'Все') {
+				return elem
+			} else {
+				return elem.practiceType === filter.practiceType
+			}
+		}
+
+		function filterDepartment(elem: TablePractical) {
+			if (filter.department === 'Все') {
+				return elem
+			} else {
+				return elem.department === filter.department
+			}
+		}
+
+		function filterCourse(elem: TablePractical) {
+			if (filter.course === 'Все') {
+				return elem
+			} else {
+				return elem.courseStudy === filter.course
+			}
+		}
+
+		function filterSemester(elem: TablePractical) {
+			if (filter.semester === 'Все') {
+				return elem
+			} else {
+				return elem.semester === filter.semester
+			}
+		}
+
+		function filterNameSpecialty(elem: TablePractical) {
+			if (filter.nameSpecialty === 'Все') {
+				return elem
+			} else {
+				return elem.specialtyName === filter.nameSpecialty
+			}
+		}
+		// function sortDateFilling(a: FullIndividualTask, b: FullIndividualTask) {
+		// 	if (filter.dateFilling === 'По дате (сначала новые)') {
+		// 		return +new Date(b.dateFilling) - +new Date(a.dateFilling)
+		// 	}
+		// 	if (filter.dateFilling === 'По дате (сначала старые)') {
+		// 		return +new Date(a.dateFilling) - +new Date(b.dateFilling)
+		// 	}
+		// 	return 0
+		// }
+		//
+		// if (isSuccess) {
+		// 	const dataFull: FullIndividualTask[] = data.map(elem => changeListDataAll(elem))
+		// 	return dataFull
+		// 		.filter(elem => filterPracticeType(elem))
+		// 		.filter(elem => filterNameSpecialty(elem))
+		// 		.sort((a, b) => sortDateFilling(a, b))
+		// }
+
+		return mockData
+			.filter(elem => filterPracticeType(elem))
+			.filter(elem => filterDepartment(elem))
+			.filter(elem => filterCourse(elem))
+			.filter(elem => filterSemester(elem))
+			.filter(elem => filterNameSpecialty(elem))
+	}
+
+	useEffect(() => {
+		setTableData(filterDataFull())
+	}, [filter]);
 
 
 
@@ -383,10 +443,14 @@ export const ViewPractical = () => {
 					<Col span={8}>
 						<Select
 							popupMatchSelectWidth={false}
-							defaultValue=""
+							defaultValue="Все"
 							className="w-full"
 							options={nameSpecialty}
-							onChange={() => {
+							onChange={value => {
+								setFilter({
+									...filter,
+									nameSpecialty: value
+								})
 							}}
 						/>
 					</Col>
@@ -413,10 +477,14 @@ export const ViewPractical = () => {
 					<Col span={8}>
 						<Select
 							popupMatchSelectWidth={false}
-							defaultValue=""
+							defaultValue="Все"
 							className="w-full"
 							options={department}
-							onChange={() => {
+							onChange={value => {
+								setFilter({
+									...filter,
+									department: value
+								})
 							}}
 						/>
 					</Col>
@@ -428,10 +496,14 @@ export const ViewPractical = () => {
 						</span>
 						<Select
 							popupMatchSelectWidth={false}
-							defaultValue=""
+							defaultValue="Все"
 							className="w-full"
 							options={filterCourse}
-							onChange={() => {
+							onChange={value => {
+								setFilter({
+									...filter,
+									course: value
+								})
 							}}
 						/>
 					</Col>
@@ -439,13 +511,16 @@ export const ViewPractical = () => {
 						<span>
 							Семестр
 						</span>
-
 						<Select
 							popupMatchSelectWidth={false}
-							defaultValue=""
+							defaultValue="Все"
 							className="w-full"
-							options={filterSemestr}
-							onChange={() => {
+							options={filterSemester}
+							onChange={value => {
+								setFilter({
+									...filter,
+									semester: value
+								})
 							}}
 						/>
 					</Col>
@@ -455,10 +530,14 @@ export const ViewPractical = () => {
 						</span>
 						<Select
 							popupMatchSelectWidth={false}
-							defaultValue=""
+							defaultValue="Все"
 							className="w-full"
 							options={filterType}
-							onChange={() => {
+							onChange={value => {
+								setFilter({
+									...filter,
+									practiceType: value
+								})
 							}}
 						/>
 					</Col>

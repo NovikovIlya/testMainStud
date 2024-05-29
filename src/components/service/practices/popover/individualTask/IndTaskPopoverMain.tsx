@@ -32,10 +32,13 @@ export const IndTaskPopoverMain = ({
                                    }: Props) => {
 
     const [severalDelete] = useDeleteSeveralTasksMutation()
-    function translateColumnsIntoRussia() {
+
+    function translateColumnsIntoRussia({isPrint}: { isPrint?: boolean }) {
         const newData: any = []
         if (recordCompressed) {
-            for (let elem of recordCompressed) {
+            const recordCompressedWithoutUndefinedElem = recordCompressed.filter(elem => elem !== undefined)
+
+            for (let elem of recordCompressedWithoutUndefinedElem) {
                 const newObj = {
                     "Шифр и наименование специальности": elem.specialityName,
                     "Дата заполнения": dayjs(elem.dateFilling).format('DD.MM.YYYY'),
@@ -45,11 +48,16 @@ export const IndTaskPopoverMain = ({
             }
         }
         if (recordFull) {
-            for (let elem of recordFull) {
+            const recordFullWithoutUndefinedElem = recordFull.filter(elem => elem !== undefined)
+
+            for (let elem of recordFullWithoutUndefinedElem) {
                 const newObj = {
                     "Шифр и наименование специальности": elem.specialityName,
                     "Тип практики": elem.practiceType,
-                    "Индивидуальные задания": elem.tasks.join('\n'),
+                    "Индивидуальные задания": isPrint ?
+                        elem.tasks.map((elem, index) => `${index + 1}.${elem} `).join('</br>')
+                        :
+                        elem.tasks.map((elem, index) => `${index + 1}.${elem} `).join('\n'),
                 }
                 newData.push(newObj)
             }
@@ -59,7 +67,7 @@ export const IndTaskPopoverMain = ({
     }
 
     function downLoad() {
-        const ws = utils.json_to_sheet(translateColumnsIntoRussia());
+        const ws = utils.json_to_sheet(translateColumnsIntoRussia({isPrint: false}));
         const wb = utils.book_new();
         utils.book_append_sheet(wb, ws, "Data");
         writeFileXLSX(wb, "File.xlsx");
@@ -84,7 +92,7 @@ export const IndTaskPopoverMain = ({
         }
 
         printJS({
-            printable: translateColumnsIntoRussia(),
+            printable: translateColumnsIntoRussia({isPrint: true}),
             properties: properties(),
             type: 'json',
             style: 'body {font-size: 10px}'
@@ -93,7 +101,9 @@ export const IndTaskPopoverMain = ({
 
     function deleteData() {
         if (setRecordCompressed && recordCompressed && recordCompressedAll) {
-            const listId = recordCompressed.map(elem => elem.id)
+            const recordCompressedWithoutUndefinedElem = recordCompressed.filter(elem => elem !== undefined)
+
+            const listId = recordCompressedWithoutUndefinedElem.map(elem => elem.id)
             const listIdDelete: ListIdDeleteTasks = {
                 listIdDelete: listId
             }
@@ -103,7 +113,9 @@ export const IndTaskPopoverMain = ({
             }))
         }
         if (setRecordFull && recordFull && recordFullAll) {
-            const listId = recordFull.map(elem => elem.id)
+            const recordFullWithoutUndefinedElem = recordFull.filter(elem => elem !== undefined)
+
+            const listId = recordFullWithoutUndefinedElem.map(elem => elem.id)
             const listIdDelete: ListIdDeleteTasks = {
                 listIdDelete: listId
             }
@@ -119,7 +131,7 @@ export const IndTaskPopoverMain = ({
             <WrapperButton
                 color={ColorBg.BLUEF2}
                 onClick={downLoad}
-                disabled={translateColumnsIntoRussia().length === 0}
+                disabled={translateColumnsIntoRussia({}).length === 0}
             >
                 <Load/>
                 <span>Скачать выбранное</span>
@@ -128,7 +140,7 @@ export const IndTaskPopoverMain = ({
             <WrapperButton
                 color={ColorBg.BLUEF2}
                 onClick={printTable}
-                disabled={translateColumnsIntoRussia().length === 0}
+                disabled={translateColumnsIntoRussia({}).length === 0}
             >
                 <PrintSvg/>
                 <span>Печать выбранного</span>
@@ -136,7 +148,7 @@ export const IndTaskPopoverMain = ({
             <WrapperButton
                 color={ColorBg.REDE5}
                 onClick={deleteData}
-                disabled={translateColumnsIntoRussia().length === 0}
+                disabled={translateColumnsIntoRussia({}).length === 0}
             >
                 <DeleteRedSvg/>
                 <span className={'text-[#E04545]'}>Удалить выбранное</span>

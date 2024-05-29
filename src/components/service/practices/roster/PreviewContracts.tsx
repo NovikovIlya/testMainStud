@@ -23,58 +23,6 @@ interface DataType {
     medic: ReactNode
 }
 
-const data: DataType[] = [
-    {
-        key: '1',
-        name: 'Номер договора',
-        medic: '№1.1.2.77.2.45-04/10/2022'
-    },
-    {
-        key: '2',
-        name: 'Дата заключения договора',
-        medic: '02.09.2022'
-    },
-    {
-        key: '3',
-        name: 'Тип договора',
-        medic: 'Пролонгация 1 год. Потом бессрочный'
-    },
-    {
-        key: '4',
-        name: 'Срок действия договора',
-        medic: 'Бессрочный'
-    },
-    {
-        key: '5',
-        name: 'Шифр и наименование специальности',
-        medic: '12.456 Лечебное дело'
-    },
-    {
-        key: '6',
-        name: 'Юридический адрес организации',
-        medic: 'ул. Оренбургский тракт, 138, Казань, Респ. Татарстан'
-    },
-    {
-        key: '7',
-        name: 'Фактический адрес организации ',
-        medic: 'ул. Оренбургский тракт, 138, Казань, Респ. Татарстан'
-    },
-    {
-        key: '8',
-        name: 'Количество мест',
-        medic: '150'
-    },
-    {
-        key: '9',
-        name: 'Ссылка на скан договора',
-        medic: 'Скан договора.pdf'
-    },
-    {
-        key: '10',
-        name: 'Ссылка на дополнительное соглашение к договору',
-        medic: 'ДопСоглашение.pdf'
-    }
-]
 
 
 export const PreviewContracts = () => {
@@ -90,7 +38,7 @@ export const PreviewContracts = () => {
     }, [contract]);
 
     function prolonAge(prolon: string) {
-        if (prolon === '1') {
+        if (prolon === '1' && prolon) {
             return 'год'
         } else if (prolon === '2' || prolon === '3' || prolon === '4') {
             return 'года'
@@ -103,6 +51,7 @@ export const PreviewContracts = () => {
         } else {
             return 'лет'
         }
+
     }
 
     const columns: TableProps<DataType>['columns'] = [
@@ -186,6 +135,9 @@ export const PreviewContracts = () => {
     	}
     ]
     function translateColumnIntoRussia() {
+
+        const isProlongation = contract?.prolongation ? `${prolonAge(contract!.prolongation)}` : '-'
+
         return {
             "Наименование организации": contract?.contractFacility,
             "Шифр и наименование специальности": contract?.specialtyName,
@@ -193,7 +145,7 @@ export const PreviewContracts = () => {
             "Дата заключения договора": contract?.conclusionDate,
             "Тип договора": contract?.contractType,
             "Срок действия договора": contract?.endDate,
-            "Пролонгация": `${contract?.prolongation} ${prolonAge(contract!.prolongation)}` || '-',
+            "Пролонгация": isProlongation,
             "Юридический адрес организации": contract?.legalFacility,
             "Фактический адрес организации": contract?.actualFacility,
             "Количество мест": contract?.placesAmount,

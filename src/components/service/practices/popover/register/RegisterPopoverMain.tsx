@@ -32,7 +32,8 @@ export const RegisterPopoverMain = ({
     function translateColumnsIntoRussia() {
         const newData: any = []
         if (recordCompressed) {
-            for (let elem of recordCompressed) {
+            const recordCompressedWithoutUndefinedElem = recordCompressed.filter(elem => elem !== undefined)
+            for (let elem of recordCompressedWithoutUndefinedElem) {
                 const newObj = {
                     "Наименование организации": elem.contractFacility,
                     "Дата заполнения": elem.fillingDate,
@@ -43,7 +44,8 @@ export const RegisterPopoverMain = ({
             }
         }
         if (recordFull) {
-            for (let elem of recordFull) {
+            const recordFullWithoutUndefinedElem = recordFull.filter(elem => elem !== undefined)
+            for (let elem of recordFullWithoutUndefinedElem) {
                 const newObj = {
                     "Наименование организации": elem.contractFacility,
                     "Шифр и наименование специальности": elem.specialtyName,
@@ -101,7 +103,8 @@ export const RegisterPopoverMain = ({
 
     function deleteData() {
         if (setRecordCompressed && recordCompressed && recordCompressedAll) {
-            const listId = recordCompressed.map(elem => elem.id)
+            const recordCompressedWithoutUndefinedElem = recordCompressed.filter(elem => elem !== undefined)
+            const listId = recordCompressedWithoutUndefinedElem.map(elem => elem.id)
             setRecordCompressed(recordCompressedAll.filter(elem => {
                 return !listId.includes(elem.id)
             }))
@@ -112,7 +115,8 @@ export const RegisterPopoverMain = ({
 
         }
         if (setRecordFull && recordFull && recordFullAll) {
-            const listId = recordFull.map(elem => elem.id)
+            const recordFullWithoutUndefinedElem = recordFull.filter(elem => elem !== undefined)
+            const listId = recordFullWithoutUndefinedElem.map(elem => elem.id)
             setRecordFull(recordFullAll.filter(elem => {
                 return !listId.includes(elem.id)
             }))
@@ -124,7 +128,6 @@ export const RegisterPopoverMain = ({
     }
 
 
-    console.log(translateColumnsIntoRussia().length === 0)
 
     return (
         <div className={'flex flex-col gap-2 '}>

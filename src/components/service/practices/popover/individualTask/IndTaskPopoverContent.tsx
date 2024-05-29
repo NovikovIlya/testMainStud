@@ -1,11 +1,9 @@
 import React from 'react';
 import {CompressedIndividualTask, FullIndividualTask} from "../../individual-tasks/IndividualTasks";
-import {useLocation, useNavigate} from "react-router-dom";
 import dayjs from "dayjs";
 import printJS from "print-js";
 import {utils, writeFileXLSX} from "xlsx";
 import {ColorBg, WrapperButton} from "../WrapperButton";
-import {Doc} from "../../../../../assets/svg/Doc";
 import {Load} from "../../../../../assets/svg/Load";
 import {PrintSvg} from "../../../../../assets/svg/PrintSvg";
 import {DeleteRedSvg} from "../../../../../assets/svg/DeleteRedSvg";
@@ -29,7 +27,8 @@ export const IndTaskPopoverContent = ({
                                           tableDataFull
                                       }: Props) => {
     const [deleteTask] = useDeleteTaskMutation()
-    function translateColumnIntoRussia() {
+
+    function translateColumnIntoRussia({isPrint}: { isPrint: boolean }) {
         if (recordCompressed) {
             return {
                 "Шифр и наименование специальности": recordCompressed.specialityName,
@@ -38,10 +37,21 @@ export const IndTaskPopoverContent = ({
             }
         }
         if (recordFull) {
-            return {
-                "Шифр и наименование специальности": recordFull.specialityName,
-                "Тип договора": recordFull.practiceType,
-                "Индивидуальные задания": recordFull.tasks.join('\n')
+            const numberedList = recordFull.tasks.map((elem, index) => {
+                return `${index + 1}.${elem} `
+            })
+            if (isPrint) {
+                return {
+                    "Шифр и наименование специальности": recordFull.specialityName,
+                    "Тип договора": recordFull.practiceType,
+                    "Индивидуальные задания": numberedList.join('</br>')
+                }
+            } else {
+                return {
+                    "Шифр и наименование специальности": recordFull.specialityName,
+                    "Тип договора": recordFull.practiceType,
+                    "Индивидуальные задания": numberedList.join('\n')
+                }
             }
         }
 
@@ -66,7 +76,7 @@ export const IndTaskPopoverContent = ({
         }
 
         printJS({
-            printable: [translateColumnIntoRussia()],
+            printable: [translateColumnIntoRussia({isPrint: true})],
             properties: properties(),
             type: 'json',
             style: 'body {font-size: 10px}'
@@ -74,7 +84,7 @@ export const IndTaskPopoverContent = ({
     }
 
     function downLoad() {
-        const ws = utils.json_to_sheet([translateColumnIntoRussia()]);
+        const ws = utils.json_to_sheet([translateColumnIntoRussia({isPrint: false})]);
         const wb = utils.book_new();
         utils.book_append_sheet(wb, ws, "Data");
         writeFileXLSX(wb, "File.xlsx");

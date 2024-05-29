@@ -75,6 +75,7 @@ const CreateTask = () => {
             subdivisionNameId: String(subDivision!.id),
             tasks: values.tasks.map(elem => elem.task)
         }
+        console.log(newData)
         createTask(newData)
             .then(data => console.log(data))
             .catch(e => console.log(e))
@@ -182,7 +183,11 @@ const CreateTask = () => {
                                                         </span>
                                                     </div>
                                                     <Form.Item name={[field.name, 'task']}
-                                                               className={'w-full h-min'}>
+                                                               className={'w-full h-min'}
+                                                               rules={[{
+                                                                   required: true
+                                                               }]}
+                                                    >
                                                         <TextArea autoSize
                                                                   size="large"
                                                                   placeholder="Добавить задание"

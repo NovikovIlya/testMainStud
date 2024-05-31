@@ -280,13 +280,18 @@ export interface NewPractice {
     director: string
 }
 
+export interface AcademicYear {
+    start: string
+    end: string
+}
+
 export interface NewPracticeSend {
     specialityName: string
     practiceType: string
     department: string
     groupNumber: string
     semester: string
-    academicYear: string
+    academicYear: AcademicYear
     courseStudy: string
     startStudy: string
     amountHours: string

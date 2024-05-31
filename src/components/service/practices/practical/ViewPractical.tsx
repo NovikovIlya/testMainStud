@@ -15,6 +15,8 @@ import {PointsSvg} from "../../../../assets/svg/PointsSvg";
 import {PracticalPopoverContent} from "../popover/practical/PracticalPopoverContent";
 import {PracticalPopoverMain} from "../popover/practical/PracticalPopoverMain";
 import {FullIndividualTask} from "../individual-tasks/IndividualTasks";
+import {OptionsNameSpecialty} from "../roster/registerContracts/RegisterContracts";
+import {useGetSpecialtyNamesQuery} from "../../../../store/api/practiceApi/roster";
 
 interface FilterType {
 	value: string | number
@@ -180,11 +182,19 @@ const mockData: TablePractical[] = [
 
 export const ViewPractical = () => {
 	const navigate = useNavigate()
-	const [nameSpecialty, setNameSpecialty] = useState<FilterType[]>(filterSpecialization)
 	const [department, setDepartment] = useState<FilterType[]>(filterDepartment)
 
 	const [tableData, setTableData] = useState<TablePractical[]>(mockData)
 
+
+	const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
+	const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery()
+
+	useEffect(() => {
+		if (isSuccessNameSpecialty) {
+			setNameSpecialty(dataNameSpecialty)
+		}
+	}, [dataNameSpecialty]);
 
 	const [
 		selectedFieldsFull,
@@ -213,7 +223,9 @@ export const ViewPractical = () => {
 					<Button
 						type="text"
 						icon={<EditSvg/>}
-						onClick={() => {}}
+						onClick={() => {
+							navigate(`/services/practices/practical/editPractical/${record.id}`)
+						}}
 					/>
 				</div>
 		},

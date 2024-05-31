@@ -24,7 +24,7 @@ const EditTask = () => {
     const {data, isSuccess} = useGetOneTaskQuery(id)
     const [edit] = useEditTaskMutation()
     const [msg, setMsg] = useState('')
-    //приходить с бэка
+
     const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
     const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery()
 

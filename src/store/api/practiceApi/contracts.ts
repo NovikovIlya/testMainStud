@@ -51,6 +51,14 @@ export const contractService = apiSlice.injectEndpoints({
                 }
             },
             invalidatesTags: [{type: 'Contracts', id: 'LIST'}]
+        }),
+        checkIsEmployee: builder.query<void, void>({
+            query: () => {
+                return {
+                    url: 'services/api-practices/contracts',
+                    method: 'HEAD',
+                }
+            }
         })
 
     })
@@ -62,4 +70,5 @@ export const {
     useDeleteSeveralContractMutation,
     useGetContractForEditQuery,
     useEditContractMutation,
+    useCheckIsEmployeeQuery,
 } = contractService

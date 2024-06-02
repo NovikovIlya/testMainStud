@@ -17,7 +17,7 @@ import dayjs from "dayjs";
 import TextArea from "antd/es/input/TextArea";
 import {DeleteOutlined, PlusOutlined} from "@ant-design/icons";
 import {string} from "yup";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {OptionsNameSpecialty} from "../roster/registerContracts/RegisterContracts";
 import {useGetSpecialtyNamesQuery} from "../../../../store/api/practiceApi/roster";
 
@@ -84,7 +84,11 @@ const optionsTypePractice: FilterType[] = [
 ]
 
 
-export const CreatePractical = () => {
+export const EditPractical = () => {
+    const path = useLocation()
+    const id: string = path.pathname.split('/').at(-1)!
+    console.log(id
+    )
     const nav = useNavigate()
     const [form] = Form.useForm()
 
@@ -138,7 +142,7 @@ export const CreatePractical = () => {
                     }}
                 />
                 <span className=" text-[28px] font-normal">
-                    Добавить практику
+                    Редактировать практику
                 </span>
             </Space>
             <Form<NewPractice>
@@ -299,11 +303,6 @@ export const CreatePractical = () => {
                         </Form.Item>
                     </Col>
                 </Row>
-                {/*<Space direction="vertical" className="w-full  mb-4 mt-10">*/}
-                {/*    <Typography.Text className="font-bold">*/}
-                {/*        Индивидуальные задания*/}
-                {/*    </Typography.Text>*/}
-                {/*</Space>*/}
 
                 <Row gutter={[16, 16]}>
                     <Col xs={24} sm={24} md={18} lg={16} xl={12}>

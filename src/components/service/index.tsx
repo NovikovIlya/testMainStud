@@ -16,6 +16,7 @@ export const Service = () => {
 	const userData = JSON.parse(localStorage.getItem('user')!)
 	const nav = useNavigate()
 
+
 	const {data, error, isError, isSuccess } = useCheckIsEmployeeQuery()
 
 	const isEmpl = userData.roles[1].type === 'EMPL'
@@ -37,8 +38,8 @@ export const Service = () => {
 						:
 						<Navigate to={'/user'}/>
 				}
-				{/*{pathname.includes('/services/businessTrip') && <NavBusinessTrip />}*/}
 
+				{pathname.includes('/services/businessTrip') && <NavBusinessTrip />}
 				{pathname.includes('/services/unifiedServiceCenter') && (
 					<NavUnifiedServiceCenter />
 				)}

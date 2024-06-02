@@ -259,3 +259,44 @@ export interface Department {
     value: string
     label: string
 }
+
+export interface OneCodeCompetence {
+    codeCompetence: string
+}
+
+export interface NewPractice {
+    specialityName: string
+    practiceType: string
+    department: string
+    groupNumber: string
+    semester: string
+    academicYear: string
+    courseStudy: string
+    startStudy: string
+    amountHours: string
+    endStudy: string
+    tasks: OneTaskForm[]
+    codeCompetencies: OneCodeCompetence[]
+    director: string
+}
+
+export interface AcademicYear {
+    start: string
+    end: string
+}
+
+export interface NewPracticeSend {
+    specialityName: string
+    practiceType: string
+    department: string
+    groupNumber: string
+    semester: string
+    academicYear: AcademicYear
+    courseStudy: string
+    startStudy: string
+    amountHours: string
+    endStudy: string
+    tasks: string[]
+    codeCompetencies: string[]
+    director: string
+}

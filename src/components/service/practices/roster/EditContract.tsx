@@ -32,6 +32,8 @@ import {
 } from "../../../../store/api/practiceApi/contracts";
 import {string} from "yup";
 import {useGetSpecialtyNamesQuery} from "../../../../store/api/practiceApi/roster";
+import {copyFileDocument} from "../../../../utils/downloadDocument/copyFileDocument";
+import {agreementFileDocument} from "../../../../utils/downloadDocument/agreementFileDocument";
 
 export interface PdfContract {
     uid: string,
@@ -47,6 +49,7 @@ export const EditContract = () => {
     const id: string = path.pathname.split('/').at(-1)!
     const {data, isSuccess} = useGetContractForEditQuery(id)
     const [editContract] = useEditContractMutation()
+    const tokenAccess = localStorage.getItem('access')!.replaceAll('"', '')
     const optionsContractsType = [
         {
             value: 'Бессрочный',
@@ -102,17 +105,15 @@ export const EditContract = () => {
             form.setFieldValue('pdfContract', data.documentCopyId)
             setPdfContract([{
                 uid: '1',
-                name: 'Скан договора',
+                name: <a onClick={() => copyFileDocument(tokenAccess, data.documentCopyId)}>Скан договора</a>,
                 status: 'done',
-                url: `https://newlk.kpfu.ru/services/api-practices/contracts/copy-file/${data.documentCopyId}`
             }])
 
             form.setFieldValue('pdfAgreement', data.documentAgreementId)
             setPdfAgreement([{
                 uid: '2',
-                name: 'Доп.соглашение',
+                name: <a onClick={() => agreementFileDocument(tokenAccess, data.documentAgreementId)}>Доп.соглашение</a>,
                 status: 'done',
-                url: `https://newlk.kpfu.ru/services/api-practices/contracts/agreement-file/${data.documentAgreementId}`
             }])
         }
 

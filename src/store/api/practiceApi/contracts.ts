@@ -52,15 +52,26 @@ export const contractService = apiSlice.injectEndpoints({
             },
             invalidatesTags: [{type: 'Contracts', id: 'LIST'}]
         }),
+        getCopyFile: builder.query<void, string>({
+            query: (id: string) => {
+                return {
+                    url: `services/api-practices/contracts/copy-file/${id}`,
+                    method: 'GET',
+                    headers: {
+                        "Content-Type": "application/pdf"
+                    }
+                }
+            }
+        }),
         checkIsEmployee: builder.query<void, void>({
             query: () => {
                 return {
                     url: 'services/api-practices/contracts',
                     method: 'HEAD',
+
                 }
             }
-        })
-
+        }),
 
     })
 })
@@ -72,4 +83,5 @@ export const {
     useGetContractForEditQuery,
     useEditContractMutation,
     useCheckIsEmployeeQuery,
+    useLazyGetCopyFileQuery,
 } = contractService

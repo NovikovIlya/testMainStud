@@ -30,8 +30,9 @@ import {
     useGetContractsShortQuery,
     useGetSpecialtyNamesQuery
 } from "../../../../../store/api/practiceApi/roster";
-import {ThemeProvider} from "@material-tailwind/react";
 import {ContractFacilities, ContractsAll, ContractShort, NameSpecialty} from "../../../../../models/Practice";
+import {copyFileDocument} from "../../../../../utils/downloadDocument/copyFileDocument";
+import {agreementFileDocument} from "../../../../../utils/downloadDocument/agreementFileDocument";
 
 
 export interface ColumnsTableCompressedView {
@@ -71,6 +72,8 @@ export interface OptionsNameSpecialty {
 
 
 export const RegisterContracts = () => {
+    const tokenAccess = localStorage.getItem('access')!.replaceAll('"', '')
+
     const {data: dataAll, isSuccess: isSuccessAll} = useGetContractsAllQuery()
     const {data: dataShort, isSuccess: isSuccessShort} = useGetContractsShortQuery()
     const nav = useNavigate()
@@ -329,12 +332,10 @@ export const RegisterContracts = () => {
             className: 'text-xs',
             render: (value, record, index) =>
                 <div className={'flex flex-col gap-2'}>
-                    <a href={`https://newlk.kpfu.ru/services/api-practices/contracts/copy-file/${record.links.documentCopyId}`}
-                       target={'_blank'}>
+                    <a onClick={() => copyFileDocument(tokenAccess, record.links.documentCopyId)}>
                         Cкан договора
                     </a>
-                    <a href={`https://newlk.kpfu.ru/services/api-practices/contracts/agreement-file/${record.links.documentAgreementId}`}
-                       target={'_blank'}>
+                    <a onClick={() => agreementFileDocument(tokenAccess, record.links.documentAgreementId)} >
                         Доп. соглашение к договору
                     </a>
                 </div>
@@ -571,6 +572,9 @@ export const RegisterContracts = () => {
         }
 
     }, [dataShort]);
+
+
+
 
     return (
         <section className={'container'}>

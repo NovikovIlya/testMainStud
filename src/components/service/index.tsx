@@ -10,16 +10,14 @@ import { NavSession } from './session/NavSession'
 import { NavSetting } from './setting/NavSetting'
 import {NavBusinessTrip} from "./businessTrip/NavBusinessTrip";
 import {useCheckIsEmployeeQuery} from "../../store/api/practiceApi/contracts";
+import {useGetContractsAllQuery} from "../../store/api/practiceApi/roster";
 
 export const Service = () => {
 	const { pathname } = useLocation()
-	const userData = JSON.parse(localStorage.getItem('user')!)
+	const userData = localStorage.getItem('practice')
 	const nav = useNavigate()
 
-
-	const {data, error, isError, isSuccess } = useCheckIsEmployeeQuery()
-
-	const isEmpl = userData.roles[1].type === 'EMPL'
+	const isEmployee = userData === 'practice'
 
 	return (
 		<div className="h-screen w-screen">
@@ -30,7 +28,7 @@ export const Service = () => {
 				{pathname.includes('/services/electronicBook') && <NavElectronicBook />}
 				{pathname.includes('/services/setting') && <NavSetting />}
 				{
-					isSuccess
+					isEmployee
 					&&
 					pathname.includes('/services/practices')
 						?

@@ -85,6 +85,8 @@ const EditTask = () => {
                 return elem
             }
         })
+
+
         const newData: TaskEdit = {
             id: data!.id,
             specialityNameId: String(specName!.id),

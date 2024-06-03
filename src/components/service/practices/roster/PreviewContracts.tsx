@@ -33,7 +33,7 @@ export const PreviewContracts = () => {
 
     useEffect(() => {
         if (isSuccess) {
-            console.log(contract)
+            //console.log(contract)
         }
     }, [contract]);
 

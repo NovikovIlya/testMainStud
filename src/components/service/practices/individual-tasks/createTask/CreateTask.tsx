@@ -75,7 +75,7 @@ const CreateTask = () => {
             subdivisionNameId: String(subDivision!.id),
             tasks: values.tasks.map(elem => elem.task)
         }
-        console.log(newData)
+        //console.log(newData)
         createTask(newData)
             .then(data => console.log(data))
             .catch(e => console.log(e))

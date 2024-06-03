@@ -29,6 +29,7 @@ const authSlice = createSlice({
 			localStorage.removeItem('user')
 			localStorage.removeItem('access')
 			localStorage.removeItem('refresh')
+			localStorage.removeItem('practice') //удаляю возможность зайти на сервис практки с аккаунта без доступа
 		},
 		setEdit: state => {
 			state.edit = !state.edit

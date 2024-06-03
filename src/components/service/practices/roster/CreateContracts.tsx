@@ -82,7 +82,7 @@ export const CreateContracts = () => {
         newForm.append('contract', blob)
         if (files.pdfContract) newForm.append('pdfContract', files.pdfContract)
         if (files.pdfAgreement) newForm.append('pdfAgreement', files.pdfAgreement)
-        console.log(values)
+        //console.log(values)
         newContract(newForm)
             .then(res => console.log(res))
             .catch(e => console.log(e))
@@ -110,7 +110,7 @@ export const CreateContracts = () => {
             fetch(url, options)
                 .then(response => response.json())
                 .then(res => {
-                    console.log(res)
+                    //console.log(res)
                     if (res.suggestions.length !== 0) {
                         setNameOrg(true)
                         form.setFieldValue('contractFacility', res.suggestions[0].data.name.full_with_opf)

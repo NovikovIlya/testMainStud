@@ -2,9 +2,11 @@ import {useTranslation} from 'react-i18next'
 import DropDrag from './dnd/DropDrag'
 import {Layout} from './layout/Layout'
 import {Button, ConfigProvider, Popover} from "antd";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {SupportCenterSvg} from "../assets/svg/SupportCenterSvg";
 import {FeedbackWindow} from "./feedbackWindow/FeedbackWindow";
+import {useGetContractsAllQuery} from "../store/api/practiceApi/roster";
+import {useCheckIsEmployeeQuery} from "../store/api/practiceApi/contracts";
 
 export const User = () => {
     const {t} = useTranslation()
@@ -15,6 +17,15 @@ export const User = () => {
     const handleOpenChange = (newOpen: boolean) => {
         setOpen(newOpen);
     };
+
+    const {data, isSuccess} = useCheckIsEmployeeQuery()
+
+    useEffect(() => {
+        if (isSuccess) {
+            localStorage.setItem('practice', 'practice')
+        }
+    }, [data]);
+
 
     return (
         <Layout>

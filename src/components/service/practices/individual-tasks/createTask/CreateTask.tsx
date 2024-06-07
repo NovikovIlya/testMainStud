@@ -14,6 +14,8 @@ import {
 } from "../../../../../store/api/practiceApi/individualTask";
 import {OptionsNameSpecialty} from "../../roster/registerContracts/RegisterContracts";
 import {useGetSpecialtyNamesQuery} from "../../../../../store/api/practiceApi/roster";
+import {string} from "yup";
+import {processingOfDivisions} from "../../../../../utils/processingOfDivisions";
 
 
 
@@ -48,7 +50,7 @@ const CreateTask = () => {
 
     useEffect(() => {
         if (isSuccessDepartments) {
-            setDepartments(dataDepartments)
+            setDepartments(processingOfDivisions(dataDepartments))
         }
     }, [dataDepartments]);
 
@@ -64,7 +66,7 @@ const CreateTask = () => {
                 return elem
             }
         })
-        const subDivision = dataDepartments!.find(elem => {
+        const subDivision = departments!.find(elem => {
             if (elem.value === values.subDivision) {
                 return elem
             }
@@ -75,10 +77,9 @@ const CreateTask = () => {
             subdivisionNameId: String(subDivision!.id),
             tasks: values.tasks.map(elem => elem.task)
         }
-        //console.log(newData)
         createTask(newData)
-            .then(data => console.log(data))
-            .catch(e => console.log(e))
+            .then(data => data)
+            .catch(e => e)
         navigate('services/practices/individualTasks/')
     }
 

@@ -138,7 +138,7 @@ export const EditPractical = () => {
                     icon={<ArrowLeftSvg className="w-4 h-4 cursor-pointer mt-1"/>}
                     type="text"
                     onClick={() => {
-                        nav('/services/practices/practical/')
+                        nav('/services/practices/practical.ts/')
                     }}
                 />
                 <span className=" text-[28px] font-normal">

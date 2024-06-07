@@ -472,7 +472,7 @@ export const ViewPractical = () => {
 								type="primary"
 								className="!rounded-full"
 								onClick={() => {
-									navigate('/services/practices/practical/createPractical')
+									navigate('/services/practices/practical.ts/createPractical')
 								}}
 							>
 								Добавить практику

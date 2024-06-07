@@ -12,7 +12,7 @@ import {
 import React, {useEffect, useState} from 'react'
 import {ArrowLeftSvg} from '../../../../assets/svg'
 import {validateMessages} from "../../../../utils/validateMessage";
-import {AcademicYear, NewPractice, NewPracticeSend} from "../../../../models/Practice";
+import {AcademicYear, NewPractice, NewPracticeSend, PracticeType, TasksAll, TwoId} from "../../../../models/Practice";
 import dayjs from "dayjs";
 import TextArea from "antd/es/input/TextArea";
 import {DeleteOutlined, PlusOutlined} from "@ant-design/icons";
@@ -20,6 +20,11 @@ import {string} from "yup";
 import {useNavigate} from "react-router-dom";
 import {OptionsNameSpecialty} from "../roster/registerContracts/RegisterContracts";
 import {useGetSpecialtyNamesQuery} from "../../../../store/api/practiceApi/roster";
+import {
+    useGetPracticeTypeQuery,
+    useLazyGetTasksForPracticeQuery
+} from "../../../../store/api/practiceApi/individualTask";
+import {useGetCafDepartmentsQuery} from "../../../../store/api/practiceApi/practical";
 
 interface FilterType {
     value: string | number
@@ -91,37 +96,95 @@ export const CreatePractical = () => {
     const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
     const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery()
 
+
     useEffect(() => {
         if (isSuccessNameSpecialty) {
             setNameSpecialty(dataNameSpecialty)
         }
     }, [dataNameSpecialty]);
 
+    const [practiceType, setPracticeType] = useState<PracticeType[]>()
+    const {data: dataPracticeType, isSuccess: isSuccessPracticeType} = useGetPracticeTypeQuery()
+
+
+    useEffect(() => {
+        if (isSuccessPracticeType) {
+            setPracticeType(dataPracticeType)
+        }
+    }, [dataPracticeType]);
+
+    const [twoId, setTwoId] = useState<TwoId>({
+        sp_name_id: null,
+        practice_type_id: null,
+    })
+    const [getTasks, results] = useLazyGetTasksForPracticeQuery()
+    const [tasksId, setTasksId] = useState<string>('')
+
+    useEffect(() => {
+        if (twoId.sp_name_id && twoId.practice_type_id) {
+            getTasks(twoId)
+                .then((data) => {
+                    if (data.data) {
+                        const tasks: TasksAll = data.data
+                        setTasksId(tasks.id)
+                        const listTasks = tasks.tasks.map(elem => {
+                            return {
+                                task: elem.taskDescription
+                            }
+                        })
+                        form.setFieldValue('tasks', listTasks)
+                        console.log(tasks)
+                    }
+                })
+        }
+    }, [twoId]);
+
+    const [dep, setDep] = useState()
+    const {data: dataDep, isSuccess: isSuccessDep} = useGetCafDepartmentsQuery()
+    useEffect(() => {
+        if (isSuccessDep) {
+            console.log(dataDep)
+        }
+    }, [dataDep]);
+
+
+
     function onFinish(values: NewPractice) {
-        values.startStudy = dayjs(values.startStudy).format('DD.MM.YYYY')
-        values.endStudy = dayjs(values.endStudy).format('DD.MM.YYYY')
-        const academicYear: AcademicYear = {
-            start: dayjs(values.academicYear[0]).format('YYYY'),
-            end: dayjs(values.academicYear[1]).format('YYYY')
-        }
+        const specialtyNameId = dataNameSpecialty!.find(elem => {
+            if (elem.value === values.specialityName) {
+                return elem.id
+            }
+        })
+        const practiceTypeId = dataPracticeType!.find(elem => {
+            if (elem.value === values.practiceType) {
+                return elem.id
+            }
+        })
+        const department = 0
+        // values.startStudy = dayjs(values.startStudy).format('DD.MM.YYYY')
+        // values.endStudy = dayjs(values.endStudy).format('DD.MM.YYYY')
+        // const academicYear: AcademicYear = {
+        //     start: dayjs(values.academicYear[0]).format('YYYY'),
+        //     end: dayjs(values.academicYear[1]).format('YYYY')
+        // }
+        //
+        // const sendData: NewPracticeSend = {
+        //     specialityName: values.specialityName,
+        //     practiceType: values.practiceType,
+        //     department: values.department,
+        //     groupNumber: values.groupNumber,
+        //     semester: values.semester,
+        //     academicYear: academicYear,
+        //     courseStudy: values.courseStudy,
+        //     startStudy: values.startStudy,
+        //     amountHours: String(values.amountHours),
+        //     endStudy: values.endStudy,
+        //     tasks: values.tasks.map(elem => elem.task),
+        //     codeCompetencies: values.codeCompetencies.map(elem => elem.codeCompetence),
+        //     director: values.director
+        // }
 
-        const sendData: NewPracticeSend = {
-            specialityName: values.specialityName,
-            practiceType: values.practiceType,
-            department: values.department,
-            groupNumber: values.groupNumber,
-            semester: values.semester,
-            academicYear: academicYear,
-            courseStudy: values.courseStudy,
-            startStudy: values.startStudy,
-            amountHours: String(values.amountHours),
-            endStudy: values.endStudy,
-            tasks: values.tasks.map(elem => elem.task),
-            codeCompetencies: values.codeCompetencies.map(elem => elem.codeCompetence),
-            director: values.director
-        }
-
-        console.log(sendData)
+        console.log(values)
 
     }
 
@@ -134,7 +197,7 @@ export const CreatePractical = () => {
                     icon={<ArrowLeftSvg className="w-4 h-4 cursor-pointer mt-1"/>}
                     type="text"
                     onClick={() => {
-                        nav('/services/practices/practical/')
+                        nav('/services/practices/practical.ts/')
                     }}
                 />
                 <span className=" text-[28px] font-normal">
@@ -157,6 +220,17 @@ export const CreatePractical = () => {
                                 popupMatchSelectWidth={false}
                                 className="w-full"
                                 options={nameSpecialty}
+                                onChange={(value) => {
+                                    const id = dataNameSpecialty!.find(elem => {
+                                        if (elem.value === value) {
+                                            return elem.id
+                                        }
+                                    })
+                                    setTwoId({
+                                        ...twoId,
+                                        sp_name_id: id!.id
+                                    })
+                                }}
                             />
                         </Form.Item>
                     </Col>
@@ -171,7 +245,18 @@ export const CreatePractical = () => {
                                 size="large"
                                 popupMatchSelectWidth={false}
                                 className="w-full"
-                                options={optionsTypePractice}
+                                options={practiceType}
+                                onChange={value => {
+                                    const id = dataPracticeType!.find(elem => {
+                                        if (elem.value === value) {
+                                            return elem
+                                        }
+                                    })
+                                    setTwoId({
+                                        ...twoId,
+                                        practice_type_id: +id!.id
+                                    })
+                                }}
                             />
                         </Form.Item>
                     </Col>
@@ -179,7 +264,7 @@ export const CreatePractical = () => {
                 <Row gutter={[16, 16]}>
                     <Col xs={24} sm={24} md={18} lg={16} xl={12}>
                         <Form.Item
-                            rules={[{required: true}]}
+                            //rules={[{required: true}]}
                             name={'department'}
                             label={'Кафедра'}>
                             <Select
@@ -194,7 +279,7 @@ export const CreatePractical = () => {
                 <Row gutter={[16, 16]}>
                     <Col xs={24} sm={24} md={18} lg={16} xl={12}>
                         <Form.Item
-                            rules={[{required: true}]}
+                            //rules={[{required: true}]}
                             name={'groupNumber'}
                             label={'Номер группы'}>
                             <Select
@@ -218,7 +303,7 @@ export const CreatePractical = () => {
                 <Row gutter={[16, 16]}>
                     <Col xs={24} sm={24} md={18} lg={8} xl={6}>
                         <Form.Item
-                            rules={[{required: true}]}
+                            //rules={[{required: true}]}
                             name={'semester'}
                             label={'Семестр'}>
                             <Select
@@ -231,7 +316,7 @@ export const CreatePractical = () => {
                     </Col>
                     <Col xs={24} sm={24} md={18} lg={8} xl={6}>
                         <Form.Item
-                            rules={[{required: true}]}
+                            //rules={[{required: true}]}
                             name={'academicYear'}
                             label={'Учебный год'}>
 
@@ -247,7 +332,7 @@ export const CreatePractical = () => {
                 <Row gutter={[16, 16]}>
                     <Col xs={24} sm={24} md={18} lg={8} xl={6}>
                         <Form.Item
-                            rules={[{required: true}]}
+                            //rules={[{required: true}]}
                             name={'courseStudy'}
                             label={'Курс обучения'}>
                             <Select
@@ -260,7 +345,7 @@ export const CreatePractical = () => {
                     </Col>
                     <Col xs={24} sm={24} md={18} lg={8} xl={6}>
                         <Form.Item
-                            rules={[{required: true}]}
+                            //rules={[{required: true}]}
                             name={'startStudy'}
                             label={'Дата начала практики'}>
                             <DatePicker
@@ -275,7 +360,7 @@ export const CreatePractical = () => {
                 <Row gutter={[16, 16]}>
                     <Col xs={24} sm={24} md={18} lg={8} xl={6}>
                         <Form.Item
-                            rules={[{required: true}]}
+                            //rules={[{required: true}]}
                             name={'amountHours'}
                             label={'Общее количество часов по практике'}>
                             <InputNumber
@@ -288,7 +373,7 @@ export const CreatePractical = () => {
                     </Col>
                     <Col xs={24} sm={24} md={18} lg={8} xl={6}>
                         <Form.Item
-                            rules={[{required: true}]}
+                            //rules={[{required: true}]}
                             name={'endStudy'}
                             label={'Дата окончания практики'}>
                             <DatePicker
@@ -338,7 +423,7 @@ export const CreatePractical = () => {
                                                     <Form.Item name={[field.name, 'task']}
                                                                className={'w-full h-min'}
                                                                rules={[{
-                                                                   required: true
+                                                                   //required: true
                                                                }]}
                                                     >
                                                         <TextArea autoSize
@@ -410,7 +495,7 @@ export const CreatePractical = () => {
                                                     <Form.Item name={[field.name, 'codeCompetence']}
                                                                className={'w-full h-min'}
                                                                rules={[{
-                                                                   required: true
+                                                                   //required: true
                                                                }]}
                                                     >
                                                         <TextArea autoSize
@@ -455,7 +540,7 @@ export const CreatePractical = () => {
                 <Row gutter={[16, 16]} className={'mt-4'}>
                     <Col xs={24} sm={24} md={18} lg={16} xl={12}>
                         <Form.Item
-                            rules={[{required: true}]}
+                            //rules={[{required: true}]}
                             name={'director'}
                             label={'Заведующий опорной кафедрой'}>
                             <Select

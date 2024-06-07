@@ -260,6 +260,13 @@ export interface Department {
     label: string
 }
 
+export interface NewDepartment {
+    id: string
+    value: string
+    label: string
+    responses?: Array<Department>
+}
+
 export interface OneCodeCompetence {
     codeCompetence: string
 }
@@ -299,4 +306,16 @@ export interface NewPracticeSend {
     tasks: string[]
     codeCompetencies: string[]
     director: string
+}
+
+export interface TwoId {
+    sp_name_id: number | null
+    practice_type_id: number | null
+}
+
+export interface Departments {
+    id: number,
+    value: string,
+    label: string,
+    responses?: string[]
 }

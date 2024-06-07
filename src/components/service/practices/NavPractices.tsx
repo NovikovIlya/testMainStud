@@ -35,7 +35,7 @@ const items: MenuItem[] = [
 	getItem('Справочники', 'sub1', <PracticesSvg />, [
 		getItem('Реестр договоров', 'registerContracts'),
 		getItem('Индивидуальные задания', 'individualTasks'),
-		//getItem('Практики', 'practical')
+		//getItem('Практики', 'practical.ts')
 	]),
 	// getItem('Формирование документов', 'sub2', <PracticesSvg />, [
 	// 	getItem('График практик', 'formingSchedule'),
@@ -85,7 +85,7 @@ export const NavPractices = () => {
 			<div className="bg-[#F5F8FB] w-full pt-14 px-14 mt-20">
 				{current === 'registerContracts' && <Roster />}
 				{current === 'individualTasks' && <Tasks />}
-				{current === 'practical' && <Practical />}
+				{current === 'practical.ts' && <Practical />}
 				{current === 'formingSchedule' && <Schedule/>}
 			</div>
 		</>

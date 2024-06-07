@@ -15,6 +15,7 @@ import {
 import {Department, PracticeType, Task, TaskEdit, TaskSend} from "../../../../models/Practice";
 import {OptionsNameSpecialty} from "../roster/registerContracts/RegisterContracts";
 import {useGetSpecialtyNamesQuery} from "../../../../store/api/practiceApi/roster";
+import {processingOfDivisions} from "../../../../utils/processingOfDivisions";
 
 const EditTask = () => {
     const path = useLocation()
@@ -50,7 +51,7 @@ const EditTask = () => {
 
     useEffect(() => {
         if (isSuccessDepartments) {
-            setDepartments(dataDepartments)
+            setDepartments(processingOfDivisions(dataDepartments))
         }
     }, [dataDepartments]);
 

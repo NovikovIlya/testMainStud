@@ -333,7 +333,7 @@ export const EditContract = () => {
                     <Col xs={24} sm={24} md={18} lg={8} xl={6}>
                         <Form.Item label={'Шифр и наименование специальности'}
                                    name={'specialtyNameId'}
-                                   rules={[{required: true}]}>
+                                   rules={[{required: false}]}>
                             <Select
                                 size="large"
                                 popupMatchSelectWidth={false}

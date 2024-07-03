@@ -254,6 +254,12 @@ export interface PracticeType {
     label: string
 }
 
+export interface PracticeKind {
+    id: string
+    value: string
+    label: string
+}
+
 export interface Department {
     id: string
     value: string

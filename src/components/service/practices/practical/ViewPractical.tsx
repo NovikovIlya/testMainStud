@@ -17,6 +17,9 @@ import {PracticalPopoverMain} from "../popover/practical/PracticalPopoverMain";
 import {FullIndividualTask} from "../individual-tasks/IndividualTasks";
 import {OptionsNameSpecialty} from "../roster/registerContracts/RegisterContracts";
 import {useGetSpecialtyNamesQuery} from "../../../../store/api/practiceApi/roster";
+import './ViewPractical.scss'
+import {agreementFileDocument} from "../../../../utils/downloadDocument/agreementFileDocument";
+import {practiceDocument} from "../../../../utils/downloadDocument/practiceDocument";
 
 interface FilterType {
 	value: string | number
@@ -185,6 +188,7 @@ export const ViewPractical = () => {
 	const [department, setDepartment] = useState<FilterType[]>(filterDepartment)
 
 	const [tableData, setTableData] = useState<TablePractical[]>(mockData)
+	const tokenAccess = localStorage.getItem('access')!.replaceAll('"', '')
 
 
 	const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
@@ -445,7 +449,43 @@ export const ViewPractical = () => {
 							Практики
 						</span>
 					</Col>
+					{/*Не актуально до создания на бекенде соответсвующего функционала*/}
+					{/*<Col>*/}
+					{/*	<Button*/}
+					{/*		type="primary"*/}
+					{/*		color={"none"}*/}
+					{/*		className="!rounded-full scale-y-120"*/}
+					{/*		onClick={() => {*/}
+					{/*			practiceDocument(tokenAccess, "")*/}
+					{/*		}}*/}
+					{/*	>*/}
+					{/*		Сформировать График Практик*/}
+					{/*	</Button>*/}
+					{/*</Col>*/}
+					{/*<Col>*/}
+					{/*	<Button*/}
+					{/*		type="primary"*/}
+					{/*		className="!rounded-full ml-2 scale-y-120"*/}
+					{/*		onClick={() => {*/}
+					{/*			practiceDocument(tokenAccess, "")*/}
+					{/*		}}*/}
+					{/*	>*/}
+					{/*		Сформировать Представление в Приказ*/}
+					{/*	</Button>*/}
+					{/*</Col>*/}
+					{/*<Col>*/}
+					{/*	<Button*/}
+					{/*		type="primary"*/}
+					{/*		className="!rounded-full ml-2 scale-y-120"*/}
+					{/*		onClick={() => {*/}
+					{/*			practiceDocument(tokenAccess, "")*/}
+					{/*		}}*/}
+					{/*	>*/}
+					{/*		Сформировать Приказ по практике*/}
+					{/*	</Button>*/}
+					{/*</Col>*/}
 				</Row>
+
 				<Row gutter={[16, 16]} className="mt-12">
 					<Col span={5}>
 						<span>

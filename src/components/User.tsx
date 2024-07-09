@@ -17,7 +17,7 @@ export const User = () => {
     const handleOpenChange = (newOpen: boolean) => {
         setOpen(newOpen);
     };
-
+    console.log('sd')
     const {data, isSuccess} = useCheckIsEmployeeQuery()
 
     useEffect(() => {

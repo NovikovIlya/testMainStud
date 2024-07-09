@@ -16,7 +16,7 @@ type week =
 	| 'friday'
 	| 'saturday'
 function getWeekDay(date: Date): week {
-	let days: week[] = [
+	const days: week[] = [
 		'sunday',
 		'monday',
 		'tuesday',
@@ -30,12 +30,12 @@ function getWeekDay(date: Date): week {
 }
 export const Schedule = () => {
 	const navigate = useNavigate()
-	let date = new Date(Date.now())
+	const date = new Date(Date.now())
 	const [activeButton, changeActive] = useState<week>(getWeekDay(date))
 	const { data: schedule } = useGetScheduleQuery()
 	const { t } = useTranslation()
 
-	//console.log(schedule[activeButton])
+	
 
 	const setActiveButton = (buttonName: week) => {
 		if (activeButton !== buttonName) changeActive(buttonName)

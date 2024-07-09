@@ -18,6 +18,7 @@ import { Service } from './components/service'
 import { blue004, blue307 } from './utils/color'
 import {Redirect} from "./components/redirect/Redirect";
 import ru_RU from 'antd/locale/ru_RU';
+import { NotFound } from './components/NotFound'
 const App = () => {
 	const [email, changeEmail] = useState('')
 
@@ -55,7 +56,7 @@ const App = () => {
 						<Route path="/work" element={<WorkForm />} />
 						<Route path="/parent" element={<ParentForm />} />
 						<Route path="/services/*" element={<Service />} />
-						<Route path="/*" element={null} />
+						<Route path="/*" element={<NotFound/>} />
 					</Route>
 				</Routes>
 			</ConfigProvider>

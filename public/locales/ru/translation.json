@@ -287,5 +287,7 @@
 	"NewBusinessTrip": "Новая командировка",
 	"CurrentBusinessTrips": "Текущие командировки",
 	"ForRevision": "На доработку",
-	"Archive": "Архив"
+	"Archive": "Архив",
+	"error 404" : "Ошибка 404",
+	"notFound": "Страница не найдена"
 }

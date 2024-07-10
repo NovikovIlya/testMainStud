@@ -6,15 +6,9 @@ import { useNavigate } from 'react-router-dom'
 import img from '../../assets/images/image15.png'
 import { useGetScheduleQuery } from '../../store/api/serviceApi'
 import { blue004 } from '../../utils/color'
+import { week } from '../../models/cards'
 
-type week =
-	| 'sunday'
-	| 'monday'
-	| 'tuesday'
-	| 'wednesday'
-	| 'thursday'
-	| 'friday'
-	| 'saturday'
+
 function getWeekDay(date: Date): week {
 	const days: week[] = [
 		'sunday',

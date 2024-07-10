@@ -10,26 +10,18 @@ import { useNavigate } from 'react-router-dom'
 import {
 	EyeSvg,
 	LogoIasSvg,
-	LogoutSvg,
-	MapSvg,
-	MenuSvg,
-	MessageSvg,
-	PersonCardSvg,
+	LogoutSvg, MenuSvg, PersonCardSvg,
 	PersonSvg,
 	SearchSvg,
 	SettingSvg
 } from '../../assets/svg'
-import { DocumentSvg } from '../../assets/svg/DocumentSvg'
 import PersonalizationSvg from '../../assets/svg/PersonalizationSvg'
 import { useAppSelector } from '../../store'
 import { logOut, setEdit } from '../../store/reducers/authSlice'
 import { ModalNav } from '../service/ModalNav'
-import {ArrowLeftBackInOldAccount} from "../../assets/svg/ArrowLeftBackInOldAccount";
+import { ArrowLeftBackInOldAccount } from "../../assets/svg/ArrowLeftBackInOldAccount"
+import { TypeHeaderProps } from '../../models/layout'
 
-type TypeHeaderProps = {
-	type?: 'service' | 'main'
-	service?: string
-}
 
 export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const dispatch = useDispatch()
@@ -240,7 +232,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 					<Select
 						defaultValue={i18n.language}
 						style={{ width: 70 }}
-						bordered={false}
+						variant="borderless"
 						className={clsx(
 							'max-sm:hidden ',
 							type === 'service' && 'text-white'

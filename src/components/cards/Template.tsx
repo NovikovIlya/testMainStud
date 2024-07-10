@@ -1,20 +1,8 @@
 import { Button } from 'antd'
 import clsx from 'clsx'
 import { useTranslation } from 'react-i18next'
+import { SessionProps } from '../../models/cards'
 
-type SessionProps = {
-	title: string
-	info: string
-	href: string
-	img?: string
-	width?: number
-	height?: number
-	buttonText?: string
-	buttonType?: 'link' | 'text' | 'default' | 'primary' | 'dashed' | undefined
-	mt?: string
-	positionImage?: string
-	isRounded?: boolean
-}
 
 export const TemplateCard = ({
 	href,

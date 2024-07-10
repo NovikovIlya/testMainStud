@@ -29,7 +29,6 @@ export const ApproveEmail = () => {
 					id: searchParams.get('id'),
 					hash: searchParams.get('hash')
 				})
-				console.log(data)
 				//@ts-ignore
 				dispatch(setCredentials(data.data))
 			}

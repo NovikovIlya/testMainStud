@@ -42,9 +42,7 @@ export const Financing = () => {
                 </Col>
             </ColSpan16RowGutter16>
 
-            <ColSpan8>
-
-            </ColSpan8>
+ 
         </WrapperForConditionsTabs>
     );
 };

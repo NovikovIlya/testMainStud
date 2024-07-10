@@ -1,12 +1,12 @@
-import {Avatar, Card, Form, Select, Skeleton, Space, Typography} from 'antd'
+import { Avatar, Card, Form, Select, Skeleton, Space, Typography } from 'antd';
 import {
     useGetTeacherInfoQuery,
     useGetTeachersRatingQuery,
     usePostTeacherRatingMutation
 } from "../../../../store/api/assessmentTeacher";
-import {IAssessmentNumber, IValuesAssessment, TestQuery} from "../../../../models/Teacher";
-import {useEffect, useState} from "react";
-import {RatingTeacher} from "./RatingTeacher/RatingTeacher";
+import { IAssessmentNumber, IValuesAssessment, TestQuery } from "../../../../models/Teacher";
+import { useState } from "react";
+import { RatingTeacher } from "./RatingTeacher/RatingTeacher";
 
 
 const objQuestId = {

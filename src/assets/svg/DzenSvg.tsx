@@ -9,7 +9,7 @@ export const DzenSvg = () => {
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"
 		>
-			<g clip-path="url(#clip0_4623_7124)">
+			<g clipPath="url(#clip0_4623_7124)">
 				<mask
 					id="mask0_4623_7124"
 					maskUnits="userSpaceOnUse"

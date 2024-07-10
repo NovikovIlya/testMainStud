@@ -2,11 +2,9 @@ import { Form, Input } from 'antd'
 import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { IError } from '../../api/types'
+import { IPasswordProps } from '../../models/registration'
 
-interface IPasswordProps {
-	error: IError | null
-}
+
 
 export const Password: FC<IPasswordProps> = ({ error }) => {
 	const { t } = useTranslation()

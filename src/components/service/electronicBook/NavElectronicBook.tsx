@@ -1,4 +1,3 @@
-import clsx from 'clsx'
 import { useTranslation } from 'react-i18next'
 import { useLocation } from 'react-router-dom'
 import { Header } from '../../layout/Header'

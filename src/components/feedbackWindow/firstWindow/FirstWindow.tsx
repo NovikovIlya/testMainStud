@@ -1,23 +1,16 @@
-import React from 'react';
-import {Button} from "antd";
-import {CloseFeedbackWindow} from "../../../assets/svg/CloseFeedbackWindow";
-import {MailFeedbackWindowSgv} from "../../../assets/svg/MailFeedbackWindowSgv";
-import {PhoneFeedbackWindow} from "../../../assets/svg/PhoneFeedbackWindow";
-import {TextWithSvg} from "../question/Question";
-import {MiniMailFeedback} from "../../../assets/svg/MiniMailFeedback";
-import {MiniPhoneFeedback} from "../../../assets/svg/MiniPhoneFeedback";
-import {Contacts} from "../contacts/Contacts";
-import {QuestionFeedbackSvg} from "../../../assets/svg/QuestionFeedbackSvg";
+import { Button } from "antd";
+import { CloseFeedbackWindow } from "../../../assets/svg/CloseFeedbackWindow";
+import { TextWithSvg } from "../question/Question";
+import { MiniMailFeedback } from "../../../assets/svg/MiniMailFeedback";
+import { Contacts } from "../contacts/Contacts";
+import { QuestionFeedbackSvg } from "../../../assets/svg/QuestionFeedbackSvg";
+import { TypeFirstWindow } from '../../../models/FeedBack';
 
 const listQuestion = [
     {id: 1, text: 'Как подключиться к Wi-Fi КФУ?', icon: <QuestionFeedbackSvg/>},
     {id: 2, text: 'Как получить учетные данные?', icon: <QuestionFeedbackSvg/>},
     {id: 3, text: 'Ответы на частые вопросы', icon: <QuestionFeedbackSvg/>},
 ]
-type TypeFirstWindow = {
-    closeWindow: () => void
-    setIsFirstWindow: (step: boolean) => void
-}
 
 export const FirstWindow = ({closeWindow, setIsFirstWindow}: TypeFirstWindow) => {
     return (

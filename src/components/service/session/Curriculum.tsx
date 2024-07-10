@@ -8,17 +8,9 @@ import { useTranslation } from 'react-i18next'
 import { useGetStudyPlanQuery } from '../../../store/api/serviceApi'
 
 import './Styles.scss'
+import { DataType } from '../../../models/session'
 
-interface DataType {
-	key: string
-	mainColumn: string
-	beginFirstTerm: string
-	endFirstTerm: string
-	termFirstWeek: string
-	beginSecondTerm: string
-	endSecondTerm: string
-	termSecondWeek: string
-}
+
 
 const dataExam: DataType[] = [
 	{

@@ -1,27 +1,10 @@
 import { Button } from 'antd'
-import { AllHTMLAttributes, FC } from 'react'
+import { FC } from 'react'
 
 import { CloseSvg } from '../../assets/svg'
+import { cardProps } from '../../models/approve'
 
-interface cardProps {
-	buttonEffect: () => void
-	closeEffect: () => void
-	withDots: boolean
-	mainTittle: string
-	secondTittle: AllHTMLAttributes<HTMLSpanElement>
-	buttonText: string
-	buttonBgBlue: boolean
-}
-
-export const CardForm: FC<cardProps> = ({
-	buttonEffect,
-	closeEffect,
-	withDots,
-	mainTittle,
-	secondTittle,
-	buttonText,
-	buttonBgBlue
-}) => {
+export const CardForm: FC<cardProps> = ({buttonEffect, closeEffect, withDots, mainTittle, secondTittle, buttonText, buttonBgBlue}) => {
 	return (
 		<div className="w-screen h-screen">
 			<div

@@ -1,9 +1,7 @@
 import React from 'react';
 import {ConfigProvider, Progress} from "antd";
+import { IProgressPart } from '../../../../../../../models/businessTrip';
 
-interface IProgressPart {
-    step: number
-}
 
 export const ProgressPart = ({step}: IProgressPart) => {
     return (

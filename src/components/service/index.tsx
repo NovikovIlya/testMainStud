@@ -36,6 +36,7 @@ export const Service = () => {
 						:
 						<Navigate to={'/user'}/>
 				} */}
+				{pathname.includes('/services/practices') && <NavPractices />}
 
 				{/*{pathname.includes('/services/businessTrip') && <NavBusinessTrip />}*/}
 				{pathname.includes('/services/unifiedServiceCenter') && (

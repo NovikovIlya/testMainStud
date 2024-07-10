@@ -3,9 +3,9 @@ import {Departments} from "../../../models/Practice";
 
 export const practical = apiSlice.injectEndpoints({
     endpoints: builder => ({
-        getCafDepartments: builder.query<Departments[], void>({
-            query: () => ({
-                url: 'services/api-practices/kpfu/departments',
+        getCafDepartments: builder.query<Departments[], any>({
+            query: (id) => ({
+                url: `services/api-practices/kpfu/departments?subdivisionId=${id}`,
                 method: 'GET',
             })
         })

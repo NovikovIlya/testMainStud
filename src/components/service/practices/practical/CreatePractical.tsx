@@ -31,7 +31,8 @@ import {useGetSpecialtyNamesQuery} from "../../../../store/api/practiceApi/roste
 import {
     useGetDepartmentsQuery,
     useGetPracticeTypeQuery,
-    useLazyGetTasksForPracticeQuery
+    useLazyGetTasksForPracticeQuery,
+    useGetPracticeKindQuery
 } from "../../../../store/api/practiceApi/individualTask";
 import {useGetCafDepartmentsQuery} from "../../../../store/api/practiceApi/practical";
 import {processingOfDivisions} from "../../../../utils/processingOfDivisions";
@@ -41,16 +42,16 @@ interface FilterType {
     label: string | number
 }
 
-const optionsDepartment: FilterType[] = [
-    {
-        value: 'Кафедра хирургических болезней постдипломного образования',
-        label: 'Кафедра хирургических болезней постдипломного образования'
-    },
-    {
-        value: 'Кафедра онкологических болезней',
-        label: 'Кафедра онкологических болезней'
-    }
-]
+// const optionsDepartment: FilterType[] = [
+//     {
+//         value: 'Кафедра хирургических болезней постдипломного образования',
+//         label: 'Кафедра хирургических болезней постдипломного образования'
+//     },
+//     {
+//         value: 'Кафедра онкологических болезней',
+//         label: 'Кафедра онкологических болезней'
+//     }
+// ]
 const practiceKind: PracticeKind[] = [
     {
         id: 'Производственная',
@@ -115,17 +116,20 @@ const optionsTypePractice: FilterType[] = [
     }
 ]
 
-const practiceKindForSelect = practiceKind.map(item => ({
-    value: item.value,
-    id: item.id,
-}));
+// const practiceKindForSelect = practiceKind.map(item => ({
+//     value: item.value,
+//     id: item.id,
+// }));
 
 export const CreatePractical = () => {
     const nav = useNavigate()
     const [form] = Form.useForm()
-
+    const [optionsDepartment,setOptionsDepartment] = useState<FilterType[] | null>(null)
+ 
+    const [subDivisionId,setSubDevisionId] = useState<null | string>(null)
     const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
     const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery()
+    const {data: dataPraciseKind, isSuccess: isSuccesPractiseKind} = useGetPracticeKindQuery(subDivisionId)
 
 
     useEffect(() => {
@@ -136,22 +140,32 @@ export const CreatePractical = () => {
 
     const [practiceType, setPracticeType] = useState<PracticeType[]>()
     const {data: dataPracticeType, isSuccess: isSuccessPracticeType} = useGetPracticeTypeQuery()
-    const [practiceKinds, setPracticeKind] = useState<PracticeKind[]>(practiceKind)
+    // const [practiceKinds, setPracticeKind] = useState<PracticeKind[]>(practiceKind)
 
     const [departments, setDepartments] = useState<Department[]>()
+    const [practiceKindForSelect, setPracticeKindForSelect] = useState<any>()
     const {data: dataDepartments, isSuccess: isSuccessDepartments} = useGetDepartmentsQuery()
 
+    // получение кафедр
     useEffect(() => {
         if (isSuccessDepartments) {
             setDepartments(processingOfDivisions(dataDepartments))
         }
     }, [dataDepartments]);
 
+    
     useEffect(() => {
         if (isSuccessPracticeType) {
             setPracticeType(dataPracticeType)
         }
     }, [dataPracticeType]);
+
+    // получение видов практик
+    useEffect(() => {
+        if (isSuccesPractiseKind) {
+            setPracticeKindForSelect(dataPraciseKind)
+        }
+    }, [dataDepartments, isSuccesPractiseKind]);
 
     const [twoId, setTwoId] = useState<TwoId>({
         sp_name_id: null,
@@ -179,13 +193,14 @@ export const CreatePractical = () => {
         }
     }, [twoId]);
 
+
+
     const [dep, setDep] = useState()
-    const {data: dataDep, isSuccess: isSuccessDep} = useGetCafDepartmentsQuery()
-    useEffect(() => {
-        if (isSuccessDep) {
-            console.log(dataDep)
-        }
-    }, [dataDep]);
+    const {data: dataDep, isSuccess: isSuccessDep} = useGetCafDepartmentsQuery(subDivisionId)
+    useEffect(()=>{
+        if(isSuccessDep)
+        setOptionsDepartment(dataDep)
+    },[dataDep])
 
 
 
@@ -227,6 +242,18 @@ export const CreatePractical = () => {
         console.log(values)
 
     }
+
+    const handleChange = (value: string) => {
+        departments?.find(elem => {
+            if (elem.label === value) {
+                setSubDevisionId(elem.id)
+                console.log('elem.id',elem.id)
+            }
+        })
+        
+        console.log(`selected ${value}`);
+    };
+    console.log('practiceKindForSelect',practiceKindForSelect)
 
     return (
         <section className="container">
@@ -304,12 +331,13 @@ export const CreatePractical = () => {
                 <Row gutter={[16, 16]}>
                     <Col xs={24} sm={24} md={18} lg={16} xl={12}>
                         <Form.Item
-                            rules={[{required: true}]}
+                            // rules={[{required: true}]}
                             name={'practiceKind'}
                             label={'Вид практики'}>
                             <Select
                                 size="large"
                                 popupMatchSelectWidth={false}
+                                disabled={!isSuccesPractiseKind}
                                 className="w-full"
                                 options={practiceKindForSelect}
                             />
@@ -323,6 +351,7 @@ export const CreatePractical = () => {
                                        rules={[{required: true}]}
                                        name={'subDivision'}>
                                 <Select
+                                    onChange={handleChange}
                                     size="large"
                                     popupMatchSelectWidth={false}
                                     className="w-full"
@@ -338,11 +367,12 @@ export const CreatePractical = () => {
                             //rules={[{required: true}]}
                             name={'department'}
                             label={'Кафедра'}>
-                            <Select
+                            <Select 
+                                disabled={!isSuccessDep}
                                 size="large"
                                 popupMatchSelectWidth={false}
                                 className="w-full"
-                                options={optionsDepartment}
+                                options={optionsDepartment ? optionsDepartment : undefined}
                             />
                         </Form.Item>
                     </Col>

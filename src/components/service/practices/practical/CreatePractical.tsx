@@ -12,7 +12,15 @@ import {
 import React, {useEffect, useState} from 'react'
 import {ArrowLeftSvg} from '../../../../assets/svg'
 import {validateMessages} from "../../../../utils/validateMessage";
-import {AcademicYear, NewPractice, NewPracticeSend, PracticeType, TasksAll, TwoId} from "../../../../models/Practice";
+import {
+    AcademicYear, Department,
+    NewPractice,
+    NewPracticeSend,
+    PracticeKind,
+    PracticeType,
+    TasksAll,
+    TwoId
+} from "../../../../models/Practice";
 import dayjs from "dayjs";
 import TextArea from "antd/es/input/TextArea";
 import {DeleteOutlined, PlusOutlined} from "@ant-design/icons";
@@ -21,10 +29,12 @@ import {useNavigate} from "react-router-dom";
 import {OptionsNameSpecialty} from "../roster/registerContracts/RegisterContracts";
 import {useGetSpecialtyNamesQuery} from "../../../../store/api/practiceApi/roster";
 import {
+    useGetDepartmentsQuery,
     useGetPracticeTypeQuery,
     useLazyGetTasksForPracticeQuery
 } from "../../../../store/api/practiceApi/individualTask";
 import {useGetCafDepartmentsQuery} from "../../../../store/api/practiceApi/practical";
+import {processingOfDivisions} from "../../../../utils/processingOfDivisions";
 
 interface FilterType {
     value: string | number
@@ -39,6 +49,23 @@ const optionsDepartment: FilterType[] = [
     {
         value: 'Кафедра онкологических болезней',
         label: 'Кафедра онкологических болезней'
+    }
+]
+const practiceKind: PracticeKind[] = [
+    {
+        id: 'Производственная',
+        value: 'Производственная',
+        label: '1'
+    },
+    {
+        id: 'Учебная',
+        value: 'Учебная',
+        label: '1'
+    },
+    {
+        id: 'Производственная (клиническая) практик',
+        value: 'Производственная (клиническая) практик',
+        label: '1'
     }
 ]
 const optionsCourse: FilterType[] = [
@@ -88,6 +115,10 @@ const optionsTypePractice: FilterType[] = [
     }
 ]
 
+const practiceKindForSelect = practiceKind.map(item => ({
+    value: item.value,
+    id: item.id,
+}));
 
 export const CreatePractical = () => {
     const nav = useNavigate()
@@ -105,7 +136,16 @@ export const CreatePractical = () => {
 
     const [practiceType, setPracticeType] = useState<PracticeType[]>()
     const {data: dataPracticeType, isSuccess: isSuccessPracticeType} = useGetPracticeTypeQuery()
+    const [practiceKinds, setPracticeKind] = useState<PracticeKind[]>(practiceKind)
 
+    const [departments, setDepartments] = useState<Department[]>()
+    const {data: dataDepartments, isSuccess: isSuccessDepartments} = useGetDepartmentsQuery()
+
+    useEffect(() => {
+        if (isSuccessDepartments) {
+            setDepartments(processingOfDivisions(dataDepartments))
+        }
+    }, [dataDepartments]);
 
     useEffect(() => {
         if (isSuccessPracticeType) {
@@ -259,6 +299,37 @@ export const CreatePractical = () => {
                                 }}
                             />
                         </Form.Item>
+                    </Col>
+                </Row>
+                <Row gutter={[16, 16]}>
+                    <Col xs={24} sm={24} md={18} lg={16} xl={12}>
+                        <Form.Item
+                            rules={[{required: true}]}
+                            name={'practiceKind'}
+                            label={'Вид практики'}>
+                            <Select
+                                size="large"
+                                popupMatchSelectWidth={false}
+                                className="w-full"
+                                options={practiceKindForSelect}
+                            />
+                        </Form.Item>
+                    </Col>
+                </Row>
+                <Row gutter={[16, 16]} className="mt-4">
+                    <Col xs={24} sm={24} md={18} lg={16} xl={12}>
+                        <Space direction={'vertical'} className={'w-full'}>
+                            <Form.Item label={'Подразделение'}
+                                       rules={[{required: true}]}
+                                       name={'subDivision'}>
+                                <Select
+                                    size="large"
+                                    popupMatchSelectWidth={false}
+                                    className="w-full"
+                                    options={departments}
+                                />
+                            </Form.Item>
+                        </Space>
                     </Col>
                 </Row>
                 <Row gutter={[16, 16]}>

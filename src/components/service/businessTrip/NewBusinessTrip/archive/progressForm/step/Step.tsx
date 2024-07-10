@@ -1,17 +1,7 @@
-import React from 'react';
-import {ButtonLeftBusinessTripSvg} from "../../../../../../../assets/svg/ButtonLeftBusinessTripSvg";
-import {ButtonRightBusinessTripSvg} from "../../../../../../../assets/svg/ButtonRightBusinessTripSvg";
+import { ButtonLeftBusinessTripSvg } from "../../../../../../../assets/svg/ButtonLeftBusinessTripSvg";
+import { ButtonRightBusinessTripSvg } from "../../../../../../../assets/svg/ButtonRightBusinessTripSvg";
 import clsx from "clsx";
-import {NavLink, useNavigate} from "react-router-dom";
-import {stepBusinessTrip} from "../../../../../../../utils/navListForLeftMenu/stepBusinessTrip";
-
-interface IStep {
-    stepNumber: number
-    nextStep: () => void
-    previousStep: () => void
-    availableLeftButton?: boolean
-    availableRightButton?: boolean
-}
+import { IStep } from "../../../../../../../models/businessTrip";
 
 export const Step = ({stepNumber, availableRightButton, availableLeftButton, nextStep, previousStep}: IStep) => {
 

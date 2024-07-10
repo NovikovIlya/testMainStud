@@ -2,12 +2,10 @@ import clsx from 'clsx'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-import { BriefcaseSvg } from '../../../assets/svg/BriefcaseSvg'
 import CalendarSvg from '../../../assets/svg/CalendarSvg'
 import { Header } from '../../layout/Header'
 
 import { Schedule } from './Schedule'
-import { Services } from './Services'
 
 const navList = [
 	{

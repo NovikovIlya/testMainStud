@@ -11,13 +11,10 @@ import { BackMainPage } from '../BackMainPage'
 import { Buttons } from './Buttons'
 import { Inputs } from './Inputs'
 import { Password } from './Password'
+import { IRegProps } from '../../models/registration'
 
 const { Title } = Typography
 
-interface IRegProps {
-	changeEmail: (email: string) => void
-	email: string
-}
 
 export const Registration: FC<IRegProps> = ({ changeEmail, email }) => {
 	const navigate = useNavigate()

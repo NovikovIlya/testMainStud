@@ -1,16 +1,8 @@
 import React from 'react';
 import {Button, Form, Rate} from "antd";
 import {blue307} from "../../../../../utils/color";
+import { IRatingTeacher } from '../../../../../models/electronicBook';
 
-interface IRatingTeacher {
-    kindnessAndTact: number | undefined
-    generalErudition: number | undefined
-    appearanceAndDemeanor: number | undefined
-    punctuality: number | undefined
-    total: number | undefined
-    disabledButton: boolean
-    sendData: boolean
-}
 
 export const RatingTeacher = (props: IRatingTeacher) => {
     return (

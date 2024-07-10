@@ -3,7 +3,7 @@ import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { IError } from '../../api/types'
-import {useNavigate} from "react-router-dom";
+
 
 interface IInputsProps {
 	error?: IError

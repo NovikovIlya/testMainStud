@@ -1,17 +1,9 @@
-import React, {ReactNode} from 'react';
 import clsx from "clsx";
-import {useLocation, useNavigate} from "react-router-dom";
-import {useTranslation} from "react-i18next";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { ILeftMenu } from '../../models/leftMenu';
 
-export interface NavLink {
-    id: string,
-    icon: ReactNode,
-    name: string,
-}
 
-interface ILeftMenu {
-    navList: NavLink[]
-}
 
 export const LeftMenu = (props: ILeftMenu) => {
     const { pathname } = useLocation()

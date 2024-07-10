@@ -1,8 +1,7 @@
 import React, {ReactNode} from 'react';
+import { IWrapperForCardData } from '../../../../../models/businessTrip';
 
-interface IWrapperForCardData {
-    children: ReactNode
-}
+
 
 export const WrapperForCardData = ({children}: IWrapperForCardData) => {
     return (

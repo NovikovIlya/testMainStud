@@ -3,11 +3,8 @@ import { CheckboxChangeEvent } from 'antd/es/checkbox'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
+import { IButtonsProps } from '../../models/registration'
 
-interface IButtonsProps {
-	check: boolean
-	setCheck: (value: boolean) => void
-}
 
 export const Buttons: FC<IButtonsProps> = ({ setCheck, check }) => {
 	const { t } = useTranslation()

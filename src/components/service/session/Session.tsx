@@ -3,22 +3,14 @@ import type { ColumnsType } from 'antd/es/table'
 import { useTranslation } from 'react-i18next'
 
 import { useGetExamsScheduleQuery } from '../../../store/api/serviceApi'
+import { DataTypeSession } from '../../../models/session'
 
-interface DataType {
-	employee_id: number
-	time_note: string
-	building_name: string
-	room_num: string
-	name: string
-	date_note: string
-	employee_name: string
-}
 
 export const Session = () => {
 	const { data: exam } = useGetExamsScheduleQuery()
 	const { t } = useTranslation()
 
-	const columns: ColumnsType<DataType> = [
+	const columns: ColumnsType<DataTypeSession> = [
 		{
 			title: t('Time'),
 			dataIndex: 'time_note',

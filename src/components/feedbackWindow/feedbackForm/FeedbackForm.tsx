@@ -1,25 +1,16 @@
-import React, {useEffect, useState} from 'react';
-import {LeftBack} from "../../../assets/svg/LeftBack";
-import {CloseFeedbackWindow} from "../../../assets/svg/CloseFeedbackWindow";
-import {Button, Form, Input, Upload} from "antd";
-import {PaperClip} from "../../../assets/svg/PaperClip";
-import {Contacts} from "../contacts/Contacts";
-import {RcFile} from "antd/es/upload";
-import {FeedBackData, FeedBackDataWithoutImage} from "../../../models/FeedBack";
-import {usePostFeedBackMutation} from "../../../store/api/feedBack";
-import {validateMessages} from "../../../utils/validateMessage";
-import {RootState} from "../../../store";
-import {log} from "util";
-import {useForm} from "react-hook-form";
-
-type TypeFeedbackForm = {
-    closeWindow: () => void
-    setIsFirstWindow: (step: boolean) => void
-}
+import { useEffect, useState } from 'react';
+import { LeftBack } from "../../../assets/svg/LeftBack";
+import { CloseFeedbackWindow } from "../../../assets/svg/CloseFeedbackWindow";
+import { Button, Form, Input, Upload } from "antd";
+import { PaperClip } from "../../../assets/svg/PaperClip";
+import { Contacts } from "../contacts/Contacts";
+import { RcFile } from "antd/es/upload";
+import { FeedBackData, FeedBackDataWithoutImage, TypeFeedbackForm } from "../../../models/FeedBack";
+import { usePostFeedBackMutation } from "../../../store/api/feedBack";
+import { validateMessages } from "../../../utils/validateMessage";
 
 
 export const FeedbackForm = ({closeWindow, setIsFirstWindow}: TypeFeedbackForm) => {
-
     const [file, setFile] = useState<RcFile>()
     const [sendFeedBackData,
         {

@@ -1,14 +1,7 @@
 import React from 'react';
 import {Step} from "./step/Step";
 import {ProgressPart} from "./progressPart/ProgressPart";
-
-interface IProgressForm {
-    step: number
-    nextStep: () => void
-    previousStep: () => void
-    availableLeftButton?: boolean
-    availableRightButton?: boolean
-}
+import { IProgressForm } from '../../../../../../models/businessTrip';
 
 export const ProgressForm = (props: IProgressForm) => {
     return (

@@ -1,12 +1,9 @@
-import React, {useEffect} from 'react';
-import {AutoComplete, Button, Col, ConfigProvider, Form, Input, Row, Select, Upload} from "antd";
-import {LabelFormItem} from "../../utilsComponent/labelFormItem";
-import {UploadFileSvg} from "../../../../../../assets/svg/UploadFileSvg";
-import clsx from 'clsx'
-import InputMask from 'react-input-mask'
-import {TitleForm} from "../titleForm/TitleForm";
-import {useSelector} from "react-redux";
-import {RootState} from "../../../../../../store";
+import { AutoComplete, Button, Col, Form, Input, Row, Select, Upload } from "antd";
+import { LabelFormItem } from "../../utilsComponent/labelFormItem";
+import { UploadFileSvg } from "../../../../../../assets/svg/UploadFileSvg";
+import InputMask from 'react-input-mask';
+import { TitleForm } from "../titleForm/TitleForm";
+import { IStepOne } from '../../../../../../models/businessTrip';
 
 const optionsGoals = [
     {value: 'Административный визит'},
@@ -39,9 +36,7 @@ const selectOptions = [
     {value: 'test 3', name: 'Тест 3'},
 ]
 
-interface IStepOne {
-    nextStep: () => void
-}
+
 
 export const StepOne = ({nextStep}: IStepOne) => {
 

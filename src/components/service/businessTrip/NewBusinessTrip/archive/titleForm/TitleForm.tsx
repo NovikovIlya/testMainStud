@@ -1,8 +1,7 @@
 import React from 'react';
+import { ITitleForm } from '../../../../../../models/businessTrip';
 
-interface ITitleForm {
-    title: string
-}
+
 
 export const TitleForm = ({title}: ITitleForm) => {
     return (

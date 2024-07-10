@@ -7,27 +7,9 @@ import { performanceItem } from '../../../api/types'
 import { useGetPerformanceQuery } from '../../../store/api/serviceApi'
 
 import './Styles.scss'
+import { DataType, DateSemester } from '../../../models/electronicBook'
 
-interface DataType {
-	key: number
-	term: number
-	discipline: string
-	scoreSemester: number
-	type: string
-	scoreReceived: number
-	dateDelivery: string
-	finalScore: number
-	finalAssessment: string
-	academicHours: number
-	credits: number
-}
-interface DateSemester {
-	key: string
-	term: number
-	semesterRating: number
-	place: number
-	placeInstitute: number
-}
+
 
 export const Estimation = () => {
 	const [semester, setSemester] = useState(0)

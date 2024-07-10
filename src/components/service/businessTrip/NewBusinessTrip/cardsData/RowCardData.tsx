@@ -1,9 +1,6 @@
 import React from 'react';
+import { IRowCardData } from '../../../../../models/businessTrip';
 
-interface IRowCardData {
-    title: string
-    data: string
-}
 
 export const RowCardData = (props: IRowCardData) => {
     return (

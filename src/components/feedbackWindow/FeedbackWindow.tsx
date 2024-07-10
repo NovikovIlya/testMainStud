@@ -1,10 +1,8 @@
 import React, {useState} from 'react';
 import {FirstWindow} from "./firstWindow/FirstWindow";
 import {FeedbackForm} from "./feedbackForm/FeedbackForm";
+import { TypeFeedbackWindow } from '../../models/FeedBack';
 
-type TypeFeedbackWindow = {
-    closeWindow: () => void
-}
 
 export const FeedbackWindow = ({closeWindow}: TypeFeedbackWindow) => {
 

@@ -3,7 +3,7 @@ import React from 'react';
 export const Archive = () => {
     return (
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <g clip-path="url(#clip0_534_2544)">
+            <g clipPath="url(#clip0_534_2544)">
                 <path
                     d="M17.5 6.66666V16.5C17.5 17.0523 17.0523 17.5 16.5 17.5H3.5C2.94772 17.5 2.5 17.0523 2.5 16.5V6.66666"
                     stroke="#1F5CB8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>

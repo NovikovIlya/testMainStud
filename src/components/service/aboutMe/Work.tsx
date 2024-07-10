@@ -1,4 +1,3 @@
-import { QuestionOutlined, UploadOutlined } from '@ant-design/icons'
 import {
 	Button,
 	Checkbox,

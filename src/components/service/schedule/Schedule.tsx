@@ -5,16 +5,10 @@ import { useEffect, useState } from 'react'
 import { useGetScheduleQuery } from '../../../store/api/serviceApi'
 
 import './StyleSchedule.scss'
+import { DataType } from '../../../models/schedule'
 
-interface DataType {
-	name: string
-	time: string
-	teacher: string
-	teacherId: number
-	building: string
-	room: string
-	type: string
-}
+
+
 const columns: ColumnsType<DataType> = [
 	{
 		title: '',

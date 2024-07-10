@@ -1,4 +1,4 @@
-import { QuestionOutlined, UploadOutlined } from '@ant-design/icons'
+import { UploadOutlined } from '@ant-design/icons'
 import {
 	Button,
 	ConfigProvider,
@@ -37,9 +37,7 @@ import {
 	inn,
 	issuedBy,
 	passportNumber,
-	passportSeries,
-	phone,
-	registrationAddress,
+	passportSeries, registrationAddress,
 	residenceAddress,
 	snils
 } from '../../../store/reducers/FormReducers/ParentReducer'

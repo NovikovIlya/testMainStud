@@ -1,13 +1,11 @@
-import React, {useEffect, useState} from 'react';
-import {useNavigate, useParams} from "react-router-dom";
-import {Spin} from "antd";
-import {useRedirectMutation} from "../../store/api/authApiSlice";
-import {useDispatch} from "react-redux";
-import {setCredentials} from "../../store/reducers/authSlice";
+import { useEffect } from 'react';
+import { useNavigate, useParams } from "react-router-dom";
+import { Spin } from "antd";
+import { useRedirectMutation } from "../../store/api/authApiSlice";
+import { useDispatch } from "react-redux";
+import { setCredentials } from "../../store/reducers/authSlice";
+import { P2 } from '../../models/redirect';
 
-interface P2 {
-    p2: string | undefined
-}
 
 
 export const Redirect = () => {

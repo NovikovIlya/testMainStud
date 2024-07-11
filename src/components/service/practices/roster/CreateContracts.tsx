@@ -272,10 +272,12 @@ export const CreateContracts = () => {
                                    name={'specialtyNameId'}
                                    rules={[{required: false}]}>
                             <Select
+                                mode="multiple"
+                                allowClear
                                 size="large"
                                 popupMatchSelectWidth={false}
                                 placeholder=""
-                                defaultValue=""
+                                defaultValue={[]}
                                 className="w-full"
                                 options={optionsNameSpec}
                             />

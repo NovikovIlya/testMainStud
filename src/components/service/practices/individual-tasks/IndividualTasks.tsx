@@ -26,10 +26,11 @@ import {OptionsNameSpecialty} from "../roster/registerContracts/RegisterContract
 
 interface FilterType {
     value: string
-    label: string
+    label: string,
+    id:any
 }
 
-export interface CompressedIndividualTask {
+export interface CompressedIndividualTask  {
     id: string
     key: string
     specialityName: string
@@ -54,12 +55,14 @@ const IndividualTasks = () => {
     const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery()
     function changeListNameSpecialty(list: NameSpecialty[]) {
         function changeElemNameSpecialty(elem: NameSpecialty) {
-            const newElem: OptionsNameSpecialty = {
+            const newElem: any = {
+                key:elem.id,
                 value: elem.value,
                 label: elem.label,
             }
             return newElem
         }
+        // @ts-ignore
         const finalList: OptionsNameSpecialty[] = [{value: 'Все', label: 'Все'}]
         const newList: OptionsNameSpecialty[] = list.map(elem => changeElemNameSpecialty(elem))
         return finalList.concat(newList)
@@ -75,12 +78,14 @@ const IndividualTasks = () => {
     const {data: dataPracticeType, isSuccess: isSuccessPracticeType} = useGetPracticeTypeQuery()
     function changeListPracticeType(list: PracticeType[]) {
         function changeElemPracticeType(elem: PracticeType) {
-            const newElem: FilterType = {
+            const newElem: any = {
+                key:elem.id,
                 value: elem.value,
                 label: elem.label,
             }
             return newElem
         }
+        // @ts-ignore
         const finalList: FilterType[] = [{value: 'Все', label: 'Все'}]
         const newList: FilterType[] = list.map(elem => changeElemPracticeType(elem))
         return finalList.concat(newList)
@@ -96,7 +101,7 @@ const IndividualTasks = () => {
     const [
         tableDataCompressed,
         setTableDataCompressed
-    ] = useState<CompressedIndividualTask[]>()
+    ] = useState<any>()
 
     const [
         tableDataFull,
@@ -160,7 +165,7 @@ const IndividualTasks = () => {
     }
 
 
-    const optionsSortDate: FilterType[] = [
+    const optionsSortDate: any = [
         {value: 'По дате (сначала новые)', label: 'По дате (сначала новые)'},
         {value: 'По дате (сначала старые)', label: 'По дате (сначала старые)'},
     ]
@@ -375,7 +380,7 @@ const IndividualTasks = () => {
             setTableDataFull(dataFull)
         }
     }, [data]);
-
+    console.log('tableDataCompressed',tableDataCompressed)
 
     return (
         <section className="container">
@@ -395,7 +400,13 @@ const IndividualTasks = () => {
                         popupMatchSelectWidth={false}
                         defaultValue="Все"
                         className="w-full"
-                        options={nameSpecialty}
+                        options={dataNameSpecialty?.map((item)=>{
+                            return {
+                                key:item.id,
+                                value: item.value,
+                                label: item.label
+                            }
+                        })}
                         onChange={value => {
                             setFilter({
                                 ...filter,
@@ -427,7 +438,13 @@ const IndividualTasks = () => {
                         popupMatchSelectWidth={false}
                         defaultValue="Все"
                         className="w-full"
-                        options={practiceType}
+                        options={dataPracticeType?.map((item)=>{
+                            return {
+                                key:item.id,
+                                value: item.value,
+                                label: item.label
+                            }
+                        })}
                         onChange={value => {
                             setFilter({
                                 ...filter,
@@ -478,6 +495,8 @@ const IndividualTasks = () => {
                 &&
                 <div className={'individualTasks'}>
                     <Table
+                        // @ts-ignore
+                        keyExtractor={record => record.id} 
                         columns={columnsCompressed}
                         dataSource={tableDataCompressed}
                         pagination={false}
@@ -490,6 +509,7 @@ const IndividualTasks = () => {
                                 setSelectedFieldsCompressed(selectedRows)
                             }
                         }}
+                    
                     />
                 </div>
             }

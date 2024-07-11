@@ -101,10 +101,41 @@ export const individualTasks = apiSlice.injectEndpoints({
                 method: 'GET',
             })
         }),
-        getTasksForPractice: builder.query<TasksAll, TwoId>({
-            query: (arg) => ({
-                url: `services/api-practices/tasks/for-practice?sp_name_id=${arg.sp_name_id}&practice_type_id=${arg.practice_type_id}`,
+        getGroupNumbers: builder.query<PracticeType[], any>({
+            query: (subDivisionId) => ({
+                url: `services/api-practices/kpfu/group-numbers?subdivisionId=${subDivisionId}`,
                 method: 'GET',
+            })
+        }),
+        getDepartmentDirectors: builder.query<PracticeType[], any>({
+            query: (subDivisionId) => ({
+                url: `services/api-practices/kpfu/department-directors?subdivisionId=${subDivisionId}`,
+                method: 'GET',
+            })
+        }),
+        getCompentences: builder.query<PracticeType[], any>({
+            query: ({specialityId,practiceKindId,startYear}) => ({
+                url: `services/api-practices/kpfu/competences?specialityId=${specialityId}&practiceKindId=${practiceKindId}&startYear=${startYear}`,
+                method: 'GET',
+            })
+        }),
+        getTasksForPractice: builder.query<any, any>({
+            query: ({specialtyNameId,practiceTypeId}) => ({
+                url: `services/api-practices/tasks/for-practice?specialtyNameId=${specialtyNameId}&practiceTypeId=${practiceTypeId}`,
+                method: 'GET',
+            })
+        }),
+        getPracticesAll: builder.query<any, any>({
+            query: () => ({
+                url: `services/api-practices/practices/all`,
+                method: 'GET',
+            })
+        }),
+        postPractices: builder.mutation<any, any>({
+            query: (obj) => ({
+                url: `services/api-practices/practices`,
+                method: 'POST',
+                body: obj
             })
         })
 
@@ -119,6 +150,11 @@ export const {
     useDeleteSeveralTasksMutation,
     useGetPracticeTypeQuery,
     useGetDepartmentsQuery,
-    useLazyGetTasksForPracticeQuery,
-    useGetPracticeKindQuery
+    useGetTasksForPracticeQuery,
+    useGetPracticeKindQuery,
+    useGetGroupNumbersQuery,
+    useGetDepartmentDirectorsQuery,
+    useGetCompentencesQuery,
+    useGetPracticesAllQuery,
+    usePostPracticesMutation,
 } = individualTasks

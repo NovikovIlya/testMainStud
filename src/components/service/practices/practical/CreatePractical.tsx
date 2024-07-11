@@ -31,8 +31,12 @@ import {useGetSpecialtyNamesQuery} from "../../../../store/api/practiceApi/roste
 import {
     useGetDepartmentsQuery,
     useGetPracticeTypeQuery,
-    useLazyGetTasksForPracticeQuery,
-    useGetPracticeKindQuery
+    useGetPracticeKindQuery,
+    useGetGroupNumbersQuery,
+    useGetDepartmentDirectorsQuery,
+    useGetCompentencesQuery,
+    usePostPracticesMutation,
+    useGetTasksForPracticeQuery
 } from "../../../../store/api/practiceApi/individualTask";
 import {useGetCafDepartmentsQuery} from "../../../../store/api/practiceApi/practical";
 import {processingOfDivisions} from "../../../../utils/processingOfDivisions";
@@ -42,33 +46,8 @@ interface FilterType {
     label: string | number
 }
 
-// const optionsDepartment: FilterType[] = [
-//     {
-//         value: 'Кафедра хирургических болезней постдипломного образования',
-//         label: 'Кафедра хирургических болезней постдипломного образования'
-//     },
-//     {
-//         value: 'Кафедра онкологических болезней',
-//         label: 'Кафедра онкологических болезней'
-//     }
-// ]
-const practiceKind: PracticeKind[] = [
-    {
-        id: 'Производственная',
-        value: 'Производственная',
-        label: '1'
-    },
-    {
-        id: 'Учебная',
-        value: 'Учебная',
-        label: '1'
-    },
-    {
-        id: 'Производственная (клиническая) практик',
-        value: 'Производственная (клиническая) практик',
-        label: '1'
-    }
-]
+
+
 const optionsCourse: FilterType[] = [
     {
         value: '1',
@@ -116,22 +95,31 @@ const optionsTypePractice: FilterType[] = [
     }
 ]
 
-// const practiceKindForSelect = practiceKind.map(item => ({
-//     value: item.value,
-//     id: item.id,
-// }));
+
 
 export const CreatePractical = () => {
     const nav = useNavigate()
     const [form] = Form.useForm()
+    const [fullDate,setFullDate] = useState<any>(null)
+    const [arqTask,setArqTask] = useState<any>(null)
+    const [pickCourseNumber,setPickCourseNumber] = useState<any>(null)
+    const [pickSemestr,setPickSemestr] = useState<any>(null)
+    const [pickGroupNumber, setPickGroupNumber] = useState<any>(null)
+    const [pickDate, setPickDate] = useState<any>(null)
+    const [pickSpeciality, setPickSpeciality] = useState<any>(null)
+    const [pickKindPractise,setPickKindPractise]=useState<any>(null)
+    const [pickTypePractise,setPickTypePractise]=useState<any>(null)
     const [optionsDepartment,setOptionsDepartment] = useState<FilterType[] | null>(null)
- 
+    const [departmentDirector, setDepartmentDirector] = useState<any>(null)
     const [subDivisionId,setSubDevisionId] = useState<null | string>(null)
     const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
+    const [objectForCompetences, setObjectForCompetences] = useState<any>(null)
     const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery()
-    const {data: dataPraciseKind, isSuccess: isSuccesPractiseKind} = useGetPracticeKindQuery(subDivisionId)
-
-
+    const {data: dataPraciseKind, isSuccess: isSuccesPractiseKind} = useGetPracticeKindQuery(subDivisionId, {skip: subDivisionId === null})
+    const {data: dataGroupNumbers, isSuccess: isSuccessGroupNumbers} = useGetGroupNumbersQuery(subDivisionId, {skip: subDivisionId === null})
+    const {data: dataDepartmentDirector, isSuccess: isSuccessDepartmentDirector} = useGetDepartmentDirectorsQuery(subDivisionId, {skip: subDivisionId === null})
+    const {data:dataCompetences, isSuccess: isSuccessCompetences} = useGetCompentencesQuery(objectForCompetences,{skip: objectForCompetences === null})
+  
     useEffect(() => {
         if (isSuccessNameSpecialty) {
             setNameSpecialty(dataNameSpecialty)
@@ -140,11 +128,52 @@ export const CreatePractical = () => {
 
     const [practiceType, setPracticeType] = useState<PracticeType[]>()
     const {data: dataPracticeType, isSuccess: isSuccessPracticeType} = useGetPracticeTypeQuery()
-    // const [practiceKinds, setPracticeKind] = useState<PracticeKind[]>(practiceKind)
-
+ 
+    const [groupNumbers, setGroupNumbers] = useState<any>(null)
     const [departments, setDepartments] = useState<Department[]>()
-    const [practiceKindForSelect, setPracticeKindForSelect] = useState<any>()
+    const [practiceKindForSelect, setPracticeKindForSelect] = useState<any>(null)
     const {data: dataDepartments, isSuccess: isSuccessDepartments} = useGetDepartmentsQuery()
+    const [sendForm,{data}] = usePostPracticesMutation()
+   
+    // заполнения объекта для компетенции
+    useEffect(()=>{
+        if(pickKindPractise && pickDate && pickSpeciality){
+            const specId = dataNameSpecialty?.find((elem) => {
+                if (elem.value === pickSpeciality) {
+                    return elem
+                }
+            })
+           
+            const pickId = dataPraciseKind?.find(elem => {
+                if (elem.value === pickKindPractise) {
+                    return elem
+                }
+            })
+        
+            const obj = {
+                specialityId: specId?.id,
+                practiceKindId: pickId?.id,
+                startYear:pickDate[0]
+            }
+            setObjectForCompetences(obj)
+        }
+    },[dataNameSpecialty, dataPraciseKind, pickDate, pickSpeciality, pickKindPractise])
+
+
+    
+    // получение заведущего
+    useEffect(() => {
+        if (isSuccessDepartmentDirector) {
+            setDepartmentDirector(dataDepartmentDirector)
+        }
+    }, [dataDepartments,isSuccessDepartmentDirector]);
+
+    // получчение номера групп
+    useEffect(() => {
+        if (isSuccessGroupNumbers) {
+            setGroupNumbers(dataGroupNumbers)
+        }
+    }, [dataDepartments,isSuccessGroupNumbers]);
 
     // получение кафедр
     useEffect(() => {
@@ -152,7 +181,7 @@ export const CreatePractical = () => {
             setDepartments(processingOfDivisions(dataDepartments))
         }
     }, [dataDepartments]);
-
+   
     
     useEffect(() => {
         if (isSuccessPracticeType) {
@@ -171,32 +200,50 @@ export const CreatePractical = () => {
         sp_name_id: null,
         practice_type_id: null,
     })
-    const [getTasks, results] = useLazyGetTasksForPracticeQuery()
+    const {data:dataTask, isSuccess:isSuccessTask} = useGetTasksForPracticeQuery(arqTask)
     const [tasksId, setTasksId] = useState<string>('')
-
-    useEffect(() => {
-        if (twoId.sp_name_id && twoId.practice_type_id) {
-            getTasks(twoId)
-                .then((data) => {
-                    if (data.data) {
-                        const tasks: TasksAll = data.data
-                        setTasksId(tasks.id)
-                        const listTasks = tasks.tasks.map(elem => {
-                            return {
-                                task: elem.taskDescription
-                            }
-                        })
-                        form.setFieldValue('tasks', listTasks)
-                        console.log(tasks)
-                    }
-                })
+    
+    // получение инд заданий
+    useEffect(()=>{
+        if(pickSpeciality && pickTypePractise){
+            const pickTypeId = dataPracticeType?.find(elem => {
+                if (elem.value === pickTypePractise) {
+                    return elem
+                }
+            })
+            const pickSpecialityId = dataNameSpecialty?.find(elem => {
+                if (elem.value === pickSpeciality) {
+                    return elem
+                }
+            })
+       
+            setArqTask({specialtyNameId : pickSpecialityId?.id, practiceTypeId : pickTypeId?.id})
         }
-    }, [twoId]);
+    },[isSuccessTask, pickSpeciality, pickTypePractise])
+
+    // useEffect(() => {
+    //     if (twoId.sp_name_id && twoId.practice_type_id) {
+    //         getTasks(twoId)
+    //             .then((data) => {
+    //                 if (data.data) {
+    //                     const tasks: TasksAll = data.data
+    //                     setTasksId(tasks.id)
+    //                     const listTasks = tasks.tasks.map(elem => {
+    //                         return {
+    //                             task: elem.taskDescription
+    //                         }
+    //                     })
+    //                     form.setFieldValue('tasks', listTasks)
+    //                     console.log(tasks)
+    //                 }
+    //             })
+    //     }
+    // }, [twoId]);
 
 
 
     const [dep, setDep] = useState()
-    const {data: dataDep, isSuccess: isSuccessDep} = useGetCafDepartmentsQuery(subDivisionId)
+    const {data: dataDep, isSuccess: isSuccessDep} = useGetCafDepartmentsQuery(subDivisionId,{skip: subDivisionId === null})
     useEffect(()=>{
         if(isSuccessDep)
         setOptionsDepartment(dataDep)
@@ -205,17 +252,17 @@ export const CreatePractical = () => {
 
 
     function onFinish(values: NewPractice) {
-        const specialtyNameId = dataNameSpecialty!.find(elem => {
-            if (elem.value === values.specialityName) {
-                return elem.id
-            }
-        })
-        const practiceTypeId = dataPracticeType!.find(elem => {
-            if (elem.value === values.practiceType) {
-                return elem.id
-            }
-        })
-        const department = 0
+        // const specialtyNameId = dataNameSpecialty!.find(elem => {
+        //     if (elem.value === values.specialityName) {
+        //         return elem.id
+        //     }
+        // })
+        // const practiceTypeId = dataPracticeType!.find(elem => {
+        //     if (elem.value === values.practiceType) {
+        //         return elem.id
+        //     }
+        // })
+        // const department = 0
         // values.startStudy = dayjs(values.startStudy).format('DD.MM.YYYY')
         // values.endStudy = dayjs(values.endStudy).format('DD.MM.YYYY')
         // const academicYear: AcademicYear = {
@@ -223,23 +270,106 @@ export const CreatePractical = () => {
         //     end: dayjs(values.academicYear[1]).format('YYYY')
         // }
         //
-        // const sendData: NewPracticeSend = {
-        //     specialityName: values.specialityName,
-        //     practiceType: values.practiceType,
-        //     department: values.department,
-        //     groupNumber: values.groupNumber,
-        //     semester: values.semester,
-        //     academicYear: academicYear,
-        //     courseStudy: values.courseStudy,
-        //     startStudy: values.startStudy,
-        //     amountHours: String(values.amountHours),
-        //     endStudy: values.endStudy,
-        //     tasks: values.tasks.map(elem => elem.task),
-        //     codeCompetencies: values.codeCompetencies.map(elem => elem.codeCompetence),
-        //     director: values.director
-        // }
+        const dateString = fullDate[0].$d
+        const date = new Date(dateString)
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const formattedDate = `${year}.${month}.${day}`;
+        console.log('formattedDate',fullDate[0].$y,fullDate[0].$M+1,fullDate[0].$D)
+        console.log('formattedDateformattedDate',formattedDate)
+        const dateStringEnd = fullDate[1].$d
+        const dateEnd = new Date(dateStringEnd)
+        const yearEnd = dateEnd.getFullYear();
+        const monthEnd = String(dateEnd.getMonth() + 1).padStart(2, '0');
+        const dayEnd = String(dateEnd.getDate()).padStart(2, '0');
+        const formattedDateEnd = `${yearEnd}.${monthEnd}.${dayEnd}`;
 
-        console.log(values)
+        const directorId = departmentDirector.find((elem:any) => {
+            if (elem.value === values.director) {
+                return elem
+            }
+        })
+        const groupNumberId = groupNumbers.find((elem:any) => {
+            if (elem.value === values.groupNumber) {
+                return elem
+            }
+        })
+        const pickSpecialityId = dataNameSpecialty?.find((elem:any) => {
+            if (elem.value === values.specialityName) {
+                return elem
+            }
+        })
+          const pickId = dataPraciseKind?.find(elem => {
+            if (elem.value === pickKindPractise) {
+                return elem
+            }
+        })
+        const practisePickId = dataPracticeType?.find(elem => {
+            if (elem.value === pickTypePractise) {
+                return elem
+            }
+        })
+        const departmenIdZ = optionsDepartment?.find(elem => {
+            if (elem.value === values.department) {
+                return elem
+            }
+        })
+    
+
+
+        const sendData: any = {
+            // specialityName: values.specialityName,
+            practiceType: values.practiceType,
+            department: values.department,
+            groupNumberId: groupNumberId.id,
+            semester: values.semester,
+            academicYear: {
+                       start:pickDate[0],
+                      end:pickDate[1]
+                 },
+                 courseNumber: values.courseStudy,
+            startDate: formattedDate,
+            totalHours: String(values.amountHours),
+            endDate: formattedDateEnd ,
+            individualTaskId: dataTask?.id || null,
+            competenceIds: dataCompetences,
+            departmentDirectorId: directorId.id,
+            subdivisionId: subDivisionId,
+            specialtyNameId:pickSpecialityId?.id,
+            practiceKindId: pickId?.id,
+            practiceTypeId: practisePickId?.id,
+            // @ts-ignore
+            departmentId : departmenIdZ?.id
+        }
+        // const pickId = dataPraciseKind?.find(elem => {
+        //     if (elem.value === pickKindPractise) {
+        //         return elem
+        //     }
+        // })
+        // const obj = {
+        //     specialtyNameId:pickSpeciality,
+        //     subdivisionId: subDivisionId,
+        //     practiceKindId: pickId?.id,
+        //     practiceTypeId: pickTypePractise,
+        //     departmentId: subDivisionId,
+        //     groupNumbers:pickGroupNumber,
+        //     semestr: pickSemestr,
+        //     academicYear:{
+        //         start:pickDate[0],
+        //         end:pickDate[1]
+        //     },
+        //     courseNumber:pickCourseNumber,
+        //     startDate:pickDate[0],
+        //     endDate:pickDate[1],
+
+            
+
+
+        // }
+        
+        console.log('sendData',sendData)
+        sendForm(sendData)
 
     }
 
@@ -247,13 +377,39 @@ export const CreatePractical = () => {
         departments?.find(elem => {
             if (elem.label === value) {
                 setSubDevisionId(elem.id)
-                console.log('elem.id',elem.id)
             }
-        })
-        
-        console.log(`selected ${value}`);
+        })  
     };
-    console.log('practiceKindForSelect',practiceKindForSelect)
+
+    const onChangePicker = (value:any)=>{
+        console.log('vvv',value[0])
+        // @ts-ignore
+        setPickDate([value[0].$y,value[1].$y])
+        setFullDate(value)
+    }
+
+    const handleSpeciality = (value:any)=>{
+        setPickSpeciality(value)
+    }
+
+    const handlePracticeKind = (value:any)=>{
+        setPickKindPractise(value)
+    }
+    const handlePracticeType = (value:any)=>{
+        setPickTypePractise(value)
+    }
+    const handleGroupNumber = (value:any)=>{
+        setPickGroupNumber(value)
+    }
+    const handleSemestr = (value:any)=>{
+        setPickSemestr(value)
+    }
+    const handleCourseNumber = (value:any)=>{
+        setPickCourseNumber(value)
+    }
+
+
+    
 
     return (
         <section className="container">
@@ -283,21 +439,27 @@ export const CreatePractical = () => {
                             name={'specialityName'}
                             rules={[{required: true}]}>
                             <Select
+                                disabled={!isSuccessNameSpecialty}
                                 size="large"
                                 popupMatchSelectWidth={false}
                                 className="w-full"
-                                options={nameSpecialty}
-                                onChange={(value) => {
-                                    const id = dataNameSpecialty!.find(elem => {
-                                        if (elem.value === value) {
-                                            return elem.id
-                                        }
-                                    })
-                                    setTwoId({
-                                        ...twoId,
-                                        sp_name_id: id!.id
-                                    })
-                                }}
+                                options={nameSpecialty?.map((item)=>(
+                                    {key:item.id,
+                                    value:item.value,
+                                    label:item.label}
+                                 ))}
+                                 onChange={handleSpeciality}
+                                // onChange={(value) => {
+                                //     const id = dataNameSpecialty!.find(elem => {
+                                //         if (elem.value === value) {
+                                //             return elem.id
+                                //         }
+                                //     })
+                                //     setTwoId({
+                                //         ...twoId,
+                                //         sp_name_id: id!.id
+                                //     })
+                                // }}
                             />
                         </Form.Item>
                     </Col>
@@ -310,20 +472,26 @@ export const CreatePractical = () => {
                             label={'Тип практики'}>
                             <Select
                                 size="large"
+                                disabled={!isSuccessPracticeType}
                                 popupMatchSelectWidth={false}
                                 className="w-full"
-                                options={practiceType}
-                                onChange={value => {
-                                    const id = dataPracticeType!.find(elem => {
-                                        if (elem.value === value) {
-                                            return elem
-                                        }
-                                    })
-                                    setTwoId({
-                                        ...twoId,
-                                        practice_type_id: +id!.id
-                                    })
-                                }}
+                                options={dataPracticeType?.map((item)=>(
+                                    {key:item.id,
+                                    value:item.value,
+                                    label:item.label}
+                                 ))}
+                                 onChange={handlePracticeType}
+                                // onChange={value => {
+                                //     const id = dataPracticeType!.find(elem => {
+                                //         if (elem.value === value) {
+                                //             return elem
+                                //         }
+                                //     })
+                                //     setTwoId({
+                                //         ...twoId,
+                                //         practice_type_id: +id!.id
+                                //     })
+                                // }}
                             />
                         </Form.Item>
                     </Col>
@@ -335,6 +503,7 @@ export const CreatePractical = () => {
                             name={'practiceKind'}
                             label={'Вид практики'}>
                             <Select
+                                onChange={handlePracticeKind}
                                 size="large"
                                 popupMatchSelectWidth={false}
                                 disabled={!isSuccesPractiseKind}
@@ -384,19 +553,33 @@ export const CreatePractical = () => {
                             name={'groupNumber'}
                             label={'Номер группы'}>
                             <Select
+                                disabled={!isSuccessGroupNumbers}
                                 size="large"
                                 popupMatchSelectWidth={false}
                                 className="w-full"
-                                options={[
-                                    {
-                                        value: '09-052',
-                                        label: '09-052'
-                                    },
-                                    {
-                                        value: '9383',
-                                        label: '9383'
-                                    }
-                                ]}
+                                options={groupNumbers?.map((item:any)=>{
+                                    return {
+                                        key:item.id,
+                                        value:item.value,
+                                        label:item.label}
+                                })}
+                                onChange={handleGroupNumber}
+                            />
+                        </Form.Item>
+                    </Col>
+                </Row>
+                <Row gutter={[16, 16]}>
+                    <Col xs={24} sm={24} md={18} lg={16} xl={12}>
+                        <Form.Item
+                            //rules={[{required: true}]}
+                            name={'competences'}
+                            label={'Код и наименование компетенции'}>
+                            <Select
+                                disabled={!isSuccessCompetences}
+                                size="large"
+                                popupMatchSelectWidth={false}
+                                className="w-full"
+                                options={dataCompetences}
                             />
                         </Form.Item>
                     </Col>
@@ -412,6 +595,7 @@ export const CreatePractical = () => {
                                 popupMatchSelectWidth={false}
                                 className="w-full"
                                 options={optionsSemester}
+                                onChange={handleSemestr}
                             />
                         </Form.Item>
                     </Col>
@@ -422,6 +606,7 @@ export const CreatePractical = () => {
                             label={'Учебный год'}>
 
                             <DatePicker.RangePicker
+                                onChange={onChangePicker}
                                 picker={'year'}
                                 size={'large'}
                                 placeholder={['Начало', 'Конец']}
@@ -441,6 +626,7 @@ export const CreatePractical = () => {
                                 popupMatchSelectWidth={false}
                                 className="w-full"
                                 options={optionsCourse}
+                                onChange={handleCourseNumber}
                             />
                         </Form.Item>
                     </Col>
@@ -492,7 +678,7 @@ export const CreatePractical = () => {
                 {/*</Space>*/}
 
                 <Row gutter={[16, 16]}>
-                    <Col xs={24} sm={24} md={18} lg={16} xl={12}>
+                    {/* <Col xs={24} sm={24} md={18} lg={16} xl={12}>
                         <Space direction="vertical" className="w-full mb-4">
                             <span className="font-bold">
                                 Индивидуальные задания (от 1 до 10)
@@ -563,8 +749,8 @@ export const CreatePractical = () => {
                                 </>
                             )}
                         </Form.List>
-                    </Col>
-                    <Col xs={24} sm={24} md={18} lg={16} xl={12}>
+                    </Col> */}
+                    {/* <Col xs={24} sm={24} md={18} lg={16} xl={12}>
                         <Space direction="vertical" className="w-full mb-4">
                             <span className="font-bold">
                                 Код и наименование компетенции (от 1 до 15)
@@ -635,7 +821,8 @@ export const CreatePractical = () => {
                                 </>
                             )}
                         </Form.List>
-                    </Col>
+                    </Col> */}
+                    
                 </Row>
 
                 <Row gutter={[16, 16]} className={'mt-4'}>
@@ -645,13 +832,11 @@ export const CreatePractical = () => {
                             name={'director'}
                             label={'Заведующий опорной кафедрой'}>
                             <Select
+                                disabled={!isSuccessDepartmentDirector}
                                 size="large"
                                 popupMatchSelectWidth={false}
                                 className="w-full"
-                                options={[
-                                    {value: 'Тест 1', label: 'Тест 1'},
-                                    {value: 'Тест 2', label: 'Тест 2'},
-                                ]}
+                                options={departmentDirector}
                             />
                         </Form.Item>
                     </Col>

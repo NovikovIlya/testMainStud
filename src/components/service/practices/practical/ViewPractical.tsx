@@ -1,25 +1,29 @@
 import {
 	Button,
-	Col, Popover,
+	Col,
+	Popover,
 	Row,
 	Select,
 	Space,
 	Table,
-	TableProps,
+	TableProps
 } from 'antd'
-import React, {useEffect, useState} from 'react'
-import {useNavigate} from 'react-router-dom'
-import dayjs from "dayjs";
-import {EditSvg} from "../../../../assets/svg/EditSvg";
-import {PointsSvg} from "../../../../assets/svg/PointsSvg";
-import {PracticalPopoverContent} from "../popover/practical/PracticalPopoverContent";
-import {PracticalPopoverMain} from "../popover/practical/PracticalPopoverMain";
-import {FullIndividualTask} from "../individual-tasks/IndividualTasks";
-import {OptionsNameSpecialty} from "../roster/registerContracts/RegisterContracts";
-import {useGetSpecialtyNamesQuery} from "../../../../store/api/practiceApi/roster";
+import dayjs from 'dayjs'
+import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+
+import { EditSvg } from '../../../../assets/svg/EditSvg'
+import { PointsSvg } from '../../../../assets/svg/PointsSvg'
+import { useGetPracticesAllQuery } from '../../../../store/api/practiceApi/individualTask'
+import { useGetSpecialtyNamesQuery } from '../../../../store/api/practiceApi/roster'
+import { agreementFileDocument } from '../../../../utils/downloadDocument/agreementFileDocument'
+import { practiceDocument } from '../../../../utils/downloadDocument/practiceDocument'
+import { FullIndividualTask } from '../individual-tasks/IndividualTasks'
+import { PracticalPopoverContent } from '../popover/practical/PracticalPopoverContent'
+import { PracticalPopoverMain } from '../popover/practical/PracticalPopoverMain'
+import { OptionsNameSpecialty } from '../roster/registerContracts/RegisterContracts'
+
 import './ViewPractical.scss'
-import {agreementFileDocument} from "../../../../utils/downloadDocument/agreementFileDocument";
-import {practiceDocument} from "../../../../utils/downloadDocument/practiceDocument";
 
 interface FilterType {
 	value: string | number
@@ -146,14 +150,14 @@ const mockData: TablePractical[] = [
 		individualTasks: [
 			'Овладеть методиками кесарева сечения (корпоральное, истмико-корпоральное, в нижнем сегменте матки, экстракорпоральное',
 			'Овладеть методиками родоразрешающих и плодоразрушающих операций',
-			'Акушерский травматизм матери и плода',
+			'Акушерский травматизм матери и плода'
 		],
 		competencies: [
 			'ПК-2 Овладеть методиками кесарева сечения (корпоральное, истмико-корпоральное, в нижнем сегменте матки, экстракорпоральное',
 			'ПК-6 Овладеть методиками родоразрешающих и плодоразрушающих операций',
-			'ПК-7 Акушерский травматизм матери и плода',
+			'ПК-7 Акушерский травматизм матери и плода'
 		],
-		departmentDirector: 'Бурмистров М. В.',
+		departmentDirector: 'Бурмистров М. В.'
 	},
 	{
 		id: '2',
@@ -170,74 +174,84 @@ const mockData: TablePractical[] = [
 		individualTasks: [
 			'Овладеть методиками кесарева сечения (корпоральное, истмико-корпоральное, в нижнем сегменте матки, экстракорпоральное',
 			'Овладеть методиками родоразрешающих и плодоразрушающих операций',
-			'Акушерский травматизм матери и плода',
+			'Акушерский травматизм матери и плода'
 		],
 		competencies: [
 			'ПК-2 Овладеть методиками кесарева сечения (корпоральное, истмико-корпоральное, в нижнем сегменте матки, экстракорпоральное',
 			'ПК-6 Овладеть методиками родоразрешающих и плодоразрушающих операций',
-			'ПК-7 Акушерский травматизм матери и плода',
+			'ПК-7 Акушерский травматизм матери и плода'
 		],
-		departmentDirector: 'Бурмистров М. В.',
+		departmentDirector: 'Бурмистров М. В.'
 	}
 ]
-
-
 
 export const ViewPractical = () => {
 	const navigate = useNavigate()
 	const [department, setDepartment] = useState<FilterType[]>(filterDepartment)
 
-	const [tableData, setTableData] = useState<TablePractical[]>(mockData)
+	const { data: dataPractiseAll } = useGetPracticesAllQuery(null)
+	const [tableData, setTableData] = useState<TablePractical[]>(dataPractiseAll)
 	const tokenAccess = localStorage.getItem('access')!.replaceAll('"', '')
 
-
 	const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
-	const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery()
+	
+	const { data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty } =
+		useGetSpecialtyNamesQuery()
 
 	useEffect(() => {
 		if (isSuccessNameSpecialty) {
 			setNameSpecialty(dataNameSpecialty)
 		}
-	}, [dataNameSpecialty]);
+	}, [dataNameSpecialty])
 
-	const [
-		selectedFieldsFull,
-		setSelectedFieldFull
-	] = useState<TablePractical[]>([])
+	const [selectedFieldsFull, setSelectedFieldFull] = useState<TablePractical[]>(
+		[]
+	)
 
 	const [filter, setFilter] = useState({
 		nameSpecialty: 'Все',
 		department: 'Все',
 		course: 'Все',
 		semester: 'Все',
-		practiceType: 'Все',
+		practiceType: 'Все'
 	})
 
-	const columns: TableProps<TablePractical>['columns'] = [
+	const columns = [
 		{
 			key: 'specialtyName',
 			dataIndex: 'specialtyName',
 			title: 'Шифр и наименование специальности',
+			name: 'Шифр и наименование специальности',
 			className: 'text-xs !p-2',
-			render: (text, record) =>
+
+			// @ts-ignore
+			render: (text, record) => (
 				<div className={'flex items-center'}>
-                    <span className={'underline flex font-bold'}>
-                        {text}
-                    </span>
+					<span className={'underline flex font-bold'}>{text}</span>
 					<Button
 						type="text"
-						icon={<EditSvg/>}
+						icon={<EditSvg />}
 						onClick={() => {
-							navigate(`/services/practices/practical/editPractical/${record.id}`)
+							navigate(
+								`/services/practices/practical/editPractical/${record.id}`
+							)
 						}}
 					/>
 				</div>
+			)
 		},
 		{
 			key: 'practiceType',
 			dataIndex: 'practiceType',
+			name: 'Тип практики',
 			title: 'Тип практики',
-			className: 'text-xs !p-2'
+			className: 'text-xs !p-2',
+			filters:[{
+				text: 'практика по получению первичных',
+				value: 'практика по получению',
+			  },],
+			  // @ts-ignore
+			  onFilter: (value, record) => record?.practiceType?.indexOf(value as string) === 0,
 		},
 		{
 			key: 'department',
@@ -251,7 +265,6 @@ export const ViewPractical = () => {
 			title: 'Номер группы',
 			align: 'center',
 			className: 'text-xs !p-2'
-
 		},
 		{
 			key: 'semester',
@@ -283,8 +296,7 @@ export const ViewPractical = () => {
 			render: (value, record, index) => {
 				return (
 					<div className={'flex flex-col'}>
-						<span>{dayjs(record.practicePeriod[0]).format('DD.MM.YYYY')}</span>
-						-
+						<span>{dayjs(record.practicePeriod[0]).format('DD.MM.YYYY')}</span>-
 						<span>{dayjs(record.practicePeriod[1]).format('DD.MM.YYYY')}</span>
 					</div>
 				)
@@ -305,8 +317,10 @@ export const ViewPractical = () => {
 			render: (value, record, index) => {
 				return (
 					<div className={'flex flex-col gap-1'}>
-						{record.individualTasks.map((elem, index) => (
-							<span key={index}>{index + 1}. {elem}</span>
+						{record.individualTasks?.map((elem, index) => (
+							<span key={index}>
+								{index + 1}. {elem}
+							</span>
 						))}
 					</div>
 				)
@@ -320,8 +334,10 @@ export const ViewPractical = () => {
 			render: (value, record, index) => {
 				return (
 					<div className={'flex flex-col gap-1'}>
-						{record.competencies.map((elem, index) => (
-							<span key={index}>{index + 1}. {elem}</span>
+						{record.competencies?.map((elem, index) => (
+							<span key={index}>
+								{index + 1}. {elem}
+							</span>
 						))}
 					</div>
 				)
@@ -334,36 +350,37 @@ export const ViewPractical = () => {
 			className: 'text-xs !p-2'
 		},
 		{
-			title:
-			<Popover trigger={'click'}
-					 content={<PracticalPopoverMain
-						 recordFullAll={tableData}
-						 setRecordFull={setTableData}
-						 recordFull={selectedFieldsFull}
-						 setSelectedFieldFull={setSelectedFieldFull}
-					 />}>
-				<Button
-					type="text"
-					className="opacity-50"
-					icon={<PointsSvg/>}
-				/>
-			</Popover>,
-			align: 'center',
-			render: (record) =>
-					<Popover trigger={'click'}
-							 content={<PracticalPopoverContent
-								 recordFull={record}
-								 recordFullAll={tableData}
-								 setRecordFull={setTableData}
-							 />}>
-						<Button
-							type="text"
-							className="opacity-50"
-							icon={<PointsSvg/>}
+			title: (
+				<Popover
+					trigger={'click'}
+					content={
+						<PracticalPopoverMain
+							recordFullAll={tableData}
+							setRecordFull={setTableData}
+							recordFull={selectedFieldsFull}
+							setSelectedFieldFull={setSelectedFieldFull}
 						/>
-					</Popover>
-				,
-			fixed: "right",
+					}
+				>
+					<Button type="text" className="opacity-50" icon={<PointsSvg />} />
+				</Popover>
+			),
+			align: 'center',
+			render: record => (
+				<Popover
+					trigger={'click'}
+					content={
+						<PracticalPopoverContent
+							recordFull={record}
+							recordFullAll={tableData}
+							setRecordFull={setTableData}
+						/>
+					}
+				>
+					<Button type="text" className="opacity-50" icon={<PointsSvg />} />
+				</Popover>
+			),
+			fixed: 'right',
 			width: 50
 		}
 	]
@@ -434,20 +451,17 @@ export const ViewPractical = () => {
 			.filter(elem => filterNameSpecialty(elem))
 	}
 
-	useEffect(() => {
-		setTableData(filterDataFull())
-	}, [filter]);
-
-
+	// useEffect(() => {
+	// 	setTableData(filterDataFull())
+	// }, [filter])
+	
 
 	return (
 		<>
 			<section className="container ">
 				<Row>
 					<Col flex={'auto'}>
-						<span className="mb-14 text-[28px]">
-							Практики
-						</span>
+						<span className="mb-14 text-[28px]">Практики</span>
 					</Col>
 					{/*Не актуально до создания на бекенде соответсвующего функционала*/}
 					{/*<Col>*/}
@@ -488,16 +502,20 @@ export const ViewPractical = () => {
 
 				<Row gutter={[16, 16]} className="mt-12">
 					<Col span={5}>
-						<span>
-							Наименование специальности
-						</span>
+						<span>Наименование специальности</span>
 					</Col>
 					<Col span={8}>
 						<Select
 							popupMatchSelectWidth={false}
 							defaultValue="Все"
 							className="w-full"
-							options={nameSpecialty}
+							options={nameSpecialty?.map((item)=>{
+								return {
+									key:item.id,
+									value: item.value,
+									label: item.label
+								}}
+							)}
 							onChange={value => {
 								setFilter({
 									...filter,
@@ -522,9 +540,7 @@ export const ViewPractical = () => {
 				</Row>
 				<Row gutter={[16, 16]} className="mt-4">
 					<Col span={5}>
-						<span>
-							Кафедра
-						</span>
+						<span>Кафедра</span>
 					</Col>
 					<Col span={8}>
 						<Select
@@ -543,9 +559,7 @@ export const ViewPractical = () => {
 				</Row>
 				<Row gutter={[16, 16]} className="mt-4">
 					<Col span={3} className={'flex items-center gap-4'}>
-						<span>
-							Курс
-						</span>
+						<span>Курс</span>
 						<Select
 							popupMatchSelectWidth={false}
 							defaultValue="Все"
@@ -560,9 +574,7 @@ export const ViewPractical = () => {
 						/>
 					</Col>
 					<Col span={3} className={'flex items-center gap-4'}>
-						<span>
-							Семестр
-						</span>
+						<span>Семестр</span>
 						<Select
 							popupMatchSelectWidth={false}
 							defaultValue="Все"
@@ -577,9 +589,7 @@ export const ViewPractical = () => {
 						/>
 					</Col>
 					<Col span={7} className={'flex items-center gap-2'}>
-						<span className="whitespace-nowrap">
-							Вид практики
-						</span>
+						<span className="whitespace-nowrap">Вид практики</span>
 						<Select
 							popupMatchSelectWidth={false}
 							defaultValue="Все"
@@ -598,11 +608,11 @@ export const ViewPractical = () => {
 			<Table
 				size="small"
 				columns={columns}
-				dataSource={tableData}
+				dataSource={dataPractiseAll?dataPractiseAll:[]}
 				pagination={false}
 				className="my-10"
 				rowSelection={{
-					type: "checkbox",
+					type: 'checkbox',
 					onSelect: (record, selected, selectedRows, nativeEvent) => {
 						setSelectedFieldFull(selectedRows)
 					},

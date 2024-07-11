@@ -148,7 +148,13 @@ const CreateTask = () => {
                                     size="large"
                                     popupMatchSelectWidth={false}
                                     className="w-full"
-                                    options={practiceType}
+                                    options={practiceType?.map((item)=>{
+                                        return {
+                                            key:item.id,
+                                            value: item.value,
+                                            label: item.label
+                                        }
+                                    })}
                                 />
                             </Form.Item>
                         </Space>

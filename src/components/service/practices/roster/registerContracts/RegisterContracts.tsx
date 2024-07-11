@@ -66,8 +66,9 @@ export interface ColumnsTableFull {
 }
 
 export interface OptionsNameSpecialty {
-    value: string
-    label: string
+    value: string,
+    label: string,
+    id: string | number
 }
 
 

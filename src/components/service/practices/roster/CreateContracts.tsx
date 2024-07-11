@@ -279,7 +279,13 @@ export const CreateContracts = () => {
                                 placeholder=""
                                 defaultValue={[]}
                                 className="w-full"
-                                options={optionsNameSpec}
+                                options={optionsNameSpec.map((item)=>{
+                                    return {
+                                        key:item.id,
+                                        value: item.value,
+                                        label: item.value
+                                    }
+                                })}
                             />
                         </Form.Item>
 

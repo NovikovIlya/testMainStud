@@ -2,29 +2,24 @@ import {
     Button,
     Col,
     DatePicker,
-    Form,
-    Input, InputNumber,
+    Form, InputNumber,
     Row,
     Select,
-    Space,
-    Typography
-} from 'antd'
-import React, {useEffect, useState} from 'react'
-import {ArrowLeftSvg} from '../../../../assets/svg'
-import {validateMessages} from "../../../../utils/validateMessage";
-import {AcademicYear, NewPractice, NewPracticeSend} from "../../../../models/Practice";
+    Space
+} from 'antd';
+import { useEffect, useState } from 'react';
+import { ArrowLeftSvg } from '../../../../assets/svg';
+import { validateMessages } from "../../../../utils/validateMessage";
+import { AcademicYear, FilterType, NewPractice, NewPracticeSend } from "../../../../models/Practice";
 import dayjs from "dayjs";
 import TextArea from "antd/es/input/TextArea";
-import {DeleteOutlined, PlusOutlined} from "@ant-design/icons";
-import {string} from "yup";
-import {useLocation, useNavigate} from "react-router-dom";
-import {OptionsNameSpecialty} from "../roster/registerContracts/RegisterContracts";
-import {useGetSpecialtyNamesQuery} from "../../../../store/api/practiceApi/roster";
+import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
+import { useLocation, useNavigate } from "react-router-dom";
+import { OptionsNameSpecialty } from "../roster/registerContracts/RegisterContracts";
+import { useGetSpecialtyNamesQuery } from "../../../../store/api/practiceApi/roster";
+import { useGetPracticeOneQuery } from '../../../../store/api/practiceApi/individualTask';
 
-interface FilterType {
-    value: string | number
-    label: string | number
-}
+
 
 const optionsDepartment: FilterType[] = [
     {
@@ -87,11 +82,9 @@ const optionsTypePractice: FilterType[] = [
 export const EditPractical = () => {
     const path = useLocation()
     const id: string = path.pathname.split('/').at(-1)!
-    console.log(id
-    )
     const nav = useNavigate()
     const [form] = Form.useForm()
-
+    const {data:dataOnePractise,isSuccess:isSuccesOnePractise} = useGetPracticeOneQuery(id)
     const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
     const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery()
 
@@ -100,6 +93,13 @@ export const EditPractical = () => {
             setNameSpecialty(dataNameSpecialty)
         }
     }, [dataNameSpecialty]);
+
+    // получение данных по практике
+    useEffect(()=>{
+        if(isSuccesOnePractise){
+            form.setFieldValue('practiceType', dataOnePractise.practiceType)
+        }
+    },[isSuccesOnePractise])
 
     function onFinish(values: NewPractice) {
         values.startStudy = dayjs(values.startStudy).format('DD.MM.YYYY')

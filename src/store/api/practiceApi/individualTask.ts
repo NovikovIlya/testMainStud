@@ -131,6 +131,13 @@ export const individualTasks = apiSlice.injectEndpoints({
                 method: 'GET',
             })
         }),
+        getPracticeOne: builder.query<any, any>({
+            query: (id) => ({
+                url: `services/api-practices/practices/${id}`,
+                method: 'GET',
+                
+            })
+        }),
         postPractices: builder.mutation<any, any>({
             query: (obj) => ({
                 url: `services/api-practices/practices`,
@@ -157,4 +164,6 @@ export const {
     useGetCompentencesQuery,
     useGetPracticesAllQuery,
     usePostPracticesMutation,
+    useGetPracticeOneQuery
+
 } = individualTasks

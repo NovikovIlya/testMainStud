@@ -81,12 +81,23 @@ const EditTask = () => {
                 return elem
             }
         })
-        const subDivision = dataDepartments!.find(elem => {
+        const subDivision = dataDepartments?.find(elem => {
+            console.log('elem',elem)
+            if ('responses' in elem){
+                return elem?.responses.find((item)=>{
+                    if(item.value===values.subDivision){
+                        console.log('bb')
+                        console.log('----------------',item)
+                        return item
+                    }
+                }) 
+            }
             if (elem.value === values.subDivision) {
                 return elem
             }
         })
-
+        console.log('values.subDivision',values.subDivision)
+        console.log('subDivision',subDivision)
 
         const newData: TaskEdit = {
             id: data!.id,

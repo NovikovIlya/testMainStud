@@ -2,32 +2,21 @@ import {
     Button,
     Col,
     DatePicker,
-    Form,
-    Input, InputNumber,
+    Form, InputNumber,
     Row,
     Select,
-    Space,
-    Typography
-} from 'antd'
-import React, {useEffect, useState} from 'react'
-import {ArrowLeftSvg} from '../../../../assets/svg'
-import {validateMessages} from "../../../../utils/validateMessage";
+    Space
+} from 'antd';
+import { useEffect, useState } from 'react';
+import { ArrowLeftSvg } from '../../../../assets/svg';
+import { validateMessages } from "../../../../utils/validateMessage";
 import {
-    AcademicYear, Department,
-    NewPractice,
-    NewPracticeSend,
-    PracticeKind,
-    PracticeType,
-    TasksAll,
-    TwoId
+    Department,
+    NewPractice, PracticeType, TwoId
 } from "../../../../models/Practice";
-import dayjs from "dayjs";
-import TextArea from "antd/es/input/TextArea";
-import {DeleteOutlined, PlusOutlined} from "@ant-design/icons";
-import {string} from "yup";
-import {useNavigate} from "react-router-dom";
-import {OptionsNameSpecialty} from "../roster/registerContracts/RegisterContracts";
-import {useGetSpecialtyNamesQuery} from "../../../../store/api/practiceApi/roster";
+import { useNavigate } from "react-router-dom";
+import { OptionsNameSpecialty } from "../roster/registerContracts/RegisterContracts";
+import { useGetSpecialtyNamesQuery } from "../../../../store/api/practiceApi/roster";
 import {
     useGetDepartmentsQuery,
     useGetPracticeTypeQuery,
@@ -38,14 +27,13 @@ import {
     usePostPracticesMutation,
     useGetTasksForPracticeQuery
 } from "../../../../store/api/practiceApi/individualTask";
-import {useGetCafDepartmentsQuery} from "../../../../store/api/practiceApi/practical";
-import {processingOfDivisions} from "../../../../utils/processingOfDivisions";
+import { useGetCafDepartmentsQuery } from "../../../../store/api/practiceApi/practical";
+import { processingOfDivisions } from "../../../../utils/processingOfDivisions";
 
 interface FilterType {
     value: string | number
     label: string | number
 }
-
 
 
 const optionsCourse: FilterType[] = [
@@ -82,16 +70,6 @@ const optionsSemester: FilterType[] = [
     {
         value: '2',
         label: '2'
-    }
-]
-const optionsTypePractice: FilterType[] = [
-    {
-        value: 'Производственная',
-        label: 'Производственная'
-    },
-    {
-        value: 'Учебная',
-        label: 'Учебная'
     }
 ]
 
@@ -370,6 +348,7 @@ export const CreatePractical = () => {
         
         console.log('sendData',sendData)
         sendForm(sendData)
+        nav('/services/practices/practical')
 
     }
 

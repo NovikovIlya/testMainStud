@@ -30,20 +30,20 @@ interface FilterType {
 	label: string | number
 }
 
-const filterSpecialization: FilterType[] = [
-	{
-		value: 'Все',
-		label: 'Все'
-	},
-	{
-		value: '31.08.01 Акушерство и гинекология',
-		label: '31.08.01 Акушерство и гинекология'
-	},
-	{
-		value: '31.08.12 Педиатрия',
-		label: '31.08.12 Педиатрия'
-	}
-]
+// const filterSpecialization: FilterType[] = [
+// 	{
+// 		value: 'Все',
+// 		label: 'Все'
+// 	},
+// 	{
+// 		value: '31.08.01 Акушерство и гинекология',
+// 		label: '31.08.01 Акушерство и гинекология'
+// 	},
+// 	{
+// 		value: '31.08.12 Педиатрия',
+// 		label: '31.08.12 Педиатрия'
+// 	}
+// ]
 const filterDepartment: FilterType[] = [
 	{
 		value: 'Все',
@@ -134,62 +134,62 @@ export interface TablePractical {
 	departmentDirector: string
 }
 
-const mockData: TablePractical[] = [
-	{
-		id: '1',
-		key: '1',
-		specialtyName: '31.08.01 Акушерство и гинекология',
-		practiceType: 'Производственная',
-		department: 'Кафедра хирургических болезней постдипломного образования',
-		groupNumber: '10.4-134',
-		semester: '1',
-		academicYear: '2022/2023',
-		courseStudy: '2',
-		practicePeriod: ['2023/03/30', '2023/05/30'],
-		totalHours: 120,
-		individualTasks: [
-			'Овладеть методиками кесарева сечения (корпоральное, истмико-корпоральное, в нижнем сегменте матки, экстракорпоральное',
-			'Овладеть методиками родоразрешающих и плодоразрушающих операций',
-			'Акушерский травматизм матери и плода'
-		],
-		competencies: [
-			'ПК-2 Овладеть методиками кесарева сечения (корпоральное, истмико-корпоральное, в нижнем сегменте матки, экстракорпоральное',
-			'ПК-6 Овладеть методиками родоразрешающих и плодоразрушающих операций',
-			'ПК-7 Акушерский травматизм матери и плода'
-		],
-		departmentDirector: 'Бурмистров М. В.'
-	},
-	{
-		id: '2',
-		key: '2',
-		specialtyName: '31.08.12 Педиатрия',
-		practiceType: 'Технологическая',
-		department: 'Кафедра онкологических болезней',
-		groupNumber: '10.4-134',
-		semester: '2',
-		academicYear: '2022/2023',
-		courseStudy: '4',
-		practicePeriod: ['2023/03/30', '2023/05/30'],
-		totalHours: 120,
-		individualTasks: [
-			'Овладеть методиками кесарева сечения (корпоральное, истмико-корпоральное, в нижнем сегменте матки, экстракорпоральное',
-			'Овладеть методиками родоразрешающих и плодоразрушающих операций',
-			'Акушерский травматизм матери и плода'
-		],
-		competencies: [
-			'ПК-2 Овладеть методиками кесарева сечения (корпоральное, истмико-корпоральное, в нижнем сегменте матки, экстракорпоральное',
-			'ПК-6 Овладеть методиками родоразрешающих и плодоразрушающих операций',
-			'ПК-7 Акушерский травматизм матери и плода'
-		],
-		departmentDirector: 'Бурмистров М. В.'
-	}
-]
+// const mockData: TablePractical[] = [
+// 	{
+// 		id: '1',
+// 		key: '1',
+// 		specialtyName: '31.08.01 Акушерство и гинекология',
+// 		practiceType: 'Производственная',
+// 		department: 'Кафедра хирургических болезней постдипломного образования',
+// 		groupNumber: '10.4-134',
+// 		semester: '1',
+// 		academicYear: '2022/2023',
+// 		courseStudy: '2',
+// 		practicePeriod: ['2023/03/30', '2023/05/30'],
+// 		totalHours: 120,
+// 		individualTasks: [
+// 			'Овладеть методиками кесарева сечения (корпоральное, истмико-корпоральное, в нижнем сегменте матки, экстракорпоральное',
+// 			'Овладеть методиками родоразрешающих и плодоразрушающих операций',
+// 			'Акушерский травматизм матери и плода'
+// 		],
+// 		competencies: [
+// 			'ПК-2 Овладеть методиками кесарева сечения (корпоральное, истмико-корпоральное, в нижнем сегменте матки, экстракорпоральное',
+// 			'ПК-6 Овладеть методиками родоразрешающих и плодоразрушающих операций',
+// 			'ПК-7 Акушерский травматизм матери и плода'
+// 		],
+// 		departmentDirector: 'Бурмистров М. В.'
+// 	},
+// 	{
+// 		id: '2',
+// 		key: '2',
+// 		specialtyName: '31.08.12 Педиатрия',
+// 		practiceType: 'Технологическая',
+// 		department: 'Кафедра онкологических болезней',
+// 		groupNumber: '10.4-134',
+// 		semester: '2',
+// 		academicYear: '2022/2023',
+// 		courseStudy: '4',
+// 		practicePeriod: ['2023/03/30', '2023/05/30'],
+// 		totalHours: 120,
+// 		individualTasks: [
+// 			'Овладеть методиками кесарева сечения (корпоральное, истмико-корпоральное, в нижнем сегменте матки, экстракорпоральное',
+// 			'Овладеть методиками родоразрешающих и плодоразрушающих операций',
+// 			'Акушерский травматизм матери и плода'
+// 		],
+// 		competencies: [
+// 			'ПК-2 Овладеть методиками кесарева сечения (корпоральное, истмико-корпоральное, в нижнем сегменте матки, экстракорпоральное',
+// 			'ПК-6 Овладеть методиками родоразрешающих и плодоразрушающих операций',
+// 			'ПК-7 Акушерский травматизм матери и плода'
+// 		],
+// 		departmentDirector: 'Бурмистров М. В.'
+// 	}
+// ]
 
 export const ViewPractical = () => {
 	const navigate = useNavigate()
 	const [department, setDepartment] = useState<FilterType[]>(filterDepartment)
 
-	const { data: dataPractiseAll } = useGetPracticesAllQuery(null)
+	const { data: dataPractiseAll, isSuccess:isSuccessPractiseAll } = useGetPracticesAllQuery(null)
 	const [tableData, setTableData] = useState<TablePractical[]>(dataPractiseAll)
 	const tokenAccess = localStorage.getItem('access')!.replaceAll('"', '')
 
@@ -243,15 +243,15 @@ export const ViewPractical = () => {
 		{
 			key: 'practiceType',
 			dataIndex: 'practiceType',
-			name: 'Тип практики',
+
 			title: 'Тип практики',
 			className: 'text-xs !p-2',
-			filters:[{
-				text: 'практика по получению первичных',
-				value: 'практика по получению',
-			  },],
-			  // @ts-ignore
-			  onFilter: (value, record) => record?.practiceType?.indexOf(value as string) === 0,
+			// filters:[{
+			// 	text: 'практика по получению первичных',
+			// 	value: 'практика по получению',
+			//   },],
+			//   // @ts-ignore
+			//   onFilter: (value, record) => record?.practiceType?.indexOf(value as string) === 0,
 		},
 		{
 			key: 'department',
@@ -317,7 +317,7 @@ export const ViewPractical = () => {
 			render: (value, record, index) => {
 				return (
 					<div className={'flex flex-col gap-1'}>
-						{record.individualTasks?.map((elem, index) => (
+						{record.tasks?.map((elem, index) => (
 							<span key={index}>
 								{index + 1}. {elem}
 							</span>
@@ -334,7 +334,7 @@ export const ViewPractical = () => {
 			render: (value, record, index) => {
 				return (
 					<div className={'flex flex-col gap-1'}>
-						{record.competencies?.map((elem, index) => (
+						{record.competence?.map((elem, index) => (
 							<span key={index}>
 								{index + 1}. {elem}
 							</span>
@@ -443,17 +443,21 @@ export const ViewPractical = () => {
 		// 		.sort((a, b) => sortDateFilling(a, b))
 		// }
 
-		return mockData
+		return dataPractiseAll? dataPractiseAll
 			.filter(elem => filterPracticeType(elem))
 			.filter(elem => filterDepartment(elem))
 			.filter(elem => filterCourse(elem))
 			.filter(elem => filterSemester(elem))
 			.filter(elem => filterNameSpecialty(elem))
+			: []
 	}
 
-	// useEffect(() => {
-	// 	setTableData(filterDataFull())
-	// }, [filter])
+	useEffect(() => {
+		if(isSuccessPractiseAll){
+			setTableData(filterDataFull())
+		}
+		
+	}, [filter,  isSuccessPractiseAll])
 	
 
 	return (
@@ -509,13 +513,14 @@ export const ViewPractical = () => {
 							popupMatchSelectWidth={false}
 							defaultValue="Все"
 							className="w-full"
-							options={nameSpecialty?.map((item)=>{
-								return {
-									key:item.id,
-									value: item.value,
-									label: item.label
-								}}
-							)}
+							options={[
+								{key: 2244612, value: "Все", label: "Все"},
+								...(nameSpecialty ? nameSpecialty.map((item) => ({
+								  key: item.id,
+								  value: item.value,
+								  label: item.label
+								})) : [])
+							  ]}
 							onChange={value => {
 								setFilter({
 									...filter,
@@ -608,7 +613,7 @@ export const ViewPractical = () => {
 			<Table
 				size="small"
 				columns={columns}
-				dataSource={dataPractiseAll?dataPractiseAll:[]}
+				dataSource={tableData?tableData:[]}
 				pagination={false}
 				className="my-10"
 				rowSelection={{

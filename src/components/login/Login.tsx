@@ -1,5 +1,5 @@
 import { Form, Typography } from 'antd'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -21,6 +21,10 @@ export const Login = () => {
 	const dispatch = useDispatch()
 	const [login] = useLoginMutation()
 	const [error, setError] = useState<IError | null>(null)
+
+	useEffect(()=>{
+		document.title = 'Казанский Федеральный Университет'
+	},[])
 
 	const onFinish = async (values: { email: string; password: string }) => {
 		try {

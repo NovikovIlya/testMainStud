@@ -57,7 +57,26 @@ const EditTask = () => {
 
     useEffect(() => {
         if (isSuccess) {
-            form.setFieldValue('subDivision', data.subdivisionName)
+            const fullSubDivision = dataDepartments?.find((item)=>{
+               
+                if('responses' in item){
+                   return item?.responses?.find((elem=>{
+                        if(elem.value===data.subdivisionName){
+                            return elem
+                        }
+                    }))
+                }
+                else {
+                    console.log('vbz')
+                    return item
+                }
+                console.log('item.value',item.value,'-------------','data.subdivisionName',data.subdivisionName)
+            })
+            
+          
+            console.log('data.subdivisionName',data.subdivisionName)
+            console.log('fullSubDivision',fullSubDivision)
+            form.setFieldValue('subDivision', `${data.subdivisionName} - ${data.subdivisionName}`)
             form.setFieldValue('specialityName', data.specialityName)
             form.setFieldValue('practiceType', data.practiceType)
             const listTasks = data.tasks.map(elem => {
@@ -68,7 +87,8 @@ const EditTask = () => {
             form.setFieldValue('tasks', listTasks)
 
         }
-    }, [data]);
+    }, [data, isSuccess, dataDepartments, form]);
+    
 
     function onFinish(values: Task) {
         const specName = dataNameSpecialty!.find(elem => {
@@ -84,7 +104,7 @@ const EditTask = () => {
         const subDivision = dataDepartments?.find(elem => {
             console.log('elem',elem)
             if ('responses' in elem){
-                return elem?.responses.find((item)=>{
+                return elem?.responses?.find((item)=>{
                     if(item.value===values.subDivision){
                         console.log('bb')
                         console.log('----------------',item)
@@ -92,9 +112,11 @@ const EditTask = () => {
                     }
                 }) 
             }
-            if (elem.value === values.subDivision) {
+            else {
                 return elem
             }
+            
+           
         })
         console.log('values.subDivision',values.subDivision)
         console.log('subDivision',subDivision)
@@ -164,7 +186,13 @@ const EditTask = () => {
                                     size="large"
                                     popupMatchSelectWidth={false}
                                     className="w-full"
-                                    options={nameSpecialty}
+                                    options={nameSpecialty?.map((item)=>{
+                                        return{
+                                            key:item.id,
+                                            value:item.value,
+                                            label:item.label
+                                        }
+                                    })}
                                 />
                             </Form.Item>
                         </Space>
@@ -182,7 +210,13 @@ const EditTask = () => {
                                     size="large"
                                     popupMatchSelectWidth={false}
                                     className="w-full"
-                                    options={practiceType}
+                                    options={practiceType?.map((item)=>{
+                                        return{
+                                            key:item.id,
+                                            value:item.value,
+                                            label:item.label
+                                        }
+                                    })}
                                 />
                             </Form.Item>
                         </Space>

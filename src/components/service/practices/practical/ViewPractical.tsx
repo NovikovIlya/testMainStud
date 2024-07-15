@@ -5,20 +5,16 @@ import {
 	Row,
 	Select,
 	Space,
-	Table,
-	TableProps
+	Table
 } from 'antd'
 import dayjs from 'dayjs'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { EditSvg } from '../../../../assets/svg/EditSvg'
 import { PointsSvg } from '../../../../assets/svg/PointsSvg'
 import { useGetPracticesAllQuery } from '../../../../store/api/practiceApi/individualTask'
 import { useGetSpecialtyNamesQuery } from '../../../../store/api/practiceApi/roster'
-import { agreementFileDocument } from '../../../../utils/downloadDocument/agreementFileDocument'
-import { practiceDocument } from '../../../../utils/downloadDocument/practiceDocument'
-import { FullIndividualTask } from '../individual-tasks/IndividualTasks'
 import { PracticalPopoverContent } from '../popover/practical/PracticalPopoverContent'
 import { PracticalPopoverMain } from '../popover/practical/PracticalPopoverMain'
 import { OptionsNameSpecialty } from '../roster/registerContracts/RegisterContracts'
@@ -30,20 +26,6 @@ interface FilterType {
 	label: string | number
 }
 
-// const filterSpecialization: FilterType[] = [
-// 	{
-// 		value: 'Все',
-// 		label: 'Все'
-// 	},
-// 	{
-// 		value: '31.08.01 Акушерство и гинекология',
-// 		label: '31.08.01 Акушерство и гинекология'
-// 	},
-// 	{
-// 		value: '31.08.12 Педиатрия',
-// 		label: '31.08.12 Педиатрия'
-// 	}
-// ]
 const filterDepartment: FilterType[] = [
 	{
 		value: 'Все',
@@ -134,69 +116,21 @@ export interface TablePractical {
 	departmentDirector: string
 }
 
-// const mockData: TablePractical[] = [
-// 	{
-// 		id: '1',
-// 		key: '1',
-// 		specialtyName: '31.08.01 Акушерство и гинекология',
-// 		practiceType: 'Производственная',
-// 		department: 'Кафедра хирургических болезней постдипломного образования',
-// 		groupNumber: '10.4-134',
-// 		semester: '1',
-// 		academicYear: '2022/2023',
-// 		courseStudy: '2',
-// 		practicePeriod: ['2023/03/30', '2023/05/30'],
-// 		totalHours: 120,
-// 		individualTasks: [
-// 			'Овладеть методиками кесарева сечения (корпоральное, истмико-корпоральное, в нижнем сегменте матки, экстракорпоральное',
-// 			'Овладеть методиками родоразрешающих и плодоразрушающих операций',
-// 			'Акушерский травматизм матери и плода'
-// 		],
-// 		competencies: [
-// 			'ПК-2 Овладеть методиками кесарева сечения (корпоральное, истмико-корпоральное, в нижнем сегменте матки, экстракорпоральное',
-// 			'ПК-6 Овладеть методиками родоразрешающих и плодоразрушающих операций',
-// 			'ПК-7 Акушерский травматизм матери и плода'
-// 		],
-// 		departmentDirector: 'Бурмистров М. В.'
-// 	},
-// 	{
-// 		id: '2',
-// 		key: '2',
-// 		specialtyName: '31.08.12 Педиатрия',
-// 		practiceType: 'Технологическая',
-// 		department: 'Кафедра онкологических болезней',
-// 		groupNumber: '10.4-134',
-// 		semester: '2',
-// 		academicYear: '2022/2023',
-// 		courseStudy: '4',
-// 		practicePeriod: ['2023/03/30', '2023/05/30'],
-// 		totalHours: 120,
-// 		individualTasks: [
-// 			'Овладеть методиками кесарева сечения (корпоральное, истмико-корпоральное, в нижнем сегменте матки, экстракорпоральное',
-// 			'Овладеть методиками родоразрешающих и плодоразрушающих операций',
-// 			'Акушерский травматизм матери и плода'
-// 		],
-// 		competencies: [
-// 			'ПК-2 Овладеть методиками кесарева сечения (корпоральное, истмико-корпоральное, в нижнем сегменте матки, экстракорпоральное',
-// 			'ПК-6 Овладеть методиками родоразрешающих и плодоразрушающих операций',
-// 			'ПК-7 Акушерский травматизм матери и плода'
-// 		],
-// 		departmentDirector: 'Бурмистров М. В.'
-// 	}
-// ]
-
 export const ViewPractical = () => {
 	const navigate = useNavigate()
 	const [department, setDepartment] = useState<FilterType[]>(filterDepartment)
-
+	const [m,setM] = useState()
 	const { data: dataPractiseAll, isSuccess:isSuccessPractiseAll } = useGetPracticesAllQuery(null)
 	const [tableData, setTableData] = useState<TablePractical[]>(dataPractiseAll)
 	const tokenAccess = localStorage.getItem('access')!.replaceAll('"', '')
 
 	const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
 	
-	const { data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty } =
-		useGetSpecialtyNamesQuery()
+	const { data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty } =useGetSpecialtyNamesQuery()
+
+	useEffect(()=>{
+		setM('')
+	},[dataPractiseAll])
 
 	useEffect(() => {
 		if (isSuccessNameSpecialty) {
@@ -444,11 +378,11 @@ export const ViewPractical = () => {
 		// }
 
 		return dataPractiseAll? dataPractiseAll
-			.filter(elem => filterPracticeType(elem))
-			.filter(elem => filterDepartment(elem))
-			.filter(elem => filterCourse(elem))
-			.filter(elem => filterSemester(elem))
-			.filter(elem => filterNameSpecialty(elem))
+			.filter((elem:any) => filterPracticeType(elem))
+			.filter((elem:any) => filterDepartment(elem))
+			.filter((elem:any) => filterCourse(elem))
+			.filter((elem:any )=> filterSemester(elem))
+			.filter((elem:any) => filterNameSpecialty(elem))
 			: []
 	}
 

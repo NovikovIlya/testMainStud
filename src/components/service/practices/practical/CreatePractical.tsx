@@ -80,9 +80,6 @@ export const CreatePractical = () => {
     const [form] = Form.useForm()
     const [fullDate,setFullDate] = useState<any>(null)
     const [arqTask,setArqTask] = useState<any>(null)
-    const [pickCourseNumber,setPickCourseNumber] = useState<any>(null)
-    const [pickSemestr,setPickSemestr] = useState<any>(null)
-    const [pickGroupNumber, setPickGroupNumber] = useState<any>(null)
     const [pickDate, setPickDate] = useState<any>(null)
     const [pickSpeciality, setPickSpeciality] = useState<any>(null)
     const [pickKindPractise,setPickKindPractise]=useState<any>(null)
@@ -220,7 +217,7 @@ export const CreatePractical = () => {
 
 
 
-    const [dep, setDep] = useState()
+
     const {data: dataDep, isSuccess: isSuccessDep} = useGetCafDepartmentsQuery(subDivisionId,{skip: subDivisionId === null})
     useEffect(()=>{
         if(isSuccessDep)
@@ -254,8 +251,7 @@ export const CreatePractical = () => {
         const month = String(date.getMonth() + 1).padStart(2, '0');
         const day = String(date.getDate()).padStart(2, '0');
         const formattedDate = `${year}.${month}.${day}`;
-        console.log('formattedDate',fullDate[0].$y,fullDate[0].$M+1,fullDate[0].$D)
-        console.log('formattedDateformattedDate',formattedDate)
+
         const dateStringEnd = fullDate[1].$d
         const dateEnd = new Date(dateStringEnd)
         const yearEnd = dateEnd.getFullYear();
@@ -377,15 +373,7 @@ export const CreatePractical = () => {
     const handlePracticeType = (value:any)=>{
         setPickTypePractise(value)
     }
-    const handleGroupNumber = (value:any)=>{
-        setPickGroupNumber(value)
-    }
-    const handleSemestr = (value:any)=>{
-        setPickSemestr(value)
-    }
-    const handleCourseNumber = (value:any)=>{
-        setPickCourseNumber(value)
-    }
+
 
 
     
@@ -542,7 +530,7 @@ export const CreatePractical = () => {
                                         value:item.value,
                                         label:item.label}
                                 })}
-                                onChange={handleGroupNumber}
+                                
                             />
                         </Form.Item>
                     </Col>
@@ -574,7 +562,7 @@ export const CreatePractical = () => {
                                 popupMatchSelectWidth={false}
                                 className="w-full"
                                 options={optionsSemester}
-                                onChange={handleSemestr}
+                               
                             />
                         </Form.Item>
                     </Col>
@@ -605,7 +593,7 @@ export const CreatePractical = () => {
                                 popupMatchSelectWidth={false}
                                 className="w-full"
                                 options={optionsCourse}
-                                onChange={handleCourseNumber}
+                               
                             />
                         </Form.Item>
                     </Col>

@@ -89,6 +89,12 @@ export const individualTasks = apiSlice.injectEndpoints({
                 method: 'GET',
             })
         }),
+        getPracticeTypeForPractice: builder.query<any, any>({
+            query: (subDivisionId) => ({
+                url:`services/api-practices/tasks/practice-types?subdivisionId=${subDivisionId}`,
+                method: 'GET',
+            })
+        }),
         getPracticeKind: builder.query<PracticeType[], any>({
             query: (subDivisionId) => ({
                 url: `services/api-practices/kpfu/practice-kinds?subdivisionId=${subDivisionId}`,
@@ -145,7 +151,8 @@ export const individualTasks = apiSlice.injectEndpoints({
                 method: 'PATCH',
                 body: obj
                 
-            })
+            }),
+            invalidatesTags:['Practice']
         }),
         postPractices: builder.mutation<any, any>({
             query: (obj) => ({
@@ -175,6 +182,7 @@ export const {
     useGetPracticesAllQuery,
     usePostPracticesMutation,
     useGetPracticeOneQuery,
-    useUpdatePracticeOneMutation
+    useUpdatePracticeOneMutation,
+    useGetPracticeTypeForPracticeQuery
 
 } = individualTasks

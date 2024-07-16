@@ -1,23 +1,23 @@
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-
+import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../store';
 import { hideNotification } from '../../store/reducers/notificationSlice';
+import { notification } from 'antd';
 
 export const Notification = () => {
+  const [api, contextHolder] = notification.useNotification();
   const { message, type } = useAppSelector((state) => state.notification);
   const dispatch = useAppDispatch();
 
-  if (!message) return null;
+  useEffect(() => {
+    if (message) {
+      api.open({
+        message: 'Уведомление',
+        description: message,
+        type: type,
+        onClose: () => dispatch(hideNotification())
+      });
+    }
+  }, [message, type, api, dispatch]);
 
-  const handleClose = () => {
-    dispatch(hideNotification());
-  };
-
-  return (
-    <div className={`notification ${type}`}>
-      <p>{message}</p>
-      <button onClick={handleClose}>Close</button>
-    </div>
-  );
+  return <>{contextHolder}</>;
 }

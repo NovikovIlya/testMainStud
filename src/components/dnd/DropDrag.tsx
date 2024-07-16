@@ -60,7 +60,9 @@ const DropDrag = () => {
 		dispatch(removeCard(i))
 	}
 
-	const generateDOM = layout.lg.map(item => {
+	const layoutValid = layout.lg.filter(obj1 =>jsxElements.some(obj2 => obj1.i === obj2.index))
+
+	const generateDOM = layoutValid.map(item => {
 		return (
 			<div
 				key={item.i}
@@ -72,10 +74,13 @@ const DropDrag = () => {
 							className="absolute top-2 cursor-pointer right-2"
 							onClick={() => onRemoveItem(item.i)}
 						>
-							<DeleteOutlined className=" mt-2 mr-2 opacity-50"/>
+							<DeleteOutlined className=" mt-2 mr-2 opacity-50" />
 						</div>
 					)}
-					{jsxElements.filter(el => el.index === item.i)[0].element}
+					{
+						jsxElements
+							.filter(el => el.index === item.i)[0].element
+					}
 				</div>
 			</div>
 		)

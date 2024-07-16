@@ -1,10 +1,12 @@
 import {
 	Button,
 	Col,
+	Form,
 	Popover,
 	Row,
 	Select,
 	Space,
+	Spin,
 	Table
 } from 'antd'
 import dayjs from 'dayjs'
@@ -13,13 +15,16 @@ import { useNavigate } from 'react-router-dom'
 
 import { EditSvg } from '../../../../assets/svg/EditSvg'
 import { PointsSvg } from '../../../../assets/svg/PointsSvg'
-import { useGetPracticesAllQuery } from '../../../../store/api/practiceApi/individualTask'
+import { useGetDepartmentsQuery, useGetPracticeKindQuery, useGetPracticesAllQuery, useGetPracticeTypeQuery } from '../../../../store/api/practiceApi/individualTask'
 import { useGetSpecialtyNamesQuery } from '../../../../store/api/practiceApi/roster'
 import { PracticalPopoverContent } from '../popover/practical/PracticalPopoverContent'
 import { PracticalPopoverMain } from '../popover/practical/PracticalPopoverMain'
 import { OptionsNameSpecialty } from '../roster/registerContracts/RegisterContracts'
 
 import './ViewPractical.scss'
+import { LoadingOutlined } from '@ant-design/icons'
+import { useGetCafDepartmentsQuery } from '../../../../store/api/practiceApi/practical'
+import { processingOfDivisions } from '../../../../utils/processingOfDivisions'
 
 interface FilterType {
 	value: string | number
@@ -84,20 +89,6 @@ const filterSemester: FilterType[] = [
 		label: '2'
 	}
 ]
-const filterType: FilterType[] = [
-	{
-		value: 'Все',
-		label: 'Все'
-	},
-	{
-		value: 'Производственная',
-		label: 'Производственная'
-	},
-	{
-		value: 'Технологическая',
-		label: 'Технологическая'
-	}
-]
 
 export interface TablePractical {
 	id: string
@@ -116,32 +107,12 @@ export interface TablePractical {
 	departmentDirector: string
 }
 
+
 export const ViewPractical = () => {
 	const navigate = useNavigate()
-	const [department, setDepartment] = useState<FilterType[]>(filterDepartment)
-	const [m,setM] = useState()
-	const { data: dataPractiseAll, isSuccess:isSuccessPractiseAll } = useGetPracticesAllQuery(null)
-	const [tableData, setTableData] = useState<TablePractical[]>(dataPractiseAll)
-	const tokenAccess = localStorage.getItem('access')!.replaceAll('"', '')
-
-	const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
-	
-	const { data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty } =useGetSpecialtyNamesQuery()
-
-	useEffect(()=>{
-		setM('')
-	},[dataPractiseAll])
-
-	useEffect(() => {
-		if (isSuccessNameSpecialty) {
-			setNameSpecialty(dataNameSpecialty)
-		}
-	}, [dataNameSpecialty])
-
-	const [selectedFieldsFull, setSelectedFieldFull] = useState<TablePractical[]>(
-		[]
-	)
-
+	const [subDevisionId, setSubDevisionId] = useState(null)
+	const [selectedFieldsFull, setSelectedFieldFull] = useState<TablePractical[]>([])
+	const [departments, setDepartments] = useState<any[]>()
 	const [filter, setFilter] = useState({
 		nameSpecialty: 'Все',
 		department: 'Все',
@@ -149,6 +120,16 @@ export const ViewPractical = () => {
 		semester: 'Все',
 		practiceType: 'Все'
 	})
+	const { data: dataPractiseAll, isSuccess:isSuccessPractiseAll, isFetching:isFetchingPractiseAll } = useGetPracticesAllQuery(null,{
+		refetchOnFocus:true
+	})
+	const [tableData, setTableData] = useState<TablePractical[]>(dataPractiseAll)
+	const tokenAccess = localStorage.getItem('access')!.replaceAll('"', '')
+	const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
+	const { data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty } = useGetSpecialtyNamesQuery()
+	const {data: dataDepartments, isSuccess: isSuccessDepartments} = useGetDepartmentsQuery()
+	const {data: dataDep, isSuccess: isSuccessDep} = useGetCafDepartmentsQuery(subDevisionId,{skip: !subDevisionId})
+	const {data: dataPracticeType, isSuccess: isSuccessPracticeType} = useGetPracticeTypeQuery()
 
 	const columns = [
 		{
@@ -227,7 +208,7 @@ export const ViewPractical = () => {
 			title: 'Период практики',
 			align: 'center',
 			className: 'text-xs !p-2',
-			render: (value, record, index) => {
+			render: (_:any, record:any) => {
 				return (
 					<div className={'flex flex-col'}>
 						<span>{dayjs(record.practicePeriod[0]).format('DD.MM.YYYY')}</span>-
@@ -248,35 +229,35 @@ export const ViewPractical = () => {
 			dataIndex: 'individualTasks',
 			title: 'Индивидуальные задания',
 			className: 'text-xs !p-2',
-			render: (value, record, index) => {
+			render: (_:any, record:any,) => {
 				return (
 					<div className={'flex flex-col gap-1'}>
-						{record.tasks?.map((elem, index) => (
+						{record.tasks?.map((elem:any, index:any) => (
 							<span key={index}>
-								{index + 1}. {elem}
+								{index + 1}. {elem.taskDescription}
 							</span>
 						))}
 					</div>
 				)
 			}
 		},
-		{
-			key: 'competencies',
-			dataIndex: 'competencies',
-			title: 'Код и наименование компетенции',
-			className: 'text-xs !p-2',
-			render: (value, record, index) => {
-				return (
-					<div className={'flex flex-col gap-1'}>
-						{record.competence?.map((elem, index) => (
-							<span key={index}>
-								{index + 1}. {elem}
-							</span>
-						))}
-					</div>
-				)
-			}
-		},
+		// {
+		// 	key: 'competencies',
+		// 	dataIndex: 'competencies',
+		// 	title: 'Код и наименование компетенции',
+		// 	className: 'text-xs !p-2',
+		// 	render: (_:any, record:any) => {
+		// 		return (
+		// 			<div className={'flex flex-col gap-1'}>
+		// 				{record.competence?.map((elem:any, index:any) => (
+		// 					<span key={index}>
+		// 						{index + 1}. {elem}
+		// 					</span>
+		// 				))}
+		// 			</div>
+		// 		)
+		// 	}
+		// },
 		{
 			key: 'departmentDirector',
 			dataIndex: 'departmentDirector',
@@ -300,7 +281,7 @@ export const ViewPractical = () => {
 				</Popover>
 			),
 			align: 'center',
-			render: record => (
+			render: (record:any) => (
 				<Popover
 					trigger={'click'}
 					content={
@@ -319,6 +300,32 @@ export const ViewPractical = () => {
 		}
 	]
 
+
+    useEffect(() => {
+        if (isSuccessDepartments) {
+            setDepartments(processingOfDivisions(dataDepartments))
+        }
+    }, [dataDepartments]);
+
+	useEffect(()=>{
+		if(isSuccessPractiseAll)
+		setTableData(dataPractiseAll)
+	},[isSuccessPractiseAll, isFetchingPractiseAll])
+
+	useEffect(() => {
+		if (isSuccessNameSpecialty) {
+			setNameSpecialty(dataNameSpecialty)
+		}
+	}, [dataNameSpecialty])
+
+	useEffect(() => {
+		if(isSuccessPractiseAll){
+			setTableData(filterDataFull())
+		}
+		
+	}, [filter,  isSuccessPractiseAll])
+
+	
 	function filterDataFull() {
 		function filterPracticeType(elem: TablePractical) {
 			if (filter.practiceType === 'Все') {
@@ -386,14 +393,15 @@ export const ViewPractical = () => {
 			: []
 	}
 
-	useEffect(() => {
-		if(isSuccessPractiseAll){
-			setTableData(filterDataFull())
-		}
-		
-	}, [filter,  isSuccessPractiseAll])
-	
+	const handleChange = (value: string) => {
+        departments?.find(elem => {
+            if (elem.label === value) {
+                setSubDevisionId(elem.id)
+            }
+        })  
+    }
 
+	
 	return (
 		<>
 			<section className="container ">
@@ -440,10 +448,26 @@ export const ViewPractical = () => {
 
 				<Row gutter={[16, 16]} className="mt-12">
 					<Col span={5}>
+						<span>Подразделение</span>
+					</Col>
+					<Col span={8}>
+						<Select
+                                    size="large"
+                                    popupMatchSelectWidth={false}
+                                    className="w-full"
+                                    options={departments}
+									onChange={handleChange}
+                                />
+					</Col>
+				</Row>
+				<Row gutter={[16, 16]} className="mt-4">
+					
+					<Col span={5}>
 						<span>Наименование специальности</span>
 					</Col>
 					<Col span={8}>
 						<Select
+							disabled={!isSuccessDep}
 							popupMatchSelectWidth={false}
 							defaultValue="Все"
 							className="w-full"
@@ -483,10 +507,21 @@ export const ViewPractical = () => {
 					</Col>
 					<Col span={8}>
 						<Select
+						    // rowKey="id"
+							disabled={!isSuccessDep}
 							popupMatchSelectWidth={false}
 							defaultValue="Все"
 							className="w-full"
-							options={department}
+							options={
+								[
+									{ key: 0, value: "Все", label: "Все" },
+									...(dataDep ? dataDep.map((item) => ({
+										key: item.id,
+										value: item.value,
+										label: item.label
+									})) : [])
+								]
+							}
 							onChange={value => {
 								setFilter({
 									...filter,
@@ -528,12 +563,22 @@ export const ViewPractical = () => {
 						/>
 					</Col>
 					<Col span={7} className={'flex items-center gap-2'}>
-						<span className="whitespace-nowrap">Вид практики</span>
+						<span className="whitespace-nowrap">Тип практики</span>
 						<Select
+							// disabled={!isSuccessDep}
 							popupMatchSelectWidth={false}
 							defaultValue="Все"
 							className="w-full"
-							options={filterType}
+							options={
+								[
+									{ key: 0, value: "Все", label: "Все" },
+									...(dataPracticeType ? dataPracticeType.map((item) => ({
+										key: item.id,
+										value: item.value,
+										label: item.label
+									})) : [])
+								]
+							}
 							onChange={value => {
 								setFilter({
 									...filter,
@@ -544,8 +589,11 @@ export const ViewPractical = () => {
 					</Col>
 				</Row>
 			</section>
+			{isFetchingPractiseAll ? <Spin className='w-full mt-20' indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />  : 
 			<Table
 				size="small"
+				rowKey="id"
+				// @ts-ignore
 				columns={columns}
 				dataSource={tableData?tableData:[]}
 				pagination={false}
@@ -560,6 +608,7 @@ export const ViewPractical = () => {
 					}
 				}}
 			/>
+			}
 		</>
 	)
 }

@@ -218,7 +218,7 @@ export interface TaskSend {
 }
 
 export interface TaskEdit extends TaskSend {
-    id: string
+    id: any
 }
 
 export interface OneTask {

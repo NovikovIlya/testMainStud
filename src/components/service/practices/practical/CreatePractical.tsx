@@ -3,6 +3,7 @@ import {
     Col,
     DatePicker,
     Form, InputNumber,
+    List,
     Row,
     Select,
     Space
@@ -16,7 +17,7 @@ import {
 } from "../../../../models/Practice";
 import { useNavigate } from "react-router-dom";
 import { OptionsNameSpecialty } from "../roster/registerContracts/RegisterContracts";
-import { useGetSpecialtyNamesQuery } from "../../../../store/api/practiceApi/roster";
+import { useGetSpecialtyNamesForPractiseQuery, useGetSpecialtyNamesQuery } from "../../../../store/api/practiceApi/roster";
 import {
     useGetDepartmentsQuery,
     useGetPracticeTypeQuery,
@@ -25,7 +26,8 @@ import {
     useGetDepartmentDirectorsQuery,
     useGetCompentencesQuery,
     usePostPracticesMutation,
-    useGetTasksForPracticeQuery
+    useGetTasksForPracticeQuery,
+    useGetPracticeTypeForPracticeQuery
 } from "../../../../store/api/practiceApi/individualTask";
 import { useGetCafDepartmentsQuery } from "../../../../store/api/practiceApi/practical";
 import { processingOfDivisions } from "../../../../utils/processingOfDivisions";
@@ -89,31 +91,26 @@ export const CreatePractical = () => {
     const [subDivisionId,setSubDevisionId] = useState<null | string>(null)
     const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
     const [objectForCompetences, setObjectForCompetences] = useState<any>(null)
-    const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery()
+    const [practiceType, setPracticeType] = useState<PracticeType[]>()
+    const [groupNumbers, setGroupNumbers] = useState<any>(null)
+    const [departments, setDepartments] = useState<Department[]>()
+    const [practiceKindForSelect, setPracticeKindForSelect] = useState<any>(null)
+    const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesForPractiseQuery(subDivisionId, {skip: subDivisionId === null})
     const {data: dataPraciseKind, isSuccess: isSuccesPractiseKind} = useGetPracticeKindQuery(subDivisionId, {skip: subDivisionId === null})
     const {data: dataGroupNumbers, isSuccess: isSuccessGroupNumbers} = useGetGroupNumbersQuery(subDivisionId, {skip: subDivisionId === null})
     const {data: dataDepartmentDirector, isSuccess: isSuccessDepartmentDirector} = useGetDepartmentDirectorsQuery(subDivisionId, {skip: subDivisionId === null})
     const {data:dataCompetences, isSuccess: isSuccessCompetences} = useGetCompentencesQuery(objectForCompetences,{skip: objectForCompetences === null})
-  
-    useEffect(() => {
-        if (isSuccessNameSpecialty) {
-            setNameSpecialty(dataNameSpecialty)
-        }
-    }, [dataNameSpecialty]);
-
-    const [practiceType, setPracticeType] = useState<PracticeType[]>()
-    const {data: dataPracticeType, isSuccess: isSuccessPracticeType} = useGetPracticeTypeQuery()
- 
-    const [groupNumbers, setGroupNumbers] = useState<any>(null)
-    const [departments, setDepartments] = useState<Department[]>()
-    const [practiceKindForSelect, setPracticeKindForSelect] = useState<any>(null)
     const {data: dataDepartments, isSuccess: isSuccessDepartments} = useGetDepartmentsQuery()
+    const {data: dataPracticeType, isSuccess: isSuccessPracticeType} = useGetPracticeTypeForPracticeQuery(subDivisionId, {skip: subDivisionId === null})
+    const {data:dataTask, isSuccess:isSuccessTask} = useGetTasksForPracticeQuery(arqTask)
+    const {data: dataDep, isSuccess: isSuccessDep} = useGetCafDepartmentsQuery(subDivisionId,{skip: subDivisionId === null})
     const [sendForm,{data}] = usePostPracticesMutation()
    
+
     // заполнения объекта для компетенции
     useEffect(()=>{
         if(pickKindPractise && pickDate && pickSpeciality){
-            const specId = dataNameSpecialty?.find((elem) => {
+            const specId = dataNameSpecialty?.find((elem:any) => {
                 if (elem.value === pickSpeciality) {
                     return elem
                 }
@@ -134,8 +131,12 @@ export const CreatePractical = () => {
         }
     },[dataNameSpecialty, dataPraciseKind, pickDate, pickSpeciality, pickKindPractise])
 
+    useEffect(() => {
+        if (isSuccessNameSpecialty) {
+            setNameSpecialty(dataNameSpecialty)
+        }
+    }, [dataNameSpecialty]);
 
-    
     // получение заведущего
     useEffect(() => {
         if (isSuccessDepartmentDirector) {
@@ -156,7 +157,6 @@ export const CreatePractical = () => {
             setDepartments(processingOfDivisions(dataDepartments))
         }
     }, [dataDepartments]);
-   
     
     useEffect(() => {
         if (isSuccessPracticeType) {
@@ -171,22 +171,22 @@ export const CreatePractical = () => {
         }
     }, [dataDepartments, isSuccesPractiseKind]);
 
-    const [twoId, setTwoId] = useState<TwoId>({
-        sp_name_id: null,
-        practice_type_id: null,
-    })
-    const {data:dataTask, isSuccess:isSuccessTask} = useGetTasksForPracticeQuery(arqTask)
-    const [tasksId, setTasksId] = useState<string>('')
+    // const [twoId, setTwoId] = useState<TwoId>({
+    //     sp_name_id: null,
+    //     practice_type_id: null,
+    // })
+
+    // const [tasksId, setTasksId] = useState<string>('')
     
     // получение инд заданий
     useEffect(()=>{
         if(pickSpeciality && pickTypePractise){
-            const pickTypeId = dataPracticeType?.find(elem => {
+            const pickTypeId = dataPracticeType?.find((elem:any) => {
                 if (elem.value === pickTypePractise) {
                     return elem
                 }
             })
-            const pickSpecialityId = dataNameSpecialty?.find(elem => {
+            const pickSpecialityId = dataNameSpecialty?.find((elem:any) => {
                 if (elem.value === pickSpeciality) {
                     return elem
                 }
@@ -215,15 +215,10 @@ export const CreatePractical = () => {
     //     }
     // }, [twoId]);
 
-
-
-
-    const {data: dataDep, isSuccess: isSuccessDep} = useGetCafDepartmentsQuery(subDivisionId,{skip: subDivisionId === null})
     useEffect(()=>{
         if(isSuccessDep)
         setOptionsDepartment(dataDep)
     },[dataDep])
-
 
 
     function onFinish(values: NewPractice) {
@@ -279,7 +274,7 @@ export const CreatePractical = () => {
                 return elem
             }
         })
-        const practisePickId = dataPracticeType?.find(elem => {
+        const practisePickId = dataPracticeType?.find((elem:any) => {
             if (elem.value === pickTypePractise) {
                 return elem
             }
@@ -289,8 +284,6 @@ export const CreatePractical = () => {
                 return elem
             }
         })
-    
-
 
         const sendData: any = {
             // specialityName: values.specialityName,
@@ -306,7 +299,7 @@ export const CreatePractical = () => {
             startDate: formattedDate,
             totalHours: String(values.amountHours),
             endDate: formattedDateEnd ,
-            individualTaskId: dataTask?.id || null,
+            // individualTaskId: dataTask?.id || null,
             competenceIds: dataCompetences,
             departmentDirectorId: directorId.id,
             subdivisionId: subDivisionId,
@@ -342,7 +335,7 @@ export const CreatePractical = () => {
 
         // }
         
-        console.log('sendData',sendData)
+
         sendForm(sendData)
         nav('/services/practices/practical')
 
@@ -357,7 +350,6 @@ export const CreatePractical = () => {
     };
 
     const onChangePicker = (value:any)=>{
-        console.log('vvv',value[0])
         // @ts-ignore
         setPickDate([value[0].$y,value[1].$y])
         setFullDate(value)
@@ -374,7 +366,7 @@ export const CreatePractical = () => {
         setPickTypePractise(value)
     }
 
-
+    const dataTaskValid = dataTask?.tasks.map((item:any)=>item.taskDescription)
 
     
 
@@ -416,17 +408,7 @@ export const CreatePractical = () => {
                                     label:item.label}
                                  ))}
                                  onChange={handleSpeciality}
-                                // onChange={(value) => {
-                                //     const id = dataNameSpecialty!.find(elem => {
-                                //         if (elem.value === value) {
-                                //             return elem.id
-                                //         }
-                                //     })
-                                //     setTwoId({
-                                //         ...twoId,
-                                //         sp_name_id: id!.id
-                                //     })
-                                // }}
+
                             />
                         </Form.Item>
                     </Col>
@@ -434,31 +416,23 @@ export const CreatePractical = () => {
                 <Row gutter={[16, 16]}>
                     <Col xs={24} sm={24} md={18} lg={16} xl={12}>
                         <Form.Item
+                        
                             rules={[{required: true}]}
                             name={'practiceType'}
                             label={'Тип практики'}>
                             <Select
+                                disabled={!pickSpeciality}
                                 size="large"
-                                disabled={!isSuccessPracticeType}
+                                
                                 popupMatchSelectWidth={false}
                                 className="w-full"
-                                options={dataPracticeType?.map((item)=>(
+                                options={dataPracticeType?.map((item:any)=>(
                                     {key:item.id,
                                     value:item.value,
                                     label:item.label}
                                  ))}
                                  onChange={handlePracticeType}
-                                // onChange={value => {
-                                //     const id = dataPracticeType!.find(elem => {
-                                //         if (elem.value === value) {
-                                //             return elem
-                                //         }
-                                //     })
-                                //     setTwoId({
-                                //         ...twoId,
-                                //         practice_type_id: +id!.id
-                                //     })
-                                // }}
+                            
                             />
                         </Form.Item>
                     </Col>
@@ -638,11 +612,7 @@ export const CreatePractical = () => {
                         </Form.Item>
                     </Col>
                 </Row>
-                {/*<Space direction="vertical" className="w-full  mb-4 mt-10">*/}
-                {/*    <Typography.Text className="font-bold">*/}
-                {/*        Индивидуальные задания*/}
-                {/*    </Typography.Text>*/}
-                {/*</Space>*/}
+
 
                 <Row gutter={[16, 16]}>
                     {/* <Col xs={24} sm={24} md={18} lg={16} xl={12}>
@@ -806,6 +776,22 @@ export const CreatePractical = () => {
                                 options={departmentDirector}
                             />
                         </Form.Item>
+                    </Col>
+                </Row>
+
+                <Row gutter={[16, 16]} className={'mt-4'}>
+                    <Col xs={24} sm={24} md={18} lg={16} xl={12}>
+                    <List
+                        header={<div>Индивидуальные задания:</div>}
+                       
+                        bordered
+                        dataSource={isSuccessTask?dataTaskValid : ''}
+                        renderItem={(item:any) => (
+                            <List.Item>
+                            {item}
+                            </List.Item>
+                        )}
+                        />
                     </Col>
                 </Row>
 

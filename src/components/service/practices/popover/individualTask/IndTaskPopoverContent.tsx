@@ -8,6 +8,9 @@ import {Load} from "../../../../../assets/svg/Load";
 import {PrintSvg} from "../../../../../assets/svg/PrintSvg";
 import {DeleteRedSvg} from "../../../../../assets/svg/DeleteRedSvg";
 import {useDeleteTaskMutation} from "../../../../../store/api/practiceApi/individualTask";
+import { useAppDispatch } from '../../../../../store';
+import { showNotification } from '../../../../../store/reducers/notificationSlice';
+
 
 interface Props {
     recordCompressed?: CompressedIndividualTask
@@ -27,6 +30,7 @@ export const IndTaskPopoverContent = ({
                                           tableDataFull
                                       }: Props) => {
     const [deleteTask] = useDeleteTaskMutation()
+    const dispatch = useAppDispatch();
 
     function translateColumnIntoRussia({isPrint}: { isPrint: boolean }) {
         if (recordCompressed) {
@@ -97,7 +101,18 @@ export const IndTaskPopoverContent = ({
                 return elem.key !== recordCompressed?.key
             })
             deleteTask(recordCompressed!.id)
-            setTableDataCompressed(newArr)
+                .unwrap()
+                .then(()=>{
+                    setTableDataCompressed(newArr)
+                })
+                .catch((error)=>{
+                console.log('bb',error)
+                if (error.status === 409) {
+                    console.log('e mama')
+                    dispatch(showNotification({ message: 'Произошел конфликт', type: 'error' }));
+                  }
+            })
+            // setTableDataCompressed(newArr)
         }
 
         if (setTableDataFull && tableDataFull) {
@@ -105,7 +120,19 @@ export const IndTaskPopoverContent = ({
                 return elem.key !== recordFull?.key
             })
             deleteTask(recordFull!.id)
-            setTableDataFull(newArr)
+                .unwrap()
+                .then(()=>{
+                    // @ts-ignore
+                    setTableDataCompressed(newArr)
+                })
+                .catch((error)=>{
+                console.log('bb',error)
+                if (error.status === 409) {
+                    console.log('e mama2')
+                    dispatch(showNotification({ message: 'Произошел конфликт', type: 'error' }));
+                  }
+            })
+            // setTableDataFull(newArr)
         }
 
     }

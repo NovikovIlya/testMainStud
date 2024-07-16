@@ -3,9 +3,11 @@ import {
     Col,
     DatePicker,
     Form, InputNumber,
+    List,
     Row,
     Select,
-    Space
+    Space,
+    Typography
 } from 'antd';
 import { useEffect, useState } from 'react';
 import { ArrowLeftSvg } from '../../../../assets/svg';
@@ -77,9 +79,9 @@ export const EditPractical = () => {
     const [fullDate,setFullDate] = useState<any>(null)
     const [idSub, setIdSub] = useState<any>(null)
     const [subDivisionId,setSubDevisionId] = useState<null | string>(null)
-    const {data:dataOnePractise,isSuccess:isSuccesOnePractise} = useGetPracticeOneQuery(id)
     const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
     const [objectForCompetences, setObjectForCompetences] = useState<any>(null)
+    const {data:dataOnePractise,isSuccess:isSuccesOnePractise} = useGetPracticeOneQuery(id)
     const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery()
     const {data:dataCompetences, isSuccess: isSuccessCompetences} = useGetCompentencesQuery(objectForCompetences,{skip: objectForCompetences === null})
     const {data: dataDepartments, isSuccess: isSuccessDepartments} = useGetDepartmentsQuery()
@@ -89,7 +91,7 @@ export const EditPractical = () => {
     const {data: dataGroupNumbers, isSuccess: isSuccessGroupNumbers} = useGetGroupNumbersQuery(idSub, {skip: !idSub})
     const {data: dataPraciseKind, isSuccess: isSuccesPractiseKind} = useGetPracticeKindQuery(idSub, {skip: !idSub})
     const [updateForm] = useUpdatePracticeOneMutation()
-    const {data:dataTask, isSuccess:isSuccessTask} = useGetTasksForPracticeQuery(arqTask,{skip:!arqTask})
+    const {data:dataTask, isSuccess:isSuccessTask,error:errorTasks} = useGetTasksForPracticeQuery(arqTask,{skip:!arqTask})
     const dispatch = useAppDispatch()
 
     useEffect(()=>{
@@ -139,7 +141,6 @@ export const EditPractical = () => {
             })
         }   
     },[dataNameSpecialty, isSuccesOnePractise,dataPraciseKind])
-    console.log('form,form',form)
 
     // вставка 
     useEffect(()=>{
@@ -168,7 +169,6 @@ export const EditPractical = () => {
                     return item
                 }
             })
-            console.log('fullSubDivisionfullSubDivision',fullSubDivision)
             form.setFieldValue('subDivision', `${fullSubDivision?.value} - ${dataOnePractise.subdivision}`);
 
             form.setFieldValue('courseStudy', dataOnePractise.courseNumber);
@@ -277,11 +277,6 @@ export const EditPractical = () => {
                 return elem
             }
         })
-          const pickId = dataPraciseKind?.find(elem => {
-            if (elem.value === values.practiceKind) {
-                return elem
-            }
-        })
         const practisePickId = dataPracticeType?.find(elem => {
             if (elem.value === values.practiceType) {
                 return elem
@@ -311,7 +306,6 @@ export const EditPractical = () => {
         const dayEnd = String(dateEnd.getDate()).padStart(2, '0');
         const formattedDateEnd = `${yearEnd}.${monthEnd}.${dayEnd}`;
 
-
         const sendData: any = {
             // specialityName: values.specialityName,
             id: dataOnePractise?.id,
@@ -328,10 +322,21 @@ export const EditPractical = () => {
             endDate: formattedDateEnd,
             totalHours: String(values.amountHours),
             // endDate: dataOnePractise.practicePeriod[1] ,
-            individualTaskId: dataTask?.id || null,
+            // individualTaskId: dataOnePractise.tasks[0].id,
             competenceIds: dataCompetences,
-            departmentDirectorId: directorId?.id,
-            subdivisionId: subDivisionId,
+            departmentDirectorId: directorId?.id, 
+            subdivisionId: dataDepartments?.find((item)=>{
+                if('responses' in item){
+                   return item?.responses?.find((elem=>{
+                        if(elem.value===dataOnePractise.subdivision){
+                            return elem
+                        }
+                    }))
+                }
+                if(item.value===dataOnePractise.subdivision){
+                    return item
+                }
+            })?.id,
             specialtyNameId:pickSpecialityId?.id,
             practiceKindId: dataPraciseKind?.find((item)=>{
                 if(item.value===values.practiceKind){
@@ -343,26 +348,16 @@ export const EditPractical = () => {
             departmentId : departmenIdZ?.id,
            
         }
-     
-        
-        console.log('sendData',sendData)
         updateForm(sendData)
-            .unwrap()
-            .then((payload) => console.log('fulfilled', payload))
-            .catch((error) => {
-                if (error.response.status === 409) {
-                    dispatch(showNotification({ message: 'Произошел конфликт', type: 'error' }));
-                 }
-            })
-
-        // nav('/services/practices/practical')
-
+        nav('/services/practices/practical')
     }
 
     const onChangePicker = (value:any)=>{
         setPickDate([value[0].$y,value[1].$y])
         setFullDate(value)
     }
+
+    const dataTaskValid = dataOnePractise?.tasks.map((item:any)=>item.taskDescription)
    
 
     return (
@@ -414,6 +409,7 @@ export const EditPractical = () => {
                             name={'practiceType'}
                             label={'Тип практики'}>
                             <Select
+                                
                                 size="large"
                                 popupMatchSelectWidth={false}
                                 className="w-full"
@@ -431,11 +427,9 @@ export const EditPractical = () => {
                 <Row gutter={[16, 16]}>
                     <Col xs={24} sm={24} md={18} lg={16} xl={12}>
                         <Form.Item
-                            // rules={[{required: true}]}
                             name={'practiceKind'}
                             label={'Вид практики'}>
                             <Select
-                                // onChange={handlePracticeKind}
                                 size="large"
                                 popupMatchSelectWidth={false}
                               
@@ -452,7 +446,6 @@ export const EditPractical = () => {
                                        rules={[{required: true}]}
                                        name={'subDivision'}>
                                 <Select
-                                    // onChange={handleChange}
                                     size="large"
                                     popupMatchSelectWidth={false}
                                     className="w-full"
@@ -501,7 +494,6 @@ export const EditPractical = () => {
                 <Row gutter={[16, 16]}>
                     <Col xs={24} sm={24} md={18} lg={16} xl={12}>
                         <Form.Item
-                            //rules={[{required: true}]}
                             name={'competences'}
                             label={'Код и наименование компетенции'}>
                             <Select
@@ -766,6 +758,22 @@ export const EditPractical = () => {
                                 })}
                             />
                         </Form.Item>
+                    </Col>
+                </Row>
+
+                <Row gutter={[16, 16]} className={'mt-4'}>
+                    <Col xs={24} sm={24} md={18} lg={16} xl={12}>
+                    <List
+                        header={<div>Индивидуальные задания:</div>}
+                       
+                        bordered
+                        dataSource={isSuccesOnePractise?dataTaskValid : ''}
+                        renderItem={(item:any) => (
+                            <List.Item>
+                            {item}
+                            </List.Item>
+                        )}
+                        />
                     </Col>
                 </Row>
 

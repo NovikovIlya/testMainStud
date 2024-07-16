@@ -25,7 +25,7 @@ const EditTask = () => {
     const {data, isSuccess} = useGetOneTaskQuery(id)
     const [edit] = useEditTaskMutation()
     const [msg, setMsg] = useState('')
-
+    const [pozrazdelenie,setPodrazdelenie] = useState<any>(null)
     const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
     const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery()
 
@@ -56,27 +56,28 @@ const EditTask = () => {
     }, [dataDepartments]);
 
     useEffect(() => {
-        if (isSuccess) {
-            const fullSubDivision = dataDepartments?.find((item)=>{
-               
+        if (isSuccess && isSuccessDepartments) {
+            dataDepartments?.forEach((item)=>{
+                if(item.value===data.subdivisionName) {
+                    form.setFieldValue('subDivision', `${data.subdivisionName}`)
+                    setPodrazdelenie(data.subdivisionName)
+                    return true
+                }
                 if('responses' in item){
-                   return item?.responses?.find((elem=>{
-                        if(elem.value===data.subdivisionName){
-                            return elem
-                        }
-                    }))
+                    return item.responses?.find((elem)=> {
+                        if(data.subdivisionName.toLowerCase()===elem.value.toLowerCase()){
+                            form.setFieldValue('subDivision', `${item.value + ' - ' + elem.value}`)
+                        }      
+                    })
                 }
-                else {
-                    console.log('vbz')
-                    return item
+                else{
+                    console.log('vx',item.value)
                 }
-                console.log('item.value',item.value,'-------------','data.subdivisionName',data.subdivisionName)
             })
             
-          
-            console.log('data.subdivisionName',data.subdivisionName)
-            console.log('fullSubDivision',fullSubDivision)
-            form.setFieldValue('subDivision', `${data.subdivisionName} - ${data.subdivisionName}`)
+            
+  
+            
             form.setFieldValue('specialityName', data.specialityName)
             form.setFieldValue('practiceType', data.practiceType)
             const listTasks = data.tasks.map(elem => {
@@ -87,7 +88,7 @@ const EditTask = () => {
             form.setFieldValue('tasks', listTasks)
 
         }
-    }, [data, isSuccess, dataDepartments, form]);
+    }, [ isSuccess,  isSuccessDepartments]);
     
 
     function onFinish(values: Task) {
@@ -102,30 +103,28 @@ const EditTask = () => {
             }
         })
         const subDivision = dataDepartments?.find(elem => {
-            console.log('elem',elem)
             if ('responses' in elem){
                 return elem?.responses?.find((item)=>{
                     if(item.value===values.subDivision){
-                        console.log('bb')
-                        console.log('----------------',item)
+                     
                         return item
                     }
                 }) 
             }
             else {
                 return elem
-            }
-            
-           
+            }   
         })
-        console.log('values.subDivision',values.subDivision)
-        console.log('subDivision',subDivision)
+    
 
         const newData: TaskEdit = {
             id: data!.id,
             specialityNameId: String(specName!.id),
             practiceTypeId: String(practiceType!.id),
-            subdivisionNameId: String(subDivision!.id),
+            // @ts-ignore
+            subdivisionNameId: dataDepartments?.find((item)=>{
+                return item.value === form.getFieldValue('subDivision')
+            })?.id,
             tasks: values.tasks.map(elem => elem.task)
         }
 

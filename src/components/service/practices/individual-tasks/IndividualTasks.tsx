@@ -53,50 +53,8 @@ const IndividualTasks = () => {
     const navigate = useNavigate()
     const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
     const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery()
-    function changeListNameSpecialty(list: NameSpecialty[]) {
-        function changeElemNameSpecialty(elem: NameSpecialty) {
-            const newElem: any = {
-                key:elem.id,
-                value: elem.value,
-                label: elem.label,
-            }
-            return newElem
-        }
-        // @ts-ignore
-        const finalList: OptionsNameSpecialty[] = [{value: 'Все', label: 'Все'}]
-        const newList: OptionsNameSpecialty[] = list.map(elem => changeElemNameSpecialty(elem))
-        return finalList.concat(newList)
-    }
-
-    useEffect(() => {
-        if (isSuccessNameSpecialty) {
-            setNameSpecialty(changeListNameSpecialty(dataNameSpecialty))
-        }
-    }, [dataNameSpecialty]);
-
     const [practiceType, setPracticeType] = useState<FilterType[]>()
     const {data: dataPracticeType, isSuccess: isSuccessPracticeType} = useGetPracticeTypeQuery()
-    function changeListPracticeType(list: PracticeType[]) {
-        function changeElemPracticeType(elem: PracticeType) {
-            const newElem: any = {
-                key:elem.id,
-                value: elem.value,
-                label: elem.label,
-            }
-            return newElem
-        }
-        // @ts-ignore
-        const finalList: FilterType[] = [{value: 'Все', label: 'Все'}]
-        const newList: FilterType[] = list.map(elem => changeElemPracticeType(elem))
-        return finalList.concat(newList)
-    }
-
-    useEffect(() => {
-        if (isSuccessPracticeType) {
-            setPracticeType(changeListPracticeType(dataPracticeType))
-        }
-    }, [dataPracticeType]);
-
     const {data, isSuccess} = useGetAllTasksQuery()
     const [
         tableDataCompressed,
@@ -127,6 +85,38 @@ const IndividualTasks = () => {
         specialityName: 'Все',
         dateFilling: 'По дате (сначала новые)',
     })
+    
+    
+    useEffect(() => {
+        if (isSuccessNameSpecialty) {
+            setNameSpecialty(changeListNameSpecialty(dataNameSpecialty))
+        }
+    }, [dataNameSpecialty]);
+
+    useEffect(() => {
+        if (isSuccessPracticeType) {
+            setPracticeType(changeListPracticeType(dataPracticeType))
+        }
+    }, [dataPracticeType]);
+   
+
+
+   
+
+    function changeListNameSpecialty(list: NameSpecialty[]) {
+        function changeElemNameSpecialty(elem: NameSpecialty) {
+            const newElem: any = {
+                key:elem.id,
+                value: elem.value,
+                label: elem.label,
+            }
+            return newElem
+        }
+        // @ts-ignore
+        const finalList: OptionsNameSpecialty[] = [{value: 'Все', label: 'Все'}]
+        const newList: OptionsNameSpecialty[] = list.map(elem => changeElemNameSpecialty(elem))
+        return finalList.concat(newList)
+    }
 
     function changeListDataShort(data: TasksAll) {
         const newData: CompressedIndividualTask = {
@@ -137,6 +127,21 @@ const IndividualTasks = () => {
             dateFilling: data.dateFilling,
         }
         return newData
+    }
+
+    function changeListPracticeType(list: PracticeType[]) {
+        function changeElemPracticeType(elem: PracticeType) {
+            const newElem: any = {
+                key:elem.id,
+                value: elem.value,
+                label: elem.label,
+            }
+            return newElem
+        }
+        // @ts-ignore
+        const finalList: FilterType[] = [{value: 'Все', label: 'Все'}]
+        const newList: FilterType[] = list.map(elem => changeElemPracticeType(elem))
+        return finalList.concat(newList)
     }
 
     function changeListDataAll(data: TasksAll) {
@@ -380,7 +385,7 @@ const IndividualTasks = () => {
             setTableDataFull(dataFull)
         }
     }, [data]);
-    console.log('tableDataCompressed',tableDataCompressed)
+
 
     return (
         <section className="container">

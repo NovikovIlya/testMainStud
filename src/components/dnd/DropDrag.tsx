@@ -60,7 +60,9 @@ const DropDrag = () => {
 		dispatch(removeCard(i))
 	}
 
-	const generateDOM = layout.lg.map(item => {
+	const layoutValid = layout.lg.filter(obj1 =>jsxElements.some(obj2 => obj1.i === obj2.index))
+
+	const generateDOM = layoutValid.map(item => {
 		return (
 			<div
 				key={item.i}

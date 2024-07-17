@@ -18,7 +18,6 @@ import {useCreateContractMutation} from '../../../../store/api/practiceApi/contr
 import {ICreateContract, NameSpecialty} from '../../../../models/Practice'
 import {validateMessages} from "../../../../utils/validateMessage";
 import {useNavigate} from "react-router-dom";
-import {RcFile} from "antd/es/upload";
 import {useGetSpecialtyNamesQuery} from "../../../../store/api/practiceApi/roster";
 
 
@@ -64,25 +63,25 @@ export const CreateContracts = () => {
 
     function onFinish(values: ICreateContract) {
         const newForm = new FormData()
-        const specName = dataNameSpecialty!.find(elem => {
-            if (elem.value === values.specialtyNameId) {
-                return elem
-            }
-        })
-        values.specialtyNameId = specName!.id
+        values.contractNumber = values.contractNumber
+        values.contractFacility = values.contractFacility
+        values.specialtyNameIds = dataNameSpecialty?.filter(item => values.specialtyNameIds.includes(item.value)).map(item => item.id)
+        values.prolongation = values.prolongation
+        values.contractType = values.contractType
         values.pdfContract = files.pdfContract!
         values.pdfAgreement = files.pdfAgreement!
         values.placesAmount = String(values.placesAmount)
-        values.ITN = String(values.ITN)
+        values.legalFacility = values.legalFacility
+        values.actualFacility = values.actualFacility
+        values.itn = String(values.ITN)
         values.conclusionDate = dayjs(values.conclusionDate).format('DD.MM.YYYY')
         values.endDate = dayjs(values.endDate).format('DD.MM.YYYY')
-
         const jsonData = JSON.stringify(values)
         const blob = new Blob([jsonData], { type: 'application/json' })
         newForm.append('contract', blob)
         if (files.pdfContract) newForm.append('pdfContract', files.pdfContract)
         if (files.pdfAgreement) newForm.append('pdfAgreement', files.pdfAgreement)
-        //console.log(values)
+
         newContract(newForm)
             .then(res => console.log(res))
             .catch(e => console.log(e))
@@ -126,9 +125,7 @@ export const CreateContracts = () => {
         }
     }, [inn]);
 
-    useEffect(() => {
-        console.log(nameOrg)
-    }, [nameOrg]);
+
 
     return (
         <section className="container">
@@ -144,7 +141,7 @@ export const CreateContracts = () => {
                     Новый документ
                 </Typography.Text>
             </Space>
-            <Form<ICreateContract>
+            <Form<any>
                   validateMessages={validateMessages}
                   layout={'vertical'}
                   onFinish={values => onFinish(values)}
@@ -269,15 +266,23 @@ export const CreateContracts = () => {
                     </Col>
                     <Col xs={24} sm={24} md={18} lg={8} xl={6}>
                         <Form.Item label={'Шифр и наименование специальности'}
-                                   name={'specialtyNameId'}
-                                   rules={[{required: true}]}>
+                                   name={'specialtyNameIds'}
+                                   rules={[{required: false}]}>
                             <Select
+                                mode="multiple"
+                                allowClear
                                 size="large"
                                 popupMatchSelectWidth={false}
                                 placeholder=""
-                                defaultValue=""
+                                defaultValue={[]}
                                 className="w-full"
-                                options={optionsNameSpec}
+                                options={optionsNameSpec.map((item)=>{
+                                    return {
+                                        key:item.id,
+                                        value: item.value,
+                                        label: item.value
+                                    }
+                                })}
                             />
                         </Form.Item>
 

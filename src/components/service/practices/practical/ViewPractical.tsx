@@ -1,42 +1,41 @@
+import { LoadingOutlined } from '@ant-design/icons'
 import {
 	Button,
-	Col, Popover,
+	Col,
+	Form,
+	Popover,
 	Row,
 	Select,
 	Space,
-	Table,
-	TableProps,
+	Spin,
+	Table
 } from 'antd'
-import React, {useEffect, useState} from 'react'
-import {useNavigate} from 'react-router-dom'
-import dayjs from "dayjs";
-import {EditSvg} from "../../../../assets/svg/EditSvg";
-import {PointsSvg} from "../../../../assets/svg/PointsSvg";
-import {PracticalPopoverContent} from "../popover/practical/PracticalPopoverContent";
-import {PracticalPopoverMain} from "../popover/practical/PracticalPopoverMain";
-import {FullIndividualTask} from "../individual-tasks/IndividualTasks";
-import {OptionsNameSpecialty} from "../roster/registerContracts/RegisterContracts";
-import {useGetSpecialtyNamesQuery} from "../../../../store/api/practiceApi/roster";
+import dayjs from 'dayjs'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+
+import { EditSvg } from '../../../../assets/svg/EditSvg'
+import { PointsSvg } from '../../../../assets/svg/PointsSvg'
+import {
+	useGetDepartmentsQuery,
+	useGetPracticeKindQuery,
+	useGetPracticeTypeQuery,
+	useGetPracticesAllQuery
+} from '../../../../store/api/practiceApi/individualTask'
+import { useGetCafDepartmentsQuery } from '../../../../store/api/practiceApi/practical'
+import { useGetSpecialtyNamesQuery } from '../../../../store/api/practiceApi/roster'
+import { processingOfDivisions } from '../../../../utils/processingOfDivisions'
+import { PracticalPopoverContent } from '../popover/practical/PracticalPopoverContent'
+import { PracticalPopoverMain } from '../popover/practical/PracticalPopoverMain'
+import { OptionsNameSpecialty } from '../roster/registerContracts/RegisterContracts'
+
+import './ViewPractical.scss'
 
 interface FilterType {
 	value: string | number
 	label: string | number
 }
 
-const filterSpecialization: FilterType[] = [
-	{
-		value: 'Все',
-		label: 'Все'
-	},
-	{
-		value: '31.08.01 Акушерство и гинекология',
-		label: '31.08.01 Акушерство и гинекология'
-	},
-	{
-		value: '31.08.12 Педиатрия',
-		label: '31.08.12 Педиатрия'
-	}
-]
 const filterDepartment: FilterType[] = [
 	{
 		value: 'Все',
@@ -95,20 +94,6 @@ const filterSemester: FilterType[] = [
 		label: '2'
 	}
 ]
-const filterType: FilterType[] = [
-	{
-		value: 'Все',
-		label: 'Все'
-	},
-	{
-		value: 'Производственная',
-		label: 'Производственная'
-	},
-	{
-		value: 'Технологическая',
-		label: 'Технологическая'
-	}
-]
 
 export interface TablePractical {
 	id: string
@@ -127,113 +112,77 @@ export interface TablePractical {
 	departmentDirector: string
 }
 
-const mockData: TablePractical[] = [
-	{
-		id: '1',
-		key: '1',
-		specialtyName: '31.08.01 Акушерство и гинекология',
-		practiceType: 'Производственная',
-		department: 'Кафедра хирургических болезней постдипломного образования',
-		groupNumber: '10.4-134',
-		semester: '1',
-		academicYear: '2022/2023',
-		courseStudy: '2',
-		practicePeriod: ['2023/03/30', '2023/05/30'],
-		totalHours: 120,
-		individualTasks: [
-			'Овладеть методиками кесарева сечения (корпоральное, истмико-корпоральное, в нижнем сегменте матки, экстракорпоральное',
-			'Овладеть методиками родоразрешающих и плодоразрушающих операций',
-			'Акушерский травматизм матери и плода',
-		],
-		competencies: [
-			'ПК-2 Овладеть методиками кесарева сечения (корпоральное, истмико-корпоральное, в нижнем сегменте матки, экстракорпоральное',
-			'ПК-6 Овладеть методиками родоразрешающих и плодоразрушающих операций',
-			'ПК-7 Акушерский травматизм матери и плода',
-		],
-		departmentDirector: 'Бурмистров М. В.',
-	},
-	{
-		id: '2',
-		key: '2',
-		specialtyName: '31.08.12 Педиатрия',
-		practiceType: 'Технологическая',
-		department: 'Кафедра онкологических болезней',
-		groupNumber: '10.4-134',
-		semester: '2',
-		academicYear: '2022/2023',
-		courseStudy: '4',
-		practicePeriod: ['2023/03/30', '2023/05/30'],
-		totalHours: 120,
-		individualTasks: [
-			'Овладеть методиками кесарева сечения (корпоральное, истмико-корпоральное, в нижнем сегменте матки, экстракорпоральное',
-			'Овладеть методиками родоразрешающих и плодоразрушающих операций',
-			'Акушерский травматизм матери и плода',
-		],
-		competencies: [
-			'ПК-2 Овладеть методиками кесарева сечения (корпоральное, истмико-корпоральное, в нижнем сегменте матки, экстракорпоральное',
-			'ПК-6 Овладеть методиками родоразрешающих и плодоразрушающих операций',
-			'ПК-7 Акушерский травматизм матери и плода',
-		],
-		departmentDirector: 'Бурмистров М. В.',
-	}
-]
-
-
-
 export const ViewPractical = () => {
 	const navigate = useNavigate()
-	const [department, setDepartment] = useState<FilterType[]>(filterDepartment)
-
-	const [tableData, setTableData] = useState<TablePractical[]>(mockData)
-
-
-	const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
-	const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery()
-
-	useEffect(() => {
-		if (isSuccessNameSpecialty) {
-			setNameSpecialty(dataNameSpecialty)
-		}
-	}, [dataNameSpecialty]);
-
-	const [
-		selectedFieldsFull,
-		setSelectedFieldFull
-	] = useState<TablePractical[]>([])
-
+	const [subDevisionId, setSubDevisionId] = useState(null)
+	const [selectedFieldsFull, setSelectedFieldFull] = useState<TablePractical[]>(
+		[]
+	)
+	const [departments, setDepartments] = useState<any[]>()
 	const [filter, setFilter] = useState({
 		nameSpecialty: 'Все',
 		department: 'Все',
 		course: 'Все',
 		semester: 'Все',
-		practiceType: 'Все',
+		practiceType: 'Все'
 	})
+	const {
+		data: dataPractiseAll,
+		isSuccess: isSuccessPractiseAll,
+		isFetching: isFetchingPractiseAll
+	} = useGetPracticesAllQuery(null, {
+		refetchOnFocus: true
+	})
+	const [tableData, setTableData] = useState<TablePractical[]>(dataPractiseAll)
+	const tokenAccess = localStorage.getItem('access')!.replaceAll('"', '')
+	const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
+	const { data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty } =
+		useGetSpecialtyNamesQuery()
+	const { data: dataDepartments, isSuccess: isSuccessDepartments } =
+		useGetDepartmentsQuery()
+	const { data: dataDep, isSuccess: isSuccessDep } = useGetCafDepartmentsQuery(
+		subDevisionId,
+		{ skip: !subDevisionId }
+	)
+	const { data: dataPracticeType, isSuccess: isSuccessPracticeType } =
+		useGetPracticeTypeQuery()
 
-	const columns: TableProps<TablePractical>['columns'] = [
+	const columns = [
 		{
 			key: 'specialtyName',
 			dataIndex: 'specialtyName',
 			title: 'Шифр и наименование специальности',
+			name: 'Шифр и наименование специальности',
 			className: 'text-xs !p-2',
-			render: (text, record) =>
+
+			// @ts-ignore
+			render: (text, record) => (
 				<div className={'flex items-center'}>
-                    <span className={'underline flex font-bold'}>
-                        {text}
-                    </span>
+					<span className={'underline flex font-bold'}>{text}</span>
 					<Button
 						type="text"
-						icon={<EditSvg/>}
+						icon={<EditSvg />}
 						onClick={() => {
-							navigate(`/services/practices/practical/editPractical/${record.id}`)
+							navigate(
+								`/services/practices/practical/editPractical/${record.id}`
+							)
 						}}
 					/>
 				</div>
+			)
 		},
 		{
 			key: 'practiceType',
 			dataIndex: 'practiceType',
+
 			title: 'Тип практики',
 			className: 'text-xs !p-2'
+			// filters:[{
+			// 	text: 'практика по получению первичных',
+			// 	value: 'практика по получению',
+			//   },],
+			//   // @ts-ignore
+			//   onFilter: (value, record) => record?.practiceType?.indexOf(value as string) === 0,
 		},
 		{
 			key: 'department',
@@ -247,7 +196,6 @@ export const ViewPractical = () => {
 			title: 'Номер группы',
 			align: 'center',
 			className: 'text-xs !p-2'
-
 		},
 		{
 			key: 'semester',
@@ -276,11 +224,10 @@ export const ViewPractical = () => {
 			title: 'Период практики',
 			align: 'center',
 			className: 'text-xs !p-2',
-			render: (value, record, index) => {
+			render: (_: any, record: any) => {
 				return (
 					<div className={'flex flex-col'}>
-						<span>{dayjs(record.practicePeriod[0]).format('DD.MM.YYYY')}</span>
-						-
+						<span>{dayjs(record.practicePeriod[0]).format('DD.MM.YYYY')}</span>-
 						<span>{dayjs(record.practicePeriod[1]).format('DD.MM.YYYY')}</span>
 					</div>
 				)
@@ -298,31 +245,35 @@ export const ViewPractical = () => {
 			dataIndex: 'individualTasks',
 			title: 'Индивидуальные задания',
 			className: 'text-xs !p-2',
-			render: (value, record, index) => {
+			render: (_: any, record: any) => {
 				return (
 					<div className={'flex flex-col gap-1'}>
-						{record.individualTasks.map((elem, index) => (
-							<span key={index}>{index + 1}. {elem}</span>
+						{record.tasks?.map((elem: any, index: any) => (
+							<span key={index}>
+								{index + 1}. {elem.taskDescription}
+							</span>
 						))}
 					</div>
 				)
 			}
 		},
-		{
-			key: 'competencies',
-			dataIndex: 'competencies',
-			title: 'Код и наименование компетенции',
-			className: 'text-xs !p-2',
-			render: (value, record, index) => {
-				return (
-					<div className={'flex flex-col gap-1'}>
-						{record.competencies.map((elem, index) => (
-							<span key={index}>{index + 1}. {elem}</span>
-						))}
-					</div>
-				)
-			}
-		},
+		// {
+		// 	key: 'competencies',
+		// 	dataIndex: 'competencies',
+		// 	title: 'Код и наименование компетенции',
+		// 	className: 'text-xs !p-2',
+		// 	render: (_:any, record:any) => {
+		// 		return (
+		// 			<div className={'flex flex-col gap-1'}>
+		// 				{record.competence?.map((elem:any, index:any) => (
+		// 					<span key={index}>
+		// 						{index + 1}. {elem}
+		// 					</span>
+		// 				))}
+		// 			</div>
+		// 		)
+		// 	}
+		// },
 		{
 			key: 'departmentDirector',
 			dataIndex: 'departmentDirector',
@@ -330,39 +281,62 @@ export const ViewPractical = () => {
 			className: 'text-xs !p-2'
 		},
 		{
-			title:
-			<Popover trigger={'click'}
-					 content={<PracticalPopoverMain
-						 recordFullAll={tableData}
-						 setRecordFull={setTableData}
-						 recordFull={selectedFieldsFull}
-						 setSelectedFieldFull={setSelectedFieldFull}
-					 />}>
-				<Button
-					type="text"
-					className="opacity-50"
-					icon={<PointsSvg/>}
-				/>
-			</Popover>,
-			align: 'center',
-			render: (record) =>
-					<Popover trigger={'click'}
-							 content={<PracticalPopoverContent
-								 recordFull={record}
-								 recordFullAll={tableData}
-								 setRecordFull={setTableData}
-							 />}>
-						<Button
-							type="text"
-							className="opacity-50"
-							icon={<PointsSvg/>}
+			title: (
+				<Popover
+					trigger={'click'}
+					content={
+						<PracticalPopoverMain
+							recordFullAll={tableData}
+							setRecordFull={setTableData}
+							recordFull={selectedFieldsFull}
+							setSelectedFieldFull={setSelectedFieldFull}
 						/>
-					</Popover>
-				,
-			fixed: "right",
+					}
+				>
+					<Button type="text" className="opacity-50" icon={<PointsSvg />} />
+				</Popover>
+			),
+			align: 'center',
+			render: (record: any) => (
+				<Popover
+					trigger={'click'}
+					content={
+						<PracticalPopoverContent
+							recordFull={record}
+							recordFullAll={tableData}
+							setRecordFull={setTableData}
+						/>
+					}
+				>
+					<Button type="text" className="opacity-50" icon={<PointsSvg />} />
+				</Popover>
+			),
+			fixed: 'right',
 			width: 50
 		}
 	]
+
+	useEffect(() => {
+		if (isSuccessDepartments) {
+			setDepartments(processingOfDivisions(dataDepartments))
+		}
+	}, [dataDepartments])
+
+	useEffect(() => {
+		if (isSuccessPractiseAll) setTableData(dataPractiseAll)
+	}, [isSuccessPractiseAll, isFetchingPractiseAll])
+
+	useEffect(() => {
+		if (isSuccessNameSpecialty) {
+			setNameSpecialty(dataNameSpecialty)
+		}
+	}, [dataNameSpecialty])
+
+	useEffect(() => {
+		if (isSuccessPractiseAll) {
+			setTableData(filterDataFull())
+		}
+	}, [filter, isSuccessPractiseAll])
 
 	function filterDataFull() {
 		function filterPracticeType(elem: TablePractical) {
@@ -422,42 +396,112 @@ export const ViewPractical = () => {
 		// 		.sort((a, b) => sortDateFilling(a, b))
 		// }
 
-		return mockData
-			.filter(elem => filterPracticeType(elem))
-			.filter(elem => filterDepartment(elem))
-			.filter(elem => filterCourse(elem))
-			.filter(elem => filterSemester(elem))
-			.filter(elem => filterNameSpecialty(elem))
+		return dataPractiseAll
+			? dataPractiseAll
+					.filter((elem: any) => filterPracticeType(elem))
+					.filter((elem: any) => filterDepartment(elem))
+					.filter((elem: any) => filterCourse(elem))
+					.filter((elem: any) => filterSemester(elem))
+					.filter((elem: any) => filterNameSpecialty(elem))
+			: []
 	}
 
-	useEffect(() => {
-		setTableData(filterDataFull())
-	}, [filter]);
-
-
+	const handleChange = (value: string) => {
+		departments?.find(elem => {
+			if (elem.label === value) {
+				setSubDevisionId(elem.id)
+			}
+		})
+	}
 
 	return (
 		<>
 			<section className="container ">
 				<Row>
 					<Col flex={'auto'}>
-						<span className="mb-14 text-[28px]">
-							Практики
-						</span>
+						<span className="mb-14 text-[28px]">Практики</span>
 					</Col>
+					{/*Не актуально до создания на бекенде соответсвующего функционала*/}
+					{/*<Col>*/}
+					{/*	<Button*/}
+					{/*		type="primary"*/}
+					{/*		color={"none"}*/}
+					{/*		className="!rounded-full scale-y-120"*/}
+					{/*		onClick={() => {*/}
+					{/*			practiceDocument(tokenAccess, "")*/}
+					{/*		}}*/}
+					{/*	>*/}
+					{/*		Сформировать График Практик*/}
+					{/*	</Button>*/}
+					{/*</Col>*/}
+					{/*<Col>*/}
+					{/*	<Button*/}
+					{/*		type="primary"*/}
+					{/*		className="!rounded-full ml-2 scale-y-120"*/}
+					{/*		onClick={() => {*/}
+					{/*			practiceDocument(tokenAccess, "")*/}
+					{/*		}}*/}
+					{/*	>*/}
+					{/*		Сформировать Представление в Приказ*/}
+					{/*	</Button>*/}
+					{/*</Col>*/}
+					{/*<Col>*/}
+					{/*	<Button*/}
+					{/*		type="primary"*/}
+					{/*		className="!rounded-full ml-2 scale-y-120"*/}
+					{/*		onClick={() => {*/}
+					{/*			practiceDocument(tokenAccess, "")*/}
+					{/*		}}*/}
+					{/*	>*/}
+					{/*		Сформировать Приказ по практике*/}
+					{/*	</Button>*/}
+					{/*</Col>*/}
 				</Row>
+
 				<Row gutter={[16, 16]} className="mt-12">
 					<Col span={5}>
-						<span>
-							Наименование специальности
-						</span>
+						<span>Подразделение</span>
 					</Col>
 					<Col span={8}>
 						<Select
+							size="large"
+							popupMatchSelectWidth={false}
+							className="w-full"
+							options={[
+								{ key: 2244612, value: 'Все', label: 'Все' },
+								...(departments
+									? departments.map(item => ({
+											key: item.id,
+											value: item.value,
+											label: item.label
+									  }))
+									: [])
+							]}
+							onChange={handleChange}
+							defaultValue="Все"
+						/>
+					</Col>
+				</Row>
+				<Row gutter={[16, 16]} className="mt-4">
+					<Col span={5}>
+						<span>Наименование специальности</span>
+					</Col>
+					<Col span={8}>
+						<Select
+							disabled={!isSuccessDep}
 							popupMatchSelectWidth={false}
 							defaultValue="Все"
 							className="w-full"
-							options={nameSpecialty}
+							options={[
+								{ key: 2244612, value: 'Все', label: 'Все' },
+								...(nameSpecialty
+									? nameSpecialty.map(item => ({
+											key: item.id,
+											value: item.value,
+											label: item.label
+									  }))
+									: [])
+							]}
 							onChange={value => {
 								setFilter({
 									...filter,
@@ -482,16 +526,25 @@ export const ViewPractical = () => {
 				</Row>
 				<Row gutter={[16, 16]} className="mt-4">
 					<Col span={5}>
-						<span>
-							Кафедра
-						</span>
+						<span>Кафедра</span>
 					</Col>
 					<Col span={8}>
 						<Select
+							// rowKey="id"
+							disabled={!isSuccessDep}
 							popupMatchSelectWidth={false}
 							defaultValue="Все"
 							className="w-full"
-							options={department}
+							options={[
+								{ key: 0, value: 'Все', label: 'Все' },
+								...(dataDep
+									? dataDep.map(item => ({
+											key: item.id,
+											value: item.value,
+											label: item.label
+									  }))
+									: [])
+							]}
 							onChange={value => {
 								setFilter({
 									...filter,
@@ -503,9 +556,7 @@ export const ViewPractical = () => {
 				</Row>
 				<Row gutter={[16, 16]} className="mt-4">
 					<Col span={3} className={'flex items-center gap-4'}>
-						<span>
-							Курс
-						</span>
+						<span>Курс</span>
 						<Select
 							popupMatchSelectWidth={false}
 							defaultValue="Все"
@@ -520,9 +571,7 @@ export const ViewPractical = () => {
 						/>
 					</Col>
 					<Col span={3} className={'flex items-center gap-4'}>
-						<span>
-							Семестр
-						</span>
+						<span>Семестр</span>
 						<Select
 							popupMatchSelectWidth={false}
 							defaultValue="Все"
@@ -537,14 +586,22 @@ export const ViewPractical = () => {
 						/>
 					</Col>
 					<Col span={7} className={'flex items-center gap-2'}>
-						<span className="whitespace-nowrap">
-							Вид практики
-						</span>
+						<span className="whitespace-nowrap">Тип практики</span>
 						<Select
+							// disabled={!isSuccessDep}
 							popupMatchSelectWidth={false}
 							defaultValue="Все"
 							className="w-full"
-							options={filterType}
+							options={[
+								{ key: 0, value: 'Все', label: 'Все' },
+								...(dataPracticeType
+									? dataPracticeType.map(item => ({
+											key: item.id,
+											value: item.value,
+											label: item.label
+									  }))
+									: [])
+							]}
 							onChange={value => {
 								setFilter({
 									...filter,
@@ -555,22 +612,31 @@ export const ViewPractical = () => {
 					</Col>
 				</Row>
 			</section>
-			<Table
-				size="small"
-				columns={columns}
-				dataSource={tableData}
-				pagination={false}
-				className="my-10"
-				rowSelection={{
-					type: "checkbox",
-					onSelect: (record, selected, selectedRows, nativeEvent) => {
-						setSelectedFieldFull(selectedRows)
-					},
-					onSelectAll: (selected, selectedRows, changeRows) => {
-						setSelectedFieldFull(selectedRows)
-					}
-				}}
-			/>
+			{isFetchingPractiseAll ? (
+				<Spin
+					className="w-full mt-20"
+					indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}
+				/>
+			) : (
+				<Table
+					size="small"
+					rowKey="id"
+					// @ts-ignore
+					columns={columns}
+					dataSource={tableData ? tableData : []}
+					pagination={false}
+					className="my-10"
+					rowSelection={{
+						type: 'checkbox',
+						onSelect: (record, selected, selectedRows, nativeEvent) => {
+							setSelectedFieldFull(selectedRows)
+						},
+						onSelectAll: (selected, selectedRows, changeRows) => {
+							setSelectedFieldFull(selectedRows)
+						}
+					}}
+				/>
+			)}
 		</>
 	)
 }

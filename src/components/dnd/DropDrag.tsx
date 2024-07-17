@@ -74,10 +74,13 @@ const DropDrag = () => {
 							className="absolute top-2 cursor-pointer right-2"
 							onClick={() => onRemoveItem(item.i)}
 						>
-							<DeleteOutlined className=" mt-2 mr-2 opacity-50"/>
+							<DeleteOutlined className=" mt-2 mr-2 opacity-50" />
 						</div>
 					)}
-					{jsxElements.filter(el => el.index === item.i)[0].element}
+					{
+						jsxElements
+							.filter(el => el.index === item.i)[0].element
+					}
 				</div>
 			</div>
 		)

@@ -76,10 +76,12 @@ export const EditContract = () => {
     const [optionsNameSpec, setOptionsNameSpec] = useState<NameSpecialty[]>([])
 
     useEffect(() => {
-        if (isSuccessNameSpecialty) {
-            setOptionsNameSpec(dataNameSpecialty)
+        if (isSuccess) {
+            const dataValid = dataNameSpecialty?.filter(item =>data ? data?.specialtyNames.includes(item.value) : [])
+            setOptionsNameSpec(dataValid ? dataValid : [] )
         }
-    }, [dataNameSpecialty]);
+            const dataValid = dataNameSpecialty?.filter(item => data?.specialtyNames.includes(item.value))
+    }, [ isSuccess,dataNameSpecialty]);
     useEffect(() => {
         if (isSuccess) {
             form.setFieldValue('ITN', data.itn)
@@ -99,7 +101,7 @@ export const EditContract = () => {
             form.setFieldValue('contractNumber', data.contractNumber)
             form.setFieldValue('conclusionDate', dayjs(data.conclusionDate))
             form.setFieldValue('endDate', dayjs(data.endDate))
-            form.setFieldValue('specialtyNameId', data.specialtyName)
+            form.setFieldValue('specialtyNameIds', optionsNameSpec.map(i=>i.value))
             form.setFieldValue('actualFacility', data.actualFacility)
             form.setFieldValue('placesAmount', data.placesAmount)
             form.setFieldValue('pdfContract', data.documentCopyId)
@@ -118,7 +120,7 @@ export const EditContract = () => {
         }
 
         //при загруке данных проверять, есть ли пролонгация. Если есть, то ставить setProlongation(true)
-    }, [data]);
+    }, [data,optionsNameSpec]);
 
     function onFinish(values: ICreateContract) {
         const formDataEditContract = new FormData()
@@ -127,13 +129,16 @@ export const EditContract = () => {
                 return elem
             }
         })
-        values.specialtyNameId = specName!.id
+        console.log('values.specialtyNameId',values.specialtyNameId)
+        console.log('specName',specName)
+        values.specialtyNameIds = dataNameSpecialty?.filter(item => values.specialtyNameIds.includes(item.value)).map(item => item.id)
+        // values.specialtyNameId = specName!.id
         values.placesAmount = String(values.placesAmount)
         values.ITN = String(values.ITN)
         values.conclusionDate = dayjs(values.conclusionDate).format('DD.MM.YYYY')
         values.endDate = dayjs(values.endDate).format('DD.MM.YYYY')
 
-        const contract: IContractInfoFull = {
+        const contract: any = {
             id: data?.id!,
             ITN: values.ITN,
             contractNumber: values.contractNumber,
@@ -142,12 +147,12 @@ export const EditContract = () => {
             contractType: values.contractType,
             prolongation: values.prolongation,
             endDate: values.endDate,
-            specialtyNameId: values.specialtyNameId,
+            specialtyNameIds: dataNameSpecialty?.filter(item => values.specialtyNameIds.includes(item.value)).map(item => item.id),
             legalFacility: values.legalFacility,
             actualFacility: values.actualFacility,
             placesAmount: values.placesAmount
         }
-
+        console.log('contract',contract)
         const jsonData = JSON.stringify(contract)
         const blob = new Blob([jsonData], { type: 'application/json' })
         formDataEditContract.append('contract', blob)
@@ -192,7 +197,7 @@ export const EditContract = () => {
         }
     }, [inn]);
 
-
+    console.log('optionsNameSpec',optionsNameSpec)
     return (
         <section className="container">
             <Space size={10}>
@@ -332,15 +337,23 @@ export const EditContract = () => {
                     </Col>
                     <Col xs={24} sm={24} md={18} lg={8} xl={6}>
                         <Form.Item label={'Шифр и наименование специальности'}
-                                   name={'specialtyNameId'}
-                                   rules={[{required: true}]}>
+                                   name={'specialtyNameIds'}
+                                   rules={[{required: false}]}>
                             <Select
+                                mode="multiple"
                                 size="large"
                                 popupMatchSelectWidth={false}
                                 placeholder=""
-                                defaultValue=""
+                              
                                 className="w-full"
-                                options={optionsNameSpec}
+                                options={dataNameSpecialty?.map((item)=>{
+                                    return{
+                                        key:item.id,
+                                        value:item.value,
+                                        label:item.label
+                                    }
+                                })}
+                                
                             />
                         </Form.Item>
 

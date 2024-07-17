@@ -102,7 +102,8 @@ export interface IContractInfo {
     contractType: string
     prolongation: string
     endDate: string
-    specialtyNameId: number | string
+    specialtyNameId: any
+    specialtyNameIds: any
     legalFacility: string
     actualFacility: string
     placesAmount: string
@@ -113,6 +114,7 @@ export interface IContractInfoFull extends IContractInfo {
 }
 
 export interface ICreateContract extends IContractInfo {
+    itn: string;
     pdfContract: Blob
     pdfAgreement: Blob
 }
@@ -127,7 +129,8 @@ export interface ResponseEditContract {
     contractType: string
     prolongation: string
     endDate: string
-    specialtyName: number
+    specialtyName: any
+    specialtyNames: any
     legalFacility: string
     actualFacility: string
     placesAmount: string
@@ -215,7 +218,7 @@ export interface TaskSend {
 }
 
 export interface TaskEdit extends TaskSend {
-    id: string
+    id: any
 }
 
 export interface OneTask {
@@ -249,6 +252,12 @@ export interface ListIdDeleteTasks {
 }
 
 export interface PracticeType {
+    id: string
+    value: string
+    label: string
+}
+
+export interface PracticeKind {
     id: string
     value: string
     label: string
@@ -318,4 +327,12 @@ export interface Departments {
     value: string,
     label: string,
     responses?: string[]
+}
+
+
+
+
+export interface FilterType {
+    value: string | number
+    label: string | number
 }

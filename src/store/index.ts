@@ -17,10 +17,12 @@ import StaffItemTabsReducer from "./reducers/FormReducers/StaffItemTabsReducer";
 import SecretaryStepFormBusinessTrip from "./reducers/FormReducers/SecretaryStepFormBusinessTrip";
 import SecretaryItemTabsReducer from "./reducers/FormReducers/SecretaryItemTabsReducer";
 import {practiceApi} from "./api/practiceApi/practiceApi";
+import notificationSlice from './reducers/notificationSlice'
 
 
 export const store = configureStore({
 	reducer: {
+		notification: notificationSlice,
 		auth: authSlice,
 		Layout: LayoutSlice,
 		InfoUser: InfoUserReducer,

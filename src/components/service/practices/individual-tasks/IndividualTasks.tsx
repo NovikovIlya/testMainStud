@@ -6,6 +6,7 @@ import {
     Space,
     Table,
     TableColumnsType,
+    Spin
 } from 'antd'
 import React, {useEffect, useRef, useState} from 'react'
 import {useNavigate} from 'react-router-dom'
@@ -22,14 +23,16 @@ import {EditSvg} from "../../../../assets/svg/EditSvg";
 import {useGetAllTasksQuery, useGetPracticeTypeQuery} from "../../../../store/api/practiceApi/individualTask";
 import {useGetSpecialtyNamesQuery} from "../../../../store/api/practiceApi/roster";
 import {OptionsNameSpecialty} from "../roster/registerContracts/RegisterContracts";
+import { LoadingOutlined } from '@ant-design/icons'
 
 
 interface FilterType {
     value: string
-    label: string
+    label: string,
+    id:any
 }
 
-export interface CompressedIndividualTask {
+export interface CompressedIndividualTask  {
     id: string
     key: string
     specialityName: string
@@ -52,51 +55,13 @@ const IndividualTasks = () => {
     const navigate = useNavigate()
     const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
     const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery()
-    function changeListNameSpecialty(list: NameSpecialty[]) {
-        function changeElemNameSpecialty(elem: NameSpecialty) {
-            const newElem: OptionsNameSpecialty = {
-                value: elem.value,
-                label: elem.label,
-            }
-            return newElem
-        }
-        const finalList: OptionsNameSpecialty[] = [{value: 'Все', label: 'Все'}]
-        const newList: OptionsNameSpecialty[] = list.map(elem => changeElemNameSpecialty(elem))
-        return finalList.concat(newList)
-    }
-
-    useEffect(() => {
-        if (isSuccessNameSpecialty) {
-            setNameSpecialty(changeListNameSpecialty(dataNameSpecialty))
-        }
-    }, [dataNameSpecialty]);
-
     const [practiceType, setPracticeType] = useState<FilterType[]>()
     const {data: dataPracticeType, isSuccess: isSuccessPracticeType} = useGetPracticeTypeQuery()
-    function changeListPracticeType(list: PracticeType[]) {
-        function changeElemPracticeType(elem: PracticeType) {
-            const newElem: FilterType = {
-                value: elem.value,
-                label: elem.label,
-            }
-            return newElem
-        }
-        const finalList: FilterType[] = [{value: 'Все', label: 'Все'}]
-        const newList: FilterType[] = list.map(elem => changeElemPracticeType(elem))
-        return finalList.concat(newList)
-    }
-
-    useEffect(() => {
-        if (isSuccessPracticeType) {
-            setPracticeType(changeListPracticeType(dataPracticeType))
-        }
-    }, [dataPracticeType]);
-
-    const {data, isSuccess} = useGetAllTasksQuery()
+    const {data, isSuccess, isFetching } = useGetAllTasksQuery()
     const [
         tableDataCompressed,
         setTableDataCompressed
-    ] = useState<CompressedIndividualTask[]>()
+    ] = useState<any>()
 
     const [
         tableDataFull,
@@ -122,6 +87,38 @@ const IndividualTasks = () => {
         specialityName: 'Все',
         dateFilling: 'По дате (сначала новые)',
     })
+    
+    
+    useEffect(() => {
+        if (isSuccessNameSpecialty) {
+            setNameSpecialty(changeListNameSpecialty(dataNameSpecialty))
+        }
+    }, [dataNameSpecialty]);
+
+    useEffect(() => {
+        if (isSuccessPracticeType) {
+            setPracticeType(changeListPracticeType(dataPracticeType))
+        }
+    }, [dataPracticeType]);
+   
+
+
+   
+
+    function changeListNameSpecialty(list: NameSpecialty[]) {
+        function changeElemNameSpecialty(elem: NameSpecialty) {
+            const newElem: any = {
+                key:elem.id,
+                value: elem.value,
+                label: elem.label,
+            }
+            return newElem
+        }
+        // @ts-ignore
+        const finalList: OptionsNameSpecialty[] = [{value: 'Все', label: 'Все'}]
+        const newList: OptionsNameSpecialty[] = list.map(elem => changeElemNameSpecialty(elem))
+        return finalList.concat(newList)
+    }
 
     function changeListDataShort(data: TasksAll) {
         const newData: CompressedIndividualTask = {
@@ -132,6 +129,21 @@ const IndividualTasks = () => {
             dateFilling: data.dateFilling,
         }
         return newData
+    }
+
+    function changeListPracticeType(list: PracticeType[]) {
+        function changeElemPracticeType(elem: PracticeType) {
+            const newElem: any = {
+                key:elem.id,
+                value: elem.value,
+                label: elem.label,
+            }
+            return newElem
+        }
+        // @ts-ignore
+        const finalList: FilterType[] = [{value: 'Все', label: 'Все'}]
+        const newList: FilterType[] = list.map(elem => changeElemPracticeType(elem))
+        return finalList.concat(newList)
     }
 
     function changeListDataAll(data: TasksAll) {
@@ -160,7 +172,7 @@ const IndividualTasks = () => {
     }
 
 
-    const optionsSortDate: FilterType[] = [
+    const optionsSortDate: any = [
         {value: 'По дате (сначала новые)', label: 'По дате (сначала новые)'},
         {value: 'По дате (сначала старые)', label: 'По дате (сначала старые)'},
     ]
@@ -395,7 +407,14 @@ const IndividualTasks = () => {
                         popupMatchSelectWidth={false}
                         defaultValue="Все"
                         className="w-full"
-                        options={nameSpecialty}
+                        options={[
+                            {key: 2244612, value: "Все", label: "Все"},
+                            ...(dataNameSpecialty ? dataNameSpecialty.map((item) => ({
+                              key: item.id,
+                              value: item.value,
+                              label: item.label
+                            })) : [])
+                          ]}
                         onChange={value => {
                             setFilter({
                                 ...filter,
@@ -427,7 +446,14 @@ const IndividualTasks = () => {
                         popupMatchSelectWidth={false}
                         defaultValue="Все"
                         className="w-full"
-                        options={practiceType}
+                        options={[
+                            {key: 2244612, value: "Все", label: "Все"},
+                            ...(dataPracticeType ? dataPracticeType.map((item) => ({
+                              key: item.id,
+                              value: item.value,
+                              label: item.label
+                            })) : [])
+                          ]}
                         onChange={value => {
                             setFilter({
                                 ...filter,
@@ -473,11 +499,15 @@ const IndividualTasks = () => {
 
                 </Col>
             </Row>
+            {isFetching ? <Spin className='w-full mt-20' indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />  : 
+            <>
             {
                 tableView.compressed
                 &&
                 <div className={'individualTasks'}>
                     <Table
+                        // @ts-ignore
+                        keyExtractor={record => record.id} 
                         columns={columnsCompressed}
                         dataSource={tableDataCompressed}
                         pagination={false}
@@ -490,12 +520,14 @@ const IndividualTasks = () => {
                                 setSelectedFieldsCompressed(selectedRows)
                             }
                         }}
+                    
                     />
                 </div>
             }
-            {
+            {  
                 tableView.full
                 &&
+                
                 <Table
                     className={'mt-5'}
                     columns={columnsFull}
@@ -512,6 +544,7 @@ const IndividualTasks = () => {
                     }}
                 />
             }
+            </>}
 
 
         </section>

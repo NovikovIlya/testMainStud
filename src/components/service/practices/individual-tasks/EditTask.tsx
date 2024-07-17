@@ -25,7 +25,7 @@ const EditTask = () => {
     const {data, isSuccess} = useGetOneTaskQuery(id)
     const [edit] = useEditTaskMutation()
     const [msg, setMsg] = useState('')
-
+    const [pozrazdelenie,setPodrazdelenie] = useState<any>(null)
     const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
     const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery()
 
@@ -56,8 +56,28 @@ const EditTask = () => {
     }, [dataDepartments]);
 
     useEffect(() => {
-        if (isSuccess) {
-            form.setFieldValue('subDivision', data.subdivisionName)
+        if (isSuccess && isSuccessDepartments) {
+            dataDepartments?.forEach((item)=>{
+                if(item.value===data.subdivisionName) {
+                    form.setFieldValue('subDivision', `${data.subdivisionName}`)
+                    setPodrazdelenie(data.subdivisionName)
+                    return true
+                }
+                if('responses' in item){
+                    return item.responses?.find((elem)=> {
+                        if(data.subdivisionName.toLowerCase()===elem.value.toLowerCase()){
+                            form.setFieldValue('subDivision', `${item.value + ' - ' + elem.value}`)
+                        }      
+                    })
+                }
+                else{
+                    console.log('vx',item.value)
+                }
+            })
+            
+            
+  
+            
             form.setFieldValue('specialityName', data.specialityName)
             form.setFieldValue('practiceType', data.practiceType)
             const listTasks = data.tasks.map(elem => {
@@ -68,7 +88,8 @@ const EditTask = () => {
             form.setFieldValue('tasks', listTasks)
 
         }
-    }, [data]);
+    }, [ isSuccess,  isSuccessDepartments]);
+    
 
     function onFinish(values: Task) {
         const specName = dataNameSpecialty!.find(elem => {
@@ -81,18 +102,29 @@ const EditTask = () => {
                 return elem
             }
         })
-        const subDivision = dataDepartments!.find(elem => {
-            if (elem.value === values.subDivision) {
-                return elem
+        const subDivision = dataDepartments?.find(elem => {
+            if ('responses' in elem){
+                return elem?.responses?.find((item)=>{
+                    if(item.value===values.subDivision){
+                     
+                        return item
+                    }
+                }) 
             }
+            else {
+                return elem
+            }   
         })
-
+    
 
         const newData: TaskEdit = {
             id: data!.id,
             specialityNameId: String(specName!.id),
             practiceTypeId: String(practiceType!.id),
-            subdivisionNameId: String(subDivision!.id),
+            // @ts-ignore
+            subdivisionNameId: dataDepartments?.find((item)=>{
+                return item.value === form.getFieldValue('subDivision')
+            })?.id,
             tasks: values.tasks.map(elem => elem.task)
         }
 
@@ -153,7 +185,13 @@ const EditTask = () => {
                                     size="large"
                                     popupMatchSelectWidth={false}
                                     className="w-full"
-                                    options={nameSpecialty}
+                                    options={nameSpecialty?.map((item)=>{
+                                        return{
+                                            key:item.id,
+                                            value:item.value,
+                                            label:item.label
+                                        }
+                                    })}
                                 />
                             </Form.Item>
                         </Space>
@@ -171,7 +209,13 @@ const EditTask = () => {
                                     size="large"
                                     popupMatchSelectWidth={false}
                                     className="w-full"
-                                    options={practiceType}
+                                    options={practiceType?.map((item)=>{
+                                        return{
+                                            key:item.id,
+                                            value:item.value,
+                                            label:item.label
+                                        }
+                                    })}
                                 />
                             </Form.Item>
                         </Space>

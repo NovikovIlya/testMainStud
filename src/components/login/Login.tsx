@@ -23,7 +23,7 @@ export const Login = () => {
 	const [error, setError] = useState<IError | null>(null)
 
 	useEffect(()=>{
-		document.title = "Казанский Федеральный Университет"
+		document.title = 'Казанский Федеральный Университет'
 	},[])
 
 	const onFinish = async (values: { email: string; password: string }) => {

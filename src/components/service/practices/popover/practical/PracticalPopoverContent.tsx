@@ -7,6 +7,7 @@ import {DeleteRedSvg} from "../../../../../assets/svg/DeleteRedSvg";
 import dayjs from "dayjs";
 import {utils, writeFileXLSX} from "xlsx";
 import printJS from "print-js";
+import { useDeletePractiseMutation } from '../../../../../store/api/practiceApi/practical';
 
 interface Props {
     recordFullAll?: TablePractical[]
@@ -15,6 +16,7 @@ interface Props {
 }
 
 export const PracticalPopoverContent = ({recordFull, recordFullAll, setRecordFull}: Props) => {
+    const [deletePractise] = useDeletePractiseMutation()
     function translateColumnsIntoRussia({isPrint}: { isPrint: boolean }) {
         if (recordFull) {
 
@@ -102,6 +104,8 @@ export const PracticalPopoverContent = ({recordFull, recordFullAll, setRecordFul
             // }
             //deleteSeveralContracts(objIdList)
         }
+        // @ts-ignore
+        deletePractise(recordFull?.id)
     }
 
     return (

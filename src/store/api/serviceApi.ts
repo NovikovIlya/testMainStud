@@ -545,6 +545,28 @@ export const serviceApi = apiSlice.injectEndpoints({
 					Authorization: `Bearer ${personnelDeparmentToken}`
 				}
 			})
+		}),
+		editVacancyAsPerDepartment: builder.mutation<
+			void,
+			VacancyRequestType & { vacancyId: number }
+		>({
+			query: arg => ({
+				url: `http://localhost:8082/employment-api/v1/vacancy`,
+				method: 'PATCH',
+				body: arg,
+				headers: {
+					Authorization: `Bearer ${personnelDeparmentToken}`
+				}
+			})
+		}),
+		deleteVacancyAsPerDepartment: builder.mutation<void, number>({
+			query: id => ({
+				url: `http://localhost:8082/employment-api/v1/vacancy/${id}`,
+				method: 'DELETE',
+				headers: {
+					Authorization: `Bearer ${personnelDeparmentToken}`
+				}
+			})
 		})
 	})
 })
@@ -602,5 +624,7 @@ export const {
 	useGetReservedRespondFullInfoQuery,
 	useSendRespondToReserveMutation,
 	useApproveReservedRespondMutation,
-	useGetAllVacanciesQuery
+	useGetAllVacanciesQuery,
+	useEditVacancyAsPerDepartmentMutation,
+	useDeleteVacancyAsPerDepartmentMutation
 } = serviceApi

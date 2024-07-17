@@ -8,6 +8,7 @@ import { ChatEmpDemp } from '../Chat/ChatEmpDemp'
 
 import { Archive } from './Archive'
 import { ArchiveRespondInfo } from './ArchiveRespondInfo'
+import Catalog from './CatalogForEdit'
 import { ChatIcon } from './ChatIcon'
 import { Reserve } from './Reserve'
 import { ReserveRespondInfo } from './ReserveRespondInfo'
@@ -15,6 +16,7 @@ import { RespondInfo } from './RespondInfo'
 import { Responds } from './Responds'
 import { RespondsIcon } from './RespondsIcon'
 import { VacanciesIcon } from './VacanciesIcon'
+import { VacancyEditView } from './VacancyEditView'
 import { VacancyRequestCreateView } from './VacancyRequestCreateView'
 import { VacancyRequestDeleteView } from './VacancyRequestDeleteView'
 import { VacancyRequestUpdateView } from './VacancyRequestUpdateView'
@@ -353,7 +355,10 @@ export const NavPesonnelAccounting = () => {
 				) && <RespondInfo type="SUPERVISOR" />}
 				{pathname.includes(navEmployeeList[1].id) && <ChatEmpDemp />}
 				{pathname === navEmployeeList[2].id && <></>}
-				{pathname === navEmployeeList[3].id && <></>}
+				{pathname === navEmployeeList[3].id && <Catalog />}
+				{pathname.match(
+					'services/personnelaccounting/vacancies/vacancyedit'
+				) && <VacancyEditView />}
 				{pathname === '/services/personnelaccounting/vacancyrequests' && (
 					<VacancyRequestsPage />
 				)}

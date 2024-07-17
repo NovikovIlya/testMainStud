@@ -11,7 +11,7 @@ export const Notification = () => {
   useEffect(() => {
     if (message) {
       api.open({
-        message: 'Уведомление',
+        message: 'Внимание!',
         description: message,
         type: type,
         onClose: () => dispatch(hideNotification())

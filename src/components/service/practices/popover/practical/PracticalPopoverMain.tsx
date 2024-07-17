@@ -8,6 +8,7 @@ import dayjs from "dayjs";
 import {utils, writeFileXLSX} from "xlsx";
 import printJS from "print-js";
 import {ListIdDeleteContracts} from "../../../../../models/Practice";
+import { useDeletePractiseMutation, useDeletePractiseSeveralMutation } from '../../../../../store/api/practiceApi/practical';
 
 interface Props {
     recordFullAll?: TablePractical[]
@@ -16,12 +17,8 @@ interface Props {
     setSelectedFieldFull?: (arg: TablePractical[]) => void
 }
 
-export const PracticalPopoverMain = ({
-                                         recordFull,
-                                         recordFullAll,
-                                         setRecordFull,
-                                         setSelectedFieldFull
-                                     }: Props) => {
+export const PracticalPopoverMain = ({recordFull,recordFullAll,setRecordFull,setSelectedFieldFull}: Props) => {
+    const [deletePractise] = useDeletePractiseSeveralMutation()
 
     function translateColumnsIntoRussia({isPrint}: {isPrint: boolean}) {
         const newData: any = []
@@ -91,6 +88,7 @@ export const PracticalPopoverMain = ({
                 ]
             }
         }
+       
 
         printJS({
             printable: translateColumnsIntoRussia({isPrint: true}),
@@ -111,13 +109,22 @@ export const PracticalPopoverMain = ({
             // if (setSelectedFieldFull) {
             //     setSelectedFieldFull([])
             // }
-            console.log(recordFull)
+           
             // const objIdList: ListIdDeleteContracts = {
             //     listIdDelete: listId
             // }
             //deleteSeveralContracts(objIdList)
         }
+        // @ts-ignore
+    
+
+        const listId = recordFull?.map((elem:any) => elem.id)
+        const listIdDelete = {
+            listIdDelete: listId
+        }
+        deletePractise(listIdDelete)
     }
+    console.log('recordFull',recordFull)
 
     return (
         <div className={'flex flex-col gap-2 '}>

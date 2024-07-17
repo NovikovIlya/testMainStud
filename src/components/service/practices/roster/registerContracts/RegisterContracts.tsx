@@ -8,6 +8,7 @@ import {
     Radio,
     Row,
     Select,
+    Spin,
     Table,
     TableProps,
     Typography
@@ -33,6 +34,7 @@ import {
 import {ContractFacilities, ContractsAll, ContractShort, NameSpecialty} from "../../../../../models/Practice";
 import {copyFileDocument} from "../../../../../utils/downloadDocument/copyFileDocument";
 import {agreementFileDocument} from "../../../../../utils/downloadDocument/agreementFileDocument";
+import { LoadingOutlined } from '@ant-design/icons';
 
 
 export interface ColumnsTableCompressedView {
@@ -75,7 +77,7 @@ export interface OptionsNameSpecialty {
 export const RegisterContracts = () => {
     const tokenAccess = localStorage.getItem('access')!.replaceAll('"', '')
 
-    const {data: dataAll, isSuccess: isSuccessAll} = useGetContractsAllQuery()
+    const {data: dataAll, isSuccess: isSuccessAll,isFetching} = useGetContractsAllQuery()
     const {data: dataShort, isSuccess: isSuccessShort} = useGetContractsShortQuery()
     const nav = useNavigate()
     const [filter, setFilter] = useState({
@@ -728,6 +730,8 @@ export const RegisterContracts = () => {
 
                 </Col>
             </Row>
+            {isFetching ? <Spin className='w-full mt-20' indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />  : 
+            <>
             {
                 tableView.compressed
                 &&
@@ -768,6 +772,7 @@ export const RegisterContracts = () => {
                        }}
                 />
             }
+            </>}
         </section>
     )
 }

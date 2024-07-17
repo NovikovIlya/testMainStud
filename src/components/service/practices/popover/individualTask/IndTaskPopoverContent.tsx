@@ -21,14 +21,7 @@ interface Props {
     setTableDataFull?: (arg: FullIndividualTask[]) => void
 }
 
-export const IndTaskPopoverContent = ({
-                                          recordCompressed,
-                                          recordFull,
-                                          setTableDataCompressed,
-                                          tableDataCompressed,
-                                          setTableDataFull,
-                                          tableDataFull
-                                      }: Props) => {
+export const IndTaskPopoverContent = ({recordCompressed,recordFull,setTableDataCompressed,tableDataCompressed,setTableDataFull,tableDataFull}: Props) => {
     const [deleteTask] = useDeleteTaskMutation()
     const dispatch = useAppDispatch();
 
@@ -109,7 +102,7 @@ export const IndTaskPopoverContent = ({
                 console.log('bb',error)
                 if (error.status === 409) {
                     console.log('e mama')
-                    dispatch(showNotification({ message: 'Произошел конфликт', type: 'error' }));
+                    dispatch(showNotification({ message: 'Удаление невозможно, так как имеются связи, прежде необходимо удалить их', type: 'error' }));
                   }
             })
             // setTableDataCompressed(newArr)
@@ -129,7 +122,7 @@ export const IndTaskPopoverContent = ({
                 console.log('bb',error)
                 if (error.status === 409) {
                     console.log('e mama2')
-                    dispatch(showNotification({ message: 'Произошел конфликт', type: 'error' }));
+                    dispatch(showNotification({ message: 'Удаление невозможно, так как имеются связи, прежде необходимо удалить их', type: 'error' }));
                   }
             })
             // setTableDataFull(newArr)

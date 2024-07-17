@@ -27,7 +27,8 @@ import {
     useGetCompentencesQuery,
     usePostPracticesMutation,
     useGetTasksForPracticeQuery,
-    useGetPracticeTypeForPracticeQuery
+    useGetPracticeTypeForPracticeQuery,
+    useGetSubdivisionForPracticeQuery
 } from "../../../../store/api/practiceApi/individualTask";
 import { useGetCafDepartmentsQuery } from "../../../../store/api/practiceApi/practical";
 import { processingOfDivisions } from "../../../../utils/processingOfDivisions";
@@ -94,19 +95,39 @@ export const CreatePractical = () => {
     const [practiceType, setPracticeType] = useState<PracticeType[]>()
     const [groupNumbers, setGroupNumbers] = useState<any>(null)
     const [departments, setDepartments] = useState<Department[]>()
+    const [objType,setObjType] = useState<any>({subDivisionId:null,
+        specialtyNameId:null})
     const [practiceKindForSelect, setPracticeKindForSelect] = useState<any>(null)
     const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesForPractiseQuery(subDivisionId, {skip: subDivisionId === null})
     const {data: dataPraciseKind, isSuccess: isSuccesPractiseKind} = useGetPracticeKindQuery(subDivisionId, {skip: subDivisionId === null})
     const {data: dataGroupNumbers, isSuccess: isSuccessGroupNumbers} = useGetGroupNumbersQuery(subDivisionId, {skip: subDivisionId === null})
     const {data: dataDepartmentDirector, isSuccess: isSuccessDepartmentDirector} = useGetDepartmentDirectorsQuery(subDivisionId, {skip: subDivisionId === null})
     const {data:dataCompetences, isSuccess: isSuccessCompetences} = useGetCompentencesQuery(objectForCompetences,{skip: objectForCompetences === null})
-    const {data: dataDepartments, isSuccess: isSuccessDepartments} = useGetDepartmentsQuery()
-    const {data: dataPracticeType, isSuccess: isSuccessPracticeType} = useGetPracticeTypeForPracticeQuery(subDivisionId, {skip: subDivisionId === null})
+    const {data: dataDepartments, isSuccess: isSuccessDepartments} = useGetSubdivisionForPracticeQuery()
+    const {data: dataPracticeType, isSuccess: isSuccessPracticeType} = useGetPracticeTypeForPracticeQuery(objType, {skip: objType.subDivisionId === null})
     const {data:dataTask, isSuccess:isSuccessTask} = useGetTasksForPracticeQuery(arqTask)
     const {data: dataDep, isSuccess: isSuccessDep} = useGetCafDepartmentsQuery(subDivisionId,{skip: subDivisionId === null})
+    
     const [sendForm,{data}] = usePostPracticesMutation()
-   
 
+    // объект для типа практик
+    useEffect(()=>{
+        if(isSuccessNameSpecialty && form.getFieldValue('subDivision') && isSuccessNameSpecialty && pickSpeciality){
+            const pickSpecialityId = dataNameSpecialty?.find((elem:any) => {
+                if (elem.value === pickSpeciality) {
+                    return elem
+                }
+            })
+            setObjType({
+                ...objType,
+                subDivisionId:subDivisionId,
+                specialtyNameId:pickSpecialityId?.id
+            })
+        }
+    
+    },[isSuccessNameSpecialty,form,isSuccessNameSpecialty,pickSpeciality])
+   
+    console.log('objType',objType)
     // заполнения объекта для компетенции
     useEffect(()=>{
         if(pickKindPractise && pickDate && pickSpeciality){
@@ -590,7 +611,7 @@ export const CreatePractical = () => {
                         <Form.Item
                             //rules={[{required: true}]}
                             name={'amountHours'}
-                            label={'Общее количество часов по практике'}>
+                            label={'Общее кол-во часов'}>
                             <InputNumber
                                 type="number"
                                 className="w-full"

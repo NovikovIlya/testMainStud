@@ -6,6 +6,7 @@ import {
     Space,
     Table,
     TableColumnsType,
+    Spin
 } from 'antd'
 import React, {useEffect, useRef, useState} from 'react'
 import {useNavigate} from 'react-router-dom'
@@ -22,6 +23,7 @@ import {EditSvg} from "../../../../assets/svg/EditSvg";
 import {useGetAllTasksQuery, useGetPracticeTypeQuery} from "../../../../store/api/practiceApi/individualTask";
 import {useGetSpecialtyNamesQuery} from "../../../../store/api/practiceApi/roster";
 import {OptionsNameSpecialty} from "../roster/registerContracts/RegisterContracts";
+import { LoadingOutlined } from '@ant-design/icons'
 
 
 interface FilterType {
@@ -55,7 +57,7 @@ const IndividualTasks = () => {
     const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery()
     const [practiceType, setPracticeType] = useState<FilterType[]>()
     const {data: dataPracticeType, isSuccess: isSuccessPracticeType} = useGetPracticeTypeQuery()
-    const {data, isSuccess} = useGetAllTasksQuery()
+    const {data, isSuccess, isFetching } = useGetAllTasksQuery()
     const [
         tableDataCompressed,
         setTableDataCompressed
@@ -405,13 +407,14 @@ const IndividualTasks = () => {
                         popupMatchSelectWidth={false}
                         defaultValue="Все"
                         className="w-full"
-                        options={dataNameSpecialty?.map((item)=>{
-                            return {
-                                key:item.id,
-                                value: item.value,
-                                label: item.label
-                            }
-                        })}
+                        options={[
+                            {key: 2244612, value: "Все", label: "Все"},
+                            ...(dataNameSpecialty ? dataNameSpecialty.map((item) => ({
+                              key: item.id,
+                              value: item.value,
+                              label: item.label
+                            })) : [])
+                          ]}
                         onChange={value => {
                             setFilter({
                                 ...filter,
@@ -443,13 +446,14 @@ const IndividualTasks = () => {
                         popupMatchSelectWidth={false}
                         defaultValue="Все"
                         className="w-full"
-                        options={dataPracticeType?.map((item)=>{
-                            return {
-                                key:item.id,
-                                value: item.value,
-                                label: item.label
-                            }
-                        })}
+                        options={[
+                            {key: 2244612, value: "Все", label: "Все"},
+                            ...(dataPracticeType ? dataPracticeType.map((item) => ({
+                              key: item.id,
+                              value: item.value,
+                              label: item.label
+                            })) : [])
+                          ]}
                         onChange={value => {
                             setFilter({
                                 ...filter,
@@ -495,6 +499,8 @@ const IndividualTasks = () => {
 
                 </Col>
             </Row>
+            {isFetching ? <Spin className='w-full mt-20' indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />  : 
+            <>
             {
                 tableView.compressed
                 &&
@@ -518,9 +524,10 @@ const IndividualTasks = () => {
                     />
                 </div>
             }
-            {
+            {  
                 tableView.full
                 &&
+                
                 <Table
                     className={'mt-5'}
                     columns={columnsFull}
@@ -537,6 +544,7 @@ const IndividualTasks = () => {
                     }}
                 />
             }
+            </>}
 
 
         </section>

@@ -18,13 +18,14 @@ import TextArea from "antd/es/input/TextArea";
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import { useLocation, useNavigate } from "react-router-dom";
 import { OptionsNameSpecialty } from "../roster/registerContracts/RegisterContracts";
-import { useGetSpecialtyNamesQuery } from "../../../../store/api/practiceApi/roster";
-import { useGetCompentencesQuery, useGetDepartmentDirectorsQuery, useGetDepartmentsQuery, useGetGroupNumbersQuery, useGetPracticeKindQuery, useGetPracticeOneQuery, useGetPracticeTypeQuery, useGetTasksForPracticeQuery, useUpdatePracticeOneMutation } from '../../../../store/api/practiceApi/individualTask';
+import { useGetSpecialtyNamesForPractiseQuery, useGetSpecialtyNamesQuery } from "../../../../store/api/practiceApi/roster";
+import { useGetCompentencesQuery, useGetDepartmentDirectorsQuery, useGetDepartmentsQuery, useGetGroupNumbersQuery, useGetPracticeKindQuery, useGetPracticeOneQuery, useGetPracticeTypeForPracticeQuery, useGetPracticeTypeQuery, useGetSubdivisionForPracticeQuery, useGetTasksForPracticeQuery, useUpdatePracticeOneMutation } from '../../../../store/api/practiceApi/individualTask';
 import { parse } from 'date-fns';
 import { processingOfDivisions } from '../../../../utils/processingOfDivisions';
 import { useGetCafDepartmentsQuery } from '../../../../store/api/practiceApi/practical';
 import { useAppDispatch } from '../../../../store';
 import { showNotification } from '../../../../store/reducers/notificationSlice';
+import   './EditPractical.module.scss'
 
 
 
@@ -79,20 +80,34 @@ export const EditPractical = () => {
     const [fullDate,setFullDate] = useState<any>(null)
     const [idSub, setIdSub] = useState<any>(null)
     const [subDivisionId,setSubDevisionId] = useState<null | string>(null)
+    const [pickType,setPickType] = useState(null)
+    const [objType,setObjType] = useState({
+            subdivisionId :null,
+            specialtyNameId :null 
+    })
     const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
     const [objectForCompetences, setObjectForCompetences] = useState<any>(null)
     const {data:dataOnePractise,isSuccess:isSuccesOnePractise} = useGetPracticeOneQuery(id)
-    const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery()
+    // const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery()
+    const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesForPractiseQuery(dataOnePractise?.subdivisionId, {skip: !dataOnePractise?.subdivisionId})
+    
     const {data:dataCompetences, isSuccess: isSuccessCompetences} = useGetCompentencesQuery(objectForCompetences,{skip: objectForCompetences === null})
-    const {data: dataDepartments, isSuccess: isSuccessDepartments} = useGetDepartmentsQuery()
-    const {data: dataPracticeType, isSuccess: isSuccessPracticeType} = useGetPracticeTypeQuery()
-    const {data: dataDepartmentDirector, isSuccess: isSuccessDepartmentDirector} = useGetDepartmentDirectorsQuery(idSub, {skip: !idSub})
-    const {data: dataCaf, isSuccess: isSuccessCaf} = useGetCafDepartmentsQuery(idSub,{skip: !idSub})
-    const {data: dataGroupNumbers, isSuccess: isSuccessGroupNumbers} = useGetGroupNumbersQuery(idSub, {skip: !idSub})
-    const {data: dataPraciseKind, isSuccess: isSuccesPractiseKind} = useGetPracticeKindQuery(idSub, {skip: !idSub})
+    const {data: dataDepartments, isSuccess: isSuccessDepartments} = useGetSubdivisionForPracticeQuery()
+  
+    const {data: dataPracticeType, isSuccess: isSuccessPracticeType} = useGetPracticeTypeForPracticeQuery(objType, {skip: objType.subdivisionId === null})
+    
+    const {data: dataDepartmentDirector, isSuccess: isSuccessDepartmentDirector} = useGetDepartmentDirectorsQuery(dataOnePractise?.subdivisionId, {skip: !dataOnePractise?.subdivisionId})
+    const {data: dataCaf, isSuccess: isSuccessCaf} = useGetCafDepartmentsQuery(dataOnePractise?.subdivisionId,{skip: !dataOnePractise?.subdivisionId})
+    const {data: dataGroupNumbers, isSuccess: isSuccessGroupNumbers} = useGetGroupNumbersQuery(dataOnePractise?.subdivisionId, {skip: !dataOnePractise?.subdivisionId})
+    const {data: dataPraciseKind, isSuccess: isSuccesPractiseKind} = useGetPracticeKindQuery(dataOnePractise?.subdivisionId, {skip: !dataOnePractise?.subdivisionId})
+    const{data:dataSubdivisonForPractise} = useGetSubdivisionForPracticeQuery()
     const [updateForm] = useUpdatePracticeOneMutation()
     const {data:dataTask, isSuccess:isSuccessTask,error:errorTasks} = useGetTasksForPracticeQuery(arqTask,{skip:!arqTask})
     const dispatch = useAppDispatch()
+
+
+
+   console.log('objTypeobjTypeobjType',objType)
 
     useEffect(()=>{
         const idSubdevision = dataDepartments?.find((item)=>{
@@ -109,6 +124,26 @@ export const EditPractical = () => {
         setIdSub(idSubdevision?.id)
     },[dataDepartments, dataOnePractise?.subdivision])
 
+    useEffect(()=>{
+
+        if(isSuccesOnePractise){
+            console.log('dataOnePractise?.subdivisionId',dataOnePractise?.subdivisionId)
+            const objTypeZ = {
+            ...objType,
+            subdivisionId: dataOnePractise?.subdivisionId,
+            specialtyNameId :dataOnePractise?.specialtyNameId 
+        }
+        setObjType(objTypeZ)
+        }
+    
+},[isSuccesOnePractise,dataOnePractise])
+
+    useEffect(() => {
+        if (isSuccessDepartments) {
+            setDepartments(processingOfDivisions(dataDepartments))
+        }
+    }, [dataDepartments]);
+
     // получение кафедр
     useEffect(() => {
         if (isSuccessDepartments) {
@@ -124,23 +159,32 @@ export const EditPractical = () => {
 
     // заполнения объекта для компетенции
     useEffect(()=>{
-        if(isSuccesOnePractise && isSuccesPractiseKind){
+        if(isSuccesOnePractise && isSuccesPractiseKind&&isSuccessNameSpecialty && form.getFieldValue('practiceType')!== undefined){
+           
+            console.log('11',
+                dataPraciseKind?.find(elem => {
+                if (elem.value === form.getFieldValue('practiceKind')) {
+                    return elem
+                }
+            })?.id)
             setObjectForCompetences({
-                specialityId: dataNameSpecialty?.find((elem) => {
-                    if (elem.value === dataOnePractise.specialtyName) {
+                specialityId: dataNameSpecialty?.find(elem => {
+                    if (elem.value === form.getFieldValue('specialityName')) {
                         return elem
                     }
                 })?.id,
+                
                 practiceKindId: dataPraciseKind?.find(elem => {
-                    if (elem.value === dataOnePractise.practiceKind) {
+                    if (elem.value === form.getFieldValue('practiceKind')) {
                         return elem
                     }
                 })?.id,
-                startYear:dataOnePractise?.academicYear[0]
+                startYear:form.getFieldValue('academicYear')[0].$y
 
             })
         }   
-    },[dataNameSpecialty, isSuccesOnePractise,dataPraciseKind])
+    },[dataNameSpecialty, isSuccesOnePractise,dataPraciseKind,form])
+
 
     // вставка 
     useEffect(()=>{
@@ -157,19 +201,24 @@ export const EditPractical = () => {
             const endDate = dayjs(endYear, 'YYYY');
             form.setFieldValue('academicYear', [startDate, endDate]);
 
-            const fullSubDivision = dataDepartments?.find((item)=>{
-                if('responses' in item){
-                   return item?.responses?.find((elem=>{
-                        if(elem.value===dataOnePractise.subdivision){
-                            return elem
-                        }
-                    }))
+           
+            const fullSubDivision = dataDepartments?.forEach((item:any)=>{
+                if(item.value===dataOnePractise?.subdivision) {
+                    form.setFieldValue('subDivision', `${dataOnePractise.subdivision}`)
+                    
+                    return true
                 }
-                if(item.value===dataOnePractise.subdivision){
-                    return item
+                if('responses' in item){
+                    return item.responses?.find((elem:any)=> {
+                        if(dataOnePractise?.subdivision.toLowerCase()===elem.value.toLowerCase()){
+                            form.setFieldValue('subDivision', `${item.value + ' - ' + elem.value}`)
+                        }      
+                    })
+                }
+                else{
+                    
                 }
             })
-            form.setFieldValue('subDivision', `${fullSubDivision?.value} - ${dataOnePractise.subdivision}`);
 
             form.setFieldValue('courseStudy', dataOnePractise.courseNumber);
             form.setFieldValue('startStudy', dayjs(dataOnePractise.practicePeriod[0], 'YYYY.MM.DD'));
@@ -184,21 +233,23 @@ export const EditPractical = () => {
 
       // получение инд заданий
       useEffect(()=>{
-        if(form.getFieldValue('specialityName') && form.getFieldValue('practiceType') ){
+        if(isSuccessTask  ){
             const pickTypeId = dataPracticeType?.find(elem => {
                 if (elem.value === form.getFieldValue('practiceType')) {
                     return elem
                 }
             })
-            const pickSpecialityId = dataNameSpecialty?.find(elem => {
+            const pickSpecialityId = dataNameSpecialty?.find((elem:any) => {
+                console.log('ss',form.getFieldValue('specialityName'))
                 if (elem.value === form.getFieldValue('specialityName')) {
                     return elem
                 }
             })
-       
+            console.log('vvvvvvvvvvvvvvvvvvvvvv',pickSpecialityId)
             setArqTask({specialtyNameId : pickSpecialityId?.id, practiceTypeId : pickTypeId?.id})
         }
-    },[isSuccessTask, form])
+    },[isSuccessTask, form,form.getFieldValue('practiceType')])
+    console.log('argtask',arqTask)
 
     // function onFinish(values: NewPractice) {
     //     values.startStudy = dayjs(values.startStudy).format('DD.MM.YYYY')
@@ -325,15 +376,15 @@ export const EditPractical = () => {
             // individualTaskId: dataOnePractise.tasks[0].id,
             competenceIds: dataCompetences,
             departmentDirectorId: directorId?.id, 
-            subdivisionId: dataDepartments?.find((item)=>{
+            subdivisionId: dataSubdivisonForPractise?.find((item:any)=>{
                 if('responses' in item){
-                   return item?.responses?.find((elem=>{
-                        if(elem.value===dataOnePractise.subdivision){
+                    return item.responses?.find((elem:any)=> {
+                        if(form.getFieldValue('subDivision') === elem.value){
                             return elem
-                        }
-                    }))
+                        }      
+                    })
                 }
-                if(item.value===dataOnePractise.subdivision){
+                if(item.value === form.getFieldValue('subDivision')){
                     return item
                 }
             })?.id,
@@ -348,6 +399,7 @@ export const EditPractical = () => {
             departmentId : departmenIdZ?.id,
            
         }
+        console.log('sendData',sendData)
         updateForm(sendData)
         nav('/services/practices/practical')
     }
@@ -356,7 +408,9 @@ export const EditPractical = () => {
         setPickDate([value[0].$y,value[1].$y])
         setFullDate(value)
     }
-
+    const onChangeTypePick = (value)=>{
+        setPickType(value)
+    }
     const dataTaskValid = dataOnePractise?.tasks.map((item:any)=>item.taskDescription)
    
 
@@ -409,7 +463,7 @@ export const EditPractical = () => {
                             name={'practiceType'}
                             label={'Тип практики'}>
                             <Select
-                                
+                                onChange={onChangeTypePick}
                                 size="large"
                                 popupMatchSelectWidth={false}
                                 className="w-full"
@@ -569,7 +623,7 @@ export const EditPractical = () => {
                         <Form.Item
                             rules={[{required: true}]}
                             name={'amountHours'}
-                            label={'Общее количество часов по практике'}>
+                            label={'Общее кол-во часов'}>
                             <InputNumber
                                 type="number"
                                 className="w-full"
@@ -761,16 +815,17 @@ export const EditPractical = () => {
                     </Col>
                 </Row>
 
-                <Row gutter={[16, 16]} className={'mt-4'}>
+                <Row gutter={[16, 16]} className={`mt-4 `}>
                     <Col xs={24} sm={24} md={18} lg={16} xl={12}>
                     <List
+                        className='newAntd'
                         header={<div>Индивидуальные задания:</div>}
                        
                         bordered
                         dataSource={isSuccesOnePractise?dataTaskValid : ''}
-                        renderItem={(item:any) => (
+                        renderItem={(item:any,index:number) => (
                             <List.Item>
-                            {item}
+                            {index+ 1}. {item}
                             </List.Item>
                         )}
                         />

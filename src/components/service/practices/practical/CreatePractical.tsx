@@ -95,7 +95,7 @@ export const CreatePractical = () => {
     const [practiceType, setPracticeType] = useState<PracticeType[]>()
     const [groupNumbers, setGroupNumbers] = useState<any>(null)
     const [departments, setDepartments] = useState<Department[]>()
-    const [objType,setObjType] = useState<any>({subDivisionId:null,
+    const [objType,setObjType] = useState<any>({subdivisionId:null,
         specialtyNameId:null})
     const [practiceKindForSelect, setPracticeKindForSelect] = useState<any>(null)
     const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesForPractiseQuery(subDivisionId, {skip: subDivisionId === null})
@@ -120,7 +120,7 @@ export const CreatePractical = () => {
             })
             setObjType({
                 ...objType,
-                subDivisionId:subDivisionId,
+                subdivisionId:subDivisionId,
                 specialtyNameId:pickSpecialityId?.id
             })
         }

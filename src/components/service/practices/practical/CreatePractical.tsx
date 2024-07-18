@@ -102,12 +102,12 @@ export const CreatePractical = () => {
     const {data: dataPraciseKind, isSuccess: isSuccesPractiseKind} = useGetPracticeKindQuery(subDivisionId, {skip: subDivisionId === null})
     const {data: dataGroupNumbers, isSuccess: isSuccessGroupNumbers} = useGetGroupNumbersQuery(subDivisionId, {skip: subDivisionId === null})
     const {data: dataDepartmentDirector, isSuccess: isSuccessDepartmentDirector} = useGetDepartmentDirectorsQuery(subDivisionId, {skip: subDivisionId === null})
-    const {data:dataCompetences, isSuccess: isSuccessCompetences} = useGetCompentencesQuery(objectForCompetences,{skip: objectForCompetences === null})
+    const {data:dataCompetences, isSuccess: isSuccessCompetences} = useGetCompentencesQuery(objectForCompetences,{skip: objectForCompetences === null})    
     const {data: dataDepartments, isSuccess: isSuccessDepartments} = useGetSubdivisionForPracticeQuery()
     const {data: dataPracticeType, isSuccess: isSuccessPracticeType} = useGetPracticeTypeForPracticeQuery(objType, {skip: objType.subDivisionId === null})
     const {data:dataTask, isSuccess:isSuccessTask} = useGetTasksForPracticeQuery(arqTask)
     const {data: dataDep, isSuccess: isSuccessDep} = useGetCafDepartmentsQuery(subDivisionId,{skip: subDivisionId === null})
-    
+
     const [sendForm,{data}] = usePostPracticesMutation()
 
     // объект для типа практик
@@ -125,9 +125,9 @@ export const CreatePractical = () => {
             })
         }
     
-    },[isSuccessNameSpecialty,form,isSuccessNameSpecialty,pickSpeciality])
+    },[isSuccessNameSpecialty,form,pickSpeciality])
    
-    console.log('objType',objType)
+    console.log('dataCompetences',dataCompetences)
     // заполнения объекта для компетенции
     useEffect(()=>{
         if(pickKindPractise && pickDate && pickSpeciality){
@@ -136,7 +136,7 @@ export const CreatePractical = () => {
                     return elem
                 }
             })
-           
+            console.log('specId',specId)
             const pickId = dataPraciseKind?.find(elem => {
                 if (elem.value === pickKindPractise) {
                     return elem
@@ -148,6 +148,7 @@ export const CreatePractical = () => {
                 practiceKindId: pickId?.id,
                 startYear:pickDate[0]
             }
+            console.log('obj',obj)
             setObjectForCompetences(obj)
         }
     },[dataNameSpecialty, dataPraciseKind, pickDate, pickSpeciality, pickKindPractise])
@@ -155,6 +156,12 @@ export const CreatePractical = () => {
     useEffect(() => {
         if (isSuccessNameSpecialty) {
             setNameSpecialty(dataNameSpecialty)
+            form.setFieldValue('specialityName','')
+            form.setFieldValue('practiceType','')
+            form.setFieldValue('groupNumber','')
+            form.setFieldValue('director','')
+            form.setFieldValue('department','')    
+            form.setFieldValue('practiceKind','')
         }
     }, [dataNameSpecialty]);
 
@@ -275,12 +282,12 @@ export const CreatePractical = () => {
         const dayEnd = String(dateEnd.getDate()).padStart(2, '0');
         const formattedDateEnd = `${yearEnd}.${monthEnd}.${dayEnd}`;
 
-        const directorId = departmentDirector.find((elem:any) => {
+        const directorId = dataDepartmentDirector?.find((elem:any) => {
             if (elem.value === values.director) {
                 return elem
             }
         })
-        const groupNumberId = groupNumbers.find((elem:any) => {
+        const groupNumberId = dataGroupNumbers?.find((elem:any) => {
             if (elem.value === values.groupNumber) {
                 return elem
             }
@@ -310,7 +317,7 @@ export const CreatePractical = () => {
             // specialityName: values.specialityName,
             practiceType: values.practiceType,
             department: values.department,
-            groupNumberId: groupNumberId.id,
+            groupNumberId: groupNumberId?.id,
             semester: values.semester,
             academicYear: {
                        start:pickDate[0],
@@ -321,8 +328,8 @@ export const CreatePractical = () => {
             totalHours: String(values.amountHours),
             endDate: formattedDateEnd ,
             // individualTaskId: dataTask?.id || null,
-            competenceIds: dataCompetences,
-            departmentDirectorId: directorId.id,
+            competenceIds: dataCompetences && dataCompetences?.length > 0 ? dataCompetences : [],
+            departmentDirectorId: directorId?.id,
             subdivisionId: subDivisionId,
             specialtyNameId:pickSpecialityId?.id,
             practiceKindId: pickId?.id,
@@ -356,7 +363,7 @@ export const CreatePractical = () => {
 
         // }
         
-
+        console.log('sendData',sendData)
         sendForm(sendData)
         nav('/services/practices/practical')
 
@@ -442,7 +449,7 @@ export const CreatePractical = () => {
                             name={'practiceType'}
                             label={'Тип практики'}>
                             <Select
-                                disabled={!pickSpeciality}
+                                disabled={!form.getFieldValue('specialityName')}
                                 size="large"
                                 
                                 popupMatchSelectWidth={false}
@@ -519,7 +526,7 @@ export const CreatePractical = () => {
                                 size="large"
                                 popupMatchSelectWidth={false}
                                 className="w-full"
-                                options={groupNumbers?.map((item:any)=>{
+                                options={dataGroupNumbers?.map((item:any)=>{
                                     return {
                                         key:item.id,
                                         value:item.value,
@@ -794,7 +801,7 @@ export const CreatePractical = () => {
                                 size="large"
                                 popupMatchSelectWidth={false}
                                 className="w-full"
-                                options={departmentDirector}
+                                options={dataDepartmentDirector}
                             />
                         </Form.Item>
                     </Col>
@@ -807,9 +814,9 @@ export const CreatePractical = () => {
                        
                         bordered
                         dataSource={isSuccessTask?dataTaskValid : ''}
-                        renderItem={(item:any) => (
+                        renderItem={(item:any,index:number) => (
                             <List.Item>
-                            {item}
+                            {index + 1}. {item}
                             </List.Item>
                         )}
                         />

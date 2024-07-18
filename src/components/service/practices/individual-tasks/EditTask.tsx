@@ -28,6 +28,7 @@ const EditTask = () => {
     const [pozrazdelenie,setPodrazdelenie] = useState<any>(null)
     const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
     const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery()
+    
 
     useEffect(() => {
         if (isSuccessNameSpecialty) {
@@ -71,7 +72,7 @@ const EditTask = () => {
                     })
                 }
                 else{
-                    console.log('vx',item.value)
+                  
                 }
             })
             
@@ -103,17 +104,19 @@ const EditTask = () => {
             }
         })
         const subDivision = dataDepartments?.find(elem => {
-            if ('responses' in elem){
-                return elem?.responses?.find((item)=>{
-                    if(item.value===values.subDivision){
-                     
-                        return item
-                    }
-                }) 
-            }
-            else {
+            if (elem.value === values.subDivision) {
+                console.log('============elem!!!!!!',elem)
                 return elem
-            }   
+            }
+            if('responses' in elem){
+                // @ts-ignore
+                return elem.responses?.find((elem:any)=> {
+                    if(form?.getFieldValue('subDivision')?.split(" - ")[1] === elem.value){
+                        console.log('------------elem!!!!!!',elem)
+                        return elem
+                    }      
+                })
+            }
         })
     
 
@@ -122,17 +125,17 @@ const EditTask = () => {
             specialityNameId: String(specName!.id),
             practiceTypeId: String(practiceType!.id),
             // @ts-ignore
-            subdivisionNameId: dataDepartments?.find((item)=>{
-                return item.value === form.getFieldValue('subDivision')
-            })?.id,
+            subdivisionNameId: subDivision?.id,
             tasks: values.tasks.map(elem => elem.task)
         }
-
+        console.log('newData',newData)
         edit(newData)
             .then(() => {
                 setMsg('Данные сохранены')
             })
             .catch(e => console.log(e))
+
+        navigate('/services/practices/individualTasks')
     }
 
 

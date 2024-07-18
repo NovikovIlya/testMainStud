@@ -65,10 +65,23 @@ const CreateTask = () => {
             if (elem.value === values.practiceType) {
                 return elem
             }
+            
         })
         const subDivision = departments!.find(elem => {
+            console.log('elem',elem)
+            console.log('form',form?.getFieldValue('subDivision'))
             if (elem.value === values.subDivision) {
+                console.log('============elem!!!!!!',elem)
                 return elem
+            }
+            if('responses' in elem){
+                // @ts-ignore
+                return elem.responses?.find((elem:any)=> {
+                    if(form?.getFieldValue('subDivision')?.split(" - ")[1] === elem.value){
+                        console.log('------------elem!!!!!!',elem)
+                        return elem
+                    }      
+                })
             }
         })
         const newData: TaskSend = {
@@ -131,7 +144,13 @@ const CreateTask = () => {
                                     size="large"
                                     popupMatchSelectWidth={false}
                                     className="w-full"
-                                    options={nameSpecialty}
+                                    options={nameSpecialty?.map((item)=>{
+                                        return{
+                                            key:item.id,
+                                            value:item.value,
+                                            label:item.label
+                                        }
+                                    })}
                                 />
                             </Form.Item>
                         </Space>

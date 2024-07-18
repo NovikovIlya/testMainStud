@@ -149,7 +149,9 @@ export const individualTasks = apiSlice.injectEndpoints({
                 url: `services/api-practices/practices/${id}`,
                 method: 'GET',
                 
-            })
+            }),
+            keepUnusedDataFor: 1,
+
         }),
         updatePracticeOne: builder.mutation<any, any>({
             query: (obj) => ({
@@ -158,7 +160,8 @@ export const individualTasks = apiSlice.injectEndpoints({
                 body: obj
                 
             }),
-            invalidatesTags:['Practice']
+            invalidatesTags:['Practice'],
+            
         }),
         postPractices: builder.mutation<any, any>({
             query: (obj) => ({

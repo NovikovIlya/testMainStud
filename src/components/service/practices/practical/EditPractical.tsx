@@ -217,7 +217,6 @@ export const EditPractical = () => {
             const endDate = dayjs(endYear, 'YYYY');
             form.setFieldValue('academicYear', [startDate, endDate]);
 
-           
             dataDepartments?.forEach((item:any)=>{
                 if(item.value===dataOnePractise?.subdivision) {
                     form.setFieldValue('subDivision', `${dataOnePractise.subdivision}`)
@@ -239,11 +238,8 @@ export const EditPractical = () => {
             form.setFieldValue('courseStudy', dataOnePractise.courseNumber);
             form.setFieldValue('startStudy', dayjs(dataOnePractise.practicePeriod[0], 'YYYY.MM.DD'));
             form.setFieldValue('endStudy', dayjs(dataOnePractise.practicePeriod[1], 'YYYY.MM.DD'));
-
             form.setFieldValue('amountHours', dataOnePractise.totalHours);
-
             form.setFieldValue('director', dataOnePractise.departmentDirector);
-
         }
     },[isSuccesOnePractise,isSuccessDepartments])
 
@@ -332,8 +328,8 @@ export const EditPractical = () => {
             groupNumberId: groupNumberId?.id,
             semester: values.semester,
             academicYear: {
-                       start:startDate.$y,
-                      end:endDate.$y
+                    start:startDate.$y,
+                    end:endDate.$y
             },
             courseNumber: values.courseStudy,
             startDate: formattedDate,
@@ -357,24 +353,6 @@ export const EditPractical = () => {
         nav('/services/practices/practical')
     }
 
-    useEffect(()=>{
-        if (flag) {
-            setFlag(false)
-            
-            
-        }
-        else{
-            // form.setFieldValue('specialityName','')
-            // form.setFieldValue('practiceType','')
-            // form.setFieldValue('groupNumber','')
-            // form.setFieldValue('director','')
-            // form.setFieldValue('department','')    
-            // form.setFieldValue('practiceKind','')
-        }
-        return()=>{
-            setFlag(true)
-        }
-    },[subDivisionId])
 
     const onChangePicker = (value:any)=>{
         setPickDate([value[0].$y,value[1].$y])
@@ -397,7 +375,6 @@ export const EditPractical = () => {
         setPickSpeciality(value)
         form.setFieldValue('practiceType','')
     }
-
     const dataTaskValid = dataTask?.tasks.map((item:any)=>item.taskDescription)
    
 
@@ -422,7 +399,24 @@ export const EditPractical = () => {
                 form={form}
                 onFinish={(values) => onFinish(values)}
                 layout={'vertical'}>
-                <Row gutter={[16, 16]} className="mt-4">
+                 <Row gutter={[16, 16]} className="mt-10">
+                    <Col xs={24} sm={24} md={18} lg={16} xl={12}>
+                        <Space direction={'vertical'} className={'w-full'}>
+                            <Form.Item label={'Подразделение'}
+                                       rules={[{required: true}]}
+                                       name={'subDivision'}>
+                                <Select
+                                     onChange={handleChange}
+                                    size="large"
+                                    popupMatchSelectWidth={false}
+                                    className="w-full"
+                                    options={departments}
+                                />
+                            </Form.Item>
+                        </Space>
+                    </Col>
+                </Row>
+                <Row gutter={[16, 16]} className="">
                     <Col xs={24} sm={24} md={18} lg={16} xl={12}>
                         <Form.Item
                             label={'Шифр и наименование специальности'}
@@ -481,23 +475,7 @@ export const EditPractical = () => {
                         </Form.Item>
                     </Col>
                 </Row>
-                <Row gutter={[16, 16]} className="mt-4">
-                    <Col xs={24} sm={24} md={18} lg={16} xl={12}>
-                        <Space direction={'vertical'} className={'w-full'}>
-                            <Form.Item label={'Подразделение'}
-                                       rules={[{required: true}]}
-                                       name={'subDivision'}>
-                                <Select
-                                     onChange={handleChange}
-                                    size="large"
-                                    popupMatchSelectWidth={false}
-                                    className="w-full"
-                                    options={departments}
-                                />
-                            </Form.Item>
-                        </Space>
-                    </Col>
-                </Row>
+               
                 <Row gutter={[16, 16]}>
                     <Col xs={24} sm={24} md={18} lg={16} xl={12}>
                         <Form.Item

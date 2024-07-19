@@ -25,18 +25,19 @@ const CreateTask = () => {
     const [createTask] = useCreateTaskMutation()
     const navigate = useNavigate()
     const [form] = Form.useForm()
-
+    const [subDivision, setSubDivision] = useState<any>(null)
     const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
-    const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery()
+    const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery(subDivision)
+    const [practiceType, setPracticeType] = useState<PracticeType[]>()
+    const {data: dataPracticeType, isSuccess: isSuccessPracticeType} = useGetPracticeTypeQuery(subDivision)
+    const [departments, setDepartments] = useState<Department[]>()
+    const {data: dataDepartments, isSuccess: isSuccessDepartments} = useGetDepartmentsQuery()
 
     useEffect(() => {
         if (isSuccessNameSpecialty) {
             setNameSpecialty(dataNameSpecialty)
         }
     }, [dataNameSpecialty]);
-
-    const [practiceType, setPracticeType] = useState<PracticeType[]>()
-    const {data: dataPracticeType, isSuccess: isSuccessPracticeType} = useGetPracticeTypeQuery()
 
 
     useEffect(() => {
@@ -45,8 +46,6 @@ const CreateTask = () => {
         }
     }, [dataPracticeType]);
 
-    const [departments, setDepartments] = useState<Department[]>()
-    const {data: dataDepartments, isSuccess: isSuccessDepartments} = useGetDepartmentsQuery()
 
     useEffect(() => {
         if (isSuccessDepartments) {
@@ -68,8 +67,7 @@ const CreateTask = () => {
             
         })
         const subDivision = departments!.find(elem => {
-            console.log('elem',elem)
-            console.log('form',form?.getFieldValue('subDivision'))
+
             if (elem.value === values.subDivision) {
                 console.log('============elem!!!!!!',elem)
                 return elem
@@ -94,6 +92,28 @@ const CreateTask = () => {
             .then(data => data)
             .catch(e => e)
         navigate('services/practices/individualTasks/')
+    }
+
+    const handlePodrazdelenie = (value:any)=>{
+        if(value.length === 0){
+            return
+        }
+        const podrazdelenie = departments?.find(elem => {
+            if(elem.value === value){
+                return elem
+            }
+            if('responses' in elem){
+                // @ts-ignore
+                return elem.responses?.find((elem:any)=> {
+                    if(elem.value === value){
+                        return elem
+                    }
+                })
+            }
+        })
+        setSubDivision(podrazdelenie?.id)
+        form.setFieldValue('specialityName', null)
+        form.setFieldValue('practiceType', null)
     }
 
     return (
@@ -129,6 +149,7 @@ const CreateTask = () => {
                                     popupMatchSelectWidth={false}
                                     className="w-full"
                                     options={departments}
+                                    onChange={handlePodrazdelenie}
                                 />
                             </Form.Item>
                         </Space>
@@ -141,6 +162,7 @@ const CreateTask = () => {
                                 rules={[{required: true}]}
                                 name={'specialityName'}>
                                 <Select
+                                    disabled={!subDivision}
                                     size="large"
                                     popupMatchSelectWidth={false}
                                     className="w-full"
@@ -164,6 +186,7 @@ const CreateTask = () => {
                                 rules={[{required: true}]}
                                 name={"practiceType"}>
                                 <Select
+                                 disabled={!subDivision}
                                     size="large"
                                     popupMatchSelectWidth={false}
                                     className="w-full"

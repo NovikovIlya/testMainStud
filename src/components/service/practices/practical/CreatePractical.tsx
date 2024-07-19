@@ -353,7 +353,24 @@ export const CreatePractical = () => {
                 form={form}
                 onFinish={(values) => onFinish(values)}
                 layout={'vertical'}>
-                <Row gutter={[16, 16]} className="mt-4">
+                    <Row gutter={[16, 16]} className="mt-10">
+                    <Col xs={24} sm={24} md={18} lg={16} xl={12}>
+                        <Space direction={'vertical'} className={'w-full'}>
+                            <Form.Item label={'Подразделение'}
+                                       rules={[{required: true}]}
+                                       name={'subDivision'}>
+                                <Select
+                                    onChange={handleChange}
+                                    size="large"
+                                    popupMatchSelectWidth={false}
+                                    className="w-full"
+                                    options={departments}
+                                />
+                            </Form.Item>
+                        </Space>
+                    </Col>
+                </Row>
+                <Row gutter={[16, 16]} className="">
                     <Col xs={24} sm={24} md={18} lg={16} xl={12}>
                         <Form.Item
                             label={'Шифр и наименование специальности'}
@@ -416,23 +433,7 @@ export const CreatePractical = () => {
                         </Form.Item>
                     </Col>
                 </Row>
-                <Row gutter={[16, 16]} className="mt-4">
-                    <Col xs={24} sm={24} md={18} lg={16} xl={12}>
-                        <Space direction={'vertical'} className={'w-full'}>
-                            <Form.Item label={'Подразделение'}
-                                       rules={[{required: true}]}
-                                       name={'subDivision'}>
-                                <Select
-                                    onChange={handleChange}
-                                    size="large"
-                                    popupMatchSelectWidth={false}
-                                    className="w-full"
-                                    options={departments}
-                                />
-                            </Form.Item>
-                        </Space>
-                    </Col>
-                </Row>
+                
                 <Row gutter={[16, 16]}>
                     <Col xs={24} sm={24} md={18} lg={16} xl={12}>
                         <Form.Item

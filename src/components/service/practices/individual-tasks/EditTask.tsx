@@ -25,9 +25,14 @@ const EditTask = () => {
     const {data, isSuccess} = useGetOneTaskQuery(id)
     const [edit] = useEditTaskMutation()
     const [msg, setMsg] = useState('')
+    const [subDivision, setSubDivision] = useState<any>(null)
     const [pozrazdelenie,setPodrazdelenie] = useState<any>(null)
     const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
-    const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery()
+    const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery(subDivision)
+    const [practiceType, setPracticeType] = useState<PracticeType[]>()
+    const {data: dataPracticeType, isSuccess: isSuccessPracticeType} = useGetPracticeTypeQuery(subDivision)
+    const [departments, setDepartments] = useState<Department[]>()
+    const {data: dataDepartments, isSuccess: isSuccessDepartments} = useGetDepartmentsQuery()
     
 
     useEffect(() => {
@@ -36,9 +41,6 @@ const EditTask = () => {
         }
     }, [dataNameSpecialty]);
 
-    const [practiceType, setPracticeType] = useState<PracticeType[]>()
-    const {data: dataPracticeType, isSuccess: isSuccessPracticeType} = useGetPracticeTypeQuery()
-
 
     useEffect(() => {
         if (isSuccessPracticeType) {
@@ -46,9 +48,6 @@ const EditTask = () => {
         }
     }, [dataPracticeType]);
 
-
-    const [departments, setDepartments] = useState<Department[]>()
-    const {data: dataDepartments, isSuccess: isSuccessDepartments} = useGetDepartmentsQuery()
 
     useEffect(() => {
         if (isSuccessDepartments) {
@@ -138,6 +137,28 @@ const EditTask = () => {
         navigate('/services/practices/individualTasks')
     }
 
+    const handlePodrazdelenie = (value:any)=>{
+        if(value.length === 0){
+            return
+        }
+        const podrazdelenie = departments?.find(elem => {
+            if(elem.value === value){
+                return elem
+            }
+            if('responses' in elem){
+                // @ts-ignore
+                return elem.responses?.find((elem:any)=> {
+                    if(elem.value === value){
+                        return elem
+                    }
+                })
+            }
+        })
+        setSubDivision(podrazdelenie?.id)
+        form.setFieldValue('specialityName', null)
+        form.setFieldValue('practiceType', null)
+    }
+
 
     return (
         <section className="container">
@@ -172,6 +193,7 @@ const EditTask = () => {
                                     popupMatchSelectWidth={false}
                                     className="w-full"
                                     options={departments}
+                                    onChange={handlePodrazdelenie}
                                 />
                             </Form.Item>
                         </Space>
@@ -185,6 +207,7 @@ const EditTask = () => {
                                     //    initialValue={'Test 1'}
                                        name={'specialityName'}>
                                 <Select
+                                    disabled={!subDivision}
                                     size="large"
                                     popupMatchSelectWidth={false}
                                     className="w-full"
@@ -209,6 +232,7 @@ const EditTask = () => {
                                 // initialValue={'Test 1'}
                                 name={"practiceType"}>
                                 <Select
+                                    disabled={!subDivision}
                                     size="large"
                                     popupMatchSelectWidth={false}
                                     className="w-full"

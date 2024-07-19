@@ -253,7 +253,7 @@ export const CreateContracts = () => {
 
                 <Row gutter={[16, 16]}>
                     <Col xs={24} sm={24} md={18} lg={8} xl={6}>
-                        <Form.Item label={'Срок действия договора'}
+                        <Form.Item label={'Срок действия  договора'}
                                    name={'endDate'}
                                    rules={[{required: true}]}>
                             <DatePicker
@@ -316,7 +316,8 @@ export const CreateContracts = () => {
                     <Col xs={24} sm={24} md={18} lg={16} xl={12}>
                         <Form.Item label={'Количество мест'}
                                    name={'placesAmount'}
-                                   rules={[{required: true}]}>
+                                //    rules={[{required: true}]}
+                                   >
                             <InputNumber
                                 className="w-full"
                                 size="large"
@@ -330,7 +331,8 @@ export const CreateContracts = () => {
                     <Col xs={24} sm={24} md={18} lg={8} xl={6}>
                         <Form.Item label={'Прикрепить скан договора в формате pdf'}
                                    name={'pdfContract'}
-                                   rules={[{required: true}]}>
+                                //    rules={[{required: true}]}
+                                   >
                             <Upload
                                 beforeUpload={(file) => {
                                     setFiles({

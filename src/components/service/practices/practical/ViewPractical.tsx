@@ -36,20 +36,7 @@ interface FilterType {
 	label: string | number
 }
 
-const filterDepartment: FilterType[] = [
-	{
-		value: 'Все',
-		label: 'Все'
-	},
-	{
-		value: 'Кафедра хирургических болезней постдипломного образования',
-		label: 'Кафедра хирургических болезней постдипломного образования'
-	},
-	{
-		value: 'Кафедра онкологических болезней',
-		label: 'Кафедра онкологических болезней'
-	}
-]
+
 const filterCourse: FilterType[] = [
 	{
 		value: 'Все',
@@ -257,23 +244,7 @@ export const ViewPractical = () => {
 				)
 			}
 		},
-		// {
-		// 	key: 'competencies',
-		// 	dataIndex: 'competencies',
-		// 	title: 'Код и наименование компетенции',
-		// 	className: 'text-xs !p-2',
-		// 	render: (_:any, record:any) => {
-		// 		return (
-		// 			<div className={'flex flex-col gap-1'}>
-		// 				{record.competence?.map((elem:any, index:any) => (
-		// 					<span key={index}>
-		// 						{index + 1}. {elem}
-		// 					</span>
-		// 				))}
-		// 			</div>
-		// 		)
-		// 	}
-		// },
+
 		{
 			key: 'departmentDirector',
 			dataIndex: 'departmentDirector',
@@ -464,7 +435,7 @@ export const ViewPractical = () => {
 					</Col>
 					<Col span={8}>
 						<Select
-							size="large"
+							
 							popupMatchSelectWidth={false}
 							className="w-full"
 							options={[
@@ -481,7 +452,21 @@ export const ViewPractical = () => {
 							defaultValue="Все"
 						/>
 					</Col>
+					<Col span={7} offset={4}>
+						<Space className="w-full flex-row-reverse">
+							<Button
+								type="primary"
+								className="!rounded-full"
+								onClick={() => {
+									navigate('/services/practices/practical.ts/createPractical')
+								}}
+							>
+								Добавить практику
+							</Button>
+						</Space>
+					</Col>
 				</Row>
+				
 				<Row gutter={[16, 16]} className="mt-4">
 					<Col span={5}>
 						<span>Наименование специальности</span>
@@ -510,19 +495,7 @@ export const ViewPractical = () => {
 							}}
 						/>
 					</Col>
-					<Col span={7} offset={4}>
-						<Space className="w-full flex-row-reverse">
-							<Button
-								type="primary"
-								className="!rounded-full"
-								onClick={() => {
-									navigate('/services/practices/practical.ts/createPractical')
-								}}
-							>
-								Добавить практику
-							</Button>
-						</Space>
-					</Col>
+	
 				</Row>
 				<Row gutter={[16, 16]} className="mt-4">
 					<Col span={5}>

@@ -182,7 +182,7 @@ const EditTask = () => {
                         <Space direction={'vertical'} className={'w-full'}>
                             <Form.Item label={'Шифр и наименование специальности'}
                                        rules={[{required: true}]}
-                                       initialValue={'Test 1'}
+                                    //    initialValue={'Test 1'}
                                        name={'specialityName'}>
                                 <Select
                                     size="large"
@@ -206,7 +206,7 @@ const EditTask = () => {
                             <Form.Item
                                 label={'Тип практики'}
                                 rules={[{required: true}]}
-                                initialValue={'Test 1'}
+                                // initialValue={'Test 1'}
                                 name={"practiceType"}>
                                 <Select
                                     size="large"

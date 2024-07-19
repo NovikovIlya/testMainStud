@@ -236,8 +236,8 @@ export const EditPractical = () => {
             })
 
             form.setFieldValue('courseStudy', dataOnePractise.courseNumber);
-            form.setFieldValue('startStudy', dayjs(dataOnePractise.practicePeriod[0], 'YYYY.MM.DD'));
-            form.setFieldValue('endStudy', dayjs(dataOnePractise.practicePeriod[1], 'YYYY.MM.DD'));
+            form.setFieldValue('period', [dayjs(dataOnePractise.practicePeriod[0], 'YYYY.MM.DD'),dayjs(dataOnePractise.practicePeriod[1], 'YYYY.MM.DD')]);
+            // form.setFieldValue('period', dayjs(dataOnePractise.practicePeriod[1], 'YYYY.MM.DD'));
             form.setFieldValue('amountHours', dataOnePractise.totalHours);
             form.setFieldValue('director', dataOnePractise.departmentDirector);
         }
@@ -332,8 +332,8 @@ export const EditPractical = () => {
                     end:endDate.$y
             },
             courseNumber: values.courseStudy,
-            startDate: formattedDate,
-            endDate: formattedDateEnd,
+            startDate: `${String(form?.getFieldValue('period')[0].$D)}.${String(form?.getFieldValue('period')[0].$M+1).padStart(2, '0')}.${String(form?.getFieldValue('period')[0].$y)}`,
+            endDate: `${String(form?.getFieldValue('period')[1].$D)}.${String(form?.getFieldValue('period')[1].$M+1).padStart(2, '0')}.${String(form?.getFieldValue('period')[1].$y)}`,
             totalHours: String(values.amountHours),
             competenceIds: dataCompetences,
             departmentDirectorId: directorId?.id, 
@@ -375,6 +375,10 @@ export const EditPractical = () => {
         setPickSpeciality(value)
         form.setFieldValue('practiceType','')
     }
+
+    const onChangePickerPeriodPractise = (value:any)=>{
+        console.log(value)
+   }
     const dataTaskValid = dataTask?.tasks.map((item:any)=>item.taskDescription)
    
 
@@ -557,7 +561,26 @@ export const EditPractical = () => {
                         </Form.Item>
                     </Col>
                 </Row>
+                {/* <Row gutter={[16, 16]}>
+                    <Col xs={24} sm={24} md={18} lg={8} xl={6}>
+                        <Form.Item
+                            //rules={[{required: true}]}
+                            name={'period'}
+                            label={'Период практики'}>
+
+                            <DatePicker.RangePicker 
+                                size={'large'}
+                                placeholder={['Начало', 'Конец']}
+                                format="DD.MM.YYYY"
+                                onChange={onChangePickerPeriodPractise}
+                                
+                            />
+
+                        </Form.Item>
+                    </Col>
+                </Row> */}
                 <Row gutter={[16, 16]}>
+                    
                     <Col xs={24} sm={24} md={18} lg={8} xl={6}>
                         <Form.Item
                             rules={[{required: true}]}
@@ -573,6 +596,22 @@ export const EditPractical = () => {
                     </Col>
                     <Col xs={24} sm={24} md={18} lg={8} xl={6}>
                         <Form.Item
+                            //rules={[{required: true}]}
+                            name={'period'}
+                            label={'Период практики'}>
+
+                            <DatePicker.RangePicker 
+                                size={'large'}
+                                placeholder={['Начало', 'Конец']}
+                                format="DD.MM.YYYY"
+                                onChange={onChangePickerPeriodPractise}
+                                
+                            />
+
+                        </Form.Item>
+                    </Col>
+                    {/* <Col xs={24} sm={24} md={18} lg={8} xl={6}>
+                        <Form.Item
                             rules={[{required: true}]}
                             name={'startStudy'}
                             label={'Дата начала практики'}>
@@ -583,7 +622,7 @@ export const EditPractical = () => {
                                 className="w-full"
                             />
                         </Form.Item>
-                    </Col>
+                    </Col> */}
                 </Row>
                 <Row gutter={[16, 16]}>
                     <Col xs={24} sm={24} md={18} lg={8} xl={6}>
@@ -599,7 +638,7 @@ export const EditPractical = () => {
                             />
                         </Form.Item>
                     </Col>
-                    <Col xs={24} sm={24} md={18} lg={8} xl={6}>
+                    {/* <Col xs={24} sm={24} md={18} lg={8} xl={6}>
                         <Form.Item
                             rules={[{required: true}]}
                             name={'endStudy'}
@@ -610,7 +649,7 @@ export const EditPractical = () => {
                                 className="w-full"
                             />
                         </Form.Item>
-                    </Col>
+                    </Col> */}
                 </Row>
 
                 <Row gutter={[16, 16]}>

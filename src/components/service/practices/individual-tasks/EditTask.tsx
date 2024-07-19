@@ -16,6 +16,8 @@ import {Department, PracticeType, Task, TaskEdit, TaskSend} from "../../../../mo
 import {OptionsNameSpecialty} from "../roster/registerContracts/RegisterContracts";
 import {useGetSpecialtyNamesQuery} from "../../../../store/api/practiceApi/roster";
 import {processingOfDivisions} from "../../../../utils/processingOfDivisions";
+import { useAppDispatch } from '../../../../store'
+import { showNotification } from '../../../../store/reducers/notificationSlice'
 
 const EditTask = () => {
     const path = useLocation()
@@ -33,6 +35,7 @@ const EditTask = () => {
     const {data: dataPracticeType, isSuccess: isSuccessPracticeType} = useGetPracticeTypeQuery(subDivision)
     const [departments, setDepartments] = useState<Department[]>()
     const {data: dataDepartments, isSuccess: isSuccessDepartments} = useGetDepartmentsQuery()
+    const dispatch = useAppDispatch()
     
 
     useEffect(() => {
@@ -104,14 +107,12 @@ const EditTask = () => {
         })
         const subDivision = dataDepartments?.find(elem => {
             if (elem.value === values.subDivision) {
-                console.log('============elem!!!!!!',elem)
                 return elem
             }
             if('responses' in elem){
                 // @ts-ignore
                 return elem.responses?.find((elem:any)=> {
                     if(form?.getFieldValue('subDivision')?.split(" - ")[1] === elem.value){
-                        console.log('------------elem!!!!!!',elem)
                         return elem
                     }      
                 })
@@ -127,14 +128,21 @@ const EditTask = () => {
             subdivisionNameId: subDivision?.id,
             tasks: values.tasks.map(elem => elem.task)
         }
-        console.log('newData',newData)
+
         edit(newData)
+            .unwrap()
             .then(() => {
                 setMsg('Данные сохранены')
+                navigate('/services/practices/individualTasks')
             })
-            .catch(e => console.log(e))
+            .catch((error)=>{
+                console.log('bb',error)
+                if (error.status === 400) {
+                    dispatch(showNotification({ message: error.data.message, type: 'error' }));
+                  }
+            })
 
-        navigate('/services/practices/individualTasks')
+        // navigate('/services/practices/individualTasks')
     }
 
     const handlePodrazdelenie = (value:any)=>{
@@ -207,7 +215,7 @@ const EditTask = () => {
                                     //    initialValue={'Test 1'}
                                        name={'specialityName'}>
                                 <Select
-                                    disabled={!subDivision}
+                                    disabled={!form.getFieldValue('subDivision') }
                                     size="large"
                                     popupMatchSelectWidth={false}
                                     className="w-full"
@@ -232,7 +240,7 @@ const EditTask = () => {
                                 // initialValue={'Test 1'}
                                 name={"practiceType"}>
                                 <Select
-                                    disabled={!subDivision}
+                                    disabled={!form.getFieldValue('subDivision') }
                                     size="large"
                                     popupMatchSelectWidth={false}
                                     className="w-full"

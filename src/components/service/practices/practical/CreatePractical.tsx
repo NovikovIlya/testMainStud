@@ -221,7 +221,7 @@ export const CreatePractical = () => {
         if(isSuccessDep)
         setOptionsDepartment(dataDep)
     },[dataDep])
-
+    
 
     function onFinish(values: NewPractice) {
 
@@ -269,7 +269,7 @@ export const CreatePractical = () => {
                 return elem
             }
         })
-
+   
         const sendData: any = {
             // specialityName: values.specialityName,
             practiceType: values.practiceType,
@@ -281,9 +281,9 @@ export const CreatePractical = () => {
                       end:pickDate[1]
                  },
                  courseNumber: values.courseStudy,
-            startDate: formattedDate,
+            startDate: `${String(form?.getFieldValue('period')[0].$D)}.${String(form?.getFieldValue('period')[0].$M+1).padStart(2, '0')}.${String(form?.getFieldValue('period')[0].$y)}`,
             totalHours: String(values.amountHours),
-            endDate: formattedDateEnd ,
+            endDate: `${String(form?.getFieldValue('period')[1].$D)}.${String(form?.getFieldValue('period')[1].$M+1).padStart(2, '0')}.${String(form?.getFieldValue('period')[1].$y)}` ,
             // individualTaskId: dataTask?.id || null,
             competenceIds: dataCompetences && dataCompetences?.length > 0 ? dataCompetences : [],
             departmentDirectorId: directorId?.id,
@@ -296,7 +296,7 @@ export const CreatePractical = () => {
         }
 
         
-
+        console.log('sendData',sendData)
         sendForm(sendData)
         nav('/services/practices/practical')
 
@@ -326,6 +326,13 @@ export const CreatePractical = () => {
     }
     const handlePracticeType = (value:any)=>{
         setPickTypePractise(value)
+    }
+    
+    console.log('zzz,',
+        form?.getFieldValue('period')
+    )
+    const onChangePickerPeriodPractise = (value:any)=>{
+         console.log(value)
     }
 
     const dataTaskValid = dataTask?.tasks.map((item:any)=>item.taskDescription)
@@ -514,17 +521,38 @@ export const CreatePractical = () => {
                                 picker={'year'}
                                 size={'large'}
                                 placeholder={['Начало', 'Конец']}
+                              
                             />
 
                         </Form.Item>
                     </Col>
                 </Row>
+                {/* <Row gutter={[16, 16]}>
+                    <Col xs={24} sm={24} md={18} lg={8} xl={6}>
+                        <Form.Item
+                            //rules={[{required: true}]}
+                            name={'period'}
+                            label={'Период практики'}>
+
+                            <DatePicker.RangePicker 
+                                size={'large'}
+                                placeholder={['Начало', 'Конец']}
+                                format="DD.MM.YYYY"
+                                onChange={onChangePickerPeriodPractise}
+                                
+                            />
+
+                        </Form.Item>
+                    </Col>
+                </Row> */}
                 <Row gutter={[16, 16]}>
                     <Col xs={24} sm={24} md={18} lg={8} xl={6}>
                         <Form.Item
                             //rules={[{required: true}]}
                             name={'courseStudy'}
-                            label={'Курс обучения'}>
+                            label={'Курс обучения'}
+                            rules={[{required: true}]}
+                            >    
                             <Select
                                 size="large"
                                 popupMatchSelectWidth={false}
@@ -537,6 +565,22 @@ export const CreatePractical = () => {
                     <Col xs={24} sm={24} md={18} lg={8} xl={6}>
                         <Form.Item
                             //rules={[{required: true}]}
+                            name={'period'}
+                            label={'Период практики'}>
+
+                            <DatePicker.RangePicker 
+                                size={'large'}
+                                placeholder={['Начало', 'Конец']}
+                                format="DD.MM.YYYY"
+                                onChange={onChangePickerPeriodPractise}
+                                
+                            />
+
+                        </Form.Item>
+                    </Col>
+                    {/* <Col xs={24} sm={24} md={18} lg={8} xl={6}>
+                        <Form.Item
+                            //rules={[{required: true}]}
                             name={'startStudy'}
                             label={'Дата начала практики'}>
                             <DatePicker
@@ -546,7 +590,7 @@ export const CreatePractical = () => {
                                 className="w-full"
                             />
                         </Form.Item>
-                    </Col>
+                    </Col> */}
                 </Row>
                 <Row gutter={[16, 16]}>
                     <Col xs={24} sm={24} md={18} lg={8} xl={6}>
@@ -562,7 +606,7 @@ export const CreatePractical = () => {
                             />
                         </Form.Item>
                     </Col>
-                    <Col xs={24} sm={24} md={18} lg={8} xl={6}>
+                    {/* <Col xs={24} sm={24} md={18} lg={8} xl={6}>
                         <Form.Item
                             //rules={[{required: true}]}
                             name={'endStudy'}
@@ -573,7 +617,7 @@ export const CreatePractical = () => {
                                 className="w-full"
                             />
                         </Form.Item>
-                    </Col>
+                    </Col> */}
                 </Row>
 
 

@@ -16,6 +16,8 @@ import {OptionsNameSpecialty} from "../../roster/registerContracts/RegisterContr
 import {useGetSpecialtyNamesQuery} from "../../../../../store/api/practiceApi/roster";
 import {string} from "yup";
 import {processingOfDivisions} from "../../../../../utils/processingOfDivisions";
+import { useAppDispatch } from '../../../../../store'
+import { showNotification } from '../../../../../store/reducers/notificationSlice'
 
 
 
@@ -32,6 +34,7 @@ const CreateTask = () => {
     const {data: dataPracticeType, isSuccess: isSuccessPracticeType} = useGetPracticeTypeQuery(subDivision)
     const [departments, setDepartments] = useState<Department[]>()
     const {data: dataDepartments, isSuccess: isSuccessDepartments} = useGetDepartmentsQuery()
+    const dispatch = useAppDispatch()
 
     useEffect(() => {
         if (isSuccessNameSpecialty) {
@@ -67,16 +70,13 @@ const CreateTask = () => {
             
         })
         const subDivision = departments!.find(elem => {
-
             if (elem.value === values.subDivision) {
-                console.log('============elem!!!!!!',elem)
                 return elem
             }
             if('responses' in elem){
                 // @ts-ignore
                 return elem.responses?.find((elem:any)=> {
                     if(form?.getFieldValue('subDivision')?.split(" - ")[1] === elem.value){
-                        console.log('------------elem!!!!!!',elem)
                         return elem
                     }      
                 })
@@ -89,9 +89,18 @@ const CreateTask = () => {
             tasks: values.tasks.map(elem => elem.task)
         }
         createTask(newData)
-            .then(data => data)
-            .catch(e => e)
-        navigate('services/practices/individualTasks/')
+            .unwrap()
+            .then(data => {
+                navigate('services/practices/individualTasks/')
+            })
+            .catch((error)=>{
+                console.log('bb',error)
+                if (error.status === 400) {
+                    console.log('e mama')
+                    dispatch(showNotification({ message: error.data.message, type: 'error' }));
+                  }
+            })
+       
     }
 
     const handlePodrazdelenie = (value:any)=>{

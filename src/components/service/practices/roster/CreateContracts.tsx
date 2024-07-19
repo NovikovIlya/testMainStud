@@ -41,12 +41,17 @@ export const CreateContracts = () => {
             label: 'Бессрочный'
         },
         {
+            value: 'Срочный',
+            label: 'Срочный'
+        },
+        {
             value: 'С пролонгацией',
             label: 'С пролонгацией'
         }]
     const [prolongation, setProlongation] = useState(false)
+    const [hideSrok,setHideSrok] = useState(false)
     const [newContract] = useCreateContractMutation()
-    const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery()
+    const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery(null)
     const [optionsNameSpec, setOptionsNameSpec] = useState<NameSpecialty[]>([])
     //const [selected, setSelected] = useState<number>()
 
@@ -226,7 +231,15 @@ export const CreateContracts = () => {
                                 onChange={value => {
                                     if (value === 'С пролонгацией') {
                                         setProlongation(true)
-                                    } else setProlongation(false)
+                                        setHideSrok(false)
+                                    } else if(value === 'Бессрочный'){
+                                        setProlongation(false)
+                                        setHideSrok(true)
+
+                                    }else {
+                                        setHideSrok(false)
+                                        setProlongation(false)
+                                    }
                                 }}
                             />
                         </Form.Item>
@@ -252,7 +265,9 @@ export const CreateContracts = () => {
                 }
 
                 <Row gutter={[16, 16]}>
+                {hideSrok ? '' :
                     <Col xs={24} sm={24} md={18} lg={8} xl={6}>
+                   
                         <Form.Item label={'Срок действия  договора'}
                                    name={'endDate'}
                                    rules={[{required: true}]}>
@@ -263,8 +278,8 @@ export const CreateContracts = () => {
                                 size={'large'}
                             />
                         </Form.Item>
-                    </Col>
-                    <Col xs={24} sm={24} md={18} lg={8} xl={6}>
+                    </Col>}
+                    <Col xs={24} sm={24} md={18} lg={hideSrok ? 16 : 8} xl={6}>
                         <Form.Item label={'Шифр и наименование специальности'}
                                    name={'specialtyNameIds'}
                                    rules={[{required: false}]}>

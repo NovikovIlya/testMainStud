@@ -789,6 +789,22 @@ export const CreatePractical = () => {
                 <Row gutter={[16, 16]} className={'mt-4'}>
                     <Col xs={24} sm={24} md={18} lg={16} xl={12}>
                     <List
+                        header={<div>Код и наименование компетенции:</div>}
+                        bordered
+                        // @ts-ignore
+                        dataSource={isSuccessCompetences?dataCompetences : ''}
+                        renderItem={(item:any,index:number) => (
+                            <List.Item>
+                            {index + 1}. {item}
+                            </List.Item>
+                        )}
+                        />
+                    </Col>
+                </Row>
+
+                <Row gutter={[16, 16]} className={'mt-4'}>
+                    <Col xs={24} sm={24} md={18} lg={16} xl={12}>
+                    <List
                         header={<div>Индивидуальные задания:</div>}
                        
                         bordered

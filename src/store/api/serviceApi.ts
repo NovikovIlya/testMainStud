@@ -1,11 +1,16 @@
+import i18n from 'i18next'
+
 import { IApproveRequest } from '../../api/types'
 import {
 	CategoryType,
 	ChatMessageType,
+	DocumentDocumentation,
+	DocumentLib,
 	Documentation,
 	Email,
 	Exam,
 	ICalendar,
+	IPerformance,
 	ResponceType,
 	RespondItemType,
 	Template,
@@ -18,7 +23,7 @@ import {
 	VacancyRespondItemType,
 	VacancyViewResponceType,
 	respondStatus
-} from '../type'
+} from '../reducers/type'
 
 import { apiSlice } from './apiSlice'
 
@@ -29,12 +34,15 @@ const seekerToken =
 const personnelDeparmentToken =
 	'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJTdWJCQXNhZHVsbG9ldkBzdHVkLmtwZnUucnUiLCJpYXQiOjE3MTE3MjQ1NDQsImV4cCI6MTcxMTczNTM0NCwic2NvcGUiOiJ1c2VyIiwicm9sZXMiOlt7InVzZXJJZCI6IjciLCJzZXNzaW9uSWQiOiIyNDA0NzM4MTc3NzI3MjIwMTMzMDkwNzU0ODQ2ODU5MSIsInNlc3Npb25IYXNoIjoiNTZEMTZENTNDOTc5MDk5MTk0QTY4OEY4Qjk0M0I0N0MiLCJkb2N1bWVudHNIYXNoIjoiQTdCMkI0MUU4MjQ4NDYzNkY2ODZDNTQ3NEY0NEREMjYiLCJsb2dpbiI6IlNCQXNhZHVsbG9ldiIsInR5cGUiOiJQRVJTT05ORUxfREVQQVJUTUVOVCJ9LHsidXNlcklkIjoiMzQ4NTQxIiwic2Vzc2lvbklkIjoiMjQwNDczODA1NjYxMjc2MDM3NTM5NjI3MjY1MTM0OTQiLCJzZXNzaW9uSGFzaCI6IkUzQUZFMTUzNUVCMTU3NEUyMkZCNUJDNEYxNUFERkUwIiwiZG9jdW1lbnRzSGFzaCI6IiIsImxvZ2luIjoiU3ViQkFzYWR1bGxvZXYiLCJ0eXBlIjoiRU1QTCJ9LHsidXNlcklkIjoiMzM2MDM3Iiwic2Vzc2lvbklkIjoiMjQwNDczODI0NDUwMjI3MTM5NzgzNzQ5OTMwNjk4MDciLCJzZXNzaW9uSGFzaCI6IjcxMEExMTFFM0FCN0Q4NDczNTVFOEM0QkUxMDI4RTZBIiwiZG9jdW1lbnRzSGFzaCI6IkEyMkE3NURCRTBBNzg4MDE4OTY4NjZCQjgzNUIxNDQxIiwibG9naW4iOiJTdUJBc2FkdWxsb2V2IiwidHlwZSI6IlNUVUQifV0sInNlc3Npb25JZCI6IjI0MDQ3MzgxNzc3MjcyMjAxMzMwOTA3NTQ4NDY4NTkxIiwic2Vzc2lvbkhhc2giOiI1NkQxNkQ1M0M5NzkwOTkxOTRBNjg4RjhCOTQzQjQ3QyIsImFsbElkIjoiMjM5MTc0IiwiZW1haWwiOiJCYXN1YmhvbmJla0BnbWFpbC5jb20ifQ.MMK47Gd4AKG8tPzmPAwgNq79zVEmfzdFCuoZjcXeW_o'
 const supervisorToken =
-	'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJJQU1pdHJvZmFub3ZAc3R1ZC5rcGZ1LnJ1IiwiaWF0IjoxNzExNTc3OTMwLCJleHAiOjE3MTE1ODg3MzAsInNjb3BlIjoidXNlciIsInJvbGVzIjpbeyJ1c2VySWQiOiI2Iiwic2Vzc2lvbklkIjoiMjQwMzIyNzE0ODc1MTk0ODI5NzMzMDkwNDczNTM2NjciLCJzZXNzaW9uSGFzaCI6IkQyQTIyNUE3NDk5RjFDRTE2Q0JFMDJCOUY2QzkxN0UxIiwiZG9jdW1lbnRzSGFzaCI6IkIyNkNCMEMzRThBQzM2RDZBMENCNTEyQ0YzMDIzNzc3IiwibG9naW4iOiJJQU1pdHJvZmFub3YiLCJ0eXBlIjoiU1VQRVJWSVNPUiJ9XSwic2Vzc2lvbklkIjoiMjQwMzIyNzE0ODc1MTk0ODI5NzMzMDkwNDczNTM2NjciLCJzZXNzaW9uSGFzaCI6IkQyQTIyNUE3NDk5RjFDRTE2Q0JFMDJCOUY2QzkxN0UxIiwiYWxsSWQiOiIxNzg0NDAiLCJlbWFpbCI6Im1pdHJvXzAyQG1haWwucnUifQ._3lXFX2cHYMmBafkOhWhxmbbKb912nMqyLjGqmvYl48'
+	'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJJQU1pdHJvZmFub3ZAc3R1ZC5rcGZ1LnJ1IiwiaWF0IjoxNzExNTc3OTMwLCJleHAiOjE3MTE1ODg3MzAsInNjb3BlIjoidXNlciIsInJvbGVzIjpbeyJ1c2VySWQiOiIzMTE0NjQiLCJzZXNzaW9uSWQiOiIyNDAzMjI3MTQ4NzUxOTQ4Mjk3MzMwOTA0NzM1MzY2NyIsInNlc3Npb25IYXNoIjoiRDJBMjI1QTc0OTlGMUNFMTZDQkUwMkI5RjZDOTE3RTEiLCJkb2N1bWVudHNIYXNoIjoiQjI2Q0IwQzNFOEFDMzZENkEwQ0I1MTJDRjMwMjM3NzciLCJsb2dpbiI6IklBTWl0cm9mYW5vdiIsInR5cGUiOiJTVVBFUlZJU09SIn1dLCJzZXNzaW9uSWQiOiIyNDAzMjI3MTQ4NzUxOTQ4Mjk3MzMwOTA0NzM1MzY2NyIsInNlc3Npb25IYXNoIjoiRDJBMjI1QTc0OTlGMUNFMTZDQkUwMkI5RjZDOTE3RTEiLCJhbGxJZCI6IjE3ODQ0MCIsImVtYWlsIjoibWl0cm9fMDJAbWFpbC5ydSJ9.idm4ua4nH3WUN0Z119KV2pC6Dqb7uw4Rf1PMiHiCZh4'
 
 export const serviceApi = apiSlice.injectEndpoints({
 	endpoints: builder => ({
 		getSchedule: builder.query<TypeSchedule, void>({
 			query: () => `schedule-api/schedule`
+		}),
+		getPerformance: builder.query<IPerformance, void>({
+			query: () => 'academic-performance-api/performance'
 		}),
 		getExamsSchedule: builder.query<Exam[], void>({
 			query: () => 'study-plan-api/studyplan/examsSchedule'
@@ -50,6 +58,21 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		getPracticeDocuments: builder.query<Template[], void>({
 			query: () => 'unified-center-api/practice-documents'
+		}),
+		getDocumentsLibraries: builder.query<DocumentLib[], void>({
+			query: () => 'unified-center-api/documents/online-libraries'
+		}),
+		getDocumentsTemplates: builder.query<DocumentLib[], void>({
+			query: () => 'unified-center-api/documents/templates'
+		}),
+		getDocumentsPractice: builder.query<DocumentLib[], void>({
+			query: () => 'unified-center-api/documents/practice-documents'
+		}),
+		getDocumentsMy: builder.query<DocumentLib[], void>({
+			query: () => 'unified-center-api/documents/my-documents'
+		}),
+		getDocumentsDocumentation: builder.query<DocumentDocumentation, void>({
+			query: () => 'unified-center-api/documents/documentation'
 		}),
 		getMyQWEDocuments: builder.query<Template[], void>({
 			query: () => 'unified-center-api/my-documents'
@@ -114,7 +137,10 @@ export const serviceApi = apiSlice.injectEndpoints({
 			query: status => ({
 				url:
 					'http://localhost:8082/employment-api/v1/seeker/responds?status=' +
-					status
+					status,
+				headers: {
+					Authorization: `Bearer ${seekerToken}`
+				}
 			})
 		}),
 		getVacancyGroupedResponces: builder.query<
@@ -571,6 +597,12 @@ export const serviceApi = apiSlice.injectEndpoints({
 	})
 })
 export const {
+	useGetDocumentsDocumentationQuery,
+	useGetDocumentsMyQuery,
+	useGetDocumentsPracticeQuery,
+	useGetDocumentsTemplatesQuery,
+	useGetDocumentsLibrariesQuery,
+	useGetPerformanceQuery,
 	useVerifyAccMutation,
 	useGetEmailQuery,
 	useGetScheduleQuery,

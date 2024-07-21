@@ -27,6 +27,7 @@ const DropDrag = () => {
 
 	useEffect(() => {
 		localStorage.setItem('dashboard', JSON.stringify(layout))
+		return () => {}
 	}, [layout])
 
 	const [windowSize, setWindowSize] = useState(getWindowSize())
@@ -59,7 +60,9 @@ const DropDrag = () => {
 		dispatch(removeCard(i))
 	}
 
-	const generateDOM = layout.lg.map(item => {
+	const layoutValid = layout.lg.filter(obj1 =>jsxElements.some(obj2 => obj1.i === obj2.index))
+
+	const generateDOM = layoutValid.map(item => {
 		return (
 			<div
 				key={item.i}
@@ -74,7 +77,10 @@ const DropDrag = () => {
 							<DeleteOutlined className=" mt-2 mr-2 opacity-50" />
 						</div>
 					)}
-					{jsxElements.filter(el => el.index === item.i)[0].element}
+					{
+						jsxElements
+							.filter(el => el.index === item.i)[0].element
+					}
 				</div>
 			</div>
 		)
@@ -95,7 +101,7 @@ const DropDrag = () => {
 				onBreakpointChange={onBreakpointChange}
 				isDraggable={edit}
 				isResizable={false}
-				compactType={'vertical'}
+				compactType={'horizontal'}
 			>
 				{generateDOM}
 			</ResponsiveReactGridLayout>

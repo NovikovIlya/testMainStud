@@ -12,7 +12,7 @@ export const Switcher = () => {
 	return (
 		<div className="flex self-start mb-4">
 			<label htmlFor="0" className="flex items-start  w-full cursor-pointer">
-				<ListItemPrefix className="mr-3">
+				<ListItemPrefix className="mr-3" placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
 					<Radio
 						crossOrigin="true"
 						name="vertical-list"
@@ -23,10 +23,9 @@ export const Switcher = () => {
 							className: 'p-0'
 						}}
 						onChange={() => dispatch(gender('W'))}
-						checked={genderState === 'W' ? true : false}
-					/>
+						checked={genderState === 'W' ? true : false} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}					/>
 				</ListItemPrefix>
-				<Typography color="blue-gray" className="font-medium text-sm">
+				<Typography color="blue-gray" className="font-medium text-sm"  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
 					{t('woman')}
 				</Typography>
 			</label>
@@ -34,7 +33,7 @@ export const Switcher = () => {
 				htmlFor="1"
 				className="pl-3 flex items-start  w-full cursor-pointer"
 			>
-				<ListItemPrefix className="mr-3">
+				<ListItemPrefix className="mr-3"  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
 					<Radio
 						crossOrigin="true"
 						name="vertical-list"
@@ -45,10 +44,9 @@ export const Switcher = () => {
 							className: 'p-0'
 						}}
 						onChange={() => dispatch(gender('M'))}
-						checked={genderState === 'M' ? true : false}
-					/>
+						checked={genderState === 'M' ? true : false} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}					/>
 				</ListItemPrefix>
-				<Typography color="blue-gray" className="font-medium text-sm">
+				<Typography color="blue-gray" className="font-medium text-sm"  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
 					{t('man')}
 				</Typography>
 			</label>

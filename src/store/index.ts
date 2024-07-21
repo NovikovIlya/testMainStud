@@ -1,7 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import logger from 'redux-logger'
-
 import { apiSlice } from './api/apiSlice'
 import ChatRespondStatusSlice from './reducers/ChatRespondStatusSlice'
 import CurrentRequestSlice from './reducers/CurrentRequestSlice'
@@ -25,9 +24,17 @@ import RespondEducationReducer from './reducers/SeekerFormReducers/RespondEducat
 import SkillsReducer from './reducers/SeekerFormReducers/SkillsReducer'
 import authSlice from './reducers/authSlice'
 import chatIdSlice from './reducers/chatIdSlice'
+import StaffStepFormBusinessTrip from "./reducers/FormReducers/StaffStepFormBusinessTrip";
+import StaffItemTabsReducer from "./reducers/FormReducers/StaffItemTabsReducer";
+import SecretaryStepFormBusinessTrip from "./reducers/FormReducers/SecretaryStepFormBusinessTrip";
+import SecretaryItemTabsReducer from "./reducers/FormReducers/SecretaryItemTabsReducer";
+import {practiceApi} from "./api/practiceApi/practiceApi";
+import notificationSlice from './reducers/notificationSlice'
+
 
 export const store = configureStore({
 	reducer: {
+		notification: notificationSlice,
 		auth: authSlice,
 		Layout: LayoutSlice,
 		InfoUser: InfoUserReducer,
@@ -50,12 +57,17 @@ export const store = configureStore({
 		chatResponceStatus: ChatRespondStatusSlice,
 		currentRequest: CurrentRequestSlice,
 		respondId: CurrentRespondIdSlice,
+		StaffStepFormBusinessTrip: StaffStepFormBusinessTrip,
+		StaffItemTabs: StaffItemTabsReducer,
+		SecretaryStepFormBusinessTrip: SecretaryStepFormBusinessTrip,
+		SecretaryItemTabs: SecretaryItemTabsReducer,
+		[practiceApi.reducerPath]: practiceApi.reducer,
 		[apiSlice.reducerPath]: apiSlice.reducer
 	},
 	middleware: getDefaultMiddleware =>
 		getDefaultMiddleware()
-			.concat(...(process.env.NODE_ENV !== 'production' ? [logger] : []))
-			.concat(apiSlice.middleware),
+			//.concat(...(process.env.NODE_ENV !== 'production' ? [logger] : []))
+			.concat(apiSlice.middleware, practiceApi.middleware),
 	devTools: true
 })
 

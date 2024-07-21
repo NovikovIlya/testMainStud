@@ -4,7 +4,7 @@ import {
 	useLazyGetResponcesByVacancyQuery,
 	useLazyGetVacancyGroupedResponcesQuery
 } from '../../../../store/api/serviceApi'
-import { VacancyRespondItemType } from '../../../../store/type'
+import { VacancyRespondItemType } from '../../../../store/reducers/type'
 import { VacancyRespondItem } from '../VacancyRespondItem'
 
 export const RespondsSupervisor = () => {

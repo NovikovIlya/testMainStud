@@ -1,4 +1,5 @@
 import clsx from 'clsx'
+import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { ChangePasswordSvg } from '../../../assets/svg/ChangePasswordSvg'
@@ -7,6 +8,7 @@ import { LanguageSvg } from '../../../assets/svg/LanguageSvg'
 import { PhotoSvg } from '../../../assets/svg/PhotoSvg'
 import { ThemeDesignSvg } from '../../../assets/svg/ThemeDesignSvg'
 import { VisuallyImpairedSvg } from '../../../assets/svg/VisuallyImpairedSvg'
+import { Header } from '../../layout/Header'
 
 import { ChangePassword } from './ChangePassword'
 import { ContactInformation } from './ContactInformation'
@@ -51,6 +53,8 @@ const navList = [
 export const NavSetting = () => {
 	const { pathname } = useLocation()
 	const navigate = useNavigate()
+	const { t } = useTranslation()
+
 	const handleNavigate = (url: string) => {
 		navigate(url)
 	}
@@ -71,14 +75,17 @@ export const NavSetting = () => {
 			</li>
 		)
 	})
+
 	return (
 		<>
-			<div className="shadowNav">
+			<Header type="service" service={t('Setting')} />
+
+			<div className="shadowNav mt-20">
 				<ul className="min-w-[230px] pt-14 flex flex-col gap-4 ">
 					{handleList}
 				</ul>
 			</div>
-			<div className="bg-[#F5F8FB] w-full pt-14 px-14 ">
+			<div className="bg-[#F5F8FB] w-full pt-14 px-14 mt-20">
 				{pathname === navList[0].id && <ContactInformation />}
 				{pathname === navList[1].id && <Photo />}
 				{pathname === navList[2].id && <ChangePassword />}

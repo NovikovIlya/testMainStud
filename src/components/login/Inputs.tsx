@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 
 import { IError } from '../../api/types'
 
+
 interface IInputsProps {
 	error?: IError
 }
@@ -41,9 +42,10 @@ export const Inputs: FC<IInputsProps> = ({ error }) => {
 					placeholder={t('password')}
 				/>
 			</Form.Item>
-			<p className="mt-5 w-fit cursor-pointer underline;">
+			<a className="mt-5 w-fit cursor-pointer underline;"
+			   href={'https://kpfu.ru/change_user_pass.forget_pass_form?p_lang=1'}>
 				{t('rememberPassword')}
-			</p>
+			</a>
 		</>
 	)
 }

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { useLazyGetVacancyViewQuery } from '../../../store/api/serviceApi'
 import { setCurrentVacancy } from '../../../store/reducers/CurrentVacancySlice'
-import { VacancyItemType } from '../../../store/type'
+import { VacancyItemType } from '../../../store/reducers/type'
 
 export default function VacancyItem(props: VacancyItemType) {
 	const [getVacancy, result] = useLazyGetVacancyViewQuery()

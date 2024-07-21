@@ -4,7 +4,10 @@ import { useNavigate } from 'react-router-dom'
 
 import { useLazyGetRespondFullInfoQuery } from '../../../store/api/serviceApi'
 import { setCurrentResponce } from '../../../store/reducers/CurrentResponceSlice'
-import { VacancyRespondItemType, respondStatus } from '../../../store/type'
+import {
+	VacancyRespondItemType,
+	respondStatus
+} from '../../../store/reducers/type'
 
 export const VacancyRespondItem = (
 	props: VacancyRespondItemType & {

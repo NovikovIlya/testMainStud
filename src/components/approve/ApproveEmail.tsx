@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { useApproveEmailMutation } from '../../store/api/serviceApi'
 import { setCredentials } from '../../store/reducers/authSlice'
-import { InitialState } from '../../store/type'
+import { InitialState } from '../../store/reducers/type'
 
 import { CardForm } from './cardForm'
 
@@ -29,7 +29,6 @@ export const ApproveEmail = () => {
 					id: searchParams.get('id'),
 					hash: searchParams.get('hash')
 				})
-				console.log(data)
 				//@ts-ignore
 				dispatch(setCredentials(data.data))
 			}

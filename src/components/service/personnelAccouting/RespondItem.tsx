@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import { setCurrentVacancyName } from '../../../store/reducers/CurrentVacancyNameSlice'
-import { VacancyGroupedResponcesType } from '../../../store/type'
+import { VacancyGroupedResponcesType } from '../../../store/reducers/type'
 
 export const RespondItem = ({
 	vacancyId,

@@ -2,7 +2,7 @@ import { Select } from 'antd'
 import { useState } from 'react'
 
 import { useGetSeekerRespondsQuery } from '../../../store/api/serviceApi'
-import { respondStatus } from '../../../store/type'
+import { respondStatus } from '../../../store/reducers/type'
 
 import { RespondItem } from './RespondItem'
 

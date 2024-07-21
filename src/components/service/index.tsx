@@ -1,10 +1,8 @@
 import { ReactNode } from 'react'
-import { useTranslation } from 'react-i18next'
-import { useLocation } from 'react-router-dom'
-
-import { Header } from '../layout/Header'
+import {Navigate, useLocation, useNavigate} from 'react-router-dom'
 
 import { NavAboutMe } from './aboutMe/NavAboutMe'
+import { NavUnifiedServiceCenter } from './documentFlow/NavUnifiedServiceCenter'
 import { NavElectronicBook } from './electronicBook/NavElectronicBook'
 import { NavJobSeeker } from './jobSeeker/NavJobSeeker'
 import { NavMyResponds } from './myResponds/NavMyResponds'
@@ -13,24 +11,43 @@ import { NavPractices } from './practices/NavPractices'
 import { NavSchedule } from './schedule/NavSchedule'
 import { NavSession } from './session/NavSession'
 import { NavSetting } from './setting/NavSetting'
+import {NavBusinessTrip} from "./businessTrip/NavBusinessTrip";
+import {useCheckIsEmployeeQuery} from "../../store/api/practiceApi/contracts";
+import {useGetContractsAllQuery} from "../../store/api/practiceApi/roster";
 
-export const Service = ({ children }: { children?: ReactNode }) => {
+export const Service = () => {
 	const { pathname } = useLocation()
-	const { t } = useTranslation()
+	const userData = localStorage.getItem('practice')
+	const nav = useNavigate()
+
+	const isEmployee = userData === 'practice'
+
 	return (
 		<div className="h-screen w-screen">
-			<Header type="service" service={t('StudentService')} />
-			<div className="flex min-h-full pt-20">
+			<div className="flex min-h-full">
 				{pathname.includes('/services/schedule') && <NavSchedule />}
 				{pathname.includes('/services/session') && <NavSession />}
 				{pathname.includes('/services/aboutMe') && <NavAboutMe />}
 				{pathname.includes('/services/electronicBook') && <NavElectronicBook />}
 				{pathname.includes('/services/setting') && <NavSetting />}
+				{/* {
+					isEmployee
+					&&
+					pathname.includes('/services/practices')
+						?
+						<NavPractices/>
+						:
+						<Navigate to={'/user'}/>
+				} */}
 				{pathname.includes('/services/practices') && <NavPractices />}
 				{pathname.includes('/services/jobseeker') && <NavJobSeeker />}
 				{pathname.includes('/services/myresponds') && <NavMyResponds />}
 				{pathname.includes('/services/personnelaccounting') && (
 					<NavPesonnelAccounting />
+				)}
+				{/*{pathname.includes('/services/businessTrip') && <NavBusinessTrip />}*/}
+				{pathname.includes('/services/unifiedServiceCenter') && (
+					<NavUnifiedServiceCenter />
 				)}
 			</div>
 		</div>

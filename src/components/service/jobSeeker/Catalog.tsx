@@ -12,7 +12,7 @@ import {
 	useGetVacancyPreviewBySubdivisionQuery
 } from '../../../store/api/serviceApi'
 import { allData } from '../../../store/reducers/SeekerFormReducers/AboutMeReducer'
-import { VacancyItemType } from '../../../store/type'
+import { VacancyItemType } from '../../../store/reducers/type'
 
 import VacancyItem from './VacancyItem'
 

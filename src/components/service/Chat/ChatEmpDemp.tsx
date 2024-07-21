@@ -7,7 +7,7 @@ import {
 	useLazyGetResponcesByVacancyQuery,
 	useLazyGetVacancyGroupedResponcesQuery
 } from '../../../store/api/serviceApi'
-import { VacancyRespondItemType } from '../../../store/type'
+import { VacancyRespondItemType } from '../../../store/reducers/type'
 
 import { ChatPage } from './ChatPage'
 import { ChatPreview } from './ChatPreview'

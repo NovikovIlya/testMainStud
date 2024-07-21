@@ -2,13 +2,8 @@ import { Form, Input } from 'antd'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { IError } from '../../api/types'
+import { IInputsProps } from '../../models/registration'
 
-interface IInputsProps {
-	email: string
-	error: IError | null
-	changeEmail: (email: string) => void
-}
 
 export const Inputs: FC<IInputsProps> = ({ error, changeEmail, email }) => {
 	const { t } = useTranslation()

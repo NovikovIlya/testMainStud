@@ -10,6 +10,8 @@ import {
 } from '../../assets/svg'
 
 export const Footer = () => {
+	const year = new Date().getFullYear()
+
 	return (
 		<footer className="w-full min-h-[200px] text-base py-14 flex max-md:flex-col justify-between container mx-auto px-3">
 			<div className="flex  flex-col">
@@ -25,7 +27,7 @@ export const Footer = () => {
 					</div>
 				</div>
 				<span>
-					<strong>© 2023 Казанский федеральный университет</strong>
+					<strong>© {year} Казанский федеральный университет</strong>
 				</span>
 			</div>
 			<div className="flex flex-col max-sm:mt-7">

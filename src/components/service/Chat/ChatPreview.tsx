@@ -16,7 +16,7 @@ import {
 import { setRespondId } from '../../../store/reducers/CurrentRespondIdSlice'
 import { setCurrentVacancyName } from '../../../store/reducers/CurrentVacancyNameSlice'
 import { setChatId } from '../../../store/reducers/chatIdSlice'
-import { respondStatus } from '../../../store/type'
+import { respondStatus } from '../../../store/reducers/type'
 
 export const ChatPreview = (props: {
 	respondId: number

@@ -2,10 +2,8 @@ import React, { FC } from 'react'
 
 import { Footer } from './Footer'
 import { Header } from './Header'
+import { ILayoutProps } from '../../models/layout'
 
-interface ILayoutProps {
-	children: React.ReactNode
-}
 
 export const Layout: FC<ILayoutProps> = ({ children }) => {
 	return (

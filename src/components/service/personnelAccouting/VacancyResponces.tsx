@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 
 import { useAppSelector } from '../../../store'
 import { useGetResponcesByVacancyQuery } from '../../../store/api/serviceApi'
-import { respondStatus } from '../../../store/type'
+import { respondStatus } from '../../../store/reducers/type'
 import ArrowIcon from '../jobSeeker/ArrowIcon'
 
 import { VacancyRespondItem } from './VacancyRespondItem'

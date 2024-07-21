@@ -6,7 +6,7 @@ import { MessageReadSvg } from '../../../assets/svg/MessageReadSvg'
 import { MessageUnreadSvg } from '../../../assets/svg/MessageUnreadSvg'
 import { useAppSelector } from '../../../store'
 import { useAnswerToInivitationMainTimeMutation } from '../../../store/api/serviceApi'
-import { ChatMessageType } from '../../../store/type'
+import { ChatMessageType } from '../../../store/reducers/type'
 
 import { ChatMessageFile } from './ChatMessageFile'
 

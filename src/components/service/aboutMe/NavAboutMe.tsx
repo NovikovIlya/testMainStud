@@ -7,14 +7,17 @@ import { AddressSvg } from '../../../assets/svg/AddressSvg'
 import { EducationSvg } from '../../../assets/svg/EducationSvg'
 import { MyDocsSvg } from '../../../assets/svg/MyDocsSvg'
 import { ParentSvg } from '../../../assets/svg/ParentSvg'
+import { ProfessionalSkillsSvg } from '../../../assets/svg/ProfessionalSkillsSvg'
 import { WorkSvg } from '../../../assets/svg/WorkSvg'
 import { useAppSelector } from '../../../store'
+import { Header } from '../../layout/Header'
 
 import { AboutMe } from './AboutMe'
 import { Address } from './Address'
 import { Document } from './Document'
 import { Education } from './Education'
 import { Parent } from './Parent'
+import { ProfessionalSkills } from './ProfessionalSkills'
 import { Work } from './Work'
 
 export const NavAboutMe = () => {
@@ -27,9 +30,9 @@ export const NavAboutMe = () => {
 	const { t } = useTranslation()
 	const navList = [
 		{
-			id: '/services/aboutMe/aboutMe',
+			id: '/services/aboutMe/personalData',
 			icon: <AboutMeSvg />,
-			name: t('aboutMe')
+			name: t('PersonalData')
 		},
 		{
 			id: '/services/aboutMe/document',
@@ -55,6 +58,11 @@ export const NavAboutMe = () => {
 			id: '/services/aboutMe/parent',
 			icon: <ParentSvg />,
 			name: t('Parents')
+		},
+		{
+			id: '/services/aboutMe/professionalSkills',
+			icon: <ProfessionalSkillsSvg />,
+			name: t('ProfessionalSkills')
 		}
 	]
 	if (!role) return <></>
@@ -71,7 +79,7 @@ export const NavAboutMe = () => {
 				onClick={() => handleNavigate(id)}
 			>
 				<div className="flex items-center gap-[10px]">
-					{icon}
+					<div className="w-5 h-5">{icon}</div>
 					<p className="text-base">{name}</p>
 				</div>
 			</li>
@@ -80,18 +88,21 @@ export const NavAboutMe = () => {
 
 	return (
 		<>
-			<div className="shadowNav ">
+			<Header type="service" service={t('AboutMeService')} />
+
+			<div className="shadowNav mt-20">
 				<ul className="min-w-[230px] pt-14 flex flex-col gap-4 ">
 					{handleList}
 				</ul>
 			</div>
-			<div className="bg-[#F5F8FB] flex w-full">
+			<div className="bg-[#F5F8FB] flex w-full mt-20">
 				{pathname === navList[0].id && <AboutMe />}
 				{pathname === navList[1].id && <Document />}
 				{pathname === navList[2].id && <Address />}
 				{pathname === navList[3].id && <Education />}
 				{pathname === navList[4].id && <Work />}
 				{pathname === navList[5].id && <Parent />}
+				{pathname === navList[6].id && <ProfessionalSkills />}
 			</div>
 		</>
 	)

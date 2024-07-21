@@ -1,7 +1,7 @@
 import { RootState } from '..'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
-import { InitialState } from '../type'
+import { InitialState } from './type'
 
 const initialState: InitialState = {
 	accessToken: localStorage.getItem('access'),
@@ -26,6 +26,10 @@ const authSlice = createSlice({
 			state.user = null
 			state.accessToken = null
 			state.refreshToken = null
+			localStorage.removeItem('user')
+			localStorage.removeItem('access')
+			localStorage.removeItem('refresh')
+			localStorage.removeItem('practice') //удаляю возможность зайти на сервис практки с аккаунта без доступа
 		},
 		setEdit: state => {
 			state.edit = !state.edit

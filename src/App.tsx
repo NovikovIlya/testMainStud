@@ -16,6 +16,12 @@ import { Login } from './components/login/Login'
 import { Registration } from './components/registration/Registration'
 import { Service } from './components/service'
 import { blue004, blue307 } from './utils/color'
+import {Redirect} from "./components/redirect/Redirect";
+import ru_RU from 'antd/locale/ru_RU';
+import { NotFound } from './components/NotFound'
+import { Notification } from './components/notification/Notification'
+
+
 
 const App = () => {
 	const [email, changeEmail] = useState('')
@@ -29,9 +35,11 @@ const App = () => {
 						colorPrimaryHover: blue004
 					}
 				}}
+				locale={ru_RU}
 			>
 				<Routes>
 					<Route path="/">
+						<Route path={"/redirect/:id"} element={<Redirect/>}/>
 						<Route path="/" element={<Login />} />
 						<Route
 							path="/registration"
@@ -52,11 +60,12 @@ const App = () => {
 						<Route path="/work" element={<WorkForm />} />
 						<Route path="/parent" element={<ParentForm />} />
 						<Route path="/services/*" element={<Service />} />
-
-						<Route path="/*" element={null} />
+						<Route path="/*" element={<NotFound/>} />
+						
 					</Route>
 				</Routes>
 			</ConfigProvider>
+			<Notification/>
 		</>
 	)
 }

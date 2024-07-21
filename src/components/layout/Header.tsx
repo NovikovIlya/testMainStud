@@ -10,25 +10,18 @@ import { useNavigate } from 'react-router-dom'
 import {
 	EyeSvg,
 	LogoIasSvg,
-	LogoutSvg,
-	MapSvg,
-	MenuSvg,
-	MessageSvg,
-	PersonCardSvg,
+	LogoutSvg, MenuSvg, PersonCardSvg,
 	PersonSvg,
 	SearchSvg,
 	SettingSvg
 } from '../../assets/svg'
-import { DocumentSvg } from '../../assets/svg/DocumentSvg'
 import PersonalizationSvg from '../../assets/svg/PersonalizationSvg'
 import { useAppSelector } from '../../store'
 import { logOut, setEdit } from '../../store/reducers/authSlice'
 import { ModalNav } from '../service/ModalNav'
+import { ArrowLeftBackInOldAccount } from "../../assets/svg/ArrowLeftBackInOldAccount"
+import { TypeHeaderProps } from '../../models/layout'
 
-type TypeHeaderProps = {
-	type?: 'service' | 'main'
-	service?: string
-}
 
 export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const dispatch = useDispatch()
@@ -81,7 +74,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 				<div
 					onClick={() => {
 						setOpenMenu(false)
-						navigate('/services/aboutMe/aboutMe')
+						navigate('/services/aboutMe/personalData')
 					}}
 					className="flex items-center gap-[15px] px-[4px] py-[5px]"
 				>
@@ -158,12 +151,12 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 					<Button
 						onClick={showDrawer}
 						className={clsx(
-							'py-2.5 rounded-full  font-semibold bg-transparent border-2 flex items-center justify-center ',
+							'py-2.5 rounded-full hover:!bg-transparent font-semibold bg-transparent border-2 flex items-center justify-center ',
 							type === 'main'
-								? `text-blue1f5 border-blue1f5`
-								: 'text-white border-white hover:!border-white hover:!text-white'
+								? `text-blue1f5 border-blue1f5 hover:!text-blue1f5`
+								: 'text-white border-white '
 						)}
-						type="default"
+						type="primary"
 						icon={<MenuSvg white={type === 'service'} />}
 					>
 						<span className="pl-2 max-md:!hidden">{t('services')}</span>
@@ -176,6 +169,25 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 				</div>
 				<div className="flex gap-5 items-center h-full max-[1000px]:gap-0 w-fit justify-center">
 					<div className="flex h-full items-center max-[1000px]:hidden">
+
+						<a
+							className={clsx(
+								'h-full flex gap-2 items-center px-3 cursor-pointer no-underline',
+								type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'
+							)}
+							href={'https://shelly.kpfu.ru/e-ksu/main_blocks.startpage'}
+						>
+							<ArrowLeftBackInOldAccount white={type === 'service'}/>
+							<span className={clsx(
+								`text-[14px]/[14px] text-[#3073D7]`
+								&&
+								type === 'service' ? 'text-white' : 'text-[#3073D7]'
+
+							)}>
+								в старый ЛК
+							</span>
+						</a>
+
 						<div
 							className={clsx(
 								'h-full flex items-center px-3 cursor-pointer ',
@@ -184,30 +196,30 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						>
 							<SearchSvg white={type === 'service'} />
 						</div>
-						<div
-							className={clsx(
-								'h-full flex items-center px-3 cursor-pointer ',
-								type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'
-							)}
-						>
-							<MessageSvg white={type === 'service'} />
-						</div>
-						<div
-							className={clsx(
-								'h-full flex items-center px-3 cursor-pointer ',
-								type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'
-							)}
-						>
-							<MapSvg white={type === 'service'} />
-						</div>
-						<div
-							className={clsx(
-								'h-full flex items-center px-3 cursor-pointer ',
-								type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'
-							)}
-						>
-							<DocumentSvg white={type === 'service'} />
-						</div>
+						{/*<div*/}
+						{/*	className={clsx(*/}
+						{/*		'h-full flex items-center px-3 cursor-pointer ',*/}
+						{/*		type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'*/}
+						{/*	)}*/}
+						{/*>*/}
+						{/*	<MessageSvg white={type === 'service'} />*/}
+						{/*</div>*/}
+						{/*<div*/}
+						{/*	className={clsx(*/}
+						{/*		'h-full flex items-center px-3 cursor-pointer ',*/}
+						{/*		type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'*/}
+						{/*	)}*/}
+						{/*>*/}
+						{/*	<MapSvg white={type === 'service'} />*/}
+						{/*</div>*/}
+						{/*<div*/}
+						{/*	className={clsx(*/}
+						{/*		'h-full flex items-center px-3 cursor-pointer ',*/}
+						{/*		type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'*/}
+						{/*	)}*/}
+						{/*>*/}
+						{/*	<DocumentSvg white={type === 'service'} />*/}
+						{/*</div>*/}
 						<div
 							className={clsx(
 								'h-full flex items-center px-3 cursor-pointer ',
@@ -220,7 +232,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 					<Select
 						defaultValue={i18n.language}
 						style={{ width: 70 }}
-						bordered={false}
+						variant="borderless"
 						className={clsx(
 							'max-sm:hidden ',
 							type === 'service' && 'text-white'

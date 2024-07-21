@@ -6,9 +6,10 @@ export const VisuallyImpaired = () => {
 	const [value, setValue] = useState(1)
 
 	const onChange = (e: RadioChangeEvent) => {
-		console.log('radio checked', e.target.value)
 		setValue(e.target.value)
 	}
+
+	
 	return (
 		<section className="max-w-2xl">
 			<h1 className="text-black text-2xl font-bold leading-normal">

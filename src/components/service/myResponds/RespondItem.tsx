@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { DeleteSvg } from '../../../assets/svg/DeleteSvg'
 import { useDeleteVacancyRespondMutation } from '../../../store/api/serviceApi'
-import { RespondItemType, respondStatus } from '../../../store/type'
+import { RespondItemType, respondStatus } from '../../../store/reducers/type'
 
 export const RespondItem = (props: RespondItemType & { refetch: Function }) => {
 	const navigate = useNavigate()

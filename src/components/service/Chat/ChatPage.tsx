@@ -2,6 +2,8 @@ import { Button } from 'antd'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import SockJS from 'sockjs-client'
+// const Stomp = require('stompjs/lib/stomp').Stomp
+import Stomp from 'stompjs'
 
 import { useAppSelector } from '../../../store'
 import {
@@ -13,12 +15,10 @@ import { setChatId } from '../../../store/reducers/chatIdSlice'
 import {
 	ChatMessageDateDisplayEnum,
 	ChatMessageType
-} from '../../../store/type'
+} from '../../../store/reducers/type'
 import { AttachIcon } from '../jobSeeker/AttachIcon'
 
 import { ChatMessage } from './ChatMessage'
-
-const Stomp = require('stompjs/lib/stomp').Stomp
 
 const seekerToken =
 	'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJJQU1pdHJvZmFub3ZAc3R1ZC5rcGZ1LnJ1IiwiaWF0IjoxNzExNTc3OTMwLCJleHAiOjE3MTE1ODg3MzAsInNjb3BlIjoidXNlciIsInJvbGVzIjpbeyJ1c2VySWQiOiI2Iiwic2Vzc2lvbklkIjoiMjQwMzIyNzE0ODc1MTk0ODI5NzMzMDkwNDczNTM2NjciLCJzZXNzaW9uSGFzaCI6IkQyQTIyNUE3NDk5RjFDRTE2Q0JFMDJCOUY2QzkxN0UxIiwiZG9jdW1lbnRzSGFzaCI6IkIyNkNCMEMzRThBQzM2RDZBMENCNTEyQ0YzMDIzNzc3IiwibG9naW4iOiJJQU1pdHJvZmFub3YiLCJ0eXBlIjoiU0VFS0VSIn1dLCJzZXNzaW9uSWQiOiIyNDAzMjI3MTQ4NzUxOTQ4Mjk3MzMwOTA0NzM1MzY2NyIsInNlc3Npb25IYXNoIjoiRDJBMjI1QTc0OTlGMUNFMTZDQkUwMkI5RjZDOTE3RTEiLCJhbGxJZCI6IjE3ODQ0MCIsImVtYWlsIjoibWl0cm9fMDJAbWFpbC5ydSJ9.rbdEbs6b2NVFyFa65GW5rpy8VBd7TKpNxaTrVBMh5i0'
@@ -138,7 +138,7 @@ export const ChatPage = () => {
 			})
 		})
 		return () => {
-			client.disconnect()
+			client.disconnect(() => {})
 			socket.close()
 		}
 	}, [chatIdState])

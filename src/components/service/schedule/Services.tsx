@@ -1,15 +1,9 @@
 import { Select, Table } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
+import { DataTypeService } from '../../../models/schedule'
 
-interface DataType {
-	key: string
-	division: string
-	workingHours: string
-	studentAdmissionTime: string
-	fullNameManager: string
-	contactPhone: string
-}
-const columns: ColumnsType<DataType> = [
+
+const columns: ColumnsType<DataTypeService> = [
 	{
 		title: 'Подразделение',
 		dataIndex: 'division',
@@ -41,7 +35,7 @@ const columns: ColumnsType<DataType> = [
 		render: item => <p className="text-base">{item}</p>
 	}
 ]
-const data: DataType[] = [
+const data: DataTypeService[] = [
 	{
 		key: '1',
 		division:

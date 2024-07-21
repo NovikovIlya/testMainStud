@@ -23,13 +23,15 @@ export const ChatPreview = (props: {
 	respName: string
 	checkableStatus?: string
 }) => {
+	const user = useAppSelector(state => state.auth.user)
+	const isEmpDemp = user?.roles.find(role => role.type === 'EMPL')
 	const { data: chatId = 0, isLoading: isChatIdLoading } =
 		useGetChatIdByRespondIdQuery(props.respondId)
 	const { data: unreadCount, isLoading: isUnreadCountLoading } =
-		useGetUnreadMessagesCountQuery(chatId)
-
-	const user = useAppSelector(state => state.auth.user)
-	const isEmpDemp = user?.roles.find(role => role.type === 'EMPL')
+		useGetUnreadMessagesCountQuery({
+			chatId: chatId,
+			role: isEmpDemp ? 'PERSONNEL_DEPARTMENT' : 'SEEKER'
+		})
 
 	const { pathname } = useLocation()
 	const dispatch = useDispatch()

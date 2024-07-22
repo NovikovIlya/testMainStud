@@ -111,7 +111,8 @@ export const individualTasks = apiSlice.injectEndpoints({
             query: () => ({
                 url: `services/api-practices/tasks/subdivisions`,
                 method: 'GET',
-            })
+            }),
+            keepUnusedDataFor: 1,
         }),
         getGroupNumbers: builder.query<PracticeType[], any>({
             query: (subDivisionId) => ({

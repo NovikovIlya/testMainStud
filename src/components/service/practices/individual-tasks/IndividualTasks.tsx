@@ -54,9 +54,9 @@ export interface FullIndividualTask {
 const IndividualTasks = () => {
     const navigate = useNavigate()
     const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
-    const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery()
+    const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery(null)
     const [practiceType, setPracticeType] = useState<FilterType[]>()
-    const {data: dataPracticeType, isSuccess: isSuccessPracticeType} = useGetPracticeTypeQuery()
+    const {data: dataPracticeType, isSuccess: isSuccessPracticeType} = useGetPracticeTypeQuery(null)
     const {data, isSuccess, isFetching } = useGetAllTasksQuery()
     const [
         tableDataCompressed,

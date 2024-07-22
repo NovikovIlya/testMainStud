@@ -16,11 +16,15 @@ body {
 
 @layer utilities {
 	*::-webkit-scrollbar {
-		width: 5px;
+		// width: 5px;
+		
 	}
 
-	body::-webkit-scrollbar-thumb {
-		background: #ccc;
+	*::-webkit-scrollbar-thumb {
+		
+	}
+	*::-webkit-scrollbar-track {
+   		
 	}
 }
 .ant-modal .ant-modal-content {
@@ -193,3 +197,11 @@ body {
 .ant-list-item {
 	background-color: #FFFFFF !important; /* светло-серый фон */
 }
+
+:where(.css-dev-only-do-not-override-to9039).ant-spin-nested-loading >div>.ant-spin{
+	bottom:0 !important;
+	top:auto !important;
+}
+.rc-virtual-list .rc-virtual-list-scrollbar {
+	display: block !important;
+  }

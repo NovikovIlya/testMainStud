@@ -6,7 +6,8 @@ import {
     List,
     Row,
     Select,
-    Space
+    Space,
+    Spin
 } from 'antd';
 import { useEffect, useState } from 'react';
 import { ArrowLeftSvg } from '../../../../assets/svg';
@@ -21,6 +22,7 @@ import { processingOfDivisions } from '../../../../utils/processingOfDivisions';
 import { useGetCafDepartmentsQuery } from '../../../../store/api/practiceApi/practical';
 import { useAppDispatch } from '../../../../store';
 import './EditPractical.module.scss';
+import { showNotification } from '../../../../store/reducers/notificationSlice';
 
 
 
@@ -52,14 +54,35 @@ const optionsCourse: FilterType[] = [
     }
 ]
 const optionsSemester: FilterType[] = [
-    {
-        value: '1',
-        label: '1'
-    },
-    {
-        value: '2',
-        label: '2'
-    }
+
+	{
+		value: '1',
+		label: '1'
+	},
+	{
+		value: '2',
+		label: '2'
+	},
+	{
+		value: '3',
+		label: '3'
+	},
+	{
+		value: '4',
+		label: '4'
+	},
+	{
+		value: '5',
+		label: '5'
+	},
+	{
+		value: '6',
+		label: '6'
+	},
+	{
+		value: '7',
+		label: '7'
+	}
 ]
 
 
@@ -67,11 +90,10 @@ const optionsSemester: FilterType[] = [
 export const EditPractical = () => {
     const [departments, setDepartments] = useState<Department[]>()
     const path = useLocation()
-    const id: string = path.pathname.split('/').at(-1)!
+    const id = path.pathname.split('/').at(-1)!
     const nav = useNavigate()
     const [pickSpeciality, setPickSpeciality] = useState<any>(null)
     const [form] = Form.useForm<any>()
-    const [flag,setFlag] = useState(true)
     const [pickKund,setPickKind] = useState(null)
     const [arqTask,setArqTask] = useState<any>(null)
     const [pickDate, setPickDate] = useState<any>(null)
@@ -94,14 +116,14 @@ export const EditPractical = () => {
     const {data:dataCompetences, isSuccess: isSuccessCompetences} = useGetCompentencesQuery(objectForCompetences,{skip: objectForCompetences === null})
     const {data: dataDepartments, isSuccess: isSuccessDepartments} = useGetSubdivisionForPracticeQuery()
     const {data: dataPracticeType, isSuccess: isSuccessPracticeType} = useGetPracticeTypeForPracticeQuery(objType, {skip: objType.subdivisionId === null })
-    const {data: dataDepartmentDirector, isSuccess: isSuccessDepartmentDirector} = useGetDepartmentDirectorsQuery(subDivisionId, {skip: !subDivisionId})
-    const {data: dataCaf, isSuccess: isSuccessCaf} = useGetCafDepartmentsQuery(subDivisionId,)
-    const {data: dataGroupNumbers, isSuccess: isSuccessGroupNumbers} = useGetGroupNumbersQuery(subDivisionId, {skip: !subDivisionId})
+    const {data: dataDepartmentDirector} = useGetDepartmentDirectorsQuery(subDivisionId, {skip: !subDivisionId})
+    const {data: dataCaf} = useGetCafDepartmentsQuery(subDivisionId,{skip: !subDivisionId})
+    const {data: dataGroupNumbers} = useGetGroupNumbersQuery(subDivisionId, {skip: !subDivisionId})
     const {data: dataPraciseKind, isSuccess: isSuccesPractiseKind} = useGetPracticeKindQuery(subDivisionId, {skip: !subDivisionId})
     const{data:dataSubdivisonForPractise} = useGetSubdivisionForPracticeQuery()
-    const [updateForm] = useUpdatePracticeOneMutation()
-    const {data:dataTask, isSuccess:isSuccessTask,error:errorTasks} = useGetTasksForPracticeQuery(arqTask,{skip:!arqTask})
-
+    const {data:dataTask, isSuccess:isSuccessTask} = useGetTasksForPracticeQuery(arqTask,{skip:!arqTask})
+    const [updateForm,{isLoading:isLoadingSendForm}] = useUpdatePracticeOneMutation()
+    const dispatch = useAppDispatch()
 
 
     useEffect(()=>{
@@ -124,8 +146,9 @@ export const EditPractical = () => {
         setIdSub(idSubdevision?.id)
     },[dataDepartments, dataOnePractise?.subdivision])
 
-
+    // объект для пракики
     useEffect(()=>{
+        if(isSuccessDepartments && isSuccessNameSpecialty){
             const objTypeZ = {
             ...objType,
             subdivisionId: dataDepartments?.find((item:any)=>{
@@ -138,7 +161,6 @@ export const EditPractical = () => {
                     })
                 }
                 if(item.value === form.getFieldValue('subDivision')?.split(" - ")[1]){
-
                     return item
                 }
             })?.responses?.find((item:any)=>item.value === form?.getFieldValue('subDivision')?.split(" - ")[1])?.id,
@@ -149,16 +171,18 @@ export const EditPractical = () => {
             })?.id 
         }
         setObjType(objTypeZ)
-    },[pickSpeciality, form, dataDepartments, dataNameSpecialty])
+    }
+    },[pickSpeciality, form, dataDepartments, dataNameSpecialty,isSuccessDepartments,isSuccessNameSpecialty])
 
 
-    // получение кафедр
+    // получение подразделений
     useEffect(() => {
         if (isSuccessDepartments) {
             setDepartments(processingOfDivisions(dataDepartments))
         }
     }, [dataDepartments]);
 
+    // получение наименование специальностей
     useEffect(() => {
         if (isSuccessNameSpecialty) {
             setNameSpecialty(dataNameSpecialty)
@@ -247,10 +271,12 @@ export const EditPractical = () => {
       useEffect(()=>{
         if(isSuccessPracticeType){
             const pickTypeId = dataPracticeType?.find((elem:any) => {
+                console.log('elem.value',elem.value)
                 if (elem.value === form.getFieldValue('practiceType')) {
                     return elem
                 }
             })
+            console.log('pickTypeId',pickTypeId)
             const pickSpecialityId = dataNameSpecialty?.find((elem:any) => {
                
                 if (elem.value === form.getFieldValue('specialityName')) {
@@ -291,19 +317,19 @@ export const EditPractical = () => {
     
         const [startDate, endDate] = form.getFieldValue('academicYear');
     
-        const dateString = form.getFieldValue('startStudy').$d
-        const date = new Date(dateString)
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        const formattedDate = `${year}.${month}.${day}`;
+        // const dateString = form.getFieldValue('startStudy').$d
+        // const date = new Date(dateString)
+        // const year = date.getFullYear();
+        // const month = String(date.getMonth() + 1).padStart(2, '0');
+        // const day = String(date.getDate()).padStart(2, '0');
+        // const formattedDate = `${year}.${month}.${day}`;
 
-        const dateStringEnd = form.getFieldValue('endStudy').$d
-        const dateEnd = new Date(dateStringEnd)
-        const yearEnd = dateEnd.getFullYear();
-        const monthEnd = String(dateEnd.getMonth() + 1).padStart(2, '0');
-        const dayEnd = String(dateEnd.getDate()).padStart(2, '0');
-        const formattedDateEnd = `${yearEnd}.${monthEnd}.${dayEnd}`;
+        // const dateStringEnd = form.getFieldValue('endStudy').$d
+        // const dateEnd = new Date(dateStringEnd)
+        // const yearEnd = dateEnd.getFullYear();
+        // const monthEnd = String(dateEnd.getMonth() + 1).padStart(2, '0');
+        // const dayEnd = String(dateEnd.getDate()).padStart(2, '0');
+        // const formattedDateEnd = `${yearEnd}.${monthEnd}.${dayEnd}`;
 
         const mother = dataSubdivisonForPractise?.find((item:any)=>{     
             if('responses' in item){
@@ -335,7 +361,7 @@ export const EditPractical = () => {
             startDate: `${String(form?.getFieldValue('period')[0].$D)}.${String(form?.getFieldValue('period')[0].$M+1).padStart(2, '0')}.${String(form?.getFieldValue('period')[0].$y)}`,
             endDate: `${String(form?.getFieldValue('period')[1].$D)}.${String(form?.getFieldValue('period')[1].$M+1).padStart(2, '0')}.${String(form?.getFieldValue('period')[1].$y)}`,
             totalHours: String(values.amountHours),
-            competenceIds: dataCompetences,
+            competenceIds: dataCompetences?.map((item)=>String(item.id)),
             departmentDirectorId: directorId?.id, 
             subdivisionId: child,
             specialtyNameId:pickSpecialityId?.id,
@@ -350,7 +376,15 @@ export const EditPractical = () => {
         }
       
         updateForm(sendData)
-        nav('/services/practices/practical')
+        .unwrap()
+        .then(()=>{
+            nav('/services/practices/practical')
+        })
+        .catch((error)=>{
+			if (error.status === 400) {
+				dispatch(showNotification({ message: 'Такая практика уже создана', type: 'error' }));
+			}
+		})
     }
 
 
@@ -383,6 +417,7 @@ export const EditPractical = () => {
    
 
     return (
+        <Spin spinning={isLoadingSendForm}>
         <section className="container">
             <Space size={10} align="center">
                 <Button
@@ -516,7 +551,7 @@ export const EditPractical = () => {
                         </Form.Item>
                     </Col>
                 </Row>
-                <Row gutter={[16, 16]}>
+                {/* <Row gutter={[16, 16]}>
                     <Col xs={24} sm={24} md={18} lg={16} xl={12}>
                         <Form.Item
                             name={'competences'}
@@ -530,7 +565,7 @@ export const EditPractical = () => {
                             />
                         </Form.Item>
                     </Col>
-                </Row>
+                </Row> */}
                 <Row gutter={[16, 16]}>
                     <Col xs={24} sm={24} md={18} lg={8} xl={6}>
                         <Form.Item
@@ -821,12 +856,35 @@ export const EditPractical = () => {
                     </Col>
                 </Row>
 
+                <Row gutter={[16, 16]} className={'mt-4'}>
+					<Col xs={24} sm={24} md={18} lg={16} xl={12}>
+						<List
+							header={<div>Код и наименование компетенции:</div>}
+                            style={{
+								overflow: 'auto',
+								maxHeight: 200,	
+							}}
+							bordered
+							// @ts-ignore
+							dataSource={isSuccessCompetences ? dataCompetences : ''}
+							renderItem={(item: any, index: number) => (
+								<List.Item>
+									{index + 1}. {item.value}
+								</List.Item>
+							)}
+						/>
+					</Col>
+				</Row>
+
                 <Row gutter={[16, 16]} className={`mt-4 `}>
                     <Col xs={24} sm={24} md={18} lg={16} xl={12}>
                     <List
                         className='newAntd'
                         header={<div>Индивидуальные задания:</div>}
-                       
+                        style={{
+                            overflow: 'auto',
+                            maxHeight: 200,	
+                        }}
                         bordered
                         dataSource={isSuccesOnePractise?dataTaskValid : ''}
                         renderItem={(item:any,index:number) => (
@@ -854,6 +912,7 @@ export const EditPractical = () => {
                 </Row>
             </Form>
         </section>
+        </Spin>
     )
 }
 

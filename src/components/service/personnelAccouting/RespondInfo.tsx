@@ -1,6 +1,7 @@
 import { Button, Tag } from 'antd'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { Margin, usePDF } from 'react-to-pdf'
 import uuid from 'react-uuid'
 
 import { AvatartandardSvg } from '../../../assets/svg/AvatarStandardSvg'
@@ -43,6 +44,18 @@ export const RespondInfo = (props: {
 
 	const navigate = useNavigate()
 
+	const { toPDF, targetRef } = usePDF({
+		filename:
+			res?.userData?.lastname +
+			' ' +
+			res?.userData?.firstname +
+			' ' +
+			res?.userData?.middlename,
+		page: {
+			margin: Margin.SMALL
+		}
+	})
+
 	if (res === undefined) {
 		return <></>
 	} else {
@@ -64,7 +77,7 @@ export const RespondInfo = (props: {
 							Назад
 						</Button>
 					</div>
-					<div className="mt-[52px] flex flex-col gap-[36px]">
+					<div className="mt-[52px] flex flex-col gap-[36px]" ref={targetRef}>
 						<div className="flex flex-wrap gap-[150px]">
 							<div className="flex gap-[20px]">
 								<div className="flex h-[167px] w-[167px] bg-[#D9D9D9]">
@@ -280,6 +293,9 @@ export const RespondInfo = (props: {
 								</div>
 							</div>
 						</div>
+					</div>
+					<div>
+						<Button onClick={() => toPDF()}>Скачать резюме</Button>
 					</div>
 				</div>
 			</>

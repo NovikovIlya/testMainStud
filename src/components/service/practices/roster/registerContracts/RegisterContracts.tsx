@@ -56,6 +56,7 @@ export interface ColumnsTableFull {
     key: string
     contractFacility: string
     specialtyName: string
+    specialtyNames:any
     contractNumber: string
     conclusionDate: string
     contractType: string
@@ -76,8 +77,8 @@ export interface OptionsNameSpecialty {
 
 export const RegisterContracts = () => {
     const tokenAccess = localStorage.getItem('access')!.replaceAll('"', '')
-
     const {data: dataAll, isSuccess: isSuccessAll,isFetching} = useGetContractsAllQuery()
+    console.log('dataAll',dataAll)
     const {data: dataShort, isSuccess: isSuccessShort} = useGetContractsShortQuery()
     const nav = useNavigate()
     const [filter, setFilter] = useState({
@@ -128,11 +129,12 @@ export const RegisterContracts = () => {
     }
 
     function changeListDataAll(elem: ContractsAll) {
+        console.log('elem',elem)
         const newElem: ColumnsTableFull = {
             id: elem.id,
             key: elem.id,
             contractFacility: elem.contractFacility,
-            specialtyName: elem.specialtyName,
+            specialtyName: elem?.specialtyNames?.join(','),
             contractNumber: elem.contractNumber,
             conclusionDate: elem.conclusionDate,
             contractType: elem.contractType,
@@ -270,9 +272,12 @@ export const RegisterContracts = () => {
         },
         {
             title: <span className={'text-xs'}>Шифр и наименование специальности</span>,
-            dataIndex: 'specialtyName',
+            dataIndex: 'specialtyNames',
             align: "center",
-            className: 'text-xs'
+            className: 'text-xs',
+            render: (text, record) => {
+                return record.specialtyName
+            },
         },
         {
             title: <span className={'text-xs'}>Номер договора</span>,
@@ -302,13 +307,13 @@ export const RegisterContracts = () => {
                         </span>}
                 </div>
         },
-        {
-            title: <span className={'text-xs'}>Срок действия договора</span>,
-            dataIndex: 'endDate',
-            align: "center",
-            className: 'text-xs',
-            render: (value, record, index) => dayjs(value).format('DD.MM.YYYY')
-        },
+        // {
+        //     title: <span className={'text-xs'}>Срок действия договора</span>,
+        //     dataIndex: 'endDate',
+        //     align: "center",
+        //     className: 'text-xs',
+        //     render: (value, record, index) => dayjs(value).format('DD.MM.YYYY')
+        // },
         {
             title: <span className={'text-xs'}>Юридический адрес организации</span>,
             dataIndex: 'legalFacility',
@@ -377,7 +382,7 @@ export const RegisterContracts = () => {
 
 
     const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
-    const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery()
+    const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery(null)
     useEffect(() => {
         if (isSuccessNameSpecialty) {
             setNameSpecialty(changeListNameSpecialty(dataNameSpecialty))

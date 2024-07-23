@@ -49,7 +49,7 @@ export const CreateContracts = () => {
             label: 'С пролонгацией'
         }]
     const [prolongation, setProlongation] = useState(false)
-    const [hideSrok,setHideSrok] = useState(false)
+    const [hideSrok,setHideSrok] = useState(true)
     const [newContract] = useCreateContractMutation()
     const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery(null)
     const [optionsNameSpec, setOptionsNameSpec] = useState<NameSpecialty[]>([])
@@ -80,7 +80,8 @@ export const CreateContracts = () => {
         values.actualFacility = values.actualFacility
         values.itn = String(values.ITN)
         values.conclusionDate = dayjs(values.conclusionDate).format('DD.MM.YYYY')
-        values.endDate = dayjs(values.endDate).format('DD.MM.YYYY')
+        // @ts-ignore
+        values.endDate = hideSrok ? null : dayjs(values.endDate).format('DD.MM.YYYY')
         const jsonData = JSON.stringify(values)
         const blob = new Blob([jsonData], { type: 'application/json' })
         newForm.append('contract', blob)
@@ -268,18 +269,21 @@ export const CreateContracts = () => {
                 {hideSrok ? '' :
                     <Col xs={24} sm={24} md={18} lg={8} xl={6}>
                    
-                        <Form.Item label={'Срок действия  договора'}
+                        <Form.Item 
+                                
+                                   label={'Срок действия  договора'}
                                    name={'endDate'}
                                    rules={[{required: true}]}>
                             <DatePicker
+                         
                                 format={'DD.MM.YYYY'}
                                 placeholder={''}
-                                className="w-full"
+                                className="w-full mt-[22px]"
                                 size={'large'}
                             />
                         </Form.Item>
                     </Col>}
-                    <Col xs={24} sm={24} md={18} lg={hideSrok ? 16 : 8} xl={6}>
+                    <Col xs={24} sm={24} md={18} lg={hideSrok ? 16 : 8} xl={hideSrok ? 12 : 6}>
                         <Form.Item label={'Шифр и наименование специальности'}
                                    name={'specialtyNameIds'}
                                    rules={[{required: false}]}>
@@ -346,7 +350,7 @@ export const CreateContracts = () => {
                     <Col xs={24} sm={24} md={18} lg={8} xl={6}>
                         <Form.Item label={'Прикрепить скан договора в формате pdf'}
                                    name={'pdfContract'}
-                                //    rules={[{required: true}]}
+                                   rules={[{required: true}]}
                                    >
                             <Upload
                                 beforeUpload={(file) => {
@@ -382,7 +386,8 @@ export const CreateContracts = () => {
                     <Col xs={24} sm={24} md={18} lg={8} xl={6}>
                         <Form.Item label={'Прикрепить дополнительный документ в формате pdf'}
                                    name={'pdfAgreement'}
-                                   rules={[{required: true}]}>
+                                //    rules={[{required: true}]}
+                                   >
                             <Upload
                                 beforeUpload={(file) => {
                                     setFiles({

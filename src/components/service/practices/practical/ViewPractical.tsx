@@ -35,6 +35,7 @@ import { OptionsNameSpecialty } from '../roster/registerContracts/RegisterContra
 import './ViewPractical.scss'
 import { TitleHeadCell } from '../../businessTrip/NewBusinessTrip/archive/stepTwo/tableStepTwo/titleHeadCell/TitleHeadCell'
 
+
 interface FilterType {
 	value: string | number
 	label: string | number
@@ -140,7 +141,8 @@ export const ViewPractical = () => {
 		course: 'Все',
 		semester: 'Все',
 		practiceType: 'Все',
-		subdivision:'Все'
+		subdivision:'Все',
+		dateFilling: 'По дате (сначала новые)',
 	})
 	const {
 		data: dataPractiseAll,
@@ -161,6 +163,11 @@ export const ViewPractical = () => {
 	const { data: dataPracticeType, isSuccess: isSuccessPracticeType } = useGetPracticeTypeForPracticeQuery(objType, {
 		skip: objType.subDivisionId === null || objType.specialtyNameId === null
 	})
+
+	const optionsSortDate: any = [
+        {value: 'По дате (сначала новые)', label: 'По дате (сначала новые)'},
+        {value: 'По дате (сначала старые)', label: 'По дате (сначала старые)'},
+    ]
 
 	const columns = [
 		{
@@ -194,6 +201,12 @@ export const ViewPractical = () => {
 				</div>
 			)
 		},
+		{
+            title: 'Дата заполнения',
+            dataIndex: 'dateFilling',
+            width: '20%',
+            render: (text:any) => dayjs(text).format('DD.MM.YYYY')
+        },
 		{
 			key: 'practiceType',
 			dataIndex: 'practiceType',
@@ -329,6 +342,8 @@ export const ViewPractical = () => {
 			title: <TitleHeadCell title={'Подразделение'}/>,
 			name: 'Подразделение',
 			className: 'text-xs !p-2',
+			width: '20%',
+			height: '50px'
 			
 		},
 		{
@@ -354,6 +369,12 @@ export const ViewPractical = () => {
 				</div>
 			)
 		},
+		{
+            title: <TitleHeadCell title={'Дата заполнения'}/>,
+            dataIndex: 'dateFilling',
+            width: '20%',
+            render: (text:any) => dayjs(text).format('DD.MM.YYYY')
+        },
 		{
 			key: 'practiceType',
 			dataIndex: 'practiceType',
@@ -588,6 +609,15 @@ export const ViewPractical = () => {
 		// 		.filter(elem => filterNameSpecialty(elem))
 		// 		.sort((a, b) => sortDateFilling(a, b))
 		// }
+		function sortDateFilling(a:any, b:any) {
+            if (filter.dateFilling === 'По дате (сначала новые)') {
+                return +new Date(b.dateFilling) - +new Date(a.dateFilling)
+            }
+            if (filter.dateFilling === 'По дате (сначала старые)') {
+                return +new Date(a.dateFilling) - +new Date(b.dateFilling)
+            }
+            return 0
+        }
 
 		return dataPractiseAll
 			? dataPractiseAll
@@ -597,6 +627,7 @@ export const ViewPractical = () => {
 					.filter((elem: any) => filterSemester(elem))
 					.filter((elem: any) => filterNameSpecialty(elem))
 					.filter((elem :any) => filterSubdivision(elem))
+					.sort((a:any, b:any) => sortDateFilling(a, b))
 			: []
 	}
 
@@ -620,6 +651,8 @@ export const ViewPractical = () => {
     function isFullTable() {
         setFullTable(true)
     }
+
+
 
 	return (
 		<>
@@ -672,12 +705,11 @@ export const ViewPractical = () => {
 					<Col span={8}>
 					<Form.Item
 						name={'podrazdelenie'}
+						className='mb-[-4px]'
 					>
-						
 						<Select
-							
 							popupMatchSelectWidth={false}
-							className="w-full"
+							className="w-full "
 							options={[
 								{ key: 2244612, value: 'Все', label: 'Все' },
 								...(departments
@@ -844,7 +876,7 @@ export const ViewPractical = () => {
                         </Radio.Button>
                     </Radio.Group>
                 </Col>
-                {/* <Col span={8} offset={4}>
+                <Col span={8} offset={4}>
                     <div className={'flex gap-2 items-center'}>
                         <span className={'mr-2'}>Сортировка</span>
                         <Select
@@ -861,7 +893,7 @@ export const ViewPractical = () => {
                         />
                     </div>
 
-                </Col> */}
+                </Col>
             </Row>
 
 			</section>
@@ -891,7 +923,7 @@ export const ViewPractical = () => {
 				/> :
 				<div className='viewPractical'>
 				<Table
-					size="small"
+					
 					rowKey="id"
 					// @ts-ignore
 					columns={columnsCompressed}

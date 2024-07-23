@@ -18,6 +18,7 @@ import {useGetSpecialtyNamesQuery} from "../../../../store/api/practiceApi/roste
 import {processingOfDivisions} from "../../../../utils/processingOfDivisions";
 import { useAppDispatch } from '../../../../store'
 import { showNotification } from '../../../../store/reducers/notificationSlice'
+import { SkeletonPage } from './Skeleton'
 
 const EditTask = () => {
     const path = useLocation()
@@ -34,7 +35,7 @@ const EditTask = () => {
     const [practiceType, setPracticeType] = useState<PracticeType[]>()
     const {data: dataPracticeType, isSuccess: isSuccessPracticeType} = useGetPracticeTypeQuery(subDivision)
     const [departments, setDepartments] = useState<Department[]>()
-    const {data: dataDepartments, isSuccess: isSuccessDepartments} = useGetDepartmentsQuery()
+    const {data: dataDepartments, isSuccess: isSuccessDepartments,isLoading} = useGetDepartmentsQuery()
     const dispatch = useAppDispatch()
     
 
@@ -78,8 +79,7 @@ const EditTask = () => {
                 }
             })
             
-            
-  
+
             
             form.setFieldValue('specialityName', data.specialityName)
             form.setFieldValue('practiceType', data.practiceType)
@@ -167,6 +167,7 @@ const EditTask = () => {
         form.setFieldValue('practiceType', null)
     }
 
+    if(isLoading) return <SkeletonPage/>
 
     return (
         <section className="container">

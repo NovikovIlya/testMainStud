@@ -23,7 +23,7 @@ import { useGetCafDepartmentsQuery } from '../../../../store/api/practiceApi/pra
 import { useAppDispatch } from '../../../../store';
 import './EditPractical.module.scss';
 import { showNotification } from '../../../../store/reducers/notificationSlice';
-
+import { SkeletonPage } from './Skeleton';
 
 
 
@@ -105,13 +105,14 @@ export const EditPractical = () => {
             subdivisionId :null,
             specialtyNameId :null 
     })
+    const [nameSpecialtyId,setNameSpecialtyId] = useState<any>(null)
     const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
     const [objectForCompetences, setObjectForCompetences] = useState<any>({
         specialityId:null,
         practiceKindId:null,
         startYear:null
     })
-    const {data:dataOnePractise,isSuccess:isSuccesOnePractise} = useGetPracticeOneQuery(id,{refetchOnMountOrArgChange: true  })
+    const {data:dataOnePractise,isSuccess:isSuccesOnePractise,isFetching:isFetchingDataOnePractise} = useGetPracticeOneQuery(id,{refetchOnMountOrArgChange: true  })
     const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesForPractiseQuery(subDivisionId, {skip: !subDivisionId})
     const {data:dataCompetences, isSuccess: isSuccessCompetences} = useGetCompentencesQuery(objectForCompetences,{skip: objectForCompetences === null})
     const {data: dataDepartments, isSuccess: isSuccessDepartments} = useGetSubdivisionForPracticeQuery()
@@ -146,34 +147,39 @@ export const EditPractical = () => {
         setIdSub(idSubdevision?.id)
     },[dataDepartments, dataOnePractise?.subdivision])
 
-    // объект для пракики
+    // объект для практики
     useEffect(()=>{
         if(isSuccessDepartments && isSuccessNameSpecialty){
             const objTypeZ = {
             ...objType,
-            subdivisionId: dataDepartments?.find((item:any)=>{
-                if('responses' in item){
-                    return item.responses?.find((elem:any)=> {
-                        if(form?.getFieldValue('subDivision')?.split(" - ")[1] === elem.value){
-             
-                            return elem
-                        }      
-                    })
-                }
-                if(item.value === form.getFieldValue('subDivision')?.split(" - ")[1]){
-                    return item
-                }
-            })?.responses?.find((item:any)=>item.value === form?.getFieldValue('subDivision')?.split(" - ")[1])?.id,
+            subdivisionId: subDivisionId,
             specialtyNameId :dataNameSpecialty?.find((item:any)=>{
                 if(item.value===form.getFieldValue('specialityName')){
                     return item
                 }
             })?.id 
         }
+        // @ts-ignore
         setObjType(objTypeZ)
     }
-    },[pickSpeciality, form, dataDepartments, dataNameSpecialty,isSuccessDepartments,isSuccessNameSpecialty])
+    },[ form,  dataNameSpecialty,isSuccessDepartments,isSuccessNameSpecialty])
 
+
+    useEffect(() => {
+        if (isSuccessDepartments && isSuccessNameSpecialty) {
+            const objTypeZ = {
+                ...objType,
+                subdivisionId: subDivisionId || null,
+                specialtyNameId: dataNameSpecialty?.find((item: any) => {
+                    if (item.value === form.getFieldValue('specialityName')) {
+                        return item
+                    }
+                })?.id || null
+            }
+            // @ts-ignore
+            setObjType(objTypeZ)
+        }
+    }, [pickSpeciality, form, dataDepartments, dataNameSpecialty, isSuccessDepartments, isSuccessNameSpecialty, subDivisionId])
 
     // получение подразделений
     useEffect(() => {
@@ -267,16 +273,14 @@ export const EditPractical = () => {
         }
     },[isSuccesOnePractise,isSuccessDepartments])
 
-      // получение инд заданий
-      useEffect(()=>{
+    // получение инд заданий
+    useEffect(()=>{
         if(isSuccessPracticeType){
             const pickTypeId = dataPracticeType?.find((elem:any) => {
-                console.log('elem.value',elem.value)
                 if (elem.value === form.getFieldValue('practiceType')) {
                     return elem
                 }
             })
-            console.log('pickTypeId',pickTypeId)
             const pickSpecialityId = dataNameSpecialty?.find((elem:any) => {
                
                 if (elem.value === form.getFieldValue('specialityName')) {
@@ -414,7 +418,8 @@ export const EditPractical = () => {
         console.log(value)
    }
     const dataTaskValid = dataTask?.tasks.map((item:any)=>item.taskDescription)
-   
+
+    if(isFetchingDataOnePractise) return <SkeletonPage/>
 
     return (
         <Spin spinning={isLoadingSendForm}>
@@ -551,21 +556,7 @@ export const EditPractical = () => {
                         </Form.Item>
                     </Col>
                 </Row>
-                {/* <Row gutter={[16, 16]}>
-                    <Col xs={24} sm={24} md={18} lg={16} xl={12}>
-                        <Form.Item
-                            name={'competences'}
-                            label={'Код и наименование компетенции'}>
-                            <Select
-                               
-                                size="large"
-                                popupMatchSelectWidth={false}
-                                className="w-full"
-                                options={dataCompetences}
-                            />
-                        </Form.Item>
-                    </Col>
-                </Row> */}
+
                 <Row gutter={[16, 16]}>
                     <Col xs={24} sm={24} md={18} lg={8} xl={6}>
                         <Form.Item
@@ -596,24 +587,7 @@ export const EditPractical = () => {
                         </Form.Item>
                     </Col>
                 </Row>
-                {/* <Row gutter={[16, 16]}>
-                    <Col xs={24} sm={24} md={18} lg={8} xl={6}>
-                        <Form.Item
-                            //rules={[{required: true}]}
-                            name={'period'}
-                            label={'Период практики'}>
-
-                            <DatePicker.RangePicker 
-                                size={'large'}
-                                placeholder={['Начало', 'Конец']}
-                                format="DD.MM.YYYY"
-                                onChange={onChangePickerPeriodPractise}
-                                
-                            />
-
-                        </Form.Item>
-                    </Col>
-                </Row> */}
+               
                 <Row gutter={[16, 16]}>
                     
                     <Col xs={24} sm={24} md={18} lg={8} xl={6}>
@@ -862,7 +836,7 @@ export const EditPractical = () => {
 							header={<div>Код и наименование компетенции:</div>}
                             style={{
 								overflow: 'auto',
-								maxHeight: 200,	
+								maxHeight: 300,	
 							}}
 							bordered
 							// @ts-ignore
@@ -883,7 +857,7 @@ export const EditPractical = () => {
                         header={<div>Индивидуальные задания:</div>}
                         style={{
                             overflow: 'auto',
-                            maxHeight: 200,	
+                            maxHeight: 300,	
                         }}
                         bordered
                         dataSource={isSuccesOnePractise?dataTaskValid : ''}

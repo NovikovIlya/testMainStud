@@ -34,6 +34,7 @@ import {string} from "yup";
 import {useGetSpecialtyNamesQuery} from "../../../../store/api/practiceApi/roster";
 import {copyFileDocument} from "../../../../utils/downloadDocument/copyFileDocument";
 import {agreementFileDocument} from "../../../../utils/downloadDocument/agreementFileDocument";
+import { SkeletonPage } from './Skeleton'
 
 export interface PdfContract {
     uid: string,
@@ -47,7 +48,7 @@ export const EditContract = () => {
     const path = useLocation()
     const nav = useNavigate()
     const id: string = path.pathname.split('/').at(-1)!
-    const {data, isSuccess} = useGetContractForEditQuery(id)
+    const {data, isSuccess,isLoading} = useGetContractForEditQuery(id)
     const [editContract] = useEditContractMutation()
     const tokenAccess = localStorage.getItem('access')!.replaceAll('"', '')
     const optionsContractsType = [
@@ -63,7 +64,7 @@ export const EditContract = () => {
             value: 'С пролонгацией',
             label: 'С пролонгацией'
         }]
-    const [hideSrok,setHideSrok] = useState(false)
+    const [hideSrok,setHideSrok] = useState(true)
     const [prolongation, setProlongation] = useState(false)
     const [inn, setInn] = useState<string | number | null>(0)
     const [files, setFiles] = useState<{
@@ -87,6 +88,7 @@ export const EditContract = () => {
         }
             const dataValid = dataNameSpecialty?.filter(item => data?.specialtyNames.includes(item.value))
     }, [ isSuccess,dataNameSpecialty]);
+
     useEffect(() => {
         if (isSuccess) {
             form.setFieldValue('ITN', data.itn)
@@ -105,7 +107,9 @@ export const EditContract = () => {
 
             form.setFieldValue('contractNumber', data.contractNumber)
             form.setFieldValue('conclusionDate', dayjs(data.conclusionDate))
-            form.setFieldValue('endDate', dayjs(data.endDate))
+            if(!hideSrok){
+                form.setFieldValue('endDate', dayjs(data.endDate))
+            }
             form.setFieldValue('specialtyNameIds', optionsNameSpec.map(i=>i.value))
             form.setFieldValue('actualFacility', data.actualFacility)
             form.setFieldValue('placesAmount', data.placesAmount)
@@ -151,7 +155,7 @@ export const EditContract = () => {
             conclusionDate: values.conclusionDate,
             contractType: values.contractType,
             prolongation: values.prolongation,
-            endDate: values.endDate,
+            endDate: hideSrok ? null : values.endDate,
             specialtyNameIds: dataNameSpecialty?.filter(item => values.specialtyNameIds.includes(item.value)).map(item => item.id),
             legalFacility: values.legalFacility,
             actualFacility: values.actualFacility,
@@ -202,7 +206,9 @@ export const EditContract = () => {
         }
     }, [inn]);
 
-    console.log('optionsNameSpec',optionsNameSpec)
+    if(isLoading) return <SkeletonPage/>
+
+    
     return (
         <section className="container">
             <Space size={10}>
@@ -345,12 +351,12 @@ export const EditContract = () => {
                             <DatePicker
                                 format={'DD.MM.YYYY'}
                                 placeholder={''}
-                                className="w-full"
+                                className="w-full mt-[22px]"
                                 size={'large'}
                             />
                         </Form.Item>
                     </Col>}
-                    <Col xs={24} sm={24} md={18} lg={hideSrok ? 16 : 8} xl={6}>
+                    <Col xs={24} sm={24} md={18} lg={hideSrok ? 16 : 8} xl={hideSrok ? 12 : 6}>
                         <Form.Item label={'Шифр и наименование специальности'}
                                    name={'specialtyNameIds'}
                                    rules={[{required: false}]}>

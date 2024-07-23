@@ -178,7 +178,6 @@ export const CreatePractical = () => {
 					return elem
 				}
 			})
-			console.log('specId', specId)
 			const pickId = dataPraciseKind?.find(elem => {
 				if (elem.value === pickKindPractise) {
 					return elem
@@ -190,7 +189,6 @@ export const CreatePractical = () => {
 				practiceKindId: pickId?.id,
 				startYear: pickDate[0]
 			}
-			console.log('obj', obj)
 			setObjectForCompetences(obj)
 		}
 	}, [
@@ -348,7 +346,6 @@ export const CreatePractical = () => {
 			departmentId: departmenIdZ?.id
 		}
 
-		console.log('sendData', sendData)
 		sendForm(sendData)
 		.unwrap()
 		.then(()=>{
@@ -499,7 +496,7 @@ export const CreatePractical = () => {
 				<Row gutter={[16, 16]}>
 					<Col xs={24} sm={24} md={18} lg={16} xl={12}>
 						<Form.Item
-							//rules={[{required: true}]}
+							rules={[{required: true}]}
 							name={'department'}
 							label={'Кафедра'}
 						>
@@ -824,7 +821,7 @@ export const CreatePractical = () => {
 				<Row gutter={[16, 16]} className={'mt-4'}>
 					<Col xs={24} sm={24} md={18} lg={16} xl={12}>
 						<Form.Item
-							//rules={[{required: true}]}
+							rules={[{required: true}]}
 							name={'director'}
 							label={'Заведующий опорной кафедрой'}
 						>
@@ -845,7 +842,7 @@ export const CreatePractical = () => {
 						<List
 							style={{
 								overflow: 'auto',
-								maxHeight: 200,	
+								maxHeight: 300,	
 							}}
 							header={<div>Код и наименование компетенции:</div>}
 							bordered
@@ -865,7 +862,7 @@ export const CreatePractical = () => {
 						<List
 							style={{
 								overflow: 'auto',
-								maxHeight: 200,	
+								maxHeight: 300,	
 							}}
 							header={<div>Индивидуальные задания:</div>}
 							bordered

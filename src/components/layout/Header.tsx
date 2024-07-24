@@ -51,6 +51,8 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 				return t('GUEST')
 			case 'ATTEND':
 				return t('ATTEND')
+			case 'EMPL':
+				return t('EMPL')
 		}
 	}
 
@@ -138,7 +140,8 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const changeLanguage = (language: string) => {
 		i18n.changeLanguage(language)
 	}
-
+	console.log('user,',user)
+	console.log('1',((user?.roles?.map((item)=>getRole(item.type)))))
 	return (
 		<header
 			className={clsx(
@@ -188,14 +191,15 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 							</span>
 						</a>
 
-						<div
+						{/* <div
 							className={clsx(
 								'h-full flex items-center px-3 cursor-pointer ',
 								type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'
 							)}
 						>
 							<SearchSvg white={type === 'service'} />
-						</div>
+						</div> */}
+
 						{/*<div*/}
 						{/*	className={clsx(*/}
 						{/*		'h-full flex items-center px-3 cursor-pointer ',*/}
@@ -220,14 +224,15 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						{/*>*/}
 						{/*	<DocumentSvg white={type === 'service'} />*/}
 						{/*</div>*/}
-						<div
+
+						{/* <div
 							className={clsx(
 								'h-full flex items-center px-3 cursor-pointer ',
 								type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'
 							)}
 						>
 							<EyeSvg white={type === 'service'} />
-						</div>
+						</div> */}
 					</div>
 					<Select
 						defaultValue={i18n.language}
@@ -275,7 +280,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 												: user?.middlename.charAt(0) + '.'
 										}`}
 									</div>
-									<div className="text-sm">{getRole(user?.roles[0].type)}</div>
+									<div className="text-sm">{user?.roles && user?.roles?.length > 1 ? ((user?.roles?.map((item)=>getRole(item.type))))?.join(', ') : String((user?.roles?.map((item)=>getRole(item.type))))}</div>
 								</div>
 							</Space>
 						</Dropdown>

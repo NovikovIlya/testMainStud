@@ -544,6 +544,17 @@ export const ViewPractical = () => {
 		}
 	}, [isSuccessNameSpecialty, form, pickSpeciality])
 
+	// если выбираем курс "Все" то семестр тоже "Все"
+	useEffect(()=>{
+		if(pickCourse === 'Все'){
+		
+			setFilter({
+				...filter,
+				semester: 'Все'
+			})
+		}
+	},[pickCourse])
+
 	function filterDataFull() {
 		function filterPracticeType(elem: TablePractical) {
 			if (filter.practiceType === 'Все') {
@@ -655,39 +666,54 @@ export const ViewPractical = () => {
 
 	const handleCourse = (value:any)=>{
 		setPickCourse(value)
+		
 		form.setFieldValue('semester', '')
+		if(form.getFieldValue('courseNumber') === 'Все'){
+			setFilter({
+				...filter,
+				semester: 'Все'
+			})
+		}
+		
 	}
+
+	
 
 	const optionsCourseValid = (() => {
 		switch (pickCourse) {
 			case '1':
 				return [
+					{ value: 'Все', label: 'Все' },
 					{ value: '1', label: '1' },
 					{ value: '2', label: '2' }
 				];
 			case '2':
 				return [
-
+					{ value: 'Все', label: 'Все' },
 					{ value: '3', label: '3' },
 					{ value: '4', label: '4' }
 				];
 			case '3':
 				return [
+					{ value: 'Все', label: 'Все' },
 					{ value: '5', label: '5' },
 					{ value: '6', label: '6' }
 				];
 			case '4':
 				return [
+					{ value: 'Все', label: 'Все' },
 					{ value: '7', label: '7' },
 					{ value: '8', label: '8' }
 				];
 			case '5':
 				return [
+					{ value: 'Все', label: 'Все' },
 					{ value: '9', label: '9' },
 					{ value: '10', label: '10' }
 				];
 			case '6':
 				return [
+					{ value: 'Все', label: 'Все' },
 					{ value: '11', label: '11' },
 					{ value: '12', label: '12' }
 				];
@@ -877,7 +903,7 @@ export const ViewPractical = () => {
 										semester: value
 									})
 								}}
-							    disabled={!pickCourse}
+							    disabled={!pickCourse || pickCourse==='Все'} 
 								size='middle'
 								popupMatchSelectWidth={false}
 								className="w-full"

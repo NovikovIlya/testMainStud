@@ -353,8 +353,12 @@ export const CreatePractical = () => {
 			nav('/services/practices/practical')
 		})
 		.catch((error)=>{
-			if (error.status === 400) {
+			console.log(error)
+			if (error.status === 409) {
 				dispatch(showNotification({ message: 'Такая практика уже создана', type: 'error' }));
+			}
+			if (error.status === 400) {
+				dispatch(showNotification({ message: 'Текст в консоли', type: 'error' }));
 			}
 		})
 	}

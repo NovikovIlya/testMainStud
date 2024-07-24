@@ -351,7 +351,7 @@ export const EditContract = () => {
                             <DatePicker
                                 format={'DD.MM.YYYY'}
                                 placeholder={''}
-                                className="w-full mt-[22px]"
+                                className="w-full"
                                 size={'large'}
                             />
                         </Form.Item>
@@ -373,8 +373,7 @@ export const EditContract = () => {
                                         value:item.value,
                                         label:item.label
                                     }
-                                })}
-                                
+                                })} 
                             />
                         </Form.Item>
 
@@ -445,7 +444,6 @@ export const EditContract = () => {
                                 onRemove={file => {
                                     setPdfContract(undefined)
                                 }}
-
                             >
                                 <Button
                                     className="w-full"
@@ -457,7 +455,6 @@ export const EditContract = () => {
                                 </Button>
                             </Upload>
                         </Form.Item>
-
                     </Col>
                 </Row>
                 <Row gutter={[16, 16]}>

@@ -21,8 +21,6 @@ import {useNavigate} from "react-router-dom";
 import {useGetSpecialtyNamesQuery} from "../../../../store/api/practiceApi/roster";
 
 
-
-
 export const CreateContracts = () => {
     const [form] = Form.useForm()
     const [inn, setInn] = useState<string | number | null>(0)
@@ -53,11 +51,7 @@ export const CreateContracts = () => {
     const [newContract] = useCreateContractMutation()
     const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery(null)
     const [optionsNameSpec, setOptionsNameSpec] = useState<NameSpecialty[]>([])
-    //const [selected, setSelected] = useState<number>()
 
-    // useEffect(() => {
-    //     form.setFieldValue('specialtyNameId', selected)
-    // }, [selected]);
 
     useEffect(() => {
         if (isSuccessNameSpecialty) {
@@ -65,38 +59,6 @@ export const CreateContracts = () => {
         }
     }, [dataNameSpecialty]);
 
-
-    function onFinish(values: ICreateContract) {
-        const newForm = new FormData()
-        values.contractNumber = values.contractNumber
-        values.contractFacility = values.contractFacility
-        values.specialtyNameIds = dataNameSpecialty?.filter(item => values.specialtyNameIds.includes(item.value)).map(item => item.id)
-        values.prolongation = values.prolongation
-        values.contractType = values.contractType
-        values.pdfContract = files.pdfContract!
-        values.pdfAgreement = files.pdfAgreement!
-        values.placesAmount = String(values.placesAmount)
-        values.legalFacility = values.legalFacility
-        values.actualFacility = values.actualFacility
-        values.itn = String(values.ITN)
-        values.conclusionDate = dayjs(values.conclusionDate).format('DD.MM.YYYY')
-        // @ts-ignore
-        values.endDate = hideSrok ? null : dayjs(values.endDate).format('DD.MM.YYYY')
-        const jsonData = JSON.stringify(values)
-        const blob = new Blob([jsonData], { type: 'application/json' })
-        newForm.append('contract', blob)
-        if (files.pdfContract) newForm.append('pdfContract', files.pdfContract)
-        if (files.pdfAgreement) newForm.append('pdfAgreement', files.pdfAgreement)
-
-        newContract(newForm)
-            .then(res => console.log(res))
-            .catch(e => console.log(e))
-
-        nav('/services/practices/registerContracts')
-    }
-
-
-    
     useEffect(() => {
         let url = "https://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/party";
         let query = "1655018018";
@@ -131,6 +93,35 @@ export const CreateContracts = () => {
         }
     }, [inn]);
 
+
+    function onFinish(values: ICreateContract) {
+        const newForm = new FormData()
+        values.contractNumber = values.contractNumber
+        values.contractFacility = values.contractFacility
+        values.specialtyNameIds = dataNameSpecialty?.filter(item => values.specialtyNameIds.includes(item.value)).map(item => item.id)
+        values.prolongation = values.prolongation
+        values.contractType = values.contractType
+        values.pdfContract = files.pdfContract!
+        values.pdfAgreement = files.pdfAgreement!
+        values.placesAmount = String(values.placesAmount)
+        values.legalFacility = values.legalFacility
+        values.actualFacility = values.actualFacility
+        values.itn = String(values.ITN)
+        values.conclusionDate = dayjs(values.conclusionDate).format('DD.MM.YYYY')
+        // @ts-ignore
+        values.endDate = hideSrok ? null : dayjs(values.endDate).format('DD.MM.YYYY')
+        const jsonData = JSON.stringify(values)
+        const blob = new Blob([jsonData], { type: 'application/json' })
+        newForm.append('contract', blob)
+        if (files.pdfContract) newForm.append('pdfContract', files.pdfContract)
+        if (files.pdfAgreement) newForm.append('pdfAgreement', files.pdfAgreement)
+
+        newContract(newForm)
+            .then(res => console.log(res))
+            .catch(e => console.log(e))
+
+        nav('/services/practices/registerContracts')
+    }
 
 
     return (
@@ -264,21 +255,17 @@ export const CreateContracts = () => {
                         </Col>
                     </Row>
                 }
-
                 <Row gutter={[16, 16]}>
                 {hideSrok ? '' :
                     <Col xs={24} sm={24} md={18} lg={8} xl={6}>
-                   
                         <Form.Item 
-                                
                                    label={'Срок действия  договора'}
                                    name={'endDate'}
                                    rules={[{required: true}]}>
                             <DatePicker
-                         
                                 format={'DD.MM.YYYY'}
                                 placeholder={''}
-                                className="w-full mt-[22px]"
+                                className="w-full "
                                 size={'large'}
                             />
                         </Form.Item>

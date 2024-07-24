@@ -92,6 +92,7 @@ export const EditPractical = () => {
     const path = useLocation()
     const id = path.pathname.split('/').at(-1)!
     const nav = useNavigate()
+    const [pickCourse, setPickCourse] = useState<any>(null)
     const [pickSpeciality, setPickSpeciality] = useState<any>(null)
     const [form] = Form.useForm<any>()
     const [pickKund,setPickKind] = useState(null)
@@ -415,7 +416,51 @@ export const EditPractical = () => {
     const onChangePickerPeriodPractise = (value:any)=>{
         console.log(value)
    }
+
+   const handleCourse = (value:any)=>{
+    setPickCourse(value)
+    form.setFieldValue('semester', '')
+    }
+
     const dataTaskValid = dataTask?.tasks.map((item:any)=>item.taskDescription)
+
+    const optionsCourseValid = (() => {
+		switch (pickCourse) {
+			case '1':
+				return [
+					{ value: '1', label: '1' },
+					{ value: '2', label: '2' }
+				];
+			case '2':
+				return [
+
+					{ value: '3', label: '3' },
+					{ value: '4', label: '4' }
+				];
+			case '3':
+				return [
+					{ value: '5', label: '5' },
+					{ value: '6', label: '6' }
+				];
+			case '4':
+				return [
+					{ value: '7', label: '7' },
+					{ value: '8', label: '8' }
+				];
+			case '5':
+				return [
+					{ value: '9', label: '9' },
+					{ value: '10', label: '10' }
+				];
+			case '6':
+				return [
+					{ value: '11', label: '11' },
+					{ value: '12', label: '12' }
+				];
+			default:
+				return [];
+		}
+	})()
 
     if(isFetchingDataOnePractise) return <SkeletonPage/>
 
@@ -565,7 +610,7 @@ export const EditPractical = () => {
                                     size="large"
                                     popupMatchSelectWidth={false}
                                     className="w-full"
-                                    options={optionsSemester}
+                                    options={optionsCourseValid}
                                 />
                             </Form.Item>
                         </Col>
@@ -598,6 +643,7 @@ export const EditPractical = () => {
                                     popupMatchSelectWidth={false}
                                     className="w-full"
                                     options={optionsCourse}
+                                    onChange={handleCourse}
                                 />
                             </Form.Item>
                         </Col>

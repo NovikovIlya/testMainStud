@@ -128,6 +128,7 @@ export const ViewPractical = () => {
 	const [fullTable,setFullTable] = useState(false)
 	const [form] = Form.useForm()
 	const navigate = useNavigate()
+	const [pickCourse, setPickCourse] = useState<any>(null)
 	const [pickSpeciality,setPickSpeciality] = useState(null)
 	const [subDevisionId, setSubDevisionId] = useState(null)
 	const [objType, setObjType] = useState<any>({subdivisionId: null,specialtyNameId: null})
@@ -652,6 +653,48 @@ export const ViewPractical = () => {
         setFullTable(true)
     }
 
+	const handleCourse = (value:any)=>{
+		setPickCourse(value)
+		form.setFieldValue('semester', '')
+	}
+
+	const optionsCourseValid = (() => {
+		switch (pickCourse) {
+			case '1':
+				return [
+					{ value: '1', label: '1' },
+					{ value: '2', label: '2' }
+				];
+			case '2':
+				return [
+
+					{ value: '3', label: '3' },
+					{ value: '4', label: '4' }
+				];
+			case '3':
+				return [
+					{ value: '5', label: '5' },
+					{ value: '6', label: '6' }
+				];
+			case '4':
+				return [
+					{ value: '7', label: '7' },
+					{ value: '8', label: '8' }
+				];
+			case '5':
+				return [
+					{ value: '9', label: '9' },
+					{ value: '10', label: '10' }
+				];
+			case '6':
+				return [
+					{ value: '11', label: '11' },
+					{ value: '12', label: '12' }
+				];
+			default:
+				return [];
+		}
+	})()
 
 
 	return (
@@ -810,6 +853,7 @@ export const ViewPractical = () => {
 							className="w-full"
 							options={filterCourse}
 							onChange={value => {
+								handleCourse(value)
 								setFilter({
 									...filter,
 									course: value
@@ -819,18 +863,28 @@ export const ViewPractical = () => {
 					</Col>
 					<Col span={3} className={'flex items-center gap-4'}>
 						<span>Семестр</span>
-						<Select
-							popupMatchSelectWidth={false}
-							defaultValue="Все"
-							className="w-full"
-							options={filterSemester}
-							onChange={value => {
-								setFilter({
-									...filter,
-									semester: value
-								})
-							}}
-						/>
+						<Form form={form}>
+						<Form.Item
+							style={{marginBottom:'0'}}
+							//rules={[{required: true}]}
+							name={'semester'}	
+						>
+							<Select
+								onChange={value => {
+								
+									setFilter({
+										...filter,
+										semester: value
+									})
+								}}
+							    disabled={!pickCourse}
+								size='middle'
+								popupMatchSelectWidth={false}
+								className="w-full"
+								options={optionsCourseValid}
+							/>
+						</Form.Item>
+						</Form>
 					</Col>
 					<Col span={7} className={'flex items-center gap-2'}>
 						<span className="whitespace-nowrap">Тип практики</span>

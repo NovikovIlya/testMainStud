@@ -10,6 +10,7 @@ import printJS from "print-js";
 import {PrintSvg} from "../../../../../assets/svg/PrintSvg";
 import {ColorBg, WrapperButton} from "../WrapperButton";
 import {useDeleteContractMutation} from "../../../../../store/api/practiceApi/contracts";
+import { Popconfirm } from 'antd';
 
 
 interface Props {
@@ -148,10 +149,18 @@ export const RegisterPopoverContent = ({
                 <span>Печать</span>
             </WrapperButton>
 
-            <WrapperButton color={ColorBg.REDE5} onClick={deleteData}>
-                <DeleteRedSvg/>
-                <span className={'text-[#E04545]'}>Удалить</span>
-            </WrapperButton>
+        	<Popconfirm
+				title="Удаление"
+				description="Вы уверены, что хотите удалить?"
+				onConfirm={deleteData}
+				okText="Да"
+				cancelText="Нет"
+			>
+                <WrapperButton color={ColorBg.REDE5} >
+                    <DeleteRedSvg/>
+                    <span className={'text-[#E04545]'}>Удалить</span>
+                </WrapperButton>
+            </Popconfirm>
         </div>
     );
 };

@@ -164,8 +164,9 @@ const plainOptions = data.map(item => item.key)
 
 export const PracticeSchedule = () => {
     const navigate = useNavigate()
+    const [year,setYear] = useState('2023/2024')
     const {data:dataCreate} = useCreateDocumentQuery('2023/2024')
-    const {data:dataBlob,isLoading:isLoadingBlob} = useGetDocQuery('2023/2024')
+    const {data:dataBlob,isLoading:isLoadingBlob} = useGetDocQuery(year,{skip:!year})
     const [stateSchedule, setStateSchedule] = useState({
         compressed: true,
         table: false,

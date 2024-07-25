@@ -63,11 +63,11 @@ export const NavMyResponds = () => {
 					{handleList}
 				</ul>
 			</div>
-			<div className="bg-[#F5F8FB] flex w-full">
+			<WrapperForServices>
 				{pathname === navList[0].id && <MyResponds />}
 				{pathname.includes(navList[1].id) && <Chat />}
 				{pathname === navList[2].id && <Employment />}
-			</div>
+			</WrapperForServices>
 		</>
 	)
 }

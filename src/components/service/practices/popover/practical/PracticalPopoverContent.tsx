@@ -24,21 +24,24 @@ export const PracticalPopoverContent = ({
 }: Props) => {
 	const [deletePractise] = useDeletePractiseMutation()
 	function translateColumnsIntoRussia({ isPrint }: { isPrint: boolean }) {
+		console.log('recordFull,recordFull',recordFull)
 		if (recordFull) {
 			const stringIndTask = isPrint
-				? recordFull.individualTasks
-						.map((elem, index) => `${index + 1}.${elem} `)
+			// @ts-ignore
+				? recordFull?.tasks
+						.map((elem:any, index:number) => `${index + 1}.${elem.taskDescription} `)
 						.join('</br>')
-				: recordFull.individualTasks
-						.map((elem, index) => `${index + 1}.${elem} `)
+							// @ts-ignore
+				: recordFull?.tasks
+						.map((elem:any, index:number) => `${index + 1}.${elem.taskDescription} `)
 						.join('\n')
 
 			const stringCompetencies = isPrint
-				? recordFull.competencies
-						.map((elem, index) => `${index + 1}.${elem} `)
+				? recordFull.competence
+						.map((elem:any, index:number) => `${index + 1}.${elem} `)
 						.join('</br>')
-				: recordFull.competencies
-						.map((elem, index) => `${index + 1}.${elem} `)
+				: recordFull.competence
+						.map((elem:any, index:number) => `${index + 1}.${elem} `)
 						.join('\n')
 
 			const startPractice = `${dayjs(recordFull.practicePeriod[0]).format(

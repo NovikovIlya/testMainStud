@@ -46,7 +46,6 @@
 		"xlsx": "^0.18.5",
 		"yup": "^1.4.0"
 	},
-
 	"devDependencies": {
 		"@babel/plugin-proposal-private-property-in-object": "^7.21.11",
 		"@eslint/compat": "^1.1.0",
@@ -80,7 +79,7 @@
 			"react-app/jest"
 		],
 		"rules": {
-			"no-console":"warn"
+			"no-console": "warn"
 		}
 	},
 	"browserslist": {

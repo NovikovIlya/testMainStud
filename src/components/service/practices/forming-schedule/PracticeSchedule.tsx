@@ -14,6 +14,9 @@ import {useEffect, useState} from 'react'
 import {CompressedView} from "./CompressedView";
 import {TableView} from "./TableView";
 import {useNavigate} from "react-router-dom";
+import { useCreateDocumentQuery, useGetDocQuery } from '../../../../store/api/practiceApi/formingSchedule';
+
+import i18next from 'i18next'
 
 type CheckboxValueType = GetProp<typeof Checkbox.Group, 'value'>[number]
 
@@ -161,6 +164,8 @@ const plainOptions = data.map(item => item.key)
 
 export const PracticeSchedule = () => {
     const navigate = useNavigate()
+    const {data:dataCreate} = useCreateDocumentQuery('2023/2024')
+    const {data:dataBlob,isLoading:isLoadingBlob} = useGetDocQuery('2023/2024')
     const [stateSchedule, setStateSchedule] = useState({
         compressed: true,
         table: false,
@@ -198,7 +203,7 @@ export const PracticeSchedule = () => {
             table: false
         })
     }
-
+    console.log('blobblob',dataBlob)
     function isTableView() {
         setStateSchedule({
             ...stateSchedule,
@@ -206,7 +211,22 @@ export const PracticeSchedule = () => {
             table: true,
         })
     }
+    const downloadFile = () => {
+        if(dataBlob){
+        const link = document.createElement('a');
+        link.href = dataBlob;
+        link.setAttribute('download', 'downloaded-file.docx');
+        document.body.appendChild(link);
+        link.click();
 
+        window.URL.revokeObjectURL(dataBlob); 
+        }
+      }
+
+      
+    
+
+    console.log('dataCreate',dataCreate)
 
     return (
         <section className="container">
@@ -215,6 +235,9 @@ export const PracticeSchedule = () => {
                     <Typography.Text className=" text-[28px] mb-14">
                         График практик
                     </Typography.Text>
+                    <button disabled={isLoadingBlob} onClick={downloadFile}>
+                         Скачать XML
+                    </button>
                 </Col>
             </Row>
             <Row gutter={[8, 16]} className="mt-12 w-full flex items-center">

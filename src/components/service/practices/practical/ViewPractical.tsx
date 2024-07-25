@@ -122,12 +122,17 @@ export interface TablePractical {
 	individualTasks: string[]
 	competencies: string[]
 	departmentDirector: string
+	competence:any,
 }
 
 export const ViewPractical = () => {
 	const [fullTable,setFullTable] = useState(false)
 	const [form] = Form.useForm()
 	const navigate = useNavigate()
+	const initialFormValues = {
+		podrazdelenie: 'Все',
+		semester: '',
+	};
 	const [pickCourse, setPickCourse] = useState<any>(null)
 	const [pickSpeciality,setPickSpeciality] = useState(null)
 	const [subDevisionId, setSubDevisionId] = useState(null)
@@ -211,15 +216,8 @@ export const ViewPractical = () => {
 		{
 			key: 'practiceType',
 			dataIndex: 'practiceType',
-
 			title: 'Тип практики',
 			className: 'text-xs !p-2'
-			// filters:[{
-			// 	text: 'практика по получению первичных',
-			// 	value: 'практика по получению',
-			//   },],
-			//   // @ts-ignore
-			//   onFilter: (value, record) => record?.practiceType?.indexOf(value as string) === 0,
 		},
 		{
 			key: 'department',
@@ -389,19 +387,6 @@ export const ViewPractical = () => {
 			//   // @ts-ignore
 			//   onFilter: (value, record) => record?.practiceType?.indexOf(value as string) === 0,
 		},
-		// {
-		// 	key: 'department',
-		// 	dataIndex: 'department',
-		// 	title: 'Кафедра',
-		// 	className: 'text-xs !p-2'
-		// },
-		// {
-		// 	key: 'groupNumber',
-		// 	dataIndex: 'groupNumber',
-		// 	title: 'Номер группы',
-		// 	align: 'center',
-		// 	className: 'text-xs !p-2'
-		// },
 		{
 			key: 'semester',
 			dataIndex: 'semester',
@@ -409,13 +394,6 @@ export const ViewPractical = () => {
 			align: 'center',
 			className: 'text-xs !p-2'
 		},
-		// {
-		// 	key: 'academicYear',
-		// 	dataIndex: 'academicYear',
-		// 	title: 'Учебный год',
-		// 	align: 'center',
-		// 	className: 'text-xs !p-2'
-		// },
 		{
 			key: 'courseNumber',
 			dataIndex: 'courseNumber',
@@ -423,52 +401,6 @@ export const ViewPractical = () => {
 			align: 'center',
 			className: 'text-xs !p-2'
 		},
-		// {
-		// 	key: 'practicePeriod',
-		// 	dataIndex: 'practicePeriod',
-		// 	title: 'Период практики',
-		// 	align: 'center',
-		// 	className: 'text-xs !p-2',
-		// 	render: (_: any, record: any) => {
-		// 		return (
-		// 			<div className={'flex flex-col'}>
-		// 				<span>{dayjs(record.practicePeriod[0]).format('DD.MM.YYYY')}</span>-
-		// 				<span>{dayjs(record.practicePeriod[1]).format('DD.MM.YYYY')}</span>
-		// 			</div>
-		// 		)
-		// 	}
-		// },
-		// {
-		// 	key: 'totalHours',
-		// 	dataIndex: 'totalHours',
-		// 	title: 'Кол-во часов по практике',
-		// 	align: 'center',
-		// 	className: 'text-xs !p-2'
-		// },
-		// {
-		// 	key: 'individualTasks',
-		// 	dataIndex: 'individualTasks',
-		// 	title: 'Индивидуальные задания',
-		// 	className: 'text-xs !p-2',
-		// 	render: (_: any, record: any) => {
-		// 		return (
-		// 			<div className={'flex flex-col gap-1'}>
-		// 				{record.tasks?.map((elem: any, index: any) => (
-		// 					<span key={index}>
-		// 						{index + 1}. {elem.taskDescription}
-		// 					</span>
-		// 				))}
-		// 			</div>
-		// 		)
-		// 	}
-		// },
-
-		// {
-		// 	key: 'departmentDirector',
-		// 	dataIndex: 'departmentDirector',
-		// 	title: 'Заведующий опорной кафедрой',
-		// 	className: 'text-xs !p-2'
-		// },
 		{
 			title: (
 				<Popover
@@ -532,7 +464,6 @@ export const ViewPractical = () => {
 		if (isSuccessNameSpecialty && subDevisionId && isSuccessNameSpecialty) {
 			const pickSpecialityId = dataNameSpecialty?.find((elem: any) => {
 				if (elem.value === pickSpeciality) {
-					console.log('pickSpeciality',pickSpeciality)
 					return elem
 				}
 			})
@@ -574,7 +505,11 @@ export const ViewPractical = () => {
 		function filterSubdivision(elem: TablePractical) {
 			if (filter.subdivision === 'Все') {
 				return elem
-			} else {
+			} else if(!filter.subdivision.includes('-')){
+				// @ts-ignore
+				return elem.subdivision === filter.subdivision
+			}
+			else {
 				// @ts-ignore
 				return elem.subdivision === filter.subdivision.split(' - ')[1]
 			}
@@ -666,15 +601,7 @@ export const ViewPractical = () => {
 
 	const handleCourse = (value:any)=>{
 		setPickCourse(value)
-		
 		form.setFieldValue('semester', '')
-		if(form.getFieldValue('courseNumber') === 'Все'){
-			setFilter({
-				...filter,
-				semester: 'Все'
-			})
-		}
-		
 	}
 
 	
@@ -725,7 +652,8 @@ export const ViewPractical = () => {
 
 	return (
 		<>
-			<section className="container ">
+			<section className="container">
+			<Form form={form} initialValues={initialFormValues}>
 				<Row>
 					<Col flex={'auto'}>
 						<span className="mb-14 text-[28px]">Практики</span>
@@ -772,6 +700,7 @@ export const ViewPractical = () => {
 						<span>Подразделение</span>
 					</Col>
 					<Col span={8}>
+					
 					<Form.Item
 						name={'podrazdelenie'}
 						className='mb-[-4px]'
@@ -790,7 +719,7 @@ export const ViewPractical = () => {
 									: [])
 							]}
 							onChange={handleChange}
-							defaultValue="Все"
+							// defaultValue="Все"
 						/>
 						</Form.Item>
 					</Col>
@@ -889,7 +818,7 @@ export const ViewPractical = () => {
 					</Col>
 					<Col span={3} className={'flex items-center gap-4'}>
 						<span>Семестр</span>
-						<Form form={form}>
+					
 						<Form.Item
 							style={{marginBottom:'0'}}
 							//rules={[{required: true}]}
@@ -910,7 +839,7 @@ export const ViewPractical = () => {
 								options={optionsCourseValid}
 							/>
 						</Form.Item>
-						</Form>
+						
 					</Col>
 					<Col span={7} className={'flex items-center gap-2'}>
 						<span className="whitespace-nowrap">Тип практики</span>
@@ -975,6 +904,7 @@ export const ViewPractical = () => {
 
                 </Col>
             </Row>
+			</Form>
 
 			</section>
 			{isFetchingPractiseAll ? (

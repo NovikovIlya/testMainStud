@@ -140,8 +140,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const changeLanguage = (language: string) => {
 		i18n.changeLanguage(language)
 	}
-	console.log('user,',user)
-	console.log('1',((user?.roles?.map((item)=>getRole(item.type)))))
+
 	return (
 		<header
 			className={clsx(

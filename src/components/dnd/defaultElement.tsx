@@ -237,6 +237,7 @@ export const jsxElements = [
 				info="PracticesInfo"
 				title="Practices"
 				buttonText="Study"
+				img="/Group499.png"
 			/>
 		),
 		place: {

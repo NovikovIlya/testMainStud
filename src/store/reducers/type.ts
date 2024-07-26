@@ -1,7 +1,6 @@
 import { IGender } from '../../api/types'
 import { performanceItem } from '../../api/types'
 
-
 export interface InitialState {
 	accessToken: string | null
 	refreshToken: string | null
@@ -163,8 +162,10 @@ export enum respondStatus {
 	'IN_SUPERVISOR_REVIEW',
 	'IN_PERSONNEL_DEPT_REVIEW',
 	'INVITATION',
-	'REJECTED',
-	'ARCHIVE'
+	'IN_RESERVE',
+	'ARCHIVE',
+	'EMPLOYMENT_REQUEST',
+	'EMPLOYMENT'
 }
 
 export type RespondItemType = {

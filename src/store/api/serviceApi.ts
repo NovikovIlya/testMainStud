@@ -261,9 +261,9 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
-		getReservedResponces: builder.query<VacancyRespondItemType[], void>({
-			query: () => ({
-				url: `http://localhost:8082/employment-api/v1/reserve`,
+		getReservedResponces: builder.query<VacancyRespondItemType[], string>({
+			query: type => ({
+				url: `http://localhost:8082/employment-api/v1/reserve?type=${type}`,
 				headers: {
 					Authorization: `Bearer ${personnelDeparmentToken}`
 				}

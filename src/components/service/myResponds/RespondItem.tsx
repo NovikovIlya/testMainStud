@@ -68,12 +68,12 @@ export const RespondItem = (props: RespondItemType & { refetch: Function }) => {
 				<p className="ml-[5%] w-[25%]">
 					{props.status ===
 					respondStatus[respondStatus.IN_PERSONNEL_DEPT_REVIEW]
-						? 'на рассмотрении у отдела кадров'
+						? 'на рассмотрении у управления кадрами'
 						: props.status === respondStatus[respondStatus.IN_SUPERVISOR_REVIEW]
 						? 'на рассмотрении у руководителя'
 						: props.status === respondStatus[respondStatus.INVITATION]
 						? 'приглашение'
-						: props.status === respondStatus[respondStatus.REJECTED]
+						: props.status === respondStatus[respondStatus.IN_RESERVE]
 						? 'отказано'
 						: 'отказано'}
 				</p>

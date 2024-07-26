@@ -1,4 +1,4 @@
-import { ConfigProvider, Radio } from 'antd'
+import { Radio } from 'antd'
 import { useState } from 'react'
 
 import { useGetVacancyRequestsQuery } from '../../../store/api/serviceApi'
@@ -19,42 +19,54 @@ export const VacancyRequestsPage = () => {
 				<h1 className="font-content-font font-normal text-[28px]/[28px] text-black">
 					Заявки от руководилей
 				</h1>
-				<ConfigProvider
-					theme={{ components: { Radio: { dotSize: 0, radioSize: 0 } } }}
+				<Radio.Group
+					className="mt-[80px] flex gap-[12px]"
+					value={action}
+					onChange={e => {
+						setAction(e.target.value)
+					}}
 				>
-					<Radio.Group
-						className="mt-[80px]"
-						value={action}
-						onChange={e => {
-							setAction(e.target.value)
-						}}
+					<label
+						className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
+							action === 'все'
+								? 'text-white bg-dasha-blue'
+								: 'text-black border-solid border-black border-[1px]'
+						} font-normal text-[16px]/[16px]`}
 					>
-						<Radio
-							value={'все'}
-							className="rounded-[54.5px] py-[8px] px-[16px] border-solid border-black border-[1px] border-opacity-20 font-content-font text-black font-normal text-[16px]/[16px] checked:border-blue-500"
-						>
-							все
-						</Radio>
-						<Radio
-							value={'UPDATE'}
-							className="rounded-[54.5px] py-[8px] px-[16px] border-solid border-black border-[1px] border-opacity-20 font-content-font text-black font-normal text-[16px]/[16px] checked:border-blue-500"
-						>
-							редактирование
-						</Radio>
-						<Radio
-							value={'CREATE'}
-							className="rounded-[54.5px] py-[8px] px-[16px] border-solid border-black border-[1px] border-opacity-20 font-content-font text-black font-normal text-[16px]/[16px] checked:border-blue-500"
-						>
-							создание
-						</Radio>
-						<Radio
-							value={'DELETE'}
-							className="rounded-[54.5px] py-[8px] px-[16px] border-solid border-black border-[1px] border-opacity-20 font-content-font text-black font-normal text-[16px]/[16px] checked:border-blue-500"
-						>
-							удаление
-						</Radio>
-					</Radio.Group>
-				</ConfigProvider>
+						<Radio value={'все'} className="hidden"></Radio>
+						все
+					</label>
+					<label
+						className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
+							action === 'UPDATE'
+								? 'text-white bg-dasha-blue'
+								: 'text-black border-solid border-black border-[1px]'
+						} font-normal text-[16px]/[16px]`}
+					>
+						<Radio value={'UPDATE'} className="hidden"></Radio>
+						редактирование
+					</label>
+					<label
+						className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
+							action === 'CREATE'
+								? 'text-white bg-dasha-blue'
+								: 'text-black border-solid border-black border-[1px]'
+						} font-normal text-[16px]/[16px]`}
+					>
+						<Radio value={'CREATE'} className="hidden"></Radio>
+						создание
+					</label>
+					<label
+						className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
+							action === 'DELETE'
+								? 'text-white bg-dasha-blue'
+								: 'text-black border-solid border-black border-[1px]'
+						} font-normal text-[16px]/[16px]`}
+					>
+						<Radio value={'DELETE'} className="hidden"></Radio>
+						удаление
+					</label>
+				</Radio.Group>
 				<div className="flex ml-[20px] mt-[60px] mb-[16px]">
 					<h3 className="w-[388px] shrink-0 font-content-font font-normal text-[14px]/[14px] text-text-gray">
 						Должность

@@ -1,4 +1,4 @@
-import { Select } from 'antd'
+import { Radio, Select } from 'antd'
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
@@ -18,7 +18,7 @@ export const VacancyResponces = () => {
 
 	const vacancyId = parseInt(pathVacancyId)
 
-	const [status, setStatus] = useState('')
+	const [status, setStatus] = useState('все')
 	const { data: responds = [] } = useGetResponcesByVacancyQuery({
 		id: vacancyId,
 		status: status,
@@ -42,28 +42,77 @@ export const VacancyResponces = () => {
 					</p>
 				</div>
 				<div className="mt-[52px] mb-[60px] flex items-center gap-[16px]">
-					<p className="font-content-font font-normal text-black text-[16px]/[16px]">
-						Статус
-					</p>
-					<Select
-						className="w-[301px]"
-						options={[
-							{ value: 'all', label: 'все' },
-							{
-								value: respondStatus.IN_PERSONNEL_DEPT_REVIEW,
-								label: 'на рассмотрении у отдела кадров'
-							},
-							{
-								value: respondStatus.IN_SUPERVISOR_REVIEW,
-								label: 'на рассмотрении у руководителя'
-							},
-							{ value: respondStatus.INVITATION, label: 'приглашение' },
-							{ value: respondStatus.REJECTED, label: 'отклонено' }
-						]}
-						onChange={(value: respondStatus) => {
-							setStatus(respondStatus[value])
+					<Radio.Group
+						className="flex flex-wrap gap-[12px]"
+						value={status}
+						onChange={e => {
+							setStatus(e.target.value)
+							console.log(status)
 						}}
-					/>
+					>
+						<label
+							className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
+								status === 'все'
+									? 'text-white bg-dasha-blue'
+									: 'text-black border-solid border-black border-[1px]'
+							} font-normal text-[16px]/[16px]`}
+						>
+							<Radio value={'все'} className="hidden"></Radio>
+							все
+						</label>
+						<label
+							className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
+								status === respondStatus[respondStatus.IN_REVIEW]
+									? 'text-white bg-dasha-blue'
+									: 'text-black border-solid border-black border-[1px]'
+							} font-normal text-[16px]/[16px]`}
+						>
+							<Radio
+								value={respondStatus[respondStatus.IN_REVIEW]}
+								className="hidden"
+							></Radio>
+							на рассмотрении
+						</label>
+						<label
+							className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
+								status === respondStatus[respondStatus.EMPLOYMENT_REQUEST]
+									? 'text-white bg-dasha-blue'
+									: 'text-black border-solid border-black border-[1px]'
+							} font-normal text-[16px]/[16px]`}
+						>
+							<Radio
+								value={respondStatus[respondStatus.EMPLOYMENT_REQUEST]}
+								className="hidden"
+							></Radio>
+							этап трудоустройства
+						</label>
+						<label
+							className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
+								status === respondStatus[respondStatus.IN_SUPERVISOR_REVIEW]
+									? 'text-white bg-dasha-blue'
+									: 'text-black border-solid border-black border-[1px]'
+							} font-normal text-[16px]/[16px]`}
+						>
+							<Radio
+								value={respondStatus[respondStatus.IN_SUPERVISOR_REVIEW]}
+								className="hidden"
+							></Radio>
+							на рассмотрении у руководителя
+						</label>
+						<label
+							className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
+								status === respondStatus[respondStatus.INVITATION]
+									? 'text-white bg-dasha-blue'
+									: 'text-black border-solid border-black border-[1px]'
+							} font-normal text-[16px]/[16px]`}
+						>
+							<Radio
+								value={respondStatus[respondStatus.INVITATION]}
+								className="hidden"
+							></Radio>
+							приглашение на собеседование
+						</label>
+					</Radio.Group>
 				</div>
 				<div className="flex mb-[16px] pl-[20px] pr-[55px]">
 					<h3 className="w-[25%] font-content-font text-black font-normal text-[14px]/[14px] opacity-[60%]">

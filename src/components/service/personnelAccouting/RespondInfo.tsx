@@ -18,7 +18,7 @@ import ArrowIcon from '../jobSeeker/ArrowIcon'
 import { InviteSeekerForm } from './supervisor/InviteSeekerForm'
 
 export const RespondInfo = (props: {
-	type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
+	type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR' | 'SEEKER'
 }) => {
 	const respondId = useAppSelector(state => state.currentResponce)
 
@@ -67,9 +67,11 @@ export const RespondInfo = (props: {
 							onClick={() => {
 								props.type === 'PERSONNEL_DEPARTMENT'
 									? navigate('/services/personnelaccounting/responds')
-									: navigate(
+									: props.type === 'SUPERVISOR'
+									? navigate(
 											'/services/personnelaccounting/supervisor/responds'
 									  )
+									: navigate('/services/myresponds/responds')
 							}}
 							className="bg-inherit h-[38px] w-[99px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer font-normal text-black text-[16px]/[16px] flex gap-[8px]"
 						>

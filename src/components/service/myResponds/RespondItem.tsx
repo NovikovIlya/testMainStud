@@ -1,13 +1,16 @@
 import { Button, ConfigProvider, Modal } from 'antd'
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import { DeleteSvg } from '../../../assets/svg/DeleteSvg'
 import { useDeleteVacancyRespondMutation } from '../../../store/api/serviceApi'
+import { setCurrentResponce } from '../../../store/reducers/CurrentResponceSlice'
 import { RespondItemType, respondStatus } from '../../../store/reducers/type'
 
 export const RespondItem = (props: RespondItemType & { refetch: Function }) => {
 	const navigate = useNavigate()
+	const dispatch = useDispatch()
 	const [isModalOpen, setModalOpen] = useState(false)
 	const [deleteVacancy, deleteResult] = useDeleteVacancyRespondMutation()
 
@@ -78,15 +81,25 @@ export const RespondItem = (props: RespondItemType & { refetch: Function }) => {
 						: 'отказано'}
 				</p>
 				<Button
+					className="ml-[5%] rounded-[54px] font-content-font font-normal text-[16px]/[16px]"
+					type="primary"
+					onClick={() => {
+						dispatch(setCurrentResponce(props.id))
+						navigate('/services/myresponds/responds/fullinfo')
+					}}
+				>
+					Посмотреть
+				</Button>
+				<Button
 					onClick={() => {
 						navigate('/services/myresponds/chat')
 					}}
-					className="ml-[15%] font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black"
+					className="ml-[1%] font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black"
 				>
 					Перейти в чат
 				</Button>
 				<Button
-					className="ml-[5%]"
+					className="ml-[1%]"
 					onClick={() => {
 						setModalOpen(true)
 					}}

@@ -7,6 +7,7 @@ import { MyDocsSvg } from '../../../assets/svg/MyDocsSvg'
 import { Header } from '../../layout/Header'
 import { WrapperForServices } from '../../wrapperForServices/WrapperForServices'
 import { Chat } from '../Chat/Chat'
+import { RespondInfo } from '../personnelAccouting/RespondInfo'
 
 import { Employment } from './Employment'
 import { MyResponds } from './MyResponds'
@@ -65,6 +66,9 @@ export const NavMyResponds = () => {
 			</div>
 			<WrapperForServices>
 				{pathname === navList[0].id && <MyResponds />}
+				{pathname === navList[0].id + '/fullinfo' && (
+					<RespondInfo type="SEEKER" />
+				)}
 				{pathname.includes(navList[1].id) && <Chat />}
 				{pathname === navList[2].id && <Employment />}
 			</WrapperForServices>

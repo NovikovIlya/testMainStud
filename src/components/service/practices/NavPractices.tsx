@@ -37,11 +37,11 @@ const items: MenuItem[] = [
 		getItem('Индивидуальные задания', 'individualTasks'),
 		getItem('Практики', 'practical.ts')
 	]),
-	// getItem('Формирование документов', 'sub2', <PracticesSvg />, [
-	// 	getItem('График практик', 'formingSchedule'),
-	// 	getItem('Представление в приказ', '6'),
-	// 	getItem('Приказ по практике', '7')
-	// ]),
+	getItem('Формирование документов', 'sub2', <PracticesSvg />, [
+		getItem('График практик', 'formingSchedule'),
+		getItem('Представление в приказ', '6'),
+		getItem('Приказ по практике', '7')
+	]),
 	// getItem('Cогласование документов', 'sub4', <PracticesSvg />, [
 	// 	getItem('График практик', '9'),
 	// 	getItem('Представление в приказ', '10'),

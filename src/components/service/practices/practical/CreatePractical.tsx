@@ -37,7 +37,7 @@ import { validateMessages } from '../../../../utils/validateMessage'
 import { OptionsNameSpecialty } from '../roster/registerContracts/RegisterContracts'
 import { showNotification } from '../../../../store/reducers/notificationSlice'
 import { useAppDispatch } from '../../../../store'
-import { LoadingOutlined } from '@ant-design/icons'
+import { DeleteRedSvg } from '../../../../assets/svg/DeleteRedSvg'
 
 interface FilterType {
 	value: string | number
@@ -122,6 +122,7 @@ export const CreatePractical = () => {
 	const [departments, setDepartments] = useState<Department[]>()
 	const [objType, setObjType] = useState<any>({subdivisionId: null,specialtyNameId: null})
 	const [practiceKindForSelect, setPracticeKindForSelect] = useState<any>(null)
+
 	const { data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty } = useGetSpecialtyNamesForPractiseQuery(subDivisionId, {skip: subDivisionId === null})
 	const { data: dataPraciseKind, isSuccess: isSuccesPractiseKind } = useGetPracticeKindQuery(subDivisionId, { skip: subDivisionId === null })
 	const { data: dataGroupNumbers, isSuccess: isSuccessGroupNumbers } = useGetGroupNumbersQuery(subDivisionId, { skip: subDivisionId === null })
@@ -145,9 +146,15 @@ export const CreatePractical = () => {
 		subDivisionId,
 		{ skip: subDivisionId === null }
 	)
+	const [copyDataCompetences, setCopyDataCompetences] = useState<any>(dataCompetences)
 	const [sendForm, { data,isLoading:isLoadingSendForm }] = usePostPracticesMutation()
 	const { t } = useTranslation()
 	const dispatch = useAppDispatch()
+
+	useEffect(()=>{
+		if(isSuccessCompetences)
+		setCopyDataCompetences(dataCompetences)
+	},[isSuccessCompetences])
 
 	// объект для типа практик
 	useEffect(() => {
@@ -337,7 +344,7 @@ export const CreatePractical = () => {
 			).padStart(2, '0')}.${String(form?.getFieldValue('period')[1].$y)}`,
 			// individualTaskId: dataTask?.id || null,
 			competenceIds:
-				dataCompetences && dataCompetences?.length > 0 ? dataCompetences.map((item)=>String(item.id)) : [],
+				copyDataCompetences && copyDataCompetences?.length > 0 ? copyDataCompetences.map((item:any)=>String(item.id)) : [],
 			departmentDirectorId: directorId?.id,
 			subdivisionId: subDivisionId,
 			specialtyNameId: pickSpecialityId?.id,
@@ -436,6 +443,13 @@ export const CreatePractical = () => {
 		}
 	})()
 	console.log('v', form?.getFieldValue('semester'))
+
+	const deleteCompetence = (item: any) => {
+		console.log('item',item)
+		const newCompetences = copyDataCompetences.filter((elem:any) => elem.id!== item.id)
+		console.log('newCompetences',newCompetences)
+		setCopyDataCompetences(newCompetences)
+	}
 
 	return (
 		<Spin spinning={isLoadingSendForm}>
@@ -887,19 +901,24 @@ export const CreatePractical = () => {
 
 				<Row gutter={[16, 16]} className={'mt-4'}>
 					<Col xs={24} sm={24} md={18} lg={16} xl={12}>
-					
 						<List
 							style={{
 								overflow: 'auto',
 								maxHeight: 300,	
+								
 							}}
 							header={<div>Код и наименование компетенции:</div>}
 							bordered
 							// @ts-ignore
-							dataSource={isSuccessCompetences ? dataCompetences : ''}
+							dataSource={isSuccessCompetences ? copyDataCompetences : ''}
 							renderItem={(item: any, index: number) => (
-								<List.Item>
-									{index + 1}. {item.value}
+								<List.Item
+								style={{
+									display: 'flex',
+								}}
+								actions={[<div onClick={() => deleteCompetence(item)} className='cursor-pointer' ><DeleteRedSvg  /></div>]}
+								>
+									<div className=' p-3'>{index + 1}</div> <div className='ml-2'>{item.value}</div>
 								</List.Item>
 							)}
 						/>

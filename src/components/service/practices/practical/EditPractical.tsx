@@ -24,6 +24,8 @@ import { useAppDispatch } from '../../../../store';
 import './EditPractical.module.scss';
 import { showNotification } from '../../../../store/reducers/notificationSlice';
 import { SkeletonPage } from './Skeleton';
+import { DeleteOutlined } from '@ant-design/icons';
+import { DeleteRedSvg } from '../../../../assets/svg/DeleteRedSvg';
 
 
 
@@ -115,7 +117,7 @@ export const EditPractical = () => {
     })
     const {data:dataOnePractise,isSuccess:isSuccesOnePractise,isFetching:isFetchingDataOnePractise} = useGetPracticeOneQuery(id,{refetchOnMountOrArgChange: true  })
     const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesForPractiseQuery(subDivisionId, {skip: !subDivisionId})
-    const {data:dataCompetences, isSuccess: isSuccessCompetences} = useGetCompentencesQuery(objectForCompetences,{skip: objectForCompetences.specialityId === null || objectForCompetences.practiceKindId === null || objectForCompetences.startYear === null})
+    const {data:dataCompetences, isSuccess: isSuccessCompetences} = useGetCompentencesQuery(objectForCompetences,{skip: true === null || objectForCompetences.practiceKindId === null || objectForCompetences.startYear === null})
     const {data: dataDepartments, isSuccess: isSuccessDepartments} = useGetSubdivisionForPracticeQuery()
     const {data: dataPracticeType, isSuccess: isSuccessPracticeType} = useGetPracticeTypeForPracticeQuery(objType, {skip: objType.subdivisionId === null || objType.specialtyNameId === null})
     const {data: dataDepartmentDirector} = useGetDepartmentDirectorsQuery(subDivisionId, {skip: !subDivisionId})
@@ -125,10 +127,34 @@ export const EditPractical = () => {
     const{data:dataSubdivisonForPractise} = useGetSubdivisionForPracticeQuery()
     const {data:dataTask, isSuccess:isSuccessTask} = useGetTasksForPracticeQuery(arqTask,{skip:!arqTask})
     const [updateForm,{isLoading:isLoadingSendForm}] = useUpdatePracticeOneMutation()
+    const [copyDataCompetences, setCopyDataCompetences] = useState<any>([])
+    const [flagCompetence,setFlagCompentence] = useState(false)
     const [flag,setFlag] = useState(false)
     const dispatch = useAppDispatch()
 
+    
+	useEffect(()=>{
+		if(!flagCompetence){
+            setCopyDataCompetences( dataOnePractise?.competence)
+            console.log('zet')
+        }
+        if(flagCompetence){
+            setCopyDataCompetences(dataCompetences)
+            console.log('vv2')
+        }
+ 
+		
+	},[dataCompetences, dataOnePractise?.competence, flagCompetence])
+    console.log('dataCompetences',dataCompetences)
+    // useEffect(()=>{
+    //     if(isSuccesOnePractise){
+    //         setCopyDataCompetences(dataOnePractise?.competence ? dataOnePractise.competence : [])
+           
+    //     }
 
+	// },[dataOnePractise?.competences,isSuccesOnePractise])
+
+    console.log('copyDataCompetences',copyDataCompetences)
     useEffect(()=>{
         setSubDevisionId(dataOnePractise?.subdivisionId)
     },[isSuccesOnePractise])
@@ -236,8 +262,9 @@ export const EditPractical = () => {
                 startYear:form.getFieldValue('academicYear')[0].$y
 
             })
+          
         }   
-    },[dataNameSpecialty, isSuccesOnePractise,dataPraciseKind,form,pickKund,dataPraciseKind])
+    },[dataNameSpecialty, isSuccesOnePractise,dataPraciseKind,form,pickKund,dataPraciseKind,fullDate])
 
     // вставка 
     useEffect(()=>{
@@ -257,14 +284,14 @@ export const EditPractical = () => {
             dataDepartments?.forEach((item:any)=>{
                 if(item.value===dataOnePractise?.subdivision) {
                     form.setFieldValue('subDivision', `${dataOnePractise.subdivision}`)
-                    console.log('item.value',item.value)
+                   
                    
                 }
                 if('responses' in item){
                      item.responses?.find((elem:any)=> {
                         if(dataOnePractise?.subdivision.toLowerCase()===elem.value.toLowerCase()){
                             form.setFieldValue('subDivision', `${item.value + ' - ' + elem.value}`)
-                            console.log('item.value2',item.value)
+                        
                         }      
                     })
                 }
@@ -305,7 +332,7 @@ export const EditPractical = () => {
                 return elem
             }
         })
-        console.log('directorId',directorId)
+      
         const groupNumberId = dataGroupNumbers?.find((elem:any) => {
             if (elem.value === values.groupNumber) {
                 return elem
@@ -373,11 +400,11 @@ export const EditPractical = () => {
                 }
             }
         })
-        console.log('mother',mother)
+    
         const child = (form.getFieldValue('subDivision').includes('-')) ? 
             mother?.responses?.find((item:any)=>item.value === form.getFieldValue('subDivision').split(" - ")[1]).id
             : mother?.id
-        console.log('child',child)
+   
         const sendData: any = {
             id: dataOnePractise?.id,
             practiceType: values.practiceType,
@@ -392,7 +419,7 @@ export const EditPractical = () => {
             startDate: `${String(form?.getFieldValue('period')[0].$D)}.${String(form?.getFieldValue('period')[0].$M+1).padStart(2, '0')}.${String(form?.getFieldValue('period')[0].$y)}`,
             endDate: `${String(form?.getFieldValue('period')[1].$D)}.${String(form?.getFieldValue('period')[1].$M+1).padStart(2, '0')}.${String(form?.getFieldValue('period')[1].$y)}`,
             totalHours: String(values.amountHours),
-            competenceIds: dataCompetences?.map((item)=>String(item.id)),
+            competenceIds: copyDataCompetences?.map((item:any)=>String(item.id)),
             departmentDirectorId: directorId?.id, 
             subdivisionId: child,
             specialtyNameId:pickSpecialityId?.id,
@@ -405,7 +432,7 @@ export const EditPractical = () => {
             // @ts-ignore
             departmentId : departmenIdZ?.id,   
         }
-        console.log('sendData',sendData)
+        console.log('sendDatasendDatasendDatasendData',sendData)
         updateForm(sendData)
         .unwrap()
         .then(()=>{
@@ -418,26 +445,38 @@ export const EditPractical = () => {
 		})
     }
 
+
     const onChangePicker = (value:any)=>{
         setPickDate([value[0].$y,value[1].$y])
         setFullDate(value)
+        setFlagCompentence(true)
+     
     }
+
     const onChangeTypePick = (value:any)=>{
         setPickType(value)
+        setFlagCompentence(true)
+
     }
+
     const handleChange = (value: string) => {
         departments?.find(elem => {
             if (elem.label === value) {
                 setSubDevisionId(elem.id)
             }
         })  
+        setFlagCompentence(true)
     };
+
     const handleKind = (value:any)=>{
         setPickKind(value)
+        setFlagCompentence(true)
     }
+
     const handleSpeciality = (value:any)=>{
         setPickSpeciality(value)
         form.setFieldValue('practiceType','')
+        setFlagCompentence(true)
     }
 
     const onChangePickerPeriodPractise = (value:any)=>{
@@ -448,9 +487,11 @@ export const EditPractical = () => {
     setPickCourse(value)
     form.setFieldValue('semester', '')
     }
-    console.log('1',form?.getFieldValue('course'))
+
+
     const dataTaskValid = dataTask?.tasks.map((item:any)=>item.taskDescription)
-    console.log('pickCourse',pickCourse)
+
+
     const optionsCourseValid = (() => {
         const validPickCourse = pickCourse === undefined ? dataOnePractise?.courseNumber : pickCourse
 		switch (validPickCourse) {
@@ -489,6 +530,13 @@ export const EditPractical = () => {
 				return [];
 		}
 	})()
+
+    const deleteCompetence = (item: any) => {
+	
+		const newCompetences = copyDataCompetences.filter((elem:any) => elem.id!== item.id)
+
+		setCopyDataCompetences(newCompetences)
+	}
 
     if(isFetchingDataOnePractise) return <SkeletonPage/>
 
@@ -746,10 +794,15 @@ export const EditPractical = () => {
                                 }}
                                 bordered
                                 // @ts-ignore
-                                dataSource={isSuccessCompetences ? dataCompetences : ''}
+                                dataSource={isSuccesOnePractise ? copyDataCompetences : ''}
                                 renderItem={(item: any, index: number) => (
-                                    <List.Item>
-                                        {index + 1}. {item.value}
+                                    <List.Item
+                                    style={{
+                                        display: 'flex',
+                                    }}
+                                    actions={[<div  onClick={() => deleteCompetence(item)} className='cursor-pointer'><DeleteRedSvg /></div>]}
+                                    >
+                                        <div className=' p-3'>{index + 1}</div> <div className='ml-2'>{item.value}</div>
                                     </List.Item>
                                 )}
                             />

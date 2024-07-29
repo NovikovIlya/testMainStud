@@ -130,7 +130,8 @@ export const individualTasks = apiSlice.injectEndpoints({
             query: ({specialityId,practiceKindId,startYear}) => ({
                 url: `services/api-practices/kpfu/competences?specialityId=${specialityId}&practiceKindId=${practiceKindId}&startYear=${startYear}`,
                 method: 'GET',
-            })
+            }),
+            keepUnusedDataFor:1,
         }),
         getTasksForPractice: builder.query<any, any>({
             query: ({specialtyNameId,practiceTypeId}) => ({

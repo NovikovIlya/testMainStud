@@ -38,10 +38,10 @@ export const PracticalPopoverContent = ({
 
 			const stringCompetencies = isPrint
 				? recordFull.competence
-						.map((elem:any, index:number) => `${index + 1}.${elem} `)
+						.map((elem:any, index:number) => `${index + 1}.${elem.value} `)
 						.join('</br>')
 				: recordFull.competence
-						.map((elem:any, index:number) => `${index + 1}.${elem} `)
+						.map((elem:any, index:number) => `${index + 1}.${elem.value} `)
 						.join('\n')
 
 			const startPractice = `${dayjs(recordFull.practicePeriod[0]).format(

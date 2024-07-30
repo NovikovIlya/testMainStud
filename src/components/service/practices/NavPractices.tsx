@@ -12,6 +12,8 @@ import { Roster } from './roster/Roster'
 import { Schedule } from './forming-schedule/Schedule'
 import {Header} from "../../layout/Header";
 import {useTranslation} from "react-i18next";
+import { Representation } from './Representation/Representation'
+import { PracticeOrder } from './practice-order/PracticeOrder'
 
 type MenuItem = Required<MenuProps>['items'][number]
 
@@ -39,8 +41,8 @@ const items: MenuItem[] = [
 	]),
 	getItem('Формирование документов', 'sub2', <PracticesSvg />, [
 		getItem('График практик', 'formingSchedule'),
-		getItem('Представление в приказ', '6'),
-		getItem('Приказ по практике', '7')
+		getItem('Представление в приказ', 'representation'),
+		getItem('Приказ по практике', 'practiceOrder')
 	]),
 	// getItem('Cогласование документов', 'sub4', <PracticesSvg />, [
 	// 	getItem('График практик', '9'),
@@ -87,6 +89,8 @@ export const NavPractices = () => {
 				{current === 'individualTasks' && <Tasks />}
 				{current === 'practical.ts' && <Practical />}
 				{current === 'formingSchedule' && <Schedule/>}
+				{current === 'representation' && <Representation/>}
+				{current === 'practiceOrder' && <PracticeOrder/>}
 			</div>
 		</>
 	)

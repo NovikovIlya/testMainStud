@@ -1,3 +1,4 @@
+import EditSchedule from './EditSchedule';
 import { FormingSchedule } from './FormingSchedule'
 import MainSchedule from './MainSchedule';
 import PracticeSchedule from './PracticeSchedule'
@@ -8,7 +9,9 @@ export const Schedule = () => {
 	const { pathname } = useLocation()
 	if (pathname.includes('createSchedule')) {
 		return <PracticeSchedule />
-	} else {
+	}  else if (pathname.includes('edit')){
+		return <EditSchedule/>
+	}else {
 		return <MainSchedule/>
 	}
 }

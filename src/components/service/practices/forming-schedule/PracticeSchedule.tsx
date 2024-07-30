@@ -1,31 +1,21 @@
 import {
-    Button,
-    Checkbox,
-    Col,
-    DatePicker,
-    Form,
-    List,
-    Popconfirm,
-    Radio,
-    Row,
+    Button, Col, Form, Popconfirm, Row,
     Select,
-    Space, Table, Tabs,
-    Typography
-} from 'antd'
-import type {CheckboxProps, GetProp, TableProps} from 'antd'
-import {useEffect, useState} from 'react'
-import {CompressedView} from "./CompressedView";
-import {TableView} from "./TableView";
-import {useNavigate} from "react-router-dom";
+    Space, Table, Typography
+} from 'antd';
+import type { TableProps } from 'antd';
+import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import { useCreateDocumentQuery, useGetDocQuery } from '../../../../store/api/practiceApi/formingSchedule';
-import dayjs from 'dayjs'
+import dayjs from 'dayjs';
 
-import i18next from 'i18next'
 import { ArrowLeftSvg } from '../../../../assets/svg';
 import printJS from 'print-js';
 import { EditableCell, Item } from './EditableCell';
+import { DeleteRedSvg } from '../../../../assets/svg/DeleteRedSvg';
+import { EditSvg } from '../../../../assets/svg/EditSvg';
+import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 
-type CheckboxValueType = GetProp<typeof Checkbox.Group, 'value'>[number]
 
 interface FilterType {
     value: string
@@ -48,7 +38,7 @@ const filterSpecialization: FilterType[] = [
 ]
 const filterCourse: FilterType[] = [
     {
-        value: '',
+        value: 'Все',
         label: 'Все'
     },
     {
@@ -78,7 +68,7 @@ const filterCourse: FilterType[] = [
 ]
 const filterType: FilterType[] = [
     {
-        value: '',
+        value: 'Все',
         label: 'Все'
     },
     {
@@ -123,95 +113,137 @@ const filterEducationForm: FilterType[] = [
     }
 ]
 
-interface DataType {
-    key: string
-    specialization: string
-    fillingDate: string
-    type: string
-    course: string
-    academicYear: string
-    group: string
-    educationLevel: string
-    educationForm: string
-    sybtypePractice: string
-    periodPractice: string
-}
+const optionsSortDate: any = [
+    {value: 'По дате (сначала новые)', label: 'По дате (сначала новые)'},
+    {value: 'По дате (сначала старые)', label: 'По дате (сначала старые)'},
+]
 
-// const data: DataType[] = [
-//     {
-//         key: '1',
-//         specialization: 'Лечебно-профилактическое учреждение по договору',
-//         fillingDate: '00.00.00, 00:00',
-//         type: 'Бессрочный',
-//         course: '1',
-//         academicYear: '2',
-//         group: '09-033',
-//         educationLevel: 'Ординатура',
-//         educationForm: 'Очная',
-//         sybtypePractice: 'Акушерство',
-//         periodPractice: '2020-2021'
-//     },
-//     {
-//         key: '2',
-//         specialization: 'Лечебно-профилактическое учреждение по договору',
-//         fillingDate: '00.00.00, 00:00',
-//         type: 'С пролонгацией',
-//         course: '2',
-//         academicYear: '2',
-//         group: '09-033',
-//         educationLevel: 'Ординатура',
-//         educationForm: 'Заочная',
-//         sybtypePractice: 'Акушерство',
-//         periodPractice: '2020-2021'
-//     }
-// ]
-
-// const plainOptions = data.map(item => item.key)
-
+const optionMock = [
+    { value: '1', label: 'Курс 1' },
+    { value: '2', label: 'Курс 2' },
+    { value: '3', label: 'Курс 3' },
+]
+const optionMockType = [
+    { value: '1', label: 'Кур 4' },
+    { value: '2', label: 'Курс 5' },
+    { value: '3', label: 'Курс 6' },
+]
+const optionMockKind = [
+    { value: '1', label: 'Курс 7' },
+    { value: '2', label: 'Курс 8' },
+    { value: '3', label: 'Курс 9' },
+]
 
 export const PracticeSchedule = () => {
+    const tableRef = useRef(null);
+    const originData: any = [
+        {id:'czxczxc',key:'czxczxc',Name:'1',academicYear:'2024',address:'Kazan',period:null,selectCourse:'1',type:null,dateFilling:'2024-07-30',selectKind:'Производственная'},
+        {id:'bbq',key:'bbq',Name:'2',academicYear:'2030',address:'Moscw',period:null,selectCourse:'1',type:null,dateFilling:'2024-07-29',selectKind:'Производственная'},
+        {id:'ccx',key:'ccx',Name:'3',academicYear:'2030',address:'Moscw',period:null,selectCourse:'1',type:null,dateFilling:'2024-07-28',selectKind:'Производственная'}
+    ];
     const nav = useNavigate()
     const [year,setYear] = useState('2023/2024')
     const {data:dataCreate} = useCreateDocumentQuery('2023/2024')
     const {data:dataBlob,isLoading:isLoadingBlob} = useGetDocQuery(year,{skip:!year})
-    // const [stateSchedule, setStateSchedule] = useState({
-    //     compressed: true,
-    //     table: false,
-    // })
-    // const [dataTable, setDataTable] = useState<any>(data)
-    const [filters, setFilters] = useState<{
-        type: string
-        spec: string
-        course: string
-        level: string
-        form: string
-    }>({type: '', spec: '', course: '', level: '', form: ''})
-    const originData: any = [
-        {key:1,name:'1',age:'20',address:'Kazan',period:null,course:null,type:null},
-        {key:2,name:'2',age:'30',address:'Moscw',period:null,course:null,type:null}
-      ];
-      const [form] = Form.useForm();
-      const [data, setData] = useState(originData);
-      const [editingKey, setEditingKey] = useState('');
-      const isEditing = (record: Item) => record.key === editingKey
-      const [currentRowValues, setCurrentRowValues] = useState({});
-    // useEffect(() => {
-    //     setDataTable(
-    //         data.filter(
-    //             x =>
-    //                 x.type.includes(filters.type) &&
-    //                 x.specialization.includes(filters.spec) &&
-    //                 x.course.includes(filters.course) &&
-    //                 x.educationLevel.includes(filters.level) &&
-    //                 x.educationForm.includes(filters.form)
-    //         )
-    //     )
-    // }, [filters])
+    const [tableData, setTableData] = useState<any>(originData)
+    const [filter, setFilter] = useState<any>({type: '', spec: '', course: 'Все', level: '', form: '',dateFilling: 'По дате (сначала новые)',selectKind:'Все'})
 
-    const filter = (value: string, index: string) => {
-        setFilters(prev => ({...prev, [index]: value}))
-    }
+    const [form] = Form.useForm();
+    // const [data, setData] = useState(originData);
+    const [editingKey, setEditingKey] = useState('');
+    const isEditing = (record: Item) => record.key === editingKey
+    const [currentRowValues, setCurrentRowValues] = useState({});
 
+    useEffect(() => {
+		// if (isSuccessPractiseAll) {
+			setTableData(filterDataFull())
+            console.log('update')
+            // @ts-ignore
+           
+		// }
+	}, [filter])
+    
+    function filterDataFull() {
+
+
+		// function filterDepartment(elem: any) {
+		// 	if (filter.department === 'Все') {
+		// 		return elem
+		// 	} else {
+		// 		return elem.department === filter.department
+		// 	}
+		// }
+		// function filterSubdivision(elem: any) {
+		// 	if (filter.subdivision === 'Все') {
+		// 		return elem
+		// 	} else if(!filter.subdivision.includes('-')){
+		// 		// @ts-ignore
+		// 		return elem.subdivision === filter.subdivision
+		// 	}
+		// 	else {
+		// 		// @ts-ignore
+		// 		return elem.subdivision === filter.subdivision.split(' - ')[1]
+		// 	}
+		// }
+
+		function filterCourse(elem: any) {
+			if (filter.course === 'Все') {
+				return elem
+			} else {
+                console.log('elem',elem)
+				// @ts-ignore
+				return elem.selectCourse === filter.course
+			}
+		}
+        function filterKind(elem: any) {
+			if (filter.selectKind === 'Все') {
+				return elem
+			} else {
+                console.log('elem',elem)
+				// @ts-ignore
+				return elem.selectKind === filter.selectKind
+			}
+		}
+
+		// function filterSemester(elem: any) {
+		// 	if (filter.semester === 'Все') {
+		// 		return elem
+		// 	} else {
+		// 		return elem.semester === filter.semester
+		// 	}
+		// }
+
+		// function filterNameSpecialty(elem: any) {
+		// 	if (filter.nameSpecialty === 'Все') {
+		// 		return elem
+		// 	} else {
+		// 		return elem.specialtyName === filter.nameSpecialty
+		// 	}
+		// }
+
+		function sortDateFilling(a:any, b:any) {
+            if (filter.dateFilling === 'По дате (сначала новые)') {
+                return +new Date(b.dateFilling) - +new Date(a.dateFilling)
+            }
+            if (filter.dateFilling === 'По дате (сначала старые)') {
+                return +new Date(a.dateFilling) - +new Date(b.dateFilling)
+            }
+            return 0
+        }
+       
+		return originData
+			? originData
+
+					// .filter((elem: any) => filterDepartment(elem))
+					.filter((elem: any) => filterCourse(elem))
+                    .filter((elem: any) => filterKind(elem))
+					// .filter((elem: any) => filterSemester(elem))
+					// .filter((elem: any) => filterNameSpecialty(elem))
+					// .filter((elem :any) => filterSubdivision(elem))
+					.sort((a:any, b:any) => sortDateFilling(a, b))
+			: []
+	}
+    console.log('tableData',tableData)
     // function isCompressedView() {
     //     setStateSchedule({
     //         ...stateSchedule,
@@ -237,7 +269,7 @@ export const PracticeSchedule = () => {
 
         window.URL.revokeObjectURL(dataBlob); 
         }
-      }
+    }
 
     function translateColumnsIntoRussia({isPrint}: { isPrint?: boolean }) {
         const newData: any = []
@@ -258,6 +290,7 @@ export const PracticeSchedule = () => {
 
         return newData
     }
+
     const print = ()=>{
         function properties() {
 				return [
@@ -274,7 +307,7 @@ export const PracticeSchedule = () => {
             style: 'body {font-size: 10px}'
         })
     }
-    console.log('data',data)
+
     const edit = (record: Partial<Item> & { key: React.Key }) => {
         form.setFieldsValue({ name: '', age: '', address: '', ...record });
         setEditingKey(record.key);
@@ -284,11 +317,11 @@ export const PracticeSchedule = () => {
     const cancel = () => {
         setEditingKey('');
     };
-    // const handleInputChange = (e) => {
-    //     const { name, value } = e.target;
-    //     setCurrentRowValues({ ...currentRowValues, [name]: value });
-    // };
-    console.log('currentRowValues',currentRowValues)
+
+    const deleteRow = ()=>{
+
+    }
+
     const save = async (key: React.Key) => {
         try {
           const row = (await form.validateFields()) as Item;
@@ -312,8 +345,7 @@ export const PracticeSchedule = () => {
           console.log('Validate Failed:', errInfo);
         }
     };
-    console.log('editingKey',editingKey)
-    console.log('ss',data[Number(editingKey) - 1])
+   
     const columns = [
 		{
 			key: 'Name',
@@ -321,22 +353,20 @@ export const PracticeSchedule = () => {
 			title: 'Шифр и иаименование документа',
 			name: 'Шифр и иаименование документа',
 			className: 'text-xs !p-2',
-           
-			
 		},
         {
 			key: 'academicYear',
 			dataIndex: 'academicYear',
 			title: 'Учебный год',
 			className: 'text-xs !p-2',
-         
 		},
         {
 			key: 'course',
-			dataIndex: 'course',
+			dataIndex: 'selectCourse',
 			title: 'Курс',
 			className: 'text-xs !p-2',
             editable: true,
+           
 		},
         {
 			key: 'groupNumbers',
@@ -347,7 +377,7 @@ export const PracticeSchedule = () => {
         {
 			key: 'level',
 			dataIndex: 'level',
-			title: 'Уровень орбазования',
+			title: 'Уровень образования',
 			className: 'text-xs !p-2'
 		},
         {
@@ -358,22 +388,24 @@ export const PracticeSchedule = () => {
 		},
         {
 			key: 'kind',
-			dataIndex: 'kind',
+			dataIndex: 'selectKind',
 			title: 'Вид практики',
 			className: 'text-xs !p-2',
             editable: true,
 		},
         {
 			key: 'type',
-			dataIndex: 'type',
+			dataIndex: 'selectType',
 			title: 'Тип практики',
 			className: 'text-xs !p-2',
             editable: true,
 		},
 		{
+            key: 'id',
             title: 'Дата заполнения',
             dataIndex: 'dateFilling',
             width: '20%',
+            sorter: (a, b) => +new Date(b.dateFilling) - +new Date(a.dateFilling),
             // @ts-ignore
             render: (text:any) => dayjs(text).format('DD.MM.YYYY')
         },
@@ -384,7 +416,7 @@ export const PracticeSchedule = () => {
 			title: 'Период практики',
 			className: 'text-xs !p-2',
             editable: true,
-            render: (text, record) => {
+            render: (text:any, record:any) => {
                 const editable = isEditing(record);
                 console.log('text', text);
                 return (
@@ -392,23 +424,28 @@ export const PracticeSchedule = () => {
                 );
             },},
         {
-            title: 'operation',
+            title: '',
             dataIndex: 'operation',
             render: (_: any, record: Item) => {
               const editable = isEditing(record);
               return editable ? (
-                <span>
+                <div className='flex justify-around items-center w-[60px]'>
                   <Typography.Link onClick={() => save(record.key)} style={{ marginRight: 8 }}>
-                    Save
+                    <CheckOutlined style={{color:'#75a4d3'}}/>
                   </Typography.Link>
-                  <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
-                    <a>Cancel</a>
+                  <Popconfirm title="Вы действительно хотите отменить действие?" onConfirm={cancel}>
+                     <CloseOutlined style={{color:'#75a4d3'}}/>
                   </Popconfirm>
-                </span>
+                </div>
               ) : (
+                <div className='flex justify-around items-center  w-[60px]'>
                 <Typography.Link disabled={editingKey !== ''} onClick={() => edit(record)}>
-                  Edit
+                  <EditSvg/>
                 </Typography.Link>
+                <Popconfirm title="Вы действительно хотите удалить?" onConfirm={deleteRow}>
+                    <a><DeleteRedSvg/></a>
+                </Popconfirm>
+                </div>
               );
             },
           },
@@ -424,16 +461,22 @@ export const PracticeSchedule = () => {
           ...col,
           onCell: (record: Item) => ({
             record,
-            inputType:col.dataIndex === 'period' ? 'date' :
+            inputType:  col.dataIndex === 'selectCourse' ? 'select' :
+            col.dataIndex === 'selectType' ? 'select' :
+            col.dataIndex === 'selectKind' ? 'select' :
+            col.dataIndex === 'period' ? 'date' :
              col.dataIndex === 'course' ? 'number' : 'text',
             dataIndex: col.dataIndex,
             title: col.title,
             editing: isEditing(record),
+            options: col.dataIndex === 'selectCourse' ? optionMock 
+            : col.dataIndex === 'selectType' ? optionMockType 
+            : col.dataIndex === 'selectKind' ? optionMockKind : undefined,
           }),
         };
-      });
+    });
 
-    console.log('dataCreate',dataCreate)
+   
 
     return (
         <section className="container">
@@ -476,10 +519,16 @@ export const PracticeSchedule = () => {
                 <Col span={2}>
                     <Select
                         popupMatchSelectWidth={false}
-                        defaultValue=""
+                        defaultValue="Все"
                         className="w-full"
                         options={filterCourse}
-                        onChange={value => filter(value, 'course')}
+                        onChange={value => {
+                           
+                            setFilter({
+                                ...filter,
+                                course: value
+                            })
+                        }}
                     />
                 </Col>
                 <Col span={2}>
@@ -488,10 +537,16 @@ export const PracticeSchedule = () => {
                 <Col span={7}>
                     <Select
                         popupMatchSelectWidth={false}
-                        defaultValue=""
+                        defaultValue="Все"
                         className="w-full"
                         options={filterType}
-                        onChange={value => filter(value, 'type')}
+                        onChange={value => {
+                            
+                            setFilter({
+                                ...filter,
+                                selectKind: value
+                            })
+                        }}
                     />
                 </Col>
             </Row>
@@ -532,12 +587,14 @@ export const PracticeSchedule = () => {
             <Row className="mt-4 flex items-center">
                 <Col span={12} flex="50%">
                     <div >
-                        <Button disabled={isLoadingBlob} onClick={downloadFile}>
-                            Скачать XML
-                        </Button>
-                        <Button disabled={isLoadingBlob} onClick={print}>
-                            Печать
-                        </Button>
+                        <Space>
+                            <Button disabled={isLoadingBlob} onClick={downloadFile}>
+                                Скачать 
+                            </Button>
+                            <Button disabled={isLoadingBlob} onClick={print}>
+                                Печать
+                            </Button>
+                        </Space>
                     </div>
                 </Col>
                 <Col span={8} offset={4}>
@@ -545,9 +602,17 @@ export const PracticeSchedule = () => {
                         <span className={'mr-2'}>Сортировка</span>
                         <Select
                             popupMatchSelectWidth={false}
-                            defaultValue="1"
+                            defaultValue="По дате (сначала новые)"
                             className="w-full"
-                            options={[{value: '1', label: 'Все'}]}/>
+                            options={optionsSortDate}
+                            onChange={value => {
+                                setFilter({
+                                    ...filter,
+                                    dateFilling: value
+                                })
+                            }}
+                            />
+                        
                     </div>
 
                 </Col>
@@ -559,18 +624,18 @@ export const PracticeSchedule = () => {
                     {stateSchedule.table && <TableView/>} */}
                      <Form form={form} component={false}>
                         <Table
+                            ref={tableRef}
                             components={{
                             body: {
                                 cell: EditableCell,
                             },
                             }}
                             bordered
-                            dataSource={data}
+                            dataSource={tableData ? tableData : []}
                             columns={mergedColumns}
                             rowClassName="editable-row"
-                            pagination={{
-                            onChange: cancel,
-                            }}
+                            pagination={false}
+                           	rowKey="id"
                         />
                         </Form>
                 </Col>

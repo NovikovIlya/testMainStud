@@ -1,4 +1,4 @@
-import { DatePicker, Form, Input, InputNumber } from "antd";
+import { DatePicker, Form, Input, InputNumber, Select } from "antd";
 
 export interface Item {
     key: string;
@@ -18,7 +18,8 @@ interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
 
 export const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({editing,dataIndex,title,inputType,record,index,children,...restProps}) => {
     
-    const inputNode = inputType === 'date' ? <DatePicker.RangePicker/> 
+    const inputNode =  inputType === 'select'? <Select options={restProps.options} />
+    : inputType === 'date' ? <DatePicker.RangePicker/> 
     : inputType === 'number' ? <InputNumber /> : <Input />;
   
     return (
@@ -30,7 +31,7 @@ export const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> 
             rules={[
               {
                 required: true,
-                message: `Please Input ${title}!`,
+                message: `Заполните "${title}"!`,
               },
             ]}
           >

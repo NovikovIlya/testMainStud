@@ -626,6 +626,7 @@ export const EditPractical = () => {
                     <Row gutter={[16, 16]}>
                         <Col xs={24} sm={24} md={18} lg={16} xl={12}>
                             <Form.Item
+                                rules={[{required: true}]}
                                 name={'practiceKind'}
                                 label={'Вид практики'}>
                                 <Select

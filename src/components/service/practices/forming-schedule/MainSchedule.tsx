@@ -16,8 +16,13 @@ import {CompressedView} from "./CompressedView";
 import {TableView} from "./TableView";
 import {useNavigate} from "react-router-dom";
 import { useCreateDocumentQuery, useGetDocQuery } from '../../../../store/api/practiceApi/formingSchedule';
+import dayjs from 'dayjs';
 
 import i18next from 'i18next'
+import {PopoverMain} from './PopoverMain';
+import { PointsSvg } from '../../../../assets/svg/PointsSvg';
+import {PopoverContent} from './PopoverContent';
+import { EditSvg } from '../../../../assets/svg/EditSvg';
 
 type CheckboxValueType = GetProp<typeof Checkbox.Group, 'value'>[number]
 
@@ -131,49 +136,44 @@ interface DataType {
     periodPractice: string
 }
 
-const data: DataType[] = [
+const data  = [
     {
         key: '1',
-        specialization: 'Лечебно-профилактическое учреждение по договору',
-        fillingDate: '00.00.00, 00:00',
+        name: 'График 2022',
+        dateFilling: '22.08.2021',
         type: 'Бессрочный',
         course: '1',
         academicYear: '2',
-        group: '09-033',
-        educationLevel: 'Ординатура',
-        educationForm: 'Очная',
-        sybtypePractice: 'Акушерство',
-        periodPractice: '2020-2021'
+        period: '2020-2021'
     },
-    {
-        key: '2',
-        specialization: 'Лечебно-профилактическое учреждение по договору',
-        fillingDate: '00.00.00, 00:00',
-        type: 'С пролонгацией',
-        course: '2',
-        academicYear: '2',
-        group: '09-033',
-        educationLevel: 'Ординатура',
-        educationForm: 'Заочная',
-        sybtypePractice: 'Акушерство',
-        periodPractice: '2020-2021'
-    }
+    
 ]
 
 const plainOptions = data.map(item => item.key)
 
+const optionsSortDate: any = [
+    {value: 'По дате (сначала новые)', label: 'По дате (сначала новые)'},
+    {value: 'По дате (сначала старые)', label: 'По дате (сначала старые)'},
+]
+
 
 export const PracticeSchedule = () => {
     const navigate = useNavigate()
+    const [filter, setFilter] = useState({
+		dateFilling: 'По дате (сначала новые)',
+	})
     const [tableData, setTableData] = useState([])
     const [year,setYear] = useState('2023/2024')
     const {data:dataCreate} = useCreateDocumentQuery('2023/2024')
     const {data:dataBlob,isLoading:isLoadingBlob} = useGetDocQuery(year,{skip:!year})
+    const [selectedFieldsFull, setSelectedFieldFull] = useState<any>(
+		[]
+	)
     const [stateSchedule, setStateSchedule] = useState({
         compressed: true,
         table: false,
     })
-    const [dataTable, setDataTable] = useState<DataType[]>(data)
+    const [dataTable, setDataTable] = useState<any>(data)
     const [filters, setFilters] = useState<{
         type: string
         spec: string
@@ -182,22 +182,42 @@ export const PracticeSchedule = () => {
         form: string
     }>({type: '', spec: '', course: '', level: '', form: ''})
 
-    useEffect(() => {
-        setDataTable(
-            data.filter(
-                x =>
-                    x.type.includes(filters.type) &&
-                    x.specialization.includes(filters.spec) &&
-                    x.course.includes(filters.course) &&
-                    x.educationLevel.includes(filters.level) &&
-                    x.educationForm.includes(filters.form)
-            )
-        )
-    }, [filters])
+    // useEffect(() => {
+    //     setDataTable(
+    //         data.filter(
+    //             x =>
+    //                 x.type.includes(filters.type) &&
+    //                 x.specialization.includes(filters.spec) &&
+    //                 x.course.includes(filters.course) &&
+    //                 x.educationLevel.includes(filters.level) &&
+    //                 x.educationForm.includes(filters.form)
+    //         )
+    //     )
+    // }, [filters])
 
-    const filter = (value: string, index: string) => {
-        setFilters(prev => ({...prev, [index]: value}))
-    }
+    // useEffect(() => {
+	// 	if (isSuccessPractiseAll) {
+	// 		setTableData(filterDataFull())
+	// 	}
+	// }, [filter, isSuccessPractiseAll])
+
+    function filterDataFull() {
+
+		function sortDateFilling(a:any, b:any) {
+            if (filter.dateFilling === 'По дате (сначала новые)') {
+                return +new Date(b.dateFilling) - +new Date(a.dateFilling)
+            }
+            if (filter.dateFilling === 'По дате (сначала старые)') {
+                return +new Date(a.dateFilling) - +new Date(b.dateFilling)
+            }
+            return 0
+        }
+
+		return []
+			? []
+					.sort((a:any, b:any) => sortDateFilling(a, b))
+			: []
+	}
 
     function isCompressedView() {
         setStateSchedule({
@@ -228,12 +248,26 @@ export const PracticeSchedule = () => {
 
       const columns = [
 		{
-			key: 'Name',
-			dataIndex: 'Name',
-			title: 'Наименование документа',
-			name: 'Наименование документа',
-			className: 'text-xs !p-2',
-			
+			key: 'name',
+			dataIndex: 'name',
+			title: 'Наименование графика',
+			name: 'Наименование графика',
+			className: 'text-xs !p-2 ',
+			// @ts-ignore
+			render: (text, record) => (
+				<div className={'flex items-center justify-between'}>
+					<span className={'underline flex font-bold'}>{text}</span>
+					<Button
+						type="text"
+						icon={<EditSvg />}
+						onClick={() => {
+							navigate(
+								`/services/practices/formingSchedule/edit/${record.id}`
+							)
+						}}
+					/>
+				</div>
+			)
 		},
 		
 		{
@@ -255,6 +289,41 @@ export const PracticeSchedule = () => {
 			title: 'Период практики',
 			className: 'text-xs !p-2'
 		},
+        {
+			title: (
+				<Popover
+					trigger={'click'}
+					content={
+						<PopoverMain
+                            // @ts-ignore
+							recordFullAll={tableData}
+							setRecordFull={setTableData}
+							recordFull={selectedFieldsFull}
+							setSelectedFieldFull={setSelectedFieldFull}
+						/>
+					}
+				>
+					<Button type="text" className="opacity-50" icon={<PointsSvg />} />
+				</Popover>
+			),
+			align: 'center',
+			render: (record: any) => (
+				<Popover
+					trigger={'click'}
+					content={
+						<PopoverContent
+							recordFull={record}
+							recordFullAll={tableData}
+							setRecordFull={setTableData}
+						/>
+					}
+				>
+					<Button type="text" className="opacity-50" icon={<PointsSvg />} />
+				</Popover>
+			),
+			fixed: 'right',
+			width: 50
+		}
 		
 	
 	]
@@ -310,6 +379,27 @@ export const PracticeSchedule = () => {
                        
                         
                     />
+                </Col>
+                
+                </Row>
+                <Row gutter={[16, 16]} className="mt-4">
+                <Col span={7} offset={17}>
+                    <div className={'flex gap-2 items-center'}>
+                        <span className={'mr-2'}>Сортировка</span>
+                        <Select
+                            popupMatchSelectWidth={false}
+                            defaultValue="По дате (сначала новые)"
+                            className="w-full"
+                            options={optionsSortDate}
+                            onChange={value => {
+                                setFilter({
+                                    ...filter,
+                                    dateFilling: value
+                                })
+                            }}
+                        />
+                    </div>
+
                 </Col>
                 </Row>
             {/* {
@@ -375,18 +465,18 @@ export const PracticeSchedule = () => {
 					rowKey="id"
 					// @ts-ignore
 					columns={columns}
-					dataSource={tableData ? tableData : []}
+					dataSource={ dataTable ? dataTable : []}
 					pagination={false}
 					className="my-10"
-					// rowSelection={{
-					// 	type: 'checkbox',
-					// 	onSelect: (record, selected, selectedRows, nativeEvent) => {
-					// 		setSelectedFieldFull(selectedRows)
-					// 	},
-					// 	onSelectAll: (selected, selectedRows, changeRows) => {
-					// 		setSelectedFieldFull(selectedRows)
-					// 	}
-					// }}
+					rowSelection={{
+						type: 'checkbox',
+						onSelect: (record, selected, selectedRows, nativeEvent) => {
+							setSelectedFieldFull(selectedRows)
+						},
+						onSelectAll: (selected, selectedRows, changeRows) => {
+							setSelectedFieldFull(selectedRows)
+						}
+					}}
 				/>
                 </Col>
             </Row>
@@ -395,7 +485,5 @@ export const PracticeSchedule = () => {
 }
 
 export default PracticeSchedule
-function dayjs(text: any) {
-    throw new Error('Function not implemented.');
-}
+
 

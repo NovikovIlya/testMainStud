@@ -278,19 +278,19 @@ export const PracticeSchedule = () => {
     function translateColumnsIntoRussia({isPrint}: { isPrint?: boolean }) {
         const newData: any = []
             // const recordCompressedWithoutUndefinedElem = dataCreate.filter((elem:any) => elem !== undefined)
-            const dataMock = [{specialityName:'test',practiceKind:'тест',dateFilling:'2021.09.10'}]
+            const dataMock = tableData
             for (let elem of dataMock) {
                 const newObj = {
-                    "Шифр и наименование специальности": elem.specialityName,
+                    "Шифр и наименование специальности": elem.name,
                     "Учебный год": elem.academicYear,
                     "Курс": elem.selectCourse,
-                    "Номер группы": elem.groupNumber,
+                    "Номер группы": elem.groupNumbers,
                     "Уровень образования": elem.level,
                     "Форма обучения": elem.forms,
-                    "Тип практики": elem.practiceKind,
+                    "Тип практики": elem.selectType,
                     "Дата заполнения": dayjs(elem.dateFilling).format('YYYY.MM.DD'),
-                    "Вид практики": elem.practiceKind,
-                    "Период практики": elem.practiceKind,
+                    "Вид практики": elem.selectKind,
+                    "Период практики": elem.period,
                 }
 
                 newData.push(newObj)
@@ -547,7 +547,7 @@ export const PracticeSchedule = () => {
                             }}
                         />
                     <Typography.Text className=" text-[28px] mb-14">
-                        График проведения практик на {getAcademicYear()} учебный год "" КФУ
+                        График проведения практик на {getAcademicYear()} учебный год "Подразделение" КФУ
                     </Typography.Text>
                
                 </Col>

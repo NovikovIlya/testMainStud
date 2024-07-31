@@ -14,7 +14,7 @@ import printJS from 'print-js';
 import { EditableCell, Item } from './EditableCell';
 import { DeleteRedSvg } from '../../../../assets/svg/DeleteRedSvg';
 import { EditSvg } from '../../../../assets/svg/EditSvg';
-import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
+import { CheckOutlined, CloseOutlined, PlusOutlined, PrinterOutlined, VerticalAlignBottomOutlined } from '@ant-design/icons';
 
 
 interface FilterType {
@@ -24,16 +24,12 @@ interface FilterType {
 
 const filterSpecialization: FilterType[] = [
     {
-        value: '',
+        value: 'Все',
         label: 'Все'
     },
     {
-        value: '31.08.01 Акушерство и гинекология',
-        label: '31.08.01 Акушерство и гинекология'
-    },
-    {
-        value: '31.08.01 Педиатрия',
-        label: '31.08.01 Педиатрия'
+        value: '1',
+        label: '1'
     }
 ]
 const filterCourse: FilterType[] = [
@@ -119,37 +115,36 @@ const optionsSortDate: any = [
 ]
 
 const optionMock = [
-    { value: '1', label: 'Курс 1' },
-    { value: '2', label: 'Курс 2' },
-    { value: '3', label: 'Курс 3' },
+    { value: '1', label: '1' },
+    { value: '2', label: '2' },
+    { value: '3', label: '3' },
 ]
 const optionMockType = [
-    { value: '1', label: 'Кур 4' },
-    { value: '2', label: 'Курс 5' },
-    { value: '3', label: 'Курс 6' },
+    { value: '4', label: '4' },
+    { value: '5', label: '5' },
 ]
 const optionMockKind = [
-    { value: '1', label: 'Курс 7' },
-    { value: '2', label: 'Курс 8' },
-    { value: '3', label: 'Курс 9' },
+    { value: '7', label: '7' },
+    { value: '8', label: '8' },
+    { value: '9', label: '9' },
 ]
 
 export const PracticeSchedule = () => {
     const tableRef = useRef(null);
     const originData: any = [
-        {id:'czxczxc',key:'czxczxc',Name:'1',academicYear:'2024',address:'Kazan',period:null,selectCourse:'1',type:null,dateFilling:'2024-07-30',selectKind:'Производственная'},
-        {id:'bbq',key:'bbq',Name:'2',academicYear:'2030',address:'Moscw',period:null,selectCourse:'1',type:null,dateFilling:'2024-07-29',selectKind:'Производственная'},
-        {id:'ccx',key:'ccx',Name:'3',academicYear:'2030',address:'Moscw',period:null,selectCourse:'1',type:null,dateFilling:'2024-07-28',selectKind:'Производственная'}
+        {id:'czxczxc',key:'czxczxc',name:'1',academicYear:'2024',address:'Kazan',period: [dayjs('2024-07-01'), dayjs('2024-07-15')],selectCourse:'1',type:null,dateFilling:'2024-07-30',selectKind:'Производственная'},
+        {id:'bbq',key:'bbq',name:'2',academicYear:'2030',address:'Moscw',period:null,selectCourse:'1',type:null,dateFilling:'2024-07-29',selectKind:'Производственная'},
+        {id:'ccx',key:'ccx',name:'3',academicYear:'2030',address:'Moscw',period:null,selectCourse:'1',type:null,dateFilling:'2024-07-28',selectKind:'Производственная'}
     ];
     const nav = useNavigate()
     const [year,setYear] = useState('2023/2024')
     const {data:dataCreate} = useCreateDocumentQuery('2023/2024')
     const {data:dataBlob,isLoading:isLoadingBlob} = useGetDocQuery(year,{skip:!year})
     const [tableData, setTableData] = useState<any>(originData)
-    const [filter, setFilter] = useState<any>({type: '', spec: '', course: 'Все', level: '', form: '',dateFilling: 'По дате (сначала новые)',selectKind:'Все'})
+    const [filter, setFilter] = useState<any>({type: '', spec: '', course: 'Все', level: '', form: '',dateFilling: 'По дате (сначала новые)',selectKind:'Все', name:'Все'})
 
     const [form] = Form.useForm();
-    // const [data, setData] = useState(originData);
+    const [data, setData] = useState(originData);
     const [editingKey, setEditingKey] = useState('');
     const isEditing = (record: Item) => record.key === editingKey
     const [currentRowValues, setCurrentRowValues] = useState({});
@@ -204,6 +199,15 @@ export const PracticeSchedule = () => {
 				return elem.selectKind === filter.selectKind
 			}
 		}
+        function filterName(elem: any) {
+			if (filter.name === 'Все') {
+				return elem
+			} else {
+                console.log('elem',elem)
+				// @ts-ignore
+				return elem.name === filter.name
+			}
+		}
 
 		// function filterSemester(elem: any) {
 		// 	if (filter.semester === 'Все') {
@@ -233,10 +237,10 @@ export const PracticeSchedule = () => {
        
 		return originData
 			? originData
-
 					// .filter((elem: any) => filterDepartment(elem))
 					.filter((elem: any) => filterCourse(elem))
                     .filter((elem: any) => filterKind(elem))
+                    .filter((elem: any) => filterName(elem))
 					// .filter((elem: any) => filterSemester(elem))
 					// .filter((elem: any) => filterNameSpecialty(elem))
 					// .filter((elem :any) => filterSubdivision(elem))
@@ -273,14 +277,20 @@ export const PracticeSchedule = () => {
 
     function translateColumnsIntoRussia({isPrint}: { isPrint?: boolean }) {
         const newData: any = []
-      
             // const recordCompressedWithoutUndefinedElem = dataCreate.filter((elem:any) => elem !== undefined)
             const dataMock = [{specialityName:'test',practiceKind:'тест',dateFilling:'2021.09.10'}]
             for (let elem of dataMock) {
                 const newObj = {
                     "Шифр и наименование специальности": elem.specialityName,
+                    "Учебный год": elem.academicYear,
+                    "Курс": elem.selectCourse,
+                    "Номер группы": elem.groupNumber,
+                    "Уровень образования": elem.level,
+                    "Форма обучения": elem.forms,
+                    "Тип практики": elem.practiceKind,
                     "Дата заполнения": dayjs(elem.dateFilling).format('YYYY.MM.DD'),
                     "Вид практики": elem.practiceKind,
+                    "Период практики": elem.practiceKind,
                 }
 
                 newData.push(newObj)
@@ -294,9 +304,16 @@ export const PracticeSchedule = () => {
     const print = ()=>{
         function properties() {
 				return [
-					'Шифр и наименование специальности',
+                    "Шифр и наименование специальности",
+                    "Учебный год",
+                    "Курс",
+                    "Номер группы",
+                    "Уровень образования",
+                    "Форма обучения",
+                    "Тип практики",
                     "Дата заполнения",
-					"Вид практики",
+                    "Вид практики",
+                    "Период практики",
 					
 				]
 		}
@@ -318,10 +335,21 @@ export const PracticeSchedule = () => {
         setEditingKey('');
     };
 
-    const deleteRow = ()=>{
 
-    }
-
+    const formatDateRange = (dateRange) => {
+        console.log('dateRange',dateRange)
+        if (dateRange !== null && Array.isArray(dateRange) && dateRange.length === 2) {
+            const startDate = dayjs(dateRange[0]);
+            const endDate = dayjs(dateRange[1]);
+    
+            if (startDate.isValid() && endDate.isValid()) {
+                return `${startDate.format('DD.MM.YYYY')} - ${endDate.format('DD.MM.YYYY')}`;
+            } else {
+                return 'Неверный формат даты';
+            }
+        }
+        return ''; // Возвращает пустую строку, если dateRange не является массивом или если длина массива не равна 2
+    };
     const save = async (key: React.Key) => {
         try {
           const row = (await form.validateFields()) as Item;
@@ -335,21 +363,25 @@ export const PracticeSchedule = () => {
               ...row,
             });
             setData(newData);
+            setTableData(newData);
             setEditingKey('');
+            console.log('1',newData[index])
           } else {
+            // если новая запись
             newData.push(row);
             setData(newData);
+            setTableData(newData)
             setEditingKey('');
           }
         } catch (errInfo) {
           console.log('Validate Failed:', errInfo);
         }
     };
-   
+    console.log('data',data)
     const columns = [
 		{
-			key: 'Name',
-			dataIndex: 'Name',
+			key: 'name',
+			dataIndex: 'name',
 			title: 'Шифр и иаименование документа',
 			name: 'Шифр и иаименование документа',
 			className: 'text-xs !p-2',
@@ -417,10 +449,8 @@ export const PracticeSchedule = () => {
 			className: 'text-xs !p-2',
             editable: true,
             render: (text:any, record:any) => {
-                const editable = isEditing(record);
-                console.log('text', text);
                 return (
-                  <>{text && text[0]?.$D} {text && text[0]?.$M}</>
+                  <>{formatDateRange((Array.isArray(text) ? text : ['','']))}</>
                 );
             },},
         {
@@ -442,7 +472,7 @@ export const PracticeSchedule = () => {
                 <Typography.Link disabled={editingKey !== ''} onClick={() => edit(record)}>
                   <EditSvg/>
                 </Typography.Link>
-                <Popconfirm title="Вы действительно хотите удалить?" onConfirm={deleteRow}>
+                <Popconfirm title="Вы действительно хотите удалить?" onConfirm={() => handleDelete(record.key)}>
                     <a><DeleteRedSvg/></a>
                 </Popconfirm>
                 </div>
@@ -476,6 +506,31 @@ export const PracticeSchedule = () => {
         };
     });
 
+    // const handleAdd = () => {
+    //     const newData: any = {
+    //     //   key: count,
+    //       name: '',
+    //       age: '32',
+    //     };
+    //     setTableData([...tableData, newData]);
+       
+    //   };
+    const handleDelete = (key: React.Key) => {
+        const newData = tableData.filter((item:any) => item.key !== key);
+        setTableData(newData);
+    };
+    function getAcademicYear() {
+        const today = dayjs();
+        const year = today.year();
+        const month = today.month() + 1; 
+    
+        if (month >= 8) {
+            return `${year}/${year + 1}`; 
+        } else {
+            return `${year - 1}/${year}`;
+        }
+    }
+
    
 
     return (
@@ -492,22 +547,27 @@ export const PracticeSchedule = () => {
                             }}
                         />
                     <Typography.Text className=" text-[28px] mb-14">
-                        График проведения практик на "year" учебный год ""
+                        График проведения практик на {getAcademicYear()} учебный год "" КФУ
                     </Typography.Text>
                
                 </Col>
             </Row>
             <Row gutter={[8, 16]} className="mt-12 w-full flex items-center">
                 <Col span={4}>
-                    <Typography.Text>Наименование специальности</Typography.Text>
+                    <Typography.Text>Шифр и наименование специальности</Typography.Text>
                 </Col>
                 <Col span={8}>
                     <Select
                         popupMatchSelectWidth={false}
-                        defaultValue=""
+                        defaultValue="Все"
                         className="w-full"
                         options={filterSpecialization}
-                        onChange={value => filter(value, 'spec')}
+                        onChange={value => {
+                            setFilter({
+                                ...filter,
+                                name: value
+                            })
+                        }}
                     />
                 </Col>
                 
@@ -523,7 +583,6 @@ export const PracticeSchedule = () => {
                         className="w-full"
                         options={filterCourse}
                         onChange={value => {
-                           
                             setFilter({
                                 ...filter,
                                 course: value
@@ -589,10 +648,10 @@ export const PracticeSchedule = () => {
                     <div >
                         <Space>
                             <Button disabled={isLoadingBlob} onClick={downloadFile}>
-                                Скачать 
+                                <VerticalAlignBottomOutlined /> Скачать 
                             </Button>
                             <Button disabled={isLoadingBlob} onClick={print}>
-                                Печать
+                                 <PrinterOutlined /> Печать
                             </Button>
                         </Space>
                     </div>
@@ -640,6 +699,12 @@ export const PracticeSchedule = () => {
                         </Form>
                 </Col>
             </Row>
+            {/* <Row className='flex justify-center mt-4 cursor-pointer '>
+                    <div onClick={handleAdd} className='flex justify-center bg-[#3073d7] p-3 rounded-full'>
+                            <PlusOutlined style={{color: '#FFFFFF'}}/>
+                    </div>
+                    <div className='w-full justify-center text-center text-[#939597] mt-2'>Добавить строку</div>
+            </Row> */}
         </section>
     )
 }

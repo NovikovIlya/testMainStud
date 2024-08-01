@@ -24,8 +24,13 @@ import {
 import { PopoverContent } from './PopoverContent'
 import { PopoverMain } from './PopoverMain'
 
-
+const optionsNames = [
+	{ value: 'Все', label: 'Все' },
+	{ value: 'Акушерство', label: 'Акушерство' },
+	{ value: 'тест', label: 'тест' },
+]
 const optionsSortDate: any = [
+	{ value: 'Все', label: 'Все' },
 	{ value: 'По дате (сначала новые)', label: 'По дате (сначала новые)' },
 	{ value: 'По дате (сначала старые)', label: 'По дате (сначала старые)' }
 ]
@@ -34,7 +39,7 @@ export const ViewRepresentation = () => {
 	const originDate = [
 		{
 			key: '1',
-			name: 'График 2022',
+			name: 'Акушерство',
 			dateFilling: '2021.08.20',
 			type: 'Бессрочный',
 			course: '1',
@@ -43,7 +48,7 @@ export const ViewRepresentation = () => {
 		},
 		{
 			key: '2',
-			name: 'График 2022',
+			name: 'Акушерство',
 			dateFilling: '2021.08.22',
 			type: 'Бессрочный',
 			course: '1',
@@ -53,7 +58,8 @@ export const ViewRepresentation = () => {
 	]
 	const navigate = useNavigate()
 	const [filter, setFilter] = useState({
-		dateFilling: 'По дате (сначала новые)'
+		dateFilling: 'По дате (сначала новые)',
+		name: 'Все'
 	})
 	const [tableData, setTableData] = useState([])
 	const [selectedFieldsFull, setSelectedFieldFull] = useState<any>([])
@@ -64,8 +70,15 @@ export const ViewRepresentation = () => {
 		setDataTable(filterDataFull())
 		// }
 	}, [filter])
-
+	console.log('dataTable',dataTable)
 	function filterDataFull() {
+		function filterName(elem: any) {
+			if (filter.name === 'Все') {
+				return elem
+			} else {
+				return elem.name === filter.name
+			}
+		}
 		function sortDateFilling(a: any, b: any) {
 			if (filter.dateFilling === 'По дате (сначала новые)') {
 				return +new Date(b.dateFilling) - +new Date(a.dateFilling)
@@ -77,7 +90,9 @@ export const ViewRepresentation = () => {
 		}
 
 		return originDate
-			? originDate.sort((a: any, b: any) => sortDateFilling(a, b))
+			? originDate
+			.filter((elem: any) => filterName(elem))
+			.sort((a: any, b: any) => sortDateFilling(a, b))
 			: []
 	}
 
@@ -223,6 +238,10 @@ export const ViewRepresentation = () => {
 						popupMatchSelectWidth={false}
 						defaultValue="Все"
 						className="w-full"
+						options={optionsNames}
+						onChange={(value: any) => {
+							setFilter({ ...filter, name: value })
+						}}
 					/>
 				</Col>
 				<Col span={7} offset={5}>

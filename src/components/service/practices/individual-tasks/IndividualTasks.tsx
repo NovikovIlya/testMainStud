@@ -485,7 +485,7 @@ const IndividualTasks = () => {
                         <span className={'mr-2'}>Сортировка</span>
                         <Select
                             popupMatchSelectWidth={false}
-                            defaultValue="По дате (сначала новые)"
+                            defaultValue=""
                             className="w-full"
                             options={optionsSortDate}
                             onChange={value => {

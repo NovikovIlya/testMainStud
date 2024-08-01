@@ -1,9 +1,7 @@
 import {
     Button,
     Col,
-    DatePicker,
-    Input,
-    InputNumber,
+    DatePicker, InputNumber,
     Popover,
     Radio,
     Row,
@@ -12,28 +10,28 @@ import {
     Table,
     TableProps,
     Typography
-} from 'antd'
-import React, {ChangeEvent, useEffect, useState} from 'react'
-import './RegisterContracts.scss'
+} from 'antd';
+import { useEffect, useState } from 'react';
+import './RegisterContracts.scss';
 import {
     TitleHeadCell
 } from "../../../businessTrip/NewBusinessTrip/archive/stepTwo/tableStepTwo/titleHeadCell/TitleHeadCell";
-import {EditSvg} from "../../../../../assets/svg/EditSvg";
-import {PointsSvg} from "../../../../../assets/svg/PointsSvg";
+import { EditSvg } from "../../../../../assets/svg/EditSvg";
+import { PointsSvg } from "../../../../../assets/svg/PointsSvg";
 import dayjs from "dayjs";
 import clsx from "clsx";
-import {RegisterPopoverContent} from "../../popover/register/RegisterPopoverContent";
-import {RegisterPopoverMain} from "../../popover/register/RegisterPopoverMain";
-import {useNavigate} from "react-router-dom";
+import { RegisterPopoverContent } from "../../popover/register/RegisterPopoverContent";
+import { RegisterPopoverMain } from "../../popover/register/RegisterPopoverMain";
+import { useNavigate } from "react-router-dom";
 import {
     useGetContractFacilitiesQuery,
     useGetContractsAllQuery,
     useGetContractsShortQuery,
     useGetSpecialtyNamesQuery
 } from "../../../../../store/api/practiceApi/roster";
-import {ContractFacilities, ContractsAll, ContractShort, NameSpecialty} from "../../../../../models/Practice";
-import {copyFileDocument} from "../../../../../utils/downloadDocument/copyFileDocument";
-import {agreementFileDocument} from "../../../../../utils/downloadDocument/agreementFileDocument";
+import { ContractFacilities, ContractsAll, ContractShort, NameSpecialty } from "../../../../../models/Practice";
+import { copyFileDocument } from "../../../../../utils/downloadDocument/copyFileDocument";
+import { agreementFileDocument } from "../../../../../utils/downloadDocument/agreementFileDocument";
 import { LoadingOutlined } from '@ant-design/icons';
 
 
@@ -78,7 +76,6 @@ export interface OptionsNameSpecialty {
 export const RegisterContracts = () => {
     const tokenAccess = localStorage.getItem('access')!.replaceAll('"', '')
     const {data: dataAll, isSuccess: isSuccessAll,isFetching} = useGetContractsAllQuery()
-    console.log('dataAll',dataAll)
     const {data: dataShort, isSuccess: isSuccessShort} = useGetContractsShortQuery()
     const nav = useNavigate()
     const [filter, setFilter] = useState({
@@ -88,7 +85,6 @@ export const RegisterContracts = () => {
         sortDateConclusionContract: 'По дате (сначала новые)',
         nameSpecialty: 'Все',
         numberSeats: 'Все',
-
     })
     const [
         tableDataCompressed,
@@ -128,9 +124,9 @@ export const RegisterContracts = () => {
         }
     }
 
-    function changeListDataAll(elem: ContractsAll) {
+    function changeListDataAll(elem: any) {
         console.log('elem',elem)
-        const newElem: ColumnsTableFull = {
+        const newElem: any = {
             id: elem.id,
             key: elem.id,
             contractFacility: elem.contractFacility,
@@ -400,6 +396,7 @@ export const RegisterContracts = () => {
     const optionsTypeContract = [
         {value: 'Все', label: 'Все'},
         {value: 'Бессрочный', label: 'Бессрочный'},
+        {value: 'Срочный', label: 'Срочный'},
         {value: 'С пролонгацией', label: 'С пролонгацией'}
     ]
     const optionsSort = [
@@ -720,7 +717,7 @@ export const RegisterContracts = () => {
                         <span className={'mr-2'}>Сортировка</span>
                         <Select
                             popupMatchSelectWidth={false}
-                            defaultValue="По дате (сначала новые)"
+                            defaultValue=""
                             className="w-full"
                             options={optionsSort}
                             onChange={value => {

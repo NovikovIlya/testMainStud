@@ -191,7 +191,7 @@ export const PreviewContracts = () => {
                     onClick={() => nav('/services/practices/registerContracts')}
                 />
                 <Typography.Text className="text-black text-3xl font-normal">
-                    Название
+                    Договор {contract?.contractNumber}
                 </Typography.Text>
             </Space>
 

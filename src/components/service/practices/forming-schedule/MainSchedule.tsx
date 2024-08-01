@@ -1,25 +1,18 @@
 import {
-	Button,
-	Checkbox,
-	Col,
-	Popover,
-	Row,
-	Select,
-	Space,
-	Table,
-	Typography
+    Button, Col,
+    Popover,
+    Row,
+    Select,
+    Space,
+    Table,
+    Typography
 } from 'antd'
-import type { GetProp } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { EditSvg } from '../../../../assets/svg/EditSvg'
 import { PointsSvg } from '../../../../assets/svg/PointsSvg'
-import {
-	useCreateDocumentQuery,
-	useGetDocQuery
-} from '../../../../store/api/practiceApi/formingSchedule'
 
 import { PopoverContent } from './PopoverContent'
 import { PopoverMain } from './PopoverMain'
@@ -58,44 +51,6 @@ export const PracticeSchedule = () => {
 	const [tableData, setTableData] = useState([])
 	const [selectedFieldsFull, setSelectedFieldFull] = useState<any>([])
 	const [dataTable, setDataTable] = useState<any>(originDate)
-
-	useEffect(() => {
-		// if (isSuccessPractiseAll) {
-		setDataTable(filterDataFull())
-		// }
-	}, [filter])
-
-	function filterDataFull() {
-		function sortDateFilling(a: any, b: any) {
-			if (filter.dateFilling === 'По дате (сначала новые)') {
-				return +new Date(b.dateFilling) - +new Date(a.dateFilling)
-			}
-			if (filter.dateFilling === 'По дате (сначала старые)') {
-				return +new Date(a.dateFilling) - +new Date(b.dateFilling)
-			}
-			return 0
-		}
-
-		return originDate
-			? originDate.sort((a: any, b: any) => sortDateFilling(a, b))
-			: []
-	}
-
-	// function isCompressedView() {
-	//     setStateSchedule({
-	//         ...stateSchedule,
-	//         compressed: true,
-	//         table: false
-	//     })
-	// }
-
-	// function isTableView() {
-	//     setStateSchedule({
-	//         ...stateSchedule,
-	//         compressed: false,
-	//         table: true,
-	//     })
-	// }
 
 	const columns = [
 		{
@@ -175,6 +130,46 @@ export const PracticeSchedule = () => {
 		}
 	]
 
+	useEffect(() => {
+		// if (isSuccessPractiseAll) {
+		setDataTable(filterDataFull())
+		// }
+	}, [filter])
+
+	function filterDataFull() {
+		function sortDateFilling(a: any, b: any) {
+			if (filter.dateFilling === 'По дате (сначала новые)') {
+				return +new Date(b.dateFilling) - +new Date(a.dateFilling)
+			}
+			if (filter.dateFilling === 'По дате (сначала старые)') {
+				return +new Date(a.dateFilling) - +new Date(b.dateFilling)
+			}
+			return 0
+		}
+
+		return originDate
+			? originDate.sort((a: any, b: any) => sortDateFilling(a, b))
+			: []
+	}
+
+	// function isCompressedView() {
+	//     setStateSchedule({
+	//         ...stateSchedule,
+	//         compressed: true,
+	//         table: false
+	//     })
+	// }
+
+	// function isTableView() {
+	//     setStateSchedule({
+	//         ...stateSchedule,
+	//         compressed: false,
+	//         table: true,
+	//     })
+	// }
+
+
+
 	return (
 		<section className="container">
 			<Row gutter={[16, 16]}>
@@ -209,7 +204,7 @@ export const PracticeSchedule = () => {
 					</Space>
 				</Col>
 			</Row>
-			<Row gutter={[16, 16]} className="mt-4">
+			<Row gutter={[16, 16]} className="mt-4 flex items-center">
 				<Col span={5}>
 					<span>Учебный год</span>
 				</Col>
@@ -221,13 +216,13 @@ export const PracticeSchedule = () => {
 					/>
 				</Col>
 			</Row>
-			<Row gutter={[16, 16]} className="mt-4">
+			<Row gutter={[16, 16]} className="mt-4 flex items-centerек">
 				<Col span={7} offset={17}>
 					<div className={'flex gap-2 items-center'}>
 						<span className={'mr-2'}>Сортировка</span>
 						<Select
 							popupMatchSelectWidth={false}
-							defaultValue="По дате (сначала новые)"
+							defaultValue=""
 							className="w-full"
 							options={optionsSortDate}
 							onChange={value => {

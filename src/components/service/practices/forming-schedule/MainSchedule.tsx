@@ -16,6 +16,8 @@ import { PointsSvg } from '../../../../assets/svg/PointsSvg'
 
 import { PopoverContent } from './PopoverContent'
 import { PopoverMain } from './PopoverMain'
+import { useGetAllSchedulesQuery } from '../../../../store/api/practiceApi/formingSchedule'
+import { useGetSubdivisionUserQuery } from '../../../../store/api/serviceApi'
 
 
 const optionsSortDate: any = [
@@ -51,6 +53,9 @@ export const PracticeSchedule = () => {
 	const [tableData, setTableData] = useState([])
 	const [selectedFieldsFull, setSelectedFieldFull] = useState<any>([])
 	const [dataTable, setDataTable] = useState<any>(originDate)
+	const {data:dataUserSubdivision} = useGetSubdivisionUserQuery()
+	// @ts-ignore
+	const {data:dataAll} = useGetAllSchedulesQuery({subdivisionId:dataUserSubdivision?.value,academicYear:getAcademicYear()},{skip:!dataUserSubdivision})
 
 	const columns = [
 		{
@@ -151,6 +156,17 @@ export const PracticeSchedule = () => {
 			? originDate.sort((a: any, b: any) => sortDateFilling(a, b))
 			: []
 	}
+	function getAcademicYear() {
+        const today = dayjs();
+        const year = today.year();
+        const month = today.month() + 1; 
+    
+        if (month >= 8) {
+            return `${year}/${year + 1}`; 
+        } else {
+            return `${year - 1}/${year}`;
+        }
+    }
 
 	// function isCompressedView() {
 	//     setStateSchedule({
@@ -190,7 +206,8 @@ export const PracticeSchedule = () => {
 						className="w-full"
 					/>
 				</Col>
-				<Col span={7} offset={5}>
+				{/* {dataUserSubdivision?.value ? */}
+				 <Col span={7} offset={5}>
 					<Space className="w-full flex-row-reverse">
 						<Button
 							type="primary"
@@ -202,7 +219,8 @@ export const PracticeSchedule = () => {
 							Добавить график практик
 						</Button>
 					</Space>
-				</Col>
+				</Col> 
+				{/* : null} */}
 			</Row>
 			<Row gutter={[16, 16]} className="mt-4 flex items-center">
 				<Col span={5}>
@@ -262,3 +280,5 @@ export const PracticeSchedule = () => {
 }
 
 export default PracticeSchedule
+
+

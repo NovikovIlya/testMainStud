@@ -26,6 +26,8 @@ import { RespondsSupervisor } from './supervisor/RespondsSupervisor'
 import { SupervisorCreateVacancyForm } from './supervisor/SupervisorCreateVacancyForm'
 import { SupervisorUpdateVacancy } from './supervisor/SupervisorUpdateVacancy'
 import { SupervisorVacancies } from './supervisor/SupervisorVacancies'
+import { SupervisorInvitationAll } from './supervisor/SupervisorInvitationAll'
+import { SupervisorInvitationCreate } from './supervisor/SupervisorInvitationCreate'
 
 export const NavPesonnelAccounting = () => {
 	const { pathname } = useLocation()
@@ -207,7 +209,48 @@ export const NavPesonnelAccounting = () => {
 		}
 	]
 
-	const handleList = navEmployeeList.map(({ id, icon, name }, index) => {
+	const navSupervisorListInterviewItems: CollapseProps['items'] = [
+		{
+			key: 'allInterviews',
+			label: (
+				<div className="flex items-center gap-[10px]">
+					{<BriefcaseSvg/>}
+					<p className="text-base">{'Собеседование'}</p>
+				</div>
+			), children: (
+				<div className="flex flex-col gap-[12px] ml-[24px]">
+					<p
+						className={clsx(
+							'font-content-font text-black text-[14px]/[14px] font-normal',
+							pathname !==
+							'/services/personnelaccounting/supervisor/invitation' &&
+							'opacity-[52%]'
+						)}
+						onClick={() => {
+							navigate('/services/personnelaccounting/supervisor/invitation')
+						}}
+					>
+						Все собеседования
+					</p>
+					<p
+						className={clsx(
+							'font-content-font text-black text-[14px]/[14px] font-normal',
+							pathname !==
+							'/services/personnelaccounting/supervisor/scheduleinvitation' &&
+							'opacity-[52%]'
+						)}
+						onClick={() => {
+							navigate('/services/personnelaccounting/supervisor/scheduleinvitation')
+						}}
+					>
+						Назначить собеседование
+					</p>
+				</div>
+			)
+		}
+	]
+
+	const handleList = navEmployeeList.map(({id, icon, name}, index) => {
 		if (name === 'Вакансии') {
 			return (
 				<li
@@ -305,6 +348,35 @@ export const NavPesonnelAccounting = () => {
 						</ConfigProvider>
 					</li>
 				)
+			} else if (name === 'Собеседование') {
+				return (
+					<li
+						key={index}
+						className={clsx(
+							'w-full flex items-center pl-5 hover:bg-[#F5F8FB]  cursor-pointer',
+							id === pathname && 'bg-[#F5F8FB]'
+						)}
+					>
+						<ConfigProvider
+							// theme={{
+							// 	components: {
+							// 		Collapse: {
+							// 			headerBg: '#ffffff',
+							// 			headerPadding: '0px 20px 0px 0px'
+							// 		}
+							// 	}
+							// }}
+						>
+							<Collapse
+								className="w-full !bg-inherit"
+								items={navSupervisorListInterviewItems}
+								expandIconPosition="end"
+								bordered={false}
+								style={{}}
+							/>
+						</ConfigProvider>
+					</li>
+				)
 			} else {
 				return (
 					<li
@@ -343,53 +415,61 @@ export const NavPesonnelAccounting = () => {
 				</div>
 			)}
 			<div className="bg-[#F5F8FB] flex w-full">
-				{pathname === navEmployeeList[0].id && <Responds />}
+				{pathname === navEmployeeList[0].id && <Responds/>}
 				{pathname.match(
 					'services/personnelaccounting/responds/byvacancy/*'
-				) && <VacancyResponces />}
+				) && <VacancyResponces/>}
 				{pathname.match('services/personnelaccounting/responds/fullinfo') && (
-					<RespondInfo type="PERSONNEL_DEPARTMENT" />
+					<RespondInfo type="PERSONNEL_DEPARTMENT"/>
 				)}
 				{pathname.match(
 					'services/personnelaccounting/supervisor/responds/fullinfo'
-				) && <RespondInfo type="SUPERVISOR" />}
-				{pathname.includes(navEmployeeList[1].id) && <ChatEmpDemp />}
+				) && <RespondInfo type="SUPERVISOR"/>}
+				{pathname.includes(navEmployeeList[1].id) && <ChatEmpDemp/>}
 				{pathname === navEmployeeList[2].id && <></>}
-				{pathname === navEmployeeList[3].id && <Catalog />}
+				{pathname === navEmployeeList[3].id && <Catalog/>}
 				{pathname.match(
 					'services/personnelaccounting/vacancies/vacancyedit'
-				) && <VacancyEditView />}
+				) && <VacancyEditView/>}
 				{pathname === '/services/personnelaccounting/vacancyrequests' && (
-					<VacancyRequestsPage />
+					<VacancyRequestsPage/>
 				)}
 				{pathname === '/services/personnelaccounting/request/create' && (
-					<VacancyRequestCreateView />
+					<VacancyRequestCreateView/>
 				)}
 				{pathname === '/services/personnelaccounting/request/update' && (
-					<VacancyRequestUpdateView />
+					<VacancyRequestUpdateView/>
 				)}
 				{pathname === '/services/personnelaccounting/request/delete' && (
-					<VacancyRequestDeleteView />
+					<VacancyRequestDeleteView/>
 				)}
-				{pathname === navEmployeeList[4].id && <Reserve />}
+				{pathname === navEmployeeList[4].id && <Reserve/>}
 				{pathname.match('/services/personnelaccounting/reserve/fullinfo') && (
-					<ReserveRespondInfo type="PERSONNEL_DEPARTMENT" />
+					<ReserveRespondInfo type="PERSONNEL_DEPARTMENT"/>
 				)}
-				{pathname === '/services/personnelaccounting/archive' && <Archive />}
+				{pathname === '/services/personnelaccounting/archive' && <Archive/>}
 				{pathname.match('services/personnelaccounting/archive/fullinfo') && (
-					<ArchiveRespondInfo type="PERSONNEL_DEPARTMENT" />
+					<ArchiveRespondInfo type="PERSONNEL_DEPARTMENT"/>
 				)}
-				{pathname === navSupervisorList[0].id && <RespondsSupervisor />}
+				{pathname === navSupervisorList[0].id && <RespondsSupervisor/>}
 				{pathname === navSupervisorList[1].id && <></>}
-				{pathname === navSupervisorList[2].id && <SupervisorVacancies />}
+				{pathname === navSupervisorList[2].id && <SupervisorVacancies/>}
 				{pathname ===
 					'/services/personnelaccounting/supervisor/createvacancy' && (
-					<SupervisorCreateVacancyForm />
-				)}
+						<SupervisorCreateVacancyForm/>
+					)}
 				{pathname ===
 					'/services/personnelaccounting/supervisor/vacancyview' && (
-					<SupervisorUpdateVacancy />
+						<SupervisorUpdateVacancy/>
+					)}
+				{pathname ===
+					'/services/personnelaccounting/supervisor/invitation' && (
+						<SupervisorInvitationAll/>
 				)}
+				{pathname ===
+					'/services/personnelaccounting/supervisor/scheduleinvitation' && (
+						<SupervisorInvitationCreate/>
+					)}
 			</div>
 		</>
 	)

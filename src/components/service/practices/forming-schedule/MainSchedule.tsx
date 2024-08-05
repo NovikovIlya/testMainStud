@@ -4,6 +4,7 @@ import {
     Row,
     Select,
     Space,
+    Spin,
     Table,
     Typography
 } from 'antd'
@@ -16,8 +17,10 @@ import { PointsSvg } from '../../../../assets/svg/PointsSvg'
 
 import { PopoverContent } from './PopoverContent'
 import { PopoverMain } from './PopoverMain'
-import { useGetAllSchedulesQuery } from '../../../../store/api/practiceApi/formingSchedule'
+import { useGetAcademicYearQuery, useGetAllSchedulesQuery, useGetSubdivisionQuery } from '../../../../store/api/practiceApi/formingSchedule'
 import { useGetSubdivisionUserQuery } from '../../../../store/api/serviceApi'
+import { LoadingOutlined } from '@ant-design/icons'
+import { processingOfDivisions } from '../../../../utils/processingOfDivisions'
 
 
 const optionsSortDate: any = [
@@ -26,37 +29,18 @@ const optionsSortDate: any = [
 ]
 
 export const PracticeSchedule = () => {
-	const originDate = [
-		{
-			key: '1',
-			name: 'График 2022',
-			dateFilling: '2021.08.20',
-			type: 'Бессрочный',
-			course: '1',
-			academicYear: '2',
-			period: '2020-2021'
-		},
-		{
-			key: '2',
-			name: 'График 2022',
-			dateFilling: '2021.08.22',
-			type: 'Бессрочный',
-			course: '1',
-			academicYear: '2',
-			period: '2020-2021'
-		}
-	]
 	const navigate = useNavigate()
 	const [filter, setFilter] = useState({
 		dateFilling: 'По дате (сначала новые)'
 	})
 	const [tableData, setTableData] = useState([])
 	const [selectedFieldsFull, setSelectedFieldFull] = useState<any>([])
-	const [dataTable, setDataTable] = useState<any>(originDate)
+	const [dataTable, setDataTable] = useState<any>([])
 	const {data:dataUserSubdivision} = useGetSubdivisionUserQuery()
-	// @ts-ignore
-	const {data:dataAll} = useGetAllSchedulesQuery({subdivisionId:dataUserSubdivision?.value,academicYear:getAcademicYear()},{skip:!dataUserSubdivision})
-
+	const {data:dataAll,isSuccess:isSuccessData,isFetching:isFetchingDataAll} = useGetAllSchedulesQuery({subdivisionId:dataUserSubdivision?.value,academicYear:getAcademicYear()},{skip:!dataUserSubdivision})
+	const {data:dataAcademicYear} = useGetAcademicYearQuery()
+	const {data:dataSubdivision,isSuccess:isSuccessSubdivision} = useGetSubdivisionQuery()
+	const [departments, setDepartments] = useState<any[]>()
 	const columns = [
 		{
 			key: 'name',
@@ -72,7 +56,7 @@ export const PracticeSchedule = () => {
 						type="text"
 						icon={<EditSvg />}
 						onClick={() => {
-							navigate(`/services/practices/formingSchedule/edit/${record.id}`)
+							navigate(`/services/practices/formingSchedule/edit/year=${record.academicYear.replace("/", "-")}/${record.id}`)
 						}}
 					/>
 				</div>
@@ -134,12 +118,18 @@ export const PracticeSchedule = () => {
 			width: 50
 		}
 	]
+	
+	useEffect(() => {
+		if (isSuccessSubdivision) {
+			setDepartments(processingOfDivisions(dataSubdivision))
+		}
+	}, [dataSubdivision])
 
 	useEffect(() => {
-		// if (isSuccessPractiseAll) {
-		setDataTable(filterDataFull())
-		// }
-	}, [filter])
+		if (isSuccessData) {
+			setDataTable(filterDataFull())
+		}
+	}, [filter,isSuccessData,dataAll])
 
 	function filterDataFull() {
 		function sortDateFilling(a: any, b: any) {
@@ -152,10 +142,11 @@ export const PracticeSchedule = () => {
 			return 0
 		}
 
-		return originDate
-			? originDate.sort((a: any, b: any) => sortDateFilling(a, b))
+		return dataAll
+			? [...dataAll].sort((a: any, b: any) => sortDateFilling(a, b))
 			: []
 	}
+
 	function getAcademicYear() {
         const today = dayjs();
         const year = today.year();
@@ -166,24 +157,7 @@ export const PracticeSchedule = () => {
         } else {
             return `${year - 1}/${year}`;
         }
-    }
-
-	// function isCompressedView() {
-	//     setStateSchedule({
-	//         ...stateSchedule,
-	//         compressed: true,
-	//         table: false
-	//     })
-	// }
-
-	// function isTableView() {
-	//     setStateSchedule({
-	//         ...stateSchedule,
-	//         compressed: false,
-	//         table: true,
-	//     })
-	// }
-
+    }	
 
 
 	return (
@@ -204,6 +178,18 @@ export const PracticeSchedule = () => {
 						popupMatchSelectWidth={false}
 						defaultValue="Все"
 						className="w-full"
+						options={
+							[
+								{ key: 2244612, value: 'Все', label: 'Все' },
+								...(departments
+									? departments.map(item => ({
+											key: item.id,
+											value: item.value,
+											label: item.label
+									  }))
+									: [])
+							]
+						}
 					/>
 				</Col>
 				{/* {dataUserSubdivision?.value ? */}
@@ -231,6 +217,16 @@ export const PracticeSchedule = () => {
 						popupMatchSelectWidth={false}
 						defaultValue="Все"
 						className="w-full"
+						options={
+							[
+								{key: 2244612, value: "Все", label: "Все"},
+                            ...(dataAcademicYear ? dataAcademicYear.map((item:any) => ({
+                              key: item,
+                              value: item,
+                              label: item
+                            })) : [])
+							]
+						}
 					/>
 				</Col>
 			</Row>
@@ -255,7 +251,8 @@ export const PracticeSchedule = () => {
 			</Row>
 			<Row className="mt-4">
 				<Col flex={'auto'}>
-					<Table
+					{isFetchingDataAll ? <Spin className='w-full mt-20' indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />  
+					:  <Table
 						size="small"
 						rowKey="id"
 						// @ts-ignore
@@ -272,7 +269,7 @@ export const PracticeSchedule = () => {
 								setSelectedFieldFull(selectedRows)
 							}
 						}}
-					/>
+					/>}
 				</Col>
 			</Row>
 		</section>

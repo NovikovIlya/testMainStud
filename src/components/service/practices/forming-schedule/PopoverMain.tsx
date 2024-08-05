@@ -130,14 +130,14 @@ export const PopoverMain = ({recordFull,recordFullAll,setRecordFull,setSelectedF
                 <PrintSvg/>
                 <span>Печать выбранного</span>
             </WrapperButton>
-            <WrapperButton
+            {/* <WrapperButton
                 color={ColorBg.REDE5}
                 onClick={deleteData}
                 disabled={recordFull!.length === 0}
             >
                 <DeleteRedSvg/>
                 <span className={'text-[#E04545]'}>Удалить выбранное</span>
-            </WrapperButton>
+            </WrapperButton> */}
         </div>
     );
 };

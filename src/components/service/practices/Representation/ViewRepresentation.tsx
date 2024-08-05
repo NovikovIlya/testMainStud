@@ -1,7 +1,5 @@
 import {
-	Button,
-	Checkbox,
-	Col,
+	Button, Col,
 	Popover,
 	Row,
 	Select,
@@ -9,17 +7,12 @@ import {
 	Table,
 	Typography
 } from 'antd'
-import type { GetProp } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { EditSvg } from '../../../../assets/svg/EditSvg'
 import { PointsSvg } from '../../../../assets/svg/PointsSvg'
-import {
-	useCreateDocumentQuery,
-	useGetDocQuery
-} from '../../../../store/api/practiceApi/formingSchedule'
 
 import { PopoverContent } from './PopoverContent'
 import { PopoverMain } from './PopoverMain'
@@ -70,7 +63,6 @@ export const ViewRepresentation = () => {
 		setDataTable(filterDataFull())
 		// }
 	}, [filter])
-	console.log('dataTable',dataTable)
 	function filterDataFull() {
 		function filterName(elem: any) {
 			if (filter.name === 'Все') {
@@ -253,7 +245,7 @@ export const ViewRepresentation = () => {
 								navigate('/services/practices/representation/createRepresentation')
 							}}
 						>
-							Добавить приказ
+							Добавить представление
 						</Button>
 					</Space>
 				</Col>

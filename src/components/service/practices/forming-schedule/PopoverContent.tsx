@@ -8,6 +8,7 @@ import { DeleteRedSvg } from '../../../../assets/svg/DeleteRedSvg'
 import { Load } from '../../../../assets/svg/Load'
 import { PrintSvg } from '../../../../assets/svg/PrintSvg'
 import { ColorBg, WrapperButton } from '../popover/WrapperButton'
+import { useDeleteMutation } from '../../../../store/api/practiceApi/formingSchedule'
 
 interface Props {
 	recordFullAll?: any
@@ -18,6 +19,7 @@ interface Props {
 
 export const PopoverContent = ({recordFull,recordFullAll,setRecordFull,setSelectedFieldFull}: Props) => {
 	// const [deletePractise] = useDeletePractiseSeveralMutation()
+	const [deletePractise,{}] = useDeleteMutation()
 	console.log('recordFull', recordFull)
 	function translateColumnsIntoRussia({ isPrint }: { isPrint: boolean }) {
 		if (isPrint) {
@@ -96,16 +98,17 @@ export const PopoverContent = ({recordFull,recordFullAll,setRecordFull,setSelect
 
 	function deleteData() {
 		if (setRecordFull && recordFull && recordFullAll) {
-			const recordFullWithoutUndefinedElem = recordFull.filter(
-				(elem: any) => elem !== undefined
-			)
 
-			const listId = recordFullWithoutUndefinedElem.map((elem: any) => elem.id)
-			setRecordFull(
-				recordFullAll.filter((elem: any) => {
-					return !listId.includes(elem.id)
-				})
-			)
+			// const recordFullWithoutUndefinedElem = recordFull.filter(
+			// 	(elem: any) => elem !== undefined
+			// )
+
+			// const listId = recordFullWithoutUndefinedElem.map((elem: any) => elem.id)
+			// setRecordFull(
+			// 	recordFullAll.filter((elem: any) => {
+			// 		return !listId.includes(elem.id)
+			// 	})
+			// )
 			// if (setSelectedFieldFull) {
 			//     setSelectedFieldFull([])
 			// }
@@ -114,14 +117,17 @@ export const PopoverContent = ({recordFull,recordFullAll,setRecordFull,setSelect
 			//     listIdDelete: listId
 			// }
 			//deleteSeveralContracts(objIdList)
+			// deletePractise()
 		}
 
 
-		const listId = recordFull?.map((elem: any) => elem.id)
-		const listIdDelete = {
-			listIdDelete: listId
-		}
+		// const listId = recordFull?.map((elem: any) => elem.id)
+		// const listIdDelete = {
+		// 	listIdDelete: listId
+		// }
 		// deletePractise(listIdDelete)
+		console.log('vv',recordFull)
+		deletePractise(recordFull.id)
 	}
 
 

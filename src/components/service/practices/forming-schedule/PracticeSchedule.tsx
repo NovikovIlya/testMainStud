@@ -13,6 +13,7 @@ import {
 	Row,
 	Select,
 	Space,
+	Spin,
 	Table,
 	Typography
 } from 'antd'
@@ -38,6 +39,8 @@ import { findSubdivisions } from '../../../../utils/findSubdivisions'
 import { EditableCell, Item } from './EditableCell'
 import { useGetSubdivisionUserQuery } from '../../../../store/api/serviceApi'
 import { useGetSpecialtyNamesForPractiseQuery } from '../../../../store/api/practiceApi/roster'
+import { useDispatch } from 'react-redux'
+import { showNotification } from '../../../../store/reducers/notificationSlice'
 
 interface FilterType {
 	value: string
@@ -173,16 +176,11 @@ const optionMockKind = [
 
 export const PracticeSchedule = () => {
 	const nav = useNavigate()
-	const [year, setYear] = useState('2023/2024')
-	const { data: dataCreate } = useCreateDocumentQuery('2023/2024')
 	const [scheduleIdState, setScheduleIdState] = useState(null)
     const {data:dataUserSubdivision} = useGetSubdivisionUserQuery()
 	const { data: dataBlob, isLoading: isLoadingBlob } = useGetDocQuery(scheduleIdState,{ skip: scheduleIdState === null })
     const {data:dataSpeciality} = useGetSpecialtyNamesForPractiseQuery(dataUserSubdivision?.id,{skip:dataUserSubdivision?.id === null})
-    const {data:dataType} = useGetPracticeTypeForPracticeQuery({subdivisionId:dataUserSubdivision?.id,specialtyNameId:null})
-    const {data:dataPracticeKind} = useGetPracticeKindQuery(dataUserSubdivision?.id,{skip:dataUserSubdivision?.id === null})
-    const [deleteRow,{}] = useDeleteRowMutation()
-    
+    const {data:dataPracticeKind} = useGetPracticeKindQuery(dataUserSubdivision?.id,{skip:dataUserSubdivision?.id === null})    
 	const [filter, setFilter] = useState<any>({
 		type: '',
 		spec: '',
@@ -195,22 +193,14 @@ export const PracticeSchedule = () => {
         subDivision:'Все'
 	})
 	const [form] = Form.useForm()
-
 	const [editingKey, setEditingKey] = useState('')
-	// const [filterParams,setFilterParams] = useState({
-	//     subdivisionId:null,
-	//     specialtyNameId:null,
-	//     courseNumber:null,
-	//     practiceKindId:null,
-	//     educationLevel:null,
-	//     educationType:null
-	// })
 	const { data: dataAllSubdivision } = useGetDepartmentsQuery()
 	const isEditing = (record: Item) => record.key === editingKey
 	const [currentRowValues, setCurrentRowValues] = useState({})
-	const [createSchedule, { data: dataCreateSchedule }] = useCreateScheduleMutation({})
+	const [createSchedule, { data: dataCreateSchedule ,isLoading:isLoadingCreate}] = useCreateScheduleMutation({})
 	const [sendFilterParams,{data:dataByFilter,isSuccess:isSuccessByFilter}] = useGetByFilterMutation()
     const [tableData, setTableData] = useState<any>(dataByFilter)
+	const dispatch = useDispatch()
 
 	const columns = [
 		{
@@ -315,6 +305,7 @@ export const PracticeSchedule = () => {
 						</Typography.Link> */}
 						<Popconfirm
 							title="Вы действительно хотите удалить?"
+							// @ts-ignore
 							onConfirm={() => handleDelete(record.id)}
 						>
 							<a>
@@ -361,7 +352,7 @@ export const PracticeSchedule = () => {
 			})
 		}
 	})
-	console.log('filter.educationType',filter.educationType)
+
 	useEffect(() => {
 		const data = {
 			subdivisionId:  dataUserSubdivision?.id ? dataUserSubdivision?.id : null,
@@ -381,12 +372,7 @@ export const PracticeSchedule = () => {
 	}, [filter, isSuccessByFilter])
 
 	useEffect(() => {
-		// if (isSuccessPractiseAll) {
 		setTableData(filterDataFull())
-
-		// @ts-ignore
-
-		// }
 	}, [filter])
 
 	function filterDataFull() {
@@ -451,17 +437,17 @@ export const PracticeSchedule = () => {
 			: []
 	}
 
-	const downloadFile = () => {
-		if (dataBlob) {
-			const link = document.createElement('a')
-			link.href = dataBlob
-			link.setAttribute('download', 'downloaded-file.docx')
-			document.body.appendChild(link)
-			link.click()
+	// const downloadFile = () => {
+	// 	if (dataBlob) {
+	// 		const link = document.createElement('a')
+	// 		link.href = dataBlob
+	// 		link.setAttribute('download', 'downloaded-file.docx')
+	// 		document.body.appendChild(link)
+	// 		link.click()
 
-			window.URL.revokeObjectURL(dataBlob)
-		}
-	}
+	// 		window.URL.revokeObjectURL(dataBlob)
+	// 	}
+	// }
 
 	function translateColumnsIntoRussia({ isPrint }: { isPrint?: boolean }) {
 		const newData: any = []
@@ -512,11 +498,11 @@ export const PracticeSchedule = () => {
 		})
 	}
 
-	const edit = (record: Partial<Item> & { key: React.Key }) => {
-		form.setFieldsValue({ name: '', age: '', address: '', ...record })
-		setEditingKey(record.key)
-		setCurrentRowValues(record)
-	}
+	// const edit = (record: Partial<Item> & { key: React.Key }) => {
+	// 	form.setFieldsValue({ name: '', age: '', address: '', ...record })
+	// 	setEditingKey(record.key)
+	// 	setCurrentRowValues(record)
+	// }
 
 	const cancel = () => {
 		setEditingKey('')
@@ -557,7 +543,7 @@ export const PracticeSchedule = () => {
 				// setData(newData)
 				setTableData(newData)
 				setEditingKey('')
-				console.log('1', newData[index])
+
 			} else {
 				// если новая запись
 				newData.push(row)
@@ -569,7 +555,7 @@ export const PracticeSchedule = () => {
 			console.log('Validate Failed:', errInfo)
 		}
 	}
-    console.log('tableData',tableData)
+
 	const handleDelete = (id: React.Key) => {
 		const newData = tableData.filter((item: any) => item.id !== id)
 		setTableData(newData)
@@ -586,14 +572,28 @@ export const PracticeSchedule = () => {
 			return `${year - 1}/${year}`
 		}
 	}
+
 	const handleCreateSchedule = () => {
-        console.log('tableData,tableData',tableData.map((item)=>item.id))
-        createSchedule(tableData.map((item)=>item.id))
+        createSchedule({practiceIds: tableData.map((item:any)=>item.id)})
+			.unwrap()
+			.then(()=>{
+				nav('/services/practices/formingSchedule')
+			})
+			.catch((error)=>{
+				console.log(error)
+				if (error.status === 409) {
+					dispatch(showNotification({ message: 'Такой график уже создан', type: 'error' }));
+				}
+				if (error.status === 400) {
+					dispatch(showNotification({ message: 'Текст в консоли', type: 'error' }));
+				}
+			})
+
     }
 
-   
 
 	return (
+		<Spin spinning={isLoadingCreate}>
 		<section className="container">
             <Form form={form} >
 			<Row gutter={[16, 16]}>
@@ -609,7 +609,7 @@ export const PracticeSchedule = () => {
 					/>
 					<Typography.Text className=" text-[28px] mb-14">
 						График проведения практик на {getAcademicYear()} учебный год
-						"Подразделение" КФУ
+						{dataUserSubdivision?.value} КФУ
 					</Typography.Text>
 				</Col>
 			</Row>
@@ -644,7 +644,14 @@ export const PracticeSchedule = () => {
 						popupMatchSelectWidth={false}
 						defaultValue="Все"
 						className="w-full"
-						options={filterSpecialization}
+						options={[
+							{key: 2244612, value: "Все", label: "Все"},
+                            ...(dataSpeciality ? dataSpeciality.map((item:any) => ({
+                              key: item.id,
+                              value: item.value,
+                              label: item.label
+                            })) : [])
+						]}
 						onChange={value => {
 							setFilter({
 								...filter,
@@ -680,7 +687,14 @@ export const PracticeSchedule = () => {
 						popupMatchSelectWidth={false}
 						defaultValue="Все"
 						className="w-full"
-						options={filterType}
+						options={[
+							{key: 2244612, value: "Все", label: "Все"},
+                            ...(dataPracticeKind ? dataPracticeKind.map((item) => ({
+                              key: item.id,
+                              value: item.value,
+                              label: item.label
+                            })) : [])
+						]}
 						onChange={value => {
 							setFilter({
 								...filter,
@@ -785,7 +799,7 @@ export const PracticeSchedule = () => {
 								}
 							}}
 							bordered
-							dataSource={tableData ? tableData.map((item)=>{
+							dataSource={tableData ? tableData.map((item:any)=>{
                                 return{
                                     ...item,
                                     period:  [dayjs(item.practiceStartDate), dayjs(item.practiceEndDate)]
@@ -801,6 +815,7 @@ export const PracticeSchedule = () => {
 			</Row>
             </Form>
 		</section>
+		</Spin>
 	)
 }
 

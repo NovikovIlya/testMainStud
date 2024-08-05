@@ -76,38 +76,8 @@ const filterType: FilterType[] = [
       label: 'Технологическая'
   }
 ]
-const filterEducationLevel: FilterType[] = [
-  {
-      value: '',
-      label: 'Все'
-  },
-  {
-      value: 'Ординатура',
-      label: 'Ординатура'
-  },
-  {
-      value: 'Интернатура',
-      label: 'Интернатура'
-  }
-]
-const filterEducationForm: FilterType[] = [
-  {
-      value: '',
-      label: 'Все'
-  },
-  {
-      value: 'Очная',
-      label: 'Очная'
-  },
-  {
-      value: 'Заочная',
-      label: 'Заочная'
-  },
-  {
-      value: 'Очно - заочная',
-      label: 'Очно - заочная'
-  }
-]
+
+
 
 const optionsSortDate: any = [
   {value: 'По дате (сначала новые)', label: 'По дате (сначала новые)'},
@@ -247,7 +217,7 @@ export const CreateRepresentation = () => {
         .sort((a:any, b:any) => sortDateFilling(a, b))
     : []
 }
-  console.log('tableData',tableData)
+
   // function isCompressedView() {
   //     setStateSchedule({
   //         ...stateSchedule,
@@ -338,6 +308,7 @@ export const CreateRepresentation = () => {
       }
       return ''; // Возвращает пустую строку, если dateRange не является массивом или если длина массива не равна 2
   };
+
   const save = async (key: React.Key) => {
       try {
         const row = (await form.validateFields()) as Item;
@@ -365,7 +336,7 @@ export const CreateRepresentation = () => {
         console.log('Validate Failed:', errInfo);
       }
   };
-  console.log('data',data)
+
   const columns = [
   {
     key: 'name',
@@ -385,7 +356,7 @@ export const CreateRepresentation = () => {
     dataIndex: 'selectCourse',
     title: 'Курс',
     className: 'text-xs !p-2',
-          editable: true,
+    editable: true,
          
   },
       {
@@ -398,7 +369,8 @@ export const CreateRepresentation = () => {
     key: 'level',
     dataIndex: 'level',
     title: 'Уровень образования',
-    className: 'text-xs !p-2'
+    className: 'text-xs !p-2',
+    editable: true,
   },
       {
     key: 'forms',
@@ -411,7 +383,7 @@ export const CreateRepresentation = () => {
     dataIndex: 'selectKind',
     title: 'Вид практики',
     className: 'text-xs !p-2',
-          editable: true,
+    editable: true,
   },
       {
     key: 'type',
@@ -512,7 +484,7 @@ export const CreateRepresentation = () => {
                           }}
                       />
                   <Typography.Text className=" text-[28px] mb-14">
-                      График проведения практик на "year" учебный год ""
+                      Представление '...'
                   </Typography.Text>
              
               </Col>

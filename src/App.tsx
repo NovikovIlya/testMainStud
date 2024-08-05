@@ -20,6 +20,7 @@ import {Redirect} from "./components/redirect/Redirect";
 import ru_RU from 'antd/locale/ru_RU';
 import { NotFound } from './components/NotFound'
 import { Notification } from './components/notification/Notification'
+import EditSchedule from './components/service/practices/forming-schedule/EditSchedule'
 
 
 
@@ -61,7 +62,7 @@ const App = () => {
 						<Route path="/parent" element={<ParentForm />} />
 						<Route path="/services/*" element={<Service />} />
 						<Route path="/*" element={<NotFound/>} />
-						
+						{/* <Route path="/services/practices/formingSchedule/edit/:id" element={<EditSchedule />} /> */}
 					</Route>
 				</Routes>
 			</ConfigProvider>

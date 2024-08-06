@@ -157,7 +157,7 @@ export const EditSchedule = () => {
 	const [filter, setFilter] = useState<any>({
 		type: '',
 		spec: '',
-		course: 'Все',
+		courseNumber: 'Все',
 		educationLevel: 'Все',
 		educationType: 'Все',
 		dateFilling: 'По дате (сначала новые)',
@@ -360,40 +360,42 @@ export const EditSchedule = () => {
 		function filterCourse(elem: any) {
 			console.log('element',elem)
 			console.log('filter',filter)
-			if (filter.course === 'Все') {
+			if (filter?.courseNumber?.includes('Все')) {
 				return elem
 			} else {
-				return elem.courseNumber === Number(filter.course)
+				return filter?.courseNumber ? filter?.courseNumber?.some(item=>elem?.courseNumber === Number(item)) : null
 			}
 		}
 		function filterLevel(elem: any) {
-			if (filter.educationLevel === 'Все') {
+			if (filter?.educationLevel?.includes('Все')) {
 				return elem
 			} else {
-				return elem.educationLevel === filter.educationLevel
+				return filter?.educationLevel ? filter?.educationLevel?.some(item=>elem?.educationLevel === (item)) : null
 			}
 		}
 		function filterForm(elem: any) {
-			if (filter.educationType === 'Все') {
+			if (filter?.educationType?.includes('Все')) {
 				return elem
 			} else {
-				return elem.educationType === filter.educationType
+				return filter?.educationType ? filter?.educationType?.some(item=>elem?.educationType === (item)) : null
 			}
 		}
 		function filterKind(elem: any) {
-			if (filter.practiceKind === 'Все') {
+			console.log('filter',filter)
+			console.log('elem',elem)
+			if (filter?.practiceKind?.includes('Все')) {
 				return elem
 			} else {
-				return elem.practiceKind === filter.practiceKind
+				return filter?.practiceKind ? filter?.practiceKind?.some(item=>elem?.practiceKind === (item)) : null
 			}
 		}
-		function filterName(elem: any) {
-			if (filter.name === 'Все') {
-				return elem
-			} else {
-				return elem.name === filter.name
-			}
-		}
+		// function filterName(elem: any) {
+		// 	if (filter?.specialtyName?.includes('Все')) {
+		// 		return elem
+		// 	} else {
+		// 		return filter?.specialtyName ? filter?.specialtyName?.some(item=>elem?.specialtyName === Number(item)) : null
+		// 	}
+		// }
 
 		function sortDateFilling(a: any, b: any) {
 			if (filter.dateFilling === 'По дате (сначала новые)') {
@@ -409,7 +411,7 @@ export const EditSchedule = () => {
 			? dataOneSchedule
 					.filter((elem: any) => filterCourse(elem))
 					.filter((elem: any) => filterKind(elem))
-					.filter((elem: any) => filterName(elem))
+					// .filter((elem: any) => filterName(elem))
 					.filter((elem: any) => filterLevel(elem))
 					.filter((elem: any) => filterForm(elem))
 					.sort((a: any, b: any) => sortDateFilling(a, b))
@@ -607,7 +609,8 @@ export const EditSchedule = () => {
 					<Typography.Text>Шифр и наименование специальности</Typography.Text>
 				</Col>
 				<Col span={8}>
-					<Select
+					<Select	
+						mode='multiple'
 						popupMatchSelectWidth={false}
 						defaultValue="Все"
 						className="w-full"
@@ -622,7 +625,7 @@ export const EditSchedule = () => {
 						onChange={value => {
 							setFilter({
 								...filter,
-								name: value
+								specialtyName: value
 							})
 						}}
 					/>
@@ -634,6 +637,7 @@ export const EditSchedule = () => {
 				</Col>
 				<Col span={2}>
 					<Select
+						mode='multiple'
 						popupMatchSelectWidth={false}
 						defaultValue="Все"
 						className="w-full"
@@ -641,7 +645,7 @@ export const EditSchedule = () => {
 						onChange={value => {
 							setFilter({
 								...filter,
-								course: value
+								courseNumber: value
 							})
 						}}
 					/>
@@ -651,6 +655,7 @@ export const EditSchedule = () => {
 				</Col>
 				<Col span={6}>
 					<Select
+						mode='multiple'
 						popupMatchSelectWidth={false}
 						defaultValue="Все"
 						className="w-full"
@@ -677,6 +682,7 @@ export const EditSchedule = () => {
 				</Col>
 				<Col span={8}>
 					<Select
+						mode='multiple'
 						popupMatchSelectWidth={false}
 						defaultValue="Все"
 						className="w-full"
@@ -696,6 +702,7 @@ export const EditSchedule = () => {
 				</Col>
 				<Col span={8}>
 					<Select
+						mode='multiple'
 						popupMatchSelectWidth={false}
 						defaultValue="Все"
 						className="w-full"

@@ -25,16 +25,18 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { ArrowLeftSvg } from '../../../../assets/svg'
 import { DeleteRedSvg } from '../../../../assets/svg/DeleteRedSvg'
 import {
+	useDeleteMutation,
 	useDeleteRowMutation,
 	useGetByFilterMutation,
 	useGetDocQuery,
 	useGetOneScheduleQuery
 } from '../../../../store/api/practiceApi/formingSchedule'
-import { useGetDepartmentsQuery, useGetPracticeKindQuery, useGetPracticeTypeForPracticeQuery } from '../../../../store/api/practiceApi/individualTask'
+import { useGetDepartmentsQuery, useGetPracticeKindQuery } from '../../../../store/api/practiceApi/individualTask'
 
-import { EditableCell, Item } from './EditableCell'
+import { EditableCell } from './EditableCell'
 import { useGetSubdivisionUserQuery } from '../../../../store/api/serviceApi'
 import { useGetSpecialtyNamesForPractiseQuery } from '../../../../store/api/practiceApi/roster'
+import { Item } from '../Representation/EditableCell'
 
 interface FilterType {
 	value: string
@@ -113,11 +115,8 @@ const filterCourse: FilterType[] = [
 	{
 		value: '6',
 		label: '6'
-	},
-	{
-		value: '7',
-		label: '7'
 	}
+	
 ]
 
 const optionsSortDate: any = [
@@ -153,7 +152,7 @@ export const EditSchedule = () => {
 	const { data: dataBlob, isLoading: isLoadingBlob,isFetching:isFetchingBlob } = useGetDocQuery(id,{ skip: !id })
     const {data:dataSpeciality} = useGetSpecialtyNamesForPractiseQuery(dataUserSubdivision?.id,{skip:dataUserSubdivision?.id === null})
     const {data:dataPracticeKind} = useGetPracticeKindQuery(dataUserSubdivision?.id,{skip:dataUserSubdivision?.id === null})
-    const [deleteRow,{}] = useDeleteRowMutation()
+    const [deleteRow] = useDeleteRowMutation()
     const {data:dataOneSchedule,isLoading:isLoadingOneSchedule,isSuccess:isSuccessAll} = useGetOneScheduleQuery(id,{skip:!id })
 	const [filter, setFilter] = useState<any>({
 		type: '',
@@ -174,7 +173,8 @@ export const EditSchedule = () => {
 	// const [createSchedule, { data: dataCreateSchedule }] = useCreateScheduleMutation({})
 	const [sendFilterParams,{data:dataByFilter,isSuccess:isSuccessByFilter}] = useGetByFilterMutation()
     const [tableData, setTableData] = useState<any>(dataByFilter)
-
+	const [deleteSchedule,{}] = useDeleteMutation()
+ 
 	const columns = [
 		{
 			key: 'name',
@@ -325,17 +325,18 @@ export const EditSchedule = () => {
 		}
 	})
 
-	useEffect(() => {
-		const data = {
-			subdivisionId:  dataUserSubdivision?.id ? dataUserSubdivision?.id : null,
-			specialtyNameId: null,
-			courseNumber: null,
-			practiceKindId: null,
-			educationLevel: filter.educationLevel ==='Все' ? null : filter.educationLevel,
-			educationType: filter.educationType ==='Все' ? null : filter.educationType
-		}
-		sendFilterParams(data)
-	}, [filter, dataAllSubdivision, form])
+
+	// useEffect(() => {
+	// 	const data = {
+	// 		subdivisionId:  dataUserSubdivision?.id ? dataUserSubdivision?.id : null,
+	// 		specialtyNameId: null,
+	// 		courseNumber: null,
+	// 		practiceKindId: null,
+	// 		educationLevel: filter.educationLevel ==='Все' ? null : filter.educationLevel,
+	// 		educationType: filter.educationType ==='Все' ? null : filter.educationType
+	// 	}
+	// 	sendFilterParams(data)
+	// }, [filter, dataAllSubdivision, form])
 
     useEffect(() => {
 		if (isSuccessAll) {
@@ -355,11 +356,14 @@ export const EditSchedule = () => {
 
 
 	function filterDataFull() {
+		
 		function filterCourse(elem: any) {
+			console.log('element',elem)
+			console.log('filter',filter)
 			if (filter.course === 'Все') {
 				return elem
 			} else {
-				return elem.courseNumber === filter.course
+				return elem.courseNumber === Number(filter.course)
 			}
 		}
 		function filterLevel(elem: any) {
@@ -413,6 +417,7 @@ export const EditSchedule = () => {
 	}
 
 	const downloadFile = () => {
+		console.log('dataBlob',dataBlob)
 		if (dataBlob) {
 			const link = document.createElement('a')
 			link.href = dataBlob
@@ -420,7 +425,7 @@ export const EditSchedule = () => {
 			document.body.appendChild(link)
 			link.click()
 
-			window.URL.revokeObjectURL(dataBlob)
+			// window.URL.revokeObjectURL(dataBlob)
 		}
 	}
 
@@ -428,13 +433,13 @@ export const EditSchedule = () => {
 		const newData: any = []
 		// const recordCompressedWithoutUndefinedElem = dataCreate.filter((elem:any) => elem !== undefined)
 
-		for (let elem of dataByFilter) {
+		for (let elem of tableData) {
 			const startPractice = `${dayjs(elem.period?.[0]).format('DD.MM.YYYY')}`
 			const endPractice = `${dayjs(elem.period?.[1]).format('DD.MM.YYYY')}`
 			const newObj = {
 				'Шифр и наименование специальности': elem.specialtyName,
 				// 'Учебный год': elem.academicYear,
-				Курс: elem.courseNumber,
+				'Курс': elem.courseNumber,
 				'Номер группы': elem.groupNumbers,
 				'Уровень образования': elem.educationLevel,
 				'Форма обучения': elem.educationType,
@@ -531,13 +536,25 @@ export const EditSchedule = () => {
 	}
 
 	const handleDelete = (idP: React.Key) => {
+		console.log('tableData',tableData)
+		if(tableData.length === 1) {
+			const obj = {
+					scheduleId:id,
+					practiceId:idP
+			}
+			deleteRow(obj)
+			deleteSchedule(id)
+			nav('/services/practices/formingSchedule')
+			return
+		}
 		const newData = tableData.filter((item: any) => item.id !== idP)
 		setTableData(newData)
 		const obj = {
-		scheduleId:id,
-		practiceId:idP
+			scheduleId:id,
+			practiceId:idP
 		}
 		deleteRow(obj)
+		
 	}
 
 
@@ -564,11 +581,11 @@ export const EditSchedule = () => {
 			</Row>
 			<Row gutter={[8, 16]} className="mt-12 w-full flex items-center">
 				{dataUserSubdivision?.value ? 
-                <><Col span={5}>
+                <>
+				<Col span={5}>
 					<span>Подразделение</span>
 				</Col>
 				<Col span={7}>
-					
 						<Form.Item name={'subDivision'}>
 							<Select
 								popupMatchSelectWidth={false}
@@ -584,7 +601,8 @@ export const EditSchedule = () => {
 							/>
 						</Form.Item>
 					
-                </Col></> : null}
+                </Col>
+				</> : null}
 				<Col span={4}>
 					<Typography.Text>Шифр и наименование специальности</Typography.Text>
 				</Col>
@@ -638,7 +656,7 @@ export const EditSchedule = () => {
 						className="w-full"
 						options={[
 							{key: 2244612, value: "Все", label: "Все"},
-                            ...(dataPracticeKind ? dataPracticeKind.map((item) => ({
+                            ...(dataPracticeKind ? dataPracticeKind.map((item:any) => ({
                               key: item.id,
                               value: item.value,
                               label: item.label
@@ -711,9 +729,9 @@ export const EditSchedule = () => {
 							<Button disabled={isLoadingBlob || isFetchingBlob} onClick={downloadFile}>
 								<VerticalAlignBottomOutlined /> Скачать
 							</Button>
-							<Button disabled={isLoadingBlob} onClick={print}>
+							{/* <Button disabled={isLoadingBlob} onClick={print}>
 								<PrinterOutlined /> Печать
-							</Button>
+							</Button> */}
 						</Space>
 					</div>
 				</Col>

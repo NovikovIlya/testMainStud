@@ -1,6 +1,3 @@
-import {
-    IDocument, IDocumentStatus
-} from '../../../models/Practice'
 import { apiSlice } from '../apiSlice'
 
 
@@ -39,7 +36,6 @@ export const taskService = apiSlice.injectEndpoints({
             query: () => {
                 return {
                     url: `/services/api-practices/practice-schedule/academic-years`,
-
                 }
             },
         }),
@@ -47,7 +43,6 @@ export const taskService = apiSlice.injectEndpoints({
             query: () => {
                 return {
                     url: `/services/api-practices/practice-schedule/subdivisions`,
-
                 }
             },
         }),
@@ -56,7 +51,6 @@ export const taskService = apiSlice.injectEndpoints({
                 return {
                     url: `/services/api-practices/practice-schedule/lines?scheduleId=${scheduleId}`,
                     method: 'GET',
-                   
                 }
             }, 
             keepUnusedDataFor:1,
@@ -66,7 +60,6 @@ export const taskService = apiSlice.injectEndpoints({
                 return {
                     url: `/services/api-practices/practice-schedule/line?scheduleId=${scheduleId}&practiceId=${practiceId}`,
                     method: 'DELETE',
-                   
                 }
             },
         }),
@@ -75,7 +68,6 @@ export const taskService = apiSlice.injectEndpoints({
                 return {
                     url: `/services/api-practices/practice-schedule?scheduleId=${scheduleId}`,
                     method: 'DELETE',
-                   
                 }
             },
             invalidatesTags:['Schedule'],

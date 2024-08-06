@@ -21,6 +21,8 @@ import { useGetAcademicYearQuery, useGetAllSchedulesQuery, useGetSubdivisionQuer
 import { useGetSubdivisionUserQuery } from '../../../../store/api/serviceApi'
 import { LoadingOutlined } from '@ant-design/icons'
 import { processingOfDivisions } from '../../../../utils/processingOfDivisions'
+import { ScheduleType } from '../../../../models/representation'
+import { NewDepartment } from '../../../../models/Practice'
 
 
 const optionsSortDate: any = [
@@ -30,17 +32,21 @@ const optionsSortDate: any = [
 
 export const PracticeSchedule = () => {
 	const navigate = useNavigate()
-	const [filter, setFilter] = useState({
-		dateFilling: 'По дате (сначала новые)'
-	})
+	const [filter, setFilter] = useState(
+		{
+			dateFilling: 'По дате (сначала новые)',
+			subdivisionId: 'Все',
+			academicYear: 'Все',
+		}
+	)
 	const [tableData, setTableData] = useState([])
 	const [selectedFieldsFull, setSelectedFieldFull] = useState<any>([])
-	const [dataTable, setDataTable] = useState<any>([])
+	const [dataTable, setDataTable] = useState<ScheduleType[]>([])
 	const {data:dataUserSubdivision} = useGetSubdivisionUserQuery()
 	const {data:dataAll,isSuccess:isSuccessData,isFetching:isFetchingDataAll} = useGetAllSchedulesQuery({subdivisionId:dataUserSubdivision?.value,academicYear:getAcademicYear()},{skip:!dataUserSubdivision})
 	const {data:dataAcademicYear} = useGetAcademicYearQuery()
 	const {data:dataSubdivision,isSuccess:isSuccessSubdivision} = useGetSubdivisionQuery()
-	const [departments, setDepartments] = useState<any[]>()
+	const [departments, setDepartments] = useState<NewDepartment[]>()
 	const columns = [
 		{
 			key: 'name',
@@ -118,21 +124,22 @@ export const PracticeSchedule = () => {
 			width: 50
 		}
 	]
-	
+
 	useEffect(() => {
 		if (isSuccessSubdivision) {
 			setDepartments(processingOfDivisions(dataSubdivision))
 		}
 	}, [dataSubdivision])
-
+	
 	useEffect(() => {
 		if (isSuccessData) {
 			setDataTable(filterDataFull())
 		}
 	}, [filter,isSuccessData,dataAll])
 
+
 	function filterDataFull() {
-		function sortDateFilling(a: any, b: any) {
+		function sortDateFilling(a: ScheduleType, b: ScheduleType) {
 			if (filter.dateFilling === 'По дате (сначала новые)') {
 				return +new Date(b.dateFilling) - +new Date(a.dateFilling)
 			}
@@ -141,9 +148,28 @@ export const PracticeSchedule = () => {
 			}
 			return 0
 		}
+		function filterSubdivision(elem: any) {
+			console.log('elem',elem)
+			if (filter.subdivisionId === 'Все') {
+				return elem
+			} else {
+				return elem.subdivisionId === filter.subdivisionId
+			}
+		}
+		function filterAcademicYear(elem: any) {
+			console.log('elem',elem)
+			if (filter.academicYear === 'Все') {
+				return elem
+			} else {
+				return elem.academicYear === filter.academicYear
+			}
+		}
 
 		return dataAll
-			? [...dataAll].sort((a: any, b: any) => sortDateFilling(a, b))
+			? [...dataAll]
+			.sort((a: ScheduleType, b: ScheduleType) => sortDateFilling(a, b))
+			.filter((elem: any) => filterSubdivision(elem))
+			.filter((elem: any) => filterAcademicYear(elem))
 			: []
 	}
 
@@ -178,13 +204,17 @@ export const PracticeSchedule = () => {
 						popupMatchSelectWidth={false}
 						defaultValue="Все"
 						className="w-full"
+						onChange={(value: any) => {
+							console.log(value)
+							setFilter({ ...filter, subdivisionId: value })
+						}}
 						options={
 							[
 								{ key: 2244612, value: 'Все', label: 'Все' },
 								...(departments
 									? departments.map(item => ({
 											key: item.id,
-											value: item.value,
+											value: item.id,
 											label: item.label
 									  }))
 									: [])
@@ -217,10 +247,13 @@ export const PracticeSchedule = () => {
 						popupMatchSelectWidth={false}
 						defaultValue="Все"
 						className="w-full"
+						onChange={(value: any) => {
+							setFilter({ ...filter, academicYear: value })
+						}}
 						options={
 							[
 								{key: 2244612, value: "Все", label: "Все"},
-                            ...(dataAcademicYear ? dataAcademicYear.map((item:any) => ({
+                            ...(dataAcademicYear ? dataAcademicYear.map((item:string) => ({
                               key: item,
                               value: item,
                               label: item

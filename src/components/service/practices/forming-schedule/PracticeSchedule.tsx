@@ -1,9 +1,6 @@
 import {
 	CheckOutlined,
-	CloseOutlined,
-	PlusOutlined,
-	PrinterOutlined,
-	VerticalAlignBottomOutlined
+	CloseOutlined, LoadingOutlined, PrinterOutlined
 } from '@ant-design/icons'
 import {
 	Button,
@@ -20,43 +17,30 @@ import {
 import type { TableProps } from 'antd'
 import dayjs from 'dayjs'
 import printJS from 'print-js'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { ArrowLeftSvg } from '../../../../assets/svg'
 import { DeleteRedSvg } from '../../../../assets/svg/DeleteRedSvg'
-import { EditSvg } from '../../../../assets/svg/EditSvg'
 import {
-	useCreateDocumentQuery,
-	useCreateScheduleMutation,
-	useDeleteRowMutation,
-	useGetByFilterMutation,
+	useCreateScheduleMutation, useGetByFilterMutation,
 	useGetDocQuery
 } from '../../../../store/api/practiceApi/formingSchedule'
-import { useGetDepartmentsQuery, useGetPracticeKindQuery, useGetPracticeTypeForPracticeQuery } from '../../../../store/api/practiceApi/individualTask'
-import { findSubdivisions } from '../../../../utils/findSubdivisions'
+import { useGetDepartmentsQuery, useGetPracticeKindQuery } from '../../../../store/api/practiceApi/individualTask'
 
-import { EditableCell, Item } from './EditableCell'
+import { EditableCell } from './EditableCell'
 import { useGetSubdivisionUserQuery } from '../../../../store/api/serviceApi'
 import { useGetSpecialtyNamesForPractiseQuery } from '../../../../store/api/practiceApi/roster'
 import { useDispatch } from 'react-redux'
 import { showNotification } from '../../../../store/reducers/notificationSlice'
+import { Item } from '../Representation/EditableCell'
+import { Filter } from '../../../../models/representation'
 
 interface FilterType {
 	value: string
 	label: string
 }
 
-const filterSpecialization: FilterType[] = [
-	{
-		value: 'Все',
-		label: 'Все'
-	},
-	{
-		value: '1',
-		label: '1'
-	}
-]
 const filterLevel: FilterType[] = [
 	{
 		value: 'Все',
@@ -184,12 +168,12 @@ export const PracticeSchedule = () => {
 	const [filter, setFilter] = useState<any>({
 		type: '',
 		spec: '',
-		course: 'Все',
+		courseNumber: 'Все',
 		educationLevel: 'Все',
 		educationType: 'Все',
 		dateFilling: 'По дате (сначала новые)',
 		practiceKind: 'Все',
-		specialtyName: null,
+		specialtyName: 'Все',
         subDivision:'Все'
 	})
 	const [form] = Form.useForm()
@@ -198,7 +182,7 @@ export const PracticeSchedule = () => {
 	const isEditing = (record: Item) => record.key === editingKey
 	const [currentRowValues, setCurrentRowValues] = useState({})
 	const [createSchedule, { data: dataCreateSchedule ,isLoading:isLoadingCreate}] = useCreateScheduleMutation({})
-	const [sendFilterParams,{data:dataByFilter,isSuccess:isSuccessByFilter}] = useGetByFilterMutation()
+	const [sendFilterParams,{data:dataByFilter,isSuccess:isSuccessByFilter,isLoading:isLoadingByFilters}] = useGetByFilterMutation()
     const [tableData, setTableData] = useState<any>(dataByFilter)
 	const dispatch = useDispatch()
 
@@ -354,13 +338,14 @@ export const PracticeSchedule = () => {
 	})
 
 	useEffect(() => {
+		console.log('filter.courseNumber',filter.courseNumber)
 		const data = {
 			subdivisionId:  dataUserSubdivision?.id ? dataUserSubdivision?.id : null,
-			specialtyNameId: null,
-			courseNumber: null,
-			practiceKindId: null,
-			educationLevel: filter.educationLevel ==='Все' ? null : filter.educationLevel,
-			educationType: filter.educationType ==='Все' ? null : filter.educationType
+			specialtyNameId:  dataSpeciality ? dataSpeciality : null,
+			courseNumber: filter.courseNumber ==='Все' ? null : filter.courseNumber.includes('Все') ? null : filter?.courseNumber?.filter(x => x !== "Все").map(Number),
+			practiceKindId: filter.practiceKindId ==='Все' ? null: filter?.practiceKindId?.filter(x => x !== "Все").map(Number),
+			educationLevel: filter.educationLevel ==='Все' ? null : filter.educationLevel.includes('Все') ? null : filter?.educationLevel,
+			educationType: filter.educationType ==='Все' ? null : filter.educationType.includes('Все') ? null : filter?.educationType,
 		}
 		sendFilterParams(data)
 	}, [filter, dataAllSubdivision, form])
@@ -376,64 +361,56 @@ export const PracticeSchedule = () => {
 	}, [filter])
 
 	function filterDataFull() {
-		function filterCourse(elem: any) {
-			if (filter.course === 'Все') {
-				return elem
-			} else {
-				return elem.courseNumber === filter.course
-			}
-		}
-		function filterLevel(elem: any) {
-			if (filter.educationLevel === 'Все') {
-				return elem
-			} else {
-				return elem.educationLevel === filter.educationLevel
-			}
-		}
-		function filterForm(elem: any) {
-			if (filter.educationType === 'Все') {
-				return elem
-			} else {
-				return elem.educationType === filter.educationType
-			}
-		}
-		function filterKind(elem: any) {
-			if (filter.practiceKind === 'Все') {
-				return elem
-			} else {
-				return elem.practiceKind === filter.practiceKind
-			}
-		}
-		function filterName(elem: any) {
-			if (filter.name === 'Все') {
-				return elem
-			} else {
-				return elem.name === filter.name
-			}
-		}
+		// function filterCourse(elem: any) {
+		// 	if (filter.course === 'Все') {
+		// 		return elem
+		// 	} else {
+		// 		return elem.courseNumber === filter.course
+		// 	}
+		// }
+		// function filterLevel(elem: any) {
+		// 	if (filter.educationLevel === 'Все') {
+		// 		return elem
+		// 	} else {
+		// 		return elem.educationLevel === filter.educationLevel
+		// 	}
+		// }
+		// function filterForm(elem: any) {
+		// 	if (filter.educationType === 'Все') {
+		// 		return elem
+		// 	} else {
+		// 		return elem.educationType === filter.educationType
+		// 	}
+		// }
+		// function filterKind(elem: any) {
+		// 	if (filter.practiceKind === 'Все') {
+		// 		return elem
+		// 	} else {
+		// 		return elem.practiceKind === filter.practiceKind
+		// 	}
+		// }
+		// function filterName(elem: any) {
+		// 	if (filter.specialtyName === 'Все') {
+		// 		return elem
+		// 	} else {
+		// 		return elem.specialtyName === filter.specialtyName
+		// 	}
+		// }
 
-		function sortDateFilling(a: any, b: any) {
-			if (filter.dateFilling === 'По дате (сначала новые)') {
-				return +new Date(b.dateFilling) - +new Date(a.dateFilling)
-			}
-			if (filter.dateFilling === 'По дате (сначала старые)') {
-				return +new Date(a.dateFilling) - +new Date(b.dateFilling)
-			}
-			return 0
-		}
+		// function sortDateFilling(a: any, b: any) {
+		// 	console.log('a',a)
+		// 	if (filter.dateFilling === 'По дате (сначала новые)') {
+		// 		return +new Date(b.dateFilling) - +new Date(a.dateFilling)
+		// 	}
+		// 	if (filter.dateFilling === 'По дате (сначала старые)') {
+		// 		return +new Date(a.dateFilling) - +new Date(b.dateFilling)
+		// 	}
+		// 	return 0
+		// }
 
 		return dataByFilter
 			? dataByFilter
-					// .filter((elem: any) => filterDepartment(elem))
-					.filter((elem: any) => filterCourse(elem))
-					.filter((elem: any) => filterKind(elem))
-					.filter((elem: any) => filterName(elem))
-					.filter((elem: any) => filterLevel(elem))
-					.filter((elem: any) => filterForm(elem))
-					// .filter((elem: any) => filterSemester(elem))
-					// .filter((elem: any) => filterNameSpecialty(elem))
-					// .filter((elem :any) => filterSubdivision(elem))
-					.sort((a: any, b: any) => sortDateFilling(a, b))
+					// .sort((a: any, b: any) => sortDateFilling(a, b))
 			: []
 	}
 
@@ -451,15 +428,15 @@ export const PracticeSchedule = () => {
 
 	function translateColumnsIntoRussia({ isPrint }: { isPrint?: boolean }) {
 		const newData: any = []
-		// const recordCompressedWithoutUndefinedElem = dataCreate.filter((elem:any) => elem !== undefined)
+	
 
-		for (let elem of dataByFilter) {
+		for (let elem of tableData) {
 			const startPractice = `${dayjs(elem.period?.[0]).format('DD.MM.YYYY')}`
 			const endPractice = `${dayjs(elem.period?.[1]).format('DD.MM.YYYY')}`
 			const newObj = {
 				'Шифр и наименование специальности': elem.specialtyName,
 				// 'Учебный год': elem.academicYear,
-				Курс: elem.courseNumber,
+				'Курс': elem.courseNumber,
 				'Номер группы': elem.groupNumbers,
 				'Уровень образования': elem.educationLevel,
 				'Форма обучения': elem.educationType,
@@ -608,7 +585,7 @@ export const PracticeSchedule = () => {
 						}}
 					/>
 					<Typography.Text className=" text-[28px] mb-14">
-						График проведения практик на {getAcademicYear()} учебный год
+						Добавление графика проведения практик на {getAcademicYear()} учебный год
 						{dataUserSubdivision?.value} КФУ
 					</Typography.Text>
 				</Col>
@@ -641,6 +618,7 @@ export const PracticeSchedule = () => {
 				</Col>
 				<Col span={8}>
 					<Select
+						mode='multiple'
 						popupMatchSelectWidth={false}
 						defaultValue="Все"
 						className="w-full"
@@ -655,7 +633,7 @@ export const PracticeSchedule = () => {
 						onChange={value => {
 							setFilter({
 								...filter,
-								name: value
+								specialtyName: value
 							})
 						}}
 					/>
@@ -665,8 +643,9 @@ export const PracticeSchedule = () => {
 				<Col span={1}>
 					<Typography.Text className="whitespace-nowrap">Курс</Typography.Text>
 				</Col>
-				<Col span={2}>
+				<Col span={3}>
 					<Select
+						mode='multiple'
 						popupMatchSelectWidth={false}
 						defaultValue="Все"
 						className="w-full"
@@ -674,7 +653,7 @@ export const PracticeSchedule = () => {
 						onChange={value => {
 							setFilter({
 								...filter,
-								course: value
+								courseNumber: value
 							})
 						}}
 					/>
@@ -682,8 +661,9 @@ export const PracticeSchedule = () => {
 				<Col span={3}>
 					<Typography.Text>Вид практики</Typography.Text>
 				</Col>
-				<Col span={6}>
+				<Col span={5}>
 					<Select
+						mode='multiple'
 						popupMatchSelectWidth={false}
 						defaultValue="Все"
 						className="w-full"
@@ -691,8 +671,8 @@ export const PracticeSchedule = () => {
 							{key: 2244612, value: "Все", label: "Все"},
                             ...(dataPracticeKind ? dataPracticeKind.map((item) => ({
                               key: item.id,
-                              value: item.value,
-                              label: item.label
+                              value: item.id,
+                              label: item.value
                             })) : [])
 						]}
 						onChange={value => {
@@ -709,7 +689,8 @@ export const PracticeSchedule = () => {
 					<Typography.Text>Уровень образования</Typography.Text>
 				</Col>
 				<Col span={8}>
-					<Select
+					<Select	
+						mode='multiple'
 						popupMatchSelectWidth={false}
 						defaultValue="Все"
 						className="w-full"
@@ -729,6 +710,7 @@ export const PracticeSchedule = () => {
 				</Col>
 				<Col span={8}>
 					<Select
+						mode='multiple'
 						popupMatchSelectWidth={false}
 						defaultValue="Все"
 						className="w-full"
@@ -762,13 +744,13 @@ export const PracticeSchedule = () => {
 							{/* <Button disabled={isLoadingBlob} onClick={downloadFile}>
 								<VerticalAlignBottomOutlined /> Скачать
 							</Button> */}
-							<Button disabled={isLoadingBlob} onClick={print}>
+							{/* <Button disabled={isLoadingBlob} onClick={print}>
 								<PrinterOutlined /> Печать
-							</Button>
+							</Button> */}
 						</Space>
 					</div>
 				</Col>
-				<Col span={8} offset={4}>
+				{/* <Col span={8} offset={4}>
 					<div className={'flex gap-2 items-center'}>
 						<span className={'mr-2'}>Сортировка</span>
 						<Select
@@ -784,14 +766,14 @@ export const PracticeSchedule = () => {
 							}}
 						/>
 					</div>
-				</Col>
+				</Col> */}
 			</Row>
 
 			<Row className="mt-4">
 				<Col flex={'auto'}>
 					{/* {stateSchedule.compressed && <CompressedView/>}
                     {stateSchedule.table && <TableView/>} */}
-					
+					{isLoadingByFilters ?  <Spin className='w-full mt-20' indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />   :
 						<Table
 							components={{
 								body: {
@@ -810,7 +792,7 @@ export const PracticeSchedule = () => {
 							pagination={false}
 							rowKey="id"
 						/>
-					
+						}
 				</Col>
 			</Row>
             </Form>

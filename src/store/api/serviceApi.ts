@@ -664,5 +664,7 @@ export const {
 	useApproveReservedRespondMutation,
 	useGetAllVacanciesQuery,
 	useEditVacancyAsPerDepartmentMutation,
-	useDeleteVacancyAsPerDepartmentMutation
+	useDeleteVacancyAsPerDepartmentMutation,
+	useLazyGetVacancyPreviewByDirectionQuery,
+	useLazyGetVacancyPreviewBySubdivisionQuery
 } = serviceApi

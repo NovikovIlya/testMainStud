@@ -47,7 +47,7 @@ export const ChatPreview = (props: {
 		} else {
 			dispatch(openChat())
 		}
-		dispatch(setChatId(chatId))
+		dispatch(setChatId(1))
 		dispatch(setRespondId(props.respondId))
 		navigate(url)
 	}

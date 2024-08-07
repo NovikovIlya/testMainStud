@@ -1,5 +1,5 @@
 import {
-  Button, Col, Form, Popconfirm, Row,
+  Button, Col, Form, Input, Modal, Popconfirm, Row,
   Select,
   Space, Table, Typography
 } from 'antd';
@@ -14,7 +14,8 @@ import printJS from 'print-js';
 import { EditableCell, Item } from './EditableCell';
 import { DeleteRedSvg } from '../../../../assets/svg/DeleteRedSvg';
 import { EditSvg } from '../../../../assets/svg/EditSvg';
-import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
+import { CheckOutlined, CloseOutlined, SearchOutlined } from '@ant-design/icons';
+import Highlighter from 'react-highlight-words';
 
 
 interface FilterType {
@@ -102,9 +103,10 @@ const optionMockKind = [
 export const CreateRepresentation = () => {
   const tableRef = useRef(null);
   const originData: any = [
-      {id:'czxczxc',key:'czxczxc',name:'1',academicYear:'2024',address:'Kazan',period: [dayjs('2024-07-01'), dayjs('2024-07-15')],selectCourse:'1',type:null,dateFilling:'2024-07-30',selectKind:'Производственная'},
-      {id:'bbq',key:'bbq',name:'2',academicYear:'2030',address:'Moscw',period:null,selectCourse:'1',type:null,dateFilling:'2024-07-29',selectKind:'Производственная'},
-      {id:'ccx',key:'ccx',name:'3',academicYear:'2030',address:'Moscw',period:null,selectCourse:'1',type:null,dateFilling:'2024-07-28',selectKind:'Производственная'}
+      {id:'czxczxc',key:'czxczxc',name:'jim',academicYear:'2024',address:'Kazan',period: [dayjs('2024-07-01'), dayjs('2024-07-15')],selectCourse:'1',type:null,dateFilling:'2024-07-30',selectKind:'Производственная'},
+      {id:'bbq',key:'bbq',name:'jon',academicYear:'2030',address:'Moscw',period:null,selectCourse:'1',type:null,dateFilling:'2024-07-29',selectKind:'Производственная'},
+      {id:'ccx',key:'ccx',name:'jen',academicYear:'2030',address:'Moscw',period:null,selectCourse:'1',type:null,dateFilling:'2024-07-28',selectKind:'Производственная'},
+      
   ];
   const nav = useNavigate()
   const [year,setYear] = useState('2023/2024')
@@ -118,6 +120,12 @@ export const CreateRepresentation = () => {
   const [editingKey, setEditingKey] = useState('');
   const isEditing = (record: Item) => record.key === editingKey
   const [currentRowValues, setCurrentRowValues] = useState({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpenOne, setIsModalOpenOne] = useState(false);
+
+  const [searchText, setSearchText] = useState('');
+  const [searchedColumn, setSearchedColumn] = useState('');
+  const searchInput = useRef<any>(null);
 
   useEffect(() => {
   // if (isSuccessPractiseAll) {
@@ -127,29 +135,101 @@ export const CreateRepresentation = () => {
          
   // }
 }, [filter])
-  
+
+  const getColumnSearchProps = (dataIndex: any): any => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
+      <div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
+        <Input
+          ref={searchInput}
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onPressEnter={() => handleSearch(selectedKeys as string[], confirm, dataIndex)}
+          style={{ marginBottom: 8, display: 'block' }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => handleSearch(selectedKeys as string[], confirm, dataIndex)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Искать
+          </Button>
+          <Button
+            onClick={() => clearFilters && handleReset(clearFilters)}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Сбросить
+          </Button>
+          {/* <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              confirm({ closeDropdown: false });
+              setSearchText((selectedKeys as string[])[0]);
+              setSearchedColumn(dataIndex);
+            }}
+          >
+            Filter
+          </Button> */}
+          {/* <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              close();
+            }}
+          >
+            close
+          </Button> */}
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered: boolean) => (
+      <SearchOutlined style={{ color: filtered ? '#1677ff' : undefined }} />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex]
+        .toString()
+        .toLowerCase()
+        .includes((value as string).toLowerCase()),
+    onFilterDropdownOpenChange: (visible) => {
+      if (visible) {
+        setTimeout(() => searchInput.current?.select(), 100);
+      }
+    },
+    render: (text) =>
+      searchedColumn === dataIndex ? (
+        <Highlighter
+          highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ''}
+        />
+      ) : (
+        text
+      ),
+  });
+  const handleSearch = (
+    selectedKeys: string[],
+    confirm: FilterDropdownProps['confirm'],
+    dataIndex: DataIndex,
+  ) => {
+    confirm();
+    setSearchText(selectedKeys[0]);
+    setSearchedColumn(dataIndex);
+  };
+
+  const handleReset = (clearFilters: () => void) => {
+    clearFilters();
+    setSearchText('');
+  };
   function filterDataFull() {
 
 
-  // function filterDepartment(elem: any) {
-  // 	if (filter.department === 'Все') {
-  // 		return elem
-  // 	} else {
-  // 		return elem.department === filter.department
-  // 	}
-  // }
-  // function filterSubdivision(elem: any) {
-  // 	if (filter.subdivision === 'Все') {
-  // 		return elem
-  // 	} else if(!filter.subdivision.includes('-')){
-  // 		// @ts-ignore
-  // 		return elem.subdivision === filter.subdivision
-  // 	}
-  // 	else {
-  // 		// @ts-ignore
-  // 		return elem.subdivision === filter.subdivision.split(' - ')[1]
-  // 	}
-  // }
+
 
   function filterCourse(elem: any) {
     if (filter.course === 'Все') {
@@ -179,21 +259,7 @@ export const CreateRepresentation = () => {
     }
   }
 
-  // function filterSemester(elem: any) {
-  // 	if (filter.semester === 'Все') {
-  // 		return elem
-  // 	} else {
-  // 		return elem.semester === filter.semester
-  // 	}
-  // }
 
-  // function filterNameSpecialty(elem: any) {
-  // 	if (filter.nameSpecialty === 'Все') {
-  // 		return elem
-  // 	} else {
-  // 		return elem.specialtyName === filter.nameSpecialty
-  // 	}
-  // }
 
   function sortDateFilling(a:any, b:any) {
           if (filter.dateFilling === 'По дате (сначала новые)') {
@@ -207,32 +273,15 @@ export const CreateRepresentation = () => {
      
   return originData
     ? originData
-        // .filter((elem: any) => filterDepartment(elem))
+
         .filter((elem: any) => filterCourse(elem))
                   .filter((elem: any) => filterKind(elem))
                   .filter((elem: any) => filterName(elem))
-        // .filter((elem: any) => filterSemester(elem))
-        // .filter((elem: any) => filterNameSpecialty(elem))
-        // .filter((elem :any) => filterSubdivision(elem))
+
         .sort((a:any, b:any) => sortDateFilling(a, b))
     : []
 }
 
-  // function isCompressedView() {
-  //     setStateSchedule({
-  //         ...stateSchedule,
-  //         compressed: true,
-  //         table: false
-  //     })
-  // }
-
-  // function isTableView() {
-  //     setStateSchedule({
-  //         ...stateSchedule,
-  //         compressed: false,
-  //         table: true,
-  //     })
-  // }
   const downloadFile = () => {
       if(dataBlob){
       const link = document.createElement('a');
@@ -336,7 +385,56 @@ export const CreateRepresentation = () => {
         console.log('Validate Failed:', errInfo);
       }
   };
+  const columnsOne = [
+    {
+      key: 'name',
+      dataIndex: 'name',
+      title: 'Шифр и иаименование документа',
+      name: 'Шифр и иаименование документа',
+      className: 'text-xs !p-2',
+      ...getColumnSearchProps('name'),
+    },
+        {
+      key: 'academicYear',
+      dataIndex: 'academicYear',
+      title: 'Учебный год',
+      className: 'text-xs !p-2',
+    },
+        {
+      key: 'course',
+      dataIndex: 'selectCourse',
+      title: 'Курс',
+      className: 'text-xs !p-2',
+      editable: true,
+           
+    },
+        {
+      key: 'groupNumbers',
+      dataIndex: 'groupNumbers',
+      title: 'Номер группы',
+      className: 'text-xs !p-2'
+    },
+        {
+      key: 'level',
+      dataIndex: 'level',
+      title: 'Уровень образования',
+      className: 'text-xs !p-2',
+      editable: true,
+    },
 
+    {
+      title: '',
+      key: 'action',
+      render: (_, record) => (
+        <Space size="middle">
+          <a>Выбрать </a>
+        </Space>
+      ),
+    },
+  
+  
+  
+  ]
   const columns = [
   {
     key: 'name',
@@ -368,7 +466,7 @@ export const CreateRepresentation = () => {
       {
     key: 'level',
     dataIndex: 'level',
-    title: 'Уровень образования',
+    title: 'Место прохождения практики',
     className: 'text-xs !p-2',
     editable: true,
   },
@@ -390,7 +488,7 @@ export const CreateRepresentation = () => {
     dataIndex: 'selectType',
     title: 'Тип практики',
     className: 'text-xs !p-2',
-          editable: true,
+          
   },
   {
           key: 'id',
@@ -434,16 +532,17 @@ export const CreateRepresentation = () => {
               <Typography.Link disabled={editingKey !== ''} onClick={() => edit(record)}>
                 <EditSvg/>
               </Typography.Link>
-              <Popconfirm title="Вы действительно хотите удалить?" onConfirm={deleteRow}>
+              {/* <Popconfirm title="Вы действительно хотите удалить?" onConfirm={deleteRow}>
                   <a><DeleteRedSvg/></a>
-              </Popconfirm>
+              </Popconfirm> */}
               </div>
             );
           },
         },
   
 
-]
+  ]
+
   const mergedColumns: TableProps['columns'] = columns.map((col) => {
       // @ts-ignore
       if (!col.editable) {
@@ -467,6 +566,29 @@ export const CreateRepresentation = () => {
         }),
       };
   });
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  const showModalOne = () => {
+    setIsModalOpenOne(true);
+  };
+
+  const handleOkOne = () => {
+    setIsModalOpenOne(false);
+  };
+
+  const handleCancelOne = () => {
+    setIsModalOpenOne(false);
+  };
 
  
 
@@ -546,49 +668,22 @@ export const CreateRepresentation = () => {
                   />
               </Col>
           </Row>
-          {/* {
-              stateSchedule.table
-              &&
-              <>
-                  <Row gutter={[16, 16]} className="mt-4 flex items-center">
-                      <Col span={4}>
-                          <Typography.Text>Уровень образования</Typography.Text>
-                      </Col>
-                      <Col span={8}>
-                          <Select
-                              popupMatchSelectWidth={false}
-                              defaultValue=""
-                              className="w-full"
-                              options={filterEducationLevel}
-                              onChange={value => filter(value, 'level')}
-                          />
-                      </Col>
-                  </Row>
-                  <Row gutter={[16, 16]} className="mt-4 flex items-center">
-                      <Col span={4}>
-                          <Typography.Text>Форма обучения</Typography.Text>
-                      </Col>
-                      <Col span={8}>
-                          <Select
-                              popupMatchSelectWidth={false}
-                              defaultValue=""
-                              className="w-full"
-                              options={filterEducationForm}
-                              onChange={value => filter(value, 'form')}
-                          />
-                      </Col>
-                  </Row>
-              </>
-          } */}
+          
           <Row className="mt-4 flex items-center">
               <Col span={12} flex="50%">
                   <div >
                       <Space>
-                          <Button disabled={isLoadingBlob} onClick={downloadFile}>
+                          {/* <Button disabled={isLoadingBlob} onClick={downloadFile}>
                               Скачать 
                           </Button>
                           <Button disabled={isLoadingBlob} onClick={print}>
                               Печать
+                          </Button> */}
+                          <Button type="primary" onClick={showModalOne}>
+                            Выберите практику
+                          </Button>
+                          <Button type="primary" onClick={showModal}>
+                            Сформировать представление
                           </Button>
                       </Space>
                   </div>
@@ -613,7 +708,23 @@ export const CreateRepresentation = () => {
 
               </Col>
           </Row>
-
+          <Modal width={'100%'} title="Выберите практику" open={isModalOpenOne} onOk={handleOkOne} onCancel={handleCancelOne}>
+             <Table
+                  ref={tableRef}
+                  components={{
+                  body: {
+                      cell: EditableCell,
+                  },
+                  }}
+                  bordered
+                  dataSource={tableData ? tableData : []}
+                  columns={columnsOne}
+                  rowClassName="editable-row"
+                  pagination={false}
+                    rowKey="id"
+                      />
+          </Modal>
+          <Modal okText='Сформировать' width={'100%'} title="Сформируйте представление" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
           <Row className="mt-4">
               <Col flex={'auto'}>
                   {/* {stateSchedule.compressed && <CompressedView/>}
@@ -636,6 +747,7 @@ export const CreateRepresentation = () => {
                       </Form>
               </Col>
           </Row>
+          </Modal>
       </section>
   )
 }

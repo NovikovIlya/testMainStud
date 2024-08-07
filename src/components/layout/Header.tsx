@@ -140,6 +140,15 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const changeLanguage = (language: string) => {
 		i18n.changeLanguage(language)
 	}
+	const showMobileMenu = ()=>{
+		if(document.querySelector('.ant-menu-root').style.position==='static'){
+			document.querySelector('.ant-menu-root').style.position = 'fixed'
+			document.querySelector('header').style.marginLeft = '0'
+			return
+		}
+		document.querySelector('.ant-menu-root').style.position = 'static'
+		// document.querySelector('header').style.marginLeft = '-100px'
+	}
 
 	return (
 		<header
@@ -166,7 +175,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 					<div className="flex items-center gap-5">
 						<LogoIasSvg white={type === 'service'} />
 						<Divider type="vertical" className="border-l-white h-10 m-0" />
-						<div className="text-white text-base font-bold">{service}</div>
+						<div onClick={showMobileMenu} className="text-white text-base font-bold">{service}</div>
 					</div>
 				</div>
 				<div className="flex gap-5 items-center h-full max-[1000px]:gap-0 w-fit justify-center">

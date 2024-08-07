@@ -590,7 +590,7 @@ export const RegisterContracts = () => {
                     </Typography.Text>
                 </Col>
             </Row>
-            <Row gutter={[16, 16]} className={'mt-12'}>
+            <Row gutter={[16, 16]} className={'mt-12 gtc'}>
                 <Col span={12} className={'flex items-center gap-0'}>
                     <Col span={8} className={clsx(
                         'flex items-center gap-2',
@@ -621,14 +621,14 @@ export const RegisterContracts = () => {
                             onClick={() => {
                                 nav('/services/practices/registerContracts/createContract')
                             }}
-                            className={'rounded-full'}
+                            className={'rounded-full my-buttonContract'}
                     >
-                        Создать договор
+                      
                     </Button>
                 </Col>
             </Row>
-            <Row gutter={[16, 16]} className={'mt-4'}>
-                <Col span={12} className={'flex items-center gap-2'}>
+            <Row gutter={[16, 16]} className={'mt-4 '}>
+                <Col span={12} className={'flex items-center gap-2 overWrite'}>
                     <Col span={8}>
                         <span className={'whitespace-nowrap'}>Наименование организации</span>
                     </Col>
@@ -675,7 +675,7 @@ export const RegisterContracts = () => {
             </Row>
 
             <Row gutter={[16, 16]} className={'mt-4'}>
-                <Col span={12} className={'flex items-center gap-2'}>
+                <Col span={12} className={'flex items-center gap-2 overWrite'}>
                     <Col span={8}>
                         <span className={'whitespace-nowrap'}>Тип договора</span>
                     </Col>
@@ -696,7 +696,7 @@ export const RegisterContracts = () => {
                 </Col>
             </Row>
             <Row className="mt-12 flex items-center">
-                <Col span={12} flex="50%">
+                <Col span={12} flex="50%" className='mobileFirst'>
                     <Radio.Group defaultValue="compressedView" buttonStyle="solid">
                         <Radio.Button
                             onClick={isCompressedTable}
@@ -712,7 +712,7 @@ export const RegisterContracts = () => {
                         </Radio.Button>
                     </Radio.Group>
                 </Col>
-                <Col span={8} offset={4}>
+                <Col span={8} offset={4} className='mobileFirst'>
                     <div className={'flex gap-2 items-center'}>
                         <span className={'mr-2'}>Сортировка</span>
                         <Select

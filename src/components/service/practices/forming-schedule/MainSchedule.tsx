@@ -73,6 +73,7 @@ export const PracticeSchedule = () => {
 			title: 'Дата заполнения',
 			dataIndex: 'dateFilling',
 			width: '20%',
+			className: 'mobileFirst',
 			// @ts-ignore
 			render: (text: any) => dayjs(text).format('DD.MM.YYYY')
 		},
@@ -149,7 +150,6 @@ export const PracticeSchedule = () => {
 			return 0
 		}
 		function filterSubdivision(elem: any) {
-			console.log('elem',elem)
 			if (filter.subdivisionId === 'Все') {
 				return elem
 			} else {
@@ -157,7 +157,6 @@ export const PracticeSchedule = () => {
 			}
 		}
 		function filterAcademicYear(elem: any) {
-			console.log('elem',elem)
 			if (filter.academicYear === 'Все') {
 				return elem
 			} else {
@@ -190,22 +189,21 @@ export const PracticeSchedule = () => {
 		<section className="container">
 			<Row gutter={[16, 16]}>
 				<Col span={24}>
-					<Typography.Text className=" text-[28px] mb-14">
+					<Typography.Text className=" text-[28px] mb-14 titleMobile">
 						График практик
 					</Typography.Text>
 				</Col>
 			</Row>
-			<Row gutter={[16, 16]} className="mt-12">
-				<Col span={5}>
+			<Row gutter={[16, 16]} className="mt-12 overWrite">
+				<Col span={5} className='overWrite'>
 					<span>Подразделение</span>
 				</Col>
-				<Col span={7}>
+				<Col span={7} className='overWrite'>
 					<Select
 						popupMatchSelectWidth={false}
 						defaultValue="Все"
 						className="w-full"
 						onChange={(value: any) => {
-							console.log(value)
 							setFilter({ ...filter, subdivisionId: value })
 						}}
 						options={
@@ -223,30 +221,31 @@ export const PracticeSchedule = () => {
 					/>
 				</Col>
 				{/* {dataUserSubdivision?.value ? */}
-				 <Col span={7} offset={5}>
+				 <Col span={7} offset={5} className='overWrite orderHigh'>
 					<Space className="w-full flex-row-reverse">
 						<Button
 							type="primary"
-							className="!rounded-full"
+							className="!rounded-full my-buttonSchedule"
 							onClick={() => {
 								navigate('/services/practices/formingSchedule/createSchedule')
 							}}
 						>
-							Добавить график практик
+							
 						</Button>
 					</Space>
 				</Col> 
 				{/* : null} */}
 			</Row>
-			<Row gutter={[16, 16]} className="mt-4 flex items-center">
-				<Col span={5}>
+			<Row gutter={[16, 16]} className="mt-4 flex items-center overWrite">
+				<Col span={5} className='overWrite'>
+				<div className={'flex gap-2 items-center overWrite w-full'}>
 					<span>Учебный год</span>
-				</Col>
-				<Col span={7}>
+				
+				
 					<Select
 						popupMatchSelectWidth={false}
 						defaultValue="Все"
-						className="w-full"
+						className="w-[500px]"
 						onChange={(value: any) => {
 							setFilter({ ...filter, academicYear: value })
 						}}
@@ -261,16 +260,17 @@ export const PracticeSchedule = () => {
 							]
 						}
 					/>
+					</div>
 				</Col>
 			</Row>
-			<Row gutter={[16, 16]} className="mt-4 flex items-centerек">
-				<Col span={7} offset={17}>
-					<div className={'flex gap-2 items-center'}>
+			<Row gutter={[16, 16]} className="mt-4 flex items-center overWrite">
+				<Col span={7} offset={17} className='overWrite w-full'>
+					<div className={'flex gap-2 items-center overWrite w-full'}>
 						<span className={'mr-2'}>Сортировка</span>
 						<Select
 							popupMatchSelectWidth={false}
 							defaultValue=""
-							className="w-full"
+							className="w-[500px]"
 							options={optionsSortDate}
 							onChange={value => {
 								setFilter({
@@ -282,10 +282,10 @@ export const PracticeSchedule = () => {
 					</div>
 				</Col>
 			</Row>
-			<Row className="mt-4">
-				<Col flex={'auto'}>
+		
 					{isFetchingDataAll ? <Spin className='w-full mt-20' indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />  
 					:  <Table
+						responsive
 						size="small"
 						rowKey="id"
 						// @ts-ignore
@@ -303,8 +303,7 @@ export const PracticeSchedule = () => {
 							}
 						}}
 					/>}
-				</Col>
-			</Row>
+				
 		</section>
 	)
 }

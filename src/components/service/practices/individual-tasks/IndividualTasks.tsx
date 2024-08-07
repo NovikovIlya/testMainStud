@@ -398,15 +398,18 @@ const IndividualTasks = () => {
 					</span>
                 </Col>
             </Row>
-            <Row gutter={[16, 16]} className="mt-12">
-                <Col span={5}>
+            <Row gutter={[16, 16]} className="mt-12 overWrite">
+                <Col span={5} className='overWrite'>
                     <span>Наименование специальности</span>
                 </Col>
-                <Col span={7}>
+                <Col span={7} className='overWrite'>
                     <Select
                         popupMatchSelectWidth={false}
                         defaultValue="Все"
                         className="w-full"
+                        // dropdownMatchSelectWidth={false}
+
+                        style={{ width: '100% !important' }}
                         options={[
                             {key: 2244612, value: "Все", label: "Все"},
                             ...(dataNameSpecialty ? dataNameSpecialty.map((item) => ({
@@ -423,25 +426,25 @@ const IndividualTasks = () => {
                         }}
                     />
                 </Col>
-                <Col span={7} offset={5}>
-                    <Space className="w-full flex-row-reverse">
+                <Col span={7} offset={5} className='orderHigh overWrite'>
+                    <Space className="w-full flex-row-reverse ">
                         <Button
                             type="primary"
-                            className="!rounded-full"
+                            className="!rounded-full my-button "
                             onClick={() => {
                                 navigate('/services/practices/individualTasks/createTask')
                             }}
                         >
-                            Добавить индивидуальные задания
+                            
                         </Button>
                     </Space>
                 </Col>
             </Row>
-            <Row gutter={[16, 16]} className="mt-4">
-                <Col span={5}>
+            <Row gutter={[16, 16]} className="mt-4 overWrite">
+                <Col span={5} className='overWrite'>
                     <span>Тип практики</span>
                 </Col>
-                <Col span={7}>
+                <Col span={7} className='overWrite'>
                     <Select
                         popupMatchSelectWidth={false}
                         defaultValue="Все"
@@ -464,7 +467,7 @@ const IndividualTasks = () => {
                 </Col>
             </Row>
             <Row className="mt-12 flex items-center">
-                <Col span={12} flex="50%">
+                <Col span={12} flex="50%" className='mobileFirst'>
                     <Radio.Group defaultValue="compressedView" buttonStyle="solid">
                         <Radio.Button
                             onClick={isCompressedTable}
@@ -480,7 +483,7 @@ const IndividualTasks = () => {
                         </Radio.Button>
                     </Radio.Group>
                 </Col>
-                <Col span={8} offset={4}>
+                <Col span={8} offset={4} className='mobileFirst'>
                     <div className={'flex gap-2 items-center'}>
                         <span className={'mr-2'}>Сортировка</span>
                         <Select

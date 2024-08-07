@@ -1,4 +1,4 @@
-import {PlusOutlined} from '@ant-design/icons'
+import { PlusOutlined } from '@ant-design/icons'
 import {
     Button,
     Col,
@@ -8,32 +8,23 @@ import {
     Select,
     Space,
     Typography,
-    Upload,
-    UploadFile,
-    UploadProps,
-    message, Form, InputNumber
+    Upload, Form, InputNumber
 } from 'antd'
 import dayjs from 'dayjs'
-import React, {Dispatch, SetStateAction, useEffect, useState} from 'react'
-import {useLocation, useNavigate} from 'react-router-dom'
-import {ArrowLeftSvg} from '../../../../assets/svg'
+import { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { ArrowLeftSvg } from '../../../../assets/svg'
 import {
-    IContractInfo,
-    IContractInfoFull,
-    ICreateContract,
-    ICreateContractFull,
-    NameSpecialty
+    ICreateContract, NameSpecialty
 } from '../../../../models/Practice'
-import {validateMessages} from "../../../../utils/validateMessage";
+import { validateMessages } from "../../../../utils/validateMessage"
 import {
     useEditContractMutation,
-    useGetContractForEditQuery,
-    useGetContractQuery
-} from "../../../../store/api/practiceApi/contracts";
-import {string} from "yup";
-import {useGetSpecialtyNamesQuery} from "../../../../store/api/practiceApi/roster";
-import {copyFileDocument} from "../../../../utils/downloadDocument/copyFileDocument";
-import {agreementFileDocument} from "../../../../utils/downloadDocument/agreementFileDocument";
+    useGetContractForEditQuery
+} from "../../../../store/api/practiceApi/contracts"
+import { useGetSpecialtyNamesQuery } from "../../../../store/api/practiceApi/roster"
+import { copyFileDocument } from "../../../../utils/downloadDocument/copyFileDocument"
+import { agreementFileDocument } from "../../../../utils/downloadDocument/agreementFileDocument"
 import { SkeletonPage } from './Skeleton'
 
 export interface PdfContract {

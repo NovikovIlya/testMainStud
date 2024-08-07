@@ -32,7 +32,7 @@ export const ViewRepresentation = () => {
 	const originDate = [
 		{
 			key: '1',
-			name: 'Акушерство',
+			name: 'Представление 1',
 			dateFilling: '2021.08.20',
 			type: 'Бессрочный',
 			course: '1',
@@ -41,7 +41,7 @@ export const ViewRepresentation = () => {
 		},
 		{
 			key: '2',
-			name: 'Акушерство',
+			name: 'Представление 2',
 			dateFilling: '2021.08.22',
 			type: 'Бессрочный',
 			course: '1',
@@ -108,8 +108,8 @@ export const ViewRepresentation = () => {
 		{
 			key: 'name',
 			dataIndex: 'name',
-			title: 'Шифр и наименование специальности',
-			name: 'Шифр и наименование специальности',
+			title: 'Наименование представления',
+			name: 'Наименование представления',
 			className: 'text-xs !p-2 ',
 			// @ts-ignore
 			render: (text, record) => (

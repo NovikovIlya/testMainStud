@@ -340,10 +340,10 @@ export const ViewPractical = () => {
 			dataIndex: 'subdivision',
 			title: <TitleHeadCell title={'Подразделение'}/>,
 			name: 'Подразделение',
-			className: 'text-xs !p-2',
+			className: 'text-xs !p-2 mobileFirst',
 			width: '20%',
-			height: '50px'
-			
+			height: '50px',
+			responsive: ['xs'],
 		},
 		{
 			key: 'specialtyName',
@@ -379,7 +379,7 @@ export const ViewPractical = () => {
 			dataIndex: 'practiceType',
 
 			title: <TitleHeadCell title={'Тип практики'}/>,
-			className: 'text-xs !p-2'
+			className: 'text-xs !p-2 mobileFirst'
 			// filters:[{
 			// 	text: 'практика по получению первичных',
 			// 	value: 'практика по получению',
@@ -392,14 +392,14 @@ export const ViewPractical = () => {
 			dataIndex: 'semester',
 			title: <TitleHeadCell title={'Семестр'}/>,
 			align: 'center',
-			className: 'text-xs !p-2'
+			className: 'text-xs !p-2 mobileFirst'
 		},
 		{
 			key: 'courseNumber',
 			dataIndex: 'courseNumber',
 			title: <TitleHeadCell title={'Курс'}/>,
 			align: 'center',
-			className: 'text-xs !p-2'
+			className: 'text-xs !p-2 mobileFirst'
 		},
 		{
 			title: (
@@ -695,11 +695,11 @@ export const ViewPractical = () => {
 					{/*</Col>*/}
 				</Row>
 
-				<Row gutter={[16, 16]} className="mt-12">
-					<Col span={5}>
+				<Row gutter={[16, 16]} className="mt-12 overWrite">
+					<Col span={5} className='overWrite'>
 						<span>Подразделение</span>
 					</Col>
-					<Col span={8}>
+					<Col span={8} className='overWrite'>
 					
 					<Form.Item
 						name={'podrazdelenie'}
@@ -723,26 +723,26 @@ export const ViewPractical = () => {
 						/>
 						</Form.Item>
 					</Col>
-					<Col span={7} offset={4}>
+					<Col span={7} offset={4} className='orderHigh overWrite'>
 						<Space className="w-full flex-row-reverse">
 							<Button
 								type="primary"
-								className="!rounded-full"
+								className="!rounded-full my-buttonPractice"
 								onClick={() => {
 									navigate('/services/practices/practical.ts/createPractical')
 								}}
 							>
-								Добавить практику
+								
 							</Button>
 						</Space>
 					</Col>
 				</Row>
 				
-				<Row gutter={[16, 16]} className="mt-4">
-					<Col span={5}>
+				<Row gutter={[16, 16]} className="mt-4 overWrite">
+					<Col span={5} className='overWrite'>
 						<span>Наименование специальности</span>
 					</Col>
-					<Col span={8}>
+					<Col span={8} className='overWrite'>
 						<Select
 							disabled={!isSuccessDep}
 							popupMatchSelectWidth={false}
@@ -769,11 +769,11 @@ export const ViewPractical = () => {
 					</Col>
 	
 				</Row>
-				<Row gutter={[16, 16]} className="mt-4">
+				<Row gutter={[16, 16]} className="mt-4 overWrite">
 					<Col span={5}>
 						<span>Кафедра</span>
 					</Col>
-					<Col span={8}>
+					<Col span={8} className='overWrite'>
 						<Select
 							// rowKey="id"
 							disabled={!isSuccessDep}
@@ -799,8 +799,8 @@ export const ViewPractical = () => {
 						/>
 					</Col>
 				</Row>
-				<Row gutter={[16, 16]} className="mt-4">
-					<Col span={3} className={'flex items-center gap-4'}>
+				<Row gutter={[16, 16]} className="mt-4 overWrite">
+					<Col span={3} className={'flex items-center gap-4 overWrite'}>
 						<span>Курс</span>
 						<Select
 							popupMatchSelectWidth={false}
@@ -816,10 +816,11 @@ export const ViewPractical = () => {
 							}}
 						/>
 					</Col>
-					<Col span={3} className={'flex items-center gap-4'}>
+					<Col span={3} className={'flex items-center gap-4 overWrite'}>
 						<span>Семестр</span>
 					
 						<Form.Item
+							className='w-full'
 							style={{marginBottom:'0'}}
 							//rules={[{required: true}]}
 							name={'semester'}	
@@ -835,13 +836,13 @@ export const ViewPractical = () => {
 							    disabled={!pickCourse || pickCourse==='Все'} 
 								size='middle'
 								popupMatchSelectWidth={false}
-								className="w-full"
+								className="w-full "
 								options={optionsCourseValid}
 							/>
 						</Form.Item>
 						
 					</Col>
-					<Col span={7} className={'flex items-center gap-2'}>
+					<Col span={7} className={'flex items-center gap-2 overWrite'}>
 						<span className="whitespace-nowrap">Тип практики</span>
 						<Select
 							disabled={!pickSpeciality}
@@ -869,7 +870,7 @@ export const ViewPractical = () => {
 				</Row>
 				
 				<Row className="mt-12 flex items-center">
-                <Col span={12} flex="50%">
+                <Col span={12} flex="50%" className='mobileFirst'>
                     <Radio.Group defaultValue="compressedView" buttonStyle="solid">
                         <Radio.Button
                             onClick={isCompressedTable}
@@ -885,7 +886,7 @@ export const ViewPractical = () => {
                         </Radio.Button>
                     </Radio.Group>
                 </Col>
-                <Col span={8} offset={4}>
+                <Col span={8} offset={4} className='mobileFirst'>
                     <div className={'flex gap-2 items-center'}>
                         <span className={'mr-2'}>Сортировка</span>
                         <Select
@@ -914,6 +915,7 @@ export const ViewPractical = () => {
 				/>
 			) : (fullTable ?
 				<Table
+				responsive
 					size="small"
 					rowKey="id"
 					// @ts-ignore
@@ -933,7 +935,7 @@ export const ViewPractical = () => {
 				/> :
 				<div className='viewPractical'>
 				<Table
-					
+					responsive
 					rowKey="id"
 					// @ts-ignore
 					columns={columnsCompressed}

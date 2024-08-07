@@ -162,7 +162,7 @@ export const EditSchedule = () => {
 		educationType: 'Все',
 		dateFilling: 'По дате (сначала новые)',
 		practiceKind: 'Все',
-		specialtyName: null,
+		specialtyName: 'Все',
         subDivision:'Все'
 	})
 	const [form] = Form.useForm()
@@ -218,14 +218,14 @@ export const EditSchedule = () => {
 			key: 'kind',
 			dataIndex: 'practiceKind',
 			title: 'Вид практики',
-			className: 'text-xs !p-2',
+			className: 'text-xs !p-2 mobileFirst',
 			editable: true
 		},
 		{
 			key: 'type',
 			dataIndex: 'practiceType',
 			title: 'Тип практики',
-			className: 'text-xs !p-2',
+			className: 'text-xs !p-2 mobileFirst',
 			editable: true
 		},
 		{
@@ -233,6 +233,7 @@ export const EditSchedule = () => {
 			title: 'Дата заполнения',
 			dataIndex: 'dateFilling',
 			width: '20%',
+			className: 'mobileFirst',
 			// sorter: (a:any, b:any) => +new Date(b.dateFilling) - +new Date(a.dateFilling),
 			// @ts-ignore
 			render: (text: any) => dayjs(text).format('DD.MM.YYYY')
@@ -277,7 +278,7 @@ export const EditSchedule = () => {
 							<EditSvg />
 						</Typography.Link> */}
 						<Popconfirm
-							title="Вы действительно хотите удалить?"
+							title="Вы действительно хотите удалить? Данные будут удалены и в печатной форме"
 							onConfirm={() => handleDelete(record.id)}
 						>
 							<a>
@@ -356,46 +357,41 @@ export const EditSchedule = () => {
 
 
 	function filterDataFull() {
-		
 		function filterCourse(elem: any) {
-			console.log('element',elem)
-			console.log('filter',filter)
 			if (filter?.courseNumber?.includes('Все')) {
 				return elem
 			} else {
-				return filter?.courseNumber ? filter?.courseNumber?.some(item=>elem?.courseNumber === Number(item)) : null
+				return filter?.courseNumber ? filter?.courseNumber?.some((item:any)=>elem?.courseNumber === Number(item)) : null
 			}
 		}
 		function filterLevel(elem: any) {
 			if (filter?.educationLevel?.includes('Все')) {
 				return elem
 			} else {
-				return filter?.educationLevel ? filter?.educationLevel?.some(item=>elem?.educationLevel === (item)) : null
+				return filter?.educationLevel ? filter?.educationLevel?.some((item:any)=>elem?.educationLevel === (item)) : null
 			}
 		}
 		function filterForm(elem: any) {
 			if (filter?.educationType?.includes('Все')) {
 				return elem
 			} else {
-				return filter?.educationType ? filter?.educationType?.some(item=>elem?.educationType === (item)) : null
+				return filter?.educationType ? filter?.educationType?.some((item:any)=>elem?.educationType === (item)) : null
 			}
 		}
 		function filterKind(elem: any) {
-			console.log('filter',filter)
-			console.log('elem',elem)
 			if (filter?.practiceKind?.includes('Все')) {
 				return elem
 			} else {
-				return filter?.practiceKind ? filter?.practiceKind?.some(item=>elem?.practiceKind === (item)) : null
+				return filter?.practiceKind ? filter?.practiceKind?.some((item:any)=>elem?.practiceKind === (item)) : null
 			}
 		}
-		// function filterName(elem: any) {
-		// 	if (filter?.specialtyName?.includes('Все')) {
-		// 		return elem
-		// 	} else {
-		// 		return filter?.specialtyName ? filter?.specialtyName?.some(item=>elem?.specialtyName === Number(item)) : null
-		// 	}
-		// }
+		function filterName(elem: any) {
+			if (filter?.specialtyName?.includes('Все')) {
+				return elem
+			} else {
+				return filter?.specialtyName ? filter?.specialtyName?.some((item:any)=>elem?.specialtyName === (item)) : null
+			}
+		}
 
 		function sortDateFilling(a: any, b: any) {
 			if (filter.dateFilling === 'По дате (сначала новые)') {
@@ -406,12 +402,13 @@ export const EditSchedule = () => {
 			}
 			return 0
 		}
+		
 
 		return dataOneSchedule
 			? dataOneSchedule
 					.filter((elem: any) => filterCourse(elem))
 					.filter((elem: any) => filterKind(elem))
-					// .filter((elem: any) => filterName(elem))
+					.filter((elem: any) => filterName(elem))
 					.filter((elem: any) => filterLevel(elem))
 					.filter((elem: any) => filterForm(elem))
 					.sort((a: any, b: any) => sortDateFilling(a, b))
@@ -419,7 +416,6 @@ export const EditSchedule = () => {
 	}
 
 	const downloadFile = () => {
-		console.log('dataBlob',dataBlob)
 		if (dataBlob) {
 			const link = document.createElement('a')
 			link.href = dataBlob
@@ -538,7 +534,6 @@ export const EditSchedule = () => {
 	}
 
 	const handleDelete = (idP: React.Key) => {
-		console.log('tableData',tableData)
 		if(tableData.length === 1) {
 			const obj = {
 					scheduleId:id,
@@ -556,13 +551,12 @@ export const EditSchedule = () => {
 			practiceId:idP
 		}
 		deleteRow(obj)
-		
 	}
 
 
 
 	return (
-			<section className="container">
+		<section className="container">
             <Form form={form} >
 			<Row gutter={[16, 16]}>
 				<Col span={24}>
@@ -581,7 +575,7 @@ export const EditSchedule = () => {
 					</Typography.Text>
 				</Col>
 			</Row>
-			<Row gutter={[8, 16]} className="mt-12 w-full flex items-center">
+			<Row gutter={[8, 16]} className="mt-12 w-full flex items-center overWrite">
 				{dataUserSubdivision?.value ? 
                 <>
 				<Col span={5}>
@@ -605,10 +599,10 @@ export const EditSchedule = () => {
 					
                 </Col>
 				</> : null}
-				<Col span={4}>
-					<Typography.Text>Шифр и наименование специальности</Typography.Text>
+				<Col span={4} className=''>
+					<Typography.Text className='mobileFont'>Шифр и наименование специальности</Typography.Text>
 				</Col>
-				<Col span={8}>
+				<Col span={8} className='overWrite grow'>
 					<Select	
 						mode='multiple'
 						popupMatchSelectWidth={false}
@@ -631,11 +625,11 @@ export const EditSchedule = () => {
 					/>
 				</Col>
 			</Row>
-			<Row gutter={[16, 0]} className="mt-4 flex items-center">
+			<Row gutter={[16, 0]} className="mt-4 flex items-center overWrite w-full justify-between mrr mll">
 				<Col span={1}>
-					<Typography.Text className="whitespace-nowrap">Курс</Typography.Text>
+					<Typography.Text className="whitespace-nowrap mobileFont">Курс</Typography.Text>
 				</Col>
-				<Col span={2}>
+				<Col span={2} className='overWrite w-full'>
 					<Select
 						mode='multiple'
 						popupMatchSelectWidth={false}
@@ -651,9 +645,9 @@ export const EditSchedule = () => {
 					/>
 				</Col>
 				<Col span={3}>
-					<Typography.Text>Вид практики</Typography.Text>
+					<Typography.Text className='mobileFont'>Вид практики</Typography.Text>
 				</Col>
-				<Col span={6}>
+				<Col span={6} className='overWrite w-full'>
 					<Select
 						mode='multiple'
 						popupMatchSelectWidth={false}
@@ -678,9 +672,9 @@ export const EditSchedule = () => {
 			</Row>
 			<Row gutter={[8, 16]} className="mt-4 w-full flex items-center">
 				<Col span={4}>
-					<Typography.Text>Уровень образования</Typography.Text>
+					<Typography.Text className='mobileFont'>Уровень образования</Typography.Text>
 				</Col>
-				<Col span={8}>
+				<Col span={8} className='overWrite grow'>
 					<Select
 						mode='multiple'
 						popupMatchSelectWidth={false}
@@ -698,9 +692,9 @@ export const EditSchedule = () => {
 			</Row>
 			<Row gutter={[8, 16]} className="mt-4 pb-4 mb-4 w-full flex items-center">
 				<Col span={4}>
-					<Typography.Text>Форма обучения</Typography.Text>
+					<Typography.Text className='mobileFont'>Форма обучения</Typography.Text>
 				</Col>
-				<Col span={8}>
+				<Col span={8} className='overWrite grow'>
 					<Select
 						mode='multiple'
 						popupMatchSelectWidth={false}
@@ -729,11 +723,11 @@ export const EditSchedule = () => {
 					</Space>
 				</Col> */}
 			</Row>
-			<Row className="mt-4 flex items-center">
+			<Row className="mt-4 flex items-center justify-around">
 				<Col span={12} flex="50%">
 					<div>
 						<Space>
-							<Button disabled={isLoadingBlob || isFetchingBlob} onClick={downloadFile}>
+							<Button loading={isLoadingBlob || isFetchingBlob} disabled={isLoadingBlob || isFetchingBlob} onClick={downloadFile}>
 								<VerticalAlignBottomOutlined /> Скачать
 							</Button>
 							{/* <Button disabled={isLoadingBlob} onClick={print}>
@@ -742,7 +736,7 @@ export const EditSchedule = () => {
 						</Space>
 					</div>
 				</Col>
-				<Col span={8} offset={4}>
+				<Col span={8} offset={4} className='overWrite'>
 					<div className={'flex gap-2 items-center'}>
 						<span className={'mr-2'}>Сортировка</span>
 						<Select
@@ -761,8 +755,6 @@ export const EditSchedule = () => {
 				</Col>
 			</Row>
 
-			<Row className="mt-4">
-				<Col flex={'auto'}>
 					{/* {stateSchedule.compressed && <CompressedView/>}
                     {stateSchedule.table && <TableView/>} */}
 					{isLoadingOneSchedule  ? <Spin className='w-full mt-20' indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />   :
@@ -785,8 +777,7 @@ export const EditSchedule = () => {
 							rowKey="id"
 						/>
 					}
-				</Col>
-			</Row>
+				
             </Form>
 		</section>
 		

@@ -217,26 +217,26 @@ export const PracticeSchedule = () => {
 			key: 'educationLevel',
 			dataIndex: 'educationLevel',
 			title: 'Уровень образования',
-			className: 'text-xs !p-2'
+			className: 'text-xs !p-2 mobileFirst'
 		},
 		{
 			key: 'educationType',
 			dataIndex: 'educationType',
 			title: 'Форма обучения',
-			className: 'text-xs !p-2'
+			className: 'text-xs !p-2 mobileFirst'
 		},
 		{
 			key: 'kind',
 			dataIndex: 'practiceKind',
 			title: 'Вид практики',
-			className: 'text-xs !p-2',
+			className: 'text-xs !p-2 mobileFirst',
 			editable: true
 		},
 		{
 			key: 'type',
 			dataIndex: 'practiceType',
 			title: 'Тип практики',
-			className: 'text-xs !p-2',
+			className: 'text-xs !p-2 mobileFirst ',
 			editable: true
 		},
 		{
@@ -244,6 +244,7 @@ export const PracticeSchedule = () => {
 			title: 'Дата заполнения',
 			dataIndex: 'dateFilling',
 			width: '20%',
+			className: 'mobileFirst',
 			// sorter: (a:any, b:any) => +new Date(b.dateFilling) - +new Date(a.dateFilling),
 			// @ts-ignore
 			render: (text: any) => dayjs(text).format('DD.MM.YYYY')
@@ -584,13 +585,13 @@ export const PracticeSchedule = () => {
 							nav('/services/practices/formingSchedule')
 						}}
 					/>
-					<Typography.Text className=" text-[28px] mb-14">
+					<Typography.Text className=" text-[28px] mb-14 titleMobile">
 						Добавление графика проведения практик на {getAcademicYear()} учебный год
 						{dataUserSubdivision?.value} КФУ
 					</Typography.Text>
 				</Col>
 			</Row>
-			<Row gutter={[8, 16]} className="mt-12 w-full flex items-center">
+			<Row gutter={[8, 16]} className="mt-12 w-full flex items-center overWrite ">
 				{dataUserSubdivision?.value ? 
                 <><Col span={5}>
 					<span>Подразделение</span>
@@ -613,15 +614,15 @@ export const PracticeSchedule = () => {
 						</Form.Item>
 					
                 </Col></> : null}
-				<Col span={4}>
-					<Typography.Text>Шифр и наименование специальности</Typography.Text>
+				<Col span={4} className='overWrite'>
+					<Typography.Text className='mobileFont'>Шифр и наименование специальности</Typography.Text>
 				</Col>
-				<Col span={8}>
+				<Col span={8} className='overWrite grow'>
 					<Select
 						mode='multiple'
 						popupMatchSelectWidth={false}
 						defaultValue="Все"
-						className="w-full"
+						className="w-full "
 						options={[
 							{key: 2244612, value: "Все", label: "Все"},
                             ...(dataSpeciality ? dataSpeciality.map((item:any) => ({
@@ -639,11 +640,11 @@ export const PracticeSchedule = () => {
 					/>
 				</Col>
 			</Row>
-			<Row gutter={[16, 0]} className="mt-4 flex items-center">
+			<Row gutter={[16, 0]} className="mt-4 flex items-center mrr">
 				<Col span={1}>
-					<Typography.Text className="whitespace-nowrap">Курс</Typography.Text>
+					<Typography.Text className="whitespace-nowrap mobileFont">Курс</Typography.Text>
 				</Col>
-				<Col span={3}>
+				<Col span={3} className='grow overWrite'>
 					<Select
 						mode='multiple'
 						popupMatchSelectWidth={false}
@@ -659,9 +660,9 @@ export const PracticeSchedule = () => {
 					/>
 				</Col>
 				<Col span={3}>
-					<Typography.Text>Вид практики</Typography.Text>
+					<Typography.Text className='mobileFont'>Вид практики</Typography.Text>
 				</Col>
-				<Col span={5}>
+				<Col span={5} className='overWrite grow'>
 					<Select
 						mode='multiple'
 						popupMatchSelectWidth={false}
@@ -684,11 +685,11 @@ export const PracticeSchedule = () => {
 					/>
 				</Col>
 			</Row>
-			<Row gutter={[8, 16]} className="mt-4 w-full flex items-center">
+			<Row gutter={[8, 16]} className="mt-4 w-full flex items-center ">
 				<Col span={4}>
-					<Typography.Text>Уровень образования</Typography.Text>
+					<Typography.Text className='mobileFont'>Уровень образования</Typography.Text>
 				</Col>
-				<Col span={8}>
+				<Col span={8} className='overWrite grow'>
 					<Select	
 						mode='multiple'
 						popupMatchSelectWidth={false}
@@ -704,11 +705,11 @@ export const PracticeSchedule = () => {
 					/>
 				</Col>
 			</Row>
-			<Row gutter={[8, 16]} className="mt-4 pb-4 mb-4 w-full flex items-center">
+			<Row gutter={[8, 16]} className="mt-4 pb-4 mb-4 w-full flex items-center ">
 				<Col span={4}>
-					<Typography.Text>Форма обучения</Typography.Text>
+					<Typography.Text className='mobileFont'>Форма обучения</Typography.Text>
 				</Col>
-				<Col span={8}>
+				<Col span={8} className='overWrite grow'>
 					<Select
 						mode='multiple'
 						popupMatchSelectWidth={false}
@@ -723,8 +724,8 @@ export const PracticeSchedule = () => {
 						}}
 					/>
 				</Col>
-				<Col span={7} offset={5}>
-					<Space className="w-full flex-row-reverse">
+				<Col span={7} offset={5} className='overWrite'>
+					<Space className="w-full flex-row-reverse overWrite">
 						<Button
 							type="primary"
 							className="!rounded-full"
@@ -750,27 +751,10 @@ export const PracticeSchedule = () => {
 						</Space>
 					</div>
 				</Col>
-				{/* <Col span={8} offset={4}>
-					<div className={'flex gap-2 items-center'}>
-						<span className={'mr-2'}>Сортировка</span>
-						<Select
-							popupMatchSelectWidth={false}
-							defaultValue=""
-							className="w-full"
-							options={optionsSortDate}
-							onChange={value => {
-								setFilter({
-									...filter,
-									dateFilling: value
-								})
-							}}
-						/>
-					</div>
-				</Col> */}
+				
 			</Row>
 
-			<Row className="mt-4">
-				<Col flex={'auto'}>
+		
 					{/* {stateSchedule.compressed && <CompressedView/>}
                     {stateSchedule.table && <TableView/>} */}
 					{isLoadingByFilters ?  <Spin className='w-full mt-20' indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />   :
@@ -793,8 +777,7 @@ export const PracticeSchedule = () => {
 							rowKey="id"
 						/>
 						}
-				</Col>
-			</Row>
+			
             </Form>
 		</section>
 		</Spin>

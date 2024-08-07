@@ -62,6 +62,7 @@ export const taskService = apiSlice.injectEndpoints({
                     method: 'DELETE',
                 }
             },
+            invalidatesTags:['Schedule'],
         }),
         delete: builder.mutation<any, any>({
             query: (scheduleId) => {

@@ -401,8 +401,20 @@ const IndividualTasks = () => {
             })) 
         : [])
     ];
+    const arrayType = [
+        { key: 2244612, value: "Все", label: "Все" },
+        ...(data ?
+            data.map((item) => ({
+                key: item.id,
+                value: item.practiceType,
+                label: item.practiceType
+            }))
+        : [])
+    ];
 
     const uniqueSpecialityNames = Array.from(new Set(arraySpec.map(item => item.value)))
+    .map(value => ({ value, label: value }));
+    const uniqueTypes           = Array.from(new Set(arrayType.map(item => item.value)))
     .map(value => ({ value, label: value }));
     console.log('uniqueSpecialityNames',uniqueSpecialityNames)
     return (
@@ -458,14 +470,7 @@ const IndividualTasks = () => {
                         popupMatchSelectWidth={false}
                         defaultValue="Все"
                         className="w-full"
-                        options={[
-                            {key: 2244612, value: "Все", label: "Все"},
-                            ...(dataPracticeType ? dataPracticeType.map((item) => ({
-                              key: item.id,
-                              value: item.value,
-                              label: item.label
-                            })) : [])
-                          ]}
+                        options={uniqueTypes.length > 1 ? uniqueTypes : []}
                         onChange={value => {
                             setFilter({
                                 ...filter,

@@ -21,7 +21,7 @@ import {IndTaskPopoverMain} from "../popover/individualTask/IndTaskPopoverMain";
 import dayjs from "dayjs";
 import {EditSvg} from "../../../../assets/svg/EditSvg";
 import {useGetAllTasksQuery, useGetPracticeTypeQuery} from "../../../../store/api/practiceApi/individualTask";
-import {useGetSpecialtyNamesQuery} from "../../../../store/api/practiceApi/roster";
+import {useGetSpecialtyNamesIndividualTasksQuery, useGetSpecialtyNamesQuery} from "../../../../store/api/practiceApi/roster";
 import {OptionsNameSpecialty} from "../roster/registerContracts/RegisterContracts";
 import { LoadingOutlined } from '@ant-design/icons'
 
@@ -77,6 +77,7 @@ const IndividualTasks = () => {
         selectedFieldsFull,
         setSelectedFieldFull
     ] = useState<FullIndividualTask[]>()
+    // const {} = useGetSpecialtyNamesIndividualTasksQuery()
 
     const [tableView, setTableView] = useState({
         compressed: true,
@@ -349,6 +350,8 @@ const IndividualTasks = () => {
             }
         }
         function filterNameSpecialty(elem: FullIndividualTask) {
+            console.log('elem',elem.id)
+            console.log('filter.specialityName',filter.specialityName)
             if (filter.specialityName === 'Все') {
                 return elem
             } else {
@@ -388,7 +391,20 @@ const IndividualTasks = () => {
         }
     }, [data]);
 
+    const arraySpec = [
+        { key: 2244612, value: "Все", label: "Все" },
+        ...(data ? 
+            data.map((item) => ({
+                key: item.id,
+                value: item.specialityName,
+                label: item.specialityName
+            })) 
+        : [])
+    ];
 
+    const uniqueSpecialityNames = Array.from(new Set(arraySpec.map(item => item.value)))
+    .map(value => ({ value, label: value }));
+    console.log('uniqueSpecialityNames',uniqueSpecialityNames)
     return (
         <section className="container">
             <Row>
@@ -410,14 +426,7 @@ const IndividualTasks = () => {
                         // dropdownMatchSelectWidth={false}
 
                         style={{ width: '100% !important' }}
-                        options={[
-                            {key: 2244612, value: "Все", label: "Все"},
-                            ...(dataNameSpecialty ? dataNameSpecialty.map((item) => ({
-                              key: item.id,
-                              value: item.value,
-                              label: item.label
-                            })) : [])
-                          ]}
+                        options={uniqueSpecialityNames.length > 1 ? uniqueSpecialityNames : []}
                         onChange={value => {
                             setFilter({
                                 ...filter,
@@ -466,7 +475,7 @@ const IndividualTasks = () => {
                     />
                 </Col>
             </Row>
-            <Row className="mt-12 flex items-center">
+            <Row className="mt-12 mb-6 flex items-center">
                 <Col span={12} flex="50%" className='mobileFirst'>
                     <Radio.Group defaultValue="compressedView" buttonStyle="solid">
                         <Radio.Button

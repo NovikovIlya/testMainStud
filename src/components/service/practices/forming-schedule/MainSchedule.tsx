@@ -42,7 +42,7 @@ export const PracticeSchedule = () => {
 	const [tableData, setTableData] = useState([])
 	const [selectedFieldsFull, setSelectedFieldFull] = useState<any>([])
 	const [dataTable, setDataTable] = useState<ScheduleType[]>([])
-	const {data:dataUserSubdivision} = useGetSubdivisionUserQuery()
+	const {data:dataUserSubdivision,isLoading:isLoadingUserSubdivision} = useGetSubdivisionUserQuery()
 	const {data:dataAll,isSuccess:isSuccessData,isFetching:isFetchingDataAll} = useGetAllSchedulesQuery({subdivisionId:dataUserSubdivision?.value,academicYear:getAcademicYear()},{skip:!dataUserSubdivision})
 	const {data:dataAcademicYear} = useGetAcademicYearQuery()
 	const {data:dataSubdivision,isSuccess:isSuccessSubdivision} = useGetSubdivisionQuery()
@@ -237,31 +237,33 @@ export const PracticeSchedule = () => {
 				{/* : null} */}
 			</Row>
 			<Row gutter={[16, 16]} className="mt-4 flex items-center overWrite">
-				<Col span={5} className='overWrite'>
-				<div className={'flex gap-2 items-center overWrite w-full'}>
+					<Col span={5} className='overWrite'>
+				{/* <div className={'flex gap-2 items-center overWrite w-full'}> */}
 					<span>Учебный год</span>
 				
-				
-					<Select
-						popupMatchSelectWidth={false}
-						defaultValue="Все"
-						className="w-[500px]"
-						onChange={(value: any) => {
-							setFilter({ ...filter, academicYear: value })
-						}}
-						options={
-							[
-								{key: 2244612, value: "Все", label: "Все"},
-                            ...(dataAcademicYear ? dataAcademicYear.map((item:string) => ({
-                              key: item,
-                              value: item,
-                              label: item
-                            })) : [])
-							]
-						}
-					/>
-					</div>
-				</Col>
+					</Col>
+					<Col span={7} className='overWrite grow'>
+						<Select
+							popupMatchSelectWidth={false}
+							defaultValue="Все"
+							className="w-full"
+							onChange={(value: any) => {
+								setFilter({ ...filter, academicYear: value })
+							}}
+							options={
+								[
+									{key: 2244612, value: "Все", label: "Все"},
+								...(dataAcademicYear ? dataAcademicYear.map((item:string) => ({
+								key: item,
+								value: item,
+								label: item
+								})) : [])
+								]
+							}
+						/>
+					{/* </div> */}
+					
+					</Col>
 			</Row>
 			<Row gutter={[16, 16]} className="mt-4 flex items-center overWrite">
 				<Col span={7} offset={17} className='overWrite w-full'>
@@ -283,7 +285,7 @@ export const PracticeSchedule = () => {
 				</Col>
 			</Row>
 		
-					{isFetchingDataAll ? <Spin className='w-full mt-20' indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />  
+					{isLoadingUserSubdivision || isFetchingDataAll ? <Spin className='w-full mt-20' indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />  
 					:  <Table
 						responsive
 						size="small"

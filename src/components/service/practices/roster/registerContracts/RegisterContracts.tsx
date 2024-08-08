@@ -695,7 +695,7 @@ export const RegisterContracts = () => {
                     </Col>
                 </Col>
             </Row>
-            <Row className="mt-12 flex items-center">
+            <Row className="mt-12 mb-6 flex items-center">
                 <Col span={12} flex="50%" className='mobileFirst'>
                     <Radio.Group defaultValue="compressedView" buttonStyle="solid">
                         <Radio.Button

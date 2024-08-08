@@ -625,7 +625,7 @@ export const EditSchedule = () => {
 					/>
 				</Col>
 			</Row>
-			<Row gutter={[16, 0]} className="mt-4 flex items-center overWrite w-full justify-between mrr mll">
+			<Row gutter={[16, 0]} className="mt-4 flex items-center overWrite w-full  mrr mll">
 				<Col span={1}>
 					<Typography.Text className="whitespace-nowrap mobileFont">Курс</Typography.Text>
 				</Col>
@@ -647,7 +647,7 @@ export const EditSchedule = () => {
 				<Col span={3}>
 					<Typography.Text className='mobileFont'>Вид практики</Typography.Text>
 				</Col>
-				<Col span={6} className='overWrite w-full'>
+				<Col span={6} className='overWrite w-full prr-0'>
 					<Select
 						mode='multiple'
 						popupMatchSelectWidth={false}
@@ -723,7 +723,7 @@ export const EditSchedule = () => {
 					</Space>
 				</Col> */}
 			</Row>
-			<Row className="mt-4 flex items-center justify-around">
+			<Row className="mt-4 mb-6 flex items-center justify-around">
 				<Col span={12} flex="50%">
 					<div>
 						<Space>

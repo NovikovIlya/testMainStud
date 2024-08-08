@@ -337,19 +337,20 @@ export const PracticeSchedule = () => {
 			})
 		}
 	})
+	
 
 	useEffect(() => {
 		console.log('filter.courseNumber',filter.courseNumber)
 		const data = {
 			subdivisionId:  dataUserSubdivision?.id ? dataUserSubdivision?.id : null,
 			specialtyNameId:  dataSpeciality ? dataSpeciality : null,
-			courseNumber: filter.courseNumber ==='Все' ? null : filter.courseNumber.includes('Все') ? null : filter?.courseNumber?.filter(x => x !== "Все").map(Number),
-			practiceKindId: filter.practiceKindId ==='Все' ? null: filter?.practiceKindId?.filter(x => x !== "Все").map(Number),
+			courseNumber: filter.courseNumber ==='Все' ? null : filter.courseNumber.includes('Все') ? null : filter?.courseNumber?.filter((x:any) => x !== "Все").map(Number),
+			practiceKindId: filter.practiceKindId ==='Все' ? null: filter?.practiceKindId?.filter((x:string) => x !== "Все").map(Number),
 			educationLevel: filter.educationLevel ==='Все' ? null : filter.educationLevel.includes('Все') ? null : filter?.educationLevel,
 			educationType: filter.educationType ==='Все' ? null : filter.educationType.includes('Все') ? null : filter?.educationType,
 		}
 		sendFilterParams(data)
-	}, [filter, dataAllSubdivision, form])
+	}, [filter, dataUserSubdivision, form])
 
     useEffect(() => {
 		if (isSuccessByFilter) {

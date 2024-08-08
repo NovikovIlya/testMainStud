@@ -14,6 +14,9 @@
   content: 'Создать договор';
   /* Скрываем текст по умолчанию */
 }
+.prr-0{
+ padding-right: 0 !important;
+}
 @media screen and (max-width: 768px) {
   .ant-menu-root{
     position: fixed;

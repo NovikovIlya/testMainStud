@@ -78,8 +78,6 @@ const filterType: FilterType[] = [
   }
 ]
 
-
-
 const optionsSortDate: any = [
   {value: 'По дате (сначала новые)', label: 'По дате (сначала новые)'},
   {value: 'По дате (сначала старые)', label: 'По дате (сначала старые)'},
@@ -109,23 +107,17 @@ export const CreateRepresentation = () => {
       
   ];
   const nav = useNavigate()
-  const [year,setYear] = useState('2023/2024')
-  const {data:dataCreate} = useCreateDocumentQuery('2023/2024')
-  const {data:dataBlob,isLoading:isLoadingBlob} = useGetDocQuery(year,{skip:!year})
   const [tableData, setTableData] = useState<any>(originData)
   const [filter, setFilter] = useState<any>({type: '', spec: '', course: 'Все', level: '', form: '',dateFilling: 'По дате (сначала новые)',selectKind:'Все', name:'Все'})
-
   const [form] = Form.useForm();
   const [data, setData] = useState(originData);
   const [editingKey, setEditingKey] = useState('');
   const isEditing = (record: Item) => record.key === editingKey
-  const [currentRowValues, setCurrentRowValues] = useState({});
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpenOne, setIsModalOpenOne] = useState(false);
-
   const [searchText, setSearchText] = useState('');
   const [searchedColumn, setSearchedColumn] = useState('');
   const searchInput = useRef<any>(null);
+  const [selectedPractice, setSelectedPractice] = useState<any>(null)
 
   useEffect(() => {
   // if (isSuccessPractiseAll) {
@@ -134,7 +126,7 @@ export const CreateRepresentation = () => {
           // @ts-ignore
          
   // }
-}, [filter])
+  }, [filter])
 
   const getColumnSearchProps = (dataIndex: any): any => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
@@ -212,6 +204,187 @@ export const CreateRepresentation = () => {
         text
       ),
   });
+  const columnsRepresentation = [
+    {
+      key: 'name',
+      dataIndex: 'name',
+      title: 'Шифр и иаименование документа',
+      name: 'Шифр и иаименование документа',
+      className: 'text-xs !p-2',
+      ...getColumnSearchProps('name'),
+    },
+        {
+      key: 'academicYear',
+      dataIndex: 'academicYear',
+      title: 'Учебный год',
+      className: 'text-xs !p-2',
+    },
+        {
+      key: 'course',
+      dataIndex: 'selectCourse',
+      title: 'Курс',
+      className: 'text-xs !p-2',
+      editable: true,
+           
+    },
+        {
+      key: 'groupNumbers',
+      dataIndex: 'groupNumbers',
+      title: 'Номер группы',
+      className: 'text-xs !p-2'
+    },
+        {
+      key: 'level',
+      dataIndex: 'level',
+      title: 'Уровень образования',
+      className: 'text-xs !p-2',
+      editable: true,
+    },
+
+    {
+      title: '',
+      key: 'action',
+      render: (_, record) => (
+        <Space size="middle">
+          <Button onClick={()=>hanldeSelectedPractise(record.id)}>Выбрать </Button>
+        </Space>
+      ),
+    },
+  
+  
+  
+  ]
+  const columns = [
+  {
+    key: 'name',
+    dataIndex: 'name',
+    title: 'Шифр и иаименование документа',
+    name: 'Шифр и иаименование документа',
+    className: 'text-xs !p-2',
+  },
+      {
+    key: 'academicYear',
+    dataIndex: 'academicYear',
+    title: 'Учебный год',
+    className: 'text-xs !p-2',
+  },
+      {
+    key: 'course',
+    dataIndex: 'selectCourse',
+    title: 'Курс',
+    className: 'text-xs !p-2',
+    editable: true,
+         
+  },
+      {
+    key: 'groupNumbers',
+    dataIndex: 'groupNumbers',
+    title: 'Номер группы',
+    className: 'text-xs !p-2'
+  },
+      {
+    key: 'level',
+    dataIndex: 'level',
+    title: 'Место прохождения практики',
+    className: 'text-xs !p-2',
+    editable: true,
+  },
+      {
+    key: 'forms',
+    dataIndex: 'forms',
+    title: 'Форма обучения',
+    className: 'text-xs !p-2'
+  },
+      {
+    key: 'kind',
+    dataIndex: 'selectKind',
+    title: 'Вид практики',
+    className: 'text-xs !p-2',
+    editable: true,
+  },
+      {
+    key: 'type',
+    dataIndex: 'selectType',
+    title: 'Тип практики',
+    className: 'text-xs !p-2',
+          
+  },
+  {
+          key: 'id',
+          title: 'Дата заполнения',
+          dataIndex: 'dateFilling',
+          width: '20%',
+          sorter: (a, b) => +new Date(b.dateFilling) - +new Date(a.dateFilling),
+          // @ts-ignore
+          render: (text:any) => dayjs(text).format('DD.MM.YYYY')
+      },
+
+  {
+    key: 'period',
+    dataIndex: 'period',
+    title: 'Период практики',
+    className: 'text-xs !p-2',
+          editable: true,
+          render: (text:any, record:any) => {
+              const editable = isEditing(record);
+              console.log('text', text,record);
+              return (
+                <>{formatDateRange((Array.isArray(text) ? text : ['','']))}</>
+              );
+          },},
+      {
+          title: '',
+          dataIndex: 'operation',
+          render: (_: any, record: Item) => {
+            const editable = isEditing(record);
+            return editable ? (
+              <div className='flex justify-around items-center w-[60px]'>
+                <Typography.Link onClick={() => save(record.key)} style={{ marginRight: 8 }}>
+                  <CheckOutlined style={{color:'#75a4d3'}}/>
+                </Typography.Link>
+                <Popconfirm title="Вы действительно хотите отменить действие?" onConfirm={cancel}>
+                   <CloseOutlined style={{color:'#75a4d3'}}/>
+                </Popconfirm>
+              </div>
+            ) : (
+              <div className='flex justify-around items-center  w-[60px]'>
+              <Typography.Link disabled={editingKey !== ''} onClick={() => edit(record)}>
+                <EditSvg/>
+              </Typography.Link>
+              {/* <Popconfirm title="Вы действительно хотите удалить?" onConfirm={deleteRow}>
+                  <a><DeleteRedSvg/></a>
+              </Popconfirm> */}
+              </div>
+            );
+          },
+        },
+  
+
+  ]
+  const mergedColumns: TableProps['columns'] = columns.map((col) => {
+      // @ts-ignore
+      if (!col.editable) {
+        return col;
+      }
+      return {
+        ...col,
+        onCell: (record: Item) => ({
+          record,
+          inputType:  col.dataIndex === 'selectCourse' ? 'select' :
+          col.dataIndex === 'selectType' ? 'select' :
+          col.dataIndex === 'selectKind' ? 'select' :
+          col.dataIndex === 'period' ? 'date' :
+           col.dataIndex === 'course' ? 'number' : 'text',
+          dataIndex: col.dataIndex,
+          title: col.title,
+          editing: isEditing(record),
+          options: col.dataIndex === 'selectCourse' ? optionMock 
+          : col.dataIndex === 'selectType' ? optionMockType 
+          : col.dataIndex === 'selectKind' ? optionMockKind : undefined,
+        }),
+      };
+  });
+  
   const handleSearch = (
     selectedKeys: string[],
     confirm: FilterDropdownProps['confirm'],
@@ -226,6 +399,7 @@ export const CreateRepresentation = () => {
     clearFilters();
     setSearchText('');
   };
+
   function filterDataFull() {
 
 
@@ -385,187 +559,12 @@ export const CreateRepresentation = () => {
         console.log('Validate Failed:', errInfo);
       }
   };
-  const columnsOne = [
-    {
-      key: 'name',
-      dataIndex: 'name',
-      title: 'Шифр и иаименование документа',
-      name: 'Шифр и иаименование документа',
-      className: 'text-xs !p-2',
-      ...getColumnSearchProps('name'),
-    },
-        {
-      key: 'academicYear',
-      dataIndex: 'academicYear',
-      title: 'Учебный год',
-      className: 'text-xs !p-2',
-    },
-        {
-      key: 'course',
-      dataIndex: 'selectCourse',
-      title: 'Курс',
-      className: 'text-xs !p-2',
-      editable: true,
-           
-    },
-        {
-      key: 'groupNumbers',
-      dataIndex: 'groupNumbers',
-      title: 'Номер группы',
-      className: 'text-xs !p-2'
-    },
-        {
-      key: 'level',
-      dataIndex: 'level',
-      title: 'Уровень образования',
-      className: 'text-xs !p-2',
-      editable: true,
-    },
 
-    {
-      title: '',
-      key: 'action',
-      render: (_, record) => (
-        <Space size="middle">
-          <a>Выбрать </a>
-        </Space>
-      ),
-    },
-  
-  
-  
-  ]
-  const columns = [
-  {
-    key: 'name',
-    dataIndex: 'name',
-    title: 'Шифр и иаименование документа',
-    name: 'Шифр и иаименование документа',
-    className: 'text-xs !p-2',
-  },
-      {
-    key: 'academicYear',
-    dataIndex: 'academicYear',
-    title: 'Учебный год',
-    className: 'text-xs !p-2',
-  },
-      {
-    key: 'course',
-    dataIndex: 'selectCourse',
-    title: 'Курс',
-    className: 'text-xs !p-2',
-    editable: true,
-         
-  },
-      {
-    key: 'groupNumbers',
-    dataIndex: 'groupNumbers',
-    title: 'Номер группы',
-    className: 'text-xs !p-2'
-  },
-      {
-    key: 'level',
-    dataIndex: 'level',
-    title: 'Место прохождения практики',
-    className: 'text-xs !p-2',
-    editable: true,
-  },
-      {
-    key: 'forms',
-    dataIndex: 'forms',
-    title: 'Форма обучения',
-    className: 'text-xs !p-2'
-  },
-      {
-    key: 'kind',
-    dataIndex: 'selectKind',
-    title: 'Вид практики',
-    className: 'text-xs !p-2',
-    editable: true,
-  },
-      {
-    key: 'type',
-    dataIndex: 'selectType',
-    title: 'Тип практики',
-    className: 'text-xs !p-2',
-          
-  },
-  {
-          key: 'id',
-          title: 'Дата заполнения',
-          dataIndex: 'dateFilling',
-          width: '20%',
-          sorter: (a, b) => +new Date(b.dateFilling) - +new Date(a.dateFilling),
-          // @ts-ignore
-          render: (text:any) => dayjs(text).format('DD.MM.YYYY')
-      },
+  const hanldeSelectedPractise = (id: any)=>{
+    console.log('id',id)
+    setSelectedPractice(id)
+  }
 
-  {
-    key: 'period',
-    dataIndex: 'period',
-    title: 'Период практики',
-    className: 'text-xs !p-2',
-          editable: true,
-          render: (text:any, record:any) => {
-              const editable = isEditing(record);
-              console.log('text', text,record);
-              return (
-                <>{formatDateRange((Array.isArray(text) ? text : ['','']))}</>
-              );
-          },},
-      {
-          title: '',
-          dataIndex: 'operation',
-          render: (_: any, record: Item) => {
-            const editable = isEditing(record);
-            return editable ? (
-              <div className='flex justify-around items-center w-[60px]'>
-                <Typography.Link onClick={() => save(record.key)} style={{ marginRight: 8 }}>
-                  <CheckOutlined style={{color:'#75a4d3'}}/>
-                </Typography.Link>
-                <Popconfirm title="Вы действительно хотите отменить действие?" onConfirm={cancel}>
-                   <CloseOutlined style={{color:'#75a4d3'}}/>
-                </Popconfirm>
-              </div>
-            ) : (
-              <div className='flex justify-around items-center  w-[60px]'>
-              <Typography.Link disabled={editingKey !== ''} onClick={() => edit(record)}>
-                <EditSvg/>
-              </Typography.Link>
-              {/* <Popconfirm title="Вы действительно хотите удалить?" onConfirm={deleteRow}>
-                  <a><DeleteRedSvg/></a>
-              </Popconfirm> */}
-              </div>
-            );
-          },
-        },
-  
-
-  ]
-
-  const mergedColumns: TableProps['columns'] = columns.map((col) => {
-      // @ts-ignore
-      if (!col.editable) {
-        return col;
-      }
-      return {
-        ...col,
-        onCell: (record: Item) => ({
-          record,
-          inputType:  col.dataIndex === 'selectCourse' ? 'select' :
-          col.dataIndex === 'selectType' ? 'select' :
-          col.dataIndex === 'selectKind' ? 'select' :
-          col.dataIndex === 'period' ? 'date' :
-           col.dataIndex === 'course' ? 'number' : 'text',
-          dataIndex: col.dataIndex,
-          title: col.title,
-          editing: isEditing(record),
-          options: col.dataIndex === 'selectCourse' ? optionMock 
-          : col.dataIndex === 'selectType' ? optionMockType 
-          : col.dataIndex === 'selectKind' ? optionMockKind : undefined,
-        }),
-      };
-  });
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -682,9 +681,9 @@ export const CreateRepresentation = () => {
                           <Button type="primary" onClick={showModalOne}>
                             Выберите практику
                           </Button>
-                          <Button type="primary" onClick={showModal}>
+                          {/* <Button type="primary" onClick={showModal}>
                             Сформировать представление
-                          </Button>
+                          </Button> */}
                       </Space>
                   </div>
               </Col>
@@ -718,17 +717,16 @@ export const CreateRepresentation = () => {
                   }}
                   bordered
                   dataSource={tableData ? tableData : []}
-                  columns={columnsOne}
+                  columns={columnsRepresentation}
                   rowClassName="editable-row"
                   pagination={false}
                     rowKey="id"
                       />
           </Modal>
-          <Modal okText='Сформировать' width={'100%'} title="Сформируйте представление" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+
+          {selectedPractice ? <>
           <Row className="mt-4">
               <Col flex={'auto'}>
-                  {/* {stateSchedule.compressed && <CompressedView/>}
-                  {stateSchedule.table && <TableView/>} */}
                    <Form form={form} component={false}>
                       <Table
                           ref={tableRef}
@@ -747,7 +745,7 @@ export const CreateRepresentation = () => {
                       </Form>
               </Col>
           </Row>
-          </Modal>
+          </> : ''}
       </section>
   )
 }

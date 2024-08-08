@@ -38,6 +38,12 @@ export const rosterService = apiSlice.injectEndpoints({
                 method: 'GET',
             }),
         }),
+        getSpecialtyNamesIndividualTasks: builder.query<NameSpecialty[], any>({
+            query: (subDivision) => ({
+                url: `services/api-practices/tasks/specialties${subDivision ? "?subdivisionId=" + subDivision : ''}`,
+                method: 'GET',
+            }),
+        }),
         getSpecialtyNamesForPractise: builder.query<any, any>({
             query: (subDivisionId) => ({
                 url: `services/api-practices/tasks/specialties?subdivisionId=${subDivisionId}`,
@@ -65,5 +71,6 @@ export const {
     useGetContractsShortQuery,
     useGetSpecialtyNamesQuery,
     useGetContractFacilitiesQuery,
-    useGetSpecialtyNamesForPractiseQuery
+    useGetSpecialtyNamesForPractiseQuery,
+    useGetSpecialtyNamesIndividualTasksQuery
 } = rosterService

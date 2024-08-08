@@ -28,6 +28,7 @@ import { SupervisorUpdateVacancy } from './supervisor/SupervisorUpdateVacancy'
 import { SupervisorVacancies } from './supervisor/SupervisorVacancies'
 import { SupervisorInvitationAll } from './supervisor/SupervisorInvitationAll'
 import { SupervisorInvitationCreate } from './supervisor/SupervisorInvitationCreate'
+import {Header} from "../../layout/Header";
 
 export const NavPesonnelAccounting = () => {
 	const { pathname } = useLocation()
@@ -401,6 +402,7 @@ export const NavPesonnelAccounting = () => {
 
 	return (
 		<>
+			<Header type="service" service="employment" />
 			{isEmployee ? (
 				<div className="shadowNav">
 					<ul className="min-w-[230px] pt-14 flex flex-col gap-4 sticky top-[80px]">

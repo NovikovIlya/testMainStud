@@ -26,7 +26,7 @@ export const RespondsSupervisor = () => {
 
 	return (
 		<>
-			<div className="pl-[54px] pr-[54px] pt-[60px] w-full bg-content-gray">
+			<div className="pl-[54px] pr-[54px] pt-[120px] w-full bg-content-gray">
 				<h1 className="font-content-font font-normal text-[28px]/[28px] text-black">
 					Отклики
 				</h1>

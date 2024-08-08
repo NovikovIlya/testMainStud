@@ -318,3 +318,9 @@ export type VacancyRequestViewType = {
 	newData: VacancyRequestType
 	oldData: VacancyRequestType | null
 }
+
+export type InterviewRequestType ={
+	respondId : number,
+	date : string,
+	format : string
+}

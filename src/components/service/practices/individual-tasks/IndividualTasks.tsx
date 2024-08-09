@@ -350,8 +350,6 @@ const IndividualTasks = () => {
             }
         }
         function filterNameSpecialty(elem: FullIndividualTask) {
-            console.log('elem',elem.id)
-            console.log('filter.specialityName',filter.specialityName)
             if (filter.specialityName === 'Все') {
                 return elem
             } else {
@@ -416,7 +414,7 @@ const IndividualTasks = () => {
     .map(value => ({ value, label: value }));
     const uniqueTypes           = Array.from(new Set(arrayType.map(item => item.value)))
     .map(value => ({ value, label: value }));
-    console.log('uniqueSpecialityNames',uniqueSpecialityNames)
+   
     return (
         <section className="container">
             <Row>
@@ -435,8 +433,6 @@ const IndividualTasks = () => {
                         popupMatchSelectWidth={false}
                         defaultValue="Все"
                         className="w-full"
-                        // dropdownMatchSelectWidth={false}
-
                         style={{ width: '100% !important' }}
                         options={uniqueSpecialityNames.length > 1 ? uniqueSpecialityNames : []}
                         onChange={value => {

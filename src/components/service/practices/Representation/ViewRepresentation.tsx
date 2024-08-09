@@ -23,7 +23,6 @@ const optionsNames = [
 	{ value: 'тест', label: 'тест' },
 ]
 const optionsSortDate: any = [
-	{ value: 'Все', label: 'Все' },
 	{ value: 'По дате (сначала новые)', label: 'По дате (сначала новые)' },
 	{ value: 'По дате (сначала старые)', label: 'По дате (сначала старые)' }
 ]

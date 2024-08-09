@@ -85,7 +85,7 @@ export const NavPractices = () => {
 				className="min-w-[230px] max-w-[230px] flex flex-col gap-7 mt-28"
 				items={items}
 			/>
-			<div className="bg-[#F5F8FB] w-full pt-14 px-14 mt-20">
+			<div className="bg-[#F5F8FB] w-full pt-14 px-14  xl:mt-20 mt-28 ">
 				{current === 'registerContracts' && <Roster />}
 				{current === 'individualTasks' && <Tasks />}
 				{current === 'practical.ts' && <Practical />}

@@ -33,13 +33,14 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const location = useLocation();
 	const user = useAppSelector(state => state.auth.user)
 	const isMobile = isMobileDevice();
-	
+	const urlContainsPractice = location.pathname.includes('practice');
+
 	useEffect(()=>{
 		if(isMobile){
-			showMobileMenu()
+			showMobileMenuEffect()
 		}
 	},[location])
-	
+
 	const showDrawer = () => {
 		setOpenDrawer(!openDrawer)
 	}
@@ -150,13 +151,26 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 		i18n.changeLanguage(language)
 	}
 	const showMobileMenu = ()=>{
-		if(document.querySelector('.ant-menu-root').style.position==='static'){
-			document.querySelector('.ant-menu-root').style.position = 'fixed'
-			document.querySelector('header').style.marginLeft = '0'
-			return
+		if(document.querySelector('.ant-menu-root')){
+			if(document.querySelector('.ant-menu-root').style.position==='static'){
+				document.querySelector('.ant-menu-root').style.position = 'fixed'
+				document.querySelector('header').style.marginLeft = '0'
+				return
+			}
+			document.querySelector('.ant-menu-root').style.position = 'static'
+			// document.querySelector('header').style.marginLeft = '-100px'
 		}
-		document.querySelector('.ant-menu-root').style.position = 'static'
-		// document.querySelector('header').style.marginLeft = '-100px'
+	}
+	const showMobileMenuEffect = ()=>{
+		if(document.querySelector('.ant-menu-root')){
+			if(document.querySelector('.ant-menu-root').style.position==='static'){
+				document.querySelector('.ant-menu-root').style.position = 'fixed'
+				document.querySelector('header').style.marginLeft = '0'
+				return
+			}
+			
+			// document.querySelector('header').style.marginLeft = '-100px'
+		}
 	}
 
 	return (
@@ -332,6 +346,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 				
 			</div>
 			{/* Для мобильных устройств */}
+			{urlContainsPractice ?
 			<div className='block lg:hidden  bg-blue65A  flex w-full mt-[1px] items-center p-1'>
 				<Button
 						onClick={showMobileMenu}
@@ -348,7 +363,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 					</Button>
 					<Divider type="vertical" className="border-l-white h-10 m-0 mr-4" />
 				<div  className="text-white text-base font-bold ">{service}</div>
-			</div>
+			</div> : ""}
 		</header>
 	)
 }

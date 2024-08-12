@@ -119,25 +119,7 @@ const filterCourse: FilterType[] = [
 		label: '7'
 	}
 ]
-const filterType: FilterType[] = [
-	{
-		value: 'Все',
-		label: 'Все'
-	},
-	{
-		value: 'Производственная',
-		label: 'Производственная'
-	},
-	{
-		value: 'Технологическая',
-		label: 'Технологическая'
-	}
-]
 
-const optionsSortDate: any = [
-	{ value: 'По дате (сначала новые)', label: 'По дате (сначала новые)' },
-	{ value: 'По дате (сначала старые)', label: 'По дате (сначала старые)' }
-]
 
 const optionMock = [
 	{ value: '1', label: '1' },
@@ -340,7 +322,6 @@ export const PracticeSchedule = () => {
 	
 
 	useEffect(() => {
-		console.log('filter.courseNumber',filter.courseNumber)
 		const data = {
 			subdivisionId:  dataUserSubdivision?.id ? dataUserSubdivision?.id : null,
 			specialtyNameId:  dataSpeciality ? dataSpeciality : null,
@@ -454,28 +435,28 @@ export const PracticeSchedule = () => {
 		return newData
 	}
 
-	const print = () => {
-		function properties() {
-			return [
-				'Шифр и наименование специальности',
-				// 'Учебный год',
-				'Курс',
-				'Номер группы',
-				'Уровень образования',
-				'Форма обучения',
-				'Тип практики',
-				'Дата заполнения',
-				'Вид практики',
-				'Период практики'
-			]
-		}
-		printJS({
-			printable: translateColumnsIntoRussia({ isPrint: true }),
-			properties: properties(),
-			type: 'json',
-			style: 'body {font-size: 10px}'
-		})
-	}
+	// const print = () => {
+	// 	function properties() {
+	// 		return [
+	// 			'Шифр и наименование специальности',
+	// 			// 'Учебный год',
+	// 			'Курс',
+	// 			'Номер группы',
+	// 			'Уровень образования',
+	// 			'Форма обучения',
+	// 			'Тип практики',
+	// 			'Дата заполнения',
+	// 			'Вид практики',
+	// 			'Период практики'
+	// 		]
+	// 	}
+	// 	printJS({
+	// 		printable: translateColumnsIntoRussia({ isPrint: true }),
+	// 		properties: properties(),
+	// 		type: 'json',
+	// 		style: 'body {font-size: 10px}'
+	// 	})
+	// }
 
 	// const edit = (record: Partial<Item> & { key: React.Key }) => {
 	// 	form.setFieldsValue({ name: '', age: '', address: '', ...record })
@@ -569,6 +550,8 @@ export const PracticeSchedule = () => {
 			})
 
     }
+
+
 
 
 	return (

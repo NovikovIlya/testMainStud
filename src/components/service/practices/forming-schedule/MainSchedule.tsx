@@ -55,18 +55,18 @@ export const PracticeSchedule = () => {
 			name: 'Наименование графика',
 			className: 'text-xs !p-2 ',
 			// @ts-ignore
-			render: (text, record) => (
-				<div className={'flex items-center justify-between'}>
-					<span className={'underline flex font-bold'}>{text}</span>
-					<Button
-						type="text"
-						icon={<EditSvg />}
-						onClick={() => {
-							navigate(`/services/practices/formingSchedule/edit/year=${record.academicYear.replace("/", "-")}/${record.id}`)
-						}}
-					/>
-				</div>
-			)
+			// render: (text, record) => (
+			// 	<div className={'flex items-center justify-between'}>
+			// 		<span className={'underline flex font-bold'}>{text}</span>
+			// 		<Button
+			// 			type="text"
+			// 			icon={<EditSvg />}
+			// 			onClick={() => {
+			// 				navigate(`/services/practices/formingSchedule/edit/year=${record.academicYear.replace("/", "-")}/${record.id}`)
+			// 			}}
+			// 		/>
+			// 	</div>
+			// )
 		},
 
 		{
@@ -118,7 +118,7 @@ export const PracticeSchedule = () => {
 						/>
 					}
 				>
-					<Button type="text" className="opacity-50" icon={<PointsSvg />} />
+					<Button type="text" onClick={(e) => { e.stopPropagation(); /* обработка клика на PointsSvg */ }}  className="opacity-50" icon={<PointsSvg />} />
 				</Popover>
 			),
 			fixed: 'right',
@@ -183,6 +183,10 @@ export const PracticeSchedule = () => {
             return `${year - 1}/${year}`;
         }
     }	
+
+	const handleRowClick = (record:any) => {
+		navigate(`/services/practices/formingSchedule/edit/year=${record.academicYear.replace("/", "-")}/${record.id}`)
+    };
 
 
 	return (
@@ -287,6 +291,9 @@ export const PracticeSchedule = () => {
 		
 					{isLoadingUserSubdivision || isFetchingDataAll ? <Spin className='w-full mt-20' indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />  
 					:  <Table
+						onRow={(record) => ({
+							onClick: () => handleRowClick(record),
+						})}
 						responsive
 						size="small"
 						rowKey="id"

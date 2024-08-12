@@ -123,7 +123,7 @@ export const PopoverMain = ({recordFull,recordFullAll,setRecordFull,setSelectedF
     console.log('recordFull',recordFull)
 
     return (
-        <div className={'flex flex-col gap-2 '}>
+        <div className={'flex flex-col gap-2 '} onClick={(e) => { e.stopPropagation()}} >
             <WrapperButton
                 color={ColorBg.BLUEF2}
                 onClick={downLoad}

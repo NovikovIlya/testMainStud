@@ -1,3 +1,6 @@
+import { FilterDropdownProps } from "antd/es/table/interface";
+import { ReactNode } from "react";
+
 export type ScheduleType = {
     id: string;
     name: string;
@@ -34,4 +37,12 @@ export interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
     inputType: 'number' | 'text';
     record: Item;
     index: number;
+  }
+
+export  interface GetColumnSearchProps {
+    filterDropdown: (props: FilterDropdownProps) => ReactNode;
+    filterIcon: (filtered: boolean) => ReactNode;
+    onFilter: (value: string | number | boolean | null, record: any) => boolean;
+    onFilterDropdownOpenChange: (visible: boolean) => void;
+    render: (text: string | number) => ReactNode;
   }

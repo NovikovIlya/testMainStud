@@ -17,6 +17,12 @@
 .prr-0{
  padding-right: 0 !important;
 }
+.ant-table-row{
+  cursor: pointer;
+}
+.ant-table-cell-row-hover{
+  background-color: #ededed !important;
+}
 @media screen and (max-width: 768px) {
   .ant-menu-root{
     position: fixed;

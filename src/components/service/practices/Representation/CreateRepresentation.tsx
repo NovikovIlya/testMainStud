@@ -1,5 +1,5 @@
 import {
-  Button, Col, Form, Input, Modal, Popconfirm, Row,
+  Button, Col, Form, Input, Modal, Popconfirm, Radio, Result, Row,
   Select,
   Space, Table, Typography
 } from 'antd';
@@ -16,6 +16,9 @@ import { DeleteRedSvg } from '../../../../assets/svg/DeleteRedSvg';
 import { EditSvg } from '../../../../assets/svg/EditSvg';
 import { CheckOutlined, CloseOutlined, SearchOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
+import { optionsCourseValidAdd } from '../../../../utils/optionsCourseAdd';
+import { GetColumnSearchProps } from '../../../../models/representation';
+import { FilterDropdownProps } from 'antd/es/table/interface';
 
 
 interface FilterType {
@@ -113,7 +116,7 @@ export const CreateRepresentation = () => {
   const [data, setData] = useState(originData);
   const [editingKey, setEditingKey] = useState('');
   const isEditing = (record: Item) => record.key === editingKey
-  const [isModalOpenOne, setIsModalOpenOne] = useState(false);
+  const [isModalOpenOne, setIsModalOpenOne] = useState(true);
   const [searchText, setSearchText] = useState('');
   const [searchedColumn, setSearchedColumn] = useState('');
   const searchInput = useRef<any>(null);
@@ -128,7 +131,7 @@ export const CreateRepresentation = () => {
   // }
   }, [filter])
 
-  const getColumnSearchProps = (dataIndex: any): any => ({
+  const getColumnSearchProps = (dataIndex: any): GetColumnSearchProps  => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
       <div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
         <Input
@@ -205,6 +208,7 @@ export const CreateRepresentation = () => {
       ),
   });
   const columnsRepresentation = [
+  
     {
       key: 'name',
       dataIndex: 'name',
@@ -219,14 +223,7 @@ export const CreateRepresentation = () => {
       title: 'Учебный год',
       className: 'text-xs !p-2',
     },
-        {
-      key: 'course',
-      dataIndex: 'selectCourse',
-      title: 'Курс',
-      className: 'text-xs !p-2',
-      editable: true,
-           
-    },
+
         {
       key: 'groupNumbers',
       dataIndex: 'groupNumbers',
@@ -240,99 +237,64 @@ export const CreateRepresentation = () => {
       className: 'text-xs !p-2',
       editable: true,
     },
-
     {
-      title: '',
-      key: 'action',
-      render: (_, record) => (
-        <Space size="middle">
-          <Button onClick={()=>hanldeSelectedPractise(record.id)}>Выбрать </Button>
-        </Space>
-      ),
+      key: 'course',
+      dataIndex: 'selectCourse',
+      title: 'Курс',
+      className: 'text-xs !p-2',
+      editable: true,  
     },
+
+    // {
+    //   title: '',
+    //   key: 'action',
+    //   render: (_:any, record:any) => (
+    //     <Space size="middle">
+    //       <Button onClick={()=>hanldeSelectedPractise(record.id)}>Выбрать </Button>
+    //     </Space>
+    //   ),
+    // },
   
   
   
   ]
+
   const columns = [
+    {
+      key: 'number',
+      dataIndex: 'number',
+      title: '№',
+      className: 'text-xs !p-2',
+      render: (text:any, record:any, index:any) => <div>{index + 1}</div>,
+    },
   {
-    key: 'name',
-    dataIndex: 'name',
-    title: 'Шифр и иаименование документа',
-    name: 'Шифр и иаименование документа',
+    key: 'student',
+    dataIndex: 'student',
+    title: 'ФИО обучающегося',
+    name: 'ФИО обучающегося',
     className: 'text-xs !p-2',
   },
-      {
-    key: 'academicYear',
-    dataIndex: 'academicYear',
-    title: 'Учебный год',
-    className: 'text-xs !p-2',
-  },
-      {
-    key: 'course',
-    dataIndex: 'selectCourse',
-    title: 'Курс',
-    className: 'text-xs !p-2',
-    editable: true,
-         
-  },
-      {
+   
+    {
     key: 'groupNumbers',
     dataIndex: 'groupNumbers',
     title: 'Номер группы',
     className: 'text-xs !p-2'
-  },
-      {
-    key: 'level',
-    dataIndex: 'level',
+    },
+    {
+    key: 'place',
+    dataIndex: 'place',
     title: 'Место прохождения практики',
     className: 'text-xs !p-2',
     editable: true,
-  },
-      {
-    key: 'forms',
-    dataIndex: 'forms',
-    title: 'Форма обучения',
+    },
+    {
+    key: 'FIO',
+    dataIndex: 'FIO',
+    title: 'ФИО руководителя от кафедры',
     className: 'text-xs !p-2'
-  },
-      {
-    key: 'kind',
-    dataIndex: 'selectKind',
-    title: 'Вид практики',
-    className: 'text-xs !p-2',
-    editable: true,
-  },
-      {
-    key: 'type',
-    dataIndex: 'selectType',
-    title: 'Тип практики',
-    className: 'text-xs !p-2',
-          
-  },
-  {
-          key: 'id',
-          title: 'Дата заполнения',
-          dataIndex: 'dateFilling',
-          width: '20%',
-          sorter: (a, b) => +new Date(b.dateFilling) - +new Date(a.dateFilling),
-          // @ts-ignore
-          render: (text:any) => dayjs(text).format('DD.MM.YYYY')
-      },
-
-  {
-    key: 'period',
-    dataIndex: 'period',
-    title: 'Период практики',
-    className: 'text-xs !p-2',
-          editable: true,
-          render: (text:any, record:any) => {
-              const editable = isEditing(record);
-              console.log('text', text,record);
-              return (
-                <>{formatDateRange((Array.isArray(text) ? text : ['','']))}</>
-              );
-          },},
-      {
+    },
+     {
           title: '',
           dataIndex: 'operation',
           render: (_: any, record: Item) => {
@@ -388,7 +350,7 @@ export const CreateRepresentation = () => {
   const handleSearch = (
     selectedKeys: string[],
     confirm: FilterDropdownProps['confirm'],
-    dataIndex: DataIndex,
+    dataIndex: any,
   ) => {
     confirm();
     setSearchText(selectedKeys[0]);
@@ -456,17 +418,17 @@ export const CreateRepresentation = () => {
     : []
 }
 
-  const downloadFile = () => {
-      if(dataBlob){
-      const link = document.createElement('a');
-      link.href = dataBlob;
-      link.setAttribute('download', 'downloaded-file.docx');
-      document.body.appendChild(link);
-      link.click();
+  // const downloadFile = () => {
+  //     if(dataBlob){
+  //     const link = document.createElement('a');
+  //     link.href = dataBlob;
+  //     link.setAttribute('download', 'downloaded-file.docx');
+  //     document.body.appendChild(link);
+  //     link.click();
 
-      window.URL.revokeObjectURL(dataBlob); 
-      }
-  }
+  //     window.URL.revokeObjectURL(dataBlob); 
+  //     }
+  // }
 
   function translateColumnsIntoRussia({isPrint}: { isPrint?: boolean }) {
       const newData: any = []
@@ -507,7 +469,7 @@ export const CreateRepresentation = () => {
   const edit = (record: Partial<Item> & { key: React.Key }) => {
       form.setFieldsValue({ name: '', age: '', address: '', ...record });
       setEditingKey(record.key);
-      setCurrentRowValues(record);
+      // setCurrentRowValues(record);
   };
   
   const cancel = () => {
@@ -517,7 +479,7 @@ export const CreateRepresentation = () => {
   const deleteRow = ()=>{
 
   }
-  const formatDateRange = (dateRange) => {
+  const formatDateRange = (dateRange:any) => {
       console.log('dateRange',dateRange)
       if (dateRange !== null && Array.isArray(dateRange) && dateRange.length === 2) {
           const startDate = dayjs(dateRange[0]);
@@ -563,19 +525,20 @@ export const CreateRepresentation = () => {
   const hanldeSelectedPractise = (id: any)=>{
     console.log('id',id)
     setSelectedPractice(id)
+    setIsModalOpenOne(false)
   }
 
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
+  // const showModal = () => {
+  //   setIsModalOpen(true);
+  // };
 
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
+  // const handleOk = () => {
+  //   setIsModalOpen(false);
+  // };
 
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
+  // const handleCancel = () => {
+  //   setIsModalOpen(false);
+  // };
 
   const showModalOne = () => {
     setIsModalOpenOne(true);
@@ -587,6 +550,9 @@ export const CreateRepresentation = () => {
 
   const handleCancelOne = () => {
     setIsModalOpenOne(false);
+  };
+  const handleRowClick = (record:any) => {
+		hanldeSelectedPractise(record.id)
   };
 
  
@@ -605,12 +571,33 @@ export const CreateRepresentation = () => {
                           }}
                       />
                   <Typography.Text className=" text-[28px] mb-14">
-                      Представление '...'
+                      Добавление представления в приказ
                   </Typography.Text>
              
               </Col>
           </Row>
-          <Row gutter={[8, 16]} className="mt-12 w-full flex items-center">
+          
+          {/* <Row gutter={[8, 16]} className="mt-12 w-full flex items-center">
+              <Col span={4}>
+                  <Typography.Text>Подразделение</Typography.Text>
+              </Col>
+              <Col span={8}>
+                  <Select
+                      popupMatchSelectWidth={false}
+                      defaultValue=""
+                      className="w-full"
+                      options={filterSpecialization}
+                      onChange={value => {
+                          setFilter({
+                              ...filter,
+                              name: value
+                          })
+                      }}
+                  />
+              </Col>
+              
+          </Row>
+          <Row gutter={[8, 16]} className="mt-4 w-full flex items-center">
               <Col span={4}>
                   <Typography.Text>Шифр и наименование специальности</Typography.Text>
               </Col>
@@ -649,16 +636,16 @@ export const CreateRepresentation = () => {
                   />
               </Col>
               <Col span={2}>
-                  <Typography.Text>Вид практики</Typography.Text>
+                  <Typography.Text>Семестр</Typography.Text>
               </Col>
               <Col span={7}>
                   <Select
                       popupMatchSelectWidth={false}
-                      defaultValue="Все"
+                      defaultValue=""
                       className="w-full"
-                      options={filterType}
+                      options={optionsCourseValidAdd(filter.course)}
+                      disabled={!filter.course || filter.course === 'Все'}
                       onChange={value => {
-                          
                           setFilter({
                               ...filter,
                               selectKind: value
@@ -666,7 +653,8 @@ export const CreateRepresentation = () => {
                       }}
                   />
               </Col>
-          </Row>
+          </Row> */}
+
           
           <Row className="mt-4 flex items-center">
               <Col span={12} flex="50%">
@@ -687,7 +675,7 @@ export const CreateRepresentation = () => {
                       </Space>
                   </div>
               </Col>
-              <Col span={8} offset={4}>
+              {/* <Col span={8} offset={4}>
                   <div className={'flex gap-2 items-center'}>
                       <span className={'mr-2'}>Сортировка</span>
                       <Select
@@ -704,11 +692,131 @@ export const CreateRepresentation = () => {
                           />
                       
                   </div>
-
-              </Col>
+              </Col> */}
           </Row>
+
+          {selectedPractice ? <Col span={12} flex="50%" className='mt-4 mobileFirst'>
+                    <Radio.Group defaultValue="compressedView" buttonStyle="solid">
+                        <Radio.Button
+                           
+                            value="compressedView"
+                            className="!rounded-l-full">
+                            Невыездная практика
+                        </Radio.Button>
+                        <Radio.Button
+             
+                            value="tableView"
+                            className="!rounded-r-full">
+                            Выездная практика
+                        </Radio.Button>
+                    </Radio.Group>
+          </Col> : ''}
+
           <Modal width={'100%'} title="Выберите практику" open={isModalOpenOne} onOk={handleOkOne} onCancel={handleCancelOne}>
+            <Row gutter={[8, 16]} className="mt-12 w-full flex items-center">
+                <Col span={4}>
+                    <Typography.Text>Шифр и наимеование документа</Typography.Text>
+                </Col>
+                <Col span={8}>
+                    <Select
+                        showSearch
+                        optionFilterProp="label"
+                        filterSort={(optionA, optionB) =>
+                          (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
+                        }
+                        popupMatchSelectWidth={false}
+                        defaultValue=""
+                        className="w-full"
+                        options={filterSpecialization}
+                        onChange={value => {
+                            setFilter({
+                                ...filter,
+                                name: value
+                            })
+                        }}
+                    />
+                </Col>
+            </Row>
+            <Row gutter={[8, 16]} className="mt-4 w-full flex items-center">
+                <Col span={4}>
+                    <Typography.Text>Подразделение</Typography.Text>
+                </Col>
+                <Col span={8}>
+                    <Select
+                        popupMatchSelectWidth={false}
+                        defaultValue=""
+                        className="w-full"
+                        options={filterSpecialization}
+                        onChange={value => {
+                            setFilter({
+                                ...filter,
+                                name: value
+                            })
+                        }}
+                    />
+                </Col>
+            </Row>
+            <Row gutter={[8, 16]} className="mt-4 w-full flex items-center">
+                <Col span={4}>
+                    <Typography.Text>Учебный год</Typography.Text>
+                </Col>
+                <Col span={8}>
+                    <Select
+                        popupMatchSelectWidth={false}
+                        defaultValue=""
+                        className="w-full"
+                        options={filterSpecialization}
+                        onChange={value => {
+                            setFilter({
+                                ...filter,
+                                name: value
+                            })
+                        }}
+                    />
+                </Col>
+            </Row>
+            <Row gutter={[8, 16]} className="mt-4 w-full flex items-center">
+                <Col span={4}>
+                    <Typography.Text>Номер группы</Typography.Text>
+                </Col>
+                <Col span={8}>
+                    <Select
+                        popupMatchSelectWidth={false}
+                        defaultValue=""
+                        className="w-full"
+                        options={filterSpecialization}
+                        onChange={value => {
+                            setFilter({
+                                ...filter,
+                                name: value
+                            })
+                        }}
+                    />
+                </Col>
+            </Row>
+            <Row gutter={[8, 16]} className="mt-4 mb-12 w-full flex items-center">
+                <Col span={4}>
+                    <Typography.Text>Уровень образования</Typography.Text>
+                </Col>
+                <Col span={8}>
+                    <Select
+                        popupMatchSelectWidth={false}
+                        defaultValue=""
+                        className="w-full"
+                        options={filterSpecialization}
+                        onChange={value => {
+                            setFilter({
+                                ...filter,
+                                name: value
+                            })
+                        }}
+                    />
+                </Col>
+            </Row>
              <Table
+                  onRow={(record) => ({
+                    onClick: () => handleRowClick(record),
+                  })}
                   ref={tableRef}
                   components={{
                   body: {
@@ -717,6 +825,7 @@ export const CreateRepresentation = () => {
                   }}
                   bordered
                   dataSource={tableData ? tableData : []}
+                  // @ts-ignore
                   columns={columnsRepresentation}
                   rowClassName="editable-row"
                   pagination={false}
@@ -745,7 +854,10 @@ export const CreateRepresentation = () => {
                       </Form>
               </Col>
           </Row>
-          </> : ''}
+          </> : <Result
+    title="Выберите практику чтобы добавить представление"
+   
+  />}
       </section>
   )
 }

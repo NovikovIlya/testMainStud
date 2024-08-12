@@ -126,13 +126,13 @@ export const PopoverContent = ({recordFull,recordFullAll,setRecordFull,setSelect
 		// 	listIdDelete: listId
 		// }
 		// deletePractise(listIdDelete)
-		console.log('vv',recordFull)
+
 		deletePractise(recordFull.id)
 	}
 
 
 	return (
-		<div className={'flex flex-col gap-2 '}>
+		<div className={'flex flex-col gap-2 '} onClick={(e) => { e.stopPropagation()}} >
 			<WrapperButton color={ColorBg.BLUEF2} onClick={downLoad}>
 				<Load />
 				<span>Скачать выбранное</span>

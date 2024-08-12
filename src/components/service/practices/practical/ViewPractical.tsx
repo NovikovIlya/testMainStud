@@ -280,17 +280,17 @@ export const ViewPractical = () => {
 			dataIndex: 'individualTasks',
 			title: 'Индивидуальные задания',
 			className: 'text-xs !p-2',
-			render: (_: any, record: any) => {
-				return (
-					<div className={'flex flex-col gap-1'}>
-						{record.tasks?.map((elem: any, index: any) => (
-							<span key={index}>
-								{index + 1}. {elem.taskDescription}
-							</span>
-						))}
-					</div>
-				)
-			}
+			// render: (_: any, record: any) => {
+			// 	return (
+			// 		<div className={'flex flex-col gap-1'}>
+			// 			{record.tasks?.map((elem: any, index: any) => (
+			// 				<span key={index}>
+			// 					{index + 1}. {elem.taskDescription}
+			// 				</span>
+			// 			))}
+			// 		</div>
+			// 	)
+			// }
 		},
 
 		{
@@ -327,7 +327,7 @@ export const ViewPractical = () => {
 						/>
 					}
 				>
-					<Button type="text" className="opacity-50" icon={<PointsSvg />} />
+					<Button onClick={(e) => { e.stopPropagation()}} type="text" className="opacity-50" icon={<PointsSvg />} />
 				</Popover>
 			),
 			fixed: 'right',
@@ -353,20 +353,20 @@ export const ViewPractical = () => {
 			className: 'text-xs !p-2',
 
 			// @ts-ignore
-			render: (text, record) => (
-				<div className={'flex items-center'}>
-					<span className={'underline flex w-[200px]'}>{text}</span>
-					<Button
-						type="text"
-						icon={<EditSvg />}
-						onClick={() => {
-							navigate(
-								`/services/practices/practical/editPractical/${record.id}`
-							)
-						}}
-					/>
-				</div>
-			)
+			// render: (text, record) => (
+			// 	<div className={'flex items-center'}>
+			// 		<span className={'underline flex w-[200px]'}>{text}</span>
+			// 		<Button
+			// 			type="text"
+			// 			icon={<EditSvg />}
+			// 			onClick={() => {
+			// 				navigate(
+			// 					`/services/practices/practical/editPractical/${record.id}`
+			// 				)
+			// 			}}
+			// 		/>
+			// 	</div>
+			// )
 		},
 		{
             title: <TitleHeadCell title={'Дата заполнения'}/>,
@@ -429,7 +429,7 @@ export const ViewPractical = () => {
 						/>
 					}
 				>
-					<Button type="text" className="opacity-50" icon={<PointsSvg />} />
+					<Button onClick={(e) => { e.stopPropagation()}} type="text" className="opacity-50" icon={<PointsSvg />} />
 				</Popover>
 			),
 			fixed: 'right',
@@ -539,23 +539,7 @@ export const ViewPractical = () => {
 				return elem.specialtyName === filter.nameSpecialty
 			}
 		}
-		// function sortDateFilling(a: FullIndividualTask, b: FullIndividualTask) {
-		// 	if (filter.dateFilling === 'По дате (сначала новые)') {
-		// 		return +new Date(b.dateFilling) - +new Date(a.dateFilling)
-		// 	}
-		// 	if (filter.dateFilling === 'По дате (сначала старые)') {
-		// 		return +new Date(a.dateFilling) - +new Date(b.dateFilling)
-		// 	}
-		// 	return 0
-		// }
-		//
-		// if (isSuccess) {
-		// 	const dataFull: FullIndividualTask[] = data.map(elem => changeListDataAll(elem))
-		// 	return dataFull
-		// 		.filter(elem => filterPracticeType(elem))
-		// 		.filter(elem => filterNameSpecialty(elem))
-		// 		.sort((a, b) => sortDateFilling(a, b))
-		// }
+	
 		function sortDateFilling(a:any, b:any) {
             if (filter.dateFilling === 'По дате (сначала новые)') {
                 return +new Date(b.dateFilling) - +new Date(a.dateFilling)
@@ -649,6 +633,12 @@ export const ViewPractical = () => {
 		}
 	})()
 
+	const handleRowClick = (record:any) => {
+		navigate(
+			`/services/practices/practical/editPractical/${record.id}`
+		)
+    };
+
 
 	return (
 		<>
@@ -658,41 +648,7 @@ export const ViewPractical = () => {
 					<Col flex={'auto'}>
 						<span className="mb-14 text-[28px]">Практики</span>
 					</Col>
-					{/*Не актуально до создания на бекенде соответсвующего функционала*/}
-					{/*<Col>*/}
-					{/*	<Button*/}
-					{/*		type="primary"*/}
-					{/*		color={"none"}*/}
-					{/*		className="!rounded-full scale-y-120"*/}
-					{/*		onClick={() => {*/}
-					{/*			practiceDocument(tokenAccess, "")*/}
-					{/*		}}*/}
-					{/*	>*/}
-					{/*		Сформировать График Практик*/}
-					{/*	</Button>*/}
-					{/*</Col>*/}
-					{/*<Col>*/}
-					{/*	<Button*/}
-					{/*		type="primary"*/}
-					{/*		className="!rounded-full ml-2 scale-y-120"*/}
-					{/*		onClick={() => {*/}
-					{/*			practiceDocument(tokenAccess, "")*/}
-					{/*		}}*/}
-					{/*	>*/}
-					{/*		Сформировать Представление в Приказ*/}
-					{/*	</Button>*/}
-					{/*</Col>*/}
-					{/*<Col>*/}
-					{/*	<Button*/}
-					{/*		type="primary"*/}
-					{/*		className="!rounded-full ml-2 scale-y-120"*/}
-					{/*		onClick={() => {*/}
-					{/*			practiceDocument(tokenAccess, "")*/}
-					{/*		}}*/}
-					{/*	>*/}
-					{/*		Сформировать Приказ по практике*/}
-					{/*	</Button>*/}
-					{/*</Col>*/}
+				
 				</Row>
 
 				<Row gutter={[16, 16]} className="mt-12 overWrite">
@@ -915,6 +871,9 @@ export const ViewPractical = () => {
 				/>
 			) : (fullTable ?
 				<Table
+				onRow={(record) => ({
+					onClick: () => handleRowClick(record),
+				})}
 				responsive
 					size="small"
 					rowKey="id"
@@ -935,6 +894,9 @@ export const ViewPractical = () => {
 				/> :
 				<div className='viewPractical'>
 				<Table
+				onRow={(record) => ({
+					onClick: () => handleRowClick(record),
+				})}
 					responsive
 					rowKey="id"
 					// @ts-ignore

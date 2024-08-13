@@ -187,7 +187,10 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		getChatIdByRespondId: builder.query<number, number>({
 			query: respId => ({
-				url: `http://localhost:8082/employment-api/v1/respond/${respId}/chat`
+				url: `http://localhost:8082/employment-api/v1/respond/${respId}/chat`,
+				headers: {
+					Authorization: `Bearer ${seekerToken}`
+				}
 			})
 		}),
 		getUnreadMessagesCount: builder.query<
@@ -382,7 +385,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 			query: ({ id, text, name, role }) => ({
 				url: `http://localhost:8082/employment-api/v1/chat/${id}/text`,
 				method: 'POST',
-				body: { text: text },
+				body: { text: text, sender: role },
 				headers: {
 					Authorization: `Bearer ${
 						role === 'PERSONNEL_DEPARTMENT'
@@ -398,7 +401,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 			{ chatId: number; messageId: number; sessionId: string; role: string }
 		>({
 			query: ({ chatId, messageId, sessionId, role }) => ({
-				url: `http://localhost:8082/employment-api/v1/chat/${chatId}/message/${messageId}/read`,
+				url: `http://localhost:8082/employment-api/v1/chat/${chatId}/message/${messageId}/read?sender=${role}`,
 				method: 'PUT',
 				headers: {
 					Authorization: `Bearer ${
@@ -674,4 +677,6 @@ export const {
 	useEditVacancyAsPerDepartmentMutation,
 	useDeleteVacancyAsPerDepartmentMutation,
 	useRequestCreateInterviewMutation,
+	useLazyGetVacancyPreviewByDirectionQuery,
+	useLazyGetVacancyPreviewBySubdivisionQuery
 } = serviceApi

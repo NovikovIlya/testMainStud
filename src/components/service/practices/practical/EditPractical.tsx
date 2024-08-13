@@ -136,16 +136,16 @@ export const EditPractical = () => {
 	useEffect(()=>{
 		if(!flagCompetence){
             setCopyDataCompetences( dataOnePractise?.competence)
-            console.log('zet')
+
         }
         if(flagCompetence){
             setCopyDataCompetences(dataCompetences)
-            console.log('vv2')
+
         }
  
 		
 	},[dataCompetences, dataOnePractise?.competence, flagCompetence])
-    console.log('dataCompetences',dataCompetences)
+
     // useEffect(()=>{
     //     if(isSuccesOnePractise){
     //         setCopyDataCompetences(dataOnePractise?.competence ? dataOnePractise.competence : [])
@@ -154,7 +154,7 @@ export const EditPractical = () => {
 
 	// },[dataOnePractise?.competences,isSuccesOnePractise])
 
-    console.log('copyDataCompetences',copyDataCompetences)
+
     useEffect(()=>{
         setSubDevisionId(dataOnePractise?.subdivisionId)
     },[isSuccesOnePractise])
@@ -432,7 +432,6 @@ export const EditPractical = () => {
             // @ts-ignore
             departmentId : departmenIdZ?.id,   
         }
-        console.log('sendDatasendDatasendDatasendData',sendData)
         updateForm(sendData)
         .unwrap()
         .then(()=>{

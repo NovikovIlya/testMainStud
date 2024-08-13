@@ -133,7 +133,7 @@ export const RegisterPopoverContent = ({
 
 
     return (
-        <div className={'flex flex-col gap-2 '}>
+        <div className={'flex flex-col gap-2 '}  onClick={(e) => { e.stopPropagation()}} >
             <WrapperButton color={ColorBg.BLUEF8} onClick={navPreview}>
                 <Doc/>
                 <span>Режим просмотра</span>

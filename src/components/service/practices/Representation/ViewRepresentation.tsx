@@ -7,16 +7,13 @@ import {
 	Table,
 	Typography
 } from 'antd'
-import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { EditSvg } from '../../../../assets/svg/EditSvg'
 import { PointsSvg } from '../../../../assets/svg/PointsSvg'
 
 import { PopoverContent } from './PopoverContent'
 import { PopoverMain } from './PopoverMain'
-import { optionsCourseValid } from '../../../../utils/optionsCourse'
 
 const optionsNames = [
 	{ value: 'Все', label: 'Все' },
@@ -77,7 +74,55 @@ const typeOptions = [
 export const ViewRepresentation = () => {
 	const originDate = [
 		{
+			id:'asd',
 			key: '1',
+			subdivision: 'Представление 2',
+			specialtyName: '30.08.01 Акушерство и гинекология',
+			groupNumber: '16',
+			courseNumber: '1',
+			academicYear: '2',
+			period: '2',
+			practiceType: 'Производственная',
+			practiceKind: 'Технологическая',
+			place: 'Казань',
+			FIO: 'Петров И.И.',
+			visiting: 'Нет',
+			status: 'Ожидание'
+		},
+		{
+			id:'212314',
+			key: '3',
+			subdivision: 'Представление 1',
+			specialtyName: '30.08.01 Акушерство и гинекология',
+			groupNumber: '16',
+			courseNumber: '1',
+			academicYear: '2',
+			period: '2',
+			practiceType: 'Производственная',
+			practiceKind: 'Технологическая',
+			place: 'Казань',
+			FIO: 'Петров И.И.',
+			visiting: 'Нет',
+			status: 'Ожидание'
+		},
+		{
+			id:'12312',
+			key: '4',
+			subdivision: 'Представление 3',
+			specialtyName: '30.08.01 Акушерство и гинекология',
+			groupNumber: '16',
+			courseNumber: '1',
+			academicYear: '2',
+			period: '2',
+			practiceType: 'Производственная',
+			practiceKind: 'Технологическая',
+			place: 'Казань',
+			FIO: 'Петров И.И.',
+			visiting: 'Нет',
+			status: 'Ожидание'
+		},
+		{
+			key: '5',
 			subdivision: 'Представление 1',
 			specialtyName: '30.08.01 Акушерство и гинекология',
 			groupNumber: '16',
@@ -117,6 +162,7 @@ export const ViewRepresentation = () => {
 		academicYear:'Все',
 		practiceType: "Все",
 		practiceKind: "Все",
+		dateFilling: 'По дате (сначала новые)',
 	})
 	const [tableData, setTableData] = useState([])
 	const [selectedFieldsFull, setSelectedFieldFull] = useState<any>([])
@@ -185,15 +231,15 @@ export const ViewRepresentation = () => {
 				return elem.practiceKind === filter.practiceKind
 			}
 		}
-		// function sortDateFilling(a: any, b: any) {
-		// 	if (filter.dateFilling === 'По дате (сначала новые)') {
-		// 		return +new Date(b.dateFilling) - +new Date(a.dateFilling)
-		// 	}
-		// 	if (filter.dateFilling === 'По дате (сначала старые)') {
-		// 		return +new Date(a.dateFilling) - +new Date(b.dateFilling)
-		// 	}
-		// 	return 0
-		// }
+		function sortDateFilling(a: any, b: any) {
+			if (filter.dateFilling === 'По дате (сначала новые)') {
+				return +new Date(b.dateFilling) - +new Date(a.dateFilling)
+			}
+			if (filter.dateFilling === 'По дате (сначала старые)') {
+				return +new Date(a.dateFilling) - +new Date(b.dateFilling)
+			}
+			return 0
+		}
 
 		return originDate
 			? originDate
@@ -205,11 +251,9 @@ export const ViewRepresentation = () => {
 			.filter((elem: any) => filterAcademicYear(elem))
 			.filter((elem: any) => filterType(elem))
 			.filter((elem: any) => filterKind(elem))
-			// .sort((a: any, b: any) => sortDateFilling(a, b))
+			.sort((a: any, b: any) => sortDateFilling(a, b))
 			: []
 	}
-
-
 
 	const columns = [
 		{
@@ -332,11 +376,9 @@ export const ViewRepresentation = () => {
 			align: 'center',
 			render: (record: any) => (
 				<Popover
-	
 					trigger={'click'}
 					content={
 						<PopoverContent
-						
 							recordFull={record}
 							recordFullAll={tableData}
 							setRecordFull={setTableData}
@@ -524,7 +566,7 @@ export const ViewRepresentation = () => {
 			</Row>
 
 			 {/* Сортировка  */}
-			{/* <Row gutter={[16, 16]} className="mt-4">
+			<Row gutter={[16, 16]} className="mt-4">
 				<Col span={7} offset={17}>
 					<div className={'flex gap-2 items-center'}>
 						<span className={'mr-2'}>Сортировка</span>
@@ -542,7 +584,7 @@ export const ViewRepresentation = () => {
 						/>
 					</div>
 				</Col>
-			</Row> */}
+			</Row>
 
 			<Row className="mt-4">
 				<Col flex={'auto'}>
@@ -555,7 +597,9 @@ export const ViewRepresentation = () => {
 						// @ts-ignore
 						columns={columns}
 						dataSource={dataTable ? dataTable : []}
-						pagination={false}
+						pagination={dataTable?.length < 3 ? false : {
+							pageSize: 3,
+						}}
 						className="my-10"
 						rowSelection={{
 							type: 'checkbox',
@@ -572,5 +616,4 @@ export const ViewRepresentation = () => {
 		</section>
 	)
 }
-
 export default ViewRepresentation

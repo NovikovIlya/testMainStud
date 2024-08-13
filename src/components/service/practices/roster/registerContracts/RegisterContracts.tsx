@@ -161,13 +161,13 @@ export const RegisterContracts = () => {
 
     function changeListNameSpecialty(list: NameSpecialty[]) {
         function changeElemNameSpecialty(elem: NameSpecialty) {
-            const newElem: OptionsNameSpecialty = {
+            const newElem: any = {
                 value: elem.value,
                 label: elem.label,
             }
             return newElem
         }
-        const finalList: OptionsNameSpecialty[] = [{value: 'Все', label: 'Все'}]
+        const finalList: any[] = [{value: 'Все', label: 'Все'}]
         const newList: OptionsNameSpecialty[] = list.map(elem => changeElemNameSpecialty(elem))
         return finalList.concat(newList)
     }
@@ -183,19 +183,19 @@ export const RegisterContracts = () => {
             dataIndex: 'contractFacility',
             align: "left",
             width: 150,
-            render: (text, record) =>
-                <div className={'flex items-center'}>
-                    <span className={'underline flex w-[200px]'}>
-                        {text}
-                    </span>
-                    <Button
-                        type="text"
-                        icon={<EditSvg/>}
-                        onClick={() => {
-                            nav(`/services/practices/registerContracts/editContract/${record.key}`)
-                        }}
-                    />
-                </div>
+            // render: (text, record) =>
+            //     <div className={'flex items-center'}>
+            //         <span className={'underline flex w-[200px]'}>
+            //             {text}
+            //         </span>
+            //         <Button
+            //             type="text"
+            //             icon={<EditSvg/>}
+            //             onClick={() => {
+            //                 nav(`/services/practices/registerContracts/editContract/${record.key}`)
+            //             }}
+            //         />
+            //     </div>
         },
         {
             title: <TitleHeadCell title={'Дата заполнения'}/>,
@@ -240,6 +240,7 @@ export const RegisterContracts = () => {
                                                           setTableDataCompressed={setTableDataCompressed}/>}
                          trigger={'click'}>
                     <Button
+                     onClick={(e) => { e.stopPropagation()}} 
                         type="text"
                         className="opacity-50"
                         icon={<PointsSvg/>}
@@ -254,17 +255,17 @@ export const RegisterContracts = () => {
             align: "left",
             className: 'text-xs',
             width: 200,
-            render: (text, record) =>
-                <div className={'flex items-center'}>
-                    <span className={'underline flex w-[150px]'}>
-                        {text}
-                    </span>
-                    <Button
-                        type="text"
-                        icon={<EditSvg/>}
-                        onClick={() => nav(`/services/practices/registerContracts/editContract/${record.key}`)}
-                    />
-                </div>
+            // render: (text, record) =>
+            //     <div className={'flex items-center'}>
+            //         <span className={'underline flex w-[150px]'}>
+            //             {text}
+            //         </span>
+            //         <Button
+            //             type="text"
+            //             icon={<EditSvg/>}
+            //             onClick={() => nav(`/services/practices/registerContracts/editContract/${record.key}`)}
+            //         />
+            //     </div>
         },
         {
             title: <span className={'text-xs'}>Шифр и наименование специальности</span>,
@@ -365,6 +366,7 @@ export const RegisterContracts = () => {
                                                           tableDataFull={tableDataFull}
                                                           setTableDataFull={setTableDataFull}/>}>
                     <Button
+                         onClick={(e) => { e.stopPropagation()}} 
                         type="text"
                         className="opacity-50"
                         icon={<PointsSvg/>}
@@ -578,7 +580,9 @@ export const RegisterContracts = () => {
 
     }, [dataShort]);
 
-
+    const handleRowClick = (record:any) => {
+		nav(`/services/practices/registerContracts/editContract/${record.key}`)
+    };
 
 
     return (
@@ -739,6 +743,9 @@ export const RegisterContracts = () => {
                 &&
                 <div className={'registerContracts'}>
                     <Table
+                        onRow={(record) => ({
+                            onClick: () => handleRowClick(record),
+                        })}
                         columns={columnsCompressedView}
                         pagination={false}
                         size={"middle"}
@@ -758,7 +765,11 @@ export const RegisterContracts = () => {
             {
                 tableView.table
                 &&
-                <Table columns={columnsFullView}
+                <Table 
+                        onRow={(record) => ({
+                            onClick: () => handleRowClick(record),
+                        })}
+                        columns={columnsFullView}
                        pagination={false}
                        dataSource={tableDataFull}
                        size={"middle"}

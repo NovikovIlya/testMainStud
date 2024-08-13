@@ -72,7 +72,6 @@ export const taskService = apiSlice.injectEndpoints({
                 }
             },
             invalidatesTags:['Schedule'],
-     
         }),
         createDocument: builder.query<any, any>({
             query: (academicYear) => {

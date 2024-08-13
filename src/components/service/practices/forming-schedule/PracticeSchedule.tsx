@@ -166,6 +166,11 @@ export const PracticeSchedule = () => {
 	const [createSchedule, { data: dataCreateSchedule ,isLoading:isLoadingCreate}] = useCreateScheduleMutation({})
 	const [sendFilterParams,{data:dataByFilter,isSuccess:isSuccessByFilter,isLoading:isLoadingByFilters}] = useGetByFilterMutation()
     const [tableData, setTableData] = useState<any>(dataByFilter)
+	const [selectedValuesLevel, setSelectedValuesLevel] = useState(['Все']);
+	const [selectedValueForm, setSelectedValuesForm] = useState(['Все']);
+	const [selectedValueCourse, setSelectedValuesCourse] = useState(['Все']);
+	const [selectedValueSpecialty, setSelectedValuesSpectialty] = useState(['Все']);
+	const [selectedValueKind, setSelectedValuesKind] = useState(['Все']);
 	const dispatch = useDispatch()
 
 	const columns = [
@@ -325,13 +330,13 @@ export const PracticeSchedule = () => {
 		const data = {
 			subdivisionId:  dataUserSubdivision?.id ? dataUserSubdivision?.id : null,
 			specialtyNameId:  dataSpeciality ? dataSpeciality : null,
-			courseNumber: filter.courseNumber ==='Все' ? null : filter.courseNumber.includes('Все') ? null : filter?.courseNumber?.filter((x:any) => x !== "Все").map(Number),
+			courseNumber: selectedValueCourse.includes('Все') ? null : selectedValueCourse.map((i)=>Number(i)),
 			practiceKindId: filter.practiceKindId ==='Все' ? null: filter?.practiceKindId?.filter((x:string) => x !== "Все").map(Number),
-			educationLevel: filter.educationLevel ==='Все' ? null : filter.educationLevel.includes('Все') ? null : filter?.educationLevel,
-			educationType: filter.educationType ==='Все' ? null : filter.educationType.includes('Все') ? null : filter?.educationType,
+			educationLevel: selectedValuesLevel.includes('Все') ? null : selectedValuesLevel,
+			educationType: selectedValueForm.includes('Все') ? null : selectedValueForm,
 		}
 		sendFilterParams(data)
-	}, [filter, dataUserSubdivision, form])
+	}, [filter, dataUserSubdivision, form,selectedValuesLevel])
 
     useEffect(() => {
 		if (isSuccessByFilter) {
@@ -342,6 +347,43 @@ export const PracticeSchedule = () => {
 	useEffect(() => {
 		setTableData(filterDataFull())
 	}, [filter])
+
+
+	const handleChangeLevel = (values:any) => {
+		if(selectedValuesLevel.includes('Все')===false && values.includes('Все') ){
+			setSelectedValuesLevel(['Все']);
+			return
+		}
+		setSelectedValuesLevel(values.filter((i:any)=>i!=='Все'))
+	};
+	const handleChangeForm = (values:any) => {
+		if(selectedValueForm.includes('Все')===false && values.includes('Все') ){
+			setSelectedValuesForm(['Все']);
+			return
+		}
+		setSelectedValuesForm(values.filter((i:any)=>i!=='Все'))
+	};
+	const handleChangeCourse = (values:any) => {
+		if(selectedValueCourse.includes('Все')===false && values.includes('Все') ){
+			setSelectedValuesCourse(['Все']);
+			return
+		}
+		setSelectedValuesCourse(values.filter((i:any)=>i!=='Все'))
+	};
+	const handleChangeSpecialty = (values:any) => {
+		if(selectedValueSpecialty.includes('Все')===false && values.includes('Все') ){
+			setSelectedValuesSpectialty(['Все']);
+			return
+		}
+		setSelectedValuesSpectialty(values.filter((i:any)=>i!=='Все'))
+	};
+	const handleChangeKind = (values:any) => {
+		if(selectedValueKind.includes('Все')===false && values.includes('Все') ){
+			setSelectedValuesKind(['Все']);
+			return
+		}
+		setSelectedValuesKind(values.filter((i:any)=>i!=='Все'))
+	};
 
 	function filterDataFull() {
 		// function filterCourse(elem: any) {
@@ -396,7 +438,7 @@ export const PracticeSchedule = () => {
 					// .sort((a: any, b: any) => sortDateFilling(a, b))
 			: []
 	}
-
+	
 	// const downloadFile = () => {
 	// 	if (dataBlob) {
 	// 		const link = document.createElement('a')
@@ -605,7 +647,7 @@ export const PracticeSchedule = () => {
 					<Select
 						mode='multiple'
 						popupMatchSelectWidth={false}
-						defaultValue="Все"
+						value={selectedValueSpecialty}
 						className="w-full "
 						options={[
 							{key: 2244612, value: "Все", label: "Все"},
@@ -616,6 +658,7 @@ export const PracticeSchedule = () => {
                             })) : [])
 						]}
 						onChange={value => {
+							handleChangeSpecialty(value)
 							setFilter({
 								...filter,
 								specialtyName: value
@@ -632,10 +675,11 @@ export const PracticeSchedule = () => {
 					<Select
 						mode='multiple'
 						popupMatchSelectWidth={false}
-						defaultValue="Все"
+						value={selectedValueCourse}
 						className="w-full"
 						options={filterCourse}
 						onChange={value => {
+							handleChangeCourse(value)
 							setFilter({
 								...filter,
 								courseNumber: value
@@ -676,11 +720,13 @@ export const PracticeSchedule = () => {
 				<Col span={8} className='overWrite grow'>
 					<Select	
 						mode='multiple'
+						value={selectedValuesLevel}
 						popupMatchSelectWidth={false}
-						defaultValue="Все"
+						
 						className="w-full"
 						options={filterLevel}
 						onChange={value => {
+							handleChangeLevel(value)
 							setFilter({
 								...filter,
 								educationLevel: value
@@ -697,10 +743,11 @@ export const PracticeSchedule = () => {
 					<Select
 						mode='multiple'
 						popupMatchSelectWidth={false}
-						defaultValue="Все"
+						value={selectedValueForm}
 						className="w-full"
 						options={filterForm}
 						onChange={value => {
+							handleChangeForm(value)
 							setFilter({
 								...filter,
 								educationType: value

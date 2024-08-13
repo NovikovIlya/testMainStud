@@ -182,19 +182,19 @@ const IndividualTasks = () => {
             title: <TitleHeadCell title={'Шифр и наименование специальности'}/>,
             dataIndex: 'specialityName',
             width: '20%',
-            render: (text, record) =>
-                <div className={'flex items-center'}>
-                    <span className={'underline flex w-[200px]'}>
-                        {text}
-                    </span>
-                    <Button
-                        type="text"
-                        icon={<EditSvg/>}
-                        onClick={() => {
-                            navigate(`/services/practices/individualTasks/editTask/${record.id}`)
-                        }}
-                    />
-                </div>
+            // render: (text, record) =>
+            //     <div className={'flex items-center'}>
+            //         <span className={'underline flex w-[200px]'}>
+            //             {text}
+            //         </span>
+            //         <Button
+            //             type="text"
+            //             icon={<EditSvg/>}
+            //             onClick={() => {
+            //                 navigate(`/services/practices/individualTasks/editTask/${record.id}`)
+            //             }}
+            //         />
+            //     </div>
         },
         {
             title: <TitleHeadCell title={'Дата заполнения'}/>,
@@ -217,6 +217,7 @@ const IndividualTasks = () => {
                          />}
                 >
                     <Button
+                    onClick={(e) => { e.stopPropagation()}}
                         type="text"
                         className="opacity-50"
                         icon={<PointsSvg/>}
@@ -231,6 +232,7 @@ const IndividualTasks = () => {
                                                     tableDataCompressed={tableDataCompressed}
                                                     setTableDataCompressed={setTableDataCompressed}/>}>
                     <Button
+                    onClick={(e) => { e.stopPropagation()}}
                         type="text"
                         className="opacity-50"
                         icon={<PointsSvg/>}
@@ -243,19 +245,19 @@ const IndividualTasks = () => {
             title: <span className={'text-base'}>Шифр и наименование специальности</span>,
             dataIndex: 'specialityName',
             width: '20%',
-            render: (text, record) =>
-                <div className={'flex items-center'}>
-                    <span className={'underline flex w-[200px] font-bold'}>
-                        {text}
-                    </span>
-                    <Button
-                        type="text"
-                        icon={<EditSvg/>}
-                        onClick={() => {
-                            navigate(`/services/practices/individualTasks/editTask/${record.id}`)
-                        }}
-                    />
-                </div>
+            // render: (text, record) =>
+            //     <div className={'flex items-center'}>
+            //         <span className={'underline flex w-[200px] font-bold'}>
+            //             {text}
+            //         </span>
+            //         <Button
+            //             type="text"
+            //             icon={<EditSvg/>}
+            //             onClick={() => {
+            //                 navigate(`/services/practices/individualTasks/editTask/${record.id}`)
+            //             }}
+            //         />
+            //     </div>
         },
         {
             title: <span className={'text-base'}>Тип практики</span>,
@@ -389,6 +391,10 @@ const IndividualTasks = () => {
         }
     }, [data]);
 
+    const handleRowClick = (record:any) => {
+		navigate(`/services/practices/individualTasks/editTask/${record.id}`)
+    };
+
     const arraySpec = [
         { key: 2244612, value: "Все", label: "Все" },
         ...(data ? 
@@ -519,6 +525,9 @@ const IndividualTasks = () => {
                 &&
                 <div className={'individualTasks'}>
                     <Table
+                    onRow={(record) => ({
+                        onClick: () => handleRowClick(record),
+                    })}
                         // @ts-ignore
                         keyExtractor={record => record.id} 
                         columns={columnsCompressed}
@@ -542,6 +551,9 @@ const IndividualTasks = () => {
                 &&
                 
                 <Table
+                onRow={(record) => ({
+                    onClick: () => handleRowClick(record),
+                })}
                     className={'mt-5'}
                     columns={columnsFull}
                     dataSource={tableDataFull}

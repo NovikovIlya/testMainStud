@@ -22,6 +22,7 @@ import {
 	VacancyRequestViewType,
 	VacancyRespondItemType,
 	VacancyViewResponceType,
+	InterviewRequestType,
 	respondStatus
 } from '../reducers/type'
 
@@ -599,7 +600,17 @@ export const serviceApi = apiSlice.injectEndpoints({
 					Authorization: `Bearer ${personnelDeparmentToken}`
 				}
 			})
-		})
+		}),
+		requestCreateInterview: builder.mutation<void, InterviewRequestType>({
+			query: arg => ({
+				url: `http://localhost:8082/employment-api/v1/interview`,
+				method: 'POST',
+				body: arg,
+				headers: {
+					Authorization: `Bearer ${supervisorToken}`
+				}
+			})
+		}),
 	})
 })
 export const {
@@ -665,6 +676,7 @@ export const {
 	useGetAllVacanciesQuery,
 	useEditVacancyAsPerDepartmentMutation,
 	useDeleteVacancyAsPerDepartmentMutation,
+	useRequestCreateInterviewMutation,
 	useLazyGetVacancyPreviewByDirectionQuery,
 	useLazyGetVacancyPreviewBySubdivisionQuery
 } = serviceApi

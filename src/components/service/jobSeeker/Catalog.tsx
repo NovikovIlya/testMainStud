@@ -1,6 +1,6 @@
 import { LoadingOutlined } from '@ant-design/icons'
 import { Select, Spin } from 'antd'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 import { useAppSelector } from '../../../store'
@@ -33,6 +33,10 @@ export default function Catalog() {
 		type: 'DIRECTORY' | 'SUBDIVISION'
 		page: number
 	}>({ category: 'АУП', subcategory: 'Все', type: 'DIRECTORY', page: 0 })
+	const [blockPageAddition, setBlockPageAddition] = useState<boolean>(true)
+	const [isBottomOfCatalogVisible, setIsBottomOfCatalogVisible] =
+		useState<boolean>(true)
+	const catalogBottomRef = useRef<null | HTMLDivElement>(null)
 	const [previews, setPreviews] = useState<VacancyItemType[]>([])
 	const { data: categories = [], isLoading: isCategoriesLoading } =
 		useGetCategoriesQuery()
@@ -63,6 +67,29 @@ export default function Catalog() {
 	}, [])
 
 	useEffect(() => {
+		const lowerObserver = new IntersectionObserver(entries => {
+			const target = entries[0]
+			if (target.isIntersecting) {
+				console.log('I see the depths of hell below')
+				setIsBottomOfCatalogVisible(true)
+			}
+			if (!target.isIntersecting) {
+				setIsBottomOfCatalogVisible(false)
+			}
+		})
+
+		if (catalogBottomRef.current) {
+			lowerObserver.observe(catalogBottomRef.current)
+		}
+
+		return () => {
+			if (catalogBottomRef.current) {
+				lowerObserver.unobserve(catalogBottomRef.current)
+			}
+		}
+	}, [previews.length])
+
+	useEffect(() => {
 		if (requestData.page === 0) {
 			if (requestData.type === 'DIRECTORY') {
 				getVacByDir({
@@ -73,6 +100,7 @@ export default function Catalog() {
 					.unwrap()
 					.then(res => {
 						setPreviews(res)
+						setBlockPageAddition(false)
 					})
 			} else {
 				getVacBySub({
@@ -83,6 +111,7 @@ export default function Catalog() {
 					.unwrap()
 					.then(res => {
 						setPreviews(res)
+						setBlockPageAddition(false)
 					})
 			}
 		} else {
@@ -95,6 +124,7 @@ export default function Catalog() {
 					.unwrap()
 					.then(res => {
 						setPreviews(prev => [...prev, ...res])
+						setBlockPageAddition(false)
 					})
 			} else {
 				getVacBySub({
@@ -105,10 +135,19 @@ export default function Catalog() {
 					.unwrap()
 					.then(res => {
 						setPreviews(prev => [...prev, ...res])
+						setBlockPageAddition(false)
 					})
 			}
 		}
 	}, [requestData])
+
+	useEffect(() => {
+		if (isBottomOfCatalogVisible) {
+			if (!blockPageAddition) {
+				setRequestData(prev => ({ ...prev, page: prev.page + 1 }))
+			}
+		}
+	}, [isBottomOfCatalogVisible])
 
 	if (preLoadStatus.isLoading) {
 		return (
@@ -146,6 +185,7 @@ export default function Catalog() {
 				defaultValue={'АУП'}
 				onChange={(value: string) => {
 					;(() => {
+						setBlockPageAddition(true)
 						setRequestData({
 							category: value,
 							subcategory: '',
@@ -191,6 +231,7 @@ export default function Catalog() {
 					categories.find(category => category.title === categoryTitle)
 						?.direction
 						? (() => {
+								setBlockPageAddition(true)
 								setRequestData(prev => ({
 									category: prev.category,
 									subcategory: value,
@@ -200,6 +241,7 @@ export default function Catalog() {
 								setSecondOption(value)
 						  })()
 						: (() => {
+								setBlockPageAddition(true)
 								setRequestData(prev => ({
 									category: prev.category,
 									subcategory: value,
@@ -248,14 +290,11 @@ export default function Catalog() {
 				{previews.map(prev => (
 					<VacancyItem {...prev} key={prev.id} />
 				))}
-				<button
-					className="ml-auto mr-auto outline-none border-none bg-button-blue hover:bg-button-blue-hover focus:border-[2px] focus:border-button-focus-border-blue font-content-font font-normal text-[16px]/[16px] text-white text-center h-[32px] pt-[8px] pb-[8px] pl-[24px] pr-[24px] rounded-[54px]"
-					onClick={() => {
-						setRequestData(prev => ({ ...prev, page: prev.page + 1 }))
-					}}
-				>
-					Загрузить ещё вакансии
-				</button>
+				<div
+					className="h-[1px]"
+					ref={catalogBottomRef}
+					key={'catalog_bottom_key'}
+				></div>
 			</div>
 		</>
 	)

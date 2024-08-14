@@ -17,7 +17,7 @@ import {
 import type { TableProps } from 'antd'
 import dayjs from 'dayjs'
 import printJS from 'print-js'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { ArrowLeftSvg } from '../../../../assets/svg'
@@ -30,11 +30,11 @@ import { useGetDepartmentsQuery, useGetPracticeKindQuery } from '../../../../sto
 
 import { EditableCell } from './EditableCell'
 import { useGetSubdivisionUserQuery } from '../../../../store/api/serviceApi'
-import { useGetSpecialtyNamesForPractiseQuery } from '../../../../store/api/practiceApi/roster'
+import { useGetSpecialtyNamesForPractiseQuery, useGetSpecialtyNamesQuery } from '../../../../store/api/practiceApi/roster'
 import { useDispatch } from 'react-redux'
 import { showNotification } from '../../../../store/reducers/notificationSlice'
-import { Item } from '../Representation/EditableCell'
-import { Filter } from '../../../../models/representation'
+
+import { Filter, Item } from '../../../../models/representation'
 
 interface FilterType {
 	value: string
@@ -142,9 +142,10 @@ const optionMockKind = [
 
 export const PracticeSchedule = () => {
 	const nav = useNavigate()
+	const {data:dataUserSubdivision} = useGetSubdivisionUserQuery()
+	const {data:dataAllSpec} = useGetSpecialtyNamesQuery(null)
+	const {data:dataAllPracKind} = useGetPracticeKindQuery(dataUserSubdivision,{skip: !dataUserSubdivision})
 	const [scheduleIdState, setScheduleIdState] = useState(null)
-    const {data:dataUserSubdivision} = useGetSubdivisionUserQuery()
-	const { data: dataBlob, isLoading: isLoadingBlob } = useGetDocQuery(scheduleIdState,{ skip: scheduleIdState === null })
     const {data:dataSpeciality} = useGetSpecialtyNamesForPractiseQuery(dataUserSubdivision?.id,{skip:dataUserSubdivision?.id === null})
     const {data:dataPracticeKind} = useGetPracticeKindQuery(dataUserSubdivision?.id,{skip:dataUserSubdivision?.id === null})    
 	const [filter, setFilter] = useState<any>({
@@ -171,6 +172,11 @@ export const PracticeSchedule = () => {
 	const [selectedValueCourse, setSelectedValuesCourse] = useState(['Все']);
 	const [selectedValueSpecialty, setSelectedValuesSpectialty] = useState(['Все']);
 	const [selectedValueKind, setSelectedValuesKind] = useState(['Все']);
+	const [selectedValueSpecialtySend, setSelectedValuesSpectialtySend] = useState([]);
+	const [selectedValueKindSend, setSelectedValuesKindSend] = useState([]);
+	const prevDataByFilterLength = useRef([]);
+	const prevUniqName = useRef()
+	const prevUniqNameKind = useRef()
 	const dispatch = useDispatch()
 
 	const columns = [
@@ -324,19 +330,19 @@ export const PracticeSchedule = () => {
 			})
 		}
 	})
-	
+
 
 	useEffect(() => {
 		const data = {
 			subdivisionId:  dataUserSubdivision?.id ? dataUserSubdivision?.id : null,
-			specialtyNameId:  dataSpeciality ? dataSpeciality : null,
+			specialtyNameId: selectedValueSpecialtySend.length===0 ? null : selectedValueSpecialtySend ,
 			courseNumber: selectedValueCourse.includes('Все') ? null : selectedValueCourse.map((i)=>Number(i)),
-			practiceKindId: filter.practiceKindId ==='Все' ? null: filter?.practiceKindId?.filter((x:string) => x !== "Все").map(Number),
+			practiceKindId: selectedValueKindSend?.length===0 ? null : selectedValueKindSend,
 			educationLevel: selectedValuesLevel.includes('Все') ? null : selectedValuesLevel,
 			educationType: selectedValueForm.includes('Все') ? null : selectedValueForm,
 		}
 		sendFilterParams(data)
-	}, [filter, dataUserSubdivision, form,selectedValuesLevel])
+	}, [filter, dataUserSubdivision, form,selectedValuesLevel,selectedValueSpecialtySend,selectedValueCourse,selectedValueForm,selectedValueKind])
 
     useEffect(() => {
 		if (isSuccessByFilter) {
@@ -373,16 +379,31 @@ export const PracticeSchedule = () => {
 	const handleChangeSpecialty = (values:any) => {
 		if(selectedValueSpecialty.includes('Все')===false && values.includes('Все') ){
 			setSelectedValuesSpectialty(['Все']);
+			setSelectedValuesSpectialtySend([])
 			return
 		}
 		setSelectedValuesSpectialty(values.filter((i:any)=>i!=='Все'))
+		const stri = dataByFilter.filter((item:any)=>values.includes(item.specialtyName))
+		const x = stri.map((item:any)=>item.specialtyCode + ' ' + item.specialtyName)
+		const araId = (dataAllSpec?.filter((item)=>x.includes(item?.value)))?.map((item)=>item.id)
+		//@ts-ignore
+		setSelectedValuesSpectialtySend(araId)
 	};
 	const handleChangeKind = (values:any) => {
 		if(selectedValueKind.includes('Все')===false && values.includes('Все') ){
 			setSelectedValuesKind(['Все']);
+			setSelectedValuesKindSend([])
 			return
 		}
 		setSelectedValuesKind(values.filter((i:any)=>i!=='Все'))
+		const stri = dataByFilter.filter((item:any)=>values.includes(item.practiceKind))
+
+		const x = stri.map((item:any)=>item.practiceKind)
+
+		const araId = (dataAllPracKind?.filter((item)=>x.includes(item?.value)))?.map((item)=>item.id)
+		// !дождаться получения данных о видах практики /////////////////////////////////////////////////////////////////////////////////////
+		//@ts-ignore
+		setSelectedValuesKindSend(araId)
 	};
 
 	function filterDataFull() {
@@ -586,6 +607,9 @@ export const PracticeSchedule = () => {
 				if (error.status === 409) {
 					dispatch(showNotification({ message: 'Такой график уже создан', type: 'error' }));
 				}
+				if (error.status === 404) {
+					dispatch(showNotification({ message: 'Нельзя создать пустой график', type: 'error' }));
+				}
 				if (error.status === 400) {
 					dispatch(showNotification({ message: 'Текст в консоли', type: 'error' }));
 				}
@@ -593,7 +617,57 @@ export const PracticeSchedule = () => {
 
     }
 
+	const arraySpec = [
+        { key: 2244612, value: "Все", label: "Все" },
+        ...(dataByFilter ? 
+            dataByFilter.map((item:any) => ({
+                key: item.id,
+                value: item.specialtyName,
+                label: item.specialtyName
+            })) 
+        : [])
+    ];
+	
+    const arrayKind = [
+        { key: 2244612, value: "Все", label: "Все" },
+        ...(dataByFilter ?
+            dataByFilter.map((item:any) => ({
+                key: item.id,
+                value: item.practiceKind,
+                label: item.practiceKind
+            }))
+        : [])
+    ];
 
+	const uniqueSpecialityNames = useMemo(() => {
+		if(prevDataByFilterLength?.current <= dataByFilter?.length){
+
+			const uniqueNames = Array.from(new Set(arraySpec.map(item => item.value)))
+			.map(value => ({ value, label: value }));
+
+			prevDataByFilterLength.current = dataByFilter?.length
+
+			if(dataByFilter.length>=prevDataByFilterLength.current){
+				//@ts-ignore
+				prevDataByFilterLength.current = uniqueNames.length
+			}
+			//@ts-ignore
+			prevUniqName.current = uniqueNames
+			return uniqueNames;
+		}else return prevUniqName.current
+	  }, [dataByFilter]);
+
+	const uniqueKind = useMemo(() => {
+	if(prevDataByFilterLength?.current <= dataByFilter?.length){
+		const uniqueNames = Array.from(new Set(arrayKind.map(item => item.value)))
+		.map(value => ({ value, label: value }));
+		prevDataByFilterLength.current = dataByFilter?.length
+		//@ts-ignore
+		prevUniqNameKind.current = uniqueNames
+		return uniqueNames;
+	}else return prevUniqNameKind.current
+	}, [dataByFilter]);
+;
 
 
 	return (
@@ -638,8 +712,8 @@ export const PracticeSchedule = () => {
 								}}
 							/>
 						</Form.Item>
-					
-                </Col></> : null}
+                </Col>
+				</> : null}
 				<Col span={4} className='overWrite'>
 					<Typography.Text className='mobileFont'>Шифр и наименование специальности</Typography.Text>
 				</Col>
@@ -649,14 +723,7 @@ export const PracticeSchedule = () => {
 						popupMatchSelectWidth={false}
 						value={selectedValueSpecialty}
 						className="w-full "
-						options={[
-							{key: 2244612, value: "Все", label: "Все"},
-                            ...(dataSpeciality ? dataSpeciality.map((item:any) => ({
-                              key: item.id,
-                              value: item.value,
-                              label: item.label
-                            })) : [])
-						]}
+						options={uniqueSpecialityNames}
 						onChange={value => {
 							handleChangeSpecialty(value)
 							setFilter({
@@ -694,17 +761,11 @@ export const PracticeSchedule = () => {
 					<Select
 						mode='multiple'
 						popupMatchSelectWidth={false}
-						defaultValue="Все"
+						value={selectedValueKind}
 						className="w-full"
-						options={[
-							{key: 2244612, value: "Все", label: "Все"},
-                            ...(dataPracticeKind ? dataPracticeKind.map((item) => ({
-                              key: item.id,
-                              value: item.id,
-                              label: item.value
-                            })) : [])
-						]}
+						options={uniqueKind}
 						onChange={value => {
+							handleChangeKind(value)
 							setFilter({
 								...filter,
 								practiceKind: value
@@ -722,7 +783,6 @@ export const PracticeSchedule = () => {
 						mode='multiple'
 						value={selectedValuesLevel}
 						popupMatchSelectWidth={false}
-						
 						className="w-full"
 						options={filterLevel}
 						onChange={value => {
@@ -769,25 +829,7 @@ export const PracticeSchedule = () => {
 					</Space>
 				</Col>
 			</Row>
-			<Row className="mt-4 flex items-center">
-				<Col span={12} flex="50%">
-					<div>
-						<Space>
-							{/* <Button disabled={isLoadingBlob} onClick={downloadFile}>
-								<VerticalAlignBottomOutlined /> Скачать
-							</Button> */}
-							{/* <Button disabled={isLoadingBlob} onClick={print}>
-								<PrinterOutlined /> Печать
-							</Button> */}
-						</Space>
-					</div>
-				</Col>
-				
-			</Row>
 
-		
-					{/* {stateSchedule.compressed && <CompressedView/>}
-                    {stateSchedule.table && <TableView/>} */}
 					{isLoadingByFilters ?  <Spin className='w-full mt-20' indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />   :
 						<Table
 							components={{
@@ -808,7 +850,6 @@ export const PracticeSchedule = () => {
 							rowKey="id"
 						/>
 						}
-			
             </Form>
 		</section>
 		</Spin>

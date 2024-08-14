@@ -97,7 +97,7 @@ export const individualTasks = apiSlice.injectEndpoints({
         }),
         getPracticeKind: builder.query<PracticeType[], any>({
             query: (subDivisionId) => ({
-                url: `services/api-practices/kpfu/practice-kinds?subdivisionId=${subDivisionId}`,
+                url: `services/api-practices/kpfu/practice-kinds${subDivisionId ? "?subdivisionId=" + subDivisionId : ''}`,
                 method: 'GET',
             })
         }),

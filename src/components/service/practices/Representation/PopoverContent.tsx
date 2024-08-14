@@ -1,4 +1,4 @@
-import { Popconfirm } from 'antd'
+import { Popconfirm, Spin } from 'antd'
 import dayjs from 'dayjs'
 import printJS from 'print-js'
 import React, { useEffect, useState } from 'react'
@@ -143,14 +143,15 @@ export const PopoverContent = ({recordFull,recordFullAll,setRecordFull,setSelect
 	return (
 		<div className={'flex flex-col gap-2 '} onClick={(e) => { e.stopPropagation()}} >
 			<WrapperButton color={ColorBg.BLUEF2} onClick={downLoad}>
+				{/* {isLoadingBlob ? <Spin/> :''} */}
 				<Load />
-				<span>Скачать выбранное</span>
+				<span>Скачать</span>
 			</WrapperButton>
 
-			<WrapperButton color={ColorBg.BLUEF2} onClick={printTable}>
+			{/* <WrapperButton color={ColorBg.BLUEF2} onClick={printTable}>
 				<PrintSvg />
 				<span>Печать выбранного</span>
-			</WrapperButton>
+			</WrapperButton> */}
 
 			<Popconfirm
 				title="Удаление"
@@ -161,7 +162,7 @@ export const PopoverContent = ({recordFull,recordFullAll,setRecordFull,setSelect
 			>
 				<WrapperButton color={ColorBg.REDE5}>
 					<DeleteRedSvg />
-					<span className={'text-[#E04545]'}>Удалить выбранное</span>
+					<span className={'text-[#E04545]'}>Удалить</span>
 				</WrapperButton>
 			</Popconfirm>
 		</div>

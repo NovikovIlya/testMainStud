@@ -9,6 +9,8 @@ import {utils, writeFileXLSX} from "xlsx";
 import printJS from "print-js";
 import {ListIdDeleteContracts} from "../../../../../models/Practice";
 import { useDeletePractiseMutation, useDeletePractiseSeveralMutation } from '../../../../../store/api/practiceApi/practical';
+import { showNotification } from '../../../../../store/reducers/notificationSlice';
+import { useAppDispatch } from '../../../../../store';
 
 interface Props {
     recordFullAll?: TablePractical[]
@@ -19,7 +21,7 @@ interface Props {
 
 export const PracticalPopoverMain = ({recordFull,recordFullAll,setRecordFull,setSelectedFieldFull}: Props) => {
     const [deletePractise] = useDeletePractiseSeveralMutation()
-
+    const dispatch = useAppDispatch()
     function translateColumnsIntoRussia({isPrint}: {isPrint: boolean}) {
         const newData: any = []
         if (recordFull) {
@@ -99,22 +101,7 @@ export const PracticalPopoverMain = ({recordFull,recordFullAll,setRecordFull,set
     }
 
     function deleteData() {
-        if (setRecordFull && recordFull && recordFullAll) {
-            const recordFullWithoutUndefinedElem = recordFull.filter(elem => elem !== undefined)
-
-            const listId = recordFullWithoutUndefinedElem.map(elem => elem.id)
-            setRecordFull(recordFullAll.filter(elem => {
-                return !listId.includes(elem.id)
-            }))
-            // if (setSelectedFieldFull) {
-            //     setSelectedFieldFull([])
-            // }
-           
-            // const objIdList: ListIdDeleteContracts = {
-            //     listIdDelete: listId
-            // }
-            //deleteSeveralContracts(objIdList)
-        }
+       
         // @ts-ignore
     
 
@@ -122,9 +109,34 @@ export const PracticalPopoverMain = ({recordFull,recordFullAll,setRecordFull,set
         const listIdDelete = {
             listIdDelete: listId
         }
-        deletePractise(listIdDelete)
+        deletePractise(listIdDelete).unwrap()
+        .then(() => {
+            if (setRecordFull && recordFull && recordFullAll) {
+                const recordFullWithoutUndefinedElem = recordFull.filter(elem => elem !== undefined)
+    
+                const listId = recordFullWithoutUndefinedElem.map(elem => elem.id)
+                setRecordFull(recordFullAll.filter(elem => {
+                    return !listId.includes(elem.id)
+                }))
+               
+            }
+        })
+        .catch(error => {
+            console.log('bb', error)
+            if (error.status === 409) {
+                console.log('e mama')
+                dispatch(
+                    showNotification({
+                        message:
+                            'Удаление невозможно, так как имеются связи, прежде необходимо удалить их',
+                        type: 'error'
+                    })
+                )
+            }
+        })
+
     }
-    console.log('recordFull',recordFull)
+
 
     return (
         <div className={'flex flex-col gap-2 '}>

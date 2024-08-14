@@ -29,7 +29,6 @@ import { FilterType, GetColumnSearchProps, Item } from '../../../../models/repre
 import { EditableCell } from './EditableCell'
 
 
-
 const filterSpecialization: FilterType[] = [
 	{
 		value: 'Все',
@@ -114,9 +113,9 @@ export const CreateRepresentation = () => {
 		dateFilling: 'По дате (сначала новые)',
 		selectKind: 'Все',
 		specialtyName: 'Все',
-    subdivision: 'Все',
-    academicYear: 'Все',
-    groupNumber: 'Все'
+		subdivision: 'Все',
+		academicYear: 'Все',
+		groupNumber: 'Все'
 	})
 	const [form] = Form.useForm()
 	const [data, setData] = useState(originData)
@@ -132,100 +131,100 @@ export const CreateRepresentation = () => {
 	useEffect(() => {
 		// if (isSuccessPractiseAll) {
 		setTableData(filterDataFull())
-		console.log('update')
+		
 		// @ts-ignore
 
 		// }
 	}, [filter])
 
-	const getColumnSearchProps = (dataIndex: any): GetColumnSearchProps => ({
-		filterDropdown: ({
-			setSelectedKeys,
-			selectedKeys,
-			confirm,
-			clearFilters,
-			close
-		}) => (
-			<div style={{ padding: 8 }} onKeyDown={e => e.stopPropagation()}>
-				<Input
-					ref={searchInput}
-					placeholder={`Search ${dataIndex}`}
-					value={selectedKeys[0]}
-					onChange={e =>
-						setSelectedKeys(e.target.value ? [e.target.value] : [])
-					}
-					onPressEnter={() =>
-						handleSearch(selectedKeys as string[], confirm, dataIndex)
-					}
-					style={{ marginBottom: 8, display: 'block' }}
-				/>
-				<Space>
-					<Button
-						type="primary"
-						onClick={() =>
-							handleSearch(selectedKeys as string[], confirm, dataIndex)
-						}
-						icon={<SearchOutlined />}
-						size="small"
-						style={{ width: 90 }}
-					>
-						Искать
-					</Button>
-					<Button
-						onClick={() => clearFilters && handleReset(clearFilters)}
-						size="small"
-						style={{ width: 90 }}
-					>
-						Сбросить
-					</Button>
-					{/* <Button
-            type="link"
-            size="small"
-            onClick={() => {
-              confirm({ closeDropdown: false });
-              setSearchText((selectedKeys as string[])[0]);
-              setSearchedColumn(dataIndex);
-            }}
-          >
-            Filter
-          </Button> */}
-					{/* <Button
-            type="link"
-            size="small"
-            onClick={() => {
-              close();
-            }}
-          >
-            close
-          </Button> */}
-				</Space>
-			</div>
-		),
-		filterIcon: (filtered: boolean) => (
-			<SearchOutlined style={{ color: filtered ? '#1677ff' : undefined }} />
-		),
-		onFilter: (value, record) =>
-			record[dataIndex]
-				.toString()
-				.toLowerCase()
-				.includes((value as string).toLowerCase()),
-		onFilterDropdownOpenChange: visible => {
-			if (visible) {
-				setTimeout(() => searchInput.current?.select(), 100)
-			}
-		},
-		render: text =>
-			searchedColumn === dataIndex ? (
-				<Highlighter
-					highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
-					searchWords={[searchText]}
-					autoEscape
-					textToHighlight={text ? text.toString() : ''}
-				/>
-			) : (
-				text
-			)
-	})
+	// const getColumnSearchProps = (dataIndex: any): GetColumnSearchProps => ({
+	// 	filterDropdown: ({
+	// 		setSelectedKeys,
+	// 		selectedKeys,
+	// 		confirm,
+	// 		clearFilters,
+	// 		close
+	// 	}) => (
+	// 		<div style={{ padding: 8 }} onKeyDown={e => e.stopPropagation()}>
+	// 			<Input
+	// 				ref={searchInput}
+	// 				placeholder={`Search ${dataIndex}`}
+	// 				value={selectedKeys[0]}
+	// 				onChange={e =>
+	// 					setSelectedKeys(e.target.value ? [e.target.value] : [])
+	// 				}
+	// 				onPressEnter={() =>
+	// 					handleSearch(selectedKeys as string[], confirm, dataIndex)
+	// 				}
+	// 				style={{ marginBottom: 8, display: 'block' }}
+	// 			/>
+	// 			<Space>
+	// 				<Button
+	// 					type="primary"
+	// 					onClick={() =>
+	// 						handleSearch(selectedKeys as string[], confirm, dataIndex)
+	// 					}
+	// 					icon={<SearchOutlined />}
+	// 					size="small"
+	// 					style={{ width: 90 }}
+	// 				>
+	// 					Искать
+	// 				</Button>
+	// 				<Button
+	// 					onClick={() => clearFilters && handleReset(clearFilters)}
+	// 					size="small"
+	// 					style={{ width: 90 }}
+	// 				>
+	// 					Сбросить
+	// 				</Button>
+	// 				{/* <Button
+    //         type="link"
+    //         size="small"
+    //         onClick={() => {
+    //           confirm({ closeDropdown: false });
+    //           setSearchText((selectedKeys as string[])[0]);
+    //           setSearchedColumn(dataIndex);
+    //         }}
+    //       >
+    //         Filter
+    //       </Button> */}
+	// 				{/* <Button
+    //         type="link"
+    //         size="small"
+    //         onClick={() => {
+    //           close();
+    //         }}
+    //       >
+    //         close
+    //       </Button> */}
+	// 			</Space>
+	// 		</div>
+	// 	),
+	// 	filterIcon: (filtered: boolean) => (
+	// 		<SearchOutlined style={{ color: filtered ? '#1677ff' : undefined }} />
+	// 	),
+	// 	onFilter: (value, record) =>
+	// 		record[dataIndex]
+	// 			.toString()
+	// 			.toLowerCase()
+	// 			.includes((value as string).toLowerCase()),
+	// 	onFilterDropdownOpenChange: visible => {
+	// 		if (visible) {
+	// 			setTimeout(() => searchInput.current?.select(), 100)
+	// 		}
+	// 	},
+	// 	render: text =>
+	// 		searchedColumn === dataIndex ? (
+	// 			<Highlighter
+	// 				highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+	// 				searchWords={[searchText]}
+	// 				autoEscape
+	// 				textToHighlight={text ? text.toString() : ''}
+	// 			/>
+	// 		) : (
+	// 			text
+	// 		)
+	// })
 
 	const columnsRepresentation = [
 		{
@@ -234,7 +233,7 @@ export const CreateRepresentation = () => {
 			title: 'Шифр и иаименование документа',
 			name: 'Шифр и иаименование документа',
 			className: 'text-xs !p-2',
-			...getColumnSearchProps('name')
+			// ...getColumnSearchProps('name')
 		},
 		{
 			key: 'academicYear',
@@ -309,6 +308,13 @@ export const CreateRepresentation = () => {
 			dataIndex: 'FIO',
 			title: 'ФИО руководителя от кафедры',
 			className: 'text-xs !p-2'
+		},
+		{
+			key: 'A',
+			dataIndex: 'A',
+			title: 'Категория',
+			className: `text-xs !p-2 ${visiting? '' : 'hidden'}`,
+			editable: true
 		},
 		{
 			key: 'F',
@@ -500,45 +506,6 @@ export const CreateRepresentation = () => {
 			: []
 	}
 
-	function translateColumnsIntoRussia({ isPrint }: { isPrint?: boolean }) {
-		const newData: any = []
-		// const recordCompressedWithoutUndefinedElem = dataCreate.filter((elem:any) => elem !== undefined)
-		const dataMock = [
-			{
-				specialityName: 'test',
-				practiceKind: 'тест',
-				dateFilling: '2021.09.10'
-			}
-		]
-		for (let elem of dataMock) {
-			const newObj = {
-				'Шифр и наименование специальности': elem.specialityName,
-				'Дата заполнения': dayjs(elem.dateFilling).format('YYYY.MM.DD'),
-				'Вид практики': elem.practiceKind
-			}
-
-			newData.push(newObj)
-		}
-
-		return newData
-	}
-
-	const print = () => {
-		function properties() {
-			return [
-				'Шифр и наименование специальности',
-				'Дата заполнения',
-				'Вид практики'
-			]
-		}
-		printJS({
-			printable: translateColumnsIntoRussia({ isPrint: true }),
-			properties: properties(),
-			type: 'json',
-			style: 'body {font-size: 10px}'
-		})
-	}
-
 	const edit = (record: Partial<Item> & { key: React.Key }) => {
 		form.setFieldsValue({ name: '', age: '', address: '', ...record })
 		setEditingKey(record.key)
@@ -550,26 +517,26 @@ export const CreateRepresentation = () => {
 	}
 
 	const deleteRow = () => {}
-	const formatDateRange = (dateRange: any) => {
-		console.log('dateRange', dateRange)
-		if (
-			dateRange !== null &&
-			Array.isArray(dateRange) &&
-			dateRange.length === 2
-		) {
-			const startDate = dayjs(dateRange[0])
-			const endDate = dayjs(dateRange[1])
+	// const formatDateRange = (dateRange: any) => {
+	
+	// 	if (
+	// 		dateRange !== null &&
+	// 		Array.isArray(dateRange) &&
+	// 		dateRange.length === 2
+	// 	) {
+	// 		const startDate = dayjs(dateRange[0])
+	// 		const endDate = dayjs(dateRange[1])
 
-			if (startDate.isValid() && endDate.isValid()) {
-				return `${startDate.format('DD.MM.YYYY')} - ${endDate.format(
-					'DD.MM.YYYY'
-				)}`
-			} else {
-				return 'Неверный формат даты'
-			}
-		}
-		return '' // Возвращает пустую строку, если dateRange не является массивом или если длина массива не равна 2
-	}
+	// 		if (startDate.isValid() && endDate.isValid()) {
+	// 			return `${startDate.format('DD.MM.YYYY')} - ${endDate.format(
+	// 				'DD.MM.YYYY'
+	// 			)}`
+	// 		} else {
+	// 			return 'Неверный формат даты'
+	// 		}
+	// 	}
+	// 	return '' // Возвращает пустую строку, если dateRange не является массивом или если длина массива не равна 2
+	// }
 
 	const save = async (key: React.Key) => {
 		try {
@@ -600,7 +567,6 @@ export const CreateRepresentation = () => {
 	}
 
 	const hanldeSelectedPractise = (id: any) => {
-		console.log('id', id)
 		setSelectedPractice(id)
 		setIsModalOpenOne(false)
 	}
@@ -616,10 +582,11 @@ export const CreateRepresentation = () => {
 	const handleCancelOne = () => {
 		setIsModalOpenOne(false)
 	}
+
 	const handleRowClick = (record: any) => {
 		hanldeSelectedPractise(record.id)
 	}
-
+	
 	return (
 		<section className="container">
 			<Row gutter={[16, 16]}>
@@ -638,13 +605,19 @@ export const CreateRepresentation = () => {
 					</Typography.Text>
 				</Col>
 			</Row>
-			<Row className="mt-4 flex items-center">
-				<Col span={12} flex="50%">
+			<Row className="mt-4 flex items-center justify-end">
+				<Col span={12} className='justify-end flex'>
 					<div>
 						<Space>
-							<Button type="primary" onClick={showModalOne}>
-								Выберите практику
-							</Button>
+							
+								{selectedPractice ? <Popconfirm
+									title="Редактирование"
+									description="Вы уверены, что хотите изменить практику? Все данные будут удалены."
+									onConfirm={showModalOne}
+									okText="Да"
+									cancelText="Нет"
+								><Button type="primary" >Изменить практику</Button></Popconfirm> : <Button type="primary" onClick={showModalOne}>Выбрать практику</Button>}
+							
 						</Space>
 					</div>
 				</Col>
@@ -667,10 +640,9 @@ export const CreateRepresentation = () => {
 							type="primary"
 							className="!rounded-full"
 							onClick={() => {
-								
 							}}
 						>
-							Добавить
+							Сохранить
 						</Button>
 					</Space>
 				</Col>
@@ -833,8 +805,7 @@ export const CreateRepresentation = () => {
 				<>
 					<Row className="mt-4">
 						<Col flex={'auto'}>
-							<Form form={form} component={false}>
-								
+							<Form form={form} component={false}>		
 								<Table
 									ref={tableRef}
 									components={{

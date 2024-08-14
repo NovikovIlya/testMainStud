@@ -28,7 +28,7 @@ export const ModalNav = () => {
  ) 
  
  return ( 
-  <Row className='mt-20'> 
+  <Row> 
    <Col span={24} className="mb-9"> 
     <Typography.Text 
      className={`text-blue1f5 text-2xl font-bold leading-loose`} 
@@ -52,7 +52,7 @@ export const ModalNav = () => {
      {t('Favorites')} 
     </Button> 
    </Col> 
-   {/* <Col span={24} className="mt-8"> 
+   <Col span={24} className="mt-8"> 
     <div 
      className={clsx('radio mb-16 w-full h-full ', !isStudent && 'hidden')} 
     > 
@@ -100,7 +100,7 @@ export const ModalNav = () => {
       </Radio.Button> 
      </Radio.Group> 
     </div> 
-   </Col>  */}
+   </Col> 
    {layouts.lg.length === jsxElements.length ? ( 
     <div className="text-3xl">{t('NoService')}</div> 
    ) : ( 

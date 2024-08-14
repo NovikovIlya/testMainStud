@@ -100,6 +100,7 @@ export const PracticeSchedule = () => {
 							setRecordFull={setTableData}
 							recordFull={selectedFieldsFull}
 							setSelectedFieldFull={setSelectedFieldFull}
+						
 						/>
 					}
 				>

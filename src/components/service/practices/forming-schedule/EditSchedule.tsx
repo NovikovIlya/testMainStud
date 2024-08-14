@@ -36,7 +36,8 @@ import { useGetDepartmentsQuery, useGetPracticeKindQuery } from '../../../../sto
 import { EditableCell } from './EditableCell'
 import { useGetSubdivisionUserQuery } from '../../../../store/api/serviceApi'
 import { useGetSpecialtyNamesForPractiseQuery } from '../../../../store/api/practiceApi/roster'
-import { Item } from '../Representation/EditableCell'
+import { Item } from '../../../../models/representation'
+
 
 interface FilterType {
 	value: string
@@ -828,7 +829,9 @@ export const EditSchedule = () => {
                             }) : []}
 							columns={mergedColumns}
 							rowClassName="editable-row"
-							pagination={false}
+							pagination={tableData.length < 5 ? false : {
+									pageSize: 5,					
+							}}
 							rowKey="id"
 						/>
 					}

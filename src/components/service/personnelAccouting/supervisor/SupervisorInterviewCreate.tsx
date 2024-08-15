@@ -4,7 +4,7 @@ import {useGetSupervisorVacancyQuery,
         useRequestCreateInterviewMutation
 } from "../../../../store/api/serviceApi";
 
-export const SupervisorInvitationCreate = () => {
+export const SupervisorInterviewCreate = () => {
 
     const [requestCreateInterview] = useRequestCreateInterviewMutation()
 
@@ -98,7 +98,7 @@ export const SupervisorInvitationCreate = () => {
                     <Form.Item
                         name={'seeker'}
                         label={
-                            <label className="text-black text-[18px]/[18px] font-content-font font-normal">
+                            <label className="text-black opacity-[80%] text-[18px]/[18px] font-content-font font-normal">
                                 Соискатель
                             </label>
                         }
@@ -116,7 +116,7 @@ export const SupervisorInvitationCreate = () => {
                     <Form.Item
                         name={'post'}
                         label={
-                            <label className="text-black text-[18px]/[18px] font-content-font font-normal">
+                            <label className="text-black opacity-[80%] text-[18px]/[18px] font-content-font font-normal">
                                 Должность
                             </label>
                         }
@@ -131,12 +131,12 @@ export const SupervisorInvitationCreate = () => {
                             ]}
                         ></Select>
                     </Form.Item>
-                    <div className="flex flex-row w-full">
+                    <div className="flex flex-row w-full gap-[20px]">
                         <Form.Item
-                            className="w-6/12"
+                            className="w-4/12"
                             name={'date'}
                             label={
-                                <label className="text-black text-[18px]/[18px] font-content-font font-normal">
+                                <label className="opacity-[80%] text-black text-[18px]/[18px] font-content-font font-normal">
                                     Дата
                                 </label>
                             }
@@ -148,10 +148,10 @@ export const SupervisorInvitationCreate = () => {
                             </DatePicker>
                         </Form.Item>
                         <Form.Item
-                            className="w-6/12"
+                            className="w-4/12"
                             name={'date'}
                             label={
-                                <label className="text-black text-[18px]/[18px] font-content-font font-normal">
+                                <label className="opacity-[80%] text-black text-[18px]/[18px] font-content-font font-normal">
                                     Время
                                 </label>
                             }
@@ -164,10 +164,10 @@ export const SupervisorInvitationCreate = () => {
                         </Form.Item>
 
                         <Form.Item
-                            className="w-6/12"
+                            className="w-4/12"
                             name={'type'}
                             label={
-                                <label className="text-black text-[18px]/[18px] font-content-font font-normal">
+                                <label className="opacity-[80%] text-black text-[18px]/[18px] font-content-font font-normal">
                                     Формат
                                 </label>
                             }
@@ -182,16 +182,15 @@ export const SupervisorInvitationCreate = () => {
                             ></Select>
                         </Form.Item>
                     </div>
-                    <Form.Item>
-                        <Button
-                            type="primary"
-                            className="rounded-[54.5px] w-[121px]"
-                            htmlType="submit">
-                            Отправить
-                        </Button>
-                    </Form.Item>
+                  <Form.Item>
+                    <Button
+                      type="primary"
+                      className="rounded-[30px] w-[121px]"
+                      htmlType="submit">
+                      Создать
+                    </Button>
+                  </Form.Item>
                 </Form>
-
             </div>
         </>
     );

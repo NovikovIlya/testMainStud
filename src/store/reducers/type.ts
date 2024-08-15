@@ -229,13 +229,23 @@ export type VacancyRespondItemType = {
 	recipient: string
 	desiredJob: string
 	type: 'DIRECTLY' | 'RESERVE'
+	url: string
 	userData: null | {
 		firstname: string
 		lastname: String
 		middlename: string
+		sex: string
+		age: number
 		email: string
 		phone: string
+		country: string
+		bday: string
 	}
+	meetingData: {
+		url: string
+		date: string
+		time: string
+}
 	respondData: {
 		coverLetter: string
 		portfolio: {
@@ -323,4 +333,15 @@ export type InterviewRequestType ={
 	respondId : number,
 	date : string,
 	format : string
+}
+
+export type InterviewItemType = {
+	id: number,
+	job_grade : string,
+	name : string,
+	date : string,
+	type : string,
+	time_left : string,
+	url: string,
+	status: 'OFFLINE' | 'ONLINE_ACTIVE' | 'ONLINE_INACTIVE'
 }

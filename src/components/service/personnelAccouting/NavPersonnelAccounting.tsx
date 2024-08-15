@@ -26,9 +26,10 @@ import { RespondsSupervisor } from './supervisor/RespondsSupervisor'
 import { SupervisorCreateVacancyForm } from './supervisor/SupervisorCreateVacancyForm'
 import { SupervisorUpdateVacancy } from './supervisor/SupervisorUpdateVacancy'
 import { SupervisorVacancies } from './supervisor/SupervisorVacancies'
-import { SupervisorInvitationAll } from './supervisor/SupervisorInvitationAll'
-import { SupervisorInvitationCreate } from './supervisor/SupervisorInvitationCreate'
+import { SupervisorInterviews } from './supervisor/SupervisorInterviews'
+import { SupervisorInterviewCreate } from './supervisor/SupervisorInterviewCreate'
 import {Header} from "../../layout/Header";
+import { SupervisorInterviewSeekerInfo } from './supervisor/SupervisorInterviewSeekerInfo'
 
 export const NavPesonnelAccounting = () => {
 	const { pathname } = useLocation()
@@ -466,11 +467,15 @@ export const NavPesonnelAccounting = () => {
 					)}
 				{pathname ===
 					'/services/personnelaccounting/supervisor/invitation' && (
-						<SupervisorInvitationAll/>
+						<SupervisorInterviews/>
 				)}
 				{pathname ===
 					'/services/personnelaccounting/supervisor/scheduleinvitation' && (
-						<SupervisorInvitationCreate/>
+						<SupervisorInterviewCreate/>
+					)}
+				{pathname ===
+					'/services/personnelaccounting/supervisor/invitation/seekerinfo' && (
+						<SupervisorInterviewSeekerInfo status="ENDED"/>
 					)}
 			</div>
 		</>

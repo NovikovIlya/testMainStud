@@ -4,6 +4,7 @@ import {
 	Row,
 	Select,
 	Space,
+	Spin,
 	Table,
 	Typography
 } from 'antd'
@@ -14,6 +15,8 @@ import { PointsSvg } from '../../../../assets/svg/PointsSvg'
 
 import { PopoverContent } from './PopoverContent'
 import { PopoverMain } from './PopoverMain'
+import { useGetAllSubmissionsQuery } from '../../../../store/api/practiceApi/representation'
+import { LoadingOutlined } from '@ant-design/icons'
 
 const optionsNames = [
 	{ value: 'Все', label: 'Все' },
@@ -167,7 +170,8 @@ export const ViewRepresentation = () => {
 	const [tableData, setTableData] = useState([])
 	const [selectedFieldsFull, setSelectedFieldFull] = useState<any>([])
 	const [dataTable, setDataTable] = useState<any>(originDate)
-
+	const {data:dataAllSubmissions,isLoading} = useGetAllSubmissionsQuery(null)
+	console.log('111',dataAllSubmissions)
 	useEffect(() => {
 		// if (isSuccessPractiseAll) {
 		setDataTable(filterDataFull())
@@ -588,6 +592,7 @@ export const ViewRepresentation = () => {
 
 			<Row className="mt-4">
 				<Col flex={'auto'}>
+				{isLoading ? <Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}/> :
 					<Table
 						onRow={(record) => ({
 							onClick: () => handleRowClick(record),
@@ -610,7 +615,7 @@ export const ViewRepresentation = () => {
 								setSelectedFieldFull(selectedRows)
 							}
 						}}
-					/>
+					/>}
 				</Col>
 			</Row>
 		</section>

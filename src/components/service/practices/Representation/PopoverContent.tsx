@@ -8,6 +8,7 @@ import { DeleteRedSvg } from '../../../../assets/svg/DeleteRedSvg'
 import { Load } from '../../../../assets/svg/Load'
 import { PrintSvg } from '../../../../assets/svg/PrintSvg'
 import { ColorBg, WrapperButton } from '../popover/WrapperButton'
+import { useDeleteSubmissionMutation } from '../../../../store/api/practiceApi/representation'
 
 interface Props {
 	recordFullAll?: any
@@ -17,6 +18,7 @@ interface Props {
 }
 
 export const PopoverContent = ({recordFull,recordFullAll,setRecordFull,setSelectedFieldFull}: Props) => {
+	const [deleteRepresentation,{}] = useDeleteSubmissionMutation()
 	// const [deletePractise] = useDeletePractiseSeveralMutation()
 	console.log('recordFull', recordFull)
 	function translateColumnsIntoRussia({ isPrint }: { isPrint: boolean }) {
@@ -111,16 +113,16 @@ export const PopoverContent = ({recordFull,recordFullAll,setRecordFull,setSelect
 
 	function deleteData() {
 		if (setRecordFull && recordFull && recordFullAll) {
-			const recordFullWithoutUndefinedElem = recordFull.filter(
-				(elem: any) => elem !== undefined
-			)
+			// const recordFullWithoutUndefinedElem = recordFull.filter(
+			// 	(elem: any) => elem !== undefined
+			// )
 
-			const listId = recordFullWithoutUndefinedElem.map((elem: any) => elem.id)
-			setRecordFull(
-				recordFullAll.filter((elem: any) => {
-					return !listId.includes(elem.id)
-				})
-			)
+			// const listId = recordFullWithoutUndefinedElem.map((elem: any) => elem.id)
+			// setRecordFull(
+			// 	recordFullAll.filter((elem: any) => {
+			// 		return !listId.includes(elem.id)
+			// 	})
+			// )
 			// if (setSelectedFieldFull) {
 			//     setSelectedFieldFull([])
 			// }
@@ -129,6 +131,9 @@ export const PopoverContent = ({recordFull,recordFullAll,setRecordFull,setSelect
 			//     listIdDelete: listId
 			// }
 			//deleteSeveralContracts(objIdList)
+			console.log('recordFull.id',recordFull.id)
+			deleteRepresentation(recordFull.id)
+			
 		}
 
 

@@ -2,6 +2,7 @@ import { CheckOutlined, CloseOutlined, SearchOutlined, VerticalAlignBottomOutlin
 import {
 	Button,
 	Col,
+	Descriptions,
 	Form,
 	Input,
 	Modal,
@@ -14,19 +15,20 @@ import {
 	Table,
 	Typography
 } from 'antd'
-import type { TableProps } from 'antd'
+import type { DescriptionsProps, TableProps } from 'antd'
 import { FilterDropdownProps } from 'antd/es/table/interface'
 import dayjs from 'dayjs'
 import printJS from 'print-js'
 import { useEffect, useRef, useState } from 'react'
 import Highlighter from 'react-highlight-words'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import { ArrowLeftSvg } from '../../../../assets/svg'
 import { EditSvg } from '../../../../assets/svg/EditSvg'
 import { FilterType, GetColumnSearchProps, Item } from '../../../../models/representation'
 
 import { EditableCell } from './EditableCell'
+import { useGetOneSubmissionsQuery } from '../../../../store/api/practiceApi/representation'
 
 
 
@@ -57,6 +59,8 @@ const optionMockKind = [
 ]
 
 export const EditRepresentation = () => {
+	const path = useLocation()
+	const id = path.pathname.split('/').at(-1)!
 	const tableRef = useRef(null)
 	const originData: any = [
 		{
@@ -128,6 +132,7 @@ export const EditRepresentation = () => {
 	const searchInput = useRef<any>(null)
 	const [selectedPractice, setSelectedPractice] = useState<any>(null)
 	const [visiting,setVisiting] = useState(false)
+	const {data:dataOneSubmissions,isSuccess} = useGetOneSubmissionsQuery(id,{skip:!id})
 
 	useEffect(() => {
 		// if (isSuccessPractiseAll) {
@@ -288,84 +293,115 @@ export const EditRepresentation = () => {
 			dataIndex: 'student',
 			title: 'ФИО обучающегося',
 			name: 'ФИО обучающегося',
-			className: 'text-xs !p-2'
+			className: 'text-xs !p-2',
+			render: (text: any, record: any) => (
+				<div>{record?.students?.name || 'Нет челибаса...'}</div>
+			)
 		},
 
 		{
 			key: 'groupNumbers',
 			dataIndex: 'groupNumbers',
 			title: 'Номер группы',
-			className: 'text-xs !p-2'
+			className: 'text-xs !p-2',
+			render: (text: any, record: any) => (
+				<div>{record?.groupNumber || 'Нет челибаса...'}</div>
+			)
 		},
 		{
 			key: 'place',
 			dataIndex: 'place',
 			title: 'Место прохождения практики',
 			className: 'text-xs !p-2',
-			editable: true
+			editable: true,
+			render: (text: any, record: any) => (
+				<div>{record?.students?.place || 'Нет челибаса...'}</div>
+			)
 		},
 		{
 			key: 'FIO',
 			dataIndex: 'FIO',
 			title: 'ФИО руководителя от кафедры',
-			className: 'text-xs !p-2'
+			className: 'text-xs !p-2',
+			render: (text: any, record: any) => (
+				<div>{record?.practice?.departmentDirector || 'Нет челибаса...'}</div>
+			)
+		},
+		{
+			key: 'A',
+			dataIndex: 'A',
+			title: 'Категория',
+			className: `text-xs !p-2 ${isSuccess ? dataOneSubmissions.isWithDeparture ? '' : 'hidden' : 'hidden'}`,
+			editable: true,
+			render: (text: any, record: any) => (
+				<div>{record?.students?.category || 'Нет челибаса...'}</div>
+			)
 		},
 		{
 			key: 'F',
 			dataIndex: 'F',
 			title: 'Суточные (50 руб/сут)',
-			className: `text-xs !p-2 ${visiting? '' : 'hidden'}`,
-			editable: true
+			className: `text-xs !p-2 ${isSuccess ? dataOneSubmissions.isWithDeparture ? '' : 'hidden' : 'hidden'}`,
+			editable: true,
+			render: (text: any, record: any) => (
+				<div>{record?.students?.costForDay || 'Нет челибаса...'}</div>
+			)
 		},
 		{
 			key: 'E',
 			dataIndex: 'E',
 			title: 'Проезд (руб)',
-			className: `text-xs !p-2 ${visiting? '' : 'hidden'}`,
-			editable: true
+			className: `text-xs !p-2 ${isSuccess ? dataOneSubmissions.isWithDeparture ? '' : 'hidden' : 'hidden'}`,
+			editable: true,
+			render: (text: any, record: any) => (
+				<div>{record?.students?.arrivingCost || 'Нет челибаса...'}</div>
+			)
 		},
 		{
 			key: 'C',
 			dataIndex: 'C',
 			title: 'Оплата проживания (руб)',
-			className: `text-xs !p-2 ${visiting? '' : 'hidden'}`,
-			editable: true
+			className: `text-xs !p-2 ${isSuccess ? dataOneSubmissions.isWithDeparture ? '' : 'hidden' : 'hidden'}`,
+			editable: true,
+			render: (text: any, record: any) => (
+				<div>{record?.students?.livingCost || 'Нет челибаса...'}</div>
+			)
 		},
-		{
-			title: '',
-			dataIndex: 'operation',
-			render: (_: any, record: Item) => {
-				const editable = isEditing(record)
-				return editable ? (
-					<div className="flex justify-around items-center w-[60px]">
-						<Typography.Link
-							onClick={() => save(record.key)}
-							style={{ marginRight: 8 }}
-						>
-							<CheckOutlined style={{ color: '#75a4d3' }} />
-						</Typography.Link>
-						<Popconfirm
-							title="Вы действительно хотите отменить действие?"
-							onConfirm={cancel}
-						>
-							<CloseOutlined style={{ color: '#75a4d3' }} />
-						</Popconfirm>
-					</div>
-				) : (
-					<div className="flex justify-around items-center  w-[60px]">
-						<Typography.Link
-							disabled={editingKey !== ''}
-							onClick={() => edit(record)}
-						>
-							<EditSvg />
-						</Typography.Link>
-						{/* <Popconfirm title="Вы действительно хотите удалить?" onConfirm={deleteRow}>
-                  <a><DeleteRedSvg/></a>
-              </Popconfirm> */}
-					</div>
-				)
-			}
-		}
+		// {
+		// 	title: '',
+		// 	dataIndex: 'operation',
+		// 	render: (_: any, record: Item) => {
+		// 		const editable = isEditing(record)
+		// 		return editable ? (
+		// 			<div className="flex justify-around items-center w-[60px]">
+		// 				<Typography.Link
+		// 					onClick={() => save(record.key)}
+		// 					style={{ marginRight: 8 }}
+		// 				>
+		// 					<CheckOutlined style={{ color: '#75a4d3' }} />
+		// 				</Typography.Link>
+		// 				<Popconfirm
+		// 					title="Вы действительно хотите отменить действие?"
+		// 					onConfirm={cancel}
+		// 				>
+		// 					<CloseOutlined style={{ color: '#75a4d3' }} />
+		// 				</Popconfirm>
+		// 			</div>
+		// 		) : (
+		// 			<div className="flex justify-around items-center  w-[60px]">
+		// 				<Typography.Link
+		// 					disabled={editingKey !== ''}
+		// 					onClick={() => edit(record)}
+		// 				>
+		// 					<EditSvg />
+		// 				</Typography.Link>
+		// 				{/* <Popconfirm title="Вы действительно хотите удалить?" onConfirm={deleteRow}>
+        //           <a><DeleteRedSvg/></a>
+        //       </Popconfirm> */}
+		// 			</div>
+		// 		)
+		// 	}
+		// }
 	]
 
 
@@ -598,7 +634,39 @@ export const EditRepresentation = () => {
 			console.log('Validate Failed:', errInfo)
 		}
 	}
-
+	const items: DescriptionsProps['items'] = [
+		{
+		  key: '1',
+		  label: 'Подразделение',
+		  children: isSuccess ? dataOneSubmissions.subdivision : '',
+		},
+		{
+		  key: '2',
+		  label: 'Наименование специальности',
+		  children: 'Акушерство',
+		},
+		{
+		  key: '3',
+		  label: 'Профиль',
+		  children: 'Акушер',
+		},
+		{
+		  key: '4',
+		  label: 'Форма обучения',
+		  children: 'Очная',
+		},
+		{
+		  key: '5',
+		  label: 'Курс',
+		  children: '1',
+		},
+		{
+			key: '5',
+			label: 'Тип',
+			children: '1',
+		},
+		
+	  ];
 
 
 
@@ -620,6 +688,7 @@ export const EditRepresentation = () => {
 					</Typography.Text>
 				</Col>
 			</Row>
+			<Descriptions className='mt-8'  items={items} />
 			
 			{/* {selectedPractice ? (
 				<Row className='items-end'>
@@ -665,8 +734,6 @@ export const EditRepresentation = () => {
 				</Col>
 				
 			</Row>
-
-		
 				<>
 					<Row className="mt-4">
 						<Col flex={'auto'}>
@@ -690,7 +757,7 @@ export const EditRepresentation = () => {
 						</Col>
 					</Row>
 				</>
-			) 
+			
 		</section>
 	)
 }

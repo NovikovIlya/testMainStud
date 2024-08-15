@@ -1,44 +1,29 @@
-import { CheckOutlined, CloseOutlined, SearchOutlined } from '@ant-design/icons'
+import { CheckOutlined, CloseOutlined, LoadingOutlined } from '@ant-design/icons'
 import {
 	Button,
 	Col,
 	Form,
-	Input,
-	Modal,
-	Popconfirm,
+	Input, Popconfirm,
 	Radio,
 	Result,
-	Row,
-	Select,
-	Space,
+	Row, Space,
+	Spin,
 	Table,
 	Typography
 } from 'antd'
 import type { TableProps } from 'antd'
-import { FilterDropdownProps } from 'antd/es/table/interface'
 import dayjs from 'dayjs'
-import printJS from 'print-js'
 import { useEffect, useRef, useState } from 'react'
-import Highlighter from 'react-highlight-words'
 import { useNavigate } from 'react-router-dom'
 
 import { ArrowLeftSvg } from '../../../../assets/svg'
 import { EditSvg } from '../../../../assets/svg/EditSvg'
-import { FilterType, GetColumnSearchProps, Item } from '../../../../models/representation'
+import { Item } from '../../../../models/representation'
 
 import { EditableCell } from './EditableCell'
-
-
-const filterSpecialization: FilterType[] = [
-	{
-		value: 'Все',
-		label: 'Все'
-	},
-	{
-		value: '1',
-		label: '1'
-	}
-]
+import PracticeModal from './practicalModal'
+import { useAddSubmissionMutation, useGetAllSubmissionsQuery, useGetStudentsQuery } from '../../../../store/api/practiceApi/representation'
+import { useGetPracticesAllQuery } from '../../../../store/api/practiceApi/individualTask'
 
 const optionMock = [
 	{ value: '1', label: '1' },
@@ -124,9 +109,16 @@ export const CreateRepresentation = () => {
 	const [isModalOpenOne, setIsModalOpenOne] = useState(true)
 	const [searchText, setSearchText] = useState('')
 	const [searchedColumn, setSearchedColumn] = useState('')
-	const searchInput = useRef<any>(null)
+	// const searchInput = useRef<any>(null)
 	const [selectedPractice, setSelectedPractice] = useState<any>(null)
 	const [visiting,setVisiting] = useState(false)
+	const [value, setValue] = useState(1);
+	const [theme,setTheme] = useState('')
+	const [sendSubmission,{}] = useAddSubmissionMutation()
+	const {data:dataGetStudents,isSuccess:isSuccessGetStudents} = useGetStudentsQuery(selectedPractice,{skip:!selectedPractice})
+	const {data:dataAllSubmissions} = useGetAllSubmissionsQuery(selectedPractice,{skip:!selectedPractice})
+	const [fullTable,setFullTable] = useState<any>([])
+	const {data:dataAllPractise} = useGetPracticesAllQuery(selectedPractice,{skip:!selectedPractice})
 
 	useEffect(() => {
 		// if (isSuccessPractiseAll) {
@@ -225,54 +217,23 @@ export const CreateRepresentation = () => {
 	// 			text
 	// 		)
 	// })
-
-	const columnsRepresentation = [
-		{
-			key: 'specialtyName',
-			dataIndex: 'specialtyName',
-			title: 'Шифр и иаименование документа',
-			name: 'Шифр и иаименование документа',
-			className: 'text-xs !p-2',
-			// ...getColumnSearchProps('name')
-		},
-		{
-			key: 'academicYear',
-			dataIndex: 'academicYear',
-			title: 'Учебный год',
-			className: 'text-xs !p-2'
-		},
-
-		{
-			key: 'groupNumber',
-			dataIndex: 'groupNumber',
-			title: 'Номер группы',
-			className: 'text-xs !p-2'
-		},
-		{
-			key: 'level',
-			dataIndex: 'level',
-			title: 'Уровень образования',
-			className: 'text-xs !p-2',
-			editable: true
-		},
-		{
-			key: 'course',
-			dataIndex: 'courseNumber',
-			title: 'Курс',
-			className: 'text-xs !p-2',
-			editable: true
+	useEffect(()=>{
+		if(isSuccessGetStudents){
+			const newArray = dataGetStudents.map((item:any)=>({
+				name: item,
+				costForDay: null,
+				arrivingCost: null,
+				livingCost: null,
+				place: null,
+				category: null,
+				departmentDirector: dataAllPractise[0].departmentDirector,
+				groupNumber: dataAllPractise[0].groupNumber
+			}))
+			setFullTable(newArray)
 		}
 
-		// {
-		//   title: '',
-		//   key: 'action',
-		//   render: (_:any, record:any) => (
-		//     <Space size="middle">
-		//       <Button onClick={()=>hanldeSelectedPractise(record.id)}>Выбрать </Button>
-		//     </Space>
-		//   ),
-		// },
-	]
+	},[isSuccessGetStudents])
+
 
 	const columns = [
 		{
@@ -412,20 +373,20 @@ export const CreateRepresentation = () => {
 		}
 	})
 
-	const handleSearch = (
-		selectedKeys: string[],
-		confirm: FilterDropdownProps['confirm'],
-		dataIndex: any
-	) => {
-		confirm()
-		setSearchText(selectedKeys[0])
-		setSearchedColumn(dataIndex)
-	}
+	// const handleSearch = (
+	// 	selectedKeys: string[],
+	// 	confirm: FilterDropdownProps['confirm'],
+	// 	dataIndex: any
+	// ) => {
+	// 	confirm()
+	// 	setSearchText(selectedKeys[0])
+	// 	setSearchedColumn(dataIndex)
+	// }
 
-	const handleReset = (clearFilters: () => void) => {
-		clearFilters()
-		setSearchText('')
-	}
+	// const handleReset = (clearFilters: () => void) => {
+	// 	clearFilters()
+	// 	setSearchText('')
+	// }
 
 	function filterDataFull() {
 		function filterCourse(elem: any) {
@@ -586,6 +547,28 @@ export const CreateRepresentation = () => {
 	const handleRowClick = (record: any) => {
 		hanldeSelectedPractise(record.id)
 	}
+
+	const onChange = (e: any) => {
+		setValue(e.target.value);
+	};
+
+	const sendData = ()=>{
+		const tableDataStudent = fullTable.map((item:any)=>({
+			costForDay:item.costForDay, 
+			arrivingCost:item.arrivingCost,
+			livingCost:item.livingCost,
+			name:item.name,
+			place:item.place,
+			category:item.category
+		}))
+		const obj = {
+			id: selectedPractice,
+			theme: theme,
+			students: tableDataStudent
+		}
+		sendSubmission(obj)
+	}
+	
 	
 	return (
 		<section className="container">
@@ -609,30 +592,38 @@ export const CreateRepresentation = () => {
 				<Col span={12} className='justify-end flex'>
 					<div>
 						<Space>
-							
-								{selectedPractice ? <Popconfirm
-									title="Редактирование"
-									description="Вы уверены, что хотите изменить практику? Все данные будут удалены."
-									onConfirm={showModalOne}
-									okText="Да"
-									cancelText="Нет"
-								><Button type="primary" >Изменить практику</Button></Popconfirm> : <Button type="primary" onClick={showModalOne}>Выбрать практику</Button>}
-							
+							{selectedPractice ? 
+							<Popconfirm
+								title="Редактирование"
+								description="Вы уверены, что хотите изменить практику? Все данные будут удалены."
+								onConfirm={showModalOne}
+								okText="Да"
+								cancelText="Нет"
+							><Button type="primary" >Изменить практику</Button></Popconfirm> : 
+							<Button type="primary" onClick={showModalOne}>Выбрать практику</Button>}
 						</Space>
 					</div>
 				</Col>
 			</Row>
 			{selectedPractice ? (
 				<Row className='items-end'>
-					<Col span={12} flex="50%" className="mt-4 mobileFirst">
-					<Radio.Group defaultValue="compressedView" buttonStyle="solid">
-						<Radio.Button value="compressedView" className="!rounded-l-full" onClick={()=>setVisiting(false)}>
-							Невыездная практика
-						</Radio.Button>
-						<Radio.Button value="tableView" className="!rounded-r-full" onClick={()=>setVisiting(true)}>
-							Выездная практика
-						</Radio.Button>
-					</Radio.Group>
+					{/* <Col span={12} flex="50%" className="mt-4 mobileFirst">
+						<Radio.Group defaultValue="compressedView" buttonStyle="solid">
+							<Radio.Button value="compressedView" className="!rounded-l-full" onClick={()=>setVisiting(false)}>
+								Невыездная практика
+							</Radio.Button>
+							<Radio.Button value="tableView" className="!rounded-r-full" onClick={()=>setVisiting(true)}>
+								Выездная практика
+							</Radio.Button>
+						</Radio.Group>
+					</Col> */}
+					 <Col span={12} flex="50%" className="mt-4 mobileFirst">
+						<Radio.Group onChange={onChange} value={value}>
+							<Space direction="vertical">
+								<Radio value={1} onClick={()=>setVisiting(false)}>Невыездная практика</Radio>
+								<Radio value={2} onClick={()=>setVisiting(true)}>Выездная практика</Radio>
+							</Space>
+						</Radio.Group>
 				</Col>
 				<Col span={7} offset={5}>
 					<Space className="w-full flex-row-reverse">
@@ -640,6 +631,7 @@ export const CreateRepresentation = () => {
 							type="primary"
 							className="!rounded-full"
 							onClick={() => {
+								sendData()
 							}}
 						>
 							Сохранить
@@ -647,10 +639,17 @@ export const CreateRepresentation = () => {
 					</Space>
 				</Col>
 				</Row>
-			) : (
-				''
-			)}
-			<Modal
+				
+			) : ''}
+			{visiting ? <Row className='mt-4'>
+				<Col span={1} className='flex items-center'>
+					<label htmlFor="topic">Тема:</label>
+				</Col>
+				<Col span={3} className=''>
+					<Input id="topic" placeholder='тема' onChange={(e) => setTheme(e.target.value)}/>	
+				</Col>	
+			</Row> : ''}
+			{/* <Modal
        			footer={null}
 				width={'100%'}
 				title="Выберите практику"
@@ -793,15 +792,17 @@ export const CreateRepresentation = () => {
 					}}
 					bordered
 					dataSource={tableData ? tableData : []}
-					// @ts-ignore
 					columns={columnsRepresentation}
 					rowClassName="editable-row"
 					pagination={false}
 					rowKey="id"
 				/>
-			</Modal>
+			</Modal> */}
+			<PracticeModal isModalOpenOne={isModalOpenOne} handleOkOne={handleOkOne} handleCancelOne={handleCancelOne} setFilter={setFilter} filter={filter} handleRowClick={handleRowClick}  tableRef={tableRef} tableData={tableData} />
 
-			{selectedPractice ? (
+			{selectedPractice ? isSuccessGetStudents === false ? 
+				<Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}/> :
+			(
 				<>
 					<Row className="mt-4">
 						<Col flex={'auto'}>
@@ -814,7 +815,7 @@ export const CreateRepresentation = () => {
 										}
 									}}
 									bordered
-									dataSource={tableData ? tableData : []}
+									dataSource={dataAllPractise}
 									columns={mergedColumns}
 									rowClassName="editable-row"
 									pagination={false}

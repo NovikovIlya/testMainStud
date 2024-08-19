@@ -28,9 +28,11 @@ export const ApproveEmail = () => {
 					  } = await approve({
 					id: searchParams.get('id'),
 					hash: searchParams.get('hash')
+				}).unwrap().then((data) => {
+					data.refreshToken && localStorage.setItem('refresh', JSON.stringify(data.refreshToken))
 				})
+				
 				//@ts-ignore
-				console.log('data3333333333',data)
 				dispatch(setCredentials(data.data))
 			}
 

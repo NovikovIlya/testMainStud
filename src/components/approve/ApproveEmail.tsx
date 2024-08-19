@@ -30,6 +30,7 @@ export const ApproveEmail = () => {
 					hash: searchParams.get('hash')
 				}).unwrap().then((data) => {
 					data.refreshToken && localStorage.setItem('refresh', JSON.stringify(data.refreshToken))
+					console.log('data1',data)
 				})
 				
 				//@ts-ignore
@@ -38,8 +39,8 @@ export const ApproveEmail = () => {
 
 			fetchData()
 		} catch (e) {
-			navigate('/user')
-			console.error(e)
+			// navigate('/user')
+			console.log('ошибкааааа',e)
 		}
 	}, [approve, dispatch, navigate, searchParams])
 

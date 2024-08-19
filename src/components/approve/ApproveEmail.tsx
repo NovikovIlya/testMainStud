@@ -28,17 +28,14 @@ export const ApproveEmail = () => {
 					  } = await approve({
 					id: searchParams.get('id'),
 					hash: searchParams.get('hash')
-				}).unwrap().then((data) => {
-					data.refreshToken && localStorage.setItem('refresh', JSON.stringify(data.refreshToken))
 				})
-				
 				//@ts-ignore
 				dispatch(setCredentials(data.data))
 			}
 
 			fetchData()
 		} catch (e) {
-			// navigate('/user')
+			navigate('/user')
 			console.error(e)
 		}
 	}, [approve, dispatch, navigate, searchParams])

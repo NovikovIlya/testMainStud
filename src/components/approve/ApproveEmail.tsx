@@ -30,8 +30,9 @@ export const ApproveEmail = () => {
 					hash: searchParams.get('hash')
 				}).unwrap().then((data) => {
 					data.refreshToken && localStorage.setItem('refresh', JSON.stringify(data.refreshToken))
+					console.log('data',data)
 				})
-				console.log('data',data)
+				
 				//@ts-ignore
 				dispatch(setCredentials(data.data))
 			}

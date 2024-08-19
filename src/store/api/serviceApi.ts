@@ -11,6 +11,7 @@ import {
 	Exam,
 	ICalendar,
 	IPerformance,
+	InterviewRequestType,
 	ResponceType,
 	RespondItemType,
 	Template,
@@ -22,7 +23,6 @@ import {
 	VacancyRequestViewType,
 	VacancyRespondItemType,
 	VacancyViewResponceType,
-	InterviewRequestType,
 	respondStatus
 } from '../reducers/type'
 
@@ -569,8 +569,8 @@ export const serviceApi = apiSlice.injectEndpoints({
 			{ respondId: number; vacancyId: number }
 		>({
 			query: ({ respondId, vacancyId }) => ({
-				url: `http://localhost:8082/employment-api/v1/reserve/${respondId}/status/approve`,
-				method: 'PUT',
+				url: `http://localhost:8082/employment-api/v1/reserve/${respondId}/approve`,
+				method: 'POST',
 				body: {
 					vacancyId: vacancyId
 				},
@@ -610,7 +610,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 					Authorization: `Bearer ${supervisorToken}`
 				}
 			})
-		}),
+		})
 	})
 })
 export const {

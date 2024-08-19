@@ -130,7 +130,7 @@ export const ReserveRespondInfo = (props: {
 											Отправить руководителю
 										</Button> */}
 										<ApproveRespondForm
-											respondId={0}
+											respondId={res.id}
 											vacancyId={0}
 											isRespondSentToSupervisor={
 												res.status === 'IN_SUPERVISOR_REVIEW'
@@ -339,7 +339,7 @@ export const ReserveRespondInfo = (props: {
 											Отправить руководителю
 										</Button> */}
 										<ApproveRespondForm
-											respondId={0}
+											respondId={res.id}
 											vacancyId={0}
 											isRespondSentToSupervisor={false}
 											mode={res.type}

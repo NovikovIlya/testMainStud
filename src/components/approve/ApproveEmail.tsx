@@ -14,7 +14,7 @@ import { CardForm } from './cardForm'
 export const ApproveEmail = () => {
 	const [searchParams] = useSearchParams()
 	const navigate = useNavigate()
-	const [approve,{data:dataApprove,isSucces:isSuccesAprove}] = useApproveEmailMutation()
+	const [approve,{data:dataApprove,isSuccess :isSuccesAprove}] = useApproveEmailMutation()
 	const dispatch = useDispatch()
 
 	useEffect(()=>{

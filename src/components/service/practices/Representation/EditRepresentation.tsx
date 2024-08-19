@@ -28,20 +28,8 @@ import { EditSvg } from '../../../../assets/svg/EditSvg'
 import { FilterType, GetColumnSearchProps, Item } from '../../../../models/representation'
 
 import { EditableCell } from './EditableCell'
-import { useGetOneSubmissionsQuery } from '../../../../store/api/practiceApi/representation'
+import { useEditSubmissionMutation, useGetDocRepresentationQuery, useGetOneSubmissionsQuery } from '../../../../store/api/practiceApi/representation'
 
-
-
-const filterSpecialization: FilterType[] = [
-	{
-		value: 'Все',
-		label: 'Все'
-	},
-	{
-		value: '1',
-		label: '1'
-	}
-]
 
 const optionMock = [
 	{ value: '1', label: '1' },
@@ -126,13 +114,16 @@ export const EditRepresentation = () => {
 	const [data, setData] = useState(originData)
 	const [editingKey, setEditingKey] = useState('')
 	const isEditing = (record: Item) => record.key === editingKey
-
 	const [searchText, setSearchText] = useState('')
 	const [searchedColumn, setSearchedColumn] = useState('')
 	const searchInput = useRef<any>(null)
 	const [selectedPractice, setSelectedPractice] = useState<any>(null)
 	const [visiting,setVisiting] = useState(false)
 	const {data:dataOneSubmissions,isSuccess} = useGetOneSubmissionsQuery(id,{skip:!id})
+	const {data:dataGetDocRepresentation,isLoading:isLoadingDocRepesentation} = useGetDocRepresentationQuery(null)
+	const [editSumbissions,{}] = useEditSubmissionMutation({})
+	const [fullTable,setFullTable] = useState<any>([])
+	const [editTheme,setEditTheme] = useState(dataOneSubmissions?.theme)
 
 	useEffect(() => {
 		// if (isSuccessPractiseAll) {
@@ -143,142 +134,15 @@ export const EditRepresentation = () => {
 		// }
 	}, [filter])
 
-	const getColumnSearchProps = (dataIndex: any): GetColumnSearchProps => ({
-		filterDropdown: ({
-			setSelectedKeys,
-			selectedKeys,
-			confirm,
-			clearFilters,
-			close
-		}) => (
-			<div style={{ padding: 8 }} onKeyDown={e => e.stopPropagation()}>
-				<Input
-					ref={searchInput}
-					placeholder={`Search ${dataIndex}`}
-					value={selectedKeys[0]}
-					onChange={e =>
-						setSelectedKeys(e.target.value ? [e.target.value] : [])
-					}
-					onPressEnter={() =>
-						handleSearch(selectedKeys as string[], confirm, dataIndex)
-					}
-					style={{ marginBottom: 8, display: 'block' }}
-				/>
-				<Space>
-					<Button
-						type="primary"
-						onClick={() =>
-							handleSearch(selectedKeys as string[], confirm, dataIndex)
-						}
-						icon={<SearchOutlined />}
-						size="small"
-						style={{ width: 90 }}
-					>
-						Искать
-					</Button>
-					<Button
-						onClick={() => clearFilters && handleReset(clearFilters)}
-						size="small"
-						style={{ width: 90 }}
-					>
-						Сбросить
-					</Button>
-					{/* <Button
-            type="link"
-            size="small"
-            onClick={() => {
-              confirm({ closeDropdown: false });
-              setSearchText((selectedKeys as string[])[0]);
-              setSearchedColumn(dataIndex);
-            }}
-          >
-            Filter
-          </Button> */}
-					{/* <Button
-            type="link"
-            size="small"
-            onClick={() => {
-              close();
-            }}
-          >
-            close
-          </Button> */}
-				</Space>
-			</div>
-		),
-		filterIcon: (filtered: boolean) => (
-			<SearchOutlined style={{ color: filtered ? '#1677ff' : undefined }} />
-		),
-		onFilter: (value, record) =>
-			record[dataIndex]
-				.toString()
-				.toLowerCase()
-				.includes((value as string).toLowerCase()),
-		onFilterDropdownOpenChange: visible => {
-			if (visible) {
-				setTimeout(() => searchInput.current?.select(), 100)
-			}
-		},
-		render: text =>
-			searchedColumn === dataIndex ? (
-				<Highlighter
-					highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
-					searchWords={[searchText]}
-					autoEscape
-					textToHighlight={text ? text.toString() : ''}
-				/>
-			) : (
-				text
-			)
-	})
-
-	const columnsRepresentation = [
-		{
-			key: 'specialtyName',
-			dataIndex: 'specialtyName',
-			title: 'Шифр и иаименование документа',
-			name: 'Шифр и иаименование документа',
-			className: 'text-xs !p-2',
-			...getColumnSearchProps('name')
-		},
-		{
-			key: 'academicYear',
-			dataIndex: 'academicYear',
-			title: 'Учебный год',
-			className: 'text-xs !p-2'
-		},
-
-		{
-			key: 'groupNumber',
-			dataIndex: 'groupNumber',
-			title: 'Номер группы',
-			className: 'text-xs !p-2'
-		},
-		{
-			key: 'level',
-			dataIndex: 'level',
-			title: 'Уровень образования',
-			className: 'text-xs !p-2',
-			editable: true
-		},
-		{
-			key: 'course',
-			dataIndex: 'courseNumber',
-			title: 'Курс',
-			className: 'text-xs !p-2',
-			editable: true
+	useEffect(()=>{
+		if(isSuccess){
+			const obj = dataOneSubmissions.map((item:any)=>{
+				return item.students
+			})
+			setFullTable(obj)
 		}
+	},[dataOneSubmissions,isSuccess])
 
-		// {
-		//   title: '',
-		//   key: 'action',
-		//   render: (_:any, record:any) => (
-		//     <Space size="middle">
-		//       <Button onClick={()=>hanldeSelectedPractise(record.id)}>Выбрать </Button>
-		//     </Space>
-		//   ),
-		// },
-	]
 
 	const columns = [
 		{
@@ -367,43 +231,88 @@ export const EditRepresentation = () => {
 				<div>{record?.students?.livingCost || 'Нет челибаса...'}</div>
 			)
 		},
-		// {
-		// 	title: '',
-		// 	dataIndex: 'operation',
-		// 	render: (_: any, record: Item) => {
-		// 		const editable = isEditing(record)
-		// 		return editable ? (
-		// 			<div className="flex justify-around items-center w-[60px]">
-		// 				<Typography.Link
-		// 					onClick={() => save(record.key)}
-		// 					style={{ marginRight: 8 }}
-		// 				>
-		// 					<CheckOutlined style={{ color: '#75a4d3' }} />
-		// 				</Typography.Link>
-		// 				<Popconfirm
-		// 					title="Вы действительно хотите отменить действие?"
-		// 					onConfirm={cancel}
-		// 				>
-		// 					<CloseOutlined style={{ color: '#75a4d3' }} />
-		// 				</Popconfirm>
-		// 			</div>
-		// 		) : (
-		// 			<div className="flex justify-around items-center  w-[60px]">
-		// 				<Typography.Link
-		// 					disabled={editingKey !== ''}
-		// 					onClick={() => edit(record)}
-		// 				>
-		// 					<EditSvg />
-		// 				</Typography.Link>
-		// 				{/* <Popconfirm title="Вы действительно хотите удалить?" onConfirm={deleteRow}>
-        //           <a><DeleteRedSvg/></a>
-        //       </Popconfirm> */}
-		// 			</div>
-		// 		)
-		// 	}
-		// }
+		
+		{
+			title: '',
+			dataIndex: 'operation',
+			className: `text-xs !p-2 ${isSuccess ? dataOneSubmissions.status==='' ? '' : 'hidden' : ''}`,
+			key: 'operation',
+			render: (_: any, record: Item) => {
+				const editable = isEditing(record)
+				return editable ? (
+					<div className="flex justify-around items-center w-[60px]">
+						<Typography.Link
+							onClick={() => save(record.key)}
+							style={{ marginRight: 8 }}
+						>
+							<CheckOutlined style={{ color: '#75a4d3' }} />
+						</Typography.Link>
+						<Popconfirm
+							title="Вы действительно хотите отменить действие?"
+							onConfirm={cancel}
+						>
+							<CloseOutlined style={{ color: '#75a4d3' }} />
+						</Popconfirm>
+					</div>
+				) : (
+					<div className="flex justify-around items-center  w-[60px]">
+						<Typography.Link
+							disabled={editingKey !== ''}
+							onClick={() => edit(record)}
+						>
+							<EditSvg />
+						</Typography.Link>
+						{/* <Popconfirm title="Вы действительно хотите удалить?" onConfirm={deleteRow}>
+                  <a><DeleteRedSvg/></a>
+              </Popconfirm> */}
+					</div>
+				)
+			}
+		}
 	]
 
+	const items: DescriptionsProps['items'] = [
+		{
+		  key: '1',
+		  label: 'Подразделение',
+		  children: isSuccess ? dataOneSubmissions.subdivision : '',
+		},
+		{
+		  key: '2',
+		  label: 'Наименование специальности',
+		  children: 'Акушерство',
+		},
+		{
+		  key: '3',
+		  label: 'Профиль',
+		  children: 'Акушер',
+		},
+		{
+		  key: '4',
+		  label: 'Форма обучения',
+		  children: 'Очная',
+		},
+		{
+		  key: '5',
+		  label: 'Курс',
+		  children: '1',
+		},
+		{
+			key: '5',
+			label: 'Тип',
+			children: '1',
+		},
+		{
+			key: '6',
+			label: 'Тема',
+			children:  isSuccess ? dataOneSubmissions.status : '',
+		},
+		{
+			key: '7',
+			label: 'Статус',
+			children:  isSuccess ? dataOneSubmissions.theme : '',
+		},
+	];
 
 	const mergedColumns: TableProps['columns'] = columns.map(col => {
 		// @ts-ignore
@@ -442,6 +351,7 @@ export const EditRepresentation = () => {
 		}
 	})
 
+
 	const handleSearch = (
 		selectedKeys: string[],
 		confirm: FilterDropdownProps['confirm'],
@@ -450,6 +360,18 @@ export const EditRepresentation = () => {
 		confirm()
 		setSearchText(selectedKeys[0])
 		setSearchedColumn(dataIndex)
+	}
+
+	const downloadFile = () => {
+		if (dataGetDocRepresentation) {
+			const link = document.createElement('a')
+			link.href = dataGetDocRepresentation
+			link.setAttribute('download', 'downloaded-file.docx')
+			document.body.appendChild(link)
+			link.click()
+
+			// window.URL.revokeObjectURL(dataBlob)
+		}
 	}
 
 	const handleReset = (clearFilters: () => void) => {
@@ -536,45 +458,6 @@ export const EditRepresentation = () => {
 			: []
 	}
 
-	function translateColumnsIntoRussia({ isPrint }: { isPrint?: boolean }) {
-		const newData: any = []
-		// const recordCompressedWithoutUndefinedElem = dataCreate.filter((elem:any) => elem !== undefined)
-		const dataMock = [
-			{
-				specialityName: 'test',
-				practiceKind: 'тест',
-				dateFilling: '2021.09.10'
-			}
-		]
-		for (let elem of dataMock) {
-			const newObj = {
-				'Шифр и наименование специальности': elem.specialityName,
-				'Дата заполнения': dayjs(elem.dateFilling).format('YYYY.MM.DD'),
-				'Вид практики': elem.practiceKind
-			}
-
-			newData.push(newObj)
-		}
-
-		return newData
-	}
-
-	const print = () => {
-		function properties() {
-			return [
-				'Шифр и наименование специальности',
-				'Дата заполнения',
-				'Вид практики'
-			]
-		}
-		printJS({
-			printable: translateColumnsIntoRussia({ isPrint: true }),
-			properties: properties(),
-			type: 'json',
-			style: 'body {font-size: 10px}'
-		})
-	}
-
 	const edit = (record: Partial<Item> & { key: React.Key }) => {
 		form.setFieldsValue({ name: '', age: '', address: '', ...record })
 		setEditingKey(record.key)
@@ -585,33 +468,11 @@ export const EditRepresentation = () => {
 		setEditingKey('')
 	}
 
-	const deleteRow = () => {}
-	const formatDateRange = (dateRange: any) => {
-		console.log('dateRange', dateRange)
-		if (
-			dateRange !== null &&
-			Array.isArray(dateRange) &&
-			dateRange.length === 2
-		) {
-			const startDate = dayjs(dateRange[0])
-			const endDate = dayjs(dateRange[1])
-
-			if (startDate.isValid() && endDate.isValid()) {
-				return `${startDate.format('DD.MM.YYYY')} - ${endDate.format(
-					'DD.MM.YYYY'
-				)}`
-			} else {
-				return 'Неверный формат даты'
-			}
-		}
-		return '' // Возвращает пустую строку, если dateRange не является массивом или если длина массива не равна 2
-	}
-
 	const save = async (key: React.Key) => {
 		try {
 			const row = (await form.validateFields()) as Item
 
-			const newData = [...data]
+			const newData = [...fullTable]
 			const index = newData.findIndex(item => key === item.key)
 			if (index > -1) {
 				const item = newData[index]
@@ -621,6 +482,7 @@ export const EditRepresentation = () => {
 				})
 				setData(newData)
 				setTableData(newData)
+				setFullTable(newData)
 				setEditingKey('')
 				console.log('1', newData[index])
 			} else {
@@ -628,46 +490,25 @@ export const EditRepresentation = () => {
 				newData.push(row)
 				setData(newData)
 				setTableData(newData)
+				setFullTable(newData)
 				setEditingKey('')
 			}
 		} catch (errInfo) {
 			console.log('Validate Failed:', errInfo)
 		}
 	}
-	const items: DescriptionsProps['items'] = [
-		{
-		  key: '1',
-		  label: 'Подразделение',
-		  children: isSuccess ? dataOneSubmissions.subdivision : '',
-		},
-		{
-		  key: '2',
-		  label: 'Наименование специальности',
-		  children: 'Акушерство',
-		},
-		{
-		  key: '3',
-		  label: 'Профиль',
-		  children: 'Акушер',
-		},
-		{
-		  key: '4',
-		  label: 'Форма обучения',
-		  children: 'Очная',
-		},
-		{
-		  key: '5',
-		  label: 'Курс',
-		  children: '1',
-		},
-		{
-			key: '5',
-			label: 'Тип',
-			children: '1',
-		},
-		
-	  ];
 
+	const editData = ()=>{
+		const arrayT: any = []
+		const obj = arrayT.map((item:any)=>{
+			return {
+				students: fullTable.map(({key,...rest}:any)=>rest),
+				id: dataOneSubmissions.id,
+				theme: dataOneSubmissions.theme,
+			}
+		})
+		editSumbissions(obj)
+	}
 
 
 	return (
@@ -689,50 +530,30 @@ export const EditRepresentation = () => {
 				</Col>
 			</Row>
 			<Descriptions className='mt-8'  items={items} />
-			
-			{/* {selectedPractice ? (
-				<Row className='items-end'>
-					<Col span={12} flex="50%" className="mt-4 mobileFirst">
-					<Radio.Group defaultValue="compressedView" buttonStyle="solid">
-						<Radio.Button value="compressedView" className="!rounded-l-full" onClick={()=>setVisiting(false)}>
-							Невыездная практика
-						</Radio.Button>
-						<Radio.Button value="tableView" className="!rounded-r-full" onClick={()=>setVisiting(true)}>
-							Выездная практика
-						</Radio.Button>
-					</Radio.Group>
+			<Row className="mt-4 mb-6 flex  ">
+				<Col span={12} >
+					<div>
+						<Space>
+							<Button onClick={downloadFile} loading={isLoadingDocRepesentation} disabled={isLoadingDocRepesentation}>
+								<VerticalAlignBottomOutlined /> Скачать
+							</Button>
+						</Space>
+					</div>
 				</Col>
+				{isSuccess && dataOneSubmissions.theme==='' ?
 				<Col span={7} offset={5}>
 					<Space className="w-full flex-row-reverse">
 						<Button
 							type="primary"
 							className="!rounded-full"
 							onClick={() => {
-								
+								editData()
 							}}
 						>
-							Добавить
+							Сохранить
 						</Button>
 					</Space>
-				</Col>
-				</Row>
-			) : (
-				''
-			)} */}
-			<Row className="mt-4 mb-6 flex  ">
-				<Col span={12} >
-					<div>
-						<Space>
-							<Button >
-								<VerticalAlignBottomOutlined /> Скачать
-							</Button>
-							{/* <Button disabled={isLoadingBlob} onClick={print}>
-								<PrinterOutlined /> Печать
-							</Button> */}
-						</Space>
-					</div>
-				</Col>
-				
+				</Col> : ''}
 			</Row>
 				<>
 					<Row className="mt-4">
@@ -747,7 +568,8 @@ export const EditRepresentation = () => {
 										}
 									}}
 									bordered
-									dataSource={tableData ? tableData : []}
+									dataSource={fullTable}
+									
 									columns={mergedColumns}
 									rowClassName="editable-row"
 									pagination={false}
@@ -756,8 +578,7 @@ export const EditRepresentation = () => {
 							</Form>
 						</Col>
 					</Row>
-				</>
-			
+				</>	
 		</section>
 	)
 }

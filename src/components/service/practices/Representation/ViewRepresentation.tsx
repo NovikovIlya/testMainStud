@@ -456,7 +456,6 @@ export const ViewRepresentation = () => {
 						}}
 					/>
 				</Col>
-        
 			</Row>
 			<Row gutter={[16, 16]} className="mt-4 flex items-center">
 				<Col span={5} >
@@ -473,7 +472,6 @@ export const ViewRepresentation = () => {
 						}}
 					/>
 				</Col>
-        
 			</Row>
 			<Row gutter={[16, 16]} className="mt-4 flex items-center">
 				<Col span={5} >
@@ -490,7 +488,6 @@ export const ViewRepresentation = () => {
 						}}
 					/>
 				</Col>
-        
 			</Row>
 			
 
@@ -570,7 +567,7 @@ export const ViewRepresentation = () => {
 			</Row>
 
 			 {/* Сортировка  */}
-			<Row gutter={[16, 16]} className="mt-4">
+			{/* <Row gutter={[16, 16]} className="mt-4">
 				<Col span={7} offset={17}>
 					<div className={'flex gap-2 items-center'}>
 						<span className={'mr-2'}>Сортировка</span>
@@ -588,7 +585,7 @@ export const ViewRepresentation = () => {
 						/>
 					</div>
 				</Col>
-			</Row>
+			</Row> */}
 
 			<Row className="mt-4">
 				<Col flex={'auto'}>

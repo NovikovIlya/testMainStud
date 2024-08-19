@@ -9,6 +9,8 @@ import i18next from 'i18next'
 
 import { logOut, setCredentials } from '../reducers/authSlice'
 
+
+
 const baseQuery = fetchBaseQuery({
 	baseUrl: 'https://newlk.kpfu.ru/',
 	prepareHeaders(headers, { getState }) {

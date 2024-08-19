@@ -172,7 +172,13 @@ export const individualTasks = apiSlice.injectEndpoints({
                 body: obj
             }),
             invalidatesTags:['Practice']
-        })
+        }),
+        isPeopleInGroup: builder.query<any, any>({
+            query: (group) => ({
+                url: `services/api-practices/kpfu/department-directors?subdivisionId=${group}`,
+                method: 'GET',
+            })
+        }),
 
     })
 })
@@ -195,5 +201,6 @@ export const {
     useGetPracticeOneQuery,
     useUpdatePracticeOneMutation,
     useGetPracticeTypeForPracticeQuery,
-    useGetSubdivisionForPracticeQuery
+    useGetSubdivisionForPracticeQuery,
+    useIsPeopleInGroupQuery
 } = individualTasks

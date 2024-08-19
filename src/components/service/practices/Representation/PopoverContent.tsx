@@ -8,7 +8,7 @@ import { DeleteRedSvg } from '../../../../assets/svg/DeleteRedSvg'
 import { Load } from '../../../../assets/svg/Load'
 import { PrintSvg } from '../../../../assets/svg/PrintSvg'
 import { ColorBg, WrapperButton } from '../popover/WrapperButton'
-import { useDeleteSubmissionMutation } from '../../../../store/api/practiceApi/representation'
+import { useDeleteSubmissionMutation, useGetDocRepresentationQuery } from '../../../../store/api/practiceApi/representation'
 
 interface Props {
 	recordFullAll?: any
@@ -19,6 +19,7 @@ interface Props {
 
 export const PopoverContent = ({recordFull,recordFullAll,setRecordFull,setSelectedFieldFull}: Props) => {
 	const [deleteRepresentation,{}] = useDeleteSubmissionMutation()
+	const {data:dataGetDocRepresentation,isLoading:isLoadingDocRepesentation} = useGetDocRepresentationQuery(null)
 	// const [deletePractise] = useDeletePractiseSeveralMutation()
 	console.log('recordFull', recordFull)
 	function translateColumnsIntoRussia({ isPrint }: { isPrint: boolean }) {
@@ -76,14 +77,26 @@ export const PopoverContent = ({recordFull,recordFullAll,setRecordFull,setSelect
 
 		return newObj
 	}
+	const downloadFile = () => {
+		if (dataGetDocRepresentation) {
+			const link = document.createElement('a')
+			link.href = dataGetDocRepresentation
+			link.setAttribute('download', 'downloaded-file.docx')
+			document.body.appendChild(link)
+			link.click()
+
+			// window.URL.revokeObjectURL(dataBlob)
+		}
+	}
 
 	function downLoad() {
-		const ws = utils.json_to_sheet([
-			translateColumnsIntoRussia({ isPrint: false })
-		])
-		const wb = utils.book_new()
-		utils.book_append_sheet(wb, ws, 'Data')
-		writeFileXLSX(wb, 'File.xlsx')
+		// const ws = utils.json_to_sheet([
+		// 	translateColumnsIntoRussia({ isPrint: false })
+		// ])
+		// const wb = utils.book_new()
+		// utils.book_append_sheet(wb, ws, 'Data')
+		// writeFileXLSX(wb, 'File.xlsx')
+		downloadFile()
 	}
 
 	function printTable() {
@@ -147,8 +160,8 @@ export const PopoverContent = ({recordFull,recordFullAll,setRecordFull,setSelect
 
 	return (
 		<div className={'flex flex-col gap-2 '} onClick={(e) => { e.stopPropagation()}} >
-			<WrapperButton color={ColorBg.BLUEF2} onClick={downLoad}>
-				{/* {isLoadingBlob ? <Spin/> :''} */}
+			<WrapperButton color={ColorBg.BLUEF2} onClick={downLoad} disabled={isLoadingDocRepesentation}>
+				{isLoadingDocRepesentation ? <Spin/> :''}
 				<Load />
 				<span>Скачать</span>
 			</WrapperButton>

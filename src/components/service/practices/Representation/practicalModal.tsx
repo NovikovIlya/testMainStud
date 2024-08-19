@@ -1,7 +1,7 @@
 import {
   Col, Modal,
   Row,
-  Select, Table,
+  Select, Spin, Table,
   Typography
 } from 'antd'
 
@@ -11,15 +11,16 @@ import {
 
 import { EditableCell } from './EditableCell'
 import { useGetPracticesAllQuery } from '../../../../store/api/practiceApi/individualTask'
+import { LoadingOutlined } from '@ant-design/icons'
 
 const filterSpecialization: FilterType[] = [
 	{ value: 'Все', label: 'Все' },
 	{ value: '1', label: '1' }
 ]
 
-const PracticeModal = ({isModalOpenOne,handleOkOne,handleCancelOne,setFilter,filter,handleRowClick,tableRef, tableData}: any) => {
- 
- const columnsRepresentation = [
+const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancelOne,setFilter,filter,handleRowClick,tableRef, tableData}: any) => {
+	const {data:dataAllPractise,isLoading} = useGetPracticesAllQuery(null)
+ 	const columnsRepresentation = [
 	{
 		key: 'specialtyName',
 		dataIndex: 'specialtyName',
@@ -41,13 +42,13 @@ const PracticeModal = ({isModalOpenOne,handleOkOne,handleCancelOne,setFilter,fil
 		title: 'Номер группы',
 		className: 'text-xs !p-2'
 	},
-	{
-		key: 'level',
-		dataIndex: 'level',
-		title: 'Уровень образования',
-		className: 'text-xs !p-2',
-		editable: true
-	},
+	// {
+	// 	key: 'level',
+	// 	dataIndex: 'level',
+	// 	title: 'Уровень образования',
+	// 	className: 'text-xs !p-2',
+	// 	editable: true
+	// },
 	{
 		key: 'course',
 		dataIndex: 'courseNumber',
@@ -65,7 +66,13 @@ const PracticeModal = ({isModalOpenOne,handleOkOne,handleCancelOne,setFilter,fil
 	//     </Space>
 	//   ),
 	// },
-]
+	]
+	const filteredData = dataAllPractise?.filter(record => {
+		console.log('record', record)
+		return record.id !== selectedPractice
+	});
+
+	console.log('filteredData', filteredData)
   return (
 		<Modal
 			footer={null}
@@ -159,7 +166,7 @@ const PracticeModal = ({isModalOpenOne,handleOkOne,handleCancelOne,setFilter,fil
 					/>
 				</Col>
 			</Row>
-			<Row gutter={[8, 16]} className="mt-4  w-full flex items-center">
+			{/* <Row gutter={[8, 16]} className="mt-4  w-full flex items-center">
 				<Col span={4}>
 					<Typography.Text>Уровень образования</Typography.Text>
 				</Col>
@@ -177,7 +184,7 @@ const PracticeModal = ({isModalOpenOne,handleOkOne,handleCancelOne,setFilter,fil
 						}}
 					/>
 				</Col>
-			</Row>
+			</Row> */}
 			<Row gutter={[8, 16]} className="mt-4 mb-12 w-full flex items-center">
 				<Col span={4}>
 					<Typography.Text>Курс</Typography.Text>
@@ -197,7 +204,7 @@ const PracticeModal = ({isModalOpenOne,handleOkOne,handleCancelOne,setFilter,fil
 					/>
 				</Col>
 			</Row>
-
+			{isLoading ? <Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}/> : 
 			<Table
 				onRow={record => ({
 					onClick: () => handleRowClick(record)
@@ -209,12 +216,14 @@ const PracticeModal = ({isModalOpenOne,handleOkOne,handleCancelOne,setFilter,fil
 					}
 				}}
 				bordered
-				dataSource={tableData}
+				dataSource={filteredData}
 				columns={columnsRepresentation}
-				rowClassName="editable-row"
-				pagination={false}
+				// rowClassName={record => selectedPractice===record.key ? "hide" : ''}
+				pagination={dataAllPractise?.length < 3 ? false : {
+					pageSize: 3,
+				}}
 				rowKey="id"
-			/>
+			/>}
 		</Modal>
 	)
 }

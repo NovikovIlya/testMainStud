@@ -43,6 +43,16 @@ export const representationService = apiSlice.injectEndpoints({
             },
             invalidatesTags: ['Submissions'],  
         }),
+        editSubmission: builder.mutation<any, any>({
+            query: (body) => {
+                return {
+                    url: `/services/api-practices/submissions`,
+                    method: 'PUT',
+                    body:body
+                }
+            },
+            invalidatesTags: ['Submissions'],  
+        }),
         deleteSubmission: builder.mutation<any, any>({
             query: (id) => {
                 return {
@@ -51,6 +61,20 @@ export const representationService = apiSlice.injectEndpoints({
                 }
             },
             invalidatesTags: ['Submissions']
+        }),
+        getDocRepresentation: builder.query<any, any>({
+            query: (id) => {
+                return {
+                    url: `/services/api-practices/practice-schedule/doc?scheduleId=${id}`,
+                    method: 'GET',
+                    responseHandler: async (response) => {
+                        const blob = await response.blob();
+                        return window.URL.createObjectURL(blob); 
+                    },
+                }
+            },
+            providesTags: ['Schedule'],
+            keepUnusedDataFor:1,
         }),
 
         
@@ -62,5 +86,7 @@ export const {
     useAddSubmissionMutation,
     useGetStudentsQuery,
     useGetOneSubmissionsQuery,
-    useDeleteSubmissionMutation
+    useDeleteSubmissionMutation,
+    useGetDocRepresentationQuery,
+    useEditSubmissionMutation
 } = representationService

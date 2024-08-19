@@ -17,7 +17,7 @@ import dayjs from "dayjs";
 import { useLocation, useNavigate } from "react-router-dom";
 import { OptionsNameSpecialty } from "../roster/registerContracts/RegisterContracts";
 import { useGetSpecialtyNamesForPractiseQuery } from "../../../../store/api/practiceApi/roster";
-import { useGetCompentencesQuery, useGetDepartmentDirectorsQuery, useGetGroupNumbersQuery, useGetPracticeKindQuery, useGetPracticeOneQuery, useGetPracticeTypeForPracticeQuery, useGetSubdivisionForPracticeQuery, useGetTasksForPracticeQuery, useUpdatePracticeOneMutation } from '../../../../store/api/practiceApi/individualTask';
+import { useGetCompentencesQuery, useGetDepartmentDirectorsQuery, useGetGroupNumbersQuery, useGetPracticeKindQuery, useGetPracticeOneQuery, useGetPracticeTypeForPracticeQuery, useGetSubdivisionForPracticeQuery, useGetTasksForPracticeQuery, useIsPeopleInGroupQuery, useUpdatePracticeOneMutation } from '../../../../store/api/practiceApi/individualTask';
 import { processingOfDivisions } from '../../../../utils/processingOfDivisions';
 import { useGetCafDepartmentsQuery } from '../../../../store/api/practiceApi/practical';
 import { useAppDispatch } from '../../../../store';
@@ -55,38 +55,6 @@ const optionsCourse: FilterType[] = [
         label: '6'
     }
 ]
-const optionsSemester: FilterType[] = [
-
-	{
-		value: '1',
-		label: '1'
-	},
-	{
-		value: '2',
-		label: '2'
-	},
-	{
-		value: '3',
-		label: '3'
-	},
-	{
-		value: '4',
-		label: '4'
-	},
-	{
-		value: '5',
-		label: '5'
-	},
-	{
-		value: '6',
-		label: '6'
-	},
-	{
-		value: '7',
-		label: '7'
-	}
-]
-
 
 
 export const EditPractical = () => {
@@ -124,8 +92,9 @@ export const EditPractical = () => {
     const {data: dataCaf} = useGetCafDepartmentsQuery(subDivisionId,{skip: !subDivisionId})
     const {data: dataGroupNumbers} = useGetGroupNumbersQuery(subDivisionId, {skip: !subDivisionId})
     const {data: dataPraciseKind, isSuccess: isSuccesPractiseKind} = useGetPracticeKindQuery(subDivisionId, {skip: !subDivisionId})
-    const{data:dataSubdivisonForPractise} = useGetSubdivisionForPracticeQuery()
+    const {data:dataSubdivisonForPractise} = useGetSubdivisionForPracticeQuery()
     const {data:dataTask, isSuccess:isSuccessTask} = useGetTasksForPracticeQuery(arqTask,{skip:!arqTask})
+    const {data:dataIsPeopleInGroup} = useIsPeopleInGroupQuery(form.getFieldValue('groupNumber'))
     const [updateForm,{isLoading:isLoadingSendForm}] = useUpdatePracticeOneMutation()
     const [copyDataCompetences, setCopyDataCompetences] = useState<any>([])
     const [flagCompetence,setFlagCompentence] = useState(false)
@@ -146,19 +115,9 @@ export const EditPractical = () => {
 		
 	},[dataCompetences, dataOnePractise?.competence, flagCompetence])
 
-    // useEffect(()=>{
-    //     if(isSuccesOnePractise){
-    //         setCopyDataCompetences(dataOnePractise?.competence ? dataOnePractise.competence : [])
-           
-    //     }
-
-	// },[dataOnePractise?.competences,isSuccesOnePractise])
-
-
     useEffect(()=>{
         setSubDevisionId(dataOnePractise?.subdivisionId)
     },[isSuccesOnePractise])
-
 
     useEffect(()=>{
         const idSubdevision = dataDepartments?.find((item:any)=>{
@@ -191,7 +150,6 @@ export const EditPractical = () => {
         setObjType(objTypeZ)
     }
     },[ form,  dataNameSpecialty,isSuccessDepartments,isSuccessNameSpecialty])
-
 
     useEffect(() => {
         if (isSuccessDepartments && isSuccessNameSpecialty) {
@@ -233,7 +191,6 @@ export const EditPractical = () => {
             form.setFieldValue('director','')
             form.setFieldValue('department','')    
             form.setFieldValue('practiceKind','')
-            
             }
             // проверить на работоспособность кода
             else{
@@ -245,8 +202,6 @@ export const EditPractical = () => {
     // заполнения объекта для компетенции
     useEffect(()=>{
         if(isSuccesOnePractise && isSuccesPractiseKind&&isSuccessNameSpecialty ){
-           
-           
             setObjectForCompetences({
                 specialityId: dataNameSpecialty?.find((elem:any) => {
                     if (elem.value === form.getFieldValue('specialityName')) {
@@ -260,9 +215,7 @@ export const EditPractical = () => {
                     }
                 })?.id,
                 startYear:form.getFieldValue('academicYear')[0].$y
-
             })
-          
         }   
     },[dataNameSpecialty, isSuccesOnePractise,dataPraciseKind,form,pickKund,dataPraciseKind,fullDate])
 
@@ -327,6 +280,11 @@ export const EditPractical = () => {
 
    
     function onFinish(values: any) {
+        // if(dataIsPeopleInGroup){
+        //     dispatch(showNotification({ message:
+        //                 'В выбранной группе нет студентов, пожалуйста выберите другую группу', type: 'warning'}))
+        //     return
+        // }
         const directorId = dataDepartmentDirector?.find((elem:any) => {
             if (elem.value === values.director) {
                 return elem
@@ -355,20 +313,6 @@ export const EditPractical = () => {
         })
     
         const [startDate, endDate] = form.getFieldValue('academicYear');
-    
-        // const dateString = form.getFieldValue('startStudy').$d
-        // const date = new Date(dateString)
-        // const year = date.getFullYear();
-        // const month = String(date.getMonth() + 1).padStart(2, '0');
-        // const day = String(date.getDate()).padStart(2, '0');
-        // const formattedDate = `${year}.${month}.${day}`;
-
-        // const dateStringEnd = form.getFieldValue('endStudy').$d
-        // const dateEnd = new Date(dateStringEnd)
-        // const yearEnd = dateEnd.getFullYear();
-        // const monthEnd = String(dateEnd.getMonth() + 1).padStart(2, '0');
-        // const dayEnd = String(dateEnd.getDate()).padStart(2, '0');
-        // const formattedDateEnd = `${yearEnd}.${monthEnd}.${dayEnd}`;
 
         const mother = dataSubdivisonForPractise?.find((item:any)=>{    
             if(form.getFieldValue('subDivision').includes('-')){
@@ -449,13 +393,11 @@ export const EditPractical = () => {
         setPickDate([value[0].$y,value[1].$y])
         setFullDate(value)
         setFlagCompentence(true)
-     
     }
 
     const onChangeTypePick = (value:any)=>{
         setPickType(value)
         setFlagCompentence(true)
-
     }
 
     const handleChange = (value: string) => {
@@ -483,8 +425,8 @@ export const EditPractical = () => {
    }
 
    const handleCourse = (value:any)=>{
-    setPickCourse(value)
-    form.setFieldValue('semester', '')
+        setPickCourse(value)
+        form.setFieldValue('semester', '')
     }
 
 
@@ -531,9 +473,7 @@ export const EditPractical = () => {
 	})()
 
     const deleteCompetence = (item: any) => {
-	
 		const newCompetences = copyDataCompetences.filter((elem:any) => elem.id!== item.id)
-
 		setCopyDataCompetences(newCompetences)
 	}
 
@@ -638,7 +578,7 @@ export const EditPractical = () => {
                             </Form.Item>
                         </Col>
                     </Row>
-                
+
                     <Row gutter={[16, 16]}>
                         <Col xs={24} sm={24} md={18} lg={16} xl={12}>
                             <Form.Item
@@ -661,6 +601,9 @@ export const EditPractical = () => {
                                 name={'groupNumber'}
                                 label={'Номер группы'}>
                                 <Select
+                                    showSearch
+                                    optionFilterProp="label"
+
                                     size="large"
                                     popupMatchSelectWidth={false}
                                     className="w-full"
@@ -675,7 +618,6 @@ export const EditPractical = () => {
                             </Form.Item>
                         </Col>
                     </Row>
-
                     <Row gutter={[16, 16]}>
                         <Col xs={24} sm={24} md={18} lg={8} xl={6}>
                             <Form.Item
@@ -706,9 +648,7 @@ export const EditPractical = () => {
                             </Form.Item>
                         </Col>
                     </Row>
-                
                     <Row gutter={[16, 16]}>
-                        
                         <Col xs={24} sm={24} md={18} lg={8} xl={6}>
                             <Form.Item
                                 rules={[{required: true}]}
@@ -736,10 +676,8 @@ export const EditPractical = () => {
                                     onChange={onChangePickerPeriodPractise}
                                     
                                 />
-
                             </Form.Item>
                         </Col>
-                      
                     </Row>
                     <Row gutter={[16, 16]}>
                         <Col xs={24} sm={24} md={18} lg={8} xl={6}>
@@ -755,13 +693,9 @@ export const EditPractical = () => {
                                 />
                             </Form.Item>
                         </Col>
-                   
                     </Row>
-
                     <Row gutter={[16, 16]}>
-                        
                     </Row>
-
                     <Row gutter={[16, 16]} className={'mt-4'}>
                         <Col xs={24} sm={24} md={18} lg={16} xl={12}>
                             <Form.Item

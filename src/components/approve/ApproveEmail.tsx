@@ -14,8 +14,15 @@ import { CardForm } from './cardForm'
 export const ApproveEmail = () => {
 	const [searchParams] = useSearchParams()
 	const navigate = useNavigate()
-	const [approve] = useApproveEmailMutation()
+	const [approve,{data:dataApprove,isSuccess :isSuccesAprove}] = useApproveEmailMutation()
 	const dispatch = useDispatch()
+
+	useEffect(()=>{
+		if(isSuccesAprove){
+			localStorage.setItem('refresh', JSON.stringify(dataApprove.refreshToken))
+		}
+	},[isSuccesAprove])
+
 	useEffect(() => {
 		try {
 			const fetchData = async () => {

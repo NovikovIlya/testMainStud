@@ -2,16 +2,18 @@ import { CheckOutlined, CloseOutlined, LoadingOutlined } from '@ant-design/icons
 import {
 	Button,
 	Col,
+	Descriptions,
 	Form,
 	Input, Popconfirm,
 	Radio,
 	Result,
 	Row, Space,
 	Spin,
+	Steps,
 	Table,
 	Typography
 } from 'antd'
-import type { TableProps } from 'antd'
+import type { DescriptionsProps, TableProps } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -22,8 +24,10 @@ import { Item } from '../../../../models/representation'
 
 import { EditableCell } from './EditableCell'
 import PracticeModal from './practicalModal'
-import { useAddSubmissionMutation, useGetAllSubmissionsQuery, useGetStudentsQuery } from '../../../../store/api/practiceApi/representation'
+import { useAddSubmissionMutation, useGetAllSubmissionsQuery, useGetDocRepresentationQuery, useGetStudentsQuery } from '../../../../store/api/practiceApi/representation'
 import { useGetPracticesAllQuery } from '../../../../store/api/practiceApi/individualTask'
+import { showNotification } from '../../../../store/reducers/notificationSlice'
+import { useAppDispatch } from '../../../../store'
 
 const optionMock = [
 	{ value: '1', label: '1' },
@@ -103,7 +107,6 @@ export const CreateRepresentation = () => {
 		groupNumber: 'Все'
 	})
 	const [form] = Form.useForm()
-	const [data, setData] = useState(originData)
 	const [editingKey, setEditingKey] = useState('')
 	const isEditing = (record: Item) => record.key === editingKey
 	const [isModalOpenOne, setIsModalOpenOne] = useState(true)
@@ -115,10 +118,14 @@ export const CreateRepresentation = () => {
 	const [value, setValue] = useState(1);
 	const [theme,setTheme] = useState('')
 	const [sendSubmission,{}] = useAddSubmissionMutation()
-	const {data:dataGetStudents,isSuccess:isSuccessGetStudents} = useGetStudentsQuery(selectedPractice,{skip:!selectedPractice})
+	const {data:dataGetStudents,isSuccess:isSuccessGetStudents,isLoading:isLoadingStudents} = useGetStudentsQuery(selectedPractice,{skip:!selectedPractice})
 	const {data:dataAllSubmissions} = useGetAllSubmissionsQuery(selectedPractice,{skip:!selectedPractice})
 	const [fullTable,setFullTable] = useState<any>([])
-	const {data:dataAllPractise} = useGetPracticesAllQuery(selectedPractice,{skip:!selectedPractice})
+	const [fullSelectedPractise,setFullSelectedPractise] = useState<any>([])
+	const {data:dataAllPractise,isSuccess:isSuccessAllPractice} = useGetPracticesAllQuery(selectedPractice,{skip:!selectedPractice})
+	const [data, setData] = useState(fullTable)
+	const [step,setStep] = useState(0)
+	const dispatch = useAppDispatch()
 
 	useEffect(() => {
 		// if (isSuccessPractiseAll) {
@@ -129,112 +136,62 @@ export const CreateRepresentation = () => {
 		// }
 	}, [filter])
 
-	// const getColumnSearchProps = (dataIndex: any): GetColumnSearchProps => ({
-	// 	filterDropdown: ({
-	// 		setSelectedKeys,
-	// 		selectedKeys,
-	// 		confirm,
-	// 		clearFilters,
-	// 		close
-	// 	}) => (
-	// 		<div style={{ padding: 8 }} onKeyDown={e => e.stopPropagation()}>
-	// 			<Input
-	// 				ref={searchInput}
-	// 				placeholder={`Search ${dataIndex}`}
-	// 				value={selectedKeys[0]}
-	// 				onChange={e =>
-	// 					setSelectedKeys(e.target.value ? [e.target.value] : [])
-	// 				}
-	// 				onPressEnter={() =>
-	// 					handleSearch(selectedKeys as string[], confirm, dataIndex)
-	// 				}
-	// 				style={{ marginBottom: 8, display: 'block' }}
-	// 			/>
-	// 			<Space>
-	// 				<Button
-	// 					type="primary"
-	// 					onClick={() =>
-	// 						handleSearch(selectedKeys as string[], confirm, dataIndex)
-	// 					}
-	// 					icon={<SearchOutlined />}
-	// 					size="small"
-	// 					style={{ width: 90 }}
-	// 				>
-	// 					Искать
-	// 				</Button>
-	// 				<Button
-	// 					onClick={() => clearFilters && handleReset(clearFilters)}
-	// 					size="small"
-	// 					style={{ width: 90 }}
-	// 				>
-	// 					Сбросить
-	// 				</Button>
-	// 				{/* <Button
-    //         type="link"
-    //         size="small"
-    //         onClick={() => {
-    //           confirm({ closeDropdown: false });
-    //           setSearchText((selectedKeys as string[])[0]);
-    //           setSearchedColumn(dataIndex);
-    //         }}
-    //       >
-    //         Filter
-    //       </Button> */}
-	// 				{/* <Button
-    //         type="link"
-    //         size="small"
-    //         onClick={() => {
-    //           close();
-    //         }}
-    //       >
-    //         close
-    //       </Button> */}
-	// 			</Space>
-	// 		</div>
-	// 	),
-	// 	filterIcon: (filtered: boolean) => (
-	// 		<SearchOutlined style={{ color: filtered ? '#1677ff' : undefined }} />
-	// 	),
-	// 	onFilter: (value, record) =>
-	// 		record[dataIndex]
-	// 			.toString()
-	// 			.toLowerCase()
-	// 			.includes((value as string).toLowerCase()),
-	// 	onFilterDropdownOpenChange: visible => {
-	// 		if (visible) {
-	// 			setTimeout(() => searchInput.current?.select(), 100)
-	// 		}
-	// 	},
-	// 	render: text =>
-	// 		searchedColumn === dataIndex ? (
-	// 			<Highlighter
-	// 				highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
-	// 				searchWords={[searchText]}
-	// 				autoEscape
-	// 				textToHighlight={text ? text.toString() : ''}
-	// 			/>
-	// 		) : (
-	// 			text
-	// 		)
-	// })
+
+	console.log('ffff',fullTable)
+	console.log(fullSelectedPractise)
 	useEffect(()=>{
-		if(isSuccessGetStudents){
-			const newArray = dataGetStudents.map((item:any)=>({
+		if(isSuccessGetStudents ){
+			const newArray = dataGetStudents?.map((item:any)=>({
 				name: item,
 				costForDay: null,
 				arrivingCost: null,
 				livingCost: null,
 				place: null,
 				category: null,
-				departmentDirector: dataAllPractise[0].departmentDirector,
-				groupNumber: dataAllPractise[0].groupNumber
+				departmentDirector: dataAllPractise?.[0].departmentDirector,
+				groupNumber: dataAllPractise?.[0].groupNumber
 			}))
-			setFullTable(newArray)
+			setFullTable(newArray.map((item:any)=>({key: item.name, ...item})))
+			setStep(1)
 		}
 
-	},[isSuccessGetStudents])
+	},[isSuccessGetStudents,isSuccessAllPractice,dataGetStudents,dataAllPractise])
 
+	const items: DescriptionsProps['items'] = [
+		{
+		  key: '1',
+		  label: 'Подразделение',
+		  children: fullSelectedPractise ? fullSelectedPractise.subdivision : '',
+		},
+		{
+		  key: '2',
+		  label: 'Наименование специальности',
+		  children: fullSelectedPractise ? fullSelectedPractise.specialtyName : '',
+		},
 
+		{
+		  key: '4',
+		  label: 'Вид',
+		  children: fullSelectedPractise ? fullSelectedPractise.practiceKind : '',
+		},
+		{
+		  key: '5',
+		  label: 'Курс',
+		  children: fullSelectedPractise ? fullSelectedPractise.courseNumber : '',
+		},
+		{
+			key: '5',
+			label: 'Тип',
+			children: fullSelectedPractise ? fullSelectedPractise.practiceType : '',
+		},
+
+		{
+			key: '7',
+			label: 'Статус',
+			children:  'В ожидании',
+		},
+	];
+	
 	const columns = [
 		{
 			key: 'number',
@@ -244,16 +201,16 @@ export const CreateRepresentation = () => {
 			render: (text: any, record: any, index: any) => <div>{index + 1}</div>
 		},
 		{
-			key: 'student',
-			dataIndex: 'student',
+			key: 'nane',
+			dataIndex: 'name',
 			title: 'ФИО обучающегося',
 			name: 'ФИО обучающегося',
 			className: 'text-xs !p-2'
 		},
 
 		{
-			key: 'groupNumbers',
-			dataIndex: 'groupNumbers',
+			key: 'groupNumber',
+			dataIndex: 'groupNumber',
 			title: 'Номер группы',
 			className: 'text-xs !p-2'
 		},
@@ -265,35 +222,35 @@ export const CreateRepresentation = () => {
 			editable: true
 		},
 		{
-			key: 'FIO',
-			dataIndex: 'FIO',
+			key: 'departmentDirector',
+			dataIndex: 'departmentDirector',
 			title: 'ФИО руководителя от кафедры',
 			className: 'text-xs !p-2'
 		},
 		{
-			key: 'A',
-			dataIndex: 'A',
+			key: 'category',
+			dataIndex: 'category',
 			title: 'Категория',
 			className: `text-xs !p-2 ${visiting? '' : 'hidden'}`,
 			editable: true
 		},
 		{
-			key: 'F',
-			dataIndex: 'F',
+			key: 'costForDay',
+			dataIndex: 'costForDay',
 			title: 'Суточные (50 руб/сут)',
 			className: `text-xs !p-2 ${visiting? '' : 'hidden'}`,
 			editable: true
 		},
 		{
-			key: 'E',
-			dataIndex: 'E',
+			key: 'arrivingCost',
+			dataIndex: 'arrivingCost',
 			title: 'Проезд (руб)',
 			className: `text-xs !p-2 ${visiting? '' : 'hidden'}`,
 			editable: true
 		},
 		{
-			key: 'C',
-			dataIndex: 'C',
+			key: 'livingCost',
+			dataIndex: 'livingCost',
 			title: 'Оплата проживания (руб)',
 			className: `text-xs !p-2 ${visiting? '' : 'hidden'}`,
 			editable: true
@@ -368,26 +325,14 @@ export const CreateRepresentation = () => {
 						: col.dataIndex === 'selectKind'
 						? optionMockKind
 						: undefined,
-				rules: col.dataIndex === 'F' || col.dataIndex === 'E' || col.dataIndex === 'C' ? [] :  [{ required: true, message: `Заполните "${col.title}"!` }]
+				rules: col.dataIndex === 'place'  ? [{
+					required: true,
+					message: 'Поле обязательно для заполнения'}] : []
 			})
 		}
 	})
 
-	// const handleSearch = (
-	// 	selectedKeys: string[],
-	// 	confirm: FilterDropdownProps['confirm'],
-	// 	dataIndex: any
-	// ) => {
-	// 	confirm()
-	// 	setSearchText(selectedKeys[0])
-	// 	setSearchedColumn(dataIndex)
-	// }
-
-	// const handleReset = (clearFilters: () => void) => {
-	// 	clearFilters()
-	// 	setSearchText('')
-	// }
-
+	
 	function filterDataFull() {
 		function filterCourse(elem: any) {
 			if (filter.courseNumber === 'Все') {
@@ -477,33 +422,13 @@ export const CreateRepresentation = () => {
 		setEditingKey('')
 	}
 
-	const deleteRow = () => {}
-	// const formatDateRange = (dateRange: any) => {
-	
-	// 	if (
-	// 		dateRange !== null &&
-	// 		Array.isArray(dateRange) &&
-	// 		dateRange.length === 2
-	// 	) {
-	// 		const startDate = dayjs(dateRange[0])
-	// 		const endDate = dayjs(dateRange[1])
-
-	// 		if (startDate.isValid() && endDate.isValid()) {
-	// 			return `${startDate.format('DD.MM.YYYY')} - ${endDate.format(
-	// 				'DD.MM.YYYY'
-	// 			)}`
-	// 		} else {
-	// 			return 'Неверный формат даты'
-	// 		}
-	// 	}
-	// 	return '' // Возвращает пустую строку, если dateRange не является массивом или если длина массива не равна 2
-	// }
 
 	const save = async (key: React.Key) => {
 		try {
 			const row = (await form.validateFields()) as Item
 
-			const newData = [...data]
+			const newData = [...fullTable]
+			console.log('newData',newData)
 			const index = newData.findIndex(item => key === item.key)
 			if (index > -1) {
 				const item = newData[index]
@@ -511,24 +436,36 @@ export const CreateRepresentation = () => {
 					...item,
 					...row
 				})
-				setData(newData)
+				// setData(newData)
 				setTableData(newData)
+				setFullTable(newData)
 				setEditingKey('')
 				console.log('1', newData[index])
 			} else {
 				// если новая запись
 				newData.push(row)
-				setData(newData)
+				// setData(newData)
 				setTableData(newData)
+				setFullTable(newData)
 				setEditingKey('')
+				console.log('222222', newData[index])
 			}
 		} catch (errInfo) {
 			console.log('Validate Failed:', errInfo)
 		}
+		
 	}
+	useEffect(()=>{
+		if(isSuccessGetStudents && fullTable.length>0){
+			if(fullTable.every((item:any)=>item.place!==null)){
+				setStep(2)
+			}
+		}
+	},[fullTable,isSuccessGetStudents])
 
 	const hanldeSelectedPractise = (id: any) => {
 		setSelectedPractice(id)
+		setStep(1)
 		setIsModalOpenOne(false)
 	}
 
@@ -546,13 +483,19 @@ export const CreateRepresentation = () => {
 
 	const handleRowClick = (record: any) => {
 		hanldeSelectedPractise(record.id)
+		setFullSelectedPractise(record)
+
 	}
 
 	const onChange = (e: any) => {
 		setValue(e.target.value);
 	};
 
+
 	const sendData = ()=>{
+		if(fullTable.some((item:any)=>item.place===null)){
+			return dispatch(showNotification({ message: 'Для сохранения необходимо заполнить "Место прохождение практики', type: 'warning' }));
+		}
 		const tableDataStudent = fullTable.map((item:any)=>({
 			costForDay:item.costForDay, 
 			arrivingCost:item.arrivingCost,
@@ -562,13 +505,25 @@ export const CreateRepresentation = () => {
 			category:item.category
 		}))
 		const obj = {
-			id: selectedPractice,
+			practiceId: selectedPractice,
+			isWithDeparture: visiting ? true : false,
 			theme: theme,
 			students: tableDataStudent
 		}
-		sendSubmission(obj)
+		console.log('eeee',obj)
+		sendSubmission(obj).unwrap()
+			.then(()=>{nav('/services/practices/representation')})
+			.catch((error)=>{
+				    if(error.status === 409){
+			        dispatch(showNotification({ message: 'Такое представление уже имеется, создайте другое', type: 'error' }));
+			      }
+					console.log(error)
+			})
 	}
-	
+
+	const okayModal = ()=>{
+		showModalOne()
+	}
 	
 	return (
 		<section className="container">
@@ -588,24 +543,48 @@ export const CreateRepresentation = () => {
 					</Typography.Text>
 				</Col>
 			</Row>
-			<Row className="mt-4 flex items-center justify-end">
-				<Col span={12} className='justify-end flex'>
+			
+			<Row className="mt-4 flex items-center justify-between">
+				<Col span={12} className='justify-start flex'>
+				<Steps
+						
+						size="small"
+						current={step}
+						items={[
+						{
+							title: 'Выберите практику',
+						},
+						{
+							title: 'Выберите тип и заполните таблицу',
+						},
+						{
+							title: 'Сохраните представление',
+						},
+						]}
+					/>
+				</Col>
+				{!selectedPractice ? 
+				<Col span={24} className='justify-end flex'>
 					<div>
 						<Space>
 							{selectedPractice ? 
 							<Popconfirm
 								title="Редактирование"
 								description="Вы уверены, что хотите изменить практику? Все данные будут удалены."
-								onConfirm={showModalOne}
+								onConfirm={okayModal}
 								okText="Да"
 								cancelText="Нет"
-							><Button type="primary" >Изменить практику</Button></Popconfirm> : 
-							<Button type="primary" onClick={showModalOne}>Выбрать практику</Button>}
+							><Button  >Изменить практику</Button></Popconfirm> : 
+							<Button  onClick={showModalOne}>Выбрать практику</Button>}
 						</Space>
 					</div>
 				</Col>
+				: null}
+				
 			</Row>
-			{selectedPractice ? (
+			
+			{selectedPractice ? (<>
+				<Descriptions className='mt-8'  items={items} />
 				<Row className='items-end'>
 					{/* <Col span={12} flex="50%" className="mt-4 mobileFirst">
 						<Radio.Group defaultValue="compressedView" buttonStyle="solid">
@@ -625,22 +604,25 @@ export const CreateRepresentation = () => {
 							</Space>
 						</Radio.Group>
 				</Col>
-				<Col span={7} offset={5}>
-					<Space className="w-full flex-row-reverse">
-						<Button
-							type="primary"
-							className="!rounded-full"
-							onClick={() => {
-								sendData()
-							}}
-						>
-							Сохранить
-						</Button>
-					</Space>
+				<Col span={12} className='justify-end flex'>
+					<div>
+						<Space>
+							{selectedPractice ? 
+							<Popconfirm
+								title="Редактирование"
+								description="Вы уверены, что хотите изменить практику? Все данные будут удалены."
+								onConfirm={okayModal}
+								okText="Да"
+								cancelText="Нет"
+							><Button  >Изменить практику</Button></Popconfirm> : 
+							<Button  onClick={showModalOne}>Выбрать практику</Button>}
+						</Space>
+					</div>
 				</Col>
+				
 				</Row>
 				
-			) : ''}
+				</>) : ''}
 			{visiting ? <Row className='mt-4'>
 				<Col span={1} className='flex items-center'>
 					<label htmlFor="topic">Тема:</label>
@@ -798,9 +780,10 @@ export const CreateRepresentation = () => {
 					rowKey="id"
 				/>
 			</Modal> */}
-			<PracticeModal isModalOpenOne={isModalOpenOne} handleOkOne={handleOkOne} handleCancelOne={handleCancelOne} setFilter={setFilter} filter={filter} handleRowClick={handleRowClick}  tableRef={tableRef} tableData={tableData} />
+			<PracticeModal selectedPractice={selectedPractice} isModalOpenOne={isModalOpenOne} handleOkOne={handleOkOne} handleCancelOne={handleCancelOne} setFilter={setFilter} filter={filter} handleRowClick={handleRowClick}  tableRef={tableRef} tableData={tableData} />
 
-			{selectedPractice ? isSuccessGetStudents === false ? 
+			{selectedPractice ?
+			    isLoadingStudents ? 
 				<Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}/> :
 			(
 				<>
@@ -815,7 +798,7 @@ export const CreateRepresentation = () => {
 										}
 									}}
 									bordered
-									dataSource={dataAllPractise}
+									dataSource={fullTable}
 									columns={mergedColumns}
 									rowClassName="editable-row"
 									pagination={false}
@@ -824,9 +807,25 @@ export const CreateRepresentation = () => {
 							</Form>
 						</Col>
 					</Row>
+					<Row>
+					<Col span={2} className='mt-6' >
+					<Space className="w-full flex-row-reverse">
+						<Button
+							type="primary"
+							className="!rounded-full"
+							onClick={() => {
+								sendData()
+							}}
+						>
+							Сохранить
+						</Button>
+					</Space>
+				</Col>
+					</Row>
 				</>
 			) : (
-				<Result title="Выберите практику чтобы добавить представление" />
+				// <Result title="Выберите практику чтобы добавить представление" />
+				null
 			)}
 		</section>
 	)

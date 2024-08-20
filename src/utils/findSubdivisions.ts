@@ -1,5 +1,5 @@
-export const findSubdivisions = (subdivisionsAll,field) => {
-    return subdivisionsAll?.find(item=>{
+export const findSubdivisions = (subdivisionsAll:any,field:any) => {
+    return subdivisionsAll?.find((item:any)=>{
         if(field.includes('-')){
             if('responses' in item){
                 return item.responses?.find((elem:any)=> {

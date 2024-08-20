@@ -145,15 +145,24 @@ export const PopoverContent = ({recordFull,recordFullAll,setRecordFull,setSelect
 			// }
 			//deleteSeveralContracts(objIdList)
 			console.log('recordFull.id',recordFull.id)
-			deleteRepresentation(recordFull.id)
+			deleteRepresentation(recordFull.id).unwrap().then(()=>{
+	
+					const newArr = recordFullAll.filter((elem:any) => {
+						return elem.id !== recordFull.id
+					})
+					console.log('newArr',newArr)
+					setRecordFull(newArr)
+					
+			})
+		}
 			
-		}
+		
 
 
-		const listId = recordFull?.map((elem: any) => elem.id)
-		const listIdDelete = {
-			listIdDelete: listId
-		}
+		// const listId = recordFull?.map((elem: any) => elem.id)
+		// const listIdDelete = {
+		// 	listIdDelete: listId
+		// }
 		// deletePractise(listIdDelete)
 	}
 

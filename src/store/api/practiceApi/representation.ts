@@ -33,6 +33,66 @@ export const representationService = apiSlice.injectEndpoints({
             providesTags: ['Submissions'],
             keepUnusedDataFor:1,
         }),
+        getSubmissionsSubdevision: builder.query<any, void>({
+            query: () => {
+                return {
+                    url: `/services/api-practices/submissions/list/subdivisions`,
+                    method: 'GET'
+                }
+            },
+            providesTags: ['Submissions'],
+            keepUnusedDataFor:1,
+        }),
+        getSubmissionsSpecialties: builder.query<any, any>({
+            query: (subdivisionId ) => {
+                return {
+                    url: `/services/api-practices/submissions/list/specialties?subdivisionId=${subdivisionId}`,
+                    method: 'GET'
+                }
+            },
+            providesTags: ['Submissions'],
+            keepUnusedDataFor:1,
+        }),
+        getSubmissionsPracticeType: builder.query<any, any>({
+            query: (subdivisionId ) => {
+                return {
+                    url: `/services/api-practices/submissions/list/practice-types?subdivisionId=${subdivisionId}`,
+                    method: 'GET'
+                }
+            },
+            providesTags: ['Submissions'],
+            keepUnusedDataFor:1,
+        }),
+        getSubmissionsPracticeKind: builder.query<any, any>({
+            query: (subdivisionId ) => {
+                return {
+                    url: `/services/api-practices/submissions/list/practice-kinds?subdivisionId=${subdivisionId}`,
+                    method: 'GET'
+                }
+            },
+            providesTags: ['Submissions'],
+            keepUnusedDataFor:1,
+        }),
+        getSubmissionsDirector: builder.query<any, any>({
+            query: (subdivisionId ) => {
+                return {
+                    url: `/services/api-practices/submissions/list/department-directors?subdivisionId=${subdivisionId}`,
+                    method: 'GET'
+                }
+            },
+            providesTags: ['Submissions'],
+            keepUnusedDataFor:1,
+        }),
+        getSubmissionsAcademicYear: builder.query<any, any>({
+            query: (subdivisionId ) => {
+                return {
+                    url: `/services/api-practices/submissions/list/academic-years?subdivisionId=${subdivisionId}`,
+                    method: 'GET'
+                }
+            },
+            providesTags: ['Submissions'],
+            keepUnusedDataFor:1,
+        }),
         addSubmission: builder.mutation<any, any>({
             query: (body) => {
                 return {
@@ -88,5 +148,11 @@ export const {
     useGetOneSubmissionsQuery,
     useDeleteSubmissionMutation,
     useGetDocRepresentationQuery,
-    useEditSubmissionMutation
+    useEditSubmissionMutation,
+    useGetSubmissionsSubdevisionQuery,
+    useGetSubmissionsSpecialtiesQuery,
+    useGetSubmissionsPracticeTypeQuery,
+    useGetSubmissionsPracticeKindQuery,
+    useGetSubmissionsDirectorQuery,
+    useGetSubmissionsAcademicYearQuery
 } = representationService

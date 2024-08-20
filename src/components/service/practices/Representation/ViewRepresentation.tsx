@@ -6,17 +6,19 @@ import {
 	Space,
 	Spin,
 	Table,
-	Typography
+	Typography,Form
 } from 'antd'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { PointsSvg } from '../../../../assets/svg/PointsSvg'
 
 import { PopoverContent } from './PopoverContent'
 import { PopoverMain } from './PopoverMain'
-import { useGetAllSubmissionsQuery } from '../../../../store/api/practiceApi/representation'
+import { useGetAllSubmissionsQuery, useGetSubmissionsAcademicYearQuery, useGetSubmissionsDirectorQuery, useGetSubmissionsPracticeKindQuery, useGetSubmissionsPracticeTypeQuery, useGetSubmissionsSpecialtiesQuery, useGetSubmissionsSubdevisionQuery } from '../../../../store/api/practiceApi/representation'
 import { LoadingOutlined } from '@ant-design/icons'
+import { findSubdivisions } from '../../../../utils/findSubdivisions'
+
 
 const optionsNames = [
 	{ value: 'Все', label: 'Все' },
@@ -75,86 +77,87 @@ const typeOptions = [
 ]
 
 export const ViewRepresentation = () => {
-	const originDate = [
-		{
-			id:'asd',
-			key: '1',
-			subdivision: 'Представление 2',
-			specialtyName: '30.08.01 Акушерство и гинекология',
-			groupNumber: '16',
-			courseNumber: '1',
-			academicYear: '2',
-			period: '2',
-			practiceType: 'Производственная',
-			practiceKind: 'Технологическая',
-			place: 'Казань',
-			FIO: 'Петров И.И.',
-			visiting: 'Нет',
-			status: 'Ожидание'
-		},
-		{
-			id:'212314',
-			key: '3',
-			subdivision: 'Представление 1',
-			specialtyName: '30.08.01 Акушерство и гинекология',
-			groupNumber: '16',
-			courseNumber: '1',
-			academicYear: '2',
-			period: '2',
-			practiceType: 'Производственная',
-			practiceKind: 'Технологическая',
-			place: 'Казань',
-			FIO: 'Петров И.И.',
-			visiting: 'Нет',
-			status: 'Ожидание'
-		},
-		{
-			id:'12312',
-			key: '4',
-			subdivision: 'Представление 3',
-			specialtyName: '30.08.01 Акушерство и гинекология',
-			groupNumber: '16',
-			courseNumber: '1',
-			academicYear: '2',
-			period: '2',
-			practiceType: 'Производственная',
-			practiceKind: 'Технологическая',
-			place: 'Казань',
-			FIO: 'Петров И.И.',
-			visiting: 'Нет',
-			status: 'Ожидание'
-		},
-		{
-			key: '5',
-			subdivision: 'Представление 1',
-			specialtyName: '30.08.01 Акушерство и гинекология',
-			groupNumber: '16',
-			courseNumber: '1',
-			academicYear: '2',
-			period: '2',
-			practiceType: 'Производственная',
-			practiceKind: 'Технологическая',
-			place: 'Казань',
-			FIO: 'Петров И.И.',
-			visiting: 'Нет',
-			status: 'Ожидание'
-		},
-		{
-			key: '2',
-			subdivision: 'Представление 2',
-			specialtyName: '30.08.02 Иное',
-			groupNumber: '16',
-			course: '1',
-			academicYear: '2',
-			courseNumber: '1',
-			practiceType: 'Производственная',
-			practiceKind: 'Технологическая',
-			place: 'Москва',
-			FIO: 'Иванов И.И.',
-			visiting: 'Да',
-			status: 'Согласовано'
-		}
-	]
+	// const originDate = [
+	// 	{
+	// 		id:'asd',
+	// 		key: '1',
+	// 		subdivision: 'Представление 2',
+	// 		specialtyName: '30.08.01 Акушерство и гинекология',
+	// 		groupNumber: '16',
+	// 		courseNumber: '1',
+	// 		academicYear: '2',
+	// 		period: '2',
+	// 		practiceType: 'Производственная',
+	// 		practiceKind: 'Технологическая',
+	// 		place: 'Казань',
+	// 		FIO: 'Петров И.И.',
+	// 		visiting: 'Нет',
+	// 		status: 'Ожидание'
+	// 	},
+	// 	{
+	// 		id:'212314',
+	// 		key: '3',
+	// 		subdivision: 'Представление 1',
+	// 		specialtyName: '30.08.01 Акушерство и гинекология',
+	// 		groupNumber: '16',
+	// 		courseNumber: '1',
+	// 		academicYear: '2',
+	// 		period: '2',
+	// 		practiceType: 'Производственная',
+	// 		practiceKind: 'Технологическая',
+	// 		place: 'Казань',
+	// 		FIO: 'Петров И.И.',
+	// 		visiting: 'Нет',
+	// 		status: 'Ожидание'
+	// 	},
+	// 	{
+	// 		id:'12312',
+	// 		key: '4',
+	// 		subdivision: 'Представление 3',
+	// 		specialtyName: '30.08.01 Акушерство и гинекология',
+	// 		groupNumber: '16',
+	// 		courseNumber: '1',
+	// 		academicYear: '2',
+	// 		period: '2',
+	// 		practiceType: 'Производственная',
+	// 		practiceKind: 'Технологическая',
+	// 		place: 'Казань',
+	// 		FIO: 'Петров И.И.',
+	// 		visiting: 'Нет',
+	// 		status: 'Ожидание'
+	// 	},
+	// 	{
+	// 		key: '5',
+	// 		subdivision: 'Представление 1',
+	// 		specialtyName: '30.08.01 Акушерство и гинекология',
+	// 		groupNumber: '16',
+	// 		courseNumber: '1',
+	// 		academicYear: '2',
+	// 		period: '2',
+	// 		practiceType: 'Производственная',
+	// 		practiceKind: 'Технологическая',
+	// 		place: 'Казань',
+	// 		FIO: 'Петров И.И.',
+	// 		visiting: 'Нет',
+	// 		status: 'Ожидание'
+	// 	},
+	// 	{
+	// 		key: '2',
+	// 		subdivision: 'Представление 2',
+	// 		specialtyName: '30.08.02 Иное',
+	// 		groupNumber: '16',
+	// 		course: '1',
+	// 		academicYear: '2',
+	// 		courseNumber: '1',
+	// 		practiceType: 'Производственная',
+	// 		practiceKind: 'Технологическая',
+	// 		place: 'Москва',
+	// 		FIO: 'Иванов И.И.',
+	// 		visiting: 'Да',
+	// 		status: 'Согласовано'
+	// 	}
+	// ]
+	const [form] = Form.useForm()
 	const navigate = useNavigate()
 	const [filter, setFilter] = useState({
 		subdivision: 'Все',
@@ -169,42 +172,77 @@ export const ViewRepresentation = () => {
 	})
 	const [tableData, setTableData] = useState([])
 	const [selectedFieldsFull, setSelectedFieldFull] = useState<any>([])
-	const [dataTable, setDataTable] = useState<any>(originDate)
-	const {data:dataAllSubmissions,isLoading} = useGetAllSubmissionsQuery(null)
-	console.log('111',dataAllSubmissions)
+	const {data:dataAllSubmissions,isLoading,isSuccess:isSuccessSubAll} = useGetAllSubmissionsQuery(null)
+	const {data:dataSubmisisionsSubdevision} = useGetSubmissionsSubdevisionQuery()
+	const [selectSubdivisionId,setSelectSubdivisionId] = useState(null)
+	const {data:dataSubmissionSpecialty} = useGetSubmissionsSpecialtiesQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
+	const {data:dataSubmissionType} = useGetSubmissionsPracticeTypeQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
+	const {data:dataSubmissionKind} = useGetSubmissionsPracticeKindQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
+	const {data:dataSubmissionDirector} = useGetSubmissionsDirectorQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
+	const {data:dataSubmissionAcademicYear} = useGetSubmissionsAcademicYearQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
+	const [dataTable, setDataTable] = useState<any>([])
+
+	console.log('123',dataTable)
+	useEffect(()=>{
+		form.setFieldValue('practiceType', 'Все')
+		form.setFieldValue('practiceKind', 'Все')
+		form.setFieldValue('specialtyName', 'Все')
+		form.setFieldValue('FIO', 'Все')
+		form.setFieldValue('academicYear', 'Все')
+		setFilter({
+			...filter,
+			specialtyName: 'Все',
+			visiting: 'Все',
+			FIO: 'Все',
+			courseNumber: 'Все',
+			academicYear:'Все',
+			practiceType: "Все",
+			practiceKind: "Все",
+		
+		})
+	},[selectSubdivisionId])
+
+	
 	useEffect(() => {
-		// if (isSuccessPractiseAll) {
+		if (isSuccessSubAll) {
 		setDataTable(filterDataFull())
-		// }
-	}, [filter])
+		}
+	}, [filter,isSuccessSubAll])
+	console.log(
+		'filter,',
+		filter
+	)
 
 	function filterDataFull() {
 		function filterName(elem: any) {
 			if (filter.subdivision === 'Все') {
 				return elem
 			} else {
-				return elem.subdivision === filter.subdivision
+				return elem.practice.subdivision === filter.subdivision
 			}
 		}
 		function filterSpec(elem: any) {
 			if (filter.specialtyName === 'Все') {
 				return elem
 			} else {
-				return elem.specialtyName === filter.specialtyName
+				return elem.practice.specialtyName === filter.specialtyName
 			}
 		}
 		function filtervisiting(elem: any) {
+			console.log('filter.visiting',filter.visiting)
+			console.log('elem.visiting',elem.isWithDeparture)
 			if (filter.visiting === 'Все') {
 				return elem
 			} else {
-				return elem.visiting === filter.visiting
+				const v = elem.isWithDeparture ? 'Да' : 'Нет'
+				return v === filter.visiting
 			}
 		}
 		function filterFio(elem: any) {
 			if (filter.FIO === 'Все') {
 				return elem
 			} else {
-				return elem.FIO === filter.FIO
+				return elem.practice.departmentDirector === filter.FIO
 			}
 		}
 		function filterCourse(elem: any) {
@@ -218,21 +256,21 @@ export const ViewRepresentation = () => {
 			if (filter.academicYear === 'Все') {
 				return elem
 			} else {
-				return elem.academicYear === filter.academicYear
+				return elem.practice.academicYear === filter.academicYear
 			}
 		}
 		function filterType(elem: any) {
 			if (filter.practiceType === 'Все') {
 				return elem
 			} else {
-				return elem.practiceType === filter.practiceType
+				return elem.practice.practiceType === filter.practiceType
 			}
 		}
 		function filterKind(elem: any) {
 			if (filter.practiceKind === 'Все') {
 				return elem
 			} else {
-				return elem.practiceKind === filter.practiceKind
+				return elem.practice.practiceKind === filter.practiceKind
 			}
 		}
 		function sortDateFilling(a: any, b: any) {
@@ -245,8 +283,8 @@ export const ViewRepresentation = () => {
 			return 0
 		}
 
-		return originDate
-			? originDate
+		return dataAllSubmissions
+			? dataAllSubmissions
 			.filter((elem: any) => filterName(elem))
 			.filter((elem: any) => filterSpec(elem))
 			.filter((elem: any) => filtervisiting(elem))
@@ -266,6 +304,7 @@ export const ViewRepresentation = () => {
 			title: 'Подразделение',
 			name: 'Подразделение',
 			className: 'text-xs !p-2 ',
+			render: (text: any, record: any) => <span >{record?.practice?.subdivision}</span>
 			// @ts-ignore
 			// render: (text, record) => (
 			// 	<div className={'flex items-center justify-between'}>
@@ -292,61 +331,71 @@ export const ViewRepresentation = () => {
 			key: 'specialtyName',
 			dataIndex: 'specialtyName',
 			title: 'Шифр и наименование специальности',
-			className: 'text-xs !p-2'
+			className: 'text-xs !p-2',
+			render: (text: any, record: any) => <span >{record?.practice?.specialtyName}</span>
 		},
 		{
 			key: 'groupNumber',
 			dataIndex: 'groupNumber',
 			title: 'Номер группы',
-			className: 'text-xs !p-2'
+			className: 'text-xs !p-2',
+			render: (text: any, record: any) => <span >{record?.practice?.groupNumber}</span>
 		},
    		{
 			key: 'academicYear',
 			dataIndex: 'academicYear',
 			title: 'Учебный год',
-			className: 'text-xs !p-2'
+			className: 'text-xs !p-2',
+			render: (text: any, record: any) => <span >{record?.practice?.academicYear}</span>
 		},
     	{
 			key: 'courseNumber',
 			dataIndex: 'courseNumber',
 			title: 'Курс',
-			className: 'text-xs !p-2'
+			className: 'text-xs !p-2',
+			render: (text: any, record: any) => <span >{record?.practice?.courseNumber}</span>
 		},
    		{
 			key: 'practiceType',
 			dataIndex: 'practiceType',
 			title: 'Тип',
-			className: 'text-xs !p-2'
+			className: 'text-xs !p-2',
+			render: (text: any, record: any) => <span >{record?.practice?.practiceType}</span>
 		},
   		{
 			key: 'practiceKind',
 			dataIndex: 'practiceKind',
 			title: 'Вид',
-			className: 'text-xs !p-2'
+			className: 'text-xs !p-2',
+			render: (text: any, record: any) => <span >{record?.practice?.practiceKind}</span>
 		},
-		{
-			key: 'place',
-			dataIndex: 'place',
-			title: 'Место прохождения практики',
-			className: 'text-xs !p-2'
-		},
+		// {
+		// 	key: 'place',
+		// 	dataIndex: 'place',
+		// 	title: 'Место прохождения практики',
+		// 	className: 'text-xs !p-2',
+		// 	render: (text: any, record: any) => <span >{record?.place}</span>
+		// },
 		{
 			key: 'FIO',
 			dataIndex: 'FIO',
 			title: 'ФИО руководителя от кафедры, должность',
-			className: 'text-xs !p-2'
+			className: 'text-xs !p-2',
+			render: (text: any, record: any) => <span >{record?.practice?.departmentDirector}</span>
 		},
 		{
 			key: 'visiting',
 			dataIndex: 'visiting',
 			title: 'Выездные практики',
-			className: 'text-xs !p-2'
+			className: 'text-xs !p-2',
+			render: (text: any, record: any) => <span >{record?.isWithDeparture ? 'Да' : 'Нет'}</span>
 		},
 		{
 			key: 'status',
 			dataIndex: 'status',
 			title: 'Статус',
 			className: 'text-xs !p-2',
+			render: (text: any, record: any) => <span >{record?.status}</span>
 			// render: (text:any, record:any) => (
 			// 	<div className={'flex items-center justify-between'}>
 			// 		<span className={'underline flex font-bold'}>{text}</span>
@@ -385,7 +434,7 @@ export const ViewRepresentation = () => {
 						<PopoverContent
 							recordFull={record}
 							recordFullAll={tableData}
-							setRecordFull={setTableData}
+							setRecordFull={setDataTable}
 						/>
 					}
 				>
@@ -400,9 +449,89 @@ export const ViewRepresentation = () => {
 		navigate(`/services/practices/representation/edit/${record.id}`)
     };
 
-	
+	// const arraySubdevision = [
+       
+    //     ...(dataAllSubmissions ? 
+    //         dataAllSubmissions.map((item:any) => ({
+    //             key: item.id,
+    //             value: item.practice.subdivision,
+    //             label: item.practice.subdivision
+    //         })) 
+    //     : [])
+    // ];
+	// const uniqueSubdevision = useMemo(() => {
+	// 	if(prevDataByFilterLength?.current <= dataAllSubmissions?.length){
 
+	// 		const uniqueNames = Array.from(new Set(arraySubdevision.map(item => item.value)))
+	// 		.map(value => ({ value, label: value }));
+
+	// 		prevDataByFilterLength.current = dataAllSubmissions?.length
+
+	// 		if(dataAllSubmissions.length>=prevDataByFilterLength.current){
+	// 			//@ts-ignore
+	// 			prevDataByFilterLength.current = uniqueNames.length
+	// 		}
+	// 		//@ts-ignore
+	// 		prevUniqName.current = uniqueNames
+	// 		return uniqueNames;
+	// 	}else return prevUniqName.current
+	//   }, [dataAllSubmissions]);
+
+	// const arraySpec = [
+    //     { key: 2244612, value: "Все", label: "Все" },
+    //     ...(tableData ? 
+    //         tableData.map((item:any) => ({
+    //             key: item.id,
+    //             value: item.practice.specialtyName,
+    //             label: item.practice.specialtyName
+    //         })) 
+    //     : [])
+    // ];
+	// const uniqueSpec = useMemo(() => {
+	// 	if(prevDataByFilterLength?.current <= dataAllSubmissions?.length){
+	// 		const uniqueNames = Array.from(new Set(arraySpec.map(item => item.value)))
+	// 		.map(value => ({ value, label: value }));
+	// 		prevDataByFilterLength.current = dataAllSubmissions?.length
+
+	// 		if(dataAllSubmissions.length>=prevDataByFilterLength.current){
+	// 			//@ts-ignore
+	// 			prevDataByFilterLength.current = uniqueNames.length
+	// 		}
+	// 		//@ts-ignore
+	// 		prevUniqNameSpec.current = uniqueNames
+	// 		return uniqueNames;
+	// 	}else return prevUniqNameSpec.current
+	// }, [dataAllSubmissions]);
+	  
+	// const arrayFio = [
+    //     { key: 2244612, value: "Все", label: "Все" },
+    //     ...( tableData? 
+    //         tableData.map((item:any) => ({
+    //             key: item.id,
+    //             value: item.practice.departmentDirector,
+    //             label: item.practice.departmentDirector
+    //         })) 
+    //     : [])
+    // ];
+	// console.log('arrayFio',arrayFio)
+	// const uniqueFio = useMemo(() => {
+	// 	if(prevDataByFilterLength?.current <= dataAllSubmissions?.length){
+	// 		const uniqueNames = Array.from(new Set(arrayFio.map(item => item.value)))
+	// 		.map(value => ({ value, label: value }));
+	// 		prevDataByFilterLength.current = dataAllSubmissions?.length
+
+	// 		if(dataAllSubmissions.length>=prevDataByFilterLength.current){
+	// 			//@ts-ignore
+	// 			prevDataByFilterLength.current = uniqueNames.length
+	// 		}
+	// 		//@ts-ignore
+	// 		prevUniqNameFio.current = uniqueNames
+	// 		return uniqueNames;
+	// 	}else return prevUniqNameFio.current
+	// }, [dataAllSubmissions]);
+	console.log('11111111111',selectSubdivisionId)
 	return (
+		<Form form={form}>
 		<section className="container">
 			<Row gutter={[16, 16]}>
 				<Col span={24}>
@@ -419,12 +548,24 @@ export const ViewRepresentation = () => {
 				<Col span={7}>
 					<Select
 						popupMatchSelectWidth={false}
-						defaultValue="Все"
+						defaultValue=""
 						className="w-full"
-						options={optionsNames}
+						options={dataSubmisisionsSubdevision}
 						onChange={(value: any) => {
-							setFilter({ ...filter, subdivision: value })
-						}}
+							// const selectedOption = dataSubmisisionsSubdevision.find((option:any) => option.value === value);
+        
+       					
+							// if (selectedOption) {
+							// 	const selectedId = selectedOption.id;
+							// 	console.log(selectedId); 
+							// 	setSelectSubdivisionId(selectedId); 
+							// }
+							const x = findSubdivisions(dataSubmisisionsSubdevision,value)
+							if(x){
+								setSelectSubdivisionId(x.id)
+							}
+								setFilter({ ...filter, subdivision: value })
+							}}
 					/>
 				</Col>
 				<Col span={7} offset={5}>
@@ -446,15 +587,28 @@ export const ViewRepresentation = () => {
 					<span>Наименование специальности</span>
 				</Col>
 				<Col span={7}>
+				<Form.Item className='mb-0' name={'specialtyName'}>
+					
 					<Select
+						disabled={filter.subdivision === 'Все' ? true : false}
 						popupMatchSelectWidth={false}
-						defaultValue="Все"
+						
 						className="w-full"
-						options={specialtyNameOptions}
+						options={[
+							{ key: 2244612, value: 'Все', label: 'Все' },
+							...(dataSubmissionSpecialty
+								? dataSubmissionSpecialty.map((item: any) => ({
+										key: item.id,
+										value: item.value,
+										label: item.label
+								  }))
+								: [])
+						]}
 						onChange={(value: any) => {
 							setFilter({ ...filter, specialtyName: value })
 						}}
 					/>
+					</Form.Item>
 				</Col>
 			</Row>
 			<Row gutter={[16, 16]} className="mt-4 flex items-center">
@@ -463,6 +617,7 @@ export const ViewRepresentation = () => {
 				</Col>
 				<Col span={7}>
 					<Select
+						disabled={filter.subdivision === 'Все' ? true : false}
 						popupMatchSelectWidth={false}
 						defaultValue="Все"
 						className="w-full"
@@ -478,15 +633,27 @@ export const ViewRepresentation = () => {
 					<span>ФИО руководителя</span>
 				</Col>
 				<Col span={7}>
+					<Form.Item className='mb-0'  name={'FIO'}>
 					<Select
+						disabled={filter.subdivision === 'Все' ? true : false}
 						popupMatchSelectWidth={false}
 						defaultValue="Все"
 						className="w-full"
-						options={fioOptions}
+						options={[
+							{ key: 2244612, value: 'Все', label: 'Все' },
+							...(dataSubmissionDirector
+								? dataSubmissionDirector.map((item: any) => ({
+										key: item.id,
+										value: item.value,
+										label: item.label
+								  }))
+								: [])
+						]}
 						onChange={(value: any) => {
 							setFilter({ ...filter, FIO: value })
 						}}
 					/>
+					</Form.Item>
 				</Col>
 			</Row>
 			
@@ -497,12 +664,12 @@ export const ViewRepresentation = () => {
 				</Col>
 				<Col span={4}>
 					<Select
+						disabled={filter.subdivision === 'Все' ? true : false}
 						popupMatchSelectWidth={false}
 						defaultValue="Все"
 						className="w-full"
 						options={courseNumberOptions}
 						onChange={value => {
-							
 							setFilter({
 								...filter,
 								courseNumber: value
@@ -514,11 +681,13 @@ export const ViewRepresentation = () => {
 					<span>Учебный год</span>
 				</Col>
 				<Col span={4}>
+				<Form.Item className='mb-0'  name={'academicYear'}>
 					<Select
+						disabled={filter.subdivision === 'Все' ? true : false}
 						popupMatchSelectWidth={false}
 						defaultValue="Все"
 						className="w-full"
-						options={academicYearOptions}
+						options={dataSubmissionAcademicYear?.map((item: any) => ({ label: item, value: item }))}
 						onChange={value => {
 							setFilter({
 								...filter,
@@ -526,6 +695,7 @@ export const ViewRepresentation = () => {
 							})
 						}}
 					/>
+					</Form.Item>
 				</Col>
 			</Row>
 		
@@ -534,10 +704,12 @@ export const ViewRepresentation = () => {
 					<span>Тип</span>
 				</Col>
 				<Col span={4}>
+				<Form.Item className='mb-0'  name={'practiceType'}>
 					<Select
+						disabled={filter.subdivision === 'Все' ? true : false}
 						popupMatchSelectWidth={false}
 						defaultValue="Все"
-						options={typeOptions}
+						options={dataSubmissionType}
 						onChange={value => {
 							setFilter({
 								...filter,
@@ -546,13 +718,15 @@ export const ViewRepresentation = () => {
 						}}
 						className="w-full"
 					/>
+					</Form.Item>
 				</Col>
        			<Col span={2} >
 					<span>Вид</span>
 				</Col>
 				<Col span={4}>
 					<Select
-						options={practiceKindOptions}
+						disabled={filter.subdivision === 'Все' ? true : false}
+						options={dataSubmissionKind}
 						onChange={value => {
 							setFilter({
 								...filter,
@@ -598,7 +772,7 @@ export const ViewRepresentation = () => {
 						rowKey="id"
 						// @ts-ignore
 						columns={columns}
-						dataSource={dataTable ? dataTable : []}
+						dataSource={filter?.subdivision !== 'Все' ? dataTable ? dataTable : [] : []}
 						pagination={dataTable?.length < 3 ? false : {
 							pageSize: 3,
 						}}
@@ -612,10 +786,19 @@ export const ViewRepresentation = () => {
 								setSelectedFieldFull(selectedRows)
 							}
 						}}
+						locale={{
+							emptyText: (
+							  <div>
+								<h3>Нет данных для отображения</h3>
+								<p>Поле "Подразделение" не должно быть пустым</p>
+							  </div>
+							),
+						  }}
 					/>}
 				</Col>
 			</Row>
 		</section>
+		</Form>
 	)
 }
 export default ViewRepresentation

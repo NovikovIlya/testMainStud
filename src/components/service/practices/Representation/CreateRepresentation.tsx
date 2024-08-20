@@ -30,9 +30,9 @@ import { showNotification } from '../../../../store/reducers/notificationSlice'
 import { useAppDispatch } from '../../../../store'
 
 const optionMock = [
-	{ value: '1', label: '1' },
-	{ value: '2', label: '2' },
-	{ value: '3', label: '3' }
+	{ value: 'контракт', label: 'контракт' },
+	{ value: 'бюджет', label: 'бюджет' },
+
 ]
 const optionMockType = [
 	{ value: '4', label: '4' },
@@ -110,14 +110,11 @@ export const CreateRepresentation = () => {
 	const [editingKey, setEditingKey] = useState('')
 	const isEditing = (record: Item) => record.key === editingKey
 	const [isModalOpenOne, setIsModalOpenOne] = useState(true)
-	const [searchText, setSearchText] = useState('')
-	const [searchedColumn, setSearchedColumn] = useState('')
-	// const searchInput = useRef<any>(null)
 	const [selectedPractice, setSelectedPractice] = useState<any>(null)
 	const [visiting,setVisiting] = useState(false)
 	const [value, setValue] = useState(1);
 	const [theme,setTheme] = useState('')
-	const [sendSubmission,{}] = useAddSubmissionMutation()
+	const [sendSubmission,{isLoading:isLoadingAddSub}] = useAddSubmissionMutation()
 	const {data:dataGetStudents,isSuccess:isSuccessGetStudents,isLoading:isLoadingStudents} = useGetStudentsQuery(selectedPractice,{skip:!selectedPractice})
 	const {data:dataAllSubmissions} = useGetAllSubmissionsQuery(selectedPractice,{skip:!selectedPractice})
 	const [fullTable,setFullTable] = useState<any>([])
@@ -126,7 +123,7 @@ export const CreateRepresentation = () => {
 	const [data, setData] = useState(fullTable)
 	const [step,setStep] = useState(0)
 	const dispatch = useAppDispatch()
-
+	
 	useEffect(() => {
 		// if (isSuccessPractiseAll) {
 		setTableData(filterDataFull())
@@ -136,9 +133,6 @@ export const CreateRepresentation = () => {
 		// }
 	}, [filter])
 
-
-	console.log('ffff',fullTable)
-	console.log(fullSelectedPractise)
 	useEffect(()=>{
 		if(isSuccessGetStudents ){
 			const newArray = dataGetStudents?.map((item:any)=>({
@@ -156,6 +150,26 @@ export const CreateRepresentation = () => {
 		}
 
 	},[isSuccessGetStudents,isSuccessAllPractice,dataGetStudents,dataAllPractise])
+
+	useEffect(()=>{
+		if(!visiting){
+			if(isSuccessGetStudents && fullTable.length>0){
+				if(fullTable.every((item:any)=>item.place!==null)){
+					setStep(2)
+				}
+			}
+		}
+		if(visiting){
+			if(isSuccessGetStudents && fullTable.length>0){
+				if(fullTable.every((item:any)=>item.place!==null && item.arrivingCost!==null && item.livingCost!==null)){
+					setStep(2)
+				}else{
+					setStep(1)
+				}
+			}
+		}
+	},[fullTable,isSuccessGetStudents,visiting])
+
 
 	const items: DescriptionsProps['items'] = [
 		{
@@ -232,7 +246,7 @@ export const CreateRepresentation = () => {
 			dataIndex: 'category',
 			title: 'Категория',
 			className: `text-xs !p-2 ${visiting? '' : 'hidden'}`,
-			editable: true
+			// editable: true
 		},
 		{
 			key: 'costForDay',
@@ -292,7 +306,6 @@ export const CreateRepresentation = () => {
 		}
 	]
 
-
 	const mergedColumns: TableProps['columns'] = columns.map(col => {
 		// @ts-ignore
 		if (!col.editable) {
@@ -303,7 +316,7 @@ export const CreateRepresentation = () => {
 			onCell: (record: Item) => ({
 				record,
 				inputType:
-					col.dataIndex === 'selectCourse'
+					col.dataIndex === 'category'
 						? 'select'
 						: col.dataIndex === 'selectType'
 						? 'select'
@@ -318,16 +331,20 @@ export const CreateRepresentation = () => {
 				title: col.title,
 				editing: isEditing(record),
 				options:
-					col.dataIndex === 'selectCourse'
+					col.dataIndex === 'category'
 						? optionMock
 						: col.dataIndex === 'selectType'
 						? optionMockType
 						: col.dataIndex === 'selectKind'
 						? optionMockKind
 						: undefined,
-				rules: col.dataIndex === 'place'  ? [{
-					required: true,
-					message: 'Поле обязательно для заполнения'}] : []
+				rules: visiting === false
+						? ((  col.dataIndex === 'place')  ? [{
+						required: true,
+						message: 'Поле обязательно для заполнения'}] : [])
+					 	: ((  col.dataIndex === 'place'||  col.dataIndex === 'costForDay' || col.dataIndex === 'arrivingCost' || col.dataIndex === 'livingCost')  ? [{
+						required: true,
+						message: 'Поле обязательно для заполнения'}] : [])
 			})
 		}
 	})
@@ -422,7 +439,6 @@ export const CreateRepresentation = () => {
 		setEditingKey('')
 	}
 
-
 	const save = async (key: React.Key) => {
 		try {
 			const row = (await form.validateFields()) as Item
@@ -455,13 +471,6 @@ export const CreateRepresentation = () => {
 		}
 		
 	}
-	useEffect(()=>{
-		if(isSuccessGetStudents && fullTable.length>0){
-			if(fullTable.every((item:any)=>item.place!==null)){
-				setStep(2)
-			}
-		}
-	},[fullTable,isSuccessGetStudents])
 
 	const hanldeSelectedPractise = (id: any) => {
 		setSelectedPractice(id)
@@ -490,7 +499,6 @@ export const CreateRepresentation = () => {
 	const onChange = (e: any) => {
 		setValue(e.target.value);
 	};
-
 
 	const sendData = ()=>{
 		if(fullTable.some((item:any)=>item.place===null)){
@@ -526,6 +534,7 @@ export const CreateRepresentation = () => {
 	}
 	
 	return (
+		<Spin spinning={isLoadingAddSub}>
 		<section className="container">
 			<Row gutter={[16, 16]}>
 				<Col span={24}>
@@ -579,23 +588,12 @@ export const CreateRepresentation = () => {
 						</Space>
 					</div>
 				</Col>
-				: null}
-				
+				: null}	
 			</Row>
 			
 			{selectedPractice ? (<>
 				<Descriptions className='mt-8'  items={items} />
 				<Row className='items-end'>
-					{/* <Col span={12} flex="50%" className="mt-4 mobileFirst">
-						<Radio.Group defaultValue="compressedView" buttonStyle="solid">
-							<Radio.Button value="compressedView" className="!rounded-l-full" onClick={()=>setVisiting(false)}>
-								Невыездная практика
-							</Radio.Button>
-							<Radio.Button value="tableView" className="!rounded-r-full" onClick={()=>setVisiting(true)}>
-								Выездная практика
-							</Radio.Button>
-						</Radio.Group>
-					</Col> */}
 					 <Col span={12} flex="50%" className="mt-4 mobileFirst">
 						<Radio.Group onChange={onChange} value={value}>
 							<Space direction="vertical">
@@ -619,11 +617,11 @@ export const CreateRepresentation = () => {
 						</Space>
 					</div>
 				</Col>
-				
-				</Row>
-				
-				</>) : ''}
-			{visiting ? <Row className='mt-4'>
+			</Row>	
+			</>) : ''}
+
+			{visiting ? 
+			<Row className='mt-4'>
 				<Col span={1} className='flex items-center'>
 					<label htmlFor="topic">Тема:</label>
 				</Col>
@@ -631,155 +629,7 @@ export const CreateRepresentation = () => {
 					<Input id="topic" placeholder='тема' onChange={(e) => setTheme(e.target.value)}/>	
 				</Col>	
 			</Row> : ''}
-			{/* <Modal
-       			footer={null}
-				width={'100%'}
-				title="Выберите практику"
-				open={isModalOpenOne}
-				onOk={handleOkOne}
-				onCancel={handleCancelOne}
-			>
-      			<Row gutter={[8, 16]} className="mt-12 w-full flex items-center">
-					<Col span={4}>
-						<Typography.Text>Подразделение</Typography.Text>
-					</Col>
-					<Col span={8}>
-						<Select
-							popupMatchSelectWidth={false}
-							defaultValue="Все"
-							className="w-full"
-							options={filterSpecialization}
-							onChange={value => {
-								setFilter({
-									...filter,
-									subdivision: value
-								})
-							}}
-						/>
-					</Col>
-				</Row>
-				<Row gutter={[8, 16]} className="mt-4 w-full flex items-center">
-					<Col span={4}>
-						<Typography.Text>Шифр и наимеование документа</Typography.Text>
-					</Col>
-					<Col span={8}>
-						<Select
-							showSearch
-							optionFilterProp="label"
-							filterSort={(optionA, optionB) =>
-								(optionA?.label ?? '')
-									.toLowerCase()
-									.localeCompare((optionB?.label ?? '').toLowerCase())
-							}
-							popupMatchSelectWidth={false}
-							defaultValue="Все"
-							className="w-full"
-							options={filterSpecialization}
-							onChange={value => {
-								setFilter({
-									...filter,
-									specialtyName: value
-								})
-							}}
-						/>
-					</Col>
-				</Row>
-				
-				<Row gutter={[8, 16]} className="mt-4 w-full flex items-center">
-					<Col span={4}>
-						<Typography.Text>Учебный год</Typography.Text>
-					</Col>
-					<Col span={8}>
-						<Select
-							popupMatchSelectWidth={false}
-							defaultValue="Все"
-							className="w-full"
-							options={filterSpecialization}
-							onChange={value => {
-								setFilter({
-									...filter,
-									academicYear: value
-								})
-							}}
-						/>
-					</Col>
-				</Row>
-				<Row gutter={[8, 16]} className="mt-4 w-full flex items-center">
-					<Col span={4}>
-						<Typography.Text>Номер группы</Typography.Text>
-					</Col>
-					<Col span={8}>
-						<Select
-							popupMatchSelectWidth={false}
-							defaultValue="Все"
-							className="w-full"
-							options={filterSpecialization}
-							onChange={value => {
-								setFilter({
-									...filter,
-									groupNumber: value
-								})
-							}}
-						/>
-					</Col>
-				</Row>
-				<Row gutter={[8, 16]} className="mt-4  w-full flex items-center">
-					<Col span={4}>
-						<Typography.Text>Уровень образования</Typography.Text>
-					</Col>
-					<Col span={8}>
-						<Select
-							popupMatchSelectWidth={false}
-							defaultValue="Все"
-							className="w-full"
-							options={filterSpecialization}
-							onChange={value => {
-								setFilter({
-									...filter,
-									level: value
-								})
-							}}
-						/>
-					</Col>
-				</Row>
-				<Row gutter={[8, 16]} className="mt-4 mb-12 w-full flex items-center">
-					<Col span={4}>
-						<Typography.Text>Курс</Typography.Text>
-					</Col>
-					<Col span={8}>
-						<Select
-							popupMatchSelectWidth={false}
-							defaultValue="Все"
-							className="w-full"
-							options={filterSpecialization}
-							onChange={value => {
-								setFilter({
-									...filter,
-									courseNumber: value
-								})
-							}}
-						/>
-					</Col>
-				</Row>
-				
-				<Table
-					onRow={record => ({
-						onClick: () => handleRowClick(record)
-					})}
-					ref={tableRef}
-					components={{
-						body: {
-							cell: EditableCell
-						}
-					}}
-					bordered
-					dataSource={tableData ? tableData : []}
-					columns={columnsRepresentation}
-					rowClassName="editable-row"
-					pagination={false}
-					rowKey="id"
-				/>
-			</Modal> */}
+			
 			<PracticeModal selectedPractice={selectedPractice} isModalOpenOne={isModalOpenOne} handleOkOne={handleOkOne} handleCancelOne={handleCancelOne} setFilter={setFilter} filter={filter} handleRowClick={handleRowClick}  tableRef={tableRef} tableData={tableData} />
 
 			{selectedPractice ?
@@ -807,9 +657,9 @@ export const CreateRepresentation = () => {
 							</Form>
 						</Col>
 					</Row>
-					<Row>
-					<Col span={2} className='mt-6' >
-					<Space className="w-full flex-row-reverse">
+					<Row className=''>
+					<Col span={3} className=' mt-6' >
+					<Space className="w-full ">
 						<Button
 							type="primary"
 							className="!rounded-full"
@@ -828,6 +678,7 @@ export const CreateRepresentation = () => {
 				null
 			)}
 		</section>
+		</Spin>
 	)
 }
 

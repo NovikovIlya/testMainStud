@@ -136,14 +136,19 @@ export const EditRepresentation = () => {
 
 	useEffect(()=>{
 		if(isSuccess){
-			const obj = dataOneSubmissions.map((item:any)=>{
-				return item.students
+			// const obj = dataOneSubmissions?.map((item:any)=>{
+			// 	return item.students
+			// })
+			const array = dataOneSubmissions.students.map((item:any)=>{
+				return {...item, 
+						groupNumbers:dataOneSubmissions.practice.groupNumber,
+						departmentDirector:dataOneSubmissions.practice.departmentDirector}
 			})
-			setFullTable(obj)
+			setFullTable(array)
 		}
 	},[dataOneSubmissions,isSuccess])
 
-
+	console.log('fullTable',fullTable)
 	const columns = [
 		{
 			key: 'number',
@@ -159,7 +164,7 @@ export const EditRepresentation = () => {
 			name: 'ФИО обучающегося',
 			className: 'text-xs !p-2',
 			render: (text: any, record: any) => (
-				<div>{record?.students?.name || 'Нет челибаса...'}</div>
+				<div>{record?.name || 'Нет челибаса...'}</div>
 			)
 		},
 
@@ -169,7 +174,7 @@ export const EditRepresentation = () => {
 			title: 'Номер группы',
 			className: 'text-xs !p-2',
 			render: (text: any, record: any) => (
-				<div>{record?.groupNumber || 'Нет челибаса...'}</div>
+				<div>{record?.groupNumbers || 'Нет челибаса...'}</div>
 			)
 		},
 		{
@@ -179,7 +184,7 @@ export const EditRepresentation = () => {
 			className: 'text-xs !p-2',
 			editable: true,
 			render: (text: any, record: any) => (
-				<div>{record?.students?.place || 'Нет челибаса...'}</div>
+				<div>{record?.place || 'Нет челибаса...'}</div>
 			)
 		},
 		{
@@ -188,7 +193,7 @@ export const EditRepresentation = () => {
 			title: 'ФИО руководителя от кафедры',
 			className: 'text-xs !p-2',
 			render: (text: any, record: any) => (
-				<div>{record?.practice?.departmentDirector || 'Нет челибаса...'}</div>
+				<div>{record?.departmentDirector || 'Нет челибаса...'}</div>
 			)
 		},
 		{
@@ -198,7 +203,7 @@ export const EditRepresentation = () => {
 			className: `text-xs !p-2 ${isSuccess ? dataOneSubmissions.isWithDeparture ? '' : 'hidden' : 'hidden'}`,
 			editable: true,
 			render: (text: any, record: any) => (
-				<div>{record?.students?.category || 'Нет челибаса...'}</div>
+				<div>{record?.category || 'Нет челибаса...'}</div>
 			)
 		},
 		{
@@ -208,7 +213,7 @@ export const EditRepresentation = () => {
 			className: `text-xs !p-2 ${isSuccess ? dataOneSubmissions.isWithDeparture ? '' : 'hidden' : 'hidden'}`,
 			editable: true,
 			render: (text: any, record: any) => (
-				<div>{record?.students?.costForDay || 'Нет челибаса...'}</div>
+				<div>{record?.costForDay || 'Нет челибаса...'}</div>
 			)
 		},
 		{
@@ -218,7 +223,7 @@ export const EditRepresentation = () => {
 			className: `text-xs !p-2 ${isSuccess ? dataOneSubmissions.isWithDeparture ? '' : 'hidden' : 'hidden'}`,
 			editable: true,
 			render: (text: any, record: any) => (
-				<div>{record?.students?.arrivingCost || 'Нет челибаса...'}</div>
+				<div>{record?.arrivingCost || 'Нет челибаса...'}</div>
 			)
 		},
 		{
@@ -228,7 +233,7 @@ export const EditRepresentation = () => {
 			className: `text-xs !p-2 ${isSuccess ? dataOneSubmissions.isWithDeparture ? '' : 'hidden' : 'hidden'}`,
 			editable: true,
 			render: (text: any, record: any) => (
-				<div>{record?.students?.livingCost || 'Нет челибаса...'}</div>
+				<div>{record?.livingCost || 'Нет челибаса...'}</div>
 			)
 		},
 		

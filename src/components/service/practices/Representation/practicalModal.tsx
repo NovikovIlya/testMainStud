@@ -10,8 +10,9 @@ import {
 } from '../../../../models/representation'
 
 import { EditableCell } from './EditableCell'
-import { useGetPracticesAllQuery } from '../../../../store/api/practiceApi/individualTask'
+import { useGetPracticesAllQuery, useGetSubdivisionForPracticeQuery } from '../../../../store/api/practiceApi/individualTask'
 import { LoadingOutlined } from '@ant-design/icons'
+import { useGetAllSubmissionsQuery } from '../../../../store/api/practiceApi/representation'
 
 const filterSpecialization: FilterType[] = [
 	{ value: 'Все', label: 'Все' },
@@ -19,8 +20,18 @@ const filterSpecialization: FilterType[] = [
 ]
 
 const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancelOne,setFilter,filter,handleRowClick,tableRef, tableData}: any) => {
+	const {data:dataAllSubmissions} = useGetAllSubmissionsQuery(selectedPractice,{skip:!selectedPractice})
 	const {data:dataAllPractise,isLoading} = useGetPracticesAllQuery(null)
+	const {data:dataAllSubdivision} = useGetSubdivisionForPracticeQuery()
  	const columnsRepresentation = [
+		{
+			key: 'subdivision',
+			dataIndex: 'subdivision',
+			title: 'Подразделение',
+			name: 'Подразделение',
+			className: 'text-xs !p-2',
+			// ...getColumnSearchProps('name')
+		},
 	{
 		key: 'specialtyName',
 		dataIndex: 'specialtyName',
@@ -67,13 +78,13 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 	//   ),
 	// },
 	]
-	const filteredData = dataAllPractise?.filter(record => {
+	const filteredData = dataAllPractise?.filter((record: any) => {
 		console.log('record', record)
 		return record.id !== selectedPractice
 	});
 
-	console.log('filteredData', filteredData)
-  return (
+	console.log('dataAllSubmissions', dataAllSubmissions)
+  	return (
 		<Modal
 			footer={null}
 			width={'100%'}
@@ -91,7 +102,7 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 						popupMatchSelectWidth={false}
 						defaultValue="Все"
 						className="w-full"
-						options={filterSpecialization}
+						options={dataAllSubdivision}
 						onChange={value => {
 							setFilter({
 								...filter,
@@ -219,7 +230,7 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 				dataSource={filteredData}
 				columns={columnsRepresentation}
 				// rowClassName={record => selectedPractice===record.key ? "hide" : ''}
-				pagination={dataAllPractise?.length < 3 ? false : {
+				pagination={dataAllPractise?.length < 5 ? false : {
 					pageSize: 3,
 				}}
 				rowKey="id"

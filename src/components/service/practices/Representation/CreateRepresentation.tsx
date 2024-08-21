@@ -124,14 +124,7 @@ export const CreateRepresentation = () => {
 	const [step,setStep] = useState(0)
 	const dispatch = useAppDispatch()
 	
-	useEffect(() => {
-		// if (isSuccessPractiseAll) {
-		setTableData(filterDataFull())
-		
-		// @ts-ignore
 
-		// }
-	}, [filter])
 
 	useEffect(()=>{
 		if(isSuccessGetStudents ){
@@ -350,84 +343,87 @@ export const CreateRepresentation = () => {
 	})
 
 	
-	function filterDataFull() {
-		function filterCourse(elem: any) {
-			if (filter.courseNumber === 'Все') {
-				return elem
-			} else {
-				return elem.courseNumber === filter.courseNumber
-			}
-		}
-    function filterSubdivision(elem: any) {
-			if (filter.courseNumber === 'Все') {
-				return elem
-			} else {
-				return elem.courseNumber === filter.courseNumber
-			}
-		}
-		function filterKind(elem: any) {
-			if (filter.selectKind === 'Все') {
-				return elem
-			} else {
-				// @ts-ignore
-				return elem.selectKind === filter.selectKind
-			}
-		}
-    function filterAcademicYeary(elem: any) {
-			if (filter.academicYear === 'Все') {
-				return elem
-			} else {
-				// @ts-ignore
-				return elem.academicYear === filter.academicYear
-			}
-		}
-    function filterNumber(elem: any) {
-			if (filter.groupNumber === 'Все') {
-				return elem
-			} else {
-				// @ts-ignore
-				return elem.groupNumber === filter.groupNumber
-			}
-		}
-		function filterspecialtyName(elem: any) {
-			if (filter.specialtyName === 'Все') {
-				return elem
-			} else {
-				// @ts-ignore
-				return elem.specialtyName === filter.specialtyName
-			}
-		}
-    function filtersLevel(elem: any) {
-			if (filter.level === 'Все') {
-				return elem
-			} else {
-				// @ts-ignore
-				return elem.level === filter.level
-			}
-		}
+	// function filterDataFull() {
+	// 	function filterCourse(elem: any) {
+	// 		console.log('filter.courseNumber',filter.courseNumber)
+	// 		console.log('elem.courseNumber',elem.courseNumber)
+	// 		if (filter.courseNumber === 'Все') {
+	// 			return elem
+	// 		} else {
+	// 			return elem.courseNumber === filter.courseNumber
+	// 		}
+	// 	}
+    // function filterSubdivision(elem: any) {
+	// 		if (filter.courseNumber === 'Все') {
+	// 			return elem
+	// 		} else {
+	// 			return elem.courseNumber === filter.courseNumber
+	// 		}
+	// 	}
+	// 	function filterKind(elem: any) {
+	// 		if (filter.selectKind === 'Все') {
+	// 			return elem
+	// 		} else {
+	// 			// @ts-ignore
+	// 			return elem.selectKind === filter.selectKind
+	// 		}
+	// 	}
+    // function filterAcademicYeary(elem: any) {
+	// 		if (filter.academicYear === 'Все') {
+	// 			return elem
+	// 		} else {
+	// 			// @ts-ignore
+	// 			return elem.academicYear === filter.academicYear
+	// 		}
+	// 	}
+    // function filterNumber(elem: any) {
+		  
+	// 		if (filter.groupNumber === 'Все') {
+	// 			return elem
+	// 		} else {
+	// 			// @ts-ignore
+	// 			return elem.groupNumber === filter.groupNumber
+	// 		}
+	// 	}
+	// 	function filterspecialtyName(elem: any) {
+	// 		if (filter.specialtyName === 'Все') {
+	// 			return elem
+	// 		} else {
+	// 			// @ts-ignore
+	// 			return elem.specialtyName === filter.specialtyName
+	// 		}
+	// 	}
+    // function filtersLevel(elem: any) {
+	// 		if (filter.level === 'Все') {
+	// 			return elem
+	// 		} else {
+	// 			// @ts-ignore
+	// 			return elem.level === filter.level
+	// 		}
+	// 	}
 
-		function sortDateFilling(a: any, b: any) {
-			if (filter.dateFilling === 'По дате (сначала новые)') {
-				return +new Date(b.dateFilling) - +new Date(a.dateFilling)
-			}
-			if (filter.dateFilling === 'По дате (сначала старые)') {
-				return +new Date(a.dateFilling) - +new Date(b.dateFilling)
-			}
-			return 0
-		}
+	// 	function sortDateFilling(a: any, b: any) {
+	// 		if (filter.dateFilling === 'По дате (сначала новые)') {
+	// 			return +new Date(b.dateFilling) - +new Date(a.dateFilling)
+	// 		}
+	// 		if (filter.dateFilling === 'По дате (сначала старые)') {
+	// 			return +new Date(a.dateFilling) - +new Date(b.dateFilling)
+	// 		}
+	// 		return 0
+	// 	}
 
-		return originData
-			? originData
-					.filter((elem: any) => filterCourse(elem))
-					.filter((elem: any) => filterKind(elem))
-					.filter((elem: any) => filterspecialtyName(elem))
-          .filter((elem: any) => filterSubdivision(elem))
-          .filter((elem: any) => filterAcademicYeary(elem))
-          .filter((elem: any) => filterNumber(elem))
-          .filter((elem: any) => filtersLevel(elem))
-					.sort((a: any, b: any) => sortDateFilling(a, b))
-			: []
-	}
+	// 	return originData
+	// 		? originData
+	// 				.filter((elem: any) => filterCourse(elem))
+	// 				.filter((elem: any) => filterKind(elem))
+	// 				.filter((elem: any) => filterspecialtyName(elem))
+    //       .filter((elem: any) => filterSubdivision(elem))
+    //       .filter((elem: any) => filterAcademicYeary(elem))
+    //       .filter((elem: any) => filterNumber(elem))
+    //       .filter((elem: any) => filtersLevel(elem))
+	// 				.sort((a: any, b: any) => sortDateFilling(a, b))
+	// 		: []
+	// }
 
 	const edit = (record: Partial<Item> & { key: React.Key }) => {
 		form.setFieldsValue({ name: '', age: '', address: '', ...record })

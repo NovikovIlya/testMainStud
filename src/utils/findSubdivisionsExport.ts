@@ -1,10 +1,11 @@
-export const findSubdivisions = (subdivisionsAll:any,field:any) => {
-    console.log(subdivisionsAll,field)
+export const findSubdivisionsExport = (subdivisionsAll:any,field:any) => {
+
     return subdivisionsAll?.find((item:any)=>{
         if(field.includes('-')){
             if('responses' in item){
                 return item.responses?.find((elem:any)=> {
                     if(field.split(" - ")[1] === elem.value){  
+                        console.log('44444444444')
                         return elem
                     }      
                 })

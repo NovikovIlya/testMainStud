@@ -7,6 +7,7 @@ import {
 	Input,
 	Modal,
 	Popconfirm,
+	Popover,
 	Radio,
 	Result,
 	Row,
@@ -116,8 +117,6 @@ export const EditRepresentation = () => {
 	const isEditing = (record: Item) => record.key === editingKey
 	const [searchText, setSearchText] = useState('')
 	const [searchedColumn, setSearchedColumn] = useState('')
-	const searchInput = useRef<any>(null)
-	const [selectedPractice, setSelectedPractice] = useState<any>(null)
 	const [visiting,setVisiting] = useState(false)
 	const {data:dataOneSubmissions,isSuccess} = useGetOneSubmissionsQuery(id,{skip:!id})
 	const {data:dataGetDocRepresentation,isLoading:isLoadingDocRepesentation} = useGetDocRepresentationQuery(null)
@@ -136,9 +135,6 @@ export const EditRepresentation = () => {
 
 	useEffect(()=>{
 		if(isSuccess){
-			// const obj = dataOneSubmissions?.map((item:any)=>{
-			// 	return item.students
-			// })
 			const array = dataOneSubmissions.students.map((item:any)=>{
 				return {...item, 
 						groupNumbers:dataOneSubmissions.practice.groupNumber,
@@ -148,7 +144,7 @@ export const EditRepresentation = () => {
 		}
 	},[dataOneSubmissions,isSuccess])
 
-	console.log('fullTable',fullTable)
+
 	const columns = [
 		{
 			key: 'number',
@@ -276,46 +272,43 @@ export const EditRepresentation = () => {
 		}
 	]
 
-	const items: DescriptionsProps['items'] = [
+	const items: any = [
 		{
 		  key: '1',
 		  label: 'Подразделение',
-		  children: isSuccess ? dataOneSubmissions.subdivision : '',
+		  children: isSuccess ? dataOneSubmissions.practice.subdivision : '',
+
 		},
 		{
 		  key: '2',
 		  label: 'Наименование специальности',
-		  children: 'Акушерство',
+		  children: isSuccess ? dataOneSubmissions.practice.specialtyName : '',
 		},
 		{
 		  key: '3',
-		  label: 'Профиль',
-		  children: 'Акушер',
-		},
-		{
-		  key: '4',
-		  label: 'Форма обучения',
-		  children: 'Очная',
+		  label: 'Вид',
+		  children: isSuccess ? dataOneSubmissions.practice.practiceKind : '',
 		},
 		{
 		  key: '5',
 		  label: 'Курс',
-		  children: '1',
+		  children: isSuccess ? dataOneSubmissions.practice.courseNumber : '',
 		},
 		{
 			key: '5',
 			label: 'Тип',
-			children: '1',
+			children: isSuccess ? dataOneSubmissions.practice.practiceType : '',
 		},
 		{
 			key: '6',
 			label: 'Тема',
-			children:  isSuccess ? dataOneSubmissions.status : '',
+			children:  isSuccess ? dataOneSubmissions.theme : '',
 		},
 		{
 			key: '7',
 			label: 'Статус',
 			children:  isSuccess ? dataOneSubmissions.theme : '',
+			render: (text: any) =>  <Popover content={<div>Редактировать представление можно только в статусе "Ожидание"</div>} title=""><span>{text}</span></Popover>
 		},
 	];
 
@@ -560,30 +553,28 @@ export const EditRepresentation = () => {
 					</Space>
 				</Col> : ''}
 			</Row>
-				<>
-					<Row className="mt-4">
-						<Col flex={'auto'}>
-							<Form form={form} component={false}>
-								
-								<Table
-									ref={tableRef}
-									components={{
-										body: {
-											cell: EditableCell
-										}
-									}}
-									bordered
-									dataSource={fullTable}
-									
-									columns={mergedColumns}
-									rowClassName="editable-row"
-									pagination={false}
-									rowKey="id"
-								/>
-							</Form>
-						</Col>
-					</Row>
-				</>	
+
+			<Row className="mt-4">
+				<Col flex={'auto'}>
+					<Form form={form} component={false}>
+						<Table
+							ref={tableRef}
+							components={{
+								body: {
+									cell: EditableCell
+								}
+							}}
+							bordered
+							dataSource={fullTable}
+							columns={mergedColumns}
+							rowClassName="editable-row"
+							pagination={false}
+							rowKey="id"
+						/>
+					</Form>
+				</Col>
+			</Row>
+		
 		</section>
 	)
 }

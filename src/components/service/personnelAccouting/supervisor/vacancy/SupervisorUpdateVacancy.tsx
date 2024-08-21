@@ -2,14 +2,14 @@ import { Button, ConfigProvider, Form, Input, Modal, Select } from 'antd'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { useAppSelector } from '../../../../store'
+import { useAppSelector } from '../../../../../store'
 import {
 	useGetCategoriesQuery,
 	useGetDirectionsQuery,
 	useGetSubdivisionsQuery,
 	useRequestUpdateVacancyMutation
-} from '../../../../store/api/serviceApi'
-import ArrowIcon from '../../jobSeeker/ArrowIcon'
+} from '../../../../../store/api/serviceApi'
+import ArrowIcon from '../../../jobSeeker/ArrowIcon'
 
 export const SupervisorUpdateVacancy = () => {
 	const { currentVacancy } = useAppSelector(state => state.currentVacancy)

@@ -24,6 +24,7 @@ import {
 	VacancyViewResponceType,
 	InterviewRequestType,
 	InterviewItemType,
+	InterviewViewResponseType,
 	respondStatus
 } from '../reducers/type'
 
@@ -622,6 +623,11 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
+		getInterviewView: builder.query<InterviewViewResponseType, number>({
+			query: id => ({
+				url: 'http://localhost:8082/employment-api/v1/interviewy/' + id
+			})
+		}),
 	})
 })
 export const {
@@ -691,4 +697,5 @@ export const {
 	useLazyGetVacancyPreviewByDirectionQuery,
 	useLazyGetVacancyPreviewBySubdivisionQuery,
 	useGetSupervisorInterviewQuery,
+	useLazyGetInterviewViewQuery,
 } = serviceApi

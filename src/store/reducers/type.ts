@@ -157,6 +157,10 @@ export type VacancyViewResponceType = {
 	}
 }
 
+export type InterviewViewResponseType = {
+	id: number
+}
+
 export enum respondStatus {
 	'IN_REVIEW',
 	'IN_SUPERVISOR_REVIEW',
@@ -329,10 +333,17 @@ export type VacancyRequestViewType = {
 	oldData: VacancyRequestType | null
 }
 
+export type InterviewRequestViewType = {
+	id: number
+}
+
 export type InterviewRequestType ={
 	respondId : number,
+	seeker_name : string,
+	post: string;
 	date : string,
-	format : string
+	time: string,
+	type : string
 }
 
 export type InterviewItemType = {

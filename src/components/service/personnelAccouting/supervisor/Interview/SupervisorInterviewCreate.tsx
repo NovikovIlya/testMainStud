@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Button, Form, Select, DatePicker, TimePicker, Modal, ConfigProvider} from "antd"
 import {useGetSupervisorVacancyQuery,
         useRequestCreateInterviewMutation
-} from "../../../../store/api/serviceApi";
+} from "../../../../../store/api/serviceApi";
 
 export const SupervisorInterviewCreate = () => {
 
@@ -62,7 +62,7 @@ export const SupervisorInterviewCreate = () => {
                     width={407}
                 >
                     <p className="font-content-font font-normal text-black text-[16px]/[20px] text-center">
-                        Произошла ошибка. Нет ответа от сервера.
+                        Произошла ошибка или нет ответа от сервера.
                     </p>
                     <div className="mt-[40px] flex gap-[12px]">
                         <Button
@@ -96,7 +96,7 @@ export const SupervisorInterviewCreate = () => {
                     }}
                 >
                     <Form.Item
-                        name={'seeker'}
+                        name={'seeker_name'}
                         label={
                             <label className="text-black opacity-[80%] text-[18px]/[18px] font-content-font font-normal">
                                 Соискатель
@@ -133,7 +133,7 @@ export const SupervisorInterviewCreate = () => {
                     </Form.Item>
                     <div className="flex flex-row w-full gap-[20px]">
                         <Form.Item
-                            className="w-4/12"
+                            className="w-6/12"
                             name={'date'}
                             label={
                                 <label className="opacity-[80%] text-black text-[18px]/[18px] font-content-font font-normal">
@@ -143,28 +143,25 @@ export const SupervisorInterviewCreate = () => {
                             rules={[{required: true, message: 'Не указаны дата и время'}]}
                         >
                             <DatePicker
+                              format={'DD.MM.YYYY, h:mm'}
+                              showTime={{
+                                minuteStep: 15,
+                                disabledHours: () => {
+                                  return [0, 1, 2, 3, 4, 5, 6, 7, 20, 21, 22, 23]
+                                },
+                                hideDisabledOptions: true
+                              }}
+                              className="w-full"
+                              onChange={(e, dateString) => {
+                                console.log(e)
+                                console.log(dateString)
+                              }}
                                 placeholder="Выбрать">
 
                             </DatePicker>
                         </Form.Item>
                         <Form.Item
-                            className="w-4/12"
-                            name={'date'}
-                            label={
-                                <label className="opacity-[80%] text-black text-[18px]/[18px] font-content-font font-normal">
-                                    Время
-                                </label>
-                            }
-                            rules={[{required: true, message: 'Не указаны дата и время'}]}
-                        >
-                            <TimePicker
-                                placeholder="Выбрать">
-
-                            </TimePicker>
-                        </Form.Item>
-
-                        <Form.Item
-                            className="w-4/12"
+                            className="w-6/12"
                             name={'type'}
                             label={
                                 <label className="opacity-[80%] text-black text-[18px]/[18px] font-content-font font-normal">

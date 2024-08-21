@@ -3,13 +3,13 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-import { DeleteSvg } from '../../../../assets/svg/DeleteSvg'
+import { DeleteSvg } from '../../../../../assets/svg/DeleteSvg'
 import {
 	useLazyGetVacancyViewQuery,
 	useRequestDeleteVacancyMutation
-} from '../../../../store/api/serviceApi'
-import { setCurrentVacancy } from '../../../../store/reducers/CurrentVacancySlice'
-import { VacancyItemType } from '../../../../store/reducers/type'
+} from '../../../../../store/api/serviceApi'
+import { setCurrentVacancy } from '../../../../../store/reducers/CurrentVacancySlice'
+import { VacancyItemType } from '../../../../../store/reducers/type'
 
 export default function VacancyItem(props: VacancyItemType) {
 	const [getVacancy, result] = useLazyGetVacancyViewQuery()

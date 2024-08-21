@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import { Button, Tag, ConfigProvider, Modal, Form, Select, Input } from 'antd'
-import ArrowIcon from '../../jobSeeker/ArrowIcon'
-import { AvatartandardSvg } from '../../../../assets/svg/AvatarStandardSvg'
+import ArrowIcon from '../../../jobSeeker/ArrowIcon'
+import { AvatartandardSvg } from '../../../../../assets/svg/AvatarStandardSvg'
 import uuid from 'react-uuid'
-import { useAppSelector } from '../../../../store'
-import { useGetRespondFullInfoQuery } from '../../../../store/api/serviceApi'
+import { useAppSelector } from '../../../../../store'
+import { useGetRespondFullInfoQuery } from '../../../../../store/api/serviceApi'
 
 export const SupervisorInterviewSeekerInfo = (props : { status : 'ONLINE_ONGOING' | 'ENDED' | 'OFFLINE_ONGOING'}) => {
 
@@ -123,26 +123,6 @@ export const SupervisorInterviewSeekerInfo = (props : { status : 'ONLINE_ONGOING
 												{ value: '2', label: 'Причина 3' }
 											]}
 										></Select>
-									</Form.Item>
-									<Form.Item
-										name={'reason-for-refusal'}
-										label={
-											<label className="mb-[10px] text-black text-[18px]/[18px] font-content-font font-normal">
-												Сообщение
-											</label>
-										}
-									>
-										<TextArea
-											name="refuse-message"
-											rows={4}
-										/>
-										<div className="w-full flex justify-end mt-[40px]">
-											<Button
-												className="h-[40px] w-[121px] bg-[#3073D7] rounded-[54.5px] text-white text-[16px]/[16px]"
-											>
-												Отправить
-											</Button>
-										</div>
 									</Form.Item>
 								</Form>
 							</Modal>

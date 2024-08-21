@@ -2,7 +2,7 @@ import {
   Col, Modal,
   Row,
   Select, Spin, Table,
-  Typography
+  Typography,Form
 } from 'antd'
 
 import {
@@ -10,7 +10,7 @@ import {
 } from '../../../../models/representation'
 
 import { EditableCell } from './EditableCell'
-import { useGetPracticesAllQuery, useGetSubdivisionForPracticeQuery } from '../../../../store/api/practiceApi/individualTask'
+import { useGetGroupNumberQuery, useGetPracticesAllQuery, useGetSubdivisionForPracticeQuery } from '../../../../store/api/practiceApi/individualTask'
 import { LoadingOutlined } from '@ant-design/icons'
 import { useGetAllSubmissionsQuery } from '../../../../store/api/practiceApi/representation'
 import { useGetSpecialtyNamesForPractiseQuery } from '../../../../store/api/practiceApi/roster'
@@ -55,8 +55,10 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 	const {data:dataAllSubmissions} = useGetAllSubmissionsQuery(selectedPractice,{skip:!selectedPractice})
 	const {data:dataAllPractise,isLoading} = useGetPracticesAllQuery(null)
 	const {data:dataAllSubdivision} = useGetSubdivisionForPracticeQuery()
-	const {data:dataAllSpecialty} = useGetSpecialtyNamesForPractiseQuery(subdivisionId,{skip:!subdivisionId})
+	const {data:dataAllSpecialty,isSuccess:isSuccesSpecialty} = useGetSpecialtyNamesForPractiseQuery(subdivisionId,{skip:!subdivisionId})
 	const [tableData, setTableData] = useState<any>(dataAllPractise)
+	const {data:dataGroupNumber} = useGetGroupNumberQuery(subdivisionId, {skip:!subdivisionId})
+	const [form] = Form.useForm()
 	const [filter, setFilter] = useState<any>({
 		type: '',
 		spec: '',
@@ -68,7 +70,8 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 		specialtyName: 'Все',
 		subdivision: 'Все',
 		academicYear: 'Все',
-		groupNumber: 'Все'
+		groupNumber: 'Все',
+
 	})
  	const columnsRepresentation = [
 	{
@@ -133,10 +136,14 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 				return elem.courseNumber === filter.courseNumber
 			}
 		}
+		function filterGroup(elem: any) {
+			if (filter.groupNumber === 'Все') {
+				return elem
+			} else {
+				return elem.groupNumber === filter.groupNumber
+			}
+		}
 	function filterSubdivision(elem: any) {
-			console.log('filter.subdivision',filter.subdivision)
-			console.log('elem.subdivision',elem.subdivision)
-			console.log('filter.subdivision.spli',filter.subdivision.split(' - ')[1])
 			if (filter.subdivision === 'Все') {
 				return elem
 			} else {
@@ -200,97 +207,15 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 					.filter((elem: any) => filterSubdivision(elem))
 					.filter((elem: any) => filterCourse(elem))
 					.filter((elem: any) => filterspecialtyName(elem))
+					.filter((elem: any) => filterGroup(elem))
 		 
 			: []
 	}
-	// useEffect(() => {
-	// 	function filterDataFull() {
-	// 		function filterCourse(elem: any) {
-	// 			if (filter.courseNumber === 'Все') {
-	// 				return elem
-	// 			} else {
-	// 				return elem.courseNumber === filter.courseNumber
-	// 			}
-	// 		}
-	// 	function filterSubdivision(elem: any) {
-	// 			if (filter.courseNumber === 'Все') {
-	// 				return elem
-	// 			} else {
-	// 				return elem.courseNumber === filter.courseNumber
-	// 			}
-	// 		}
-	// 		function filterKind(elem: any) {
-	// 			if (filter.selectKind === 'Все') {
-	// 				return elem
-	// 			} else {
-	// 				// @ts-ignore
-	// 				return elem.selectKind === filter.selectKind
-	// 			}
-	// 		}
-	// 	function filterAcademicYeary(elem: any) {
-	// 			if (filter.academicYear === 'Все') {
-	// 				return elem
-	// 			} else {
-	// 				// @ts-ignore
-	// 				return elem.academicYear === filter.academicYear
-	// 			}
-	// 		}
-	// 	function filterNumber(elem: any) {
-	// 			if (filter.groupNumber === 'Все') {
-	// 				return elem
-	// 			} else {
-	// 				// @ts-ignore
-	// 				return elem.groupNumber === filter.groupNumber
-	// 			}
-	// 		}
-	// 		function filterspecialtyName(elem: any) {
-	// 			if (filter.specialtyName === 'Все') {
-	// 				return elem
-	// 			} else {
-	// 				// @ts-ignore
-	// 				return elem.specialtyName === filter.specialtyName
-	// 			}
-	// 		}
-	// 	function filtersLevel(elem: any) {
-	// 			if (filter.level === 'Все') {
-	// 				return elem
-	// 			} else {
-	// 				// @ts-ignore
-	// 				return elem.level === filter.level
-	// 			}
-	// 		}
-	
-	// 		function sortDateFilling(a: any, b: any) {
-	// 			if (filter.dateFilling === 'По дате (сначала новые)') {
-	// 				return +new Date(b.dateFilling) - +new Date(a.dateFilling)
-	// 			}
-	// 			if (filter.dateFilling === 'По дате (сначала старые)') {
-	// 				return +new Date(a.dateFilling) - +new Date(b.dateFilling)
-	// 			}
-	// 			return 0
-	// 		}
-	
-	// 		return dataAllPractise
-	// 			? dataAllPractise
-	// 					.filter((elem: any) => filterSubdivision(elem))
-	// 					.filter((elem: any) => filterCourse(elem))
-	// 					.filter((elem: any) => filterspecialtyName(elem))
-			 
-	// 			: []
-	// 	}
-	// 	// if (isSuccessPractiseAll) {
-	// 	setTableData(filterDataFull())
-		
-	// 	// @ts-ignore
 
-	// 	// }
-	// }, [dataAllPractise, filter])
-	console.log('tableData',tableData)
+
 	const filteredData = filterDataFull()?.filter((record: any) => {
 		return record.id !== selectedPractice
 	});
-
-	console.log('filteredData',filteredData)
 
   	return (
 		<Modal
@@ -300,7 +225,7 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 			open={isModalOpenOne}
 			onOk={handleOkOne}
 			onCancel={handleCancelOne}
-		>
+		><Form form={form}>
 			<Row gutter={[8, 16]} className="mt-12 w-full flex items-center">
 				<Col span={4}>
 					<Typography.Text>Подразделение</Typography.Text>
@@ -310,18 +235,32 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 						popupMatchSelectWidth={false}
 						defaultValue="Все"
 						className="w-full"
-						options={dataAllSubdivision?.length > 0 ? processingOfDivisions(dataAllSubdivision) : []}
+						options={[
+							{ key: 2244612, value: 'Все', label: 'Все' },
+							...(dataAllSubdivision
+								? processingOfDivisions(dataAllSubdivision).map(item => ({
+										key: item.id,
+										value: item.value,
+										label: item.label
+								  }))
+								: [])
+						]}
+						// options={dataAllSubdivision?.length > 0 ? processingOfDivisions(dataAllSubdivision) : []}
 						onChange={value => {
-							const x = findSubdivisionsExport((dataAllSubdivision), value )
-							if('responses' in x){
-								setSubdivisionId(x.responses[0].id)
-							}else{setSubdivisionId(x.id)}
-							
+							if(value!=='Все'){
+								const x = findSubdivisionsExport(dataAllSubdivision, value )
+								if('responses' in x){
+									setSubdivisionId(x.responses[0].id)
+								}else{setSubdivisionId(x.id)}
+							}
 						
+							
 							setFilter({
 								...filter,
-								subdivision: value
+								subdivision: value,
+								specialtyName: 'Все'
 							})
+							form.setFieldValue('specialtyName', 'Все')
 						}}
 					/>
 				</Col>
@@ -331,21 +270,32 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 					<Typography.Text>Шифр и наимеование документа</Typography.Text>
 				</Col>
 				<Col span={8}>
+					<Form.Item className='mb-0' name={'specialtyName'}>
 					<Select
 						disabled={!subdivisionId}
 						showSearch
 						optionFilterProp="label"
-						filterSort={(optionA, optionB) =>
-							(optionA?.label ?? '')
-								// @ts-ignore
-								.toLowerCase()
-								// @ts-ignore
-								.localeCompare((optionB?.label ?? '').toLowerCase())
-						}
+						// filterSort={(optionA, optionB) =>
+						// 	(optionA?.label ?? '')
+						// 		// @ts-ignore
+						// 		.toLowerCase()
+						// 		// @ts-ignore
+						// 		.localeCompare((optionB?.label ?? '').toLowerCase())
+						// }
 						popupMatchSelectWidth={false}
 						defaultValue="Все"
 						className="w-full"
-						options={dataAllSpecialty}
+						// options={dataAllSpecialty}
+						options={[
+							{ key: 2244612, value: 'Все', label: 'Все' },
+							...(dataAllSpecialty
+								? dataAllSpecialty.map((item:any) => ({
+										key: item.id,
+										value: item.value,
+										label: item.label
+								  }))
+								: [])
+						]}
 						onChange={value => {
 							setFilter({
 								...filter,
@@ -353,38 +303,31 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 							})
 						}}
 					/>
+					</Form.Item>
 				</Col>
 			</Row>
 
-			{/* <Row gutter={[8, 16]} className="mt-4 w-full flex items-center">
-				<Col span={4}>
-					<Typography.Text>Учебный год</Typography.Text>
-				</Col>
-				<Col span={8}>
-					<Select
-						popupMatchSelectWidth={false}
-						defaultValue="Все"
-						className="w-full"
-						options={filterSpecialization}
-						onChange={value => {
-							setFilter({
-								...filter,
-								academicYear: value
-							})
-						}}
-					/>
-				</Col>
-			</Row>
+			
 			<Row gutter={[8, 16]} className="mt-4 w-full flex items-center">
 				<Col span={4}>
 					<Typography.Text>Номер группы</Typography.Text>
 				</Col>
 				<Col span={8}>
 					<Select
+						disabled={!subdivisionId}
 						popupMatchSelectWidth={false}
 						defaultValue="Все"
 						className="w-full"
-						options={filterSpecialization}
+						options={[
+							{ key: 0, value: 'Все', label: 'Все' },
+							...(dataGroupNumber
+								? dataGroupNumber.map(item => ({
+										key: item.id,
+										value: item.value,
+										label: item.label
+								  }))
+								: [])
+						]}
 						onChange={value => {
 							setFilter({
 								...filter,
@@ -393,7 +336,7 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 						}}
 					/>
 				</Col>
-			</Row> */}
+			</Row> 
 			{/* <Row gutter={[8, 16]} className="mt-4  w-full flex items-center">
 				<Col span={4}>
 					<Typography.Text>Уровень образования</Typography.Text>
@@ -448,11 +391,12 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 				dataSource={filteredData}
 				columns={columnsRepresentation}
 				// rowClassName={record => selectedPractice===record.key ? "hide" : ''}
-				pagination={dataAllPractise?.length < 5 ? false : {
-					pageSize: 3,
+				pagination={dataAllPractise?.length < 6 ? false : {
+					pageSize: 5,
 				}}
 				rowKey="id"
 			/>}
+			</Form>
 		</Modal>
 	)
 }

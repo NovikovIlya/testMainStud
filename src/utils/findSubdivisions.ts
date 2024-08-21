@@ -25,9 +25,10 @@ export const findSubdivisions = (subdivisionsAll:any,field:any) => {
             }
             if(item.value === field){
                 return item
-            }else{
-                return field
             }
+            // else{
+            //     return field
+            // }
         }
     
     })

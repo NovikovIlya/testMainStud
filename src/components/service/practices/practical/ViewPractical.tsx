@@ -19,6 +19,7 @@ import { EditSvg } from '../../../../assets/svg/EditSvg'
 import { PointsSvg } from '../../../../assets/svg/PointsSvg'
 import {
 	useGetDepartmentsQuery,
+	useGetGroupNumberQuery,
 	useGetPracticeKindQuery,
 	useGetPracticeTypeForPracticeQuery,
 	useGetPracticeTypeQuery,
@@ -72,40 +73,7 @@ const filterCourse: FilterType[] = [
 		label: '6'
 	}
 ]
-const filterSemester: FilterType[] = [
-	{
-		value: 'Все',
-		label: 'Все'
-	},
-	{
-		value: '1',
-		label: '1'
-	},
-	{
-		value: '2',
-		label: '2'
-	},
-	{
-		value: '3',
-		label: '3'
-	},
-	{
-		value: '4',
-		label: '4'
-	},
-	{
-		value: '5',
-		label: '5'
-	},
-	{
-		value: '6',
-		label: '6'
-	},
-	{
-		value: '7',
-		label: '7'
-	}
-]
+
 
 export interface TablePractical {
 	id: string
@@ -149,6 +117,7 @@ export const ViewPractical = () => {
 		practiceType: 'Все',
 		subdivision:'Все',
 		dateFilling: 'По дате (сначала новые)',
+		groupNumber: 'Все'
 	})
 	const {
 		data: dataPractiseAll,
@@ -169,6 +138,7 @@ export const ViewPractical = () => {
 	const { data: dataPracticeType, isSuccess: isSuccessPracticeType } = useGetPracticeTypeForPracticeQuery(objType, {
 		skip: objType.subDivisionId === null || objType.specialtyNameId === null
 	})
+	const {data:dataGroupNumber} = useGetGroupNumberQuery(subDevisionId, {skip:!subDevisionId})
 
 	const optionsSortDate: any = [
         {value: 'По дате (сначала новые)', label: 'По дате (сначала новые)'},
@@ -539,6 +509,13 @@ export const ViewPractical = () => {
 				return elem.specialtyName === filter.nameSpecialty
 			}
 		}
+		function filterGroup(elem: TablePractical) {
+			if (filter.groupNumber === 'Все') {
+				return elem
+			} else {
+				return elem.groupNumber === filter.groupNumber
+			}
+		}
 	
 		function sortDateFilling(a:any, b:any) {
             if (filter.dateFilling === 'По дате (сначала новые)') {
@@ -558,6 +535,7 @@ export const ViewPractical = () => {
 					.filter((elem: any) => filterSemester(elem))
 					.filter((elem: any) => filterNameSpecialty(elem))
 					.filter((elem :any) => filterSubdivision(elem))
+					.filter((elem :any) => filterGroup(elem))
 					.sort((a:any, b:any) => sortDateFilling(a, b))
 			: []
 	}
@@ -755,6 +733,38 @@ export const ViewPractical = () => {
 						/>
 					</Col>
 				</Row>
+
+				<Row gutter={[16, 16]} className="mt-4 overWrite">
+					<Col span={5}>
+						<span>Номер группы</span>
+					</Col>
+					<Col span={8} className='overWrite'>
+						<Select
+
+							disabled={!isSuccessDep}
+							popupMatchSelectWidth={false}
+							defaultValue="Все"
+							className="w-full"
+							options={[
+								{ key: 0, value: 'Все', label: 'Все' },
+								...(dataGroupNumber
+									? dataGroupNumber.map(item => ({
+											key: item.id,
+											value: item.value,
+											label: item.label
+									  }))
+									: [])
+							]}
+							onChange={value => {
+								setFilter({
+									...filter,
+									groupNumber: value
+								})
+							}}
+						/>
+					</Col>
+				</Row>
+
 				<Row gutter={[16, 16]} className="mt-4 overWrite">
 					<Col span={3} className={'flex items-center gap-4 overWrite'}>
 						<span>Курс</span>

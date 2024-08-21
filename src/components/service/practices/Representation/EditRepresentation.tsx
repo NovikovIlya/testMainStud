@@ -1,35 +1,27 @@
-import { CheckOutlined, CloseOutlined, SearchOutlined, VerticalAlignBottomOutlined } from '@ant-design/icons'
+import { CheckOutlined, CloseOutlined, VerticalAlignBottomOutlined } from '@ant-design/icons'
 import {
 	Button,
 	Col,
 	Descriptions,
-	Form,
-	Input,
-	Modal,
-	Popconfirm,
-	Popover,
-	Radio,
-	Result,
-	Row,
-	Select,
-	Space,
+	Form, Popconfirm,
+	Popover, Row, Space,
 	Table,
 	Typography
 } from 'antd'
-import type { DescriptionsProps, TableProps } from 'antd'
+import type { TableProps } from 'antd'
 import { FilterDropdownProps } from 'antd/es/table/interface'
 import dayjs from 'dayjs'
-import printJS from 'print-js'
 import { useEffect, useRef, useState } from 'react'
-import Highlighter from 'react-highlight-words'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { ArrowLeftSvg } from '../../../../assets/svg'
 import { EditSvg } from '../../../../assets/svg/EditSvg'
-import { FilterType, GetColumnSearchProps, Item } from '../../../../models/representation'
+import { Item } from '../../../../models/representation'
 
 import { EditableCell } from './EditableCell'
 import { useEditSubmissionMutation, useGetDocRepresentationQuery, useGetOneSubmissionsQuery } from '../../../../store/api/practiceApi/representation'
+import { SkeletonPage } from './Skeleton'
+
 
 
 const optionMock = [
@@ -118,7 +110,7 @@ export const EditRepresentation = () => {
 	const [searchText, setSearchText] = useState('')
 	const [searchedColumn, setSearchedColumn] = useState('')
 	const [visiting,setVisiting] = useState(false)
-	const {data:dataOneSubmissions,isSuccess} = useGetOneSubmissionsQuery(id,{skip:!id})
+	const {data:dataOneSubmissions,isSuccess,isLoading:isLoadingOneSubmission} = useGetOneSubmissionsQuery(id,{skip:!id})
 	const {data:dataGetDocRepresentation,isLoading:isLoadingDocRepesentation} = useGetDocRepresentationQuery(null)
 	const [editSumbissions,{}] = useEditSubmissionMutation({})
 	const [fullTable,setFullTable] = useState<any>([])
@@ -127,7 +119,7 @@ export const EditRepresentation = () => {
 	useEffect(() => {
 		// if (isSuccessPractiseAll) {
 		setTableData(filterDataFull())
-		console.log('update')
+		
 		// @ts-ignore
 
 		// }
@@ -273,17 +265,17 @@ export const EditRepresentation = () => {
 	]
 
 	const items: any = [
-		{
-		  key: '1',
-		  label: 'Подразделение',
-		  children: isSuccess ? dataOneSubmissions.practice.subdivision : '',
+		// {
+		//   key: '1',
+		//   label: 'Подразделение',
+		//   children: isSuccess ? dataOneSubmissions.practice.subdivision : '',
 
-		},
-		{
-		  key: '2',
-		  label: 'Наименование специальности',
-		  children: isSuccess ? dataOneSubmissions.practice.specialtyName : '',
-		},
+		// },
+		// {
+		//   key: '2',
+		//   label: 'Наименование специальности',
+		//   children: isSuccess ? dataOneSubmissions.practice.specialtyName : '',
+		// },
 		{
 		  key: '3',
 		  label: 'Вид',
@@ -303,6 +295,11 @@ export const EditRepresentation = () => {
 			key: '6',
 			label: 'Тема',
 			children:  isSuccess ? dataOneSubmissions.theme : '',
+		},
+		{
+			key: '66',
+			label: 'Форма',
+			children:  isSuccess ? dataOneSubmissions.isWithDeparture ? 'Выездная' : 'Невыездная' : '',
 		},
 		{
 			key: '7',
@@ -508,7 +505,8 @@ export const EditRepresentation = () => {
 		editSumbissions(obj)
 	}
 
-
+	if(isLoadingOneSubmission) return <SkeletonPage/>
+	
 	return (
 		<section className="container">
 			<Row gutter={[16, 16]}>
@@ -523,7 +521,7 @@ export const EditRepresentation = () => {
 						}}
 					/>
 					<Typography.Text className=" text-[28px] mb-14">
-						Представление в приказ ...
+						Представление в приказ группы "{dataOneSubmissions?.practice.groupNumber}" подразделения "{dataOneSubmissions?.practice.subdivision}" на {dataOneSubmissions?.practice.academicYear} учебный год
 					</Typography.Text>
 				</Col>
 			</Row>

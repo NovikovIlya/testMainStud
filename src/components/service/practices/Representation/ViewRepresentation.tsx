@@ -6,9 +6,9 @@ import {
 	Space,
 	Spin,
 	Table,
-	Typography,Form
+	Typography, Form
 } from 'antd'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { PointsSvg } from '../../../../assets/svg/PointsSvg'
@@ -20,31 +20,12 @@ import { LoadingOutlined } from '@ant-design/icons'
 import { findSubdivisions } from '../../../../utils/findSubdivisions'
 
 
-const optionsNames = [
-	{ value: 'Все', label: 'Все' },
-	{ value: 'Представление 1', label: 'Представление 1' },
-	{ value: 'тест', label: 'тест' },
-]
-const optionsSortDate: any = [
-	{ value: 'По дате (сначала новые)', label: 'По дате (сначала новые)' },
-	{ value: 'По дате (сначала старые)', label: 'По дате (сначала старые)' }
-]
-
-
-
-const specialtyNameOptions = [
-	{ value: 'Все', label: 'Все' },
-	{ value: '30.08.01 Акушерство и гинекология', label: '30.08.01 Акушерство и гинекология' },
-]
 const visitingOptions = [
 	{ value: 'Все', label: 'Все' },
 	{ value: 'Да', label: 'Да' },
 	{ value: 'Нет', label: 'Нет' },
 ]
-const fioOptions = [
-	{ value: 'Все', label: 'Все' },
-	{ value: 'Иванов И.И.', label: 'Иванов И.И.' },
-]
+
 const courseNumberOptions = [
 	{ value: 'Все', label: 'Все' },
 	{ value: '1', label: '1' },
@@ -53,27 +34,6 @@ const courseNumberOptions = [
 	{ value: '4', label: '4' },
 	{ value: '5', label: '5' },
 	{ value: '6', label: '6' },
-]
-const academicYearOptions = [
-		{ value: 'Все', label: 'Все' },
-		{ value: '2022/2023', label: '2022/2023' },
-		{ value: '2023/2024', label: '2023/2024' },
-		{ value: '2024/2025', label: '2024/2025' },
-		{ value: '2025/2026', label: '2025/2026' },
-		{ value: '2026/2027', label: '2026/2027' },
-		{ value: '2027/2028', label: '2027/2028' },
-		{ value: '2028/2029', label: '2028/2029' },
-		{ value: '2029/2030', label: '2029/2030' },
-]
-const practiceKindOptions = [
-	{ value: 'Все', label: 'Все' },
-	{ value: 'Производственная', label: 'Производственная' },
-	{ value: 'Технологическая', label: 'Технологическая' },
-]
-const typeOptions = [
-	{ value: 'Все', label: 'Все' },
-	{ value: 'Производственная', label: 'Производственная' },
-	{ value: 'Технологическая', label: 'Технологическая' },
 ]
 
 export const ViewRepresentation = () => {
@@ -182,7 +142,6 @@ export const ViewRepresentation = () => {
 	const {data:dataSubmissionAcademicYear} = useGetSubmissionsAcademicYearQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
 	const [dataTable, setDataTable] = useState<any>([])
 
-	console.log('123',dataTable)
 	useEffect(()=>{
 		form.setFieldValue('practiceType', 'Все')
 		form.setFieldValue('practiceKind', 'Все')
@@ -208,10 +167,7 @@ export const ViewRepresentation = () => {
 		setDataTable(filterDataFull())
 		}
 	}, [filter,isSuccessSubAll])
-	console.log(
-		'filter,',
-		filter
-	)
+	
 
 	function filterDataFull() {
 		function filterName(elem: any) {
@@ -229,8 +185,7 @@ export const ViewRepresentation = () => {
 			}
 		}
 		function filtervisiting(elem: any) {
-			console.log('filter.visiting',filter.visiting)
-			console.log('elem.visiting',elem.isWithDeparture)
+	
 			if (filter.visiting === 'Все') {
 				return elem
 			} else {
@@ -445,91 +400,12 @@ export const ViewRepresentation = () => {
 			width: 50
 		}
 	]
+
 	const handleRowClick = (record:any) => {
 		navigate(`/services/practices/representation/edit/${record.id}`)
     };
 
-	// const arraySubdevision = [
-       
-    //     ...(dataAllSubmissions ? 
-    //         dataAllSubmissions.map((item:any) => ({
-    //             key: item.id,
-    //             value: item.practice.subdivision,
-    //             label: item.practice.subdivision
-    //         })) 
-    //     : [])
-    // ];
-	// const uniqueSubdevision = useMemo(() => {
-	// 	if(prevDataByFilterLength?.current <= dataAllSubmissions?.length){
 
-	// 		const uniqueNames = Array.from(new Set(arraySubdevision.map(item => item.value)))
-	// 		.map(value => ({ value, label: value }));
-
-	// 		prevDataByFilterLength.current = dataAllSubmissions?.length
-
-	// 		if(dataAllSubmissions.length>=prevDataByFilterLength.current){
-	// 			//@ts-ignore
-	// 			prevDataByFilterLength.current = uniqueNames.length
-	// 		}
-	// 		//@ts-ignore
-	// 		prevUniqName.current = uniqueNames
-	// 		return uniqueNames;
-	// 	}else return prevUniqName.current
-	//   }, [dataAllSubmissions]);
-
-	// const arraySpec = [
-    //     { key: 2244612, value: "Все", label: "Все" },
-    //     ...(tableData ? 
-    //         tableData.map((item:any) => ({
-    //             key: item.id,
-    //             value: item.practice.specialtyName,
-    //             label: item.practice.specialtyName
-    //         })) 
-    //     : [])
-    // ];
-	// const uniqueSpec = useMemo(() => {
-	// 	if(prevDataByFilterLength?.current <= dataAllSubmissions?.length){
-	// 		const uniqueNames = Array.from(new Set(arraySpec.map(item => item.value)))
-	// 		.map(value => ({ value, label: value }));
-	// 		prevDataByFilterLength.current = dataAllSubmissions?.length
-
-	// 		if(dataAllSubmissions.length>=prevDataByFilterLength.current){
-	// 			//@ts-ignore
-	// 			prevDataByFilterLength.current = uniqueNames.length
-	// 		}
-	// 		//@ts-ignore
-	// 		prevUniqNameSpec.current = uniqueNames
-	// 		return uniqueNames;
-	// 	}else return prevUniqNameSpec.current
-	// }, [dataAllSubmissions]);
-	  
-	// const arrayFio = [
-    //     { key: 2244612, value: "Все", label: "Все" },
-    //     ...( tableData? 
-    //         tableData.map((item:any) => ({
-    //             key: item.id,
-    //             value: item.practice.departmentDirector,
-    //             label: item.practice.departmentDirector
-    //         })) 
-    //     : [])
-    // ];
-	// console.log('arrayFio',arrayFio)
-	// const uniqueFio = useMemo(() => {
-	// 	if(prevDataByFilterLength?.current <= dataAllSubmissions?.length){
-	// 		const uniqueNames = Array.from(new Set(arrayFio.map(item => item.value)))
-	// 		.map(value => ({ value, label: value }));
-	// 		prevDataByFilterLength.current = dataAllSubmissions?.length
-
-	// 		if(dataAllSubmissions.length>=prevDataByFilterLength.current){
-	// 			//@ts-ignore
-	// 			prevDataByFilterLength.current = uniqueNames.length
-	// 		}
-	// 		//@ts-ignore
-	// 		prevUniqNameFio.current = uniqueNames
-	// 		return uniqueNames;
-	// 	}else return prevUniqNameFio.current
-	// }, [dataAllSubmissions]);
-	console.log('11111111111',selectSubdivisionId)
 	return (
 		<Form form={form}>
 		<section className="container">
@@ -552,14 +428,6 @@ export const ViewRepresentation = () => {
 						className="w-full"
 						options={dataSubmisisionsSubdevision}
 						onChange={(value: any) => {
-							// const selectedOption = dataSubmisisionsSubdevision.find((option:any) => option.value === value);
-        
-       					
-							// if (selectedOption) {
-							// 	const selectedId = selectedOption.id;
-							// 	console.log(selectedId); 
-							// 	setSelectSubdivisionId(selectedId); 
-							// }
 							const x = findSubdivisions(dataSubmisisionsSubdevision,value)
 							if(x){
 								setSelectSubdivisionId(x.id)
@@ -588,11 +456,9 @@ export const ViewRepresentation = () => {
 				</Col>
 				<Col span={7}>
 				<Form.Item className='mb-0' name={'specialtyName'}>
-					
 					<Select
 						disabled={filter.subdivision === 'Все' ? true : false}
 						popupMatchSelectWidth={false}
-						
 						className="w-full"
 						options={[
 							{ key: 2244612, value: 'Все', label: 'Все' },

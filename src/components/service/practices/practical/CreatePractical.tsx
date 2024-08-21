@@ -28,6 +28,7 @@ import {
 	useGetPracticeTypeForPracticeQuery,
 	useGetSubdivisionForPracticeQuery,
 	useGetTasksForPracticeQuery,
+	useIsPeopleInGroupQuery,
 	usePostPracticesMutation
 } from '../../../../store/api/practiceApi/individualTask'
 import { useGetCafDepartmentsQuery } from '../../../../store/api/practiceApi/practical'
@@ -70,37 +71,7 @@ const optionsCourse: FilterType[] = [
 		label: '6'
 	}
 ]
-const optionsSemester: FilterType[] = [
 
-	{
-		value: '1',
-		label: '1'
-	},
-	{
-		value: '2',
-		label: '2'
-	},
-	{
-		value: '3',
-		label: '3'
-	},
-	{
-		value: '4',
-		label: '4'
-	},
-	{
-		value: '5',
-		label: '5'
-	},
-	{
-		value: '6',
-		label: '6'
-	},
-	{
-		value: '7',
-		label: '7'
-	}
-]
 
 export const CreatePractical = () => {
 	const nav = useNavigate()
@@ -122,14 +93,12 @@ export const CreatePractical = () => {
 	const [departments, setDepartments] = useState<Department[]>()
 	const [objType, setObjType] = useState<any>({subdivisionId: null,specialtyNameId: null})
 	const [practiceKindForSelect, setPracticeKindForSelect] = useState<any>(null)
-
+	const [groupId,setGroupId] = useState(null)
+	const {data:dataIsPeopleInGroup} = useIsPeopleInGroupQuery({subDivisionId:subDivisionId,groupId : groupId},{skip: !subDivisionId  || !groupId })
 	const { data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty } = useGetSpecialtyNamesForPractiseQuery(subDivisionId, {skip: subDivisionId === null})
 	const { data: dataPraciseKind, isSuccess: isSuccesPractiseKind } = useGetPracticeKindQuery(subDivisionId, { skip: subDivisionId === null })
 	const { data: dataGroupNumbers, isSuccess: isSuccessGroupNumbers } = useGetGroupNumbersQuery(subDivisionId, { skip: subDivisionId === null })
-	const {
-		data: dataDepartmentDirector,isSuccess: isSuccessDepartmentDirector} = useGetDepartmentDirectorsQuery(subDivisionId, {
-		skip: subDivisionId === null
-	})
+	const {data: dataDepartmentDirector,isSuccess: isSuccessDepartmentDirector} = useGetDepartmentDirectorsQuery(subDivisionId, {skip: !subDivisionId})
 	const { data: dataCompetences, isSuccess: isSuccessCompetences } =
 		useGetCompentencesQuery(objectForCompetences, {
 			skip: objectForCompetences === null
@@ -279,19 +248,11 @@ export const CreatePractical = () => {
 	}, [dataDep])
 
 	function onFinish(values: NewPractice) {
-		// const dateString = fullDate[0].$d
-		// const date = new Date(dateString)
-		// const year = date.getFullYear()
-		// const month = String(date.getMonth() + 1).padStart(2, '0')
-		// const day = String(date.getDate()).padStart(2, '0')
-		// const formattedDate = `${year}.${month}.${day}`
-
-		// const dateStringEnd = fullDate[1].$d
-		// const dateEnd = new Date(dateStringEnd)
-		// const yearEnd = dateEnd.getFullYear()
-		// const monthEnd = String(dateEnd.getMonth() + 1).padStart(2, '0')
-		// const dayEnd = String(dateEnd.getDate()).padStart(2, '0')
-		// const formattedDateEnd = `${yearEnd}.${monthEnd}.${dayEnd}`
+		if(!dataIsPeopleInGroup){
+            dispatch(showNotification({ message:
+                        'В выбранной группе нет студентов, пожалуйста выберите другую группу', type: 'warning'}))
+            return
+        }
 
 		const directorId = dataDepartmentDirector?.find((elem: any) => {
 			if (elem.value === values.director) {
@@ -308,7 +269,7 @@ export const CreatePractical = () => {
 				return elem
 			}
 		})
-		const pickId = dataPraciseKind?.find(elem => {
+		const pickId = dataPraciseKind?.find((elem:any) => {
 			if (elem.value === pickKindPractise) {
 				return elem
 			}
@@ -583,6 +544,13 @@ export const CreatePractical = () => {
 								size="large"
 								popupMatchSelectWidth={false}
 								className="w-full"
+								onChange={(value: any) => {
+									const groupId = dataGroupNumbers?.find((item: any) => item.value === value);
+									if (groupId !== undefined) {
+										// @ts-ignore
+									  setGroupId(groupId?.id);
+									}
+								  }}
 								options={dataGroupNumbers?.map((item: any) => {
 									return {
 										key: item.id,

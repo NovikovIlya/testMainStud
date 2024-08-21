@@ -280,11 +280,7 @@ export const EditPractical = () => {
 
    
     function onFinish(values: any) {
-        // if(dataIsPeopleInGroup){
-        //     dispatch(showNotification({ message:
-        //                 'В выбранной группе нет студентов, пожалуйста выберите другую группу', type: 'warning'}))
-        //     return
-        // }
+ 
         const directorId = dataDepartmentDirector?.find((elem:any) => {
             if (elem.value === values.director) {
                 return elem
@@ -607,7 +603,7 @@ export const EditPractical = () => {
                                     size="large"
                                     popupMatchSelectWidth={false}
                                     className="w-full"
-                                    options={dataGroupNumbers?.map((item)=>{
+                                    options={dataGroupNumbers?.map((item:any)=>{
                                         return{
                                             key:item.id,
                                             value:item.value,

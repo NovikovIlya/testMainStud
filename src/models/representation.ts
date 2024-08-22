@@ -67,3 +67,16 @@ export interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
 	record: Item
 	index: number
 }
+interface filterType {
+    type: string;
+    spec: string;
+    courseNumber: string;
+    level: string;
+    form: string;
+    dateFilling: string;
+    selectKind: string;
+    specialtyName: string;
+    subdivision: string;
+    academicYear: string;
+    groupNumber: string;
+}

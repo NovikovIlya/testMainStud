@@ -542,7 +542,7 @@ export const CreateRepresentation = () => {
 					<label htmlFor="topic">Тема:</label>
 				</Col>
 				<Col span={3} className=''>
-					<Input id="topic" placeholder='тема' onChange={(e) => setTheme(e.target.value)}/>	
+					<Input id="topic" placeholder=''  onChange={(e) => setTheme(e.target.value)}/>	
 				</Col>	
 			</Row> : ''}
 			

@@ -3,13 +3,12 @@ import {
 	Button,
 	Col,
 	Descriptions,
-	Form, Popconfirm,
+	Form, Input, Popconfirm,
 	Popover, Row, Space,
 	Table,
 	Typography
 } from 'antd'
 import type { TableProps } from 'antd'
-import { FilterDropdownProps } from 'antd/es/table/interface'
 import dayjs from 'dayjs'
 import { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -21,7 +20,8 @@ import { Item } from '../../../../models/representation'
 import { EditableCell } from './EditableCell'
 import { useEditSubmissionMutation, useGetDocRepresentationQuery, useGetOneSubmissionsQuery } from '../../../../store/api/practiceApi/representation'
 import { SkeletonPage } from './Skeleton'
-
+import { showNotification } from '../../../../store/reducers/notificationSlice'
+import { useAppDispatch } from '../../../../store'
 
 
 const optionMock = [
@@ -43,87 +43,26 @@ export const EditRepresentation = () => {
 	const path = useLocation()
 	const id = path.pathname.split('/').at(-1)!
 	const tableRef = useRef(null)
-	const originData: any = [
-		{
-			id: 'czxczxc',
-			key: 'czxczxc',
-			specialtyName: 'jim',
-			academicYear: '2024',
-			address: 'Kazan',
-			period: [dayjs('2024-07-01'), dayjs('2024-07-15')],
-			courseNumber: '1',
-			type: null,
-			dateFilling: '2024-07-30',
-			selectKind: 'Производственная',
-      subdivision: '',
-      groupNumber: '1',
-      level: 'бакалавр'
-		},
-		{
-			id: 'bbq',
-			key: 'bbq',
-			specialtyName: 'jon',
-			academicYear: '2030',
-			address: 'Moscw',
-			period: null,
-			courseNumber: '2',
-			type: null,
-			dateFilling: '2024-07-29',
-			selectKind: 'Производственная',
-      groupNumber: '1',
-       level: 'бакалавр'
-		},
-		{
-			id: 'ccx',
-			key: 'ccx',
-			specialtyName: 'jen',
-			academicYear: '2030',
-			address: 'Moscw',
-			period: null,
-			courseNumber: '1',
-			type: null,
-			dateFilling: '2024-07-28',
-			selectKind: 'Производственная',
-      groupNumber: '2',
-       level: 'ордин'
-		}
-	]
+	const originData: any[] = []
 	const nav = useNavigate()
-	const [tableData, setTableData] = useState<any>(originData)
-	const [filter, setFilter] = useState<any>({
-		type: '',
-		spec: '',
-		courseNumber: 'Все',
-		level: 'Все',
-		form: '',
-		dateFilling: 'По дате (сначала новые)',
-		selectKind: 'Все',
-		specialtyName: 'Все',
-    subdivision: 'Все',
-    academicYear: 'Все',
-    groupNumber: 'Все'
-	})
+	const [tableData, setTableData] = useState<any>([])
 	const [form] = Form.useForm()
 	const [data, setData] = useState(originData)
 	const [editingKey, setEditingKey] = useState('')
 	const isEditing = (record: Item) => record.key === editingKey
-	const [searchText, setSearchText] = useState('')
-	const [searchedColumn, setSearchedColumn] = useState('')
-	const [visiting,setVisiting] = useState(false)
 	const {data:dataOneSubmissions,isSuccess,isLoading:isLoadingOneSubmission} = useGetOneSubmissionsQuery(id,{skip:!id})
 	const {data:dataGetDocRepresentation,isLoading:isLoadingDocRepesentation} = useGetDocRepresentationQuery(null)
 	const [editSumbissions,{}] = useEditSubmissionMutation({})
 	const [fullTable,setFullTable] = useState<any>([])
-	const [editTheme,setEditTheme] = useState(dataOneSubmissions?.theme)
+	const [editTheme,setEditTheme] = useState('')
+	const [isEdit,setIsEdit] = useState(false)
+	const dispatch = useAppDispatch()
 
-	useEffect(() => {
-		// if (isSuccessPractiseAll) {
-		setTableData(filterDataFull())
-		
-		// @ts-ignore
-
-		// }
-	}, [filter])
+	useEffect(()=>{
+		if(isSuccess){
+			setEditTheme(dataOneSubmissions?.theme)
+		}
+	},[isSuccess,dataOneSubmissions?.theme])
 
 	useEffect(()=>{
 		if(isSuccess){
@@ -132,7 +71,7 @@ export const EditRepresentation = () => {
 						groupNumbers:dataOneSubmissions.practice.groupNumber,
 						departmentDirector:dataOneSubmissions.practice.departmentDirector}
 			})
-			setFullTable(array)
+			setFullTable(array.map((item:any)=>({...item,key: item.name})))
 		}
 	},[dataOneSubmissions,isSuccess])
 
@@ -189,14 +128,13 @@ export const EditRepresentation = () => {
 			dataIndex: 'A',
 			title: 'Категория',
 			className: `text-xs !p-2 ${isSuccess ? dataOneSubmissions.isWithDeparture ? '' : 'hidden' : 'hidden'}`,
-			editable: true,
 			render: (text: any, record: any) => (
 				<div>{record?.category || 'Нет челибаса...'}</div>
 			)
 		},
 		{
-			key: 'F',
-			dataIndex: 'F',
+			key: 'costForDay',
+			dataIndex: 'costForDay',
 			title: 'Суточные (50 руб/сут)',
 			className: `text-xs !p-2 ${isSuccess ? dataOneSubmissions.isWithDeparture ? '' : 'hidden' : 'hidden'}`,
 			editable: true,
@@ -205,8 +143,8 @@ export const EditRepresentation = () => {
 			)
 		},
 		{
-			key: 'E',
-			dataIndex: 'E',
+			key: 'arrivingCost',
+			dataIndex: 'arrivingCost',
 			title: 'Проезд (руб)',
 			className: `text-xs !p-2 ${isSuccess ? dataOneSubmissions.isWithDeparture ? '' : 'hidden' : 'hidden'}`,
 			editable: true,
@@ -215,8 +153,8 @@ export const EditRepresentation = () => {
 			)
 		},
 		{
-			key: 'C',
-			dataIndex: 'C',
+			key: 'livingCost',
+			dataIndex: 'livingCost',
 			title: 'Оплата проживания (руб)',
 			className: `text-xs !p-2 ${isSuccess ? dataOneSubmissions.isWithDeparture ? '' : 'hidden' : 'hidden'}`,
 			editable: true,
@@ -228,7 +166,7 @@ export const EditRepresentation = () => {
 		{
 			title: '',
 			dataIndex: 'operation',
-			className: `text-xs !p-2 ${isSuccess ? dataOneSubmissions.status==='' ? '' : 'hidden' : ''}`,
+			className: `text-xs !p-2 ${isSuccess ? dataOneSubmissions.status==='На рассмотрении' ? '' : 'hidden' : ''}`,
 			key: 'operation',
 			render: (_: any, record: Item) => {
 				const editable = isEditing(record)
@@ -265,17 +203,7 @@ export const EditRepresentation = () => {
 	]
 
 	const items: any = [
-		// {
-		//   key: '1',
-		//   label: 'Подразделение',
-		//   children: isSuccess ? dataOneSubmissions.practice.subdivision : '',
 
-		// },
-		// {
-		//   key: '2',
-		//   label: 'Наименование специальности',
-		//   children: isSuccess ? dataOneSubmissions.practice.specialtyName : '',
-		// },
 		{
 		  key: '3',
 		  label: 'Вид',
@@ -291,11 +219,21 @@ export const EditRepresentation = () => {
 			label: 'Тип',
 			children: isSuccess ? dataOneSubmissions.practice.practiceType : '',
 		},
-		{
+		...(isSuccess && dataOneSubmissions.isWithDeparture ? [{
 			key: '6',
 			label: 'Тема',
-			children:  isSuccess ? dataOneSubmissions.theme : '',
-		},
+			children: <div className='flex'>
+			  <Col span={19}>
+				{dataOneSubmissions?.status === 'На рассмотрении' ? 
+				  <Input size='small' id="topic" placeholder='тема' value={editTheme} onChange={(e) => {
+					setEditTheme(e.target.value)
+					setIsEdit(true)
+				  }} /> 
+				  : <div>{dataOneSubmissions?.theme}</div>
+				} 
+			  </Col>
+			</div>
+		  }] : []),
 		{
 			key: '66',
 			label: 'Форма',
@@ -304,7 +242,7 @@ export const EditRepresentation = () => {
 		{
 			key: '7',
 			label: 'Статус',
-			children:  isSuccess ? dataOneSubmissions.theme : '',
+			children:  isSuccess ? dataOneSubmissions.status : '',
 			render: (text: any) =>  <Popover content={<div>Редактировать представление можно только в статусе "Ожидание"</div>} title=""><span>{text}</span></Popover>
 		},
 	];
@@ -341,21 +279,17 @@ export const EditRepresentation = () => {
 						: col.dataIndex === 'selectKind'
 						? optionMockKind
 						: undefined,
-				rules: col.dataIndex === 'F' || col.dataIndex === 'E' || col.dataIndex === 'C' ? [] :  [{ required: true, message: `Заполните "${col.title}"!` }]
+				rules: dataOneSubmissions.isWithDeparture === false
+						? ((  col.dataIndex === 'place')  ? [{
+						required: true,
+						message: 'Поле обязательно для заполнения'}] : [])
+					 	: ((  col.dataIndex === 'place'||  col.dataIndex === 'costForDay' || col.dataIndex === 'arrivingCost' || col.dataIndex === 'livingCost')  ? [{
+						required: true,
+						message: 'Поле обязательно для заполнения'}] : [])
 			})
 		}
 	})
 
-
-	const handleSearch = (
-		selectedKeys: string[],
-		confirm: FilterDropdownProps['confirm'],
-		dataIndex: any
-	) => {
-		confirm()
-		setSearchText(selectedKeys[0])
-		setSearchedColumn(dataIndex)
-	}
 
 	const downloadFile = () => {
 		if (dataGetDocRepresentation) {
@@ -367,90 +301,6 @@ export const EditRepresentation = () => {
 
 			// window.URL.revokeObjectURL(dataBlob)
 		}
-	}
-
-	const handleReset = (clearFilters: () => void) => {
-		clearFilters()
-		setSearchText('')
-	}
-
-	function filterDataFull() {
-		function filterCourse(elem: any) {
-			if (filter.courseNumber === 'Все') {
-				return elem
-			} else {
-				return elem.courseNumber === filter.courseNumber
-			}
-		}
-    function filterSubdivision(elem: any) {
-			if (filter.courseNumber === 'Все') {
-				return elem
-			} else {
-				return elem.courseNumber === filter.courseNumber
-			}
-		}
-		function filterKind(elem: any) {
-			if (filter.selectKind === 'Все') {
-				return elem
-			} else {
-				// @ts-ignore
-				return elem.selectKind === filter.selectKind
-			}
-		}
-    function filterAcademicYeary(elem: any) {
-			if (filter.academicYear === 'Все') {
-				return elem
-			} else {
-				// @ts-ignore
-				return elem.academicYear === filter.academicYear
-			}
-		}
-    function filterNumber(elem: any) {
-			if (filter.groupNumber === 'Все') {
-				return elem
-			} else {
-				// @ts-ignore
-				return elem.groupNumber === filter.groupNumber
-			}
-		}
-		function filterspecialtyName(elem: any) {
-			if (filter.specialtyName === 'Все') {
-				return elem
-			} else {
-				// @ts-ignore
-				return elem.specialtyName === filter.specialtyName
-			}
-		}
-    function filtersLevel(elem: any) {
-			if (filter.level === 'Все') {
-				return elem
-			} else {
-				// @ts-ignore
-				return elem.level === filter.level
-			}
-		}
-
-		function sortDateFilling(a: any, b: any) {
-			if (filter.dateFilling === 'По дате (сначала новые)') {
-				return +new Date(b.dateFilling) - +new Date(a.dateFilling)
-			}
-			if (filter.dateFilling === 'По дате (сначала старые)') {
-				return +new Date(a.dateFilling) - +new Date(b.dateFilling)
-			}
-			return 0
-		}
-
-		return originData
-			? originData
-					.filter((elem: any) => filterCourse(elem))
-					.filter((elem: any) => filterKind(elem))
-					.filter((elem: any) => filterspecialtyName(elem))
-          .filter((elem: any) => filterSubdivision(elem))
-          .filter((elem: any) => filterAcademicYeary(elem))
-          .filter((elem: any) => filterNumber(elem))
-          .filter((elem: any) => filtersLevel(elem))
-					.sort((a: any, b: any) => sortDateFilling(a, b))
-			: []
 	}
 
 	const edit = (record: Partial<Item> & { key: React.Key }) => {
@@ -466,9 +316,9 @@ export const EditRepresentation = () => {
 	const save = async (key: React.Key) => {
 		try {
 			const row = (await form.validateFields()) as Item
-
 			const newData = [...fullTable]
 			const index = newData.findIndex(item => key === item.key)
+			setIsEdit(true)
 			if (index > -1) {
 				const item = newData[index]
 				newData.splice(index, 1, {
@@ -493,20 +343,26 @@ export const EditRepresentation = () => {
 		}
 	}
 
-	const editData = ()=>{
-		const arrayT: any = []
+	const editData = () => {
+		const arrayT: any = [{}]
 		const obj = arrayT.map((item:any)=>{
 			return {
+				...item,
 				students: fullTable.map(({key,...rest}:any)=>rest),
 				id: dataOneSubmissions.id,
-				theme: dataOneSubmissions.theme,
+				theme: editTheme,
 			}
 		})
-		editSumbissions(obj)
+		console.log('obj',obj[0])
+		editSumbissions(obj[0])
+		.unwrap()
+			.then(()=>dispatch(showNotification({ message: 'Представление успешно отредактировано', type: 'success' })))
 	}
+
 
 	if(isLoadingOneSubmission) return <SkeletonPage/>
 	
+
 	return (
 		<section className="container">
 			<Row gutter={[16, 16]}>
@@ -526,30 +382,23 @@ export const EditRepresentation = () => {
 				</Col>
 			</Row>
 			<Descriptions className='mt-8'  items={items} />
+		
 			<Row className="mt-4 mb-6 flex  ">
 				<Col span={12} >
 					<div>
 						<Space>
-							<Button onClick={downloadFile} loading={isLoadingDocRepesentation} disabled={isLoadingDocRepesentation}>
+							{!isEdit ? <Button  onClick={downloadFile} loading={isLoadingDocRepesentation} disabled={isLoadingDocRepesentation || isEdit}>
 								<VerticalAlignBottomOutlined /> Скачать
-							</Button>
+							</Button> :
+							<Popover content={'Прежде чем скачать, сохраните измененное представление'} >
+								<Button  onClick={downloadFile} loading={isLoadingDocRepesentation} disabled={isLoadingDocRepesentation || isEdit}>
+									<VerticalAlignBottomOutlined /> Скачать
+								</Button>
+  							</Popover>}
 						</Space>
 					</div>
 				</Col>
-				{isSuccess && dataOneSubmissions.theme==='' ?
-				<Col span={7} offset={5}>
-					<Space className="w-full flex-row-reverse">
-						<Button
-							type="primary"
-							className="!rounded-full"
-							onClick={() => {
-								editData()
-							}}
-						>
-							Сохранить
-						</Button>
-					</Space>
-				</Col> : ''}
+			
 			</Row>
 
 			<Row className="mt-4">
@@ -571,6 +420,26 @@ export const EditRepresentation = () => {
 						/>
 					</Form>
 				</Col>
+			</Row>
+			<Row>
+			{isSuccess && dataOneSubmissions.status==='На рассмотрении' ?
+				<Col span={2} className='mt-5'>
+					<Space className="w-full ">
+					<Popover content={<div>{dataOneSubmissions.status==='На рассмотрении' ? 'Статус "На рассмотрении" позволяет редактировать представление' : 'Редактировать представление можно только в статусе "На рассмотрении'}</div>} title="">
+						<Button
+							disabled={dataOneSubmissions.status !== 'На рассмотрении'}
+							type="primary"
+							className="!rounded-full"
+							onClick={() => {
+								setIsEdit(false)
+								editData()
+							}}
+						>
+							Сохранить
+						</Button>
+					</Popover>
+					</Space>
+				</Col> : ''}
 			</Row>
 		
 		</section>

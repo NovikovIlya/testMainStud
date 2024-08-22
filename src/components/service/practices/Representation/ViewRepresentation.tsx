@@ -164,7 +164,7 @@ export const ViewRepresentation = () => {
 	
 	useEffect(() => {
 		if (isSuccessSubAll) {
-		setDataTable(filterDataFull())
+			setDataTable(filterDataFull())
 		}
 	}, [filter,isSuccessSubAll])
 	
@@ -553,7 +553,17 @@ export const ViewRepresentation = () => {
 						popupMatchSelectWidth={false}
 						defaultValue="Все"
 						className="w-full"
-						options={dataSubmissionAcademicYear?.map((item: any) => ({ label: item, value: item }))}
+						// options={dataSubmissionAcademicYear?.map((item: any) => ({ label: item, value: item }))}
+						options={[
+							{ key: 2244612, value: 'Все', label: 'Все' },
+							...(dataSubmissionAcademicYear?.map((item: any) => ({ label: item, value: item }))
+								? dataSubmissionAcademicYear?.map((item: any) => ({ label: item, value: item })).map((item: any) => ({
+										key: item.id,
+										value: item.value,
+										label: item.label
+								  }))
+								: [])
+						]}
 						onChange={value => {
 							setFilter({
 								...filter,
@@ -575,7 +585,17 @@ export const ViewRepresentation = () => {
 						disabled={filter.subdivision === 'Все' ? true : false}
 						popupMatchSelectWidth={false}
 						defaultValue="Все"
-						options={dataSubmissionType}
+						// options={dataSubmissionType}
+						options={[
+							{ key: 2244612, value: 'Все', label: 'Все' },
+							...(dataSubmissionType
+								? dataSubmissionType?.map((item: any) => ({
+										key: item.id,
+										value: item.value,
+										label: item.label
+								  }))
+								: [])
+						]}
 						onChange={value => {
 							setFilter({
 								...filter,
@@ -592,7 +612,16 @@ export const ViewRepresentation = () => {
 				<Col span={4}>
 					<Select
 						disabled={filter.subdivision === 'Все' ? true : false}
-						options={dataSubmissionKind}
+						options={[
+							{ key: 2244612, value: 'Все', label: 'Все' },
+							...(dataSubmissionKind
+								? dataSubmissionKind?.map((item: any) => ({
+										key: item.id,
+										value: item.value,
+										label: item.label
+								  }))
+								: [])
+						]}
 						onChange={value => {
 							setFilter({
 								...filter,

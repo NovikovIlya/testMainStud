@@ -375,7 +375,10 @@ export const serviceApi = apiSlice.injectEndpoints({
 		deleteVacancyRespond: builder.mutation<void, number>({
 			query: id => ({
 				url: `http://localhost:8082/employment-api/v1/respond/${id}`,
-				method: 'DELETE'
+				method: 'DELETE',
+				headers: {
+					Authorization: `Bearer ${seekerToken}`
+				}
 			})
 		}),
 		postChatMessage: builder.mutation<

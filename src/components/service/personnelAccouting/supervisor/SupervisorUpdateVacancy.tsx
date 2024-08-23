@@ -135,7 +135,10 @@ export const SupervisorUpdateVacancy = () => {
 					</div>
 				</Modal>
 			</ConfigProvider>
-			<div id="wrapper" className="pl-[54px] pr-[54px] pt-[60px] w-full">
+			<div
+				id="wrapper"
+				className="pl-[54px] pr-[54px] pt-[60px] mt-[60px] mb-[52px] w-full"
+			>
 				<div className="flex">
 					<button
 						onClick={() => {
@@ -145,7 +148,7 @@ export const SupervisorUpdateVacancy = () => {
 					>
 						<ArrowIcon />
 					</button>
-					<p className="ml-[40px] font-content-font font-normal text-black text-[28px]/[33.6px]">
+					<p className="ml-[32px] font-content-font font-normal text-black text-[28px]/[33.6px]">
 						{currentVacancy !== null ? currentVacancy.title.rendered : ''}
 					</p>
 				</div>
@@ -339,7 +342,7 @@ export const SupervisorUpdateVacancy = () => {
 						</Form.Item>
 					</Form>
 				) : (
-					<div className="w-[50%] mt-[80px] flex flex-col gap-[40px]">
+					<div className="w-[50%] mt-[52px] flex flex-col gap-[40px]">
 						<div className="flex flex-col gap-[16px]">
 							<p className="font-content-font font-bold text-black text-[18px]/[21px]">
 								Должность:

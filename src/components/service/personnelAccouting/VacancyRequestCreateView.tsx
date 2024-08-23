@@ -119,7 +119,7 @@ export const VacancyRequestCreateView = () => {
 					}}
 					layout="vertical"
 					requiredMark={false}
-					className="w-[50%] mt-[52px]"
+					className="w-[50%] mt-[112px] ml-[52px]"
 					onFinish={values => {
 						setPost(prev => values.post)
 						setExperience(prev => values.experience)
@@ -293,7 +293,10 @@ export const VacancyRequestCreateView = () => {
 					</Form.Item>
 				</Form>
 			) : (
-				<div id="wrapper" className="pl-[54px] pr-[54px] pt-[60px] w-full">
+				<div
+					id="wrapper"
+					className="pl-[54px] pr-[54px] pt-[60px] w-full mt-[60px]"
+				>
 					<div className="flex">
 						<button
 							onClick={() => {

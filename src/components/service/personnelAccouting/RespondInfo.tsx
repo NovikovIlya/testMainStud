@@ -5,6 +5,7 @@ import { Margin, usePDF } from 'react-to-pdf'
 import uuid from 'react-uuid'
 
 import { AvatartandardSvg } from '../../../assets/svg/AvatarStandardSvg'
+import { DownloadSvg } from '../../../assets/svg/DownloadSvg'
 import { useAppSelector } from '../../../store'
 import {
 	useApproveRespondMutation,
@@ -61,7 +62,7 @@ export const RespondInfo = (props: {
 	} else {
 		return (
 			<>
-				<div className="pl-[52px] pr-[10%] py-[60px] w-full">
+				<div className="pl-[52px] pr-[10%] py-[60px] mt-[60px] w-full">
 					<div>
 						<Button
 							onClick={() => {
@@ -130,7 +131,7 @@ export const RespondInfo = (props: {
 								</div>
 							</div>
 							{props.type === 'PERSONNEL_DEPARTMENT' && (
-								<div className="self-center grid grid-cols-2 grid-rows-[40px_40px] gap-x-[12px] gap-y-[12px]">
+								<div className="self-center grid grid-cols-2 grid-rows-[40px_40px_40px] gap-x-[12px] gap-y-[12px]">
 									<Button
 										onClick={() => {
 											approveRespond(respondId.respondId)
@@ -177,16 +178,28 @@ export const RespondInfo = (props: {
 									>
 										Перейти в чат
 									</Button>
+									<Button
+										onClick={() => toPDF()}
+										className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
+									>
+										<DownloadSvg /> Скачать
+									</Button>
 								</div>
 							)}
 							{props.type === 'SUPERVISOR' && (
-								<div className="self-center grid grid-cols-1 grid-rows-[40px_40px] gap-y-[12px]">
+								<div className="self-center grid grid-cols-1 grid-rows-[40px_40px_40px] gap-y-[12px]">
 									<InviteSeekerForm respondId={respondId.respondId} />
 									<Button
 										onClick={() => {}}
 										className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[257px] h-[40px] py-[8px] px-[24px] border-black"
 									>
 										Отказать
+									</Button>
+									<Button
+										onClick={() => toPDF()}
+										className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[257px] h-[40px] py-[8px] px-[24px] border-black"
+									>
+										<DownloadSvg /> Скачать
 									</Button>
 								</div>
 							)}
@@ -295,9 +308,6 @@ export const RespondInfo = (props: {
 								</div>
 							</div>
 						</div>
-					</div>
-					<div>
-						<Button onClick={() => toPDF()}>Скачать резюме</Button>
 					</div>
 				</div>
 			</>

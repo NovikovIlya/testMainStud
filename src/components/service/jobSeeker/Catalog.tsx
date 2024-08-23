@@ -279,7 +279,7 @@ export default function Catalog() {
 						Опыт работы
 					</h3>
 					<h3 className="w-[104px] font-content-font font-normal text-[14px]/[14px] text-text-gray">
-						График работы
+						Тип занятости
 					</h3>
 				</div>
 				<h3 className="ml-[140px] font-content-font font-normal text-[14px]/[14px] text-text-gray">

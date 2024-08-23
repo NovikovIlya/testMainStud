@@ -53,7 +53,7 @@ export const ChatEmpDemp = () => {
 	return (
 		<>
 			{' '}
-			<div className="shadowNav bg-white relative z-[5]">
+			<div className="shadowNav bg-white relative z-[5] mt-[60px]">
 				<div className="sticky top-[80px]">
 					<div className="">
 						<p className="pl-[53px] pt-14 pb-[40px] font-content-font font-normal text-black text-[20px]/[20px] ">

@@ -39,7 +39,7 @@ export const ArchiveRespondInfo = (props: {
 	} else {
 		return (
 			<>
-				<div className="pl-[52px] pr-[10%] py-[60px] w-full">
+				<div className="pl-[52px] pr-[10%] py-[60px] w-full mt-[60px]">
 					<div>
 						<Button
 							onClick={() => {

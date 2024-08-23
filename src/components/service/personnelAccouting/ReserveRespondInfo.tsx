@@ -42,7 +42,7 @@ export const ReserveRespondInfo = (props: {
 		if (res.type === 'RESERVE') {
 			return (
 				<>
-					<div className="pl-[52px] pr-[10%] py-[60px] w-full">
+					<div className="pl-[52px] pr-[10%] py-[60px] mt-[60px] w-full">
 						<div>
 							<Button
 								onClick={() => {

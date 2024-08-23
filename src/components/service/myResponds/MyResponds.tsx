@@ -17,7 +17,7 @@ export const MyResponds = () => {
 			</h1>
 			<div className="mt-[52px] mb-[40px] flex items-center gap-[16px]">
 				<Radio.Group
-					className="flex flex-wrap gap-[12px]"
+					className="flex gap-[8px]"
 					value={status}
 					onChange={e => {
 						setStatus(e.target.value)
@@ -34,7 +34,7 @@ export const MyResponds = () => {
 						<Radio value={'все'} className="hidden"></Radio>
 						все
 					</label>
-					<label
+					{/* <label
 						className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
 							status === respondStatus[respondStatus.ARCHIVE]
 								? 'text-white bg-dasha-blue'
@@ -46,7 +46,7 @@ export const MyResponds = () => {
 							className="hidden"
 						></Radio>
 						архив
-					</label>
+					</label> */}
 					<label
 						className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
 							status === respondStatus[respondStatus.IN_RESERVE]
@@ -84,7 +84,7 @@ export const MyResponds = () => {
 							value={respondStatus[respondStatus.IN_PERSONNEL_DEPT_REVIEW]}
 							className="hidden"
 						></Radio>
-						на рассмотрении у УК
+						на рассмотрении у HR
 					</label>
 					<label
 						className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
@@ -121,7 +121,7 @@ export const MyResponds = () => {
 				<h3 className="ml-[5%] w-[8%] font-content-font text-black font-normal text-[14px]/[14px] opacity-[60%]">
 					Дата отклика
 				</h3>
-				<h3 className="ml-[5%] w-[25%] font-content-font text-black font-normal text-[14px]/[14px] opacity-[60%]">
+				<h3 className="ml-[2%] w-[25%] font-content-font text-black font-normal text-[14px]/[14px] opacity-[60%]">
 					Статус
 				</h3>
 			</div>

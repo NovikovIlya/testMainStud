@@ -8,7 +8,7 @@ export const Archive = () => {
 
 	return (
 		<>
-			<div className="w-full pl-[52px] pr-[52px] pt-[60px]">
+			<div className="w-full pl-[52px] pr-[52px] pt-[60px] mt-[60px]">
 				<h1 className="font-content-font font-normal text-black text-[28px]/[28px]">
 					Архив
 				</h1>

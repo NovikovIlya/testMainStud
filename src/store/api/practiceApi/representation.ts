@@ -125,7 +125,7 @@ export const representationService = apiSlice.injectEndpoints({
         getDocRepresentation: builder.query<any, any>({
             query: (id) => {
                 return {
-                    url: `/services/api-practices/practice-schedule/doc?scheduleId=${id}`,
+                    url: `/services/api-practices/submissions/doc/${id}`,
                     method: 'GET',
                     responseHandler: async (response) => {
                         const blob = await response.blob();
@@ -135,6 +135,16 @@ export const representationService = apiSlice.injectEndpoints({
             },
             providesTags: ['Schedule'],
             keepUnusedDataFor:1,
+        }),
+        changeStatus: builder.mutation<any, any>({
+            query: (submissionId ) => {
+                return {
+                    url: `/services/api-practices/submissions/change-status?submissionId=${submissionId }`,
+                    method: 'PATCH',
+                   
+                }
+            },
+            invalidatesTags: ['Submissions'],  
         }),
 
         
@@ -154,5 +164,6 @@ export const {
     useGetSubmissionsPracticeTypeQuery,
     useGetSubmissionsPracticeKindQuery,
     useGetSubmissionsDirectorQuery,
-    useGetSubmissionsAcademicYearQuery
+    useGetSubmissionsAcademicYearQuery,
+    useChangeStatusMutation
 } = representationService

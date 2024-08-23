@@ -6,7 +6,7 @@ import { DatePicker, Form, Input, InputNumber, Select } from "antd";
 // @ts-ignore
 export const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({editing,dataIndex,title,inputType,record,index,children,rules,...restProps}) => {
     // @ts-ignore
-    const inputNode =  inputType === 'select'? <Select options={restProps.options} /> : inputType === 'date' ? <DatePicker.RangePicker/>  : inputType === 'number' ? <InputNumber /> : <Input />;
+    const inputNode =  inputType === 'select'? <Select options={restProps.options} /> : inputType === 'date' ? <DatePicker.RangePicker/>  : inputType === 'number' ? <InputNumber min={0} /> : <Input />;
   
     return (
       <td {...restProps}>

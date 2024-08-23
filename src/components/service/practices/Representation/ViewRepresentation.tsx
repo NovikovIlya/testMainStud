@@ -37,86 +37,6 @@ const courseNumberOptions = [
 ]
 
 export const ViewRepresentation = () => {
-	// const originDate = [
-	// 	{
-	// 		id:'asd',
-	// 		key: '1',
-	// 		subdivision: 'Представление 2',
-	// 		specialtyName: '30.08.01 Акушерство и гинекология',
-	// 		groupNumber: '16',
-	// 		courseNumber: '1',
-	// 		academicYear: '2',
-	// 		period: '2',
-	// 		practiceType: 'Производственная',
-	// 		practiceKind: 'Технологическая',
-	// 		place: 'Казань',
-	// 		FIO: 'Петров И.И.',
-	// 		visiting: 'Нет',
-	// 		status: 'Ожидание'
-	// 	},
-	// 	{
-	// 		id:'212314',
-	// 		key: '3',
-	// 		subdivision: 'Представление 1',
-	// 		specialtyName: '30.08.01 Акушерство и гинекология',
-	// 		groupNumber: '16',
-	// 		courseNumber: '1',
-	// 		academicYear: '2',
-	// 		period: '2',
-	// 		practiceType: 'Производственная',
-	// 		practiceKind: 'Технологическая',
-	// 		place: 'Казань',
-	// 		FIO: 'Петров И.И.',
-	// 		visiting: 'Нет',
-	// 		status: 'Ожидание'
-	// 	},
-	// 	{
-	// 		id:'12312',
-	// 		key: '4',
-	// 		subdivision: 'Представление 3',
-	// 		specialtyName: '30.08.01 Акушерство и гинекология',
-	// 		groupNumber: '16',
-	// 		courseNumber: '1',
-	// 		academicYear: '2',
-	// 		period: '2',
-	// 		practiceType: 'Производственная',
-	// 		practiceKind: 'Технологическая',
-	// 		place: 'Казань',
-	// 		FIO: 'Петров И.И.',
-	// 		visiting: 'Нет',
-	// 		status: 'Ожидание'
-	// 	},
-	// 	{
-	// 		key: '5',
-	// 		subdivision: 'Представление 1',
-	// 		specialtyName: '30.08.01 Акушерство и гинекология',
-	// 		groupNumber: '16',
-	// 		courseNumber: '1',
-	// 		academicYear: '2',
-	// 		period: '2',
-	// 		practiceType: 'Производственная',
-	// 		practiceKind: 'Технологическая',
-	// 		place: 'Казань',
-	// 		FIO: 'Петров И.И.',
-	// 		visiting: 'Нет',
-	// 		status: 'Ожидание'
-	// 	},
-	// 	{
-	// 		key: '2',
-	// 		subdivision: 'Представление 2',
-	// 		specialtyName: '30.08.02 Иное',
-	// 		groupNumber: '16',
-	// 		course: '1',
-	// 		academicYear: '2',
-	// 		courseNumber: '1',
-	// 		practiceType: 'Производственная',
-	// 		practiceKind: 'Технологическая',
-	// 		place: 'Москва',
-	// 		FIO: 'Иванов И.И.',
-	// 		visiting: 'Да',
-	// 		status: 'Согласовано'
-	// 	}
-	// ]
 	const [form] = Form.useForm()
 	const navigate = useNavigate()
 	const [filter, setFilter] = useState({
@@ -130,7 +50,6 @@ export const ViewRepresentation = () => {
 		practiceKind: "Все",
 		dateFilling: 'По дате (сначала новые)',
 	})
-	const [tableData, setTableData] = useState([])
 	const [selectedFieldsFull, setSelectedFieldFull] = useState<any>([])
 	const {data:dataAllSubmissions,isLoading,isSuccess:isSuccessSubAll} = useGetAllSubmissionsQuery(null)
 	const {data:dataSubmisisionsSubdevision} = useGetSubmissionsSubdevisionQuery()
@@ -140,6 +59,7 @@ export const ViewRepresentation = () => {
 	const {data:dataSubmissionKind} = useGetSubmissionsPracticeKindQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
 	const {data:dataSubmissionDirector} = useGetSubmissionsDirectorQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
 	const {data:dataSubmissionAcademicYear} = useGetSubmissionsAcademicYearQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
+	const [flag,setFlag] = useState(false)
 	const [dataTable, setDataTable] = useState<any>([])
 
 	useEffect(()=>{
@@ -164,7 +84,7 @@ export const ViewRepresentation = () => {
 	
 	useEffect(() => {
 		if (isSuccessSubAll) {
-			setDataTable(filterDataFull())
+			setDataTable(filterDataFull())	
 		}
 	}, [filter,isSuccessSubAll])
 	
@@ -174,6 +94,7 @@ export const ViewRepresentation = () => {
 			if (filter.subdivision === 'Все') {
 				return elem
 			} else {
+				setFlag(true)
 				return elem.practice.subdivision === filter.subdivision
 			}
 		}
@@ -185,7 +106,6 @@ export const ViewRepresentation = () => {
 			}
 		}
 		function filtervisiting(elem: any) {
-	
 			if (filter.visiting === 'Все') {
 				return elem
 			} else {
@@ -237,7 +157,7 @@ export const ViewRepresentation = () => {
 			}
 			return 0
 		}
-
+	
 		return dataAllSubmissions
 			? dataAllSubmissions
 			.filter((elem: any) => filterName(elem))
@@ -260,28 +180,8 @@ export const ViewRepresentation = () => {
 			name: 'Подразделение',
 			className: 'text-xs !p-2 ',
 			render: (text: any, record: any) => <span >{record?.practice?.subdivision}</span>
-			// @ts-ignore
-			// render: (text, record) => (
-			// 	<div className={'flex items-center justify-between'}>
-			// 		<span className={'underline flex font-bold'}>{text}</span>
-			// 		<Button
-			// 			type="text"
-			// 			icon={<EditSvg />}
-			// 			onClick={() => {
-			// 				navigate(`/services/practices/representation/edit/${record.id}`)
-			// 			}}
-			// 		/>
-			// 	</div>
-			// )
+			
 		},
-
-		// {
-		// 	title: 'Дата заполнения',
-		// 	dataIndex: 'dateFilling',
-	
-		// 	// @ts-ignore
-		// 	render: (text: any) => dayjs(text).format('DD.MM.YYYY')
-		// },
     	{
 			key: 'specialtyName',
 			dataIndex: 'specialtyName',
@@ -324,13 +224,7 @@ export const ViewRepresentation = () => {
 			className: 'text-xs !p-2',
 			render: (text: any, record: any) => <span >{record?.practice?.practiceKind}</span>
 		},
-		// {
-		// 	key: 'place',
-		// 	dataIndex: 'place',
-		// 	title: 'Место прохождения практики',
-		// 	className: 'text-xs !p-2',
-		// 	render: (text: any, record: any) => <span >{record?.place}</span>
-		// },
+
 		{
 			key: 'FIO',
 			dataIndex: 'FIO',
@@ -351,35 +245,11 @@ export const ViewRepresentation = () => {
 			title: 'Статус',
 			className: 'text-xs !p-2',
 			render: (text: any, record: any) => <span >{record?.status}</span>
-			// render: (text:any, record:any) => (
-			// 	<div className={'flex items-center justify-between'}>
-			// 		<span className={'underline flex font-bold'}>{text}</span>
-			// 		<Button
-			// 			type="text"
-			// 			icon={<EditSvg />}
-			// 			onClick={() => {
-			// 				navigate(`/services/practices/representation/edit/${record.id}`)
-			// 			}}
-			// 		/>
-			// 	</div>
-			// )
+		
 		},
 		{
 			title: (
-				<Popover
-					trigger={'click'}
-					content={
-						<PopoverMain
-							// @ts-ignore
-							recordFullAll={tableData}
-							setRecordFull={setTableData}
-							recordFull={selectedFieldsFull}
-							setSelectedFieldFull={setSelectedFieldFull}
-						/>
-					}
-				>
-					<Button type="text" className="opacity-50" icon={<PointsSvg />} />
-				</Popover>
+				''
 			),
 			align: 'center',
 			render: (record: any) => (
@@ -388,7 +258,7 @@ export const ViewRepresentation = () => {
 					content={
 						<PopoverContent
 							recordFull={record}
-							recordFullAll={tableData}
+							recordFullAll={dataTable}
 							setRecordFull={setDataTable}
 						/>
 					}
@@ -450,6 +320,7 @@ export const ViewRepresentation = () => {
 					</Space>
 				</Col>
 			</Row>
+
     		<Row gutter={[16, 16]} className="mt-4 flex items-center">
 				<Col span={5} >
 					<span>Наименование специальности</span>
@@ -477,6 +348,7 @@ export const ViewRepresentation = () => {
 					</Form.Item>
 				</Col>
 			</Row>
+
 			<Row gutter={[16, 16]} className="mt-4 flex items-center">
 				<Col span={5} >
 					<span>Выездные практики</span>
@@ -494,6 +366,7 @@ export const ViewRepresentation = () => {
 					/>
 				</Col>
 			</Row>
+
 			<Row gutter={[16, 16]} className="mt-4 flex items-center">
 				<Col span={5} >
 					<span>ФИО руководителя</span>
@@ -523,7 +396,6 @@ export const ViewRepresentation = () => {
 				</Col>
 			</Row>
 			
-
 			<Row gutter={[16, 16]} className="mt-4 flex items-center">
 				<Col span={2} >
 					<span>Курс</span>
@@ -667,7 +539,7 @@ export const ViewRepresentation = () => {
 						rowKey="id"
 						// @ts-ignore
 						columns={columns}
-						dataSource={filter?.subdivision !== 'Все' ? dataTable ? dataTable : [] : []}
+						dataSource={filter?.subdivision !== 'Все' ? flag ? dataTable : [] : []}
 						pagination={dataTable?.length < 3 ? false : {
 							pageSize: 3,
 						}}

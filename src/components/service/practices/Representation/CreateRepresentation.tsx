@@ -312,12 +312,12 @@ export const CreateRepresentation = () => {
 				inputType:
 					col.dataIndex === 'category'
 						? 'select'
-						: col.dataIndex === 'selectType'
-						? 'select'
-						: col.dataIndex === 'selectKind'
-						? 'select'
-						: col.dataIndex === 'period'
-						? 'date'
+						: col.dataIndex === 'costForDay'
+						? 'number'
+						: col.dataIndex === 'arrivingCost'
+						? 'number'
+						: col.dataIndex === 'livingCost'
+						? 'number'
 						: col.dataIndex === 'course'
 						? 'number'
 						: 'text',

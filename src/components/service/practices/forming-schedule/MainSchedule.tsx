@@ -91,21 +91,7 @@ export const PracticeSchedule = () => {
 		},
 		{
 			title: (
-				<Popover
-					trigger={'click'}
-					content={
-						<PopoverMain
-							// @ts-ignore
-							recordFullAll={tableData}
-							setRecordFull={setTableData}
-							recordFull={selectedFieldsFull}
-							setSelectedFieldFull={setSelectedFieldFull}
-						
-						/>
-					}
-				>
-					<Button type="text" className="opacity-50" icon={<PointsSvg />} />
-				</Popover>
+				''
 			),
 			align: 'center',
 			render: (record: any) => (

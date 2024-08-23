@@ -1,10 +1,19 @@
-import { CheckOutlined, CloseOutlined, VerticalAlignBottomOutlined } from '@ant-design/icons'
+import {
+	CheckOutlined,
+	CloseOutlined,
+	VerticalAlignBottomOutlined
+} from '@ant-design/icons'
 import {
 	Button,
 	Col,
 	Descriptions,
-	Form, Input, Popconfirm,
-	Popover, Row, Space,
+	Form,
+	Input,
+	Popconfirm,
+	Popover,
+	Row,
+	Select,
+	Space,
 	Table,
 	Typography
 } from 'antd'
@@ -16,13 +25,17 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { ArrowLeftSvg } from '../../../../assets/svg'
 import { EditSvg } from '../../../../assets/svg/EditSvg'
 import { Item } from '../../../../models/representation'
+import { useAppDispatch } from '../../../../store'
+import {
+	useChangeStatusMutation,
+	useEditSubmissionMutation,
+	useGetDocRepresentationQuery,
+	useGetOneSubmissionsQuery
+} from '../../../../store/api/practiceApi/representation'
+import { showNotification } from '../../../../store/reducers/notificationSlice'
 
 import { EditableCell } from './EditableCell'
-import { useEditSubmissionMutation, useGetDocRepresentationQuery, useGetOneSubmissionsQuery } from '../../../../store/api/practiceApi/representation'
 import { SkeletonPage } from './Skeleton'
-import { showNotification } from '../../../../store/reducers/notificationSlice'
-import { useAppDispatch } from '../../../../store'
-
 
 const optionMock = [
 	{ value: '1', label: '1' },
@@ -50,31 +63,33 @@ export const EditRepresentation = () => {
 	const [data, setData] = useState(originData)
 	const [editingKey, setEditingKey] = useState('')
 	const isEditing = (record: Item) => record.key === editingKey
-	const {data:dataOneSubmissions,isSuccess,isLoading:isLoadingOneSubmission} = useGetOneSubmissionsQuery(id,{skip:!id})
-	const {data:dataGetDocRepresentation,isLoading:isLoadingDocRepesentation} = useGetDocRepresentationQuery(null)
-	const [editSumbissions,{}] = useEditSubmissionMutation({})
-	const [fullTable,setFullTable] = useState<any>([])
-	const [editTheme,setEditTheme] = useState('')
-	const [isEdit,setIsEdit] = useState(false)
+	const {data: dataOneSubmissions,isSuccess,isLoading: isLoadingOneSubmission} = useGetOneSubmissionsQuery(id, { skip: !id })
+	const {data: dataGetDocRepresentation,isLoading: isLoadingDocRepesentation,refetch} = useGetDocRepresentationQuery(dataOneSubmissions ? dataOneSubmissions?.id : null,{ skip: !dataOneSubmissions })
+	const [changeStatusSubmissions, {}] = useChangeStatusMutation()
+	const [editSumbissions, {}] = useEditSubmissionMutation({})
+	const [fullTable, setFullTable] = useState<any>([])
+	const [editTheme, setEditTheme] = useState('')
+	const [isEdit, setIsEdit] = useState(false)
 	const dispatch = useAppDispatch()
 
-	useEffect(()=>{
-		if(isSuccess){
+	useEffect(() => {
+		if (isSuccess) {
 			setEditTheme(dataOneSubmissions?.theme)
 		}
-	},[isSuccess,dataOneSubmissions?.theme])
+	}, [isSuccess, dataOneSubmissions?.theme])
 
-	useEffect(()=>{
-		if(isSuccess){
-			const array = dataOneSubmissions.students.map((item:any)=>{
-				return {...item, 
-						groupNumbers:dataOneSubmissions.practice.groupNumber,
-						departmentDirector:dataOneSubmissions.practice.departmentDirector}
+	useEffect(() => {
+		if (isSuccess) {
+			const array = dataOneSubmissions.students.map((item: any) => {
+				return {
+					...item,
+					groupNumbers: dataOneSubmissions.practice.groupNumber,
+					departmentDirector: dataOneSubmissions.practice.departmentDirector
+				}
 			})
-			setFullTable(array.map((item:any)=>({...item,key: item.name})))
+			setFullTable(array.map((item: any) => ({ ...item, key: item.name })))
 		}
-	},[dataOneSubmissions,isSuccess])
-
+	}, [dataOneSubmissions, isSuccess])
 
 	const columns = [
 		{
@@ -127,7 +142,13 @@ export const EditRepresentation = () => {
 			key: 'A',
 			dataIndex: 'A',
 			title: 'Категория',
-			className: `text-xs !p-2 ${isSuccess ? dataOneSubmissions.isWithDeparture ? '' : 'hidden' : 'hidden'}`,
+			className: `text-xs !p-2 ${
+				isSuccess
+					? dataOneSubmissions.isWithDeparture
+						? ''
+						: 'hidden'
+					: 'hidden'
+			}`,
 			render: (text: any, record: any) => (
 				<div>{record?.category || 'Нет челибаса...'}</div>
 			)
@@ -136,7 +157,13 @@ export const EditRepresentation = () => {
 			key: 'costForDay',
 			dataIndex: 'costForDay',
 			title: 'Суточные (50 руб/сут)',
-			className: `text-xs !p-2 ${isSuccess ? dataOneSubmissions.isWithDeparture ? '' : 'hidden' : 'hidden'}`,
+			className: `text-xs !p-2 ${
+				isSuccess
+					? dataOneSubmissions.isWithDeparture
+						? ''
+						: 'hidden'
+					: 'hidden'
+			}`,
 			editable: true,
 			render: (text: any, record: any) => (
 				<div>{record?.costForDay || 'Нет челибаса...'}</div>
@@ -146,7 +173,13 @@ export const EditRepresentation = () => {
 			key: 'arrivingCost',
 			dataIndex: 'arrivingCost',
 			title: 'Проезд (руб)',
-			className: `text-xs !p-2 ${isSuccess ? dataOneSubmissions.isWithDeparture ? '' : 'hidden' : 'hidden'}`,
+			className: `text-xs !p-2 ${
+				isSuccess
+					? dataOneSubmissions.isWithDeparture
+						? ''
+						: 'hidden'
+					: 'hidden'
+			}`,
 			editable: true,
 			render: (text: any, record: any) => (
 				<div>{record?.arrivingCost || 'Нет челибаса...'}</div>
@@ -156,17 +189,29 @@ export const EditRepresentation = () => {
 			key: 'livingCost',
 			dataIndex: 'livingCost',
 			title: 'Оплата проживания (руб)',
-			className: `text-xs !p-2 ${isSuccess ? dataOneSubmissions.isWithDeparture ? '' : 'hidden' : 'hidden'}`,
+			className: `text-xs !p-2 ${
+				isSuccess
+					? dataOneSubmissions.isWithDeparture
+						? ''
+						: 'hidden'
+					: 'hidden'
+			}`,
 			editable: true,
 			render: (text: any, record: any) => (
 				<div>{record?.livingCost || 'Нет челибаса...'}</div>
 			)
 		},
-		
+
 		{
 			title: '',
 			dataIndex: 'operation',
-			className: `text-xs !p-2 ${isSuccess ? dataOneSubmissions.status==='На рассмотрении' ? '' : 'hidden' : ''}`,
+			className: `text-xs !p-2 ${
+				isSuccess
+					? dataOneSubmissions.status === 'На рассмотрении'
+						? ''
+						: 'hidden'
+					: ''
+			}`,
 			key: 'operation',
 			render: (_: any, record: Item) => {
 				const editable = isEditing(record)
@@ -203,49 +248,76 @@ export const EditRepresentation = () => {
 	]
 
 	const items: any = [
-
 		{
-		  key: '3',
-		  label: 'Вид',
-		  children: isSuccess ? dataOneSubmissions.practice.practiceKind : '',
+			key: '3',
+			label: 'Вид',
+			children: isSuccess ? dataOneSubmissions.practice.practiceKind : ''
 		},
 		{
-		  key: '5',
-		  label: 'Курс',
-		  children: isSuccess ? dataOneSubmissions.practice.courseNumber : '',
+			key: '5',
+			label: 'Курс',
+			children: isSuccess ? dataOneSubmissions.practice.courseNumber : ''
 		},
 		{
 			key: '5',
 			label: 'Тип',
-			children: isSuccess ? dataOneSubmissions.practice.practiceType : '',
+			children: isSuccess ? dataOneSubmissions.practice.practiceType : ''
 		},
-		...(isSuccess && dataOneSubmissions.isWithDeparture ? [{
-			key: '6',
-			label: 'Тема',
-			children: <div className='flex'>
-			  <Col span={19}>
-				{dataOneSubmissions?.status === 'На рассмотрении' ? 
-				  <Input size='small' id="topic" placeholder='тема' value={editTheme} onChange={(e) => {
-					setEditTheme(e.target.value)
-					setIsEdit(true)
-				  }} /> 
-				  : <div>{dataOneSubmissions?.theme}</div>
-				} 
-			  </Col>
-			</div>
-		  }] : []),
+		...(isSuccess && dataOneSubmissions.isWithDeparture
+			? [
+					{
+						key: '6',
+						label: 'Тема',
+						children: (
+							<div className="flex">
+								<Col span={19}>
+									{dataOneSubmissions?.status === 'На рассмотрении' ? (
+										<Input
+											size="small"
+											id="topic"
+											placeholder="тема"
+											value={editTheme}
+											onChange={e => {
+												setEditTheme(e.target.value)
+												setIsEdit(true)
+											}}
+										/>
+									) : (
+										<div>{dataOneSubmissions?.theme}</div>
+									)}
+								</Col>
+							</div>
+						)
+					}
+			  ]
+			: []),
 		{
 			key: '66',
 			label: 'Форма',
-			children:  isSuccess ? dataOneSubmissions.isWithDeparture ? 'Выездная' : 'Невыездная' : '',
+			children: isSuccess
+				? dataOneSubmissions.isWithDeparture
+					? 'Выездная'
+					: 'Невыездная'
+				: ''
 		},
 		{
 			key: '7',
 			label: 'Статус',
-			children:  isSuccess ? dataOneSubmissions.status : '',
-			render: (text: any) =>  <Popover content={<div>Редактировать представление можно только в статусе "Ожидание"</div>} title=""><span>{text}</span></Popover>
-		},
-	];
+			children: isSuccess ? dataOneSubmissions.status : '',
+			render: (text: any) => (
+				<Popover
+					content={
+						<div>
+							Редактировать представление можно только в статусе "Ожидание"
+						</div>
+					}
+					title=""
+				>
+					<span>{text}</span>
+				</Popover>
+			)
+		}
+	]
 
 	const mergedColumns: TableProps['columns'] = columns.map(col => {
 		// @ts-ignore
@@ -259,12 +331,12 @@ export const EditRepresentation = () => {
 				inputType:
 					col.dataIndex === 'selectCourse'
 						? 'select'
-						: col.dataIndex === 'selectType'
-						? 'select'
-						: col.dataIndex === 'selectKind'
-						? 'select'
-						: col.dataIndex === 'period'
-						? 'date'
+						: col.dataIndex === 'costForDay'
+						? 'number'
+						: col.dataIndex === 'livingCost'
+						? 'number'
+						: col.dataIndex === 'livingCost'
+						? 'number'
 						: col.dataIndex === 'course'
 						? 'number'
 						: 'text',
@@ -279,19 +351,33 @@ export const EditRepresentation = () => {
 						: col.dataIndex === 'selectKind'
 						? optionMockKind
 						: undefined,
-				rules: dataOneSubmissions.isWithDeparture === false
-						? ((  col.dataIndex === 'place')  ? [{
-						required: true,
-						message: 'Поле обязательно для заполнения'}] : [])
-					 	: ((  col.dataIndex === 'place'||  col.dataIndex === 'costForDay' || col.dataIndex === 'arrivingCost' || col.dataIndex === 'livingCost')  ? [{
-						required: true,
-						message: 'Поле обязательно для заполнения'}] : [])
+				rules:
+					dataOneSubmissions.isWithDeparture === false
+						? col.dataIndex === 'place'
+							? [
+									{
+										required: true,
+										message: 'Поле обязательно для заполнения'
+									}
+							  ]
+							: []
+						: col.dataIndex === 'place' ||
+						  col.dataIndex === 'costForDay' ||
+						  col.dataIndex === 'arrivingCost' ||
+						  col.dataIndex === 'livingCost'
+						? [
+								{
+									required: true,
+									message: 'Поле обязательно для заполнения'
+								}
+						  ]
+						: []
 			})
 		}
 	})
 
-
 	const downloadFile = () => {
+		
 		if (dataGetDocRepresentation) {
 			const link = document.createElement('a')
 			link.href = dataGetDocRepresentation
@@ -345,23 +431,36 @@ export const EditRepresentation = () => {
 
 	const editData = () => {
 		const arrayT: any = [{}]
-		const obj = arrayT.map((item:any)=>{
+		const obj = arrayT.map((item: any) => {
 			return {
 				...item,
-				students: fullTable.map(({key,...rest}:any)=>rest),
+				students: fullTable.map(({ key, ...rest }: any) => rest),
 				id: dataOneSubmissions.id,
-				theme: editTheme,
+				theme: editTheme
 			}
 		})
-		console.log('obj',obj[0])
+		console.log('obj', obj[0])
 		editSumbissions(obj[0])
-		.unwrap()
-			.then(()=>dispatch(showNotification({ message: 'Представление успешно отредактировано', type: 'success' })))
+			.unwrap()
+			.then(() =>{
+				dispatch(
+					showNotification({
+						message: 'Представление успешно отредактировано',
+						type: 'success'
+					})
+				)
+				refetch()
+			}
+				
+			)
+		
 	}
 
+	const handleChangeStatus = ()=>{
+		changeStatusSubmissions(dataOneSubmissions.id)
+	}
 
-	if(isLoadingOneSubmission) return <SkeletonPage/>
-	
+	if (isLoadingOneSubmission) return <SkeletonPage />
 
 	return (
 		<section className="container">
@@ -377,28 +476,50 @@ export const EditRepresentation = () => {
 						}}
 					/>
 					<Typography.Text className=" text-[28px] mb-14">
-						Представление в приказ группы "{dataOneSubmissions?.practice.groupNumber}" подразделения "{dataOneSubmissions?.practice.subdivision}" на {dataOneSubmissions?.practice.academicYear} учебный год
+						Представление в приказ группы "
+						{dataOneSubmissions?.practice.groupNumber}" подразделения "
+						{dataOneSubmissions?.practice.subdivision}" на{' '}
+						{dataOneSubmissions?.practice.academicYear} учебный год
 					</Typography.Text>
 				</Col>
 			</Row>
-			<Descriptions className='mt-8'  items={items} />
-		
-			<Row className="mt-4 mb-6 flex  ">
-				<Col span={12} >
+			<Descriptions className="mt-8" items={items} />
+
+			<Row className="mt-4 mb-6 flex  justify-between">
+				<Col span={12}>
 					<div>
 						<Space>
-							{!isEdit ? <Button  onClick={downloadFile} loading={isLoadingDocRepesentation} disabled={isLoadingDocRepesentation || isEdit}>
-								<VerticalAlignBottomOutlined /> Скачать
-							</Button> :
-							<Popover content={'Прежде чем скачать, сохраните измененное представление'} >
-								<Button  onClick={downloadFile} loading={isLoadingDocRepesentation} disabled={isLoadingDocRepesentation || isEdit}>
+							{!isEdit ? (
+								<Button
+									onClick={downloadFile}
+									loading={isLoadingDocRepesentation}
+									disabled={isLoadingDocRepesentation || isEdit}
+								>
 									<VerticalAlignBottomOutlined /> Скачать
 								</Button>
-  							</Popover>}
+							) : (
+								<Popover
+									content={
+										'Прежде чем скачать, сохраните измененное представление'
+									}
+								>
+									<Button
+										onClick={downloadFile}
+										loading={isLoadingDocRepesentation}
+										disabled={isLoadingDocRepesentation || isEdit}
+									>
+										<VerticalAlignBottomOutlined /> Скачать
+									</Button>
+								</Popover>
+							)}
 						</Space>
 					</div>
 				</Col>
-			
+				<Col span={12} className="flex justify-end">
+							
+							<Button onClick={handleChangeStatus}>Согласовать представление</Button>
+	
+				</Col>
 			</Row>
 
 			<Row className="mt-4">
@@ -421,27 +542,39 @@ export const EditRepresentation = () => {
 					</Form>
 				</Col>
 			</Row>
+
 			<Row>
-			{isSuccess && dataOneSubmissions.status==='На рассмотрении' ?
-				<Col span={2} className='mt-5'>
-					<Space className="w-full ">
-					<Popover content={<div>{dataOneSubmissions.status==='На рассмотрении' ? 'Статус "На рассмотрении" позволяет редактировать представление' : 'Редактировать представление можно только в статусе "На рассмотрении'}</div>} title="">
-						<Button
-							disabled={dataOneSubmissions.status !== 'На рассмотрении'}
-							type="primary"
-							className="!rounded-full"
-							onClick={() => {
-								setIsEdit(false)
-								editData()
-							}}
-						>
-							Сохранить
-						</Button>
-					</Popover>
-					</Space>
-				</Col> : ''}
+				{isSuccess && dataOneSubmissions.status === 'На рассмотрении' ? (
+					<Col span={2} className="mt-5">
+						<Space className="w-full ">
+							<Popover
+								content={
+									<div>
+										{dataOneSubmissions.status === 'На рассмотрении'
+											? 'Статус "На рассмотрении" позволяет редактировать представление'
+											: 'Редактировать представление можно только в статусе "На рассмотрении'}
+									</div>
+								}
+								title=""
+							>
+								<Button
+									disabled={dataOneSubmissions.status !== 'На рассмотрении'}
+									type="primary"
+									className="!rounded-full"
+									onClick={() => {
+										setIsEdit(false)
+										editData()
+									}}
+								>
+									Сохранить
+								</Button>
+							</Popover>
+						</Space>
+					</Col>
+				) : (
+					''
+				)}
 			</Row>
-		
 		</section>
 	)
 }

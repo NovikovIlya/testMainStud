@@ -133,7 +133,21 @@ export const representationService = apiSlice.injectEndpoints({
                     },
                 }
             },
-            providesTags: ['Schedule'],
+          
+            keepUnusedDataFor:1,
+        }),
+        getDocOrder: builder.query<any, any>({
+            query: (id) => {
+                return {
+                    url: `/services/api-practices/orders/doc/${id}`,
+                    method: 'GET',
+                    responseHandler: async (response) => {
+                        const blob = await response.blob();
+                        return window.URL.createObjectURL(blob); 
+                    },
+                }
+            },
+          
             keepUnusedDataFor:1,
         }),
         changeStatus: builder.mutation<any, any>({
@@ -145,6 +159,27 @@ export const representationService = apiSlice.injectEndpoints({
                 }
             },
             invalidatesTags: ['Submissions'],  
+        }),
+        changeStatusOrder: builder.mutation<any, any>({
+            query: (orderId  ) => {
+                return {
+                    url: `/services/api-practices/orderId /change-status?submissionId=${orderId  }`,
+                    method: 'PATCH',
+                   
+                }
+            },
+         
+        }),
+        getAllOrder: builder.query<any, any>({
+            query: ({subdivisionId ,page ,size } ) => {
+                return {
+                    url: `services/api-practices/orders/all/by-page?subdivisionId=${subdivisionId}&page=${page}&size=${size}`,
+                    method: 'GET',
+                   
+                }
+            },
+        
+            keepUnusedDataFor:1,
         }),
 
         
@@ -165,5 +200,8 @@ export const {
     useGetSubmissionsPracticeKindQuery,
     useGetSubmissionsDirectorQuery,
     useGetSubmissionsAcademicYearQuery,
-    useChangeStatusMutation
+    useChangeStatusMutation,
+    useGetAllOrderQuery,
+    useChangeStatusOrderMutation,
+    useGetDocOrderQuery
 } = representationService

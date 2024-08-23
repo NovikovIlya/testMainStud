@@ -15,7 +15,7 @@ import { PointsSvg } from '../../../../assets/svg/PointsSvg'
 
 import { PopoverContent } from './PopoverContent'
 import { PopoverMain } from './PopoverMain'
-import { useGetAllSubmissionsQuery, useGetSubmissionsAcademicYearQuery, useGetSubmissionsDirectorQuery, useGetSubmissionsPracticeKindQuery, useGetSubmissionsPracticeTypeQuery, useGetSubmissionsSpecialtiesQuery, useGetSubmissionsSubdevisionQuery } from '../../../../store/api/practiceApi/representation'
+import { useGetAllOrderQuery, useGetAllSubmissionsQuery, useGetSubmissionsAcademicYearQuery, useGetSubmissionsDirectorQuery, useGetSubmissionsPracticeKindQuery, useGetSubmissionsPracticeTypeQuery, useGetSubmissionsSpecialtiesQuery, useGetSubmissionsSubdevisionQuery } from '../../../../store/api/practiceApi/representation'
 import { LoadingOutlined } from '@ant-design/icons'
 import { findSubdivisions } from '../../../../utils/findSubdivisions'
 
@@ -37,86 +37,7 @@ const courseNumberOptions = [
 ]
 
 export const ViewPracticeOrder = () => {
-	// const originDate = [
-	// 	{
-	// 		id:'asd',
-	// 		key: '1',
-	// 		subdivision: 'Представление 2',
-	// 		specialtyName: '30.08.01 Акушерство и гинекология',
-	// 		groupNumber: '16',
-	// 		courseNumber: '1',
-	// 		academicYear: '2',
-	// 		period: '2',
-	// 		practiceType: 'Производственная',
-	// 		practiceKind: 'Технологическая',
-	// 		place: 'Казань',
-	// 		FIO: 'Петров И.И.',
-	// 		visiting: 'Нет',
-	// 		status: 'Ожидание'
-	// 	},
-	// 	{
-	// 		id:'212314',
-	// 		key: '3',
-	// 		subdivision: 'Представление 1',
-	// 		specialtyName: '30.08.01 Акушерство и гинекология',
-	// 		groupNumber: '16',
-	// 		courseNumber: '1',
-	// 		academicYear: '2',
-	// 		period: '2',
-	// 		practiceType: 'Производственная',
-	// 		practiceKind: 'Технологическая',
-	// 		place: 'Казань',
-	// 		FIO: 'Петров И.И.',
-	// 		visiting: 'Нет',
-	// 		status: 'Ожидание'
-	// 	},
-	// 	{
-	// 		id:'12312',
-	// 		key: '4',
-	// 		subdivision: 'Представление 3',
-	// 		specialtyName: '30.08.01 Акушерство и гинекология',
-	// 		groupNumber: '16',
-	// 		courseNumber: '1',
-	// 		academicYear: '2',
-	// 		period: '2',
-	// 		practiceType: 'Производственная',
-	// 		practiceKind: 'Технологическая',
-	// 		place: 'Казань',
-	// 		FIO: 'Петров И.И.',
-	// 		visiting: 'Нет',
-	// 		status: 'Ожидание'
-	// 	},
-	// 	{
-	// 		key: '5',
-	// 		subdivision: 'Представление 1',
-	// 		specialtyName: '30.08.01 Акушерство и гинекология',
-	// 		groupNumber: '16',
-	// 		courseNumber: '1',
-	// 		academicYear: '2',
-	// 		period: '2',
-	// 		practiceType: 'Производственная',
-	// 		practiceKind: 'Технологическая',
-	// 		place: 'Казань',
-	// 		FIO: 'Петров И.И.',
-	// 		visiting: 'Нет',
-	// 		status: 'Ожидание'
-	// 	},
-	// 	{
-	// 		key: '2',
-	// 		subdivision: 'Представление 2',
-	// 		specialtyName: '30.08.02 Иное',
-	// 		groupNumber: '16',
-	// 		course: '1',
-	// 		academicYear: '2',
-	// 		courseNumber: '1',
-	// 		practiceType: 'Производственная',
-	// 		practiceKind: 'Технологическая',
-	// 		place: 'Москва',
-	// 		FIO: 'Иванов И.И.',
-	// 		visiting: 'Да',
-	// 		status: 'Согласовано'
-	// 	}
-	// ]
+	const [currentPage, setCurrentPage] = useState(1);
 	const [form] = Form.useForm()
 	const navigate = useNavigate()
 	const [filter, setFilter] = useState({
@@ -140,6 +61,7 @@ export const ViewPracticeOrder = () => {
 	const {data:dataSubmissionKind} = useGetSubmissionsPracticeKindQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
 	const {data:dataSubmissionDirector} = useGetSubmissionsDirectorQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
 	const {data:dataSubmissionAcademicYear} = useGetSubmissionsAcademicYearQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
+	const {data:dataAllOrder,isSuccess:isSuccessOrder} = useGetAllOrderQuery({subdivisionId:selectSubdivisionId,page:currentPage - 1,size :'5'},{skip:!selectSubdivisionId || !currentPage})
 	const [dataTable, setDataTable] = useState<any>([])
 
 	useEffect(()=>{
@@ -163,10 +85,10 @@ export const ViewPracticeOrder = () => {
 
 	
 	useEffect(() => {
-		if (isSuccessSubAll) {
+		if (isSuccessOrder) {
 			setDataTable(filterDataFull())
 		}
-	}, [filter,isSuccessSubAll])
+	}, [filter,isSuccessOrder])
 	
 
 	function filterDataFull() {
@@ -238,8 +160,8 @@ export const ViewPracticeOrder = () => {
 			return 0
 		}
 
-		return dataAllSubmissions
-			? dataAllSubmissions
+		return dataAllOrder
+			? dataAllOrder
 			.filter((elem: any) => filterName(elem))
 			.filter((elem: any) => filterSpec(elem))
 			.filter((elem: any) => filtervisiting(elem))
@@ -389,7 +311,7 @@ export const ViewPracticeOrder = () => {
 	]
 
 	const handleRowClick = (record:any) => {
-		navigate(`/services/practices/representation/edit/${record.id}`)
+		navigate(`/services/practices/order/edit/${record.id}`)
     };
 
 
@@ -655,9 +577,12 @@ export const ViewPracticeOrder = () => {
 						// @ts-ignore
 						columns={columns}
 						dataSource={filter?.subdivision !== 'Все' ? dataTable : []}
-						pagination={dataTable?.length < 3 ? false : {
-							pageSize: 3,
-						}}
+						pagination={{
+							current: currentPage,
+							pageSize: 5,
+							total: dataAllOrder?.length,
+							onChange: (page) => setCurrentPage(page),
+						  }}
 						className="my-10"
 						rowSelection={{
 							type: 'checkbox',

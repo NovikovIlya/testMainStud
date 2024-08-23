@@ -8,7 +8,7 @@ import { DeleteRedSvg } from '../../../../assets/svg/DeleteRedSvg'
 import { Load } from '../../../../assets/svg/Load'
 import { PrintSvg } from '../../../../assets/svg/PrintSvg'
 import { ColorBg, WrapperButton } from '../popover/WrapperButton'
-import { useDeleteSubmissionMutation, useGetDocRepresentationQuery } from '../../../../store/api/practiceApi/representation'
+import { useDeleteSubmissionMutation, useGetDocOrderQuery, useGetDocRepresentationQuery } from '../../../../store/api/practiceApi/representation'
 
 interface Props {
 	recordFullAll?: any
@@ -19,7 +19,7 @@ interface Props {
 
 export const PopoverContent = ({recordFull,recordFullAll,setRecordFull,setSelectedFieldFull}: Props) => {
 	const [deleteRepresentation,{}] = useDeleteSubmissionMutation()
-	const {data:dataGetDocRepresentation,isLoading:isLoadingDocRepesentation} = useGetDocRepresentationQuery(recordFull.id)
+	const {data:dataGetDocRepresentation,isLoading:isLoadingDocRepesentation} = useGetDocOrderQuery(recordFull.id)
 	
 	function translateColumnsIntoRussia({ isPrint }: { isPrint: boolean }) {
 		if (isPrint) {
@@ -179,7 +179,7 @@ export const PopoverContent = ({recordFull,recordFullAll,setRecordFull,setSelect
 				<span>Печать выбранного</span>
 			</WrapperButton> */}
 
-			<Popconfirm
+			{/* <Popconfirm
 				title="Удаление"
 				description="Вы уверены, что хотите удалить?"
 				onConfirm={deleteData}
@@ -190,7 +190,7 @@ export const PopoverContent = ({recordFull,recordFullAll,setRecordFull,setSelect
 					<DeleteRedSvg />
 					<span className={'text-[#E04545]'}>Удалить</span>
 				</WrapperButton>
-			</Popconfirm>
+			</Popconfirm> */}
 		</div>
 	)
 }

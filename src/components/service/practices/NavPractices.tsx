@@ -43,7 +43,7 @@ const items: MenuItem[] = [
 	getItem('Формирование документов', 'sub2', <PracticesSvg />, [
 		getItem('График практик', 'formingSchedule'),
 		getItem('Представление в приказ', 'representation'),
-		// getItem('Приказ по практике', 'practiceOrder')
+		getItem('Приказ по практике', 'practiceOrder')
 	]),
 	// getItem('Cогласование документов', 'sub4', <PracticesSvg />, [
 	// 	getItem('График практик', '9'),

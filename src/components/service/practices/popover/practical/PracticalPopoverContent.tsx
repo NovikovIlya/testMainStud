@@ -10,6 +10,8 @@ import { PrintSvg } from '../../../../../assets/svg/PrintSvg'
 import { useDeletePractiseMutation } from '../../../../../store/api/practiceApi/practical'
 import { TablePractical } from '../../practical/ViewPractical'
 import { ColorBg, WrapperButton } from '../WrapperButton'
+import { showNotification } from '../../../../../store/reducers/notificationSlice'
+import { useAppDispatch } from '../../../../../store'
 
 interface Props {
 	recordFullAll?: TablePractical[]
@@ -23,6 +25,7 @@ export const PracticalPopoverContent = ({
 	setRecordFull
 }: Props) => {
 	const [deletePractise] = useDeletePractiseMutation()
+	const dispatch = useAppDispatch()
 	function translateColumnsIntoRussia({ isPrint }: { isPrint: boolean }) {
 		console.log('recordFull,recordFull',recordFull)
 		if (recordFull) {
@@ -108,10 +111,10 @@ export const PracticalPopoverContent = ({
 
 	function deleteData() {
 		if (setRecordFull && recordFull && recordFullAll) {
-			const newArr = recordFullAll.filter(elem => {
-				return elem.id !== recordFull.id
-			})
-			setRecordFull(newArr)
+			// const newArr = recordFullAll.filter(elem => {
+			// 	return elem.id !== recordFull.id
+			// })
+			// setRecordFull(newArr)
 			// if (setSelectedFieldFull) {
 			//     setSelectedFieldFull([])
 			// }
@@ -123,10 +126,32 @@ export const PracticalPopoverContent = ({
 		}
 		// @ts-ignore
 		deletePractise(recordFull?.id)
+			.unwrap()
+				.then(() => {
+					if(setRecordFull && recordFull && recordFullAll){
+					const newArr = recordFullAll.filter(elem => {
+						return elem.id !== recordFull.id
+					})
+					setRecordFull(newArr)
+					}
+				})
+				.catch(error => {
+					console.log('bb', error)
+					if (error.status === 409) {
+						console.log('e mama')
+						dispatch(
+							showNotification({
+								message:
+									'Удаление невозможно, так как имеются связи, прежде необходимо удалить их',
+								type: 'error'
+							})
+						)
+					}
+				})
 	}
 
 	return (
-		<div className={'flex flex-col gap-2 '}>
+		<div className={'flex flex-col gap-2 '} onClick={(e) => { e.stopPropagation()}}>
 			<WrapperButton color={ColorBg.BLUEF2} onClick={downLoad}>
 				<Load />
 				<span>Скачать выбранное</span>

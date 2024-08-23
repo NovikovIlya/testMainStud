@@ -113,7 +113,7 @@ export const PopoverMain = ({recordFull,recordFullAll,setRecordFull,setSelectedF
     console.log('recordFull',recordFull)
 
     return (
-        <div className={'flex flex-col gap-2 '}>
+        <div className={'flex flex-col gap-2 '} onClick={(e) => { e.stopPropagation()}} >
             <WrapperButton
                 color={ColorBg.BLUEF2}
                 onClick={downLoad}
@@ -122,22 +122,22 @@ export const PopoverMain = ({recordFull,recordFullAll,setRecordFull,setSelectedF
                 <Load/>
                 <span>Скачать выбранное</span>
             </WrapperButton>
-            <WrapperButton
+            {/* <WrapperButton
                 color={ColorBg.BLUEF2}
                 onClick={printTable}
                 disabled={recordFull!.length === 0}
             >
                 <PrintSvg/>
                 <span>Печать выбранного</span>
-            </WrapperButton>
-            <WrapperButton
+            </WrapperButton> */}
+            {/* <WrapperButton
                 color={ColorBg.REDE5}
                 onClick={deleteData}
                 disabled={recordFull!.length === 0}
             >
                 <DeleteRedSvg/>
                 <span className={'text-[#E04545]'}>Удалить выбранное</span>
-            </WrapperButton>
+            </WrapperButton> */}
         </div>
     );
 };

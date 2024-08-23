@@ -21,7 +21,7 @@ import {IndTaskPopoverMain} from "../popover/individualTask/IndTaskPopoverMain";
 import dayjs from "dayjs";
 import {EditSvg} from "../../../../assets/svg/EditSvg";
 import {useGetAllTasksQuery, useGetPracticeTypeQuery} from "../../../../store/api/practiceApi/individualTask";
-import {useGetSpecialtyNamesQuery} from "../../../../store/api/practiceApi/roster";
+import {useGetSpecialtyNamesIndividualTasksQuery, useGetSpecialtyNamesQuery} from "../../../../store/api/practiceApi/roster";
 import {OptionsNameSpecialty} from "../roster/registerContracts/RegisterContracts";
 import { LoadingOutlined } from '@ant-design/icons'
 
@@ -77,6 +77,7 @@ const IndividualTasks = () => {
         selectedFieldsFull,
         setSelectedFieldFull
     ] = useState<FullIndividualTask[]>()
+    // const {} = useGetSpecialtyNamesIndividualTasksQuery()
 
     const [tableView, setTableView] = useState({
         compressed: true,
@@ -181,19 +182,19 @@ const IndividualTasks = () => {
             title: <TitleHeadCell title={'Шифр и наименование специальности'}/>,
             dataIndex: 'specialityName',
             width: '20%',
-            render: (text, record) =>
-                <div className={'flex items-center'}>
-                    <span className={'underline flex w-[200px]'}>
-                        {text}
-                    </span>
-                    <Button
-                        type="text"
-                        icon={<EditSvg/>}
-                        onClick={() => {
-                            navigate(`/services/practices/individualTasks/editTask/${record.id}`)
-                        }}
-                    />
-                </div>
+            // render: (text, record) =>
+            //     <div className={'flex items-center'}>
+            //         <span className={'underline flex w-[200px]'}>
+            //             {text}
+            //         </span>
+            //         <Button
+            //             type="text"
+            //             icon={<EditSvg/>}
+            //             onClick={() => {
+            //                 navigate(`/services/practices/individualTasks/editTask/${record.id}`)
+            //             }}
+            //         />
+            //     </div>
         },
         {
             title: <TitleHeadCell title={'Дата заполнения'}/>,
@@ -216,6 +217,7 @@ const IndividualTasks = () => {
                          />}
                 >
                     <Button
+                    onClick={(e) => { e.stopPropagation()}}
                         type="text"
                         className="opacity-50"
                         icon={<PointsSvg/>}
@@ -230,6 +232,7 @@ const IndividualTasks = () => {
                                                     tableDataCompressed={tableDataCompressed}
                                                     setTableDataCompressed={setTableDataCompressed}/>}>
                     <Button
+                    onClick={(e) => { e.stopPropagation()}}
                         type="text"
                         className="opacity-50"
                         icon={<PointsSvg/>}
@@ -242,19 +245,19 @@ const IndividualTasks = () => {
             title: <span className={'text-base'}>Шифр и наименование специальности</span>,
             dataIndex: 'specialityName',
             width: '20%',
-            render: (text, record) =>
-                <div className={'flex items-center'}>
-                    <span className={'underline flex w-[200px] font-bold'}>
-                        {text}
-                    </span>
-                    <Button
-                        type="text"
-                        icon={<EditSvg/>}
-                        onClick={() => {
-                            navigate(`/services/practices/individualTasks/editTask/${record.id}`)
-                        }}
-                    />
-                </div>
+            // render: (text, record) =>
+            //     <div className={'flex items-center'}>
+            //         <span className={'underline flex w-[200px] font-bold'}>
+            //             {text}
+            //         </span>
+            //         <Button
+            //             type="text"
+            //             icon={<EditSvg/>}
+            //             onClick={() => {
+            //                 navigate(`/services/practices/individualTasks/editTask/${record.id}`)
+            //             }}
+            //         />
+            //     </div>
         },
         {
             title: <span className={'text-base'}>Тип практики</span>,
@@ -388,7 +391,36 @@ const IndividualTasks = () => {
         }
     }, [data]);
 
+    const handleRowClick = (record:any) => {
+		navigate(`/services/practices/individualTasks/editTask/${record.id}`)
+    };
 
+    const arraySpec = [
+        { key: 2244612, value: "Все", label: "Все" },
+        ...(data ? 
+            data.map((item) => ({
+                key: item.id,
+                value: item.specialityName,
+                label: item.specialityName
+            })) 
+        : [])
+    ];
+    const arrayType = [
+        { key: 2244612, value: "Все", label: "Все" },
+        ...(data ?
+            data.map((item) => ({
+                key: item.id,
+                value: item.practiceType,
+                label: item.practiceType
+            }))
+        : [])
+    ];
+
+    const uniqueSpecialityNames = Array.from(new Set(arraySpec.map(item => item.value)))
+    .map(value => ({ value, label: value }));
+    const uniqueTypes           = Array.from(new Set(arrayType.map(item => item.value)))
+    .map(value => ({ value, label: value }));
+   
     return (
         <section className="container">
             <Row>
@@ -398,23 +430,17 @@ const IndividualTasks = () => {
 					</span>
                 </Col>
             </Row>
-            <Row gutter={[16, 16]} className="mt-12">
-                <Col span={5}>
+            <Row gutter={[16, 16]} className="mt-12 overWrite">
+                <Col span={5} className='overWrite'>
                     <span>Наименование специальности</span>
                 </Col>
-                <Col span={7}>
+                <Col span={7} className='overWrite'>
                     <Select
                         popupMatchSelectWidth={false}
                         defaultValue="Все"
                         className="w-full"
-                        options={[
-                            {key: 2244612, value: "Все", label: "Все"},
-                            ...(dataNameSpecialty ? dataNameSpecialty.map((item) => ({
-                              key: item.id,
-                              value: item.value,
-                              label: item.label
-                            })) : [])
-                          ]}
+                        style={{ width: '100% !important' }}
+                        options={uniqueSpecialityNames.length > 1 ? uniqueSpecialityNames : []}
                         onChange={value => {
                             setFilter({
                                 ...filter,
@@ -423,37 +449,30 @@ const IndividualTasks = () => {
                         }}
                     />
                 </Col>
-                <Col span={7} offset={5}>
-                    <Space className="w-full flex-row-reverse">
+                <Col span={7} offset={5} className='orderHigh overWrite'>
+                    <Space className="w-full flex-row-reverse ">
                         <Button
                             type="primary"
-                            className="!rounded-full"
+                            className="!rounded-full my-button "
                             onClick={() => {
                                 navigate('/services/practices/individualTasks/createTask')
                             }}
                         >
-                            Добавить индивидуальные задания
+                            
                         </Button>
                     </Space>
                 </Col>
             </Row>
-            <Row gutter={[16, 16]} className="mt-4">
-                <Col span={5}>
+            <Row gutter={[16, 16]} className="mt-4 overWrite">
+                <Col span={5} className='overWrite'>
                     <span>Тип практики</span>
                 </Col>
-                <Col span={7}>
+                <Col span={7} className='overWrite'>
                     <Select
                         popupMatchSelectWidth={false}
                         defaultValue="Все"
                         className="w-full"
-                        options={[
-                            {key: 2244612, value: "Все", label: "Все"},
-                            ...(dataPracticeType ? dataPracticeType.map((item) => ({
-                              key: item.id,
-                              value: item.value,
-                              label: item.label
-                            })) : [])
-                          ]}
+                        options={uniqueTypes.length > 1 ? uniqueTypes : []}
                         onChange={value => {
                             setFilter({
                                 ...filter,
@@ -463,8 +482,8 @@ const IndividualTasks = () => {
                     />
                 </Col>
             </Row>
-            <Row className="mt-12 flex items-center">
-                <Col span={12} flex="50%">
+            <Row className="mt-12 mb-6 flex items-center">
+                <Col span={12} flex="50%" className='mobileFirst'>
                     <Radio.Group defaultValue="compressedView" buttonStyle="solid">
                         <Radio.Button
                             onClick={isCompressedTable}
@@ -480,7 +499,7 @@ const IndividualTasks = () => {
                         </Radio.Button>
                     </Radio.Group>
                 </Col>
-                <Col span={8} offset={4}>
+                <Col span={8} offset={4} className='mobileFirst'>
                     <div className={'flex gap-2 items-center'}>
                         <span className={'mr-2'}>Сортировка</span>
                         <Select
@@ -506,6 +525,9 @@ const IndividualTasks = () => {
                 &&
                 <div className={'individualTasks'}>
                     <Table
+                    onRow={(record) => ({
+                        onClick: () => handleRowClick(record),
+                    })}
                         // @ts-ignore
                         keyExtractor={record => record.id} 
                         columns={columnsCompressed}
@@ -529,6 +551,9 @@ const IndividualTasks = () => {
                 &&
                 
                 <Table
+                onRow={(record) => ({
+                    onClick: () => handleRowClick(record),
+                })}
                     className={'mt-5'}
                     columns={columnsFull}
                     dataSource={tableDataFull}

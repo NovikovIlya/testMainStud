@@ -49,7 +49,7 @@ export const TemplateCard = ({
 			<Button
 				type={buttonType}
 				href={href}
-				className="rounded-full w-[200px] h-[50px] max-[874px]:hidden flex items-center justify-center no-underline"
+				className="rounded-full w-[200px] h-[50px] max-[874px]:absolute  max-[874px]:bottom-5 flex items-center justify-center no-underline"
 			>
 				{t(buttonText)}
 			</Button>

@@ -2,10 +2,10 @@ import { Button, Divider, Drawer, Select } from 'antd'
 import type { MenuProps } from 'antd'
 import { Dropdown, Space } from 'antd'
 import clsx from 'clsx'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import {
 	EyeSvg,
@@ -21,6 +21,7 @@ import { logOut, setEdit } from '../../store/reducers/authSlice'
 import { ModalNav } from '../service/ModalNav'
 import { ArrowLeftBackInOldAccount } from "../../assets/svg/ArrowLeftBackInOldAccount"
 import { TypeHeaderProps } from '../../models/layout'
+import { isMobileDevice } from '../../utils/hooks/useIsMobile'
 
 
 export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
@@ -29,8 +30,17 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const [openDrawer, setOpenDrawer] = useState(false)
 	const [openMenu, setOpenMenu] = useState(false)
 	const { t, i18n } = useTranslation()
-
+	const location = useLocation();
 	const user = useAppSelector(state => state.auth.user)
+	const isMobile = isMobileDevice();
+	const urlContainsPractice = location.pathname.includes('practice');
+
+	useEffect(()=>{
+		if(isMobile){
+			showMobileMenuEffect()
+		}
+	},[location])
+
 	const showDrawer = () => {
 		setOpenDrawer(!openDrawer)
 	}
@@ -140,11 +150,33 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const changeLanguage = (language: string) => {
 		i18n.changeLanguage(language)
 	}
+	const showMobileMenu = ()=>{
+		if(document.querySelector('.ant-menu-root')){
+			if(document.querySelector('.ant-menu-root').style.position==='static'){
+				document.querySelector('.ant-menu-root').style.position = 'fixed'
+				document.querySelector('header').style.marginLeft = '0'
+				return
+			}
+			document.querySelector('.ant-menu-root').style.position = 'static'
+			// document.querySelector('header').style.marginLeft = '-100px'
+		}
+	}
+	const showMobileMenuEffect = ()=>{
+		if(document.querySelector('.ant-menu-root')){
+			if(document.querySelector('.ant-menu-root').style.position==='static'){
+				document.querySelector('.ant-menu-root').style.position = 'fixed'
+				document.querySelector('header').style.marginLeft = '0'
+				return
+			}
+			
+			// document.querySelector('header').style.marginLeft = '-100px'
+		}
+	}
 
 	return (
 		<header
 			className={clsx(
-				' z-[1001]  h-[80px] fixed flex items-center justify-center w-full',
+				' z-[1001] flex flex-wrap  h-[80px] fixed flex items-center justify-center w-full',
 				type === 'main' ? 'bg-white' : `bg-blue65A`
 			)}
 		>
@@ -153,7 +185,21 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 					<Button
 						onClick={showDrawer}
 						className={clsx(
-							'py-2.5 rounded-full hover:!bg-transparent font-semibold bg-transparent border-2 flex items-center justify-center ',
+							'py-2.5 rounded-full hover:!bg-transparent font-semibold bg-transparent border-2 flex items-center justify-center block lg:hidden',
+							type === 'main'
+								? `text-blue1f5 border-blue1f5 hover:!text-blue1f5`
+								: 'text-white border-white '
+						)}
+						type="primary"
+						
+					>Сервисы
+						<span className="pl-2 max-md:!hidden">{t('services')}</span>
+					</Button>
+					
+					<Button
+						onClick={showDrawer}
+						className={clsx(
+							'py-2.5 rounded-full hover:!bg-transparent font-semibold bg-transparent border-2  items-center justify-center hidden sm:flex',
 							type === 'main'
 								? `text-blue1f5 border-blue1f5 hover:!text-blue1f5`
 								: 'text-white border-white '
@@ -165,8 +211,8 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 					</Button>
 					<div className="flex items-center gap-5">
 						<LogoIasSvg white={type === 'service'} />
-						<Divider type="vertical" className="border-l-white h-10 m-0" />
-						<div className="text-white text-base font-bold">{service}</div>
+						<Divider type="vertical" className="border-l-white h-10 m-0 hidden sm:block" />
+						<div onClick={showMobileMenu} className="text-white text-base font-bold hidden sm:block">{service}</div>
 					</div>
 				</div>
 				<div className="flex gap-5 items-center h-full max-[1000px]:gap-0 w-fit justify-center">
@@ -297,7 +343,27 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						</Drawer>
 					</div>
 				</div>
+				
 			</div>
+			{/* Для мобильных устройств */}
+			{urlContainsPractice ?
+			<div className='block lg:hidden  bg-blue65A  flex w-full mt-[1px] items-center p-1'>
+				<Button
+						onClick={showMobileMenu}
+						className={clsx(
+							'py-2.5 ml-4 mr-4  rounded-full hover:!bg-transparent font-semibold bg-transparent border-2 flex items-center justify-center ',
+							type === 'main'
+								? `text-blue1f5 border-blue1f5 hover:!text-blue1f5`
+								: 'text-white border-white '
+						)}
+						type="primary"
+						icon={<MenuSvg white={type === 'service'} />}
+					>
+						<span className="pl-2 max-md:!hidden">{t('services')}</span>
+					</Button>
+					<Divider type="vertical" className="border-l-white h-10 m-0 mr-4" />
+				<div  className="text-white text-base font-bold ">{service}</div>
+			</div> : ""}
 		</header>
 	)
 }

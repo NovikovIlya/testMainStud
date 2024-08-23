@@ -156,7 +156,7 @@ export const IndTaskPopoverContent = ({
 
 
 	return (
-		<div className={'flex flex-col gap-2 '}>
+		<div className={'flex flex-col gap-2 '} onClick={(e) => { e.stopPropagation()}}>
 			<WrapperButton color={ColorBg.BLUEF2} onClick={downLoad}>
 				<Load />
 				<span>Скачать</span>

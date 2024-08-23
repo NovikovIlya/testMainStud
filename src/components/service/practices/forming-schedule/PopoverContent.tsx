@@ -1,4 +1,4 @@
-import { Popconfirm } from 'antd'
+import { Popconfirm, Spin } from 'antd'
 import dayjs from 'dayjs'
 import printJS from 'print-js'
 import React, { useEffect, useState } from 'react'
@@ -8,6 +8,7 @@ import { DeleteRedSvg } from '../../../../assets/svg/DeleteRedSvg'
 import { Load } from '../../../../assets/svg/Load'
 import { PrintSvg } from '../../../../assets/svg/PrintSvg'
 import { ColorBg, WrapperButton } from '../popover/WrapperButton'
+import { useDeleteMutation, useGetDocQuery } from '../../../../store/api/practiceApi/formingSchedule'
 
 interface Props {
 	recordFullAll?: any
@@ -18,6 +19,8 @@ interface Props {
 
 export const PopoverContent = ({recordFull,recordFullAll,setRecordFull,setSelectedFieldFull}: Props) => {
 	// const [deletePractise] = useDeletePractiseSeveralMutation()
+	const [deletePractise,{}] = useDeleteMutation()
+	const { data: dataBlob, isLoading: isLoadingBlob,isFetching:isFetchingBlob } = useGetDocQuery(recordFull.id,{ skip: !recordFull.id })
 	console.log('recordFull', recordFull)
 	function translateColumnsIntoRussia({ isPrint }: { isPrint: boolean }) {
 		if (isPrint) {
@@ -66,12 +69,14 @@ export const PopoverContent = ({recordFull,recordFullAll,setRecordFull,setSelect
 	}
 
 	function downLoad() {
-		const ws = utils.json_to_sheet([
-			translateColumnsIntoRussia({ isPrint: false })
-		])
-		const wb = utils.book_new()
-		utils.book_append_sheet(wb, ws, 'Data')
-		writeFileXLSX(wb, 'File.xlsx')
+		// const ws = utils.json_to_sheet([
+		// 	translateColumnsIntoRussia({ isPrint: false })
+		// ])
+		// const wb = utils.book_new()
+		// utils.book_append_sheet(wb, ws, 'Data')
+		// writeFileXLSX(wb, 'File.xlsx')
+		console.log('1',recordFull)
+		downloadFile()
 	}
 
 	function printTable() {
@@ -96,16 +101,17 @@ export const PopoverContent = ({recordFull,recordFullAll,setRecordFull,setSelect
 
 	function deleteData() {
 		if (setRecordFull && recordFull && recordFullAll) {
-			const recordFullWithoutUndefinedElem = recordFull.filter(
-				(elem: any) => elem !== undefined
-			)
 
-			const listId = recordFullWithoutUndefinedElem.map((elem: any) => elem.id)
-			setRecordFull(
-				recordFullAll.filter((elem: any) => {
-					return !listId.includes(elem.id)
-				})
-			)
+			// const recordFullWithoutUndefinedElem = recordFull.filter(
+			// 	(elem: any) => elem !== undefined
+			// )
+
+			// const listId = recordFullWithoutUndefinedElem.map((elem: any) => elem.id)
+			// setRecordFull(
+			// 	recordFullAll.filter((elem: any) => {
+			// 		return !listId.includes(elem.id)
+			// 	})
+			// )
 			// if (setSelectedFieldFull) {
 			//     setSelectedFieldFull([])
 			// }
@@ -114,28 +120,46 @@ export const PopoverContent = ({recordFull,recordFullAll,setRecordFull,setSelect
 			//     listIdDelete: listId
 			// }
 			//deleteSeveralContracts(objIdList)
+			// deletePractise()
 		}
 
 
-		const listId = recordFull?.map((elem: any) => elem.id)
-		const listIdDelete = {
-			listIdDelete: listId
-		}
+		// const listId = recordFull?.map((elem: any) => elem.id)
+		// const listIdDelete = {
+		// 	listIdDelete: listId
+		// }
 		// deletePractise(listIdDelete)
+
+		deletePractise(recordFull.id)
+	}
+	const downloadFile = () => {
+		if (dataBlob) {
+			const link = document.createElement('a')
+			link.href = dataBlob
+			link.setAttribute('download', 'downloaded-file.docx')
+			document.body.appendChild(link)
+			link.click()
+
+			// window.URL.revokeObjectURL(dataBlob)
+		}
 	}
 
 
 	return (
-		<div className={'flex flex-col gap-2 '}>
-			<WrapperButton color={ColorBg.BLUEF2} onClick={downLoad}>
+		<div className={'flex flex-col gap-2 '} onClick={(e) => { 
+			e.stopPropagation()
+
+			}} >
+			<WrapperButton  disabled={isLoadingBlob} color={ColorBg.BLUEF2} onClick={downLoad}>
+				{isLoadingBlob ? <Spin/> :''}
 				<Load />
-				<span>Скачать выбранное</span>
+				<span>Скачать </span>
 			</WrapperButton>
 
-			<WrapperButton color={ColorBg.BLUEF2} onClick={printTable}>
+			{/* <WrapperButton color={ColorBg.BLUEF2} onClick={printTable}>
 				<PrintSvg />
 				<span>Печать выбранного</span>
-			</WrapperButton>
+			</WrapperButton> */}
 
 			<Popconfirm
 				title="Удаление"
@@ -146,7 +170,7 @@ export const PopoverContent = ({recordFull,recordFullAll,setRecordFull,setSelect
 			>
 				<WrapperButton color={ColorBg.REDE5}>
 					<DeleteRedSvg />
-					<span className={'text-[#E04545]'}>Удалить выбранное</span>
+					<span className={'text-[#E04545]'}>Удалить </span>
 				</WrapperButton>
 			</Popconfirm>
 		</div>

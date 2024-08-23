@@ -19,6 +19,7 @@ import { EditSvg } from '../../../../assets/svg/EditSvg'
 import { PointsSvg } from '../../../../assets/svg/PointsSvg'
 import {
 	useGetDepartmentsQuery,
+	useGetGroupNumberQuery,
 	useGetPracticeKindQuery,
 	useGetPracticeTypeForPracticeQuery,
 	useGetPracticeTypeQuery,
@@ -72,40 +73,7 @@ const filterCourse: FilterType[] = [
 		label: '6'
 	}
 ]
-const filterSemester: FilterType[] = [
-	{
-		value: 'Все',
-		label: 'Все'
-	},
-	{
-		value: '1',
-		label: '1'
-	},
-	{
-		value: '2',
-		label: '2'
-	},
-	{
-		value: '3',
-		label: '3'
-	},
-	{
-		value: '4',
-		label: '4'
-	},
-	{
-		value: '5',
-		label: '5'
-	},
-	{
-		value: '6',
-		label: '6'
-	},
-	{
-		value: '7',
-		label: '7'
-	}
-]
+
 
 export interface TablePractical {
 	id: string
@@ -149,6 +117,7 @@ export const ViewPractical = () => {
 		practiceType: 'Все',
 		subdivision:'Все',
 		dateFilling: 'По дате (сначала новые)',
+		groupNumber: 'Все'
 	})
 	const {
 		data: dataPractiseAll,
@@ -169,6 +138,7 @@ export const ViewPractical = () => {
 	const { data: dataPracticeType, isSuccess: isSuccessPracticeType } = useGetPracticeTypeForPracticeQuery(objType, {
 		skip: objType.subDivisionId === null || objType.specialtyNameId === null
 	})
+	const {data:dataGroupNumber} = useGetGroupNumberQuery(subDevisionId, {skip:!subDevisionId})
 
 	const optionsSortDate: any = [
         {value: 'По дате (сначала новые)', label: 'По дате (сначала новые)'},
@@ -280,17 +250,17 @@ export const ViewPractical = () => {
 			dataIndex: 'individualTasks',
 			title: 'Индивидуальные задания',
 			className: 'text-xs !p-2',
-			render: (_: any, record: any) => {
-				return (
-					<div className={'flex flex-col gap-1'}>
-						{record.tasks?.map((elem: any, index: any) => (
-							<span key={index}>
-								{index + 1}. {elem.taskDescription}
-							</span>
-						))}
-					</div>
-				)
-			}
+			// render: (_: any, record: any) => {
+			// 	return (
+			// 		<div className={'flex flex-col gap-1'}>
+			// 			{record.tasks?.map((elem: any, index: any) => (
+			// 				<span key={index}>
+			// 					{index + 1}. {elem.taskDescription}
+			// 				</span>
+			// 			))}
+			// 		</div>
+			// 	)
+			// }
 		},
 
 		{
@@ -327,7 +297,7 @@ export const ViewPractical = () => {
 						/>
 					}
 				>
-					<Button type="text" className="opacity-50" icon={<PointsSvg />} />
+					<Button onClick={(e) => { e.stopPropagation()}} type="text" className="opacity-50" icon={<PointsSvg />} />
 				</Popover>
 			),
 			fixed: 'right',
@@ -340,10 +310,10 @@ export const ViewPractical = () => {
 			dataIndex: 'subdivision',
 			title: <TitleHeadCell title={'Подразделение'}/>,
 			name: 'Подразделение',
-			className: 'text-xs !p-2',
+			className: 'text-xs !p-2 mobileFirst',
 			width: '20%',
-			height: '50px'
-			
+			height: '50px',
+			responsive: ['xs'],
 		},
 		{
 			key: 'specialtyName',
@@ -353,20 +323,20 @@ export const ViewPractical = () => {
 			className: 'text-xs !p-2',
 
 			// @ts-ignore
-			render: (text, record) => (
-				<div className={'flex items-center'}>
-					<span className={'underline flex w-[200px]'}>{text}</span>
-					<Button
-						type="text"
-						icon={<EditSvg />}
-						onClick={() => {
-							navigate(
-								`/services/practices/practical/editPractical/${record.id}`
-							)
-						}}
-					/>
-				</div>
-			)
+			// render: (text, record) => (
+			// 	<div className={'flex items-center'}>
+			// 		<span className={'underline flex w-[200px]'}>{text}</span>
+			// 		<Button
+			// 			type="text"
+			// 			icon={<EditSvg />}
+			// 			onClick={() => {
+			// 				navigate(
+			// 					`/services/practices/practical/editPractical/${record.id}`
+			// 				)
+			// 			}}
+			// 		/>
+			// 	</div>
+			// )
 		},
 		{
             title: <TitleHeadCell title={'Дата заполнения'}/>,
@@ -379,7 +349,7 @@ export const ViewPractical = () => {
 			dataIndex: 'practiceType',
 
 			title: <TitleHeadCell title={'Тип практики'}/>,
-			className: 'text-xs !p-2'
+			className: 'text-xs !p-2 mobileFirst'
 			// filters:[{
 			// 	text: 'практика по получению первичных',
 			// 	value: 'практика по получению',
@@ -392,14 +362,14 @@ export const ViewPractical = () => {
 			dataIndex: 'semester',
 			title: <TitleHeadCell title={'Семестр'}/>,
 			align: 'center',
-			className: 'text-xs !p-2'
+			className: 'text-xs !p-2 mobileFirst'
 		},
 		{
 			key: 'courseNumber',
 			dataIndex: 'courseNumber',
 			title: <TitleHeadCell title={'Курс'}/>,
 			align: 'center',
-			className: 'text-xs !p-2'
+			className: 'text-xs !p-2 mobileFirst'
 		},
 		{
 			title: (
@@ -429,7 +399,7 @@ export const ViewPractical = () => {
 						/>
 					}
 				>
-					<Button type="text" className="opacity-50" icon={<PointsSvg />} />
+					<Button onClick={(e) => { e.stopPropagation()}} type="text" className="opacity-50" icon={<PointsSvg />} />
 				</Popover>
 			),
 			fixed: 'right',
@@ -539,23 +509,14 @@ export const ViewPractical = () => {
 				return elem.specialtyName === filter.nameSpecialty
 			}
 		}
-		// function sortDateFilling(a: FullIndividualTask, b: FullIndividualTask) {
-		// 	if (filter.dateFilling === 'По дате (сначала новые)') {
-		// 		return +new Date(b.dateFilling) - +new Date(a.dateFilling)
-		// 	}
-		// 	if (filter.dateFilling === 'По дате (сначала старые)') {
-		// 		return +new Date(a.dateFilling) - +new Date(b.dateFilling)
-		// 	}
-		// 	return 0
-		// }
-		//
-		// if (isSuccess) {
-		// 	const dataFull: FullIndividualTask[] = data.map(elem => changeListDataAll(elem))
-		// 	return dataFull
-		// 		.filter(elem => filterPracticeType(elem))
-		// 		.filter(elem => filterNameSpecialty(elem))
-		// 		.sort((a, b) => sortDateFilling(a, b))
-		// }
+		function filterGroup(elem: TablePractical) {
+			if (filter.groupNumber === 'Все') {
+				return elem
+			} else {
+				return elem.groupNumber === filter.groupNumber
+			}
+		}
+	
 		function sortDateFilling(a:any, b:any) {
             if (filter.dateFilling === 'По дате (сначала новые)') {
                 return +new Date(b.dateFilling) - +new Date(a.dateFilling)
@@ -574,6 +535,7 @@ export const ViewPractical = () => {
 					.filter((elem: any) => filterSemester(elem))
 					.filter((elem: any) => filterNameSpecialty(elem))
 					.filter((elem :any) => filterSubdivision(elem))
+					.filter((elem :any) => filterGroup(elem))
 					.sort((a:any, b:any) => sortDateFilling(a, b))
 			: []
 	}
@@ -649,6 +611,12 @@ export const ViewPractical = () => {
 		}
 	})()
 
+	const handleRowClick = (record:any) => {
+		navigate(
+			`/services/practices/practical/editPractical/${record.id}`
+		)
+    };
+
 
 	return (
 		<>
@@ -658,48 +626,14 @@ export const ViewPractical = () => {
 					<Col flex={'auto'}>
 						<span className="mb-14 text-[28px]">Практики</span>
 					</Col>
-					{/*Не актуально до создания на бекенде соответсвующего функционала*/}
-					{/*<Col>*/}
-					{/*	<Button*/}
-					{/*		type="primary"*/}
-					{/*		color={"none"}*/}
-					{/*		className="!rounded-full scale-y-120"*/}
-					{/*		onClick={() => {*/}
-					{/*			practiceDocument(tokenAccess, "")*/}
-					{/*		}}*/}
-					{/*	>*/}
-					{/*		Сформировать График Практик*/}
-					{/*	</Button>*/}
-					{/*</Col>*/}
-					{/*<Col>*/}
-					{/*	<Button*/}
-					{/*		type="primary"*/}
-					{/*		className="!rounded-full ml-2 scale-y-120"*/}
-					{/*		onClick={() => {*/}
-					{/*			practiceDocument(tokenAccess, "")*/}
-					{/*		}}*/}
-					{/*	>*/}
-					{/*		Сформировать Представление в Приказ*/}
-					{/*	</Button>*/}
-					{/*</Col>*/}
-					{/*<Col>*/}
-					{/*	<Button*/}
-					{/*		type="primary"*/}
-					{/*		className="!rounded-full ml-2 scale-y-120"*/}
-					{/*		onClick={() => {*/}
-					{/*			practiceDocument(tokenAccess, "")*/}
-					{/*		}}*/}
-					{/*	>*/}
-					{/*		Сформировать Приказ по практике*/}
-					{/*	</Button>*/}
-					{/*</Col>*/}
+				
 				</Row>
 
-				<Row gutter={[16, 16]} className="mt-12">
-					<Col span={5}>
+				<Row gutter={[16, 16]} className="mt-12 overWrite">
+					<Col span={5} className='overWrite'>
 						<span>Подразделение</span>
 					</Col>
-					<Col span={8}>
+					<Col span={8} className='overWrite'>
 					
 					<Form.Item
 						name={'podrazdelenie'}
@@ -723,26 +657,26 @@ export const ViewPractical = () => {
 						/>
 						</Form.Item>
 					</Col>
-					<Col span={7} offset={4}>
+					<Col span={7} offset={4} className='orderHigh overWrite'>
 						<Space className="w-full flex-row-reverse">
 							<Button
 								type="primary"
-								className="!rounded-full"
+								className="!rounded-full my-buttonPractice"
 								onClick={() => {
 									navigate('/services/practices/practical.ts/createPractical')
 								}}
 							>
-								Добавить практику
+								
 							</Button>
 						</Space>
 					</Col>
 				</Row>
 				
-				<Row gutter={[16, 16]} className="mt-4">
-					<Col span={5}>
+				<Row gutter={[16, 16]} className="mt-4 overWrite">
+					<Col span={5} className='overWrite'>
 						<span>Наименование специальности</span>
 					</Col>
-					<Col span={8}>
+					<Col span={8} className='overWrite'>
 						<Select
 							disabled={!isSuccessDep}
 							popupMatchSelectWidth={false}
@@ -769,11 +703,11 @@ export const ViewPractical = () => {
 					</Col>
 	
 				</Row>
-				<Row gutter={[16, 16]} className="mt-4">
+				<Row gutter={[16, 16]} className="mt-4 overWrite">
 					<Col span={5}>
 						<span>Кафедра</span>
 					</Col>
-					<Col span={8}>
+					<Col span={8} className='overWrite'>
 						<Select
 							// rowKey="id"
 							disabled={!isSuccessDep}
@@ -799,8 +733,40 @@ export const ViewPractical = () => {
 						/>
 					</Col>
 				</Row>
-				<Row gutter={[16, 16]} className="mt-4">
-					<Col span={3} className={'flex items-center gap-4'}>
+
+				<Row gutter={[16, 16]} className="mt-4 overWrite">
+					<Col span={5}>
+						<span>Номер группы</span>
+					</Col>
+					<Col span={8} className='overWrite'>
+						<Select
+
+							disabled={!isSuccessDep}
+							popupMatchSelectWidth={false}
+							defaultValue="Все"
+							className="w-full"
+							options={[
+								{ key: 0, value: 'Все', label: 'Все' },
+								...(dataGroupNumber
+									? dataGroupNumber.map(item => ({
+											key: item.id,
+											value: item.value,
+											label: item.label
+									  }))
+									: [])
+							]}
+							onChange={value => {
+								setFilter({
+									...filter,
+									groupNumber: value
+								})
+							}}
+						/>
+					</Col>
+				</Row>
+
+				<Row gutter={[16, 16]} className="mt-4 overWrite">
+					<Col span={3} className={'flex items-center gap-4 overWrite'}>
 						<span>Курс</span>
 						<Select
 							popupMatchSelectWidth={false}
@@ -816,10 +782,11 @@ export const ViewPractical = () => {
 							}}
 						/>
 					</Col>
-					<Col span={3} className={'flex items-center gap-4'}>
+					<Col span={3} className={'flex items-center gap-4 overWrite'}>
 						<span>Семестр</span>
 					
 						<Form.Item
+							className='w-full'
 							style={{marginBottom:'0'}}
 							//rules={[{required: true}]}
 							name={'semester'}	
@@ -835,13 +802,13 @@ export const ViewPractical = () => {
 							    disabled={!pickCourse || pickCourse==='Все'} 
 								size='middle'
 								popupMatchSelectWidth={false}
-								className="w-full"
+								className="w-full "
 								options={optionsCourseValid}
 							/>
 						</Form.Item>
 						
 					</Col>
-					<Col span={7} className={'flex items-center gap-2'}>
+					<Col span={7} className={'flex items-center gap-2 overWrite'}>
 						<span className="whitespace-nowrap">Тип практики</span>
 						<Select
 							disabled={!pickSpeciality}
@@ -869,7 +836,7 @@ export const ViewPractical = () => {
 				</Row>
 				
 				<Row className="mt-12 flex items-center">
-                <Col span={12} flex="50%">
+                <Col span={12} flex="50%" className='mobileFirst'>
                     <Radio.Group defaultValue="compressedView" buttonStyle="solid">
                         <Radio.Button
                             onClick={isCompressedTable}
@@ -885,7 +852,7 @@ export const ViewPractical = () => {
                         </Radio.Button>
                     </Radio.Group>
                 </Col>
-                <Col span={8} offset={4}>
+                <Col span={8} offset={4} className='mobileFirst'>
                     <div className={'flex gap-2 items-center'}>
                         <span className={'mr-2'}>Сортировка</span>
                         <Select
@@ -914,6 +881,10 @@ export const ViewPractical = () => {
 				/>
 			) : (fullTable ?
 				<Table
+				onRow={(record) => ({
+					onClick: () => handleRowClick(record),
+				})}
+				responsive
 					size="small"
 					rowKey="id"
 					// @ts-ignore
@@ -933,7 +904,10 @@ export const ViewPractical = () => {
 				/> :
 				<div className='viewPractical'>
 				<Table
-					
+				onRow={(record) => ({
+					onClick: () => handleRowClick(record),
+				})}
+					responsive
 					rowKey="id"
 					// @ts-ignore
 					columns={columnsCompressed}

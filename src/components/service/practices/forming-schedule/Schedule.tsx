@@ -1,5 +1,4 @@
 import EditSchedule from './EditSchedule';
-import { FormingSchedule } from './FormingSchedule'
 import MainSchedule from './MainSchedule';
 import PracticeSchedule from './PracticeSchedule'
 import {useLocation} from "react-router-dom";

@@ -89,6 +89,12 @@ export const individualTasks = apiSlice.injectEndpoints({
                 method: 'GET',
             })
         }),
+        getGroupNumber: builder.query<PracticeType[], any>({
+            query: (subDivision) => ({
+                url: `services/api-practices/practices/groups?subdivisionId=${subDivision}`,
+                method: 'GET',
+            })
+        }),
         getPracticeTypeForPractice: builder.query<any, any>({
             query: ({subdivisionId,specialtyNameId }) => ({
                 url:`services/api-practices/tasks/practice-types?subdivisionId=${subdivisionId}&specialtyNameId=${specialtyNameId }`,
@@ -97,7 +103,7 @@ export const individualTasks = apiSlice.injectEndpoints({
         }),
         getPracticeKind: builder.query<PracticeType[], any>({
             query: (subDivisionId) => ({
-                url: `services/api-practices/kpfu/practice-kinds?subdivisionId=${subDivisionId}`,
+                url: `services/api-practices/kpfu/practice-kinds${subDivisionId ? "?subdivisionId=" + subDivisionId : ''}`,
                 method: 'GET',
             })
         }),
@@ -172,7 +178,13 @@ export const individualTasks = apiSlice.injectEndpoints({
                 body: obj
             }),
             invalidatesTags:['Practice']
-        })
+        }),
+        isPeopleInGroup: builder.query<any, any>({
+            query: ({subDivisionId ,groupId }) => ({
+                url: `services/api-practices/practices/groups/has-students?subdivisionId=${subDivisionId}&groupId=${groupId}`,
+                method: 'GET',
+            })
+        }),
 
     })
 })
@@ -195,5 +207,7 @@ export const {
     useGetPracticeOneQuery,
     useUpdatePracticeOneMutation,
     useGetPracticeTypeForPracticeQuery,
-    useGetSubdivisionForPracticeQuery
+    useGetSubdivisionForPracticeQuery,
+    useIsPeopleInGroupQuery,
+    useGetGroupNumberQuery
 } = individualTasks

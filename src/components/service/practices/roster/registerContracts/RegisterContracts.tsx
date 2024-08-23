@@ -161,13 +161,13 @@ export const RegisterContracts = () => {
 
     function changeListNameSpecialty(list: NameSpecialty[]) {
         function changeElemNameSpecialty(elem: NameSpecialty) {
-            const newElem: OptionsNameSpecialty = {
+            const newElem: any = {
                 value: elem.value,
                 label: elem.label,
             }
             return newElem
         }
-        const finalList: OptionsNameSpecialty[] = [{value: 'Все', label: 'Все'}]
+        const finalList: any[] = [{value: 'Все', label: 'Все'}]
         const newList: OptionsNameSpecialty[] = list.map(elem => changeElemNameSpecialty(elem))
         return finalList.concat(newList)
     }
@@ -183,19 +183,19 @@ export const RegisterContracts = () => {
             dataIndex: 'contractFacility',
             align: "left",
             width: 150,
-            render: (text, record) =>
-                <div className={'flex items-center'}>
-                    <span className={'underline flex w-[200px]'}>
-                        {text}
-                    </span>
-                    <Button
-                        type="text"
-                        icon={<EditSvg/>}
-                        onClick={() => {
-                            nav(`/services/practices/registerContracts/editContract/${record.key}`)
-                        }}
-                    />
-                </div>
+            // render: (text, record) =>
+            //     <div className={'flex items-center'}>
+            //         <span className={'underline flex w-[200px]'}>
+            //             {text}
+            //         </span>
+            //         <Button
+            //             type="text"
+            //             icon={<EditSvg/>}
+            //             onClick={() => {
+            //                 nav(`/services/practices/registerContracts/editContract/${record.key}`)
+            //             }}
+            //         />
+            //     </div>
         },
         {
             title: <TitleHeadCell title={'Дата заполнения'}/>,
@@ -240,6 +240,7 @@ export const RegisterContracts = () => {
                                                           setTableDataCompressed={setTableDataCompressed}/>}
                          trigger={'click'}>
                     <Button
+                     onClick={(e) => { e.stopPropagation()}} 
                         type="text"
                         className="opacity-50"
                         icon={<PointsSvg/>}
@@ -254,17 +255,17 @@ export const RegisterContracts = () => {
             align: "left",
             className: 'text-xs',
             width: 200,
-            render: (text, record) =>
-                <div className={'flex items-center'}>
-                    <span className={'underline flex w-[150px]'}>
-                        {text}
-                    </span>
-                    <Button
-                        type="text"
-                        icon={<EditSvg/>}
-                        onClick={() => nav(`/services/practices/registerContracts/editContract/${record.key}`)}
-                    />
-                </div>
+            // render: (text, record) =>
+            //     <div className={'flex items-center'}>
+            //         <span className={'underline flex w-[150px]'}>
+            //             {text}
+            //         </span>
+            //         <Button
+            //             type="text"
+            //             icon={<EditSvg/>}
+            //             onClick={() => nav(`/services/practices/registerContracts/editContract/${record.key}`)}
+            //         />
+            //     </div>
         },
         {
             title: <span className={'text-xs'}>Шифр и наименование специальности</span>,
@@ -365,6 +366,7 @@ export const RegisterContracts = () => {
                                                           tableDataFull={tableDataFull}
                                                           setTableDataFull={setTableDataFull}/>}>
                     <Button
+                         onClick={(e) => { e.stopPropagation()}} 
                         type="text"
                         className="opacity-50"
                         icon={<PointsSvg/>}
@@ -578,7 +580,9 @@ export const RegisterContracts = () => {
 
     }, [dataShort]);
 
-
+    const handleRowClick = (record:any) => {
+		nav(`/services/practices/registerContracts/editContract/${record.key}`)
+    };
 
 
     return (
@@ -590,7 +594,7 @@ export const RegisterContracts = () => {
                     </Typography.Text>
                 </Col>
             </Row>
-            <Row gutter={[16, 16]} className={'mt-12'}>
+            <Row gutter={[16, 16]} className={'mt-12 gtc'}>
                 <Col span={12} className={'flex items-center gap-0'}>
                     <Col span={8} className={clsx(
                         'flex items-center gap-2',
@@ -621,14 +625,14 @@ export const RegisterContracts = () => {
                             onClick={() => {
                                 nav('/services/practices/registerContracts/createContract')
                             }}
-                            className={'rounded-full'}
+                            className={'rounded-full my-buttonContract'}
                     >
-                        Создать договор
+                      
                     </Button>
                 </Col>
             </Row>
-            <Row gutter={[16, 16]} className={'mt-4'}>
-                <Col span={12} className={'flex items-center gap-2'}>
+            <Row gutter={[16, 16]} className={'mt-4 '}>
+                <Col span={12} className={'flex items-center gap-2 overWrite'}>
                     <Col span={8}>
                         <span className={'whitespace-nowrap'}>Наименование организации</span>
                     </Col>
@@ -675,7 +679,7 @@ export const RegisterContracts = () => {
             </Row>
 
             <Row gutter={[16, 16]} className={'mt-4'}>
-                <Col span={12} className={'flex items-center gap-2'}>
+                <Col span={12} className={'flex items-center gap-2 overWrite'}>
                     <Col span={8}>
                         <span className={'whitespace-nowrap'}>Тип договора</span>
                     </Col>
@@ -695,8 +699,8 @@ export const RegisterContracts = () => {
                     </Col>
                 </Col>
             </Row>
-            <Row className="mt-12 flex items-center">
-                <Col span={12} flex="50%">
+            <Row className="mt-12 mb-6 flex items-center">
+                <Col span={12} flex="50%" className='mobileFirst'>
                     <Radio.Group defaultValue="compressedView" buttonStyle="solid">
                         <Radio.Button
                             onClick={isCompressedTable}
@@ -712,7 +716,7 @@ export const RegisterContracts = () => {
                         </Radio.Button>
                     </Radio.Group>
                 </Col>
-                <Col span={8} offset={4}>
+                <Col span={8} offset={4} className='mobileFirst'>
                     <div className={'flex gap-2 items-center'}>
                         <span className={'mr-2'}>Сортировка</span>
                         <Select
@@ -739,6 +743,9 @@ export const RegisterContracts = () => {
                 &&
                 <div className={'registerContracts'}>
                     <Table
+                        onRow={(record) => ({
+                            onClick: () => handleRowClick(record),
+                        })}
                         columns={columnsCompressedView}
                         pagination={false}
                         size={"middle"}
@@ -758,7 +765,11 @@ export const RegisterContracts = () => {
             {
                 tableView.table
                 &&
-                <Table columns={columnsFullView}
+                <Table 
+                        onRow={(record) => ({
+                            onClick: () => handleRowClick(record),
+                        })}
+                        columns={columnsFullView}
                        pagination={false}
                        dataSource={tableDataFull}
                        size={"middle"}

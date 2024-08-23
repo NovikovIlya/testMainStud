@@ -4,6 +4,7 @@ import {
     Row,
     Select,
     Space,
+    Spin,
     Table,
     Typography
 } from 'antd'
@@ -16,6 +17,12 @@ import { PointsSvg } from '../../../../assets/svg/PointsSvg'
 
 import { PopoverContent } from './PopoverContent'
 import { PopoverMain } from './PopoverMain'
+import { useGetAcademicYearQuery, useGetAllSchedulesQuery, useGetSubdivisionQuery } from '../../../../store/api/practiceApi/formingSchedule'
+import { useGetSubdivisionUserQuery } from '../../../../store/api/serviceApi'
+import { LoadingOutlined } from '@ant-design/icons'
+import { processingOfDivisions } from '../../../../utils/processingOfDivisions'
+import { ScheduleType } from '../../../../models/representation'
+import { NewDepartment } from '../../../../models/Practice'
 
 
 const optionsSortDate: any = [
@@ -24,34 +31,22 @@ const optionsSortDate: any = [
 ]
 
 export const PracticeSchedule = () => {
-	const originDate = [
-		{
-			key: '1',
-			name: 'График 2022',
-			dateFilling: '2021.08.20',
-			type: 'Бессрочный',
-			course: '1',
-			academicYear: '2',
-			period: '2020-2021'
-		},
-		{
-			key: '2',
-			name: 'График 2022',
-			dateFilling: '2021.08.22',
-			type: 'Бессрочный',
-			course: '1',
-			academicYear: '2',
-			period: '2020-2021'
-		}
-	]
 	const navigate = useNavigate()
-	const [filter, setFilter] = useState({
-		dateFilling: 'По дате (сначала новые)'
-	})
+	const [filter, setFilter] = useState(
+		{
+			dateFilling: 'По дате (сначала новые)',
+			subdivisionId: 'Все',
+			academicYear: 'Все',
+		}
+	)
 	const [tableData, setTableData] = useState([])
 	const [selectedFieldsFull, setSelectedFieldFull] = useState<any>([])
-	const [dataTable, setDataTable] = useState<any>(originDate)
-
+	const [dataTable, setDataTable] = useState<ScheduleType[]>([])
+	const {data:dataUserSubdivision,isLoading:isLoadingUserSubdivision} = useGetSubdivisionUserQuery()
+	const {data:dataAll,isSuccess:isSuccessData,isFetching:isFetchingDataAll} = useGetAllSchedulesQuery({subdivisionId:dataUserSubdivision?.value,academicYear:getAcademicYear()},{skip:!dataUserSubdivision})
+	const {data:dataAcademicYear} = useGetAcademicYearQuery()
+	const {data:dataSubdivision,isSuccess:isSuccessSubdivision} = useGetSubdivisionQuery()
+	const [departments, setDepartments] = useState<NewDepartment[]>()
 	const columns = [
 		{
 			key: 'name',
@@ -60,24 +55,25 @@ export const PracticeSchedule = () => {
 			name: 'Наименование графика',
 			className: 'text-xs !p-2 ',
 			// @ts-ignore
-			render: (text, record) => (
-				<div className={'flex items-center justify-between'}>
-					<span className={'underline flex font-bold'}>{text}</span>
-					<Button
-						type="text"
-						icon={<EditSvg />}
-						onClick={() => {
-							navigate(`/services/practices/formingSchedule/edit/${record.id}`)
-						}}
-					/>
-				</div>
-			)
+			// render: (text, record) => (
+			// 	<div className={'flex items-center justify-between'}>
+			// 		<span className={'underline flex font-bold'}>{text}</span>
+			// 		<Button
+			// 			type="text"
+			// 			icon={<EditSvg />}
+			// 			onClick={() => {
+			// 				navigate(`/services/practices/formingSchedule/edit/year=${record.academicYear.replace("/", "-")}/${record.id}`)
+			// 			}}
+			// 		/>
+			// 	</div>
+			// )
 		},
 
 		{
 			title: 'Дата заполнения',
 			dataIndex: 'dateFilling',
 			width: '20%',
+			className: 'mobileFirst',
 			// @ts-ignore
 			render: (text: any) => dayjs(text).format('DD.MM.YYYY')
 		},
@@ -95,20 +91,7 @@ export const PracticeSchedule = () => {
 		},
 		{
 			title: (
-				<Popover
-					trigger={'click'}
-					content={
-						<PopoverMain
-							// @ts-ignore
-							recordFullAll={tableData}
-							setRecordFull={setTableData}
-							recordFull={selectedFieldsFull}
-							setSelectedFieldFull={setSelectedFieldFull}
-						/>
-					}
-				>
-					<Button type="text" className="opacity-50" icon={<PointsSvg />} />
-				</Popover>
+				''
 			),
 			align: 'center',
 			render: (record: any) => (
@@ -122,7 +105,7 @@ export const PracticeSchedule = () => {
 						/>
 					}
 				>
-					<Button type="text" className="opacity-50" icon={<PointsSvg />} />
+					<Button type="text" onClick={(e) => { e.stopPropagation(); /* обработка клика на PointsSvg */ }}  className="opacity-50" icon={<PointsSvg />} />
 				</Popover>
 			),
 			fixed: 'right',
@@ -131,13 +114,20 @@ export const PracticeSchedule = () => {
 	]
 
 	useEffect(() => {
-		// if (isSuccessPractiseAll) {
-		setDataTable(filterDataFull())
-		// }
-	}, [filter])
+		if (isSuccessSubdivision) {
+			setDepartments(processingOfDivisions(dataSubdivision))
+		}
+	}, [dataSubdivision])
+	
+	useEffect(() => {
+		if (isSuccessData) {
+			setDataTable(filterDataFull())
+		}
+	}, [filter,isSuccessData,dataAll])
+
 
 	function filterDataFull() {
-		function sortDateFilling(a: any, b: any) {
+		function sortDateFilling(a: ScheduleType, b: ScheduleType) {
 			if (filter.dateFilling === 'По дате (сначала новые)') {
 				return +new Date(b.dateFilling) - +new Date(a.dateFilling)
 			}
@@ -146,84 +136,134 @@ export const PracticeSchedule = () => {
 			}
 			return 0
 		}
+		function filterSubdivision(elem: any) {
+			if (filter.subdivisionId === 'Все') {
+				return elem
+			} else {
+				return elem.subdivisionId === filter.subdivisionId
+			}
+		}
+		function filterAcademicYear(elem: any) {
+			if (filter.academicYear === 'Все') {
+				return elem
+			} else {
+				return elem.academicYear === filter.academicYear
+			}
+		}
 
-		return originDate
-			? originDate.sort((a: any, b: any) => sortDateFilling(a, b))
+		return dataAll
+			? [...dataAll]
+			.sort((a: ScheduleType, b: ScheduleType) => sortDateFilling(a, b))
+			.filter((elem: any) => filterSubdivision(elem))
+			.filter((elem: any) => filterAcademicYear(elem))
 			: []
 	}
 
-	// function isCompressedView() {
-	//     setStateSchedule({
-	//         ...stateSchedule,
-	//         compressed: true,
-	//         table: false
-	//     })
-	// }
+	function getAcademicYear() {
+        const today = dayjs();
+        const year = today.year();
+        const month = today.month() + 1; 
+    
+        if (month >= 8) {
+            return `${year}/${year + 1}`; 
+        } else {
+            return `${year - 1}/${year}`;
+        }
+    }	
 
-	// function isTableView() {
-	//     setStateSchedule({
-	//         ...stateSchedule,
-	//         compressed: false,
-	//         table: true,
-	//     })
-	// }
-
+	const handleRowClick = (record:any) => {
+		navigate(`/services/practices/formingSchedule/edit/year=${record.academicYear.replace("/", "-")}/${record.id}`)
+    };
 
 
 	return (
 		<section className="container">
 			<Row gutter={[16, 16]}>
 				<Col span={24}>
-					<Typography.Text className=" text-[28px] mb-14">
+					<Typography.Text className=" text-[28px] mb-14 titleMobile">
 						График практик
 					</Typography.Text>
 				</Col>
 			</Row>
-			<Row gutter={[16, 16]} className="mt-12">
-				<Col span={5}>
+			<Row gutter={[16, 16]} className="mt-12 overWrite">
+				<Col span={5} className='overWrite'>
 					<span>Подразделение</span>
 				</Col>
-				<Col span={7}>
+				<Col span={7} className='overWrite'>
 					<Select
 						popupMatchSelectWidth={false}
 						defaultValue="Все"
 						className="w-full"
+						onChange={(value: any) => {
+							setFilter({ ...filter, subdivisionId: value })
+						}}
+						options={
+							[
+								{ key: 2244612, value: 'Все', label: 'Все' },
+								...(departments
+									? departments.map(item => ({
+											key: item.id,
+											value: item.id,
+											label: item.label
+									  }))
+									: [])
+							]
+						}
 					/>
 				</Col>
-				<Col span={7} offset={5}>
+				{/* {dataUserSubdivision?.value ? */}
+				 <Col span={7} offset={5} className='overWrite orderHigh'>
 					<Space className="w-full flex-row-reverse">
 						<Button
 							type="primary"
-							className="!rounded-full"
+							className="!rounded-full my-buttonSchedule"
 							onClick={() => {
 								navigate('/services/practices/formingSchedule/createSchedule')
 							}}
 						>
-							Добавить график практик
+							
 						</Button>
 					</Space>
-				</Col>
+				</Col> 
+				{/* : null} */}
 			</Row>
-			<Row gutter={[16, 16]} className="mt-4 flex items-center">
-				<Col span={5}>
+			<Row gutter={[16, 16]} className="mt-4 flex items-center overWrite">
+					<Col span={5} className='overWrite'>
+				{/* <div className={'flex gap-2 items-center overWrite w-full'}> */}
 					<span>Учебный год</span>
-				</Col>
-				<Col span={7}>
-					<Select
-						popupMatchSelectWidth={false}
-						defaultValue="Все"
-						className="w-full"
-					/>
-				</Col>
+				
+					</Col>
+					<Col span={7} className='overWrite grow'>
+						<Select
+							popupMatchSelectWidth={false}
+							defaultValue="Все"
+							className="w-full"
+							onChange={(value: any) => {
+								setFilter({ ...filter, academicYear: value })
+							}}
+							options={
+								[
+									{key: 2244612, value: "Все", label: "Все"},
+								...(dataAcademicYear ? dataAcademicYear.map((item:string) => ({
+								key: item,
+								value: item,
+								label: item
+								})) : [])
+								]
+							}
+						/>
+					{/* </div> */}
+					
+					</Col>
 			</Row>
-			<Row gutter={[16, 16]} className="mt-4 flex items-centerек">
-				<Col span={7} offset={17}>
-					<div className={'flex gap-2 items-center'}>
+			<Row gutter={[16, 16]} className="mt-4 flex items-center overWrite">
+				<Col span={7} offset={17} className='overWrite w-full'>
+					<div className={'flex gap-2 items-center overWrite w-full'}>
 						<span className={'mr-2'}>Сортировка</span>
 						<Select
 							popupMatchSelectWidth={false}
 							defaultValue=""
-							className="w-full"
+							className="w-[500px]"
 							options={optionsSortDate}
 							onChange={value => {
 								setFilter({
@@ -235,9 +275,13 @@ export const PracticeSchedule = () => {
 					</div>
 				</Col>
 			</Row>
-			<Row className="mt-4">
-				<Col flex={'auto'}>
-					<Table
+		
+					{isLoadingUserSubdivision || isFetchingDataAll ? <Spin className='w-full mt-20' indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />  
+					:  <Table
+						onRow={(record) => ({
+							onClick: () => handleRowClick(record),
+						})}
+						responsive
 						size="small"
 						rowKey="id"
 						// @ts-ignore
@@ -254,11 +298,12 @@ export const PracticeSchedule = () => {
 								setSelectedFieldFull(selectedRows)
 							}
 						}}
-					/>
-				</Col>
-			</Row>
+					/>}
+				
 		</section>
 	)
 }
 
 export default PracticeSchedule
+
+

@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import { PracticesSvg } from '../../../assets/svg/PracticesSvg'
 
 import './Practices.sass'
+import './PracticesStyle.scss'
 import { Tasks } from './individual-tasks/Tasks'
 import { Practical } from './practical/Practical'
 import { Roster } from './roster/Roster'
@@ -42,7 +43,7 @@ const items: MenuItem[] = [
 	getItem('Формирование документов', 'sub2', <PracticesSvg />, [
 		getItem('График практик', 'formingSchedule'),
 		getItem('Представление в приказ', 'representation'),
-		getItem('Приказ по практике', 'practiceOrder')
+		// getItem('Приказ по практике', 'practiceOrder')
 	]),
 	// getItem('Cогласование документов', 'sub4', <PracticesSvg />, [
 	// 	getItem('График практик', '9'),
@@ -84,7 +85,7 @@ export const NavPractices = () => {
 				className="min-w-[230px] max-w-[230px] flex flex-col gap-7 mt-28"
 				items={items}
 			/>
-			<div className="bg-[#F5F8FB] w-full pt-14 px-14 mt-20">
+			<div className="bg-[#F5F8FB] w-full pt-14 px-14  xl:mt-20 mt-20 ">
 				{current === 'registerContracts' && <Roster />}
 				{current === 'individualTasks' && <Tasks />}
 				{current === 'practical.ts' && <Practical />}

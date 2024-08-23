@@ -61,6 +61,9 @@ export const serviceApi = apiSlice.injectEndpoints({
         getPhoneUser: builder.query<Array<any>, void>({
             query: () => 'user-api/settings/phones'
         }),
+        getSubdivisionUser: builder.query<any, void>({
+            query: () => 'services/api-practices/user/subdivision'
+        }),
         postPhone: builder.mutation({
             query: phone => {
                 return {
@@ -151,4 +154,5 @@ export const {
     useChangePasswordMutation,
     useGetPhoneUserQuery,
     usePostPhoneMutation,
+    useGetSubdivisionUserQuery
 } = serviceApi

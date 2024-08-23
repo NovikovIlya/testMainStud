@@ -1,0 +1,109 @@
+.my-button::after {
+  content: 'Добавить индивидуальное задание';
+  /* Скрываем текст по умолчанию */
+}
+.my-buttonPractice::after {
+  content: 'Добавить практику';
+  /* Скрываем текст по умолчанию */
+}
+.my-buttonSchedule::after {
+  content: 'Добавить график практик';
+  /* Скрываем текст по умолчанию */
+}
+.my-buttonContract::after {
+  content: 'Создать договор';
+  /* Скрываем текст по умолчанию */
+}
+.prr-0{
+ padding-right: 0 !important;
+}
+.ant-table-row{
+  cursor: pointer;
+}
+.ant-table-cell-row-hover{
+  background-color: #ededed !important;
+}
+.ant-steps-item-title{
+  font-size: 11px !important;
+}
+@media screen and (max-width: 768px) {
+  .ant-menu-root{
+    position: fixed;
+    top: -9999px;
+   
+  }
+  .ant-col-3{
+   
+  }
+  .mobileFirst{
+    display: none;
+  }
+  .ant-row{
+    display: grid;
+  }
+  .ant-col{
+    font-size: 7px !important;
+    margin-left: 0 !important;
+   
+  }
+  .ant-table-wrapper{
+    display: flex;
+    justify-content: center;
+  }
+  .ant-table{
+    scale: 0.6;
+  }
+  .my-button::after {
+    content: '+ ';
+    display: inline; /* Скрываем текст по умолчанию */
+  }  
+  .my-buttonPractice::after {
+    content: '+';
+    display: inline; /* Скрываем текст по умолчанию */
+  }
+  .my-buttonSchedule::after {
+    content: '+';
+    display: inline; /* Скрываем текст по умолчанию */
+  }
+  .my-buttonContract::after {
+    content: '+';
+    display: inline; /* Скрываем текст по умолчанию */
+  }
+  .ant-select-dropdown {
+    width: 250px !important;
+  }
+  .mobileFont{
+    font-size: 7px !important;
+  }
+  .ant-row-schedule{
+    justify-content: space-between;
+  }
+  .gtc{
+    grid-template-columns: 1fr 1fr;
+  }
+  .overWrite{
+    max-width: 100% !important;
+  }
+  .orderHigh{
+    order:-1000000000
+  }
+  .grow{
+    flex-grow: 1;
+  }
+  .mrr{
+    margin-right: 0 !important;
+  }
+  .mll{
+    margin-left: 0 !important;
+  }
+  .titleMobile{
+    font-size: 22px !important;
+  }
+  .ant-select-selection-item-content,.ant-select-selection-item{
+    font-size: 8px !important;
+  }
+  .ant-list-item-no-flex{
+    display: grid !important;
+    grid-template-columns: 1fr 1fr 1fr !important;
+  }
+}

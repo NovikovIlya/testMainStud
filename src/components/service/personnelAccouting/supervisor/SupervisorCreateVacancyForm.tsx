@@ -95,9 +95,10 @@ export const SupervisorCreateVacancyForm = () => {
 							<Select
 								placeholder="Выбрать"
 								options={[
-									{ value: '0', label: '0' },
-									{ value: '1', label: '1' },
-									{ value: '2', label: '2' }
+									{ value: 'Нет опыта', label: 'Нет опыта' },
+									{ value: 'Опыт от 1 до 3 лет', label: 'Опыт от 1 до 3 лет' },
+									{ value: 'Опыт от 3 до 6 лет', label: 'Опыт от 3 до 6 лет' },
+									{ value: 'Опыт более 6 лет', label: 'Опыт более 6 лет' }
 								]}
 							></Select>
 						</Form.Item>
@@ -113,9 +114,10 @@ export const SupervisorCreateVacancyForm = () => {
 							<Select
 								placeholder="Выбрать"
 								options={[
-									{ value: 'Полный день', label: 'Полный день' },
-									{ value: 'Пол ставки', label: 'Пол ставки' },
-									{ value: 'Четверть ставки', label: 'Четверть ставки' }
+									{ value: 'Полный график', label: 'Полный график' },
+									{ value: 'Гибкий график', label: 'Гибкий график' },
+									{ value: 'Сменный график', label: 'Сменный график' },
+									{ value: 'Удалённая работа', label: 'Удалённая работа' }
 								]}
 							></Select>
 						</Form.Item>

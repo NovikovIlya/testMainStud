@@ -17,11 +17,8 @@ export const SupervisorInterviewItem = ( props : InterviewItemType ) => {
 
   const navigate = useNavigate()
 
-  const date = props.date
-  const spaceIndex = date.indexOf(' ');
-  const dateSplited = date.substring(0, spaceIndex);
-  const timeSplited = date.substring(spaceIndex + 1);
-
+  const time = props.time
+  const seekerName = props.seeker.firstName + ' ' + props.seeker.middleName + ' ' + props.seeker.lastName
   return (
     <>
       <ConfigProvider
@@ -59,34 +56,40 @@ export const SupervisorInterviewItem = ( props : InterviewItemType ) => {
         </Modal>
       </ConfigProvider>
       <div className="w-full flex bg-white p-5 items-center">
-        <span className="w-[25%] ">{props.job_grade}</span>
-        <span className="w-[20%] ml-[2%] ">{props.name}</span>
-        <span className="w-[8%] ">
-              {dateSplited}
-          {timeSplited}
-            </span>
-        <span className="w-[8%] ml-[1%] ">{props.type}</span>
-        <div className=" w-[34%] ml-[2%] flex items-center justify-evenly">
-          {props.status === "OFFLINE" && (
+        <span className="w-[25%] "></span>
+        <span className="w-[20%] ml-[2%] ">{seekerName}</span>
+        <span className="w-[8%] ">{props.time}</span>
+          {props.format === "OFFLINE" && (
+              <span className="w-[8%] ml-[1%] ">Оффлайн</span>
+          )}
+          {props.format === "ONLINE_ACTIVE" && (
+              <span className="w-[8%] ml-[1%] ">Онлайн</span>
+          )}
+          {props.format === "ONLINE_INACTIVE" && (
+              <span className="w-[8%] ml-[1%] ">Онлайн</span>
+          )}
+
+          <div className=" w-[34%] ml-[2%] flex items-center justify-evenly">
+          {props.format === "OFFLINE" && (
             <button
               className="opacity-[100%]">
             </button>
           )}
-          {props.status === "ONLINE_ACTIVE" && (
+          {props.format=== "ONLINE_ACTIVE" && (
             <button
               className="bg-[#3073D7] text-white font-content-font cursor pointer font-normal text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-0"
               onClick={() => {
-                const MeetingUrl = props.url
+                const MeetingUrl = 'hhtps://google.com'
                 window.open(MeetingUrl, '_blank')
               }}
             >
               Подключится
             </button>
           )}
-          {props.status === "ONLINE_INACTIVE" && (
+          {props.format === "ONLINE_INACTIVE" && (
             <button
               className="bg-[#3073D7] opacity-[32%] text-white font-content-font font-normal text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-0">
-              Осталось {props.time_left}
+              Осталось
             </button>
           )}
           <Button

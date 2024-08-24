@@ -8,11 +8,10 @@ import { useNavigate } from 'react-router-dom'
 export const SupervisorInterviews = () => {
 
 	const { data: interviews = [] } = useGetSupervisorInterviewQuery()
-	const navigate = useNavigate()
 
 
 	return (
-        <div className="w-full mx-16 pt-[120px]">
+        <div className="w-full mx-16 mt-[120px]">
             <h1 className="font-normal text-3xl mb-14">Все собеседования</h1>
             <div className="flex flex-col">
                 <div className="w-full flex flex-row pb-4 px-5">
@@ -34,11 +33,6 @@ export const SupervisorInterviews = () => {
 								{interviews.map(inter => (
 									<SupervisorInterviewItem {...inter} key={inter.id} />
 								))}
-								<SupervisorInterviewItem date={'18.05.24\n' +
-									'16:00'} id={123}
-																				 job_grade={'Специалист Центра образовательных программ и экскурсий'}
-																				 name={'Мочалов Сергей Сергеевич'} time_left={'3 дня 4 часа'}
-																				 type={'Онлайн'} status={'ONLINE_INACTIVE'} url={'https://google.com'}></SupervisorInterviewItem>
 							</div>
 						</div>
 				</div>

@@ -25,6 +25,7 @@ import {
 	InterviewRequestType,
 	InterviewItemType,
 	InterviewViewResponseType,
+	RejectionMessageType,
 	respondStatus
 } from '../reducers/type'
 
@@ -615,7 +616,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		getSupervisorInterview: builder.query<InterviewItemType[], void>({
 			query: arg => ({
-				url: 'http://localhost:8082/employment-api/v1/interview',
+				url: `http://localhost:8082/employment-api/v1/interview`,
 				method: 'GET',
 				body: arg,
 				headers: {
@@ -625,7 +626,21 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		getInterviewView: builder.query<InterviewViewResponseType, number>({
 			query: id => ({
-				url: 'http://localhost:8082/employment-api/v1/interviewy/' + id
+				url: `http://localhost:8082/employment-api/v1/interview/${id}`,
+				method: 'GET'
+			})
+		}),
+		employeeSeekerRequest: builder.mutation<void, RejectionMessageType & {respondId: number}>( {
+			query: arg  => ({
+				url: `http://localhost:8082/employment-api/v1/respond/${arg.respondId}status/employ`,
+				method: 'PUT',
+				body: {
+					rejectionReason: arg.rejectionReason,
+					action :  arg.action
+				},
+				headers: {
+					Authorization: `Bearer ${supervisorToken}`
+				}
 			})
 		}),
 	})
@@ -698,4 +713,5 @@ export const {
 	useLazyGetVacancyPreviewBySubdivisionQuery,
 	useGetSupervisorInterviewQuery,
 	useLazyGetInterviewViewQuery,
+	useEmployeeSeekerRequestMutation,
 } = serviceApi

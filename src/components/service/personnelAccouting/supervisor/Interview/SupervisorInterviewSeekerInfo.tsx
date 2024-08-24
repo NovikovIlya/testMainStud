@@ -4,7 +4,9 @@ import ArrowIcon from '../../../jobSeeker/ArrowIcon'
 import { AvatartandardSvg } from '../../../../../assets/svg/AvatarStandardSvg'
 import uuid from 'react-uuid'
 import { useAppSelector } from '../../../../../store'
-import { useGetRespondFullInfoQuery } from '../../../../../store/api/serviceApi'
+import { useGetRespondFullInfoQuery,
+		 useEmployeeSeekerRequestMutation
+} from '../../../../../store/api/serviceApi'
 
 export const SupervisorInterviewSeekerInfo = (props : { status : 'ONLINE_ONGOING' | 'ENDED' | 'OFFLINE_ONGOING'}) => {
 
@@ -16,8 +18,46 @@ export const SupervisorInterviewSeekerInfo = (props : { status : 'ONLINE_ONGOING
 
 	const { TextArea } = Input;
 
+	const [isUnsuccessModalOpen, setIsUnsuccessModalOpen] = useState(false)
+
+	const [sendSeekerMessage] = useEmployeeSeekerRequestMutation()
+
 	return (
 		<>
+			<ConfigProvider
+				theme={{
+					token: {
+						boxShadow: '0 0 19px 0 rgba(212, 227, 241, 0.6)'
+					}
+				}}
+			>
+				<Modal
+					bodyStyle={{ padding: 53 }}
+					centered
+					open={isUnsuccessModalOpen}
+					onCancel={() => {
+						setIsUnsuccessModalOpen(false)
+					}}
+					title={null}
+					footer={null}
+					width={407}
+				>
+					<p className="font-content-font font-normal text-black text-[16px]/[20px] text-center">
+						Произошла ошибка или нет ответа от сервера.
+					</p>
+					<div className="mt-[40px] flex gap-[12px]">
+						<Button
+							className="ml-auto mr-auto"
+							type="primary"
+							onClick={() => {
+								setIsUnsuccessModalOpen(false)
+							}}
+						>
+							ОК
+						</Button>
+					</div>
+				</Modal>
+			</ConfigProvider>
 			<div className="pl-[52px] pr-[10%] py-[100px] w-full">
 				<div>
 					<Button
@@ -100,8 +140,8 @@ export const SupervisorInterviewSeekerInfo = (props : { status : 'ONLINE_ONGOING
 									layout="vertical"
 									requiredMark={false}
 									className="p-[20px]"
-									onFinish={ () => {
-
+									onFinish={values => {
+										sendSeekerMessage(values)
 									}}
 								>
 									<h2 className="font-normal text-[18px]">Отказ на должность</h2>
@@ -118,12 +158,17 @@ export const SupervisorInterviewSeekerInfo = (props : { status : 'ONLINE_ONGOING
 										<Select
 											placeholder="Не хватает опыта"
 											options={[
-												{ value: '0', label: 'Причина 1' },
-												{ value: '1', label: 'Причина 2' },
-												{ value: '2', label: 'Причина 3' }
+												{ value: '0', label: 'Не хватает опыта' },
+												{ value: '1', label: 'Нашли другого специалиста' }
 											]}
 										></Select>
 									</Form.Item>
+									<Button
+									className="bg-[#3073D7] text-base rounded-[54.5px] text-white py-[12px] px-[24px]"
+									htmlType="submit"
+									>
+										Отправить
+									</Button>
 								</Form>
 							</Modal>
 						</ConfigProvider>
@@ -155,8 +200,6 @@ export const SupervisorInterviewSeekerInfo = (props : { status : 'ONLINE_ONGOING
 							<div className="flex flex-col justify-center gap-[12px]">
 								<Button
 									className="h-[40px] w-[257px] bg-[#3073D7] rounded-[54.5px] text-white text-[16px]/[16px]"
-									onClick={() => {
-									}}
 								>
 									Пригласить на работу
 								</Button>

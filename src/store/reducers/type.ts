@@ -333,26 +333,25 @@ export type VacancyRequestViewType = {
 	oldData: VacancyRequestType | null
 }
 
-export type InterviewRequestViewType = {
-	id: number
-}
-
 export type InterviewRequestType ={
 	respondId : number,
-	seeker_name : string,
-	post: string;
 	date : string,
-	time: string,
-	type : string
+	format: string
 }
 
 export type InterviewItemType = {
 	id: number,
-	job_grade : string,
-	name : string,
-	date : string,
-	type : string,
-	time_left : string,
-	url: string,
-	status: 'OFFLINE' | 'ONLINE_ACTIVE' | 'ONLINE_INACTIVE'
+	respondId: number,
+	seeker: {
+		firstName: string
+		middleName: string
+		lastName: string
+	},
+	format: 'OFFLINE' | 'ONLINE_ACTIVE' | 'ONLINE_INACTIVE'
+	time: string
+}
+
+export type RejectionMessageType = {
+	rejectionReason: string,
+	action : 'EMPLOY' | 'UNEMPLOY'
 }

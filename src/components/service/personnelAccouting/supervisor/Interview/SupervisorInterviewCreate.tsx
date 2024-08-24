@@ -1,7 +1,9 @@
 import React, {useState} from 'react';
 import {Button, Form, Select, DatePicker, TimePicker, Modal, ConfigProvider} from "antd"
 import {useGetSupervisorVacancyQuery,
-        useRequestCreateInterviewMutation
+        useRequestCreateInterviewMutation,
+        useLazyGetResponcesByVacancyQuery,
+        useLazyGetVacancyGroupedResponcesQuery
 } from "../../../../../store/api/serviceApi";
 
 export const SupervisorInterviewCreate = () => {
@@ -14,6 +16,8 @@ export const SupervisorInterviewCreate = () => {
 
     const [isUnsuccessModalOpen, setIsUnsuccessModalOpen] = useState(false)
 
+    const [getGroupedResponds] = useLazyGetVacancyGroupedResponcesQuery()
+    const [getResponds] = useLazyGetResponcesByVacancyQuery()
 
     return (
         <>
@@ -85,7 +89,11 @@ export const SupervisorInterviewCreate = () => {
                     layout="vertical"
                     requiredMark={false}
                     onFinish={values => {
-                        requestCreateInterview(values)
+                        requestCreateInterview({
+                            date: values.date,
+                            format: values.format,
+                            respondId: 1
+                        })
                             .unwrap()
                             .then(() => {
                                 setIsSuccessModalOpen(true);
@@ -107,9 +115,9 @@ export const SupervisorInterviewCreate = () => {
                         <Select
                             placeholder="Иванов Иван Иванович"
                             options={[
-                                {value: '0', label: 'Воронов Евгений Петрович'},
-                                {value: '1', label: 'Воронов Евгений Петрович'},
-                                {value: '2', label: 'Воронов Евгений Петрович'}
+                                {value: '1', label: 'Илья Митрофанов'},
+                                {value: '2', label: 'Воронов Евгений Петрович'},
+                                {value: '3', label: 'Воронов Евгений Петрович'}
                             ]}
                         ></Select>
                     </Form.Item>
@@ -125,9 +133,9 @@ export const SupervisorInterviewCreate = () => {
                         <Select
                             placeholder="Специалист по связям с общественностью"
                             options={[
-                                {value: '0', label: 'Специалист по связям с общественностью'},
-                                {value: '1', label: 'Специалист по связям с общественностью'},
-                                {value: '2', label: 'Специалист по связям с общественностью'}
+                                {value: '1', label: 'Повар'},
+                                {value: '2', label: 'Специалист по связям с общественностью'},
+                                {value: '3', label: 'Специалист по связям с общественностью'}
                             ]}
                         ></Select>
                     </Form.Item>
@@ -162,7 +170,7 @@ export const SupervisorInterviewCreate = () => {
                         </Form.Item>
                         <Form.Item
                             className="w-6/12"
-                            name={'type'}
+                            name={'format'}
                             label={
                                 <label className="opacity-[80%] text-black text-[18px]/[18px] font-content-font font-normal">
                                     Формат
@@ -173,8 +181,8 @@ export const SupervisorInterviewCreate = () => {
                             <Select
                                 placeholder="-"
                                 options={[
-                                    {value: '0', label: 'Оффлайн'},
-                                    {value: '1', label: 'Онлайн'},
+                                    {value: 'ONLINE', label: 'Оффлайн'},
+                                    {value: 'OFFLINE', label: 'Онлайн'},
                                 ]}
                             ></Select>
                         </Form.Item>

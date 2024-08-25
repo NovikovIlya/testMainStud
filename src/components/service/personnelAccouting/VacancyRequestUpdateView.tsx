@@ -4,9 +4,10 @@ import { useNavigate } from 'react-router-dom'
 
 import { useAppSelector } from '../../../store'
 import {
-	useAcceptVacancyRequestMutation,
+	useAcceptUpdateVacancyRequestMutation,
 	useDenyVacancyRequestMutation,
-	useGetVacancyRequestViewQuery
+	useGetVacancyRequestViewQuery,
+	useGetVacancyRequestsQuery
 } from '../../../store/api/serviceApi'
 import ArrowIcon from '../jobSeeker/ArrowIcon'
 
@@ -14,8 +15,10 @@ export const VacancyRequestUpdateView = () => {
 	const { requestId } = useAppSelector(state => state.currentRequest)
 	const { data: requestView } = useGetVacancyRequestViewQuery(requestId)
 	const navigate = useNavigate()
-	const [acceptRequest] = useAcceptVacancyRequestMutation()
+	const [acceptRequest] = useAcceptUpdateVacancyRequestMutation()
 	const [denyRequest] = useDenyVacancyRequestMutation()
+
+	const { refetch } = useGetVacancyRequestsQuery('все')
 
 	const dmp = new diff_match_patch()
 
@@ -310,6 +313,9 @@ export const VacancyRequestUpdateView = () => {
 							onClick={() => {
 								acceptRequest(requestId)
 									.unwrap()
+									.then(() => {
+										refetch()
+									})
 									.then(() => {
 										navigate('/services/personnelaccounting/vacancyrequests')
 									})

@@ -1,14 +1,15 @@
-import { Button, Form, Input, Select } from 'antd'
+import { Button, Form, Input, Modal, Select } from 'antd'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useAppSelector } from '../../../store'
 import {
-	useAcceptVacancyRequestMutation,
+	useAcceptCreateVacancyRequestMutation,
 	useAlterCreateVacancyRequestMutation,
 	useGetCategoriesQuery,
 	useGetDirectionsQuery,
 	useGetSubdivisionsQuery,
+	useGetVacancyRequestsQuery,
 	useLazyGetVacancyRequestViewQuery
 } from '../../../store/api/serviceApi'
 import ArrowIcon from '../jobSeeker/ArrowIcon'
@@ -17,8 +18,10 @@ export const VacancyRequestCreateView = () => {
 	const { requestId } = useAppSelector(state => state.currentRequest)
 	const navigate = useNavigate()
 	const [getVacancyRequestView] = useLazyGetVacancyRequestViewQuery()
-	const [acceptRequest] = useAcceptVacancyRequestMutation()
+	const [acceptRequest] = useAcceptCreateVacancyRequestMutation()
 	const [alterRequest] = useAlterCreateVacancyRequestMutation()
+
+	const { refetch } = useGetVacancyRequestsQuery('все')
 
 	const { data: categories = [] } = useGetCategoriesQuery()
 	const [categoryTitle, setCategoryTitle] = useState<string>('')
@@ -43,6 +46,8 @@ export const VacancyRequestCreateView = () => {
 	const [skills, setSkills] = useState<string | undefined>(undefined)
 
 	const [conditions, setConditions] = useState<string | undefined>(undefined)
+
+	const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 
 	useEffect(() => {
 		getVacancyRequestView(requestId)
@@ -104,6 +109,127 @@ export const VacancyRequestCreateView = () => {
 
 	return (
 		<>
+			<Modal
+				centered
+				open={isModalOpen}
+				bodyStyle={{
+					padding: '26px'
+				}}
+				className="pr-[52px] pl-[52px] pb-[52px]"
+				footer={null}
+				title={null}
+				width={622}
+				onCancel={() => {
+					setIsModalOpen(false)
+				}}
+			>
+				<Form
+					layout="vertical"
+					requiredMark={false}
+					onFinish={() => {
+						isEdited
+							? alterRequest({
+									post: post as string,
+									experience: experience as string,
+									salary: salary as string,
+									employment: employment as string,
+									responsibilities: responsibilities as string,
+									skills: skills as string,
+									conditions: conditions as string,
+									category: category as string,
+									direction: direction as string,
+									vacancyRequestId: requestId
+							  })
+									.unwrap()
+									.then(() => {
+										acceptRequest(requestId)
+											.unwrap()
+											.then(() => {
+												refetch()
+												navigate(
+													'/services/personnelaccounting/vacancyrequests'
+												)
+											})
+									})
+							: acceptRequest(requestId)
+									.unwrap()
+									.then(() => {
+										refetch()
+										navigate('/services/personnelaccounting/vacancyrequests')
+									})
+					}}
+				>
+					<p className="font-content-font font-bold text-[18px]/[21.6px] text-black opacity-80 mb-[40px]">
+						Выберите необходимые документы для трудоустройства
+					</p>
+					<Form.Item
+						name={'category'}
+						label={
+							<label className="text-black text-[18px]/[18px] font-content-font font-normal opacity-80">
+								Категория сотрудников
+							</label>
+						}
+						rules={[{ required: true, message: 'Не указана категория' }]}
+					>
+						<Select
+							className="mt-[16px]"
+							options={categories.map(category => ({
+								value: category.title,
+								label: category.title
+							}))}
+							onChange={(value: string) => {
+								;(() => {
+									setCategoryTitle(value)
+								})()
+							}}
+							placeholder="Выбрать"
+						/>
+					</Form.Item>
+					<Form.Item
+						name={'direction'}
+						label={
+							<label className="text-black text-[18px]/[18px] font-content-font font-normal opacity-80">
+								{categories.find(cat => cat.title === categoryTitle)?.direction
+									? 'Профобласть'
+									: 'Подразделение'}
+							</label>
+						}
+						rules={[{ required: true, message: 'Не указана подкатегория' }]}
+					>
+						<Select
+							placeholder="Выбрать"
+							options={
+								categories.find(cat => cat.title === categoryTitle)?.direction
+									? directions.map(dir => ({
+											value: dir.title,
+											label: dir.title
+									  }))
+									: subdivisions.map(sub => ({
+											value: sub.title,
+											label: sub.title
+									  }))
+							}
+							value={
+								categories.find(cat => cat.title === categoryTitle)?.direction
+									? direction
+									: subdivision
+							}
+						></Select>
+					</Form.Item>
+					<Form.Item>
+						<div style={{ textAlign: 'right', marginTop: 20 }}>
+							<Button
+								type="primary"
+								className="rounded-[54.5px] w-[121px] ml-auto"
+								htmlType="submit"
+								disabled={categoryTitle === ''}
+							>
+								Опубликовать
+							</Button>
+						</div>
+					</Form.Item>
+				</Form>
+			</Modal>
 			{isEdit ? (
 				<Form
 					initialValues={{
@@ -361,7 +487,7 @@ export const VacancyRequestCreateView = () => {
 								{conditions !== undefined ? conditions : ''}
 							</p>
 						</div>
-						<div className="flex gap-[40px]">
+						{/* <div className="flex gap-[40px]">
 							<div className="flex flex-col gap-[16px]">
 								<p className="font-content-font font-bold text-black text-[18px]/[21px]">
 									Категория сотрудников
@@ -378,7 +504,7 @@ export const VacancyRequestCreateView = () => {
 									{direction !== undefined ? direction : ''}
 								</p>
 							</div>
-						</div>
+						</div> */}
 						<div className="flex gap-[20px]">
 							<Button
 								onClick={() => {
@@ -390,36 +516,7 @@ export const VacancyRequestCreateView = () => {
 							</Button>
 							<Button
 								onClick={() => {
-									isEdited
-										? alterRequest({
-												post: post as string,
-												experience: experience as string,
-												salary: salary as string,
-												employment: employment as string,
-												responsibilities: responsibilities as string,
-												skills: skills as string,
-												conditions: conditions as string,
-												category: category as string,
-												direction: direction as string,
-												vacancyRequestId: requestId
-										  })
-												.unwrap()
-												.then(() => {
-													acceptRequest(requestId)
-														.unwrap()
-														.then(() => {
-															navigate(
-																'/services/personnelaccounting/vacancyrequests'
-															)
-														})
-												})
-										: acceptRequest(requestId)
-												.unwrap()
-												.then(() => {
-													navigate(
-														'/services/personnelaccounting/vacancyrequests'
-													)
-												})
+									setIsModalOpen(true)
 								}}
 								type="primary"
 								className="rounded-[54.5px] w-[121px]"

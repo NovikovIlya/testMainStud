@@ -488,9 +488,39 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
-		acceptVacancyRequest: builder.mutation<void, number>({
+		acceptCreateVacancyRequest: builder.mutation<
+			void,
+			{
+				data: {
+					category: string
+					direction: string
+					subdivision: string
+					empDocDefIds: number[]
+				}
+				requestId: number
+			}
+		>({
+			query: arg => ({
+				url: `http://localhost:8082/employment-api/v1/management/vacancy-requests/for-create/${arg.requestId}/acceptance`,
+				method: 'PUT',
+				body: arg.data,
+				headers: {
+					Authorization: `Bearer ${personnelDeparmentToken}`
+				}
+			})
+		}),
+		acceptUpdateVacancyRequest: builder.mutation<void, number>({
 			query: id => ({
-				url: `http://localhost:8082/employment-api/v1/management/vacancy-requests/${id}/accept`,
+				url: `http://localhost:8082/employment-api/v1/management/vacancy-requests/for-update/${id}/acceptance`,
+				method: 'PUT',
+				headers: {
+					Authorization: `Bearer ${personnelDeparmentToken}`
+				}
+			})
+		}),
+		acceptDeleteVacancyRequest: builder.mutation<void, number>({
+			query: id => ({
+				url: `http://localhost:8082/employment-api/v1/management/vacancy-requests/for-delete/${id}/acceptance`,
 				method: 'PUT',
 				headers: {
 					Authorization: `Bearer ${personnelDeparmentToken}`
@@ -663,7 +693,7 @@ export const {
 	useGetVacancyRequestsQuery,
 	useGetVacancyRequestViewQuery,
 	useLazyGetVacancyRequestViewQuery,
-	useAcceptVacancyRequestMutation,
+	useAcceptCreateVacancyRequestMutation,
 	useDenyVacancyRequestMutation,
 	useAlterCreateVacancyRequestMutation,
 	useGetArchivedResponcesQuery,
@@ -681,5 +711,7 @@ export const {
 	useDeleteVacancyAsPerDepartmentMutation,
 	useRequestCreateInterviewMutation,
 	useLazyGetVacancyPreviewByDirectionQuery,
-	useLazyGetVacancyPreviewBySubdivisionQuery
+	useLazyGetVacancyPreviewBySubdivisionQuery,
+	useAcceptUpdateVacancyRequestMutation,
+	useAcceptDeleteVacancyRequestMutation
 } = serviceApi

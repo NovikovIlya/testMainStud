@@ -4,8 +4,9 @@ import { useNavigate } from 'react-router-dom'
 
 import { useAppSelector } from '../../../store'
 import {
-	useAcceptVacancyRequestMutation,
-	useDenyVacancyRequestMutation
+	useAcceptDeleteVacancyRequestMutation,
+	useDenyVacancyRequestMutation,
+	useGetVacancyRequestsQuery
 } from '../../../store/api/serviceApi'
 import ArrowIcon from '../jobSeeker/ArrowIcon'
 
@@ -14,8 +15,10 @@ export const VacancyRequestDeleteView = () => {
 	const { requestId } = useAppSelector(state => state.currentRequest)
 
 	const navigate = useNavigate()
-	const [acceptRequest] = useAcceptVacancyRequestMutation()
+	const [acceptRequest] = useAcceptDeleteVacancyRequestMutation()
 	const [denyRequest] = useDenyVacancyRequestMutation()
+
+	const { refetch } = useGetVacancyRequestsQuery('все')
 
 	const [post, setPost] = useState<string | undefined>(
 		currentVacancy?.title.rendered
@@ -201,6 +204,9 @@ export const VacancyRequestDeleteView = () => {
 							onClick={() => {
 								acceptRequest(requestId)
 									.unwrap()
+									.then(() => {
+										refetch()
+									})
 									.then(() => {
 										navigate('/services/personnelaccounting/vacancyrequests')
 									})

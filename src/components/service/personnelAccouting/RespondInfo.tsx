@@ -276,7 +276,7 @@ export const RespondInfo = (props: {
 										</p>
 										<div className="flex flex-col gap-[8px]">
 											<p className="font-content-font font-bold text-black text-[16px]/[19.2px]">
-												{edu.nameOfInstitute}
+												{edu.nameOfInstitute + ', ' + edu.country}
 											</p>
 											<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
 												{edu.speciality === null ? '' : edu.speciality + ', '}
@@ -307,6 +307,15 @@ export const RespondInfo = (props: {
 									))}
 								</div>
 							</div>
+						</div>
+						<hr />
+						<div className="flex flex-col gap-[24px]">
+							<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">
+								О себе
+							</p>
+							<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
+								{res.respondData.skills.aboutMe}
+							</p>
 						</div>
 					</div>
 				</div>

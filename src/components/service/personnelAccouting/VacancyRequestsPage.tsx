@@ -67,11 +67,11 @@ export const VacancyRequestsPage = () => {
 						удаление
 					</label>
 				</Radio.Group>
-				<div className="flex ml-[20px] mt-[60px] mb-[16px]">
-					<h3 className="w-[388px] shrink-0 font-content-font font-normal text-[14px]/[14px] text-text-gray">
+				<div className="flex mt-[60px] mb-[16px] pl-[20px] pr-[55px]">
+					<h3 className="w-[40%] font-content-font font-normal text-[14px]/[14px] text-text-gray">
 						Должность
 					</h3>
-					<h3 className="w-[388px] ml-[135px] shrink-0 font-content-font font-normal text-[14px]/[14px] text-text-gray">
+					<h3 className="w-[10%] ml-[10%] font-content-font font-normal text-[14px]/[14px] text-text-gray">
 						Заявка
 					</h3>
 				</div>

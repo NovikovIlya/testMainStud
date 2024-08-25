@@ -13,7 +13,7 @@ export const Archive = () => {
 					Архив
 				</h1>
 				<div className="flex mt-[52px] mb-[16px] pl-[20px] pr-[55px]">
-					<h3 className="w-[25%] font-content-font text-black font-normal text-[14px]/[14px] opacity-[60%]">
+					<h3 className="w-[30%] font-content-font text-black font-normal text-[14px]/[14px] opacity-[60%]">
 						Должность
 					</h3>
 					<h3 className="ml-[5%] w-[20%] font-content-font text-black font-normal text-[14px]/[14px] opacity-[60%]">

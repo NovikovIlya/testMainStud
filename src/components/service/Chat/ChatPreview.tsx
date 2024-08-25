@@ -26,7 +26,10 @@ export const ChatPreview = (props: {
 	const user = useAppSelector(state => state.auth.user)
 	const isEmpDemp = user?.roles.find(role => role.type === 'EMPL')
 	const { data: chatId = 0, isLoading: isChatIdLoading } =
-		useGetChatIdByRespondIdQuery(props.respondId)
+		useGetChatIdByRespondIdQuery({
+			chatId: props.respondId,
+			role: isEmpDemp ? 'PERSONNEL_DEPARTMENT' : 'SEEKER'
+		})
 	const { data: unreadCount, isLoading: isUnreadCountLoading } =
 		useGetUnreadMessagesCountQuery({
 			chatId: chatId,
@@ -47,7 +50,7 @@ export const ChatPreview = (props: {
 		} else {
 			dispatch(openChat())
 		}
-		dispatch(setChatId(1))
+		dispatch(setChatId(chatId))
 		dispatch(setRespondId(props.respondId))
 		navigate(url)
 	}

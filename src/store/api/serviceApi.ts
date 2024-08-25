@@ -185,11 +185,18 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
-		getChatIdByRespondId: builder.query<number, number>({
-			query: respId => ({
-				url: `http://localhost:8082/employment-api/v1/respond/${respId}/chat`,
+		getChatIdByRespondId: builder.query<
+			number,
+			{ chatId: number; role: string }
+		>({
+			query: arg => ({
+				url: `http://localhost:8082/employment-api/v1/respond/${arg.chatId}/chat?sender=${arg.role}`,
 				headers: {
-					Authorization: `Bearer ${seekerToken}`
+					Authorization: `Bearer ${
+						arg.role === 'PERSONNEL_DEPARTMENT'
+							? personnelDeparmentToken
+							: seekerToken
+					}`
 				}
 			})
 		}),
@@ -200,7 +207,11 @@ export const serviceApi = apiSlice.injectEndpoints({
 			query: ({ chatId, role }) => ({
 				url: `http://localhost:8082/employment-api/v1/chat/${chatId}/unread-count?sender=${role}`,
 				headers: {
-					Authorization: `Bearer ${seekerToken}`
+					Authorization: `Bearer ${
+						role === 'PERSONNEL_DEPARTMENT'
+							? personnelDeparmentToken
+							: seekerToken
+					}`
 				}
 			}),
 			keepUnusedDataFor: 0

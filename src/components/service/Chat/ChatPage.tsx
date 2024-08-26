@@ -1,6 +1,7 @@
 import { Button } from 'antd'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
+import { useDispatch } from 'react-redux'
 import SockJS from 'sockjs-client'
 // const Stomp = require('stompjs/lib/stomp').Stomp
 import Stomp from 'stompjs'
@@ -11,6 +12,7 @@ import {
 	usePostChatMessageMutation,
 	useReadChatMessageMutation
 } from '../../../store/api/serviceApi'
+import { openChat } from '../../../store/reducers/ChatRespondStatusSlice'
 import { setChatId } from '../../../store/reducers/chatIdSlice'
 import {
 	ChatMessageDateDisplayEnum,
@@ -63,6 +65,8 @@ export const ChatPage = () => {
 	const [messages, setMessages] = useState<ChatMessageType[]>([])
 
 	const [sessionId, setSessionId] = useState<string>('')
+
+	const dispatch = useDispatch()
 
 	useEffect(() => {
 		setLastMessageId(0)
@@ -128,6 +132,9 @@ export const ChatPage = () => {
 						sessionId: sessionId,
 						role: isEmpDemp ? 'PERSONNEL_DEPARTMENT' : 'SEEKER'
 					})
+				}
+				if (msgBody.message.type === 'INVITATION') {
+					dispatch(openChat())
 				}
 				msgBody.type === 'READ' &&
 					(msgBody.message.ids as number[]).map(id =>

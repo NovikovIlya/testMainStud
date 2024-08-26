@@ -99,7 +99,19 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 				</div>
 			</div>
 			{props.msgData.type === 'INVITATION' && (
-				<div className="mt-[24px] max-w-[50%] grid grid-cols-2 grid-rows-[40px_40px] gap-[20px]">
+				<div
+					className={clsx(
+						'mt-[24px] w-[50%] grid grid-cols-2 grid-rows-[40px_40px] gap-[20px]',
+						{
+							'self-start':
+								(props.msgData.sender === 'SEEKER' && isEmpDep) ||
+								(props.msgData.sender === 'PERSONNEL_DEPARTMENT' && !isEmpDep),
+							'self-end':
+								(props.msgData.sender === 'SEEKER' && !isEmpDep) ||
+								(props.msgData.sender === 'PERSONNEL_DEPARTMENT' && isEmpDep)
+						}
+					)}
+				>
 					<button
 						onClick={() => {
 							answerMainTime({ id: respondId, ans: 'YES' })

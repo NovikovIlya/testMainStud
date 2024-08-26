@@ -1,20 +1,13 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
-import { InterviewViewResponseType } from './type'
-
-const initialState: { currentInterview: InterviewViewResponseType | null } = {
-	currentInterview: null
-}
+const initialState: { id: number } = { id: 0 }
 
 const currentInterviewSlice = createSlice({
 	name: 'currentInterview',
 	initialState,
 	reducers: {
-		setCurrentInterview(
-			state,
-			action: PayloadAction<InterviewViewResponseType | null>
-		) {
-			state.currentInterview = action.payload
+		setCurrentInterview: (state, action: PayloadAction<number>) => {
+			state.id = action.payload
 		}
 	}
 })

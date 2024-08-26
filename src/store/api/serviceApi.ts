@@ -25,7 +25,7 @@ import {
 	InterviewRequestType,
 	InterviewItemType,
 	InterviewViewResponseType,
-	RejectionMessageType,
+	SeekerStatusChangeType,
 	respondStatus
 } from '../reducers/type'
 
@@ -626,13 +626,16 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		getInterviewView: builder.query<InterviewViewResponseType, number>({
 			query: id => ({
-				url: `http://localhost:8082/employment-api/v1/interview/${id}`,
-				method: 'GET'
+				url: `http://localhost:8082/employment-api/v1/interview`,
+				method: 'GET',
+				headers: {
+					Authorization: `Bearer ${supervisorToken}`
+				}
 			})
 		}),
-		employeeSeekerRequest: builder.mutation<void, RejectionMessageType & {respondId: number}>( {
+		employeeSeekerRequest: builder.mutation<void, SeekerStatusChangeType & {respondId: number}>( {
 			query: arg  => ({
-				url: `http://localhost:8082/employment-api/v1/respond/${arg.respondId}status/employ`,
+				url: `http://localhost:8082/employment-api/v1/respond/${arg.respondId}/status/employ`,
 				method: 'PUT',
 				body: {
 					rejectionReason: arg.rejectionReason,

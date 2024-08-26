@@ -79,6 +79,50 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 					)}
 				</div>
 			</div>
+			{/*
+			{props.msgData.type === 'INVITATION' && (
+				<div className='flex flex-col'>
+					<div className="rounded-[16px] max-w-[50%] p-[20px] flex flex-col gap-[16px] font-content-font font-normal text-black text-[16px]/[19.2px] rounded-bl-none bg-[#FFFFFF] mt-[12px]">
+						<p className='text-[#808080] text-[16px]/[19.2px]'>
+							Анастасия, HR-менеджер
+						</p>
+						<p className='text-[16px]/[19.2px]'>
+							Иван, руководитель приглашает вас на оффлайн собеседование. Удобно ли вам подойти по адресу Кремлевская, 35 в 15:00?
+							Выберите пожалуйста подходящий ответ
+						</p>
+						<p className='text-[#7A7A7A] text-[12px] flex self-end'>
+							12:23
+						</p>
+					</div>
+					<div className="mt-[24px] max-w-[50%] grid grid-cols-2 grid-rows-[40px_40px] gap-[20px]">
+						<button
+							onClick={() => {
+								answerMainTime({id: respondId, ans: 'YES'})
+							}}
+							className="rounded-[54.5px] bg-inherit outline-none border cursor-pointer"
+						>
+							Да
+						</button>
+						<button
+							onClick={() => {
+								answerMainTime({id: respondId, ans: 'NO'})
+							}}
+							className="rounded-[54.5px] bg-inherit outline-none border cursor-pointer"
+						>
+							Не удобно
+						</button>
+						<button
+							onClick={() => {
+								answerMainTime({id: respondId, ans: 'NOT_RELEVANT'})
+							}}
+							className="col-span-2 rounded-[54.5px] bg-inherit outline-none border cursor-pointer"
+						>
+							Вакансия не актуальна
+						</button>
+					</div>
+				</div>
+			)}
+			*/}
 			{props.msgData.type === 'INVITATION' && (
 				<div className="mt-[24px] max-w-[50%] grid grid-cols-2 grid-rows-[40px_40px] gap-[20px]">
 					<button
@@ -107,6 +151,130 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 					</button>
 				</div>
 			)}
+
+			{props.msgData.type === 'INVITATION_RESERVE' && (
+				<div className='flex flex-col'>
+					<div className="rounded-[16px] max-w-[50%] p-[20px] flex flex-col gap-[16px] font-content-font font-normal text-black text-[16px]/[19.2px] rounded-bl-none bg-[#FFFFFF] mt-[12px]">
+						<p className='text-[#808080] text-[16px]/[19.2px]'>
+							Анастасия, HR-менеджер
+						</p>
+						<p className='text-[16px]/[19.2px]'>
+							Выберите удобное для вас время
+						</p>
+						<p className='text-[#7A7A7A] text-[12px] flex self-end'>
+							12:23
+						</p>
+					</div>
+					<div className="mt-[24px] max-w-[50%] flex flex-col gap-[14px]">
+						<div className='flex flex-row justify-between gap-[14px]'>
+							<button
+								onClick={() => {
+									answerMainTime({id: respondId, ans: 'first_adviced_time'})
+								}}
+								className="text-[16px]/[19.2px] rounded-[54.5px] py-[12px] px-[20px] text-center bg-inherit outline-none border cursor-pointer"
+							>
+								15.03.2024,
+								15:00
+							</button>
+							<button
+								onClick={() => {
+									answerMainTime({id: respondId, ans: 'second_adviced_time'})
+								}}
+								className="text-[16px]/[19.2px] rounded-[54.5px]  py-[12px] px-[20px] text-left bg-inherit outline-none border cursor-pointer"
+							>
+								15.03.2024,
+								15:00
+							</button>
+							<button
+								onClick={() => {
+									answerMainTime({id: respondId, ans: 'third_adviced_time'})
+								}}
+								className="text-[16px]/[19.2px] rounded-[54.5px]  py-[12px] px-[20px] text-left bg-inherit outline-none border cursor-pointer"
+							>
+								15.03.2024,
+								15:00
+							</button>
+						</div>
+						<button
+							onClick={() => {
+								answerMainTime({id: respondId, ans: 'NOT_RELEVANT'})
+							}}
+							className="text-[16px]/[19.2px] w-full rounded-[54.5px]  py-[12px] px-[56px] bg-inherit outline-none border cursor-pointer"
+						>
+							Нет подходящего времени
+						</button>
+					</div>
+				</div>
+			)}
+			{props.msgData.type === 'EMPLOYMENT_REQUEST' && (
+				<div className='flex flex-col'>
+					<div className="rounded-[16px] max-w-[50%] p-[20px] flex flex-col gap-[16px] font-content-font font-normal text-black text-[16px]/[19.2px] rounded-bl-none bg-[#FFFFFF] mt-[12px]">
+						<p className='text-[#808080] text-[16px]/[19.2px]'>
+							Анастасия, HR-менеджер
+						</p>
+						<p className='text-[16px]/[19.2px]'>
+							Здравствуйте! <br/>
+							Руководитель приглашает вас на работу. <br/>
+							Вы принимаете приглашение?
+						</p>
+						<p className='text-[#7A7A7A] text-[12px] flex self-end'>
+							12:23
+						</p>
+					</div>
+					<div className="mt-[24px] max-w-[50%] flex flex-row gap-[20px]">
+						<button
+							onClick={() => {
+								answerMainTime({id: respondId, ans: 'YES'})
+							}}
+							className="w-6/12 text-[16px]/[19.2px] rounded-[54.5px]  text-center bg-inherit outline-none border cursor-pointer"
+						>
+							Да
+						</button>
+						<button
+							onClick={() => {
+								answerMainTime({id: respondId, ans: 'NO'})
+							}}
+							className="w-6/12 text-[16px]/[19.2px] rounded-[54.5px] text-center py-[12px] bg-inherit outline-none border cursor-pointer"
+						>
+							Нет
+						</button>
+					</div>
+				</div>
+			)}
+			{/*
+			{props.msgData.type === 'EMPLOYMENT_REQUEST_STATIC' && (
+				<div className='flex flex-col'>
+					<div className="rounded-[16px] max-w-[50%] p-[20px] flex flex-col gap-[16px] font-content-font font-normal text-black text-[16px]/[19.2px] rounded-bl-none bg-[#FFFFFF] mt-[12px]">
+						<p className='text-[#808080] text-[16px]/[19.2px]'>
+							Анастасия, HR-менеджер
+						</p>
+						<p className='text-[16px]/[19.2px]'>
+							Рады, что вы приняли наше предложение!
+							В качестве дальнейших действий, просим вас пройти «Этап трудоустройства»
+						</p>
+						<p className='text-[#7A7A7A] text-[12px] flex self-end'>
+							12:23
+						</p>
+					</div>
+
+				</div>
+			)}
+			{props.msgData.type === '' && (
+				<div className='flex flex-col'>
+					<div className="rounded-[16px] max-w-[50%] p-[20px] flex flex-col gap-[16px] font-content-font font-normal text-black text-[16px]/[19.2px] rounded-bl-none bg-[#FFFFFF] mt-[12px]">
+						<p className='text-[#808080] text-[16px]/[19.2px]'>
+							Анастасия, HR-менеджер
+						</p>
+						<p className='text-[16px]/[19.2px]'>
+							Позвоните пожалуйста в Управление кадров для подбора подходящего времени.
+						</p>
+						<p className='text-black text-[16px]/[19.2px] font-bold'>
+							+7 999 999-99-99
+						</p>
+					</div>
+				</div>
+			)}
+			*/}
 		</>
 	)
 })

@@ -12,15 +12,14 @@ export const SupervisorInterviewSeekerInfo = (props : { status : 'ONLINE_ONGOING
 
 	const respondId = useAppSelector(state => state.currentResponce)
 
-	const { data: data } = useGetRespondFullInfoQuery(respondId.respondId)
+	const { data } = useGetRespondFullInfoQuery(respondId.respondId)
 
 	const [isRefuseModalOpen, setIsRefuseModalOpen] = useState(false)
 
-	const { TextArea } = Input;
-
 	const [isUnsuccessModalOpen, setIsUnsuccessModalOpen] = useState(false)
 
-	const [sendSeekerMessage] = useEmployeeSeekerRequestMutation()
+	const [rejectSeeker] = useEmployeeSeekerRequestMutation()
+	const [aproveSeeker] = useEmployeeSeekerRequestMutation()
 
 	return (
 		<>
@@ -141,13 +140,17 @@ export const SupervisorInterviewSeekerInfo = (props : { status : 'ONLINE_ONGOING
 									requiredMark={false}
 									className="p-[20px]"
 									onFinish={values => {
-										sendSeekerMessage(values)
+										rejectSeeker({
+											rejectionReason: values.reason,
+											action: 'UNEMPLOY',
+											respondId: 1
+										})
 									}}
 								>
 									<h2 className="font-normal text-[18px]">Отказ на должность</h2>
 									<h3 className="mb-[40px] font-bold text-[18px]">«{data?.vacancyName}»</h3>
 									<Form.Item
-										name={'reason-for-refusal'}
+										name={'reason'}
 										label={
 											<label className="mb-[10px] text-black text-[18px]/[18px] font-content-font font-normal">
 												Причина отказа
@@ -158,8 +161,8 @@ export const SupervisorInterviewSeekerInfo = (props : { status : 'ONLINE_ONGOING
 										<Select
 											placeholder="Не хватает опыта"
 											options={[
-												{ value: '0', label: 'Не хватает опыта' },
-												{ value: '1', label: 'Нашли другого специалиста' }
+												{ value: 'Не хватает опыта', label: 'Не хватает опыта' },
+												{ value: 'Нашли другого специалиста', label: 'Нашли другого специалиста' }
 											]}
 										></Select>
 									</Form.Item>
@@ -200,6 +203,13 @@ export const SupervisorInterviewSeekerInfo = (props : { status : 'ONLINE_ONGOING
 							<div className="flex flex-col justify-center gap-[12px]">
 								<Button
 									className="h-[40px] w-[257px] bg-[#3073D7] rounded-[54.5px] text-white text-[16px]/[16px]"
+									onClick={values => {
+										aproveSeeker({
+											rejectionReason: 'approve',
+											action: 'EMPLOY',
+											respondId: 1
+										})
+									}}
 								>
 									Пригласить на работу
 								</Button>

@@ -26,8 +26,9 @@ import { EditableCell } from './EditableCell'
 import PracticeModal from './practicalModal'
 import { useAddSubmissionMutation, useGetAllSubmissionsQuery, useGetDocRepresentationQuery, useGetStudentsQuery } from '../../../../store/api/practiceApi/representation'
 import { useGetPracticesAllQuery } from '../../../../store/api/practiceApi/individualTask'
-import { showNotification } from '../../../../store/reducers/notificationSlice'
+import { changeStatus, changeStatusTrue, showNotification } from '../../../../store/reducers/notificationSlice'
 import { useAppDispatch } from '../../../../store'
+import TableEdit from './tableEdit'
 
 const optionMock = [
 	{ value: 'контракт', label: 'контракт' },
@@ -163,6 +164,10 @@ export const CreateRepresentation = () => {
 			}
 		}
 	},[fullTable,isSuccessGetStudents,visiting])
+
+	useEffect(()=>{
+				dispatch(changeStatusTrue())
+	},[])
 
 
 	const items: DescriptionsProps['items'] = [
@@ -360,7 +365,7 @@ export const CreateRepresentation = () => {
 			const row = (await form.validateFields()) as Item
 
 			const newData = [...fullTable]
-			console.log('newData',newData)
+
 			const index = newData.findIndex(item => key === item.key)
 			if (index > -1) {
 				const item = newData[index]
@@ -417,8 +422,8 @@ export const CreateRepresentation = () => {
 	};
 
 	const sendData = ()=>{
-		if(fullTable.some((item:any)=>item.place===null)){
-			return dispatch(showNotification({ message: 'Для сохранения необходимо заполнить "Место прохождение практики', type: 'warning' }));
+		if(fullTable.some((item:any)=>item.place===null)){ 
+			return dispatch(showNotification({ message: `Для сохранения необходимо заполнить "Место прохождение практики" ${visiting ? `,  "Суточные", "Проезд" и "Оплата проживания"`:''}`, type: 'warning' }));
 		}
 		const tableDataStudent = fullTable.map((item:any)=>({
 			costForDay:item.costForDay, 
@@ -556,7 +561,7 @@ export const CreateRepresentation = () => {
 					<Row className="mt-4">
 						<Col flex={'auto'}>
 							<Form form={form} component={false}>		
-								<Table
+								{/* <Table
 									ref={tableRef}
 									components={{
 										body: {
@@ -569,7 +574,8 @@ export const CreateRepresentation = () => {
 									rowClassName="editable-row"
 									pagination={false}
 									rowKey="id"
-								/>
+								/> */}
+								<TableEdit visiting={visiting} fullTable={fullTable} setFullTable={setFullTable}/>
 							</Form>
 						</Col>
 					</Row>

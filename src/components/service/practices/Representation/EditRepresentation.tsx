@@ -32,10 +32,11 @@ import {
 	useGetDocRepresentationQuery,
 	useGetOneSubmissionsQuery
 } from '../../../../store/api/practiceApi/representation'
-import { showNotification } from '../../../../store/reducers/notificationSlice'
+import { changeStatus, showNotification } from '../../../../store/reducers/notificationSlice'
 
 import { EditableCell } from './EditableCell'
 import { SkeletonPage } from './Skeleton'
+import TableEdit from './tableEdit'
 
 const optionMock = [
 	{ value: '1', label: '1' },
@@ -71,6 +72,16 @@ export const EditRepresentation = () => {
 	const [editTheme, setEditTheme] = useState('')
 	const [isEdit, setIsEdit] = useState(false)
 	const dispatch = useAppDispatch()
+	
+
+	useEffect(()=>{
+		if(isSuccess){
+			if(dataOneSubmissions.status === '123'){
+				dispatch(changeStatus())
+			}
+			
+		}
+	},[isSuccess])
 
 	useEffect(() => {
 		if (isSuccess) {
@@ -439,7 +450,6 @@ export const EditRepresentation = () => {
 				theme: editTheme
 			}
 		})
-		console.log('obj', obj[0])
 		editSumbissions(obj[0])
 			.unwrap()
 			.then(() =>{
@@ -525,7 +535,7 @@ export const EditRepresentation = () => {
 			<Row className="mt-4">
 				<Col flex={'auto'}>
 					<Form form={form} component={false}>
-						<Table
+						{/* <Table
 							ref={tableRef}
 							components={{
 								body: {
@@ -538,7 +548,8 @@ export const EditRepresentation = () => {
 							rowClassName="editable-row"
 							pagination={false}
 							rowKey="id"
-						/>
+						/> */}
+						<TableEdit visiting={dataOneSubmissions?.isWithDeparture} fullTable={fullTable} setFullTable={setFullTable} />
 					</Form>
 				</Col>
 			</Row>

@@ -5,6 +5,7 @@ const notificationSlice = createSlice({
   initialState: {
     message: null,
     type: null,
+    status: true
   },
   reducers: {
     showNotification: (state, action) => {
@@ -15,8 +16,14 @@ const notificationSlice = createSlice({
       state.message = null;
       state.type = null;
     },
+    changeStatus: (state) => {
+      state.status = false
+    },
+    changeStatusTrue: (state) => {
+      state.status = true
+    }
   },
 });
 
-export const { showNotification, hideNotification } = notificationSlice.actions;
+export const { showNotification, hideNotification,changeStatus,changeStatusTrue } = notificationSlice.actions;
 export default notificationSlice.reducer;

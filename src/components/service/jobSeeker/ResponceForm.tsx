@@ -424,8 +424,12 @@ export const ResponseForm = () => {
 											educations: educationData.educations.map(edu => ({
 												institution: edu.education.nameofInstitute,
 												endYear: parseInt(edu.education.graduateYear),
-												country: 'РФ',
-												educationLevel: 'Высшее',
+												country: countries?.find(
+													cou => cou.id === edu.education.countryId
+												)?.shortName!,
+												educationLevel: levels?.find(
+													educ => educ.id === edu.education.educationLevelId
+												)?.name!,
 												speciality: edu.education.specialization
 											})),
 											portfolio: {
@@ -1221,7 +1225,11 @@ export const ResponseForm = () => {
 							requiredMark={false}
 							onFinish={values => {
 								console.log(
-									values.beginWork.$d.toLocaleDateString().split('.').join('-')
+									// values.beginWork.$d.toLocaleDateString().split('.').join('-')
+									values.beginWork.$d.getMonth() +
+										1 +
+										'-' +
+										values.beginWork.$d.getFullYear()
 								)
 								dispatch(
 									addExperience({

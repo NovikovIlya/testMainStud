@@ -278,7 +278,7 @@ export const InviteSeekerForm = (props: { respondId: number }) => {
 						<Form.Item>
 							<div style={{ textAlign: 'right', marginTop: 40 }}>
 								<Button type="primary" htmlType="submit">
-									Сохранить
+									Пригласить
 								</Button>
 							</div>
 						</Form.Item>

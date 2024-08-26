@@ -14,13 +14,13 @@ export const VacancyRequestsPage = () => {
 		<>
 			<div
 				id="wrapper"
-				className="pl-[54px] pr-[54px] pt-[60px] w-full bg-content-gray"
+				className="pl-[54px] pr-[54px] pt-[60px] mt-[60px] w-full bg-content-gray"
 			>
 				<h1 className="font-content-font font-normal text-[28px]/[28px] text-black">
 					Заявки от руководилей
 				</h1>
 				<Radio.Group
-					className="mt-[80px] flex gap-[12px]"
+					className="mt-[40px] flex gap-[12px]"
 					value={action}
 					onChange={e => {
 						setAction(e.target.value)

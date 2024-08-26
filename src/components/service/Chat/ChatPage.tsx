@@ -314,7 +314,7 @@ export const ChatPage = () => {
 			<div className="flex flex-col w-full">
 				<div
 					ref={chatPageRef}
-					className="w-full h-full flex flex-col pt-[60px] pr-[85px] pl-[40px] overflow-scroll"
+					className="w-full h-full flex flex-col pt-[60px] pr-[40px] pl-[40px] overflow-scroll"
 				>
 					<div
 						className="h-[1px]"
@@ -328,7 +328,7 @@ export const ChatPage = () => {
 								((msgDate.current = msg.sendDate.substring(0, 10)),
 								console.log(msg.sendDate.substring(0, 10)),
 								(
-									<div className="self-center font-content-font font-normal text-black text-[14px]/[16.8px] opacity-60">
+									<div className="self-center font-content-font font-normal text-black text-[14px]/[16.8px] opacity-60 mt-[60px] mb-[30px]">
 										{parseInt(msg.sendDate.substring(8, 10)) +
 											' ' +
 											ChatMessageDateDisplayEnum[

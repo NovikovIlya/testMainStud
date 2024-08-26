@@ -560,12 +560,19 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
-		sendRespondToArchive: builder.mutation<VacancyRespondItemType, number>({
-			query: id => ({
+		sendRespondToArchive: builder.mutation<
+			VacancyRespondItemType,
+			{ id: number; role: string }
+		>({
+			query: ({ id, role }) => ({
 				url: `http://localhost:8082/employment-api/v1/respond/${id}/status/archive`,
 				method: 'PUT',
 				headers: {
-					Authorization: `Bearer ${personnelDeparmentToken}`
+					Authorization: `Bearer ${
+						role === 'PERSONNEL_DEPARTMENT'
+							? personnelDeparmentToken
+							: supervisorToken
+					}`
 				}
 			})
 		}),

@@ -77,7 +77,7 @@ export default function VacancyView() {
 
 	return (
 		<>
-			<div id="wrapper" className="pl-[54px] pr-[54px] pt-[60px]">
+			<div id="wrapper" className="pl-[54px] pr-[54px]">
 				<div className="flex">
 					<button
 						onClick={() => {

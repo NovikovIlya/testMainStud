@@ -263,7 +263,7 @@ export const VacancyRequestCreateView = () => {
 					<Form.Item
 						name={'post'}
 						label={
-							<label className="text-black text-[18px]/[18px] font-content-font font-normal">
+							<label className="text-black text-[18px]/[18px] font-content-font font-normal opacity-80">
 								Должность
 							</label>
 						}
@@ -275,7 +275,7 @@ export const VacancyRequestCreateView = () => {
 						<Form.Item
 							name={'experience'}
 							label={
-								<label className="text-black text-[18px]/[18px] font-content-font font-normal">
+								<label className="text-black text-[18px]/[18px] font-content-font font-normal opacity-80">
 									Требуемый опыт работы
 								</label>
 							}
@@ -293,7 +293,7 @@ export const VacancyRequestCreateView = () => {
 						<Form.Item
 							name={'employment'}
 							label={
-								<label className="text-black text-[18px]/[18px] font-content-font font-normal">
+								<label className="text-black text-[18px]/[18px] font-content-font font-normal opacity-80">
 									Тип занятости
 								</label>
 							}
@@ -311,7 +311,7 @@ export const VacancyRequestCreateView = () => {
 						<Form.Item
 							name={'salary'}
 							label={
-								<label className="text-black text-[18px]/[18px] font-content-font font-normal">
+								<label className="text-black text-[18px]/[18px] font-content-font font-normal opacity-80">
 									Заработная плата
 								</label>
 							}
@@ -323,7 +323,7 @@ export const VacancyRequestCreateView = () => {
 					<Form.Item
 						name={'responsibilities'}
 						label={
-							<label className="text-black text-[18px]/[18px] font-content-font font-normal">
+							<label className="text-black text-[18px]/[18px] font-content-font font-normal opacity-80">
 								Задачи
 							</label>
 						}
@@ -338,7 +338,7 @@ export const VacancyRequestCreateView = () => {
 					<Form.Item
 						name={'skills'}
 						label={
-							<label className="text-black text-[18px]/[18px] font-content-font font-normal">
+							<label className="text-black text-[18px]/[18px] font-content-font font-normal opacity-80">
 								Требования
 							</label>
 						}
@@ -353,7 +353,7 @@ export const VacancyRequestCreateView = () => {
 					<Form.Item
 						name={'conditions'}
 						label={
-							<label className="text-black text-[18px]/[18px] font-content-font font-normal">
+							<label className="text-black text-[18px]/[18px] font-content-font font-normal opacity-80">
 								Условия
 							</label>
 						}
@@ -369,7 +369,7 @@ export const VacancyRequestCreateView = () => {
 						<Form.Item
 							name={'category'}
 							label={
-								<label className="text-black text-[18px]/[18px] font-content-font font-normal">
+								<label className="text-black text-[18px]/[18px] font-content-font font-normal opacity-80">
 									Категория сотрудников
 								</label>
 							}
@@ -387,7 +387,7 @@ export const VacancyRequestCreateView = () => {
 						<Form.Item
 							name={'direction'}
 							label={
-								<label className="text-black text-[18px]/[18px] font-content-font font-normal">
+								<label className="text-black text-[18px]/[18px] font-content-font font-normal opacity-80">
 									{categories.find(cat => cat.title === categoryTitle)
 										?.direction
 										? 'Профобласть'

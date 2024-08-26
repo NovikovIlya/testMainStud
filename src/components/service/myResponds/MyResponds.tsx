@@ -12,7 +12,7 @@ export const MyResponds = () => {
 
 	return (
 		<>
-			<div className="mt-[120px] pl-[52px]">
+			<div className="mt-[120px] pl-[52px] w-full">
 				<h1 className="font-content-font font-normal text-black text-[28px]/[28px]">
 					Мои отклики
 				</h1>

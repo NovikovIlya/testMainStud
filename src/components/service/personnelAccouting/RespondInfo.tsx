@@ -5,7 +5,7 @@ import { Margin, usePDF } from 'react-to-pdf'
 import uuid from 'react-uuid'
 
 import { AvatartandardSvg } from '../../../assets/svg/AvatarStandardSvg'
-import { DownloadSvg } from '../../../assets/svg/DownloadSvg'
+import { RespondDownload } from '../../../assets/svg/RespondDownload'
 import { useAppSelector } from '../../../store'
 import {
 	useApproveRespondMutation,
@@ -148,7 +148,10 @@ export const RespondInfo = (props: {
 									</Button>
 									<Button
 										onClick={() => {
-											sendToArchive(respondId.respondId)
+											sendToArchive({
+												id: respondId.respondId,
+												role: 'PERSONNEL_DEPARTMENT'
+											})
 												.unwrap()
 												.then(() => {
 													setIsRespondSentToArchive(true)
@@ -182,7 +185,7 @@ export const RespondInfo = (props: {
 										onClick={() => toPDF()}
 										className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
 									>
-										<DownloadSvg /> Скачать
+										<RespondDownload /> Скачать
 									</Button>
 								</div>
 							)}
@@ -190,7 +193,17 @@ export const RespondInfo = (props: {
 								<div className="self-center grid grid-cols-1 grid-rows-[40px_40px_40px] gap-y-[12px]">
 									<InviteSeekerForm respondId={respondId.respondId} />
 									<Button
-										onClick={() => {}}
+										disabled={isRespondSentToReserve}
+										onClick={() => {
+											sendToArchive({
+												id: respondId.respondId,
+												role: 'SUPERVISOR'
+											})
+												.unwrap()
+												.then(() => {
+													setIsRespondSentToArchive(true)
+												})
+										}}
 										className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[257px] h-[40px] py-[8px] px-[24px] border-black"
 									>
 										Отказать
@@ -199,7 +212,7 @@ export const RespondInfo = (props: {
 										onClick={() => toPDF()}
 										className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[257px] h-[40px] py-[8px] px-[24px] border-black"
 									>
-										<DownloadSvg /> Скачать
+										<RespondDownload /> Скачать
 									</Button>
 								</div>
 							)}
@@ -288,6 +301,15 @@ export const RespondInfo = (props: {
 							</div>
 						</div>
 						<hr />
+						<div className="flex flex-col gap-[24px]">
+							<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">
+								О себе
+							</p>
+							<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
+								{res.respondData.skills.aboutMe}
+							</p>
+						</div>
+						<hr />
 						<div className="flex flex-col">
 							<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40 w-[194px]">
 								Профессиональные навыки
@@ -307,15 +329,6 @@ export const RespondInfo = (props: {
 									))}
 								</div>
 							</div>
-						</div>
-						<hr />
-						<div className="flex flex-col gap-[24px]">
-							<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">
-								О себе
-							</p>
-							<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-								{res.respondData.skills.aboutMe}
-							</p>
 						</div>
 					</div>
 				</div>

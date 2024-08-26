@@ -661,6 +661,15 @@ export const serviceApi = apiSlice.injectEndpoints({
 					Authorization: `Bearer ${supervisorToken}`
 				}
 			})
+		}),
+		deleteReserveRespond: builder.mutation<void, number>({
+			query: id => ({
+				url: `http://localhost:8082/employment-api/v1/reserve/${id}`,
+				method: 'DELETE',
+				headers: {
+					Authorization: `Bearer ${personnelDeparmentToken}`
+				}
+			})
 		})
 	})
 })
@@ -731,5 +740,6 @@ export const {
 	useLazyGetVacancyPreviewByDirectionQuery,
 	useLazyGetVacancyPreviewBySubdivisionQuery,
 	useAcceptUpdateVacancyRequestMutation,
-	useAcceptDeleteVacancyRequestMutation
+	useAcceptDeleteVacancyRequestMutation,
+	useDeleteReserveRespondMutation
 } = serviceApi

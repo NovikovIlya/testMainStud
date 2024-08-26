@@ -8,7 +8,7 @@ import { MyDocsSvg } from '../../../assets/svg/MyDocsSvg'
 import { useAppSelector } from '../../../store'
 import {
 	useApproveReservedRespondMutation,
-	useDeleteRespondFromArchiveMutation,
+	useDeleteReserveRespondMutation,
 	useGetReservedResponcesQuery,
 	useGetReservedRespondFullInfoQuery
 } from '../../../store/api/serviceApi'
@@ -23,9 +23,9 @@ export const ReserveRespondInfo = (props: {
 	const respondId = useAppSelector(state => state.currentResponce)
 
 	const { data: res } = useGetReservedRespondFullInfoQuery(respondId.respondId)
-	const { refetch } = useGetReservedResponcesQuery()
+	const { refetch } = useGetReservedResponcesQuery('все')
 	const [approveRespond] = useApproveReservedRespondMutation()
-	const [deleteRespond] = useDeleteRespondFromArchiveMutation()
+	const [deleteRespond] = useDeleteReserveRespondMutation()
 
 	const [isRespondSentToSupervisor, setIsRespondSentToSupervisor] =
 		useState<boolean>(res?.status === 'IN_SUPERVISOR_REVIEW')

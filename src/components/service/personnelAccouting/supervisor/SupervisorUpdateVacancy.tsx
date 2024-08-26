@@ -160,8 +160,6 @@ export const SupervisorUpdateVacancy = () => {
 							responsibilities: responsibilities,
 							skills: skills,
 							conditions: conditions,
-							category: category,
-							direction: direction,
 							experience: experience,
 							employment: employment
 						}}
@@ -173,8 +171,6 @@ export const SupervisorUpdateVacancy = () => {
 							setExperience(prev => values.experience)
 							setEmployment(prev => values.employment)
 							setSalary(prev => values.salary)
-							setCategory(prev => values.category)
-							setDirection(prev => values.direction)
 							setResponsibilities(prev => values.responsibilities)
 							setSkills(prev => values.skills)
 							setConditions(prev => values.conditions)
@@ -295,54 +291,6 @@ export const SupervisorUpdateVacancy = () => {
 								placeholder="Ввести текст..."
 							></Input.TextArea>
 						</Form.Item>
-						<div className="flex gap-[20px] w-full">
-							<Form.Item
-								name={'category'}
-								label={
-									<label className="text-black text-[18px]/[18px] font-content-font font-normal opacity-80">
-										Категория сотрудников
-									</label>
-								}
-								rules={[{ required: true, message: 'Не указана категория' }]}
-							>
-								<Select
-									placeholder="Выбрать"
-									options={categories.map(category => ({
-										value: category.title,
-										label: category.title
-									}))}
-									onChange={e => setCategoryTitle(e)}
-								></Select>
-							</Form.Item>
-							<Form.Item
-								name={'direction'}
-								label={
-									<label className="text-black text-[18px]/[18px] font-content-font font-normal opacity-80">
-										{categories.find(cat => cat.title === categoryTitle)
-											?.direction
-											? 'Профобласть'
-											: 'Подразделение'}
-									</label>
-								}
-								rules={[{ required: true, message: 'Не указана подкатегория' }]}
-							>
-								<Select
-									placeholder="Выбрать"
-									options={
-										categories.find(cat => cat.title === categoryTitle)
-											?.direction
-											? directions.map(dir => ({
-													value: dir.title,
-													label: dir.title
-											  }))
-											: subdivisions.map(sub => ({
-													value: sub.title,
-													label: sub.title
-											  }))
-									}
-								></Select>
-							</Form.Item>
-						</div>
 						<Form.Item>
 							<Button type="primary" htmlType="submit">
 								Сохранить
@@ -451,8 +399,6 @@ export const SupervisorUpdateVacancy = () => {
 											responsibilities: responsibilities as string,
 											skills: skills as string,
 											conditions: conditions as string,
-											category: category as string,
-											direction: direction as string,
 											vacancyId: currentVacancy?.id as number
 										})
 											.unwrap()

@@ -296,8 +296,6 @@ export type VacancyRequestType = {
 	responsibilities: string
 	skills: string
 	conditions: string
-	category: string
-	direction: string
 }
 
 export type VacancyRequestItemType = {

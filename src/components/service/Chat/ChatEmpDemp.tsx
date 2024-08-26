@@ -44,6 +44,7 @@ export const ChatEmpDemp = () => {
 		return (
 			<ChatPreview
 				respondId={resp.id}
+				vacancyId={resp.id}
 				respName={resp.vacancyName}
 				key={resp.id}
 			/>

@@ -14,12 +14,14 @@ import {
 	openChat
 } from '../../../store/reducers/ChatRespondStatusSlice'
 import { setRespondId } from '../../../store/reducers/CurrentRespondIdSlice'
+import { setCurrentVacancyId } from '../../../store/reducers/CurrentVacancyIdSlice'
 import { setCurrentVacancyName } from '../../../store/reducers/CurrentVacancyNameSlice'
 import { setChatId } from '../../../store/reducers/chatIdSlice'
 import { respondStatus } from '../../../store/reducers/type'
 
 export const ChatPreview = (props: {
 	respondId: number
+	vacancyId: number
 	respName: string
 	checkableStatus?: string
 }) => {
@@ -52,6 +54,7 @@ export const ChatPreview = (props: {
 		}
 		dispatch(setChatId(chatId))
 		dispatch(setRespondId(props.respondId))
+		dispatch(setCurrentVacancyId(props.vacancyId))
 		navigate(url)
 	}
 

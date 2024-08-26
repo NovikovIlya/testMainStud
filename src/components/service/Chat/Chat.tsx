@@ -19,6 +19,7 @@ export const Chat = () => {
 		return (
 			<ChatPreview
 				respondId={resp.id}
+				vacancyId={resp.vacancyId}
 				respName={resp.name}
 				checkableStatus={resp.status}
 				key={resp.id}

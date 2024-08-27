@@ -540,8 +540,8 @@ export const ViewRepresentation = () => {
 						// @ts-ignore
 						columns={columns}
 						dataSource={filter?.subdivision !== 'Все' ? flag ? dataTable : [] : []}
-						pagination={dataTable?.length < 3 ? false : {
-							pageSize: 3,
+						pagination={dataTable?.length < 5 ? false : {
+							pageSize: 5,
 						}}
 						className="my-10"
 						rowSelection={{

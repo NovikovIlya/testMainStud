@@ -126,7 +126,7 @@ export const CreateRepresentation = () => {
 	const dispatch = useAppDispatch()
 	
 
-
+	console.log('fullSelectedPractise',fullSelectedPractise)
 	useEffect(()=>{
 		if(isSuccessGetStudents ){
 			const newArray = dataGetStudents?.map((item:any)=>({
@@ -137,8 +137,8 @@ export const CreateRepresentation = () => {
 				place: null,
 				category: item.category,
 				categoryId: item.categoryId,
-				departmentDirector: dataAllPractise?.[0].departmentDirector,
-				groupNumber: dataAllPractise?.[0].groupNumber
+				departmentDirector: fullSelectedPractise.departmentDirector,
+				groupNumber: fullSelectedPractise.groupNumber
 			}))
 			setFullTable(newArray.map((item:any)=>({key: item.name, ...item})))
 			setStep(1)
@@ -575,7 +575,7 @@ export const CreateRepresentation = () => {
 									pagination={false}
 									rowKey="id"
 								/> */}
-								<TableEdit visiting={visiting} fullTable={fullTable} setFullTable={setFullTable}/>
+								<TableEdit visiting={visiting} fullTable={fullTable} setFullTable={setFullTable} create={true}/>
 							</Form>
 						</Col>
 					</Row>

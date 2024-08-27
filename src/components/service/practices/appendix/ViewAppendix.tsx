@@ -15,7 +15,7 @@ import { PointsSvg } from '../../../../assets/svg/PointsSvg'
 
 import { PopoverContent } from './PopoverContent'
 import { PopoverMain } from './PopoverMain'
-import { useGetAllOrderQuery, useGetAllSubmissionsQuery, useGetSubmissionsAcademicYearQuery, useGetSubmissionsDirectorQuery, useGetSubmissionsPracticeKindQuery, useGetSubmissionsPracticeTypeQuery, useGetSubmissionsSpecialtiesQuery, useGetSubmissionsSubdevisionQuery } from '../../../../store/api/practiceApi/representation'
+import { useGetAllSubmissionsQuery, useGetSubmissionsAcademicYearQuery, useGetSubmissionsDirectorQuery, useGetSubmissionsPracticeKindQuery, useGetSubmissionsPracticeTypeQuery, useGetSubmissionsSpecialtiesQuery, useGetSubmissionsSubdevisionQuery } from '../../../../store/api/practiceApi/representation'
 import { LoadingOutlined } from '@ant-design/icons'
 import { findSubdivisions } from '../../../../utils/findSubdivisions'
 
@@ -36,8 +36,7 @@ const courseNumberOptions = [
 	{ value: '6', label: '6' },
 ]
 
-export const ViewPracticeOrder = () => {
-	const [currentPage, setCurrentPage] = useState(1);
+export const ViewAppendix = () => {
 	const [form] = Form.useForm()
 	const navigate = useNavigate()
 	const [filter, setFilter] = useState({
@@ -51,7 +50,6 @@ export const ViewPracticeOrder = () => {
 		practiceKind: "Все",
 		dateFilling: 'По дате (сначала новые)',
 	})
-	const [tableData, setTableData] = useState([])
 	const [selectedFieldsFull, setSelectedFieldFull] = useState<any>([])
 	const {data:dataAllSubmissions,isLoading,isSuccess:isSuccessSubAll} = useGetAllSubmissionsQuery(null)
 	const {data:dataSubmisisionsSubdevision} = useGetSubmissionsSubdevisionQuery()
@@ -61,7 +59,7 @@ export const ViewPracticeOrder = () => {
 	const {data:dataSubmissionKind} = useGetSubmissionsPracticeKindQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
 	const {data:dataSubmissionDirector} = useGetSubmissionsDirectorQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
 	const {data:dataSubmissionAcademicYear} = useGetSubmissionsAcademicYearQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
-	const {data:dataAllOrder,isSuccess:isSuccessOrder} = useGetAllOrderQuery({subdivisionId:selectSubdivisionId,page:currentPage - 1,size :'5'},{skip:!selectSubdivisionId || !currentPage})
+	const [flag,setFlag] = useState(false)
 	const [dataTable, setDataTable] = useState<any>([])
 
 	useEffect(()=>{
@@ -85,10 +83,10 @@ export const ViewPracticeOrder = () => {
 
 	
 	useEffect(() => {
-		if (isSuccessOrder) {
-			setDataTable(filterDataFull())
+		if (isSuccessSubAll) {
+			setDataTable(filterDataFull())	
 		}
-	}, [filter,isSuccessOrder])
+	}, [filter,isSuccessSubAll])
 	
 
 	function filterDataFull() {
@@ -96,6 +94,7 @@ export const ViewPracticeOrder = () => {
 			if (filter.subdivision === 'Все') {
 				return elem
 			} else {
+				setFlag(true)
 				return elem.practice.subdivision === filter.subdivision
 			}
 		}
@@ -107,7 +106,6 @@ export const ViewPracticeOrder = () => {
 			}
 		}
 		function filtervisiting(elem: any) {
-	
 			if (filter.visiting === 'Все') {
 				return elem
 			} else {
@@ -159,9 +157,9 @@ export const ViewPracticeOrder = () => {
 			}
 			return 0
 		}
-
-		return dataAllOrder
-			? dataAllOrder
+	
+		return dataAllSubmissions
+			? dataAllSubmissions
 			.filter((elem: any) => filterName(elem))
 			.filter((elem: any) => filterSpec(elem))
 			.filter((elem: any) => filtervisiting(elem))
@@ -182,28 +180,8 @@ export const ViewPracticeOrder = () => {
 			name: 'Подразделение',
 			className: 'text-xs !p-2 ',
 			render: (text: any, record: any) => <span >{record?.practice?.subdivision}</span>
-			// @ts-ignore
-			// render: (text, record) => (
-			// 	<div className={'flex items-center justify-between'}>
-			// 		<span className={'underline flex font-bold'}>{text}</span>
-			// 		<Button
-			// 			type="text"
-			// 			icon={<EditSvg />}
-			// 			onClick={() => {
-			// 				navigate(`/services/practices/representation/edit/${record.id}`)
-			// 			}}
-			// 		/>
-			// 	</div>
-			// )
+			
 		},
-
-		// {
-		// 	title: 'Дата заполнения',
-		// 	dataIndex: 'dateFilling',
-	
-		// 	// @ts-ignore
-		// 	render: (text: any) => dayjs(text).format('DD.MM.YYYY')
-		// },
     	{
 			key: 'specialtyName',
 			dataIndex: 'specialtyName',
@@ -246,13 +224,7 @@ export const ViewPracticeOrder = () => {
 			className: 'text-xs !p-2',
 			render: (text: any, record: any) => <span >{record?.practice?.practiceKind}</span>
 		},
-		// {
-		// 	key: 'place',
-		// 	dataIndex: 'place',
-		// 	title: 'Место прохождения практики',
-		// 	className: 'text-xs !p-2',
-		// 	render: (text: any, record: any) => <span >{record?.place}</span>
-		// },
+
 		{
 			key: 'FIO',
 			dataIndex: 'FIO',
@@ -261,30 +233,12 @@ export const ViewPracticeOrder = () => {
 			render: (text: any, record: any) => <span >{record?.practice?.departmentDirector}</span>
 		},
 		{
-			key: 'visiting',
-			dataIndex: 'visiting',
-			title: 'Выездные практики',
-			className: 'text-xs !p-2',
-			render: (text: any, record: any) => <span >{record?.isWithDeparture ? 'Да' : 'Нет'}</span>
-		},
-		{
-			key: 'orderStatus',
-			dataIndex: 'orderStatus',
+			key: 'status',
+			dataIndex: 'status',
 			title: 'Статус',
 			className: 'text-xs !p-2',
 			render: (text: any, record: any) => <span >{record?.status}</span>
-			// render: (text:any, record:any) => (
-			// 	<div className={'flex items-center justify-between'}>
-			// 		<span className={'underline flex font-bold'}>{text}</span>
-			// 		<Button
-			// 			type="text"
-			// 			icon={<EditSvg />}
-			// 			onClick={() => {
-			// 				navigate(`/services/practices/representation/edit/${record.id}`)
-			// 			}}
-			// 		/>
-			// 	</div>
-			// )
+		
 		},
 		{
 			title: (
@@ -297,7 +251,7 @@ export const ViewPracticeOrder = () => {
 					content={
 						<PopoverContent
 							recordFull={record}
-							recordFullAll={tableData}
+							recordFullAll={dataTable}
 							setRecordFull={setDataTable}
 						/>
 					}
@@ -311,8 +265,8 @@ export const ViewPracticeOrder = () => {
 	]
 
 	const handleRowClick = (record:any) => {
-		navigate(`/services/practices/order/edit/${record.id}`)
-    };
+		navigate(`/services/practices/appendix/edit/${record.id}`)
+  };
 
 
 	return (
@@ -321,7 +275,7 @@ export const ViewPracticeOrder = () => {
 			<Row gutter={[16, 16]}>
 				<Col span={24}>
 					<Typography.Text className=" text-[28px] mb-14">
-						Приказ по практике
+						Приложение 4
 					</Typography.Text>
 				</Col>
 			</Row>
@@ -333,7 +287,7 @@ export const ViewPracticeOrder = () => {
 				<Col span={7}>
 					<Select
 						popupMatchSelectWidth={false}
-						defaultValue=""
+						
 						className="w-full"
 						options={dataSubmisisionsSubdevision}
 						onChange={(value: any) => {
@@ -345,21 +299,22 @@ export const ViewPracticeOrder = () => {
 							}}
 					/>
 				</Col>
-				{/* <Col span={7} offset={5}>
+				<Col span={7} offset={5}>
 					<Space className="w-full flex-row-reverse">
 						<Button
 							type="primary"
 							className="!rounded-full"
 							onClick={() => {
-								navigate('/services/practices/representation/createRepresentation')
+								navigate('/services/practices/appendix/createAppendix')
 							}}
 						>
-							Добавить представление
+							Добавить приложение
 						</Button>
 					</Space>
-				</Col> */}
+				</Col>
 			</Row>
-    		<Row gutter={[16, 16]} className="mt-4 flex items-center">
+
+    	<Row gutter={[16, 16]} className="mt-4 flex items-center">
 				<Col span={5} >
 					<span>Наименование специальности</span>
 				</Col>
@@ -386,23 +341,9 @@ export const ViewPracticeOrder = () => {
 					</Form.Item>
 				</Col>
 			</Row>
-			<Row gutter={[16, 16]} className="mt-4 flex items-center">
-				<Col span={5} >
-					<span>Выездные практики</span>
-				</Col>
-				<Col span={7}>
-					<Select
-						disabled={filter.subdivision === 'Все' ? true : false}
-						popupMatchSelectWidth={false}
-						defaultValue="Все"
-						className="w-full"
-						options={visitingOptions}
-						onChange={(value: any) => {
-							setFilter({ ...filter, visiting: value })
-						}}
-					/>
-				</Col>
-			</Row>
+
+
+
 			<Row gutter={[16, 16]} className="mt-4 flex items-center">
 				<Col span={5} >
 					<span>ФИО руководителя</span>
@@ -432,7 +373,6 @@ export const ViewPracticeOrder = () => {
 				</Col>
 			</Row>
 			
-
 			<Row gutter={[16, 16]} className="mt-4 flex items-center">
 				<Col span={2} >
 					<span>Курс</span>
@@ -544,27 +484,6 @@ export const ViewPracticeOrder = () => {
 				</Col>
 			</Row>
 
-			 {/* Сортировка  */}
-			{/* <Row gutter={[16, 16]} className="mt-4">
-				<Col span={7} offset={17}>
-					<div className={'flex gap-2 items-center'}>
-						<span className={'mr-2'}>Сортировка</span>
-						<Select
-							popupMatchSelectWidth={false}
-							defaultValue=""
-							className="w-full"
-							options={optionsSortDate}
-							onChange={value => {
-								setFilter({
-									...filter,
-									dateFilling: value
-								})
-							}}
-						/>
-					</div>
-				</Col>
-			</Row> */}
-
 			<Row className="mt-4">
 				<Col flex={'auto'}>
 				{isLoading ? <Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}/> :
@@ -576,13 +495,10 @@ export const ViewPracticeOrder = () => {
 						rowKey="id"
 						// @ts-ignore
 						columns={columns}
-						dataSource={filter?.subdivision !== 'Все' ? dataTable : []}
-						pagination={dataTable.length > 5 && {
-							current: currentPage,
-							pageSize: 5,
-							total: dataAllOrder?.length,
-							onChange: (page) => setCurrentPage(page),
-						  }}
+						dataSource={filter?.subdivision !== 'Все' ? flag ? dataTable : [] : []}
+						pagination={dataTable?.length < 3 ? false : {
+							pageSize: 3,
+						}}
 						className="my-10"
 						rowSelection={{
 							type: 'checkbox',
@@ -608,4 +524,4 @@ export const ViewPracticeOrder = () => {
 		</Form>
 	)
 }
-export default ViewPracticeOrder
+export default ViewAppendix

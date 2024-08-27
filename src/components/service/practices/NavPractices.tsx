@@ -15,6 +15,7 @@ import {Header} from "../../layout/Header";
 import {useTranslation} from "react-i18next";
 import { Representation } from './Representation/Representation'
 import { PracticeOrder } from './practice-order/PracticeOrder'
+import { Appendix } from './appendix/Appendix'
 
 type MenuItem = Required<MenuProps>['items'][number]
 
@@ -43,8 +44,10 @@ const items: MenuItem[] = [
 	getItem('Формирование документов', 'sub2', <PracticesSvg />, [
 		getItem('График практик', 'formingSchedule'),
 		getItem('Представление в приказ', 'representation'),
-		getItem('Приказ по практике', 'practiceOrder')
+		getItem('Приказ по практике', 'practiceOrder'),
+		getItem('Приложение 4', 'appendix')
 	]),
+	
 	// getItem('Cогласование документов', 'sub4', <PracticesSvg />, [
 	// 	getItem('График практик', '9'),
 	// 	getItem('Представление в приказ', '10'),
@@ -92,6 +95,7 @@ export const NavPractices = () => {
 				{current === 'formingSchedule' && <Schedule/>}
 				{current === 'representation' && <Representation/>}
 				{current === 'practiceOrder' && <PracticeOrder/>}
+				{current === 'appendix' && <Appendix/>}
 			</div>
 		</>
 	)

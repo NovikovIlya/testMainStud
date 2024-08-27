@@ -205,7 +205,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 								: 'text-white border-white '
 						)}
 						type="primary"
-						icon={<MenuSvg white={type === 'service'} />}
+						// icon={<MenuSvg white={type === 'service'} />}
 					>
 						<span className="pl-2 max-md:!hidden">{t('services')}</span>
 					</Button>

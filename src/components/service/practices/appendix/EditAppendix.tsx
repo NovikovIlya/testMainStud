@@ -28,16 +28,16 @@ import { Item } from '../../../../models/representation'
 import { useAppDispatch } from '../../../../store'
 import {
 	useChangeStatusMutation,
-	useChangeStatusOrderMutation,
 	useEditSubmissionMutation,
-	useGetDocOrderQuery,
 	useGetDocRepresentationQuery,
 	useGetOneSubmissionsQuery
 } from '../../../../store/api/practiceApi/representation'
-import { showNotification } from '../../../../store/reducers/notificationSlice'
+import { changeStatus, showNotification } from '../../../../store/reducers/notificationSlice'
 
 import { EditableCell } from './EditableCell'
 import { SkeletonPage } from './Skeleton'
+import TableEdit from './tableEdit'
+import TableEditView from './tableEditView'
 
 const optionMock = [
 	{ value: '1', label: '1' },
@@ -54,7 +54,7 @@ const optionMockKind = [
 	{ value: '9', label: '9' }
 ]
 
-export const EditOrder = () => {
+export const EditAppendix = () => {
 	const path = useLocation()
 	const id = path.pathname.split('/').at(-1)!
 	const tableRef = useRef(null)
@@ -66,13 +66,22 @@ export const EditOrder = () => {
 	const [editingKey, setEditingKey] = useState('')
 	const isEditing = (record: Item) => record.key === editingKey
 	const {data: dataOneSubmissions,isSuccess,isLoading: isLoadingOneSubmission} = useGetOneSubmissionsQuery(id, { skip: !id })
-	const {data: dataGetDocRepresentation,isLoading: isLoadingDocRepesentation,refetch} = useGetDocOrderQuery(dataOneSubmissions ? dataOneSubmissions?.id : null,{ skip: !dataOneSubmissions })
-	const [changeStatusSubmissions, {}] = useChangeStatusOrderMutation()
+	const {data: dataGetDocRepresentation,isLoading: isLoadingDocRepesentation,refetch} = useGetDocRepresentationQuery(dataOneSubmissions ? dataOneSubmissions?.id : null,{ skip: !dataOneSubmissions })
+	const [changeStatusSubmissions, {}] = useChangeStatusMutation()
 	const [editSumbissions, {}] = useEditSubmissionMutation({})
 	const [fullTable, setFullTable] = useState<any>([])
 	const [editTheme, setEditTheme] = useState('')
 	const [isEdit, setIsEdit] = useState(false)
 	const dispatch = useAppDispatch()
+	
+
+	// useEffect(()=>{
+	// 	if(isSuccess){
+	// 		if(dataOneSubmissions.status === '123'){
+	// 			dispatch(changeStatus())
+	// 		}
+	// 	}
+	// },[isSuccess])
 
 	useEffect(() => {
 		if (isSuccess) {
@@ -305,7 +314,7 @@ export const EditOrder = () => {
 		{
 			key: '7',
 			label: 'Статус',
-			children: isSuccess ? dataOneSubmissions.orderStatus : '',
+			children: isSuccess ? dataOneSubmissions.status : '',
 			render: (text: any) => (
 				<Popover
 					content={
@@ -441,7 +450,6 @@ export const EditOrder = () => {
 				theme: editTheme
 			}
 		})
-		console.log('obj', obj[0])
 		editSumbissions(obj[0])
 			.unwrap()
 			.then(() =>{
@@ -478,7 +486,7 @@ export const EditOrder = () => {
 						}}
 					/>
 					<Typography.Text className=" text-[28px] mb-14">
-						Приказ по практике группы "
+            Приложение 4 группы "
 						{dataOneSubmissions?.practice.groupNumber}" подразделения "
 						{dataOneSubmissions?.practice.subdivision}" на{' '}
 						{dataOneSubmissions?.practice.academicYear} учебный год
@@ -519,7 +527,7 @@ export const EditOrder = () => {
 				</Col>
 				<Col span={12} className="flex justify-end">
 							
-							<Button onClick={handleChangeStatus}>Согласовать приказ</Button>
+							<Button onClick={handleChangeStatus}>Согласовать представление</Button>
 	
 				</Col>
 			</Row>
@@ -527,7 +535,7 @@ export const EditOrder = () => {
 			<Row className="mt-4">
 				<Col flex={'auto'}>
 					<Form form={form} component={false}>
-						<Table
+						{/* <Table
 							ref={tableRef}
 							components={{
 								body: {
@@ -540,7 +548,8 @@ export const EditOrder = () => {
 							rowClassName="editable-row"
 							pagination={false}
 							rowKey="id"
-						/>
+						/> */}
+						<TableEditView visiting={dataOneSubmissions?.isWithDeparture} fullTable={fullTable} setFullTable={setFullTable} />
 					</Form>
 				</Col>
 			</Row>
@@ -581,4 +590,4 @@ export const EditOrder = () => {
 	)
 }
 
-export default EditOrder
+export default EditAppendix

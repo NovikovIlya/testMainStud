@@ -3,6 +3,7 @@ import { Form, Input, InputNumber, Table } from 'antd'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useAppSelector } from '../../../../store'
 import './index.css'
+import { format, parse } from 'date-fns';
 
 type FormInstance<T> = GetRef<typeof Form<T>>
 
@@ -104,7 +105,9 @@ interface DataType {
 
 type ColumnTypes = Exclude<TableProps['columns'], undefined>
 
-export const TableEdit = ({ visiting, fullTable, setFullTable, create=false }: any) => {
+export const TableEditView = ({ isSuccessDataOne,visiting, fullTable=[], setFullTable, create=false,setIsFIOProf }: any) => {
+
+	const [fullTableValidState, setFullTableValidState] = useState<any>([])
 	const defaultColumns = [
 		{
 			key: 'number',
@@ -114,7 +117,7 @@ export const TableEdit = ({ visiting, fullTable, setFullTable, create=false }: a
 			render: (text: any, record: any, index: any) => <div>{index + 1}</div>
 		},
 		{
-			key: 'nane',
+			key: 'name',
 			dataIndex: 'name',
 			title: 'ФИО обучающегося',
 			name: 'ФИО обучающегося',
@@ -122,91 +125,53 @@ export const TableEdit = ({ visiting, fullTable, setFullTable, create=false }: a
 		},
 
 		{
-			key: `${create ? 'groupNumber' : 'groupNumbers' }`,
-			dataIndex:  `${create ? 'groupNumber' : 'groupNumbers' }`,
-			title: 'Номер группы',
+			key: 'period',
+			dataIndex: 'period',
+			title: 'Период практики',
 			className: 'text-xs !p-2'
 		},
 		{
-			key: 'place',
-			dataIndex: 'place',
-			title: 'Место прохождения практики',
+			key: 'other',
+			dataIndex: 'other',
+			title: 'Курc, вид и тип прохождения практики',
 			className: 'text-xs !p-2',
-			editable: true
+			
+		},
+		
+		{
+			key: 'specialtyName',
+			dataIndex: 'specialtyName',
+			title: 'Шифр и наименование спциальности',
+			className: 'text-xs !p-2',
+			
 		},
 		{
-			key: 'departmentDirector',
-			dataIndex: 'departmentDirector',
-			title: 'ФИО руководителя от кафедры',
-			className: 'text-xs !p-2'
+			key: 'FIO',
+			dataIndex: 'FIO',
+			title: 'ФИО руководителя практики от Организации',
+			className: 'text-xs !p-2',
+			
 		},
 		{
-			key: 'category',
-			dataIndex: 'category',
-			title: 'Категория',
-			className: `text-xs !p-2 ${visiting ? '' : 'hidden'}`
-			// editable: true
+			key: 'FIOProf',
+			dataIndex: 'FIOProf',
+			title: 'ФИО руководителя практики от Профильной Организации',
+			className: 'text-xs !p-2',
+			editable:true
+			
 		},
-		{
-			key: 'costForDay',
-			dataIndex: 'costForDay',
-			title: 'Суточные (50 руб/сут)',
-			className: `text-xs !p-2 ${visiting ? '' : 'hidden'}`,
-			editable: true
-		},
-		{
-			key: 'arrivingCost',
-			dataIndex: 'arrivingCost',
-			title: 'Проезд (руб)',
-			className: `text-xs !p-2 ${visiting ? '' : 'hidden'}`,
-			editable: true
-		},
-		{
-			key: 'livingCost',
-			dataIndex: 'livingCost',
-			title: 'Оплата проживания (руб)',
-			className: `text-xs !p-2 ${visiting ? '' : 'hidden'}`,
-			editable: true
-		}
-		// {
-		//     title: '',
-		//     dataIndex: 'operation',
-		//     render: (_: any, record: Item) => {
-		//         const editable = isEditing(record)
-		//         return editable ? (
-		//             <div className="flex justify-around items-center w-[60px]">
-		//                 <Typography.Link
-		//                     onClick={() => save(record.key)}
-		//                     style={{ marginRight: 8 }}
-		//                 >
-		//                     <CheckOutlined style={{ color: '#75a4d3' }} />
-		//                 </Typography.Link>
-		//                 <Popconfirm
-		//                     title="Вы действительно хотите отменить действие?"
-		//                     onConfirm={cancel}
-		//                 >
-		//                     <CloseOutlined style={{ color: '#75a4d3' }} />
-		//                 </Popconfirm>
-		//             </div>
-		//         ) : (
-		//             <div className="flex justify-around items-center  w-[60px]">
-		//                 <Typography.Link
-		//                     disabled={editingKey !== ''}
-		//                     onClick={() => edit(record)}
-		//                 >
-		//                     <EditSvg />
-		//                 </Typography.Link>
-		//                 {/* <Popconfirm title="Вы действительно хотите удалить?" onConfirm={deleteRow}>
-		//           <a><DeleteRedSvg/></a>
-		//       </Popconfirm> */}
-		//             </div>
-		//         )
-		//     }
-		// }
+		
 	]
 
+	const formatDateRange = (dates:any) => {
+		const startDate = parse(dates[0], 'yyyy/MM/dd', new Date());
+		const endDate = parse(dates[1], 'yyyy/MM/dd', new Date());
+	  
+		return `${format(startDate, 'dd.MM.yyyy')} - ${format(endDate, 'dd.MM.yyyy')}`;
+	};
+
 	const handleSave = (row: DataType) => {
-		const newData = [...fullTable]
+		const newData = [...fullTableValidState]
 		const index = newData.findIndex(item => row.key === item.key)
 		const item = newData[index]
 		newData.splice(index, 1, {
@@ -214,7 +179,7 @@ export const TableEdit = ({ visiting, fullTable, setFullTable, create=false }: a
 			...row
 		})
 
-		setFullTable(newData)
+		setFullTableValidState(newData)
 	}
 
 	const components = {
@@ -240,6 +205,33 @@ export const TableEdit = ({ visiting, fullTable, setFullTable, create=false }: a
 			})
 		}
 	})
+	useEffect(()=>{
+		if(fullTableValidState.length>0){
+			if(fullTableValidState.every((item:any)=>item.FIOProf!==null)){
+			
+				setIsFIOProf(true)
+			}
+	}
+	},[fullTableValidState, setIsFIOProf])
+	console.log('fullTableValidState',fullTableValidState)
+	useEffect(()=>{
+		if(isSuccessDataOne && fullTable?.students?.length>0){
+			const fullTableValid = fullTable?.students?.map((item:any)=>{
+				return {
+					name: item.name,
+					period:formatDateRange(fullTable.practice.practicePeriod),
+					specialtyName: fullTable.practice.specialtyName,
+					FIO: fullTable.practice.departmentDirector,
+					other: `${fullTable.practice.courseNumber} ${fullTable.practice.practiceKind} ${fullTable.practice.practiceType}`,
+					FIOProf:null,
+					id:item.name,
+					key:item.name
+				}
+			})
+			setFullTableValidState(fullTableValid)
+			
+		}
+	},[isSuccessDataOne])
 
 	return (
 		<div>
@@ -248,14 +240,11 @@ export const TableEdit = ({ visiting, fullTable, setFullTable, create=false }: a
 				components={components}
 				rowClassName={() => 'editable-row'}
 				bordered
-				pagination={fullTable?.length < 5 ? false : {
-					pageSize: 5,
-				}}
-				dataSource={fullTable}
+				dataSource={fullTableValidState}
 				columns={columns as ColumnTypes}
 			/>
 		</div>
 	)
 }
 
-export default TableEdit
+export default TableEditView

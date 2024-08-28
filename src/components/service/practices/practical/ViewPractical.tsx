@@ -162,25 +162,25 @@ export const ViewPractical = () => {
 			className: 'text-xs !p-2',
 
 			// @ts-ignore
-			render: (text, record) => (
-				<div className={'flex items-center'}>
-					<span className={'underline flex font-bold'}>{text}</span>
-					<Button
-						type="text"
-						icon={<EditSvg />}
-						onClick={() => {
-							navigate(
-								`/services/practices/practical/editPractical/${record.id}`
-							)
-						}}
-					/>
-				</div>
-			)
+			// render: (text, record) => (
+			// 	<div className={'flex items-center'}>
+			// 		<span className={'underline flex font-bold'}>{text}</span>
+			// 		<Button
+			// 			type="text"
+			// 			icon={<EditSvg />}
+			// 			onClick={() => {
+			// 				navigate(
+			// 					`/services/practices/practical/editPractical/${record.id}`
+			// 				)
+			// 			}}
+			// 		/>
+			// 	</div>
+			// )
 		},
 		{
             title: 'Дата заполнения',
             dataIndex: 'dateFilling',
-            width: '20%',
+      
             render: (text:any) => dayjs(text).format('DD.MM.YYYY')
         },
 		{
@@ -250,17 +250,17 @@ export const ViewPractical = () => {
 			dataIndex: 'individualTasks',
 			title: 'Индивидуальные задания',
 			className: 'text-xs !p-2',
-			// render: (_: any, record: any) => {
-			// 	return (
-			// 		<div className={'flex flex-col gap-1'}>
-			// 			{record.tasks?.map((elem: any, index: any) => (
-			// 				<span key={index}>
-			// 					{index + 1}. {elem.taskDescription}
-			// 				</span>
-			// 			))}
-			// 		</div>
-			// 	)
-			// }
+			render: (_: any, record: any) => {
+				return (
+					<div className={'flex flex-col gap-1'}>
+						{record.tasks?.map((elem: any, index: any) => (
+							<span key={index}>
+								{index + 1}. {elem.taskDescription}
+							</span>
+						))}
+					</div>
+				)
+			}
 		},
 
 		{

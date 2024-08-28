@@ -125,8 +125,8 @@ export const TableEditView = ({ isSuccessDataOne,visiting, fullTable=[], setFull
 		},
 
 		{
-			key: 'period',
-			dataIndex: 'period',
+			key: 'practicePeriod',
+			dataIndex: 'practicePeriod',
 			title: 'Период практики',
 			className: 'text-xs !p-2'
 		},
@@ -146,15 +146,15 @@ export const TableEditView = ({ isSuccessDataOne,visiting, fullTable=[], setFull
 			
 		},
 		{
-			key: 'FIO',
-			dataIndex: 'FIO',
+			key: 'departmentDirector',
+			dataIndex: 'departmentDirector',
 			title: 'ФИО руководителя практики от Организации',
 			className: 'text-xs !p-2',
 			
 		},
 		{
-			key: 'FIOProf',
-			dataIndex: 'FIOProf',
+			key: 'profileDirector',
+			dataIndex: 'profileDirector',
 			title: 'ФИО руководителя практики от Профильной Организации',
 			className: 'text-xs !p-2',
 			editable:true
@@ -171,7 +171,7 @@ export const TableEditView = ({ isSuccessDataOne,visiting, fullTable=[], setFull
 	};
 
 	const handleSave = (row: DataType) => {
-		const newData = [...fullTableValidState]
+		const newData = [...fullTable]
 		const index = newData.findIndex(item => row.key === item.key)
 		const item = newData[index]
 		newData.splice(index, 1, {
@@ -179,7 +179,7 @@ export const TableEditView = ({ isSuccessDataOne,visiting, fullTable=[], setFull
 			...row
 		})
 
-		setFullTableValidState(newData)
+		setFullTable(newData)
 	}
 
 	const components = {
@@ -205,34 +205,34 @@ export const TableEditView = ({ isSuccessDataOne,visiting, fullTable=[], setFull
 			})
 		}
 	})
-	useEffect(()=>{
-		if(fullTableValidState.length>0){
-			if(fullTableValidState.every((item:any)=>item.FIOProf!==null)){
+	// useEffect(()=>{
+	// 	if(fullTableValidState.length>0){
+	// 		if(fullTableValidState.every((item:any)=>item.FIOProf!==null)){
 			
-				setIsFIOProf(true)
-			}
-	}
-	},[fullTableValidState, setIsFIOProf])
-	console.log('fullTableValidState',fullTableValidState)
-	useEffect(()=>{
-		if(isSuccessDataOne && fullTable?.students?.length>0){
-			const fullTableValid = fullTable?.students?.map((item:any)=>{
-				return {
-					name: item.name,
-					period:formatDateRange(fullTable.practice.practicePeriod),
-					specialtyName: fullTable.practice.specialtyName,
-					FIO: fullTable.practice.departmentDirector,
-					other: `${fullTable.practice.courseNumber} ${fullTable.practice.practiceKind} ${fullTable.practice.practiceType}`,
-					FIOProf:null,
-					id:item.name,
-					key:item.name
-				}
-			})
-			setFullTableValidState(fullTableValid)
+	// 			setIsFIOProf(true)
+	// 		}
+	// }
+	// },[fullTableValidState, setIsFIOProf])
+	// console.log('fullTableValidState',fullTableValidState)
+	// useEffect(()=>{
+	// 	if(isSuccessDataOne && fullTable?.students?.length>0){
+	// 		const fullTableValid = fullTable?.students?.map((item:any)=>{
+	// 			return {
+	// 				name: item.name,
+	// 				period:formatDateRange(fullTable.practice.practicePeriod),
+	// 				specialtyName: fullTable.practice.specialtyName,
+	// 				FIO: fullTable.practice.departmentDirector,
+	// 				other: `${fullTable.practice.courseNumber} ${fullTable.practice.practiceKind} ${fullTable.practice.practiceType}`,
+	// 				FIOProf:null,
+	// 				id:item.name,
+	// 				key:item.name
+	// 			}
+	// 		})
+	// 		setFullTableValidState(fullTableValid)
 			
-		}
-	},[isSuccessDataOne])
-
+	// 	}
+	// },[isSuccessDataOne])
+	console.log('fullTable',fullTable)
 	return (
 		<div>
 			<Table
@@ -240,7 +240,7 @@ export const TableEditView = ({ isSuccessDataOne,visiting, fullTable=[], setFull
 				components={components}
 				rowClassName={() => 'editable-row'}
 				bordered
-				dataSource={fullTableValidState}
+				dataSource={fullTable}
 				columns={columns as ColumnTypes}
 			/>
 		</div>

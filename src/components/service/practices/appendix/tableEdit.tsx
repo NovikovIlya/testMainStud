@@ -105,9 +105,9 @@ interface DataType {
 
 type ColumnTypes = Exclude<TableProps['columns'], undefined>
 
-export const TableEdit = ({ isSuccessDataOne,visiting, fullTable=[], setFullTable, create=false,setIsFIOProf }: any) => {
+export const TableEdit = ({ isSuccessDataOne,visiting, fullTable=[], setFullTable, create=false,setIsFIOProf,setFullTableValidState,fullTableValidState }: any) => {
 
-	const [fullTableValidState, setFullTableValidState] = useState<any>([])
+	// const [fullTableValidState, setFullTableValidState] = useState<any>([])
 	const defaultColumns = [
 		{
 			key: 'number',
@@ -213,7 +213,7 @@ export const TableEdit = ({ isSuccessDataOne,visiting, fullTable=[], setFullTabl
 			}
 	}
 	},[fullTableValidState, setIsFIOProf])
-	console.log('fullTableValidState',fullTableValidState)
+
 	useEffect(()=>{
 		if(isSuccessDataOne && fullTable?.students?.length>0){
 			const fullTableValid = fullTable?.students?.map((item:any)=>{
@@ -224,7 +224,7 @@ export const TableEdit = ({ isSuccessDataOne,visiting, fullTable=[], setFullTabl
 					FIO: fullTable.practice.departmentDirector,
 					other: `${fullTable.practice.courseNumber} ${fullTable.practice.practiceKind} ${fullTable.practice.practiceType}`,
 					FIOProf:null,
-					id:item.name,
+					id:item.id,
 					key:item.name
 				}
 			})
@@ -242,6 +242,9 @@ export const TableEdit = ({ isSuccessDataOne,visiting, fullTable=[], setFullTabl
 				bordered
 				dataSource={fullTableValidState}
 				columns={columns as ColumnTypes}
+				pagination={fullTable?.length < 5 ? false : {
+					pageSize: 5,
+				}}
 			/>
 		</div>
 	)

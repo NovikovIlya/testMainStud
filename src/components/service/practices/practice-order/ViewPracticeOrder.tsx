@@ -272,7 +272,7 @@ export const ViewPracticeOrder = () => {
 			dataIndex: 'orderStatus',
 			title: 'Статус',
 			className: 'text-xs !p-2',
-			render: (text: any, record: any) => <span >{record?.status}</span>
+			render: (text: any, record: any) => <span >{record?.orderStatus}</span>
 			// render: (text:any, record:any) => (
 			// 	<div className={'flex items-center justify-between'}>
 			// 		<span className={'underline flex font-bold'}>{text}</span>

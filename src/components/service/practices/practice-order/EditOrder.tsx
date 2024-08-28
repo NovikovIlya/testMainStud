@@ -459,7 +459,7 @@ export const EditOrder = () => {
 	}
 
 	const handleChangeStatus = ()=>{
-		changeStatusSubmissions(dataOneSubmissions.id)
+		changeStatusSubmissions(dataOneSubmissions?.id)
 	}
 
 	if (isLoadingOneSubmission) return <SkeletonPage />

@@ -22,6 +22,8 @@ import { ModalNav } from '../service/ModalNav'
 import { ArrowLeftBackInOldAccount } from "../../assets/svg/ArrowLeftBackInOldAccount"
 import { TypeHeaderProps } from '../../models/layout'
 import { isMobileDevice } from '../../utils/hooks/useIsMobile'
+import logo from '../../assets/images/logo.svg'
+
 
 
 export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
@@ -152,19 +154,26 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	}
 	const showMobileMenu = ()=>{
 		if(document.querySelector('.ant-menu-root')){
+			// @ts-ignore
 			if(document.querySelector('.ant-menu-root').style.position==='static'){
+				// @ts-ignore
 				document.querySelector('.ant-menu-root').style.position = 'fixed'
+				// @ts-ignore
 				document.querySelector('header').style.marginLeft = '0'
 				return
 			}
+			// @ts-ignore
 			document.querySelector('.ant-menu-root').style.position = 'static'
 			// document.querySelector('header').style.marginLeft = '-100px'
 		}
 	}
 	const showMobileMenuEffect = ()=>{
 		if(document.querySelector('.ant-menu-root')){
+			// @ts-ignore
 			if(document.querySelector('.ant-menu-root').style.position==='static'){
+				// @ts-ignore
 				document.querySelector('.ant-menu-root').style.position = 'fixed'
+				// @ts-ignore
 				document.querySelector('header').style.marginLeft = '0'
 				return
 			}
@@ -199,7 +208,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 					<Button
 						onClick={showDrawer}
 						className={clsx(
-							'py-2.5 rounded-full hover:!bg-transparent font-semibold bg-transparent border-2  items-center justify-center hidden sm:flex',
+							'h-[38px] py-2.5 rounded-full hover:!bg-transparent font-semibold bg-transparent border-2  items-center justify-center hidden sm:flex',
 							type === 'main'
 								? `text-blue1f5 border-blue1f5 hover:!text-blue1f5`
 								: 'text-white border-white '
@@ -207,7 +216,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						type="primary"
 						// icon={<MenuSvg white={type === 'service'} />}
 					>
-						<span className="pl-2 max-md:!hidden">{t('services')}</span>
+						<span className="w-[105px] pl-2 max-md:!hidden">{t('services')}</span>
 					</Button>
 					<div className="flex items-center gap-5">
 						<LogoIasSvg white={type === 'service'} />

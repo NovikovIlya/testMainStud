@@ -1,6 +1,5 @@
 import { LoadingOutlined } from '@ant-design/icons'
-import { Button, Col, Form, Input, Popconfirm, Row, Select, Space, Spin, Steps, Typography } from 'antd'
-import dayjs from 'dayjs'
+import { Button, Col, Form, Popconfirm, Row, Select, Space, Spin, Steps, Typography } from 'antd'
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -9,66 +8,22 @@ import { Item, Practice } from '../../../../models/representation'
 import { useAppDispatch } from '../../../../store'
 import { useGetPracticesAllQuery } from '../../../../store/api/practiceApi/individualTask'
 import {
+	useAddApplicationMutation,
 	useAddSubmissionMutation,
 	useGetAllSubmissionsQuery,
 	useGetOneSubmissionsQuery,
 	useGetStudentsQuery
 } from '../../../../store/api/practiceApi/representation'
 import { useGetContractsAllQuery } from '../../../../store/api/practiceApi/roster'
-import { changeStatusTrue, showNotification } from '../../../../store/reducers/notificationSlice'
+import { showNotification } from '../../../../store/reducers/notificationSlice'
 
 import PracticeModal from './practicalModal'
 import TableEdit from './tableEdit'
 
 export const CreateAppendix = () => {
 	const tableRef = useRef(null)
-	const originData: any = [
-		{
-			id: 'czxczxc',
-			key: 'czxczxc',
-			specialtyName: 'jim',
-			academicYear: '2024',
-			address: 'Kazan',
-			period: [dayjs('2024-07-01'), dayjs('2024-07-15')],
-			courseNumber: '1',
-			type: null,
-			dateFilling: '2024-07-30',
-			selectKind: 'Производственная',
-			subdivision: '',
-			groupNumber: '1',
-			level: 'бакалавр'
-		},
-		{
-			id: 'bbq',
-			key: 'bbq',
-			specialtyName: 'jon',
-			academicYear: '2030',
-			address: 'Moscw',
-			period: null,
-			courseNumber: '2',
-			type: null,
-			dateFilling: '2024-07-29',
-			selectKind: 'Производственная',
-			groupNumber: '1',
-			level: 'бакалавр'
-		},
-		{
-			id: 'ccx',
-			key: 'ccx',
-			specialtyName: 'jen',
-			academicYear: '2030',
-			address: 'Moscw',
-			period: null,
-			courseNumber: '1',
-			type: null,
-			dateFilling: '2024-07-28',
-			selectKind: 'Производственная',
-			groupNumber: '2',
-			level: 'ордин'
-		}
-	]
 	const nav = useNavigate()
-	const [tableData, setTableData] = useState<any>(originData)
+	const [tableData, setTableData] = useState<any>([])
 	const [filter, setFilter] = useState<any>({
 		type: '',
 		spec: '',
@@ -89,7 +44,7 @@ export const CreateAppendix = () => {
 	const [selectedPractice, setSelectedPractice] = useState<any>(null)
 	const [visiting, setVisiting] = useState(false)
 	const [theme, setTheme] = useState('')
-	const [sendSubmission, { isLoading: isLoadingAddSub }] = useAddSubmissionMutation()
+	const [sendApplication, { isLoading: isLoadingAddApp }] = useAddApplicationMutation()
 	const {data: dataGetStudents,isSuccess: isSuccessGetStudents,isLoading: isLoadingStudents} = useGetStudentsQuery(selectedPractice, { skip: !selectedPractice })
 	const { data: dataAllSubmissions } = useGetAllSubmissionsQuery(selectedPractice, { skip: !selectedPractice })
 	const [fullTable, setFullTable] = useState<any>([])
@@ -101,54 +56,12 @@ export const CreateAppendix = () => {
 	const [selectContract, setSelectContract] = useState<string | null>(null)
 	const {data:dataOne,isSuccess:isSuccessDataOne} = useGetOneSubmissionsQuery(selectedPractice,{skip: !selectedPractice})
 	const [isFIOProf, setIsFIOProf] = useState(false)
+	const [fullTableValidState, setFullTableValidState] = useState<any>([])
 	const dispatch = useAppDispatch()
 
-	// useEffect(() => {
-	// 	if (isSuccessGetStudents) {
-	// 		const newArray = dataGetStudents?.map((item: any) => ({
-	// 			name: item.name,
-	// 			costForDay: null,
-	// 			arrivingCost: null,
-	// 			livingCost: null,
-	// 			place: null,
-	// 			category: item.category,
-	// 			categoryId: item.categoryId,
-	// 			departmentDirector: fullSelectedPractise.departmentDirector,
-	// 			groupNumber: fullSelectedPractise.groupNumber
-	// 		}))
-	// 		setFullTable(newArray.map((item: any) => ({ key: item.name, ...item })))
-	// 		setStep(1)
-	// 	}
-	// }, [isSuccessGetStudents, isSuccessAllPractice, dataGetStudents, dataAllPractise])
-
-	useEffect(() => {
-		if (!visiting) {
-			if (isSuccessGetStudents && fullTable.length > 0) {
-				if (fullTable.every((item: any) => item.place !== null)) {
-					setStep(2)
-				}
-			}
-		}
-		if (visiting) {
-			if (isSuccessGetStudents && fullTable.length > 0) {
-				if (
-					fullTable.every((item: any) => item.place !== null && item.arrivingCost !== null && item.livingCost !== null)
-				) {
-					setStep(2)
-				} else {
-					setStep(1)
-				}
-			}
-		}
-	}, [fullTable, isSuccessGetStudents, visiting])
-
-	// useEffect(() => {
-	// 	dispatch(changeStatusTrue())
-	// }, [])
-
+	console.log('fullTableValidState',fullTableValidState)
 	useEffect(() => {
 		if (isSuccessGetContracts) {
-
 			const newArray = dataGetContracts.map(item => {
 				return {
 					value: item.id,
@@ -186,10 +99,11 @@ export const CreateAppendix = () => {
 	const handleRowClick = (record: any) => {
 		hanldeSelectedPractise(record.id)
 		setFullSelectedPractise(record)
-	}
+	}	
+	console.log('dataOne',dataOne)
 
 	const sendData = () => {
-		if (isFIOProf===false) {
+		if (!isFIOProf || !selectContract) {
 			return dispatch(
 				showNotification({
 					message: `Для сохранения необходимо заполнить "ФИО руководителя практики от Профильной Организации" и выбрать договор`,
@@ -197,29 +111,34 @@ export const CreateAppendix = () => {
 				})
 			)
 		}
-		const tableDataStudent = fullTable.map((item: any) => ({
+		const tableDataStudent = fullTableValidState.map((item: any) => ({
 			costForDay: item.costForDay,
 			arrivingCost: item.arrivingCost,
 			livingCost: item.livingCost,
 			name: item.name,
 			place: item.place,
-			category: item.category
+			category: item.category,
+			categoryId:item.categoryId,
+			id:item.id,
+			profileDirector: item.FIOProf
 		}))
 		const obj = {
-			practiceId: selectedPractice,
-			isWithDeparture: visiting ? true : false,
-			theme: theme,
+			contractId: selectContract,
+			submissionId: dataOne?.id,
+			// practiceId: selectedPractice,
+			// isWithDeparture: visiting ? true : false,
+			// theme: theme,
 			students: tableDataStudent
 		}
-
-		sendSubmission(obj)
+		console.log('obj',obj)
+		sendApplication(obj)
 			.unwrap()
 			.then(() => {
-				nav('/services/practices/representation')
+				nav('/services/practices/appendix')
 			})
 			.catch(error => {
 				if (error.status === 409) {
-					dispatch(showNotification({ message: 'Такое представление уже имеется, создайте другое', type: 'error' }))
+					dispatch(showNotification({ message: 'Такое приложение уже имеется, создайте другое', type: 'error' }))
 				}
 				console.log(error)
 			})
@@ -235,7 +154,7 @@ export const CreateAppendix = () => {
 	}
 
 	return (
-		<Spin spinning={isLoadingAddSub}>
+		<Spin spinning={isLoadingAddApp}>
 			<section className="container">
 				<Row gutter={[16, 16]}>
 					<Col span={24}>
@@ -255,7 +174,8 @@ export const CreateAppendix = () => {
 				<Row className="mt-4 flex items-center justify-between">
 					<Col span={12} className="justify-start flex">
 						<Steps
-							size="small"
+							className='mt-6 mb-6'
+							size="default"
 							current={step}
 							items={[
 								{
@@ -270,8 +190,8 @@ export const CreateAppendix = () => {
 							]}
 						/>
 					</Col>
-					{!selectedPractice ? (
-						<Col span={24} className="justify-end flex">
+			
+						<Col span={12} className="justify-end flex">
 							<div>
 								<Space>
 									{selectedPractice ? (
@@ -290,50 +210,10 @@ export const CreateAppendix = () => {
 								</Space>
 							</div>
 						</Col>
-					) : null}
+		
 				</Row>
 
-				{selectedPractice ? (
-					<>
-						{/* <Descriptions className='mt-8'  items={items} /> */}
-						<Row className="items-end">
-							<Col span={24} className="justify-end flex">
-								<div>
-									<Space>
-										{selectedPractice ? (
-											<Popconfirm
-												title="Редактирование"
-												description="Вы уверены, что хотите изменить приказ? Все данные будут удалены."
-												onConfirm={okayModal}
-												okText="Да"
-												cancelText="Нет"
-											>
-												<Button>Изменить приказ</Button>
-											</Popconfirm>
-										) : (
-											<Button onClick={showModalOne}>Выбрать приказ</Button>
-										)}
-									</Space>
-								</div>
-							</Col>
-						</Row>
-					</>
-				) : (
-					''
-				)}
-
-				{visiting ? (
-					<Row className="mt-4">
-						<Col span={1} className="flex items-center">
-							<label htmlFor="topic">Тема:</label>
-						</Col>
-						<Col span={3} className="">
-							<Input id="topic" placeholder="" onChange={e => setTheme(e.target.value)} />
-						</Col>
-					</Row>
-				) : (
-					''
-				)}
+				
 				<Row>
 					<Col span={24}>
 						<Typography.Text>Договор</Typography.Text>
@@ -372,7 +252,7 @@ export const CreateAppendix = () => {
 							<Row className="mt-4">
 								<Col flex={'auto'}>
 									<Form form={form} component={false}>
-										<TableEdit isSuccessDataOne={isSuccessDataOne} setIsFIOProf={setIsFIOProf} fullTable={dataOne} visiting={visiting} setFullTable={setFullTable} create={true} />
+										<TableEdit fullTableValidState={fullTableValidState} setFullTableValidState={setFullTableValidState} isSuccessDataOne={isSuccessDataOne} setIsFIOProf={setIsFIOProf} fullTable={dataOne} visiting={visiting} setFullTable={setFullTable} create={true} />
 									</Form>
 								</Col>
 							</Row>

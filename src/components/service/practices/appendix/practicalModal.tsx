@@ -456,7 +456,7 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 			dataIndex: 'orderStatus',
 			title: 'Статус',
 			className: 'text-xs !p-2',
-			render: (text: any, record: any) => <span >{record?.status}</span>
+			render: (text: any, record: any) => <span >{record?.orderStatus}</span>
 			// render: (text:any, record:any) => (
 			// 	<div className={'flex items-center justify-between'}>
 			// 		<span className={'underline flex font-bold'}>{text}</span>
@@ -692,7 +692,7 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 			onCancel={handleCancelOne}
 		>
 		<Form form={form}>
-		<section className="container">
+		
 			<Row gutter={[16, 16]}>
 				<Col span={24}>
 					<Typography.Text className=" text-[28px] mb-14">
@@ -979,7 +979,7 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 					/>}
 				</Col>
 			</Row>
-		</section>
+	
 		</Form>
 		</Modal>
 	)

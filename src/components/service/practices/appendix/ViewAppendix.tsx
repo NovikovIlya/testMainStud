@@ -15,7 +15,7 @@ import { PointsSvg } from '../../../../assets/svg/PointsSvg'
 
 import { PopoverContent } from './PopoverContent'
 import { PopoverMain } from './PopoverMain'
-import { useGetAllSubmissionsQuery, useGetSubmissionsAcademicYearQuery, useGetSubmissionsDirectorQuery, useGetSubmissionsPracticeKindQuery, useGetSubmissionsPracticeTypeQuery, useGetSubmissionsSpecialtiesQuery, useGetSubmissionsSubdevisionQuery } from '../../../../store/api/practiceApi/representation'
+import { useGetAllApplicationsQuery, useGetAllSubmissionsQuery, useGetSubmissionsAcademicYearQuery, useGetSubmissionsDirectorQuery, useGetSubmissionsPracticeKindQuery, useGetSubmissionsPracticeTypeQuery, useGetSubmissionsSpecialtiesQuery, useGetSubmissionsSubdevisionQuery } from '../../../../store/api/practiceApi/representation'
 import { LoadingOutlined } from '@ant-design/icons'
 import { findSubdivisions } from '../../../../utils/findSubdivisions'
 
@@ -37,6 +37,7 @@ const courseNumberOptions = [
 ]
 
 export const ViewAppendix = () => {
+	const [currentPage, setCurrentPage] = useState(1);
 	const [form] = Form.useForm()
 	const navigate = useNavigate()
 	const [filter, setFilter] = useState({
@@ -59,6 +60,7 @@ export const ViewAppendix = () => {
 	const {data:dataSubmissionKind} = useGetSubmissionsPracticeKindQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
 	const {data:dataSubmissionDirector} = useGetSubmissionsDirectorQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
 	const {data:dataSubmissionAcademicYear} = useGetSubmissionsAcademicYearQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
+	const {data:dataAppendix,isSuccess:isSuccessAppendix} = useGetAllApplicationsQuery({subdivisionId:selectSubdivisionId,page:currentPage - 1,size :'5'},{skip:!selectSubdivisionId || !currentPage})
 	const [flag,setFlag] = useState(false)
 	const [dataTable, setDataTable] = useState<any>([])
 
@@ -83,10 +85,10 @@ export const ViewAppendix = () => {
 
 	
 	useEffect(() => {
-		if (isSuccessSubAll) {
+		if (isSuccessAppendix) {
 			setDataTable(filterDataFull())	
 		}
-	}, [filter,isSuccessSubAll])
+	}, [filter,isSuccessAppendix])
 	
 
 	function filterDataFull() {
@@ -158,8 +160,8 @@ export const ViewAppendix = () => {
 			return 0
 		}
 	
-		return dataAllSubmissions
-			? dataAllSubmissions
+		return dataAppendix
+			? dataAppendix
 			.filter((elem: any) => filterName(elem))
 			.filter((elem: any) => filterSpec(elem))
 			.filter((elem: any) => filtervisiting(elem))
@@ -496,9 +498,12 @@ export const ViewAppendix = () => {
 						// @ts-ignore
 						columns={columns}
 						dataSource={filter?.subdivision !== 'Все' ? flag ? dataTable : [] : []}
-						pagination={dataTable?.length < 3 ? false : {
-							pageSize: 3,
-						}}
+						pagination={dataTable.length > 5 && {
+							current: currentPage,
+							pageSize: 5,
+							total: dataAppendix?.length,
+							onChange: (page) => setCurrentPage(page),
+						  }}
 						className="my-10"
 						rowSelection={{
 							type: 'checkbox',

@@ -477,8 +477,8 @@ export const CreateRepresentation = () => {
 			<Row className="mt-4 flex items-center justify-between">
 				<Col span={12} className='justify-start flex'>
 				<Steps
-						
-						size="small"
+						className='mt-6 mb-6'
+						size="default"
 						current={step}
 						items={[
 						{
@@ -493,36 +493,7 @@ export const CreateRepresentation = () => {
 						]}
 					/>
 				</Col>
-				{!selectedPractice ? 
-				<Col span={24} className='justify-end flex'>
-					<div>
-						<Space>
-							{selectedPractice ? 
-							<Popconfirm
-								title="Редактирование"
-								description="Вы уверены, что хотите изменить практику? Все данные будут удалены."
-								onConfirm={okayModal}
-								okText="Да"
-								cancelText="Нет"
-							><Button  >Изменить практику</Button></Popconfirm> : 
-							<Button  onClick={showModalOne}>Выбрать практику</Button>}
-						</Space>
-					</div>
-				</Col>
-				: null}	
-			</Row>
-			
-			{selectedPractice ? (<>
-				<Descriptions className='mt-8'  items={items} />
-				<Row className='items-end'>
-					 <Col span={12} flex="50%" className="mt-4 mobileFirst">
-						<Radio.Group onChange={onChange} value={value}>
-							<Space direction="vertical">
-								<Radio value={1} onClick={()=>setVisiting(false)}>Невыездная практика</Radio>
-								<Radio value={2} onClick={()=>setVisiting(true)}>Выездная практика</Radio>
-							</Space>
-						</Radio.Group>
-				</Col>
+				
 				<Col span={12} className='justify-end flex'>
 					<div>
 						<Space>
@@ -538,6 +509,21 @@ export const CreateRepresentation = () => {
 						</Space>
 					</div>
 				</Col>
+			
+			</Row>
+			
+			{selectedPractice ? (<>
+				<Descriptions className='mt-8'  items={items} />
+				<Row className='items-end'>
+					 <Col span={12} flex="50%" className="mt-4 mobileFirst">
+						<Radio.Group onChange={onChange} value={value}>
+							<Space direction="vertical">
+								<Radio value={1} onClick={()=>setVisiting(false)}>Невыездная практика</Radio>
+								<Radio value={2} onClick={()=>setVisiting(true)}>Выездная практика</Radio>
+							</Space>
+						</Radio.Group>
+				</Col>
+				
 			</Row>	
 			</>) : ''}
 

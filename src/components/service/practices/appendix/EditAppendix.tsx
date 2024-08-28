@@ -29,7 +29,9 @@ import { useAppDispatch } from '../../../../store'
 import {
 	useChangeStatusMutation,
 	useEditSubmissionMutation,
+	useGetDocApplicationQuery,
 	useGetDocRepresentationQuery,
+	useGetOneApplicationQuery,
 	useGetOneSubmissionsQuery
 } from '../../../../store/api/practiceApi/representation'
 import { changeStatus, showNotification } from '../../../../store/reducers/notificationSlice'
@@ -65,8 +67,8 @@ export const EditAppendix = () => {
 	const [data, setData] = useState(originData)
 	const [editingKey, setEditingKey] = useState('')
 	const isEditing = (record: Item) => record.key === editingKey
-	const {data: dataOneSubmissions,isSuccess,isLoading: isLoadingOneSubmission} = useGetOneSubmissionsQuery(id, { skip: !id })
-	const {data: dataGetDocRepresentation,isLoading: isLoadingDocRepesentation,refetch} = useGetDocRepresentationQuery(dataOneSubmissions ? dataOneSubmissions?.id : null,{ skip: !dataOneSubmissions })
+	const {data: dataOneSubmissions,isSuccess,isLoading: isLoadingOneSubmission} = useGetOneApplicationQuery(id, { skip: !id })
+	const {data: dataGetDocRepresentation,isLoading: isLoadingDocRepesentation,refetch} = useGetDocApplicationQuery(dataOneSubmissions ? dataOneSubmissions?.id : null,{ skip: !dataOneSubmissions })
 	const [changeStatusSubmissions, {}] = useChangeStatusMutation()
 	const [editSumbissions, {}] = useEditSubmissionMutation({})
 	const [fullTable, setFullTable] = useState<any>([])
@@ -94,8 +96,13 @@ export const EditAppendix = () => {
 			const array = dataOneSubmissions.students.map((item: any) => {
 				return {
 					...item,
-					groupNumbers: dataOneSubmissions.practice.groupNumber,
-					departmentDirector: dataOneSubmissions.practice.departmentDirector
+					profileDirector: item.profileDirector,
+					name: item.name,
+					departmentDirector:dataOneSubmissions.practice.departmentDirector,
+					practicePeriod: dataOneSubmissions.practice.practicePeriod,
+					specialtyName: dataOneSubmissions.practice.specialtyName,
+					other: `${dataOneSubmissions.practice.courseNumber} ${dataOneSubmissions.practice.practiceKind} ${dataOneSubmissions.practice.practiceType}`,
+
 				}
 			})
 			setFullTable(array.map((item: any) => ({ ...item, key: item.name })))
@@ -486,14 +493,14 @@ export const EditAppendix = () => {
 						}}
 					/>
 					<Typography.Text className=" text-[28px] mb-14">
-            Приложение 4 группы "
+            Приложение к договору группы "
 						{dataOneSubmissions?.practice.groupNumber}" подразделения "
 						{dataOneSubmissions?.practice.subdivision}" на{' '}
 						{dataOneSubmissions?.practice.academicYear} учебный год
 					</Typography.Text>
 				</Col>
 			</Row>
-			<Descriptions className="mt-8" items={items} />
+			{/* <Descriptions className="mt-8" items={items} /> */}
 
 			<Row className="mt-4 mb-6 flex  justify-between">
 				<Col span={12}>
@@ -525,11 +532,11 @@ export const EditAppendix = () => {
 						</Space>
 					</div>
 				</Col>
-				<Col span={12} className="flex justify-end">
+				{/* <Col span={12} className="flex justify-end">
 							
 							<Button onClick={handleChangeStatus}>Согласовать представление</Button>
 	
-				</Col>
+				</Col> */}
 			</Row>
 
 			<Row className="mt-4">
@@ -555,7 +562,7 @@ export const EditAppendix = () => {
 			</Row>
 
 			<Row>
-				{isSuccess && dataOneSubmissions.status === 'На рассмотрении' ? (
+				{isSuccess && dataOneSubmissions.orderStatus !== 'Согласован1' ? (
 					<Col span={2} className="mt-5">
 						<Space className="w-full ">
 							<Popover
@@ -563,7 +570,7 @@ export const EditAppendix = () => {
 									<div>
 										{dataOneSubmissions.status === 'На рассмотрении'
 											? 'Статус "На рассмотрении" позволяет редактировать представление'
-											: 'Редактировать представление можно только в статусе "На рассмотрении'}
+											: 'Редактировать приложение можно только в статусе "На рассмотрении'}
 									</div>
 								}
 								title=""

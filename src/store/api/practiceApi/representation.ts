@@ -161,14 +161,14 @@ export const representationService = apiSlice.injectEndpoints({
             invalidatesTags: ['Submissions'],  
         }),
         changeStatusOrder: builder.mutation<any, any>({
-            query: (orderId  ) => {
+            query: (orderId) => {
                 return {
-                    url: `/services/api-practices/orderId /change-status?submissionId=${orderId  }`,
+                    url: `/services/api-practices/orders/change-status?orderId=${orderId}`,
                     method: 'PATCH',
                    
                 }
             },
-         
+            invalidatesTags: ['Order','Submissions'],  
         }),
         getAllOrder: builder.query<any, any>({
             query: ({subdivisionId ,page ,size } ) => {
@@ -178,7 +178,53 @@ export const representationService = apiSlice.injectEndpoints({
                    
                 }
             },
-        
+            providesTags: ['Order'],
+            keepUnusedDataFor:1,
+        }),
+
+        getAllApplications: builder.query<any, any>({
+            query: ({subdivisionId ,page ,size } ) => {
+                return {
+                    url: `services/api-practices/application-four/all/by-page?subdivisionId=${subdivisionId}&page=${page}&size=${size}`,
+                    method: 'GET',
+                   
+                }
+            },
+            providesTags: ['Application'],
+            keepUnusedDataFor:1,
+        }),
+        addApplication: builder.mutation<any, any>({
+            query: (body) => {
+                return {
+                    url: `/services/api-practices/application-four`,
+                    method: 'POST',
+                    body: body
+                }
+            },
+            invalidatesTags: ['Application'],  
+        }),
+        getOneApplication: builder.query<any, any>({
+            query: (id) => {
+                return {
+                    url: `services/api-practices/application-four/${id}`,
+                    method: 'GET'
+                }
+            },
+            providesTags: ['Submissions','Application'],
+            keepUnusedDataFor:1,
+        }),
+        getDocApplication: builder.query<any, any>({
+            query: (id) => {
+                return {
+                    url: `/services/api-practices/orders/doc/${id}`,
+                    method: 'GET',
+                    responseHandler: async (response) => {
+                        const blob = await response.blob();
+                        return window.URL.createObjectURL(blob); 
+                    },
+                }
+            },
+          
             keepUnusedDataFor:1,
         }),
 
@@ -201,7 +247,13 @@ export const {
     useGetSubmissionsDirectorQuery,
     useGetSubmissionsAcademicYearQuery,
     useChangeStatusMutation,
+
     useGetAllOrderQuery,
     useChangeStatusOrderMutation,
-    useGetDocOrderQuery
+    useGetDocOrderQuery,
+
+    useGetAllApplicationsQuery,
+    useAddApplicationMutation,
+    useGetOneApplicationQuery,
+    useGetDocApplicationQuery
 } = representationService

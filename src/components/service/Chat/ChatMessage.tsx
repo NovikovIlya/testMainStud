@@ -60,11 +60,13 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 								.unwrap()
 								.then(result => {
 									dispatch(setCurrentVacancy(result))
-									navigate('/services/jobseeker/vacancyview')
+									isEmpDep
+										? navigate('/services/personnelaccounting/chat/vacancyview')
+										: navigate('/services/myresponds/chat/vacancyview')
 								})
 						}}
 					>
-						<div className="flex items-center justify-between">
+						<div className="flex items-center gap-[40px]">
 							<div>
 								<p className="font-bold">Отклик на вакансию</p>
 								<p>{vacancyTitle}</p>

@@ -366,7 +366,7 @@ export const ChatPage = () => {
 						</p>
 					</div> */}
 					{ChatStatus.chatClosed && (
-						<div className="mt-[15px] mb-[10px] text-center font-content-font font-normal text-[16px]/[16px] text-black text-opacity-40">
+						<div className="mt-auto py-[10px] text-center font-content-font font-normal text-[16px]/[16px] text-black text-opacity-40">
 							Вы сможете писать в чат после того, как руководитель пригласит вас
 							на собеседование
 						</div>

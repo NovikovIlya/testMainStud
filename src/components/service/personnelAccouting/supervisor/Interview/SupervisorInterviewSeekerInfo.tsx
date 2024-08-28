@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { Button, ConfigProvider, Modal, Form, Select} from 'antd'
 import ArrowIcon from '../../../jobSeeker/ArrowIcon'
 import { AvatartandardSvg } from '../../../../../assets/svg/AvatarStandardSvg'
-import uuid from 'react-uuid'
 import { useAppSelector } from '../../../../../store'
 import { useGetRespondFullInfoQuery,
 		 useEmployeeSeekerRequestMutation
@@ -142,7 +141,7 @@ export const SupervisorInterviewSeekerInfo = (props : { status : 'ONLINE_ONGOING
 									onFinish={values => {
 										rejectSeeker({
 											rejectionReason: values.reason,
-											action: 'UNEMPLOY',
+											action: 'REJECT',
 											respondId: respondId.respondId
 										})
 									}}

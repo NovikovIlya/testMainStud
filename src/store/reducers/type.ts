@@ -286,7 +286,7 @@ export type VacancyRespondItemType = {
 	url: string
 	userData: null | {
 		firstname: string
-		lastname: String
+		lastname: string
 		middlename: string
 		sex: string
 		age: number
@@ -407,7 +407,7 @@ export type InterviewItemType = {
 
 export type SeekerStatusChangeType = {
 	rejectionReason: string,
-	action : 'EMPLOY' | 'UNEMPLOY'
+	action : 'EMPLOY' | 'REJECT'
 }
 
 export type ReserveTimeRequestType = {

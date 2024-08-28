@@ -38,7 +38,11 @@ export const RespondInfo = (props: {
 	)
 
 	useEffect(() => {
-		setIsRespondSentToSupervisor(res?.status === 'IN_SUPERVISOR_REVIEW')
+		setIsRespondSentToSupervisor(
+			res?.status === 'IN_SUPERVISOR_REVIEW' ||
+				res?.status === 'INVITATION' ||
+				res?.status === 'EMPLOYMENT_REQUEST'
+		)
 		setIsRespondSentToArchive(res?.status === 'ARCHIVE')
 		setIsRespondSentToReserve(res?.status === 'IN_RESERVE')
 	}, [res])
@@ -157,13 +161,17 @@ export const RespondInfo = (props: {
 													setIsRespondSentToArchive(true)
 												})
 										}}
-										disabled={isRespondSentToArchive}
+										disabled={
+											isRespondSentToArchive || isRespondSentToSupervisor
+										}
 										className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
 									>
 										Отказать
 									</Button>
 									<Button
-										disabled={isRespondSentToReserve}
+										disabled={
+											isRespondSentToReserve || isRespondSentToSupervisor
+										}
 										onClick={() => {
 											sendToReserve(respondId.respondId)
 												.unwrap()

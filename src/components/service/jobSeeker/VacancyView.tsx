@@ -80,7 +80,12 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 
 	return (
 		<>
-			<div id="wrapper" className="pl-[54px] pr-[54px]">
+			<div
+				id="wrapper"
+				className={`pl-[54px] pr-[54px] ${
+					props.type === 'CHAT' && 'mt-[120px]'
+				}`}
+			>
 				<div className="flex">
 					<button
 						onClick={() => {

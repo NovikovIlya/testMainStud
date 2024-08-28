@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Tag, ConfigProvider, Modal, Form, Select, Input } from 'antd'
+import { Button, ConfigProvider, Modal, Form, Select} from 'antd'
 import ArrowIcon from '../../../jobSeeker/ArrowIcon'
 import { AvatartandardSvg } from '../../../../../assets/svg/AvatarStandardSvg'
 import uuid from 'react-uuid'

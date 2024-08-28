@@ -36,6 +36,12 @@ export const RespondInfo = (props: {
 	const [isRespondSentToReserve, setIsRespondSentToReserve] = useState<boolean>(
 		res?.status === 'IN_RESERVE'
 	)
+	const [isRespondInvited, setIsRespondInvited] = useState<boolean>(
+		res?.status === 'INVITATION'
+	)
+	const [isRespondEmployed, setIsRespondEmployed] = useState<boolean>(
+		res?.status === 'EMPLOYMENT_REQUEST'
+	)
 
 	useEffect(() => {
 		setIsRespondSentToSupervisor(
@@ -45,6 +51,8 @@ export const RespondInfo = (props: {
 		)
 		setIsRespondSentToArchive(res?.status === 'ARCHIVE')
 		setIsRespondSentToReserve(res?.status === 'IN_RESERVE')
+		setIsRespondInvited(res?.status === 'INVITATION')
+		setIsRespondEmployed(res?.status === 'EMPLOYMENT_REQUEST')
 	}, [res])
 
 	const navigate = useNavigate()
@@ -201,7 +209,11 @@ export const RespondInfo = (props: {
 								<div className="self-center grid grid-cols-1 grid-rows-[40px_40px_40px] gap-y-[12px]">
 									<InviteSeekerForm respondId={respondId.respondId} />
 									<Button
-										disabled={isRespondSentToReserve}
+										disabled={
+											isRespondSentToArchive ||
+											isRespondInvited ||
+											isRespondEmployed
+										}
 										onClick={() => {
 											sendToArchive({
 												id: respondId.respondId,

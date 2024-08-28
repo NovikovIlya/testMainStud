@@ -26,6 +26,8 @@ import {
 	InterviewItemType,
 	InterviewViewResponseType,
 	SeekerStatusChangeType,
+	ReserveTimeRequestType,
+	EmploymentRequestType,
 	respondStatus
 } from '../reducers/type'
 
@@ -646,6 +648,30 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
+		answerToInvitationReserveTimeRequest: builder.mutation<void, ReserveTimeRequestType & {respondId: number}> ( {
+			query: arg => ({
+				url: `http://localhost:8082/employment-api/v1/respond/${arg.respondId}/chat/butttons/interview/reserve-time`,
+				method: 'POST',
+				body: {
+					time: arg.time
+				},
+				headers: {
+					Authorization: `Bearer ${supervisorToken}`
+				}
+			})
+		}),
+		answerEmploymentRequest: builder.mutation<void, EmploymentRequestType & {respondId: number}> ( {
+			query: arg => ({
+				url: `http://localhost:8082/employment-api/v1/respond/${arg.respondId}/chat/buttons/employment-request`,
+				method: 'POST',
+				body: {
+					answer: arg.answer
+				},
+				headers: {
+					Authorization: `Bearer ${supervisorToken}`
+				}
+			})
+		})
 	})
 })
 export const {
@@ -717,4 +743,6 @@ export const {
 	useGetSupervisorInterviewQuery,
 	useLazyGetInterviewViewQuery,
 	useEmployeeSeekerRequestMutation,
+	useAnswerToInvitationReserveTimeRequestMutation,
+	useAnswerEmploymentRequestMutation
 } = serviceApi

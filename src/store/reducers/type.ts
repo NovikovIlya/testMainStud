@@ -335,6 +335,7 @@ export type ChatMessageType = {
 		| 'REJECTED'
 		| 'EMPLOYMENT_REQUEST'
 		| 'INVITATION_RESERVE'
+	reserveTimes: string[]
 	fileInfos: { id: number; name: string }[] | null
 }
 
@@ -407,4 +408,12 @@ export type InterviewItemType = {
 export type SeekerStatusChangeType = {
 	rejectionReason: string,
 	action : 'EMPLOY' | 'UNEMPLOY'
+}
+
+export type ReserveTimeRequestType = {
+	time: string
+}
+
+export type EmploymentRequestType = {
+	answer: 'YES' | 'NO'
 }

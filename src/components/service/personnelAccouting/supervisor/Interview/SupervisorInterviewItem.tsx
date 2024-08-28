@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import { InterviewItemType } from '../../../../../store/reducers/type'
 import { setCurrentInterview } from '../../../../../store/reducers/CurrentInterviewSlice'
 import { useLazyGetInterviewViewQuery } from '../../../../../store/api/serviceApi'
+import {setCurrentResponce} from "../../../../../store/reducers/CurrentResponceSlice";
 
 export const SupervisorInterviewItem = ( props : InterviewItemType ) => {
 
@@ -85,7 +86,7 @@ export const SupervisorInterviewItem = ( props : InterviewItemType ) => {
                     <span className="w-[200px] opacity-[0%]"></span>
                 )}
                 {(props.format === "ONLINE") && (isLessThanFiveMinutes) && !(difference<0) &&  (
-                    <span className="w-[200px] flex justify-center bg-[#3073D7] text-white font-content-font cursor pointer font-normal text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-0">
+                    <span className="cursor-pointer w-[200px] flex justify-center bg-[#3073D7] text-white font-content-font cursor pointer font-normal text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-0">
                  Подключиться</span>
                 )}
                 {(props.format === "ONLINE") && (!isLessThanFiveMinutes) && !(difference<0) && (
@@ -120,7 +121,7 @@ export const SupervisorInterviewItem = ( props : InterviewItemType ) => {
 
         return (
             <>
-                <span className="w-[8%]">{datePublicString}</span>
+                <span className="w-[8%] ml-[3%]">{datePublicString}</span>
             </>
         )
     }
@@ -128,10 +129,10 @@ export const SupervisorInterviewItem = ( props : InterviewItemType ) => {
         return(
             <>
                 {props.format === "OFFLINE" && (
-                    <span className="w-[8%] ml-[1%] ">Оффлайн</span>
+                    <span className="w-[8%] ">Оффлайн</span>
                 )}
                 {props.format === "ONLINE" && (
-                    <span className="w-[8%] ml-[1%] ">Онлайн</span>
+                    <span className="w-[8%] ">Онлайн</span>
                 )}
             </>
         )
@@ -141,7 +142,7 @@ export const SupervisorInterviewItem = ( props : InterviewItemType ) => {
             <>
                 <Button
                     onClick={() => {
-                            dispatch(setCurrentInterview(props.id))
+                            dispatch(setCurrentResponce(props.id))
                             navigate('/services/personnelaccounting/supervisor/invitation/seekerinfo')
                     }}
                     className="font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black"
@@ -188,11 +189,11 @@ export const SupervisorInterviewItem = ( props : InterviewItemType ) => {
                 </Modal>
             </ConfigProvider>
             <div className="w-full flex bg-white p-5 items-center">
-                <span className="w-[25%] ">{props.post}</span>
-                <span className="w-[20%] ml-[2%] ">{seekerName}</span>
+                <span className="w-[22%] ">{props.post}</span>
+                <span className="w-[22%] ml-[3%]">{seekerName}</span>
                 <InterviewTimeElem eventTime={props.time}></InterviewTimeElem>
                 <InterviewFormatElem format={props.format}></InterviewFormatElem>
-                <div className="w-[34%] ml-[2%] flex flex-row items-center justify-evenly">
+                <div className="w-[31%] mr-[3%] flex flex-row items-center justify-evenly">
                     <InterviewCountdownTimeElem eventTime={props.time}  format={props.format}/>
                     <InterviewButtonElem id={props.id}></InterviewButtonElem>
                 </div>

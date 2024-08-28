@@ -5,7 +5,9 @@ import { ArrowToTheRight } from '../../../assets/svg/ArrowToTheRight'
 import { MessageReadSvg } from '../../../assets/svg/MessageReadSvg'
 import { MessageUnreadSvg } from '../../../assets/svg/MessageUnreadSvg'
 import { useAppSelector } from '../../../store'
-import { useAnswerToInivitationMainTimeMutation } from '../../../store/api/serviceApi'
+import { useAnswerToInivitationMainTimeMutation,
+		 useAnswerToInvitationReserveTimeRequestMutation,
+		 useAnswerEmploymentRequestMutation} from '../../../store/api/serviceApi'
 import { ChatMessageType } from '../../../store/reducers/type'
 
 import { ChatMessageFile } from './ChatMessageFile'
@@ -21,6 +23,8 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 	const isEmpDep = user?.roles.find(role => role.type === 'EMPL')
 
 	const [answerMainTime] = useAnswerToInivitationMainTimeMutation()
+	const [answerReserveTime] = useAnswerToInvitationReserveTimeRequestMutation()
+	const [answerEmploymentRequest] = useAnswerEmploymentRequestMutation()
 
 	return (
 		<>
@@ -154,6 +158,7 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 
 			{props.msgData.type === 'INVITATION_RESERVE' && (
 				<div className='flex flex-col'>
+					{/*
 					<div className="rounded-[16px] max-w-[50%] p-[20px] flex flex-col gap-[16px] font-content-font font-normal text-black text-[16px]/[19.2px] rounded-bl-none bg-[#FFFFFF] mt-[12px]">
 						<p className='text-[#808080] text-[16px]/[19.2px]'>
 							Анастасия, HR-менеджер
@@ -165,39 +170,27 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 							12:23
 						</p>
 					</div>
+					*/}
 					<div className="mt-[24px] max-w-[50%] flex flex-col gap-[14px]">
 						<div className='flex flex-row justify-between gap-[14px]'>
-							<button
-								onClick={() => {
-									answerMainTime({id: respondId, ans: 'first_adviced_time'})
-								}}
-								className="text-[16px]/[19.2px] rounded-[54.5px] py-[12px] px-[20px] text-center bg-inherit outline-none border cursor-pointer"
-							>
-								15.03.2024,
-								15:00
-							</button>
-							<button
-								onClick={() => {
-									answerMainTime({id: respondId, ans: 'second_adviced_time'})
-								}}
-								className="text-[16px]/[19.2px] rounded-[54.5px]  py-[12px] px-[20px] text-left bg-inherit outline-none border cursor-pointer"
-							>
-								15.03.2024,
-								15:00
-							</button>
-							<button
-								onClick={() => {
-									answerMainTime({id: respondId, ans: 'third_adviced_time'})
-								}}
-								className="text-[16px]/[19.2px] rounded-[54.5px]  py-[12px] px-[20px] text-left bg-inherit outline-none border cursor-pointer"
-							>
-								15.03.2024,
-								15:00
-							</button>
+							{props.msgData.reserveTimes.map(
+								time => (
+									<button
+										onClick={() => {
+											answerReserveTime({
+												respondId: respondId,
+												time: time
+											})
+										}}
+										className="text-[16px]/[19.2px] rounded-[54.5px] py-[12px] px-[20px] text-center bg-inherit outline-none border cursor-pointer"
+									>
+									</button>
+								)
+							)}
 						</div>
 						<button
 							onClick={() => {
-								answerMainTime({id: respondId, ans: 'NOT_RELEVANT'})
+
 							}}
 							className="text-[16px]/[19.2px] w-full rounded-[54.5px]  py-[12px] px-[56px] bg-inherit outline-none border cursor-pointer"
 						>
@@ -208,6 +201,7 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 			)}
 			{props.msgData.type === 'EMPLOYMENT_REQUEST' && (
 				<div className='flex flex-col'>
+					{/*
 					<div className="rounded-[16px] max-w-[50%] p-[20px] flex flex-col gap-[16px] font-content-font font-normal text-black text-[16px]/[19.2px] rounded-bl-none bg-[#FFFFFF] mt-[12px]">
 						<p className='text-[#808080] text-[16px]/[19.2px]'>
 							Анастасия, HR-менеджер
@@ -221,10 +215,11 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 							12:23
 						</p>
 					</div>
+					*/}
 					<div className="mt-[24px] max-w-[50%] flex flex-row gap-[20px]">
 						<button
 							onClick={() => {
-								answerMainTime({id: respondId, ans: 'YES'})
+								answerEmploymentRequest({respondId: respondId, answer: 'YES'})
 							}}
 							className="w-6/12 text-[16px]/[19.2px] rounded-[54.5px]  text-center bg-inherit outline-none border cursor-pointer"
 						>
@@ -232,7 +227,7 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 						</button>
 						<button
 							onClick={() => {
-								answerMainTime({id: respondId, ans: 'NO'})
+								answerEmploymentRequest({respondId: respondId, answer: 'NO'})
 							}}
 							className="w-6/12 text-[16px]/[19.2px] rounded-[54.5px] text-center py-[12px] bg-inherit outline-none border cursor-pointer"
 						>

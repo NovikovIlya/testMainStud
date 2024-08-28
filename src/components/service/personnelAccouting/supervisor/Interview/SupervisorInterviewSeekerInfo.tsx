@@ -143,7 +143,7 @@ export const SupervisorInterviewSeekerInfo = (props : { status : 'ONLINE_ONGOING
 										rejectSeeker({
 											rejectionReason: values.reason,
 											action: 'UNEMPLOY',
-											respondId: 1
+											respondId: respondId.respondId
 										})
 									}}
 								>
@@ -207,7 +207,7 @@ export const SupervisorInterviewSeekerInfo = (props : { status : 'ONLINE_ONGOING
 										aproveSeeker({
 											rejectionReason: 'approve',
 											action: 'EMPLOY',
-											respondId: 1
+											respondId: respondId.respondId
 										})
 									}}
 								>

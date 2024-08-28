@@ -99,7 +99,7 @@ export const RespondItem = (props: RespondItemType & { refetch: Function }) => {
 					Перейти в чат
 				</Button>
 				<Button
-					className="ml-[1%]"
+					className="ml-[1%] rounded-[54.5px] border-solid border-black !px-[16px] !py-[7px] !w-[50px]"
 					onClick={() => {
 						setModalOpen(true)
 					}}

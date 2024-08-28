@@ -1156,7 +1156,70 @@ export const ResponseForm = () => {
 												{exp.experience.workplace}
 											</p>
 											<p className="font-content-font text-black text-[14px]/[14px] font-normal select-none opacity-60">
-												{exp.experience.beginWork} - {exp.experience.endWork}
+												{dayjs(exp.experience.beginWork, 'DD.MM.YYYY')
+													.toDate()
+													.getMonth() + 1}
+												.
+												{dayjs(exp.experience.beginWork, 'DD.MM.YYYY')
+													.toDate()
+													.getFullYear()}{' '}
+												-{' '}
+												{dayjs(exp.experience.endWork, 'DD.MM.YYYY')
+													.toDate()
+													.getFullYear() === date.getFullYear() &&
+												dayjs(exp.experience.endWork, 'DD.MM.YYYY')
+													.toDate()
+													.getMonth() === date.getMonth()
+													? 'по н.в.'
+													: dayjs(exp.experience.endWork, 'DD.MM.YYYY')
+															.toDate()
+															.getMonth() +
+													  1 +
+													  '.' +
+													  dayjs(exp.experience.endWork, 'DD.MM.YYYY')
+															.toDate()
+															.getFullYear()}{' '}
+												{/* {dayjs(exp.experience.endWork, 'DD.MM.YYYY')
+													.toDate()
+													.getFullYear() -
+													dayjs(exp.experience.beginWork, 'DD.MM.YYYY')
+														.toDate()
+														.getFullYear() ===
+												0
+													? ''
+													: dayjs(exp.experience.endWork, 'DD.MM.YYYY')
+															.toDate()
+															.getFullYear() -
+															(dayjs(exp.experience.beginWork, 'DD.MM.YYYY')
+																.toDate()
+																.getFullYear() %
+																10) ===
+													  1
+													? '1 год'
+													: dayjs(exp.experience.endWork, 'DD.MM.YYYY')
+															.toDate()
+															.getFullYear() -
+															(dayjs(exp.experience.beginWork, 'DD.MM.YYYY')
+																.toDate()
+																.getFullYear() %
+																10) <=
+													  4
+													? `${
+															dayjs(exp.experience.endWork, 'DD.MM.YYYY')
+																.toDate()
+																.getFullYear() -
+															dayjs(exp.experience.beginWork, 'DD.MM.YYYY')
+																.toDate()
+																.getFullYear()
+													  } года`
+													: `${
+															dayjs(exp.experience.endWork, 'DD.MM.YYYY')
+																.toDate()
+																.getFullYear() -
+															dayjs(exp.experience.beginWork, 'DD.MM.YYYY')
+																.toDate()
+																.getFullYear()
+													  } лет`} */}
 											</p>
 										</div>
 										<div className="flex gap-[12px]">
@@ -1225,11 +1288,7 @@ export const ResponseForm = () => {
 							requiredMark={false}
 							onFinish={values => {
 								console.log(
-									// values.beginWork.$d.toLocaleDateString().split('.').join('-')
-									values.beginWork.$d.getMonth() +
-										1 +
-										'-' +
-										values.beginWork.$d.getFullYear()
+									values.beginWork.$d.toLocaleDateString().split('.').join('-')
 								)
 								dispatch(
 									addExperience({

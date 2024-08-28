@@ -466,8 +466,8 @@ export const VacancyEditView = () => {
 											responsibilities: responsibilities as string,
 											skills: skills as string,
 											conditions: conditions as string,
-											// category: category as string,
-											// direction: direction as string,
+											category: category as string,
+											direction: direction as string,
 											vacancyId: currentVacancy?.id as number
 										})
 											.unwrap()

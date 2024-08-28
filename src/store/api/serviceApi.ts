@@ -632,7 +632,11 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		editVacancyAsPerDepartment: builder.mutation<
 			void,
-			VacancyRequestType & { vacancyId: number }
+			VacancyRequestType & {
+				vacancyId: number
+				category: string
+				direction: string
+			}
 		>({
 			query: arg => ({
 				url: `http://localhost:8082/employment-api/v1/vacancy`,

@@ -236,7 +236,7 @@ export const VacancyRequestUpdateView = () => {
 								: ''}
 						</p>
 					</div>
-					<div className="flex gap-[40px]">
+					{/* <div className="flex gap-[40px]">
 						<div className="flex flex-col gap-[16px]">
 							<p className="font-content-font font-bold text-black text-[18px]/[21px]">
 								Категория сотрудников
@@ -295,7 +295,7 @@ export const VacancyRequestUpdateView = () => {
 									: ''}
 							</p>
 						</div>
-					</div>
+					</div> */}
 					<div className="flex gap-[20px]">
 						<Button
 							onClick={() => {

@@ -1,4 +1,4 @@
-import { Button, Form, Input, Modal, Select } from 'antd'
+import { Button, Checkbox, Form, Input, Modal, Select } from 'antd'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -36,8 +36,8 @@ export const VacancyRequestCreateView = () => {
 	const [employment, setEmployment] = useState<string | undefined>(undefined)
 	const [salary, setSalary] = useState<string | undefined>(undefined)
 	const [category, setCategory] = useState<string | undefined>(undefined)
-	const [direction, setDirection] = useState<string | undefined>(undefined)
-	const [subdivision, setSubdivision] = useState<string | undefined>(undefined)
+	const [direction, setDirection] = useState<string>('')
+	const [subdivision, setSubdivision] = useState<string>('')
 
 	const [responsibilities, setResponsibilities] = useState<string | undefined>(
 		undefined
@@ -49,6 +49,8 @@ export const VacancyRequestCreateView = () => {
 
 	const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 
+	const [secondOption, setSecondOption] = useState<string | null>(null)
+
 	useEffect(() => {
 		getVacancyRequestView(requestId)
 			.unwrap()
@@ -57,8 +59,6 @@ export const VacancyRequestCreateView = () => {
 				setExperience(req.newData.experience)
 				setEmployment(req.newData.employment)
 				setSalary(req.newData.salary)
-				setCategory(req.newData.category)
-				setDirection(req.newData.direction)
 				setResponsibilities(
 					req.newData.responsibilities
 						.replace(/<strong>/g, '')
@@ -115,7 +115,7 @@ export const VacancyRequestCreateView = () => {
 				bodyStyle={{
 					padding: '26px'
 				}}
-				className="pr-[52px] pl-[52px] pb-[52px]"
+				className="pr-[52px] pl-[52px] pb-[52px] mt-[100px]"
 				footer={null}
 				title={null}
 				width={622}
@@ -126,7 +126,7 @@ export const VacancyRequestCreateView = () => {
 				<Form
 					layout="vertical"
 					requiredMark={false}
-					onFinish={() => {
+					onFinish={values => {
 						isEdited
 							? alterRequest({
 									post: post as string,
@@ -136,13 +136,19 @@ export const VacancyRequestCreateView = () => {
 									responsibilities: responsibilities as string,
 									skills: skills as string,
 									conditions: conditions as string,
-									category: category as string,
-									direction: direction as string,
 									vacancyRequestId: requestId
 							  })
 									.unwrap()
 									.then(() => {
-										acceptRequest(requestId)
+										acceptRequest({
+											data: {
+												category: categoryTitle,
+												direction: direction,
+												subdivision: subdivision,
+												emplDocDefIds: values.formDocs
+											},
+											requestId: requestId
+										})
 											.unwrap()
 											.then(() => {
 												refetch()
@@ -151,7 +157,15 @@ export const VacancyRequestCreateView = () => {
 												)
 											})
 									})
-							: acceptRequest(requestId)
+							: acceptRequest({
+									data: {
+										category: categoryTitle,
+										direction: direction,
+										subdivision: subdivision,
+										emplDocDefIds: values.formDocs
+									},
+									requestId: requestId
+							  })
 									.unwrap()
 									.then(() => {
 										refetch()
@@ -178,15 +192,14 @@ export const VacancyRequestCreateView = () => {
 								label: category.title
 							}))}
 							onChange={(value: string) => {
-								;(() => {
-									setCategoryTitle(value)
-								})()
+								setCategoryTitle(value)
+								setSecondOption(prev => null)
+								console.log('Test?')
 							}}
 							placeholder="Выбрать"
 						/>
 					</Form.Item>
 					<Form.Item
-						name={'direction'}
 						label={
 							<label className="text-black text-[18px]/[18px] font-content-font font-normal opacity-80">
 								{categories.find(cat => cat.title === categoryTitle)?.direction
@@ -209,12 +222,73 @@ export const VacancyRequestCreateView = () => {
 											label: sub.title
 									  }))
 							}
-							value={
+							onChange={value => {
+								setSecondOption(value)
 								categories.find(cat => cat.title === categoryTitle)?.direction
-									? direction
-									: subdivision
-							}
+									? setDirection(value)
+									: setSubdivision(value)
+							}}
+							value={secondOption}
 						></Select>
+					</Form.Item>
+					<Form.Item name={'formDocs'} valuePropName="checked">
+						<Checkbox.Group
+							name="docs"
+							defaultValue={[1, 2, 3]}
+							className="flex flex-col gap-[8px]"
+						>
+							<p className="font-content-font text-black font-bold text-[18px]/[21.6px] opacity-80 mb-[16px]">
+								2 этап. Прикрепление документов
+							</p>
+							<Checkbox
+								value={1}
+								disabled
+								className="font-content-font text-black font-normal text-[16px]/[19.2px]"
+							>
+								Паспорт
+							</Checkbox>
+							<Checkbox
+								value={2}
+								disabled
+								className="font-content-font text-black font-normal text-[16px]/[19.2px]"
+							>
+								ИНН
+							</Checkbox>
+							<Checkbox
+								value={3}
+								disabled
+								className="font-content-font text-black font-normal text-[16px]/[19.2px]"
+							>
+								СНИЛС
+							</Checkbox>
+							<Checkbox
+								value={4}
+								className="font-content-font text-black font-normal text-[16px]/[19.2px]"
+							>
+								Документ об образовании
+							</Checkbox>
+							<Checkbox
+								value={5}
+								className="font-content-font text-black font-normal text-[16px]/[19.2px]"
+							>
+								Трудовая книжка
+							</Checkbox>
+							<p className="font-content-font text-black font-bold text-[18px]/[21.6px] opacity-80 mb-[16px] mt-[24px]">
+								4 этап. Медицинский осмотр
+							</p>
+							<Checkbox
+								value={6}
+								className="font-content-font text-black font-normal text-[16px]/[19.2px]"
+							>
+								Справка
+							</Checkbox>
+							<Checkbox
+								value={7}
+								className="font-content-font text-black font-normal text-[16px]/[19.2px]"
+							>
+								Копия справки
+							</Checkbox>
+						</Checkbox.Group>
 					</Form.Item>
 					<Form.Item>
 						<div style={{ textAlign: 'right', marginTop: 20 }}>
@@ -222,7 +296,7 @@ export const VacancyRequestCreateView = () => {
 								type="primary"
 								className="rounded-[54.5px] w-[121px] ml-auto"
 								htmlType="submit"
-								disabled={categoryTitle === ''}
+								disabled={categoryTitle === '' || secondOption === null}
 							>
 								Опубликовать
 							</Button>
@@ -238,8 +312,6 @@ export const VacancyRequestCreateView = () => {
 						responsibilities: responsibilities,
 						skills: skills,
 						conditions: conditions,
-						category: category,
-						direction: direction,
 						experience: experience,
 						employment: employment
 					}}
@@ -251,8 +323,6 @@ export const VacancyRequestCreateView = () => {
 						setExperience(prev => values.experience)
 						setEmployment(prev => values.employment)
 						setSalary(prev => values.salary)
-						setCategory(prev => values.category)
-						setDirection(prev => values.direction)
 						setResponsibilities(prev => values.responsibilities)
 						setSkills(prev => values.skills)
 						setConditions(prev => values.conditions)
@@ -365,53 +435,6 @@ export const VacancyRequestCreateView = () => {
 							placeholder="Ввести текст..."
 						></Input.TextArea>
 					</Form.Item>
-					<div className="flex gap-[20px] w-full">
-						<Form.Item
-							name={'category'}
-							label={
-								<label className="text-black text-[18px]/[18px] font-content-font font-normal opacity-80">
-									Категория сотрудников
-								</label>
-							}
-							rules={[{ required: true, message: 'Не указана категория' }]}
-						>
-							<Select
-								placeholder="Выбрать"
-								options={categories.map(category => ({
-									value: category.title,
-									label: category.title
-								}))}
-								onChange={e => setCategoryTitle(e)}
-							></Select>
-						</Form.Item>
-						<Form.Item
-							name={'direction'}
-							label={
-								<label className="text-black text-[18px]/[18px] font-content-font font-normal opacity-80">
-									{categories.find(cat => cat.title === categoryTitle)
-										?.direction
-										? 'Профобласть'
-										: 'Подразделение'}
-								</label>
-							}
-							rules={[{ required: true, message: 'Не указана подкатегория' }]}
-						>
-							<Select
-								placeholder="Выбрать"
-								options={
-									categories.find(cat => cat.title === categoryTitle)?.direction
-										? directions.map(dir => ({
-												value: dir.title,
-												label: dir.title
-										  }))
-										: subdivisions.map(sub => ({
-												value: sub.title,
-												label: sub.title
-										  }))
-								}
-							></Select>
-						</Form.Item>
-					</div>
 					<Form.Item>
 						<Button type="primary" htmlType="submit">
 							Сохранить
@@ -487,24 +510,6 @@ export const VacancyRequestCreateView = () => {
 								{conditions !== undefined ? conditions : ''}
 							</p>
 						</div>
-						{/* <div className="flex gap-[40px]">
-							<div className="flex flex-col gap-[16px]">
-								<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-									Категория сотрудников
-								</p>
-								<p className="font-content-font font-normal text-black text-[18px]/[21px]">
-									{category !== undefined ? category : ''}
-								</p>
-							</div>
-							<div className="flex flex-col gap-[16px]">
-								<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-									Профобласть
-								</p>
-								<p className="font-content-font font-normal text-black text-[18px]/[21px]">
-									{direction !== undefined ? direction : ''}
-								</p>
-							</div>
-						</div> */}
 						<div className="flex gap-[20px]">
 							<Button
 								onClick={() => {

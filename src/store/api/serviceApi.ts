@@ -506,7 +506,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 					category: string
 					direction: string
 					subdivision: string
-					empDocDefIds: number[]
+					emplDocDefIds: number[]
 				}
 				requestId: number
 			}

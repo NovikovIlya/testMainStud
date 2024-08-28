@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom'
 import { useAppSelector } from '../../../store'
 import {
 	useAcceptDeleteVacancyRequestMutation,
-	useDenyVacancyRequestMutation,
 	useGetVacancyRequestsQuery
 } from '../../../store/api/serviceApi'
 import ArrowIcon from '../jobSeeker/ArrowIcon'
@@ -16,7 +15,6 @@ export const VacancyRequestDeleteView = () => {
 
 	const navigate = useNavigate()
 	const [acceptRequest] = useAcceptDeleteVacancyRequestMutation()
-	const [denyRequest] = useDenyVacancyRequestMutation()
 
 	const { refetch } = useGetVacancyRequestsQuery('все')
 
@@ -187,36 +185,22 @@ export const VacancyRequestDeleteView = () => {
 							</p>
 						</div>
 					</div>
-					<div className="flex gap-[20px]">
-						<Button
-							onClick={() => {
-								denyRequest(requestId)
-									.unwrap()
-									.then(() => {
-										navigate('/services/personnelaccounting/vacancyrequests')
-									})
-							}}
-							className="w-[151px] font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black bg-inherit"
-						>
-							Отклонить
-						</Button>
-						<Button
-							onClick={() => {
-								acceptRequest(requestId)
-									.unwrap()
-									.then(() => {
-										refetch()
-									})
-									.then(() => {
-										navigate('/services/personnelaccounting/vacancyrequests')
-									})
-							}}
-							type="primary"
-							className="rounded-[54.5px] w-[121px]"
-						>
-							Удалить
-						</Button>
-					</div>
+					<Button
+						onClick={() => {
+							acceptRequest(requestId)
+								.unwrap()
+								.then(() => {
+									refetch()
+								})
+								.then(() => {
+									navigate('/services/personnelaccounting/vacancyrequests')
+								})
+						}}
+						type="primary"
+						className="rounded-[54.5px] w-[121px]"
+					>
+						Удалить
+					</Button>
 				</div>
 			</div>
 		</>

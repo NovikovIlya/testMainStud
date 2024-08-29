@@ -560,6 +560,19 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
+		alterUpdateVacancyRequest: builder.mutation<
+			void,
+			VacancyRequestType & { vacancyRequestId: number }
+		>({
+			query: body => ({
+				url: `http://localhost:8082/employment-api/v1/management/vacancy-requests/for-update`,
+				method: 'PATCH',
+				body: body,
+				headers: {
+					Authorization: `Bearer ${personnelDeparmentToken}`
+				}
+			})
+		}),
 		sendRespondToArchive: builder.mutation<
 			VacancyRespondItemType,
 			{ id: number; role: string }
@@ -745,5 +758,6 @@ export const {
 	useLazyGetVacancyPreviewBySubdivisionQuery,
 	useAcceptUpdateVacancyRequestMutation,
 	useAcceptDeleteVacancyRequestMutation,
-	useDeleteReserveRespondMutation
+	useDeleteReserveRespondMutation,
+	useAlterUpdateVacancyRequestMutation
 } = serviceApi

@@ -1158,7 +1158,17 @@ export const ResponseForm = () => {
 											<p className="font-content-font text-black text-[14px]/[14px] font-normal select-none opacity-60">
 												{dayjs(exp.experience.beginWork, 'DD.MM.YYYY')
 													.toDate()
-													.getMonth() + 1}
+													.getMonth() +
+													1 <
+												10
+													? '0' +
+													  (dayjs(exp.experience.beginWork, 'DD.MM.YYYY')
+															.toDate()
+															.getMonth() +
+															1)
+													: dayjs(exp.experience.beginWork, 'DD.MM.YYYY')
+															.toDate()
+															.getMonth() + 1}
 												.
 												{dayjs(exp.experience.beginWork, 'DD.MM.YYYY')
 													.toDate()
@@ -1170,7 +1180,7 @@ export const ResponseForm = () => {
 												dayjs(exp.experience.endWork, 'DD.MM.YYYY')
 													.toDate()
 													.getMonth() === date.getMonth()
-													? 'по н.в.'
+													? 'по наст.время'
 													: dayjs(exp.experience.endWork, 'DD.MM.YYYY')
 															.toDate()
 															.getMonth() +

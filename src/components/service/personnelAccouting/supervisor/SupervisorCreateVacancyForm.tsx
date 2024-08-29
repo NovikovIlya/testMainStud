@@ -1,5 +1,6 @@
 import { Button, ConfigProvider, Form, Input, Modal, Select } from 'antd'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import {
 	useGetCategoriesQuery,
@@ -18,6 +19,8 @@ export const SupervisorCreateVacancyForm = () => {
 
 	const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
 
+	const navigate = useNavigate()
+
 	return (
 		<>
 			<ConfigProvider
@@ -33,6 +36,7 @@ export const SupervisorCreateVacancyForm = () => {
 					open={isSuccessModalOpen}
 					onCancel={() => {
 						setIsSuccessModalOpen(false)
+						navigate('/services/personnelaccounting/supervisor/vacancies')
 					}}
 					title={null}
 					footer={null}
@@ -48,6 +52,7 @@ export const SupervisorCreateVacancyForm = () => {
 							type="primary"
 							onClick={() => {
 								setIsSuccessModalOpen(false)
+								navigate('/services/personnelaccounting/supervisor/vacancies')
 							}}
 						>
 							ОК
@@ -55,14 +60,14 @@ export const SupervisorCreateVacancyForm = () => {
 					</div>
 				</Modal>
 			</ConfigProvider>
-			<div className="pl-[54px] pr-[54px] pt-[120px] w-full bg-content-gray">
+			<div className="pl-[54px] pr-[54px] pb-[52px] pt-[120px] w-full bg-content-gray">
 				<h1 className="font-content-font font-normal text-[28px]/[28px] text-black">
 					Создать вакансию
 				</h1>
 				<Form
 					layout="vertical"
 					requiredMark={false}
-					className="w-[50%] mt-[52px]"
+					className="w-[52%] mt-[52px]"
 					onFinish={values => {
 						requestCreateVacancy(values)
 							.unwrap()

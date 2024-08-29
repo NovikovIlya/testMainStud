@@ -90,7 +90,10 @@ export const VacancyRequestDeleteView = () => {
 
 	return (
 		<>
-			<div id="wrapper" className="pl-[54px] pr-[54px] pt-[60px] w-full">
+			<div
+				id="wrapper"
+				className="pl-[54px] pr-[54px] pt-[120px] pb-[52px] w-full"
+			>
 				<div className="flex">
 					<button
 						onClick={() => {

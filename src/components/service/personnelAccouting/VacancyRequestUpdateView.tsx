@@ -116,7 +116,7 @@ export const VacancyRequestUpdateView = () => {
 					}}
 					layout="vertical"
 					requiredMark={false}
-					className="w-[50%] mt-[112px] ml-[52px]"
+					className="w-[50%] mt-[112px] ml-[52px] pb-[52px]"
 					onFinish={values => {
 						setPost(prev => values.post)
 						setExperience(prev => values.experience)

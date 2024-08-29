@@ -66,12 +66,14 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 								})
 						}}
 					>
-						<div className="flex items-center gap-[40px]">
+						<div className="flex items-center">
 							<div>
 								<p className="font-bold">Отклик на вакансию</p>
 								<p>{vacancyTitle}</p>
 							</div>
-							<ArrowToTheRight />
+							<div className="ml-auto">
+								<ArrowToTheRight />
+							</div>
 						</div>
 						<div className="h-[1px] bg-black bg-opacity-[24%] mt-[16px]"></div>
 					</div>

@@ -11,7 +11,6 @@ import {
 	Exam,
 	ICalendar,
 	IPerformance,
-	InterviewRequestType,
 	ResponceType,
 	RespondItemType,
 	Template,
@@ -23,6 +22,12 @@ import {
 	VacancyRequestViewType,
 	VacancyRespondItemType,
 	VacancyViewResponceType,
+	InterviewRequestType,
+	InterviewItemType,
+	InterviewViewResponseType,
+	SeekerStatusChangeType,
+	ReserveTimeRequestType,
+	EmploymentRequestType,
 	respondStatus
 } from '../reducers/type'
 
@@ -685,6 +690,62 @@ export const serviceApi = apiSlice.injectEndpoints({
 				method: 'DELETE',
 				headers: {
 					Authorization: `Bearer ${personnelDeparmentToken}`
+					}
+			})
+		}),
+		getSupervisorInterview: builder.query<InterviewItemType[], void>({
+			query: arg => ({
+				url: `http://localhost:8082/employment-api/v1/interview`,
+				method: 'GET',
+				body: arg,
+				headers: {
+					Authorization: `Bearer ${supervisorToken}`
+				}
+			})
+		}),
+		getInterviewView: builder.query<InterviewViewResponseType, number>({
+			query: id => ({
+				url: `http://localhost:8082/employment-api/v1/interview`,
+				method: 'GET',
+				headers: {
+					Authorization: `Bearer ${supervisorToken}`
+				}
+			})
+		}),
+		employeeSeekerRequest: builder.mutation<void, SeekerStatusChangeType & {respondId: number}>( {
+			query: arg  => ({
+				url: `http://localhost:8082/employment-api/v1/respond/${arg.respondId}/status/employ`,
+				method: 'PUT',
+				body: {
+					rejectionReason: arg.rejectionReason,
+					action :  arg.action
+				},
+				headers: {
+					Authorization: `Bearer ${supervisorToken}`
+				}
+			})
+		}),
+		answerToInvitationReserveTimeRequest: builder.mutation<void, ReserveTimeRequestType & {respondId: number}> ( {
+			query: arg => ({
+				url: `http://localhost:8082/employment-api/v1/respond/${arg.respondId}/chat/butttons/interview/reserve-time`,
+				method: 'POST',
+				body: {
+					time: arg.time
+				},
+				headers: {
+					Authorization: `Bearer ${supervisorToken}`
+				}
+			})
+		}),
+		answerEmploymentRequest: builder.mutation<void, EmploymentRequestType & {respondId: number}> ( {
+			query: arg => ({
+				url: `http://localhost:8082/employment-api/v1/respond/${arg.respondId}/chat/buttons/employment-request`,
+				method: 'POST',
+				body: {
+					answer: arg.answer
+				},
+				headers: {
+					Authorization: `Bearer ${supervisorToken}`
 				}
 			})
 		})
@@ -759,5 +820,10 @@ export const {
 	useAcceptUpdateVacancyRequestMutation,
 	useAcceptDeleteVacancyRequestMutation,
 	useDeleteReserveRespondMutation,
-	useAlterUpdateVacancyRequestMutation
+	useAlterUpdateVacancyRequestMutation,
+	useGetSupervisorInterviewQuery,
+	useLazyGetInterviewViewQuery,
+	useEmployeeSeekerRequestMutation,
+	useAnswerToInvitationReserveTimeRequestMutation,
+	useAnswerEmploymentRequestMutation
 } = serviceApi

@@ -7,7 +7,7 @@ import {
 	useGetDirectionsQuery,
 	useGetSubdivisionsQuery,
 	useRequestCreateVacancyMutation
-} from '../../../../store/api/serviceApi'
+} from '../../../../../store/api/serviceApi'
 
 export const SupervisorCreateVacancyForm = () => {
 	const { data: categories = [] } = useGetCategoriesQuery()

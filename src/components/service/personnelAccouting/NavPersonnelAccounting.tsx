@@ -23,12 +23,13 @@ import { VacancyRequestUpdateView } from './VacancyRequestUpdateView'
 import { VacancyRequestsPage } from './VacancyRequestsPage'
 import { VacancyResponces } from './VacancyResponces'
 import { RespondsSupervisor } from './supervisor/RespondsSupervisor'
-import { SupervisorCreateVacancyForm } from './supervisor/SupervisorCreateVacancyForm'
-import { SupervisorUpdateVacancy } from './supervisor/SupervisorUpdateVacancy'
-import { SupervisorVacancies } from './supervisor/SupervisorVacancies'
-import { SupervisorInvitationAll } from './supervisor/SupervisorInvitationAll'
-import { SupervisorInvitationCreate } from './supervisor/SupervisorInvitationCreate'
+import { SupervisorCreateVacancyForm } from './supervisor/vacancy/SupervisorCreateVacancyForm'
+import { SupervisorUpdateVacancy } from './supervisor/vacancy/SupervisorUpdateVacancy'
+import { SupervisorVacancies } from './supervisor/vacancy/SupervisorVacancies'
+import { SupervisorInterviews } from './supervisor/Interview/SupervisorInterviews'
+import { SupervisorInterviewCreate } from './supervisor/Interview/SupervisorInterviewCreate'
 import {Header} from "../../layout/Header";
+import { SupervisorInterviewSeekerInfo } from './supervisor/Interview/SupervisorInterviewSeekerInfo'
 
 export const NavPesonnelAccounting = () => {
 	const { pathname } = useLocation()
@@ -466,11 +467,15 @@ export const NavPesonnelAccounting = () => {
 					)}
 				{pathname ===
 					'/services/personnelaccounting/supervisor/invitation' && (
-						<SupervisorInvitationAll/>
+						<SupervisorInterviews/>
 				)}
 				{pathname ===
 					'/services/personnelaccounting/supervisor/scheduleinvitation' && (
-						<SupervisorInvitationCreate/>
+						<SupervisorInterviewCreate/>
+					)}
+				{pathname ===
+					'/services/personnelaccounting/supervisor/invitation/seekerinfo' && (
+						<SupervisorInterviewSeekerInfo status="ENDED"/>
 					)}
 			</div>
 		</>

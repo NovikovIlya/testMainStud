@@ -1,4 +1,4 @@
-import { useGetSupervisorVacancyQuery } from '../../../../store/api/serviceApi'
+import { useGetSupervisorVacancyQuery } from '../../../../../store/api/serviceApi'
 
 import SupervisorVacancyItem from './SupervisorVacancyItem'
 

@@ -157,6 +157,60 @@ export type VacancyViewResponceType = {
 	}
 }
 
+export type InterviewViewResponseType = {
+	id: number
+	responseDate: string
+	vacancyId: number
+	vacancyName: string
+	status: string
+	userData: {
+		id: {
+			id: number,
+			type: string
+		},
+		firstname: string
+		lastname: string
+		middlename: string
+		email: string
+		sex: string
+		desiredJob: string
+		countryId: number
+		birthday: string
+		phone: string
+	}
+	respondData: {
+		vacancyId: number
+		portfolio: {
+			url: string,
+			workExperiences: [
+				{
+					workPlace: string
+					position: string
+					beginWork: string
+					endWork: string
+					duties: string
+				}
+			]
+		}
+		skills: {
+			keySkills: [
+				string
+			],
+			aboutMe: string
+		},
+		coverLetter: string
+	},
+	educations: [
+		{
+			educationLevel: string
+			country: string
+			endYear: string
+			speciality: string
+			nameOfInstitute: string
+		}
+	]
+}
+
 export enum respondStatus {
 	'IN_REVIEW',
 	'IN_SUPERVISOR_REVIEW',
@@ -230,13 +284,23 @@ export type VacancyRespondItemType = {
 	recipient: string
 	desiredJob: string
 	type: 'DIRECTLY' | 'RESERVE'
+	url: string
 	userData: null | {
 		firstname: string
 		lastname: String
 		middlename: string
+		sex: string
+		age: number
 		email: string
 		phone: string
+		country: string
+		bday: string
 	}
+	meetingData: {
+		url: string
+		date: string
+		time: string
+}
 	respondData: {
 		coverLetter: string
 		portfolio: {
@@ -270,6 +334,9 @@ export type ChatMessageType = {
 		| 'IN_SUPERVISOR_REVIEW'
 		| 'INVITATION'
 		| 'REJECTED'
+		| 'EMPLOYMENT_REQUEST'
+		| 'INVITATION_RESERVE'
+	reserveTimes: string[]
 	fileInfos: { id: number; name: string }[] | null
 }
 
@@ -322,4 +389,30 @@ export type InterviewRequestType = {
 	respondId: number
 	date: string
 	format: string
+}
+
+export type InterviewItemType = {
+	id: number,
+	respondId: number,
+	seeker: {
+		firstName: string
+		middleName: string
+		lastName: string
+	},
+	format: 'OFFLINE' | 'ONLINE'
+	time: string
+	post: string
+}
+
+export type SeekerStatusChangeType = {
+	rejectionReason: string,
+	action : 'EMPLOY' | 'UNEMPLOY'
+}
+
+export type ReserveTimeRequestType = {
+	time: string
+}
+
+export type EmploymentRequestType = {
+	answer: 'YES' | 'NO'
 }

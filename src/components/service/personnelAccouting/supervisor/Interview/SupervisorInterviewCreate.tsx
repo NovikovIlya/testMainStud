@@ -1,10 +1,12 @@
 import React, {useState} from 'react';
 import {Button, Form, Select, DatePicker, TimePicker, Modal, ConfigProvider} from "antd"
 import {useGetSupervisorVacancyQuery,
-        useRequestCreateInterviewMutation
-} from "../../../../store/api/serviceApi";
+        useRequestCreateInterviewMutation,
+        useLazyGetResponcesByVacancyQuery,
+        useLazyGetVacancyGroupedResponcesQuery
+} from "../../../../../store/api/serviceApi";
 
-export const SupervisorInvitationCreate = () => {
+export const SupervisorInterviewCreate = () => {
 
     const [requestCreateInterview] = useRequestCreateInterviewMutation()
 
@@ -14,6 +16,8 @@ export const SupervisorInvitationCreate = () => {
 
     const [isUnsuccessModalOpen, setIsUnsuccessModalOpen] = useState(false)
 
+    const [getGroupedResponds] = useLazyGetVacancyGroupedResponcesQuery()
+    const [getResponds] = useLazyGetResponcesByVacancyQuery()
 
     return (
         <>
@@ -62,7 +66,7 @@ export const SupervisorInvitationCreate = () => {
                     width={407}
                 >
                     <p className="font-content-font font-normal text-black text-[16px]/[20px] text-center">
-                        Произошла ошибка. Нет ответа от сервера.
+                        Произошла ошибка или нет ответа от сервера.
                     </p>
                     <div className="mt-[40px] flex gap-[12px]">
                         <Button
@@ -85,7 +89,11 @@ export const SupervisorInvitationCreate = () => {
                     layout="vertical"
                     requiredMark={false}
                     onFinish={values => {
-                        requestCreateInterview(values)
+                        requestCreateInterview({
+                            date: values.date,
+                            format: values.format,
+                            respondId: 1
+                        })
                             .unwrap()
                             .then(() => {
                                 setIsSuccessModalOpen(true);
@@ -96,9 +104,9 @@ export const SupervisorInvitationCreate = () => {
                     }}
                 >
                     <Form.Item
-                        name={'seeker'}
+                        name={'seeker_name'}
                         label={
-                            <label className="text-black text-[18px]/[18px] font-content-font font-normal">
+                            <label className="text-black opacity-[80%] text-[18px]/[18px] font-content-font font-normal">
                                 Соискатель
                             </label>
                         }
@@ -107,16 +115,16 @@ export const SupervisorInvitationCreate = () => {
                         <Select
                             placeholder="Иванов Иван Иванович"
                             options={[
-                                {value: '0', label: 'Воронов Евгений Петрович'},
-                                {value: '1', label: 'Воронов Евгений Петрович'},
-                                {value: '2', label: 'Воронов Евгений Петрович'}
+                                {value: '1', label: 'Илья Митрофанов'},
+                                {value: '2', label: 'Воронов Евгений Петрович'},
+                                {value: '3', label: 'Воронов Евгений Петрович'}
                             ]}
                         ></Select>
                     </Form.Item>
                     <Form.Item
                         name={'post'}
                         label={
-                            <label className="text-black text-[18px]/[18px] font-content-font font-normal">
+                            <label className="text-black opacity-[80%] text-[18px]/[18px] font-content-font font-normal">
                                 Должность
                             </label>
                         }
@@ -125,49 +133,46 @@ export const SupervisorInvitationCreate = () => {
                         <Select
                             placeholder="Специалист по связям с общественностью"
                             options={[
-                                {value: '0', label: 'Специалист по связям с общественностью'},
-                                {value: '1', label: 'Специалист по связям с общественностью'},
-                                {value: '2', label: 'Специалист по связям с общественностью'}
+                                {value: '1', label: 'Повар'},
+                                {value: '2', label: 'Специалист по связям с общественностью'},
+                                {value: '3', label: 'Специалист по связям с общественностью'}
                             ]}
                         ></Select>
                     </Form.Item>
-                    <div className="flex flex-row w-full">
+                    <div className="flex flex-row w-full gap-[20px]">
                         <Form.Item
                             className="w-6/12"
                             name={'date'}
                             label={
-                                <label className="text-black text-[18px]/[18px] font-content-font font-normal">
+                                <label className="opacity-[80%] text-black text-[18px]/[18px] font-content-font font-normal">
                                     Дата
                                 </label>
                             }
                             rules={[{required: true, message: 'Не указаны дата и время'}]}
                         >
                             <DatePicker
+                              format={'DD.MM.YYYY, h:mm'}
+                              showTime={{
+                                minuteStep: 15,
+                                disabledHours: () => {
+                                  return [0, 1, 2, 3, 4, 5, 6, 7, 20, 21, 22, 23]
+                                },
+                                hideDisabledOptions: true
+                              }}
+                              className="w-full"
+                              onChange={(e, dateString) => {
+                                console.log(e)
+                                console.log(dateString)
+                              }}
                                 placeholder="Выбрать">
 
                             </DatePicker>
                         </Form.Item>
                         <Form.Item
                             className="w-6/12"
-                            name={'date'}
+                            name={'format'}
                             label={
-                                <label className="text-black text-[18px]/[18px] font-content-font font-normal">
-                                    Время
-                                </label>
-                            }
-                            rules={[{required: true, message: 'Не указаны дата и время'}]}
-                        >
-                            <TimePicker
-                                placeholder="Выбрать">
-
-                            </TimePicker>
-                        </Form.Item>
-
-                        <Form.Item
-                            className="w-6/12"
-                            name={'type'}
-                            label={
-                                <label className="text-black text-[18px]/[18px] font-content-font font-normal">
+                                <label className="opacity-[80%] text-black text-[18px]/[18px] font-content-font font-normal">
                                     Формат
                                 </label>
                             }
@@ -176,22 +181,21 @@ export const SupervisorInvitationCreate = () => {
                             <Select
                                 placeholder="-"
                                 options={[
-                                    {value: '0', label: 'Оффлайн'},
-                                    {value: '1', label: 'Онлайн'},
+                                    {value: 'ONLINE', label: 'Оффлайн'},
+                                    {value: 'OFFLINE', label: 'Онлайн'},
                                 ]}
                             ></Select>
                         </Form.Item>
                     </div>
-                    <Form.Item>
-                        <Button
-                            type="primary"
-                            className="rounded-[54.5px] w-[121px]"
-                            htmlType="submit">
-                            Отправить
-                        </Button>
-                    </Form.Item>
+                  <Form.Item>
+                    <Button
+                      type="primary"
+                      className="rounded-[30px] w-[121px]"
+                      htmlType="submit">
+                      Создать
+                    </Button>
+                  </Form.Item>
                 </Form>
-
             </div>
         </>
     );

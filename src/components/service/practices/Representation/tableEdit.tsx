@@ -248,8 +248,8 @@ export const TableEdit = ({ visiting, fullTable, setFullTable, create=false }: a
 				components={components}
 				rowClassName={() => 'editable-row'}
 				bordered
-				pagination={fullTable?.length < 5 ? false : {
-					pageSize: 5,
+				pagination={{
+					pageSize: 10,
 				}}
 				dataSource={fullTable}
 				columns={columns as ColumnTypes}

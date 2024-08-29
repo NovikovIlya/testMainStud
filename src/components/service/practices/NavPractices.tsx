@@ -79,7 +79,7 @@ export const NavPractices = () => {
 		<>
 			<Header type={"service"} service={t("Practices")}/>
 			<Menu
-				defaultOpenKeys={['sub1']}
+				defaultOpenKeys={['sub1','sub2']}
 				selectedKeys={[current]}
 				defaultActiveFirst
 				mode="inline"

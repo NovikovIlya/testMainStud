@@ -20,12 +20,6 @@ import { LoadingOutlined } from '@ant-design/icons'
 import { findSubdivisions } from '../../../../utils/findSubdivisions'
 
 
-const visitingOptions = [
-	{ value: 'Все', label: 'Все' },
-	{ value: 'Да', label: 'Да' },
-	{ value: 'Нет', label: 'Нет' },
-]
-
 const courseNumberOptions = [
 	{ value: 'Все', label: 'Все' },
 	{ value: '1', label: '1' },
@@ -60,7 +54,7 @@ export const ViewAppendix = () => {
 	const {data:dataSubmissionKind} = useGetSubmissionsPracticeKindQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
 	const {data:dataSubmissionDirector} = useGetSubmissionsDirectorQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
 	const {data:dataSubmissionAcademicYear} = useGetSubmissionsAcademicYearQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
-	const {data:dataAppendix,isSuccess:isSuccessAppendix} = useGetAllApplicationsQuery({subdivisionId:selectSubdivisionId,page:currentPage - 1,size :'5'},{skip:!selectSubdivisionId || !currentPage})
+	const {data:dataAppendix,isSuccess:isSuccessAppendix,isFetching:isFetchingAppend} = useGetAllApplicationsQuery({subdivisionId:selectSubdivisionId,page:currentPage - 1,size :'5'},{skip:!selectSubdivisionId || !currentPage})
 	const [flag,setFlag] = useState(false)
 	const [dataTable, setDataTable] = useState<any>([])
 
@@ -83,12 +77,13 @@ export const ViewAppendix = () => {
 		})
 	},[selectSubdivisionId])
 
-	
+	console.log('dataAppendix',dataAppendix)
+	console.log('dataTable',dataTable)
 	useEffect(() => {
-		if (isSuccessAppendix) {
-			setDataTable(filterDataFull())	
-		}
-	}, [filter,isSuccessAppendix])
+		
+		setDataTable(dataAppendix?.length > 0 ? dataAppendix : [])
+	
+	}, [dataAppendix, filter.subdivision])
 	
 
 	function filterDataFull() {
@@ -488,7 +483,7 @@ export const ViewAppendix = () => {
 
 			<Row className="mt-4">
 				<Col flex={'auto'}>
-				{isLoading ? <Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}/> :
+				{isFetchingAppend ? <Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}/> :
 					<Table
 						onRow={(record) => ({
 							onClick: () => handleRowClick(record),
@@ -497,10 +492,10 @@ export const ViewAppendix = () => {
 						rowKey="id"
 						// @ts-ignore
 						columns={columns}
-						dataSource={filter?.subdivision !== 'Все' ? flag ? dataTable : [] : []}
-						pagination={dataTable.length > 5 && {
+						dataSource={filter?.subdivision !== 'Все'  ? dataTable : []}
+						pagination={dataTable.length > 10 && {
 							current: currentPage,
-							pageSize: 5,
+							pageSize: 10,
 							total: dataAppendix?.length,
 							onChange: (page) => setCurrentPage(page),
 						  }}

@@ -193,6 +193,17 @@ export const representationService = apiSlice.injectEndpoints({
             providesTags: ['Application'],
             keepUnusedDataFor:1,
         }),
+        getAllOrderAgree: builder.query<any, any>({
+            query: ({subdivisionId ,page ,size } ) => {
+                return {
+                    url: `services/api-practices/orders/agreed/by-page?subdivisionId=${subdivisionId}&page=${page}&size=${size}`,
+                    method: 'GET',
+                   
+                }
+            },
+            providesTags: ['Application'],
+            keepUnusedDataFor:1,
+        }),
         addApplication: builder.mutation<any, any>({
             query: (body) => {
                 return {
@@ -227,6 +238,25 @@ export const representationService = apiSlice.injectEndpoints({
           
             keepUnusedDataFor:1,
         }),
+        deleteApplication: builder.mutation<any, any>({
+            query: (id) => {
+                return {
+                    url: `/services/api-practices/application-four?applicationId=${id}`,
+                    method: 'DELETE',
+                }
+            },
+            invalidatesTags: ['Submissions','Application']
+        }),
+        editApplication: builder.mutation<any, any>({
+            query: ({id,body}) => {
+                return {
+                    url: `/services/api-practices/application-four?applicationId=${id}`,
+                    method: 'PUT',
+                    body:body
+                }
+            },
+            invalidatesTags: ['Submissions','Application'],  
+        }),
 
         
     })
@@ -255,5 +285,8 @@ export const {
     useGetAllApplicationsQuery,
     useAddApplicationMutation,
     useGetOneApplicationQuery,
-    useGetDocApplicationQuery
+    useGetDocApplicationQuery,
+    useDeleteApplicationMutation,
+    useEditApplicationMutation,
+    useGetAllOrderAgreeQuery
 } = representationService

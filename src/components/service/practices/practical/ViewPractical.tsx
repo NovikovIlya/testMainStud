@@ -18,12 +18,15 @@ import { useNavigate } from 'react-router-dom'
 import { EditSvg } from '../../../../assets/svg/EditSvg'
 import { PointsSvg } from '../../../../assets/svg/PointsSvg'
 import {
+	useGetCafedraNewQuery,
 	useGetDepartmentsQuery,
 	useGetGroupNumberQuery,
+	useGetGroupNumbersNewQuery,
 	useGetPracticeKindQuery,
 	useGetPracticeTypeForPracticeQuery,
 	useGetPracticeTypeQuery,
 	useGetPracticesAllQuery,
+	useGetPractiseSubdevisionNewQuery,
 	useGetSubdivisionForPracticeQuery
 } from '../../../../store/api/practiceApi/individualTask'
 import { useGetCafDepartmentsQuery } from '../../../../store/api/practiceApi/practical'
@@ -105,9 +108,7 @@ export const ViewPractical = () => {
 	const [pickSpeciality,setPickSpeciality] = useState(null)
 	const [subDevisionId, setSubDevisionId] = useState(null)
 	const [objType, setObjType] = useState<any>({subdivisionId: null,specialtyNameId: null})
-	const [selectedFieldsFull, setSelectedFieldFull] = useState<TablePractical[]>(
-		[]
-	)
+	const [selectedFieldsFull, setSelectedFieldFull] = useState<TablePractical[]>([])
 	const [departments, setDepartments] = useState<any[]>()
 	const [filter, setFilter] = useState({
 		nameSpecialty: 'Все',
@@ -119,26 +120,18 @@ export const ViewPractical = () => {
 		dateFilling: 'По дате (сначала новые)',
 		groupNumber: 'Все'
 	})
-	const {
-		data: dataPractiseAll,
-		isSuccess: isSuccessPractiseAll,
-		isFetching: isFetchingPractiseAll
-	} = useGetPracticesAllQuery(null, {
-		refetchOnFocus: true
-	})
+	const {data: dataPractiseAll,isSuccess: isSuccessPractiseAll,isFetching: isFetchingPractiseAll} = useGetPracticesAllQuery(null, {refetchOnFocus: true})
+	const {data:dataSubdevisionPracticeNew} = useGetPractiseSubdevisionNewQuery()
 	const [tableData, setTableData] = useState<TablePractical[]>(dataPractiseAll)
 	const tokenAccess = localStorage.getItem('access')!.replaceAll('"', '')
 	const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
 	const { data: dataDepartments, isSuccess: isSuccessDepartments } = useGetSubdivisionForPracticeQuery()
 	const { data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty } = useGetSpecialtyNamesForPractiseQuery(subDevisionId, {skip:!subDevisionId})
-	const { data: dataDep, isSuccess: isSuccessDep } = useGetCafDepartmentsQuery(
-		subDevisionId,
-		{ skip: !subDevisionId }
-	)
-	const { data: dataPracticeType, isSuccess: isSuccessPracticeType } = useGetPracticeTypeForPracticeQuery(objType, {
-		skip: objType.subDivisionId === null || objType.specialtyNameId === null
-	})
+	const { data: dataDep, isSuccess: isSuccessDep } = useGetCafDepartmentsQuery(subDevisionId,{ skip: !subDevisionId })
+	const { data: dataPracticeType, isSuccess: isSuccessPracticeType } = useGetPracticeTypeForPracticeQuery(objType, {skip: objType.subDivisionId === null || objType.specialtyNameId === null})
 	const {data:dataGroupNumber} = useGetGroupNumberQuery(subDevisionId, {skip:!subDevisionId})
+	const {data:dataGroupNumberNew} = useGetGroupNumbersNewQuery(subDevisionId,{ skip: !subDevisionId })
+	const {data:dataGetCafedraNew} = useGetCafedraNewQuery(subDevisionId,{ skip: !subDevisionId })
 
 	const optionsSortDate: any = [
         {value: 'По дате (сначала новые)', label: 'По дате (сначала новые)'},
@@ -312,7 +305,7 @@ export const ViewPractical = () => {
 			name: 'Подразделение',
 			className: 'text-xs !p-2 mobileFirst',
 			width: '20%',
-			height: '50px',
+			
 			responsive: ['xs'],
 		},
 		{
@@ -566,7 +559,6 @@ export const ViewPractical = () => {
 		form.setFieldValue('semester', '')
 	}
 
-	
 
 	const optionsCourseValid = (() => {
 		switch (pickCourse) {
@@ -644,15 +636,33 @@ export const ViewPractical = () => {
 							className="w-full "
 							options={[
 								{ key: 2244612, value: 'Все', label: 'Все' },
-								...(departments
-									? departments.map(item => ({
+								...(dataSubdevisionPracticeNew
+									? processingOfDivisions(dataSubdevisionPracticeNew).map((item:any) => ({
 											key: item.id,
 											value: item.value,
 											label: item.label
 									  }))
 									: [])
 							]}
-							onChange={handleChange}
+							onChange={(value)=>{
+								handleChange(value)
+								setFilter({
+									...filter,
+									subdivision : value,
+									nameSpecialty:'Все',
+									course:'Все',
+									semester:'Все',
+									practiceType:'Все',
+									department:'Все',
+									groupNumber:'Все',
+								})
+								form.setFieldValue('nameSpecialty','Все')
+								form.setFieldValue('course','Все')
+								form.setFieldValue('semester','Все')
+								form.setFieldValue('practiceType','Все')
+								form.setFieldValue('department','Все')
+								form.setFieldValue('groupNumber','Все')
+							}}
 							// defaultValue="Все"
 						/>
 						</Form.Item>
@@ -677,8 +687,12 @@ export const ViewPractical = () => {
 						<span>Наименование специальности</span>
 					</Col>
 					<Col span={8} className='overWrite'>
+					<Form.Item
+						name={'nameSpecialty'}
+						className='mb-[-4px]'
+					>
 						<Select
-							disabled={!isSuccessDep}
+							disabled={filter.subdivision==='Все'}
 							popupMatchSelectWidth={false}
 							defaultValue="Все"
 							className="w-full"
@@ -700,6 +714,7 @@ export const ViewPractical = () => {
 								})
 							}}
 						/>
+						</Form.Item>
 					</Col>
 	
 				</Row>
@@ -708,6 +723,7 @@ export const ViewPractical = () => {
 						<span>Кафедра</span>
 					</Col>
 					<Col span={8} className='overWrite'>
+					<Form.Item name={'department'} className='mb-[-4px]'>
 						<Select
 							// rowKey="id"
 							disabled={!isSuccessDep}
@@ -716,8 +732,8 @@ export const ViewPractical = () => {
 							className="w-full"
 							options={[
 								{ key: 0, value: 'Все', label: 'Все' },
-								...(dataDep
-									? dataDep.map(item => ({
+								...(dataGetCafedraNew
+									? dataGetCafedraNew.map(item => ({
 											key: item.id,
 											value: item.value,
 											label: item.label
@@ -731,6 +747,7 @@ export const ViewPractical = () => {
 								})
 							}}
 						/>
+						</Form.Item>
 					</Col>
 				</Row>
 
@@ -739,16 +756,17 @@ export const ViewPractical = () => {
 						<span>Номер группы</span>
 					</Col>
 					<Col span={8} className='overWrite'>
+					<Form.Item name={'groupNumber'} className='mb-[-4px]'>
 						<Select
 
-							disabled={!isSuccessDep}
+							disabled={filter.nameSpecialty==='Все'}
 							popupMatchSelectWidth={false}
 							defaultValue="Все"
 							className="w-full"
 							options={[
 								{ key: 0, value: 'Все', label: 'Все' },
-								...(dataGroupNumber
-									? dataGroupNumber.map(item => ({
+								...(dataGroupNumberNew
+									? dataGroupNumberNew.map(item => ({
 											key: item.id,
 											value: item.value,
 											label: item.label
@@ -762,31 +780,38 @@ export const ViewPractical = () => {
 								})
 							}}
 						/>
+						</Form.Item>
 					</Col>
 				</Row>
 
-				<Row gutter={[16, 16]} className="mt-4 overWrite">
-					<Col span={3} className={'flex items-center gap-4 overWrite'}>
-						<span>Курс</span>
-						<Select
-							popupMatchSelectWidth={false}
-							defaultValue="Все"
-							className="w-full"
-							options={filterCourse}
-							onChange={value => {
-								handleCourse(value)
-								setFilter({
-									...filter,
-									course: value
-								})
-							}}
-						/>
-					</Col>
-					<Col span={3} className={'flex items-center gap-4 overWrite'}>
-						<span>Семестр</span>
+				<Row gutter={[16, 16]} className="mt-4 overWrite items-center ">
+					<Col span={4} className='flex items-center'>
+						<span className='w-12'>Курс</span>
+				
 					
+						<Form.Item name={'course'} className='mb-[-4px] w-full'>
+							<Select
+								popupMatchSelectWidth={false}
+								defaultValue="Все"
+								className="w-full"
+								options={filterCourse}
+								onChange={value => {
+									handleCourse(value)
+									setFilter({
+										...filter,
+										course: value
+									})
+								}}
+							/>
+						</Form.Item>
+					</Col>
+					
+					<Col span={4} className='flex items-center'>
+						<span className='w-20'>Семестр</span>
+			
+						
 						<Form.Item
-							className='w-full'
+							className='mb-[-4px] w-full items-center'
 							style={{marginBottom:'0'}}
 							//rules={[{required: true}]}
 							name={'semester'}	
@@ -806,15 +831,18 @@ export const ViewPractical = () => {
 								options={optionsCourseValid}
 							/>
 						</Form.Item>
-						
 					</Col>
-					<Col span={7} className={'flex items-center gap-2 overWrite'}>
-						<span className="whitespace-nowrap">Тип практики</span>
+
+					<Col span={5} className='flex items-center'>
+						<span className='w-40'>Тип практики</span>
+				
+			
+						<Form.Item name={'practiceType'} className='mb-[-4px] w-full items-center'>
 						<Select
 							disabled={!pickSpeciality}
 							popupMatchSelectWidth={false}
 							defaultValue="Все"
-							className="w-full"
+							className=""
 							options={[
 								{ key: 0, value: 'Все', label: 'Все' },
 								...(dataPracticeType
@@ -832,6 +860,7 @@ export const ViewPractical = () => {
 								})
 							}}
 						/>
+						</Form.Item>
 					</Col>
 				</Row>
 				
@@ -912,8 +941,10 @@ export const ViewPractical = () => {
 					// @ts-ignore
 					columns={columnsCompressed}
 					dataSource={tableData ? tableData : []}
-					pagination={false}
-					className="my-10"
+					pagination={tableData && tableData?.length<10?false:{
+                        pageSize: 10
+                    }}
+					className="my-"
 					rowSelection={{
 						type: 'checkbox',
 						onSelect: (record, selected, selectedRows, nativeEvent) => {

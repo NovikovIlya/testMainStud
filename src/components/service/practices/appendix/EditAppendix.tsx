@@ -28,6 +28,7 @@ import { Item } from '../../../../models/representation'
 import { useAppDispatch } from '../../../../store'
 import {
 	useChangeStatusMutation,
+	useEditApplicationMutation,
 	useEditSubmissionMutation,
 	useGetDocApplicationQuery,
 	useGetDocRepresentationQuery,
@@ -40,6 +41,7 @@ import { EditableCell } from './EditableCell'
 import { SkeletonPage } from './Skeleton'
 import TableEdit from './tableEdit'
 import TableEditView from './tableEditView'
+import { useGetContractsAllQuery } from '../../../../store/api/practiceApi/roster'
 
 const optionMock = [
 	{ value: '1', label: '1' },
@@ -69,13 +71,28 @@ export const EditAppendix = () => {
 	const isEditing = (record: Item) => record.key === editingKey
 	const {data: dataOneSubmissions,isSuccess,isLoading: isLoadingOneSubmission} = useGetOneApplicationQuery(id, { skip: !id })
 	const {data: dataGetDocRepresentation,isLoading: isLoadingDocRepesentation,refetch} = useGetDocApplicationQuery(dataOneSubmissions ? dataOneSubmissions?.id : null,{ skip: !dataOneSubmissions })
+	const { data: dataGetContracts, isSuccess: isSuccessGetContracts } = useGetContractsAllQuery()
+	const [editApplication,{}] = useEditApplicationMutation()
 	const [changeStatusSubmissions, {}] = useChangeStatusMutation()
 	const [editSumbissions, {}] = useEditSubmissionMutation({})
 	const [fullTable, setFullTable] = useState<any>([])
 	const [editTheme, setEditTheme] = useState('')
 	const [isEdit, setIsEdit] = useState(false)
+	const [selectContract, setSelectContract] = useState<string | null>(null)
+	const [contracts, setContracts] = useState<any>([])
 	const dispatch = useAppDispatch()
-	
+
+	useEffect(() => {
+		if (isSuccessGetContracts) {
+			const newArray = dataGetContracts.map(item => {
+				return {
+					value: item.id,
+					label: `${item.contractFacility} ${item.contractNumber} ${item.conclusionDate}`
+				}
+			})
+			setContracts(newArray)
+		}
+	}, [isSuccessGetContracts])
 
 	// useEffect(()=>{
 	// 	if(isSuccess){
@@ -101,7 +118,7 @@ export const EditAppendix = () => {
 					departmentDirector:dataOneSubmissions.practice.departmentDirector,
 					practicePeriod: dataOneSubmissions.practice.practicePeriod,
 					specialtyName: dataOneSubmissions.practice.specialtyName,
-					other: `${dataOneSubmissions.practice.courseNumber} ${dataOneSubmissions.practice.practiceKind} ${dataOneSubmissions.practice.practiceType}`,
+					other: `${dataOneSubmissions.practice.courseNumber} курс, ${dataOneSubmissions.practice.practiceKind}, ${dataOneSubmissions.practice.practiceType}`,
 
 				}
 			})
@@ -266,62 +283,54 @@ export const EditAppendix = () => {
 	]
 
 	const items: any = [
-		{
-			key: '3',
-			label: 'Вид',
-			children: isSuccess ? dataOneSubmissions.practice.practiceKind : ''
-		},
-		{
-			key: '5',
-			label: 'Курс',
-			children: isSuccess ? dataOneSubmissions.practice.courseNumber : ''
-		},
-		{
-			key: '5',
-			label: 'Тип',
-			children: isSuccess ? dataOneSubmissions.practice.practiceType : ''
-		},
-		...(isSuccess && dataOneSubmissions.isWithDeparture
-			? [
-					{
-						key: '6',
-						label: 'Тема',
-						children: (
-							<div className="flex">
-								<Col span={19}>
-									{dataOneSubmissions?.status === 'На рассмотрении' ? (
-										<Input
-											size="small"
-											id="topic"
-											placeholder="тема"
-											value={editTheme}
-											onChange={e => {
-												setEditTheme(e.target.value)
-												setIsEdit(true)
-											}}
-										/>
-									) : (
-										<div>{dataOneSubmissions?.theme}</div>
-									)}
-								</Col>
-							</div>
-						)
-					}
-			  ]
-			: []),
-		{
-			key: '66',
-			label: 'Форма',
-			children: isSuccess
-				? dataOneSubmissions.isWithDeparture
-					? 'Выездная'
-					: 'Невыездная'
-				: ''
-		},
+		// {
+		// 	key: '3',
+		// 	label: 'Вид',
+		// 	children: isSuccess ? dataOneSubmissions.practice.practiceKind : ''
+		// },
+		// {
+		// 	key: '5',
+		// 	label: 'Курс',
+		// 	children: isSuccess ? dataOneSubmissions.practice.courseNumber : ''
+		// },
+		// {
+		// 	key: '5',
+		// 	label: 'Тип',
+		// 	children: isSuccess ? dataOneSubmissions.practice.practiceType : ''
+		// },
+		// ...(isSuccess && dataOneSubmissions.isWithDeparture
+		// 	? [
+		// 			{
+		// 				key: '6',
+		// 				label: 'Тема',
+		// 				children: (
+		// 					<div className="flex">
+		// 						<Col span={19}>
+		// 							{dataOneSubmissions?.status === 'На рассмотрении' ? (
+		// 								<Input
+		// 									size="small"
+		// 									id="topic"
+		// 									placeholder="тема"
+		// 									value={editTheme}
+		// 									onChange={e => {
+		// 										setEditTheme(e.target.value)
+		// 										setIsEdit(true)
+		// 									}}
+		// 								/>
+		// 							) : (
+		// 								<div>{dataOneSubmissions?.theme}</div>
+		// 							)}
+		// 						</Col>
+		// 					</div>
+		// 				)
+		// 			}
+		// 	  ]
+		// 	: []),
+		
 		{
 			key: '7',
 			label: 'Статус',
-			children: isSuccess ? dataOneSubmissions.status : '',
+			children: isSuccess ? dataOneSubmissions.applicationStatus : '',
 			render: (text: any) => (
 				<Popover
 					content={
@@ -446,23 +455,26 @@ export const EditAppendix = () => {
 			console.log('Validate Failed:', errInfo)
 		}
 	}
-
+	console.log('selectContract',selectContract)
 	const editData = () => {
 		const arrayT: any = [{}]
-		const obj = arrayT.map((item: any) => {
-			return {
-				...item,
+		const obj = 
+			 {
+	
 				students: fullTable.map(({ key, ...rest }: any) => rest),
-				id: dataOneSubmissions.id,
-				theme: editTheme
+				contractId: selectContract,
+				
 			}
-		})
-		editSumbissions(obj[0])
+		
+		console.log('obj', {id:dataOneSubmissions.id,
+			body:obj})
+		editApplication({id:dataOneSubmissions.id,
+			body:obj})
 			.unwrap()
 			.then(() =>{
 				dispatch(
 					showNotification({
-						message: 'Представление успешно отредактировано',
+						message: 'Приложение успешно отредактировано',
 						type: 'success'
 					})
 				)
@@ -475,6 +487,11 @@ export const EditAppendix = () => {
 
 	const handleChangeStatus = ()=>{
 		changeStatusSubmissions(dataOneSubmissions.id)
+	}
+
+	const handleChange = (value: string) => {
+		console.log('Выбранный ID:', value)
+		setSelectContract(value)
 	}
 
 	if (isLoadingOneSubmission) return <SkeletonPage />
@@ -500,8 +517,24 @@ export const EditAppendix = () => {
 					</Typography.Text>
 				</Col>
 			</Row>
-			{/* <Descriptions className="mt-8" items={items} /> */}
-
+			<Descriptions className="mt-8" items={items} />
+			<Row>
+					<Col span={24}>
+						<Typography.Text>Договор</Typography.Text>
+					</Col>
+					<Col className="mt-2" span={12}>
+						<Select
+							style={{ width: '100%' }}
+							showSearch
+							placeholder="Выберите договор"
+							onChange={handleChange}
+							filterOption={(input, option) =>
+								(option?.label ?? '').toString().toLowerCase().includes(input.toLowerCase())
+							}
+							options={contracts}
+						/>
+					</Col>
+				</Row>
 			<Row className="mt-4 mb-6 flex  justify-between">
 				<Col span={12}>
 					<div>
@@ -534,7 +567,7 @@ export const EditAppendix = () => {
 				</Col>
 				{/* <Col span={12} className="flex justify-end">
 							
-							<Button onClick={handleChangeStatus}>Согласовать представление</Button>
+							<Button onClick={handleChangeStatus}>Согласовать приложение</Button>
 	
 				</Col> */}
 			</Row>
@@ -561,7 +594,7 @@ export const EditAppendix = () => {
 				</Col>
 			</Row>
 
-			<Row>
+			<Row className='mt-[-68px]'>
 				{isSuccess && dataOneSubmissions.orderStatus !== 'Согласован1' ? (
 					<Col span={2} className="mt-5">
 						<Space className="w-full ">
@@ -576,7 +609,7 @@ export const EditAppendix = () => {
 								title=""
 							>
 								<Button
-									disabled={dataOneSubmissions.status !== 'На рассмотрении'}
+								
 									type="primary"
 									className="!rounded-full"
 									onClick={() => {

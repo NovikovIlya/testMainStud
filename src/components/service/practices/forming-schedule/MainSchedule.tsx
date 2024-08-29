@@ -47,6 +47,7 @@ export const PracticeSchedule = () => {
 	const {data:dataAcademicYear} = useGetAcademicYearQuery()
 	const {data:dataSubdivision,isSuccess:isSuccessSubdivision} = useGetSubdivisionQuery()
 	const [departments, setDepartments] = useState<NewDepartment[]>()
+	const [flagLoad,setFlagLoad] = useState(false)
 	const columns = [
 		{
 			key: 'name',
@@ -150,7 +151,7 @@ export const PracticeSchedule = () => {
 				return elem.academicYear === filter.academicYear
 			}
 		}
-
+		setFlagLoad(false)
 		return dataAll
 			? [...dataAll]
 			.sort((a: ScheduleType, b: ScheduleType) => sortDateFilling(a, b))
@@ -195,6 +196,7 @@ export const PracticeSchedule = () => {
 						defaultValue="Все"
 						className="w-full"
 						onChange={(value: any) => {
+							setFlagLoad(true)
 							setFilter({ ...filter, subdivisionId: value })
 						}}
 						options={
@@ -276,7 +278,7 @@ export const PracticeSchedule = () => {
 				</Col>
 			</Row>
 		
-					{isLoadingUserSubdivision || isFetchingDataAll ? <Spin className='w-full mt-20' indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />  
+					{isLoadingUserSubdivision || isFetchingDataAll || flagLoad? <Spin className='w-full mt-20' indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />  
 					:  <Table
 						onRow={(record) => ({
 							onClick: () => handleRowClick(record),
@@ -287,7 +289,9 @@ export const PracticeSchedule = () => {
 						// @ts-ignore
 						columns={columns}
 						dataSource={dataTable ? dataTable : []}
-						pagination={false}
+						pagination={dataTable && dataTable?.length<10?false:{
+							pageSize: 10
+						}}
 						className="my-10"
 						rowSelection={{
 							type: 'checkbox',

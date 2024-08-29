@@ -61,7 +61,7 @@ export const ViewPracticeOrder = () => {
 	const {data:dataSubmissionKind} = useGetSubmissionsPracticeKindQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
 	const {data:dataSubmissionDirector} = useGetSubmissionsDirectorQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
 	const {data:dataSubmissionAcademicYear} = useGetSubmissionsAcademicYearQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
-	const {data:dataAllOrder,isSuccess:isSuccessOrder} = useGetAllOrderQuery({subdivisionId:selectSubdivisionId,page:currentPage - 1,size :'5'},{skip:!selectSubdivisionId || !currentPage})
+	const {data:dataAllOrder,isSuccess:isSuccessOrder,isFetching:isLoadingOrder} = useGetAllOrderQuery({subdivisionId:selectSubdivisionId,page:currentPage - 1,size :'5'},{skip:!selectSubdivisionId || !currentPage})
 	const [dataTable, setDataTable] = useState<any>([])
 
 	useEffect(()=>{
@@ -83,12 +83,13 @@ export const ViewPracticeOrder = () => {
 		})
 	},[selectSubdivisionId])
 
-	
+	console.log('dataAllOrder',dataAllOrder)
+	console.log('dataTable',dataTable)
 	useEffect(() => {
-		if (isSuccessOrder) {
-			setDataTable(filterDataFull())
-		}
-	}, [filter,isSuccessOrder])
+		
+			setDataTable(dataAllOrder?.length > 0 ? dataAllOrder : [])
+		
+	}, [dataAllOrder, filter.subdivision, isSuccessOrder])
 	
 
 	function filterDataFull() {
@@ -162,15 +163,15 @@ export const ViewPracticeOrder = () => {
 
 		return dataAllOrder
 			? dataAllOrder
-			.filter((elem: any) => filterName(elem))
-			.filter((elem: any) => filterSpec(elem))
-			.filter((elem: any) => filtervisiting(elem))
-			.filter((elem: any) => filterFio(elem))
-			.filter((elem: any) => filterCourse(elem))
-			.filter((elem: any) => filterAcademicYear(elem))
-			.filter((elem: any) => filterType(elem))
-			.filter((elem: any) => filterKind(elem))
-			.sort((a: any, b: any) => sortDateFilling(a, b))
+			// .filter((elem: any) => filterName(elem))
+			// .filter((elem: any) => filterSpec(elem))
+			// .filter((elem: any) => filtervisiting(elem))
+			// .filter((elem: any) => filterFio(elem))
+			// .filter((elem: any) => filterCourse(elem))
+			// .filter((elem: any) => filterAcademicYear(elem))
+			// .filter((elem: any) => filterType(elem))
+			// .filter((elem: any) => filterKind(elem))
+			// .sort((a: any, b: any) => sortDateFilling(a, b))
 			: []
 	}
 
@@ -567,7 +568,7 @@ export const ViewPracticeOrder = () => {
 
 			<Row className="mt-4">
 				<Col flex={'auto'}>
-				{isLoading ? <Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}/> :
+				{isLoadingOrder ? <Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}/> :
 					<Table
 						onRow={(record) => ({
 							onClick: () => handleRowClick(record),
@@ -577,9 +578,9 @@ export const ViewPracticeOrder = () => {
 						// @ts-ignore
 						columns={columns}
 						dataSource={filter?.subdivision !== 'Все' ? dataTable : []}
-						pagination={dataTable.length > 5 && {
+						pagination={dataTable.length > 10 && {
 							current: currentPage,
-							pageSize: 5,
+							pageSize: 10,
 							total: dataAllOrder?.length,
 							onChange: (page) => setCurrentPage(page),
 						  }}

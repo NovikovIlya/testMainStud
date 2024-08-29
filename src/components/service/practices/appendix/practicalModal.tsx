@@ -12,7 +12,7 @@ import {
   import { EditableCell } from './EditableCell'
   import { useGetGroupNumberQuery, useGetPracticesAllQuery, useGetSubdivisionForPracticeQuery } from '../../../../store/api/practiceApi/individualTask'
   import { LoadingOutlined } from '@ant-design/icons'
-  import { useGetAllSubmissionsQuery } from '../../../../store/api/practiceApi/representation'
+  import { useGetAllOrderAgreeQuery, useGetAllSubmissionsQuery } from '../../../../store/api/practiceApi/representation'
   import { useGetSpecialtyNamesForPractiseQuery } from '../../../../store/api/practiceApi/roster'
   import { findSubdivisions } from '../../../../utils/findSubdivisions'
   import { useEffect, useState } from 'react'
@@ -160,7 +160,7 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 	const {data:dataSubmissionKind} = useGetSubmissionsPracticeKindQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
 	const {data:dataSubmissionDirector} = useGetSubmissionsDirectorQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
 	const {data:dataSubmissionAcademicYear} = useGetSubmissionsAcademicYearQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
-	const {data:dataAllOrder,isSuccess:isSuccessOrder} = useGetAllOrderQuery({subdivisionId:selectSubdivisionId,page:currentPage - 1,size :'5'},{skip:!selectSubdivisionId || !currentPage})
+	const {data:dataAllOrder,isSuccess:isSuccessOrder} = useGetAllOrderAgreeQuery({subdivisionId:selectSubdivisionId,page:currentPage - 1,size :'5'},{skip:!selectSubdivisionId || !currentPage})
 	const [dataTable, setDataTable] = useState<any>([])
 
 

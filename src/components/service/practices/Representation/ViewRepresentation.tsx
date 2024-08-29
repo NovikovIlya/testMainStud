@@ -51,7 +51,7 @@ export const ViewRepresentation = () => {
 		dateFilling: 'По дате (сначала новые)',
 	})
 	const [selectedFieldsFull, setSelectedFieldFull] = useState<any>([])
-	const {data:dataAllSubmissions,isLoading,isSuccess:isSuccessSubAll} = useGetAllSubmissionsQuery(null)
+	const {data:dataAllSubmissions,isLoading,isSuccess:isSuccessSubAll,isFetching:isFetchingSubAll} = useGetAllSubmissionsQuery(null)
 	const {data:dataSubmisisionsSubdevision} = useGetSubmissionsSubdevisionQuery()
 	const [selectSubdivisionId,setSelectSubdivisionId] = useState(null)
 	const {data:dataSubmissionSpecialty} = useGetSubmissionsSpecialtiesQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
@@ -61,6 +61,7 @@ export const ViewRepresentation = () => {
 	const {data:dataSubmissionAcademicYear} = useGetSubmissionsAcademicYearQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
 	const [flag,setFlag] = useState(false)
 	const [dataTable, setDataTable] = useState<any>([])
+	const [flagLoad,setFlagLoad] = useState(false)
 
 	useEffect(()=>{
 		form.setFieldValue('practiceType', 'Все')
@@ -90,6 +91,7 @@ export const ViewRepresentation = () => {
 	
 
 	function filterDataFull() {
+		
 		function filterName(elem: any) {
 			if (filter.subdivision === 'Все') {
 				return elem
@@ -157,7 +159,7 @@ export const ViewRepresentation = () => {
 			}
 			return 0
 		}
-	
+		setFlagLoad(false)
 		return dataAllSubmissions
 			? dataAllSubmissions
 			.filter((elem: any) => filterName(elem))
@@ -298,6 +300,7 @@ export const ViewRepresentation = () => {
 						className="w-full"
 						options={dataSubmisisionsSubdevision}
 						onChange={(value: any) => {
+							setFlagLoad(true)
 							const x = findSubdivisions(dataSubmisisionsSubdevision,value)
 							if(x){
 								setSelectSubdivisionId(x.id)
@@ -530,7 +533,7 @@ export const ViewRepresentation = () => {
 
 			<Row className="mt-4">
 				<Col flex={'auto'}>
-				{isLoading ? <Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}/> :
+				{isFetchingSubAll || flagLoad? <Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}/> :
 					<Table
 						onRow={(record) => ({
 							onClick: () => handleRowClick(record),
@@ -540,8 +543,8 @@ export const ViewRepresentation = () => {
 						// @ts-ignore
 						columns={columns}
 						dataSource={filter?.subdivision !== 'Все' ? flag ? dataTable : [] : []}
-						pagination={dataTable?.length < 5 ? false : {
-							pageSize: 5,
+						pagination={dataTable?.length < 10 ? false : {
+							pageSize: 10,
 						}}
 						className="my-10"
 						rowSelection={{

@@ -193,6 +193,7 @@ export const CreateContracts = () => {
                             <Input
                                 className="w-full"
                                 size="large"
+                                autoComplete="off"
                             />
                         </Form.Item>
                     </Col>
@@ -304,6 +305,7 @@ export const CreateContracts = () => {
                             <Input
                                 className="w-full"
                                 size="large"
+                                autoComplete="adress" 
                             />
                         </Form.Item>
                     </Col>
@@ -316,6 +318,7 @@ export const CreateContracts = () => {
                             <Input
                                 className="w-full"
                                 size="large"
+                                autoComplete="adress" 
                             />
                         </Form.Item>
                     </Col>

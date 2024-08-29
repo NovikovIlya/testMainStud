@@ -770,7 +770,9 @@ export const RegisterContracts = () => {
                             onClick: () => handleRowClick(record),
                         })}
                         columns={columnsFullView}
-                       pagination={false}
+                        pagination={tableDataFull && tableDataFull?.length<10?false:{
+                            pageSize: 10
+                        }}
                        dataSource={tableDataFull}
                        size={"middle"}
                        className={'mt-5'}

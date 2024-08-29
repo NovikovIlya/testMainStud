@@ -18,6 +18,7 @@ import {string} from "yup";
 import {processingOfDivisions} from "../../../../../utils/processingOfDivisions";
 import { useAppDispatch } from '../../../../../store'
 import { showNotification } from '../../../../../store/reducers/notificationSlice'
+import { newProcessing } from '../../../../../utils/newProcessing'
 
 
 
@@ -32,7 +33,7 @@ const CreateTask = () => {
     const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery(subDivision)
     const [practiceType, setPracticeType] = useState<PracticeType[]>()
     const {data: dataPracticeType, isSuccess: isSuccessPracticeType} = useGetPracticeTypeQuery(subDivision)
-    const [departments, setDepartments] = useState<Department[]>()
+    const [departments, setDepartments] = useState<Department[]>([])
     const {data: dataDepartments, isSuccess: isSuccessDepartments} = useGetDepartmentsQuery()
     const dispatch = useAppDispatch()
 
@@ -53,6 +54,7 @@ const CreateTask = () => {
     useEffect(() => {
         if (isSuccessDepartments) {
             setDepartments(processingOfDivisions(dataDepartments))
+            // setDepartments(newProcessing(dataDepartments))
         }
     }, [dataDepartments]);
 

@@ -104,7 +104,7 @@ const IndividualTasks = () => {
    
 
 
-   
+   console.log('tableDataFull',tableDataFull)
 
     function changeListNameSpecialty(list: NameSpecialty[]) {
         function changeElemNameSpecialty(elem: NameSpecialty) {
@@ -147,14 +147,16 @@ const IndividualTasks = () => {
         return finalList.concat(newList)
     }
 
-    function changeListDataAll(data: TasksAll) {
-        const newData: FullIndividualTask = {
+    function changeListDataAll(data: any) {
+        console.log('data',data)
+        const newData: any = {
             id: data.id,
             key: data.key,
             specialityName: data.specialityName,
             practiceType: data.practiceType,
             dateFilling: data.dateFilling,
-            tasks: data.tasks.map(elem => elem.taskDescription)
+            subdivision: data.subdivisionName,
+            tasks: data.tasks.map((elem:any) => elem.taskDescription)
         }
         return newData
     }
@@ -241,6 +243,24 @@ const IndividualTasks = () => {
         }
     ]
     const columnsFull: TableColumnsType<FullIndividualTask> = [
+        {
+            title: <span className={'text-base'}>Подразделение</span>,
+            dataIndex: 'subdivision',
+            width: '20%',
+            // render: (text, record) =>
+            //     <div className={'flex items-center'}>
+            //         <span className={'underline flex w-[200px] font-bold'}>
+            //             {text}
+            //         </span>
+            //         <Button
+            //             type="text"
+            //             icon={<EditSvg/>}
+            //             onClick={() => {
+            //                 navigate(`/services/practices/individualTasks/editTask/${record.id}`)
+            //             }}
+            //         />
+            //     </div>
+        },
         {
             title: <span className={'text-base'}>Шифр и наименование специальности</span>,
             dataIndex: 'specialityName',
@@ -369,7 +389,7 @@ const IndividualTasks = () => {
         }
 
         if (isSuccess) {
-            const dataFull: FullIndividualTask[] = data.map(elem => changeListDataAll(elem))
+            const dataFull: any[] = data.map(elem => changeListDataAll(elem))
             return dataFull
                 .filter(elem => filterPracticeType(elem))
                 .filter(elem => filterNameSpecialty(elem))
@@ -523,7 +543,7 @@ const IndividualTasks = () => {
             {
                 tableView.compressed
                 &&
-                <div className={'individualTasks'}>
+                <div className={'individualTasks mb-4'}>
                     <Table
                     onRow={(record) => ({
                         onClick: () => handleRowClick(record),
@@ -554,10 +574,12 @@ const IndividualTasks = () => {
                 onRow={(record) => ({
                     onClick: () => handleRowClick(record),
                 })}
-                    className={'mt-5'}
+                    className={'mt-5 mb-4'}
                     columns={columnsFull}
                     dataSource={tableDataFull}
-                    pagination={false}
+                    pagination={tableDataFull && tableDataFull?.length<10?false:{
+                        pageSize: 10
+                    }}
                     rowSelection={{
                         type: 'checkbox',
                         onSelect: (record, selected, selectedRows, nativeEvent) => {

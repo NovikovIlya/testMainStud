@@ -554,7 +554,7 @@ export const EditRepresentation = () => {
 				</Col>
 			</Row>
 
-			<Row>
+			<Row className='mt-[-68px]'>
 				{isSuccess && dataOneSubmissions.status === 'На рассмотрении' ? (
 					<Col span={2} className="mt-5">
 						<Space className="w-full ">

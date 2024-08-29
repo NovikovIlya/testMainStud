@@ -222,7 +222,7 @@ export const TableEdit = ({ isSuccessDataOne,visiting, fullTable=[], setFullTabl
 					period:formatDateRange(fullTable.practice.practicePeriod),
 					specialtyName: fullTable.practice.specialtyName,
 					FIO: fullTable.practice.departmentDirector,
-					other: `${fullTable.practice.courseNumber} ${fullTable.practice.practiceKind} ${fullTable.practice.practiceType}`,
+					other: `${fullTable.practice.courseNumber} курс, ${fullTable.practice.practiceKind}, ${fullTable.practice.practiceType}`,
 					FIOProf:null,
 					id:item.id,
 					key:item.name

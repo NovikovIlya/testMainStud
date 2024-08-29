@@ -108,7 +108,7 @@ export const EditOrder = () => {
 			name: 'ФИО обучающегося',
 			className: 'text-xs !p-2',
 			render: (text: any, record: any) => (
-				<div>{record?.name || 'Нет челибаса...'}</div>
+				<div>{record?.name || ''}</div>
 			)
 		},
 
@@ -118,7 +118,7 @@ export const EditOrder = () => {
 			title: 'Номер группы',
 			className: 'text-xs !p-2',
 			render: (text: any, record: any) => (
-				<div>{record?.groupNumbers || 'Нет челибаса...'}</div>
+				<div>{record?.groupNumbers || ''}</div>
 			)
 		},
 		{
@@ -128,7 +128,7 @@ export const EditOrder = () => {
 			className: 'text-xs !p-2',
 			editable: true,
 			render: (text: any, record: any) => (
-				<div>{record?.place || 'Нет челибаса...'}</div>
+				<div>{record?.place || ''}</div>
 			)
 		},
 		{
@@ -137,7 +137,7 @@ export const EditOrder = () => {
 			title: 'ФИО руководителя от кафедры',
 			className: 'text-xs !p-2',
 			render: (text: any, record: any) => (
-				<div>{record?.departmentDirector || 'Нет челибаса...'}</div>
+				<div>{record?.departmentDirector || ''}</div>
 			)
 		},
 		{
@@ -152,7 +152,7 @@ export const EditOrder = () => {
 					: 'hidden'
 			}`,
 			render: (text: any, record: any) => (
-				<div>{record?.category || 'Нет челибаса...'}</div>
+				<div>{record?.category || ''}</div>
 			)
 		},
 		{
@@ -168,7 +168,7 @@ export const EditOrder = () => {
 			}`,
 			editable: true,
 			render: (text: any, record: any) => (
-				<div>{record?.costForDay || 'Нет челибаса...'}</div>
+				<div>{record?.costForDay || ''}</div>
 			)
 		},
 		{
@@ -184,7 +184,7 @@ export const EditOrder = () => {
 			}`,
 			editable: true,
 			render: (text: any, record: any) => (
-				<div>{record?.arrivingCost || 'Нет челибаса...'}</div>
+				<div>{record?.arrivingCost || ''}</div>
 			)
 		},
 		{
@@ -200,7 +200,7 @@ export const EditOrder = () => {
 			}`,
 			editable: true,
 			render: (text: any, record: any) => (
-				<div>{record?.livingCost || 'Нет челибаса...'}</div>
+				<div>{record?.livingCost || ''}</div>
 			)
 		},
 
@@ -538,7 +538,7 @@ export const EditOrder = () => {
 							dataSource={fullTable}
 							columns={mergedColumns}
 							rowClassName="editable-row"
-							pagination={false}
+							pagination={{pageSize:10}}
 							rowKey="id"
 						/>
 					</Form>

@@ -40,7 +40,6 @@ import { useGetContractsAllQuery } from '../../../../store/api/practiceApi/roste
 export const EditAppendix = () => {
 	const path = useLocation()
 	const id = path.pathname.split('/').at(-1)!
-	const tableRef = useRef(null)
 	const originData: any[] = []
 	const nav = useNavigate()
 	const [form] = Form.useForm()

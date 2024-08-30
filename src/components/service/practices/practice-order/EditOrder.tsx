@@ -7,6 +7,7 @@ import {
 	Button,
 	Col,
 	Descriptions,
+	Divider,
 	Form,
 	Input,
 	Popconfirm,
@@ -486,7 +487,7 @@ export const EditOrder = () => {
 				</Col>
 			</Row>
 			<Descriptions className="mt-8" items={items} />
-
+			<Divider />
 			<Row className="mt-4 mb-6 flex  justify-between">
 				<Col span={12}>
 					<div>
@@ -544,7 +545,7 @@ export const EditOrder = () => {
 					</Form>
 				</Col>
 			</Row>
-
+		
 			<Row>
 				{isSuccess && dataOneSubmissions.status === 'На рассмотрении' ? (
 					<Col span={2} className="mt-5">

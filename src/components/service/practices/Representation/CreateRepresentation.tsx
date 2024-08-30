@@ -3,6 +3,7 @@ import {
 	Button,
 	Col,
 	Descriptions,
+	Divider,
 	Form,
 	Input, Popconfirm,
 	Radio,
@@ -493,7 +494,7 @@ export const CreateRepresentation = () => {
 						]}
 					/>
 				</Col>
-				
+		
 				<Col span={12} className='justify-end flex'>
 					<div>
 						<Space>
@@ -511,11 +512,12 @@ export const CreateRepresentation = () => {
 				</Col>
 			
 			</Row>
-			
+			<Divider />
 			{selectedPractice ? (<>
 				<Descriptions className='mt-8'  items={items} />
-				<Row className='items-end'>
-					 <Col span={12} flex="50%" className="mt-4 mobileFirst">
+				<Divider />
+				<Row className='items-end mb-7'>
+					 <Col span={12} flex="50%" className=" mobileFirst">
 						<Radio.Group onChange={onChange} value={value}>
 							<Space direction="vertical">
 								<Radio value={1} onClick={()=>setVisiting(false)}>Невыездная практика</Radio>
@@ -526,7 +528,7 @@ export const CreateRepresentation = () => {
 				
 			</Row>	
 			</>) : ''}
-
+	
 			{visiting ? 
 			<Row className='mt-4'>
 				<Col span={1} className='flex items-center'>
@@ -565,7 +567,7 @@ export const CreateRepresentation = () => {
 							</Form>
 						</Col>
 					</Row>
-					<Row className=''>
+					<Row className='mt-[-68px]'>
 					<Col span={3} className=' mt-6' >
 					<Space className="w-full ">
 						<Button

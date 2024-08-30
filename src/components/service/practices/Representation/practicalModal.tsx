@@ -10,12 +10,11 @@ import {
 } from '../../../../models/representation'
 
 import { EditableCell } from './EditableCell'
-import { useGetGroupNumberQuery, useGetPracticesAllQuery, useGetSubdivisionForPracticeQuery } from '../../../../store/api/practiceApi/individualTask'
+import { useGetGroupNumberQuery, useGetPracticesAllQuery, useGetPractiseSubdevisionNewQuery } from '../../../../store/api/practiceApi/individualTask'
 import { LoadingOutlined } from '@ant-design/icons'
 import { useGetAllSubmissionsQuery } from '../../../../store/api/practiceApi/representation'
 import { useGetSpecialtyNamesForPractiseQuery } from '../../../../store/api/practiceApi/roster'
-import { findSubdivisions } from '../../../../utils/findSubdivisions'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { processingOfDivisions } from '../../../../utils/processingOfDivisions'
 import { findSubdivisionsExport } from '../../../../utils/findSubdivisionsExport'
 
@@ -53,8 +52,8 @@ const filterSpecialization: FilterType[] = [
 const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancelOne,handleRowClick,tableRef}: any) => {
 	const [subdivisionId, setSubdivisionId] = useState(null)
 	const {data:dataAllSubmissions} = useGetAllSubmissionsQuery(selectedPractice,{skip:!selectedPractice})
-	const {data:dataAllPractise,isLoading} = useGetPracticesAllQuery(null)
-	const {data:dataAllSubdivision} = useGetSubdivisionForPracticeQuery()
+	const {data:dataAllPractise,isLoading,isFetching} = useGetPracticesAllQuery(null)
+	const {data:dataAllSubdivision} = useGetPractiseSubdevisionNewQuery()
 	const {data:dataAllSpecialty,isSuccess:isSuccesSpecialty} = useGetSpecialtyNamesForPractiseQuery(subdivisionId,{skip:!subdivisionId})
 	const [tableData, setTableData] = useState<any>(dataAllPractise)
 	const {data:dataGroupNumber} = useGetGroupNumberQuery(subdivisionId, {skip:!subdivisionId})
@@ -73,6 +72,7 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 		groupNumber: 'Все',
 
 	})
+	const [load,setLoad] = useState(false)
  	const columnsRepresentation = [
 	{
 		key: 'subdivision',
@@ -201,7 +201,6 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 			}
 			return 0
 		}
-
 		return dataAllPractise
 			? dataAllPractise
 					.filter((elem: any) => filterSubdivision(elem))
@@ -211,8 +210,7 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 		 
 			: []
 	}
-
-
+	
 	const filteredData = filterDataFull()?.filter((record: any) => {
 		return record.id !== selectedPractice
 	});
@@ -247,6 +245,7 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 						]}
 						// options={dataAllSubdivision?.length > 0 ? processingOfDivisions(dataAllSubdivision) : []}
 						onChange={value => {
+							
 							if(value!=='Все'){
 								const x = findSubdivisionsExport(dataAllSubdivision, value )
 								if('responses' in x){
@@ -376,7 +375,7 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 					/>
 				</Col>
 			</Row>
-			{isLoading ? <Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}/> : 
+			{isLoading || load ? <Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}/> : 
 			<Table
 				onRow={record => ({
 					onClick: () => handleRowClick(record)

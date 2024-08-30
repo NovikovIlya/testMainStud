@@ -1,5 +1,5 @@
 import { LoadingOutlined } from '@ant-design/icons'
-import { Button, Col, Form, Popconfirm, Row, Select, Space, Spin, Steps, Typography } from 'antd'
+import { Button, Col, Divider, Form, Popconfirm, Row, Select, Space, Spin, Steps, Typography } from 'antd'
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -190,7 +190,7 @@ export const CreateAppendix = () => {
 							]}
 						/>
 					</Col>
-			
+
 						<Col span={12} className="justify-end flex">
 							<div>
 								<Space>
@@ -210,10 +210,9 @@ export const CreateAppendix = () => {
 								</Space>
 							</div>
 						</Col>
-		
 				</Row>
 
-				
+				<Divider />
 				<Row>
 					<Col span={24}>
 						<Typography.Text>Договор</Typography.Text>

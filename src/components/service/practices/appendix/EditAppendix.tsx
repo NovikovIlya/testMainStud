@@ -7,18 +7,16 @@ import {
 	Button,
 	Col,
 	Descriptions,
+	Divider,
 	Form,
-	Input,
 	Popconfirm,
 	Popover,
 	Row,
 	Select,
 	Space,
-	Table,
 	Typography
 } from 'antd'
 import type { TableProps } from 'antd'
-import dayjs from 'dayjs'
 import { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
@@ -31,32 +29,13 @@ import {
 	useEditApplicationMutation,
 	useEditSubmissionMutation,
 	useGetDocApplicationQuery,
-	useGetDocRepresentationQuery,
-	useGetOneApplicationQuery,
-	useGetOneSubmissionsQuery
-} from '../../../../store/api/practiceApi/representation'
-import { changeStatus, showNotification } from '../../../../store/reducers/notificationSlice'
+	useGetOneApplicationQuery} from '../../../../store/api/practiceApi/representation'
+import { showNotification } from '../../../../store/reducers/notificationSlice'
 
-import { EditableCell } from './EditableCell'
 import { SkeletonPage } from './Skeleton'
-import TableEdit from './tableEdit'
 import TableEditView from './tableEditView'
 import { useGetContractsAllQuery } from '../../../../store/api/practiceApi/roster'
 
-const optionMock = [
-	{ value: '1', label: '1' },
-	{ value: '2', label: '2' },
-	{ value: '3', label: '3' }
-]
-const optionMockType = [
-	{ value: '4', label: '4' },
-	{ value: '5', label: '5' }
-]
-const optionMockKind = [
-	{ value: '7', label: '7' },
-	{ value: '8', label: '8' },
-	{ value: '9', label: '9' }
-]
 
 export const EditAppendix = () => {
 	const path = useLocation()
@@ -64,13 +43,12 @@ export const EditAppendix = () => {
 	const tableRef = useRef(null)
 	const originData: any[] = []
 	const nav = useNavigate()
-	const [tableData, setTableData] = useState<any>([])
 	const [form] = Form.useForm()
 	const [data, setData] = useState(originData)
 	const [editingKey, setEditingKey] = useState('')
 	const isEditing = (record: Item) => record.key === editingKey
 	const {data: dataOneSubmissions,isSuccess,isLoading: isLoadingOneSubmission} = useGetOneApplicationQuery(id, { skip: !id })
-	const {data: dataGetDocRepresentation,isLoading: isLoadingDocRepesentation,refetch} = useGetDocApplicationQuery(dataOneSubmissions ? dataOneSubmissions?.id : null,{ skip: !dataOneSubmissions })
+	const {data: dataGetDocApplication,isLoading: isLoadingDocApplication,refetch} = useGetDocApplicationQuery(dataOneSubmissions ? dataOneSubmissions?.id : null,{ skip: !dataOneSubmissions })
 	const { data: dataGetContracts, isSuccess: isSuccessGetContracts } = useGetContractsAllQuery()
 	const [editApplication,{}] = useEditApplicationMutation()
 	const [changeStatusSubmissions, {}] = useChangeStatusMutation()
@@ -93,14 +71,6 @@ export const EditAppendix = () => {
 			setContracts(newArray)
 		}
 	}, [isSuccessGetContracts])
-
-	// useEffect(()=>{
-	// 	if(isSuccess){
-	// 		if(dataOneSubmissions.status === '123'){
-	// 			dispatch(changeStatus())
-	// 		}
-	// 	}
-	// },[isSuccess])
 
 	useEffect(() => {
 		if (isSuccess) {
@@ -126,161 +96,6 @@ export const EditAppendix = () => {
 		}
 	}, [dataOneSubmissions, isSuccess])
 
-	const columns = [
-		{
-			key: 'number',
-			dataIndex: 'number',
-			title: '№',
-			className: 'text-xs !p-2',
-			render: (text: any, record: any, index: any) => <div>{index + 1}</div>
-		},
-		{
-			key: 'student',
-			dataIndex: 'student',
-			title: 'ФИО обучающегося',
-			name: 'ФИО обучающегося',
-			className: 'text-xs !p-2',
-			render: (text: any, record: any) => (
-				<div>{record?.name || 'Нет челибаса...'}</div>
-			)
-		},
-
-		{
-			key: 'groupNumbers',
-			dataIndex: 'groupNumbers',
-			title: 'Номер группы',
-			className: 'text-xs !p-2',
-			render: (text: any, record: any) => (
-				<div>{record?.groupNumbers || 'Нет челибаса...'}</div>
-			)
-		},
-		{
-			key: 'place',
-			dataIndex: 'place',
-			title: 'Место прохождения практики',
-			className: 'text-xs !p-2',
-			editable: true,
-			render: (text: any, record: any) => (
-				<div>{record?.place || 'Нет челибаса...'}</div>
-			)
-		},
-		{
-			key: 'FIO',
-			dataIndex: 'FIO',
-			title: 'ФИО руководителя от кафедры',
-			className: 'text-xs !p-2',
-			render: (text: any, record: any) => (
-				<div>{record?.departmentDirector || 'Нет челибаса...'}</div>
-			)
-		},
-		{
-			key: 'A',
-			dataIndex: 'A',
-			title: 'Категория',
-			className: `text-xs !p-2 ${
-				isSuccess
-					? dataOneSubmissions.isWithDeparture
-						? ''
-						: 'hidden'
-					: 'hidden'
-			}`,
-			render: (text: any, record: any) => (
-				<div>{record?.category || 'Нет челибаса...'}</div>
-			)
-		},
-		{
-			key: 'costForDay',
-			dataIndex: 'costForDay',
-			title: 'Суточные (50 руб/сут)',
-			className: `text-xs !p-2 ${
-				isSuccess
-					? dataOneSubmissions.isWithDeparture
-						? ''
-						: 'hidden'
-					: 'hidden'
-			}`,
-			editable: true,
-			render: (text: any, record: any) => (
-				<div>{record?.costForDay || 'Нет челибаса...'}</div>
-			)
-		},
-		{
-			key: 'arrivingCost',
-			dataIndex: 'arrivingCost',
-			title: 'Проезд (руб)',
-			className: `text-xs !p-2 ${
-				isSuccess
-					? dataOneSubmissions.isWithDeparture
-						? ''
-						: 'hidden'
-					: 'hidden'
-			}`,
-			editable: true,
-			render: (text: any, record: any) => (
-				<div>{record?.arrivingCost || 'Нет челибаса...'}</div>
-			)
-		},
-		{
-			key: 'livingCost',
-			dataIndex: 'livingCost',
-			title: 'Оплата проживания (руб)',
-			className: `text-xs !p-2 ${
-				isSuccess
-					? dataOneSubmissions.isWithDeparture
-						? ''
-						: 'hidden'
-					: 'hidden'
-			}`,
-			editable: true,
-			render: (text: any, record: any) => (
-				<div>{record?.livingCost || 'Нет челибаса...'}</div>
-			)
-		},
-
-		{
-			title: '',
-			dataIndex: 'operation',
-			className: `text-xs !p-2 ${
-				isSuccess
-					? dataOneSubmissions.status === 'На рассмотрении'
-						? ''
-						: 'hidden'
-					: ''
-			}`,
-			key: 'operation',
-			render: (_: any, record: Item) => {
-				const editable = isEditing(record)
-				return editable ? (
-					<div className="flex justify-around items-center w-[60px]">
-						<Typography.Link
-							onClick={() => save(record.key)}
-							style={{ marginRight: 8 }}
-						>
-							<CheckOutlined style={{ color: '#75a4d3' }} />
-						</Typography.Link>
-						<Popconfirm
-							title="Вы действительно хотите отменить действие?"
-							onConfirm={cancel}
-						>
-							<CloseOutlined style={{ color: '#75a4d3' }} />
-						</Popconfirm>
-					</div>
-				) : (
-					<div className="flex justify-around items-center  w-[60px]">
-						<Typography.Link
-							disabled={editingKey !== ''}
-							onClick={() => edit(record)}
-						>
-							<EditSvg />
-						</Typography.Link>
-						{/* <Popconfirm title="Вы действительно хотите удалить?" onConfirm={deleteRow}>
-                  <a><DeleteRedSvg/></a>
-              </Popconfirm> */}
-					</div>
-				)
-			}
-		}
-	]
 
 	const items: any = [
 		// {
@@ -346,68 +161,11 @@ export const EditAppendix = () => {
 		}
 	]
 
-	const mergedColumns: TableProps['columns'] = columns.map(col => {
-		// @ts-ignore
-		if (!col.editable) {
-			return col
-		}
-		return {
-			...col,
-			onCell: (record: Item) => ({
-				record,
-				inputType:
-					col.dataIndex === 'selectCourse'
-						? 'select'
-						: col.dataIndex === 'costForDay'
-						? 'number'
-						: col.dataIndex === 'livingCost'
-						? 'number'
-						: col.dataIndex === 'livingCost'
-						? 'number'
-						: col.dataIndex === 'course'
-						? 'number'
-						: 'text',
-				dataIndex: col.dataIndex,
-				title: col.title,
-				editing: isEditing(record),
-				options:
-					col.dataIndex === 'selectCourse'
-						? optionMock
-						: col.dataIndex === 'selectType'
-						? optionMockType
-						: col.dataIndex === 'selectKind'
-						? optionMockKind
-						: undefined,
-				rules:
-					dataOneSubmissions.isWithDeparture === false
-						? col.dataIndex === 'place'
-							? [
-									{
-										required: true,
-										message: 'Поле обязательно для заполнения'
-									}
-							  ]
-							: []
-						: col.dataIndex === 'place' ||
-						  col.dataIndex === 'costForDay' ||
-						  col.dataIndex === 'arrivingCost' ||
-						  col.dataIndex === 'livingCost'
-						? [
-								{
-									required: true,
-									message: 'Поле обязательно для заполнения'
-								}
-						  ]
-						: []
-			})
-		}
-	})
-
 	const downloadFile = () => {
 		
-		if (dataGetDocRepresentation) {
+		if (dataGetDocApplication) {
 			const link = document.createElement('a')
-			link.href = dataGetDocRepresentation
+			link.href = dataGetDocApplication
 			link.setAttribute('download', 'downloaded-file.docx')
 			document.body.appendChild(link)
 			link.click()
@@ -416,46 +174,6 @@ export const EditAppendix = () => {
 		}
 	}
 
-	const edit = (record: Partial<Item> & { key: React.Key }) => {
-		form.setFieldsValue({ name: '', age: '', address: '', ...record })
-		setEditingKey(record.key)
-		// setCurrentRowValues(record);
-	}
-
-	const cancel = () => {
-		setEditingKey('')
-	}
-
-	const save = async (key: React.Key) => {
-		try {
-			const row = (await form.validateFields()) as Item
-			const newData = [...fullTable]
-			const index = newData.findIndex(item => key === item.key)
-			setIsEdit(true)
-			if (index > -1) {
-				const item = newData[index]
-				newData.splice(index, 1, {
-					...item,
-					...row
-				})
-				setData(newData)
-				setTableData(newData)
-				setFullTable(newData)
-				setEditingKey('')
-				console.log('1', newData[index])
-			} else {
-				// если новая запись
-				newData.push(row)
-				setData(newData)
-				setTableData(newData)
-				setFullTable(newData)
-				setEditingKey('')
-			}
-		} catch (errInfo) {
-			console.log('Validate Failed:', errInfo)
-		}
-	}
-	console.log('selectContract',selectContract)
 	const editData = () => {
 		const arrayT: any = [{}]
 		const obj = 
@@ -510,7 +228,7 @@ export const EditAppendix = () => {
 						}}
 					/>
 					<Typography.Text className=" text-[28px] mb-14">
-            Приложение к договору группы "
+          				Приложение к договору группы "
 						{dataOneSubmissions?.practice.groupNumber}" подразделения "
 						{dataOneSubmissions?.practice.subdivision}" на{' '}
 						{dataOneSubmissions?.practice.academicYear} учебный год
@@ -518,6 +236,7 @@ export const EditAppendix = () => {
 				</Col>
 			</Row>
 			<Descriptions className="mt-8" items={items} />
+			<Divider />
 			<Row>
 					<Col span={24}>
 						<Typography.Text>Договор</Typography.Text>
@@ -542,8 +261,8 @@ export const EditAppendix = () => {
 							{!isEdit ? (
 								<Button
 									onClick={downloadFile}
-									loading={isLoadingDocRepesentation}
-									disabled={isLoadingDocRepesentation || isEdit}
+									loading={isLoadingDocApplication}
+									disabled={isLoadingDocApplication || isEdit}
 								>
 									<VerticalAlignBottomOutlined /> Скачать
 								</Button>
@@ -555,8 +274,8 @@ export const EditAppendix = () => {
 								>
 									<Button
 										onClick={downloadFile}
-										loading={isLoadingDocRepesentation}
-										disabled={isLoadingDocRepesentation || isEdit}
+										loading={isLoadingDocApplication}
+										disabled={isLoadingDocApplication || isEdit}
 									>
 										<VerticalAlignBottomOutlined /> Скачать
 									</Button>
@@ -575,20 +294,7 @@ export const EditAppendix = () => {
 			<Row className="mt-4">
 				<Col flex={'auto'}>
 					<Form form={form} component={false}>
-						{/* <Table
-							ref={tableRef}
-							components={{
-								body: {
-									cell: EditableCell
-								}
-							}}
-							bordered
-							dataSource={fullTable}
-							columns={mergedColumns}
-							rowClassName="editable-row"
-							pagination={false}
-							rowKey="id"
-						/> */}
+
 						<TableEditView visiting={dataOneSubmissions?.isWithDeparture} fullTable={fullTable} setFullTable={setFullTable} />
 					</Form>
 				</Col>

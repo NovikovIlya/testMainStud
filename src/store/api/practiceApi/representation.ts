@@ -257,6 +257,66 @@ export const representationService = apiSlice.injectEndpoints({
             },
             invalidatesTags: ['Submissions','Application'],  
         }),
+        getSubmissionsApplication: builder.query<any, void>({
+            query: () => {
+                return {
+                    url: `/services/api-practices/applications/list/subdivisions`,
+                    method: 'GET'
+                }
+            },
+            providesTags: ['Submissions','Application'],
+            keepUnusedDataFor:1,
+        }),
+        getSpecialtiesApplication: builder.query<any, any>({
+            query: (id) => {
+                return {
+                    url: `/services/api-practices/applications/list/specialties?subdivisionId=${id}`,
+                    method: 'GET'
+                }
+            },
+            providesTags: ['Submissions','Application'],
+            keepUnusedDataFor:1,
+        }),
+        getPracticeTypeApplication: builder.query<any, any>({
+            query: (id) => {
+                return {
+                    url: `/services/api-practices/applications/list/practice-types?subdivisionId=${id}`,
+                    method: 'GET'
+                }
+            },
+            providesTags: ['Submissions','Application'],
+            keepUnusedDataFor:1,
+        }),
+        getPracticeKindApplication: builder.query<any, any>({
+            query: (id) => {
+                return {
+                    url: `/services/api-practices/applications/list/practice-kinds?subdivisionId=${id}`,
+                    method: 'GET'
+                }
+            },
+            providesTags: ['Submissions','Application'],
+            keepUnusedDataFor:1,
+        }),
+        getDirectorApplication: builder.query<any, any>({
+            query: (id) => {
+                return {
+                    url: `/services/api-practices/applications/list/department-directors?subdivisionId=${id}`,
+                    method: 'GET'
+                }
+            },
+            providesTags: ['Submissions','Application'],
+            keepUnusedDataFor:1,
+        }),
+        getAcademicApplication: builder.query<any, any>({
+            query: (id) => {
+                return {
+                    url: `/services/api-practices/applications/list/academic-years?subdivisionId=${id}`,
+                    method: 'GET'
+                }
+            },
+            providesTags: ['Submissions','Application'],
+            keepUnusedDataFor:1,
+        }),
 
         
     })
@@ -288,5 +348,12 @@ export const {
     useGetDocApplicationQuery,
     useDeleteApplicationMutation,
     useEditApplicationMutation,
-    useGetAllOrderAgreeQuery
+    useGetAllOrderAgreeQuery,
+
+    useGetSubmissionsApplicationQuery,
+    useGetSpecialtiesApplicationQuery,
+    useGetPracticeTypeApplicationQuery,
+    useGetPracticeKindApplicationQuery,
+    useGetDirectorApplicationQuery,
+    useGetAcademicApplicationQuery
 } = representationService

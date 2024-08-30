@@ -15,7 +15,7 @@ import { PointsSvg } from '../../../../assets/svg/PointsSvg'
 
 import { PopoverContent } from './PopoverContent'
 import { PopoverMain } from './PopoverMain'
-import { useGetAllApplicationsQuery, useGetAllSubmissionsQuery, useGetSubmissionsAcademicYearQuery, useGetSubmissionsDirectorQuery, useGetSubmissionsPracticeKindQuery, useGetSubmissionsPracticeTypeQuery, useGetSubmissionsSpecialtiesQuery, useGetSubmissionsSubdevisionQuery } from '../../../../store/api/practiceApi/representation'
+import { useGetAcademicApplicationQuery, useGetAllApplicationsQuery, useGetAllSubmissionsQuery, useGetDirectorApplicationQuery, useGetPracticeKindApplicationQuery, useGetPracticeTypeApplicationQuery, useGetSpecialtiesApplicationQuery, useGetSubmissionsAcademicYearQuery, useGetSubmissionsApplicationQuery, useGetSubmissionsDirectorQuery, useGetSubmissionsPracticeKindQuery, useGetSubmissionsPracticeTypeQuery, useGetSubmissionsSpecialtiesQuery, useGetSubmissionsSubdevisionQuery } from '../../../../store/api/practiceApi/representation'
 import { LoadingOutlined } from '@ant-design/icons'
 import { findSubdivisions } from '../../../../utils/findSubdivisions'
 
@@ -47,13 +47,13 @@ export const ViewAppendix = () => {
 	})
 	const [selectedFieldsFull, setSelectedFieldFull] = useState<any>([])
 	const {data:dataAllSubmissions,isLoading,isSuccess:isSuccessSubAll} = useGetAllSubmissionsQuery(null)
-	const {data:dataSubmisisionsSubdevision} = useGetSubmissionsSubdevisionQuery()
+	const {data:dataSubmisisionsSubdevision} = useGetSubmissionsApplicationQuery()
 	const [selectSubdivisionId,setSelectSubdivisionId] = useState(null)
-	const {data:dataSubmissionSpecialty} = useGetSubmissionsSpecialtiesQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
-	const {data:dataSubmissionType} = useGetSubmissionsPracticeTypeQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
-	const {data:dataSubmissionKind} = useGetSubmissionsPracticeKindQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
-	const {data:dataSubmissionDirector} = useGetSubmissionsDirectorQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
-	const {data:dataSubmissionAcademicYear} = useGetSubmissionsAcademicYearQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
+	const {data:dataSubmissionSpecialty} = useGetSpecialtiesApplicationQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
+	const {data:dataSubmissionType} = useGetPracticeTypeApplicationQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
+	const {data:dataSubmissionKind} = useGetPracticeKindApplicationQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
+	const {data:dataSubmissionDirector} = useGetDirectorApplicationQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
+	const {data:dataSubmissionAcademicYear} = useGetAcademicApplicationQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
 	const {data:dataAppendix,isSuccess:isSuccessAppendix,isFetching:isFetchingAppend} = useGetAllApplicationsQuery({subdivisionId:selectSubdivisionId,page:currentPage - 1,size :'5'},{skip:!selectSubdivisionId || !currentPage})
 	const [flag,setFlag] = useState(false)
 	const [dataTable, setDataTable] = useState<any>([])
@@ -77,13 +77,11 @@ export const ViewAppendix = () => {
 		})
 	},[selectSubdivisionId])
 
-	console.log('dataAppendix',dataAppendix)
-	console.log('dataTable',dataTable)
 	useEffect(() => {
 		
-		setDataTable(dataAppendix?.length > 0 ? dataAppendix : [])
+		setDataTable(dataAppendix?.length > 0 ? filterDataFull() : [])
 	
-	}, [dataAppendix, filter.subdivision])
+	}, [dataAppendix, filter])
 	
 
 	function filterDataFull() {
@@ -118,10 +116,12 @@ export const ViewAppendix = () => {
 			}
 		}
 		function filterCourse(elem: any) {
+			console.log('filter.courseNumber',filter.courseNumber)
+			console.log('elem.courseNumber',elem.courseNumber)
 			if (filter.courseNumber === 'Все') {
 				return elem
 			} else {
-				return elem.courseNumber === filter.courseNumber
+				return elem.practice.courseNumber === filter.courseNumber
 			}
 		}
 		function filterAcademicYear(elem: any) {

@@ -279,7 +279,14 @@ export type VacancyRespondItemType = {
 	responseDate: string
 	respondDate: string
 	vacancyName: string
-	status: string
+	status: 'IN_REVIEW' |
+					'IN_PERSONNEL_DEPT_REVIEW' |
+					'IN_SUPERVISOR_REVIEW' |
+					'INVITATION' |
+					'EMPLOYMENT_REQUEST' |
+					'EMPLOYMENT' |
+					'IN_RESERVE' |
+					'ARCHIVE'
 	recipient: string
 	desiredJob: string
 	type: 'DIRECTLY' | 'RESERVE'
@@ -402,7 +409,7 @@ export type InterviewItemType = {
 	},
 	format: 'OFFLINE' | 'ONLINE'
 	time: string
-	post: string
+	vacancyName: string
 }
 
 export type SeekerStatusChangeType = {

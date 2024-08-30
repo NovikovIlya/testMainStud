@@ -2,9 +2,7 @@ import { Button, ConfigProvider, Modal } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-
 import { InterviewItemType } from '../../../../../store/reducers/type'
-import { setCurrentInterview } from '../../../../../store/reducers/CurrentInterviewSlice'
 import { useLazyGetInterviewViewQuery } from '../../../../../store/api/serviceApi'
 import {setCurrentResponce} from "../../../../../store/reducers/CurrentResponceSlice";
 
@@ -100,7 +98,6 @@ export const SupervisorInterviewItem = ( props : InterviewItemType ) => {
             </div>
         );
     }
-
     const InterviewTimeElem = (props :  InterviewTimeElemProps) =>  {
         const date : Date = new Date(props.eventTime);
 
@@ -189,7 +186,7 @@ export const SupervisorInterviewItem = ( props : InterviewItemType ) => {
                 </Modal>
             </ConfigProvider>
             <div className="w-full flex bg-white p-5 items-center">
-                <span className="w-[22%] ">{props.post}</span>
+                <span className="w-[22%] ">{props.vacancyName}</span>
                 <span className="w-[22%] ml-[3%]">{seekerName}</span>
                 <InterviewTimeElem eventTime={props.time}></InterviewTimeElem>
                 <InterviewFormatElem format={props.format}></InterviewFormatElem>

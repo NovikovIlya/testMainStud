@@ -1,5 +1,6 @@
 import { Button, ConfigProvider, Modal, Tag } from 'antd'
 import { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { Margin, usePDF } from 'react-to-pdf'
 import uuid from 'react-uuid'
@@ -11,9 +12,14 @@ import { useAppSelector } from '../../../store'
 import {
 	useApproveReservedRespondMutation,
 	useDeleteReserveRespondMutation,
+	useGetChatIdByRespondIdQuery,
 	useGetReservedResponcesQuery,
 	useGetReservedRespondFullInfoQuery
 } from '../../../store/api/serviceApi'
+import { openChat } from '../../../store/reducers/ChatRespondStatusSlice'
+import { setRespondId } from '../../../store/reducers/CurrentRespondIdSlice'
+import { setCurrentVacancyId } from '../../../store/reducers/CurrentVacancyIdSlice'
+import { setChatId } from '../../../store/reducers/chatIdSlice'
 import ArrowIcon from '../jobSeeker/ArrowIcon'
 
 import { ApproveRespondForm } from './ApproveRespondForm'
@@ -50,6 +56,25 @@ export const ReserveRespondInfo = (props: {
 			margin: Margin.SMALL
 		}
 	})
+
+	const dispatch = useDispatch()
+
+	const { data: chatId = 0, isLoading: isChatIdLoading } =
+		useGetChatIdByRespondIdQuery({
+			chatId: res ? res.id : 0,
+			role:
+				props.type === 'PERSONNEL_DEPARTMENT'
+					? 'PERSONNEL_DEPARTMENT'
+					: 'SEEKER'
+		})
+
+	const handleNavigate = (url: string) => {
+		dispatch(openChat())
+		dispatch(setChatId(chatId))
+		dispatch(setRespondId(res?.id as number))
+		dispatch(setCurrentVacancyId(0))
+		navigate(url)
+	}
 
 	if (res === undefined) {
 		return <></>
@@ -201,7 +226,11 @@ export const ReserveRespondInfo = (props: {
 											mode={res.type}
 										/>
 										<Button
-											onClick={() => {}}
+											onClick={() => {
+												handleNavigate(
+													`/services/personnelaccounting/chat/id/${chatId}`
+												)
+											}}
 											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
 										>
 											Перейти в чат

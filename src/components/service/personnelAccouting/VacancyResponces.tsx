@@ -68,7 +68,7 @@ export const VacancyResponces = () => {
 							} font-normal text-[16px]/[16px]`}
 						>
 							<Radio
-								value={respondStatus[respondStatus.IN_REVIEW]}
+								value={respondStatus[respondStatus.IN_PERSONNEL_DEPT_REVIEW]}
 								className="hidden"
 							></Radio>
 							на рассмотрении

@@ -8,11 +8,17 @@ import {
 	DocumentLib,
 	Documentation,
 	Email,
+	EmploymentRequestType,
 	Exam,
 	ICalendar,
 	IPerformance,
+	InterviewItemType,
+	InterviewRequestType,
+	InterviewViewResponseType,
+	ReserveTimeRequestType,
 	ResponceType,
 	RespondItemType,
+	SeekerStatusChangeType,
 	Template,
 	TypeSchedule,
 	VacancyGroupedResponcesType,
@@ -22,12 +28,6 @@ import {
 	VacancyRequestViewType,
 	VacancyRespondItemType,
 	VacancyViewResponceType,
-	InterviewRequestType,
-	InterviewItemType,
-	InterviewViewResponseType,
-	SeekerStatusChangeType,
-	ReserveTimeRequestType,
-	EmploymentRequestType,
 	respondStatus
 } from '../reducers/type'
 
@@ -41,6 +41,17 @@ const personnelDeparmentToken =
 	'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJTdWJCQXNhZHVsbG9ldkBzdHVkLmtwZnUucnUiLCJpYXQiOjE3MTE3MjQ1NDQsImV4cCI6MTcxMTczNTM0NCwic2NvcGUiOiJ1c2VyIiwicm9sZXMiOlt7InVzZXJJZCI6IjciLCJzZXNzaW9uSWQiOiIyNDA0NzM4MTc3NzI3MjIwMTMzMDkwNzU0ODQ2ODU5MSIsInNlc3Npb25IYXNoIjoiNTZEMTZENTNDOTc5MDk5MTk0QTY4OEY4Qjk0M0I0N0MiLCJkb2N1bWVudHNIYXNoIjoiQTdCMkI0MUU4MjQ4NDYzNkY2ODZDNTQ3NEY0NEREMjYiLCJsb2dpbiI6IlNCQXNhZHVsbG9ldiIsInR5cGUiOiJQRVJTT05ORUxfREVQQVJUTUVOVCJ9LHsidXNlcklkIjoiMzQ4NTQxIiwic2Vzc2lvbklkIjoiMjQwNDczODA1NjYxMjc2MDM3NTM5NjI3MjY1MTM0OTQiLCJzZXNzaW9uSGFzaCI6IkUzQUZFMTUzNUVCMTU3NEUyMkZCNUJDNEYxNUFERkUwIiwiZG9jdW1lbnRzSGFzaCI6IiIsImxvZ2luIjoiU3ViQkFzYWR1bGxvZXYiLCJ0eXBlIjoiRU1QTCJ9LHsidXNlcklkIjoiMzM2MDM3Iiwic2Vzc2lvbklkIjoiMjQwNDczODI0NDUwMjI3MTM5NzgzNzQ5OTMwNjk4MDciLCJzZXNzaW9uSGFzaCI6IjcxMEExMTFFM0FCN0Q4NDczNTVFOEM0QkUxMDI4RTZBIiwiZG9jdW1lbnRzSGFzaCI6IkEyMkE3NURCRTBBNzg4MDE4OTY4NjZCQjgzNUIxNDQxIiwibG9naW4iOiJTdUJBc2FkdWxsb2V2IiwidHlwZSI6IlNUVUQifV0sInNlc3Npb25JZCI6IjI0MDQ3MzgxNzc3MjcyMjAxMzMwOTA3NTQ4NDY4NTkxIiwic2Vzc2lvbkhhc2giOiI1NkQxNkQ1M0M5NzkwOTkxOTRBNjg4RjhCOTQzQjQ3QyIsImFsbElkIjoiMjM5MTc0IiwiZW1haWwiOiJCYXN1YmhvbmJla0BnbWFpbC5jb20ifQ.MMK47Gd4AKG8tPzmPAwgNq79zVEmfzdFCuoZjcXeW_o'
 const supervisorToken =
 	'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJJQU1pdHJvZmFub3ZAc3R1ZC5rcGZ1LnJ1IiwiaWF0IjoxNzExNTc3OTMwLCJleHAiOjE3MTE1ODg3MzAsInNjb3BlIjoidXNlciIsInJvbGVzIjpbeyJ1c2VySWQiOiIzMTE0NjQiLCJzZXNzaW9uSWQiOiIyNDAzMjI3MTQ4NzUxOTQ4Mjk3MzMwOTA0NzM1MzY2NyIsInNlc3Npb25IYXNoIjoiRDJBMjI1QTc0OTlGMUNFMTZDQkUwMkI5RjZDOTE3RTEiLCJkb2N1bWVudHNIYXNoIjoiQjI2Q0IwQzNFOEFDMzZENkEwQ0I1MTJDRjMwMjM3NzciLCJsb2dpbiI6IklBTWl0cm9mYW5vdiIsInR5cGUiOiJTVVBFUlZJU09SIn1dLCJzZXNzaW9uSWQiOiIyNDAzMjI3MTQ4NzUxOTQ4Mjk3MzMwOTA0NzM1MzY2NyIsInNlc3Npb25IYXNoIjoiRDJBMjI1QTc0OTlGMUNFMTZDQkUwMkI5RjZDOTE3RTEiLCJhbGxJZCI6IjE3ODQ0MCIsImVtYWlsIjoibWl0cm9fMDJAbWFpbC5ydSJ9.idm4ua4nH3WUN0Z119KV2pC6Dqb7uw4Rf1PMiHiCZh4'
+
+//Требуется для преобразования нужным образом дат, приходящих у сервера
+//В модуле трудоустройства
+const seekerServiceResponcesDataTransformHandler = (
+	response: VacancyRespondItemType[]
+) => {
+	return response.map(resp => ({
+		...resp,
+		responseDate: resp.responseDate.substring(0, 10)
+	}))
+}
 
 export const serviceApi = apiSlice.injectEndpoints({
 	endpoints: builder => ({
@@ -147,7 +158,13 @@ export const serviceApi = apiSlice.injectEndpoints({
 				headers: {
 					Authorization: `Bearer ${seekerToken}`
 				}
-			})
+			}),
+			transformResponse: (response: RespondItemType[]) => {
+				return response.map(resp => ({
+					...resp,
+					respondDate: resp.respondDate.substring(0, 10)
+				}))
+			}
 		}),
 		getVacancyGroupedResponces: builder.query<
 			VacancyGroupedResponcesType[],
@@ -180,7 +197,8 @@ export const serviceApi = apiSlice.injectEndpoints({
 					}`
 				},
 				keepUnusedDataFor: 0
-			})
+			}),
+			transformResponse: seekerServiceResponcesDataTransformHandler
 		}),
 		getRespondFullInfo: builder.query<VacancyRespondItemType, number>({
 			query: id => ({
@@ -271,7 +289,8 @@ export const serviceApi = apiSlice.injectEndpoints({
 				headers: {
 					Authorization: `Bearer ${personnelDeparmentToken}`
 				}
-			})
+			}),
+			transformResponse: seekerServiceResponcesDataTransformHandler
 		}),
 		getArchivedRespondFullInfo: builder.query<VacancyRespondItemType, number>({
 			query: id => ({
@@ -287,7 +306,8 @@ export const serviceApi = apiSlice.injectEndpoints({
 				headers: {
 					Authorization: `Bearer ${personnelDeparmentToken}`
 				}
-			})
+			}),
+			transformResponse: seekerServiceResponcesDataTransformHandler
 		}),
 		getReservedRespondFullInfo: builder.query<VacancyRespondItemType, number>({
 			query: id => ({
@@ -690,7 +710,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 				method: 'DELETE',
 				headers: {
 					Authorization: `Bearer ${personnelDeparmentToken}`
-					}
+				}
 			})
 		}),
 		getSupervisorInterview: builder.query<InterviewItemType[], void>({
@@ -712,20 +732,26 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
-		employeeSeekerRequest: builder.mutation<void, SeekerStatusChangeType & {respondId: number}>( {
-			query: arg  => ({
+		employeeSeekerRequest: builder.mutation<
+			void,
+			SeekerStatusChangeType & { respondId: number }
+		>({
+			query: arg => ({
 				url: `http://localhost:8082/employment-api/v1/respond/${arg.respondId}/status/employ`,
 				method: 'PUT',
 				body: {
 					rejectionReason: arg.rejectionReason,
-					action :  arg.action
+					action: arg.action
 				},
 				headers: {
 					Authorization: `Bearer ${supervisorToken}`
 				}
 			})
 		}),
-		answerToInvitationReserveTimeRequest: builder.mutation<void, ReserveTimeRequestType & {respondId: number}> ( {
+		answerToInvitationReserveTimeRequest: builder.mutation<
+			void,
+			ReserveTimeRequestType & { respondId: number }
+		>({
 			query: arg => ({
 				url: `http://localhost:8082/employment-api/v1/respond/${arg.respondId}/chat/butttons/interview/reserve-time`,
 				method: 'POST',
@@ -737,7 +763,10 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
-		answerEmploymentRequest: builder.mutation<void, EmploymentRequestType & {respondId: number}> ( {
+		answerEmploymentRequest: builder.mutation<
+			void,
+			EmploymentRequestType & { respondId: number }
+		>({
 			query: arg => ({
 				url: `http://localhost:8082/employment-api/v1/respond/${arg.respondId}/chat/buttons/employment-request`,
 				method: 'POST',

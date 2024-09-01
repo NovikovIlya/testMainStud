@@ -8,6 +8,9 @@ import CurrentResponceSlice from './reducers/CurrentResponceSlice'
 import CurrentRespondIdSlice from './reducers/CurrentRespondIdSlice'
 import CurrentVacancyNameSlice from './reducers/CurrentVacancyNameSlice'
 import CurrentVacancySlice from './reducers/CurrentVacancySlice'
+import CurrentInterviewTimeSlice from './reducers/CurrentInterviewTimeSlice'
+import CurrentInterviewFormatSlice from './reducers/CurrentInterviewFormatSlice'
+import CurrentInterviewSlice from './reducers/CurrentInterviewSlice'
 import AddressReducer from './reducers/FormReducers/AddressReducer'
 import CountriesEducationReducer from './reducers/FormReducers/CountriesEducationReducer'
 import DocumentReducer from './reducers/FormReducers/DocumentReducer'
@@ -54,6 +57,8 @@ export const store = configureStore({
 		formCompletion: FormCompletionReducer,
 		chatId: chatIdSlice,
 		currentResponce: CurrentResponceSlice,
+		currentInterviewFormat: CurrentInterviewFormatSlice,
+		currentInterviewTime: CurrentInterviewTimeSlice,
 		chatResponceStatus: ChatRespondStatusSlice,
 		currentRequest: CurrentRequestSlice,
 		respondId: CurrentRespondIdSlice,

@@ -5,11 +5,15 @@ import { useNavigate } from 'react-router-dom'
 import { InterviewItemType } from '../../../../../store/reducers/type'
 import { useLazyGetInterviewViewQuery } from '../../../../../store/api/serviceApi'
 import {setCurrentResponce} from "../../../../../store/reducers/CurrentResponceSlice";
+import {setCurrentInterviewFormat} from "../../../../../store/reducers/CurrentInterviewFormatSlice";
+import {setCurrentInterviewTime} from "../../../../../store/reducers/CurrentInterviewTimeSlice";
 
 export const SupervisorInterviewItem = ( props : InterviewItemType ) => {
 
     interface InterviewButtonElemProps {
         id: any
+				format : string
+				time : string
     }
     interface InterviewTimeElemProps {
         eventTime: string
@@ -135,11 +139,29 @@ export const SupervisorInterviewItem = ( props : InterviewItemType ) => {
         )
     }
     const InterviewButtonElem = (props: InterviewButtonElemProps) => {
+				const date : Date = new Date(props.time);
+
+				const localDate = date.toLocaleString('ru-RU', {
+					timeZoneName: 'short',
+					hour12: false,
+				});
+
+				// Преобразуем строку в формат "дд.мм.гг чч:мм"
+				const [datePart, timePart] = localDate.split(', ');
+				const [day, month, year] = datePart.split('.');
+
+				const shortYear : string = year.slice(-2);
+				const shortTime : string = timePart.substring(0, 5);
+
+				const InterviewTimeStringForSeeker = day + '.' + month + '.' + shortYear + ' в ' + shortTime;
+
         return (
             <>
                 <Button
                     onClick={() => {
                             dispatch(setCurrentResponce(props.id))
+                            dispatch(setCurrentInterviewTime(InterviewTimeStringForSeeker))
+                            dispatch(setCurrentInterviewFormat(props.format))
                             navigate('/services/personnelaccounting/supervisor/invitation/seekerinfo')
                     }}
                     className="font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black"
@@ -192,7 +214,7 @@ export const SupervisorInterviewItem = ( props : InterviewItemType ) => {
                 <InterviewFormatElem format={props.format}></InterviewFormatElem>
                 <div className="w-[31%] mr-[3%] flex flex-row items-center justify-evenly">
                     <InterviewCountdownTimeElem eventTime={props.time}  format={props.format}/>
-                    <InterviewButtonElem id={props.id}></InterviewButtonElem>
+                    <InterviewButtonElem id={props.id} format={props.format} time={props.time}></InterviewButtonElem>
                 </div>
             </div>
         </>

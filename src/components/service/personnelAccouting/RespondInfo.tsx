@@ -53,6 +53,8 @@ export const RespondInfo = (props: {
 		res?.status === 'EMPLOYMENT_REQUEST'
 	)
 
+	const date = new Date()
+
 	const dispatch = useDispatch()
 
 	const { data: chatId = 0, isLoading: isChatIdLoading } =
@@ -290,7 +292,10 @@ export const RespondInfo = (props: {
 										<div className="flex flex-col gap-[4px]">
 											<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
 												{exp.beginWork.substring(0, 4)}-
-												{exp.endWork.substring(0, 4)}
+												{parseInt(exp.endWork.substring(0, 4)) ===
+												date.getFullYear()
+													? 'по наст.время'
+													: exp.endWork.substring(0, 4)}
 											</p>
 											<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
 												{parseInt(exp.endWork.substring(0, 4)) -

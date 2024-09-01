@@ -107,7 +107,7 @@ export const VacancyRequestDeleteView = () => {
 						{currentVacancy !== null ? currentVacancy.title.rendered : ''}
 					</p>
 				</div>
-				<div className="w-[50%] mt-[80px] flex flex-col gap-[40px]">
+				<div className="w-[50%] mt-[52px] flex flex-col gap-[40px]">
 					<div className="flex flex-col gap-[16px]">
 						<p className="font-content-font font-bold text-black text-[18px]/[21px]">
 							Должность:

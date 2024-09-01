@@ -103,7 +103,7 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 						{currentVacancy !== null ? currentVacancy.title.rendered : ''}
 					</p>
 				</div>
-				<div className="w-[50%] mt-[80px] grid grid-cols-[repeat(3,_minmax(106px,_auto))_143px] gap-x-[120px] gap-y-[16px]">
+				<div className="w-[50%] mt-[52px] grid grid-cols-[repeat(3,_minmax(106px,_auto))_143px] gap-x-[120px] gap-y-[16px]">
 					<p className="w-[106px] font-content-font font-bold text-black text-[18px]/[21px]">
 						Требуемый опыт работы
 					</p>

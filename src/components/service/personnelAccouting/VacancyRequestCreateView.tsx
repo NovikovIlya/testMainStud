@@ -444,7 +444,7 @@ export const VacancyRequestCreateView = () => {
 			) : (
 				<div
 					id="wrapper"
-					className="pl-[54px] pr-[54px] pt-[60px] pb-[52px] w-full mt-[60px]"
+					className="pl-[54px] pr-[54px] pt-[120px] pb-[52px] w-full"
 				>
 					<div className="flex">
 						<button
@@ -459,7 +459,7 @@ export const VacancyRequestCreateView = () => {
 							{post !== undefined ? post : ''}
 						</p>
 					</div>
-					<div className="w-[50%] mt-[80px] flex flex-col gap-[40px]">
+					<div className="w-[50%] mt-[52px] flex flex-col gap-[40px]">
 						<div className="flex gap-[60px]">
 							<div className="flex flex-col gap-[16px]">
 								<p className="font-content-font font-bold text-black text-[18px]/[21px]">

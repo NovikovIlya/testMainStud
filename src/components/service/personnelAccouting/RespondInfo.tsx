@@ -1,5 +1,6 @@
 import { Button, Tag } from 'antd'
 import { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { Margin, usePDF } from 'react-to-pdf'
 import uuid from 'react-uuid'
@@ -9,11 +10,20 @@ import { RespondDownload } from '../../../assets/svg/RespondDownload'
 import { useAppSelector } from '../../../store'
 import {
 	useApproveRespondMutation,
+	useGetChatIdByRespondIdQuery,
 	useGetRespondFullInfoQuery,
 	useLazyGetRespondFullInfoQuery,
 	useSendRespondToArchiveMutation,
 	useSendRespondToReserveMutation
 } from '../../../store/api/serviceApi'
+import {
+	closeChat,
+	openChat
+} from '../../../store/reducers/ChatRespondStatusSlice'
+import { setRespondId } from '../../../store/reducers/CurrentRespondIdSlice'
+import { setCurrentVacancyId } from '../../../store/reducers/CurrentVacancyIdSlice'
+import { setChatId } from '../../../store/reducers/chatIdSlice'
+import { respondStatus } from '../../../store/reducers/type'
 import ArrowIcon from '../jobSeeker/ArrowIcon'
 
 import { InviteSeekerForm } from './supervisor/InviteSeekerForm'
@@ -42,6 +52,25 @@ export const RespondInfo = (props: {
 	const [isRespondEmployed, setIsRespondEmployed] = useState<boolean>(
 		res?.status === 'EMPLOYMENT_REQUEST'
 	)
+
+	const dispatch = useDispatch()
+
+	const { data: chatId = 0, isLoading: isChatIdLoading } =
+		useGetChatIdByRespondIdQuery({
+			chatId: res ? res.id : 0,
+			role:
+				props.type === 'PERSONNEL_DEPARTMENT'
+					? 'PERSONNEL_DEPARTMENT'
+					: 'SEEKER'
+		})
+
+	const handleNavigate = (url: string) => {
+		dispatch(openChat())
+		dispatch(setChatId(chatId))
+		dispatch(setRespondId(res?.id as number))
+		dispatch(setCurrentVacancyId(0))
+		navigate(url)
+	}
 
 	useEffect(() => {
 		setIsRespondSentToSupervisor(
@@ -192,7 +221,11 @@ export const RespondInfo = (props: {
 										Отправить в резерв
 									</Button>
 									<Button
-										onClick={() => {}}
+										onClick={() => {
+											handleNavigate(
+												`/services/personnelaccounting/chat/id/${chatId}`
+											)
+										}}
 										className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
 									>
 										Перейти в чат

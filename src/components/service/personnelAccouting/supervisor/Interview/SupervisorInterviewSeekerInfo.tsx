@@ -11,6 +11,8 @@ import { useGetRespondFullInfoQuery,
 export const SupervisorInterviewSeekerInfo = ( ) => {
 
 	const respondId = useAppSelector(state => state.currentResponce)
+	const format = useAppSelector(state => state.currentInterviewFormat)
+	const time = useAppSelector(state => state.currentInterviewTime)
 
 	const { data } = useGetRespondFullInfoQuery(respondId.respondId)
 
@@ -39,24 +41,26 @@ export const SupervisorInterviewSeekerInfo = ( ) => {
 		}
 		return (
 			<>
-				{props.format === 'OFFLINE' && !(isInterviewEnded) && (
+				{ (format.format  === 'OFFLINE') && !(isInterviewEnded) && (
 					<div className="flex flex-col justify-center">
 						<h3
 							className=" mb-[20px] font-content-font font-bold text-black text-[16px]/[19.2px]">Собеседование</h3>
-						<h4 className=" mb-[10px] font-content-font font-normal text-black text-[12px]/[14.4x] opacity-40">Дата
-							и время:</h4>
+						<h4 className=" mb-[10px] font-content-font font-normal text-black text-[12px]/[14.4x] opacity-40">
+							Дата и время:</h4>
 						<h4
-							className="font-content-font font-normal text-black text-[16px]/[19.2px]">{data?.meetingData.date} в {data?.meetingData.time}</h4>
+							className="font-content-font font-normal text-black text-[16px]/[19.2px]">
+							{time.time}
+						</h4>
 					</div>
 				)}
-				{props.format === 'ONLINE' && !(isInterviewEnded) && (
+				{ (format.format === 'ONLINE') && !(isInterviewEnded) && (
 					<div className="flex flex-col justify-center">
 						<h4 className="mb-[20px] font-content-font font-normal text-black text-[16px]/[19.2px]">Подключитесь к
 							онлайн-конференции</h4>
 						<Button
 							className="h-[40px] w-[257px] bg-[#3073D7] rounded-[54.5px] text-white text-[16px]/[16px]"
 							onClick={() => {
-								window.open(data?.meetingData?.url, '_blank')
+
 							}}
 						>
 							Подключиться

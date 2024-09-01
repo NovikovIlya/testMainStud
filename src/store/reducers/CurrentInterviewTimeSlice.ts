@@ -3,7 +3,7 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 const initialState: { time: string } = { time: '' }
 
 const currentInterviewTimeSlice = createSlice({
-	name: 'currentInterviewFormat',
+	name: 'currentInterviewTime',
 	initialState,
 	reducers: {
 		setCurrentInterviewTime: (state, action: PayloadAction<string>) => {

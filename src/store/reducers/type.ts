@@ -303,11 +303,6 @@ export type VacancyRespondItemType = {
 		country: string
 		bday: string
 	}
-	meetingData: {
-		url: string
-		date: string
-		time: string
-}
 	respondData: {
 		coverLetter: string
 		portfolio: {

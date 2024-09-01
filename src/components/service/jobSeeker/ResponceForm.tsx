@@ -1181,10 +1181,19 @@ export const ResponseForm = () => {
 													.toDate()
 													.getMonth() === date.getMonth()
 													? 'по наст.время'
-													: dayjs(exp.experience.endWork, 'DD.MM.YYYY')
+													: (dayjs(exp.experience.endWork, 'DD.MM.YYYY')
 															.toDate()
 															.getMonth() +
-													  1 +
+															1 <
+													  10
+															? '0' +
+															  (dayjs(exp.experience.endWork, 'DD.MM.YYYY')
+																	.toDate()
+																	.getMonth() +
+																	1)
+															: dayjs(exp.experience.endWork, 'DD.MM.YYYY')
+																	.toDate()
+																	.getMonth() + 1) +
 													  '.' +
 													  dayjs(exp.experience.endWork, 'DD.MM.YYYY')
 															.toDate()

@@ -47,10 +47,14 @@ const supervisorToken =
 const seekerServiceResponcesDataTransformHandler = (
 	response: VacancyRespondItemType[]
 ) => {
-	return response.map(resp => ({
-		...resp,
-		responseDate: resp.responseDate.substring(0, 10)
-	}))
+	return response.map(resp =>
+		resp.type === 'RESERVE'
+			? {
+					...resp,
+					responseDate: resp.responseDate.substring(0, 10)
+			  }
+			: { ...resp, respondDate: resp.respondDate.substring(0, 10) }
+	)
 }
 
 export const serviceApi = apiSlice.injectEndpoints({

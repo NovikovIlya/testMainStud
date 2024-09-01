@@ -68,7 +68,7 @@ export const DirectResume = ({
 	const onSubmit: SubmitHandler<formDataType> = data => {
 		const formData = new FormData()
 		data.resumeFile && formData.append('resumeFile', data.resumeFile[0])
-		formData.append('name', data.name)
+		formData.append('firstname', data.name)
 		formData.append('lastname', data.lastname)
 		formData.append('middlename', data.middlename)
 		formData.append('email', data.email)

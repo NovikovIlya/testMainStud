@@ -57,7 +57,31 @@ export const EditAppendix = () => {
 	const [isEdit, setIsEdit] = useState(false)
 	const [selectContract, setSelectContract] = useState<string | null>(null)
 	const [contracts, setContracts] = useState<any>([])
+	const [selectDogovor,setSelectDogovor] = useState<any>()
 	const dispatch = useAppDispatch()
+
+	useEffect(()=>{
+		if(isSuccess){
+			const x = {
+				value: dataOneSubmissions.id,
+				label: `${dataOneSubmissions.contract.contractFacility} ${dataOneSubmissions.contract.contractNumber} ${dataOneSubmissions.contract.conclusionDate}`
+			}
+			console.log('x',x)
+			setSelectDogovor(x.label)
+		}
+	},[isSuccess])
+	
+	useEffect(() => {
+		if (isSuccessGetContracts) {
+			const newArray = dataGetContracts.map(item => {
+				return {
+					value: item.id,
+					label: `${item.contractFacility} ${item.contractNumber} ${item.conclusionDate}`
+				}
+			})
+			setContracts(newArray)
+		}
+	}, [isSuccessGetContracts])
 
 	useEffect(() => {
 		if (isSuccessGetContracts) {
@@ -244,6 +268,7 @@ export const EditAppendix = () => {
 						<Select
 							style={{ width: '100%' }}
 							showSearch
+							value={selectDogovor}
 							placeholder="Выберите договор"
 							onChange={handleChange}
 							filterOption={(input, option) =>

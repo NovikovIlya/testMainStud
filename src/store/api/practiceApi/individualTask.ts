@@ -111,7 +111,8 @@ export const individualTasks = apiSlice.injectEndpoints({
             query: () => ({
                 url: 'services/api-practices/kpfu/subdivisions',
                 method: 'GET',
-            })
+            }),
+            keepUnusedDataFor: 1,
         }),
         getSubdivisionForPractice: builder.query<any, void>({
             query: () => ({

@@ -103,7 +103,7 @@
 
 import type { MenuProps } from 'antd'
 import { Button, Menu, Tour } from 'antd'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { PracticesSvg } from '../../../assets/svg/PracticesSvg'
@@ -146,6 +146,8 @@ export const NavPractices = () => {
 	const refArray = [ref1, ref2, ref3];
 	const [open, setOpen] = useState<boolean>(false);
 
+
+
 	const items: any = [
 		getItem('Справочники', 'sub1', <PracticesSvg />, [
 			getItem('Реестр договоров', 'registerContracts'),
@@ -158,7 +160,7 @@ export const NavPractices = () => {
 			getItem('Приказ по практике', 'practiceOrder'),
 			getItem('Приложение 4', 'appendix')
 		]),
-		getItem(<Button className='opacity-70'  onClick={() => setOpen(true)}>Пройти обучение</Button>, 'sub3', <QuestionCircleOutlined className='invisible absolute top-1/2 -translate-y-1/2 right-4 '/>),
+		getItem(<Button className='opacity-70 '  onClick={() => setOpen(true)}>Пройти обучение</Button>, 'sub3', <QuestionCircleOutlined className='invisible absolute top-1/2 -translate-y-1/2 right-4 '/>),
 		// getItem('Cогласование документов', 'sub4', <PracticesSvg />, [
 		// 	getItem('График практик', '9'),
 		// 	getItem('Представление в приказ', '10'),
@@ -279,12 +281,16 @@ export const NavPractices = () => {
 				onOpenChange={onOpenChange}
 				className="min-w-[230px] max-w-[230px] flex flex-col gap-7 mt-28"
 				// @ts-ignore
-				items={items.map((item,index)=>{
-					return{key: item.key,
+				items={items.map((item, index) => ({
+					key: item.key,
 					icon: item.icon,
 					children: item.children,
-					label: <div ref={refArray[index]}>{item?.label}</div>}
-				})}
+					label: (
+					  <div  ref={refArray[index]}>
+						{item?.label}
+					  </div>
+					)
+				  }))}
 			/>
 			<div className="bg-[#F5F8FB] w-full pt-14 px-14  xl:mt-20 mt-20 ">
 				{current === 'registerContracts' && <Roster />}

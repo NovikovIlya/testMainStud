@@ -128,12 +128,12 @@ export const TableEdit = ({ isSuccessDataOne,visiting, fullTable=[], setFullTabl
 			key: 'period',
 			dataIndex: 'period',
 			title: 'Период практики',
-			className: 'text-xs !p-2'
+			className: 'text-xs !p-2 mobileFirst'
 		},
 		{
 			key: 'other',
 			dataIndex: 'other',
-			title: 'Курc, вид и тип прохождения практики',
+			title: 'Курc, вид и тип прохождения практики mobileFirst',
 			className: 'text-xs !p-2',
 			
 		},
@@ -149,14 +149,14 @@ export const TableEdit = ({ isSuccessDataOne,visiting, fullTable=[], setFullTabl
 			key: 'FIO',
 			dataIndex: 'FIO',
 			title: 'ФИО руководителя практики от Организации',
-			className: 'text-xs !p-2',
+			className: 'text-xs !p-2 mobileFirst',
 			
 		},
 		{
 			key: 'FIOProf',
 			dataIndex: 'FIOProf',
 			title: 'ФИО руководителя практики от Профильной Организации',
-			className: 'text-xs !p-2',
+			className: 'text-xs !p-2 mobileFirst',
 			editable:true
 			
 		},

@@ -216,14 +216,14 @@ export const ViewRepresentation = () => {
 			key: 'practiceType',
 			dataIndex: 'practiceType',
 			title: 'Тип',
-			className: 'text-xs !p-2',
+			className: 'text-xs !p-2 mobileFirst',
 			render: (text: any, record: any) => <span >{record?.practice?.practiceType}</span>
 		},
   		{
 			key: 'practiceKind',
 			dataIndex: 'practiceKind',
 			title: 'Вид',
-			className: 'text-xs !p-2',
+			className: 'text-xs !p-2 mobileFirst',
 			render: (text: any, record: any) => <span >{record?.practice?.practiceKind}</span>
 		},
 
@@ -231,14 +231,14 @@ export const ViewRepresentation = () => {
 			key: 'FIO',
 			dataIndex: 'FIO',
 			title: 'ФИО руководителя от кафедры, должность',
-			className: 'text-xs !p-2',
+			className: 'text-xs !p-2 mobileFirst',
 			render: (text: any, record: any) => <span >{record?.practice?.departmentDirector}</span>
 		},
 		{
 			key: 'visiting',
 			dataIndex: 'visiting',
 			title: 'Выездные практики',
-			className: 'text-xs !p-2',
+			className: 'text-xs !p-2 mobileFirst',
 			render: (text: any, record: any) => <span >{record?.isWithDeparture ? 'Да' : 'Нет'}</span>
 		},
 		{
@@ -289,11 +289,11 @@ export const ViewRepresentation = () => {
 				</Col>
 			</Row>
 
-			<Row gutter={[16, 16]} className="mt-12 flex items-center">
-				<Col span={5}>
+			<Row gutter={[16, 16]} className=" mt-12 flex items-center overWrite w-full">
+				<Col span={5} className='overWrite ' >
 					<span>Подразделение</span>
 				</Col>
-				<Col span={7}>
+				<Col span={7} className='overWrite ccc'>
 					<Select
 						popupMatchSelectWidth={false}
 						defaultValue=""
@@ -309,7 +309,7 @@ export const ViewRepresentation = () => {
 							}}
 					/>
 				</Col>
-				<Col span={7} offset={5}>
+				<Col span={7} offset={5} className='overWrite'>
 					<Space className="w-full flex-row-reverse">
 						<Button
 							type="primary"
@@ -324,16 +324,16 @@ export const ViewRepresentation = () => {
 				</Col>
 			</Row>
 
-    		<Row gutter={[16, 16]} className="mt-4 flex items-center">
+    		<Row gutter={[16, 16]} className="mt-4 flex items-center ">
 				<Col span={5} >
 					<span>Наименование специальности</span>
 				</Col>
-				<Col span={7}>
-				<Form.Item className='mb-0' name={'specialtyName'}>
+				<Col span={7} className='overWrite'>
+				<Form.Item className='mb-0 ' name={'specialtyName'}>
 					<Select
 						disabled={filter.subdivision === 'Все' ? true : false}
 						popupMatchSelectWidth={false}
-						className="w-full"
+						className="w-full overWrite"
 						options={[
 							{ key: 2244612, value: 'Все', label: 'Все' },
 							...(dataSubmissionSpecialty
@@ -356,7 +356,7 @@ export const ViewRepresentation = () => {
 				<Col span={5} >
 					<span>Выездные практики</span>
 				</Col>
-				<Col span={7}>
+				<Col span={7} className='overWrite'>
 					<Select
 						disabled={filter.subdivision === 'Все' ? true : false}
 						popupMatchSelectWidth={false}
@@ -374,7 +374,7 @@ export const ViewRepresentation = () => {
 				<Col span={5} >
 					<span>ФИО руководителя</span>
 				</Col>
-				<Col span={7}>
+				<Col span={7} className='overWrite'>
 					<Form.Item className='mb-0'  name={'FIO'}>
 					<Select
 						disabled={filter.subdivision === 'Все' ? true : false}
@@ -403,7 +403,7 @@ export const ViewRepresentation = () => {
 				<Col span={2} >
 					<span>Курс</span>
 				</Col>
-				<Col span={4}>
+				<Col span={4} className='overWrite'>
 					<Select
 						disabled={filter.subdivision === 'Все' ? true : false}
 						popupMatchSelectWidth={false}
@@ -421,7 +421,7 @@ export const ViewRepresentation = () => {
        			<Col span={2} >
 					<span>Учебный год</span>
 				</Col>
-				<Col span={4}>
+				<Col span={4} className='overWrite'>
 				<Form.Item className='mb-0'  name={'academicYear'}>
 					<Select
 						disabled={filter.subdivision === 'Все' ? true : false}
@@ -454,7 +454,7 @@ export const ViewRepresentation = () => {
 				<Col span={2} >
 					<span>Тип</span>
 				</Col>
-				<Col span={4}>
+				<Col span={4} className='overWrite'>
 				<Form.Item className='mb-0'  name={'practiceType'}>
 					<Select
 						disabled={filter.subdivision === 'Все' ? true : false}
@@ -484,7 +484,7 @@ export const ViewRepresentation = () => {
        			<Col span={2} >
 					<span>Вид</span>
 				</Col>
-				<Col span={4}>
+				<Col span={4} className='overWrite'>
 					<Select
 						disabled={filter.subdivision === 'Все' ? true : false}
 						options={[
@@ -531,8 +531,8 @@ export const ViewRepresentation = () => {
 				</Col>
 			</Row> */}
 
-			<Row className="mt-4">
-				<Col flex={'auto'}>
+			<Row className="mt-4 ">
+				<Col flex={'auto'} className='overWrite '>
 				{isFetchingSubAll || flagLoad? <Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}/> :
 					<Table
 						onRow={(record) => ({
@@ -546,7 +546,7 @@ export const ViewRepresentation = () => {
 						pagination={dataTable?.length < 10 ? false : {
 							pageSize: 10,
 						}}
-						className="my-10"
+						className='absolute  sm:relative  lg:left-0 sm:top-10'
 						rowSelection={{
 							type: 'checkbox',
 							onSelect: (record, selected, selectedRows, nativeEvent) => {

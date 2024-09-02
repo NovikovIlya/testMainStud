@@ -1,5 +1,5 @@
 import {DeleteOutlined, PlusOutlined} from '@ant-design/icons'
-import {Button, Col, Form, Row, Select, Space} from 'antd'
+import {Button, Col, Form, Row, Select, Space, TreeSelect} from 'antd'
 import React, {useEffect, useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {ArrowLeftSvg} from '../../../../../assets/svg'
@@ -33,9 +33,13 @@ const CreateTask = () => {
     const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery(subDivision)
     const [practiceType, setPracticeType] = useState<PracticeType[]>()
     const {data: dataPracticeType, isSuccess: isSuccessPracticeType} = useGetPracticeTypeQuery(subDivision)
-    const [departments, setDepartments] = useState<Department[]>([])
+    const [departments, setDepartments] = useState<any[]>([])
     const {data: dataDepartments, isSuccess: isSuccessDepartments} = useGetDepartmentsQuery()
     const dispatch = useAppDispatch()
+    const [treeLine, setTreeLine] = useState(true);
+    const [showLeafIcon, setShowLeafIcon] = useState(false);
+    const [value, setValue] = useState<string>();
+  
 
     useEffect(() => {
         if (isSuccessNameSpecialty) {
@@ -60,36 +64,37 @@ const CreateTask = () => {
 
 
     function onFinish(values: Task) {
-        const specName = dataNameSpecialty!.find(elem => {
+        const specName = dataNameSpecialty?.find(elem => {
             if (elem.value === values.specialityName) {
                 return elem
             }
         })
-        const practiceType = dataPracticeType!.find(elem => {
+        const practiceType = dataPracticeType?.find(elem => {
             if (elem.value === values.practiceType) {
                 return elem
             }
             
         })
-        const subDivision = departments!.find(elem => {
-            if (elem.value === values.subDivision) {
-                return elem
-            }
-            if('responses' in elem){
-                // @ts-ignore
-                return elem.responses?.find((elem:any)=> {
-                    if(form?.getFieldValue('subDivision')?.split(" - ")[1] === elem.value){
-                        return elem
-                    }      
-                })
-            }
-        })
+        // const subDivision = departments!.find(elem => {
+        //     if (elem.value === values.subDivision) {
+        //         return elem
+        //     }
+        //     if('responses' in elem){
+        //         // @ts-ignore
+        //         return elem.responses?.find((elem:any)=> {
+        //             if(form?.getFieldValue('subDivision')?.split(" - ")[1] === elem.value){
+        //                 return elem
+        //             }      
+        //         })
+        //     }
+        // })
         const newData: TaskSend = {
             specialityNameId: String(specName!.id),
             practiceTypeId: String(practiceType!.id),
-            subdivisionNameId: String(subDivision!.id),
+            subdivisionNameId: subDivision,
             tasks: values.tasks.map(elem => elem.task)
         }
+        
         createTask(newData)
             .unwrap()
             .then(data => {
@@ -104,6 +109,14 @@ const CreateTask = () => {
             })
        
     }
+
+    const disableParents = (data:any) => {
+        return data?.map((item: any) => ({
+          ...item,
+          disabled: !!item.children, // Делаем родительские элементы недоступными
+          children: item.children ? disableParents(item.children) : undefined,
+        }));
+    };
 
     const handlePodrazdelenie = (value:any)=>{
         if(value.length === 0){
@@ -127,6 +140,32 @@ const CreateTask = () => {
         form.setFieldValue('practiceType', null)
     }
 
+    const onChange = (newValue: string) => {
+        console.log('newValue',newValue)
+        setSubDivision(newValue);
+
+        form.setFieldValue('specialityName', null)
+        form.setFieldValue('practiceType', null)
+      };
+    
+      const onPopupScroll: any = (e:any) => {
+        console.log('onPopupScroll', e);
+    };
+    const treeData = dataDepartments?.map((item)=>{
+        return{
+            title:item.value,
+            value:item.id,
+            // @ts-ignore
+            children: item?.responses?.map((item)=>{
+                return{
+                    title:item.value,
+                    value:item.id,
+                }
+            })
+        }
+    })
+    console.log('treeData',treeData)
+    console.log('subDivision',subDivision)
     return (
         <section className="container">
             <Space size={10} align="center">
@@ -155,12 +194,26 @@ const CreateTask = () => {
                             <Form.Item label={'Подразделение'}
                                        rules={[{required: true}]}
                                        name={'subDivision'}>
-                                <Select
+                                {/* <Select
                                     size="large"
                                     popupMatchSelectWidth={false}
                                     className="w-full"
                                     options={departments}
                                     onChange={handlePodrazdelenie}
+                                /> */}
+                                <TreeSelect
+                                    treeLine={treeLine && { showLeafIcon }}
+                                    showSearch
+                                    style={{ height:'38px',width: '100%' }}
+                                    value={value}
+                                    dropdownStyle={{  overflow: 'auto' }}
+                                    placeholder=""
+                                    allowClear
+                                    treeDefaultExpandAll
+                                    onChange={onChange}
+                                    treeData={disableParents(treeData)}
+                                    onPopupScroll={onPopupScroll}
+                                    treeNodeFilterProp="title"
                                 />
                             </Form.Item>
                         </Space>

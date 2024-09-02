@@ -26,6 +26,17 @@
 .ant-steps-item-title{
   font-size: 11px !important;
 }
+li:nth-child(3)[role='menuitem'][data-menu-id*='sub3'] {
+  background-color: transparent !important;
+  cursor: auto !important;
+}
+.ccc{
+  padding: 0 !important;
+}
+
+:where(.css-dev-only-do-not-override-to9039).ant-tree-select-dropdown .ant-select-tree .ant-select-tree-treenode-disabled .ant-select-tree-node-content-wrapper{
+  color:rgba(0, 0, 0, 0.5) !important;
+}
 @media screen and (max-width: 768px) {
   .ant-menu-root{
     position: fixed;
@@ -39,14 +50,14 @@
     display: none;
   }
   .ant-row{
-    display: grid;
+    display: grid !important;
   }
   .ant-col{
     font-size: 7px !important;
     margin-left: 0 !important;
    
   }
-  .ant-table-wrapper{
+  .ant-table-wrapper,.ant-spin-container{
     display: flex;
     justify-content: center;
   }

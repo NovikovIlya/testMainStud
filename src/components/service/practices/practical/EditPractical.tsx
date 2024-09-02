@@ -7,7 +7,8 @@ import {
     Row,
     Select,
     Space,
-    Spin
+    Spin,
+    TreeSelect
 } from 'antd';
 import { useEffect, useState } from 'react';
 import { ArrowLeftSvg } from '../../../../assets/svg';
@@ -26,6 +27,7 @@ import { showNotification } from '../../../../store/reducers/notificationSlice';
 import { SkeletonPage } from './Skeleton';
 import { DeleteOutlined } from '@ant-design/icons';
 import { DeleteRedSvg } from '../../../../assets/svg/DeleteRedSvg';
+import { disableParents } from '../../../../utils/disableParents';
 
 
 
@@ -94,13 +96,15 @@ export const EditPractical = () => {
     const {data: dataPraciseKind, isSuccess: isSuccesPractiseKind} = useGetPracticeKindQuery(subDivisionId, {skip: !subDivisionId})
     const {data:dataSubdivisonForPractise} = useGetSubdivisionForPracticeQuery()
     const {data:dataTask, isSuccess:isSuccessTask} = useGetTasksForPracticeQuery(arqTask,{skip:!arqTask})
-    const {data:dataIsPeopleInGroup} = useIsPeopleInGroupQuery(form.getFieldValue('groupNumber'))
+    // const {data:dataIsPeopleInGroup} = useIsPeopleInGroupQuery(form.getFieldValue('groupNumber'))
     const [updateForm,{isLoading:isLoadingSendForm}] = useUpdatePracticeOneMutation()
     const [copyDataCompetences, setCopyDataCompetences] = useState<any>([])
     const [flagCompetence,setFlagCompentence] = useState(false)
     const [flag,setFlag] = useState(false)
     const dispatch = useAppDispatch()
-
+    const [treeLine, setTreeLine] = useState(true);
+    const [showLeafIcon, setShowLeafIcon] = useState(false);
+    const [value, setValue] = useState<any>();
     
 	useEffect(()=>{
 		if(!flagCompetence){
@@ -234,24 +238,28 @@ export const EditPractical = () => {
             const endDate = dayjs(endYear, 'YYYY');
             form.setFieldValue('academicYear', [startDate, endDate]);
 
-            dataDepartments?.forEach((item:any)=>{
-                if(item.value===dataOnePractise?.subdivision) {
-                    form.setFieldValue('subDivision', `${dataOnePractise.subdivision}`)
+            // dataDepartments?.forEach((item:any)=>{
+            //     if(item.value===dataOnePractise?.subdivision) {
+            //         form.setFieldValue('subDivision', `${dataOnePractise.subdivision}`)
                    
                    
-                }
-                if('responses' in item){
-                     item.responses?.find((elem:any)=> {
-                        if(dataOnePractise?.subdivision.toLowerCase()===elem.value.toLowerCase()){
-                            form.setFieldValue('subDivision', `${item.value + ' - ' + elem.value}`)
+            //     }
+            //     if('responses' in item){
+            //          item.responses?.find((elem:any)=> {
+            //             if(dataOnePractise?.subdivision.toLowerCase()===elem.value.toLowerCase()){
+            //                 form.setFieldValue('subDivision', `${item.value + ' - ' + elem.value}`)
                         
-                        }      
-                    })
-                }
-                else{
-                    console.log('item.value3',item.value)
-                }
-            })
+            //             }      
+            //         })
+            //     }
+            //     else{
+            //         console.log('item.value3',item.value)
+            //     }
+            // })
+            form.setFieldValue('subDivision', [{
+                title: dataOnePractise.subdivision,
+                // @ts-ignore
+                value: dataOnePractise.subdivisionId}]);
 
             form.setFieldValue('courseStudy', dataOnePractise.courseNumber);
             form.setFieldValue('period', [dayjs(dataOnePractise.practicePeriod[0], 'YYYY.MM.DD'),dayjs(dataOnePractise.practicePeriod[1], 'YYYY.MM.DD')]);
@@ -361,7 +369,7 @@ export const EditPractical = () => {
             totalHours: String(values.amountHours),
             competenceIds: copyDataCompetences?.map((item:any)=>String(item.id)),
             departmentDirectorId: directorId?.id, 
-            subdivisionId: child,
+            subdivisionId: subDivisionId,
             specialtyNameId:pickSpecialityId?.id,
             practiceKindId: dataPraciseKind?.find((item)=>{
                 if(item.value===values.practiceKind){
@@ -472,6 +480,31 @@ export const EditPractical = () => {
 		const newCompetences = copyDataCompetences.filter((elem:any) => elem.id!== item.id)
 		setCopyDataCompetences(newCompetences)
 	}
+    const onPopupScroll: any = (e:any) => {
+        console.log('onPopupScroll', e);
+    };
+    const onChange = (newValue: string) => {
+        console.log('newValue',newValue)
+        // setSubDivision(newValue);
+
+        setSubDevisionId(newValue)
+        // form.setFieldValue('specialityName', null)
+        // form.setFieldValue('practiceType', null)
+      };
+
+    const treeData = dataDepartments?.map((item:any)=>{
+        return{
+            title:item.value,
+            value:item.id,
+            // @ts-ignore
+            children: item?.responses?.map((item)=>{
+                return{
+                    title:item.value,
+                    value:item.id,
+                }
+            })
+        }
+    })
 
     if(isFetchingDataOnePractise) return <SkeletonPage/>
 
@@ -503,12 +536,27 @@ export const EditPractical = () => {
                                 <Form.Item label={'Подразделение'}
                                         rules={[{required: true}]}
                                         name={'subDivision'}>
-                                    <Select
+                                    {/* <Select
                                         onChange={handleChange}
                                         size="large"
                                         popupMatchSelectWidth={false}
                                         className="w-full"
                                         options={departments}
+                                    /> */}
+                                        <TreeSelect
+                                        treeLine={treeLine && { showLeafIcon }}
+                                        showSearch
+                                        style={{ height:'38px',width: '100%' }}
+                                        value={value}
+                                        dropdownStyle={{  overflow: 'auto' }}
+                                        placeholder=""
+                                        allowClear
+                                        treeDefaultExpandAll
+                                        onChange={onChange}
+                                        treeData={disableParents(treeData)}
+                                        onPopupScroll={onPopupScroll}
+                                        treeNodeFilterProp="title"
+                                    
                                     />
                                 </Form.Item>
                             </Space>
@@ -732,7 +780,10 @@ export const EditPractical = () => {
                                     }}
                                     actions={[<div  onClick={() => deleteCompetence(item)} className='cursor-pointer'><DeleteRedSvg /></div>]}
                                     >
-                                        <div className=' p-3'>{index + 1}</div> <div className='ml-2'>{item.value}</div>
+                                        <div className='flex items-center'>
+                                            <div className=' p-3'>{index + 1}</div> 
+                                            <div className='ml-2'>{item.value}</div>
+                                        </div>
                                     </List.Item>
                                 )}
                             />

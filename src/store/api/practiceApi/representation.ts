@@ -227,7 +227,7 @@ export const representationService = apiSlice.injectEndpoints({
         getDocApplication: builder.query<any, any>({
             query: (id) => {
                 return {
-                    url: `/services/api-practices/orders/doc/${id}`,
+                    url: `services/api-practices/application-four/doc/${id}`,
                     method: 'GET',
                     responseHandler: async (response) => {
                         const blob = await response.blob();

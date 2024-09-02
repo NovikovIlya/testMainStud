@@ -265,7 +265,7 @@ export const PracticeSchedule = () => {
 						<Select
 							popupMatchSelectWidth={false}
 							defaultValue=""
-							className="w-[500px]"
+							className="w-full sm:w-[500px]"
 							options={optionsSortDate}
 							onChange={value => {
 								setFilter({

@@ -650,7 +650,7 @@ export const RegisterContracts = () => {
                         />
                     </Col>
                 </Col>
-                <Col span={3} offset={9}>
+                <Col span={3} offset={9} className='overWrite flex justify-end sm:block'>
                     <Button type={"primary"} ref={ref1}
                             onClick={() => {
                                 nav('/services/practices/registerContracts/createContract')
@@ -687,11 +687,11 @@ export const RegisterContracts = () => {
                 'mt-4',
                 !tableView.table && 'hidden'
             )}>
-                <Col span={12} className={'flex items-center gap-2'}>
+                <Col span={12} className={'flex items-center gap-2 overWrite'}>
                     <Col span={8}>
                         <span className={'whitespace-nowrap'}>Наименование специальности</span>
                     </Col>
-                    <Col span={16}>
+                    <Col span={16} className='overWrite'>
                         <Select
                             popupMatchSelectWidth={false}
                             defaultValue="Все"

@@ -172,7 +172,7 @@ export const CreateAppendix = () => {
 				</Row>
 
 				<Row className="mt-4 flex items-center justify-between">
-					<Col span={12} className="justify-start flex">
+					<Col span={12} className="justify-start flex overWrite">
 						<Steps
 							className='mt-6 mb-6'
 							size="default"
@@ -191,7 +191,7 @@ export const CreateAppendix = () => {
 						/>
 					</Col>
 
-						<Col span={12} className="justify-end flex">
+						<Col span={12} className="justify-start sm:justify-end flex">
 							<div>
 								<Space>
 									{selectedPractice ? (

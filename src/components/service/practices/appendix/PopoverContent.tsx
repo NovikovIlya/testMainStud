@@ -8,7 +8,7 @@ import { DeleteRedSvg } from '../../../../assets/svg/DeleteRedSvg'
 import { Load } from '../../../../assets/svg/Load'
 import { PrintSvg } from '../../../../assets/svg/PrintSvg'
 import { ColorBg, WrapperButton } from '../popover/WrapperButton'
-import { useDeleteApplicationMutation, useDeleteSubmissionMutation, useGetDocRepresentationQuery } from '../../../../store/api/practiceApi/representation'
+import { useDeleteApplicationMutation, useDeleteSubmissionMutation, useGetDocApplicationQuery, useGetDocRepresentationQuery } from '../../../../store/api/practiceApi/representation'
 
 interface Props {
 	recordFullAll?: any
@@ -19,7 +19,7 @@ interface Props {
 
 export const PopoverContent = ({recordFull,recordFullAll,setRecordFull,setSelectedFieldFull}: Props) => {
 	const [deleteRepresentation,{}] = useDeleteApplicationMutation()
-	const {data:dataGetDocRepresentation,isLoading:isLoadingDocRepesentation} = useGetDocRepresentationQuery(recordFull.id)
+	const {data:dataGetDocRepresentation,isLoading:isLoadingDocRepesentation} = useGetDocApplicationQuery(recordFull.id)
 	
 	function translateColumnsIntoRussia({ isPrint }: { isPrint: boolean }) {
 		if (isPrint) {

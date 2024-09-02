@@ -151,7 +151,6 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 		practiceKind: "Все",
 		dateFilling: 'По дате (сначала новые)',
 	})
-
 	const [selectedFieldsFull, setSelectedFieldFull] = useState<any>([])
 	const {data:dataSubmisisionsSubdevision} = useGetSubmissionsSubdevisionQuery()
 	const [selectSubdivisionId,setSelectSubdivisionId] = useState(null)
@@ -406,26 +405,26 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 			key: 'academicYear',
 			dataIndex: 'academicYear',
 			title: 'Учебный год',
-			className: 'text-xs !p-2',
+			className: 'text-xs !p-2 mobileFirst',
 			render: (text: any, record: any) => <span >{record?.practice?.academicYear}</span>
 		},
     	{
 			key: 'courseNumber',
 			dataIndex: 'courseNumber',
 			title: 'Курс',
-			className: 'text-xs !p-2',
+			className: 'text-xs !p-2 mobileFirst',
 			render: (text: any, record: any) => <span >{record?.practice?.courseNumber}</span>
 		},
    		{
 			key: 'practiceType',
 			dataIndex: 'practiceType',
 			title: 'Тип',
-			className: 'text-xs !p-2',
+			className: 'text-xs !p-2 mobileFirst',
 			render: (text: any, record: any) => <span >{record?.practice?.practiceType}</span>
 		},
   		{
 			key: 'practiceKind',
-			dataIndex: 'practiceKind',
+			dataIndex: 'practiceKind mobileFirst',
 			title: 'Вид',
 			className: 'text-xs !p-2',
 			render: (text: any, record: any) => <span >{record?.practice?.practiceKind}</span>
@@ -441,14 +440,14 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 			key: 'FIO',
 			dataIndex: 'FIO',
 			title: 'ФИО руководителя от кафедры, должность',
-			className: 'text-xs !p-2',
+			className: 'text-xs !p-2 mobileFirst',
 			render: (text: any, record: any) => <span >{record?.practice?.departmentDirector}</span>
 		},
 		{
 			key: 'visiting',
 			dataIndex: 'visiting',
 			title: 'Выездные практики',
-			className: 'text-xs !p-2',
+			className: 'text-xs !p-2 mobileFirst',
 			render: (text: any, record: any) => <span >{record?.isWithDeparture ? 'Да' : 'Нет'}</span>
 		},
 		{
@@ -686,7 +685,7 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 		<Modal
 			footer={null}
 			width={'100%'}
-			
+			className='top-[140px] sm:top-[100px]'
 			open={isModalOpenOne}
 			onOk={handleOkOne}
 			onCancel={handleCancelOne}
@@ -705,7 +704,7 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 				<Col span={5}>
 					<span>Подразделение</span>
 				</Col>
-				<Col span={7}>
+				<Col span={7} className='overWrite'>
 					<Select
 						popupMatchSelectWidth={false}
 						defaultValue=""
@@ -738,7 +737,7 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 				<Col span={5} >
 					<span>Наименование специальности</span>
 				</Col>
-				<Col span={7}>
+				<Col span={7}  className='overWrite'>
 				<Form.Item className='mb-0' name={'specialtyName'}>
 					<Select
 						disabled={filter.subdivision === 'Все' ? true : false}
@@ -765,7 +764,7 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 				<Col span={5} >
 					<span>Выездные практики</span>
 				</Col>
-				<Col span={7}>
+				<Col span={7}  className='overWrite'>
 					<Select
 						disabled={filter.subdivision === 'Все' ? true : false}
 						popupMatchSelectWidth={false}
@@ -782,7 +781,7 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 				<Col span={5} >
 					<span>ФИО руководителя</span>
 				</Col>
-				<Col span={7}>
+				<Col span={7}  className='overWrite'>
 					<Form.Item className='mb-0'  name={'FIO'}>
 					<Select
 						disabled={filter.subdivision === 'Все' ? true : false}
@@ -809,10 +808,10 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 			
 
 			<Row gutter={[16, 16]} className="mt-4 flex items-center">
-				<Col span={2} >
+				<Col span={2}  className='overWrite'>
 					<span>Курс</span>
 				</Col>
-				<Col span={4}>
+				<Col span={4}  className='overWrite'>
 					<Select
 						disabled={filter.subdivision === 'Все' ? true : false}
 						popupMatchSelectWidth={false}
@@ -827,10 +826,10 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 						}}
 					/>
 				</Col>
-       			<Col span={2} >
+       			<Col span={2}  className='overWrite'>
 					<span>Учебный год</span>
 				</Col>
-				<Col span={4}>
+				<Col span={4}  className='overWrite'>
 				<Form.Item className='mb-0'  name={'academicYear'}>
 					<Select
 						disabled={filter.subdivision === 'Все' ? true : false}
@@ -860,10 +859,10 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 			</Row>
 		
 			<Row gutter={[16, 16]} className="mt-4 flex items-center">
-				<Col span={2} >
+				<Col span={2}  className='overWrite'>
 					<span>Тип</span>
 				</Col>
-				<Col span={4}>
+				<Col span={4}  className='overWrite'>
 				<Form.Item className='mb-0'  name={'practiceType'}>
 					<Select
 						disabled={filter.subdivision === 'Все' ? true : false}
@@ -890,10 +889,10 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 					/>
 					</Form.Item>
 				</Col>
-       			<Col span={2} >
+       			<Col span={2}  className='overWrite'>
 					<span>Вид</span>
 				</Col>
-				<Col span={4}>
+				<Col span={4}  className='overWrite'>
 					<Select
 						disabled={filter.subdivision === 'Все' ? true : false}
 						options={[
@@ -958,7 +957,7 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 							total: dataAllOrder?.length,
 							onChange: (page) => setCurrentPage(page),
 						  }}
-						className="my-10"
+						className="my-10 relative left-[-70px] sm:left-0"
 						rowSelection={{
 							type: 'checkbox',
 							onSelect: (record, selected, selectedRows, nativeEvent) => {

@@ -94,14 +94,14 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 		key: 'academicYear',
 		dataIndex: 'academicYear',
 		title: 'Учебный год',
-		className: 'text-xs !p-2'
+		className: 'text-xs !p-2 mobileFirst'
 	},
 
 	{
 		key: 'groupNumber',
 		dataIndex: 'groupNumber',
 		title: 'Номер группы',
-		className: 'text-xs !p-2'
+		className: 'text-xs !p-2 mobileFirst'
 	},
 	// {
 	// 	key: 'level',
@@ -114,7 +114,7 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 		key: 'course',
 		dataIndex: 'courseNumber',
 		title: 'Курс',
-		className: 'text-xs !p-2',
+		className: 'text-xs !p-2 mobileFirst',
 		editable: true
 	}
 
@@ -217,6 +217,7 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 
   	return (
 		<Modal
+			className='top-[140px] md:top-[140px] lg:top-[100px]'
 			footer={null}
 			width={'100%'}
 			title="Выберите практику"
@@ -225,10 +226,10 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 			onCancel={handleCancelOne}
 		><Form form={form}>
 			<Row gutter={[8, 16]} className="mt-12 w-full flex items-center">
-				<Col span={4}>
+				<Col span={4} className='overWrite'>
 					<Typography.Text>Подразделение</Typography.Text>
 				</Col>
-				<Col span={8}>
+				<Col span={8} className='overWrite'>
 					<Select
 						popupMatchSelectWidth={false}
 						defaultValue="Все"
@@ -265,10 +266,10 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 				</Col>
 			</Row>
 			<Row gutter={[8, 16]} className="mt-4 w-full flex items-center">
-				<Col span={4}>
+				<Col span={4} className='overWrite'>
 					<Typography.Text>Шифр и наимеование документа</Typography.Text>
 				</Col>
-				<Col span={8}>
+				<Col span={8} className='overWrite'>
 					<Form.Item className='mb-0' name={'specialtyName'}>
 					<Select
 						disabled={!subdivisionId}
@@ -308,10 +309,10 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 
 			
 			<Row gutter={[8, 16]} className="mt-4 w-full flex items-center">
-				<Col span={4}>
+				<Col span={4} className='overWrite'>
 					<Typography.Text>Номер группы</Typography.Text>
 				</Col>
-				<Col span={8}>
+				<Col span={8} className='overWrite'>
 					<Select
 						disabled={!subdivisionId}
 						popupMatchSelectWidth={false}
@@ -356,10 +357,10 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 				</Col>
 			</Row> */}
 			<Row gutter={[8, 16]} className="mt-4 mb-12 w-full flex items-center">
-				<Col span={4}>
+				<Col span={4} className='overWrite'>
 					<Typography.Text>Курс</Typography.Text>
 				</Col>
-				<Col span={8}>
+				<Col span={8} className='overWrite'>
 					<Select
 						disabled={!subdivisionId}
 						popupMatchSelectWidth={false}

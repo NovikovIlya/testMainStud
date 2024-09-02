@@ -230,21 +230,21 @@ export const ViewPracticeOrder = () => {
 			key: 'courseNumber',
 			dataIndex: 'courseNumber',
 			title: 'Курс',
-			className: 'text-xs !p-2',
+			className: 'text-xs !p-2 mobileFirst',
 			render: (text: any, record: any) => <span >{record?.practice?.courseNumber}</span>
 		},
    		{
 			key: 'practiceType',
 			dataIndex: 'practiceType',
 			title: 'Тип',
-			className: 'text-xs !p-2',
+			className: 'text-xs !p-2 mobileFirst',
 			render: (text: any, record: any) => <span >{record?.practice?.practiceType}</span>
 		},
   		{
 			key: 'practiceKind',
 			dataIndex: 'practiceKind',
 			title: 'Вид',
-			className: 'text-xs !p-2',
+			className: 'text-xs !p-2 mobileFirst',
 			render: (text: any, record: any) => <span >{record?.practice?.practiceKind}</span>
 		},
 		// {
@@ -258,14 +258,14 @@ export const ViewPracticeOrder = () => {
 			key: 'FIO',
 			dataIndex: 'FIO',
 			title: 'ФИО руководителя от кафедры, должность',
-			className: 'text-xs !p-2',
+			className: 'text-xs !p-2 mobileFirst',
 			render: (text: any, record: any) => <span >{record?.practice?.departmentDirector}</span>
 		},
 		{
 			key: 'visiting',
 			dataIndex: 'visiting',
 			title: 'Выездные практики',
-			className: 'text-xs !p-2',
+			className: 'text-xs !p-2 mobileFirst',
 			render: (text: any, record: any) => <span >{record?.isWithDeparture ? 'Да' : 'Нет'}</span>
 		},
 		{
@@ -331,7 +331,7 @@ export const ViewPracticeOrder = () => {
 				<Col span={5}>
 					<span>Подразделение</span>
 				</Col>
-				<Col span={7}>
+				<Col span={7} className='overWrite'>
 					<Select
 						popupMatchSelectWidth={false}
 						defaultValue=""
@@ -364,7 +364,7 @@ export const ViewPracticeOrder = () => {
 				<Col span={5} >
 					<span>Наименование специальности</span>
 				</Col>
-				<Col span={7}>
+				<Col span={7} className='overWrite'>
 				<Form.Item className='mb-0' name={'specialtyName'}>
 					<Select
 						disabled={filter.subdivision === 'Все' ? true : false}
@@ -391,7 +391,7 @@ export const ViewPracticeOrder = () => {
 				<Col span={5} >
 					<span>Выездные практики</span>
 				</Col>
-				<Col span={7}>
+				<Col span={7} className='overWrite'>
 					<Select
 						disabled={filter.subdivision === 'Все' ? true : false}
 						popupMatchSelectWidth={false}
@@ -408,7 +408,7 @@ export const ViewPracticeOrder = () => {
 				<Col span={5} >
 					<span>ФИО руководителя</span>
 				</Col>
-				<Col span={7}>
+				<Col span={7} className='overWrite'>
 					<Form.Item className='mb-0'  name={'FIO'}>
 					<Select
 						disabled={filter.subdivision === 'Все' ? true : false}
@@ -438,7 +438,7 @@ export const ViewPracticeOrder = () => {
 				<Col span={2} >
 					<span>Курс</span>
 				</Col>
-				<Col span={4}>
+				<Col span={4} className='overWrite'>
 					<Select
 						disabled={filter.subdivision === 'Все' ? true : false}
 						popupMatchSelectWidth={false}
@@ -456,7 +456,7 @@ export const ViewPracticeOrder = () => {
        			<Col span={2} >
 					<span>Учебный год</span>
 				</Col>
-				<Col span={4}>
+				<Col span={4} className='overWrite'>
 				<Form.Item className='mb-0'  name={'academicYear'}>
 					<Select
 						disabled={filter.subdivision === 'Все' ? true : false}
@@ -489,7 +489,7 @@ export const ViewPracticeOrder = () => {
 				<Col span={2} >
 					<span>Тип</span>
 				</Col>
-				<Col span={4}>
+				<Col span={4} className='overWrite'>
 				<Form.Item className='mb-0'  name={'practiceType'}>
 					<Select
 						disabled={filter.subdivision === 'Все' ? true : false}
@@ -519,7 +519,7 @@ export const ViewPracticeOrder = () => {
        			<Col span={2} >
 					<span>Вид</span>
 				</Col>
-				<Col span={4}>
+				<Col span={4} className='overWrite'>
 					<Select
 						disabled={filter.subdivision === 'Все' ? true : false}
 						options={[
@@ -584,7 +584,7 @@ export const ViewPracticeOrder = () => {
 							total: dataAllOrder?.length,
 							onChange: (page) => setCurrentPage(page),
 						  }}
-						className="my-10"
+						className="my-10  absolute  sm:relative sm:left-0 sm:top-10"
 						rowSelection={{
 							type: 'checkbox',
 							onSelect: (record, selected, selectedRows, nativeEvent) => {

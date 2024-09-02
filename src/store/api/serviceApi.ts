@@ -201,8 +201,8 @@ export const serviceApi = apiSlice.injectEndpoints({
 					}`
 				},
 				keepUnusedDataFor: 0
-			}),
-			transformResponse: seekerServiceResponcesDataTransformHandler
+			})
+			//transformResponse: seekerServiceResponcesDataTransformHandler
 		}),
 		getRespondFullInfo: builder.query<VacancyRespondItemType, number>({
 			query: id => ({
@@ -293,8 +293,8 @@ export const serviceApi = apiSlice.injectEndpoints({
 				headers: {
 					Authorization: `Bearer ${personnelDeparmentToken}`
 				}
-			}),
-			transformResponse: seekerServiceResponcesDataTransformHandler
+			})
+			//transformResponse: seekerServiceResponcesDataTransformHandler
 		}),
 		getArchivedRespondFullInfo: builder.query<VacancyRespondItemType, number>({
 			query: id => ({
@@ -310,8 +310,8 @@ export const serviceApi = apiSlice.injectEndpoints({
 				headers: {
 					Authorization: `Bearer ${personnelDeparmentToken}`
 				}
-			}),
-			transformResponse: seekerServiceResponcesDataTransformHandler
+			})
+			//transformResponse: seekerServiceResponcesDataTransformHandler
 		}),
 		getReservedRespondFullInfo: builder.query<VacancyRespondItemType, number>({
 			query: id => ({

@@ -9,10 +9,11 @@ import {
 } from '../../../../../store/api/serviceApi'
 import { NocircleArrowIcon } from '../../../jobSeeker/NoCircleArrowIcon'
 
-export const SupervisorInterviewSeekerInfo = (props: {
-	status: 'ONLINE_ONGOING' | 'ENDED' | 'OFFLINE_ONGOING'
-}) => {
+export const SupervisorInterviewSeekerInfo = ( ) => {
+
 	const respondId = useAppSelector(state => state.currentResponce)
+	const format = useAppSelector(state => state.currentInterviewFormat)
+	const time = useAppSelector(state => state.currentInterviewTime)
 
 	const { data } = useGetRespondFullInfoQuery(respondId.respondId)
 
@@ -22,6 +23,78 @@ export const SupervisorInterviewSeekerInfo = (props: {
 
 	const [rejectSeeker] = useEmployeeSeekerRequestMutation()
 	const [aproveSeeker] = useEmployeeSeekerRequestMutation()
+
+	interface ComponentProps {
+		eventTime: string
+		format: string
+	}
+
+	const Component = ( props: ComponentProps ) => {
+		const targetDate = new Date(props.eventTime);
+		const now = new Date();
+		const difference = targetDate.getTime() - now.getTime();
+		let isInterviewEnded : boolean = false
+		if (difference<0) {
+			isInterviewEnded = true
+		}
+		if (difference>0) {
+			isInterviewEnded = false
+		}
+		return (
+			<>
+				{ (format.format  === 'OFFLINE') && !(isInterviewEnded) && (
+					<div className="flex flex-col justify-center">
+						<h3
+							className=" mb-[20px] font-content-font font-bold text-black text-[16px]/[19.2px]">Собеседование</h3>
+						<h4 className=" mb-[10px] font-content-font font-normal text-black text-[12px]/[14.4x] opacity-40">
+							Дата и время:</h4>
+						<h4
+							className="font-content-font font-normal text-black text-[16px]/[19.2px]">
+							{time.time}
+						</h4>
+					</div>
+				)}
+				{ (format.format === 'ONLINE') && !(isInterviewEnded) && (
+					<div className="flex flex-col justify-center">
+						<h4 className="mb-[20px] font-content-font font-normal text-black text-[16px]/[19.2px]">Подключитесь к
+							онлайн-конференции</h4>
+						<Button
+							className="h-[40px] w-[257px] bg-[#3073D7] rounded-[54.5px] text-white text-[16px]/[16px]"
+							onClick={() => {
+
+							}}
+						>
+							Подключиться
+						</Button>
+					</div>
+				)}
+				{(isInterviewEnded) && (
+					<div className="flex flex-col justify-center gap-[12px]">
+						<Button
+							className="h-[40px] w-[257px] bg-[#3073D7] rounded-[54.5px] text-white text-[16px]/[16px]"
+							onClick={values => {
+								aproveSeeker({
+									rejectionReason: 'approve',
+									action: 'EMPLOY',
+									respondId: respondId.respondId
+								})
+							}}
+						>
+							Пригласить на работу
+						</Button>
+						<Button
+							className="h-[40px] font-content-font font-normal text-black border-[1px] border-black text-[16px]/[16px] rounded-[54.5px]"
+							onClick={() => {
+								setIsRefuseModalOpen(true)
+							}}
+						>
+							Отказать
+						</Button>
+					</div>
+				)}
+			</>
+		)
+	}
 
 	return (
 		<>
@@ -145,7 +218,7 @@ export const SupervisorInterviewSeekerInfo = (props: {
 									onFinish={values => {
 										rejectSeeker({
 											rejectionReason: values.reason,
-											action: 'UNEMPLOY',
+											action: 'REJECT',
 											respondId: respondId.respondId
 										})
 									}}
@@ -188,58 +261,7 @@ export const SupervisorInterviewSeekerInfo = (props: {
 								</Form>
 							</Modal>
 						</ConfigProvider>
-						{props.status === 'OFFLINE_ONGOING' && (
-							<div className="flex flex-col justify-center">
-								<h3 className=" mb-[20px] font-content-font font-bold text-black text-[16px]/[19.2px]">
-									Собеседование
-								</h3>
-								<h4 className=" mb-[10px] font-content-font font-normal text-black text-[12px]/[14.4x] opacity-40">
-									Дата и время:
-								</h4>
-								<h4 className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-									{data?.meetingData.date} в {data?.meetingData.time}
-								</h4>
-							</div>
-						)}
-						{props.status === 'ONLINE_ONGOING' && (
-							<div className="flex flex-col justify-center">
-								<h4 className="mb-[20px] font-content-font font-normal text-black text-[16px]/[19.2px]">
-									Подключитесь к онлайн-конференции
-								</h4>
-								<Button
-									className="h-[40px] w-[257px] bg-[#3073D7] rounded-[54.5px] text-white text-[16px]/[16px]"
-									onClick={() => {
-										window.open(data?.meetingData?.url, '_blank')
-									}}
-								>
-									Подключиться
-								</Button>
-							</div>
-						)}
-						{props.status === 'ENDED' && (
-							<div className="flex flex-col justify-center gap-[12px]">
-								<Button
-									className="h-[40px] w-[257px] bg-[#3073D7] rounded-[54.5px] text-white text-[16px]/[16px]"
-									onClick={values => {
-										aproveSeeker({
-											rejectionReason: 'approve',
-											action: 'EMPLOY',
-											respondId: respondId.respondId
-										})
-									}}
-								>
-									Пригласить на работу
-								</Button>
-								<Button
-									className="h-[40px] font-content-font font-normal text-black border-[1px] border-black text-[16px]/[16px] rounded-[54.5px]"
-									onClick={() => {
-										setIsRefuseModalOpen(true)
-									}}
-								>
-									Отказать
-								</Button>
-							</div>
-						)}
+						<Component format={''} eventTime={''}></Component>
 					</div>
 					<hr />
 					<div className="flex flex-col gap-[24px]">
@@ -330,10 +352,12 @@ export const SupervisorInterviewSeekerInfo = (props: {
 							Профессиональные навыки
 						</p>
 						<div className="grid grid-cols-[194px_auto] gap-x-[20px] w-[90%]">
-							{/* <div className="col-start-2">
-									{res.respondData.skills.aboutMe}
-								</div> */}
-							<div className="col-start-2 flex gap-[8px] flex-wrap"></div>
+							<div className="col-start-2">
+								{data?.respondData.skills.aboutMe}
+								</div>
+							<div className="col-start-2 flex gap-[8px] flex-wrap">
+
+							</div>
 						</div>
 					</div>
 				</div>

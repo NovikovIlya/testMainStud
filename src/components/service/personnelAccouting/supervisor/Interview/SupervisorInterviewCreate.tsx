@@ -1,14 +1,22 @@
-import React, {useState} from 'react';
-import {Button, Form, Select, DatePicker, TimePicker, Modal, ConfigProvider} from "antd"
+import React, {useEffect, useState} from 'react';
+import {Button, Form, Select, DatePicker, Modal, ConfigProvider} from "antd"
 import {useGetSupervisorVacancyQuery,
         useRequestCreateInterviewMutation,
         useLazyGetResponcesByVacancyQuery,
         useLazyGetVacancyGroupedResponcesQuery
 } from "../../../../../store/api/serviceApi";
+import {useAppSelector} from "../../../../../store";
+import {VacancyRespondItemType} from "../../../../../store/reducers/type";
+import {ThemeProvider} from "@material-tailwind/react";
+import value = ThemeProvider.propTypes.value;
 
 export const SupervisorInterviewCreate = () => {
 
+    const [responds, setResponds] = useState<VacancyRespondItemType[]>([])
+
     const [requestCreateInterview] = useRequestCreateInterviewMutation()
+
+    const respondId = useAppSelector(state => state.currentResponce)
 
     const { data: vacancies = [] } = useGetSupervisorVacancyQuery()
 
@@ -16,9 +24,43 @@ export const SupervisorInterviewCreate = () => {
 
     const [isUnsuccessModalOpen, setIsUnsuccessModalOpen] = useState(false)
 
+    const [ fio, setFIO] = useState('')
+
     const [getGroupedResponds] = useLazyGetVacancyGroupedResponcesQuery()
     const [getResponds] = useLazyGetResponcesByVacancyQuery()
 
+    useEffect(() => {
+        getGroupedResponds({ category: 'АУП', role: 'SUPERVISOR' })
+            .unwrap()
+            .then(grData => {
+                grData.map(vacResp => {
+                    getResponds({
+                        id: vacResp.vacancyId,
+                        status: '',
+                        role: 'SUPERVISOR'
+                    })
+                        .unwrap()
+                        .then(data => setResponds(prev => [...prev, ...data]))
+                })
+            })
+    }, [])
+
+    let respondFIOSet = Array.from(new Set(responds.map(resp =>
+        resp.userData?.firstname + ' ' + resp.userData?.middlename + ' ' + resp.userData?.lastname
+    ))).map(fio => ({value: fio, label: fio}))
+
+    const respondPosSet = Array.from(new Set(
+        responds
+            .filter(resp =>
+                resp.userData?.firstname === fio.split(' ')[0] &&
+                resp.userData?.middlename === fio.split(' ')[1] &&
+                resp.userData?.lastname === fio.split(' ')[2]
+            )
+            .map(resp => resp.vacancyName)
+    )).map(resp => ({
+        value: resp,
+        label: resp
+    }));
     return (
         <>
             <ConfigProvider
@@ -92,7 +134,7 @@ export const SupervisorInterviewCreate = () => {
                         requestCreateInterview({
                             date: values.date,
                             format: values.format,
-                            respondId: 1
+                            respondId: respondId.respondId
                         })
                             .unwrap()
                             .then(() => {
@@ -113,12 +155,13 @@ export const SupervisorInterviewCreate = () => {
                         rules={[{required: true, message: 'не выбран соискатель'}]}
                     >
                         <Select
-                            placeholder="Иванов Иван Иванович"
-                            options={[
-                                {value: '1', label: 'Илья Митрофанов'},
-                                {value: '2', label: 'Воронов Евгений Петрович'},
-                                {value: '3', label: 'Воронов Евгений Петрович'}
-                            ]}
+                            placeholder='Выбрать'
+                            options={respondFIOSet}
+                            onChange={
+                                (value) => {
+                                    setFIO(value)
+                                }
+                            }
                         ></Select>
                     </Form.Item>
                     <Form.Item
@@ -131,12 +174,9 @@ export const SupervisorInterviewCreate = () => {
                         rules={[{required: true, message: 'не указана должность'}]}
                     >
                         <Select
-                            placeholder="Специалист по связям с общественностью"
-                            options={[
-                                {value: '1', label: 'Повар'},
-                                {value: '2', label: 'Специалист по связям с общественностью'},
-                                {value: '3', label: 'Специалист по связям с общественностью'}
-                            ]}
+                            placeholder='Выбрать'
+                            options={respondPosSet}
+
                         ></Select>
                     </Form.Item>
                     <div className="flex flex-row w-full gap-[20px]">
@@ -161,8 +201,6 @@ export const SupervisorInterviewCreate = () => {
                               }}
                               className="w-full"
                               onChange={(e, dateString) => {
-                                console.log(e)
-                                console.log(dateString)
                               }}
                                 placeholder="Выбрать">
 

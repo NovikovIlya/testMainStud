@@ -3,7 +3,6 @@ import { SupervisorInterviewItem } from './SupervisorInterviewItem'
 import {
 	useGetSupervisorInterviewQuery
 } from '../../../../../store/api/serviceApi'
-import { useNavigate } from 'react-router-dom'
 
 export const SupervisorInterviews = () => {
 

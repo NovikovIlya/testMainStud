@@ -6,6 +6,7 @@ import {
     Space,
     Spin,
     Table,
+    TreeSelect,
     Typography
 } from 'antd'
 import dayjs from 'dayjs'
@@ -23,6 +24,7 @@ import { LoadingOutlined } from '@ant-design/icons'
 import { processingOfDivisions } from '../../../../utils/processingOfDivisions'
 import { ScheduleType } from '../../../../models/representation'
 import { NewDepartment } from '../../../../models/Practice'
+import { disableParents } from '../../../../utils/disableParents'
 
 
 const optionsSortDate: any = [
@@ -47,6 +49,10 @@ export const PracticeSchedule = () => {
 	const {data:dataAcademicYear} = useGetAcademicYearQuery()
 	const {data:dataSubdivision,isSuccess:isSuccessSubdivision} = useGetSubdivisionQuery()
 	const [departments, setDepartments] = useState<NewDepartment[]>()
+	const [flagLoad,setFlagLoad] = useState(false)
+	const [treeLine, setTreeLine] = useState(true);
+    const [showLeafIcon, setShowLeafIcon] = useState(false);
+    const [value, setValue] = useState<any>();
 	const columns = [
 		{
 			key: 'name',
@@ -150,7 +156,7 @@ export const PracticeSchedule = () => {
 				return elem.academicYear === filter.academicYear
 			}
 		}
-
+		setFlagLoad(false)
 		return dataAll
 			? [...dataAll]
 			.sort((a: ScheduleType, b: ScheduleType) => sortDateFilling(a, b))
@@ -158,6 +164,9 @@ export const PracticeSchedule = () => {
 			.filter((elem: any) => filterAcademicYear(elem))
 			: []
 	}
+	const onPopupScroll: any = (e:any) => {
+        console.log('onPopupScroll', e);
+    };
 
 	function getAcademicYear() {
         const today = dayjs();
@@ -175,6 +184,20 @@ export const PracticeSchedule = () => {
 		navigate(`/services/practices/formingSchedule/edit/year=${record.academicYear.replace("/", "-")}/${record.id}`)
     };
 
+	const treeData =[{ key: 2244612, value: 'Все', label: 'Все' },...(dataSubdivision ? dataSubdivision?.map((item:any)=>{
+        return{
+            title:item.value,
+            value:item.id,
+            // @ts-ignore
+            children: item?.responses?.map((item)=>{
+                return{
+                    title:item.value,
+                    value:item.id,
+                }
+            })
+        }
+    }):[])]
+
 
 	return (
 		<section className="container">
@@ -190,11 +213,12 @@ export const PracticeSchedule = () => {
 					<span>Подразделение</span>
 				</Col>
 				<Col span={7} className='overWrite'>
-					<Select
+					{/* <Select
 						popupMatchSelectWidth={false}
 						defaultValue="Все"
 						className="w-full"
 						onChange={(value: any) => {
+							setFlagLoad(true)
 							setFilter({ ...filter, subdivisionId: value })
 						}}
 						options={
@@ -209,7 +233,25 @@ export const PracticeSchedule = () => {
 									: [])
 							]
 						}
-					/>
+					/> */}
+								 <TreeSelect
+                                        treeLine={treeLine && { showLeafIcon }}
+                                        showSearch
+                                        style={{ height:'32px',width: '100%' }}
+                                        value={value}
+                                        dropdownStyle={{  overflow: 'auto' }}
+                                        placeholder=""
+                                        allowClear
+                                        treeDefaultExpandAll
+										onChange={(value: any) => {
+											setFlagLoad(true)
+											setFilter({ ...filter, subdivisionId: value })
+										}}
+                                        treeData={disableParents(treeData)}
+                                        onPopupScroll={onPopupScroll}
+                                        treeNodeFilterProp="title"
+                                    
+                                    />
 				</Col>
 				{/* {dataUserSubdivision?.value ? */}
 				 <Col span={7} offset={5} className='overWrite orderHigh'>
@@ -263,7 +305,7 @@ export const PracticeSchedule = () => {
 						<Select
 							popupMatchSelectWidth={false}
 							defaultValue=""
-							className="w-[500px]"
+							className="w-full sm:w-[500px]"
 							options={optionsSortDate}
 							onChange={value => {
 								setFilter({
@@ -276,7 +318,7 @@ export const PracticeSchedule = () => {
 				</Col>
 			</Row>
 		
-					{isLoadingUserSubdivision || isFetchingDataAll ? <Spin className='w-full mt-20' indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />  
+					{isLoadingUserSubdivision || isFetchingDataAll || flagLoad? <Spin className='w-full mt-20' indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />  
 					:  <Table
 						onRow={(record) => ({
 							onClick: () => handleRowClick(record),
@@ -287,7 +329,9 @@ export const PracticeSchedule = () => {
 						// @ts-ignore
 						columns={columns}
 						dataSource={dataTable ? dataTable : []}
-						pagination={false}
+						pagination={dataTable && dataTable?.length<10?false:{
+							pageSize: 10
+						}}
 						className="my-10"
 						rowSelection={{
 							type: 'checkbox',

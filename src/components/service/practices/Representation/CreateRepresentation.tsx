@@ -3,6 +3,7 @@ import {
 	Button,
 	Col,
 	Descriptions,
+	Divider,
 	Form,
 	Input, Popconfirm,
 	Radio,
@@ -26,8 +27,9 @@ import { EditableCell } from './EditableCell'
 import PracticeModal from './practicalModal'
 import { useAddSubmissionMutation, useGetAllSubmissionsQuery, useGetDocRepresentationQuery, useGetStudentsQuery } from '../../../../store/api/practiceApi/representation'
 import { useGetPracticesAllQuery } from '../../../../store/api/practiceApi/individualTask'
-import { showNotification } from '../../../../store/reducers/notificationSlice'
+import { changeStatus, changeStatusTrue, showNotification } from '../../../../store/reducers/notificationSlice'
 import { useAppDispatch } from '../../../../store'
+import TableEdit from './tableEdit'
 
 const optionMock = [
 	{ value: 'контракт', label: 'контракт' },
@@ -125,7 +127,7 @@ export const CreateRepresentation = () => {
 	const dispatch = useAppDispatch()
 	
 
-
+	console.log('fullSelectedPractise',fullSelectedPractise)
 	useEffect(()=>{
 		if(isSuccessGetStudents ){
 			const newArray = dataGetStudents?.map((item:any)=>({
@@ -136,8 +138,8 @@ export const CreateRepresentation = () => {
 				place: null,
 				category: item.category,
 				categoryId: item.categoryId,
-				departmentDirector: dataAllPractise?.[0].departmentDirector,
-				groupNumber: dataAllPractise?.[0].groupNumber
+				departmentDirector: fullSelectedPractise.departmentDirector,
+				groupNumber: fullSelectedPractise.groupNumber
 			}))
 			setFullTable(newArray.map((item:any)=>({key: item.name, ...item})))
 			setStep(1)
@@ -163,6 +165,10 @@ export const CreateRepresentation = () => {
 			}
 		}
 	},[fullTable,isSuccessGetStudents,visiting])
+
+	useEffect(()=>{
+				dispatch(changeStatusTrue())
+	},[])
 
 
 	const items: DescriptionsProps['items'] = [
@@ -360,7 +366,7 @@ export const CreateRepresentation = () => {
 			const row = (await form.validateFields()) as Item
 
 			const newData = [...fullTable]
-			console.log('newData',newData)
+
 			const index = newData.findIndex(item => key === item.key)
 			if (index > -1) {
 				const item = newData[index]
@@ -417,8 +423,8 @@ export const CreateRepresentation = () => {
 	};
 
 	const sendData = ()=>{
-		if(fullTable.some((item:any)=>item.place===null)){
-			return dispatch(showNotification({ message: 'Для сохранения необходимо заполнить "Место прохождение практики', type: 'warning' }));
+		if(fullTable.some((item:any)=>item.place===null)){ 
+			return dispatch(showNotification({ message: `Для сохранения необходимо заполнить "Место прохождение практики" ${visiting ? `,  "Суточные", "Проезд" и "Оплата проживания"`:''}`, type: 'warning' }));
 		}
 		const tableDataStudent = fullTable.map((item:any)=>({
 			costForDay:item.costForDay, 
@@ -470,10 +476,10 @@ export const CreateRepresentation = () => {
 			</Row>
 			
 			<Row className="mt-4 flex items-center justify-between">
-				<Col span={12} className='justify-start flex'>
+				<Col span={12} className='justify-start flex overWrite'>
 				<Steps
-						
-						size="small"
+						className='mt-6 mb-6'
+						size="default"
 						current={step}
 						items={[
 						{
@@ -488,8 +494,8 @@ export const CreateRepresentation = () => {
 						]}
 					/>
 				</Col>
-				{!selectedPractice ? 
-				<Col span={24} className='justify-end flex'>
+		
+				<Col span={12} className='justify-start sm:justify-end flex overWrite'>
 					<div>
 						<Space>
 							{selectedPractice ? 
@@ -504,13 +510,14 @@ export const CreateRepresentation = () => {
 						</Space>
 					</div>
 				</Col>
-				: null}	
-			</Row>
 			
+			</Row>
+			<Divider />
 			{selectedPractice ? (<>
 				<Descriptions className='mt-8'  items={items} />
-				<Row className='items-end'>
-					 <Col span={12} flex="50%" className="mt-4 mobileFirst">
+				<Divider />
+				<Row className='items-end mb-7'>
+					 <Col span={12} flex="50%" className=" mobileFirst">
 						<Radio.Group onChange={onChange} value={value}>
 							<Space direction="vertical">
 								<Radio value={1} onClick={()=>setVisiting(false)}>Невыездная практика</Radio>
@@ -518,24 +525,10 @@ export const CreateRepresentation = () => {
 							</Space>
 						</Radio.Group>
 				</Col>
-				<Col span={12} className='justify-end flex'>
-					<div>
-						<Space>
-							{selectedPractice ? 
-							<Popconfirm
-								title="Редактирование"
-								description="Вы уверены, что хотите изменить практику? Все данные будут удалены."
-								onConfirm={okayModal}
-								okText="Да"
-								cancelText="Нет"
-							><Button  >Изменить практику</Button></Popconfirm> : 
-							<Button  onClick={showModalOne}>Выбрать практику</Button>}
-						</Space>
-					</div>
-				</Col>
+				
 			</Row>	
 			</>) : ''}
-
+	
 			{visiting ? 
 			<Row className='mt-4'>
 				<Col span={1} className='flex items-center'>
@@ -556,7 +549,7 @@ export const CreateRepresentation = () => {
 					<Row className="mt-4">
 						<Col flex={'auto'}>
 							<Form form={form} component={false}>		
-								<Table
+								{/* <Table
 									ref={tableRef}
 									components={{
 										body: {
@@ -569,11 +562,12 @@ export const CreateRepresentation = () => {
 									rowClassName="editable-row"
 									pagination={false}
 									rowKey="id"
-								/>
+								/> */}
+								<TableEdit visiting={visiting} fullTable={fullTable} setFullTable={setFullTable} create={true}/>
 							</Form>
 						</Col>
 					</Row>
-					<Row className=''>
+					<Row className='mt-[-68px]'>
 					<Col span={3} className=' mt-6' >
 					<Space className="w-full ">
 						<Button

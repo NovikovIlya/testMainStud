@@ -16,17 +16,11 @@ import { PointsSvg } from '../../../../assets/svg/PointsSvg'
 
 import { PopoverContent } from './PopoverContent'
 import { PopoverMain } from './PopoverMain'
-import { useGetAllOrderQuery, useGetAllSubmissionsQuery, useGetOrderSubdevisionQuery, useGetSubmissionsAcademicYearQuery, useGetSubmissionsDirectorQuery, useGetSubmissionsPracticeKindQuery, useGetSubmissionsPracticeTypeQuery, useGetSubmissionsSpecialtiesQuery, useGetSubmissionsSubdevisionQuery } from '../../../../store/api/practiceApi/representation'
+import { useGetAcademicApplicationQuery, useGetAllApplicationsQuery, useGetAllSubmissionsQuery, useGetDirectorApplicationQuery, useGetPracticeKindApplicationQuery, useGetPracticeTypeApplicationQuery, useGetSpecialtiesApplicationQuery, useGetSubmissionsAcademicYearQuery, useGetSubmissionsApplicationQuery, useGetSubmissionsDirectorQuery, useGetSubmissionsPracticeKindQuery, useGetSubmissionsPracticeTypeQuery, useGetSubmissionsSpecialtiesQuery, useGetSubmissionsSubdevisionQuery } from '../../../../store/api/practiceApi/representation'
 import { LoadingOutlined } from '@ant-design/icons'
 import { findSubdivisions } from '../../../../utils/findSubdivisions'
 import { disableParents } from '../../../../utils/disableParents'
 
-
-const visitingOptions = [
-	{ value: 'Все', label: 'Все' },
-	{ value: 'Да', label: 'Да' },
-	{ value: 'Нет', label: 'Нет' },
-]
 
 const courseNumberOptions = [
 	{ value: 'Все', label: 'Все' },
@@ -38,7 +32,7 @@ const courseNumberOptions = [
 	{ value: '6', label: '6' },
 ]
 
-export const ViewPracticeOrder = () => {
+export const ViewAppendix = () => {
 	const [currentPage, setCurrentPage] = useState(1);
 	const [form] = Form.useForm()
 	const navigate = useNavigate()
@@ -53,17 +47,17 @@ export const ViewPracticeOrder = () => {
 		practiceKind: "Все",
 		dateFilling: 'По дате (сначала новые)',
 	})
-	const [tableData, setTableData] = useState([])
 	const [selectedFieldsFull, setSelectedFieldFull] = useState<any>([])
 	const {data:dataAllSubmissions,isLoading,isSuccess:isSuccessSubAll} = useGetAllSubmissionsQuery(null)
-	const {data:dataSubmisisionsSubdevision} = useGetOrderSubdevisionQuery()
+	const {data:dataSubmisisionsApplication} = useGetSubmissionsApplicationQuery()
 	const [selectSubdivisionId,setSelectSubdivisionId] = useState(null)
-	const {data:dataSubmissionSpecialty} = useGetSubmissionsSpecialtiesQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
-	const {data:dataSubmissionType} = useGetSubmissionsPracticeTypeQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
-	const {data:dataSubmissionKind} = useGetSubmissionsPracticeKindQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
-	const {data:dataSubmissionDirector} = useGetSubmissionsDirectorQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
-	const {data:dataSubmissionAcademicYear} = useGetSubmissionsAcademicYearQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
-	const {data:dataAllOrder,isSuccess:isSuccessOrder,isFetching:isLoadingOrder} = useGetAllOrderQuery({subdivisionId:selectSubdivisionId,page:currentPage - 1,size :'5'},{skip:!selectSubdivisionId || !currentPage})
+	const {data:dataSubmissionSpecialty} = useGetSpecialtiesApplicationQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
+	const {data:dataSubmissionType} = useGetPracticeTypeApplicationQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
+	const {data:dataSubmissionKind} = useGetPracticeKindApplicationQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
+	const {data:dataSubmissionDirector} = useGetDirectorApplicationQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
+	const {data:dataSubmissionAcademicYear} = useGetAcademicApplicationQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
+	const {data:dataAppendix,isSuccess:isSuccessAppendix,isFetching:isFetchingAppend} = useGetAllApplicationsQuery({subdivisionId:selectSubdivisionId,page:currentPage - 1,size :'5'},{skip:!selectSubdivisionId || !currentPage})
+	const [flag,setFlag] = useState(false)
 	const [dataTable, setDataTable] = useState<any>([])
 	const [treeLine, setTreeLine] = useState(true);
     const [showLeafIcon, setShowLeafIcon] = useState(false);
@@ -88,13 +82,11 @@ export const ViewPracticeOrder = () => {
 		})
 	},[selectSubdivisionId])
 
-	console.log('dataAllOrder',dataAllOrder)
-	console.log('dataTable',dataTable)
 	useEffect(() => {
 		
-			setDataTable(dataAllOrder?.length > 0 ? dataAllOrder : [])
-		
-	}, [dataAllOrder, filter.subdivision, isSuccessOrder])
+		setDataTable(dataAppendix?.length > 0 ? filterDataFull() : [])
+	
+	}, [dataAppendix, filter])
 	
 
 	function filterDataFull() {
@@ -102,7 +94,9 @@ export const ViewPracticeOrder = () => {
 			if (filter.subdivision === 'Все') {
 				return elem
 			} else {
-				return elem.practice.subdivision === filter.subdivision
+				setFlag(true)
+				console.log('elem',elem)
+				 return elem.practice.subdivisionId === filter.subdivision
 			}
 		}
 		function filterSpec(elem: any) {
@@ -113,7 +107,6 @@ export const ViewPracticeOrder = () => {
 			}
 		}
 		function filtervisiting(elem: any) {
-	
 			if (filter.visiting === 'Все') {
 				return elem
 			} else {
@@ -129,10 +122,12 @@ export const ViewPracticeOrder = () => {
 			}
 		}
 		function filterCourse(elem: any) {
+			console.log('filter.courseNumber',filter.courseNumber)
+			console.log('elem.courseNumber',elem.courseNumber)
 			if (filter.courseNumber === 'Все') {
 				return elem
 			} else {
-				return elem.courseNumber === filter.courseNumber
+				return elem.practice.courseNumber === filter.courseNumber
 			}
 		}
 		function filterAcademicYear(elem: any) {
@@ -165,24 +160,20 @@ export const ViewPracticeOrder = () => {
 			}
 			return 0
 		}
-
-		return dataAllOrder
-			? dataAllOrder
-			// .filter((elem: any) => filterName(elem))
-			// .filter((elem: any) => filterSpec(elem))
-			// .filter((elem: any) => filtervisiting(elem))
-			// .filter((elem: any) => filterFio(elem))
-			// .filter((elem: any) => filterCourse(elem))
-			// .filter((elem: any) => filterAcademicYear(elem))
-			// .filter((elem: any) => filterType(elem))
-			// .filter((elem: any) => filterKind(elem))
-			// .sort((a: any, b: any) => sortDateFilling(a, b))
+	
+		return dataAppendix
+			? dataAppendix
+			.filter((elem: any) => filterName(elem))
+			.filter((elem: any) => filterSpec(elem))
+			.filter((elem: any) => filtervisiting(elem))
+			.filter((elem: any) => filterFio(elem))
+			.filter((elem: any) => filterCourse(elem))
+			.filter((elem: any) => filterAcademicYear(elem))
+			.filter((elem: any) => filterType(elem))
+			.filter((elem: any) => filterKind(elem))
+			.sort((a: any, b: any) => sortDateFilling(a, b))
 			: []
 	}
-
-	const onPopupScroll: any = (e:any) => {
-        console.log('onPopupScroll', e);
-    };
 
 	const columns = [
 		{
@@ -192,28 +183,8 @@ export const ViewPracticeOrder = () => {
 			name: 'Подразделение',
 			className: 'text-xs !p-2 ',
 			render: (text: any, record: any) => <span >{record?.practice?.subdivision}</span>
-			// @ts-ignore
-			// render: (text, record) => (
-			// 	<div className={'flex items-center justify-between'}>
-			// 		<span className={'underline flex font-bold'}>{text}</span>
-			// 		<Button
-			// 			type="text"
-			// 			icon={<EditSvg />}
-			// 			onClick={() => {
-			// 				navigate(`/services/practices/representation/edit/${record.id}`)
-			// 			}}
-			// 		/>
-			// 	</div>
-			// )
+			
 		},
-
-		// {
-		// 	title: 'Дата заполнения',
-		// 	dataIndex: 'dateFilling',
-	
-		// 	// @ts-ignore
-		// 	render: (text: any) => dayjs(text).format('DD.MM.YYYY')
-		// },
     	{
 			key: 'specialtyName',
 			dataIndex: 'specialtyName',
@@ -232,7 +203,7 @@ export const ViewPracticeOrder = () => {
 			key: 'academicYear',
 			dataIndex: 'academicYear',
 			title: 'Учебный год',
-			className: 'text-xs !p-2',
+			className: 'text-xs !p-2 mobileFirst',
 			render: (text: any, record: any) => <span >{record?.practice?.academicYear}</span>
 		},
     	{
@@ -256,13 +227,7 @@ export const ViewPracticeOrder = () => {
 			className: 'text-xs !p-2 mobileFirst',
 			render: (text: any, record: any) => <span >{record?.practice?.practiceKind}</span>
 		},
-		// {
-		// 	key: 'place',
-		// 	dataIndex: 'place',
-		// 	title: 'Место прохождения практики',
-		// 	className: 'text-xs !p-2',
-		// 	render: (text: any, record: any) => <span >{record?.place}</span>
-		// },
+
 		{
 			key: 'FIO',
 			dataIndex: 'FIO',
@@ -271,30 +236,12 @@ export const ViewPracticeOrder = () => {
 			render: (text: any, record: any) => <span >{record?.practice?.departmentDirector}</span>
 		},
 		{
-			key: 'visiting',
-			dataIndex: 'visiting',
-			title: 'Выездные практики',
-			className: 'text-xs !p-2 mobileFirst',
-			render: (text: any, record: any) => <span >{record?.isWithDeparture ? 'Да' : 'Нет'}</span>
-		},
-		{
-			key: 'orderStatus',
-			dataIndex: 'orderStatus',
+			key: 'status',
+			dataIndex: 'status',
 			title: 'Статус',
 			className: 'text-xs !p-2',
-			render: (text: any, record: any) => <span >{record?.orderStatus}</span>
-			// render: (text:any, record:any) => (
-			// 	<div className={'flex items-center justify-between'}>
-			// 		<span className={'underline flex font-bold'}>{text}</span>
-			// 		<Button
-			// 			type="text"
-			// 			icon={<EditSvg />}
-			// 			onClick={() => {
-			// 				navigate(`/services/practices/representation/edit/${record.id}`)
-			// 			}}
-			// 		/>
-			// 	</div>
-			// )
+			render: (text: any, record: any) => <span >{record?.status}</span>
+		
 		},
 		{
 			title: (
@@ -307,7 +254,7 @@ export const ViewPracticeOrder = () => {
 					content={
 						<PopoverContent
 							recordFull={record}
-							recordFullAll={tableData}
+							recordFullAll={dataTable}
 							setRecordFull={setDataTable}
 						/>
 					}
@@ -321,10 +268,14 @@ export const ViewPracticeOrder = () => {
 	]
 
 	const handleRowClick = (record:any) => {
-		navigate(`/services/practices/order/edit/${record.id}`)
+		navigate(`/services/practices/appendix/edit/${record.id}`)
+  	};
+
+	const onPopupScroll: any = (e:any) => {
+        console.log('onPopupScroll', e);
     };
 
-	const treeData =[...(dataSubmisisionsSubdevision ? dataSubmisisionsSubdevision?.map((item:any)=>{
+	const treeData =[...(dataSubmisisionsApplication ? dataSubmisisionsApplication?.map((item:any)=>{
         return{
             title:item.value,
             value:item.id,
@@ -345,7 +296,7 @@ export const ViewPracticeOrder = () => {
 			<Row gutter={[16, 16]}>
 				<Col span={24}>
 					<Typography.Text className=" text-[28px] mb-14">
-						Приказ по практике
+						Приложение 4
 					</Typography.Text>
 				</Col>
 			</Row>
@@ -357,11 +308,11 @@ export const ViewPracticeOrder = () => {
 				<Col span={7} className='overWrite'>
 					{/* <Select
 						popupMatchSelectWidth={false}
-						defaultValue=""
+						
 						className="w-full"
-						options={dataSubmisisionsSubdevision}
+						options={dataSubmisisionsApplication}
 						onChange={(value: any) => {
-							const x = findSubdivisions(dataSubmisisionsSubdevision,value)
+							const x = findSubdivisions(dataSubmisisionsApplication,value)
 							if(x){
 								setSelectSubdivisionId(x.id)
 							}
@@ -369,40 +320,41 @@ export const ViewPracticeOrder = () => {
 							}}
 					/> */}
 					<TreeSelect
-							treeLine={treeLine && { showLeafIcon }}
-							showSearch
-							style={{ height:'32px',width: '100%' }}
-							value={value}
-							dropdownStyle={{  overflow: 'auto' }}
-							placeholder=""
-							allowClear
-							treeDefaultExpandAll
-							onChange={(value)=>{
+						treeLine={treeLine && { showLeafIcon }}
+						showSearch
+						style={{ height:'32px',width: '100%' }}
+						value={value}
+						dropdownStyle={{  overflow: 'auto' }}
+						placeholder=""
+						allowClear
+						treeDefaultExpandAll
+						onChange={(value)=>{
 							
-								setSelectSubdivisionId(value)
-								setFilter({ ...filter, subdivision: value })
-							}}
-							treeData={disableParents(treeData)}
-							onPopupScroll={onPopupScroll}
-							treeNodeFilterProp="title"
-						
-						/>
+							setSelectSubdivisionId(value)
+							setFilter({ ...filter, subdivision: value })
+						}}
+						treeData={disableParents(treeData)}
+						onPopupScroll={onPopupScroll}
+						treeNodeFilterProp="title"
+					
+					/>
 				</Col>
-				{/* <Col span={7} offset={5}>
+				<Col span={7} offset={5} className='overWrite'>
 					<Space className="w-full flex-row-reverse">
 						<Button
 							type="primary"
 							className="!rounded-full"
 							onClick={() => {
-								navigate('/services/practices/representation/createRepresentation')
+								navigate('/services/practices/appendix/createAppendix')
 							}}
 						>
-							Добавить представление
+							Добавить приложение
 						</Button>
 					</Space>
-				</Col> */}
+				</Col>
 			</Row>
-    		<Row gutter={[16, 16]} className="mt-4 flex items-center">
+
+    	<Row gutter={[16, 16]} className="mt-4 flex items-center">
 				<Col span={5} >
 					<span>Наименование специальности</span>
 				</Col>
@@ -429,23 +381,9 @@ export const ViewPracticeOrder = () => {
 					</Form.Item>
 				</Col>
 			</Row>
-			<Row gutter={[16, 16]} className="mt-4 flex items-center">
-				<Col span={5} >
-					<span>Выездные практики</span>
-				</Col>
-				<Col span={7} className='overWrite'>
-					<Select
-						disabled={filter.subdivision === 'Все' ? true : false}
-						popupMatchSelectWidth={false}
-						defaultValue="Все"
-						className="w-full"
-						options={visitingOptions}
-						onChange={(value: any) => {
-							setFilter({ ...filter, visiting: value })
-						}}
-					/>
-				</Col>
-			</Row>
+
+
+
 			<Row gutter={[16, 16]} className="mt-4 flex items-center">
 				<Col span={5} >
 					<span>ФИО руководителя</span>
@@ -475,7 +413,6 @@ export const ViewPracticeOrder = () => {
 				</Col>
 			</Row>
 			
-
 			<Row gutter={[16, 16]} className="mt-4 flex items-center">
 				<Col span={2} >
 					<span>Курс</span>
@@ -587,30 +524,9 @@ export const ViewPracticeOrder = () => {
 				</Col>
 			</Row>
 
-			 {/* Сортировка  */}
-			{/* <Row gutter={[16, 16]} className="mt-4">
-				<Col span={7} offset={17}>
-					<div className={'flex gap-2 items-center'}>
-						<span className={'mr-2'}>Сортировка</span>
-						<Select
-							popupMatchSelectWidth={false}
-							defaultValue=""
-							className="w-full"
-							options={optionsSortDate}
-							onChange={value => {
-								setFilter({
-									...filter,
-									dateFilling: value
-								})
-							}}
-						/>
-					</div>
-				</Col>
-			</Row> */}
-
 			<Row className="mt-4">
 				<Col flex={'auto'}>
-				{isLoadingOrder ? <Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}/> :
+				{isFetchingAppend ? <Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}/> :
 					<Table
 						onRow={(record) => ({
 							onClick: () => handleRowClick(record),
@@ -619,14 +535,14 @@ export const ViewPracticeOrder = () => {
 						rowKey="id"
 						// @ts-ignore
 						columns={columns}
-						dataSource={filter?.subdivision !== 'Все' ? dataTable : []}
+						dataSource={filter?.subdivision !== 'Все'  ? dataTable : []}
 						pagination={dataTable.length > 10 && {
 							current: currentPage,
 							pageSize: 10,
-							total: dataAllOrder?.length,
+							total: dataAppendix?.length,
 							onChange: (page) => setCurrentPage(page),
 						  }}
-						className="my-10  absolute  sm:relative sm:left-0 sm:top-10"
+						className="my-10 absolute  sm:relative sm:left-0 sm:top-10"
 						rowSelection={{
 							type: 'checkbox',
 							onSelect: (record, selected, selectedRows, nativeEvent) => {
@@ -651,4 +567,4 @@ export const ViewPracticeOrder = () => {
 		</Form>
 	)
 }
-export default ViewPracticeOrder
+export default ViewAppendix

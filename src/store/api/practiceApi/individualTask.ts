@@ -111,7 +111,8 @@ export const individualTasks = apiSlice.injectEndpoints({
             query: () => ({
                 url: 'services/api-practices/kpfu/subdivisions',
                 method: 'GET',
-            })
+            }),
+            keepUnusedDataFor: 1,
         }),
         getSubdivisionForPractice: builder.query<any, void>({
             query: () => ({
@@ -123,6 +124,18 @@ export const individualTasks = apiSlice.injectEndpoints({
         getGroupNumbers: builder.query<PracticeType[], any>({
             query: (subDivisionId) => ({
                 url: `services/api-practices/kpfu/group-numbers?subdivisionId=${subDivisionId}`,
+                method: 'GET',
+            })
+        }),
+        getGroupNumbersNew: builder.query<PracticeType[], any>({
+            query: (subDivisionId) => ({
+                url: `/services/api-practices/practices/group-numbers?subdivisionId=${subDivisionId}`,
+                method: 'GET',
+            })
+        }),
+        getCafedraNew: builder.query<PracticeType[], any>({
+            query: (subDivisionId) => ({
+                url: `/services/api-practices/practices/departments?subdivisionId=${subDivisionId}`,
                 method: 'GET',
             })
         }),
@@ -185,6 +198,12 @@ export const individualTasks = apiSlice.injectEndpoints({
                 method: 'GET',
             })
         }),
+        getPractiseSubdevisionNew: builder.query<any, void>({
+            query: () => ({
+                url: `services/api-practices/practices/subdivisions`,
+                method: 'GET',
+            })
+        }),
 
     })
 })
@@ -209,5 +228,8 @@ export const {
     useGetPracticeTypeForPracticeQuery,
     useGetSubdivisionForPracticeQuery,
     useIsPeopleInGroupQuery,
-    useGetGroupNumberQuery
+    useGetGroupNumberQuery,
+    useGetPractiseSubdevisionNewQuery,
+    useGetGroupNumbersNewQuery,
+    useGetCafedraNewQuery
 } = individualTasks

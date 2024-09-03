@@ -144,7 +144,7 @@ export const PracticeSchedule = () => {
 	const nav = useNavigate()
 	const {data:dataUserSubdivision} = useGetSubdivisionUserQuery()
 	const {data:dataAllSpec} = useGetSpecialtyNamesQuery(null)
-	const {data:dataAllPracKind} = useGetPracticeKindQuery(dataUserSubdivision,{skip: !dataUserSubdivision})
+	const {data:dataAllPracKind} = useGetPracticeKindQuery(dataUserSubdivision ? dataUserSubdivision?.id : null)
 	const [scheduleIdState, setScheduleIdState] = useState(null)
     const {data:dataSpeciality} = useGetSpecialtyNamesForPractiseQuery(dataUserSubdivision?.id,{skip:dataUserSubdivision?.id === null})
     const {data:dataPracticeKind} = useGetPracticeKindQuery(dataUserSubdivision?.id,{skip:dataUserSubdivision?.id === null})    
@@ -174,9 +174,11 @@ export const PracticeSchedule = () => {
 	const [selectedValueKind, setSelectedValuesKind] = useState(['Все']);
 	const [selectedValueSpecialtySend, setSelectedValuesSpectialtySend] = useState([]);
 	const [selectedValueKindSend, setSelectedValuesKindSend] = useState([]);
+	const [copyDataByFilter, setCopyDataByFilter] = useState([]);
 	const prevDataByFilterLength = useRef([]);
 	const prevUniqName = useRef()
 	const prevUniqNameKind = useRef()
+	const prevData = useRef([])
 	const dispatch = useDispatch()
 
 	const columns = [
@@ -330,8 +332,14 @@ export const PracticeSchedule = () => {
 			})
 		}
 	})
-
-
+	useEffect(()=>{
+		if(isSuccessByFilter){
+			if(prevData.current.length < dataByFilter.length){
+				prevData.current = dataByFilter
+			}
+		}
+	},[isSuccessByFilter])
+	
 	useEffect(() => {
 		const data = {
 			subdivisionId:  dataUserSubdivision?.id ? dataUserSubdivision?.id : null,
@@ -379,12 +387,17 @@ export const PracticeSchedule = () => {
 	const handleChangeSpecialty = (values:any) => {
 		if(selectedValueSpecialty.includes('Все')===false && values.includes('Все') ){
 			setSelectedValuesSpectialty(['Все']);
+			console.log('всеееее')
 			setSelectedValuesSpectialtySend([])
 			return
 		}
 		setSelectedValuesSpectialty(values.filter((i:any)=>i!=='Все'))
-		const stri = dataByFilter.filter((item:any)=>values.includes(item.specialtyName))
+		console.log('values',values)
+		console.log('prevData',prevData.current)
+		const stri = prevData.current.filter((item:any)=>values.includes(item.specialtyName))
+		console.log('stri',stri)
 		const x = stri.map((item:any)=>item.specialtyCode + ' ' + item.specialtyName)
+		console.log('x',x)
 		const araId = (dataAllSpec?.filter((item)=>x.includes(item?.value)))?.map((item)=>item.id)
 		//@ts-ignore
 		setSelectedValuesSpectialtySend(araId)
@@ -396,14 +409,8 @@ export const PracticeSchedule = () => {
 			return
 		}
 		setSelectedValuesKind(values.filter((i:any)=>i!=='Все'))
-		const stri = dataByFilter.filter((item:any)=>values.includes(item.practiceKind))
-
-		const x = stri.map((item:any)=>item.practiceKind)
-
-		const araId = (dataAllPracKind?.filter((item)=>x.includes(item?.value)))?.map((item)=>item.id)
-		// !дождаться получения данных о видах практики /////////////////////////////////////////////////////////////////////////////////////
-		//@ts-ignore
-		setSelectedValuesKindSend(araId)
+		
+		setSelectedValuesKindSend(values.filter((i:any)=>i!=='Все'))
 	};
 
 	function filterDataFull() {
@@ -638,7 +645,17 @@ export const PracticeSchedule = () => {
             }))
         : [])
     ];
-
+	const arrayKindWithId = [
+      
+        ...(dataByFilter ?
+            dataByFilter.map((item:any) => ({
+                key: item.id,
+                value: item,
+                label: item
+            }))
+        : [])
+    ];
+	console.log('arrayKindWithId',arrayKindWithId)
 	const uniqueSpecialityNames = useMemo(() => {
 		if(prevDataByFilterLength?.current <= dataByFilter?.length){
 
@@ -668,7 +685,7 @@ export const PracticeSchedule = () => {
 	}else return prevUniqNameKind.current
 	}, [dataByFilter]);
 ;
-
+console.log('prevData?.current',prevData?.current)
 
 	return (
 		<Spin spinning={isLoadingCreate}>
@@ -763,7 +780,22 @@ export const PracticeSchedule = () => {
 						popupMatchSelectWidth={false}
 						value={selectedValueKind}
 						className="w-full"
-						options={uniqueKind}
+						// @ts-ignore
+						options={[
+							{ key: 2244612, value: "Все", label: "Все" },
+							...prevData?.current.filter((item, index, self) =>
+								// @ts-ignore
+							  index === self.findIndex(t => t.practiceKind === item.practiceKind)
+							).map(item => ({
+								// @ts-ignore
+							  key: item.id,
+							  // @ts-ignore
+							  value: item.practiceKindId,
+							  // @ts-ignore
+							  label: item.practiceKind
+							}))
+						  ]
+						}
 						onChange={value => {
 							handleChangeKind(value)
 							setFilter({

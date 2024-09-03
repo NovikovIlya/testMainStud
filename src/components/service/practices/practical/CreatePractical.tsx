@@ -8,7 +8,8 @@ import {
 	Row,
 	Select,
 	Space,
-	Spin
+	Spin,
+	TreeSelect
 } from 'antd'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -39,6 +40,7 @@ import { OptionsNameSpecialty } from '../roster/registerContracts/RegisterContra
 import { showNotification } from '../../../../store/reducers/notificationSlice'
 import { useAppDispatch } from '../../../../store'
 import { DeleteRedSvg } from '../../../../assets/svg/DeleteRedSvg'
+import { disableParents } from '../../../../utils/disableParents'
 
 interface FilterType {
 	value: string | number
@@ -99,26 +101,18 @@ export const CreatePractical = () => {
 	const { data: dataPraciseKind, isSuccess: isSuccesPractiseKind } = useGetPracticeKindQuery(subDivisionId, { skip: subDivisionId === null })
 	const { data: dataGroupNumbers, isSuccess: isSuccessGroupNumbers } = useGetGroupNumbersQuery(subDivisionId, { skip: subDivisionId === null })
 	const {data: dataDepartmentDirector,isSuccess: isSuccessDepartmentDirector} = useGetDepartmentDirectorsQuery(subDivisionId, {skip: !subDivisionId})
-	const { data: dataCompetences, isSuccess: isSuccessCompetences } =
-		useGetCompentencesQuery(objectForCompetences, {
-			skip: objectForCompetences === null
-		})
-	const { data: dataDepartments, isSuccess: isSuccessDepartments } =
-		useGetSubdivisionForPracticeQuery()
-	const { data: dataPracticeType, isSuccess: isSuccessPracticeType } =
-		useGetPracticeTypeForPracticeQuery(objType, {
-			skip: objType.subDivisionId === null
-		})
-	const { data: dataTask, isSuccess: isSuccessTask } =
-		useGetTasksForPracticeQuery(arqTask)
-	const { data: dataDep, isSuccess: isSuccessDep } = useGetCafDepartmentsQuery(
-		subDivisionId,
-		{ skip: subDivisionId === null }
-	)
+	const { data: dataCompetences, isSuccess: isSuccessCompetences } =useGetCompentencesQuery(objectForCompetences, {skip: objectForCompetences === null})
+	const { data: dataDepartments, isSuccess: isSuccessDepartments } =useGetSubdivisionForPracticeQuery()
+	const { data: dataPracticeType, isSuccess: isSuccessPracticeType } =useGetPracticeTypeForPracticeQuery(objType, {skip: objType.subDivisionId === null})
+	const { data: dataTask, isSuccess: isSuccessTask } =useGetTasksForPracticeQuery(arqTask)
+	const { data: dataDep, isSuccess: isSuccessDep } = useGetCafDepartmentsQuery(subDivisionId,{ skip: subDivisionId === null })
 	const [copyDataCompetences, setCopyDataCompetences] = useState<any>(dataCompetences)
 	const [sendForm, { data,isLoading:isLoadingSendForm }] = usePostPracticesMutation()
 	const { t } = useTranslation()
 	const dispatch = useAppDispatch()
+	const [treeLine, setTreeLine] = useState(true);
+    const [showLeafIcon, setShowLeafIcon] = useState(false);
+    const [value, setValue] = useState<string>();
 
 	useEffect(()=>{
 		if(isSuccessCompetences)
@@ -360,12 +354,25 @@ export const CreatePractical = () => {
 	const onChangePickerPeriodPractise = (value: any) => {
 		console.log(value)
 	}
+	
 	const handleCourse = (value:any)=>{
 		setPickCourse(value)
 		form.setFieldValue('semester', '')
 	}
 
+	const onChange = (newValue: string) => {
+        console.log('newValue',newValue)
+        setSubDevisionId(newValue);
+
+       
+      };
+    
+      const onPopupScroll: any = (e:any) => {
+        console.log('onPopupScroll', e);
+    };
+
 	const dataTaskValid = dataTask?.tasks.map((item: any) => item.taskDescription)
+
 	const optionsCourseValid = (() => {
 		switch (pickCourse) {
 			case '1':
@@ -403,14 +410,25 @@ export const CreatePractical = () => {
 				return [];
 		}
 	})()
-	console.log('v', form?.getFieldValue('semester'))
 
 	const deleteCompetence = (item: any) => {
-		console.log('item',item)
 		const newCompetences = copyDataCompetences.filter((elem:any) => elem.id!== item.id)
-		console.log('newCompetences',newCompetences)
 		setCopyDataCompetences(newCompetences)
 	}
+
+	const treeData = dataDepartments?.map((item:any)=>{
+        return{
+            title:item.value,
+            value:item.id,
+            // @ts-ignore
+            children: item?.responses?.map((item)=>{
+                return{
+                    title:item.value,
+                    value:item.id,
+                }
+            })
+        }
+    })
 
 	return (
 		<Spin spinning={isLoadingSendForm}>
@@ -441,13 +459,28 @@ export const CreatePractical = () => {
 								rules={[{ required: true }]}
 								name={'subDivision'}
 							>
-								<Select
+								{/* <Select
 									onChange={handleChange}
 									size="large"
 									popupMatchSelectWidth={false}
 									className="w-full"
 									options={departments}
-								/>
+								/> */}
+								  <TreeSelect
+                                    treeLine={treeLine && { showLeafIcon }}
+                                    showSearch
+                                    style={{ height:'38px',width: '100%' }}
+                                    value={value}
+                                    dropdownStyle={{  overflow: 'auto' }}
+                                    placeholder=""
+                                    allowClear
+                                    treeDefaultExpandAll
+                                    onChange={onChange}
+                                    treeData={disableParents(treeData)}
+                                    onPopupScroll={onPopupScroll}
+                                    treeNodeFilterProp="title"
+								
+                                />
 							</Form.Item>
 						</Space>
 					</Col>

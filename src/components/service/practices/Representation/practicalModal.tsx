@@ -2,7 +2,8 @@ import {
   Col, Modal,
   Row,
   Select, Spin, Table,
-  Typography,Form
+  Typography,Form,
+  TreeSelect
 } from 'antd'
 
 import {
@@ -10,14 +11,14 @@ import {
 } from '../../../../models/representation'
 
 import { EditableCell } from './EditableCell'
-import { useGetGroupNumberQuery, useGetPracticesAllQuery, useGetSubdivisionForPracticeQuery } from '../../../../store/api/practiceApi/individualTask'
+import { useGetGroupNumberQuery, useGetPracticesAllQuery, useGetPractiseSubdevisionNewQuery } from '../../../../store/api/practiceApi/individualTask'
 import { LoadingOutlined } from '@ant-design/icons'
 import { useGetAllSubmissionsQuery } from '../../../../store/api/practiceApi/representation'
 import { useGetSpecialtyNamesForPractiseQuery } from '../../../../store/api/practiceApi/roster'
-import { findSubdivisions } from '../../../../utils/findSubdivisions'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { processingOfDivisions } from '../../../../utils/processingOfDivisions'
 import { findSubdivisionsExport } from '../../../../utils/findSubdivisionsExport'
+import { disableParents } from '../../../../utils/disableParents'
 
 const filterSpecialization: FilterType[] = [
 	{
@@ -53,8 +54,8 @@ const filterSpecialization: FilterType[] = [
 const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancelOne,handleRowClick,tableRef}: any) => {
 	const [subdivisionId, setSubdivisionId] = useState(null)
 	const {data:dataAllSubmissions} = useGetAllSubmissionsQuery(selectedPractice,{skip:!selectedPractice})
-	const {data:dataAllPractise,isLoading} = useGetPracticesAllQuery(null)
-	const {data:dataAllSubdivision} = useGetSubdivisionForPracticeQuery()
+	const {data:dataAllPractise,isLoading,isFetching} = useGetPracticesAllQuery(null)
+	const {data:dataAllSubdivision} = useGetPractiseSubdevisionNewQuery()
 	const {data:dataAllSpecialty,isSuccess:isSuccesSpecialty} = useGetSpecialtyNamesForPractiseQuery(subdivisionId,{skip:!subdivisionId})
 	const [tableData, setTableData] = useState<any>(dataAllPractise)
 	const {data:dataGroupNumber} = useGetGroupNumberQuery(subdivisionId, {skip:!subdivisionId})
@@ -73,6 +74,11 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 		groupNumber: 'Все',
 
 	})
+	const [load,setLoad] = useState(false)
+	const [treeLine, setTreeLine] = useState(true);
+    const [showLeafIcon, setShowLeafIcon] = useState(false);
+    const [value, setValue] = useState<any>();
+
  	const columnsRepresentation = [
 	{
 		key: 'subdivision',
@@ -94,14 +100,14 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 		key: 'academicYear',
 		dataIndex: 'academicYear',
 		title: 'Учебный год',
-		className: 'text-xs !p-2'
+		className: 'text-xs !p-2 mobileFirst'
 	},
 
 	{
 		key: 'groupNumber',
 		dataIndex: 'groupNumber',
 		title: 'Номер группы',
-		className: 'text-xs !p-2'
+		className: 'text-xs !p-2 mobileFirst'
 	},
 	// {
 	// 	key: 'level',
@@ -114,7 +120,7 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 		key: 'course',
 		dataIndex: 'courseNumber',
 		title: 'Курс',
-		className: 'text-xs !p-2',
+		className: 'text-xs !p-2 mobileFirst',
 		editable: true
 	}
 
@@ -128,6 +134,7 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 	//   ),
 	// },
 	]
+
 	function filterDataFull() {
 		function filterCourse(elem: any) {
 			if (filter.courseNumber === 'Все') {
@@ -147,8 +154,8 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 			if (filter.subdivision === 'Все') {
 				return elem
 			} else {
-				const x = filter.subdivision.includes(' - ') ? filter.subdivision.split(' - ')[1] : filter.subdivision
-				return elem.subdivision === x
+
+				return elem.subdivisionId === filter.subdivision
 			}
 		}
 		function filterKind(elem: any) {
@@ -201,7 +208,6 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 			}
 			return 0
 		}
-
 		return dataAllPractise
 			? dataAllPractise
 					.filter((elem: any) => filterSubdivision(elem))
@@ -211,14 +217,31 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 		 
 			: []
 	}
-
-
+	const onPopupScroll: any = (e:any) => {
+        console.log('onPopupScroll', e);
+    };
+	
 	const filteredData = filterDataFull()?.filter((record: any) => {
 		return record.id !== selectedPractice
 	});
 
+	const treeData = [{ key: 2244612, value: 'Все', label: 'Все' },...(dataAllSubdivision ? dataAllSubdivision?.map((item:any)=>{
+        return{
+            title:item.value,
+            value:item.id,
+            // @ts-ignore
+            children: item?.responses?.map((item)=>{
+                return{
+                    title:item.value,
+                    value:item.id,
+                }
+            })
+        }
+    }):[])]
+
   	return (
 		<Modal
+			className='top-[140px] md:top-[140px] lg:top-[100px]'
 			footer={null}
 			width={'100%'}
 			title="Выберите практику"
@@ -227,11 +250,11 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 			onCancel={handleCancelOne}
 		><Form form={form}>
 			<Row gutter={[8, 16]} className="mt-12 w-full flex items-center">
-				<Col span={4}>
+				<Col span={4} className='overWrite'>
 					<Typography.Text>Подразделение</Typography.Text>
 				</Col>
-				<Col span={8}>
-					<Select
+				<Col span={8} className='overWrite'>
+					{/* <Select
 						popupMatchSelectWidth={false}
 						defaultValue="Все"
 						className="w-full"
@@ -247,6 +270,7 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 						]}
 						// options={dataAllSubdivision?.length > 0 ? processingOfDivisions(dataAllSubdivision) : []}
 						onChange={value => {
+							
 							if(value!=='Все'){
 								const x = findSubdivisionsExport(dataAllSubdivision, value )
 								if('responses' in x){
@@ -262,14 +286,37 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 							})
 							form.setFieldValue('specialtyName', 'Все')
 						}}
-					/>
+					/> */}
+								<TreeSelect
+                                        treeLine={treeLine && { showLeafIcon }}
+                                        showSearch
+                                        style={{ height:'32px',width: '100%' }}
+                                        value={value}
+                                        dropdownStyle={{  overflow: 'auto' }}
+                                        placeholder=""
+                                        allowClear
+                                        treeDefaultExpandAll
+										onChange={value => {
+											setSubdivisionId(value)
+											setFilter({
+												...filter,
+												subdivision: value,
+												specialtyName: 'Все'
+											})
+											form.setFieldValue('specialtyName', 'Все')
+										}}
+                                        treeData={disableParents(treeData)}
+                                        onPopupScroll={onPopupScroll}
+                                        treeNodeFilterProp="title"
+                                    
+                                    />
 				</Col>
 			</Row>
 			<Row gutter={[8, 16]} className="mt-4 w-full flex items-center">
-				<Col span={4}>
+				<Col span={4} className='overWrite'>
 					<Typography.Text>Шифр и наимеование документа</Typography.Text>
 				</Col>
-				<Col span={8}>
+				<Col span={8} className='overWrite'>
 					<Form.Item className='mb-0' name={'specialtyName'}>
 					<Select
 						disabled={!subdivisionId}
@@ -309,10 +356,10 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 
 			
 			<Row gutter={[8, 16]} className="mt-4 w-full flex items-center">
-				<Col span={4}>
+				<Col span={4} className='overWrite'>
 					<Typography.Text>Номер группы</Typography.Text>
 				</Col>
-				<Col span={8}>
+				<Col span={8} className='overWrite'>
 					<Select
 						disabled={!subdivisionId}
 						popupMatchSelectWidth={false}
@@ -357,10 +404,10 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 				</Col>
 			</Row> */}
 			<Row gutter={[8, 16]} className="mt-4 mb-12 w-full flex items-center">
-				<Col span={4}>
+				<Col span={4} className='overWrite'>
 					<Typography.Text>Курс</Typography.Text>
 				</Col>
-				<Col span={8}>
+				<Col span={8} className='overWrite'>
 					<Select
 						disabled={!subdivisionId}
 						popupMatchSelectWidth={false}
@@ -376,7 +423,7 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 					/>
 				</Col>
 			</Row>
-			{isLoading ? <Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}/> : 
+			{isLoading || load ? <Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}/> : 
 			<Table
 				onRow={record => ({
 					onClick: () => handleRowClick(record)

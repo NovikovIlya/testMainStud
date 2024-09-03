@@ -9,9 +9,10 @@ import {
     Spin,
     Table,
     TableProps,
+    Tour,
     Typography
 } from 'antd';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './RegisterContracts.scss';
 import {
     TitleHeadCell
@@ -86,27 +87,40 @@ export const RegisterContracts = () => {
         nameSpecialty: 'Все',
         numberSeats: 'Все',
     })
-    const [
-        tableDataCompressed,
-        setTableDataCompressed
-    ] = useState<ColumnsTableCompressedView[]>()
-    const [
-        tableDataFull,
-        setTableDataFull
-    ] = useState<ColumnsTableFull[]>()
-    const [tableView, setTableView] = useState({
-        compressed: true,
-        table: false
-    })
-    const [
-        selectedFieldsCompressed,
-        setSelectedFieldsCompressed
-    ] = useState<ColumnsTableCompressedView[]>()
+    const [ tableDataCompressed,setTableDataCompressed] = useState<ColumnsTableCompressedView[]>()
+    const [ tableDataFull,setTableDataFull] = useState<ColumnsTableFull[]>()
+    const [tableView, setTableView] = useState({ compressed: true, table: false})
+    const [selectedFieldsCompressed, setSelectedFieldsCompressed] = useState<ColumnsTableCompressedView[]>()
+    const [ selectedFieldsFull, setSelectedFieldFull] = useState<ColumnsTableFull[]>()
+    const ref1 = useRef(null);
+    const ref2 = useRef(null);
+    const ref3 = useRef(null);
+    const [open, setOpen] = useState<boolean>(false);
 
-    const [
-        selectedFieldsFull,
-        setSelectedFieldFull
-    ] = useState<ColumnsTableFull[]>()
+  const steps: any = [
+    {
+      title: 'Upload File',
+      description: 'Put your files here.',
+      cover: (
+        <img
+          alt="tour.png"
+          src="https://user-images.githubusercontent.com/5378891/197385811-55df8480-7ff4-44bd-9d43-a7dade598d70.png"
+        />
+      ),
+      target: () => ref1.current,
+    },
+    {
+      title: 'Save',
+      description: 'Save your changes.',
+      target: () => ref2.current,
+    },
+    {
+      title: 'Other Actions',
+      description: 'Click to see other actions.',
+      target: () => ref3.current,
+    },
+  ];
+  
 
     function prolonAge(prolon: string) {
         if (prolon === '1') {
@@ -381,6 +395,7 @@ export const RegisterContracts = () => {
 
     const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
     const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery(null)
+
     useEffect(() => {
         if (isSuccessNameSpecialty) {
             setNameSpecialty(changeListNameSpecialty(dataNameSpecialty))
@@ -389,6 +404,7 @@ export const RegisterContracts = () => {
 
     const [contractFacilities, setContractFacilities] = useState<ContractFacilities[]>()
     const {data: dataContractFacilities, isSuccess: isSuccessContractFacilities} = useGetContractFacilitiesQuery()
+
     useEffect(() => {
         if (isSuccessContractFacilities) {
             setContractFacilities(changeListContractFacilities(dataContractFacilities))
@@ -584,6 +600,17 @@ export const RegisterContracts = () => {
 		nav(`/services/practices/registerContracts/editContract/${record.key}`)
     };
 
+    const handleKeyDown = (event:any) => {
+        // Разрешаем ввод только цифр и некоторых специальных символов
+        const validKeys = ['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', 'Delete', 'Enter', 'Escape'];
+        if (
+          !validKeys.includes(event.key) &&
+          !/^\d$/.test(event.key) && // Разрешаем ввод только цифр
+          event.key !== '.' // Разрешаем ввод точки для разделения дат
+        ) {
+          event.preventDefault(); // Запрещаем ввод недопустимых символов
+        }
+      };
 
     return (
         <section className={'container'}>
@@ -594,6 +621,7 @@ export const RegisterContracts = () => {
                     </Typography.Text>
                 </Col>
             </Row>
+            
             <Row gutter={[16, 16]} className={'mt-12 gtc'}>
                 <Col span={12} className={'flex items-center gap-0'}>
                     <Col span={8} className={clsx(
@@ -607,21 +635,27 @@ export const RegisterContracts = () => {
                             onChange={value => setFilterNumberSeats(value)}
                         />
                     </Col>
-                    <Col span={!tableView.table ? 24 : 16} className={'flex items-center gap-10 justify-between'}
+                    <Col span={!tableView.table ? 24 : 16} className={'flex items-center gap-2 mobileFirst '}
                          style={{
                              paddingRight: 0,
-                             paddingLeft: tableView.table ? 16 : 8
+                             paddingLeft: tableView.table ? 16 : 0
                          }}>
-                        <span className={'whitespace-nowrap'}>Дата заключения договора</span>
-                        <DatePicker className={'w-[90%]'}
-                                    placeholder={'ДД.ММ.ГГГГ'}
-                                    format={'DD.MM.YYYY'}
-                                    onChange={date => setFilterDate(date)}
-                        />
+                        <Col span={8} className='overWrite mobileFirst'>
+                            <span className={'whitespace-nowrap'}>Дата заключения договора</span>
+                        </Col>
+                        <Col span={16} className='overWrite mobileFirst'>
+                            <DatePicker className={'w-full overWrite'}
+                                        placeholder={'ДД.ММ.ГГГГ'}
+                                        format={'DD.MM.YYYY'}
+                                        onChange={date => setFilterDate(date)}
+                                        allowClear
+                                        onKeyDown={handleKeyDown}
+                            />
+                        </Col>
                     </Col>
                 </Col>
-                <Col span={3} offset={9}>
-                    <Button type={"primary"}
+                <Col span={3} offset={9} className='overWrite flex justify-end sm:block'>
+                    <Button type={"primary"} ref={ref1}
                             onClick={() => {
                                 nav('/services/practices/registerContracts/createContract')
                             }}
@@ -657,11 +691,11 @@ export const RegisterContracts = () => {
                 'mt-4',
                 !tableView.table && 'hidden'
             )}>
-                <Col span={12} className={'flex items-center gap-2'}>
+                <Col span={12} className={'flex items-center gap-2 overWrite'}>
                     <Col span={8}>
                         <span className={'whitespace-nowrap'}>Наименование специальности</span>
                     </Col>
-                    <Col span={16}>
+                    <Col span={16} className='overWrite'>
                         <Select
                             popupMatchSelectWidth={false}
                             defaultValue="Все"
@@ -770,7 +804,9 @@ export const RegisterContracts = () => {
                             onClick: () => handleRowClick(record),
                         })}
                         columns={columnsFullView}
-                       pagination={false}
+                        pagination={tableDataFull && tableDataFull?.length<10?false:{
+                            pageSize: 10
+                        }}
                        dataSource={tableDataFull}
                        size={"middle"}
                        className={'mt-5'}
@@ -786,6 +822,7 @@ export const RegisterContracts = () => {
                 />
             }
             </>}
+            <Tour open={open} onClose={() => setOpen(false)} steps={steps} />
         </section>
     )
 }

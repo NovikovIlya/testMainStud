@@ -123,7 +123,17 @@ export const CreateContracts = () => {
         nav('/services/practices/registerContracts')
     }
 
-
+    const handleKeyDown = (event:any) => {
+        // Разрешаем ввод только цифр и некоторых специальных символов
+        const validKeys = ['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', 'Delete', 'Enter', 'Escape'];
+        if (
+          !validKeys.includes(event.key) &&
+          !/^\d$/.test(event.key) && // Разрешаем ввод только цифр
+          event.key !== '.' // Разрешаем ввод точки для разделения дат
+        ) {
+          event.preventDefault(); // Запрещаем ввод недопустимых символов
+        }
+    };
 
 
     return (
@@ -193,6 +203,7 @@ export const CreateContracts = () => {
                             <Input
                                 className="w-full"
                                 size="large"
+                                autoComplete="off"
                             />
                         </Form.Item>
                     </Col>
@@ -207,6 +218,8 @@ export const CreateContracts = () => {
                                 placeholder={''}
                                 className="w-full"
                                 size={'large'}
+                                allowClear
+                                onKeyDown={handleKeyDown}
                             />
                         </Form.Item>
 
@@ -304,6 +317,7 @@ export const CreateContracts = () => {
                             <Input
                                 className="w-full"
                                 size="large"
+                                autoComplete="adress" 
                             />
                         </Form.Item>
                     </Col>
@@ -316,6 +330,7 @@ export const CreateContracts = () => {
                             <Input
                                 className="w-full"
                                 size="large"
+                                autoComplete="adress" 
                             />
                         </Form.Item>
                     </Col>

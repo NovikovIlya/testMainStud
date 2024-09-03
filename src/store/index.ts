@@ -35,6 +35,7 @@ import SkillsReducer from './reducers/SeekerFormReducers/SkillsReducer'
 import authSlice from './reducers/authSlice'
 import chatIdSlice from './reducers/chatIdSlice'
 import notificationSlice from './reducers/notificationSlice'
+import CurrentInterviewTimeFormatedSlice from './reducers/CurrentInterviewTimeFormatedSlice'
 
 export const store = configureStore({
 	reducer: {
@@ -69,7 +70,8 @@ export const store = configureStore({
 		SecretaryItemTabs: SecretaryItemTabsReducer,
 		[practiceApi.reducerPath]: practiceApi.reducer,
 		[apiSlice.reducerPath]: apiSlice.reducer,
-		currentVacancyId: CurrentVacancyIdSlice
+		currentVacancyId: CurrentVacancyIdSlice,
+		currentInterviewTimeFormated: CurrentInterviewTimeFormatedSlice,
 	},
 	middleware: getDefaultMiddleware =>
 		getDefaultMiddleware()

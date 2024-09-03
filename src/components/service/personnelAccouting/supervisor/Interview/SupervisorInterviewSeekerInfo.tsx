@@ -10,10 +10,10 @@ import {
 import { NocircleArrowIcon } from '../../../jobSeeker/NoCircleArrowIcon'
 
 export const SupervisorInterviewSeekerInfo = ( ) => {
-
 	const respondId = useAppSelector(state => state.currentResponce)
 	const format = useAppSelector(state => state.currentInterviewFormat)
 	const time = useAppSelector(state => state.currentInterviewTime)
+	const timeFormated = useAppSelector(state => state.currentInterviewTimeFormated)
 
 	const { data } = useGetRespondFullInfoQuery(respondId.respondId)
 
@@ -25,12 +25,13 @@ export const SupervisorInterviewSeekerInfo = ( ) => {
 	const [aproveSeeker] = useEmployeeSeekerRequestMutation()
 
 	interface ComponentProps {
-		eventTime: string
+		time: string
+		timeFormated: string
 		format: string
 	}
 
 	const Component = ( props: ComponentProps ) => {
-		const targetDate = new Date(props.eventTime);
+		const targetDate = new Date(props.time);
 		const now = new Date();
 		const difference = targetDate.getTime() - now.getTime();
 		let isInterviewEnded : boolean = false
@@ -50,7 +51,7 @@ export const SupervisorInterviewSeekerInfo = ( ) => {
 							Дата и время:</h4>
 						<h4
 							className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-							{time.time}
+							{props.timeFormated}
 						</h4>
 					</div>
 				)}
@@ -261,7 +262,7 @@ export const SupervisorInterviewSeekerInfo = ( ) => {
 								</Form>
 							</Modal>
 						</ConfigProvider>
-						<Component format={''} eventTime={''}></Component>
+						<Component time={time.time} format={format.format} timeFormated={timeFormated.timeFormated}></Component>
 					</div>
 					<hr />
 					<div className="flex flex-col gap-[24px]">
@@ -353,10 +354,12 @@ export const SupervisorInterviewSeekerInfo = ( ) => {
 						</p>
 						<div className="grid grid-cols-[194px_auto] gap-x-[20px] w-[90%]">
 							<div className="col-start-2">
+								{/*
 								{data?.respondData.skills.aboutMe}
+								TODO: разобраться почему приходит undefined
+								*/}
 								</div>
 							<div className="col-start-2 flex gap-[8px] flex-wrap">
-
 							</div>
 						</div>
 					</div>

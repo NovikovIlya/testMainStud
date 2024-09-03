@@ -7,6 +7,7 @@ import { useLazyGetInterviewViewQuery } from '../../../../../store/api/serviceAp
 import {setCurrentResponce} from "../../../../../store/reducers/CurrentResponceSlice";
 import {setCurrentInterviewFormat} from "../../../../../store/reducers/CurrentInterviewFormatSlice";
 import {setCurrentInterviewTime} from "../../../../../store/reducers/CurrentInterviewTimeSlice";
+import {setCurrentInterviewTimeFormated} from "../../../../../store/reducers/CurrentInterviewTimeFormatedSlice";
 
 export const SupervisorInterviewItem = ( props : InterviewItemType ) => {
 
@@ -160,8 +161,9 @@ export const SupervisorInterviewItem = ( props : InterviewItemType ) => {
                 <Button
                     onClick={() => {
                             dispatch(setCurrentResponce(props.id))
-                            dispatch(setCurrentInterviewTime(InterviewTimeStringForSeeker))
+                            dispatch(setCurrentInterviewTime(props.time))
                             dispatch(setCurrentInterviewFormat(props.format))
+                            dispatch(setCurrentInterviewTimeFormated(InterviewTimeStringForSeeker))
                             navigate('/services/personnelaccounting/supervisor/invitation/seekerinfo')
                     }}
                     className="font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black"

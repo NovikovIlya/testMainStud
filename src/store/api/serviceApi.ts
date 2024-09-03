@@ -201,8 +201,13 @@ export const serviceApi = apiSlice.injectEndpoints({
 					}`
 				},
 				keepUnusedDataFor: 0
-			})
-			//transformResponse: seekerServiceResponcesDataTransformHandler
+			}),
+			transformResponse: (response: VacancyRespondItemType[]) => {
+				return response.map(resp => ({
+					...resp,
+					responseDate: resp.responseDate.substring(0, 10)
+				}))
+			}
 		}),
 		getRespondFullInfo: builder.query<VacancyRespondItemType, number>({
 			query: id => ({
@@ -293,8 +298,13 @@ export const serviceApi = apiSlice.injectEndpoints({
 				headers: {
 					Authorization: `Bearer ${personnelDeparmentToken}`
 				}
-			})
-			//transformResponse: seekerServiceResponcesDataTransformHandler
+			}),
+			transformResponse: (response: VacancyRespondItemType[]) => {
+				return response.map(resp => ({
+					...resp,
+					responseDate: resp.responseDate.substring(0, 10)
+				}))
+			}
 		}),
 		getArchivedRespondFullInfo: builder.query<VacancyRespondItemType, number>({
 			query: id => ({
@@ -310,8 +320,13 @@ export const serviceApi = apiSlice.injectEndpoints({
 				headers: {
 					Authorization: `Bearer ${personnelDeparmentToken}`
 				}
-			})
-			//transformResponse: seekerServiceResponcesDataTransformHandler
+			}),
+			transformResponse: (response: VacancyRespondItemType[]) => {
+				return response.map(resp => ({
+					...resp,
+					respondDate: resp.respondDate.substring(0, 10)
+				}))
+			}
 		}),
 		getReservedRespondFullInfo: builder.query<VacancyRespondItemType, number>({
 			query: id => ({

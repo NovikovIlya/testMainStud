@@ -1403,6 +1403,7 @@ export const ResponseForm = () => {
 									<DatePicker.MonthPicker
 										className="w-full"
 										disabled={haveNoExprience}
+										maxDate={dayjs(date)}
 									/>
 								</Form.Item>
 							</div>
@@ -1543,6 +1544,7 @@ export const ResponseForm = () => {
 									<DatePicker.MonthPicker
 										className="w-full"
 										disabled={haveNoExprience}
+										maxDate={dayjs(date)}
 									/>
 								</Form.Item>
 							</div>

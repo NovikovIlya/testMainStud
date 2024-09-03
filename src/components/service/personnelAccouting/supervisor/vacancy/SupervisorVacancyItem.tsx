@@ -116,7 +116,7 @@ export default function VacancyItem(props: VacancyItemType) {
 						{props.employment}
 					</p>
 				</div>
-				<p className="ml-[140px] w-[150px] font-content-font font-normal text-[16px]/[19px] text-black">
+				<p className="ml-[140px] w-[150px] font-content-font font-normal text-[16px]/[19px] text-black text-balance">
 					{props.salary}
 				</p>
 				<Button

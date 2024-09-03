@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom'
 
-import { ArrowLeftSvg } from '../../../assets/svg'
 import { useAppSelector } from '../../../store'
 import { usePostVacancyRespondMutation } from '../../../store/api/serviceApi'
 
@@ -95,15 +94,15 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 								? navigate(`/services/personnelaccounting/chat/id/${chatId}`)
 								: navigate(`/services/myresponds/chat/id/${chatId}`)
 						}}
-						className="bg-white h-[38px] w-[46px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer"
+						className="bg-inherit border-none cursor-pointer"
 					>
 						<ArrowIcon />
 					</button>
-					<p className="ml-[40px] font-content-font font-normal text-black text-[28px]/[33.6px]">
+					<p className="mb-[2px] ml-[40px] font-content-font font-normal text-black text-[28px]/[33.6px]">
 						{currentVacancy !== null ? currentVacancy.title.rendered : ''}
 					</p>
 				</div>
-				<div className="w-[50%] mt-[80px] grid grid-cols-[repeat(3,_minmax(106px,_auto))_143px] gap-x-[120px] gap-y-[16px]">
+				<div className="w-[50%] mt-[52px] grid grid-cols-[repeat(3,_minmax(106px,_auto))_143px] gap-x-[120px] gap-y-[16px]">
 					<p className="w-[106px] font-content-font font-bold text-black text-[18px]/[21px]">
 						Требуемый опыт работы
 					</p>

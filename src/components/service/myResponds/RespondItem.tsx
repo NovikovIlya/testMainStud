@@ -4,8 +4,18 @@ import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import { DeleteSvg } from '../../../assets/svg/DeleteSvg'
-import { useDeleteVacancyRespondMutation } from '../../../store/api/serviceApi'
+import {
+	useDeleteVacancyRespondMutation,
+	useGetChatIdByRespondIdQuery
+} from '../../../store/api/serviceApi'
+import {
+	closeChat,
+	openChat
+} from '../../../store/reducers/ChatRespondStatusSlice'
 import { setCurrentResponce } from '../../../store/reducers/CurrentResponceSlice'
+import { setRespondId } from '../../../store/reducers/CurrentRespondIdSlice'
+import { setCurrentVacancyId } from '../../../store/reducers/CurrentVacancyIdSlice'
+import { setChatId } from '../../../store/reducers/chatIdSlice'
 import { RespondItemType, respondStatus } from '../../../store/reducers/type'
 
 export const RespondItem = (props: RespondItemType & { refetch: Function }) => {
@@ -13,6 +23,28 @@ export const RespondItem = (props: RespondItemType & { refetch: Function }) => {
 	const dispatch = useDispatch()
 	const [isModalOpen, setModalOpen] = useState(false)
 	const [deleteVacancy, deleteResult] = useDeleteVacancyRespondMutation()
+
+	const { data: chatId = 0, isLoading: isChatIdLoading } =
+		useGetChatIdByRespondIdQuery({
+			chatId: props.id,
+			role: 'SEEKER'
+		})
+
+	const handleNavigate = (url: string) => {
+		if (props.status) {
+			if (props.status !== respondStatus[respondStatus.INVITATION]) {
+				dispatch(closeChat())
+			} else {
+				dispatch(openChat())
+			}
+		} else {
+			dispatch(openChat())
+		}
+		dispatch(setChatId(chatId))
+		dispatch(setRespondId(props.id))
+		dispatch(setCurrentVacancyId(0))
+		navigate(url)
+	}
 
 	return (
 		<>
@@ -92,7 +124,7 @@ export const RespondItem = (props: RespondItemType & { refetch: Function }) => {
 				</Button>
 				<Button
 					onClick={() => {
-						navigate('/services/myresponds/chat')
+						handleNavigate(`/services/myresponds/chat/id/${chatId}`)
 					}}
 					className="ml-[1%] max-w-[15%] font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black"
 				>

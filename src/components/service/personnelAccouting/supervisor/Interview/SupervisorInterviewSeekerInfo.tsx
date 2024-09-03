@@ -1,12 +1,13 @@
-import React, { useState } from 'react'
-import { Button, ConfigProvider, Modal, Form, Select} from 'antd'
-import ArrowIcon from '../../../jobSeeker/ArrowIcon'
+import { Button, ConfigProvider, Form, Modal, Select } from 'antd'
+import { useState } from 'react'
+
 import { AvatartandardSvg } from '../../../../../assets/svg/AvatarStandardSvg'
 import { useAppSelector } from '../../../../../store'
-import { useGetRespondFullInfoQuery,
-				 useEmployeeSeekerRequestMutation,
-				 useLazyGetInterviewViewQuery
+import {
+	useEmployeeSeekerRequestMutation,
+	useGetRespondFullInfoQuery
 } from '../../../../../store/api/serviceApi'
+import { NocircleArrowIcon } from '../../../jobSeeker/NoCircleArrowIcon'
 
 export const SupervisorInterviewSeekerInfo = ( ) => {
 
@@ -137,13 +138,13 @@ export const SupervisorInterviewSeekerInfo = ( ) => {
 						onClick={() => {
 							window.history.back()
 						}}
-						className="bg-inherit h-[38px] w-[99px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer font-normal text-black text-[16px]/[16px] flex gap-[8px]"
+						className="bg-inherit h-[38px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer"
 					>
-						<ArrowIcon />
+						<NocircleArrowIcon />
 						Назад
 					</Button>
 				</div>
-				<div className="mt-[52px] flex flex-col gap-[36px]" >
+				<div className="mt-[52px] flex flex-col gap-[36px]">
 					<div className="flex flex-wrap gap-[150px]">
 						<div className="flex gap-[20px]">
 							<div className="flex h-[167px] w-[167px] bg-[#D9D9D9]">
@@ -198,7 +199,8 @@ export const SupervisorInterviewSeekerInfo = ( ) => {
 								token: {
 									boxShadow: '0 0 19px 0 rgba(212, 227, 241, 0.6)'
 								}
-							}}>
+							}}
+						>
 							<Modal
 								centered
 								open={isRefuseModalOpen}
@@ -221,8 +223,12 @@ export const SupervisorInterviewSeekerInfo = ( ) => {
 										})
 									}}
 								>
-									<h2 className="font-normal text-[18px]">Отказ на должность</h2>
-									<h3 className="mb-[40px] font-bold text-[18px]">«{data?.vacancyName}»</h3>
+									<h2 className="font-normal text-[18px]">
+										Отказ на должность
+									</h2>
+									<h3 className="mb-[40px] font-bold text-[18px]">
+										«{data?.vacancyName}»
+									</h3>
 									<Form.Item
 										name={'reason'}
 										label={
@@ -235,14 +241,20 @@ export const SupervisorInterviewSeekerInfo = ( ) => {
 										<Select
 											placeholder="Не хватает опыта"
 											options={[
-												{ value: 'Не хватает опыта', label: 'Не хватает опыта' },
-												{ value: 'Нашли другого специалиста', label: 'Нашли другого специалиста' }
+												{
+													value: 'Не хватает опыта',
+													label: 'Не хватает опыта'
+												},
+												{
+													value: 'Нашли другого специалиста',
+													label: 'Нашли другого специалиста'
+												}
 											]}
 										></Select>
 									</Form.Item>
 									<Button
-									className="bg-[#3073D7] text-base rounded-[54.5px] text-white py-[12px] px-[24px]"
-									htmlType="submit"
+										className="bg-[#3073D7] text-base rounded-[54.5px] text-white py-[12px] px-[24px]"
+										htmlType="submit"
 									>
 										Отправить
 									</Button>
@@ -275,11 +287,11 @@ export const SupervisorInterviewSeekerInfo = ( ) => {
 										</p>
 										<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
 											{parseInt(exp.endWork.substring(0, 4)) -
-											parseInt(exp.beginWork.substring(0, 4)) ===
+												parseInt(exp.beginWork.substring(0, 4)) ===
 											0
 												? ''
 												: parseInt(exp.endWork.substring(0, 4)) -
-												parseInt(exp.beginWork.substring(0, 4))}
+												  parseInt(exp.beginWork.substring(0, 4))}
 											{parseInt(exp.endWork.substring(0, 4)) -
 												parseInt(exp.beginWork.substring(0, 4)) ===
 												1 && ' год'}
@@ -287,8 +299,8 @@ export const SupervisorInterviewSeekerInfo = ( ) => {
 												parseInt(exp.beginWork.substring(0, 4)) >=
 												2 &&
 												parseInt(exp.endWork.substring(0, 4)) -
-												parseInt(exp.beginWork.substring(0, 4)) <=
-												4 &&
+													parseInt(exp.beginWork.substring(0, 4)) <=
+													4 &&
 												' года'}
 											{parseInt(exp.endWork.substring(0, 4)) -
 												parseInt(exp.beginWork.substring(0, 4)) >

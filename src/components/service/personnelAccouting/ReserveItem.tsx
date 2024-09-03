@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import { DeleteSvg } from '../../../assets/svg/DeleteSvg'
-import { useDeleteRespondFromArchiveMutation } from '../../../store/api/serviceApi'
+import { useDeleteReserveRespondMutation } from '../../../store/api/serviceApi'
 import { setCurrentResponce } from '../../../store/reducers/CurrentResponceSlice'
 
 export const ReserveItem = (props: {
@@ -17,7 +17,7 @@ export const ReserveItem = (props: {
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
 	const [isModalOpen, setModalOpen] = useState(false)
-	const [deleteVacancy, deleteResult] = useDeleteRespondFromArchiveMutation()
+	const [deleteVacancy, deleteResult] = useDeleteReserveRespondMutation()
 
 	return (
 		<>

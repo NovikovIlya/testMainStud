@@ -4,7 +4,9 @@ import { useLocation, useNavigate } from 'react-router-dom'
 
 import { BriefcaseSvg } from '../../../assets/svg/BriefcaseSvg'
 import { useAppSelector } from '../../../store'
+import { Header } from '../../layout/Header'
 import { ChatEmpDemp } from '../Chat/ChatEmpDemp'
+import { DepEmployment } from '../employmentStage/personnelDepartment/depEmployment'
 
 import { Archive } from './Archive'
 import { ArchiveRespondInfo } from './ArchiveRespondInfo'
@@ -22,14 +24,13 @@ import { VacancyRequestDeleteView } from './VacancyRequestDeleteView'
 import { VacancyRequestUpdateView } from './VacancyRequestUpdateView'
 import { VacancyRequestsPage } from './VacancyRequestsPage'
 import { VacancyResponces } from './VacancyResponces'
+import { SupervisorInterviewCreate } from './supervisor/Interview/SupervisorInterviewCreate'
+import { SupervisorInterviewSeekerInfo } from './supervisor/Interview/SupervisorInterviewSeekerInfo'
+import { SupervisorInterviews } from './supervisor/Interview/SupervisorInterviews'
 import { RespondsSupervisor } from './supervisor/RespondsSupervisor'
 import { SupervisorCreateVacancyForm } from './supervisor/vacancy/SupervisorCreateVacancyForm'
 import { SupervisorUpdateVacancy } from './supervisor/vacancy/SupervisorUpdateVacancy'
 import { SupervisorVacancies } from './supervisor/vacancy/SupervisorVacancies'
-import { SupervisorInterviews } from './supervisor/Interview/SupervisorInterviews'
-import { SupervisorInterviewCreate } from './supervisor/Interview/SupervisorInterviewCreate'
-import {Header} from "../../layout/Header";
-import { SupervisorInterviewSeekerInfo } from './supervisor/Interview/SupervisorInterviewSeekerInfo'
 
 export const NavPesonnelAccounting = () => {
 	const { pathname } = useLocation()
@@ -216,17 +217,18 @@ export const NavPesonnelAccounting = () => {
 			key: 'allInterviews',
 			label: (
 				<div className="flex items-center gap-[10px]">
-					{<BriefcaseSvg/>}
+					{<BriefcaseSvg />}
 					<p className="text-base">{'Собеседование'}</p>
 				</div>
-			), children: (
+			),
+			children: (
 				<div className="flex flex-col gap-[12px] ml-[24px]">
 					<p
 						className={clsx(
 							'font-content-font text-black text-[14px]/[14px] font-normal',
 							pathname !==
-							'/services/personnelaccounting/supervisor/invitation' &&
-							'opacity-[52%]'
+								'/services/personnelaccounting/supervisor/invitation' &&
+								'opacity-[52%]'
 						)}
 						onClick={() => {
 							navigate('/services/personnelaccounting/supervisor/invitation')
@@ -238,11 +240,13 @@ export const NavPesonnelAccounting = () => {
 						className={clsx(
 							'font-content-font text-black text-[14px]/[14px] font-normal',
 							pathname !==
-							'/services/personnelaccounting/supervisor/scheduleinvitation' &&
-							'opacity-[52%]'
+								'/services/personnelaccounting/supervisor/scheduleinvitation' &&
+								'opacity-[52%]'
 						)}
 						onClick={() => {
-							navigate('/services/personnelaccounting/supervisor/scheduleinvitation')
+							navigate(
+								'/services/personnelaccounting/supervisor/scheduleinvitation'
+							)
 						}}
 					>
 						Назначить собеседование
@@ -252,7 +256,7 @@ export const NavPesonnelAccounting = () => {
 		}
 	]
 
-	const handleList = navEmployeeList.map(({id, icon, name}, index) => {
+	const handleList = navEmployeeList.map(({ id, icon, name }, index) => {
 		if (name === 'Вакансии') {
 			return (
 				<li
@@ -360,14 +364,14 @@ export const NavPesonnelAccounting = () => {
 						)}
 					>
 						<ConfigProvider
-							// theme={{
-							// 	components: {
-							// 		Collapse: {
-							// 			headerBg: '#ffffff',
-							// 			headerPadding: '0px 20px 0px 0px'
-							// 		}
-							// 	}
-							// }}
+						// theme={{
+						// 	components: {
+						// 		Collapse: {
+						// 			headerBg: '#ffffff',
+						// 			headerPadding: '0px 20px 0px 0px'
+						// 		}
+						// 	}
+						// }}
 						>
 							<Collapse
 								className="w-full !bg-inherit"
@@ -418,65 +422,64 @@ export const NavPesonnelAccounting = () => {
 				</div>
 			)}
 			<div className="bg-[#F5F8FB] flex w-full">
-				{pathname === navEmployeeList[0].id && <Responds/>}
+				{pathname === navEmployeeList[0].id && <Responds />}
 				{pathname.match(
 					'services/personnelaccounting/responds/byvacancy/*'
-				) && <VacancyResponces/>}
+				) && <VacancyResponces />}
 				{pathname.match('services/personnelaccounting/responds/fullinfo') && (
-					<RespondInfo type="PERSONNEL_DEPARTMENT"/>
+					<RespondInfo type="PERSONNEL_DEPARTMENT" />
 				)}
 				{pathname.match(
 					'services/personnelaccounting/supervisor/responds/fullinfo'
-				) && <RespondInfo type="SUPERVISOR"/>}
-				{pathname.includes(navEmployeeList[1].id) && <ChatEmpDemp/>}
-				{pathname === navEmployeeList[2].id && <></>}
-				{pathname === navEmployeeList[3].id && <Catalog/>}
+				) && <RespondInfo type="SUPERVISOR" />}
+				{pathname.includes(navEmployeeList[1].id) && <ChatEmpDemp />}
+				{pathname === navEmployeeList[2].id && <DepEmployment />}
+				{pathname === navEmployeeList[3].id && <Catalog />}
 				{pathname.match(
 					'services/personnelaccounting/vacancies/vacancyedit'
-				) && <VacancyEditView/>}
+				) && <VacancyEditView />}
 				{pathname === '/services/personnelaccounting/vacancyrequests' && (
-					<VacancyRequestsPage/>
+					<VacancyRequestsPage />
 				)}
 				{pathname === '/services/personnelaccounting/request/create' && (
-					<VacancyRequestCreateView/>
+					<VacancyRequestCreateView />
 				)}
 				{pathname === '/services/personnelaccounting/request/update' && (
-					<VacancyRequestUpdateView/>
+					<VacancyRequestUpdateView />
 				)}
 				{pathname === '/services/personnelaccounting/request/delete' && (
-					<VacancyRequestDeleteView/>
+					<VacancyRequestDeleteView />
 				)}
-				{pathname === navEmployeeList[4].id && <Reserve/>}
+				{pathname === navEmployeeList[4].id && <Reserve />}
 				{pathname.match('/services/personnelaccounting/reserve/fullinfo') && (
-					<ReserveRespondInfo type="PERSONNEL_DEPARTMENT"/>
+					<ReserveRespondInfo type="PERSONNEL_DEPARTMENT" />
 				)}
-				{pathname === '/services/personnelaccounting/archive' && <Archive/>}
+				{pathname === '/services/personnelaccounting/archive' && <Archive />}
 				{pathname.match('services/personnelaccounting/archive/fullinfo') && (
-					<ArchiveRespondInfo type="PERSONNEL_DEPARTMENT"/>
+					<ArchiveRespondInfo type="PERSONNEL_DEPARTMENT" />
 				)}
-				{pathname === navSupervisorList[0].id && <RespondsSupervisor/>}
+				{pathname === navSupervisorList[0].id && <RespondsSupervisor />}
 				{pathname === navSupervisorList[1].id && <></>}
-				{pathname === navSupervisorList[2].id && <SupervisorVacancies/>}
+				{pathname === navSupervisorList[2].id && <SupervisorVacancies />}
 				{pathname ===
 					'/services/personnelaccounting/supervisor/createvacancy' && (
-						<SupervisorCreateVacancyForm/>
-					)}
+					<SupervisorCreateVacancyForm />
+				)}
 				{pathname ===
 					'/services/personnelaccounting/supervisor/vacancyview' && (
-						<SupervisorUpdateVacancy/>
-					)}
-				{pathname ===
-					'/services/personnelaccounting/supervisor/invitation' && (
-						<SupervisorInterviews/>
+					<SupervisorUpdateVacancy />
+				)}
+				{pathname === '/services/personnelaccounting/supervisor/invitation' && (
+					<SupervisorInterviews />
 				)}
 				{pathname ===
 					'/services/personnelaccounting/supervisor/scheduleinvitation' && (
-						<SupervisorInterviewCreate/>
-					)}
+					<SupervisorInterviewCreate />
+				)}
 				{pathname ===
 					'/services/personnelaccounting/supervisor/invitation/seekerinfo' && (
-						<SupervisorInterviewSeekerInfo status="ENDED"/>
-					)}
+					<SupervisorInterviewSeekerInfo status="ENDED" />
+				)}
 			</div>
 		</>
 	)

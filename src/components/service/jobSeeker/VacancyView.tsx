@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom'
 
-import { ArrowLeftSvg } from '../../../assets/svg'
 import { useAppSelector } from '../../../store'
 import { usePostVacancyRespondMutation } from '../../../store/api/serviceApi'
 
@@ -95,11 +94,11 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 								? navigate(`/services/personnelaccounting/chat/id/${chatId}`)
 								: navigate(`/services/myresponds/chat/id/${chatId}`)
 						}}
-						className="bg-white h-[38px] w-[46px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer"
+						className="bg-inherit border-none cursor-pointer"
 					>
 						<ArrowIcon />
 					</button>
-					<p className="ml-[40px] font-content-font font-normal text-black text-[28px]/[33.6px]">
+					<p className="mb-[2px] ml-[40px] font-content-font font-normal text-black text-[28px]/[33.6px]">
 						{currentVacancy !== null ? currentVacancy.title.rendered : ''}
 					</p>
 				</div>

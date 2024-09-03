@@ -1,15 +1,17 @@
-import React, { useState } from 'react'
-import { Button, Tag, ConfigProvider, Modal, Form, Select, Input } from 'antd'
-import ArrowIcon from '../../../jobSeeker/ArrowIcon'
+import { Button, ConfigProvider, Form, Modal, Select } from 'antd'
+import { useState } from 'react'
+
 import { AvatartandardSvg } from '../../../../../assets/svg/AvatarStandardSvg'
-import uuid from 'react-uuid'
 import { useAppSelector } from '../../../../../store'
-import { useGetRespondFullInfoQuery,
-		 useEmployeeSeekerRequestMutation
+import {
+	useEmployeeSeekerRequestMutation,
+	useGetRespondFullInfoQuery
 } from '../../../../../store/api/serviceApi'
+import { NocircleArrowIcon } from '../../../jobSeeker/NoCircleArrowIcon'
 
-export const SupervisorInterviewSeekerInfo = (props : { status : 'ONLINE_ONGOING' | 'ENDED' | 'OFFLINE_ONGOING'}) => {
-
+export const SupervisorInterviewSeekerInfo = (props: {
+	status: 'ONLINE_ONGOING' | 'ENDED' | 'OFFLINE_ONGOING'
+}) => {
 	const respondId = useAppSelector(state => state.currentResponce)
 
 	const { data } = useGetRespondFullInfoQuery(respondId.respondId)
@@ -63,13 +65,13 @@ export const SupervisorInterviewSeekerInfo = (props : { status : 'ONLINE_ONGOING
 						onClick={() => {
 							window.history.back()
 						}}
-						className="bg-inherit h-[38px] w-[99px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer font-normal text-black text-[16px]/[16px] flex gap-[8px]"
+						className="bg-inherit h-[38px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer"
 					>
-						<ArrowIcon />
+						<NocircleArrowIcon />
 						Назад
 					</Button>
 				</div>
-				<div className="mt-[52px] flex flex-col gap-[36px]" >
+				<div className="mt-[52px] flex flex-col gap-[36px]">
 					<div className="flex flex-wrap gap-[150px]">
 						<div className="flex gap-[20px]">
 							<div className="flex h-[167px] w-[167px] bg-[#D9D9D9]">
@@ -124,7 +126,8 @@ export const SupervisorInterviewSeekerInfo = (props : { status : 'ONLINE_ONGOING
 								token: {
 									boxShadow: '0 0 19px 0 rgba(212, 227, 241, 0.6)'
 								}
-							}}>
+							}}
+						>
 							<Modal
 								centered
 								open={isRefuseModalOpen}
@@ -147,8 +150,12 @@ export const SupervisorInterviewSeekerInfo = (props : { status : 'ONLINE_ONGOING
 										})
 									}}
 								>
-									<h2 className="font-normal text-[18px]">Отказ на должность</h2>
-									<h3 className="mb-[40px] font-bold text-[18px]">«{data?.vacancyName}»</h3>
+									<h2 className="font-normal text-[18px]">
+										Отказ на должность
+									</h2>
+									<h3 className="mb-[40px] font-bold text-[18px]">
+										«{data?.vacancyName}»
+									</h3>
 									<Form.Item
 										name={'reason'}
 										label={
@@ -161,14 +168,20 @@ export const SupervisorInterviewSeekerInfo = (props : { status : 'ONLINE_ONGOING
 										<Select
 											placeholder="Не хватает опыта"
 											options={[
-												{ value: 'Не хватает опыта', label: 'Не хватает опыта' },
-												{ value: 'Нашли другого специалиста', label: 'Нашли другого специалиста' }
+												{
+													value: 'Не хватает опыта',
+													label: 'Не хватает опыта'
+												},
+												{
+													value: 'Нашли другого специалиста',
+													label: 'Нашли другого специалиста'
+												}
 											]}
 										></Select>
 									</Form.Item>
 									<Button
-									className="bg-[#3073D7] text-base rounded-[54.5px] text-white py-[12px] px-[24px]"
-									htmlType="submit"
+										className="bg-[#3073D7] text-base rounded-[54.5px] text-white py-[12px] px-[24px]"
+										htmlType="submit"
 									>
 										Отправить
 									</Button>
@@ -177,18 +190,22 @@ export const SupervisorInterviewSeekerInfo = (props : { status : 'ONLINE_ONGOING
 						</ConfigProvider>
 						{props.status === 'OFFLINE_ONGOING' && (
 							<div className="flex flex-col justify-center">
-								<h3
-									className=" mb-[20px] font-content-font font-bold text-black text-[16px]/[19.2px]">Собеседование</h3>
-								<h4 className=" mb-[10px] font-content-font font-normal text-black text-[12px]/[14.4x] opacity-40">Дата
-									и время:</h4>
-								<h4
-									className="font-content-font font-normal text-black text-[16px]/[19.2px]">{data?.meetingData.date} в {data?.meetingData.time}</h4>
+								<h3 className=" mb-[20px] font-content-font font-bold text-black text-[16px]/[19.2px]">
+									Собеседование
+								</h3>
+								<h4 className=" mb-[10px] font-content-font font-normal text-black text-[12px]/[14.4x] opacity-40">
+									Дата и время:
+								</h4>
+								<h4 className="font-content-font font-normal text-black text-[16px]/[19.2px]">
+									{data?.meetingData.date} в {data?.meetingData.time}
+								</h4>
 							</div>
 						)}
 						{props.status === 'ONLINE_ONGOING' && (
 							<div className="flex flex-col justify-center">
-								<h4 className="mb-[20px] font-content-font font-normal text-black text-[16px]/[19.2px]">Подключитесь к
-									онлайн-конференции</h4>
+								<h4 className="mb-[20px] font-content-font font-normal text-black text-[16px]/[19.2px]">
+									Подключитесь к онлайн-конференции
+								</h4>
 								<Button
 									className="h-[40px] w-[257px] bg-[#3073D7] rounded-[54.5px] text-white text-[16px]/[16px]"
 									onClick={() => {
@@ -248,11 +265,11 @@ export const SupervisorInterviewSeekerInfo = (props : { status : 'ONLINE_ONGOING
 										</p>
 										<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
 											{parseInt(exp.endWork.substring(0, 4)) -
-											parseInt(exp.beginWork.substring(0, 4)) ===
+												parseInt(exp.beginWork.substring(0, 4)) ===
 											0
 												? ''
 												: parseInt(exp.endWork.substring(0, 4)) -
-												parseInt(exp.beginWork.substring(0, 4))}
+												  parseInt(exp.beginWork.substring(0, 4))}
 											{parseInt(exp.endWork.substring(0, 4)) -
 												parseInt(exp.beginWork.substring(0, 4)) ===
 												1 && ' год'}
@@ -260,8 +277,8 @@ export const SupervisorInterviewSeekerInfo = (props : { status : 'ONLINE_ONGOING
 												parseInt(exp.beginWork.substring(0, 4)) >=
 												2 &&
 												parseInt(exp.endWork.substring(0, 4)) -
-												parseInt(exp.beginWork.substring(0, 4)) <=
-												4 &&
+													parseInt(exp.beginWork.substring(0, 4)) <=
+													4 &&
 												' года'}
 											{parseInt(exp.endWork.substring(0, 4)) -
 												parseInt(exp.beginWork.substring(0, 4)) >
@@ -316,9 +333,7 @@ export const SupervisorInterviewSeekerInfo = (props : { status : 'ONLINE_ONGOING
 							{/* <div className="col-start-2">
 									{res.respondData.skills.aboutMe}
 								</div> */}
-							<div className="col-start-2 flex gap-[8px] flex-wrap">
-
-							</div>
+							<div className="col-start-2 flex gap-[8px] flex-wrap"></div>
 						</div>
 					</div>
 				</div>

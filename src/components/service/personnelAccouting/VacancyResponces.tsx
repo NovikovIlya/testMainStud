@@ -33,7 +33,7 @@ export const VacancyResponces = () => {
 						onClick={() => {
 							navigate('/services/personnelaccounting/responds')
 						}}
-						className="bg-white h-[38px] w-[46px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer"
+						className="bg-inherit border-none cursor-pointer"
 					>
 						<ArrowIcon />
 					</button>

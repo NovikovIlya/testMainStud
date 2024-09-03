@@ -513,11 +513,11 @@ export const ResponseForm = () => {
 									onClick={() => {
 										navigate('/services/jobseeker/vacancyview/respond/main')
 									}}
-									className="bg-white h-[38px] w-[46px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer"
+									className="bg-white border-none cursor-pointer"
 								>
 									<ArrowIcon />
 								</button>
-								<p className="ml-[15px] font-content-font font-bold text-black text-[18px]/[21.6px]">
+								<p className="mb-[2px] ml-[15px] font-content-font font-bold text-black text-[18px]/[21.6px]">
 									Личные данные
 								</p>
 							</div>
@@ -692,11 +692,11 @@ export const ResponseForm = () => {
 									onClick={() => {
 										navigate('/services/jobseeker/vacancyview/respond/main')
 									}}
-									className="bg-white h-[38px] w-[46px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer"
+									className="bg-white border-none cursor-pointer"
 								>
 									<ArrowIcon />
 								</button>
-								<p className="ml-[15px] font-content-font font-bold text-black text-[18px]/[21.6px]">
+								<p className="mb-[2px] ml-[15px] font-content-font font-bold text-black text-[18px]/[21.6px]">
 									Образование
 								</p>
 							</div>
@@ -812,11 +812,11 @@ export const ResponseForm = () => {
 											'/services/jobseeker/vacancyview/respond/education/main'
 										)
 									}}
-									className="bg-white h-[38px] w-[46px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer"
+									className="bg-white border-none cursor-pointer"
 								>
 									<ArrowIcon />
 								</button>
-								<p className="ml-[15px] font-content-font font-bold text-black text-[18px]/[21.6px]">
+								<p className="mb-[2px] ml-[15px] font-content-font font-bold text-black text-[18px]/[21.6px]">
 									Добавить образование
 								</p>
 							</div>
@@ -970,11 +970,11 @@ export const ResponseForm = () => {
 											'/services/jobseeker/vacancyview/respond/education/main'
 										)
 									}}
-									className="bg-white h-[38px] w-[46px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer"
+									className="bg-white border-none cursor-pointer"
 								>
 									<ArrowIcon />
 								</button>
-								<p className="ml-[15px] font-content-font font-bold text-black text-[18px]/[21.6px]">
+								<p className="mb-[2px] ml-[15px] font-content-font font-bold text-black text-[18px]/[21.6px]">
 									Изменить образование
 								</p>
 							</div>
@@ -1099,11 +1099,11 @@ export const ResponseForm = () => {
 									onClick={() => {
 										navigate('/services/jobseeker/vacancyview/respond/main')
 									}}
-									className="bg-white h-[38px] w-[46px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer"
+									className="bg-white border-none cursor-pointer"
 								>
 									<ArrowIcon />
 								</button>
-								<p className="ml-[15px] font-content-font font-bold text-black text-[18px]/[21.6px]">
+								<p className="mb-[2px] ml-[15px] font-content-font font-bold text-black text-[18px]/[21.6px]">
 									Опыт работы
 								</p>
 							</div>
@@ -1339,11 +1339,11 @@ export const ResponseForm = () => {
 											'/services/jobseeker/vacancyview/respond/experience/main'
 										)
 									}}
-									className="bg-white h-[38px] w-[46px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer"
+									className="bg-white border-none cursor-pointer"
 								>
 									<ArrowIcon />
 								</button>
-								<p className="ml-[15px] font-content-font font-bold text-black text-[18px]/[21.6px]">
+								<p className="mb-[2px] ml-[15px] font-content-font font-bold text-black text-[18px]/[21.6px]">
 									Добавить место работы
 								</p>
 							</div>
@@ -1482,11 +1482,11 @@ export const ResponseForm = () => {
 											'/services/jobseeker/vacancyview/respond/experience/main'
 										)
 									}}
-									className="bg-white h-[38px] w-[46px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer"
+									className="bg-white border-none cursor-pointer"
 								>
 									<ArrowIcon />
 								</button>
-								<p className="ml-[15px] font-content-font font-bold text-black text-[18px]/[21.6px]">
+								<p className="mb-[2px] ml-[15px] font-content-font font-bold text-black text-[18px]/[21.6px]">
 									Изменить место работы
 								</p>
 							</div>
@@ -1594,11 +1594,11 @@ export const ResponseForm = () => {
 									onClick={() => {
 										navigate('/services/jobseeker/vacancyview/respond/main')
 									}}
-									className="bg-white h-[38px] w-[46px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer"
+									className="bg-white border-none cursor-pointer"
 								>
 									<ArrowIcon />
 								</button>
-								<p className="ml-[15px] font-content-font font-bold text-black text-[18px]/[21.6px]">
+								<p className="mb-[2px] ml-[15px] font-content-font font-bold text-black text-[18px]/[21.6px]">
 									Профессиональные навыки
 								</p>
 							</div>

@@ -147,7 +147,7 @@ export const VacancyEditView = () => {
 						onClick={() => {
 							navigate('/services/personnelaccounting/vacancies')
 						}}
-						className="bg-inherit h-[38px] w-[46px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer"
+						className="bg-inherit border-none cursor-pointer"
 					>
 						<ArrowIcon />
 					</button>

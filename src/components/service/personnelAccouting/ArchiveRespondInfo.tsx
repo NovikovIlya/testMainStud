@@ -19,7 +19,7 @@ import { openChat } from '../../../store/reducers/ChatRespondStatusSlice'
 import { setRespondId } from '../../../store/reducers/CurrentRespondIdSlice'
 import { setCurrentVacancyId } from '../../../store/reducers/CurrentVacancyIdSlice'
 import { setChatId } from '../../../store/reducers/chatIdSlice'
-import ArrowIcon from '../jobSeeker/ArrowIcon'
+import { NocircleArrowIcon } from '../jobSeeker/NoCircleArrowIcon'
 
 import { InviteSeekerForm } from './supervisor/InviteSeekerForm'
 
@@ -137,9 +137,9 @@ export const ArchiveRespondInfo = (props: {
 											'/services/personnelaccounting/supervisor/responds'
 									  )
 							}}
-							className="bg-inherit h-[38px] w-[99px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer font-normal text-black text-[16px]/[16px] flex gap-[8px]"
+							className="bg-inherit h-[38px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer"
 						>
-							<ArrowIcon />
+							<NocircleArrowIcon />
 							Назад
 						</Button>
 					</div>

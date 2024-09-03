@@ -478,7 +478,7 @@ export const NavPesonnelAccounting = () => {
 				)}
 				{pathname ===
 					'/services/personnelaccounting/supervisor/invitation/seekerinfo' && (
-					<SupervisorInterviewSeekerInfo status="ENDED" />
+					<SupervisorInterviewSeekerInfo/>
 				)}
 			</div>
 		</>

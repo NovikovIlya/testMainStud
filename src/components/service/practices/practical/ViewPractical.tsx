@@ -690,7 +690,7 @@ export const ViewPractical = () => {
 							}}
 							// defaultValue="Все"
 						/> */}
-						 <TreeSelect
+						 			<TreeSelect
                                         treeLine={treeLine && { showLeafIcon }}
                                         showSearch
                                         style={{ height:'38px',width: '100%' }}

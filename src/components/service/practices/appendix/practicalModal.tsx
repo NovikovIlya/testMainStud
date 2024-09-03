@@ -2,7 +2,8 @@ import {
 	Col, Modal,
 	Row,
 	Select, Spin, Table,
-	Typography,Form
+	Typography,Form,
+	TreeSelect
   } from 'antd'
   
   import {
@@ -12,7 +13,7 @@ import {
   import { EditableCell } from './EditableCell'
   import { useGetGroupNumberQuery, useGetPracticesAllQuery, useGetSubdivisionForPracticeQuery } from '../../../../store/api/practiceApi/individualTask'
   import { LoadingOutlined } from '@ant-design/icons'
-  import { useGetAllOrderAgreeQuery, useGetAllSubmissionsQuery } from '../../../../store/api/practiceApi/representation'
+  import { useGetAllOrderAgreeQuery, useGetAllSubmissionsQuery, useGetOrderSubdevisionQuery } from '../../../../store/api/practiceApi/representation'
   import { useGetSpecialtyNamesForPractiseQuery } from '../../../../store/api/practiceApi/roster'
   import { findSubdivisions } from '../../../../utils/findSubdivisions'
   import { useEffect, useState } from 'react'
@@ -24,6 +25,7 @@ import {
   import { PopoverContent } from './PopoverContent'
   import { PopoverMain } from './PopoverMain'
   import { useGetAllOrderQuery, useGetSubmissionsAcademicYearQuery, useGetSubmissionsDirectorQuery, useGetSubmissionsPracticeKindQuery, useGetSubmissionsPracticeTypeQuery, useGetSubmissionsSpecialtiesQuery, useGetSubmissionsSubdevisionQuery } from '../../../../store/api/practiceApi/representation'
+import { disableParents } from '../../../../utils/disableParents'
 
 
 const filterSpecialization: FilterType[] = [
@@ -152,7 +154,7 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 		dateFilling: 'По дате (сначала новые)',
 	})
 	const [selectedFieldsFull, setSelectedFieldFull] = useState<any>([])
-	const {data:dataSubmisisionsSubdevision} = useGetSubmissionsSubdevisionQuery()
+	const {data:dataOrderSubdevision} = useGetOrderSubdevisionQuery()
 	const [selectSubdivisionId,setSelectSubdivisionId] = useState(null)
 	const {data:dataSubmissionSpecialty} = useGetSubmissionsSpecialtiesQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
 	const {data:dataSubmissionType} = useGetSubmissionsPracticeTypeQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
@@ -161,7 +163,9 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 	const {data:dataSubmissionAcademicYear} = useGetSubmissionsAcademicYearQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
 	const {data:dataAllOrder,isSuccess:isSuccessOrder,isFetching:isFetchingAgree} = useGetAllOrderAgreeQuery({subdivisionId:selectSubdivisionId,page:currentPage - 1,size :'5'},{skip:!selectSubdivisionId || !currentPage})
 	const [dataTable, setDataTable] = useState<any>([])
-
+	const [treeLine, setTreeLine] = useState(true);
+    const [showLeafIcon, setShowLeafIcon] = useState(false);
+    const [value, setValue] = useState<any>();
 
 	
 	useEffect(()=>{
@@ -279,7 +283,7 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 			if (filter.subdivision === 'Все') {
 				return elem
 			} else {
-				return elem.practice.subdivision === filter.subdivision
+				return elem.practice.subdivisionId === filter.subdivision
 			}
 		}
 		function filterSpec(elem: any) {
@@ -356,6 +360,10 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 			.sort((a: any, b: any) => sortDateFilling(a, b))
 			: []
 	}
+
+	const onPopupScroll: any = (e:any) => {
+        console.log('onPopupScroll', e);
+    };
 
 	const columns = [
 		{
@@ -498,6 +506,20 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 	const filteredData = filterDataFull()?.filter((record: any) => {
 		return record.id !== selectedPractice
 	});
+
+	const treeData = [...(dataOrderSubdevision ? dataOrderSubdevision?.map((item:any)=>{
+        return{
+            title:item.value,
+            value:item.id,
+            // @ts-ignore
+            children: item?.responses?.map((item)=>{
+                return{
+                    title:item.value,
+                    value:item.id,
+                }
+            })
+        }
+    }):[])]
 
   	// return (
 	// 	<Modal
@@ -705,18 +727,41 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 					<span>Подразделение</span>
 				</Col>
 				<Col span={7} className='overWrite'>
-					<Select
+					{/* <Select
 						popupMatchSelectWidth={false}
 						defaultValue=""
 						className="w-full"
-						options={dataSubmisisionsSubdevision}
+						options={dataOrderSubdevision}
 						onChange={(value: any) => {
-							const x = findSubdivisions(dataSubmisisionsSubdevision,value)
+							const x = findSubdivisions(dataOrderSubdevision,value)
 							if(x){
 								setSelectSubdivisionId(x.id)
 							}
 								setFilter({ ...filter, subdivision: value })
 							}}
+					/> */}
+					<TreeSelect
+						treeLine={treeLine && { showLeafIcon }}
+						showSearch
+						style={{ height:'32px',width: '100%' }}
+						value={value}
+						dropdownStyle={{  overflow: 'auto' }}
+						placeholder=""
+						allowClear
+						treeDefaultExpandAll
+						onChange={value => {
+							setSelectSubdivisionId(value)
+							setFilter({
+								...filter,
+								subdivision: value,
+								
+							})
+							
+						}}
+						treeData={disableParents(treeData)}
+						onPopupScroll={onPopupScroll}
+						treeNodeFilterProp="title"
+					
 					/>
 				</Col>
 				{/* <Col span={7} offset={5}>

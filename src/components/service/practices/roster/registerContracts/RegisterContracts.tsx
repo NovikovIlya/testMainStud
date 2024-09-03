@@ -635,19 +635,23 @@ export const RegisterContracts = () => {
                             onChange={value => setFilterNumberSeats(value)}
                         />
                     </Col>
-                    <Col span={!tableView.table ? 24 : 16} className={'flex items-center gap-10 justify-between'}
+                    <Col span={!tableView.table ? 24 : 16} className={'flex items-center gap-2 mobileFirst '}
                          style={{
                              paddingRight: 0,
-                             paddingLeft: tableView.table ? 16 : 8
+                             paddingLeft: tableView.table ? 16 : 0
                          }}>
-                        <span className={'whitespace-nowrap'}>Дата заключения договора</span>
-                        <DatePicker className={'w-[90%]'}
-                                    placeholder={'ДД.ММ.ГГГГ'}
-                                    format={'DD.MM.YYYY'}
-                                    onChange={date => setFilterDate(date)}
-                                    allowClear
-                                    onKeyDown={handleKeyDown}
-                        />
+                        <Col span={8} className='overWrite mobileFirst'>
+                            <span className={'whitespace-nowrap'}>Дата заключения договора</span>
+                        </Col>
+                        <Col span={16} className='overWrite mobileFirst'>
+                            <DatePicker className={'w-full overWrite'}
+                                        placeholder={'ДД.ММ.ГГГГ'}
+                                        format={'DD.MM.YYYY'}
+                                        onChange={date => setFilterDate(date)}
+                                        allowClear
+                                        onKeyDown={handleKeyDown}
+                            />
+                        </Col>
                     </Col>
                 </Col>
                 <Col span={3} offset={9} className='overWrite flex justify-end sm:block'>

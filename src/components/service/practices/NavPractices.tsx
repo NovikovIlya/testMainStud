@@ -238,18 +238,18 @@ export const NavPractices = () => {
 		target: () => document.querySelectorAll('.ant-menu-item')[4],
 		placement: 'right',
 	  },
-	  {
-		title: '7',
-		description: 'текст',
-		target: () => document.querySelectorAll('.ant-menu-item')[5],
-		placement: 'right',
-	  },
-	  {
-		title: '8',
-		description: 'текст',
-		target: () => document.querySelectorAll('.ant-menu-item')[6],
-		placement: 'right',
-	  },
+	//   {
+	// 	title: '7',
+	// 	description: 'текст',
+	// 	target: () => document.querySelectorAll('.ant-menu-item')[5],
+	// 	placement: 'right',
+	//   },
+	//   {
+	// 	title: '8',
+	// 	description: 'текст',
+	// 	target: () => document.querySelectorAll('.ant-menu-item')[6],
+	// 	placement: 'right',
+	//   },
 	];
 
 	const onClick: MenuProps['onClick'] = e => {

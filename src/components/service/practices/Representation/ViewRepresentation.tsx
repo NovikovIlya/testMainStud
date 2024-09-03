@@ -6,7 +6,8 @@ import {
 	Space,
 	Spin,
 	Table,
-	Typography, Form
+	Typography, Form,
+	TreeSelect
 } from 'antd'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -18,6 +19,7 @@ import { PopoverMain } from './PopoverMain'
 import { useGetAllSubmissionsQuery, useGetSubmissionsAcademicYearQuery, useGetSubmissionsDirectorQuery, useGetSubmissionsPracticeKindQuery, useGetSubmissionsPracticeTypeQuery, useGetSubmissionsSpecialtiesQuery, useGetSubmissionsSubdevisionQuery } from '../../../../store/api/practiceApi/representation'
 import { LoadingOutlined } from '@ant-design/icons'
 import { findSubdivisions } from '../../../../utils/findSubdivisions'
+import { disableParents } from '../../../../utils/disableParents'
 
 
 const visitingOptions = [
@@ -62,6 +64,9 @@ export const ViewRepresentation = () => {
 	const [flag,setFlag] = useState(false)
 	const [dataTable, setDataTable] = useState<any>([])
 	const [flagLoad,setFlagLoad] = useState(false)
+	const [treeLine, setTreeLine] = useState(true);
+    const [showLeafIcon, setShowLeafIcon] = useState(false);
+    const [value, setValue] = useState<any>();
 
 	useEffect(()=>{
 		form.setFieldValue('practiceType', 'Все')
@@ -97,7 +102,9 @@ export const ViewRepresentation = () => {
 				return elem
 			} else {
 				setFlag(true)
-				return elem.practice.subdivision === filter.subdivision
+				console.log('elem.practice',elem.practice.subdivisionId)
+				console.log('filter.subdivision',filter.subdivision)
+				return elem.practice.subdivisionId === filter.subdivision
 			}
 		}
 		function filterSpec(elem: any) {
@@ -173,6 +180,10 @@ export const ViewRepresentation = () => {
 			.sort((a: any, b: any) => sortDateFilling(a, b))
 			: []
 	}
+
+	const onPopupScroll: any = (e:any) => {
+        console.log('onPopupScroll', e);
+    };
 
 	const columns = [
 		{
@@ -277,6 +288,20 @@ export const ViewRepresentation = () => {
 		navigate(`/services/practices/representation/edit/${record.id}`)
     };
 
+	const treeData =[...(dataSubmisisionsSubdevision ? dataSubmisisionsSubdevision?.map((item:any)=>{
+        return{
+            title:item.value,
+            value:item.id,
+            // @ts-ignore
+            children: item?.responses?.map((item)=>{
+                return{
+                    title:item.value,
+                    value:item.id,
+                }
+            })
+        }
+    }):[])]
+
 
 	return (
 		<Form form={form}>
@@ -294,7 +319,7 @@ export const ViewRepresentation = () => {
 					<span>Подразделение</span>
 				</Col>
 				<Col span={7} className='overWrite ccc'>
-					<Select
+					{/* <Select
 						popupMatchSelectWidth={false}
 						defaultValue=""
 						className="w-full"
@@ -307,7 +332,26 @@ export const ViewRepresentation = () => {
 							}
 								setFilter({ ...filter, subdivision: value })
 							}}
-					/>
+					/> */}
+								<TreeSelect
+                                        treeLine={treeLine && { showLeafIcon }}
+                                        showSearch
+                                        style={{ height:'32px',width: '100%' ,paddingLeft:'8px'}}
+                                        value={value}
+                                        dropdownStyle={{  overflow: 'auto' }}
+                                        placeholder=""
+                                        allowClear
+                                        treeDefaultExpandAll
+                                        onChange={(value)=>{
+											setFlagLoad(true)
+											setSelectSubdivisionId(value)
+											setFilter({ ...filter, subdivision: value })
+										}}
+                                        treeData={disableParents(treeData)}
+                                        onPopupScroll={onPopupScroll}
+                                        treeNodeFilterProp="title"
+                                    
+                                    />
 				</Col>
 				<Col span={7} offset={5} className='overWrite'>
 					<Space className="w-full flex-row-reverse">

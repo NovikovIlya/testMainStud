@@ -6,7 +6,8 @@ import {
 	Space,
 	Spin,
 	Table,
-	Typography, Form
+	Typography, Form,
+	TreeSelect
 } from 'antd'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -18,6 +19,7 @@ import { PopoverMain } from './PopoverMain'
 import { useGetAcademicApplicationQuery, useGetAllApplicationsQuery, useGetAllSubmissionsQuery, useGetDirectorApplicationQuery, useGetPracticeKindApplicationQuery, useGetPracticeTypeApplicationQuery, useGetSpecialtiesApplicationQuery, useGetSubmissionsAcademicYearQuery, useGetSubmissionsApplicationQuery, useGetSubmissionsDirectorQuery, useGetSubmissionsPracticeKindQuery, useGetSubmissionsPracticeTypeQuery, useGetSubmissionsSpecialtiesQuery, useGetSubmissionsSubdevisionQuery } from '../../../../store/api/practiceApi/representation'
 import { LoadingOutlined } from '@ant-design/icons'
 import { findSubdivisions } from '../../../../utils/findSubdivisions'
+import { disableParents } from '../../../../utils/disableParents'
 
 
 const courseNumberOptions = [
@@ -47,7 +49,7 @@ export const ViewAppendix = () => {
 	})
 	const [selectedFieldsFull, setSelectedFieldFull] = useState<any>([])
 	const {data:dataAllSubmissions,isLoading,isSuccess:isSuccessSubAll} = useGetAllSubmissionsQuery(null)
-	const {data:dataSubmisisionsSubdevision} = useGetSubmissionsApplicationQuery()
+	const {data:dataSubmisisionsApplication} = useGetSubmissionsApplicationQuery()
 	const [selectSubdivisionId,setSelectSubdivisionId] = useState(null)
 	const {data:dataSubmissionSpecialty} = useGetSpecialtiesApplicationQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
 	const {data:dataSubmissionType} = useGetPracticeTypeApplicationQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
@@ -57,6 +59,9 @@ export const ViewAppendix = () => {
 	const {data:dataAppendix,isSuccess:isSuccessAppendix,isFetching:isFetchingAppend} = useGetAllApplicationsQuery({subdivisionId:selectSubdivisionId,page:currentPage - 1,size :'5'},{skip:!selectSubdivisionId || !currentPage})
 	const [flag,setFlag] = useState(false)
 	const [dataTable, setDataTable] = useState<any>([])
+	const [treeLine, setTreeLine] = useState(true);
+    const [showLeafIcon, setShowLeafIcon] = useState(false);
+    const [value, setValue] = useState<any>();
 
 	useEffect(()=>{
 		form.setFieldValue('practiceType', 'Все')
@@ -90,7 +95,8 @@ export const ViewAppendix = () => {
 				return elem
 			} else {
 				setFlag(true)
-				return elem.practice.subdivision === filter.subdivision
+				console.log('elem',elem)
+				 return elem.practice.subdivisionId === filter.subdivision
 			}
 		}
 		function filterSpec(elem: any) {
@@ -263,7 +269,25 @@ export const ViewAppendix = () => {
 
 	const handleRowClick = (record:any) => {
 		navigate(`/services/practices/appendix/edit/${record.id}`)
-  };
+  	};
+
+	const onPopupScroll: any = (e:any) => {
+        console.log('onPopupScroll', e);
+    };
+
+	const treeData =[...(dataSubmisisionsApplication ? dataSubmisisionsApplication?.map((item:any)=>{
+        return{
+            title:item.value,
+            value:item.id,
+            // @ts-ignore
+            children: item?.responses?.map((item)=>{
+                return{
+                    title:item.value,
+                    value:item.id,
+                }
+            })
+        }
+    }):[])]
 
 
 	return (
@@ -282,18 +306,37 @@ export const ViewAppendix = () => {
 					<span>Подразделение</span>
 				</Col>
 				<Col span={7} className='overWrite'>
-					<Select
+					{/* <Select
 						popupMatchSelectWidth={false}
 						
 						className="w-full"
-						options={dataSubmisisionsSubdevision}
+						options={dataSubmisisionsApplication}
 						onChange={(value: any) => {
-							const x = findSubdivisions(dataSubmisisionsSubdevision,value)
+							const x = findSubdivisions(dataSubmisisionsApplication,value)
 							if(x){
 								setSelectSubdivisionId(x.id)
 							}
 								setFilter({ ...filter, subdivision: value })
 							}}
+					/> */}
+					<TreeSelect
+						treeLine={treeLine && { showLeafIcon }}
+						showSearch
+						style={{ height:'32px',width: '100%' }}
+						value={value}
+						dropdownStyle={{  overflow: 'auto' }}
+						placeholder=""
+						allowClear
+						treeDefaultExpandAll
+						onChange={(value)=>{
+							
+							setSelectSubdivisionId(value)
+							setFilter({ ...filter, subdivision: value })
+						}}
+						treeData={disableParents(treeData)}
+						onPopupScroll={onPopupScroll}
+						treeNodeFilterProp="title"
+					
 					/>
 				</Col>
 				<Col span={7} offset={5} className='overWrite'>

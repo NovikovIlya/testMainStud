@@ -2,7 +2,8 @@ import {
   Col, Modal,
   Row,
   Select, Spin, Table,
-  Typography,Form
+  Typography,Form,
+  TreeSelect
 } from 'antd'
 
 import {
@@ -17,6 +18,7 @@ import { useGetSpecialtyNamesForPractiseQuery } from '../../../../store/api/prac
 import { useState } from 'react'
 import { processingOfDivisions } from '../../../../utils/processingOfDivisions'
 import { findSubdivisionsExport } from '../../../../utils/findSubdivisionsExport'
+import { disableParents } from '../../../../utils/disableParents'
 
 const filterSpecialization: FilterType[] = [
 	{
@@ -73,6 +75,10 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 
 	})
 	const [load,setLoad] = useState(false)
+	const [treeLine, setTreeLine] = useState(true);
+    const [showLeafIcon, setShowLeafIcon] = useState(false);
+    const [value, setValue] = useState<any>();
+
  	const columnsRepresentation = [
 	{
 		key: 'subdivision',
@@ -128,6 +134,7 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 	//   ),
 	// },
 	]
+
 	function filterDataFull() {
 		function filterCourse(elem: any) {
 			if (filter.courseNumber === 'Все') {
@@ -147,8 +154,8 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 			if (filter.subdivision === 'Все') {
 				return elem
 			} else {
-				const x = filter.subdivision.includes(' - ') ? filter.subdivision.split(' - ')[1] : filter.subdivision
-				return elem.subdivision === x
+
+				return elem.subdivisionId === filter.subdivision
 			}
 		}
 		function filterKind(elem: any) {
@@ -210,10 +217,27 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 		 
 			: []
 	}
+	const onPopupScroll: any = (e:any) => {
+        console.log('onPopupScroll', e);
+    };
 	
 	const filteredData = filterDataFull()?.filter((record: any) => {
 		return record.id !== selectedPractice
 	});
+
+	const treeData = [{ key: 2244612, value: 'Все', label: 'Все' },...(dataAllSubdivision ? dataAllSubdivision?.map((item:any)=>{
+        return{
+            title:item.value,
+            value:item.id,
+            // @ts-ignore
+            children: item?.responses?.map((item)=>{
+                return{
+                    title:item.value,
+                    value:item.id,
+                }
+            })
+        }
+    }):[])]
 
   	return (
 		<Modal
@@ -230,7 +254,7 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 					<Typography.Text>Подразделение</Typography.Text>
 				</Col>
 				<Col span={8} className='overWrite'>
-					<Select
+					{/* <Select
 						popupMatchSelectWidth={false}
 						defaultValue="Все"
 						className="w-full"
@@ -262,7 +286,30 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 							})
 							form.setFieldValue('specialtyName', 'Все')
 						}}
-					/>
+					/> */}
+								<TreeSelect
+                                        treeLine={treeLine && { showLeafIcon }}
+                                        showSearch
+                                        style={{ height:'32px',width: '100%' }}
+                                        value={value}
+                                        dropdownStyle={{  overflow: 'auto' }}
+                                        placeholder=""
+                                        allowClear
+                                        treeDefaultExpandAll
+										onChange={value => {
+											setSubdivisionId(value)
+											setFilter({
+												...filter,
+												subdivision: value,
+												specialtyName: 'Все'
+											})
+											form.setFieldValue('specialtyName', 'Все')
+										}}
+                                        treeData={disableParents(treeData)}
+                                        onPopupScroll={onPopupScroll}
+                                        treeNodeFilterProp="title"
+                                    
+                                    />
 				</Col>
 			</Row>
 			<Row gutter={[8, 16]} className="mt-4 w-full flex items-center">

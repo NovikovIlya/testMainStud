@@ -43,6 +43,16 @@ export const representationService = apiSlice.injectEndpoints({
             providesTags: ['Submissions'],
             keepUnusedDataFor:1,
         }),
+        getOrderSubdevision: builder.query<any, void>({
+            query: () => {
+                return {
+                    url: `/services/api-practices/orders/list/subdivisions`,
+                    method: 'GET'
+                }
+            },
+            providesTags: ['Order'],
+            keepUnusedDataFor:1,
+        }),
         getSubmissionsSpecialties: builder.query<any, any>({
             query: (subdivisionId ) => {
                 return {
@@ -349,6 +359,7 @@ export const {
     useDeleteApplicationMutation,
     useEditApplicationMutation,
     useGetAllOrderAgreeQuery,
+    useGetOrderSubdevisionQuery,
 
     useGetSubmissionsApplicationQuery,
     useGetSpecialtiesApplicationQuery,

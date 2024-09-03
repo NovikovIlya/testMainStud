@@ -302,6 +302,8 @@ export const ViewRepresentation = () => {
         }
     }):[])]
 
+	const uniqueCourseNumbers = [...new Set(dataTable?.map((item:any) => item.practice.courseNumber))];
+
 
 	return (
 		<Form form={form}>
@@ -453,7 +455,7 @@ export const ViewRepresentation = () => {
 						popupMatchSelectWidth={false}
 						defaultValue="Все"
 						className="w-full"
-						options={courseNumberOptions}
+						options={uniqueCourseNumbers.map((item: any) => ({key: item, label: item, value: item }))}
 						onChange={value => {
 							setFilter({
 								...filter,

@@ -56,7 +56,6 @@ const optionMockKind = [
 export const EditRepresentation = () => {
 	const path = useLocation()
 	const id = path.pathname.split('/').at(-1)!
-	const tableRef = useRef(null)
 	const originData: any[] = []
 	const nav = useNavigate()
 	const [tableData, setTableData] = useState<any>([])
@@ -330,69 +329,69 @@ export const EditRepresentation = () => {
 		}
 	]
 
-	const mergedColumns: TableProps['columns'] = columns.map(col => {
-		// @ts-ignore
-		if (!col.editable) {
-			return col
-		}
-		return {
-			...col,
-			onCell: (record: Item) => ({
-				record,
-				inputType:
-					col.dataIndex === 'selectCourse'
-						? 'select'
-						: col.dataIndex === 'costForDay'
-						? 'number'
-						: col.dataIndex === 'livingCost'
-						? 'number'
-						: col.dataIndex === 'livingCost'
-						? 'number'
-						: col.dataIndex === 'course'
-						? 'number'
-						: 'text',
-				dataIndex: col.dataIndex,
-				title: col.title,
-				editing: isEditing(record),
-				options:
-					col.dataIndex === 'selectCourse'
-						? optionMock
-						: col.dataIndex === 'selectType'
-						? optionMockType
-						: col.dataIndex === 'selectKind'
-						? optionMockKind
-						: undefined,
-				rules:
-					dataOneSubmissions.isWithDeparture === false
-						? col.dataIndex === 'place'
-							? [
-									{
-										required: true,
-										message: 'Поле обязательно для заполнения'
-									}
-							  ]
-							: []
-						: col.dataIndex === 'place' ||
-						  col.dataIndex === 'costForDay' ||
-						  col.dataIndex === 'arrivingCost' ||
-						  col.dataIndex === 'livingCost'
-						? [
-								{
-									required: true,
-									message: 'Поле обязательно для заполнения'
-								}
-						  ]
-						: []
-			})
-		}
-	})
+	// const mergedColumns: TableProps['columns'] = columns.map(col => {
+	// 	// @ts-ignore
+	// 	if (!col.editable) {
+	// 		return col
+	// 	}
+	// 	return {
+	// 		...col,
+	// 		onCell: (record: Item) => ({
+	// 			record,
+	// 			inputType:
+	// 				col.dataIndex === 'selectCourse'
+	// 					? 'select'
+	// 					: col.dataIndex === 'costForDay'
+	// 					? 'number'
+	// 					: col.dataIndex === 'livingCost'
+	// 					? 'number'
+	// 					: col.dataIndex === 'livingCost'
+	// 					? 'number'
+	// 					: col.dataIndex === 'course'
+	// 					? 'number'
+	// 					: 'text',
+	// 			dataIndex: col.dataIndex,
+	// 			title: col.title,
+	// 			editing: isEditing(record),
+	// 			options:
+	// 				col.dataIndex === 'selectCourse'
+	// 					? optionMock
+	// 					: col.dataIndex === 'selectType'
+	// 					? optionMockType
+	// 					: col.dataIndex === 'selectKind'
+	// 					? optionMockKind
+	// 					: undefined,
+	// 			rules:
+	// 				dataOneSubmissions.isWithDeparture === false
+	// 					? col.dataIndex === 'place'
+	// 						? [
+	// 								{
+	// 									required: true,
+	// 									message: 'Поле обязательно для заполнения'
+	// 								}
+	// 						  ]
+	// 						: []
+	// 					: col.dataIndex === 'place' ||
+	// 					  col.dataIndex === 'costForDay' ||
+	// 					  col.dataIndex === 'arrivingCost' ||
+	// 					  col.dataIndex === 'livingCost'
+	// 					? [
+	// 							{
+	// 								required: true,
+	// 								message: 'Поле обязательно для заполнения'
+	// 							}
+	// 					  ]
+	// 					: []
+	// 		})
+	// 	}
+	// })
 
 	const downloadFile = () => {
 		
 		if (dataGetDocRepresentation) {
 			const link = document.createElement('a')
 			link.href = dataGetDocRepresentation
-			link.setAttribute('download', 'downloaded-file.docx')
+			link.setAttribute('download', `Представление в приказ.docx`)
 			document.body.appendChild(link)
 			link.click()
 
@@ -478,7 +477,7 @@ export const EditRepresentation = () => {
 				<Col span={24}>
 					<Button
 						size="large"
-						className="mt-1"
+						className="mt-1 mr-6  rounded-full border border-black"
 						icon={<ArrowLeftSvg className="w-4 h-4 cursor-pointer mt-1" />}
 						type="text"
 						onClick={() => {
@@ -493,7 +492,7 @@ export const EditRepresentation = () => {
 					</Typography.Text>
 				</Col>
 			</Row>
-			<Descriptions className="mt-8" items={items} />
+			<Descriptions className="mt-12" items={items} />
 
 			<Row className="mt-4 mb-6 flex  justify-between">
 				<Col span={12}>

@@ -1,6 +1,4 @@
 import {
-	CheckOutlined,
-	CloseOutlined,
 	VerticalAlignBottomOutlined
 } from '@ant-design/icons'
 import {
@@ -9,19 +7,16 @@ import {
 	Descriptions,
 	Divider,
 	Form,
-	Popconfirm,
 	Popover,
 	Row,
 	Select,
 	Space,
 	Typography
 } from 'antd'
-import type { TableProps } from 'antd'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { ArrowLeftSvg } from '../../../../assets/svg'
-import { EditSvg } from '../../../../assets/svg/EditSvg'
 import { Item } from '../../../../models/representation'
 import { useAppDispatch } from '../../../../store'
 import {
@@ -121,49 +116,7 @@ export const EditAppendix = () => {
 
 
 	const items: any = [
-		// {
-		// 	key: '3',
-		// 	label: 'Вид',
-		// 	children: isSuccess ? dataOneSubmissions.practice.practiceKind : ''
-		// },
-		// {
-		// 	key: '5',
-		// 	label: 'Курс',
-		// 	children: isSuccess ? dataOneSubmissions.practice.courseNumber : ''
-		// },
-		// {
-		// 	key: '5',
-		// 	label: 'Тип',
-		// 	children: isSuccess ? dataOneSubmissions.practice.practiceType : ''
-		// },
-		// ...(isSuccess && dataOneSubmissions.isWithDeparture
-		// 	? [
-		// 			{
-		// 				key: '6',
-		// 				label: 'Тема',
-		// 				children: (
-		// 					<div className="flex">
-		// 						<Col span={19}>
-		// 							{dataOneSubmissions?.status === 'На рассмотрении' ? (
-		// 								<Input
-		// 									size="small"
-		// 									id="topic"
-		// 									placeholder="тема"
-		// 									value={editTheme}
-		// 									onChange={e => {
-		// 										setEditTheme(e.target.value)
-		// 										setIsEdit(true)
-		// 									}}
-		// 								/>
-		// 							) : (
-		// 								<div>{dataOneSubmissions?.theme}</div>
-		// 							)}
-		// 						</Col>
-		// 					</div>
-		// 				)
-		// 			}
-		// 	  ]
-		// 	: []),
+
 		
 		{
 			key: '7',
@@ -189,7 +142,7 @@ export const EditAppendix = () => {
 		if (dataGetDocApplication) {
 			const link = document.createElement('a')
 			link.href = dataGetDocApplication
-			link.setAttribute('download', 'downloaded-file.docx')
+			link.setAttribute('download', `Приложение к договору группы "${dataOneSubmissions?.practice.groupNumber}" подразделения "${dataOneSubmissions?.practice.subdivision}" на ${dataOneSubmissions?.practice.academicYear} учебный год.docx`)
 			document.body.appendChild(link)
 			link.click()
 
@@ -243,7 +196,7 @@ export const EditAppendix = () => {
 				<Col span={24}>
 					<Button
 						size="large"
-						className="mt-1"
+						className="mt-1 mr-6  rounded-full border border-black"
 						icon={<ArrowLeftSvg className="w-4 h-4 cursor-pointer mt-1" />}
 						type="text"
 						onClick={() => {
@@ -258,7 +211,7 @@ export const EditAppendix = () => {
 					</Typography.Text>
 				</Col>
 			</Row>
-			<Descriptions className="mt-8" items={items} />
+			<Descriptions className="mt-12" items={items} />
 			<Divider />
 			<Row>
 					<Col span={24}>

@@ -59,7 +59,6 @@ export const CreateAppendix = () => {
 	const [fullTableValidState, setFullTableValidState] = useState<any>([])
 	const dispatch = useAppDispatch()
 
-	console.log('fullTableValidState',fullTableValidState)
 	useEffect(() => {
 		if (isSuccessGetContracts) {
 			const newArray = dataGetContracts.map(item => {
@@ -100,7 +99,6 @@ export const CreateAppendix = () => {
 		hanldeSelectedPractise(record.id)
 		setFullSelectedPractise(record)
 	}	
-	console.log('dataOne',dataOne)
 
 	const sendData = () => {
 		if (!isFIOProf || !selectContract) {
@@ -125,9 +123,6 @@ export const CreateAppendix = () => {
 		const obj = {
 			contractId: selectContract,
 			submissionId: dataOne?.id,
-			// practiceId: selectedPractice,
-			// isWithDeparture: visiting ? true : false,
-			// theme: theme,
 			students: tableDataStudent
 		}
 		console.log('obj',obj)
@@ -149,7 +144,6 @@ export const CreateAppendix = () => {
 	}
 
 	const handleChange = (value: string) => {
-		console.log('Выбранный ID:', value)
 		setSelectContract(value)
 	}
 
@@ -160,7 +154,7 @@ export const CreateAppendix = () => {
 					<Col span={24}>
 						<Button
 							size="large"
-							className="mt-1"
+							className="mt-1 mr-6  rounded-full border border-black"
 							icon={<ArrowLeftSvg className="w-4 h-4 cursor-pointer mt-1" />}
 							type="text"
 							onClick={() => {
@@ -171,7 +165,7 @@ export const CreateAppendix = () => {
 					</Col>
 				</Row>
 
-				<Row className="mt-4 flex items-center justify-between">
+				<Row className="mt-6 flex items-center justify-between">
 					<Col span={12} className="justify-start flex overWrite">
 						<Steps
 							className='mt-6 mb-6'

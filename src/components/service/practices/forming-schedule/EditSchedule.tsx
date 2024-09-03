@@ -170,8 +170,6 @@ export const EditSchedule = () => {
 	const [editingKey, setEditingKey] = useState('')
 	const { data: dataAllSubdivision } = useGetDepartmentsQuery()
 	const isEditing = (record: any) => record.key === editingKey
-	// const [currentRowValues, setCurrentRowValues] = useState({})
-	// const [createSchedule, { data: dataCreateSchedule }] = useCreateScheduleMutation({})
 	const [sendFilterParams,{data:dataByFilter,isSuccess:isSuccessByFilter}] = useGetByFilterMutation()
     const [tableData, setTableData] = useState<any>(dataByFilter)
 	const [deleteSchedule,{}] = useDeleteMutation()
@@ -189,12 +187,6 @@ export const EditSchedule = () => {
 			name: 'Шифр и иаименование документа',
 			className: 'text-xs !p-2'
 		},
-		// {
-		// 	key: 'academicYear',
-		// 	dataIndex: 'academicYear',
-		// 	title: 'Учебный год',
-		// 	className: 'text-xs !p-2'
-		// },
 		{
 			key: 'course',
 			dataIndex: 'courseNumber',
@@ -333,17 +325,6 @@ export const EditSchedule = () => {
 	})
 
 
-	// useEffect(() => {
-	// 	const data = {
-	// 		subdivisionId:  dataUserSubdivision?.id ? dataUserSubdivision?.id : null,
-	// 		specialtyNameId: null,
-	// 		courseNumber: null,
-	// 		practiceKindId: null,
-	// 		educationLevel: filter.educationLevel ==='Все' ? null : filter.educationLevel,
-	// 		educationType: filter.educationType ==='Все' ? null : filter.educationType
-	// 	}
-	// 	sendFilterParams(data)
-	// }, [filter, dataAllSubdivision, form])
 
     useEffect(() => {
 		if (isSuccessAll) {
@@ -367,6 +348,7 @@ export const EditSchedule = () => {
 		}
 		setSelectedValuesLevel(values.filter((i:any)=>i!=='Все'))
 	};
+
 	const handleChangeForm = (values:any) => {
 		if(selectedValueForm.includes('Все')===false && values.includes('Все') ){
 			setSelectedValuesForm(['Все']);
@@ -374,6 +356,7 @@ export const EditSchedule = () => {
 		}
 		setSelectedValuesForm(values.filter((i:any)=>i!=='Все'))
 	};
+
 	const handleChangeCourse = (values:any) => {
 		if(selectedValueCourse.includes('Все')===false && values.includes('Все') ){
 			setSelectedValuesCourse(['Все']);
@@ -381,6 +364,7 @@ export const EditSchedule = () => {
 		}
 		setSelectedValuesCourse(values.filter((i:any)=>i!=='Все'))
 	};
+
 	const handleChangeSpecialty = (values:any) => {
 		if(selectedValueSpecialty.includes('Все')===false && values.includes('Все') ){
 			setSelectedValuesSpectialty(['Все']);
@@ -388,6 +372,7 @@ export const EditSchedule = () => {
 		}
 		setSelectedValuesSpectialty(values.filter((i:any)=>i!=='Все'))
 	};
+
 	const handleChangeKind = (values:any) => {
 		if(selectedValueKind.includes('Все')===false && values.includes('Все') ){
 			setSelectedValuesKind(['Все']);
@@ -459,7 +444,7 @@ export const EditSchedule = () => {
 		if (dataBlob) {
 			const link = document.createElement('a')
 			link.href = dataBlob
-			link.setAttribute('download', 'downloaded-file.docx')
+			link.setAttribute('download', `График проведения практик на ${year.split('=')[1].replace('-', '/')} учебный год ${dataUserSubdivision?.value ? dataUserSubdivision?.value : ''} КФУ.docx`)
 			document.body.appendChild(link)
 			link.click()
 
@@ -516,11 +501,6 @@ export const EditSchedule = () => {
 		})
 	}
 
-	// const edit = (record: Partial<Item> & { key: React.Key }) => {
-	// 	form.setFieldsValue({ name: '', age: '', address: '', ...record })
-	// 	setEditingKey(record.key)
-	// 	setCurrentRowValues(record)
-	// }
 
 	const cancel = () => {
 		setEditingKey('')
@@ -627,7 +607,7 @@ export const EditSchedule = () => {
 				<Col span={24}>
 					<Button
 						size="large"
-						className="mt-1"
+						className="mt-1 mr-6  rounded-full border border-black"
 						icon={<ArrowLeftSvg className="w-4 h-4 cursor-pointer mt-1" />}
 						type="text"
 						onClick={() => {

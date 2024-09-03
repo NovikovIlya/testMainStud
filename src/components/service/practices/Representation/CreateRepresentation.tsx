@@ -462,7 +462,7 @@ export const CreateRepresentation = () => {
 				<Col span={24}>
 					<Button
 						size="large"
-						className="mt-1"
+						className="mt-1 mr-6 w-[45px] rounded-full border border-black"
 						icon={<ArrowLeftSvg className="w-4 h-4 cursor-pointer mt-1" />}
 						type="text"
 						onClick={() => {
@@ -475,7 +475,7 @@ export const CreateRepresentation = () => {
 				</Col>
 			</Row>
 			
-			<Row className="mt-4 flex items-center justify-between">
+			<Row className="mt-7 flex items-center justify-between">
 				<Col span={12} className='justify-start flex overWrite'>
 				<Steps
 						className='mt-6 mb-6'
@@ -549,20 +549,7 @@ export const CreateRepresentation = () => {
 					<Row className="mt-4">
 						<Col flex={'auto'}>
 							<Form form={form} component={false}>		
-								{/* <Table
-									ref={tableRef}
-									components={{
-										body: {
-											cell: EditableCell
-										}
-									}}
-									bordered
-									dataSource={fullTable}
-									columns={mergedColumns}
-									rowClassName="editable-row"
-									pagination={false}
-									rowKey="id"
-								/> */}
+								
 								<TableEdit visiting={visiting} fullTable={fullTable} setFullTable={setFullTable} create={true}/>
 							</Form>
 						</Col>

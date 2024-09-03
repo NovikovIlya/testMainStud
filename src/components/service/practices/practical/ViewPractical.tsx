@@ -159,21 +159,7 @@ export const ViewPractical = () => {
 			name: 'Шифр и наименование специальности',
 			className: 'text-xs !p-2',
 
-			// @ts-ignore
-			// render: (text, record) => (
-			// 	<div className={'flex items-center'}>
-			// 		<span className={'underline flex font-bold'}>{text}</span>
-			// 		<Button
-			// 			type="text"
-			// 			icon={<EditSvg />}
-			// 			onClick={() => {
-			// 				navigate(
-			// 					`/services/practices/practical/editPractical/${record.id}`
-			// 				)
-			// 			}}
-			// 		/>
-			// 	</div>
-			// )
+
 		},
 		{
             title: 'Дата заполнения',
@@ -320,21 +306,7 @@ export const ViewPractical = () => {
 			name: 'Шифр и наименование специальности',
 			className: 'text-xs !p-2',
 
-			// @ts-ignore
-			// render: (text, record) => (
-			// 	<div className={'flex items-center'}>
-			// 		<span className={'underline flex w-[200px]'}>{text}</span>
-			// 		<Button
-			// 			type="text"
-			// 			icon={<EditSvg />}
-			// 			onClick={() => {
-			// 				navigate(
-			// 					`/services/practices/practical/editPractical/${record.id}`
-			// 				)
-			// 			}}
-			// 		/>
-			// 	</div>
-			// )
+		
 		},
 		{
             title: <TitleHeadCell title={'Дата заполнения'}/>,
@@ -348,12 +320,7 @@ export const ViewPractical = () => {
 
 			title: <TitleHeadCell title={'Тип практики'}/>,
 			className: 'text-xs !p-2 mobileFirst'
-			// filters:[{
-			// 	text: 'практика по получению первичных',
-			// 	value: 'практика по получению',
-			//   },],
-			//   // @ts-ignore
-			//   onFilter: (value, record) => record?.practiceType?.indexOf(value as string) === 0,
+		
 		},
 		{
 			key: 'semester',
@@ -634,6 +601,8 @@ export const ViewPractical = () => {
         }
     }):[])]
 
+	const uniqueCourseNumbers = [...new Set(dataPractiseAll?.map((item:any) => item.courseNumber))];
+
 
 	return (
 		<>
@@ -656,44 +625,10 @@ export const ViewPractical = () => {
 						name={'podrazdelenie'}
 						className='mb-[-4px]'
 					>
-						{/* <Select
-							popupMatchSelectWidth={false}
-							className="w-full "
-							options={[
-								{ key: 2244612, value: 'Все', label: 'Все' },
-								...(dataSubdevisionPracticeNew
-									? processingOfDivisions(dataSubdevisionPracticeNew).map((item:any) => ({
-											key: item.id,
-											value: item.value,
-											label: item.label
-									  }))
-									: [])
-							]}
-							onChange={(value)=>{
-								handleChange(value)
-								setFilter({
-									...filter,
-									subdivision : value,
-									nameSpecialty:'Все',
-									course:'Все',
-									semester:'Все',
-									practiceType:'Все',
-									department:'Все',
-									groupNumber:'Все',
-								})
-								form.setFieldValue('nameSpecialty','Все')
-								form.setFieldValue('course','Все')
-								form.setFieldValue('semester','Все')
-								form.setFieldValue('practiceType','Все')
-								form.setFieldValue('department','Все')
-								form.setFieldValue('groupNumber','Все')
-							}}
-							// defaultValue="Все"
-						/> */}
 						 			<TreeSelect
                                         treeLine={treeLine && { showLeafIcon }}
                                         showSearch
-                                        style={{ height:'38px',width: '100%' }}
+                                        style={{ height:'32px',width: '100%' }}
                                         value={value}
                                         dropdownStyle={{  overflow: 'auto' }}
                                         placeholder=""
@@ -852,7 +787,7 @@ export const ViewPractical = () => {
 								popupMatchSelectWidth={false}
 								defaultValue="Все"
 								className="w-full"
-								options={filterCourse}
+								options={uniqueCourseNumbers.map((item)=>({key: item, value: item, label: item}))}
 								onChange={value => {
 									handleCourse(value)
 									setFilter({

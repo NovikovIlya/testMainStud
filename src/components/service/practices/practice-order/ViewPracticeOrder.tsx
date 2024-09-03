@@ -88,8 +88,6 @@ export const ViewPracticeOrder = () => {
 		})
 	},[selectSubdivisionId])
 
-	console.log('dataAllOrder',dataAllOrder)
-	console.log('dataTable',dataTable)
 	useEffect(() => {
 		
 			setDataTable(dataAllOrder?.length > 0 ? dataAllOrder : [])
@@ -192,28 +190,8 @@ export const ViewPracticeOrder = () => {
 			name: 'Подразделение',
 			className: 'text-xs !p-2 ',
 			render: (text: any, record: any) => <span >{record?.practice?.subdivision}</span>
-			// @ts-ignore
-			// render: (text, record) => (
-			// 	<div className={'flex items-center justify-between'}>
-			// 		<span className={'underline flex font-bold'}>{text}</span>
-			// 		<Button
-			// 			type="text"
-			// 			icon={<EditSvg />}
-			// 			onClick={() => {
-			// 				navigate(`/services/practices/representation/edit/${record.id}`)
-			// 			}}
-			// 		/>
-			// 	</div>
-			// )
+			
 		},
-
-		// {
-		// 	title: 'Дата заполнения',
-		// 	dataIndex: 'dateFilling',
-	
-		// 	// @ts-ignore
-		// 	render: (text: any) => dayjs(text).format('DD.MM.YYYY')
-		// },
     	{
 			key: 'specialtyName',
 			dataIndex: 'specialtyName',
@@ -338,6 +316,7 @@ export const ViewPracticeOrder = () => {
         }
     }):[])]
 
+	const uniqueCourseNumbers = [...new Set(dataTable?.map((item:any) => item.practice.courseNumber))];
 
 	return (
 		<Form form={form}>
@@ -486,7 +465,7 @@ export const ViewPracticeOrder = () => {
 						popupMatchSelectWidth={false}
 						defaultValue="Все"
 						className="w-full"
-						options={courseNumberOptions}
+						options={uniqueCourseNumbers.map((item: any) => ({ key: item,label: item, value: item }))}
 						onChange={value => {
 							setFilter({
 								...filter,

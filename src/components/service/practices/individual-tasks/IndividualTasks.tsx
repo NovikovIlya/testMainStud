@@ -8,7 +8,7 @@ import {
     TableColumnsType,
     Spin
 } from 'antd'
-import React, {useEffect, useRef, useState} from 'react'
+import {useEffect, useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {NameSpecialty, PracticeType, TasksAll} from '../../../../models/Practice'
 import './IndividualTasks.scss'
@@ -19,9 +19,8 @@ import {PointsSvg} from "../../../../assets/svg/PointsSvg";
 import {IndTaskPopoverContent} from "../popover/individualTask/IndTaskPopoverContent";
 import {IndTaskPopoverMain} from "../popover/individualTask/IndTaskPopoverMain";
 import dayjs from "dayjs";
-import {EditSvg} from "../../../../assets/svg/EditSvg";
 import {useGetAllTasksQuery, useGetPracticeTypeQuery} from "../../../../store/api/practiceApi/individualTask";
-import {useGetSpecialtyNamesIndividualTasksQuery, useGetSpecialtyNamesQuery} from "../../../../store/api/practiceApi/roster";
+import {useGetSpecialtyNamesQuery} from "../../../../store/api/practiceApi/roster";
 import {OptionsNameSpecialty} from "../roster/registerContracts/RegisterContracts";
 import { LoadingOutlined } from '@ant-design/icons'
 
@@ -77,7 +76,7 @@ const IndividualTasks = () => {
         selectedFieldsFull,
         setSelectedFieldFull
     ] = useState<FullIndividualTask[]>()
-    // const {} = useGetSpecialtyNamesIndividualTasksQuery()
+ 
 
     const [tableView, setTableView] = useState({
         compressed: true,
@@ -102,9 +101,6 @@ const IndividualTasks = () => {
         }
     }, [dataPracticeType]);
    
-
-
-   console.log('tableDataFull',tableDataFull)
 
     function changeListNameSpecialty(list: NameSpecialty[]) {
         function changeElemNameSpecialty(elem: NameSpecialty) {
@@ -284,6 +280,7 @@ const IndividualTasks = () => {
             dataIndex: 'practiceType',
             width: '20%',
             align: 'left',
+            render: (value) => <span className={''}>{value}</span>
         },
         {
             title: <span className={'text-base'}>Индивидуальные задания</span>,

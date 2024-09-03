@@ -12,6 +12,7 @@ import {
 	Space,
 	Spin,
 	Table,
+	TreeSelect,
 	Typography
 } from 'antd'
 import type { TableProps } from 'antd'
@@ -24,7 +25,8 @@ import { ArrowLeftSvg } from '../../../../assets/svg'
 import { DeleteRedSvg } from '../../../../assets/svg/DeleteRedSvg'
 import {
 	useCreateScheduleMutation, useGetByFilterMutation,
-	useGetDocQuery
+	useGetDocQuery,
+	useGetSubdivisionQuery
 } from '../../../../store/api/practiceApi/formingSchedule'
 import { useGetDepartmentsQuery, useGetPracticeKindQuery } from '../../../../store/api/practiceApi/individualTask'
 
@@ -35,6 +37,7 @@ import { useDispatch } from 'react-redux'
 import { showNotification } from '../../../../store/reducers/notificationSlice'
 
 import { Filter, Item } from '../../../../models/representation'
+import { disableParents } from '../../../../utils/disableParents'
 
 interface FilterType {
 	value: string
@@ -161,7 +164,7 @@ export const PracticeSchedule = () => {
 	})
 	const [form] = Form.useForm()
 	const [editingKey, setEditingKey] = useState('')
-	const { data: dataAllSubdivision } = useGetDepartmentsQuery()
+	const { data: dataAllSubdivision } = useGetSubdivisionQuery()
 	const isEditing = (record: Item) => record.key === editingKey
 	const [currentRowValues, setCurrentRowValues] = useState({})
 	const [createSchedule, { data: dataCreateSchedule ,isLoading:isLoadingCreate}] = useCreateScheduleMutation({})
@@ -179,7 +182,13 @@ export const PracticeSchedule = () => {
 	const prevUniqName = useRef()
 	const prevUniqNameKind = useRef()
 	const prevData = useRef([])
+	const [treeLine, setTreeLine] = useState(true);
+    const [showLeafIcon, setShowLeafIcon] = useState(false);
+    const [value, setValue] = useState<any>();
+	const [newSubdivisionId,setNewSubdivisionId] = useState(null)
+	const [flag,setFlag] = useState(false)
 	const dispatch = useDispatch()
+
 
 	const columns = [
 		{
@@ -189,12 +198,7 @@ export const PracticeSchedule = () => {
 			name: 'Шифр и иаименование документа',
 			className: 'text-xs !p-2'
 		},
-		// {
-		// 	key: 'academicYear',
-		// 	dataIndex: 'academicYear',
-		// 	title: 'Учебный год',
-		// 	className: 'text-xs !p-2'
-		// },
+		
 		{
 			key: 'course',
 			dataIndex: 'courseNumber',
@@ -342,7 +346,7 @@ export const PracticeSchedule = () => {
 	
 	useEffect(() => {
 		const data = {
-			subdivisionId:  dataUserSubdivision?.id ? dataUserSubdivision?.id : null,
+			subdivisionId:  newSubdivisionId ? newSubdivisionId  : null,
 			specialtyNameId: selectedValueSpecialtySend.length===0 ? null : selectedValueSpecialtySend ,
 			courseNumber: selectedValueCourse.includes('Все') ? null : selectedValueCourse.map((i)=>Number(i)),
 			practiceKindId: selectedValueKindSend?.length===0 ? null : selectedValueKindSend,
@@ -360,8 +364,12 @@ export const PracticeSchedule = () => {
 
 	useEffect(() => {
 		setTableData(filterDataFull())
+		setFlag(false)
 	}, [filter])
 
+	const onPopupScroll: any = (e:any) => {
+        console.log('onPopupScroll', e);
+    };
 
 	const handleChangeLevel = (values:any) => {
 		if(selectedValuesLevel.includes('Все')===false && values.includes('Все') ){
@@ -370,6 +378,7 @@ export const PracticeSchedule = () => {
 		}
 		setSelectedValuesLevel(values.filter((i:any)=>i!=='Все'))
 	};
+
 	const handleChangeForm = (values:any) => {
 		if(selectedValueForm.includes('Все')===false && values.includes('Все') ){
 			setSelectedValuesForm(['Все']);
@@ -377,6 +386,7 @@ export const PracticeSchedule = () => {
 		}
 		setSelectedValuesForm(values.filter((i:any)=>i!=='Все'))
 	};
+
 	const handleChangeCourse = (values:any) => {
 		if(selectedValueCourse.includes('Все')===false && values.includes('Все') ){
 			setSelectedValuesCourse(['Все']);
@@ -384,6 +394,7 @@ export const PracticeSchedule = () => {
 		}
 		setSelectedValuesCourse(values.filter((i:any)=>i!=='Все'))
 	};
+
 	const handleChangeSpecialty = (values:any) => {
 		if(selectedValueSpecialty.includes('Все')===false && values.includes('Все') ){
 			setSelectedValuesSpectialty(['Все']);
@@ -392,16 +403,16 @@ export const PracticeSchedule = () => {
 			return
 		}
 		setSelectedValuesSpectialty(values.filter((i:any)=>i!=='Все'))
-		console.log('values',values)
-		console.log('prevData',prevData.current)
+	
 		const stri = prevData.current.filter((item:any)=>values.includes(item.specialtyName))
-		console.log('stri',stri)
+	
 		const x = stri.map((item:any)=>item.specialtyCode + ' ' + item.specialtyName)
-		console.log('x',x)
+	
 		const araId = (dataAllSpec?.filter((item)=>x.includes(item?.value)))?.map((item)=>item.id)
 		//@ts-ignore
 		setSelectedValuesSpectialtySend(araId)
 	};
+
 	const handleChangeKind = (values:any) => {
 		if(selectedValueKind.includes('Все')===false && values.includes('Все') ){
 			setSelectedValuesKind(['Все']);
@@ -414,125 +425,12 @@ export const PracticeSchedule = () => {
 	};
 
 	function filterDataFull() {
-		// function filterCourse(elem: any) {
-		// 	if (filter.course === 'Все') {
-		// 		return elem
-		// 	} else {
-		// 		return elem.courseNumber === filter.course
-		// 	}
-		// }
-		// function filterLevel(elem: any) {
-		// 	if (filter.educationLevel === 'Все') {
-		// 		return elem
-		// 	} else {
-		// 		return elem.educationLevel === filter.educationLevel
-		// 	}
-		// }
-		// function filterForm(elem: any) {
-		// 	if (filter.educationType === 'Все') {
-		// 		return elem
-		// 	} else {
-		// 		return elem.educationType === filter.educationType
-		// 	}
-		// }
-		// function filterKind(elem: any) {
-		// 	if (filter.practiceKind === 'Все') {
-		// 		return elem
-		// 	} else {
-		// 		return elem.practiceKind === filter.practiceKind
-		// 	}
-		// }
-		// function filterName(elem: any) {
-		// 	if (filter.specialtyName === 'Все') {
-		// 		return elem
-		// 	} else {
-		// 		return elem.specialtyName === filter.specialtyName
-		// 	}
-		// }
-
-		// function sortDateFilling(a: any, b: any) {
-		// 	console.log('a',a)
-		// 	if (filter.dateFilling === 'По дате (сначала новые)') {
-		// 		return +new Date(b.dateFilling) - +new Date(a.dateFilling)
-		// 	}
-		// 	if (filter.dateFilling === 'По дате (сначала старые)') {
-		// 		return +new Date(a.dateFilling) - +new Date(b.dateFilling)
-		// 	}
-		// 	return 0
-		// }
-
 		return dataByFilter
 			? dataByFilter
 					// .sort((a: any, b: any) => sortDateFilling(a, b))
 			: []
 	}
-	
-	// const downloadFile = () => {
-	// 	if (dataBlob) {
-	// 		const link = document.createElement('a')
-	// 		link.href = dataBlob
-	// 		link.setAttribute('download', 'downloaded-file.docx')
-	// 		document.body.appendChild(link)
-	// 		link.click()
 
-	// 		window.URL.revokeObjectURL(dataBlob)
-	// 	}
-	// }
-
-	function translateColumnsIntoRussia({ isPrint }: { isPrint?: boolean }) {
-		const newData: any = []
-	
-
-		for (let elem of tableData) {
-			const startPractice = `${dayjs(elem.period?.[0]).format('DD.MM.YYYY')}`
-			const endPractice = `${dayjs(elem.period?.[1]).format('DD.MM.YYYY')}`
-			const newObj = {
-				'Шифр и наименование специальности': elem.specialtyName,
-				// 'Учебный год': elem.academicYear,
-				'Курс': elem.courseNumber,
-				'Номер группы': elem.groupNumbers,
-				'Уровень образования': elem.educationLevel,
-				'Форма обучения': elem.educationType,
-				'Тип практики': elem.practiceType,
-				'Дата заполнения': dayjs(elem.dateFilling).format('YYYY.MM.DD'),
-				'Вид практики': elem.practiceKind,
-				'Период практики': `${startPractice} - ${endPractice}`
-			}
-
-			newData.push(newObj)
-		}
-
-		return newData
-	}
-
-	// const print = () => {
-	// 	function properties() {
-	// 		return [
-	// 			'Шифр и наименование специальности',
-	// 			// 'Учебный год',
-	// 			'Курс',
-	// 			'Номер группы',
-	// 			'Уровень образования',
-	// 			'Форма обучения',
-	// 			'Тип практики',
-	// 			'Дата заполнения',
-	// 			'Вид практики',
-	// 			'Период практики'
-	// 		]
-	// 	}
-	// 	printJS({
-	// 		printable: translateColumnsIntoRussia({ isPrint: true }),
-	// 		properties: properties(),
-	// 		type: 'json',
-	// 		style: 'body {font-size: 10px}'
-	// 	})
-	// }
-
-	// const edit = (record: Partial<Item> & { key: React.Key }) => {
-	// 	form.setFieldsValue({ name: '', age: '', address: '', ...record })
-	// 	setEditingKey(record.key)
-	// 	setCurrentRowValues(record)
-	// }
 
 	const cancel = () => {
 		setEditingKey('')
@@ -604,6 +502,10 @@ export const PracticeSchedule = () => {
 	}
 
 	const handleCreateSchedule = () => {
+		if(!newSubdivisionId){
+			dispatch(showNotification({ message: 'Выберите подразделение', type: 'warning' }));
+			return
+		}
         createSchedule({practiceIds: tableData.map((item:any)=>item.id)})
 			.unwrap()
 			.then(()=>{
@@ -655,7 +557,7 @@ export const PracticeSchedule = () => {
             }))
         : [])
     ];
-	console.log('arrayKindWithId',arrayKindWithId)
+	
 	const uniqueSpecialityNames = useMemo(() => {
 		if(prevDataByFilterLength?.current <= dataByFilter?.length){
 
@@ -684,8 +586,20 @@ export const PracticeSchedule = () => {
 		return uniqueNames;
 	}else return prevUniqNameKind.current
 	}, [dataByFilter]);
-;
-console.log('prevData?.current',prevData?.current)
+
+	const treeData = dataAllSubdivision?.map((item:any)=>{
+        return{
+            title:item.value,
+            value:item.id,
+            // @ts-ignore
+            children: item?.responses?.map((item)=>{
+                return{
+                    title:item.value,
+                    value:item.id,
+                }
+            })
+        }
+    })
 
 	return (
 		<Spin spinning={isLoadingCreate}>
@@ -695,7 +609,7 @@ console.log('prevData?.current',prevData?.current)
 				<Col span={24}>
 					<Button
 						size="large"
-						className="mt-1"
+						className="mt-1 mr-6  rounded-full border border-black"
 						icon={<ArrowLeftSvg className="w-4 h-4 cursor-pointer mt-1" />}
 						type="text"
 						onClick={() => {
@@ -708,29 +622,41 @@ console.log('prevData?.current',prevData?.current)
 					</Typography.Text>
 				</Col>
 			</Row>
-			<Row gutter={[8, 16]} className="mt-12 w-full flex items-center overWrite ">
-				{dataUserSubdivision?.value ? 
-                <><Col span={5}>
+			<Row gutter={[8, 16]} className="mt-12 w-full flex  overWrite ">
+				
+                <Col span={4} className='overWrite'>
 					<span>Подразделение</span>
 				</Col>
-				<Col span={7}>
+				<Col span={8} className='overWrite grow'>
 					
 						<Form.Item name={'subDivision'}>
-							<Select
-								popupMatchSelectWidth={false}
-								defaultValue="Все"
-								className="w-full"
-								options={dataAllSubdivision}
-                                onChange={value => {
+
+							  <TreeSelect
+								treeLine={treeLine && { showLeafIcon }}
+								showSearch
+								style={{ height:'32px',width: '100%' }}
+								value={value}
+								dropdownStyle={{  overflow: 'auto' }}
+								placeholder=""
+								allowClear
+								treeDefaultExpandAll
+								onChange={value => {
+									setFlag(true)
+									setNewSubdivisionId(value)
 									setFilter({
 										...filter,
 										subDivision: value
 									})
 								}}
-							/>
+								treeData={disableParents(treeData)}
+								onPopupScroll={onPopupScroll}
+								treeNodeFilterProp="title"
+                                    
+                                    />
 						</Form.Item>
                 </Col>
-				</> : null}
+				</Row>
+				<Row gutter={[8, 16]} className="mt-0 w-full flex items-center overWrite ">
 				<Col span={4} className='overWrite'>
 					<Typography.Text className='mobileFont'>Шифр и наименование специальности</Typography.Text>
 				</Col>
@@ -862,7 +788,7 @@ console.log('prevData?.current',prevData?.current)
 				</Col>
 			</Row>
 
-					{isLoadingByFilters ?  <Spin className='w-full mt-20' indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />   :
+					{flag ? <Spin className='w-full mt-20' indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} /> : isLoadingByFilters ?  <Spin className='w-full mt-20' indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />   :
 						<Table
 							components={{
 								body: {
@@ -870,7 +796,7 @@ console.log('prevData?.current',prevData?.current)
 								}
 							}}
 							bordered
-							dataSource={tableData ? tableData.map((item:any)=>{
+							dataSource={!newSubdivisionId ? [] : tableData ? tableData.map((item:any)=>{
                                 return{
                                     ...item,
                                     period:  [dayjs(item.practiceStartDate), dayjs(item.practiceEndDate)]
@@ -880,6 +806,14 @@ console.log('prevData?.current',prevData?.current)
 							rowClassName="editable-row"
 							pagination={false}
 							rowKey="id"
+							locale={{
+								emptyText: (
+								  <div>
+									<h3>Нет данных для отображения</h3>
+									<p>Поле "Подразделение" не должно быть пустым</p>
+								  </div>
+								),
+							  }}
 						/>
 						}
             </Form>

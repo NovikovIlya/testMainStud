@@ -238,6 +238,8 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
             })
         }
     }):[])]
+	console.log('filteredData',filteredData)
+	const uniqueCourseNumbers = [...new Set(filteredData?.map((item:any) => item.courseNumber))];
 
   	return (
 		<Modal
@@ -413,7 +415,7 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 						popupMatchSelectWidth={false}
 						defaultValue="Все"
 						className="w-full"
-						options={filterSpecialization}
+						options={uniqueCourseNumbers.map((item:any) => ({ key: item, value: item, label: item }))}
 						onChange={value => {
 							setFilter({
 								...filter,

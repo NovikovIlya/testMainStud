@@ -97,29 +97,29 @@ export const RegisterContracts = () => {
     const ref3 = useRef(null);
     const [open, setOpen] = useState<boolean>(false);
 
-  const steps: any = [
-    {
-      title: 'Upload File',
-      description: 'Put your files here.',
-      cover: (
-        <img
-          alt="tour.png"
-          src="https://user-images.githubusercontent.com/5378891/197385811-55df8480-7ff4-44bd-9d43-a7dade598d70.png"
-        />
-      ),
-      target: () => ref1.current,
-    },
-    {
-      title: 'Save',
-      description: 'Save your changes.',
-      target: () => ref2.current,
-    },
-    {
-      title: 'Other Actions',
-      description: 'Click to see other actions.',
-      target: () => ref3.current,
-    },
-  ];
+    const steps: any = [
+        {
+        title: 'Upload File',
+        description: 'Put your files here.',
+        cover: (
+            <img
+            alt="tour.png"
+            src="https://user-images.githubusercontent.com/5378891/197385811-55df8480-7ff4-44bd-9d43-a7dade598d70.png"
+            />
+        ),
+        target: () => ref1.current,
+        },
+        {
+        title: 'Save',
+        description: 'Save your changes.',
+        target: () => ref2.current,
+        },
+        {
+        title: 'Other Actions',
+        description: 'Click to see other actions.',
+        target: () => ref3.current,
+        },
+    ];
   
 
     function prolonAge(prolon: string) {
@@ -318,13 +318,6 @@ export const RegisterContracts = () => {
                         </span>}
                 </div>
         },
-        // {
-        //     title: <span className={'text-xs'}>Срок действия договора</span>,
-        //     dataIndex: 'endDate',
-        //     align: "center",
-        //     className: 'text-xs',
-        //     render: (value, record, index) => dayjs(value).format('DD.MM.YYYY')
-        // },
         {
             title: <span className={'text-xs'}>Юридический адрес организации</span>,
             dataIndex: 'legalFacility',

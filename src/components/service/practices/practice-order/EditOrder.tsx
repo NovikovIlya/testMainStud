@@ -13,13 +13,11 @@ import {
 	Popconfirm,
 	Popover,
 	Row,
-	Select,
 	Space,
 	Table,
 	Typography
 } from 'antd'
 import type { TableProps } from 'antd'
-import dayjs from 'dayjs'
 import { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
@@ -28,11 +26,9 @@ import { EditSvg } from '../../../../assets/svg/EditSvg'
 import { Item } from '../../../../models/representation'
 import { useAppDispatch } from '../../../../store'
 import {
-	useChangeStatusMutation,
 	useChangeStatusOrderMutation,
 	useEditSubmissionMutation,
 	useGetDocOrderQuery,
-	useGetDocRepresentationQuery,
 	useGetOneSubmissionsQuery
 } from '../../../../store/api/practiceApi/representation'
 import { showNotification } from '../../../../store/reducers/notificationSlice'
@@ -384,7 +380,7 @@ export const EditOrder = () => {
 		if (dataGetDocRepresentation) {
 			const link = document.createElement('a')
 			link.href = dataGetDocRepresentation
-			link.setAttribute('download', 'downloaded-file.docx')
+			link.setAttribute('download', `Приказ по практике.docx`)
 			document.body.appendChild(link)
 			link.click()
 
@@ -471,7 +467,7 @@ export const EditOrder = () => {
 				<Col span={24}>
 					<Button
 						size="large"
-						className="mt-1"
+						className="mt-1 mr-6  rounded-full border border-black"
 						icon={<ArrowLeftSvg className="w-4 h-4 cursor-pointer mt-1" />}
 						type="text"
 						onClick={() => {
@@ -486,7 +482,7 @@ export const EditOrder = () => {
 					</Typography.Text>
 				</Col>
 			</Row>
-			<Descriptions className="mt-8" items={items} />
+			<Descriptions className="mt-12" items={items} />
 			<Divider />
 			<Row className="mt-4 mb-6 flex  justify-between">
 				<Col span={12}>

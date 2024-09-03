@@ -25,25 +25,7 @@ export const PopoverContent = ({recordFull,recordFullAll,setRecordFull,setSelect
 		if (isPrint) {
 			const newData: any = []
 			if (recordFull) {
-				// const recordFullWithoutUndefinedElem = recordFull.filter((elem:any) => elem !== undefined)
-				// for (let elem of recordFullWithoutUndefinedElem) {
-
-				// const stringIndTask = isPrint
-				//     ?
-				//     elem.individualTasks.map((elem:any, index:any) => `${index + 1}.${elem} `).join('</br>')
-				//     :
-				//     elem.individualTasks.map((elem:any, index:any) => `${index + 1}.${elem} `).join('\n')
-
-				// const stringCompetencies = isPrint
-				//     ?
-				//     elem.competencies.map((elem:any, index:any) => `${index + 1}.${elem} `).join('</br>')
-				//     :
-				//     elem.competencies.map((elem:any, index:any) => `${index + 1}.${elem} `).join('\n')
-
-				// const startPractice = `${dayjs(elem.practicePeriod[0]).format('DD.MM.YYYY')}`
-				// const endPractice = `${dayjs(elem.practicePeriod[1]).format('DD.MM.YYYY')}`
-				// const stringPeriodPractice = `${startPractice} - ${endPractice}`
-
+			
 				const newObj = {
 					"Шифр и наименование специальности": recordFull.name,
                     "Дата заполнения": recordFull.dateFilling,
@@ -80,7 +62,7 @@ export const PopoverContent = ({recordFull,recordFullAll,setRecordFull,setSelect
 		if (dataGetDocRepresentation) {
 			const link = document.createElement('a')
 			link.href = dataGetDocRepresentation
-			link.setAttribute('download', 'downloaded-file.docx')
+			link.setAttribute('download', `${recordFull.name}.docx`)
 			document.body.appendChild(link)
 			link.click()
 
@@ -89,12 +71,7 @@ export const PopoverContent = ({recordFull,recordFullAll,setRecordFull,setSelect
 	}
 
 	function downLoad() {
-		// const ws = utils.json_to_sheet([
-		// 	translateColumnsIntoRussia({ isPrint: false })
-		// ])
-		// const wb = utils.book_new()
-		// utils.book_append_sheet(wb, ws, 'Data')
-		// writeFileXLSX(wb, 'File.xlsx')
+		
 		downloadFile()
 	}
 

@@ -436,7 +436,7 @@ export const CreatePractical = () => {
 			<Space size={10} align="center">
 				<Button
 					size="large"
-					className="mt-1"
+					className="mt-1 mt-1 mr-6 rounded-full border border-black"
 					icon={<ArrowLeftSvg className="w-4 h-4 cursor-pointer mt-1" />}
 					type="text"
 					onClick={() => {
@@ -446,12 +446,13 @@ export const CreatePractical = () => {
 				<span className=" text-[28px] font-normal">Добавить практику</span>
 			</Space>
 			<Form<NewPractice>
+				
 				validateMessages={validateMessages}
 				form={form}
 				onFinish={values => onFinish(values)}
 				layout={'vertical'}
 			>
-				<Row gutter={[16, 16]} className="mt-10">
+				<Row gutter={[16, 16]} className="mt-14">
 					<Col xs={24} sm={24} md={18} lg={16} xl={12}>
 						<Space direction={'vertical'} className={'w-full'}>
 							<Form.Item

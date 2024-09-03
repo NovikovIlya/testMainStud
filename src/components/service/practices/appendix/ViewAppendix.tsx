@@ -289,6 +289,8 @@ export const ViewAppendix = () => {
         }
     }):[])]
 
+	const uniqueCourseNumbers = [...new Set(dataTable?.map((item:any) => item.practice.courseNumber))];
+
 
 	return (
 		<Form form={form}>
@@ -306,19 +308,7 @@ export const ViewAppendix = () => {
 					<span>Подразделение</span>
 				</Col>
 				<Col span={7} className='overWrite'>
-					{/* <Select
-						popupMatchSelectWidth={false}
-						
-						className="w-full"
-						options={dataSubmisisionsApplication}
-						onChange={(value: any) => {
-							const x = findSubdivisions(dataSubmisisionsApplication,value)
-							if(x){
-								setSelectSubdivisionId(x.id)
-							}
-								setFilter({ ...filter, subdivision: value })
-							}}
-					/> */}
+
 					<TreeSelect
 						treeLine={treeLine && { showLeafIcon }}
 						showSearch
@@ -423,7 +413,7 @@ export const ViewAppendix = () => {
 						popupMatchSelectWidth={false}
 						defaultValue="Все"
 						className="w-full"
-						options={courseNumberOptions}
+						options={uniqueCourseNumbers.map((item: any) => ({ key: item,label: item, value: item }))}
 						onChange={value => {
 							setFilter({
 								...filter,

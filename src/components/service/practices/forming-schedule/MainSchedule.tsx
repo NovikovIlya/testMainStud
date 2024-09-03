@@ -13,11 +13,9 @@ import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { EditSvg } from '../../../../assets/svg/EditSvg'
 import { PointsSvg } from '../../../../assets/svg/PointsSvg'
 
 import { PopoverContent } from './PopoverContent'
-import { PopoverMain } from './PopoverMain'
 import { useGetAcademicYearQuery, useGetAllSchedulesQuery, useGetSubdivisionQuery } from '../../../../store/api/practiceApi/formingSchedule'
 import { useGetSubdivisionUserQuery } from '../../../../store/api/serviceApi'
 import { LoadingOutlined } from '@ant-design/icons'
@@ -25,9 +23,11 @@ import { processingOfDivisions } from '../../../../utils/processingOfDivisions'
 import { ScheduleType } from '../../../../models/representation'
 import { NewDepartment } from '../../../../models/Practice'
 import { disableParents } from '../../../../utils/disableParents'
+import { transformSubdivisionData } from '../../../../utils/subdevisionToTree'
+import { OptionSortDate } from '../../../../models/schedule'
 
 
-const optionsSortDate: any = [
+const optionsSortDate: OptionSortDate[] = [
 	{ value: 'По дате (сначала новые)', label: 'По дате (сначала новые)' },
 	{ value: 'По дате (сначала старые)', label: 'По дате (сначала старые)' }
 ]
@@ -52,7 +52,7 @@ export const PracticeSchedule = () => {
 	const [flagLoad,setFlagLoad] = useState(false)
 	const [treeLine, setTreeLine] = useState(true);
     const [showLeafIcon, setShowLeafIcon] = useState(false);
-    const [value, setValue] = useState<any>();
+    const [value, setValue] = useState<any>(dataUserSubdivision?.value ? dataUserSubdivision.value : 'Все');
 	const columns = [
 		{
 			key: 'name',
@@ -60,19 +60,6 @@ export const PracticeSchedule = () => {
 			title: 'Наименование графика',
 			name: 'Наименование графика',
 			className: 'text-xs !p-2 ',
-			// @ts-ignore
-			// render: (text, record) => (
-			// 	<div className={'flex items-center justify-between'}>
-			// 		<span className={'underline flex font-bold'}>{text}</span>
-			// 		<Button
-			// 			type="text"
-			// 			icon={<EditSvg />}
-			// 			onClick={() => {
-			// 				navigate(`/services/practices/formingSchedule/edit/year=${record.academicYear.replace("/", "-")}/${record.id}`)
-			// 			}}
-			// 		/>
-			// 	</div>
-			// )
 		},
 
 		{
@@ -164,6 +151,7 @@ export const PracticeSchedule = () => {
 			.filter((elem: any) => filterAcademicYear(elem))
 			: []
 	}
+
 	const onPopupScroll: any = (e:any) => {
         console.log('onPopupScroll', e);
     };
@@ -184,19 +172,8 @@ export const PracticeSchedule = () => {
 		navigate(`/services/practices/formingSchedule/edit/year=${record.academicYear.replace("/", "-")}/${record.id}`)
     };
 
-	const treeData =[{ key: 2244612, value: 'Все', label: 'Все' },...(dataSubdivision ? dataSubdivision?.map((item:any)=>{
-        return{
-            title:item.value,
-            value:item.id,
-            // @ts-ignore
-            children: item?.responses?.map((item)=>{
-                return{
-                    title:item.value,
-                    value:item.id,
-                }
-            })
-        }
-    }):[])]
+	const treeData = dataUserSubdivision?.value ?  transformSubdivisionData(dataUserSubdivision) : 
+	[{ key: 2244612, value: 'Все', label: 'Все' },...transformSubdivisionData(dataSubdivision) ]
 
 
 	return (
@@ -212,46 +189,25 @@ export const PracticeSchedule = () => {
 				<Col span={5} className='overWrite'>
 					<span>Подразделение</span>
 				</Col>
-				<Col span={7} className='overWrite'>
-					{/* <Select
-						popupMatchSelectWidth={false}
-						defaultValue="Все"
-						className="w-full"
+				<Col span={7} className='overWrite'>	
+					<TreeSelect
+						disabled={treeData.length === 1}
+						treeLine={treeLine && { showLeafIcon }}
+						showSearch
+						style={{ height:'32px', width: '100%' }}
+						value={value}
+						dropdownStyle={{  overflow: 'auto' }}
+						placeholder=""
+						allowClear
+						treeDefaultExpandAll
 						onChange={(value: any) => {
 							setFlagLoad(true)
 							setFilter({ ...filter, subdivisionId: value })
 						}}
-						options={
-							[
-								{ key: 2244612, value: 'Все', label: 'Все' },
-								...(departments
-									? departments.map(item => ({
-											key: item.id,
-											value: item.id,
-											label: item.label
-									  }))
-									: [])
-							]
-						}
-					/> */}
-								 <TreeSelect
-                                        treeLine={treeLine && { showLeafIcon }}
-                                        showSearch
-                                        style={{ height:'32px',width: '100%' }}
-                                        value={value}
-                                        dropdownStyle={{  overflow: 'auto' }}
-                                        placeholder=""
-                                        allowClear
-                                        treeDefaultExpandAll
-										onChange={(value: any) => {
-											setFlagLoad(true)
-											setFilter({ ...filter, subdivisionId: value })
-										}}
-                                        treeData={disableParents(treeData)}
-                                        onPopupScroll={onPopupScroll}
-                                        treeNodeFilterProp="title"
-                                    
-                                    />
+						treeData={(treeData)}
+						onPopupScroll={onPopupScroll}
+						treeNodeFilterProp="title"					
+					/>
 				</Col>
 				{/* {dataUserSubdivision?.value ? */}
 				 <Col span={7} offset={5} className='overWrite orderHigh'>
@@ -271,7 +227,6 @@ export const PracticeSchedule = () => {
 			</Row>
 			<Row gutter={[16, 16]} className="mt-4 flex items-center overWrite">
 					<Col span={5} className='overWrite'>
-				{/* <div className={'flex gap-2 items-center overWrite w-full'}> */}
 					<span>Учебный год</span>
 				
 					</Col>
@@ -294,7 +249,7 @@ export const PracticeSchedule = () => {
 								]
 							}
 						/>
-					{/* </div> */}
+
 					
 					</Col>
 			</Row>

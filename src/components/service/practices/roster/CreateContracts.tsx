@@ -141,7 +141,7 @@ export const CreateContracts = () => {
             <Space size={10}>
                 <Button
                     size="large"
-                    className="mt-1"
+                    className="mt-1 mr-6 w-[45px] rounded-full border border-black"
                     icon={<ArrowLeftSvg className="w-4 h-4 cursor-pointer mt-1"/>}
                     type="text"
                     onClick={() => nav('/services/practices/registerContracts')}
@@ -374,7 +374,7 @@ export const CreateContracts = () => {
                                 }}
                             >
                                 <Button
-                                    className="w-full"
+                                    className="w-full sm:w-[300px]"
                                     size="large"
                                     type="primary"
                                     icon={<PlusOutlined/>}
@@ -410,7 +410,7 @@ export const CreateContracts = () => {
                                 }}
                             >
                                 <Button
-                                    className="w-full"
+                                    className="w-full sm:w-[300px]"
                                     size="large"
                                     type="primary"
                                     icon={<PlusOutlined/>}

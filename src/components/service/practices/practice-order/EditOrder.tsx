@@ -35,6 +35,7 @@ import { showNotification } from '../../../../store/reducers/notificationSlice'
 
 import { EditableCell } from './EditableCell'
 import { SkeletonPage } from './Skeleton'
+import { Vector } from '../../../../assets/svg/Vector'
 
 const optionMock = [
 	{ value: '1', label: '1' },
@@ -467,8 +468,9 @@ export const EditOrder = () => {
 				<Col span={24}>
 					<Button
 						size="large"
-						className="mt-1 mr-6  rounded-full border border-black"
-						icon={<ArrowLeftSvg className="w-4 h-4 cursor-pointer mt-1" />}
+						style={{width:'48px'}}
+						className="mt-1 mr-6 w-[48px] rounded-full border border-black"
+						icon={<Vector />}
 						type="text"
 						onClick={() => {
 							nav('/services/practices/representation')

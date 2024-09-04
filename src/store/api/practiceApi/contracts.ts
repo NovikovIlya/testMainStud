@@ -12,7 +12,7 @@ export const contractService = apiSlice.injectEndpoints({
                     method: 'POST'
                 }
             },
-            invalidatesTags: [{type: 'Contracts', id: 'LIST'}]
+            invalidatesTags: ['Contracts']
         }),
         deleteContract: builder.mutation<void, string>({
             query: id => {
@@ -21,7 +21,7 @@ export const contractService = apiSlice.injectEndpoints({
                     method: 'DELETE',
                 }
             },
-            invalidatesTags: [{type: 'Contracts', id: 'LIST'}]
+            invalidatesTags: ['Contracts']
         }),
         deleteSeveralContract: builder.mutation<void, ListIdDeleteContracts>({
             query: (body: ListIdDeleteContracts) => {
@@ -31,16 +31,16 @@ export const contractService = apiSlice.injectEndpoints({
                     method: 'DELETE'
                 }
             },
-            invalidatesTags: [{type: 'Contracts', id: 'LIST'}]
+            invalidatesTags: ['Contracts']
 
         }),
         getContract: builder.query<ContractsAll, string>({
             query: id => `services/api-practices/contracts/${id}`,
-            providesTags: () => [{ type: 'Contracts', id: 'LIST' }],
+            providesTags: () => ['Contracts'],
         }),
         getContractForEdit: builder.query<ResponseEditContract, string>({
             query: id => `services/api-practices/contracts/${id}`,
-            providesTags: () => [{ type: 'Contracts', id: 'LIST' }],
+            providesTags: () => ['Contracts'],
         }),
         editContract: builder.mutation<void, FormData>({
             query: (body: FormData) => {
@@ -50,7 +50,7 @@ export const contractService = apiSlice.injectEndpoints({
                     method: 'PATCH',
                 }
             },
-            invalidatesTags: [{type: 'Contracts', id: 'LIST'}]
+            invalidatesTags: ['Contracts']
         }),
         getCopyFile: builder.query<void, string>({
             query: (id: string) => {

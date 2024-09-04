@@ -62,14 +62,14 @@ export const PopoverContent = ({recordFull,recordFullAll,setRecordFull,setSelect
 		if (dataGetDocRepresentation) {
 			const link = document.createElement('a')
 			link.href = dataGetDocRepresentation
-			link.setAttribute('download', `${recordFull.name}.docx`)
+			link.setAttribute('download', `Представление в приказ группы ${recordFull.practice.groupNumber}.docx`)
 			document.body.appendChild(link)
 			link.click()
 
 			// window.URL.revokeObjectURL(dataBlob)
 		}
 	}
-
+	console.log('recordFull',recordFull)
 	function downLoad() {
 	
 		downloadFile()

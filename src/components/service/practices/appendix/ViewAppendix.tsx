@@ -294,7 +294,7 @@ export const ViewAppendix = () => {
 
 	return (
 		<Form form={form}>
-		<section className="container">
+		<section className="container animate-fade-in">
 			<Row gutter={[16, 16]}>
 				<Col span={24}>
 					<Typography.Text className=" text-[28px] mb-14">
@@ -333,7 +333,7 @@ export const ViewAppendix = () => {
 					<Space className="w-full flex-row-reverse">
 						<Button
 							type="primary"
-							className="!rounded-full"
+							className="!rounded-full h-10"
 							onClick={() => {
 								navigate('/services/practices/appendix/createAppendix')
 							}}
@@ -344,7 +344,7 @@ export const ViewAppendix = () => {
 				</Col>
 			</Row>
 
-    	<Row gutter={[16, 16]} className="mt-4 flex items-center">
+    	<Row gutter={[16, 16]} className="mt-3 flex items-center">
 				<Col span={5} >
 					<span>Наименование специальности</span>
 				</Col>
@@ -533,15 +533,15 @@ export const ViewAppendix = () => {
 							onChange: (page) => setCurrentPage(page),
 						  }}
 						className="my-10 absolute  sm:relative sm:left-0 sm:top-10"
-						rowSelection={{
-							type: 'checkbox',
-							onSelect: (record, selected, selectedRows, nativeEvent) => {
-								setSelectedFieldFull(selectedRows)
-							},
-							onSelectAll: (selected, selectedRows, changeRows) => {
-								setSelectedFieldFull(selectedRows)
-							}
-						}}
+						// rowSelection={{
+						// 	type: 'checkbox',
+						// 	onSelect: (record, selected, selectedRows, nativeEvent) => {
+						// 		setSelectedFieldFull(selectedRows)
+						// 	},
+						// 	onSelectAll: (selected, selectedRows, changeRows) => {
+						// 		setSelectedFieldFull(selectedRows)
+						// 	}
+						// }}
 						locale={{
 							emptyText: (
 							  <div>

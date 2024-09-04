@@ -16,7 +16,8 @@ export const rosterService = apiSlice.injectEndpoints({
                     {type: 'Contracts', id: 'LIST'},
                 ]
                 :
-                [{type: 'Contracts', id: 'LIST'}],
+                ['Contracts'],
+            keepUnusedDataFor:1,
         }),
         getContractsShort: builder.query<ContractShort[], void>({
             query: () => ({
@@ -30,19 +31,21 @@ export const rosterService = apiSlice.injectEndpoints({
                     {type: 'Contracts', id: 'LIST'},
                 ]
                 :
-                [{type: 'Contracts', id: 'LIST'}],
+                ['Contracts'],
         }),
         getSpecialtyNames: builder.query<NameSpecialty[], any>({
             query: (subDivision) => ({
                 url: `services/api-practices/kpfu/specialty-names${subDivision ? "?subdivisionId=" + subDivision : ''}`,
                 method: 'GET',
             }),
+            providesTags:  ['Contracts'],
         }),
         getSpecialtyNamesIndividualTasks: builder.query<NameSpecialty[], any>({
             query: (subDivision) => ({
                 url: `services/api-practices/tasks/specialties${subDivision ? "?subdivisionId=" + subDivision : ''}`,
                 method: 'GET',
             }),
+            providesTags: ['Contracts'],
         }),
         getSpecialtyNamesForPractise: builder.query<any, any>({
             query: (subDivisionId) => ({
@@ -62,7 +65,7 @@ export const rosterService = apiSlice.injectEndpoints({
                     {type: 'Contracts', id: 'LIST'},
                 ]
                 :
-                [{type: 'Contracts', id: 'LIST'}],
+                ['Contracts'],
         })
     })
 })

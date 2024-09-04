@@ -20,6 +20,7 @@ import { useAppDispatch } from '../../../../store'
 import { showNotification } from '../../../../store/reducers/notificationSlice'
 import { SkeletonPage } from './Skeleton'
 import { disableParents } from '../../../../utils/disableParents'
+import { Vector } from '../../../../assets/svg/Vector'
 
 const EditTask = () => {
     const path = useLocation()
@@ -41,7 +42,6 @@ const EditTask = () => {
     const [treeLine, setTreeLine] = useState(true);
     const [showLeafIcon, setShowLeafIcon] = useState(false);
     const [value, setValue] = useState<any>();
-    console.log('value',value)
 
     useEffect(() => {
         if (isSuccessNameSpecialty) {
@@ -97,9 +97,6 @@ const EditTask = () => {
                 // @ts-ignore
                 value: data.subdivisionNameId}]);
            
-        
-            
-
             
             form.setFieldValue('specialityName', data.specialityName)
             form.setFieldValue('practiceType', data.practiceType)
@@ -165,31 +162,8 @@ const EditTask = () => {
         // navigate('/services/practices/individualTasks')
     }
 
-    const handlePodrazdelenie = (value:any)=>{
-        if(value.length === 0){
-            return
-        }
-        const podrazdelenie = departments?.find(elem => {
-            if(elem.value === value){
-                return elem
-            }
-            if('responses' in elem){
-                // @ts-ignore
-                return elem.responses?.find((elem:any)=> {
-                    if(elem.value === value){
-                        return elem
-                    }
-                })
-            }
-        })
-        setSubDivision(podrazdelenie?.id)
-        form.setFieldValue('specialityName', null)
-        form.setFieldValue('practiceType', null)
-    }
+  
     const onChange = (newValue: string) => {
-        console.log('newValue',newValue)
-        // setSubDivision(newValue);
-
         setSubDivision(newValue)
         form.setFieldValue('specialityName', null)
         form.setFieldValue('practiceType', null)
@@ -212,16 +186,17 @@ const EditTask = () => {
             })
         }
     })
-    console.log('treeData',treeData)
+
     if(isLoading) return <SkeletonPage/>
 
     return (
-        <section className="container">
+        <section className="container animate-fade-in">
             <Space size={10} align="center">
                 <Button
                     size="large"
-                    className="mt-1 mr-6 rounded-full border border-black"
-                    icon={<ArrowLeftSvg className="w-4 h-4 cursor-pointer mt-1"/>}
+                    style={{width:'48px'}}
+                    className="mt-1 mr-6 w-[48px] rounded-full border border-black"
+                    icon={<Vector />}
                     type="text"
                     onClick={() => {
                         navigate('/services/practices/individualTasks/')

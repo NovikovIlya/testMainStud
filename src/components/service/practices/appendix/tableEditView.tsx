@@ -107,7 +107,7 @@ type ColumnTypes = Exclude<TableProps['columns'], undefined>
 
 export const TableEditView = ({ isSuccessDataOne,visiting, fullTable=[], setFullTable, create=false,setIsFIOProf }: any) => {
 
-	const [fullTableValidState, setFullTableValidState] = useState<any>([])
+	
 	const defaultColumns = [
 		{
 			key: 'number',

@@ -20,36 +20,7 @@ import { processingOfDivisions } from '../../../../utils/processingOfDivisions'
 import { findSubdivisionsExport } from '../../../../utils/findSubdivisionsExport'
 import { disableParents } from '../../../../utils/disableParents'
 
-const filterSpecialization: FilterType[] = [
-	{
-		value: 'Все',
-		label: 'Все'
-	},
-	{
-		value: '1',
-		label: '1'
-	},
-	{
-		value: '2',
-		label: '2'
-	},
-	{
-		value: '3',
-		label: '3'
-	},
-	{
-		value: '4',
-		label: '4'
-	},
-	{
-		value: '5',
-		label: '5'
-	},
-	{
-		value: '6',
-		label: '6'
-	}
-]
+
 
 const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancelOne,handleRowClick,tableRef}: any) => {
 	const [subdivisionId, setSubdivisionId] = useState(null)
@@ -77,7 +48,7 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 	const [load,setLoad] = useState(false)
 	const [treeLine, setTreeLine] = useState(true);
     const [showLeafIcon, setShowLeafIcon] = useState(false);
-    const [value, setValue] = useState<any>();
+    const [value, setValue] = useState<any>('Все');
 
  	const columnsRepresentation = [
 	{
@@ -238,7 +209,7 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
             })
         }
     }):[])]
-	console.log('filteredData',filteredData)
+	
 	const uniqueCourseNumbers = [...new Set(filteredData?.map((item:any) => item.courseNumber))];
 
   	return (
@@ -256,62 +227,28 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 					<Typography.Text>Подразделение</Typography.Text>
 				</Col>
 				<Col span={8} className='overWrite'>
-					{/* <Select
-						popupMatchSelectWidth={false}
-						defaultValue="Все"
-						className="w-full"
-						options={[
-							{ key: 2244612, value: 'Все', label: 'Все' },
-							...(dataAllSubdivision
-								? processingOfDivisions(dataAllSubdivision).map(item => ({
-										key: item.id,
-										value: item.value,
-										label: item.label
-								  }))
-								: [])
-						]}
-						// options={dataAllSubdivision?.length > 0 ? processingOfDivisions(dataAllSubdivision) : []}
-						onChange={value => {
-							
-							if(value!=='Все'){
-								const x = findSubdivisionsExport(dataAllSubdivision, value )
-								if('responses' in x){
-									setSubdivisionId(x.responses[0].id)
-								}else{setSubdivisionId(x.id)}
-							}
-						
-							
-							setFilter({
-								...filter,
-								subdivision: value,
-								specialtyName: 'Все'
-							})
-							form.setFieldValue('specialtyName', 'Все')
-						}}
-					/> */}
-								<TreeSelect
-                                        treeLine={treeLine && { showLeafIcon }}
-                                        showSearch
-                                        style={{ height:'32px',width: '100%' }}
-                                        value={value}
-                                        dropdownStyle={{  overflow: 'auto' }}
-                                        placeholder=""
-                                        allowClear
-                                        treeDefaultExpandAll
-										onChange={value => {
-											setSubdivisionId(value)
-											setFilter({
-												...filter,
-												subdivision: value,
-												specialtyName: 'Все'
-											})
-											form.setFieldValue('specialtyName', 'Все')
-										}}
-                                        treeData={disableParents(treeData)}
-                                        onPopupScroll={onPopupScroll}
-                                        treeNodeFilterProp="title"
-                                    
-                                    />
+					<TreeSelect
+							treeLine={treeLine && { showLeafIcon }}
+							showSearch
+							style={{ height:'32px',width: '100%' }}
+							value={value}
+							dropdownStyle={{  overflow: 'auto' }}
+							placeholder=""
+							allowClear
+							treeDefaultExpandAll
+							onChange={value => {
+								setSubdivisionId(value)
+								setFilter({
+									...filter,
+									subdivision: value,
+									specialtyName: 'Все'
+								})
+								form.setFieldValue('specialtyName', 'Все')
+							}}
+							treeData={disableParents(treeData)}
+							onPopupScroll={onPopupScroll}
+							treeNodeFilterProp="title"
+							/>
 				</Col>
 			</Row>
 			<Row gutter={[8, 16]} className="mt-4 w-full flex items-center">
@@ -324,17 +261,9 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 						disabled={!subdivisionId}
 						showSearch
 						optionFilterProp="label"
-						// filterSort={(optionA, optionB) =>
-						// 	(optionA?.label ?? '')
-						// 		// @ts-ignore
-						// 		.toLowerCase()
-						// 		// @ts-ignore
-						// 		.localeCompare((optionB?.label ?? '').toLowerCase())
-						// }
 						popupMatchSelectWidth={false}
 						defaultValue="Все"
 						className="w-full"
-						// options={dataAllSpecialty}
 						options={[
 							{ key: 2244612, value: 'Все', label: 'Все' },
 							...(dataAllSpecialty
@@ -355,8 +284,6 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 					</Form.Item>
 				</Col>
 			</Row>
-
-			
 			<Row gutter={[8, 16]} className="mt-4 w-full flex items-center">
 				<Col span={4} className='overWrite'>
 					<Typography.Text>Номер группы</Typography.Text>
@@ -386,25 +313,6 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 					/>
 				</Col>
 			</Row> 
-			{/* <Row gutter={[8, 16]} className="mt-4  w-full flex items-center">
-				<Col span={4}>
-					<Typography.Text>Уровень образования</Typography.Text>
-				</Col>
-				<Col span={8}>
-					<Select
-						popupMatchSelectWidth={false}
-						defaultValue="Все"
-						className="w-full"
-						options={filterSpecialization}
-						onChange={value => {
-							setFilter({
-								...filter,
-								level: value
-							})
-						}}
-					/>
-				</Col>
-			</Row> */}
 			<Row gutter={[8, 16]} className="mt-4 mb-12 w-full flex items-center">
 				<Col span={4} className='overWrite'>
 					<Typography.Text>Курс</Typography.Text>
@@ -439,9 +347,9 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 				bordered
 				dataSource={filteredData}
 				columns={columnsRepresentation}
-				// rowClassName={record => selectedPractice===record.key ? "hide" : ''}
-				pagination={dataAllPractise?.length < 6 ? false : {
-					pageSize: 5,
+
+				pagination={dataAllPractise?.length < 10 ? false : {
+					pageSize: 10,
 				}}
 				rowKey="id"
 			/>}

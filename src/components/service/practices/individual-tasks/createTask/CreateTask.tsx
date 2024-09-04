@@ -19,6 +19,7 @@ import {processingOfDivisions} from "../../../../../utils/processingOfDivisions"
 import { useAppDispatch } from '../../../../../store'
 import { showNotification } from '../../../../../store/reducers/notificationSlice'
 import { newProcessing } from '../../../../../utils/newProcessing'
+import { Vector } from '../../../../../assets/svg/Vector'
 
 
 
@@ -164,16 +165,16 @@ const CreateTask = () => {
             })
         }
     })
-    console.log('treeData',treeData)
-    console.log('subDivision',subDivision)
+
     return (
-        <section className="container">
+        <section className="container animate-fade-in">
             <Space size={10} align="center">
                 <Button
-                    
                     size="large"
                     className="mt-1 mr-6 rounded-full border border-black"
-                    icon={<ArrowLeftSvg className="w-4 h-4 cursor-pointer mt-1"/>}
+                    style={{width:'48px'}}
+              
+                    icon={<Vector />}
                     type="text"
                     onClick={() => {
                         navigate('/services/practices/individualTasks/')
@@ -196,13 +197,6 @@ const CreateTask = () => {
                             <Form.Item label={'Подразделение'}
                                        rules={[{required: true}]}
                                        name={'subDivision'}>
-                                {/* <Select
-                                    size="large"
-                                    popupMatchSelectWidth={false}
-                                    className="w-full"
-                                    options={departments}
-                                    onChange={handlePodrazdelenie}
-                                /> */}
                                 <TreeSelect
                                     treeLine={treeLine && { showLeafIcon }}
                                     showSearch

@@ -55,6 +55,13 @@ export const PracticeSchedule = () => {
     const [value, setValue] = useState<any>(dataUserSubdivision?.value ? dataUserSubdivision.value : 'Все');
 	const columns = [
 		{
+			key: 'subdivision',
+			dataIndex: 'subdivision',
+			title: 'Подразделение',
+			name: 'Подразделение',
+			className: 'text-xs !p-2 ',
+		},
+		{
 			key: 'name',
 			dataIndex: 'name',
 			title: 'Наименование графика',
@@ -173,11 +180,11 @@ export const PracticeSchedule = () => {
     };
 
 	const treeData = dataUserSubdivision?.value ?  transformSubdivisionData(dataUserSubdivision) : 
-	[{ key: 2244612, value: 'Все', label: 'Все' },...transformSubdivisionData(dataSubdivision) ]
+	[{ key: 'Все', value: 'Все', label: 'Все' },...transformSubdivisionData(dataSubdivision) ]
 
 
 	return (
-		<section className="container">
+		<section className="container animate-fade-in">
 			<Row gutter={[16, 16]}>
 				<Col span={24}>
 					<Typography.Text className=" text-[28px] mb-14 titleMobile">
@@ -209,12 +216,12 @@ export const PracticeSchedule = () => {
 						treeNodeFilterProp="title"					
 					/>
 				</Col>
-				{/* {dataUserSubdivision?.value ? */}
+				
 				 <Col span={7} offset={5} className='overWrite orderHigh'>
 					<Space className="w-full flex-row-reverse">
 						<Button
 							type="primary"
-							className="!rounded-full my-buttonSchedule"
+							className="!rounded-full my-buttonSchedule h-10"
 							onClick={() => {
 								navigate('/services/practices/formingSchedule/createSchedule')
 							}}
@@ -223,9 +230,9 @@ export const PracticeSchedule = () => {
 						</Button>
 					</Space>
 				</Col> 
-				{/* : null} */}
+
 			</Row>
-			<Row gutter={[16, 16]} className="mt-4 flex items-center overWrite">
+			<Row gutter={[16, 16]} className="mt-1 flex items-center overWrite">
 					<Col span={5} className='overWrite'>
 					<span>Учебный год</span>
 				
@@ -249,8 +256,6 @@ export const PracticeSchedule = () => {
 								]
 							}
 						/>
-
-					
 					</Col>
 			</Row>
 			<Row gutter={[16, 16]} className="mt-4 flex items-center overWrite">
@@ -259,7 +264,7 @@ export const PracticeSchedule = () => {
 						<span className={'mr-2'}>Сортировка</span>
 						<Select
 							popupMatchSelectWidth={false}
-							defaultValue=""
+							value={filter.dateFilling}
 							className="w-full sm:w-[500px]"
 							options={optionsSortDate}
 							onChange={value => {
@@ -272,33 +277,32 @@ export const PracticeSchedule = () => {
 					</div>
 				</Col>
 			</Row>
+			{isLoadingUserSubdivision || isFetchingDataAll || flagLoad? <Spin className='w-full mt-20' indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />  
+			:  <Table
+				onRow={(record) => ({
+					onClick: () => handleRowClick(record),
+				})}
+				responsive
+				size="small"
+				rowKey="id"
+				// @ts-ignore
+				columns={columns}
+				dataSource={dataTable ? dataTable : []}
+				pagination={dataTable && dataTable?.length <10 ? false : {
+					pageSize: 10
+				}}
+				className="my-10"
+				// rowSelection={{
+				// 	type: 'checkbox',
+				// 	onSelect: (record, selected, selectedRows, nativeEvent) => {
+				// 		setSelectedFieldFull(selectedRows)
+				// 	},
+				// 	onSelectAll: (selected, selectedRows, changeRows) => {
+				// 		setSelectedFieldFull(selectedRows)
+				// 	}
+				// }}
+			/>}
 		
-					{isLoadingUserSubdivision || isFetchingDataAll || flagLoad? <Spin className='w-full mt-20' indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />  
-					:  <Table
-						onRow={(record) => ({
-							onClick: () => handleRowClick(record),
-						})}
-						responsive
-						size="small"
-						rowKey="id"
-						// @ts-ignore
-						columns={columns}
-						dataSource={dataTable ? dataTable : []}
-						pagination={dataTable && dataTable?.length<10?false:{
-							pageSize: 10
-						}}
-						className="my-10"
-						rowSelection={{
-							type: 'checkbox',
-							onSelect: (record, selected, selectedRows, nativeEvent) => {
-								setSelectedFieldFull(selectedRows)
-							},
-							onSelectAll: (selected, selectedRows, changeRows) => {
-								setSelectedFieldFull(selectedRows)
-							}
-						}}
-					/>}
-				
 		</section>
 	)
 }

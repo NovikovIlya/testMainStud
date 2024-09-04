@@ -510,7 +510,7 @@ export const EditPractical = () => {
 
     return (
         <Spin spinning={isLoadingSendForm}>
-            <section className="container">
+            <section className="container animate-fade-in">
                 <Space size={10} align="center">
                     <Button
                         size="large"

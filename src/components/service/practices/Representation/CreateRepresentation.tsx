@@ -30,6 +30,7 @@ import { useGetPracticesAllQuery } from '../../../../store/api/practiceApi/indiv
 import { changeStatus, changeStatusTrue, showNotification } from '../../../../store/reducers/notificationSlice'
 import { useAppDispatch } from '../../../../store'
 import TableEdit from './tableEdit'
+import { Vector } from '../../../../assets/svg/Vector'
 
 const optionMock = [
 	{ value: 'контракт', label: 'контракт' },
@@ -457,13 +458,14 @@ export const CreateRepresentation = () => {
 	
 	return (
 		<Spin spinning={isLoadingAddSub}>
-		<section className="container">
+		<section className="container ">
 			<Row gutter={[16, 16]}>
 				<Col span={24}>
 					<Button
 						size="large"
-						className="mt-1 mr-6 w-[45px] rounded-full border border-black"
-						icon={<ArrowLeftSvg className="w-4 h-4 cursor-pointer mt-1" />}
+						style={{width:'48px'}}
+						className="mt-1 mr-6 w-[48px] rounded-full border border-black"
+						icon={<Vector />}
 						type="text"
 						onClick={() => {
 							nav('/services/practices/representation')

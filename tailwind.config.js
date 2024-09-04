@@ -10,7 +10,17 @@ module.exports = {
 				blue307: '#3073D7',
 				blue004: '#004EC2',
 				blue65A: '#65A1FA'
-			}
+			},
+			animation: {
+				'bounce-slow': 'bounce 3s  1 ease-in-out',
+				'fade-in': 'fadeIn 0.7s ease-in-out',
+			},
+			keyframes: {
+				fadeIn: {
+				  '0%': { opacity: 0 },
+				  '100%': { opacity: 1 },
+				},
+			  },
 		}
 	},
 	corePlugins: {

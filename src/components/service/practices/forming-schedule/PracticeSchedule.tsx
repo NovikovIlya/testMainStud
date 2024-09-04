@@ -38,6 +38,7 @@ import { showNotification } from '../../../../store/reducers/notificationSlice'
 
 import { Filter, Item } from '../../../../models/representation'
 import { disableParents } from '../../../../utils/disableParents'
+import { Vector } from '../../../../assets/svg/Vector'
 
 interface FilterType {
 	value: string
@@ -364,7 +365,7 @@ export const PracticeSchedule = () => {
 
 	useEffect(() => {
 		setTableData(filterDataFull())
-		setFlag(false)
+	
 	}, [filter])
 
 	const onPopupScroll: any = (e:any) => {
@@ -425,6 +426,7 @@ export const PracticeSchedule = () => {
 	};
 
 	function filterDataFull() {
+		setFlag(false)
 		return dataByFilter
 			? dataByFilter
 					// .sort((a: any, b: any) => sortDateFilling(a, b))
@@ -603,22 +605,22 @@ export const PracticeSchedule = () => {
 
 	return (
 		<Spin spinning={isLoadingCreate}>
-		<section className="container">
+		<section className="container animate-fade-in">
             <Form form={form} >
 			<Row gutter={[16, 16]}>
 				<Col span={24}>
 					<Button
 						size="large"
-						className="mt-1 mr-6  rounded-full border border-black"
-						icon={<ArrowLeftSvg className="w-4 h-4 cursor-pointer mt-1" />}
+						style={{width:'48px'}}
+						className="mt-1 mr-6 w-[48px] rounded-full border border-black"
+						icon={<Vector />}
 						type="text"
 						onClick={() => {
 							nav('/services/practices/formingSchedule')
 						}}
 					/>
 					<Typography.Text className=" text-[28px] mb-14 titleMobile">
-						Добавление графика проведения практик на {getAcademicYear()} учебный год
-						{dataUserSubdivision?.value} КФУ
+						Добавление графика проведения практик
 					</Typography.Text>
 				</Col>
 			</Row>
@@ -773,11 +775,11 @@ export const PracticeSchedule = () => {
 						}}
 					/>
 				</Col>
-				<Col span={7} offset={5} className='overWrite'>
+				{/* <Col span={7} offset={5} className='overWrite'>
 					<Space className="w-full flex-row-reverse overWrite">
 						<Button
 							type="primary"
-							className="!rounded-full"
+							className="!rounded-full h-10"
 							onClick={() => {
 								handleCreateSchedule()
 							}}
@@ -785,7 +787,7 @@ export const PracticeSchedule = () => {
 							Добавить
 						</Button>
 					</Space>
-				</Col>
+				</Col> */}
 			</Row>
 
 					{flag ? <Spin className='w-full mt-20' indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} /> : isLoadingByFilters ?  <Spin className='w-full mt-20' indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />   :
@@ -816,6 +818,21 @@ export const PracticeSchedule = () => {
 							  }}
 						/>
 						}
+						<Row className='mt-5'>
+						<Col span={2}  className='overWrite'>
+						<Space className="w-full flex-row-reverse overWrite">
+							<Button
+								type="primary"
+								className="!rounded-full h-10"
+								onClick={() => {
+									handleCreateSchedule()
+								}}
+							>
+							Сохранить
+						</Button>
+					</Space>
+				</Col>
+						</Row>
             </Form>
 		</section>
 		</Spin>

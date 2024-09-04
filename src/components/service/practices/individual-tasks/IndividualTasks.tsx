@@ -144,7 +144,6 @@ const IndividualTasks = () => {
     }
 
     function changeListDataAll(data: any) {
-        console.log('data',data)
         const newData: any = {
             id: data.id,
             key: data.key,
@@ -261,6 +260,25 @@ const IndividualTasks = () => {
             title: <span className={'text-base'}>Шифр и наименование специальности</span>,
             dataIndex: 'specialityName',
             width: '20%',
+            // render: (text, record) =>
+            //     <div className={'flex items-center'}>
+            //         <span className={'underline flex w-[200px] font-bold'}>
+            //             {text}
+            //         </span>
+            //         <Button
+            //             type="text"
+            //             icon={<EditSvg/>}
+            //             onClick={() => {
+            //                 navigate(`/services/practices/individualTasks/editTask/${record.id}`)
+            //             }}
+            //         />
+            //     </div>
+        },
+        {
+            title: <span className={'text-base'}>Дата заполнения</span>,
+            dataIndex: 'dateFilling',
+            width: '20%',
+            render: (text) => dayjs(text).format('DD.MM.YYYY')
             // render: (text, record) =>
             //     <div className={'flex items-center'}>
             //         <span className={'underline flex w-[200px] font-bold'}>
@@ -397,16 +415,16 @@ const IndividualTasks = () => {
     useEffect(() => {
         setTableDataCompressed(filterDataCompressed())
         setTableDataFull(filterDataFull())
-    }, [filter]);
+    }, [filter,isSuccess]);
 
-    useEffect(() => {
-        if (isSuccess) {
-            const dataCompressed: CompressedIndividualTask[] = data.map(elem => changeListDataShort(elem))
-            setTableDataCompressed(dataCompressed)
-            const dataFull: FullIndividualTask[] = data.map(elem => changeListDataAll(elem))
-            setTableDataFull(dataFull)
-        }
-    }, [data]);
+    // useEffect(() => {
+    //     if (isSuccess) {
+    //         const dataCompressed: CompressedIndividualTask[] = data.map(elem => changeListDataShort(elem))
+    //         setTableDataCompressed(dataCompressed)
+    //         const dataFull: FullIndividualTask[] = data.map(elem => changeListDataAll(elem))
+    //         setTableDataFull(dataFull)
+    //     }
+    // }, [data]);
 
     const handleRowClick = (record:any) => {
 		navigate(`/services/practices/individualTasks/editTask/${record.id}`)
@@ -439,7 +457,7 @@ const IndividualTasks = () => {
     .map(value => ({ value, label: value }));
    
     return (
-        <section className="container">
+        <section className="container animate-fade-in">
             <Row>
                 <Col>
 					<span className="mb-14 text-[28px]">
@@ -470,7 +488,7 @@ const IndividualTasks = () => {
                     <Space className="w-full flex-row-reverse ">
                         <Button
                             type="primary"
-                            className="!rounded-full my-button "
+                            className="!rounded-full my-button h-10"
                             onClick={() => {
                                 navigate('/services/practices/individualTasks/createTask')
                             }}
@@ -521,7 +539,7 @@ const IndividualTasks = () => {
                         <span className={'mr-2'}>Сортировка</span>
                         <Select
                             popupMatchSelectWidth={false}
-                            defaultValue=""
+                            value={filter.dateFilling}
                             className="w-full"
                             options={optionsSortDate}
                             onChange={value => {

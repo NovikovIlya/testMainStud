@@ -110,13 +110,15 @@ export const EditContract = () => {
                 name: <a onClick={() => copyFileDocument(tokenAccess, data.documentCopyId)}>Скан договора</a>,
                 status: 'done',
             }])
-
-            form.setFieldValue('pdfAgreement', data.documentAgreementId)
-            setPdfAgreement([{
-                uid: '2',
-                name: <a onClick={() => agreementFileDocument(tokenAccess, data.documentAgreementId)}>Доп.соглашение</a>,
-                status: 'done',
-            }])
+            if(data.documentAgreementId!==null){
+                form.setFieldValue('pdfAgreement', data.documentAgreementId)
+                 setPdfAgreement([{
+                    uid: '2',
+                    name: <a onClick={() => agreementFileDocument(tokenAccess, data.documentAgreementId)}>Доп.соглашение</a>,
+                    status: 'done',
+                   }])
+            }
+            
         }
 
         //при загруке данных проверять, есть ли пролонгация. Если есть, то ставить setProlongation(true)
@@ -201,7 +203,7 @@ export const EditContract = () => {
 
     
     return (
-        <section className="container">
+        <section className="container animate-fade-in">
             <Space size={10}>
                 <Button
                     size="large"

@@ -30,6 +30,7 @@ import { showNotification } from '../../../../store/reducers/notificationSlice'
 import { SkeletonPage } from './Skeleton'
 import TableEditView from './tableEditView'
 import { useGetContractsAllQuery } from '../../../../store/api/practiceApi/roster'
+import { Vector } from '../../../../assets/svg/Vector'
 
 
 export const EditAppendix = () => {
@@ -106,7 +107,7 @@ export const EditAppendix = () => {
 					departmentDirector:dataOneSubmissions.practice.departmentDirector,
 					practicePeriod: dataOneSubmissions.practice.practicePeriod,
 					specialtyName: dataOneSubmissions.practice.specialtyName,
-					other: `${dataOneSubmissions.practice.courseNumber} курс, ${dataOneSubmissions.practice.practiceKind}, ${dataOneSubmissions.practice.practiceType}`,
+					other: <><div>{dataOneSubmissions.practice.courseNumber} курс,</div>  <div>{dataOneSubmissions.practice.practiceKind},<div> </div>{dataOneSubmissions.practice.practiceType}</div></>,
 
 				}
 			})
@@ -138,30 +139,24 @@ export const EditAppendix = () => {
 	]
 
 	const downloadFile = () => {
-		
 		if (dataGetDocApplication) {
 			const link = document.createElement('a')
 			link.href = dataGetDocApplication
 			link.setAttribute('download', `Приложение к договору группы "${dataOneSubmissions?.practice.groupNumber}" подразделения "${dataOneSubmissions?.practice.subdivision}" на ${dataOneSubmissions?.practice.academicYear} учебный год.docx`)
 			document.body.appendChild(link)
 			link.click()
-
 			// window.URL.revokeObjectURL(dataBlob)
 		}
 	}
 
 	const editData = () => {
-		const arrayT: any = [{}]
 		const obj = 
 			 {
-	
 				students: fullTable.map(({ key, ...rest }: any) => rest),
-				contractId: selectContract,
-				
+				contractId: selectContract,				
 			}
 		
-		console.log('obj', {id:dataOneSubmissions.id,
-			body:obj})
+		
 		editApplication({id:dataOneSubmissions.id,
 			body:obj})
 			.unwrap()
@@ -191,13 +186,14 @@ export const EditAppendix = () => {
 	if (isLoadingOneSubmission) return <SkeletonPage />
 
 	return (
-		<section className="container">
+		<section className="container animate-fade-in">
 			<Row gutter={[16, 16]}>
 				<Col span={24}>
 					<Button
 						size="large"
-						className="mt-1 mr-6  rounded-full border border-black"
-						icon={<ArrowLeftSvg className="w-4 h-4 cursor-pointer mt-1" />}
+						style={{width:'48px'}}
+						className="mt-1 mr-6 w-[48px] rounded-full border border-black"
+						icon={<Vector />}
 						type="text"
 						onClick={() => {
 							nav('/services/practices/representation')

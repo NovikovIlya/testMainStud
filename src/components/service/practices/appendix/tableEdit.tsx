@@ -133,8 +133,8 @@ export const TableEdit = ({ isSuccessDataOne,visiting, fullTable=[], setFullTabl
 		{
 			key: 'other',
 			dataIndex: 'other',
-			title: 'Курc, вид и тип прохождения практики mobileFirst',
-			className: 'text-xs !p-2',
+			title: 'Курc, вид и тип прохождения практики ',
+			className: 'text-xs !p-2 mobileFirst',
 			
 		},
 		
@@ -222,7 +222,7 @@ export const TableEdit = ({ isSuccessDataOne,visiting, fullTable=[], setFullTabl
 					period:formatDateRange(fullTable.practice.practicePeriod),
 					specialtyName: fullTable.practice.specialtyName,
 					FIO: fullTable.practice.departmentDirector,
-					other: `${fullTable.practice.courseNumber} курс, ${fullTable.practice.practiceKind}, ${fullTable.practice.practiceType}`,
+					other: <><div>{fullTable.practice.courseNumber} курс,</div>  <div>{fullTable.practice.practiceKind},<div> </div>{fullTable.practice.practiceType}</div></>,
 					FIOProf:null,
 					id:item.id,
 					key:item.name

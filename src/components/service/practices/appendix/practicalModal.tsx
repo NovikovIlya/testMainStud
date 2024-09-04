@@ -658,15 +658,15 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 							onChange: (page) => setCurrentPage(page),
 						  }}
 						className="my-10 relative left-[-70px] sm:left-0"
-						rowSelection={{
-							type: 'checkbox',
-							onSelect: (record, selected, selectedRows, nativeEvent) => {
-								setSelectedFieldFull(selectedRows)
-							},
-							onSelectAll: (selected, selectedRows, changeRows) => {
-								setSelectedFieldFull(selectedRows)
-							}
-						}}
+						// rowSelection={{
+						// 	type: 'checkbox',
+						// 	onSelect: (record, selected, selectedRows, nativeEvent) => {
+						// 		setSelectedFieldFull(selectedRows)
+						// 	},
+						// 	onSelectAll: (selected, selectedRows, changeRows) => {
+						// 		setSelectedFieldFull(selectedRows)
+						// 	}
+						// }}
 						locale={{
 							emptyText: (
 							  <div>

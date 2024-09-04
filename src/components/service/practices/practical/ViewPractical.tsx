@@ -440,15 +440,9 @@ export const ViewPractical = () => {
 		function filterSubdivision(elem: TablePractical) {
 			if (filter.subdivision === 'Все') {
 				return elem
-			} else if(!filter?.subdivision){
-				// @ts-ignore
-				console.log('elem.subdivision',elem.subdivision)
-				console.log('filter.subdivision',filter.subdivision)
-				// return elem.subdivision === filter.subdivision
-			}
+			} 
 			else {
-				console.log('elem',elem)
-				console.log('filter.subdivision1',filter.subdivision)
+	
 				// @ts-ignore
 				return elem.subdivisionId === filter.subdivision
 			}
@@ -587,7 +581,7 @@ export const ViewPractical = () => {
 			`/services/practices/practical/editPractical/${record.id}`
 		)
     };
-	const treeData = [{ key: 2244612, value: 'Все', label: 'Все' },...(dataSubdevisionPracticeNew ? dataSubdevisionPracticeNew?.map((item:any)=>{
+	const treeData = [{ key: 'Все', value: 'Все', label: 'Все' },...(dataSubdevisionPracticeNew ? dataSubdevisionPracticeNew?.map((item:any)=>{
         return{
             title:item.value,
             value:item.id,
@@ -606,7 +600,7 @@ export const ViewPractical = () => {
 
 	return (
 		<>
-			<section className="container">
+			<section className="container animate-fade-in">
 			<Form form={form} initialValues={initialFormValues}>
 				<Row>
 					<Col flex={'auto'}>
@@ -625,46 +619,47 @@ export const ViewPractical = () => {
 						name={'podrazdelenie'}
 						className='mb-[-4px]'
 					>
-						 			<TreeSelect
-                                        treeLine={treeLine && { showLeafIcon }}
-                                        showSearch
-                                        style={{ height:'32px',width: '100%' }}
-                                        value={value}
-                                        dropdownStyle={{  overflow: 'auto' }}
-                                        placeholder=""
-                                        allowClear
-                                        treeDefaultExpandAll
-										onChange={(value)=>{
-											handleChange(value)
-											setFilter({
-												...filter,
-												subdivision : value,
-												nameSpecialty:'Все',
-												course:'Все',
-												semester:'Все',
-												practiceType:'Все',
-												department:'Все',
-												groupNumber:'Все',
-											})
-											form.setFieldValue('nameSpecialty','Все')
-											form.setFieldValue('course','Все')
-											form.setFieldValue('semester','Все')
-											form.setFieldValue('practiceType','Все')
-											form.setFieldValue('department','Все')
-											form.setFieldValue('groupNumber','Все')
-										}}
-                                        treeData={disableParents(treeData)}
-                                        onPopupScroll={onPopupScroll}
-                                        treeNodeFilterProp="title"
-                                    
-                                    />
+							<TreeSelect
+								treeLine={treeLine && { showLeafIcon }}
+								showSearch
+								style={{ height:'32px',width: '100%' }}
+								value={value}
+								dropdownStyle={{  overflow: 'auto' }}
+								placeholder=""
+								allowClear
+								treeDefaultExpandAll
+								onChange={(value)=>{
+									setSubDevisionId(value)
+									handleChange(value)
+									setFilter({
+										...filter,
+										subdivision : value,
+										nameSpecialty:'Все',
+										course:'Все',
+										semester:'Все',
+										practiceType:'Все',
+										department:'Все',
+										groupNumber:'Все',
+									})
+									form.setFieldValue('nameSpecialty','Все')
+									form.setFieldValue('course','Все')
+									form.setFieldValue('semester','Все')
+									form.setFieldValue('practiceType','Все')
+									form.setFieldValue('department','Все')
+									form.setFieldValue('groupNumber','Все')
+								}}
+								treeData={disableParents(treeData)}
+								onPopupScroll={onPopupScroll}
+								treeNodeFilterProp="title"
+							
+							/>
 						</Form.Item>
 					</Col>
 					<Col span={7} offset={4} className='orderHigh overWrite'>
 						<Space className="w-full flex-row-reverse">
 							<Button
 								type="primary"
-								className="!rounded-full my-buttonPractice"
+								className="!rounded-full my-buttonPractice h-10 "
 								onClick={() => {
 									navigate('/services/practices/practical.ts/createPractical')
 								}}
@@ -675,7 +670,7 @@ export const ViewPractical = () => {
 					</Col>
 				</Row>
 				
-				<Row gutter={[16, 16]} className="mt-4 overWrite">
+				<Row gutter={[16, 16]} className="mt-1 overWrite">
 					<Col span={5} className='overWrite'>
 						<span>Наименование специальности</span>
 					</Col>
@@ -879,7 +874,7 @@ export const ViewPractical = () => {
                         <span className={'mr-2'}>Сортировка</span>
                         <Select
                             popupMatchSelectWidth={false}
-                            defaultValue=""
+                            value={filter.dateFilling}
                             className="w-full"
                             options={optionsSortDate}
                             onChange={value => {
@@ -895,7 +890,7 @@ export const ViewPractical = () => {
             </Row>
 			</Form>
 
-			</section>
+			
 			{isFetchingPractiseAll ? (
 				<Spin
 					className="w-full mt-20"
@@ -950,6 +945,7 @@ export const ViewPractical = () => {
 				/>
 				</div>
 			)}
+			</section>
 		</>
 	)
 }

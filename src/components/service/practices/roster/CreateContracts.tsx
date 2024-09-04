@@ -14,11 +14,13 @@ import {
 import dayjs from 'dayjs'
 import React, {useEffect, useState} from 'react'
 import {ArrowLeftSvg} from '../../../../assets/svg'
+import {Vector} from '../../../../assets/svg/Vector'
 import {useCreateContractMutation} from '../../../../store/api/practiceApi/contracts'
 import {ICreateContract, NameSpecialty} from '../../../../models/Practice'
 import {validateMessages} from "../../../../utils/validateMessage";
 import {useNavigate} from "react-router-dom";
 import {useGetSpecialtyNamesQuery} from "../../../../store/api/practiceApi/roster";
+import { endOfDay, isAfter } from 'date-fns'
 
 
 export const CreateContracts = () => {
@@ -134,15 +136,16 @@ export const CreateContracts = () => {
           event.preventDefault(); // Запрещаем ввод недопустимых символов
         }
     };
-
+    console.log('optionsNameSpec',optionsNameSpec)
 
     return (
-        <section className="container">
+        <section className="container animate-fade-in">
             <Space size={10}>
                 <Button
                     size="large"
-                    className="mt-1 mr-6 w-[45px] rounded-full border border-black"
-                    icon={<ArrowLeftSvg className="w-4 h-4 cursor-pointer mt-1"/>}
+                    style={{width:'48px'}}
+                    className="mt-1 mr-6 w-[48px] rounded-full border border-black"
+                    icon={<Vector />}
                     type="text"
                     onClick={() => nav('/services/practices/registerContracts')}
                 />
@@ -220,6 +223,10 @@ export const CreateContracts = () => {
                                 size={'large'}
                                 allowClear
                                 onKeyDown={handleKeyDown}
+                                disabledDate={(current) => {
+                                    // Отключаем даты, которые больше текущей даты
+                                    return current && isAfter(current.toDate(), endOfDay(new Date()));
+                                  }}
                             />
                         </Form.Item>
 
@@ -297,7 +304,11 @@ export const CreateContracts = () => {
                                 placeholder=""
                                 defaultValue={[]}
                                 className="w-full"
-                                options={optionsNameSpec.map((item)=>{
+                                options={optionsNameSpec.filter((option, index, self) =>
+                                    index === self.findIndex((o) => (
+                                        o.value === option.value
+                                    ))
+                                ).map((item)=>{
                                     return {
                                         key:item.id,
                                         value: item.value,
@@ -346,6 +357,7 @@ export const CreateContracts = () => {
                                 size="large"
                                 type={'number'}
                                 controls={false}
+                                min={0}
                             />
                         </Form.Item>
                     </Col>

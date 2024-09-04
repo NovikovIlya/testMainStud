@@ -28,16 +28,6 @@ const visitingOptions = [
 	{ value: 'Нет', label: 'Нет' },
 ]
 
-const courseNumberOptions = [
-	{ value: 'Все', label: 'Все' },
-	{ value: '1', label: '1' },
-	{ value: '2', label: '2' },
-	{ value: '3', label: '3' },
-	{ value: '4', label: '4' },
-	{ value: '5', label: '5' },
-	{ value: '6', label: '6' },
-]
-
 export const ViewPracticeOrder = () => {
 	const [currentPage, setCurrentPage] = useState(1);
 	const [form] = Form.useForm()
@@ -94,89 +84,6 @@ export const ViewPracticeOrder = () => {
 		
 	}, [dataAllOrder, filter.subdivision, isSuccessOrder])
 	
-
-	function filterDataFull() {
-		function filterName(elem: any) {
-			if (filter.subdivision === 'Все') {
-				return elem
-			} else {
-				return elem.practice.subdivision === filter.subdivision
-			}
-		}
-		function filterSpec(elem: any) {
-			if (filter.specialtyName === 'Все') {
-				return elem
-			} else {
-				return elem.practice.specialtyName === filter.specialtyName
-			}
-		}
-		function filtervisiting(elem: any) {
-	
-			if (filter.visiting === 'Все') {
-				return elem
-			} else {
-				const v = elem.isWithDeparture ? 'Да' : 'Нет'
-				return v === filter.visiting
-			}
-		}
-		function filterFio(elem: any) {
-			if (filter.FIO === 'Все') {
-				return elem
-			} else {
-				return elem.practice.departmentDirector === filter.FIO
-			}
-		}
-		function filterCourse(elem: any) {
-			if (filter.courseNumber === 'Все') {
-				return elem
-			} else {
-				return elem.courseNumber === filter.courseNumber
-			}
-		}
-		function filterAcademicYear(elem: any) {
-			if (filter.academicYear === 'Все') {
-				return elem
-			} else {
-				return elem.practice.academicYear === filter.academicYear
-			}
-		}
-		function filterType(elem: any) {
-			if (filter.practiceType === 'Все') {
-				return elem
-			} else {
-				return elem.practice.practiceType === filter.practiceType
-			}
-		}
-		function filterKind(elem: any) {
-			if (filter.practiceKind === 'Все') {
-				return elem
-			} else {
-				return elem.practice.practiceKind === filter.practiceKind
-			}
-		}
-		function sortDateFilling(a: any, b: any) {
-			if (filter.dateFilling === 'По дате (сначала новые)') {
-				return +new Date(b.dateFilling) - +new Date(a.dateFilling)
-			}
-			if (filter.dateFilling === 'По дате (сначала старые)') {
-				return +new Date(a.dateFilling) - +new Date(b.dateFilling)
-			}
-			return 0
-		}
-
-		return dataAllOrder
-			? dataAllOrder
-			// .filter((elem: any) => filterName(elem))
-			// .filter((elem: any) => filterSpec(elem))
-			// .filter((elem: any) => filtervisiting(elem))
-			// .filter((elem: any) => filterFio(elem))
-			// .filter((elem: any) => filterCourse(elem))
-			// .filter((elem: any) => filterAcademicYear(elem))
-			// .filter((elem: any) => filterType(elem))
-			// .filter((elem: any) => filterKind(elem))
-			// .sort((a: any, b: any) => sortDateFilling(a, b))
-			: []
-	}
 
 	const onPopupScroll: any = (e:any) => {
         console.log('onPopupScroll', e);
@@ -320,7 +227,7 @@ export const ViewPracticeOrder = () => {
 
 	return (
 		<Form form={form}>
-		<section className="container">
+		<section className="container animate-fade-in">
 			<Row gutter={[16, 16]}>
 				<Col span={24}>
 					<Typography.Text className=" text-[28px] mb-14">
@@ -334,19 +241,7 @@ export const ViewPracticeOrder = () => {
 					<span>Подразделение</span>
 				</Col>
 				<Col span={7} className='overWrite'>
-					{/* <Select
-						popupMatchSelectWidth={false}
-						defaultValue=""
-						className="w-full"
-						options={dataSubmisisionsSubdevision}
-						onChange={(value: any) => {
-							const x = findSubdivisions(dataSubmisisionsSubdevision,value)
-							if(x){
-								setSelectSubdivisionId(x.id)
-							}
-								setFilter({ ...filter, subdivision: value })
-							}}
-					/> */}
+					
 					<TreeSelect
 							treeLine={treeLine && { showLeafIcon }}
 							showSearch
@@ -606,15 +501,15 @@ export const ViewPracticeOrder = () => {
 							onChange: (page) => setCurrentPage(page),
 						  }}
 						className="my-10  absolute  sm:relative sm:left-0 sm:top-10"
-						rowSelection={{
-							type: 'checkbox',
-							onSelect: (record, selected, selectedRows, nativeEvent) => {
-								setSelectedFieldFull(selectedRows)
-							},
-							onSelectAll: (selected, selectedRows, changeRows) => {
-								setSelectedFieldFull(selectedRows)
-							}
-						}}
+						// rowSelection={{
+						// 	type: 'checkbox',
+						// 	onSelect: (record, selected, selectedRows, nativeEvent) => {
+						// 		setSelectedFieldFull(selectedRows)
+						// 	},
+						// 	onSelectAll: (selected, selectedRows, changeRows) => {
+						// 		setSelectedFieldFull(selectedRows)
+						// 	}
+						// }}
 						locale={{
 							emptyText: (
 							  <div>

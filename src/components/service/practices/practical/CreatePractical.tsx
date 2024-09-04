@@ -41,6 +41,7 @@ import { showNotification } from '../../../../store/reducers/notificationSlice'
 import { useAppDispatch } from '../../../../store'
 import { DeleteRedSvg } from '../../../../assets/svg/DeleteRedSvg'
 import { disableParents } from '../../../../utils/disableParents'
+import { Vector } from '../../../../assets/svg/Vector'
 
 interface FilterType {
 	value: string | number
@@ -432,12 +433,14 @@ export const CreatePractical = () => {
 
 	return (
 		<Spin spinning={isLoadingSendForm}>
-		<section className="container">
+		<section className="container animate-fade-in">
 			<Space size={10} align="center">
 				<Button
 					size="large"
 					className="mt-1 mt-1 mr-6 rounded-full border border-black"
-					icon={<ArrowLeftSvg className="w-4 h-4 cursor-pointer mt-1" />}
+					style={{width:'48px'}}
+           
+                    icon={<Vector />}
 					type="text"
 					onClick={() => {
 						nav('/services/practices/practical.ts/')

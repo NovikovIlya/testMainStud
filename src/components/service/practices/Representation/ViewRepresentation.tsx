@@ -307,7 +307,7 @@ export const ViewRepresentation = () => {
 
 	return (
 		<Form form={form}>
-		<section className="container">
+		<section className="container animate-fade-in">
 			<Row gutter={[16, 16]}>
 				<Col span={24}>
 					<Typography.Text className=" text-[28px] mb-14">
@@ -359,7 +359,7 @@ export const ViewRepresentation = () => {
 					<Space className="w-full flex-row-reverse">
 						<Button
 							type="primary"
-							className="!rounded-full"
+							className="!rounded-full h-10"
 							onClick={() => {
 								navigate('/services/practices/representation/createRepresentation')
 							}}
@@ -370,7 +370,7 @@ export const ViewRepresentation = () => {
 				</Col>
 			</Row>
 
-    		<Row gutter={[16, 16]} className="mt-4 flex items-center ">
+    		<Row gutter={[16, 16]} className="mt-3 flex items-center ">
 				<Col span={5} >
 					<span>Наименование специальности</span>
 				</Col>
@@ -593,15 +593,15 @@ export const ViewRepresentation = () => {
 							pageSize: 10,
 						}}
 						className='absolute  sm:relative  lg:left-0 sm:top-10'
-						rowSelection={{
-							type: 'checkbox',
-							onSelect: (record, selected, selectedRows, nativeEvent) => {
-								setSelectedFieldFull(selectedRows)
-							},
-							onSelectAll: (selected, selectedRows, changeRows) => {
-								setSelectedFieldFull(selectedRows)
-							}
-						}}
+						// rowSelection={{
+						// 	type: 'checkbox',
+						// 	onSelect: (record, selected, selectedRows, nativeEvent) => {
+						// 		setSelectedFieldFull(selectedRows)
+						// 	},
+						// 	onSelectAll: (selected, selectedRows, changeRows) => {
+						// 		setSelectedFieldFull(selectedRows)
+						// 	}
+						// }}
 						locale={{
 							emptyText: (
 							  <div>

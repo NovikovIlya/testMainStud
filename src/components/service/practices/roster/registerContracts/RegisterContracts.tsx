@@ -34,6 +34,7 @@ import { ContractFacilities, ContractsAll, ContractShort, NameSpecialty } from "
 import { copyFileDocument } from "../../../../../utils/downloadDocument/copyFileDocument";
 import { agreementFileDocument } from "../../../../../utils/downloadDocument/agreementFileDocument";
 import { LoadingOutlined } from '@ant-design/icons';
+import { isArray } from 'util';
 
 
 export interface ColumnsTableCompressedView {
@@ -139,7 +140,6 @@ export const RegisterContracts = () => {
     }
 
     function changeListDataAll(elem: any) {
-        console.log('elem',elem)
         const newElem: any = {
             id: elem.id,
             key: elem.id,
@@ -347,9 +347,11 @@ export const RegisterContracts = () => {
                     <a onClick={() => copyFileDocument(tokenAccess, record.links.documentCopyId)}>
                         Cкан договора
                     </a>
+                   {record.links.documentAgreementId!==null ?
                     <a onClick={() => agreementFileDocument(tokenAccess, record.links.documentAgreementId)} >
                         Доп. соглашение к договору
-                    </a>
+                    </a> : ''
+                     }
                 </div>
         },
         {
@@ -531,7 +533,10 @@ export const RegisterContracts = () => {
         function filterDataNameSpecialty(elem: ColumnsTableFull) {
             if (filter.nameSpecialty === 'Все') {
                 return elem
-            } else {
+            } else if(filter.nameSpecialty !== 'Все' ){
+                return elem.specialtyName.includes(filter.nameSpecialty)
+            }else {
+
                 return elem.specialtyName === filter.nameSpecialty
             }
         }
@@ -569,25 +574,27 @@ export const RegisterContracts = () => {
     useEffect(() => {
         setTableDataCompressed(filterDataCompressed())
         setTableDataFull(filterDataFull())
-    }, [filter])
+    }, [filter,isSuccessAll,isSuccessShort])
 
 
-    useEffect(() => {
-        if (isSuccessAll) {
-            const newDataAll: ColumnsTableFull[] = dataAll.map(elem => (changeListDataAll(elem)))
-            setTableDataFull(newDataAll)
-        }
-    }, [dataAll]);
 
-    useEffect(() => {
-        if (isSuccessShort) {
-            if (isSuccessShort) {
-                const newDataShort: ColumnsTableCompressedView[] = dataShort.map(elem => (changeListDataShort(elem)))
-                setTableDataCompressed(newDataShort)
-            }
-        }
 
-    }, [dataShort]);
+    // useEffect(() => {
+    //     if (isSuccessAll) {
+    //         const newDataAll: ColumnsTableFull[] = dataAll.map(elem => (changeListDataAll(elem)))
+    //         setTableDataFull(newDataAll)
+    //     }
+    // }, [dataAll]);
+
+    // useEffect(() => {
+    //     if (isSuccessShort) {
+    //         if (isSuccessShort) {
+    //             const newDataShort: ColumnsTableCompressedView[] = dataShort.map(elem => (changeListDataShort(elem)))
+    //             setTableDataCompressed(newDataShort)
+    //         }
+    //     }
+
+    // }, [dataShort]);
 
     const handleRowClick = (record:any) => {
 		nav(`/services/practices/registerContracts/editContract/${record.key}`)
@@ -604,9 +611,17 @@ export const RegisterContracts = () => {
           event.preventDefault(); // Запрещаем ввод недопустимых символов
         }
       };
+    
+    let arraySpec:any = []
+    dataAll?.forEach((item)=>{
+        // @ts-ignore
+        item?.specialtyNames?.forEach((i)=>{
+            arraySpec.push(i)
+        })
+    })
 
     return (
-        <section className={'container'}>
+        <section className={'container  animate-fade-in'}>
             <Row gutter={[16, 16]}>
                 <Col span={24}>
                     <Typography.Text className="text-[28px] mb-14">
@@ -626,6 +641,7 @@ export const RegisterContracts = () => {
                             controls={false}
                             type={'number'}
                             onChange={value => setFilterNumberSeats(value)}
+                            min={0}
                         />
                     </Col>
                     <Col span={!tableView.table ? 24 : 16} className={'flex items-center gap-2 mobileFirst '}
@@ -647,12 +663,12 @@ export const RegisterContracts = () => {
                         </Col>
                     </Col>
                 </Col>
-                <Col span={3} offset={9} className='overWrite flex justify-end sm:block'>
+                <Col span={3} offset={9} className='overWrite flex justify-end '>
                     <Button type={"primary"} ref={ref1}
                             onClick={() => {
                                 nav('/services/practices/registerContracts/createContract')
                             }}
-                            className={'rounded-full my-buttonContract'}
+                            className={'rounded-full my-buttonContract h-10'}
                     >
                       
                     </Button>
@@ -693,7 +709,11 @@ export const RegisterContracts = () => {
                             popupMatchSelectWidth={false}
                             defaultValue="Все"
                             className="w-full"
-                            options={nameSpecialty}
+                            options={
+                                arraySpec?.length > 0 
+                                    ? [{ value: 'Все', label: 'Все' }, ...Array.from(new Set(arraySpec)).map(item => ({ value: item, label: item }))] 
+                                    : []
+                            }
                             onChange={value => {
                                 setFilter({
                                     ...filter,
@@ -728,11 +748,11 @@ export const RegisterContracts = () => {
             </Row>
             <Row className="mt-12 mb-6 flex items-center">
                 <Col span={12} flex="50%" className='mobileFirst'>
-                    <Radio.Group defaultValue="compressedView" buttonStyle="solid">
+                    <Radio.Group defaultValue="compressedView" buttonStyle="solid" className=''>
                         <Radio.Button
                             onClick={isCompressedTable}
                             value="compressedView"
-                            className="!rounded-l-full">
+                            className="!rounded-l-full ">
                             Посмотреть в сжатом виде
                         </Radio.Button>
                         <Radio.Button
@@ -748,7 +768,7 @@ export const RegisterContracts = () => {
                         <span className={'mr-2'}>Сортировка</span>
                         <Select
                             popupMatchSelectWidth={false}
-                            defaultValue=""
+                            value={filter.sortDateConclusionContract}
                             className="w-full"
                             options={optionsSort}
                             onChange={value => {

@@ -15,6 +15,7 @@ import {
 import { VacancyRespondItemType } from '../../../store/reducers/type'
 import VacancyView from '../jobSeeker/VacancyView'
 
+import { ChatEmpDempPreview } from './ChatEmpDempPreview'
 import { ChatPage } from './ChatPage'
 import { ChatPreview } from './ChatPreview'
 
@@ -131,11 +132,20 @@ export const ChatEmpDemp = () => {
 
 	const handleList = chats.map(chat => {
 		return (
-			<ChatPreview
-				respondId={chat.id}
-				vacancyId={chat.respondInfo.id}
+			// <ChatPreview
+			// 	respondId={chat.id}
+			// 	vacancyId={chat.respondInfo.id}
+			// 	respName={chat.respondInfo.vacancyName}
+			// 	key={chat.id}
+			// />
+			<ChatEmpDempPreview
+				chatId={chat.id}
+				vacancyId={0}
 				respName={chat.respondInfo.vacancyName}
-				key={chat.id}
+				surname="Митрофанов"
+				name="Илья"
+				status={chat.respondInfo.status}
+				unreadCount={chat.unreadCount}
 			/>
 		)
 	})
@@ -271,7 +281,7 @@ export const ChatEmpDemp = () => {
 								</div>
 							</>
 						)}
-						<ul className="w-[461px] flex flex-col gap-4">{handleList}</ul>
+						<ul className="flex flex-col">{handleList}</ul>
 						<div className="h-[1px]" ref={chatPreviewsBottomRef}></div>
 					</div>
 				</div>

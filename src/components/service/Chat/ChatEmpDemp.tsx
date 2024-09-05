@@ -156,7 +156,7 @@ export const ChatEmpDemp = () => {
 			{!pathname.includes('/services/personnelaccounting/chat/vacancyview') && (
 				<div className="shadowNav bg-white relative z-[5] mt-[60px] w-[461px]">
 					<div className="sticky top-[80px] h-screen overflow-scroll">
-						<div className="flex items-center px-[30px] pt-14">
+						<div className="flex items-center px-[30px] pt-14 pb-[40px]">
 							<p className="font-content-font font-normal text-black text-[20px]/[20px] ">
 								Все сообщения
 							</p>

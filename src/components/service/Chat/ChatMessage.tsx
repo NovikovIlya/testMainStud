@@ -7,13 +7,13 @@ import { ArrowToTheRight } from '../../../assets/svg/ArrowToTheRight'
 import { MessageReadSvg } from '../../../assets/svg/MessageReadSvg'
 import { MessageUnreadSvg } from '../../../assets/svg/MessageUnreadSvg'
 import { useAppSelector } from '../../../store'
-
-import { useAnswerToInivitationMainTimeMutation,
-		 useAnswerToInvitationReserveTimeRequestMutation,
-		 useAnswerEmploymentRequestMutation } from '../../../store/api/serviceApi'
+import {
+	useAnswerEmploymentRequestMutation,
+	useAnswerToInivitationMainTimeMutation,
+	useAnswerToInvitationReserveTimeRequestMutation
+} from '../../../store/api/serviceApi'
 import { useLazyGetVacancyViewQuery } from '../../../store/api/serviceApi'
 import { setCurrentVacancy } from '../../../store/reducers/CurrentVacancySlice'
-
 import { ChatMessageType } from '../../../store/reducers/type'
 
 import { ChatMessageFile } from './ChatMessageFile'
@@ -55,6 +55,9 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 					{
 						'mt-[24px]': props.senderChange,
 						'mt-[12px]': !props.senderChange
+					},
+					{
+						'min-w-[50%]': props.msgData.type === 'RESPOND'
 					}
 				)}
 			>
@@ -192,9 +195,8 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 					</button>
 				</div>
 			)}
-
 			{props.msgData.type === 'INVITATION_RESERVE' && (
-				<div className='flex flex-col'>
+				<div className="flex flex-col">
 					{/*
 					<div className="rounded-[16px] max-w-[50%] p-[20px] flex flex-col gap-[16px] font-content-font font-normal text-black text-[16px]/[19.2px] rounded-bl-none bg-[#FFFFFF] mt-[12px]">
 						<p className='text-[#808080] text-[16px]/[19.2px]'>
@@ -209,26 +211,21 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 					</div>
 					*/}
 					<div className="mt-[24px] max-w-[50%] flex flex-col gap-[14px]">
-						<div className='flex flex-row justify-between gap-[14px]'>
-							{props.msgData.reserveTimes.map(
-								time => (
-									<button
-										onClick={() => {
-											answerReserveTime({
-												respondId: respondId,
-												time: time
-											})
-										}}
-										className="text-[16px]/[19.2px] rounded-[54.5px] py-[12px] px-[20px] text-center bg-inherit outline-none border cursor-pointer"
-									>
-									</button>
-								)
-							)}
+						<div className="flex flex-row justify-between gap-[14px]">
+							{props.msgData.reserveTimes.map(time => (
+								<button
+									onClick={() => {
+										answerReserveTime({
+											respondId: respondId,
+											time: time
+										})
+									}}
+									className="text-[16px]/[19.2px] rounded-[54.5px] py-[12px] px-[20px] text-center bg-inherit outline-none border cursor-pointer"
+								></button>
+							))}
 						</div>
 						<button
-							onClick={() => {
-
-							}}
+							onClick={() => {}}
 							className="text-[16px]/[19.2px] w-full rounded-[54.5px]  py-[12px] px-[56px] bg-inherit outline-none border cursor-pointer"
 						>
 							Нет подходящего времени
@@ -237,7 +234,7 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 				</div>
 			)}
 			{props.msgData.type === 'EMPLOYMENT_REQUEST' && (
-				<div className='flex flex-col'>
+				<div className="flex flex-col">
 					{/*
 					<div className="rounded-[16px] max-w-[50%] p-[20px] flex flex-col gap-[16px] font-content-font font-normal text-black text-[16px]/[19.2px] rounded-bl-none bg-[#FFFFFF] mt-[12px]">
 						<p className='text-[#808080] text-[16px]/[19.2px]'>
@@ -256,7 +253,7 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 					<div className="mt-[24px] max-w-[50%] flex flex-row gap-[20px]">
 						<button
 							onClick={() => {
-								answerEmploymentRequest({respondId: respondId, answer: 'YES'})
+								answerEmploymentRequest({ respondId: respondId, answer: 'YES' })
 							}}
 							className="w-6/12 text-[16px]/[19.2px] rounded-[54.5px]  text-center bg-inherit outline-none border cursor-pointer"
 						>
@@ -264,7 +261,7 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 						</button>
 						<button
 							onClick={() => {
-								answerEmploymentRequest({respondId: respondId, answer: 'NO'})
+								answerEmploymentRequest({ respondId: respondId, answer: 'NO' })
 							}}
 							className="w-6/12 text-[16px]/[19.2px] rounded-[54.5px] text-center py-[12px] bg-inherit outline-none border cursor-pointer"
 						>

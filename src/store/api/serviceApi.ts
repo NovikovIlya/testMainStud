@@ -362,7 +362,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 				url: `http://localhost:8082/employment-api/v1/chat?page=${page}&pageSize=${pageSize}${
 					vacancyId ? `&vacancy_id=${vacancyId}` : ''
 				}
-				${status ? `&status=${status}` : ''}${sort ? `&sort=${sort}` : ''}`,
+				${status ? `&status=${status}` : ''}${sort ? `&chat_sort=${sort}` : ''}`,
 				headers: {
 					Authorization: `Bearer ${personnelDeparmentToken}`
 				}

@@ -35,11 +35,35 @@ export const SupervisorInterviewSeekerInfo = ( ) => {
 		const now = new Date();
 		const difference = targetDate.getTime() - now.getTime();
 		let isInterviewEnded : boolean = false
-		if (difference<0) {
-			isInterviewEnded = true
+		let isInterviewSoon : boolean = false
+
+		if (difference < 0) {
+			isInterviewEnded = true;
+		} else {
+			isInterviewEnded = false;
 		}
-		if (difference>0) {
-			isInterviewEnded = false
+
+		if (difference > 0 && difference <= 1800000) { // 30 мин
+			isInterviewSoon = true;
+		} else {
+			isInterviewSoon = false;
+		}
+
+		const minutes: number = Math.floor((difference / 1000 / 60) % 60);
+		const hours: number = Math.floor((difference / (1000 * 60 * 60)) % 24);
+		const days: number = Math.floor(difference / (1000 * 60 * 60 * 24));
+		let datePublicString : string = ''
+		const isDaysEmpty : boolean = days === 0
+		const isHoursEmpty : boolean = hours === 0
+
+		if (isDaysEmpty && isHoursEmpty) {
+			datePublicString += 'Осталось ' + minutes + ' минут'
+		}
+		if (isDaysEmpty && !isHoursEmpty) {
+			datePublicString += 'Осталось ' + hours + ' ч' + minutes + ' м'
+		}
+		if (!isDaysEmpty && !isHoursEmpty) {
+			datePublicString += 'Осталось ' + days + ' дн ' + hours + ' ч'
 		}
 		return (
 			<>
@@ -55,7 +79,7 @@ export const SupervisorInterviewSeekerInfo = ( ) => {
 						</h4>
 					</div>
 				)}
-				{ (format.format === 'ONLINE') && !(isInterviewEnded) && (
+				{ (format.format === 'ONLINE') && !(isInterviewEnded) && (isInterviewSoon) && (
 					<div className="flex flex-col justify-center">
 						<h4 className="mb-[20px] font-content-font font-normal text-black text-[16px]/[19.2px]">Подключитесь к
 							онлайн-конференции</h4>
@@ -91,6 +115,17 @@ export const SupervisorInterviewSeekerInfo = ( ) => {
 						>
 							Отказать
 						</Button>
+					</div>
+				)}
+				{(format.format === 'ONLINE') && !(isInterviewSoon) && !(isInterviewEnded) && (
+					<div className="flex flex-col justify-center">
+						<h4 className="mb-[20px] font-content-font font-normal text-black text-[16px]/[19.2px]">Подключитесь к
+							онлайн-конференции</h4>
+						<button
+							className="hover:none h-[40px] w-[257px] cursor-default bg-[#3073D7] opacity-[32%] border-none rounded-[54.5px] text-white text-[16px]/[16px]"
+						>
+						{datePublicString}
+						</button>
 					</div>
 				)}
 			</>
@@ -133,7 +168,7 @@ export const SupervisorInterviewSeekerInfo = ( ) => {
 					</div>
 				</Modal>
 			</ConfigProvider>
-			<div className="pl-[52px] pr-[10%] py-[100px] w-full">
+			<div className="pl-[52px] pr-[10%] py-[140px] w-full">
 				<div>
 					<Button
 						onClick={() => {

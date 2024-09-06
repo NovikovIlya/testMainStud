@@ -8,8 +8,11 @@ import {setCurrentResponce} from "../../../../../store/reducers/CurrentResponceS
 import {setCurrentInterviewFormat} from "../../../../../store/reducers/CurrentInterviewFormatSlice";
 import {setCurrentInterviewTime} from "../../../../../store/reducers/CurrentInterviewTimeSlice";
 import {setCurrentInterviewTimeFormated} from "../../../../../store/reducers/CurrentInterviewTimeFormatedSlice";
+import { useAppSelector } from '../../../../../store'
 
 export const SupervisorInterviewItem = ( props : InterviewItemType ) => {
+
+    const respondId = useAppSelector(state => state.currentResponce)
 
     interface InterviewButtonElemProps {
         id: any
@@ -86,18 +89,18 @@ export const SupervisorInterviewItem = ( props : InterviewItemType ) => {
         return (
             <div className="flex items-center">
                 {(props.format === "OFFLINE") && (
-                    <span className="w-[200px] opacity-[0%]"></span>
+                    <span className="min-w-[220px] opacity-[0%]"></span>
                 )}
                 {(props.format === "ONLINE") && (isLessThanFiveMinutes) && !(difference<0) &&  (
-                    <span className="cursor-pointer w-[200px] flex justify-center bg-[#3073D7] text-white font-content-font cursor pointer font-normal text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-0">
+                    <span className="cursor-pointer w-[200px] flex justify-center bg-[#3073D7] text-white font-content-font cursor pointer font-normal text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[35px] border-0">
                  Подключиться</span>
                 )}
                 {(props.format === "ONLINE") && (!isLessThanFiveMinutes) && !(difference<0) && (
-                    <span className="w-[200px] flex justify-center bg-[#3073D7] opacity-[32%] text-white font-content-font font-normal text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-0">
+                    <span className="min-w-[220px] flex justify-center bg-[#3073D7] opacity-[32%] text-white font-content-font font-normal text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[35px] border-0">
                 {datePublicString}</span>
                 )}
                 {(props.format === "ONLINE") && (difference<0) && (
-                    <span className="w-[200px] flex justify-center bg-[#3073D7] opacity-[32%] text-white font-content-font font-normal text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-0">
+                    <span className="min-w-[220px] flex justify-center bg-[#3073D7] opacity-[32%] text-white font-content-font font-normal text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[35px] border-0">
                 Время истекло</span>
                 )}
             </div>
@@ -161,6 +164,7 @@ export const SupervisorInterviewItem = ( props : InterviewItemType ) => {
                 <Button
                     onClick={() => {
                             dispatch(setCurrentResponce(props.id))
+                            console.log(respondId.respondId + "123")
                             dispatch(setCurrentInterviewTime(props.time))
                             dispatch(setCurrentInterviewFormat(props.format))
                             dispatch(setCurrentInterviewTimeFormated(InterviewTimeStringForSeeker))
@@ -214,7 +218,7 @@ export const SupervisorInterviewItem = ( props : InterviewItemType ) => {
                 <span className="w-[22%] ml-[3%]">{seekerName}</span>
                 <InterviewTimeElem eventTime={props.time}></InterviewTimeElem>
                 <InterviewFormatElem format={props.format}></InterviewFormatElem>
-                <div className="w-[31%] mr-[3%] flex flex-row items-center justify-evenly">
+                <div className="w-[31%] mr-[3%] gap-[21px] flex flex-row items-center justify-evenly">
                     <InterviewCountdownTimeElem eventTime={props.time}  format={props.format}/>
                     <InterviewButtonElem id={props.id} format={props.format} time={props.time}></InterviewButtonElem>
                 </div>

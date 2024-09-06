@@ -347,7 +347,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		getChatPreviews: builder.query<
 			{
 				id: number
-				respondInfo: VacancyRespondItemType
+				respondInfo: VacancyRespondItemType & { vacancyId: number }
 				unreadCount: number
 			}[],
 			{

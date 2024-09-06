@@ -140,7 +140,7 @@ export const ChatEmpDemp = () => {
 			// />
 			<ChatEmpDempPreview
 				chatId={chat.id}
-				vacancyId={0}
+				vacancyId={chat.respondInfo.vacancyId}
 				respName={chat.respondInfo.vacancyName}
 				surname="Митрофанов"
 				name="Илья"

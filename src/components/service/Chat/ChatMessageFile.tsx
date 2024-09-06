@@ -32,7 +32,7 @@ export const ChatMessageFile = (props: {
 				return res.blob()
 			})
 			.then(blob => {
-				const file = new Blob([blob])
+				const file = new Blob([blob], { type: 'application/pdf' })
 				const url = window.URL.createObjectURL(file)
 				if (linkRef.current) {
 					linkRef.current.href = url

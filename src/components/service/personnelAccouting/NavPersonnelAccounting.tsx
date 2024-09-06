@@ -31,6 +31,7 @@ import { RespondsSupervisor } from './supervisor/RespondsSupervisor'
 import { SupervisorCreateVacancyForm } from './supervisor/vacancy/SupervisorCreateVacancyForm'
 import { SupervisorUpdateVacancy } from './supervisor/vacancy/SupervisorUpdateVacancy'
 import { SupervisorVacancies } from './supervisor/vacancy/SupervisorVacancies'
+import { EmploymentStageInfo } from './../employmentStage/personnelDepartment/employmentStageInfo'
 
 export const NavPesonnelAccounting = () => {
 	const { pathname } = useLocation()
@@ -480,6 +481,10 @@ export const NavPesonnelAccounting = () => {
 					'/services/personnelaccounting/supervisor/invitation/seekerinfo' && (
 					<SupervisorInterviewSeekerInfo/>
 				)}
+				{pathname ===
+					'/services/personnelaccounting/employment/stages' && (
+						<EmploymentStageInfo/>
+					)}
 			</div>
 		</>
 	)

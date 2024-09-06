@@ -26,7 +26,7 @@ export const InfoUser = () => {
 
 	const { t } = useTranslation()
 	const handleOk = async () => {
-		role && postRole({ role: '123' })
+		role && postRole({ role: role })
 		navigate('/form')
 	}
 	const handleSkip = () => {

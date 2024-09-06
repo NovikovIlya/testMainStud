@@ -67,7 +67,7 @@ export const AboutMe = () => {
 		userInfo && dispatch(allData(userInfo))
 	}, [userInfo, refetch, dispatch])
 	const isStudent = role === 'STUD'
-	if (isLoadingCountry || isLoadingUser) return <SkeletonPage />
+	if (isLoadingCountry ) return <SkeletonPage />
 	return (
 		<div className="m-14 radio w-full max-w-2xl">
 			<Space.Compact block direction="vertical" className="gap-5">

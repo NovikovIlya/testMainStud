@@ -1,5 +1,5 @@
 import type { GetRef, TableProps } from 'antd'
-import { Form, Input, InputNumber, Table } from 'antd'
+import { Form, Input, InputNumber, Select, Table } from 'antd'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useAppSelector } from '../../../../store'
 import './index.css'
@@ -12,7 +12,8 @@ interface Item {
 	key: string
 	name: string
 	age: string
-	address: string
+	address: string,
+	place: string 
 }
 
 const EditableRow: React.FC<any> = ({ index, ...props }) => {
@@ -33,7 +34,20 @@ interface EditableCellProps {
 	record: Item
 	handleSave: (record: Item) => void
 }
-
+const optionMock:any = [
+	{
+		value: 'В профильной организации',
+		label: 'В профильной организации'
+	},
+	{
+		value: 'На кафедре КФУ',
+		label: 'На кафедре КФУ'
+	},
+	{
+		value: 'В структурном подразделении КФУ',
+		label: 'В структурном подразделении КФУ'
+	}
+]
 const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
 	title,
 	editable,
@@ -80,12 +94,20 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
 				<Form.Item style={{ margin: 0 }} name={dataIndex}>
 					<InputNumber min={0} ref={inputRef} onPressEnter={save} onBlur={save} />
 				</Form.Item>
-			) : (
+				//@ts-ignore
+			) : dataIndex ==='1' ? 
+			(<Form.Item style={{ margin: 0 }} name={dataIndex}>
+				<Select onChange={(value) => {
+						// Update the fullTable with the selected value
+						handleSave({ ...record, place: value }) 
+					}} options={optionMock}/>
+			</Form.Item>)  : (
 				<Form.Item style={{ margin: 0 }} name={dataIndex}>
 					<Input ref={inputRef} onPressEnter={save} onBlur={save} />
 				</Form.Item>
 			)
-		) : (
+		) :
+		 (
 			<div className="editable-cell-value-wrap h-[32px]" onClick={toggleEdit}>
 				{children}
 			</div>
@@ -104,7 +126,9 @@ interface DataType {
 
 type ColumnTypes = Exclude<TableProps['columns'], undefined>
 
-export const TableEdit = ({ visiting, fullTable, setFullTable, create=false }: any) => {
+
+
+export const TableEdit = ({selectedPlace, status='',active = true,visiting, fullTable, setFullTable, create=false }: any) => {
 	const defaultColumns = [
 		{
 			key: 'number',
@@ -127,12 +151,19 @@ export const TableEdit = ({ visiting, fullTable, setFullTable, create=false }: a
 			title: 'Номер группы',
 			className: 'text-xs !p-2'
 		},
+		// {
+		// 	key: 'place',
+		// 	dataIndex: 'place',
+		// 	title: 'Где будет проходить практика',
+		// 	className: 'text-xs !p-2',
+		// 	editable: active ?? status !== 'Согласован' ? true :false
+		// },
 		{
 			key: 'place',
 			dataIndex: 'place',
 			title: 'Место прохождения практики',
-			className: 'text-xs !p-2',
-			editable: true
+			className: `text-xs !p-2  ${selectedPlace === 'В профильной организации' ? '' : 'hidden'}`,
+			editable: active ?? status !== 'Согласован' ? true :false
 		},
 		{
 			key: 'departmentDirector',
@@ -168,43 +199,10 @@ export const TableEdit = ({ visiting, fullTable, setFullTable, create=false }: a
 			className: `text-xs !p-2 ${visiting ? '' : 'hidden'}`,
 			editable: true
 		}
-		// {
-		//     title: '',
-		//     dataIndex: 'operation',
-		//     render: (_: any, record: Item) => {
-		//         const editable = isEditing(record)
-		//         return editable ? (
-		//             <div className="flex justify-around items-center w-[60px]">
-		//                 <Typography.Link
-		//                     onClick={() => save(record.key)}
-		//                     style={{ marginRight: 8 }}
-		//                 >
-		//                     <CheckOutlined style={{ color: '#75a4d3' }} />
-		//                 </Typography.Link>
-		//                 <Popconfirm
-		//                     title="Вы действительно хотите отменить действие?"
-		//                     onConfirm={cancel}
-		//                 >
-		//                     <CloseOutlined style={{ color: '#75a4d3' }} />
-		//                 </Popconfirm>
-		//             </div>
-		//         ) : (
-		//             <div className="flex justify-around items-center  w-[60px]">
-		//                 <Typography.Link
-		//                     disabled={editingKey !== ''}
-		//                     onClick={() => edit(record)}
-		//                 >
-		//                     <EditSvg />
-		//                 </Typography.Link>
-		//                 {/* <Popconfirm title="Вы действительно хотите удалить?" onConfirm={deleteRow}>
-		//           <a><DeleteRedSvg/></a>
-		//       </Popconfirm> */}
-		//             </div>
-		//         )
-		//     }
-		// }
+		
 	]
-
+	
+	
 	const handleSave = (row: DataType) => {
 		const newData = [...fullTable]
 		const index = newData.findIndex(item => row.key === item.key)
@@ -231,11 +229,16 @@ export const TableEdit = ({ visiting, fullTable, setFullTable, create=false }: a
 		return {
 			...col,
 			onCell: (record: DataType) => ({
+				inputType: col.dataIndex === 'place'
+						? 'select' : 'text',
 				record,
 				editable: col.editable,
 				dataIndex: col.dataIndex,
 				title: col.title,
 				handleSave,
+				options:
+					col.dataIndex === '1'
+						? optionMock : undefined,
 				rules: [{ required: true, message: 'Поле обязательно для заполнения' }]
 			})
 		}
@@ -244,6 +247,7 @@ export const TableEdit = ({ visiting, fullTable, setFullTable, create=false }: a
 	return (
 		<div>
 			<Table
+
 				rowKey="id"
 				components={components}
 				rowClassName={() => 'editable-row'}

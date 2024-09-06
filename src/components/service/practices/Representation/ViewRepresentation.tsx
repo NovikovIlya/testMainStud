@@ -15,11 +15,10 @@ import { useNavigate } from 'react-router-dom'
 import { PointsSvg } from '../../../../assets/svg/PointsSvg'
 
 import { PopoverContent } from './PopoverContent'
-import { PopoverMain } from './PopoverMain'
 import { useGetAllSubmissionsQuery, useGetSubmissionsAcademicYearQuery, useGetSubmissionsDirectorQuery, useGetSubmissionsPracticeKindQuery, useGetSubmissionsPracticeTypeQuery, useGetSubmissionsSpecialtiesQuery, useGetSubmissionsSubdevisionQuery } from '../../../../store/api/practiceApi/representation'
 import { LoadingOutlined } from '@ant-design/icons'
-import { findSubdivisions } from '../../../../utils/findSubdivisions'
 import { disableParents } from '../../../../utils/disableParents'
+import { Submission } from '../../../../models/representation'
 
 
 const visitingOptions = [
@@ -28,15 +27,7 @@ const visitingOptions = [
 	{ value: 'Нет', label: 'Нет' },
 ]
 
-const courseNumberOptions = [
-	{ value: 'Все', label: 'Все' },
-	{ value: '1', label: '1' },
-	{ value: '2', label: '2' },
-	{ value: '3', label: '3' },
-	{ value: '4', label: '4' },
-	{ value: '5', label: '5' },
-	{ value: '6', label: '6' },
-]
+
 
 export const ViewRepresentation = () => {
 	const [form] = Form.useForm()
@@ -52,21 +43,20 @@ export const ViewRepresentation = () => {
 		practiceKind: "Все",
 		dateFilling: 'По дате (сначала новые)',
 	})
-	const [selectedFieldsFull, setSelectedFieldFull] = useState<any>([])
 	const {data:dataAllSubmissions,isLoading,isSuccess:isSuccessSubAll,isFetching:isFetchingSubAll} = useGetAllSubmissionsQuery(null)
 	const {data:dataSubmisisionsSubdevision} = useGetSubmissionsSubdevisionQuery()
-	const [selectSubdivisionId,setSelectSubdivisionId] = useState(null)
+	const [selectSubdivisionId,setSelectSubdivisionId] = useState<string | null>(null)
 	const {data:dataSubmissionSpecialty} = useGetSubmissionsSpecialtiesQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
 	const {data:dataSubmissionType} = useGetSubmissionsPracticeTypeQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
 	const {data:dataSubmissionKind} = useGetSubmissionsPracticeKindQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
 	const {data:dataSubmissionDirector} = useGetSubmissionsDirectorQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
 	const {data:dataSubmissionAcademicYear} = useGetSubmissionsAcademicYearQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
 	const [flag,setFlag] = useState(false)
-	const [dataTable, setDataTable] = useState<any>([])
+	const [dataTable, setDataTable] = useState<Submission[]>([])
 	const [flagLoad,setFlagLoad] = useState(false)
 	const [treeLine, setTreeLine] = useState(true);
     const [showLeafIcon, setShowLeafIcon] = useState(false);
-    const [value, setValue] = useState<any>();
+    const [value, setValue] = useState<string | undefined>();
 
 	useEffect(()=>{
 		form.setFieldValue('practiceType', 'Все')
@@ -74,6 +64,7 @@ export const ViewRepresentation = () => {
 		form.setFieldValue('specialtyName', 'Все')
 		form.setFieldValue('FIO', 'Все')
 		form.setFieldValue('academicYear', 'Все')
+		form.setFieldValue('visiting', 'Все')
 		setFilter({
 			...filter,
 			specialtyName: 'Все',
@@ -83,7 +74,6 @@ export const ViewRepresentation = () => {
 			academicYear:'Все',
 			practiceType: "Все",
 			practiceKind: "Все",
-		
 		})
 	},[selectSubdivisionId])
 
@@ -96,25 +86,23 @@ export const ViewRepresentation = () => {
 	
 
 	function filterDataFull() {
-		
-		function filterName(elem: any) {
+		function filterName(elem: Submission) {
 			if (filter.subdivision === 'Все') {
 				return elem
 			} else {
 				setFlag(true)
-				console.log('elem.practice',elem.practice.subdivisionId)
-				console.log('filter.subdivision',filter.subdivision)
+				
 				return elem.practice.subdivisionId === filter.subdivision
 			}
 		}
-		function filterSpec(elem: any) {
+		function filterSpec(elem: Submission) {
 			if (filter.specialtyName === 'Все') {
 				return elem
 			} else {
 				return elem.practice.specialtyName === filter.specialtyName
 			}
 		}
-		function filtervisiting(elem: any) {
+		function filtervisiting(elem: Submission) {
 			if (filter.visiting === 'Все') {
 				return elem
 			} else {
@@ -122,42 +110,42 @@ export const ViewRepresentation = () => {
 				return v === filter.visiting
 			}
 		}
-		function filterFio(elem: any) {
+		function filterFio(elem: Submission) {
 			if (filter.FIO === 'Все') {
 				return elem
 			} else {
 				return elem.practice.departmentDirector === filter.FIO
 			}
 		}
-		function filterCourse(elem: any) {
+		function filterCourse(elem: Submission) {
 			if (filter.courseNumber === 'Все') {
 				return elem
 			} else {
-				return elem.courseNumber === filter.courseNumber
+				return elem.practice.courseNumber === filter.courseNumber
 			}
 		}
-		function filterAcademicYear(elem: any) {
+		function filterAcademicYear(elem: Submission) {
 			if (filter.academicYear === 'Все') {
 				return elem
 			} else {
 				return elem.practice.academicYear === filter.academicYear
 			}
 		}
-		function filterType(elem: any) {
+		function filterType(elem: Submission) {
 			if (filter.practiceType === 'Все') {
 				return elem
 			} else {
 				return elem.practice.practiceType === filter.practiceType
 			}
 		}
-		function filterKind(elem: any) {
+		function filterKind(elem: Submission) {
 			if (filter.practiceKind === 'Все') {
 				return elem
 			} else {
 				return elem.practice.practiceKind === filter.practiceKind
 			}
 		}
-		function sortDateFilling(a: any, b: any) {
+		function sortDateFilling(a: Submission, b: Submission) {
 			if (filter.dateFilling === 'По дате (сначала новые)') {
 				return +new Date(b.dateFilling) - +new Date(a.dateFilling)
 			}
@@ -192,7 +180,7 @@ export const ViewRepresentation = () => {
 			title: 'Подразделение',
 			name: 'Подразделение',
 			className: 'text-xs !p-2 ',
-			render: (text: any, record: any) => <span >{record?.practice?.subdivision}</span>
+			render: (text: any, record: Submission) => <span >{record?.practice?.subdivision}</span>
 			
 		},
     	{
@@ -200,42 +188,42 @@ export const ViewRepresentation = () => {
 			dataIndex: 'specialtyName',
 			title: 'Шифр и наименование специальности',
 			className: 'text-xs !p-2',
-			render: (text: any, record: any) => <span >{record?.practice?.specialtyName}</span>
+			render: (text: any, record: Submission) => <span >{record?.practice?.specialtyName}</span>
 		},
 		{
 			key: 'groupNumber',
 			dataIndex: 'groupNumber',
 			title: 'Номер группы',
 			className: 'text-xs !p-2',
-			render: (text: any, record: any) => <span >{record?.practice?.groupNumber}</span>
+			render: (text: any, record: Submission) => <span >{record?.practice?.groupNumber}</span>
 		},
    		{
 			key: 'academicYear',
 			dataIndex: 'academicYear',
 			title: 'Учебный год',
 			className: 'text-xs !p-2',
-			render: (text: any, record: any) => <span >{record?.practice?.academicYear}</span>
+			render: (text: any, record: Submission) => <span >{record?.practice?.academicYear}</span>
 		},
     	{
 			key: 'courseNumber',
 			dataIndex: 'courseNumber',
 			title: 'Курс',
 			className: 'text-xs !p-2',
-			render: (text: any, record: any) => <span >{record?.practice?.courseNumber}</span>
+			render: (text: any, record: Submission) => <span >{record?.practice?.courseNumber}</span>
 		},
    		{
 			key: 'practiceType',
 			dataIndex: 'practiceType',
 			title: 'Тип',
 			className: 'text-xs !p-2 mobileFirst',
-			render: (text: any, record: any) => <span >{record?.practice?.practiceType}</span>
+			render: (text: any, record: Submission) => <span >{record?.practice?.practiceType}</span>
 		},
   		{
 			key: 'practiceKind',
 			dataIndex: 'practiceKind',
 			title: 'Вид',
 			className: 'text-xs !p-2 mobileFirst',
-			render: (text: any, record: any) => <span >{record?.practice?.practiceKind}</span>
+			render: (text: any, record: Submission) => <span >{record?.practice?.practiceKind}</span>
 		},
 
 		{
@@ -243,21 +231,21 @@ export const ViewRepresentation = () => {
 			dataIndex: 'FIO',
 			title: 'ФИО руководителя от кафедры, должность',
 			className: 'text-xs !p-2 mobileFirst',
-			render: (text: any, record: any) => <span >{record?.practice?.departmentDirector}</span>
+			render: (text: any, record: Submission) => <span >{record?.practice?.departmentDirector}</span>
 		},
 		{
 			key: 'visiting',
 			dataIndex: 'visiting',
 			title: 'Выездные практики',
 			className: 'text-xs !p-2 mobileFirst',
-			render: (text: any, record: any) => <span >{record?.isWithDeparture ? 'Да' : 'Нет'}</span>
+			render: (text: any, record: Submission) => <span >{record?.isWithDeparture ? 'Да' : 'Нет'}</span>
 		},
 		{
 			key: 'status',
 			dataIndex: 'status',
 			title: 'Статус',
 			className: 'text-xs !p-2',
-			render: (text: any, record: any) => <span >{record?.status}</span>
+			render: (text: any, record: Submission) => <span >{record?.status}</span>
 		
 		},
 		{
@@ -265,7 +253,7 @@ export const ViewRepresentation = () => {
 				''
 			),
 			align: 'center',
-			render: (record: any) => (
+			render: (record: Submission) => (
 				<Popover
 					trigger={'click'}
 					content={
@@ -284,25 +272,24 @@ export const ViewRepresentation = () => {
 		}
 	]
 
-	const handleRowClick = (record:any) => {
+	const handleRowClick = (record : any) => {
 		navigate(`/services/practices/representation/edit/${record.id}`)
     };
 
-	const treeData =[...(dataSubmisisionsSubdevision ? dataSubmisisionsSubdevision?.map((item:any)=>{
+	const treeData = [...(dataSubmisisionsSubdevision ? dataSubmisisionsSubdevision?.map((item:any)=>{
         return{
             title:item.value,
             value:item.id,
-            // @ts-ignore
-            children: item?.responses?.map((item)=>{
+            children: item?.responses?.map((item:any)=>{
                 return{
                     title:item.value,
                     value:item.id,
                 }
             })
         }
-    }):[])]
+    }) : [])]
 
-	const uniqueCourseNumbers = [...new Set(dataTable?.map((item:any) => item.practice.courseNumber))];
+	const uniqueCourseNumbers = [...new Set(dataTable?.map((item : any) => item.practice.courseNumber))];
 
 
 	return (
@@ -321,39 +308,25 @@ export const ViewRepresentation = () => {
 					<span>Подразделение</span>
 				</Col>
 				<Col span={7} className='overWrite ccc'>
-					{/* <Select
-						popupMatchSelectWidth={false}
-						defaultValue=""
-						className="w-full"
-						options={dataSubmisisionsSubdevision}
-						onChange={(value: any) => {
-							setFlagLoad(true)
-							const x = findSubdivisions(dataSubmisisionsSubdevision,value)
-							if(x){
-								setSelectSubdivisionId(x.id)
-							}
+					<TreeSelect
+							treeLine={treeLine && { showLeafIcon }}
+							showSearch
+							style={{ height:'32px',width: '100%' ,paddingLeft:'8px'}}
+							value={value}
+							dropdownStyle={{  overflow: 'auto' }}
+							placeholder=""
+							allowClear
+							treeDefaultExpandAll
+							onChange={(value)=>{
+								setFlagLoad(true)
+								setSelectSubdivisionId(value)
 								setFilter({ ...filter, subdivision: value })
 							}}
-					/> */}
-								<TreeSelect
-                                        treeLine={treeLine && { showLeafIcon }}
-                                        showSearch
-                                        style={{ height:'32px',width: '100%' ,paddingLeft:'8px'}}
-                                        value={value}
-                                        dropdownStyle={{  overflow: 'auto' }}
-                                        placeholder=""
-                                        allowClear
-                                        treeDefaultExpandAll
-                                        onChange={(value)=>{
-											setFlagLoad(true)
-											setSelectSubdivisionId(value)
-											setFilter({ ...filter, subdivision: value })
-										}}
-                                        treeData={disableParents(treeData)}
-                                        onPopupScroll={onPopupScroll}
-                                        treeNodeFilterProp="title"
-                                    
-                                    />
+							treeData={disableParents(treeData)}
+							onPopupScroll={onPopupScroll}
+							treeNodeFilterProp="title"
+						
+						/>
 				</Col>
 				<Col span={7} offset={5} className='overWrite'>
 					<Space className="w-full flex-row-reverse">
@@ -403,6 +376,7 @@ export const ViewRepresentation = () => {
 					<span>Выездные практики</span>
 				</Col>
 				<Col span={7} className='overWrite'>
+				<Form.Item className='mb-0 ' name={'visiting'}>
 					<Select
 						disabled={filter.subdivision === 'Все' ? true : false}
 						popupMatchSelectWidth={false}
@@ -413,6 +387,7 @@ export const ViewRepresentation = () => {
 							setFilter({ ...filter, visiting: value })
 						}}
 					/>
+				</Form.Item>
 				</Col>
 			</Row>
 
@@ -592,6 +567,7 @@ export const ViewRepresentation = () => {
 						pagination={dataTable?.length < 10 ? false : {
 							pageSize: 10,
 						}}
+						rowClassName={() => 'animate-fade-in'}
 						className='absolute  sm:relative  lg:left-0 sm:top-10'
 						// rowSelection={{
 						// 	type: 'checkbox',
@@ -606,7 +582,7 @@ export const ViewRepresentation = () => {
 							emptyText: (
 							  <div>
 								<h3>Нет данных для отображения</h3>
-								<p>Поле "Подразделение" не должно быть пустым</p>
+								{!selectSubdivisionId ? <p>Поле "Подразделение" не должно быть пустым</p> : ''}
 							  </div>
 							),
 						  }}

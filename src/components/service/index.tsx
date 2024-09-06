@@ -11,6 +11,7 @@ import { NavSetting } from './setting/NavSetting'
 import {NavBusinessTrip} from "./businessTrip/NavBusinessTrip";
 import {useCheckIsEmployeeQuery} from "../../store/api/practiceApi/contracts";
 import {useGetContractsAllQuery} from "../../store/api/practiceApi/roster";
+import { NavMyPractices } from './myPractice/navMyPractice'
 
 export const Service = () => {
 	const { pathname } = useLocation()
@@ -37,6 +38,7 @@ export const Service = () => {
 						<Navigate to={'/user'}/>
 				} */}
 				{pathname.includes('/services/practices') && <NavPractices />}
+				{pathname.includes('/services/mypractices') && <NavMyPractices />}
 
 				{/*{pathname.includes('/services/businessTrip') && <NavBusinessTrip />}*/}
 				{pathname.includes('/services/unifiedServiceCenter') && (

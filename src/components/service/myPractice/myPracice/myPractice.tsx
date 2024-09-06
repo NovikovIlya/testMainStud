@@ -14,8 +14,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { PointsSvg } from '../../../../assets/svg/PointsSvg'
 
-import { PopoverContent } from './PopoverContent'
-import { PopoverMain } from './PopoverMain'
+
 import { useGetAllOrderQuery, useGetAllSubmissionsQuery, useGetOrderSubdevisionQuery, useGetSubmissionsAcademicYearQuery, useGetSubmissionsDirectorQuery, useGetSubmissionsPracticeKindQuery, useGetSubmissionsPracticeTypeQuery, useGetSubmissionsSpecialtiesQuery, useGetSubmissionsSubdevisionQuery } from '../../../../store/api/practiceApi/representation'
 import { LoadingOutlined } from '@ant-design/icons'
 import { findSubdivisions } from '../../../../utils/findSubdivisions'
@@ -28,7 +27,66 @@ const visitingOptions = [
 	{ value: 'Нет', label: 'Нет' },
 ]
 
-export const ViewPracticeOrder = () => {
+const mockData = [
+  {
+      key: '1',
+      practice: {
+          specialtyName: 'Информационные технологии',
+          groupNumber: 'IT-2023-01',
+          academicYear: '2023-2024',
+          courseNumber: '3',
+          practiceType: 'Производственная практика',
+          practiceKind: 'Очная',
+          departmentDirector: 'Иванов И.И.',
+      },
+      isWithDeparture: true,
+      orderStatus: 'Зачтено',
+  },
+  {
+      key: '2',
+      practice: {
+          specialtyName: 'Экономика',
+          groupNumber: 'ECO-2023-02',
+          academicYear: '2023-2024',
+          courseNumber: '2',
+          practiceType: 'Научно-исследовательская практика',
+          practiceKind: 'Заочная',
+          departmentDirector: 'Петрова А.А.',
+      },
+      isWithDeparture: false,
+      orderStatus: 'Не зачтено',
+  },
+  {
+      key: '3',
+      practice: {
+          specialtyName: 'Менеджмент',
+          groupNumber: 'MAN-2023-03',
+          academicYear: '2023-2024',
+          courseNumber: '4',
+          practiceType: 'Производственная практика',
+          practiceKind: 'Очная',
+          departmentDirector: 'Сидоров С.С.',
+      },
+      isWithDeparture: true,
+      orderStatus: 'Зачтено',
+  },
+  {
+      key: '4',
+      practice: {
+          specialtyName: 'Финансы',
+          groupNumber: 'FIN-2023-04',
+          academicYear: '2023-2024',
+          courseNumber: '1',
+          practiceType: 'Практика в компании',
+          practiceKind: 'Очная',
+          departmentDirector: 'Кузнецова М.М.',
+      },
+      isWithDeparture: false,
+      orderStatus: 'Зачтено',
+  },
+];
+
+export const MyPractice = () => {
 	const [currentPage, setCurrentPage] = useState(1);
 	const [form] = Form.useForm()
 	const navigate = useNavigate()
@@ -56,8 +114,8 @@ export const ViewPracticeOrder = () => {
 	const {data:dataAllOrder,isSuccess:isSuccessOrder,isFetching:isLoadingOrder} = useGetAllOrderQuery({subdivisionId:selectSubdivisionId,page:currentPage - 1,size :'5'},{skip:!selectSubdivisionId || !currentPage})
 	const [dataTable, setDataTable] = useState<any>([])
 	const [treeLine, setTreeLine] = useState(true);
-    const [showLeafIcon, setShowLeafIcon] = useState(false);
-    const [value, setValue] = useState<any>();
+  const [showLeafIcon, setShowLeafIcon] = useState(false);
+  const [value, setValue] = useState<any>();
 
 	useEffect(()=>{
 		form.setFieldValue('practiceType', 'Все')
@@ -91,15 +149,7 @@ export const ViewPracticeOrder = () => {
     };
 
 	const columns = [
-		{
-			key: 'subdivision',
-			dataIndex: 'subdivision',
-			title: 'Подразделение',
-			name: 'Подразделение',
-			className: 'text-xs !p-2 ',
-			render: (text: any, record: any) => <span >{record?.practice?.subdivision}</span>
-			
-		},
+		
     	{
 			key: 'specialtyName',
 			dataIndex: 'specialtyName',
@@ -157,57 +207,25 @@ export const ViewPracticeOrder = () => {
 			render: (text: any, record: any) => <span >{record?.practice?.departmentDirector}</span>
 		},
 		{
-			key: 'visiting',
-			dataIndex: 'visiting',
-			title: 'Выездные практики',
+			key: 'place',
+			dataIndex: 'place',
+			title: 'Место прохождения практики',
 			className: 'text-xs !p-2 mobileFirst',
 			render: (text: any, record: any) => <span >{record?.isWithDeparture ? 'Да' : 'Нет'}</span>
 		},
 		{
-			key: 'orderStatus',
-			dataIndex: 'orderStatus',
-			title: 'Статус',
+			key: 'status',
+			dataIndex: 'status',
+			title: 'Оценка',
 			className: 'text-xs !p-2',
 			render: (text: any, record: any) => <span >{record?.orderStatus}</span>
-			// render: (text:any, record:any) => (
-			// 	<div className={'flex items-center justify-between'}>
-			// 		<span className={'underline flex font-bold'}>{text}</span>
-			// 		<Button
-			// 			type="text"
-			// 			icon={<EditSvg />}
-			// 			onClick={() => {
-			// 				navigate(`/services/practices/representation/edit/${record.id}`)
-			// 			}}
-			// 		/>
-			// 	</div>
-			// )
-		},
-		{
-			title: (
-				''
-			),
-			align: 'center',
-			render: (record: any) => (
-				<Popover
-					trigger={'click'}
-					content={
-						<PopoverContent
-							recordFull={record}
-							recordFullAll={tableData}
-							setRecordFull={setDataTable}
-						/>
-					}
-				>
-					<Button type="text" onClick={(e) => { e.stopPropagation()}} className="opacity-50" icon={<PointsSvg />} />
-				</Popover>
-			),
-			fixed: 'right',
-			width: 50
+			
 		}
+		
 	]
 
 	const handleRowClick = (record:any) => {
-		navigate(`/services/practices/order/edit/${record.id}`)
+		navigate(`/services/mypractices/myPractices/edit/${record.id}`)
     };
 
 	const treeData =[...(dataSubmisisionsSubdevision ? dataSubmisisionsSubdevision?.map((item:any)=>{
@@ -232,59 +250,20 @@ export const ViewPracticeOrder = () => {
 			<Row gutter={[16, 16]}>
 				<Col span={24}>
 					<Typography.Text className=" text-[28px] mb-14">
-						Приказ по практике
+						Мои практики
 					</Typography.Text>
 				</Col>
 			</Row>
 
-			<Row gutter={[16, 16]} className="mt-12 flex items-center">
-				<Col span={5}>
-					<span>Подразделение</span>
-				</Col>
-				<Col span={7} className='overWrite'>
-					
-					<TreeSelect
-							treeLine={treeLine && { showLeafIcon }}
-							showSearch
-							style={{ height:'32px',width: '100%' }}
-							value={value}
-							dropdownStyle={{  overflow: 'auto' }}
-							placeholder=""
-							allowClear
-							treeDefaultExpandAll
-							onChange={(value)=>{
-							
-								setSelectSubdivisionId(value)
-								setFilter({ ...filter, subdivision: value })
-							}}
-							treeData={disableParents(treeData)}
-							onPopupScroll={onPopupScroll}
-							treeNodeFilterProp="title"
-						
-						/>
-				</Col>
-				{/* <Col span={7} offset={5}>
-					<Space className="w-full flex-row-reverse">
-						<Button
-							type="primary"
-							className="!rounded-full"
-							onClick={() => {
-								navigate('/services/practices/representation/createRepresentation')
-							}}
-						>
-							Добавить представление
-						</Button>
-					</Space>
-				</Col> */}
-			</Row>
-    		<Row gutter={[16, 16]} className="mt-4 flex items-center">
+			
+    	<Row gutter={[16, 16]} className="mt-14 flex items-center">
 				<Col span={5} >
 					<span>Наименование специальности</span>
 				</Col>
 				<Col span={7} className='overWrite'>
 				<Form.Item className='mb-0' name={'specialtyName'}>
 					<Select
-						disabled={filter.subdivision === 'Все' ? true : false}
+					
 						popupMatchSelectWidth={false}
 						className="w-full"
 						options={[
@@ -304,25 +283,7 @@ export const ViewPracticeOrder = () => {
 					</Form.Item>
 				</Col>
 			</Row>
-			<Row gutter={[16, 16]} className="mt-4 flex items-center">
-				<Col span={5} >
-					<span>Выездные практики</span>
-				</Col>
-				<Col span={7} className='overWrite'>
-				<Form.Item className='mb-0' name={'visiting'}>
-					<Select
-						disabled={filter.subdivision === 'Все' ? true : false}
-						popupMatchSelectWidth={false}
-						defaultValue="Все"
-						className="w-full"
-						options={visitingOptions}
-						onChange={(value: any) => {
-							setFilter({ ...filter, visiting: value })
-						}}
-					/>
-					</Form.Item>
-				</Col>
-			</Row>
+			
 			<Row gutter={[16, 16]} className="mt-4 flex items-center">
 				<Col span={5} >
 					<span>ФИО руководителя</span>
@@ -330,7 +291,7 @@ export const ViewPracticeOrder = () => {
 				<Col span={7} className='overWrite'>
 					<Form.Item className='mb-0'  name={'FIO'}>
 					<Select
-						disabled={filter.subdivision === 'Все' ? true : false}
+						
 						popupMatchSelectWidth={false}
 						defaultValue="Все"
 						className="w-full"
@@ -382,7 +343,7 @@ export const ViewPracticeOrder = () => {
 						popupMatchSelectWidth={false}
 						defaultValue="Все"
 						className="w-full"
-						// options={dataSubmissionAcademicYear?.map((item: any) => ({ label: item, value: item }))}
+						
 						options={[
 							{ key: 2244612, value: 'Все', label: 'Все' },
 							...(dataSubmissionAcademicYear?.map((item: any) => ({ label: item, value: item }))
@@ -414,7 +375,7 @@ export const ViewPracticeOrder = () => {
 						disabled={filter.subdivision === 'Все' ? true : false}
 						popupMatchSelectWidth={false}
 						defaultValue="Все"
-						// options={dataSubmissionType}
+			
 						options={[
 							{ key: 2244612, value: 'Все', label: 'Все' },
 							...(dataSubmissionType
@@ -496,7 +457,7 @@ export const ViewPracticeOrder = () => {
 						rowKey="id"
 						// @ts-ignore
 						columns={columns}
-						dataSource={filter?.subdivision !== 'Все' ? dataTable : []}
+						dataSource={mockData}
 						pagination={dataTable.length > 10 && {
 							current: currentPage,
 							pageSize: 10,
@@ -504,21 +465,13 @@ export const ViewPracticeOrder = () => {
 							onChange: (page) => setCurrentPage(page),
 						  }}
 						className="my-10  absolute  sm:relative sm:left-0 sm:top-10"
-						// rowSelection={{
-						// 	type: 'checkbox',
-						// 	onSelect: (record, selected, selectedRows, nativeEvent) => {
-						// 		setSelectedFieldFull(selectedRows)
-						// 	},
-						// 	onSelectAll: (selected, selectedRows, changeRows) => {
-						// 		setSelectedFieldFull(selectedRows)
-						// 	}
-						// }}
+
 						rowClassName={() => 'animate-fade-in'}
 						locale={{
 							emptyText: (
 							  <div>
 								<h3>Нет данных для отображения</h3>
-								{!selectSubdivisionId ? <p>Поле "Подразделение" не должно быть пустым</p> : ''}
+							
 							  </div>
 							),
 						  }}
@@ -529,4 +482,4 @@ export const ViewPracticeOrder = () => {
 		</Form>
 	)
 }
-export default ViewPracticeOrder
+export default MyPractice

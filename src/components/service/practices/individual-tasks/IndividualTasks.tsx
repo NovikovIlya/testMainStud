@@ -560,14 +560,15 @@ const IndividualTasks = () => {
                 &&
                 <div className={'individualTasks mb-4'}>
                     <Table
-                    onRow={(record) => ({
-                        onClick: () => handleRowClick(record),
-                    })}
+                        onRow={(record) => ({
+                            onClick: () => handleRowClick(record),
+                        })}
                         // @ts-ignore
                         keyExtractor={record => record.id} 
                         columns={columnsCompressed}
                         dataSource={tableDataCompressed}
                         pagination={false}
+                        rowClassName={() => 'animate-fade-in'}
                         rowSelection={{
                             type: 'checkbox',
                             onSelect: (record, selected, selectedRows, nativeEvent) => {
@@ -586,15 +587,16 @@ const IndividualTasks = () => {
                 &&
                 
                 <Table
-                onRow={(record) => ({
-                    onClick: () => handleRowClick(record),
-                })}
+                    onRow={(record) => ({
+                        onClick: () => handleRowClick(record),
+                    })}
                     className={'mt-5 mb-4'}
                     columns={columnsFull}
                     dataSource={tableDataFull}
                     pagination={tableDataFull && tableDataFull?.length<10?false:{
                         pageSize: 10
                     }}
+                    rowClassName={() => 'animate-fade-in'}
                     rowSelection={{
                         type: 'checkbox',
                         onSelect: (record, selected, selectedRows, nativeEvent) => {

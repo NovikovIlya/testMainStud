@@ -761,8 +761,8 @@ export const EditSchedule = () => {
 					</Space>
 				</Col> */}
 			</Row>
-			<Row className="mt-4 mb-6 flex items-center justify-around">
-				<Col span={12} flex="50%">
+			<Row className="mt-4 mb-6 flex items-center ">
+				<Col span={4} className=''>
 					<div>
 						<Space>
 							<Button loading={isLoadingBlob || isFetchingBlob} disabled={isLoadingBlob || isFetchingBlob} onClick={downloadFile}>
@@ -774,15 +774,16 @@ export const EditSchedule = () => {
 						</Space>
 					</div>
 				</Col>
-				<Col span={8} offset={4} className='overWrite'>
+				{/* <Col span={8} offset={4} className='overWrite'>
 					<div className={'flex gap-2 items-center'}>
 						<span className={'mr-2'}>Сортировка</span>
 						<Select
 							popupMatchSelectWidth={false}
-							defaultValue=""
+							value={filter.dateFilling}
 							className="w-full"
 							options={optionsSortDate}
 							onChange={value => {
+								
 								setFilter({
 									...filter,
 									dateFilling: value
@@ -790,7 +791,7 @@ export const EditSchedule = () => {
 							}}
 						/>
 					</div>
-				</Col>
+				</Col> */}
 			</Row>
 
 					{/* {stateSchedule.compressed && <CompressedView/>}

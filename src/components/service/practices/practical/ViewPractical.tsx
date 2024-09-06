@@ -16,22 +16,18 @@ import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { EditSvg } from '../../../../assets/svg/EditSvg'
 import { PointsSvg } from '../../../../assets/svg/PointsSvg'
 import {
 	useGetCafedraNewQuery,
-	useGetDepartmentsQuery,
 	useGetGroupNumberQuery,
 	useGetGroupNumbersNewQuery,
-	useGetPracticeKindQuery,
 	useGetPracticeTypeForPracticeQuery,
-	useGetPracticeTypeQuery,
 	useGetPracticesAllQuery,
 	useGetPractiseSubdevisionNewQuery,
 	useGetSubdivisionForPracticeQuery
 } from '../../../../store/api/practiceApi/individualTask'
 import { useGetCafDepartmentsQuery } from '../../../../store/api/practiceApi/practical'
-import { useGetSpecialtyNamesForPractiseQuery, useGetSpecialtyNamesQuery } from '../../../../store/api/practiceApi/roster'
+import { useGetSpecialtyNamesForPractiseQuery } from '../../../../store/api/practiceApi/roster'
 import { processingOfDivisions } from '../../../../utils/processingOfDivisions'
 import { PracticalPopoverContent } from '../popover/practical/PracticalPopoverContent'
 import { PracticalPopoverMain } from '../popover/practical/PracticalPopoverMain'
@@ -41,43 +37,6 @@ import './ViewPractical.scss'
 import { TitleHeadCell } from '../../businessTrip/NewBusinessTrip/archive/stepTwo/tableStepTwo/titleHeadCell/TitleHeadCell'
 import { disableParents } from '../../../../utils/disableParents'
 
-
-interface FilterType {
-	value: string | number
-	label: string | number
-}
-
-
-const filterCourse: FilterType[] = [
-	{
-		value: 'Все',
-		label: 'Все'
-	},
-	{
-		value: '1',
-		label: '1'
-	},
-	{
-		value: '2',
-		label: '2'
-	},
-	{
-		value: '3',
-		label: '3'
-	},
-	{
-		value: '4',
-		label: '4'
-	},
-	{
-		value: '5',
-		label: '5'
-	},
-	{
-		value: '6',
-		label: '6'
-	}
-]
 
 
 export interface TablePractical {
@@ -595,7 +554,7 @@ export const ViewPractical = () => {
         }
     }):[])]
 
-	const uniqueCourseNumbers = [...new Set(dataPractiseAll?.map((item:any) => item.courseNumber))];
+	const uniqueCourseNumbers = [...new Set(tableData?.map((item:any) => item.courseNumber))];
 
 
 	return (
@@ -608,13 +567,11 @@ export const ViewPractical = () => {
 					</Col>
 				
 				</Row>
-
 				<Row gutter={[16, 16]} className="mt-12 overWrite">
 					<Col span={5} className='overWrite'>
 						<span>Подразделение</span>
 					</Col>
 					<Col span={8} className='overWrite'>
-					
 					<Form.Item
 						name={'podrazdelenie'}
 						className='mb-[-4px]'
@@ -797,7 +754,6 @@ export const ViewPractical = () => {
 					<Col span={4} className='flex items-center overWrite'>
 						<span className='w-20'>Семестр</span>
 			
-						
 						<Form.Item
 							className='mb-[-4px] w-full items-center'
 							style={{marginBottom:'0'}}
@@ -932,6 +888,7 @@ export const ViewPractical = () => {
 					pagination={tableData && tableData?.length<10?false:{
                         pageSize: 10
                     }}
+					rowClassName={() => 'animate-fade-in'}
 					className="my-"
 					rowSelection={{
 						type: 'checkbox',

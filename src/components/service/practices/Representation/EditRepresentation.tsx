@@ -39,19 +39,21 @@ import { SkeletonPage } from './Skeleton'
 import TableEdit from './tableEdit'
 import { Vector } from '../../../../assets/svg/Vector'
 
-const optionMock = [
-	{ value: '1', label: '1' },
-	{ value: '2', label: '2' },
-	{ value: '3', label: '3' }
-]
-const optionMockType = [
-	{ value: '4', label: '4' },
-	{ value: '5', label: '5' }
-]
-const optionMockKind = [
-	{ value: '7', label: '7' },
-	{ value: '8', label: '8' },
-	{ value: '9', label: '9' }
+
+const optionMockSelect = [
+	{
+		value: 'В профильной организации',
+		label: 'В профильной организации'
+	},
+	{
+		value: 'На кафедре КФУ',
+		label: 'На кафедре КФУ'
+	},
+	{
+		value: 'В структурном подразделении КФУ',
+		label: 'В структурном подразделении КФУ'
+	}
+
 ]
 
 export const EditRepresentation = () => {
@@ -71,6 +73,9 @@ export const EditRepresentation = () => {
 	const [fullTable, setFullTable] = useState<any>([])
 	const [editTheme, setEditTheme] = useState('')
 	const [isEdit, setIsEdit] = useState(false)
+	const [selectedPlace,setSelecectedPlace] = useState(dataOneSubmissions ? 
+		dataOneSubmissions.practice.place ==='На кафедре' ? 'В профильной организации' : dataOneSubmissions.practice.place === 'В структурном подразделении КФУ' ? 'В структурном подразделении КФУ' : 'В профильной организации'
+		: '')
 	const dispatch = useAppDispatch()
 	
 
@@ -441,6 +446,16 @@ export const EditRepresentation = () => {
 	}
 
 	const editData = () => {
+		if(selectedPlace==='В профильной организации'){
+			if(fullTable.some((item:any)=>item.place===null)){ 
+				return dispatch(showNotification({ message: `Для сохранения необходимо заполнить "Место прохождение практики" ${dataOneSubmissions.isWithDeparture ? `,  "Суточные", "Проезд" и "Оплата проживания"`:''}`, type: 'warning' }));
+			}
+			if(dataOneSubmissions.isWithDeparture){
+				if(fullTable.some((item:any)=>item.costForDay===null || item.arrivingCost===null || item.livingCost===null)){ 
+					return dispatch(showNotification({ message: `Для сохранения необходимо заполнить "Место прохождение практики" ${dataOneSubmissions.isWithDeparture ? `,  "Суточные", "Проезд" и "Оплата проживания"`:''}`, type: 'warning' }));
+				}
+			}
+		}
 		const arrayT: any = [{}]
 		const obj = arrayT.map((item: any) => {
 			return {
@@ -496,6 +511,21 @@ export const EditRepresentation = () => {
 			</Row>
 			<Descriptions className="mt-12" items={items} />
 
+			<Row className='items-center flex gap-2'>
+				<Col>
+					<span>Где будет проходить практика</span>
+				</Col>
+				<Col span={3}>
+				<Form.Item style={{ margin: 0 }} name={'selectPlace'}>
+					<Select onChange={(value) => {
+						
+						setSelecectedPlace(value)
+						
+					}} options={optionMockSelect}/>
+				</Form.Item>
+			</Col>
+			</Row>
+
 			<Row className="mt-4 mb-6 flex  justify-between">
 				<Col span={12}>
 					<div>
@@ -536,21 +566,8 @@ export const EditRepresentation = () => {
 			<Row className="mt-4">
 				<Col flex={'auto'}>
 					<Form form={form} component={false}>
-						{/* <Table
-							ref={tableRef}
-							components={{
-								body: {
-									cell: EditableCell
-								}
-							}}
-							bordered
-							dataSource={fullTable}
-							columns={mergedColumns}
-							rowClassName="editable-row"
-							pagination={false}
-							rowKey="id"
-						/> */}
-						<TableEdit visiting={dataOneSubmissions?.isWithDeparture} fullTable={fullTable} setFullTable={setFullTable} />
+
+						<TableEdit status={dataOneSubmissions?.status} active={true} visiting={dataOneSubmissions?.isWithDeparture} fullTable={fullTable} setFullTable={setFullTable} />
 					</Form>
 				</Col>
 			</Row>

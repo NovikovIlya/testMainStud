@@ -45,7 +45,7 @@ export const PracticeSchedule = () => {
 	const [selectedFieldsFull, setSelectedFieldFull] = useState<any>([])
 	const [dataTable, setDataTable] = useState<ScheduleType[]>([])
 	const {data:dataUserSubdivision,isLoading:isLoadingUserSubdivision} = useGetSubdivisionUserQuery()
-	const {data:dataAll,isSuccess:isSuccessData,isFetching:isFetchingDataAll} = useGetAllSchedulesQuery({subdivisionId:dataUserSubdivision?.value,academicYear:getAcademicYear()},{skip:!dataUserSubdivision})
+
 	const {data:dataAcademicYear} = useGetAcademicYearQuery()
 	const {data:dataSubdivision,isSuccess:isSuccessSubdivision} = useGetSubdivisionQuery()
 	const [departments, setDepartments] = useState<NewDepartment[]>()
@@ -53,6 +53,7 @@ export const PracticeSchedule = () => {
 	const [treeLine, setTreeLine] = useState(true);
     const [showLeafIcon, setShowLeafIcon] = useState(false);
     const [value, setValue] = useState<any>(dataUserSubdivision?.value ? dataUserSubdivision.value : 'Все');
+	const {data:dataAll,isSuccess:isSuccessData,isFetching:isFetchingDataAll} = useGetAllSchedulesQuery({subdivisionId:value ==='Все'?null:value,academicYear:getAcademicYear()},{skip:!dataUserSubdivision})
 	const columns = [
 		{
 			key: 'subdivision',
@@ -154,7 +155,7 @@ export const PracticeSchedule = () => {
 		return dataAll
 			? [...dataAll]
 			.sort((a: ScheduleType, b: ScheduleType) => sortDateFilling(a, b))
-			.filter((elem: any) => filterSubdivision(elem))
+			// .filter((elem: any) => filterSubdivision(elem))
 			.filter((elem: any) => filterAcademicYear(elem))
 			: []
 	}
@@ -208,6 +209,7 @@ export const PracticeSchedule = () => {
 						allowClear
 						treeDefaultExpandAll
 						onChange={(value: any) => {
+							setValue(value)
 							setFlagLoad(true)
 							setFilter({ ...filter, subdivisionId: value })
 						}}
@@ -292,6 +294,7 @@ export const PracticeSchedule = () => {
 					pageSize: 10
 				}}
 				className="my-10"
+				rowClassName={() => 'animate-fade-in'}
 				// rowSelection={{
 				// 	type: 'checkbox',
 				// 	onSelect: (record, selected, selectedRows, nativeEvent) => {

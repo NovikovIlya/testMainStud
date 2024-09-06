@@ -104,3 +104,20 @@ export interface Practice {
 	tasks: any;
 	competence: any;
   }
+
+  export interface Submission {
+    practice: {
+        subdivisionId: string;
+        specialtyName: string;
+        groupNumber: string;
+        academicYear: string;
+        courseNumber: string;
+        practiceType: string;
+        practiceKind: string;
+        departmentDirector: string;
+		subdivision: string;
+    };
+    isWithDeparture: boolean;
+    status: string;
+    dateFilling: string;
+}

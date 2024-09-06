@@ -20,7 +20,7 @@ import {ICreateContract, NameSpecialty} from '../../../../models/Practice'
 import {validateMessages} from "../../../../utils/validateMessage";
 import {useNavigate} from "react-router-dom";
 import {useGetSpecialtyNamesQuery} from "../../../../store/api/practiceApi/roster";
-import { endOfDay, isAfter } from 'date-fns'
+import { endOfDay, isAfter, isBefore, startOfDay } from 'date-fns'
 
 
 export const CreateContracts = () => {
@@ -289,6 +289,9 @@ export const CreateContracts = () => {
                                 placeholder={''}
                                 className="w-full "
                                 size={'large'}
+                                disabledDate={(current) => {
+                                    return current && current.isBefore(startOfDay(new Date()));
+                                }}
                             />
                         </Form.Item>
                     </Col>}

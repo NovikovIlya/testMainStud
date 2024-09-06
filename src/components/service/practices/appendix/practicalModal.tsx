@@ -641,7 +641,7 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 
 			<Row className="mt-4">
 				<Col flex={'auto'}>
-				{isLoading || isFetchingAgree ? <Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}/> :
+				{isLoading || isFetchingAgree ? <Spin className="w-full mt-20 mb-10" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}/> :
 					<Table
 						onRow={(record) => ({
 							onClick: () => handleRowClick(record),

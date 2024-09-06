@@ -333,7 +333,7 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 					/>
 				</Col>
 			</Row>
-			{isLoading || load ? <Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}/> : 
+			{isLoading || load ? <Spin className="w-full mt-20 mb-10" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}/> : 
 			<Table
 				onRow={record => ({
 					onClick: () => handleRowClick(record)

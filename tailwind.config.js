@@ -13,7 +13,7 @@ module.exports = {
 			},
 			animation: {
 				'bounce-slow': 'bounce 3s  1 ease-in-out',
-				'fade-in': 'fadeIn 0.7s ease-in-out',
+				'fade-in': 'fadeIn 0.6s ease-in-out',
 			},
 			keyframes: {
 				fadeIn: {

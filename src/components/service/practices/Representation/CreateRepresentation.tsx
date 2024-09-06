@@ -8,7 +8,7 @@ import {
 	Input, Popconfirm,
 	Radio,
 	Result,
-	Row, Space,
+	Row, Select, Space,
 	Spin,
 	Steps,
 	Table,
@@ -35,6 +35,21 @@ import { Vector } from '../../../../assets/svg/Vector'
 const optionMock = [
 	{ value: 'контракт', label: 'контракт' },
 	{ value: 'бюджет', label: 'бюджет' },
+
+]
+const optionMockSelect = [
+	{
+		value: 'В профильной организации',
+		label: 'В профильной организации'
+	},
+	{
+		value: 'На кафедре КФУ',
+		label: 'На кафедре КФУ'
+	},
+	{
+		value: 'В структурном подразделении КФУ',
+		label: 'В структурном подразделении КФУ'
+	}
 
 ]
 const optionMockType = [
@@ -125,6 +140,7 @@ export const CreateRepresentation = () => {
 	const {data:dataAllPractise,isSuccess:isSuccessAllPractice} = useGetPracticesAllQuery(selectedPractice,{skip:!selectedPractice})
 	const [data, setData] = useState(fullTable)
 	const [step,setStep] = useState(0)
+	const [selectedPlace,setSelecectedPlace] = useState(null)
 	const dispatch = useAppDispatch()
 	
 
@@ -137,6 +153,7 @@ export const CreateRepresentation = () => {
 				arrivingCost: null,
 				livingCost: null,
 				place: null,
+				placeTwo:null,
 				category: item.category,
 				categoryId: item.categoryId,
 				departmentDirector: fullSelectedPractise.departmentDirector,
@@ -151,7 +168,12 @@ export const CreateRepresentation = () => {
 	useEffect(()=>{
 		if(!visiting){
 			if(isSuccessGetStudents && fullTable.length>0){
-				if(fullTable.every((item:any)=>item.place!==null)){
+				if(visiting){
+					if(fullTable.every((item:any)=>item.place!==null || item.arrivingCost!==null || item.livingCost!==null || item.costForDay!==null)){
+						setStep(2)
+					}
+				}
+				if(fullTable.every((item:any)=>item.place!==null )){
 					setStep(2)
 				}
 			}
@@ -232,6 +254,13 @@ export const CreateRepresentation = () => {
 		{
 			key: 'place',
 			dataIndex: 'place',
+			title: 'Где будет проходить практика',
+			className: 'text-xs !p-2',
+			editable: true
+		},
+		{
+			key: 'placeTwo',
+			dataIndex: 'placeTwo',
 			title: 'Место прохождения практики',
 			className: 'text-xs !p-2',
 			editable: true
@@ -317,7 +346,7 @@ export const CreateRepresentation = () => {
 			onCell: (record: Item) => ({
 				record,
 				inputType:
-					col.dataIndex === 'category'
+					col.dataIndex === 'place'
 						? 'select'
 						: col.dataIndex === 'costForDay'
 						? 'number'
@@ -422,17 +451,29 @@ export const CreateRepresentation = () => {
 	const onChange = (e: any) => {
 		setValue(e.target.value);
 	};
-
+	console.log('selectedPlace',selectedPlace)
 	const sendData = ()=>{
-		if(fullTable.some((item:any)=>item.place===null)){ 
-			return dispatch(showNotification({ message: `Для сохранения необходимо заполнить "Место прохождение практики" ${visiting ? `,  "Суточные", "Проезд" и "Оплата проживания"`:''}`, type: 'warning' }));
+		console.log('fullTablefullTable',fullTable)
+		if(!selectedPlace){
+			return dispatch(showNotification({ message: `Выберите где будет проходить практика`, type: 'warning' }));
+		}
+		if(selectedPlace==='В профильной организации'){
+			if(fullTable.some((item:any)=>item.place===null)){ 
+				return dispatch(showNotification({ message: `Для сохранения необходимо заполнить "Место прохождение практики" ${visiting ? `,  "Суточные", "Проезд" и "Оплата проживания"`:''}`, type: 'warning' }));
+			}
+			if(visiting){
+				if(fullTable.some((item:any)=>item.costForDay===null || item.arrivingCost===null || item.livingCost===null)){ 
+					return dispatch(showNotification({ message: `Для сохранения необходимо заполнить "Место прохождение практики" ${visiting ? `,  "Суточные", "Проезд" и "Оплата проживания"`:''}`, type: 'warning' }));
+				}
+			}
 		}
 		const tableDataStudent = fullTable.map((item:any)=>({
 			costForDay:item.costForDay, 
 			arrivingCost:item.arrivingCost,
 			livingCost:item.livingCost,
 			name:item.name,
-			place:item.place,
+			place: selectedPlace==='На кафедре КФУ' || selectedPlace === 'В структурном подразделении КФУ' ? selectedPlace 
+			: item.place ,
 			category:item.category
 		}))
 		const obj = {
@@ -488,10 +529,10 @@ export const CreateRepresentation = () => {
 							title: 'Выберите практику',
 						},
 						{
-							title: 'Выберите тип и заполните таблицу',
+							title: 'Заполните данные',
 						},
 						{
-							title: 'Сохраните представление',
+							title: 'Сохраните',
 						},
 						]}
 					/>
@@ -527,8 +568,31 @@ export const CreateRepresentation = () => {
 							</Space>
 						</Radio.Group>
 				</Col>
+
 				
 			</Row>	
+			<Row className='items-center flex gap-2'>
+				<Col>
+					<span>Где будет проходить практика</span>
+				</Col>
+				<Col span={3}>
+				<Form.Item style={{ margin: 0 }} name={'selectPlace'}>
+					<Select onChange={(value) => {
+						
+						setSelecectedPlace(value)
+						if(value==='На кафедре КФУ' || value === 'В структурном подразделении КФУ'){
+							setStep(2)
+						}
+						if(value==='В профильной организации'){
+							if(fullTable.every((item:any)=>item.place===null)){
+								setStep(1)
+							}
+							
+						}
+					}} options={optionMockSelect}/>
+				</Form.Item>
+			</Col>
+			</Row>
 			</>) : ''}
 	
 			{visiting ? 
@@ -552,7 +616,7 @@ export const CreateRepresentation = () => {
 						<Col flex={'auto'}>
 							<Form form={form} component={false}>		
 								
-								<TableEdit visiting={visiting} fullTable={fullTable} setFullTable={setFullTable} create={true}/>
+								<TableEdit selectedPlace={selectedPlace} visiting={visiting} fullTable={fullTable} setFullTable={setFullTable} create={true}/>
 							</Form>
 						</Col>
 					</Row>

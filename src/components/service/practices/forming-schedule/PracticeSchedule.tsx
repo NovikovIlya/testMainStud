@@ -28,7 +28,7 @@ import {
 	useGetDocQuery,
 	useGetSubdivisionQuery
 } from '../../../../store/api/practiceApi/formingSchedule'
-import { useGetDepartmentsQuery, useGetPracticeKindQuery } from '../../../../store/api/practiceApi/individualTask'
+import { useGetDepartmentsQuery, useGetPracticeKindQuery, useGetPractiseSubdevisionNewQuery } from '../../../../store/api/practiceApi/individualTask'
 
 import { EditableCell } from './EditableCell'
 import { useGetSubdivisionUserQuery } from '../../../../store/api/serviceApi'
@@ -170,6 +170,7 @@ export const PracticeSchedule = () => {
 	const [currentRowValues, setCurrentRowValues] = useState({})
 	const [createSchedule, { data: dataCreateSchedule ,isLoading:isLoadingCreate}] = useCreateScheduleMutation({})
 	const [sendFilterParams,{data:dataByFilter,isSuccess:isSuccessByFilter,isLoading:isLoadingByFilters}] = useGetByFilterMutation()
+	const {data:dataSubNewCreate} = useGetPractiseSubdevisionNewQuery()
     const [tableData, setTableData] = useState<any>(dataByFilter)
 	const [selectedValuesLevel, setSelectedValuesLevel] = useState(['Все']);
 	const [selectedValueForm, setSelectedValuesForm] = useState(['Все']);
@@ -589,7 +590,7 @@ export const PracticeSchedule = () => {
 	}else return prevUniqNameKind.current
 	}, [dataByFilter]);
 
-	const treeData = dataAllSubdivision?.map((item:any)=>{
+	const treeData = dataSubNewCreate?.map((item:any)=>{
         return{
             title:item.value,
             value:item.id,
@@ -820,7 +821,7 @@ export const PracticeSchedule = () => {
 						}
 						<Row className='mt-5'>
 						<Col span={2}  className='overWrite'>
-						<Space className="w-full flex-row-reverse overWrite">
+						<Space className="w-full  overWrite">
 							<Button
 								type="primary"
 								className="!rounded-full h-10"

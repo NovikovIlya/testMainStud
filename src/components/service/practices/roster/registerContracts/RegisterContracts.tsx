@@ -793,10 +793,12 @@ export const RegisterContracts = () => {
                         onRow={(record) => ({
                             onClick: () => handleRowClick(record),
                         })}
+                        className=''
                         columns={columnsCompressedView}
                         pagination={false}
                         size={"middle"}
                         dataSource={tableDataCompressed}
+                        rowClassName={() => 'animate-fade-in'}
                         rowSelection={{
                             type: "checkbox",
                             onSelect: (record, selected, selectedRows, nativeEvent) => {
@@ -822,7 +824,7 @@ export const RegisterContracts = () => {
                         }}
                        dataSource={tableDataFull}
                        size={"middle"}
-                       className={'mt-5'}
+                       className={'mt-5 animate-fade-in'}
                        rowSelection={{
                            type: "checkbox",
                            onSelect: (record, selected, selectedRows, nativeEvent) => {

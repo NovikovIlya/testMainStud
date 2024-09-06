@@ -542,11 +542,12 @@ export const ViewAppendix = () => {
 						// 		setSelectedFieldFull(selectedRows)
 						// 	}
 						// }}
+						rowClassName={() => 'animate-fade-in'}
 						locale={{
 							emptyText: (
 							  <div>
 								<h3>Нет данных для отображения</h3>
-								<p>Поле "Подразделение" не должно быть пустым</p>
+								{!selectSubdivisionId ? <p>Поле "Подразделение" не должно быть пустым</p> : ''}
 							  </div>
 							),
 						  }}

@@ -62,7 +62,7 @@ export const VacancyResponces = () => {
 						</label>
 						<label
 							className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
-								status === respondStatus[respondStatus.IN_REVIEW]
+								status === respondStatus[respondStatus.IN_PERSONNEL_DEPT_REVIEW]
 									? 'text-white bg-dasha-blue'
 									: 'text-black border-solid border-black border-[1px]'
 							} font-normal text-[16px]/[16px]`}

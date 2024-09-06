@@ -344,6 +344,30 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
+		getChatPreviews: builder.query<
+			{
+				id: number
+				respondInfo: VacancyRespondItemType & { vacancyId: number }
+				unreadCount: number
+			}[],
+			{
+				vacancyId: number | null
+				status: string | null
+				sort: 'ALL' | 'UNREAD' | null
+				page: number
+				pageSize: number
+			}
+		>({
+			query: ({ vacancyId, status, sort, page, pageSize }) => ({
+				url: `http://localhost:8082/employment-api/v1/chat?page=${page}&pageSize=${pageSize}${
+					vacancyId ? `&vacancy_id=${vacancyId}` : ''
+				}
+				${status ? `&status=${status}` : ''}${sort ? `&chat_sort=${sort}` : ''}`,
+				headers: {
+					Authorization: `Bearer ${personnelDeparmentToken}`
+				}
+			})
+		}),
 		postPhone: builder.mutation({
 			query: phone => {
 				return {
@@ -873,5 +897,6 @@ export const {
 	useLazyGetInterviewViewQuery,
 	useEmployeeSeekerRequestMutation,
 	useAnswerToInvitationReserveTimeRequestMutation,
-	useAnswerEmploymentRequestMutation
+	useAnswerEmploymentRequestMutation,
+	useLazyGetChatPreviewsQuery
 } = serviceApi

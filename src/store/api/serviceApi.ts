@@ -368,6 +368,26 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
+		getSeekerEmploymentResponds: builder.query<RespondItemType[], void>({
+			query: () => ({
+				url: 'http://localhost:8082/employment-api/v1/seeker/responds?status=все',
+				headers: {
+					Authorization: `Bearer ${seekerToken}`
+				}
+			}),
+			transformResponse: (response: RespondItemType[]) => {
+				// return response.map(resp => ({
+				// 	...resp,
+				// 	respondDate: resp.respondDate.substring(0, 10)
+				// }))
+				return response
+					.filter(resp => resp.status === 'EMPLOYMENT')
+					.map(resp => ({
+						...resp,
+						respondDate: resp.respondDate.substring(0, 10)
+					}))
+			}
+		}),
 		postPhone: builder.mutation({
 			query: phone => {
 				return {
@@ -802,7 +822,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 					time: arg.time
 				},
 				headers: {
-					Authorization: `Bearer ${supervisorToken}`
+					Authorization: `Bearer ${seekerToken}`
 				}
 			})
 		}),
@@ -811,13 +831,10 @@ export const serviceApi = apiSlice.injectEndpoints({
 			EmploymentRequestType & { respondId: number }
 		>({
 			query: arg => ({
-				url: `http://localhost:8082/employment-api/v1/respond/${arg.respondId}/chat/buttons/employment-request`,
+				url: `http://localhost:8082/employment-api/v1/respond/${arg.respondId}/chat/buttons/employment-request?answer=${arg.answer}`,
 				method: 'POST',
-				body: {
-					answer: arg.answer
-				},
 				headers: {
-					Authorization: `Bearer ${supervisorToken}`
+					Authorization: `Bearer ${seekerToken}`
 				}
 			})
 		})
@@ -898,5 +915,6 @@ export const {
 	useEmployeeSeekerRequestMutation,
 	useAnswerToInvitationReserveTimeRequestMutation,
 	useAnswerEmploymentRequestMutation,
-	useLazyGetChatPreviewsQuery
+	useLazyGetChatPreviewsQuery,
+	useGetSeekerEmploymentRespondsQuery
 } = serviceApi

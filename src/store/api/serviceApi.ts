@@ -802,7 +802,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 					time: arg.time
 				},
 				headers: {
-					Authorization: `Bearer ${supervisorToken}`
+					Authorization: `Bearer ${seekerToken}`
 				}
 			})
 		}),
@@ -811,13 +811,10 @@ export const serviceApi = apiSlice.injectEndpoints({
 			EmploymentRequestType & { respondId: number }
 		>({
 			query: arg => ({
-				url: `http://localhost:8082/employment-api/v1/respond/${arg.respondId}/chat/buttons/employment-request`,
+				url: `http://localhost:8082/employment-api/v1/respond/${arg.respondId}/chat/buttons/employment-request?answer=${arg.answer}`,
 				method: 'POST',
-				body: {
-					answer: arg.answer
-				},
 				headers: {
-					Authorization: `Bearer ${supervisorToken}`
+					Authorization: `Bearer ${seekerToken}`
 				}
 			})
 		})

@@ -1,5 +1,6 @@
 import { Button } from 'antd'
 import { useNavigate } from 'react-router-dom'
+import { FileIconSvg } from "../../../../assets/svg/FileIconSvg"
 
 interface DepEmploymentItemProps {
 	status: string
@@ -47,15 +48,20 @@ export const DepEmploymentItem = (  props : DepEmploymentItemProps ) => {
 					</Button>
 					<Button
 						className='bg-[#FFFFFF] py-[8px] px-[24px] text-[#333333] border-[#333333] border-[1px] rounded-[54.5px] text-[16px] font-normal cursor-pointer'
-
+						onClick={() => {
+							alert('Эта функция пока недоступна')
+						}}
 					>
 						Резюме
 					</Button>
 					<Button
-						className='bg-[#FFFFFF] py-[8px] px-[24px] text-[#333333] border-[#333333] border-[1px] rounded-[54.5px] text-[16px] font-normal cursor-pointer'
-
+						className='bg-[#FFFFFF] py-[8px] px-[24px] text-[#333333] border-[#333333] border-[1px] rounded-[54.5px] cursor-pointer'
+						onClick={() => {
+							alert('Эта функция пока недоступна')
+						}}
 					>
-						Чат
+						<FileIconSvg></FileIconSvg>
+						<span className='text-[16px] font-normal'>Чат</span>
 					</Button>
 				</div>
 			</div>

@@ -15,10 +15,10 @@ export const EmploymentStageInfo = () => {
 
 	const DocumentElem = ( props: DocumentElemProps) => {
 		return (
-			<div className="pl-[20px] flex flex-row w-[388px] justify-between">
+			<div className="flex flex-row w-[388px] justify-between cursor-pointer">
 				<div className='flex flex-row items-center'>
 					<DocumentIcon></DocumentIcon>
-					<span className="font-normal ml-[12px] text-[16px]/[19.2px] underline-offset-2">{props.name}</span>
+					<span className="underline font-normal ml-[12px] underline-offset-2 text-[16px]/[19.2px] ">{props.name}</span>
 				</div>
 				<span className="font-normal opacity-[70%] text-[16px]/[19.2px]">{props.weight}</span>
 			</div>
@@ -51,14 +51,14 @@ export const EmploymentStageInfo = () => {
 						>На доработку</Button>
 					</div>
 				</div>
-				<div className='flex flex-row'>
-					<div className="flex flex-col gap-[12px] py-[20px]">
+				<div className='flex flex-row py-[20px] px-[20px] gap-[40px]'>
+					<div className="flex flex-col gap-[12px] ">
 						<DocumentElem name={'Скан паспорта'} weight={'123 кб'}></DocumentElem>
 						<DocumentElem name={'Трудовая книжка'} weight={'123 кб'}></DocumentElem>
 						<DocumentElem name={'СНИЛС'} weight={'123 кб'}></DocumentElem>
 						<DocumentElem name={'ИНН'} weight={'123 кб'}></DocumentElem>
 					</div>
-					<div className="flex flex-col gap-[12px] py-[20px]">
+					<div className="flex flex-col gap-[12px]">
 						<DocumentElem name={'Скан паспорта'} weight={'123 кб'}></DocumentElem>
 						<DocumentElem name={'Трудовая книжка'} weight={'123 кб'}></DocumentElem>
 						<DocumentElem name={'СНИЛС'} weight={'123 кб'}></DocumentElem>
@@ -99,7 +99,7 @@ export const EmploymentStageInfo = () => {
 				<div className="flex flex-row pl-[20px] pt-[27px] items-center justify-between pr-[40px]">
 					<div className="flex flex-row">
 						<h3 className="font-bold text-[16px]/[19.2px]">4 ЭТАП</h3>
-						<h3 className="font-normal ml-[37px] text-[18px]/[21.6px]">«Медицинский осмотр»</h3>
+						<h3 className="font-normal ml-[37px] text-[18px]/[21.6px] ">«Медицинский осмотр»</h3>
 					</div>
 					<div className="flex flex-row gap-[12px]">
 						<Button
@@ -120,7 +120,7 @@ export const EmploymentStageInfo = () => {
 						</Button>
 					</div>
 				</div>
-				<div className="flex flex-col gap-[12px] py-[20px]">
+				<div className="flex flex-col gap-[12px] pl-[20px] py-[20px]">
 					<DocumentElem name={'Справка с медицинского осмотра'} weight={'123 кб'}></DocumentElem>
 					<DocumentElem name={'Психиатрическое заключение'} weight={'123 кб'}></DocumentElem>
 				</div>

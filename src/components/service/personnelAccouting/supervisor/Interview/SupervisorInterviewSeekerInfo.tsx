@@ -43,7 +43,7 @@ export const SupervisorInterviewSeekerInfo = ( ) => {
 			isInterviewEnded = false;
 		}
 
-		if (difference > 0 && difference <= 1800000) { // 30 мин
+		if (difference > 0 && difference <= 60 * 1000 * 5) { // 5 мин
 			isInterviewSoon = true;
 		} else {
 			isInterviewSoon = false;

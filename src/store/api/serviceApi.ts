@@ -1,3 +1,4 @@
+import { time } from 'console'
 import i18n from 'i18next'
 
 import { IApproveRequest } from '../../api/types'
@@ -818,7 +819,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 			query: arg => ({
 				url: `http://localhost:8082/employment-api/v1/respond/${arg.respondId}/chat/butttons/interview/reserve-time`,
 				method: 'POST',
-				body: {
+				body: arg.time && {
 					time: arg.time
 				},
 				headers: {

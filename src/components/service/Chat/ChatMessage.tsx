@@ -225,7 +225,9 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 							))}
 						</div>
 						<button
-							onClick={() => {}}
+							onClick={() => {
+								answerReserveTime({ respondId: respondId })
+							}}
 							className="text-[16px]/[19.2px] w-full rounded-[54.5px]  py-[12px] px-[56px] bg-inherit outline-none border cursor-pointer"
 						>
 							Нет подходящего времени

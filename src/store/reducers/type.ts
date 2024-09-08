@@ -412,7 +412,7 @@ export type SeekerStatusChangeType = {
 }
 
 export type ReserveTimeRequestType = {
-	time: string
+	time?: string
 }
 
 export type EmploymentRequestType = {

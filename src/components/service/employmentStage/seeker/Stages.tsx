@@ -1,6 +1,12 @@
+import { LoadingOutlined } from '@ant-design/icons'
+import { Spin } from 'antd'
+import { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 import { useLocation } from 'react-router-dom'
 
 import { useAppSelector } from '../../../../store'
+import { useLazyGetEmploymentDataQuery } from '../../../../store/api/serviceApi'
+import { setAllData } from '../../../../store/reducers/EmploymentDataSlice'
 
 import { EmplDocAttachment } from './EmplDocAttachment'
 import { EmplInstruction } from './EmplInstruction'
@@ -13,10 +19,38 @@ import { NavPanel } from './NavPanel'
 
 export const Stages = () => {
 	const { pathname } = useLocation()
+	const dispatch = useDispatch()
 
 	const respondId = parseInt(pathname.substring(pathname.lastIndexOf('/') + 1))
 
 	const { currentStage } = useAppSelector(state => state.currentEmploymentStage)
+
+	const [getEmpData, empData] = useLazyGetEmploymentDataQuery()
+
+	useEffect(() => {
+		getEmpData(respondId)
+			.unwrap()
+			.then(data => {
+				dispatch(setAllData(data))
+			})
+	}, [])
+
+	if (empData.isFetching || empData.isLoading) {
+		return (
+			<>
+				<div className="w-screen h-screen flex items-center">
+					<div className="text-center ml-auto mr-auto mb-[10%]">
+						<Spin
+							indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}
+						></Spin>
+						<p className="font-content-font font-normal text-black text-[18px]/[18px]">
+							Идёт загрузка этапа трудоустройства...
+						</p>
+					</div>
+				</div>
+			</>
+		)
+	}
 
 	return (
 		<>

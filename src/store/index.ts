@@ -16,6 +16,7 @@ import CurrentRespondIdSlice from './reducers/CurrentRespondIdSlice'
 import CurrentVacancyIdSlice from './reducers/CurrentVacancyIdSlice'
 import CurrentVacancyNameSlice from './reducers/CurrentVacancyNameSlice'
 import CurrentVacancySlice from './reducers/CurrentVacancySlice'
+import EmploymentDataSlice from './reducers/EmploymentDataSlice'
 import AddressReducer from './reducers/FormReducers/AddressReducer'
 import CountriesEducationReducer from './reducers/FormReducers/CountriesEducationReducer'
 import DocumentReducer from './reducers/FormReducers/DocumentReducer'
@@ -73,7 +74,8 @@ export const store = configureStore({
 		[apiSlice.reducerPath]: apiSlice.reducer,
 		currentVacancyId: CurrentVacancyIdSlice,
 		currentInterviewTimeFormated: CurrentInterviewTimeFormatedSlice,
-		currentEmploymentStage: CurrentEmploymentStage
+		currentEmploymentStage: CurrentEmploymentStage,
+		employmentData: EmploymentDataSlice
 	},
 	middleware: getDefaultMiddleware =>
 		getDefaultMiddleware()

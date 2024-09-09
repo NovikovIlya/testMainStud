@@ -418,3 +418,16 @@ export type ReserveTimeRequestType = {
 export type EmploymentRequestType = {
 	answer: 'YES' | 'NO'
 }
+
+export type EmployementStatus = 'FILLING' | 'VERIFYING' | 'REFINE' | 'COMPLETE'
+
+export type EmploymentDataType = {
+	id: number
+	status: EmployementStatus
+	stages: {
+		id: number
+		status: EmployementStatus
+		comment: string
+		documents: string[]
+	}[]
+}

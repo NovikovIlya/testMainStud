@@ -1,5 +1,6 @@
 import { time } from 'console'
 import i18n from 'i18next'
+import { url } from 'inspector'
 
 import { IApproveRequest } from '../../api/types'
 import {
@@ -9,6 +10,7 @@ import {
 	DocumentLib,
 	Documentation,
 	Email,
+	EmploymentDataType,
 	EmploymentRequestType,
 	Exam,
 	ICalendar,
@@ -388,6 +390,12 @@ export const serviceApi = apiSlice.injectEndpoints({
 						respondDate: resp.respondDate.substring(0, 10)
 					}))
 			}
+		}),
+		getEmploymentData: builder.query<EmploymentDataType, number>({
+			query: respondId => ({
+				url: `http://localhost:8082/employment-api/v1/respond/${respondId}/employment`,
+				headers: { Authorization: `Bearer ${seekerToken}` }
+			})
 		}),
 		postPhone: builder.mutation({
 			query: phone => {
@@ -917,5 +925,7 @@ export const {
 	useAnswerToInvitationReserveTimeRequestMutation,
 	useAnswerEmploymentRequestMutation,
 	useLazyGetChatPreviewsQuery,
-	useGetSeekerEmploymentRespondsQuery
+	useGetSeekerEmploymentRespondsQuery,
+	useLazyGetEmploymentDataQuery,
+	useGetEmploymentDataQuery
 } = serviceApi

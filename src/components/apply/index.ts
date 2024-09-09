@@ -98,7 +98,26 @@ export const postDocument = (params: any) =>
 export const getDocument = (): AxiosPromise<any> =>
 	axiosInstance.get(endpoints.USER.INFO.DOCUMENT)
 
-export const getAdmissionLink = (): AxiosPromise<{
-	link: string
-	session: string
-}> => axiosInstance.get(endpoints.USER.ADMISSION)
+// export const getAdmissionLink = (): AxiosPromise<{
+// 	link: string
+// 	session: string
+// }> => axiosInstance.get(endpoints.USER.ADMISSION)
+export const getAdmissionLink = () => {
+	const url = `https://egp.kpfu.ru/user-api/admission-link`
+	const headers = {
+		'Content-Type': 'application/json',
+		'Authorization': `Bearer ${localStorage.getItem('access')?.replaceAll('"', '')}`,
+		'Accept-Language': 'en'
+	}
+
+	return fetch(url, {
+		method: 'GET',
+		headers: headers
+	})
+	.then(response => response.json())
+	.then(data => data)
+	.catch(error => {
+		console.error('Ошибка при получении ссылки на поступление:', error)
+		throw error
+	})
+}

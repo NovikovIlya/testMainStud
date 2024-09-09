@@ -165,9 +165,9 @@ export type InterviewViewResponseType = {
 	status: string
 	userData: {
 		id: {
-			id: number,
+			id: number
 			type: string
-		},
+		}
 		firstname: string
 		lastname: string
 		middlename: string
@@ -181,7 +181,7 @@ export type InterviewViewResponseType = {
 	respondData: {
 		vacancyId: number
 		portfolio: {
-			url: string,
+			url: string
 			workExperiences: [
 				{
 					workPlace: string
@@ -193,13 +193,11 @@ export type InterviewViewResponseType = {
 			]
 		}
 		skills: {
-			keySkills: [
-				string
-			],
+			keySkills: [string]
 			aboutMe: string
-		},
+		}
 		coverLetter: string
-	},
+	}
 	educations: [
 		{
 			educationLevel: string
@@ -228,6 +226,7 @@ export type RespondItemType = {
 	name: string
 	respondDate: string
 	status: string
+	employmentStageStatus: string
 }
 
 type experienceResponceType = {
@@ -280,14 +279,15 @@ export type VacancyRespondItemType = {
 	responseDate: string
 	respondDate: string
 	vacancyName: string
-	status: 'IN_REVIEW' |
-					'IN_PERSONNEL_DEPT_REVIEW' |
-					'IN_SUPERVISOR_REVIEW' |
-					'INVITATION' |
-					'EMPLOYMENT_REQUEST' |
-					'EMPLOYMENT' |
-					'IN_RESERVE' |
-					'ARCHIVE'
+	status:
+		| 'IN_REVIEW'
+		| 'IN_PERSONNEL_DEPT_REVIEW'
+		| 'IN_SUPERVISOR_REVIEW'
+		| 'INVITATION'
+		| 'EMPLOYMENT_REQUEST'
+		| 'EMPLOYMENT'
+		| 'IN_RESERVE'
+		| 'ARCHIVE'
 	recipient: string
 	desiredJob: string
 	type: 'DIRECTLY' | 'RESERVE'
@@ -394,21 +394,21 @@ export type InterviewRequestType = {
 }
 
 export type InterviewItemType = {
-	id: number,
-	respondId: number,
+	id: number
+	respondId: number
 	seeker: {
 		firstName: string
 		middleName: string
 		lastName: string
-	},
+	}
 	format: 'OFFLINE' | 'ONLINE'
 	time: string
 	vacancyName: string
 }
 
 export type SeekerStatusChangeType = {
-	rejectionReason: string,
-	action : 'EMPLOY' | 'REJECT'
+	rejectionReason: string
+	action: 'EMPLOY' | 'REJECT'
 }
 
 export type ReserveTimeRequestType = {

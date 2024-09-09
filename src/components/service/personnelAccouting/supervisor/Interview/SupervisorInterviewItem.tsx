@@ -70,11 +70,33 @@ export const SupervisorInterviewItem = (props: InterviewItemType) => {
 		const hours: number = Math.floor((difference / (1000 * 60 * 60)) % 24)
 		const days: number = Math.floor(difference / (1000 * 60 * 60 * 24))
 
-		const isLessThanFiveMinutes = timeLeft > 0 && timeLeft <= 5 * 60 * 1000
+        const targetDate = new Date(props.eventTime);
+        const now = new Date();
+        const difference = targetDate.getTime() - now.getTime();
+        const minutes: number = Math.floor((difference / 1000 / 60) % 60);
+        const hours: number = Math.floor((difference / (1000 * 60 * 60)) % 24);
+        const days: number = Math.floor(difference / (1000 * 60 * 60 * 24));
+        let isInterviewStarted : boolean = false
+        let is5MinBeforeInterviewStarted : boolean = false
+        let is30MinAfterInterviewEnded : boolean = false
 
-		let datePublicString: string = ''
-		const isDaysEmpty: boolean = days === 0
-		const isHoursEmpty: boolean = hours === 0
+        if (difference < 0) {
+            isInterviewStarted = true;
+        } else {
+            isInterviewStarted = false;
+        }
+
+        if (difference > 0 && difference <= 60 * 1000 * 5) { // 5 мин
+            is5MinBeforeInterviewStarted = true;
+        } else {
+            is5MinBeforeInterviewStarted = false;
+        }
+
+        if (difference * (-1) < 60 * 1000 * 30) {
+            is30MinAfterInterviewEnded = false;
+        } else {
+            is30MinAfterInterviewEnded = true;
+        }
 
 		if (isDaysEmpty && isHoursEmpty) {
 			datePublicString += 'Осталось ' + minutes + ' минут'
@@ -115,11 +137,43 @@ export const SupervisorInterviewItem = (props: InterviewItemType) => {
 	const InterviewTimeElem = (props: InterviewTimeElemProps) => {
 		const date: Date = new Date(props.eventTime)
 
-		// Получаем локальное время
-		const localDate = date.toLocaleString('ru-RU', {
-			timeZoneName: 'short',
-			hour12: false
-		})
+        if (isDaysEmpty && isHoursEmpty) {
+            datePublicString += 'Осталось ' + minutes + ' минут'
+        }
+        if (isDaysEmpty && !isHoursEmpty) {
+            datePublicString += 'Осталось ' + hours + ' ч' + minutes + ' м'
+        }
+        if (!isDaysEmpty && !isHoursEmpty) {
+            datePublicString += 'Осталось ' + days + ' дн ' + hours + ' ч'
+        }
+        return (
+            <div className="flex items-center">
+                {(props.format === "OFFLINE") && (
+                    <span className="min-w-[220px] opacity-[0%]"></span>
+                )}
+                {(props.format === "ONLINE") && !(is5MinBeforeInterviewStarted) && !(isInterviewStarted) && (
+                  <span className="min-w-[220px] flex justify-center bg-[#3073D7] opacity-[32%] text-white font-content-font font-normal text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[35px] border-0">
+                {datePublicString}</span>
+                )}
+                {(props.format === "ONLINE") && (is5MinBeforeInterviewStarted) && !(isInterviewStarted) && (
+                  <span
+                    className="cursor-pointer w-[200px] flex justify-center bg-[#3073D7] text-white font-content-font cursor pointer font-normal text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[35px] border-0">
+                 Подключиться</span>
+                )}
+                {(props.format === 'ONLINE') && !(is30MinAfterInterviewEnded) && (isInterviewStarted) && (
+                  <span
+                    className="cursor-pointer w-[200px] flex justify-center bg-[#3073D7] text-white font-content-font cursor pointer font-normal text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[35px] border-0">
+                 Подключиться</span>
+                )}
+                {(props.format === "ONLINE") && (isInterviewStarted) && (is30MinAfterInterviewEnded) && (
+                    <span className="min-w-[220px] flex justify-center bg-[#3073D7] opacity-[32%] text-white font-content-font font-normal text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[35px] border-0">
+                Время истекло</span>
+                )}
+            </div>
+        );
+    }
+    const InterviewTimeElem = (props :  InterviewTimeElemProps) =>  {
+        const date : Date = new Date(props.eventTime);
 
 		// Преобразуем строку в формат "дд.мм.гг чч:мм"
 		const [datePart, timePart] = localDate.split(', ')

@@ -3,32 +3,9 @@ import request from 'axios'
 import { Cookies } from 'react-cookie'
 
 import {
-	addEducation,
-	addJobItem,
-	approve,
-	deleteEducation,
-	deleteJobItem,
-	deleteParent,
-	getAddress,
+
 	getAdmissionLink,
-	getDocument,
-	getEducation,
-	getForm,
-	getJob,
-	getParent,
-	getRole,
-	login,
-	postDocument,
-	postParent,
-	putAddress,
-	putEducation,
-	putForm,
-	putParent,
-	putPortfolioLink,
-	refresh,
-	register,
-	role,
-	updateJobItem
+	
 } from './index'
 
 

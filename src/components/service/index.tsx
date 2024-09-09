@@ -12,6 +12,7 @@ import {NavBusinessTrip} from "./businessTrip/NavBusinessTrip";
 import {useCheckIsEmployeeQuery} from "../../store/api/practiceApi/contracts";
 import {useGetContractsAllQuery} from "../../store/api/practiceApi/roster";
 import { NavMyPractices } from './myPractice/navMyPractice'
+import AboutUniversity from '../aboutUniversity/AboutUnversity'
 
 export const Service = () => {
 	const { pathname } = useLocation()
@@ -44,6 +45,7 @@ export const Service = () => {
 				{pathname.includes('/services/unifiedServiceCenter') && (
 					<NavUnifiedServiceCenter />
 				)}
+				{pathname.includes('/services/aboutUniversity') && <AboutUniversity />}
 			</div>
 		</div>
 	)

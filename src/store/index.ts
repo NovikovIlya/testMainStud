@@ -18,6 +18,7 @@ import SecretaryStepFormBusinessTrip from "./reducers/FormReducers/SecretaryStep
 import SecretaryItemTabsReducer from "./reducers/FormReducers/SecretaryItemTabsReducer";
 import {practiceApi} from "./api/practiceApi/practiceApi";
 import notificationSlice from './reducers/notificationSlice'
+import { abiturientApi } from './api/abiturent/abitRedirect'
 
 
 export const store = configureStore({
@@ -38,12 +39,14 @@ export const store = configureStore({
 		SecretaryStepFormBusinessTrip: SecretaryStepFormBusinessTrip,
 		SecretaryItemTabs: SecretaryItemTabsReducer,
 		[practiceApi.reducerPath]: practiceApi.reducer,
-		[apiSlice.reducerPath]: apiSlice.reducer
+		[apiSlice.reducerPath]: apiSlice.reducer,
+		[abiturientApi.reducerPath]: abiturientApi.reducer,
 	},
 	middleware: getDefaultMiddleware =>
 		getDefaultMiddleware()
 			//.concat(...(process.env.NODE_ENV !== 'production' ? [logger] : []))
-			.concat(apiSlice.middleware, practiceApi.middleware),
+			.concat(apiSlice.middleware, practiceApi.middleware)
+			.concat(abiturientApi.middleware),
 	devTools: true
 })
 

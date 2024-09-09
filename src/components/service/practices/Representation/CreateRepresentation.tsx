@@ -140,7 +140,7 @@ export const CreateRepresentation = () => {
 	const {data:dataAllPractise,isSuccess:isSuccessAllPractice} = useGetPracticesAllQuery(selectedPractice,{skip:!selectedPractice})
 	const [data, setData] = useState(fullTable)
 	const [step,setStep] = useState(0)
-	const [selectedPlace,setSelecectedPlace] = useState(null)
+	const [selectedPlace,setSelecectedPlace] = useState('В профильной организации')
 	const dispatch = useAppDispatch()
 	
 
@@ -167,23 +167,34 @@ export const CreateRepresentation = () => {
 
 	useEffect(()=>{
 		if(!visiting){
+			if(selectedPlace!=='В профильной организации'){
+				setStep(2)
+			}
 			if(isSuccessGetStudents && fullTable.length>0){
 				if(visiting){
 					if(fullTable.every((item:any)=>item.place!==null || item.arrivingCost!==null || item.livingCost!==null || item.costForDay!==null)){
 						setStep(2)
 					}
 				}
-				if(fullTable.every((item:any)=>item.place!==null )){
-					setStep(2)
-				}
+				// if(fullTable.every((item:any)=>item.place!==null )){
+				// 	setStep(2)
+				// }
 			}
 		}
 		if(visiting){
 			if(isSuccessGetStudents && fullTable.length>0){
-				if(fullTable.every((item:any)=>item.place!==null && item.arrivingCost!==null && item.livingCost!==null)){
-					setStep(2)
+				if(selectedPlace==='В профильной организации'){
+					if(fullTable.every((item:any)=>item.place!==null && item.arrivingCost!==null && item.livingCost!==null)){
+						setStep(2)
+					}else{
+						setStep(1)
+					}
 				}else{
-					setStep(1)
+					if(fullTable.every((item:any)=> item.arrivingCost!==null && item.livingCost!==null)){
+						setStep(2)
+					}else{
+						setStep(1)
+					}
 				}
 			}
 		}
@@ -576,12 +587,16 @@ export const CreateRepresentation = () => {
 					<span>Где будет проходить практика</span>
 				</Col>
 				<Col span={3}>
-				<Form.Item style={{ margin: 0 }} name={'selectPlace'}>
-					<Select onChange={(value) => {
+				
+					<Select
+					 value={selectedPlace}
+					 onChange={(value) => {
 						
 						setSelecectedPlace(value)
 						if(value==='На кафедре КФУ' || value === 'В структурном подразделении КФУ'){
-							setStep(2)
+							if(!visiting){
+								setStep(2)
+							}
 						}
 						if(value==='В профильной организации'){
 							if(fullTable.every((item:any)=>item.place===null)){
@@ -590,7 +605,7 @@ export const CreateRepresentation = () => {
 							
 						}
 					}} options={optionMockSelect}/>
-				</Form.Item>
+				
 			</Col>
 			</Row>
 			</>) : ''}
@@ -631,6 +646,19 @@ export const CreateRepresentation = () => {
 							}}
 						>
 							Сохранить
+						</Button>
+					</Space>
+				</Col>
+				<Col span={3} className=' mt-6' >
+					<Space className="w-full ">
+						<Button
+							
+							className="!rounded-full"
+							onClick={() => {
+								sendData()
+							}}
+						>
+							Сохранить и согласовать
 						</Button>
 					</Space>
 				</Col>

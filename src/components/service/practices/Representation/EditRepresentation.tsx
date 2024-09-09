@@ -73,11 +73,17 @@ export const EditRepresentation = () => {
 	const [fullTable, setFullTable] = useState<any>([])
 	const [editTheme, setEditTheme] = useState('')
 	const [isEdit, setIsEdit] = useState(false)
-	const [selectedPlace,setSelecectedPlace] = useState(dataOneSubmissions ? 
-		dataOneSubmissions.practice.place ==='На кафедре' ? 'В профильной организации' : dataOneSubmissions.practice.place === 'В структурном подразделении КФУ' ? 'В структурном подразделении КФУ' : 'В профильной организации'
-		: '')
+	const [selectedPlace,setSelecectedPlace] = useState<any>(null)
 	const dispatch = useAppDispatch()
+	console.log('selectedPlace',selectedPlace)
+
+	useEffect(()=>{
 	
+			const x = dataOneSubmissions?.students[0].place ==='На кафедре КФУ' ? 'На кафедре КФУ' : dataOneSubmissions?.students[0].place === 'В структурном подразделении КФУ' ? 'В структурном подразделении КФУ' : 'В профильной организации'
+			setSelecectedPlace(x)
+			form.setFieldValue('selectPlace',x)
+		
+	},[isSuccess])
 
 	useEffect(()=>{
 		if(isSuccess){
@@ -142,7 +148,7 @@ export const EditRepresentation = () => {
 			className: 'text-xs !p-2',
 			editable: true,
 			render: (text: any, record: any) => (
-				<div>{record?.place || 'Нет челибаса...'}</div>
+				<div>{''}</div>
 			)
 		},
 		{
@@ -460,11 +466,18 @@ export const EditRepresentation = () => {
 		const obj = arrayT.map((item: any) => {
 			return {
 				...item,
-				students: fullTable.map(({ key, ...rest }: any) => rest),
+				students: fullTable.map(({ key, ...rest }: any) => rest).map((item:any)=>{
+					if(selectedPlace==='В профильной организации'){
+						return { ...item, place: item.place }
+					}else{
+						return { ...item, place: selectedPlace }
+					}
+				}),
 				id: dataOneSubmissions.id,
 				theme: editTheme
 			}
 		})
+		console.log('-s-s-s',obj)
 		editSumbissions(obj[0])
 			.unwrap()
 			.then(() =>{
@@ -516,13 +529,23 @@ export const EditRepresentation = () => {
 					<span>Где будет проходить практика</span>
 				</Col>
 				<Col span={3}>
-				<Form.Item style={{ margin: 0 }} name={'selectPlace'}>
-					<Select onChange={(value) => {
+				
+					<Select 
+					value={selectedPlace}
+					onChange={(value) => {
 						
 						setSelecectedPlace(value)
-						
+						if(value==='В профильной организации'){
+							const x = fullTable.map((item:any)=>{
+								return {
+									...item,
+									place:''
+								}
+							})
+							setFullTable(x)
+						}
 					}} options={optionMockSelect}/>
-				</Form.Item>
+		
 			</Col>
 			</Row>
 
@@ -567,7 +590,7 @@ export const EditRepresentation = () => {
 				<Col flex={'auto'}>
 					<Form form={form} component={false}>
 
-						<TableEdit status={dataOneSubmissions?.status} active={true} visiting={dataOneSubmissions?.isWithDeparture} fullTable={fullTable} setFullTable={setFullTable} />
+						<TableEdit selectedPlace={selectedPlace} status={dataOneSubmissions?.status} active={true} visiting={dataOneSubmissions?.isWithDeparture} fullTable={fullTable} setFullTable={setFullTable} />
 					</Form>
 				</Col>
 			</Row>

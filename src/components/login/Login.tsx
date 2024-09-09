@@ -55,6 +55,7 @@ export const Login = () => {
 			}; path=/; samesite=strict`
 
 			localStorage.setItem('user', JSON.stringify(userData.user))
+			localStorage.setItem('password', JSON.stringify(values.password))
 			localStorage.setItem('access', JSON.stringify(userData.accessToken))
 			localStorage.setItem('refresh', JSON.stringify(userData.refreshToken))
 			navigate('/user')

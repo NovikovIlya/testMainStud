@@ -57,9 +57,9 @@ export const NavMyPractices = () => {
 		getItem('Практики', 'sub1', <PracticesSvg />, [
 			getItem('Мои практики', 'myPractice'),
 			
-		]),
+		])
 		
-		getItem(<Button className='opacity-70 '  onClick={() => setOpen(true)}>Пройти обучение</Button>, 'sub3', <QuestionCircleOutlined className='invisible absolute top-1/2 -translate-y-1/2 right-4 '/>),
+		// getItem(<Button className='opacity-70 '  onClick={() => setOpen(true)}>Пройти обучение</Button>, 'sub3', <QuestionCircleOutlined className='invisible absolute top-1/2 -translate-y-1/2 right-4 '/>),
 		// getItem('Cогласование документов', 'sub4', <PracticesSvg />, [
 		// 	getItem('График практик', '9'),
 		// 	getItem('Представление в приказ', '10'),

@@ -16,8 +16,8 @@ export const ContactInformation = () => {
 	const email = useAppSelector(state => state.auth.user?.email)
 	const [submit] = usePostPhoneMutation()
 	const onSubmitPhone = () => submit({ phone })
-
-	if (data === undefined || isLoading) return <SkeletonPage />
+	console.log('daisLoadingta',isLoading)
+	// if (data === undefined || isLoading) return <SkeletonPage />
 
 	return (
 		<section className="max-w-2xl">
@@ -38,8 +38,8 @@ export const ContactInformation = () => {
 				</article>
 				<article className="mt-7 mb-2.5">
 					<h1 className="opacity-80 text-black text-sm font-normal">Телефон</h1>
-					{data.length ? (
-						<div className="bg-white p-2 rounded-md">{data[0]}</div>
+					{data?.length ? (
+						<div className="bg-white p-2 rounded-md">{data?.[0]}</div>
 					) : (
 						<>
 							<FormItem name="phone" className="w-full">

@@ -9,6 +9,9 @@ import { useAppSelector } from '../../store'
 import { changeLayout, removeCard } from '../../store/reducers/LayoutsSlice'
 
 import { jsxElements } from './defaultElement'
+import { Apply } from '../apply/Apply'
+import { AboutUniversityCard } from '../aboutUniversity/AboutUniversityCard'
+import { Col, Row } from 'antd'
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive)
 const DropDrag = () => {
@@ -17,9 +20,8 @@ const DropDrag = () => {
 	const edit = useAppSelector(state => state.auth.edit)
 	const [currentBreakpoint, setCurrentBreakpoint] = useState<string>('lg')
 	const [mounted, setMounted] = useState(false)
-	const [toolbox, setToolbox] = useState<{ [index: string]: any[] }>({
-		lg: []
-	})
+	const [toolbox, setToolbox] = useState<{ [index: string]: any[] }>({lg: []})
+	const user = useAppSelector(state => state.auth.user)
 
 	useEffect(() => {
 		setMounted(true)
@@ -35,7 +37,7 @@ const DropDrag = () => {
 	useEffect(() => {
 		function handleWindowResize() {
 			setWindowSize(getWindowSize())
-		}
+	}
 
 		window.addEventListener('resize', handleWindowResize)
 
@@ -85,9 +87,19 @@ const DropDrag = () => {
 			</div>
 		)
 	})
-
+	console.log('user',user)
 	return (
 		<div className=" mt-[40px] w-[min(1600px, 100%)] mb-[100px]">
+			{user?.roles[0].type==='ABITUR' || user?.roles[0].type==='OTHER' ?
+			<>
+			<Apply/> 
+			<Row>
+				<Col span={8}>
+					<AboutUniversityCard/>
+				</Col>
+			</Row>
+			</>
+			: 
 			<ResponsiveReactGridLayout
 				className="layout "
 				cols={{ lg: 3, md: 2, sm: 2, xs: 2, xxs: 1 }}
@@ -105,6 +117,8 @@ const DropDrag = () => {
 			>
 				{generateDOM}
 			</ResponsiveReactGridLayout>
+			}
+
 		</div>
 	)
 }

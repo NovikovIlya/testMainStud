@@ -23,31 +23,31 @@ const navList = [
 		icon: <ContactInformationSvg />,
 		name: 'Контактные данные'
 	},
-	{
-		id: '/services/setting/photo',
-		icon: <PhotoSvg />,
-		name: 'ID фото'
-	},
+	// {
+	// 	id: '/services/setting/photo',
+	// 	icon: <PhotoSvg />,
+	// 	name: 'ID фото'
+	// },
 	{
 		id: '/services/setting/changePassword',
 		icon: <ChangePasswordSvg />,
 		name: 'Изменить пароль'
 	},
-	{
-		id: '/services/setting/themeDesign',
-		icon: <ThemeDesignSvg />,
-		name: 'Тема оформления'
-	},
-	{
-		id: '/services/setting/language',
-		icon: <LanguageSvg />,
-		name: 'Язык'
-	},
-	{
-		id: '/services/setting/visuallyImpaired',
-		icon: <VisuallyImpairedSvg />,
-		name: 'Для слабовидящих'
-	}
+	// {
+	// 	id: '/services/setting/themeDesign',
+	// 	icon: <ThemeDesignSvg />,
+	// 	name: 'Тема оформления'
+	// },
+	// {
+	// 	id: '/services/setting/language',
+	// 	icon: <LanguageSvg />,
+	// 	name: 'Язык'
+	// },
+	// {
+	// 	id: '/services/setting/visuallyImpaired',
+	// 	icon: <VisuallyImpairedSvg />,
+	// 	name: 'Для слабовидящих'
+	// }
 ]
 
 export const NavSetting = () => {
@@ -87,11 +87,11 @@ export const NavSetting = () => {
 			</div>
 			<div className="bg-[#F5F8FB] w-full pt-14 px-14 mt-20">
 				{pathname === navList[0].id && <ContactInformation />}
-				{pathname === navList[1].id && <Photo />}
-				{pathname === navList[2].id && <ChangePassword />}
-				{pathname === navList[3].id && <ThemeDesign />}
-				{pathname === navList[4].id && <Language />}
-				{pathname === navList[5].id && <VisuallyImpaired />}
+				{/* {pathname === navList[1].id && <Photo />} */}
+				{pathname === navList[1].id && <ChangePassword />}
+				{/* {pathname === navList[2].id && <ThemeDesign />} */}
+				{/* {pathname === navList[3].id && <Language />} */}
+				{/* {pathname === navList[4].id && <VisuallyImpaired />} */}
 			</div>
 		</>
 	)

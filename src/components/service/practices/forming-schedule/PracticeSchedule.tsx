@@ -665,6 +665,7 @@ export const PracticeSchedule = () => {
 				</Col>
 				<Col span={8} className='overWrite grow'>
 					<Select
+						disabled={filter.subDivision==='Все'}
 						mode='multiple'
 						popupMatchSelectWidth={false}
 						value={selectedValueSpecialty}
@@ -686,6 +687,7 @@ export const PracticeSchedule = () => {
 				</Col>
 				<Col span={3} className='grow overWrite'>
 					<Select
+						disabled={filter.subDivision==='Все'}
 						mode='multiple'
 						popupMatchSelectWidth={false}
 						value={selectedValueCourse}
@@ -705,6 +707,7 @@ export const PracticeSchedule = () => {
 				</Col>
 				<Col span={5} className='overWrite grow'>
 					<Select
+						disabled={filter.subDivision==='Все'}
 						mode='multiple'
 						popupMatchSelectWidth={false}
 						value={selectedValueKind}
@@ -741,6 +744,7 @@ export const PracticeSchedule = () => {
 				</Col>
 				<Col span={8} className='overWrite grow'>
 					<Select	
+						disabled={filter.subDivision==='Все'}
 						mode='multiple'
 						value={selectedValuesLevel}
 						popupMatchSelectWidth={false}
@@ -762,6 +766,7 @@ export const PracticeSchedule = () => {
 				</Col>
 				<Col span={8} className='overWrite grow'>
 					<Select
+						disabled={filter.subDivision==='Все'}
 						mode='multiple'
 						popupMatchSelectWidth={false}
 						value={selectedValueForm}

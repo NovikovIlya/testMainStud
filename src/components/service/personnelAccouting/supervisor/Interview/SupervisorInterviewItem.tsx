@@ -70,8 +70,27 @@ export const SupervisorInterviewItem = ( props : InterviewItemType ) => {
         const minutes: number = Math.floor((difference / 1000 / 60) % 60);
         const hours: number = Math.floor((difference / (1000 * 60 * 60)) % 24);
         const days: number = Math.floor(difference / (1000 * 60 * 60 * 24));
+        let isInterviewStarted : boolean = false
+        let is5MinBeforeInterviewStarted : boolean = false
+        let is30MinAfterInterviewEnded : boolean = false
 
-        const isLessThanFiveMinutes = timeLeft > 0 && timeLeft <= 5 * 60 * 1000;
+        if (difference < 0) {
+            isInterviewStarted = true;
+        } else {
+            isInterviewStarted = false;
+        }
+
+        if (difference > 0 && difference <= 60 * 1000 * 5) { // 5 мин
+            is5MinBeforeInterviewStarted = true;
+        } else {
+            is5MinBeforeInterviewStarted = false;
+        }
+
+        if (difference * (-1) < 60 * 1000 * 30) {
+            is30MinAfterInterviewEnded = false;
+        } else {
+            is30MinAfterInterviewEnded = true;
+        }
 
         let datePublicString : string = ''
         const isDaysEmpty : boolean = days === 0
@@ -91,15 +110,21 @@ export const SupervisorInterviewItem = ( props : InterviewItemType ) => {
                 {(props.format === "OFFLINE") && (
                     <span className="min-w-[220px] opacity-[0%]"></span>
                 )}
-                {(props.format === "ONLINE") && (isLessThanFiveMinutes) && !(difference<0) &&  (
-                    <span className="cursor-pointer w-[200px] flex justify-center bg-[#3073D7] text-white font-content-font cursor pointer font-normal text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[35px] border-0">
-                 Подключиться</span>
-                )}
-                {(props.format === "ONLINE") && (!isLessThanFiveMinutes) && !(difference<0) && (
-                    <span className="min-w-[220px] flex justify-center bg-[#3073D7] opacity-[32%] text-white font-content-font font-normal text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[35px] border-0">
+                {(props.format === "ONLINE") && !(is5MinBeforeInterviewStarted) && !(isInterviewStarted) && (
+                  <span className="min-w-[220px] flex justify-center bg-[#3073D7] opacity-[32%] text-white font-content-font font-normal text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[35px] border-0">
                 {datePublicString}</span>
                 )}
-                {(props.format === "ONLINE") && (difference<0) && (
+                {(props.format === "ONLINE") && (is5MinBeforeInterviewStarted) && !(isInterviewStarted) && (
+                  <span
+                    className="cursor-pointer w-[200px] flex justify-center bg-[#3073D7] text-white font-content-font cursor pointer font-normal text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[35px] border-0">
+                 Подключиться</span>
+                )}
+                {(props.format === 'ONLINE') && !(is30MinAfterInterviewEnded) && (isInterviewStarted) && (
+                  <span
+                    className="cursor-pointer w-[200px] flex justify-center bg-[#3073D7] text-white font-content-font cursor pointer font-normal text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[35px] border-0">
+                 Подключиться</span>
+                )}
+                {(props.format === "ONLINE") && (isInterviewStarted) && (is30MinAfterInterviewEnded) && (
                     <span className="min-w-[220px] flex justify-center bg-[#3073D7] opacity-[32%] text-white font-content-font font-normal text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[35px] border-0">
                 Время истекло</span>
                 )}

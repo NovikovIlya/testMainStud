@@ -1,6 +1,11 @@
 import { Button } from 'antd'
 import { useNavigate } from 'react-router-dom'
 import { FileIconSvg } from "../../../../assets/svg/FileIconSvg"
+import { setCurrentResponce } from '../../../../store/reducers/CurrentResponceSlice'
+import {
+	useGetChatIdByRespondIdQuery
+} from '../../../../store/api/serviceApi'
+import { useDispatch } from 'react-redux'
 
 interface DepEmploymentItemProps {
 	status: string
@@ -8,10 +13,11 @@ interface DepEmploymentItemProps {
 
 export const DepEmploymentItem = (  props : DepEmploymentItemProps ) => {
 
+	const dispatch = useDispatch()
 	const navigate = useNavigate()
 
 	return (
-		<div className="flex flex-col mt-[16px]">
+		<div className="flex flex-col">
 			<div className="flex flex-row items-center h-[80px] w-full bg-[#FFFFFF]">
 				<div className="flex ml-[1.5%] w-[24%]">
 					Алексеев Дмитрий Иванович
@@ -49,7 +55,8 @@ export const DepEmploymentItem = (  props : DepEmploymentItemProps ) => {
 					<Button
 						className='bg-[#FFFFFF] py-[8px] px-[24px] text-[#333333] border-[#333333] border-[1px] rounded-[54.5px] text-[16px] font-normal cursor-pointer'
 						onClick={() => {
-							alert('Эта функция пока недоступна')
+							{/*dispatch(setCurrentResponce(props.id))*/}
+							navigate('/services/personnelaccounting/employment/stages/seekerinfo')
 						}}
 					>
 						Резюме
@@ -57,7 +64,8 @@ export const DepEmploymentItem = (  props : DepEmploymentItemProps ) => {
 					<Button
 						className='bg-[#FFFFFF] py-[8px] px-[24px] text-[#333333] border-[#333333] border-[1px] rounded-[54.5px] cursor-pointer'
 						onClick={() => {
-							alert('Эта функция пока недоступна')
+							let chatId = 1
+							navigate(`/services/personnelaccounting/chat/id/${chatId}`)
 						}}
 					>
 						<FileIconSvg></FileIconSvg>

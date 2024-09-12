@@ -419,7 +419,12 @@ export type EmploymentRequestType = {
 	answer: 'YES' | 'NO'
 }
 
-export type EmployementStatus = 'FILLING' | 'VERIFYING' | 'REFINE' | 'COMPLETE'
+export type EmployementStatus =
+	| 'FILLING'
+	| 'VERIFYING'
+	| 'REFINE'
+	| 'COMPLETE'
+	| 'READY'
 
 export type EmploymentDataType = {
 	id: number
@@ -428,6 +433,10 @@ export type EmploymentDataType = {
 		id: number
 		status: EmployementStatus
 		comment: string
-		documents: string[]
+		documents: {
+			id: number
+			docType: string
+			status: 'ATTACHED' | 'NOT_ATTACHED'
+		}[]
 	}[]
 }

@@ -7,6 +7,7 @@ import { useLocation } from 'react-router-dom'
 import { useAppSelector } from '../../../../store'
 import { useLazyGetEmploymentDataQuery } from '../../../../store/api/serviceApi'
 import { setAllData } from '../../../../store/reducers/EmploymentDataSlice'
+import { setAllProgress } from '../../../../store/reducers/EmploymentProgressSlice'
 
 import { EmplDocAttachment } from './EmplDocAttachment'
 import { EmplInstruction } from './EmplInstruction'
@@ -32,6 +33,24 @@ export const Stages = () => {
 			.unwrap()
 			.then(data => {
 				dispatch(setAllData(data))
+				dispatch(
+					setAllProgress(
+						data.stages.map(stage => {
+							if (stage.status === 'FILLING') {
+								const smthMissing = stage.documents.find(
+									doc => doc.status === 'NOT_ATTACHED'
+								)
+								if (smthMissing) {
+									return stage
+								} else {
+									return { ...stage, status: 'READY' }
+								}
+							} else {
+								return stage
+							}
+						})
+					)
+				)
 			})
 	}, [])
 

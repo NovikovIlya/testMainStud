@@ -32,17 +32,21 @@ export const RespondItem = (props: RespondItemType & { refetch: Function }) => {
 
 	const handleNavigate = (url: string) => {
 		if (props.status) {
-			if (props.status !== respondStatus[respondStatus.INVITATION]) {
-				dispatch(closeChat())
-			} else {
+			if (
+				props.status === respondStatus[respondStatus.INVITATION] ||
+				props.status === respondStatus[respondStatus.EMPLOYMENT_REQUEST] ||
+				props.status === respondStatus[respondStatus.EMPLOYMENT]
+			) {
 				dispatch(openChat())
+			} else {
+				dispatch(closeChat())
 			}
 		} else {
 			dispatch(openChat())
 		}
 		dispatch(setChatId(chatId))
 		dispatch(setRespondId(props.id))
-		dispatch(setCurrentVacancyId(0))
+		dispatch(setCurrentVacancyId(props.vacancyId))
 		navigate(url)
 	}
 

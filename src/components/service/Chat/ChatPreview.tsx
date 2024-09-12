@@ -44,10 +44,15 @@ export const ChatPreview = (props: {
 
 	const handleNavigate = (url: string) => {
 		if (props.checkableStatus) {
-			if (props.checkableStatus !== respondStatus[respondStatus.INVITATION]) {
-				dispatch(closeChat())
-			} else {
+			if (
+				props.checkableStatus === respondStatus[respondStatus.INVITATION] ||
+				props.checkableStatus ===
+					respondStatus[respondStatus.EMPLOYMENT_REQUEST] ||
+				props.checkableStatus === respondStatus[respondStatus.EMPLOYMENT]
+			) {
 				dispatch(openChat())
+			} else {
+				dispatch(closeChat())
 			}
 		} else {
 			dispatch(openChat())

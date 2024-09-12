@@ -72,7 +72,7 @@ export const ReserveRespondInfo = (props: {
 		dispatch(openChat())
 		dispatch(setChatId(chatId))
 		dispatch(setRespondId(res?.id as number))
-		dispatch(setCurrentVacancyId(0))
+		dispatch(setCurrentVacancyId(res?.vacancyId as number))
 		navigate(url)
 	}
 

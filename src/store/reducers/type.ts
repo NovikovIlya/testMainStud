@@ -279,6 +279,7 @@ export type VacancyRespondItemType = {
 	responseDate: string
 	respondDate: string
 	vacancyName: string
+	vacancyId: number
 	status:
 		| 'IN_REVIEW'
 		| 'IN_PERSONNEL_DEPT_REVIEW'

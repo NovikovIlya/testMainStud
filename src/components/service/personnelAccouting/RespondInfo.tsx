@@ -118,13 +118,14 @@ export const RespondInfo = (props: {
 					<div>
 						<Button
 							onClick={() => {
-								props.type === 'PERSONNEL_DEPARTMENT'
-									? navigate('/services/personnelaccounting/responds')
-									: props.type === 'SUPERVISOR'
-									? navigate(
-											'/services/personnelaccounting/supervisor/responds'
-									  )
-									: navigate('/services/myresponds/responds')
+								// props.type === 'PERSONNEL_DEPARTMENT'
+								// 	? navigate('/services/personnelaccounting/responds')
+								// 	: props.type === 'SUPERVISOR'
+								// 	? navigate(
+								// 			'/services/personnelaccounting/supervisor/responds'
+								// 	  )
+								// 	: navigate('/services/myresponds/responds')
+								navigate(-1)
 							}}
 							className="bg-inherit h-[38px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer"
 						>

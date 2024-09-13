@@ -1,4 +1,5 @@
-import { Button, ConfigProvider, Modal, Tag } from 'antd'
+import { LoadingOutlined } from '@ant-design/icons'
+import { Button, ConfigProvider, Modal, Spin, Tag } from 'antd'
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -75,7 +76,20 @@ export const ArchiveRespondInfo = (props: {
 	}
 
 	if (res === undefined) {
-		return <></>
+		return (
+			<>
+				<div className="w-screen h-screen flex items-center">
+					<div className="text-center ml-auto mr-auto mb-[10%]">
+						<Spin
+							indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}
+						></Spin>
+						<p className="font-content-font font-normal text-black text-[18px]/[18px]">
+							Идёт загрузка...
+						</p>
+					</div>
+				</div>
+			</>
+		)
 	} else {
 		return (
 			<>

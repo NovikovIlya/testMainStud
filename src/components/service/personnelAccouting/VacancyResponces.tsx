@@ -1,4 +1,5 @@
-import { Radio, Select } from 'antd'
+import { LoadingOutlined } from '@ant-design/icons'
+import { Radio, Select, Spin } from 'antd'
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
@@ -19,11 +20,29 @@ export const VacancyResponces = () => {
 	const vacancyId = parseInt(pathVacancyId)
 
 	const [status, setStatus] = useState('все')
-	const { data: responds = [] } = useGetResponcesByVacancyQuery({
-		id: vacancyId,
-		status: status,
-		role: 'PERSONNEL_DEPARTMENT'
-	})
+	const { data: responds = [], isLoading: loading } =
+		useGetResponcesByVacancyQuery({
+			id: vacancyId,
+			status: status,
+			role: 'PERSONNEL_DEPARTMENT'
+		})
+
+	if (loading) {
+		return (
+			<>
+				<div className="w-screen h-screen flex items-center">
+					<div className="text-center ml-auto mr-auto mb-[10%]">
+						<Spin
+							indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}
+						></Spin>
+						<p className="font-content-font font-normal text-black text-[18px]/[18px]">
+							Идёт загрузка...
+						</p>
+					</div>
+				</div>
+			</>
+		)
+	}
 
 	return (
 		<>

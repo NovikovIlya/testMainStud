@@ -1,4 +1,5 @@
-import { Radio, Select } from 'antd'
+import { LoadingOutlined } from '@ant-design/icons'
+import { Radio, Select, Spin } from 'antd'
 import { useState } from 'react'
 
 import { useGetSeekerRespondsQuery } from '../../../store/api/serviceApi'
@@ -8,7 +9,28 @@ import { RespondItem } from './RespondItem'
 
 export const MyResponds = () => {
 	const [status, setStatus] = useState('все')
-	const { data: responds = [], refetch } = useGetSeekerRespondsQuery(status)
+	const {
+		data: responds = [],
+		refetch,
+		isLoading: loading
+	} = useGetSeekerRespondsQuery(status)
+
+	if (loading) {
+		return (
+			<>
+				<div className="w-screen h-screen flex items-center">
+					<div className="text-center ml-auto mr-auto mb-[10%]">
+						<Spin
+							indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}
+						></Spin>
+						<p className="font-content-font font-normal text-black text-[18px]/[18px]">
+							Идёт загрузка...
+						</p>
+					</div>
+				</div>
+			</>
+		)
+	}
 
 	return (
 		<>

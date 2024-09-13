@@ -1,4 +1,5 @@
-import { Button, ConfigProvider, Select } from 'antd'
+import { LoadingOutlined } from '@ant-design/icons'
+import { Button, ConfigProvider, Select, Spin } from 'antd'
 import { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 
@@ -48,7 +49,8 @@ export const ChatEmpDemp = () => {
 		{ id: number; respondInfo: VacancyRespondItemType; unreadCount: number }[]
 	>([])
 
-	const [getChatPreviews] = useLazyGetChatPreviewsQuery()
+	const [getChatPreviews, chatPreviewsQueryState] =
+		useLazyGetChatPreviewsQuery()
 	const { data: vacancies = [] } = useGetAllVacanciesQuery()
 
 	useEffect(() => {
@@ -281,7 +283,25 @@ export const ChatEmpDemp = () => {
 								</div>
 							</>
 						)}
-						<ul className="flex flex-col">{handleList}</ul>
+						{chatPreviewsQueryState.isFetching ||
+						chatPreviewsQueryState.isLoading ? (
+							<>
+								<div className="flex items-center">
+									<div className="text-center ml-auto mr-auto mb-[10%]">
+										<Spin
+											indicator={
+												<LoadingOutlined style={{ fontSize: 36 }} spin />
+											}
+										></Spin>
+										<p className="font-content-font font-normal text-black text-[18px]/[18px]">
+											Идёт загрузка...
+										</p>
+									</div>
+								</div>
+							</>
+						) : (
+							<ul className="flex flex-col">{handleList}</ul>
+						)}
 						<div className="h-[1px]" ref={chatPreviewsBottomRef}></div>
 					</div>
 				</div>

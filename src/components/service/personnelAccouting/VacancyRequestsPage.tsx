@@ -1,4 +1,5 @@
-import { Radio } from 'antd'
+import { LoadingOutlined } from '@ant-design/icons'
+import { Radio, Spin } from 'antd'
 import { useState } from 'react'
 
 import { useGetVacancyRequestsQuery } from '../../../store/api/serviceApi'
@@ -8,7 +9,25 @@ import { VacancyRequestItem } from './VacancyRequestItem'
 export const VacancyRequestsPage = () => {
 	const [action, setAction] = useState<string>('все')
 
-	const { data: requests = [] } = useGetVacancyRequestsQuery(action)
+	const { data: requests = [], isLoading: loading } =
+		useGetVacancyRequestsQuery(action)
+
+	if (loading) {
+		return (
+			<>
+				<div className="w-screen h-screen flex items-center">
+					<div className="text-center ml-auto mr-auto mb-[10%]">
+						<Spin
+							indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}
+						></Spin>
+						<p className="font-content-font font-normal text-black text-[18px]/[18px]">
+							Идёт загрузка...
+						</p>
+					</div>
+				</div>
+			</>
+		)
+	}
 
 	return (
 		<>

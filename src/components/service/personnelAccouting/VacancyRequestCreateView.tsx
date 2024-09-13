@@ -456,7 +456,7 @@ export const VacancyRequestCreateView = () => {
 							<ArrowIcon />
 						</button>
 						<p className="ml-[40px] font-content-font font-normal text-black text-[28px]/[33.6px]">
-							{post !== undefined ? post : ''}
+							{post !== undefined ? '«' + post + '»' : ''}
 						</p>
 					</div>
 					<div className="w-[50%] mt-[52px] flex flex-col gap-[40px]">

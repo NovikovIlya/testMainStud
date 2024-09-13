@@ -252,15 +252,17 @@ export const VacancyRequestUpdateView = () => {
 							<ArrowIcon />
 						</button>
 						<p className="ml-[40px] font-content-font font-normal text-black text-[28px]/[33.6px]">
-							{requestView !== undefined && requestView.oldData !== null
-								? (() => {
+							{requestView !== undefined && requestView.oldData !== null ? (
+								<>
+									<span>«</span>
+									{(() => {
 										var test = dmp.diff_main(
 											requestView.oldData.post,
 											isEdited ? (post as string) : requestView.newData.post
 										)
 										dmp.diff_cleanupSemantic(test)
 										return test
-								  })().map(diff =>
+									})().map(diff =>
 										diff[0] < 0 ? (
 											<span className="bg-red-400 bg-opacity-60">
 												{diff[1]}
@@ -272,8 +274,12 @@ export const VacancyRequestUpdateView = () => {
 										) : (
 											<span>{diff[1]}</span>
 										)
-								  )
-								: ''}
+									)}
+									<span>»</span>
+								</>
+							) : (
+								''
+							)}
 						</p>
 					</div>
 					<div className="w-[50%] mt-[52px] flex flex-col gap-[40px]">

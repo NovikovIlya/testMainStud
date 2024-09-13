@@ -113,7 +113,7 @@ export const VacancyRequestDeleteView = () => {
 							Должность:
 						</p>
 						<p className="font-content-font font-normal text-black text-[18px]/[21px]">
-							{post && post}
+							{post && '«' + post + '»'}
 						</p>
 					</div>
 					<div className="flex gap-[60px]">

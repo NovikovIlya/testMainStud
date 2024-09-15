@@ -145,6 +145,10 @@ export const RespondItem = (props: RespondItemType & { refetch: Function }) => {
 							setModalOpen(true)
 						}}
 						type="text"
+						disabled={
+							props.status === respondStatus[respondStatus.IN_RESERVE] ||
+							props.status === respondStatus[respondStatus.ARCHIVE]
+						}
 						icon={<DeleteSvg />}
 					/>
 				</div>

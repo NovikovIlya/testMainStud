@@ -1,4 +1,4 @@
-import { Button, Form, Input, Select } from 'antd'
+import { Button, ConfigProvider, Form, Input, Modal, Select } from 'antd'
 import { diff_match_patch } from 'diff-match-patch'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -40,6 +40,9 @@ export const VacancyRequestUpdateView = () => {
 	const [skills, setSkills] = useState<string | undefined>(undefined)
 
 	const [conditions, setConditions] = useState<string | undefined>(undefined)
+
+	const [isResultModalOpen, setIsResultModalOpen] = useState<boolean>(false)
+	const [resultModalText, setResultModalText] = useState<string>('')
 
 	useEffect(() => {
 		getVacancyRequestView(requestId)
@@ -103,6 +106,42 @@ export const VacancyRequestUpdateView = () => {
 
 	return (
 		<>
+			<ConfigProvider
+				theme={{
+					token: {
+						boxShadow: '0 0 19px 0 rgba(212, 227, 241, 0.6)'
+					}
+				}}
+			>
+				<Modal
+					bodyStyle={{
+						padding: '26px'
+					}}
+					width={407}
+					className="pr-[52px] pl-[52px] pb-[52px]"
+					open={isResultModalOpen}
+					title={null}
+					footer={null}
+					centered
+					onCancel={() => {
+						setIsResultModalOpen(false)
+					}}
+				>
+					<p className="text-center font-content-font text-black text-[16px]/[20px] font-normal">
+						{resultModalText}
+					</p>
+					<Button
+						className="rounded-[40px] w-full !py-[13px] mt-[40px]"
+						type="primary"
+						onClick={() => {
+							setIsResultModalOpen(false)
+							navigate('/services/personnelaccounting/vacancyrequests')
+						}}
+					>
+						Ок
+					</Button>
+				</Modal>
+			</ConfigProvider>
 			{isEdit ? (
 				<Form
 					initialValues={{
@@ -562,10 +601,21 @@ export const VacancyRequestUpdateView = () => {
 																refetch()
 															})
 															.then(() => {
-																navigate(
-																	'/services/personnelaccounting/vacancyrequests'
-																)
+																setResultModalText('Вакансия успешно обновлена')
+																setIsResultModalOpen(true)
 															})
+													})
+													.catch(error => {
+														try {
+															setResultModalText(
+																error.data.errors[0].message as string
+															)
+														} catch (err) {
+															setResultModalText(
+																'Что-то пошло не так, приносим извинения за неудобства'
+															)
+														}
+														setIsResultModalOpen(true)
 													})
 										  }
 										: () => {
@@ -575,9 +625,20 @@ export const VacancyRequestUpdateView = () => {
 														refetch()
 													})
 													.then(() => {
-														navigate(
-															'/services/personnelaccounting/vacancyrequests'
-														)
+														setResultModalText('Вакансия успешно обновлена')
+														setIsResultModalOpen(true)
+													})
+													.catch(error => {
+														try {
+															setResultModalText(
+																error.data.errors[0].message as string
+															)
+														} catch (err) {
+															setResultModalText(
+																'Что-то пошло не так, приносим извинения за неудобства'
+															)
+														}
+														setIsResultModalOpen(true)
 													})
 										  }
 								}

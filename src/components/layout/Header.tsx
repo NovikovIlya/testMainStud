@@ -114,21 +114,21 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 			),
 			key: '3'
 		},
-		{
-			label: (
-				<div
-					onClick={() => {
-						setOpenMenu(false)
-						dispatch(setEdit())
-					}}
-					className="flex items-center gap-[15px] px-[4px] py-[5px]"
-				>
-					<PersonalizationSvg />
-					{t('Personalization')}
-				</div>
-			),
-			key: '4'
-		},
+		// {
+		// 	label: (
+		// 		<div
+		// 			onClick={() => {
+		// 				setOpenMenu(false)
+		// 				dispatch(setEdit())
+		// 			}}
+		// 			className="flex items-center gap-[15px] px-[4px] py-[5px]"
+		// 		>
+		// 			<PersonalizationSvg />
+		// 			{t('Personalization')}
+		// 		</div>
+		// 	),
+		// 	key: '4'
+		// },
 		{
 			label: (
 				<div

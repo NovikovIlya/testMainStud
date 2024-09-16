@@ -7,7 +7,8 @@ import {
 	Spin,
 	Table,
 	Typography, Form,
-	TreeSelect
+	TreeSelect,
+	Radio
 } from 'antd'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -83,6 +84,7 @@ const mockData = [
 ];
 
 export const MyPractice = () => {
+	const [fullTable,setFullTable] = useState(false)
 	const [currentPage, setCurrentPage] = useState(1);
 	const [form] = Form.useForm()
 	const navigate = useNavigate()
@@ -148,13 +150,7 @@ export const MyPractice = () => {
 			className: 'text-xs !p-2 mobileFirst',
 			render: (text: any, record: any) => <span >{record?.practice?.practiceKind}</span>
 		},
-		// {
-		// 	key: 'place',
-		// 	dataIndex: 'place',
-		// 	title: 'Место прохождения практики',
-		// 	className: 'text-xs !p-2',
-		// 	render: (text: any, record: any) => <span >{record?.place}</span>
-		// },
+
 		{
 			key: 'FIO',
 			dataIndex: 'FIO',
@@ -180,6 +176,51 @@ export const MyPractice = () => {
 		
 	]
 
+	const columnsMini = [
+		
+    	{
+			key: 'specialtyName',
+			dataIndex: 'specialtyName',
+			title: 'Шифр и наименование специальности',
+			className: 'text-xs !p-4',
+			render: (text: any, record: any) => <span >{record?.practice?.specialtyName}</span>
+		},
+
+   		{
+			key: 'academicYear',
+			dataIndex: 'academicYear',
+			title: 'Учебный год',
+			className: 'text-xs !p-4',
+			render: (text: any, record: any) => <span >{record?.practice?.academicYear}</span>
+		},
+    	{
+			key: 'courseNumber',
+			dataIndex: 'courseNumber',
+			title: 'Курс',
+			className: 'text-xs !p-4 mobileFirst',
+			render: (text: any, record: any) => <span >{record?.practice?.courseNumber}</span>
+		},
+   		{
+			key: 'practiceType',
+			dataIndex: 'practiceType',
+			title: 'Тип',
+			className: 'text-xs !p-4 mobileFirst',
+			render: (text: any, record: any) => <span >{record?.practice?.practiceType}</span>
+		},
+  
+
+
+
+		{
+			key: 'status',
+			dataIndex: 'status',
+			title: 'Оценка',
+			className: 'text-xs !p-4',
+			render: (text: any, record: any) => <span >{record?.orderStatus}</span>
+			
+		}
+		
+	]
 
 	// useEffect(()=>{
 	// 	form.setFieldValue('practiceType', 'Все')
@@ -344,15 +385,12 @@ export const MyPractice = () => {
 					</Form.Item>
 				</Col>
 			</Row>
-			
-	
-			
 
 			<Row gutter={[16, 16]} className="mt-4 flex items-center">
-				<Col span={2} >
+				<Col span={5} >
 					<span>Курс</span>
 				</Col>
-				<Col span={4} className='overWrite'>
+				<Col span={7} className='overWrite'>
 					<Select
 					
 						popupMatchSelectWidth={false}
@@ -367,10 +405,10 @@ export const MyPractice = () => {
 						}}
 					/>
 				</Col>
-       			<Col span={2} >
+       			{/* <Col span={2} >
 					<span>Учебный год</span>
-				</Col>
-				<Col span={4} className='overWrite'>
+				</Col> */}
+				{/* <Col span={4} className='overWrite'>
 				<Form.Item className='mb-0'  name={'academicYear'}>
 					<Select
 						
@@ -396,7 +434,27 @@ export const MyPractice = () => {
 						}}
 					/>
 					</Form.Item>
-				</Col>
+				</Col> */}
+			</Row>
+
+			
+			<Row className="mt-12 flex items-center">
+                <Col span={12} flex="50%" className='mobileFirst'>
+                    <Radio.Group defaultValue="compressedView" buttonStyle="solid">
+                        <Radio.Button
+                            onClick={()=>setFullTable(false)}
+                            value="compressedView"
+                            className="!rounded-l-full">
+                            Посмотреть в сжатом виде
+                        </Radio.Button>
+                        <Radio.Button
+                            onClick={()=>setFullTable(true)}
+                            value="tableView"
+                            className="!rounded-r-full">
+                            Посмотреть данные в таблице
+                        </Radio.Button>
+                    </Radio.Group>
+                </Col>
 			</Row>
 		
 		
@@ -421,10 +479,11 @@ export const MyPractice = () => {
 					</div>
 				</Col>
 			</Row> */}
-
+		
 			<Row className="mt-4">
 				<Col flex={'auto'}>
 				{isLoadingOrder ? <Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}/> :
+					fullTable ?
 					<Table
 						onRow={(record) => ({
 							onClick: () => handleRowClick(record),
@@ -440,7 +499,7 @@ export const MyPractice = () => {
 							total: dataAllOrder?.length,
 							onChange: (page) => setCurrentPage(page),
 						  }}
-						className="my-10  absolute  sm:relative sm:left-0 sm:top-10"
+						className="my-10  absolute  sm:relative sm:left-0 top-10 sm:top-0"
 
 						rowClassName={() => 'animate-fade-in'}
 						locale={{
@@ -451,7 +510,35 @@ export const MyPractice = () => {
 							  </div>
 							),
 						  }}
-					/>}
+					/> :
+					
+				<div className='viewPractical'>
+				<Table
+					onRow={(record) => ({
+						onClick: () => handleRowClick(record),
+					})}
+					
+					rowKey="id"
+					// @ts-ignore
+					columns={columnsMini}
+					dataSource={dataTable ? dataTable : []}
+					pagination={dataTable && dataTable?.length<10?false:{
+                        pageSize: 10
+                    }}
+					rowClassName={() => 'animate-fade-in '}
+					className="my- "
+					// rowSelection={{
+					// 	type: 'checkbox',
+					// 	onSelect: (record, selected, selectedRows, nativeEvent) => {
+					// 		setSelectedFieldFull(selectedRows)
+					// 	},
+					// 	onSelectAll: (selected, selectedRows, changeRows) => {
+					// 		setSelectedFieldFull(selectedRows)
+					// 	}
+					// }}
+				/>
+				</div>
+					}
 				</Col>
 			</Row>
 		</section>

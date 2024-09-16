@@ -39,7 +39,7 @@ export const FirstWindow = ({closeWindow, setIsFirstWindow}: TypeFirstWindow) =>
                 </div>
             </div>
             <div className={`flex flex-col w-full px-[10px]`}>
-                <div className={`flex w-full pt-4 pb-4 border-solid border-b-2 border-0 border-[#D9D9D9]`}>
+                {/* <div className={`flex w-full pt-4 pb-4 border-solid border-b-2 border-0 border-[#D9D9D9]`}>
                     <div className={`flex flex-col`}>
                         {
                             listQuestion.map((elem) => (
@@ -47,7 +47,7 @@ export const FirstWindow = ({closeWindow, setIsFirstWindow}: TypeFirstWindow) =>
                             ))
                         }
                     </div>
-                </div>
+                </div> */}
                 <div className={`flex w-full pt-4 pb-4`}>
                     <div className={`flex flex-col w-full`}>
                         <div className={'cursor-pointer hover:bg-[#F8F8F8] w-full rounded-[5px]'}

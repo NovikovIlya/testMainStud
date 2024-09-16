@@ -88,7 +88,7 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({tit
 //     }
 //   };
 const save = async (date:any) => {
-  console.log('---------',date)
+
   try {
     
 
@@ -102,7 +102,7 @@ const save = async (date:any) => {
   }
 };
 const saveDate = async (date:any) => {
-  console.log('---------', date )
+
 
     if (Array.isArray(date) ) {
       toggleEdit();
@@ -198,9 +198,7 @@ const EditableTableTwo = ({setIsDisabled}:any) => {
     {
       key: '0',
       name: '',
-      age:  null,
-   
-     
+      age:  null, 
     },
    
    
@@ -300,11 +298,12 @@ const EditableTableTwo = ({setIsDisabled}:any) => {
 
   const areAllCellsFilled = () => {
     return dataSource.every((item:any) => 
-      item.name && item.age && item.age.length === 2 
+      item.name && item.age 
     );
   };
 
-  if (areAllCellsFilled()) {
+  if (areAllCellsFilled() && dataSource?.length>0) {
+
     setIsDisabled(false); // Включаем кнопку или действие
   } else {
     setIsDisabled(true); // Отключаем кнопку или действие

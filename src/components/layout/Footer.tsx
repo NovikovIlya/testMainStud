@@ -35,11 +35,11 @@ export const Footer = () => {
 					<strong>Соцсети:</strong>
 				</span>
 				<div className="flex gap-3 mt-5">
-					<VkSvg />
-					<YoutubeSvg />
-					<DzenSvg />
-					<OkSvg />
-					<TelegramSvg />
+					<a href='https://vk.com/kazan_federal_university'><VkSvg /></a>
+					<a href='https://www.youtube.com/univertv'><YoutubeSvg /></a>
+					<a href='https://dzen.ru/kazan_federal_university'><DzenSvg /></a>
+					<a href='https://ok.ru/kznuniversity'><OkSvg /></a>
+					<a href='https://t.me/s/kznuniversity'><TelegramSvg /></a>
 				</div>
 			</div>
 		</footer>

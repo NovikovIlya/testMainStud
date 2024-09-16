@@ -1,4 +1,4 @@
-import { Button, ConfigProvider, Popover } from 'antd'
+import { Button, ConfigProvider, Popover, Switch } from 'antd'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -9,7 +9,9 @@ import DropDrag from './dnd/DropDrag'
 import { FeedbackWindow } from './feedbackWindow/FeedbackWindow'
 import { Layout } from './layout/Layout'
 import { useSearchParams } from 'react-router-dom'
-import { useAppSelector } from '../store'
+import { useAppDispatch, useAppSelector } from '../store'
+import PersonalizationSvg from '../assets/svg/PersonalizationSvg'
+import { setEdit } from '../store/reducers/authSlice'
 
 export const User = () => {
 	const { t,i18n } = useTranslation()
@@ -18,6 +20,7 @@ export const User = () => {
 	const [searchParams] = useSearchParams();
     const hasEnParam = searchParams.has('en');
 	const acceesss = useAppSelector((state)=>state.auth.accessToken)
+	const dispatch = useAppDispatch()
 	console.log('acceesssacceesssacceesss',acceesss)
 	const hide = () => {
 		setOpen(false)
@@ -42,8 +45,12 @@ export const User = () => {
 		<Layout>
 			<div className="px-10 flex items-center justify-center">
 				<div className="max-w-[1600px] w-[1600px]">
-					<div className={`mt-[125px] text-2xl font-bold text-blue1f5`}>
+					<div className={`mt-[125px] text-2xl font-bold text-blue1f5 justify-between flex`}>
 						{t('PersonalAccount')}
+						<div className='flex gap-3 items-center'>
+							<span className='text-sm font-normal'>{t('Personalization')}</span>
+							<Switch   defaultValue={false} onClick={()=>dispatch(setEdit())} />
+						</div>
 					</div>
 					<DropDrag />
 				</div>

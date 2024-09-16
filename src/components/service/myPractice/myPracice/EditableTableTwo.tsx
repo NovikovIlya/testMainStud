@@ -1,8 +1,11 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import './index.css';
 import type { GetRef, InputRef, TableProps } from 'antd';
-import { Button, Calendar, DatePicker, Form, Input, Table } from 'antd';
+import { Button, Calendar, DatePicker, Form, Input, Popconfirm, Table } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
+import uuid from 'react-uuid'
+import { CloseOutlined } from '@ant-design/icons';
+import { DeleteRedSvg } from '../../../../assets/svg/DeleteRedSvg';
 
 type FormInstance<T> = GetRef<typeof Form<T>>;
 
@@ -38,18 +41,12 @@ interface EditableCellProps {
   handleSave: (record: Item) => void;
 }
 
-const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
-  title,
-  editable,
-  children,
-  dataIndex,
-  record,
-  handleSave,
-  ...restProps
+const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({title, editable, children, dataIndex, record, handleSave, ...restProps
 }) => {
   const [editing, setEditing] = useState(false);
   const inputRef = useRef<InputRef>(null);
   const form = useContext(EditableContext)!;
+
 
   useEffect(() => {
     if (editing) {
@@ -62,57 +59,126 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
     form.setFieldsValue({ [dataIndex]: record[dataIndex] });
   };
 
-//   const save = async () => {
-//     try {
-//       const values = await form.validateFields();
+  // const saveTwo = async () => {
+  //   try {
+  //     const values = await form.validateFields();
 
+  //     toggleEdit();
+  //     handleSave({ ...record, ...values });
+  //   } catch (errInfo) {
+  //     console.log('Save failed:', errInfo);
+  //   }
+  // };
+// const save = async (date?: any) => {
+//   try {
+//     const values = await form.validateFields();
+//     toggleEdit();
+//     handleSave({ ...record, [dataIndex]: date || values[dataIndex] });
+//   } catch (errInfo) {
+//     console.log('Save failed:', errInfo);
+//   }
+// };
+// const save = (date: any) => {
+//     console.log('444',date)
+//     if (date ) {
 //       toggleEdit();
-//       handleSave({ ...record, ...values });
-//     } catch (errInfo) {
-//       console.log('Save failed:', errInfo);
+//       handleSave({ ...record, [dataIndex]: date });
+//     } else {
+//       console.error('Invalid date:', date);
 //     }
 //   };
+const save = async (date:any) => {
+  console.log('---------',date)
+  try {
+    
 
-const save = (date: any) => {
-    console.log(date)
-    if (date ) {
+
+    const values = await form.validateFields();
+
+    toggleEdit();
+    handleSave({ ...record, ...values });
+  } catch (errInfo) {
+    console.log('Save failed:', errInfo);
+  }
+};
+const saveDate = async (date:any) => {
+  console.log('---------', date )
+
+    if (Array.isArray(date) ) {
       toggleEdit();
       handleSave({ ...record, [dataIndex]: date });
-    } else {
-      console.error('Invalid date:', date);
+      
+    } else{
+      toggleEdit();
     }
-  };
 
+
+    
+
+};
+const saveDateThree= async () => {
+  
+  
+   
+      toggleEdit();
+      
+      
+    
+
+
+    
+ 
+};
   let childNode = children;
 
   if (editable) {
-    childNode = editing ? (
+    childNode = editing 
+    ? dataIndex==='age'? (<div className='flex items-center gap-2'><Form.Item
+      style={{ margin: 0 }}
+      name={dataIndex}
+     
+    >
+      <DatePicker.RangePicker
+      //  onChange={save}
+       format={'DD.MM.YYYY'}
+       placeholder={['Начало', 'Конец']}
+       className="w-full"
+       size={'large'}
+       
+       onChange={saveDate}
+      
+        
+       
+       /></Form.Item>
+       <Form.Item
+       className='h-[40px]'
+       style={{ margin: 0 }}
+       name={dataIndex+'1'}
+    
+     >
+        <Button className='h-[40px]'  onClick={saveDate} >
+      Отмена
+      </Button>
+    </Form.Item></div>):(
       <Form.Item
         style={{ margin: 0 }}
         name={dataIndex}
-        rules={[{ required: true, message: `${title} is required.` }]}
+       
       >
-        <DatePicker.RangePicker
-        //  onChange={save}
-         format={'DD.MM.YYYY'}
-         placeholder={['Начало', 'Конец']}
-         className="w-full"
-         size={'large'}
-         allowClear
-         onChange={save}
-   
-         />
+        <Input  ref={inputRef} onPressEnter={save} onBlur={save}  />
       </Form.Item>
-    ) : (
-      <div
-        className="editable-cell-value-wrap"
+    ) 
+    :(  <div
+        className="editable-cell-value-wrap min-h-9 h-full"
         style={{ paddingInlineEnd: 24 }}
         onClick={toggleEdit}
+
       >
         {children}
       </div>
-    );
+    ) 
   }
+
 
   return <td {...restProps}>{childNode}</td>;
 };
@@ -131,13 +197,28 @@ const EditableTableTwo = ({setIsDisabled}:any) => {
   const [dataSource, setDataSource] = useState<any>([
     {
       key: '0',
-      name: 'Edward King 0',
+      name: '',
       age:  null,
-      address: 'London, Park Lane no. 0',
+   
      
-    }
+    },
+   
    
   ]);
+  const handleDelete = (key: React.Key) => {
+    const newData = dataSource.filter((item:any) => item.key !== key);
+    setDataSource(newData);
+  };
+
+  const handleAdd = () => {
+    const newData: any = {
+      key: uuid(),
+      name: ``,
+      age: '',
+    };
+    setDataSource([...dataSource, newData]);
+   
+  };
 
  
 
@@ -155,6 +236,7 @@ const EditableTableTwo = ({setIsDisabled}:any) => {
       title: 'Содержание выполненной работы',
       dataIndex: 'name',
       width: '30%',
+      editable: true,
     
     },
     {
@@ -165,6 +247,16 @@ const EditableTableTwo = ({setIsDisabled}:any) => {
       <span>{record?.age ? dayjs(record?.age?.[0]).format('DD.MM.YYYY') : null}</span>{record?.age ? '-' : null}
       <span>{record?.age ?dayjs(record?.age?.[1]).format('DD.MM.YYYY'): null}</span>
   </div>
+    },
+    {
+      title: '',
+      dataIndex: 'operation',
+      render: (_, record) =>
+        dataSource.length >= 1 ? (
+          <Popconfirm title="Вы действительно хотите удалить?" onConfirm={() => handleDelete(record.key)}>
+            <a><DeleteRedSvg /></a>
+          </Popconfirm>
+        ) : null,
     },
   
    
@@ -208,7 +300,7 @@ const EditableTableTwo = ({setIsDisabled}:any) => {
 
   const areAllCellsFilled = () => {
     return dataSource.every((item:any) => 
-      item.name && item.age && item.age.length === 2 && item.address
+      item.name && item.age && item.age.length === 2 
     );
   };
 
@@ -223,12 +315,17 @@ const EditableTableTwo = ({setIsDisabled}:any) => {
 
       <Table
         components={components}
-        rowClassName={() => 'editable-row'}
+        rowClassName={() => 'editable-row animate-fade-in'}
         bordered
         dataSource={dataSource}
         columns={columns as ColumnTypes}
         pagination={false}
+        
       />
+      <div className='flex items-center  flex-col mt-4 animate-pulse '>
+        <div className='rounded-full mb-1 flex  w-[40px] h-[40px] justify-center  bg-[#3073d7] text-white text-center items-center text-xl cursor-pointer' onClick={handleAdd}>+</div>
+        <div className='text-center mt1'>Добавить <br></br> задание</div>
+      </div>
     </div>
   );
 };

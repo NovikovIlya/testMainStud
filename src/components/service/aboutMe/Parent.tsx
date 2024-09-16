@@ -134,12 +134,12 @@ export const Parent = () => {
 											onChange={e => {
 												dispatch(FIO({ id: item.id, FIO: e.target.value }))
 											}}
-											value={isStudent ? item.mother : item.FIO}
+											value={isStudent ? item.mother?.replace(/&#39;/g, "'") : item.FIO.replace(/&#39;/g, "'")}
 										/>
 									) : (
-										<div className="bg-white p-2 h-10 rounded-md">
+										<div className="bg-white p-4  rounded-md">
 											<Typography.Text>
-												{isStudent ? item.mother : item.FIO || '-'}
+												{isStudent ? item.mother?.replace(/&#39;/g, "'") : item.FIO.replace(/&#39;/g, "'") || '-'}
 											</Typography.Text>
 										</div>
 									)}

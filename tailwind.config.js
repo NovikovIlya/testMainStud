@@ -12,7 +12,7 @@ module.exports = {
 				blue65A: '#65A1FA'
 			},
 			animation: {
-				'bounce-slow': 'bounce 3s  1 ease-in-out',
+				'bounce-slow': 'bounce 12s  infinite ease-in-out',
 				'fade-in': 'fadeIn 0.6s ease-in-out',
 			},
 			keyframes: {

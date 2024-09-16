@@ -16,6 +16,7 @@ const authSlice = createSlice({
 	reducers: {
 		setCredentials: (state, action: PayloadAction<InitialState>) => {
 			state.accessToken = action.payload.accessToken
+			localStorage.setItem('access', action.payload.accessToken || '')
 			if (action.payload.refreshToken)
 				state.refreshToken = action.payload.refreshToken
 			if (state.user && action.payload.user)

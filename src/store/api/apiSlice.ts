@@ -1,3 +1,4 @@
+
 import { RootState } from '..'
 import {
 	BaseQueryApi,
@@ -6,16 +7,11 @@ import {
 	fetchBaseQuery
 } from '@reduxjs/toolkit/dist/query/react'
 import i18next from 'i18next'
-
 import { logOut, setCredentials } from '../reducers/authSlice'
-
-
-
 const baseQuery = fetchBaseQuery({
 	baseUrl: 'https://newlk.kpfu.ru/',
 	prepareHeaders(headers, { getState }) {
 		const token = (getState() as RootState).auth.accessToken
-
 		if (token) {
 			headers.set('authorization', `Bearer ${token.replaceAll('"', '')}`)
 		}
@@ -23,40 +19,49 @@ const baseQuery = fetchBaseQuery({
 		return headers
 	}
 })
-
 const baseQueryWithReAuth = async (
 	args: string | FetchArgs,
 	api: BaseQueryApi,
 	extraOptions: {}
 ) => {
 	let result = await baseQuery(args, api, extraOptions)
-
 	if (result?.error?.status === 403 || result?.error?.status === 401) {
 		console.log('sending refresh token')
-		const refreshResult = await baseQuery(
-			{
-				url: 'user-api/token/refresh',
-				body: {
-					refreshToken: localStorage.getItem('refresh')?.replaceAll('"', '')
-				},
-				method: 'POST'
+		// const refreshResult = await baseQuery(
+		// 	{
+		// 		url: 'user-api/token/refresh',
+		// 		body: {
+		// 			refreshToken: localStorage.getItem('refresh')?.replaceAll('"', '')
+		// 		},
+		// 		method: 'POST'
+		// 	},
+		// 	api,
+		// 	extraOptions
+		// )
+		const refreshToken =  localStorage.getItem('refresh')?.replaceAll('"', '');
+		const refreshResult = await fetch('https://newlk.kpfu.ru/user-api/token/refresh', {
+			method: 'POST',
+			headers: {
+			  'Content-Type': 'application/json',
+			  'Accept-Language': i18next.language
 			},
-			api,
-			extraOptions
-		)
-		if (refreshResult.data) {
+			body: JSON.stringify({ refreshToken })
+		  });
+		  const refreshResultJson = await refreshResult.json()
+		  if (refreshResultJson.accessToken) {
+			console.log('---------------2')
 			//@ts-ignore
 			const user = api.getState().auth.user
 			//@ts-ignore
-			api.dispatch(setCredentials({ ...refreshResult.data, user }))
+			api.dispatch(setCredentials({ ...refreshResultJson, user }))
 			result = await baseQuery(args, api, extraOptions)
 		} else {
-			api.dispatch(logOut())
+			console.log('refreshResultJsonВЫХОД--------------',refreshResultJson)
+			// api.dispatch(logOut())
 		}
 	}
 	return result
 }
-
 export const apiSlice = createApi({
 	baseQuery: baseQueryWithReAuth,
 	endpoints: () => ({}),

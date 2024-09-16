@@ -1,12 +1,15 @@
-import { Button, Card, Col, Divider, Row, Space, Typography } from 'antd'
+import { Button, Card, Col, Divider, Popover, Row, Space, Typography } from 'antd'
 import React, { useState } from 'react'
 
 import EditableTable from './EditableTable'
 
-const Plan = () => {
+const Plan = ({setShowFinal}:any) => {
     const [isDisabled,setIsDisabled] = useState(true)
     const [show,setShow] = useState(false)
-    
+	const handleButton = ()=>{
+	 setShow(true)
+     setShowFinal(true)
+	}
 	return (
 		<>
 			<Row>
@@ -28,14 +31,14 @@ const Plan = () => {
 			<Row gutter={[16, 16]} className="my-8">
 				<Col xs={24} sm={24} md={18} lg={8} xl={6}>
 					<Space className="w-full">
-						<Button
+						<Popover content={isDisabled ? 'Заполните период выполнения практики' : null}><Button
                             disabled={isDisabled}
 							className="!rounded-full"
 							size="large"
-                            onClick={() => setShow(true)}
+                            onClick={handleButton}
 						>
 							Сформировать и скачать направительные документы
-						</Button>
+						</Button></Popover>
 					</Space>
 				</Col>
 			</Row>

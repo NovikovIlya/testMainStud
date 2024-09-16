@@ -74,35 +74,47 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
 //   };
 
 const save = (date: any) => {
-    console.log(date)
-    if (date ) {
+    console.log(Array.isArray(date))
+    if (Array.isArray(date) ) {
       toggleEdit();
       handleSave({ ...record, [dataIndex]: date });
     } else {
-      console.error('Invalid date:', date);
+      toggleEdit();
+      console.error('else case:', date);
     }
   };
 
   let childNode = children;
 
   if (editable) {
-    childNode = editing ? (
-      <Form.Item
-        style={{ margin: 0 }}
-        name={dataIndex}
-        rules={[{ required: true, message: `${title} is required.` }]}
-      >
-        <DatePicker.RangePicker
-        //  onChange={save}
-         format={'DD.MM.YYYY'}
-         placeholder={['Начало', 'Конец']}
-         className="w-full"
-         size={'large'}
-         allowClear
-         onChange={save}
-   
-         />
-      </Form.Item>
+    childNode = editing? (
+      <div className='flex items-center gap-2'><Form.Item
+      style={{ margin: 0 }}
+      name={dataIndex}
+      rules={[{ required: true, message: `${title} is required.` }]}
+    >
+      <DatePicker.RangePicker
+      //  onChange={save}
+       format={'DD.MM.YYYY'}
+       placeholder={['Начало', 'Конец']}
+       className="w-full"
+       size={'large'}
+       allowClear
+       onChange={save}
+      
+        
+       
+       /></Form.Item>
+       <Form.Item
+       className='h-[40px]'
+       style={{ margin: 0 }}
+       name={dataIndex+'1'}
+       rules={[{ required: true, message: `${title} is required.` }]}
+     >
+        <Button className='h-[40px]'  onClick={save} >
+      Отмена
+      </Button>
+    </Form.Item></div>
     ) : (
       <div
         className="editable-cell-value-wrap"
@@ -138,7 +150,7 @@ const EditableTable = ({setIsDisabled}:any) => {
     }
    
   ]);
-
+  console.log('dataSource',dataSource)
 
   const defaultColumns: (ColumnTypes[number] & { editable?: boolean; dataIndex: string })[] = [
     {
@@ -224,6 +236,7 @@ const EditableTable = ({setIsDisabled}:any) => {
         dataSource={dataSource}
         columns={columns as ColumnTypes}
         pagination={false}
+        
       />
     </div>
   );

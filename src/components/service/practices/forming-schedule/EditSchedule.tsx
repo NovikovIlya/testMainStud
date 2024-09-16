@@ -121,10 +121,7 @@ const filterCourse: FilterType[] = [
 	
 ]
 
-const optionsSortDate: any = [
-	{ value: 'По дате (сначала новые)', label: 'По дате (сначала новые)' },
-	{ value: 'По дате (сначала старые)', label: 'По дате (сначала старые)' }
-]
+
 
 const optionMock = [
 	{ value: '1', label: '1' },
@@ -430,8 +427,8 @@ export const EditSchedule = () => {
 		}
 		
 
-		return dataOneSchedule
-			? dataOneSchedule
+		return dataOneSchedule?.scheduleContent
+			? dataOneSchedule?.scheduleContent
 					.filter((elem: any) => filterCourse(elem))
 					.filter((elem: any) => filterKind(elem))
 					.filter((elem: any) => filterName(elem))
@@ -445,7 +442,7 @@ export const EditSchedule = () => {
 		if (dataBlob) {
 			const link = document.createElement('a')
 			link.href = dataBlob
-			link.setAttribute('download', `График проведения практик на ${year.split('=')[1].replace('-', '/')} учебный год ${dataUserSubdivision?.value ? dataUserSubdivision?.value : ''} КФУ.docx`)
+			link.setAttribute('download', `График проведения практик на ${year.split('=')[1].replace('-', '/')} учебный год ${dataOneSchedule?.subdivision} КФУ.docx`)
 			document.body.appendChild(link)
 			link.click()
 
@@ -577,7 +574,7 @@ export const EditSchedule = () => {
 	const arraySpec = [
         { key: 2244612, value: "Все", label: "Все" },
         ...(dataOneSchedule ? 
-            dataOneSchedule.map((item:any) => ({
+            dataOneSchedule?.scheduleContent.map((item:any) => ({
                 key: item.id,
                 value: item.specialtyName,
                 label: item.specialtyName
@@ -588,7 +585,7 @@ export const EditSchedule = () => {
     const arrayKind = [
         { key: 2244612, value: "Все", label: "Все" },
         ...(dataOneSchedule ?
-            dataOneSchedule.map((item:any) => ({
+            dataOneSchedule?.scheduleContent.map((item:any) => ({
                 key: item.id,
                 value: item.practiceKind,
                 label: item.practiceKind
@@ -617,13 +614,12 @@ export const EditSchedule = () => {
 						}}
 					/>
 					<Typography.Text className=" text-[28px] mb-14">
-						График проведения практик на {year.split('=')[1].replace('-', '/')} учебный год
-						{dataUserSubdivision?.value} КФУ
+						График проведения практик на {year.split('=')[1].replace('-', '/')} учебный год подразделения "{dataOneSchedule?.subdivision}"" КФУ
 					</Typography.Text>
 				</Col>
 			</Row>
 			<Row gutter={[8, 16]} className="mt-12 w-full flex items-center overWrite">
-				{dataUserSubdivision?.value ? 
+				{/* {dataUserSubdivision?.value ? 
                 <>
 				<Col span={5}>
 					<span>Подразделение</span>
@@ -645,7 +641,7 @@ export const EditSchedule = () => {
 						</Form.Item>
 					
                 </Col>
-				</> : null}
+				</> : null} */}
 				<Col span={4} className=''>
 					<Typography.Text className='mobileFont'>Шифр и наименование специальности</Typography.Text>
 				</Col>
@@ -804,7 +800,7 @@ export const EditSchedule = () => {
 								}
 							}}
 							bordered
-							dataSource={tableData ? tableData.map((item:any)=>{
+							dataSource={tableData ? tableData?.map((item:any)=>{
                                 return{
                                     ...item,
                                     period:  [dayjs(item.practiceStartDate), dayjs(item.practiceEndDate)]

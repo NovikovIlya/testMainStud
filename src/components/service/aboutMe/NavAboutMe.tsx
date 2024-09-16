@@ -59,11 +59,11 @@ export const NavAboutMe = () => {
 			icon: <ParentSvg />,
 			name: t('Parents')
 		},
-		{
-			id: '/services/aboutMe/professionalSkills',
-			icon: <ProfessionalSkillsSvg />,
-			name: t('ProfessionalSkills')
-		}
+		// {
+		// 	id: '/services/aboutMe/professionalSkills',
+		// 	icon: <ProfessionalSkillsSvg />,
+		// 	name: t('ProfessionalSkills')
+		// }
 	]
 	if (!role) return <></>
 	const isStudent = role[0].type === 'STUD'
@@ -102,7 +102,7 @@ export const NavAboutMe = () => {
 				{pathname === navList[3].id && <Education />}
 				{pathname === navList[4].id && <Work />}
 				{pathname === navList[5].id && <Parent />}
-				{pathname === navList[6].id && <ProfessionalSkills />}
+				{/* {pathname === navList[6].id && <ProfessionalSkills />} */}
 			</div>
 		</>
 	)

@@ -103,7 +103,7 @@ import endpoints from '../../api/endpoints'
 // 	session: string
 // }> => axiosInstance.get(endpoints.USER.ADMISSION)
 export const getAdmissionLink = () => {
-	const url = `https://egp.kpfu.ru/user-api/admission-link`
+	const url = `https://newlk.kpfu.ru/user-api/admission-link`
 	const headers = {
 		'Content-Type': 'application/json',
 		'Authorization': `Bearer ${localStorage.getItem('access')?.replaceAll('"', '')}`,

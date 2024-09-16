@@ -13,6 +13,7 @@ import {useCheckIsEmployeeQuery} from "../../store/api/practiceApi/contracts";
 import {useGetContractsAllQuery} from "../../store/api/practiceApi/roster";
 import { NavMyPractices } from './myPractice/navMyPractice'
 import AboutUniversity from '../aboutUniversity/AboutUnversity'
+import { NavPracticeTeacher } from './practiceTeacher/navMyPractice'
 
 export const Service = () => {
 	const { pathname } = useLocation()
@@ -40,6 +41,7 @@ export const Service = () => {
 				} */}
 				{pathname.includes('/services/practices') && <NavPractices />}
 				{pathname.includes('/services/mypractices') && <NavMyPractices />}
+				{pathname.includes('/services/practiceteacher') && <NavPracticeTeacher />}
 
 				{/*{pathname.includes('/services/businessTrip') && <NavBusinessTrip />}*/}
 				{pathname.includes('/services/unifiedServiceCenter') && (

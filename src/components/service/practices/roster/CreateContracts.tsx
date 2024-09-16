@@ -1,4 +1,4 @@
-import {PlusOutlined} from '@ant-design/icons'
+import {EyeOutlined, PlusOutlined} from '@ant-design/icons'
 import {
     Button,
     Col,
@@ -9,7 +9,8 @@ import {
     Space,
     Typography,
     Upload,
-    Form, InputNumber
+    Form, InputNumber,
+    message
 } from 'antd'
 import dayjs from 'dayjs'
 import React, {useEffect, useState} from 'react'
@@ -26,10 +27,7 @@ import { endOfDay, isAfter, isBefore, startOfDay } from 'date-fns'
 export const CreateContracts = () => {
     const [form] = Form.useForm()
     const [inn, setInn] = useState<string | number | null>(0)
-    const [files, setFiles] = useState<{
-        pdfAgreement: Blob | null
-        pdfContract: Blob | null
-    }>({
+    const [files, setFiles] = useState<any>({
         pdfAgreement: null,
         pdfContract: null,
     })
@@ -136,7 +134,8 @@ export const CreateContracts = () => {
           event.preventDefault(); // Запрещаем ввод недопустимых символов
         }
     };
-    console.log('optionsNameSpec',optionsNameSpec)
+    console.log('files.pdfContract',files.pdfContract)
+     
 
     return (
         <section className="container animate-fade-in">
@@ -365,7 +364,7 @@ export const CreateContracts = () => {
                         </Form.Item>
                     </Col>
                 </Row>
-                <Row gutter={[16, 16]}>
+                <Row gutter={[16, 16]} className='mb-8'>
                     <Col xs={24} sm={24} md={18} lg={8} xl={6}>
                         <Form.Item label={'Прикрепить скан договора в формате pdf'}
                                    name={'pdfContract'}
@@ -373,6 +372,18 @@ export const CreateContracts = () => {
                                    >
                             <Upload
                                 beforeUpload={(file) => {
+                                    const isPdf = file.type === 'application/pdf';
+                                    const isLt5M = file.size / 1024 / 1024 < 5; // Проверка на размер меньше 5 МБ
+
+                                    if (!isPdf) {
+                                        message.error('Вы можете загружать только PDF файлы!');
+                                        return false
+                                    }
+                                    if (!isLt5M) {
+                                        message.error('Файл должен быть меньше 5 МБ!');
+                                        return false
+                                    }
+                                    console.log('file',file)
                                     setFiles({
                                         ...files,
                                         pdfContract: file
@@ -381,10 +392,16 @@ export const CreateContracts = () => {
                                 }}
                                 accept={'.pdf'}
                                 maxCount={1}
+                                fileList={files.pdfContract ? [files.pdfContract] : []}
                                 name={'pdfContract'}
                                 onChange={info => {
+                                    console.log('info', info)
                                     if (info.file.status === "removed") {
                                         form.setFieldValue('pdfContract', undefined)
+                                        setFiles({
+                                            ...files,
+                                            pdfContract: undefined
+                                        })
                                     }
                                 }}
                             >

@@ -40,14 +40,14 @@ const CreateTask = () => {
     const [treeLine, setTreeLine] = useState(true);
     const [showLeafIcon, setShowLeafIcon] = useState(false);
     const [value, setValue] = useState<string>();
-  
+    const [specValue,setSpecValue] = useState<any>(null)
 
     useEffect(() => {
         if (isSuccessNameSpecialty) {
             setNameSpecialty(dataNameSpecialty)
         }
     }, [dataNameSpecialty]);
-
+    console.log('specValue',specValue)
 
     useEffect(() => {
         if (isSuccessPracticeType) {
@@ -65,33 +65,17 @@ const CreateTask = () => {
 
 
     function onFinish(values: Task) {
-        const specName = dataNameSpecialty?.find(elem => {
-            if (elem.value === values.specialityName) {
-                return elem
-            }
-        })
+
         const practiceType = dataPracticeType?.find(elem => {
             if (elem.value === values.practiceType) {
                 return elem
             }
             
         })
-        // const subDivision = departments!.find(elem => {
-        //     if (elem.value === values.subDivision) {
-        //         return elem
-        //     }
-        //     if('responses' in elem){
-        //         // @ts-ignore
-        //         return elem.responses?.find((elem:any)=> {
-        //             if(form?.getFieldValue('subDivision')?.split(" - ")[1] === elem.value){
-        //                 return elem
-        //             }      
-        //         })
-        //     }
-        // })
+
         const newData: TaskSend = {
-            specialityNameId: String(specName!.id),
-            practiceTypeId: String(practiceType!.id),
+            specialityNameId: specValue,
+            practiceTypeId: String(practiceType?.id),
             subdivisionNameId: subDivision,
             tasks: values.tasks.map(elem => elem.task)
         }
@@ -226,11 +210,14 @@ const CreateTask = () => {
                                     size="large"
                                     popupMatchSelectWidth={false}
                                     className="w-full"
+                                    onChange={(value)=>{
+                                        setSpecValue(value)
+                                    }}
                                     options={nameSpecialty?.map((item)=>{
                                         return{
                                             key:item.id,
-                                            value:item.value,
-                                            label:item.label
+                                            value:item.id,
+                                            label:item.value
                                         }
                                     })}
                                 />

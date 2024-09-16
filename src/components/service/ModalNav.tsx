@@ -36,14 +36,14 @@ export const ModalNav = () => {
      {t('OurServices')} 
     </Typography.Text> 
    </Col> 
-   <Col span={20}> 
+   <Col span={24} className='mb-6'> 
     <Input.Search 
      onChange={e => setSearchText(e.target.value)} 
      size="large" 
      placeholder={t('SearchFavorite')} 
     /> 
    </Col> 
-   <Col offset={1} span={3} className="flex justify-center items-center"> 
+   {/* <Col offset={1} span={3} className="flex justify-center items-center mb-6"> 
     <Button 
      type="text" 
      icon={<TagOutlined />} 
@@ -51,8 +51,8 @@ export const ModalNav = () => {
     > 
      {t('Favorites')} 
     </Button> 
-   </Col> 
-   <Col span={24} className="mt-8"> 
+   </Col>  */}
+   {/* <Col span={24} className="mt-8"> 
     <div 
      className={clsx('radio mb-16 w-full h-full ', !isStudent && 'hidden')} 
     > 
@@ -100,7 +100,7 @@ export const ModalNav = () => {
       </Radio.Button> 
      </Radio.Group> 
     </div> 
-   </Col> 
+   </Col>  */}
    {layouts.lg.length === jsxElements.length ? ( 
     <div className="text-3xl">{t('NoService')}</div> 
    ) : ( 

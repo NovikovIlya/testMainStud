@@ -113,6 +113,16 @@ export const representationService = apiSlice.injectEndpoints({
             },
             invalidatesTags: ['Submissions'],  
         }),
+        addSubmissionAgreement: builder.mutation<any, any>({
+            query: (body) => {
+                return {
+                    url: `/services/api-practices/submissions?isSendToAgreement=true`,
+                    method: 'POST',
+                    body:body
+                }
+            },
+            invalidatesTags: ['Submissions'],  
+        }),
         editSubmission: builder.mutation<any, any>({
             query: (body) => {
                 return {
@@ -347,6 +357,7 @@ export const {
     useGetSubmissionsDirectorQuery,
     useGetSubmissionsAcademicYearQuery,
     useChangeStatusMutation,
+    useAddSubmissionAgreementMutation,
 
     useGetAllOrderQuery,
     useChangeStatusOrderMutation,

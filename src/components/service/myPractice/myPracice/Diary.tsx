@@ -1,11 +1,15 @@
-import { Button, Card, Col, Divider, Row, Space, Typography } from 'antd'
+import { Button, Card, Col, Divider, Popover, Row, Space, Typography } from 'antd'
 import React, { useState } from 'react'
 
 import EditableTableTwo from './EditableTableTwo'
 
-const Diary = () => {
+const Diary = ({setShowFinalTwo}:any) => {
 	const [isDisabled, setIsDisabled] = useState(true)
 	const [show, setShow] = useState(false)
+	const handleButton = ()=>{
+		setShow(true)
+		setShowFinalTwo(true)
+	}
 	return (
 		<>
 			<Row>
@@ -27,15 +31,15 @@ const Diary = () => {
 			<Row gutter={[16, 16]} className="my-8">
 				<Col xs={24} sm={24} md={18} lg={8} xl={6}>
 					<Space className="w-full">
-						<Button
+					<Popover content={isDisabled ? 'Заполните содержание выполненной работы и период выполнения дневника практиканта' : null}><Button
 							className="!rounded-full"
 							size="large"
                             disabled={isDisabled}
-                            onClick={() => setShow(!show)}
+                            onClick={handleButton}
 							// htmlType="submit"
 						>
 							Сформировать дневник практиканта
-						</Button>
+						</Button></Popover>
 					</Space>
 				</Col>
 			</Row>

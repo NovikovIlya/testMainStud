@@ -99,6 +99,17 @@ export const block = {
             moved: true,
             static: false
         },
+        {
+            w: 1,
+            h: 1,
+            x: 2,
+            y: 2,
+            i: 'practiceTeacher',
+            maxH: 4,
+            maxW: 4,
+            moved: true,
+            static: false
+        },
 
         //3-ья тройка
         {

@@ -101,20 +101,22 @@ export const Apply = () => {
 				
 				})
 			
-		}
-		changeStatus(() => 'loading')
-		const response = await getAdmission(dispatch)
-		if (response === 403) navigate('/')
-		else {
-			if (typeof response !== 'number') {
-				window.open(response.link, '_blank')
-				changeStatus(() => 'success')
-			}
-			if (response === 404) changeStatus(() => 'error')
+		}else{
 
-			setTimeout(() => {
-				changeStatus(() => 'none')
-			}, 0)
+			changeStatus(() => 'loading')
+			const response = await getAdmission(dispatch)
+			if (response === 403) navigate('/')
+			else {
+				if (typeof response !== 'number') {
+					window.open(response.link, '_blank')
+					changeStatus(() => 'success')
+				}
+				if (response === 404) changeStatus(() => 'error')
+
+				setTimeout(() => {
+					changeStatus(() => 'none')
+				}, 0)
+			}
 		}
 	}
 

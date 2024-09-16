@@ -8,12 +8,17 @@ import { useCheckIsEmployeeQuery } from '../store/api/practiceApi/contracts'
 import DropDrag from './dnd/DropDrag'
 import { FeedbackWindow } from './feedbackWindow/FeedbackWindow'
 import { Layout } from './layout/Layout'
+import { useSearchParams } from 'react-router-dom'
+import { useAppSelector } from '../store'
 
 export const User = () => {
-	const { t } = useTranslation()
+	const { t,i18n } = useTranslation()
 	const [open, setOpen] = useState(false)
 	const { data, isSuccess } = useCheckIsEmployeeQuery()
-
+	const [searchParams] = useSearchParams();
+    const hasEnParam = searchParams.has('en');
+	const acceesss = useAppSelector((state)=>state.auth.accessToken)
+	console.log('acceesssacceesssacceesss',acceesss)
 	const hide = () => {
 		setOpen(false)
 	}
@@ -26,6 +31,12 @@ export const User = () => {
 			localStorage.setItem('practice', 'practice')
 		}
 	}, [data])
+
+	useEffect(()=>{
+		if(hasEnParam){
+			i18n.changeLanguage('en')
+		}
+	},[])
 
 	return (
 		<Layout>

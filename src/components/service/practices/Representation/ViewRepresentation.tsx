@@ -307,7 +307,7 @@ export const ViewRepresentation = () => {
 				<Col span={5} className='overWrite ' >
 					<span>Подразделение</span>
 				</Col>
-				<Col span={7} className='overWrite ccc'>
+				<Col span={7} className='overWrite ccc '>
 					<TreeSelect
 							treeLine={treeLine && { showLeafIcon }}
 							showSearch

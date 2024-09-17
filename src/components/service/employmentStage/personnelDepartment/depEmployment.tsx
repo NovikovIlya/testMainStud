@@ -1,101 +1,100 @@
-import { Radio, Button } from 'antd'
-import { respondStatus } from '../../../../store/reducers/type'
 import {DepEmploymentItem} from './depEmploymentItem'
-import { boolean } from 'yup'
 import { useState } from 'react'
-import { button } from '@material-tailwind/react'
-import { current } from '@reduxjs/toolkit'
+import { useGetPersonnelStagesQuery } from '../../../../store/api/serviceApi'
 
 export const DepEmployment = () => {
-	{/*
-	const { data : employment_stage_items = [] } = useGetPersonnelStagesQuery()
-	*/}
+
+	const { data: employment_stage_items = [] } = useGetPersonnelStagesQuery();
+
+	const verifyingItems = employment_stage_items.filter(item => item.status === 'VERIFYING');
+	const refineItems = employment_stage_items.filter(item => item.status === 'REFINE');
+	const completeItems = employment_stage_items.filter(item => item.status === 'COMPLETE');
+	const allItems = [...verifyingItems, ...refineItems, ...completeItems]
 
 	const [currentFilterItem, setCurrentFilterItem] = useState('all')
-
+	const isActive = (filter: string) => currentFilterItem === filter;
 
 	const ColumnFieldHeaderComponent = () => {
 		return (
 			<div className="flex flex-row mt-[40px]">
 				<span className="ml-[1.5%] w-[24%] text-[14px] text-[#626364] font-normal">Соискатель</span>
-					<span className="w-[26%] text-[14px] text-[#626364] font-normal">Должность</span>
-					<span className="w-[10%] text-[14px] text-[#626364] font-normal">Статус</span>
-					<div className="w-[38.5%]"></div>
-				</div>
-			)
-		}
+				<span className="w-[26%] text-[14px] text-[#626364] font-normal">Должность</span>
+				<span className="w-[10%] text-[14px] text-[#626364] font-normal">Статус</span>
+				<div className="w-[38.5%]"></div>
+			</div>
+		)
+	}
 
 	return (
 		<div id="wrapper" className="flex flex-col bg-[#F5F8FB] px-[53px] pt-[120px] w-full">
 			<h1 className="text-[28px] font-normal text-[#000000]">Этап трудоустройства</h1>
 			<div className="flex flex-row gap-[12px] mt-[52px]">
 				<button
-					id='buttonEmploymentStageAll'
-					className="border-0 px-[16px] py-[8px] bg-[#1F5CB8] font-normal text-white rounded-[54.5px] text-[16px]/[16px] cursor-pointer"
-					onClick={() => {
-						setCurrentFilterItem('all')
-					}}>
+					id="buttonEmploymentStageAll"
+					className={`px-[16px] py-[8px] font-normal rounded-[54.5px] text-[16px]/[16px] cursor-pointer ${
+						isActive('ALL') ? 'bg-[#1F5CB8] text-white border-[0px]' : 'bg-[#FFFFFF] text-[#4A4B4C] border-[#4A4B4C] border'
+					}`}
+					onClick={() => setCurrentFilterItem('ALL')}
+				>
 					все
 				</button>
 				<button
-					id='buttonEmploymentStageOncheck'
-					className={`bg-[#FFFFFF] border-[#4A4B4C] border cursor-pointer px-[16px] py-[8px] font-normal rounded-[54.5px] text-[16px]/[16px] text-[#4A4B4C]`}
-					onClick={() => {
-						setCurrentFilterItem('oncheck')
-					}}>
+					id="buttonEmploymentStageOncheck"
+					className={`px-[16px] py-[8px] font-normal rounded-[54.5px] text-[16px]/[16px] cursor-pointer ${
+						isActive('VERIFYING') ? 'bg-[#1F5CB8] text-white border-[0px]' : 'bg-[#FFFFFF] text-[#4A4B4C] border-[#4A4B4C] border'
+					}`}
+					onClick={() => setCurrentFilterItem('VERIFYING')}
+				>
 					на проверке
 				</button>
 				<button
-					id='buttonEmploymentStageRevision'
-					className="border-[#4A4B4C] border px-[16px] py-[8px] cursor-pointer bg-[#FFFFFF] font-normal rounded-[54.5px] text-[16px]/[16px] text-[#4A4B4C]"
-					onClick={() => {
-						setCurrentFilterItem('revision')
-					}}>
+					id="buttonEmploymentStageRevision"
+					className={`px-[16px] py-[8px] font-normal rounded-[54.5px] text-[16px]/[16px] cursor-pointer ${
+						isActive('REFINE') ? 'bg-[#1F5CB8] text-white border-[0px]' : 'bg-[#FFFFFF] text-[#4A4B4C] border-[#4A4B4C] border'
+					}`}
+					onClick={() => setCurrentFilterItem('REFINE')}
+				>
 					доработка
 				</button>
 				<button
-					id='buttonEmploymentStageAccepted'
-					className="border-[#4A4B4C] border px-[16px] py-[8px] cursor-pointer bg-[#FFFFFF] font-normal rounded-[54.5px] text-[16px]/[16px] text-[#4A4B4C]"
-					onClick={() => {
-						setCurrentFilterItem('accepted')
-					}}>
+					id="buttonEmploymentStageAccepted"
+					className={`px-[16px] py-[8px] font-normal rounded-[54.5px] text-[16px]/[16px] cursor-pointer ${
+						isActive('COMPLETE') ? 'bg-[#1F5CB8] text-white border-[0px]' : 'bg-[#FFFFFF] text-[#4A4B4C] border-[#4A4B4C] border'
+					}`}
+					onClick={() => setCurrentFilterItem('COMPLETE')}
+				>
 					принято
 				</button>
 			</div>
 			<ColumnFieldHeaderComponent></ColumnFieldHeaderComponent>
 			<div className="flex flex-col mt-[16px] pb-[50px] gap-[12px]">
-				{(currentFilterItem === 'all') && (
-					<>
-						<DepEmploymentItem status={'revision'}></DepEmploymentItem>
-						<DepEmploymentItem status={'oncheck'}></DepEmploymentItem>
-						<DepEmploymentItem status={'accepted'}></DepEmploymentItem>
-						<DepEmploymentItem status={'revision'}></DepEmploymentItem>
-						<DepEmploymentItem status={'revision'}></DepEmploymentItem>
-						<DepEmploymentItem status={'revision'}></DepEmploymentItem>
-						<DepEmploymentItem status={'accepted'}></DepEmploymentItem>
-						<DepEmploymentItem status={'accepted'}></DepEmploymentItem>
-						<DepEmploymentItem status={'accepted'}></DepEmploymentItem>
-					</>
+				{(currentFilterItem === 'ALL') && (
+					<div className="flex flex-col gap-[12px]">
+						{allItems.map(item => (
+							<DepEmploymentItem {...item} key={item.respondId}></DepEmploymentItem>
+						))}
+					</div>
 				)}
-				{(currentFilterItem === 'oncheck') && (
-					<>
-						<DepEmploymentItem status={'oncheck'}></DepEmploymentItem>
-					</>
+				{(currentFilterItem === 'VERIFYING') && (
+					<div className="flex flex-col gap-[12px]">
+						{verifyingItems.map(item => (
+							<DepEmploymentItem {...item} key={item.respondId}></DepEmploymentItem>
+						))}
+					</div>
 				)}
-				{(currentFilterItem === 'revision') && (
-					<>
-						<DepEmploymentItem status={'revision'}></DepEmploymentItem>
-						<DepEmploymentItem status={'revision'}></DepEmploymentItem>
-						<DepEmploymentItem status={'revision'}></DepEmploymentItem>
-						<DepEmploymentItem status={'revision'}></DepEmploymentItem>
-					</>
+				{(currentFilterItem === 'REFINE') && (
+					<div className="flex flex-col gap-[12px]">
+						{refineItems.map(item => (
+							<DepEmploymentItem {...item} key={item.respondId}></DepEmploymentItem>
+						))}
+					</div>
 				)}
-				{(currentFilterItem === 'accepted') && (
-					<>
-						<DepEmploymentItem status={'accepted'}></DepEmploymentItem>
-						<DepEmploymentItem status={'accepted'}></DepEmploymentItem>
-						<DepEmploymentItem status={'accepted'}></DepEmploymentItem>
-					</>
+				{(currentFilterItem === 'COMPLETE') && (
+					<div className="flex flex-col gap-[12px]">
+						{completeItems.map(item => (
+							<DepEmploymentItem {...item} key={item.respondId}></DepEmploymentItem>
+						))}
+					</div>
 				)}
 				{/*
 				{employment_stage_items.map(item => (

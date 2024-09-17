@@ -6,38 +6,45 @@ import {
 	useGetChatIdByRespondIdQuery
 } from '../../../../store/api/serviceApi'
 import { useDispatch } from 'react-redux'
+import { EmploymentStageItemType } from '../../../../store/reducers/type'
+import { useAppSelector } from '../../../../store'
+import {
+	setCurrentEmploymentSeekerName,
+	setCurrentEmploymentSeekerVacancy
+} from '../../../../store/reducers/employmentStageReducers/EmploymentStageSeekerReducer'
 
-interface DepEmploymentItemProps {
-	status: string
-}
-
-export const DepEmploymentItem = (  props : DepEmploymentItemProps ) => {
+export const DepEmploymentItem = (  props : EmploymentStageItemType ) => {
 
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
+
+	const chatid = useGetChatIdByRespondIdQuery({
+		chatId: props.respondId,
+		role: 'SEEKER'
+	})
 
 	return (
 		<div className="flex flex-col">
 			<div className="flex flex-row items-center h-[80px] w-full bg-[#FFFFFF]">
 				<div className="flex ml-[1.5%] w-[24%]">
-					Алексеев Дмитрий Иванович
+					{props.applicant.firstName + ' ' + props.applicant.middleName + ' ' + props.applicant.lastName}
 				</div>
 				<div className="flex w-[20%] mr-[5%]">
-					Специалист отдела развития сотрудничества
+					{props.vacancy.name}
 				</div>
-				{props.status === 'revision' && (
+				{props.status === 'VERIFYING' && (
 					<div className="flex items-center w-[16%] gap-[12px]">
 						<div className="w-[11px] h-[11px] rounded-[100%] bg-[#FFD600]"></div>
 						<span>Доработка</span>
 					</div>
 				)}
-				{props.status === 'oncheck' && (
+				{props.status === 'REFINE' && (
 					<div className="flex items-center w-[16%] gap-[12px]">
 						<div className="w-[11px] h-[11px] rounded-[100%] bg-[#009DCE]"></div>
 						<span>На проверке</span>
 					</div>
 				)}
-				{props.status === 'accepted' && (
+				{props.status === 'COMPLETE' && (
 					<div className="flex items-center w-[16%] gap-[12px]">
 						<div className="w-[11px] h-[11px] rounded-[100%] bg-[#00AB30]"></div>
 						<span>Принято</span>
@@ -48,6 +55,9 @@ export const DepEmploymentItem = (  props : DepEmploymentItemProps ) => {
 						className='text-[#FFFFFF] py-[8px] px-[24px] border-none rounded-[54.5px] text-[16px] font-normal'
 						type="primary"
 						onClick={() => {
+							dispatch(setCurrentResponce(props.respondId))
+							dispatch(setCurrentEmploymentSeekerVacancy(props.vacancy.name))
+							dispatch(setCurrentEmploymentSeekerName(props.applicant.firstName + ' ' + props.applicant.middleName + ' ' + props.applicant.lastName))
 							navigate('/services/personnelaccounting/employment/stages')
 						}}>
 						Подробнее
@@ -55,7 +65,7 @@ export const DepEmploymentItem = (  props : DepEmploymentItemProps ) => {
 					<Button
 						className='bg-[#FFFFFF] py-[8px] px-[24px] text-[#333333] border-[#333333] border-[1px] rounded-[54.5px] text-[16px] font-normal cursor-pointer'
 						onClick={() => {
-							{/*dispatch(setCurrentResponce(props.id))*/}
+							dispatch(setCurrentResponce(props.respondId))
 							navigate('/services/personnelaccounting/employment/stages/seekerinfo')
 						}}
 					>
@@ -64,8 +74,7 @@ export const DepEmploymentItem = (  props : DepEmploymentItemProps ) => {
 					<Button
 						className='bg-[#FFFFFF] py-[8px] px-[24px] text-[#333333] border-[#333333] border-[1px] rounded-[54.5px] cursor-pointer'
 						onClick={() => {
-							let chatId = 1
-							navigate(`/services/personnelaccounting/chat/id/${chatId}`)
+							navigate(`/services/personnelaccounting/chat/id/${chatid}/`)
 						}}
 					>
 						<FileIconSvg></FileIconSvg>

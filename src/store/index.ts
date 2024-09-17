@@ -1,4 +1,4 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import logger from 'redux-logger'
 
@@ -36,6 +36,8 @@ import authSlice from './reducers/authSlice'
 import chatIdSlice from './reducers/chatIdSlice'
 import notificationSlice from './reducers/notificationSlice'
 import CurrentInterviewTimeFormatedSlice from './reducers/CurrentInterviewTimeFormatedSlice'
+import inviteSeekerButtonReducer from './reducers/inviteSeekerButtonReducer'
+import currentEmploymentSeekerReducer from './reducers/employmentStageReducers/EmploymentStageSeekerReducer'
 
 export const store = configureStore({
 	reducer: {
@@ -72,6 +74,8 @@ export const store = configureStore({
 		[apiSlice.reducerPath]: apiSlice.reducer,
 		currentVacancyId: CurrentVacancyIdSlice,
 		currentInterviewTimeFormated: CurrentInterviewTimeFormatedSlice,
+		inviteSeekerButtonStatus: inviteSeekerButtonReducer,
+		employmentSeeker: currentEmploymentSeekerReducer,
 	},
 	middleware: getDefaultMiddleware =>
 		getDefaultMiddleware()

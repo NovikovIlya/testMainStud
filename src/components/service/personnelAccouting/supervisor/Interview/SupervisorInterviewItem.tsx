@@ -30,8 +30,6 @@ export const SupervisorInterviewItem = ( props : InterviewItemType ) => {
         format: string
     }
 
-    const [getInterview, result] = useLazyGetInterviewViewQuery()
-
     const [isUnsuccessModalOpen, setIsUnsuccessModalOpen] = useState(false)
 
     const dispatch = useDispatch()
@@ -188,8 +186,7 @@ export const SupervisorInterviewItem = ( props : InterviewItemType ) => {
             <>
                 <Button
                     onClick={() => {
-                            dispatch(setCurrentResponce(props.id))
-                            console.log(respondId.respondId + "123")
+                            dispatch(setCurrentResponce(respondId.respondId))
                             dispatch(setCurrentInterviewTime(props.time))
                             dispatch(setCurrentInterviewFormat(props.format))
                             dispatch(setCurrentInterviewTimeFormated(InterviewTimeStringForSeeker))

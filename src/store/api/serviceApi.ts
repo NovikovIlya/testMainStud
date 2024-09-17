@@ -28,6 +28,9 @@ import {
 	VacancyRequestViewType,
 	VacancyRespondItemType,
 	VacancyViewResponceType,
+	EmploymentStageItemType,
+	EmploymentStageStatusType,
+	ChangeStageStatusType,
 	respondStatus
 } from '../reducers/type'
 
@@ -796,6 +799,51 @@ export const serviceApi = apiSlice.injectEndpoints({
 					Authorization: `Bearer ${supervisorToken}`
 				}
 			})
+		}),
+		getPersonnelStages: builder.query<EmploymentStageItemType[], void>({
+			query: arg => ({
+				url: `http://localhost:8082/employment-api/v1/managment/employment`,
+				method: 'GET',
+				headers: {
+					Authorization: `Bearer ${supervisorToken}`
+				}
+			})
+		}),
+		downloadFileEmploymentStages: builder.query<Blob, {respondId: number, fileId: number}> ({
+			query: arg => ({
+				url: `http://localhost:8082/employment-api/v1/respond/${arg.respondId}/employment/file/${arg.fileId}/`,
+				method: 'GET',
+				headers: {
+					Authorization: `Bearer ${supervisorToken}`
+				}
+			})
+		}),
+		getEmploymentStageStatus: builder.query<EmploymentStageStatusType, { respondId: number }> ({
+			query: arg => ({
+				url: `http://localhost:8082/employment-api/v1/respond/${arg.respondId}/employment`,
+				method: 'GET',
+				headers: {
+					Authorization: `Bearer ${supervisorToken}`
+				}
+			})
+		}),
+		changeEmploymentStageStatusRequest: builder.mutation<void, ChangeStageStatusType & { subStageId: number }> ( {
+			query: arg => ({
+				url: `http://localhost:8082/employment-api/v1/managment/employment/sub-stage/${arg.subStageId}`,
+				method: 'PUT',
+				headers: {
+					Authorization: `Bearer ${supervisorToken}`
+				}
+			})
+		}),
+		downloadEmploymentStageFile: builder.query<Blob, { fileId : number }> ({
+			query: arg => ({
+				url: `http://localhost:8082/employment-api/v1/managment/employment/sub-stage/${arg.fileId}`,
+				method: 'GET',
+				headers: {
+					Authorization: `Bearer ${supervisorToken}`
+				}
+			})
 		})
 	})
 })
@@ -873,5 +921,9 @@ export const {
 	useLazyGetInterviewViewQuery,
 	useEmployeeSeekerRequestMutation,
 	useAnswerToInvitationReserveTimeRequestMutation,
-	useAnswerEmploymentRequestMutation
+	useAnswerEmploymentRequestMutation,
+	useGetPersonnelStagesQuery,
+	useGetEmploymentStageStatusQuery,
+	useChangeEmploymentStageStatusRequestMutation,
+	useDownloadEmploymentStageFileQuery
 } = serviceApi

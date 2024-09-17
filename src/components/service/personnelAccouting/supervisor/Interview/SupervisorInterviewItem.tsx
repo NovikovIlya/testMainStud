@@ -30,6 +30,8 @@ export const SupervisorInterviewItem = ( props : InterviewItemType ) => {
         format: string
     }
 
+    const [getInterview, result] = useLazyGetInterviewViewQuery()
+
     const [isUnsuccessModalOpen, setIsUnsuccessModalOpen] = useState(false)
 
     const dispatch = useDispatch()
@@ -129,58 +131,55 @@ export const SupervisorInterviewItem = ( props : InterviewItemType ) => {
             </div>
         );
     }
-    const InterviewTimeElem = (props :  InterviewTimeElemProps) =>  {
-        const date : Date = new Date(props.eventTime);
+	const InterviewTimeElem = (props :  InterviewTimeElemProps) =>  {
+		const date : Date = new Date(props.eventTime);
 
-        // Получаем локальное время
-        const localDate = date.toLocaleString('ru-RU', {
-            timeZoneName: 'short',
-            hour12: false,
-        });
+		// Получаем локальное время
+		const localDate = date.toLocaleString('ru-RU', {
+			timeZoneName: 'short',
+			hour12: false,
+		});
 
-        // Преобразуем строку в формат "дд.мм.гг чч:мм"
-        const [datePart, timePart] = localDate.split(', ');
-        const [day, month, year] = datePart.split('.');
+		// Преобразуем строку в формат "дд.мм.гг чч:мм"
+		const [datePart, timePart] = localDate.split(', ');
+		const [day, month, year] = datePart.split('.');
 
 // Получаем последние две цифры года
-        const shortYear : string = year.slice(-2);
-        const shortTime : string = timePart.substring(0, 5);
-        const datePublicString = day + '.' + month + '.' + shortYear + ' ' + shortTime;
+		const shortYear : string = year.slice(-2);
+		const shortTime : string = timePart.substring(0, 5);
+		const datePublicString = day + '.' + month + '.' + shortYear + ' ' + shortTime;
 
-        return (
-            <>
-                <span className="w-[8%] ml-[3%]">{datePublicString}</span>
-            </>
-        )
-    }
-    const InterviewFormatElem = (props: InterviewFormatElemProps) => {
-        return(
-            <>
-                {props.format === "OFFLINE" && (
-                    <span className="w-[8%] ">Оффлайн</span>
-                )}
-                {props.format === "ONLINE" && (
-                    <span className="w-[8%] ">Онлайн</span>
-                )}
-            </>
-        )
-    }
-    const InterviewButtonElem = (props: InterviewButtonElemProps) => {
-				const date : Date = new Date(props.time);
+		return (
+			<>
+				<span className="w-[8%] ml-[3%]">{datePublicString}</span>
+			</>
+		)
+	}
+	const InterviewFormatElem = (props: InterviewFormatElemProps) => {
+		return (
+			<>
+				{props.format === 'OFFLINE' && <span className="w-[8%] ">Оффлайн</span>}
+				{props.format === 'ONLINE' && <span className="w-[8%] ">Онлайн</span>}
+			</>
+		)
+	}
+	const InterviewButtonElem = (props: InterviewButtonElemProps) => {
+		const date: Date = new Date(props.time)
 
-				const localDate = date.toLocaleString('ru-RU', {
-					timeZoneName: 'short',
-					hour12: false,
-				});
+		const localDate = date.toLocaleString('ru-RU', {
+			timeZoneName: 'short',
+			hour12: false
+		})
 
-				// Преобразуем строку в формат "дд.мм.гг чч:мм"
-				const [datePart, timePart] = localDate.split(', ');
-				const [day, month, year] = datePart.split('.');
+		// Преобразуем строку в формат "дд.мм.гг чч:мм"
+		const [datePart, timePart] = localDate.split(', ')
+		const [day, month, year] = datePart.split('.')
 
-				const shortYear : string = year.slice(-2);
-				const shortTime : string = timePart.substring(0, 5);
+		const shortYear: string = year.slice(-2)
+		const shortTime: string = timePart.substring(0, 5)
 
-				const InterviewTimeStringForSeeker = day + '.' + month + '.' + shortYear + ' в ' + shortTime;
+		const InterviewTimeStringForSeeker =
+			day + '.' + month + '.' + shortYear + ' в ' + shortTime
 
         return (
             <>

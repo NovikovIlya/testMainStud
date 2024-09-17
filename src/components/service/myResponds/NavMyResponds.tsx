@@ -6,7 +6,7 @@ import CalendarSvg from '../../../assets/svg/CalendarSvg'
 import { MyDocsSvg } from '../../../assets/svg/MyDocsSvg'
 import { Header } from '../../layout/Header'
 import { Chat } from '../Chat/Chat'
-import { SeekerEmployment } from '../employmentStage/seeker/seekerEmployment'
+import { NavSeekerEmployment } from '../employmentStage/seeker/NavSeekerEmployment'
 import { RespondInfo } from '../personnelAccouting/RespondInfo'
 
 import { MyResponds } from './MyResponds'
@@ -68,7 +68,7 @@ export const NavMyResponds = () => {
 				<RespondInfo type="SEEKER" />
 			)}
 			{pathname.includes(navList[1].id) && <Chat />}
-			{pathname === navList[2].id && <SeekerEmployment />}
+			{pathname.includes(navList[2].id) && <NavSeekerEmployment />}
 		</>
 	)
 }

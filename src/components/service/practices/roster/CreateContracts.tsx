@@ -297,7 +297,10 @@ export const CreateContracts = () => {
                     <Col xs={24} sm={24} md={18} lg={hideSrok ? 16 : 8} xl={hideSrok ? 12 : 6}>
                         <Form.Item label={'Шифр и наименование специальности'}
                                    name={'specialtyNameIds'}
-                                   rules={[{required: false}]}>
+                                   rules={[{required: false}]}
+                                   required={true}
+                                   >
+                                    
                             <Select
                                 mode="multiple"
                                 allowClear
@@ -352,7 +355,7 @@ export const CreateContracts = () => {
                     <Col xs={24} sm={24} md={18} lg={16} xl={12}>
                         <Form.Item label={'Количество мест'}
                                    name={'placesAmount'}
-                                //    rules={[{required: true}]}
+                                   rules={[{required: true}]}
                                    >
                             <InputNumber
                                 className="w-full"

@@ -248,25 +248,25 @@ export const jsxElements = [
 			i: 'Practices'
 		}
 	},
-	{
-		index: 'myPractices',
-		element: (
-			<TemplateCard
-				href="/services/mypractices"
-				info="Мои практики пум пум пум пум пум умпум пум пумпум пум пум пум пум"
-				title="Мои практики"
-				buttonText="Study"
-				img="/Group499.png"
-			/>
-		),
-		place: {
-			w: 1,
-			h: 1,
-			x: 0,
-			y: 0,
-			i: 'myPractices'
-		}
-	},
+	// {
+	// 	index: 'myPractices',
+	// 	element: (
+	// 		<TemplateCard
+	// 			href="/services/mypractices"
+	// 			info="Мои практики пум пум пум пум пум умпум пум пумпум пум пум пум пум"
+	// 			title="Мои практики"
+	// 			buttonText="Study"
+	// 			img="/Group499.png"
+	// 		/>
+	// 	),
+	// 	place: {
+	// 		w: 1,
+	// 		h: 1,
+	// 		x: 0,
+	// 		y: 0,
+	// 		i: 'myPractices'
+	// 	}
+	// },
 	// {
 	// 	index: 'practiceTeacher',
 	// 	element: (

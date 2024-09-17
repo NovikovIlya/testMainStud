@@ -9,6 +9,7 @@ import {
 	Popover,
 	Row,
 	Space,
+	Spin,
 	Tabs,
 	Tooltip} from 'antd'
 import { useState } from 'react'
@@ -20,6 +21,9 @@ import { validateMessages } from '../../../../utils/validateMessage'
 import Diary from './Diary'
 import Plan from './Plan'
 import Final from './Final'
+import { useGetOneMyPracticesQuery } from '../../../../store/api/practiceApi/mypractice'
+import { LoadingOutlined } from '@ant-design/icons'
+import dayjs from 'dayjs'
 
 export const EditMyPractice = () => {
 	const [form] = Form.useForm<any>()
@@ -29,12 +33,22 @@ export const EditMyPractice = () => {
 	const { Panel } = Collapse
 	const [showFinal, setShowFinal] = useState(false)
 	const [showFinalTwo, setShowFinalTwo] = useState(false)
+	const {data:dataOne,isFetching,isSuccess} = useGetOneMyPracticesQuery(id)
+	const formatedDate = ()=>{
+		if(isSuccess){
+			const [start, end] = dataOne?.practicePeriod?.split('-');
+			const formattedStart = dayjs(start).format('DD.MM.YYYY');
+			const formattedEnd = dayjs(end).format('DD.MM.YYYY');
+			return [formattedStart,formattedEnd]
+		}
+		return []
+	}
 
 	const items: any = [
 		{
 			key: '1',
 			label: 'Где будет проходить практика',
-			children: 'Zhou Maomao'
+			children: dataOne?.place ? dataOne.place : 'Не указано'
 		},
 		{
 			key: '2',
@@ -44,73 +58,71 @@ export const EditMyPractice = () => {
 		{
 			key: '3',
 			label: 'Шифр',
-			children: '12 Химия'
+			children:  dataOne?.specialty ? dataOne.specialty : 'Не указано'
 		},
 		{
 			key: '4',
 			label: 'Профиль',
-			children: 'empty'
+			children:  dataOne?.profile ? dataOne.profile : 'Не указано'
 		},
 		{
 			key: '5',
 			label: 'Уровень образования',
-			children: 'Бакалавриат'
+			children: dataOne?.educationLevel ? dataOne.educationLevel : 'Не указано'
 		},
 		{
 			key: '6',
 			label: 'Курс',
-			children: '4'
+			children:dataOne?.course ? dataOne.course : 'Не указано'
 		},
 		{
 			key: '7',
 			label: 'Группа',
-			children: '07-001'
+			children: dataOne?.group ? dataOne.group : 'Не указано'
 		},
-		{
-			key: '8',
-			label: 'Образовательное учреждение',
-			children: 'Высшая школа ииф'
-		},
+		
 		{
 			key: '9',
 			label: 'Тип практики',
-			children: 'Учебная'
+			children: dataOne?.practiceType ? dataOne.practiceType : 'Не указано'
 		},
 		{
 			key: '10',
 			label: 'Вид практики',
-			children: 'учебно-методическая'
+			children: dataOne?.practiceKind ? dataOne.practiceKind : 'Не указано'
 		},
 		{
 			key: '11',
 			label: 'Период практики',
-			children: '11'
+			children: dataOne?.practicePeriod ? `${formatedDate()[0]} - ${formatedDate()[1]}` : 'Не указано'
 		},
 		{
 			key: '12',
 			label: 'Учебный год',
-			children: '2024'
+			children:  dataOne?.academicYear ? dataOne.academicYear : 'Не указано'
 		},
 		{
 			key: '13',
 			label: 'ФИО руководителя практики',
-			children: 'Новиков'
+			children:  dataOne?.departmentDirector ? dataOne.departmentDirector : 'Не указано'
 		},
 		{
 			key: '14',
 			label: 'ФИО руководителя от организации',
-			children: 'Иванов'
+			children: dataOne?.departmentDirector ? dataOne.departmentDirector : 'Не указано'
 		},
 		{
 			key: '15',
 			label: 'Юридический адресс',
-			children: 'ул Оренбусий тракт, 138, Казань'
+			children: dataOne?.departmentDirector ? dataOne.departmentDirector : 'Не указано'
 		}
 	]
 
 	const onChange = (key: string) => {
 		console.log(key)
 	}
+
+	
 
 	return (
 		<section className="container animate-fade-in">
@@ -124,34 +136,19 @@ export const EditMyPractice = () => {
 						nav('/services/mypractices/')
 					}}
 				/>
-				<span className=" text-[28px] font-normal">Учебная практика на кафедре общей физики с .. по ..</span>
+				<span className=" text-[28px] font-normal">Учебная практика по специальности "{dataOne?.specialty}" с {formatedDate()[0]} по {formatedDate()[1]} </span>
 			</Space>
 
 			<Tabs defaultActiveKey="1" onChange={onChange} className='mt-6'>
 				<Tabs.TabPane tab={'Основная информация'} key={1}>
-					{/* <Row gutter={16} className="mt-14 mb-10">
-						<Col span={6}>
-							<Card title="Ваш пакет документов должен содержать:" bordered={false}>
-								<ul className="ml-6">
-									<li>Отчет по практике</li>
-									<li>Путевка практиканта</li>
-									<li>Дневник практиканта</li>
-								</ul>
-							</Card>
-						</Col>
-						<Col span={6}>
-							<Card title="Обратите внимание" bordered={false}>
-								Отчет должен заполняться самостоятельно.<br></br> В модуле “Практики студентов” формируется только
-								титульный лист отчета.
-							</Card>
-						</Col>
-					</Row> */}
+				{isFetching ? <Spin className="w-full mt-20 flex justify-start ml-10" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} /> :
+					<>
 					<Row className='mb-4 mt-4'>
 						<Col span={12} className="pr-[8px] ">
 							<Card title="Оценка:" bordered={false} className='mb-4'>
 									<Row>
 										<Descriptions.Item className="" span={3} label={'1'} key={'1'}>
-										<div className="">{'Нет оценки'}</div>
+										<div className="">{dataOne?.grade ? dataOne.grade :'Нет оценки'}</div>
 										</Descriptions.Item>
 									</Row>
 								</Card>
@@ -169,8 +166,8 @@ export const EditMyPractice = () => {
 							
 						</Col>
 					</Row>
-
-					<Form<any> validateMessages={validateMessages} form={form} layout={'vertical'}>
+				
+					<Form<any> validateMessages={validateMessages} form={form} layout={'vertical'} className='mb-8'>
 						<Row gutter={[16, 16]} className={'mt-4'}>
 							<Col xs={24} sm={24} md={18} lg={16} xl={12}>
 								<List
@@ -181,7 +178,7 @@ export const EditMyPractice = () => {
 									}}
 									bordered
 									// @ts-ignore
-									dataSource={[]}
+									dataSource={dataOne?.tasks}
 									renderItem={(item: any, index: number) => (
 										<List.Item
 											style={{
@@ -190,7 +187,7 @@ export const EditMyPractice = () => {
 										>
 											<div className="flex items-center">
 												<div className=" p-3">{index + 1}</div>
-												<div className="ml-2">{item.value}</div>
+												<div className="ml-2">{item.description}</div>
 											</div>
 										</List.Item>
 									)}
@@ -198,6 +195,8 @@ export const EditMyPractice = () => {
 							</Col>
 						</Row>
 					</Form>
+					</>
+					}
 				</Tabs.TabPane>
 				<Tabs.TabPane tab={'План и дневник практики'} key={2}>
 					
@@ -209,8 +208,9 @@ export const EditMyPractice = () => {
 			
 					<Tabs.TabPane tab={<Popover  content={!showFinal || !showFinalTwo ? 'Раздел доступен только после' : null}>Отправка документов</Popover>} key={3} >
 						<Row gutter={16} className="mt-14 mb-10">
-							<Col span={6}>
-								<Card title="Ваш пакет документов должен содержать:" bordered={false}>
+							<Col span={12}>
+								<Card title="Обратите внимание:" bordered={false}>
+									<div className='mb-3'>Ваш пакет документов должен содержать:</div>
 									<ul className="ml-6">
 										<li>Отчет по практике</li>
 										<li>Путевка практиканта</li>
@@ -218,12 +218,12 @@ export const EditMyPractice = () => {
 									</ul>
 								</Card>
 							</Col>
-							<Col span={6}>
+							{/* <Col span={6}>
 								<Card title="Обратите внимание" bordered={false}>
 									Отчет должен заполняться самостоятельно.<br></br> В модуле “Практики студентов” формируется только
 									титульный лист отчета.
 								</Card>
-							</Col>
+							</Col> */}
 						</Row>
 					<Final/>
 					</Tabs.TabPane>
@@ -232,3 +232,5 @@ export const EditMyPractice = () => {
 		</section>
 	)
 }
+
+

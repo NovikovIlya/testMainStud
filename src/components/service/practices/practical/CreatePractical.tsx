@@ -24,6 +24,7 @@ import {
 import {
 	useGetCompentencesQuery,
 	useGetDepartmentDirectorsQuery,
+	useGetGroupNumbersNewQuery,
 	useGetGroupNumbersQuery,
 	useGetPracticeKindQuery,
 	useGetPracticeTypeForPracticeQuery,
@@ -101,6 +102,7 @@ export const CreatePractical = () => {
 	const { data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty } = useGetSpecialtyNamesForPractiseQuery(subDivisionId, {skip: subDivisionId === null})
 	const { data: dataPraciseKind, isSuccess: isSuccesPractiseKind } = useGetPracticeKindQuery(subDivisionId, { skip: subDivisionId === null })
 	const { data: dataGroupNumbers, isSuccess: isSuccessGroupNumbers } = useGetGroupNumbersQuery(subDivisionId, { skip: subDivisionId === null })
+	const { data: dataGroupNumbersNew } = useGetGroupNumbersNewQuery(subDivisionId, { skip: subDivisionId === null })
 	const {data: dataDepartmentDirector,isSuccess: isSuccessDepartmentDirector} = useGetDepartmentDirectorsQuery(subDivisionId, {skip: !subDivisionId})
 	const { data: dataCompetences, isSuccess: isSuccessCompetences } =useGetCompentencesQuery(objectForCompetences, {skip: !objectForCompetences?.specialityId || objectForCompetences?.practiceKindId === null|| objectForCompetences?.startYear === null})
 	const { data: dataDepartments, isSuccess: isSuccessDepartments } =useGetSubdivisionForPracticeQuery()

@@ -11,7 +11,7 @@ import {
 } from '../../../../models/representation'
 
 import { EditableCell } from './EditableCell'
-import { useGetGroupNumberQuery, useGetPracticesAllQuery, useGetPractiseSubdevisionNewQuery } from '../../../../store/api/practiceApi/individualTask'
+import { useGetGroupNumberQuery, useGetGroupNumbersNewQuery, useGetPracticesAllQuery, useGetPractiseSubdevisionNewQuery } from '../../../../store/api/practiceApi/individualTask'
 import { LoadingOutlined } from '@ant-design/icons'
 import { useGetAllSubmissionsQuery } from '../../../../store/api/practiceApi/representation'
 import { useGetSpecialtyNamesForPractiseQuery } from '../../../../store/api/practiceApi/roster'
@@ -49,6 +49,7 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 	const [treeLine, setTreeLine] = useState(true);
     const [showLeafIcon, setShowLeafIcon] = useState(false);
     const [value, setValue] = useState<any>('Все');
+	const { data: dataGroupNumbersNew } = useGetGroupNumbersNewQuery(subdivisionId, { skip: subdivisionId === null })
 
  	const columnsRepresentation = [
 	{
@@ -296,8 +297,8 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 						className="w-full"
 						options={[
 							{ key: 0, value: 'Все', label: 'Все' },
-							...(dataGroupNumber
-								? dataGroupNumber.map(item => ({
+							...(dataGroupNumbersNew
+								? dataGroupNumbersNew.map(item => ({
 										key: item.id,
 										value: item.value,
 										label: item.label

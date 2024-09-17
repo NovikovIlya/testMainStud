@@ -26,7 +26,9 @@ import { DeleteRedSvg } from '../../../../assets/svg/DeleteRedSvg'
 import {
 	useCreateScheduleMutation, useGetByFilterMutation,
 	useGetDocQuery,
-	useGetSubdivisionQuery
+	useGetSubdivisionQuery,
+	useGetSubmissionsKindPracticeQuery,
+	useGetSubmissionsSpecPracticeQuery
 } from '../../../../store/api/practiceApi/formingSchedule'
 import { useGetDepartmentsQuery, useGetPracticeKindQuery, useGetPractiseSubdevisionNewQuery } from '../../../../store/api/practiceApi/individualTask'
 
@@ -165,7 +167,7 @@ export const PracticeSchedule = () => {
 	})
 	const [form] = Form.useForm()
 	const [editingKey, setEditingKey] = useState('')
-	const { data: dataAllSubdivision } = useGetSubdivisionQuery()
+	// const { data: dataAllSubdivision } = useGetSubdivisionQuery()
 	const isEditing = (record: Item) => record.key === editingKey
 	const [currentRowValues, setCurrentRowValues] = useState({})
 	const [createSchedule, { data: dataCreateSchedule ,isLoading:isLoadingCreate}] = useCreateScheduleMutation({})
@@ -179,7 +181,8 @@ export const PracticeSchedule = () => {
 	const [selectedValueKind, setSelectedValuesKind] = useState(['Все']);
 	const [selectedValueSpecialtySend, setSelectedValuesSpectialtySend] = useState([]);
 	const [selectedValueKindSend, setSelectedValuesKindSend] = useState([]);
-	const [copyDataByFilter, setCopyDataByFilter] = useState([]);
+	const [copyDataByFilter, setCopyDataByFilter] = useState(dataByFilter);
+	
 	const prevDataByFilterLength = useRef([]);
 	const prevUniqName = useRef()
 	const prevUniqNameKind = useRef()
@@ -188,9 +191,13 @@ export const PracticeSchedule = () => {
     const [showLeafIcon, setShowLeafIcon] = useState(false);
     const [value, setValue] = useState<any>();
 	const [newSubdivisionId,setNewSubdivisionId] = useState(null)
+	const {data:dataSubKindPractice} = useGetSubmissionsKindPracticeQuery(newSubdivisionId,{skip:!newSubdivisionId })
+	const {data:dataSubSpecPractice} = useGetSubmissionsSpecPracticeQuery(newSubdivisionId,{skip:!newSubdivisionId })
 	const [flag,setFlag] = useState(false)
+	const [kindPracticeSub,setKindPracticeSub] = useState<any>(null)
+	const [specPracticeSub,setSpecPracticeSub] = useState<any>(null)
 	const dispatch = useDispatch()
-
+	console.log('dataSubSpecPractice',dataSubSpecPractice)
 
 	const columns = [
 		{
@@ -345,15 +352,20 @@ export const PracticeSchedule = () => {
 			}
 		}
 	},[isSuccessByFilter])
-	
+	console.log('kindPracticeSub',kindPracticeSub)
 	useEffect(() => {
 		const data = {
 			subdivisionId:  newSubdivisionId ? newSubdivisionId  : null,
-			specialtyNameId: selectedValueSpecialtySend.length===0 ? null : selectedValueSpecialtySend ,
-			courseNumber: selectedValueCourse.includes('Все') ? null : selectedValueCourse.map((i)=>Number(i)),
-			practiceKindId: selectedValueKindSend?.length===0 ? null : selectedValueKindSend,
-			educationLevel: selectedValuesLevel.includes('Все') ? null : selectedValuesLevel,
+			specialtyNameId:specPracticeSub?.length===1 && specPracticeSub?.includes('Все') ? null : specPracticeSub?.filter((i:any)=>i!=='Все') ,
+			courseNumber: selectedValueCourse?.includes('Все') ? null : selectedValueCourse.map((i)=>Number(i)),
+			practiceKindId: kindPracticeSub?.length===1&&kindPracticeSub.includes('Все') ? null : kindPracticeSub?.filter((i:any)=>i!=='Все') ,
+			educationLevel: selectedValuesLevel?.includes('Все') ? null : selectedValuesLevel,
 			educationType: selectedValueForm.includes('Все') ? null : selectedValueForm,
+		}
+		console.log('selectedValueKindSend',selectedValueKindSend)
+		console.log('datadatadatadata---------------------',data)
+		if(data?.subdivisionId===null){
+			return
 		}
 		sendFilterParams(data)
 	}, [filter, dataUserSubdivision, form,selectedValuesLevel,selectedValueSpecialtySend,selectedValueCourse,selectedValueForm,selectedValueKind])
@@ -400,7 +412,7 @@ export const PracticeSchedule = () => {
 	const handleChangeSpecialty = (values:any) => {
 		if(selectedValueSpecialty.includes('Все')===false && values.includes('Все') ){
 			setSelectedValuesSpectialty(['Все']);
-			console.log('всеееее')
+		
 			setSelectedValuesSpectialtySend([])
 			return
 		}
@@ -492,17 +504,7 @@ export const PracticeSchedule = () => {
 		setTableData(newData)
 	}
 
-	function getAcademicYear() {
-		const today = dayjs()
-		const year = today.year()
-		const month = today.month() + 1
 
-		if (month >= 8) {
-			return `${year}/${year + 1}`
-		} else {
-			return `${year - 1}/${year}`
-		}
-	}
 
 	const handleCreateSchedule = () => {
 		if(!newSubdivisionId){
@@ -528,11 +530,11 @@ export const PracticeSchedule = () => {
 			})
 
     }
-
+	
 	const arraySpec = [
         { key: 2244612, value: "Все", label: "Все" },
         ...(dataByFilter ? 
-            dataByFilter.map((item:any) => ({
+            dataByFilter?.scheduleContent?.map((item:any) => ({
                 key: item.id,
                 value: item.specialtyName,
                 label: item.specialtyName
@@ -543,17 +545,18 @@ export const PracticeSchedule = () => {
     const arrayKind = [
         { key: 2244612, value: "Все", label: "Все" },
         ...(dataByFilter ?
-            dataByFilter.map((item:any) => ({
+            dataByFilter?.scheduleContent?.map((item:any) => ({
                 key: item.id,
                 value: item.practiceKind,
                 label: item.practiceKind
             }))
         : [])
     ];
+	
 	const arrayKindWithId = [
       
         ...(dataByFilter ?
-            dataByFilter.map((item:any) => ({
+            dataByFilter?.scheduleContent?.map((item:any) => ({
                 key: item.id,
                 value: item,
                 label: item
@@ -562,14 +565,15 @@ export const PracticeSchedule = () => {
     ];
 	
 	const uniqueSpecialityNames = useMemo(() => {
-		if(prevDataByFilterLength?.current <= dataByFilter?.length){
+	
+		if(prevDataByFilterLength?.current <= dataByFilter?.scheduleContent.length){
 
 			const uniqueNames = Array.from(new Set(arraySpec.map(item => item.value)))
 			.map(value => ({ value, label: value }));
 
 			prevDataByFilterLength.current = dataByFilter?.length
 
-			if(dataByFilter.length>=prevDataByFilterLength.current){
+			if(dataByFilter.scheduleContent.length>=prevDataByFilterLength.current){
 				//@ts-ignore
 				prevDataByFilterLength.current = uniqueNames.length
 			}
@@ -580,16 +584,21 @@ export const PracticeSchedule = () => {
 	  }, [dataByFilter]);
 
 	const uniqueKind = useMemo(() => {
-	if(prevDataByFilterLength?.current <= dataByFilter?.length){
+	
+	if(prevDataByFilterLength?.current <= dataByFilter?.scheduleContent.length){
 		const uniqueNames = Array.from(new Set(arrayKind.map(item => item.value)))
 		.map(value => ({ value, label: value }));
-		prevDataByFilterLength.current = dataByFilter?.length
+		prevDataByFilterLength.current = dataByFilter?.scheduleContent.length
 		//@ts-ignore
 		prevUniqNameKind.current = uniqueNames
+	
 		return uniqueNames;
-	}else return prevUniqNameKind.current
+	}else {
+	
+	return prevUniqNameKind.current}
 	}, [dataByFilter]);
 
+	
 	const treeData = dataSubNewCreate?.map((item:any)=>{
         return{
             title:item.value,
@@ -603,6 +612,7 @@ export const PracticeSchedule = () => {
             })
         }
     })
+	console.log('specPracticeSub',specPracticeSub)
 
 	return (
 		<Spin spinning={isLoadingCreate}>
@@ -670,8 +680,23 @@ export const PracticeSchedule = () => {
 						popupMatchSelectWidth={false}
 						value={selectedValueSpecialty}
 						className="w-full "
-						options={uniqueSpecialityNames}
+						options={ [
+							{ key: 2244612, value: 'Все', label: 'Все' },
+							...(Array.isArray(dataSubSpecPractice) ? dataSubSpecPractice.map(item => ({
+								label: item.value,
+								key: item.id,
+								value: item.id
+							})) : [])
+						]
+					}
 						onChange={value => {
+							if(specPracticeSub?.includes('Все')===false && value?.includes('Все')){
+								setSpecPracticeSub(['Все'])
+							}else{
+								const x = value.filter((i)=>i!=='Все')
+								setSpecPracticeSub(x)
+							}
+							// setSpecPracticeSub(value)
 							handleChangeSpecialty(value)
 							setFilter({
 								...filter,
@@ -712,23 +737,24 @@ export const PracticeSchedule = () => {
 						popupMatchSelectWidth={false}
 						value={selectedValueKind}
 						className="w-full"
-						// @ts-ignore
-						options={[
-							{ key: 2244612, value: "Все", label: "Все" },
-							...prevData?.current.filter((item, index, self) =>
-								// @ts-ignore
-							  index === self.findIndex(t => t.practiceKind === item.practiceKind)
-							).map(item => ({
-								// @ts-ignore
-							  key: item.id,
-							  // @ts-ignore
-							  value: item.practiceKindId,
-							  // @ts-ignore
-							  label: item.practiceKind
-							}))
-						  ]
-						}
+						options={ [
+							{ key: 2244612, value: 'Все', label: 'Все' },
+							...(Array.isArray(dataSubKindPractice) ? dataSubKindPractice.map(item => ({
+								label: item.value,
+								key: item.id,
+								value: item.id
+							})) : [])
+						]
+					}
+						
 						onChange={value => {
+							if(kindPracticeSub?.includes('Все')===false && value?.includes('Все')){
+								setKindPracticeSub(['Все'])
+							}else{
+								const x = value.filter((i)=>i!=='Все')
+								setKindPracticeSub(x)
+							}
+							// setKindPracticeSub(value)
 							handleChangeKind(value)
 							setFilter({
 								...filter,
@@ -804,16 +830,17 @@ export const PracticeSchedule = () => {
 								}
 							}}
 							bordered
-							dataSource={!newSubdivisionId ? [] : tableData ? tableData.map((item:any)=>{
+							dataSource={!newSubdivisionId ? [] : tableData ? tableData?.scheduleContent?.map((item:any)=>{
                                 return{
                                     ...item,
                                     period:  [dayjs(item.practiceStartDate), dayjs(item.practiceEndDate)]
                                 }
                             }) : []}
 							columns={mergedColumns}
-							rowClassName="editable-row"
+							rowClassName="editable-row animate-fade-in"
 							pagination={false}
 							rowKey="id"
+							
 							locale={{
 								emptyText: (
 								  <div>

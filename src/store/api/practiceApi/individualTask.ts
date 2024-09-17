@@ -95,6 +95,7 @@ export const individualTasks = apiSlice.injectEndpoints({
                 method: 'GET',
             })
         }),
+
         getPracticeTypeForPractice: builder.query<any, any>({
             query: ({subdivisionId,specialtyNameId }) => ({
                 url:`services/api-practices/tasks/practice-types?subdivisionId=${subdivisionId}&specialtyNameId=${specialtyNameId }`,

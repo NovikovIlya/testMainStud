@@ -22,17 +22,19 @@ export const Comment = () => (
   <>
     <Row>
         <Col>
-            <Typography.Title level={2}>Комментарии проверяющего</Typography.Title>
+            <Typography.Title level={2}>Комментарии по практике</Typography.Title>
+            <span>Загружайте пакет документов на проверку и получайте обратную связь прямо в окне комментариев </span>
         </Col>
 	</Row>
           
     <List
+        className='h-[400px] mt-6 p-4  overflow-y-auto border-solid border-y-4 border-[#7ab0e6]'
         itemLayout="horizontal"
         dataSource={comments}
         renderItem={item => (
-        <List.Item className='rounded-lg  mb-6 flex-wrap ant-list-itemTwo'>
+        <List.Item className='rounded-lg  mb-6 flex-wrap ant-list-itemTwo '>
             <Row className='mt-6 w-full  justify-end mb-3    w-25'>
-              <Col className='  p-4 flex flex-wrap justify-end rounded-lg w-25 bg-white cc'>
+              <Col className='  p-4 flex flex-wrap justify-end rounded-lg w-25 bg-[#e3f2ff] cc'>
                 <Typography className='text-sm  text-gray-400 text-end w-full'>Прикрепленные файлы</Typography>
                 <a href={item.href} download>Файл</a>
               </Col>

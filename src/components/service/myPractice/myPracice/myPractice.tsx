@@ -20,68 +20,11 @@ import { useGetAllOrderQuery, useGetAllSubmissionsQuery, useGetOrderSubdevisionQ
 import { LoadingOutlined } from '@ant-design/icons'
 import { findSubdivisions } from '../../../../utils/findSubdivisions'
 import { disableParents } from '../../../../utils/disableParents'
+import { useGetAllMyPracticesQuery } from '../../../../store/api/practiceApi/mypractice'
 
 
 
 
-const mockData = [
-  {
-      key: '1',
-      practice: {
-          specialtyName: 'Информационные технологии',
-          groupNumber: 'IT-2023-01',
-          academicYear: '2023-2024',
-          courseNumber: '3',
-          practiceType: 'Производственная практика',
-          practiceKind: 'Очная',
-          departmentDirector: 'Иванов И.И.',
-      },
-      isWithDeparture: true,
-      orderStatus: 'Зачтено',
-  },
-  {
-      key: '2',
-      practice: {
-          specialtyName: 'Экономика',
-          groupNumber: 'ECO-2023-02',
-          academicYear: '2023-2024',
-          courseNumber: '2',
-          practiceType: 'Научно-исследовательская практика',
-          practiceKind: 'Заочная',
-          departmentDirector: 'Петрова А.А.',
-      },
-      isWithDeparture: false,
-      orderStatus: 'Не зачтено',
-  },
-  {
-      key: '3',
-      practice: {
-          specialtyName: 'Менеджмент',
-          groupNumber: 'MAN-2023-03',
-          academicYear: '2023-2024',
-          courseNumber: '4',
-          practiceType: 'Производственная практика',
-          practiceKind: 'Очная',
-          departmentDirector: 'Сидоров С.С.',
-      },
-      isWithDeparture: true,
-      orderStatus: 'Зачтено',
-  },
-  {
-      key: '4',
-      practice: {
-          specialtyName: 'Финансы',
-          groupNumber: 'FIN-2023-04',
-          academicYear: '2023-2024',
-          courseNumber: '1',
-          practiceType: 'Практика в компании',
-          practiceKind: 'Очная',
-          departmentDirector: 'Кузнецова М.М.',
-      },
-      isWithDeparture: false,
-      orderStatus: 'Зачтено',
-  },
-];
 
 export const MyPractice = () => {
 	const [fullTable,setFullTable] = useState(false)
@@ -99,91 +42,85 @@ export const MyPractice = () => {
 		practiceKind: "Все",
 		dateFilling: 'По дате (сначала новые)',
 	})
-	const {data:dataAllSubmissions,isLoading,isSuccess:isSuccessSubAll} = useGetAllSubmissionsQuery(null)
+	// const {data:dataAllSubmissions,isLoading,isSuccess:isSuccessSubAll} = useGetAllSubmissionsQuery(null)
 	const [selectSubdivisionId,setSelectSubdivisionId] = useState(null)
 	const {data:dataSubmissionSpecialty} = useGetSubmissionsSpecialtiesQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
 	const {data:dataSubmissionAcademicYear} = useGetSubmissionsAcademicYearQuery(selectSubdivisionId,{skip:!selectSubdivisionId})
 	const {data:dataAllOrder,isSuccess:isSuccessOrder,isFetching:isLoadingOrder} = useGetAllOrderQuery({subdivisionId:selectSubdivisionId,page:currentPage - 1,size :'5'},{skip:!selectSubdivisionId || !currentPage})
-	const [dataTable, setDataTable] = useState<any>(mockData)
+	const [dataTable, setDataTable] = useState<any>([])
+	const {data:dataAllMyPractices,isSuccess:isSuccessMyPractice,isFetching:isFetchingMyPractice} = useGetAllMyPracticesQuery()
 
 	const columns = [
 		
     	{
-			key: 'specialtyName',
-			dataIndex: 'specialtyName',
+			key: 'specialty',
+			dataIndex: 'specialty',
 			title: 'Шифр и наименование специальности',
 			className: 'text-xs !p-2',
-			render: (text: any, record: any) => <span >{record?.practice?.specialtyName}</span>
+			
 		},
 		{
-			key: 'groupNumber',
-			dataIndex: 'groupNumber',
+			key: 'group',
+			dataIndex: 'group',
 			title: 'Номер группы',
 			className: 'text-xs !p-2',
-			render: (text: any, record: any) => <span >{record?.practice?.groupNumber}</span>
+			
 		},
    		{
 			key: 'academicYear',
 			dataIndex: 'academicYear',
 			title: 'Учебный год',
 			className: 'text-xs !p-2',
-			render: (text: any, record: any) => <span >{record?.practice?.academicYear}</span>
+			
 		},
     	{
-			key: 'courseNumber',
-			dataIndex: 'courseNumber',
+			key: 'course',
+			dataIndex: 'course',
 			title: 'Курс',
 			className: 'text-xs !p-2 mobileFirst',
-			render: (text: any, record: any) => <span >{record?.practice?.courseNumber}</span>
+			
 		},
    		{
 			key: 'practiceType',
 			dataIndex: 'practiceType',
 			title: 'Тип',
 			className: 'text-xs !p-2 mobileFirst',
-			render: (text: any, record: any) => <span >{record?.practice?.practiceType}</span>
+			
 		},
   		{
 			key: 'practiceKind',
 			dataIndex: 'practiceKind',
 			title: 'Вид',
 			className: 'text-xs !p-2 mobileFirst',
-			render: (text: any, record: any) => <span >{record?.practice?.practiceKind}</span>
+			
 		},
 
 		{
-			key: 'FIO',
-			dataIndex: 'FIO',
+			key: 'departmentDirectorName',
+			dataIndex: 'departmentDirectorName',
 			title: 'ФИО руководителя от кафедры, должность',
 			className: 'text-xs !p-2 mobileFirst',
-			render: (text: any, record: any) => <span >{record?.practice?.departmentDirector}</span>
+			
 		},
+		
 		{
-			key: 'place',
-			dataIndex: 'place',
-			title: 'Место прохождения практики',
-			className: 'text-xs !p-2 mobileFirst',
-			render: (text: any, record: any) => <span >{record?.isWithDeparture ? 'Да' : 'Нет'}</span>
-		},
-		{
-			key: 'status',
-			dataIndex: 'status',
+			key: 'grade',
+			dataIndex: 'grade',
 			title: 'Оценка',
 			className: 'text-xs !p-2',
-			render: (text: any, record: any) => <span >{record?.orderStatus}</span>
+			
 			
 		}
 		
 	]
 
 	const columnsMini = [
-		
     	{
-			key: 'specialtyName',
-			dataIndex: 'specialtyName',
+			key: 'specialty',
+			dataIndex: 'specialty',
 			title: 'Шифр и наименование специальности',
 			className: 'text-xs !p-4',
-			render: (text: any, record: any) => <span >{record?.practice?.specialtyName}</span>
+			
 		},
 
    		{
@@ -191,32 +128,32 @@ export const MyPractice = () => {
 			dataIndex: 'academicYear',
 			title: 'Учебный год',
 			className: 'text-xs !p-4',
-			render: (text: any, record: any) => <span >{record?.practice?.academicYear}</span>
+			
 		},
     	{
-			key: 'courseNumber',
-			dataIndex: 'courseNumber',
+			key: 'course',
+			dataIndex: 'course',
 			title: 'Курс',
 			className: 'text-xs !p-4 mobileFirst',
-			render: (text: any, record: any) => <span >{record?.practice?.courseNumber}</span>
+			
 		},
    		{
 			key: 'practiceType',
 			dataIndex: 'practiceType',
 			title: 'Тип',
 			className: 'text-xs !p-4 mobileFirst',
-			render: (text: any, record: any) => <span >{record?.practice?.practiceType}</span>
+			
 		},
   
 
 
 
 		{
-			key: 'status',
-			dataIndex: 'status',
+			key: 'grade',
+			dataIndex: 'grade',
 			title: 'Оценка',
 			className: 'text-xs !p-4',
-			render: (text: any, record: any) => <span >{record?.orderStatus}</span>
+			
 			
 		}
 		
@@ -248,10 +185,10 @@ export const MyPractice = () => {
 		
 	// }, [dataAllOrder, filter.subdivision, isSuccessOrder])
 	useEffect(() => {
-		if (isSuccessSubAll) {
+		if (isSuccessMyPractice) {
 			setDataTable(filterDataFull())	
 		}
-	}, [filter,isSuccessSubAll])
+	}, [filter,isSuccessMyPractice])
 
 	function filterDataFull() {
 		function filterName(elem: any) {
@@ -290,7 +227,7 @@ export const MyPractice = () => {
 			if (filter.courseNumber === 'Все') {
 				return elem
 			} else {
-				return elem.practice.courseNumber === filter.courseNumber
+				return elem.course === filter.courseNumber
 			}
 		}
 		function filterAcademicYear(elem: any) {
@@ -324,8 +261,8 @@ export const MyPractice = () => {
 			return 0
 		}
 	
-		return dataAllSubmissions
-			? dataAllSubmissions
+		return dataAllMyPractices
+			? dataAllMyPractices
 			// .filter((elem: any) => filterName(elem))
 			// .filter((elem: any) => filterSpec(elem))
 			// .filter((elem: any) => filtervisiting(elem))
@@ -343,8 +280,8 @@ export const MyPractice = () => {
     };
 
 
-	// const uniqueCourseNumbers = [...new Set(dataTable?.map((item:any) => item.practice.courseNumber))];
-	const uniqueCourseNumbers = ['1','2']
+	const uniqueCourseNumbers = [...new Set(dataTable?.map((item:any) => item.course))];
+	// const uniqueCourseNumbers = ['1','2']
 
 	return (
 		<Form form={form}>
@@ -365,16 +302,16 @@ export const MyPractice = () => {
 				<Col span={7} className='overWrite'>
 				<Form.Item className='mb-0' name={'specialtyName'}>
 					<Select
-					
+						defaultValue={'Все'}
 						popupMatchSelectWidth={false}
 						className="w-full"
 						options={[
 							{ key: 2244612, value: 'Все', label: 'Все' },
-							...(dataSubmissionSpecialty
-								? dataSubmissionSpecialty.map((item: any) => ({
-										key: item.id,
-										value: item.value,
-										label: item.label
+							...(dataAllMyPractices
+								? dataAllMyPractices.map((item: any) => ({
+										key: item.specialty,
+										value: item.specialty,
+										label: item.specialty
 								  }))
 								: [])
 						]}
@@ -396,7 +333,9 @@ export const MyPractice = () => {
 						popupMatchSelectWidth={false}
 						defaultValue="Все"
 						className="w-full"
-						options={uniqueCourseNumbers.map((item: any) => ({ key: item,label: item, value: item }))}
+						options={[
+							{ key: 2244612, value: 'Все', label: 'Все' },...(uniqueCourseNumbers.map((item: any) => ({ key: item,label: item, value: item })))
+						]}
 						onChange={value => {
 							setFilter({
 								...filter,
@@ -482,8 +421,34 @@ export const MyPractice = () => {
 		
 			<Row className="mt-4">
 				<Col flex={'auto'}>
-				{isLoadingOrder ? <Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}/> :
-					fullTable ?
+				{isFetchingMyPractice ? <Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}/> :
+					!fullTable ?
+					<div className='viewPractical'>
+				<Table
+					onRow={(record) => ({
+						onClick: () => handleRowClick(record),
+					})}
+					
+					rowKey="id"
+					// @ts-ignore
+					columns={columnsMini}
+					dataSource={dataTable ? dataTable : []}
+					pagination={dataTable && dataTable?.length<10?false:{
+                        pageSize: 10
+                    }}
+					rowClassName={() => 'animate-fade-in '}
+					className="my- "
+					// rowSelection={{
+					// 	type: 'checkbox',
+					// 	onSelect: (record, selected, selectedRows, nativeEvent) => {
+					// 		setSelectedFieldFull(selectedRows)
+					// 	},
+					// 	onSelectAll: (selected, selectedRows, changeRows) => {
+					// 		setSelectedFieldFull(selectedRows)
+					// 	}
+					// }}
+				/>
+				</div> :
 					<Table
 						onRow={(record) => ({
 							onClick: () => handleRowClick(record),
@@ -510,34 +475,9 @@ export const MyPractice = () => {
 							  </div>
 							),
 						  }}
-					/> :
+					/> 
 					
-				<div className='viewPractical'>
-				<Table
-					onRow={(record) => ({
-						onClick: () => handleRowClick(record),
-					})}
-					
-					rowKey="id"
-					// @ts-ignore
-					columns={columnsMini}
-					dataSource={dataTable ? dataTable : []}
-					pagination={dataTable && dataTable?.length<10?false:{
-                        pageSize: 10
-                    }}
-					rowClassName={() => 'animate-fade-in '}
-					className="my- "
-					// rowSelection={{
-					// 	type: 'checkbox',
-					// 	onSelect: (record, selected, selectedRows, nativeEvent) => {
-					// 		setSelectedFieldFull(selectedRows)
-					// 	},
-					// 	onSelectAll: (selected, selectedRows, changeRows) => {
-					// 		setSelectedFieldFull(selectedRows)
-					// 	}
-					// }}
-				/>
-				</div>
+				
 					}
 				</Col>
 			</Row>

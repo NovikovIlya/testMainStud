@@ -4,19 +4,12 @@ import {apiSlice} from "../apiSlice";
 
 export const rosterService = apiSlice.injectEndpoints({
     endpoints: builder => ({
-        getContractsAll: builder.query<ContractsAll[], void>({
+        getContractsAll: builder.query<ContractsAll[], any>({
             query: () => ({
                 url: 'services/api-practices/contracts/all',
                 method: 'GET',
             }),
-            providesTags: (result) => result
-                ?
-                [
-                    ...result.map(({ id }) => ({ type: 'Contracts' as const, id })),
-                    {type: 'Contracts', id: 'LIST'},
-                ]
-                :
-                ['Contracts'],
+            providesTags:   ['Contracts'],
             keepUnusedDataFor:1,
         }),
         getContractsShort: builder.query<ContractShort[], void>({
@@ -24,14 +17,8 @@ export const rosterService = apiSlice.injectEndpoints({
                 url: 'services/api-practices/contracts/all-short',
                 method: 'GET',
             }),
-            providesTags: (result) => result
-                ?
-                [
-                    ...result.map(({ id }) => ({ type: 'Contracts' as const, id })),
-                    {type: 'Contracts', id: 'LIST'},
-                ]
-                :
-                ['Contracts'],
+            providesTags:  ['Contracts'],
+            keepUnusedDataFor:1,
         }),
         getSpecialtyNames: builder.query<NameSpecialty[], any>({
             query: (subDivision) => ({

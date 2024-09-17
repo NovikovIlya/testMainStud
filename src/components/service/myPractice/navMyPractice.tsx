@@ -191,7 +191,7 @@ export const NavMyPractices = () => {
 					)
 				  }))}
 			/>
-			<div className="bg-[#F5F8FB] w-full pt-14 px-14  xl:mt-20 mt-20 ">
+			<div className="bg-[#F5F8FB] min-h-[900px] w-full pt-14 px-14  xl:mt-20 mt-20 ">
 				{current === 'myPractice' && <RouteMyPractice/>}
 				
 				

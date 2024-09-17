@@ -53,51 +53,13 @@ const Final = () => {
 					<Divider />
 				</Col>
 			</Row>
-			<Row>
-				<Col>
-					<Typography.Title level={2}>Итоговая отправка</Typography.Title>
-				</Col>
-			</Row>
-			<Row gutter={16} className="mt-4 mb-10">
-				<Col span={6}>
-					<Card title="Пакет отчетных документов:" bordered={false}>
-						<ul className="ml-6">
-							<li>Готовый отчет</li>
-							<li>Дневник</li>
-							<li>Путевка</li>
-						</ul>
-						{/* <div className="mt-8">
-							<Upload {...props}>
-								<Button type="primary" icon={<UploadOutlined />}>
-									Добавить файл
-								</Button>
-							</Upload>
-						</div> */}
-					</Card>
-				</Col>
-				<Col span={6}>
-					<Card title="Обратите внимание" bordered={false}>
-						<li>После отправки документов дождитесь появления комментариев от руководителя практики</li>
-						<li>Если документы оформлены верно, вы увидите комментарий “Принято</li>
-						<li>Если есть ошибки, преподаватель укажет в комментарии, что следует исправить</li>
-					</Card>
-				</Col>
-			</Row>
-			{/* <Row gutter={[16, 16]} className="my-8">
-				<Col xs={24} sm={24} md={18} lg={8} xl={6}>
-					<Space className="w-full">
-						<Button className="!rounded-full" size="large" type="primary">
-							Отправить документы на проверку
-						</Button>
-					</Space>
-				</Col>
-			</Row> */}
+		
 
-			{isFirstSend ? <Row className="mb-12">
+			<Row className="mb-12">
 				<Col span={12}>
 					<Comment />
 				</Col>
-			</Row>:''}
+			</Row>
 
 			<Row className="mb-6">
 				<Col span={12} className="flex flex-wrap">

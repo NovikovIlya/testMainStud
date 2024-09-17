@@ -77,8 +77,8 @@ export interface OptionsNameSpecialty {
 
 export const RegisterContracts = () => {
     const tokenAccess = localStorage.getItem('access')!.replaceAll('"', '')
-    const {data: dataAll, isSuccess: isSuccessAll,isFetching} = useGetContractsAllQuery()
-    const {data: dataShort, isSuccess: isSuccessShort} = useGetContractsShortQuery()
+    const {data: dataAll, isSuccess: isSuccessAll,isFetching} = useGetContractsAllQuery(null,{refetchOnFocus:true})
+    const {data: dataShort, isSuccess: isSuccessShort,isFetching:isFetchingShort} = useGetContractsShortQuery()
     const nav = useNavigate()
     const [filter, setFilter] = useState({
         contractType: 'Все',
@@ -574,7 +574,7 @@ export const RegisterContracts = () => {
     useEffect(() => {
         setTableDataCompressed(filterDataCompressed())
         setTableDataFull(filterDataFull())
-    }, [filter,isSuccessAll,isSuccessShort])
+    })
 
 
 
@@ -783,7 +783,7 @@ export const RegisterContracts = () => {
 
                 </Col>
             </Row>
-            {isFetching ? <Spin className='w-full mt-20' indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />  : 
+            {isFetching && isFetchingShort ? <Spin className='w-full mt-20' indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />  : 
             <>
             {
                 tableView.compressed

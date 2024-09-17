@@ -102,10 +102,10 @@ export const CreatePractical = () => {
 	const { data: dataPraciseKind, isSuccess: isSuccesPractiseKind } = useGetPracticeKindQuery(subDivisionId, { skip: subDivisionId === null })
 	const { data: dataGroupNumbers, isSuccess: isSuccessGroupNumbers } = useGetGroupNumbersQuery(subDivisionId, { skip: subDivisionId === null })
 	const {data: dataDepartmentDirector,isSuccess: isSuccessDepartmentDirector} = useGetDepartmentDirectorsQuery(subDivisionId, {skip: !subDivisionId})
-	const { data: dataCompetences, isSuccess: isSuccessCompetences } =useGetCompentencesQuery(objectForCompetences, {skip: objectForCompetences === null})
+	const { data: dataCompetences, isSuccess: isSuccessCompetences } =useGetCompentencesQuery(objectForCompetences, {skip: !objectForCompetences?.specialityId || objectForCompetences?.practiceKindId === null|| objectForCompetences?.startYear === null})
 	const { data: dataDepartments, isSuccess: isSuccessDepartments } =useGetSubdivisionForPracticeQuery()
-	const { data: dataPracticeType, isSuccess: isSuccessPracticeType } =useGetPracticeTypeForPracticeQuery(objType, {skip: objType.subDivisionId === null})
-	const { data: dataTask, isSuccess: isSuccessTask } =useGetTasksForPracticeQuery(arqTask)
+	const { data: dataPracticeType, isSuccess: isSuccessPracticeType } =useGetPracticeTypeForPracticeQuery(objType, {skip: !objType?.specialtyNameId|| !objType?.subdivisionId})
+	const { data: dataTask, isSuccess: isSuccessTask } =useGetTasksForPracticeQuery(arqTask,{skip: !arqTask?.practiceTypeId|| !arqTask?.specialtyNameId})
 	const { data: dataDep, isSuccess: isSuccessDep } = useGetCafDepartmentsQuery(subDivisionId,{ skip: subDivisionId === null })
 	const [copyDataCompetences, setCopyDataCompetences] = useState<any>(dataCompetences)
 	const [sendForm, { data,isLoading:isLoadingSendForm }] = usePostPracticesMutation()
@@ -114,11 +114,11 @@ export const CreatePractical = () => {
 	const [treeLine, setTreeLine] = useState(true);
     const [showLeafIcon, setShowLeafIcon] = useState(false);
     const [value, setValue] = useState<string>();
-
+	console.log('dataCompetences',dataCompetences)
 	useEffect(()=>{
-		if(isSuccessCompetences)
+
 		setCopyDataCompetences(dataCompetences)
-	},[isSuccessCompetences])
+	},[dataCompetences])
 
 	// объект для типа практик
 	useEffect(() => {
@@ -136,7 +136,7 @@ export const CreatePractical = () => {
 			setObjType({
 				...objType,
 				subdivisionId: subDivisionId,
-				specialtyNameId: pickSpecialityId?.id
+				specialtyNameId:pickSpecialityId?.id ? pickSpecialityId?.id : null
 			})
 		}
 	}, [isSuccessNameSpecialty, form, pickSpeciality])
@@ -364,6 +364,13 @@ export const CreatePractical = () => {
 	const onChange = (newValue: string) => {
         console.log('newValue',newValue)
         setSubDevisionId(newValue);
+		setObjectForCompetences({	
+				specialityId: null,
+				practiceKindId: null,
+				startYear: null
+			}
+		)
+		setCopyDataCompetences([])
 
        
       };
@@ -519,7 +526,7 @@ export const CreatePractical = () => {
 							label={'Тип практики'}
 						>
 							<Select
-								disabled={!form.getFieldValue('specialityName')}
+								disabled={!pickSpeciality}
 								size="large"
 								popupMatchSelectWidth={false}
 								className="w-full"

@@ -16,15 +16,17 @@ body {
 
 @layer utilities {
 	*::-webkit-scrollbar {
-		// width: 5px;
+		width: 16px; /* Ширина вертикального скролла */
+		height: 16px; /* Высота горизонтального скролла */
 		
 	}
 
 	*::-webkit-scrollbar-thumb {
-		
+		background: #888; /* Цвет ползунка */
+		border-radius: 0px; /* Скругление углов ползунка */
 	}
 	*::-webkit-scrollbar-track {
-   		
+		background: #f1f1f1; 
 	}
 }
 .ant-modal .ant-modal-content {

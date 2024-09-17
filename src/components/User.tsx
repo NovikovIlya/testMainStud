@@ -20,8 +20,9 @@ export const User = () => {
 	const [searchParams] = useSearchParams();
     const hasEnParam = searchParams.has('en');
 	const acceesss = useAppSelector((state)=>state.auth.accessToken)
+	const role = useAppSelector((state)=>state.auth.user?.roles)
 	const dispatch = useAppDispatch()
-	console.log('acceesssacceesssacceesss',acceesss)
+	console.log('role',role)
 	const hide = () => {
 		setOpen(false)
 	}
@@ -47,10 +48,12 @@ export const User = () => {
 				<div className="max-w-[1600px] w-[1600px]">
 					<div className={`mt-[125px] text-2xl font-bold text-blue1f5 justify-between flex`}>
 						{t('PersonalAccount')}
+						{role && role[0]?.type!=='ABITUR' ?
 						<div className='flex gap-3 items-center'>
 							<span className='text-sm font-normal'>{t('Personalization')}</span>
 							<Switch   defaultValue={false} onClick={()=>dispatch(setEdit())} />
 						</div>
+						:''}		
 					</div>
 					<DropDrag />
 				</div>

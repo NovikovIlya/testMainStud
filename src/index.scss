@@ -210,3 +210,11 @@ body {
 // .rc-virtual-list .rc-virtual-list-scrollbar {
 // 	display: block !important;
 //   }
+.ant-list-itemThree{
+    background-color: white !important;
+}
+:where(.css-dev-only-do-not-override-to9039).ant-list-split .ant-list-item {
+    border-block-end: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+

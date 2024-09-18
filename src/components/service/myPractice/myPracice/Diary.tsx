@@ -4,6 +4,15 @@ import React, { useState } from 'react'
 import EditableTableTwo from './EditableTableTwo'
 
 const Diary = ({setShowFinalTwo}:any) => {
+	const [dataSource, setDataSource] = useState<any>([
+		{
+		  key: '0',
+		  name: '',
+		  age:  null, 
+		},
+	   
+	   
+	  ]);
 	const [isDisabled, setIsDisabled] = useState(true)
 	const [show, setShow] = useState(false)
 	const handleButton = ()=>{
@@ -19,12 +28,12 @@ const Diary = ({setShowFinalTwo}:any) => {
 			</Row>
 			<Row>
 				<Col>
-					<Typography.Title level={2}>Отчетный дневник практиканта</Typography.Title>
+					<Typography.Title level={2}>Дневник практиканта</Typography.Title>
 				</Col>
 			</Row>
 			<Row>
 				<Col span={12}>
-					<EditableTableTwo setIsDisabled={setIsDisabled}/>
+					<EditableTableTwo dataSource={dataSource} setDataSource={setDataSource} setIsDisabled={setIsDisabled}/>
 				</Col>
 			</Row>
 
@@ -38,7 +47,7 @@ const Diary = ({setShowFinalTwo}:any) => {
                             onClick={handleButton}
 							// htmlType="submit"
 						>
-							Сформировать дневник практиканта
+							Сохранить данные и сформировать документы
 						</Button></Popover>
 					</Space>
 				</Col>
@@ -46,17 +55,17 @@ const Diary = ({setShowFinalTwo}:any) => {
             {show ?
 			<Row gutter={16} className="mt-14 mb-10">
 				<Col span={6}>
-					<Card title="Дневник практиканта:" bordered={false}>
+					<Card title="Скачать документы:" bordered={false}>
 						<ul className="ml-6">
-							<li>Дневник практиканта</li>
+							<li><a>Дневник практиканта</a></li>
 						</ul>
 					</Card>
 				</Col>
-				<Col span={6}>
+				{/* <Col span={6}>
 					<Card title="Обратите внимание" bordered={false}>
 						Скачайте и проверьте документ
 					</Card>
-				</Col>
+				</Col> */}
 			</Row>:''}
 		</>
 	)

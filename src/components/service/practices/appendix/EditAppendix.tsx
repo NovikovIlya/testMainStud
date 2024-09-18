@@ -31,7 +31,7 @@ import { SkeletonPage } from './Skeleton'
 import TableEditView from './tableEditView'
 import { useGetContractsAllQuery } from '../../../../store/api/practiceApi/roster'
 import { Vector } from '../../../../assets/svg/Vector'
-
+import dayjs from 'dayjs';
 
 export const EditAppendix = () => {
 	const path = useLocation()
@@ -44,7 +44,7 @@ export const EditAppendix = () => {
 	const isEditing = (record: Item) => record.key === editingKey
 	const {data: dataOneSubmissions,isSuccess,isLoading: isLoadingOneSubmission} = useGetOneApplicationQuery(id, { skip: !id })
 	const {data: dataGetDocApplication,isLoading: isLoadingDocApplication,refetch} = useGetDocApplicationQuery(dataOneSubmissions ? dataOneSubmissions?.id : null,{ skip: !dataOneSubmissions })
-	const { data: dataGetContracts, isSuccess: isSuccessGetContracts } = useGetContractsAllQuery()
+	const { data: dataGetContracts, isSuccess: isSuccessGetContracts } = useGetContractsAllQuery(null)
 	const [editApplication,{}] = useEditApplicationMutation()
 	const [changeStatusSubmissions, {}] = useChangeStatusMutation()
 	const [editSumbissions, {}] = useEditSubmissionMutation({})
@@ -59,32 +59,33 @@ export const EditAppendix = () => {
 	useEffect(()=>{
 		if(isSuccess){
 			const x = {
-				value: dataOneSubmissions.id,
-				label: `${dataOneSubmissions.contract.contractFacility} ${dataOneSubmissions.contract.contractNumber} ${dataOneSubmissions.contract.conclusionDate}`
+				value: dataOneSubmissions.contract.id,
+				label: `${dataOneSubmissions.contract.contractFacility}  №${dataOneSubmissions.contract.contractNumber} от ${dayjs(dataOneSubmissions.contract.conclusionDate).format('DD.MM.YYYY')}`
 			}
 			console.log('x',x)
-			setSelectDogovor(x.label)
+			setSelectDogovor(x)
 		}
 	},[isSuccess])
 	
+	// useEffect(() => {
+	// 	if (isSuccessGetContracts) {
+	// 		const newArray = dataGetContracts.map(item => {
+	// 			return {
+	// 				value: item.id,
+	// 				label: `${item.contractFacility} №${item.contractNumber} от ${dayjs(item.conclusionDate).format}`
+	// 			}
+	// 		})
+	// 		setContracts(newArray)
+	// 	}
+	// }, [isSuccessGetContracts])
+	console.log('contracts',contracts)
+	console.log('selectDogovor',selectDogovor)
 	useEffect(() => {
 		if (isSuccessGetContracts) {
 			const newArray = dataGetContracts.map(item => {
 				return {
 					value: item.id,
-					label: `${item.contractFacility} ${item.contractNumber} ${item.conclusionDate}`
-				}
-			})
-			setContracts(newArray)
-		}
-	}, [isSuccessGetContracts])
-
-	useEffect(() => {
-		if (isSuccessGetContracts) {
-			const newArray = dataGetContracts.map(item => {
-				return {
-					value: item.id,
-					label: `${item.contractFacility} ${item.contractNumber} ${item.conclusionDate}`
+					label: `${item.contractFacility} №${item.contractNumber} от ${dayjs(item.conclusionDate).format('DD.MM.YYYY')}`
 				}
 			})
 			setContracts(newArray)

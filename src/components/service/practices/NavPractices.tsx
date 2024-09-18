@@ -292,7 +292,7 @@ export const NavPractices = () => {
 					)
 				  }))}
 			/>
-			<div className="bg-[#F5F8FB] min-h-[840px] w-full pt-14 px-14  xl:mt-20 mt-20 ">
+			<div className="bg-[#F5F8FB] overflow-hidden min-h-[840px] w-full pt-14 px-14  xl:mt-20 mt-20 ">
 				{current === 'registerContracts' && <Roster />}
 				{current === 'individualTasks' && <Tasks />}
 				{current === 'practical.ts' && <Practical />}

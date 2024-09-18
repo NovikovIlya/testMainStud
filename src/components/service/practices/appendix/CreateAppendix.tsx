@@ -20,6 +20,7 @@ import { showNotification } from '../../../../store/reducers/notificationSlice'
 import PracticeModal from './practicalModal'
 import TableEdit from './tableEdit'
 import { Vector } from '../../../../assets/svg/Vector'
+import dayjs from 'dayjs';
 
 export const CreateAppendix = () => {
 	const tableRef = useRef(null)
@@ -51,7 +52,7 @@ export const CreateAppendix = () => {
 	const [fullTable, setFullTable] = useState<any>([])
 	const [fullSelectedPractise, setFullSelectedPractise] = useState<Practice[]>([])
 	const { data: dataAllPractise, isSuccess: isSuccessAllPractice } = useGetPracticesAllQuery(selectedPractice, {skip: !selectedPractice})
-	const { data: dataGetContracts, isSuccess: isSuccessGetContracts } = useGetContractsAllQuery()
+	const { data: dataGetContracts, isSuccess: isSuccessGetContracts } = useGetContractsAllQuery(null)
 	const [contracts, setContracts] = useState<any>([])
 	const [step, setStep] = useState(0)
 	const [selectContract, setSelectContract] = useState<string | null>(null)
@@ -65,7 +66,7 @@ export const CreateAppendix = () => {
 			const newArray = dataGetContracts.map(item => {
 				return {
 					value: item.id,
-					label: `${item.contractFacility} ${item.contractNumber} ${item.conclusionDate}`
+					label: `${item.contractFacility} №${item.contractNumber} от ${dayjs(item.conclusionDate).format('DD.MM.YYYY')}`
 				}
 			})
 			setContracts(newArray)

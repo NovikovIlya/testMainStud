@@ -1,6 +1,7 @@
 import { List, Avatar, Button, Form, Row, Col, Typography, Divider } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import './myPracticeStyle.scss'
+import { FileOutlined, UploadOutlined } from '@ant-design/icons';
 
 const comments = [
   {
@@ -28,11 +29,11 @@ export const Comment = () => (
 	</Row>
           
     <List
-        className='h-[400px] mt-6 p-4  overflow-y-auto border-solid border-y-4 border-[#7ab0e6]'
+        className='ant-list-itemThree h-[400px] mt-6 p-4  overflow-y-auto border-solid border-y-4 border-[#7ab0e6]'
         itemLayout="horizontal"
         dataSource={comments}
         renderItem={item => (
-        <List.Item className='rounded-lg  mb-6 flex-wrap ant-list-itemTwo '>
+        <List.Item className='rounded-lg  mb-0 flex-wrap ant-list-itemThree'>
             <Row className='mt-6 w-full  justify-end mb-3    w-25'>
               <Col className='  p-4 flex flex-wrap justify-end rounded-lg w-25 bg-[#e3f2ff] cc'>
                 <Typography className='text-sm  text-gray-400 text-end w-full'>Прикрепленные файлы</Typography>
@@ -41,23 +42,28 @@ export const Comment = () => (
             </Row>
             {/* <Divider className='border-solid border-y-4 border-[#f5f8fb]'/> */}
             <List.Item.Meta
-              className='p-4   cc w-15 bg-white flex-none'
+              className='p-4  rounded-lg cc w-15 bg-[#65a1fa] flex-none text-white'
               avatar={<Avatar  src={item.avatar} />}
-              title={item.author}
+              title={<div className='text-white'>{item.author}</div>}
               description={
-                <>
+                <div className=''>
                   <Row>
                     <Col>
-                      <span className='text-slate-950'>{item.text}</span>
+                      <span className='text-gray-100  '>{item.text}</span>
                     </Col>
                   </Row>
                   <Row className='mt-6'>
-                    <Col>
-                      <Typography className='text-sm text-gray-400'>Прикрепленные файлы</Typography>
-                      <a href={item.href} download>Файл</a>
+                    <Col className='flex items-center gap-2 '>
+                      <div>
+                          <FileOutlined style={{ color: 'white' }} className='w-4 h-4 cursor-pointer mt-1 color-white' />
+                      </div>
+                      <div>
+                        {/* <Typography className='text-sm text-white'>Прикрепленные файлы</Typography> */}
+                        <a className='text-yellow-500' href={item.href} download>Файл</a>
+                      </div>
                     </Col>
                   </Row>
-                </>
+                </div>
               }
             />
             

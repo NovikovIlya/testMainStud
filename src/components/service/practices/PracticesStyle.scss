@@ -37,6 +37,19 @@ li:nth-child(3)[role='menuitem'][data-menu-id*='sub3'] {
 :where(.css-dev-only-do-not-override-to9039).ant-tree-select-dropdown .ant-select-tree .ant-select-tree-treenode-disabled .ant-select-tree-node-content-wrapper{
   color:rgba(0, 0, 0, 0.5) !important;
 }
+
+.ant-checkbox-inner{
+	height: 30px !important;
+	width: 30px !important;
+}
+.ant-checkbox-inner:after {
+	inset-inline-start: 35% !important;
+}
+.ant-checkbox-indeterminate .ant-checkbox-inner:after {
+	width: 15px !important;
+	height: 15px !important;
+	transform: translate(-19%,-50%) scale(1) !important;
+}
 @media screen and (max-width: 768px) {
   .ant-menu-root{
     position: fixed;

@@ -133,10 +133,10 @@ const saveDateThree= async () => {
 
   if (editable) {
     childNode = editing 
-    ? dataIndex==='age'? (<div className='flex items-center gap-2'><Form.Item
+    ? dataIndex==='age'? (<div className='flex items-center gap-2 w-[300px]'><Form.Item
       style={{ margin: 0 }}
       name={dataIndex}
-     
+      className='h-10'
     >
       <DatePicker.RangePicker
       //  onChange={save}
@@ -169,7 +169,7 @@ const saveDateThree= async () => {
       </Form.Item>
     ) 
     :(  <div
-        className="editable-cell-value-wrap min-h-9 h-full"
+        className="editable-cell-value-wrap h-10 w-[300px] flex items-center"
         style={{ paddingInlineEnd: 24 }}
         onClick={toggleEdit}
 
@@ -192,17 +192,9 @@ interface DataType {
 
 type ColumnTypes = Exclude<TableProps['columns'], undefined>;
 
-const EditableTableTwo = ({setIsDisabled}:any) => {
+const EditableTableTwo = ({dataSource,setDataSource,setIsDisabled}:any) => {
 
-  const [dataSource, setDataSource] = useState<any>([
-    {
-      key: '0',
-      name: '',
-      age:  null, 
-    },
-   
-   
-  ]);
+
   const handleDelete = (key: React.Key) => {
     const newData = dataSource.filter((item:any) => item.key !== key);
     setDataSource(newData);

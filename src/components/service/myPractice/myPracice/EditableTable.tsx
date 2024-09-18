@@ -88,7 +88,7 @@ const save = (date: any) => {
 
   if (editable) {
     childNode = editing? (
-      <div className='flex items-center gap-2'><Form.Item
+      <div className='flex items-center gap-2 w-[320px]'><Form.Item
       style={{ margin: 0 }}
       name={dataIndex}
       rules={[{ required: true, message: `${title} is required.` }]}
@@ -97,7 +97,7 @@ const save = (date: any) => {
       //  onChange={save}
        format={'DD.MM.YYYY'}
        placeholder={['Начало', 'Конец']}
-       className="w-full"
+       className=""
        size={'large'}
        allowClear
        onChange={save}
@@ -111,13 +111,14 @@ const save = (date: any) => {
        name={dataIndex+'1'}
        rules={[{ required: true, message: `${title} is required.` }]}
      >
-        <Button className='h-[40px]'  onClick={save} >
+        <Button className='h-[40px] text-sm'  onClick={save} >
       Отмена
       </Button>
-    </Form.Item></div>
+    </Form.Item>
+    </div>
     ) : (
       <div
-        className="editable-cell-value-wrap"
+        className="editable-cell-value-wrap w-[320px] h-10"
         style={{ paddingInlineEnd: 24 }}
         onClick={toggleEdit}
       >
@@ -138,18 +139,9 @@ interface DataType {
 
 type ColumnTypes = Exclude<TableProps['columns'], undefined>;
 
-const EditableTable = ({setIsDisabled}:any) => {
+const EditableTable = ({dataSource,setDataSource,setIsDisabled}:any) => {
 
-  const [dataSource, setDataSource] = useState<any>([
-    {
-      key: '0',
-      name: 'Edward King 0',
-      age:  null,
-      address: 'London, Park Lane no. 0',
-     
-    }
-   
-  ]);
+  
   console.log('dataSource',dataSource)
 
   const defaultColumns: (ColumnTypes[number] & { editable?: boolean; dataIndex: string })[] = [
@@ -180,7 +172,7 @@ const EditableTable = ({setIsDisabled}:any) => {
 
   const areAllCellsFilled = () => {
     return dataSource.every((item:any) => 
-      item.name && item.age && item.age.length === 2 && item.address
+      item.name && item.age 
     );
   };
 

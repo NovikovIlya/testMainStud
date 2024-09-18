@@ -53,7 +53,8 @@ export const EditMyPractice = () => {
 		{
 			key: '2',
 			label: 'Место прохождение практики',
-			children: 'Казань'
+			children: dataOne?.profilePlace  ? dataOne.profilePlace  : 'Не указано',
+			className: dataOne?.profilePlace ? '' : 'hide' ,
 		},
 		{
 			key: '3',
@@ -109,12 +110,12 @@ export const EditMyPractice = () => {
 		{
 			key: '14',
 			label: 'ФИО руководителя от организации',
-			children: dataOne?.departmentDirector ? dataOne.departmentDirector : 'Не указано'
+			children: dataOne?.contractDepartmentDirector ? dataOne.contractDepartmentDirector : 'Не указано'
 		},
 		{
 			key: '15',
 			label: 'Юридический адресс',
-			children: dataOne?.departmentDirector ? dataOne.departmentDirector : 'Не указано'
+			children: dataOne?.contractAddress ? dataOne.contractAddress : 'Не указано'
 		}
 	]
 
@@ -178,7 +179,7 @@ export const EditMyPractice = () => {
 									}}
 									bordered
 									// @ts-ignore
-									dataSource={dataOne?.tasks}
+									dataSource={dataOne?.competences}
 									renderItem={(item: any, index: number) => (
 										<List.Item
 											style={{
@@ -187,7 +188,7 @@ export const EditMyPractice = () => {
 										>
 											<div className="flex items-center">
 												<div className=" p-3">{index + 1}</div>
-												<div className="ml-2">{item.description}</div>
+												<div className="ml-2">{item}</div>
 											</div>
 										</List.Item>
 									)}
@@ -198,32 +199,27 @@ export const EditMyPractice = () => {
 					</>
 					}
 				</Tabs.TabPane>
-				<Tabs.TabPane tab={'План и дневник практики'} key={2}>
+				<Tabs.TabPane tab={'Заполнение документов'} key={2}>
 					
-					<Plan setShowFinal={setShowFinal} />
+					<Plan dataTasks={dataOne?.tasks} setShowFinal={setShowFinal} />
 
 					<Diary setShowFinalTwo={setShowFinalTwo} />
 				</Tabs.TabPane>
 				{/* disabled={!showFinal || !showFinalTwo  } */}
 			
-					<Tabs.TabPane tab={<Popover  content={!showFinal || !showFinalTwo ? 'Раздел доступен только после' : null}>Отправка документов</Popover>} key={3} >
+					<Tabs.TabPane tab={<Popover  content={!showFinal || !showFinalTwo ? null : null}>Отправка документов</Popover>} key={3} >
 						<Row gutter={16} className="mt-14 mb-10">
 							<Col span={12}>
 								<Card title="Обратите внимание:" bordered={false}>
 									<div className='mb-3'>Ваш пакет документов должен содержать:</div>
 									<ul className="ml-6">
 										<li>Отчет по практике</li>
-										<li>Путевка практиканта</li>
-										<li>Дневник практиканта</li>
+										<li>Индивидуальные задания</li>
+										<li>Дневник практиканта (по требованию кафедры)</li>
 									</ul>
 								</Card>
 							</Col>
-							{/* <Col span={6}>
-								<Card title="Обратите внимание" bordered={false}>
-									Отчет должен заполняться самостоятельно.<br></br> В модуле “Практики студентов” формируется только
-									титульный лист отчета.
-								</Card>
-							</Col> */}
+							
 						</Row>
 					<Final/>
 					</Tabs.TabPane>

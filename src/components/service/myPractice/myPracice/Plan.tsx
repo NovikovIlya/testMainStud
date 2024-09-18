@@ -1,15 +1,35 @@
 import { Button, Card, Col, Divider, Popover, Row, Space, Typography } from 'antd'
 import React, { useState } from 'react'
+import dayjs from 'dayjs'
 
 import EditableTable from './EditableTable'
 
-const Plan = ({setShowFinal}:any) => {
+const Plan = ({dataTasks,setShowFinal}:any) => {
+	const [dataSource, setDataSource] = useState<any>(dataTasks.map((item:any)=>{
+		return{
+		  key:item.id,
+		  name:item.description,
+		  age:null
+		}
+	}));
     const [isDisabled,setIsDisabled] = useState(true)
     const [show,setShow] = useState(false)
 	const handleButton = ()=>{
 	 setShow(true)
      setShowFinal(true)
+
+	 const validData = dataSource.map((item:any)=>{
+		const startDate = dayjs(item.age?.[0]).format('DD.MM.YYYY')
+		const endDate = dayjs(item?.age[1]).format('DD.MM.YYYY')
+		return {
+			id:item.key,
+			task:item.name,
+			date:[startDate,endDate]
+		}
+	 })
+	 console.log('validData',validData)
 	}
+
 	return (
 		<>
 			<Row>
@@ -19,12 +39,12 @@ const Plan = ({setShowFinal}:any) => {
 			</Row>
 			<Row>
 				<Col>
-					<Typography.Title level={2}>План практики</Typography.Title>
+					<Typography.Title level={2}>Отчет и Индивидуальные задания</Typography.Title>
 				</Col>
 			</Row>
 			<Row>
 				<Col span={12}>
-					<EditableTable setIsDisabled={setIsDisabled}/>
+					<EditableTable dataSource={dataSource} setDataSource={setDataSource} setIsDisabled={setIsDisabled}/>
 				</Col>
 			</Row>
 
@@ -37,7 +57,7 @@ const Plan = ({setShowFinal}:any) => {
 							size="large"
                             onClick={handleButton}
 						>
-							Сформировать и скачать направительные документы
+							Сохранить данные и сформировать документы
 						</Button></Popover>
 					</Space>
 				</Col>
@@ -46,17 +66,20 @@ const Plan = ({setShowFinal}:any) => {
             {show ?
 			<Row gutter={16} className="mt-14 mb-10">
 				<Col span={6}>
-					<Card title="Шаблон пакета документов:" bordered={false}>
+					<Card title="Скачать документы:" bordered={false}>
 						<ul className="ml-6">
-							<li>Шаблон отчет по практике</li>
-							<li>Путевка практиканта</li>
+							<li><a>Отчет по практике</a></li>
+							<li><a>Индивидуальные задания</a></li>
 						</ul>
 					</Card>
 				</Col>
 				<Col span={6}>
 					<Card title="Обратите внимание" bordered={false}>
-						Путевку практиканта необходимо распечатать с использованием двусторонней печати и отнести на подпись в
-						Департамент Образования до начала практики — с подписанным документом можно начинать практику в организации.
+					<ul className='pl-5 pr-5 '>
+						<li className='mb-3'>Отчет должен заполняться самостоятельно.В модуле “Практики студентов” формируется только титульный лист отчета.</li>
+						<li className=''>Индивидуальные задания представляют собой план-график на практику студента. Перед началом практики руководитель по практике должен поставить подпись.</li>
+
+					</ul>
 					</Card>
 				</Col>
 			</Row> : ''}

@@ -40,11 +40,11 @@ const Final = () => {
 		setIsFirstSend(true)
 		setText('')
 		setFileList([]) 
-	  };
+	};
 	  
-	  const onFinishFailed: any = (errorInfo:any) => {
-		console.log('Failed:', errorInfo);
-	  };
+	const onFinishFailed: any = (errorInfo:any) => {
+	console.log('Failed:', errorInfo);
+	};
 
 	return (
 		<>
@@ -68,12 +68,12 @@ const Final = () => {
     					onFinishFailed={onFinishFailed}>
 
 						<Upload {...props} className='flex items-center h-full '>
-							<Button className="h-14"  icon={<UploadOutlined />}>
+							<Button className="rounded-[10px_0px_0px_10px] h-14"  icon={<UploadOutlined />}>
 							
 							</Button>
 						</Upload>
-						<TextArea style={{ resize: 'none' }}  value={text} onChange={onChange}/>
-						<Button htmlType='submit' icon={<SendOutlined />} className=" h-full" size="large" >
+						<TextArea className='rounded-[0px_0px_0px_0px]' style={{ resize: 'none' }}  value={text} onChange={onChange}/>
+						<Button htmlType='submit' icon={<SendOutlined />} className="rounded-[0px_10px_10px_0px] h-full" size="large" >
 							
 						</Button>
 					</Form>

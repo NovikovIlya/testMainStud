@@ -1,4 +1,11 @@
+import { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+
 import { useAppSelector } from '../../../../store'
+import {
+	setStageProgressAsFilling,
+	setStageProgressAsReady
+} from '../../../../store/reducers/EmploymentProgressSlice'
 
 import { FileAttachment } from './FileAttachment'
 
@@ -8,6 +15,24 @@ export const EmplDocAttachment = (props: {
 	stageName: string
 }) => {
 	const { docs } = useAppSelector(state => state.employmentSeekerDocs)
+	const { empData } = useAppSelector(state => state.employmentData)
+	const foundStage = empData.stages.find(stage => stage.id === props.stageId)
+	const dispatch = useDispatch()
+
+	useEffect(() => {
+		if (foundStage) {
+			if (
+				foundStage.documents.length ===
+				docs.filter(doc => doc.employmentStageType === props.stageName).length
+			) {
+				console.log('Все файлы на данном этапе загружены')
+				dispatch(setStageProgressAsReady(props.stageId))
+			} else {
+				console.log('Какого-то из файлов не хватает')
+				dispatch(setStageProgressAsFilling(props.stageId))
+			}
+		}
+	}, [empData])
 
 	return (
 		<>

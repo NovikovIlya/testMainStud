@@ -46,20 +46,21 @@ export const Stages = () => {
 				dispatch(setAllData(data))
 				dispatch(
 					setAllProgress(
-						data.stages.map(stage => {
-							if (stage.status === 'FILLING') {
-								const smthMissing = stage.documents.find(
-									doc => doc.status === 'NOT_ATTACHED'
-								)
-								if (smthMissing) {
-									return stage
-								} else {
-									return { ...stage, status: 'READY' }
-								}
-							} else {
-								return stage
-							}
-						})
+						// data.stages.map(stage => {
+						// 	if (stage.status === 'FILLING') {
+						// 		const smthMissing = stage.documents.find(
+						// 			doc => doc.status === 'NOT_ATTACHED'
+						// 		)
+						// 		if (smthMissing) {
+						// 			return stage
+						// 		} else {
+						// 			return { ...stage, status: 'READY' }
+						// 		}
+						// 	} else {
+						// 		return stage
+						// 	}
+						// })
+						data.stages
 					)
 				)
 			})

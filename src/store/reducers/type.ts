@@ -441,3 +441,9 @@ export type EmploymentDataType = {
 		}[]
 	}[]
 }
+
+export type EmploymentDocsType = {
+	id: number
+	employmentStageType: string
+	name: string
+}

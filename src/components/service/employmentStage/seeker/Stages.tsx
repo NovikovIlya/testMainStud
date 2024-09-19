@@ -5,9 +5,13 @@ import { useDispatch } from 'react-redux'
 import { useLocation } from 'react-router-dom'
 
 import { useAppSelector } from '../../../../store'
-import { useLazyGetEmploymentDataQuery } from '../../../../store/api/serviceApi'
+import {
+	useLazyGetEmploymentDataQuery,
+	useLazyGetEmploymentDocsQuery
+} from '../../../../store/api/serviceApi'
 import { setAllData } from '../../../../store/reducers/EmploymentDataSlice'
 import { setAllProgress } from '../../../../store/reducers/EmploymentProgressSlice'
+import { setDocs } from '../../../../store/reducers/EmploymentSeekerDocsSlice'
 
 import { EmplDocAttachment } from './EmplDocAttachment'
 import { EmplInstruction } from './EmplInstruction'
@@ -24,9 +28,16 @@ export const Stages = () => {
 
 	const respondId = parseInt(pathname.substring(pathname.lastIndexOf('/') + 1))
 
+	const vacancyId = parseInt(
+		pathname.substring(
+			pathname.substring(0, pathname.lastIndexOf('/')).lastIndexOf('/') + 1
+		)
+	)
+
 	const { currentStage } = useAppSelector(state => state.currentEmploymentStage)
 
 	const [getEmpData, empData] = useLazyGetEmploymentDataQuery()
+	const [getEmpDocs, empDocs] = useLazyGetEmploymentDocsQuery()
 
 	useEffect(() => {
 		getEmpData(respondId)
@@ -51,6 +62,14 @@ export const Stages = () => {
 						})
 					)
 				)
+			})
+	}, [])
+
+	useEffect(() => {
+		getEmpDocs(vacancyId)
+			.unwrap()
+			.then(data => {
+				dispatch(setDocs(data))
 			})
 	}, [])
 
@@ -82,7 +101,13 @@ export const Stages = () => {
 					{currentStage === 1 && (
 						<EmplMedInvite respondId={respondId} stageId={1} />
 					)}
-					{currentStage === 2 && <EmplDocAttachment />}
+					{currentStage === 2 && (
+						<EmplDocAttachment
+							respondId={respondId}
+							stageId={2}
+							stageName="SECOND"
+						/>
+					)}
 					{currentStage === 3 && <EmplWorkConditions />}
 					{currentStage === 4 && <EmplMedExam />}
 					{currentStage === 5 && <EmplInstruction />}

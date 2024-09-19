@@ -18,6 +18,7 @@ import CurrentVacancyNameSlice from './reducers/CurrentVacancyNameSlice'
 import CurrentVacancySlice from './reducers/CurrentVacancySlice'
 import EmploymentDataSlice from './reducers/EmploymentDataSlice'
 import EmploymentProgressSlice from './reducers/EmploymentProgressSlice'
+import EmploymentSeekerDocsSlice from './reducers/EmploymentSeekerDocsSlice'
 import AddressReducer from './reducers/FormReducers/AddressReducer'
 import CountriesEducationReducer from './reducers/FormReducers/CountriesEducationReducer'
 import DocumentReducer from './reducers/FormReducers/DocumentReducer'
@@ -77,7 +78,8 @@ export const store = configureStore({
 		currentInterviewTimeFormated: CurrentInterviewTimeFormatedSlice,
 		currentEmploymentStage: CurrentEmploymentStage,
 		employmentData: EmploymentDataSlice,
-		employmentProgress: EmploymentProgressSlice
+		employmentProgress: EmploymentProgressSlice,
+		employmentSeekerDocs: EmploymentSeekerDocsSlice
 	},
 	middleware: getDefaultMiddleware =>
 		getDefaultMiddleware()

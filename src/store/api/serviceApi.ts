@@ -11,6 +11,7 @@ import {
 	Documentation,
 	Email,
 	EmploymentDataType,
+	EmploymentDocsType,
 	EmploymentRequestType,
 	Exam,
 	ICalendar,
@@ -394,6 +395,12 @@ export const serviceApi = apiSlice.injectEndpoints({
 		getEmploymentData: builder.query<EmploymentDataType, number>({
 			query: respondId => ({
 				url: `http://localhost:8082/employment-api/v1/respond/${respondId}/employment`,
+				headers: { Authorization: `Bearer ${seekerToken}` }
+			})
+		}),
+		getEmploymentDocs: builder.query<EmploymentDocsType[], number>({
+			query: vacancyId => ({
+				url: `http://localhost:8082/employment-api/v1/vacancy/${vacancyId}/empl-docs`,
 				headers: { Authorization: `Bearer ${seekerToken}` }
 			})
 		}),
@@ -827,8 +834,8 @@ export const serviceApi = apiSlice.injectEndpoints({
 			query: arg => ({
 				url: `http://localhost:8082/employment-api/v1/respond/${arg.respondId}/chat/butttons/interview/reserve-time`,
 				method: 'POST',
-				body: arg.time && {
-					time: arg.time
+				body: {
+					time: arg.time ? arg.time : null
 				},
 				headers: {
 					Authorization: `Bearer ${seekerToken}`
@@ -927,5 +934,6 @@ export const {
 	useLazyGetChatPreviewsQuery,
 	useGetSeekerEmploymentRespondsQuery,
 	useLazyGetEmploymentDataQuery,
-	useGetEmploymentDataQuery
+	useGetEmploymentDataQuery,
+	useLazyGetEmploymentDocsQuery
 } = serviceApi

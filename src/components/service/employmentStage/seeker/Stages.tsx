@@ -73,7 +73,7 @@ export const Stages = () => {
 			})
 	}, [])
 
-	if (empData.isFetching || empData.isLoading) {
+	if (currentStage === 0 && (empData.isFetching || empData.isLoading)) {
 		return (
 			<>
 				<div className="w-screen h-screen flex items-center">

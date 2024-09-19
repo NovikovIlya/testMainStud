@@ -22,7 +22,7 @@ export const EmplDocAttachment = (props: {
 				</div>
 				<div className="bg-white rounded-[16px] shadow-custom-shadow p-[20px] w-[50%] flex flex-col gap-[20px]">
 					<p className="opacity-80">Прикрепить файлы</p>
-					<div className="grid gap-x-[36px] gap-y-[12px] grid-cols-[50%_auto_100px_21px]">
+					<div className="grid gap-x-[36px] gap-y-[12px] grid-cols-[50%_auto_100px_21px] items-center">
 						{docs.map(doc => (
 							<FileAttachment
 								{...doc}

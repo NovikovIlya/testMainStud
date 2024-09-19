@@ -853,6 +853,18 @@ export const serviceApi = apiSlice.injectEndpoints({
 					Authorization: `Bearer ${seekerToken}`
 				}
 			})
+		}),
+		deleteEmploymentDoc: builder.mutation<
+			void,
+			{ respondId: number; docId: number }
+		>({
+			query: ({ respondId, docId }) => ({
+				url: `http://localhost:8082/employment-api/v1/respond/${respondId}/employment/file/${docId}`,
+				method: 'DELETE',
+				headers: {
+					Authorization: `Bearer ${seekerToken}`
+				}
+			})
 		})
 	})
 })
@@ -935,5 +947,6 @@ export const {
 	useGetSeekerEmploymentRespondsQuery,
 	useLazyGetEmploymentDataQuery,
 	useGetEmploymentDataQuery,
-	useLazyGetEmploymentDocsQuery
+	useLazyGetEmploymentDocsQuery,
+	useDeleteEmploymentDocMutation
 } = serviceApi

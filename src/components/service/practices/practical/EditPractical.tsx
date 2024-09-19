@@ -734,6 +734,7 @@ export const EditPractical = () => {
                                     className="w-full"
                                     size="large"
                                     controls={false}
+                                    min={1}
                                 />
                             </Form.Item>
                         </Col>

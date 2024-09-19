@@ -12,7 +12,7 @@ const comments = [
   },
   {
     author: 'Тетя Мотя',
-    avatar: 'https://t3.ftcdn.net/jpg/06/57/85/22/360_F_657852299_5py03y6oH4mrUDyZnf9XxFSFfrjcqAzP.jpg',
+   
     href:'https://filesamples.com/samples/document/docx/sample2.docx',
     text: 'Хорошо получилось, молодец, но есть правки',
    
@@ -43,7 +43,7 @@ export const Comment = () => (
             {/* <Divider className='border-solid border-y-4 border-[#f5f8fb]'/> */}
             <List.Item.Meta
               className='p-4  rounded-lg cc w-15 bg-[#65a1fa] flex-none text-white'
-              avatar={<Avatar  src={item.avatar} />}
+             
               title={<div className='text-white'>{item.author}</div>}
               description={
                 <div className=''>

@@ -101,13 +101,17 @@ export const CreatePractical = () => {
 	const {data:dataIsPeopleInGroup} = useIsPeopleInGroupQuery({subDivisionId:subDivisionId,groupId : groupId},{skip: !subDivisionId  || !groupId })
 	const { data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty } = useGetSpecialtyNamesForPractiseQuery(subDivisionId, {skip: subDivisionId === null})
 	const { data: dataPraciseKind, isSuccess: isSuccesPractiseKind } = useGetPracticeKindQuery(subDivisionId, { skip: subDivisionId === null })
-	const { data: dataGroupNumbers, isSuccess: isSuccessGroupNumbers } = useGetGroupNumbersQuery(subDivisionId, { skip: subDivisionId === null })
-	const { data: dataGroupNumbersNew } = useGetGroupNumbersNewQuery(subDivisionId, { skip: subDivisionId === null })
+	const { data: dataGroupNumbers, isSuccess: isSuccessGroupNumbers } = useGetGroupNumbersQuery({subDivisionId,specialtyNameId : dataNameSpecialty?.find((elem: any) => {
+		if (elem.value === pickSpeciality) {
+			return elem
+		}
+	})?.id}, { skip: !subDivisionId || !pickSpeciality})
+	// const { data: dataGroupNumbersNew } = useGetGroupNumbersNewQuery(subDivisionId, { skip: subDivisionId === null })
 	const {data: dataDepartmentDirector,isSuccess: isSuccessDepartmentDirector} = useGetDepartmentDirectorsQuery(subDivisionId, {skip: !subDivisionId})
-	const { data: dataCompetences, isSuccess: isSuccessCompetences } =useGetCompentencesQuery(objectForCompetences, {skip: !objectForCompetences?.specialityId || objectForCompetences?.practiceKindId === null|| objectForCompetences?.startYear === null})
-	const { data: dataDepartments, isSuccess: isSuccessDepartments } =useGetSubdivisionForPracticeQuery()
-	const { data: dataPracticeType, isSuccess: isSuccessPracticeType } =useGetPracticeTypeForPracticeQuery(objType, {skip: !objType?.specialtyNameId|| !objType?.subdivisionId})
-	const { data: dataTask, isSuccess: isSuccessTask } =useGetTasksForPracticeQuery(arqTask,{skip: !arqTask?.practiceTypeId|| !arqTask?.specialtyNameId})
+	const { data: dataCompetences, isSuccess: isSuccessCompetences } = useGetCompentencesQuery(objectForCompetences, {skip: !objectForCompetences?.specialityId || objectForCompetences?.practiceKindId === null|| objectForCompetences?.startYear === null})
+	const { data: dataDepartments, isSuccess: isSuccessDepartments } = useGetSubdivisionForPracticeQuery()
+	const { data: dataPracticeType, isSuccess: isSuccessPracticeType } = useGetPracticeTypeForPracticeQuery(objType, {skip: !objType?.specialtyNameId|| !objType?.subdivisionId})
+	const { data: dataTask, isSuccess: isSuccessTask } = useGetTasksForPracticeQuery(arqTask,{skip: !arqTask?.practiceTypeId|| !arqTask?.specialtyNameId})
 	const { data: dataDep, isSuccess: isSuccessDep } = useGetCafDepartmentsQuery(subDivisionId,{ skip: subDivisionId === null })
 	const [copyDataCompetences, setCopyDataCompetences] = useState<any>(dataCompetences)
 	const [sendForm, { data,isLoading:isLoadingSendForm }] = usePostPracticesMutation()
@@ -116,11 +120,10 @@ export const CreatePractical = () => {
 	const [treeLine, setTreeLine] = useState(true);
     const [showLeafIcon, setShowLeafIcon] = useState(false);
     const [value, setValue] = useState<string>();
-	console.log('dataCompetences',dataCompetences)
-	useEffect(()=>{
 
+	useEffect(()=>{
 		setCopyDataCompetences(dataCompetences)
-	},[dataCompetences])
+	}, [dataCompetences])
 
 	// объект для типа практик
 	useEffect(() => {
@@ -581,7 +584,7 @@ export const CreatePractical = () => {
 				<Row gutter={[16, 16]}>
 					<Col xs={24} sm={24} md={18} lg={16} xl={12}>
 						<Form.Item
-							//rules={[{required: true}]}
+							rules={[{required: true}]}
 							name={'groupNumber'}
 							label={'Номер группы'}
 						>
@@ -731,6 +734,7 @@ export const CreatePractical = () => {
 								className="w-full"
 								size="large"
 								controls={false}
+								min={1}
 							/>
 						</Form.Item>
 					</Col>

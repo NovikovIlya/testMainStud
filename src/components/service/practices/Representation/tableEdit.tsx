@@ -163,7 +163,7 @@ export const TableEdit = ({selectedPlace, status='',active = true,visiting, full
 			dataIndex: 'place',
 			title: 'Место прохождения практики',
 			className: `text-xs !p-2  ${selectedPlace === 'В профильной организации' ? '' : 'hidden'}`,
-			editable: active ?? status !== 'Согласован' ? true :false
+			editable: active && status !== 'Согласован' ? true :false
 		},
 		{
 			key: 'departmentDirector',

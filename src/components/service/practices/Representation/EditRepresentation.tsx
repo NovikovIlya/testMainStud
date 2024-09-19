@@ -581,7 +581,7 @@ export const EditRepresentation = () => {
 				</Col>
 				<Col span={12} className="flex justify-end">
 							
-							<Button onClick={handleChangeStatus}>Согласовать представление</Button>
+							<Button disabled={dataOneSubmissions.status === 'Согласован'} onClick={handleChangeStatus}>Согласовать представление</Button>
 	
 				</Col>
 			</Row>

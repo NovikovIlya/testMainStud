@@ -28,6 +28,7 @@ import {
     useGetContractFacilitiesQuery,
     useGetContractsAllQuery,
     useGetContractsShortQuery,
+    useGetMestQuery,
     useGetSpecialtyNamesQuery
 } from "../../../../../store/api/practiceApi/roster";
 import { ContractFacilities, ContractsAll, ContractShort, NameSpecialty } from "../../../../../models/Practice";
@@ -87,41 +88,19 @@ export const RegisterContracts = () => {
         sortDateConclusionContract: 'По дате (сначала новые)',
         nameSpecialty: 'Все',
         numberSeats: 'Все',
+        mest: 'Все'
     })
     const [ tableDataCompressed,setTableDataCompressed] = useState<ColumnsTableCompressedView[]>()
     const [ tableDataFull,setTableDataFull] = useState<ColumnsTableFull[]>()
     const [tableView, setTableView] = useState({ compressed: true, table: false})
     const [selectedFieldsCompressed, setSelectedFieldsCompressed] = useState<ColumnsTableCompressedView[]>()
     const [ selectedFieldsFull, setSelectedFieldFull] = useState<ColumnsTableFull[]>()
+    const { data:dataMest}= useGetMestQuery()
     const ref1 = useRef(null);
-    const ref2 = useRef(null);
-    const ref3 = useRef(null);
-    const [open, setOpen] = useState<boolean>(false);
 
-    const steps: any = [
-        {
-        title: 'Upload File',
-        description: 'Put your files here.',
-        cover: (
-            <img
-            alt="tour.png"
-            src="https://user-images.githubusercontent.com/5378891/197385811-55df8480-7ff4-44bd-9d43-a7dade598d70.png"
-            />
-        ),
-        target: () => ref1.current,
-        },
-        {
-        title: 'Save',
-        description: 'Save your changes.',
-        target: () => ref2.current,
-        },
-        {
-        title: 'Other Actions',
-        description: 'Click to see other actions.',
-        target: () => ref3.current,
-        },
-    ];
-  
+
+
+
 
     function prolonAge(prolon: string) {
         if (prolon === '1') {
@@ -496,7 +475,7 @@ export const RegisterContracts = () => {
         }
 
         if (isSuccessShort) {
-            const filterDataShort: ColumnsTableCompressedView[] = dataShort.map(elem => changeListDataShort(elem))
+            const filterDataShort: ColumnsTableCompressedView[] = dataShort.map((elem:any) => changeListDataShort(elem))
             return filterDataShort
                 .filter(elem => filterNameOrg(elem))
                 .filter(elem => filterContractType(elem))
@@ -511,6 +490,15 @@ export const RegisterContracts = () => {
                 return elem
             } else {
                 return elem.contractFacility === filter.nameOrg
+            }
+        }
+        function filterMest(elem: ColumnsTableFull) {
+            console.log('mest',filter.mest)
+            console.log('elem.placesAmount',elem.placesAmount)
+            if (filter.mest === 'Все') {
+                return elem
+            } else {
+                return Number(elem.placesAmount) === Number(filter.mest)
             }
         }
 
@@ -560,13 +548,14 @@ export const RegisterContracts = () => {
         }
 
         if (isSuccessAll) {
-            const filterDataAll: ColumnsTableFull[] = dataAll.map(elem => (changeListDataAll(elem)))
+            const filterDataAll: ColumnsTableFull[] = dataAll.map((elem:any) => (changeListDataAll(elem)))
             return filterDataAll
                 .filter(elem => filterNameOrg(elem))
                 .filter(elem => filterContractType(elem))
                 .filter(elem => filterDateConclusionContract(elem))
                 .filter(elem => filterDataNameSpecialty(elem))
                 .filter(elem => filterNumberSeats(elem))
+                .filter(elem => filterMest(elem))
                 .sort((a, b) => sortDateConclusionContract(a, b))
         }
     }
@@ -574,7 +563,7 @@ export const RegisterContracts = () => {
     useEffect(() => {
         setTableDataCompressed(filterDataCompressed())
         setTableDataFull(filterDataFull())
-    })
+    },[dataAll,dataShort,filter])
 
 
 
@@ -613,7 +602,7 @@ export const RegisterContracts = () => {
       };
     
     let arraySpec:any = []
-    dataAll?.forEach((item)=>{
+    dataAll?.forEach((item:any)=>{
         // @ts-ignore
         item?.specialtyNames?.forEach((i)=>{
             arraySpec.push(i)
@@ -637,11 +626,29 @@ export const RegisterContracts = () => {
                         !tableView.table && 'hidden')}
                     >
                         <span className={'whitespace-nowrap'}>Количество мест</span>
-                        <InputNumber
+                        {/* <InputNumber
                             controls={false}
                             type={'number'}
                             onChange={value => setFilterNumberSeats(value)}
                             min={0}
+                        /> */}
+                            <Select
+                            popupMatchSelectWidth={false}
+                            defaultValue="Все"
+                            className="w-full"
+                            options={dataMest ? [{key:'Все',value:'Все',label:'Все'},...(dataMest.map((item:any)=>{
+                                return{
+                                    key:item,
+                                    value:item,
+                                    label:item
+                                }
+                            }))] : []}
+                            onChange={(value, option) => {
+                                setFilter({
+                                    ...filter,
+                                    mest: value
+                                })
+                            }}
                         />
                     </Col>
                     <Col span={!tableView.table ? 24 : 16} className={'flex items-center gap-2 mobileFirst '}
@@ -837,7 +844,7 @@ export const RegisterContracts = () => {
                 />
             }
             </>}
-            <Tour open={open} onClose={() => setOpen(false)} steps={steps} />
+           
         </section>
     )
 }

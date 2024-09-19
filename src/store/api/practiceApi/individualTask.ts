@@ -123,8 +123,8 @@ export const individualTasks = apiSlice.injectEndpoints({
             keepUnusedDataFor: 1,
         }),
         getGroupNumbers: builder.query<PracticeType[], any>({
-            query: (subDivisionId) => ({
-                url: `services/api-practices/kpfu/group-numbers?subdivisionId=${subDivisionId}`,
+            query: ({subDivisionId,specialtyNameId }) => ({
+                url: `services/api-practices/kpfu/group-numbers?subdivisionId=${subDivisionId}&specialtyNameId=${specialtyNameId}`,
                 method: 'GET',
             })
         }),

@@ -26,6 +26,7 @@ import { useGetSpecialtyNamesQuery } from "../../../../store/api/practiceApi/ros
 import { copyFileDocument } from "../../../../utils/downloadDocument/copyFileDocument"
 import { agreementFileDocument } from "../../../../utils/downloadDocument/agreementFileDocument"
 import { SkeletonPage } from './Skeleton'
+import { endOfDay, isAfter } from 'date-fns'
 
 export interface PdfContract {
     uid: string,
@@ -71,6 +72,24 @@ export const EditContract = () => {
     const [pdfAgreement, setPdfAgreement] = useState<any[]>()
     const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery(null)
     const [optionsNameSpec, setOptionsNameSpec] = useState<NameSpecialty[]>([])
+    const [nameSpec,setNameSpec] = useState<any>(null)
+    console.log('nameSpec',nameSpec)
+    useEffect(()=>{
+        if(isSuccess){
+            const x = dataNameSpecialty?.filter((item)=>{
+                console.log('data?.specialtyName',data?.specialtyNames)
+                return data?.specialtyNames?.includes(item.label)
+            })
+            setNameSpec(x?.map((item)=>{
+                return{
+                    key:item.id,
+                    value:item.id,
+                    label:item.label
+                }
+            }))
+            console.log('x',x)
+        }
+    },[dataNameSpecialty,data,isSuccess])
 
     useEffect(() => {
         if (isSuccess) {
@@ -101,7 +120,7 @@ export const EditContract = () => {
             if(!hideSrok){
                 form.setFieldValue('endDate', dayjs(data.endDate))
             }
-            form.setFieldValue('specialtyNameIds', optionsNameSpec.map(i=>i.value))
+            form.setFieldValue('specialtyNameIds', nameSpec)
             form.setFieldValue('actualFacility', data.actualFacility)
             form.setFieldValue('placesAmount', data.placesAmount)
             form.setFieldValue('pdfContract', data.documentCopyId)
@@ -126,14 +145,8 @@ export const EditContract = () => {
 
     function onFinish(values: ICreateContract) {
         const formDataEditContract = new FormData()
-        const specName = dataNameSpecialty!.find(elem => {
-            if (elem.value === values.specialtyNameId) {
-                return elem
-            }
-        })
-        console.log('values.specialtyNameId',values.specialtyNameId)
-        console.log('specName',specName)
-        values.specialtyNameIds = dataNameSpecialty?.filter(item => values.specialtyNameIds.includes(item.value)).map(item => item.id)
+   
+        values.specialtyNameIds = nameSpec,
         // values.specialtyNameId = specName!.id
         values.placesAmount = String(values.placesAmount)
         values.ITN = String(values.ITN)
@@ -149,7 +162,7 @@ export const EditContract = () => {
             contractType: values.contractType,
             prolongation: values.prolongation,
             endDate: hideSrok ? null : values.endDate,
-            specialtyNameIds: dataNameSpecialty?.filter(item => values.specialtyNameIds.includes(item.value)).map(item => item.id),
+            specialtyNameIds: nameSpec,
             legalFacility: values.legalFacility,
             actualFacility: values.actualFacility,
             placesAmount: values.placesAmount
@@ -284,6 +297,10 @@ export const EditContract = () => {
                                 placeholder={''}
                                 className="w-full"
                                 size={'large'}
+                                disabledDate={(current) => {
+                                    // Отключаем даты, которые больше текущей даты
+                                    return current && isAfter(current.toDate(), endOfDay(new Date()));
+                                }}
                             />
                         </Form.Item>
 
@@ -358,12 +375,18 @@ export const EditContract = () => {
                                 size="large"
                                 popupMatchSelectWidth={false}
                                 placeholder=""
-                              
+                                value={nameSpec}
                                 className="w-full"
-                                options={dataNameSpecialty?.map((item)=>{
+                                onChange={(value)=>setNameSpec(value)}
+                              
+                                options={dataNameSpecialty?.filter((option, index, self) =>
+                                    index === self.findIndex((o) => (
+                                        o.value === option.value
+                                    ))
+                                ).map((item)=>{
                                     return{
                                         key:item.id,
-                                        value:item.value,
+                                        value:item.id,
                                         label:item.label
                                     }
                                 })} 

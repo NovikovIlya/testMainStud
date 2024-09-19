@@ -37,6 +37,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const isMobile = isMobileDevice();
 	const urlContainsPractice = location.pathname.includes('practice');
 
+
 	useEffect(()=>{
 		if(isMobile){
 			showMobileMenuEffect()
@@ -191,6 +192,8 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 		>
 			<div className="w-screen flex h-full justify-between px-8 max-sm:px-5">
 				<div className="flex gap-8 max-sm:gap-2 items-center">
+				{user?.roles[0].type==='ABITUR' || user?.roles[0].type==='OTHER' ? '':
+				<>
 					<Button
 						onClick={showDrawer}
 						className={clsx(
@@ -218,6 +221,8 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 					>
 						<span className="w-[105px] pl-2 max-md:!hidden">{t('services')}</span>
 					</Button>
+					</>
+					}
 					<div className="flex items-center gap-5">
 						<LogoIasSvg white={type === 'service'} />
 						<Divider type="vertical" className="border-l-white h-10 m-0 hidden sm:block" />

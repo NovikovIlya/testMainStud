@@ -51,8 +51,9 @@ export const CreateContracts = () => {
     const [newContract] = useCreateContractMutation()
     const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery(null)
     const [optionsNameSpec, setOptionsNameSpec] = useState<NameSpecialty[]>([])
+    const [nameSpec,setNameSpec] = useState<any>(null)
 
-
+    console.log('nameSpec',nameSpec)
     useEffect(() => {
         if (isSuccessNameSpecialty) {
             setOptionsNameSpec(dataNameSpecialty)
@@ -98,7 +99,7 @@ export const CreateContracts = () => {
         const newForm = new FormData()
         values.contractNumber = values.contractNumber
         values.contractFacility = values.contractFacility
-        values.specialtyNameIds = dataNameSpecialty?.filter(item => values.specialtyNameIds.includes(item.value)).map(item => item.id)
+        values.specialtyNameIds = nameSpec
         values.prolongation = values.prolongation
         values.contractType = values.contractType
         values.pdfContract = files.pdfContract!
@@ -271,6 +272,7 @@ export const CreateContracts = () => {
                                     className="w-full"
                                     size="large"
                                     controls={false}
+                                    min={1}
                                 />
                             </Form.Item>
                         </Col>
@@ -309,6 +311,7 @@ export const CreateContracts = () => {
                                 placeholder=""
                                 defaultValue={[]}
                                 className="w-full"
+                                onChange={(value)=>setNameSpec(value)}
                                 options={optionsNameSpec.filter((option, index, self) =>
                                     index === self.findIndex((o) => (
                                         o.value === option.value
@@ -316,7 +319,7 @@ export const CreateContracts = () => {
                                 ).map((item)=>{
                                     return {
                                         key:item.id,
-                                        value: item.value,
+                                        value: item.id,
                                         label: item.value
                                     }
                                 })}

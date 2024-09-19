@@ -100,7 +100,11 @@ export const Stages = () => {
 				<NavPanel />
 				<div className="w-full mt-[40px]">
 					{currentStage === 1 && (
-						<EmplMedInvite respondId={respondId} stageId={1} />
+						<EmplMedInvite
+							respondId={respondId}
+							stageId={1}
+							stageName="FIRST"
+						/>
 					)}
 					{currentStage === 2 && (
 						<EmplDocAttachment
@@ -109,7 +113,13 @@ export const Stages = () => {
 							stageName="SECOND"
 						/>
 					)}
-					{currentStage === 3 && <EmplWorkConditions />}
+					{currentStage === 3 && (
+						<EmplWorkConditions
+							respondId={respondId}
+							stageId={3}
+							stageName="THIRD"
+						/>
+					)}
 					{currentStage === 4 && <EmplMedExam />}
 					{currentStage === 5 && <EmplInstruction />}
 					{currentStage === 6 && <EmplRequisites />}

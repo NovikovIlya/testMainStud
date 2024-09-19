@@ -6,6 +6,7 @@ import { setStageProgressAsReady } from '../../../../store/reducers/EmploymentPr
 export const EmplMedInvite = (props: {
 	respondId: number
 	stageId: number
+	stageName: string
 }) => {
 	const dispatch = useDispatch()
 

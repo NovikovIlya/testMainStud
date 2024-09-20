@@ -10,7 +10,8 @@ import {
     Typography,
     Upload,
     Form, InputNumber,
-    message
+    message,
+    Spin
 } from 'antd'
 import dayjs from 'dayjs'
 import React, {useEffect, useState} from 'react'
@@ -45,15 +46,15 @@ export const CreateContracts = () => {
         {
             value: 'С пролонгацией',
             label: 'С пролонгацией'
-        }]
+    }]
     const [prolongation, setProlongation] = useState(false)
     const [hideSrok,setHideSrok] = useState(true)
-    const [newContract] = useCreateContractMutation()
+    const [newContract,{isLoading}] = useCreateContractMutation()
     const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery(null)
     const [optionsNameSpec, setOptionsNameSpec] = useState<NameSpecialty[]>([])
     const [nameSpec,setNameSpec] = useState<any>(null)
 
-    console.log('nameSpec',nameSpec)
+   
     useEffect(() => {
         if (isSuccessNameSpecialty) {
             setOptionsNameSpec(dataNameSpecialty)
@@ -117,11 +118,14 @@ export const CreateContracts = () => {
         if (files.pdfContract) newForm.append('pdfContract', files.pdfContract)
         if (files.pdfAgreement) newForm.append('pdfAgreement', files.pdfAgreement)
 
-        newContract(newForm)
-            .then(res => console.log(res))
-            .catch(e => console.log(e))
+        newContract(newForm).unwrap().then(res => {
+            console.log(res)
+            nav('/services/practices/registerContracts')
+        })
+            // .then(res => console.log(res))
+            // .catch(e => console.log(e))
 
-        nav('/services/practices/registerContracts')
+        // nav('/services/practices/registerContracts')
     }
 
     const handleKeyDown = (event:any) => {
@@ -135,10 +139,11 @@ export const CreateContracts = () => {
           event.preventDefault(); // Запрещаем ввод недопустимых символов
         }
     };
-    console.log('files.pdfContract',files.pdfContract)
+    
      
 
     return (
+        <Spin spinning={isLoading}>
         <section className="container animate-fade-in">
             <Space size={10}>
                 <Button
@@ -484,5 +489,6 @@ export const CreateContracts = () => {
                 </Row>
             </Form>
         </section>
+        </Spin>
     )
 }

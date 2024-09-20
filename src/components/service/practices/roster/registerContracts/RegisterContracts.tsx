@@ -75,10 +75,20 @@ export interface OptionsNameSpecialty {
     id: string | number
 }
 
+const optionsTypeContract = [
+    {value: 'Все', label: 'Все'},
+    {value: 'Бессрочный', label: 'Бессрочный'},
+    {value: 'Срочный', label: 'Срочный'},
+    {value: 'С пролонгацией', label: 'С пролонгацией'}
+]
+const optionsSort = [
+    {value: 'По дате (сначала новые)', label: 'По дате (сначала новые)'},
+    {value: 'По дате (сначала старые)', label: 'По дате (сначала старые)'},
+]
 
 export const RegisterContracts = () => {
     const tokenAccess = localStorage.getItem('access')!.replaceAll('"', '')
-    const {data: dataAll, isSuccess: isSuccessAll,isFetching} = useGetContractsAllQuery(null,{refetchOnFocus:true})
+    const {data: dataAll, isSuccess: isSuccessAll,isFetching} = useGetContractsAllQuery(null)
     const {data: dataShort, isSuccess: isSuccessShort,isFetching:isFetchingShort} = useGetContractsShortQuery()
     const nav = useNavigate()
     const [filter, setFilter] = useState({
@@ -97,78 +107,10 @@ export const RegisterContracts = () => {
     const [ selectedFieldsFull, setSelectedFieldFull] = useState<ColumnsTableFull[]>()
     const { data:dataMest}= useGetMestQuery()
     const ref1 = useRef(null);
-
-
-
-
-
-    function prolonAge(prolon: string) {
-        if (prolon === '1') {
-            return 'год'
-        } else if (prolon === '2' || prolon === '3' || prolon === '4') {
-            return 'года'
-        } else if (prolon === '11' || prolon === '12') {
-            return 'лет'
-        } else if (prolon.length > 1 && prolon.at(-1) === '1') {
-            return 'лет'
-        } else if (prolon.at(-1) === '2' || prolon.at(-1) === '3' || prolon.at(-1) === '4') {
-            return 'года'
-        } else {
-            return 'лет'
-        }
-    }
-
-    function changeListDataAll(elem: any) {
-        const newElem: any = {
-            id: elem.id,
-            key: elem.id,
-            contractFacility: elem.contractFacility,
-            specialtyName: elem?.specialtyNames?.join(','),
-            contractNumber: elem.contractNumber,
-            conclusionDate: elem.conclusionDate,
-            contractType: elem.contractType,
-            endDate: elem.endDate,
-            legalFacility: elem.legalFacility,
-            actualFacility: elem.actualFacility,
-            placesAmount: elem.placesAmount,
-            prolongation: elem.prolongation,
-            links: {
-                documentCopyId: elem.documentCopyId,
-                documentAgreementId: elem.documentAgreementId
-            },
-        }
-        return newElem
-    }
-
-    function changeListDataShort(elem: ContractShort) {
-        const newElem: ColumnsTableCompressedView = {
-            id: elem.id,
-            key: elem.id,
-            contractFacility: elem.contractFacility,
-            fillingDate: elem.fillingDate,
-            contractType: elem.contractType,
-            conclusionDate: elem.conclusionDate
-        }
-        return newElem
-    }
-
-    function changeListNameSpecialty(list: NameSpecialty[]) {
-        function changeElemNameSpecialty(elem: NameSpecialty) {
-            const newElem: any = {
-                value: elem.value,
-                label: elem.label,
-            }
-            return newElem
-        }
-        const finalList: any[] = [{value: 'Все', label: 'Все'}]
-        const newList: OptionsNameSpecialty[] = list.map(elem => changeElemNameSpecialty(elem))
-        return finalList.concat(newList)
-    }
-
-    function changeListContractFacilities(list: ContractFacilities[]) {
-        const finalList: ContractFacilities[] = [{value: 'Все', label: 'Все'}]
-        return finalList.concat(list)
-    }
+    const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
+    const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery(null)
+    const [contractFacilities, setContractFacilities] = useState<ContractFacilities[]>()
+    const {data: dataContractFacilities, isSuccess: isSuccessContractFacilities} = useGetContractFacilitiesQuery()
 
     const columnsCompressedView: TableProps<ColumnsTableCompressedView>['columns'] = [
         {
@@ -367,17 +309,11 @@ export const RegisterContracts = () => {
     ]
 
 
-    const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
-    const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery(null)
-
     useEffect(() => {
         if (isSuccessNameSpecialty) {
             setNameSpecialty(changeListNameSpecialty(dataNameSpecialty))
         }
     }, [dataNameSpecialty]);
-
-    const [contractFacilities, setContractFacilities] = useState<ContractFacilities[]>()
-    const {data: dataContractFacilities, isSuccess: isSuccessContractFacilities} = useGetContractFacilitiesQuery()
 
     useEffect(() => {
         if (isSuccessContractFacilities) {
@@ -385,17 +321,78 @@ export const RegisterContracts = () => {
         }
     }, [dataContractFacilities]);
 
-    const optionsTypeContract = [
-        {value: 'Все', label: 'Все'},
-        {value: 'Бессрочный', label: 'Бессрочный'},
-        {value: 'Срочный', label: 'Срочный'},
-        {value: 'С пролонгацией', label: 'С пролонгацией'}
-    ]
-    const optionsSort = [
-        {value: 'По дате (сначала новые)', label: 'По дате (сначала новые)'},
-        {value: 'По дате (сначала старые)', label: 'По дате (сначала старые)'},
-    ]
+    useEffect(() => {
+        setTableDataCompressed(filterDataCompressed())
+        setTableDataFull(filterDataFull())
+    }, [dataAll,dataShort,filter])
+   
+    function prolonAge(prolon: string) {
+        if (prolon === '1') {
+            return 'год'
+        } else if (prolon === '2' || prolon === '3' || prolon === '4') {
+            return 'года'
+        } else if (prolon === '11' || prolon === '12') {
+            return 'лет'
+        } else if (prolon.length > 1 && prolon.at(-1) === '1') {
+            return 'лет'
+        } else if (prolon.at(-1) === '2' || prolon.at(-1) === '3' || prolon.at(-1) === '4') {
+            return 'года'
+        } else {
+            return 'лет'
+        }
+    }
 
+    function changeListDataAll(elem: any) {
+        const newElem: any = {
+            id: elem.id,
+            key: elem.id,
+            contractFacility: elem.contractFacility,
+            specialtyName: elem?.specialtyNames?.join(','),
+            contractNumber: elem.contractNumber,
+            conclusionDate: elem.conclusionDate,
+            contractType: elem.contractType,
+            endDate: elem.endDate,
+            legalFacility: elem.legalFacility,
+            actualFacility: elem.actualFacility,
+            placesAmount: elem.placesAmount,
+            prolongation: elem.prolongation,
+            links: {
+                documentCopyId: elem.documentCopyId,
+                documentAgreementId: elem.documentAgreementId
+            },
+        }
+        return newElem
+    }
+
+    function changeListDataShort(elem: ContractShort) {
+        const newElem: ColumnsTableCompressedView = {
+            id: elem.id,
+            key: elem.id,
+            contractFacility: elem.contractFacility,
+            fillingDate: elem.fillingDate,
+            contractType: elem.contractType,
+            conclusionDate: elem.conclusionDate
+        }
+        return newElem
+    }
+
+    function changeListNameSpecialty(list: NameSpecialty[]) {
+        function changeElemNameSpecialty(elem: NameSpecialty) {
+            const newElem: any = {
+                value: elem.value,
+                label: elem.label,
+            }
+            return newElem
+        }
+        const finalList: any[] = [{value: 'Все', label: 'Все'}]
+        const newList: OptionsNameSpecialty[] = list.map(elem => changeElemNameSpecialty(elem))
+        return finalList.concat(newList)
+    }
+
+    function changeListContractFacilities(list: ContractFacilities[]) {
+        const finalList: ContractFacilities[] = [{value: 'Все', label: 'Все'}]
+        return finalList.concat(list)
+    }
 
     function isCompressedTable() {
         setTableView({
@@ -560,30 +557,7 @@ export const RegisterContracts = () => {
         }
     }
 
-    useEffect(() => {
-        setTableDataCompressed(filterDataCompressed())
-        setTableDataFull(filterDataFull())
-    },[dataAll,dataShort,filter])
 
-
-
-
-    // useEffect(() => {
-    //     if (isSuccessAll) {
-    //         const newDataAll: ColumnsTableFull[] = dataAll.map(elem => (changeListDataAll(elem)))
-    //         setTableDataFull(newDataAll)
-    //     }
-    // }, [dataAll]);
-
-    // useEffect(() => {
-    //     if (isSuccessShort) {
-    //         if (isSuccessShort) {
-    //             const newDataShort: ColumnsTableCompressedView[] = dataShort.map(elem => (changeListDataShort(elem)))
-    //             setTableDataCompressed(newDataShort)
-    //         }
-    //     }
-
-    // }, [dataShort]);
 
     const handleRowClick = (record:any) => {
 		nav(`/services/practices/registerContracts/editContract/${record.key}`)
@@ -599,7 +573,7 @@ export const RegisterContracts = () => {
         ) {
           event.preventDefault(); // Запрещаем ввод недопустимых символов
         }
-      };
+    };
     
     let arraySpec:any = []
     dataAll?.forEach((item:any)=>{
@@ -792,9 +766,9 @@ export const RegisterContracts = () => {
             </Row>
             {isFetching && isFetchingShort ? <Spin className='w-full mt-20' indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />  : 
             <>
-            {
-                tableView.compressed
-                &&
+            
+               { tableView.compressed
+                ?
                 <div className={'registerContracts'}>
                     <Table
                         onRow={(record) => ({
@@ -817,10 +791,9 @@ export const RegisterContracts = () => {
                         }}
                     />
                 </div>
-            }
-            {
-                tableView.table
-                &&
+            
+            
+                :
                 <Table 
                         onRow={(record) => ({
                             onClick: () => handleRowClick(record),
@@ -842,7 +815,7 @@ export const RegisterContracts = () => {
                            }
                        }}
                 />
-            }
+                    }
             </>}
            
         </section>

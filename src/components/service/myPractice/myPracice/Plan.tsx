@@ -32,12 +32,8 @@ const Plan = ({dataTasks,setShowFinal}:any) => {
 
 	return (
 		<>
-			<Row>
-				<Col span={12}>
-					<Divider />
-				</Col>
-			</Row>
-			<Row>
+		
+			<Row className='mt-6'>
 				<Col>
 					<Typography.Title level={2}>Отчет и Индивидуальные задания</Typography.Title>
 				</Col>

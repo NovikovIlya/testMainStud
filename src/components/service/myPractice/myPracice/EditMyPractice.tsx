@@ -30,10 +30,10 @@ export const EditMyPractice = () => {
 	const path = useLocation()
 	const id = path.pathname.split('/').at(-1)!
 	const nav = useNavigate()
-	const { Panel } = Collapse
 	const [showFinal, setShowFinal] = useState(false)
 	const [showFinalTwo, setShowFinalTwo] = useState(false)
 	const {data:dataOne,isFetching,isSuccess} = useGetOneMyPracticesQuery(id)
+	
 	const formatedDate = ()=>{
 		if(isSuccess){
 			const [start, end] = dataOne?.practicePeriod?.split('-');
@@ -139,7 +139,6 @@ export const EditMyPractice = () => {
 				/>
 				<span className=" text-[28px] font-normal">Учебная практика по специальности "{dataOne?.specialty}" с {formatedDate()[0]} по {formatedDate()[1]} </span>
 			</Space>
-
 			<Tabs defaultActiveKey="1" onChange={onChange} className='mt-6'>
 				<Tabs.TabPane tab={'Основная информация'} key={1}>
 				{isFetching ? <Spin className="w-full mt-20 flex justify-start ml-10" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} /> :
@@ -167,7 +166,6 @@ export const EditMyPractice = () => {
 							
 						</Col>
 					</Row>
-				
 					<Form<any> validateMessages={validateMessages} form={form} layout={'vertical'} className='mb-8'>
 						<Row gutter={[16, 16]} className={'mt-4'}>
 							<Col xs={24} sm={24} md={18} lg={16} xl={12}>
@@ -178,7 +176,7 @@ export const EditMyPractice = () => {
 										maxHeight: 300
 									}}
 									bordered
-									// @ts-ignore
+						
 									dataSource={dataOne?.competences}
 									renderItem={(item: any, index: number) => (
 										<List.Item
@@ -200,13 +198,9 @@ export const EditMyPractice = () => {
 					}
 				</Tabs.TabPane>
 				<Tabs.TabPane tab={'Заполнение документов'} key={2}>
-					
 					<Plan dataTasks={dataOne?.tasks} setShowFinal={setShowFinal} />
-
 					<Diary setShowFinalTwo={setShowFinalTwo} />
 				</Tabs.TabPane>
-				{/* disabled={!showFinal || !showFinalTwo  } */}
-			
 					<Tabs.TabPane tab={<Popover  content={!showFinal || !showFinalTwo ? null : null}>Отправка документов</Popover>} key={3} >
 						<Row gutter={16} className="mt-14 mb-10">
 							<Col span={12}>
@@ -219,11 +213,9 @@ export const EditMyPractice = () => {
 									</ul>
 								</Card>
 							</Col>
-							
 						</Row>
 					<Final/>
 					</Tabs.TabPane>
-				
 			</Tabs>
 		</section>
 	)

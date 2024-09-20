@@ -52,6 +52,8 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 		switch (role) {
 			case 'ABIT':
 				return t('ABIT')
+			case 'ABITUR':
+				return t('ABIT')
 			case 'STUD':
 				return t('STUD')
 			case 'SCHOOL':
@@ -66,6 +68,8 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 				return t('ATTEND')
 			case 'EMPL':
 				return t('EMPL')
+			case 'OTHER':
+				return 'Other'
 		}
 	}
 
@@ -182,7 +186,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 			// document.querySelector('header').style.marginLeft = '-100px'
 		}
 	}
-
+	console.log('roke',user)
 	return (
 		<header
 			className={clsx(

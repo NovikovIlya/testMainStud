@@ -10,7 +10,7 @@ export const rosterService = apiSlice.injectEndpoints({
                 method: 'GET',
             }),
             providesTags:   ['Contracts'],
-            keepUnusedDataFor:1,
+           
         }),
         getContractsShort: builder.query<ContractShort[], void>({
             query: () => ({
@@ -18,7 +18,7 @@ export const rosterService = apiSlice.injectEndpoints({
                 method: 'GET',
             }),
             providesTags:  ['Contracts'],
-            keepUnusedDataFor:1,
+            
         }),
         getMest: builder.query<any, void>({
             query: () => ({

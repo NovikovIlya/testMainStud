@@ -33,7 +33,7 @@ export const AboutUniversityCard = () => {
 			</div>
 			<div className="">
 				<div className="absolute -z-10 mt-5 sm:flex hidden min-w-[115px] min-h-[115px] max-w-[115px]  max-h-[115px] bg-[#3E89F9] bg-opacity-80 rounded-full justify-center items-center "></div>
-				<img className="sm:flex hidden mt-5" src={img} alt="" />
+				<img className="sm:flex hidden mt-5 rounded-2xl" src={img} alt="" />
 			</div>
 		</div>
 	)

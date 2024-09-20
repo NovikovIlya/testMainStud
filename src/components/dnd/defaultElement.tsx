@@ -253,7 +253,7 @@ export const jsxElements = [
 		element: (
 			<TemplateCard
 				href="/services/mypractices"
-				info="Сервис поможет вам получить актуальную информацию об ваших практиках"
+				info="Сервис поможет вам получить актуальную информацию о ваших практиках"
 				title="Мои практики"
 				buttonText="Study"
 				img="/Group499.png"

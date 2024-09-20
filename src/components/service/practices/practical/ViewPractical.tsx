@@ -854,10 +854,15 @@ export const ViewPractical = () => {
 				/>
 			) : (fullTable ?
 				<Table
-				onRow={(record) => ({
-					onClick: () => handleRowClick(record),
-				})}
-				responsive
+					onRow={(record) => ({
+						onClick: (e) => {
+							// @ts-ignore
+							if (e.target.closest('.ant-table-selection-column')) {
+								return
+							}
+							handleRowClick(record)},
+					})}
+					responsive
 					size="small"
 					rowKey="id"
 					// @ts-ignore
@@ -877,9 +882,14 @@ export const ViewPractical = () => {
 				/> :
 				<div className='viewPractical'>
 				<Table
-				onRow={(record) => ({
-					onClick: () => handleRowClick(record),
-				})}
+					onRow={(record) => ({
+						onClick: (e) => {
+							// @ts-ignore
+							if (e.target.closest('.ant-table-selection-column')) {
+								return
+							}
+							handleRowClick(record)},
+					})}
 					responsive
 					rowKey="id"
 					// @ts-ignore

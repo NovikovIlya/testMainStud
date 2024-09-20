@@ -22,7 +22,7 @@ import Diary from './Diary'
 import Plan from './Plan'
 import Final from './Final'
 import { useGetOneMyPracticesQuery } from '../../../../store/api/practiceApi/mypractice'
-import { LoadingOutlined } from '@ant-design/icons'
+import { ExclamationCircleTwoTone, LoadingOutlined } from '@ant-design/icons'
 import dayjs from 'dayjs'
 
 export const EditMyPractice = () => {
@@ -137,18 +137,18 @@ export const EditMyPractice = () => {
 						nav('/services/mypractices/')
 					}}
 				/>
-				<span className=" text-[28px] font-normal">Учебная практика по специальности "{dataOne?.specialty}" с {formatedDate()[0]} по {formatedDate()[1]} </span>
+				<span className="text-[10px] lg:text-[28px] font-normal">Учебная практика по специальности "{dataOne?.specialty}" с {formatedDate()[0]} по {formatedDate()[1]} </span>
 			</Space>
 			<Tabs defaultActiveKey="1" onChange={onChange} className='mt-6'>
 				<Tabs.TabPane tab={'Основная информация'} key={1}>
 				{isFetching ? <Spin className="w-full mt-20 flex justify-start ml-10" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} /> :
 					<>
 					<Row className='mb-4 mt-4'>
-						<Col span={12} className="pr-[8px] ">
+						<Col xs={24} sm={12} span={12} className="pr-[8px] ">
 							<Card title="Оценка:" bordered={false} className='mb-4'>
 									<Row>
-										<Descriptions.Item className="" span={3} label={'1'} key={'1'}>
-										<div className="">{dataOne?.grade ? dataOne.grade :'Нет оценки'}</div>
+										<Descriptions.Item className="block sm:flex"  span={3} label={'1'} key={'1'}>
+											<div className="">{dataOne?.grade ? dataOne.grade :'Нет оценки'}</div>
 										</Descriptions.Item>
 									</Row>
 								</Card>
@@ -156,7 +156,7 @@ export const EditMyPractice = () => {
 									<Row>
 										<Descriptions  className="">
 											{items.map((item: any) => (
-												<Descriptions.Item className="" span={3} label={item.label} key={item.key}>
+												<Descriptions.Item className=""  span={3} label={item.label} key={item.key}>
 													<div className="">{item.children}</div>
 												</Descriptions.Item>
 											))}
@@ -166,7 +166,12 @@ export const EditMyPractice = () => {
 							
 						</Col>
 					</Row>
-					<Form<any> validateMessages={validateMessages} form={form} layout={'vertical'} className='mb-8'>
+
+					</>
+					}
+				</Tabs.TabPane>
+				<Tabs.TabPane tab={'Заполнение документов'} key={2}>
+				<Form<any> validateMessages={validateMessages} form={form} layout={'vertical'} className='mb-8'>
 						<Row gutter={[16, 16]} className={'mt-4'}>
 							<Col xs={24} sm={24} md={18} lg={16} xl={12}>
 								<List
@@ -194,27 +199,23 @@ export const EditMyPractice = () => {
 							</Col>
 						</Row>
 					</Form>
-					</>
-					}
-				</Tabs.TabPane>
-				<Tabs.TabPane tab={'Заполнение документов'} key={2}>
-					<Plan dataTasks={dataOne?.tasks} setShowFinal={setShowFinal} />
+					<Plan dataTasks={dataOne?.tasks} setShowFinal={setShowFinal} dataOnePlace={dataOne?.place}/>
 					<Diary setShowFinalTwo={setShowFinalTwo} />
 				</Tabs.TabPane>
 					<Tabs.TabPane tab={<Popover  content={!showFinal || !showFinalTwo ? null : null}>Отправка документов</Popover>} key={3} >
 						<Row gutter={16} className="mt-14 mb-10">
-							<Col span={12}>
-								<Card title="Обратите внимание:" bordered={false}>
+							<Col xl={24} lg={12} >
+								<Card title={<div className='flex gap-3'><ExclamationCircleTwoTone />Обратите внимание:</div>}bordered={false}>
 									<div className='mb-3'>Ваш пакет документов должен содержать:</div>
 									<ul className="ml-6">
 										<li>Отчет по практике</li>
-										<li>Индивидуальные задания</li>
+										{dataOne?.place==='На кафедре КФУ'? <li>Индивидуальные задания</li>:<li>Путевка</li>}
 										<li>Дневник практиканта (по требованию кафедры)</li>
 									</ul>
 								</Card>
 							</Col>
 						</Row>
-					<Final/>
+					<Final />
 					</Tabs.TabPane>
 			</Tabs>
 		</section>

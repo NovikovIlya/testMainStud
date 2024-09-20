@@ -561,7 +561,12 @@ const IndividualTasks = () => {
                 <div className={'individualTasks mb-4'}>
                     <Table
                         onRow={(record) => ({
-                            onClick: () => handleRowClick(record),
+                            onClick: (e) => {
+                                // @ts-ignore
+                                if (e.target.closest('.ant-table-selection-column')) {
+                                    return
+                                }
+                                handleRowClick(record)},
                         })}
                         // @ts-ignore
                         keyExtractor={record => record.id} 
@@ -588,7 +593,12 @@ const IndividualTasks = () => {
                 
                 <Table
                     onRow={(record) => ({
-                        onClick: () => handleRowClick(record),
+                        onClick: (e) => {
+                            // @ts-ignore
+                            if (e.target.closest('.ant-table-selection-column')) {
+                                return
+                            }
+                            handleRowClick(record)},
                     })}
                     className={'mt-5 mb-4'}
                     columns={columnsFull}

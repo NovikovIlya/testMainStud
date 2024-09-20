@@ -8,7 +8,7 @@ import TextArea from 'antd/es/input/TextArea'
 
 
 
-const Final = () => {
+const Final = ({dataOnePlace}:any) => {
 	const [isFirstSend,setIsFirstSend] = useState(false)
 	const [text,setText] = useState<string>('')
 	const [fileList, setFileList] = useState<any[]>([])
@@ -57,7 +57,7 @@ const Final = () => {
 
 			<Row className="mb-12">
 				<Col span={12}>
-					<Comment />
+					<Comment  />
 				</Col>
 			</Row>
 

@@ -133,7 +133,7 @@ const saveDateThree= async () => {
 
   if (editable) {
     childNode = editing 
-    ? dataIndex==='age'? (<div className='flex items-center gap-2 w-[300px]'><Form.Item
+    ? dataIndex==='age'? (<div className='flex items-center gap-2 w-[120px] lg:w-[300px]'><Form.Item
       style={{ margin: 0 }}
       name={dataIndex}
       className='h-10'
@@ -163,13 +163,13 @@ const saveDateThree= async () => {
       <Form.Item
         style={{ margin: 0 }}
         name={dataIndex}
-       
+        className='w-[120px] lg:w-[300px]'
       >
         <Input  ref={inputRef} onPressEnter={save} onBlur={save}  />
       </Form.Item>
     ) 
     :(  <div
-        className="editable-cell-value-wrap h-10 w-[300px] flex items-center"
+        className="editable-cell-value-wrap h-10 w-[120px] lg:w-[300px] flex items-center"
         style={{ paddingInlineEnd: 24 }}
         onClick={toggleEdit}
 

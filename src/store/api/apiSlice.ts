@@ -57,7 +57,7 @@ const baseQueryWithReAuth = async (
 			result = await baseQuery(args, api, extraOptions)
 		} else {
 			console.log('refreshResultJsonВЫХОД--------------',refreshResultJson)
-			// api.dispatch(logOut())
+			api.dispatch(logOut())
 		}
 	}
 	return result
@@ -65,5 +65,5 @@ const baseQueryWithReAuth = async (
 export const apiSlice = createApi({
 	baseQuery: baseQueryWithReAuth,
 	endpoints: () => ({}),
-	tagTypes: ['Tasks', 'Contracts', 'Practice','Schedule','Submissions','Application','Order'],
+	tagTypes: ['Tasks', 'Contracts', 'Practice','Schedule','Submissions','Application','Order','MyPractice'],
 })

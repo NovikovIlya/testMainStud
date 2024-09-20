@@ -39,17 +39,25 @@ li:nth-child(3)[role='menuitem'][data-menu-id*='sub3'] {
 }
 
 .ant-checkbox-inner{
-	height: 30px !important;
-	width: 30px !important;
+	// height: 30px !important;
+	// width: 30px !important;
+ margin:  25px !important;
 }
-.ant-checkbox-inner:after {
-	inset-inline-start: 35% !important;
+
+.ant-checkbox-inner:after{
+  inset-inline-start: 44% !important
 }
-.ant-checkbox-indeterminate .ant-checkbox-inner:after {
-	width: 15px !important;
-	height: 15px !important;
-	transform: translate(-19%,-50%) scale(1) !important;
+.ant-table-cell .ant-table-selection-column{
+  padding: 0 !important;
 }
+.ant-checkbox-indeterminate .ant-checkbox-inner:after{
+	inset-inline-start: 50% !important;
+}
+// .ant-checkbox-indeterminate .ant-checkbox-inner:after {
+// 	width: 15px !important;
+// 	height: 15px !important;
+// 	transform: translate(-19%,-50%) scale(1) !important;
+// }
 @media screen and (max-width: 768px) {
   .ant-menu-root{
     position: fixed;

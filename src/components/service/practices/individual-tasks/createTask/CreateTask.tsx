@@ -65,20 +65,25 @@ const CreateTask = () => {
 
 
     function onFinish(values: Task) {
-
         const practiceType = dataPracticeType?.find(elem => {
             if (elem.value === values.practiceType) {
                 return elem
-            }
-            
+            }    
         })
-
+       
         const newData: TaskSend = {
             specialityNameId: specValue,
             practiceTypeId: String(practiceType?.id),
             subdivisionNameId: subDivision,
             tasks: values.tasks.map(elem => elem.task)
+            // tasks: values.tasks.map((elem,index) => {
+            //     return{
+            //         task: elem.task,
+            //         number:index+1.
+            //     }
+            // })
         }
+        // console.log('newData',newData)
         
         createTask(newData)
             .unwrap()
@@ -133,7 +138,7 @@ const CreateTask = () => {
         form.setFieldValue('practiceType', null)
       };
     
-      const onPopupScroll: any = (e:any) => {
+    const onPopupScroll: any = (e:any) => {
         console.log('onPopupScroll', e);
     };
     const treeData = dataDepartments?.map((item)=>{

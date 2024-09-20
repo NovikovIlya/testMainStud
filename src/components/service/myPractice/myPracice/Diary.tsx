@@ -41,11 +41,11 @@ const Diary = ({setShowFinalTwo}:any) => {
 				<Col xs={24} sm={24} md={18} lg={8} xl={6}>
 					<Space className="w-full">
 					<Popover content={isDisabled ? 'Заполните содержание выполненной работы и период выполнения дневника практиканта' : null}><Button
-							className="!rounded-full"
+							className="!rounded-full text-[10px] sm:text-base"
 							size="large"
                             disabled={isDisabled}
                             onClick={handleButton}
-							// htmlType="submit"
+							
 						>
 							Сохранить данные и сформировать документы
 						</Button></Popover>
@@ -55,7 +55,7 @@ const Diary = ({setShowFinalTwo}:any) => {
             {show ?
 			<Row gutter={16} className="mt-14 mb-10">
 				<Col span={6}>
-					<Card title="Скачать документы:" bordered={false}>
+					<Card title="Документы практики:" bordered={false}>
 						<ul className="ml-6">
 							<li><a>Дневник практиканта</a></li>
 						</ul>

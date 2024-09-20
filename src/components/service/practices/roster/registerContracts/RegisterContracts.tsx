@@ -169,6 +169,7 @@ export const RegisterContracts = () => {
                 </Popover>,
             width: 200,
             align: 'center',
+            className: 'p-1',
             render: (record) =>
                 <Popover content={<RegisterPopoverContent recordCompressed={record}
                                                           tableDataCompressed={tableDataCompressed}
@@ -772,7 +773,12 @@ export const RegisterContracts = () => {
                 <div className={'registerContracts'}>
                     <Table
                         onRow={(record) => ({
-                            onClick: () => handleRowClick(record),
+                            onClick: (e) => {
+                                // @ts-ignore
+                                if (e.target.closest('.ant-table-selection-column')) {
+                                    return
+                                }
+                                handleRowClick(record)},
                         })}
                         className=''
                         columns={columnsCompressedView}
@@ -783,6 +789,7 @@ export const RegisterContracts = () => {
                         rowSelection={{
                             type: "checkbox",
                             onSelect: (record, selected, selectedRows, nativeEvent) => {
+                                nativeEvent.stopPropagation();
                                 setSelectedFieldsCompressed(selectedRows)
                             },
                             onSelectAll: (selected, selectedRows, changeRows) => {
@@ -796,7 +803,12 @@ export const RegisterContracts = () => {
                 :
                 <Table 
                         onRow={(record) => ({
-                            onClick: () => handleRowClick(record),
+                            onClick: (e) => {
+                                // @ts-ignore
+                                if (e.target.closest('.ant-table-selection-column')) {
+                                    return
+                                }
+                                handleRowClick(record)},
                         })}
                         columns={columnsFullView}
                         pagination={tableDataFull && tableDataFull?.length<10?false:{

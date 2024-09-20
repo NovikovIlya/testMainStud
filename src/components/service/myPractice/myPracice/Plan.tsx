@@ -3,8 +3,9 @@ import React, { useState } from 'react'
 import dayjs from 'dayjs'
 
 import EditableTable from './EditableTable'
+import { ExclamationCircleTwoTone, ExclamationOutlined } from '@ant-design/icons'
 
-const Plan = ({dataTasks,setShowFinal}:any) => {
+const Plan = ({dataOnePlace,dataTasks,setShowFinal}:any) => {
 	const [dataSource, setDataSource] = useState<any>(dataTasks.map((item:any)=>{
 		return{
 		  key:item.id,
@@ -49,7 +50,7 @@ const Plan = ({dataTasks,setShowFinal}:any) => {
 					<Space className="w-full">
 						<Popover content={isDisabled ? 'Заполните период выполнения практики' : null}><Button
                             disabled={isDisabled}
-							className="!rounded-full"
+							className="!rounded-full text-[10px] sm:text-base"
 							size="large"
                             onClick={handleButton}
 						>
@@ -61,20 +62,20 @@ const Plan = ({dataTasks,setShowFinal}:any) => {
 
             {show ?
 			<Row gutter={16} className="mt-14 mb-10">
-				<Col span={6}>
-					<Card title="Скачать документы:" bordered={false}>
+				<Col xs={24} sm={24} md={6} >
+					<Card title="Документы практики:" bordered={false}>
 						<ul className="ml-6">
 							<li><a>Отчет по практике</a></li>
-							<li><a>Индивидуальные задания</a></li>
+							<li>{dataOnePlace==='На кафедре КФУ' ? <a>Индивидуальные задания</a> : <a> Путевка</a>}</li>
 						</ul>
 					</Card>
 				</Col>
-				<Col span={6}>
-					<Card title="Обратите внимание" bordered={false}>
+				<Col xs={24} md={6} span={6}>
+					<Card title={<div className='flex gap-3'><ExclamationCircleTwoTone />Обратите внимание</div>} bordered={false}>
 					<ul className='pl-5 pr-5 '>
 						<li className='mb-3'>Отчет должен заполняться самостоятельно.В модуле “Практики студентов” формируется только титульный лист отчета.</li>
-						<li className=''>Индивидуальные задания представляют собой план-график на практику студента. Перед началом практики руководитель по практике должен поставить подпись.</li>
-
+						{dataOnePlace==='На кафедре КФУ' ?<li className=''>Индивидуальные задания представляют собой план-график на практику студента. Перед началом практики руководитель по практике должен поставить подпись.</li>:
+						<li className=''>Путевку практиканта необходимо распечатать с использованием двусторонней печати и отнести на подпись в Департамент Образования до начала практики — с подписанным документом можно начинать практику в организации</li>}
 					</ul>
 					</Card>
 				</Col>

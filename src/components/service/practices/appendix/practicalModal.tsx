@@ -396,7 +396,7 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 			<Row gutter={[16, 16]}>
 				<Col span={24}>
 					<Typography.Text className=" text-[28px] mb-14">
-						Приказ по практике
+						Выберите приказ по практике
 					</Typography.Text>
 				</Col>
 			</Row>

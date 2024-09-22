@@ -71,35 +71,43 @@ export const FileAttachment = (
 			</div>
 			{foundDoc ? (
 				<>
-					<a className="col-start-2" download={true} ref={linkRef}>
-						dkaskjdasd9ued
-					</a>
-					<p className="col-start-3">
-						{Math.round(fileSize / 1000000) > 0
-							? Math.round(fileSize / 1000000) + ' Мб'
-							: Math.round(fileSize / 1000) > 0
-							? Math.round(fileSize / 1000) + ' Кб'
-							: fileSize + ' б'}
-					</p>
-					<button
-						className="col-start-4"
-						onClick={() => {
-							deleteDoc({ respondId: props.respondId, docId: foundDoc.id })
-								.unwrap()
-								.then(() => {
-									getEmpData(props.respondId)
-										.unwrap()
-										.then(data => {
-											dispatch(setAllData(data))
-										})
-								})
-						}}
+					<a
+						className="col-start-2 text-ellipsis overflow-clip"
+						download={true}
+						ref={linkRef}
 					>
-						Удалить
-					</button>
+						dkaskjdasd9
+					</a>
+					<div className="col-start-3 ml-auto flex gap-[36px] items-center">
+						<p className="">
+							{Math.round(fileSize / 1000000) > 0
+								? Math.round(fileSize / 1000000) + ' Мб'
+								: Math.round(fileSize / 1000) > 0
+								? Math.round(fileSize / 1000) + ' Кб'
+								: fileSize + ' б'}
+						</p>
+						<Button
+							className="bg-inherit ml-auto opacity-40 underline"
+							type="text"
+							onClick={() => {
+								deleteDoc({ respondId: props.respondId, docId: foundDoc.id })
+									.unwrap()
+									.then(() => {
+										getEmpData(props.respondId)
+											.unwrap()
+											.then(data => {
+												dispatch(setAllData(data))
+											})
+									})
+							}}
+						>
+							Удалить
+						</Button>
+					</div>
 				</>
 			) : (
 				<Upload
+					className="col-start-3 ml-auto mr-[10%]"
 					showUploadList={false}
 					action={`http://localhost:8082/employment-api/v1/respond/${props.respondId}/employment/file?employmentDocDefId=${props.id}`}
 					method="PUT"
@@ -127,7 +135,7 @@ export const FileAttachment = (
 					{' '}
 					<Button
 						loading={isFileUploading}
-						className="border-black border rounded-[5px] py-[12px] px-[20px] col-start-3 col-end-4"
+						className="border-black border rounded-[5px] py-[12px] px-[20px]"
 						type="text"
 					>
 						Добавить файл

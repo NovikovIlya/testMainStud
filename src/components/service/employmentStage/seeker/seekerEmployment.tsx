@@ -16,7 +16,7 @@ export const SeekerEmployment = () => {
 		return (
 			<>
 				<div className="w-screen h-screen flex items-center">
-					<div className="text-center ml-auto mr-auto mb-[10%]">
+					<div className="text-center ml-auto mr-auto">
 						<Spin
 							indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}
 						></Spin>

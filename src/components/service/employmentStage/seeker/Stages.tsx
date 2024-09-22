@@ -137,7 +137,9 @@ export const Stages = () => {
 							stageName="SIXTH"
 						/>
 					)}
-					{currentStage === 7 && <EmplSend />}
+					{currentStage === 7 && (
+						<EmplSend respondId={respondId} stageId={7} stageName="SEVENTH" />
+					)}
 				</div>
 			</div>
 		</>

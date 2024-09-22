@@ -1,7 +1,10 @@
 import { LoadingOutlined } from '@ant-design/icons'
 import { Spin } from 'antd'
+import { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 
 import { useGetSeekerEmploymentRespondsQuery } from '../../../../store/api/serviceApi'
+import { setStage } from '../../../../store/reducers/CurrentEmploymentStage'
 
 import { SeekerEmploymentItem } from './SeekerEmploymentItem'
 
@@ -11,6 +14,12 @@ export const SeekerEmployment = () => {
 		refetch,
 		isLoading: loading
 	} = useGetSeekerEmploymentRespondsQuery()
+
+	const dispatch = useDispatch()
+
+	useEffect(() => {
+		dispatch(setStage(0))
+	}, [])
 
 	if (loading) {
 		return (

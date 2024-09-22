@@ -93,7 +93,7 @@ export const Stages = () => {
 
 	return (
 		<>
-			<div id="wrapper" className="px-[52px] w-full">
+			<div id="wrapper" className="px-[52px] pb-[52px] w-full">
 				<div className="font-content-font font-normal text-[28px]/[28px] text-black mt-[120px]">
 					Вакансия «Специалист отдела сотрудничества»
 				</div>
@@ -121,7 +121,13 @@ export const Stages = () => {
 						/>
 					)}
 					{currentStage === 4 && <EmplMedExam />}
-					{currentStage === 5 && <EmplInstruction />}
+					{currentStage === 5 && (
+						<EmplInstruction
+							respondId={respondId}
+							stageId={5}
+							stageName="FIFTH"
+						/>
+					)}
 					{currentStage === 6 && <EmplRequisites />}
 					{currentStage === 7 && <EmplSend />}
 				</div>

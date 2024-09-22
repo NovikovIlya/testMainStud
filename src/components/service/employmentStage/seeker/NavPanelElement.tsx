@@ -12,7 +12,7 @@ export const NavPanelElement = (props: { id: number; text: string }) => {
 
 	return (
 		<div
-			className="flex flex-col items-center gap-[12px] h-full z-[3] w-[10%] font-content-font font-bold text-[14px]/[14px]"
+			className="flex flex-col items-center gap-[12px] h-full z-[3] w-[10%] font-content-font font-bold text-[14px]/[14px] cursor-pointer select-none"
 			onClick={() => {
 				dispatch(setStage(props.id))
 			}}
@@ -38,7 +38,9 @@ export const NavPanelElement = (props: { id: number; text: string }) => {
 				</>
 			) : (
 				<>
-					<EmpReadyIcon />
+					<div className="h-[28px] w-[28px]">
+						<EmpReadyIcon />
+					</div>
 					<div className="text-[#3073D7] text-center">{props.text}</div>
 				</>
 			)}

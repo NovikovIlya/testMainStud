@@ -410,6 +410,18 @@ export const serviceApi = apiSlice.injectEndpoints({
 				headers: { Authorization: `Bearer ${seekerToken}` }
 			})
 		}),
+		getSupervisorResponds: builder.query<VacancyRespondItemType[], void>({
+			query: () => ({
+				url: `http://localhost:8082/employment-api/v1/supervisor/vacancy/respond`,
+				headers: { Authorization: `Bearer ${supervisorToken}` }
+			}),
+			transformResponse: (response: VacancyRespondItemType[]) => {
+				return response.map(resp => ({
+					...resp,
+					responseDate: resp.responseDate.substring(0, 10)
+				}))
+			}
+		}),
 		postPhone: builder.mutation({
 			query: phone => {
 				return {
@@ -954,5 +966,6 @@ export const {
 	useLazyGetEmploymentDataQuery,
 	useGetEmploymentDataQuery,
 	useLazyGetEmploymentDocsQuery,
-	useDeleteEmploymentDocMutation
+	useDeleteEmploymentDocMutation,
+	useGetSupervisorRespondsQuery
 } = serviceApi

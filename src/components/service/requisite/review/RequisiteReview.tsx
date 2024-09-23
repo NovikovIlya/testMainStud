@@ -1,9 +1,10 @@
-import {DepEmploymentItem} from './depEmploymentItem'
-import { useState } from 'react'
+import { DepEmploymentItem } from '../../employmentStage/personnelDepartment/depEmploymentItem'
 import { useGetPersonnelStagesQuery } from '../../../../store/api/serviceApi'
+import { useState } from 'react'
 import { Button } from 'antd'
 
-export const DepEmployment = () => {
+
+export const RequisiteReview = () => {
 
 	const { data: employment_stage_items = [] } = useGetPersonnelStagesQuery();
 
@@ -28,12 +29,12 @@ export const DepEmployment = () => {
 
 	return (
 		<div id="wrapper" className="flex flex-col bg-[#F5F8FB] px-[53px] pt-[120px] w-full">
-			<h1 className="text-[28px] font-normal text-[#000000]">Этап трудоустройства</h1>
+			<h1 className="text-[28px] font-normal text-[#000000]">Просмотр реквизитов</h1>
 			<div className="flex flex-row gap-[12px] mt-[52px]">
 				<Button
 					id="buttonEmploymentStageAll"
 					className={`px-[16px] py-[8px] font-normal rounded-[54.5px] text-[16px]/[16px] cursor-pointer ${
-						isActive('ALL') ? 'bg-[#1F5CB8] text-white border-[1px] border-[#1F5CB8]' : 'bg-[#F5F8FB] text-[#4A4B4C] border-[#4A4B4C] border-[1px]'
+						isActive('ALL') ? 'bg-[#1F5CB8] text-white border-[1px] border-[1F5CB8]' : 'bg-[#F5F8FB] text-[#4A4B4C] border-[#4A4B4C] border-[1px]'
 					}`}
 					onClick={() => setCurrentFilterItem('ALL')}
 				>
@@ -42,7 +43,7 @@ export const DepEmployment = () => {
 				<Button
 					id="buttonEmploymentStageOncheck"
 					className={`px-[16px] py-[8px] font-normal rounded-[54.5px] text-[16px]/[16px] cursor-pointer ${
-						isActive('VERIFYING') ? 'bg-[#1F5CB8] text-white border-[1px] border-[#1F5CB8]' : 'bg-[#F5F8FB] text-[#4A4B4C] border-[#4A4B4C] border-[1px]'
+						isActive('VERIFYING') ? 'bg-[#1F5CB8] text-white border-[1px] border-[1F5CB8]' : 'bg-[#F5F8FB] text-[#4A4B4C] border-[#4A4B4C] border-[1px]'
 					}`}
 					onClick={() => setCurrentFilterItem('VERIFYING')}
 				>
@@ -51,7 +52,7 @@ export const DepEmployment = () => {
 				<Button
 					id="buttonEmploymentStageRevision"
 					className={`px-[16px] py-[8px] font-normal rounded-[54.5px] text-[16px]/[16px] cursor-pointer ${
-						isActive('REFINE') ? 'bg-[#1F5CB8] text-white border-[1px] border-[#1F5CB8]' : 'bg-[#F5F8FB] text-[#4A4B4C] border-[#4A4B4C] border-[1px]'
+						isActive('REFINE') ? 'bg-[#1F5CB8] text-white border-[1px] border-[1F5CB8]' : 'bg-[#F5F8FB] text-[#4A4B4C] border-[#4A4B4C] border-[1px]'
 					}`}
 					onClick={() => setCurrentFilterItem('REFINE')}
 				>
@@ -60,7 +61,7 @@ export const DepEmployment = () => {
 				<Button
 					id="buttonEmploymentStageAccepted"
 					className={`px-[16px] py-[8px] font-normal rounded-[54.5px] text-[16px]/[16px] cursor-pointer ${
-						isActive('COMPLETE') ? 'bg-[#1F5CB8] text-white border-[1px] border-[#1F5CB8]' : 'bg-[#F5F8FB] text-[#4A4B4C] border-[#4A4B4C] border-[1px]'
+						isActive('COMPLETE') ? 'bg-[#1F5CB8] text-white border-[1px] border-[1F5CB8]' : 'bg-[#F5F8FB] text-[#4A4B4C] border-[#4A4B4C] border-[1px]'
 					}`}
 					onClick={() => setCurrentFilterItem('COMPLETE')}
 				>

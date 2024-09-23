@@ -1,6 +1,5 @@
 import { useLocation } from 'react-router-dom'
-
-import { SeekerEmployment } from './SeekerEmployment'
+import { SeekerEmployment } from './seekerEmployment'
 import { Stages } from './Stages'
 
 export const NavSeekerEmployment = () => {

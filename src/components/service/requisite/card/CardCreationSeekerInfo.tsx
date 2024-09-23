@@ -1,11 +1,10 @@
 import { Button } from 'antd'
+import { NocircleArrowIcon } from '../../jobSeeker/NoCircleArrowIcon'
 import { AvatartandardSvg } from '../../../../assets/svg/AvatarStandardSvg'
 import { useAppSelector } from '../../../../store'
-import { useGetRespondFullInfoQuery
-} from '../../../../store/api/serviceApi'
-import { NocircleArrowIcon } from '../../jobSeeker/NoCircleArrowIcon'
+import { useGetRespondFullInfoQuery } from '../../../../store/api/serviceApi'
 
-export const DepEmploymentSeekerInfo = ( ) => {
+export const CardCreationSeekerInfo = () => {
 
 	const respondId = useAppSelector(state => state.currentResponce)
 	const { data } = useGetRespondFullInfoQuery(respondId.respondId)

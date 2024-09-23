@@ -966,8 +966,7 @@ export const {
 	useGetPersonnelStagesQuery,
 	useGetEmploymentStageStatusQuery,
 	useChangeEmploymentStageStatusRequestMutation,
-	useDownloadEmploymentStageFileQuery
-	useAnswerEmploymentRequestMutation,
+	useDownloadEmploymentStageFileQuery,
 	useLazyGetChatPreviewsQuery,
 	useGetSeekerEmploymentRespondsQuery
 } = serviceApi

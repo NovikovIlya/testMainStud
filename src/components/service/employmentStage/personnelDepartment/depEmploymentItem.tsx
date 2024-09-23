@@ -11,7 +11,7 @@ import { useAppSelector } from '../../../../store'
 import {
 	setCurrentEmploymentSeekerName,
 	setCurrentEmploymentSeekerVacancy
-} from '../../../../store/reducers/employmentStageReducers/EmploymentStageSeekerReducer'
+} from '../../../../store/reducers/EmploymentStageReducers/EmploymentStageSeekerReducer'
 
 export const DepEmploymentItem = (  props : EmploymentStageItemType ) => {
 

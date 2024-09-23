@@ -1,10 +1,6 @@
 import { Button } from 'antd'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { SecondStage } from './Stages/SecondStage'
-import { ThirdStage } from './Stages/ThirdStage'
-import { ForthStage } from './Stages/ForthStage'
-import { FifthStage } from './Stages/FifthStage'
 import { useGetEmploymentStageStatusQuery} from '../../../../store/api/serviceApi'
 import { useAppSelector} from '../../../../store'
 import { setCurrentResponce } from '../../../../store/reducers/CurrentResponceSlice'
@@ -27,7 +23,7 @@ export const EmploymentStageInfo = () => {
 				<h1 className="font-normal text-[28px]/[28px]">Вакансия «{employmentSeekerVacancy}»</h1>
 				<Button
 					type="default"
-					className="max-w-[102px] mt-[20px] py-[8px] px-[24px] text-[#333333] border-[#333333] border-[1px] rounded-[54.5px] text-[16px]"
+					className="max-w-[102px] bg-[#F5F8FB] mt-[20px] py-[8px] px-[24px] text-[#333333] border-[#333333] border-[1px] rounded-[54.5px] text-[16px]"
 					onClick={() => {
 						dispatch(setCurrentResponce(respondId.respondId))
 						navigate('/services/personnelaccounting/employment/stages/seekerinfo')

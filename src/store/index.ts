@@ -37,7 +37,8 @@ import chatIdSlice from './reducers/chatIdSlice'
 import notificationSlice from './reducers/notificationSlice'
 import CurrentInterviewTimeFormatedSlice from './reducers/CurrentInterviewTimeFormatedSlice'
 import inviteSeekerButtonReducer from './reducers/inviteSeekerButtonReducer'
-import currentEmploymentSeekerReducer from './reducers/employmentStageReducers/EmploymentStageSeekerReducer'
+import currentEmploymentSeekerReducer from './reducers/EmploymentStageReducers/EmploymentStageSeekerReducer'
+import currentRequisiteSeekerReducer from './reducers/RequisiteReducers/RequisiteSeekerReducer'
 
 export const store = configureStore({
 	reducer: {
@@ -76,6 +77,7 @@ export const store = configureStore({
 		currentInterviewTimeFormated: CurrentInterviewTimeFormatedSlice,
 		inviteSeekerButtonStatus: inviteSeekerButtonReducer,
 		employmentSeeker: currentEmploymentSeekerReducer,
+		requisiteSeeker: currentRequisiteSeekerReducer,
 	},
 	middleware: getDefaultMiddleware =>
 		getDefaultMiddleware()

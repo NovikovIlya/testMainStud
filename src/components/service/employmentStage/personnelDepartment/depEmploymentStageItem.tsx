@@ -3,7 +3,7 @@ import { GreenCheck } from '../../../../assets/svg/GreenCheck'
 import { Button, ConfigProvider, Input, Modal } from 'antd'
 import { DocumentElem } from './components/DocumentElem'
 import { Comment } from './components/Comment'
-import { initialState, stageReducer } from '../../../../store/reducers/employmentStageReducers/StageStatusReducer'
+import { initialState, stageReducer } from '../../../../store/reducers/EmploymentStageReducers/StageStatusReducer'
 import { useChangeEmploymentStageStatusRequestMutation } from '../../../../store/api/serviceApi'
 
 interface DepEmploymentStageItemProps {
@@ -83,7 +83,6 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 			<>
 				{(props.stageContentType === 'docs') && (
 					<>
-						{/*
 						<div className="flex flex-row gap-[40px] pr-[150px]">
 						<div className="flex flex-col gap-[12px] ">
 							<DocumentElem name={'Скан паспорта'}></DocumentElem>
@@ -98,7 +97,6 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 							<DocumentElem name={'ИНН'}></DocumentElem>
 						</div>
 					</div>
-						*/}
 					</>
 				)}
 				{(props.stageContentType === 'text') && (

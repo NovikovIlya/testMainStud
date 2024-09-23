@@ -130,7 +130,13 @@ export const Stages = () => {
 							stageName="FIFTH"
 						/>
 					)}
-					{currentStage === 6 && <EmplRequisites />}
+					{currentStage === 6 && (
+						<EmplRequisites
+							respondId={respondId}
+							stageId={6}
+							stageName="SIXTH"
+						/>
+					)}
 					{currentStage === 7 && <EmplSend />}
 				</div>
 			</div>

@@ -16,10 +16,17 @@ const EmploymentDataSlice = createSlice({
 	reducers: {
 		setAllData: (state, action: PayloadAction<EmploymentDataType>) => {
 			state.empData = action.payload
+		},
+		setHasRequisites: (state, action: PayloadAction<string>) => {
+			state.empData.stages = state.empData.stages.map(stage => {
+				return stage.type === action.payload
+					? { ...stage, hasRequisites: !stage.hasRequisites }
+					: stage
+			})
 		}
 	}
 })
 
-export const { setAllData } = EmploymentDataSlice.actions
+export const { setAllData, setHasRequisites } = EmploymentDataSlice.actions
 
 export default EmploymentDataSlice.reducer

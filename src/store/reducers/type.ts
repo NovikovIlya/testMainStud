@@ -432,6 +432,7 @@ export type EmploymentDataType = {
 	status: EmployementStatus
 	stages: {
 		id: number
+		type: string
 		status: EmployementStatus
 		comment: string
 		documents: {

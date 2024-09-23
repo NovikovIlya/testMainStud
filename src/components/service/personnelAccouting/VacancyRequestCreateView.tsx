@@ -220,7 +220,7 @@ export const VacancyRequestCreateView = () => {
 										category: categoryTitle,
 										direction: direction,
 										subdivision: subdivision,
-										emplDocDefIds: values.formDocs
+										emplDocDefIds: [...values.formDocs, 9]
 									},
 									requestId: requestId
 							  })

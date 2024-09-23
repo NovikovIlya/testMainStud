@@ -11,7 +11,7 @@ const EditableContext = React.createContext<FormInstance<any> | null>(null);
 interface Item {
   key: string;
   name: string;
-  age: string;
+  period: string;
   address: string;
 }
 
@@ -133,24 +133,20 @@ const save = (date: any) => {
 interface DataType {
   key: React.Key;
   name: string;
-  age: string;
+  period: string;
   address: string;
 }
 
 type ColumnTypes = Exclude<TableProps['columns'], undefined>;
 
-const EditableTable = ({dataSource,setDataSource,setIsDisabled}:any) => {
-
-  
-  console.log('dataSource',dataSource)
-
+const EditableTable = ({setShow,dataSource,setDataSource,setIsDisabled}:any) => {
   const defaultColumns: (ColumnTypes[number] & { editable?: boolean; dataIndex: string })[] = [
     {
         key: 'number',
         dataIndex: 'number',
         title: '№',
         className: 'text-xs !p-2',
-        render: (text: any, record: any, index: any) => <div>{index + 1}</div>
+        render: (text: any, record: any, index: any) => <div>{record.number}</div>
     },
     {
       title: 'Индивидуальные задания',
@@ -160,19 +156,19 @@ const EditableTable = ({dataSource,setDataSource,setIsDisabled}:any) => {
     },
     {
       title: 'Период выполнения',
-      dataIndex: 'age',
+      dataIndex: 'period',
       editable: true,
       render: (_: any, record: any) => <div className={'flex items-center gap-3 h-8'}>
-      <span>{record?.age ? dayjs(record?.age?.[0]).format('DD.MM.YYYY') : null}</span>{record?.age ? '-' : null}
-      <span>{record?.age ?dayjs(record?.age?.[1]).format('DD.MM.YYYY'): null}</span>
+      <span>{record?.period ? dayjs(record?.period?.[0]).format('DD.MM.YYYY') : null}</span>{record?.period ? '-' : null}
+      <span>{record?.period ?dayjs(record?.period?.[1]).format('DD.MM.YYYY'): null}</span>
      </div>
     },
   ];
 
 
   const areAllCellsFilled = () => {
-    return dataSource.every((item:any) => 
-      item.name && item.age 
+    return dataSource?.every((item:any) => 
+      item.name && item.period 
     );
   };
 
@@ -185,16 +181,14 @@ const EditableTable = ({dataSource,setDataSource,setIsDisabled}:any) => {
       ...row,
     });
     setDataSource(newData);
-
-
-
+    setShow(false)
   };
 
   if (areAllCellsFilled()) {
     setIsDisabled(false); // Включаем кнопку или действие
   } else {
     setIsDisabled(true); // Отключаем кнопку или действие
-    }
+  }
 
   const components = {
     body: {
@@ -225,7 +219,7 @@ const EditableTable = ({dataSource,setDataSource,setIsDisabled}:any) => {
         components={components}
         rowClassName={() => 'editable-row'}
         bordered
-        dataSource={dataSource}
+        dataSource={dataSource?.sort((a:any,b:any)=>a.number - b.number)}
         columns={columns as ColumnTypes}
         pagination={false}
         

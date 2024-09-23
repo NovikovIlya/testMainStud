@@ -141,27 +141,22 @@ export const CreateRepresentation = () => {
 	const [theme, setTheme] = useState('')
 	const [sendSubmission, { isLoading: isLoadingAddSub }] = useAddSubmissionMutation()
 	const [sendSubmissionaAgeement, { isLoading: isLoadingAddSubAgreement }] = useAddSubmissionAgreementMutation()
-	const {
-		data: dataGetStudents,
-		isSuccess: isSuccessGetStudents,
-		isLoading: isLoadingStudents
-	} = useGetStudentsQuery(selectedPractice, { skip: !selectedPractice })
+	const {data: dataGetStudents,isSuccess: isSuccessGetStudents,isLoading: isLoadingStudents} = useGetStudentsQuery(selectedPractice, { skip: !selectedPractice })
 	const { data: dataAllSubmissions } = useGetAllSubmissionsQuery(selectedPractice, { skip: !selectedPractice })
 	const [fullTable, setFullTable] = useState<any>([])
 	const [fullSelectedPractise, setFullSelectedPractise] = useState<any>([])
-	const { data: dataAllPractise, isSuccess: isSuccessAllPractice } = useGetPracticesAllQuery(selectedPractice, {
-		skip: !selectedPractice
-	})
+	const { data: dataAllPractise, isSuccess: isSuccessAllPractice } = useGetPracticesAllQuery(selectedPractice, {skip: !selectedPractice})
 	const [data, setData] = useState(fullTable)
 	const [step, setStep] = useState(0)
 	const [selectedPlace, setSelecectedPlace] = useState('В профильной организации')
 	const dispatch = useAppDispatch()
 
-	console.log('fullSelectedPractise', fullSelectedPractise)
+	
 	useEffect(() => {
 		if (isSuccessGetStudents) {
 			const newArray = dataGetStudents?.map((item: any) => ({
 				name: item.name,
+				studentId : item.studentId,
 				costForDay: null,
 				arrivingCost: null,
 				livingCost: null,
@@ -488,7 +483,6 @@ export const CreateRepresentation = () => {
 	}
 
 	const sendData = () => {
-		console.log('fullTablefullTable', fullTable)
 		if (!selectedPlace) {
 			return dispatch(showNotification({ message: `Выберите где будет проходить практика`, type: 'warning' }))
 		}
@@ -521,6 +515,7 @@ export const CreateRepresentation = () => {
 			}
 		}
 		const tableDataStudent = fullTable.map((item: any) => ({
+			studentId :item.studentId ,
 			costForDay: item.costForDay,
 			arrivingCost: item.arrivingCost,
 			livingCost: item.livingCost,
@@ -768,7 +763,7 @@ export const CreateRepresentation = () => {
 									</Form>
 								</Col>
 							</Row>
-							<Row className="mt-[-68px] flex gap-4">
+							<Row className="mt-[-68px] flex gap-4 mb-10">
 								<Col className=" mt-6">
 									<Space className=" ">
 										<Button

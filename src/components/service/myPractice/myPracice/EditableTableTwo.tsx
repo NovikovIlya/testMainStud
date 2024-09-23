@@ -14,7 +14,7 @@ const EditableContext = React.createContext<FormInstance<any> | null>(null);
 interface Item {
   key: string;
   name: string;
-  age: string;
+  period: string;
   address: string;
 }
 
@@ -59,34 +59,6 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({tit
     form.setFieldsValue({ [dataIndex]: record[dataIndex] });
   };
 
-  // const saveTwo = async () => {
-  //   try {
-  //     const values = await form.validateFields();
-
-  //     toggleEdit();
-  //     handleSave({ ...record, ...values });
-  //   } catch (errInfo) {
-  //     console.log('Save failed:', errInfo);
-  //   }
-  // };
-// const save = async (date?: any) => {
-//   try {
-//     const values = await form.validateFields();
-//     toggleEdit();
-//     handleSave({ ...record, [dataIndex]: date || values[dataIndex] });
-//   } catch (errInfo) {
-//     console.log('Save failed:', errInfo);
-//   }
-// };
-// const save = (date: any) => {
-//     console.log('444',date)
-//     if (date ) {
-//       toggleEdit();
-//       handleSave({ ...record, [dataIndex]: date });
-//     } else {
-//       console.error('Invalid date:', date);
-//     }
-//   };
 const save = async (date:any) => {
 
   try {
@@ -133,7 +105,8 @@ const saveDateThree= async () => {
 
   if (editable) {
     childNode = editing 
-    ? dataIndex==='age'? (<div className='flex items-center gap-2 w-[120px] lg:w-[300px]'><Form.Item
+    // @ts-ignore
+    ? dataIndex==='period'? (<div className='flex items-center gap-2 w-[120px] lg:w-[300px]'><Form.Item
       style={{ margin: 0 }}
       name={dataIndex}
       className='h-10'
@@ -186,16 +159,17 @@ const saveDateThree= async () => {
 interface DataType {
   key: React.Key;
   name: string;
-  age: string;
+  period: string;
   address: string;
 }
 
 type ColumnTypes = Exclude<TableProps['columns'], undefined>;
 
-const EditableTableTwo = ({dataSource,setDataSource,setIsDisabled}:any) => {
+const EditableTableTwo = ({setShow,dataSource,setDataSource,setIsDisabled}:any) => {
 
 
   const handleDelete = (key: React.Key) => {
+    console.log('key',key)
     const newData = dataSource.filter((item:any) => item.key !== key);
     setDataSource(newData);
   };
@@ -203,11 +177,12 @@ const EditableTableTwo = ({dataSource,setDataSource,setIsDisabled}:any) => {
   const handleAdd = () => {
     const newData: any = {
       key: uuid(),
-      name: ``,
-      age: '',
+      description: ``,
+      period: '',
+      number: dataSource?.length+1,
     };
     setDataSource([...dataSource, newData]);
-   
+    setShow(false)
   };
 
  
@@ -220,22 +195,22 @@ const EditableTableTwo = ({dataSource,setDataSource,setIsDisabled}:any) => {
         dataIndex: 'number',
         title: '№',
         className: 'text-xs !p-2',
-        render: (text: any, record: any, index: any) => <div>{index + 1}</div>
+       
     },
     {
       title: 'Содержание выполненной работы',
-      dataIndex: 'name',
+      dataIndex: 'description',
       width: '30%',
       editable: true,
     
     },
     {
       title: 'Период выполнения',
-      dataIndex: 'age',
+      dataIndex: 'period',
       editable: true,
       render: (_: any, record: any) => <div className={'flex items-center gap-3 h-8'}>
-      <span>{record?.age ? dayjs(record?.age?.[0]).format('DD.MM.YYYY') : null}</span>{record?.age ? '-' : null}
-      <span>{record?.age ?dayjs(record?.age?.[1]).format('DD.MM.YYYY'): null}</span>
+      <span>{record?.period ? dayjs(record?.period?.[0]).format('DD.MM.YYYY') : null}</span>{record?.period ? '-' : null}
+      <span>{record?.period ?dayjs(record?.period?.[1]).format('DD.MM.YYYY'): null}</span>
   </div>
     },
     {
@@ -248,8 +223,6 @@ const EditableTableTwo = ({dataSource,setDataSource,setIsDisabled}:any) => {
           </Popconfirm>
         ) : null,
     },
-  
-   
   ];
 
 
@@ -262,7 +235,9 @@ const EditableTableTwo = ({dataSource,setDataSource,setIsDisabled}:any) => {
       ...item,
       ...row,
     });
+    console.log('newData',newData)
     setDataSource(newData);
+    setShow(false)
   };
 
   const components = {
@@ -289,16 +264,16 @@ const EditableTableTwo = ({dataSource,setDataSource,setIsDisabled}:any) => {
   });
 
   const areAllCellsFilled = () => {
-    return dataSource.every((item:any) => 
-      item.name && item.age 
+    return dataSource?.every((item:any) => 
+      item.description && item.period 
     );
   };
 
   if (areAllCellsFilled() && dataSource?.length>0) {
 
-    setIsDisabled(false); // Включаем кнопку или действие
+    setIsDisabled(false);
   } else {
-    setIsDisabled(true); // Отключаем кнопку или действие
+    setIsDisabled(true); 
     }
 
   return (
@@ -315,7 +290,7 @@ const EditableTableTwo = ({dataSource,setDataSource,setIsDisabled}:any) => {
       />
       <div className='flex items-center  flex-col mt-4 animate-pulse '>
         <div className='rounded-full mb-1 flex  w-[40px] h-[40px] justify-center  bg-[#3073d7] text-white text-center items-center text-xl cursor-pointer' onClick={handleAdd}>+</div>
-        <div className='text-center mt1'>Добавить <br></br> задание</div>
+        <div className='text-center mt1'>Добавить <br></br> работу</div>
       </div>
     </div>
   );

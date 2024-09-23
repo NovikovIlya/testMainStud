@@ -199,8 +199,8 @@ export const EditMyPractice = () => {
 							</Col>
 						</Row>
 					</Form>
-					<Plan dataTasks={dataOne?.tasks} setShowFinal={setShowFinal} dataOnePlace={dataOne?.place}/>
-					<Diary setShowFinalTwo={setShowFinalTwo} />
+					<Plan id={id} dataTasks={dataOne?.tasks} setShowFinal={setShowFinal} dataOnePlace={dataOne?.place}/>
+					<Diary id={id} dataDiary={dataOne?.diary} setShowFinalTwo={setShowFinalTwo} />
 				</Tabs.TabPane>
 					<Tabs.TabPane tab={<Popover  content={!showFinal || !showFinalTwo ? null : null}>Отправка документов</Popover>} key={3} >
 						<Row gutter={16} className="mt-14 mb-10">

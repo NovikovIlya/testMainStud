@@ -64,24 +64,24 @@ const CreateTask = () => {
     }, [dataDepartments]);
 
 
-    function onFinish(values: Task) {
+    function onFinish(values: any) {
         const practiceType = dataPracticeType?.find(elem => {
             if (elem.value === values.practiceType) {
                 return elem
             }    
         })
        
-        const newData: TaskSend = {
+        const newData: any = {
             specialityNameId: specValue,
             practiceTypeId: String(practiceType?.id),
             subdivisionNameId: subDivision,
-            tasks: values.tasks.map(elem => elem.task)
-            // tasks: values.tasks.map((elem,index) => {
-            //     return{
-            //         task: elem.task,
-            //         number:index+1.
-            //     }
-            // })
+            // tasks: values.tasks.map(elem => elem.task)
+            tasks: values.tasks.map((elem:any,index:any) => {
+                return{
+                    taskDescription: elem.task,
+                    number:index+1.
+                }
+            })
         }
         // console.log('newData',newData)
         

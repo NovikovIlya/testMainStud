@@ -16,6 +16,14 @@ export interface myPractice {
   export interface Task {
     id: string;
     description: string;
+    period:string;
+    number:number,
+  }
+  export interface Diary {
+    id: string;
+    description: string;
+    period:string;
+    number:number,
   }
   
   export interface myPracticeOne {
@@ -37,4 +45,27 @@ export interface myPractice {
     competences: string[];
     tasks: Task[];
     profilePlace : string;
+    diary:Diary[]
   }
+
+  export interface Taskadded {
+    taskId: string; // Идентификатор задачи
+    period: string;  // Период задачи
+  }
+  
+  export interface addTask {
+    practiceId: string; // Идентификатор практики
+    tasks: Taskadded[];      // Массив задач
+  }
+
+
+export  interface Line {
+    period: string;
+    description: string;
+    number: number;
+}
+
+export interface addDiary {
+    practiceId: string;
+    lines: Line[];
+}

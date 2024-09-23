@@ -1,29 +1,16 @@
-import {
-	Button,
-	Card,
-	Col,
-	Collapse,
-	Descriptions,
-	Form,
-	List,
-	Popover,
-	Row,
-	Space,
-	Spin,
-	Tabs,
-	Tooltip} from 'antd'
+import { ExclamationCircleTwoTone, LoadingOutlined } from '@ant-design/icons'
+import { Button, Card, Col, Collapse, Descriptions, Form, List, Popover, Row, Space, Spin, Tabs, Tooltip } from 'antd'
+import dayjs from 'dayjs'
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { ArrowLeftSvg } from '../../../../assets/svg'
+import { useGetOneMyPracticesQuery } from '../../../../store/api/practiceApi/mypractice'
 import { validateMessages } from '../../../../utils/validateMessage'
 
 import Diary from './Diary'
-import Plan from './Plan'
 import Final from './Final'
-import { useGetOneMyPracticesQuery } from '../../../../store/api/practiceApi/mypractice'
-import { ExclamationCircleTwoTone, LoadingOutlined } from '@ant-design/icons'
-import dayjs from 'dayjs'
+import Plan from './Plan'
 
 export const EditMyPractice = () => {
 	const [form] = Form.useForm<any>()
@@ -32,14 +19,14 @@ export const EditMyPractice = () => {
 	const nav = useNavigate()
 	const [showFinal, setShowFinal] = useState(false)
 	const [showFinalTwo, setShowFinalTwo] = useState(false)
-	const {data:dataOne,isFetching,isSuccess} = useGetOneMyPracticesQuery(id)
-	
-	const formatedDate = ()=>{
-		if(isSuccess){
-			const [start, end] = dataOne?.practicePeriod?.split('-');
-			const formattedStart = dayjs(start).format('DD.MM.YYYY');
-			const formattedEnd = dayjs(end).format('DD.MM.YYYY');
-			return [formattedStart,formattedEnd]
+	const { data: dataOne, isFetching, isSuccess } = useGetOneMyPracticesQuery(id)
+
+	const formatedDate = () => {
+		if (isSuccess) {
+			const [start, end] = dataOne?.practicePeriod?.split('-')
+			const formattedStart = dayjs(start).format('DD.MM.YYYY')
+			const formattedEnd = dayjs(end).format('DD.MM.YYYY')
+			return [formattedStart, formattedEnd]
 		}
 		return []
 	}
@@ -53,18 +40,18 @@ export const EditMyPractice = () => {
 		{
 			key: '2',
 			label: 'Место прохождение практики',
-			children: dataOne?.profilePlace  ? dataOne.profilePlace  : 'Не указано',
-			className: dataOne?.profilePlace ? '' : 'hide' ,
+			children: dataOne?.profilePlace ? dataOne.profilePlace : 'Не указано',
+			className: dataOne?.profilePlace ? '' : 'hide'
 		},
 		{
 			key: '3',
 			label: 'Шифр',
-			children:  dataOne?.specialty ? dataOne.specialty : 'Не указано'
+			children: dataOne?.specialty ? dataOne.specialty : 'Не указано'
 		},
 		{
 			key: '4',
 			label: 'Профиль',
-			children:  dataOne?.profile ? dataOne.profile : 'Не указано'
+			children: dataOne?.profile ? dataOne.profile : 'Не указано'
 		},
 		{
 			key: '5',
@@ -74,14 +61,14 @@ export const EditMyPractice = () => {
 		{
 			key: '6',
 			label: 'Курс',
-			children:dataOne?.course ? dataOne.course : 'Не указано'
+			children: dataOne?.course ? dataOne.course : 'Не указано'
 		},
 		{
 			key: '7',
 			label: 'Группа',
 			children: dataOne?.group ? dataOne.group : 'Не указано'
 		},
-		
+
 		{
 			key: '9',
 			label: 'Тип практики',
@@ -100,12 +87,12 @@ export const EditMyPractice = () => {
 		{
 			key: '12',
 			label: 'Учебный год',
-			children:  dataOne?.academicYear ? dataOne.academicYear : 'Не указано'
+			children: dataOne?.academicYear ? dataOne.academicYear : 'Не указано'
 		},
 		{
 			key: '13',
 			label: 'ФИО руководителя практики',
-			children:  dataOne?.departmentDirector ? dataOne.departmentDirector : 'Не указано'
+			children: dataOne?.departmentDirector ? dataOne.departmentDirector : 'Не указано'
 		},
 		{
 			key: '14',
@@ -123,8 +110,6 @@ export const EditMyPractice = () => {
 		console.log(key)
 	}
 
-	
-
 	return (
 		<section className="container animate-fade-in">
 			<Space size={10} align="center">
@@ -137,41 +122,46 @@ export const EditMyPractice = () => {
 						nav('/services/mypractices/')
 					}}
 				/>
-				<span className="text-[10px] lg:text-[28px] font-normal">Учебная практика по специальности "{dataOne?.specialty}" с {formatedDate()[0]} по {formatedDate()[1]} </span>
+				<span className="text-[10px] lg:text-[28px] font-normal">
+					Учебная практика по специальности "{dataOne?.specialty}" с {formatedDate()[0]} по {formatedDate()[1]}{' '}
+				</span>
 			</Space>
-			<Tabs defaultActiveKey="1" onChange={onChange} className='mt-6'>
+			<Tabs defaultActiveKey="1" onChange={onChange} className="mt-6">
 				<Tabs.TabPane tab={'Основная информация'} key={1}>
-				{isFetching ? <Spin className="w-full mt-20 flex justify-start ml-10" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} /> :
-					<>
-					<Row className='mb-4 mt-4'>
-						<Col xs={24} sm={12} span={12} className="pr-[8px] ">
-							<Card title="Оценка:" bordered={false} className='mb-4'>
-									<Row>
-										<Descriptions.Item className="block sm:flex"  span={3} label={'1'} key={'1'}>
-											<div className="">{dataOne?.grade ? dataOne.grade :'Нет оценки'}</div>
-										</Descriptions.Item>
-									</Row>
-								</Card>
-								<Card title="Основные сведения:" bordered={false}>
-									<Row>
-										<Descriptions  className="">
-											{items.map((item: any) => (
-												<Descriptions.Item className=""  span={3} label={item.label} key={item.key}>
-													<div className="">{item.children}</div>
-												</Descriptions.Item>
-											))}
-										</Descriptions>
-									</Row>
-								</Card>
-							
-						</Col>
-					</Row>
-
-					</>
-					}
+					{isFetching ? (
+						<Spin
+							className="w-full mt-20 flex justify-start ml-10"
+							indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}
+						/>
+					) : (
+						<>
+							<Row className="mb-4 mt-4">
+								<Col xs={24} sm={12} span={12} className="pr-[8px] ">
+									<Card title="Оценка:" bordered={false} className="mb-4">
+										<Row>
+											<Descriptions.Item className="block sm:flex" span={3} label={'1'} key={'1'}>
+												<div className="">{dataOne?.grade ? dataOne.grade : 'Нет оценки'}</div>
+											</Descriptions.Item>
+										</Row>
+									</Card>
+									<Card title="Основные сведения:" bordered={false}>
+										<Row>
+											<Descriptions className="">
+												{items.map((item: any) => (
+													<Descriptions.Item className="" span={3} label={item.label} key={item.key}>
+														<div className="">{item.children}</div>
+													</Descriptions.Item>
+												))}
+											</Descriptions>
+										</Row>
+									</Card>
+								</Col>
+							</Row>
+						</>
+					)}
 				</Tabs.TabPane>
 				<Tabs.TabPane tab={'Заполнение документов'} key={2}>
-				<Form<any> validateMessages={validateMessages} form={form} layout={'vertical'} className='mb-8'>
+					<Form<any> validateMessages={validateMessages} form={form} layout={'vertical'} className="mb-8">
 						<Row gutter={[16, 16]} className={'mt-4'}>
 							<Col xs={24} sm={24} md={18} lg={16} xl={12}>
 								<List
@@ -181,7 +171,6 @@ export const EditMyPractice = () => {
 										maxHeight: 300
 									}}
 									bordered
-						
 									dataSource={dataOne?.competences}
 									renderItem={(item: any, index: number) => (
 										<List.Item
@@ -199,27 +188,36 @@ export const EditMyPractice = () => {
 							</Col>
 						</Row>
 					</Form>
-					<Plan id={id} dataTasks={dataOne?.tasks} setShowFinal={setShowFinal} dataOnePlace={dataOne?.place}/>
+					<Plan id={id} dataTasks={dataOne?.tasks} setShowFinal={setShowFinal} dataOnePlace={dataOne?.place} />
 					<Diary id={id} dataDiary={dataOne?.diary} setShowFinalTwo={setShowFinalTwo} />
 				</Tabs.TabPane>
-					<Tabs.TabPane tab={<Popover  content={!showFinal || !showFinalTwo ? null : null}>Отправка документов</Popover>} key={3} >
-						<Row gutter={16} className="mt-14 mb-10">
-							<Col xl={24} lg={12} >
-								<Card title={<div className='flex gap-3'><ExclamationCircleTwoTone />Обратите внимание:</div>}bordered={false}>
-									<div className='mb-3'>Ваш пакет документов должен содержать:</div>
-									<ul className="ml-6">
-										<li>Отчет по практике</li>
-										{dataOne?.place==='На кафедре КФУ'? <li>Индивидуальные задания</li>:<li>Путевка</li>}
-										<li>Дневник практиканта (по требованию кафедры)</li>
-									</ul>
-								</Card>
-							</Col>
-						</Row>
+				<Tabs.TabPane
+					tab={<Popover content={!showFinal || !showFinalTwo ? null : null}>Отправка документов</Popover>}
+					key={3}
+				>
+					<Row gutter={16} className="mt-14 mb-10">
+						<Col sm={24} md={12} lg={12}>
+							<Card
+								title={
+									<div className="flex gap-3">
+										<ExclamationCircleTwoTone />
+										Обратите внимание:
+									</div>
+								}
+								bordered={false}
+							>
+								<div className="mb-3">Ваш пакет документов должен содержать:</div>
+								<ul className="ml-6">
+									<li>Отчет по практике</li>
+									{dataOne?.place === 'На кафедре КФУ' ? <li>Индивидуальные задания</li> : <li>Путевка</li>}
+									<li>Дневник практиканта (по требованию кафедры)</li>
+								</ul>
+							</Card>
+						</Col>
+					</Row>
 					<Final />
-					</Tabs.TabPane>
+				</Tabs.TabPane>
 			</Tabs>
 		</section>
 	)
 }
-
-

@@ -1,4 +1,4 @@
-import { Button, Card, Col, Divider, Popover, Row, Space, Typography } from 'antd'
+import { Button, Card, Col, Divider, Popover, Row, Space, Spin, Typography } from 'antd'
 import React, { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
 
@@ -20,12 +20,10 @@ const Plan = ({id,dataOnePlace,dataTasks,setShowFinal}:any) => {
 	}));
     const [isDisabled,setIsDisabled] = useState(true)
     const [show,setShow] = useState(false)
-	const [sendTask,{data} ] = useAddTasksMutation()
+	const [sendTask,{data,isLoading} ] = useAddTasksMutation()
 	const [file,setFile] = useState<any>(null)
 
-	useEffect(()=>{
 
-	},[])
 	
 	const handleSave = ()=>{
 	 setShow(true)
@@ -52,14 +50,13 @@ const Plan = ({id,dataOnePlace,dataTasks,setShowFinal}:any) => {
 	const download = async ()=>{
 		const link = document.createElement('a')
 		link.href = data
-		link.setAttribute('download', `Индивидуальные задания.docx`)
+		link.setAttribute('download', `Документы практики.docx`)
 		document.body.appendChild(link)
 		link.click()
 	}
 
 	return (
 		<>
-		
 			<Row className='mt-6'>
 				<Col>
 					<Typography.Title level={2}>Отчет и Индивидуальные задания</Typography.Title>
@@ -87,12 +84,13 @@ const Plan = ({id,dataOnePlace,dataTasks,setShowFinal}:any) => {
 			</Row>
 
             {show ?
+			<Spin style={{width:'50%'}} className='w-[50%]' spinning={isLoading} >
 			<Row gutter={16} className="mt-14 mb-10">
 				<Col xs={24} sm={24} md={6} >
 					<Card title="Документы практики:" bordered={false}>
 						<ul className="ml-6">
-							<li><a onClick={download}>Отчет по практике</a></li>
-							<li>{dataOnePlace==='На кафедре КФУ' ? <a>Индивидуальные задания</a> : <a> Путевка</a>}</li>
+							<li><a onClick={download}>Отчет по практике и {dataOnePlace==='На кафедре КФУ' ? <a>Индивидуальные задания</a> : <a> Путевка</a>}</a></li>
+							{/* <li>{dataOnePlace==='На кафедре КФУ' ? <a>Индивидуальные задания</a> : <a> Путевка</a>}</li> */}
 						</ul>
 					</Card>
 				</Col>
@@ -105,7 +103,8 @@ const Plan = ({id,dataOnePlace,dataTasks,setShowFinal}:any) => {
 					</ul>
 					</Card>
 				</Col>
-			</Row> : ''}
+			</Row> </Spin> : ''}
+
 		</>
 	)
 }

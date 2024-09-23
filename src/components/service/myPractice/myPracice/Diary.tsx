@@ -1,4 +1,4 @@
-import { Button, Card, Col, Divider, Popover, Row, Space, Typography } from 'antd'
+import { Button, Card, Col, Divider, Popover, Row, Space, Spin, Typography } from 'antd'
 import React, { useState } from 'react'
 import dayjs from 'dayjs'
 
@@ -9,7 +9,7 @@ import { showNotification } from '../../../../store/reducers/notificationSlice'
 
 const Diary = ({id,dataDiary,setShowFinalTwo}:any) => {
 	
-	const [sendDiary,{data}] = useAddDiaryMutation()
+	const [sendDiary,{data,isLoading}] = useAddDiaryMutation()
 	const [dataSource, setDataSource] = useState<any>(dataDiary?.map((item:any)=>{
 		const [startDateStr, endDateStr] = item?.period ?  item?.period?.split('/') : [null, null];
 		const startDate = dayjs(startDateStr, 'DD.MM.YYYY');
@@ -89,6 +89,7 @@ const Diary = ({id,dataDiary,setShowFinalTwo}:any) => {
 				</Col>
 			</Row>
             {show ?
+			<Spin style={{width:'50%'}} className='w-[50%]' spinning={isLoading} >
 			<Row gutter={16} className="mt-14 mb-10">
 				<Col span={6}>
 					<Card title="Документы практики:" bordered={false}>
@@ -102,7 +103,7 @@ const Diary = ({id,dataDiary,setShowFinalTwo}:any) => {
 						Скачайте и проверьте документ
 					</Card>
 				</Col> */}
-			</Row>:''}
+			</Row></Spin>:''}
 		</>
 	)
 }

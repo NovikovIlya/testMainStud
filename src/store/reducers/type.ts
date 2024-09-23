@@ -339,7 +339,7 @@ export type ChatMessageType = {
 		| 'REJECTED'
 		| 'EMPLOYMENT_REQUEST'
 		| 'INVITATION_RESERVE'
-	reserveTimes: string[]
+	reserveTimes: string[] | null
 	fileInfos: { id: number; name: string }[] | null
 }
 

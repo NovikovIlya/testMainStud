@@ -195,9 +195,10 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 					</button>
 				</div>
 			)}
-			{props.msgData.type === 'INVITATION_RESERVE' && (
-				<div className="flex flex-col">
-					{/*
+			{props.msgData.type === 'INVITATION_RESERVE' &&
+				props.msgData.reserveTimes !== null && (
+					<div className="flex flex-col">
+						{/*
 					<div className="rounded-[16px] max-w-[50%] p-[20px] flex flex-col gap-[16px] font-content-font font-normal text-black text-[16px]/[19.2px] rounded-bl-none bg-[#FFFFFF] mt-[12px]">
 						<p className='text-[#808080] text-[16px]/[19.2px]'>
 							Анастасия, HR-менеджер
@@ -210,35 +211,35 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 						</p>
 					</div>
 					*/}
-					<div className="mt-[24px] max-w-[50%] flex flex-col gap-[14px]">
-						<div className="flex flex-row justify-between gap-[14px]">
-							{props.msgData.reserveTimes.map(time => (
-								<button
-									onClick={() => {
-										answerReserveTime({
-											respondId: respondId,
-											time: time
-										})
-									}}
-									className="text-[16px]/[19.2px] rounded-[54.5px] py-[12px] px-[20px] text-center bg-inherit outline-none border cursor-pointer"
-								>
-									{time.substring(0, 10).split('-').reverse().join('.') +
-										', ' +
-										time.substring(11, 16)}
-								</button>
-							))}
+						<div className="mt-[24px] max-w-[50%] flex flex-col gap-[14px]">
+							<div className="flex flex-row justify-between gap-[14px]">
+								{props.msgData.reserveTimes.map(time => (
+									<button
+										onClick={() => {
+											answerReserveTime({
+												respondId: respondId,
+												time: time
+											})
+										}}
+										className="text-[16px]/[19.2px] rounded-[54.5px] py-[12px] px-[20px] text-center bg-inherit outline-none border cursor-pointer"
+									>
+										{time.substring(0, 10).split('-').reverse().join('.') +
+											', ' +
+											time.substring(11, 16)}
+									</button>
+								))}
+							</div>
+							<button
+								onClick={() => {
+									answerReserveTime({ respondId: respondId })
+								}}
+								className="text-[16px]/[19.2px] w-full rounded-[54.5px]  py-[12px] px-[56px] bg-inherit outline-none border cursor-pointer"
+							>
+								Нет подходящего времени
+							</button>
 						</div>
-						<button
-							onClick={() => {
-								answerReserveTime({ respondId: respondId })
-							}}
-							className="text-[16px]/[19.2px] w-full rounded-[54.5px]  py-[12px] px-[56px] bg-inherit outline-none border cursor-pointer"
-						>
-							Нет подходящего времени
-						</button>
 					</div>
-				</div>
-			)}
+				)}
 			{props.msgData.type === 'EMPLOYMENT_REQUEST' && (
 				<div className="flex flex-col">
 					{/*

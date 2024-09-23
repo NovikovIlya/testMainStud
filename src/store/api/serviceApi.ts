@@ -222,7 +222,12 @@ export const serviceApi = apiSlice.injectEndpoints({
 			})
 		}),
 		getChatIdByRespondId: builder.query<
-			number,
+			{
+				id: number
+				respondInfo: VacancyRespondItemType & { vacancyId: number }
+				unreadCount: number
+				lastMessageDate: string
+			},
 			{ chatId: number; role: string }
 		>({
 			query: arg => ({
@@ -353,6 +358,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 				id: number
 				respondInfo: VacancyRespondItemType & { vacancyId: number }
 				unreadCount: number
+				lastMessageDate: string
 			}[],
 			{
 				vacancyId: number | null
@@ -832,7 +838,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 			ReserveTimeRequestType & { respondId: number }
 		>({
 			query: arg => ({
-				url: `http://localhost:8082/employment-api/v1/respond/${arg.respondId}/chat/butttons/interview/reserve-time`,
+				url: `http://localhost:8082/employment-api/v1/respond/${arg.respondId}/chat/buttons/interview/reserve-time`,
 				method: 'POST',
 				body: {
 					time: arg.time ? arg.time : null

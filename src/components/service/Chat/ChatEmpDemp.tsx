@@ -46,7 +46,12 @@ export const ChatEmpDemp = () => {
 	const chatPreviewsBottomRef = useRef<null | HTMLDivElement>(null)
 
 	const [chats, setChats] = useState<
-		{ id: number; respondInfo: VacancyRespondItemType; unreadCount: number }[]
+		{
+			id: number
+			respondInfo: VacancyRespondItemType
+			unreadCount: number
+			lastMessageDate: string
+		}[]
 	>([])
 
 	const [getChatPreviews, chatPreviewsQueryState] =
@@ -148,6 +153,7 @@ export const ChatEmpDemp = () => {
 				name="Илья"
 				status={chat.respondInfo.status}
 				unreadCount={chat.unreadCount}
+				lastMessageDate={chat.lastMessageDate}
 			/>
 		)
 	})

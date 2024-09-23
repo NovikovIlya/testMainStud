@@ -29,6 +29,7 @@ export const ChatEmpDempPreview = (props: {
 	status: string
 	unreadCount: number
 	checkableStatus?: string
+	lastMessageDate: string
 }) => {
 	const user = useAppSelector(state => state.auth.user)
 	const isEmpDemp = user?.roles.find(role => role.type === 'EMPL')
@@ -94,7 +95,11 @@ export const ChatEmpDempPreview = (props: {
 						</div>
 						<div className="flex flex-col ml-auto">
 							<p className=" font-content-font font-normal text-black text-[12px]/[14.4px] opacity-[52%]">
-								5 окт 12:23
+								{props.lastMessageDate.substring(8, 10) +
+									'.' +
+									props.lastMessageDate.substring(5, 7) +
+									' ' +
+									props.lastMessageDate.substring(11, 16)}
 							</p>
 
 							{props.unreadCount !== 0 && !isChatOpen && (

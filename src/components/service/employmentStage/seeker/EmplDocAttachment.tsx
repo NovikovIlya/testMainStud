@@ -40,21 +40,25 @@ export const EmplDocAttachment = (props: {
 				<div className="flex flex-col gap-[12px]">
 					<p>Необходимые документы:</p>
 					<ol className="ml-[2%]">
-						{docs.map(doc => (
-							<li>{doc.name}</li>
-						))}
+						{docs
+							.filter(doc => doc.employmentStageType === props.stageName)
+							.map(doc => (
+								<li>{doc.name}</li>
+							))}
 					</ol>
 				</div>
 				<div className="bg-white rounded-[16px] shadow-custom-shadow p-[20px] w-[70%] flex flex-col gap-[20px]">
 					<p className="opacity-80">Прикрепить файлы</p>
 					<div className="grid gap-x-[36px] gap-y-[12px] grid-cols-[auto_10%_auto] items-center w-full">
-						{docs.map(doc => (
-							<FileAttachment
-								{...doc}
-								respondId={props.respondId}
-								stageId={props.stageId}
-							/>
-						))}
+						{docs
+							.filter(doc => doc.employmentStageType === props.stageName)
+							.map(doc => (
+								<FileAttachment
+									{...doc}
+									respondId={props.respondId}
+									stageId={props.stageId}
+								/>
+							))}
 					</div>
 				</div>
 			</div>

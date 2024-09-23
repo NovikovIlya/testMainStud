@@ -120,7 +120,9 @@ export const Stages = () => {
 							stageName="THIRD"
 						/>
 					)}
-					{currentStage === 4 && <EmplMedExam />}
+					{currentStage === 4 && (
+						<EmplMedExam respondId={respondId} stageId={4} stageName="FOURTH" />
+					)}
 					{currentStage === 5 && (
 						<EmplInstruction
 							respondId={respondId}

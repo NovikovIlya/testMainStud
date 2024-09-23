@@ -221,7 +221,11 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 										})
 									}}
 									className="text-[16px]/[19.2px] rounded-[54.5px] py-[12px] px-[20px] text-center bg-inherit outline-none border cursor-pointer"
-								></button>
+								>
+									{time.substring(0, 10).split('-').reverse().join('.') +
+										', ' +
+										time.substring(11, 16)}
+								</button>
 							))}
 						</div>
 						<button

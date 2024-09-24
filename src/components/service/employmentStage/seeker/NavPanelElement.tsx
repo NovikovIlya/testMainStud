@@ -35,33 +35,24 @@ export const NavPanelElement = (props: { id: number; text: string }) => {
 					isReadyToSend && dispatch(setStage(props.id))
 				}}
 			>
-				{!isReadyToSend ? (
-					<>
-						<div
-							className={`shrink-0 h-[28px] w-[28px] rounded-[32px] border-solid border-2 ${
-								currentStage === props.id
-									? 'text-[#3073D7] border-[#3073D7]'
-									: 'text-[#757778] border-[#757778]'
-							} flex justify-center items-center bg-[#F5F8FB]`}
-						>
-							{props.id}
-						</div>
-						<div
-							className={`${
-								currentStage === props.id ? 'text-[#3073D7]' : 'text-[#757778]'
-							}  text-center`}
-						>
-							{props.text}
-						</div>
-					</>
-				) : (
-					<>
-						<div className="h-[28px] w-[28px]">
-							<EmpReadyIcon />
-						</div>
-						<div className="text-[#3073D7] text-center">{props.text}</div>
-					</>
-				)}
+				<>
+					<div
+						className={`shrink-0 h-[28px] w-[28px] rounded-[32px] border-solid border-2 ${
+							currentStage === props.id
+								? 'text-[#3073D7] border-[#3073D7]'
+								: 'text-[#757778] border-[#757778]'
+						} flex justify-center items-center bg-[#F5F8FB]`}
+					>
+						{props.id}
+					</div>
+					<div
+						className={`${
+							currentStage === props.id ? 'text-[#3073D7]' : 'text-[#757778]'
+						}  text-center`}
+					>
+						{props.text}
+					</div>
+				</>
 			</div>
 		)
 	}

@@ -1,8 +1,7 @@
-import { DepEmploymentItem } from '../../employmentStage/personnelDepartment/depEmploymentItem'
 import { useGetPersonnelStagesQuery } from '../../../../store/api/serviceApi'
 import { useState } from 'react'
 import { Button } from 'antd'
-
+import { RequisiteItem } from './RequisiteItem'
 
 export const RequisiteReview = () => {
 
@@ -19,10 +18,10 @@ export const RequisiteReview = () => {
 	const ColumnFieldHeaderComponent = () => {
 		return (
 			<div className="flex flex-row mt-[40px]">
-				<span className="ml-[1.5%] w-[24%] text-[14px] text-[#626364] font-normal">Соискатель</span>
-				<span className="w-[26%] text-[14px] text-[#626364] font-normal">Должность</span>
-				<span className="w-[10%] text-[14px] text-[#626364] font-normal">Статус</span>
-				<div className="w-[38.5%]"></div>
+				<span className="ml-[1.5%] w-[30%] text-[14px] text-[#626364] font-normal">Соискатель</span>
+				<span className="w-[20%] mr-[10%] text-[14px] text-[#626364] font-normal">Должность</span>
+				<span className="w-[13.5%] text-[14px] text-[#626364] font-normal">Статус</span>
+				<div className=" ml-[5%] w-[20%]"></div>
 			</div>
 		)
 	}
@@ -73,28 +72,28 @@ export const RequisiteReview = () => {
 				{(currentFilterItem === 'ALL') && (
 					<div className="flex flex-col gap-[12px]">
 						{allItems.map(item => (
-							<DepEmploymentItem {...item} key={item.respondId}></DepEmploymentItem>
+							<RequisiteItem {...item} key={item.respondId}></RequisiteItem>
 						))}
 					</div>
 				)}
 				{(currentFilterItem === 'VERIFYING') && (
 					<div className="flex flex-col gap-[12px]">
 						{verifyingItems.map(item => (
-							<DepEmploymentItem {...item} key={item.respondId}></DepEmploymentItem>
+							<RequisiteItem {...item} key={item.respondId}></RequisiteItem>
 						))}
 					</div>
 				)}
 				{(currentFilterItem === 'REFINE') && (
 					<div className="flex flex-col gap-[12px]">
 						{refineItems.map(item => (
-							<DepEmploymentItem {...item} key={item.respondId}></DepEmploymentItem>
+							<RequisiteItem {...item} key={item.respondId}></RequisiteItem>
 						))}
 					</div>
 				)}
 				{(currentFilterItem === 'COMPLETE') && (
 					<div className="flex flex-col gap-[12px]">
 						{completeItems.map(item => (
-							<DepEmploymentItem {...item} key={item.respondId}></DepEmploymentItem>
+							<RequisiteItem {...item} key={item.respondId}></RequisiteItem>
 						))}
 					</div>
 				)}

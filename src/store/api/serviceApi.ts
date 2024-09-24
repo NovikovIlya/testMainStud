@@ -859,7 +859,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
-		getEmploymentStageStatus: builder.query<EmploymentStageStatusType, { respondId: number }> ({
+		getEmploymentStageStatus: builder.query<EmploymentStageStatusType[], { respondId: number }> ({
 			query: arg => ({
 				url: `http://localhost:8082/employment-api/v1/respond/${arg.respondId}/employment`,
 				method: 'GET',

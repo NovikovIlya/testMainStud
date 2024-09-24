@@ -1,4 +1,4 @@
-import { Button } from 'antd'
+	import { Button } from 'antd'
 import { setCurrentResponce } from '../../../../store/reducers/CurrentResponceSlice'
 import { useAppSelector } from '../../../../store'
 import { useDispatch } from 'react-redux'
@@ -30,7 +30,7 @@ export const RequisiteReviewInfo = () => {
 					Вакансия: <span className="font-bold">{seekerVacancy}</span>
 				</h3>
 				<div className="mt-[40px] mb-[100px] gap-[12px] flex flex-col ">
-					<RequisiteStageItem></RequisiteStageItem>
+					<RequisiteStageItem docs={' '} stageNumber={6}></RequisiteStageItem>
 				</div>
 			</div>
 		</>

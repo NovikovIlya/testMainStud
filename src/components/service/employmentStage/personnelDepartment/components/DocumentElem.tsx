@@ -38,7 +38,7 @@ export const DocumentElem = (props: DocumentElemProps) => {
         </span>
 			</div>
 			<span className="font-normal opacity-[70%] text-[16px]/[19.2px]">
-        {fileSizeInKB !== 'N/A' ? `${fileSizeInKB} кб` : 'Размер неизвестен'}
+        {fileSizeInKB !== 'N/A' ? `${fileSizeInKB} кб` : '???'}
       </span>
 		</button>
 	)

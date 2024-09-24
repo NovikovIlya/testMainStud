@@ -1,4 +1,12 @@
-import { Button, Checkbox, Form, Input, Modal, Select } from 'antd'
+import {
+	Button,
+	Checkbox,
+	ConfigProvider,
+	Form,
+	Input,
+	Modal,
+	Select
+} from 'antd'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -50,6 +58,9 @@ export const VacancyRequestCreateView = () => {
 	const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 
 	const [secondOption, setSecondOption] = useState<string | null>(null)
+
+	const [isResultModalOpen, setIsResultModalOpen] = useState<boolean>(false)
+	const [resultModalText, setResultModalText] = useState<string>('')
 
 	useEffect(() => {
 		getVacancyRequestView(requestId)
@@ -109,6 +120,42 @@ export const VacancyRequestCreateView = () => {
 
 	return (
 		<>
+			<ConfigProvider
+				theme={{
+					token: {
+						boxShadow: '0 0 19px 0 rgba(212, 227, 241, 0.6)'
+					}
+				}}
+			>
+				<Modal
+					bodyStyle={{
+						padding: '26px'
+					}}
+					width={407}
+					className="pr-[52px] pl-[52px] pb-[52px]"
+					open={isResultModalOpen}
+					title={null}
+					footer={null}
+					centered
+					onCancel={() => {
+						setIsResultModalOpen(false)
+					}}
+				>
+					<p className="text-center font-content-font text-black text-[16px]/[20px] font-normal">
+						{resultModalText}
+					</p>
+					<Button
+						className="rounded-[40px] w-full !py-[13px] mt-[40px]"
+						type="primary"
+						onClick={() => {
+							setIsResultModalOpen(false)
+							navigate('/services/personnelaccounting/vacancyrequests')
+						}}
+					>
+						Ок
+					</Button>
+				</Modal>
+			</ConfigProvider>
 			<Modal
 				centered
 				open={isModalOpen}
@@ -152,24 +199,48 @@ export const VacancyRequestCreateView = () => {
 											.unwrap()
 											.then(() => {
 												refetch()
-												navigate(
-													'/services/personnelaccounting/vacancyrequests'
-												)
+												setIsModalOpen(false)
+												setResultModalText('Вакансия успешно опубликована')
+												setIsResultModalOpen(true)
 											})
+									})
+									.catch(error => {
+										try {
+											setResultModalText(error.data.errors[0].message as string)
+										} catch (err) {
+											setResultModalText(
+												'Что-то пошло не так, приносим извинения за неудобства'
+											)
+										}
+										setIsModalOpen(false)
+										setIsResultModalOpen(true)
 									})
 							: acceptRequest({
 									data: {
 										category: categoryTitle,
 										direction: direction,
 										subdivision: subdivision,
-										emplDocDefIds: values.formDocs
+										emplDocDefIds: [...values.formDocs, 9]
 									},
 									requestId: requestId
 							  })
 									.unwrap()
 									.then(() => {
 										refetch()
-										navigate('/services/personnelaccounting/vacancyrequests')
+										setIsModalOpen(false)
+										setResultModalText('Заявка успешно опубликована')
+										setIsResultModalOpen(true)
+									})
+									.catch(error => {
+										try {
+											setResultModalText(error.data.errors[0].message as string)
+										} catch (err) {
+											setResultModalText(
+												'Что-то пошло не так, приносим извинения за неудобства'
+											)
+										}
+										setIsModalOpen(false)
+										setIsResultModalOpen(true)
 									})
 					}}
 				>
@@ -456,7 +527,7 @@ export const VacancyRequestCreateView = () => {
 							<ArrowIcon />
 						</button>
 						<p className="ml-[40px] font-content-font font-normal text-black text-[28px]/[33.6px]">
-							{post !== undefined ? post : ''}
+							{post !== undefined ? '«' + post + '»' : ''}
 						</p>
 					</div>
 					<div className="w-[50%] mt-[52px] flex flex-col gap-[40px]">

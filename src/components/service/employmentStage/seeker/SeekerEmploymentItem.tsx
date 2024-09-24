@@ -13,14 +13,16 @@ export const SeekerEmploymentItem = (props: RespondItemType) => {
 				{props.employmentStageStatus === 'FILLING' ? (
 					<p className="ml-[10%]">Прохождение</p>
 				) : (
-					<p className="ml-[10%]">Доработка</p>
+					<p className="ml-[10%]">Проверка</p>
 				)}
 				<div className="flex gap-[12px] ml-auto">
 					<Button
 						className="ml-[5%] rounded-[54px] font-content-font font-normal text-[16px]/[16px]"
 						type="primary"
 						onClick={() => {
-							navigate(`/services/myresponds/employment/stages/${props.id}`)
+							navigate(
+								`/services/myresponds/employment/stages/${props.vacancyId}/${props.id}`
+							)
 						}}
 					>
 						Пройти этапы

@@ -1,4 +1,5 @@
-import { Radio } from 'antd'
+import { LoadingOutlined } from '@ant-design/icons'
+import { Radio, Spin } from 'antd'
 import { useState } from 'react'
 
 import { useGetReservedResponcesQuery } from '../../../store/api/serviceApi'
@@ -9,7 +10,28 @@ import { ReserveItem } from './ReserveItem'
 export const Reserve = () => {
 	const [type, setType] = useState('все')
 
-	const { data: reserve = [], refetch } = useGetReservedResponcesQuery(type)
+	const {
+		data: reserve = [],
+		refetch,
+		isLoading: loading
+	} = useGetReservedResponcesQuery(type)
+
+	if (loading) {
+		return (
+			<>
+				<div className="w-full h-full flex items-center">
+					<div className="text-center ml-auto mr-auto">
+						<Spin
+							indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}
+						></Spin>
+						<p className="font-content-font font-normal text-black text-[18px]/[18px]">
+							Идёт загрузка...
+						</p>
+					</div>
+				</div>
+			</>
+		)
+	}
 
 	return (
 		<>

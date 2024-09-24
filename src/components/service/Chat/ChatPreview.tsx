@@ -27,14 +27,21 @@ export const ChatPreview = (props: {
 }) => {
 	const user = useAppSelector(state => state.auth.user)
 	const isEmpDemp = user?.roles.find(role => role.type === 'EMPL')
-	const { data: chatId = 0, isLoading: isChatIdLoading } =
-		useGetChatIdByRespondIdQuery({
-			chatId: props.respondId,
-			role: isEmpDemp ? 'PERSONNEL_DEPARTMENT' : 'SEEKER'
-		})
+	const {
+		data: chatInfo = {
+			id: 0,
+			respondInfo: {},
+			unreadCount: 0,
+			lastMessageDate: ''
+		},
+		isLoading: isChatIdLoading
+	} = useGetChatIdByRespondIdQuery({
+		chatId: props.respondId,
+		role: isEmpDemp ? 'PERSONNEL_DEPARTMENT' : 'SEEKER'
+	})
 	const { data: unreadCount, isLoading: isUnreadCountLoading } =
 		useGetUnreadMessagesCountQuery({
-			chatId: chatId,
+			chatId: chatInfo.id,
 			role: isEmpDemp ? 'PERSONNEL_DEPARTMENT' : 'SEEKER'
 		})
 
@@ -44,15 +51,20 @@ export const ChatPreview = (props: {
 
 	const handleNavigate = (url: string) => {
 		if (props.checkableStatus) {
-			if (props.checkableStatus !== respondStatus[respondStatus.INVITATION]) {
-				dispatch(closeChat())
-			} else {
+			if (
+				props.checkableStatus === respondStatus[respondStatus.INVITATION] ||
+				props.checkableStatus ===
+					respondStatus[respondStatus.EMPLOYMENT_REQUEST] ||
+				props.checkableStatus === respondStatus[respondStatus.EMPLOYMENT]
+			) {
 				dispatch(openChat())
+			} else {
+				dispatch(closeChat())
 			}
 		} else {
 			dispatch(openChat())
 		}
-		dispatch(setChatId(chatId))
+		dispatch(setChatId(chatInfo.id))
 		dispatch(setRespondId(props.respondId))
 		dispatch(setCurrentVacancyId(props.vacancyId))
 		navigate(url)
@@ -71,8 +83,8 @@ export const ChatPreview = (props: {
 					dispatch(setCurrentVacancyName(props.respName))
 					handleNavigate(
 						isEmpDemp
-							? `/services/personnelaccounting/chat/id/${chatId}`
-							: `/services/myresponds/chat/id/${chatId}`
+							? `/services/personnelaccounting/chat/id/${chatInfo.id}`
+							: `/services/myresponds/chat/id/${chatInfo.id}`
 					)
 					setIsChatOpen(true)
 				}}
@@ -85,7 +97,11 @@ export const ChatPreview = (props: {
 						<p className="text-base w-[60%]">{props.respName}</p>
 						<div className="flex flex-col">
 							<p className=" font-content-font font-normal text-black text-[12px]/[14.4px] opacity-[52%]">
-								5 окт 12:23
+								{chatInfo.lastMessageDate.substring(8, 10) +
+									'.' +
+									chatInfo.lastMessageDate.substring(5, 7) +
+									' ' +
+									chatInfo.lastMessageDate.substring(11, 16)}
 							</p>
 							{unreadCount !== 0 && !isChatOpen && (
 								<Badge

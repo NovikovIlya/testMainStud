@@ -5,15 +5,20 @@ import logger from 'redux-logger'
 import { apiSlice } from './api/apiSlice'
 import { practiceApi } from './api/practiceApi/practiceApi'
 import ChatRespondStatusSlice from './reducers/ChatRespondStatusSlice'
+import CurrentEmploymentStage from './reducers/CurrentEmploymentStage'
+import CurrentInterviewFormatSlice from './reducers/CurrentInterviewFormatSlice'
+import CurrentInterviewSlice from './reducers/CurrentInterviewSlice'
+import CurrentInterviewTimeFormatedSlice from './reducers/CurrentInterviewTimeFormatedSlice'
+import CurrentInterviewTimeSlice from './reducers/CurrentInterviewTimeSlice'
 import CurrentRequestSlice from './reducers/CurrentRequestSlice'
 import CurrentResponceSlice from './reducers/CurrentResponceSlice'
 import CurrentRespondIdSlice from './reducers/CurrentRespondIdSlice'
 import CurrentVacancyIdSlice from './reducers/CurrentVacancyIdSlice'
 import CurrentVacancyNameSlice from './reducers/CurrentVacancyNameSlice'
 import CurrentVacancySlice from './reducers/CurrentVacancySlice'
-import CurrentInterviewTimeSlice from './reducers/CurrentInterviewTimeSlice'
-import CurrentInterviewFormatSlice from './reducers/CurrentInterviewFormatSlice'
-import CurrentInterviewSlice from './reducers/CurrentInterviewSlice'
+import EmploymentDataSlice from './reducers/EmploymentDataSlice'
+import EmploymentProgressSlice from './reducers/EmploymentProgressSlice'
+import EmploymentSeekerDocsSlice from './reducers/EmploymentSeekerDocsSlice'
 import AddressReducer from './reducers/FormReducers/AddressReducer'
 import CountriesEducationReducer from './reducers/FormReducers/CountriesEducationReducer'
 import DocumentReducer from './reducers/FormReducers/DocumentReducer'
@@ -35,7 +40,6 @@ import SkillsReducer from './reducers/SeekerFormReducers/SkillsReducer'
 import authSlice from './reducers/authSlice'
 import chatIdSlice from './reducers/chatIdSlice'
 import notificationSlice from './reducers/notificationSlice'
-import CurrentInterviewTimeFormatedSlice from './reducers/CurrentInterviewTimeFormatedSlice'
 
 export const store = configureStore({
 	reducer: {
@@ -72,6 +76,10 @@ export const store = configureStore({
 		[apiSlice.reducerPath]: apiSlice.reducer,
 		currentVacancyId: CurrentVacancyIdSlice,
 		currentInterviewTimeFormated: CurrentInterviewTimeFormatedSlice,
+		currentEmploymentStage: CurrentEmploymentStage,
+		employmentData: EmploymentDataSlice,
+		employmentProgress: EmploymentProgressSlice,
+		employmentSeekerDocs: EmploymentSeekerDocsSlice
 	},
 	middleware: getDefaultMiddleware =>
 		getDefaultMiddleware()

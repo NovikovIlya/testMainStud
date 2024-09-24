@@ -1,6 +1,9 @@
+import { LoadingOutlined } from '@ant-design/icons'
+import { Spin } from 'antd'
 import { useEffect, useState } from 'react'
 
 import {
+	useGetSupervisorRespondsQuery,
 	useLazyGetResponcesByVacancyQuery,
 	useLazyGetVacancyGroupedResponcesQuery
 } from '../../../../store/api/serviceApi'
@@ -8,21 +11,41 @@ import { VacancyRespondItemType } from '../../../../store/reducers/type'
 import { VacancyRespondItem } from '../VacancyRespondItem'
 
 export const RespondsSupervisor = () => {
-	const [responds, setResponds] = useState<VacancyRespondItemType[]>([])
-	const [getGroupedResponds] = useLazyGetVacancyGroupedResponcesQuery()
-	const [getResponds] = useLazyGetResponcesByVacancyQuery()
+	//const [responds, setResponds] = useState<VacancyRespondItemType[]>([])
+	// const [getGroupedResponds] = useLazyGetVacancyGroupedResponcesQuery()
+	// const [getResponds] = useLazyGetResponcesByVacancyQuery()
 
-	useEffect(() => {
-		getGroupedResponds({ category: 'АУП', role: 'SUPERVISOR' })
-			.unwrap()
-			.then(grData => {
-				grData.map(vacResp => {
-					getResponds({ id: vacResp.vacancyId, status: '', role: 'SUPERVISOR' })
-						.unwrap()
-						.then(data => setResponds(prev => [...prev, ...data]))
-				})
-			})
-	}, [])
+	const { data: responds = [], isLoading: loading } =
+		useGetSupervisorRespondsQuery()
+
+	// useEffect(() => {
+	// 	getGroupedResponds({ category: 'АУП', role: 'SUPERVISOR' })
+	// 		.unwrap()
+	// 		.then(grData => {
+	// 			grData.map(vacResp => {
+	// 				getResponds({ id: vacResp.vacancyId, status: '', role: 'SUPERVISOR' })
+	// 					.unwrap()
+	// 					.then(data => setResponds(prev => [...prev, ...data]))
+	// 			})
+	// 		})
+	// }, [])
+
+	if (loading) {
+		return (
+			<>
+				<div className="w-full h-full flex items-center">
+					<div className="text-center ml-auto mr-auto">
+						<Spin
+							indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}
+						></Spin>
+						<p className="font-content-font font-normal text-black text-[18px]/[18px]">
+							Идёт загрузка...
+						</p>
+					</div>
+				</div>
+			</>
+		)
+	}
 
 	return (
 		<>

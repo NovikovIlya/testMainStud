@@ -279,6 +279,7 @@ export type VacancyRespondItemType = {
 	responseDate: string
 	respondDate: string
 	vacancyName: string
+	vacancyId: number
 	status:
 		| 'IN_REVIEW'
 		| 'IN_PERSONNEL_DEPT_REVIEW'
@@ -338,7 +339,7 @@ export type ChatMessageType = {
 		| 'REJECTED'
 		| 'EMPLOYMENT_REQUEST'
 		| 'INVITATION_RESERVE'
-	reserveTimes: string[]
+	reserveTimes: string[] | null
 	fileInfos: { id: number; name: string }[] | null
 }
 
@@ -412,9 +413,40 @@ export type SeekerStatusChangeType = {
 }
 
 export type ReserveTimeRequestType = {
-	time: string
+	time?: string
 }
 
 export type EmploymentRequestType = {
 	answer: 'YES' | 'NO'
+}
+
+export type EmployementStatus =
+	| 'FILLING'
+	| 'VERIFYING'
+	| 'REFINE'
+	| 'COMPLETE'
+	| 'READY'
+
+export type EmploymentDataType = {
+	id: number
+	status: EmployementStatus
+	stages: {
+		id: number
+		type: string
+		status: EmployementStatus
+		comment: string
+		documents: {
+			id: number
+			docType: string
+			status: 'ATTACHED' | 'NOT_ATTACHED'
+		}[]
+		hasRequisites?: boolean
+		testLink?: string
+	}[]
+}
+
+export type EmploymentDocsType = {
+	id: number
+	employmentStageType: string
+	name: string
 }

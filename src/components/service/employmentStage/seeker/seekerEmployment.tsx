@@ -1,7 +1,10 @@
 import { LoadingOutlined } from '@ant-design/icons'
 import { Spin } from 'antd'
+import { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 
 import { useGetSeekerEmploymentRespondsQuery } from '../../../../store/api/serviceApi'
+import { setStage } from '../../../../store/reducers/CurrentEmploymentStage'
 
 import { SeekerEmploymentItem } from './SeekerEmploymentItem'
 
@@ -12,11 +15,17 @@ export const SeekerEmployment = () => {
 		isLoading: loading
 	} = useGetSeekerEmploymentRespondsQuery()
 
+	const dispatch = useDispatch()
+
+	useEffect(() => {
+		dispatch(setStage(0))
+	}, [])
+
 	if (loading) {
 		return (
 			<>
 				<div className="w-screen h-screen flex items-center">
-					<div className="text-center ml-auto mr-auto mb-[10%]">
+					<div className="text-center ml-auto mr-auto">
 						<Spin
 							indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}
 						></Spin>

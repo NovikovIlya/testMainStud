@@ -1,4 +1,4 @@
-import { Button } from 'antd'
+import { Button, ConfigProvider, Modal } from 'antd'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -88,8 +88,47 @@ export const VacancyRequestDeleteView = () => {
 			.replace(/<\/li>/g, '')
 	)
 
+	const [isResultModalOpen, setIsResultModalOpen] = useState<boolean>(false)
+	const [resultModalText, setResultModalText] = useState<string>('')
+
 	return (
 		<>
+			<ConfigProvider
+				theme={{
+					token: {
+						boxShadow: '0 0 19px 0 rgba(212, 227, 241, 0.6)'
+					}
+				}}
+			>
+				<Modal
+					bodyStyle={{
+						padding: '26px'
+					}}
+					width={407}
+					className="pr-[52px] pl-[52px] pb-[52px]"
+					open={isResultModalOpen}
+					title={null}
+					footer={null}
+					centered
+					onCancel={() => {
+						setIsResultModalOpen(false)
+					}}
+				>
+					<p className="text-center font-content-font text-black text-[16px]/[20px] font-normal">
+						{resultModalText}
+					</p>
+					<Button
+						className="rounded-[40px] w-full !py-[13px] mt-[40px]"
+						type="primary"
+						onClick={() => {
+							setIsResultModalOpen(false)
+							navigate('/services/personnelaccounting/vacancyrequests')
+						}}
+					>
+						Ок
+					</Button>
+				</Modal>
+			</ConfigProvider>
 			<div
 				id="wrapper"
 				className="pl-[54px] pr-[54px] pt-[120px] pb-[52px] w-full"
@@ -113,7 +152,7 @@ export const VacancyRequestDeleteView = () => {
 							Должность:
 						</p>
 						<p className="font-content-font font-normal text-black text-[18px]/[21px]">
-							{post && post}
+							{post && '«' + post + '»'}
 						</p>
 					</div>
 					<div className="flex gap-[60px]">
@@ -195,8 +234,19 @@ export const VacancyRequestDeleteView = () => {
 								.then(() => {
 									refetch()
 								})
+								.catch(error => {
+									try {
+										setResultModalText(error.data.errors[0].message as string)
+									} catch (err) {
+										setResultModalText(
+											'Что-то пошло не так, приносим извинения за неудобства'
+										)
+									}
+									setIsResultModalOpen(true)
+								})
 								.then(() => {
-									navigate('/services/personnelaccounting/vacancyrequests')
+									setResultModalText('Вакансия успешно удалена')
+									setIsResultModalOpen(true)
 								})
 						}}
 						type="primary"

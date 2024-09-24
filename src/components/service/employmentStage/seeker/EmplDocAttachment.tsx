@@ -59,6 +59,7 @@ export const EmplDocAttachment = (props: {
 									{...doc}
 									respondId={props.respondId}
 									stageName={props.stageName}
+									seventhStage={false}
 								/>
 							))}
 					</div>

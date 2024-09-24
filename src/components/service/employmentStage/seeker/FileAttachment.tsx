@@ -12,7 +12,11 @@ import { setAllData } from '../../../../store/reducers/EmploymentDataSlice'
 import { EmploymentDocsType } from '../../../../store/reducers/type'
 
 export const FileAttachment = (
-	props: EmploymentDocsType & { respondId: number; stageName: string }
+	props: EmploymentDocsType & {
+		respondId: number
+		stageName: string
+		seventhStage: boolean
+	}
 ) => {
 	const seekerToken =
 		'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJJQU1pdHJvZmFub3ZAc3R1ZC5rcGZ1LnJ1IiwiaWF0IjoxNzExNTc3OTMwLCJleHAiOjE3MTE1ODg3MzAsInNjb3BlIjoidXNlciIsInJvbGVzIjpbeyJ1c2VySWQiOiIyNTMxNjIiLCJzZXNzaW9uSWQiOiIyNDAzMjI3MTQ4NzUxOTQ4Mjk3MzMwOTA0NzM1MzY2NyIsInNlc3Npb25IYXNoIjoiRDJBMjI1QTc0OTlGMUNFMTZDQkUwMkI5RjZDOTE3RTEiLCJkb2N1bWVudHNIYXNoIjoiQjI2Q0IwQzNFOEFDMzZENkEwQ0I1MTJDRjMwMjM3NzciLCJsb2dpbiI6IklBTWl0cm9mYW5vdiIsInR5cGUiOiJTRUVLRVIifV0sInNlc3Npb25JZCI6IjI0MDMyMjcxNDg3NTE5NDgyOTczMzA5MDQ3MzUzNjY3Iiwic2Vzc2lvbkhhc2giOiJEMkEyMjVBNzQ5OUYxQ0UxNkNCRTAyQjlGNkM5MTdFMSIsImFsbElkIjoiMTc4NDQwIiwiZW1haWwiOiJtaXRyb18wMkBtYWlsLnJ1In0.4dmYBUEDz9UzKxvxWtQhA6poTVwFOkRn-YoSzngfVUs'
@@ -86,26 +90,28 @@ export const FileAttachment = (
 								? Math.round(fileSize / 1000) + ' Кб'
 								: fileSize + ' б'}
 						</p>
-						<Button
-							className="bg-inherit ml-auto opacity-40 underline"
-							type="text"
-							onClick={() => {
-								deleteDoc({ respondId: props.respondId, docId: foundDoc.id })
-									.unwrap()
-									.then(() => {
-										getEmpData(props.respondId)
-											.unwrap()
-											.then(data => {
-												dispatch(setAllData(data))
-											})
-									})
-							}}
-						>
-							Удалить
-						</Button>
+						{!props.seventhStage && (
+							<Button
+								className="bg-inherit ml-auto opacity-40 underline"
+								type="text"
+								onClick={() => {
+									deleteDoc({ respondId: props.respondId, docId: foundDoc.id })
+										.unwrap()
+										.then(() => {
+											getEmpData(props.respondId)
+												.unwrap()
+												.then(data => {
+													dispatch(setAllData(data))
+												})
+										})
+								}}
+							>
+								Удалить
+							</Button>
+						)}
 					</div>
 				</>
-			) : (
+			) : !props.seventhStage ? (
 				<Upload
 					className="col-start-3 ml-auto mr-[10%]"
 					showUploadList={false}
@@ -141,6 +147,8 @@ export const FileAttachment = (
 						Добавить файл
 					</Button>
 				</Upload>
+			) : (
+				<p className="col-start-3 ml-auto">Отсутствует</p>
 			)}
 		</>
 	)

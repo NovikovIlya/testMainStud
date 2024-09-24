@@ -66,6 +66,7 @@ export const EmplMedExam = (props: {
 									{...doc}
 									respondId={props.respondId}
 									stageName={props.stageName}
+									seventhStage={false}
 								/>
 							))}
 					</div>

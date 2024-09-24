@@ -130,12 +130,12 @@ export const FileAttachment = (
 							: options.file.status === 'error' ||
 							  options.file.status === 'removed'
 							? console.log('Произошла чудовищная ошибка')
-							: setIsFileUploading(false)
-						getEmpData(props.respondId)
-							.unwrap()
-							.then(data => {
-								dispatch(setAllData(data))
-							})
+							: (setIsFileUploading(false),
+							  getEmpData(props.respondId)
+									.unwrap()
+									.then(data => {
+										dispatch(setAllData(data))
+									}))
 					}}
 				>
 					{' '}

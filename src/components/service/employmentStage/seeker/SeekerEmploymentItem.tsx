@@ -13,7 +13,7 @@ export const SeekerEmploymentItem = (props: RespondItemType) => {
 				{props.employmentStageStatus === 'FILLING' ? (
 					<p className="ml-[10%]">Прохождение</p>
 				) : (
-					<p className="ml-[10%]">Доработка</p>
+					<p className="ml-[10%]">Проверка</p>
 				)}
 				<div className="flex gap-[12px] ml-auto">
 					<Button

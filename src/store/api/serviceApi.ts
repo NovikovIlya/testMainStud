@@ -883,6 +883,24 @@ export const serviceApi = apiSlice.injectEndpoints({
 					Authorization: `Bearer ${seekerToken}`
 				}
 			})
+		}),
+		sendEmploymentDocs: builder.mutation<
+			void,
+			{ respondId: number; hasNotRequisites: boolean }
+		>({
+			query: ({ respondId, hasNotRequisites }) => ({
+				url: `http://localhost:8082/employment-api/v1/respond/${respondId}/employment/verification`,
+				method: 'POST',
+				headers: {
+					Authorization: `Bearer ${seekerToken}`
+				},
+				body: hasNotRequisites
+					? {
+							acceptance: true,
+							hasNotRequisites: hasNotRequisites
+					  }
+					: { acceptance: true }
+			})
 		})
 	})
 })
@@ -967,5 +985,6 @@ export const {
 	useGetEmploymentDataQuery,
 	useLazyGetEmploymentDocsQuery,
 	useDeleteEmploymentDocMutation,
-	useGetSupervisorRespondsQuery
+	useGetSupervisorRespondsQuery,
+	useSendEmploymentDocsMutation
 } = serviceApi

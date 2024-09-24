@@ -1,11 +1,11 @@
-import { ExclamationCircleTwoTone, LoadingOutlined } from '@ant-design/icons'
-import { Button, Card, Col, Collapse, Descriptions, Form, List, Popover, Row, Space, Spin, Tabs, Tooltip } from 'antd'
+import { ExclamationCircleTwoTone, LoadingOutlined, VerticalAlignBottomOutlined } from '@ant-design/icons'
+import { Button, Card, Col, Collapse, Descriptions, Divider, Form, List, Popover, Row, Space, Spin, Tabs, Tooltip, Typography } from 'antd'
 import dayjs from 'dayjs'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { ArrowLeftSvg } from '../../../../assets/svg'
-import { useGetOneMyPracticesQuery } from '../../../../store/api/practiceApi/mypractice'
+import { useAddReportMutation, useGetOneMyPracticesQuery } from '../../../../store/api/practiceApi/mypractice'
 import { validateMessages } from '../../../../utils/validateMessage'
 
 import Diary from './Diary'
@@ -20,6 +20,14 @@ export const EditMyPractice = () => {
 	const [showFinal, setShowFinal] = useState(false)
 	const [showFinalTwo, setShowFinalTwo] = useState(false)
 	const { data: dataOne, isFetching, isSuccess } = useGetOneMyPracticesQuery(id)
+	const [sendReport,{data,isLoading,isSuccess:isSuccessReport} ] = useAddReportMutation()
+
+	useEffect(()=>{
+		if(isSuccessReport){
+			download()
+		}
+		
+	},[isSuccessReport])
 
 	const formatedDate = () => {
 		if (isSuccess) {
@@ -110,6 +118,20 @@ export const EditMyPractice = () => {
 		console.log(key)
 	}
 
+	const download = async ()=>{
+		if(data){
+			const link = document.createElement('a')
+			link.href = data
+			link.setAttribute('download', `Отчет.docx`)
+			document.body.appendChild(link)
+			link.click()
+		}
+	}
+
+	const handleSave = ()=>{
+		// sendReport()
+	}
+
 	return (
 		<section className="container animate-fade-in">
 			<Space size={10} align="center">
@@ -162,6 +184,12 @@ export const EditMyPractice = () => {
 				</Tabs.TabPane>
 				<Tabs.TabPane tab={'Заполнение документов'} key={2}>
 					<Form<any> validateMessages={validateMessages} form={form} layout={'vertical'} className="mb-8">
+						<Spin style={{width:'50%'}} className='w-[50%]' spinning={isLoading} >
+						<Row className='mt-6'>
+							<Col>
+								<Typography.Title level={2}>Отчет</Typography.Title>
+							</Col>
+						</Row>
 						<Row gutter={[16, 16]} className={'mt-4'}>
 							<Col xs={24} sm={24} md={18} lg={16} xl={12}>
 								<List
@@ -185,9 +213,36 @@ export const EditMyPractice = () => {
 										</List.Item>
 									)}
 								/>
+								<Row>
+									<Col xs={24} md={24} span={24}>
+										<Card title={<div className='flex gap-3'><ExclamationCircleTwoTone />Обратите внимание</div>} bordered={false}>
+										<ul className='pl-5 pr-5 '>
+											<li className='mb-3'>Отчет должен заполняться самостоятельно.В модуле “Практики студентов” формируется только титульный лист отчета.</li>
+											
+										</ul>
+										</Card>
+									</Col>
+								</Row>
+								<Row gutter={[16, 16]} className="my-8">
+									<Col xs={24} sm={24} md={18} lg={8} xl={6}>
+										<Space className="w-full">
+											<Button
+												className="!rounded-full text-[10px] sm:text-base"
+												size="large"
+												onClick={handleSave}
+											>
+												<VerticalAlignBottomOutlined />	Скачать отчет
+											</Button>
+										</Space>
+									</Col>
+								</Row>
+								<Divider />
 							</Col>
 						</Row>
+						</Spin>
 					</Form>
+					
+
 					<Plan id={id} dataTasks={dataOne?.tasks} setShowFinal={setShowFinal} dataOnePlace={dataOne?.place} />
 					<Diary id={id} dataDiary={dataOne?.diary} setShowFinalTwo={setShowFinalTwo} />
 				</Tabs.TabPane>

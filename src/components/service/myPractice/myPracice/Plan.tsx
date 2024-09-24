@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
 
 import EditableTable from './EditableTable'
-import { ExclamationCircleTwoTone, ExclamationOutlined } from '@ant-design/icons'
+import { ExclamationCircleTwoTone, ExclamationOutlined, VerticalAlignBottomOutlined } from '@ant-design/icons'
 import { useAddTasksMutation } from '../../../../store/api/practiceApi/mypractice'
 
 const Plan = ({id,dataOnePlace,dataTasks,setShowFinal}:any) => {
@@ -20,12 +20,12 @@ const Plan = ({id,dataOnePlace,dataTasks,setShowFinal}:any) => {
 	}));
     const [isDisabled,setIsDisabled] = useState(true)
     const [show,setShow] = useState(false)
-	const [sendTask,{data,isLoading} ] = useAddTasksMutation()
+	const [sendTask,{data,isLoading,isSuccess} ] = useAddTasksMutation()
 	const [file,setFile] = useState<any>(null)
 
 
 	
-	const handleSave = ()=>{
+	const handleSave = async ()=>{
 	 setShow(true)
      setShowFinal(true)
 
@@ -39,27 +39,37 @@ const Plan = ({id,dataOnePlace,dataTasks,setShowFinal}:any) => {
 			period:startDate + '/' + endDate
 		}
 	 })
-	 console.log('validData',validData)
+
 	 const obj = {
 		 practiceId:id,
 		 tasks:validData
 	 }
-	 sendTask(obj)
+	 await sendTask(obj)
 	}
-	console.log('file',file)
+
 	const download = async ()=>{
-		const link = document.createElement('a')
-		link.href = data
-		link.setAttribute('download', `Документы практики.docx`)
-		document.body.appendChild(link)
-		link.click()
+		if(data){
+			const link = document.createElement('a')
+			link.href = data
+			link.setAttribute('download', `Документы практики.docx`)
+			document.body.appendChild(link)
+			link.click()
+		}
 	}
+
+	useEffect(()=>{
+		if(isSuccess){
+			download()
+		}
+		
+	},[isSuccess])
 
 	return (
 		<>
+			<Spin style={{width:'50%'}} className='w-[50%]' spinning={isLoading} >
 			<Row className='mt-6'>
 				<Col>
-					<Typography.Title level={2}>Отчет и Индивидуальные задания</Typography.Title>
+					<Typography.Title level={2}>{dataOnePlace==='На кафедре КФУ'? 'Индивидуальные задания' : 'Путевка'}</Typography.Title>
 				</Col>
 			</Row>
 			<Row>
@@ -77,34 +87,33 @@ const Plan = ({id,dataOnePlace,dataTasks,setShowFinal}:any) => {
 							size="large"
                             onClick={handleSave}
 						>
-							Сохранить данные и сформировать документы
+							<VerticalAlignBottomOutlined />	Сохранить и скачать {dataOnePlace==='На кафедре КФУ' ? <a>Индивидуальные задания</a> : <a> Путевку</a>}
 						</Button></Popover>
 					</Space>
 				</Col>
 			</Row>
 
             {show ?
-			<Spin style={{width:'50%'}} className='w-[50%]' spinning={isLoading} >
+		
 			<Row gutter={16} className="mt-14 mb-10">
-				<Col xs={24} sm={24} md={6} >
+				{/* <Col xs={24} sm={24} md={6} >
 					<Card title="Документы практики:" bordered={false}>
 						<ul className="ml-6">
 							<li><a onClick={download}>Отчет по практике и {dataOnePlace==='На кафедре КФУ' ? <a>Индивидуальные задания</a> : <a> Путевка</a>}</a></li>
-							{/* <li>{dataOnePlace==='На кафедре КФУ' ? <a>Индивидуальные задания</a> : <a> Путевка</a>}</li> */}
 						</ul>
 					</Card>
-				</Col>
-				<Col xs={24} md={6} span={6}>
+				</Col> */}
+				<Col xs={24} md={24} span={24}>
 					<Card title={<div className='flex gap-3'><ExclamationCircleTwoTone />Обратите внимание</div>} bordered={false}>
 					<ul className='pl-5 pr-5 '>
-						<li className='mb-3'>Отчет должен заполняться самостоятельно.В модуле “Практики студентов” формируется только титульный лист отчета.</li>
+						
 						{dataOnePlace==='На кафедре КФУ' ?<li className=''>Индивидуальные задания представляют собой план-график на практику студента. Перед началом практики руководитель по практике должен поставить подпись.</li>:
 						<li className=''>Путевку практиканта необходимо распечатать с использованием двусторонней печати и отнести на подпись в Департамент Образования до начала практики — с подписанным документом можно начинать практику в организации</li>}
 					</ul>
 					</Card>
 				</Col>
-			</Row> </Spin> : ''}
-
+			</Row>  : ''}
+			</Spin>
 		</>
 	)
 }

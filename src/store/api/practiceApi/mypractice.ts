@@ -53,7 +53,20 @@ export const myPracticeService = apiSliceStudent.injectEndpoints({
             },
             invalidatesTags: ['MyPractices'],
         }),
-
+        addReport: builder.mutation<any, addDiary>({
+            query: (body) => {
+                return {
+                    url: `/services/api-student-practices/documents/diary`,
+                    method: 'POST',
+                    body:body,
+                    responseHandler: async (response) => {
+                        const blob = await response.blob();
+                        return window.URL.createObjectURL(blob); 
+                    },
+                }
+            },
+            invalidatesTags: ['MyPractices'],
+        }),
     })
 })
 
@@ -61,6 +74,7 @@ export const {
     useGetAllMyPracticesQuery,
     useGetOneMyPracticesQuery,
     useAddTasksMutation,
-    useAddDiaryMutation
+    useAddDiaryMutation,
+    useAddReportMutation
     
 } = myPracticeService

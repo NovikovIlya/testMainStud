@@ -18,7 +18,9 @@ export const EmplRequisites = (props: {
 }) => {
 	const { docs } = useAppSelector(state => state.employmentSeekerDocs)
 	const { empData } = useAppSelector(state => state.employmentData)
-	const foundStage = empData.stages.find(stage => stage.id === props.stageId)
+	const foundStage = empData.stages.find(
+		stage => stage.type === props.stageName
+	)
 	const dispatch = useDispatch()
 
 	useEffect(() => {
@@ -58,7 +60,7 @@ export const EmplRequisites = (props: {
 								<FileAttachment
 									{...doc}
 									respondId={props.respondId}
-									stageId={props.stageId}
+									stageName={props.stageName}
 								/>
 							))}
 					</div>

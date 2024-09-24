@@ -10,7 +10,9 @@ export const EmplInstruction = (props: {
 	stageName: string
 }) => {
 	const { empData } = useAppSelector(state => state.employmentData)
-	const foundStage = empData.stages.find(stage => stage.id === props.stageId)
+	const foundStage = empData.stages.find(
+		stage => stage.type === props.stageName
+	)
 	const dispatch = useDispatch()
 
 	return (

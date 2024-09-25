@@ -51,7 +51,7 @@ const Plan = ({id,dataOnePlace,dataTasks,setShowFinal}:any) => {
 		if(data){
 			const link = document.createElement('a')
 			link.href = data
-			link.setAttribute('download', `Документы практики.docx`)
+			link.setAttribute('download', `${dataOnePlace==='На кафедре КФУ'? 'Индивидуальные задания' : 'Путевка'}.docx`)
 			document.body.appendChild(link)
 			link.click()
 		}
@@ -87,13 +87,13 @@ const Plan = ({id,dataOnePlace,dataTasks,setShowFinal}:any) => {
 							size="large"
                             onClick={handleSave}
 						>
-							<VerticalAlignBottomOutlined />	Сохранить и скачать {dataOnePlace==='На кафедре КФУ' ? <a>Индивидуальные задания</a> : <a> Путевку</a>}
+							<VerticalAlignBottomOutlined />	Сохранить и скачать {dataOnePlace==='На кафедре КФУ' ? <a>Индивидуальные задания</a> : <a>Путевку</a>}
 						</Button></Popover>
 					</Space>
 				</Col>
 			</Row>
 
-            {show ?
+          
 		
 			<Row gutter={16} className="mt-14 mb-10">
 				{/* <Col xs={24} sm={24} md={6} >
@@ -103,7 +103,7 @@ const Plan = ({id,dataOnePlace,dataTasks,setShowFinal}:any) => {
 						</ul>
 					</Card>
 				</Col> */}
-				<Col xs={24} md={24} span={24}>
+				<Col xs={12} md={12} span={12}>
 					<Card title={<div className='flex gap-3'><ExclamationCircleTwoTone />Обратите внимание</div>} bordered={false}>
 					<ul className='pl-5 pr-5 '>
 						
@@ -112,7 +112,7 @@ const Plan = ({id,dataOnePlace,dataTasks,setShowFinal}:any) => {
 					</ul>
 					</Card>
 				</Col>
-			</Row>  : ''}
+			</Row>  
 			</Spin>
 		</>
 	)

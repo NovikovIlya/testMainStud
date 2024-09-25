@@ -140,6 +140,8 @@ export const MyPractice = () => {
 
 	const uniqueCourseNumbers = [...new Set(dataTable?.map((item: any) => item.course))]
 
+	if(isFetchingMyPractice)return(<Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />)
+	
 	return (
 		<Form form={form}>
 			<section className="container animate-fade-in">
@@ -236,30 +238,28 @@ export const MyPractice = () => {
 
 				<Row className="mt-4">
 					<Col flex={'auto'}>
-						{isFetchingMyPractice ? (
-							<Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
-						) : !fullTable ? (
+						{ !fullTable ?(
 							<div className="viewPractical">
-								<Table
-									onRow={record => ({
-										onClick: () => handleRowClick(record)
-									})}
-									rowKey="id"
-									// @ts-ignore
-									columns={columnsMini}
-									dataSource={dataTable ? dataTable : []}
-									pagination={
-										dataTable && dataTable?.length < 10
-											? false
-											: {
-													pageSize: 10
-											  }
-									}
-									rowClassName={() => 'animate-fade-in '}
-									className="my- "
-								/>
-							</div>
-						) : (
+							<Table
+								onRow={record => ({
+									onClick: () => handleRowClick(record)
+								})}
+								rowKey="id"
+								// @ts-ignore
+								columns={columnsMini}
+								dataSource={dataTable ? dataTable : []}
+								pagination={
+									dataTable && dataTable?.length < 10
+										? false
+										: {
+												pageSize: 10
+											}
+								}
+								rowClassName={() => 'animate-fade-in '}
+								className="my- "
+							/>
+						</div>
+						) :  (
 							<Table
 								onRow={record => ({
 									onClick: () => handleRowClick(record)

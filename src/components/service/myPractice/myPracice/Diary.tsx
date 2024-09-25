@@ -60,7 +60,6 @@ const Diary = ({id,dataDiary,setShowFinalTwo}:any) => {
 		if(isSuccess){
 			download()
 		}
-		
 	},[isSuccess])
 
 	return (

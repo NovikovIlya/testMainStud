@@ -167,10 +167,15 @@ type ColumnTypes = Exclude<TableProps['columns'], undefined>;
 
 const EditableTableTwo = ({setShow,dataSource,setDataSource,setIsDisabled}:any) => {
 
-
+  console.log('dataSource',dataSource)
   const handleDelete = (key: React.Key) => {
     console.log('key',key)
-    const newData = dataSource.filter((item:any) => item.key !== key);
+    const newData = dataSource.filter((item:any) => item.key !== key).map((item:any,index:number)=>{
+     return{
+      ...item,
+      number:index+1
+     }
+    });
     setDataSource(newData);
   };
 
@@ -195,7 +200,7 @@ const EditableTableTwo = ({setShow,dataSource,setDataSource,setIsDisabled}:any) 
         dataIndex: 'number',
         title: '№',
         className: 'text-xs !p-2',
-       
+        render: (_, __, index) => index + 1 
     },
     {
       title: 'Содержание выполненной работы',

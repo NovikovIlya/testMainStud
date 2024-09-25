@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { ArrowLeftSvg } from '../../../../assets/svg'
-import { useAddReportMutation, useGetOneMyPracticesQuery } from '../../../../store/api/practiceApi/mypractice'
+import {  useAddReportQuery, useGetOneMyPracticesQuery } from '../../../../store/api/practiceApi/mypractice'
 import { validateMessages } from '../../../../utils/validateMessage'
 
 import Diary from './Diary'
@@ -19,15 +19,16 @@ export const EditMyPractice = () => {
 	const nav = useNavigate()
 	const [showFinal, setShowFinal] = useState(false)
 	const [showFinalTwo, setShowFinalTwo] = useState(false)
-	const { data: dataOne, isFetching, isSuccess } = useGetOneMyPracticesQuery(id)
-	const [sendReport,{data,isLoading,isSuccess:isSuccessReport} ] = useAddReportMutation()
 
-	useEffect(()=>{
-		if(isSuccessReport){
-			download()
-		}
+	const { data: dataOne, isFetching, isSuccess } = useGetOneMyPracticesQuery(id)
+	const {data,isLoading,isSuccess:isSuccessReport}  = useAddReportQuery(id,{skip:!id})
+
+	// useEffect(()=>{
+	// 	if(isSuccessReport){
+	// 		download()
+	// 	}
 		
-	},[isSuccessReport])
+	// },[isSuccessReport])
 
 	const formatedDate = () => {
 		if (isSuccess) {
@@ -129,10 +130,14 @@ export const EditMyPractice = () => {
 	}
 
 	const handleSave = ()=>{
+		download()
 		// sendReport()
 	}
 
+	
+
 	return (
+		<Spin spinning={isFetching}>
 		<section className="container animate-fade-in">
 			<Space size={10} align="center">
 				<Button
@@ -150,12 +155,7 @@ export const EditMyPractice = () => {
 			</Space>
 			<Tabs defaultActiveKey="1" onChange={onChange} className="mt-6">
 				<Tabs.TabPane tab={'Основная информация'} key={1}>
-					{isFetching ? (
-						<Spin
-							className="w-full mt-20 flex justify-start ml-10"
-							indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}
-						/>
-					) : (
+					
 						<>
 							<Row className="mb-4 mt-4">
 								<Col xs={24} sm={12} span={12} className="pr-[8px] ">
@@ -180,7 +180,7 @@ export const EditMyPractice = () => {
 								</Col>
 							</Row>
 						</>
-					)}
+					
 				</Tabs.TabPane>
 				<Tabs.TabPane tab={'Заполнение документов'} key={2}>
 					<Form<any> validateMessages={validateMessages} form={form} layout={'vertical'} className="mb-8">
@@ -213,7 +213,7 @@ export const EditMyPractice = () => {
 										</List.Item>
 									)}
 								/>
-								<Row>
+								<Row className='mt-4'>
 									<Col xs={24} md={24} span={24}>
 										<Card title={<div className='flex gap-3'><ExclamationCircleTwoTone />Обратите внимание</div>} bordered={false}>
 										<ul className='pl-5 pr-5 '>
@@ -274,5 +274,6 @@ export const EditMyPractice = () => {
 				</Tabs.TabPane>
 			</Tabs>
 		</section>
+		</Spin>
 	)
 }

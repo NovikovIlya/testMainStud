@@ -436,6 +436,14 @@ export type EmploymentDataType = {
 		status: EmployementStatus
 		comment: string
 		documents: {
+			id: number
+			docType: string
+			status: 'ATTACHED' | 'NOT_ATTACHED'
+		}[]
+		hasRequisites?: boolean
+		testLink?: string
+	}[]
+}
 
 export type EmploymentStageItemType = {
 	respondId: number
@@ -472,8 +480,8 @@ export type EmploymentDocsType = {
 	id: number
 	employmentStageType: string
 	name: string
-	}[]
 }
+
 export type ChangeStageStatusType = {
 	status: 'ACCEPTED' | 'REFINE'
 	comment: string

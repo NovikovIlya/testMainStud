@@ -44,7 +44,6 @@ import inviteSeekerButtonReducer from './reducers/inviteSeekerButtonReducer'
 import currentEmploymentSeekerReducer from './reducers/EmploymentStageReducers/EmploymentStageSeekerReducer'
 import currentRequisiteSeekerReducer from './reducers/RequisiteReducers/RequisiteSeekerReducer'
 import currentCommentVisibilitySlice from './reducers/RequisiteReducers/StageCommentReducer'
-import currentStageStatusSlice from './reducers/StagesStatusReducer'
 
 export const store = configureStore({
 	reducer: {
@@ -84,12 +83,11 @@ export const store = configureStore({
 		currentEmploymentStage: CurrentEmploymentStage,
 		employmentData: EmploymentDataSlice,
 		employmentProgress: EmploymentProgressSlice,
-		employmentSeekerDocs: EmploymentSeekerDocsSlice
+		employmentSeekerDocs: EmploymentSeekerDocsSlice,
 		inviteSeekerButtonStatus: inviteSeekerButtonReducer,
 		employmentSeeker: currentEmploymentSeekerReducer,
 		requisiteSeeker: currentRequisiteSeekerReducer,
 		currentCommentVisibility: currentCommentVisibilitySlice,
-		currentStageStatus: currentStageStatusSlice
 	},
 	middleware: getDefaultMiddleware =>
 		getDefaultMiddleware()

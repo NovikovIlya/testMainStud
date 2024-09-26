@@ -899,10 +899,12 @@ export const serviceApi = apiSlice.injectEndpoints({
 				},
 				body: hasNotRequisites
 					? {
-							acceptance: true,
-							hasNotRequisites: hasNotRequisites
-					  }
+						acceptance: true,
+						hasNotRequisites: hasNotRequisites
+					}
 					: { acceptance: true }
+			})
+		}),
 		getPersonnelStages: builder.query<EmploymentStageItemType[], void>({
 			query: arg => ({
 				url: `http://localhost:8082/employment-api/v1/managment/employment`,
@@ -1036,5 +1038,5 @@ export const {
 	useLazyGetEmploymentDocsQuery,
 	useDeleteEmploymentDocMutation,
 	useGetSupervisorRespondsQuery,
-	useSendEmploymentDocsMutation
+	useSendEmploymentDocsMutation,
 } = serviceApi

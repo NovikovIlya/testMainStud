@@ -1,4 +1,6 @@
+import { time } from 'console'
 import i18n from 'i18next'
+import { url } from 'inspector'
 
 import { IApproveRequest } from '../../api/types'
 import {
@@ -8,6 +10,8 @@ import {
 	DocumentLib,
 	Documentation,
 	Email,
+	EmploymentDataType,
+	EmploymentDocsType,
 	EmploymentRequestType,
 	Exam,
 	ICalendar,
@@ -221,7 +225,12 @@ export const serviceApi = apiSlice.injectEndpoints({
 			})
 		}),
 		getChatIdByRespondId: builder.query<
-			number,
+			{
+				id: number
+				respondInfo: VacancyRespondItemType & { vacancyId: number }
+				unreadCount: number
+				lastMessageDate: string
+			},
 			{ chatId: number; role: string }
 		>({
 			query: arg => ({
@@ -352,6 +361,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 				id: number
 				respondInfo: VacancyRespondItemType & { vacancyId: number }
 				unreadCount: number
+				lastMessageDate: string
 			}[],
 			{
 				vacancyId: number | null
@@ -389,6 +399,30 @@ export const serviceApi = apiSlice.injectEndpoints({
 						...resp,
 						respondDate: resp.respondDate.substring(0, 10)
 					}))
+			}
+		}),
+		getEmploymentData: builder.query<EmploymentDataType, number>({
+			query: respondId => ({
+				url: `http://localhost:8082/employment-api/v1/respond/${respondId}/employment`,
+				headers: { Authorization: `Bearer ${seekerToken}` }
+			})
+		}),
+		getEmploymentDocs: builder.query<EmploymentDocsType[], number>({
+			query: vacancyId => ({
+				url: `http://localhost:8082/employment-api/v1/vacancy/${vacancyId}/empl-docs`,
+				headers: { Authorization: `Bearer ${seekerToken}` }
+			})
+		}),
+		getSupervisorResponds: builder.query<VacancyRespondItemType[], void>({
+			query: () => ({
+				url: `http://localhost:8082/employment-api/v1/supervisor/vacancy/respond`,
+				headers: { Authorization: `Bearer ${supervisorToken}` }
+			}),
+			transformResponse: (response: VacancyRespondItemType[]) => {
+				return response.map(resp => ({
+					...resp,
+					responseDate: resp.responseDate.substring(0, 10)
+				}))
 			}
 		}),
 		postPhone: builder.mutation({
@@ -819,10 +853,10 @@ export const serviceApi = apiSlice.injectEndpoints({
 			ReserveTimeRequestType & { respondId: number }
 		>({
 			query: arg => ({
-				url: `http://localhost:8082/employment-api/v1/respond/${arg.respondId}/chat/butttons/interview/reserve-time`,
+				url: `http://localhost:8082/employment-api/v1/respond/${arg.respondId}/chat/buttons/interview/reserve-time`,
 				method: 'POST',
 				body: {
-					time: arg.time
+					time: arg.time ? arg.time : null
 				},
 				headers: {
 					Authorization: `Bearer ${seekerToken}`
@@ -841,6 +875,34 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
+		deleteEmploymentDoc: builder.mutation<
+			void,
+			{ respondId: number; docId: number }
+		>({
+			query: ({ respondId, docId }) => ({
+				url: `http://localhost:8082/employment-api/v1/respond/${respondId}/employment/file/${docId}`,
+				method: 'DELETE',
+				headers: {
+					Authorization: `Bearer ${seekerToken}`
+				}
+			})
+		}),
+		sendEmploymentDocs: builder.mutation<
+			void,
+			{ respondId: number; hasNotRequisites: boolean }
+		>({
+			query: ({ respondId, hasNotRequisites }) => ({
+				url: `http://localhost:8082/employment-api/v1/respond/${respondId}/employment/verification`,
+				method: 'POST',
+				headers: {
+					Authorization: `Bearer ${seekerToken}`
+				},
+				body: hasNotRequisites
+					? {
+							acceptance: true,
+							hasNotRequisites: hasNotRequisites
+					  }
+					: { acceptance: true }
 		getPersonnelStages: builder.query<EmploymentStageItemType[], void>({
 			query: arg => ({
 				url: `http://localhost:8082/employment-api/v1/managment/employment`,
@@ -968,5 +1030,11 @@ export const {
 	useChangeEmploymentStageStatusRequestMutation,
 	useDownloadEmploymentStageFileQuery,
 	useLazyGetChatPreviewsQuery,
-	useGetSeekerEmploymentRespondsQuery
+	useGetSeekerEmploymentRespondsQuery,
+	useLazyGetEmploymentDataQuery,
+	useGetEmploymentDataQuery,
+	useLazyGetEmploymentDocsQuery,
+	useDeleteEmploymentDocMutation,
+	useGetSupervisorRespondsQuery,
+	useSendEmploymentDocsMutation
 } = serviceApi

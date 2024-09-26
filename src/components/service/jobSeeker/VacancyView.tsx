@@ -99,7 +99,9 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 						<ArrowIcon />
 					</button>
 					<p className="mb-[2px] ml-[40px] font-content-font font-normal text-black text-[28px]/[33.6px]">
-						{currentVacancy !== null ? currentVacancy.title.rendered : ''}
+						{currentVacancy !== null
+							? '«' + currentVacancy.title.rendered + '»'
+							: ''}
 					</p>
 				</div>
 				<div className="w-[50%] mt-[52px] grid grid-cols-[repeat(3,_minmax(106px,_auto))_143px] gap-x-[120px] gap-y-[16px]">

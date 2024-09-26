@@ -32,17 +32,21 @@ export const RespondItem = (props: RespondItemType & { refetch: Function }) => {
 
 	const handleNavigate = (url: string) => {
 		if (props.status) {
-			if (props.status !== respondStatus[respondStatus.INVITATION]) {
-				dispatch(closeChat())
-			} else {
+			if (
+				props.status === respondStatus[respondStatus.INVITATION] ||
+				props.status === respondStatus[respondStatus.EMPLOYMENT_REQUEST] ||
+				props.status === respondStatus[respondStatus.EMPLOYMENT]
+			) {
 				dispatch(openChat())
+			} else {
+				dispatch(closeChat())
 			}
 		} else {
 			dispatch(openChat())
 		}
 		dispatch(setChatId(chatId))
 		dispatch(setRespondId(props.id))
-		dispatch(setCurrentVacancyId(0))
+		dispatch(setCurrentVacancyId(props.vacancyId))
 		navigate(url)
 	}
 
@@ -95,7 +99,7 @@ export const RespondItem = (props: RespondItemType & { refetch: Function }) => {
 					</div>
 				</Modal>
 			</ConfigProvider>
-			<div className="w-full mb-[12px] flex items-center bg-white shadow-custom-shadow pl-[20px] pr-[55px] pt-[20px] pb-[20px]">
+			<div className="w-full mb-[12px] flex items-center bg-white shadow-custom-shadow pl-[20px] pr-[55px] pt-[20px] pb-[20px] flex-wrap">
 				<p className="w-[25%]">{props.name}</p>
 				<p className="ml-[5%] w-[8%]">
 					{props.respondDate.split('-').reverse().join('.')}
@@ -110,34 +114,44 @@ export const RespondItem = (props: RespondItemType & { refetch: Function }) => {
 						? 'приглашение'
 						: props.status === respondStatus[respondStatus.IN_RESERVE]
 						? 'отказано'
+						: props.status === respondStatus[respondStatus.EMPLOYMENT_REQUEST]
+						? 'приглашение'
+						: props.status === respondStatus[respondStatus.EMPLOYMENT]
+						? 'трудоустройство'
 						: 'отказано'}
 				</p>
-				<Button
-					className="ml-[5%] max-w-[15%] rounded-[54px] font-content-font font-normal text-[16px]/[16px]"
-					type="primary"
-					onClick={() => {
-						dispatch(setCurrentResponce(props.id))
-						navigate('/services/myresponds/responds/fullinfo')
-					}}
-				>
-					Посмотреть
-				</Button>
-				<Button
-					onClick={() => {
-						handleNavigate(`/services/myresponds/chat/id/${chatId}`)
-					}}
-					className="ml-[1%] max-w-[15%] font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black"
-				>
-					Перейти в чат
-				</Button>
-				<Button
-					className="ml-[1%] rounded-[54.5px] border-solid border-black !px-[16px] !py-[7px] !w-[50px]"
-					onClick={() => {
-						setModalOpen(true)
-					}}
-					type="text"
-					icon={<DeleteSvg />}
-				/>
+				<div className="flex ml-auto gap-[12px]">
+					<Button
+						className="rounded-[54px] font-content-font font-normal text-[16px]/[16px]"
+						type="primary"
+						onClick={() => {
+							dispatch(setCurrentResponce(props.id))
+							navigate('/services/myresponds/responds/fullinfo')
+						}}
+					>
+						Посмотреть
+					</Button>
+					<Button
+						onClick={() => {
+							handleNavigate(`/services/myresponds/chat/id/${chatId}`)
+						}}
+						className="font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black"
+					>
+						Перейти в чат
+					</Button>
+					<Button
+						className="rounded-[54.5px] border-solid border-black !px-[16px] !py-[7px] !w-[50px]"
+						onClick={() => {
+							setModalOpen(true)
+						}}
+						type="text"
+						disabled={
+							props.status === respondStatus[respondStatus.IN_RESERVE] ||
+							props.status === respondStatus[respondStatus.ARCHIVE]
+						}
+						icon={<DeleteSvg />}
+					/>
+				</div>
 			</div>
 		</>
 	)

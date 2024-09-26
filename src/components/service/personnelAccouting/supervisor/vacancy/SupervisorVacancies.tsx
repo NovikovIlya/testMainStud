@@ -1,9 +1,30 @@
+import { LoadingOutlined } from '@ant-design/icons'
+import { Spin } from 'antd'
+
 import { useGetSupervisorVacancyQuery } from '../../../../../store/api/serviceApi'
 
 import SupervisorVacancyItem from './SupervisorVacancyItem'
 
 export const SupervisorVacancies = () => {
-	const { data: vacancies = [] } = useGetSupervisorVacancyQuery()
+	const { data: vacancies = [], isLoading: loading } =
+		useGetSupervisorVacancyQuery()
+
+	if (loading) {
+		return (
+			<>
+				<div className="w-full h-full flex items-center">
+					<div className="text-center ml-auto mr-auto mb-[10%]">
+						<Spin
+							indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}
+						></Spin>
+						<p className="font-content-font font-normal text-black text-[18px]/[18px]">
+							Идёт загрузка...
+						</p>
+					</div>
+				</div>
+			</>
+		)
+	}
 
 	return (
 		<>

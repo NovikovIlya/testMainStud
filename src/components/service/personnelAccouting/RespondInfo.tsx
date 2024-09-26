@@ -1,4 +1,5 @@
-import { Button, Tag } from 'antd'
+import { LoadingOutlined } from '@ant-design/icons'
+import { Button, Spin, Tag } from 'antd'
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -65,7 +66,7 @@ export const RespondInfo = (props: {
 		dispatch(openChat())
 		dispatch(setChatId(chatId))
 		dispatch(setRespondId(res?.id as number))
-		dispatch(setCurrentVacancyId(0))
+		dispatch(setCurrentVacancyId(res?.vacancyId as number))
 		navigate(url)
 	}
 
@@ -96,7 +97,20 @@ export const RespondInfo = (props: {
 	})
 
 	if (res === undefined) {
-		return <></>
+		return (
+			<>
+				<div className="w-screen h-screen flex items-center">
+					<div className="text-center ml-auto mr-auto mb-[10%]">
+						<Spin
+							indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}
+						></Spin>
+						<p className="font-content-font font-normal text-black text-[18px]/[18px]">
+							Идёт загрузка...
+						</p>
+					</div>
+				</div>
+			</>
+		)
 	} else {
 		return (
 			<>
@@ -104,13 +118,14 @@ export const RespondInfo = (props: {
 					<div>
 						<Button
 							onClick={() => {
-								props.type === 'PERSONNEL_DEPARTMENT'
-									? navigate('/services/personnelaccounting/responds')
-									: props.type === 'SUPERVISOR'
-									? navigate(
-											'/services/personnelaccounting/supervisor/responds'
-									  )
-									: navigate('/services/myresponds/responds')
+								// props.type === 'PERSONNEL_DEPARTMENT'
+								// 	? navigate('/services/personnelaccounting/responds')
+								// 	: props.type === 'SUPERVISOR'
+								// 	? navigate(
+								// 			'/services/personnelaccounting/supervisor/responds'
+								// 	  )
+								// 	: navigate('/services/myresponds/responds')
+								navigate(-1)
 							}}
 							className="bg-inherit h-[38px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer"
 						>

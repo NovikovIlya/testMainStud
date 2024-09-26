@@ -19,6 +19,7 @@ export const DocumentElem = (props: DocumentElemProps) => {
 		link.href = window.URL.createObjectURL(fileBlob)
 		link.download = fileName
 		link.click()
+
 	}
 
 	return (

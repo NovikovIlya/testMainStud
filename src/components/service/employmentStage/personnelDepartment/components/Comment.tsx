@@ -1,20 +1,23 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
+import { useAppSelector } from '../../../../../store'
 
 interface CommentProps {
 	commentText: string
-	commentStatus: 'visible' | 'invisible'
 }
 
 export const Comment = ( props: CommentProps ) => {
 
+	const visibility = useAppSelector(state => state.currentCommentVisibility.visibility)
+
 	const [isCommentExpanded, setIsCommentExpanded] = useState(false);
 
 	let fullText = props.commentText
-
 	let shortText = fullText.slice(0, 40) + "...";
 
 	return (
-		<div className={` ${ props.commentStatus === 'visible' ? 'flex' : 'hidden'} flex flex-col pl-[20px] gap-[4px] mt-[20px] mb-[20px] max-w-[50%]`}>
+		<div className={` ${ (visibility === 'invisible') ? 'hiiden' : 'flex'}
+											${ (visibility === 'visible') ? 'flex' : 'hidden'}
+		 									flex flex-col gap-[4px] max-w-[50%]`}>
 			<span className="text-[14px]/[16.8px] text-black opacity-[40%] font-normal">Комментарий на доработку: </span>
 			<span className="text-[14px]/[16.8px] text-black opacity-[60%] font-normal">{isCommentExpanded ? fullText : shortText}
 				<button

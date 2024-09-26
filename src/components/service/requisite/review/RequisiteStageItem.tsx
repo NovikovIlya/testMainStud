@@ -1,52 +1,56 @@
-import React, { useReducer, useState, useCallback } from 'react'
+import React, { useState, useRef } from 'react'
+import { useDispatch } from 'react-redux'
 import { Button, ConfigProvider, Input, Modal } from 'antd'
 import { DocumentElem } from '../../employmentStage/personnelDepartment/components/DocumentElem'
-import { initialState, stageReducer } from '../../../../store/reducers/EmploymentStageReducers/StageStatusReducer'
+import { Comment } from '../../employmentStage/personnelDepartment/components/Comment'
 import {
 	useChangeEmploymentStageStatusRequestMutation, useGetEmploymentStageStatusQuery,
 } from '../../../../store/api/serviceApi'
-import { EmploymentStageStatusType } from '../../../../store/reducers/type'
 import { useAppSelector } from '../../../../store'
+import { setCurrentCommentVisibility } from '../../../../store/reducers/RequisiteReducers/StageCommentReducer'
 
 export const RequisiteStageItem = ( ) => {
+
+	const dispatch = useDispatch()
 
 	const respondId = useAppSelector(state => state.currentResponce)
 
 	const { data: requisite_items = [] } = useGetEmploymentStageStatusQuery(respondId)
 
+	const stageWithId6 = requisite_items
+		.flatMap(item => item.stages)
+		.find(stage => stage.id === 6)
+	const sixStageStatus = stageWithId6?.status
+	const sixStageComment = stageWithId6?.comment
 	const [changeStatus] = useChangeEmploymentStageStatusRequestMutation()
 
 	const [isRevisionModalOpen, setIsRevisionModalOpen] = useState(false)
 
-	const [secondStageState, dispatch] = useReducer(stageReducer, initialState);
-
-	const [comment, setComment] = useState('');
-
 	const { TextArea } = Input
 
-	const textChangeCheck = useCallback((e : any) => {
-		setComment(e.target.value);
-	}, []);
+	const changeVisibility = (newVisibility: string) => {
+		dispatch(setCurrentCommentVisibility(newVisibility))
+	}
 
+	const textRef = useRef('')
+	const checkInputChange = (e:any) => {
+		textRef.current = e.target.value
+	};
 	const StageStatusComponent = () => {
 		return(
 			<>
-				{(secondStageState.stageStatus === 'VERIFYING') && (
+				{(sixStageStatus === 'VERIFYING') && (
 					<div className="flex flex-row gap-[12px]">
 						<Button
 							className="text-[#FFFFFF] py-[8px] px-[24px] border-none rounded-[54.5px] text-[16px] font-normal"
 							type="primary"
 							onClick={() => {
-								try {
-									changeStatus({
-										status: 'ACCEPTED',
-										comment: comment,
-										subStageId: 6
-									});
-									dispatch({ type: 'SET_COMPLETE' });
-								} catch (error) {
-									console.log('try/catch error', error);
-								}
+								changeStatus({
+									status: 'ACCEPTED',
+									comment: '',
+									subStageId: 6
+								})
+								changeVisibility('invisible')
 							}}
 						>
 							Принять
@@ -60,13 +64,13 @@ export const RequisiteStageItem = ( ) => {
 						>На доработку</Button>
 					</div>
 				)}
-				{(secondStageState.stageStatus === 'REFINE') && (
+				{(sixStageStatus === 'REFINE') && (
 					<div className="flex flex-row items-center gap-[12px] pr-[150px]">
 						<div className="w-[11px] h-[11px] rounded-[100%] bg-[#FFD600]"></div>
 						<span>Доработка</span>
 					</div>
 				)}
-				{(secondStageState.stageStatus === 'COMPLETE') && (
+				{(sixStageStatus === 'COMPLETE') && (
 					<div className="flex flex-row items-center gap-[12px] pr-[150px]">
 						<div className="w-[11px] h-[11px] rounded-[100%] bg-[#00AB30]"></div>
 						<span>Принято</span>
@@ -79,14 +83,16 @@ export const RequisiteStageItem = ( ) => {
 		return(
 			<div className="flex flex-col gap-[12px]">
 				{/*TODO не работает, исправить*/}
-				{requisite_items.map((stage: EmploymentStageStatusType) => (
-					stage.stages?.map((subStage) => (
-						<DocumentElem
-							key={subStage.document.id}
-							name={subStage.document.docType}
-						/>
-					))
-				))}
+				{/*
+				
+				*/}
+				{(sixStageStatus === 'REFINE') && (
+					<>
+						{(typeof sixStageComment === 'string') && (
+							<Comment commentText={sixStageComment}></Comment>
+						)}
+					</>
+				)}
 			</div>
 		)
 	}
@@ -107,6 +113,8 @@ export const RequisiteStageItem = ( ) => {
 						onCancel={() => {
 							setIsRevisionModalOpen(false)
 						}}
+						onOk={() => {
+							setIsRevisionModalOpen(false)}}
 						title={null}
 						footer={null}
 						width={620}
@@ -118,28 +126,23 @@ export const RequisiteStageItem = ( ) => {
 						<TextArea
 							autoSize={{ minRows: 4, maxRows: 8 }}
 							style={{ height: 107, resize: 'none', width: 520, }}
-							value={comment}
-							onChange={textChangeCheck}
+							onChange={checkInputChange}
 						/>
 						<div className="mt-[40px] flex gap-[12px] w-full justify-end ">
 							<Button
 								className="rounded-[54.5px] py-[12px] px-[24px]  text-[16px]"
 								type="primary"
 								onClick={() => {
-									try {
-										changeStatus({
-											status: 'REFINE',
-											comment: comment,
-											subStageId: 0
-										});
-										dispatch({ type: 'SET_REFINE' });
-										setIsRevisionModalOpen(false);
-									} catch (error) {
-										console.log('try/catch error', error);
-									}
+									changeStatus({
+										status: 'REFINE',
+										comment: textRef.current,
+										subStageId: 6
+									})
+									changeVisibility('visible')
+									setIsRevisionModalOpen(false)
 								}}
 							>
-								Отправить
+								Ok
 							</Button>
 						</div>
 					</Modal>

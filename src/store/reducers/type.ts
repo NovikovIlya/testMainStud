@@ -444,8 +444,8 @@ export type EmploymentStageStatusType = {
 			id: number
 			docType: string
 			status: 'ATTACHED' | 'NOT_ATTACHED'
-		}
-	}
+		}[]
+	}[]
 }
 export type ChangeStageStatusType = {
 	status: 'ACCEPTED' | 'REFINE'

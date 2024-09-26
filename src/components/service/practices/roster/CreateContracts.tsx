@@ -394,7 +394,7 @@ export const CreateContracts = () => {
                                         message.error('Файл должен быть меньше 5 МБ!');
                                         return false
                                     }
-                                    console.log('file',file)
+                                
                                     setFiles({
                                         ...files,
                                         pdfContract: file

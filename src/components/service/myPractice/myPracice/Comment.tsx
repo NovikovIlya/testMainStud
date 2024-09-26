@@ -6,13 +6,13 @@ import { FileOutlined, UploadOutlined } from '@ant-design/icons';
 const comments = [
   {
     author: 'Тетя Мотя',
-    avatar: 'https://t3.ftcdn.net/jpg/06/57/85/22/360_F_657852299_5py03y6oH4mrUDyZnf9XxFSFfrjcqAzP.jpg',
+    // avatar: 'https://t3.ftcdn.net/jpg/06/57/85/22/360_F_657852299_5py03y6oH4mrUDyZnf9XxFSFfrjcqAzP.jpg',
+    href:'https://filesamples.com/samples/document/docx/sample2.docx',
     text: 'Нужно исправить',
    
   },
   {
     author: 'Тетя Мотя',
-   
     href:'https://filesamples.com/samples/document/docx/sample2.docx',
     text: 'Хорошо получилось, молодец, но есть правки',
    
@@ -35,14 +35,17 @@ export const Comment = () => (
         renderItem={item => (
         <List.Item className='rounded-lg  mb-0 flex-wrap ant-list-itemThree'>
             <Row className='mt-6 w-full  justify-end mb-3    w-25'>
-              <Col className='  p-4 flex flex-wrap justify-end rounded-lg w-25 bg-[#e3f2ff] cc'>
-                <Typography className='text-sm  text-gray-400 text-end w-full'>Прикрепленные файлы</Typography>
-                <a href={item.href} download>Файл</a>
+              <Col className='  p-4 flex flex-wrap justify-end rounded-lg w-25 bg-[#1F5CB8] cc'>
+                <Typography className='text-sm  text-white text-end w-full'>Отправляю вам документы!</Typography>
+               <div className='flex gap-3'>
+                <a className='text-yellow-500' href={item.href} download>Файл</a>
+                <FileOutlined style={{ color: 'white' }} className='w-4 h-4 cursor-pointer mt-1 color-white' />
+               </div>
               </Col>
             </Row>
-            {/* <Divider className='border-solid border-y-4 border-[#f5f8fb]'/> */}
+
             <List.Item.Meta
-              className='p-4  rounded-lg cc w-15 bg-[#65a1fa] flex-none text-white'
+              className='p-4  rounded-xl cc w-15 bg-[#545457] flex-none text-white'
              
               title={<div className='text-white'>{item.author}</div>}
               description={
@@ -58,7 +61,6 @@ export const Comment = () => (
                           <FileOutlined style={{ color: 'white' }} className='w-4 h-4 cursor-pointer mt-1 color-white' />
                       </div>
                       <div>
-                        {/* <Typography className='text-sm text-white'>Прикрепленные файлы</Typography> */}
                         <a className='text-yellow-500' href={item.href} download>Файл</a>
                       </div>
                     </Col>
@@ -71,17 +73,6 @@ export const Comment = () => (
       
         )}
     />
-      {/* <Row>
-        <Col>
-          <Typography>Прикрепленные файлы</Typography>
-           <a href='https://filesamples.com/samples/document/docx/sample2.docx' download>Файл</a>
-        </Col>
-      </Row> */}
-    {/* <div>
-        <Form className='flex mt-4'>
-            <TextArea rows={1} />
-            <Button>Отправить</Button>
-        </Form>
-    </div> */}
+
   </>
 );

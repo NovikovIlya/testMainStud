@@ -27,8 +27,6 @@ export const SupervisorInterviews = () => {
 		)
 	}
 
-	const { data: interviews = [] } = useGetSupervisorInterviewQuery()
-
 	return (
 		<div className="w-full mx-16 mt-[120px]">
 			<h1 className="font-normal text-3xl mb-14">Все собеседования</h1>

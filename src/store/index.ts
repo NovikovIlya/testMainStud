@@ -1,4 +1,4 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import logger from 'redux-logger'
 
@@ -40,6 +40,10 @@ import SkillsReducer from './reducers/SeekerFormReducers/SkillsReducer'
 import authSlice from './reducers/authSlice'
 import chatIdSlice from './reducers/chatIdSlice'
 import notificationSlice from './reducers/notificationSlice'
+import inviteSeekerButtonReducer from './reducers/inviteSeekerButtonReducer'
+import currentEmploymentSeekerReducer from './reducers/EmploymentStageReducers/EmploymentStageSeekerReducer'
+import currentRequisiteSeekerReducer from './reducers/RequisiteReducers/RequisiteSeekerReducer'
+import currentCommentVisibilitySlice from './reducers/RequisiteReducers/StageCommentReducer'
 
 export const store = configureStore({
 	reducer: {
@@ -79,7 +83,11 @@ export const store = configureStore({
 		currentEmploymentStage: CurrentEmploymentStage,
 		employmentData: EmploymentDataSlice,
 		employmentProgress: EmploymentProgressSlice,
-		employmentSeekerDocs: EmploymentSeekerDocsSlice
+		employmentSeekerDocs: EmploymentSeekerDocsSlice,
+		inviteSeekerButtonStatus: inviteSeekerButtonReducer,
+		employmentSeeker: currentEmploymentSeekerReducer,
+		requisiteSeeker: currentRequisiteSeekerReducer,
+		currentCommentVisibility: currentCommentVisibilitySlice,
 	},
 	middleware: getDefaultMiddleware =>
 		getDefaultMiddleware()

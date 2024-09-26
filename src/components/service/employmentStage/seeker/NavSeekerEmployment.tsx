@@ -1,7 +1,6 @@
 import { useLocation } from 'react-router-dom'
-
-import { Stages } from './Stages'
 import { SeekerEmployment } from './seekerEmployment'
+import { Stages } from './Stages'
 
 export const NavSeekerEmployment = () => {
 	const { pathname } = useLocation()

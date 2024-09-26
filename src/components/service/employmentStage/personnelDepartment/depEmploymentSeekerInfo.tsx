@@ -1,13 +1,16 @@
 import { Button } from 'antd'
+
 import { AvatartandardSvg } from '../../../../assets/svg/AvatarStandardSvg'
 import { useAppSelector } from '../../../../store'
 import { useGetRespondFullInfoQuery
 } from '../../../../store/api/serviceApi'
 import { NocircleArrowIcon } from '../../jobSeeker/NoCircleArrowIcon'
+import { AlertMessage } from '../../../../utils/AlertMessage'
 
 export const DepEmploymentSeekerInfo = ( ) => {
 
 	const respondId = useAppSelector(state => state.currentResponce)
+
 	const { data } = useGetRespondFullInfoQuery(respondId.respondId)
 
 	return (
@@ -24,6 +27,7 @@ export const DepEmploymentSeekerInfo = ( ) => {
 						Назад
 					</Button>
 				</div>
+				<AlertMessage type={'error'}></AlertMessage>
 				<div className="mt-[52px] flex flex-col gap-[36px]">
 					<div className="flex flex-wrap gap-[150px]">
 						<div className="flex gap-[20px]">

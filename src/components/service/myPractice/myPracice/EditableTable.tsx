@@ -74,13 +74,13 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
 //   };
 
 const save = (date: any) => {
-    console.log(Array.isArray(date))
+
     if (Array.isArray(date) ) {
       toggleEdit();
       handleSave({ ...record, [dataIndex]: date });
     } else {
       toggleEdit();
-      console.error('else case:', date);
+    
     }
   };
 
@@ -166,11 +166,11 @@ const EditableTable = ({setShow,dataSource,setDataSource,setIsDisabled}:any) => 
   ];
 
 
-  const areAllCellsFilled = () => {
-    return dataSource?.every((item:any) => 
-      item.name && item.period 
-    );
-  };
+  // const areAllCellsFilled = () => {
+  //   return dataSource?.every((item:any) => 
+  //     item.name && item.period 
+  //   );
+  // };
 
   const handleSave = (row: DataType) => {
     const newData = [...dataSource];
@@ -184,11 +184,20 @@ const EditableTable = ({setShow,dataSource,setDataSource,setIsDisabled}:any) => 
     setShow(false)
   };
 
-  if (areAllCellsFilled()) {
-    setIsDisabled(false); // Включаем кнопку или действие
-  } else {
-    setIsDisabled(true); // Отключаем кнопку или действие
-  }
+  // if (areAllCellsFilled()) {
+  //   setIsDisabled(false); // Включаем кнопку или действие
+  // } else {
+  //   setIsDisabled(true); // Отключаем кнопку или действие
+  // }
+ 
+  useEffect(() => {
+    if (dataSource.length > 0) {
+        const allCellsFilled = dataSource.every((item:any) =>item.name && item.period );
+        setIsDisabled(!allCellsFilled);
+    } else {
+        setIsDisabled(true);
+    }
+}, [dataSource, setIsDisabled]);
 
   const components = {
     body: {

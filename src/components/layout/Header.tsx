@@ -36,7 +36,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const user = useAppSelector(state => state.auth.user)
 	const isMobile = isMobileDevice();
 	const urlContainsPractice = location.pathname.includes('practice');
-
+	
 
 	useEffect(()=>{
 		if(isMobile){
@@ -186,7 +186,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 			// document.querySelector('header').style.marginLeft = '-100px'
 		}
 	}
-	console.log('roke',user)
+
 	return (
 		<header
 			className={clsx(

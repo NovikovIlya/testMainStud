@@ -66,7 +66,7 @@ const Plan = ({id,dataOnePlace,dataTasks,setShowFinal}:any) => {
 
 	return (
 		<>
-			<Spin style={{width:'50%'}} className='w-[50%]' spinning={isLoading} >
+			<Spin style={{width:'50%'}} className='w-[50%] flex flex-wrap' spinning={isLoading} >
 			<Row className='mt-6'>
 				<Col>
 					<Typography.Title level={2}>{dataOnePlace==='На кафедре КФУ'? 'Индивидуальные задания' : 'Путевка'}</Typography.Title>
@@ -103,7 +103,7 @@ const Plan = ({id,dataOnePlace,dataTasks,setShowFinal}:any) => {
 						</ul>
 					</Card>
 				</Col> */}
-				<Col xs={12} md={12} span={12}>
+				<Col xs={24} md={12} span={12}>
 					<Card title={<div className='flex gap-3'><ExclamationCircleTwoTone />Обратите внимание</div>} bordered={false}>
 					<ul className='pl-5 pr-5 '>
 						

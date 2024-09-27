@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import './index.css';
 import type { GetRef, InputRef, TableProps } from 'antd';
-import { Button, Calendar, DatePicker, Form, Input, Popconfirm, Table } from 'antd';
-import dayjs, { Dayjs } from 'dayjs';
+import { Button, DatePicker, Form, Input, Popconfirm, Table } from 'antd';
+import dayjs from 'dayjs';
 import uuid from 'react-uuid'
-import { CloseOutlined } from '@ant-design/icons';
 import { DeleteRedSvg } from '../../../../assets/svg/DeleteRedSvg';
+import   './diaryStyle.module.scss'
 
 type FormInstance<T> = GetRef<typeof Form<T>>;
 
@@ -60,11 +60,7 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({tit
   };
 
 const save = async (date:any) => {
-
   try {
-    
-
-
     const values = await form.validateFields();
 
     toggleEdit();
@@ -74,8 +70,6 @@ const save = async (date:any) => {
   }
 };
 const saveDate = async (date:any) => {
-
-
     if (Array.isArray(date) ) {
       toggleEdit();
       handleSave({ ...record, [dataIndex]: date });
@@ -83,24 +77,8 @@ const saveDate = async (date:any) => {
     } else{
       toggleEdit();
     }
-
-
-    
-
 };
-const saveDateThree= async () => {
-  
-  
-   
-      toggleEdit();
-      
-      
-    
 
-
-    
- 
-};
   let childNode = children;
 
   if (editable) {
@@ -136,13 +114,13 @@ const saveDateThree= async () => {
       <Form.Item
         style={{ margin: 0 }}
         name={dataIndex}
-        className='w-[120px] lg:w-[300px]'
+        className='w-[200px] lg:w-[300px]'
       >
         <Input  ref={inputRef} onPressEnter={save} onBlur={save}  />
       </Form.Item>
     ) 
     :(  <div
-        className="editable-cell-value-wrap h-10 w-[120px] lg:w-[300px] flex items-center"
+        className="editable-cell-value-wrap h-10 w-[200px] lg:w-[300px] flex items-center"
         style={{ paddingInlineEnd: 24 }}
         onClick={toggleEdit}
 
@@ -166,10 +144,8 @@ interface DataType {
 type ColumnTypes = Exclude<TableProps['columns'], undefined>;
 
 const EditableTableTwo = ({setShow,dataSource,setDataSource,setIsDisabled}:any) => {
-
-  console.log('dataSource',dataSource)
   const handleDelete = (key: React.Key) => {
-    console.log('key',key)
+
     const newData = dataSource.filter((item:any) => item.key !== key).map((item:any,index:number)=>{
      return{
       ...item,
@@ -192,14 +168,12 @@ const EditableTableTwo = ({setShow,dataSource,setDataSource,setIsDisabled}:any) 
 
  
 
- 
-
   const defaultColumns: (ColumnTypes[number] & { editable?: boolean; dataIndex: string })[] = [
     {
         key: 'number',
         dataIndex: 'number',
         title: '№',
-        className: 'text-xs !p-2',
+        className: 'text-xs !p-2 mobile',
         render: (_, __, index) => index + 1 
     },
     {
@@ -207,13 +181,14 @@ const EditableTableTwo = ({setShow,dataSource,setDataSource,setIsDisabled}:any) 
       dataIndex: 'description',
       width: '30%',
       editable: true,
+      className: 'mobile'
     
     },
     {
       title: 'Период выполнения',
       dataIndex: 'period',
       editable: true,
-      render: (_: any, record: any) => <div className={'flex items-center gap-3 h-8'}>
+      render: (_: any, record: any) => <div className={'flex items-center gap-3 h-8 mobileFirst min-w-60'}>
       <span>{record?.period ? dayjs(record?.period?.[0]).format('DD.MM.YYYY') : null}</span>{record?.period ? '-' : null}
       <span>{record?.period ?dayjs(record?.period?.[1]).format('DD.MM.YYYY'): null}</span>
   </div>
@@ -240,7 +215,7 @@ const EditableTableTwo = ({setShow,dataSource,setDataSource,setIsDisabled}:any) 
       ...item,
       ...row,
     });
-    console.log('newData',newData)
+   
     setDataSource(newData);
     setShow(false)
   };
@@ -268,36 +243,36 @@ const EditableTableTwo = ({setShow,dataSource,setDataSource,setIsDisabled}:any) 
     };
   });
 
-  const areAllCellsFilled = () => {
-    return dataSource?.every((item:any) => 
-      item.description && item.period 
-    );
-  };
 
-  if (areAllCellsFilled() && dataSource?.length>0) {
 
-    setIsDisabled(false);
-  } else {
-    setIsDisabled(true); 
+  useEffect(() => {
+    if (dataSource.length > 0) {
+        const allCellsFilled = dataSource.every((item:any) => item.description && item.period);
+        setIsDisabled(!allCellsFilled);
+    } else {
+        setIsDisabled(true);
     }
+}, [dataSource]);
 
   return (
-    <div>
-
+    <>
+    <div className='w-full'>
       <Table
         components={components}
-        rowClassName={() => 'editable-row animate-fade-in'}
+        rowClassName={() => 'editable-row animate-fade-in '}
         bordered
         dataSource={dataSource}
         columns={columns as ColumnTypes}
         pagination={false}
-        
+        className='relative right-[140px] sm:right-0'
       />
-      <div className='flex items-center  flex-col mt-4 animate-pulse '>
+      <div className='flex items-center  flex-col mt-4 animate-pulse w-fit  sm:w-auto'>
         <div className='rounded-full mb-1 flex  w-[40px] h-[40px] justify-center  bg-[#3073d7] text-white text-center items-center text-xl cursor-pointer' onClick={handleAdd}>+</div>
         <div className='text-center mt1'>Добавить <br></br> работу</div>
       </div>
     </div>
+
+    </>
   );
 };
 

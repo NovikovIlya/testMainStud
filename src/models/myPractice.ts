@@ -45,7 +45,8 @@ export interface myPractice {
     competences: string[];
     tasks: Task[];
     profilePlace : string;
-    diary:Diary[]
+    diary:Diary[],
+    chat:any,
   }
 
   export interface Taskadded {
@@ -68,4 +69,19 @@ export  interface Line {
 export interface addDiary {
     practiceId: string;
     lines: Line[];
+}
+
+
+export interface Message {
+  practiceId: string;
+  datetime: any; // если известен формат даты, можно использовать Date
+  text: string;
+  senderName: string;
+}
+
+export interface DataMessages {
+  message: Message;
+  report: any;
+  diary: any;
+  tasks: any;
 }

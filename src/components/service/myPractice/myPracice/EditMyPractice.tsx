@@ -1,5 +1,5 @@
 import { ExclamationCircleTwoTone, LoadingOutlined, VerticalAlignBottomOutlined } from '@ant-design/icons'
-import { Button, Card, Col, Collapse, Descriptions, Divider, Form, List, Popover, Row, Space, Spin, Tabs, Tooltip, Typography } from 'antd'
+import { Button, Card, Col, Collapse, Descriptions, Divider, Form, List, Popover, Row, Skeleton, Space, Spin, Tabs, Tooltip, Typography } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -19,17 +19,10 @@ export const EditMyPractice = () => {
 	const nav = useNavigate()
 	const [showFinal, setShowFinal] = useState(false)
 	const [showFinalTwo, setShowFinalTwo] = useState(false)
-
-	const { data: dataOne, isFetching, isSuccess } = useGetOneMyPracticesQuery(id)
+	const { data: dataOne, isFetching, isSuccess,refetch } = useGetOneMyPracticesQuery(id)
 	const {data,isLoading,isSuccess:isSuccessReport}  = useAddReportQuery(id,{skip:!id})
 
-	// useEffect(()=>{
-	// 	if(isSuccessReport){
-	// 		download()
-	// 	}
-		
-	// },[isSuccessReport])
-
+	
 	const formatedDate = () => {
 		if (isSuccess) {
 			const [start, end] = dataOne?.practicePeriod?.split('-')
@@ -131,8 +124,8 @@ export const EditMyPractice = () => {
 
 	const handleSave = ()=>{
 		download()
-		// sendReport()
 	}
+	
 
 	
 
@@ -150,12 +143,11 @@ export const EditMyPractice = () => {
 					}}
 				/>
 				<span className="text-[10px] lg:text-[28px] font-normal">
-					Учебная практика по специальности "{dataOne?.specialty}" с {formatedDate()[0]} по {formatedDate()[1]}{' '}
+					{isFetching ? <><Skeleton.Input style={{width:'300px'}}  active   /></> : <>Учебная практика по специальности "{dataOne?.specialty}" с {formatedDate()[0]} по {formatedDate()[1]}{' '}</>}
 				</span>
 			</Space>
 			<Tabs defaultActiveKey="1" onChange={onChange} className="mt-6">
 				<Tabs.TabPane tab={'Основная информация'} key={1}>
-					
 						<>
 							<Row className="mb-4 mt-4">
 								<Col xs={24} sm={12} span={12} className="pr-[8px] ">
@@ -180,11 +172,10 @@ export const EditMyPractice = () => {
 								</Col>
 							</Row>
 						</>
-					
 				</Tabs.TabPane>
 				<Tabs.TabPane tab={'Заполнение документов'} key={2}>
 					<Form<any> validateMessages={validateMessages} form={form} layout={'vertical'} className="mb-8">
-						<Spin style={{width:'50%'}} className='w-[50%]' spinning={isLoading} >
+						<Spin style={{width:'50%',display:'flex',flexWrap:'wrap'}} className='w-[50%] flex !flex-wrap' spinning={isLoading} >
 						<Row className='mt-6'>
 							<Col>
 								<Typography.Title level={2}>Отчет</Typography.Title>
@@ -270,7 +261,7 @@ export const EditMyPractice = () => {
 							</Card>
 						</Col>
 					</Row>
-					<Final />
+					<Final refetch={refetch} id={id} dataOnePlace={dataOne?.place} chat={dataOne?.chat}/>
 				</Tabs.TabPane>
 			</Tabs>
 		</section>

@@ -1,15 +1,13 @@
-import { Button, Card, Col, Divider, Popover, Row, Space, Spin, Typography } from 'antd'
-import React, { useEffect, useState } from 'react'
+import { Button, Col, Divider, Popover, Row, Space, Spin, Typography } from 'antd'
+import { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
 
 import EditableTableTwo from './EditableTableTwo'
 import { useAddDiaryMutation } from '../../../../store/api/practiceApi/mypractice'
-import { useAppDispatch } from '../../../../store'
-import { showNotification } from '../../../../store/reducers/notificationSlice'
 import { VerticalAlignBottomOutlined } from '@ant-design/icons'
+import './myPracticeStyle.scss'
 
 const Diary = ({id,dataDiary,setShowFinalTwo}:any) => {
-	
 	const [sendDiary,{data,isLoading,isSuccess}] = useAddDiaryMutation()
 	const [dataSource, setDataSource] = useState<any>(dataDiary?.map((item:any)=>{
 		const [startDateStr, endDateStr] = item?.period ?  item?.period?.split('/') : [null, null];
@@ -24,7 +22,13 @@ const Diary = ({id,dataDiary,setShowFinalTwo}:any) => {
 	}));
 	const [isDisabled, setIsDisabled] = useState(true)
 	const [show, setShow] = useState(false)
-	const dispatch = useAppDispatch()
+	
+
+	useEffect(()=>{
+		if(isSuccess){
+			download()
+		}
+	},[isSuccess])
 
 	const handleSave = async ()=>{
 		setShow(true)
@@ -56,15 +60,11 @@ const Diary = ({id,dataDiary,setShowFinalTwo}:any) => {
 		link.click()
 	}
 
-	useEffect(()=>{
-		if(isSuccess){
-			download()
-		}
-	},[isSuccess])
+
 
 	return (
 		<>
-		<Spin style={{width:'50%'}} className='w-[50%]' spinning={isLoading} >
+		<Spin style={{width:'50%'}} className='w-full sm:w-[50%] flex flex-wrap' spinning={isLoading} >
 			<Row>
 				<Col span={12}>
 					<Divider />
@@ -76,7 +76,7 @@ const Diary = ({id,dataDiary,setShowFinalTwo}:any) => {
 				</Col>
 			</Row>
 			<Row>
-				<Col span={12}>
+				<Col xs={24} md={12} >
 					<EditableTableTwo setShow={setShow} dataSource={dataSource} setDataSource={setDataSource} setIsDisabled={setIsDisabled}/>
 				</Col>
 			</Row>
@@ -96,22 +96,6 @@ const Diary = ({id,dataDiary,setShowFinalTwo}:any) => {
 					</Space>
 				</Col>
 			</Row>
-            {show ?
-			
-			<Row gutter={16} className="mt-14 mb-10">
-				{/* <Col span={6}>
-					<Card title="Документы практики:" bordered={false}>
-						<ul className="ml-6">
-							<li><a onClick={download}>Дневник практиканта</a></li>
-						</ul>
-					</Card>
-				</Col> */}
-				{/* <Col span={6}>
-					<Card title="Обратите внимание" bordered={false}>
-						Скачайте и проверьте документ
-					</Card>
-				</Col> */}
-			</Row>:''}
 			</Spin>
 		</>
 	)

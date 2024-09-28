@@ -445,8 +445,44 @@ export type EmploymentDataType = {
 	}[]
 }
 
+export type EmploymentStageItemType = {
+	respondId: number
+	vacancy: {
+		id: 0
+		name: string
+	}
+	applicant: {
+		firstName: string
+		middleName: string
+		lastName: string
+	}
+	status: 'FILLING' | 'VERIFYING' | 'REFINE' | 'COMPLETE'
+}
+
+export type EmploymentStageStatusType = {
+	id: number
+	status: 'FILLING' | 'VERIFYING' | 'REFINE' | 'COMPLETE'
+	stages: {
+		id: number
+		status: 'FILLING' | 'VERIFYING' | 'REFINE' | 'COMPLETE'
+		comment: string
+		document: {
+			id: number
+			docType: string
+			status: 'ATTACHED' | 'NOT_ATTACHED'
+		}[]
+		hasRequisites?: boolean
+		testLink?: string
+	}[]
+}
+
 export type EmploymentDocsType = {
 	id: number
 	employmentStageType: string
 	name: string
+}
+
+export type ChangeStageStatusType = {
+	status: 'ACCEPTED' | 'REFINE'
+	comment: string
 }

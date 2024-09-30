@@ -120,6 +120,7 @@ export const CreateAppendix = () => {
 			category: item.category,
 			categoryId:item.categoryId,
 			id:item.id,
+			studentId:item.studentId,
 			profileDirector: item.FIOProf
 		}))
 		const obj = {

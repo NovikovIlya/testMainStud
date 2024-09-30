@@ -17,24 +17,21 @@ import { useAppSelector } from '../../store'
 import { useSubmitFormMutation } from '../../store/api/abiturent/abitRedirect'
 import { getAdmission } from './MainCreators'
 import { putRole } from '../../store/reducers/FormReducers/InfoUserReducer'
+import { useTranslation } from 'react-i18next'
 
 
 export const Apply = () => {
+	const { t, i18n } = useTranslation()
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 	const role = useAppSelector(state=>state.InfoUser.role)
 	const user = useAppSelector(state => state.auth.user)
 	const [sendData,{}] = useSubmitFormMutation()
 	const [url,setUrl] = useState('')
-	console.log('user?.roles.type',user?.roles[0].type)
-	const [requestStatus, changeStatus] = useState<
-		'loading' | 'error' | 'success' | 'none'
-	>('none')
+	const [requestStatus, changeStatus] = useState<'loading' | 'error' | 'success' | 'none'>('none')
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	const userJson = localStorage.getItem('userInfo')
-	const pass =   localStorage.getItem('password')
-	const userData = userJson ?  JSON.parse(userJson) : []
-	const passData = pass ? JSON.parse(pass) : []
+
+
 
 	// @ts-ignore
 	function setCookie (name, value, expires, path, domain, secure,samesite) {
@@ -44,29 +41,8 @@ export const Apply = () => {
 		  ((domain) ? "; domain=" + domain : "") + 
 		  ((secure) ? "; secure" : "")+
 		  ((samesite) ? "; samesite=" + samesite : "");
- 	 }
+ 	}
 		  
-	// function getCookie(name:any) {
-	// 	var cookie = " " + document.cookie;
-	// 	var search = " " + name + "=";
-	// 	var setStr = null;
-	// 	var offset = 0;
-	// 	var end = 0;
-	// 	if (cookie.length > 0) {
-	// 		offset = cookie.indexOf(search);
-	// 		if (offset != -1) {
-	// 			offset += search.length;
-	// 			end = cookie.indexOf(";", offset)
-	// 			if (end == -1) {
-	// 				end = cookie.length;
-	// 			}
-	// 			setStr = unescape(cookie.substring(offset, end));
-	// 		}
-	// 	}
-	// 	return(setStr);
-	// }
-
-
 
 	const request = async () => {
 	
@@ -151,7 +127,7 @@ export const Apply = () => {
 			}}
 		>
 			<div className="text-4xl max-sm:text-3xl text-start text-white w-full font-extrabold flex flex-col justify-between">
-				Admission to university
+				{t('ApplyText')}
 				<Button
 					onClick={() => request()}
 					className={clsx(
@@ -162,7 +138,7 @@ export const Apply = () => {
 						'mt-10'
 					)}
 				>
-					{requestStatus === 'none' && <>Apply</>}
+					{requestStatus === 'none' && <>	{t('Apply')}</>}
 					{requestStatus === 'loading' && (
 						<>
 							<Spin

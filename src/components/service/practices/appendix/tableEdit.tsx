@@ -225,6 +225,7 @@ export const TableEdit = ({ isSuccessDataOne,visiting, fullTable=[], setFullTabl
 					other: <><div>{fullTable.practice.courseNumber} курс,</div>  <div>{fullTable.practice.practiceKind},<div> </div>{fullTable.practice.practiceType}</div></>,
 					FIOProf:null,
 					id:item.id,
+					studentId:item.studentId,
 					key:item.name
 				}
 			})

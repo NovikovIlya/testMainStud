@@ -191,7 +191,7 @@ const EditableTable = ({setShow,dataSource,setDataSource,setIsDisabled}:any) => 
   // }
  
   useEffect(() => {
-    if (dataSource.length > 0) {
+    if (dataSource?.length > 0) {
         const allCellsFilled = dataSource.every((item:any) =>item.name && item.period );
         setIsDisabled(!allCellsFilled);
     } else {

@@ -53,6 +53,7 @@ export const CreateContracts = () => {
     const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery(null)
     const [optionsNameSpec, setOptionsNameSpec] = useState<NameSpecialty[]>([])
     const [nameSpec,setNameSpec] = useState<any>(null)
+    
 
    
     useEffect(() => {

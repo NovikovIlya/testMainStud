@@ -261,7 +261,7 @@ export const EditMyPractice = () => {
 							</Card>
 						</Col>
 					</Row>
-					<Final refetch={refetch} id={id} dataOnePlace={dataOne?.place} chat={dataOne?.chat}/>
+					<Final dataOneLength={dataOne?.chat?.length} isSuccessFull={isSuccess} refetch={refetch} id={id} dataOnePlace={dataOne?.place} chat={dataOne?.chat}/>
 				</Tabs.TabPane>
 			</Tabs>
 		</section>

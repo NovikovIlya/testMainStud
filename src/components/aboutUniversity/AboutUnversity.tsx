@@ -45,39 +45,19 @@ const AboutUniversity = () => {
 				<div className="flex justify-between w-full mb-40 max-lg:flex-col max-lg:items-center">
 					<div className="flex flex-col w-5/12 max-lg:w-3/4 max-lg:mb-5">
 						<Typography.Title level={2} className="font-normal">
-							About the university
+						{t('AboutTheUniversity')}
 						</Typography.Title>
 
 						<Typography.Title level={4} className="font-normal mt-1">
-							MISSION
+						{t('mission')}
+						
 						</Typography.Title>
 
 						<div className="flex flex-col mt-4">
 							<p className="leading-1 mb-2">
-								<span className="font-bold uppercase">
-									generation, concentration and dissemination&nbsp;
-								</span>
-								of knowledge, competencies and technologies in response to
-								global challenges related to demographic problems, increasing
-								life expectancy, climate change, environmental pollution and
-								energy security.
+							{t('info')}
 							</p>
-							<p className="leading-1 mb-2">
-								<span className="font-bold uppercase">
-									preservation and enhancement&nbsp;
-								</span>
-								of the spiritual values of humanity, advanced training of the
-								intellectual elite of society, able to act in a rapidly changing
-								world and ensure the accelerated development of science and
-								technology based on the integration of the educational process
-								and fundamental scientific research.
-							</p>
-							<p className="leading-1 mb-2">
-								<span className="font-bold uppercase">
-									assistance to the innovative development&nbsp;
-								</span>
-								of priority areas of the Russian Federation.
-							</p>
+							
 						</div>
 					</div>
 					<img src='https://egp.kpfu.ru/static/media/universityView.16fe930cb1fd794e1b5c.png' alt="" className="w-1/2 max-lg:w-3/4" />
@@ -87,13 +67,7 @@ const AboutUniversity = () => {
 					{/* <QuotationMarksSVG />  */}
 				</div>
 				<span className="mx-auto mt-10 mb-40 w-4/6 text-center">
-					KFU has almost 40 years of experience in teaching foreigners. The
-					university is famous for its strong schools of mathematics, physics,
-					biology, chemistry, linguistics. In scientific research, KFU gives
-					priority to developments in pharmacology, biomedicine, geology,
-					physics, chemistry, oil and gas, nano- and information technologies
-					(IT), psychology and cultural studies, humanities, pedagogical and
-					interdisciplinary fields.
+				{t('aboutKFU')}
 				</span>
 				<div className="relative m-auto min-[1100px]:w-[885px] w-[885px] min-[1100px]:h-[500px] h-[500px] max-[1100px]:hidden">
 					 {/* <div

@@ -511,7 +511,8 @@ export const PracticeSchedule = () => {
 			dispatch(showNotification({ message: 'Выберите подразделение', type: 'warning' }));
 			return
 		}
-        createSchedule({practiceIds: tableData.map((item:any)=>item.id)})
+		console.log('tableData',tableData)
+        createSchedule({practiceIds: tableData?.scheduleContent?.map((item:any)=>item.id)})
 			.unwrap()
 			.then(()=>{
 				nav('/services/practices/formingSchedule')

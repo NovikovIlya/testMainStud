@@ -2,19 +2,22 @@ import { Button } from 'antd'
 import { useNavigate } from 'react-router-dom'
 
 import img from '../../assets/images/aboutUniversity.png'
+import { useTranslation } from 'react-i18next'
 
 export const AboutUniversityCard = () => {
+	const { t } = useTranslation()
 	const navigate = useNavigate()
+	
 	return (
 		<div className="px-[30px] py-[40px] h-full flex gap-2 justify-between bg-white mt-7 rounded-2xl">
 			<div className="flex flex-col justify-between">
 				<div>
 					<div className="font-semibold text-xl text-start relative flex z-10">
-						About the University
+					{t('AboutTheUniversity')}
 					</div>
 					<div className="text-base relative text-start mt-[30px] max-h-[100px] w-full  flex z-10">
-						One of the oldest universities in Russia, founded in 1804. The
-						university is famous for its strong schools of mathematics...
+					
+					{t('infoUniversity')}
 					</div>
 				</div>
 				<div className="text-start">
@@ -27,7 +30,7 @@ export const AboutUniversityCard = () => {
 							navigate('/services/aboutUniversity')
 						}}
 					>
-						Watch
+						{t('watch')}
 					</Button>
 				</div>
 			</div>

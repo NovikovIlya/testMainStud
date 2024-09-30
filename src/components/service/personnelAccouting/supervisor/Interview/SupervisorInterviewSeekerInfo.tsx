@@ -26,6 +26,10 @@ export const SupervisorInterviewSeekerInfo = () => {
 	const [rejectSeeker] = useEmployeeSeekerRequestMutation()
 	const [aproveSeeker] = useEmployeeSeekerRequestMutation()
 
+	const [isEmploymentRequestSent, setIsEmploymentRequestSent] =
+		useState<boolean>(false)
+	const [isSeekerRejected, setIsSeekerRejected] = useState<boolean>(false)
+
 	interface ComponentProps {
 		time: string
 		timeFormated: string
@@ -124,6 +128,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 					is30MinAfterInterviewEnded && ( // Собес окончился, вынести вердикт
 						<div className="flex flex-col justify-center gap-[12px]">
 							<Button
+								disabled={isEmploymentRequestSent || isSeekerRejected}
 								className="h-[40px] w-[257px] bg-[#3073D7] rounded-[54.5px] text-white text-[16px]/[16px]"
 								onClick={values => {
 									aproveSeeker({
@@ -131,11 +136,16 @@ export const SupervisorInterviewSeekerInfo = () => {
 										action: 'EMPLOY',
 										respondId: respondId.respondId
 									})
+										.unwrap()
+										.then(() => {
+											setIsEmploymentRequestSent(true)
+										})
 								}}
 							>
 								Пригласить на работу
 							</Button>
 							<Button
+								disabled={isEmploymentRequestSent || isSeekerRejected}
 								className="h-[40px] font-content-font font-normal text-black border-[1px] border-black text-[16px]/[16px] rounded-[54.5px]"
 								onClick={() => {
 									setIsRefuseModalOpen(true)
@@ -273,6 +283,10 @@ export const SupervisorInterviewSeekerInfo = () => {
 											action: 'REJECT',
 											respondId: respondId.respondId
 										})
+											.unwrap()
+											.then(() => {
+												setIsSeekerRejected(true)
+											})
 									}}
 								>
 									<h2 className="font-normal text-[18px]">

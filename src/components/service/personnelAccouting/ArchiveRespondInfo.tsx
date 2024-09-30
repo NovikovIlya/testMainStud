@@ -258,7 +258,11 @@ export const ArchiveRespondInfo = (props: {
 							)}
 							{props.type === 'SUPERVISOR' && (
 								<div className="self-center grid grid-cols-1 grid-rows-[40px_40px] gap-y-[12px]">
-									<InviteSeekerForm respondId={respondId.respondId} />
+									<InviteSeekerForm
+										respondId={respondId.respondId}
+										isButtonDisabled
+										callback={() => {}}
+									/>
 									<Button
 										onClick={() => {}}
 										className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[257px] h-[40px] py-[8px] px-[24px] border-black"

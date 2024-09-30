@@ -87,6 +87,7 @@ export const myPracticeService = apiSliceStudent.injectEndpoints({
                 }
             },
             providesTags: ['MyPractices'],
+            keepUnusedDataFor:1,
         }),
         
     })

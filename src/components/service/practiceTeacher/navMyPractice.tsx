@@ -43,7 +43,7 @@ function getItem(label: React.ReactNode,key: React.Key,icon?: React.ReactNode,ch
 const rootSubmenuKeys = ['sub1', 'sub2', 'sub4']
 export const NavPracticeTeacher = () => {
 	const [openKeys, setOpenKeys] = useState(['sub1'])
-	const [current, setCurrent] = useState('myPractice')
+	const [current, setCurrent] = useState('practiceteacher')
 	const navigate = useNavigate()
 	const {t} = useTranslation()
 	const ref1 = useRef(null);
@@ -56,16 +56,11 @@ export const NavPracticeTeacher = () => {
 
 	const items: any = [
 		getItem('Практики', 'sub1', <PracticesSvg />, [
-			getItem('Мои практики', 'myPractice'),
+			getItem('Практики для преподавателя', 'practiceteacher'),
 			
 		])
 		
-		// getItem(<Button className='opacity-70 '  onClick={() => setOpen(true)}>Пройти обучение</Button>, 'sub3', <QuestionCircleOutlined className='invisible absolute top-1/2 -translate-y-1/2 right-4 '/>),
-		// getItem('Cогласование документов', 'sub4', <PracticesSvg />, [
-		// 	getItem('График практик', '9'),
-		// 	getItem('Представление в приказ', '10'),
-		// 	getItem('Приказ по практике', '11')
-		// ])
+
 	]
   
 	const steps: any = [
@@ -156,7 +151,7 @@ export const NavPracticeTeacher = () => {
 		if(e.key==='sub3'){
 			return
 		}
-		navigate('/services/mypractices/' + e.key)
+		navigate('/services/' + e.key)
 		setCurrent(e.key)
 	}
 
@@ -193,7 +188,7 @@ export const NavPracticeTeacher = () => {
 				  }))}
 			/>
 			<div className="bg-[#F5F8FB] w-full pt-14 px-14  xl:mt-20 mt-20 ">
-				{current === 'myPractice' && <RoutePracticeTeacher/>}
+				{current === 'practiceteacher' && <RoutePracticeTeacher/>}
 				
 				
 				<Tour open={open} onClose={() => setOpen(false)} steps={steps} />

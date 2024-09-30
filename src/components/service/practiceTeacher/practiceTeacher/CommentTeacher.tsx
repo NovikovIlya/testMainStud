@@ -8,52 +8,52 @@ import avaStudent from '../../../../assets/images/avaStudent.png'
 import avaTeacher from '../../../../assets/images/avaTeacher.png'
 import { useGetAttachmentQuery } from '../../../../store/api/practiceApi/mypractice'
 
-import './myPracticeStyle.scss'
+// import './myPracticeStyle.scss'
 
-export const CommentNew = ({ isLoading,dataOneLength,refetch, chat }: any) => {
+export const CommentNewTeacher = ({ isLoading,dataOneLength,refetch, chat }: any) => {
 	const [idAttachment, setIdAttachment] = useState<any>(null)
-	const { data, isSuccess, isFetching ,refetch:ref} = useGetAttachmentQuery(idAttachment, { skip: !idAttachment })
+	// const { data, isSuccess, isFetching ,refetch:ref} = useGetAttachmentQuery(idAttachment, { skip: !idAttachment })
 	const messagesEndRef = useRef<HTMLDivElement | null>(null) 
 
 	const sendAttachments = (id: any) => {
 		if(id===idAttachment){
-			ref()
+			// ref()
 			return
 		}
 		setIdAttachment(id)
 	}
 
 	const download = async () => {
-		if (data) {
+		
 			const link = document.createElement('a')
-			link.href = data
+			// link.href = data
 			link.setAttribute('download', `${idAttachment}.docx`)
 			document.body.appendChild(link)
 			link.click()
-		}
+		
 	}
 
 
-	useEffect(() => {
-		if (isSuccess) {
-			download()
-		}
-	}, [isSuccess])
+	// useEffect(() => {
+	// 	if (isSuccess) {
+	// 		download()
+	// 	}
+	// }, [isSuccess])
 
-	useEffect(() => {
-		if (messagesEndRef.current) {
-			messagesEndRef.current.scrollIntoView({ behavior: 'smooth' }) // Прокручиваем вниз
-		}
-	}, [dataOneLength])
+	// useEffect(() => {
+	// 	if (messagesEndRef.current) {
+	// 		messagesEndRef.current.scrollIntoView({ behavior: 'smooth' }) // Прокручиваем вниз
+	// 	}
+	// }, [dataOneLength])
 
 
-	const chatValid = chat ? [...chat].sort((a: any, b: any) => dayjs(a.dateTime).unix() - dayjs(b.dateTime).unix()) : []
+	// const chatValid = chat ? [...chat].sort((a: any, b: any) => dayjs(a.dateTime).unix() - dayjs(b.dateTime).unix()) : []
 
 
 
 	return (
 		<>
-			<Spin spinning={isFetching||isLoading}>
+			
 				<Row className="mb-20">
 					<Col xs={24} md={12}>
 						<Typography.Title level={2}>Комментарии по практике</Typography.Title>
@@ -70,14 +70,14 @@ export const CommentNew = ({ isLoading,dataOneLength,refetch, chat }: any) => {
 					</Col>
 				</Row>
 
-				<div className="space-y-4 h-[400px] overflow-y-auto p-10 bg-white rounded-xl">
-					{chatValid?.map((message: any) => {
+				<div className="space-y-4 h-[400px] overflow-y-auto p-10 bg-gray-100 rounded-xl">
+					{/* {chatValid?.map((message: any) => {
 						const isStudent = message.senderType === 'STUDENT'
 
 						return (
 							<div className={`mb-4 flex items-start ${isStudent ? 'justify-end' : ''}`} key={message.dateTime}>
 								{isStudent ? (
-									<div className="flex mb-4">
+									<div className="flex mb-10">
 										<div className="flex flex-col items-end">
 											<div className="flex items-center mb-1">
 												<span className="text-xs text-gray-500 flex gap-2">
@@ -117,7 +117,7 @@ export const CommentNew = ({ isLoading,dataOneLength,refetch, chat }: any) => {
 										</div>
 									</div>
 								) : (
-									<div className='flex mb-4'>
+									<>
 										<div className="flex-shrink-0 mr-3">
 											<div className="w-10 h-10 rounded-full overflow-hidden">
 												<img className="w-full h-full object-cover" src={avaTeacher} alt="teacher" />
@@ -127,6 +127,7 @@ export const CommentNew = ({ isLoading,dataOneLength,refetch, chat }: any) => {
 											<div className="flex items-center mb-1">
 												<span className="font-bold mr-2">{message.senderName}</span>
 												<span className="text-xs text-gray-500 flex gap-2 mt-[2px]">
+	
 													<span>{new Date(message.dateTime).toLocaleDateString()}</span>
 												</span>
 											</div>
@@ -137,6 +138,7 @@ export const CommentNew = ({ isLoading,dataOneLength,refetch, chat }: any) => {
 												</div>
 											</div>
 											<div className="flex gap-3 mt-4 flex-col">
+											
 												{message.attachments.map((attachment: any) => (
 													<div className="flex gap-3">
 														<FileOutlined style={{ color: '' }} className="w-4 h-4 cursor-pointer mt-1 color-white" />
@@ -150,14 +152,14 @@ export const CommentNew = ({ isLoading,dataOneLength,refetch, chat }: any) => {
 												))}
 											</div>
 										</div>
-									</div>
+									</>
 								)}
 							</div>
 						)
-					})}
+					})} */}
 					<div ref={messagesEndRef} />
 				</div>
-			</Spin>
+			
 		</>
 	)
 }

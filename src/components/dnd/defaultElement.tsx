@@ -267,25 +267,25 @@ export const jsxElements = [
 			i: 'myPractices'
 		}
 	},
-	// {
-	// 	index: 'practiceTeacher',
-	// 	element: (
-	// 		<TemplateCard
-	// 			href="/services/practiceteacher"
-	// 			info="Практики для учителя"
-	// 			title="Практики для учителя"
-	// 			buttonText="Study"
-	// 			img="/Group499.png"
-	// 		/>
-	// 	),
-	// 	place: {
-	// 		w: 1,
-	// 		h: 1,
-	// 		x: 0,
-	// 		y: 0,
-	// 		i: 'practiceTeacher'
-	// 	}
-	// },
+	{
+		index: 'practiceTeacher',
+		element: (
+			<TemplateCard
+				href="/services/practiceteacher"
+				info="Практики для учителя"
+				title="Практики для учителя"
+				buttonText="Study"
+				img="/Group499.png"
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 0,
+			y: 0,
+			i: 'practiceTeacher'
+		}
+	},
 	// {
 	// 	index: 'SitAnKFU',
 	// 	element: (

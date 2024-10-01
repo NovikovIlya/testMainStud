@@ -581,7 +581,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 					format: format,
 					mainTime: mainTime,
 					reserveTimes: reservedTimes,
-					additionalInfo: additionalInfo
+					address: additionalInfo
 				},
 				headers: {
 					Authorization: `Bearer ${supervisorToken}`

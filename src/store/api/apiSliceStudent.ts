@@ -67,5 +67,5 @@ export const apiSliceStudent = createApi({
 	reducerPath: 'studentApi',
 	baseQuery: baseQueryWithReAuth,
 	endpoints: () => ({}),
-	tagTypes: ['MyPractices'],
+	tagTypes: ['MyPractices','practiceTeacher'],
 })

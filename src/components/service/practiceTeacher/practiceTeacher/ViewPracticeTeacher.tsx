@@ -213,12 +213,13 @@ export const ViewPraciceTeacher = () => {
 		}
 	}, [filter, isSuccessMyPractice])
 
-	const timeoutFunction = useTimeout(() => {
+	useTimeout(() => {
 		if (delay !== 250) {
 			showDrawer()
 			console.log('ttt')
 		}
 	}, delay)
+
 
 	function filterDataFull() {
 		function filterCourse(elem: any) {
@@ -261,24 +262,24 @@ export const ViewPraciceTeacher = () => {
 		setOpen(false)
 		setDelay(v => (v !== undefined ? v + 1 : 1))
 
-		// showDrawer()
-		// navigate(`/services/mypractices/myPractices/edit/${record.id}`)
+		
 	}
 	const showDrawer = () => {
 		setOpen(true)
 	}
-
 	const onClose = () => {
 		setOpen(false)
 	}
-	const onChange = ()=>{
+	const onChange = (e:any)=>{
+		setText(e.target.value)
+	}
+	const onFinish = ()=>{
 
 	}
 
 	const uniqueCourseNumbers = [...new Set(dataTable?.map((item: any) => item.course))]
 
-	if (isFetchingMyPractice)
-		return <Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
+	if (isFetchingMyPractice)	return <Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
 
 	return (
 		<Form form={form}>
@@ -327,7 +328,7 @@ export const ViewPraciceTeacher = () => {
 					</Col>
 				</Row>
 
-				<Row gutter={[16, 16]} className="mt-4 flex items-center">
+				{/* <Row gutter={[16, 16]} className="mt-4 flex items-center">
 					<Col span={5}>
 						<span>Номер группы</span>
 					</Col>
@@ -352,7 +353,7 @@ export const ViewPraciceTeacher = () => {
 							}}
 						/>
 					</Col>
-				</Row>
+				</Row> */}
 
 				{/* <Row className="mt-12 flex items-center"> 
 				<Col span={12} flex="50%" className="mobileFirst"> 
@@ -452,7 +453,8 @@ export const ViewPraciceTeacher = () => {
 						<div>Смена статуса</div>
 						<Divider />
 						<CommentNewTeacher />
-						<div className="flex w-full ">
+						<Form className="flex  w-full flex-wrap " onFinish={onFinish}>
+							<div className="flex w-full ">
 							<TextArea
 								maxLength={75}
 								placeholder="Напишите комментарий к работе"
@@ -468,7 +470,8 @@ export const ViewPraciceTeacher = () => {
 								className="rounded-[0px_0px_10px_0px] h-[54px] "
 								size="large"
 							/>
-						</div>
+							</div>
+						</Form>
 					</div>
 				</Drawer>
 			</section>

@@ -1,21 +1,17 @@
-import { LoadingOutlined, SendOutlined } from '@ant-design/icons'
-import { useTimeout } from 'ahooks'
-import { Button, Col, Divider, Drawer, Form, Radio, Row, Select, Spin, Table, Typography } from 'antd'
+import { LoadingOutlined } from '@ant-design/icons'
+import { Col, Form, Row, Select, Spin, Table, Typography } from 'antd'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useGetAllMyPracticesQuery } from '../../../../store/api/practiceApi/mypractice'
 import { useGetAllOrderQuery } from '../../../../store/api/practiceApi/representation'
 
-import { CommentNewTeacher } from './CommentTeacher'
 import './practiceTeacherStyle.scss'
-import { isMobileDevice } from '../../../../utils/hooks/useIsMobile'
-import TextArea from 'antd/es/input/TextArea'
 
 const mockData = [
 	{
 		index: 1,
-		specialty: 'Иванов Иван Иванович',
+		specialty: 'Физика',
 		specialtyDetails: '01.03.02 - Прикладная математика',
 		group: 'Группа 101',
 		academicYear: '2023/2024',
@@ -27,7 +23,7 @@ const mockData = [
 	},
 	{
 		index: 2,
-		specialty: 'Сидорова Мария Сергеевна',
+		specialty: 'Химия',
 		specialtyDetails: '01.03.03 - Информатика и вычислительная техника',
 		group: 'Группа 102',
 		academicYear: '2023/2024',
@@ -39,7 +35,7 @@ const mockData = [
 	},
 	{
 		index: 3,
-		specialty: 'Кузнецов Алексей Николаевич',
+		specialty: 'Физика',
 		specialtyDetails: '01.03.04 - Программная инженерия',
 		group: 'Группа 103',
 		academicYear: '2023/2024',
@@ -51,7 +47,7 @@ const mockData = [
 	},
 	{
 		index: 4,
-		specialty: 'Лебедева Анна Владимировна',
+		specialty: 'Алгебра',
 		specialtyDetails: '01.03.05 - Системный анализ и управление',
 		group: 'Группа 104',
 		academicYear: '2023/2024',
@@ -63,7 +59,7 @@ const mockData = [
 	},
 	{
 		index: 5,
-		specialty: 'Тихонов Сергей Андреевич',
+		specialty: 'Физика',
 		specialtyDetails: '01.03.06 - Информационные технологии в образовании',
 		group: 'Группа 105',
 		academicYear: '2023/2024',
@@ -74,14 +70,9 @@ const mockData = [
 		grade: null
 	}
 ]
-const optionMock = [
-	{ label: 'Зачтено', value: 'Зачтено' },
-]
+
 
 export const ViewAll = () => {
-	
-	const [delay, setDelay] = useState<number | undefined>(250)
-	const [open, setOpen] = useState(false)
 	const [fullTable, setFullTable] = useState(true)
 	const [currentPage, setCurrentPage] = useState(1)
 	const [form] = Form.useForm()
@@ -91,20 +82,10 @@ export const ViewAll = () => {
 		courseNumber: 'Все',
 		dateFilling: 'По дате (сначала новые)'
 	})
-	const [text,setText] = useState('')
 	const [selectSubdivisionId, setSelectSubdivisionId] = useState(null)
-	const {
-		data: dataAllOrder,
-		isSuccess: isSuccessOrder,
-		isFetching: isLoadingOrder
-	} = useGetAllOrderQuery(
-		{ subdivisionId: selectSubdivisionId, page: currentPage - 1, size: '5' },
-		{ skip: !selectSubdivisionId || !currentPage }
-	)
-	const isMobile = isMobileDevice();
+	const {data: dataAllOrder,isSuccess: isSuccessOrder,isFetching: isLoadingOrder} = useGetAllOrderQuery({ subdivisionId: selectSubdivisionId, page: currentPage - 1, size: '5' },{ skip: !selectSubdivisionId || !currentPage })
 	const [dataTable, setDataTable] = useState<any>(mockData)
 	const {data: dataAllMyPractices,isSuccess: isSuccessMyPractice,isFetching: isFetchingMyPractice} = useGetAllMyPracticesQuery()
-
 	const columns = [
 		{
 			key: 'index',
@@ -112,22 +93,7 @@ export const ViewAll = () => {
 			title: '№',
 			className: 'text-xs !p-4'
 		},
-		{
-			key: 'specialty',
-			dataIndex: 'specialty',
-			title: 'ФИО обучающегося',
-			className: 'text-xs !p-4'
-		},
-		{
-			key: 'grade',
-			dataIndex: 'grade',
-			title: 'Оценка',
-			className: 'text-xs !p-2',
-			render: (record:any,row:any)=>{
-				return <Select value={record} placeholder={'Выбрать'} options={optionMock} onChange={(value) => changeSelect(value, row)}></Select>
-			},
-			fixed: 'right',
-		},
+		
 		{
 			key: 'specialty',
 			dataIndex: 'specialty',
@@ -176,9 +142,7 @@ export const ViewAll = () => {
 			dataIndex: 'departmentDirectorName',
 			title: 'ФИО руководителя от кафедры, должность',
 			className: 'text-xs !p-2 mobileFirst'
-		},
-
-		
+		}
 	]
 	const columnsMini = [
 		{
@@ -215,12 +179,12 @@ export const ViewAll = () => {
 		}
 	]
 
+
 	useEffect(() => {
 		if (isSuccessMyPractice) {
 			// setDataTable(filterDataFull())
 		}
 	}, [filter, isSuccessMyPractice])
-
 
 
 	function filterDataFull() {
@@ -244,43 +208,14 @@ export const ViewAll = () => {
 
 		return dataAllMyPractices ? dataAllMyPractices.filter((elem: any) => filterCourse(elem)) : []
 	}
-	const changeSelect = (value:any,row:any)=>{
-		console.log('value',value)
-		console.log('row',row)
-
-		const updatedData = dataTable.map((item:any) => {
-			if (item.index === row.index) {
-				return { ...item, grade: value };
-			}
-			return item;
-		});
-		setDataTable(updatedData);
-
-		if(row.fio===''){
-			setOpen(false)
-		}
-	}
+	
 	const handleRowClick = (record: any) => {
-		
-
-		// showDrawer()
 		navigate(`/services/practiceteacher/edit/${record.id}`)
-	}
-	const showDrawer = () => {
-		setOpen(true)
-	}
-
-	const onClose = () => {
-		setOpen(false)
-	}
-	const onChange = ()=>{
-
 	}
 
 	const uniqueCourseNumbers = [...new Set(dataTable?.map((item: any) => item.course))]
 
-	if (isFetchingMyPractice)
-		return <Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
+	if (isFetchingMyPractice) return <Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
 
 	return (
 		<Form form={form}>
@@ -291,7 +226,7 @@ export const ViewAll = () => {
 					</Col>
 				</Row>
 
-				<Row gutter={[16, 16]} className="mt-14 flex items-center">
+				{/* <Row gutter={[16, 16]} className="mt-14 flex items-center">
 					<Col span={5}>
 						<span>Статус</span>
 					</Col>
@@ -317,17 +252,13 @@ export const ViewAll = () => {
 							/>
 						</Form.Item>
 					</Col>
-				</Row>
+				</Row> */}
 
-				<Row gutter={[16, 16]} className="mt-4 flex items-center">
+				<Row gutter={[16, 16]} className="mt-14 flex items-center">
 					<Col span={5}>
 						<span>Номер группы</span>
 					</Col>
-					<Col
-						span={7}
-						className="overWrite
-"
-					>
+					<Col span={7} className="overWrite">
 						<Select
 							popupMatchSelectWidth={false}
 							defaultValue="Все"
@@ -368,7 +299,7 @@ export const ViewAll = () => {
 										onClick: () => handleRowClick(record)
 									})}
 									rowKey="id"
-									// @ts-ignore
+								
 									columns={columnsMini}
 									dataSource={dataTable ? dataTable : []}
 									pagination={
@@ -384,8 +315,8 @@ export const ViewAll = () => {
 							</div>
 						) : (
 							<Table
-								onRow={(record) => ({
-									onClick: (e) => {
+								onRow={record => ({
+									onClick: e => {
 										// @ts-ignore
 										if (e.target.closest('.ant-select')) {
 											return
@@ -394,11 +325,11 @@ export const ViewAll = () => {
 										if (e.target.closest('.ant-select-item-option-content')) {
 											return
 										}
-										handleRowClick(record)},
+										handleRowClick(record)
+									}
 								})}
 								size="large"
 								rowKey="id"
-								// @ts-ignore
 								columns={columns}
 								dataSource={dataTable}
 								pagination={
@@ -422,38 +353,6 @@ export const ViewAll = () => {
 						)}
 					</Col>
 				</Row>
-				<Drawer
-					mask={false}
-					bodyStyle={{ paddingTop: '80px' }}
-					headerStyle={{ paddingTop: isMobile ? '140px':'100px', background: '#d2def1' }}
-					className=""
-					onClose={onClose}
-					open={open}
-					title="Новиков Илья"
-				>
-					<div className="top-10">
-						<div>Смена статуса</div>
-						<Divider />
-						<CommentNewTeacher />
-						<div className="flex w-full ">
-							<TextArea
-								maxLength={75}
-								placeholder="Напишите комментарий к работе"
-								className="rounded-[0px_0px_0px_10px] "
-								style={{ resize: 'none' }}
-								value={text}
-								onChange={onChange}
-								
-							/>
-							<Button
-								htmlType="submit"
-								icon={<SendOutlined />}
-								className="rounded-[0px_0px_10px_0px] h-[54px] "
-								size="large"
-							/>
-						</div>
-					</div>
-				</Drawer>
 			</section>
 		</Form>
 	)

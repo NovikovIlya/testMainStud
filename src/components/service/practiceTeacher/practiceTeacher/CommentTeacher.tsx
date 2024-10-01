@@ -9,10 +9,43 @@ import avaTeacher from '../../../../assets/images/avaTeacher.png'
 import { useGetAttachmentQuery } from '../../../../store/api/practiceApi/mypractice'
 
 // import './myPracticeStyle.scss'
+const chat = [
+    {
+        "text": "Привет! Как дела?",
+        "senderName": "Алексей",
+        "senderType": "STUDENT",
+        "dateTime": "2024-10-01T10:15:30Z",
+        "attachments": [
+            {
+                "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                "name": "фото_отпуска.jpg"
+            }
+        ]
+    },
+    {
+        "text": "Не забудь про встречу завтра.",
+        "senderName": "Мария",
+        "senderType": "администратор",
+        "dateTime": "2024-10-01T11:00:00Z",
+        "attachments": []
+    },
+    {
+        "text": "Отправляю отчет за сентябрь.",
+        "senderName": "Алексей",
+        "senderType": "STUDENT",
+        "dateTime": "2024-10-01T12:30:45Z",
+        "attachments": [
+            {
+                "id": "b2c85f64-5717-4562-b3fc-2c963f66afa6",
+                "name": "отчет_сентябрь.pdf"
+            }
+        ]
+    }
+]
 
-export const CommentNewTeacher = ({ isLoading,dataOneLength,refetch, chat }: any) => {
+export const CommentNewTeacher = ({ isLoading,dataOneLength,refetch }: any) => {
 	const [idAttachment, setIdAttachment] = useState<any>(null)
-	// const { data, isSuccess, isFetching ,refetch:ref} = useGetAttachmentQuery(idAttachment, { skip: !idAttachment })
+	const { data, isSuccess, isFetching ,refetch:ref} = useGetAttachmentQuery(idAttachment, { skip: !idAttachment })
 	const messagesEndRef = useRef<HTMLDivElement | null>(null) 
 
 	const sendAttachments = (id: any) => {
@@ -47,7 +80,7 @@ export const CommentNewTeacher = ({ isLoading,dataOneLength,refetch, chat }: any
 	// }, [dataOneLength])
 
 
-	// const chatValid = chat ? [...chat].sort((a: any, b: any) => dayjs(a.dateTime).unix() - dayjs(b.dateTime).unix()) : []
+	const chatValid = chat ? [...chat].sort((a: any, b: any) => dayjs(a.dateTime).unix() - dayjs(b.dateTime).unix()) : []
 
 
 
@@ -55,9 +88,9 @@ export const CommentNewTeacher = ({ isLoading,dataOneLength,refetch, chat }: any
 		<>
 			
 				<Row className="mb-20">
-					<Col xs={24} md={12}>
-						<Typography.Title level={2}>Комментарии по практике</Typography.Title>
-						<span>Загружайте пакет документов на проверку и получайте обратную связь прямо в окне комментариев </span>
+					<Col xs={24} md={12} className='flex items-center'>
+						{/* <Typography.Title level={2}>Здесь отобразятся материалы студента</Typography.Title> */}
+						<span>Проверяйте пакет документов и оставляйте обратную связь </span>
 					</Col>
 					<Col xs={24} md={12} className="flex justify-end">
 						<Button
@@ -70,8 +103,8 @@ export const CommentNewTeacher = ({ isLoading,dataOneLength,refetch, chat }: any
 					</Col>
 				</Row>
 
-				<div className="space-y-4 h-[400px] overflow-y-auto p-10 bg-gray-100 rounded-xl">
-					{/* {chatValid?.map((message: any) => {
+				<div className="space-y-4 h-[400px] overflow-y-auto p-10 bg-gray-100 rounded-[10px_10px_0px_0px]">
+					{chatValid?.map((message: any) => {
 						const isStudent = message.senderType === 'STUDENT'
 
 						return (
@@ -156,7 +189,7 @@ export const CommentNewTeacher = ({ isLoading,dataOneLength,refetch, chat }: any
 								)}
 							</div>
 						)
-					})} */}
+					})}
 					<div ref={messagesEndRef} />
 				</div>
 			

@@ -168,8 +168,9 @@ export const Apply = () => {
 					alt="avatar"
 				/>
 			</div>
-			<Modal title="Redirect" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-				<p>Are you sure you want to proceed?</p>
+			<Modal  open={isModalOpen} onOk={handleOk} onCancel={handleCancel}  cancelButtonProps={{ style: { display: 'none' } }}>
+			
+				<p>{t('redirectText')}</p>
      		 </Modal>
 		</div>
 	)

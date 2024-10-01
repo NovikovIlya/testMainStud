@@ -1,6 +1,6 @@
 import { LoadingOutlined, SendOutlined } from '@ant-design/icons'
 import { useTimeout } from 'ahooks'
-import { Button, Col, Divider, Drawer, Form, Row, Select, Space, Spin, Table } from 'antd'
+import { Button, Col, Divider, Drawer, Form, Radio, Row, Select, Spin, Table, Typography } from 'antd'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -11,7 +11,6 @@ import { CommentNewTeacher } from './CommentTeacher'
 import './practiceTeacherStyle.scss'
 import { isMobileDevice } from '../../../../utils/hooks/useIsMobile'
 import TextArea from 'antd/es/input/TextArea'
-import { ArrowLeftSvg } from '../../../../assets/svg'
 
 const mockData = [
 	{
@@ -61,20 +60,32 @@ const mockData = [
 		practiceKind: 'Аналитическая',
 		departmentDirectorName: 'Зайцева Ольга Сергеевна, зав. кафедрой системного анализа',
 		grade: 5
+	},
+	{
+		index: 5,
+		specialty: 'Тихонов Сергей Андреевич',
+		specialtyDetails: '01.03.06 - Информационные технологии в образовании',
+		group: 'Группа 105',
+		academicYear: '2023/2024',
+		course: 1,
+		practiceType: null,
+		practiceKind: null,
+		departmentDirectorName: null,
+		grade: null
 	}
-	
 ]
 const optionMock = [
 	{ label: 'Зачтено', value: 'Зачтено' },
 ]
 
-export const ViewPraciceTeacher = () => {
-	const nav = useNavigate()
+export const ViewAll = () => {
+	
 	const [delay, setDelay] = useState<number | undefined>(250)
 	const [open, setOpen] = useState(false)
-	const [fullTable, setFullTable] = useState(false)
+	const [fullTable, setFullTable] = useState(true)
 	const [currentPage, setCurrentPage] = useState(1)
 	const [form] = Form.useForm()
+	const navigate = useNavigate()
 	const [filter, setFilter] = useState({
 		specialtyName: 'Все',
 		courseNumber: 'Все',
@@ -82,7 +93,14 @@ export const ViewPraciceTeacher = () => {
 	})
 	const [text,setText] = useState('')
 	const [selectSubdivisionId, setSelectSubdivisionId] = useState(null)
-	const {data: dataAllOrder,isSuccess: isSuccessOrder,isFetching: isLoadingOrder} = useGetAllOrderQuery({ subdivisionId: selectSubdivisionId, page: currentPage - 1, size: '5' },{ skip: !selectSubdivisionId || !currentPage })
+	const {
+		data: dataAllOrder,
+		isSuccess: isSuccessOrder,
+		isFetching: isLoadingOrder
+	} = useGetAllOrderQuery(
+		{ subdivisionId: selectSubdivisionId, page: currentPage - 1, size: '5' },
+		{ skip: !selectSubdivisionId || !currentPage }
+	)
 	const isMobile = isMobileDevice();
 	const [dataTable, setDataTable] = useState<any>(mockData)
 	const {data: dataAllMyPractices,isSuccess: isSuccessMyPractice,isFetching: isFetchingMyPractice} = useGetAllMyPracticesQuery()
@@ -164,32 +182,17 @@ export const ViewPraciceTeacher = () => {
 	]
 	const columnsMini = [
 		{
-			key: 'index',
-			dataIndex: 'index',
-			title: '№',
-			className: 'text-xs !p-4'
-		},
-		{
 			key: 'specialty',
 			dataIndex: 'specialty',
-			title: 'ФИО обучающегося',
-			className: 'w-[250px]'
+			title: 'Шифр и наименование специальности',
+			className: 'text-xs !p-4'
 		},
-		{
-			key: 'grade',
-			dataIndex: 'grade',
-			title: 'Оценка',
-			className: 'text-xs !p-4 ',
-			render: (record:any,row:any)=>{
-				return <Select className='w-full' value={record} placeholder={'Выбрать'} options={optionMock} onChange={(value) => changeSelect(value, row)}></Select>
-			}
-		
-		},
+
 		{
 			key: 'academicYear',
 			dataIndex: 'academicYear',
 			title: 'Учебный год',
-			className: 'text-xs !p-4 w-[250px]'
+			className: 'text-xs !p-4'
 		},
 		{
 			key: 'course',
@@ -202,9 +205,14 @@ export const ViewPraciceTeacher = () => {
 			dataIndex: 'practiceType',
 			title: 'Тип',
 			className: 'text-xs !p-4 mobileFirst'
-		}
+		},
 
-		
+		{
+			key: 'grade',
+			dataIndex: 'grade',
+			title: 'Оценка',
+			className: 'text-xs !p-4'
+		}
 	]
 
 	useEffect(() => {
@@ -213,12 +221,7 @@ export const ViewPraciceTeacher = () => {
 		}
 	}, [filter, isSuccessMyPractice])
 
-	const timeoutFunction = useTimeout(() => {
-		if (delay !== 250) {
-			showDrawer()
-			console.log('ttt')
-		}
-	}, delay)
+
 
 	function filterDataFull() {
 		function filterCourse(elem: any) {
@@ -258,11 +261,10 @@ export const ViewPraciceTeacher = () => {
 		}
 	}
 	const handleRowClick = (record: any) => {
-		setOpen(false)
-		setDelay(v => (v !== undefined ? v + 1 : 1))
+		
 
 		// showDrawer()
-		// navigate(`/services/mypractices/myPractices/edit/${record.id}`)
+		navigate(`/services/practiceteacher/edit/${record.id}`)
 	}
 	const showDrawer = () => {
 		setOpen(true)
@@ -283,21 +285,11 @@ export const ViewPraciceTeacher = () => {
 	return (
 		<Form form={form}>
 			<section className="container animate-fade-in">
-				<Space size={10} align="center">
-                    <Button
-                        size="large"
-                        className="mt-1 mr-6 rounded-full border border-black"
-                        icon={<ArrowLeftSvg className="w-4 h-4 cursor-pointer mt-1"/>}
-                        type="text"
-                        onClick={() => {
-                            nav('/services/practiceteacher')
-                        }}
-                    />
-                    <span className=" text-[28px] font-normal">
-                        Практика группы ...
-                    </span>
-                </Space>
-			
+				<Row gutter={[16, 16]}>
+					<Col span={24}>
+						<Typography.Text className=" text-[28px] mb-14">Практики для преподавателя</Typography.Text>
+					</Col>
+				</Row>
 
 				<Row gutter={[16, 16]} className="mt-14 flex items-center">
 					<Col span={5}>
@@ -372,17 +364,8 @@ export const ViewPraciceTeacher = () => {
 						{!fullTable ? (
 							<div className="viewPractical">
 								<Table
-									onRow={(record) => ({
-										onClick: (e) => {
-											// @ts-ignore
-											if (e.target.closest('.ant-select')) {
-												return
-											}
-											// @ts-ignore
-											if (e.target.closest('.ant-select-item-option-content')) {
-												return
-											}
-											handleRowClick(record)},
+									onRow={record => ({
+										onClick: () => handleRowClick(record)
 									})}
 									rowKey="id"
 									// @ts-ignore
@@ -396,7 +379,7 @@ export const ViewPraciceTeacher = () => {
 											  }
 									}
 									rowClassName={() => 'animate-fade-in '}
-									className=""
+									className="my- "
 								/>
 							</div>
 						) : (
@@ -441,7 +424,7 @@ export const ViewPraciceTeacher = () => {
 				</Row>
 				<Drawer
 					mask={false}
-					bodyStyle={{ paddingTop: '30px' }}
+					bodyStyle={{ paddingTop: '80px' }}
 					headerStyle={{ paddingTop: isMobile ? '140px':'100px', background: '#d2def1' }}
 					className=""
 					onClose={onClose}
@@ -475,4 +458,4 @@ export const ViewPraciceTeacher = () => {
 		</Form>
 	)
 }
-export default ViewPraciceTeacher
+export default ViewAll

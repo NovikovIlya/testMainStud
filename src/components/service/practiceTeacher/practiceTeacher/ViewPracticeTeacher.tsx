@@ -460,7 +460,7 @@ export const ViewPraciceTeacher = () => {
 								style={{ resize: 'none' }}
 								value={text}
 								onChange={onChange}
-								
+								required
 							/>
 							<Button
 								htmlType="submit"

@@ -100,7 +100,7 @@ const Final = ({ dataOneLength,isSuccessFull,refetch, id, dataOnePlace, chat }: 
 								style={{ resize: 'none' }}
 								value={text}
 								onChange={onChange}
-								
+								required
 							/>
 							<Button
 								htmlType="submit"

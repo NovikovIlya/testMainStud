@@ -1,3 +1,9 @@
 .ant-drawer-header-title{ 
     flex-direction: row-reverse; 
 }
+@media screen and (max-width: 768px) {
+    .ant-table{
+        position: relative !important;
+        right: 50px;
+    }
+}

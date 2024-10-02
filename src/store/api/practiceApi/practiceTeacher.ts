@@ -15,6 +15,37 @@ export const practiceTeacherService = apiSliceTeacher.injectEndpoints({
             providesTags: ['practiceTeacher']
           
         }),
+        getOneGroup: builder.query<any, any>({
+            query: (id) => {
+                return {
+                    url: `/services/api-teacher-practices/practices/${id}`,
+                    method: 'GET'
+                }
+            },
+            providesTags: ['practiceTeacher']
+          
+        }),
+        getChat: builder.query<any, any>({
+            query: (id) => {
+                return {
+                    url: `/services/api-teacher-practices/chat/${id}`,
+                    method: 'GET'
+                }
+            },
+            providesTags: ['practiceTeacher']
+          
+        }),
+        sendMessage: builder.mutation<any, any>({
+            query: (body) => {
+                return {
+                    url: `/services/api-teacher-practices/chat/send`,
+                    method: 'POST',
+                    body
+                }
+            },
+            invalidatesTags: ['practiceTeacher']
+          
+        }),
         
         
     })
@@ -22,6 +53,8 @@ export const practiceTeacherService = apiSliceTeacher.injectEndpoints({
 
 export const {
     useGetAllPracticeTeacherQuery,
-    
+    useGetOneGroupQuery,
+    useGetChatQuery,
+    useSendMessageMutation
     
 } = practiceTeacherService

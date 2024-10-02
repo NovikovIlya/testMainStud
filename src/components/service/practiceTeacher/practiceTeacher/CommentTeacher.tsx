@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from 'react'
 import avaStudent from '../../../../assets/images/avaStudent.png'
 import avaTeacher from '../../../../assets/images/avaTeacher.png'
 import { useGetAttachmentQuery } from '../../../../store/api/practiceApi/mypractice'
+import { useSendMessageMutation } from '../../../../store/api/practiceApi/practiceTeacher'
 
 // import './myPracticeStyle.scss'
 const chat = [
@@ -43,9 +44,10 @@ const chat = [
     }
 ]
 
-export const CommentNewTeacher = ({ isLoading,dataOneLength,refetch }: any) => {
+export const CommentNewTeacher = ({ dataChat,isLoading,dataOneLength,refetch }: any) => {
 	const [idAttachment, setIdAttachment] = useState<any>(null)
 	const { data, isSuccess, isFetching ,refetch:ref} = useGetAttachmentQuery(idAttachment, { skip: !idAttachment })
+	
 	const messagesEndRef = useRef<HTMLDivElement | null>(null) 
 
 	const sendAttachments = (id: any) => {
@@ -80,7 +82,7 @@ export const CommentNewTeacher = ({ isLoading,dataOneLength,refetch }: any) => {
 	// }, [dataOneLength])
 
 
-	const chatValid = chat ? [...chat].sort((a: any, b: any) => dayjs(a.dateTime).unix() - dayjs(b.dateTime).unix()) : []
+	const chatValid = dataChat ? [...dataChat].sort((a: any, b: any) => dayjs(a.dateTime).unix() - dayjs(b.dateTime).unix()) : []
 
 
 

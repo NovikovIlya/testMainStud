@@ -12,6 +12,9 @@ import './practiceTeacherStyle.scss'
 import { isMobileDevice } from '../../../../utils/hooks/useIsMobile'
 import TextArea from 'antd/es/input/TextArea'
 import { ArrowLeftSvg } from '../../../../assets/svg'
+import { useGetChatQuery, useGetOneGroupQuery, useSendMessageMutation } from '../../../../store/api/practiceApi/practiceTeacher'
+import dayjs from 'dayjs'
+import { useAppSelector } from '../../../../store'
 
 const mockData = [
 	{
@@ -69,9 +72,11 @@ const optionMock = [
 ]
 
 export const ViewPraciceTeacher = () => {
+	const user = useAppSelector(state => state.auth.user)
 	const nav = useNavigate()
 	const path = useLocation()
 	const id = path.pathname.split('/').at(-1)!
+	const [idStudent,setIdStudent] = useState(null)
 	const [delay, setDelay] = useState<number | undefined>(250)
 	const [open, setOpen] = useState(false)
 	const [fullTable, setFullTable] = useState(false)
@@ -84,10 +89,12 @@ export const ViewPraciceTeacher = () => {
 	})
 	const [text,setText] = useState('')
 	const [selectSubdivisionId, setSelectSubdivisionId] = useState(null)
-	const {data: dataAllOrder,isSuccess: isSuccessOrder,isFetching: isLoadingOrder} = useGetAllOrderQuery({ subdivisionId: selectSubdivisionId, page: currentPage - 1, size: '5' },{ skip: !selectSubdivisionId || !currentPage })
+	const {data: dataAllOrder,isSuccess: isSuccessOrder,isFetching: isLoadingOrder} = useGetOneGroupQuery(id)
 	const isMobile = isMobileDevice();
-	const [dataTable, setDataTable] = useState<any>(mockData)
+	const [dataTable, setDataTable] = useState<any>(dataAllOrder)
 	const {data: dataAllMyPractices,isSuccess: isSuccessMyPractice,isFetching: isFetchingMyPractice} = useGetAllMyPracticesQuery()
+	const {data:dataChat} = useGetChatQuery(idStudent,{skip:!idStudent})
+	const [sendMessageApi,{}] = useSendMessageMutation()
 
 	const columns = [
 		{
@@ -169,11 +176,12 @@ export const ViewPraciceTeacher = () => {
 			key: 'index',
 			dataIndex: 'index',
 			title: '№',
-			className: 'text-xs !p-4'
+			className: 'text-xs !p-4',
+			render: (text: string, record: any, index: number) => index + 1
 		},
 		{
-			key: 'specialty',
-			dataIndex: 'specialty',
+			key: 'studentName',
+			dataIndex: 'studentName',
 			title: 'ФИО обучающегося',
 			className: 'w-[250px]'
 		},
@@ -188,32 +196,25 @@ export const ViewPraciceTeacher = () => {
 		
 		},
 		{
-			key: 'academicYear',
-			dataIndex: 'academicYear',
-			title: 'Учебный год',
-			className: 'text-xs !p-4 w-[250px]'
+			key: 'status',
+			dataIndex: 'status',
+			title: 'Статус',
+			className: 'text-xs !p-4 ',
+			render: (record:any,row:any)=>{
+				return <Select className='w-full' value={record} placeholder={'Выбрать'} options={optionMock} onChange={(value) => changeSelect(value, row)}></Select>
+			}
+		
 		},
-		{
-			key: 'course',
-			dataIndex: 'course',
-			title: 'Курс',
-			className: 'text-xs !p-4 mobileFirst'
-		},
-		{
-			key: 'practiceType',
-			dataIndex: 'practiceType',
-			title: 'Тип',
-			className: 'text-xs !p-4 mobileFirst'
-		}
+		
 
 		
 	]
-
+	console.log('dataTable',dataTable)
 	useEffect(() => {
-		if (isSuccessMyPractice) {
-			// setDataTable(filterDataFull())
+		if (isSuccessOrder) {
+			setDataTable(filterDataFull())
 		}
-	}, [filter, isSuccessMyPractice])
+	}, [filter, isSuccessOrder])
 
 	useTimeout(() => {
 		if (delay !== 250) {
@@ -242,7 +243,7 @@ export const ViewPraciceTeacher = () => {
 			return 0
 		}
 
-		return dataAllMyPractices ? dataAllMyPractices.filter((elem: any) => filterCourse(elem)) : []
+		return dataAllOrder ? dataAllOrder.filter((elem: any) => filterCourse(elem)) : []
 	}
 	const changeSelect = (value:any,row:any)=>{
 		console.log('value',value)
@@ -263,7 +264,7 @@ export const ViewPraciceTeacher = () => {
 	const handleRowClick = (record: any) => {
 		setOpen(false)
 		setDelay(v => (v !== undefined ? v + 1 : 1))
-
+		setIdStudent(record.id)
 		
 	}
 	const showDrawer = () => {
@@ -276,7 +277,26 @@ export const ViewPraciceTeacher = () => {
 		setText(e.target.value)
 	}
 	const onFinish = ()=>{
+		const nameUser = user?.lastname + ' ' + user?.firstname
 
+		const newForm = new FormData()
+
+		const currentDate = dayjs().tz('Europe/Moscow').format()
+		const message: any = {
+			practiceId: id,
+			text: text,
+			senderName: nameUser,
+			datetime: currentDate,
+			studentId:idStudent,
+		}
+		const jsonData = JSON.stringify(message)
+		const blob = new Blob([jsonData], { type: 'application/json' })
+		newForm.append('message', blob)
+	
+	
+		sendMessageApi(newForm)
+
+		setText('')
 	}
 
 	const uniqueCourseNumbers = [...new Set(dataTable?.map((item: any) => item.course))]
@@ -297,7 +317,7 @@ export const ViewPraciceTeacher = () => {
                         }}
                     />
                     <span className=" text-[28px] font-normal">
-                        Практика группы ...
+                        Практика группы {dataAllOrder?.[0]?.groupNumber}
                     </span>
                 </Space>
 			
@@ -454,7 +474,7 @@ export const ViewPraciceTeacher = () => {
 					<div className="top-10">
 						<div>Смена статуса</div>
 						<Divider />
-						<CommentNewTeacher />
+						<CommentNewTeacher dataChat={dataChat}/>
 						<Form className="flex  w-full flex-wrap " onFinish={onFinish}>
 							<div className="flex w-full ">
 							<TextArea

@@ -16,15 +16,14 @@ export const block = {
             y: 0,
             i: 'Schedule',
 			moved: true,
-			static: false
+			static: true
         },
 
         //1-ая тройка
         {
             w: 1,
             h: 1,
-            maxH: 4,
-            maxW: 4,
+          
             x: 0,
             y: 1,
             i: 'ElectronicBook',
@@ -34,8 +33,7 @@ export const block = {
         {
             w: 1,
             h: 1,
-            maxH: 4,
-            maxW: 4,
+   
             x: 1,
             y: 1,
             i: 'Session',
@@ -48,8 +46,7 @@ export const block = {
 			x: 2,
 			y: 1,
 			i: 'Testing',
-			maxH: 4,
-			maxW: 4,
+			
 			moved: true,
 			static: false
 		},
@@ -61,8 +58,7 @@ export const block = {
             x: 0,
             y: 2,
             i: 'Dormitory',
-            maxH: 4,
-            maxW: 4,
+          
             moved: true,
             static: false
         },
@@ -80,11 +76,10 @@ export const block = {
         {
             w: 1,
             h: 1,
-            x: 2,
+            x: 1,
             y: 2,
             i: 'Practices',
-            maxH: 4,
-            maxW: 4,
+         
             moved: true,
             static: false
         },
@@ -94,43 +89,40 @@ export const block = {
             x: 2,
             y: 2,
             i: 'myPractices',
-            maxH: 4,
-            maxW: 4,
+          
             moved: true,
             static: false
         },
         {
             w: 1,
             h: 1,
-            x: 2,
-            y: 2,
+            x: 0,
+            y: 3,
             i: 'practiceTeacher',
-            maxH: 4,
-            maxW: 4,
+          
             moved: true,
             static: false
         },
 
         //3-ья тройка
         {
-            w: 2,
+            w: 1,
             h: 1,
-            x: 0,
+            x: 1,
             y: 3,
             i: 'EducationalCourses',
-            maxH: 4,
-            maxW: 4,
+           
             moved: true,
             static: false
         },
         {
             w: 1,
             h: 1,
+            
             x: 2,
             y: 3,
             i: 'PsychologicalHelp',
-            maxH: 4,
-            maxW: 4,
+         
             moved: true,
             static: false
         },
@@ -142,8 +134,7 @@ export const block = {
             x: 0,
             y: 4,
             i: 'Applications',
-            maxH: 4,
-            maxW: 4,
+          
             moved: true,
             static: false
         },
@@ -153,8 +144,7 @@ export const block = {
             x: 1,
             y: 4,
             i: 'Staff',
-            maxH: 4,
-            maxW: 4,
+          
             moved: true,
             static: false
         },
@@ -164,8 +154,7 @@ export const block = {
             x: 2,
             y: 4,
             i: 'Vacancies',
-            maxH: 4,
-            maxW: 4,
+          
             moved: true,
             static: false
         },
@@ -177,8 +166,7 @@ export const block = {
             x: 0,
             y: 5,
             i: 'News',
-            maxH: 4,
-            maxW: 4,
+           
             moved: true,
             static: false
         },
@@ -188,8 +176,7 @@ export const block = {
             x: 1,
             y: 5,
             i: 'DocumentFlow',
-            maxH: 4,
-            maxW: 4,
+          
             moved: true,
             static: false
         },
@@ -212,8 +199,7 @@ export const block = {
             x: 2,
             y: 2,
             i: 'VirtualAudience',
-            maxH: 4,
-            maxW: 4,
+         
             moved: true,
             static: false
         },
@@ -223,8 +209,7 @@ export const block = {
             x: 1,
             y: 5,
             i: 'DigitalDepartments',
-            maxH: 4,
-            maxW: 4,
+      
             moved: true,
             static: false,
         },
@@ -234,8 +219,7 @@ export const block = {
             x: 2,
             y: 2,
             i: 'ManagementScientificProjects',
-            maxH: 4,
-            maxW: 4,
+         
             moved: true,
             static: false,
         }

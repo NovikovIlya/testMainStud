@@ -746,7 +746,7 @@ export const EditPractical = () => {
                             <Form.Item
                                 rules={[{required: true}]}
                                 name={'director'}
-                                label={'Заведующий опорной кафедрой'}>
+                                label={'Руководитель практики'}>
                                 <Select
                                     size="large"
                                     popupMatchSelectWidth={false}

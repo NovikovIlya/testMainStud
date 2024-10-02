@@ -47,6 +47,7 @@ export interface myPractice {
     profilePlace : string;
     diary:Diary[],
     chat:any,
+    department: string,
   }
 
   export interface Taskadded {

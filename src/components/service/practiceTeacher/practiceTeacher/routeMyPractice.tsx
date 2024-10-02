@@ -4,7 +4,7 @@ import {useLocation} from "react-router-dom";
 // import MyPractice from "./myPractice";
 import ViewPracticeTeacher from "./ViewPracticeTeacher";
 import { EditPracticeTeacher } from "./EditPracticeTeacher";
-import ViewAll from "./ViewAll";
+import {ViewAll} from "./ViewAll";
 
 
 

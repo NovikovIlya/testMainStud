@@ -20,6 +20,7 @@ import {practiceApi} from "./api/practiceApi/practiceApi";
 import notificationSlice from './reducers/notificationSlice'
 import { abiturientApi } from './api/abiturent/abitRedirect'
 import { apiSliceStudent } from './api/apiSliceStudent'
+import { apiSliceTeacher } from './api/apiSliceTeacher'
 
 
 export const store = configureStore({
@@ -42,14 +43,17 @@ export const store = configureStore({
 		[practiceApi.reducerPath]: practiceApi.reducer,
 		[apiSlice.reducerPath]: apiSlice.reducer,
 		[abiturientApi.reducerPath]: abiturientApi.reducer,
-		[apiSliceStudent.reducerPath]: apiSliceStudent.reducer
+		[apiSliceStudent.reducerPath]: apiSliceStudent.reducer,
+		[apiSliceTeacher.reducerPath]: apiSliceTeacher.reducer
 	},
+	//@ts-ignore
 	middleware: getDefaultMiddleware =>
 		getDefaultMiddleware()
 			//.concat(...(process.env.NODE_ENV !== 'production' ? [logger] : []))
 			.concat(apiSlice.middleware, practiceApi.middleware)
 			.concat(abiturientApi.middleware)
-			.concat(apiSliceStudent.middleware),
+			.concat(apiSliceStudent.middleware)
+			.concat(apiSliceTeacher.middleware),
 	devTools: true
 })
 

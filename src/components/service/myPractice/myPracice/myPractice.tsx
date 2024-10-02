@@ -1,10 +1,11 @@
 import { LoadingOutlined } from '@ant-design/icons'
-import { Col, Form, Radio, Row, Select, Spin, Table, Typography } from 'antd'
+import { Badge, Col, Form, Radio, Row, Select, Spin, Table, Typography } from 'antd'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useGetAllMyPracticesQuery } from '../../../../store/api/practiceApi/mypractice'
 import { useGetAllOrderQuery } from '../../../../store/api/practiceApi/representation'
+import { render } from 'react-dom'
 
 export const MyPractice = () => {
 	const [fullTable, setFullTable] = useState(false)
@@ -103,7 +104,8 @@ export const MyPractice = () => {
 			key: 'grade',
 			dataIndex: 'grade',
 			title: 'Оценка',
-			className: 'text-xs !p-4'
+			className: 'text-xs !p-4',
+			
 		}
 	]
 

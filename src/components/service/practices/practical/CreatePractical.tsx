@@ -904,7 +904,7 @@ export const CreatePractical = () => {
 						<Form.Item
 							rules={[{required: true}]}
 							name={'director'}
-							label={'Заведующий опорной кафедрой'}
+							label={'Руководитель практики'}
 						>
 							<Select
 								disabled={!isSuccessDepartmentDirector}

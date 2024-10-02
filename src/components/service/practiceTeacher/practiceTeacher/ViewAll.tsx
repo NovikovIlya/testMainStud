@@ -1,360 +1,701 @@
 import { LoadingOutlined } from '@ant-design/icons'
-import { Col, Form, Row, Select, Spin, Table, Typography } from 'antd'
+import {
+	Button,
+	Col,
+	Form,
+	Row,
+	Select,
+	Space,
+	Spin,
+	Table,
+	TreeSelect
+} from 'antd'
+import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { useGetAllMyPracticesQuery } from '../../../../store/api/practiceApi/mypractice'
-import { useGetAllOrderQuery } from '../../../../store/api/practiceApi/representation'
+import {
+	useGetCafedraNewQuery,
+	useGetGroupNumberQuery,
+	useGetGroupNumbersNewQuery,
+	useGetPracticeTypeForPracticeQuery,
+	useGetPracticesAllQuery,
+	useGetPractiseSubdevisionNewQuery,
+	useGetSubdivisionForPracticeQuery
+} from '../../../../store/api/practiceApi/individualTask'
+import { useGetCafDepartmentsQuery } from '../../../../store/api/practiceApi/practical'
+import { useGetSpecialtyNamesForPractiseQuery } from '../../../../store/api/practiceApi/roster'
+import { processingOfDivisions } from '../../../../utils/processingOfDivisions'
 
-import './practiceTeacherStyle.scss'
 
-const mockData = [
-	{
-		index: 1,
-		specialty: 'Физика',
-		specialtyDetails: '01.03.02 - Прикладная математика',
-		group: 'Группа 101',
-		academicYear: '2023/2024',
-		course: 2,
-		practiceType: 'Производственная',
-		practiceKind: 'Техническая',
-		departmentDirectorName: 'Петров Петр Петрович, зав. кафедрой математики',
-		grade: 5
-	},
-	{
-		index: 2,
-		specialty: 'Химия',
-		specialtyDetails: '01.03.03 - Информатика и вычислительная техника',
-		group: 'Группа 102',
-		academicYear: '2023/2024',
-		course: 1,
-		practiceType: 'Научная',
-		practiceKind: 'Исследовательская',
-		departmentDirectorName: 'Смирнов Алексей Викторович, зав. кафедрой информатики',
-		grade: 4
-	},
-	{
-		index: 3,
-		specialty: 'Физика',
-		specialtyDetails: '01.03.04 - Программная инженерия',
-		group: 'Группа 103',
-		academicYear: '2023/2024',
-		course: 3,
-		practiceType: 'Производственная',
-		practiceKind: 'Разработка ПО',
-		departmentDirectorName: 'Федоров Игорь Дмитриевич, зав. кафедрой программирования',
-		grade: 3
-	},
-	{
-		index: 4,
-		specialty: 'Алгебра',
-		specialtyDetails: '01.03.05 - Системный анализ и управление',
-		group: 'Группа 104',
-		academicYear: '2023/2024',
-		course: 2,
-		practiceType: 'Научная',
-		practiceKind: 'Аналитическая',
-		departmentDirectorName: 'Зайцева Ольга Сергеевна, зав. кафедрой системного анализа',
-		grade: 5
-	},
-	{
-		index: 5,
-		specialty: 'Физика',
-		specialtyDetails: '01.03.06 - Информационные технологии в образовании',
-		group: 'Группа 105',
-		academicYear: '2023/2024',
-		course: 1,
-		practiceType: null,
-		practiceKind: null,
-		departmentDirectorName: null,
-		grade: null
-	}
-]
+
+import './ViewPractical.scss'
+import { TitleHeadCell } from '../../businessTrip/NewBusinessTrip/archive/stepTwo/tableStepTwo/titleHeadCell/TitleHeadCell'
+import { disableParents } from '../../../../utils/disableParents'
+import { OptionsNameSpecialty } from '../../practices/roster/registerContracts/RegisterContracts'
+import { useGetAllPracticeTeacherQuery } from '../../../../store/api/practiceApi/practiceTeacher'
+
 
 
 export const ViewAll = () => {
-	const [fullTable, setFullTable] = useState(true)
-	const [currentPage, setCurrentPage] = useState(1)
+	const [fullTable,setFullTable] = useState(true)
 	const [form] = Form.useForm()
 	const navigate = useNavigate()
+	const initialFormValues = {
+		podrazdelenie: 'Все',
+		semester: '',
+	};
+	const [pickCourse, setPickCourse] = useState<any>(null)
+	const [pickSpeciality,setPickSpeciality] = useState(null)
+	const [subDevisionId, setSubDevisionId] = useState(null)
+	const [objType, setObjType] = useState<any>({subdivisionId: null,specialtyNameId: null})
+	const [selectedFieldsFull, setSelectedFieldFull] = useState<any[]>([])
+	const [departments, setDepartments] = useState<any[]>()
 	const [filter, setFilter] = useState({
-		specialtyName: 'Все',
-		courseNumber: 'Все',
-		dateFilling: 'По дате (сначала новые)'
+		nameSpecialty: 'Все',
+		department: 'Все',
+		course: 'Все',
+		semester: 'Все',
+		practiceType: 'Все',
+		subdivision:'Все',
+		dateFilling: 'По дате (сначала новые)',
+		groupNumber: 'Все'
 	})
-	const [selectSubdivisionId, setSelectSubdivisionId] = useState(null)
-	const {data: dataAllOrder,isSuccess: isSuccessOrder,isFetching: isLoadingOrder} = useGetAllOrderQuery({ subdivisionId: selectSubdivisionId, page: currentPage - 1, size: '5' },{ skip: !selectSubdivisionId || !currentPage })
-	const [dataTable, setDataTable] = useState<any>(mockData)
-	const {data: dataAllMyPractices,isSuccess: isSuccessMyPractice,isFetching: isFetchingMyPractice} = useGetAllMyPracticesQuery()
+	const {data: dataPractiseAll,isSuccess: isSuccessPractiseAll,isFetching: isFetchingPractiseAll} = useGetAllPracticeTeacherQuery()
+	const {data:dataSubdevisionPracticeNew} = useGetPractiseSubdevisionNewQuery()
+	const [tableData, setTableData] = useState<any[]>(dataPractiseAll)
+	const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
+	const { data: dataDepartments, isSuccess: isSuccessDepartments } = useGetSubdivisionForPracticeQuery()
+	const { data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty } = useGetSpecialtyNamesForPractiseQuery(subDevisionId, {skip:!subDevisionId})
+	const { data: dataDep, isSuccess: isSuccessDep } = useGetCafDepartmentsQuery(subDevisionId,{ skip: !subDevisionId })
+	const { data: dataPracticeType, isSuccess: isSuccessPracticeType } = useGetPracticeTypeForPracticeQuery(objType, {skip: objType.subDivisionId === null || objType.specialtyNameId === null})
+	const {data:dataGroupNumberNew} = useGetGroupNumbersNewQuery(subDevisionId,{ skip: !subDevisionId })
+	const {data:dataGetCafedraNew} = useGetCafedraNewQuery(subDevisionId,{ skip: !subDevisionId })
+	const [treeLine, setTreeLine] = useState(true);
+    const [showLeafIcon, setShowLeafIcon] = useState(false);
+    const [value, setValue] = useState<any>();
+
+	
+
 	const columns = [
 		{
-			key: 'index',
-			dataIndex: 'index',
-			title: '№',
+			key: 'subdivision',
+			dataIndex: 'subdivision',
+			title: 'Подразделение',
+			name: 'Подразделение',
+			className: 'text-xs !p-4',
+			
+		},
+		{
+			key: 'group',
+			dataIndex: 'group',
+			title: 'Номер группы',
+			align: 'center',
 			className: 'text-xs !p-4'
+		},
+		{
+			key: 'specialty',
+			dataIndex: 'specialty',
+			title: 'Шифр и наименование специальности',
+			name: 'Шифр и наименование специальности',
+			className: 'text-xs !p-4',
+
+
+		},
+		{
+			key: 'practiceType',
+			dataIndex: 'practiceType',
+			title: 'Тип практики',
+			className: 'text-xs !p-4'
+		},
+		{
+			key: 'department',
+			dataIndex: 'department',
+			title: 'Кафедра',
+			className: 'text-xs !p-4'
+		},
+		{
+			key: 'semester',
+			dataIndex: 'semester',
+			title: 'Семестр',
+			align: 'center',
+			className: 'text-xs !p-4'
+		},
+		{
+			key: 'academicYear',
+			dataIndex: 'academicYear',
+			title: 'Учебный год',
+			align: 'center',
+			className: 'text-xs !p-4'
+		},
+		{
+			key: 'course',
+			dataIndex: 'course',
+			title: 'Курс',
+			align: 'center',
+			className: 'text-xs !p-4'
+		},
+		{
+			key: 'period',
+			dataIndex: 'period',
+			title: 'Период практики',
+			align: 'center',
+			className: 'text-xs !p-4',
+			render: (_: any, record: any) => {
+				return (
+					<div className={'flex flex-col'}>
+						<span>{dayjs(record.period.split('-')[0]).format('DD.MM.YYYY')}</span>-
+						<span>{dayjs(record.period.split('-')[1]).format('DD.MM.YYYY')}</span>
+					</div>
+				)
+			}
 		},
 		
+		
+
+		
+		
+	]
+	const columnsCompressed = [
 		{
-			key: 'specialty',
-			dataIndex: 'specialty',
-			title: 'Шифр и наименование специальности',
-			className: 'text-xs !p-4'
+			key: 'subdivision',
+			dataIndex: 'subdivision',
+			title: <TitleHeadCell title={'Подразделение'}/>,
+			name: 'Подразделение',
+			className: 'text-xs !p-2 mobileFirst',
+			width: '20%',
+			
+			responsive: ['xs'],
 		},
 		{
-			key: 'group',
-			dataIndex: 'group',
-			title: 'Номер группы',
-			className: 'text-xs !p-2'
+			key: 'specialtyName',
+			dataIndex: 'specialtyName',
+			title: <TitleHeadCell title={'Шифр и наименование специальности'}/>,
+			name: 'Шифр и наименование специальности',
+			className: 'text-xs !p-2',
+
+		
 		},
 		{
-			key: 'group',
-			dataIndex: 'group',
-			title: 'Номер группы',
-			className: 'text-xs !p-2'
-		},
-		{
-			key: 'academicYear',
-			dataIndex: 'academicYear',
-			title: 'Учебный год',
-			className: 'text-xs !p-2'
-		},
-		{
-			key: 'course',
-			dataIndex: 'course',
-			title: 'Курс',
-			className: 'text-xs !p-2 mobileFirst'
-		},
+            title: <TitleHeadCell title={'Дата заполнения'}/>,
+            dataIndex: 'dateFilling',
+            width: '20%',
+            render: (text:any) => dayjs(text).format('DD.MM.YYYY')
+        },
 		{
 			key: 'practiceType',
 			dataIndex: 'practiceType',
-			title: 'Тип',
-			className: 'text-xs !p-2 mobileFirst'
-		},
-		{
-			key: 'practiceKind',
-			dataIndex: 'practiceKind',
-			title: 'Вид',
-			className: 'text-xs !p-2 mobileFirst'
-		},
 
+			title: <TitleHeadCell title={'Тип практики'}/>,
+			className: 'text-xs !p-2 mobileFirst'
+		
+		},
 		{
-			key: 'departmentDirectorName',
-			dataIndex: 'departmentDirectorName',
-			title: 'ФИО руководителя от кафедры, должность',
+			key: 'semester',
+			dataIndex: 'semester',
+			title: <TitleHeadCell title={'Семестр'}/>,
+			align: 'center',
+			className: 'text-xs !p-2 mobileFirst'
+		},
+		{
+			key: 'courseNumber',
+			dataIndex: 'courseNumber',
+			title: <TitleHeadCell title={'Курс'}/>,
+			align: 'center',
 			className: 'text-xs !p-2 mobileFirst'
 		}
+		
 	]
-	const columnsMini = [
-		{
-			key: 'specialty',
-			dataIndex: 'specialty',
-			title: 'Шифр и наименование специальности',
-			className: 'text-xs !p-4'
-		},
-
-		{
-			key: 'academicYear',
-			dataIndex: 'academicYear',
-			title: 'Учебный год',
-			className: 'text-xs !p-4'
-		},
-		{
-			key: 'course',
-			dataIndex: 'course',
-			title: 'Курс',
-			className: 'text-xs !p-4 mobileFirst'
-		},
-		{
-			key: 'practiceType',
-			dataIndex: 'practiceType',
-			title: 'Тип',
-			className: 'text-xs !p-4 mobileFirst'
-		},
-
-		{
-			key: 'grade',
-			dataIndex: 'grade',
-			title: 'Оценка',
-			className: 'text-xs !p-4'
-		}
-	]
-
 
 	useEffect(() => {
-		if (isSuccessMyPractice) {
-			// setDataTable(filterDataFull())
+		if (isSuccessDepartments) {
+			setDepartments(processingOfDivisions(dataDepartments))
 		}
-	}, [filter, isSuccessMyPractice])
+	}, [dataDepartments])
 
+	useEffect(() => {
+		if (isSuccessPractiseAll) setTableData(dataPractiseAll)
+	}, [isSuccessPractiseAll, isFetchingPractiseAll])
 
+	useEffect(() => {
+		if (isSuccessNameSpecialty) {
+			setNameSpecialty(dataNameSpecialty)
+		}
+	}, [dataNameSpecialty])
+
+	useEffect(() => {
+		if (isSuccessPractiseAll) {
+			setTableData(filterDataFull())
+		}
+	}, [filter, isSuccessPractiseAll])
+
+	// объект для типа практик
+	useEffect(() => {
+		if (isSuccessNameSpecialty && subDevisionId && isSuccessNameSpecialty) {
+			const pickSpecialityId = dataNameSpecialty?.find((elem: any) => {
+				if (elem.value === pickSpeciality) {
+					return elem
+				}
+			})
+			setObjType({
+				...objType,
+				subdivisionId: subDevisionId,
+				specialtyNameId: pickSpecialityId?.id
+			})
+		}
+	}, [isSuccessNameSpecialty, form, pickSpeciality])
+
+	// если выбираем курс "Все" то семестр тоже "Все"
+	useEffect(()=>{
+		if(pickCourse === 'Все'){
+		
+			setFilter({
+				...filter,
+				semester: 'Все'
+			})
+		}
+	},[pickCourse])
+	console.log('dataPractiseAll',dataPractiseAll)
 	function filterDataFull() {
-		function filterCourse(elem: any) {
-			if (filter.courseNumber === 'Все') {
+		function filterPracticeType(elem: any) {
+			if (filter.practiceType === 'Все') {
 				return elem
 			} else {
-				return elem.course === filter.courseNumber
+				return elem.practiceType === filter.practiceType
 			}
 		}
 
-		function sortDateFilling(a: any, b: any) {
-			if (filter.dateFilling === 'По дате (сначала новые)') {
-				return +new Date(b.dateFilling) - +new Date(a.dateFilling)
+		function filterDepartment(elem: any) {
+			
+			if (filter.department === 'Все') {
+				return elem
+			} else {
+				return elem.department === filter.department
 			}
-			if (filter.dateFilling === 'По дате (сначала старые)') {
-				return +new Date(a.dateFilling) - +new Date(b.dateFilling)
-			}
-			return 0
 		}
-
-		return dataAllMyPractices ? dataAllMyPractices.filter((elem: any) => filterCourse(elem)) : []
-	}
+		function filterSubdivision(elem: any) {
+			console.log('filter.subdivision', filter.subdivision)
+			console.log('elem.subdivisionId',elem.subdivisionId)
+			if (filter.subdivision === 'Все') {
+				return elem
+			} 
+			else {
 	
+				// @ts-ignore
+				return elem.subdivisionId === filter.subdivision
+			}
+		}
+
+		function filterCourse(elem: any) {
+			if (filter.course === 'Все') {
+				return elem
+			} else {
+				// @ts-ignore
+				return elem.courseNumber === filter.course
+			}
+		}
+
+		function filterSemester(elem: any) {
+			if (filter.semester === 'Все') {
+				return elem
+			} else {
+				return elem.semester === filter.semester
+			}
+		}
+
+		function filterNameSpecialty(elem: any) {
+			if (filter.nameSpecialty === 'Все') {
+				return elem
+			} else {
+				return elem.specialtyName === filter.nameSpecialty
+			}
+		}
+		function filterGroup(elem: any) {
+			if (filter.groupNumber === 'Все') {
+				return elem
+			} else {
+				return elem.groupNumber === filter.groupNumber
+			}
+		}
+	
+		function sortDateFilling(a:any, b:any) {
+            if (filter.dateFilling === 'По дате (сначала новые)') {
+                return +new Date(b.dateFilling) - +new Date(a.dateFilling)
+            }
+            if (filter.dateFilling === 'По дате (сначала старые)') {
+                return +new Date(a.dateFilling) - +new Date(b.dateFilling)
+            }
+            return 0
+        }
+
+		return dataPractiseAll
+			? dataPractiseAll
+					.filter((elem: any) => filterPracticeType(elem))
+					.filter((elem: any) => filterDepartment(elem))
+					.filter((elem: any) => filterCourse(elem))
+					.filter((elem: any) => filterSemester(elem))
+					.filter((elem: any) => filterNameSpecialty(elem))
+					.filter((elem :any) => filterSubdivision(elem))
+					.filter((elem :any) => filterGroup(elem))
+					.sort((a:any, b:any) => sortDateFilling(a, b))
+			: []
+	}
+
+	const handleChange = (value: string) => {
+		departments?.find(elem => {
+			if (elem.label === value) {
+				setSubDevisionId(elem.id)
+			}
+		})
+		setFilter({
+			...filter,
+			subdivision: value
+		})
+	}
+	const onPopupScroll: any = (e:any) => {
+        console.log('onPopupScroll', e);
+    };
+	const handleSelect = (value:any)=>{
+		setPickSpeciality(value)
+	}
+
+
+	const handleCourse = (value:any)=>{
+		setPickCourse(value)
+		form.setFieldValue('semester', '')
+	}
+	console.log('filter,filter',filter)
+
+	const optionsCourseValid = (() => {
+		switch (pickCourse) {
+			case '1':
+				return [
+					{ value: 'Все', label: 'Все' },
+					{ value: '1', label: '1' },
+					{ value: '2', label: '2' }
+				];
+			case '2':
+				return [
+					{ value: 'Все', label: 'Все' },
+					{ value: '3', label: '3' },
+					{ value: '4', label: '4' }
+				];
+			case '3':
+				return [
+					{ value: 'Все', label: 'Все' },
+					{ value: '5', label: '5' },
+					{ value: '6', label: '6' }
+				];
+			case '4':
+				return [
+					{ value: 'Все', label: 'Все' },
+					{ value: '7', label: '7' },
+					{ value: '8', label: '8' }
+				];
+			case '5':
+				return [
+					{ value: 'Все', label: 'Все' },
+					{ value: '9', label: '9' },
+					{ value: '10', label: '10' }
+				];
+			case '6':
+				return [
+					{ value: 'Все', label: 'Все' },
+					{ value: '11', label: '11' },
+					{ value: '12', label: '12' }
+				];
+			default:
+				return [];
+		}
+	})()
+
 	const handleRowClick = (record: any) => {
 		navigate(`/services/practiceteacher/edit/${record.id}`)
 	}
 
-	const uniqueCourseNumbers = [...new Set(dataTable?.map((item: any) => item.course))]
+	const treeData = [{ key: 'Все', value: 'Все', label: 'Все' },...(dataSubdevisionPracticeNew ? dataSubdevisionPracticeNew?.map((item:any)=>{
+        return{
+            title:item.value,
+            value:item.id,
+            // @ts-ignore
+            children: item?.responses?.map((item)=>{
+                return{
+                    title:item.value,
+                    value:item.id,
+                }
+            })
+        }
+    }):[])]
 
-	if (isFetchingMyPractice) return <Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
+	const uniqueCourseNumbers = [...new Set(tableData?.map((item:any) => item.courseNumber))];
+
 
 	return (
-		<Form form={form}>
+		<>
 			<section className="container animate-fade-in">
-				<Row gutter={[16, 16]}>
-					<Col span={24}>
-						<Typography.Text className=" text-[28px] mb-14">Практики для преподавателя</Typography.Text>
+			<Form form={form} initialValues={initialFormValues}>
+				<Row>
+					<Col flex={'auto'}>
+						<span className="mb-14 text-[28px]">Практики для преподавателя</span>
 					</Col>
+				
 				</Row>
-
-				{/* <Row gutter={[16, 16]} className="mt-14 flex items-center">
-					<Col span={5}>
-						<span>Статус</span>
+				<Row gutter={[16, 16]} className="mt-12 overWrite mb-4">
+					<Col span={5} className='overWrite'>
+						<span>Подразделение</span>
 					</Col>
-					<Col span={7} className="overWrite">
-						<Form.Item className="mb-0" name={'specialtyName'}>
-							<Select
-								defaultValue={'Все'}
-								popupMatchSelectWidth={false}
-								className="w-full"
-								options={[
-									{ key: 2244612, value: 'Все', label: 'Все' },
-									...(dataAllMyPractices
-										? dataAllMyPractices.map((item: any) => ({
-												key: item.specialty,
-												value: item.specialty,
-												label: item.specialty
-										  }))
-										: [])
-								]}
-								onChange={(value: any) => {
-									setFilter({ ...filter, specialtyName: value })
+					<Col span={8} className='overWrite'>
+					<Form.Item
+						name={'podrazdelenie'}
+						className='mb-[-4px]'
+					>
+							<TreeSelect
+								treeLine={treeLine && { showLeafIcon }}
+								showSearch
+								style={{ height:'32px',width: '100%' }}
+								value={value}
+								dropdownStyle={{  overflow: 'auto' }}
+								placeholder=""
+								allowClear
+								treeDefaultExpandAll
+								onChange={(value)=>{
+									setSubDevisionId(value)
+									handleChange(value)
+									setFilter({
+										...filter,
+										subdivision : value,
+										nameSpecialty:'Все',
+										course:'Все',
+										semester:'Все',
+										practiceType:'Все',
+										department:'Все',
+										groupNumber:'Все',
+									})
+									form.setFieldValue('nameSpecialty','Все')
+									form.setFieldValue('course','Все')
+									form.setFieldValue('semester','Все')
+									form.setFieldValue('practiceType','Все')
+									form.setFieldValue('department','Все')
+									form.setFieldValue('groupNumber','Все')
 								}}
+								treeData={disableParents(treeData)}
+								onPopupScroll={onPopupScroll}
+								treeNodeFilterProp="title"
+							
 							/>
 						</Form.Item>
 					</Col>
-				</Row> */}
-
-				<Row gutter={[16, 16]} className="mt-14 flex items-center">
-					<Col span={5}>
-						<span>Номер группы</span>
+					
+				</Row>
+				
+				<Row gutter={[16, 16]} className="mt-1 overWrite">
+					<Col span={5} className='overWrite'>
+						<span>Наименование специальности</span>
 					</Col>
-					<Col span={7} className="overWrite">
+					<Col span={8} className='overWrite'>
+					<Form.Item
+						name={'nameSpecialty'}
+						className='mb-[-4px]'
+					>
 						<Select
+							disabled={filter.subdivision==='Все'}
 							popupMatchSelectWidth={false}
 							defaultValue="Все"
 							className="w-full"
 							options={[
 								{ key: 2244612, value: 'Все', label: 'Все' },
-								...uniqueCourseNumbers.map((item: any) => ({ key: item, label: item, value: item }))
+								...(nameSpecialty
+									? nameSpecialty.map(item => ({
+											key: item.id,
+											value: item.value,
+											label: item.label
+									  }))
+									: [])
+							]}
+							onChange={value => {
+								handleSelect(value)
+								setFilter({
+									...filter,
+									nameSpecialty: value
+								})
+							}}
+						/>
+						</Form.Item>
+					</Col>
+	
+				</Row>
+				
+
+				<Row gutter={[16, 16]} className="mt-4 overWrite">
+					<Col span={5}>
+						<span>Номер группы</span>
+					</Col>
+					<Col span={8} className='overWrite'>
+					<Form.Item name={'groupNumber'} className='mb-[-4px]'>
+						<Select
+
+							disabled={filter.nameSpecialty==='Все'}
+							popupMatchSelectWidth={false}
+							defaultValue="Все"
+							className="w-full"
+							options={[
+								{ key: 0, value: 'Все', label: 'Все' },
+								...(dataGroupNumberNew
+									? dataGroupNumberNew.map(item => ({
+											key: item.id,
+											value: item.value,
+											label: item.label
+									  }))
+									: [])
 							]}
 							onChange={value => {
 								setFilter({
 									...filter,
-									courseNumber: value
+									groupNumber: value
 								})
 							}}
 						/>
+						</Form.Item>
 					</Col>
 				</Row>
 
-				{/* <Row className="mt-12 flex items-center"> 
-				<Col span={12} flex="50%" className="mobileFirst"> 
-				<Radio.Group defaultValue="compressedView" buttonStyle="solid"> 
-				<Radio.Button onClick={() => setFullTable(false)} value="compressedView" className="!rounded-l-full"> 
-					Посмотреть в сжатом виде 
-				</Radio.Button> 
-				<Radio.Button onClick={() => setFullTable(true)} value="tableView" className="!rounded-r-full"> 
-					Посмотреть данные в таблице 
-				</Radio.Button> 
-				</Radio.Group> 
-				</Col> 
-				</Row> */}
-
-				<Row className="mt-4">
-					<Col flex={'auto'}>
-						{!fullTable ? (
-							<div className="viewPractical">
-								<Table
-									onRow={record => ({
-										onClick: () => handleRowClick(record)
-									})}
-									rowKey="id"
-								
-									columns={columnsMini}
-									dataSource={dataTable ? dataTable : []}
-									pagination={
-										dataTable && dataTable?.length < 10
-											? false
-											: {
-													pageSize: 10
-											  }
-									}
-									rowClassName={() => 'animate-fade-in '}
-									className="my- "
-								/>
-							</div>
-						) : (
-							<Table
-								onRow={record => ({
-									onClick: e => {
-										// @ts-ignore
-										if (e.target.closest('.ant-select')) {
-											return
-										}
-										// @ts-ignore
-										if (e.target.closest('.ant-select-item-option-content')) {
-											return
-										}
-										handleRowClick(record)
-									}
-								})}
-								size="large"
-								rowKey="id"
-								columns={columns}
-								dataSource={dataTable}
-								pagination={
-									dataTable.length > 10 && {
-										current: currentPage,
-										pageSize: 10,
-										total: dataAllOrder?.length,
-										onChange: page => setCurrentPage(page)
-									}
-								}
-								className="my-10  absolute  sm:relative sm:left-0 top-10 sm:top-0"
-								rowClassName={() => 'animate-fade-in'}
-								locale={{
-									emptyText: (
-										<div>
-											<h3>Нет данных для отображения</h3>
-										</div>
-									)
+				<Row gutter={[16, 16]} className="mt-4 overWrite items-center ">
+					<Col span={4} className='flex items-center overWrite'>
+						<span className='w-12'>Курс</span>
+				
+					
+						<Form.Item name={'course'} className='mb-[-4px] w-full overWrite'>
+							<Select
+								popupMatchSelectWidth={false}
+								defaultValue="Все"
+								className="w-full"
+								options={uniqueCourseNumbers.map((item)=>({key: item, value: item, label: item}))}
+								onChange={value => {
+									handleCourse(value)
+									setFilter({
+										...filter,
+										course: value
+									})
 								}}
 							/>
-						)}
+						</Form.Item>
+					</Col>
+					
+					<Col span={4} className='flex items-center overWrite'>
+						<span className='w-20'>Семестр</span>
+			
+						<Form.Item
+							className='mb-[-4px] w-full items-center'
+							style={{marginBottom:'0'}}
+							//rules={[{required: true}]}
+							name={'semester'}	
+						>
+							<Select
+								onChange={value => {
+								
+									setFilter({
+										...filter,
+										semester: value
+									})
+								}}
+							    disabled={!pickCourse || pickCourse==='Все'} 
+								size='middle'
+								popupMatchSelectWidth={false}
+								className="w-full "
+								options={optionsCourseValid}
+							/>
+						</Form.Item>
+					</Col>
+
+					<Col span={5} className='flex items-center overWrite'>
+						<span className='w-40'>Тип практики</span>
+						<Form.Item name={'practiceType'} className='mb-[-4px] w-full items-center'>
+						<Select
+							disabled={!pickSpeciality}
+							popupMatchSelectWidth={false}
+							defaultValue="Все"
+							className=""
+							options={[
+								{ key: 0, value: 'Все', label: 'Все' },
+								...(dataPracticeType
+									? dataPracticeType.map((item:any) => ({
+											key: item.id,
+											value: item.value,
+											label: item.label
+									  }))
+									: [])
+							]}
+							onChange={value => {
+								setFilter({
+									...filter,
+									practiceType: value
+								})
+							}}
+						/>
+						</Form.Item>
 					</Col>
 				</Row>
+			</Form>
+
+			
+			{isFetchingPractiseAll ? (
+				<Spin
+					className="w-full mt-20"
+					indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}
+				/>
+			) : (fullTable ?
+				<Table
+					onRow={(record) => ({
+						onClick: (e) => {
+							// @ts-ignore
+							if (e.target.closest('.ant-table-selection-column')) {
+								return
+							}
+							handleRowClick(record)},
+					})}
+					responsive
+					size="small"
+					rowKey="id"
+					//@ts-ignore
+					columns={columns}
+					dataSource={tableData ? tableData : []}
+					pagination={false}
+					className="my-10"
+					
+				/> :
+				<div className='viewPractical'>
+				<Table
+					onRow={(record) => ({
+						onClick: (e) => {
+							// @ts-ignore
+							if (e.target.closest('.ant-table-selection-column')) {
+								return
+							}
+							handleRowClick(record)},
+					})}
+					responsive
+					rowKey="id"
+					//@ts-ignore
+					columns={columnsCompressed}
+					dataSource={tableData ? tableData : []}
+					pagination={tableData && tableData?.length<10?false:{
+                        pageSize: 10
+                    }}
+					rowClassName={() => 'animate-fade-in'}
+					className="my-"
+					rowSelection={{
+						type: 'checkbox',
+						onSelect: (record, selected, selectedRows, nativeEvent) => {
+							setSelectedFieldFull(selectedRows)
+						},
+						onSelectAll: (selected, selectedRows, changeRows) => {
+							setSelectedFieldFull(selectedRows)
+						}
+					}}
+				/>
+				</div>
+			)}
 			</section>
-		</Form>
+		</>
 	)
 }
-export default ViewAll

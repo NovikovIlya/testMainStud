@@ -209,7 +209,7 @@ export const ViewPractical = () => {
 		{
 			key: 'departmentDirector',
 			dataIndex: 'departmentDirector',
-			title: 'Заведующий опорной кафедрой',
+			title: 'Руководитель практики',
 			className: 'text-xs !p-2'
 		},
 		{

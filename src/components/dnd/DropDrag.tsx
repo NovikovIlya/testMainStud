@@ -1,5 +1,5 @@
 import { DeleteOutlined } from '@ant-design/icons'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Responsive, WidthProvider } from 'react-grid-layout'
 import 'react-grid-layout/css/styles.css'
 import { useDispatch } from 'react-redux'
@@ -13,7 +13,7 @@ import { Apply } from '../apply/Apply'
 import { AboutUniversityCard } from '../aboutUniversity/AboutUniversityCard'
 import { Col, Row } from 'antd'
 
-const ResponsiveReactGridLayout = WidthProvider(Responsive)
+
 const DropDrag = () => {
 	const dispatch = useDispatch()
 	const layout = useAppSelector(state => state.Layout)
@@ -22,6 +22,7 @@ const DropDrag = () => {
 	const [mounted, setMounted] = useState(false)
 	const [toolbox, setToolbox] = useState<{ [index: string]: any[] }>({lg: []})
 	const user = useAppSelector(state => state.auth.user)
+	const ResponsiveReactGridLayout = useMemo(() => WidthProvider(Responsive), []);
 
 	useEffect(() => {
 		setMounted(true)
@@ -65,13 +66,14 @@ const DropDrag = () => {
 	const layoutValid = layout.lg.filter(obj1 =>jsxElements.some(obj2 => obj1.i === obj2.index))
 
 	const generateDOM = layoutValid.map(item => {
+		console.log('item',item)
 		return (
 			<div
 				key={item.i}
 				className="bg-white/70 backdrop-blur-sm rounded-[20px] shadow-md "
 			>
 				<div className="w-full h-full">
-					{edit && (
+					{edit && item.i !== 'Schedule' && (
 						<div
 							className="absolute top-2 cursor-pointer right-2"
 							onClick={() => onRemoveItem(item.i)}
@@ -113,7 +115,8 @@ const DropDrag = () => {
 				onBreakpointChange={onBreakpointChange}
 				isDraggable={edit}
 				isResizable={false}
-				compactType={'horizontal'}
+				compactType={null}
+				preventCollision={true}
 			>
 				{generateDOM}
 			</ResponsiveReactGridLayout>

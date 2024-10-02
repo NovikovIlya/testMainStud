@@ -124,7 +124,7 @@ export const jsxElements = [
 			/>
 		),
 		place: {
-			w: 2,
+			w: 1,
 			h: 1,
 			x: 0,
 			y: 0,
@@ -137,10 +137,11 @@ export const jsxElements = [
 		place: {
 			w: 3,
 			h: 1,
-			minW: 2,
+		
 			x: 0,
 			y: 0,
-			i: 'Schedule'
+			i: 'Schedule',
+			static: true
 		}
 	},
 	{

@@ -42,8 +42,8 @@ export const EditMyPractice = () => {
 		{
 			key: '2',
 			label: 'Место прохождение практики',
-			children: dataOne?.profilePlace ? dataOne.profilePlace : 'Не указано',
-			className: dataOne?.profilePlace ? '' : 'hide'
+			children: dataOne?.profilePlace !=='На кафедре КФУ' ? dataOne?.profilePlace : dataOne?.department,
+			className: dataOne?.profilePlace !== 'В структурном подразделении' ? '' : 'hide'
 		},
 		{
 			key: '3',

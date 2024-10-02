@@ -2,7 +2,7 @@ import { LoadingOutlined, SendOutlined } from '@ant-design/icons'
 import { useTimeout } from 'ahooks'
 import { Button, Col, Divider, Drawer, Form, Row, Select, Space, Spin, Table } from 'antd'
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import { useGetAllMyPracticesQuery } from '../../../../store/api/practiceApi/mypractice'
 import { useGetAllOrderQuery } from '../../../../store/api/practiceApi/representation'
@@ -70,6 +70,8 @@ const optionMock = [
 
 export const ViewPraciceTeacher = () => {
 	const nav = useNavigate()
+	const path = useLocation()
+	const id = path.pathname.split('/').at(-1)!
 	const [delay, setDelay] = useState<number | undefined>(250)
 	const [open, setOpen] = useState(false)
 	const [fullTable, setFullTable] = useState(false)

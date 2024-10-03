@@ -907,10 +907,10 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		getPersonnelStages: builder.query<EmploymentStageItemType[], void>({
 			query: arg => ({
-				url: `http://localhost:8082/employment-api/v1/managment/employment`,
+				url: `http://localhost:8082/employment-api/v1/management/employment`,
 				method: 'GET',
 				headers: {
-					Authorization: `Bearer ${supervisorToken}`
+					Authorization: `Bearer ${personnelDeparmentToken}`
 				}
 			})
 		}),
@@ -928,7 +928,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 				url: `http://localhost:8082/employment-api/v1/respond/${arg.respondId}/employment`,
 				method: 'GET',
 				headers: {
-					Authorization: `Bearer ${supervisorToken}`
+					Authorization: `Bearer ${personnelDeparmentToken}`
 				}
 			})
 		}),
@@ -937,7 +937,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 				url: `http://localhost:8082/employment-api/v1/managment/employment/sub-stage/${arg.subStageId}`,
 				method: 'PUT',
 				headers: {
-					Authorization: `Bearer ${supervisorToken}`
+					Authorization: `Bearer ${personnelDeparmentToken}`
 				}
 			})
 		}),

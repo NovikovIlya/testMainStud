@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react'
 import { GreenCheck } from '../../../../assets/svg/GreenCheck'
-import { Button, ConfigProvider, Input, Modal} from 'antd'
+import { Button, ConfigProvider, Input, Modal, Spin } from 'antd'
 import { DocumentElem } from './components/DocumentElem'
 import { Comment } from './components/Comment'
 import {
@@ -11,6 +11,7 @@ import { setCurrentCommentVisibility } from '../../../../store/reducers/Requisit
 import { useAppSelector } from '../../../../store'
 import { setCurrentStageStatus } from '../../../../store/reducers/EmploymentStageReducers/StageStatusReducer'
 import { useDispatch } from 'react-redux'
+import { LoadingOutlined } from '@ant-design/icons'
 
 interface DepEmploymentStageItemProps {
 	stage: number
@@ -20,14 +21,14 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 
 	const respondId = useAppSelector(state => state.currentResponce)
 	const stageStatus = useAppSelector(state => state.currentStageStatus)
-	const { data: requisite_items = [] }
+	const { data: requisite_items = [], isLoading : loading }
 		= useGetEmploymentStageStatusQuery(respondId)
 
 	const dispatch = useDispatch()
 
 	const stagesWithIds1To5 = requisite_items
 		.flatMap(item => item.stages)
-		.filter(stage => stage.id >= 1 && stage.id <= 5)
+		.filter(stage => stage.id >= 2 && stage.id <= 5)
 
 	const stagesStatusesAndComments = stagesWithIds1To5.map(stage => ({
 		id: stage.id,
@@ -362,6 +363,7 @@ const StageStatusModal = () => {
 		</>
 	)
 }
+
 return (
 	<>
 		<StageStatusModal></StageStatusModal>

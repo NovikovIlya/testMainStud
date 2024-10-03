@@ -15,7 +15,7 @@ export const CardCreationInfo = () => {
 	const seekerName  = useAppSelector(state => state.requisiteSeeker.currentRequisiteSeekerName)
 	const seekerVacancy  = useAppSelector(state => state.requisiteSeeker.currentRequisiteSeekerVacancy)
 
-	if (true) {
+	if (false) {
 		return (
 			<>
 				<div className="w-screen h-screen flex items-center">

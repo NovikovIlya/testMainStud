@@ -15,7 +15,7 @@ export const RequisiteReviewInfo = () => {
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 
-	if (true) {
+	if (false) {
 		return (
 			<>
 				<div className="w-screen h-screen flex items-center">

@@ -22,13 +22,13 @@ export const RequisiteItem = ( props : EmploymentStageItemType ) => {
 				<div className="flex w-[20%] mr-[10%]">
 					{props.vacancy.name}
 				</div>
-				{props.status === 'VERIFYING' && (
+				{props.status === 'REFINE' && (
 					<div className="flex items-center w-[13.5%] gap-[12px]">
 						<div className="w-[11px] h-[11px] rounded-[100%] bg-[#FFD600]"></div>
 						<span>Доработка</span>
 					</div>
 				)}
-				{props.status === 'REFINE' && (
+				{props.status === 'VERIFYING' && (
 					<div className="flex items-center w-[13.5%] gap-[12px]">
 						<div className="w-[11px] h-[11px] rounded-[100%] bg-[#009DCE]"></div>
 						<span>На проверке</span>

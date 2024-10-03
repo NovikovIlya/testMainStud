@@ -3,6 +3,7 @@ import { useDownloadEmploymentStageFileQuery } from "../../../../../store/api/se
 
 interface DocumentElemProps {
 	name: string
+
 }
 
 export const DocumentElem = (props: DocumentElemProps) => {
@@ -24,12 +25,13 @@ export const DocumentElem = (props: DocumentElemProps) => {
 
 	return (
 		<button
-			className="flex flex-row w-[388px] justify-between cursor-pointer bg-white border-none"
+			className="flex flex-row w-[388px] justify-between cursor-pointer bg-white border-none
+      hover:opacity-[80%]"
 			onClick={() => {
 				if (fileBlob) {
 					downloadFile(fileBlob, props.name)
 				} else {
-					console.error('Файл не найден.')
+					alert('Файл не найден.')
 				}
 			}}>
 			<div className='flex flex-row items-center'>

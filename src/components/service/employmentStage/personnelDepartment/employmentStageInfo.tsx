@@ -1,10 +1,10 @@
-import { Button } from 'antd'
+import { Button, Spin } from 'antd'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { useGetEmploymentStageStatusQuery} from '../../../../store/api/serviceApi'
 import { useAppSelector} from '../../../../store'
 import { setCurrentResponce } from '../../../../store/reducers/CurrentResponceSlice'
 import { DepEmploymentStageItem } from './depEmploymentStageItem'
+import { LoadingOutlined } from '@ant-design/icons'
 
 export const EmploymentStageInfo = () => {
 
@@ -12,11 +12,25 @@ export const EmploymentStageInfo = () => {
 	const employmentSeekerName  = useAppSelector(state => state.employmentSeeker.currentEmploymentSeekerName)
 	const employmentSeekerVacancy  = useAppSelector(state => state.employmentSeeker.currentEmploymentSeekerVacancy)
 
-	const { data: employment_stage_status = [] } = useGetEmploymentStageStatusQuery(respondId)
-
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 
+	if (false) {
+		return (
+			<>
+				<div className="w-screen h-screen flex items-center">
+					<div className="text-center ml-auto mr-auto mb-[10%]">
+						<Spin
+							indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}
+						></Spin>
+						<p className="font-content-font font-normal text-black text-[18px]/[18px]">
+							Идёт загрузка...
+						</p>
+					</div>
+				</div>
+			</>
+		)
+	}
 	return (
 		<>
 			<div className="w-full flex flex-col px-[53px] mt-[140px]">
@@ -33,10 +47,10 @@ export const EmploymentStageInfo = () => {
 					Соискатель: <span className="font-bold">{employmentSeekerName}</span>
 				</h3>
 				<div className="mt-[40px] mb-[100px] gap-[12px] flex flex-col ">
-					<DepEmploymentStageItem name={'Прикрепление документов'} stageNumber={2} stageContentType={'docs'} content={''}></DepEmploymentStageItem>
-					<DepEmploymentStageItem name={'Трудовые условия'} stageNumber={3} stageContentType={'text'} content={'Соискатель ознакомлен с трудовыми условиями'}></DepEmploymentStageItem>
-					<DepEmploymentStageItem name={'Медицинский осмотр'} stageNumber={4} stageContentType={'docs'} content={''}></DepEmploymentStageItem>
-					<DepEmploymentStageItem name={'Инструктаж'} stageNumber={5} stageContentType={'text'} content={'Соискатель прошел инструктаж'}></DepEmploymentStageItem>
+					<DepEmploymentStageItem  stage={2}></DepEmploymentStageItem>
+					<DepEmploymentStageItem  stage={3}></DepEmploymentStageItem>
+					<DepEmploymentStageItem  stage={4}></DepEmploymentStageItem>
+					<DepEmploymentStageItem  stage={5}></DepEmploymentStageItem>
 				</div>
 			</div>
 		</>

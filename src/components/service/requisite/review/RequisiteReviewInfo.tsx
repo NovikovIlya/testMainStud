@@ -1,9 +1,10 @@
-	import { Button } from 'antd'
+import { Button, Spin } from 'antd'
 import { setCurrentResponce } from '../../../../store/reducers/CurrentResponceSlice'
 import { useAppSelector } from '../../../../store'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { RequisiteStageItem } from './RequisiteStageItem'
+import { LoadingOutlined } from '@ant-design/icons'
 
 export const RequisiteReviewInfo = () => {
 
@@ -14,6 +15,22 @@ export const RequisiteReviewInfo = () => {
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 
+	if (true) {
+		return (
+			<>
+				<div className="w-screen h-screen flex items-center">
+					<div className="text-center ml-auto mr-[50%]">
+						<Spin
+							indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}
+						></Spin>
+						<p className="font-content-font font-normal text-black text-[18px]/[18px]">
+							Идёт загрузка...
+						</p>
+					</div>
+				</div>
+			</>
+		)
+	}
 	return (
 		<>
 			<div className="w-full flex flex-col px-[53px] mt-[140px]">
@@ -30,7 +47,7 @@ export const RequisiteReviewInfo = () => {
 					Вакансия: <span className="font-bold">{seekerVacancy}</span>
 				</h3>
 				<div className="mt-[40px] mb-[100px] gap-[12px] flex flex-col ">
-					<RequisiteStageItem docs={' '} stageNumber={6}></RequisiteStageItem>
+					<RequisiteStageItem ></RequisiteStageItem>
 				</div>
 			</div>
 		</>

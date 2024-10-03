@@ -42,6 +42,7 @@ import chatIdSlice from './reducers/chatIdSlice'
 import notificationSlice from './reducers/notificationSlice'
 import inviteSeekerButtonReducer from './reducers/inviteSeekerButtonReducer'
 import currentEmploymentSeekerReducer from './reducers/EmploymentStageReducers/EmploymentStageSeekerReducer'
+import currentStageStatusSlice from './reducers/EmploymentStageReducers/StageStatusReducer'
 import currentRequisiteSeekerReducer from './reducers/RequisiteReducers/RequisiteSeekerReducer'
 import currentCommentVisibilitySlice from './reducers/RequisiteReducers/StageCommentReducer'
 
@@ -88,6 +89,7 @@ export const store = configureStore({
 		employmentSeeker: currentEmploymentSeekerReducer,
 		requisiteSeeker: currentRequisiteSeekerReducer,
 		currentCommentVisibility: currentCommentVisibilitySlice,
+		currentStageStatus: currentStageStatusSlice,
 	},
 	middleware: getDefaultMiddleware =>
 		getDefaultMiddleware()

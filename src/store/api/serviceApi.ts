@@ -949,7 +949,16 @@ export const serviceApi = apiSlice.injectEndpoints({
 					Authorization: `Bearer ${supervisorToken}`
 				}
 			})
-		})
+		}),
+		changeCardStatusRequest: builder.mutation<void, {subStageId: number}> ({
+			query: arg => ({
+				url: `hhtp://localhost:8082//employment-api/v1/managment/employment/sub-stage/${arg.subStageId}/has-requisites`,
+				method: 'PATCH',
+				headers: {
+					Authorization: `Bearer ${supervisorToken}`
+				}
+			})
+		}),
 	})
 })
 export const {
@@ -1039,4 +1048,5 @@ export const {
 	useDeleteEmploymentDocMutation,
 	useGetSupervisorRespondsQuery,
 	useSendEmploymentDocsMutation,
+	useChangeCardStatusRequestMutation,
 } = serviceApi

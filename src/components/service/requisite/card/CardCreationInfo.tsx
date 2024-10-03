@@ -1,11 +1,10 @@
-import { Button } from 'antd'
+import { Button, Spin } from 'antd'
 import { setCurrentResponce } from '../../../../store/reducers/CurrentResponceSlice'
-import { DepEmploymentStageItem } from '../../employmentStage/personnelDepartment/depEmploymentStageItem'
 import { CardRequestItem } from './CardRequestItem'
 import { useNavigate } from 'react-router-dom'
 import { useAppSelector } from '../../../../store'
 import { useDispatch } from 'react-redux'
-
+import { LoadingOutlined } from '@ant-design/icons'
 
 export const CardCreationInfo = () => {
 
@@ -16,7 +15,22 @@ export const CardCreationInfo = () => {
 	const seekerName  = useAppSelector(state => state.requisiteSeeker.currentRequisiteSeekerName)
 	const seekerVacancy  = useAppSelector(state => state.requisiteSeeker.currentRequisiteSeekerVacancy)
 
-
+	if (true) {
+		return (
+			<>
+				<div className="w-screen h-screen flex items-center">
+					<div className="text-center ml-auto mr-[50%]">
+						<Spin
+							indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}
+						></Spin>
+						<p className="font-content-font font-normal text-black text-[18px]/[18px]">
+							Идёт загрузка...
+						</p>
+					</div>
+				</div>
+			</>
+		)
+	}
 	return (
 		<>
 			<div className="w-full flex flex-col px-[53px] mt-[140px]">

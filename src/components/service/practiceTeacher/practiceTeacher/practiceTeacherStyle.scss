@@ -1,6 +1,11 @@
 .ant-drawer-header-title{ 
     flex-direction: row-reverse; 
 }
+.ant-dropdown-menu-title-content .ant-upload-wrapper 
+.ant-upload-list{
+    margin-left: 200px ;
+    top: 20px ;
+}
 @media screen and (max-width: 768px) {
     .ant-table{
         position: relative !important;

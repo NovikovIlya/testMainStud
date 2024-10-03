@@ -11,23 +11,25 @@ import { useGetAttachmentQuery } from '../../../../store/api/practiceApi/mypract
 import './myPracticeStyle.scss'
 
 export const CommentNew = ({ isLoading,dataOneLength,refetch, chat }: any) => {
+	const [name,sendName] = useState(null)
 	const [idAttachment, setIdAttachment] = useState<any>(null)
 	const { data, isSuccess, isFetching ,refetch:ref} = useGetAttachmentQuery(idAttachment, { skip: !idAttachment })
 	const messagesEndRef = useRef<HTMLDivElement | null>(null) 
 
-	const sendAttachments = (id: any) => {
-		if(id===idAttachment){
+	const sendAttachments = (attachment: any) => {
+		if(attachment.id===idAttachment){
 			ref()
 			return
 		}
-		setIdAttachment(id)
+		setIdAttachment(attachment.id)
+		sendName(attachment.name)
 	}
 
 	const download = async () => {
 		if (data) {
 			const link = document.createElement('a')
 			link.href = data
-			link.setAttribute('download', `${idAttachment}.docx`)
+			link.setAttribute('download', `${name}.docx`)
 			document.body.appendChild(link)
 			link.click()
 		}
@@ -100,7 +102,7 @@ export const CommentNew = ({ isLoading,dataOneLength,refetch, chat }: any) => {
 												{message.attachments.map((attachment: any) => (
 													<div className="flex gap-3">
 														<div
-															onClick={() => sendAttachments(attachment.id)}
+															onClick={() => sendAttachments(attachment)}
 															className="text-blue-500 cursor-pointer"
 														>
 															{attachment.name}
@@ -141,7 +143,7 @@ export const CommentNew = ({ isLoading,dataOneLength,refetch, chat }: any) => {
 													<div className="flex gap-3">
 														<FileOutlined style={{ color: '' }} className="w-4 h-4 cursor-pointer mt-1 color-white" />
 														<div
-															onClick={() => sendAttachments(attachment.id)}
+															onClick={() => sendAttachments(attachment)}
 															className="text-blue-500 cursor-pointer"
 														>
 															{attachment.name}

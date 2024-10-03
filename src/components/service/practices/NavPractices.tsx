@@ -160,7 +160,7 @@ export const NavPractices = () => {
 			getItem('Приказ по практике', 'practiceOrder'),
 			getItem('Приложение 4', 'appendix')
 		]),
-		getItem(<Button className='opacity-70 '  onClick={() => setOpen(true)}>Пройти обучение</Button>, 'sub3', <QuestionCircleOutlined className='invisible absolute top-1/2 -translate-y-1/2 right-4 '/>),
+		getItem(<Button className='opacity-70 mt-3'  onClick={() => setOpen(true)}>Пройти обучение</Button>, 'sub3', <QuestionCircleOutlined className='invisible absolute top-1/2 -translate-y-1/2 right-4 '/>),
 		// getItem('Cогласование документов', 'sub4', <PracticesSvg />, [
 		// 	getItem('График практик', '9'),
 		// 	getItem('Представление в приказ', '10'),
@@ -186,9 +186,9 @@ export const NavPractices = () => {
 		description: 'Справочники представляют собой «банк информации», которая в дальнейшем используется для формирования документов. Реестр договоров – «банк договоров» КФУ с организациями, в которых студенты КФУ могут проходить практику. Информация об организациях в дальнейшем используется при формировании Представления в Приказ (ПвП), Приказа по практике (ПП) и Приложения 4 (П4).',
 		cover: (
 		  <img
-			style={{ width: '100px',height: '100px' }}
+			style={{ width: '200px',height: '150px' }}
 			alt="tour.png"
-			src="https://flexys.net/images/article/dictionaries/cabinet_256.png"
+			src="https://i.ibb.co/T4MsPmz/c139a117-e447-4b7f-a3d0-0d69da42c23d.png"
 		  />
 		),
 		target: () => ref1.current,
@@ -218,9 +218,9 @@ export const NavPractices = () => {
 		description: 'Вкладка представляет собой таблицы для создания, редактирования, печати документов и отправления их на согласование',
 		cover: (
 		  <img
-		    style={{ width: '100px',height: '100px' }}
+		    style={{ width: '200px',height: '150px' }}
 			alt="tour.png"
-			src="https://flexys.net/images/article/basic/printer_64.png"
+			src="https://i.ibb.co/qNH92GJ/7adcff7c-43a9-4fb1-b426-795d735abaac.png"
 		  />
 		),
 		target: () => ref2.current,
@@ -301,7 +301,7 @@ export const NavPractices = () => {
 				{current === 'practiceOrder' && <PracticeOrder/>}
 				{current === 'appendix' && <Appendix/>}
 				
-				<Tour open={open} onClose={() => setOpen(false)} steps={steps} />
+				<Tour  open={open} onClose={() => setOpen(false)} steps={steps} />
 			</div>
 			
 		</>

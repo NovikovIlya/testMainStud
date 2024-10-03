@@ -1,20 +1,40 @@
-import { LoadingOutlined, SendOutlined } from '@ant-design/icons'
+import { LoadingOutlined, PlusOutlined, SendOutlined } from '@ant-design/icons'
 import { useTimeout } from 'ahooks'
-import { Button, Col, Divider, Drawer, Form, Row, Select, Space, Spin, Table } from 'antd'
-import { useEffect, useState } from 'react'
+import {
+	Button,
+	Col,
+	Divider,
+	Drawer,
+	Dropdown,
+	Form,
+	Row,
+	Select,
+	Skeleton,
+	Space,
+	Spin,
+	Table,
+	Upload,
+	message
+} from 'antd'
+import TextArea from 'antd/es/input/TextArea'
+import dayjs from 'dayjs'
+import { useEffect, useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
+import { ArrowLeftSvg } from '../../../../assets/svg'
+import { useAppDispatch, useAppSelector } from '../../../../store'
 import { useGetAllMyPracticesQuery } from '../../../../store/api/practiceApi/mypractice'
+import {
+	useGetChatQuery,
+	useGetOneGroupQuery,
+	useSendMessageMutation
+} from '../../../../store/api/practiceApi/practiceTeacher'
 import { useGetAllOrderQuery } from '../../../../store/api/practiceApi/representation'
+import { isMobileDevice } from '../../../../utils/hooks/useIsMobile'
 
 import { CommentNewTeacher } from './CommentTeacher'
 import './practiceTeacherStyle.scss'
-import { isMobileDevice } from '../../../../utils/hooks/useIsMobile'
-import TextArea from 'antd/es/input/TextArea'
-import { ArrowLeftSvg } from '../../../../assets/svg'
-import { useGetChatQuery, useGetOneGroupQuery, useSendMessageMutation } from '../../../../store/api/practiceApi/practiceTeacher'
-import dayjs from 'dayjs'
-import { useAppSelector } from '../../../../store'
+import { setText } from '../../../../store/reducers/notificationSlice'
 
 const mockData = [
 	{
@@ -65,18 +85,21 @@ const mockData = [
 		departmentDirectorName: 'Зайцева Ольга Сергеевна, зав. кафедрой системного анализа',
 		grade: 5
 	}
-	
 ]
-const optionMock = [
-	{ label: 'Зачтено', value: 'Зачтено' },
-]
+const optionMock = [{ label: 'Зачтено', value: 'Зачтено' }]
 
 export const ViewPraciceTeacher = () => {
+	const [files, setFiles] = useState<any>({
+		report: null,
+		diary: null,
+		tasks: null
+	})
 	const user = useAppSelector(state => state.auth.user)
+	const [studentName, setStudentName] = useState(null)
 	const nav = useNavigate()
 	const path = useLocation()
 	const id = path.pathname.split('/').at(-1)!
-	const [idStudent,setIdStudent] = useState(null)
+	const [idStudent, setIdStudent] = useState(null)
 	const [delay, setDelay] = useState<number | undefined>(250)
 	const [open, setOpen] = useState(false)
 	const [fullTable, setFullTable] = useState(false)
@@ -87,14 +110,141 @@ export const ViewPraciceTeacher = () => {
 		courseNumber: 'Все',
 		dateFilling: 'По дате (сначала новые)'
 	})
-	const [text,setText] = useState('')
+	// const [text, setText] = useState('')
 	const [selectSubdivisionId, setSelectSubdivisionId] = useState(null)
-	const {data: dataAllOrder,isSuccess: isSuccessOrder,isFetching: isLoadingOrder} = useGetOneGroupQuery(id)
-	const isMobile = isMobileDevice();
+	const { data: dataAllOrder, isSuccess: isSuccessOrder, isFetching: isLoadingOrder } = useGetOneGroupQuery(id)
+	const isMobile = isMobileDevice()
 	const [dataTable, setDataTable] = useState<any>(dataAllOrder)
 	const {data: dataAllMyPractices,isSuccess: isSuccessMyPractice,isFetching: isFetchingMyPractice} = useGetAllMyPracticesQuery()
-	const {data:dataChat} = useGetChatQuery(idStudent,{skip:!idStudent})
-	const [sendMessageApi,{}] = useSendMessageMutation()
+	const { data: dataChat, isFetching: isFethcingChat,refetch } = useGetChatQuery(idStudent, { skip: !idStudent })
+	const [sendMessageApi, { isLoading}] = useSendMessageMutation()
+
+	// const textStore = useAppSelector((state)=>state.notification.text)
+
+	const items: any = [
+		{
+			label: (
+				<Upload
+					maxCount={1}
+					onChange={info => {
+						if (info.file.status === 'removed') {
+							// form.setFieldValue('pdfContract', undefined)
+							setFiles({
+								...files,
+								report: undefined
+							})
+						}
+					}}
+					beforeUpload={file => {
+						const isPdf = file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+						const isLt5M = file.size / 1024 / 1024 < 5 // Проверка на размер меньше 5 МБ
+
+						if (!isPdf) {
+							message.error('Вы можете загружать только docx файлы!')
+							return false
+						}
+						if (!isLt5M) {
+							message.error('Файл должен быть меньше 5 МБ!')
+							return false
+						}
+
+						setFiles({
+							...files,
+							report: file
+						})
+						return false
+					}}
+					accept={'.docx'}
+					fileList={files.report ? [files.report] : []}
+					className="flex items-center  "
+				>
+					<Button disabled={files.report} className="rounded-[20px_20px_20px_20px] h-14" icon={<PlusOutlined />}>
+						Загрузить отчёт
+					</Button>
+				</Upload>
+			),
+			key: '1'
+		},
+		{
+			label: (
+				<Upload
+					
+					maxCount={1}
+					onChange={info => {
+						if (info.file.status === 'removed') {
+							// form.setFieldValue('pdfContract', undefined)
+							setFiles({
+								...files,
+								diary: undefined
+							})
+						}
+					}}
+					beforeUpload={file => {
+						const isPdf = file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+						const isLt5M = file.size / 1024 / 1024 < 5 // Проверка на размер меньше 5 МБ
+
+						if (!isPdf) {
+							message.error('Вы можете загружать только PDF файлы!')
+							return false
+						}
+						if (!isLt5M) {
+							message.error('Файл должен быть меньше 5 МБ!')
+							return false
+						}
+
+						setFiles({
+							...files,
+							diary: file
+						})
+						return false
+					}}
+					accept={'.docx'}
+					fileList={files.diary ? [files.diary] : []}
+					className="flex items-center  "
+				>
+					<Button disabled={files.diary} className="rounded-[20px_20px_20px_20px] h-14" icon={<PlusOutlined />}>
+						Загрузить дневник
+					</Button>
+				</Upload>
+			),
+			key: '2'
+		},
+		{
+			label: (
+				<Upload
+					
+					maxCount={1}
+					beforeUpload={file => {
+						const isPdf = file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+						const isLt5M = file.size / 1024 / 1024 < 5 // Проверка на размер меньше 5 МБ
+
+						if (!isPdf) {
+							message.error('Вы можете загружать только PDF файлы!')
+							return false
+						}
+						if (!isLt5M) {
+							message.error('Файл должен быть меньше 5 МБ!')
+							return false
+						}
+
+						setFiles({
+							...files,
+							tasks: file
+						})
+						return false
+					}}
+					accept={'.docx'}
+					fileList={files.tasks ? [files.tasks] : []}
+					className="flex items-center "
+				>
+					<Button disabled={files.tasks} className="rounded-[20px_20px_20px_20px] h-14" icon={<PlusOutlined />}>
+						Загрузить путевку
+					</Button>
+				</Upload>
+			),
+			key: '3'
+		}
+	]
 
 	const columns = [
 		{
@@ -114,10 +264,17 @@ export const ViewPraciceTeacher = () => {
 			dataIndex: 'grade',
 			title: 'Оценка',
 			className: 'text-xs !p-2',
-			render: (record:any,row:any)=>{
-				return <Select value={record} placeholder={'Выбрать'} options={optionMock} onChange={(value) => changeSelect(value, row)}></Select>
+			render: (record: any, row: any) => {
+				return (
+					<Select
+						value={record}
+						placeholder={'Выбрать'}
+						options={optionMock}
+						onChange={value => changeSelect(value, row)}
+					></Select>
+				)
 			},
-			fixed: 'right',
+			fixed: 'right'
 		},
 		{
 			key: 'specialty',
@@ -167,9 +324,7 @@ export const ViewPraciceTeacher = () => {
 			dataIndex: 'departmentDirectorName',
 			title: 'ФИО руководителя от кафедры, должность',
 			className: 'text-xs !p-2 mobileFirst'
-		},
-
-		
+		}
 	]
 	const columnsMini = [
 		{
@@ -190,26 +345,37 @@ export const ViewPraciceTeacher = () => {
 			dataIndex: 'grade',
 			title: 'Оценка',
 			className: 'text-xs !p-4 ',
-			render: (record:any,row:any)=>{
-				return <Select className='w-full' value={record} placeholder={'Выбрать'} options={optionMock} onChange={(value) => changeSelect(value, row)}></Select>
+			render: (record: any, row: any) => {
+				return (
+					<Select
+						className="w-full"
+						value={record}
+						placeholder={'Выбрать'}
+						options={optionMock}
+						onChange={value => changeSelect(value, row)}
+					></Select>
+				)
 			}
-		
 		},
 		{
 			key: 'status',
 			dataIndex: 'status',
 			title: 'Статус',
 			className: 'text-xs !p-4 ',
-			render: (record:any,row:any)=>{
-				return <Select className='w-full' value={record} placeholder={'Выбрать'} options={optionMock} onChange={(value) => changeSelect(value, row)}></Select>
+			render: (record: any, row: any) => {
+				return (
+					<Select
+						className="w-full"
+						value={record}
+						placeholder={'Выбрать'}
+						options={optionMock}
+						onChange={value => changeSelect(value, row)}
+					></Select>
+				)
 			}
-		
-		},
-		
-
-		
+		}
 	]
-	console.log('dataTable',dataTable)
+
 	useEffect(() => {
 		if (isSuccessOrder) {
 			setDataTable(filterDataFull())
@@ -219,10 +385,8 @@ export const ViewPraciceTeacher = () => {
 	useTimeout(() => {
 		if (delay !== 250) {
 			showDrawer()
-			console.log('ttt')
 		}
 	}, delay)
-
 
 	function filterDataFull() {
 		function filterCourse(elem: any) {
@@ -245,19 +409,16 @@ export const ViewPraciceTeacher = () => {
 
 		return dataAllOrder ? dataAllOrder.filter((elem: any) => filterCourse(elem)) : []
 	}
-	const changeSelect = (value:any,row:any)=>{
-		console.log('value',value)
-		console.log('row',row)
-
-		const updatedData = dataTable.map((item:any) => {
+	const changeSelect = (value: any, row: any) => {
+		const updatedData = dataTable.map((item: any) => {
 			if (item.index === row.index) {
-				return { ...item, grade: value };
+				return { ...item, grade: value }
 			}
-			return item;
-		});
-		setDataTable(updatedData);
+			return item
+		})
+		setDataTable(updatedData)
 
-		if(row.fio===''){
+		if (row.fio === '') {
 			setOpen(false)
 		}
 	}
@@ -265,7 +426,7 @@ export const ViewPraciceTeacher = () => {
 		setOpen(false)
 		setDelay(v => (v !== undefined ? v + 1 : 1))
 		setIdStudent(record.id)
-		
+		setStudentName(record.studentName)
 	}
 	const showDrawer = () => {
 		setOpen(true)
@@ -273,10 +434,11 @@ export const ViewPraciceTeacher = () => {
 	const onClose = () => {
 		setOpen(false)
 	}
-	const onChange = (e:any)=>{
-		setText(e.target.value)
+	const onChange = (e: any) => {
+		// setText(e.target.value)
+	
 	}
-	const onFinish = ()=>{
+	const onFinish = () => {
 		const nameUser = user?.lastname + ' ' + user?.firstname
 
 		const newForm = new FormData()
@@ -284,22 +446,36 @@ export const ViewPraciceTeacher = () => {
 		const currentDate = dayjs().tz('Europe/Moscow').format()
 		const message: any = {
 			practiceId: id,
-			text: text,
+			text: form.getFieldValue('textArea'),
 			senderName: nameUser,
 			datetime: currentDate,
-			studentId:idStudent,
+			studentId: idStudent
 		}
 		const jsonData = JSON.stringify(message)
 		const blob = new Blob([jsonData], { type: 'application/json' })
 		newForm.append('message', blob)
-	
-	
+		if (files?.report) {
+			newForm.append('report', files.report)
+		}
+		if (files?.diary) {
+			newForm.append('diary', files.diary)
+		}
+		if (files?.tasks) {
+			newForm.append('tasks', files.tasks)
+		}
+
 		sendMessageApi(newForm)
+		form.resetFields()
 
 		setText('')
+		setFiles({
+			report: null,
+			diary: null,
+			tasks: null
+		})
 	}
-
-	const uniqueCourseNumbers = [...new Set(dataTable?.map((item: any) => item.course))]
+	const sortedData =  dataTable ? dataTable?.sort((a:any, b:any) => a.studentName.localeCompare(b.studentName)) : [];
+	
 
 	if (isFetchingMyPractice)	return <Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
 
@@ -307,20 +483,17 @@ export const ViewPraciceTeacher = () => {
 		<Form form={form}>
 			<section className="container animate-fade-in">
 				<Space size={10} align="center">
-                    <Button
-                        size="large"
-                        className="mt-1 mr-6 rounded-full border border-black"
-                        icon={<ArrowLeftSvg className="w-4 h-4 cursor-pointer mt-1"/>}
-                        type="text"
-                        onClick={() => {
-                            nav('/services/practiceteacher')
-                        }}
-                    />
-                    <span className=" text-[28px] font-normal">
-                        Практика группы {dataAllOrder?.[0]?.groupNumber}
-                    </span>
-                </Space>
-			
+					<Button
+						size="large"
+						className="mt-1 mr-6 rounded-full border border-black"
+						icon={<ArrowLeftSvg className="w-4 h-4 cursor-pointer mt-1" />}
+						type="text"
+						onClick={() => {
+							nav('/services/practiceteacher')
+						}}
+					/>
+					<span className=" text-[28px] font-normal">Практика группы {dataAllOrder?.[0]?.groupNumber}</span>
+				</Space>
 
 				<Row gutter={[16, 16]} className="mt-14 flex items-center">
 					<Col span={5}>
@@ -395,8 +568,8 @@ export const ViewPraciceTeacher = () => {
 						{!fullTable ? (
 							<div className="viewPractical">
 								<Table
-									onRow={(record) => ({
-										onClick: (e) => {
+									onRow={record => ({
+										onClick: e => {
 											// @ts-ignore
 											if (e.target.closest('.ant-select')) {
 												return
@@ -405,12 +578,15 @@ export const ViewPraciceTeacher = () => {
 											if (e.target.closest('.ant-select-item-option-content')) {
 												return
 											}
-											handleRowClick(record)},
+											handleRowClick(record)
+										}
 									})}
 									rowKey="id"
 									// @ts-ignore
 									columns={columnsMini}
-									dataSource={dataTable ? dataTable : []}
+									dataSource={
+										sortedData
+									}
 									pagination={
 										dataTable && dataTable?.length < 10
 											? false
@@ -424,8 +600,8 @@ export const ViewPraciceTeacher = () => {
 							</div>
 						) : (
 							<Table
-								onRow={(record) => ({
-									onClick: (e) => {
+								onRow={record => ({
+									onClick: e => {
 										// @ts-ignore
 										if (e.target.closest('.ant-select')) {
 											return
@@ -434,7 +610,8 @@ export const ViewPraciceTeacher = () => {
 										if (e.target.closest('.ant-select-item-option-content')) {
 											return
 										}
-										handleRowClick(record)},
+										handleRowClick(record)
+									}
 								})}
 								size="large"
 								rowKey="id"
@@ -462,39 +639,55 @@ export const ViewPraciceTeacher = () => {
 						)}
 					</Col>
 				</Row>
+				
 				<Drawer
 					mask={false}
 					bodyStyle={{ paddingTop: '30px' }}
-					headerStyle={{ paddingTop: isMobile ? '140px':'100px', background: '#d2def1' }}
+					headerStyle={{ paddingTop: isMobile ? '140px' : '100px', background: '#d2def1' }}
 					className=""
 					onClose={onClose}
 					open={open}
-					title="Новиков Илья"
+					title={studentName}
 				>
-					<div className="top-10">
-						<div>Смена статуса</div>
-						<Divider />
-						<CommentNewTeacher dataChat={dataChat}/>
-						<Form className="flex  w-full flex-wrap " onFinish={onFinish}>
-							<div className="flex w-full ">
-							<TextArea
-								maxLength={75}
-								placeholder="Напишите комментарий к работе"
-								className="rounded-[0px_0px_0px_10px] "
-								style={{ resize: 'none' }}
-								value={text}
-								onChange={onChange}
-								required
-							/>
-							<Button
-								htmlType="submit"
-								icon={<SendOutlined />}
-								className="rounded-[0px_0px_10px_0px] h-[54px] "
-								size="large"
-							/>
-							</div>
-						</Form>
-					</div>
+					
+					{!isFethcingChat ? (
+						<div className="top-10">
+							<div>Смена статуса</div>
+							<Divider />
+							<Spin spinning={isLoading}>
+								<CommentNewTeacher dataChat={dataChat} refetch={refetch}/>
+							</Spin>
+							<Form form={form} className="flex  w-full flex-wrap " onFinish={onFinish}>
+								<div className="flex w-full mt-4 ">
+									<Dropdown className='h-[54px] rounded-[10px_0_0_10px]' menu={{ items }} trigger={['click']}>
+										<Button><PlusOutlined /></Button>
+									</Dropdown>
+
+									<Form.Item className=' w-full' name={'textArea'}>
+										<TextArea
+										
+										maxLength={75}
+										placeholder="Напишите комментарий к работе"
+										className="rounded-[0px_0px_0px_0px]   !h-[54px]"
+										style={{ resize: 'none' }}
+									
+										
+										required
+									/></Form.Item>
+
+									<Button
+										htmlType="submit"
+										icon={<SendOutlined />}
+										className="rounded-[0px_10px_10px_0px] h-[54px] "
+										size="large"
+									/>
+								</div>
+							</Form>
+						</div>
+					) : (
+						<Skeleton />
+					)}
+					
 				</Drawer>
 			</section>
 		</Form>

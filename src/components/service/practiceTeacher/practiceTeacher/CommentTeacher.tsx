@@ -10,76 +10,43 @@ import { useGetAttachmentQuery } from '../../../../store/api/practiceApi/mypract
 import { useSendMessageMutation } from '../../../../store/api/practiceApi/practiceTeacher'
 
 // import './myPracticeStyle.scss'
-const chat = [
-    {
-        "text": "Привет! Как дела?",
-        "senderName": "Алексей",
-        "senderType": "STUDENT",
-        "dateTime": "2024-10-01T10:15:30Z",
-        "attachments": [
-            {
-                "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                "name": "фото_отпуска.jpg"
-            }
-        ]
-    },
-    {
-        "text": "Не забудь про встречу завтра.",
-        "senderName": "Мария",
-        "senderType": "администратор",
-        "dateTime": "2024-10-01T11:00:00Z",
-        "attachments": []
-    },
-    {
-        "text": "Отправляю отчет за сентябрь.",
-        "senderName": "Алексей",
-        "senderType": "STUDENT",
-        "dateTime": "2024-10-01T12:30:45Z",
-        "attachments": [
-            {
-                "id": "b2c85f64-5717-4562-b3fc-2c963f66afa6",
-                "name": "отчет_сентябрь.pdf"
-            }
-        ]
-    }
-]
+
 
 export const CommentNewTeacher = ({ dataChat,isLoading,dataOneLength,refetch }: any) => {
+	const [name,sendName] = useState(null)
 	const [idAttachment, setIdAttachment] = useState<any>(null)
 	const { data, isSuccess, isFetching ,refetch:ref} = useGetAttachmentQuery(idAttachment, { skip: !idAttachment })
-	
 	const messagesEndRef = useRef<HTMLDivElement | null>(null) 
 
-	const sendAttachments = (id: any) => {
-		if(id===idAttachment){
-			// ref()
+	const sendAttachments = (attachment: any) => {
+		if(attachment.id===idAttachment){
+			ref()
 			return
 		}
-		setIdAttachment(id)
+		setIdAttachment(attachment.id)
+		sendName(attachment.name)
 	}
 
 	const download = async () => {
-		
 			const link = document.createElement('a')
-			// link.href = data
-			link.setAttribute('download', `${idAttachment}.docx`)
+			link.href = data
+			link.setAttribute('download', `${name}.docx`)
 			document.body.appendChild(link)
 			link.click()
-		
 	}
 
 
-	// useEffect(() => {
-	// 	if (isSuccess) {
-	// 		download()
-	// 	}
-	// }, [isSuccess])
+	useEffect(() => {
+		if (isSuccess) {
+			download()
+		}
+	}, [isSuccess])
 
-	// useEffect(() => {
-	// 	if (messagesEndRef.current) {
-	// 		messagesEndRef.current.scrollIntoView({ behavior: 'smooth' }) // Прокручиваем вниз
-	// 	}
-	// }, [dataOneLength])
+	useEffect(() => {
+		if (messagesEndRef.current) {
+			messagesEndRef.current.scrollIntoView() // Прокручиваем вниз
+		}
+	}, [dataOneLength])
 
 
 	const chatValid = dataChat ? [...dataChat].sort((a: any, b: any) => dayjs(a.dateTime).unix() - dayjs(b.dateTime).unix()) : []
@@ -89,7 +56,7 @@ export const CommentNewTeacher = ({ dataChat,isLoading,dataOneLength,refetch }: 
 	return (
 		<>
 			
-				<Row className="mb-20">
+				<Row className="mb-14">
 					<Col xs={24} md={12} className='flex items-center'>
 						{/* <Typography.Title level={2}>Здесь отобразятся материалы студента</Typography.Title> */}
 						<span>Проверяйте пакет документов и оставляйте обратную связь </span>
@@ -107,7 +74,7 @@ export const CommentNewTeacher = ({ dataChat,isLoading,dataOneLength,refetch }: 
 
 				<div className="space-y-4 h-[400px] overflow-y-auto p-10 bg-gray-100 rounded-[10px_10px_0px_0px]">
 					{chatValid?.map((message: any) => {
-						const isStudent = message.senderType === 'STUDENT'
+						const isStudent = message.senderType !== 'STUDENT'
 
 						return (
 							<div className={`mb-4 flex items-start ${isStudent ? 'justify-end' : ''}`} key={message.dateTime}>
@@ -135,7 +102,12 @@ export const CommentNewTeacher = ({ dataChat,isLoading,dataOneLength,refetch }: 
 												{message.attachments.map((attachment: any) => (
 													<div className="flex gap-3">
 														<div
-															onClick={() => sendAttachments(attachment.id)}
+															onClick={()=>{
+
+																sendAttachments(attachment)
+																
+															}
+															}
 															className="text-blue-500 cursor-pointer"
 														>
 															{attachment.name}
@@ -178,7 +150,7 @@ export const CommentNewTeacher = ({ dataChat,isLoading,dataOneLength,refetch }: 
 													<div className="flex gap-3">
 														<FileOutlined style={{ color: '' }} className="w-4 h-4 cursor-pointer mt-1 color-white" />
 														<div
-															onClick={() => sendAttachments(attachment.id)}
+															onClick={() => sendAttachments(attachment)}
 															className="text-blue-500 cursor-pointer"
 														>
 															{attachment.name}

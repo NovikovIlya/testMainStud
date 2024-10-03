@@ -68,7 +68,7 @@ export const ViewAll = () => {
 	const { data: dataDepartments, isSuccess: isSuccessDepartments } = useGetSubdivisionForPracticeQuery()
 	const { data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty } = useGetSpecialtyNamesForPractiseQuery(subDevisionId, {skip:!subDevisionId})
 	const { data: dataDep, isSuccess: isSuccessDep } = useGetCafDepartmentsQuery(subDevisionId,{ skip: !subDevisionId })
-	const { data: dataPracticeType, isSuccess: isSuccessPracticeType } = useGetPracticeTypeForPracticeQuery(objType, {skip: objType.subDivisionId === null || objType.specialtyNameId === null})
+	const { data: dataPracticeType, isSuccess: isSuccessPracticeType } = useGetPracticeTypeForPracticeQuery(objType, {skip: objType.subDivisionId === null || !objType.specialtyNameId })
 	const {data:dataGroupNumberNew} = useGetGroupNumbersNewQuery(subDevisionId,{ skip: !subDevisionId })
 	const {data:dataGetCafedraNew} = useGetCafedraNewQuery(subDevisionId,{ skip: !subDevisionId })
 	const [treeLine, setTreeLine] = useState(true);
@@ -231,12 +231,14 @@ export const ViewAll = () => {
 
 	// объект для типа практик
 	useEffect(() => {
+	
 		if (isSuccessNameSpecialty && subDevisionId && isSuccessNameSpecialty) {
 			const pickSpecialityId = dataNameSpecialty?.find((elem: any) => {
 				if (elem.value === pickSpeciality) {
 					return elem
 				}
 			})
+			
 			setObjType({
 				...objType,
 				subdivisionId: subDevisionId,
@@ -255,7 +257,7 @@ export const ViewAll = () => {
 			})
 		}
 	},[pickCourse])
-	console.log('dataPractiseAll',dataPractiseAll)
+
 	function filterDataFull() {
 		function filterPracticeType(elem: any) {
 			if (filter.practiceType === 'Все') {
@@ -274,8 +276,7 @@ export const ViewAll = () => {
 			}
 		}
 		function filterSubdivision(elem: any) {
-			console.log('filter.subdivision', filter.subdivision)
-			console.log('elem.subdivisionId',elem.subdivisionId)
+
 			if (filter.subdivision === 'Все') {
 				return elem
 			} 
@@ -291,7 +292,7 @@ export const ViewAll = () => {
 				return elem
 			} else {
 				// @ts-ignore
-				return elem.courseNumber === filter.course
+				return elem.course === filter.course
 			}
 		}
 
@@ -299,22 +300,23 @@ export const ViewAll = () => {
 			if (filter.semester === 'Все') {
 				return elem
 			} else {
-				return elem.semester === filter.semester
+				return Number(elem.semester) === Number(filter.semester)
 			}
 		}
 
 		function filterNameSpecialty(elem: any) {
+
 			if (filter.nameSpecialty === 'Все') {
 				return elem
 			} else {
-				return elem.specialtyName === filter.nameSpecialty
+				return elem.specialty === filter.nameSpecialty
 			}
 		}
 		function filterGroup(elem: any) {
 			if (filter.groupNumber === 'Все') {
 				return elem
 			} else {
-				return elem.groupNumber === filter.groupNumber
+				return elem.group === filter.groupNumber
 			}
 		}
 	
@@ -356,49 +358,49 @@ export const ViewAll = () => {
         console.log('onPopupScroll', e);
     };
 	const handleSelect = (value:any)=>{
+		
 		setPickSpeciality(value)
 	}
-
 
 	const handleCourse = (value:any)=>{
 		setPickCourse(value)
 		form.setFieldValue('semester', '')
 	}
-	console.log('filter,filter',filter)
+	
 
 	const optionsCourseValid = (() => {
 		switch (pickCourse) {
-			case '1':
+			case 1:
 				return [
 					{ value: 'Все', label: 'Все' },
 					{ value: '1', label: '1' },
 					{ value: '2', label: '2' }
 				];
-			case '2':
+			case 2:
 				return [
 					{ value: 'Все', label: 'Все' },
 					{ value: '3', label: '3' },
 					{ value: '4', label: '4' }
 				];
-			case '3':
+			case 3:
 				return [
 					{ value: 'Все', label: 'Все' },
 					{ value: '5', label: '5' },
 					{ value: '6', label: '6' }
 				];
-			case '4':
+			case 4:
 				return [
 					{ value: 'Все', label: 'Все' },
 					{ value: '7', label: '7' },
 					{ value: '8', label: '8' }
 				];
-			case '5':
+			case 5:
 				return [
 					{ value: 'Все', label: 'Все' },
 					{ value: '9', label: '9' },
 					{ value: '10', label: '10' }
 				];
-			case '6':
+			case 6:
 				return [
 					{ value: 'Все', label: 'Все' },
 					{ value: '11', label: '11' },
@@ -408,6 +410,7 @@ export const ViewAll = () => {
 				return [];
 		}
 	})()
+	
 
 	const handleRowClick = (record: any) => {
 		navigate(`/services/practiceteacher/edit/${record.id}`)
@@ -427,7 +430,7 @@ export const ViewAll = () => {
         }
     }):[])]
 
-	const uniqueCourseNumbers = [...new Set(tableData?.map((item:any) => item.courseNumber))];
+	const uniqueCourseNumbers = [...new Set(tableData?.map((item:any) => item.course))];
 
 
 	return (
@@ -534,7 +537,7 @@ export const ViewAll = () => {
 					<Form.Item name={'groupNumber'} className='mb-[-4px]'>
 						<Select
 
-							disabled={filter.nameSpecialty==='Все'}
+							disabled={filter.subdivision==='Все'}
 							popupMatchSelectWidth={false}
 							defaultValue="Все"
 							className="w-full"

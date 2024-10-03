@@ -26,7 +26,7 @@ export const Apply = () => {
 	const navigate = useNavigate()
 	const role = useAppSelector(state=>state.InfoUser.role)
 	const user = useAppSelector(state => state.auth.user)
-	const [sendData,{}] = useSubmitFormMutation()
+	const [sendData,{isLoading}] = useSubmitFormMutation()
 	const [url,setUrl] = useState('')
 	const [requestStatus, changeStatus] = useState<'loading' | 'error' | 'success' | 'none'>('none')
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -120,6 +120,7 @@ export const Apply = () => {
 	setIsModalOpen(false);
 	};
 	return (
+		<Spin spinning={isLoading}>
 		<div
 			className="rounded-[1vw] w-full px-[54px] py-[75px] flex h-full overflow-y-auto"
 			style={{
@@ -173,5 +174,6 @@ export const Apply = () => {
 				<p>{t('redirectText')}</p>
      		 </Modal>
 		</div>
+		</Spin>
 	)
 }

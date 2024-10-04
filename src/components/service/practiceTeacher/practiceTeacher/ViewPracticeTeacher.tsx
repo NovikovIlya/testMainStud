@@ -7,6 +7,7 @@ import {
 	Drawer,
 	Dropdown,
 	Form,
+	Modal,
 	Row,
 	Select,
 	Skeleton,
@@ -36,56 +37,7 @@ import { CommentNewTeacher } from './CommentTeacher'
 import './practiceTeacherStyle.scss'
 import { setText } from '../../../../store/reducers/notificationSlice'
 
-const mockData = [
-	{
-		index: 1,
-		specialty: 'Иванов Иван Иванович',
-		specialtyDetails: '01.03.02 - Прикладная математика',
-		group: 'Группа 101',
-		academicYear: '2023/2024',
-		course: 2,
-		practiceType: 'Производственная',
-		practiceKind: 'Техническая',
-		departmentDirectorName: 'Петров Петр Петрович, зав. кафедрой математики',
-		grade: 5
-	},
-	{
-		index: 2,
-		specialty: 'Сидорова Мария Сергеевна',
-		specialtyDetails: '01.03.03 - Информатика и вычислительная техника',
-		group: 'Группа 102',
-		academicYear: '2023/2024',
-		course: 1,
-		practiceType: 'Научная',
-		practiceKind: 'Исследовательская',
-		departmentDirectorName: 'Смирнов Алексей Викторович, зав. кафедрой информатики',
-		grade: 4
-	},
-	{
-		index: 3,
-		specialty: 'Кузнецов Алексей Николаевич',
-		specialtyDetails: '01.03.04 - Программная инженерия',
-		group: 'Группа 103',
-		academicYear: '2023/2024',
-		course: 3,
-		practiceType: 'Производственная',
-		practiceKind: 'Разработка ПО',
-		departmentDirectorName: 'Федоров Игорь Дмитриевич, зав. кафедрой программирования',
-		grade: 3
-	},
-	{
-		index: 4,
-		specialty: 'Лебедева Анна Владимировна',
-		specialtyDetails: '01.03.05 - Системный анализ и управление',
-		group: 'Группа 104',
-		academicYear: '2023/2024',
-		course: 2,
-		practiceType: 'Научная',
-		practiceKind: 'Аналитическая',
-		departmentDirectorName: 'Зайцева Ольга Сергеевна, зав. кафедрой системного анализа',
-		grade: 5
-	}
-]
+
 const optionMock = [{ label: 'Зачтено', value: 'Зачтено' }]
 
 export const ViewPraciceTeacher = () => {
@@ -106,10 +58,12 @@ export const ViewPraciceTeacher = () => {
 	const [currentPage, setCurrentPage] = useState(1)
 	const [form] = Form.useForm()
 	const [filter, setFilter] = useState({
-		specialtyName: 'Все',
+		name: 'Все',
 		courseNumber: 'Все',
-		dateFilling: 'По дате (сначала новые)'
+		dateFilling: 'По дате (сначала новые)',
+		status: 'Все'
 	})
+	const [isModalOpen, setIsModalOpen] = useState(false);
 	// const [text, setText] = useState('')
 	const [selectSubdivisionId, setSelectSubdivisionId] = useState(null)
 	const { data: dataAllOrder, isSuccess: isSuccessOrder, isFetching: isLoadingOrder } = useGetOneGroupQuery(id)
@@ -119,132 +73,8 @@ export const ViewPraciceTeacher = () => {
 	const { data: dataChat, isFetching: isFethcingChat,refetch } = useGetChatQuery(idStudent, { skip: !idStudent })
 	const [sendMessageApi, { isLoading}] = useSendMessageMutation()
 
-	// const textStore = useAppSelector((state)=>state.notification.text)
 
-	const items: any = [
-		{
-			label: (
-				<Upload
-					maxCount={1}
-					onChange={info => {
-						if (info.file.status === 'removed') {
-							// form.setFieldValue('pdfContract', undefined)
-							setFiles({
-								...files,
-								report: undefined
-							})
-						}
-					}}
-					beforeUpload={file => {
-						const isPdf = file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-						const isLt5M = file.size / 1024 / 1024 < 5 // Проверка на размер меньше 5 МБ
 
-						if (!isPdf) {
-							message.error('Вы можете загружать только docx файлы!')
-							return false
-						}
-						if (!isLt5M) {
-							message.error('Файл должен быть меньше 5 МБ!')
-							return false
-						}
-
-						setFiles({
-							...files,
-							report: file
-						})
-						return false
-					}}
-					accept={'.docx'}
-					fileList={files.report ? [files.report] : []}
-					className="flex items-center  "
-				>
-					<Button disabled={files.report} className="rounded-[20px_20px_20px_20px] h-14" icon={<PlusOutlined />}>
-						Загрузить отчёт
-					</Button>
-				</Upload>
-			),
-			key: '1'
-		},
-		{
-			label: (
-				<Upload
-					
-					maxCount={1}
-					onChange={info => {
-						if (info.file.status === 'removed') {
-							// form.setFieldValue('pdfContract', undefined)
-							setFiles({
-								...files,
-								diary: undefined
-							})
-						}
-					}}
-					beforeUpload={file => {
-						const isPdf = file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-						const isLt5M = file.size / 1024 / 1024 < 5 // Проверка на размер меньше 5 МБ
-
-						if (!isPdf) {
-							message.error('Вы можете загружать только PDF файлы!')
-							return false
-						}
-						if (!isLt5M) {
-							message.error('Файл должен быть меньше 5 МБ!')
-							return false
-						}
-
-						setFiles({
-							...files,
-							diary: file
-						})
-						return false
-					}}
-					accept={'.docx'}
-					fileList={files.diary ? [files.diary] : []}
-					className="flex items-center  "
-				>
-					<Button disabled={files.diary} className="rounded-[20px_20px_20px_20px] h-14" icon={<PlusOutlined />}>
-						Загрузить дневник
-					</Button>
-				</Upload>
-			),
-			key: '2'
-		},
-		{
-			label: (
-				<Upload
-					
-					maxCount={1}
-					beforeUpload={file => {
-						const isPdf = file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-						const isLt5M = file.size / 1024 / 1024 < 5 // Проверка на размер меньше 5 МБ
-
-						if (!isPdf) {
-							message.error('Вы можете загружать только PDF файлы!')
-							return false
-						}
-						if (!isLt5M) {
-							message.error('Файл должен быть меньше 5 МБ!')
-							return false
-						}
-
-						setFiles({
-							...files,
-							tasks: file
-						})
-						return false
-					}}
-					accept={'.docx'}
-					fileList={files.tasks ? [files.tasks] : []}
-					className="flex items-center "
-				>
-					<Button disabled={files.tasks} className="rounded-[20px_20px_20px_20px] h-14" icon={<PlusOutlined />}>
-						Загрузить путевку
-					</Button>
-				</Upload>
-			),
-			key: '3'
-		}
-	]
 
 	const columns = [
 		{
@@ -396,6 +226,13 @@ export const ViewPraciceTeacher = () => {
 				return elem.course === filter.courseNumber
 			}
 		}
+		function filterName(elem: any) {
+			if (filter.name === 'Все') {
+				return elem
+			} else {
+				return elem.studentName === filter.name
+			}
+		}
 
 		function sortDateFilling(a: any, b: any) {
 			if (filter.dateFilling === 'По дате (сначала новые)') {
@@ -407,7 +244,9 @@ export const ViewPraciceTeacher = () => {
 			return 0
 		}
 
-		return dataAllOrder ? dataAllOrder.filter((elem: any) => filterCourse(elem)) : []
+		return dataAllOrder ? dataAllOrder
+		.filter((elem: any) => filterCourse(elem))
+		.filter((elem: any) => filterName(elem)) : []
 	}
 	const changeSelect = (value: any, row: any) => {
 		const updatedData = dataTable.map((item: any) => {
@@ -427,6 +266,12 @@ export const ViewPraciceTeacher = () => {
 		setDelay(v => (v !== undefined ? v + 1 : 1))
 		setIdStudent(record.id)
 		setStudentName(record.studentName)
+
+		setFiles({
+			report: null,
+			diary: null,
+			tasks: null
+		})
 	}
 	const showDrawer = () => {
 		setOpen(true)
@@ -434,9 +279,9 @@ export const ViewPraciceTeacher = () => {
 	const onClose = () => {
 		setOpen(false)
 	}
-	const onChange = (e: any) => {
-		// setText(e.target.value)
-	
+
+	const clickTextArea = ()=>{
+		// refetch()
 	}
 	const onFinish = () => {
 		const nameUser = user?.lastname + ' ' + user?.firstname
@@ -465,7 +310,7 @@ export const ViewPraciceTeacher = () => {
 		}
 
 		sendMessageApi(newForm)
-		form.resetFields()
+		form.setFieldsValue({ textArea: '' })
 
 		setText('')
 		setFiles({
@@ -474,8 +319,21 @@ export const ViewPraciceTeacher = () => {
 			tasks: null
 		})
 	}
-	const sortedData =  dataTable ? dataTable?.sort((a:any, b:any) => a.studentName.localeCompare(b.studentName)) : [];
+	const showModal = () => {
+		setIsModalOpen(true);
+	};
 	
+	const handleOk = () => {
+	setIsModalOpen(false);
+	};
+	
+	const handleCancel = () => {
+	setIsModalOpen(false);
+	};
+	
+	const sortedData = dataTable?.length > 0 ? [...dataTable].sort((a: any, b: any) => a.studentName.localeCompare(b.studentName)) : [];
+
+	const uniqueNames = Array.from(new Set(dataAllOrder?.map((student:any) => student.studentName)));
 
 	if (isFetchingMyPractice)	return <Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
 
@@ -495,12 +353,41 @@ export const ViewPraciceTeacher = () => {
 					<span className=" text-[28px] font-normal">Практика группы {dataAllOrder?.[0]?.groupNumber}</span>
 				</Space>
 
-				<Row gutter={[16, 16]} className="mt-14 flex items-center">
+				<Row gutter={[16, 16]} className="mt-14  flex items-center">
+					<Col span={5}>
+						<span>ФИО обучающегося</span>
+					</Col>
+					<Col span={7} className="overWrite">
+						<Form.Item className="mb-0" name={'name'}>
+							<Select
+								showSearch
+								defaultValue={'Все'}
+								popupMatchSelectWidth={false}
+								className="w-full"
+								options={[
+									{ key: 2244612, value: 'Все', label: 'Все' },
+									...(uniqueNames
+										? uniqueNames.map((item: any) => ({
+												key: item,
+												value: item,
+												label: item
+										  }))
+										: [])
+								]}
+								onChange={(value: any) => {
+									setFilter({ ...filter, name: value })
+								}}
+							/>
+						</Form.Item>
+					</Col>
+				</Row>
+
+				<Row gutter={[16, 16]} className="mt-4 mb-14 flex items-center">
 					<Col span={5}>
 						<span>Статус</span>
 					</Col>
 					<Col span={7} className="overWrite">
-						<Form.Item className="mb-0" name={'specialtyName'}>
+						<Form.Item className="mb-0" name={'status'}>
 							<Select
 								defaultValue={'Все'}
 								popupMatchSelectWidth={false}
@@ -516,12 +403,14 @@ export const ViewPraciceTeacher = () => {
 										: [])
 								]}
 								onChange={(value: any) => {
-									setFilter({ ...filter, specialtyName: value })
+									setFilter({ ...filter, status: value })
 								}}
 							/>
 						</Form.Item>
 					</Col>
 				</Row>
+
+			
 
 				{/* <Row gutter={[16, 16]} className="mt-4 flex items-center">
 					<Col span={5}>
@@ -651,6 +540,7 @@ export const ViewPraciceTeacher = () => {
 				>
 					
 					{!isFethcingChat ? (
+						
 						<div className="top-10">
 							<div>Смена статуса</div>
 							<Divider />
@@ -659,9 +549,9 @@ export const ViewPraciceTeacher = () => {
 							</Spin>
 							<Form form={form} className="flex  w-full flex-wrap " onFinish={onFinish}>
 								<div className="flex w-full mt-4 ">
-									<Dropdown className='h-[54px] rounded-[10px_0_0_10px]' menu={{ items }} trigger={['click']}>
-										<Button><PlusOutlined /></Button>
-									</Dropdown>
+									
+										<Button className='h-[54px] rounded-[10px_0_0_10px]'  onClick={showModal}><PlusOutlined /></Button>
+									
 
 									<Form.Item className=' w-full' name={'textArea'}>
 										<TextArea
@@ -670,7 +560,7 @@ export const ViewPraciceTeacher = () => {
 										placeholder="Напишите комментарий к работе"
 										className="rounded-[0px_0px_0px_0px]   !h-[54px]"
 										style={{ resize: 'none' }}
-									
+										onClick={clickTextArea}
 										
 										required
 									/></Form.Item>
@@ -685,10 +575,132 @@ export const ViewPraciceTeacher = () => {
 							</Form>
 						</div>
 					) : (
-						<Skeleton />
+						<>
+						<Skeleton active  />
+						<Skeleton.Input active className='mt-20 !h-72 !w-72'/>
+						</>
 					)}
 					
 				</Drawer>
+				<Modal title='Выберите файлы'  width={600} style={{paddingBottom:'40px'}} open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={null}>
+					<div className='flex gap-3 w-full flex-wrap'>
+					<Upload
+					maxCount={1}
+					onChange={info => {
+						if (info.file.status === 'removed') {
+							// form.setFieldValue('pdfContract', undefined)
+							setFiles({
+								...files,
+								report: undefined
+							})
+						}
+					}}
+					beforeUpload={file => {
+						const isPdf = file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+						const isLt5M = file.size / 1024 / 1024 < 5 // Проверка на размер меньше 5 МБ
+
+						if (!isPdf) {
+							message.error('Вы можете загружать только docx файлы!')
+							return false
+						}
+						if (!isLt5M) {
+							message.error('Файл должен быть меньше 5 МБ!')
+							return false
+						}
+
+						setFiles({
+							...files,
+							report: file
+						})
+						return false
+					}}
+					accept={'.docx'}
+					fileList={files.report ? [files.report] : []}
+					className="flex items-center  "
+				>
+					<Button className={`${files.report ? 'opacity-100' : ''} rounded-[20px_20px_20px_20px] h-14 w-[170px] flex justify-start`} icon={<PlusOutlined />}>
+						Загрузить отчёт
+					</Button>
+				</Upload>
+				<Upload
+					
+					maxCount={1}
+					onChange={info => {
+						if (info.file.status === 'removed') {
+							// form.setFieldValue('pdfContract', undefined)
+							setFiles({
+								...files,
+								diary: undefined
+							})
+						}
+					}}
+					beforeUpload={file => {
+						const isPdf = file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+						const isLt5M = file.size / 1024 / 1024 < 5 // Проверка на размер меньше 5 МБ
+
+						if (!isPdf) {
+							message.error('Вы можете загружать только PDF файлы!')
+							return false
+						}
+						if (!isLt5M) {
+							message.error('Файл должен быть меньше 5 МБ!')
+							return false
+						}
+
+						setFiles({
+							...files,
+							diary: file
+						})
+						return false
+					}}
+					accept={'.docx'}
+					fileList={files.diary ? [files.diary] : []}
+					className="flex items-center  "
+				>
+					<Button className={`${files.diary ? 'opacity-100' : ''} rounded-[20px_20px_20px_20px] h-14 w-[170px] flex justify-start`}  icon={<PlusOutlined />}>
+						Загрузить дневник
+					</Button>
+				</Upload>
+				<Upload
+					onChange={info => {
+						if (info.file.status === 'removed') {
+							// form.setFieldValue('pdfContract', undefined)
+							setFiles({
+								...files,
+								tasks: undefined
+							})
+						}
+					}}
+					maxCount={1}
+					beforeUpload={file => {
+						const isPdf = file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+						const isLt5M = file.size / 1024 / 1024 < 5 // Проверка на размер меньше 5 МБ
+
+						if (!isPdf) {
+							message.error('Вы можете загружать только PDF файлы!')
+							return false
+						}
+						if (!isLt5M) {
+							message.error('Файл должен быть меньше 5 МБ!')
+							return false
+						}
+
+						setFiles({
+							...files,
+							tasks: file
+						})
+						return false
+					}}
+					accept={'.docx'}
+					fileList={files.tasks ? [files.tasks] : []}
+					className="flex items-center "
+				>
+					<Button  className={`${files.tasks ? 'opacity-100' : ''} rounded-[20px_20px_20px_20px] h-14 w-[170px] flex justify-start`}  icon={<PlusOutlined />}>
+						Загрузить путевку
+					</Button>
+				</Upload>
+					</div>
+				</Modal>
 			</section>
 		</Form>
 	)

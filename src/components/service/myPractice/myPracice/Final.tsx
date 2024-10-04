@@ -85,7 +85,7 @@ const Final = ({ dataOneLength,isSuccessFull,refetch, id, dataOnePlace, chat }: 
 
 			<Row className="mb-12">
 				<Col xs={24} md={12}>
-					<CommentNew isLoading={isLoading} dataOneLength={dataOneLength} change={change} isSuccessFull={isSuccessFull} refetch={refetch} chat={chat} />
+					<CommentNew dataOnePlace={dataOnePlace} isLoading={isLoading} dataOneLength={dataOneLength} change={change} isSuccessFull={isSuccessFull} refetch={refetch} chat={chat} />
 				</Col>
 			</Row>
 

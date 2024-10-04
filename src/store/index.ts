@@ -21,6 +21,7 @@ import notificationSlice from './reducers/notificationSlice'
 import { abiturientApi } from './api/abiturent/abitRedirect'
 import { apiSliceStudent } from './api/apiSliceStudent'
 import { apiSliceTeacher } from './api/apiSliceTeacher'
+import { setupListeners } from '@reduxjs/toolkit/query'
 
 
 export const store = configureStore({
@@ -56,6 +57,8 @@ export const store = configureStore({
 			.concat(apiSliceTeacher.middleware),
 	devTools: true
 })
+
+setupListeners(store.dispatch)
 
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch

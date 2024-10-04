@@ -35,7 +35,12 @@ import { disableParents } from '../../../../utils/disableParents'
 import { OptionsNameSpecialty } from '../../practices/roster/registerContracts/RegisterContracts'
 import { useGetAllPracticeTeacherQuery } from '../../../../store/api/practiceApi/practiceTeacher'
 
-
+const optionYears = [
+	{value:'Учебный год (по убыванию)'},
+	{value:'Учебный год (по возрастанию)'},
+	{value:'Прошедшие'},
+	{value:'Текущие'}
+]
 
 export const ViewAll = () => {
 	const [fullTable,setFullTable] = useState(true)
@@ -58,7 +63,7 @@ export const ViewAll = () => {
 		semester: 'Все',
 		practiceType: 'Все',
 		subdivision:'Все',
-		dateFilling: 'По дате (сначала новые)',
+		dateFilling: 'Учебный год (по убыванию)',
 		groupNumber: 'Все'
 	})
 	const {data: dataPractiseAll,isSuccess: isSuccessPractiseAll,isFetching: isFetchingPractiseAll} = useGetAllPracticeTeacherQuery()
@@ -144,8 +149,8 @@ export const ViewAll = () => {
 			render: (_: any, record: any) => {
 				return (
 					<div className={'flex flex-col'}>
-						<span>{dayjs(record.period.split('-')[0]).format('DD.MM.YYYY')}</span>-
-						<span>{dayjs(record.period.split('-')[1]).format('DD.MM.YYYY')}</span>
+						<span>{dayjs(record.period.split(' - ')[0].trim()).format('DD.MM.YYYY')}</span>-
+						<span>{dayjs(record.period.split(' - ')[1].trim()).format('DD.MM.YYYY')}</span>
 					</div>
 				)
 			}
@@ -319,14 +324,27 @@ export const ViewAll = () => {
 				return elem.group === filter.groupNumber
 			}
 		}
+		function filterPast(elem: any) {
+			console.log('elem.period',elem.period )
+			if (filter.dateFilling === 'Прошедшие') {
+				return dayjs(elem.period.split(' - ')[1].trim()).format('DD.MM.YYYY') < dayjs().format('DD.MM.YYYY')
+            }
+			if (filter.dateFilling === 'Текущие') {
+				return dayjs(elem.period.split(' - ')[1].trim()).format('DD.MM.YYYY') > dayjs().format('DD.MM.YYYY')
+            }
+			else{
+				return elem
+			}
+		}
 	
 		function sortDateFilling(a:any, b:any) {
-            if (filter.dateFilling === 'По дате (сначала новые)') {
-                return +new Date(b.dateFilling) - +new Date(a.dateFilling)
+            if (filter.dateFilling === 'Учебный год (по убыванию)') {
+                return +new Date(b.academicYear.split('/'[0])) - +new Date(a.academicYear.split('/'[0]))
             }
-            if (filter.dateFilling === 'По дате (сначала старые)') {
-                return +new Date(a.dateFilling) - +new Date(b.dateFilling)
+            if (filter.dateFilling === 'Учебный год (по возрастанию)') {
+                return +new Date(a.academicYear.split('/'[0])) - +new Date(b.academicYear.split('/'[0]))
             }
+			
             return 0
         }
 
@@ -339,6 +357,7 @@ export const ViewAll = () => {
 					.filter((elem: any) => filterNameSpecialty(elem))
 					.filter((elem :any) => filterSubdivision(elem))
 					.filter((elem :any) => filterGroup(elem))
+					.filter((elem :any) => filterPast(elem))
 					.sort((a:any, b:any) => sortDateFilling(a, b))
 			: []
 	}
@@ -639,6 +658,26 @@ export const ViewAll = () => {
 					</Col>
 				</Row>
 			</Form>
+			<Row className='flex justify-end'>
+			<Col span={8}  className='mobileFirst mt-4'>
+                    <div className={'flex gap-2 items-center'}>
+                        <span className={'mr-2'}>Сортировка</span>
+                        <Select
+                            popupMatchSelectWidth={false}
+                            value={filter.dateFilling}
+                            className="w-full"
+                            options={optionYears}
+                            onChange={value => {
+                                setFilter({
+                                    ...filter,
+                                    dateFilling: value
+                                })
+                            }}
+                        />
+                    </div>
+
+                </Col>
+			</Row>
 
 			
 			{isFetchingPractiseAll ? (

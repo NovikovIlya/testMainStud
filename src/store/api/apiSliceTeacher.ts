@@ -11,7 +11,7 @@ import { logOut, setCredentials } from '../reducers/authSlice'
 
 
 const baseQuery = fetchBaseQuery({
-	baseUrl: 'http://192.168.63.96:8087/',
+	baseUrl: 'https://newlk.kpfu.ru/',
 	prepareHeaders(headers, { getState }) {
 		const token = (getState() as RootState).auth.accessToken
 		if (token) {

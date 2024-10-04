@@ -4,6 +4,7 @@ import { apiSliceStudent } from '../apiSliceStudent'
 import { apiSliceTeacher } from '../apiSliceTeacher'
 
 export const practiceTeacherService = apiSliceTeacher.injectEndpoints({
+
     endpoints: builder => ({
         getAllPracticeTeacher: builder.query<any, void>({
             query: () => {
@@ -26,14 +27,17 @@ export const practiceTeacherService = apiSliceTeacher.injectEndpoints({
           
         }),
         getChat: builder.query<any, any>({
+ 
             query: (id) => {
                 return {
                     url: `/services/api-teacher-practices/chat/${id}`,
                     method: 'GET'
+                    
                 }
             },
-            providesTags: ['practiceTeacher']
-          
+            providesTags: ['practiceTeacher'],
+            keepUnusedDataFor: 1,
+         
         }),
         sendMessage: builder.mutation<any, any>({
             query: (body) => {

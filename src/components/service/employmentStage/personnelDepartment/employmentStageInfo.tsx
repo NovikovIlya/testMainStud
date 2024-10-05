@@ -17,6 +17,7 @@ export const EmploymentStageInfo = ( ) => {
 	console.log(requisite_items)
 
 	const stagesArray = requisite_items?.stages || []; // Получаем массив этапов
+
 	console.log(stagesArray)
 
 

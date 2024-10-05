@@ -8,7 +8,14 @@ import {
 } from '../../../../store/api/serviceApi'
 import { setCurrentCommentVisibility } from '../../../../store/reducers/RequisiteReducers/StageCommentReducer'
 import { useAppSelector } from '../../../../store'
-import { setCurrentStageStatus } from '../../../../store/reducers/EmploymentStageReducers/StageStatusReducer'
+import { setSecondStageStatus } from '../../../../store/reducers/EmploymentStageReducers/stages/SecondStageStatusSlice'
+import { setThirdStageStatus } from '../../../../store/reducers/EmploymentStageReducers/stages/ThirdStageStatusSlice'
+import { setForthStageStatus } from '../../../../store/reducers/EmploymentStageReducers/stages/ForthStageStatusSlice'
+import { setFifthStageStatus } from '../../../../store/reducers/EmploymentStageReducers/stages/FifthStageStatusSlice'
+import { setSecondStageCommentVisibility } from '../../../../store/reducers/EmploymentStageReducers/comments/SecondStageCommentVisibilitySlice'
+import { setThirdStageCommentVisibility } from '../../../../store/reducers/EmploymentStageReducers/comments/ThirdStageCommentVisibilitySlice'
+import { setForthStageCommentVisibility } from '../../../../store/reducers/EmploymentStageReducers/comments/ForthStageCommentVisibilitySlice'
+import { setFifthStageCommentVisibility } from '../../../../store/reducers/EmploymentStageReducers/comments/FifthStageCommentVisibilitySlice'
 import { useDispatch } from 'react-redux'
 
 interface DepEmploymentStageItemProps {
@@ -19,7 +26,14 @@ interface DepEmploymentStageItemProps {
 
 export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 
-	const stageStatus = useAppSelector(state => state.currentStageStatus)
+	const secondStageStatus = useAppSelector(state => state.secondStageStatus)
+	const thirdStageStatus = useAppSelector(state => state.thirdStageStatus)
+	const forthStageStatus = useAppSelector(state => state.forthStageStatus)
+	const fifthStageStatus = useAppSelector(state => state.fifthStageStatus)
+	const secondStageCommentVisibility = useAppSelector(state => state.secondStageCommentVisibility)
+	const thirdStageCommentVisibility = useAppSelector(state => state.thirdStageCommentVisibility)
+	const forthStageCommentVisibility = useAppSelector(state => state.forthStageCommentVisibility)
+	const fifthStageCommentVisibility = useAppSelector(state => state.fifthStageCommentVisibility)
 
 	const dispatch = useDispatch()
 
@@ -28,10 +42,6 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 	const [isRevisionModalOpen, setIsRevisionModalOpen] = useState(false)
 
 	const { TextArea } = Input
-
-	const changeVisibility = (newVisibility: string) => {
-		dispatch(setCurrentCommentVisibility(newVisibility))
-	}
 
 	const textRef = useRef('')
 	const checkInputChange = (e:any) => {
@@ -43,7 +53,7 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 			<>
 				{(props.stage === 2) && (
 					<>
-						{(props.stageStatus === 'VERIFYING') && (stageStatus.stageStatus === 'VERIFYING') && (
+						{(props.stageStatus === 'VERIFYING') && (secondStageStatus.secondStageStatus === 'VERIFYING') && (
 							<div className="flex flex-row gap-[12px]">
 								<Button
 									className="text-[#FFFFFF] py-[8px] px-[24px] border-none rounded-[54.5px] text-[16px] font-normal"
@@ -54,8 +64,8 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 											comment: textRef.current,
 											subStageId: props.stage
 										});
-										dispatch(setCurrentStageStatus('ACCEPTED'))
-										changeVisibility('invisible')
+										dispatch(setSecondStageStatus('ACCEPTED'))
+										dispatch(setSecondStageCommentVisibility('invisible'))
 									}}
 								>
 									Принять
@@ -70,13 +80,13 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 								</Button>
 							</div>
 						)}
-						{((props.stageStatus === 'REFINE') || (stageStatus.stageStatus === 'REFINE')) && (
+						{((props.stageStatus === 'REFINE') || (secondStageStatus.secondStageStatus === 'REFINE')) && (
 							<div className="flex flex-row items-center gap-[12px] pr-[150px]">
 								<div className="w-[11px] h-[11px] rounded-[100%] bg-[#FFD600]"></div>
 								<span>Доработка</span>
 							</div>
 						)}
-						{((props.stageStatus === 'ACCEPTED') || (stageStatus.stageStatus === 'ACCEPTED')) && (
+						{((props.stageStatus === 'ACCEPTED') || (secondStageStatus.secondStageStatus === 'ACCEPTED')) && (
 							<div className="flex flex-row items-center gap-[12px] pr-[150px]">
 								<div className="w-[11px] h-[11px] rounded-[100%] bg-[#00AB30]"></div>
 								<span>Принято</span>
@@ -86,7 +96,7 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 				)}
 				{(props.stage === 3) && (
 					<>
-						{(props.stageStatus === 'VERIFYING') && (stageStatus.stageStatus === 'VERIFYING') && (
+						{(props.stageStatus === 'VERIFYING') && (thirdStageStatus.thirdStageStatus === 'VERIFYING') && (
 							<div className="flex flex-row gap-[12px]">
 								<Button
 									className="text-[#FFFFFF] py-[8px] px-[24px] border-none rounded-[54.5px] text-[16px] font-normal"
@@ -97,8 +107,8 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 											comment: textRef.current,
 											subStageId: props.stage
 										});
-										dispatch(setCurrentStageStatus('ACCEPTED'))
-										changeVisibility('invisible')
+										dispatch(setThirdStageStatus('ACCEPTED'))
+										dispatch(setThirdStageCommentVisibility('invisible'))
 									}}
 								>
 									Принять
@@ -112,13 +122,13 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 								>На доработку</Button>
 							</div>
 						)}
-						{((props.stageStatus === 'REFINE') || (stageStatus.stageStatus === 'REFINE')) && (
+						{((props.stageStatus === 'REFINE') || (thirdStageStatus.thirdStageStatus === 'REFINE')) && (
 							<div className="flex flex-row items-center gap-[12px] pr-[150px]">
 								<div className="w-[11px] h-[11px] rounded-[100%] bg-[#FFD600]"></div>
 								<span>Доработка</span>
 							</div>
 						)}
-						{((props.stageStatus === 'ACCEPTED') || (stageStatus.stageStatus === 'ACCEPTED')) && (
+						{((props.stageStatus === 'ACCEPTED') || (thirdStageStatus.thirdStageStatus === 'ACCEPTED')) && (
 							<div className="flex flex-row items-center gap-[12px] pr-[150px]">
 								<div className="w-[11px] h-[11px] rounded-[100%] bg-[#00AB30]"></div>
 								<span>Принято</span>
@@ -128,7 +138,7 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 				)}
 				{(props.stage === 4) && (
 					<>
-					{(props.stageStatus === 'VERIFYING') && (stageStatus.stageStatus === 'VERIFYING') && (
+					{(props.stageStatus === 'VERIFYING') && (forthStageStatus.forthStageStatus === 'VERIFYING') && (
 						<div className="flex flex-row gap-[12px]">
 							<Button
 								className="text-[#FFFFFF] py-[8px] px-[24px] border-none rounded-[54.5px] text-[16px] font-normal"
@@ -139,8 +149,8 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 								comment: textRef.current,
 								subStageId: props.stage
 							});
-							dispatch(setCurrentStageStatus('ACCEPTED'))
-							changeVisibility('invisible')
+							dispatch(setForthStageStatus('ACCEPTED'))
+							dispatch(setForthStageCommentVisibility('invisible'))
 						}}
 							>
 							Принять
@@ -154,13 +164,13 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 					>На доработку</Button>
 					</div>
 					)}
-				{((props.stageStatus === 'REFINE') || (stageStatus.stageStatus === 'REFINE')) && (
+				{((props.stageStatus === 'REFINE') || (forthStageStatus.forthStageStatus === 'REFINE')) && (
 					<div className="flex flex-row items-center gap-[12px] pr-[150px]">
 						<div className="w-[11px] h-[11px] rounded-[100%] bg-[#FFD600]"></div>
 						<span>Доработка</span>
 					</div>
 				)}
-				{((props.stageStatus === 'ACCEPTED') || (stageStatus.stageStatus === 'ACCEPTED')) && (
+				{((props.stageStatus === 'ACCEPTED') || (forthStageStatus.forthStageStatus === 'ACCEPTED')) && (
 					<div className="flex flex-row items-center gap-[12px] pr-[150px]">
 						<div className="w-[11px] h-[11px] rounded-[100%] bg-[#00AB30]"></div>
 						<span>Принято</span>
@@ -170,7 +180,7 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 		)}
 	{(props.stage === 5) && (
 		<>
-			{(props.stageStatus === 'VERIFYING') && (stageStatus.stageStatus === 'VERIFYING')	 && (
+			{(props.stageStatus === 'VERIFYING') && (fifthStageStatus.fifthStageStatus === 'VERIFYING')	 && (
 				<div className="flex flex-row gap-[12px]">
 					<Button
 						className="text-[#FFFFFF] py-[8px] px-[24px] border-none rounded-[54.5px] text-[16px] font-normal"
@@ -181,8 +191,8 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 								comment: textRef.current,
 								subStageId: props.stage
 							});
-							dispatch(setCurrentStageStatus('ACCEPTED'))
-							changeVisibility('invisible')
+							dispatch(setFifthStageStatus('ACCEPTED'))
+							dispatch(setFifthStageCommentVisibility('invisible'))
 						}}
 					>
 						Принять
@@ -196,13 +206,13 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 					>На доработку</Button>
 				</div>
 			)}
-			{((props.stageStatus === 'REFINE') || (stageStatus.stageStatus === 'REFINE')) && (
+			{((props.stageStatus === 'REFINE') || (fifthStageStatus.fifthStageStatus === 'REFINE')) && (
 				<div className="flex flex-row items-center gap-[12px] pr-[150px]">
 					<div className="w-[11px] h-[11px] rounded-[100%] bg-[#FFD600]"></div>
 					<span>Доработка</span>
 				</div>
 			)}
-			{((props.stageStatus === 'ACCEPTED') || (stageStatus.stageStatus === 'ACCEPTED')) && (
+			{((props.stageStatus === 'ACCEPTED') || (fifthStageStatus.fifthStageStatus === 'ACCEPTED')) && (
 				<div className="flex flex-row items-center gap-[12px] pr-[150px]">
 					<div className="w-[11px] h-[11px] rounded-[100%] bg-[#00AB30]"></div>
 					<span>Принято</span>
@@ -221,9 +231,9 @@ const StageContentComponent = () => {
 					<div className="flex flex-row gap-[40px] pr-[150px]">
 
 					</div>
-					{(props.stageStatus === 'REFINE') && (
+					{(props.stageStatus === 'REFINE') || (secondStageCommentVisibility.secondStageCommentVisibility === 'visible') && (
 						<>
-							<Comment commentText={props.comment}></Comment>
+							комент
 						</>
 					)}
 				</>
@@ -234,9 +244,9 @@ const StageContentComponent = () => {
 						<GreenCheck></GreenCheck>
 						<span className="text-[16px]/[19.2px] font-normal">Соискатель ознакомлен с трудовыми условиями</span>
 					</div>
-					{(props.stageStatus === 'REFINE') && (
+					{(props.stageStatus === 'REFINE') || (thirdStageCommentVisibility.thirdStageCommentVisibility === 'visible') && (
 						<>
-							<Comment commentText={props.comment}></Comment>
+							комент
 						</>
 					)}
 				</>
@@ -246,9 +256,9 @@ const StageContentComponent = () => {
 					<div className="flex flex-row gap-[40px] pr-[150px]">
 
 					</div>
-					{(props.stageStatus === 'REFINE') && (
+					{(props.stageStatus === 'REFINE') || (forthStageCommentVisibility.forthStageCommentVisibility === 'visible') && (
 						<>
-							<Comment commentText={props.comment}></Comment>
+							комент
 						</>
 					)}
 				</>
@@ -259,9 +269,9 @@ const StageContentComponent = () => {
 						<GreenCheck></GreenCheck>
 						<span className="text-[16px]/[19.2px] font-normal">Соискатель прошел инструктаж</span>
 					</div>
-					{(props.stageStatus === 'REFINE') && (
+					{(props.stageStatus === 'REFINE') || (fifthStageCommentVisibility.fifthStageCommentVisibility === 'visible') && (
 						<>
-							<Comment commentText={props.comment}></Comment>
+							комент
 						</>
 					)}
 				</>
@@ -300,25 +310,94 @@ const StageStatusModal = () => {
 						onChange={checkInputChange}
 					/>
 					<div className="mt-[40px] flex gap-[12px] w-full justify-end ">
-						<Button
-							className="rounded-[54.5px] py-[12px] px-[24px]  text-[16px]"
-							type="primary"
-							onClick={() => {
-								try {
-									changeStatus({
-										status: 'REFINE',
-										comment: textRef.current,
-										subStageId: 0
-									});
-									dispatch(setCurrentStageStatus('REFINE'))
-									setIsRevisionModalOpen(false);
-								} catch (error) {
-									console.log('try/catch error', error);
-								}
-							}}
-						>
-							Отправить
-						</Button>
+						{(props.stage === 2) && (
+							<Button
+								className="rounded-[54.5px] py-[12px] px-[24px]  text-[16px]"
+								type="primary"
+								onClick={() => {
+									try {
+										changeStatus({
+											status: 'REFINE',
+											comment: textRef.current,
+											subStageId: 0
+										});
+										dispatch(setSecondStageStatus('REFINE'))
+										dispatch(setSecondStageCommentVisibility('visible'))
+										setIsRevisionModalOpen(false);
+									} catch (error) {
+										console.log('try/catch error', error);
+									}
+								}}
+							>
+								Отправить
+							</Button>
+						)}
+						{(props.stage === 3) && (
+							<Button
+								className="rounded-[54.5px] py-[12px] px-[24px]  text-[16px]"
+								type="primary"
+								onClick={() => {
+									try {
+										changeStatus({
+											status: 'REFINE',
+											comment: textRef.current,
+											subStageId: 0
+										});
+										dispatch(setThirdStageStatus('REFINE'))
+										dispatch(setThirdStageCommentVisibility('visible'))
+										setIsRevisionModalOpen(false);
+									} catch (error) {
+										console.log('try/catch error', error);
+									}
+								}}
+							>
+								Отправить
+							</Button>
+						)}
+						{(props.stage === 4) && (
+							<Button
+								className="rounded-[54.5px] py-[12px] px-[24px]  text-[16px]"
+								type="primary"
+								onClick={() => {
+									try {
+										changeStatus({
+											status: 'REFINE',
+											comment: textRef.current,
+											subStageId: 0
+										});
+										dispatch(setForthStageStatus('REFINE'))
+										dispatch(setForthStageCommentVisibility('visible'))
+										setIsRevisionModalOpen(false);
+									} catch (error) {
+										console.log('try/catch error', error);
+									}
+								}}
+							>
+								Отправить
+							</Button>
+						)}
+						{(props.stage === 5) && (
+							<Button
+								className="rounded-[54.5px] py-[12px] px-[24px]  text-[16px]"
+								type="primary"
+								onClick={() => {
+									try {
+										changeStatus({
+											status: 'REFINE',
+											comment: textRef.current,
+											subStageId: 0
+										});
+										dispatch(setFifthStageStatus('REFINE'))
+										dispatch(setFifthStageCommentVisibility('visible'))
+										setIsRevisionModalOpen(false);
+									} catch (error) {
+										console.log('try/catch error', error);
+									}
+								}}
+							>
+								Отправить
+							</Button>
+						)}
 					</div>
 				</Modal>
 			</ConfigProvider>

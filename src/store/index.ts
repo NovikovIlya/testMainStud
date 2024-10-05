@@ -42,9 +42,16 @@ import chatIdSlice from './reducers/chatIdSlice'
 import notificationSlice from './reducers/notificationSlice'
 import inviteSeekerButtonReducer from './reducers/inviteSeekerButtonReducer'
 import currentEmploymentSeekerReducer from './reducers/EmploymentStageReducers/EmploymentStageSeekerReducer'
-import currentStageStatusSlice from './reducers/EmploymentStageReducers/StageStatusReducer'
+import secondStageStatusSlice from './reducers/EmploymentStageReducers/stages/SecondStageStatusSlice'
+import thirdStageStatusSlice from './reducers/EmploymentStageReducers/stages/ThirdStageStatusSlice'
+import forthStageStatusSlice from './reducers/EmploymentStageReducers/stages/ForthStageStatusSlice'
+import fifthStageStatusSlice from './reducers/EmploymentStageReducers/stages/FifthStageStatusSlice'
 import currentRequisiteSeekerReducer from './reducers/RequisiteReducers/RequisiteSeekerReducer'
 import currentCommentVisibilitySlice from './reducers/RequisiteReducers/StageCommentReducer'
+import secondStageCommentVisibilitySlice from './reducers/EmploymentStageReducers/comments/SecondStageCommentVisibilitySlice'
+import thirdStageCommentVisibilitySlice from './reducers/EmploymentStageReducers/comments/ThirdStageCommentVisibilitySlice'
+import forthStageCommentVisibilitySlice from './reducers/EmploymentStageReducers/comments/ForthStageCommentVisibilitySlice'
+import fifthStageCommentVisibilitySlice from './reducers/EmploymentStageReducers/comments/FifthStageCommentVisibilitySlice'
 
 export const store = configureStore({
 	reducer: {
@@ -89,7 +96,14 @@ export const store = configureStore({
 		employmentSeeker: currentEmploymentSeekerReducer,
 		requisiteSeeker: currentRequisiteSeekerReducer,
 		currentCommentVisibility: currentCommentVisibilitySlice,
-		currentStageStatus: currentStageStatusSlice,
+		secondStageStatus: secondStageStatusSlice,
+		thirdStageStatus: thirdStageStatusSlice,
+		forthStageStatus: forthStageStatusSlice,
+		fifthStageStatus: fifthStageStatusSlice,
+		secondStageCommentVisibility: secondStageCommentVisibilitySlice,
+		thirdStageCommentVisibility: thirdStageCommentVisibilitySlice,
+		forthStageCommentVisibility: forthStageCommentVisibilitySlice,
+		fifthStageCommentVisibility: fifthStageCommentVisibilitySlice,
 	},
 	middleware: getDefaultMiddleware =>
 		getDefaultMiddleware()

@@ -923,9 +923,9 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
-		getEmploymentStageStatus: builder.query<EmploymentStageStatusType[], { respondId: number }> ({
+		getEmploymentStageStatus: builder.query<EmploymentStageStatusType, { respondId: number }> ({
 			query: arg => ({
-				url: `http://localhost:8082/employment-api/v1/respond/${arg.respondId}/employment`,
+				url: `http://localhost:8082/employment-api/v1/management/respond/${arg.respondId}/employment`,
 				method: 'GET',
 				headers: {
 					Authorization: `Bearer ${personnelDeparmentToken}`
@@ -934,16 +934,20 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		changeEmploymentStageStatusRequest: builder.mutation<void, ChangeStageStatusType & { subStageId: number }> ( {
 			query: arg => ({
-				url: `http://localhost:8082/employment-api/v1/managment/employment/sub-stage/${arg.subStageId}`,
+				url: `http://localhost:8082/employment-api/v1/management/employment/sub-stage/${arg.subStageId}`,
 				method: 'PUT',
 				headers: {
 					Authorization: `Bearer ${personnelDeparmentToken}`
+				},
+				body: {
+					status: arg.status,
+					comment: arg.comment,
 				}
 			})
 		}),
 		downloadEmploymentStageFile: builder.query<Blob, { fileId : number }> ({
 			query: arg => ({
-				url: `http://localhost:8082/employment-api/v1/managment/employment/sub-stage/${arg.fileId}`,
+				url: `http://localhost:8082/employment-api/v1/management/employment/sub-stage/${arg.fileId}`,
 				method: 'GET',
 				headers: {
 					Authorization: `Bearer ${supervisorToken}`

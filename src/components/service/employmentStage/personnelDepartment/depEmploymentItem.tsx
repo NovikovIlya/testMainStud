@@ -30,8 +30,6 @@ export const DepEmploymentItem = (  props : EmploymentStageItemType ) => {
 		chatId: props.respondId,
 		role: 'PERSONNEL_DEPARTMENT'
 	})
-	console.log(props.respondId)
-	console.log(chatId.id)
 
 	return (
 		<div className="flex flex-col">

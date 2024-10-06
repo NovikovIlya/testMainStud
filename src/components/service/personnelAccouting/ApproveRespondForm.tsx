@@ -11,10 +11,11 @@ export const ApproveRespondForm = (props: {
 	vacancyId: number
 	isRespondSentToSupervisor: boolean
 	mode: 'DIRECTLY' | 'RESERVE'
+	callback: Function
 }) => {
 	const [isFormOpen, setIsFormOpen] = useState<boolean>(false)
-	const [isRespondSentToSupervisor, setIsRespondSentToSupervisor] =
-		useState<boolean>(props.isRespondSentToSupervisor)
+	// const [isRespondSentToSupervisor, setIsRespondSentToSupervisor] =
+	// 	useState<boolean>(props.isRespondSentToSupervisor)
 	const [approveRespond, result] = useApproveReservedRespondMutation()
 	const { data: vacancies = [] } = useGetAllVacanciesQuery()
 
@@ -45,7 +46,7 @@ export const ApproveRespondForm = (props: {
 						})
 							.unwrap()
 							.then(() => {
-								result.isSuccess && setIsRespondSentToSupervisor(true)
+								result.isSuccess && props.callback()
 								setIsFormOpen(false)
 							})
 					}}
@@ -88,9 +89,13 @@ export const ApproveRespondForm = (props: {
 					props.mode === 'DIRECTLY'
 						? setIsFormOpen(true)
 						: approveRespond({ respondId: props.respondId, vacancyId: 0 })
+								.unwrap()
+								.then(() => {
+									props.callback()
+								})
 				}}
 				type="primary"
-				disabled={isRespondSentToSupervisor}
+				disabled={props.isRespondSentToSupervisor}
 				className="font-content-font font-normal text-white text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px]"
 			>
 				Отправить руководителю

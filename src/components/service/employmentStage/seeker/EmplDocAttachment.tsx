@@ -45,7 +45,34 @@ export const EmplDocAttachment = (props: {
 						{docs
 							.filter(doc => doc.employmentStageType === props.stageName)
 							.map(doc => (
-								<li>{doc.name}</li>
+								<li>
+									{doc.name}{' '}
+									{doc.name === 'Заявление о приёме на работу' && (
+										<a
+											href="https://kadry.kpfu.ru/wp-content/uploads/2023/01/01_.zayavlenie.o.prieme.na_.rabotu._list.soglasovaniya__i_o.2022._2_.docx"
+											download={true}
+										>
+											(скачать)
+										</a>
+									)}
+									{doc.name === 'Заполненный личный листок по учету кадров' && (
+										<a
+											href="https://kadry.kpfu.ru/wp-content/uploads/2023/01/lichnyj.listok.po_.uchetu.kadrov.docx"
+											download={true}
+										>
+											(скачать)
+										</a>
+									)}
+									{doc.name ===
+										'Бланк согласия на обработку персональных данных' && (
+										<a
+											href="https://kadry.kpfu.ru/wp-content/uploads/2023/01/soglasie.rabotnika.2017.docx"
+											download={true}
+										>
+											(скачать)
+										</a>
+									)}
+								</li>
 							))}
 					</ol>
 				</div>

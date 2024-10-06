@@ -1,23 +1,23 @@
 import { Button, ConfigProvider, Modal } from 'antd'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-
-import { useAppSelector } from '../../../../../store'
-import { useLazyGetInterviewViewQuery } from '../../../../../store/api/serviceApi'
-import { setCurrentInterviewFormat } from '../../../../../store/reducers/CurrentInterviewFormatSlice'
-import { setCurrentInterviewTimeFormated } from '../../../../../store/reducers/CurrentInterviewTimeFormatedSlice'
-import { setCurrentInterviewTime } from '../../../../../store/reducers/CurrentInterviewTimeSlice'
-import { setCurrentResponce } from '../../../../../store/reducers/CurrentResponceSlice'
 import { InterviewItemType } from '../../../../../store/reducers/type'
+import { useLazyGetInterviewViewQuery } from '../../../../../store/api/serviceApi'
+import {setCurrentResponce} from "../../../../../store/reducers/CurrentResponceSlice";
+import {setCurrentInterviewFormat} from "../../../../../store/reducers/CurrentInterviewFormatSlice";
+import {setCurrentInterviewTime} from "../../../../../store/reducers/CurrentInterviewTimeSlice";
+import {setCurrentInterviewTimeFormated} from "../../../../../store/reducers/CurrentInterviewTimeFormatedSlice";
+import { useAppSelector } from '../../../../../store'
 
-export const SupervisorInterviewItem = (props: InterviewItemType) => {
+export const SupervisorInterviewItem = ( props : InterviewItemType ) => {
+
 	const respondId = useAppSelector(state => state.currentResponce)
 
 	interface InterviewButtonElemProps {
 		id: any
-		format: string
-		time: string
+		format : string
+		time : string
 	}
 	interface InterviewTimeElemProps {
 		eventTime: string
@@ -37,44 +37,64 @@ export const SupervisorInterviewItem = (props: InterviewItemType) => {
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 
-	const seekerName =
-		props.seeker.firstName +
-		' ' +
-		props.seeker.middleName +
-		' ' +
-		props.seeker.lastName
+	const seekerName
+		=
+		props.seeker.firstName
+		+ ' '
+		+ props.seeker.middleName
+		+ ' '
+		+ props.seeker.lastName
 
-	const InterviewCountdownTimeElem = (props: CountdownButtonProps) => {
-		const [timeLeft, setTimeLeft] = useState<number>(0)
+	const InterviewCountdownTimeElem = (props : CountdownButtonProps) => {
+		const [timeLeft, setTimeLeft] = useState<number>(0);
 
 		useEffect(() => {
 			const updateTimeLeft = () => {
-				const targetDate = new Date(props.eventTime)
-				const now = new Date()
-				const difference = targetDate.getTime() - now.getTime()
-				setTimeLeft(difference)
+				const targetDate = new Date(props.eventTime);
+				const now = new Date();
+				const difference = targetDate.getTime() - now.getTime();
+				setTimeLeft(difference);
 				return difference
-			}
+			};
 
-			updateTimeLeft() // Обновляем сразу при монтировании
+			updateTimeLeft(); // Обновляем сразу при монтировании
 
-			const intervalId = setInterval(updateTimeLeft, 1000) // Обновляем каждую секунду
+			const intervalId = setInterval(updateTimeLeft, 1000); // Обновляем каждую секунду
 
-			return () => clearInterval(intervalId) // Очищаем интервал при размонтировании
-		}, [props.eventTime])
+			return () => clearInterval(intervalId); // Очищаем интервал при размонтировании
+		}, [props.eventTime]);
 
-		const targetDate = new Date(props.eventTime)
-		const now = new Date()
-		const difference = targetDate.getTime() - now.getTime()
-		const minutes: number = Math.floor((difference / 1000 / 60) % 60)
-		const hours: number = Math.floor((difference / (1000 * 60 * 60)) % 24)
-		const days: number = Math.floor(difference / (1000 * 60 * 60 * 24))
+		const targetDate = new Date(props.eventTime);
+		const now = new Date();
+		const difference = targetDate.getTime() - now.getTime();
+		const minutes: number = Math.floor((difference / 1000 / 60) % 60);
+		const hours: number = Math.floor((difference / (1000 * 60 * 60)) % 24);
+		const days: number = Math.floor(difference / (1000 * 60 * 60 * 24));
+		let isInterviewStarted : boolean = false
+		let is5MinBeforeInterviewStarted : boolean = false
+		let is30MinAfterInterviewEnded : boolean = false
 
-		const isLessThanFiveMinutes = timeLeft > 0 && timeLeft <= 5 * 60 * 1000
+		if (difference < 0) {
+			isInterviewStarted = true;
+		} else {
+			isInterviewStarted = false;
+		}
 
-		let datePublicString: string = ''
-		const isDaysEmpty: boolean = days === 0
-		const isHoursEmpty: boolean = hours === 0
+		if (difference > 0 && difference <= 60 * 1000 * 5) { // 5 мин
+			is5MinBeforeInterviewStarted = true;
+		} else {
+			is5MinBeforeInterviewStarted = false;
+		}
+
+		if (difference * (-1) < 60 * 1000 * 30) {
+			is30MinAfterInterviewEnded = false;
+		} else {
+			is30MinAfterInterviewEnded = true;
+		}
+
+		let datePublicString : string = ''
+		const isDaysEmpty : boolean = days === 0
+		const isHoursEmpty : boolean = hours === 0
 
 		if (isDaysEmpty && isHoursEmpty) {
 			datePublicString += 'Осталось ' + minutes + ' минут'
@@ -87,49 +107,47 @@ export const SupervisorInterviewItem = (props: InterviewItemType) => {
 		}
 		return (
 			<div className="flex items-center">
-				{props.format === 'OFFLINE' && (
+				{(props.format === "OFFLINE") && (
 					<span className="min-w-[220px] opacity-[0%]"></span>
 				)}
-				{props.format === 'ONLINE' &&
-					isLessThanFiveMinutes &&
-					!(difference < 0) && (
-						<span className="cursor-pointer w-[200px] flex justify-center bg-[#3073D7] text-white font-content-font cursor pointer font-normal text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[35px] border-0">
-							Подключиться
-						</span>
-					)}
-				{props.format === 'ONLINE' &&
-					!isLessThanFiveMinutes &&
-					!(difference < 0) && (
-						<span className="min-w-[220px] flex justify-center bg-[#3073D7] opacity-[32%] text-white font-content-font font-normal text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[35px] border-0">
-							{datePublicString}
-						</span>
-					)}
-				{props.format === 'ONLINE' && difference < 0 && (
+				{(props.format === "ONLINE") && !(is5MinBeforeInterviewStarted) && !(isInterviewStarted) && (
 					<span className="min-w-[220px] flex justify-center bg-[#3073D7] opacity-[32%] text-white font-content-font font-normal text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[35px] border-0">
-						Время истекло
-					</span>
+                {datePublicString}</span>
+				)}
+				{(props.format === "ONLINE") && (is5MinBeforeInterviewStarted) && !(isInterviewStarted) && (
+					<span
+						className="cursor-pointer w-[200px] flex justify-center bg-[#3073D7] text-white font-content-font cursor pointer font-normal text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[35px] border-0">
+                 Подключиться</span>
+				)}
+				{(props.format === 'ONLINE') && !(is30MinAfterInterviewEnded) && (isInterviewStarted) && (
+					<span
+						className="cursor-pointer w-[200px] flex justify-center bg-[#3073D7] text-white font-content-font cursor pointer font-normal text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[35px] border-0">
+                 Подключиться</span>
+				)}
+				{(props.format === "ONLINE") && (isInterviewStarted) && (is30MinAfterInterviewEnded) && (
+					<span className="min-w-[220px] flex justify-center bg-[#3073D7] opacity-[32%] text-white font-content-font font-normal text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[35px] border-0">
+                Время истекло</span>
 				)}
 			</div>
-		)
+		);
 	}
-	const InterviewTimeElem = (props: InterviewTimeElemProps) => {
-		const date: Date = new Date(props.eventTime)
+	const InterviewTimeElem = (props :  InterviewTimeElemProps) =>  {
+		const date : Date = new Date(props.eventTime);
 
 		// Получаем локальное время
 		const localDate = date.toLocaleString('ru-RU', {
 			timeZoneName: 'short',
-			hour12: false
-		})
+			hour12: false,
+		});
 
 		// Преобразуем строку в формат "дд.мм.гг чч:мм"
-		const [datePart, timePart] = localDate.split(', ')
-		const [day, month, year] = datePart.split('.')
+		const [datePart, timePart] = localDate.split(', ');
+		const [day, month, year] = datePart.split('.');
 
-		// Получаем последние две цифры года
-		const shortYear: string = year.slice(-2)
-		const shortTime: string = timePart.substring(0, 5)
-		const datePublicString =
-			day + '.' + month + '.' + shortYear + ' ' + shortTime
+// Получаем последние две цифры года
+		const shortYear : string = year.slice(-2);
+		const shortTime : string = timePart.substring(0, 5);
+		const datePublicString = day + '.' + month + '.' + shortYear + ' ' + shortTime;
 
 		return (
 			<>
@@ -168,15 +186,10 @@ export const SupervisorInterviewItem = (props: InterviewItemType) => {
 				<Button
 					onClick={() => {
 						dispatch(setCurrentResponce(props.id))
-						console.log(respondId.respondId + '123')
 						dispatch(setCurrentInterviewTime(props.time))
 						dispatch(setCurrentInterviewFormat(props.format))
-						dispatch(
-							setCurrentInterviewTimeFormated(InterviewTimeStringForSeeker)
-						)
-						navigate(
-							'/services/personnelaccounting/supervisor/invitation/seekerinfo'
-						)
+						dispatch(setCurrentInterviewTimeFormated(InterviewTimeStringForSeeker))
+						navigate('/services/personnelaccounting/supervisor/invitation/seekerinfo')
 					}}
 					className="font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black"
 				>
@@ -227,17 +240,10 @@ export const SupervisorInterviewItem = (props: InterviewItemType) => {
 				<InterviewTimeElem eventTime={props.time}></InterviewTimeElem>
 				<InterviewFormatElem format={props.format}></InterviewFormatElem>
 				<div className="w-[31%] mr-[3%] gap-[21px] flex flex-row items-center justify-evenly">
-					<InterviewCountdownTimeElem
-						eventTime={props.time}
-						format={props.format}
-					/>
-					<InterviewButtonElem
-						id={props.respondId}
-						format={props.format}
-						time={props.time}
-					></InterviewButtonElem>
+					<InterviewCountdownTimeElem eventTime={props.time}  format={props.format}/>
+					<InterviewButtonElem id={props.id} format={props.format} time={props.time}></InterviewButtonElem>
 				</div>
 			</div>
 		</>
-	)
-}
+	);
+};

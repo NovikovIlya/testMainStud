@@ -1,4 +1,4 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import logger from 'redux-logger'
 
@@ -40,6 +40,18 @@ import SkillsReducer from './reducers/SeekerFormReducers/SkillsReducer'
 import authSlice from './reducers/authSlice'
 import chatIdSlice from './reducers/chatIdSlice'
 import notificationSlice from './reducers/notificationSlice'
+import inviteSeekerButtonReducer from './reducers/inviteSeekerButtonReducer'
+import currentEmploymentSeekerReducer from './reducers/EmploymentStageReducers/EmploymentStageSeekerReducer'
+import secondStageStatusSlice from './reducers/EmploymentStageReducers/stages/SecondStageStatusSlice'
+import thirdStageStatusSlice from './reducers/EmploymentStageReducers/stages/ThirdStageStatusSlice'
+import forthStageStatusSlice from './reducers/EmploymentStageReducers/stages/ForthStageStatusSlice'
+import fifthStageStatusSlice from './reducers/EmploymentStageReducers/stages/FifthStageStatusSlice'
+import currentRequisiteSeekerReducer from './reducers/RequisiteReducers/RequisiteSeekerReducer'
+import currentCommentVisibilitySlice from './reducers/RequisiteReducers/StageCommentReducer'
+import secondStageCommentVisibilitySlice from './reducers/EmploymentStageReducers/comments/SecondStageCommentVisibilitySlice'
+import thirdStageCommentVisibilitySlice from './reducers/EmploymentStageReducers/comments/ThirdStageCommentVisibilitySlice'
+import forthStageCommentVisibilitySlice from './reducers/EmploymentStageReducers/comments/ForthStageCommentVisibilitySlice'
+import fifthStageCommentVisibilitySlice from './reducers/EmploymentStageReducers/comments/FifthStageCommentVisibilitySlice'
 
 export const store = configureStore({
 	reducer: {
@@ -79,7 +91,19 @@ export const store = configureStore({
 		currentEmploymentStage: CurrentEmploymentStage,
 		employmentData: EmploymentDataSlice,
 		employmentProgress: EmploymentProgressSlice,
-		employmentSeekerDocs: EmploymentSeekerDocsSlice
+		employmentSeekerDocs: EmploymentSeekerDocsSlice,
+		inviteSeekerButtonStatus: inviteSeekerButtonReducer,
+		employmentSeeker: currentEmploymentSeekerReducer,
+		requisiteSeeker: currentRequisiteSeekerReducer,
+		currentCommentVisibility: currentCommentVisibilitySlice,
+		secondStageStatus: secondStageStatusSlice,
+		thirdStageStatus: thirdStageStatusSlice,
+		forthStageStatus: forthStageStatusSlice,
+		fifthStageStatus: fifthStageStatusSlice,
+		secondStageCommentVisibility: secondStageCommentVisibilitySlice,
+		thirdStageCommentVisibility: thirdStageCommentVisibilitySlice,
+		forthStageCommentVisibility: forthStageCommentVisibilitySlice,
+		fifthStageCommentVisibility: fifthStageCommentVisibilitySlice,
 	},
 	middleware: getDefaultMiddleware =>
 		getDefaultMiddleware()

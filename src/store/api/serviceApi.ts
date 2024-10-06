@@ -32,6 +32,9 @@ import {
 	VacancyRequestViewType,
 	VacancyRespondItemType,
 	VacancyViewResponceType,
+	EmploymentStageItemType,
+	EmploymentStageStatusType,
+	ChangeStageStatusType,
 	respondStatus
 } from '../reducers/type'
 
@@ -581,7 +584,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 					format: format,
 					mainTime: mainTime,
 					reserveTimes: reservedTimes,
-					additionalInfo: additionalInfo
+					address: additionalInfo
 				},
 				headers: {
 					Authorization: `Bearer ${supervisorToken}`
@@ -896,12 +899,70 @@ export const serviceApi = apiSlice.injectEndpoints({
 				},
 				body: hasNotRequisites
 					? {
-							acceptance: true,
-							hasNotRequisites: hasNotRequisites
-					  }
+						acceptance: true,
+						hasNotRequisites: hasNotRequisites
+					}
 					: { acceptance: true }
 			})
-		})
+		}),
+		getPersonnelStages: builder.query<EmploymentStageItemType[], void>({
+			query: arg => ({
+				url: `http://localhost:8082/employment-api/v1/management/employment`,
+				method: 'GET',
+				headers: {
+					Authorization: `Bearer ${personnelDeparmentToken}`
+				}
+			})
+		}),
+		downloadFileEmploymentStages: builder.query<Blob, {respondId: number, fileId: number}> ({
+			query: arg => ({
+				url: `http://localhost:8082/employment-api/v1/respond/${arg.respondId}/employment/file/${arg.fileId}/`,
+				method: 'GET',
+				headers: {
+					Authorization: `Bearer ${supervisorToken}`
+				}
+			})
+		}),
+		getEmploymentStageStatus: builder.query<EmploymentStageStatusType, { respondId: number }> ({
+			query: arg => ({
+				url: `http://localhost:8082/employment-api/v1/management/respond/${arg.respondId}/employment`,
+				method: 'GET',
+				headers: {
+					Authorization: `Bearer ${personnelDeparmentToken}`
+				}
+			})
+		}),
+		changeEmploymentStageStatusRequest: builder.mutation<void, ChangeStageStatusType & { subStageId: number }> ( {
+			query: arg => ({
+				url: `http://localhost:8082/employment-api/v1/management/employment/sub-stage/${arg.subStageId}`,
+				method: 'PUT',
+				headers: {
+					Authorization: `Bearer ${personnelDeparmentToken}`
+				},
+				body: {
+					status: arg.status,
+					comment: arg.comment,
+				}
+			})
+		}),
+		downloadEmploymentStageFile: builder.query<Blob, { fileId : number }> ({
+			query: arg => ({
+				url: `http://localhost:8082/employment-api/v1/management/employment/sub-stage/${arg.fileId}`,
+				method: 'GET',
+				headers: {
+					Authorization: `Bearer ${supervisorToken}`
+				}
+			})
+		}),
+		changeCardStatusRequest: builder.mutation<void, {subStageId: number}> ({
+			query: arg => ({
+				url: `hhtp://localhost:8082//employment-api/v1/managment/employment/sub-stage/${arg.subStageId}/has-requisites`,
+				method: 'PATCH',
+				headers: {
+					Authorization: `Bearer ${supervisorToken}`
+				}
+			})
+		}),
 	})
 })
 export const {
@@ -979,6 +1040,10 @@ export const {
 	useEmployeeSeekerRequestMutation,
 	useAnswerToInvitationReserveTimeRequestMutation,
 	useAnswerEmploymentRequestMutation,
+	useGetPersonnelStagesQuery,
+	useGetEmploymentStageStatusQuery,
+	useChangeEmploymentStageStatusRequestMutation,
+	useDownloadEmploymentStageFileQuery,
 	useLazyGetChatPreviewsQuery,
 	useGetSeekerEmploymentRespondsQuery,
 	useLazyGetEmploymentDataQuery,
@@ -986,5 +1051,6 @@ export const {
 	useLazyGetEmploymentDocsQuery,
 	useDeleteEmploymentDocMutation,
 	useGetSupervisorRespondsQuery,
-	useSendEmploymentDocsMutation
+	useSendEmploymentDocsMutation,
+	useChangeCardStatusRequestMutation,
 } = serviceApi

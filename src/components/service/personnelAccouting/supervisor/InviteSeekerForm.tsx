@@ -12,8 +12,12 @@ import uuid from 'react-uuid'
 
 import { useInviteSeekerMutation } from '../../../../store/api/serviceApi'
 
-export const InviteSeekerForm = (props: { respondId: number }) => {
-	const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false)
+export const InviteSeekerForm = (props: {
+	respondId: number
+	isButtonDisabled: boolean
+	callback: Function
+}) => {
+	//const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false)
 
 	const [isFormOpen, setIsFormOpen] = useState<boolean>(false)
 	const [format, setFormat] = useState<'OFFLINE' | 'ONLINE'>('OFFLINE')
@@ -32,7 +36,7 @@ export const InviteSeekerForm = (props: { respondId: number }) => {
 				onClick={() => {
 					setIsFormOpen(true)
 				}}
-				disabled={isButtonDisabled}
+				disabled={props.isButtonDisabled}
 				type="primary"
 				className="font-content-font font-normal text-white text-[16px]/[16px] rounded-[54.5px] w-[257px] h-[40px] py-[8px] px-[24px]"
 			>
@@ -194,7 +198,7 @@ export const InviteSeekerForm = (props: { respondId: number }) => {
 									setIsFormOpen(false)
 									setResultModalText('Приглашение успешно отправлено')
 									setIsResultModalOpen(true)
-									setIsButtonDisabled(true)
+									props.callback()
 								})
 								.catch(error => {
 									try {

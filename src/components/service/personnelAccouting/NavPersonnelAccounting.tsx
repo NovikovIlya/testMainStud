@@ -31,7 +31,14 @@ import { RespondsSupervisor } from './supervisor/RespondsSupervisor'
 import { SupervisorCreateVacancyForm } from './supervisor/vacancy/SupervisorCreateVacancyForm'
 import { SupervisorUpdateVacancy } from './supervisor/vacancy/SupervisorUpdateVacancy'
 import { SupervisorVacancies } from './supervisor/vacancy/SupervisorVacancies'
-import { EmploymentStageInfo } from './../employmentStage/personnelDepartment/employmentStageInfo'
+import { EmploymentStageInfo } from '../employmentStage/personnelDepartment/employmentStageInfo'
+import { DepEmploymentSeekerInfo } from '../employmentStage/personnelDepartment/depEmploymentSeekerInfo'
+import { RequisiteReview } from '../requisite/review/RequisiteReview'
+import { CardCreationList } from '../requisite/card/CardCreationList'
+import { CardCreationInfo } from '../requisite/card/CardCreationInfo'
+import { CardCreationSeekerInfo } from '../requisite/card/CardCreationSeekerInfo'
+import { RequisiteReviewInfo } from '../requisite/review/RequisiteReviewInfo'
+import { RequisiteSeekerInfo } from '../requisite/review/RequisiteSeekerInfo'
 
 export const NavPesonnelAccounting = () => {
 	const { pathname } = useLocation()
@@ -70,6 +77,11 @@ export const NavPesonnelAccounting = () => {
 			id: '/services/personnelaccounting/reserve',
 			icon: <RespondsIcon />,
 			name: 'Кадровый резерв'
+		},
+		{
+			id: '/services/personnelaccounting/requisite',
+			icon: <RespondsIcon />,
+			name: 'Реквизиты'
 		}
 	]
 
@@ -125,6 +137,46 @@ export const NavPesonnelAccounting = () => {
 						}}
 					>
 						Заявки от руководилей
+					</p>
+				</div>
+			)
+		}
+	]
+
+	const navEmployeeListRequisiteItems: CollapseProps['items'] = [
+		{
+			key: 'requisite',
+			label: (
+				<div className="flex items-center gap-[10px]">
+					{<VacanciesIcon />}
+					<p className="text-base">{'Реквизиты'}</p>
+				</div>
+			),
+			children: (
+				<div className="flex flex-col gap-[12px] ml-[24px]">
+					<p
+						className={clsx(
+							'font-content-font text-black text-[14px]/[14px] font-normal',
+							pathname !== '/services/personnelaccounting/requisite/requisite-review' &&
+							'opacity-[52%]'
+						)}
+						onClick={() => {
+							navigate('/services/personnelaccounting/requisite/requisite-review')
+						}}
+					>
+						Просмотр реквизитов
+					</p>
+					<p
+						className={clsx(
+							'font-content-font text-black text-[14px]/[14px] font-normal',
+							pathname !== '/services/personnelaccounting/requisite/card-creation' &&
+							'opacity-[52%]'
+						)}
+						onClick={() => {
+							navigate('/services/personnelaccounting/requisite/card-creation')
+						}}
+					>
+						Заявки на создание карт
 					</p>
 				</div>
 			)
@@ -299,6 +351,24 @@ export const NavPesonnelAccounting = () => {
 					<Collapse
 						className="w-full !bg-inherit"
 						items={navEmployeeListReserveItems}
+						expandIconPosition="end"
+						bordered={false}
+						style={{}}
+					/>
+				</li>
+			)
+		} else if (name === 'Реквизиты') {
+			return (
+				<li
+					key={index}
+					className={clsx(
+						'w-full flex items-center pl-5 hover:bg-[#F5F8FB]  cursor-pointer',
+						id === pathname && 'bg-[#F5F8FB]'
+					)}
+				>
+					<Collapse
+						className="w-full !bg-inherit"
+						items={navEmployeeListRequisiteItems}
 						expandIconPosition="end"
 						bordered={false}
 						style={{}}
@@ -484,6 +554,34 @@ export const NavPesonnelAccounting = () => {
 				{pathname ===
 					'/services/personnelaccounting/employment/stages' && (
 						<EmploymentStageInfo/>
+					)}
+				{pathname ===
+					'/services/personnelaccounting/employment/stages/seekerinfo' && (
+						<DepEmploymentSeekerInfo/>
+					)}
+				{pathname ===
+					'/services/personnelaccounting/requisite/requisite-review' && (
+						<RequisiteReview/>
+					)}
+				{pathname ===
+					'/services/personnelaccounting/requisite/card-creation' && (
+						<CardCreationList/>
+					)}
+				{pathname ===
+					'/services/personnelaccounting/requisite/requisite-review/info' && (
+						<RequisiteReviewInfo/>
+					)}
+				{pathname ===
+					'/services/personnelaccounting/requisite/card-creation/info' && (
+						<CardCreationInfo/>
+					)}
+				{pathname ===
+					'/services/personnelaccounting/requisite/card-creation/info/seekerinfo' && (
+						<CardCreationSeekerInfo/>
+					)}
+				{pathname ===
+					'/services/personnelaccounting/requisite/requisite-review/info/seekerinfo/' && (
+						<RequisiteSeekerInfo/>
 					)}
 			</div>
 		</>

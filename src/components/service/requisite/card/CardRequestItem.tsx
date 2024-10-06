@@ -1,8 +1,7 @@
 import {
 	useChangeCardStatusRequestMutation,
-	useChangeEmploymentStageStatusRequestMutation
 } from '../../../../store/api/serviceApi'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button, ConfigProvider, Modal } from 'antd'
 import { DocumentElem } from '../../employmentStage/personnelDepartment/components/DocumentElem'
@@ -52,13 +51,9 @@ export const CardRequestItem = () => {
 							<Button
 								className="rounded-[54.5px] text-[14px] w-full py-[13px]"
 								type="primary"
-								onClick={async () => {
-									try {
-										await markCardGiven({ subStageId: 6 });
-										navigate('/services/personnelaccounting/requisite/card-creation');
-									} catch (error) {
-										alert('какая то ошибка');
-									}
+								onClick={() => {
+										markCardGiven({ subStageId: 5 })
+										navigate('/services/personnelaccounting/requisite/card-creation')
 								}}
 							>
 								Ок

@@ -44,6 +44,7 @@ export const NavPesonnelAccounting = () => {
 	const { pathname } = useLocation()
 	const navigate = useNavigate()
 	const roles = useAppSelector(state => state.auth.user?.roles)
+	const respondId = useAppSelector(state => state.currentResponce)
 
 	const handleNavigate = (url: string) => {
 		navigate(url)
@@ -552,7 +553,7 @@ export const NavPesonnelAccounting = () => {
 					<SupervisorInterviewSeekerInfo/>
 				)}
 				{pathname ===
-					'/services/personnelaccounting/employment/stages' && (
+					`/services/personnelaccounting/employment/stages/${respondId.respondId}` && (
 						<EmploymentStageInfo/>
 					)}
 				{pathname ===
@@ -568,7 +569,7 @@ export const NavPesonnelAccounting = () => {
 						<CardCreationList/>
 					)}
 				{pathname ===
-					'/services/personnelaccounting/requisite/requisite-review/info' && (
+					`/services/personnelaccounting/requisite/requisite-review/info/${respondId.respondId}` && (
 						<RequisiteReviewInfo/>
 					)}
 				{pathname ===

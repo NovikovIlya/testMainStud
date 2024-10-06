@@ -956,10 +956,10 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		changeCardStatusRequest: builder.mutation<void, {subStageId: number}> ({
 			query: arg => ({
-				url: `hhtp://localhost:8082//employment-api/v1/managment/employment/sub-stage/${arg.subStageId}/has-requisites`,
+				url: `hhtp://localhost:8082//employment-api/v1/management/employment/sub-stage/${arg.subStageId}/has-requisites`,
 				method: 'PATCH',
 				headers: {
-					Authorization: `Bearer ${supervisorToken}`
+					Authorization: `Bearer ${personnelDeparmentToken}`
 				}
 			})
 		}),

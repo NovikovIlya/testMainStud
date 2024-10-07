@@ -5,6 +5,7 @@ import dayjs from 'dayjs'
 import EditableTable from './EditableTable'
 import { ExclamationCircleTwoTone, ExclamationOutlined, VerticalAlignBottomOutlined } from '@ant-design/icons'
 import { useAddTasksMutation } from '../../../../store/api/practiceApi/mypractice'
+import { Znak } from '../../../../assets/svg/Znak'
 
 const Plan = ({id,dataOnePlace,dataTasks,setShowFinal}:any) => {
 	const [dataSource, setDataSource] = useState<any>(dataTasks?.map((item:any)=>{
@@ -104,7 +105,7 @@ const Plan = ({id,dataOnePlace,dataTasks,setShowFinal}:any) => {
 					</Card>
 				</Col> */}
 				<Col xs={24} md={12} span={12}>
-					<Card title={<div className='flex gap-3'><ExclamationCircleTwoTone />Обратите внимание</div>} bordered={false}>
+					<Card title={<div className='flex gap-3 items-center'><Znak />Обратите внимание</div>} bordered={false}>
 					<ul className='pl-5 pr-5 '>
 						
 						{dataOnePlace==='На кафедре КФУ' ?<li className=''>Индивидуальные задания представляют собой план-график на практику студента. Перед началом практики руководитель по практике должен поставить подпись.</li>:

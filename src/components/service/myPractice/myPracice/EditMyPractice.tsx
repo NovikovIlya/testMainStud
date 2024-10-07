@@ -12,6 +12,7 @@ import Diary from './Diary'
 import Final from './Final'
 import Plan from './Plan'
 import { Vector } from '../../../../assets/svg/Vector'
+import {Znak} from '../../../../assets/svg/Znak'
 
 export const EditMyPractice = () => {
 	const [form] = Form.useForm<any>()
@@ -208,7 +209,7 @@ export const EditMyPractice = () => {
 								/>
 								<Row className='mt-4'>
 									<Col xs={24} md={24} span={24}>
-										<Card title={<div className='flex gap-3'><ExclamationCircleTwoTone />Обратите внимание</div>} bordered={false}>
+										<Card title={<div className='flex gap-3 items-center'><Znak />Обратите внимание</div>} bordered={false}>
 										<ul className='pl-5 pr-5 '>
 											<li className='mb-3'>Отчет должен заполняться самостоятельно.В модуле “Практики студентов” формируется только титульный лист отчета.</li>
 											
@@ -247,8 +248,8 @@ export const EditMyPractice = () => {
 						<Col sm={24} md={12} lg={12}>
 							<Card
 								title={
-									<div className="flex gap-3">
-										<ExclamationCircleTwoTone />
+									<div className="flex gap-3 items-center">
+										<Znak />
 										Обратите внимание:
 									</div>
 								}

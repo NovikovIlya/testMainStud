@@ -538,13 +538,7 @@ export const EditPractical = () => {
                                 <Form.Item label={'Подразделение'}
                                         rules={[{required: true}]}
                                         name={'subDivision'}>
-                                    {/* <Select
-                                        onChange={handleChange}
-                                        size="large"
-                                        popupMatchSelectWidth={false}
-                                        className="w-full"
-                                        options={departments}
-                                    /> */}
+                                  
                                         <TreeSelect
                                         treeLine={treeLine && { showLeafIcon }}
                                         showSearch
@@ -781,7 +775,11 @@ export const EditPractical = () => {
                                     style={{
                                         display: 'flex',
                                     }}
-                                    actions={[<div  onClick={() => deleteCompetence(item)} className='cursor-pointer'><DeleteRedSvg /></div>]}
+                                    // @ts-ignore
+                                    actions={dataOnePractise?.isInSubmission ? null :
+                                        [
+                                    <div  onClick={() => deleteCompetence(item)} className='cursor-pointer'><DeleteRedSvg /></div>
+                                ]}
                                     >
                                         <div className='flex items-center'>
                                             <div className=' p-3'>{index + 1}</div> 

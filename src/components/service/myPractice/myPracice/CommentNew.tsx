@@ -61,7 +61,7 @@ export const CommentNew = ({ isLoading,dataOneLength,refetch, chat }: any) => {
 						<Typography.Title level={2}>Комментарии по практике</Typography.Title>
 						<span>Загружайте пакет документов на проверку и получайте обратную связь прямо в окне комментариев </span>
 					</Col>
-					<Col xs={24} md={12} className="flex justify-end">
+					{/* <Col xs={24} md={12} className="flex justify-end">
 						<Button
 							onClick={refetch}
 							className="mt-8 mb-8 ml-8"
@@ -69,15 +69,24 @@ export const CommentNew = ({ isLoading,dataOneLength,refetch, chat }: any) => {
 							shape="circle"
 							icon={<ReloadOutlined />}
 						/>
-					</Col>
+					</Col> */}
 				</Row>
 
 				<div className="space-y-4 h-[400px] overflow-y-auto p-10 bg-white rounded-xl">
+				<Button
+							onClick={refetch}
+							className="  absolute right-8 top-46"
+							size="large"
+							shape="circle"
+							icon={<ReloadOutlined />}
+						/>
+					
 					{chatValid?.map((message: any) => {
 						const isStudent = message.senderType === 'STUDENT'
 
 						return (
 							<div className={`mb-4 flex items-start ${isStudent ? 'justify-end' : ''}`} key={message.dateTime}>
+								
 								{isStudent ? (
 									<div className="flex mb-4">
 										<div className="flex flex-col items-end">

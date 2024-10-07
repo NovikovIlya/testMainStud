@@ -377,7 +377,7 @@ const StageStatusModal = () => {
 										changeStatus({
 											status: 'REFINE',
 											comment: textRef.current,
-											subStageId: props.stage - 1
+											subStageId: props.stage - 2
 										})
 										dispatch(setSecondStageStatus('REFINE'))
 										dispatch(setSecondStageCommentVisibility('visible'))
@@ -395,7 +395,7 @@ const StageStatusModal = () => {
 										changeStatus({
 											status: 'REFINE',
 											comment: textRef.current,
-											subStageId: props.stage - 1
+											subStageId: props.stage - 2
 										});
 										dispatch(setThirdStageStatus('REFINE'))
 										dispatch(setThirdStageCommentVisibility('visible'))
@@ -413,7 +413,7 @@ const StageStatusModal = () => {
 										changeStatus({
 											status: 'REFINE',
 											comment: textRef.current,
-											subStageId: props.stage - 1
+											subStageId: props.stage - 2
 										});
 										dispatch(setForthStageStatus('REFINE'))
 										dispatch(setForthStageCommentVisibility('visible'))
@@ -431,7 +431,7 @@ const StageStatusModal = () => {
 										changeStatus({
 											status: 'REFINE',
 											comment: textRef.current,
-											subStageId: props.stage - 1
+											subStageId: props.stage - 2
 										});
 										dispatch(setFifthStageStatus('REFINE'))
 										dispatch(setFifthStageCommentVisibility('visible'))
@@ -449,7 +449,7 @@ const StageStatusModal = () => {
 									changeStatus({
 										status: 'REFINE',
 										comment: textRef.current,
-										subStageId: props.stage - 1
+										subStageId: props.stage - 2
 									});
 									dispatch(setSixStageStatus('REFINE'))
 									dispatch(setSixStageCommentVisibility('visible'))

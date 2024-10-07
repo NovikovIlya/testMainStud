@@ -7,6 +7,7 @@ import {
 	Drawer,
 	Dropdown,
 	Form,
+	Input,
 	Modal,
 	Row,
 	Select,
@@ -36,18 +37,23 @@ import { isMobileDevice } from '../../../../utils/hooks/useIsMobile'
 import { CommentNewTeacher } from './CommentTeacher'
 import './practiceTeacherStyle.scss'
 import { setText } from '../../../../store/reducers/notificationSlice'
+import { Vector } from '../../../../assets/svg/Vector'
 
 
 const optionMock = [{ label: 'Зачтено', value: 'Зачтено' }]
 
 export const ViewPraciceTeacher = () => {
+
 	const [files, setFiles] = useState<any>({
 		report: null,
 		diary: null,
 		tasks: null
 	})
 	const user = useAppSelector(state => state.auth.user)
-	const [studentName, setStudentName] = useState(null)
+	const [studentName, setStudentName] = useState<any>(null)
+	const [grade,setGrade] = useState<any>(null)
+	const [rowData,setRowData] = useState(null)
+	const [statusStudent,setStatusStudent] = useState(null)
 	const nav = useNavigate()
 	const path = useLocation()
 	const id = path.pathname.split('/').at(-1)!
@@ -175,34 +181,41 @@ export const ViewPraciceTeacher = () => {
 			dataIndex: 'grade',
 			title: 'Оценка',
 			className: 'text-xs !p-4 ',
-			render: (record: any, row: any) => {
-				return (
-					<Select
-						className="w-full"
-						value={record}
-						placeholder={'Выбрать'}
-						options={optionMock}
-						onChange={value => changeSelect(value, row)}
-					></Select>
-				)
-			}
+			// render: (record: any, row: any) => {
+			// 	return (
+			// 		<Select
+			// 			className="w-full"
+			// 			value={record}
+			// 			placeholder={'Выбрать'}
+			// 			options={optionMock}
+			// 			onChange={value => changeSelect(value, row)}
+			// 		></Select>
+			// 	)
+			// }
 		},
 		{
 			key: 'status',
 			dataIndex: 'status',
 			title: 'Статус',
 			className: 'text-xs !p-4 ',
-			render: (record: any, row: any) => {
-				return (
-					<Select
-						className="w-full"
-						value={record}
-						placeholder={'Выбрать'}
-						options={optionMock}
-						onChange={value => changeSelect(value, row)}
-					></Select>
-				)
-			}
+			// render: (record: any, row: any) => {
+			// 	return (
+			// 		<Select
+			// 			className="w-full"
+			// 			value={record}
+			// 			placeholder={'Выбрать'}
+			// 			options={optionMock}
+			// 			onChange={value => changeSelect(value, row)}
+			// 		></Select>
+			// 	)
+			// }
+		},
+		{
+			key: 'documents',
+			dataIndex: 'documents',
+			title: 'Документы',
+			className: 'text-xs !p-4 ',
+			
 		}
 	]
 
@@ -266,6 +279,7 @@ export const ViewPraciceTeacher = () => {
 		setDelay(v => (v !== undefined ? v + 1 : 1))
 		setIdStudent(record.id)
 		setStudentName(record.studentName)
+		setRowData(record)
 
 		setFiles({
 			report: null,
@@ -343,8 +357,9 @@ export const ViewPraciceTeacher = () => {
 				<Space size={10} align="center">
 					<Button
 						size="large"
-						className="mt-1 mr-6 rounded-full border border-black"
-						icon={<ArrowLeftSvg className="w-4 h-4 cursor-pointer mt-1" />}
+						style={{width:'48px'}}
+                        className="mt-1 mr-6 w-[48px] rounded-full border border-black"
+                        icon={<Vector />}
 						type="text"
 						onClick={() => {
 							nav('/services/practiceteacher')
@@ -537,12 +552,47 @@ export const ViewPraciceTeacher = () => {
 					onClose={onClose}
 					open={open}
 					title={studentName}
+					width={isMobile ? '100%' : '30%'}
+					
 				>
 					
 					{!isFethcingChat ? (
 						
 						<div className="top-10">
-							<div>Смена статуса</div>
+							<Form form={form} className="flex  w-full flex-wrap " onFinish={onFinish}>
+								<Row className='flex items-center w-full mb-4'>
+									<Col span={5}>Статус</Col>
+									<Col span={19}>
+										<Select
+											className="w-full"
+											
+											placeholder={'Выбрать'}
+											options={optionMock}
+											onChange={value => setStatusStudent(value)}
+										></Select>
+									</Col>
+								</Row>
+								<Row className='flex items-center w-full'>
+									<Col span={5}>Оценка</Col>
+									<Col span={19}>
+										<Form.Item className='  flex-wrap items-center  mb-[0]' name={'gradeForm'}>
+											<Input
+												className="w-full flex"
+												
+												placeholder={'Ввести'}
+											
+											
+											></Input>
+										</Form.Item>
+									</Col>
+								</Row>
+								<Row className='flex justify-end w-full mt-2'>
+									<Col >
+										<Button>Сохранить</Button>
+									</Col>
+								</Row>
+							</Form>
+							
 							<Divider />
 							<Spin spinning={isLoading}>
 								<CommentNewTeacher dataChat={dataChat} refetch={refetch}/>

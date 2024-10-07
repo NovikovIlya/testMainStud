@@ -108,7 +108,7 @@ export const CreatePractical = () => {
 	})?.id}, { skip: !subDivisionId || !pickSpeciality})
 	// const { data: dataGroupNumbersNew } = useGetGroupNumbersNewQuery(subDivisionId, { skip: subDivisionId === null })
 	const {data: dataDepartmentDirector,isSuccess: isSuccessDepartmentDirector} = useGetDepartmentDirectorsQuery(subDivisionId, {skip: !subDivisionId})
-	const { data: dataCompetences, isSuccess: isSuccessCompetences } = useGetCompentencesQuery(objectForCompetences, {skip: !objectForCompetences?.specialityId || objectForCompetences?.practiceKindId === null|| objectForCompetences?.startYear === null})
+	const { data: dataCompetences, isSuccess: isSuccessCompetences } = useGetCompentencesQuery(objectForCompetences, {skip: !objectForCompetences?.specialityId || objectForCompetences?.practiceKindId === null})
 	const { data: dataDepartments, isSuccess: isSuccessDepartments } = useGetSubdivisionForPracticeQuery()
 	const { data: dataPracticeType, isSuccess: isSuccessPracticeType } = useGetPracticeTypeForPracticeQuery(objType, {skip: !objType?.specialtyNameId|| !objType?.subdivisionId})
 	const { data: dataTask, isSuccess: isSuccessTask } = useGetTasksForPracticeQuery(arqTask,{skip: !arqTask?.practiceTypeId|| !arqTask?.specialtyNameId})
@@ -149,7 +149,7 @@ export const CreatePractical = () => {
 
 	// заполнения объекта для компетенции
 	useEffect(() => {
-		if (pickKindPractise && pickDate && pickSpeciality) {
+		if (pickKindPractise  && pickSpeciality) {
 			const specId = dataNameSpecialty?.find((elem: any) => {
 				if (elem.value === pickSpeciality) {
 					return elem
@@ -164,14 +164,14 @@ export const CreatePractical = () => {
 			const obj = {
 				specialityId: specId?.id,
 				practiceKindId: pickId?.id,
-				startYear: pickDate[0]
+				// startYear: pickDate[0]
 			}
 			setObjectForCompetences(obj)
 		}
 	}, [
 		dataNameSpecialty,
 		dataPraciseKind,
-		pickDate,
+		// pickDate,
 		pickSpeciality,
 		pickKindPractise
 	])
@@ -629,18 +629,19 @@ export const CreatePractical = () => {
 					</Col>
 				</Row> */}
 				<Row gutter={[16, 16]}>
-					<Col xs={24} sm={24} md={18} lg={8} xl={6}>
+				<Col xs={24} sm={24} md={18} lg={8} xl={6}>
 						<Form.Item
 							//rules={[{required: true}]}
-							name={'semester'}
-							label={'Семестр'}
+							name={'courseStudy'}
+							label={'Курс обучения'}
+							rules={[{ required: true }]}
 						>
 							<Select
-							    disabled={!pickCourse}
 								size="large"
 								popupMatchSelectWidth={false}
 								className="w-full"
-								options={optionsCourseValid}
+								options={optionsCourse}
+								onChange={handleCourse}
 							/>
 						</Form.Item>
 					</Col>
@@ -678,22 +679,22 @@ export const CreatePractical = () => {
                     </Col>
                 </Row> */}
 				<Row gutter={[16, 16]}>
-					<Col xs={24} sm={24} md={18} lg={8} xl={6}>
+				<Col xs={24} sm={24} md={18} lg={8} xl={6}>
 						<Form.Item
 							//rules={[{required: true}]}
-							name={'courseStudy'}
-							label={'Курс обучения'}
-							rules={[{ required: true }]}
+							name={'semester'}
+							label={'Семестр'}
 						>
 							<Select
+							    disabled={!pickCourse}
 								size="large"
 								popupMatchSelectWidth={false}
 								className="w-full"
-								options={optionsCourse}
-								onChange={handleCourse}
+								options={optionsCourseValid}
 							/>
 						</Form.Item>
 					</Col>
+					
 					<Col xs={24} sm={24} md={18} lg={8} xl={6}>
 						<Form.Item
 							//rules={[{required: true}]}

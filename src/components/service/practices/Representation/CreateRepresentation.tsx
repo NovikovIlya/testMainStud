@@ -595,18 +595,18 @@ export const CreateRepresentation = () => {
 			theme: theme,
 			students: tableDataStudent
 		}
-
-		sendSubmission(obj)
-			.unwrap()
-			.then(() => {
-				nav('/services/practices/representation')
-			})
-			.catch(error => {
-				if (error.status === 409) {
-					dispatch(showNotification({ message: 'Такое представление уже имеется, создайте другое', type: 'error' }))
-				}
-				console.log(error)
-			})
+		console.log('obj',obj)
+		// sendSubmission(obj)
+		// 	.unwrap()
+		// 	.then(() => {
+		// 		nav('/services/practices/representation')
+		// 	})
+		// 	.catch(error => {
+		// 		if (error.status === 409) {
+		// 			dispatch(showNotification({ message: 'Такое представление уже имеется, создайте другое', type: 'error' }))
+		// 		}
+		// 		console.log(error)
+		// 	})
 	}
 
 	const okayModal = () => {

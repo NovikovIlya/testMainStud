@@ -56,23 +56,30 @@ export const CommentNewTeacher = ({ dataChat,isLoading,dataOneLength,refetch }: 
 	return (
 		<>
 			
-				<Row className="mb-14">
+				{/* <Row className="mb-14">
 					<Col xs={24} md={12} className='flex items-center'>
-						{/* <Typography.Title level={2}>Здесь отобразятся материалы студента</Typography.Title> */}
+						
 						<span>Проверяйте пакет документов и оставляйте обратную связь </span>
 					</Col>
 					<Col xs={24} md={12} className="flex justify-end">
 						<Button
 							onClick={refetch}
-							className="mt-8 mb-8 ml-8"
+							className="mt-8 mb-8 ml-8 "
 							size="large"
 							shape="circle"
 							icon={<ReloadOutlined />}
 						/>
 					</Col>
-				</Row>
+				</Row> */}
 
 				<div className="space-y-4 h-[400px] overflow-y-auto p-10 bg-gray-100 rounded-[10px_10px_0px_0px]">
+					<Button
+							onClick={refetch}
+							className="mb-8 ml-8 absolute top-4 right-4"
+							size="large"
+							shape="circle"
+							icon={<ReloadOutlined />}
+						/>
 					{chatValid?.map((message: any) => {
 						const isStudent = message.senderType !== 'STUDENT'
 

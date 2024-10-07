@@ -114,7 +114,7 @@ export const TableEditView = ({ isSuccessDataOne,visiting, fullTable=[], setFull
 			dataIndex: 'number',
 			title: '№',
 			className: 'text-xs !p-2',
-			render: (text: any, record: any, index: any) => <div>{index + 1}</div>
+			
 		},
 		{
 			key: 'name',
@@ -128,7 +128,8 @@ export const TableEditView = ({ isSuccessDataOne,visiting, fullTable=[], setFull
 			key: 'practicePeriod',
 			dataIndex: 'practicePeriod',
 			title: 'Период практики',
-			className: 'text-xs !p-2'
+			className: 'text-xs !p-2',
+			render: (text: any) => <div>{formatDateRange(text)}</div>
 		},
 		{
 			key: 'other',
@@ -240,7 +241,11 @@ export const TableEditView = ({ isSuccessDataOne,visiting, fullTable=[], setFull
 				components={components}
 				rowClassName={() => 'editable-row'}
 				bordered
-				dataSource={fullTable}
+				dataSource={fullTable.map((item:any,index:number)=>({...item, number:index+1})).sort((a:any, b:any) => {
+					const lastNameA = a.name.split(' ')[0]; 
+					const lastNameB = b.name.split(' ')[0]; 
+					return lastNameA.localeCompare(lastNameB); 
+				})}
 				columns={columns as ColumnTypes}
 			/>
 		</div>

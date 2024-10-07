@@ -97,7 +97,7 @@ export const EditOrder = () => {
 			dataIndex: 'number',
 			title: '№',
 			className: 'text-xs !p-2',
-			render: (text: any, record: any, index: any) => <div>{index + 1}</div>
+			
 		},
 		{
 			key: 'student',
@@ -459,7 +459,7 @@ export const EditOrder = () => {
 	const handleChangeStatus = ()=>{
 		changeStatusSubmissions(dataOneSubmissions?.id)
 	}
-
+	console.log('fullTable',fullTable)
 	if (isLoadingOneSubmission) return <SkeletonPage />
 
 	return (
@@ -534,7 +534,11 @@ export const EditOrder = () => {
 								}
 							}}
 							bordered
-							dataSource={fullTable}
+							dataSource={fullTable.map((item:any,index:number)=>({...item, number:index+1})).sort((a:any, b:any) => {
+								const lastNameA = a.name.split(' ')[0]; 
+								const lastNameB = b.name.split(' ')[0]; 
+								return lastNameA.localeCompare(lastNameB); 
+							})}
 							columns={mergedColumns}
 							rowClassName="editable-row"
 							pagination={{pageSize:10}}

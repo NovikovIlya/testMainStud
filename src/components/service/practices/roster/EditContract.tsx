@@ -27,6 +27,7 @@ import { copyFileDocument } from "../../../../utils/downloadDocument/copyFileDoc
 import { agreementFileDocument } from "../../../../utils/downloadDocument/agreementFileDocument"
 import { SkeletonPage } from './Skeleton'
 import { endOfDay, isAfter } from 'date-fns'
+import { Vector } from '../../../../assets/svg/Vector'
 
 export interface PdfContract {
     uid: string,
@@ -220,8 +221,9 @@ export const EditContract = () => {
             <Space size={10}>
                 <Button
                     size="large"
-                    className="mt-1 mr-6  rounded-full border border-black"
-                    icon={<ArrowLeftSvg className="w-4 h-4 cursor-pointer mt-1"/>}
+                    style={{width:'48px'}}
+                    className="mt-1 mr-6 w-[48px] rounded-full border border-black"
+                    icon={<Vector />}
                     type="text"
                     onClick={() => nav('/services/practices/registerContracts')}
                 />

@@ -141,7 +141,7 @@ export const CreateContracts = () => {
         }
     };
     
-     
+    console.log('optionsNameSpec',optionsNameSpec)
 
     return (
         <Spin spinning={isLoading}>
@@ -310,6 +310,10 @@ export const CreateContracts = () => {
                                    >
                                     
                             <Select
+                                showSearch
+                                filterOption={(input, option) =>
+                                    (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                                  }
                                 mode="multiple"
                                 allowClear
                                 size="large"

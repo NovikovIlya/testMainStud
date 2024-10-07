@@ -192,7 +192,7 @@ export const NavPractices = () => {
 		  />
 		),
 		target: () => ref1.current,
-		placement: 'right',
+		placement: 'bottom',
 	  },
 	
 	  {

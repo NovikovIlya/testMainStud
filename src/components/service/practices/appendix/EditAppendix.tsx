@@ -274,7 +274,7 @@ export const EditAppendix = () => {
 				</Col>
 			</Row>
 
-			<Row className='mt-[-68px]'>
+			<Row className='mt-[-68px] mb-6'>
 				{isSuccess && dataOneSubmissions.orderStatus !== 'Согласован1' ? (
 					<Col span={2} className="mt-5">
 						<Space className="w-full ">

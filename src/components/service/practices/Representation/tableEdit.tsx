@@ -135,7 +135,7 @@ export const TableEdit = ({selectedPlace, status='',active = true,visiting, full
 			dataIndex: 'number',
 			title: '№',
 			className: 'text-xs !p-2',
-			render: (text: any, record: any, index: any) => <div>{index + 1}</div>
+			
 		},
 		{
 			key: 'nane',
@@ -243,7 +243,7 @@ export const TableEdit = ({selectedPlace, status='',active = true,visiting, full
 			})
 		}
 	})
-
+	console.log('fullTable',fullTable)
 	return (
 		<div>
 			<Table
@@ -255,7 +255,7 @@ export const TableEdit = ({selectedPlace, status='',active = true,visiting, full
 				pagination={{
 					pageSize: 10,
 				}}
-				dataSource={fullTable}
+				dataSource={fullTable.map((item:any,index:number)=>({...item, number:index+1})).sort((a:any, b:any) => a.name.localeCompare(b.name))}
 				columns={columns as ColumnTypes}
 			/>
 		</div>

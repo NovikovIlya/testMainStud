@@ -11,6 +11,7 @@ import type { UploadProps } from 'antd';
 import { UploadOutlined } from '@ant-design/icons'
 
 import { useState } from 'react'
+import { Vector } from '../../../../assets/svg/Vector'
 
 
 export const EditPracticeTeacher = () => {
@@ -127,8 +128,9 @@ export const EditPracticeTeacher = () => {
 				<Space size={10} align="center">
 					<Button
 						size="large"
-						className="mt-1 mr-6 rounded-full border border-black"
-						icon={<ArrowLeftSvg className="w-4 h-4 cursor-pointer mt-1" />}
+						style={{width:'48px'}}
+                        className="mt-1 mr-6 w-[48px] rounded-full border border-black"
+                        icon={<Vector />}
 						type="text"
 						onClick={() => {
 							nav('/services/mypractices/')

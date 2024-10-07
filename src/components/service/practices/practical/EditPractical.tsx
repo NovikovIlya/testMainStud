@@ -28,6 +28,7 @@ import { SkeletonPage } from './Skeleton';
 import { DeleteOutlined } from '@ant-design/icons';
 import { DeleteRedSvg } from '../../../../assets/svg/DeleteRedSvg';
 import { disableParents } from '../../../../utils/disableParents';
+import { Vector } from '../../../../assets/svg/Vector';
 
 
 
@@ -82,12 +83,12 @@ export const EditPractical = () => {
     const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
     const [objectForCompetences, setObjectForCompetences] = useState<any>({
         specialityId:null,
-        practiceKindId:null,
-        startYear:null
+        practiceKindId:null
+      
     })
-    const {data:dataOnePractise,isSuccess:isSuccesOnePractise,isFetching:isFetchingDataOnePractise} = useGetPracticeOneQuery(id,{refetchOnMountOrArgChange: true  })
+    const {data:dataOnePractise,isSuccess:isSuccesOnePractise,isFetching:isFetchingDataOnePractise} = useGetPracticeOneQuery(id)
     const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesForPractiseQuery(subDivisionId, {skip: !subDivisionId})
-    const {data:dataCompetences, isSuccess: isSuccessCompetences} = useGetCompentencesQuery(objectForCompetences,{skip: true === null || objectForCompetences.practiceKindId === null || objectForCompetences.startYear === null})
+    const {data:dataCompetences, isSuccess: isSuccessCompetences} = useGetCompentencesQuery(objectForCompetences,{skip: true === null || objectForCompetences.practiceKindId === null})
     const {data: dataDepartments, isSuccess: isSuccessDepartments} = useGetSubdivisionForPracticeQuery()
     const {data: dataPracticeType, isSuccess: isSuccessPracticeType} = useGetPracticeTypeForPracticeQuery(objType, {skip: objType.subdivisionId === null || objType.specialtyNameId === null})
     const {data: dataDepartmentDirector} = useGetDepartmentDirectorsQuery(subDivisionId, {skip: !subDivisionId})
@@ -105,7 +106,7 @@ export const EditPractical = () => {
     const [treeLine, setTreeLine] = useState(true);
     const [showLeafIcon, setShowLeafIcon] = useState(false);
     const [value, setValue] = useState<any>();
-    
+    console.log('objectForCompetences',objectForCompetences)
 	useEffect(()=>{
 		if(!flagCompetence){
             setCopyDataCompetences( dataOnePractise?.competence)
@@ -217,8 +218,8 @@ export const EditPractical = () => {
                     if (elem.value === form.getFieldValue('practiceKind')) {
                         return elem
                     }
-                })?.id,
-                startYear:form.getFieldValue('academicYear')[0].$y
+                })?.id
+                
             })
         }   
     },[dataNameSpecialty, isSuccesOnePractise,dataPraciseKind,form,pickKund,dataPraciseKind,fullDate])
@@ -514,8 +515,9 @@ export const EditPractical = () => {
                 <Space size={10} align="center">
                     <Button
                         size="large"
-                        className="mt-1 mr-6 rounded-full border border-black"
-                        icon={<ArrowLeftSvg className="w-4 h-4 cursor-pointer mt-1"/>}
+                        style={{width:'48px'}}
+                        className="mt-1 mr-6 w-[48px] rounded-full border border-black"
+                        icon={<Vector />}
                         type="text"
                         onClick={() => {
                             nav('/services/practices/practical.ts/')

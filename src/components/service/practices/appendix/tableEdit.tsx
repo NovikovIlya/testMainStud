@@ -114,7 +114,7 @@ export const TableEdit = ({ isSuccessDataOne,visiting, fullTable=[], setFullTabl
 			dataIndex: 'number',
 			title: '№',
 			className: 'text-xs !p-2',
-			render: (text: any, record: any, index: any) => <div>{index + 1}</div>
+			
 		},
 		{
 			key: 'name',
@@ -233,7 +233,7 @@ export const TableEdit = ({ isSuccessDataOne,visiting, fullTable=[], setFullTabl
 			
 		}
 	},[isSuccessDataOne])
-
+	console.log('fullTableValidState',fullTableValidState)
 	return (
 		<div>
 			<Table
@@ -241,10 +241,14 @@ export const TableEdit = ({ isSuccessDataOne,visiting, fullTable=[], setFullTabl
 				components={components}
 				rowClassName={() => 'editable-row'}
 				bordered
-				dataSource={fullTableValidState}
+				dataSource={fullTableValidState.map((item:any,index:number)=>({...item, number:index+1})).sort((a:any, b:any) => {
+					const lastNameA = a.name.split(' ')[0]; 
+					const lastNameB = b.name.split(' ')[0]; 
+					return lastNameA.localeCompare(lastNameB); 
+				})}
 				columns={columns as ColumnTypes}
-				pagination={fullTable?.length < 5 ? false : {
-					pageSize: 5,
+				pagination={fullTable?.length < 10 ? false : {
+					pageSize: 10,
 				}}
 			/>
 		</div>

@@ -246,7 +246,7 @@ export const CreateAppendix = () => {
 						<Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
 					) : (
 						<>
-							<Row className="mt-4">
+							<Row className="mt-4 mb-6">
 								<Col flex={'auto'}>
 									<Form form={form} component={false}>
 										<TableEdit fullTableValidState={fullTableValidState} setFullTableValidState={setFullTableValidState} isSuccessDataOne={isSuccessDataOne} setIsFIOProf={setIsFIOProf} fullTable={dataOne} visiting={visiting} setFullTable={setFullTable} create={true} />

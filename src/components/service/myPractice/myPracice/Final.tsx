@@ -77,11 +77,11 @@ const Final = ({ dataOneLength,isSuccessFull,refetch, id, dataOnePlace, chat }: 
 
 	return (
 		<>
-			<Row>
+			{/* <Row>
 				<Col span={12}>
 					<Divider />
 				</Col>
-			</Row>
+			</Row> */}
 
 			<Row className="mb-12">
 				<Col xs={24} md={12}>
@@ -101,6 +101,12 @@ const Final = ({ dataOneLength,isSuccessFull,refetch, id, dataOnePlace, chat }: 
 								value={text}
 								onChange={onChange}
 								required
+								onKeyDown={(e) => {
+									if (e.key === 'Enter') {
+										e.preventDefault(); 
+										onFinish();
+									}
+								}}
 							/>
 							<Button
 								htmlType="submit"

@@ -346,7 +346,7 @@ const PracticeModal = ({selectedPractice,isModalOpenOne,handleOkOne,handleCancel
 					}
 				}}
 				bordered
-				dataSource={filteredData}
+				dataSource={filteredData.map((item:any,index:number)=>({...item, number:index+1}))}
 				columns={columnsRepresentation}
 
 				pagination={dataAllPractise?.length < 10 ? false : {

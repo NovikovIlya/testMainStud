@@ -11,6 +11,7 @@ import { validateMessages } from '../../../../utils/validateMessage'
 import Diary from './Diary'
 import Final from './Final'
 import Plan from './Plan'
+import { Vector } from '../../../../assets/svg/Vector'
 
 export const EditMyPractice = () => {
 	const [form] = Form.useForm<any>()
@@ -135,8 +136,9 @@ export const EditMyPractice = () => {
 			<Space size={10} align="center">
 				<Button
 					size="large"
-					className="mt-1 mr-6 rounded-full border border-black"
-					icon={<ArrowLeftSvg className="w-4 h-4 cursor-pointer mt-1" />}
+					style={{width:'48px'}}
+					className="mt-1 mr-6 w-[48px] rounded-full border border-black"
+					icon={<Vector />}
 					type="text"
 					onClick={() => {
 						nav('/services/mypractices/')
@@ -149,16 +151,16 @@ export const EditMyPractice = () => {
 			<Tabs defaultActiveKey="1" onChange={onChange} className="mt-6">
 				<Tabs.TabPane tab={'Основная информация'} key={1}>
 						<>
-							<Row className="mb-4 mt-4">
+							<Row className="mb-4 mt-9">
 								<Col xs={24} sm={12} span={12} className="pr-[8px] ">
-									<Card title="Оценка:" bordered={false} className="mb-4">
+									<Card title="Оценка" bordered={false} className="mb-4">
 										<Row>
 											<Descriptions.Item className="block sm:flex" span={3} label={'1'} key={'1'}>
 												<div className="">{dataOne?.grade ? dataOne.grade : 'Нет оценки'}</div>
 											</Descriptions.Item>
 										</Row>
 									</Card>
-									<Card title="Основные сведения:" bordered={false}>
+									<Card title="Основные сведения" bordered={false}>
 										<Row>
 											<Descriptions className="">
 												{items.map((item: any) => (
@@ -176,7 +178,7 @@ export const EditMyPractice = () => {
 				<Tabs.TabPane tab={'Заполнение документов'} key={2}>
 					<Form<any> validateMessages={validateMessages} form={form} layout={'vertical'} className="mb-8">
 						<Spin style={{width:'50%',display:'flex',flexWrap:'wrap'}} className='w-[50%] flex !flex-wrap' spinning={isLoading} >
-						<Row className='mt-6'>
+						<Row className='mt-9'>
 							<Col>
 								<Typography.Title level={2}>Отчет</Typography.Title>
 							</Col>
@@ -241,7 +243,7 @@ export const EditMyPractice = () => {
 					tab={<Popover content={!showFinal || !showFinalTwo ? null : null}>Отправка документов</Popover>}
 					key={3}
 				>
-					<Row gutter={16} className="mt-14 mb-10">
+					<Row gutter={16} className="mt-9 mb-10">
 						<Col sm={24} md={12} lg={12}>
 							<Card
 								title={

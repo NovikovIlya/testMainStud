@@ -52,6 +52,8 @@ import secondStageCommentVisibilitySlice from './reducers/EmploymentStageReducer
 import thirdStageCommentVisibilitySlice from './reducers/EmploymentStageReducers/comments/ThirdStageCommentVisibilitySlice'
 import forthStageCommentVisibilitySlice from './reducers/EmploymentStageReducers/comments/ForthStageCommentVisibilitySlice'
 import fifthStageCommentVisibilitySlice from './reducers/EmploymentStageReducers/comments/FifthStageCommentVisibilitySlice'
+import sixStageStatusSlice from './reducers/EmploymentStageReducers/stages/SixStageStatusSlice'
+import sixStageCommentVisibilitySlice from './reducers/EmploymentStageReducers/comments/SixStageCommentVisibilitySlice'
 
 export const store = configureStore({
 	reducer: {
@@ -100,10 +102,12 @@ export const store = configureStore({
 		thirdStageStatus: thirdStageStatusSlice,
 		forthStageStatus: forthStageStatusSlice,
 		fifthStageStatus: fifthStageStatusSlice,
+		sixStageStatus: sixStageStatusSlice,
 		secondStageCommentVisibility: secondStageCommentVisibilitySlice,
 		thirdStageCommentVisibility: thirdStageCommentVisibilitySlice,
 		forthStageCommentVisibility: forthStageCommentVisibilitySlice,
 		fifthStageCommentVisibility: fifthStageCommentVisibilitySlice,
+		sixStageCommentVisibility: sixStageCommentVisibilitySlice,
 	},
 	middleware: getDefaultMiddleware =>
 		getDefaultMiddleware()

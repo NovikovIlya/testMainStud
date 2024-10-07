@@ -16,11 +16,13 @@ export type experienceItemType = {
 }
 
 type experienceStateType = {
+	portfolio: string
 	noExperienceFlag: boolean
 	experiences: experienceItemType[]
 }
 
 const initialState: experienceStateType = {
+	portfolio: '',
 	noExperienceFlag: false,
 	experiences: []
 }
@@ -65,6 +67,9 @@ const ExperienceReducer = createSlice({
 						exp.id === action.payload.id ? newExp : exp
 					)
 				})
+		},
+		setPortfolioLink: (state, action: PayloadAction<string>) => {
+			state.portfolio = action.payload
 		}
 	}
 })
@@ -74,7 +79,8 @@ export const {
 	lowerNoExperienceFlag,
 	addExperience,
 	deleteExperience,
-	alterExperience
+	alterExperience,
+	setPortfolioLink
 } = ExperienceReducer.actions
 
 export default ExperienceReducer.reducer

@@ -34,7 +34,8 @@ import {
 	deleteExperience,
 	experienceItemType,
 	lowerNoExperienceFlag,
-	raiseNoExperienceFlag
+	raiseNoExperienceFlag,
+	setPortfolioLink
 } from '../../../store/reducers/SeekerFormReducers/ExperienceReducer'
 import {
 	completeAboutMe,
@@ -433,7 +434,7 @@ export const ResponseForm = () => {
 												speciality: edu.education.specialization
 											})),
 											portfolio: {
-												url: '',
+												url: experienceData.portfolio,
 												workExperiences: experienceData.experiences.map(
 													exp => ({
 														workPlace: exp.experience.workplace,
@@ -1114,7 +1115,16 @@ export const ResponseForm = () => {
 								Ссылка
 							</p>
 							<Form.Item className="mt-[18px]">
-								<Input placeholder="https://disk.yandex.ru"></Input>
+								<Input
+									placeholder="https://disk.yandex.ru"
+									value={experienceData.portfolio}
+									onPressEnter={e => {
+										e.preventDefault()
+									}}
+									onChange={e => {
+										dispatch(setPortfolioLink(e.target.value))
+									}}
+								></Input>
 							</Form.Item>
 							<Upload>
 								<div className="flex items-center gap-[12px] cursor-pointer">

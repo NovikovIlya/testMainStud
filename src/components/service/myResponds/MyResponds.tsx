@@ -124,16 +124,16 @@ export const MyResponds = () => {
 						</label>
 						<label
 							className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
-								status === respondStatus[respondStatus.EMPLOYMENT_REQUEST]
+								status === respondStatus[respondStatus.EMPLOYMENT]
 									? 'text-white bg-dasha-blue'
 									: 'text-black border-solid border-black border-[1px]'
 							} font-normal text-[16px]/[16px]`}
 						>
 							<Radio
-								value={respondStatus[respondStatus.EMPLOYMENT_REQUEST]}
+								value={respondStatus[respondStatus.EMPLOYMENT]}
 								className="hidden"
 							></Radio>
-							этап трудоустройства
+							трудоустройство
 						</label>
 					</Radio.Group>
 				</div>

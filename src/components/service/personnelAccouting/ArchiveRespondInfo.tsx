@@ -56,6 +56,8 @@ export const ArchiveRespondInfo = (props: {
 		}
 	})
 
+	const [buttonsHidden, setIsButtonsHidden] = useState<boolean>(false)
+
 	const dispatch = useDispatch()
 
 	const {
@@ -213,7 +215,11 @@ export const ArchiveRespondInfo = (props: {
 								</div>
 							</div>
 							{props.type === 'PERSONNEL_DEPARTMENT' && (
-								<div className="self-center grid grid-cols-2 grid-rows-[40px_40px] gap-[12px]">
+								<div
+									className={`self-center grid grid-cols-2 grid-rows-[40px_40px] gap-[12px] ${
+										buttonsHidden && 'hidden'
+									}`}
+								>
 									<Button
 										onClick={() => {
 											approveRespond(respondId.respondId)
@@ -249,7 +255,13 @@ export const ArchiveRespondInfo = (props: {
 										Удалить
 									</Button>
 									<Button
-										onClick={() => toPDF()}
+										onClick={() => {
+											setIsButtonsHidden(true)
+											setTimeout(() => {
+												toPDF()
+												setIsButtonsHidden(false)
+											}, 0)
+										}}
 										className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
 									>
 										<RespondDownload /> Скачать

@@ -323,6 +323,7 @@ export const InviteSeekerForm = (props: {
 										Адрес и дополнительная информация
 									</label>
 								}
+								rules={[{ required: true, message: 'Не указан адрес' }]}
 							>
 								<Input.TextArea
 									autoSize

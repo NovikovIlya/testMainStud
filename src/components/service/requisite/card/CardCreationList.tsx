@@ -1,12 +1,12 @@
-import { DepEmploymentItem } from '../../employmentStage/personnelDepartment/depEmploymentItem'
 import { useGetPersonnelStagesQuery } from '../../../../store/api/serviceApi'
-import { useState } from 'react'
 import { CardCreationListItem } from './CardCreationListItem'
+import { Spin } from 'antd'
+import { LoadingOutlined } from '@ant-design/icons'
 
 
 export const CardCreationList = () => {
 
-	const { data: card_creation_list = [] } = useGetPersonnelStagesQuery();
+	const { data: card_creation_list = [], isLoading : loading } = useGetPersonnelStagesQuery();
 
 	const ColumnFieldHeaderComponent = () => {
 		return (
@@ -24,6 +24,22 @@ export const CardCreationList = () => {
 					<CardCreationListItem {...item} key={item.respondId}></CardCreationListItem>
 				))}
 			</div>
+		)
+	}
+	if (loading) {
+		return (
+			<>
+				<div className="w-screen h-screen flex items-center">
+					<div className="text-center ml-auto mt-[0%] mr-[50%]">
+						<Spin
+							indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}
+						></Spin>
+						<p className="font-content-font font-normal text-black text-[18px]/[18px]">
+							Идёт загрузка...
+						</p>
+					</div>
+				</div>
+			</>
 		)
 	}
 	return (

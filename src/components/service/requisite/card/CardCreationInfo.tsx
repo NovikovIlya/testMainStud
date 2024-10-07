@@ -1,11 +1,10 @@
-import { Button } from 'antd'
+import { Button, Spin } from 'antd'
 import { setCurrentResponce } from '../../../../store/reducers/CurrentResponceSlice'
-import { DepEmploymentStageItem } from '../../employmentStage/personnelDepartment/depEmploymentStageItem'
 import { CardRequestItem } from './CardRequestItem'
 import { useNavigate } from 'react-router-dom'
 import { useAppSelector } from '../../../../store'
 import { useDispatch } from 'react-redux'
-
+import { LoadingOutlined } from '@ant-design/icons'
 
 export const CardCreationInfo = () => {
 
@@ -15,7 +14,6 @@ export const CardCreationInfo = () => {
 	const respondId = useAppSelector(state => state.currentResponce)
 	const seekerName  = useAppSelector(state => state.requisiteSeeker.currentRequisiteSeekerName)
 	const seekerVacancy  = useAppSelector(state => state.requisiteSeeker.currentRequisiteSeekerVacancy)
-
 
 	return (
 		<>

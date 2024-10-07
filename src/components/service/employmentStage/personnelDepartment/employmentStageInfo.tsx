@@ -1,21 +1,47 @@
-import { Button } from 'antd'
+import { Button, Spin } from 'antd'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { useGetEmploymentStageStatusQuery} from '../../../../store/api/serviceApi'
 import { useAppSelector} from '../../../../store'
 import { setCurrentResponce } from '../../../../store/reducers/CurrentResponceSlice'
 import { DepEmploymentStageItem } from './depEmploymentStageItem'
+import { LoadingOutlined } from '@ant-design/icons'
+import { useGetEmploymentStageStatusQuery } from '../../../../store/api/serviceApi'
+import { number } from 'yup'
 
-export const EmploymentStageInfo = () => {
-
-	const respondId = useAppSelector(state => state.currentResponce)
-	const employmentSeekerName  = useAppSelector(state => state.employmentSeeker.currentEmploymentSeekerName)
-	const employmentSeekerVacancy  = useAppSelector(state => state.employmentSeeker.currentEmploymentSeekerVacancy)
-
-	const { data: employment_stage_status = [] } = useGetEmploymentStageStatusQuery(respondId)
+export const EmploymentStageInfo = ( ) => {
 
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
+
+	const currentUrl = window.location.href
+	const parts = currentUrl.split('/')
+	const userIdStr = parts[parts.length - 1]
+	const id = parseInt(userIdStr, 10)
+
+	const employmentSeekerName  = useAppSelector(state => state.employmentSeeker.currentEmploymentSeekerName)
+	const employmentSeekerVacancy  = useAppSelector(state => state.employmentSeeker.currentEmploymentSeekerVacancy)
+
+	const { data: requisite_items, isLoading: loading } = useGetEmploymentStageStatusQuery({ respondId: id })
+
+	const stagesArray = requisite_items?.stages || [] // массив массивов c этапами
+	const sortedStages = stagesArray.flat().sort((a, b) => a.id - b.id) // сортирую потому что приходит вперемешку
+
+	if (loading) {
+		return (
+			<>
+				<div className="w-screen h-screen flex items-center">
+					<div className="text-center ml-auto mr-[50%]">
+						<Spin
+							indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}
+						></Spin>
+						<p className="font-content-font font-normal text-black text-[18px]/[18px]">
+							Идёт загрузка...
+						</p>
+					</div>
+				</div>
+			</>
+		)
+	}
 
 	return (
 		<>
@@ -25,7 +51,7 @@ export const EmploymentStageInfo = () => {
 					type="default"
 					className="max-w-[102px] bg-[#F5F8FB] mt-[20px] py-[8px] px-[24px] text-[#333333] border-[#333333] border-[1px] rounded-[54.5px] text-[16px]"
 					onClick={() => {
-						dispatch(setCurrentResponce(respondId.respondId))
+						dispatch(setCurrentResponce(id))
 						navigate('/services/personnelaccounting/employment/stages/seekerinfo')
 					}}
 				>Резюме</Button>
@@ -33,10 +59,38 @@ export const EmploymentStageInfo = () => {
 					Соискатель: <span className="font-bold">{employmentSeekerName}</span>
 				</h3>
 				<div className="mt-[40px] mb-[100px] gap-[12px] flex flex-col ">
-					<DepEmploymentStageItem name={'Прикрепление документов'} stageNumber={2} stageContentType={'docs'} content={''}></DepEmploymentStageItem>
-					<DepEmploymentStageItem name={'Трудовые условия'} stageNumber={3} stageContentType={'text'} content={'Соискатель ознакомлен с трудовыми условиями'}></DepEmploymentStageItem>
-					<DepEmploymentStageItem name={'Медицинский осмотр'} stageNumber={4} stageContentType={'docs'} content={''}></DepEmploymentStageItem>
-					<DepEmploymentStageItem name={'Инструктаж'} stageNumber={5} stageContentType={'text'} content={'Соискатель прошел инструктаж'}></DepEmploymentStageItem>
+					{sortedStages?.[0] && (
+						<DepEmploymentStageItem
+							stage={2}
+							comment={sortedStages[0].comment}
+							stageStatus={sortedStages[0].status}
+						/>
+					)}
+
+					{sortedStages?.[1] && (
+						<DepEmploymentStageItem
+							stage={3}
+							comment={sortedStages[1].comment}
+							stageStatus={sortedStages[1].status}
+						/>
+					)}
+
+					{sortedStages?.[2] && (
+						<DepEmploymentStageItem
+							stage={4}
+							comment={sortedStages[2].comment}
+							stageStatus={sortedStages[2].status}
+						/>
+					)}
+
+					{sortedStages?.[3] && (
+						<DepEmploymentStageItem
+							stage={5}
+							comment={sortedStages[3].comment}
+							stageStatus={sortedStages[3].status}
+						/>
+					)}
+
 				</div>
 			</div>
 		</>

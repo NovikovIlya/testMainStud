@@ -125,7 +125,7 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 						{currentVacancy !== null ? currentVacancy.acf.salary : ''}
 					</p>
 				</div>
-				<div className="w-[60%] mt-[60px] mb-[86px] grid grid-cols-[auto_auto] gap-x-[154px] gap-y-[40px]">
+				<div className="w-[60%] mt-[60px] mb-[86px] grid grid-cols-[9%_auto] gap-x-[160px] gap-y-[40px]">
 					<p className="font-content-font font-bold text-black text-[18px]/[21px] whitespace-nowrap">
 						Задачи:
 					</p>
@@ -139,7 +139,9 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 								))}
 						</ul>
 					) : (
-						<p>{responsibilities}</p>
+						<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-pre-line">
+							{responsibilities}
+						</p>
 					)}
 					{/* <ul className="list-disc">
 						{responsibilitiesArr !== null &&
@@ -162,7 +164,9 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 								))}
 						</ul>
 					) : (
-						<p>{skills}</p>
+						<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-pre-line">
+							{skills}
+						</p>
 					)}
 					{/* <ul className="list-disc">
 						{skillsArr !== null &&
@@ -185,7 +189,9 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 								))}
 						</ul>
 					) : (
-						<p>{conditions}</p>
+						<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-pre-line">
+							{conditions}
+						</p>
 					)}
 					{/* <ul className="list-disc">
 						{conditionsArr !== null &&

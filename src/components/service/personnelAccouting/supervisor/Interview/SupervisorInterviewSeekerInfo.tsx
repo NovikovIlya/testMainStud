@@ -9,11 +9,13 @@ import {
 } from '../../../../../store/api/serviceApi'
 import { NocircleArrowIcon } from '../../../jobSeeker/NoCircleArrowIcon'
 
-export const SupervisorInterviewSeekerInfo = ( ) => {
+export const SupervisorInterviewSeekerInfo = () => {
 	const respondId = useAppSelector(state => state.currentResponce)
 	const format = useAppSelector(state => state.currentInterviewFormat)
 	const time = useAppSelector(state => state.currentInterviewTime)
-	const timeFormated = useAppSelector(state => state.currentInterviewTimeFormated)
+	const timeFormated = useAppSelector(
+		state => state.currentInterviewTimeFormated
+	)
 
 	const { data } = useGetRespondFullInfoQuery(respondId.respondId)
 
@@ -24,45 +26,49 @@ export const SupervisorInterviewSeekerInfo = ( ) => {
 	const [rejectSeeker] = useEmployeeSeekerRequestMutation()
 	const [aproveSeeker] = useEmployeeSeekerRequestMutation()
 
+	const [isEmploymentRequestSent, setIsEmploymentRequestSent] =
+		useState<boolean>(false)
+	const [isSeekerRejected, setIsSeekerRejected] = useState<boolean>(false)
+
 	interface ComponentProps {
 		time: string
 		timeFormated: string
 		format: string
 	}
 
-	const Component = ( props: ComponentProps ) => {
-		const targetDate = new Date(props.time);
-		const now = new Date();
-		const difference = targetDate.getTime() - now.getTime();
-		let isInterviewStarted : boolean = false
-		let is5MinBeforeInterviewStarted : boolean = false
-		let is30MinAfterInterviewEnded : boolean = false
+	const Component = (props: ComponentProps) => {
+		const targetDate = new Date(props.time)
+		const now = new Date()
+		const difference = targetDate.getTime() - now.getTime()
+		let isInterviewStarted: boolean = false
+		let is5MinBeforeInterviewStarted: boolean = false
+		let is30MinAfterInterviewEnded: boolean = false
 
 		if (difference < 0) {
-			isInterviewStarted = true;
+			isInterviewStarted = true
 		} else {
-			isInterviewStarted = false;
+			isInterviewStarted = false
 		}
 
-		if (difference > 0 && difference <= 60 * 1000 * 5) { // 5 мин
-			is5MinBeforeInterviewStarted = true;
+		if (difference > 0 && difference <= 60 * 1000 * 5) {
+			// 5 мин
+			is5MinBeforeInterviewStarted = true
 		} else {
-			is5MinBeforeInterviewStarted = false;
+			is5MinBeforeInterviewStarted = false
 		}
 
-		if (difference * (-1) < 60 * 1000 * 30) {
-			is30MinAfterInterviewEnded = false;
+		if (difference * -1 < 60 * 1000 * 30) {
+			is30MinAfterInterviewEnded = false
 		} else {
-			is30MinAfterInterviewEnded = true;
+			is30MinAfterInterviewEnded = true
 		}
 
-		const minutes: number = Math.floor((difference / 1000 / 60) % 60);
-		const hours: number = Math.floor((difference / (1000 * 60 * 60)) % 24);
-		const days: number = Math.floor(difference / (1000 * 60 * 60 * 24));
-		let datePublicString : string = ''
-		const isDaysEmpty : boolean = days === 0
-		const isHoursEmpty : boolean = hours === 0
-
+		const minutes: number = Math.floor((difference / 1000 / 60) % 60)
+		const hours: number = Math.floor((difference / (1000 * 60 * 60)) % 24)
+		const days: number = Math.floor(difference / (1000 * 60 * 60 * 24))
+		let datePublicString: string = ''
+		const isDaysEmpty: boolean = days === 0
+		const isHoursEmpty: boolean = hours === 0
 		if (isDaysEmpty && isHoursEmpty) {
 			datePublicString += 'Осталось ' + minutes + ' минут'
 		}
@@ -74,73 +80,84 @@ export const SupervisorInterviewSeekerInfo = ( ) => {
 		}
 		return (
 			<>
-				{ (format.format  === 'OFFLINE') && !(isInterviewStarted) && ( // Офлайн собес, ожидание
+				{format.format === 'OFFLINE' &&
+					!isInterviewStarted && ( // Офлайн собес, ожидание
+						<div className="flex flex-col justify-center">
+							<h3 className=" mb-[20px] font-content-font font-bold text-black text-[16px]/[19.2px]">
+								Собеседование
+							</h3>
+							<h4 className=" mb-[10px] font-content-font font-normal text-black text-[12px]/[14.4x] opacity-40">
+								Дата и время:
+							</h4>
+							<h4 className="font-content-font font-normal text-black text-[16px]/[19.2px]">
+								{props.timeFormated}
+							</h4>
+						</div>
+					)}
+				{format.format === 'ONLINE' &&
+					!isInterviewStarted &&
+					!is5MinBeforeInterviewStarted && ( // Онлайн собес, ождиание
+						<div className="flex flex-col justify-center">
+							<h4 className="mb-[20px] font-content-font font-normal text-black text-[16px]/[19.2px]">
+								Подключитесь к онлайн-конференции
+							</h4>
+							<button className="hover:none h-[40px] w-[257px] cursor-default bg-[#3073D7] opacity-[32%] border-none rounded-[54.5px] text-white text-[16px]/[16px]">
+								{datePublicString}
+							</button>
+						</div>
+					)}
+				{((format.format === 'ONLINE' &&
+					isInterviewStarted &&
+					is5MinBeforeInterviewStarted) ||
+					(format.format === 'ONLINE' &&
+						isInterviewStarted &&
+						!is30MinAfterInterviewEnded)) && ( // Онлайн собес, подкбчиться 5 | 30
 					<div className="flex flex-col justify-center">
-						<h3
-							className=" mb-[20px] font-content-font font-bold text-black text-[16px]/[19.2px]">Собеседование</h3>
-						<h4 className=" mb-[10px] font-content-font font-normal text-black text-[12px]/[14.4x] opacity-40">
-							Дата и время:</h4>
-						<h4
-							className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-							{props.timeFormated}
+						<h4 className="mb-[20px] font-content-font font-normal text-black text-[16px]/[19.2px]">
+							Подключитесь к онлайн-конференции
 						</h4>
-					</div>
-				)}
-				{(format.format === 'ONLINE') && !(isInterviewStarted) && !(is5MinBeforeInterviewStarted) && ( // Онлайн собес, ождиание
-					<div className="flex flex-col justify-center">
-						<h4 className="mb-[20px] font-content-font font-normal text-black text-[16px]/[19.2px]">Подключитесь к
-							онлайн-конференции</h4>
-						<button
-							className="hover:none h-[40px] w-[257px] cursor-default bg-[#3073D7] opacity-[32%] border-none rounded-[54.5px] text-white text-[16px]/[16px]"
-						>
-							{datePublicString}
-						</button>
-					</div>
-				)}
-				{ (((format.format === 'ONLINE') && (isInterviewStarted) && (is5MinBeforeInterviewStarted))
-					||
-					((format.format === 'ONLINE') && (isInterviewStarted) && !(is30MinAfterInterviewEnded))) && ( // Онлайн собес, подкбчиться 5 | 30
-					<div className="flex flex-col justify-center">
-						<h4 className="mb-[20px] font-content-font font-normal text-black text-[16px]/[19.2px]">Подключитесь к
-							онлайн-конференции</h4>
 						<Button
 							className="h-[40px] w-[257px] bg-[#3073D7] rounded-[54.5px] text-white text-[16px]/[16px]"
-							onClick={() => {
-
-							}}
+							onClick={() => {}}
 						>
 							Подключиться
 						</Button>
 					</div>
 				)}
-				{(isInterviewStarted) && (is30MinAfterInterviewEnded) && ( // Собес окончился, вынести вердикт
-					<div className="flex flex-col justify-center gap-[12px]">
-						<Button
-							className="h-[40px] w-[257px] bg-[#3073D7] rounded-[54.5px] text-white text-[16px]/[16px]"
-							onClick={values => {
-								aproveSeeker({
-									rejectionReason: 'approve',
-									action: 'EMPLOY',
-									respondId: respondId.respondId
-								})
-							}}
-						>
-							Пригласить на работу
-						</Button>
-						<Button
-							className="h-[40px] font-content-font font-normal text-black border-[1px] border-black text-[16px]/[16px] rounded-[54.5px]"
-							onClick={() => {
-								setIsRefuseModalOpen(true)
-							}}
-						>
-							Отказать
-						</Button>
-					</div>
-				)}
+				{isInterviewStarted &&
+					is30MinAfterInterviewEnded && ( // Собес окончился, вынести вердикт
+						<div className="flex flex-col justify-center gap-[12px]">
+							<Button
+								disabled={isEmploymentRequestSent || isSeekerRejected}
+								className="h-[40px] w-[257px] bg-[#3073D7] rounded-[54.5px] text-white text-[16px]/[16px]"
+								onClick={values => {
+									aproveSeeker({
+										rejectionReason: 'approve',
+										action: 'EMPLOY',
+										respondId: respondId.respondId
+									})
+										.unwrap()
+										.then(() => {
+											setIsEmploymentRequestSent(true)
+										})
+								}}
+							>
+								Пригласить на работу
+							</Button>
+							<Button
+								disabled={isEmploymentRequestSent || isSeekerRejected}
+								className="h-[40px] font-content-font font-normal text-black border-[1px] border-black text-[16px]/[16px] rounded-[54.5px]"
+								onClick={() => {
+									setIsRefuseModalOpen(true)
+								}}
+							>
+								Отказать
+							</Button>
+						</div>
+					)}
 			</>
 		)
 	}
-
 	return (
 		<>
 			<ConfigProvider
@@ -266,6 +283,10 @@ export const SupervisorInterviewSeekerInfo = ( ) => {
 											action: 'REJECT',
 											respondId: respondId.respondId
 										})
+											.unwrap()
+											.then(() => {
+												setIsSeekerRejected(true)
+											})
 									}}
 								>
 									<h2 className="font-normal text-[18px]">
@@ -306,7 +327,11 @@ export const SupervisorInterviewSeekerInfo = ( ) => {
 								</Form>
 							</Modal>
 						</ConfigProvider>
-						<Component time={time.time} format={format.format} timeFormated={timeFormated.timeFormated}></Component>
+						<Component
+							time={time.time}
+							format={format.format}
+							timeFormated={timeFormated.timeFormated}
+						></Component>
 					</div>
 					<hr />
 					<div className="flex flex-col gap-[24px]">
@@ -399,12 +424,11 @@ export const SupervisorInterviewSeekerInfo = ( ) => {
 						<div className="grid grid-cols-[194px_auto] gap-x-[20px] w-[90%]">
 							<div className="col-start-2">
 								{/*
-								{data?.respondData.skills.aboutMe}
-								TODO: разобраться почему приходит undefined
-								*/}
-								</div>
-							<div className="col-start-2 flex gap-[8px] flex-wrap">
+                {data?.respondData.skills.aboutMe}
+                TODO: разобраться почему приходит undefined
+                */}
 							</div>
+							<div className="col-start-2 flex gap-[8px] flex-wrap"></div>
 						</div>
 					</div>
 				</div>

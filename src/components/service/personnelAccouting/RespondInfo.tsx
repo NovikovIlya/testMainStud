@@ -53,18 +53,23 @@ export const RespondInfo = (props: {
 
 	const dispatch = useDispatch()
 
-	const { data: chatId = 0, isLoading: isChatIdLoading } =
-		useGetChatIdByRespondIdQuery({
-			chatId: res ? res.id : 0,
-			role:
-				props.type === 'PERSONNEL_DEPARTMENT'
-					? 'PERSONNEL_DEPARTMENT'
-					: 'SEEKER'
-		})
+	const {
+		data: chatId = {
+			id: 0,
+			respondInfo: {},
+			unreadCount: 0,
+			lastMessageDate: ''
+		},
+		isLoading: isChatIdLoading
+	} = useGetChatIdByRespondIdQuery({
+		chatId: res ? res.id : 0,
+		role:
+			props.type === 'PERSONNEL_DEPARTMENT' ? 'PERSONNEL_DEPARTMENT' : 'SEEKER'
+	})
 
 	const handleNavigate = (url: string) => {
 		dispatch(openChat())
-		dispatch(setChatId(chatId))
+		dispatch(setChatId(chatId.id))
 		dispatch(setRespondId(res?.id as number))
 		dispatch(setCurrentVacancyId(res?.vacancyId as number))
 		navigate(url)
@@ -96,11 +101,13 @@ export const RespondInfo = (props: {
 		}
 	})
 
+	const [buttonsHidden, setIsButtonsHidden] = useState<boolean>(false)
+
 	if (res === undefined) {
 		return (
 			<>
-				<div className="w-screen h-screen flex items-center">
-					<div className="text-center ml-auto mr-auto mb-[10%]">
+				<div className="w-full h-full flex items-center">
+					<div className="text-center ml-auto mr-auto">
 						<Spin
 							indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}
 						></Spin>
@@ -184,7 +191,11 @@ export const RespondInfo = (props: {
 								</div>
 							</div>
 							{props.type === 'PERSONNEL_DEPARTMENT' && (
-								<div className="self-center grid grid-cols-2 grid-rows-[40px_40px_40px] gap-x-[12px] gap-y-[12px]">
+								<div
+									className={`self-center grid grid-cols-2 grid-rows-[40px_40px_40px] gap-x-[12px] gap-y-[12px] ${
+										buttonsHidden && 'hidden'
+									}`}
+								>
 									<Button
 										onClick={() => {
 											approveRespond(respondId.respondId)
@@ -193,7 +204,11 @@ export const RespondInfo = (props: {
 													setIsRespondSentToSupervisor(true)
 												})
 										}}
-										disabled={isRespondSentToSupervisor}
+										disabled={
+											isRespondSentToSupervisor ||
+											isRespondSentToReserve ||
+											isRespondSentToArchive
+										}
 										type="primary"
 										className="font-content-font font-normal text-white text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px]"
 									>
@@ -211,7 +226,9 @@ export const RespondInfo = (props: {
 												})
 										}}
 										disabled={
-											isRespondSentToArchive || isRespondSentToSupervisor
+											isRespondSentToSupervisor ||
+											isRespondSentToReserve ||
+											isRespondSentToArchive
 										}
 										className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
 									>
@@ -219,7 +236,9 @@ export const RespondInfo = (props: {
 									</Button>
 									<Button
 										disabled={
-											isRespondSentToReserve || isRespondSentToSupervisor
+											isRespondSentToSupervisor ||
+											isRespondSentToReserve ||
+											isRespondSentToArchive
 										}
 										onClick={() => {
 											sendToReserve(respondId.respondId)
@@ -235,7 +254,7 @@ export const RespondInfo = (props: {
 									<Button
 										onClick={() => {
 											handleNavigate(
-												`/services/personnelaccounting/chat/id/${chatId}`
+												`/services/personnelaccounting/chat/id/${chatId.id}`
 											)
 										}}
 										className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
@@ -243,7 +262,13 @@ export const RespondInfo = (props: {
 										Перейти в чат
 									</Button>
 									<Button
-										onClick={() => toPDF()}
+										onClick={() => {
+											setIsButtonsHidden(true)
+											setTimeout(() => {
+												toPDF()
+												setIsButtonsHidden(false)
+											}, 0)
+										}}
 										className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
 									>
 										<RespondDownload /> Скачать
@@ -251,8 +276,22 @@ export const RespondInfo = (props: {
 								</div>
 							)}
 							{props.type === 'SUPERVISOR' && (
-								<div className="self-center grid grid-cols-1 grid-rows-[40px_40px_40px] gap-y-[12px]">
-									<InviteSeekerForm respondId={respondId.respondId} />
+								<div
+									className={`self-center grid grid-cols-1 grid-rows-[40px_40px_40px] gap-y-[12px] ${
+										buttonsHidden && 'hidden'
+									}`}
+								>
+									<InviteSeekerForm
+										respondId={respondId.respondId}
+										isButtonDisabled={
+											isRespondSentToArchive ||
+											isRespondInvited ||
+											isRespondEmployed
+										}
+										callback={() => {
+											setIsRespondInvited(true)
+										}}
+									/>
 									<Button
 										disabled={
 											isRespondSentToArchive ||
@@ -274,7 +313,13 @@ export const RespondInfo = (props: {
 										Отказать
 									</Button>
 									<Button
-										onClick={() => toPDF()}
+										onClick={() => {
+											setIsButtonsHidden(true)
+											setTimeout(() => {
+												toPDF()
+												setIsButtonsHidden(false)
+											}, 0)
+										}}
 										className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[257px] h-[40px] py-[8px] px-[24px] border-black"
 									>
 										<RespondDownload /> Скачать

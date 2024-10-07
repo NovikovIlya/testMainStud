@@ -22,13 +22,13 @@ export const RequisiteItem = ( props : EmploymentStageItemType ) => {
 				<div className="flex w-[20%] mr-[10%]">
 					{props.vacancy.name}
 				</div>
-				{props.status === 'VERIFYING' && (
+				{props.status === 'REFINE' && (
 					<div className="flex items-center w-[13.5%] gap-[12px]">
 						<div className="w-[11px] h-[11px] rounded-[100%] bg-[#FFD600]"></div>
 						<span>Доработка</span>
 					</div>
 				)}
-				{props.status === 'REFINE' && (
+				{props.status === 'VERIFYING' && (
 					<div className="flex items-center w-[13.5%] gap-[12px]">
 						<div className="w-[11px] h-[11px] rounded-[100%] bg-[#009DCE]"></div>
 						<span>На проверке</span>
@@ -48,7 +48,7 @@ export const RequisiteItem = ( props : EmploymentStageItemType ) => {
 							dispatch(setCurrentResponce(props.respondId))
 							dispatch(setCurrentRequisiteSeekerVacancy(props.vacancy.name))
 							dispatch(setCurrentRequisiteSeekerName(props.applicant.firstName + ' ' + props.applicant.middleName + ' ' + props.applicant.lastName))
-							navigate('/services/personnelaccounting/requisite/requisite-review/info')
+							navigate(`/services/personnelaccounting/requisite/requisite-review/info/${props.respondId}`)
 						}}>
 						Подробнее
 					</Button>

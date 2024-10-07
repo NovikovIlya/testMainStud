@@ -1,11 +1,15 @@
-import { useChangeEmploymentStageStatusRequestMutation } from '../../../../store/api/serviceApi'
-import React, { useState } from 'react'
+import {
+	useChangeCardStatusRequestMutation,
+} from '../../../../store/api/serviceApi'
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button, ConfigProvider, Modal } from 'antd'
 import { DocumentElem } from '../../employmentStage/personnelDepartment/components/DocumentElem'
 
 export const CardRequestItem = () => {
 
-	const [changeStatus] = useChangeEmploymentStageStatusRequestMutation()
+	const navigate = useNavigate()
+	const [markCardGiven] = useChangeCardStatusRequestMutation()
 
 	const [isAceptionModalOpen, setIsAceptionModalOpen] = useState(false)
 
@@ -13,9 +17,7 @@ export const CardRequestItem = () => {
 		return (
 			<div className="flex flex-row gap-[40px] pr-[150px]">
 				<div className="flex flex-col gap-[12px] ">
-					<DocumentElem name={'Реквизиты'}></DocumentElem>
-					<DocumentElem name={'Реквизиты'}></DocumentElem>
-					<DocumentElem name={'Реквизиты'}></DocumentElem>
+					<DocumentElem name={'Скан паспорта'}></DocumentElem>
 				</div>
 			</div>
 		)
@@ -50,7 +52,8 @@ export const CardRequestItem = () => {
 								className="rounded-[54.5px] text-[14px] w-full py-[13px]"
 								type="primary"
 								onClick={() => {
-
+										markCardGiven({ subStageId: 5 })
+										navigate('/services/personnelaccounting/requisite/card-creation')
 								}}
 							>
 								Ок

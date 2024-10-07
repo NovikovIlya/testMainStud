@@ -24,11 +24,18 @@ export const RespondItem = (props: RespondItemType & { refetch: Function }) => {
 	const [isModalOpen, setModalOpen] = useState(false)
 	const [deleteVacancy, deleteResult] = useDeleteVacancyRespondMutation()
 
-	const { data: chatId = 0, isLoading: isChatIdLoading } =
-		useGetChatIdByRespondIdQuery({
-			chatId: props.id,
-			role: 'SEEKER'
-		})
+	const {
+		data: chatId = {
+			id: 0,
+			respondInfo: {},
+			unreadCount: 0,
+			lastMessageDate: ''
+		},
+		isLoading: isChatIdLoading
+	} = useGetChatIdByRespondIdQuery({
+		chatId: props.id,
+		role: 'SEEKER'
+	})
 
 	const handleNavigate = (url: string) => {
 		if (props.status) {
@@ -44,7 +51,7 @@ export const RespondItem = (props: RespondItemType & { refetch: Function }) => {
 		} else {
 			dispatch(openChat())
 		}
-		dispatch(setChatId(chatId))
+		dispatch(setChatId(chatId.id))
 		dispatch(setRespondId(props.id))
 		dispatch(setCurrentVacancyId(props.vacancyId))
 		navigate(url)
@@ -133,7 +140,7 @@ export const RespondItem = (props: RespondItemType & { refetch: Function }) => {
 					</Button>
 					<Button
 						onClick={() => {
-							handleNavigate(`/services/myresponds/chat/id/${chatId}`)
+							handleNavigate(`/services/myresponds/chat/id/${chatId.id}`)
 						}}
 						className="font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black"
 					>

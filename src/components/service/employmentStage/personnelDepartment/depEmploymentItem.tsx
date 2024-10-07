@@ -18,9 +18,17 @@ export const DepEmploymentItem = (  props : EmploymentStageItemType ) => {
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 
-	const chatid = useGetChatIdByRespondIdQuery({
+	const {
+		data: chatId = {
+			id: 0,
+			respondInfo: {},
+			unreadCount: 0,
+			lastMessageDate: ''
+		},
+		isLoading: isChatIdLoading
+	} = useGetChatIdByRespondIdQuery({
 		chatId: props.respondId,
-		role: 'SEEKER'
+		role: 'PERSONNEL_DEPARTMENT'
 	})
 
 	return (
@@ -32,13 +40,13 @@ export const DepEmploymentItem = (  props : EmploymentStageItemType ) => {
 				<div className="flex w-[20%] mr-[5%]">
 					{props.vacancy.name}
 				</div>
-				{props.status === 'VERIFYING' && (
+				{props.status === 'REFINE' && (
 					<div className="flex items-center w-[16%] gap-[12px]">
 						<div className="w-[11px] h-[11px] rounded-[100%] bg-[#FFD600]"></div>
 						<span>Доработка</span>
 					</div>
 				)}
-				{props.status === 'REFINE' && (
+				{props.status === 'VERIFYING' && (
 					<div className="flex items-center w-[16%] gap-[12px]">
 						<div className="w-[11px] h-[11px] rounded-[100%] bg-[#009DCE]"></div>
 						<span>На проверке</span>
@@ -58,7 +66,7 @@ export const DepEmploymentItem = (  props : EmploymentStageItemType ) => {
 							dispatch(setCurrentResponce(props.respondId))
 							dispatch(setCurrentEmploymentSeekerVacancy(props.vacancy.name))
 							dispatch(setCurrentEmploymentSeekerName(props.applicant.firstName + ' ' + props.applicant.middleName + ' ' + props.applicant.lastName))
-							navigate('/services/personnelaccounting/employment/stages')
+							navigate(`/services/personnelaccounting/employment/stages/${props.respondId}`)
 						}}>
 						Подробнее
 					</Button>
@@ -66,7 +74,7 @@ export const DepEmploymentItem = (  props : EmploymentStageItemType ) => {
 						className='bg-[#FFFFFF] py-[8px] px-[24px] text-[#333333] border-[#333333] border-[1px] rounded-[54.5px] text-[16px] font-normal cursor-pointer'
 						onClick={() => {
 							dispatch(setCurrentResponce(props.respondId))
-							navigate('/services/personnelaccounting/employment/stages/seekerinfo')
+							navigate(`/services/personnelaccounting/employment/stages/${props.respondId}/seekerinfo`)
 						}}
 					>
 						Резюме
@@ -74,7 +82,7 @@ export const DepEmploymentItem = (  props : EmploymentStageItemType ) => {
 					<Button
 						className='bg-[#FFFFFF] py-[8px] px-[24px] text-[#333333] border-[#333333] border-[1px] rounded-[54.5px] cursor-pointer'
 						onClick={() => {
-							navigate(`/services/personnelaccounting/chat/id/${chatid}/`)
+							navigate(`/services/personnelaccounting/chat/id/${chatId.id}`)
 						}}
 					>
 						<FileIconSvg></FileIconSvg>

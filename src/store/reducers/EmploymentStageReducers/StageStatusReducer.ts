@@ -1,27 +1,17 @@
-type StageStatus = 'VERIFYING' | 'REFINE' | 'COMPLETE';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
-interface StageState {
-	stageStatus: StageStatus;
-}
+const initialState: { stageStatus: string } = { stageStatus: 'VERIFYING' }
 
-type StageAction =
-	| { type: 'SET_VERIFYING' }
-	| { type: 'SET_REFINE' }
-	| { type: 'SET_COMPLETE' }
-
-export const initialState: StageState = {
-	stageStatus: 'VERIFYING',
-};
-
-export const stageReducer = (state: StageState, action: StageAction): StageState => {
-	switch (action.type) {
-		case 'SET_VERIFYING':
-			return { ...state, stageStatus: 'VERIFYING' };
-		case 'SET_REFINE':
-			return { ...state, stageStatus: 'REFINE' };
-		case 'SET_COMPLETE':
-			return { ...state, stageStatus: 'COMPLETE' };
-		default:
-			return state;
+const currentStageStatusSlice = createSlice( {
+	name: 'currentStageStatus',
+	initialState,
+	reducers: {
+		setCurrentStageStatus: (state,action: PayloadAction<string>) => {
+			state.stageStatus = action.payload
+		}
 	}
-};
+})
+
+export const { setCurrentStageStatus } = currentStageStatusSlice.actions
+
+export default currentStageStatusSlice.reducer

@@ -1,18 +1,19 @@
 import { useGetPersonnelStagesQuery } from '../../../../store/api/serviceApi'
-import { useState } from 'react'
-import { Button } from 'antd'
+import React, { useState } from 'react'
+import { Button, Spin } from 'antd'
 import { RequisiteItem } from './RequisiteItem'
+import { LoadingOutlined } from '@ant-design/icons'
 
 export const RequisiteReview = () => {
 
-	const { data: employment_stage_items = [] } = useGetPersonnelStagesQuery();
+	const { data: employment_stage_items = [], isLoading: loading } = useGetPersonnelStagesQuery();
 
 	const verifyingItems = employment_stage_items.filter(item => item.status === 'VERIFYING');
 	const refineItems = employment_stage_items.filter(item => item.status === 'REFINE');
 	const completeItems = employment_stage_items.filter(item => item.status === 'COMPLETE');
 	const allItems = [...verifyingItems, ...refineItems, ...completeItems]
 
-	const [currentFilterItem, setCurrentFilterItem] = useState('all')
+	const [currentFilterItem, setCurrentFilterItem] = useState('ALL')
 	const isActive = (filter: string) => currentFilterItem === filter;
 
 	const ColumnFieldHeaderComponent = () => {
@@ -25,7 +26,22 @@ export const RequisiteReview = () => {
 			</div>
 		)
 	}
-
+	if (loading) {
+		return (
+			<>
+				<div className="w-screen h-screen flex items-center">
+					<div className="text-center ml-auto mt-[0%] mr-[50%]">
+						<Spin
+							indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}
+						></Spin>
+						<p className="font-content-font font-normal text-black text-[18px]/[18px]">
+							Идёт загрузка...
+						</p>
+					</div>
+				</div>
+			</>
+		)
+	}
 	return (
 		<div id="wrapper" className="flex flex-col bg-[#F5F8FB] px-[53px] pt-[120px] w-full">
 			<h1 className="text-[28px] font-normal text-[#000000]">Просмотр реквизитов</h1>
@@ -73,7 +89,7 @@ export const RequisiteReview = () => {
 					<div className="flex flex-col gap-[12px]">
 						{allItems.map(item => (
 							<RequisiteItem {...item} key={item.respondId}></RequisiteItem>
-						))}
+							))}
 					</div>
 				)}
 				{(currentFilterItem === 'VERIFYING') && (
@@ -97,11 +113,6 @@ export const RequisiteReview = () => {
 						))}
 					</div>
 				)}
-				{/*
-				{employment_stage_items.map(item => (
-					<DepEmploymentItem {...item} key={item.id} />
-				))}
-				*/}
 			</div>
 		</div>
 	)

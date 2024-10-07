@@ -1,5 +1,5 @@
 import { ThemeProvider } from '@material-tailwind/react'
-import { Button, ConfigProvider, DatePicker, Form, Modal, Select } from 'antd'
+import { Button, ConfigProvider, DatePicker, Form, Input, Modal, Select } from 'antd'
 import React, { useEffect, useState } from 'react'
 
 import { useAppSelector } from '../../../../../store'
@@ -12,6 +12,7 @@ import {
 import { VacancyRespondItemType } from '../../../../../store/reducers/type'
 
 import value = ThemeProvider.propTypes.value
+import TextArea from 'antd/es/input/TextArea'
 
 export const SupervisorInterviewCreate = () => {
 	const [responds, setResponds] = useState<VacancyRespondItemType[]>([])
@@ -148,7 +149,8 @@ export const SupervisorInterviewCreate = () => {
 						requestCreateInterview({
 							date: values.date,
 							format: values.format,
-							respondId: respondId.respondId
+							respondId: respondId.respondId,
+							address: values.extraInfo
 						})
 							.unwrap()
 							.then(() => {
@@ -231,6 +233,17 @@ export const SupervisorInterviewCreate = () => {
 							></Select>
 						</Form.Item>
 					</div>
+					<Form.Item
+						name={'extraInfo'}
+						label={
+							<label className="text-black opacity-[80%] text-[18px]/[18px] font-content-font font-normal">
+								Адрес и дополнительная информация
+							</label>
+						}
+						rules={[{ required: true, message: 'Адрес не указан' }]}
+					>
+						<TextArea autoSize={{minRows: 1, maxRows: 6}}></TextArea>
+					</Form.Item>
 					<Form.Item>
 						<Button
 							type="primary"

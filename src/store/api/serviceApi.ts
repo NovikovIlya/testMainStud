@@ -584,7 +584,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 					format: format,
 					mainTime: mainTime,
 					reserveTimes: reservedTimes,
-					additionalInfo: additionalInfo
+					address: additionalInfo
 				},
 				headers: {
 					Authorization: `Bearer ${supervisorToken}`
@@ -907,10 +907,10 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		getPersonnelStages: builder.query<EmploymentStageItemType[], void>({
 			query: arg => ({
-				url: `http://localhost:8082/employment-api/v1/managment/employment`,
+				url: `http://localhost:8082/employment-api/v1/management/employment`,
 				method: 'GET',
 				headers: {
-					Authorization: `Bearer ${supervisorToken}`
+					Authorization: `Bearer ${personnelDeparmentToken}`
 				}
 			})
 		}),
@@ -923,33 +923,46 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
-		getEmploymentStageStatus: builder.query<EmploymentStageStatusType[], { respondId: number }> ({
+		getEmploymentStageStatus: builder.query<EmploymentStageStatusType, { respondId: number }> ({
 			query: arg => ({
-				url: `http://localhost:8082/employment-api/v1/respond/${arg.respondId}/employment`,
+				url: `http://localhost:8082/employment-api/v1/management/respond/${arg.respondId}/employment`,
 				method: 'GET',
 				headers: {
-					Authorization: `Bearer ${supervisorToken}`
+					Authorization: `Bearer ${personnelDeparmentToken}`
 				}
 			})
 		}),
 		changeEmploymentStageStatusRequest: builder.mutation<void, ChangeStageStatusType & { subStageId: number }> ( {
 			query: arg => ({
-				url: `http://localhost:8082/employment-api/v1/managment/employment/sub-stage/${arg.subStageId}`,
+				url: `http://localhost:8082/employment-api/v1/management/employment/sub-stage/${arg.subStageId}`,
 				method: 'PUT',
 				headers: {
-					Authorization: `Bearer ${supervisorToken}`
+					Authorization: `Bearer ${personnelDeparmentToken}`
+				},
+				body: {
+					status: arg.status,
+					comment: arg.comment,
 				}
 			})
 		}),
 		downloadEmploymentStageFile: builder.query<Blob, { fileId : number }> ({
 			query: arg => ({
-				url: `http://localhost:8082/employment-api/v1/managment/employment/sub-stage/${arg.fileId}`,
+				url: `http://localhost:8082/employment-api/v1/management/employment/sub-stage/${arg.fileId}`,
 				method: 'GET',
 				headers: {
 					Authorization: `Bearer ${supervisorToken}`
 				}
 			})
-		})
+		}),
+		changeCardStatusRequest: builder.mutation<void, {subStageId: number}> ({
+			query: arg => ({
+				url: `hhtp://localhost:8082//employment-api/v1/management/employment/sub-stage/${arg.subStageId}/has-requisites`,
+				method: 'PATCH',
+				headers: {
+					Authorization: `Bearer ${personnelDeparmentToken}`
+				}
+			})
+		}),
 	})
 })
 export const {
@@ -1039,4 +1052,5 @@ export const {
 	useDeleteEmploymentDocMutation,
 	useGetSupervisorRespondsQuery,
 	useSendEmploymentDocsMutation,
+	useChangeCardStatusRequestMutation,
 } = serviceApi

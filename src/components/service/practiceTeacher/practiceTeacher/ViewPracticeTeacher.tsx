@@ -495,11 +495,12 @@ export const ViewPraciceTeacher = () => {
 										dataTable && dataTable?.length < 10
 											? false
 											: {
-													pageSize: 10
+													pageSize: 10,
+													position: ['bottomLeft']
 											  }
 									}
 									rowClassName={() => 'animate-fade-in '}
-									className=""
+									className="ant-table2"
 								/>
 							</div>
 						) : (

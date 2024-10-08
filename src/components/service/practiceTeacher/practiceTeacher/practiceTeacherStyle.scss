@@ -23,6 +23,13 @@
 @media screen and (max-width: 768px) {
     .ant-table{
         position: relative !important;
-        right: 50px;
+        right: 0px;
+    }
+    .ant-table2{
+        position: relative !important;
+        right: 40px;
+    }
+    .mobileFirst{
+        display: none;
     }
 }

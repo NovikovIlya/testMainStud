@@ -73,7 +73,7 @@ const Plan = ({id,dataOnePlace,dataTasks,setShowFinal}:any) => {
 					<Typography.Title level={2}>{dataOnePlace==='На кафедре КФУ'? 'Индивидуальные задания' : 'Путевка'}</Typography.Title>
 				</Col>
 			</Row>
-			<Row>
+			<Row className='mm'>
 				<Col span={12}>
 					<EditableTable setShow={setShow} dataSource={dataSource} setDataSource={setDataSource} setIsDisabled={setIsDisabled}/>
 				</Col>
@@ -97,13 +97,6 @@ const Plan = ({id,dataOnePlace,dataTasks,setShowFinal}:any) => {
           
 		
 			<Row gutter={16} className="mt-14 mb-10">
-				{/* <Col xs={24} sm={24} md={6} >
-					<Card title="Документы практики:" bordered={false}>
-						<ul className="ml-6">
-							<li><a onClick={download}>Отчет по практике и {dataOnePlace==='На кафедре КФУ' ? <a>Индивидуальные задания</a> : <a> Путевка</a>}</a></li>
-						</ul>
-					</Card>
-				</Col> */}
 				<Col xs={24} md={12} span={12}>
 					<Card title={<div className='flex gap-3 items-center'><Znak />Обратите внимание</div>} bordered={false}>
 					<ul className='pl-5 pr-5 '>

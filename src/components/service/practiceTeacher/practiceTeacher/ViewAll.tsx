@@ -36,8 +36,9 @@ import { OptionsNameSpecialty } from '../../practices/roster/registerContracts/R
 import { useGetAllPracticeTeacherQuery } from '../../../../store/api/practiceApi/practiceTeacher'
 
 const optionYears = [
-	{value:'Учебный год (по убыванию)'},
-	{value:'Учебный год (по возрастанию)'},
+	// {value:'Учебный год (по убыванию)'},
+	// {value:'Учебный год (по возрастанию)'},
+	{value:'Все'},
 	{value:'Прошедшие'},
 	{value:'Текущие'}
 ]
@@ -63,7 +64,7 @@ export const ViewAll = () => {
 		semester: 'Все',
 		practiceType: 'Все',
 		subdivision:'Все',
-		dateFilling: 'Учебный год (по убыванию)',
+		dateFilling: 'Все',
 		groupNumber: 'Все'
 	})
 	const {data: dataPractiseAll,isSuccess: isSuccessPractiseAll,isFetching: isFetchingPractiseAll} = useGetAllPracticeTeacherQuery()
@@ -111,13 +112,13 @@ export const ViewAll = () => {
 			key: 'practiceType',
 			dataIndex: 'practiceType',
 			title: 'Тип практики',
-			className: 'text-xs !p-4'
+			className: 'text-xs !p-4 mobileFirst'
 		},
 		{
 			key: 'department',
 			dataIndex: 'department',
 			title: 'Кафедра',
-			className: 'text-xs !p-4'
+			className: 'text-xs !p-4 mobileFirst'
 		},
 		{
 			key: 'semester',
@@ -131,14 +132,15 @@ export const ViewAll = () => {
 			dataIndex: 'academicYear',
 			title: 'Учебный год',
 			align: 'center',
-			className: 'text-xs !p-4'
+			className: 'text-xs !p-4',
+			sorter: (a:any, b:any) => +new Date(a.academicYear.split('/')[0]) - +new Date(b.academicYear.split('/')[0]),
 		},
 		{
 			key: 'course',
 			dataIndex: 'course',
 			title: 'Курс',
 			align: 'center',
-			className: 'text-xs !p-4'
+			className: 'text-xs !p-4 mobileFirst'
 		},
 		{
 			key: 'period',
@@ -339,10 +341,14 @@ export const ViewAll = () => {
 	
 		function sortDateFilling(a:any, b:any) {
             if (filter.dateFilling === 'Учебный год (по убыванию)') {
-                return +new Date(b.academicYear.split('/'[0])) - +new Date(a.academicYear.split('/'[0]))
+				console.log('filter.dateFilling0',filter.dateFilling)
+                return +new Date(b.academicYear.split('/')[0]) - +new Date(a.academicYear.split('/')[0])
+				
             }
             if (filter.dateFilling === 'Учебный год (по возрастанию)') {
-                return +new Date(a.academicYear.split('/'[0])) - +new Date(b.academicYear.split('/'[0]))
+				console.log('filter.dateFilling1',filter.dateFilling)
+				console.log('1',a.academicYear.split('/')[0])
+                return +new Date(a.academicYear.split('/')[0]) - +new Date(b.academicYear.split('/')[0])
             }
 			
             return 0

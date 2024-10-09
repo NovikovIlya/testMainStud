@@ -1,4 +1,4 @@
-import { FileOutlined, ReloadOutlined, UploadOutlined } from '@ant-design/icons'
+import { FileOutlined, FileTextOutlined, ReloadOutlined, UploadOutlined } from '@ant-design/icons'
 import { Avatar, Button, Col, Divider, Form, List, Row, Spin, Typography } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
 import dayjs from 'dayjs'
@@ -12,7 +12,7 @@ import { useSendMessageMutation } from '../../../../store/api/practiceApi/practi
 // import './myPracticeStyle.scss'
 
 
-export const CommentNewTeacher = ({ dataChat,isLoading,dataOneLength,refetch }: any) => {
+export const CommentNewTeacher = ({files, dataChat,isLoading,dataOneLength,refetch }: any) => {
 	const [name,sendName] = useState(null)
 	const [idAttachment, setIdAttachment] = useState<any>(null)
 	const { data, isSuccess, isFetching ,refetch:ref} = useGetAttachmentQuery(idAttachment, { skip: !idAttachment })
@@ -72,7 +72,7 @@ export const CommentNewTeacher = ({ dataChat,isLoading,dataOneLength,refetch }: 
 					</Col>
 				</Row> */}
 
-				<div className="space-y-4 h-[460px] overflow-y-auto p-10 bg-gray-100 rounded-[10px_10px_0px_0px]">
+				<div className="space-y-4 h-[460px] overflow-y-auto p-10 bg-[#f5f8fb] rounded-[10px_10px_0px_0px]">
 					<Button
 							onClick={refetch}
 							className="mb-8 ml-8 absolute top-4 right-4"
@@ -80,6 +80,29 @@ export const CommentNewTeacher = ({ dataChat,isLoading,dataOneLength,refetch }: 
 							shape="circle"
 							icon={<ReloadOutlined />}
 						/>
+						<div className="mb-8 ml-8 absolute top-0.5 right-20 flex flex-wrap  gap-5 backdrop:blur-[3px] m-[15px]">
+							<div className=''>{files?.report ?<div 	> <Button
+														icon={<FileTextOutlined />}
+													
+														
+														shape="circle"
+														
+														></Button><div className='!text-xs'>Отчет</div></div>:''}</div>
+														
+						{files?.diary ?<div className='flex items-center flex-col'	> <Button
+														icon={<FileTextOutlined />}
+													
+														
+														shape="circle"
+														
+														></Button><div className='!text-xs'>Дневник</div></div>:''}
+							{files?.tasks ?<div 	> <Button
+														icon={<FileTextOutlined />}
+													
+														
+														shape="circle"
+														
+														></Button><div className='!text-xs'>Иное</div></div>:''}</div>
 					{chatValid?.map((message: any) => {
 						const isStudent = message.senderType !== 'STUDENT'
 

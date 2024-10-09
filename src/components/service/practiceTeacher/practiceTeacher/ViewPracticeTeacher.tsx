@@ -1,10 +1,11 @@
-import { LoadingOutlined, PlusOutlined, SendOutlined } from '@ant-design/icons'
+import { FileTextOutlined, LoadingOutlined, PlusOutlined, SendOutlined } from '@ant-design/icons'
 import { useTimeout } from 'ahooks'
 import {
 	Button,
 	Col,
 	Divider,
 	Drawer,
+	FloatButton,
 	Form,
 	Input,
 	Modal,
@@ -32,7 +33,7 @@ import {
 import { isMobileDevice } from '../../../../utils/hooks/useIsMobile'
 
 import { CommentNewTeacher } from './CommentTeacher'
-import './practiceTeacherStyle.scss'
+import styles from './practiceTeacherStyle.module.scss'
 import { setText } from '../../../../store/reducers/notificationSlice'
 import { Vector } from '../../../../assets/svg/Vector'
 
@@ -329,7 +330,7 @@ export const ViewPraciceTeacher = () => {
 	const uniqueNames = Array.from(new Set(dataAllOrder?.map((student:any) => student.studentName)));
 
 	if (isFetchingMyPractice)	return <Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
-
+	console.log('files',files)
 	return (
 		<Form form={form}>
 			<section className="container animate-fade-in">
@@ -527,7 +528,7 @@ export const ViewPraciceTeacher = () => {
 				<Drawer
 					mask={false}
 					bodyStyle={{ paddingTop: '30px' }}
-					headerStyle={{ paddingTop: isMobile ? '140px' : '100px', background: '#d2def1' }}
+					headerStyle={{ paddingTop: isMobile ? '140px' : '100px', background: '#f5f8fb' }}
 					className=""
 					onClose={onClose}
 					open={open}
@@ -575,7 +576,7 @@ export const ViewPraciceTeacher = () => {
 							
 							<Divider />
 							<Spin spinning={isLoading}>
-								<CommentNewTeacher dataChat={dataChat} refetch={refetch}/>
+								<CommentNewTeacher files={files} dataChat={dataChat} refetch={refetch}/>
 							</Spin>
 							<Form form={form} className="flex  w-full flex-wrap " onFinish={onFinish}>
 								<div className="flex w-full mt-4 ">
@@ -603,6 +604,21 @@ export const ViewPraciceTeacher = () => {
 									/>
 								</div>
 							</Form>
+							{/* <div className='w-full flex items-center justify-between  '>
+								<div>{files?.report ?  <FloatButton
+														icon={<FileTextOutlined />}
+														description="Отчет"
+														shape="square"
+														style={{ insetInlineEnd: 24 }}
+														/> : ''}</div>
+								<div>{files?.diary ? <FloatButton
+														icon={<FileTextOutlined />}
+														description="Отчет"
+														shape="square"
+														style={{ insetInlineEnd: 124 }}
+														/>: ''}</div>
+								<div>{files?.tasks ? 'Иное загружено' : ''}</div>
+							</div> */}
 						</div>
 					) : (
 						<>
@@ -612,8 +628,8 @@ export const ViewPraciceTeacher = () => {
 					)}
 					
 				</Drawer>
-				<Modal title='Выберите файлы'  width={600} style={{paddingBottom:'50px'}} open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={null}>
-					<div className='flex gap-3 w-full flex-wrap'>
+				<Modal title='Выберите файлы'  width={650} style={{paddingBottom:'150px'}} open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={null}>
+				 <div className={`${styles.item2} flex gap-3 w-full flex-wrap p-6`}>
 					<Upload
 					maxCount={1}
 					onChange={info => {

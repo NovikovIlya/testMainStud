@@ -238,6 +238,18 @@ export const NavPractices = () => {
 		target: () => document.querySelectorAll('.ant-menu-item')[4],
 		placement: 'right',
 	  },
+	  {
+		title: 'Приказ по практике',
+		description: 'Приказ по практике - документ, который содержит информацию о конкретных студентах, которые направляются на  практику в определенный период. Является логическим продолжением вкладки «Представление в приказ»',
+		target: () => document.querySelectorAll('.ant-menu-item')[5],
+		placement: 'right',
+	  },
+	  {
+		title: 'Приложение 4',
+		description: 'Приложение 4 – документ, содержащий информацию об обучающихся, направляемых на практическую подготовку в профильную организацию',
+		target: () => document.querySelectorAll('.ant-menu-item')[6],
+		placement: 'right',
+	  },
 	//   {
 	// 	title: '7',
 	// 	description: 'текст',

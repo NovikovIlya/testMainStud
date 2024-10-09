@@ -293,6 +293,7 @@ const CreateTask = () => {
                                                                   size="large"
                                                                   placeholder="Добавить задание"
                                                                   className={'textArea'}
+                                                                  required
 
                                                         />
                                                     </Form.Item>

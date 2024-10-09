@@ -684,6 +684,7 @@ export const CreatePractical = () => {
 							//rules={[{required: true}]}
 							name={'semester'}
 							label={'Семестр'}
+							required
 						>
 							<Select
 							    disabled={!pickCourse}
@@ -691,6 +692,7 @@ export const CreatePractical = () => {
 								popupMatchSelectWidth={false}
 								className="w-full"
 								options={optionsCourseValid}
+								
 							/>
 						</Form.Item>
 					</Col>

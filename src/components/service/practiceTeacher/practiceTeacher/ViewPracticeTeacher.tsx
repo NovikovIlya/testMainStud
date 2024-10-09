@@ -5,7 +5,6 @@ import {
 	Col,
 	Divider,
 	Drawer,
-	Dropdown,
 	Form,
 	Input,
 	Modal,
@@ -20,18 +19,16 @@ import {
 } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
 import dayjs from 'dayjs'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-import { ArrowLeftSvg } from '../../../../assets/svg'
-import { useAppDispatch, useAppSelector } from '../../../../store'
+import { useAppSelector } from '../../../../store'
 import { useGetAllMyPracticesQuery } from '../../../../store/api/practiceApi/mypractice'
 import {
 	useGetChatQuery,
 	useGetOneGroupQuery,
 	useSendMessageMutation
 } from '../../../../store/api/practiceApi/practiceTeacher'
-import { useGetAllOrderQuery } from '../../../../store/api/practiceApi/representation'
 import { isMobileDevice } from '../../../../utils/hooks/useIsMobile'
 
 import { CommentNewTeacher } from './CommentTeacher'
@@ -43,7 +40,6 @@ import { Vector } from '../../../../assets/svg/Vector'
 const optionMock = [{ label: 'Зачтено', value: 'Зачтено' }]
 
 export const ViewPraciceTeacher = () => {
-
 	const [files, setFiles] = useState<any>({
 		report: null,
 		diary: null,
@@ -70,17 +66,12 @@ export const ViewPraciceTeacher = () => {
 		status: 'Все'
 	})
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	// const [text, setText] = useState('')
-	const [selectSubdivisionId, setSelectSubdivisionId] = useState(null)
 	const { data: dataAllOrder, isSuccess: isSuccessOrder, isFetching: isLoadingOrder } = useGetOneGroupQuery(id)
 	const isMobile = isMobileDevice()
 	const [dataTable, setDataTable] = useState<any>(dataAllOrder)
 	const {data: dataAllMyPractices,isSuccess: isSuccessMyPractice,isFetching: isFetchingMyPractice} = useGetAllMyPracticesQuery()
 	const { data: dataChat, isFetching: isFethcingChat,refetch } = useGetChatQuery(idStudent, { skip: !idStudent })
 	const [sendMessageApi, { isLoading}] = useSendMessageMutation()
-
-
-
 
 	const columns = [
 		{
@@ -181,41 +172,29 @@ export const ViewPraciceTeacher = () => {
 			dataIndex: 'grade',
 			title: 'Оценка',
 			className: 'text-xs !p-4 ',
-			// render: (record: any, row: any) => {
-			// 	return (
-			// 		<Select
-			// 			className="w-full"
-			// 			value={record}
-			// 			placeholder={'Выбрать'}
-			// 			options={optionMock}
-			// 			onChange={value => changeSelect(value, row)}
-			// 		></Select>
-			// 	)
-			// }
+	
 		},
 		{
 			key: 'status',
 			dataIndex: 'status',
 			title: 'Статус',
 			className: 'text-xs !p-4 ',
-			// render: (record: any, row: any) => {
-			// 	return (
-			// 		<Select
-			// 			className="w-full"
-			// 			value={record}
-			// 			placeholder={'Выбрать'}
-			// 			options={optionMock}
-			// 			onChange={value => changeSelect(value, row)}
-			// 		></Select>
-			// 	)
-			// }
+
 		},
 		{
 			key: 'documents',
 			dataIndex: 'documents',
-			title: 'Документы',
+			title: 'Наличие документов',
 			className: 'text-xs !p-4 ',
-			
+			render: (record: any, text:any) => {
+				console.log('record',record)
+				console.log('text',text)
+				return(<>
+					<div className='!text-xs'>Отчет: {text?.isReportSent  ? 'Да' : 'Нет' }</div>
+					<div className='!text-xs'>Дневник: {text?.isDiarySent?'Да':'Нет'}</div>
+					<div className='!text-xs'>Иное: {text?.areTasksSent?'Да':'Нет'}</div>
+				</>)
+			}
 		}
 	]
 
@@ -230,6 +209,7 @@ export const ViewPraciceTeacher = () => {
 			showDrawer()
 		}
 	}, delay)
+
 
 	function filterDataFull() {
 		function filterCourse(elem: any) {
@@ -346,7 +326,6 @@ export const ViewPraciceTeacher = () => {
 	};
 	
 	const sortedData = dataTable?.length > 0 ? [...dataTable].sort((a: any, b: any) => a.studentName.localeCompare(b.studentName)) : [];
-
 	const uniqueNames = Array.from(new Set(dataAllOrder?.map((student:any) => student.studentName)));
 
 	if (isFetchingMyPractice)	return <Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
@@ -633,7 +612,7 @@ export const ViewPraciceTeacher = () => {
 					)}
 					
 				</Drawer>
-				<Modal title='Выберите файлы'  width={600} style={{paddingBottom:'40px'}} open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={null}>
+				<Modal title='Выберите файлы'  width={600} style={{paddingBottom:'50px'}} open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={null}>
 					<div className='flex gap-3 w-full flex-wrap'>
 					<Upload
 					maxCount={1}

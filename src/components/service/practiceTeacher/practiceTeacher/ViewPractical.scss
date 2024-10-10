@@ -50,5 +50,8 @@
 
 .ant-modal-content .ant-upload-list-item{
   left:10px;
-  top: -38px;
+  top: -200px;
+}
+.ant-drawer-right .ant-drawer-close{
+  display:none !important;
 }

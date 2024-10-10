@@ -39,8 +39,16 @@ const optionYears = [
 	// {value:'Учебный год (по убыванию)'},
 	// {value:'Учебный год (по возрастанию)'},
 	{value:'Все'},
-	{value:'Прошедшие'},
-	{value:'Текущие'}
+	{value:'Текущие'},
+	{value:'Прошедшие'}
+]
+
+const optionYearsTwo = [
+	{value:'Учебный год (по убыванию)'},
+	{value:'Учебный год (по возрастанию)'},
+	// {value:'Все'},
+	// {value:'Прошедшие'},
+	// {value:'Текущие'}
 ]
 
 export const ViewAll = () => {
@@ -49,7 +57,7 @@ export const ViewAll = () => {
 	const navigate = useNavigate()
 	const initialFormValues = {
 		podrazdelenie: 'Все',
-		semester: '',
+		semester: 'Все',
 	};
 	const [pickCourse, setPickCourse] = useState<any>(null)
 	const [pickSpeciality,setPickSpeciality] = useState(null)
@@ -65,7 +73,8 @@ export const ViewAll = () => {
 		practiceType: 'Все',
 		subdivision:'Все',
 		dateFilling: 'Все',
-		groupNumber: 'Все'
+		groupNumber: 'Все',
+		dateYear:'Учебный год (по убыванию)'
 	})
 	const {data: dataPractiseAll,isSuccess: isSuccessPractiseAll,isFetching: isFetchingPractiseAll} = useGetAllPracticeTeacherQuery()
 	const {data:dataSubdevisionPracticeNew} = useGetPractiseSubdevisionNewQuery()
@@ -133,7 +142,7 @@ export const ViewAll = () => {
 			title: 'Учебный год',
 			align: 'center',
 			className: 'text-xs !p-4',
-			sorter: (a:any, b:any) => +new Date(a.academicYear.split('/')[0]) - +new Date(b.academicYear.split('/')[0]),
+			// sorter: (a:any, b:any) => +new Date(a.academicYear.split('/')[0]) - +new Date(b.academicYear.split('/')[0]),
 		},
 		{
 			key: 'course',
@@ -340,13 +349,13 @@ export const ViewAll = () => {
 		}
 	
 		function sortDateFilling(a:any, b:any) {
-            if (filter.dateFilling === 'Учебный год (по убыванию)') {
-				console.log('filter.dateFilling0',filter.dateFilling)
+            if (filter.dateYear === 'Учебный год (по убыванию)') {
+				console.log('filter.dateFilling0',filter.dateYear)
                 return +new Date(b.academicYear.split('/')[0]) - +new Date(a.academicYear.split('/')[0])
 				
             }
-            if (filter.dateFilling === 'Учебный год (по возрастанию)') {
-				console.log('filter.dateFilling1',filter.dateFilling)
+            if (filter.dateYear === 'Учебный год (по возрастанию)') {
+				console.log('filter.dateFilling1',filter.dateYear)
 				console.log('1',a.academicYear.split('/')[0])
                 return +new Date(a.academicYear.split('/')[0]) - +new Date(b.academicYear.split('/')[0])
             }
@@ -586,6 +595,28 @@ export const ViewAll = () => {
 						</Form.Item>
 					</Col>
 				</Row>
+				<Row gutter={[16, 16]} className='mt-4 overWrite'>
+				<Col span={5}><span className={'mr-2'}>Период практики</span></Col>
+				<Col span={8}  className='mobileFirst overWrite'>
+                    
+						
+                        
+                        <Select
+                            popupMatchSelectWidth={false}
+                            value={filter.dateFilling}
+                            className="w-full"
+                            options={optionYears}
+                            onChange={value => {
+                                setFilter({
+                                    ...filter,
+                                    dateFilling: value
+                                })
+                            }}
+                        />
+               
+
+                </Col>
+				</Row>
 
 				<Row gutter={[16, 16]} className="mt-4 overWrite items-center ">
 					<Col span={4} className='flex items-center overWrite'>
@@ -619,8 +650,9 @@ export const ViewAll = () => {
 							name={'semester'}	
 						>
 							<Select
+								defaultValue="Все"
 								onChange={value => {
-								
+									
 									setFilter({
 										...filter,
 										semester: value
@@ -665,9 +697,9 @@ export const ViewAll = () => {
 				</Row>
 			</Form>
 			<Row className='flex justify-end'>
-			<Col span={8}  className='mobileFirst mt-4'>
+				{/* <Col span={8}  className='mobileFirst mt-4'>
                     <div className={'flex gap-2 items-center'}>
-                        <span className={'mr-2'}>Сортировка</span>
+                        <span className={'mr-2'}>Отображать по времени</span>
                         <Select
                             popupMatchSelectWidth={false}
                             value={filter.dateFilling}
@@ -682,7 +714,26 @@ export const ViewAll = () => {
                         />
                     </div>
 
+                </Col> */}
+				<Col span={8}  className='mobileFirst mt-4'>
+                    <div className={'flex gap-2 items-center'}>
+                        <span className={'mr-2'}>Сортировка</span>
+                        <Select
+                            popupMatchSelectWidth={false}
+                            value={filter.dateYear}
+                            className="w-full"
+                            options={optionYearsTwo}
+                            onChange={value => {
+                                setFilter({
+                                    ...filter,
+                                    dateYear: value
+                                })
+                            }}
+                        />
+                    </div>
+
                 </Col>
+			
 			</Row>
 
 			

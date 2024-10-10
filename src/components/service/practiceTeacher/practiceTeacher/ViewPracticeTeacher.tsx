@@ -1,13 +1,11 @@
-import { FileTextOutlined, LoadingOutlined, PlusOutlined, SendOutlined } from '@ant-design/icons'
+import { CloseOutlined, LoadingOutlined, PlusOutlined } from '@ant-design/icons'
 import { useTimeout } from 'ahooks'
 import {
 	Button,
 	Col,
 	Divider,
 	Drawer,
-	FloatButton,
 	Form,
-	Input,
 	Modal,
 	Row,
 	Select,
@@ -18,25 +16,25 @@ import {
 	Upload,
 	message
 } from 'antd'
-import TextArea from 'antd/es/input/TextArea'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
+import { Vector } from '../../../../assets/svg/Vector'
 import { useAppSelector } from '../../../../store'
 import { useGetAllMyPracticesQuery } from '../../../../store/api/practiceApi/mypractice'
 import {
 	useGetChatQuery,
 	useGetOneGroupQuery,
-	useSendMessageMutation
+	useSendMessageMutation,
+	useUpdateStatusMutation
 } from '../../../../store/api/practiceApi/practiceTeacher'
+import { setText } from '../../../../store/reducers/notificationSlice'
 import { isMobileDevice } from '../../../../utils/hooks/useIsMobile'
 
 import { CommentNewTeacher } from './CommentTeacher'
+import InputText from './InputText'
 import styles from './practiceTeacherStyle.module.scss'
-import { setText } from '../../../../store/reducers/notificationSlice'
-import { Vector } from '../../../../assets/svg/Vector'
-
 
 const optionMock = [{ label: 'Зачтено', value: 'Зачтено' }]
 
@@ -48,13 +46,13 @@ export const ViewPraciceTeacher = () => {
 	})
 	const user = useAppSelector(state => state.auth.user)
 	const [studentName, setStudentName] = useState<any>(null)
-	const [grade,setGrade] = useState<any>(null)
-	const [rowData,setRowData] = useState(null)
-	const [statusStudent,setStatusStudent] = useState(null)
+	const [grade, setGrade] = useState<any>(null)
+	const [rowData, setRowData] = useState(null)
+	const [statusStudent, setStatusStudent] = useState<any>(null)
 	const nav = useNavigate()
 	const path = useLocation()
 	const id = path.pathname.split('/').at(-1)!
-	const [idStudent, setIdStudent] = useState(null)
+	const [idStudent, setIdStudent] = useState<any>(null)
 	const [delay, setDelay] = useState<number | undefined>(250)
 	const [open, setOpen] = useState(false)
 	const [fullTable, setFullTable] = useState(false)
@@ -66,13 +64,14 @@ export const ViewPraciceTeacher = () => {
 		dateFilling: 'По дате (сначала новые)',
 		status: 'Все'
 	})
-	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [isModalOpen, setIsModalOpen] = useState(false)
 	const { data: dataAllOrder, isSuccess: isSuccessOrder, isFetching: isLoadingOrder } = useGetOneGroupQuery(id)
 	const isMobile = isMobileDevice()
 	const [dataTable, setDataTable] = useState<any>(dataAllOrder)
 	const {data: dataAllMyPractices,isSuccess: isSuccessMyPractice,isFetching: isFetchingMyPractice} = useGetAllMyPracticesQuery()
-	const { data: dataChat, isFetching: isFethcingChat,refetch } = useGetChatQuery(idStudent, { skip: !idStudent })
-	const [sendMessageApi, { isLoading}] = useSendMessageMutation()
+	const { data: dataChat, isFetching: isFethcingChat, refetch } = useGetChatQuery(idStudent, { skip: !idStudent })
+	const [sendMessageApi, { isLoading }] = useSendMessageMutation()
+	const [updateStatus, {}] = useUpdateStatusMutation()
 
 	const columns = [
 		{
@@ -172,29 +171,27 @@ export const ViewPraciceTeacher = () => {
 			key: 'grade',
 			dataIndex: 'grade',
 			title: 'Оценка',
-			className: 'text-xs !p-4 ',
-	
+			className: 'text-xs !p-4 '
 		},
 		{
 			key: 'status',
 			dataIndex: 'status',
 			title: 'Статус',
-			className: 'text-xs !p-4 ',
-
+			className: 'text-xs !p-4 '
 		},
 		{
 			key: 'documents',
 			dataIndex: 'documents',
 			title: 'Наличие документов',
 			className: 'text-xs !p-4 ',
-			render: (record: any, text:any) => {
-				console.log('record',record)
-				console.log('text',text)
-				return(<>
-					<div className='!text-xs'>Отчет: {text?.isReportSent  ? 'Да' : 'Нет' }</div>
-					<div className='!text-xs'>Дневник: {text?.isDiarySent?'Да':'Нет'}</div>
-					<div className='!text-xs'>Иное: {text?.areTasksSent?'Да':'Нет'}</div>
-				</>)
+			render: (record: any, text: any) => {
+				return (
+					<>
+						<div className="!text-xs">Отчет: {text?.isReportSent ? 'Да' : 'Нет'}</div>
+						<div className="!text-xs">Дневник: {text?.isDiarySent ? 'Да' : 'Нет'}</div>
+						<div className="!text-xs">Иное: {text?.areTasksSent ? 'Да' : 'Нет'}</div>
+					</>
+				)
 			}
 		}
 	]
@@ -210,7 +207,6 @@ export const ViewPraciceTeacher = () => {
 			showDrawer()
 		}
 	}, delay)
-
 
 	function filterDataFull() {
 		function filterCourse(elem: any) {
@@ -238,9 +234,9 @@ export const ViewPraciceTeacher = () => {
 			return 0
 		}
 
-		return dataAllOrder ? dataAllOrder
-		.filter((elem: any) => filterCourse(elem))
-		.filter((elem: any) => filterName(elem)) : []
+		return dataAllOrder
+			? dataAllOrder.filter((elem: any) => filterCourse(elem)).filter((elem: any) => filterName(elem))
+			: []
 	}
 	const changeSelect = (value: any, row: any) => {
 		const updatedData = dataTable.map((item: any) => {
@@ -275,7 +271,7 @@ export const ViewPraciceTeacher = () => {
 		setOpen(false)
 	}
 
-	const clickTextArea = ()=>{
+	const clickTextArea = () => {
 		// refetch()
 	}
 	const onFinish = () => {
@@ -315,31 +311,49 @@ export const ViewPraciceTeacher = () => {
 		})
 	}
 	const showModal = () => {
-		setIsModalOpen(true);
-	};
-	
-	const handleOk = () => {
-	setIsModalOpen(false);
-	};
-	
-	const handleCancel = () => {
-	setIsModalOpen(false);
-	};
-	
-	const sortedData = dataTable?.length > 0 ? [...dataTable].sort((a: any, b: any) => a.studentName.localeCompare(b.studentName)) : [];
-	const uniqueNames = Array.from(new Set(dataAllOrder?.map((student:any) => student.studentName)));
+		setIsModalOpen(true)
+	}
 
-	if (isFetchingMyPractice)	return <Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
-	console.log('files',files)
+	const handleOk = () => {
+		setIsModalOpen(false)
+	}
+
+	const handleCancel = () => {
+		setIsModalOpen(false)
+		console.warn('закрыто')
+		form.setFieldsValue({ textArea: '' })
+
+		setText('')
+		setFiles({
+			report: null,
+			diary: null,
+			tasks: null
+		})
+	}
+
+	const updateStatusFn = () => {
+		const obj = {
+			id: idStudent,
+			status: statusStudent,
+			grade: grade
+		}
+		updateStatus(obj)
+	}
+
+	const sortedData = dataTable?.length > 0 ? [...dataTable].sort((a: any, b: any) => a.studentName.localeCompare(b.studentName)) : []
+	const uniqueNames = Array.from(new Set(dataAllOrder?.map((student: any) => student.studentName)))
+
+	if (isFetchingMyPractice) return <Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
+	
 	return (
 		<Form form={form}>
 			<section className="container animate-fade-in">
 				<Space size={10} align="center">
 					<Button
 						size="large"
-						style={{width:'48px'}}
-                        className="mt-1 mr-6 w-[48px] rounded-full border border-black"
-                        icon={<Vector />}
+						style={{ width: '48px' }}
+						className="mt-1 mr-6 w-[48px] rounded-full border border-black"
+						icon={<Vector />}
 						type="text"
 						onClick={() => {
 							nav('/services/practiceteacher')
@@ -405,8 +419,6 @@ export const ViewPraciceTeacher = () => {
 					</Col>
 				</Row>
 
-			
-
 				{/* <Row gutter={[16, 16]} className="mt-4 flex items-center">
 					<Col span={5}>
 						<span>Номер группы</span>
@@ -468,9 +480,7 @@ export const ViewPraciceTeacher = () => {
 									rowKey="id"
 									// @ts-ignore
 									columns={columnsMini}
-									dataSource={
-										sortedData
-									}
+									dataSource={sortedData}
 									pagination={
 										dataTable && dataTable?.length < 10
 											? false
@@ -524,7 +534,7 @@ export const ViewPraciceTeacher = () => {
 						)}
 					</Col>
 				</Row>
-				
+
 				<Drawer
 					mask={false}
 					bodyStyle={{ paddingTop: '30px' }}
@@ -532,59 +542,59 @@ export const ViewPraciceTeacher = () => {
 					className=""
 					onClose={onClose}
 					open={open}
-					title={studentName}
+					title={
+						<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+							<span>{studentName}</span>
+							<Button type="text" icon={<CloseOutlined />} onClick={onClose} />
+						</div>
+					}
 					width={isMobile ? '100%' : '30%'}
-					
 				>
-					
 					{!isFethcingChat ? (
-						
 						<div className="top-10">
 							<Form form={form} className="flex  w-full flex-wrap " onFinish={onFinish}>
-								<Row className='flex items-center w-full mb-4'>
+								<Row className="flex items-center w-full mb-4">
 									<Col span={5}>Статус</Col>
 									<Col span={19}>
 										<Select
 											className="w-full"
-											
 											placeholder={'Выбрать'}
 											options={optionMock}
 											onChange={value => setStatusStudent(value)}
 										></Select>
 									</Col>
 								</Row>
-								<Row className='flex items-center w-full'>
+								<Row className="flex items-center w-full">
 									<Col span={5}>Оценка</Col>
 									<Col span={19}>
-										<Form.Item className='  flex-wrap items-center  mb-[0]' name={'gradeForm'}>
-											<Input
-												className="w-full flex"
-												
-												placeholder={'Ввести'}
-											
-											
-											></Input>
+										<Form.Item className="  flex-wrap items-center  mb-[0]" name={'gradeForm'}>
+											<Select
+												value={grade}
+												placeholder={'Выбрать'}
+												options={optionMock}
+												onChange={value => setGrade(value)}
+											></Select>
 										</Form.Item>
 									</Col>
 								</Row>
-								<Row className='flex justify-end w-full mt-2'>
-									<Col >
-										<Button>Сохранить</Button>
+								<Row className="flex justify-end w-full mt-2">
+									<Col>
+										<Button onClick={updateStatusFn}>Сохранить</Button>
 									</Col>
 								</Row>
 							</Form>
-							
+
 							<Divider />
 							<Spin spinning={isLoading}>
-								<CommentNewTeacher files={files} dataChat={dataChat} refetch={refetch}/>
+								<CommentNewTeacher files={files} dataChat={dataChat} refetch={refetch} />
 							</Spin>
 							<Form form={form} className="flex  w-full flex-wrap " onFinish={onFinish}>
 								<div className="flex w-full mt-4 ">
-									
-										<Button className='h-[54px] rounded-[10px_0_0_10px]'  onClick={showModal}><PlusOutlined /></Button>
-									
+									<Button className="h-[54px] rounded-[10px_0_0_10px]" onClick={showModal}>
+										<PlusOutlined />
+									</Button>
 
-									<Form.Item className=' w-full' name={'textArea'}>
+									{/* <Form.Item className=' w-full' name={'textArea'}>
 										<TextArea
 										
 										maxLength={75}
@@ -601,7 +611,8 @@ export const ViewPraciceTeacher = () => {
 										icon={<SendOutlined />}
 										className="rounded-[0px_10px_10px_0px] h-[54px] "
 										size="large"
-									/>
+									/> */}
+									<InputText setIsModalOpen={setIsModalOpen} clickTextArea={clickTextArea} />
 								</div>
 							</Form>
 							{/* <div className='w-full flex items-center justify-between  '>
@@ -622,129 +633,162 @@ export const ViewPraciceTeacher = () => {
 						</div>
 					) : (
 						<>
-						<Skeleton active  />
-						<Skeleton.Input active className='mt-20 !h-72 !w-72'/>
+							<Skeleton active />
+							<Skeleton.Input active className="mt-10 mb-5 !h-[400px] !w-[500px]" />
+							<Skeleton.Input active className="mt-10 !h-14 !w-[500px]" />
 						</>
 					)}
-					
 				</Drawer>
-				<Modal title='Выберите файлы'  width={650} style={{paddingBottom:'150px'}} open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={null}>
-				 <div className={`${styles.item2} flex gap-3 w-full flex-wrap p-6`}>
-					<Upload
-					maxCount={1}
-					onChange={info => {
-						if (info.file.status === 'removed') {
-							// form.setFieldValue('pdfContract', undefined)
-							setFiles({
-								...files,
-								report: undefined
-							})
-						}
-					}}
-					beforeUpload={file => {
-						const isPdf = file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-						const isLt5M = file.size / 1024 / 1024 < 5 // Проверка на размер меньше 5 МБ
-
-						if (!isPdf) {
-							message.error('Вы можете загружать только docx файлы!')
-							return false
-						}
-						if (!isLt5M) {
-							message.error('Файл должен быть меньше 5 МБ!')
-							return false
-						}
-
-						setFiles({
-							...files,
-							report: file
-						})
-						return false
-					}}
-					accept={'.docx'}
-					fileList={files.report ? [files.report] : []}
-					className="flex items-center  "
+				<Modal
+					title="Выберите файлы и отправьте комментарий"
+					width={650}
+					style={{ paddingBottom: '150px' }}
+					open={isModalOpen}
+					onOk={handleOk}
+					onCancel={handleCancel}
+					footer={null}
 				>
-					<Button className={`${files.report ? 'opacity-100' : ''} rounded-[20px_20px_20px_20px] h-14 w-[170px] flex justify-start`} icon={<PlusOutlined />}>
-						Загрузить отчёт
-					</Button>
-				</Upload>
-				<Upload
-					
-					maxCount={1}
-					onChange={info => {
-						if (info.file.status === 'removed') {
-							// form.setFieldValue('pdfContract', undefined)
-							setFiles({
-								...files,
-								diary: undefined
-							})
-						}
-					}}
-					beforeUpload={file => {
-						const isPdf = file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-						const isLt5M = file.size / 1024 / 1024 < 5 // Проверка на размер меньше 5 МБ
+					<div className={`${styles.item2} flex gap-3 w-full flex-wrap p-6`}>
+						<Upload
+							maxCount={1}
+							onChange={info => {
+								if (info.file.status === 'removed') {
+									// form.setFieldValue('pdfContract', undefined)
+									setFiles({
+										...files,
+										report: undefined
+									})
+								}
+							}}
+							beforeUpload={file => {
+								const isPdf = file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+								const isLt5M = file.size / 1024 / 1024 < 5 // Проверка на размер меньше 5 МБ
 
-						if (!isPdf) {
-							message.error('Вы можете загружать только PDF файлы!')
-							return false
-						}
-						if (!isLt5M) {
-							message.error('Файл должен быть меньше 5 МБ!')
-							return false
-						}
+								if (!isPdf) {
+									message.error('Вы можете загружать только docx файлы!')
+									return false
+								}
+								if (!isLt5M) {
+									message.error('Файл должен быть меньше 5 МБ!')
+									return false
+								}
 
-						setFiles({
-							...files,
-							diary: file
-						})
-						return false
-					}}
-					accept={'.docx'}
-					fileList={files.diary ? [files.diary] : []}
-					className="flex items-center  "
-				>
-					<Button className={`${files.diary ? 'opacity-100' : ''} rounded-[20px_20px_20px_20px] h-14 w-[170px] flex justify-start`}  icon={<PlusOutlined />}>
-						Загрузить дневник
-					</Button>
-				</Upload>
-				<Upload
-					onChange={info => {
-						if (info.file.status === 'removed') {
-							// form.setFieldValue('pdfContract', undefined)
-							setFiles({
-								...files,
-								tasks: undefined
-							})
-						}
-					}}
-					maxCount={1}
-					beforeUpload={file => {
-						const isPdf = file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-						const isLt5M = file.size / 1024 / 1024 < 5 // Проверка на размер меньше 5 МБ
+								setFiles({
+									...files,
+									report: file
+								})
+								return false
+							}}
+							accept={'.docx'}
+							fileList={files.report ? [files.report] : []}
+							className="flex items-center  "
+						>
+							<Button
+								className={`${
+									files.report ? 'opacity-100' : ''
+								} rounded-[20px_20px_20px_20px] h-14 w-[170px] flex justify-start`}
+								icon={<PlusOutlined />}
+							>
+								Загрузить отчёт
+							</Button>
+						</Upload>
+						<Upload
+							maxCount={1}
+							onChange={info => {
+								if (info.file.status === 'removed') {
+									// form.setFieldValue('pdfContract', undefined)
+									setFiles({
+										...files,
+										diary: undefined
+									})
+								}
+							}}
+							beforeUpload={file => {
+								const isPdf = file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+								const isLt5M = file.size / 1024 / 1024 < 5 // Проверка на размер меньше 5 МБ
 
-						if (!isPdf) {
-							message.error('Вы можете загружать только PDF файлы!')
-							return false
-						}
-						if (!isLt5M) {
-							message.error('Файл должен быть меньше 5 МБ!')
-							return false
-						}
+								if (!isPdf) {
+									message.error('Вы можете загружать только PDF файлы!')
+									return false
+								}
+								if (!isLt5M) {
+									message.error('Файл должен быть меньше 5 МБ!')
+									return false
+								}
 
-						setFiles({
-							...files,
-							tasks: file
-						})
-						return false
-					}}
-					accept={'.docx'}
-					fileList={files.tasks ? [files.tasks] : []}
-					className="flex items-center "
-				>
-					<Button  className={`${files.tasks ? 'opacity-100' : ''} rounded-[20px_20px_20px_20px] h-14 w-[170px] flex justify-start`}  icon={<PlusOutlined />}>
-						Загрузить путевку
-					</Button>
-				</Upload>
+								setFiles({
+									...files,
+									diary: file
+								})
+								return false
+							}}
+							accept={'.docx'}
+							fileList={files.diary ? [files.diary] : []}
+							className="flex items-center  "
+						>
+							<Button
+								className={`${
+									files.diary ? 'opacity-100' : ''
+								} rounded-[20px_20px_20px_20px] h-14 w-[170px] flex justify-start`}
+								icon={<PlusOutlined />}
+							>
+								Загрузить дневник
+							</Button>
+						</Upload>
+						<Upload
+							onChange={info => {
+								if (info.file.status === 'removed') {
+									// form.setFieldValue('pdfContract', undefined)
+									setFiles({
+										...files,
+										tasks: undefined
+									})
+								}
+							}}
+							maxCount={1}
+							beforeUpload={file => {
+								const isPdf = file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+								const isLt5M = file.size / 1024 / 1024 < 5 // Проверка на размер меньше 5 МБ
+
+								if (!isPdf) {
+									message.error('Вы можете загружать только PDF файлы!')
+									return false
+								}
+								if (!isLt5M) {
+									message.error('Файл должен быть меньше 5 МБ!')
+									return false
+								}
+
+								setFiles({
+									...files,
+									tasks: file
+								})
+								return false
+							}}
+							accept={'.docx'}
+							fileList={files.tasks ? [files.tasks] : []}
+							className="flex items-center "
+						>
+							<Button
+								className={`${
+									files.tasks ? 'opacity-100' : ''
+								} rounded-[20px_20px_20px_20px] h-14 w-[170px] flex justify-start`}
+								icon={<PlusOutlined />}
+							>
+								Загрузить путевку
+							</Button>
+						</Upload>
+						<Form form={form} className="flex  w-full flex-wrap " onFinish={onFinish}>
+							<div className="w-full flex mt-20">
+								<InputText
+									files={files}
+									text={form.getFieldValue('textArea')}
+									isModal={true}
+									setIsModalOpen={setIsModalOpen}
+									clickTextArea={clickTextArea}
+								/>
+							</div>
+						</Form>
 					</div>
 				</Modal>
 			</section>

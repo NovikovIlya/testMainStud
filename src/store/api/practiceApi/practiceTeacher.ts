@@ -1,6 +1,4 @@
-import { AnyAction } from '@reduxjs/toolkit'
-import { myPractice } from '../../../models/myPractice'
-import { apiSliceStudent } from '../apiSliceStudent'
+import { updateStatus } from '../../../models/myPractice'
 import { apiSliceTeacher } from '../apiSliceTeacher'
 
 export const practiceTeacherService = apiSliceTeacher.injectEndpoints({
@@ -50,6 +48,17 @@ export const practiceTeacherService = apiSliceTeacher.injectEndpoints({
             invalidatesTags: ['practiceTeacher']
           
         }),
+        updateStatus: builder.mutation<any, updateStatus>({
+            query: (body) => {
+                return {
+                    url: `/services/api-teacher-practices/practices/student/status`,
+                    method: 'PATCH',
+                    body
+                }
+            },
+            invalidatesTags: ['practiceTeacher']
+          
+        }),
         
         
     })
@@ -59,6 +68,7 @@ export const {
     useGetAllPracticeTeacherQuery,
     useGetOneGroupQuery,
     useGetChatQuery,
-    useSendMessageMutation
+    useSendMessageMutation,
+    useUpdateStatusMutation
     
 } = practiceTeacherService

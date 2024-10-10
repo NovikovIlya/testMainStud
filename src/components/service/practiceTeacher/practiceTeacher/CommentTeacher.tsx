@@ -72,7 +72,7 @@ export const CommentNewTeacher = ({files, dataChat,isLoading,dataOneLength,refet
 					</Col>
 				</Row> */}
 
-				<div className="space-y-4 h-[460px] overflow-y-auto p-10 bg-[#f5f8fb] rounded-[10px_10px_0px_0px]">
+				<div className="space-y-4 h-[450px] overflow-y-auto p-10 bg-[#f5f8fb] rounded-[10px_10px_0px_0px]">
 					<Button
 							onClick={refetch}
 							className="mb-8 ml-8 absolute top-4 right-4"

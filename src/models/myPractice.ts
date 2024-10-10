@@ -86,3 +86,9 @@ export interface DataMessages {
   diary: any;
   tasks: any;
 }
+
+export interface updateStatus{
+  id: string;
+  grade: string;
+  status: string;
+}

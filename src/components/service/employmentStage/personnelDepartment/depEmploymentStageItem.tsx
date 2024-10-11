@@ -76,7 +76,6 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 											comment: textRef.current,
 											subStageId: props.stage
 										});
-										console.log(textRef.current)
 										dispatch(setSecondStageStatus('ACCEPTED'))
 										dispatch(setSecondStageCommentVisibility('invisible'))
 									}}
@@ -120,7 +119,6 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 											comment: textRef.current,
 											subStageId: props.stage
 										});
-										console.log(textRef.current)
 										dispatch(setThirdStageStatus('ACCEPTED'))
 										dispatch(setThirdStageCommentVisibility('invisible'))
 									}}
@@ -336,7 +334,9 @@ const StageContentComponent = () => {
 				<>
 					{((props.stageStatus === 'REFINE') || (sixStageCommentVisibility.sixStageCommentVisibility === 'visible')) && (
 						<>
-
+							{props.documentArray?.map((document) => (
+								<DocumentElem key={document.id} name={document.docType} />
+							))}
 							<StageComment commentTextBd={props.comment} commentTextState={textRef.current}></StageComment>
 						</>
 					)}

@@ -5,7 +5,7 @@ import { useAppSelector} from '../../../../store'
 import { setCurrentResponce } from '../../../../store/reducers/CurrentResponceSlice'
 import { DepEmploymentStageItem } from './depEmploymentStageItem'
 import { LoadingOutlined } from '@ant-design/icons'
-import { useGetEmploymentStageStatusQuery } from '../../../../store/api/serviceApi'
+import { useGetEmploymentStageStatusQuery, useGetEmploymentReqStageStatusQuery } from '../../../../store/api/serviceApi'
 import { number } from 'yup'
 
 export const EmploymentStageInfo = ( ) => {

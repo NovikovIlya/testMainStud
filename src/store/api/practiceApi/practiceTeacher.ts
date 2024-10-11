@@ -57,6 +57,15 @@ export const practiceTeacherService = apiSliceTeacher.injectEndpoints({
                 }
             },
             invalidatesTags: ['practiceTeacher']
+        }),
+        getStatus: builder.query<any, any>({
+            query: (id) => {
+                return {
+                    url: `/services/api-teacher-practices/practices/student/status?studentId=${id}`,
+                    method: 'GET'
+                }
+            },
+            providesTags: ['practiceTeacher']
           
         }),
         
@@ -69,6 +78,7 @@ export const {
     useGetOneGroupQuery,
     useGetChatQuery,
     useSendMessageMutation,
-    useUpdateStatusMutation
+    useUpdateStatusMutation,
+    useGetStatusQuery
     
 } = practiceTeacherService

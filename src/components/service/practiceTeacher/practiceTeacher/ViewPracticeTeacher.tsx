@@ -26,6 +26,7 @@ import { useGetAllMyPracticesQuery } from '../../../../store/api/practiceApi/myp
 import {
 	useGetChatQuery,
 	useGetOneGroupQuery,
+	useGetStatusQuery,
 	useSendMessageMutation,
 	useUpdateStatusMutation
 } from '../../../../store/api/practiceApi/practiceTeacher'
@@ -36,23 +37,48 @@ import { CommentNewTeacher } from './CommentTeacher'
 import InputText from './InputText'
 import styles from './practiceTeacherStyle.module.scss'
 
-const optionMock = [{ label: 'Зачтено', value: 'Зачтено' }]
+const optionMock = [
+	{ label: 'Ожидает проверки', value: 'Ожидает проверки' },
+	{ label: 'На доработке', value: 'На доработке' },
+	{ label: 'Завершено', value: 'Завершено' }
+]
+const optionMockStatus = [
+	{ label: 'Все', value: 'Все' },
+	{ label: 'Ожидает проверки', value: 'Ожидает проверки' },
+	{ label: 'На доработке', value: 'На доработке' },
+	{ label: 'Завершено', value: 'Завершено' }
+]
+const optionMockGrade = [
+	{ label: '0', value: '0' },
+	{ label: '1', value: '1' },
+	{ label: '2', value: '2' },
+	{ label: '3', value: '3' },
+	{ label: '4', value: '4' },
+	{ label: '5', value: '5' },
+	{ label: '6', value: '6' },
+	{ label: '7', value: '7' },
+	{ label: '8', value: '9' },
+	{ label: '9', value: '9' }
+]
+
+
 
 export const ViewPraciceTeacher = () => {
+	const path = useLocation()
+	const id = path.pathname.split('/').at(-1)!
 	const [files, setFiles] = useState<any>({
 		report: null,
 		diary: null,
 		tasks: null
 	})
 	const user = useAppSelector(state => state.auth.user)
+	const [idStudent, setIdStudent] = useState<any>(null)
+	const { data: dataStatus, isSuccess: isSuccessStatus } = useGetStatusQuery(idStudent, { skip: !idStudent })
 	const [studentName, setStudentName] = useState<any>(null)
 	const [grade, setGrade] = useState<any>(null)
 	const [rowData, setRowData] = useState(null)
 	const [statusStudent, setStatusStudent] = useState<any>(null)
 	const nav = useNavigate()
-	const path = useLocation()
-	const id = path.pathname.split('/').at(-1)!
-	const [idStudent, setIdStudent] = useState<any>(null)
 	const [delay, setDelay] = useState<number | undefined>(250)
 	const [open, setOpen] = useState(false)
 	const [fullTable, setFullTable] = useState(false)
@@ -65,13 +91,13 @@ export const ViewPraciceTeacher = () => {
 		status: 'Все'
 	})
 	const [isModalOpen, setIsModalOpen] = useState(false)
-	const { data: dataAllOrder, isSuccess: isSuccessOrder, isFetching: isLoadingOrder } = useGetOneGroupQuery(id)
+	const { data: dataAllOrder, isSuccess: isSuccessOrder } = useGetOneGroupQuery(id)
 	const isMobile = isMobileDevice()
 	const [dataTable, setDataTable] = useState<any>(dataAllOrder)
-	const {data: dataAllMyPractices,isSuccess: isSuccessMyPractice,isFetching: isFetchingMyPractice} = useGetAllMyPracticesQuery()
+	const {data: dataAllMyPractices,isFetching: isFetchingMyPractice} = useGetAllMyPracticesQuery()
 	const { data: dataChat, isFetching: isFethcingChat, refetch } = useGetChatQuery(idStudent, { skip: !idStudent })
 	const [sendMessageApi, { isLoading }] = useSendMessageMutation()
-	const [updateStatus, {}] = useUpdateStatusMutation()
+	const [updateStatus, {isLoading:isLoadingUpdateStatus}] = useUpdateStatusMutation()
 
 	const columns = [
 		{
@@ -155,11 +181,11 @@ export const ViewPraciceTeacher = () => {
 	]
 	const columnsMini = [
 		{
-			key: 'index',
-			dataIndex: 'index',
+			key: 'number',
+			dataIndex: 'number',
 			title: '№',
 			className: 'text-xs !p-4',
-			render: (text: string, record: any, index: number) => index + 1
+			
 		},
 		{
 			key: 'studentName',
@@ -171,13 +197,19 @@ export const ViewPraciceTeacher = () => {
 			key: 'grade',
 			dataIndex: 'grade',
 			title: 'Оценка',
-			className: 'text-xs !p-4 '
+			className: 'text-xs !p-4 ',
+			render:(record: any, text: any) => {
+				return <div className="">{text?.grade ? text?.grade : 'Нет оценки'}</div>
+			}
 		},
 		{
 			key: 'status',
 			dataIndex: 'status',
 			title: 'Статус',
-			className: 'text-xs !p-4 '
+			className: 'text-xs !p-4 ',
+			render:(record: any, text: any) => {
+				return <div className="">{text?.status ? text?.status : 'Ожидает проверки'}</div>
+			}
 		},
 		{
 			key: 'documents',
@@ -189,12 +221,28 @@ export const ViewPraciceTeacher = () => {
 					<>
 						<div className="!text-xs">Отчет: {text?.isReportSent ? 'Да' : 'Нет'}</div>
 						<div className="!text-xs">Дневник: {text?.isDiarySent ? 'Да' : 'Нет'}</div>
-						<div className="!text-xs">Иное: {text?.areTasksSent ? 'Да' : 'Нет'}</div>
+						<div className="!text-xs">{text?.thirdDocType === 'TASKS'? 'Инд.задания':'Путевка' }: {text?.isThirdDocSent ? 'Да' : 'Нет'}</div>
 					</>
 				)
 			}
 		}
 	]
+
+	useEffect(() => {
+		if (isSuccessStatus) {
+			if(dataStatus?.grade === null){
+				setGrade('')
+			}else{
+				setGrade(dataStatus?.grade)
+			}
+			
+			if(dataStatus?.status === null){
+				setStatusStudent('Ожидает проверки')
+			}else{
+				setStatusStudent(dataStatus?.status)
+			}
+		}
+	}, [isSuccessStatus])
 
 	useEffect(() => {
 		if (isSuccessOrder) {
@@ -216,6 +264,17 @@ export const ViewPraciceTeacher = () => {
 				return elem.course === filter.courseNumber
 			}
 		}
+		function filterStatus(elem: any) {
+
+			if (filter.status === 'Все') {
+				return elem
+			}else if(filter.status === 'Ожидает проверки'){
+				return elem.status === null || elem.status === 'Ожидает проверки'
+			
+			} else {
+				return elem.status === filter.courseNumber
+			}
+		}
 		function filterName(elem: any) {
 			if (filter.name === 'Все') {
 				return elem
@@ -224,18 +283,12 @@ export const ViewPraciceTeacher = () => {
 			}
 		}
 
-		function sortDateFilling(a: any, b: any) {
-			if (filter.dateFilling === 'По дате (сначала новые)') {
-				return +new Date(b.dateFilling) - +new Date(a.dateFilling)
-			}
-			if (filter.dateFilling === 'По дате (сначала старые)') {
-				return +new Date(a.dateFilling) - +new Date(b.dateFilling)
-			}
-			return 0
-		}
 
 		return dataAllOrder
-			? dataAllOrder.filter((elem: any) => filterCourse(elem)).filter((elem: any) => filterName(elem))
+			? dataAllOrder
+			.filter((elem: any) => filterCourse(elem))
+			.filter((elem: any) => filterName(elem))
+			.filter((elem: any) => filterStatus(elem))
 			: []
 	}
 	const changeSelect = (value: any, row: any) => {
@@ -320,7 +373,7 @@ export const ViewPraciceTeacher = () => {
 
 	const handleCancel = () => {
 		setIsModalOpen(false)
-		console.warn('закрыто')
+	
 		form.setFieldsValue({ textArea: '' })
 
 		setText('')
@@ -337,14 +390,16 @@ export const ViewPraciceTeacher = () => {
 			status: statusStudent,
 			grade: grade
 		}
+		
 		updateStatus(obj)
 	}
 
-	const sortedData = dataTable?.length > 0 ? [...dataTable].sort((a: any, b: any) => a.studentName.localeCompare(b.studentName)) : []
+	const sortedData =
+		dataTable?.length > 0 ? [...dataTable].sort((a: any, b: any) => a.studentName.localeCompare(b.studentName)).map((item:any,index:number)=>({...item, number:index+1})) : []
 	const uniqueNames = Array.from(new Set(dataAllOrder?.map((student: any) => student.studentName)))
 
 	if (isFetchingMyPractice) return <Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
-	
+
 	return (
 		<Form form={form}>
 			<section className="container animate-fade-in">
@@ -401,16 +456,17 @@ export const ViewPraciceTeacher = () => {
 								defaultValue={'Все'}
 								popupMatchSelectWidth={false}
 								className="w-full"
-								options={[
-									{ key: 2244612, value: 'Все', label: 'Все' },
-									...(dataAllMyPractices
-										? dataAllMyPractices.map((item: any) => ({
-												key: item.specialty,
-												value: item.specialty,
-												label: item.specialty
-										  }))
-										: [])
-								]}
+								// options={[
+								// 	{ key: 2244612, value: 'Все', label: 'Все' },
+								// 	...(dataAllMyPractices
+								// 		? dataAllMyPractices.map((item: any) => ({
+								// 				key: item.specialty,
+								// 				value: item.specialty,
+								// 				label: item.specialty
+								// 		  }))
+								// 		: [])
+								// ]}
+								options={optionMockStatus}
 								onChange={(value: any) => {
 									setFilter({ ...filter, status: value })
 								}}
@@ -418,46 +474,6 @@ export const ViewPraciceTeacher = () => {
 						</Form.Item>
 					</Col>
 				</Row>
-
-				{/* <Row gutter={[16, 16]} className="mt-4 flex items-center">
-					<Col span={5}>
-						<span>Номер группы</span>
-					</Col>
-					<Col
-						span={7}
-						className="overWrite
-"
-					>
-						<Select
-							popupMatchSelectWidth={false}
-							defaultValue="Все"
-							className="w-full"
-							options={[
-								{ key: 2244612, value: 'Все', label: 'Все' },
-								...uniqueCourseNumbers.map((item: any) => ({ key: item, label: item, value: item }))
-							]}
-							onChange={value => {
-								setFilter({
-									...filter,
-									courseNumber: value
-								})
-							}}
-						/>
-					</Col>
-				</Row> */}
-
-				{/* <Row className="mt-12 flex items-center"> 
-				<Col span={12} flex="50%" className="mobileFirst"> 
-				<Radio.Group defaultValue="compressedView" buttonStyle="solid"> 
-				<Radio.Button onClick={() => setFullTable(false)} value="compressedView" className="!rounded-l-full"> 
-					Посмотреть в сжатом виде 
-				</Radio.Button> 
-				<Radio.Button onClick={() => setFullTable(true)} value="tableView" className="!rounded-r-full"> 
-					Посмотреть данные в таблице 
-				</Radio.Button> 
-				</Radio.Group> 
-				</Col> 
-				</Row> */}
 
 				<Row className="mt-4">
 					<Col flex={'auto'}>
@@ -512,7 +528,7 @@ export const ViewPraciceTeacher = () => {
 								rowKey="id"
 								// @ts-ignore
 								columns={columns}
-								dataSource={dataTable}
+								dataSource={dataTable.map((item:any,index:number)=>({...item, number:index+1}))}
 								pagination={
 									dataTable.length > 10 && {
 										current: currentPage,
@@ -551,12 +567,15 @@ export const ViewPraciceTeacher = () => {
 					width={isMobile ? '100%' : '30%'}
 				>
 					{!isFethcingChat ? (
+					
 						<div className="top-10">
+							<Spin spinning={isLoadingUpdateStatus}>
 							<Form form={form} className="flex  w-full flex-wrap " onFinish={onFinish}>
 								<Row className="flex items-center w-full mb-4">
 									<Col span={5}>Статус</Col>
 									<Col span={19}>
 										<Select
+											value={statusStudent}
 											className="w-full"
 											placeholder={'Выбрать'}
 											options={optionMock}
@@ -567,14 +586,13 @@ export const ViewPraciceTeacher = () => {
 								<Row className="flex items-center w-full">
 									<Col span={5}>Оценка</Col>
 									<Col span={19}>
-										<Form.Item className="  flex-wrap items-center  mb-[0]" name={'gradeForm'}>
-											<Select
-												value={grade}
-												placeholder={'Выбрать'}
-												options={optionMock}
-												onChange={value => setGrade(value)}
-											></Select>
-										</Form.Item>
+										<Select
+											value={grade}
+											placeholder={'Выбрать'}
+											options={optionMockGrade}
+											className="w-full"
+											onChange={value => setGrade(value)}
+										></Select>
 									</Col>
 								</Row>
 								<Row className="flex justify-end w-full mt-2">
@@ -583,6 +601,7 @@ export const ViewPraciceTeacher = () => {
 									</Col>
 								</Row>
 							</Form>
+							</Spin>
 
 							<Divider />
 							<Spin spinning={isLoading}>
@@ -615,21 +634,7 @@ export const ViewPraciceTeacher = () => {
 									<InputText setIsModalOpen={setIsModalOpen} clickTextArea={clickTextArea} />
 								</div>
 							</Form>
-							{/* <div className='w-full flex items-center justify-between  '>
-								<div>{files?.report ?  <FloatButton
-														icon={<FileTextOutlined />}
-														description="Отчет"
-														shape="square"
-														style={{ insetInlineEnd: 24 }}
-														/> : ''}</div>
-								<div>{files?.diary ? <FloatButton
-														icon={<FileTextOutlined />}
-														description="Отчет"
-														shape="square"
-														style={{ insetInlineEnd: 124 }}
-														/>: ''}</div>
-								<div>{files?.tasks ? 'Иное загружено' : ''}</div>
-							</div> */}
+							
 						</div>
 					) : (
 						<>

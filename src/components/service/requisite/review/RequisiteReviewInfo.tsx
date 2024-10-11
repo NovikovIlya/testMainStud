@@ -26,7 +26,6 @@ export const RequisiteReviewInfo = () => {
 	const stagesArray = requisite_items?.stages || [] // массив массивов c этапами
 	const sortedStages = stagesArray.flat().sort((a, b) => a.id - b.id) // сортирую потому что приходит вперемешку
 
-
 	if (loading) {
 		return (
 			<>
@@ -65,6 +64,7 @@ export const RequisiteReviewInfo = () => {
 							stage={6}
 							comment={sortedStages[4].comment}
 							stageStatus={sortedStages[4].status}
+							documentArray={sortedStages[4].documents}
 						/>
 					)}
 				</div>

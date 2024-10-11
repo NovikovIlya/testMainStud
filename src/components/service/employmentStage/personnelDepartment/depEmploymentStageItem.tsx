@@ -21,10 +21,17 @@ import {
 	setSixStageCommentVisibility
 } from '../../../../store/reducers/EmploymentStageReducers/comments/SixStageCommentVisibilitySlice'
 
+interface Document {
+	id: number
+	docType: string
+	status: 'ATTACHED' | 'NOT_ATTACHED'
+}
+
 interface DepEmploymentStageItemProps {
 	stage: number
 	stageStatus: string
 	comment: string
+	documentArray: Document[] | undefined
 }
 
 export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
@@ -69,6 +76,7 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 											comment: textRef.current,
 											subStageId: props.stage
 										});
+										console.log(textRef.current)
 										dispatch(setSecondStageStatus('ACCEPTED'))
 										dispatch(setSecondStageCommentVisibility('invisible'))
 									}}
@@ -112,6 +120,7 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 											comment: textRef.current,
 											subStageId: props.stage
 										});
+										console.log(textRef.current)
 										dispatch(setThirdStageStatus('ACCEPTED'))
 										dispatch(setThirdStageCommentVisibility('invisible'))
 									}}
@@ -275,11 +284,11 @@ const StageContentComponent = () => {
 		<>
 			{(props.stage === 2) && (
 				<>
-					<div className="flex flex-row gap-[40px] pr-[150px]">
-
-					</div>
 					{((props.stageStatus === 'REFINE') || (secondStageCommentVisibility.secondStageCommentVisibility === 'visible')) && (
 						<>
+							{props.documentArray?.map((document) => (
+								<DocumentElem key={document.id} name={document.docType} />
+							))}
 							<StageComment commentTextBd={props.comment} commentTextState={textRef.current}></StageComment>
 						</>
 					)}
@@ -300,11 +309,11 @@ const StageContentComponent = () => {
 			)}
 			{(props.stage === 4) && (
 				<>
-					<div className="flex flex-row gap-[40px] pr-[150px]">
-
-					</div>
 					{((props.stageStatus === 'REFINE') || (forthStageCommentVisibility.forthStageCommentVisibility === 'visible')) && (
 						<>
+							{props.documentArray?.map((document) => (
+								<DocumentElem key={document.id} name={document.docType} />
+							))}
 							<StageComment commentTextBd={props.comment} commentTextState={textRef.current}></StageComment>
 						</>
 					)}
@@ -325,11 +334,9 @@ const StageContentComponent = () => {
 			)}
 			{(props.stage === 6) && (
 				<>
-					<div className="flex flex-row gap-[40px] pr-[150px]">
-
-					</div>
 					{((props.stageStatus === 'REFINE') || (sixStageCommentVisibility.sixStageCommentVisibility === 'visible')) && (
 						<>
+
 							<StageComment commentTextBd={props.comment} commentTextState={textRef.current}></StageComment>
 						</>
 					)}
@@ -377,7 +384,7 @@ const StageStatusModal = () => {
 										changeStatus({
 											status: 'REFINE',
 											comment: textRef.current,
-											subStageId: props.stage - 2
+											subStageId: props.stage
 										})
 										dispatch(setSecondStageStatus('REFINE'))
 										dispatch(setSecondStageCommentVisibility('visible'))
@@ -395,7 +402,7 @@ const StageStatusModal = () => {
 										changeStatus({
 											status: 'REFINE',
 											comment: textRef.current,
-											subStageId: props.stage - 2
+											subStageId: props.stage
 										});
 										dispatch(setThirdStageStatus('REFINE'))
 										dispatch(setThirdStageCommentVisibility('visible'))
@@ -413,7 +420,7 @@ const StageStatusModal = () => {
 										changeStatus({
 											status: 'REFINE',
 											comment: textRef.current,
-											subStageId: props.stage - 2
+											subStageId: props.stage
 										});
 										dispatch(setForthStageStatus('REFINE'))
 										dispatch(setForthStageCommentVisibility('visible'))
@@ -431,7 +438,7 @@ const StageStatusModal = () => {
 										changeStatus({
 											status: 'REFINE',
 											comment: textRef.current,
-											subStageId: props.stage - 2
+											subStageId: props.stage
 										});
 										dispatch(setFifthStageStatus('REFINE'))
 										dispatch(setFifthStageCommentVisibility('visible'))
@@ -449,7 +456,7 @@ const StageStatusModal = () => {
 									changeStatus({
 										status: 'REFINE',
 										comment: textRef.current,
-										subStageId: props.stage - 2
+										subStageId: props.stage
 									});
 									dispatch(setSixStageStatus('REFINE'))
 									dispatch(setSixStageCommentVisibility('visible'))

@@ -18,7 +18,10 @@ import { setRespondId } from '../../../store/reducers/CurrentRespondIdSlice'
 import { setCurrentVacancyId } from '../../../store/reducers/CurrentVacancyIdSlice'
 import { setCurrentVacancyName } from '../../../store/reducers/CurrentVacancyNameSlice'
 import { setChatId } from '../../../store/reducers/chatIdSlice'
-import { respondStatus } from '../../../store/reducers/type'
+import {
+	ChatMessageDateDisplayEnum,
+	respondStatus
+} from '../../../store/reducers/type'
 
 export const ChatEmpDempPreview = (props: {
 	chatId: number
@@ -96,8 +99,10 @@ export const ChatEmpDempPreview = (props: {
 						<div className="flex flex-col ml-auto">
 							<p className=" font-content-font font-normal text-black text-[12px]/[14.4px] opacity-[52%]">
 								{props.lastMessageDate.substring(8, 10) +
-									'.' +
-									props.lastMessageDate.substring(5, 7) +
+									' ' +
+									ChatMessageDateDisplayEnum[
+										parseInt(props.lastMessageDate.substring(5, 7)) - 1
+									].substring(0, 3) +
 									' ' +
 									props.lastMessageDate.substring(11, 16)}
 							</p>

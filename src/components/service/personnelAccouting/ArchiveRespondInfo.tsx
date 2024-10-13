@@ -342,6 +342,14 @@ export const ArchiveRespondInfo = (props: {
 									</>
 								))}
 							</div>
+							{res.respondData.portfolio.url !== '' && (
+								<div className="grid grid-cols-[164px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
+									<p>Ссылка на портфолио:</p>
+									<a href={res.respondData.portfolio.url} target="_blank">
+										{res.respondData.portfolio.url}
+									</a>
+								</div>
+							)}
 						</div>
 						<hr />
 						<div className="flex flex-col gap-[24px]">

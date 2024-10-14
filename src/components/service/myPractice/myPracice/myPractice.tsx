@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { useGetAllMyPracticesQuery } from '../../../../store/api/practiceApi/mypractice'
 import { useGetAllOrderQuery } from '../../../../store/api/practiceApi/representation'
-import { render } from 'react-dom'
+
 
 export const MyPractice = () => {
 	const [fullTable, setFullTable] = useState(false)
@@ -70,9 +70,11 @@ export const MyPractice = () => {
 			key: 'grade',
 			dataIndex: 'grade',
 			title: 'Оценка',
-			className: 'text-xs !p-2'
+			className: 'text-xs !p-2',
+			render: (text: any, record: any, index: any) => <div>{record?.grade ? record?.grade : 'Нет оценки'}</div>
 		}
 	]
+	
 	const columnsMini = [
 		{
 			key: 'specialty',
@@ -99,13 +101,12 @@ export const MyPractice = () => {
 			title: 'Тип',
 			className: 'text-xs !p-4 mobileFirst'
 		},
-
 		{
 			key: 'grade',
 			dataIndex: 'grade',
 			title: 'Оценка',
 			className: 'text-xs !p-4',
-			
+			render: (text: any, record: any, index: any) => <div>{record?.grade ? record?.grade : 'Нет оценки'}</div>	
 		}
 	]
 
@@ -216,27 +217,6 @@ export const MyPractice = () => {
 						</Radio.Group>
 					</Col>
 				</Row>
-
-				{/* Сортировка  */}
-				{/* <Row gutter={[16, 16]} className="mt-4">
-						<Col span={7} offset={17}>
-							<div className={'flex gap-2 items-center'}>
-								<span className={'mr-2'}>Сортировка</span>
-								<Select
-									popupMatchSelectWidth={false}
-									defaultValue=""
-									className="w-full"
-									options={optionsSortDate}
-									onChange={value => {
-										setFilter({
-											...filter,
-											dateFilling: value
-										})
-									}}
-								/>
-							</div>
-						</Col>
-					</Row> */}
 
 				<Row className="mt-4">
 					<Col flex={'auto'}>

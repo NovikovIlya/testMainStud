@@ -82,7 +82,6 @@ export const ViewAll = () => {
 	const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
 	const { data: dataDepartments, isSuccess: isSuccessDepartments } = useGetSubdivisionForPracticeQuery()
 	const { data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty } = useGetSpecialtyNamesForPractiseQuery(subDevisionId, {skip:!subDevisionId})
-	const { data: dataDep, isSuccess: isSuccessDep } = useGetCafDepartmentsQuery(subDevisionId,{ skip: !subDevisionId })
 	const { data: dataPracticeType, isSuccess: isSuccessPracticeType } = useGetPracticeTypeForPracticeQuery(objType, {skip: objType.subDivisionId === null || !objType.specialtyNameId })
 	const {data:dataGroupNumberNew} = useGetGroupNumbersNewQuery(subDevisionId,{ skip: !subDevisionId })
 	const {data:dataGetCafedraNew} = useGetCafedraNewQuery(subDevisionId,{ skip: !subDevisionId })
@@ -628,7 +627,7 @@ export const ViewAll = () => {
 								popupMatchSelectWidth={false}
 								defaultValue="Все"
 								className="w-full"
-								options={uniqueCourseNumbers.map((item)=>({key: item, value: item, label: item}))}
+								options={['Все'].concat(uniqueCourseNumbers).map((item)=>({key: item, value: item, label: item}))}
 								onChange={value => {
 									handleCourse(value)
 									setFilter({
@@ -669,7 +668,7 @@ export const ViewAll = () => {
 
 					<Col span={5} className='flex items-center overWrite'>
 						<span className='w-40'>Тип практики</span>
-						<Form.Item name={'practiceType'} className='mb-[-4px] w-full items-center'>
+						<Form.Item name={'practiceType'} className='mb-[-4px] max-w-[220px] min-w-[220px]  items-center'>
 						<Select
 							disabled={!pickSpeciality}
 							popupMatchSelectWidth={false}

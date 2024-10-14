@@ -392,6 +392,7 @@ export type InterviewRequestType = {
 	respondId: number
 	date: string
 	format: string
+	address: string
 }
 
 export type InterviewItemType = {

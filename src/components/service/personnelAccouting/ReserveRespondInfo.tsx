@@ -100,7 +100,7 @@ export const ReserveRespondInfo = (props: {
 			</>
 		)
 	} else {
-		if (res.type === 'RESERVE') {
+		if (res.type === 'RESPOND') {
 			return (
 				<>
 					<ConfigProvider

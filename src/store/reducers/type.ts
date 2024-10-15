@@ -291,7 +291,7 @@ export type VacancyRespondItemType = {
 		| 'ARCHIVE'
 	recipient: string
 	desiredJob: string
-	type: 'DIRECTLY' | 'RESERVE'
+	type: 'RESUME' | 'RESPOND'
 	url: string
 	userData: null | {
 		firstname: string

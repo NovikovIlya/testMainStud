@@ -21,6 +21,13 @@ export const MyPractice = () => {
 	const {data: dataAllOrder,isSuccess: isSuccessOrder,isFetching: isLoadingOrder} = useGetAllOrderQuery({ subdivisionId: selectSubdivisionId, page: currentPage - 1, size: '5' },{ skip: !selectSubdivisionId || !currentPage })
 	const [dataTable, setDataTable] = useState<any>([])
 	const {data: dataAllMyPractices,isSuccess: isSuccessMyPractice,isFetching: isFetchingMyPractice} = useGetAllMyPracticesQuery()
+
+	useEffect(() => {
+		if (isSuccessMyPractice) {
+			setDataTable(filterDataFull())
+		}
+	}, [filter, isSuccessMyPractice])
+
 	const columns = [
 		{
 			key: 'specialty',
@@ -74,7 +81,7 @@ export const MyPractice = () => {
 			render: (text: any, record: any, index: any) => <div>{record?.grade ? record?.grade : 'Нет оценки'}</div>
 		}
 	]
-	
+
 	const columnsMini = [
 		{
 			key: 'specialty',
@@ -109,12 +116,6 @@ export const MyPractice = () => {
 			render: (text: any, record: any, index: any) => <div>{record?.grade ? record?.grade : 'Нет оценки'}</div>	
 		}
 	]
-
-	useEffect(() => {
-		if (isSuccessMyPractice) {
-			setDataTable(filterDataFull())
-		}
-	}, [filter, isSuccessMyPractice])
 
 	function filterDataFull() {
 		function filterCourse(elem: any) {
@@ -227,7 +228,6 @@ export const MyPractice = () => {
 									onClick: () => handleRowClick(record)
 								})}
 								rowKey="id"
-								// @ts-ignore
 								columns={columnsMini}
 								dataSource={dataTable ? dataTable : []}
 								pagination={
@@ -248,7 +248,6 @@ export const MyPractice = () => {
 								})}
 								size="large"
 								rowKey="id"
-								// @ts-ignore
 								columns={columns}
 								dataSource={dataTable}
 								pagination={

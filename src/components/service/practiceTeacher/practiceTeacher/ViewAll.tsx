@@ -8,6 +8,7 @@ import {
 	Space,
 	Spin,
 	Table,
+	Tooltip,
 	TreeSelect
 } from 'antd'
 import dayjs from 'dayjs'
@@ -36,8 +37,6 @@ import { OptionsNameSpecialty } from '../../practices/roster/registerContracts/R
 import { useGetAllPracticeTeacherQuery } from '../../../../store/api/practiceApi/practiceTeacher'
 
 const optionYears = [
-	// {value:'Учебный год (по убыванию)'},
-	// {value:'Учебный год (по возрастанию)'},
 	{value:'Все'},
 	{value:'Текущие'},
 	{value:'Прошедшие'}
@@ -46,9 +45,6 @@ const optionYears = [
 const optionYearsTwo = [
 	{value:'Учебный год (по убыванию)'},
 	{value:'Учебный год (по возрастанию)'},
-	// {value:'Все'},
-	// {value:'Прошедшие'},
-	// {value:'Текущие'}
 ]
 
 export const ViewAll = () => {
@@ -84,12 +80,9 @@ export const ViewAll = () => {
 	const { data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty } = useGetSpecialtyNamesForPractiseQuery(subDevisionId, {skip:!subDevisionId})
 	const { data: dataPracticeType, isSuccess: isSuccessPracticeType } = useGetPracticeTypeForPracticeQuery(objType, {skip: objType.subDivisionId === null || !objType.specialtyNameId })
 	const {data:dataGroupNumberNew} = useGetGroupNumbersNewQuery(subDevisionId,{ skip: !subDevisionId })
-	const {data:dataGetCafedraNew} = useGetCafedraNewQuery(subDevisionId,{ skip: !subDevisionId })
 	const [treeLine, setTreeLine] = useState(true);
     const [showLeafIcon, setShowLeafIcon] = useState(false);
     const [value, setValue] = useState<any>();
-
-	
 
 	const columns = [
 		{
@@ -244,7 +237,6 @@ export const ViewAll = () => {
 		}
 	}, [filter, isSuccessPractiseAll])
 
-	// объект для типа практик
 	useEffect(() => {
 	
 		if (isSuccessNameSpecialty && subDevisionId && isSuccessNameSpecialty) {
@@ -262,7 +254,6 @@ export const ViewAll = () => {
 		}
 	}, [isSuccessNameSpecialty, form, pickSpeciality])
 
-	// если выбираем курс "Все" то семестр тоже "Все"
 	useEffect(()=>{
 		if(pickCourse === 'Все'){
 		
@@ -272,6 +263,7 @@ export const ViewAll = () => {
 			})
 		}
 	},[pickCourse])
+
 
 	function filterDataFull() {
 		function filterPracticeType(elem: any) {
@@ -375,7 +367,6 @@ export const ViewAll = () => {
 					.sort((a:any, b:any) => sortDateFilling(a, b))
 			: []
 	}
-
 	const handleChange = (value: string) => {
 		departments?.find(elem => {
 			if (elem.label === value) {
@@ -400,7 +391,6 @@ export const ViewAll = () => {
 		form.setFieldValue('semester', '')
 	}
 	
-
 	const optionsCourseValid = (() => {
 		switch (pickCourse) {
 			case 1:
@@ -444,7 +434,6 @@ export const ViewAll = () => {
 		}
 	})()
 	
-
 	const handleRowClick = (record: any) => {
 		navigate(`/services/practiceteacher/edit/${record.id}`)
 	}
@@ -533,8 +522,8 @@ export const ViewAll = () => {
 						name={'nameSpecialty'}
 						className='mb-[-4px]'
 					>
-						<Select
-							disabled={filter.subdivision==='Все'}
+						<Tooltip title={filter.subdivision==='Все' ? 'Выберите подразделение' : ''}><Select
+							disabled={filter.subdivision==='Все' || !filter.subdivision}
 							popupMatchSelectWidth={false}
 							defaultValue="Все"
 							className="w-full"
@@ -555,7 +544,7 @@ export const ViewAll = () => {
 									nameSpecialty: value
 								})
 							}}
-						/>
+						/></Tooltip>
 						</Form.Item>
 					</Col>
 	
@@ -568,9 +557,9 @@ export const ViewAll = () => {
 					</Col>
 					<Col span={8} className='overWrite'>
 					<Form.Item name={'groupNumber'} className='mb-[-4px]'>
-						<Select
+					<Tooltip title={filter.subdivision==='Все' ? 'Выберите подразделение' : ''}><Select
 
-							disabled={filter.subdivision==='Все'}
+							disabled={filter.subdivision==='Все' || !filter.subdivision}
 							popupMatchSelectWidth={false}
 							defaultValue="Все"
 							className="w-full"
@@ -590,7 +579,7 @@ export const ViewAll = () => {
 									groupNumber: value
 								})
 							}}
-						/>
+						/></Tooltip>
 						</Form.Item>
 					</Col>
 				</Row>
@@ -696,28 +685,11 @@ export const ViewAll = () => {
 				</Row>
 			</Form>
 			<Row className='flex justify-end'>
-				{/* <Col span={8}  className='mobileFirst mt-4'>
-                    <div className={'flex gap-2 items-center'}>
-                        <span className={'mr-2'}>Отображать по времени</span>
-                        <Select
-                            popupMatchSelectWidth={false}
-                            value={filter.dateFilling}
-                            className="w-full"
-                            options={optionYears}
-                            onChange={value => {
-                                setFilter({
-                                    ...filter,
-                                    dateFilling: value
-                                })
-                            }}
-                        />
-                    </div>
-
-                </Col> */}
-				<Col span={8}  className='mobileFirst mt-4'>
-                    <div className={'flex gap-2 items-center'}>
+				
+				<Col span={8}  className='mobileFirst mt-4 '>
+                    <div className={'flex gap-2 items-center justify-end '}>
                         <span className={'mr-2'}>Сортировка</span>
-                        <Select
+                        <div className='w-[228px] flex justify-end'><Select
                             popupMatchSelectWidth={false}
                             value={filter.dateYear}
                             className="w-full"
@@ -728,7 +700,7 @@ export const ViewAll = () => {
                                     dateYear: value
                                 })
                             }}
-                        />
+                        /></div>
                     </div>
 
                 </Col>

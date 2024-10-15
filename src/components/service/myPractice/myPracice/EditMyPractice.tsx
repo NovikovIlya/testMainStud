@@ -211,7 +211,7 @@ export const EditMyPractice = () => {
 									<Col xs={24} md={24} span={24}>
 										<Card title={<div className='flex gap-3 items-center'><Znak />Обратите внимание</div>} bordered={false}>
 										<ul className='pl-5 pr-5 '>
-											<li className='mb-3'>Отчет должен заполняться самостоятельно.В модуле “Практики студентов” формируется только титульный лист отчета.</li>
+											<li className='mb-3'>Отчет должен заполняться самостоятельно. В модуле “Практики студентов” формируется только титульный лист отчета.</li>
 											
 										</ul>
 										</Card>

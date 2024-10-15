@@ -91,10 +91,10 @@ export const ViewPraciceTeacher = () => {
 		status: 'Все'
 	})
 	const [isModalOpen, setIsModalOpen] = useState(false)
-	const { data: dataAllOrder, isSuccess: isSuccessOrder } = useGetOneGroupQuery(id)
+	const { data: dataAllOrder, isSuccess: isSuccessOrder,isFetching:isFetchingMyPractice } = useGetOneGroupQuery(id,{  refetchOnMountOrArgChange: true})
 	const isMobile = isMobileDevice()
 	const [dataTable, setDataTable] = useState<any>(dataAllOrder)
-	const {data: dataAllMyPractices,isFetching: isFetchingMyPractice} = useGetAllMyPracticesQuery()
+	// const {data: dataAllMyPractices,isFetching: isFetchingMyPractice} = useGetAllMyPracticesQuery()
 	const { data: dataChat, isFetching: isFethcingChat, refetch } = useGetChatQuery(idStudent, { skip: !idStudent })
 	const [sendMessageApi, { isLoading }] = useSendMessageMutation()
 	const [updateStatus, {isLoading:isLoadingUpdateStatus}] = useUpdateStatusMutation()
@@ -242,13 +242,13 @@ export const ViewPraciceTeacher = () => {
 				setStatusStudent(dataStatus?.status)
 			}
 		}
-	}, [isSuccessStatus])
-
+	}, [dataStatus?.grade, dataStatus?.status, isSuccessStatus])
+	
 	useEffect(() => {
 		if (isSuccessOrder) {
 			setDataTable(filterDataFull())
 		}
-	}, [filter, isSuccessOrder])
+	}, [filter, isSuccessOrder,dataAllOrder])
 
 	useTimeout(() => {
 		if (delay !== 250) {
@@ -398,10 +398,11 @@ export const ViewPraciceTeacher = () => {
 		dataTable?.length > 0 ? [...dataTable].sort((a: any, b: any) => a.studentName.localeCompare(b.studentName)).map((item:any,index:number)=>({...item, number:index+1})) : []
 	const uniqueNames = Array.from(new Set(dataAllOrder?.map((student: any) => student.studentName)))
 
-	if (isFetchingMyPractice) return <Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
+	// if (isFetchingMyPractice) return <Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
 
 	return (
 		<Form form={form}>
+			<Spin spinning={isFetchingMyPractice}>
 			<section className="container animate-fade-in">
 				<Space size={10} align="center">
 					<Button
@@ -797,6 +798,8 @@ export const ViewPraciceTeacher = () => {
 					</div>
 				</Modal>
 			</section>
+			</Spin>
+			
 		</Form>
 	)
 }

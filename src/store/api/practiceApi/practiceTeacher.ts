@@ -2,7 +2,6 @@ import { updateStatus } from '../../../models/myPractice'
 import { apiSliceTeacher } from '../apiSliceTeacher'
 
 export const practiceTeacherService = apiSliceTeacher.injectEndpoints({
-
     endpoints: builder => ({
         getAllPracticeTeacher: builder.query<any, void>({
             query: () => {
@@ -25,7 +24,6 @@ export const practiceTeacherService = apiSliceTeacher.injectEndpoints({
           
         }),
         getChat: builder.query<any, any>({
- 
             query: (id) => {
                 return {
                     url: `/services/api-teacher-practices/chat/${id}`,
@@ -67,9 +65,7 @@ export const practiceTeacherService = apiSliceTeacher.injectEndpoints({
             },
             providesTags: ['practiceTeacher']
           
-        }),
-        
-        
+    }),
     })
 })
 

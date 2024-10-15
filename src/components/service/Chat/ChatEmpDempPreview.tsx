@@ -97,15 +97,17 @@ export const ChatEmpDempPreview = (props: {
 							</p>
 						</div>
 						<div className="flex flex-col ml-auto">
-							<p className=" font-content-font font-normal text-black text-[12px]/[14.4px] opacity-[52%]">
-								{props.lastMessageDate.substring(8, 10) +
-									' ' +
-									ChatMessageDateDisplayEnum[
-										parseInt(props.lastMessageDate.substring(5, 7)) - 1
-									].substring(0, 3) +
-									' ' +
-									props.lastMessageDate.substring(11, 16)}
-							</p>
+							{props.lastMessageDate && (
+								<p className=" font-content-font font-normal text-black text-[12px]/[14.4px] opacity-[52%]">
+									{props.lastMessageDate.substring(8, 10) +
+										' ' +
+										ChatMessageDateDisplayEnum[
+											parseInt(props.lastMessageDate.substring(5, 7)) - 1
+										].substring(0, 3) +
+										' ' +
+										props.lastMessageDate.substring(11, 16)}
+								</p>
+							)}
 
 							{props.unreadCount !== 0 && !isChatOpen && (
 								<Badge

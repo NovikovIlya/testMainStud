@@ -6,6 +6,7 @@ import {
 	Divider,
 	Drawer,
 	Form,
+	Input,
 	Modal,
 	Row,
 	Select,
@@ -36,6 +37,8 @@ import { isMobileDevice } from '../../../../utils/hooks/useIsMobile'
 import { CommentNewTeacher } from './CommentTeacher'
 import InputText from './InputText'
 import styles from './practiceTeacherStyle.module.scss'
+import ModalReport from './ModalReport'
+import ModalStudent from './ModalStudent'
 
 const optionMock = [
 	{ label: 'Ожидает проверки', value: 'Ожидает проверки' },
@@ -50,15 +53,15 @@ const optionMockStatus = [
 ]
 const optionMockGrade = [
 	{ label: '0', value: '0' },
-	{ label: '1', value: '1' },
+	{ label: 'Не зачтено', value: 'Не зачтено' },
 	{ label: '2', value: '2' },
 	{ label: '3', value: '3' },
 	{ label: '4', value: '4' },
 	{ label: '5', value: '5' },
-	{ label: '6', value: '6' },
-	{ label: '7', value: '7' },
-	{ label: '8', value: '9' },
-	{ label: '9', value: '9' }
+	{ label: 'зачтено', value: 'зачтено' },
+	{ label: 'освобожден', value: 'освобожден' },
+	{ label: 'Отсутствие по уважительной', value: 'Отсутствие по уважительной' },
+	{ label: 'Отсутствие по неуважительной', value: 'Отсутствие по неуважительной' }
 ]
 
 
@@ -81,6 +84,8 @@ export const ViewPraciceTeacher = () => {
 	const nav = useNavigate()
 	const [delay, setDelay] = useState<number | undefined>(250)
 	const [open, setOpen] = useState(false)
+	const [openModalReport,setIsModalOpenReport] = useState(false)
+	const [openModalStudent,setIsModalStudent] = useState(false)
 	const [fullTable, setFullTable] = useState(false)
 	const [currentPage, setCurrentPage] = useState(1)
 	const [form] = Form.useForm()
@@ -94,7 +99,6 @@ export const ViewPraciceTeacher = () => {
 	const { data: dataAllOrder, isSuccess: isSuccessOrder,isFetching:isFetchingMyPractice } = useGetOneGroupQuery(id,{  refetchOnMountOrArgChange: true})
 	const isMobile = isMobileDevice()
 	const [dataTable, setDataTable] = useState<any>(dataAllOrder)
-	// const {data: dataAllMyPractices,isFetching: isFetchingMyPractice} = useGetAllMyPracticesQuery()
 	const { data: dataChat, isFetching: isFethcingChat, refetch } = useGetChatQuery(idStudent, { skip: !idStudent })
 	const [sendMessageApi, { isLoading }] = useSendMessageMutation()
 	const [updateStatus, {isLoading:isLoadingUpdateStatus}] = useUpdateStatusMutation()
@@ -199,7 +203,7 @@ export const ViewPraciceTeacher = () => {
 			title: 'Оценка',
 			className: 'text-xs !p-4 ',
 			render:(record: any, text: any) => {
-				return <div className="">{text?.grade ? text?.grade : 'Нет оценки'}</div>
+				return <div className="">{text?.grade ? <div>{text?.grade}{text?.reason ? ` (${text?.reason})` : ''}</div>  : 'Не оценено'}</div>
 			}
 		},
 		{
@@ -219,9 +223,9 @@ export const ViewPraciceTeacher = () => {
 			render: (record: any, text: any) => {
 				return (
 					<>
-						<div className="!text-xs">Отчет: {text?.isReportSent ? 'Да' : 'Нет'}</div>
-						<div className="!text-xs">Дневник: {text?.isDiarySent ? 'Да' : 'Нет'}</div>
-						<div className="!text-xs">{text?.thirdDocType === 'TASKS'? 'Инд.задания':'Путевка' }: {text?.isThirdDocSent ? 'Да' : 'Нет'}</div>
+						<div className="!text-xs">Отчет: {text?.isReportSent ? 'Отправлено' : 'Не отправлено'}</div>
+						<div className="!text-xs">Дневник: {text?.isDiarySent ? 'Отправлено' : 'Не отправлено'}</div>
+						<div className="!text-xs">{text?.thirdDocType === 'TASKS'? 'Инд.задания':'Путевка' }: {text?.isThirdDocSent ? 'Отправлено' : 'Не отправлено'}</div>
 					</>
 				)
 			}
@@ -230,6 +234,7 @@ export const ViewPraciceTeacher = () => {
 
 	useEffect(() => {
 		if (isSuccessStatus) {
+			form.setFieldValue('reasonText', dataStatus?.reason)
 			if(dataStatus?.grade === null){
 				setGrade('')
 			}else{
@@ -388,10 +393,18 @@ export const ViewPraciceTeacher = () => {
 		const obj = {
 			id: idStudent,
 			status: statusStudent,
-			grade: grade
+			grade: grade,
+			reason: form.getFieldValue('reasonText') 
 		}
 		
 		updateStatus(obj)
+	}
+	const openReportModal=()=>{
+		setIsModalOpenReport(true)
+	}
+
+	const openStudentModal=()=>{
+		setIsModalStudent(true)
 	}
 
 	const sortedData =
@@ -444,6 +457,9 @@ export const ViewPraciceTeacher = () => {
 								}}
 							/>
 						</Form.Item>
+					</Col>
+					<Col className='flex justify-end' span={12}>
+						<Button onClick={openReportModal}>Сформировать отчет</Button>
 					</Col>
 				</Row>
 
@@ -572,6 +588,7 @@ export const ViewPraciceTeacher = () => {
 						<div className="top-10">
 							<Spin spinning={isLoadingUpdateStatus}>
 							<Form form={form} className="flex  w-full flex-wrap " onFinish={onFinish}>
+								<Button onClick={openStudentModal}>Открыть</Button>
 								<Row className="flex items-center w-full mb-4">
 									<Col span={5}>Статус</Col>
 									<Col span={19}>
@@ -596,6 +613,20 @@ export const ViewPraciceTeacher = () => {
 										></Select>
 									</Col>
 								</Row>
+								{grade === 'освобожден'?<Row className="flex items-center w-full mt-4">
+									<Col span={5}>Причина</Col>
+									<Col span={19}>
+										<Form.Item className='w-full mb-0' name={'reasonText'}>
+											<Input
+											
+												placeholder={'Напишите причину'}
+												maxLength={20}
+												className="w-full"
+												
+											/>
+										</Form.Item>
+									</Col>
+								</Row>:''}
 								<Row className="flex justify-end w-full mt-2">
 									<Col>
 										<Button onClick={updateStatusFn}>Сохранить</Button>
@@ -797,6 +828,10 @@ export const ViewPraciceTeacher = () => {
 						</Form>
 					</div>
 				</Modal>
+				
+				<ModalReport setIsModalOpenReport={setIsModalOpenReport} handleOk={handleOk} openModalReport={openModalReport}/>
+
+				<ModalStudent setIsModalStudent={setIsModalStudent} handleOk={handleOk} openModalStudent={openModalStudent}/>
 			</section>
 			</Spin>
 			

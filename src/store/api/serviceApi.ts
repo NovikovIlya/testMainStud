@@ -410,6 +410,20 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}))
 			}
 		}),
+		getSeekerResumeFile: builder.query<{ href: string; size: number }, number>({
+			query: id => ({
+				url: `http://localhost:8082/employment-api/v1/resume/${id}/file`,
+				headers: { Authorization: `Bearer ${personnelDeparmentToken}` },
+				responseHandler: async res => {
+					const data = await res.blob()
+					const file = new Blob([data], {
+						type: res.headers.get('content-type') as string
+					})
+					return { href: window.URL.createObjectURL(file), size: file.size }
+				}
+			}),
+			keepUnusedDataFor: 0
+		}),
 		postPhone: builder.mutation({
 			query: phone => {
 				return {
@@ -1066,5 +1080,7 @@ export const {
 	useSendEmploymentDocsMutation,
 	useChangeCardStatusRequestMutation,
 	useAgreeToWorkingConditionsMutation,
-	useSetHasNoRequisitesOnEmploymentMutation
+	useSetHasNoRequisitesOnEmploymentMutation,
+	useGetSeekerResumeFileQuery,
+	useLazyGetSeekerResumeFileQuery
 } = serviceApi

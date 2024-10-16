@@ -224,6 +224,8 @@ export type RespondItemType = {
 	id: number
 	vacancyId: number
 	name: string
+	desiredJob: string
+	type: 'RESPOND' | 'RESUME'
 	respondDate: string
 	status: string
 	employmentStageStatus: string

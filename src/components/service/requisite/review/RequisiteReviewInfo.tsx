@@ -22,9 +22,9 @@ export const RequisiteReviewInfo = () => {
 	const id = parseInt(userIdStr, 10)
 
 	const { data: req_data, isLoading : loading } = useGetEmploymentReqStageStatusQuery({ respondId: id })
-
+	console.log(req_data)
 	const stagesArray = req_data?.stages || [] // массив массивов c этапами
-	console.log(stagesArray)
+
 	if (loading) {
 		return (
 			<>

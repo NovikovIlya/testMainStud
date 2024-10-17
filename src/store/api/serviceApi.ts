@@ -973,7 +973,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 				url: `http://localhost:8082/employment-api/v1/management/employment/sub-stage/${arg.fileId}`,
 				method: 'GET',
 				headers: {
-					Authorization: `Bearer ${supervisorToken}`
+					Authorization: `Bearer ${personnelDeparmentToken}`
 				}
 			})
 		}),

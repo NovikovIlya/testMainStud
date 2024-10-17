@@ -285,7 +285,7 @@ const StageContentComponent = () => {
 			{(props.stage === 2) && (
 				<>
 					{props.documentArray?.map((document) => (
-						<DocumentElem key={document.id} name={document.docType} />
+						<DocumentElem key={document.id} name={document.docType}  id={document.id}/>
 					))}
 					{((props.stageStatus === 'REFINE') || (secondStageCommentVisibility.secondStageCommentVisibility === 'visible')) && (
 						<>
@@ -310,7 +310,7 @@ const StageContentComponent = () => {
 			{(props.stage === 4) && (
 				<>
 					{props.documentArray?.map((document) => (
-						<DocumentElem key={document.id} name={document.docType} />
+						<DocumentElem key={document.id} name={document.docType} id={document.id}/>
 					))}
 					{((props.stageStatus === 'REFINE') || (forthStageCommentVisibility.forthStageCommentVisibility === 'visible')) && (
 						<>
@@ -335,7 +335,7 @@ const StageContentComponent = () => {
 			{(props.stage === 6) && (
 				<>
 					{props.documentArray?.map((document) => (
-						<DocumentElem key={document.id} name={document.docType} />
+						<DocumentElem key={document.id} name={document.docType} id={document.id}/>
 					))}
 					{((props.stageStatus === 'REFINE') || (sixStageCommentVisibility.sixStageCommentVisibility === 'visible')) && (
 						<>

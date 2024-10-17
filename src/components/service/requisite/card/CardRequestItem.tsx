@@ -26,7 +26,7 @@ export const CardRequestItem = ( props : CardRequisiteDocumentsProps ) => {
 		return (
 			<div className="flex flex-row gap-[40px] pr-[150px]">
 				{props.documentArray?.map((document) => (
-					<DocumentElem key={document.id} name={document.docType} />
+					<DocumentElem key={document.id} name={document.docType} id={document.id}/>
 				))}
 			</div>
 		)

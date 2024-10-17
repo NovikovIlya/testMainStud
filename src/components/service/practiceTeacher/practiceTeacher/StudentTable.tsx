@@ -102,15 +102,15 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
 	if (editable) {
 		childNode = editing ? (
 			<Form.Item style={{ margin: 0 }} name={dataIndex} >
-				<Select options={optionMock} className="" size={'large'} allowClear onChange={save} />
+				<Select options={optionMock} className="w-32" size={'large'} allowClear onChange={save} />
 			</Form.Item>
 		) : (
-			// <div className="editable-cell-value-wrap w-[320px] h-10" style={{ paddingInlineEnd: 24 }} onClick={toggleEdit}>
-			// 	{children}
-			// </div>
-            <Form.Item style={{ margin: 0 }} name={dataIndex} >
-				<Select options={optionMock} className="" size={'large'} allowClear onChange={save} />
-			</Form.Item>
+			<div className="editable-cell-value-wrap flex items-center h-10"  onClick={toggleEdit}>
+				{children}
+			</div>
+            // <Form.Item style={{ margin: 0 }} name={dataIndex} >
+			// 	<Select options={optionMock} className="w-32" size={'large'} allowClear onChange={save} />
+			// </Form.Item>
 		)
 	}
 
@@ -132,17 +132,18 @@ const StudentTable = ({ setShow,dataSource ,setDataSource}: any) => {
 			render: (text: any, record: any, index: any) => <div>{record.number}</div>
 		},
 		{
-			title: 'Индивидуальные задания',
+			title: 'Компетенции',
 			dataIndex: 'name',
 			width: '30%'
 		},
 		{
-			title: 'Уровень',
+			title: 'Уровень сформированности компетенции',
 			dataIndex: 'level',
-			editable: true
+			editable: true,
+           
 		},
 		{
-			title: 'Оценка руководителя',
+			title: 'Оценка руководителя практики за компетенции',
 			dataIndex: 'grade',
 			editable: true
 		}

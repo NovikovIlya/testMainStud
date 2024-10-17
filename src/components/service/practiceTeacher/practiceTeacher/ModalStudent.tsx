@@ -40,12 +40,13 @@ const ModalStudent = ({ openModalStudent, handleOk, setIsModalStudent }: any) =>
 	const [form] = Form.useForm()
 
 	const onFinish = (values: any) => {
-        console.log('dataSource',dataSource)
+        console.warn('123')
+        console.table(dataSource)
 		console.log('Success:', values)
 	}
 
     const handleCancelModal = () => {
-        if(form.getFieldValue('dop') || form.getFieldValue('date') || form.getFieldValue('final')){
+        if(form.getFieldValue('rep') || form.getFieldValue('date') || form.getFieldValue('gradeKFU') || form.getFieldValue('gradeProf')){
             const yes = typeof window !== 'undefined' && window.confirm("Если вы закроете окно, данные не сохраняться. Вы хотите продолжить?");
             if(yes) {
                 form.resetFields()
@@ -62,8 +63,8 @@ const ModalStudent = ({ openModalStudent, handleOk, setIsModalStudent }: any) =>
 	return (
 		<Modal
 			title="Сформируйте отчет по студенту"
-			width={650}
-			style={{ paddingBottom: '150px' }}
+			width={900}
+			style={{ paddingBottom: '150px'}}
 			open={openModalStudent}
 			onOk={handleOk}
 			onCancel={handleCancelModal}
@@ -73,32 +74,34 @@ const ModalStudent = ({ openModalStudent, handleOk, setIsModalStudent }: any) =>
 				<Form onFinish={onFinish} form={form}>
 					<Row>
 						<Col span={12}>
-							<span>Дополнительная информация</span>
+							<span>Отзыв руководителя практики</span>
 						</Col>
 						<Col span={12}>
-							<Form.Item name={'dop'}>
+							<Form.Item name={'rep'}>
+								<Input.TextArea maxLength={100} placeholder="Ввести" />
+							</Form.Item>
+						</Col>
+					</Row>
+
+					
+
+					<Row>
+						<Col span={12}>
+							<span>Оценка руководителя практики от КФУ</span>
+						</Col>
+						<Col span={12}>
+							<Form.Item name={'gradeKFU'}>
 								<Input placeholder="Ввести" />
 							</Form.Item>
 						</Col>
 					</Row>
 
-					<Row>
+                    <Row>
 						<Col span={12}>
-							<span>Даты приема зачета</span>
+							<span>Оценка руководителя практики от проф.организации</span>
 						</Col>
 						<Col span={12}>
-							<Form.Item name={'date'}>
-								<DatePicker className="w-full" format="DD.MM.YYYY" />
-							</Form.Item>
-						</Col>
-					</Row>
-
-					<Row>
-						<Col span={12}>
-							<span>Выводы</span>
-						</Col>
-						<Col span={12}>
-							<Form.Item name={'final'}>
+							<Form.Item name={'gradeProf'}>
 								<Input placeholder="Ввести" />
 							</Form.Item>
 						</Col>

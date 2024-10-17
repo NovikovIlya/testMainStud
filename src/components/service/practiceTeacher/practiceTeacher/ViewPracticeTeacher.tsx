@@ -578,7 +578,10 @@ export const ViewPraciceTeacher = () => {
 					title={
 						<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
 							<span>{studentName}</span>
-							<Button type="text" icon={<CloseOutlined />} onClick={onClose} />
+							<div className='flex gap-3'>
+								<Button type='primary' onClick={openStudentModal}>Отчет</Button>
+								<Button type="text" icon={<CloseOutlined />} onClick={onClose} />
+							</div>
 						</div>
 					}
 					width={isMobile ? '100%' : '30%'}
@@ -588,7 +591,7 @@ export const ViewPraciceTeacher = () => {
 						<div className="top-10">
 							<Spin spinning={isLoadingUpdateStatus}>
 							<Form form={form} className="flex  w-full flex-wrap " onFinish={onFinish}>
-								<Button onClick={openStudentModal}>Открыть</Button>
+								
 								<Row className="flex items-center w-full mb-4">
 									<Col span={5}>Статус</Col>
 									<Col span={19}>
@@ -613,7 +616,7 @@ export const ViewPraciceTeacher = () => {
 										></Select>
 									</Col>
 								</Row>
-								{grade === 'освобожден'?<Row className="flex items-center w-full mt-4">
+								{grade === 'освобожден'|| grade === 'Отсутствие по уважительной'|| grade === 'Отсутствие по неуважительной'?<Row className="flex items-center w-full mt-4">
 									<Col span={5}>Причина</Col>
 									<Col span={19}>
 										<Form.Item className='w-full mb-0' name={'reasonText'}>

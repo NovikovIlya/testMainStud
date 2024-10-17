@@ -955,6 +955,19 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
+		changeEmploymentStageAccountingStatusRequest: builder.mutation<void, ChangeStageStatusType & { subStageId: number }> ( {
+			query: arg => ({
+				url: `http://localhost:8082/employment-api/v1/management/employment/sub-stage/${arg.subStageId}`,
+				method: 'PUT',
+				headers: {
+					Authorization: `Bearer ${accountingToken}`
+				},
+				body: {
+					status: arg.status,
+					comment: arg.comment,
+				}
+			})
+		}),
 		downloadEmploymentStageFile: builder.query<Blob, { fileId : number }> ({
 			query: arg => ({
 				url: `http://localhost:8082/employment-api/v1/management/employment/sub-stage/${arg.fileId}`,
@@ -966,10 +979,10 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		changeCardStatusRequest: builder.mutation<void, {subStageId: number}> ({
 			query: arg => ({
-				url: `hhtp://localhost:8082//employment-api/v1/management/employment/sub-stage/${arg.subStageId}/has-requisites`,
+				url: `http://localhost:8082/employment-api/v1/management/employment/sub-stage/${arg.subStageId}/has-requisites`,
 				method: 'PATCH',
 				headers: {
-					Authorization: `Bearer ${personnelDeparmentToken}`
+					Authorization: `Bearer ${accountingToken}`
 				}
 			})
 		}),
@@ -1064,4 +1077,5 @@ export const {
 	useSendEmploymentDocsMutation,
 	useChangeCardStatusRequestMutation,
 	useGetEmploymentReqStageStatusQuery,
+	useChangeEmploymentStageAccountingStatusRequestMutation,
 } = serviceApi

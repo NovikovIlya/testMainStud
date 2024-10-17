@@ -24,7 +24,7 @@ export const RequisiteReviewInfo = () => {
 	const { data: req_data, isLoading : loading } = useGetEmploymentReqStageStatusQuery({ respondId: id })
 
 	const stagesArray = req_data?.stages || [] // массив массивов c этапами
-	console.log(stagesArray[0])
+	console.log(stagesArray)
 	if (loading) {
 		return (
 			<>

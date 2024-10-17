@@ -6,7 +6,6 @@ import { setCurrentResponce } from '../../../../store/reducers/CurrentResponceSl
 import { DepEmploymentStageItem } from './depEmploymentStageItem'
 import { LoadingOutlined } from '@ant-design/icons'
 import { useGetEmploymentStageStatusQuery, useGetEmploymentReqStageStatusQuery } from '../../../../store/api/serviceApi'
-import { number } from 'yup'
 
 export const EmploymentStageInfo = ( ) => {
 
@@ -25,7 +24,6 @@ export const EmploymentStageInfo = ( ) => {
 
 	const stagesArray = requisite_items?.stages || [] // массив массивов c этапами
 	const sortedStages = stagesArray.flat().sort((a, b) => a.id - b.id) // сортирую потому что приходит вперемешку
-	console.log(sortedStages)
 
 	if (loading) {
 		return (

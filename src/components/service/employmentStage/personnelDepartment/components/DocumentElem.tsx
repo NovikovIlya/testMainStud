@@ -25,7 +25,7 @@ export const DocumentElem = (props: DocumentElemProps) => {
 
 	return (
 		<button
-			className="flex flex-row w-[388px] justify-between cursor-pointer bg-white border-none
+			className="flex flex-row w-[50%] justify-between cursor-pointer bg-white border-none
       hover:opacity-[80%]"
 			onClick={() => {
 				if (fileBlob) {

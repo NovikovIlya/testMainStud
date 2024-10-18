@@ -162,7 +162,7 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
 
 type ColumnTypes = Exclude<TableProps['columns'], undefined>
 
-const StudentTable = ({ setShow,dataSource ,setDataSource}: any) => {
+const StudentTable = ({ setShow,dataSource ,setDataSource,setIsEdit}: any) => {
 
 	const defaultColumns: (ColumnTypes[number] & { editable?: boolean; dataIndex: string })[] = [
 		{
@@ -191,6 +191,7 @@ const StudentTable = ({ setShow,dataSource ,setDataSource}: any) => {
 	]
 
 	const handleSave = (row: any) => {
+		setIsEdit(true)
 		console.log('row',row)
 		const newData = [...dataSource]
         console.warn('newData',newData)

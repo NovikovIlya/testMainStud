@@ -47,16 +47,18 @@ const selectOptions=[
 const ModalStudent = ({rowData, openModalStudent, handleOk, setIsModalStudent }: any) => {
     const [dataSource,setDataSource] = useState(mockData)
 	const [selectGrade,setSelectGrade] = useState(null)
+	const [isEdit,setIsEdit] = useState(false)
 	const [form] = Form.useForm()
 
 	const onFinish = (values: any) => {
         console.warn('123')
         console.table(dataSource)
 		console.log('Success:', values)
+		setIsEdit(false)
 	}
 
     const handleCancelModal = () => {
-        if(form.getFieldValue('rep') || form.getFieldValue('date') || form.getFieldValue('gradeKFUProh') ||  form.getFieldValue('gradeKFUReport') | form.getFieldValue('gradeProf')){
+        if(isEdit || form.getFieldValue('rep') || form.getFieldValue('date') || form.getFieldValue('gradeKFUProh') ||  form.getFieldValue('gradeKFUReport') | form.getFieldValue('gradeProf')){
             const yes = typeof window !== 'undefined' && window.confirm("Если вы закроете окно, данные не сохраняться. Вы хотите продолжить?");
             if(yes) {
                 form.resetFields()
@@ -65,6 +67,7 @@ const ModalStudent = ({rowData, openModalStudent, handleOk, setIsModalStudent }:
                 return
             }
         }
+	
 		setIsModalStudent(false)
 	
 		
@@ -153,7 +156,7 @@ const ModalStudent = ({rowData, openModalStudent, handleOk, setIsModalStudent }:
 					}
 
                     <Row>
-                        <StudentTable dataSource={dataSource} setDataSource={setDataSource}/>
+                        <StudentTable setIsEdit={setIsEdit} dataSource={dataSource} setDataSource={setDataSource}/>
                     </Row>
 
 					<div className="flex justify-end mt-5">

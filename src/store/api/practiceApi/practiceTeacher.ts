@@ -63,8 +63,7 @@ export const practiceTeacherService = apiSliceTeacher.injectEndpoints({
                     method: 'GET'
                 }
             },
-            providesTags: ['practiceTeacher']
-          
+            providesTags: ['practiceTeacher']        
     }),
     })
 })

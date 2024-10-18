@@ -1,4 +1,4 @@
-import { CloseOutlined, LoadingOutlined, PlusOutlined } from '@ant-design/icons'
+import { CloseOutlined, LoadingOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons'
 import { useTimeout } from 'ahooks'
 import {
 	Button,
@@ -64,8 +64,6 @@ const optionMockGrade = [
 	{ label: 'Отсутствие по неуважительной', value: 'Отсутствие по неуважительной' }
 ]
 
-
-
 export const ViewPraciceTeacher = () => {
 	const path = useLocation()
 	const id = path.pathname.split('/').at(-1)!
@@ -96,13 +94,13 @@ export const ViewPraciceTeacher = () => {
 		status: 'Все'
 	})
 	const [isModalOpen, setIsModalOpen] = useState(false)
-	const { data: dataAllOrder, isSuccess: isSuccessOrder,isFetching:isFetchingMyPractice } = useGetOneGroupQuery(id,{  refetchOnMountOrArgChange: true})
+	const { data: dataAllOrder, isSuccess: isSuccessOrder,isFetching:isFetchingMyPractice,refetch:refetchAll } = useGetOneGroupQuery(id,{  refetchOnMountOrArgChange: true})
 	const isMobile = isMobileDevice()
 	const [dataTable, setDataTable] = useState<any>(dataAllOrder)
 	const { data: dataChat, isFetching: isFethcingChat, refetch } = useGetChatQuery(idStudent, { skip: !idStudent })
 	const [sendMessageApi, { isLoading }] = useSendMessageMutation()
 	const [updateStatus, {isLoading:isLoadingUpdateStatus}] = useUpdateStatusMutation()
-
+	
 	const columns = [
 		{
 			key: 'index',
@@ -229,6 +227,19 @@ export const ViewPraciceTeacher = () => {
 					</>
 				)
 			}
+		},
+		{
+			key: 'report',
+			dataIndex: 'report',
+			title: 'Наличие отчета',
+			className: 'text-xs !p-4 ',
+			render: (record: any, text: any) => {
+				return (
+					<>
+						<Button onClick={()=>modalButton(text)} className='p-5'>Отчет не сформирован</Button>
+					</>
+				)
+			}
 		}
 	]
 
@@ -255,6 +266,16 @@ export const ViewPraciceTeacher = () => {
 		}
 	}, [filter, isSuccessOrder,dataAllOrder])
 
+	useEffect(()=>{
+		if(openModalStudent){
+			// @ts-ignore
+			document.querySelector('body')?.classList.add('heigh100');	
+		}else{
+			//@ts-ignore
+			document.querySelector('body')?.classList.remove('heigh100');
+		}
+	},[openModalStudent])
+
 	useTimeout(() => {
 		if (delay !== 250) {
 			showDrawer()
@@ -277,7 +298,7 @@ export const ViewPraciceTeacher = () => {
 				return elem.status === null || elem.status === 'Ожидает проверки'
 			
 			} else {
-				return elem.status === filter.courseNumber
+				return elem.status === filter.status
 			}
 		}
 		function filterName(elem: any) {
@@ -327,6 +348,10 @@ export const ViewPraciceTeacher = () => {
 	}
 	const onClose = () => {
 		setOpen(false)
+	}
+	const modalButton = (value:any)=>{
+		setRowData(value)
+		openStudentModal()
 	}
 
 	const clickTextArea = () => {
@@ -404,6 +429,7 @@ export const ViewPraciceTeacher = () => {
 	}
 
 	const openStudentModal=()=>{
+		onClose()
 		setIsModalStudent(true)
 	}
 
@@ -411,7 +437,7 @@ export const ViewPraciceTeacher = () => {
 		dataTable?.length > 0 ? [...dataTable].sort((a: any, b: any) => a.studentName.localeCompare(b.studentName)).map((item:any,index:number)=>({...item, number:index+1})) : []
 	const uniqueNames = Array.from(new Set(dataAllOrder?.map((student: any) => student.studentName)))
 
-	// if (isFetchingMyPractice) return <Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
+	
 
 	return (
 		<Form form={form}>
@@ -490,6 +516,20 @@ export const ViewPraciceTeacher = () => {
 							/>
 						</Form.Item>
 					</Col>
+					<Col className='flex justify-end' span={12}>
+						<Button >Отправить в деканат</Button>
+					</Col>
+				</Row>
+				<Row>
+					<Col className='flex justify-end' span={24}>
+						<Button
+						onClick={refetchAll}
+						className=""
+						size="large"
+						shape="circle"
+						icon={<ReloadOutlined />}
+						/>
+					</Col>
 				</Row>
 
 				<Row className="mt-4">
@@ -500,7 +540,7 @@ export const ViewPraciceTeacher = () => {
 									onRow={record => ({
 										onClick: e => {
 											// @ts-ignore
-											if (e.target.closest('.ant-select')) {
+											if (e.target.closest('.ant-btn')) {
 												return
 											}
 											// @ts-ignore
@@ -834,7 +874,7 @@ export const ViewPraciceTeacher = () => {
 				
 				<ModalReport setIsModalOpenReport={setIsModalOpenReport} handleOk={handleOk} openModalReport={openModalReport}/>
 
-				<ModalStudent setIsModalStudent={setIsModalStudent} handleOk={handleOk} openModalStudent={openModalStudent}/>
+				<ModalStudent rowData={rowData} setIsModalStudent={setIsModalStudent} handleOk={handleOk} openModalStudent={openModalStudent}/>
 			</section>
 			</Spin>
 			

@@ -27,6 +27,28 @@ const optionMock = [
 		label: 'Ниже порогового уровня'
 	}
 ]
+const optionMockTwo = [
+	{
+		value: '1',
+		label: '1'
+	},
+	{
+		value: '2',
+		label: '2'
+	},
+	{
+		value: '3',
+		label: '3'
+	},
+	{
+		value: '4',
+		label: '4'
+	},
+	{
+		value: '5',
+		label: '5'
+	}
+]
 
 
 interface Item {
@@ -85,33 +107,52 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
 
 
 
-	const save = async(date: any) => {
+	const save = async(value: any) => {
+		console.log('date',value)
         try {
             const values = await form.validateFields();
       
-            toggleEdit();
-            handleSave({ ...record, ...values });
+            // toggleEdit();
+            handleSave({ ...record, [dataIndex]: value });
           } catch (errInfo) {
             console.log('Save failed:', errInfo);
           }
 		
 	}
-
+	
 	let childNode = children
 
+	// if (editable) {
+	// 	childNode = editing ? (
+	// 		<Form.Item style={{ margin: 0 }} name={dataIndex} >
+	// 			<Select options={optionMock} className="w-32" size={'large'} allowClear onChange={save} />
+	// 		</Form.Item>
+	// 	) : (
+	// 		<div className="editable-cell-value-wrap flex items-center h-10"  onClick={toggleEdit}>
+	// 			{children}
+	// 		</div>
+         
+	// 	)
+	// }
 	if (editable) {
-		childNode = editing ? (
+		//@ts-ignore
+		if(dataIndex==='grade'){
+			childNode = (
+				<Form.Item style={{ margin: 0 }} name={dataIndex} >
+					 <Select  defaultValue={(record as any).grade} options={optionMockTwo} className="w-32" size={'large'} allowClear onChange={save} />
+				</Form.Item>
+			) 
+		}else{
+		childNode = (
 			<Form.Item style={{ margin: 0 }} name={dataIndex} >
-				<Select options={optionMock} className="w-32" size={'large'} allowClear onChange={save} />
+				 <Select  defaultValue={(record as any).level} options={optionMock} className="w-32" size={'large'} allowClear onChange={save} />
 			</Form.Item>
-		) : (
-			<div className="editable-cell-value-wrap flex items-center h-10"  onClick={toggleEdit}>
-				{children}
-			</div>
+		) 
             // <Form.Item style={{ margin: 0 }} name={dataIndex} >
 			// 	<Select options={optionMock} className="w-32" size={'large'} allowClear onChange={save} />
 			// </Form.Item>
-		)
+		}
+		
 	}
 
 	return <td {...restProps}>{childNode}</td>
@@ -150,8 +191,10 @@ const StudentTable = ({ setShow,dataSource ,setDataSource}: any) => {
 	]
 
 	const handleSave = (row: any) => {
+		console.log('row',row)
 		const newData = [...dataSource]
         console.warn('newData',newData)
+		console.table(newData)
 		const index = newData.findIndex(item => row.key === item.key)
 		const item = newData[index]
 		newData.splice(index, 1, {
@@ -188,7 +231,7 @@ const StudentTable = ({ setShow,dataSource ,setDataSource}: any) => {
 	})
 
 	return (
-		<div>
+		<div className='mt-5'>
 			<Table
 				components={components}
 				rowClassName={() => 'editable-row'}

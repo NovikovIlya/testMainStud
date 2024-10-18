@@ -1,5 +1,5 @@
-import { LoadingOutlined } from '@ant-design/icons'
-import { Badge, Col, Form, Radio, Row, Select, Spin, Table, Typography } from 'antd'
+import { LoadingOutlined, ReloadOutlined } from '@ant-design/icons'
+import { Badge, Button, Col, Form, Radio, Row, Select, Spin, Table, Typography } from 'antd'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -20,7 +20,7 @@ export const MyPractice = () => {
 	const [selectSubdivisionId, setSelectSubdivisionId] = useState(null)
 	const {data: dataAllOrder,isSuccess: isSuccessOrder,isFetching: isLoadingOrder} = useGetAllOrderQuery({ subdivisionId: selectSubdivisionId, page: currentPage - 1, size: '5' },{ skip: !selectSubdivisionId || !currentPage })
 	const [dataTable, setDataTable] = useState<any>([])
-	const {data: dataAllMyPractices,isSuccess: isSuccessMyPractice,isFetching: isFetchingMyPractice} = useGetAllMyPracticesQuery()
+	const {data: dataAllMyPractices,isSuccess: isSuccessMyPractice,isFetching: isFetchingMyPractice,refetch} = useGetAllMyPracticesQuery()
 
 	useEffect(() => {
 		if (isSuccessMyPractice) {
@@ -144,6 +144,7 @@ export const MyPractice = () => {
 
 	const uniqueCourseNumbers = [...new Set(dataTable?.map((item: any) => item.course))]
 
+
 	if(isFetchingMyPractice)return(<Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />)
 	
 	return (
@@ -216,6 +217,15 @@ export const MyPractice = () => {
 								Посмотреть данные в таблице
 							</Radio.Button>
 						</Radio.Group>
+					</Col>
+					<Col className='flex justify-end' span={12}>
+						<Button
+						onClick={refetch}
+						className=""
+						size="large"
+						shape="circle"
+						icon={<ReloadOutlined />}
+						/>
 					</Col>
 				</Row>
 

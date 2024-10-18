@@ -15,6 +15,7 @@ body {
 	
 }
 
+
 @layer utilities {
 	*::-webkit-scrollbar {
 		width: 16px; /* Ширина вертикального скролла */
@@ -219,3 +220,6 @@ body {
 }
 
 
+.heigh100{
+	height: 100vh
+}

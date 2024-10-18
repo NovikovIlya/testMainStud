@@ -120,6 +120,7 @@ import { Representation } from './Representation/Representation'
 import { PracticeOrder } from './practice-order/PracticeOrder'
 import { Appendix } from './appendix/Appendix'
 import { QuestionCircleOutlined } from '@ant-design/icons'
+import { Finally } from './finally/finally'
 
 type MenuItem = Required<MenuProps>['items'][number]
 
@@ -159,6 +160,10 @@ export const NavPractices = () => {
 			getItem('Представление в приказ', 'representation'),
 			getItem('Приказ по практике', 'practiceOrder'),
 			getItem('Приложение 4', 'appendix')
+		]),
+		getItem('Итоговая проверка', 'sub22', <PracticesSvg />, [
+			getItem('Итоговая проверка', 'finally'),
+			
 		]),
 		getItem(<Button className='opacity-70 mt-3'  onClick={() => setOpen(true)}>Пройти обучение</Button>, 'sub3', <QuestionCircleOutlined className='invisible absolute top-1/2 -translate-y-1/2 right-4 '/>),
 		// getItem('Cогласование документов', 'sub4', <PracticesSvg />, [
@@ -285,7 +290,7 @@ export const NavPractices = () => {
 		<>
 			<Header type={"service"} service={t("Practices")}/>
 			<Menu
-				defaultOpenKeys={['sub1','sub2']}
+				defaultOpenKeys={['sub1','sub2','sub22']}
 				selectedKeys={[current]}
 				defaultActiveFirst
 				mode="inline"
@@ -312,6 +317,7 @@ export const NavPractices = () => {
 				{current === 'representation' && <Representation/>}
 				{current === 'practiceOrder' && <PracticeOrder/>}
 				{current === 'appendix' && <Appendix/>}
+				{current === 'finally' && <Finally/>}
 				
 				<Tour  open={open} onClose={() => setOpen(false)} steps={steps} />
 			</div>

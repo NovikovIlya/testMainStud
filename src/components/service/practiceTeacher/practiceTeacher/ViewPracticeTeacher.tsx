@@ -266,15 +266,15 @@ export const ViewPraciceTeacher = () => {
 		}
 	}, [filter, isSuccessOrder,dataAllOrder])
 
-	useEffect(()=>{
-		if(openModalStudent){
-			// @ts-ignore
-			document.querySelector('body')?.classList.add('heigh100');	
-		}else{
-			//@ts-ignore
-			document.querySelector('body')?.classList.remove('heigh100');
-		}
-	},[openModalStudent])
+	// useEffect(()=>{
+	// 	if(openModalStudent){
+	// 		// @ts-ignore
+	// 		document.querySelector('body')?.classList.add('heigh100');	
+	// 	}else{
+	// 		//@ts-ignore
+	// 		document.querySelector('body')?.classList.remove('heigh100');
+	// 	}
+	// },[openModalStudent])
 
 	useTimeout(() => {
 		if (delay !== 250) {

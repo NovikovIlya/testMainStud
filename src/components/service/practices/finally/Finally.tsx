@@ -2,9 +2,10 @@
 import {useLocation} from "react-router-dom";
 
 
-import CreateFinally from "./createFinally";
+import CreateFinally from "./CreateFinally";
 import EditFinnaly from "./EditFinnaly";
-import ViewFinally from "./ViewFinally";
+import {ViewFinally} from "./ViewFinally";
+import ViewPraciceTeacher from "./ViewPracticeTeacher";
 
 
 
@@ -13,7 +14,7 @@ export const Finally = () => {
 	if (pathname.includes('createAppendix')) {
 		return < CreateFinally/>
 	}  else if (pathname.includes('edit')){
-		return <EditFinnaly/>
+		return <ViewPraciceTeacher/>
 	}else {
 		return <ViewFinally/>
 	}

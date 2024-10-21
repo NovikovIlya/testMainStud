@@ -645,7 +645,7 @@ export const ViewAll = () => {
 					<Col span={4} className='flex items-center overWrite'>
 						<span className='w-20'>Семестр</span>
 			
-						<Form.Item
+						<Tooltip title={filter.course==='Все' ? 'Выберите курс' : ''}><Form.Item
 							className='mb-[-4px] w-full items-center'
 							style={{marginBottom:'0'}}
 							//rules={[{required: true}]}
@@ -666,12 +666,12 @@ export const ViewAll = () => {
 								className="w-full "
 								options={optionsCourseValid}
 							/>
-						</Form.Item>
+						</Form.Item></Tooltip>
 					</Col>
 
 					<Col span={5} className='flex items-center overWrite'>
 						<span className='w-40'>Тип практики</span>
-						<Form.Item name={'practiceType'} className='mb-[-4px] max-w-[220px] min-w-[220px]  items-center'>
+						<Tooltip title={filter.nameSpecialty==='Все' ? 'Выберите специальносиь' : ''}><Form.Item name={'practiceType'} className='mb-[-4px] max-w-[220px] min-w-[220px]  items-center'>
 						<Select
 							disabled={!pickSpeciality}
 							popupMatchSelectWidth={false}
@@ -694,7 +694,7 @@ export const ViewAll = () => {
 								})
 							}}
 						/>
-						</Form.Item>
+						</Form.Item></Tooltip>
 					</Col>
 				</Row>
 			</Form>

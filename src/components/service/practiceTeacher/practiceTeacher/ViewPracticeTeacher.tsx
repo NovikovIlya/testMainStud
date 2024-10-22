@@ -22,7 +22,7 @@ import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { Vector } from '../../../../assets/svg/Vector'
-import { useAppSelector } from '../../../../store'
+import { useAppDispatch, useAppSelector } from '../../../../store'
 import { useGetAllMyPracticesQuery } from '../../../../store/api/practiceApi/mypractice'
 import {
 	useGetChatQuery,
@@ -40,6 +40,7 @@ import InputText from './InputText'
 import styles from './practiceTeacherStyle.module.scss'
 import ModalReport from './ModalReport'
 import ModalStudent from './ModalStudent'
+import { apiSliceTeacher } from '../../../../store/api/apiSliceTeacher'
 
 const optionMock = [
 	{ label: 'Ожидает проверки', value: 'Ожидает проверки' },
@@ -102,8 +103,8 @@ export const ViewPraciceTeacher = () => {
 	const { data: dataChat, isFetching: isFethcingChat, refetch } = useGetChatQuery(idStudent, { skip: !idStudent })
 	const [sendMessageApi, { isLoading }] = useSendMessageMutation()
 	const [updateStatus, {isLoading:isLoadingUpdateStatus}] = useUpdateStatusMutation()
-	const {data:dataCompetences,isSuccess:isSuccessCompetences,isFetching:isFetchingComp,refetch:refechComp} = useGetCompetencesQuery({studentId :idStudent,orderId:id},{skip:!idStudent})
-	
+	const {data:dataCompetences,isSuccess:isSuccessCompetences,isFetching:isFetchingComp,refetch:refechComp} = useGetCompetencesQuery({studentId :idStudent,orderId:id},{refetchOnMountOrArgChange: true })
+	const dispatch = useAppDispatch()
 	const columns = [
 		{
 			key: 'index',
@@ -362,11 +363,22 @@ export const ViewPraciceTeacher = () => {
 		setOpen(false)
 	}
 	const modalButton = (value:any)=>{
+		if(value.id===idStudent){
+			console.log('был')
+			// window.location.reload()
+			refechComp()
+			
+			dispatch(apiSliceTeacher.util.resetApiState())
+		
+		}
+	
+		refetchAll()
 		console.log('value',value)
 		setRowData(value)
 		setIdStudent(value.id)
 		openStudentModal()
-		refechComp()
+		
+		
 	}
 	
 	const clickTextArea = () => {
@@ -912,7 +924,7 @@ export const ViewPraciceTeacher = () => {
 				
 				<ModalReport setIsModalOpenReport={setIsModalOpenReport} handleOk={handleOk} openModalReport={openModalReport}/>
 
-				<ModalStudent dataAllOrder={dataAllOrder} isFetchingComp={isFetchingComp} id={id} idStudent={idStudent} isSuccessCompetences={isSuccessCompetences} dataCompetences={dataCompetences} rowData={rowData} setIsModalStudent={setIsModalStudent} handleOk={handleOk} openModalStudent={openModalStudent}/>
+				<ModalStudent  dataAllOrder={dataAllOrder} isFetchingComp={isFetchingComp} id={id} idStudent={idStudent} isSuccessCompetences={isSuccessCompetences} dataCompetences={dataCompetences} rowData={rowData} setIsModalStudent={setIsModalStudent} handleOk={handleOk} openModalStudent={openModalStudent}/>
 			</section>
 			</Spin>
 			

@@ -62,12 +62,18 @@ const ModalStudent = ({dataAllOrder,isFetchingComp,id,idStudent,isSuccessCompete
 	// 	}
 	// },[isSuccessCompetences,dataCompetences])
 	console.log('dataSource',dataSource)
+	console.log('dataCompetences',dataCompetences)
 	useEffect(() => {
 		if (dataCompetences && dataCompetences.length > 0) {
 		  setDataSource([...dataCompetences]);
 		}
 	  }, [dataCompetences]);
-	  
+
+	// useEffect(() => {
+	// 	if (dataCompetences && dataCompetences.length > 0) {
+	// 	setDataSource([...dataCompetences]);
+	// 	}	
+	// }, [openModalStudent]);
 	  
 
 	const handleSave = (row: any) => {
@@ -109,15 +115,15 @@ const ModalStudent = ({dataAllOrder,isFetchingComp,id,idStudent,isSuccessCompete
 	}
 
     const handleCancelModal = () => {
-        if(isEdit || form.getFieldValue('rep') || form.getFieldValue('date') || form.getFieldValue('gradeKFUProh') ||  form.getFieldValue('gradeKFUReport') | form.getFieldValue('gradeProf')){
-            const yes = typeof window !== 'undefined' && window.confirm("Если вы закроете окно, данные не сохраняться. Вы хотите продолжить?");
-            if(yes) {
-                form.resetFields()
-                setIsModalStudent(false)
-            } else {
-                return
-            }
-        }
+        // if(isEdit || form.getFieldValue('rep') || form.getFieldValue('date') || form.getFieldValue('gradeKFUProh') ||  form.getFieldValue('gradeKFUReport') | form.getFieldValue('gradeProf')){
+        //     const yes = typeof window !== 'undefined' && window.confirm("Если вы закроете окно, данные не сохраняться. Вы хотите продолжить?");
+        //     if(yes) {
+        //         form.resetFields()
+        //         setIsModalStudent(false)
+        //     } else {
+        //         return
+        //     }
+        // }
 	
 		setIsModalStudent(false)
 		setDataSource([]);

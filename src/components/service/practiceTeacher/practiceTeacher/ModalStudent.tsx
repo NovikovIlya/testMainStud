@@ -1,6 +1,9 @@
-import { Button, Col, DatePicker, Form, Input, InputNumber, Modal, Row, Select } from 'antd'
-import React, { useState } from 'react'
+import { Button, Col, DatePicker, Form, Input, InputNumber, Modal, Row, Select, Spin } from 'antd'
+import React, { useEffect, useState } from 'react'
 import StudentTable from './StudentTable'
+import { useUpdateCompetencesMutation } from '../../../../store/api/practiceApi/practiceTeacher'
+import { useLocation } from 'react-router-dom'
+import { LoadingOutlined } from '@ant-design/icons'
 
 const mockData = [
 	{
@@ -44,17 +47,65 @@ const selectOptions=[
 	{value: 'Не согласен', name: 'Не согласен'},
 ]
 
-const ModalStudent = ({rowData, openModalStudent, handleOk, setIsModalStudent }: any) => {
-    const [dataSource,setDataSource] = useState(mockData)
+const ModalStudent = ({dataAllOrder,isFetchingComp,id,idStudent,isSuccessCompetences,dataCompetences,rowData, openModalStudent, handleOk, setIsModalStudent }: any) => {
+	const [dataSource,setDataSource] = useState<any>([])
 	const [selectGrade,setSelectGrade] = useState(null)
 	const [isEdit,setIsEdit] = useState(false)
 	const [form] = Form.useForm()
+	const [updateCompetence,{}] = useUpdateCompetencesMutation()
+	const [flag,setFlag] = useState(false)
+	
+	// useEffect(()=>{
+	// 	if(isSuccessCompetences && !flag){
+	// 		setDataSource(dataCompetences)
+	// 		setFlag(true)
+	// 	}
+	// },[isSuccessCompetences,dataCompetences])
+	console.log('dataSource',dataSource)
+	useEffect(() => {
+		if (dataCompetences && dataCompetences.length > 0) {
+		  setDataSource([...dataCompetences]);
+		}
+	  }, [dataCompetences]);
+	  
+	  
+
+	const handleSave = (row: any) => {
+		const newData = [...dataSource];
+		// @ts-ignore
+		const index = newData.findIndex(item => row.competenceId === item.competenceId);
+		const item = newData[index];
+			// @ts-ignore
+		newData.splice(index, 1, {
+				// @ts-ignore
+		  ...item,
+		  ...row,
+		});
+		setDataSource(newData);
+	  };
 
 	const onFinish = (values: any) => {
         console.warn('123')
         console.table(dataSource)
 		console.log('Success:', values)
+		
 		setIsEdit(false)
+		const obj = {
+			comment: values.rep,
+			gradeForPractice: String(values.gradeKFUProh),
+			gradeForReport: String(values.gradeKFUReport),
+			gradeFromProfileDirector:  String(values.gradeProf),
+			gradeAgreement:  values.gradeProf==='Согласен' ? true : false ,
+			gradeIfNotAgree: String(values.gradeIfSelect),
+			competencesTable: dataSource
+		}
+		const mainObj = {
+			body:obj,
+			practiceId :id,
+			studentId :idStudent
+		}
+		console.log('mainObj',mainObj)
+		updateCompetence(mainObj)
 	}
 
     const handleCancelModal = () => {
@@ -69,7 +120,7 @@ const ModalStudent = ({rowData, openModalStudent, handleOk, setIsModalStudent }:
         }
 	
 		setIsModalStudent(false)
-	
+		setDataSource([]);
 		
 	}
 
@@ -136,7 +187,7 @@ const ModalStudent = ({rowData, openModalStudent, handleOk, setIsModalStudent }:
 							<span>С результатом оценивания практики руководителя проф.организации</span>
 						</Col>
 						<Col span={12}>
-							<Form.Item name={'selectGrade'}>
+							<Form.Item name={'selectGrade'} required>
 								<Select  onChange={(v) => setSelectGrade(v)}   options={selectOptions} className='w-full'  placeholder="Ввести" />
 							</Form.Item>
 						</Col>
@@ -156,7 +207,7 @@ const ModalStudent = ({rowData, openModalStudent, handleOk, setIsModalStudent }:
 					}
 
                     <Row>
-                        <StudentTable setIsEdit={setIsEdit} dataSource={dataSource} setDataSource={setDataSource}/>
+                       {isFetchingComp ? <Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} /> : <StudentTable handleSave={handleSave} setIsEdit={setIsEdit} dataSource={dataSource} />}
                     </Row>
 
 					<div className="flex justify-end mt-5">

@@ -26,6 +26,7 @@ import { useAppSelector } from '../../../../store'
 import { useGetAllMyPracticesQuery } from '../../../../store/api/practiceApi/mypractice'
 import {
 	useGetChatQuery,
+	useGetCompetencesQuery,
 	useGetOneGroupQuery,
 	useGetStatusQuery,
 	useSendMessageMutation,
@@ -91,15 +92,17 @@ export const ViewPraciceTeacher = () => {
 		name: 'Все',
 		courseNumber: 'Все',
 		dateFilling: 'По дате (сначала новые)',
-		status: 'Все'
+		status: 'Все',
+		grade:'Все'
 	})
 	const [isModalOpen, setIsModalOpen] = useState(false)
-	const { data: dataAllOrder, isSuccess: isSuccessOrder,isFetching:isFetchingMyPractice,refetch:refetchAll } = useGetOneGroupQuery(id,{  refetchOnMountOrArgChange: true})
+	const { data: dataAllOrder, isSuccess: isSuccessOrder,isFetching:isFetchingMyPractice,refetch:refetchAll } = useGetOneGroupQuery(id, { skip: !id })
 	const isMobile = isMobileDevice()
 	const [dataTable, setDataTable] = useState<any>(dataAllOrder)
 	const { data: dataChat, isFetching: isFethcingChat, refetch } = useGetChatQuery(idStudent, { skip: !idStudent })
 	const [sendMessageApi, { isLoading }] = useSendMessageMutation()
 	const [updateStatus, {isLoading:isLoadingUpdateStatus}] = useUpdateStatusMutation()
+	const {data:dataCompetences,isSuccess:isSuccessCompetences,isFetching:isFetchingComp,refetch:refechComp} = useGetCompetencesQuery({studentId :idStudent,orderId:id},{skip:!idStudent})
 	
 	const columns = [
 		{
@@ -301,6 +304,14 @@ export const ViewPraciceTeacher = () => {
 				return elem.status === filter.status
 			}
 		}
+		function filterGrade(elem: any) {
+	
+			if (filter.grade === 'Все') {
+				return elem
+			} else {
+				return elem.grade === filter.grade
+			}
+		}
 		function filterName(elem: any) {
 			if (filter.name === 'Все') {
 				return elem
@@ -315,6 +326,7 @@ export const ViewPraciceTeacher = () => {
 			.filter((elem: any) => filterCourse(elem))
 			.filter((elem: any) => filterName(elem))
 			.filter((elem: any) => filterStatus(elem))
+			.filter((elem: any) => filterGrade(elem))
 			: []
 	}
 	const changeSelect = (value: any, row: any) => {
@@ -350,10 +362,13 @@ export const ViewPraciceTeacher = () => {
 		setOpen(false)
 	}
 	const modalButton = (value:any)=>{
+		console.log('value',value)
 		setRowData(value)
+		setIdStudent(value.id)
 		openStudentModal()
+		refechComp()
 	}
-
+	
 	const clickTextArea = () => {
 		// refetch()
 	}
@@ -428,9 +443,10 @@ export const ViewPraciceTeacher = () => {
 		setIsModalOpenReport(true)
 	}
 
-	const openStudentModal=()=>{
+	const openStudentModal = () =>{
 		onClose()
 		setIsModalStudent(true)
+		
 	}
 
 	const sortedData =
@@ -488,7 +504,28 @@ export const ViewPraciceTeacher = () => {
 						<Button onClick={openReportModal}>Сформировать отчет</Button>
 					</Col>
 				</Row>
-
+				<Row gutter={[16, 16]} className="mt-4 flex items-center">
+				<Col span={5}>
+						<span>Оценка</span>
+					</Col>
+					<Col span={7} className="overWrite">
+						<Form.Item className="mb-0" name={'status'}>
+							<Select
+								defaultValue={'Все'}
+								popupMatchSelectWidth={false}
+								className="w-full"
+								
+								options={[{value:'Все',label:'Все'}].concat(optionMockGrade)}
+								onChange={(value: any) => {
+									setFilter({ ...filter, grade: value })
+								}}
+							/>
+						</Form.Item>
+					</Col>
+					<Col className='flex justify-end' span={12}>
+						<Button >Отправить в деканат</Button>
+					</Col>
+				</Row>		
 				<Row gutter={[16, 16]} className="mt-4 mb-14 flex items-center">
 					<Col span={5}>
 						<span>Статус</span>
@@ -516,10 +553,11 @@ export const ViewPraciceTeacher = () => {
 							/>
 						</Form.Item>
 					</Col>
-					<Col className='flex justify-end' span={12}>
+					{/* <Col className='flex justify-end' span={12}>
 						<Button >Отправить в деканат</Button>
-					</Col>
+					</Col> */}
 				</Row>
+			
 				<Row>
 					<Col className='flex justify-end' span={24}>
 						<Button
@@ -874,7 +912,7 @@ export const ViewPraciceTeacher = () => {
 				
 				<ModalReport setIsModalOpenReport={setIsModalOpenReport} handleOk={handleOk} openModalReport={openModalReport}/>
 
-				<ModalStudent rowData={rowData} setIsModalStudent={setIsModalStudent} handleOk={handleOk} openModalStudent={openModalStudent}/>
+				<ModalStudent dataAllOrder={dataAllOrder} isFetchingComp={isFetchingComp} id={id} idStudent={idStudent} isSuccessCompetences={isSuccessCompetences} dataCompetences={dataCompetences} rowData={rowData} setIsModalStudent={setIsModalStudent} handleOk={handleOk} openModalStudent={openModalStudent}/>
 			</section>
 			</Spin>
 			

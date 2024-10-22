@@ -17,6 +17,18 @@ import {
 	useGetStatusQuery} from '../../../../store/api/practiceApi/practiceTeacher'
 
 
+const optionMockGrade = [
+		{ label: '0', value: '0' },
+		{ label: 'Не зачтено', value: 'Не зачтено' },
+		{ label: '2', value: '2' },
+		{ label: '3', value: '3' },
+		{ label: '4', value: '4' },
+		{ label: '5', value: '5' },
+		{ label: 'зачтено', value: 'зачтено' },
+		{ label: 'освобожден', value: 'освобожден' },
+		{ label: 'Отсутствие по уважительной', value: 'Отсутствие по уважительной' },
+		{ label: 'Отсутствие по неуважительной', value: 'Отсутствие по неуважительной' }
+]
 
 export const ViewPraciceTeacher = () => {
 	const path = useLocation()
@@ -40,7 +52,8 @@ export const ViewPraciceTeacher = () => {
 		name: 'Все',
 		courseNumber: 'Все',
 		dateFilling: 'По дате (сначала новые)',
-		status: 'Все'
+		status: 'Все',
+		grade: 'Все'
 	})
 	const {data: dataAllOrder,isSuccess: isSuccessOrder,isFetching: isFetchingMyPractice,refetch: refetchAll} = useGetOneGroupQuery(id, { refetchOnMountOrArgChange: true })
 	const [dataTable, setDataTable] = useState<any>(dataAllOrder)
@@ -159,12 +172,21 @@ export const ViewPraciceTeacher = () => {
 				return elem.studentName === filter.name
 			}
 		}
+		function filterGrade(elem: any) {
+	
+			if (filter.grade === 'Все') {
+				return elem
+			} else {
+				return elem.grade === filter.grade
+			}
+		}
 
 		return dataAllOrder
 			? dataAllOrder
 					.filter((elem: any) => filterCourse(elem))
 					.filter((elem: any) => filterName(elem))
 					.filter((elem: any) => filterStatus(elem))
+					.filter((elem: any) => filterGrade(elem))
 			: []
 	}
 
@@ -234,6 +256,28 @@ export const ViewPraciceTeacher = () => {
 							</Form.Item>
 						</Col>
 					</Row>
+					<Row gutter={[16, 16]} className="mt-4 flex items-center">
+				<Col span={5}>
+						<span>Оценка</span>
+					</Col>
+					<Col span={7} className="overWrite">
+						<Form.Item className="mb-0" name={'status'}>
+							<Select
+								defaultValue={'Все'}
+								popupMatchSelectWidth={false}
+								className="w-full"
+								
+								options={[{value:'Все',label:'Все'}].concat(optionMockGrade)}
+								onChange={(value: any) => {
+									setFilter({ ...filter, grade: value })
+								}}
+							/>
+						</Form.Item>
+					</Col>
+					<Col className='flex justify-end' span={12}>
+						<Button >Отправить в деканат</Button>
+					</Col>
+				</Row>	
 
 					<Row gutter={[16, 16]} className="mt-4 mb-14 flex items-center"></Row>
 					<Row>

@@ -1,4 +1,5 @@
 import { updateStatus } from '../../../models/myPractice'
+import { Competences } from '../../../models/practiceTeacher'
 import { apiSliceTeacher } from '../apiSliceTeacher'
 
 export const practiceTeacherService = apiSliceTeacher.injectEndpoints({
@@ -20,7 +21,8 @@ export const practiceTeacherService = apiSliceTeacher.injectEndpoints({
                     method: 'GET'
                 }
             },
-            providesTags: ['practiceTeacher']
+            providesTags: ['practiceTeacher'],
+            keepUnusedDataFor: 1,
           
         }),
         getChat: builder.query<any, any>({
@@ -64,7 +66,27 @@ export const practiceTeacherService = apiSliceTeacher.injectEndpoints({
                 }
             },
             providesTags: ['practiceTeacher']        
-    }),
+        }),
+        getCompetences: builder.query<Competences[], any>({
+            query: ({studentId , orderId }) => {
+                return {
+                    url: `/services/api-teacher-practices/practices/student/competences?studentId=${studentId}&orderId=${orderId}`,
+                    method: 'GET'
+                }
+            },
+            providesTags: ['practiceTeacher'],
+            keepUnusedDataFor: 0,   
+        }),
+        updateCompetences: builder.mutation<Competences[], any>({
+            query: ({body,studentId , practiceId }) => {
+                return {
+                    url: `/services/api-teacher-practices/practices/student/grades?practiceId=${practiceId}&studentId=${studentId}`,
+                    method: 'POST',
+                    body,
+                }
+            },
+            invalidatesTags: ['practiceTeacher']        
+        }),
     })
 })
 
@@ -74,6 +96,8 @@ export const {
     useGetChatQuery,
     useSendMessageMutation,
     useUpdateStatusMutation,
-    useGetStatusQuery
+    useGetStatusQuery,
+    useGetCompetencesQuery,
+    useUpdateCompetencesMutation
     
 } = practiceTeacherService

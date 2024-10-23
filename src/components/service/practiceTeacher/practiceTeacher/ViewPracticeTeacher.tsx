@@ -27,6 +27,7 @@ import { useGetAllMyPracticesQuery } from '../../../../store/api/practiceApi/myp
 import {
 	useGetChatQuery,
 	useGetCompetencesQuery,
+	useGetInfoReportStudentQuery,
 	useGetOneGroupQuery,
 	useGetStatusQuery,
 	useSendMessageMutation,
@@ -103,88 +104,11 @@ export const ViewPraciceTeacher = () => {
 	const { data: dataChat, isFetching: isFethcingChat, refetch } = useGetChatQuery(idStudent, { skip: !idStudent })
 	const [sendMessageApi, { isLoading }] = useSendMessageMutation()
 	const [updateStatus, {isLoading:isLoadingUpdateStatus}] = useUpdateStatusMutation()
-	const {data:dataCompetences,isSuccess:isSuccessCompetences,isFetching:isFetchingComp,refetch:refechComp} = useGetCompetencesQuery({studentId :idStudent,orderId:id},{refetchOnMountOrArgChange: true })
+	const {data:dataCompetences,isSuccess:isSuccessCompetences,isFetching:isFetchingComp,refetch:refechComp} = useGetCompetencesQuery({studentId :idStudent,orderId:id},{skip:!idStudent,refetchOnMountOrArgChange: true })
 	const dispatch = useAppDispatch()
-	const columns = [
-		{
-			key: 'index',
-			dataIndex: 'index',
-			title: '№',
-			className: 'text-xs !p-4'
-		},
-		{
-			key: 'specialty',
-			dataIndex: 'specialty',
-			title: 'ФИО обучающегося',
-			className: 'text-xs !p-4'
-		},
-		{
-			key: 'grade',
-			dataIndex: 'grade',
-			title: 'Оценка',
-			className: 'text-xs !p-2',
-			render: (record: any, row: any) => {
-				return (
-					<Select
-						value={record}
-						placeholder={'Выбрать'}
-						options={optionMock}
-						onChange={value => changeSelect(value, row)}
-					></Select>
-				)
-			},
-			fixed: 'right'
-		},
-		{
-			key: 'specialty',
-			dataIndex: 'specialty',
-			title: 'Шифр и наименование специальности',
-			className: 'text-xs !p-4'
-		},
-		{
-			key: 'group',
-			dataIndex: 'group',
-			title: 'Номер группы',
-			className: 'text-xs !p-2'
-		},
-		{
-			key: 'group',
-			dataIndex: 'group',
-			title: 'Номер группы',
-			className: 'text-xs !p-2'
-		},
-		{
-			key: 'academicYear',
-			dataIndex: 'academicYear',
-			title: 'Учебный год',
-			className: 'text-xs !p-2'
-		},
-		{
-			key: 'course',
-			dataIndex: 'course',
-			title: 'Курс',
-			className: 'text-xs !p-2 mobileFirst'
-		},
-		{
-			key: 'practiceType',
-			dataIndex: 'practiceType',
-			title: 'Тип',
-			className: 'text-xs !p-2 mobileFirst'
-		},
-		{
-			key: 'practiceKind',
-			dataIndex: 'practiceKind',
-			title: 'Вид',
-			className: 'text-xs !p-2 mobileFirst'
-		},
+	const [oldId,setOldId] = useState(null)
+	const {data:dataReportStudent} = useGetInfoReportStudentQuery(idStudent,{skip: !idStudent})
 
-		{
-			key: 'departmentDirectorName',
-			dataIndex: 'departmentDirectorName',
-			title: 'ФИО руководителя от кафедры, должность',
-			className: 'text-xs !p-2 mobileFirst'
-		}
-	]
 	const columnsMini = [
 		{
 			key: 'number',
@@ -240,7 +164,9 @@ export const ViewPraciceTeacher = () => {
 			render: (record: any, text: any) => {
 				return (
 					<>
-						<Button onClick={()=>modalButton(text)} className='p-5'>Отчет не сформирован</Button>
+						{record?.isReportExist ? 
+						<Button onClick={()=>modalButton(text)} className='p-5'>Отчет сформирован</Button> : 
+						<Button onClick={()=>modalButton(text)} className='p-5'>Отчет не сформирован</Button>}
 					</>
 				)
 			}
@@ -270,15 +196,6 @@ export const ViewPraciceTeacher = () => {
 		}
 	}, [filter, isSuccessOrder,dataAllOrder])
 
-	// useEffect(()=>{
-	// 	if(openModalStudent){
-	// 		// @ts-ignore
-	// 		document.querySelector('body')?.classList.add('heigh100');	
-	// 	}else{
-	// 		//@ts-ignore
-	// 		document.querySelector('body')?.classList.remove('heigh100');
-	// 	}
-	// },[openModalStudent])
 
 	useTimeout(() => {
 		if (delay !== 250) {
@@ -365,20 +282,16 @@ export const ViewPraciceTeacher = () => {
 	const modalButton = (value:any)=>{
 		if(value.id===idStudent){
 			console.log('был')
-			// window.location.reload()
 			refechComp()
-			
 			dispatch(apiSliceTeacher.util.resetApiState())
-		
 		}
-	
+		setOldId(value.studentName)
 		refetchAll()
 		console.log('value',value)
 		setRowData(value)
 		setIdStudent(value.id)
-		openStudentModal()
-		
-		
+		// openStudentModal()
+		setIsModalStudent(true)	
 	}
 	
 	const clickTextArea = () => {
@@ -455,10 +368,17 @@ export const ViewPraciceTeacher = () => {
 		setIsModalOpenReport(true)
 	}
 
-	const openStudentModal = () =>{
+	const openStudentModal = (value:any) =>{
+		if(value===oldId){
+			console.log('был да старый')
+			refechComp()
+			dispatch(apiSliceTeacher.util.resetApiState())
+		}
+		setOldId(value)
 		onClose()
-		setIsModalStudent(true)
-		
+		refetchAll()
+		refechComp()
+		setIsModalStudent(true)	
 	}
 
 	const sortedData =
@@ -466,7 +386,6 @@ export const ViewPraciceTeacher = () => {
 	const uniqueNames = Array.from(new Set(dataAllOrder?.map((student: any) => student.studentName)))
 
 	
-
 	return (
 		<Form form={form}>
 			<Spin spinning={isFetchingMyPractice}>
@@ -669,7 +588,7 @@ export const ViewPraciceTeacher = () => {
 						<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
 							<span>{studentName}</span>
 							<div className='flex gap-3'>
-								<Button type='primary' onClick={openStudentModal}>Отчет</Button>
+								<Button type='primary' onClick={()=>openStudentModal(studentName)}>Отчет</Button>
 								<Button type="text" icon={<CloseOutlined />} onClick={onClose} />
 							</div>
 						</div>
@@ -922,9 +841,9 @@ export const ViewPraciceTeacher = () => {
 					</div>
 				</Modal>
 				
-				<ModalReport setIsModalOpenReport={setIsModalOpenReport} handleOk={handleOk} openModalReport={openModalReport}/>
+				<ModalReport id={id} setIsModalOpenReport={setIsModalOpenReport} handleOk={handleOk} openModalReport={openModalReport}/>
 
-				<ModalStudent  dataAllOrder={dataAllOrder} isFetchingComp={isFetchingComp} id={id} idStudent={idStudent} isSuccessCompetences={isSuccessCompetences} dataCompetences={dataCompetences} rowData={rowData} setIsModalStudent={setIsModalStudent} handleOk={handleOk} openModalStudent={openModalStudent}/>
+				<ModalStudent dataReportStudent={dataReportStudent} dataAllOrder={dataAllOrder} isFetchingComp={isFetchingComp} id={id} idStudent={idStudent} isSuccessCompetences={isSuccessCompetences} data={dataCompetences} dataCompetences={dataCompetences?.competencesTable} rowData={rowData} setIsModalStudent={setIsModalStudent} handleOk={handleOk} openModalStudent={openModalStudent}/>
 			</section>
 			</Spin>
 			

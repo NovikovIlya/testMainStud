@@ -1,89 +1,46 @@
 import { Button, Col, DatePicker, Form, Input, InputNumber, Modal, Row, Select, Spin } from 'antd'
 import React, { useEffect, useState } from 'react'
 import StudentTable from './StudentTable'
-import { useUpdateCompetencesMutation } from '../../../../store/api/practiceApi/practiceTeacher'
+import { useGetInfoReportStudentQuery, useUpdateCompetencesMutation } from '../../../../store/api/practiceApi/practiceTeacher'
 import { useLocation } from 'react-router-dom'
 import { LoadingOutlined } from '@ant-design/icons'
 
-const mockData = [
-	{
-		key: '1',
-		number: 1,
-		name: 'Задание 1',
-		level: 'Высокий',
-		grade:'1'
-	},
-	{
-		key: '2',
-		number: 2,
-		name: 'Задание 2',
-		level: 'Средний',
-		grade:'1'
-	},
-	{
-		key: '3',
-		number: 3,
-		name: 'Задание 3',
-		level: 'Низкий',
-		grade:'2'
-	},
-	{
-		key: '4',
-		number: 4,
-		name: 'Задание 4',
-		level: 'Высокий',
-		grade:'0'
-	},
-	{
-		key: '5',
-		number: 5,
-		name: 'Задание 5',
-		level: 'Средний',
-		grade:'1'
-	}
-]
-const selectOptions=[
+const selectOptions = [
 	{value: 'Согласен', name: 'Согласен'},
 	{value: 'Не согласен', name: 'Не согласен'},
 ]
 
-const ModalStudent = ({dataAllOrder,isFetchingComp,id,idStudent,isSuccessCompetences,dataCompetences,rowData, openModalStudent, handleOk, setIsModalStudent }: any) => {
+const ModalStudent = ({dataReportStudent,data,dataAllOrder,isFetchingComp,id,idStudent,isSuccessCompetences,dataCompetences,rowData, openModalStudent, handleOk, setIsModalStudent }: any) => {
 	const [dataSource,setDataSource] = useState<any>([])
 	const [selectGrade,setSelectGrade] = useState(null)
 	const [isEdit,setIsEdit] = useState(false)
 	const [form] = Form.useForm()
-	const [updateCompetence,{}] = useUpdateCompetencesMutation()
-	const [flag,setFlag] = useState(false)
+	const [updateCompetence,{data:dataUpdateCompetence}] = useUpdateCompetencesMutation()
 	
-	// useEffect(()=>{
-	// 	if(isSuccessCompetences && !flag){
-	// 		setDataSource(dataCompetences)
-	// 		setFlag(true)
-	// 	}
-	// },[isSuccessCompetences,dataCompetences])
-	console.log('dataSource',dataSource)
-	console.log('dataCompetences',dataCompetences)
+
+
 	useEffect(() => {
 		if (dataCompetences && dataCompetences.length > 0) {
 		  setDataSource([...dataCompetences]);
+		  form.setFieldValue('rep',data?.comment ? data?.comment : '')
+		  form.setFieldValue('gradeKFUProh',data?.gradeForPractice ? data?.gradeForPractice : '')
+		  form.setFieldValue('gradeKFUReport',data?.gradeForReport ? data?.gradeForReport : '')
+		  form.setFieldValue('gradeProf',data?.gradeFromProfileDirector ? data?.gradeFromProfileDirector : '')
+		  form.setFieldValue('selectGrade',data?.gradeAgreement ? 'Согласен' : 'Не согласен')
+		  form.setFieldValue('gradeIfSelect',data?.gradeIfNotAgree ? data?.gradeIfNotAgree : '')
 		}
-	  }, [dataCompetences]);
+	}, [dataCompetences]);
 
-	// useEffect(() => {
-	// 	if (dataCompetences && dataCompetences.length > 0) {
-	// 	setDataSource([...dataCompetences]);
-	// 	}	
-	// }, [openModalStudent]);
-	  
+	
 
 	const handleSave = (row: any) => {
 		const newData = [...dataSource];
 		// @ts-ignore
 		const index = newData.findIndex(item => row.competenceId === item.competenceId);
 		const item = newData[index];
-			// @ts-ignore
+		// @ts-ignore
 		newData.splice(index, 1, {
-				// @ts-ignore
+		// @ts-ignore
 		  ...item,
 		  ...row,
 		});
@@ -101,7 +58,7 @@ const ModalStudent = ({dataAllOrder,isFetchingComp,id,idStudent,isSuccessCompete
 			gradeForPractice: String(values.gradeKFUProh),
 			gradeForReport: String(values.gradeKFUReport),
 			gradeFromProfileDirector:  String(values.gradeProf),
-			gradeAgreement:  values.gradeProf==='Согласен' ? true : false ,
+			gradeAgreement:  values.selectGrade==='Согласен' ? true : false ,
 			gradeIfNotAgree: String(values.gradeIfSelect),
 			competencesTable: dataSource
 		}
@@ -112,6 +69,7 @@ const ModalStudent = ({dataAllOrder,isFetchingComp,id,idStudent,isSuccessCompete
 		}
 		console.log('mainObj',mainObj)
 		updateCompetence(mainObj)
+		download()
 	}
 
     const handleCancelModal = () => {
@@ -127,7 +85,24 @@ const ModalStudent = ({dataAllOrder,isFetchingComp,id,idStudent,isSuccessCompete
 	
 		setIsModalStudent(false)
 		setDataSource([]);
-		
+
+		form.setFieldValue('rep', '')
+		form.setFieldValue('gradeKFUProh', '')
+		form.setFieldValue('gradeKFUReport','')
+		form.setFieldValue('gradeProf', '')
+		form.setFieldValue('selectGrade','')
+		form.setFieldValue('gradeIfSelect', '')
+	}
+
+	const download = async ()=>{
+		console.log('dataUpdateCompetence',dataUpdateCompetence)
+		if(dataUpdateCompetence){
+			const link = document.createElement('a')
+			link.href = dataUpdateCompetence
+			link.setAttribute('download', `Отчет.docx`)
+			document.body.appendChild(link)
+			link.click()
+		}
 	}
 
 	return (
@@ -141,7 +116,8 @@ const ModalStudent = ({dataAllOrder,isFetchingComp,id,idStudent,isSuccessCompete
 			footer={false}
 		>
 			<div className="p-5 mt-5">
-				<Form onFinish={onFinish} form={form}>
+			{isFetchingComp ? <Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} /> :<Form onFinish={onFinish} form={form}>
+					<a href=''>{dataReportStudent}</a>
 					<Row>
 						<Col span={12}>
 							<span>Отзыв руководителя практики</span>
@@ -213,13 +189,13 @@ const ModalStudent = ({dataAllOrder,isFetchingComp,id,idStudent,isSuccessCompete
 					}
 
                     <Row>
-                       {isFetchingComp ? <Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} /> : <StudentTable handleSave={handleSave} setIsEdit={setIsEdit} dataSource={dataSource} />}
+                        <StudentTable handleSave={handleSave} setIsEdit={setIsEdit} dataSource={dataSource} />
                     </Row>
 
 					<div className="flex justify-end mt-5">
 						<Button htmlType="submit">Сохранить и сформировать отчет</Button>
 					</div>
-				</Form>
+				</Form>}
 			</div>
 		</Modal>
 	)

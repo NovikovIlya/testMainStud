@@ -158,24 +158,6 @@ export const ViewFinally = () => {
 				)
 			}
 		},
-		{
-			key: 'send',
-			dataIndex: 'send',
-			title: 'Отправлен в деканат',
-			align: 'center',
-			className: 'text-xs !p-4',
-			render: (_: any, record: any) => {
-				return (
-					<div className={' '}>
-						Нет
-					</div>
-				)
-			}
-		},
-		
-		
-
-		
 		
 	]
 	const columnsCompressed = [

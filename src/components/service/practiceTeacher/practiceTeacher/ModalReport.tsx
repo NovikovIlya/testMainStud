@@ -1,15 +1,39 @@
 import { Button, Col, DatePicker, Form, Input, Modal, Row } from 'antd'
-import React from 'react'
+import React, { useState } from 'react'
+import { useGetInfoReportGroupQuery, useUpdateReportGroupMutation } from '../../../../store/api/practiceApi/practiceTeacher'
+import dayjs from 'dayjs'
+import { useAppDispatch } from '../../../../store'
+import { showNotification } from '../../../../store/reducers/notificationSlice'
 
-const ModalReport = ({ openModalReport, handleOk, setIsModalOpenReport }: any) => {
-
+const ModalReport = ({ id,openModalReport, handleOk, setIsModalOpenReport }: any) => {
+	const [sendUpdateReport,{data:dataUpdateReport}] = useUpdateReportGroupMutation()
+	const {data:dataReportGroup} = useGetInfoReportGroupQuery(id)
 	const [form] = Form.useForm()
+	const [isSend,setIsSend] = useState(false)
+	const dispatch= useAppDispatch()
 
 	const onFinish = (values: any) => {
-		console.log('Success:', values)
+		console.log('values:', values)
+		const obj = {
+			additionalInfo: values.dop,
+			conclusions: values.final,
+			date: dayjs(values.date).format('DD.MM.YYYY')
+		}
+		console.log('obj:', obj)
+		sendUpdateReport(obj).unwrap()
+			.then(() => {
+				dispatch(showNotification({ message: 'Отчет сформирован', type: 'success' }))
+				download()
+			})
+		setIsSend(true)
+		
 	}
 
     const handleCancelModal = () => {
+		if(isSend){
+			setIsModalOpenReport(false)
+			return
+		}
         if(form.getFieldValue('dop') || form.getFieldValue('date') || form.getFieldValue('final')){
             const yes = typeof window !== 'undefined' && window.confirm("Если вы закроете окно, данные не сохраняться. Вы хотите продолжить?");
             if(yes) {
@@ -20,8 +44,17 @@ const ModalReport = ({ openModalReport, handleOk, setIsModalOpenReport }: any) =
             }
         }
 		setIsModalOpenReport(false)
-	
-		
+	}
+
+	const download = async ()=>{
+		console.log('dataUpdateReport',dataUpdateReport)
+		if(dataUpdateReport){
+			const link = document.createElement('a')
+			link.href = dataUpdateReport
+			link.setAttribute('download', `Отчет.docx`)
+			document.body.appendChild(link)
+			link.click()
+		}
 	}
 
 	return (
@@ -36,6 +69,7 @@ const ModalReport = ({ openModalReport, handleOk, setIsModalOpenReport }: any) =
 		>
 			<div className="p-5">
 				<Form onFinish={onFinish} form={form}>
+					<a>{dataReportGroup}</a>
 					<Row>
 						<Col span={12}>
 							<span>Дополнительная информация</span>

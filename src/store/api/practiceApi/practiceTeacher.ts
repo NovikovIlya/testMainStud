@@ -67,7 +67,7 @@ export const practiceTeacherService = apiSliceTeacher.injectEndpoints({
             },
             providesTags: ['practiceTeacher']        
         }),
-        getCompetences: builder.query<Competences[], any>({
+        getCompetences: builder.query<any, any>({
             query: ({studentId , orderId }) => {
                 return {
                     url: `/services/api-teacher-practices/practices/student/competences?studentId=${studentId}&orderId=${orderId}`,
@@ -77,15 +77,53 @@ export const practiceTeacherService = apiSliceTeacher.injectEndpoints({
             providesTags: ['practiceTeacher'],
             keepUnusedDataFor: 0,   
         }),
-        updateCompetences: builder.mutation<Competences[], any>({
+        updateCompetences: builder.mutation<any, any>({
             query: ({body,studentId , practiceId }) => {
                 return {
                     url: `/services/api-teacher-practices/practices/student/grades?practiceId=${practiceId}&studentId=${studentId}`,
                     method: 'POST',
                     body,
+                    responseHandler: async (response) => {
+                        const blob = await response.blob();
+                        return window.URL.createObjectURL(blob); 
+                    },
                 }
             },
             invalidatesTags: ['practiceTeacher']        
+        }),
+        updateReportGroup: builder.mutation<any, any>({
+            query: (body) => {
+                return {
+                    url: `/services/api-teacher-practices/practices/report`,
+                    method: 'POST',
+                    body,
+                    responseHandler: async (response) => {
+                        const blob = await response.blob();
+                        return window.URL.createObjectURL(blob); 
+                    },
+                }
+            },
+            invalidatesTags: ['practiceTeacher']        
+        }),
+        getInfoReportStudent: builder.query<any, any>({
+            query: (studentId) => {
+                return {
+                    url: `/services/api-teacher-practices/practices/student/report?studentId=${studentId}`,
+                    method: 'GET'
+                }
+            },
+            providesTags: ['practiceTeacher'],
+            keepUnusedDataFor: 0,   
+        }),
+        getInfoReportGroup: builder.query<any, any>({
+            query: (id) => {
+                return {
+                    url: `/services/api-teacher-practices/practices/group/report?practiceId=${id}`,
+                    method: 'GET'
+                }
+            },
+            providesTags: ['practiceTeacher'],
+            keepUnusedDataFor: 0,   
         }),
     })
 })
@@ -98,6 +136,9 @@ export const {
     useUpdateStatusMutation,
     useGetStatusQuery,
     useGetCompetencesQuery,
-    useUpdateCompetencesMutation
+    useUpdateCompetencesMutation,
+    useUpdateReportGroupMutation,
+    useGetInfoReportStudentQuery,
+    useGetInfoReportGroupQuery
     
 } = practiceTeacherService

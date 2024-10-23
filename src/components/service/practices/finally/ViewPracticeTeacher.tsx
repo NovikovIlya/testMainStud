@@ -255,6 +255,9 @@ export const ViewPraciceTeacher = () => {
 								/>
 							</Form.Item>
 						</Col>
+						<Col className='flex justify-end' span={12}>
+						<Button >Скачать отчет</Button>
+					</Col>
 					</Row>
 					<Row gutter={[16, 16]} className="mt-4 flex items-center">
 				<Col span={5}>
@@ -274,9 +277,7 @@ export const ViewPraciceTeacher = () => {
 							/>
 						</Form.Item>
 					</Col>
-					<Col className='flex justify-end' span={12}>
-						<Button >Отправить в деканат</Button>
-					</Col>
+					
 				</Row>	
 
 					<Row gutter={[16, 16]} className="mt-4 mb-14 flex items-center"></Row>

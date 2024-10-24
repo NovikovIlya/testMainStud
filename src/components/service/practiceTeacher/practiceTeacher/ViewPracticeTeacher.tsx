@@ -55,6 +55,7 @@ const optionMockStatus = [
 	{ label: 'Завершено', value: 'Завершено' }
 ]
 const optionMockGrade = [
+	{ label: 'Не оценено', value: 'Не оценено' },
 	{ label: '0', value: '0' },
 	{ label: 'Не зачтено', value: 'Не зачтено' },
 	{ label: '2', value: '2' },
@@ -223,10 +224,14 @@ export const ViewPraciceTeacher = () => {
 			}
 		}
 		function filterGrade(elem: any) {
-	
+			console.log('filter.grade',filter.grade)
+			console.log('elem.grade',elem.grade)
 			if (filter.grade === 'Все') {
 				return elem
-			} else {
+			}else if(filter.grade==='Не оценено'){
+					return !elem.grade
+				}
+			 else {
 				return elem.grade === filter.grade
 			}
 		}
@@ -440,7 +445,7 @@ export const ViewPraciceTeacher = () => {
 						<span>Оценка</span>
 					</Col>
 					<Col span={7} className="overWrite">
-						<Form.Item className="mb-0" name={'status'}>
+						<Form.Item className="mb-0" name={'grade'}>
 							<Select
 								defaultValue={'Все'}
 								popupMatchSelectWidth={false}
@@ -484,9 +489,7 @@ export const ViewPraciceTeacher = () => {
 							/>
 						</Form.Item>
 					</Col>
-					{/* <Col className='flex justify-end' span={12}>
-						<Button >Отправить в деканат</Button>
-					</Col> */}
+
 				</Row>
 			
 				<Row>

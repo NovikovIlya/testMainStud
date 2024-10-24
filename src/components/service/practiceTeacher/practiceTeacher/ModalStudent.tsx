@@ -1,9 +1,11 @@
-import { Button, Col, DatePicker, Form, Input, InputNumber, Modal, Row, Select, Spin } from 'antd'
+import { Button, Col, DatePicker, Form, Input, InputNumber, Modal, Row, Select, Spin, Tooltip } from 'antd'
 import React, { useEffect, useState } from 'react'
 import StudentTable from './StudentTable'
 import { useGetInfoReportStudentQuery, useUpdateCompetencesMutation } from '../../../../store/api/practiceApi/practiceTeacher'
 import { useLocation } from 'react-router-dom'
 import { LoadingOutlined } from '@ant-design/icons'
+import { useAppDispatch } from '../../../../store'
+import { showNotification } from '../../../../store/reducers/notificationSlice'
 
 const selectOptions = [
 	{value: 'Согласен', name: 'Согласен'},
@@ -16,8 +18,12 @@ const ModalStudent = ({dataReportStudent,data,dataAllOrder,isFetchingComp,id,idS
 	const [isEdit,setIsEdit] = useState(false)
 	const [form] = Form.useForm()
 	const [updateCompetence,{data:dataUpdateCompetence}] = useUpdateCompetencesMutation()
-	
+	const [isSend,setIsSend] = useState(true)
+	const dispatch= useAppDispatch()
 
+	useEffect(()=>{
+		download()
+	},[dataUpdateCompetence])
 
 	useEffect(() => {
 		if (dataCompetences && dataCompetences.length > 0) {
@@ -34,6 +40,7 @@ const ModalStudent = ({dataReportStudent,data,dataAllOrder,isFetchingComp,id,idS
 	
 
 	const handleSave = (row: any) => {
+		setIsSend(false)
 		const newData = [...dataSource];
 		// @ts-ignore
 		const index = newData.findIndex(item => row.competenceId === item.competenceId);
@@ -68,8 +75,10 @@ const ModalStudent = ({dataReportStudent,data,dataAllOrder,isFetchingComp,id,idS
 			studentId :idStudent
 		}
 		console.log('mainObj',mainObj)
-		updateCompetence(mainObj)
-		download()
+		updateCompetence(mainObj).unwrap().then(res => {
+			dispatch(showNotification({ message: 'Отчет сформирован', type: 'success' }))
+		})
+		// download()
 	}
 
     const handleCancelModal = () => {
@@ -82,7 +91,23 @@ const ModalStudent = ({dataReportStudent,data,dataAllOrder,isFetchingComp,id,idS
         //         return
         //     }
         // }
-	
+		if(!isSend){
+			const yes = typeof window !== 'undefined' && window.confirm("Если вы закроете окно, данные не сохраняться. Вы хотите продолжить?");
+            if(yes) {
+                setIsModalStudent(false)
+				setDataSource([]);
+				form.setFieldValue('rep', '')
+				form.setFieldValue('gradeKFUProh', '')
+				form.setFieldValue('gradeKFUReport','')
+				form.setFieldValue('gradeProf', '')
+				form.setFieldValue('selectGrade','')
+				form.setFieldValue('gradeIfSelect', '')
+
+				setIsSend(true)
+            } else {
+                return
+            }
+		}
 		setIsModalStudent(false)
 		setDataSource([]);
 
@@ -99,7 +124,7 @@ const ModalStudent = ({dataReportStudent,data,dataAllOrder,isFetchingComp,id,idS
 		if(dataUpdateCompetence){
 			const link = document.createElement('a')
 			link.href = dataUpdateCompetence
-			link.setAttribute('download', `Отчет.docx`)
+			link.setAttribute('download', `Отчет студента.docx`)
 			document.body.appendChild(link)
 			link.click()
 		}
@@ -115,9 +140,10 @@ const ModalStudent = ({dataReportStudent,data,dataAllOrder,isFetchingComp,id,idS
 			onCancel={handleCancelModal}
 			footer={false}
 		>
+			<Spin spinning={isFetchingComp}>
 			<div className="p-5 mt-5">
-			{isFetchingComp ? <Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} /> :<Form onFinish={onFinish} form={form}>
-					<a href=''>{dataReportStudent}</a>
+			<Form onFinish={onFinish} form={form}>
+					{/* <a href=''>{dataReportStudent}Отчет.docx</a> */}
 					<Row>
 						<Col span={12}>
 							<span>Отзыв руководителя практики</span>
@@ -137,7 +163,7 @@ const ModalStudent = ({dataReportStudent,data,dataAllOrder,isFetchingComp,id,idS
 						</Col>
 						<Col span={12}>
 							<Form.Item name={'gradeKFUProh'}>
-								<InputNumber className='w-full' min={1} placeholder="Ввести" />
+								<InputNumber onChange={()=>setIsSend(false)}  className='w-full' min={1} placeholder="Ввести" />
 							</Form.Item>
 						</Col>
 					</Row>
@@ -148,7 +174,7 @@ const ModalStudent = ({dataReportStudent,data,dataAllOrder,isFetchingComp,id,idS
 						</Col>
 						<Col span={12}>
 							<Form.Item name={'gradeKFUReport'}>
-								<InputNumber className='w-full' min={1} placeholder="Ввести" />
+								<InputNumber onChange={()=>setIsSend(false)} className='w-full' min={1} placeholder="Ввести" />
 							</Form.Item>
 						</Col>
 					</Row>
@@ -159,7 +185,7 @@ const ModalStudent = ({dataReportStudent,data,dataAllOrder,isFetchingComp,id,idS
 						</Col>
 						<Col span={12}>
 							<Form.Item name={'gradeProf'}>
-								<InputNumber className='w-full' min={1} placeholder="Ввести" />
+								<InputNumber onChange={()=>setIsSend(false)}  className='w-full' min={1} placeholder="Ввести" />
 							</Form.Item>
 						</Col>
 					</Row>
@@ -182,21 +208,23 @@ const ModalStudent = ({dataReportStudent,data,dataAllOrder,isFetchingComp,id,idS
 						</Col>
 						<Col span={12}>
 							<Form.Item name={'gradeIfSelect'}>
-								<InputNumber className='w-full' min={1} placeholder="Ввести" />
+								<InputNumber onChange={()=>setIsSend(false)}  className='w-full' min={1} placeholder="Ввести" />
 							</Form.Item>
 						</Col>
 					</Row> : ''
 					}
 
                     <Row>
-                        <StudentTable handleSave={handleSave} setIsEdit={setIsEdit} dataSource={dataSource} />
+                        <StudentTable  handleSave={handleSave} setIsEdit={setIsEdit} dataSource={dataSource} />
                     </Row>
 
-					<div className="flex justify-end mt-5">
+					<div className="flex justify-end mt-5 gap-3">
 						<Button htmlType="submit">Сохранить и сформировать отчет</Button>
+						{/* <Tooltip title={true===true ? 'Необходимо сохранить отчет' : ''}><Button disabled={true}>Сформировать отчет</Button></Tooltip> */}
 					</div>
-				</Form>}
+				</Form>
 			</div>
+			</Spin>
 		</Modal>
 	)
 }

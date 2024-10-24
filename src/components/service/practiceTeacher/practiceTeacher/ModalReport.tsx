@@ -1,16 +1,21 @@
-import { Button, Col, DatePicker, Form, Input, Modal, Row } from 'antd'
-import React, { useState } from 'react'
+import { Button, Col, DatePicker, Form, Input, Modal, Row, Spin } from 'antd'
+import React, { useEffect, useState } from 'react'
 import { useGetInfoReportGroupQuery, useUpdateReportGroupMutation } from '../../../../store/api/practiceApi/practiceTeacher'
 import dayjs from 'dayjs'
 import { useAppDispatch } from '../../../../store'
 import { showNotification } from '../../../../store/reducers/notificationSlice'
+import { Spinner } from '@material-tailwind/react'
 
 const ModalReport = ({ id,openModalReport, handleOk, setIsModalOpenReport }: any) => {
-	const [sendUpdateReport,{data:dataUpdateReport}] = useUpdateReportGroupMutation()
+	const [sendUpdateReport,{data:dataUpdateReport,isLoading}] = useUpdateReportGroupMutation()
 	const {data:dataReportGroup} = useGetInfoReportGroupQuery(id)
 	const [form] = Form.useForm()
 	const [isSend,setIsSend] = useState(false)
 	const dispatch= useAppDispatch()
+
+	useEffect(()=>{
+		download()
+	},[dataUpdateReport])
 
 	const onFinish = (values: any) => {
 		console.log('values:', values)
@@ -67,6 +72,7 @@ const ModalReport = ({ id,openModalReport, handleOk, setIsModalOpenReport }: any
 			onCancel={handleCancelModal}
 			footer={false}
 		>
+			<Spin spinning={isLoading}>
 			<div className="p-5">
 				<Form onFinish={onFinish} form={form}>
 					<a>{dataReportGroup}</a>
@@ -108,6 +114,7 @@ const ModalReport = ({ id,openModalReport, handleOk, setIsModalOpenReport }: any
 					</div>
 				</Form>
 			</div>
+			</Spin>
 		</Modal>
 	)
 }

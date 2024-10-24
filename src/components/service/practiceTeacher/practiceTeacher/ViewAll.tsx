@@ -3,6 +3,7 @@ import {
 	Button,
 	Col,
 	Form,
+	Radio,
 	Row,
 	Select,
 	Space,
@@ -48,7 +49,7 @@ const optionYearsTwo = [
 ]
 
 export const ViewAll = () => {
-	const [fullTable,setFullTable] = useState(true)
+	const [fullTable,setFullTable] = useState(false)
 	const [form] = Form.useForm()
 	const navigate = useNavigate()
 	const initialFormValues = {
@@ -198,14 +199,20 @@ export const ViewAll = () => {
 			dataIndex: 'subdivision',
 			title: <TitleHeadCell title={'Подразделение'}/>,
 			name: 'Подразделение',
-			className: 'text-xs !p-2 mobileFirst',
+			className: 'text-xs !p-6 mobileFirst ',
 			width: '20%',
-			
-			responsive: ['xs'],
+
 		},
 		{
-			key: 'specialtyName',
-			dataIndex: 'specialtyName',
+			key: 'group',
+			dataIndex: 'group',
+			title: <TitleHeadCell title={'Номер группы'}/>,
+			align: 'center',
+			className: 'text-xs !p-6 mobileFirst ',
+		},
+		{
+			key: 'specialty',
+			dataIndex: 'specialty',
 			title: <TitleHeadCell title={'Шифр и наименование специальности'}/>,
 			name: 'Шифр и наименование специальности',
 			className: 'text-xs !p-2',
@@ -213,33 +220,51 @@ export const ViewAll = () => {
 		
 		},
 		{
-            title: <TitleHeadCell title={'Дата заполнения'}/>,
-            dataIndex: 'dateFilling',
-            width: '20%',
-            render: (text:any) => dayjs(text).format('DD.MM.YYYY')
-        },
-		{
-			key: 'practiceType',
-			dataIndex: 'practiceType',
-
-			title: <TitleHeadCell title={'Тип практики'}/>,
-			className: 'text-xs !p-2 mobileFirst'
-		
+			key: 'period',
+			dataIndex: 'period',
+			title: <TitleHeadCell title={'Период практики'}/>,
+			align: 'center',
+			className: 'text-xs !p-4',
+			render: (_: any, record: any) => {
+				return (
+					<div className={'flex flex-col'}>
+						<span>{dayjs(record.period.split(' - ')[0].trim()).format('DD.MM.YYYY')}</span>-
+						<span>{dayjs(record.period.split(' - ')[1].trim()).format('DD.MM.YYYY')}</span>
+					</div>
+				)
+			}
 		},
 		{
-			key: 'semester',
-			dataIndex: 'semester',
-			title: <TitleHeadCell title={'Семестр'}/>,
+			key: 'send',
+			dataIndex: 'send',
+			title: <TitleHeadCell title={'Сформирован отчет'}/>,
 			align: 'center',
-			className: 'text-xs !p-2 mobileFirst'
+			className: 'text-xs !p-4',
+			render: (_: any, record: any) => {
+				return (
+					<div className={' '}>
+						{record?.isReportExist ? 'Да' : 'Нет'}
+					</div>
+				)
+			}
 		},
 		{
-			key: 'courseNumber',
-			dataIndex: 'courseNumber',
-			title: <TitleHeadCell title={'Курс'}/>,
+			key: 'send',
+			dataIndex: 'send',
+			title: <TitleHeadCell title={'Отправлен в деканат'}/>,
 			align: 'center',
-			className: 'text-xs !p-2 mobileFirst'
+			className: 'text-xs !p-4',
+			render: (_: any, record: any) => {
+				return (
+					<div className={' '}>
+						{record?.isReportExist ? 'Да' : 'Нет'}
+					</div>
+				)
+			}
 		}
+	
+		
+		
 		
 	]
 
@@ -355,12 +380,14 @@ export const ViewAll = () => {
 			}
 		}
 		function filterPast(elem: any) {
-			console.log('elem.period',elem.period )
+			console.log('elem.period',dayjs(elem.period.split(' - ')[1].trim()).format('DD.MM.YYYY') )
+			console.log('filter.dateFilling',dayjs().format('DD.MM.YYYY'))
+			console.log('fuin',dayjs(elem.period.split(' - ')[1].trim()).format('DD.MM.YYYY') < dayjs().format('DD.MM.YYYY'))
 			if (filter.dateFilling === 'Прошедшие') {
-				return dayjs(elem.period.split(' - ')[1].trim()).format('DD.MM.YYYY') < dayjs().format('DD.MM.YYYY')
+				return dayjs(elem.period.split(' - ')[1].trim()).format('DD.MM.YYYY') > dayjs().format('DD.MM.YYYY')
             }
 			if (filter.dateFilling === 'Текущие') {
-				return dayjs(elem.period.split(' - ')[1].trim()).format('DD.MM.YYYY') > dayjs().format('DD.MM.YYYY')
+				return dayjs(elem.period.split(' - ')[1].trim()).format('DD.MM.YYYY') < dayjs().format('DD.MM.YYYY')
             }
 			else{
 				return elem
@@ -712,9 +739,21 @@ export const ViewAll = () => {
 					</Col>
 				</Row>
 			</Form>
-			<Row className='flex justify-end'>
-				
-				<Col span={8}  className='mobileFirst mt-4 '>
+			<Row className='flex justify-between items-center mt-8 mb-8'>
+			
+				<Col span={12} flex="50%" className="mobileFirst">
+					<Radio.Group defaultValue="compressedView" buttonStyle="solid">
+						<Radio.Button onClick={() => setFullTable(false)} value="compressedView" className="!rounded-l-full">
+							Посмотреть в сжатом виде
+						</Radio.Button>
+						<Radio.Button onClick={() => setFullTable(true)} value="tableView" className="!rounded-r-full">
+							Посмотреть данные в таблице
+						</Radio.Button>
+					</Radio.Group>
+				</Col>
+			
+			
+				<Col span={8}  className='mobileFirst  '>
                     <div className={'flex gap-2 items-center justify-end '}>
                         <span className={'mr-2'}>Сортировка</span>
                         <div className='w-[228px] flex justify-end'><Select
@@ -781,15 +820,7 @@ export const ViewAll = () => {
                     }}
 					rowClassName={() => 'animate-fade-in'}
 					className="my-"
-					rowSelection={{
-						type: 'checkbox',
-						onSelect: (record, selected, selectedRows, nativeEvent) => {
-							setSelectedFieldFull(selectedRows)
-						},
-						onSelectAll: (selected, selectedRows, changeRows) => {
-							setSelectedFieldFull(selectedRows)
-						}
-					}}
+					
 				/>
 				</div>
 			)}

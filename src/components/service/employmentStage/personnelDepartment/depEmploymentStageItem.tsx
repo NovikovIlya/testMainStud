@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+	import { useState, useRef } from 'react'
 import { GreenCheck } from '../../../../assets/svg/GreenCheck'
 import { Button, ConfigProvider, Input, Modal } from 'antd'
 import { DocumentElem } from './components/DocumentElem'
@@ -66,7 +66,7 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 		return(
 			<>
 				{(props.stage === 2) && (
-					<>
+					<div className='min-w-[300px] items-left'>
 						{(props.stageStatus === 'VERIFYING') && (secondStageStatus.secondStageStatus === 'VERIFYING') && (
 							<div className="flex flex-row gap-[12px]">
 								<Button
@@ -95,21 +95,21 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 							</div>
 						)}
 						{((props.stageStatus === 'REFINE') || (secondStageStatus.secondStageStatus === 'REFINE')) && (
-							<div className="flex flex-row items-center gap-[12px] pr-[150px]">
+							<div className="flex flex-row items-center gap-[12px]">
 								<div className="w-[11px] h-[11px] rounded-[100%] bg-[#FFD600]"></div>
 								<span>Доработка</span>
 							</div>
 						)}
 						{((props.stageStatus === 'ACCEPTED') || (secondStageStatus.secondStageStatus === 'ACCEPTED')) && (
-							<div className="flex flex-row items-center gap-[12px] pr-[150px]">
+							<div className="flex flex-row items-center gap-[12px]">
 								<div className="w-[11px] h-[11px] rounded-[100%] bg-[#00AB30]"></div>
 								<span>Принято</span>
 							</div>
 						)}
-					</>
+					</div>
 				)}
 				{(props.stage === 3) && (
-					<>
+					<div className='min-w-[300px] items-left'>
 						{(props.stageStatus === 'VERIFYING') && (thirdStageStatus.thirdStageStatus === 'VERIFYING') && (
 							<div className="flex flex-row gap-[12px]">
 								<Button
@@ -137,23 +137,23 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 							</div>
 						)}
 						{((props.stageStatus === 'REFINE') || (thirdStageStatus.thirdStageStatus === 'REFINE')) && (
-							<div className="flex flex-row items-center gap-[12px] pr-[150px]">
+							<div className="flex flex-row items-center gap-[12px]">
 								<div className="w-[11px] h-[11px] rounded-[100%] bg-[#FFD600]"></div>
 								<span>Доработка</span>
 							</div>
 						)}
 						{((props.stageStatus === 'ACCEPTED') || (thirdStageStatus.thirdStageStatus === 'ACCEPTED')) && (
-							<div className="flex flex-row items-center gap-[12px] pr-[150px]">
+							<div className="flex flex-row items-center gap-[12px]">
 								<div className="w-[11px] h-[11px] rounded-[100%] bg-[#00AB30]"></div>
 								<span>Принято</span>
 							</div>
 						)}
-					</>
+					</div>
 				)}
 				{(props.stage === 4) && (
-					<>
+					<div className='min-w-[300px] items-left'>
 					{(props.stageStatus === 'VERIFYING') && (forthStageStatus.forthStageStatus === 'VERIFYING') && (
-						<div className="flex flex-row gap-[12px]">
+						<div className="flex flex-row gap-[12px] items-left">
 							<Button
 								className="text-[#FFFFFF] py-[8px] px-[24px] border-none rounded-[54.5px] text-[16px] font-normal"
 								type="primary"
@@ -179,21 +179,21 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 					</div>
 					)}
 				{((props.stageStatus === 'REFINE') || (forthStageStatus.forthStageStatus === 'REFINE')) && (
-					<div className="flex flex-row items-center gap-[12px] pr-[150px]">
+					<div className="flex flex-row items-center gap-[12px]">
 						<div className="w-[11px] h-[11px] rounded-[100%] bg-[#FFD600]"></div>
 						<span>Доработка</span>
 					</div>
 				)}
 				{((props.stageStatus === 'ACCEPTED') || (forthStageStatus.forthStageStatus === 'ACCEPTED')) && (
-					<div className="flex flex-row items-center gap-[12px] pr-[150px]">
+					<div className="flex flex-row items-center gap-[12px]">
 						<div className="w-[11px] h-[11px] rounded-[100%] bg-[#00AB30]"></div>
 						<span>Принято</span>
 					</div>
 				)}
-			</>
+			</div>
 				)}
 				{(props.stage === 5) && (
-					<>
+					<div className='min-w-[300px] items-left'>
 						{(props.stageStatus === 'VERIFYING') && (fifthStageStatus.fifthStageStatus === 'VERIFYING')	 && (
 							<div className="flex flex-row gap-[12px]">
 								<Button
@@ -221,21 +221,21 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 							</div>
 						)}
 						{((props.stageStatus === 'REFINE') || (fifthStageStatus.fifthStageStatus === 'REFINE')) && (
-							<div className="flex flex-row items-center gap-[12px] pr-[150px]">
+							<div className="flex flex-row items-center gap-[12px]">
 								<div className="w-[11px] h-[11px] rounded-[100%] bg-[#FFD600]"></div>
 								<span>Доработка</span>
 							</div>
 						)}
 						{((props.stageStatus === 'ACCEPTED') || (fifthStageStatus.fifthStageStatus === 'ACCEPTED')) && (
-							<div className="flex flex-row items-center gap-[12px] pr-[150px]">
+							<div className="flex flex-row items-center gap-[12px]">
 								<div className="w-[11px] h-[11px] rounded-[100%] bg-[#00AB30]"></div>
 								<span>Принято</span>
 							</div>
 						)}
-					</>
+					</div>
 				)}
 				{(props.stage === 6) && (
-					<>
+					<div className='min-w-[300px] items-left'>
 						{(props.stageStatus === 'VERIFYING') && (sixStageStatus.sixStageStatus === 'VERIFYING')	 && (
 							<div className="flex flex-row gap-[12px]">
 								<Button
@@ -263,18 +263,18 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 							</div>
 						)}
 						{((props.stageStatus === 'REFINE') || (sixStageStatus.sixStageStatus === 'REFINE')) && (
-							<div className="flex flex-row items-center gap-[12px] pr-[150px]">
+							<div className="flex flex-row items-center gap-[12px]">
 								<div className="w-[11px] h-[11px] rounded-[100%] bg-[#FFD600]"></div>
 								<span>Доработка</span>
 							</div>
 						)}
 						{((props.stageStatus === 'ACCEPTED') || (sixStageStatus.sixStageStatus === 'ACCEPTED')) && (
-							<div className="flex flex-row items-center gap-[12px] pr-[150px]">
+							<div className="flex flex-row items-center gap-[12px]">
 								<div className="w-[11px] h-[11px] rounded-[100%] bg-[#00AB30]"></div>
 								<span>Принято</span>
 							</div>
 						)}
-					</>
+					</div>
 				)}
 </>
 )
@@ -478,7 +478,7 @@ const StageStatusModal = () => {
 return (
 	<>
 		<StageStatusModal></StageStatusModal>
-		<div className="p-[20px] pr-[40px] gap-[20px] flex flex-col w-full bg-[#FFFFFF]">
+		<div className="p-[20px] pr-[0px] gap-[20px] flex flex-col w-full bg-[#FFFFFF]">
 			<div className="flex flex-row items-center justify-between min-h-[32px]">
 				{(props.stage === 2) && (
 					<div className="flex flex-row gap-[37px]">

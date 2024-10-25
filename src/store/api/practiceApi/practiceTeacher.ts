@@ -92,9 +92,9 @@ export const practiceTeacherService = apiSliceTeacher.injectEndpoints({
             invalidatesTags: ['practiceTeacher']        
         }),
         updateReportGroup: builder.mutation<any, any>({
-            query: (body) => {
+            query: ({practiceId,body}) => {
                 return {
-                    url: `/services/api-teacher-practices/practices/report`,
+                    url: `/services/api-teacher-practices/practices/report?practiceId=${practiceId}`,
                     method: 'POST',
                     body,
                     responseHandler: async (response) => {
@@ -119,11 +119,26 @@ export const practiceTeacherService = apiSliceTeacher.injectEndpoints({
             query: (id) => {
                 return {
                     url: `/services/api-teacher-practices/practices/group/report?practiceId=${id}`,
-                    method: 'GET'
+                    method: 'GET',
+                    responseHandler: async (response) => {
+                        const blob = await response.blob();
+                        return window.URL.createObjectURL(blob); 
+                    },
                 }
             },
             providesTags: ['practiceTeacher'],
             keepUnusedDataFor: 0,   
+            
+        }),
+        sendToDekanat: builder.mutation<any, any>({
+            query: (practiceId) => {
+                return {
+                    url: `/services/api-teacher-practices/practices/reports/send?practiceId=${practiceId}`,
+                    method: 'PATCH',
+             
+                }
+            },
+            invalidatesTags: ['practiceTeacher']
         }),
     })
 })
@@ -139,6 +154,7 @@ export const {
     useUpdateCompetencesMutation,
     useUpdateReportGroupMutation,
     useGetInfoReportStudentQuery,
-    useGetInfoReportGroupQuery
+    useGetInfoReportGroupQuery,
+    useSendToDekanatMutation
     
 } = practiceTeacherService

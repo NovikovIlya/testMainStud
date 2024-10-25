@@ -25,7 +25,11 @@ const ModalReport = ({ id,openModalReport, handleOk, setIsModalOpenReport }: any
 			date: dayjs(values.date).format('DD.MM.YYYY')
 		}
 		console.log('obj:', obj)
-		sendUpdateReport(obj).unwrap()
+		const mainObj = {
+			body: obj,
+			practiceId: id
+		}
+		sendUpdateReport(mainObj).unwrap()
 			.then(() => {
 				dispatch(showNotification({ message: 'Отчет сформирован', type: 'success' }))
 				download()
@@ -75,7 +79,7 @@ const ModalReport = ({ id,openModalReport, handleOk, setIsModalOpenReport }: any
 			<Spin spinning={isLoading}>
 			<div className="p-5">
 				<Form onFinish={onFinish} form={form}>
-					<a>{dataReportGroup}</a>
+				
 					<Row>
 						<Col span={12}>
 							<span>Дополнительная информация</span>

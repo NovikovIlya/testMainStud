@@ -14,6 +14,7 @@ import {
 	Space,
 	Spin,
 	Table,
+	Tooltip,
 	Upload,
 	message
 } from 'antd'
@@ -27,10 +28,13 @@ import { useGetAllMyPracticesQuery } from '../../../../store/api/practiceApi/myp
 import {
 	useGetChatQuery,
 	useGetCompetencesQuery,
+	useGetInfoReportGroupQuery,
 	useGetInfoReportStudentQuery,
 	useGetOneGroupQuery,
 	useGetStatusQuery,
 	useSendMessageMutation,
+	useSendToDekanatMutation,
+	useUpdateReportGroupMutation,
 	useUpdateStatusMutation
 } from '../../../../store/api/practiceApi/practiceTeacher'
 import { setText } from '../../../../store/reducers/notificationSlice'
@@ -99,9 +103,13 @@ export const ViewPraciceTeacher = () => {
 		grade:'Все'
 	})
 	const [isModalOpen, setIsModalOpen] = useState(false)
-	const { data: dataAllOrder, isSuccess: isSuccessOrder,isFetching:isFetchingMyPractice,refetch:refetchAll } = useGetOneGroupQuery(id, { skip: !id })
+	const { data: { 
+        students, 
+        isSentToDekanat, 
+        isReportExist 
+    } = {} , isSuccess: isSuccessOrder,isFetching:isFetchingMyPractice,refetch:refetchAll } = useGetOneGroupQuery(id, { skip: !id })
 	const isMobile = isMobileDevice()
-	const [dataTable, setDataTable] = useState<any>(dataAllOrder)
+	const [dataTable, setDataTable] = useState<any>(students)
 	const { data: dataChat, isFetching: isFethcingChat, refetch } = useGetChatQuery(idStudent, { skip: !idStudent })
 	const [sendMessageApi, { isLoading }] = useSendMessageMutation()
 	const [updateStatus, {isLoading:isLoadingUpdateStatus}] = useUpdateStatusMutation()
@@ -109,6 +117,8 @@ export const ViewPraciceTeacher = () => {
 	const dispatch = useAppDispatch()
 	const [oldId,setOldId] = useState(null)
 	const {data:dataReportStudent} = useGetInfoReportStudentQuery(idStudent,{skip: !idStudent})
+	const [sendDekanat,{} ] = useSendToDekanatMutation()
+	const {data:dataReportTwo} = useGetInfoReportGroupQuery(id)
 
 	const columnsMini = [
 		{
@@ -163,11 +173,12 @@ export const ViewPraciceTeacher = () => {
 			title: 'Наличие отчета',
 			className: 'text-xs !p-4 ',
 			render: (record: any, text: any) => {
+				
 				return (
 					<>
-						{record?.isReportExist ? 
-						<Button onClick={()=>modalButton(text)} className='p-5'>Отчет сформирован</Button> : 
-						<Button onClick={()=>modalButton(text)} className='p-5'>Отчет не сформирован</Button>}
+						{text?.isReportExist ? 
+						<Button onClick={()=>modalButton(text)} className='p-5 w-48'>Отчет сформирован</Button> : 
+						<Button onClick={()=>modalButton(text)} className='p-5 w-48'>Отчет не сформирован</Button>}
 					</>
 				)
 			}
@@ -195,7 +206,7 @@ export const ViewPraciceTeacher = () => {
 		if (isSuccessOrder) {
 			setDataTable(filterDataFull())
 		}
-	}, [filter, isSuccessOrder,dataAllOrder])
+	}, [filter, isSuccessOrder,students])
 
 
 	useTimeout(() => {
@@ -224,8 +235,7 @@ export const ViewPraciceTeacher = () => {
 			}
 		}
 		function filterGrade(elem: any) {
-			console.log('filter.grade',filter.grade)
-			console.log('elem.grade',elem.grade)
+		
 			if (filter.grade === 'Все') {
 				return elem
 			}else if(filter.grade==='Не оценено'){
@@ -244,27 +254,15 @@ export const ViewPraciceTeacher = () => {
 		}
 
 
-		return dataAllOrder
-			? dataAllOrder
+		return students
+			? students
 			.filter((elem: any) => filterCourse(elem))
 			.filter((elem: any) => filterName(elem))
 			.filter((elem: any) => filterStatus(elem))
 			.filter((elem: any) => filterGrade(elem))
 			: []
 	}
-	const changeSelect = (value: any, row: any) => {
-		const updatedData = dataTable.map((item: any) => {
-			if (item.index === row.index) {
-				return { ...item, grade: value }
-			}
-			return item
-		})
-		setDataTable(updatedData)
 
-		if (row.fio === '') {
-			setOpen(false)
-		}
-	}
 	const handleRowClick = (record: any) => {
 		setOpen(false)
 		setDelay(v => (v !== undefined ? v + 1 : 1))
@@ -286,13 +284,13 @@ export const ViewPraciceTeacher = () => {
 	}
 	const modalButton = (value:any)=>{
 		if(value.id===idStudent){
-			console.log('был')
+		
 			refechComp()
 			dispatch(apiSliceTeacher.util.resetApiState())
 		}
 		setOldId(value.studentName)
 		refetchAll()
-		console.log('value',value)
+	
 		setRowData(value)
 		setIdStudent(value.id)
 		// openStudentModal()
@@ -373,9 +371,21 @@ export const ViewPraciceTeacher = () => {
 		setIsModalOpenReport(true)
 	}
 
+
+	const downloadTwo =()=>{
+		console.log('dataReportTwo',dataReportTwo)
+		if(dataReportTwo){
+			const link = document.createElement('a')
+			link.href = dataReportTwo
+			link.setAttribute('download', `Отчет.docx`)
+			document.body.appendChild(link)
+			link.click()
+		}
+	}
+
 	const openStudentModal = (value:any) =>{
 		if(value===oldId){
-			console.log('был да старый')
+		
 			refechComp()
 			dispatch(apiSliceTeacher.util.resetApiState())
 		}
@@ -388,7 +398,7 @@ export const ViewPraciceTeacher = () => {
 
 	const sortedData =
 		dataTable?.length > 0 ? [...dataTable].sort((a: any, b: any) => a.studentName.localeCompare(b.studentName)).map((item:any,index:number)=>({...item, number:index+1})) : []
-	const uniqueNames = Array.from(new Set(dataAllOrder?.map((student: any) => student.studentName)))
+	const uniqueNames = Array.from(new Set(students?.map((student: any) => student.studentName)))
 
 	
 	return (
@@ -406,7 +416,7 @@ export const ViewPraciceTeacher = () => {
 							nav('/services/practiceteacher')
 						}}
 					/>
-					<span className=" text-[28px] font-normal">Практика группы {dataAllOrder?.[0]?.groupNumber}</span>
+					<span className=" text-[28px] font-normal">Практика группы {students?.[0]?.groupNumber}</span>
 				</Space>
 
 				<Row gutter={[16, 16]} className="mt-14  flex items-center">
@@ -459,7 +469,7 @@ export const ViewPraciceTeacher = () => {
 						</Form.Item>
 					</Col>
 					<Col className='flex justify-end' span={12}>
-						<Button >Отправить в деканат</Button>
+						<Tooltip title={true===true ? 'Сформируйте отчет' : ''}><Button onClick={()=>sendDekanat(id)} disabled={!isReportExist}>Отправить в деканат</Button></Tooltip>
 					</Col>
 				</Row>		
 				<Row gutter={[16, 16]} className="mt-4 mb-14 flex items-center">
@@ -489,11 +499,31 @@ export const ViewPraciceTeacher = () => {
 							/>
 						</Form.Item>
 					</Col>
-
 				</Row>
+				
+					
 			
 				<Row>
-					<Col className='flex justify-end' span={24}>
+					{/* <Col className='flex gap-3' span={12}>
+						<span>Статус формирования:  </span>
+						<span>{isReportExist ? <a onClick={downloadTwo}>Сформирован</a> : ' Не сформирован'}</span>
+					</Col> */}
+
+				</Row>
+				<Row className='mb-6'>
+					<Col span={12}>
+						<div>
+							<Col className='flex gap-3' span={12}>
+								<span>Статус формирования:  </span>
+								<span>{isReportExist ? <a onClick={downloadTwo}>Сформирован</a> : ' Не сформирован'}</span>
+							</Col>
+							<Col className='flex gap-3' span={12}>
+								<span>Статус отправки в деканат:  </span>
+								<span>{isSentToDekanat ? ' Отправлено' : ' Не отправлено'}</span>
+							</Col>
+						</div>
+					</Col>
+					<Col className='flex justify-end' span={12}>
 						<Button
 						onClick={refetchAll}
 						className=""
@@ -562,7 +592,7 @@ export const ViewPraciceTeacher = () => {
 									dataTable.length > 10 && {
 										current: currentPage,
 										pageSize: 10,
-										total: dataAllOrder?.length,
+										total: students?.length,
 										onChange: page => setCurrentPage(page)
 									}
 								}
@@ -846,7 +876,7 @@ export const ViewPraciceTeacher = () => {
 				
 				<ModalReport id={id} setIsModalOpenReport={setIsModalOpenReport} handleOk={handleOk} openModalReport={openModalReport}/>
 
-				<ModalStudent dataReportStudent={dataReportStudent} dataAllOrder={dataAllOrder} isFetchingComp={isFetchingComp} id={id} idStudent={idStudent} isSuccessCompetences={isSuccessCompetences} data={dataCompetences} dataCompetences={dataCompetences?.competencesTable} rowData={rowData} setIsModalStudent={setIsModalStudent} handleOk={handleOk} openModalStudent={openModalStudent}/>
+				<ModalStudent dataReportStudent={dataReportStudent} students={students} isFetchingComp={isFetchingComp} id={id} idStudent={idStudent} isSuccessCompetences={isSuccessCompetences} data={dataCompetences} dataCompetences={dataCompetences?.competencesTable} rowData={rowData} setIsModalStudent={setIsModalStudent} handleOk={handleOk} openModalStudent={openModalStudent}/>
 			</section>
 			</Spin>
 			

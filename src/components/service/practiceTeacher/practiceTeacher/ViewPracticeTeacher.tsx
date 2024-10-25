@@ -499,26 +499,17 @@ export const ViewPraciceTeacher = () => {
 							/>
 						</Form.Item>
 					</Col>
-				</Row>
-				
-					
+				</Row>		
 			
-				<Row>
-					{/* <Col className='flex gap-3' span={12}>
-						<span>Статус формирования:  </span>
-						<span>{isReportExist ? <a onClick={downloadTwo}>Сформирован</a> : ' Не сформирован'}</span>
-					</Col> */}
-
-				</Row>
 				<Row className='mb-6'>
 					<Col span={12}>
 						<div>
 							<Col className='flex gap-3' span={12}>
-								<span>Статус формирования:  </span>
+								<span className='text-gray-500'>Статус формирования:  </span>
 								<span>{isReportExist ? <a onClick={downloadTwo}>Сформирован</a> : ' Не сформирован'}</span>
 							</Col>
 							<Col className='flex gap-3' span={12}>
-								<span>Статус отправки в деканат:  </span>
+								<span className='text-gray-500'>Статус отправки в деканат:  </span>
 								<span>{isSentToDekanat ? ' Отправлено' : ' Не отправлено'}</span>
 							</Col>
 						</div>

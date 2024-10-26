@@ -489,3 +489,5 @@ export type ChangeStageStatusType = {
 	status: 'ACCEPTED' | 'REFINE'
 	comment: string
 }
+
+export type DocumentDefinitionType = EmploymentDocsType & { required: boolean }

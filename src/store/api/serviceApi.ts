@@ -1031,9 +1031,13 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
-		setHasNoRequisitesOnEmployment: builder.mutation<void, number>({
-			query: respondId => ({
+		setHasNoRequisitesOnEmployment: builder.mutation<
+			void,
+			{ respondId: number; bank: 'SBER' | 'VTB' }
+		>({
+			query: ({ respondId, bank }) => ({
 				url: `http://localhost:8082/employment-api/v1/respond/${respondId}/employment/requisites-missing`,
+				body: { bank: bank },
 				method: 'POST',
 				headers: {
 					Authorization: `Bearer ${seekerToken}`

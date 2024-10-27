@@ -304,6 +304,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 											.then(() => {
 												setIsSeekerRejected(true)
 											})
+										setIsRefuseModalOpen(false)
 									}}
 								>
 									<h2 className="font-normal text-[18px]">

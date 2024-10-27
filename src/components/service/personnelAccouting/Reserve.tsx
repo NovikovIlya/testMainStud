@@ -58,22 +58,22 @@ export const Reserve = () => {
 					</label>
 					<label
 						className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
-							type === 'DIRECTLY'
+							type === 'RESUME'
 								? 'text-white bg-dasha-blue'
 								: 'text-black border-solid border-black border-[1px]'
 						} font-normal text-[16px]/[16px]`}
 					>
-						<Radio value={'DIRECTLY'} className="hidden"></Radio>
+						<Radio value={'RESUME'} className="hidden"></Radio>
 						резюме, отправленное напрямую
 					</label>
 					<label
 						className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
-							type === 'RESERVE'
+							type === 'RESPOND'
 								? 'text-white bg-dasha-blue'
 								: 'text-black border-solid border-black border-[1px]'
 						} font-normal text-[16px]/[16px]`}
 					>
-						<Radio value={'RESERVE'} className="hidden"></Radio>
+						<Radio value={'RESPOND'} className="hidden"></Radio>
 						резюме, отправленное на вакансию
 					</label>
 				</Radio.Group>
@@ -100,7 +100,11 @@ export const Reserve = () => {
 						}
 						respondDate={respond.respondDate}
 						refetch={refetch}
-						post={respond.desiredJob}
+						post={
+							respond.oldVacancyName
+								? respond.oldVacancyName
+								: respond.desiredJob
+						}
 					/>
 				))}
 			</div>

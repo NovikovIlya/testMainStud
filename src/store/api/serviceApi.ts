@@ -330,7 +330,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		getReservedResponces: builder.query<VacancyRespondItemType[], string>({
 			query: type => ({
-				url: `http://localhost:8082/employment-api/v1/reserve?type=${type}`,
+				url: `http://localhost:8082/employment-api/v1/reserve?reserveType=${type}`,
 				headers: {
 					Authorization: `Bearer ${personnelDeparmentToken}`
 				}

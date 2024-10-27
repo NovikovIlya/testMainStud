@@ -5,7 +5,7 @@ import { DocumentElem } from './components/DocumentElem'
 import { StageComment } from './components/StageComment'
 import {
 	useChangeEmploymentStageStatusRequestMutation,
-	useChangeEmploymentStageAccountingStatusRequestMutation
+	useChangeEmploymentStageAccountingStatusRequestMutation, useMarkBankCardApplicationFormedMutation
 } from '../../../../store/api/serviceApi'
 import { useAppSelector } from '../../../../store'
 import { setSecondStageStatus } from '../../../../store/reducers/EmploymentStageReducers/stages/SecondStageStatusSlice'
@@ -30,6 +30,7 @@ interface Document {
 
 interface DepEmploymentStageItemProps {
 	stage: number
+	role: string
 	stageStatus: string
 	comment: string
 	documentArray: Document[] | undefined
@@ -48,8 +49,11 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 	const fifthStageCommentVisibility = useAppSelector(state => state.fifthStageCommentVisibility)
 	const sixStageCommentVisibility = useAppSelector(state => state.sixStageCommentVisibility)
 
+	const [isReqModalOpen, setIsReqModalOpen] = useState(false)
+
 	const dispatch = useDispatch()
 
+	const [markBankCardApplicationFormed] = useMarkBankCardApplicationFormedMutation()
 	const [changeStatus] = useChangeEmploymentStageStatusRequestMutation()
 	const [changeStatusAccounting] = useChangeEmploymentStageAccountingStatusRequestMutation()
 
@@ -62,6 +66,50 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 		textRef.current = e.target.value
 	};
 
+	const isBankSber : boolean = true
+	const isBankVTB : boolean = false
+
+	const ReqModal = () => {
+		return (
+			<>
+				<ConfigProvider
+					theme={{
+						token: {
+							boxShadow: '0 0 19px 0 rgba(212, 227, 241, 0.6)'
+						}
+					}}
+				>
+					<Modal
+						centered
+						open={isReqModalOpen}
+						onCancel={() => {
+							setIsReqModalOpen(false)
+						}}
+						title={null}
+						footer={null}
+						width={407}
+					>
+						<div className='flex flex-col px-[15px] pt-[50px] pb-[30px] gap-[34px]'>
+							<p
+								className="text-center font-content-font font-normal flex items-start text-black text-[16px]/[20px]">
+								Вы действительно хотите отметить заявление сформированным? Соискателю в чат придëт сообщение, что ему необходимо подойти и подписать его.
+							</p>
+							<Button
+								className="rounded-[54.5px] text-[14px] w-full py-[13px]"
+								type="primary"
+								onClick={() => {
+									markBankCardApplicationFormed({ subStageId: 6 })
+									setIsReqModalOpen(false)
+								}}
+							>
+								Ок
+							</Button>
+						</div>
+					</Modal>
+				</ConfigProvider>
+			</>
+		)
+	}
 	const StageStatusComponent = () => {
 		return(
 			<>
@@ -234,7 +282,7 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 						)}
 					</div>
 				)}
-				{(props.stage === 6) && (
+				{(props.stage === 6) && (props.role === 'accounting') && (
 					<div className='min-w-[300px] items-left'>
 						{(props.stageStatus === 'VERIFYING') && (sixStageStatus.sixStageStatus === 'VERIFYING')	 && (
 							<div className="flex flex-row gap-[12px]">
@@ -272,6 +320,28 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 							<div className="flex flex-row items-center gap-[12px]">
 								<div className="w-[11px] h-[11px] rounded-[100%] bg-[#00AB30]"></div>
 								<span>Принято</span>
+							</div>
+						)}
+					</div>
+				)}
+				{(props.stage === 6) && (props.role === 'personnel') && (
+					<div className='min-w-[300px] items-left'>
+						{(props.stageStatus === 'VERIFYING') && (sixStageStatus.sixStageStatus === 'VERIFYING')	 && (
+							<div className="flex flex-row gap-[12px]">
+								<Button
+									className='text-[#FFFFFF] py-[8px] px-[24px] border-none rounded-[54.5px] text-[16px] font-normal'
+									type="primary"
+									onClick={() => {
+										setIsReqModalOpen(true)
+									}}>
+									Заявление сформированно
+								</Button>
+							</div>
+						)}
+						{((props.stageStatus === 'ACCEPTED') || (sixStageStatus.sixStageStatus === 'ACCEPTED')) && (
+							<div className="flex flex-row items-center gap-[12px]">
+								<div className="w-[11px] h-[11px] rounded-[100%] bg-[#00AB30]"></div>
+								<span>Сформированно</span>
 							</div>
 						)}
 					</div>
@@ -332,7 +402,7 @@ const StageContentComponent = () => {
 					)}
 				</>
 			)}
-			{(props.stage === 6) && (
+			{(props.stage === 6) && (props.role === 'accounting') && (
 				<>
 					{props.documentArray?.map((document) => (
 						<DocumentElem key={document.id} name={document.docType} id={document.id}/>
@@ -344,19 +414,27 @@ const StageContentComponent = () => {
 					)}
 				</>
 			)}
+			{(props.stage === 6) && (props.role === 'personnel') && (
+				<>
+					{props.documentArray?.map((document) => (
+						<DocumentElem key={document.id} name={document.docType} id={document.id} />
+					))}
+					<span className="text-[14px]/[16.8px] text-black opacity-[60%] font-normal">Соискателю необходимо завести банковскую карту {(isBankVTB) ? 'ВТБ' : ''}{(isBankSber) ? 'СБЕРБАНК' : ''}</span>
+				</>
+			)}
 		</>
 	)
 }
-const StageStatusModal = () => {
-	return (
-		<>
-			<ConfigProvider
-				theme={{
-					token: {
-						boxShadow: '0 0 19px 0 rgba(212, 227, 241, 0.6)'
-					}
-				}}
-			>
+	const StageStatusModal = () => {
+		return (
+			<>
+				<ConfigProvider
+					theme={{
+						token: {
+							boxShadow: '0 0 19px 0 rgba(212, 227, 241, 0.6)'
+						}
+					}}
+				>
 				<Modal
 					bodyStyle={{ padding: 52 }}
 					centered
@@ -450,7 +528,7 @@ const StageStatusModal = () => {
 								Отправить
 							</Button>
 						)}
-						{(props.stage === 6) && (
+						{(props.stage === 6) && (props.role === 'accounting') && (
 							<Button
 								className="rounded-[54.5px] py-[12px] px-[24px]  text-[16px]"
 								type="primary"
@@ -475,10 +553,11 @@ const StageStatusModal = () => {
 	)
 }
 
-return (
-	<>
-		<StageStatusModal></StageStatusModal>
-		<div className="p-[20px] pr-[0px] gap-[20px] flex flex-col w-full bg-[#FFFFFF]">
+	return (
+		<>
+			<ReqModal></ReqModal>
+			<StageStatusModal></StageStatusModal>
+			<div className="p-[20px] pr-[0px] gap-[20px] flex flex-col w-full bg-[#FFFFFF]">
 			<div className="flex flex-row items-center justify-between min-h-[32px]">
 				{(props.stage === 2) && (
 					<div className="flex flex-row gap-[37px]">

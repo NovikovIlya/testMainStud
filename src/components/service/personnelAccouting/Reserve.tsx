@@ -8,7 +8,7 @@ import { respondStatus } from '../../../store/reducers/type'
 import { ReserveItem } from './ReserveItem'
 
 export const Reserve = () => {
-	const [type, setType] = useState('все')
+	const [type, setType] = useState('')
 
 	const {
 		data: reserve = [],
@@ -48,12 +48,12 @@ export const Reserve = () => {
 				>
 					<label
 						className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
-							type === 'все'
+							type === ''
 								? 'text-white bg-dasha-blue'
 								: 'text-black border-solid border-black border-[1px]'
 						} font-normal text-[16px]/[16px]`}
 					>
-						<Radio value={'все'} className="hidden"></Radio>
+						<Radio value={''} className="hidden"></Radio>
 						все
 					</label>
 					<label

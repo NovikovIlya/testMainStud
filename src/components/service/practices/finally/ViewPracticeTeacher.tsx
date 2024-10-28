@@ -13,8 +13,14 @@ import { useLocation, useNavigate } from 'react-router-dom'
 
 import { Vector } from '../../../../assets/svg/Vector'
 import {
+	useGetInfoReportGroupQuery,
+	useGetInfoReportStudentQuery,
 	useGetOneGroupQuery,
 	useGetStatusQuery} from '../../../../store/api/practiceApi/practiceTeacher'
+import { useGetAllStudentsFinalQuery } from '../../../../store/api/practiceApi/practical'
+import { useAppDispatch } from '../../../../store'
+import { apiSliceTeacher } from '../../../../store/api/apiSliceTeacher'
+import { showNotification } from '../../../../store/reducers/notificationSlice'
 
 
 const optionMockGrade = [
@@ -33,18 +39,18 @@ const optionMockGrade = [
 export const ViewPraciceTeacher = () => {
 	const path = useLocation()
 	const id = path.pathname.split('/').at(-1)!
+	const [idGroup,setIdGroup] = useState<any>({id:null,count:0})
 	const [files, setFiles] = useState<any>({
 		report: null,
 		diary: null,
 		tasks: null
 	})
-	const [idStudent, setIdStudent] = useState<any>(null)
-	const { data: dataStatus, isSuccess: isSuccessStatus } = useGetStatusQuery(idStudent, { skip: !idStudent })
+	const [idStudent, setIdStudent] = useState<any>({id:null,count:0})
+	// const { data: dataStatus, isSuccess: isSuccessStatus } = useGetStatusQuery(idStudent, { skip: !idStudent })
 	const [grade, setGrade] = useState<any>(null)
 	const [rowData, setRowData] = useState(null)
 	const [statusStudent, setStatusStudent] = useState<any>(null)
 	const nav = useNavigate()
-	const [delay, setDelay] = useState<number | undefined>(250)
 	const [fullTable, setFullTable] = useState(false)
 	const [currentPage, setCurrentPage] = useState(1)
 	const [form] = Form.useForm()
@@ -55,9 +61,12 @@ export const ViewPraciceTeacher = () => {
 		status: 'Все',
 		grade: 'Все'
 	})
-	const {data: dataAllOrder,isSuccess: isSuccessOrder,isFetching: isFetchingMyPractice,refetch: refetchAll} = useGetOneGroupQuery(id, { refetchOnMountOrArgChange: true })
-	const [dataTable, setDataTable] = useState<any>(dataAllOrder)
+	const {data: students,isSuccess: isSuccessOrder,isFetching: isFetchingMyPractice,refetch: refetchAll} = useGetAllStudentsFinalQuery(id, { refetchOnMountOrArgChange: true })
+	const [dataTable, setDataTable] = useState<any>(students)
+	const {data:dataReportCurrentStudent} = useGetInfoReportStudentQuery(idStudent?.id,{skip:!idStudent.id})
 	
+	const {data:dataReportGurrentGroup} = useGetInfoReportGroupQuery(idGroup?.id,{skip:!idGroup.id})
+	const dispatch = useAppDispatch()
 
 	const columnsMini = [
 		{
@@ -118,35 +127,97 @@ export const ViewPraciceTeacher = () => {
 			render: (record: any, text: any) => {
 				return (
 					<>
-						<a className="p-5">Отчет.docx</a>
+						<a onClick={()=>downloadCurrenReportStudent(text.id)} className="p-5">Отчет.docx</a>
 					</>
 				)
 			}
 		}
 	]
 
-	useEffect(() => {
-		if (isSuccessStatus) {
-			form.setFieldValue('reasonText', dataStatus?.reason)
-			if (dataStatus?.grade === null) {
-				setGrade('')
-			} else {
-				setGrade(dataStatus?.grade)
-			}
+	// useEffect(() => {
+	// 	if (isSuccessStatus) {
+	// 		form.setFieldValue('reasonText', dataStatus?.reason)
+	// 		if (dataStatus?.grade === null) {
+	// 			setGrade('')
+	// 		} else {
+	// 			setGrade(dataStatus?.grade)
+	// 		}
 
-			if (dataStatus?.status === null) {
-				setStatusStudent('Ожидает проверки')
-			} else {
-				setStatusStudent(dataStatus?.status)
-			}
-		}
-	}, [dataStatus?.grade, dataStatus?.status, isSuccessStatus])
+	// 		if (dataStatus?.status === null) {
+	// 			setStatusStudent('Ожидает проверки')
+	// 		} else {
+	// 			setStatusStudent(dataStatus?.status)
+	// 		}
+	// 	}
+	// }, [dataStatus?.grade, dataStatus?.status, isSuccessStatus])
 
 	useEffect(() => {
 		if (isSuccessOrder) {
 			setDataTable(filterDataFull())
 		}
-	}, [filter, isSuccessOrder, dataAllOrder])
+	}, [filter, isSuccessOrder, students])
+
+	// useEffect(()=>{
+	// 	download()
+	// },[dataReportCurrentStudent])
+
+	// useEffect(()=>{
+	// 	downloadTwo()
+	// },[dataReportGurrentGroup])
+	useEffect(() => {
+        if (dataReportCurrentStudent) {
+            download(dataReportCurrentStudent, `Отчет по конкретному студенту.docx`);
+        }
+    }, [dataReportCurrentStudent]); 
+
+    // Эффект для скачивания отчета по группе
+    useEffect(() => {
+        if (dataReportGurrentGroup) {
+            downloadTwo(dataReportGurrentGroup, `Отчет по конкретному группе.docx`);
+        }
+    }, [dataReportGurrentGroup]); 
+
+	const downloadTwo = async (url:any,name:any)=>{
+		console.log('dataReportGurrentGroup',dataReportGurrentGroup)
+		if(dataReportGurrentGroup){
+			const link = document.createElement('a')
+			link.href = url
+			link.setAttribute('download', name)
+			document.body.appendChild(link)
+			link.click()
+			dispatch(showNotification({message:'Файл скачан',type:'success'}))
+			
+		}
+		
+	}
+
+	const download = async (url:any,name:any)=>{
+		console.log('dataReportCurrentStudent',dataReportCurrentStudent)
+		if(dataReportCurrentStudent){
+			const link = document.createElement('a')
+			link.href = url
+			link.setAttribute('download',name)
+			document.body.appendChild(link)
+			link.click()
+			dispatch(showNotification({message:'Файл скачан',type:'success'}))
+		}
+	}
+
+	const downloadCurrenReportStudent = (idz:any)=>{
+		if(idz===idStudent.id){
+			download(dataReportCurrentStudent, `Отчет по конкретному студенту.docx`)
+			return
+		}
+		setIdStudent((prev:any)=>({...prev,id:idz,count:Math.random()}))
+	}
+
+	const downloadCurrenReport = ()=>{
+		if(idGroup.id===id){
+			downloadTwo(dataReportGurrentGroup, `Отчет по конкретному группе.docx`);
+			return
+		}
+		setIdGroup((prev:any)=>({...prev,id:id,count:Math.random()}))
+	}
 
 	function filterDataFull() {
 		function filterCourse(elem: any) {
@@ -181,8 +252,8 @@ export const ViewPraciceTeacher = () => {
 			}
 		}
 
-		return dataAllOrder
-			? dataAllOrder
+		return students
+			? students
 					.filter((elem: any) => filterCourse(elem))
 					.filter((elem: any) => filterName(elem))
 					.filter((elem: any) => filterStatus(elem))
@@ -191,15 +262,15 @@ export const ViewPraciceTeacher = () => {
 	}
 
 	const handleRowClick = (record: any) => {
-		setIdStudent(record.id)
+		// setIdStudent(record.id)
 
-		setRowData(record)
+		// setRowData(record)
 
-		setFiles({
-			report: null,
-			diary: null,
-			tasks: null
-		})
+		// setFiles({
+		// 	report: null,
+		// 	diary: null,
+		// 	tasks: null
+		// })
 	}
 
 	const sortedData =
@@ -208,7 +279,7 @@ export const ViewPraciceTeacher = () => {
 					.sort((a: any, b: any) => a.studentName.localeCompare(b.studentName))
 					.map((item: any, index: number) => ({ ...item, number: index + 1 }))
 			: []
-	const uniqueNames = Array.from(new Set(dataAllOrder?.map((student: any) => student.studentName)))
+	const uniqueNames = Array.from(new Set(students?.map((student: any) => student.studentName)))
 
 	return (
 		<Form form={form}>
@@ -225,7 +296,7 @@ export const ViewPraciceTeacher = () => {
 								nav('/services/practices/finally')
 							}}
 						/>
-						<span className=" text-[28px] font-normal">Практика группы {dataAllOrder?.[0]?.groupNumber}</span>
+						<span className=" text-[28px] font-normal">Практика группы {students?.[0]?.group}</span>
 					</Space>
 
 					<Row gutter={[16, 16]} className="mt-14  flex items-center">
@@ -256,7 +327,7 @@ export const ViewPraciceTeacher = () => {
 							</Form.Item>
 						</Col>
 						<Col className='flex justify-end' span={12}>
-						<Button >Скачать отчет</Button>
+						<Button onClick={downloadCurrenReport}>Скачать отчет</Button>
 					</Col>
 					</Row>
 					<Row gutter={[16, 16]} className="mt-4 flex items-center">
@@ -345,7 +416,7 @@ export const ViewPraciceTeacher = () => {
 										dataTable.length > 10 && {
 											current: currentPage,
 											pageSize: 10,
-											total: dataAllOrder?.length,
+											total: students?.length,
 											onChange: page => setCurrentPage(page)
 										}
 									}

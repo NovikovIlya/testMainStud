@@ -109,7 +109,11 @@ export const practiceTeacherService = apiSliceTeacher.injectEndpoints({
             query: (studentId) => {
                 return {
                     url: `/services/api-teacher-practices/practices/student/report?studentId=${studentId}`,
-                    method: 'GET'
+                    method: 'GET',
+                    responseHandler: async (response) => {
+                        const blob = await response.blob();
+                        return window.URL.createObjectURL(blob); 
+                    },
                 }
             },
             providesTags: ['practiceTeacher'],

@@ -24,7 +24,7 @@ import {
 	useGetPractiseSubdevisionNewQuery,
 	useGetSubdivisionForPracticeQuery
 } from '../../../../store/api/practiceApi/individualTask'
-import { useGetCafDepartmentsQuery } from '../../../../store/api/practiceApi/practical'
+import { useGetAllPracticesFinalQuery, useGetCafDepartmentsQuery } from '../../../../store/api/practiceApi/practical'
 import { useGetSpecialtyNamesForPractiseQuery } from '../../../../store/api/practiceApi/roster'
 import { processingOfDivisions } from '../../../../utils/processingOfDivisions'
 
@@ -72,18 +72,18 @@ export const ViewFinally = () => {
 		groupNumber: 'Все',
 		dateYear:'Учебный год (по убыванию)'
 	})
-	const {data: dataPractiseAll,isSuccess: isSuccessPractiseAll,isFetching: isFetchingPractiseAll} = useGetAllPracticeTeacherQuery()
+	const {data: dataPractiseAll,isSuccess: isSuccessPractiseAll,isFetching: isFetchingPractiseAll} = useGetAllPracticesFinalQuery()
 	const {data:dataSubdevisionPracticeNew} = useGetPractiseSubdevisionNewQuery()
 	const [tableData, setTableData] = useState<any[]>(dataPractiseAll)
 	const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
 	const { data: dataDepartments, isSuccess: isSuccessDepartments } = useGetSubdivisionForPracticeQuery()
-	const { data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty } = useGetSpecialtyNamesForPractiseQuery(subDevisionId, {skip:!subDevisionId})
+	const { data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty } = useGetSpecialtyNamesForPractiseQuery(subDevisionId, {skip:!subDevisionId || subDevisionId==='Все'})
 	const { data: dataPracticeType, isSuccess: isSuccessPracticeType } = useGetPracticeTypeForPracticeQuery(objType, {skip: objType.subDivisionId === null || !objType.specialtyNameId })
-	const {data:dataGroupNumberNew} = useGetGroupNumbersNewQuery(subDevisionId,{ skip: !subDevisionId })
+	const {data:dataGroupNumberNew} = useGetGroupNumbersNewQuery(subDevisionId,{ skip: !subDevisionId || subDevisionId === 'Все' })
 	const [treeLine, setTreeLine] = useState(true);
-  const [showLeafIcon, setShowLeafIcon] = useState(false);
-  const [value, setValue] = useState<any>();
-
+	const [showLeafIcon, setShowLeafIcon] = useState(false);
+	const [value, setValue] = useState<any>();
+	console.log('subDevisionId',subDevisionId)
 	const columns = [
 		{
 			key: 'subdivision',
@@ -286,7 +286,7 @@ export const ViewFinally = () => {
 			else {
 	
 				// @ts-ignore
-				return elem.subdivisionId === filter.subdivision
+				return elem.subdivision === filter.subdivision
 			}
 		}
 
@@ -366,6 +366,7 @@ export const ViewFinally = () => {
 	const handleChange = (value: string) => {
 		departments?.find(elem => {
 			if (elem.label === value) {
+				console.log('elem.id',elem.id)
 				setSubDevisionId(elem.id)
 			}
 		})
@@ -447,7 +448,8 @@ export const ViewFinally = () => {
             })
         }
     }):[])]
-
+	const treeDataValid = dataPractiseAll?.map((item:any)=>item.subdivision)
+	console.log('treeData',treeData)
 	const uniqueCourseNumbers = [...new Set(tableData?.map((item:any) => item.course))];
 
 
@@ -499,7 +501,12 @@ export const ViewFinally = () => {
 									form.setFieldValue('department','Все')
 									form.setFieldValue('groupNumber','Все')
 								}}
-								treeData={disableParents(treeData)}
+								treeData={[
+									{key:'Все',value:'Все',label:'Все'},
+									...(treeDataValid ? treeDataValid?.map((item:any)=>{
+									return{key:item, value:item, label:item}
+									}):[])
+							]}
 								onPopupScroll={onPopupScroll}
 								treeNodeFilterProp="title"
 							

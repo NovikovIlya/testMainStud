@@ -30,10 +30,24 @@ export const practical = apiSlice.injectEndpoints({
             // @ts-ignore
             invalidatesTags: ['Practise']
         }),
+        getAllPracticesFinal: builder.query<any, void>({
+            query: () => ({
+                url: `services/api-teacher-practices/final-check/practices`,
+                method: 'GET',
+            })
+        }),
+        getAllStudentsFinal: builder.query<any, any>({
+            query: (id) => ({
+                url: `services/api-teacher-practices/final-check/students?studentId=${id}`,
+                method: 'GET',
+            })
+        }),
     })
 })
 export const {
     useGetCafDepartmentsQuery,
     useDeletePractiseMutation,
-    useDeletePractiseSeveralMutation
+    useDeletePractiseSeveralMutation,
+    useGetAllPracticesFinalQuery,
+    useGetAllStudentsFinalQuery
 } = practical

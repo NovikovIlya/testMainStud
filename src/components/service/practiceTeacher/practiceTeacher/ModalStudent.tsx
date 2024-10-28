@@ -107,7 +107,7 @@ const ModalStudent = ({dataReportStudent,data,dataAllOrder,isFetchingComp,id,idS
 		form.setFieldValue('selectGrade','')
 		form.setFieldValue('gradeIfSelect', '')
 	}
-
+	console.log('dataUpdateCompetencedataUpdateCompetencedataUpdateCompetencedataUpdateCompetence',dataUpdateCompetence)
 	const download = async ()=>{
 		if(dataUpdateCompetence){
 			const link = document.createElement('a')

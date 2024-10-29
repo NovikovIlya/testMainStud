@@ -17,7 +17,7 @@ import {
 	useGetInfoReportStudentQuery,
 	useGetOneGroupQuery,
 	useGetStatusQuery} from '../../../../store/api/practiceApi/practiceTeacher'
-import { useGetAllStudentsFinalQuery } from '../../../../store/api/practiceApi/practical'
+import { useGetAllStudentsFinalQuery, useGetAttachmentsFinalQuery } from '../../../../store/api/practiceApi/practical'
 import { useAppDispatch } from '../../../../store'
 import { apiSliceTeacher } from '../../../../store/api/apiSliceTeacher'
 import { showNotification } from '../../../../store/reducers/notificationSlice'
@@ -40,16 +40,7 @@ export const ViewPraciceTeacher = () => {
 	const path = useLocation()
 	const id = path.pathname.split('/').at(-1)!
 	const [idGroup,setIdGroup] = useState<any>({id:null,count:0})
-	const [files, setFiles] = useState<any>({
-		report: null,
-		diary: null,
-		tasks: null
-	})
 	const [idStudent, setIdStudent] = useState<any>({id:null,count:0})
-	// const { data: dataStatus, isSuccess: isSuccessStatus } = useGetStatusQuery(idStudent, { skip: !idStudent })
-	const [grade, setGrade] = useState<any>(null)
-	const [rowData, setRowData] = useState(null)
-	const [statusStudent, setStatusStudent] = useState<any>(null)
 	const nav = useNavigate()
 	const [fullTable, setFullTable] = useState(false)
 	const [currentPage, setCurrentPage] = useState(1)
@@ -63,9 +54,10 @@ export const ViewPraciceTeacher = () => {
 	})
 	const {data: students,isSuccess: isSuccessOrder,isFetching: isFetchingMyPractice,refetch: refetchAll} = useGetAllStudentsFinalQuery(id, { refetchOnMountOrArgChange: true })
 	const [dataTable, setDataTable] = useState<any>(students)
-	const {data:dataReportCurrentStudent} = useGetInfoReportStudentQuery(idStudent?.id,{skip:!idStudent.id})
-	
+	const {data:dataReportCurrentStudent,isError:isErrorStudent} = useGetInfoReportStudentQuery(idStudent?.id,{skip:!idStudent.id})
 	const {data:dataReportGurrentGroup} = useGetInfoReportGroupQuery(idGroup?.id,{skip:!idGroup.id})
+	const [objAttachment,setObjAttachment] = useState<any>({studentId:null,documentType :null,count:0})
+	const {data:dataAttachement,isError:isErrorAttachments} = useGetAttachmentsFinalQuery(objAttachment,{skip:!objAttachment.studentId || !objAttachment.documentType})
 	const dispatch = useAppDispatch()
 
 	const columnsMini = [
@@ -109,11 +101,11 @@ export const ViewPraciceTeacher = () => {
 			render: (record: any, text: any) => {
 				return (
 					<>
-						<div className="!text-xs">Отчет: <a>Отчет.docx</a></div>
-						<div className="!text-xs">Дневник: <a>Дневник.docx</a></div>
+						<div className="!text-xs">Отчет: {text?.isReportSent ? <a onClick={()=>downloadlChat(text.id,'report')}>Скачать.docx</a> : 'Не отправлен'} </div>
+						<div className="!text-xs">Дневник: {text?.isDiarySent ?  <a onClick={()=>downloadlChat(text.id,'diary')}>Скачать.docx</a> : 'Не отправлен'}</div>
 						<div className="!text-xs">
 							{text?.thirdDocType === 'TASKS' ? 'Инд.задания' : 'Путевка'}:{' '}
-							<a>Док.docx</a>
+							{text?.isThirdDocSent ? <a onClick={()=>downloadlChat(text.id,'tasks')}>Скачать.docx</a> : 'Не отправлен'}
 						</div>
 					</>
 				)
@@ -134,22 +126,6 @@ export const ViewPraciceTeacher = () => {
 		}
 	]
 
-	// useEffect(() => {
-	// 	if (isSuccessStatus) {
-	// 		form.setFieldValue('reasonText', dataStatus?.reason)
-	// 		if (dataStatus?.grade === null) {
-	// 			setGrade('')
-	// 		} else {
-	// 			setGrade(dataStatus?.grade)
-	// 		}
-
-	// 		if (dataStatus?.status === null) {
-	// 			setStatusStudent('Ожидает проверки')
-	// 		} else {
-	// 			setStatusStudent(dataStatus?.status)
-	// 		}
-	// 	}
-	// }, [dataStatus?.grade, dataStatus?.status, isSuccessStatus])
 
 	useEffect(() => {
 		if (isSuccessOrder) {
@@ -157,13 +133,7 @@ export const ViewPraciceTeacher = () => {
 		}
 	}, [filter, isSuccessOrder, students])
 
-	// useEffect(()=>{
-	// 	download()
-	// },[dataReportCurrentStudent])
 
-	// useEffect(()=>{
-	// 	downloadTwo()
-	// },[dataReportGurrentGroup])
 	useEffect(() => {
         if (dataReportCurrentStudent) {
             download(dataReportCurrentStudent, `Отчет по конкретному студенту.docx`);
@@ -177,8 +147,28 @@ export const ViewPraciceTeacher = () => {
         }
     }, [dataReportGurrentGroup]); 
 
+	 // Эффект для скачивания чата три файла
+	useEffect(() => {
+		if (dataAttachement) {
+			downloadThree(dataAttachement, `Отчет по чату.docx`);
+		}
+	}, [dataAttachement]); 
+
+	useEffect(() => {
+		if(isErrorAttachments)
+		dispatch(showNotification({message:'Данный студент не прислал данный документ',type:'error'}))
+		
+	}, [isErrorAttachments]); 
+
+	useEffect(() => {
+		if(isErrorStudent)
+		dispatch(showNotification({message:'Данный студент не прислал отчет',type:'error'}))
+		
+	}, [isErrorStudent]); 
+
 	const downloadTwo = async (url:any,name:any)=>{
 		console.log('dataReportGurrentGroup',dataReportGurrentGroup)
+		
 		if(dataReportGurrentGroup){
 			const link = document.createElement('a')
 			link.href = url
@@ -186,14 +176,32 @@ export const ViewPraciceTeacher = () => {
 			document.body.appendChild(link)
 			link.click()
 			dispatch(showNotification({message:'Файл скачан',type:'success'}))
-			
 		}
-		
 	}
 
 	const download = async (url:any,name:any)=>{
 		console.log('dataReportCurrentStudent',dataReportCurrentStudent)
+		// if(isError){
+		// 	dispatch(showNotification({message:'Для данного студента не сформирован отчет',type:'error'}))
+		// 	return
+		// }
 		if(dataReportCurrentStudent){
+			const link = document.createElement('a')
+			link.href = url
+			link.setAttribute('download',name)
+			document.body.appendChild(link)
+			link.click()
+			dispatch(showNotification({message:'Файл скачан',type:'success'}))
+		}
+	}
+
+	const downloadThree = async (url:any,name:any)=>{
+		console.log('dataAttachement',dataAttachement)
+		// if(isErrorAttachments){
+		// 	dispatch(showNotification({message:'Данный студент не прислал данный документ',type:'error'}))
+		// 	return
+		// }
+		if(dataAttachement){
 			const link = document.createElement('a')
 			link.href = url
 			link.setAttribute('download',name)
@@ -217,6 +225,16 @@ export const ViewPraciceTeacher = () => {
 			return
 		}
 		setIdGroup((prev:any)=>({...prev,id:id,count:Math.random()}))
+	}
+
+	const downloadlChat = (id:any,type:any)=>{
+		setObjAttachment(
+			{
+				studentId:id,
+				documentType :type,
+				count:Math.random()
+			}
+		)
 	}
 
 	function filterDataFull() {

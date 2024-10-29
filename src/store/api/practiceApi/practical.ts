@@ -42,6 +42,18 @@ export const practical = apiSlice.injectEndpoints({
                 method: 'GET',
             })
         }),
+        getAttachmentsFinal: builder.query<any, any>({
+            query: ({studentId ,documentType }) => ({
+                url: `services/api-teacher-practices/chat/attachment?studentId=${studentId}&documentType=${documentType}`,
+                method: 'GET',
+                responseHandler: async (response) => {
+                    const blob = await response.blob();
+                    return window.URL.createObjectURL(blob); 
+                },
+                keepUnusedDataFor: 0,
+            })
+        }),
+        
     })
 })
 export const {
@@ -49,5 +61,6 @@ export const {
     useDeletePractiseMutation,
     useDeletePractiseSeveralMutation,
     useGetAllPracticesFinalQuery,
-    useGetAllStudentsFinalQuery
+    useGetAllStudentsFinalQuery,
+    useGetAttachmentsFinalQuery
 } = practical

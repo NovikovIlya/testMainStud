@@ -241,11 +241,11 @@ export const TableEditView = ({ isSuccessDataOne,visiting, fullTable=[], setFull
 				components={components}
 				rowClassName={() => 'editable-row'}
 				bordered
-				dataSource={fullTable.map((item:any,index:number)=>({...item, number:index+1})).sort((a:any, b:any) => {
+				dataSource={fullTable.sort((a:any, b:any) => {
 					const lastNameA = a.name.split(' ')[0]; 
 					const lastNameB = b.name.split(' ')[0]; 
 					return lastNameA.localeCompare(lastNameB); 
-				})}
+				}).map((item:any,index:number)=>({...item, number:index+1}))}
 				columns={columns as ColumnTypes}
 			/>
 		</div>

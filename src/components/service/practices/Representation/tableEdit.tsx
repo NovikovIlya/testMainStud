@@ -247,7 +247,6 @@ export const TableEdit = ({selectedPlace, status='',active = true,visiting, full
 	return (
 		<div>
 			<Table
-
 				rowKey="id"
 				components={components}
 				rowClassName={() => 'editable-row'}
@@ -255,7 +254,7 @@ export const TableEdit = ({selectedPlace, status='',active = true,visiting, full
 				pagination={{
 					pageSize: 10,
 				}}
-				dataSource={fullTable.map((item:any,index:number)=>({...item, number:index+1})).sort((a:any, b:any) => a.name.localeCompare(b.name))}
+				dataSource={fullTable.sort((a:any, b:any) => a.name.localeCompare(b.name)).map((item:any,index:number)=>({...item, number:index+1}))}
 				columns={columns as ColumnTypes}
 			/>
 		</div>

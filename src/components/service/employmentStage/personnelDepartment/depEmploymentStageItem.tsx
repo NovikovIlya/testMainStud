@@ -31,6 +31,7 @@ interface Document {
 interface DepEmploymentStageItemProps {
 	stage: number
 	role: string
+	bank: string
 	stageStatus: string
 	comment: string
 	documentArray: Document[] | undefined
@@ -65,9 +66,6 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 	const checkInputChange = (e:any) => {
 		textRef.current = e.target.value
 	};
-
-	const isBankSber : boolean = true
-	const isBankVTB : boolean = false
 
 	const ReqModal = () => {
 		return (
@@ -419,7 +417,7 @@ const StageContentComponent = () => {
 					{props.documentArray?.map((document) => (
 						<DocumentElem key={document.id} name={document.docType} id={document.id} />
 					))}
-					<span className="text-[14px]/[16.8px] text-black opacity-[60%] font-normal">Соискателю необходимо завести банковскую карту {(isBankVTB) ? 'ВТБ' : ''}{(isBankSber) ? 'СБЕРБАНК' : ''}</span>
+					<span className="text-[14px]/[16.8px] text-black opacity-[60%] font-normal">Соискателю необходимо завести банковскую карту {props.bank}</span>
 				</>
 			)}
 		</>

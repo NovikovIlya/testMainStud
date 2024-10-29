@@ -1,13 +1,15 @@
-import { useGetPersonnelStagesQuery } from '../../../../store/api/serviceApi'
+import { useGetAccountingStagesQuery } from '../../../../store/api/serviceApi'
 import React, { useState } from 'react'
 import { Button, Spin } from 'antd'
 import { RequisiteItem } from './RequisiteItem'
 import { LoadingOutlined } from '@ant-design/icons'
+import { useAppSelector } from '../../../../store'
 
 export const RequisiteMain = () => {
 
-	const { data: requisite_items = [], isLoading: loading } = useGetPersonnelStagesQuery();
 
+	const { data: requisite_items = [], isLoading: loadingReq } = useGetAccountingStagesQuery();
+	console.log(requisite_items)
 	const verifyingItems = requisite_items.filter(item => item.status === 'VERIFYING');
 	const refineItems = requisite_items.filter(item => item.status === 'REFINE');
 	const completeItems = requisite_items.filter(item => item.status === 'ACCEPTED');
@@ -26,7 +28,7 @@ export const RequisiteMain = () => {
 			</div>
 		)
 	}
-	if (loading) {
+	if (loadingReq) {
 		return (
 			<>
 				<div className="w-screen h-screen flex items-center">

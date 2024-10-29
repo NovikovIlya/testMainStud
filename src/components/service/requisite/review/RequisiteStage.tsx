@@ -4,7 +4,7 @@ import { useAppSelector } from '../../../../store'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { LoadingOutlined } from '@ant-design/icons'
-import { useGetEmploymentReqStageStatusQuery, useGetEmploymentStageStatusQuery } from '../../../../store/api/serviceApi'
+import { useGetEmploymentReqStageStatusQuery } from '../../../../store/api/serviceApi'
 import { DepEmploymentStageItem } from '../../employmentStage/personnelDepartment/depEmploymentStageItem'
 
 export const RequisiteStage = () => {
@@ -18,8 +18,11 @@ export const RequisiteStage = () => {
 
 
 	const { data: req_data, isLoading : loading } = useGetEmploymentReqStageStatusQuery({ respondId: respondId.respondId })
+
 	console.log(req_data)
-	const stagesArray = req_data?.stages || [] // массив массивов c этапами
+
+	const reqArray = req_data?.stages || []
+	const sortedReqData = reqArray.flat().sort((a, b) => a.id - b.id)
 
 	if (loading) {
 		return (
@@ -53,13 +56,19 @@ export const RequisiteStage = () => {
 					Вакансия: <span className="font-bold">{seekerVacancy}</span>
 				</h3>
 				<div className="mt-[40px] mb-[100px] gap-[12px] flex flex-col ">
-					{stagesArray?.[0] && (
-						<DepEmploymentStageItem
-							stage={6}
-							role={'accounting'}
-							comment={stagesArray[0].comment}
-							stageStatus={stagesArray[0].status}
-							documentArray={stagesArray[0].documents} />
+					{sortedReqData[0].hasRequisites && (
+						<>
+							{sortedReqData?.[0] && (
+								<DepEmploymentStageItem
+									stage={6}
+									role={'accounting'}
+									comment={sortedReqData[0].comment}
+									stageStatus={sortedReqData[0].status}
+									documentArray={sortedReqData[0].documents}
+									bank={''}/>
+							)}
+
+						</>
 					)}
 				</div>
 			</div>

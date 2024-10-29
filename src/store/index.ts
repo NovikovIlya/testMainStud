@@ -53,6 +53,7 @@ import thirdStageCommentVisibilitySlice from './reducers/EmploymentStageReducers
 import forthStageCommentVisibilitySlice from './reducers/EmploymentStageReducers/comments/ForthStageCommentVisibilitySlice'
 import fifthStageCommentVisibilitySlice from './reducers/EmploymentStageReducers/comments/FifthStageCommentVisibilitySlice'
 import sixStageStatusSlice from './reducers/EmploymentStageReducers/stages/SixStageStatusSlice'
+import sixStageStatusPersonnelSlice from './reducers/EmploymentStageReducers/stages/SixStageStatusPersonnelSlice'
 import sixStageCommentVisibilitySlice from './reducers/EmploymentStageReducers/comments/SixStageCommentVisibilitySlice'
 
 export const store = configureStore({
@@ -103,6 +104,7 @@ export const store = configureStore({
 		forthStageStatus: forthStageStatusSlice,
 		fifthStageStatus: fifthStageStatusSlice,
 		sixStageStatus: sixStageStatusSlice,
+		sixStageStatusPersonnel: sixStageStatusPersonnelSlice,
 		secondStageCommentVisibility: secondStageCommentVisibilitySlice,
 		thirdStageCommentVisibility: thirdStageCommentVisibilitySlice,
 		forthStageCommentVisibility: forthStageCommentVisibilitySlice,

@@ -56,19 +56,14 @@ export const RequisiteStage = () => {
 					Вакансия: <span className="font-bold">{seekerVacancy}</span>
 				</h3>
 				<div className="mt-[40px] mb-[100px] gap-[12px] flex flex-col ">
-					{sortedReqData[0].hasRequisites && (
-						<>
-							{sortedReqData?.[0] && (
-								<DepEmploymentStageItem
-									stage={6}
-									role={'accounting'}
-									comment={sortedReqData[0].comment}
-									stageStatus={sortedReqData[0].status}
-									documentArray={sortedReqData[0].documents}
-									bank={''}/>
-							)}
-
-						</>
+					{sortedReqData?.[0] && (
+						<DepEmploymentStageItem
+							stage={6}
+							role={'accounting'}
+							comment={sortedReqData[0].comment}
+							stageStatus={sortedReqData[0].status}
+							documentArray={sortedReqData[0].documents}
+							bank={''}/>
 					)}
 				</div>
 			</div>

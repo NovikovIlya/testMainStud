@@ -430,6 +430,7 @@ export type EmployementStatus =
 	| 'REFINE'
 	| 'COMPLETE'
 	| 'READY'
+	| 'ACCEPTED'
 
 export type EmploymentDataType = {
 	id: number

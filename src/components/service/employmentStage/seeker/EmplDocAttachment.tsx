@@ -24,6 +24,9 @@ export const EmplDocAttachment = (props: {
 
 	useEffect(() => {
 		if (foundStage) {
+			if (foundStage.status === 'VERIFYING') {
+				return
+			}
 			if (foundStage.status === 'REFINE') {
 				return
 			}

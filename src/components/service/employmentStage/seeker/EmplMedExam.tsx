@@ -23,6 +23,15 @@ export const EmplMedExam = (props: {
 
 	useEffect(() => {
 		if (foundStage) {
+			if (foundStage.status === 'VERIFYING') {
+				return
+			}
+			if (foundStage.status === 'REFINE') {
+				return
+			}
+			if (foundStage.status === 'UPDATED') {
+				return
+			}
 			if (
 				foundStage.documents.length ===
 				docs.filter(doc => doc.employmentStageType === props.stageName).length

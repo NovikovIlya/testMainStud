@@ -95,14 +95,17 @@ export const NavPanelElement = (props: { id: number; text: string }) => {
 				</>
 			) : progress.status === 'VERIFYING' || progress.status === 'ACCEPTED' ? (
 				<>
-					<div className="h-[28px] w-[28px] opacity-50">
-						<EmpReadyIcon />
+					<div className="h-[28px] w-[28px] relative">
+						<div className="absolute h-[28px] w-[28px] bg-[#F5F8FB] z-[5]"></div>
+						<div className="absolute h-[28px] w-[28px] bg-inherit z-[6] opacity-50">
+							<EmpReadyIcon />
+						</div>
 					</div>
 					<div className="text-[#3073D7] text-center">{props.text}</div>
 				</>
 			) : (
 				<>
-					<div className="h-[28px] w-[28px] opacity-50">
+					<div className="h-[28px] w-[28px]">
 						<EmpReadyIcon />
 					</div>
 					<div className="text-[#3073D7] text-center">{props.text}</div>

@@ -62,10 +62,8 @@ export const ViewPraciceTeacher = () => {
 	const [objAttachment,setObjAttachment] = useState<any>({studentId:null,documentType :null,count:0})
 	const {data:dataAttachement,isError:isErrorAttachments,isFetching:isFetchingAttachments} = useGetAttachmentsFinalQuery(objAttachment,{skip:!objAttachment.studentId || !objAttachment.documentType})
 	const dispatch = useAppDispatch()
-	const orientation  = useWindowOrientation()
-	const isMobile = isMobileDevice()
-	console.log('orientation',orientation)
-	
+
+
 	const columnsMini = [
 		{
 			key: 'number',
@@ -170,8 +168,6 @@ export const ViewPraciceTeacher = () => {
 	}, [isErrorStudent]); 
 
 	const downloadTwo = async (url:any,name:any)=>{
-		console.log('dataReportGurrentGroup',dataReportGurrentGroup)
-		
 		if(dataReportGurrentGroup){
 			const link = document.createElement('a')
 			link.href = url
@@ -183,11 +179,6 @@ export const ViewPraciceTeacher = () => {
 	}
 
 	const download = async (url:any,name:any)=>{
-		console.log('dataReportCurrentStudent',dataReportCurrentStudent)
-		// if(isError){
-		// 	dispatch(showNotification({message:'Для данного студента не сформирован отчет',type:'error'}))
-		// 	return
-		// }
 		if(dataReportCurrentStudent){
 			const link = document.createElement('a')
 			link.href = url
@@ -199,7 +190,6 @@ export const ViewPraciceTeacher = () => {
 	}
 
 	const downloadThree = async (url:any,name:any)=>{
-		console.log('dataAttachement',dataAttachement)
 		if(dataAttachement){
 			const link = document.createElement('a')
 			link.href = url
@@ -283,15 +273,6 @@ export const ViewPraciceTeacher = () => {
 
 	const handleRowClick = (record: any) => {
 		setStudentName(record.studentName)
-		// setIdStudent(record.id)
-
-		// setRowData(record)
-
-		// setFiles({
-		// 	report: null,
-		// 	diary: null,
-		// 	tasks: null
-		// })
 	}
 
 	const sortedData =

@@ -73,8 +73,8 @@ const Plan = ({id,dataOnePlace,dataTasks,setShowFinal}:any) => {
 					<Typography.Title level={2}>{dataOnePlace==='На кафедре КФУ'? 'Индивидуальные задания' : 'Путевка'}</Typography.Title>
 				</Col>
 			</Row>
-			<Row className='mm'>
-				<Col span={12}>
+			<Row className=''>
+				<Col xs={24} sm={24} md={12}>
 					<EditableTable setShow={setShow} dataSource={dataSource} setDataSource={setDataSource} setIsDisabled={setIsDisabled}/>
 				</Col>
 			</Row>

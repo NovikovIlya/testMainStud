@@ -75,8 +75,8 @@ const Diary = ({id,dataDiary,setShowFinalTwo}:any) => {
 					<Typography.Title level={2}>Дневник практиканта</Typography.Title>
 				</Col>
 			</Row>
-			<Row className='mm2'>
-				<Col xs={24} md={12} >
+			<Row className=''>
+				<Col  xs={24} sm={24} md={12} >
 					<EditableTableTwo setShow={setShow} dataSource={dataSource} setDataSource={setDataSource} setIsDisabled={setIsDisabled}/>
 				</Col>
 			</Row>

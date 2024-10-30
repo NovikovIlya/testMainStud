@@ -587,7 +587,7 @@ export const ViewFinally = () => {
 					</Col>
 				</Row>
 				<Row gutter={[16, 16]} className='mt-4 overWrite'>
-				<Col span={5}><span className={'mr-2'}>Период практики</span></Col>
+				<Col span={5}><span className={'mr-2 mobileFirst'}>Период практики</span></Col>
 				<Col span={8}  className='mobileFirst overWrite'>
                     
 						
@@ -614,7 +614,7 @@ export const ViewFinally = () => {
 						<span className='w-12'>Курс</span>
 				
 					
-						<Form.Item name={'course'} className='mb-[-4px] w-full overWrite'>
+						<Form.Item name={'course'} className='mb-[-4px] sm:w-full overWrite'>
 							<Select
 								popupMatchSelectWidth={false}
 								defaultValue="Все"
@@ -635,7 +635,7 @@ export const ViewFinally = () => {
 						<span className='w-20'>Семестр</span>
 			
 						<Form.Item
-							className='mb-[-4px] w-full items-center'
+							className='mb-[-4px] sm:w-full items-center'
 							style={{marginBottom:'0'}}
 							//rules={[{required: true}]}
 							name={'semester'}	
@@ -660,7 +660,7 @@ export const ViewFinally = () => {
 
 					<Col span={5} className='flex items-center overWrite'>
 						<span className='w-40'>Тип практики</span>
-						<Form.Item name={'practiceType'} className='mb-[-4px] max-w-[220px] min-w-[220px]  items-center'>
+						<Form.Item name={'practiceType'} className='mb-[-4px] sm:max-w-[220px] sm:min-w-[220px]  items-center'>
 						<Select
 							disabled={!pickSpeciality}
 							popupMatchSelectWidth={false}

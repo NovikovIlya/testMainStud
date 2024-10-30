@@ -7,25 +7,16 @@ import { useNavigate } from 'react-router-dom'
 
 import { PracticesSvg } from '../../../assets/svg/PracticesSvg'
 
-// import './Practices.sass'
-// import './PracticesStyle.scss'
 
-// import { Tasks } from './individual-tasks/Tasks'
-// import { Practical } from './practical/Practical'
-// import { Roster } from './roster/Roster'
-// import { Schedule } from './forming-schedule/Schedule'
-// import {Header} from "../../layout/Header";
-// import {useTranslation} from "react-i18next";
-// import { Representation } from './Representation/Representation'
-// import { PracticeOrder } from './practice-order/PracticeOrder'
-// import { Appendix } from './appendix/Appendix'
 import { QuestionCircleOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
 
-// import MyPractice from './myPracice/myPractice'
+
 import { Header } from '../../layout/Header'
 import { RoutePracticeTeacher } from './practiceTeacher/routeMyPractice'
-// import { RouteMyPractice } from './myPracice/routeMyPractice'
+import useWindowOrientation from '../../../utils/hooks/useDeviceOrientation'
+import { isMobileDevice } from '../../../utils/hooks/useIsMobile'
+
 
 type MenuItem = Required<MenuProps>['items'][number]
 
@@ -51,6 +42,8 @@ export const NavPracticeTeacher = () => {
 	const ref3 = useRef(null);
 	const refArray = [ref1, ref2, ref3];
 	const [open, setOpen] = useState<boolean>(false);
+	const orientation  = useWindowOrientation()
+	const isMobile = isMobileDevice()
 
 
 
@@ -187,12 +180,14 @@ export const NavPracticeTeacher = () => {
 					)
 				  }))}
 			/>
+			{isMobile && orientation === 'portrait' ? <div className='flex justify-center items-center text-center p-4'>Для данного устройства модуль работает только в горизонтальном положении, поверните устройство</div> : 
 			<div className="bg-[#F5F8FB] w-full pt-14 px-14  xl:mt-20 mt-20 ">
 				{current === 'practiceteacher' && <RoutePracticeTeacher/>}
 				
 				
 				<Tour open={open} onClose={() => setOpen(false)} steps={steps} />
 			</div>
+			}
 			
 		</>
 	)

@@ -215,7 +215,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 					<Button
 						onClick={showDrawer}
 						className={clsx(
-							'h-[38px] py-2.5 rounded-full hover:!bg-transparent font-semibold bg-transparent border-2  items-center justify-center hidden sm:flex',
+							'h-[38px] py-2.5 rounded-full hover:!bg-transparent font-semibold bg-transparent border-2  items-center justify-center hidden md:flex',
 							type === 'main'
 								? `text-blue1f5 border-blue1f5 hover:!text-blue1f5`
 								: 'text-white border-white '

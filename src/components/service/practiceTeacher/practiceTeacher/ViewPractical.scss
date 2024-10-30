@@ -55,3 +55,10 @@
 .ant-drawer-right .ant-drawer-close{
   display:none !important;
 }
+
+@media  screen and (max-width: 768px) {
+  .ant-table{
+    scale: 1 !important;
+    // font-size: 8px !important;
+  }
+}

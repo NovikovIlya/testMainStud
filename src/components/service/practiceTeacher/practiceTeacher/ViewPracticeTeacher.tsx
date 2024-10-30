@@ -125,7 +125,7 @@ export const ViewPraciceTeacher = () => {
 			key: 'number',
 			dataIndex: 'number',
 			title: '№',
-			className: 'text-xs !p-4',
+			className: 'text-xs !p-4 mobileFirst',
 			
 		},
 		{
@@ -138,7 +138,7 @@ export const ViewPraciceTeacher = () => {
 			key: 'grade',
 			dataIndex: 'grade',
 			title: 'Оценка',
-			className: 'text-xs !p-4 ',
+			className: 'sm:text-xs !p-4 ',
 			render:(record: any, text: any) => {
 				return <div className="">{text?.grade ? <div>{text?.grade}{text?.reason ? ` (${text?.reason})` : ''}</div>  : 'Не оценено'}</div>
 			}
@@ -147,7 +147,7 @@ export const ViewPraciceTeacher = () => {
 			key: 'status',
 			dataIndex: 'status',
 			title: 'Статус',
-			className: 'text-xs !p-4 ',
+			className: 'sm:text-xs !p-4 ',
 			render:(record: any, text: any) => {
 				return <div className="">{text?.status ? text?.status : 'Ожидает проверки'}</div>
 			}
@@ -156,7 +156,7 @@ export const ViewPraciceTeacher = () => {
 			key: 'documents',
 			dataIndex: 'documents',
 			title: 'Наличие документов',
-			className: 'text-xs !p-4 ',
+			className: 'text-xs !p-4 mobileFirst',
 			render: (record: any, text: any) => {
 				return (
 					<>
@@ -171,7 +171,7 @@ export const ViewPraciceTeacher = () => {
 			key: 'report',
 			dataIndex: 'report',
 			title: 'Наличие отчета',
-			className: 'text-xs !p-4 ',
+			className: 'text-xs !p-4 mobileFirst',
 			render: (record: any, text: any) => {
 				
 				return (
@@ -446,7 +446,7 @@ export const ViewPraciceTeacher = () => {
 							/>
 						</Form.Item>
 					</Col>
-					<Col className='flex justify-end' span={12}>
+					<Col className='flex md:justify-end' span={12}>
 						<Button onClick={openReportModal}>Сформировать отчет</Button>
 					</Col>
 				</Row>
@@ -468,7 +468,7 @@ export const ViewPraciceTeacher = () => {
 							/>
 						</Form.Item>
 					</Col>
-					<Col className='flex justify-end' span={12}>
+					<Col className='flex md:justify-end' span={12}>
 						<Tooltip title={true===true ? 'Сформируйте отчет' : ''}><Button onClick={()=>sendDekanat(id)} disabled={!isReportExist}>Отправить в деканат</Button></Tooltip>
 					</Col>
 				</Row>		
@@ -501,10 +501,10 @@ export const ViewPraciceTeacher = () => {
 					</Col>
 				</Row>		
 			
-				<Row className='mb-6'>
+				<Row className='mb-6 !flex'>
 					<Col span={12}>
 						<div>
-							<Col className='flex gap-3' span={12}>
+							<Col className='!flex gap-3' span={12}>
 								<span className='text-gray-500'>Статус формирования:  </span>
 								<span>{isReportExist ? <a onClick={downloadTwo}>Сформирован</a> : ' Не сформирован'}</span>
 							</Col>

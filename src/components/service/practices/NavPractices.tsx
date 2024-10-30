@@ -1,105 +1,4 @@
-// import type { MenuProps } from 'antd'
-// import { Menu } from 'antd'
-// import { useState } from 'react'
-// import { useNavigate } from 'react-router-dom'
 
-// import { PracticesSvg } from '../../../assets/svg/PracticesSvg'
-
-// import './Practices.sass'
-// import './PracticesStyle.scss'
-// import { Tasks } from './individual-tasks/Tasks'
-// import { Practical } from './practical/Practical'
-// import { Roster } from './roster/Roster'
-// import { Schedule } from './forming-schedule/Schedule'
-// import {Header} from "../../layout/Header";
-// import {useTranslation} from "react-i18next";
-// import { Representation } from './Representation/Representation'
-// import { PracticeOrder } from './practice-order/PracticeOrder'
-// import { Appendix } from './appendix/Appendix'
-
-// type MenuItem = Required<MenuProps>['items'][number]
-
-// function getItem(
-// 	label: React.ReactNode,
-// 	key: React.Key,
-// 	icon?: React.ReactNode,
-// 	children?: MenuItem[],
-// 	type?: 'group'
-// ): MenuItem {
-// 	return {
-// 		key,
-// 		icon,
-// 		children,
-// 		label,
-// 		type
-// 	} as MenuItem
-// }
-
-// const items: MenuItem[] = [
-// 	getItem('Справочники', 'sub1', <PracticesSvg />, [
-// 		getItem('Реестр договоров', 'registerContracts'),
-// 		getItem('Индивидуальные задания', 'individualTasks'),
-// 		getItem('Практики', 'practical.ts')
-// 	]),
-// 	getItem('Формирование документов', 'sub2', <PracticesSvg />, [
-// 		getItem('График практик', 'formingSchedule'),
-// 		getItem('Представление в приказ', 'representation'),
-// 		getItem('Приказ по практике', 'practiceOrder'),
-// 		getItem('Приложение 4', 'appendix')
-// 	]),
-	
-// 	// getItem('Cогласование документов', 'sub4', <PracticesSvg />, [
-// 	// 	getItem('График практик', '9'),
-// 	// 	getItem('Представление в приказ', '10'),
-// 	// 	getItem('Приказ по практике', '11')
-// 	// ])
-// ]
-// const rootSubmenuKeys = ['sub1', 'sub2', 'sub4']
-// export const NavPractices = () => {
-// 	const [openKeys, setOpenKeys] = useState(['sub1'])
-// 	const [current, setCurrent] = useState('registerContracts')
-// 	const navigate = useNavigate()
-// 	const {t} = useTranslation()
-
-// 	const onClick: MenuProps['onClick'] = e => {
-// 		navigate('/services/practices/' + e.key)
-// 		setCurrent(e.key)
-// 	}
-
-// 	const onOpenChange: MenuProps['onOpenChange'] = keys => {
-// 		const latestOpenKey = keys.find(key => openKeys.indexOf(key) === -1)
-// 		if (latestOpenKey && rootSubmenuKeys.indexOf(latestOpenKey!) === -1) {
-// 			setOpenKeys(keys)
-// 		} else {
-// 			setOpenKeys(latestOpenKey ? [latestOpenKey] : [])
-// 		}
-// 	}
-
-// 	return (
-// 		<>
-// 			<Header type={"service"} service={t("Practices")}/>
-// 			<Menu
-// 				defaultOpenKeys={['sub1']}
-// 				selectedKeys={[current]}
-// 				defaultActiveFirst
-// 				mode="inline"
-// 				onClick={onClick}
-// 				onOpenChange={onOpenChange}
-// 				className="min-w-[230px] max-w-[230px] flex flex-col gap-7 mt-28"
-// 				items={items}
-// 			/>
-// 			<div className="bg-[#F5F8FB] w-full pt-14 px-14  xl:mt-20 mt-20 ">
-// 				{current === 'registerContracts' && <Roster />}
-// 				{current === 'individualTasks' && <Tasks />}
-// 				{current === 'practical.ts' && <Practical />}
-// 				{current === 'formingSchedule' && <Schedule/>}
-// 				{current === 'representation' && <Representation/>}
-// 				{current === 'practiceOrder' && <PracticeOrder/>}
-// 				{current === 'appendix' && <Appendix/>}
-// 			</div>
-// 		</>
-// 	)
-// }
 
 import type { MenuProps } from 'antd'
 import { Button, Menu, Tour } from 'antd'
@@ -120,7 +19,10 @@ import { Representation } from './Representation/Representation'
 import { PracticeOrder } from './practice-order/PracticeOrder'
 import { Appendix } from './appendix/Appendix'
 import { QuestionCircleOutlined } from '@ant-design/icons'
-import { Finally } from './finally/finally'
+import { Finally } from './finally/Finally'
+import useWindowOrientation from '../../../utils/hooks/useDeviceOrientation'
+import { isMobileDevice } from '../../../utils/hooks/useIsMobile'
+
 
 type MenuItem = Required<MenuProps>['items'][number]
 
@@ -146,6 +48,8 @@ export const NavPractices = () => {
 	const ref3 = useRef(null);
 	const refArray = [ref1, ref2, ref3];
 	const [open, setOpen] = useState<boolean>(false);
+	const orientation  = useWindowOrientation()
+	const isMobile = isMobileDevice()
 
 
 
@@ -166,11 +70,7 @@ export const NavPractices = () => {
 			
 		]),
 		getItem(<Button className='opacity-70 mt-3'  onClick={() => setOpen(true)}>Пройти обучение</Button>, 'sub3', <QuestionCircleOutlined className='invisible absolute top-1/2 -translate-y-1/2 right-4 '/>),
-		// getItem('Cогласование документов', 'sub4', <PracticesSvg />, [
-		// 	getItem('График практик', '9'),
-		// 	getItem('Представление в приказ', '10'),
-		// 	getItem('Приказ по практике', '11')
-		// ])
+		
 	]
   
 	const steps: any = [
@@ -309,6 +209,7 @@ export const NavPractices = () => {
 					)
 				  }))}
 			/>
+			{isMobile && orientation === 'portrait' ? <div className='flex justify-center items-center text-center p-4'>Для данного устройства модуль работает только в горизонтальном положении, поверните устройство</div> : 
 			<div className="bg-[#F5F8FB] overflow-hidden min-h-[840px] w-full pt-14 px-14  xl:mt-20 mt-20 ">
 				{current === 'registerContracts' && <Roster />}
 				{current === 'individualTasks' && <Tasks />}
@@ -321,6 +222,7 @@ export const NavPractices = () => {
 				
 				<Tour  open={open} onClose={() => setOpen(false)} steps={steps} />
 			</div>
+			}
 			
 		</>
 	)

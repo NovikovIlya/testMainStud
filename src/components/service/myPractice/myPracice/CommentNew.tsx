@@ -57,29 +57,21 @@ export const CommentNew = ({ isLoading,dataOneLength,refetch, chat }: any) => {
 		<>
 			<Spin spinning={isFetching||isLoading}>
 				<Row className="mb-20">
-					<Col xs={24} md={12}>
+					<Col xs={24}  md={12}>
 						<Typography.Title level={2}>Комментарии по практике</Typography.Title>
 						<span>Загружайте пакет документов на проверку и получайте обратную связь прямо в окне комментариев </span>
 					</Col>
-					{/* <Col xs={24} md={12} className="flex justify-end">
-						<Button
-							onClick={refetch}
-							className="mt-8 mb-8 ml-8"
-							size="large"
-							shape="circle"
-							icon={<ReloadOutlined />}
-						/>
-					</Col> */}
+					
 				</Row>
 
-				<div className="space-y-4 h-[400px] overflow-y-auto p-10 bg-white rounded-xl">
-				<Button
-							onClick={refetch}
-							className="  absolute right-8 top-46"
-							size="large"
-							shape="circle"
-							icon={<ReloadOutlined />}
-						/>
+				<div className="space-y-4 w-full h-[400px] overflow-y-auto p-10 bg-white rounded-xl">
+					<Button
+						onClick={refetch}
+						className="  absolute right-8 top-46"
+						size="large"
+						shape="circle"
+						icon={<ReloadOutlined />}
+					/>
 					
 					{chatValid?.map((message: any) => {
 						const isStudent = message.senderType === 'STUDENT'

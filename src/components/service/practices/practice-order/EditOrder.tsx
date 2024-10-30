@@ -486,7 +486,7 @@ export const EditOrder = () => {
 			</Row>
 			<Descriptions className="mt-12" items={items} />
 			<Divider />
-			<Row className="mt-4 mb-6 flex  justify-between">
+			<Row className="mt-4 mb-6 !flex  justify-between">
 				<Col span={12}>
 					<div>
 						<Space>

@@ -21,6 +21,8 @@ import { useGetAllStudentsFinalQuery, useGetAttachmentsFinalQuery } from '../../
 import { useAppDispatch } from '../../../../store'
 import { apiSliceTeacher } from '../../../../store/api/apiSliceTeacher'
 import { showNotification } from '../../../../store/reducers/notificationSlice'
+import useWindowOrientation from '../../../../utils/hooks/useDeviceOrientation'
+import { isMobileDevice } from '../../../../utils/hooks/useIsMobile'
 
 
 const optionMockGrade = [
@@ -45,6 +47,7 @@ export const ViewPraciceTeacher = () => {
 	const [fullTable, setFullTable] = useState(false)
 	const [currentPage, setCurrentPage] = useState(1)
 	const [form] = Form.useForm()
+	const [studentName,setStudentName] = useState(null)
 	const [filter, setFilter] = useState({
 		name: 'Все',
 		courseNumber: 'Все',
@@ -54,18 +57,21 @@ export const ViewPraciceTeacher = () => {
 	})
 	const {data: students,isSuccess: isSuccessOrder,isFetching: isFetchingMyPractice,refetch: refetchAll} = useGetAllStudentsFinalQuery(id, { refetchOnMountOrArgChange: true })
 	const [dataTable, setDataTable] = useState<any>(students)
-	const {data:dataReportCurrentStudent,isError:isErrorStudent} = useGetInfoReportStudentQuery(idStudent?.id,{skip:!idStudent.id})
-	const {data:dataReportGurrentGroup} = useGetInfoReportGroupQuery(idGroup?.id,{skip:!idGroup.id})
+	const {data:dataReportCurrentStudent,isError:isErrorStudent,isFetching:isFetchingStudent} = useGetInfoReportStudentQuery(idStudent?.id,{skip:!idStudent.id})
+	const {data:dataReportGurrentGroup,isFetching:isFetchingGroup} = useGetInfoReportGroupQuery(idGroup?.id,{skip:!idGroup.id})
 	const [objAttachment,setObjAttachment] = useState<any>({studentId:null,documentType :null,count:0})
-	const {data:dataAttachement,isError:isErrorAttachments} = useGetAttachmentsFinalQuery(objAttachment,{skip:!objAttachment.studentId || !objAttachment.documentType})
+	const {data:dataAttachement,isError:isErrorAttachments,isFetching:isFetchingAttachments} = useGetAttachmentsFinalQuery(objAttachment,{skip:!objAttachment.studentId || !objAttachment.documentType})
 	const dispatch = useAppDispatch()
-
+	const orientation  = useWindowOrientation()
+	const isMobile = isMobileDevice()
+	console.log('orientation',orientation)
+	
 	const columnsMini = [
 		{
 			key: 'number',
 			dataIndex: 'number',
 			title: '№',
-			className: 'text-xs !p-4'
+			className: 'text-xs !p-4 mobileFirst'
 		},
 		{
 			key: 'studentName',
@@ -77,7 +83,7 @@ export const ViewPraciceTeacher = () => {
 			key: 'grade',
 			dataIndex: 'grade',
 			title: 'Оценка',
-			className: 'text-xs !p-4 ',
+			className: 'sm:text-xs !p-4 ',
 			render: (record: any, text: any) => {
 				return (
 					<div className="">
@@ -97,7 +103,7 @@ export const ViewPraciceTeacher = () => {
 			key: 'documentsStudent',
 			dataIndex: 'documentsStudent',
 			title: 'Документы студентов',
-			className: 'text-xs !p-4 ',
+			className: 'sm:text-xs !p-4 mobileFirst',
 			render: (record: any, text: any) => {
 				return (
 					<>
@@ -114,13 +120,13 @@ export const ViewPraciceTeacher = () => {
 		{
 			key: 'reportTeacher',
 			dataIndex: 'reportTeacher',
-			title: 'Отчет преподаватеоя',
-			className: 'text-xs !p-4 ',
+			title: 'Отчет ',
+			className: 'sm:text-xs !p-4 ',
 			render: (record: any, text: any) => {
 				return (
-					<>
-						<a onClick={()=>downloadCurrenReportStudent(text.id)} className="p-5">Отчет.docx</a>
-					</>
+					
+						<a onClick={()=>downloadCurrenReportStudent(text.id)} className="text-base">Отчет.docx</a>
+				
 				)
 			}
 		}
@@ -133,10 +139,9 @@ export const ViewPraciceTeacher = () => {
 		}
 	}, [filter, isSuccessOrder, students])
 
-
 	useEffect(() => {
         if (dataReportCurrentStudent) {
-            download(dataReportCurrentStudent, `Отчет по конкретному студенту.docx`);
+            download(dataReportCurrentStudent, `Отчет по конкретному студенту ${studentName}.docx`);
         }
     }, [dataReportCurrentStudent]); 
 
@@ -157,13 +162,11 @@ export const ViewPraciceTeacher = () => {
 	useEffect(() => {
 		if(isErrorAttachments)
 		dispatch(showNotification({message:'Данный студент не прислал данный документ',type:'error'}))
-		
 	}, [isErrorAttachments]); 
 
 	useEffect(() => {
 		if(isErrorStudent)
-		dispatch(showNotification({message:'Данный студент не прислал отчет',type:'error'}))
-		
+		dispatch(showNotification({message:'По данному студенту не сформировали отчет',type:'error'}))
 	}, [isErrorStudent]); 
 
 	const downloadTwo = async (url:any,name:any)=>{
@@ -197,10 +200,6 @@ export const ViewPraciceTeacher = () => {
 
 	const downloadThree = async (url:any,name:any)=>{
 		console.log('dataAttachement',dataAttachement)
-		// if(isErrorAttachments){
-		// 	dispatch(showNotification({message:'Данный студент не прислал данный документ',type:'error'}))
-		// 	return
-		// }
 		if(dataAttachement){
 			const link = document.createElement('a')
 			link.href = url
@@ -212,10 +211,13 @@ export const ViewPraciceTeacher = () => {
 	}
 
 	const downloadCurrenReportStudent = (idz:any)=>{
-		if(idz===idStudent.id){
-			download(dataReportCurrentStudent, `Отчет по конкретному студенту.docx`)
-			return
+		if(!isErrorStudent){
+			if(idz===idStudent.id){
+				download(dataReportCurrentStudent, `Отчет по конкретному студенту.docx`)
+				return
+			}
 		}
+		
 		setIdStudent((prev:any)=>({...prev,id:idz,count:Math.random()}))
 	}
 
@@ -280,6 +282,7 @@ export const ViewPraciceTeacher = () => {
 	}
 
 	const handleRowClick = (record: any) => {
+		setStudentName(record.studentName)
 		// setIdStudent(record.id)
 
 		// setRowData(record)
@@ -301,7 +304,7 @@ export const ViewPraciceTeacher = () => {
 
 	return (
 		<Form form={form}>
-			<Spin spinning={isFetchingMyPractice}>
+			<Spin spinning={isFetchingMyPractice || isFetchingAttachments || isFetchingGroup || isFetchingStudent}>
 				<section className="container animate-fade-in">
 					<Space size={10} align="center">
 						<Button
@@ -344,7 +347,7 @@ export const ViewPraciceTeacher = () => {
 								/>
 							</Form.Item>
 						</Col>
-						<Col className='flex justify-end' span={12}>
+						<Col className='flex md:justify-end' span={12}>
 						<Button onClick={downloadCurrenReport}>Скачать отчет</Button>
 					</Col>
 					</Row>

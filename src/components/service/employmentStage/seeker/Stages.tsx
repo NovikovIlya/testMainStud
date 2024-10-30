@@ -54,58 +54,36 @@ export const Stages = () => {
 			.unwrap()
 			.then(data => {
 				dispatch(setAllData(data))
-				dispatch(
-					setAllProgress(
-						// data.stages.map(stage => {
-						// 	if (stage.status === 'FILLING') {
-						// 		const smthMissing = stage.documents.find(
-						// 			doc => doc.status === 'NOT_ATTACHED'
-						// 		)
-						// 		if (smthMissing) {
-						// 			return stage
-						// 		} else {
-						// 			return { ...stage, status: 'READY' }
-						// 		}
-						// 	} else {
-						// 		return stage
-						// 	}
-						// })
-						data.stages.map(stage => {
-							if (stage.status === 'FILLING') {
-								// if (!stage.workingConditionAccepted) {
-								// 	return { ...stage, status: 'READY' }
-								// }
-								// if (stage.hasRequisites !== false) {
-								// 	return { ...stage, status: 'READY' }
-								// }
-								// if (
-								// 	stage.documents.length !==
-								// 	docs.map(doc => doc.employmentStageType === stage.type).length
-								// ) {
-								// 	return { ...stage, status: 'READY' }
-								// } else {
-								// 	return stage
-								// }
-								if (stage.workingConditionAccepted) {
-									return { ...stage, status: 'READY' }
-								} else if (stage.hasRequisites === false) {
-									return { ...stage, status: 'READY' }
-								} else if (
-									stage.documents.length !==
-									docs.map(doc => doc.employmentStageType === stage.type).length
-								) {
-									return { ...stage, status: 'READY' }
-								} else {
-									return stage
-								}
-							} else {
-								return stage
-							}
-						})
-					)
-				)
 			})
 	}, [])
+
+	useEffect(() => {
+		dispatch(
+			setAllProgress(
+				empData.stages.map(stage => {
+					if (stage.status === 'FILLING') {
+						if (stage.workingConditionAccepted) {
+							return { ...stage, status: 'READY' }
+						} else if (stage.hasRequisites === false) {
+							return { ...stage, status: 'READY' }
+						} else if (
+							docs.filter(doc => doc.employmentStageType === stage.type)
+								.length !== 0 &&
+							stage.documents.length ===
+								docs.filter(doc => doc.employmentStageType === stage.type)
+									.length
+						) {
+							return { ...stage, status: 'READY' }
+						} else {
+							return stage
+						}
+					} else {
+						return stage
+					}
+				})
+			)
+		)
+	}, [empData])
 
 	if (
 		currentStage === 0 &&

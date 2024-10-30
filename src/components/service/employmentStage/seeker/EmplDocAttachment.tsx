@@ -1,3 +1,4 @@
+import { Button } from 'antd'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 
@@ -23,6 +24,12 @@ export const EmplDocAttachment = (props: {
 
 	useEffect(() => {
 		if (foundStage) {
+			if (foundStage.status === 'REFINE') {
+				return
+			}
+			if (foundStage.status === 'UPDATED') {
+				return
+			}
 			if (
 				foundStage.documents.length ===
 				docs.filter(doc => doc.employmentStageType === props.stageName).length
@@ -91,6 +98,11 @@ export const EmplDocAttachment = (props: {
 							))}
 					</div>
 				</div>
+				{foundStage?.status === 'REFINE' && (
+					<Button type="primary" className="rounded-[54.5px] w-[282px]">
+						Подтвердить и отправить данные
+					</Button>
+				)}
 			</div>
 		</>
 	)

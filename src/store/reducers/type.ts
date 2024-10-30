@@ -431,6 +431,7 @@ export type EmployementStatus =
 	| 'COMPLETE'
 	| 'READY'
 	| 'ACCEPTED'
+	| 'UPDATED'
 
 export type EmploymentDataType = {
 	id: number

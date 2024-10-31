@@ -20,9 +20,11 @@ export const NavPanelElement = (props: { id: number; text: string }) => {
 				stage => stage.status === 'VERIFYING' || stage.status === 'ACCEPTED'
 			)
 			const refining = stages.find(
-				stage => stage.status === 'REFINE' || stage.status === 'UPDATED'
+				stage => stage.status === 'REFINE' || stage.status === 'READY'
 			)
-			const notReady = stages.find(stage => stage.status !== 'READY')
+			const notReady = stages.find(
+				stage => stage.status === 'FILLING' || stage.status === 'REFINE'
+			)
 
 			if (verifying && !refining) {
 				setIsBeingVerified(true)

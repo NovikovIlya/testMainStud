@@ -936,6 +936,15 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
+		getAccountingStages: builder.query<EmploymentStageItemType[], void>({
+			query: arg => ({
+				url: `http://localhost:8082/employment-api/v1/management/employment`,
+				method: 'GET',
+				headers: {
+					Authorization: `Bearer ${accountingToken}`
+				}
+			})
+		}),
 		downloadFileEmploymentStages: builder.query<
 			Blob,
 			{ respondId: number; fileId: number }
@@ -1150,5 +1159,6 @@ export const {
 	useGetEmploymentReqStageStatusQuery,
 	useChangeEmploymentStageAccountingStatusRequestMutation,
 	useGetAllDocumentDefinitionsQuery,
-	useMarkBankCardApplicationFormedMutation
+	useMarkBankCardApplicationFormedMutation,
+	useGetAccountingStagesQuery
 } = serviceApi

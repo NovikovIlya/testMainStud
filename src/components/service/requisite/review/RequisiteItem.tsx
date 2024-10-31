@@ -10,8 +10,6 @@ import { EmploymentStageItemType } from '../../../../store/reducers/type'
 
 export const RequisiteItem = ( props : EmploymentStageItemType ) => {
 
-	console.log(props.status)
-
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
 

@@ -23,15 +23,12 @@ export const EmploymentStageInfo = ( ) => {
 	const respondId = useAppSelector(state => state.currentResponce)
 
 	const { data: stages, isLoading: loadingReq } = useGetEmploymentStageStatusQuery({ respondId: respondId.respondId})
-	const { data: sixStage, isLoading: loadingBank } = useGetEmploymentReqStageStatusQuery({ respondId: respondId.respondId })
-	const stagesArrayy = sixStage?.stages || [] // массив массивов c этапами
-	const sortedStagess = stagesArrayy.flat().sort((a, b) => a.id - b.id)
+
 	const stagesArray = stages?.stages || [] // массив массивов c этапами
 	const sortedStages = stagesArray.flat().sort((a, b) => a.id - b.id) // сортирую потому что приходит вперемешку
-	sortedStages.push(sortedStagess[0])
-	console.log(sortedStages)
 
-	if (loadingReq || loadingBank) {
+	console.log(sortedStages)
+	if (loadingReq) {
 		return (
 			<>
 				<div className="w-screen h-screen flex items-center">
@@ -69,7 +66,8 @@ export const EmploymentStageInfo = ( ) => {
 							role={'personnel'}
 							comment={sortedStages[1].comment}
 							stageStatus={sortedStages[1].status}
-							documentArray={sortedStages[1].documents} />
+							documentArray={sortedStages[1].documents}
+							bank={''}/>
 					)}
 
 					{sortedStages?.[2] && (
@@ -78,7 +76,8 @@ export const EmploymentStageInfo = ( ) => {
 							role={'personnel'}
 							comment={sortedStages[2].comment}
 							stageStatus={sortedStages[2].status}
-							documentArray={sortedStages[2].documents} />
+							documentArray={sortedStages[2].documents}
+							bank={''}/>
 					)}
 
 					{sortedStages?.[3] && (
@@ -88,7 +87,7 @@ export const EmploymentStageInfo = ( ) => {
 							comment={sortedStages[3].comment}
 							stageStatus={sortedStages[3].status}
 							documentArray={sortedStages[3].documents}
-						/>
+						 	bank={''}/>
 					)}
 
 					{sortedStages?.[4] && (
@@ -98,16 +97,20 @@ export const EmploymentStageInfo = ( ) => {
 							comment={sortedStages[4].comment}
 							stageStatus={sortedStages[4].status}
 							documentArray={sortedStages[4].documents}
-						/>
+						 	bank={''}/>
 					)}
-					{sortedStages?.[5] && (
-						<DepEmploymentStageItem
-							stage={6}
-							role={'personnel'}
-							comment={''}
-							stageStatus={sortedStages[5].status}
-							documentArray={sortedStages[5].documents}
-						/>
+					{!sortedStages[5].hasRequisites && (
+						<>
+							{sortedStages?.[5] && (
+								<DepEmploymentStageItem
+									stage={6}
+									role={'personnel'}
+									comment={''}
+									stageStatus={sortedStages[5].status}
+									documentArray={sortedStages[5].documents}
+								 bank={sortedStages[5].bank}/>
+							)}
+						</>
 					)}
 				</div>
 			</div>

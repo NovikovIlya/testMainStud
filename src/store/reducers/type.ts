@@ -475,6 +475,8 @@ export type EmploymentStageStatusType = {
 		status: 'FILLING' | 'VERIFYING' | 'REFINE' | 'ACCEPTED'
 		comment: string
 		type: 'FIRST' | 'SECOND' | 'THIRD' | 'FOURTH' | 'FIFTH' | 'SIXTH'
+		hasRequisites: boolean
+		bank: string
 		documents: {
 			id: number
 			docType: string

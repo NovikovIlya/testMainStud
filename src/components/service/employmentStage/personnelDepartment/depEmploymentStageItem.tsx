@@ -18,6 +18,7 @@ import { setForthStageCommentVisibility } from '../../../../store/reducers/Emplo
 import { setFifthStageCommentVisibility } from '../../../../store/reducers/EmploymentStageReducers/comments/FifthStageCommentVisibilitySlice'
 import { useDispatch } from 'react-redux'
 import { setSixStageStatus } from '../../../../store/reducers/EmploymentStageReducers/stages/SixStageStatusSlice'
+import { setSixStageStatusPersonnel } from '../../../../store/reducers/EmploymentStageReducers/stages/SixStageStatusPersonnelSlice'
 import {
 	setSixStageCommentVisibility
 } from '../../../../store/reducers/EmploymentStageReducers/comments/SixStageCommentVisibilitySlice'
@@ -31,6 +32,7 @@ interface Document {
 interface DepEmploymentStageItemProps {
 	stage: number
 	role: string
+	bank: string
 	stageStatus: string
 	comment: string
 	documentArray: Document[] | undefined
@@ -43,6 +45,7 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 	const forthStageStatus = useAppSelector(state => state.forthStageStatus)
 	const fifthStageStatus = useAppSelector(state => state.fifthStageStatus)
 	const sixStageStatus = useAppSelector(state => state.sixStageStatus)
+	const sixStageStatusPersonnel = useAppSelector(state => state.sixStageStatusPersonnel)
 	const secondStageCommentVisibility = useAppSelector(state => state.secondStageCommentVisibility)
 	const thirdStageCommentVisibility = useAppSelector(state => state.thirdStageCommentVisibility)
 	const forthStageCommentVisibility = useAppSelector(state => state.forthStageCommentVisibility)
@@ -64,10 +67,7 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 	const textRef = useRef('')
 	const checkInputChange = (e:any) => {
 		textRef.current = e.target.value
-	};
-
-	const isBankSber : boolean = true
-	const isBankVTB : boolean = false
+	}
 
 	const ReqModal = () => {
 		return (
@@ -99,6 +99,7 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 								type="primary"
 								onClick={() => {
 									markBankCardApplicationFormed({ subStageId: 6 })
+									dispatch(setSixStageStatusPersonnel('ACCEPTED'))
 									setIsReqModalOpen(false)
 								}}
 							>
@@ -324,9 +325,9 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 						)}
 					</div>
 				)}
-				{(props.stage === 6) && (props.role === 'personnel') && (
+				{(props.stage === 6) && (props.role === 'personnel') &&  (
 					<div className='min-w-[300px] items-left'>
-						{(props.stageStatus === 'VERIFYING') && (sixStageStatus.sixStageStatus === 'VERIFYING')	 && (
+						{(props.stageStatus === 'VERIFYING') && (sixStageStatusPersonnel.sixStageStatusPersonnel === 'VERIFYING')	 && (
 							<div className="flex flex-row gap-[12px]">
 								<Button
 									className='text-[#FFFFFF] py-[8px] px-[24px] border-none rounded-[54.5px] text-[16px] font-normal'
@@ -338,7 +339,7 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 								</Button>
 							</div>
 						)}
-						{((props.stageStatus === 'ACCEPTED') || (sixStageStatus.sixStageStatus === 'ACCEPTED')) && (
+						{((props.stageStatus === 'ACCEPTED') || (sixStageStatusPersonnel.sixStageStatusPersonnel === 'ACCEPTED')) && (
 							<div className="flex flex-row items-center gap-[12px]">
 								<div className="w-[11px] h-[11px] rounded-[100%] bg-[#00AB30]"></div>
 								<span>Сформированно</span>
@@ -419,7 +420,10 @@ const StageContentComponent = () => {
 					{props.documentArray?.map((document) => (
 						<DocumentElem key={document.id} name={document.docType} id={document.id} />
 					))}
-					<span className="text-[14px]/[16.8px] text-black opacity-[60%] font-normal">Соискателю необходимо завести банковскую карту {(isBankVTB) ? 'ВТБ' : ''}{(isBankSber) ? 'СБЕРБАНК' : ''}</span>
+					<span className="text-[14px]/[16.8px] text-black opacity-[60%] font-normal">Соискателю необходимо завести банковскую карту
+						{props.bank === 'SBER' ? " Сбербанк" : ""}
+						{props.bank === 'VTB' ? " ВТБ" : ""}
+					</span>
 				</>
 			)}
 		</>

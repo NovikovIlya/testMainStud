@@ -1,4 +1,4 @@
-import { Button } from 'antd'
+import { Button, Spin } from 'antd'
 import { useNavigate } from 'react-router-dom'
 import { FileIconSvg } from "../../../../assets/svg/FileIconSvg"
 import { setCurrentResponce } from '../../../../store/reducers/CurrentResponceSlice'
@@ -11,6 +11,9 @@ import {
 	setCurrentEmploymentSeekerName,
 	setCurrentEmploymentSeekerVacancy
 } from '../../../../store/reducers/EmploymentStageReducers/EmploymentStageSeekerReducer'
+import { useAppSelector } from '../../../../store'
+import { LoadingOutlined } from '@ant-design/icons'
+import { setChatId } from '../../../../store/reducers/chatIdSlice'
 
 export const DepEmploymentItem = (  props : EmploymentStageItemType ) => {
 
@@ -29,7 +32,7 @@ export const DepEmploymentItem = (  props : EmploymentStageItemType ) => {
 		chatId: props.respondId,
 		role: 'PERSONNEL_DEPARTMENT'
 	})
-	console.log(props.status)
+
 	return (
 		<div className="flex flex-col">
 			<div className="flex flex-row items-center h-[80px] w-full bg-[#FFFFFF]">
@@ -73,7 +76,7 @@ export const DepEmploymentItem = (  props : EmploymentStageItemType ) => {
 						className='bg-[#FFFFFF] py-[8px] px-[24px] text-[#333333] border-[#333333] border-[1px] rounded-[54.5px] text-[16px] font-normal cursor-pointer'
 						onClick={() => {
 							dispatch(setCurrentResponce(props.respondId))
-							navigate(`/services/personnelaccounting/employment/stages/${props.respondId}/seekerinfo`)
+							navigate(`/services/personnelaccounting/employment/stages/seeker-info`)
 						}}
 					>
 						Резюме
@@ -81,6 +84,7 @@ export const DepEmploymentItem = (  props : EmploymentStageItemType ) => {
 					<Button
 						className='bg-[#FFFFFF] py-[8px] px-[24px] text-[#333333] border-[#333333] border-[1px] rounded-[54.5px] cursor-pointer'
 						onClick={() => {
+							dispatch(setChatId(chatId.id))
 							navigate(`/services/personnelaccounting/chat/id/${chatId.id}`)
 						}}
 					>

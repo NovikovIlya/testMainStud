@@ -13,6 +13,7 @@ import {
 } from '../../../../store/reducers/EmploymentStageReducers/EmploymentStageSeekerReducer'
 import { useAppSelector } from '../../../../store'
 import { LoadingOutlined } from '@ant-design/icons'
+import { setChatId } from '../../../../store/reducers/chatIdSlice'
 
 export const DepEmploymentItem = (  props : EmploymentStageItemType ) => {
 
@@ -31,8 +32,6 @@ export const DepEmploymentItem = (  props : EmploymentStageItemType ) => {
 		chatId: props.respondId,
 		role: 'PERSONNEL_DEPARTMENT'
 	})
-	const id = chatId.id
-
 
 	return (
 		<div className="flex flex-col">
@@ -85,8 +84,8 @@ export const DepEmploymentItem = (  props : EmploymentStageItemType ) => {
 					<Button
 						className='bg-[#FFFFFF] py-[8px] px-[24px] text-[#333333] border-[#333333] border-[1px] rounded-[54.5px] cursor-pointer'
 						onClick={() => {
-							console.log(id)
-							navigate(`/services/personnelaccounting/chat/id/${id}`)
+							dispatch(setChatId(chatId.id))
+							navigate(`/services/personnelaccounting/chat/id/${chatId.id}`)
 						}}
 					>
 						<FileIconSvg></FileIconSvg>

@@ -32,6 +32,18 @@ export const EmplRequisites = (props: {
 
 	useEffect(() => {
 		if (foundStage) {
+			if (foundStage.status === 'VERIFYING') {
+				return
+			}
+			if (foundStage.status === 'REFINE') {
+				return
+			}
+			if (foundStage.status === 'UPDATED') {
+				return
+			}
+			if (foundStage.status === 'ACCEPTED') {
+				return
+			}
 			if (
 				foundStage.documents.length ===
 					docs.filter(doc => doc.employmentStageType === props.stageName)
@@ -86,6 +98,7 @@ export const EmplRequisites = (props: {
 						</Checkbox>
 						<Popover
 							overlayClassName="p-[20px] w-[369px]"
+							className="pointer-events-auto"
 							placement="bottomLeft"
 							arrow={false}
 							content="Если у вас нет ни одной из указанных карт, нажмите на галочку. Карта будет заведена на ваше имя и вы сможете получить её, как только будете трудоустроены."

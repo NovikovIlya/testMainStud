@@ -116,7 +116,8 @@ export const Stages = () => {
 				<NavPanel />
 				<div
 					className={`w-full mt-[40px] ${
-						empData.status === 'VERIFYING' && 'pointer-events-none'
+						(empData.status === 'VERIFYING' || empData.status === 'ACCEPTED') &&
+						'pointer-events-none'
 					}`}
 				>
 					{currentStage === 1 && (

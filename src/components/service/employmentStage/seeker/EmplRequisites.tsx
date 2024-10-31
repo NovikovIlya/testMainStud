@@ -41,6 +41,9 @@ export const EmplRequisites = (props: {
 			if (foundStage.status === 'UPDATED') {
 				return
 			}
+			if (foundStage.status === 'ACCEPTED') {
+				return
+			}
 			if (
 				foundStage.documents.length ===
 					docs.filter(doc => doc.employmentStageType === props.stageName)

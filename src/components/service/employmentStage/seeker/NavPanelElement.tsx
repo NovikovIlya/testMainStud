@@ -12,18 +12,20 @@ export const NavPanelElement = (props: { id: number; text: string }) => {
 	const progress = stages.find(stage => stage.id === props.id)
 
 	const [isReadyToSend, setIsReadyToSend] = useState<boolean>(false)
-	//const [isBeingVerified, setIsBeingVerified] = useState<boolean>(false);
+	const [isBeingVerified, setIsBeingVerified] = useState<boolean>(false)
 
 	useEffect(() => {
 		if (progress === undefined) {
 			const verifying = stages.find(
 				stage => stage.status === 'VERIFYING' || stage.status === 'ACCEPTED'
 			)
+			const refining = stages.find(
+				stage => stage.status === 'REFINE' || stage.status === 'UPDATED'
+			)
 			const notReady = stages.find(stage => stage.status !== 'READY')
 
-			if (verifying) {
-				setIsReadyToSend(true)
-				//setIsBeingVerified(true);
+			if (verifying && !refining) {
+				setIsBeingVerified(true)
 				return
 			}
 
@@ -36,6 +38,27 @@ export const NavPanelElement = (props: { id: number; text: string }) => {
 	}, [stages])
 
 	if (progress === undefined) {
+		if (isBeingVerified) {
+			return (
+				<>
+					<div
+						className="flex flex-col items-center gap-[12px] h-full z-[3] w-[10%] font-content-font font-bold text-[14px]/[14px] cursor-pointer select-none"
+						onClick={() => {
+							dispatch(setStage(props.id))
+						}}
+					>
+						<div className="h-[28px] w-[28px] relative">
+							<div className="absolute h-[28px] w-[28px] bg-[#F5F8FB] z-[5]"></div>
+							<div className="absolute h-[28px] w-[28px] bg-inherit z-[6] opacity-50">
+								<EmpReadyIcon />
+							</div>
+						</div>
+						<div className="text-[#3073D7] text-center">{props.text}</div>
+					</div>
+				</>
+			)
+		}
+
 		return (
 			<div
 				className={`flex flex-col items-center gap-[12px] h-full z-[3] w-[10%] font-content-font font-bold text-[14px]/[14px] ${

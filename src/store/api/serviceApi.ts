@@ -1044,7 +1044,10 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
-		markBankCardApplicationFormed: builder.mutation<void, { subStageId: number }>({
+		markBankCardApplicationFormed: builder.mutation<
+			void,
+			{ subStageId: number }
+		>({
 			query: arg => ({
 				url: `http://localhost:8082/employment-api/v1/management/employment/sub-stage/${arg.subStageId}/requisites`,
 				method: 'PATCH',
@@ -1053,6 +1056,13 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
+		updateEmploymentDocuments: builder.mutation<void, number>({
+			query: subStageId => ({
+				url: `http://localhost:8082/employment-api/v1/employment/sub-stage/${subStageId}/updated`,
+				headers: { Authorization: `Bearer ${seekerToken}` },
+				method: 'PATCH'
+			})
+		})
 	})
 })
 export const {
@@ -1150,5 +1160,6 @@ export const {
 	useGetEmploymentReqStageStatusQuery,
 	useChangeEmploymentStageAccountingStatusRequestMutation,
 	useGetAllDocumentDefinitionsQuery,
-	useMarkBankCardApplicationFormedMutation
+	useMarkBankCardApplicationFormedMutation,
+	useUpdateEmploymentDocumentsMutation
 } = serviceApi

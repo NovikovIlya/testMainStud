@@ -77,6 +77,8 @@ export const Stages = () => {
 						} else {
 							return stage
 						}
+					} else if (stage.status === 'UPDATED') {
+						return { ...stage, status: 'READY' }
 					} else {
 						return stage
 					}

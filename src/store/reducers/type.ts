@@ -217,7 +217,8 @@ export enum respondStatus {
 	'IN_RESERVE',
 	'ARCHIVE',
 	'EMPLOYMENT_REQUEST',
-	'EMPLOYMENT'
+	'EMPLOYMENT',
+	'REJECTED'
 }
 
 export type RespondItemType = {

@@ -217,7 +217,8 @@ export enum respondStatus {
 	'IN_RESERVE',
 	'ARCHIVE',
 	'EMPLOYMENT_REQUEST',
-	'EMPLOYMENT'
+	'EMPLOYMENT',
+	'REJECTED'
 }
 
 export type RespondItemType = {
@@ -431,6 +432,7 @@ export type EmployementStatus =
 	| 'COMPLETE'
 	| 'READY'
 	| 'ACCEPTED'
+	| 'UPDATED'
 
 export type EmploymentDataType = {
 	id: number

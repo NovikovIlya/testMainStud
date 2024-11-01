@@ -138,7 +138,7 @@ export const SeekerEmploymentItem = (props: RespondItemType) => {
 					<p className="ml-[10%]">Прохождение</p>
 				) : props.employmentStageStatus === 'VERIFYING' ? (
 					<p className="ml-[10%]">Проверка</p>
-				) : (
+				) : props.employmentStageStatus === 'REFINE' ? (
 					<p
 						className="ml-[10%] underline underline-offset-[3px] pt-[3px] cursor-pointer"
 						onClick={() => {
@@ -147,6 +147,8 @@ export const SeekerEmploymentItem = (props: RespondItemType) => {
 					>
 						Доработка
 					</p>
+				) : (
+					<p className="ml-[10%]">Трудоустроен</p>
 				)}
 				<div className="flex gap-[12px] ml-auto">
 					<Button

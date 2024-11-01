@@ -1,7 +1,9 @@
+import { Button } from 'antd'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 
 import { useAppSelector } from '../../../../store'
+import { useUpdateEmploymentDocumentsMutation } from '../../../../store/api/serviceApi'
 import {
 	setStageProgressAsFilling,
 	setStageProgressAsReady
@@ -21,8 +23,22 @@ export const EmplMedExam = (props: {
 	)
 	const dispatch = useDispatch()
 
+	const [updateDocuments, queryStatus] = useUpdateEmploymentDocumentsMutation()
+
 	useEffect(() => {
 		if (foundStage) {
+			if (foundStage.status === 'VERIFYING') {
+				return
+			}
+			if (foundStage.status === 'REFINE') {
+				return
+			}
+			if (foundStage.status === 'UPDATED') {
+				return
+			}
+			if (foundStage.status === 'ACCEPTED') {
+				return
+			}
 			if (
 				foundStage.documents.length ===
 				docs.filter(doc => doc.employmentStageType === props.stageName).length
@@ -71,6 +87,23 @@ export const EmplMedExam = (props: {
 							))}
 					</div>
 				</div>
+				{(foundStage?.status === 'REFINE' ||
+					foundStage?.status === 'UPDATED') && (
+					<Button
+						loading={queryStatus.isLoading}
+						type="primary"
+						className="rounded-[54.5px] w-[282px]"
+						onClick={() => {
+							updateDocuments(foundStage.id)
+								.unwrap()
+								.then(() => {
+									dispatch(setStageProgressAsReady(props.stageId))
+								})
+						}}
+					>
+						Подтвердить и отправить данные
+					</Button>
+				)}
 			</div>
 		</>
 	)

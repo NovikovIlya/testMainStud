@@ -3,12 +3,12 @@ WORKDIR /app
 COPY package*.json .
 RUN npm install
 COPY . .
-RUN npm run build
+RUN npx vite build
 
 FROM nginx:latest
 WORKDIR /usr/share/nginx/html
 RUN rm -rf ./*
-COPY --from=builder /app/dist .
+COPY --from=builder /app/build .
 WORKDIR /etc/nginx
 COPY ./nginx.conf ./nginx.conf
 ENTRYPOINT ["nginx", "-g", "daemon off;"]

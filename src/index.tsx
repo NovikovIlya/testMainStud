@@ -11,7 +11,7 @@ import { store } from './store'
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
 root.render(
-	<BrowserRouter>
+	// <BrowserRouter>
 		<React.StrictMode>
 			<Suspense
 				fallback={
@@ -30,5 +30,5 @@ root.render(
 				</Provider>
 			</Suspense>
 		</React.StrictMode>
-	</BrowserRouter>
+	// </BrowserRouter>
 )

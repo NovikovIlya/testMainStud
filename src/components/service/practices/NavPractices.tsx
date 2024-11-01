@@ -37,21 +37,23 @@ function getItem(label: React.ReactNode,key: React.Key,icon?: React.ReactNode,ch
 }
 
 
-const rootSubmenuKeys = ['sub1', 'sub2', 'sub4']
+const rootSubmenuKeys = ['sub1','sub2','sub22']
 export const NavPractices = () => {
 	const [openKeys, setOpenKeys] = useState(['sub1'])
 	const [current, setCurrent] = useState('registerContracts')
 	const navigate = useNavigate()
 	const {t} = useTranslation()
-	const ref1 = useRef(null);
-	const ref2 = useRef(null);
-	const ref3 = useRef(null);
-	const refArray = [ref1, ref2, ref3];
+	const ref1 = useRef<HTMLButtonElement | null>(null);
+	const ref2 = useRef<HTMLButtonElement | null>(null);
+	const ref3 = useRef<HTMLButtonElement | null>(null);
+	const refArray:any = [ref1, ref2, ref3];
 	const [open, setOpen] = useState<boolean>(false);
 	const orientation  = useWindowOrientation()
 	const isMobile = isMobileDevice()
 
-
+	useEffect(()=>{
+		
+	},[])
 
 	const items: any = [
 		getItem('Справочники', 'sub1', <PracticesSvg />, [
@@ -69,7 +71,21 @@ export const NavPractices = () => {
 			getItem('Итоговая проверка', 'finally'),
 			
 		]),
-		getItem(<Button className='opacity-70 mt-3'  onClick={() => setOpen(true)}>Пройти обучение</Button>, 'sub3', <QuestionCircleOutlined className='invisible absolute top-1/2 -translate-y-1/2 right-4 '/>),
+		getItem(<Button className='opacity-70 mt-1 items-center'  onClick={() => {
+			if(!ref1.current?.closest('li')?.classList.contains('ant-menu-submenu-open') ){
+				ref1.current?.click()
+			}
+			if(!ref2.current?.closest('li')?.classList.contains('ant-menu-submenu-open') ){
+				ref2.current?.click()
+			}
+			if(!ref3.current?.closest('li')?.classList.contains('ant-menu-submenu-open') ){
+				ref3.current?.click()
+			}
+	
+
+			
+			setOpen(true);
+		  }}>Пройти обучение</Button>, 'sub3', <QuestionCircleOutlined className='invisible absolute top-1/2 -translate-y-1/2 right-4 '/>),
 		
 	]
   
@@ -190,7 +206,7 @@ export const NavPractices = () => {
 		<>
 			<Header type={"service"} service={t("Practices")}/>
 			<Menu
-				defaultOpenKeys={['sub1','sub2','sub22']}
+				defaultOpenKeys={rootSubmenuKeys}
 				selectedKeys={[current]}
 				defaultActiveFirst
 				mode="inline"

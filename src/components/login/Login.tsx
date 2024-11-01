@@ -2,7 +2,7 @@ import { Form, Typography } from 'antd'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import { IError } from '../../api/types'
 import logo from '../../assets/images/group.png'
@@ -17,13 +17,21 @@ const { Title } = Typography
 
 export const Login = () => {
 	const navigate = useNavigate()
-	const { t } = useTranslation()
+	const { t, i18n } = useTranslation()
 	const dispatch = useDispatch()
 	const [login] = useLoginMutation()
 	const [error, setError] = useState<IError | null>(null)
+	const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+    const paramValue = searchParams.get('lan');
+	console.log('paramValue',paramValue)
 
 	useEffect(()=>{
 		document.title = 'Казанский Федеральный Университет'
+
+		if(paramValue==='eng'){
+			i18n.changeLanguage('en')
+		}
 	},[])
 
 	const onFinish = async (values: { email: string; password: string }) => {

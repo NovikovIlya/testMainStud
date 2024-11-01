@@ -66,7 +66,7 @@ const DropDrag = () => {
 	const layoutValid = layout.lg.filter(obj1 =>jsxElements.some(obj2 => obj1.i === obj2.index))
 
 	const generateDOM = layoutValid.map(item => {
-		console.log('item',item)
+	
 		return (
 			<div
 				key={item.i}
@@ -89,7 +89,7 @@ const DropDrag = () => {
 			</div>
 		)
 	})
-	console.log('user',user)
+
 	return (
 		<div className=" mt-[40px] w-[min(1600px, 100%)] mb-[100px]">
 			{user?.roles[0].type==='ABITUR' || user?.roles[0].type==='OTHER' ?

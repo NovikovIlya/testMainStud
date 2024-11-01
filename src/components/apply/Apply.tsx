@@ -164,7 +164,7 @@ export const Apply = () => {
 			</div>
 			<div className="max-xl:hidden">
 				<img
-					className="rounded-full absolute right-[200px] top-[80px]"
+					className="rounded-full absolute right-[200px] top-[-100px]"
 					src={img}
 					alt="avatar"
 				/>

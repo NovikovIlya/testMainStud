@@ -323,12 +323,11 @@ export const ViewFinally = () => {
 			}
 		}
 		function filterPast(elem: any) {
-			console.log('elem.period',elem.period )
 			if (filter.dateFilling === 'Прошедшие') {
-				return dayjs(elem.period.split(' - ')[1].trim()).format('DD.MM.YYYY') < dayjs().format('DD.MM.YYYY')
+				return dayjs(elem.period.split(' - ')[1].trim()).format('DD.MM.YYYY') > dayjs().format('DD.MM.YYYY')
             }
 			if (filter.dateFilling === 'Текущие') {
-				return dayjs(elem.period.split(' - ')[1].trim()).format('DD.MM.YYYY') > dayjs().format('DD.MM.YYYY')
+				return dayjs(elem.period.split(' - ')[1].trim()).format('DD.MM.YYYY') < dayjs().format('DD.MM.YYYY')
             }
 			else{
 				return elem

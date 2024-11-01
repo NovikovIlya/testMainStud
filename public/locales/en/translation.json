@@ -302,5 +302,11 @@
 	"aboutKFU": "KFU has almost 40 years of experience in teaching foreigners. Theuniversity is famous for its strong schools of mathematics, physics,biology, chemistry, linguistics. In scientific research, KFU givespriority to developments in pharmacology, biomedicine, geology,physics, chemistry, oil and gas, nano- and information technologies(IT), psychology and cultural studies, humanities, pedagogical andinterdisciplinary fields.",
 	"redirect":"Переход",
 	"redirectText" : "Are you sure you want to proceed?",
-	"cancel": "Cancel"
+	"cancel": "Cancel",
+	"welcome_message": "Dear first-year student, congratulations on the beginning of the school year." ,
+	"account_creation_message" : "An account has been created for you to access the university's information resources. To log in to your student's personal account on the website <a href='https://kpfu.ru' target='_blank'>https://kpfu.ru</a> , use the login {{login}} and password {{password}} You can change your password in your personal account",
+	"yandex_instructions_title": "In addition,an account in Yandex 360 has been created. In order to use this service, you need to do the following steps:",
+	"yandex_step_1": "Go to the website <a href='https://ya.ru/' target='_blank'>https://ya.ru/</a> and add an account",
+	"yandex_step_2": "In the LOGIN field you must enter {{login}}@kpfu.ru",
+	"yandex_step_3": "Afterwards, you will be taken to the login page for the university's information ecosystem. On this page, you will need to enter the LOGIN and PASSWORD from your account specified above"
 }

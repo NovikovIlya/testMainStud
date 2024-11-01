@@ -1,4 +1,4 @@
-import { Button, ConfigProvider, Popover, Switch } from 'antd'
+import { Button, Card, ConfigProvider, Descriptions, Popover, Switch } from 'antd'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -8,22 +8,19 @@ import { useCheckIsEmployeeQuery } from '../store/api/practiceApi/contracts'
 import DropDrag from './dnd/DropDrag'
 import { FeedbackWindow } from './feedbackWindow/FeedbackWindow'
 import { Layout } from './layout/Layout'
-import { useSearchParams } from 'react-router-dom'
+
 import { useAppDispatch, useAppSelector } from '../store'
-import PersonalizationSvg from '../assets/svg/PersonalizationSvg'
 import { setEdit } from '../store/reducers/authSlice'
+import InfoAbitAccepted from './InfoAbitAccepted'
 
 export const User = () => {
 	const { t,i18n } = useTranslation()
 	const [open, setOpen] = useState(false)
 	const { data, isSuccess } = useCheckIsEmployeeQuery()
-	const [searchParams] = useSearchParams();
-    const hasEnParam = searchParams.has('en');
-	const acceesss = useAppSelector((state)=>state.auth.accessToken)
-	const role = useAppSelector((state)=>state.auth.user?.roles)
 	const user = useAppSelector(state => state.auth.user)
 	const dispatch = useAppDispatch()
-	console.log('role',role)
+	const [acceptedData,setAcceptedData] = useState<any>(null)
+
 	const hide = () => {
 		setOpen(false)
 	}
@@ -37,9 +34,13 @@ export const User = () => {
 		}
 	}, [data])
 
+
+	// Проверка на роль Абитурента и отправка запроса является ли студент зачисленным
 	useEffect(()=>{
-		if(hasEnParam){
-			i18n.changeLanguage('en')
+		if(user?.roles?.some(item => item.credentials && item.credentials.length > 0)){
+			setAcceptedData(user?.roles?.map((item)=>{
+				return item.credentials
+			}))
 		}
 	},[])
 
@@ -56,6 +57,8 @@ export const User = () => {
 						</div>
 						}		
 					</div>
+					{acceptedData ? acceptedData[0]?.map((item:any)=><InfoAbitAccepted login={item.login} password={item.password} key={item.login}/>):''}
+					
 					<DropDrag />
 				</div>
 

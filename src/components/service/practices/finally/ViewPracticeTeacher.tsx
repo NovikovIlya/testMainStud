@@ -63,7 +63,6 @@ export const ViewPraciceTeacher = () => {
 	const {data:dataAttachement,isError:isErrorAttachments,isFetching:isFetchingAttachments} = useGetAttachmentsFinalQuery(objAttachment,{skip:!objAttachment.studentId || !objAttachment.documentType})
 	const dispatch = useAppDispatch()
 
-
 	const columnsMini = [
 		{
 			key: 'number',
@@ -130,7 +129,7 @@ export const ViewPraciceTeacher = () => {
 		}
 	]
 
-
+	// Обновление таблицы при изменении фильтров
 	useEffect(() => {
 		if (isSuccessOrder) {
 			setDataTable(filterDataFull())
@@ -142,15 +141,13 @@ export const ViewPraciceTeacher = () => {
             download(dataReportCurrentStudent, `Отчет по конкретному студенту ${studentName}.docx`);
         }
     }, [dataReportCurrentStudent]); 
-
-    // Эффект для скачивания отчета по группе
+   
     useEffect(() => {
         if (dataReportGurrentGroup) {
             downloadTwo(dataReportGurrentGroup, `Отчет по конкретному группе.docx`);
         }
     }, [dataReportGurrentGroup]); 
 
-	 // Эффект для скачивания чата три файла
 	useEffect(() => {
 		if (dataAttachement) {
 			downloadThree(dataAttachement, `Отчет по чату.docx`);
@@ -166,6 +163,8 @@ export const ViewPraciceTeacher = () => {
 		if(isErrorStudent)
 		dispatch(showNotification({message:'По данному студенту не сформировали отчет',type:'error'}))
 	}, [isErrorStudent]); 
+
+	
 
 	const downloadTwo = async (url:any,name:any)=>{
 		if(dataReportGurrentGroup){

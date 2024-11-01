@@ -380,9 +380,6 @@ export const ViewAll = () => {
 			}
 		}
 		function filterPast(elem: any) {
-			console.log('elem.period',dayjs(elem.period.split(' - ')[1].trim()).format('DD.MM.YYYY') )
-			console.log('filter.dateFilling',dayjs().format('DD.MM.YYYY'))
-			console.log('fuin',dayjs(elem.period.split(' - ')[1].trim()).format('DD.MM.YYYY') < dayjs().format('DD.MM.YYYY'))
 			if (filter.dateFilling === 'Прошедшие') {
 				return dayjs(elem.period.split(' - ')[1].trim()).format('DD.MM.YYYY') > dayjs().format('DD.MM.YYYY')
             }

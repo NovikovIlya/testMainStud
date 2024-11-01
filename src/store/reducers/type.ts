@@ -61,6 +61,7 @@ export interface Role {
 	login: string
 	id: string
 	type: string
+	credentials?:any
 }
 export interface ICalendarItem {
 	semester: number

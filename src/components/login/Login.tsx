@@ -75,7 +75,7 @@ export const Login = () => {
 
 	return (
 		<div className="flex flex-col items-center min-h-screen">
-			<BackMainPage />
+			<BackMainPage notAuth={true}/>
 			<div className="flex flex-row justify-center gap-24 text-base max-xl:gap-4 max-lg:flex-col max-lg:items-center h-full w-full">
 				<Form
 					name="login"

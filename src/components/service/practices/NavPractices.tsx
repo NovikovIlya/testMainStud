@@ -46,6 +46,7 @@ export const NavPractices = () => {
 	const ref1 = useRef<HTMLButtonElement | null>(null);
 	const ref2 = useRef<HTMLButtonElement | null>(null);
 	const ref3 = useRef<HTMLButtonElement | null>(null);
+	
 	const refArray:any = [ref1, ref2, ref3];
 	const [open, setOpen] = useState<boolean>(false);
 	const orientation  = useWindowOrientation()
@@ -169,6 +170,12 @@ export const NavPractices = () => {
 		title: 'Приложение 4',
 		description: 'Приложение 4 – документ, содержащий информацию об обучающихся, направляемых на практическую подготовку в профильную организацию',
 		target: () => document.querySelectorAll('.ant-menu-item')[6],
+		placement: 'right',
+	  }, 
+	  {
+		title: 'Итоговая проверка',
+		description: 'Итоговая проверка – документ, содержащий информацию об обучающихся, которые прошли практику и ожидают проверки',
+		target: () => ref3.current,
 		placement: 'right',
 	  },
 	//   {

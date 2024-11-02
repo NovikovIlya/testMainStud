@@ -35,7 +35,7 @@ export const User = () => {
 	}, [data])
 
 
-	// Проверка на роль Абитурента и отправка запроса является ли студент зачисленным
+	// Проверка на роль Абитурента + зачислен ли и сбор данных по зачислению
 	useEffect(()=>{
 		if(user?.roles?.some(item => item.credentials && item.credentials.length > 0)){
 			setAcceptedData(user?.roles?.map((item)=>{
@@ -58,7 +58,7 @@ export const User = () => {
 						}		
 					</div>
 					{acceptedData ? acceptedData[0]?.map((item:any)=><InfoAbitAccepted login={item.login} password={item.password} key={item.login}/>):''}
-					
+			
 					<DropDrag />
 				</div>
 

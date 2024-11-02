@@ -133,16 +133,8 @@ export const serviceApi = apiSlice.injectEndpoints({
                     method: 'POST'
                 }
             }
-        }),
-        getInfoAbitAccepted: builder.mutation({
-            query: (body) => {
-                return {
-                    url: 'user-api/users/me/role',
-                    body: body,
-                    method: 'POST'
-                }
-            }
         })
+       
     })
 })
 export const {
@@ -163,6 +155,6 @@ export const {
     useChangePasswordMutation,
     useGetPhoneUserQuery,
     usePostPhoneMutation,
-    useGetSubdivisionUserQuery,
-    useGetInfoAbitAcceptedMutation
+    useGetSubdivisionUserQuery
+    
 } = serviceApi

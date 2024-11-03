@@ -121,7 +121,7 @@ export const EmplDocAttachment = (props: {
 								})
 						}}
 					>
-						Подтвердить и отправить данные
+						Далее
 					</Button>
 				)}
 			</div>

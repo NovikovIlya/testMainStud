@@ -101,7 +101,7 @@ export const EmplMedExam = (props: {
 								})
 						}}
 					>
-						Подтвердить и отправить данные
+						Далее
 					</Button>
 				)}
 			</div>

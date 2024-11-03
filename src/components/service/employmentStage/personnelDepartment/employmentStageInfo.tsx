@@ -69,7 +69,6 @@ export const EmploymentStageInfo = ( ) => {
 							documentArray={sortedStages[1].documents}
 							bank={''}/>
 					)}
-
 					{sortedStages?.[2] && (
 						<DepEmploymentStageItem
 							stage={3}
@@ -99,16 +98,22 @@ export const EmploymentStageInfo = ( ) => {
 							documentArray={sortedStages[4].documents}
 						 	bank={''}/>
 					)}
-					{!sortedStages[5].hasRequisites && (
+					{sortedStages?.[5] && (
 						<>
-							{sortedStages?.[5] && (
-								<DepEmploymentStageItem
-									stage={6}
-									role={'personnel'}
-									comment={''}
-									stageStatus={sortedStages[5].status}
-									documentArray={sortedStages[5].documents}
-								 bank={sortedStages[5].bank}/>
+							{(!sortedStages[5].hasRequisites) && (
+								<>
+									{(sortedStages?.[5]) && (
+										<>
+											<DepEmploymentStageItem
+												stage={6}
+												role={'personnel'}
+												comment={''}
+												stageStatus={sortedStages[5].status}
+												documentArray={sortedStages[5].documents}
+												bank={sortedStages[5].bank}/>
+										</>
+									)}
+								</>
 							)}
 						</>
 					)}

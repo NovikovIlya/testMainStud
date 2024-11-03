@@ -1061,6 +1061,15 @@ export const serviceApi = apiSlice.injectEndpoints({
 				headers: { Authorization: `Bearer ${seekerToken}` },
 				method: 'PATCH'
 			})
+		}),
+		setHasRequisitesEmployment: builder.mutation<void, number>({
+			query: respondId => ({
+				url: `http://${emplBaseURL}employment-api/v1/respond/${respondId}/employment/requisites-missing`,
+				method: 'DELETE',
+				headers: {
+					Authorization: `Bearer ${seekerToken}`
+				}
+			})
 		})
 	})
 })
@@ -1161,5 +1170,6 @@ export const {
 	useGetAllDocumentDefinitionsQuery,
 	useMarkBankCardApplicationFormedMutation,
 	useUpdateEmploymentDocumentsMutation,
-	useGetAccountingStagesQuery
+	useGetAccountingStagesQuery,
+	useSetHasRequisitesEmploymentMutation
 } = serviceApi

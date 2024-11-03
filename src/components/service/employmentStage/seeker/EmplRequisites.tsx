@@ -3,7 +3,10 @@ import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 import { useAppSelector } from '../../../../store'
-import { useSetHasNoRequisitesOnEmploymentMutation } from '../../../../store/api/serviceApi'
+import {
+	useSetHasNoRequisitesOnEmploymentMutation,
+	useSetHasRequisitesEmploymentMutation
+} from '../../../../store/api/serviceApi'
 import { setHasRequisites } from '../../../../store/reducers/EmploymentDataSlice'
 import {
 	setStageProgressAsFilling,
@@ -25,6 +28,7 @@ export const EmplRequisites = (props: {
 	const dispatch = useDispatch()
 
 	const [setHasNoRequisites] = useSetHasNoRequisitesOnEmploymentMutation()
+	const [setHasRequisitesQuery] = useSetHasRequisitesEmploymentMutation()
 
 	const [hasRequisites, setRequisitesState] = useState<boolean>(
 		!foundStage?.hasRequisites
@@ -91,7 +95,16 @@ export const EmplRequisites = (props: {
 							className=""
 							checked={hasRequisites}
 							onClick={() => {
-								setRequisitesState(prev => !prev)
+								if (hasRequisites) {
+									setHasRequisitesQuery(props.respondId)
+										.unwrap()
+										.then(() => {
+											setRequisitesState(prev => !prev)
+											dispatch(setHasRequisites(props.stageName))
+										})
+								} else {
+									setRequisitesState(prev => !prev)
+								}
 							}}
 						>
 							У меня нет ни одной из указанных карт

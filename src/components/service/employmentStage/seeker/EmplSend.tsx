@@ -99,7 +99,7 @@ export const EmplSend = (props: {
 					<ol start={3} className="flex flex-col gap-[40px] ml-[2%]">
 						<li>
 							Необходимо завести банковскую карту{' '}
-							{bank === 'SBER' ? 'СБЕР' : 'ВТБ'}
+							{bank === 'SBER' ? 'Сбербанк' : 'ВТБ'}
 						</li>
 					</ol>
 				)}

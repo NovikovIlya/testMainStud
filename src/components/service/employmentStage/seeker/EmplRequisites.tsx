@@ -7,7 +7,10 @@ import {
 	useSetHasNoRequisitesOnEmploymentMutation,
 	useSetHasRequisitesEmploymentMutation
 } from '../../../../store/api/serviceApi'
-import { setHasRequisites } from '../../../../store/reducers/EmploymentDataSlice'
+import {
+	setBank,
+	setHasRequisites
+} from '../../../../store/reducers/EmploymentDataSlice'
 import {
 	setStageProgressAsFilling,
 	setStageProgressAsReady
@@ -101,6 +104,9 @@ export const EmplRequisites = (props: {
 										.then(() => {
 											setRequisitesState(prev => !prev)
 											dispatch(setHasRequisites(props.stageName))
+											dispatch(
+												setBank({ stage: props.stageName, bank: undefined })
+											)
 										})
 								} else {
 									setRequisitesState(prev => !prev)
@@ -137,11 +143,16 @@ export const EmplRequisites = (props: {
 										setHasNoRequisites({
 											respondId: props.respondId,
 											bank: 'SBER'
-										}).then(() => {
-											if (foundStage?.hasRequisites) {
-												dispatch(setHasRequisites(props.stageName))
-											}
 										})
+											.unwrap()
+											.then(() => {
+												if (foundStage?.hasRequisites) {
+													dispatch(setHasRequisites(props.stageName))
+												}
+												dispatch(
+													setBank({ stage: props.stageName, bank: 'SBER' })
+												)
+											})
 									}}
 								>
 									Сбербанк
@@ -152,11 +163,16 @@ export const EmplRequisites = (props: {
 										setHasNoRequisites({
 											respondId: props.respondId,
 											bank: 'VTB'
-										}).then(() => {
-											if (foundStage?.hasRequisites) {
-												dispatch(setHasRequisites(props.stageName))
-											}
 										})
+											.unwrap()
+											.then(() => {
+												if (foundStage?.hasRequisites) {
+													dispatch(setHasRequisites(props.stageName))
+												}
+												dispatch(
+													setBank({ stage: props.stageName, bank: 'VTB' })
+												)
+											})
 									}}
 								>
 									ВТБ

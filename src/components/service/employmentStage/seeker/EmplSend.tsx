@@ -19,6 +19,7 @@ export const EmplSend = (props: {
 	const hasNotRequisites = empData.stages.find(
 		stage => stage.type === 'SIXTH'
 	)?.hasRequisites
+	const bank = empData.stages.find(stage => stage.type === 'SIXTH')?.bank
 
 	const [isResultModalOpen, setIsResultModalOpen] = useState<boolean>(false)
 	const [resultModalText, setResultModalText] = useState<string>('')
@@ -96,7 +97,10 @@ export const EmplSend = (props: {
 				</div>
 				{!hasNotRequisites && (
 					<ol start={3} className="flex flex-col gap-[40px] ml-[2%]">
-						<li>Необходимо завести банковскую карту</li>
+						<li>
+							Необходимо завести банковскую карту{' '}
+							{bank === 'SBER' ? 'СБЕР' : 'ВТБ'}
+						</li>
 					</ol>
 				)}
 				<Checkbox

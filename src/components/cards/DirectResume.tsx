@@ -49,6 +49,17 @@ export const DirectResume = ({
 	const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
 	const [filename, setFilename] = useState<string | undefined>('')
 
+	const envs = import.meta.env
+	const defEnvs = import.meta.env
+	const host = import.meta.env.REACT_APP_HOST
+	const port = import.meta.env.REACT_APP_PORT
+	const emplBaseURL = `${host ? host : 'localhost'}:${port ? port : 8082}/`
+
+	console.log(host)
+	console.log(port)
+	console.log(envs)
+	console.log(defEnvs)
+
 	const { control, register, handleSubmit, formState } = useForm({
 		defaultValues: {
 			name: '',
@@ -75,7 +86,7 @@ export const DirectResume = ({
 		formData.append('phone', data.phone)
 		formData.append('desiredJob', data.vacancy)
 		console.log(data)
-		fetch('http://localhost:8082/employment-api/v1/resume', {
+		fetch(`http://${emplBaseURL}employment-api/v1/resume`, {
 			method: 'POST',
 			body: formData,
 			headers: {

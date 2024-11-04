@@ -12,6 +12,7 @@ import {
 } from '../../../../store/api/serviceApi'
 import { useState } from 'react'
 import { DocumentElem } from './components/DocumentElem'
+import { NocircleArrowIcon } from '../../jobSeeker/NoCircleArrowIcon'
 
 export const EmploymentStageInfo = ( ) => {
 
@@ -47,6 +48,16 @@ export const EmploymentStageInfo = ( ) => {
 	return (
 		<>
 			<div className="w-full flex flex-col px-[53px] mt-[140px]">
+				<Button
+					type="default"
+					className="max-w-[102px] bg-[#F5F8FB] mb-[30px] py-[8px] px-[24px] text-[#333333] border-[#333333] border-[1px] rounded-[54.5px] text-[16px]"
+					onClick={() => {
+						window.history.back()
+					}}
+				>
+					<NocircleArrowIcon/>
+					Назад
+				</Button>
 				<h1 className="font-normal text-[28px]/[28px]">{employmentSeekerName}</h1>
 				<Button
 					type="default"
@@ -55,7 +66,9 @@ export const EmploymentStageInfo = ( ) => {
 						dispatch(setCurrentResponce(respondId.respondId))
 						navigate('/services/personnelaccounting/employment/stages/seeker-info')
 					}}
-				>Резюме</Button>
+				>
+					Резюме
+				</Button>
 				<h3 className="mt-[53px] text-[18px] font-normal">
 					Вакансия: <span className="font-bold">«{employmentSeekerVacancy}»</span>
 				</h3>
@@ -69,7 +82,6 @@ export const EmploymentStageInfo = ( ) => {
 							documentArray={sortedStages[1].documents}
 							bank={''}/>
 					)}
-
 					{sortedStages?.[2] && (
 						<DepEmploymentStageItem
 							stage={3}
@@ -99,16 +111,22 @@ export const EmploymentStageInfo = ( ) => {
 							documentArray={sortedStages[4].documents}
 						 	bank={''}/>
 					)}
-					{!sortedStages[5].hasRequisites && (
+					{sortedStages?.[5] && (
 						<>
-							{sortedStages?.[5] && (
-								<DepEmploymentStageItem
-									stage={6}
-									role={'personnel'}
-									comment={''}
-									stageStatus={sortedStages[5].status}
-									documentArray={sortedStages[5].documents}
-								 bank={sortedStages[5].bank}/>
+							{(!sortedStages[5].hasRequisites) && (
+								<>
+									{(sortedStages?.[5]) && (
+										<>
+											<DepEmploymentStageItem
+												stage={6}
+												role={'personnel'}
+												comment={''}
+												stageStatus={sortedStages[5].status}
+												documentArray={sortedStages[5].documents}
+												bank={sortedStages[5].bank}/>
+										</>
+									)}
+								</>
 							)}
 						</>
 					)}

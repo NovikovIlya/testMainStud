@@ -3,8 +3,14 @@ import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 import { useAppSelector } from '../../../../store'
-import { useSetHasNoRequisitesOnEmploymentMutation } from '../../../../store/api/serviceApi'
-import { setHasRequisites } from '../../../../store/reducers/EmploymentDataSlice'
+import {
+	useSetHasNoRequisitesOnEmploymentMutation,
+	useSetHasRequisitesEmploymentMutation
+} from '../../../../store/api/serviceApi'
+import {
+	setBank,
+	setHasRequisites
+} from '../../../../store/reducers/EmploymentDataSlice'
 import {
 	setStageProgressAsFilling,
 	setStageProgressAsReady
@@ -25,6 +31,7 @@ export const EmplRequisites = (props: {
 	const dispatch = useDispatch()
 
 	const [setHasNoRequisites] = useSetHasNoRequisitesOnEmploymentMutation()
+	const [setHasRequisitesQuery] = useSetHasRequisitesEmploymentMutation()
 
 	const [hasRequisites, setRequisitesState] = useState<boolean>(
 		!foundStage?.hasRequisites
@@ -91,7 +98,19 @@ export const EmplRequisites = (props: {
 							className=""
 							checked={hasRequisites}
 							onClick={() => {
-								setRequisitesState(prev => !prev)
+								if (hasRequisites) {
+									setHasRequisitesQuery(props.respondId)
+										.unwrap()
+										.then(() => {
+											setRequisitesState(prev => !prev)
+											dispatch(setHasRequisites(props.stageName))
+											dispatch(
+												setBank({ stage: props.stageName, bank: undefined })
+											)
+										})
+								} else {
+									setRequisitesState(prev => !prev)
+								}
 							}}
 						>
 							У меня нет ни одной из указанных карт
@@ -124,11 +143,16 @@ export const EmplRequisites = (props: {
 										setHasNoRequisites({
 											respondId: props.respondId,
 											bank: 'SBER'
-										}).then(() => {
-											if (foundStage?.hasRequisites) {
-												dispatch(setHasRequisites(props.stageName))
-											}
 										})
+											.unwrap()
+											.then(() => {
+												if (foundStage?.hasRequisites) {
+													dispatch(setHasRequisites(props.stageName))
+												}
+												dispatch(
+													setBank({ stage: props.stageName, bank: 'SBER' })
+												)
+											})
 									}}
 								>
 									Сбербанк
@@ -139,11 +163,16 @@ export const EmplRequisites = (props: {
 										setHasNoRequisites({
 											respondId: props.respondId,
 											bank: 'VTB'
-										}).then(() => {
-											if (foundStage?.hasRequisites) {
-												dispatch(setHasRequisites(props.stageName))
-											}
 										})
+											.unwrap()
+											.then(() => {
+												if (foundStage?.hasRequisites) {
+													dispatch(setHasRequisites(props.stageName))
+												}
+												dispatch(
+													setBank({ stage: props.stageName, bank: 'VTB' })
+												)
+											})
 									}}
 								>
 									ВТБ

@@ -92,7 +92,7 @@ export const EmplMedExam = (props: {
 					<Button
 						loading={queryStatus.isLoading}
 						type="primary"
-						className="rounded-[54.5px] w-[282px]"
+						className="rounded-[54.5px] w-[141px]"
 						onClick={() => {
 							updateDocuments(foundStage.id)
 								.unwrap()
@@ -101,7 +101,7 @@ export const EmplMedExam = (props: {
 								})
 						}}
 					>
-						Подтвердить и отправить данные
+						Далее
 					</Button>
 				)}
 			</div>

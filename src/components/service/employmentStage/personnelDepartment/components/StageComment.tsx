@@ -9,7 +9,7 @@ export const StageComment = (props: CommentProps ) => {
 
 	let commentText = ''
 
-	if (props.commentTextState === '') {
+	if (props.commentTextState === '' && props.commentTextBd !== undefined) {
 		commentText = props.commentTextBd.trim()
 	}
 
@@ -18,6 +18,10 @@ export const StageComment = (props: CommentProps ) => {
 	}
 
 	if ((props.commentTextBd === null) || (props.commentTextBd === '') || (props.commentTextBd === undefined)) {
+		commentText = props.commentTextState
+	}
+
+	if ((props.commentTextBd !== null) && (props.commentTextState !== undefined) && (props.commentTextState !== '') && (props.commentTextBd !== props.commentTextState)) {
 		commentText = props.commentTextState
 	}
 
@@ -33,9 +37,9 @@ export const StageComment = (props: CommentProps ) => {
 	if (commentText.length<=120) {
 		isTextLongEnough = false
 	}
-	console.log(props.commentTextState)
-	console.log(props.commentTextBd)
-	console.log(commentText.length)
+	console.log('коммент из стейта ' + "|" + props.commentTextState + "|")
+	console.log('коммент из бд ' + props.commentTextBd)
+	console.log('длина коммента ' + commentText.length)
 
 	return (
 		<div className="flex flex-col gap-[4px] max-w-[90%]">

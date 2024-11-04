@@ -470,10 +470,10 @@ export type EmploymentStageItemType = {
 
 export type EmploymentStageStatusType = {
 	id: number
-	status: 'FILLING' | 'VERIFYING' | 'REFINE' | 'ACCEPTED'
+	status: 'FILLING' | 'VERIFYING' | 'REFINE' | 'ACCEPTED' | 'UPDATE'
 	stages: {
 		id: number
-		status: 'FILLING' | 'VERIFYING' | 'REFINE' | 'ACCEPTED'
+		status: 'FILLING' | 'VERIFYING' | 'REFINE' | 'ACCEPTED' | 'UPDATE'
 		comment: string
 		type: 'FIRST' | 'SECOND' | 'THIRD' | 'FOURTH' | 'FIFTH' | 'SIXTH'
 		hasRequisites: boolean

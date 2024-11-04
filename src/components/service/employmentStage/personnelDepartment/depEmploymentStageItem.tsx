@@ -40,6 +40,8 @@ interface DepEmploymentStageItemProps {
 
 export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 
+	console.log(props.stageStatus)
+
 	const secondStageStatus = useAppSelector(state => state.secondStageStatus)
 	const thirdStageStatus = useAppSelector(state => state.thirdStageStatus)
 	const forthStageStatus = useAppSelector(state => state.forthStageStatus)
@@ -155,6 +157,12 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 								<span>Принято</span>
 							</div>
 						)}
+						{(props.stageStatus === 'UPDATED') && (
+							<div className="flex flex-row items-center gap-[12px]">
+								<div className="w-[11px] h-[11px] rounded-[100%] bg-[#FFD600]"></div>
+								<span>Доработка</span>
+							</div>
+						)}
 					</div>
 				)}
 				{(props.stage === 3) && (
@@ -237,6 +245,12 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 					<div className="flex flex-row items-center gap-[12px]">
 						<div className="w-[11px] h-[11px] rounded-[100%] bg-[#00AB30]"></div>
 						<span>Принято</span>
+					</div>
+				)}
+				{(props.stageStatus === 'UPDATED') && (
+					<div className="flex flex-row items-center gap-[12px]">
+						<div className="w-[11px] h-[11px] rounded-[100%] bg-[#FFD600]"></div>
+						<span>Доработка</span>
 					</div>
 				)}
 			</div>
@@ -323,6 +337,12 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 								<span>Принято</span>
 							</div>
 						)}
+						{(props.stageStatus === 'UPDATED') && (
+							<div className="flex flex-row items-center gap-[12px]">
+								<div className="w-[11px] h-[11px] rounded-[100%] bg-[#FFD600]"></div>
+								<span>Доработка</span>
+							</div>
+						)}
 					</div>
 				)}
 				{(props.stage === 6) && (props.role === 'personnel') &&  (
@@ -358,7 +378,7 @@ const StageContentComponent = () => {
 					{props.documentArray?.map((document) => (
 						<DocumentElem key={document.id} name={document.docType}  id={document.id}/>
 					))}
-					{((props.stageStatus === 'REFINE') || (secondStageCommentVisibility.secondStageCommentVisibility === 'visible')) && (
+					{((props.stageStatus === 'REFINE') || (props.stageStatus === 'VERIFYING') || (props.stageStatus === 'UPDATED') || (secondStageCommentVisibility.secondStageCommentVisibility === 'visible')) && (
 						<>
 							<StageComment commentTextBd={props.comment} commentTextState={textRef.current}></StageComment>
 						</>
@@ -368,14 +388,8 @@ const StageContentComponent = () => {
 			{(props.stage === 3) && (
 				<>
 					<div className="flex flex-row gap-[12px]">
-						<GreenCheck></GreenCheck>
 						<span className="text-[16px]/[19.2px] font-normal">Соискатель ознакомлен с трудовыми условиями</span>
 					</div>
-					{((props.stageStatus === 'REFINE') || (thirdStageCommentVisibility.thirdStageCommentVisibility === 'visible')) && (
-						<>
-							<StageComment commentTextBd={props.comment} commentTextState={textRef.current}></StageComment>
-						</>
-					)}
 				</>
 			)}
 			{(props.stage === 4) && (
@@ -383,7 +397,7 @@ const StageContentComponent = () => {
 					{props.documentArray?.map((document) => (
 						<DocumentElem key={document.id} name={document.docType} id={document.id}/>
 					))}
-					{((props.stageStatus === 'REFINE') || (forthStageCommentVisibility.forthStageCommentVisibility === 'visible')) && (
+					{((props.stageStatus === 'REFINE') || (props.stageStatus === 'VERIFYING') || (props.stageStatus === 'UPDATED') || (forthStageCommentVisibility.forthStageCommentVisibility === 'visible')) && (
 						<>
 							<StageComment commentTextBd={props.comment} commentTextState={textRef.current}></StageComment>
 						</>
@@ -393,14 +407,8 @@ const StageContentComponent = () => {
 			{(props.stage === 5) && (
 				<>
 					<div className="flex flex-row gap-[12px]">
-						<GreenCheck></GreenCheck>
 						<span className="text-[16px]/[19.2px] font-normal">Соискатель прошел инструктаж</span>
 					</div>
-					{((props.stageStatus === 'REFINE') || (fifthStageCommentVisibility.fifthStageCommentVisibility === 'visible')) && (
-						<>
-							<StageComment commentTextBd={props.comment} commentTextState={textRef.current}></StageComment>
-						</>
-					)}
 				</>
 			)}
 			{(props.stage === 6) && (props.role === 'accounting') && (
@@ -408,7 +416,7 @@ const StageContentComponent = () => {
 					{props.documentArray?.map((document) => (
 						<DocumentElem key={document.id} name={document.docType} id={document.id}/>
 					))}
-					{((props.stageStatus === 'REFINE') || (sixStageCommentVisibility.sixStageCommentVisibility === 'visible')) && (
+					{((props.stageStatus === 'REFINE') || (props.stageStatus === 'VERIFYING') || (props.stageStatus === 'UPDATED') || (sixStageCommentVisibility.sixStageCommentVisibility === 'visible')) && (
 						<>
 							<StageComment commentTextBd={props.comment} commentTextState={textRef.current}></StageComment>
 						</>

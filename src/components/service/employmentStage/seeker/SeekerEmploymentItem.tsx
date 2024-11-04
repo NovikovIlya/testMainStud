@@ -101,34 +101,39 @@ export const SeekerEmploymentItem = (props: RespondItemType) => {
 					{empDataStatus.isLoading || empDataStatus.isFetching ? (
 						<p>Loading</p>
 					) : (
-						comments.map(comm =>
-							comm.comment ? (
-								<div>
-									<p>{comm.comment}</p>
-									<a
-										className="underline underline-offset-[3px]"
-										onClick={() => {
-											comm.type === 'SECOND'
-												? dispatch(setStage(2))
+						<>
+							<p className="text-black text-[18px]/[21.6px] font-bold font-content-font mb-[40px]">
+								Комменатарий
+							</p>
+							{comments.map(comm =>
+								comm.comment ? (
+									<div className="mt-[15px]">
+										<p>{comm.comment}</p>
+										<a
+											className="underline underline-offset-[3px]"
+											onClick={() => {
+												comm.type === 'SECOND'
+													? dispatch(setStage(2))
+													: comm.type === 'FOURTH'
+													? dispatch(setStage(4))
+													: dispatch(setStage(6))
+												navigate(
+													`/services/myresponds/employment/stages/${props.vacancyId}/${props.id}`
+												)
+											}}
+										>
+											{comm.type === 'SECOND'
+												? 'Этап №2 «Прикрепление документов»'
 												: comm.type === 'FOURTH'
-												? dispatch(setStage(4))
-												: dispatch(setStage(6))
-											navigate(
-												`/services/myresponds/employment/stages/${props.vacancyId}/${props.id}`
-											)
-										}}
-									>
-										{comm.type === 'SECOND'
-											? 'Этап №2 «Прикрепление документов»'
-											: comm.type === 'FOURTH'
-											? 'Этап №4 «Медицинский осмотр»'
-											: 'Этап №6 «Реквизиты»'}
-									</a>
-								</div>
-							) : (
-								<></>
-							)
-						)
+												? 'Этап №4 «Медицинский осмотр»'
+												: 'Этап №6 «Реквизиты»'}
+										</a>
+									</div>
+								) : (
+									<></>
+								)
+							)}
+						</>
 					)}
 				</Modal>
 			</ConfigProvider>

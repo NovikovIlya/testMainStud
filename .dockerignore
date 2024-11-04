@@ -3,3 +3,6 @@ dist
 build
 .vs
 .vscode
+.gitignore
+.git/
+Dockerfile

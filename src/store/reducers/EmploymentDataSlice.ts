@@ -23,10 +23,21 @@ const EmploymentDataSlice = createSlice({
 					? { ...stage, hasRequisites: !stage.hasRequisites }
 					: stage
 			})
+		},
+		setBank: (
+			state,
+			action: PayloadAction<{ stage: string; bank: 'SBER' | 'VTB' | undefined }>
+		) => {
+			state.empData.stages = state.empData.stages.map(stage => {
+				return stage.type === action.payload.stage
+					? { ...stage, bank: action.payload.bank }
+					: stage
+			})
 		}
 	}
 })
 
-export const { setAllData, setHasRequisites } = EmploymentDataSlice.actions
+export const { setAllData, setHasRequisites, setBank } =
+	EmploymentDataSlice.actions
 
 export default EmploymentDataSlice.reducer

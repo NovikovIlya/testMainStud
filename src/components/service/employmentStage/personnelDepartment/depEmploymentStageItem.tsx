@@ -165,48 +165,6 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 						)}
 					</div>
 				)}
-				{(props.stage === 3) && (
-					<div className='min-w-[300px] items-left'>
-						{(props.stageStatus === 'VERIFYING') && (thirdStageStatus.thirdStageStatus === 'VERIFYING') && (
-							<div className="flex flex-row gap-[12px]">
-								<Button
-									className="text-[#FFFFFF] py-[8px] px-[24px] border-none rounded-[54.5px] text-[16px] font-normal"
-									type="primary"
-									onClick={() => {
-										changeStatus({
-											status: 'ACCEPTED',
-											comment: textRef.current,
-											subStageId: props.stage
-										});
-										dispatch(setThirdStageStatus('ACCEPTED'))
-										dispatch(setThirdStageCommentVisibility('invisible'))
-									}}
-								>
-									Принять
-								</Button>
-								<Button
-									type="default"
-									className="min-w-[144px] py-[8px] px-[24px] text-[#333333] border-[#333333] border-[1px] rounded-[54.5px] text-[16px]"
-									onClick={() => {
-										setIsRevisionModalOpen(true)
-									}}
-								>На доработку</Button>
-							</div>
-						)}
-						{((props.stageStatus === 'REFINE') || (thirdStageStatus.thirdStageStatus === 'REFINE')) && (
-							<div className="flex flex-row items-center gap-[12px]">
-								<div className="w-[11px] h-[11px] rounded-[100%] bg-[#FFD600]"></div>
-								<span>Доработка</span>
-							</div>
-						)}
-						{((props.stageStatus === 'ACCEPTED') || (thirdStageStatus.thirdStageStatus === 'ACCEPTED')) && (
-							<div className="flex flex-row items-center gap-[12px]">
-								<div className="w-[11px] h-[11px] rounded-[100%] bg-[#00AB30]"></div>
-								<span>Принято</span>
-							</div>
-						)}
-					</div>
-				)}
 				{(props.stage === 4) && (
 					<div className='min-w-[300px] items-left'>
 					{(props.stageStatus === 'VERIFYING') && (forthStageStatus.forthStageStatus === 'VERIFYING') && (
@@ -254,48 +212,6 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 					</div>
 				)}
 			</div>
-				)}
-				{(props.stage === 5) && (
-					<div className='min-w-[300px] items-left'>
-						{(props.stageStatus === 'VERIFYING') && (fifthStageStatus.fifthStageStatus === 'VERIFYING')	 && (
-							<div className="flex flex-row gap-[12px]">
-								<Button
-									className="text-[#FFFFFF] py-[8px] px-[24px] border-none rounded-[54.5px] text-[16px] font-normal"
-									type="primary"
-									onClick={() => {
-										changeStatus({
-											status: 'ACCEPTED',
-											comment: textRef.current,
-											subStageId: props.stage
-										});
-										dispatch(setFifthStageStatus('ACCEPTED'))
-										dispatch(setFifthStageCommentVisibility('invisible'))
-									}}
-								>
-									Принять
-								</Button>
-								<Button
-									type="default"
-									className="min-w-[144px] py-[8px] px-[24px] text-[#333333] border-[#333333] border-[1px] rounded-[54.5px] text-[16px]"
-									onClick={() => {
-										setIsRevisionModalOpen(true)
-									}}
-								>На доработку</Button>
-							</div>
-						)}
-						{((props.stageStatus === 'REFINE') || (fifthStageStatus.fifthStageStatus === 'REFINE')) && (
-							<div className="flex flex-row items-center gap-[12px]">
-								<div className="w-[11px] h-[11px] rounded-[100%] bg-[#FFD600]"></div>
-								<span>Доработка</span>
-							</div>
-						)}
-						{((props.stageStatus === 'ACCEPTED') || (fifthStageStatus.fifthStageStatus === 'ACCEPTED')) && (
-							<div className="flex flex-row items-center gap-[12px]">
-								<div className="w-[11px] h-[11px] rounded-[100%] bg-[#00AB30]"></div>
-								<span>Принято</span>
-							</div>
-						)}
-					</div>
 				)}
 				{(props.stage === 6) && (props.role === 'accounting') && (
 					<div className='min-w-[300px] items-left'>

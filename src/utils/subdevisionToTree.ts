@@ -1,5 +1,5 @@
 export function transformSubdivisionData(data:any) {
-    return data ? data.map((item:any) => {
+    return data && Array.isArray(data) ? data?.map((item:any) => {
         return {
             title: item.value,
             value: item.id,

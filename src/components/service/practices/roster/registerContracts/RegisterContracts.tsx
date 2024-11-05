@@ -267,7 +267,7 @@ export const RegisterContracts = () => {
             render: (value, record, index) =>
                 <div className={'flex flex-col gap-2'}>
                     <a onClick={() => copyFileDocument(tokenAccess, record.links.documentCopyId)}>
-                        Cкан договора
+                        <Button>Cкан договора</Button>
                     </a>
                    {record.links.documentAgreementId!==null ?
                     <a onClick={() => agreementFileDocument(tokenAccess, record.links.documentAgreementId)} >
@@ -805,7 +805,7 @@ export const RegisterContracts = () => {
                         onRow={(record) => ({
                             onClick: (e) => {
                                 // @ts-ignore
-                                if (e.target.closest('.ant-table-selection-column')) {
+                                if (e.target.closest('.ant-table-selection-column') || e.target.closest('.ant-btn-default')) {
                                     return
                                 }
                                 handleRowClick(record)},

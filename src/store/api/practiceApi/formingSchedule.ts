@@ -6,7 +6,7 @@ export const taskService = apiSlice.injectEndpoints({
         getAllSchedules: builder.query<any, any>({
             query: ({subdivisionId,academicYear}) => {
                 return {
-                    url: `/services/api-practices/practice-schedule?${subdivisionId === null ? '' : `subdivisionId=${subdivisionId}`}&academicYear=${academicYear}`,
+                    url: `/services/api-practices/practice-schedule?${subdivisionId === null ? '' : `subdivisionId=${subdivisionId}&`}academicYear=${academicYear}`,
                     method: 'GET'
                 }
             },
@@ -39,7 +39,7 @@ export const taskService = apiSlice.injectEndpoints({
                 }
             },
         }),
-        getSubdivision: builder.query<any, any>({
+        getSubdivision: builder.query<any, void>({
             query: () => {
                 return {
                     url: `/services/api-practices/practice-schedule/subdivisions`,

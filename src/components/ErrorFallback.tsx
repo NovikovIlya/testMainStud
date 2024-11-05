@@ -8,8 +8,8 @@ const { Paragraph, Text } = Typography;
 const ErrorFallback = () => (
   <Result
     status="error"
-    title="Submission Failed"
-    subTitle="Please check and modify the following information before resubmitting."
+    title="Произошла ошибка"
+    subTitle="Пожалуйста, перезагрузите страницу. Если ошибка останется - обратиться к тех.поддержке"
     extra={[
       <Link to={'/user'} >
         Вернуться на главную страницу
@@ -17,26 +17,7 @@ const ErrorFallback = () => (
      
     ]}
   >
-    <div className="desc">
-      <Paragraph>
-        <Text
-          strong
-          style={{
-            fontSize: 16,
-          }}
-        >
-          The content you submitted has the following error:
-        </Text>
-      </Paragraph>
-      <Paragraph>
-        <CloseCircleOutlined className="site-result-demo-error-icon" /> Your account has been
-        frozen. <a>Thaw immediately &gt;</a>
-      </Paragraph>
-      <Paragraph>
-        <CloseCircleOutlined className="site-result-demo-error-icon" /> Your account is not yet
-        eligible to apply. <a>Apply Unlock &gt;</a>
-      </Paragraph>
-    </div>
+    
   </Result>
 );
 

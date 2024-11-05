@@ -67,7 +67,7 @@ export const CommentNew = ({ isLoading,dataOneLength,refetch, chat }: any) => {
 				<div className="space-y-4 w-full h-[400px] overflow-y-auto p-10 bg-white rounded-xl">
 					<Button
 						onClick={refetch}
-						className="  absolute right-8 top-46"
+						className="  absolute right-4 top-[200px]"
 						size="large"
 						shape="circle"
 						icon={<ReloadOutlined />}

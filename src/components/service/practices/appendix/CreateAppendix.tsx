@@ -253,7 +253,7 @@ export const CreateAppendix = () => {
 									</Form>
 								</Col>
 							</Row>
-							<Row className="mt-[-75px]">
+							<Row className="mt-[-95px] mb-6">
 								<Col span={3} className=" mt-6">
 									<Space className="w-full ">
 										<Button

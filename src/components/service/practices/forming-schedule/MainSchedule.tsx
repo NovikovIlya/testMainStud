@@ -44,7 +44,7 @@ export const PracticeSchedule = () => {
 	const [tableData, setTableData] = useState([])
 	const [selectedFieldsFull, setSelectedFieldFull] = useState<any>([])
 	const [dataTable, setDataTable] = useState<ScheduleType[]>([])
-	const {data:dataUserSubdivision,isLoading:isLoadingUserSubdivision} = useGetSubdivisionUserQuery()
+	// const {data:dataUserSubdivision,isLoading:isLoadingUserSubdivision} = useGetSubdivisionUserQuery()
 
 	const {data:dataAcademicYear} = useGetAcademicYearQuery()
 	const {data:dataSubdivision,isSuccess:isSuccessSubdivision} = useGetSubdivisionQuery()
@@ -52,8 +52,8 @@ export const PracticeSchedule = () => {
 	const [flagLoad,setFlagLoad] = useState(false)
 	const [treeLine, setTreeLine] = useState(true);
     const [showLeafIcon, setShowLeafIcon] = useState(false);
-    const [value, setValue] = useState<any>(dataUserSubdivision?.value ? dataUserSubdivision.value : 'Все');
-	const {data:dataAll,isSuccess:isSuccessData,isFetching:isFetchingDataAll} = useGetAllSchedulesQuery({subdivisionId:value ==='Все'?null:value,academicYear:getAcademicYear()},{skip:!dataUserSubdivision})
+    const [value, setValue] = useState<any>('Все');
+	const {data:dataAll,isSuccess:isSuccessData,isFetching:isFetchingDataAll} = useGetAllSchedulesQuery({subdivisionId:null,academicYear:getAcademicYear()})
 	const columns = [
 		{
 			key: 'subdivision',
@@ -180,7 +180,7 @@ export const PracticeSchedule = () => {
 		navigate(`/services/practices/formingSchedule/edit/year=${record.academicYear.replace("/", "-")}/${record.id}`)
     };
 
-	const treeData = dataUserSubdivision?.value ?  transformSubdivisionData(dataUserSubdivision) : 
+	const treeData = dataAll?.value ?  transformSubdivisionData(dataAll) : 
 	[{ key: 'Все', value: 'Все', label: 'Все' },...transformSubdivisionData(dataSubdivision) ]
 
 
@@ -279,7 +279,7 @@ export const PracticeSchedule = () => {
 					</div>
 				</Col>
 			</Row>
-			{isLoadingUserSubdivision || isFetchingDataAll || flagLoad? <Spin className='w-full mt-20' indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />  
+			{ isFetchingDataAll || flagLoad? <Spin className='w-full mt-20' indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />  
 			:  <Table
 				onRow={(record) => ({
 					onClick: () => handleRowClick(record),
@@ -295,15 +295,7 @@ export const PracticeSchedule = () => {
 				}}
 				className="my-10"
 				rowClassName={() => 'animate-fade-in'}
-				// rowSelection={{
-				// 	type: 'checkbox',
-				// 	onSelect: (record, selected, selectedRows, nativeEvent) => {
-				// 		setSelectedFieldFull(selectedRows)
-				// 	},
-				// 	onSelectAll: (selected, selectedRows, changeRows) => {
-				// 		setSelectedFieldFull(selectedRows)
-				// 	}
-				// }}
+				
 			/>}
 		
 		</section>

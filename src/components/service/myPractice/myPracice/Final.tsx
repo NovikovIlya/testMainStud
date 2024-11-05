@@ -77,11 +77,7 @@ const Final = ({ dataOneLength,isSuccessFull,refetch, id, dataOnePlace, chat }: 
 
 	return (
 		<>
-			{/* <Row>
-				<Col span={12}>
-					<Divider />
-				</Col>
-			</Row> */}
+
 
 			<Row className="mb-12">
 				<Col xs={24} md={12}>

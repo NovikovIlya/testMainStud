@@ -21,7 +21,6 @@ import ru_RU from 'antd/locale/ru_RU';
 import { NotFound } from './components/NotFound'
 import { Notification } from './components/notification/Notification'
 import EditSchedule from './components/service/practices/forming-schedule/EditSchedule'
-import { ErrorBoundary } from "react-error-boundary";
 import ErrorFallback from './components/ErrorFallback'
 
 
@@ -39,7 +38,7 @@ const App = () => {
 				}}
 				locale={ru_RU}
 			>
-				<ErrorBoundary FallbackComponent={ErrorFallback} >
+		
 					<Routes>
 						<Route path="/">
 							<Route path={"/redirect/:id"} element={<Redirect/>}/>
@@ -68,7 +67,7 @@ const App = () => {
 							{/* <Route path="/services/practices/formingSchedule/edit/:id" element={<EditSchedule />} /> */}
 						</Route>
 					</Routes>
-				</ErrorBoundary>
+				
 			</ConfigProvider>
 			<Notification/>
 		</>

@@ -17,7 +17,7 @@ export const ContactInformation = () => {
 	const [submit] = usePostPhoneMutation()
 	const onSubmitPhone = () => submit({ phone })
 	console.log('daisLoadingta',isLoading)
-	// if (data === undefined || isLoading) return <SkeletonPage />
+	if (data === undefined || isLoading) return <SkeletonPage />
 
 	return (
 		<section className="max-w-2xl">
@@ -38,11 +38,16 @@ export const ContactInformation = () => {
 				</article>
 				<article className="mt-7 mb-2.5">
 					<h1 className="opacity-80 text-black text-sm font-normal">Телефон</h1>
-					{data?.length ? (
-						<div className="bg-white p-2 rounded-md">{data?.[0]}</div>
+					{data ? (
+							<div className="bg-white p-2 rounded-md">{data?.map((item)=>{
+							return <div>{item?.phone}</div>
+					})}</div>
+						
 					) : (
-						<>
-							<FormItem name="phone" className="w-full">
+						<div>Нет телефона</div>
+					)}
+					<>
+							<FormItem name="phone" className="w-full mt-2">
 								<PhoneInput
 									size="large"
 									className="w-full"
@@ -67,7 +72,6 @@ export const ContactInformation = () => {
 								</Button>
 							</section>
 						</>
-					)}
 				</article>
 			</article>
 		</section>

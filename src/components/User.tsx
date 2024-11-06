@@ -34,8 +34,8 @@ export const User = () => {
 		}
 	}, [data])
 
-
-	// Проверка на роль Абитурента + зачислен ли и сбор данных по зачислению
+	
+	// Проверка на роль Абитурента + зачислен ли и сбор данных по зачислению 
 	useEffect(()=>{
 		if(user?.roles?.some(item => item.credentials && item.credentials.length > 0)){
 			setAcceptedData(user?.roles?.map((item)=>{

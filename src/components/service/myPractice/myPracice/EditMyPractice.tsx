@@ -1,10 +1,9 @@
-import { ExclamationCircleTwoTone, LoadingOutlined, VerticalAlignBottomOutlined } from '@ant-design/icons'
-import { Button, Card, Col, Collapse, Descriptions, Divider, Form, List, Popover, Row, Skeleton, Space, Spin, Tabs, Tooltip, Typography } from 'antd'
+import { VerticalAlignBottomOutlined } from '@ant-design/icons'
+import { Button, Card, Col, Descriptions, Divider, Form, List, Popover, Row, Skeleton, Space, Spin, Tabs, Typography } from 'antd'
 import dayjs from 'dayjs'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-import { ArrowLeftSvg } from '../../../../assets/svg'
 import {  useAddReportQuery, useGetOneMyPracticesQuery } from '../../../../store/api/practiceApi/mypractice'
 import { validateMessages } from '../../../../utils/validateMessage'
 
@@ -23,11 +22,10 @@ export const EditMyPractice = () => {
 	const [showFinalTwo, setShowFinalTwo] = useState(false)
 	const { data: dataOne, isFetching, isSuccess,refetch } = useGetOneMyPracticesQuery(id)
 	const {data,isLoading,isSuccess:isSuccessReport}  = useAddReportQuery(id,{skip:!id})
-
 	
 	const formatedDate = () => {
 		if (isSuccess) {
-			const [start, end] = dataOne?.practicePeriod?.split('-')
+			const [start, end] = dataOne?.practicePeriod?.split(' - ')
 			const formattedStart = dayjs(start).format('DD.MM.YYYY')
 			const formattedEnd = dayjs(end).format('DD.MM.YYYY')
 			return [formattedStart, formattedEnd]
@@ -127,8 +125,6 @@ export const EditMyPractice = () => {
 	const handleSave = ()=>{
 		download()
 	}
-	
-
 	
 
 	return (

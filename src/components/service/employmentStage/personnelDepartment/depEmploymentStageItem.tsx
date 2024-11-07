@@ -165,7 +165,7 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 						)}
 					</div>
 				)}
-				{(props.stage === 4) && (
+				{(props.stage === 3) && (
 					<div className='min-w-[300px] items-left'>
 					{(props.stageStatus === 'VERIFYING') && (forthStageStatus.forthStageStatus === 'VERIFYING') && (
 						<div className="flex flex-row gap-[12px] items-left">
@@ -213,7 +213,7 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 				)}
 			</div>
 				)}
-				{(props.stage === 6) && (props.role === 'accounting') && (
+				{(props.stage === 5) && (props.role === 'accounting') && (
 					<div className='min-w-[300px] items-left'>
 						{(props.stageStatus === 'VERIFYING') && (sixStageStatus.sixStageStatus === 'VERIFYING')	 && (
 							<div className="flex flex-row gap-[12px]">
@@ -261,7 +261,7 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 						)}
 					</div>
 				)}
-				{(props.stage === 6) && (props.role === 'personnel') &&  (
+				{(props.stage === 5) && (props.role === 'personnel') &&  (
 					<div className='min-w-[300px] items-left'>
 						{(props.stageStatus === 'VERIFYING') && (sixStageStatusPersonnel.sixStageStatusPersonnel === 'VERIFYING')	 && (
 							<div className="flex flex-row gap-[12px]">
@@ -303,13 +303,6 @@ const StageContentComponent = () => {
 			)}
 			{(props.stage === 3) && (
 				<>
-					<div className="flex flex-row gap-[12px]">
-						<span className="text-[16px]/[19.2px] font-normal">Соискатель ознакомлен с трудовыми условиями</span>
-					</div>
-				</>
-			)}
-			{(props.stage === 4) && (
-				<>
 					{props.documentArray?.map((document) => (
 						<DocumentElem key={document.id} name={document.docType} id={document.id}/>
 					))}
@@ -320,14 +313,15 @@ const StageContentComponent = () => {
 					)}
 				</>
 			)}
-			{(props.stage === 5) && (
+			{(props.stage === 4) && (
 				<>
 					<div className="flex flex-row gap-[12px]">
+						<GreenCheck></GreenCheck>
 						<span className="text-[16px]/[19.2px] font-normal">Соискатель прошел инструктаж</span>
 					</div>
 				</>
 			)}
-			{(props.stage === 6) && (props.role === 'accounting') && (
+			{(props.stage === 5) && (props.role === 'accounting') && (
 				<>
 					{props.documentArray?.map((document) => (
 						<DocumentElem key={document.id} name={document.docType} id={document.id}/>
@@ -339,7 +333,7 @@ const StageContentComponent = () => {
 					)}
 				</>
 			)}
-			{(props.stage === 6) && (props.role === 'personnel') && (
+			{(props.stage === 5) && (props.role === 'personnel') && (
 				<>
 					{props.documentArray?.map((document) => (
 						<DocumentElem key={document.id} name={document.docType} id={document.id} />
@@ -412,24 +406,6 @@ const StageContentComponent = () => {
 											comment: textRef.current,
 											subStageId: props.stage
 										});
-										dispatch(setThirdStageStatus('REFINE'))
-										dispatch(setThirdStageCommentVisibility('visible'))
-										setIsRevisionModalOpen(false)
-								}}
-							>
-								Отправить
-							</Button>
-						)}
-						{(props.stage === 4) && (
-							<Button
-								className="rounded-[54.5px] py-[12px] px-[24px]  text-[16px]"
-								type="primary"
-								onClick={() => {
-										changeStatus({
-											status: 'REFINE',
-											comment: textRef.current,
-											subStageId: props.stage
-										});
 										dispatch(setForthStageStatus('REFINE'))
 										dispatch(setForthStageCommentVisibility('visible'))
 										setIsRevisionModalOpen(false)
@@ -438,7 +414,7 @@ const StageContentComponent = () => {
 								Отправить
 							</Button>
 						)}
-						{(props.stage === 5) && (
+						{(props.stage === 4) && (
 							<Button
 								className="rounded-[54.5px] py-[12px] px-[24px]  text-[16px]"
 								type="primary"
@@ -456,7 +432,7 @@ const StageContentComponent = () => {
 								Отправить
 							</Button>
 						)}
-						{(props.stage === 6) && (props.role === 'accounting') && (
+						{(props.stage === 5) && (props.role === 'accounting') && (
 							<Button
 								className="rounded-[54.5px] py-[12px] px-[24px]  text-[16px]"
 								type="primary"
@@ -496,24 +472,18 @@ const StageContentComponent = () => {
 				{(props.stage === 3) && (
 					<div className="flex flex-row gap-[37px]">
 						<h3 className="font-bold text-[16px]/[19.2px]">3 ЭТАП</h3>
-						<h3 className="font-normal text-[18px]/[21.6px]">«Трудовые условия»</h3>
+						<h3 className="font-normal text-[18px]/[21.6px]">«Медицинский осмотр»</h3>
 					</div>
 				)}
 				{(props.stage === 4) && (
 					<div className="flex flex-row gap-[37px]">
 						<h3 className="font-bold text-[16px]/[19.2px]">4 ЭТАП</h3>
-						<h3 className="font-normal text-[18px]/[21.6px]">«Медицинский осмотр»</h3>
+						<h3 className="font-normal text-[18px]/[21.6px]">«Инструктаж»</h3>
 					</div>
 				)}
 				{(props.stage === 5) && (
 					<div className="flex flex-row gap-[37px]">
 						<h3 className="font-bold text-[16px]/[19.2px]">5 ЭТАП</h3>
-						<h3 className="font-normal text-[18px]/[21.6px]">«Инструктаж»</h3>
-					</div>
-				)}
-				{(props.stage === 6) && (
-					<div className="flex flex-row gap-[37px]">
-						<h3 className="font-bold text-[16px]/[19.2px]">6 ЭТАП</h3>
 						<h3 className="font-normal text-[18px]/[21.6px]">«Реквизиты»</h3>
 					</div>
 				)}

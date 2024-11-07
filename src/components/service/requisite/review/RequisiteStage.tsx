@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import { LoadingOutlined } from '@ant-design/icons'
 import { useGetEmploymentReqStageStatusQuery } from '../../../../store/api/serviceApi'
 import { DepEmploymentStageItem } from '../../employmentStage/personnelDepartment/depEmploymentStageItem'
+import {NocircleArrowIcon} from "../../jobSeeker/NoCircleArrowIcon";
 
 export const RequisiteStage = () => {
 
@@ -43,13 +44,22 @@ export const RequisiteStage = () => {
 	return (
 		<>
 			<div className="w-full flex flex-col px-[53px] mt-[140px]">
+				<Button
+					onClick={() => {
+						window.history.back()
+					}}
+					className="bg-inherit w-[102px] mb-[30px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer"
+				>
+					<NocircleArrowIcon />
+					Назад
+				</Button>
 				<h1 className="font-normal text-[28px]/[28px]">{seekerName}</h1>
 				<Button
 					type="default"
 					className="max-w-[102px] mt-[20px] bg-[#F5F8FB] py-[8px] px-[24px] text-[#333333] border-[#333333] border-[1px] rounded-[54.5px] text-[16px]"
 					onClick={() => {
 						dispatch(setCurrentResponce(respondId.respondId))
-						navigate('/services/personnelaccounting/requisite/requisite-review/info/seekerinfo/')
+						navigate('/services/personnelaccounting/requisite/requisite-review/seeker-info')
 					}}
 				>Резюме</Button>
 				<h3 className="mt-[53px] text-[18px] font-normal">
@@ -58,7 +68,7 @@ export const RequisiteStage = () => {
 				<div className="mt-[40px] mb-[100px] gap-[12px] flex flex-col ">
 					{sortedReqData?.[0] && (
 						<DepEmploymentStageItem
-							stage={6}
+							stage={5}
 							role={'accounting'}
 							comment={sortedReqData[0].comment}
 							stageStatus={sortedReqData[0].status}

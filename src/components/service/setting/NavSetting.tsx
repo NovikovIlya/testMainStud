@@ -11,11 +11,13 @@ import { VisuallyImpairedSvg } from '../../../assets/svg/VisuallyImpairedSvg'
 import { Header } from '../../layout/Header'
 
 import { ChangePassword } from './ChangePassword'
-import { ContactInformation } from './ContactInformation'
+// import { ContactInformation } from './ContactInformation'
 import { Language } from './Language'
 import { Photo } from './Photo'
 import { ThemeDesign } from './ThemeDesign'
 import { VisuallyImpaired } from './VisuallyImpaired'
+import MainContact from './Contacts/MainContact'
+
 
 const navList = [
 	{
@@ -86,7 +88,7 @@ export const NavSetting = () => {
 				</ul>
 			</div>
 			<div className="bg-[#F5F8FB] w-full pt-14 px-14 mt-20">
-				{pathname === navList[0].id && <ContactInformation />}
+				{pathname === navList[0].id && <MainContact />}
 				{/* {pathname === navList[1].id && <Photo />} */}
 				{pathname === navList[1].id && <ChangePassword />}
 				{/* {pathname === navList[2].id && <ThemeDesign />} */}

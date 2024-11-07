@@ -553,7 +553,7 @@ const IndividualTasks = () => {
 
                 </Col>
             </Row>
-            {isFetching ? <Spin className='w-full mt-20' indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />  : 
+            {!tableDataCompressed || isFetching ? <Spin className='w-full mt-20' indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />  : 
             <>
             {
                 tableView.compressed

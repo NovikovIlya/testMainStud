@@ -28,8 +28,9 @@ export const serviceApi = apiSlice.injectEndpoints({
         getStudyPlan: builder.query<ICalendar, void>({
             query: () => 'study-plan-api/studyplan'
         }),
-        getEmail: builder.query<Email, void>({
-            query: () => 'user-api/settings/emails'
+        getEmail: builder.query<Email[], void>({
+            query: () => 'user-api/settings/emails',
+            providesTags: ['emails']
         }),
         getTemplates: builder.query<Template[], void>({
             query: () => 'unified-center-api/templates'
@@ -59,7 +60,8 @@ export const serviceApi = apiSlice.injectEndpoints({
             query: () => 'unified-center-api/documentation'
         }),
         getPhoneUser: builder.query<Array<any>, void>({
-            query: () => 'user-api/settings/phones'
+            query: () => 'user-api/settings/phones',
+            providesTags: ['phones']
         }),
         getSubdivisionUser: builder.query<any, void>({
             query: () => 'services/api-practices/user/subdivision'
@@ -71,7 +73,17 @@ export const serviceApi = apiSlice.injectEndpoints({
                     body: phone,
                     method: 'POST'
                 }
-            }
+            },
+            invalidatesTags:['phones']
+        }),
+        verifyAccPhone: builder.mutation({
+            query: id => {
+                return {
+                    url: `user-api/settings/phones/${id}/send-verification`,
+                    method: 'POST'
+                }
+            },
+            // invalidatesTags:['phones']
         }),
         changePassword: builder.mutation({
             query: ({
@@ -101,13 +113,14 @@ export const serviceApi = apiSlice.injectEndpoints({
             }
         }),
         postEmail: builder.mutation({
-            query: email => {
+            query: (email) => {
                 return {
                     url: 'user-api/settings/emails',
                     body: email,
                     method: 'POST'
                 }
-            }
+            },
+            invalidatesTags:['emails']
         }),
         deleteAcc: builder.mutation({
             query: id => {
@@ -115,7 +128,17 @@ export const serviceApi = apiSlice.injectEndpoints({
                     url: `user-api/settings/emails/${id}`,
                     method: 'DELETE'
                 }
-            }
+            },
+            invalidatesTags:['emails']
+        }),
+        deleteAccPhone: builder.mutation({
+            query: id => {
+                return {
+                    url: `user-api/settings/phones/${id}`,
+                    method: 'DELETE'
+                }
+            },
+            invalidatesTags:['phones']
         }),
         verifyAcc: builder.mutation({
             query: id => {
@@ -123,7 +146,28 @@ export const serviceApi = apiSlice.injectEndpoints({
                     url: `user-api/settings/emails/${id}/send-verification`,
                     method: 'POST'
                 }
-            }
+            },
+            invalidatesTags:['emails']
+        }),
+        finalVerify: builder.mutation({
+            query: (obj) => {
+                return {
+                    url: `user-api/settings/emails/${obj.id}/verify`,
+                    method: 'POST',
+                    body: obj
+                }
+            },
+            invalidatesTags:['emails']
+        }),
+        finalVerifyPhone: builder.mutation({
+            query: (obj) => {
+                return {
+                    url: `user-api/settings/phones/${obj.id}/verify`,
+                    method: 'POST',
+                    body: obj
+                }
+            },
+            invalidatesTags:['phones']
         }),
         setRole: builder.mutation({
             query: (body: { role: string }) => {
@@ -155,6 +199,11 @@ export const {
     useChangePasswordMutation,
     useGetPhoneUserQuery,
     usePostPhoneMutation,
-    useGetSubdivisionUserQuery
+    useGetSubdivisionUserQuery,
+    useFinalVerifyMutation,
+    useDeleteAccMutation,
+    useVerifyAccPhoneMutation,
+    useFinalVerifyPhoneMutation,
+    useDeleteAccPhoneMutation
     
 } = serviceApi

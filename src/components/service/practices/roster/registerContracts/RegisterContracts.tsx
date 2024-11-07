@@ -88,8 +88,8 @@ const optionsSort = [
 
 export const RegisterContracts = () => {
     const tokenAccess = localStorage.getItem('access')!.replaceAll('"', '')
-    const {data: dataAll, isSuccess: isSuccessAll,isFetching} = useGetContractsAllQuery(null)
-    const {data: dataShort, isSuccess: isSuccessShort,isFetching:isFetchingShort} = useGetContractsShortQuery()
+    const {data: dataAll, isSuccess: isSuccessAll,isLoading} = useGetContractsAllQuery(null)
+    const {data: dataShort, isSuccess: isSuccessShort,isLoading:isLoadingShort} = useGetContractsShortQuery()
     const nav = useNavigate()
     const [filter, setFilter] = useState({
         contractType: 'Все',
@@ -111,6 +111,7 @@ export const RegisterContracts = () => {
     const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery(null)
     const [contractFacilities, setContractFacilities] = useState<ContractFacilities[]>()
     const {data: dataContractFacilities, isSuccess: isSuccessContractFacilities} = useGetContractFacilitiesQuery()
+    const [first,setFirst] = useState(false)
 
     const columnsCompressedView: TableProps<ColumnsTableCompressedView>['columns'] = [
         {
@@ -474,6 +475,7 @@ export const RegisterContracts = () => {
 
         if (isSuccessShort) {
             const filterDataShort: ColumnsTableCompressedView[] = dataShort.map((elem:any) => changeListDataShort(elem))
+            setFirst(true)
             return filterDataShort
                 .filter(elem => filterNameOrg(elem))
                 .filter(elem => filterContractType(elem))
@@ -583,7 +585,7 @@ export const RegisterContracts = () => {
             arraySpec.push(i)
         })
     })
-
+    console.log('tableDataCompressed',tableDataCompressed)
     return (
         <section className={'container  animate-fade-in'}>
             <Row gutter={[16, 16]}>
@@ -765,7 +767,7 @@ export const RegisterContracts = () => {
 
                 </Col>
             </Row>
-            {isFetching && isFetchingShort ? <Spin className='w-full mt-20' indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />  : 
+            {!tableDataCompressed || isLoading ? <Spin className='w-full mt-20' indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />  : 
             <>
             
                { tableView.compressed

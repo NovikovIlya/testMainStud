@@ -30,6 +30,7 @@ export const serviceApi = apiSlice.injectEndpoints({
         }),
         getEmail: builder.query<Email[], void>({
             query: () => 'user-api/settings/emails',
+            keepUnusedDataFor: 1,
             providesTags: ['emails']
         }),
         getTemplates: builder.query<Template[], void>({
@@ -61,7 +62,8 @@ export const serviceApi = apiSlice.injectEndpoints({
         }),
         getPhoneUser: builder.query<Array<any>, void>({
             query: () => 'user-api/settings/phones',
-            providesTags: ['phones']
+            providesTags: ['phones'],
+            keepUnusedDataFor: 1,
         }),
         getSubdivisionUser: builder.query<any, void>({
             query: () => 'services/api-practices/user/subdivision'

@@ -36,7 +36,7 @@ export const NumberInformation = () => {
 	const [count, setCount] = useState(0)
 	const dispatch = useAppDispatch()
 
-	console.log('dataFin', dataFin)
+
 	useUpdateEffect(() => {
 		if (dataVer) {
 			setCount(dataVer.cooldownMs / 1000)
@@ -74,9 +74,7 @@ export const NumberInformation = () => {
 	const handleCancel = () => {
 		setIsModalOpen(false)
 		form.setFieldValue('code', '')
-		// clear()
 		setCount(0)
-		console.log('123')
 		dispatch(apiSlice.util.resetApiState())
 	}
 
@@ -86,12 +84,14 @@ export const NumberInformation = () => {
 		// отправить код
 		sendVerify(id)
 	}
+
 	const sendVerOne = (id: any) => {
 		showModal()
 		setIdUser(id)
 		setCount(60)
-		// отправить код
+	
 	}
+
 	const finalFnVer = () => {
 		const code = form.getFieldValue('code')
 
@@ -108,6 +108,7 @@ export const NumberInformation = () => {
 	const sortedEmails = data?.slice().sort((a: any, b: any) => {
 		return b.verified === a.verified ? 0 : b.verified ? 1 : -1
 	})
+	
 	if(isError){
 			return <div> <Result
 			status="500"
@@ -130,7 +131,7 @@ export const NumberInformation = () => {
 					/>
 				</article>
 			</section>
-			<Modal title="Верификация телефона" footer={null} open={isModalOpen} onCancel={handleCancel}>
+			<Modal   maskClosable={false}  title="Верификация телефона" footer={null} open={isModalOpen} onCancel={handleCancel}>
 				{isErrorVerif ? (
 					'Пожалуйста повторите позже, запрос на следующее подтвеждение будет доступен через 1 минуту'
 				) : (

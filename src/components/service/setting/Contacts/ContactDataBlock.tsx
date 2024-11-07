@@ -1,16 +1,6 @@
 import { DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons'
 import { Button, Form, Input, Spin } from 'antd'
-import { useState } from 'react'
 
-import {
-	useDeleteAccMutation,
-	useFinalVerifyMutation,
-	useGetEmailQuery,
-	useGetPhoneUserQuery,
-	usePostEmailMutation,
-	usePostPhoneMutation,
-	useVerifyAccMutation
-} from '../../../../store/api/serviceApi'
 
 const ContactDataBlock = ({isLoadingPost, sortedEmails, sendVer, handleDeleteEmail, showModal }: any) => {
     

@@ -1,3 +1,4 @@
+
 import { Button, Divider, Drawer, Select } from 'antd'
 import type { MenuProps } from 'antd'
 import { Dropdown, Space } from 'antd'
@@ -36,8 +37,10 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const user = useAppSelector(state => state.auth.user)
 	const isMobile = isMobileDevice();
 	const urlContainsPractice = location.pathname.includes('practice');
-	
-
+	const roles = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '')?.roles : []
+	const username = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '')?.username : ''
+	const maiRole = roles.find((item:any) => item.login === username)?.type || ''
+	console.log('username',username)
 	useEffect(()=>{
 		if(isMobile){
 			showMobileMenuEffect()
@@ -198,7 +201,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 				<div className="flex gap-8 max-sm:gap-2 items-center">
 				{user?.roles[0].type==='ABITUR' || user?.roles[0].type==='OTHER' ? '':
 				<>
-					<Button
+					{/* <Button
 						onClick={showDrawer}
 						className={clsx(
 							'py-2.5 rounded-full hover:!bg-transparent font-semibold bg-transparent border-2 flex items-center justify-center block lg:hidden',
@@ -210,9 +213,9 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						
 					>Сервисы
 						<span className="pl-2 max-md:!hidden">{t('services')}</span>
-					</Button>
+					</Button> */}
 					
-					<Button
+					{/* <Button
 						onClick={showDrawer}
 						className={clsx(
 							'h-[38px] py-2.5 rounded-full hover:!bg-transparent font-semibold bg-transparent border-2  items-center justify-center hidden md:flex',
@@ -224,7 +227,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						// icon={<MenuSvg white={type === 'service'} />}
 					>
 						<span className="w-[105px] pl-2 max-md:!hidden">{t('services')}</span>
-					</Button>
+					</Button> */}
 					</>
 					}
 					<div className="flex items-center gap-5">
@@ -343,7 +346,8 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 												: user?.middlename.charAt(0) + '.'
 										}`}
 									</div>
-									<div className="text-sm">{user?.roles && user?.roles?.length > 1 ? ((user?.roles?.map((item)=>getRole(item.type))))?.join(', ') : String((user?.roles?.map((item)=>getRole(item.type))))}</div>
+									<div className="text-sm">{user?.roles && user?.roles?.length > 1 ? ((user?.roles?.map((item)=><div className={`${item.login === username ? 'font-extrabold' : ''}`}>{getRole(item.type)}</div>)))
+									 : String((user?.roles?.map((item)=>getRole(item.type))))}</div>
 								</div>
 							</Space>
 						</Dropdown>

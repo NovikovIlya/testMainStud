@@ -20,7 +20,8 @@ export const User = () => {
 	const user = useAppSelector(state => state.auth.user)
 	const dispatch = useAppDispatch()
 	const [acceptedData,setAcceptedData] = useState<any>(null)
-
+    const APP_VERSION = '1.0.1'
+	
 	const hide = () => {
 		setOpen(false)
 	}
@@ -50,12 +51,12 @@ export const User = () => {
 				<div className="max-w-[1600px] w-[1600px]">
 					<div className={`mt-[125px] text-2xl font-bold text-blue1f5 justify-between flex`}>
 						{t('PersonalAccount')}
-						{user?.roles[0].type==='ABITUR' || user?.roles[0].type==='OTHER' ? '':
+						{/* {user?.roles[0].type==='ABITUR' || user?.roles[0].type==='OTHER' ? '':
 						<div className='flex gap-3 items-center'>
 							<span className='text-sm font-normal'>{t('Personalization')}</span>
 							<Switch   defaultValue={false} onClick={()=>dispatch(setEdit())} />
 						</div>
-						}		
+						}		 */}
 					</div>
 					{acceptedData ? acceptedData[0]?.map((item:any)=><InfoAbitAccepted login={item.login} password={item.password} key={item.login}/>):''}
 			

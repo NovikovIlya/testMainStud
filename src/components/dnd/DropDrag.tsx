@@ -12,18 +12,28 @@ import { jsxElements } from './defaultElement'
 import { Apply } from '../apply/Apply'
 import { AboutUniversityCard } from '../aboutUniversity/AboutUniversityCard'
 import { Col, Row } from 'antd'
+import { useLocalStorageState } from 'ahooks'
+import { block } from './constant'
 
 
 const DropDrag = () => {
 	const dispatch = useDispatch()
-	const layout = useAppSelector(state => state.Layout)
+	const layout = block
+
 	const edit = useAppSelector(state => state.auth.edit)
 	const [currentBreakpoint, setCurrentBreakpoint] = useState<string>('lg')
 	const [mounted, setMounted] = useState(false)
 	const [toolbox, setToolbox] = useState<{ [index: string]: any[] }>({lg: []})
 	const user = useAppSelector(state => state.auth.user)
 	const ResponsiveReactGridLayout = useMemo(() => WidthProvider(Responsive), []);
-
+	const [message, setMessage] = useLocalStorageState<any>(
+		'typeAcc',
+		{
+		  defaultValue: 'STUD',
+		},
+	  );
+	
+   console.log('layout',layout)
 	useEffect(() => {
 		setMounted(true)
 	}, [])
@@ -62,9 +72,37 @@ const DropDrag = () => {
 	const onRemoveItem = (i: string) => {
 		dispatch(removeCard(i))
 	}
-
-	const layoutValid = layout.lg.filter(obj1 =>jsxElements.some(obj2 => obj1.i === obj2.index))
-
+	console.log('layout.lg',layout.lg)
+	console.log('messagemessage',message)
+	const layoutValid = layout.lg.filter(obj1 =>jsxElements
+		.filter((item)=>{
+			if(message==='STUD'){
+				return item.index==='Schedule' ||
+					   item.index==='ElectronicBook' ||
+					   item.index==='Session' ||
+					   item.index==='Dormitory' ||
+					   item.index==='myPractices' ||
+					   item.index==='EducationalCourses' ||
+					   item.index==='PsychologicalHelp' ||
+					   item.index==='News' ||
+					   item.index==='DocumentFlow' ||
+					   item.index==='VirtualAudience' ||
+					   item.index==='DigitalDepartments' ||
+					   item.index==='ManagementScientificProjects' 
+	
+	
+			}if(message==='EMPL'){
+				console.log('item',item)
+				return item.index==='Schedule' ||
+					   item.index==='Practices' ||
+					   item.index==='practiceTeacher' ||
+					   item.index==='Staff' ||
+					   item.index==='Vacancies' ||
+					   item.index==='News' 
+			}
+		})
+		.some(obj2 => obj1.i === obj2.index))
+    console.log('layoutValid',layoutValid)
 	const generateDOM = layoutValid.map(item => {
 	
 		return (
@@ -73,14 +111,14 @@ const DropDrag = () => {
 				className="bg-white/70 backdrop-blur-sm rounded-[20px] shadow-md "
 			>
 				<div className="w-full h-full">
-					{edit && item.i !== 'Schedule' && (
+					{/* {edit && item.i !== 'Schedule' && (
 						<div
 							className="absolute top-2 cursor-pointer right-2"
 							onClick={() => onRemoveItem(item.i)}
 						>
 							<DeleteOutlined className=" mt-2 mr-2 opacity-50" />
 						</div>
-					)}
+					)} */}
 					{
 						jsxElements
 							.filter(el => el.index === item.i)[0].element
@@ -88,6 +126,30 @@ const DropDrag = () => {
 				</div>
 			</div>
 		)
+	}).filter((item)=>{
+		if(message==='STUD'){
+			return item.key==='Schedule' ||
+				   item.key==='ElectronicBook' ||
+				   item.key==='Session' ||
+				   item.key==='Dormitory' ||
+				   item.key==='myPractices' ||
+				   item.key==='EducationalCourses' ||
+				   item.key==='PsychologicalHelp' ||
+				   item.key==='News' ||
+				   item.key==='DocumentFlow' ||
+				   item.key==='VirtualAudience' ||
+				   item.key==='DigitalDepartments' ||
+				   item.key==='ManagementScientificProjects' 
+
+
+		}else{
+			return item.key==='Schedule' ||
+			       item.key==='Practices' ||
+				   item.key==='practiceTeacher' ||
+				   item.key==='Staff' ||
+				   item.key==='Vacancies' ||
+				   item.key==='News' 
+		}
 	})
 
 	return (
@@ -115,7 +177,8 @@ const DropDrag = () => {
 				onBreakpointChange={onBreakpointChange}
 				isDraggable={edit}
 				isResizable={false}
-				compactType={null}
+				compactType={'vertical'}
+				verticalCompact={true}
 				preventCollision={true}
 			>
 				{generateDOM}

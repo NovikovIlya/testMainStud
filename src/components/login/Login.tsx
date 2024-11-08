@@ -1,3 +1,4 @@
+
 import { Form, Typography } from 'antd'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -12,19 +13,31 @@ import { BackMainPage } from '../BackMainPage'
 
 import { Buttons } from './Buttons'
 import { Inputs } from './Inputs'
+import { useAppDispatch } from '../../store'
+
+import { block } from '../dnd/constant'
+import { useLocalStorageState } from 'ahooks'
 
 const { Title } = Typography
 
 export const Login = () => {
+	const [form] = Form.useForm()
 	const navigate = useNavigate()
 	const { t, i18n } = useTranslation()
-	const dispatch = useDispatch()
-	const [login] = useLoginMutation()
+	// const dispatch = useDispatch()
+	const [login,{ data:dataLogin,isSuccess, isLoading }] = useLoginMutation()
 	const [error, setError] = useState<IError | null>(null)
 	const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const paramValue = searchParams.get('lan');
+	const [message, setMessage] = useLocalStorageState<any>(
+		'typeAcc',
+		{
+		  defaultValue: 'STUD',
+		},
+	  );
 	console.log('paramValue',paramValue)
+	const dispatch = useAppDispatch()
 
 	useEffect(()=>{
 		document.title = 'Казанский Федеральный Университет'
@@ -33,6 +46,16 @@ export const Login = () => {
 			i18n.changeLanguage('en')
 		}
 	},[])
+
+	useEffect(() => {
+		if (isSuccess) {
+			const type = dataLogin.user.roles.find((item:any) => item.login === form.getFieldValue('email')||item.email===form.getFieldValue('email'))?.type
+			console.log('type',type)
+			// dispatch(setMainRole(type))
+			setMessage(type)
+			navigate('/user') // Редирект на компонент User
+		}
+	}, [isSuccess]) 
 
 	const onFinish = async (values: { email: string; password: string }) => {
 		try {
@@ -66,7 +89,7 @@ export const Login = () => {
 			localStorage.setItem('password', JSON.stringify(values.password))
 			localStorage.setItem('access', JSON.stringify(userData.accessToken))
 			localStorage.setItem('refresh', JSON.stringify(userData.refreshToken))
-			navigate('/user')
+			// navigate('/user')
 		} catch (e: any) {
 			console.log(e)
 			setError(e.data)
@@ -78,6 +101,7 @@ export const Login = () => {
 			<BackMainPage notAuth={true}/>
 			<div className="flex flex-row justify-center gap-24 text-base max-xl:gap-4 max-lg:flex-col max-lg:items-center h-full w-full">
 				<Form
+				    form={form}
 					name="login"
 					className="min-w-[400px] mx-2 max-sm:min-w-[345px] max-[321px]:min-w-[300px]"
 					initialValues={{ remember: true }}

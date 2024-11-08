@@ -1,5 +1,5 @@
 import { ConfigProvider } from 'antd'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
 
 import { RequireAuth } from './components/RequireAuth'
@@ -22,10 +22,18 @@ import { NotFound } from './components/NotFound'
 import { Notification } from './components/notification/Notification'
 import EditSchedule from './components/service/practices/forming-schedule/EditSchedule'
 import ErrorFallback from './components/ErrorFallback'
+import { checkAndResetStorage } from './utils/storageVersion'
 
 
 const App = () => {
 	const [email, changeEmail] = useState('')
+	
+	useEffect(() => {
+		const wasReset = checkAndResetStorage();
+		if (wasReset) {
+		  console.log('Локальное хранилище было сброшено из-за обновления версии');
+		}
+	  }, []);
 
 	return (
 		<>

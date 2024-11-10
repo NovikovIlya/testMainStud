@@ -7,18 +7,41 @@ interface CommentProps {
 
 export const StageComment = (props: CommentProps ) => {
 
+	console.log('коммент из стейта ' + "|" + props.commentTextState + "|")
+	console.log('коммент из бд ' + props.commentTextBd)
+
 	let commentText = ''
 
-	if (props.commentTextState === '' && props.commentTextBd !== undefined) {
+	if ((props.commentTextState === '' || props.commentTextState === undefined) && (props.commentTextBd === undefined || props.commentTextBd === null || props.commentTextBd === '')) {
+		commentText = ''
+		console.log('стейт пустой, с бд пришла пустота: только начали прохождение')
+	}
+
+	if (props.commentTextState !== ''
+		&&
+		(props.commentTextBd === undefined || props.commentTextBd === null || props.commentTextBd === '')) {
+		commentText = props.commentTextState
+		console.log('че то записано в стейт, в первый раз прошли этап, с бд пришла пустота: только начали прохождение')
+	}
+
+	if ((props.commentTextState === '' || props.commentTextState === undefined)
+		&&
+		!(props.commentTextBd === undefined || props.commentTextBd === null || props.commentTextBd === '')) {
 		commentText = props.commentTextBd.trim()
+		console.log('стейт пустой, прошли этап и обновили страницу, с бд что то пришло')
 	}
 
 	if (props.commentTextState === props.commentTextBd) {
 		commentText = props.commentTextBd.trim()
+		console.log('перезашли но стейт сохранился')
 	}
-
-	if ((props.commentTextBd === null) || (props.commentTextBd === '') || (props.commentTextBd === undefined)) {
-		commentText = props.commentTextState
+	if ((props.commentTextState !== props.commentTextBd)
+		&&
+		(props.commentTextState !== '' && props.commentTextState !== undefined)
+		&& (props.commentTextBd !== '' && props.commentTextBd !== null))
+	{
+		commentText = props.commentTextState.trim()
+		console.log('стейт и бд разные, но не пустые')
 	}
 
 	if ((props.commentTextBd !== null) && (props.commentTextState !== undefined) && (props.commentTextState !== '') && (props.commentTextBd !== props.commentTextState)) {
@@ -37,8 +60,7 @@ export const StageComment = (props: CommentProps ) => {
 	if (commentText.length<=120) {
 		isTextLongEnough = false
 	}
-	console.log('коммент из стейта ' + "|" + props.commentTextState + "|")
-	console.log('коммент из бд ' + props.commentTextBd)
+
 	console.log('длина коммента ' + commentText.length)
 
 	return (

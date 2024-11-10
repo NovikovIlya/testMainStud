@@ -4,9 +4,15 @@ import { useLocation, useNavigate } from 'react-router-dom'
 
 import { BriefcaseSvg } from '../../../assets/svg/BriefcaseSvg'
 import { useAppSelector } from '../../../store'
+import { useGetEmploymentPossibleRolesQuery } from '../../../store/api/serviceApi'
 import { Header } from '../../layout/Header'
 import { ChatEmpDemp } from '../Chat/ChatEmpDemp'
 import { DepEmployment } from '../employmentStage/personnelDepartment/depEmployment'
+import { DepEmploymentSeekerInfo } from '../employmentStage/personnelDepartment/depEmploymentSeekerInfo'
+import { EmploymentStageInfo } from '../employmentStage/personnelDepartment/employmentStageInfo'
+import { RequisiteMain } from '../requisite/review/RequisiteMain'
+import { RequisiteSeeker } from '../requisite/review/RequisiteSeeker'
+import { RequisiteStage } from '../requisite/review/RequisiteStage'
 
 import { Archive } from './Archive'
 import { ArchiveRespondInfo } from './ArchiveRespondInfo'
@@ -31,11 +37,6 @@ import { RespondsSupervisor } from './supervisor/RespondsSupervisor'
 import { SupervisorCreateVacancyForm } from './supervisor/vacancy/SupervisorCreateVacancyForm'
 import { SupervisorUpdateVacancy } from './supervisor/vacancy/SupervisorUpdateVacancy'
 import { SupervisorVacancies } from './supervisor/vacancy/SupervisorVacancies'
-import { EmploymentStageInfo } from '../employmentStage/personnelDepartment/employmentStageInfo'
-import { DepEmploymentSeekerInfo } from '../employmentStage/personnelDepartment/depEmploymentSeekerInfo'
-import { RequisiteMain } from '../requisite/review/RequisiteMain'
-import { RequisiteStage } from '../requisite/review/RequisiteStage'
-import { RequisiteSeeker } from '../requisite/review/RequisiteSeeker'
 
 export const NavPesonnelAccounting = () => {
 	const { pathname } = useLocation()
@@ -47,8 +48,11 @@ export const NavPesonnelAccounting = () => {
 		navigate(url)
 	}
 
-	const isEmployee = roles?.find(role => role.type === 'EMPL')
-	const isSupervisor = roles?.find(role => role.type === 'OTHER')
+	const { data: rolesData = undefined } = useGetEmploymentPossibleRolesQuery()
+	const isPersonnelDepartment = rolesData?.find(
+		role => role === 'PERSONNEL_DEPARTMENT'
+	)
+	const isSupervisor = rolesData?.find(role => role === 'SUPERVISOR')
 
 	const navEmployeeList = [
 		{
@@ -78,7 +82,7 @@ export const NavPesonnelAccounting = () => {
 		},
 		{
 			id: '/services/personnelaccounting/requisite',
-			icon: <VacanciesIcon/>,
+			icon: <VacanciesIcon />,
 			name: 'Реквизиты'
 		}
 	]
@@ -149,7 +153,7 @@ export const NavPesonnelAccounting = () => {
 					{<VacanciesIcon />}
 					<p className="text-base">{'Реквизиты'}</p>
 				</div>
-			),
+			)
 		}
 	]
 
@@ -426,24 +430,22 @@ export const NavPesonnelAccounting = () => {
 		}
 	)
 
-	if (!(isEmployee || isSupervisor)) return <></>
+	if (!(isPersonnelDepartment || isSupervisor))
+		return (
+			<>
+				<Header type="service" service="employment" />
+			</>
+		)
 
 	return (
 		<>
 			<Header type="service" service="employment" />
-			{isEmployee ? (
-				<div className="shadowNav">
-					<ul className="min-w-[230px] pt-14 flex flex-col gap-4 sticky top-[80px]">
-						{handleList}
-					</ul>
-				</div>
-			) : (
-				<div className="shadowNav">
-					<ul className="min-w-[230px] pt-14 flex flex-col gap-4 sticky top-[80px]">
-						{handleSupervisorList}
-					</ul>
-				</div>
-			)}
+			<div className="shadowNav">
+				<ul className="min-w-[230px] pt-14 flex flex-col gap-4 sticky top-[80px]">
+					{isPersonnelDepartment ? handleList : <></>}
+					{isSupervisor ? handleSupervisorList : <></>}
+				</ul>
+			</div>
 			<div className="bg-[#F5F8FB] flex w-full">
 				{pathname === navEmployeeList[0].id && <Responds />}
 				{pathname.match(
@@ -501,28 +503,26 @@ export const NavPesonnelAccounting = () => {
 				)}
 				{pathname ===
 					'/services/personnelaccounting/supervisor/invitation/seekerinfo' && (
-					<SupervisorInterviewSeekerInfo/>
+					<SupervisorInterviewSeekerInfo />
+				)}
+				{pathname === `/services/personnelaccounting/employment/stages` && (
+					<EmploymentStageInfo />
 				)}
 				{pathname ===
-					`/services/personnelaccounting/employment/stages` && (
-						<EmploymentStageInfo/>
-					)}
-				{pathname ===
 					'/services/personnelaccounting/employment/stages/seeker-info' && (
-						<DepEmploymentSeekerInfo/>
-					)}
-				{pathname ===
-					'/services/personnelaccounting/requisite' && (
-						<RequisiteMain/>
-					)}
+					<DepEmploymentSeekerInfo />
+				)}
+				{pathname === '/services/personnelaccounting/requisite' && (
+					<RequisiteMain />
+				)}
 				{pathname ===
 					`/services/personnelaccounting/requisite/requisite-review` && (
-						<RequisiteStage/>
-					)}
+					<RequisiteStage />
+				)}
 				{pathname ===
 					'/services/personnelaccounting/requisite/requisite-review/seeker-info' && (
-						<RequisiteSeeker/>
-					)}
+					<RequisiteSeeker />
+				)}
 			</div>
 		</>
 	)

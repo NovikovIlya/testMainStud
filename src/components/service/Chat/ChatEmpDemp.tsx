@@ -51,6 +51,7 @@ export const ChatEmpDemp = () => {
 			respondInfo: VacancyRespondItemType
 			unreadCount: number
 			lastMessageDate: string
+			chatName: string
 		}[]
 	>([])
 
@@ -148,7 +149,7 @@ export const ChatEmpDemp = () => {
 			<ChatEmpDempPreview
 				chatId={chat.id}
 				vacancyId={chat.respondInfo.vacancyId}
-				respName={chat.respondInfo.vacancyName}
+				respName={chat.chatName}
 				surname="Митрофанов"
 				name="Илья"
 				status={chat.respondInfo.status}

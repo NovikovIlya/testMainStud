@@ -231,7 +231,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 							</div>
 							<div className="flex flex-col gap-[8px]">
 								<p className="font-content-font font-normal text-black text-[24px]/[28.8px]">
-									{data?.userData?.lastname +
+										{data?.userData?.lastname +
 										' ' +
 										data?.userData?.firstname +
 										' ' +

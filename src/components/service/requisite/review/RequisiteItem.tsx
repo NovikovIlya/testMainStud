@@ -17,7 +17,7 @@ export const RequisiteItem = ( props : EmploymentStageItemType ) => {
 		<div className="flex flex-col">
 			<div className="flex flex-row items-center h-[80px] w-full bg-[#FFFFFF]">
 				<div className="flex ml-[1.5%] w-[30%]">
-					{props.applicant.firstName + ' ' + props.applicant.middleName + ' ' + props.applicant.lastName}
+					{props.applicant.lastName + ' ' + props.applicant.firstName + ' ' + props.applicant.middleName}
 				</div>
 				<div className="flex w-[20%] mr-[10%]">
 					{props.vacancy.name}
@@ -47,7 +47,7 @@ export const RequisiteItem = ( props : EmploymentStageItemType ) => {
 						onClick={() => {
 							dispatch(setCurrentResponce(props.respondId))
 							dispatch(setCurrentRequisiteSeekerVacancy(props.vacancy.name))
-							dispatch(setCurrentRequisiteSeekerName(props.applicant.firstName + ' ' + props.applicant.middleName + ' ' + props.applicant.lastName))
+							dispatch(setCurrentRequisiteSeekerName( props.applicant.lastName + ' ' + props.applicant.firstName + ' ' + props.applicant.middleName))
 							navigate(`/services/personnelaccounting/requisite/requisite-review`)
 						}}>
 						Подробнее

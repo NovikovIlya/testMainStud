@@ -49,13 +49,12 @@ export const EmploymentStageInfo = ( ) => {
 		<>
 			<div className="w-full flex flex-col px-[53px] mt-[140px]">
 				<Button
-					type="default"
-					className="max-w-[102px] bg-[#F5F8FB] mb-[30px] py-[8px] px-[24px] text-[#333333] border-[#333333] border-[1px] rounded-[54.5px] text-[16px]"
 					onClick={() => {
 						window.history.back()
 					}}
+					className="bg-inherit w-[102px] mb-[30px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer"
 				>
-					<NocircleArrowIcon/>
+					<NocircleArrowIcon />
 					Назад
 				</Button>
 				<h1 className="font-normal text-[28px]/[28px]">{employmentSeekerName}</h1>
@@ -89,7 +88,7 @@ export const EmploymentStageInfo = ( ) => {
 							comment={sortedStages[2].comment}
 							stageStatus={sortedStages[2].status}
 							documentArray={sortedStages[2].documents}
-							bank={''}/>
+						 	bank={''}/>
 					)}
 
 					{sortedStages?.[3] && (
@@ -101,29 +100,19 @@ export const EmploymentStageInfo = ( ) => {
 							documentArray={sortedStages[3].documents}
 						 	bank={''}/>
 					)}
-
 					{sortedStages?.[4] && (
-						<DepEmploymentStageItem
-							stage={5}
-							role={'personnel'}
-							comment={sortedStages[4].comment}
-							stageStatus={sortedStages[4].status}
-							documentArray={sortedStages[4].documents}
-						 	bank={''}/>
-					)}
-					{sortedStages?.[5] && (
 						<>
-							{(!sortedStages[5].hasRequisites) && (
+							{(!sortedStages[4].hasRequisites) && (
 								<>
-									{(sortedStages?.[5]) && (
+									{(sortedStages?.[4]) && (
 										<>
 											<DepEmploymentStageItem
-												stage={6}
+												stage={5}
 												role={'personnel'}
 												comment={''}
-												stageStatus={sortedStages[5].status}
-												documentArray={sortedStages[5].documents}
-												bank={sortedStages[5].bank}/>
+												stageStatus={sortedStages[4].status}
+												documentArray={sortedStages[4].documents}
+												bank={sortedStages[4].bank}/>
 										</>
 									)}
 								</>

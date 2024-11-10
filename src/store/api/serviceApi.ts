@@ -354,6 +354,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 				respondInfo: VacancyRespondItemType & { vacancyId: number }
 				unreadCount: number
 				lastMessageDate: string
+				chatName: string
 			}[],
 			{
 				vacancyId: number | null
@@ -435,6 +436,35 @@ export const serviceApi = apiSlice.injectEndpoints({
 			query: () => ({
 				url: `http://${emplBaseURL}employment-api/v1/employment/document-definitions`,
 				headers: { Authorization: `Bearer ${personnelDeparmentToken}` }
+			})
+		}),
+		getEmploymentPossibleRoles: builder.query<string[], void>({
+			query: () => ({
+				url: `http://${emplBaseURL}employment-api/v1/user/my/roles`
+			})
+		}),
+		getSeekerChatPreviews: builder.query<
+			{
+				content: {
+					chatId: number
+					respondId: number
+					vacancyId: number
+					chatName: string
+					lastMessageDate: string
+					undreadCount: number
+					respondStatus: string
+				}[]
+			},
+			{
+				page: number
+				pageSize: number
+			}
+		>({
+			query: ({ page, pageSize }) => ({
+				url: `http://${emplBaseURL}employment-api/v1/chat/seeker-chats?page=${page}&size=${pageSize}`,
+				headers: {
+					Authorization: `Bearer ${seekerToken}`
+				}
 			})
 		}),
 		postPhone: builder.mutation({
@@ -1171,5 +1201,7 @@ export const {
 	useMarkBankCardApplicationFormedMutation,
 	useUpdateEmploymentDocumentsMutation,
 	useGetAccountingStagesQuery,
-	useSetHasRequisitesEmploymentMutation
+	useSetHasRequisitesEmploymentMutation,
+	useGetEmploymentPossibleRolesQuery,
+	useLazyGetSeekerChatPreviewsQuery
 } = serviceApi

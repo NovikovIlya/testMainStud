@@ -72,6 +72,8 @@ export const ChatPage = () => {
 
 	const dispatch = useDispatch()
 
+	const token = useAppSelector(state => state.auth.accessToken)
+
 	useEffect(() => {
 		setLastMessageId(0)
 	}, [chatIdState])
@@ -108,7 +110,7 @@ export const ChatPage = () => {
 		const socket = new SockJS(
 			`http://${emplBaseURL}employment-api/v1/ws?sender=${
 				isEmpDemp ? 'PERSONNEL_DEPARTMENT' : 'SEEKER'
-			}&token=Bearer ${isEmpDemp ? personnelDeparmentToken : seekerToken}`
+			}&token=Bearer ${token?.replaceAll('"', '')}`
 		)
 		socket.onopen = () => {
 			console.log('WS Open')
@@ -284,9 +286,7 @@ export const ChatPage = () => {
 					method: 'POST',
 					body: formData,
 					headers: {
-						Authorization: isEmpDemp
-							? `Bearer ${personnelDeparmentToken}`
-							: `Bearer ${seekerToken}`,
+						Authorization: `Bearer ${token}`,
 						'X-User-Name': sessionId
 					}
 				}

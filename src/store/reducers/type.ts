@@ -60,6 +60,7 @@ export type IDocumentsRequest = {
 export interface Role {
 	login: string
 	id: string
+	userId: string
 	type: string
 }
 export interface ICalendarItem {

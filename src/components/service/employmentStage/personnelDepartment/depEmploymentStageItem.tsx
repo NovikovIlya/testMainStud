@@ -100,8 +100,8 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 								className="rounded-[54.5px] text-[14px] w-full py-[13px]"
 								type="primary"
 								onClick={() => {
-									markBankCardApplicationFormed({ subStageId: 6 })
-									dispatch(setSixStageStatusPersonnel('ACCEPTED'))
+									markBankCardApplicationFormed({ subStageId: 5 })
+									dispatch(setFifthStageStatus('ACCEPTED'))
 									setIsReqModalOpen(false)
 								}}
 							>
@@ -165,9 +165,9 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 						)}
 					</div>
 				)}
-				{(props.stage === 4) && (
+				{(props.stage === 3) && (
 					<div className='min-w-[300px] items-left'>
-					{(props.stageStatus === 'VERIFYING') && (forthStageStatus.forthStageStatus === 'VERIFYING') && (
+					{(props.stageStatus === 'VERIFYING') && (thirdStageStatus.thirdStageStatus === 'VERIFYING') && (
 						<div className="flex flex-row gap-[12px] items-left">
 							<Button
 								className="text-[#FFFFFF] py-[8px] px-[24px] border-none rounded-[54.5px] text-[16px] font-normal"
@@ -178,8 +178,8 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 								comment: textRef.current,
 								subStageId: props.stage
 							});
-							dispatch(setForthStageStatus('ACCEPTED'))
-							dispatch(setForthStageCommentVisibility('invisible'))
+							dispatch(setThirdStageStatus('ACCEPTED'))
+							dispatch(setThirdStageCommentVisibility('invisible'))
 						}}
 							>
 							Принять
@@ -213,9 +213,9 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 				)}
 			</div>
 				)}
-				{(props.stage === 6) && (props.role === 'accounting') && (
+				{(props.stage === 5) && (props.role === 'accounting') && (
 					<div className='min-w-[300px] items-left'>
-						{(props.stageStatus === 'VERIFYING') && (sixStageStatus.sixStageStatus === 'VERIFYING')	 && (
+						{(props.stageStatus === 'VERIFYING') && (fifthStageStatus.fifthStageStatus === 'VERIFYING')	 && (
 							<div className="flex flex-row gap-[12px]">
 								<Button
 									className="text-[#FFFFFF] py-[8px] px-[24px] border-none rounded-[54.5px] text-[16px] font-normal"
@@ -226,8 +226,8 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 											comment: textRef.current,
 											subStageId: props.stage
 										});
-										dispatch(setSixStageStatus('ACCEPTED'))
-										dispatch(setSixStageCommentVisibility('invisible'))
+										dispatch(setFifthStageStatus('ACCEPTED'))
+										dispatch(setFifthStageCommentVisibility('invisible'))
 									}}
 								>
 									Принять
@@ -241,13 +241,13 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 								>На доработку</Button>
 							</div>
 						)}
-						{((props.stageStatus === 'REFINE') || (sixStageStatus.sixStageStatus === 'REFINE')) && (
+						{((props.stageStatus === 'REFINE') || (fifthStageStatus.fifthStageStatus === 'REFINE')) && (
 							<div className="flex flex-row items-center gap-[12px]">
 								<div className="w-[11px] h-[11px] rounded-[100%] bg-[#FFD600]"></div>
 								<span>Доработка</span>
 							</div>
 						)}
-						{((props.stageStatus === 'ACCEPTED') || (sixStageStatus.sixStageStatus === 'ACCEPTED')) && (
+						{((props.stageStatus === 'ACCEPTED') || (fifthStageStatus.fifthStageStatus === 'ACCEPTED')) && (
 							<div className="flex flex-row items-center gap-[12px]">
 								<div className="w-[11px] h-[11px] rounded-[100%] bg-[#00AB30]"></div>
 								<span>Принято</span>
@@ -261,9 +261,9 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 						)}
 					</div>
 				)}
-				{(props.stage === 6) && (props.role === 'personnel') &&  (
+				{(props.stage === 5) && (props.role === 'personnel') &&  (
 					<div className='min-w-[300px] items-left'>
-						{(props.stageStatus === 'VERIFYING') && (sixStageStatusPersonnel.sixStageStatusPersonnel === 'VERIFYING')	 && (
+						{(props.stageStatus === 'VERIFYING') && (fifthStageStatus.fifthStageStatus === 'VERIFYING')	 && (
 							<div className="flex flex-row gap-[12px]">
 								<Button
 									className='text-[#FFFFFF] py-[8px] px-[24px] border-none rounded-[54.5px] text-[16px] font-normal'
@@ -275,7 +275,7 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 								</Button>
 							</div>
 						)}
-						{((props.stageStatus === 'ACCEPTED') || (sixStageStatusPersonnel.sixStageStatusPersonnel === 'ACCEPTED')) && (
+						{((props.stageStatus === 'ACCEPTED') || (fifthStageStatus.fifthStageStatus === 'ACCEPTED')) && (
 							<div className="flex flex-row items-center gap-[12px]">
 								<div className="w-[11px] h-[11px] rounded-[100%] bg-[#00AB30]"></div>
 								<span>Сформированно</span>
@@ -294,7 +294,7 @@ const StageContentComponent = () => {
 					{props.documentArray?.map((document) => (
 						<DocumentElem key={document.id} name={document.docType}  id={document.id}/>
 					))}
-					{((props.stageStatus === 'REFINE') || (props.stageStatus === 'VERIFYING') || (props.stageStatus === 'UPDATED') || (secondStageCommentVisibility.secondStageCommentVisibility === 'visible')) && (
+					{(((props.stageStatus === 'REFINE') || (props.stageStatus === 'VERIFYING' && props.comment !== null && props.comment !== undefined && props.comment !== '') || (props.stageStatus === 'UPDATED') || (secondStageCommentVisibility.secondStageCommentVisibility === 'visible'))) && (
 						<>
 							<StageComment commentTextBd={props.comment} commentTextState={textRef.current}></StageComment>
 						</>
@@ -303,43 +303,37 @@ const StageContentComponent = () => {
 			)}
 			{(props.stage === 3) && (
 				<>
-					<div className="flex flex-row gap-[12px]">
-						<span className="text-[16px]/[19.2px] font-normal">Соискатель ознакомлен с трудовыми условиями</span>
-					</div>
+					{props.documentArray?.map((document) => (
+						<DocumentElem key={document.id} name={document.docType} id={document.id}/>
+					))}
+					{((props.stageStatus === 'REFINE') || (props.stageStatus === 'VERIFYING' && props.comment !== null && props.comment !== undefined && props.comment !== '') || (props.stageStatus === 'UPDATED') || (thirdStageCommentVisibility.thirdStageCommentVisibility === 'visible')) && (
+						<>
+							<StageComment commentTextBd={props.comment} commentTextState={textRef.current}></StageComment>
+						</>
+					)}
 				</>
 			)}
 			{(props.stage === 4) && (
 				<>
-					{props.documentArray?.map((document) => (
-						<DocumentElem key={document.id} name={document.docType} id={document.id}/>
-					))}
-					{((props.stageStatus === 'REFINE') || (props.stageStatus === 'VERIFYING') || (props.stageStatus === 'UPDATED') || (forthStageCommentVisibility.forthStageCommentVisibility === 'visible')) && (
-						<>
-							<StageComment commentTextBd={props.comment} commentTextState={textRef.current}></StageComment>
-						</>
-					)}
-				</>
-			)}
-			{(props.stage === 5) && (
-				<>
 					<div className="flex flex-row gap-[12px]">
+						<GreenCheck></GreenCheck>
 						<span className="text-[16px]/[19.2px] font-normal">Соискатель прошел инструктаж</span>
 					</div>
 				</>
 			)}
-			{(props.stage === 6) && (props.role === 'accounting') && (
+			{(props.stage === 5) && (props.role === 'accounting') && (
 				<>
 					{props.documentArray?.map((document) => (
 						<DocumentElem key={document.id} name={document.docType} id={document.id}/>
 					))}
-					{((props.stageStatus === 'REFINE') || (props.stageStatus === 'VERIFYING') || (props.stageStatus === 'UPDATED') || (sixStageCommentVisibility.sixStageCommentVisibility === 'visible')) && (
+					{((props.stageStatus === 'REFINE') || (props.stageStatus === 'VERIFYING' && props.comment !== null && props.comment !== undefined && props.comment !== '') || (props.stageStatus === 'UPDATED') || (fifthStageCommentVisibility.fifthStageCommentVisibility === 'visible')) && (
 						<>
 							<StageComment commentTextBd={props.comment} commentTextState={textRef.current}></StageComment>
 						</>
 					)}
 				</>
 			)}
-			{(props.stage === 6) && (props.role === 'personnel') && (
+			{(props.stage === 5) && (props.role === 'personnel') && (
 				<>
 					{props.documentArray?.map((document) => (
 						<DocumentElem key={document.id} name={document.docType} id={document.id} />
@@ -396,6 +390,7 @@ const StageContentComponent = () => {
 										})
 										dispatch(setSecondStageStatus('REFINE'))
 										dispatch(setSecondStageCommentVisibility('visible'))
+										console.log(secondStageCommentVisibility.secondStageCommentVisibility)
 										setIsRevisionModalOpen(false)
 								}}
 							>
@@ -414,6 +409,7 @@ const StageContentComponent = () => {
 										});
 										dispatch(setThirdStageStatus('REFINE'))
 										dispatch(setThirdStageCommentVisibility('visible'))
+										console.log(thirdStageCommentVisibility.thirdStageCommentVisibility)
 										setIsRevisionModalOpen(false)
 								}}
 							>
@@ -438,25 +434,7 @@ const StageContentComponent = () => {
 								Отправить
 							</Button>
 						)}
-						{(props.stage === 5) && (
-							<Button
-								className="rounded-[54.5px] py-[12px] px-[24px]  text-[16px]"
-								type="primary"
-								onClick={() => {
-										changeStatus({
-											status: 'REFINE',
-											comment: textRef.current,
-											subStageId: props.stage
-										});
-										dispatch(setFifthStageStatus('REFINE'))
-										dispatch(setFifthStageCommentVisibility('visible'))
-										setIsRevisionModalOpen(false)
-								}}
-							>
-								Отправить
-							</Button>
-						)}
-						{(props.stage === 6) && (props.role === 'accounting') && (
+						{(props.stage === 5) && (props.role === 'accounting') && (
 							<Button
 								className="rounded-[54.5px] py-[12px] px-[24px]  text-[16px]"
 								type="primary"
@@ -466,8 +444,8 @@ const StageContentComponent = () => {
 										comment: textRef.current,
 										subStageId: props.stage
 									});
-									dispatch(setSixStageStatus('REFINE'))
-									dispatch(setSixStageCommentVisibility('visible'))
+									dispatch(setFifthStageStatus('REFINE'))
+									dispatch(setFifthStageCommentVisibility('visible'))
 									setIsRevisionModalOpen(false)
 								}}
 							>
@@ -496,24 +474,18 @@ const StageContentComponent = () => {
 				{(props.stage === 3) && (
 					<div className="flex flex-row gap-[37px]">
 						<h3 className="font-bold text-[16px]/[19.2px]">3 ЭТАП</h3>
-						<h3 className="font-normal text-[18px]/[21.6px]">«Трудовые условия»</h3>
+						<h3 className="font-normal text-[18px]/[21.6px]">«Медицинский осмотр»</h3>
 					</div>
 				)}
 				{(props.stage === 4) && (
 					<div className="flex flex-row gap-[37px]">
 						<h3 className="font-bold text-[16px]/[19.2px]">4 ЭТАП</h3>
-						<h3 className="font-normal text-[18px]/[21.6px]">«Медицинский осмотр»</h3>
+						<h3 className="font-normal text-[18px]/[21.6px]">«Инструктаж»</h3>
 					</div>
 				)}
 				{(props.stage === 5) && (
 					<div className="flex flex-row gap-[37px]">
 						<h3 className="font-bold text-[16px]/[19.2px]">5 ЭТАП</h3>
-						<h3 className="font-normal text-[18px]/[21.6px]">«Инструктаж»</h3>
-					</div>
-				)}
-				{(props.stage === 6) && (
-					<div className="flex flex-row gap-[37px]">
-						<h3 className="font-bold text-[16px]/[19.2px]">6 ЭТАП</h3>
 						<h3 className="font-normal text-[18px]/[21.6px]">«Реквизиты»</h3>
 					</div>
 				)}

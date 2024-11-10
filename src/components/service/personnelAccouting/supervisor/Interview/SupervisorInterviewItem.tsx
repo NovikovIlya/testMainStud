@@ -38,11 +38,12 @@ export const SupervisorInterviewItem = (props: InterviewItemType) => {
 	const navigate = useNavigate()
 
 	const seekerName =
+		props.seeker.lastName +
+		' ' +
 		props.seeker.firstName +
 		' ' +
-		props.seeker.middleName +
-		' ' +
-		props.seeker.lastName
+		props.seeker.middleName
+
 
 	const InterviewCountdownTimeElem = (props: CountdownButtonProps) => {
 		const [timeLeft, setTimeLeft] = useState<number>(0)

@@ -52,11 +52,11 @@ export const SupervisorInterviewCreate = () => {
 		new Set(
 			responds.map(
 				resp =>
+					resp.userData?.lastname +
+					' ' +
 					resp.userData?.firstname +
 					' ' +
-					resp.userData?.middlename +
-					' ' +
-					resp.userData?.lastname
+					resp.userData?.middlename
 			)
 		)
 	).map(fio => ({ value: fio, label: fio }))

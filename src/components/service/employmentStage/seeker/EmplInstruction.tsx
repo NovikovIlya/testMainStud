@@ -36,13 +36,14 @@ export const EmplInstruction = (props: {
 						className="w-[50%] rounded-[16px]"
 					></video>
 				</div>
-				<a
-					className="mt-[40px] cursor-pointer underline"
+				<Button
+					type="link"
+					className="mt-[40px] w-[131px] bg-dasha-blue text-white no-underline rounded-[54.5px]"
 					href={foundStage?.testLink}
 					target="_blank"
 				>
 					Пройти тест
-				</a>
+				</Button>
 				<Button
 					type="primary"
 					className="rounded-[54.5px] mt-[40px] w-[131px]"

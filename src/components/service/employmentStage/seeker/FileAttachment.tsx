@@ -118,6 +118,7 @@ export const FileAttachment = (
 			) : !props.seventhStage ? (
 				<Upload
 					className="col-start-3 ml-auto mr-[10%]"
+					accept=".png,.jpg,.jpeg,.pdf"
 					showUploadList={false}
 					action={`http://${emplBaseURL}employment-api/v1/respond/${props.respondId}/employment/file?employmentDocDefId=${props.id}`}
 					method="PUT"

@@ -35,10 +35,13 @@ export const StageComment = (props: CommentProps ) => {
 		commentText = props.commentTextBd.trim()
 		console.log('перезашли но стейт сохранился')
 	}
-
-	if (false) {
-		commentText = ''
-		console.log('этап вернулся с доработки, был коммент в бд, но мы его переписали и снова отправили на доработку, но мы перезашли на страницу и стейт умер?')
+	if ((props.commentTextState !== props.commentTextBd)
+		&&
+		(props.commentTextState !== '' && props.commentTextState !== undefined)
+		&& (props.commentTextBd !== '' && props.commentTextBd !== null))
+	{
+		commentText = props.commentTextState.trim()
+		console.log('стейт и бд разные, но не пустые')
 	}
 
 	if ((props.commentTextBd !== null) && (props.commentTextState !== undefined) && (props.commentTextState !== '') && (props.commentTextBd !== props.commentTextState)) {

@@ -437,6 +437,11 @@ export const serviceApi = apiSlice.injectEndpoints({
 				headers: { Authorization: `Bearer ${personnelDeparmentToken}` }
 			})
 		}),
+		getEmploymentPossibleRoles: builder.query<string[], void>({
+			query: () => ({
+				url: `http://${emplBaseURL}employment-api/v1/user/my/roles`
+			})
+		}),
 		postPhone: builder.mutation({
 			query: phone => {
 				return {
@@ -1171,5 +1176,6 @@ export const {
 	useMarkBankCardApplicationFormedMutation,
 	useUpdateEmploymentDocumentsMutation,
 	useGetAccountingStagesQuery,
-	useSetHasRequisitesEmploymentMutation
+	useSetHasRequisitesEmploymentMutation,
+	useGetEmploymentPossibleRolesQuery
 } = serviceApi

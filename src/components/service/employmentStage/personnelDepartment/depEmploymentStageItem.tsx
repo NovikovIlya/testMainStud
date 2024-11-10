@@ -193,13 +193,13 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 					>На доработку</Button>
 					</div>
 					)}
-				{((props.stageStatus === 'REFINE') || (forthStageStatus.forthStageStatus === 'REFINE')) && (
+				{((props.stageStatus === 'REFINE') || (thirdStageStatus.thirdStageStatus === 'REFINE')) && (
 					<div className="flex flex-row items-center gap-[12px]">
 						<div className="w-[11px] h-[11px] rounded-[100%] bg-[#FFD600]"></div>
 						<span>Доработка</span>
 					</div>
 				)}
-				{((props.stageStatus === 'ACCEPTED') || (forthStageStatus.forthStageStatus === 'ACCEPTED')) && (
+				{((props.stageStatus === 'ACCEPTED') || (thirdStageStatus.thirdStageStatus === 'ACCEPTED')) && (
 					<div className="flex flex-row items-center gap-[12px]">
 						<div className="w-[11px] h-[11px] rounded-[100%] bg-[#00AB30]"></div>
 						<span>Принято</span>

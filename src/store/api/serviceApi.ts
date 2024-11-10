@@ -354,6 +354,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 				respondInfo: VacancyRespondItemType & { vacancyId: number }
 				unreadCount: number
 				lastMessageDate: string
+				chatName: string
 			}[],
 			{
 				vacancyId: number | null

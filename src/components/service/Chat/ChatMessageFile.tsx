@@ -5,6 +5,7 @@ import { DocxIcon } from '../../../assets/svg/DocxIcon'
 import { FileDownloadIcon } from '../../../assets/svg/FileDownloadIcon'
 import { PdfIcon } from '../../../assets/svg/PdfIcon'
 import { useAppSelector } from '../../../store'
+import { useGetEmploymentPossibleRolesQuery } from '../../../store/api/serviceApi'
 
 const seekerToken =
 	'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJJQU1pdHJvZmFub3ZAc3R1ZC5rcGZ1LnJ1IiwiaWF0IjoxNzExNTc3OTMwLCJleHAiOjE3MTE1ODg3MzAsInNjb3BlIjoidXNlciIsInJvbGVzIjpbeyJ1c2VySWQiOiIyNTMxNjIiLCJzZXNzaW9uSWQiOiIyNDAzMjI3MTQ4NzUxOTQ4Mjk3MzMwOTA0NzM1MzY2NyIsInNlc3Npb25IYXNoIjoiRDJBMjI1QTc0OTlGMUNFMTZDQkUwMkI5RjZDOTE3RTEiLCJkb2N1bWVudHNIYXNoIjoiQjI2Q0IwQzNFOEFDMzZENkEwQ0I1MTJDRjMwMjM3NzciLCJsb2dpbiI6IklBTWl0cm9mYW5vdiIsInR5cGUiOiJTRUVLRVIifV0sInNlc3Npb25JZCI6IjI0MDMyMjcxNDg3NTE5NDgyOTczMzA5MDQ3MzUzNjY3Iiwic2Vzc2lvbkhhc2giOiJEMkEyMjVBNzQ5OUYxQ0UxNkNCRTAyQjlGNkM5MTdFMSIsImFsbElkIjoiMTc4NDQwIiwiZW1haWwiOiJtaXRyb18wMkBtYWlsLnJ1In0.4dmYBUEDz9UzKxvxWtQhA6poTVwFOkRn-YoSzngfVUs'
@@ -21,13 +22,22 @@ export const ChatMessageFile = (props: {
 	const chatId = useAppSelector(state => state.chatId)
 	const linkRef = useRef<HTMLAnchorElement | null>(null)
 
+	const { data: rolesData = undefined } = useGetEmploymentPossibleRolesQuery()
+	const isEmpDemp = rolesData?.find(role => role === 'PERSONNEL_DEPARTMENT')
+
+	const token = useAppSelector(state => state.auth.accessToken)
+
 	useEffect(() => {
 		fetch(
-			`http://${emplBaseURL}employment-api/v1/chat/${chatId.chatId}/message/${props.msgId}/file/${props.id}?sender=SEEKER`,
+			`http://${emplBaseURL}employment-api/v1/chat/${chatId.chatId}/message/${
+				props.msgId
+			}/file/${props.id}?sender=${
+				isEmpDemp ? 'PERSONNEL_DEPARTMENT' : 'SEEKER'
+			}`,
 			{
 				method: 'GET',
 				headers: {
-					Authorization: `Bearer ${seekerToken}`
+					Authorization: `Bearer ${token?.replaceAll('"', '')}`
 				}
 			}
 		)

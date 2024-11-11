@@ -8,6 +8,7 @@ import Stomp from 'stompjs'
 
 import { useAppSelector } from '../../../store'
 import {
+	useGetEmploymentPossibleRolesQuery,
 	useLazyGetChatMessagesQuery,
 	usePostChatMessageMutation,
 	useReadChatMessageMutation
@@ -40,7 +41,8 @@ export const ChatPage = () => {
 	const chatIdState = useAppSelector(state => state.chatId)
 	const ChatStatus = useAppSelector(state => state.chatResponceStatus)
 	const user = useAppSelector(state => state.auth.user)
-	const isEmpDemp = user?.roles.find(role => role.type === 'EMPL')
+	const { data: rolesData = undefined } = useGetEmploymentPossibleRolesQuery()
+	const isEmpDemp = rolesData?.find(role => role === 'PERSONNEL_DEPARTMENT')
 	const [getChatMessages, chatMessages] = useLazyGetChatMessagesQuery()
 	const [postMsg, postMsgResult] = usePostChatMessageMutation()
 	const [readMsg, readMsgResult] = useReadChatMessageMutation()

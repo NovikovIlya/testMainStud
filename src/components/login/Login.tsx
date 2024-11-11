@@ -17,6 +17,8 @@ import { useAppDispatch } from '../../store'
 
 import { block } from '../dnd/constant'
 import { useLocalStorageState } from 'ahooks'
+import { useGetInfoUserQuery } from '../../store/api/formApi'
+import { useCheckIsEmployeeQuery } from '../../store/api/practiceApi/contracts'
 
 const { Title } = Typography
 
@@ -26,18 +28,27 @@ export const Login = () => {
 	const { t, i18n } = useTranslation()
 	// const dispatch = useDispatch()
 	const [login,{ data:dataLogin,isSuccess, isLoading }] = useLoginMutation()
+
 	const [error, setError] = useState<IError | null>(null)
 	const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const paramValue = searchParams.get('lan');
+	const {data:dataSubRole,isSuccess:isSuccessSubRole} = useGetInfoUserQuery()
 	const [message, setMessage] = useLocalStorageState<any>(
 		'typeAcc',
 		{
 		  defaultValue: 'STUD',
 		},
-	  );
+	);
+	const [subRole, setSubrole] = useLocalStorageState<any>(
+		'subRole',
+		{
+		  defaultValue: '',
+		},
+	);
 	console.log('paramValue',paramValue)
 	const dispatch = useAppDispatch()
+
 
 	useEffect(()=>{
 		document.title = 'Казанский Федеральный Университет'
@@ -52,10 +63,19 @@ export const Login = () => {
 			const type = dataLogin.user.roles.find((item:any) => item.login === form.getFieldValue('email')||item.email===form.getFieldValue('email'))?.type
 			console.log('type',type)
 			// dispatch(setMainRole(type))
-			setMessage(type)
+			setMessage(type) // mainRole
+			if(type==='EMPL'){
+			    
+			}
 			navigate('/user') // Редирект на компонент User
 		}
 	}, [isSuccess]) 
+
+	useEffect(()=>{
+		if(isSuccessSubRole){
+			setSubrole(dataSubRole ? dataSubRole : '')
+		}
+	},[isSuccessSubRole])
 
 	const onFinish = async (values: { email: string; password: string }) => {
 		try {

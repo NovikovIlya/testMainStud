@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { useAppSelector } from '../../store'
 import { useSetRoleMutation } from '../../store/api/serviceApi'
-import { setRole } from '../../store/reducers/authSlice'
+import { setRole,setSubRole } from '../../store/reducers/authSlice'
 import { blue307 } from '../../utils/color'
 
 import { ImagesLayout } from './ImagesLayout'
@@ -23,10 +23,11 @@ export const InfoUser = () => {
 
 	const [postRole] = useSetRoleMutation()
 	const role = useAppSelector(state => state.auth.user?.roles[0].type)
+	const subRole = useAppSelector(state => state.auth.subRole)
 
 	const { t } = useTranslation()
 	const handleOk = async () => {
-		role && postRole({ role: role })
+		role && postRole({ role: subRole })
 		navigate('/form')
 	}
 	const handleSkip = () => {
@@ -49,7 +50,8 @@ export const InfoUser = () => {
 						className="p-0 mt-5"
 						onChange={e => {
 							//@ts-ignore
-							dispatch(setRole(e.target.id))
+							// dispatch(setRole(e.target.id))
+							dispatch(setSubRole(e.target.id))
 						}}
 					>
 						<ListItem className="p-0">

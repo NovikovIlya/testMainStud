@@ -24,6 +24,7 @@ import { ArrowLeftBackInOldAccount } from "../../assets/svg/ArrowLeftBackInOldAc
 import { TypeHeaderProps } from '../../models/layout'
 import { isMobileDevice } from '../../utils/hooks/useIsMobile'
 import logo from '../../assets/images/logo.svg'
+import { UserSwitchOutlined } from '@ant-design/icons'
 
 
 
@@ -35,12 +36,13 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const { t, i18n } = useTranslation()
 	const location = useLocation();
 	const user = useAppSelector(state => state.auth.user)
+	const subRole = useAppSelector(state => state.auth.subRole)
 	const isMobile = isMobileDevice();
 	const urlContainsPractice = location.pathname.includes('practice');
 	const roles = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '')?.roles : []
 	const username = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '')?.username : ''
 	const maiRole = roles.find((item:any) => item.login === username)?.type || ''
-	console.log('username',username)
+
 	useEffect(()=>{
 		if(isMobile){
 			showMobileMenuEffect()
@@ -80,6 +82,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 		setOpenDrawer(false)
 	}
 	const items: MenuProps['items'] = [
+		
 		{
 			label: (
 				<div className={`p-2 text-sm text-blue1f5 font-bold cursor-default`}>
@@ -90,6 +93,20 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 		},
 		{
 			type: 'divider'
+		},
+		{
+			label: (
+				<div
+					onClick={() => {
+						navigate('/infoUser')
+					}}
+					className={`${maiRole==='OTHER'? "" :"hidden"} flex items-center gap-[15px] px-[4px] py-[5px]`}
+				>
+					<UserSwitchOutlined className='w-[22px] h-[22px] text-blue1f5 flex items-center justify-center' />
+					Изменить роль
+				</div>
+			),
+			key: '7'
 		},
 		{
 			label: (
@@ -122,21 +139,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 			),
 			key: '3'
 		},
-		// {
-		// 	label: (
-		// 		<div
-		// 			onClick={() => {
-		// 				setOpenMenu(false)
-		// 				dispatch(setEdit())
-		// 			}}
-		// 			className="flex items-center gap-[15px] px-[4px] py-[5px]"
-		// 		>
-		// 			<PersonalizationSvg />
-		// 			{t('Personalization')}
-		// 		</div>
-		// 	),
-		// 	key: '4'
-		// },
+
 		{
 			label: (
 				<div
@@ -248,8 +251,8 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						>
 							<ArrowLeftBackInOldAccount white={type === 'service'}/>
 							<span className={clsx(
-								`text-[14px]/[14px] text-[#3073D7]`
-								&&
+								`text-[14px] text-[#3073D7]`
+								,
 								type === 'service' ? 'text-white' : 'text-[#3073D7]'
 
 							)}>
@@ -348,6 +351,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 									</div>
 									<div className="text-sm">{user?.roles && user?.roles?.length > 1 ? ((user?.roles?.map((item)=><div className={`${item.login === username ? 'font-extrabold' : ''}`}>{getRole(item.type)}</div>)))
 									 : String((user?.roles?.map((item)=>getRole(item.type))))}</div>
+									 <div>{getRole(subRole)}</div>
 								</div>
 							</Space>
 						</Dropdown>

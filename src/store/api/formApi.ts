@@ -19,7 +19,8 @@ export const formApi = apiSlice.injectEndpoints({
 		getAllDocuments: build.query<IDocumentsRequest[], void>({
 			query: () => ({
 				url: 'user-api/document'
-			})
+			}),
+			keepUnusedDataFor:1,
 		}),
 		getInfoUser: build.query<formItem, void>({
 			query: () => ({

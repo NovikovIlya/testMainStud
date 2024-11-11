@@ -72,7 +72,7 @@ export const Document = () => {
 	const [postDocument] = usePostDocumentMutation()
 
 	const documentData = useAppSelector(state => state.Document)
-
+	console.log('documentData',documentData)
 	const onSubmit = () => {
 		postDocument(documentData)
 		setIsEdit(false)
@@ -92,8 +92,9 @@ export const Document = () => {
 					{!isEdit ? (
 						<div className="bg-white p-2 h-10 rounded-md">
 							<Typography.Text>
-								{levelDocuments?.find(
-									el => el.id === documentData.documentTypeId
+								{levelDocuments?.find(el =>{ 
+									console.log('documentData',documentData)
+									return el.id === documentData.documentTypeId}
 								)?.type || '-'}
 							</Typography.Text>
 						</div>
@@ -316,7 +317,7 @@ export const Document = () => {
 							className="border-solid border-bluekfu border-[1px] text-bluekfu !rounded-md"
 							onClick={onSubmit}
 						>
-							{t('save')}
+							Сохранить
 						</Button>
 					)}
 				</Space>

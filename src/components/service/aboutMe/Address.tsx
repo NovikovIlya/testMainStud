@@ -429,7 +429,7 @@ export const Address = () => {
 							className="border-solid border-bluekfu border-[1px] text-bluekfu !rounded-md"
 							onClick={onSubmit}
 						>
-							{t('save')}
+						 Сохранить
 						</Button>
 					)}
 				</Space>

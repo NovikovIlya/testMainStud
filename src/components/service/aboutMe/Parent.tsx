@@ -82,12 +82,14 @@ export const Parent = () => {
 		dispatch(addParent(uuid()))
 	}
 
-	const isStudent = role === 'STUD'
-	if (isLoadingDocuments || isLoadingParent) return <SkeletonPage />
-
 	const onSubmit = () => {
 		setIsEdit(false)
 	}
+	const isStudent = role === 'STUD'
+
+
+	if (isLoadingDocuments || isLoadingParent) return <SkeletonPage />
+
 
 	return (
 		<div className="m-14 radio w-full">
@@ -530,7 +532,7 @@ export const Parent = () => {
 							className="border-solid border-bluekfu border-[1px] text-bluekfu !rounded-md"
 							onClick={onSubmit}
 						>
-							{t('save')}
+							Сохранить
 						</Button>
 					)}
 				</Space>

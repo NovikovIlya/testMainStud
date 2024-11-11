@@ -7,7 +7,8 @@ const initialState: InitialState = {
 	accessToken: localStorage.getItem('access'),
 	refreshToken: localStorage.getItem('refresh'),
 	user: JSON.parse(localStorage.getItem('user') || '{}'),
-	edit: false
+	edit: false,
+	subRole: '',
 }
 
 const authSlice = createSlice({
@@ -32,18 +33,21 @@ const authSlice = createSlice({
 			localStorage.removeItem('refresh')
 			localStorage.removeItem('practice') //удаляю возможность зайти на сервис практки с аккаунта без доступа
 			localStorage.removeItem('dashboard')
-			localStorage.clear()
+			// localStorage.clear()
 		},
 		setEdit: state => {
 			state.edit = !state.edit
 		},
 		setRole: (state, action: PayloadAction<string>) => {
 			if (state.user) state.user.roles[0].type = action.payload
+		},
+		setSubRole: (state, action: PayloadAction<string>) => {
+			state.subRole = action.payload
 		}
 	}
 })
 
-export const { logOut, setCredentials, setEdit, setRole } = authSlice.actions
+export const { logOut, setCredentials, setEdit, setRole,setSubRole } = authSlice.actions
 
 export default authSlice.reducer
 

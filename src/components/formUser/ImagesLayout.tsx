@@ -31,7 +31,7 @@ export const ImagesLayout: FC<PropsWithChildren<{ first?: boolean }>> = ({
 							{ value: 'en', label: 'Eng' }
 						]}
 					/>
-					<Popover
+					{/* <Popover
 						placement="left"
 						className="h-fit"
 						content={
@@ -47,7 +47,7 @@ export const ImagesLayout: FC<PropsWithChildren<{ first?: boolean }>> = ({
 						}
 					>
 						<QuestionCircleOutlined />
-					</Popover>
+					</Popover> */}
 				</div>
 			</div>
 			{children}

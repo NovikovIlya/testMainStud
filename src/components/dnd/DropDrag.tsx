@@ -1,4 +1,4 @@
-import { DeleteOutlined } from '@ant-design/icons'
+import { DeleteOutlined, LoadingOutlined } from '@ant-design/icons'
 import { useEffect, useMemo, useState } from 'react'
 import { Responsive, WidthProvider } from 'react-grid-layout'
 import 'react-grid-layout/css/styles.css'
@@ -11,29 +11,33 @@ import { changeLayout, removeCard } from '../../store/reducers/LayoutsSlice'
 import { jsxElements } from './defaultElement'
 import { Apply } from '../apply/Apply'
 import { AboutUniversityCard } from '../aboutUniversity/AboutUniversityCard'
-import { Col, Row } from 'antd'
+import { Button, Col, Row, Spin } from 'antd'
 import { useLocalStorageState } from 'ahooks'
 import { block } from './constant'
+import { Link } from 'react-router-dom'
+import { useCheckIsEmployeeQuery } from '../../store/api/practiceApi/contracts'
 
 
 const DropDrag = () => {
+	const user = useAppSelector(state => state.auth.user)
 	const dispatch = useDispatch()
 	const layout = block
-
+	const mainRole = user?.roles[0].type
+	const subRole = useAppSelector(state => state.auth.subRole)
 	const edit = useAppSelector(state => state.auth.edit)
+	const {data:dataCheck,isSuccess:isSuccessCheck, isLoading:isLoadingCheck} = useCheckIsEmployeeQuery()
 	const [currentBreakpoint, setCurrentBreakpoint] = useState<string>('lg')
 	const [mounted, setMounted] = useState(false)
 	const [toolbox, setToolbox] = useState<{ [index: string]: any[] }>({lg: []})
-	const user = useAppSelector(state => state.auth.user)
 	const ResponsiveReactGridLayout = useMemo(() => WidthProvider(Responsive), []);
 	const [message, setMessage] = useLocalStorageState<any>(
 		'typeAcc',
 		{
 		  defaultValue: 'STUD',
 		},
-	  );
+	);
+	const [windowSize, setWindowSize] = useState(getWindowSize())
 	
-   console.log('layout',layout)
 	useEffect(() => {
 		setMounted(true)
 	}, [])
@@ -43,12 +47,10 @@ const DropDrag = () => {
 		return () => {}
 	}, [layout])
 
-	const [windowSize, setWindowSize] = useState(getWindowSize())
-
 	useEffect(() => {
 		function handleWindowResize() {
 			setWindowSize(getWindowSize())
-	}
+		}
 
 		window.addEventListener('resize', handleWindowResize)
 
@@ -69,11 +71,7 @@ const DropDrag = () => {
 		dispatch(changeLayout(layouts))
 	}
 
-	const onRemoveItem = (i: string) => {
-		dispatch(removeCard(i))
-	}
-	console.log('layout.lg',layout.lg)
-	console.log('messagemessage',message)
+
 	const layoutValid = layout.lg.filter(obj1 =>jsxElements
 		.filter((item)=>{
 			if(message==='STUD'){
@@ -102,10 +100,10 @@ const DropDrag = () => {
 			}
 		})
 		.some(obj2 => obj1.i === obj2.index))
-    console.log('layoutValid',layoutValid)
-	const generateDOM = layoutValid.map(item => {
-	
-		return (
+
+	const generateDOM = layoutValid
+		.map(item => {
+			return (
 			<div
 				key={item.i}
 				className="bg-white/70 backdrop-blur-sm rounded-[20px] shadow-md "
@@ -126,66 +124,116 @@ const DropDrag = () => {
 				</div>
 			</div>
 		)
-	}).filter((item)=>{
-		if(message==='STUD'){
-			return item.key==='Schedule' ||
-				   item.key==='ElectronicBook' ||
-				   item.key==='Session' ||
-				   item.key==='Dormitory' ||
-				   item.key==='myPractices' ||
-				   item.key==='EducationalCourses' ||
-				   item.key==='PsychologicalHelp' ||
-				   item.key==='News' ||
-				   item.key==='DocumentFlow' ||
-				   item.key==='VirtualAudience' ||
-				   item.key==='DigitalDepartments' ||
-				   item.key==='ManagementScientificProjects' 
+		})
+		.filter((item)=>{
+			if(message==='STUD'){
+				return item.key==='Schedule' ||
+					item.key==='ElectronicBook' ||
+					item.key==='Session' ||
+					item.key==='Dormitory' ||
+					item.key==='myPractices' ||
+					item.key==='EducationalCourses' ||
+					item.key==='PsychologicalHelp' ||
+					item.key==='News' ||
+					item.key==='DocumentFlow' ||
+					item.key==='VirtualAudience' ||
+					item.key==='DigitalDepartments' ||
+					item.key==='ManagementScientificProjects' 
 
 
-		}else{
-			return item.key==='Schedule' ||
-			       item.key==='Practices' ||
-				   item.key==='practiceTeacher' ||
-				   item.key==='Staff' ||
-				   item.key==='Vacancies' ||
-				   item.key==='News' 
+			}else if(message==='EMPL'){
+				return item.key==='Schedule' ||
+					(item.key==='Practices' && isSuccessCheck)||
+					item.key==='practiceTeacher' ||
+					item.key==='Staff' ||
+					item.key==='Vacancies' ||
+					item.key==='News' 
+			}else{
+				return <>Такой роли не найдено</>
+			}
+		})
+	
+
+	const renderContent = () => {
+		if (mainRole === 'ABITUR' || (mainRole === 'OTHER' && subRole==='ABIT')) {
+		  return (
+			<>
+			  <Apply />
+			  <Row>
+				<Col span={8}>
+				  <AboutUniversityCard />
+				</Col>
+			  </Row>
+			</>
+		  );
 		}
-	})
+		if(mainRole === 'OTHER' && subRole==='SCHOOL'){
+			return(
+				<>
+					<span>Я ШКОЛЬНИК</span>
+				</>
+			)
+		}
+		if(mainRole === 'OTHER' && subRole==='GUEST'){
+			return(
+				<>
+					<span>Я Гость</span>
+				</>
+			)
+		}
+		if(mainRole === 'OTHER' && subRole==='ATTEND'){
+			return(
+				<>
+					<span>Я слушатель</span>
+				</>
+			)
+		}
+		if(mainRole === 'OTHER' && subRole==='SEEKER'){
+			return(
+				<>
+					<span>Я соискатель</span>
+				</>
+			)
+		}
+		if(mainRole === 'OTHER' && subRole===''){
+			return(
+				<>
+					<Link to='/infoUser'><Button>Вернуться к выбору роли</Button></Link>
+				</>
+			)
+		}
+		
+		if(isLoadingCheck)return <><Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}/></>
+
+		return (
+			<Spin spinning={isLoadingCheck}>
+		  <ResponsiveReactGridLayout
+			className="layout"
+			cols={{ lg: 3, md: 2, sm: 2, xs: 2, xxs: 1 }}
+			rowHeight={windowSize.innerWidth < 768 ? 210 : 320}
+			containerPadding={[0, 0]}
+			margin={[20, 20]}
+			layouts={layout}
+			measureBeforeMount={true}
+			useCSSTransforms={mounted}
+			onLayoutChange={onLayoutChange}
+			onBreakpointChange={onBreakpointChange}
+			isDraggable={edit}
+			isResizable={false}
+			compactType="vertical"
+			verticalCompact={true}
+			preventCollision={true}
+		  >
+			{generateDOM}
+		  </ResponsiveReactGridLayout>
+		  </Spin>
+		);
+	  };
 
 	return (
-		<div className=" mt-[40px] w-[min(1600px, 100%)] mb-[100px]">
-			{user?.roles[0].type==='ABITUR' || user?.roles[0].type==='OTHER' ?
-			<>
-			<Apply/> 
-			<Row>
-				<Col span={8}>
-					<AboutUniversityCard/>
-				</Col>
-			</Row>
-			</>
-			: 
-			<ResponsiveReactGridLayout
-				className="layout "
-				cols={{ lg: 3, md: 2, sm: 2, xs: 2, xxs: 1 }}
-				rowHeight={windowSize.innerWidth < 768 ? 210 : 320}
-				containerPadding={[0, 0]}
-				margin={[20, 20]}
-				layouts={layout}
-				measureBeforeMount={true}
-				useCSSTransforms={mounted}
-				onLayoutChange={onLayoutChange}
-				onBreakpointChange={onBreakpointChange}
-				isDraggable={edit}
-				isResizable={false}
-				compactType={'vertical'}
-				verticalCompact={true}
-				preventCollision={true}
-			>
-				{generateDOM}
-			</ResponsiveReactGridLayout>
-			}
-
-		</div>
+		<div className="mt-[40px] w-[min(1600px, 100%)] mb-[100px]">
+			{renderContent()}
+	    </div>
 	)
 }
 

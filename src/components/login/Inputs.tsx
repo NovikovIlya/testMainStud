@@ -24,7 +24,7 @@ export const Inputs: FC<IInputsProps> = ({ error }) => {
 					type="text"
 					required
 					size="large"
-					placeholder="Email/Login"
+					placeholder="Email/Логин КФУ"
 				/>
 			</Form.Item>
 			<Form.Item

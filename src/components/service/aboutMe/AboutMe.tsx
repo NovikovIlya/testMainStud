@@ -139,7 +139,7 @@ export const AboutMe = () => {
 					<Typography.Text>{t('birth')}</Typography.Text>
 					{isEdit ? (
 						<div className="bg-white p-2 rounded-md">
-							<Typography.Text>{formData.birthDay || '-'}</Typography.Text>
+							<Typography.Text>{dayjs(formData.birthDay).format('DD.MM.YYYY') || '-'}</Typography.Text>
 						</div>
 					) : (
 						<ConfigProvider locale={ruPicker}>
@@ -243,7 +243,7 @@ export const AboutMe = () => {
 							className="border-solid border-bluekfu border-[1px] text-bluekfu !rounded-md"
 							onClick={() => onSubmit()}
 						>
-							{t('save')}
+							Сохранить
 						</Button>
 					)}
 				</Space>

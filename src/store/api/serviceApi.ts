@@ -1033,14 +1033,25 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
-		downloadEmploymentStageFile: builder.query<Blob, { fileId: number }>({
+		downloadEmploymentStageFile: builder.query<
+			{ href: string; size: number },
+			{ fileId: number }
+		>({
 			query: arg => ({
-				url: `http://${emplBaseURL}employment-api/v1/management/employment/sub-stage/${arg.fileId}`,
+				url: `http://${emplBaseURL}employment-api/v1/management/employment/file/${arg.fileId}`,
 				method: 'GET',
 				headers: {
 					Authorization: `Bearer ${personnelDeparmentToken}`
+				},
+				responseHandler: async res => {
+					const data = await res.blob()
+					const file = new Blob([data], {
+						type: res.headers.get('content-type') as string
+					})
+					return { href: window.URL.createObjectURL(file), size: file.size }
 				}
-			})
+			}),
+			keepUnusedDataFor: 0
 		}),
 		changeCardStatusRequest: builder.mutation<void, { subStageId: number }>({
 			query: arg => ({
@@ -1203,5 +1214,6 @@ export const {
 	useGetAccountingStagesQuery,
 	useSetHasRequisitesEmploymentMutation,
 	useGetEmploymentPossibleRolesQuery,
-	useLazyGetSeekerChatPreviewsQuery
+	useLazyGetSeekerChatPreviewsQuery,
+	useLazyDownloadEmploymentStageFileQuery
 } = serviceApi

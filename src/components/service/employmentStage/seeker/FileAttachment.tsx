@@ -32,6 +32,7 @@ export const FileAttachment = (
 	const [fileType, setFileType] = useState<string>('')
 	const [isFileUploading, setIsFileUploading] = useState<boolean>(false)
 	const [fileSize, setFileSize] = useState<number>(0)
+	const [fileName, setFileName] = useState<string>('dkaskjdasd9')
 	const linkRef = useRef<HTMLAnchorElement | null>(null)
 
 	const foundDoc = empData.stages
@@ -62,6 +63,7 @@ export const FileAttachment = (
 					type: data.contentType as string
 				})
 				setFileSize(blobus.size)
+				setFileName(decodeURI(foundDoc.name))
 				const url = window.URL.createObjectURL(blobus)
 				if (linkRef.current) {
 					linkRef.current.href = url
@@ -83,10 +85,10 @@ export const FileAttachment = (
 				<>
 					<a
 						className="col-start-2 text-ellipsis overflow-clip pointer-events-auto"
-						download={true}
+						download={fileName}
 						ref={linkRef}
 					>
-						dkaskjdasd9
+						{fileName}
 					</a>
 					<div className="col-start-3 ml-auto flex gap-[36px] items-center">
 						<p className="">
@@ -126,10 +128,12 @@ export const FileAttachment = (
 					method="PUT"
 					beforeUpload={file => {
 						setFileType(file.type)
+						setFileName(file.name)
 					}}
 					headers={{
 						Authorization: `Bearer ${token?.replaceAll('"', '')}`,
-						'Content-Type': fileType
+						'Content-Type': fileType,
+						'Content-Disposition': `filename="${encodeURI(fileName)}"`
 					}}
 					onChange={options => {
 						options.file.status === 'uploading'

@@ -49,7 +49,8 @@ export const DocumentForm = () => {
 	const handleOk = () => {
 		postDocument(documentData)
 		if (userRole && userRole === 'SCHOOL') navigate('/parent')
-		else navigate('/education')
+		// else navigate('/education')
+		else navigate('/user')
 	}
 	const handleSkip = () => {
 		navigate('/user')

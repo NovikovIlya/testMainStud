@@ -12,6 +12,7 @@ import { Layout } from './layout/Layout'
 import { useAppDispatch, useAppSelector } from '../store'
 import { setEdit } from '../store/reducers/authSlice'
 import InfoAbitAccepted from './InfoAbitAccepted'
+import { useLocalStorageState } from 'ahooks'
 
 export const User = () => {
 	const { t,i18n } = useTranslation()
@@ -19,7 +20,7 @@ export const User = () => {
 	const { data, isSuccess } = useCheckIsEmployeeQuery()
 	const user = useAppSelector(state => state.auth.user)
 	const dispatch = useAppDispatch()
-	const [acceptedData,setAcceptedData] = useState<any>(null)
+	const [acceptedData,setAcceptedData] = useLocalStorageState<any>('acceptedData',{defaultValue:null})
 	
 	const hide = () => {
 		setOpen(false)
@@ -69,7 +70,7 @@ export const User = () => {
 						}
 					}}
 				>
-					<Popover
+					{/* <Popover
 						trigger="click"
 						content={<FeedbackWindow closeWindow={hide} />}
 						placement={'topLeft'}
@@ -87,7 +88,7 @@ export const User = () => {
 						>
 							<SupportCenterSvg />
 						</Button>
-					</Popover>
+					</Popover> */}
 				</ConfigProvider>
 			</div>
 		</Layout>

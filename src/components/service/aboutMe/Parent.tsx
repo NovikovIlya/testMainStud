@@ -43,6 +43,7 @@ import {
 } from '../../../store/reducers/FormReducers/ParentReducer'
 
 import { SkeletonPage } from './Skeleton'
+import { useLocalStorageState } from 'ahooks'
 
 const props: UploadProps = {
 	name: 'file',
@@ -68,12 +69,12 @@ export const Parent = () => {
 	dayjs.locale(i18n.language)
 	const { data: parent, isLoading: isLoadingParent } = useGetParentsQuery()
 	const [isEdit, setIsEdit] = useState(false)
-
 	const role = useAppSelector(state => state.auth.user?.roles[0].type)
-	const { data: documents, isLoading: isLoadingDocuments } =
-		useGetAllDocumentsQuery()
+	const { data: documents, isLoading: isLoadingDocuments } =useGetAllDocumentsQuery()
 	if (parent !== undefined && parent.length) dispatch(allData(parent))
 	const parentData = useAppSelector(state => state.Parent)
+	const [acceptedData,setAcceptedData] = useLocalStorageState<any>('acceptedData',{defaultValue:null})
+    const [typeAcc, _] = useLocalStorageState<any>('typeAcc',{  defaultValue: 'STUD',});
 
 	const handleDeleteParent = (id: string) => {
 		dispatch(deleteParent(id))
@@ -86,6 +87,7 @@ export const Parent = () => {
 		setIsEdit(false)
 	}
 	const isStudent = role === 'STUD'
+	const isChanged = typeAcc === 'OTHER' ||  (typeAcc === 'ABITUR' && acceptedData[0])
 
 
 	if (isLoadingDocuments || isLoadingParent) return <SkeletonPage />
@@ -106,7 +108,7 @@ export const Parent = () => {
 					>
 						{t('infoParents')}
 					</Typography.Title>
-					{parentData.map((item, index) => (
+					{parentData?.map((item:any, index:any) => (
 						<Space direction="vertical" key={item.id}>
 							<Space direction="vertical" size={'large'} className="w-full">
 								<Space>
@@ -141,7 +143,7 @@ export const Parent = () => {
 									) : (
 										<div className="bg-white p-4  rounded-md">
 											<Typography.Text>
-												{isStudent ? item.mother?.replace(/&#39;/g, "'") : item.FIO.replace(/&#39;/g, "'") || '-'}
+												{isStudent ? item.mother?.replace(/&#39;/g, "").split(',').map((item:any)=><div>{item}</div>) : item?.FIO?.replace(/&#39;/g, "'") || '-'}
 											</Typography.Text>
 										</div>
 									)}
@@ -518,7 +520,7 @@ export const Parent = () => {
 				<Space
 					direction="vertical"
 					size={'small'}
-					className={clsx('mt-4', isStudent && 'hidden')}
+					className={clsx('mt-4', !isChanged && 'hidden')}
 				>
 					{!isEdit ? (
 						<Button

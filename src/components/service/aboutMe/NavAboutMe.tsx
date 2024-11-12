@@ -49,11 +49,11 @@ export const NavAboutMe = () => {
 			icon: <EducationSvg />,
 			name: t('education')
 		},
-		{
-			id: '/services/aboutMe/work',
-			icon: <WorkSvg />,
-			name: t('work')
-		},
+		// {
+		// 	id: '/services/aboutMe/work',
+		// 	icon: <WorkSvg />,
+		// 	name: t('work')
+		// },
 		{
 			id: '/services/aboutMe/parent',
 			icon: <ParentSvg />,
@@ -100,8 +100,8 @@ export const NavAboutMe = () => {
 				{pathname === navList[1].id && <Document />}
 				{pathname === navList[2].id && <Address />}
 				{pathname === navList[3].id && <Education />}
-				{pathname === navList[4].id && <Work />}
-				{pathname === navList[5].id && <Parent />}
+				{/* {pathname === navList[4].id && <Work />} */}
+				{pathname === navList[4].id && <Parent />}
 				{/* {pathname === navList[6].id && <ProfessionalSkills />} */}
 			</div>
 		</>

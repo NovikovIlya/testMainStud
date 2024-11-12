@@ -38,6 +38,7 @@ import {
 } from '../../../store/reducers/FormReducers/EducationReducer'
 
 import { SkeletonPage } from './Skeleton'
+import { useLocalStorageState } from 'ahooks'
 
 const props: UploadProps = {
 	name: 'file',
@@ -61,15 +62,14 @@ export const Education = () => {
 	const { t, i18n } = useTranslation()
 	const dispatch = useDispatch()
 	const [isEdit, setIsEdit] = useState(false)
-	const { data: education, isLoading: isLoadingEducation } =
-		useGetEducationQuery()
+	const { data: education, isLoading: isLoadingEducation } = useGetEducationQuery()
 	const educationData = useAppSelector(state => state.Education)
 	if (education !== undefined && education.length) dispatch(allData(education))
 	const role = useAppSelector(state => state.auth.user?.roles[0].type)
-	const { data: educationLevel, isLoading: isLoadingEducationLevel } =
-		useGetEducationLevelQuery(i18n.language)
-	const { data: countries, isLoading: isLoadingCountries } =
-		useGetCountriesQuery(i18n.language)
+	const { data: educationLevel, isLoading: isLoadingEducationLevel } =useGetEducationLevelQuery(i18n.language)
+	const { data: countries, isLoading: isLoadingCountries } =useGetCountriesQuery(i18n.language)
+	const [acceptedData,setAcceptedData] = useLocalStorageState<any>('acceptedData',{defaultValue:null})
+    const [typeAcc, _] = useLocalStorageState<any>('typeAcc',{  defaultValue: 'STUD',});
 
 	const handleDeleteEducation = (id: string) => {
 		dispatch(idDelete(id))
@@ -79,11 +79,13 @@ export const Education = () => {
 		dispatch(addEducation(uuid()))
 	}
 	const onSubmit = () => {
-		setIsEdit(false)
+		setIsEdit
+		(false)
 	}
-	const isStudent = role === 'STUD'
-	if (isLoadingCountries || isLoadingEducationLevel || isLoadingEducation)
-		return <SkeletonPage />
+	const isChanged = typeAcc === 'OTHER' ||  (typeAcc === 'ABITUR' && acceptedData[0])
+	
+	if (isLoadingCountries || isLoadingEducationLevel || isLoadingEducation)return <SkeletonPage />
+
 	return (
 		<div className="m-14 radio w-full">
 			<Space.Compact
@@ -290,7 +292,7 @@ export const Education = () => {
 								</Space>
 								<Space
 									direction="vertical"
-									className={clsx(isStudent && 'hidden')}
+									className={clsx(isChanged && 'hidden')}
 								>
 									<Typography.Text>{t('specialization')}</Typography.Text>
 									{isEdit ? (
@@ -344,7 +346,7 @@ export const Education = () => {
 				<Space
 					direction="vertical"
 					size={'large'}
-					className={clsx('w-full flex items-center', isStudent && 'hidden')}
+					className={clsx('w-full flex items-center', isChanged && 'hidden')}
 				>
 					<Button
 						className="rounded-full text-center p-0 w-8 h-8 text-xl"
@@ -358,7 +360,7 @@ export const Education = () => {
 			<Space
 				direction="vertical"
 				size={'small'}
-				className={clsx('mt-4', isStudent && 'hidden')}
+				className={clsx('mt-4', !isChanged && 'hidden')}
 			>
 				{!isEdit ? (
 					<Button

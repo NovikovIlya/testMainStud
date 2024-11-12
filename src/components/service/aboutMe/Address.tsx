@@ -21,38 +21,35 @@ import {
 } from '../../../store/reducers/FormReducers/AddressReducer'
 
 import { SkeletonPage } from './Skeleton'
+import { useLocalStorageState } from 'ahooks'
 
 export const Address = () => {
 	const { t, i18n } = useTranslation()
 	const dispatch = useDispatch()
 	const role = useAppSelector(state => state.auth.user?.roles[0].type)
-	const { data: countries, isLoading: isLoadingCountries } =
-		useGetCountriesQuery(i18n.language)
-	const {
-		data: address,
-		refetch,
-		isLoading: isLoadingAddress
-	} = useGetAddressQuery()
+	const { data: countries, isLoading: isLoadingCountries } =useGetCountriesQuery(i18n.language)
+	const {data: address,refetch,isLoading: isLoadingAddress} = useGetAddressQuery()
+	const [acceptedData,setAcceptedData] = useLocalStorageState<any>('acceptedData',{defaultValue:null})
+    const [typeAcc, _] = useLocalStorageState<any>('typeAcc',{  defaultValue: 'STUD',});
 	const [postAddress] = usePostAddressMutation()
 	const [isEdit, setIsEdit] = useState(false)
-	const [isResident, setIsResident] = useState(
-		address?.residenceAddress ? 0 : 1
-	)
-	const registrationAddressData = useAppSelector(
-		state => state.Address.registrationAddress
-	)
-	const residenceAddressData = useAppSelector(
-		state => state.Address.residenceAddress
-	)
-	const isStudent = role === 'STUD'
+	const [isResident, setIsResident] = useState(address?.residenceAddress ? 0 : 1)
+	const registrationAddressData = useAppSelector(state => state.Address.registrationAddress)
+	const residenceAddressData = useAppSelector(state => state.Address.residenceAddress)
+
+	const isChanged = typeAcc === 'OTHER' ||  (typeAcc === 'ABITUR' && acceptedData[0])
+
 	useEffect(() => {
 		address && dispatch(allData(address))
 	}, [refetch, address, dispatch])
+
 	const onSubmit = () => {
 		postAddress({ residenceAddressData, registrationAddressData, isResident })
 		setIsEdit(false)
 	}
+
 	if (isLoadingCountries || isLoadingAddress) return <SkeletonPage />
+
 	return (
 		<div className="m-14 radio w-full max-w-2xl">
 			<Space.Compact block direction="vertical" className="gap-5">
@@ -413,7 +410,7 @@ export const Address = () => {
 				<Space
 					direction="vertical"
 					size={'small'}
-					className={clsx('mt-4', isStudent && 'hidden')}
+					className={clsx('mt-4', !isChanged && 'hidden')}
 				>
 					{!isEdit ? (
 						<Button

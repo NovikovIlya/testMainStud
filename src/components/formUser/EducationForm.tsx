@@ -1,4 +1,4 @@
-import { Space, Typography } from 'antd'
+import { Form, Space, Typography } from 'antd'
 import { Button, DatePicker, Input, Select } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
@@ -26,6 +26,7 @@ import {
 import { blue307 } from '../../utils/color'
 
 import { ImagesLayout } from './ImagesLayout'
+import { usePostEducationMutation } from '../../store/api/formApi'
 
 export const EducationForm = () => {
 	const dispatch = useDispatch()
@@ -35,6 +36,7 @@ export const EducationForm = () => {
 	const { data: educationLevel } = useGetEducationLevelQuery(i18n.language)
 	const { data: countries } = useGetCountriesQuery(i18n.language)
 	const educationData = useAppSelector(state => state.Education)
+	const [postEducation] = usePostEducationMutation()
 	const handleAddEducation = () => {
 		dispatch(addEducation(uuid()))
 	}
@@ -45,6 +47,9 @@ export const EducationForm = () => {
 		navigate('/documents')
 	}
 	const handleOk = async () => {
+		const data={
+			
+		}
 		if (userRole === 'SEEKER') navigate('/work')
 		else navigate('/user')
 	}
@@ -53,6 +58,7 @@ export const EducationForm = () => {
 	}
 	return (
 		<ImagesLayout>
+			<Form>
 			<div className="w-full flex justify-center  text-sm">
 				<div className="container max-w-2xl flex flex-col  pч-5">
 					<h3 className="self-start text-xl">{t('education')}</h3>
@@ -79,6 +85,7 @@ export const EducationForm = () => {
 									<div>
 										<p>{t('higherEducational')}</p>
 
+										<Form.Item name={'educationLevelId'}>
 										<Select
 											className="w-full mt-2"
 											size="large"
@@ -98,10 +105,12 @@ export const EducationForm = () => {
 												)
 											}
 										/>
+										</Form.Item>
 									</div>
 									<div>
 										<p>{t('countryEducation')}</p>
 
+										<Form.Item name={'studentCountry'}>
 										<Select
 											className="w-full mt-2"
 											size="large"
@@ -123,10 +132,12 @@ export const EducationForm = () => {
 											}
 											value={item.countryId}
 										/>
+										</Form.Item>
 									</div>
 								</div>
 								<p className="mt-4 self-start">{t('nameEducational')}</p>
 								<div className="mt-2">
+									<Form.Item name={'nameOfInstitute'}>
 									<Input
 										placeholder={t('kfu')}
 										maxLength={250}
@@ -141,11 +152,13 @@ export const EducationForm = () => {
 											)
 										}
 									/>
+									</Form.Item>
 								</div>
 								<div className="grid grid-cols-2 mt-4 gap-x-10 gap-y-4 w-full max-sm:gap-5">
 									<div>
 										<p>{t('diplomaSeries')}</p>
 										<div className="mt-2">
+											<Form.Item name={'documentSeries'}>
 											<Input
 												placeholder="0000"
 												size="large"
@@ -160,12 +173,13 @@ export const EducationForm = () => {
 													)
 												}
 											/>
+											</Form.Item>
 										</div>
 									</div>
 									<div>
 										<p>{t('diplomaNumber')}</p>
 										<div className="mt-2">
-											<Input
+											<Form.Item name={'documentNumber'}><Input
 												placeholder="0000"
 												size="large"
 												maxLength={4}
@@ -178,13 +192,14 @@ export const EducationForm = () => {
 														})
 													)
 												}
-											/>
+											/></Form.Item>
 										</div>
 									</div>
 									<div>
 										<p>{t('graduateYear')}</p>
 										<div className="mt-2">
-											<DatePicker
+											<Form.Item name={'graduateYear'}>
+												<DatePicker
 												className="w-full"
 												onChange={e => {
 													dispatch(
@@ -203,12 +218,13 @@ export const EducationForm = () => {
 														? dayjs(item.graduateYear, 'YYYY')
 														: null
 												}
-											/>
+											/></Form.Item>
 										</div>
 									</div>
 									<div>
 										<p>{t('specialization')}</p>
 										<div className="mt-2">
+											<Form.Item name={'specialization'}>
 											<Input
 												placeholder={t('webDesign')}
 												size="large"
@@ -223,6 +239,7 @@ export const EducationForm = () => {
 													)
 												}
 											/>
+											</Form.Item>
 										</div>
 									</div>
 								</div>
@@ -267,6 +284,7 @@ export const EducationForm = () => {
 					</div>
 				</div>
 			</div>
+			</Form>
 		</ImagesLayout>
 	)
 }

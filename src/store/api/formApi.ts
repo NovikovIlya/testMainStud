@@ -14,7 +14,9 @@ export const formApi = apiSlice.injectEndpoints({
 		getMyDocuments: build.query<IDocument, void>({
 			query: () => ({
 				url: 'user-api/users/me/document'
-			})
+			}),
+			keepUnusedDataFor:1,
+
 		}),
 		getAllDocuments: build.query<IDocumentsRequest[], void>({
 			query: () => ({
@@ -25,32 +27,45 @@ export const formApi = apiSlice.injectEndpoints({
 		getInfoUser: build.query<formItem, void>({
 			query: () => ({
 				url: 'user-api/users/me'
-			})
+			}),
+			keepUnusedDataFor:1,
 		}),
 		getAddress: build.query<IAddress, void>({
 			query: () => ({
 				url: 'user-api/users/me/address'
-			})
+			}),
+			keepUnusedDataFor:1,
 		}),
 		getEducation: build.query<IEducationState[], void>({
 			query: () => ({
 				url: 'user-api/users/me/education'
+			}),
+			keepUnusedDataFor:1,
+		}),
+		postEducation: build.mutation<any, any>({
+			query: (body) => ({
+				url: 'user-api/users/me/education',
+				body,
+				method: 'POST'
 			})
 		}),
 		getParents: build.query<any, void>({
 			query: () => ({
 				url: 'user-api/users/me/parent'
-			})
+			}),
+			keepUnusedDataFor:1,
 		}),
 		getWorks: build.query<IWorkState, void>({
 			query: () => ({
 				url: 'users/me/work-history/items'
-			})
+			}),
+			keepUnusedDataFor:1,
 		}),
 		getWork: build.query<IWorkState, void>({
 			query: () => ({
 				url: 'users/me/work-history'
-			})
+			}),
+			keepUnusedDataFor:1,
 		}),
 		postInfoUser: build.mutation({
 			query: (body: formItem) => {
@@ -59,7 +74,8 @@ export const formApi = apiSlice.injectEndpoints({
 					body: body,
 					method: 'POST'
 				}
-			}
+			},
+			
 		}),
 		postDocument: build.mutation({
 			query: body => {
@@ -93,5 +109,6 @@ export const {
 	usePostInfoUserMutation,
 	usePostDocumentMutation,
 	useGetAllDocumentsQuery,
-	usePostAddressMutation
+	usePostAddressMutation,
+	usePostEducationMutation
 } = formApi

@@ -19,6 +19,7 @@ import { block } from '../dnd/constant'
 import { useLocalStorageState } from 'ahooks'
 import { useGetInfoUserQuery } from '../../store/api/formApi'
 import { useCheckIsEmployeeQuery } from '../../store/api/practiceApi/contracts'
+import { useGetRoleQuery } from '../../store/api/serviceApi'
 
 const { Title } = Typography
 
@@ -33,7 +34,7 @@ export const Login = () => {
 	const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const paramValue = searchParams.get('lan');
-	const {data:dataSubRole,isSuccess:isSuccessSubRole} = useGetInfoUserQuery()
+	const {data:dataSubRole,isSuccess:isSuccessSubRole} = useGetRoleQuery(null,{skip:!isSuccess})
 	const [message, setMessage] = useLocalStorageState<any>(
 		'typeAcc',
 		{
@@ -46,7 +47,7 @@ export const Login = () => {
 		  defaultValue: '',
 		},
 	);
-	console.log('paramValue',paramValue)
+	console.log('dataSubRoledataSubRoledataSubRole',dataSubRole)
 	const dispatch = useAppDispatch()
 
 
@@ -73,7 +74,8 @@ export const Login = () => {
 
 	useEffect(()=>{
 		if(isSuccessSubRole){
-			setSubrole(dataSubRole ? dataSubRole : '')
+			console.log('dataSubRole',dataSubRole)
+			// setSubrole(dataSubRole ? dataSubRole : '')
 		}
 	},[isSuccessSubRole])
 

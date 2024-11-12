@@ -48,6 +48,7 @@ export const Inputs = () => {
 			<span className="text-sm">{t('surname')}</span>
 			<div className="mt-2 mb-4">
 				<Input
+					disabled
 					id="surName"
 					size="large"
 					type="text"
@@ -62,6 +63,7 @@ export const Inputs = () => {
 			<span className="text-sm">{t('name')}</span>
 			<div className="mt-2 mb-4">
 				<Input
+				    disabled
 					size="large"
 					type="text"
 					maxLength={200}

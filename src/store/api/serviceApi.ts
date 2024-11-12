@@ -179,6 +179,14 @@ export const serviceApi = apiSlice.injectEndpoints({
                     method: 'POST'
                 }
             }
+        }),
+        getRole: builder.query({
+            query: () => {
+                return {
+                    url: 'user-api/users/me/role',
+                    method: 'GET'
+                }
+            }
         })
        
     })
@@ -206,6 +214,7 @@ export const {
     useDeleteAccMutation,
     useVerifyAccPhoneMutation,
     useFinalVerifyPhoneMutation,
-    useDeleteAccPhoneMutation
+    useDeleteAccPhoneMutation,
+    useGetRoleQuery
     
 } = serviceApi

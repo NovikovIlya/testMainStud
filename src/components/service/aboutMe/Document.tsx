@@ -37,6 +37,7 @@ import {
 } from '../../../store/reducers/FormReducers/DocumentReducer'
 
 import { SkeletonPage } from './Skeleton'
+import { useLocalStorageState } from 'ahooks'
 
 const props: UploadProps = {
 	name: 'file',
@@ -59,29 +60,28 @@ export const Document = () => {
 	const [t, i18n] = useTranslation()
 	dayjs.locale(i18n.language)
 	const dispatch = useDispatch()
-
+	const [acceptedData,setAcceptedData] = useLocalStorageState<any>('acceptedData',{defaultValue:null})
+    const [typeAcc, _] = useLocalStorageState<any>('typeAcc',{  defaultValue: 'STUD',});
 	const [isEdit, setIsEdit] = useState(false)
 	const role = useAppSelector(state => state.auth.user?.roles[0].type)
-	const {
-		data: documents,
-		refetch,
-		isLoading: isLoadingDocuments
-	} = useGetMyDocumentsQuery()
-	const { data: levelDocuments, isLoading: isLoadingLevelDocs } =
-		useGetAllDocumentsQuery()
+	const {data: documents,refetch,isLoading: isLoadingDocuments} = useGetMyDocumentsQuery()
+	const { data: levelDocuments, isLoading: isLoadingLevelDocs } = useGetAllDocumentsQuery()
 	const [postDocument] = usePostDocumentMutation()
-
 	const documentData = useAppSelector(state => state.Document)
-	console.log('documentData',documentData)
+
+	useEffect(() => {
+		documents && dispatch(allData(documents))
+	}, [documents, dispatch, refetch])
+
 	const onSubmit = () => {
 		postDocument(documentData)
 		setIsEdit(false)
 	}
-	useEffect(() => {
-		documents && dispatch(allData(documents))
-	}, [documents, dispatch, refetch])
-	const isStudent = role === 'STUD'
+
+	const isChanged = typeAcc === 'OTHER' ||  (typeAcc === 'ABITUR' && acceptedData[0])
+
 	if (isLoadingDocuments || isLoadingLevelDocs) return <SkeletonPage />
+
 	return (
 		<div className="m-14 w-full">
 			<Space.Compact block direction="vertical" className="gap-5 max-w-2xl">
@@ -133,7 +133,7 @@ export const Document = () => {
 							</div>
 						) : (
 							<Input
-								placeholder={isStudent ? '' : '000-000'}
+								placeholder={isChanged ? '' : '000-000'}
 								size="large"
 								value={documentData.divisionCode}
 								className={clsx(' w-full !rounded-lg ')}
@@ -282,7 +282,7 @@ export const Document = () => {
 				<Space
 					size={'small'}
 					align="center"
-					className={clsx(isStudent && 'hidden')}
+					className={clsx(isChanged && 'hidden')}
 				>
 					<Typography.Text className="text-black opacity-80 text-sm font-normal leading-none">
 						{t('AttachDocuments')}
@@ -294,7 +294,7 @@ export const Document = () => {
 					</Tooltip>
 				</Space>
 
-				<Upload {...props} className={clsx(isStudent && 'hidden')}>
+				<Upload {...props} className={clsx(isChanged && 'hidden')}>
 					<Button type="primary" className="px-8 !rounded gap-2 flex">
 						<span>+</span>
 						{t('AddFile')}
@@ -303,7 +303,7 @@ export const Document = () => {
 				<Space
 					direction="vertical"
 					size={'small'}
-					className={clsx('mt-4', isStudent && 'hidden')}
+					className={clsx('mt-4', !isChanged && 'hidden')}
 				>
 					{!isEdit ? (
 						<Button

@@ -25,6 +25,7 @@ import { TypeHeaderProps } from '../../models/layout'
 import { isMobileDevice } from '../../utils/hooks/useIsMobile'
 import logo from '../../assets/images/logo.svg'
 import { UserSwitchOutlined } from '@ant-design/icons'
+import { useLocalStorageState } from 'ahooks'
 
 
 
@@ -39,9 +40,15 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const subRole = useAppSelector(state => state.auth.subRole)
 	const isMobile = isMobileDevice();
 	const urlContainsPractice = location.pathname.includes('practice');
-	const roles = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '')?.roles : []
-	const username = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '')?.username : ''
-	const maiRole = roles.find((item:any) => item.login === username)?.type || ''
+	const roles = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '')?.roles : [];
+	const username = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '')?.username : '';
+	const maiRole = roles.find((item:any) => item.login === username)?.type || '';
+	const [subRoleLocal, setSubrole] = useLocalStorageState<any>(
+		'subRole',
+		{
+		  defaultValue: '',
+		},
+	);
 
 	useEffect(()=>{
 		if(isMobile){
@@ -351,7 +358,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 									</div>
 									<div className="text-sm">{user?.roles && user?.roles?.length > 1 ? ((user?.roles?.map((item)=><div className={`${item.login === username ? 'font-extrabold' : ''}`}>{getRole(item.type)}</div>)))
 									 : String((user?.roles?.map((item)=>getRole(item.type))))}</div>
-									 <div>{getRole(subRole)}</div>
+									 <div>{getRole(subRoleLocal)}</div>
 								</div>
 							</Space>
 						</Dropdown>
@@ -371,7 +378,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 				</div>
 				
 			</div>
-			{/* Для мобильных устройств */}
+			
 			{urlContainsPractice ?
 			<div className='block lg:hidden  bg-blue65A  flex w-full mt-[1px] items-center p-1'>
 				<Button

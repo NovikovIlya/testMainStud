@@ -35,6 +35,7 @@ import {
 } from '../../../store/reducers/FormReducers/FormReducer'
 
 import { SkeletonPage } from './Skeleton'
+import { useLocalStorageState } from 'ahooks'
 
 export const AboutMe = () => {
 	const { t, i18n } = useTranslation()
@@ -45,29 +46,38 @@ export const AboutMe = () => {
 	const dispatch = useDispatch()
 	const role = useAppSelector(state => state.auth.user?.roles[0].type)
 	const [postUser] = usePostInfoUserMutation()
-	const {
-		data: userInfo,
-		refetch,
-		isLoading: isLoadingUser
-	} = useGetInfoUserQuery()
+	const {data: userInfo,refetch,isLoading: isLoadingUser} = useGetInfoUserQuery()
 	const [isEdit, setIsEdit] = useState(true)
 	const formData = useAppSelector(state => state.Form)
 	const user = useAppSelector(state => state.auth.user)
-	const onSubmit = () => {
-		postUser(formData)
-		setIsEdit(true)
-	}
+	const [acceptedData,setAcceptedData] = useLocalStorageState<any>('acceptedData',{defaultValue:null})
+	const [typeAcc, _] = useLocalStorageState<any>(
+		'typeAcc',
+		{
+		  defaultValue: 'STUD',
+		},
+	);
+
 	useEffect(() => {
 		if (user) {
 			dispatch(surName(user.firstname))
 			dispatch(name(user.lastname))
 		}
 	}, [user, dispatch])
+
 	useEffect(() => {
 		userInfo && dispatch(allData(userInfo))
 	}, [userInfo, refetch, dispatch])
-	const isStudent = role === 'STUD'
+
+	const onSubmit = () => {
+		postUser(formData)
+		setIsEdit(true)
+	}
+	
+	const isChanged = typeAcc === 'OTHER' ||  (typeAcc === 'ABITUR' && !acceptedData[0])
+
 	if (isLoadingCountry ) return <SkeletonPage />
+
 	return (
 		<div className="m-14 radio w-full max-w-2xl">
 			<Space.Compact block direction="vertical" className="gap-5">
@@ -229,7 +239,7 @@ export const AboutMe = () => {
 				<Space
 					direction="vertical"
 					size={'small'}
-					className={clsx('mt-4', isStudent && 'hidden')}
+					className={clsx('mt-4', !isChanged && 'hidden')}
 				>
 					{isEdit ? (
 						<Button

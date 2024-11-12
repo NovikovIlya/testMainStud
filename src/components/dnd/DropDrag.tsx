@@ -16,6 +16,7 @@ import { useLocalStorageState } from 'ahooks'
 import { block } from './constant'
 import { Link } from 'react-router-dom'
 import { useCheckIsEmployeeQuery } from '../../store/api/practiceApi/contracts'
+import { useGetInfoUserQuery } from '../../store/api/formApi'
 
 
 const DropDrag = () => {
@@ -23,9 +24,10 @@ const DropDrag = () => {
 	const dispatch = useDispatch()
 	const layout = block
 	const mainRole = user?.roles[0].type
-	const subRole = useAppSelector(state => state.auth.subRole)
+	// const subRole = useAppSelector(state => state.auth.subRole)
 	const edit = useAppSelector(state => state.auth.edit)
 	const {data:dataCheck,isSuccess:isSuccessCheck, isLoading:isLoadingCheck} = useCheckIsEmployeeQuery()
+	const {data:dataGetInfoSubrole,isLoading:isLoadingGetInfoSubrole,isSuccess:isSuccessGetInfoSubrole} = useGetInfoUserQuery()
 	const [currentBreakpoint, setCurrentBreakpoint] = useState<string>('lg')
 	const [mounted, setMounted] = useState(false)
 	const [toolbox, setToolbox] = useState<{ [index: string]: any[] }>({lg: []})
@@ -36,6 +38,7 @@ const DropDrag = () => {
 		  defaultValue: 'STUD',
 		},
 	);
+	const [subRole, setSubrole] = useLocalStorageState<any>('subRole',{  defaultValue: ''});
 	const [windowSize, setWindowSize] = useState(getWindowSize())
 	
 	useEffect(() => {
@@ -127,35 +130,36 @@ const DropDrag = () => {
 		})
 		.filter((item)=>{
 			if(message==='STUD'){
-				return item.key==='Schedule' ||
-					item.key==='ElectronicBook' ||
-					item.key==='Session' ||
-					item.key==='Dormitory' ||
-					item.key==='myPractices' ||
-					item.key==='EducationalCourses' ||
-					item.key==='PsychologicalHelp' ||
-					item.key==='News' ||
-					item.key==='DocumentFlow' ||
-					item.key==='VirtualAudience' ||
-					item.key==='DigitalDepartments' ||
-					item.key==='ManagementScientificProjects' 
+				return  item.key==='Schedule' ||
+						item.key==='ElectronicBook' ||
+						item.key==='Session' ||
+						item.key==='Dormitory' ||
+						item.key==='myPractices' ||
+						item.key==='EducationalCourses' ||
+						item.key==='PsychologicalHelp' ||
+						item.key==='News' ||
+						item.key==='DocumentFlow' ||
+						item.key==='VirtualAudience' ||
+						item.key==='DigitalDepartments' ||
+						item.key==='ManagementScientificProjects' 
 
 
 			}else if(message==='EMPL'){
-				return item.key==='Schedule' ||
-					(item.key==='Practices' && isSuccessCheck)||
-					item.key==='practiceTeacher' ||
-					item.key==='Staff' ||
-					item.key==='Vacancies' ||
-					item.key==='News' 
+				return  item.key==='Schedule' ||
+						(item.key==='Practices' && isSuccessCheck)||
+						item.key==='practiceTeacher' ||
+						item.key==='Staff' ||
+						item.key==='Vacancies' ||
+						item.key==='News' 
 			}else{
 				return <>Такой роли не найдено</>
 			}
-		})
+	})
 	
 
 	const renderContent = () => {
 		if (mainRole === 'ABITUR' || (mainRole === 'OTHER' && subRole==='ABIT')) {
+		  if(isLoadingGetInfoSubrole) return <><Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}/></>
 		  return (
 			<>
 			  <Apply />
@@ -167,46 +171,51 @@ const DropDrag = () => {
 			</>
 		  );
 		}
-		if(mainRole === 'OTHER' && subRole==='SCHOOL'){
-			return(
-				<>
-					<span>Я ШКОЛЬНИК</span>
-				</>
-			)
-		}
-		if(mainRole === 'OTHER' && subRole==='GUEST'){
-			return(
-				<>
-					<span>Я Гость</span>
-				</>
-			)
-		}
-		if(mainRole === 'OTHER' && subRole==='ATTEND'){
-			return(
-				<>
-					<span>Я слушатель</span>
-				</>
-			)
-		}
-		if(mainRole === 'OTHER' && subRole==='SEEKER'){
-			return(
-				<>
-					<span>Я соискатель</span>
-				</>
-			)
-		}
-		if(mainRole === 'OTHER' && subRole===''){
-			return(
-				<>
-					<Link to='/infoUser'><Button>Вернуться к выбору роли</Button></Link>
-				</>
-			)
+		if(mainRole === 'OTHER'){
+			if(isLoadingGetInfoSubrole) return <><Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}/></>
+			
+			if(subRole==='SCHOOL'){
+				return(
+					<>
+						<span>Я ШКОЛЬНИК</span>
+					</>
+				)
+			}
+			if(subRole==='GUEST'){
+				return(
+					<>
+						<span>Я Гость</span>
+					</>
+				)
+			}
+			if(subRole==='ATTEND'){
+				return(
+					<>
+						<span>Я слушатель</span>
+					</>
+				)
+			}
+			if(subRole==='SEEKER'){
+				return(
+					<>
+						<span>Я соискатель</span>
+					</>
+				)
+			}
+			if(subRole===''){
+				return(
+					<>
+						<Link to='/infoUser'><Button>Вернуться к выбору роли</Button></Link>
+					</>
+				)
+			}
 		}
 		
+
 		if(isLoadingCheck)return <><Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}/></>
 
 		return (
-			<Spin spinning={isLoadingCheck}>
+		
 		  <ResponsiveReactGridLayout
 			className="layout"
 			cols={{ lg: 3, md: 2, sm: 2, xs: 2, xxs: 1 }}
@@ -226,9 +235,9 @@ const DropDrag = () => {
 		  >
 			{generateDOM}
 		  </ResponsiveReactGridLayout>
-		  </Spin>
+		
 		);
-	  };
+	};
 
 	return (
 		<div className="mt-[40px] w-[min(1600px, 100%)] mb-[100px]">

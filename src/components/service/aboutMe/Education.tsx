@@ -15,7 +15,7 @@ import {
 import type { UploadProps } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import uuid from 'react-uuid'
@@ -82,27 +82,46 @@ export const Education = () => {
 	const handleAddEducation = () => {
 		dispatch(addEducation(uuid()))
 	}
+
 	const onSubmit = async(id:any) => {
 		setIsEdit(false)
 
 		const values = await form.validateFields()
+		console.log('values',values)
 		const data = {
-			studentCountry: values.studentCountry,
-			nameOfInstitute: values.nameOfInstitute,
-			educationLevelId: values.educationLevelId,
-			documentNumber: values.documentNumber,
-			documentSeries: values.documentSeries,
-			graduateYear: dayjs(values.graduateYear).year(),
-			specialization: values.specialization,
-			countryId: values.countryId,
-			updatable:true,
-			id:id
+			studentCountry: values[`studentCountry-${id}`],
+			nameOfInstitute: values[`nameOfInstitute-${id}`],
+			educationLevelId: values[`educationLevelId-${id}`],
+			documentNumber: values[`documentNumber-${id}`],
+			documentSeries: values[`documentSeries-${id}`],
+			graduateYear: dayjs(values[`graduateYear-${id}`]).year(),
+			specialization: values[`specialization-${id}`],
+			countryId: values[`studentCountry-${id}`],
+			updatable: true,
+			id: id
 		}
 		putEducation(data)
 	}
+
 	const isChanged = typeAcc === 'OTHER' ||  (typeAcc === 'ABITUR' && acceptedData[0])
-	
-	if (isLoadingCountries || isLoadingEducationLevel || isLoadingEducation)return <SkeletonPage />
+
+	useEffect(() => {
+		if (educationData.length) {
+			educationData.forEach(item => {
+				form.setFieldsValue({
+					[`educationLevelId-${item.id}`]: item.educationLevelId,
+					[`studentCountry-${item.id}`]: item.countryId,
+					[`nameOfInstitute-${item.id}`]: item.nameOfInstitute,
+					[`documentNumber-${item.id}`]: item.documentNumber,
+					[`documentSeries-${item.id}`]: item.documentSeries,
+					[`graduateYear-${item.id}`]: dayjs(item.graduateYear, 'YYYY'),
+					[`specialization-${item.id}`]: item.specialization,
+				})
+			})
+		}
+	}, [educationData, form])
+
+	if (isLoadingCountries || isLoadingEducationLevel || isLoadingEducation) return <SkeletonPage />
 
 	return (
 		<Spin spinning={isLoadingEducation} >
@@ -132,8 +151,7 @@ export const Education = () => {
 								<div className="grid grid-cols-2 gap-10 mt-5 w-full max-lg:grid-cols-1 max-lg:gap-1">
 									<Form.Item
 										label={t('higherEducational')}
-										name={`educationLevelId`}
-										
+										name={`educationLevelId-${item.id}`}
 									>
 										{isEdit ? (
 											<Select
@@ -156,8 +174,7 @@ export const Education = () => {
 
 									<Form.Item
 										label={t('countryEducation')}
-										name={`studentCountry`}
-									
+										name={`studentCountry-${item.id}`}
 									>
 										{isEdit ? (
 											<Select
@@ -181,8 +198,7 @@ export const Education = () => {
 
 								<Form.Item
 									label={t('nameEducational')}
-									name={`nameOfInstitute`}
-									
+									name={`nameOfInstitute-${item.id}`}
 								>
 									{isEdit ? (
 										<Input
@@ -203,8 +219,7 @@ export const Education = () => {
 								<div className="grid grid-cols-2 mt-4 gap-x-10 gap-y-4 w-full max-lg:gap-1 max-lg:grid-cols-1">
 									<Form.Item
 										label={t('diplomaNumber')}
-										name={`documentNumber`}
-										
+										name={`documentNumber-${item.id}`}
 									>
 										{isEdit ? (
 											<Input
@@ -225,8 +240,7 @@ export const Education = () => {
 
 									<Form.Item
 										label={t('diplomaSeries')}
-										name={`documentSeries`}
-										
+										name={`documentSeries-${item.id}`}
 									>
 										{isEdit ? (
 											<Input
@@ -247,8 +261,7 @@ export const Education = () => {
 
 									<Form.Item
 										label={t('graduateYear')}
-										name={`graduateYear`}
-										
+										name={`graduateYear-${item.id}`}
 									>
 										{isEdit ? (
 											<DatePicker
@@ -270,8 +283,7 @@ export const Education = () => {
 
 									<Form.Item
 										label={t('specialization')}
-										name={`specialization`}
-										
+										name={`specialization-${item.id}`}
 										className={clsx(isChanged && 'hidden')}
 									>
 										{isEdit ? (
@@ -290,6 +302,27 @@ export const Education = () => {
 										)}
 									</Form.Item>
 								</div>
+							
+							</Space>
+							{isEdit && (
+								<Space direction="vertical">
+									<Space size={'small'} className="mt-5">
+										<Typography.Text className="text-black opacity-80 text-sm font-normal leading-none">
+											{t('AttachDocuments')}
+										</Typography.Text>
+										<Tooltip title={t('AttachDocsDescription')}>
+											<Button
+												type="default"
+												className="bg-transparent"
+												icon={<QuestionOutlined className="text-xs" />}
+											/>
+										</Tooltip>
+									</Space>
+									<Upload {...props}>
+										<Button icon={<UploadOutlined />}>{t('AddFile')}</Button>
+									</Upload>
+								</Space>
+							)}
 								{!isEdit ? (
 						<Button
 							className="border-solid border-bluekfu border-[1px] text-bluekfu !rounded-md"
@@ -313,27 +346,7 @@ export const Education = () => {
 							</Button>
 						</div>
 					)}
-							</Space>
-							{isEdit && (
-								<Space direction="vertical">
-									<Space size={'small'} className="mt-5">
-										<Typography.Text className="text-black opacity-80 text-sm font-normal leading-none">
-											{t('AttachDocuments')}
-										</Typography.Text>
-										<Tooltip title={t('AttachDocsDescription')}>
-											<Button
-												type="default"
-												className="bg-transparent"
-												icon={<QuestionOutlined className="text-xs" />}
-											/>
-										</Tooltip>
-									</Space>
-									<Upload {...props}>
-										<Button icon={<UploadOutlined />}>{t('AddFile')}</Button>
-									</Upload>
-								</Space>
-							)}
-						
+
 						</Space>
 					))}
 				</Space.Compact>

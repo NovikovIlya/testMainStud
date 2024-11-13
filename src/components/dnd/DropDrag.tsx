@@ -25,7 +25,6 @@ const DropDrag = () => {
 	const dispatch = useDispatch()
 	const layout = block
 	const mainRole = user?.roles[0].type
-	// const subRole = useAppSelector(state => state.auth.subRole)
 	const edit = useAppSelector(state => state.auth.edit)
 	const {data:dataCheck,isSuccess:isSuccessCheck, isLoading:isLoadingCheck} = useCheckIsEmployeeQuery()
 	const {data:dataGetInfoSubrole,isLoading:isLoadingGetInfoSubrole,isSuccess:isSuccessGetInfoSubrole} = useGetInfoUserQuery()
@@ -33,7 +32,7 @@ const DropDrag = () => {
 	const [mounted, setMounted] = useState(false)
 	const [toolbox, setToolbox] = useState<{ [index: string]: any[] }>({lg: []})
 	const ResponsiveReactGridLayout = useMemo(() => WidthProvider(Responsive), []);
-	const [message, setMessage] = useLocalStorageState<any>(
+	const [message, _] = useLocalStorageState<any>(
 		'typeAcc',
 		{
 		  defaultValue: 'STUD',
@@ -53,15 +52,15 @@ const DropDrag = () => {
 			}
 		}
 	},[isSuccessSubRole])
-	console.log('subRoleDrop',subRole)
+
 	useEffect(() => {
 		setMounted(true)
 	}, [])
 
-	useEffect(() => {
-		localStorage.setItem('dashboard', JSON.stringify(layout))
-		return () => {}
-	}, [layout])
+	// useEffect(() => {
+	// 	localStorage.setItem('dashboard', JSON.stringify(layout))
+	// 	return () => {}
+	// }, [layout])
 
 	useEffect(() => {
 		function handleWindowResize() {

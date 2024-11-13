@@ -134,31 +134,31 @@ export const Stages = () => {
 							stageName="SECOND"
 						/>
 					)}
-					{currentStage === 3 && (
+					{/* {currentStage === 3 && (
 						<EmplWorkConditions
 							respondId={respondId}
 							stageId={3}
 							stageName="THIRD"
 						/>
+					)} */}
+					{currentStage === 3 && (
+						<EmplMedExam respondId={respondId} stageId={3} stageName="FOURTH" />
 					)}
 					{currentStage === 4 && (
-						<EmplMedExam respondId={respondId} stageId={4} stageName="FOURTH" />
-					)}
-					{currentStage === 5 && (
 						<EmplInstruction
 							respondId={respondId}
-							stageId={5}
+							stageId={4}
 							stageName="FIFTH"
 						/>
 					)}
-					{currentStage === 6 && (
+					{currentStage === 5 && (
 						<EmplRequisites
 							respondId={respondId}
-							stageId={6}
+							stageId={5}
 							stageName="SIXTH"
 						/>
 					)}
-					{currentStage === 7 && (
+					{currentStage === 6 && (
 						<EmplSend respondId={respondId} stageId={7} stageName="SEVENTH" />
 					)}
 				</div>

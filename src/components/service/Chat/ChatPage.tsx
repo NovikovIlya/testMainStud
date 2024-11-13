@@ -8,6 +8,7 @@ import Stomp from 'stompjs'
 
 import { useAppSelector } from '../../../store'
 import {
+	useGetEmploymentPossibleRolesQuery,
 	useLazyGetChatMessagesQuery,
 	usePostChatMessageMutation,
 	useReadChatMessageMutation
@@ -40,7 +41,8 @@ export const ChatPage = () => {
 	const chatIdState = useAppSelector(state => state.chatId)
 	const ChatStatus = useAppSelector(state => state.chatResponceStatus)
 	const user = useAppSelector(state => state.auth.user)
-	const isEmpDemp = user?.roles.find(role => role.type === 'EMPL')
+	const { data: rolesData = undefined } = useGetEmploymentPossibleRolesQuery()
+	const isEmpDemp = rolesData?.find(role => role === 'PERSONNEL_DEPARTMENT')
 	const [getChatMessages, chatMessages] = useLazyGetChatMessagesQuery()
 	const [postMsg, postMsgResult] = usePostChatMessageMutation()
 	const [readMsg, readMsgResult] = useReadChatMessageMutation()
@@ -71,6 +73,8 @@ export const ChatPage = () => {
 	const [sessionId, setSessionId] = useState<string>('')
 
 	const dispatch = useDispatch()
+
+	const token = useAppSelector(state => state.auth.accessToken)
 
 	useEffect(() => {
 		setLastMessageId(0)
@@ -108,7 +112,7 @@ export const ChatPage = () => {
 		const socket = new SockJS(
 			`http://${emplBaseURL}employment-api/v1/ws?sender=${
 				isEmpDemp ? 'PERSONNEL_DEPARTMENT' : 'SEEKER'
-			}&token=Bearer ${isEmpDemp ? personnelDeparmentToken : seekerToken}`
+			}&token=Bearer ${token?.replaceAll('"', '')}`
 		)
 		socket.onopen = () => {
 			console.log('WS Open')
@@ -284,9 +288,7 @@ export const ChatPage = () => {
 					method: 'POST',
 					body: formData,
 					headers: {
-						Authorization: isEmpDemp
-							? `Bearer ${personnelDeparmentToken}`
-							: `Bearer ${seekerToken}`,
+						Authorization: `Bearer ${token}`,
 						'X-User-Name': sessionId
 					}
 				}

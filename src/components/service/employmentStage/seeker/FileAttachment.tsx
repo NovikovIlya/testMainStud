@@ -21,6 +21,8 @@ export const FileAttachment = (
 	const seekerToken =
 		'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJJQU1pdHJvZmFub3ZAc3R1ZC5rcGZ1LnJ1IiwiaWF0IjoxNzExNTc3OTMwLCJleHAiOjE3MTE1ODg3MzAsInNjb3BlIjoidXNlciIsInJvbGVzIjpbeyJ1c2VySWQiOiIyNTMxNjIiLCJzZXNzaW9uSWQiOiIyNDAzMjI3MTQ4NzUxOTQ4Mjk3MzMwOTA0NzM1MzY2NyIsInNlc3Npb25IYXNoIjoiRDJBMjI1QTc0OTlGMUNFMTZDQkUwMkI5RjZDOTE3RTEiLCJkb2N1bWVudHNIYXNoIjoiQjI2Q0IwQzNFOEFDMzZENkEwQ0I1MTJDRjMwMjM3NzciLCJsb2dpbiI6IklBTWl0cm9mYW5vdiIsInR5cGUiOiJTRUVLRVIifV0sInNlc3Npb25JZCI6IjI0MDMyMjcxNDg3NTE5NDgyOTczMzA5MDQ3MzUzNjY3Iiwic2Vzc2lvbkhhc2giOiJEMkEyMjVBNzQ5OUYxQ0UxNkNCRTAyQjlGNkM5MTdFMSIsImFsbElkIjoiMTc4NDQwIiwiZW1haWwiOiJtaXRyb18wMkBtYWlsLnJ1In0.4dmYBUEDz9UzKxvxWtQhA6poTVwFOkRn-YoSzngfVUs'
 
+	const token = useAppSelector(state => state.auth.accessToken)
+
 	const host = import.meta.env.REACT_APP_HOST
 	const port = import.meta.env.REACT_APP_PORT
 	const emplBaseURL = `${host ? host : 'localhost'}:${port ? port : 8082}/`
@@ -30,6 +32,7 @@ export const FileAttachment = (
 	const [fileType, setFileType] = useState<string>('')
 	const [isFileUploading, setIsFileUploading] = useState<boolean>(false)
 	const [fileSize, setFileSize] = useState<number>(0)
+	const [fileName, setFileName] = useState<string>('dkaskjdasd9')
 	const linkRef = useRef<HTMLAnchorElement | null>(null)
 
 	const foundDoc = empData.stages
@@ -60,6 +63,7 @@ export const FileAttachment = (
 					type: data.contentType as string
 				})
 				setFileSize(blobus.size)
+				setFileName(decodeURI(foundDoc.name))
 				const url = window.URL.createObjectURL(blobus)
 				if (linkRef.current) {
 					linkRef.current.href = url
@@ -81,10 +85,10 @@ export const FileAttachment = (
 				<>
 					<a
 						className="col-start-2 text-ellipsis overflow-clip pointer-events-auto"
-						download={true}
+						download={fileName}
 						ref={linkRef}
 					>
-						dkaskjdasd9
+						{fileName}
 					</a>
 					<div className="col-start-3 ml-auto flex gap-[36px] items-center">
 						<p className="">
@@ -118,15 +122,18 @@ export const FileAttachment = (
 			) : !props.seventhStage ? (
 				<Upload
 					className="col-start-3 ml-auto mr-[10%]"
+					accept=".png,.jpg,.jpeg,.pdf"
 					showUploadList={false}
 					action={`http://${emplBaseURL}employment-api/v1/respond/${props.respondId}/employment/file?employmentDocDefId=${props.id}`}
 					method="PUT"
 					beforeUpload={file => {
 						setFileType(file.type)
+						setFileName(file.name)
 					}}
 					headers={{
-						Authorization: `Bearer ${seekerToken}`,
-						'Content-Type': fileType
+						Authorization: `Bearer ${token?.replaceAll('"', '')}`,
+						'Content-Type': fileType,
+						'Content-Disposition': `filename="${encodeURI(fileName)}"`
 					}}
 					onChange={options => {
 						options.file.status === 'uploading'

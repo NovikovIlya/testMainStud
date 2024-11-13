@@ -138,14 +138,16 @@ export const RespondItem = (props: RespondItemType & { refetch: Function }) => {
 					>
 						Посмотреть
 					</Button>
-					<Button
-						onClick={() => {
-							handleNavigate(`/services/myresponds/chat/id/${chatId.id}`)
-						}}
-						className="font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black"
-					>
-						Перейти в чат
-					</Button>
+					{props.name && (
+						<Button
+							onClick={() => {
+								handleNavigate(`/services/myresponds/chat/id/${chatId.id}`)
+							}}
+							className="font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black"
+						>
+							Перейти в чат
+						</Button>
+					)}
 					<Button
 						className="rounded-[54.5px] border-solid border-black !px-[16px] !py-[7px] !w-[50px]"
 						onClick={() => {

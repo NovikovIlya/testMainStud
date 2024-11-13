@@ -60,6 +60,7 @@ export type IDocumentsRequest = {
 export interface Role {
 	login: string
 	id: string
+	userId: string
 	type: string
 }
 export interface ICalendarItem {
@@ -446,6 +447,7 @@ export type EmploymentDataType = {
 			id: number
 			docType: string
 			status: 'ATTACHED' | 'NOT_ATTACHED'
+			name: string
 		}[]
 		hasRequisites?: boolean
 		testLink?: string

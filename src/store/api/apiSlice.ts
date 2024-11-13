@@ -14,7 +14,7 @@ const baseQuery = fetchBaseQuery({
 	prepareHeaders(headers, { getState }) {
 		const token = (getState() as RootState).auth.accessToken
 
-		if (token && !headers.has('Authorization')) {
+		if (token) {
 			headers.set('authorization', `Bearer ${token.replaceAll('"', '')}`)
 		}
 		headers.set('Accept-Language', i18next.language)
@@ -58,5 +58,5 @@ const baseQueryWithReAuth = async (
 export const apiSlice = createApi({
 	baseQuery: baseQueryWithReAuth,
 	endpoints: () => ({}),
-	tagTypes: ['Tasks', 'Contracts', 'Practice'],
+	tagTypes: ['Tasks', 'Contracts', 'Practice']
 })

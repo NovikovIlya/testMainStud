@@ -9,11 +9,11 @@ export const NavPanel = () => {
 	const stages: { id: number; text: string }[] = [
 		{ id: 1, text: 'Направление на мед. осмотр' },
 		{ id: 2, text: 'Прикрепление документов' },
-		{ id: 3, text: 'Трудовые условия' },
-		{ id: 4, text: 'Медицинский осмотр' },
-		{ id: 5, text: 'Инструктаж' },
-		{ id: 6, text: 'Реквизиты' },
-		{ id: 7, text: 'Отправка' }
+		// { id: 3, text: 'Трудовые условия' },
+		{ id: 3, text: 'Медицинский осмотр' },
+		{ id: 4, text: 'Инструктаж' },
+		{ id: 5, text: 'Реквизиты' },
+		{ id: 6, text: 'Отправка' }
 	]
 
 	const dispatch = useDispatch()

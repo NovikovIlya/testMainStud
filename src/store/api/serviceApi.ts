@@ -354,6 +354,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 				respondInfo: VacancyRespondItemType & { vacancyId: number }
 				unreadCount: number
 				lastMessageDate: string
+				chatName: string
 			}[],
 			{
 				vacancyId: number | null
@@ -435,6 +436,35 @@ export const serviceApi = apiSlice.injectEndpoints({
 			query: () => ({
 				url: `http://${emplBaseURL}employment-api/v1/employment/document-definitions`,
 				headers: { Authorization: `Bearer ${personnelDeparmentToken}` }
+			})
+		}),
+		getEmploymentPossibleRoles: builder.query<string[], void>({
+			query: () => ({
+				url: `http://${emplBaseURL}employment-api/v1/user/my/roles`
+			})
+		}),
+		getSeekerChatPreviews: builder.query<
+			{
+				content: {
+					chatId: number
+					respondId: number
+					vacancyId: number
+					chatName: string
+					lastMessageDate: string
+					undreadCount: number
+					respondStatus: string
+				}[]
+			},
+			{
+				page: number
+				pageSize: number
+			}
+		>({
+			query: ({ page, pageSize }) => ({
+				url: `http://${emplBaseURL}employment-api/v1/chat/seeker-chats?page=${page}&size=${pageSize}`,
+				headers: {
+					Authorization: `Bearer ${seekerToken}`
+				}
 			})
 		}),
 		postPhone: builder.mutation({
@@ -1003,14 +1033,25 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
-		downloadEmploymentStageFile: builder.query<Blob, { fileId: number }>({
+		downloadEmploymentStageFile: builder.query<
+			{ href: string; size: number },
+			{ fileId: number }
+		>({
 			query: arg => ({
-				url: `http://${emplBaseURL}employment-api/v1/management/employment/sub-stage/${arg.fileId}`,
+				url: `http://${emplBaseURL}employment-api/v1/management/employment/file/${arg.fileId}`,
 				method: 'GET',
 				headers: {
 					Authorization: `Bearer ${personnelDeparmentToken}`
+				},
+				responseHandler: async res => {
+					const data = await res.blob()
+					const file = new Blob([data], {
+						type: res.headers.get('content-type') as string
+					})
+					return { href: window.URL.createObjectURL(file), size: file.size }
 				}
-			})
+			}),
+			keepUnusedDataFor: 0
 		}),
 		changeCardStatusRequest: builder.mutation<void, { subStageId: number }>({
 			query: arg => ({
@@ -1171,5 +1212,8 @@ export const {
 	useMarkBankCardApplicationFormedMutation,
 	useUpdateEmploymentDocumentsMutation,
 	useGetAccountingStagesQuery,
-	useSetHasRequisitesEmploymentMutation
+	useSetHasRequisitesEmploymentMutation,
+	useGetEmploymentPossibleRolesQuery,
+	useLazyGetSeekerChatPreviewsQuery,
+	useLazyDownloadEmploymentStageFileQuery
 } = serviceApi

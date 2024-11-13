@@ -26,6 +26,7 @@ import { isMobileDevice } from '../../utils/hooks/useIsMobile'
 import logo from '../../assets/images/logo.svg'
 import { UserSwitchOutlined } from '@ant-design/icons'
 import { useLocalStorageState } from 'ahooks'
+import { useGetRoleQuery } from '../../store/api/serviceApi'
 
 
 
@@ -37,18 +38,29 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const { t, i18n } = useTranslation()
 	const location = useLocation();
 	const user = useAppSelector(state => state.auth.user)
-	const subRole = useAppSelector(state => state.auth.subRole)
+	// const subRole = useAppSelector(state => state.auth.subRole)
 	const isMobile = isMobileDevice();
 	const urlContainsPractice = location.pathname.includes('practice');
+	const {data:dataSubRole,isSuccess:isSuccessSubRole,isLoading:isLoadingSubRole} = useGetRoleQuery(null)
 	const roles = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '')?.roles : [];
 	const username = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '')?.username : '';
 	const maiRole = roles.find((item:any) => item.login === username)?.type || '';
-	const [subRoleLocal, setSubrole] = useLocalStorageState<any>(
-		'subRole',
+	const [subRole, setSubrole] = useLocalStorageState<any>('subRole',{  defaultValue: ''});
+	const [message, setMessage] = useLocalStorageState<any>(
+		'typeAcc',
 		{
-		  defaultValue: '',
+		  defaultValue: 'STUD',
 		},
 	);
+
+	useEffect(()=>{
+		if(isSuccessSubRole){
+			if(message ==='OTHER'){
+			setSubrole(dataSubRole ? dataSubRole[0].role : '')
+			// setSubrole(dataSubRole ? dataSubRole : '')
+			}
+		}
+	},[isSuccessSubRole])
 
 	useEffect(()=>{
 		if(isMobile){
@@ -105,7 +117,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 			label: (
 				<div
 					onClick={() => {
-						navigate('/infoUser')
+						navigate('/infoUserUpdate')
 					}}
 					className={`${maiRole==='OTHER'? "" :"hidden"} flex items-center gap-[15px] px-[4px] py-[5px]`}
 				>
@@ -199,7 +211,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 			// document.querySelector('header').style.marginLeft = '-100px'
 		}
 	}
-
+	console.log('subRoleLocal,subRoleLocal',subRole)
 	return (
 		<header
 			className={clsx(
@@ -358,7 +370,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 									</div>
 									<div className="text-sm">{user?.roles && user?.roles?.length > 1 ? ((user?.roles?.map((item)=><div className={`${item.login === username ? 'font-extrabold' : ''}`}>{getRole(item.type)}</div>)))
 									 : String((user?.roles?.map((item)=>getRole(item.type))))}</div>
-									 <div>{getRole(subRoleLocal)}</div>
+									 <div>{(subRole)}</div>
 								</div>
 							</Space>
 						</Dropdown>

@@ -17,6 +17,7 @@ import { block } from './constant'
 import { Link } from 'react-router-dom'
 import { useCheckIsEmployeeQuery } from '../../store/api/practiceApi/contracts'
 import { useGetInfoUserQuery } from '../../store/api/formApi'
+import { useGetRoleQuery } from '../../store/api/serviceApi'
 
 
 const DropDrag = () => {
@@ -38,9 +39,21 @@ const DropDrag = () => {
 		  defaultValue: 'STUD',
 		},
 	);
+	const {data:dataSubRole,isSuccess:isSuccessSubRole,isLoading:isLoadingSubRole} = useGetRoleQuery(null)
 	const [subRole, setSubrole] = useLocalStorageState<any>('subRole',{  defaultValue: ''});
 	const [windowSize, setWindowSize] = useState(getWindowSize())
-	
+
+	// получение саброли
+	useEffect(()=>{
+		if(isSuccessSubRole){
+			if(message ==='OTHER'){
+			console.log('dataSubRole',dataSubRole)
+			setSubrole(dataSubRole ? dataSubRole[0].role : '')
+			// setSubrole(dataSubRole ? dataSubRole : '')
+			}
+		}
+	},[isSuccessSubRole])
+	console.log('subRoleDrop',subRole)
 	useEffect(() => {
 		setMounted(true)
 	}, [])
@@ -159,7 +172,7 @@ const DropDrag = () => {
 
 	const renderContent = () => {
 		if (mainRole === 'ABITUR' || (mainRole === 'OTHER' && subRole==='ABIT')) {
-		  if(isLoadingGetInfoSubrole) return <><Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}/></>
+		  if(isLoadingGetInfoSubrole || isSuccessGetInfoSubrole) return <><Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}/></>
 		  return (
 			<>
 			  <Apply />
@@ -172,7 +185,7 @@ const DropDrag = () => {
 		  );
 		}
 		if(mainRole === 'OTHER'){
-			if(isLoadingGetInfoSubrole) return <><Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}/></>
+			if(isLoadingSubRole) return <><Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}/></>
 			
 			if(subRole==='SCHOOL'){
 				return(
@@ -215,7 +228,6 @@ const DropDrag = () => {
 		if(isLoadingCheck)return <><Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}/></>
 
 		return (
-		
 		  <ResponsiveReactGridLayout
 			className="layout"
 			cols={{ lg: 3, md: 2, sm: 2, xs: 2, xxs: 1 }}

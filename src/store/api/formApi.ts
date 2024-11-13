@@ -41,6 +41,8 @@ export const formApi = apiSlice.injectEndpoints({
 				url: 'user-api/users/me/education'
 			}),
 			keepUnusedDataFor:1,
+			providesTags: ['Education']
+
 		}),
 		postEducation: build.mutation<any, any>({
 			query: (body) => ({
@@ -49,11 +51,28 @@ export const formApi = apiSlice.injectEndpoints({
 				method: 'POST'
 			})
 		}),
+		putEducation: build.mutation<any, any>({
+			query: (body) => ({
+				url: 'user-api/users/me/education',
+				body,
+				method: 'PUT'
+			}),
+			invalidatesTags: ['Education']
+			
+		}),
 		getParents: build.query<any, void>({
 			query: () => ({
 				url: 'user-api/users/me/parent'
 			}),
 			keepUnusedDataFor:1,
+		}),
+		postParents: build.mutation<any, any>({
+			query: (body) => ({
+				url: 'user-api/users/me/parent',
+				body,
+				method: 'POST'
+			}),
+		
 		}),
 		getWorks: build.query<IWorkState, void>({
 			query: () => ({
@@ -91,10 +110,11 @@ export const formApi = apiSlice.injectEndpoints({
 				return {
 					url: 'user-api/users/me/address',
 					body: body,
-					method: 'POST'
+					method: 'PUT'
 				}
 			}
 		})
+
 	})
 })
 
@@ -110,5 +130,7 @@ export const {
 	usePostDocumentMutation,
 	useGetAllDocumentsQuery,
 	usePostAddressMutation,
-	usePostEducationMutation
+	usePostEducationMutation,
+	usePutEducationMutation,
+	usePostParentsMutation
 } = formApi

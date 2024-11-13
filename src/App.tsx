@@ -23,6 +23,7 @@ import { Notification } from './components/notification/Notification'
 import EditSchedule from './components/service/practices/forming-schedule/EditSchedule'
 import ErrorFallback from './components/ErrorFallback'
 import { checkAndResetStorage } from './utils/storageVersion'
+import { InfoUserUpdate } from './components/formUser/InfoUserUpdate'
 
 
 const App = () => {
@@ -65,6 +66,7 @@ const App = () => {
 						<Route element={<RequireAuth />}>
 							<Route path="/user/*" element={<User />} />
 							<Route path="/infoUser" element={<InfoUser />} />
+							<Route path="/infoUserUpdate" element={<InfoUserUpdate />} />
 							<Route path="/form" element={<FormModal />} />
 							<Route path="/education" element={<EducationForm />} />
 							<Route path="/documents" element={<DocumentForm />} />

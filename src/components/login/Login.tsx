@@ -34,7 +34,7 @@ export const Login = () => {
 	const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const paramValue = searchParams.get('lan');
-	const {data:dataSubRole,isSuccess:isSuccessSubRole} = useGetRoleQuery(null,{skip:!isSuccess})
+	// const {data:dataSubRole,isSuccess:isSuccessSubRole} = useGetRoleQuery(null,{skip:!isSuccess})
 	const [message, setMessage] = useLocalStorageState<any>(
 		'typeAcc',
 		{
@@ -47,7 +47,7 @@ export const Login = () => {
 		  defaultValue: '',
 		},
 	);
-	console.log('dataSubRoledataSubRoledataSubRole',dataSubRole)
+
 	const dispatch = useAppDispatch()
 
 
@@ -72,12 +72,7 @@ export const Login = () => {
 		}
 	}, [isSuccess]) 
 
-	useEffect(()=>{
-		if(isSuccessSubRole){
-			console.log('dataSubRole',dataSubRole)
-			// setSubrole(dataSubRole ? dataSubRole : '')
-		}
-	},[isSuccessSubRole])
+
 
 	const onFinish = async (values: { email: string; password: string }) => {
 		try {

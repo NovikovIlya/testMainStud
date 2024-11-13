@@ -104,6 +104,7 @@ export const AboutMe = () => {
 						</div>
 					) : (
 						<Input
+							disabled
 							placeholder={t('surname')}
 							size="large"
 							maxLength={200}
@@ -121,6 +122,7 @@ export const AboutMe = () => {
 						</div>
 					) : (
 						<Input
+						disabled
 							placeholder={t('name')}
 							size="large"
 							className=""

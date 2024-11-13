@@ -13,6 +13,7 @@ import { useAppDispatch, useAppSelector } from '../store'
 import { setEdit } from '../store/reducers/authSlice'
 import InfoAbitAccepted from './InfoAbitAccepted'
 import { useLocalStorageState } from 'ahooks'
+import { useGetRoleQuery } from '../store/api/serviceApi'
 
 export const User = () => {
 	const { t,i18n } = useTranslation()
@@ -21,7 +22,7 @@ export const User = () => {
 	const user = useAppSelector(state => state.auth.user)
 	const dispatch = useAppDispatch()
 	const [acceptedData,setAcceptedData] = useLocalStorageState<any>('acceptedData',{defaultValue:null})
-	
+
 	const hide = () => {
 		setOpen(false)
 	}
@@ -44,6 +45,8 @@ export const User = () => {
 			}))
 		}
 	},[user?.roles])
+
+
 
 	return (
 		<Layout>

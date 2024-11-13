@@ -7,10 +7,7 @@ import pencil from '../../assets/images/pencil.png'
 import rectangle from '../../assets/images/rectangle.png'
 import { LogoIasSvg } from '../../assets/svg'
 
-export const ImagesLayout: FC<PropsWithChildren<{ first?: boolean }>> = ({
-	children,
-	first
-}) => {
+export const ImagesLayout: FC<PropsWithChildren<{ first?: boolean }>> = ({children,first}) => {
 	const { t, i18n } = useTranslation()
 
 	const changeLanguage = (language: string) => {

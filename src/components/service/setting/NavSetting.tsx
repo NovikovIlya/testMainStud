@@ -17,56 +17,66 @@ import { Photo } from './Photo'
 import { ThemeDesign } from './ThemeDesign'
 import { VisuallyImpaired } from './VisuallyImpaired'
 import MainContact from './Contacts/MainContact'
+import { useLocalStorageState } from 'ahooks'
 
 
-const navList = [
-	{
-		id: '/services/setting/contactInformation',
-		icon: <ContactInformationSvg />,
-		name: 'Контактные данные'
-	},
-	// {
-	// 	id: '/services/setting/photo',
-	// 	icon: <PhotoSvg />,
-	// 	name: 'ID фото'
-	// },
-	{
-		id: '/services/setting/changePassword',
-		icon: <ChangePasswordSvg />,
-		name: 'Изменить пароль'
-	},
-	// {
-	// 	id: '/services/setting/themeDesign',
-	// 	icon: <ThemeDesignSvg />,
-	// 	name: 'Тема оформления'
-	// },
-	// {
-	// 	id: '/services/setting/language',
-	// 	icon: <LanguageSvg />,
-	// 	name: 'Язык'
-	// },
-	// {
-	// 	id: '/services/setting/visuallyImpaired',
-	// 	icon: <VisuallyImpairedSvg />,
-	// 	name: 'Для слабовидящих'
-	// }
-]
+
 
 export const NavSetting = () => {
 	const { pathname } = useLocation()
 	const navigate = useNavigate()
 	const { t } = useTranslation()
-
+	const [mainRole, _] = useLocalStorageState<any>('typeAcc',
+		{ defaultValue: 'STUD'}
+	);
+	const navList = [
+		{
+			id: '/services/setting/contactInformation',
+			icon: <ContactInformationSvg />,
+			name: 'Контактные данные',
+			hidden:false,
+		},
+		// {
+		// 	id: '/services/setting/photo',
+		// 	icon: <PhotoSvg />,
+		// 	name: 'ID фото'
+		// },
+		{
+			id: '/services/setting/changePassword',
+			icon: <ChangePasswordSvg />,
+			name: 'Изменить пароль',
+			// hidden:mainRole==='OTHER' ? false : true,
+			hidden:mainRole==='OTHER' ? true : true,
+		
+		},
+		// {
+		// 	id: '/services/setting/themeDesign',
+		// 	icon: <ThemeDesignSvg />,
+		// 	name: 'Тема оформления'
+		// },
+		// {
+		// 	id: '/services/setting/language',
+		// 	icon: <LanguageSvg />,
+		// 	name: 'Язык'
+		// },
+		// {
+		// 	id: '/services/setting/visuallyImpaired',
+		// 	icon: <VisuallyImpairedSvg />,
+		// 	name: 'Для слабовидящих'
+		// }
+	]
+	console.log('mainRole',mainRole)
 	const handleNavigate = (url: string) => {
 		navigate(url)
 	}
-	const handleList = navList.map(({ icon, name, id }, index) => {
+	const handleList = navList.map(({ icon, name, id,hidden }, index) => {
 		return (
 			<li
 				key={index}
 				className={clsx(
 					'w-full flex items-center py-2 pl-8 hover:bg-[#F5F8FB]  cursor-pointer',
-					id === pathname && 'bg-[#F5F8FB]'
+					id === pathname && 'bg-[#F5F8FB]',
+					hidden ? 'hidden' : ''
 				)}
 				onClick={() => handleNavigate(id)}
 			>

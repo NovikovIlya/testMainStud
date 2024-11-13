@@ -186,7 +186,8 @@ export const serviceApi = apiSlice.injectEndpoints({
                     url: 'user-api/users/me/role',
                     method: 'GET'
                 }
-            }
+            },
+            keepUnusedDataFor: 1,
         })
        
     })

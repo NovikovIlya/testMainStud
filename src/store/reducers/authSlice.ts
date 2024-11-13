@@ -37,6 +37,8 @@ const authSlice = createSlice({
 			localStorage.removeItem('typeAcc')
 			localStorage.removeItem('password')
 			localStorage.removeItem('acceptedData')
+	
+			
 			// localStorage.clear()
 		},
 		setEdit: state => {

@@ -29,6 +29,7 @@ import { ImagesLayout } from './ImagesLayout'
 import { usePostEducationMutation } from '../../store/api/formApi'
 
 export const EducationForm = () => {
+	const [form] = Form.useForm()
 	const dispatch = useDispatch()
 	const userRole = useAppSelector(state => state.auth.user?.roles[0].type)
 	const navigate = useNavigate()
@@ -47,9 +48,21 @@ export const EducationForm = () => {
 		navigate('/documents')
 	}
 	const handleOk = async () => {
+		const values = await form.validateFields()
 		const data={
-			
+			studentCountry:values.studentCountry,
+			nameOfInstitute:values.nameOfInstitute,
+			educationLevelId:values.educationLevelId,
+			documentNumber:values.documentNumber,
+			documentSeries:values.documentSeries,
+			specialization:values.specialization,
+			graduateYear:dayjs(values.graduateYear).year(),
+			countryId:values.countryId,
+			updatable:true,
+
+
 		}
+		postEducation(data)
 		if (userRole === 'SEEKER') navigate('/work')
 		else navigate('/user')
 	}
@@ -58,7 +71,7 @@ export const EducationForm = () => {
 	}
 	return (
 		<ImagesLayout>
-			<Form>
+			<Form form={form} className="w-full" onFinish={handleOk}> 
 			<div className="w-full flex justify-center  text-sm">
 				<div className="container max-w-2xl flex flex-col  pч-5">
 					<h3 className="self-start text-xl">{t('education')}</h3>

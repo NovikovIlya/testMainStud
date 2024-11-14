@@ -1,9 +1,9 @@
-import { useGetAccountingStagesQuery } from '../../../../store/api/serviceApi'
+import { useGetAccountingStagesQuery } from '../../../../../store/api/serviceApi'
 import React, { useState } from 'react'
 import { Button, Spin } from 'antd'
 import { RequisiteItem } from './RequisiteItem'
 import { LoadingOutlined } from '@ant-design/icons'
-import { useAppSelector } from '../../../../store'
+import { useAppSelector } from '../../../../../store'
 
 export const RequisiteMain = () => {
 

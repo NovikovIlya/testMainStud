@@ -1,8 +1,8 @@
 import {Button, Spin} from 'antd'
-import { NocircleArrowIcon } from '../../jobSeeker/NoCircleArrowIcon'
-import { AvatartandardSvg } from '../../../../assets/svg/AvatarStandardSvg'
-import { useAppSelector } from '../../../../store'
-import { useGetRespondFullInfoQuery } from '../../../../store/api/serviceApi'
+import { NocircleArrowIcon } from '../../../jobSeeker/NoCircleArrowIcon'
+import { AvatartandardSvg } from '../../../../../assets/svg/AvatarStandardSvg'
+import { useAppSelector } from '../../../../../store'
+import { useGetRespondFullInfoQuery } from '../../../../../store/api/serviceApi'
 import {LoadingOutlined} from "@ant-design/icons";
 import React from "react";
 

@@ -1,12 +1,12 @@
 import { Button } from 'antd'
-import { setCurrentResponce } from '../../../../store/reducers/CurrentResponceSlice'
+import { setCurrentResponce } from '../../../../../store/reducers/CurrentResponceSlice'
 import {
 	setCurrentRequisiteSeekerName,
 	setCurrentRequisiteSeekerVacancy
-} from '../../../../store/reducers/RequisiteReducers/RequisiteSeekerReducer'
+} from '../../../../../store/reducers/RequisiteReducers/RequisiteSeekerReducer'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { EmploymentStageItemType } from '../../../../store/reducers/type'
+import { EmploymentStageItemType } from '../../../../../store/reducers/type'
 
 export const RequisiteItem = ( props : EmploymentStageItemType ) => {
 
@@ -48,7 +48,7 @@ export const RequisiteItem = ( props : EmploymentStageItemType ) => {
 							dispatch(setCurrentResponce(props.respondId))
 							dispatch(setCurrentRequisiteSeekerVacancy(props.vacancy.name))
 							dispatch(setCurrentRequisiteSeekerName( props.applicant.lastName + ' ' + props.applicant.firstName + ' ' + props.applicant.middleName))
-							navigate(`/services/personnelaccounting/requisite/requisite-review`)
+							navigate(`/services/personnelaccounting/accounting/requisite/requisite-review`)
 						}}>
 						Подробнее
 					</Button>

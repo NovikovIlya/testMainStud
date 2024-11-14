@@ -65,7 +65,7 @@ export const Education = () => {
 	const { t, i18n } = useTranslation()
 	const dispatch = useDispatch()
 	const [isEdit, setIsEdit] = useState(false)
-	const { data: education, isLoading: isLoadingEducation } = useGetEducationQuery()
+	const { data: education, isLoading: isLoadingEducation,isSuccess } = useGetEducationQuery()
 	const educationData = useAppSelector(state => state.Education)
 	if (education !== undefined && education.length) dispatch(allData(education))
 	const role = useAppSelector(state => state.auth.user?.roles[0].type)
@@ -74,13 +74,27 @@ export const Education = () => {
 	const [acceptedData,setAcceptedData] = useLocalStorageState<any>('acceptedData',{defaultValue:null})
     const [typeAcc, _] = useLocalStorageState<any>('typeAcc',{  defaultValue: 'STUD',});
 	const [putEducation] = usePutEducationMutation()
-
+	const [forms,setForm] = useState<any>([])
+	const [isBlur,setIsBlur] = useState<any>([])
+	console.log('isBlur',isBlur)
 	const handleDeleteEducation = (id: string) => {
 		dispatch(idDelete(id))
 	}
-
+	console.log('forms',forms)
 	const handleAddEducation = () => {
 		dispatch(addEducation(uuid()))
+		setForm(forms.concat({
+			id:uuid(),
+			studentCountry: '',
+			nameOfInstitute: '',
+			educationLevelId: '',
+			documentNumber: '',
+			documentSeries: '',
+			graduateYear: '',
+			specialization: '',
+			countryId: '',
+			updatable: true,
+		}))
 	}
 
 	const onSubmit = async(id:any) => {
@@ -105,9 +119,15 @@ export const Education = () => {
 
 	const isChanged = typeAcc === 'OTHER' ||  (typeAcc === 'ABITUR' && acceptedData[0])
 
+	useEffect(()=>{
+		if(isSuccess){
+			setForm(education)
+		}
+	},[education,isSuccess])
+
 	useEffect(() => {
-		if (educationData.length) {
-			educationData.forEach(item => {
+		if (education?.length) {
+			education?.forEach(item => {
 				form.setFieldsValue({
 					[`educationLevelId-${item.id}`]: item.educationLevelId,
 					[`studentCountry-${item.id}`]: item.countryId,
@@ -119,7 +139,7 @@ export const Education = () => {
 				})
 			})
 		}
-	}, [educationData, form])
+	}, [education, form])
 
 	if (isLoadingCountries || isLoadingEducationLevel || isLoadingEducation) return <SkeletonPage />
 
@@ -131,13 +151,13 @@ export const Education = () => {
 					<Typography.Title level={3} className="text-black text-2xl font-bold leading-normal">
 						{t('education')}
 					</Typography.Title>
-					{educationData.map((item, index) => (
+					{forms?.map((item:any, index:any) => (
 						<Space direction="vertical" key={item.id} className="w-full">
 							<Space>
 								<Typography.Text ellipsis className="font-bold mr-3">
 									{t('educationDocument')}
 								</Typography.Text>
-								<Typography.Text
+								{/* <Typography.Text
 									onClick={() => handleDeleteEducation(item.id)}
 									className={clsx(
 										'cursor-pointer opacity-40 text-center text-black text-sm font-normal leading-[18px] mr-3',
@@ -145,15 +165,15 @@ export const Education = () => {
 									)}
 								>
 									{t('Delete')}
-								</Typography.Text>
+								</Typography.Text> */}
 							</Space>
 							<Space size={'large'} direction="vertical" className="w-full">
 								<div className="grid grid-cols-2 gap-10 mt-5 w-full max-lg:grid-cols-1 max-lg:gap-1">
 									<Form.Item
 										label={t('higherEducational')}
-										name={`educationLevelId-${item.id}`}
+										name={`educationLevelId-${item?.id}`}
 									>
-										{isEdit ? (
+										{isEdit && isBlur?.includes(item?.id)? (
 											<Select
 												size="large"
 												className="w-full rounded-lg"
@@ -176,7 +196,7 @@ export const Education = () => {
 										label={t('countryEducation')}
 										name={`studentCountry-${item.id}`}
 									>
-										{isEdit ? (
+										{isEdit && isBlur?.includes(item?.id)? (
 											<Select
 												size="large"
 												className="w-full rounded-lg"
@@ -200,7 +220,7 @@ export const Education = () => {
 									label={t('nameEducational')}
 									name={`nameOfInstitute-${item.id}`}
 								>
-									{isEdit ? (
+									{isEdit && isBlur?.includes(item?.id)? (
 										<Input
 											maxLength={200}
 											size="large"
@@ -221,7 +241,7 @@ export const Education = () => {
 										label={t('diplomaNumber')}
 										name={`documentNumber-${item.id}`}
 									>
-										{isEdit ? (
+										{isEdit &&isBlur?.includes(item?.id)? (
 											<Input
 												placeholder="1234"
 												size="large"
@@ -242,7 +262,7 @@ export const Education = () => {
 										label={t('diplomaSeries')}
 										name={`documentSeries-${item.id}`}
 									>
-										{isEdit ? (
+										{isEdit &&isBlur?.includes(item.id)? (
 											<Input
 												placeholder="1234"
 												size="large"
@@ -263,7 +283,7 @@ export const Education = () => {
 										label={t('graduateYear')}
 										name={`graduateYear-${item.id}`}
 									>
-										{isEdit ? (
+										{isEdit &&isBlur?.includes(item.id)? (
 											<DatePicker
 												className="w-full"
 												size="large"
@@ -286,7 +306,7 @@ export const Education = () => {
 										name={`specialization-${item.id}`}
 										className={clsx(isChanged && 'hidden')}
 									>
-										{isEdit ? (
+										{isEdit &&isBlur?.includes(item.id)? (
 											<Input
 												placeholder={t('web')}
 												size="large"
@@ -304,7 +324,7 @@ export const Education = () => {
 								</div>
 							
 							</Space>
-							{isEdit && (
+							{isEdit && isBlur?.includes(item.id) && (
 								<Space direction="vertical">
 									<Space size={'small'} className="mt-5">
 										<Typography.Text className="text-black opacity-80 text-sm font-normal leading-none">
@@ -323,10 +343,14 @@ export const Education = () => {
 									</Upload>
 								</Space>
 							)}
-								{!isEdit ? (
+								{isBlur.length > 0 && !isBlur?.includes(item.id) ? '' :
+								!isEdit  ? (
 						<Button
 							className="border-solid border-bluekfu border-[1px] text-bluekfu !rounded-md"
-							onClick={() => setIsEdit(true)}
+							onClick={() => {
+								setIsEdit(true)
+								setIsBlur((prev:any)=>[...prev, item.id])
+							}}
 						>
 							{t('edit')}
 						</Button>
@@ -334,13 +358,19 @@ export const Education = () => {
 						<div className='flex gap-3'>
 							<Button
 								className="border-solid border-bluekfu border-[1px] text-bluekfu !rounded-md"
-								onClick={() => setIsEdit(false)}
+								onClick={() => {
+									setIsEdit(false)
+									setIsBlur((prev:any)=>prev.filter((el:any)=>el!==item.id))
+								}}
 							>
 								Отмена
 							</Button>
 							<Button
 								className="border-solid border-bluekfu border-[1px] text-bluekfu !rounded-md"
-								onClick={()=>onSubmit(item.id)}
+								onClick={()=>{
+									onSubmit(item.id)
+									setIsBlur((prev:any)=>prev.filter((el:any)=>el!==item.id))
+								}}
 							>
 								Сохранить
 							</Button>
@@ -350,11 +380,11 @@ export const Education = () => {
 						</Space>
 					))}
 				</Space.Compact>
-				{isEdit && (
+				
 					<Space
 						direction="vertical"
 						size={'large'}
-						className={clsx('w-full flex items-center', isChanged && 'hidden')}
+						className={clsx('w-full flex items-center')}
 					>
 						<Button
 							className="rounded-full text-center p-0 w-8 h-8 text-xl"
@@ -364,7 +394,7 @@ export const Education = () => {
 							+
 						</Button>
 					</Space>
-				)}
+			
 				<Space
 					direction="vertical"
 					size={'small'}

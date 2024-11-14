@@ -81,7 +81,7 @@ export const InfoUserUpdate = () => {
 								</Typography>
 							</label>
 						</ListItem>
-						<ListItem className="p-0 "  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
+						{/* <ListItem className="p-0 "  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
 							<label
 								htmlFor="SCHOOL"
 								className="px-3 py-2 flex items-start  w-full cursor-pointer"
@@ -103,7 +103,7 @@ export const InfoUserUpdate = () => {
 									{t('roleSchoolboyDescription')}
 								</Typography>
 							</label>
-						</ListItem>
+						</ListItem> */}
 						<ListItem className="p-0"  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
 							<label
 								htmlFor="ABIT"
@@ -127,7 +127,7 @@ export const InfoUserUpdate = () => {
 								</Typography>
 							</label>
 						</ListItem>
-						<ListItem className="p-0"  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
+						{/* <ListItem className="p-0"  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
 							<label
 								htmlFor="ATTEND"
 								className="px-3 py-2 flex items-start  w-full cursor-pointer"
@@ -149,8 +149,8 @@ export const InfoUserUpdate = () => {
 									{t('roleListenerDescription')}
 								</Typography>
 							</label>
-						</ListItem>
-						<ListItem className="p-0"  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
+						</ListItem> */}
+						{/* <ListItem className="p-0"  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
 							<label
 								htmlFor="SEEKER"
 								className="px-3 py-2 flex items-start  w-full cursor-pointer"
@@ -172,7 +172,7 @@ export const InfoUserUpdate = () => {
 									{t('roleApplicantDescription')}
 								</Typography>
 							</label>
-						</ListItem>
+						</ListItem> */}
 					</List>
 
 					<div className="border border-[#BDBDBD] border-solid rounded py-6 px-12 px- mt-10">

@@ -79,9 +79,12 @@ export const EducationForm = () => {
 						{educationData.map((item, index) => (
 							<div key={item.id}>
 								<Space>
-									<Typography.Text ellipsis className="font-bold mr-3">
-										{t('educationDocument')}
-									</Typography.Text>
+									<div>
+										<Typography.Text ellipsis className="font-bold mr-3">
+											{t('educationDocument')}	
+										</Typography.Text>
+										<div className='text-[10px]'>(Дополнительный документ можно добавить в разделе "Обо мне")</div>
+									</div>
 									<Typography.Text
 										onClick={() => {
 											handleDeleteEducation(item.id)
@@ -259,7 +262,7 @@ export const EducationForm = () => {
 							</div>
 						))}
 					</div>
-					<div className="mt-10 flex flex-col items-center">
+					{/* <div className="mt-10 flex flex-col items-center">
 						<Button
 							className="rounded-full text-center p-0 w-8 h-8 text-xl"
 							type="primary"
@@ -269,7 +272,7 @@ export const EducationForm = () => {
 						</Button>
 						<p className="opacity-40 text-sm mt-2">{t('add')}</p>
 						<p className="opacity-40 text-sm lowercase">{t('education')}</p>
-					</div>
+					</div> */}
 					<div className="w-full flex justify-center items-center gap-8 mt-[60px]">
 						<Button
 							onClick={handleCancel}

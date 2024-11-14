@@ -12,7 +12,7 @@ const aId = cookies[4]?.split('=')[1] || ''
  */
 export const jsxElements = [
 	{
-		index: 'ElectronicBook',
+		key: 'ElectronicBook',
 		element: (
 			<TemplateCard
 				href="/services/electronicBook/estimation"
@@ -30,7 +30,7 @@ export const jsxElements = [
 		}
 	},
 	{
-		index: 'Session',
+		key: 'Session',
 		element: (
 			<TemplateCard
 				href="/services/session/session"
@@ -50,7 +50,7 @@ export const jsxElements = [
 		}
 	},
 	{
-		index: 'Applications',
+		key: 'Applications',
 		element: (
 			<TemplateCard
 				href="https://shelly.kpfu.ru/e-ksu/site_student_sh_pr_ac.offor_document?p_menu=14&p_type_menu_open=151"
@@ -70,7 +70,7 @@ export const jsxElements = [
 		}
 	},
 	{
-		index: 'Staff',
+		key: 'Staff',
 		element: (
 			<TemplateCard
 				href="https://shelly.kpfu.ru/e-ksu/portal_person.kurs_cifra#tab1"
@@ -91,7 +91,7 @@ export const jsxElements = [
 		}
 	},
 	{
-		index: 'Vacancies',
+		key: 'Vacancies',
 		element: (
 			<TemplateCard
 				href="https://career.kpfu.ru/"
@@ -110,7 +110,7 @@ export const jsxElements = [
 		}
 	},
 	{
-		index: 'EducationalCourses',
+		key: 'EducationalCourses',
 		element: (
 			<TemplateCard
 				href="https://shelly.kpfu.ru/e-ksu/portal_person.kurs_cifra?p_type_menu_open=2#tab1"
@@ -132,7 +132,7 @@ export const jsxElements = [
 		}
 	},
 	{
-		index: 'Schedule',
+		key: 'Schedule',
 		element: <Schedule />,
 		place: {
 			w: 3,
@@ -145,7 +145,7 @@ export const jsxElements = [
 		}
 	},
 	{
-		index: 'News',
+		key: 'News',
 		element: (
 			<TemplateCard
 				href="https://media.kpfu.ru/news?kn%5B0%5D=Новости%20науки&created="
@@ -166,7 +166,7 @@ export const jsxElements = [
 		}
 	},
 	{
-		index: 'Testing',
+		key: 'Testing',
 		element: (
 			<TemplateCard
 				href="https://shelly.kpfu.ru/e-ksu/SITE_STUDENT_SH_PR_AC.test_student_personal?p_menu=28"
@@ -190,7 +190,7 @@ export const jsxElements = [
 		}
 	},
 	{
-		index: 'DocumentFlow',
+		key: 'DocumentFlow',
 		element: (
 			<TemplateCard
 				href="/services/unifiedServiceCenter/documentFlow"
@@ -210,7 +210,7 @@ export const jsxElements = [
 		}
 	},
 	// {
-	// 	index: 'PaySheet',
+	// 	key: 'PaySheet',
 	// 	element: (
 	// 		<TemplateCard
 	// 			href={`https://shelly.kpfu.ru/e-ksu/student_grants.pay_list?p1=${aId}&p2=${sId}&p_h=${hId}`}
@@ -231,7 +231,7 @@ export const jsxElements = [
 	// 	}
 	// },
 	{
-		index: 'Practices',
+		key: 'Practices',
 		element: (
 			<TemplateCard
 				href="/services/practices"
@@ -250,7 +250,7 @@ export const jsxElements = [
 		}
 	},
 	{
-		index: 'myPractices',
+		key: 'myPractices',
 		element: (
 			<TemplateCard
 				href="/services/mypractices"
@@ -269,7 +269,7 @@ export const jsxElements = [
 		}
 	},
 	{
-		index: 'practiceTeacher',
+		key: 'practiceTeacher',
 		element: (
 			<TemplateCard
 				href="/services/practiceteacher"
@@ -288,7 +288,7 @@ export const jsxElements = [
 		}
 	},
 	// {
-	// 	index: 'SitAnKFU',
+	// 	key: 'SitAnKFU',
 	// 	element: (
 	// 		<TemplateCard
 	// 			href="https://sa.kpfu.ru/news_aggregator/news/"
@@ -308,7 +308,7 @@ export const jsxElements = [
 	// 	}
 	// },
 	{
-		index: 'Dormitory',
+		key: 'Dormitory',
 		element: (
 			<TemplateCard
 				href="https://shelly.kpfu.ru/e-ksu/SITE_STUDENT_SH_PR_AC.dormitory_work_document?p_menu=37"
@@ -328,7 +328,7 @@ export const jsxElements = [
 		}
 	},
 	{
-		index: 'VirtualAudience',
+		key: 'VirtualAudience',
 		element: (
 			<TemplateCard
 				href="https://shelly.kpfu.ru/e-ksu/site_student_services.study_tasks"
@@ -350,7 +350,7 @@ export const jsxElements = [
 		}
 	},
 	{
-		index: 'PsychologicalHelp',
+		key: 'PsychologicalHelp',
 		element: (
 			<TemplateCard
 				href="https://shelly.kpfu.ru/e-ksu/student_psi_test.record_medic?p_menu=42"
@@ -372,7 +372,7 @@ export const jsxElements = [
 		}
 	},
 	{
-		index: 'DigitalDepartments',
+		key: 'DigitalDepartments',
 		element: (
 			<TemplateCard
 				href="https://shelly.kpfu.ru/e-ksu/portal_person.kurs_cifra#tab1"
@@ -394,7 +394,7 @@ export const jsxElements = [
 		}
 	},
 	{
-		index: 'ManagementScientificProjects',
+		key: 'ManagementScientificProjects',
 		element: (
 			<TemplateCard
 				href="https://shelly.kpfu.ru/e-ksu/portal_person.kurs_cifra?p_type_menu_open=2#tab1"

@@ -178,7 +178,8 @@ export const serviceApi = apiSlice.injectEndpoints({
                     body: body,
                     method: 'POST'
                 }
-            }
+            },
+            invalidatesTags: ['role']
         }),
         getRole: builder.query({
             query: () => {
@@ -188,6 +189,7 @@ export const serviceApi = apiSlice.injectEndpoints({
                 }
             },
             keepUnusedDataFor: 1,
+            providesTags: ['role']
         })
        
     })

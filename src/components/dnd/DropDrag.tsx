@@ -24,7 +24,6 @@ const DropDrag = () => {
 	const user = useAppSelector(state => state.auth.user)
 	const dispatch = useDispatch()
 	const layout = block
-	const mainRole = user?.roles[0].type
 	const edit = useAppSelector(state => state.auth.edit)
 	const {data:dataCheck,isSuccess:isSuccessCheck, isLoading:isLoadingCheck} = useCheckIsEmployeeQuery()
 	const {data:dataGetInfoSubrole,isLoading:isLoadingGetInfoSubrole,isSuccess:isSuccessGetInfoSubrole} = useGetInfoUserQuery()
@@ -32,12 +31,7 @@ const DropDrag = () => {
 	const [mounted, setMounted] = useState(false)
 	const [toolbox, setToolbox] = useState<{ [index: string]: any[] }>({lg: []})
 	const ResponsiveReactGridLayout = useMemo(() => WidthProvider(Responsive), []);
-	const [message, _] = useLocalStorageState<any>(
-		'typeAcc',
-		{
-		  defaultValue: 'STUD',
-		},
-	);
+	const [mainRole] = useLocalStorageState<any>('typeAcc',{  defaultValue: 'STUD',},);
 	const {data:dataSubRole,isSuccess:isSuccessSubRole,isLoading:isLoadingSubRole} = useGetRoleQuery(null)
 	const [subRole, setSubrole] = useLocalStorageState<any>('subRole',{  defaultValue: ''});
 	const [windowSize, setWindowSize] = useState(getWindowSize())
@@ -45,13 +39,13 @@ const DropDrag = () => {
 	// получение саброли
 	useEffect(()=>{
 		if(isSuccessSubRole){
-			if(message ==='OTHER'){
+			if(mainRole ==='OTHER'){
 			console.log('dataSubRole',dataSubRole)
 			setSubrole(dataSubRole ? dataSubRole[0].role : '')
-			// setSubrole(dataSubRole ? dataSubRole : '')
+			
 			}
 		}
-	},[isSuccessSubRole])
+	},[isSuccessSubRole,dataSubRole])
 
 	useEffect(() => {
 		setMounted(true)
@@ -89,32 +83,32 @@ const DropDrag = () => {
 
 	const layoutValid = layout.lg.filter(obj1 =>jsxElements
 		.filter((item)=>{
-			if(message==='STUD'){
-				return item.index==='Schedule' ||
-					   item.index==='ElectronicBook' ||
-					   item.index==='Session' ||
-					   item.index==='Dormitory' ||
-					   item.index==='myPractices' ||
-					   item.index==='EducationalCourses' ||
-					   item.index==='PsychologicalHelp' ||
-					   item.index==='News' ||
-					   item.index==='DocumentFlow' ||
-					   item.index==='VirtualAudience' ||
-					   item.index==='DigitalDepartments' ||
-					   item.index==='ManagementScientificProjects' 
+			if(mainRole==='STUD'){
+				return  item.key==='Schedule' ||
+						item.key==='ElectronicBook' ||
+						item.key==='Session' ||
+						item.key==='Dormitory' ||
+						item.key==='myPractices' ||
+						item.key==='EducationalCourses' ||
+						item.key==='PsychologicalHelp' ||
+						item.key==='News' ||
+						item.key==='DocumentFlow' ||
+						item.key==='VirtualAudience' ||
+						item.key==='DigitalDepartments' ||
+						item.key==='ManagementScientificProjects' ||
+						item.key==='Testing'
 	
 	
-			}if(message==='EMPL'){
+			}if(mainRole==='EMPL'){
 				console.log('item',item)
-				return item.index==='Schedule' ||
-					   item.index==='Practices' ||
-					   item.index==='practiceTeacher' ||
-					   item.index==='Staff' ||
-					   item.index==='Vacancies' ||
-					   item.index==='News' 
+				return (item.key==='Practices' && isSuccessCheck)||
+						item.key==='practiceTeacher' ||
+						item.key==='Staff' ||
+						item.key==='Vacancies' ||
+						item.key==='News' 
 			}
 		})
-		.some(obj2 => obj1.i === obj2.index))
+		.some(obj2 => obj1.i === obj2.key))
 
 	const generateDOM = layoutValid
 		.map(item => {
@@ -134,44 +128,46 @@ const DropDrag = () => {
 					)} */}
 					{
 						jsxElements
-							.filter(el => el.index === item.i)[0].element
+							.filter(el => el.key === item.i)[0].element
 					}
 				</div>
 			</div>
 		)
 		})
-		.filter((item)=>{
-			if(message==='STUD'){
-				return  item.key==='Schedule' ||
-						item.key==='ElectronicBook' ||
-						item.key==='Session' ||
-						item.key==='Dormitory' ||
-						item.key==='myPractices' ||
-						item.key==='EducationalCourses' ||
-						item.key==='PsychologicalHelp' ||
-						item.key==='News' ||
-						item.key==='DocumentFlow' ||
-						item.key==='VirtualAudience' ||
-						item.key==='DigitalDepartments' ||
-						item.key==='ManagementScientificProjects' 
+	// 	.filter((item)=>{
+	// 		if(mainRole==='STUD'){
+	// 			console.log("item",item)
+	// 			return  item.key==='Schedule' ||
+	// 					item.key==='ElectronicBook' ||
+	// 					item.key==='Session' ||
+	// 					item.key==='Dormitory' ||
+	// 					item.key==='myPractices' ||
+	// 					item.key==='EducationalCourses' ||
+	// 					item.key==='PsychologicalHelp' ||
+	// 					item.key==='News' ||
+	// 					item.key==='DocumentFlow' ||
+	// 					item.key==='VirtualAudience' ||
+	// 					item.key==='DigitalDepartments' ||
+	// 					item.key==='ManagementScientificProjects' ||
+	// 					item.key==='Testing'
 
 
-			}else if(message==='EMPL'){
-				return  item.key==='Schedule' ||
-						(item.key==='Practices' && isSuccessCheck)||
-						item.key==='practiceTeacher' ||
-						item.key==='Staff' ||
-						item.key==='Vacancies' ||
-						item.key==='News' 
-			}else{
-				return <>Такой роли не найдено</>
-			}
-	})
+	// 		}else if(mainRole==='EMPL'){
+	// 			return  item.key==='Schedule' ||
+	// 					(item.key==='Practices' && isSuccessCheck)||
+	// 					item.key==='practiceTeacher' ||
+	// 					item.key==='Staff' ||
+	// 					item.key==='Vacancies' ||
+	// 					item.key==='News' 
+	// 		}else{
+	// 			return <>Такой роли не найдено</>
+	// 		}
+	// })
 	
 
 	const renderContent = () => {
-		if (mainRole === 'ABITUR' || (mainRole === 'OTHER' && subRole==='ABIT')) {
-		  if(isLoadingGetInfoSubrole || isSuccessGetInfoSubrole) return <><Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}/></>
+		if (mainRole === 'ABITUR' || (mainRole === 'OTHER' && subRole==='ABIT') ) {
+		  if(isLoadingGetInfoSubrole || isLoadingSubRole) return <><Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}/></>
 		  return (
 			<>
 			  <Apply />
@@ -189,28 +185,34 @@ const DropDrag = () => {
 			if(subRole==='SCHOOL'){
 				return(
 					<>
-						<span>Я ШКОЛЬНИК</span>
+						<Row>
+							<Col span={8}>
+							<AboutUniversityCard />
+							</Col>
+						</Row>
 					</>
 				)
 			}
-			if(subRole==='GUEST'){
+			
+			if(subRole==='ATTEND' || subRole==='GUEST'){
 				return(
 					<>
-						<span>Я Гость</span>
-					</>
-				)
-			}
-			if(subRole==='ATTEND'){
-				return(
-					<>
-						<span>Я слушатель</span>
+						<Row>
+							<Col span={8}>
+							<AboutUniversityCard />
+							</Col>
+						</Row>
 					</>
 				)
 			}
 			if(subRole==='SEEKER'){
 				return(
 					<>
-						<span>Я соискатель</span>
+						<Row>
+							<Col span={8}>
+							<AboutUniversityCard />
+							</Col>
+						</Row>
 					</>
 				)
 			}

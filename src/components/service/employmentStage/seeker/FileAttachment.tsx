@@ -151,11 +151,6 @@ export const FileAttachment = (
 						setFileType(file.type)
 						setFileName(file.name)
 					}}
-					headers={{
-						Authorization: `Bearer ${token?.replaceAll('"', '')}`,
-						'Content-Type': fileType,
-						'Content-Disposition': `filename="${encodeURI(fileName)}"`
-					}}
 					onChange={options => {
 						options.file.status === 'uploading'
 							? setIsFileUploading(true)

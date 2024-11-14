@@ -126,9 +126,10 @@ export const FileAttachment = (
 					className="col-start-3 ml-auto mr-[10%]"
 					accept=".png,.jpg,.jpeg,.pdf"
 					showUploadList={false}
-					//action={`http://${emplBaseURL}employment-api/v1/respond/${props.respondId}/employment/file?employmentDocDefId=${props.id}`}
 					customRequest={options => {
 						const { file, filename, onSuccess, onError } = options
+
+						setIsFileUploading(true)
 
 						uploadDoc({
 							respondId: props.respondId,
@@ -139,13 +140,13 @@ export const FileAttachment = (
 							.unwrap()
 							.then(() => {
 								onSuccess && onSuccess(file)
+								setIsFileUploading(false)
 							})
 							.catch(() => {
 								const err = new Error('Не удалось загрузить файл')
 								onError && onError(err)
 							})
 					}}
-					//method="PUT"
 					beforeUpload={file => {
 						setFileType(file.type)
 						setFileName(file.name)

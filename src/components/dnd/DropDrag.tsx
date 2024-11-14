@@ -19,6 +19,31 @@ import { useCheckIsEmployeeQuery } from '../../store/api/practiceApi/contracts'
 import { useGetInfoUserQuery } from '../../store/api/formApi'
 import { useGetRoleQuery } from '../../store/api/serviceApi'
 
+const studentKeys = [
+    'Schedule',
+    'ElectronicBook',
+    'Session',
+    'Dormitory',
+    'myPractices',
+    'EducationalCourses',
+    'PsychologicalHelp',
+    'News',
+    'DocumentFlow',
+    'VirtualAudience',
+    'DigitalDepartments',
+    'ManagementScientificProjects',
+    'Testing',
+
+];
+
+const employeeKeys = [
+    'Schedule',
+    'Practices', // Проверка isSuccessCheck будет выполнена отдельно
+    'practiceTeacher',
+    'Staff',
+    'Vacancies',
+    'News'
+];
 
 const DropDrag = () => {
 	const user = useAppSelector(state => state.auth.user)
@@ -84,31 +109,15 @@ const DropDrag = () => {
 	const layoutValid = layout.lg.filter(obj1 =>jsxElements
 		.filter((item)=>{
 			if(mainRole==='STUD'){
-				return  item.key==='Schedule' ||
-						item.key==='ElectronicBook' ||
-						item.key==='Session' ||
-						item.key==='Dormitory' ||
-						item.key==='myPractices' ||
-						item.key==='EducationalCourses' ||
-						item.key==='PsychologicalHelp' ||
-						item.key==='News' ||
-						item.key==='DocumentFlow' ||
-						item.key==='VirtualAudience' ||
-						item.key==='DigitalDepartments' ||
-						item.key==='ManagementScientificProjects' ||
-						item.key==='Testing'
-	
-	
-			}if(mainRole==='EMPL'){
-				console.log('item',item)
-				return (item.key==='Practices' && isSuccessCheck)||
-						item.key==='practiceTeacher' ||
-						item.key==='Staff' ||
-						item.key==='Vacancies' ||
-						item.key==='News' 
+				return studentKeys.includes(item.key);
+			}else if(mainRole==='EMPL'){
+				return (item.key === 'Practices' && isSuccessCheck || employeeKeys.includes(item.key))
+			}else{
+				return <>Такой роли нет</>
 			}
 		})
-		.some(obj2 => obj1.i === obj2.key))
+		// .some(obj2 => obj1.i === obj2.key)
+	)
 
 	const generateDOM = layoutValid
 		.map(item => {
@@ -134,35 +143,15 @@ const DropDrag = () => {
 			</div>
 		)
 		})
-	// 	.filter((item)=>{
-	// 		if(mainRole==='STUD'){
-	// 			console.log("item",item)
-	// 			return  item.key==='Schedule' ||
-	// 					item.key==='ElectronicBook' ||
-	// 					item.key==='Session' ||
-	// 					item.key==='Dormitory' ||
-	// 					item.key==='myPractices' ||
-	// 					item.key==='EducationalCourses' ||
-	// 					item.key==='PsychologicalHelp' ||
-	// 					item.key==='News' ||
-	// 					item.key==='DocumentFlow' ||
-	// 					item.key==='VirtualAudience' ||
-	// 					item.key==='DigitalDepartments' ||
-	// 					item.key==='ManagementScientificProjects' ||
-	// 					item.key==='Testing'
-
-
-	// 		}else if(mainRole==='EMPL'){
-	// 			return  item.key==='Schedule' ||
-	// 					(item.key==='Practices' && isSuccessCheck)||
-	// 					item.key==='practiceTeacher' ||
-	// 					item.key==='Staff' ||
-	// 					item.key==='Vacancies' ||
-	// 					item.key==='News' 
-	// 		}else{
-	// 			return <>Такой роли не найдено</>
-	// 		}
-	// })
+		.filter((item)=>{
+			if(mainRole==='STUD'){
+				return studentKeys.includes(item?.key ? item?.key : '');
+			}else if(mainRole==='EMPL'){
+				return ((item.key === 'Practices' && isSuccessCheck) || employeeKeys.includes(item?.key ? item?.key : ''))
+			}else{
+				return <>Такой роли не найдено</>
+			}
+	})
 	
 
 	const renderContent = () => {

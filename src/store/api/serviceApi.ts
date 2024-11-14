@@ -1111,6 +1111,19 @@ export const serviceApi = apiSlice.injectEndpoints({
 					Authorization: `Bearer ${seekerToken}`
 				}
 			})
+		}),
+		uploadEmploymentDocument: builder.mutation<
+			void,
+			{ respondId: number; id: number; file: File; fileName: string }
+		>({
+			query: ({ respondId, id, file, fileName }) => ({
+				url: `http://${emplBaseURL}employment-api/v1/respond/${respondId}/employment/file?employmentDocDefId=${id}`,
+				body: file,
+				method: 'PUT',
+				headers: {
+					'Content-Disposition': `filename="${encodeURI(fileName)}"`
+				}
+			})
 		})
 	})
 })
@@ -1215,5 +1228,6 @@ export const {
 	useSetHasRequisitesEmploymentMutation,
 	useGetEmploymentPossibleRolesQuery,
 	useLazyGetSeekerChatPreviewsQuery,
-	useLazyDownloadEmploymentStageFileQuery
+	useLazyDownloadEmploymentStageFileQuery,
+	useUploadEmploymentDocumentMutation
 } = serviceApi

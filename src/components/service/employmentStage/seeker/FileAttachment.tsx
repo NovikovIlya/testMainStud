@@ -6,7 +6,8 @@ import { MyDocsSvg } from '../../../../assets/svg/MyDocsSvg'
 import { useAppSelector } from '../../../../store'
 import {
 	useDeleteEmploymentDocMutation,
-	useLazyGetEmploymentDataQuery
+	useLazyGetEmploymentDataQuery,
+	useUploadEmploymentDocumentMutation
 } from '../../../../store/api/serviceApi'
 import { setAllData } from '../../../../store/reducers/EmploymentDataSlice'
 import { EmploymentDocsType } from '../../../../store/reducers/type'
@@ -74,6 +75,7 @@ export const FileAttachment = (
 	const dispatch = useDispatch()
 	const [deleteDoc] = useDeleteEmploymentDocMutation()
 	const [getEmpData] = useLazyGetEmploymentDataQuery()
+	const [uploadDoc] = useUploadEmploymentDocumentMutation()
 
 	return (
 		<>
@@ -124,8 +126,26 @@ export const FileAttachment = (
 					className="col-start-3 ml-auto mr-[10%]"
 					accept=".png,.jpg,.jpeg,.pdf"
 					showUploadList={false}
-					action={`http://${emplBaseURL}employment-api/v1/respond/${props.respondId}/employment/file?employmentDocDefId=${props.id}`}
-					method="PUT"
+					//action={`http://${emplBaseURL}employment-api/v1/respond/${props.respondId}/employment/file?employmentDocDefId=${props.id}`}
+					customRequest={options => {
+						const { file, filename, onSuccess, onError } = options
+
+						uploadDoc({
+							respondId: props.respondId,
+							id: props.id,
+							file: file as File,
+							fileName: fileName
+						})
+							.unwrap()
+							.then(() => {
+								onSuccess && onSuccess(file)
+							})
+							.catch(() => {
+								const err = new Error('Не удалось загрузить файл')
+								onError && onError(err)
+							})
+					}}
+					//method="PUT"
 					beforeUpload={file => {
 						setFileType(file.type)
 						setFileName(file.name)

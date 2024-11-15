@@ -1,5 +1,5 @@
 
-import { Button, Divider, Drawer, Select } from 'antd'
+import { Button, Divider, Drawer, Modal, Select } from 'antd'
 import type { MenuProps } from 'antd'
 import { Dropdown, Space } from 'antd'
 import clsx from 'clsx'
@@ -31,6 +31,7 @@ import { useGetRoleQuery } from '../../store/api/serviceApi'
 
 
 export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
+	const [isModalOpen, setIsModalOpen] = useState(false);
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 	const [openDrawer, setOpenDrawer] = useState(false)
@@ -46,7 +47,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const username = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '')?.username : '';
 	const maiRole = roles.find((item:any) => item.login === username)?.type || '';
 	const [subRole, setSubrole] = useLocalStorageState<any>('subRole',{  defaultValue: ''});
-	const [message, setMessage] = useLocalStorageState<any>(
+	const [mainRole, setmainRole] = useLocalStorageState<any>(
 		'typeAcc',
 		{
 		  defaultValue: 'STUD',
@@ -55,7 +56,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 
 	useEffect(()=>{
 		if(isSuccessSubRole){
-			if(message ==='OTHER'){
+			if(mainRole ==='OTHER'){
 			setSubrole(dataSubRole ? dataSubRole[0].role : '')
 			// setSubrole(dataSubRole ? dataSubRole : '')
 			}
@@ -158,6 +159,20 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 			),
 			key: '3'
 		},
+		...(user?.roles && user?.roles.length > 1 ? [{
+			label: (
+			  <div
+				className="flex items-center gap-[15px] px-[4px] py-[5px]"
+				onClick={() => {
+				  showModal()
+				}}
+			  >
+				<UserSwitchOutlined className='w-[22px] h-[22px] text-blue1f5 flex items-center justify-center' />
+				Сменить роль
+			  </div>
+			),
+			key: '9'
+		  }] : []),
 
 		{
 			label: (
@@ -212,6 +227,17 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 		}
 	}
 	console.log('subRoleLocal,subRoleLocal',subRole)
+	const showModal = () => {
+		setIsModalOpen(true);
+	  };
+	
+	  const handleOk = () => {
+		setIsModalOpen(false);
+	  };
+	
+	  const handleCancel = () => {
+		setIsModalOpen(false);
+	  };
 	return (
 		<header
 			className={clsx(
@@ -294,7 +320,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						{/*		type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'*/}
 						{/*	)}*/}
 						{/*>*/}
-						{/*	<MessageSvg white={type === 'service'} />*/}
+						{/*	<mainRoleSvg white={type === 'service'} />*/}
 						{/*</div>*/}
 						{/*<div*/}
 						{/*	className={clsx(*/}
@@ -368,9 +394,14 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 												: user?.middlename.charAt(0) + '.'
 										}`}
 									</div>
-									<div className="text-sm">{user?.roles && user?.roles?.length > 1 ? ((user?.roles?.map((item)=><div className={`${item.login === username ? 'font-extrabold' : ''}`}>{getRole(item.type)}</div>)))
-									 : String((user?.roles?.map((item)=>getRole(item.type))))}</div>
-									 <div>{getRole(subRole)}</div>
+									<div className="text-sm">{user?.roles && user?.roles?.length > 1 ? 
+									((user?.roles?.map((item)=><div className={`${item.type === mainRole ? 'font-extrabold' : ''}`}>{getRole(item.type)}</div>)))
+									 : String((user?.roles?.map((item)=>getRole(item.type))))}
+									</div>
+								
+									<div>
+									{getRole(subRole)}
+									</div>
 								</div>
 							</Space>
 						</Dropdown>
@@ -409,6 +440,17 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 					<Divider type="vertical" className="border-l-white h-10 m-0 mr-4" />
 				<div  className="text-white text-base font-bold ">{service}</div>
 			</div> : ""}
+			<Modal footer={null} title="" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+			 <div className='p-8 flex flex-col gap-2'>{user?.roles && user?.roles?.length > 1 ? 
+									((user?.roles?.map((item)=><Button onClick={()=>{
+										if(mainRole===item.type){
+											return
+										}
+										setmainRole(item.type)
+										window.location.reload()
+									}} className={`${item.type === mainRole ? 'font-extrabold' : ''} cursor-pointer`}>{getRole(item.type)}</Button>)))
+									 : ''}</div>
+			</Modal>
 		</header>
 	)
 }

@@ -37,7 +37,6 @@ const studentKeys = [
 ];
 
 const employeeKeys = [
-    'Schedule',
     'Practices', // Проверка isSuccessCheck будет выполнена отдельно
     'practiceTeacher',
     'Staff',

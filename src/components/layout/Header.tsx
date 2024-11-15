@@ -1,4 +1,3 @@
-
 import { Button, Divider, Drawer, Modal, Select } from 'antd'
 import type { MenuProps } from 'antd'
 import { Dropdown, Space } from 'antd'
@@ -38,6 +37,8 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const [openMenu, setOpenMenu] = useState(false)
 	const { t, i18n } = useTranslation()
 	const location = useLocation();
+	const searchParams = new URLSearchParams(location.search);
+	const paramValue = searchParams.get('lan');
 	const user = useAppSelector(state => state.auth.user)
 	// const subRole = useAppSelector(state => state.auth.subRole)
 	const isMobile = isMobileDevice();
@@ -68,6 +69,8 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 			showMobileMenuEffect()
 		}
 	},[location])
+
+	
 
 	const showDrawer = () => {
 		setOpenDrawer(!openDrawer)
@@ -226,7 +229,8 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 			// document.querySelector('header').style.marginLeft = '-100px'
 		}
 	}
-	console.log('subRoleLocal,subRoleLocal',subRole)
+	console.log('paramValue',paramValue)
+	console.log('i18n.language,i18n.language',i18n.language)
 	const showModal = () => {
 		setIsModalOpen(true);
 	  };
@@ -349,7 +353,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						</div> */}
 					</div>
 					<Select
-						defaultValue={i18n.language}
+						defaultValue={paramValue==='eng' ? 'en' : i18n.language}
 						style={{ width: 70 }}
 						variant="borderless"
 						className={clsx(

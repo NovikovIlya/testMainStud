@@ -119,7 +119,7 @@ export const Parent = () => {
 	}
 
 	const isStudent = role === 'STUD'
-	const isChanged = typeAcc === 'OTHER' || (typeAcc === 'ABITUR' && acceptedData[0])
+	const isChanged = typeAcc === 'OTHER' || (typeAcc === 'ABITUR' && !acceptedData[0])
 
 	if (isLoadingDocuments || isLoadingParent) return <SkeletonPage />
 

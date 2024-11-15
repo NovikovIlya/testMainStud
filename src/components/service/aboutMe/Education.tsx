@@ -117,7 +117,7 @@ export const Education = () => {
 		putEducation(data)
 	}
 
-	const isChanged = typeAcc === 'OTHER' ||  (typeAcc === 'ABITUR' && acceptedData[0])
+	const isChanged = typeAcc === 'OTHER' ||  (typeAcc === 'ABITUR' && !acceptedData[0])
 
 	useEffect(()=>{
 		if(isSuccess){
@@ -381,7 +381,7 @@ export const Education = () => {
 					))}
 				</Space.Compact>
 				
-					<Space
+					{isChanged ?<Space
 						direction="vertical"
 						size={'large'}
 						className={clsx('w-full flex items-center')}
@@ -393,7 +393,7 @@ export const Education = () => {
 						>
 							+
 						</Button>
-					</Space>
+					</Space> :'Информации нет'}
 			
 				<Space
 					direction="vertical"

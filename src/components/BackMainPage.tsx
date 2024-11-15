@@ -3,10 +3,14 @@ import { useTranslation } from 'react-i18next'
 
 import { ArrowLeftSvg } from '../assets/svg'
 import { useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 
 const { Link } = Typography
 export const BackMainPage = ({notAuth=false}) => {
 	const { t, i18n } = useTranslation()
+	const location = useLocation();
+	const searchParams = new URLSearchParams(location.search);
+	const paramValue = searchParams.get('lan');
 
 	const changeLanguage = (language: string) => {
 		i18n.changeLanguage(language)
@@ -26,7 +30,7 @@ export const BackMainPage = ({notAuth=false}) => {
 				</Link></>}
 			</div>
 			<Select
-				defaultValue={i18n.language}
+				defaultValue={paramValue==='eng' ? 'en' : i18n.language}
 				style={{ width: 100 }}
 				bordered={false}
 				onChange={e => changeLanguage(e.valueOf())}

@@ -78,7 +78,7 @@ export const Document = () => {
 		setIsEdit(false)
 	}
 
-	const isChanged = typeAcc === 'OTHER' ||  (typeAcc === 'ABITUR' && acceptedData[0])
+	const isChanged = typeAcc === 'OTHER' ||  (typeAcc === 'ABITUR' && !acceptedData[0])
 
 	if (isLoadingDocuments || isLoadingLevelDocs) return <SkeletonPage />
 

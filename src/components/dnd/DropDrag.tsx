@@ -109,8 +109,12 @@ const DropDrag = () => {
 		.filter((item)=>{
 			if(mainRole==='STUD'){
 				return studentKeys.includes(item.key);
+
+				
 			}else if(mainRole==='EMPL'){
-				return (item.key === 'Practices' && isSuccessCheck || employeeKeys.includes(item.key))
+				// отображаем Практики для деканата в зависимости от contract
+				return ((item.key === 'Practices' && isSuccessCheck) 
+				|| employeeKeys.includes(item.key))
 			}else{
 				return <>Такой роли нет</>
 			}

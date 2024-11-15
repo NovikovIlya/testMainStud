@@ -2,21 +2,66 @@ import {Button, Spin} from 'antd'
 import { NocircleArrowIcon } from '../../../jobSeeker/NoCircleArrowIcon'
 import { AvatartandardSvg } from '../../../../../assets/svg/AvatarStandardSvg'
 import { useAppSelector } from '../../../../../store'
-import { useGetRespondFullInfoQuery } from '../../../../../store/api/serviceApi'
+import {
+	useGetRespondFullInfoQuery,
+	useLazyGetSeekerResumeFileQuery
+} from '../../../../../store/api/serviceApi'
 import {LoadingOutlined} from "@ant-design/icons";
-import React from "react";
+import React, {useEffect, useState} from "react";
+import {Margin, usePDF} from "react-to-pdf";
+import {MyDocsSvg} from "../../../../../assets/svg/MyDocsSvg";
 
 
 export const RequisiteSeeker = () => {
 
 	const respondId = useAppSelector(state => state.currentResponce)
+
 	const { data, isLoading: loading } = useGetRespondFullInfoQuery(respondId.respondId)
+	const [getResume] = useLazyGetSeekerResumeFileQuery()
+
+	const [resume, setResume] = useState<string>('')
+	const [resumeSize, setResumeSize] = useState<number>(0)
+
+	const getFormattedSize = (sizeInBytes: number): string => {
+		const sizeInKilobytes = sizeInBytes / 1024;
+
+		if (sizeInBytes < 1000) {
+			return sizeInBytes + 'байты';
+		} else if (sizeInKilobytes < 1000) {
+			return sizeInKilobytes.toFixed(0) + ' Кб'
+		} else {
+			const sizeInMegabytes = sizeInKilobytes / 1024;
+			return sizeInMegabytes.toFixed(2) + ' Мб'
+		}
+	};
+
+	useEffect(() => {
+		getResume(respondId.respondId)
+			.unwrap()
+			.then(resume => {
+				console.log(resume.size)
+				setResume(prev => resume.href)
+				setResumeSize(prev => Math.floor(resume.size))
+			})
+	}, [])
+
+	const { toPDF, targetRef } = usePDF({
+		filename:
+			data?.userData?.lastname +
+			' ' +
+			data?.userData?.firstname +
+			' ' +
+			data?.userData?.middlename,
+		page: {
+			margin: Margin.SMALL
+		}
+	})
 
 	if (loading) {
 		return (
 			<>
 				<div className="w-screen h-screen flex items-center">
-					<div className="text-center ml-auto mt-[0%] mr-[50%]">
+					<div className="text-center ml-auto mr-[50%]">
 						<Spin
 							indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}
 						></Spin>
@@ -28,8 +73,8 @@ export const RequisiteSeeker = () => {
 			</>
 		)
 	}
-	return (
-		<>
+	if (data?.type === 'RESPOND') {
+		return (
 			<div className="pl-[52px] pr-[10%] py-[140px] w-full">
 				<div>
 					<Button
@@ -38,7 +83,7 @@ export const RequisiteSeeker = () => {
 						}}
 						className="bg-inherit h-[38px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer"
 					>
-						<NocircleArrowIcon />
+						<NocircleArrowIcon/>
 						Назад
 					</Button>
 				</div>
@@ -46,7 +91,7 @@ export const RequisiteSeeker = () => {
 					<div className="flex flex-wrap gap-[150px]">
 						<div className="flex gap-[20px]">
 							<div className="flex h-[167px] w-[167px] bg-[#D9D9D9]">
-								<AvatartandardSvg />
+								<AvatartandardSvg/>
 							</div>
 							<div className="flex flex-col gap-[8px]">
 								<p className="font-content-font font-normal text-black text-[24px]/[28.8px]">
@@ -93,7 +138,7 @@ export const RequisiteSeeker = () => {
 							</div>
 						</div>
 					</div>
-					<hr />
+					<hr/>
 					<div className="flex flex-col gap-[24px]">
 						<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">
 							Сопроводительное письмо
@@ -102,7 +147,7 @@ export const RequisiteSeeker = () => {
 							{data?.respondData.coverLetter}
 						</p>
 					</div>
-					<hr />
+					<hr/>
 					<div className="flex flex-col gap-[24px]">
 						<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">
 							Опыт работы
@@ -152,7 +197,7 @@ export const RequisiteSeeker = () => {
 							))}
 						</div>
 					</div>
-					<hr />
+					<hr/>
 					<div className="flex flex-col gap-[24px]">
 						<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">
 							Образование
@@ -176,7 +221,7 @@ export const RequisiteSeeker = () => {
 							))}
 						</div>
 					</div>
-					<hr />
+					<hr/>
 					<div className="flex flex-col">
 						<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40 w-[194px]">
 							Профессиональные навыки
@@ -194,6 +239,107 @@ export const RequisiteSeeker = () => {
 					</div>
 				</div>
 			</div>
-		</>
-	)
+		)
+	}
+	if (data?.type === 'RESUME') {
+		return (
+			<div className="pl-[52px] pr-[10%] py-[60px] w-full mt-[60px]">
+				<div>
+					<Button
+						onClick={() => {
+							window.history.back()
+						}}
+						className="bg-inherit h-[38px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer"
+					>
+						<NocircleArrowIcon/>
+						Назад
+					</Button>
+				</div>
+				<div className="mt-[52px] flex flex-col gap-[36px]">
+					<div className="flex flex-wrap gap-[150px]">
+						<div className="flex gap-[20px]">
+							<div className="flex h-[167px] w-[167px] bg-[#D9D9D9]">
+								<AvatartandardSvg/>
+							</div>
+							<div className="flex flex-col gap-[8px]">
+								<p className="font-content-font font-normal text-black text-[24px]/[28.8px]">
+									{data?.userData?.lastname +
+										' ' +
+										data?.userData?.firstname +
+										' ' +
+										data?.userData?.middlename}
+								</p>
+								<div className="flex flex-col gap-[8px]">
+									<p className="font-content-font font-normal text-black text-[12px]/[14.4x] opacity-40">
+										Контакты:
+									</p>
+									<div className="flex gap-[24px]">
+										<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
+											{data?.userData?.phone}
+										</p>
+										<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
+											{data?.userData?.email}
+										</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<hr/>
+					<div className="flex flex-col gap-[24px]">
+						<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
+							<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
+								Желаемая должность
+							</p>
+							<p className="font-content-font font-bold text-black text-[16px]/[19.2px]">
+								{data?.desiredJob}
+							</p>
+						</div>
+					</div>
+					<hr/>
+					<div className="flex flex-col gap-[24px]">
+						<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
+							<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
+								Резюме
+							</p>
+							<div
+								className="bg-white rounded-[16px] shadow-custom-shadow h-[59px] w-[65%] p-[20px] flex">
+								<MyDocsSvg/>
+								<p
+									className="ml-[20px] font-content-font font-normal text-black text-[16px]/[19.2px] underline cursor-pointer"
+									onClick={() => {
+										const link = document.createElement('a')
+										link.href = resume
+										link.download = 'Резюме '
+											+ data?.userData?.lastname +
+											' ' +
+											data?.userData?.firstname +
+											' ' +
+											data?.userData?.middlename
+										link.click()
+									}}
+								>
+									{'Резюме ' +
+										data?.userData?.lastname +
+										' ' +
+										data?.userData?.firstname +
+										' ' +
+										data?.userData?.middlename}
+								</p>
+								<p className="ml-auto font-content-font font-normal text-black text-[16px]/[19.2px] opacity-70">
+									{getFormattedSize(resumeSize)}
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		)
+	} else {
+		return (
+			<div>
+
+			</div>
+		)
+	}
 }

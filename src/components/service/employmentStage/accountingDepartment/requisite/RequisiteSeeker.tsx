@@ -3,7 +3,7 @@ import { NocircleArrowIcon } from '../../../jobSeeker/NoCircleArrowIcon'
 import { AvatartandardSvg } from '../../../../../assets/svg/AvatarStandardSvg'
 import { useAppSelector } from '../../../../../store'
 import {
-	useGetRespondFullInfoQuery,
+	useGetRespondFullInfoAccountingQuery,
 	useLazyGetSeekerResumeFileQuery
 } from '../../../../../store/api/serviceApi'
 import {LoadingOutlined} from "@ant-design/icons";
@@ -16,7 +16,7 @@ export const RequisiteSeeker = () => {
 
 	const respondId = useAppSelector(state => state.currentResponce)
 
-	const { data, isLoading: loading } = useGetRespondFullInfoQuery(respondId.respondId)
+	const { data, isLoading: loading } = useGetRespondFullInfoAccountingQuery(respondId.respondId)
 	const [getResume] = useLazyGetSeekerResumeFileQuery()
 
 	const [resume, setResume] = useState<string>('')

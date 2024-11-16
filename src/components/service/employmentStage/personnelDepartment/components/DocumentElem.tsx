@@ -5,6 +5,7 @@ import { useLazyDownloadEmploymentStageFileQuery } from '../../../../../store/ap
 
 interface DocumentElemProps {
 	name: string
+	fileName: string
 	id: number
 }
 
@@ -30,7 +31,7 @@ export const DocumentElem = (props: DocumentElemProps) => {
 			onClick={() => {
 				const link = document.createElement('a')
 				link.href = resume
-				link.download = 'Резюме'
+				link.download = props.fileName
 				link.click()
 			}}
 		>

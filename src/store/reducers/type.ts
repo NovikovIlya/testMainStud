@@ -483,6 +483,7 @@ export type EmploymentStageStatusType = {
 		documents: {
 			id: number
 			docType: string
+			name: string
 			status: 'ATTACHED' | 'NOT_ATTACHED'
 		}[]
 	}[]

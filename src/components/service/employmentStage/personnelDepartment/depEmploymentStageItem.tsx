@@ -26,6 +26,7 @@ import {
 interface Document {
 	id: number
 	docType: string
+	name: string
 	status: 'ATTACHED' | 'NOT_ATTACHED'
 }
 
@@ -292,7 +293,7 @@ const StageContentComponent = () => {
 			{(props.stage === 2) && (
 				<>
 					{props.documentArray?.map((document) => (
-						<DocumentElem key={document.id} name={document.docType}  id={document.id}/>
+						<DocumentElem key={document.id} name={document.docType}  id={document.id} fileName={document.name}/>
 					))}
 					{(((props.stageStatus === 'REFINE') || (props.stageStatus === 'VERIFYING' && props.comment !== null && props.comment !== undefined && props.comment !== '') || (props.stageStatus === 'UPDATED') || (secondStageCommentVisibility.secondStageCommentVisibility === 'visible'))) && (
 						<>
@@ -304,7 +305,7 @@ const StageContentComponent = () => {
 			{(props.stage === 3) && (
 				<>
 					{props.documentArray?.map((document) => (
-						<DocumentElem key={document.id} name={document.docType} id={document.id}/>
+						<DocumentElem key={document.id} name={document.docType} id={document.id} fileName={document.name}/>
 					))}
 					{((props.stageStatus === 'REFINE') || (props.stageStatus === 'VERIFYING' && props.comment !== null && props.comment !== undefined && props.comment !== '') || (props.stageStatus === 'UPDATED') || (thirdStageCommentVisibility.thirdStageCommentVisibility === 'visible')) && (
 						<>
@@ -324,7 +325,7 @@ const StageContentComponent = () => {
 			{(props.stage === 5) && (props.role === 'accounting') && (
 				<>
 					{props.documentArray?.map((document) => (
-						<DocumentElem key={document.id} name={document.docType} id={document.id}/>
+						<DocumentElem key={document.id} name={document.docType} id={document.id} fileName={document.name}/>
 					))}
 					{((props.stageStatus === 'REFINE') || (props.stageStatus === 'VERIFYING' && props.comment !== null && props.comment !== undefined && props.comment !== '') || (props.stageStatus === 'UPDATED') || (fifthStageCommentVisibility.fifthStageCommentVisibility === 'visible')) && (
 						<>
@@ -336,7 +337,7 @@ const StageContentComponent = () => {
 			{(props.stage === 5) && (props.role === 'personnel') && (
 				<>
 					{props.documentArray?.map((document) => (
-						<DocumentElem key={document.id} name={document.docType} id={document.id} />
+						<DocumentElem key={document.id} name={document.docType} id={document.id}  fileName={document.name}/>
 					))}
 					<span className="text-[14px]/[16.8px] text-black opacity-[60%] font-normal">Соискателю необходимо завести банковскую карту
 						{props.bank === 'SBER' ? " Сбербанк" : ""}

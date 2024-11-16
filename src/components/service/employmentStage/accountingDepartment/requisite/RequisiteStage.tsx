@@ -1,12 +1,12 @@
 import { Button, Spin } from 'antd'
-import { setCurrentResponce } from '../../../../store/reducers/CurrentResponceSlice'
-import { useAppSelector } from '../../../../store'
+import { setCurrentResponce } from '../../../../../store/reducers/CurrentResponceSlice'
+import { useAppSelector } from '../../../../../store'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { LoadingOutlined } from '@ant-design/icons'
-import { useGetEmploymentReqStageStatusQuery } from '../../../../store/api/serviceApi'
-import { DepEmploymentStageItem } from '../../employmentStage/personnelDepartment/depEmploymentStageItem'
-import {NocircleArrowIcon} from "../../jobSeeker/NoCircleArrowIcon";
+import { useGetEmploymentReqStageStatusQuery } from '../../../../../store/api/serviceApi'
+import { DepEmploymentStageItem } from '../../personnelDepartment/depEmploymentStageItem'
+import {NocircleArrowIcon} from "../../../jobSeeker/NoCircleArrowIcon";
 
 export const RequisiteStage = () => {
 
@@ -59,7 +59,7 @@ export const RequisiteStage = () => {
 					className="max-w-[102px] mt-[20px] bg-[#F5F8FB] py-[8px] px-[24px] text-[#333333] border-[#333333] border-[1px] rounded-[54.5px] text-[16px]"
 					onClick={() => {
 						dispatch(setCurrentResponce(respondId.respondId))
-						navigate('/services/personnelaccounting/requisite/requisite-review/seeker-info')
+						navigate('/services/personnelaccounting/accounting/requisite/requisite-review/seeker-info')
 					}}
 				>Резюме</Button>
 				<h3 className="mt-[53px] text-[18px] font-normal">

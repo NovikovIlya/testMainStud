@@ -216,6 +216,14 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
+		getRespondFullInfoAccounting: builder.query<VacancyRespondItemType, number>({
+			query: id => ({
+				url: `http://${emplBaseURL}employment-api/v1/respond/${id}`,
+				headers: {
+					Authorization: `Bearer ${accountingToken}`
+				}
+			})
+		}),
 		getChatIdByRespondId: builder.query<
 			{
 				id: number
@@ -1229,5 +1237,6 @@ export const {
 	useGetEmploymentPossibleRolesQuery,
 	useLazyGetSeekerChatPreviewsQuery,
 	useLazyDownloadEmploymentStageFileQuery,
-	useUploadEmploymentDocumentMutation
+	useUploadEmploymentDocumentMutation,
+	useGetRespondFullInfoAccountingQuery
 } = serviceApi

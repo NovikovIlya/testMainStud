@@ -68,7 +68,7 @@ export const DepEmploymentItem = (  props : EmploymentStageItemType ) => {
 							dispatch(setCurrentResponce(props.respondId))
 							dispatch(setCurrentEmploymentSeekerVacancy(props.vacancy.name))
 							dispatch(setCurrentEmploymentSeekerName(props.applicant.firstName + ' ' + props.applicant.middleName + ' ' + props.applicant.lastName))
-							navigate(`/services/personnelaccounting/employment/stages`)
+							navigate(`/services/personnelaccounting/personnel-department/employment/stages`)
 						}}>
 						Подробнее
 					</Button>
@@ -76,7 +76,7 @@ export const DepEmploymentItem = (  props : EmploymentStageItemType ) => {
 						className='bg-[#FFFFFF] py-[8px] px-[24px] text-[#333333] border-[#333333] border-[1px] rounded-[54.5px] text-[16px] font-normal cursor-pointer'
 						onClick={() => {
 							dispatch(setCurrentResponce(props.respondId))
-							navigate(`/services/personnelaccounting/employment/stages/seeker-info`)
+							navigate(`/services/personnelaccounting/personnel-department/employment/stages/seeker-info`)
 						}}
 					>
 						Резюме
@@ -85,7 +85,7 @@ export const DepEmploymentItem = (  props : EmploymentStageItemType ) => {
 						className='bg-[#FFFFFF] py-[8px] px-[24px] text-[#333333] border-[#333333] border-[1px] rounded-[54.5px] cursor-pointer'
 						onClick={() => {
 							dispatch(setChatId(chatId.id))
-							navigate(`/services/personnelaccounting/chat/id/${chatId.id}`)
+							navigate(`/services/personnelaccounting/personnel-department/chat/id/${chatId.id}`)
 						}}
 					>
 						<FileIconSvg></FileIconSvg>

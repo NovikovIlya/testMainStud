@@ -17,18 +17,18 @@ export const InviteSeekerForm = (props: {
 	isButtonDisabled: boolean
 	callback: Function
 }) => {
-	//const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false)
-
 	const [isFormOpen, setIsFormOpen] = useState<boolean>(false)
 	const [format, setFormat] = useState<'OFFLINE' | 'ONLINE'>('OFFLINE')
 	const [reservedTime, setReservedTimes] = useState<
 		{ id: string; time: string; timeToSend: any }[]
 	>([])
 
-	const [inviteSeeker] = useInviteSeekerMutation()
+	const [inviteSeeker, inviteSeekerQueryStatus] = useInviteSeekerMutation()
 
 	const [isResultModalOpen, setIsResultModalOpen] = useState<boolean>(false)
 	const [resultModalText, setResultModalText] = useState<string>('')
+
+	const [form] = Form.useForm()
 
 	return (
 		<>
@@ -99,6 +99,7 @@ export const InviteSeekerForm = (props: {
 				>
 					<Form
 						layout="vertical"
+						form={form}
 						requiredMark={false}
 						onFinish={values => {
 							console.log(
@@ -145,51 +146,29 @@ export const InviteSeekerForm = (props: {
 										? values.mainTime.$s
 										: '0' + values.mainTime.$s) +
 									'.020Z',
-								reservedTimes:
-									// reservedTime[0].timeToSend.$y +
-									// '-' +
-									// (reservedTime[0].timeToSend.$M + 1 >= 10
-									// 	? reservedTime[0].timeToSend.$M + 1
-									// 	: '0' + (reservedTime[0].timeToSend.$M + 1)) +
-									// '-' +
-									// (reservedTime[0].timeToSend.$D >= 10
-									// 	? reservedTime[0].timeToSend.$D
-									// 	: '0' + reservedTime[0].timeToSend.$D) +
-									// 'T' +
-									// reservedTime[0].timeToSend.$H +
-									// ':' +
-									// (reservedTime[0].timeToSend.$m >= 10
-									// 	? reservedTime[0].timeToSend.$m
-									// 	: '0' + reservedTime[0].timeToSend.$m) +
-									// ':' +
-									// (reservedTime[0].timeToSend.$s >= 10
-									// 	? reservedTime[0].timeToSend.$s
-									// 	: '0' + reservedTime[0].timeToSend.$s) +
-									// '.020Z',
-									// ['2024-05-17T13:40:00+03:00'],
-									reservedTime.map(
-										reserve =>
-											reserve.timeToSend.$y +
-											'-' +
-											(reserve.timeToSend.$M + 1 >= 10
-												? reserve.timeToSend.$M + 1
-												: '0' + (reserve.timeToSend.$M + 1)) +
-											'-' +
-											(reserve.timeToSend.$D >= 10
-												? reserve.timeToSend.$D
-												: '0' + reserve.timeToSend.$D) +
-											'T' +
-											reserve.timeToSend.$H +
-											':' +
-											(reserve.timeToSend.$m >= 10
-												? reserve.timeToSend.$m
-												: '0' + reserve.timeToSend.$m) +
-											':' +
-											(reserve.timeToSend.$s >= 10
-												? reserve.timeToSend.$s
-												: '0' + reserve.timeToSend.$s) +
-											'.020Z'
-									),
+								reservedTimes: reservedTime.map(
+									reserve =>
+										reserve.timeToSend.$y +
+										'-' +
+										(reserve.timeToSend.$M + 1 >= 10
+											? reserve.timeToSend.$M + 1
+											: '0' + (reserve.timeToSend.$M + 1)) +
+										'-' +
+										(reserve.timeToSend.$D >= 10
+											? reserve.timeToSend.$D
+											: '0' + reserve.timeToSend.$D) +
+										'T' +
+										reserve.timeToSend.$H +
+										':' +
+										(reserve.timeToSend.$m >= 10
+											? reserve.timeToSend.$m
+											: '0' + reserve.timeToSend.$m) +
+										':' +
+										(reserve.timeToSend.$s >= 10
+											? reserve.timeToSend.$s
+											: '0' + reserve.timeToSend.$s) +
+										'.020Z'
+								),
 								additionalInfo:
 									format === 'OFFLINE' ? values.details : undefined
 							})
@@ -208,6 +187,7 @@ export const InviteSeekerForm = (props: {
 											'Что-то пошло не так, приносим извинения за неудобства'
 										)
 									}
+									form.resetFields(['reserveTime'])
 									setIsFormOpen(false)
 									setIsResultModalOpen(true)
 								})
@@ -243,7 +223,7 @@ export const InviteSeekerForm = (props: {
 							rules={[{ required: true, message: 'Не выбрано основное время' }]}
 						>
 							<DatePicker
-								format={'DD.MM.YYYY, h:mm'}
+								format={'DD.MM.YYYY, HH:mm'}
 								showTime={{
 									minuteStep: 15,
 									disabledHours: () => {
@@ -277,7 +257,7 @@ export const InviteSeekerForm = (props: {
 							]}
 						>
 							<DatePicker
-								format={'DD.MM.YYYY, h:mm'}
+								format={'DD.MM.YYYY, HH:mm'}
 								showTime={{
 									minuteStep: 15,
 									disabledHours: () => {
@@ -287,10 +267,11 @@ export const InviteSeekerForm = (props: {
 								}}
 								className="w-full"
 								onChange={(e, dateString) => {
-									setReservedTimes([
-										...reservedTime,
-										{ id: uuid(), time: dateString as string, timeToSend: e }
-									])
+									dateString !== '' &&
+										setReservedTimes([
+											...reservedTime,
+											{ id: uuid(), time: dateString as string, timeToSend: e }
+										])
 								}}
 							></DatePicker>
 							<ul className="mt-[24px] ml-[20px]">
@@ -333,7 +314,11 @@ export const InviteSeekerForm = (props: {
 						)}
 						<Form.Item>
 							<div style={{ textAlign: 'right', marginTop: 40 }}>
-								<Button type="primary" htmlType="submit">
+								<Button
+									type="primary"
+									htmlType="submit"
+									loading={inviteSeekerQueryStatus.isLoading}
+								>
 									Пригласить
 								</Button>
 							</div>

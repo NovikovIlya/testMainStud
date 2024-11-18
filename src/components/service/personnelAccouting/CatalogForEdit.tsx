@@ -153,7 +153,7 @@ export default function Catalog() {
 		return (
 			<>
 				<div className="w-full h-full flex items-center">
-					<div className="text-center ml-auto mr-auto mb-[10%]">
+					<div className="text-center ml-auto mr-auto">
 						<Spin
 							indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}
 						></Spin>

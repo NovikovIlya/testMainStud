@@ -126,7 +126,13 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 					<p className="w-[106px] font-content-font font-bold text-black text-[18px]/[21px]">
 						Заработная плата
 					</p>
-					{props.type === 'CATALOG' ? <ResponseForm /> : <></>}
+					{props.type === 'CATALOG' ? (
+						<ResponseForm />
+					) : (
+						<>
+							<div className="w-[143px]"></div>
+						</>
+					)}
 					<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-nowrap">
 						{currentVacancy !== null ? currentVacancy.acf.experience : ''}
 					</p>

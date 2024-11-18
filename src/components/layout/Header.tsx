@@ -69,9 +69,6 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 		}
 	}, [location])
 
-	const showDrawer = () => {
-		setOpenDrawer(!openDrawer)
-	}
 
 	const getRole = (role: string | undefined) => {
 		switch (role) {

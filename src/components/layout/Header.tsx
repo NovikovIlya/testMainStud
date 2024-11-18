@@ -1,3 +1,5 @@
+import { UserSwitchOutlined } from '@ant-design/icons'
+import { useLocalStorageState } from 'ahooks'
 import { Button, Divider, Drawer, Modal, Select } from 'antd'
 import type { MenuProps } from 'antd'
 import { Dropdown, Space } from 'antd'
@@ -7,70 +9,65 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 
+import logo from '../../assets/images/logo.svg'
 import {
 	EyeSvg,
 	LogoIasSvg,
-	LogoutSvg, MenuSvg, PersonCardSvg,
+	LogoutSvg,
+	MenuSvg,
+	PersonCardSvg,
 	PersonSvg,
 	SearchSvg,
 	SettingSvg
 } from '../../assets/svg'
+import { ArrowLeftBackInOldAccount } from '../../assets/svg/ArrowLeftBackInOldAccount'
 import PersonalizationSvg from '../../assets/svg/PersonalizationSvg'
-import { useAppSelector } from '../../store'
-import { logOut, setEdit } from '../../store/reducers/authSlice'
-import { ModalNav } from '../service/ModalNav'
-import { ArrowLeftBackInOldAccount } from "../../assets/svg/ArrowLeftBackInOldAccount"
 import { TypeHeaderProps } from '../../models/layout'
-import { isMobileDevice } from '../../utils/hooks/useIsMobile'
-import logo from '../../assets/images/logo.svg'
-import { UserSwitchOutlined } from '@ant-design/icons'
-import { useLocalStorageState } from 'ahooks'
+import { useAppSelector } from '../../store'
 import { useGetRoleQuery } from '../../store/api/serviceApi'
-
-
+import { logOut, setEdit } from '../../store/reducers/authSlice'
+import { isMobileDevice } from '../../utils/hooks/useIsMobile'
+import { ModalNav } from '../service/ModalNav'
+import { useFakeLoginMutation, useLoginMutation } from '../../store/api/authApiSlice'
 
 export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
-	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [isModalOpen, setIsModalOpen] = useState(false)
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 	const [openDrawer, setOpenDrawer] = useState(false)
 	const [openMenu, setOpenMenu] = useState(false)
 	const { t, i18n } = useTranslation()
-	const location = useLocation();
-	const searchParams = new URLSearchParams(location.search);
-	const paramValue = searchParams.get('lan');
+	const location = useLocation()
+	const searchParams = new URLSearchParams(location.search)
+	const paramValue = searchParams.get('lan')
 	const user = useAppSelector(state => state.auth.user)
 	// const subRole = useAppSelector(state => state.auth.subRole)
-	const isMobile = isMobileDevice();
-	const urlContainsPractice = location.pathname.includes('practice');
-	const {data:dataSubRole,isSuccess:isSuccessSubRole,isLoading:isLoadingSubRole} = useGetRoleQuery(null)
-	const roles = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '')?.roles : [];
-	const username = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '')?.username : '';
-	const maiRole = roles.find((item:any) => item.login === username)?.type || '';
-	const [subRole, setSubrole] = useLocalStorageState<any>('subRole',{  defaultValue: ''});
-	const [mainRole, setmainRole] = useLocalStorageState<any>(
-		'typeAcc',
-		{
-		  defaultValue: 'STUD',
-		},
-	);
+	const isMobile = isMobileDevice()
+	const urlContainsPractice = location.pathname.includes('practice')
+	const { data: dataSubRole, isSuccess: isSuccessSubRole, isLoading: isLoadingSubRole } = useGetRoleQuery(null)
+	const roles = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '')?.roles : []
+	const username = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '')?.username : ''
+	const maiRole = roles.find((item: any) => item.login === username)?.type || ''
+	const [subRole, setSubrole] = useLocalStorageState<any>('subRole', { defaultValue: '' })
+	const [mainRole, setmainRole] = useLocalStorageState<any>('typeAcc', {
+		defaultValue: 'STUD'
+	})
+	const [login,{ data:dataLogin,isSuccess, isLoading }] = useFakeLoginMutation()
 
-	useEffect(()=>{
-		if(isSuccessSubRole){
-			if(mainRole ==='OTHER'){
-			setSubrole(dataSubRole ? dataSubRole[0].role : '')
-			// setSubrole(dataSubRole ? dataSubRole : '')
+	useEffect(() => {
+		if (isSuccessSubRole) {
+			if (mainRole === 'OTHER') {
+				setSubrole(dataSubRole ? dataSubRole[0].role : '')
+				// setSubrole(dataSubRole ? dataSubRole : '')
 			}
 		}
-	},[isSuccessSubRole,dataSubRole])
+	}, [isSuccessSubRole, dataSubRole])
 
-	useEffect(()=>{
-		if(isMobile){
+	useEffect(() => {
+		if (isMobile) {
 			showMobileMenuEffect()
 		}
-	},[location])
-
-	
+	}, [location])
 
 	const showDrawer = () => {
 		setOpenDrawer(!openDrawer)
@@ -105,13 +102,8 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 		setOpenDrawer(false)
 	}
 	const items: MenuProps['items'] = [
-		
 		{
-			label: (
-				<div className={`p-2 text-sm text-blue1f5 font-bold cursor-default`}>
-					{user?.email}
-				</div>
-			),
+			label: <div className={`p-2 text-sm text-blue1f5 font-bold cursor-default`}>{user?.email}</div>,
 			key: '0'
 		},
 		{
@@ -123,9 +115,9 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 					onClick={() => {
 						navigate('/infoUserUpdate')
 					}}
-					className={`${maiRole==='OTHER'? "" :"hidden"} flex items-center gap-[15px] px-[4px] py-[5px]`}
+					className={`${maiRole === 'OTHER' ? '' : 'hidden'} flex items-center gap-[15px] px-[4px] py-[5px]`}
 				>
-					<UserSwitchOutlined className='w-[22px] h-[22px] text-blue1f5 flex items-center justify-center' />
+					<UserSwitchOutlined className="w-[22px] h-[22px] text-blue1f5 flex items-center justify-center" />
 					Изменить роль
 				</div>
 			),
@@ -162,20 +154,24 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 			),
 			key: '3'
 		},
-		...(user?.roles && user?.roles.length > 1 ? [{
-			label: (
-			  <div
-				className="flex items-center gap-[15px] px-[4px] py-[5px]"
-				onClick={() => {
-				  showModal()
-				}}
-			  >
-				<UserSwitchOutlined className='w-[22px] h-[22px] text-blue1f5 flex items-center justify-center' />
-				Сменить роль
-			  </div>
-			),
-			key: '9'
-		  }] : []),
+		...(user?.roles && user?.roles.length > 1
+			? [
+					{
+						label: (
+							<div
+								className="flex items-center gap-[15px] px-[4px] py-[5px]"
+								onClick={() => {
+									showModal()
+								}}
+							>
+								<UserSwitchOutlined className="w-[22px] h-[22px] text-blue1f5 flex items-center justify-center" />
+								Сменить роль
+							</div>
+						),
+						key: '9'
+					}
+			  ]
+			: []),
 
 		{
 			label: (
@@ -200,10 +196,10 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const changeLanguage = (language: string) => {
 		i18n.changeLanguage(language)
 	}
-	const showMobileMenu = ()=>{
-		if(document.querySelector('.ant-menu-root')){
+	const showMobileMenu = () => {
+		if (document.querySelector('.ant-menu-root')) {
 			// @ts-ignore
-			if(document.querySelector('.ant-menu-root').style.position==='static'){
+			if (document.querySelector('.ant-menu-root').style.position === 'static') {
 				// @ts-ignore
 				document.querySelector('.ant-menu-root').style.position = 'fixed'
 				// @ts-ignore
@@ -215,33 +211,33 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 			// document.querySelector('header').style.marginLeft = '-100px'
 		}
 	}
-	const showMobileMenuEffect = ()=>{
-		if(document.querySelector('.ant-menu-root')){
+	const showMobileMenuEffect = () => {
+		if (document.querySelector('.ant-menu-root')) {
 			// @ts-ignore
-			if(document.querySelector('.ant-menu-root').style.position==='static'){
+			if (document.querySelector('.ant-menu-root').style.position === 'static') {
 				// @ts-ignore
 				document.querySelector('.ant-menu-root').style.position = 'fixed'
 				// @ts-ignore
 				document.querySelector('header').style.marginLeft = '0'
 				return
 			}
-			
+
 			// document.querySelector('header').style.marginLeft = '-100px'
 		}
 	}
-	console.log('paramValue',paramValue)
-	console.log('i18n.language,i18n.language',i18n.language)
+	console.log('paramValue', paramValue)
+	console.log('i18n.language,i18n.language', i18n.language)
 	const showModal = () => {
-		setIsModalOpen(true);
-	  };
-	
-	  const handleOk = () => {
-		setIsModalOpen(false);
-	  };
-	
-	  const handleCancel = () => {
-		setIsModalOpen(false);
-	  };
+		setIsModalOpen(true)
+	}
+
+	const handleOk = () => {
+		setIsModalOpen(false)
+	}
+
+	const handleCancel = () => {
+		setIsModalOpen(false)
+	}
 	return (
 		<header
 			className={clsx(
@@ -251,9 +247,11 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 		>
 			<div className="w-screen flex h-full justify-between px-8 max-sm:px-5">
 				<div className="flex gap-8 max-sm:gap-2 items-center">
-				{user?.roles[0].type==='ABITUR' || user?.roles[0].type==='OTHER' ? '':
-				<>
-					{/* <Button
+					{user?.roles[0].type === 'ABITUR' || user?.roles[0].type === 'OTHER' ? (
+						''
+					) : (
+						<>
+							{/* <Button
 						onClick={showDrawer}
 						className={clsx(
 							'py-2.5 rounded-full hover:!bg-transparent font-semibold bg-transparent border-2 flex items-center justify-center block lg:hidden',
@@ -266,8 +264,8 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 					>Сервисы
 						<span className="pl-2 max-md:!hidden">{t('services')}</span>
 					</Button> */}
-					
-					{/* <Button
+
+							{/* <Button
 						onClick={showDrawer}
 						className={clsx(
 							'h-[38px] py-2.5 rounded-full hover:!bg-transparent font-semibold bg-transparent border-2  items-center justify-center hidden md:flex',
@@ -280,17 +278,18 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 					>
 						<span className="w-[105px] pl-2 max-md:!hidden">{t('services')}</span>
 					</Button> */}
-					</>
-					}
+						</>
+					)}
 					<div className="flex items-center gap-5">
 						<LogoIasSvg white={type === 'service'} />
 						<Divider type="vertical" className="border-l-white h-10 m-0 hidden sm:block" />
-						<div onClick={showMobileMenu} className="text-white text-base font-bold hidden sm:block">Об университете</div>
+						<div onClick={showMobileMenu} className="text-white text-base font-bold hidden sm:block">
+							Об университете
+						</div>
 					</div>
 				</div>
 				<div className="flex gap-5 items-center h-full max-[1000px]:gap-0 w-fit justify-center">
 					<div className="flex h-full items-center max-[1000px]:hidden">
-
 						<a
 							className={clsx(
 								'h-full flex gap-2 items-center px-3 cursor-pointer no-underline',
@@ -298,13 +297,10 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 							)}
 							href={'https://shelly.kpfu.ru/e-ksu/main_blocks.startpage'}
 						>
-							<ArrowLeftBackInOldAccount white={type === 'service'}/>
-							<span className={clsx(
-								`text-[14px] text-[#3073D7]`
-								,
-								type === 'service' ? 'text-white' : 'text-[#3073D7]'
-
-							)}>
+							<ArrowLeftBackInOldAccount white={type === 'service'} />
+							<span
+								className={clsx(`text-[14px] text-[#3073D7]`, type === 'service' ? 'text-white' : 'text-[#3073D7]')}
+							>
 								в старый ЛК
 							</span>
 						</a>
@@ -353,13 +349,10 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						</div> */}
 					</div>
 					<Select
-						defaultValue={paramValue==='eng' ? 'en' : i18n.language}
+						defaultValue={paramValue === 'eng' ? 'en' : i18n.language}
 						style={{ width: 70 }}
 						variant="borderless"
-						className={clsx(
-							'max-sm:hidden ',
-							type === 'service' && 'text-white'
-						)}
+						className={clsx('max-sm:hidden ', type === 'service' && 'text-white')}
 						dropdownStyle={{ color: 'white' }}
 						popupClassName="text-white"
 						onChange={e => changeLanguage(e.valueOf())}
@@ -385,27 +378,23 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						>
 							<Space className="px-10 max-sm:px-5 max-[455px]:!gap-0 gap-2">
 								<PersonSvg white={type === 'service'} />
-								<div
-									className={clsx(
-										'h-full max-[455px]:hidden',
-										type === 'service' && 'text-white'
-									)}
-								>
+								<div className={clsx('h-full max-[455px]:hidden', type === 'service' && 'text-white')}>
 									<div className="font-bold text-sm truncate max-w-[120px]">
 										{`${user?.lastname} ${user?.firstname.charAt(0)}. ${
-											user?.middlename === ''
-												? ''
-												: user?.middlename.charAt(0) + '.'
+											user?.middlename === '' ? '' : user?.middlename.charAt(0) + '.'
 										}`}
 									</div>
-									<div className="text-sm">{user?.roles && user?.roles?.length > 1 ? 
-									((user?.roles?.map((item)=><div className={`${item.type === mainRole ? 'font-extrabold' : ''}`}>{getRole(item.type)}</div>)))
-									 : String((user?.roles?.map((item)=>getRole(item.type))))}
+									<div className="text-sm">
+										{user?.roles && user?.roles?.length > 1
+											? user?.roles?.map(item => (
+													<div className={`${item.type === mainRole ? 'font-extrabold' : ''}`}>
+														{getRole(item.type)}
+													</div>
+											  ))
+											: String(user?.roles?.map(item => getRole(item.type)))}
 									</div>
-								
-									<div>
-									{getRole(subRole)}
-									</div>
+
+									<div>{getRole(subRole)}</div>
 								</div>
 							</Space>
 						</Dropdown>
@@ -423,18 +412,15 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						</Drawer>
 					</div>
 				</div>
-				
 			</div>
-			
-			{urlContainsPractice ?
-			<div className='block lg:hidden  bg-blue65A  flex w-full mt-[1px] items-center p-1'>
-				<Button
+
+			{urlContainsPractice ? (
+				<div className="block lg:hidden  bg-blue65A  flex w-full mt-[1px] items-center p-1">
+					<Button
 						onClick={showMobileMenu}
 						className={clsx(
 							'py-2.5 ml-4 mr-4  rounded-full hover:!bg-transparent font-semibold bg-transparent border-2 flex items-center justify-center ',
-							type === 'main'
-								? `text-blue1f5 border-blue1f5 hover:!text-blue1f5`
-								: 'text-white border-white '
+							type === 'main' ? `text-blue1f5 border-blue1f5 hover:!text-blue1f5` : 'text-white border-white '
 						)}
 						type="primary"
 						icon={<MenuSvg white={type === 'service'} />}
@@ -442,18 +428,64 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						<span className="pl-2 max-md:!hidden">{t('services')}</span>
 					</Button>
 					<Divider type="vertical" className="border-l-white h-10 m-0 mr-4" />
-				<div  className="text-white text-base font-bold ">{service}</div>
-			</div> : ""}
+					<div className="text-white text-base font-bold ">{service}</div>
+				</div>
+			) : (
+				''
+			)}
 			<Modal footer={null} title="" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-			 <div className='p-8 flex flex-col gap-2'>{user?.roles && user?.roles?.length > 1 ? 
-									((user?.roles?.map((item)=><Button onClick={()=>{
-										if(mainRole===item.type){
+				<div className="p-8 flex flex-col gap-2">
+					{user?.roles && user?.roles?.length > 1
+						? user?.roles?.map(item => (
+								<Button
+									onClick={async () => {
+										if (mainRole === item.type) {
 											return
 										}
 										setmainRole(item.type)
-										window.location.reload()
-									}} className={`${item.type === mainRole ? 'font-extrabold' : ''} cursor-pointer`}>{getRole(item.type)}</Button>)))
-									 : ''}</div>
+										
+										// логика для обновления куков в случае смены роли
+										const storedPassword = localStorage.getItem('password');
+										const password = storedPassword ? JSON.parse(storedPassword) : '';
+										login({
+											username: item.login,
+											password: password
+										}).unwrap()
+										.then((data)=>{
+											document.cookie = `refresh=${
+												data.refreshToken
+											}; max-age=31536000; domain=${
+												document.domain !== 'localhost' ? 'kpfu.ru' : 'localhost'
+											}; path=/; samesite=strict`
+											document.cookie = `s_id=${
+												data.user.sessionId
+											}; max-age=31536000; domain=${
+												document.domain !== 'localhost' ? 'kpfu.ru' : 'localhost'
+											}; path=/; samesite=strict`
+											document.cookie = `h_id=${
+												data.user.sessionHash
+											}; max-age=31536000; domain=${
+												document.domain !== 'localhost' ? 'kpfu.ru' : 'localhost'
+											}; path=/; samesite=strict`
+											document.cookie = `a_id=${
+												data.user.allId
+											}; max-age=31536000; domain=${
+												document.domain !== 'localhost' ? 'kpfu.ru' : 'localhost'
+											}; path=/; samesite=strict`
+											window.location.reload()
+										})
+										.catch((error)=>{
+											console.log(error)
+											window.location.reload()
+										})
+										
+									}}									className={`${item.type === mainRole ? 'font-extrabold' : ''} cursor-pointer`}
+								>
+									{getRole(item.type)}
+								</Button>
+						  ))
+						: ''}
+				</div>
 			</Modal>
 		</header>
 	)

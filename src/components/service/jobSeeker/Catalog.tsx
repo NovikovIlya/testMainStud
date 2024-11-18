@@ -168,7 +168,7 @@ export default function Catalog() {
 	if (preLoadStatus.isLoading) {
 		return (
 			<>
-				<div className="w-screen h-screen flex items-center">
+				<div className="w-full h-full flex items-center">
 					<div className="text-center ml-auto mr-auto">
 						<Spin
 							indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}

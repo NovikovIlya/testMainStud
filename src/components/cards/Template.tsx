@@ -4,19 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { SessionProps } from '../../models/cards'
 
 
-export const TemplateCard = ({
-	href,
-	img,
-	info,
-	title,
-	height = 112,
-	width = 112,
-	buttonText = 'Watch',
-	mt = 'mt-3',
-	positionImage,
-	isRounded,
-	buttonType = 'default'
-}: SessionProps) => {
+export const TemplateCard = ({href,img,info,title,height = 112,width = 112,buttonText = 'Watch',mt = 'mt-3',positionImage,isRounded,buttonType = 'default'}: SessionProps) => {
 	const { t } = useTranslation()
 
 	return (

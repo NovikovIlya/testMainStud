@@ -155,9 +155,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		getSeekerResponds: builder.query<RespondItemType[], string>({
 			query: status => ({
-				url:
-					`http://${emplBaseURL}employment-api/v1/seeker/responds?status=` +
-					status,
+				url: `http://${emplBaseURL}employment-api/v1/seeker/responds?${status}`,
 				headers: {
 					Authorization: `Bearer ${seekerToken}`
 				}
@@ -216,14 +214,16 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
-		getRespondFullInfoAccounting: builder.query<VacancyRespondItemType, number>({
-			query: id => ({
-				url: `http://${emplBaseURL}employment-api/v1/respond/${id}`,
-				headers: {
-					Authorization: `Bearer ${accountingToken}`
-				}
-			})
-		}),
+		getRespondFullInfoAccounting: builder.query<VacancyRespondItemType, number>(
+			{
+				query: id => ({
+					url: `http://${emplBaseURL}employment-api/v1/respond/${id}`,
+					headers: {
+						Authorization: `Bearer ${accountingToken}`
+					}
+				})
+			}
+		),
 		getChatIdByRespondId: builder.query<
 			{
 				id: number

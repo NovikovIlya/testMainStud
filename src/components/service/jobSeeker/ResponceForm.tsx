@@ -855,6 +855,8 @@ export const ResponseForm = () => {
 							>
 								<Select
 									className="w-full rounded-lg"
+									showSearch
+									optionFilterProp="label"
 									options={
 										countries === undefined
 											? []
@@ -1012,6 +1014,8 @@ export const ResponseForm = () => {
 								rules={[{ required: true, message: 'Не выбрана страна' }]}
 							>
 								<Select
+									showSearch
+									optionFilterProp="label"
 									className="w-full rounded-lg"
 									options={
 										countries === undefined
@@ -1208,47 +1212,6 @@ export const ResponseForm = () => {
 													  dayjs(exp.experience.endWork, 'DD.MM.YYYY')
 															.toDate()
 															.getFullYear()}{' '}
-												{/* {dayjs(exp.experience.endWork, 'DD.MM.YYYY')
-													.toDate()
-													.getFullYear() -
-													dayjs(exp.experience.beginWork, 'DD.MM.YYYY')
-														.toDate()
-														.getFullYear() ===
-												0
-													? ''
-													: dayjs(exp.experience.endWork, 'DD.MM.YYYY')
-															.toDate()
-															.getFullYear() -
-															(dayjs(exp.experience.beginWork, 'DD.MM.YYYY')
-																.toDate()
-																.getFullYear() %
-																10) ===
-													  1
-													? '1 год'
-													: dayjs(exp.experience.endWork, 'DD.MM.YYYY')
-															.toDate()
-															.getFullYear() -
-															(dayjs(exp.experience.beginWork, 'DD.MM.YYYY')
-																.toDate()
-																.getFullYear() %
-																10) <=
-													  4
-													? `${
-															dayjs(exp.experience.endWork, 'DD.MM.YYYY')
-																.toDate()
-																.getFullYear() -
-															dayjs(exp.experience.beginWork, 'DD.MM.YYYY')
-																.toDate()
-																.getFullYear()
-													  } года`
-													: `${
-															dayjs(exp.experience.endWork, 'DD.MM.YYYY')
-																.toDate()
-																.getFullYear() -
-															dayjs(exp.experience.beginWork, 'DD.MM.YYYY')
-																.toDate()
-																.getFullYear()
-													  } лет`} */}
 											</p>
 										</div>
 										<div className="flex gap-[12px]">

@@ -4,6 +4,7 @@ import logger from 'redux-logger'
 
 import { apiSlice } from './api/apiSlice'
 import { practiceApi } from './api/practiceApi/practiceApi'
+import CatalogFilterSlice from './reducers/CatalogFilterSlice'
 import ChatRespondStatusSlice from './reducers/ChatRespondStatusSlice'
 import CurrentEmploymentStage from './reducers/CurrentEmploymentStage'
 import CurrentInterviewFormatSlice from './reducers/CurrentInterviewFormatSlice'
@@ -19,6 +20,18 @@ import CurrentVacancySlice from './reducers/CurrentVacancySlice'
 import EmploymentDataSlice from './reducers/EmploymentDataSlice'
 import EmploymentProgressSlice from './reducers/EmploymentProgressSlice'
 import EmploymentSeekerDocsSlice from './reducers/EmploymentSeekerDocsSlice'
+import currentEmploymentSeekerReducer from './reducers/EmploymentStageReducers/EmploymentStageSeekerReducer'
+import fifthStageCommentVisibilitySlice from './reducers/EmploymentStageReducers/comments/FifthStageCommentVisibilitySlice'
+import forthStageCommentVisibilitySlice from './reducers/EmploymentStageReducers/comments/ForthStageCommentVisibilitySlice'
+import secondStageCommentVisibilitySlice from './reducers/EmploymentStageReducers/comments/SecondStageCommentVisibilitySlice'
+import sixStageCommentVisibilitySlice from './reducers/EmploymentStageReducers/comments/SixStageCommentVisibilitySlice'
+import thirdStageCommentVisibilitySlice from './reducers/EmploymentStageReducers/comments/ThirdStageCommentVisibilitySlice'
+import fifthStageStatusSlice from './reducers/EmploymentStageReducers/stages/FifthStageStatusSlice'
+import forthStageStatusSlice from './reducers/EmploymentStageReducers/stages/ForthStageStatusSlice'
+import secondStageStatusSlice from './reducers/EmploymentStageReducers/stages/SecondStageStatusSlice'
+import sixStageStatusPersonnelSlice from './reducers/EmploymentStageReducers/stages/SixStageStatusPersonnelSlice'
+import sixStageStatusSlice from './reducers/EmploymentStageReducers/stages/SixStageStatusSlice'
+import thirdStageStatusSlice from './reducers/EmploymentStageReducers/stages/ThirdStageStatusSlice'
 import AddressReducer from './reducers/FormReducers/AddressReducer'
 import CountriesEducationReducer from './reducers/FormReducers/CountriesEducationReducer'
 import DocumentReducer from './reducers/FormReducers/DocumentReducer'
@@ -32,6 +45,8 @@ import StaffItemTabsReducer from './reducers/FormReducers/StaffItemTabsReducer'
 import StaffStepFormBusinessTrip from './reducers/FormReducers/StaffStepFormBusinessTrip'
 import WorkReducer from './reducers/FormReducers/WorkReducer'
 import LayoutSlice from './reducers/LayoutsSlice'
+import currentRequisiteSeekerReducer from './reducers/RequisiteReducers/RequisiteSeekerReducer'
+import currentCommentVisibilitySlice from './reducers/RequisiteReducers/StageCommentReducer'
 import AboutMeReducer from './reducers/SeekerFormReducers/AboutMeReducer'
 import ExperienceReducer from './reducers/SeekerFormReducers/ExperienceReducer'
 import FormCompletionReducer from './reducers/SeekerFormReducers/FormCompletionReducer'
@@ -39,22 +54,8 @@ import RespondEducationReducer from './reducers/SeekerFormReducers/RespondEducat
 import SkillsReducer from './reducers/SeekerFormReducers/SkillsReducer'
 import authSlice from './reducers/authSlice'
 import chatIdSlice from './reducers/chatIdSlice'
-import notificationSlice from './reducers/notificationSlice'
 import inviteSeekerButtonReducer from './reducers/inviteSeekerButtonReducer'
-import currentEmploymentSeekerReducer from './reducers/EmploymentStageReducers/EmploymentStageSeekerReducer'
-import secondStageStatusSlice from './reducers/EmploymentStageReducers/stages/SecondStageStatusSlice'
-import thirdStageStatusSlice from './reducers/EmploymentStageReducers/stages/ThirdStageStatusSlice'
-import forthStageStatusSlice from './reducers/EmploymentStageReducers/stages/ForthStageStatusSlice'
-import fifthStageStatusSlice from './reducers/EmploymentStageReducers/stages/FifthStageStatusSlice'
-import currentRequisiteSeekerReducer from './reducers/RequisiteReducers/RequisiteSeekerReducer'
-import currentCommentVisibilitySlice from './reducers/RequisiteReducers/StageCommentReducer'
-import secondStageCommentVisibilitySlice from './reducers/EmploymentStageReducers/comments/SecondStageCommentVisibilitySlice'
-import thirdStageCommentVisibilitySlice from './reducers/EmploymentStageReducers/comments/ThirdStageCommentVisibilitySlice'
-import forthStageCommentVisibilitySlice from './reducers/EmploymentStageReducers/comments/ForthStageCommentVisibilitySlice'
-import fifthStageCommentVisibilitySlice from './reducers/EmploymentStageReducers/comments/FifthStageCommentVisibilitySlice'
-import sixStageStatusSlice from './reducers/EmploymentStageReducers/stages/SixStageStatusSlice'
-import sixStageStatusPersonnelSlice from './reducers/EmploymentStageReducers/stages/SixStageStatusPersonnelSlice'
-import sixStageCommentVisibilitySlice from './reducers/EmploymentStageReducers/comments/SixStageCommentVisibilitySlice'
+import notificationSlice from './reducers/notificationSlice'
 
 export const store = configureStore({
 	reducer: {
@@ -110,6 +111,7 @@ export const store = configureStore({
 		forthStageCommentVisibility: forthStageCommentVisibilitySlice,
 		fifthStageCommentVisibility: fifthStageCommentVisibilitySlice,
 		sixStageCommentVisibility: sixStageCommentVisibilitySlice,
+		catalogFilter: CatalogFilterSlice
 	},
 	middleware: getDefaultMiddleware =>
 		getDefaultMiddleware()

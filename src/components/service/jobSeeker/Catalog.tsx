@@ -12,6 +12,11 @@ import {
 	useLazyGetVacancyPreviewByDirectionQuery,
 	useLazyGetVacancyPreviewBySubdivisionQuery
 } from '../../../store/api/serviceApi'
+import {
+	keepFilterCategory,
+	keepFilterSubCategory,
+	keepFilterType
+} from '../../../store/reducers/CatalogFilterSlice'
 import { allData } from '../../../store/reducers/SeekerFormReducers/AboutMeReducer'
 import { VacancyItemType } from '../../../store/reducers/type'
 
@@ -20,19 +25,18 @@ import VacancyItem from './VacancyItem'
 export default function Catalog() {
 	const dispatch = useDispatch()
 	const user = useAppSelector(state => state.auth.user)
+	const catalogFilter = useAppSelector(state => state.catalogFilter)
 
-	const { state } = useLocation()
-
-	const [categoryTitle, setCategoryTitle] = useState(state.category as string)
+	const [categoryTitle, setCategoryTitle] = useState(catalogFilter.category)
 	const [directoryTitle, setDirectoryTitle] = useState(
-		state.subcategory as string
+		catalogFilter.subcategory
 	)
 	const [subdivisionTitle, setSubdivisionTitle] = useState(
-		state.subcategory as string
+		catalogFilter.subcategory
 	)
 	const [page, setPage] = useState(0)
 	const [secondOption, setSecondOption] = useState<string | null>(
-		state.subcategory
+		catalogFilter.subcategory
 	)
 	const [requestData, setRequestData] = useState<{
 		category: string
@@ -40,9 +44,9 @@ export default function Catalog() {
 		type: 'DIRECTORY' | 'SUBDIVISION'
 		page: number
 	}>({
-		category: state.category,
-		subcategory: state.subcategory,
-		type: state.type,
+		category: catalogFilter.category,
+		subcategory: catalogFilter.subcategory,
+		type: catalogFilter.type,
 		page: 0
 	})
 	const [blockPageAddition, setBlockPageAddition] = useState<boolean>(true)
@@ -194,7 +198,7 @@ export default function Catalog() {
 					value: category.title,
 					label: category.title
 				}))}
-				defaultValue={state.category}
+				defaultValue={catalogFilter.category}
 				onChange={(value: string) => {
 					;(() => {
 						console.log(value)
@@ -207,6 +211,7 @@ export default function Catalog() {
 						})
 						setCategoryTitle(value)
 						setSecondOption(null)
+						dispatch(keepFilterCategory(value))
 					})()
 				}}
 				value={categoryTitle}
@@ -240,7 +245,7 @@ export default function Catalog() {
 								label: sub.title
 						  }))
 				}
-				defaultValue={state.subcategory}
+				defaultValue={catalogFilter.subcategory}
 				onChange={(value: string) => {
 					categories.find(category => category.title === categoryTitle)
 						?.direction
@@ -253,6 +258,8 @@ export default function Catalog() {
 									page: 0
 								}))
 								setSecondOption(value)
+								dispatch(keepFilterSubCategory(value))
+								dispatch(keepFilterType('DIRECTORY'))
 						  })()
 						: (() => {
 								setBlockPageAddition(true)
@@ -263,6 +270,8 @@ export default function Catalog() {
 									page: 0
 								}))
 								setSecondOption(value)
+								dispatch(keepFilterSubCategory(value))
+								dispatch(keepFilterType('SUBDIVISION'))
 						  })()
 				}}
 				placeholder={
@@ -302,11 +311,7 @@ export default function Catalog() {
 			</div>
 			<div className="mt-[16px] mb-[50px] flex flex-col w-full gap-[10px]">
 				{previews.map(prev => (
-					<VacancyItem
-						{...prev}
-						key={prev.id}
-						subcategory={secondOption as string}
-					/>
+					<VacancyItem {...prev} key={prev.id} />
 				))}
 				<div
 					className="h-[1px]"

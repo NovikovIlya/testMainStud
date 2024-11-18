@@ -14,8 +14,6 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 	const [getVacancyRespond, respond] = usePostVacancyRespondMutation()
 	const isEmpDep = user?.roles.find(role => role.type === 'EMPL')
 
-	const { state } = useLocation()
-
 	let responsibilities: string = ''
 	let responsibilitiesArr: RegExpMatchArray | null = null
 	let skills: string = ''
@@ -91,16 +89,7 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 					<button
 						onClick={() => {
 							props.type === 'CATALOG'
-								? navigate('/services/jobseeker/catalog', {
-										state: {
-											category: currentVacancy?.acf.category,
-											subcategory: state.subcategory,
-											type:
-												currentVacancy?.acf.direction !== 'false'
-													? 'DIRECTORY'
-													: 'SUBDIVISION'
-										}
-								  })
+								? navigate('/services/jobseeker/catalog')
 								: isEmpDep
 								? navigate(`/services/personnelaccounting/chat/id/${chatId}`)
 								: navigate(`/services/myresponds/chat/id/${chatId}`)

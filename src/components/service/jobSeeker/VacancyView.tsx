@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import { useAppSelector } from '../../../store'
 import { usePostVacancyRespondMutation } from '../../../store/api/serviceApi'
@@ -13,6 +13,8 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 	const navigate = useNavigate()
 	const [getVacancyRespond, respond] = usePostVacancyRespondMutation()
 	const isEmpDep = user?.roles.find(role => role.type === 'EMPL')
+
+	const { state } = useLocation()
 
 	let responsibilities: string = ''
 	let responsibilitiesArr: RegExpMatchArray | null = null
@@ -92,10 +94,7 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 								? navigate('/services/jobseeker/catalog', {
 										state: {
 											category: currentVacancy?.acf.category,
-											subcategory:
-												currentVacancy?.acf.direction !== 'false'
-													? currentVacancy?.acf.direction
-													: currentVacancy?.acf.subdivision,
+											subcategory: state.subcategory,
 											type:
 												currentVacancy?.acf.direction !== 'false'
 													? 'DIRECTORY'

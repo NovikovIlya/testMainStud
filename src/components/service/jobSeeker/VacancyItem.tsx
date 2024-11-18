@@ -5,7 +5,9 @@ import { useLazyGetVacancyViewQuery } from '../../../store/api/serviceApi'
 import { setCurrentVacancy } from '../../../store/reducers/CurrentVacancySlice'
 import { VacancyItemType } from '../../../store/reducers/type'
 
-export default function VacancyItem(props: VacancyItemType) {
+export default function VacancyItem(
+	props: VacancyItemType & { subcategory: string }
+) {
 	const [getVacancy, result] = useLazyGetVacancyViewQuery()
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
@@ -35,7 +37,9 @@ export default function VacancyItem(props: VacancyItemType) {
 							dispatch(setCurrentVacancy(result))
 							console.log(result)
 							console.log(result.acf.responsibilities)
-							navigate('/services/jobseeker/vacancyview')
+							navigate('/services/jobseeker/vacancyview', {
+								state: { subcategory: props.subcategory }
+							})
 						})
 				}}
 			>

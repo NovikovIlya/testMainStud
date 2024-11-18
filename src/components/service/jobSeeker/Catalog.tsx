@@ -302,7 +302,11 @@ export default function Catalog() {
 			</div>
 			<div className="mt-[16px] mb-[50px] flex flex-col w-full gap-[10px]">
 				{previews.map(prev => (
-					<VacancyItem {...prev} key={prev.id} />
+					<VacancyItem
+						{...prev}
+						key={prev.id}
+						subcategory={secondOption as string}
+					/>
 				))}
 				<div
 					className="h-[1px]"

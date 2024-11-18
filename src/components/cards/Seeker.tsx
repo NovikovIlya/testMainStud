@@ -45,7 +45,11 @@ export const Seeker = () => {
 			</div>
 			<div
 				className="flex w-fit max-[560px]:w-full justify-center items-center mr-[10%]"
-				onClick={() => navigate('/services/jobseeker/catalog')}
+				onClick={() =>
+					navigate('/services/jobseeker/catalog', {
+						state: { category: 'АУП', subcategory: 'Все', type: 'DIRECTORY' }
+					})
+				}
 			>
 				<svg
 					width="87"

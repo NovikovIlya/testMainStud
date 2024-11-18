@@ -89,7 +89,19 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 					<button
 						onClick={() => {
 							props.type === 'CATALOG'
-								? navigate('/services/jobseeker/catalog')
+								? navigate('/services/jobseeker/catalog', {
+										state: {
+											category: currentVacancy?.acf.category,
+											subcategory:
+												currentVacancy?.acf.direction !== 'false'
+													? currentVacancy?.acf.direction
+													: currentVacancy?.acf.subdivision,
+											type:
+												currentVacancy?.acf.direction !== 'false'
+													? 'DIRECTORY'
+													: 'SUBDIVISION'
+										}
+								  })
 								: isEmpDep
 								? navigate(`/services/personnelaccounting/chat/id/${chatId}`)
 								: navigate(`/services/myresponds/chat/id/${chatId}`)

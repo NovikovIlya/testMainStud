@@ -2,14 +2,13 @@ import { LoadingOutlined } from '@ant-design/icons'
 import { Select, Spin } from 'antd'
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { useLocation } from 'react-router-dom'
 
 import { useAppSelector } from '../../../store'
 import {
 	useGetCategoriesQuery,
 	useGetDirectionsQuery,
 	useGetSubdivisionsQuery,
-	useGetVacancyPreviewByDirectionQuery,
-	useGetVacancyPreviewBySubdivisionQuery,
 	useLazyGetVacancyPreviewByDirectionQuery,
 	useLazyGetVacancyPreviewBySubdivisionQuery
 } from '../../../store/api/serviceApi'
@@ -22,17 +21,30 @@ export default function Catalog() {
 	const dispatch = useDispatch()
 	const user = useAppSelector(state => state.auth.user)
 
-	const [categoryTitle, setCategoryTitle] = useState('АУП')
-	const [directoryTitle, setDirectoryTitle] = useState('Все')
-	const [subdivisionTitle, setSubdivisionTitle] = useState('')
+	const { state } = useLocation()
+
+	const [categoryTitle, setCategoryTitle] = useState(state.category as string)
+	const [directoryTitle, setDirectoryTitle] = useState(
+		state.subcategory as string
+	)
+	const [subdivisionTitle, setSubdivisionTitle] = useState(
+		state.subcategory as string
+	)
 	const [page, setPage] = useState(0)
-	const [secondOption, setSecondOption] = useState<string | null>('Все')
+	const [secondOption, setSecondOption] = useState<string | null>(
+		state.subcategory
+	)
 	const [requestData, setRequestData] = useState<{
 		category: string
 		subcategory: string
 		type: 'DIRECTORY' | 'SUBDIVISION'
 		page: number
-	}>({ category: 'АУП', subcategory: 'Все', type: 'DIRECTORY', page: 0 })
+	}>({
+		category: state.category,
+		subcategory: state.subcategory,
+		type: state.type,
+		page: 0
+	})
 	const [blockPageAddition, setBlockPageAddition] = useState<boolean>(true)
 	const [isBottomOfCatalogVisible, setIsBottomOfCatalogVisible] =
 		useState<boolean>(true)
@@ -182,9 +194,10 @@ export default function Catalog() {
 					value: category.title,
 					label: category.title
 				}))}
-				defaultValue={'АУП'}
+				defaultValue={state.category}
 				onChange={(value: string) => {
 					;(() => {
+						console.log(value)
 						setBlockPageAddition(true)
 						setRequestData({
 							category: value,
@@ -196,6 +209,7 @@ export default function Catalog() {
 						setSecondOption(null)
 					})()
 				}}
+				value={categoryTitle}
 				placeholder={!isCategoriesLoading && 'Выбрать'}
 				loading={isCategoriesLoading}
 				disabled={isCategoriesLoading}
@@ -226,7 +240,7 @@ export default function Catalog() {
 								label: sub.title
 						  }))
 				}
-				defaultValue={'Все'}
+				defaultValue={state.subcategory}
 				onChange={(value: string) => {
 					categories.find(category => category.title === categoryTitle)
 						?.direction

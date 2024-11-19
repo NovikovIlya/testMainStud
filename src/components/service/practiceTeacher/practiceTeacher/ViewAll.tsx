@@ -77,7 +77,7 @@ export const ViewAll = () => {
 	const {data:dataSubdevisionPracticeNew} = useGetPractiseSubdevisionNewQuery()
 	const [tableData, setTableData] = useState<any[]>(dataPractiseAll)
 	const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
-	const { data: dataDepartments, isSuccess: isSuccessDepartments } = useGetSubdivisionForPracticeQuery()
+	// const { data: dataDepartments, isSuccess: isSuccessDepartments } = useGetSubdivisionForPracticeQuery()
 	const { data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty } = useGetSpecialtyNamesForPractiseQuery(subDevisionId, {skip:!subDevisionId})
 	const { data: dataPracticeType, isSuccess: isSuccessPracticeType } = useGetPracticeTypeForPracticeQuery(objType, {skip: objType.subDivisionId === null || !objType.specialtyNameId })
 	const {data:dataGroupNumberNew} = useGetGroupNumbersNewQuery(subDevisionId,{ skip: !subDevisionId })
@@ -268,14 +268,16 @@ export const ViewAll = () => {
 		
 	]
 
+	// useEffect(() => {
+	// 	if (isSuccessDepartments) {
+	// 		setDepartments(processingOfDivisions(dataDepartments))
+	// 	}
+	// }, [dataDepartments])
+	console.log('dataPractiseAll',dataPractiseAll)
 	useEffect(() => {
-		if (isSuccessDepartments) {
-			setDepartments(processingOfDivisions(dataDepartments))
+		if (isSuccessPractiseAll) {
+			setTableData(dataPractiseAll)
 		}
-	}, [dataDepartments])
-
-	useEffect(() => {
-		if (isSuccessPractiseAll) setTableData(dataPractiseAll)
 	}, [isSuccessPractiseAll, isFetchingPractiseAll])
 
 	useEffect(() => {
@@ -341,7 +343,8 @@ export const ViewAll = () => {
 				return elem
 			} 
 			else {
-	
+				console.log('filter.subdivision,',filter.subdivision)
+				console.log('elem', elem)
 				// @ts-ignore
 				return elem.subdivisionId === filter.subdivision
 			}
@@ -381,10 +384,10 @@ export const ViewAll = () => {
 		}
 		function filterPast(elem: any) {
 			if (filter.dateFilling === 'Прошедшие') {
-				return dayjs(elem.period.split(' - ')[1].trim()).format('DD.MM.YYYY') > dayjs().format('DD.MM.YYYY')
+				return dayjs(elem.period.split(' - ')[1].trim()).format('DD.MM.YYYY') < dayjs().format('DD.MM.YYYY')
             }
 			if (filter.dateFilling === 'Текущие') {
-				return dayjs(elem.period.split(' - ')[1].trim()).format('DD.MM.YYYY') < dayjs().format('DD.MM.YYYY')
+				return dayjs(elem.period.split(' - ')[1].trim()).format('DD.MM.YYYY') >= dayjs().format('DD.MM.YYYY')
             }
 			else{
 				return elem

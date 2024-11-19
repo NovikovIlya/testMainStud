@@ -83,7 +83,7 @@ export const ViewFinally = () => {
 	const [treeLine, setTreeLine] = useState(true);
 	const [showLeafIcon, setShowLeafIcon] = useState(false);
 	const [value, setValue] = useState<any>();
-	console.log('subDevisionId',subDevisionId)
+
 	const columns = [
 		{
 			key: 'subdivision',
@@ -324,10 +324,10 @@ export const ViewFinally = () => {
 		}
 		function filterPast(elem: any) {
 			if (filter.dateFilling === 'Прошедшие') {
-				return dayjs(elem.period.split(' - ')[1].trim()).format('DD.MM.YYYY') > dayjs().format('DD.MM.YYYY')
+				return dayjs(elem.period.split(' - ')[1].trim()).format('DD.MM.YYYY') < dayjs().format('DD.MM.YYYY')
             }
 			if (filter.dateFilling === 'Текущие') {
-				return dayjs(elem.period.split(' - ')[1].trim()).format('DD.MM.YYYY') < dayjs().format('DD.MM.YYYY')
+				return dayjs(elem.period.split(' - ')[1].trim()).format('DD.MM.YYYY') >= dayjs().format('DD.MM.YYYY')
             }
 			else{
 				return elem

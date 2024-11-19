@@ -281,7 +281,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						<LogoIasSvg white={type === 'service'} />
 						<Divider type="vertical" className="border-l-white h-10 m-0 hidden sm:block" />
 						<div onClick={showMobileMenu} className="text-white text-base font-bold hidden sm:block">
-							Об университете
+							 {service}
 						</div>
 					</div>
 				</div>

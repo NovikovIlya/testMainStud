@@ -279,7 +279,7 @@ export const Document = () => {
 					)}
 				</Space>
 
-				<Space
+				{isEdit ? <><Space
 					size={'small'}
 					align="center"
 					className={clsx(isChanged && 'hidden')}
@@ -294,12 +294,12 @@ export const Document = () => {
 					</Tooltip>
 				</Space>
 
-				<Upload {...props} className={clsx(isChanged && 'hidden')}>
+			<Upload {...props} className={clsx(isChanged && 'hidden')}>
 					<Button type="primary" className="px-8 !rounded gap-2 flex">
 						<span>+</span>
 						{t('AddFile')}
 					</Button>
-				</Upload>
+				</Upload></> : ''}
 				<Space
 					direction="vertical"
 					size={'small'}

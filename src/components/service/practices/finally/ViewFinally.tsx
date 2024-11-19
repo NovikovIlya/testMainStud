@@ -21,6 +21,7 @@ import {
 	useGetGroupNumbersNewQuery,
 	useGetPracticeTypeForPracticeQuery,
 	useGetPracticesAllQuery,
+	useGetPractiseSubdevisionApiTeacherQuery,
 	useGetPractiseSubdevisionNewQuery,
 	useGetSubdivisionForPracticeQuery
 } from '../../../../store/api/practiceApi/individualTask'
@@ -73,10 +74,10 @@ export const ViewFinally = () => {
 		dateYear:'Учебный год (по убыванию)'
 	})
 	const {data: dataPractiseAll,isSuccess: isSuccessPractiseAll,isFetching: isFetchingPractiseAll} = useGetAllPracticesFinalQuery()
-	const {data:dataSubdevisionPracticeNew} = useGetPractiseSubdevisionNewQuery()
+	const {data:dataSubdevisionPracticeNew} = useGetPractiseSubdevisionApiTeacherQuery()
 	const [tableData, setTableData] = useState<any[]>(dataPractiseAll)
 	const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
-	const { data: dataDepartments, isSuccess: isSuccessDepartments } = useGetSubdivisionForPracticeQuery()
+	// const { data: dataDepartments, isSuccess: isSuccessDepartments } = useGetSubdivisionForPracticeQuery()
 	const { data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty } = useGetSpecialtyNamesForPractiseQuery(subDevisionId, {skip:!subDevisionId || subDevisionId==='Все'})
 	const { data: dataPracticeType, isSuccess: isSuccessPracticeType } = useGetPracticeTypeForPracticeQuery(objType, {skip: objType.subDivisionId === null || !objType.specialtyNameId })
 	const {data:dataGroupNumberNew} = useGetGroupNumbersNewQuery(subDevisionId,{ skip: !subDevisionId || subDevisionId === 'Все' })
@@ -211,11 +212,11 @@ export const ViewFinally = () => {
 		
 	]
 
-	useEffect(() => {
-		if (isSuccessDepartments) {
-			setDepartments(processingOfDivisions(dataDepartments))
-		}
-	}, [dataDepartments])
+	// useEffect(() => {
+	// 	if (isSuccessDepartments) {
+	// 		setDepartments(processingOfDivisions(dataDepartments))
+	// 	}
+	// }, [dataDepartments])
 
 	useEffect(() => {
 		if (isSuccessPractiseAll) setTableData(dataPractiseAll)

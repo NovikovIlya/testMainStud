@@ -202,7 +202,7 @@ export const AboutMe = () => {
 						/>
 					)}
 				</Space>
-				<Space direction="vertical" size={'small'} className="w-full">
+				{/* <Space direction="vertical" size={'small'} className="w-full">
 					<Typography.Text>{t('telephone')}</Typography.Text>
 					{isEdit ? (
 						<div className="bg-white p-2 rounded-md">
@@ -237,7 +237,7 @@ export const AboutMe = () => {
 							value={email !== '' ? email : ''}
 						/>
 					)}
-				</Space>
+				</Space> */}
 				<Space
 					direction="vertical"
 					size={'small'}

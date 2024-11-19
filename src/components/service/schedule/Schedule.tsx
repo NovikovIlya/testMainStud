@@ -14,17 +14,22 @@ const columns: ColumnsType<DataType> = [
 		title: '',
 		dataIndex: 'type',
 		key: 'type',
-		render: item => {
-			return {
-				props: {
-					style: {
-						background: item === 'black' ? 'red' : '#B3B3B3',
-						padding: '0 6.5px 0 6.5px'
-					}
-				},
-				children: <></>
-			}
-		}
+		className: '',
+		render: (item, item2) => {
+			return (
+			  <div className={`!h-[105px] w-[32px] ${
+				item2.type === 'Практика' ? 'bg-[#844EC9]' :
+				item2.type === 'Потоковая лекция' ? 'bg-[#A7FAFF]' :
+				item2.type === 'Лекция' ? 'bg-[#3A92E3]' :
+				item2.type === 'Семинар' ? 'bg-[#FFE24C]' :
+				item2.type === 'Лабораторное занятие' ? 'bg-[#59C348]' :
+				item2.type === 'Факультатив' ? 'bg-[#E93A3A]' :
+				item2.type === 'Тестирование' ? 'bg-[#FF9838]' :
+				'bg-[#B3B3B3]' // Default case for "Тип дисциплины не указан"
+			  }`}></div>
+			)
+		  }
+		  
 	},
 	{
 		title: 'Время',
@@ -57,18 +62,23 @@ const columns: ColumnsType<DataType> = [
 		render: item => <p className="text-base">{item}</p>
 	}
 ]
+
 export const Schedule = () => {
 	const { data: schedule, isLoading } = useGetScheduleQuery()
 	const [data, setData] = useState<DataType[] | undefined>()
+
 	useEffect(() => {
 		setData(schedule?.monday)
 	}, [isLoading, schedule])
-	if (schedule === undefined) return null
+	
 
 	const onChange = (e: RadioChangeEvent) => {
 		//@ts-ignore
 		setData(schedule[e.target.value])
 	}
+
+	if (schedule === undefined) return null
+
 	return (
 		<div className="mt-14 mx-14 radio">
 			<div className="mb-14 text-[28px]">Мое расписание</div>

@@ -113,7 +113,7 @@ export const jsxElements = [
 		key: 'EducationalCourses',
 		element: (
 			<TemplateCard
-				href="https://shelly.kpfu.ru/e-ksu/portal_person.kurs_cifra?p_type_menu_open=2#tab1"
+				href="https://edu.kpfu.ru"
 				info="EducationalCoursesInfo"
 				title="EducationalCourses"
 				img="/image2.png"

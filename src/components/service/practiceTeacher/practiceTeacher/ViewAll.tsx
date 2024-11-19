@@ -22,6 +22,7 @@ import {
 	useGetGroupNumbersNewQuery,
 	useGetPracticeTypeForPracticeQuery,
 	useGetPracticesAllQuery,
+	useGetPractiseSubdevisionApiTeacherQuery,
 	useGetPractiseSubdevisionNewQuery,
 	useGetSubdivisionForPracticeQuery
 } from '../../../../store/api/practiceApi/individualTask'
@@ -74,7 +75,7 @@ export const ViewAll = () => {
 		dateYear:'Учебный год (по убыванию)'
 	})
 	const {data: dataPractiseAll,isSuccess: isSuccessPractiseAll,isFetching: isFetchingPractiseAll} = useGetAllPracticeTeacherQuery()
-	const {data:dataSubdevisionPracticeNew} = useGetPractiseSubdevisionNewQuery()
+	const {data:dataSubdevisionPracticeNew} = useGetPractiseSubdevisionApiTeacherQuery()
 	const [tableData, setTableData] = useState<any[]>(dataPractiseAll)
 	const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
 	// const { data: dataDepartments, isSuccess: isSuccessDepartments } = useGetSubdivisionForPracticeQuery()

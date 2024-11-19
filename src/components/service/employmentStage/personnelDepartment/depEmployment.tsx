@@ -49,10 +49,14 @@ export const DepEmployment = () => {
 		<>
 			<div id="wrapper" className="flex flex-col bg-[#F5F8FB] px-[53px] pt-[120px] w-full">
 					<h1 className="text-[28px] font-normal text-[#000000]">Этап трудоустройства</h1>
-				<Button onClick={() => openAlert({type: 'error', text: 'Что то пошло не так'})}>Error</Button>
-				<Button onClick={() => openAlert({type: 'info', text: 'информационные'})}>Info</Button>
-				<Button onClick={() => openAlert({type: 'success', text: 'успех'})}>Success</Button>
-				<Button onClick={() => openAlert({type: 'warning', text: 'предупреждение для пользователя'})}>Success</Button>
+				<Button onClick={() =>{
+					try {
+						throw Error('404 полный капец')
+					} catch (error : any) {
+						let errorStr = error.name + " " + error.message
+						openAlert({type: 'error', text: errorStr})
+					}
+				}}>Error</Button>
 					<div className="flex flex-row gap-[12px] mt-[52px]">
 						<Button
 							id="buttonEmploymentStageAll"

@@ -56,7 +56,7 @@ export const AlertProvider: React.FC<AlertProviderProps> = ({ children }) => {
                     )}
                     {(type === 'warning') && (
                         <div className="left-side-icon warning-side">
-
+                            <InfoAlertIconSvg />
                         </div>
                     )}
                     <div className="w-[80%]">
@@ -72,7 +72,7 @@ export const AlertProvider: React.FC<AlertProviderProps> = ({ children }) => {
                     </div>
                 </div>
             ),
-            duration: 10,
+            duration: 6,
             icon: null
         })
     }

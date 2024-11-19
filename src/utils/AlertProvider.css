@@ -1,3 +1,8 @@
+.ant-message {
+    left: 90% !important;
+    top: 11% !important;
+}
+
 .alert-message {
     min-width: 400px;
     height: 65px;

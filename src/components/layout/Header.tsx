@@ -28,7 +28,8 @@ import { useGetRoleQuery } from '../../store/api/serviceApi'
 import { logOut, setEdit } from '../../store/reducers/authSlice'
 import { isMobileDevice } from '../../utils/hooks/useIsMobile'
 import { ModalNav } from '../service/ModalNav'
-import { useFakeLoginMutation, useLoginMutation } from '../../store/api/authApiSlice'
+import { useFakeLoginMutation } from '../../store/api/fakeLogin'
+
 
 export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const [isModalOpen, setIsModalOpen] = useState(false)
@@ -440,7 +441,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 											return
 										}
 										setmainRole(item.type)
-										
+												
 										// логика для обновления куков в случае смены роли
 										const storedPassword = localStorage.getItem('password');
 										const password = storedPassword ? JSON.parse(storedPassword) : '';
@@ -469,11 +470,15 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 											}; max-age=31536000; domain=${
 												document.domain !== 'localhost' ? 'kpfu.ru' : 'localhost'
 											}; path=/; samesite=strict`
-											window.location.reload()
+											console.log('меняю роль')
+											window.location.replace('/user');
+											
+
+											// window.location.reload()
 										})
 										.catch((error)=>{
 											console.log(error)
-											window.location.reload()
+											window.location.replace('/user');
 										})
 										
 									}}									className={`${item.type === mainRole ? 'font-extrabold' : ''} cursor-pointer`}

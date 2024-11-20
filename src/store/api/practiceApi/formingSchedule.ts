@@ -60,6 +60,13 @@ export const taskService = apiSlice.injectEndpoints({
                 }
             },
         }),
+        getSubmissionsTypePractice: builder.query<any, any>({
+            query: (subdivisionId) => {
+                return {
+                    url: `/services/api-practices/practices/practice-types?subdivisionId=${subdivisionId}`,
+                }
+            },
+        }),
         getOneSchedule: builder.query<any, any>({
             query: (scheduleId) => {
                 return {
@@ -125,6 +132,7 @@ export const {
     useGetAcademicYearQuery,
     useGetSubdivisionQuery,
     useGetSubmissionsKindPracticeQuery,
-    useGetSubmissionsSpecPracticeQuery
+    useGetSubmissionsSpecPracticeQuery,
+    useGetSubmissionsTypePracticeQuery
 
 } = taskService

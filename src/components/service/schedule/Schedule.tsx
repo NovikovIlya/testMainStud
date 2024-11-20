@@ -6,66 +6,71 @@ import { useGetScheduleQuery } from '../../../store/api/serviceApi'
 
 import './StyleSchedule.scss'
 import { DataType } from '../../../models/schedule'
+import useWindowOrientation from '../../../utils/hooks/useDeviceOrientation'
+import { isMobileDevice } from '../../../utils/hooks/useIsMobile'
 
 
 
-const columns: ColumnsType<DataType> = [
-	{
-		title: '',
-		dataIndex: 'type',
-		key: 'type',
-		className: '',
-		render: (item, item2) => {
-			return (
-			  <div className={`!h-[105px] w-[32px] ${
-				item2.type === 'Практика' ? 'bg-[#844EC9]' :
-				item2.type === 'Потоковая лекция' ? 'bg-[#A7FAFF]' :
-				item2.type === 'Лекция' ? 'bg-[#3A92E3]' :
-				item2.type === 'Семинар' ? 'bg-[#FFE24C]' :
-				item2.type === 'Лабораторное занятие' ? 'bg-[#59C348]' :
-				item2.type === 'Факультатив' ? 'bg-[#E93A3A]' :
-				item2.type === 'Тестирование' ? 'bg-[#FF9838]' :
-				'bg-[#B3B3B3]' // Default case for "Тип дисциплины не указан"
-			  }`}></div>
-			)
-		  }
-		  
-	},
-	{
-		title: 'Время',
-		dataIndex: 'time',
-		key: 'time',
-		render: item => <p className="text-base whitespace-nowrap">{item}</p>
-	},
-	{
-		title: 'Предмет',
-		dataIndex: 'name',
-		key: 'name',
-		render: item => <p className="text-base">{item}</p>
-	},
-	{
-		title: 'Преподаватель',
-		dataIndex: 'teacher',
-		key: 'teacher',
-		render: item => <p className="text-base">{item}</p>
-	},
-	{
-		title: 'Корпус',
-		key: 'building',
-		dataIndex: 'building',
-		render: item => <p className="text-base">{item}</p>
-	},
-	{
-		title: 'Аудитория',
-		key: 'room',
-		dataIndex: 'room',
-		render: item => <p className="text-base">{item}</p>
-	}
-]
+
 
 export const Schedule = () => {
 	const { data: schedule, isLoading } = useGetScheduleQuery()
 	const [data, setData] = useState<DataType[] | undefined>()
+	const isMobile = isMobileDevice()
+	const orientation  = useWindowOrientation()
+	const columns: ColumnsType<DataType> = [
+		{
+			title: '',
+			dataIndex: 'type',
+			key: 'type',
+			className: '',
+			render: (item, item2) => {
+				return (
+				  <div className={` ${isMobile ? 'hidden' : ''} !h-[105px] w-[32px] ${
+					item2.type === 'Практика' ? 'bg-[#844EC9]' :
+					item2.type === 'Потоковая лекция' ? 'bg-[#A7FAFF]' :
+					item2.type === 'Лекция' ? 'bg-[#3A92E3]' :
+					item2.type === 'Семинар' ? 'bg-[#FFE24C]' :
+					item2.type === 'Лабораторное занятие' ? 'bg-[#59C348]' :
+					item2.type === 'Факультатив' ? 'bg-[#E93A3A]' :
+					item2.type === 'Тестирование' ? 'bg-[#FF9838]' :
+					'bg-[#B3B3B3]' // Default case for "Тип дисциплины не указан"
+				  }`}></div>
+				)
+			  }
+			  
+		},
+		{
+			title: 'Время',
+			dataIndex: 'time',
+			key: 'time',
+			render: item => <p className="text-base whitespace-nowrap">{item}</p>
+		},
+		{
+			title: 'Предмет',
+			dataIndex: 'name',
+			key: 'name',
+			render: item => <p className="text-base">{item}</p>
+		},
+		{
+			title: 'Преподаватель',
+			dataIndex: 'teacher',
+			key: 'teacher',
+			render: item => <p className="text-base">{item}</p>
+		},
+		{
+			title: 'Корпус',
+			key: 'building',
+			dataIndex: 'building',
+			render: item => <p className="text-base">{item}</p>
+		},
+		{
+			title: 'Аудитория',
+			key: 'room',
+			dataIndex: 'room',
+			render: item => <p className="text-base">{item}</p>
+		}
+	]
 
 	useEffect(() => {
 		setData(schedule?.monday)
@@ -79,8 +84,10 @@ export const Schedule = () => {
 
 	if (schedule === undefined) return null
 
+	if(isMobile && orientation === 'portrait') return <div className='max-w-full text-center mt-10'>В данном разрешении модуль не работает, пожалуйста поверните телефон</div>
+
 	return (
-		<div className="mt-14 mx-14 radio">
+		<div className={`${isMobile ? 'mx-0' : 'mx-14'} mt-14  radio`}>
 			<div className="mb-14 text-[28px]">Мое расписание</div>
 			<Radio.Group
 				onChange={onChange}
@@ -132,7 +139,7 @@ export const Schedule = () => {
 					pagination={false}
 					className="max-w-[1050px] w-full drop--lg -[#d4e3f1] rounded-none"
 				/>
-				<div className="flex flex-col gap-6 text-sm">
+				<div className={`${isMobile? 'hidden' :''} flex flex-col gap-6 text-sm`}>
 					<div className="flex items-center gap-2">
 						<div className="min-w-3 min-h-3 w-[11px] h-[11px]  rounded-full bg-[#A7FAFF]" />
 						Потоковая лекция

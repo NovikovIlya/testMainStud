@@ -36,6 +36,7 @@ import { OptionsNameSpecialty } from '../roster/registerContracts/RegisterContra
 import './ViewPractical.scss'
 import { TitleHeadCell } from '../../businessTrip/NewBusinessTrip/archive/stepTwo/tableStepTwo/titleHeadCell/TitleHeadCell'
 import { disableParents } from '../../../../utils/disableParents'
+import { useGetSubmissionsSpecPracticeQuery, useGetSubmissionsTypePracticeQuery } from '../../../../store/api/practiceApi/formingSchedule'
 
 
 
@@ -81,18 +82,18 @@ export const ViewPractical = () => {
 		dateFilling: 'По дате (сначала новые)',
 		groupNumber: 'Все'
 	})
-	const {data: dataPractiseAll,isSuccess: isSuccessPractiseAll,isFetching: isFetchingPractiseAll} = useGetPracticesAllQuery(null, {refetchOnFocus: true})
+	const {data: dataPractiseAll,isSuccess: isSuccessPractiseAll,isFetching: isFetchingPractiseAll} = useGetPracticesAllQuery(null)
 	const {data:dataSubdevisionPracticeNew} = useGetPractiseSubdevisionNewQuery()
 	const [tableData, setTableData] = useState<TablePractical[]>(dataPractiseAll)
-	const tokenAccess = localStorage.getItem('access')!.replaceAll('"', '')
 	const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
 	const { data: dataDepartments, isSuccess: isSuccessDepartments } = useGetSubdivisionForPracticeQuery()
-	const { data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty } = useGetSpecialtyNamesForPractiseQuery(subDevisionId, {skip:!subDevisionId})
-	const { data: dataDep, isSuccess: isSuccessDep } = useGetCafDepartmentsQuery(subDevisionId,{ skip: !subDevisionId })
-	const { data: dataPracticeType, isSuccess: isSuccessPracticeType } = useGetPracticeTypeForPracticeQuery(objType, {skip: objType.subDivisionId === null || objType.specialtyNameId === null})
-	const {data:dataGroupNumber} = useGetGroupNumberQuery(subDevisionId, {skip:!subDevisionId})
-	const {data:dataGroupNumberNew} = useGetGroupNumbersNewQuery(subDevisionId,{ skip: !subDevisionId })
-	const {data:dataGetCafedraNew} = useGetCafedraNewQuery(subDevisionId,{ skip: !subDevisionId })
+	// const { data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty } = useGetSpecialtyNamesForPractiseQuery(subDevisionId, {skip:!subDevisionId || subDevisionId==='Все'})
+	const { data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty } = useGetSubmissionsSpecPracticeQuery(subDevisionId, {skip:!subDevisionId || subDevisionId==='Все'})
+	const { data: dataDep, isSuccess: isSuccessDep } = useGetCafDepartmentsQuery(subDevisionId,{ skip: !subDevisionId  || subDevisionId==='Все'})
+	// const { data: dataPracticeType, isSuccess: isSuccessPracticeType } = useGetPracticeTypeForPracticeQuery(objType, {skip: (objType.subDivisionId === null || objType.subDivisionId === 'Все') || !objType.specialtyNameId})
+	const { data: dataPracticeType, isSuccess: isSuccessPracticeType } = useGetSubmissionsTypePracticeQuery(subDevisionId,{ skip: !subDevisionId  || subDevisionId==='Все'})
+	const {data:dataGroupNumberNew} = useGetGroupNumbersNewQuery(subDevisionId,{ skip: !subDevisionId  || subDevisionId==='Все' })
+	const {data:dataGetCafedraNew} = useGetCafedraNewQuery(subDevisionId,{ skip: !subDevisionId  || subDevisionId==='Все' })
 	const [treeLine, setTreeLine] = useState(true);
     const [showLeafIcon, setShowLeafIcon] = useState(false);
     const [value, setValue] = useState<any>();
@@ -783,7 +784,7 @@ export const ViewPractical = () => {
 			
 						<Form.Item name={'practiceType'} className='mb-[-4px] w-full items-center'>
 						<Select
-							disabled={!pickSpeciality}
+							disabled={!pickSpeciality || pickSpeciality==='Все' || subDevisionId==='Все'} 
 							popupMatchSelectWidth={false}
 							defaultValue="Все"
 							className=""

@@ -52,9 +52,6 @@ export const NavPractices = () => {
 	const orientation  = useWindowOrientation()
 	const isMobile = isMobileDevice()
 
-	useEffect(()=>{
-		
-	},[])
 
 	const items: any = [
 		getItem('Справочники', 'sub1', <PracticesSvg />, [

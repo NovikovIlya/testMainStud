@@ -24,9 +24,7 @@ export const NavSetting = () => {
 	const navigate = useNavigate()
 	const { t } = useTranslation()
 	const [isMenuOpen, setIsMenuOpen] = useState(false)
-	const [mainRole, _] = useLocalStorageState<any>('typeAcc',
-		{ defaultValue: 'STUD'}
-	)
+	const [mainRole, _] = useLocalStorageState<any>('typeAcc',{ defaultValue: 'STUD'})
 
 	const handleNavigate = (url: string) => {
 		navigate(url)
@@ -63,7 +61,7 @@ export const NavSetting = () => {
 				)}
 				onClick={() => handleNavigate(id)}
 			>
-				<div className="flex items-center gap-[10px]">
+				<div className="flex items-center gap-[10px] p-1">
 					{icon}
 					<p className="text-base">{name}</p>
 				</div>

@@ -459,7 +459,7 @@ export const ViewFinally = () => {
 			<Form form={form} initialValues={initialFormValues}>
 				<Row>
 					<Col flex={'auto'}>
-						<span className="mb-14 text-[28px]">Практики для деканата</span>
+						<span className="mb-14 text-[28px]">Итоговая проверка</span>
 					</Col>
 				
 				</Row>

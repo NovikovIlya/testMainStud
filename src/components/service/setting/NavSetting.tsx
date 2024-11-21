@@ -73,7 +73,7 @@ export const NavSetting = () => {
 		<>
 			<Header type="service" service={t('Setting')} />
 
-			<div className="flex flex-col md:flex-row w-full mt-20">
+			<div className="flex flex-col md:flex-row w-full mt-20 h-full">
 				{/* Кнопка меню для мобильных устройств */}
 				<button
 					className="md:hidden fixed top-24 left-7 z-50 bg-blue-500 text-white p-2 rounded-md border-none"
@@ -86,7 +86,7 @@ export const NavSetting = () => {
 				<div
 					className={clsx(
 						'shadowNav fixed md:relative z-40 bg-white transition-transform duration-300 ease-in-out',
-						'w-[230px] h-[calc(100vh-80px)]',
+						'w-[230px] h-full',
 						isMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
 					)}
 				>

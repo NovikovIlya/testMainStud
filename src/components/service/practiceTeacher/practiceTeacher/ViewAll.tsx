@@ -37,6 +37,7 @@ import { TitleHeadCell } from '../../businessTrip/NewBusinessTrip/archive/stepTw
 import { disableParents } from '../../../../utils/disableParents'
 import { OptionsNameSpecialty } from '../../practices/roster/registerContracts/RegisterContracts'
 import { useGetAllPracticeTeacherQuery } from '../../../../store/api/practiceApi/practiceTeacher'
+import { useGetSubmissionsSpecPracticeQuery, useGetSubmissionsTypePracticeQuery } from '../../../../store/api/practiceApi/formingSchedule'
 
 const optionYears = [
 	{value:'Все'},
@@ -79,8 +80,8 @@ export const ViewAll = () => {
 	const [tableData, setTableData] = useState<any[]>(dataPractiseAll)
 	const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
 	// const { data: dataDepartments, isSuccess: isSuccessDepartments } = useGetSubdivisionForPracticeQuery()
-	const { data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty } = useGetSpecialtyNamesForPractiseQuery(subDevisionId, {skip:!subDevisionId})
-	const { data: dataPracticeType, isSuccess: isSuccessPracticeType } = useGetPracticeTypeForPracticeQuery(objType, {skip: objType.subDivisionId === null || !objType.specialtyNameId })
+	const { data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty } = useGetSubmissionsSpecPracticeQuery(subDevisionId, {skip:!subDevisionId || subDevisionId==='Все'})
+	const { data: dataPracticeType, isSuccess: isSuccessPracticeType } = useGetSubmissionsTypePracticeQuery(subDevisionId,{ skip: !subDevisionId  || subDevisionId==='Все'})
 	const {data:dataGroupNumberNew} = useGetGroupNumbersNewQuery(subDevisionId,{ skip: !subDevisionId })
 	const [treeLine, setTreeLine] = useState(true);
     const [showLeafIcon, setShowLeafIcon] = useState(false);

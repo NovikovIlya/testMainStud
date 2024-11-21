@@ -270,12 +270,6 @@ export const ViewAll = () => {
 		
 	]
 
-	// useEffect(() => {
-	// 	if (isSuccessDepartments) {
-	// 		setDepartments(processingOfDivisions(dataDepartments))
-	// 	}
-	// }, [dataDepartments])
-	console.log('dataPractiseAll',dataPractiseAll)
 	useEffect(() => {
 		if (isSuccessPractiseAll) {
 			setTableData(dataPractiseAll)
@@ -295,7 +289,6 @@ export const ViewAll = () => {
 	}, [filter, isSuccessPractiseAll])
 
 	useEffect(() => {
-	
 		if (isSuccessNameSpecialty && subDevisionId && isSuccessNameSpecialty) {
 			const pickSpecialityId = dataNameSpecialty?.find((elem: any) => {
 				if (elem.value === pickSpeciality) {
@@ -313,7 +306,6 @@ export const ViewAll = () => {
 
 	useEffect(()=>{
 		if(pickCourse === 'Все'){
-		
 			setFilter({
 				...filter,
 				semester: 'Все'
@@ -332,7 +324,6 @@ export const ViewAll = () => {
 		}
 
 		function filterDepartment(elem: any) {
-			
 			if (filter.department === 'Все') {
 				return elem
 			} else {
@@ -340,7 +331,6 @@ export const ViewAll = () => {
 			}
 		}
 		function filterSubdivision(elem: any) {
-
 			if (filter.subdivision === 'Все') {
 				return elem
 			} 
@@ -439,7 +429,6 @@ export const ViewAll = () => {
         console.log('onPopupScroll', e);
     };
 	const handleSelect = (value:any)=>{
-		
 		setPickSpeciality(value)
 	}
 
@@ -510,7 +499,6 @@ export const ViewAll = () => {
     }):[])]
 
 	const uniqueCourseNumbers = [...new Set(tableData?.map((item:any) => item.course))];
-
 
 	return (
 		<>

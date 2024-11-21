@@ -10,13 +10,14 @@ interface IInputsProps {
 }
 export const Inputs: FC<IInputsProps> = ({ error }) => {
 	const { t } = useTranslation()
+	console.log('error',error)
 	return (
 		<>
 			<Form.Item
 				name="email"
 				style={{ marginBottom: 30 }}
 				validateStatus={error !== null ? 'error' : undefined}
-				help={error !== null && <div>{error?.error}</div>}
+				// help={error !== null && <div>{error?.error}</div>}
 			>
 				<Input
 					className="rounded-lg mt-5 h-12 px-5 py-3"

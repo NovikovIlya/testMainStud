@@ -272,7 +272,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 								: 'text-white border-white '
 						)}
 						type="primary"
-						// icon={<MenuSvg white={type === 'service'} />}
+						// icon={<MenuSvg white={type === 'service'} />
 					>
 						<span className="w-[105px] pl-2 max-md:!hidden">{t('services')}</span>
 					</Button> */}
@@ -384,11 +384,13 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 									</div>
 									<div className="text-sm">
 										{user?.roles && user?.roles?.length > 1
-											? user?.roles?.map(item => (
-													<div className={`${item.type === mainRole ? 'font-extrabold' : ''}`}>
-														{getRole(item.type)}
-													</div>
-											  ))
+											? user?.roles
+													.toSorted((a, b) => (a.type === mainRole ? -1 : b.type === mainRole ? 1 : 0))
+													.map(item => (
+														<div className={`${item.type === mainRole ? 'font-extrabold' : ''}`}>
+															{getRole(item.type)}
+														</div>
+													))
 											: String(user?.roles?.map(item => getRole(item.type)))}
 									</div>
 
@@ -441,7 +443,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 											return
 										}
 										setmainRole(item.type)
-												
+											
 										// логика для обновления куков в случае смены роли
 										const storedPassword = localStorage.getItem('password');
 										const password = storedPassword ? JSON.parse(storedPassword) : '';

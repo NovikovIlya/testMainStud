@@ -74,7 +74,7 @@ const Plan = ({id,dataOnePlace,dataTasks,setShowFinal}:any) => {
 				</Col>
 			</Row>
 			<Row className=''>
-				<Col xs={24} sm={24} md={12}>
+				<Col xs={24} sm={24} md={24}>
 					<EditableTable setShow={setShow} dataSource={dataSource} setDataSource={setDataSource} setIsDisabled={setIsDisabled}/>
 				</Col>
 			</Row>
@@ -97,7 +97,7 @@ const Plan = ({id,dataOnePlace,dataTasks,setShowFinal}:any) => {
           
 		
 			<Row gutter={16} className="mt-14 mb-10">
-				<Col xs={24} md={12} span={12}>
+				<Col xs={24} md={24} span={24}>
 					<Card title={<div className='flex gap-3 items-center'><Znak />Обратите внимание</div>} bordered={false}>
 					<ul className='pl-5 pr-5 '>
 						

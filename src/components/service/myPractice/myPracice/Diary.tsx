@@ -76,7 +76,7 @@ const Diary = ({id,dataDiary,setShowFinalTwo}:any) => {
 				</Col>
 			</Row>
 			<Row className=''>
-				<Col  xs={24} sm={24} md={12} >
+				<Col  xs={24} sm={24} md={24} >
 					<EditableTableTwo setShow={setShow} dataSource={dataSource} setDataSource={setDataSource} setIsDisabled={setIsDisabled}/>
 				</Col>
 			</Row>

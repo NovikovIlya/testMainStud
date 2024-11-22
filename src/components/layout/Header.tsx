@@ -1,8 +1,8 @@
 import { UserSwitchOutlined } from '@ant-design/icons'
 import { useLocalStorageState } from 'ahooks'
-import { Button, Divider, Drawer, Modal, Select } from 'antd'
+import { Button, Divider, Drawer, Modal, Select ,Dropdown, Space} from 'antd'
 import type { MenuProps } from 'antd'
-import { Dropdown, Space } from 'antd'
+
 import clsx from 'clsx'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -25,7 +25,7 @@ import PersonalizationSvg from '../../assets/svg/PersonalizationSvg'
 import { TypeHeaderProps } from '../../models/layout'
 import { useAppSelector } from '../../store'
 import { useGetRoleQuery } from '../../store/api/serviceApi'
-import { logOut, setEdit } from '../../store/reducers/authSlice'
+import { logOut, setEdit, setIsCollapsed } from '../../store/reducers/authSlice'
 import { isMobileDevice } from '../../utils/hooks/useIsMobile'
 import { ModalNav } from '../service/ModalNav'
 import { useFakeLoginMutation } from '../../store/api/fakeLogin'
@@ -236,6 +236,9 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const handleCancel = () => {
 		setIsModalOpen(false)
 	}
+	const setCollapsed = () => {
+		dispatch(setIsCollapsed())
+	}
 	return (
 		<header
 			className={clsx(
@@ -279,6 +282,16 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						</>
 					)}
 					<div className="flex items-center gap-5">
+						{/* бургер для сворачивания */}
+						{/* <Button
+							onClick={setCollapsed}
+							className={clsx(
+								'!px-6  py-4 rounded-full hover:!bg-transparent font-semibold bg-transparent border-2 flex items-center justify-center ',
+								type === 'main' ? `text-blue1f5 border-blue1f5 hover:!text-blue1f5` : 'text-white border-white '
+							)}
+							type="primary"
+							icon={<MenuSvg white={type === 'service'} />}
+						/> */}
 						<LogoIasSvg white={type === 'service'} />
 						<Divider type="vertical" className="border-l-white h-10 m-0 hidden sm:block" />
 						<div onClick={showMobileMenu} className="text-white text-base font-bold hidden sm:block">
@@ -385,13 +398,13 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 									<div className="text-sm">
 										{user?.roles && user?.roles?.length > 1
 											? user?.roles
-													.toSorted((a, b) => (a.type === mainRole ? -1 : b.type === mainRole ? 1 : 0))
-													.map(item => (
+													.toSorted((a:any, b:any) => (a.type === mainRole ? -1 : b.type === mainRole ? 1 : 0))
+													.map((item:any) => (
 														<div className={`${item.type === mainRole ? 'font-extrabold' : ''}`}>
 															{getRole(item.type)}
 														</div>
 													))
-											: String(user?.roles?.map(item => getRole(item.type)))}
+											: String(user?.roles?.map((item:any) => getRole(item.type)))}
 									</div>
 
 									<div>{getRole(subRole)}</div>
@@ -436,7 +449,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 			<Modal footer={null} title="" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
 				<div className="p-8 flex flex-col gap-2">
 					{user?.roles && user?.roles?.length > 1
-						? user?.roles?.map(item => (
+						? user?.roles?.map((item:any) => (
 								<Button
 									onClick={async () => {
 										if (mainRole === item.type) {

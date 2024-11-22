@@ -3,12 +3,13 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 import { InitialState } from './type'
 
-const initialState: InitialState = {
+const initialState: any = {
 	accessToken: localStorage.getItem('access'),
 	refreshToken: localStorage.getItem('refresh'),
 	user: JSON.parse(localStorage.getItem('user') || '{}'),
 	edit: false,
 	subRole: '',
+	isCollapsed: false,
 }
 
 const authSlice = createSlice({
@@ -49,11 +50,14 @@ const authSlice = createSlice({
 		},
 		setSubRole: (state, action: PayloadAction<string>) => {
 			state.subRole = action.payload
+		},
+		setIsCollapsed: (state) => {
+			state.isCollapsed = !state.isCollapsed
 		}
 	}
 })
 
-export const { logOut, setCredentials, setEdit, setRole,setSubRole } = authSlice.actions
+export const { logOut, setCredentials, setEdit, setRole,setSubRole, setIsCollapsed } = authSlice.actions
 
 export default authSlice.reducer
 

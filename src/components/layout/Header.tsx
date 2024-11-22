@@ -239,6 +239,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const setCollapsed = () => {
 		dispatch(setIsCollapsed())
 	}
+	console.log('location',location)
 	return (
 		<header
 			className={clsx(
@@ -283,7 +284,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 					)}
 					<div className="flex items-center gap-5">
 						{/* бургер для сворачивания */}
-						{/* <Button
+						{/* {location?.pathname !== "/user" ? <Button
 							onClick={setCollapsed}
 							className={clsx(
 								'!px-6  py-4 rounded-full hover:!bg-transparent font-semibold bg-transparent border-2 flex items-center justify-center ',
@@ -291,7 +292,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 							)}
 							type="primary"
 							icon={<MenuSvg white={type === 'service'} />}
-						/> */}
+						/> :''} */}
 						<LogoIasSvg white={type === 'service'} />
 						<Divider type="vertical" className="border-l-white h-10 m-0 hidden sm:block" />
 						<div onClick={showMobileMenu} className="text-white text-base font-bold hidden sm:block">

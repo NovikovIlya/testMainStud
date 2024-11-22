@@ -156,7 +156,7 @@ export const NavMyPractices = () => {
 					style={{ width: isCollapsed ? 80 : 256 }}
 					onClick={onClick}
 					onOpenChange={onOpenChange}
-					className="mt-28"
+					className="mt-32"
 					// @ts-ignore
 					items={items.map((item, index) => ({
 						key: item.key,

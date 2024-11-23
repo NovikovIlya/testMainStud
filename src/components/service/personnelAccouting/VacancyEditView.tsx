@@ -17,7 +17,9 @@ export const VacancyEditView = () => {
 	const { currentVacancy } = useAppSelector(state => state.currentVacancy)
 
 	const { data: categories = [] } = useGetCategoriesQuery()
-	const [categoryTitle, setCategoryTitle] = useState<string>('')
+	const [categoryTitle, setCategoryTitle] = useState<string>(
+		currentVacancy?.acf.category as string
+	)
 	const { data: directions = [] } = useGetDirectionsQuery(categoryTitle)
 	const { data: subdivisions = [] } = useGetSubdivisionsQuery(categoryTitle)
 
@@ -166,7 +168,10 @@ export const VacancyEditView = () => {
 							skills: skills,
 							conditions: conditions,
 							category: category,
-							direction: direction,
+							direction: categories.find(cat => cat.title === categoryTitle)
+								?.direction
+								? direction
+								: subdivision,
 							experience: experience,
 							employment: employment
 						}}

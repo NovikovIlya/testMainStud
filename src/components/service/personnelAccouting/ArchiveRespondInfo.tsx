@@ -21,6 +21,7 @@ import {
 import { openChat } from '../../../store/reducers/ChatRespondStatusSlice'
 import { setRespondId } from '../../../store/reducers/CurrentRespondIdSlice'
 import { setCurrentVacancyId } from '../../../store/reducers/CurrentVacancyIdSlice'
+import { setCurrentVacancyName } from '../../../store/reducers/CurrentVacancyNameSlice'
 import { setChatId } from '../../../store/reducers/chatIdSlice'
 import { NocircleArrowIcon } from '../jobSeeker/NoCircleArrowIcon'
 
@@ -253,6 +254,11 @@ export const ArchiveRespondInfo = (props: {
 										</Button>
 										<Button
 											onClick={() => {
+												dispatch(
+													setCurrentVacancyName(
+														res.vacancyName ? res.vacancyName : res.desiredJob
+													)
+												)
 												handleNavigate(
 													`/services/personnelaccounting/chat/id/${chatId.id}`
 												)
@@ -533,6 +539,11 @@ export const ArchiveRespondInfo = (props: {
 										</Button>
 										<Button
 											onClick={() => {
+												dispatch(
+													setCurrentVacancyName(
+														res.vacancyName ? res.vacancyName : res.desiredJob
+													)
+												)
 												handleNavigate(
 													`/services/personnelaccounting/chat/id/${chatId.id}`
 												)

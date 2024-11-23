@@ -187,6 +187,19 @@ export const VacancyRequestUpdateView = () => {
 						setIsEdit(false)
 					}}
 				>
+					<div className="flex mb-[40px]">
+						<button
+							onClick={() => {
+								setIsEdit(false)
+							}}
+							className="bg-inherit border-none cursor-pointer"
+						>
+							<ArrowIcon />
+						</button>
+						<p className="ml-[40px] font-content-font font-normal text-black text-[28px]/[33.6px]">
+							{post !== undefined ? '«' + post + '»' : ''}
+						</p>
+					</div>
 					<Form.Item
 						name={'post'}
 						label={

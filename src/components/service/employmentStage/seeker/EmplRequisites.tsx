@@ -103,7 +103,8 @@ export const EmplRequisites = (props: {
 										.unwrap()
 										.then(() => {
 											setRequisitesState(prev => !prev)
-											dispatch(setHasRequisites(props.stageName))
+											foundStage?.bank &&
+												dispatch(setHasRequisites(props.stageName))
 											dispatch(
 												setBank({ stage: props.stageName, bank: undefined })
 											)

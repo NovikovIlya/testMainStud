@@ -103,9 +103,56 @@ export const VacancyEditView = () => {
 	)
 
 	const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
+	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
 	return (
 		<>
+			<ConfigProvider
+				theme={{
+					token: {
+						boxShadow: '0 0 19px 0 rgba(212, 227, 241, 0.6)'
+					}
+				}}
+			>
+				<Modal
+					bodyStyle={{ padding: 53 }}
+					centered
+					open={isDeleteModalOpen}
+					onCancel={() => {
+						setIsDeleteModalOpen(false)
+					}}
+					title={null}
+					footer={null}
+					width={407}
+				>
+					<p className="font-content-font font-normal text-black text-[16px]/[20px] text-center">
+						Вы действительно хотите удалить вакансию?
+					</p>
+					<div className="mt-[40px] flex gap-[12px]">
+						<Button
+							className="ml-auto"
+							onClick={() => {
+								setIsDeleteModalOpen(false)
+							}}
+						>
+							Отмена
+						</Button>
+						<Button
+							className="mr-auto"
+							type="primary"
+							onClick={() => {
+								deleteVacancy(currentVacancy?.id as number)
+									.unwrap()
+									.then(() => {
+										navigate('/services/personnelaccounting/vacancies')
+									})
+							}}
+						>
+							Удалить
+						</Button>
+					</div>
+				</Modal>
+			</ConfigProvider>
 			<ConfigProvider
 				theme={{
 					token: {
@@ -444,11 +491,7 @@ export const VacancyEditView = () => {
 							</Button>
 							<Button
 								onClick={() => {
-									deleteVacancy(currentVacancy?.id as number)
-										.unwrap()
-										.then(() => {
-											navigate('/services/personnelaccounting/vacancies')
-										})
+									setIsDeleteModalOpen(true)
 								}}
 								className="w-[151px] font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black bg-inherit"
 							>

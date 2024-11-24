@@ -416,7 +416,7 @@ export const ResponseForm = () => {
 												firstname: aboutMeData.name,
 												patronymic: aboutMeData.patronymic,
 												birthday: aboutMeData.birthDay
-													.split('-')
+													.split('.')
 													.reverse()
 													.join('-'),
 												citizenship: countries?.find(
@@ -442,11 +442,11 @@ export const ResponseForm = () => {
 													exp => ({
 														workPlace: exp.experience.workplace,
 														beginWork: exp.experience.beginWork
-															.split('-')
+															.split('.')
 															.reverse()
 															.join('-'),
 														endWork: exp.experience.endWork
-															.split('-')
+															.split('.')
 															.reverse()
 															.join('-'),
 														position: exp.experience.seat,
@@ -496,10 +496,12 @@ export const ResponseForm = () => {
 								name: aboutMeData.name,
 								surname: aboutMeData.surName,
 								patronymic: aboutMeData.patronymic,
-								birthDay: dayjs(
-									aboutMeData.birthDay.split('.').join('-'),
-									'DD.MM.YYYY'
-								),
+								birthDay: aboutMeData.birthDay
+									? dayjs(
+											aboutMeData.birthDay.split('.').join('-'),
+											'DD.MM.YYYY'
+									  )
+									: null,
 								country: aboutMeData.countryId,
 								phoneNumber: aboutMeData.phone,
 								email: aboutMeData.email
@@ -508,10 +510,7 @@ export const ResponseForm = () => {
 								dispatch(
 									allData({
 										...values,
-										birthDay: values.birthDay.$d
-											.toLocaleDateString()
-											.split('.')
-											.join('-'),
+										birthDay: values.birthDay.$d.toLocaleDateString(),
 										surName: values.surname,
 										phone: values.phoneNumber,
 										countryId: values.country
@@ -1305,14 +1304,8 @@ export const ResponseForm = () => {
 											workplace: values.workplace,
 											seat: values.seat,
 											duties: values.duties,
-											beginWork: values.beginWork.$d
-												.toLocaleDateString()
-												.split('.')
-												.join('-'),
-											endWork: values.endWork.$d
-												.toLocaleDateString()
-												.split('.')
-												.join('-')
+											beginWork: values.beginWork.$d.toLocaleDateString(),
+											endWork: values.endWork.$d.toLocaleDateString()
 										}
 									})
 								)
@@ -1447,14 +1440,8 @@ export const ResponseForm = () => {
 										alterExperience({
 											id: experienceToEdit.id,
 											workplace: values.workplace,
-											beginWork: values.beginWork.$d
-												.toLocaleDateString()
-												.split('.')
-												.join('-'),
-											endWork: values.endWork.$d
-												.toLocaleDateString()
-												.split('.')
-												.join('-'),
+											beginWork: values.beginWork.$d.toLocaleDateString(),
+											endWork: values.endWork.$d.toLocaleDateString(),
 											seat: values.seat,
 											duties: values.duties
 										})

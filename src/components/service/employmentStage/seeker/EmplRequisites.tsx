@@ -1,11 +1,12 @@
-import { Checkbox, ConfigProvider, Popover, Radio } from 'antd'
+import { Button, Checkbox, ConfigProvider, Popover, Radio } from 'antd'
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 import { useAppSelector } from '../../../../store'
 import {
 	useSetHasNoRequisitesOnEmploymentMutation,
-	useSetHasRequisitesEmploymentMutation
+	useSetHasRequisitesEmploymentMutation,
+	useUpdateEmploymentDocumentsMutation
 } from '../../../../store/api/serviceApi'
 import {
 	setBank,
@@ -32,6 +33,7 @@ export const EmplRequisites = (props: {
 
 	const [setHasNoRequisites] = useSetHasNoRequisitesOnEmploymentMutation()
 	const [setHasRequisitesQuery] = useSetHasRequisitesEmploymentMutation()
+	const [updateDocuments, queryStatus] = useUpdateEmploymentDocumentsMutation()
 
 	const [hasRequisites, setRequisitesState] = useState<boolean>(
 		!foundStage?.hasRequisites
@@ -92,96 +94,116 @@ export const EmplRequisites = (props: {
 							))}
 					</div>
 				</div>
-				<div className="flex flex-col gap-[8px]">
-					<div className="flex gap-[12px] items-center">
-						<Checkbox
-							className=""
-							checked={hasRequisites}
-							onClick={() => {
-								if (hasRequisites) {
-									setHasRequisitesQuery(props.respondId)
-										.unwrap()
-										.then(() => {
-											setRequisitesState(prev => !prev)
-											foundStage?.bank &&
-												dispatch(setHasRequisites(props.stageName))
-											dispatch(
-												setBank({ stage: props.stageName, bank: undefined })
-											)
-										})
-								} else {
-									setRequisitesState(prev => !prev)
-								}
-							}}
-						>
-							У меня нет ни одной из указанных карт
-						</Checkbox>
-						<Popover
-							overlayClassName="p-[20px] w-[369px]"
-							className="pointer-events-auto"
-							placement="bottomLeft"
-							arrow={false}
-							content="Если у вас нет ни одной из указанных карт, нажмите на галочку. Карта будет заведена на ваше имя и вы сможете получить её, как только будете трудоустроены."
-						>
-							<p className="h-[18px] w-[18px] border border-black border-solid text-center content-center text-[12px]/[12px] opacity-40">
-								?
-							</p>
-						</Popover>
-					</div>
-					{hasRequisites && (
+				{foundStage?.status !== 'REFINE' &&
+					foundStage?.status !== 'UPDATED' && (
 						<div className="flex flex-col gap-[8px]">
-							<p className="text-[14px]/[14px] ml-[24px]">
-								Выберите карту, которую вы бы хотели завести:
-							</p>
-							<Radio.Group
-								name="bank"
-								className="flex flex-col gap-[8px]"
-								defaultValue={foundStage?.bank}
-							>
-								<Radio
-									value={'SBER'}
+							<div className="flex gap-[12px] items-center">
+								<Checkbox
+									className=""
+									checked={hasRequisites}
 									onClick={() => {
-										setHasNoRequisites({
-											respondId: props.respondId,
-											bank: 'SBER'
-										})
-											.unwrap()
-											.then(() => {
-												if (foundStage?.hasRequisites) {
-													dispatch(setHasRequisites(props.stageName))
-												}
-												dispatch(
-													setBank({ stage: props.stageName, bank: 'SBER' })
-												)
-											})
+										if (hasRequisites) {
+											setHasRequisitesQuery(props.respondId)
+												.unwrap()
+												.then(() => {
+													setRequisitesState(prev => !prev)
+													foundStage?.bank &&
+														dispatch(setHasRequisites(props.stageName))
+													dispatch(
+														setBank({ stage: props.stageName, bank: undefined })
+													)
+												})
+										} else {
+											setRequisitesState(prev => !prev)
+										}
 									}}
 								>
-									Сбербанк
-								</Radio>
-								<Radio
-									value={'VTB'}
-									onClick={() => {
-										setHasNoRequisites({
-											respondId: props.respondId,
-											bank: 'VTB'
-										})
-											.unwrap()
-											.then(() => {
-												if (foundStage?.hasRequisites) {
-													dispatch(setHasRequisites(props.stageName))
-												}
-												dispatch(
-													setBank({ stage: props.stageName, bank: 'VTB' })
-												)
-											})
-									}}
+									У меня нет ни одной из указанных карт
+								</Checkbox>
+								<Popover
+									overlayClassName="p-[20px] w-[369px]"
+									className="pointer-events-auto"
+									placement="bottomLeft"
+									arrow={false}
+									content="Если у вас нет ни одной из указанных карт, нажмите на галочку. Карта будет заведена на ваше имя и вы сможете получить её, как только будете трудоустроены."
 								>
-									ВТБ
-								</Radio>
-							</Radio.Group>
+									<p className="h-[18px] w-[18px] border border-black border-solid text-center content-center text-[12px]/[12px] opacity-40">
+										?
+									</p>
+								</Popover>
+							</div>
+							{hasRequisites && (
+								<div className="flex flex-col gap-[8px]">
+									<p className="text-[14px]/[14px] ml-[24px]">
+										Выберите карту, которую вы бы хотели завести:
+									</p>
+									<Radio.Group
+										name="bank"
+										className="flex flex-col gap-[8px]"
+										defaultValue={foundStage?.bank}
+									>
+										<Radio
+											value={'SBER'}
+											onClick={() => {
+												setHasNoRequisites({
+													respondId: props.respondId,
+													bank: 'SBER'
+												})
+													.unwrap()
+													.then(() => {
+														if (foundStage?.hasRequisites) {
+															dispatch(setHasRequisites(props.stageName))
+														}
+														dispatch(
+															setBank({ stage: props.stageName, bank: 'SBER' })
+														)
+													})
+											}}
+										>
+											Сбербанк
+										</Radio>
+										<Radio
+											value={'VTB'}
+											onClick={() => {
+												setHasNoRequisites({
+													respondId: props.respondId,
+													bank: 'VTB'
+												})
+													.unwrap()
+													.then(() => {
+														if (foundStage?.hasRequisites) {
+															dispatch(setHasRequisites(props.stageName))
+														}
+														dispatch(
+															setBank({ stage: props.stageName, bank: 'VTB' })
+														)
+													})
+											}}
+										>
+											ВТБ
+										</Radio>
+									</Radio.Group>
+								</div>
+							)}
 						</div>
 					)}
-				</div>
+				{(foundStage?.status === 'REFINE' ||
+					foundStage?.status === 'UPDATED') && (
+					<Button
+						loading={queryStatus.isLoading}
+						type="primary"
+						className="rounded-[54.5px] w-[141px]"
+						onClick={() => {
+							updateDocuments(foundStage.id)
+								.unwrap()
+								.then(() => {
+									dispatch(setStageProgressAsReady(props.stageId))
+								})
+						}}
+					>
+						Далее
+					</Button>
+				)}
 			</div>
 		</>
 	)

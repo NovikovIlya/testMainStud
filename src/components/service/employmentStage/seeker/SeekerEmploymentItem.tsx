@@ -116,8 +116,8 @@ export const SeekerEmploymentItem = (props: RespondItemType) => {
 												comm.type === 'SECOND'
 													? dispatch(setStage(2))
 													: comm.type === 'FOURTH'
-													? dispatch(setStage(4))
-													: dispatch(setStage(6))
+													? dispatch(setStage(3))
+													: dispatch(setStage(5))
 												navigate(
 													`/services/myresponds/employment/stages/${props.vacancyId}/${props.id}`
 												)
@@ -126,8 +126,8 @@ export const SeekerEmploymentItem = (props: RespondItemType) => {
 											{comm.type === 'SECOND'
 												? 'Этап №2 «Прикрепление документов»'
 												: comm.type === 'FOURTH'
-												? 'Этап №4 «Медицинский осмотр»'
-												: 'Этап №6 «Реквизиты»'}
+												? 'Этап №3 «Медицинский осмотр»'
+												: 'Этап №5 «Реквизиты»'}
 										</a>
 									</div>
 								) : (

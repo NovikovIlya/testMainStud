@@ -168,7 +168,7 @@ export default function Catalog() {
 
 	return (
 		<>
-			<div className="pt-[120px] pl-[52px]">
+			<div className="pt-[120px] pl-[52px] w-full pr-[52px]">
 				<h1 className="font-content-font font-normal text-[28px]/[28px] text-black">
 					Каталог вакансий
 				</h1>

@@ -306,8 +306,8 @@ export type VacancyRespondItemType = {
 		age: number
 		email: string
 		phone: string
-		country: string
-		bday: string
+		countryId: number
+		birthday: string
 	}
 	respondData: {
 		coverLetter: string

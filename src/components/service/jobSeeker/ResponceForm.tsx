@@ -117,6 +117,7 @@ export const ResponseForm = () => {
 	})
 
 	const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
+	const [resultModalText, setResultModalText] = useState<string>('')
 
 	return (
 		<>
@@ -157,7 +158,7 @@ export const ResponseForm = () => {
 				>
 					<div className="text-center">
 						<p className="font-content-font font-normal text-black text-[16px]/[20px] mb-[40px]">
-							Спасибо, ваш отклик успешно отправлен
+							{resultModalText}
 						</p>
 						<Button
 							type="primary"
@@ -418,7 +419,9 @@ export const ResponseForm = () => {
 													.split('-')
 													.reverse()
 													.join('-'),
-												citizenship: 'Российская федерация (РФ)',
+												citizenship: countries?.find(
+													cou => cou.id === aboutMeData.countryId
+												)?.shortName!,
 												phone: aboutMeData.phone,
 												email: aboutMeData.email
 											},
@@ -458,10 +461,23 @@ export const ResponseForm = () => {
 										})
 											.unwrap()
 											.then(() => {
-												!result.isSuccess && setIsFormOpen(false)
+												setResultModalText(
+													'Спасибо, ваш отклик успешно отправлен'
+												)
+												setIsFormOpen(false)
+												setIsSuccessModalOpen(true)
 											})
-											.then(() => {
-												!result.isSuccess && setIsSuccessModalOpen(true)
+											.catch(error => {
+												try {
+													console.log(error)
+													setResultModalText(error.data.message as string)
+												} catch (err) {
+													setResultModalText(
+														'Что-то пошло не так, приносим извинения за неудобства'
+													)
+												}
+												setIsFormOpen(false)
+												setIsSuccessModalOpen(true)
 											})
 								}}
 							>

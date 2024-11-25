@@ -10,7 +10,11 @@ import {
 	useLazyGetEmploymentDataQuery,
 	useUploadEmploymentDocumentMutation
 } from '../../../../store/api/serviceApi'
-import { setAllData } from '../../../../store/reducers/EmploymentDataSlice'
+import {
+	removePartialData,
+	setAllData,
+	setPartialData
+} from '../../../../store/reducers/EmploymentDataSlice'
 import { EmploymentDocsType } from '../../../../store/reducers/type'
 
 export const FileAttachment = (
@@ -75,11 +79,12 @@ export const FileAttachment = (
 									deleteDoc({ respondId: props.respondId, docId: foundDoc.id })
 										.unwrap()
 										.then(() => {
-											getEmpData(props.respondId)
-												.unwrap()
-												.then(data => {
-													dispatch(setAllData(data))
+											dispatch(
+												removePartialData({
+													stageName: props.stageName,
+													docId: foundDoc.id
 												})
+											)
 										})
 								}}
 							>
@@ -108,6 +113,15 @@ export const FileAttachment = (
 							.then(res => {
 								console.log(decodeURI(res.name))
 								onSuccess && onSuccess(file)
+								dispatch(
+									setPartialData({
+										stageName: props.stageName,
+										docType: props.name,
+										id: res.id,
+										name: res.name,
+										size: res.size
+									})
+								)
 								setIsFileUploading(false)
 							})
 							.catch(() => {
@@ -125,12 +139,7 @@ export const FileAttachment = (
 							: options.file.status === 'error' ||
 							  options.file.status === 'removed'
 							? console.log('Произошла чудовищная ошибка')
-							: (setIsFileUploading(false),
-							  getEmpData(props.respondId)
-									.unwrap()
-									.then(data => {
-										dispatch(setAllData(data))
-									}))
+							: setIsFileUploading(false)
 					}}
 				>
 					{' '}

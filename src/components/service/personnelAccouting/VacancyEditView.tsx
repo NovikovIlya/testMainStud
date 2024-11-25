@@ -105,6 +105,8 @@ export const VacancyEditView = () => {
 	const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
+	const [editForm] = Form.useForm()
+
 	return (
 		<>
 			<ConfigProvider
@@ -208,6 +210,7 @@ export const VacancyEditView = () => {
 				</div>
 				{isEdit ? (
 					<Form
+						form={editForm}
 						initialValues={{
 							post: post,
 							salary: salary,
@@ -368,7 +371,11 @@ export const VacancyEditView = () => {
 										value: category.title,
 										label: category.title
 									}))}
-									onChange={e => setCategoryTitle(e)}
+									onChange={e => {
+										setCategoryTitle(e)
+										console.log('test log')
+										editForm.setFieldValue(['direction'], null)
+									}}
 								></Select>
 							</Form.Item>
 							<Form.Item

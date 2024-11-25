@@ -9,7 +9,7 @@ const initialState: any = {
 	user: JSON.parse(localStorage.getItem('user') || '{}'),
 	edit: false,
 	subRole: '',
-	isCollapsed: false,
+	isCollapsed: localStorage.getItem('isCollapsed') === 'true',
 }
 
 const authSlice = createSlice({
@@ -53,6 +53,7 @@ const authSlice = createSlice({
 		},
 		setIsCollapsed: (state) => {
 			state.isCollapsed = !state.isCollapsed
+			localStorage.setItem('isCollapsed', state.isCollapsed.toString())
 		}
 	}
 })

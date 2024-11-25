@@ -24,7 +24,7 @@ export const NavMyPractices = () => {
 	const refArray = [ref1, ref2, ref3]
 	const [open, setOpen] = useState<boolean>(false)
 	const orientation = useWindowOrientation()
-	const isMobile = isMobileDevice()
+	const isMobile = false
 	const isCollapsed = useAppSelector(state => state.auth.isCollapsed)
 
 	const items: any = [

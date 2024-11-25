@@ -42,7 +42,7 @@ export const NavPractices = () => {
 	const refArray:any = [ref1, ref2, ref3];
 	const [open, setOpen] = useState<boolean>(false);
 	const orientation  = useWindowOrientation()
-	const isMobile = isMobileDevice()
+	const isMobile = false
 
 
 	const items: any = [

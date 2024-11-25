@@ -3,18 +3,19 @@ import { apiSlice } from "../apiSlice";
 
 export const roleModelService = apiSlice.injectEndpoints({
     endpoints: builder => ({
-        getRole: builder.query<void, void>({
+        getModules: builder.query<any, void>({
             query: () => {
                 return {
-                    url: 'services/api-practices/contracts',
-                    method: 'HEAD',
+                    url: 'user-api/user/modules',
+                    method: 'GET',
 
                 }
-            }
+            },
+            keepUnusedDataFor:1,
         }),
 
     })
 })
 export const {
-    
+    useGetModulesQuery
 } = roleModelService

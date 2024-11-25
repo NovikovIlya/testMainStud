@@ -39,8 +39,8 @@ export const User = () => {
 	
 	// Проверка на роль Абитурента + зачислен ли и сбор данных по зачислению 
 	useEffect(()=>{
-		if(user?.roles?.some(item => item.credentials && item.credentials.length > 0)){
-			setAcceptedData(user?.roles?.map((item)=>{
+		if(user?.roles?.some((item:any) => item.credentials && item.credentials.length > 0)){
+			setAcceptedData(user?.roles?.map((item:any)=>{
 				return item.credentials
 			}))
 		}
@@ -53,7 +53,7 @@ export const User = () => {
 			<div className="px-10 flex items-center justify-center"> 
 				<div className="max-w-[1600px] w-[1600px]">
 					<div className={`mt-[125px] text-2xl font-bold text-blue1f5 justify-between flex`}>
-						{t('PersonalAccount')}
+						{/* {t('PersonalAccount')} */}
 						 {user?.roles[0].type==='ABITUR' || user?.roles[0].type==='OTHER' ? '':
 						<div className='flex gap-3 items-center'>
 							{/* <span className='text-sm font-normal'>{t('Personalization')}</span>

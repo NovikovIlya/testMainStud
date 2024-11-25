@@ -1,4 +1,4 @@
-import { Button } from 'antd'
+import { Button, Spin } from 'antd'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -17,16 +17,26 @@ function getWeekDay(date: Date): week {
 		'wednesday',
 		'thursday',
 		'friday',
-		'saturday'
+		'saturday',
+		
 	]
 
 	return days[date.getDay()]
 }
+
+function truncateString(str:string) {
+	const n = 17
+    if (str.length > n) { 
+        return str.slice(0, n) + '...';
+    }
+    return str;
+}
+
 export const Schedule = () => {
 	const navigate = useNavigate()
 	const date = new Date(Date.now())
 	const [activeButton, changeActive] = useState<week>(getWeekDay(date))
-	const { data: schedule } = useGetScheduleQuery()
+	const { data: schedule,isFetching } = useGetScheduleQuery()
 	const { t } = useTranslation()
 
 	
@@ -46,8 +56,10 @@ export const Schedule = () => {
 		backgroundColor: 'white'
 	}
 	return (
-		<div
-			className="py-10 pl-10 max-xl:p-5 max-md:p-10 flex w-full h-full max-[560px]:flex-col rounded-[20px] text-white max-md:justify-center"
+		<Spin className='' spinning={isFetching}>
+		<div className='h-[320px] '>
+			<div
+			className="shadow-md py-10 pl-10 max-xl:p-5 max-md:p-10 flex w-full h-full max-[560px]:flex-col rounded-[20px] text-white max-md:justify-center"
 			style={{
 				background: 'linear-gradient(89.94deg, #71AAFF 12.16%, #3D7AD5 104.42%)'
 			}}
@@ -120,21 +132,31 @@ export const Schedule = () => {
 			<hr className="h-full w-[2px]  bg-white mx-3 border-none max-md:hidden" />
 			<div className="flex-col justify-start w-full max-w-fit min-w-min p-2 max-h-full overflow-y-auto max-xl:text-sm max-md:hidden">
 				{schedule && schedule[activeButton] !== undefined ? (
-					// schedule[activeButton].length - если сейчас вскр, то крашает весь фронт
-					schedule[activeButton].map((el, index) => (
-						<div
-							className="flex w-full gap-x-10 mb-5 max-xl:gap-x-0 max-xl:mb-3 max-xl:flex-col"
-							key={index}
-						>
-							<span className="text-start ">{el.time}</span>
-							<span className="font-bold text-start">{el.name}</span>
-						</div>
-					))
+					schedule[activeButton].length > 0 ? (
+						schedule[activeButton].map((el, index) => (
+							<div
+								className="flex w-full gap-x-10 mb-5 max-xl:gap-x-0 max-xl:mb-3 max-xl:flex-col"
+								key={index}
+							>
+								{el ? (
+									<>
+										<span className="text-start">{el.time.replace("-", " - ")}</span>
+										<span className="font-bold text-start">{truncateString(el.name)}</span>
+									</>
+								) : (
+									<div>Нет пар</div>
+								)}
+							</div>
+						))
+					) : (
+						<div>Нет пар</div>
+					)
 				) : (
-					<h3>{t('NoLesson')}</h3>
+					<h3>{isFetching ? '' : t('NoLesson')}</h3>
 				)}
 			</div>
-			<div className="flex max-xl:hidden items-center justify-center w-full">
+
+			<div className="flex max-xl:hidden items-center justify-end pr-[220px] w-full">
 				<div className="bg-white rounded-full w-44 h-44  absolute"></div>
 				<img
 					src={img}
@@ -166,5 +188,7 @@ export const Schedule = () => {
 				</svg>
 			</div>
 		</div>
+		</div>
+		</Spin>
 	)
 }

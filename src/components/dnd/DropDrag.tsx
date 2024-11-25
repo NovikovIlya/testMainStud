@@ -18,6 +18,9 @@ import { Apply } from '../apply/Apply'
 
 import { block } from './constant'
 import { jsxElements } from './defaultElement'
+import { useGetModulesQuery } from '../../store/api/roleModel/roleModel'
+import { TemplateCard } from '../cards/Template'
+import { Schedule } from '../cards/Schedule'
 
 const studentKeys = [
 	'Schedule',
@@ -61,7 +64,8 @@ const DropDrag = () => {
 	const { data: dataSubRole, isSuccess: isSuccessSubRole, isLoading: isLoadingSubRole } = useGetRoleQuery(null)
 	const [subRole, setSubrole] = useLocalStorageState<any>('subRole', { defaultValue: '' })
 	const [windowSize, setWindowSize] = useState(getWindowSize())
-
+	const {data:dataModules} = useGetModulesQuery()
+	console.log('dataModules', dataModules)
 	// получение саброли
 	useEffect(() => {
 		if (isSuccessSubRole) {
@@ -105,6 +109,16 @@ const DropDrag = () => {
 		dispatch(changeLayout(layouts))
 	}
 
+	useEffect(() => {
+		if (dataModules && Array.isArray(dataModules)) {
+			dataModules?.map((module:any) => {
+				return (
+					<TemplateCard title={module.moduleName} info={module.description} href={module.link} />
+				)
+			})
+		}
+	}, [dataModules])
+
 	const layoutValid = layout.lg.filter(
 		obj1 =>
 			jsxElements.filter(item => {
@@ -119,7 +133,7 @@ const DropDrag = () => {
 			})
 		// .some(obj2 => obj1.i === obj2.key)
 	)
-
+	
 	const generateDOM = layoutValid
 		.map(item => {
 			return (
@@ -228,29 +242,39 @@ const DropDrag = () => {
 			)
 
 		return (
-			<ResponsiveReactGridLayout
-				className="layout"
-				cols={{ lg: 3, md: 2, sm: 2, xs: 2, xxs: 1 }}
-				rowHeight={windowSize.innerWidth < 768 ? 210 : 320}
-				containerPadding={[0, 0]}
-				margin={[20, 20]}
-				layouts={layout}
-				measureBeforeMount={true}
-				useCSSTransforms={mounted}
-				onLayoutChange={onLayoutChange}
-				onBreakpointChange={onBreakpointChange}
-				isDraggable={edit}
-				isResizable={false}
-				compactType="vertical"
-				verticalCompact={true}
-				preventCollision={true}
-			>
-				{generateDOM}
-			</ResponsiveReactGridLayout>
+			<div className="grid grid-cols-3 grid-rows-3 gap-4 ">
+				{dataModules?.toSorted((a:any, b:any) => {
+					if(mainRole === 'STUD'){
+						if (a.moduleName === 'Schedule') return -1;
+						if (b.moduleName !== 'Schedule') return 1;
+						return 0;
+					}
+					else if(mainRole === 'ABITUR' || (mainRole === 'OTHER' && subRole === 'ABIT')){
+						if (a.moduleName === 'Apply') return -1;
+						if (b.moduleName !== 'Apply') return 1;
+						return 0;
+					}else return 0
+				  })
+				.map((module:any, index: number) => {
+					if(module.moduleName==='Apply'){
+						return	<div key={index} className="a col-span-3">
+									<Apply />
+								</div>
+					}
+					if(module.moduleName==='Schedule'){
+						return	<div key={index} className="a col-span-3">
+									<Schedule />
+								</div>
+					}
+					return (
+						<TemplateCard key={index} title={module.moduleName} info={'Проверяйте свои знания с помощью тестовых материалов'} href={module.link} img={'https://newlk.kpfu.ru/image23.png'} />
+					)
+				})}
+			</div>
 		)
 	}
 
-	return <div className="mt-[40px] w-[min(1600px, 100%)] mb-[100px]">{renderContent()}</div>
+	return <div className="  ">{renderContent()}</div>
 }
 
 function getWindowSize() {

@@ -448,6 +448,7 @@ export type EmploymentDataType = {
 			docType: string
 			status: 'ATTACHED' | 'NOT_ATTACHED'
 			name: string
+			size: number
 		}[]
 		hasRequisites?: boolean
 		testLink?: string

@@ -475,6 +475,22 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
+		downloadEmploymentSeekerFile: builder.query<
+			{ href: string },
+			{ respondId: number; docId: number }
+		>({
+			query: ({ respondId, docId }) => ({
+				url: `http://${emplBaseURL}employment-api/v1/respond/${respondId}/employment/file/${docId}`,
+				responseHandler: async res => {
+					const data = await res.blob()
+					const file = new Blob([data], {
+						type: res.headers.get('content-type') as string
+					})
+					return { href: window.URL.createObjectURL(file) }
+				}
+			}),
+			keepUnusedDataFor: 0
+		}),
 		postPhone: builder.mutation({
 			query: phone => {
 				return {
@@ -1121,7 +1137,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 			})
 		}),
 		uploadEmploymentDocument: builder.mutation<
-			void,
+			{ id: number; name: string; size: number },
 			{ respondId: number; id: number; file: File; fileName: string }
 		>({
 			query: ({ respondId, id, file, fileName }) => ({
@@ -1238,5 +1254,6 @@ export const {
 	useLazyGetSeekerChatPreviewsQuery,
 	useLazyDownloadEmploymentStageFileQuery,
 	useUploadEmploymentDocumentMutation,
-	useGetRespondFullInfoAccountingQuery
+	useGetRespondFullInfoAccountingQuery,
+	useLazyDownloadEmploymentSeekerFileQuery
 } = serviceApi

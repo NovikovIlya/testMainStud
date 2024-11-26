@@ -240,38 +240,58 @@ const DropDrag = () => {
 					<Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
 				</>
 			)
-
-		return (
-			<div className="grid grid-cols-3 grid-rows-3 gap-4 ">
-				{dataModules?.toSorted((a:any, b:any) => {
-					if(mainRole === 'STUD'){
-						if (a.moduleName === 'Schedule') return -1;
-						if (b.moduleName !== 'Schedule') return 1;
-						return 0;
-					}
-					else if(mainRole === 'ABITUR' || (mainRole === 'OTHER' && subRole === 'ABIT')){
-						if (a.moduleName === 'Apply') return -1;
-						if (b.moduleName !== 'Apply') return 1;
-						return 0;
-					}else return 0
-				  })
-				.map((module:any, index: number) => {
-					if(module.moduleName==='Apply'){
-						return	<div key={index} className="a col-span-3">
-									<Apply />
-								</div>
-					}
-					if(module.moduleName==='Schedule'){
-						return	<div key={index} className="a col-span-3">
-									<Schedule />
-								</div>
-					}
-					return (
-						<TemplateCard key={index} title={module.moduleName} info={'Проверяйте свои знания с помощью тестовых материалов'} href={module.link} img={'https://newlk.kpfu.ru/image23.png'} />
-					)
-				})}
-			</div>
-		)
+			return (
+				<ResponsiveReactGridLayout
+					className="layout"
+					cols={{ lg: 3, md: 2, sm: 2, xs: 2, xxs: 1 }}
+					rowHeight={windowSize.innerWidth < 768 ? 210 : 320}
+					containerPadding={[0, 0]}
+					margin={[20, 20]}
+					layouts={layout}
+					measureBeforeMount={true}
+					useCSSTransforms={mounted}
+					onLayoutChange={onLayoutChange}
+					onBreakpointChange={onBreakpointChange}
+					isDraggable={edit}
+					isResizable={false}
+					compactType="vertical"
+					verticalCompact={true}
+					preventCollision={true}
+				>
+					{generateDOM}
+				</ResponsiveReactGridLayout>
+			)	
+		// return (
+		// 	<div className="grid grid-cols-3 grid-rows-3 gap-4 ">
+		// 		{dataModules?.toSorted((a:any, b:any) => {
+		// 			if(mainRole === 'STUD'){
+		// 				if (a.moduleName === 'Schedule') return -1;
+		// 				if (b.moduleName !== 'Schedule') return 1;
+		// 				return 0;
+		// 			}
+		// 			else if(mainRole === 'ABITUR' || (mainRole === 'OTHER' && subRole === 'ABIT')){
+		// 				if (a.moduleName === 'Apply') return -1;
+		// 				if (b.moduleName !== 'Apply') return 1;
+		// 				return 0;
+		// 			}else return 0
+		// 		  })
+		// 		.map((module:any, index: number) => {
+		// 			if(module.moduleName==='Apply'){
+		// 				return	<div key={index} className="a col-span-3">
+		// 							<Apply />
+		// 						</div>
+		// 			}
+		// 			if(module.moduleName==='Schedule'){
+		// 				return	<div key={index} className="a col-span-3">
+		// 							<Schedule />
+		// 						</div>
+		// 			}
+		// 			return (
+		// 				<TemplateCard key={index} title={module.moduleName} info={'Проверяйте свои знания с помощью тестовых материалов'} href={module.link} img={'https://newlk.kpfu.ru/image23.png'} />
+		// 			)
+		// 		})}
+		// 	</div>
+		// )
 	}
 
 	return <div className="  ">{renderContent()}</div>

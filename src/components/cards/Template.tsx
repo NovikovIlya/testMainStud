@@ -19,7 +19,7 @@ export const TemplateCard = ({href,img,info,title,height = 112,width = 112,butto
 					</div>
 				</div>
 				{img && (
-					<div className="w-60 justify-center flex max-[874px]:h-full max-[874px]:w-full max-[874px]:items-center">
+					<div className="w-60 justify-end flex max-[874px]:h-full max-[874px]:w-full max-[874px]:items-center">
 						<div
 							className={`bg-[#3E89F9] bg-opacity-80 w-[125px] h-[125px] rounded-full absolute -z-10 ${mt}`}
 						/>

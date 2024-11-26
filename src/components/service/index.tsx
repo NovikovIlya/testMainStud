@@ -24,7 +24,7 @@ export const Service = () => {
 
 	return (
 		<div  className=" w-screen">
-			<div className="min-h-screen flex min-h-full">
+			<div className="h-screen flex min-h-full">
 				{pathname.includes('/services/schedule') && <NavSchedule />}
 				{pathname.includes('/services/session') && <NavSession />}
 				{pathname.includes('/services/aboutMe') && <NavAboutMe />}

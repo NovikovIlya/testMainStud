@@ -8,8 +8,12 @@ import {
 	useGetSubdivisionsQuery,
 	useRequestCreateVacancyMutation
 } from '../../../../../store/api/serviceApi'
+import {useAlert} from "../../../../../utils/AlertMessage";
 
 export const SupervisorCreateVacancyForm = () => {
+
+	const { openAlert } = useAlert()
+
 	const { data: categories = [] } = useGetCategoriesQuery()
 	const [categoryTitle, setCategoryTitle] = useState<string>('')
 	const { data: directions = [] } = useGetDirectionsQuery(categoryTitle)
@@ -68,12 +72,15 @@ export const SupervisorCreateVacancyForm = () => {
 					layout="vertical"
 					requiredMark={false}
 					className="w-[52%] mt-[52px]"
-					onFinish={values => {
-						requestCreateVacancy(values)
-							.unwrap()
-							.then(() => {
-								setIsSuccessModalOpen(true)
-							})
+					onFinish={async values => {
+						try {
+							await requestCreateVacancy(values).unwrap();
+							setIsSuccessModalOpen(true);
+						} catch (error : any) {
+							console.error('Ошибка:', error)
+							let errorStr = error.status + " " + error.data.message;
+							openAlert({ type: 'error', text: errorStr });
+						}
 					}}
 				>
 					<Form.Item

@@ -72,7 +72,7 @@ export const AlertProvider: React.FC<AlertProviderProps> = ({ children }) => {
                     </div>
                 </div>
             ),
-            duration: 6,
+            duration: 5,
             icon: null
         })
     }

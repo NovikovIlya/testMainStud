@@ -1,14 +1,10 @@
 import {DepEmploymentItem} from './depEmploymentItem'
 import React, { useState } from 'react'
 import { useGetPersonnelStagesQuery } from '../../../../store/api/serviceApi'
-import { Button, Spin, message } from 'antd'
+import { Button, Spin} from 'antd'
 import { LoadingOutlined } from '@ant-design/icons'
-import { useAlert } from "../../../../utils/AlertMessage"
-
 
 export const DepEmployment = () => {
-
-	const { openAlert } = useAlert();
 
 	const { data: employment_stage_items = [], isLoading : loading } = useGetPersonnelStagesQuery();
 	const verifyingItems = employment_stage_items.filter(item => item.status === 'VERIFYING');
@@ -49,14 +45,6 @@ export const DepEmployment = () => {
 		<>
 			<div id="wrapper" className="flex flex-col bg-[#F5F8FB] px-[53px] pt-[120px] w-full">
 					<h1 className="text-[28px] font-normal text-[#000000]">Этап трудоустройства</h1>
-				<Button onClick={() =>{
-					try {
-						throw Error('404 полный капец')
-					} catch (error : any) {
-						let errorStr = error.name + " " + error.message
-						openAlert({type: 'error', text: errorStr})
-					}
-				}}>Error</Button>
 					<div className="flex flex-row gap-[12px] mt-[52px]">
 						<Button
 							id="buttonEmploymentStageAll"

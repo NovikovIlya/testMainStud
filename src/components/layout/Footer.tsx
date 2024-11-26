@@ -8,9 +8,11 @@ import {
 	VkSvg,
 	YoutubeSvg
 } from '../../assets/svg'
+import { useTranslation } from 'react-i18next'
 
 export const Footer = () => {
 	const year = new Date().getFullYear()
+	const {t} =  useTranslation()
 
 	return (
 		<footer className="w-full min-h-[200px] text-base py-14 flex max-md:flex-col justify-between container mx-auto px-3">
@@ -19,7 +21,7 @@ export const Footer = () => {
 					<LogoSvg />
 					<div className=" flex flex-col max-sm:mt-7">
 						<span>
-							<strong>Адрес:</strong> 420008 г. Казань, ул. Кремлевская, 18
+							<strong>{t('adress2')}:</strong> {t('adress3')}
 						</span>
 						<span>
 							<strong>Email:</strong> public.mail@kpfu.ru
@@ -27,12 +29,12 @@ export const Footer = () => {
 					</div>
 				</div>
 				<span>
-					<strong>© {year} Казанский федеральный университет</strong>
+					<strong>© {year} {t('copywrigh')}</strong>
 				</span>
 			</div>
 			<div className="flex flex-col max-sm:mt-7">
 				<span>
-					<strong>Соцсети:</strong>
+					<strong>{t('soc')}:</strong>
 				</span>
 				<div className="flex gap-3 mt-5">
 					<a href='https://vk.com/kazan_federal_university'><VkSvg /></a>

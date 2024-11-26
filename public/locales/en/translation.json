@@ -218,7 +218,7 @@
 	"Vacancies": "Vacancies",
 	"VacanciesInfo": "Develop with us by working at one of the leading universities in Russia",
 	"EducationalCourses": "Educational courses",
-	"EducationalCoursesInfo": "We offer a wide range of subjects and disciplines. From classical sciences, language courses to advanced knowledge in the field of programming. This is an opportunity to receive feedback from qualified teachers and specialists in relevant fields of knowledge. Expand your horizons with us!",
+	"EducationalCoursesInfo": "We offer a wide range of subjects and disciplines. From classical sciences ...",
 	"SignUp": "Sign up",
 	"News": "News",
 	"NewsInfo": "Read about the news and events related to Kazan Federal University",
@@ -308,5 +308,14 @@
 	"yandex_instructions_title": "In addition,an account in Yandex 360 has been created. In order to use this service, you need to do the following steps:",
 	"yandex_step_1": "Go to the website <a href='https://ya.ru/' target='_blank'>https://ya.ru/</a> and add an account",
 	"yandex_step_2": "In the LOGIN field you must enter {{login}}@kpfu.ru",
-	"yandex_step_3": "Afterwards, you will be taken to the login page for the university's information ecosystem. On this page, you will need to enter the LOGIN and PASSWORD from your account specified above"
+	"yandex_step_3": "Afterwards, you will be taken to the login page for the university's information ecosystem. On this page, you will need to enter the LOGIN and PASSWORD from your account specified above",
+	"myPractices": "My practice",
+	"myPracticeInfo": "Here you can view the information about the practice",
+	"practiceTeacherInfo": "This contains information about practices for teachers.",
+	"practiceTeacher": "Practice for teachers",
+	"OldLk": "in the old LK",
+	"soc": "Social networks",
+	"adress2": "Address",
+	"adress3": "420008 Kazan, st. Kremlevskaya, 18",
+	"copywrigh": " Kazan Federal University"
 }

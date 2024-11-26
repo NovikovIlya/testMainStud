@@ -152,24 +152,24 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 			),
 			key: '3'
 		},
-		...(user?.roles && user?.roles.length > 1
-			? [
-					{
-						label: (
-							<div
-								className="flex items-center gap-[15px] px-[4px] py-[5px]"
-								onClick={() => {
-									showModal()
-								}}
-							>
-								<UserSwitchOutlined className="w-[22px] h-[22px] text-blue1f5 flex items-center justify-center" />
-								Сменить роль
-							</div>
-						),
-						key: '9'
-					}
-			  ]
-			: []),
+		// ...(user?.roles && user?.roles.length > 1
+		// 	? [
+		// 			{
+		// 				label: (
+		// 					<div
+		// 						className="flex items-center gap-[15px] px-[4px] py-[5px]"
+		// 						onClick={() => {
+		// 							showModal()
+		// 						}}
+		// 					>
+		// 						<UserSwitchOutlined className="w-[22px] h-[22px] text-blue1f5 flex items-center justify-center" />
+		// 						Сменить роль
+		// 					</div>
+		// 				),
+		// 				key: '9'
+		// 			}
+		// 	  ]
+		// 	: []),
 
 		{
 			label: (
@@ -313,7 +313,8 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 							<span
 								className={clsx(`text-[14px] text-[#3073D7]`, type === 'service' ? 'text-white' : 'text-[#3073D7]')}
 							>
-								в старый ЛК
+								
+								{t('OldLk')}
 							</span>
 						</a>
 
@@ -401,7 +402,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 											? user?.roles
 													.toSorted((a:any, b:any) => (a.type === mainRole ? -1 : b.type === mainRole ? 1 : 0))
 													.map((item:any) => (
-														<div className={`${item.type === mainRole ? 'font-extrabold' : ''}`}>
+														<div className={`${item.type === mainRole ? '' : 'text-gray-300'}`}>
 															{getRole(item.type)}
 														</div>
 													))

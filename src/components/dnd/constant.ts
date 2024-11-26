@@ -119,8 +119,8 @@ export const block = {
             w: 1,
             h: 1,
             
-            x: 2,
-            y: 3,
+            x: 0,
+            y: 0,
             i: 'PsychologicalHelp',
          
             moved: true,

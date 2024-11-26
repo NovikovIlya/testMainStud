@@ -18,7 +18,7 @@ import { blue307 } from '../../utils/color'
 import { ImagesLayout } from './ImagesLayout'
 import { useLocalStorageState } from 'ahooks'
 
-export const InfoUser = () => {
+export const InfoUserUpdate = () => {
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 
@@ -35,7 +35,7 @@ export const InfoUser = () => {
 	const { t } = useTranslation()
 	const handleOk = async () => {
 		role && postRole({ role: subRole })
-		navigate('/form')
+		navigate('/user')
 	}
 	const handleSkip = () => {
 		navigate('/user')
@@ -45,11 +45,7 @@ export const InfoUser = () => {
 		<ImagesLayout first>
 			<div className="w-full flex justify-center ">
 				<div className="container max-w-2xl flex flex-col items-center justify-center  px-5">
-					<h2
-						className={`text-center text-2xl font-bold border-solid border-0 border-b-2 border-[${blue307}] pb-2`}
-					>
-						{t('welcome')}
-					</h2>
+					
 
 					<p className="mt-8 text-center text-sm font-bold px-7">{t('role')}</p>
 
@@ -183,28 +179,22 @@ export const InfoUser = () => {
 						<p className="text-center text-sm">Изменить роль вы сможете через меню</p>
 					</div>
 					<div className="w-full flex justify-center items-center gap-8 mt-[60px] ">
-						<Button
-							disabled
-							type="default"
-							className={`w-[200px] h-[50px] font-bold rounded-full border-[${blue307}] text-[${blue307}]`}
-						>
-							{t('back')}
-						</Button>
+						
 						<Button
 							onClick={handleOk}
 							type="primary"
 							className="w-[200px] h-[50px] rounded-full font-bold"
 						>
-							{t('next')}
+							Ок
 						</Button>
 					</div>
-					<Button
+					{/* <Button
 						type="text"
 						className="rounded-full w-[200px] h-[50px] mt-8"
 						onClick={handleSkip}
 					>
 						{t('fillLater')}
-					</Button>
+					</Button> */}
 				</div>
 			</div>
 		</ImagesLayout>

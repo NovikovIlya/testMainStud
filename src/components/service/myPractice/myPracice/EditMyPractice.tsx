@@ -181,7 +181,7 @@ export const EditMyPractice = () => {
 							</Col>
 						</Row>
 						<Row gutter={[16, 16]} className={'mt-4'}>
-							<Col xs={24} sm={24} md={18} lg={16} xl={12}>
+							<Col xs={24} sm={24} md={24} lg={24} xl={24}>
 								<List
 									header={<div>Код и наименование компетенции:</div>}
 									style={{

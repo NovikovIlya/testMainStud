@@ -129,7 +129,7 @@ export type formItem = {
 }
 
 export type IDocument = {
-	documentTypeId: number
+	documentTypeId: any
 	passportSeries: string
 	passportNumber: string
 	issuedBy: string

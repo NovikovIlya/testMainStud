@@ -577,7 +577,7 @@ export const RegisterContracts = () => {
           event.preventDefault(); // Запрещаем ввод недопустимых символов
         }
     };
-    
+   
     let arraySpec:any = []
     dataAll?.forEach((item:any)=>{
         // @ts-ignore

@@ -9,12 +9,19 @@ import { useDispatch } from 'react-redux'
 import { useAppSelector } from '../../store' 
 import { addCard } from '../../store/reducers/LayoutsSlice' 
 import { jsxElements } from '../dnd/defaultElement' 
+import { useLocalStorageState } from 'ahooks'
  
 export const ModalNav = () => { 
  const [searchText, setSearchText] = useState('') 
  const { t } = useTranslation() 
  const layouts = useAppSelector(state => state.Layout) 
  const dispatch = useDispatch() 
+ const [message, setMessage] = useLocalStorageState<any>(
+  'typeAcc',
+  {
+    defaultValue: 'STUD',
+  },
+  );
  
  const onChange = (e: RadioChangeEvent) => { 
   console.log(e.target.value) 
@@ -23,9 +30,34 @@ export const ModalNav = () => {
  if (!role) return <></> 
  const isStudent = role[0].type === 'STUD' 
  
- const filteredData = jsxElements.filter(item => 
+ const filteredData = jsxElements.filter((item)=>{
+  if(message==='STUD'){
+    return item.index==='Schedule' ||
+         item.index==='ElectronicBook' ||
+         item.index==='Session' ||
+         item.index==='Dormitory' ||
+         item.index==='myPractices' ||
+         item.index==='EducationalCourses' ||
+         item.index==='PsychologicalHelp' ||
+         item.index==='News' ||
+         item.index==='DocumentFlow' ||
+         item.index==='VirtualAudience' ||
+         item.index==='DigitalDepartments' ||
+         item.index==='ManagementScientificProjects' 
+
+
+  }else{
+    return item.index==='Schedule' ||
+           item.index==='Practices' ||
+         item.index==='practiceTeacher' ||
+         item.index==='Staff' ||
+         item.index==='Vacancies' ||
+         item.index==='News' 
+  }
+}).filter(item => 
   t(item.index.toString()).toLowerCase().includes(searchText.toLowerCase()) 
  ) 
+ console.log('jsxElements',jsxElements)
  
  return ( 
   <Row> 

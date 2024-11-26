@@ -4,23 +4,11 @@ import { useTranslation } from 'react-i18next'
 import { SessionProps } from '../../models/cards'
 
 
-export const TemplateCard = ({
-	href,
-	img,
-	info,
-	title,
-	height = 112,
-	width = 112,
-	buttonText = 'Watch',
-	mt = 'mt-3',
-	positionImage,
-	isRounded,
-	buttonType = 'default'
-}: SessionProps) => {
+export const TemplateCard = ({href,img,info,title,height = 112,width = 112,buttonText = 'Watch',mt = 'mt-3',positionImage,isRounded,buttonType = 'default'}: SessionProps) => {
 	const { t } = useTranslation()
 
 	return (
-		<div className="flex flex-col px-7 py-8 justify-between h-full max-[874px]:p-0 max-[874px]:py-3 max-[874px]:items-center ">
+		<div className="shadow-md flex w-full bg-white rounded-3xl h-[320px] flex-col px-7 py-8 justify-between h-full max-[874px]:p-0 max-[874px]:py-3 max-[874px]:items-center ">
 			<div className="flex max-[874px]:flex-col max-[874px]:h-full max-[874px]:w-full max-[874px]:items-center">
 				<div className="text-left">
 					<div className="leading-7 text-xl font-bold whitespace-nowrap">
@@ -31,7 +19,7 @@ export const TemplateCard = ({
 					</div>
 				</div>
 				{img && (
-					<div className="w-60 justify-center flex max-[874px]:h-full max-[874px]:w-full max-[874px]:items-center">
+					<div className="w-60 justify-end flex max-[874px]:h-full max-[874px]:w-full max-[874px]:items-center">
 						<div
 							className={`bg-[#3E89F9] bg-opacity-80 w-[125px] h-[125px] rounded-full absolute -z-10 ${mt}`}
 						/>

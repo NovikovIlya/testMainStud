@@ -26,15 +26,7 @@ import { isMobileDevice } from '../../../utils/hooks/useIsMobile'
 
 type MenuItem = Required<MenuProps>['items'][number]
 
-function getItem(label: React.ReactNode,key: React.Key,icon?: React.ReactNode,children?: MenuItem[],type?: 'group'): MenuItem {
-	return {
-		key,
-		icon,
-		children,
-		label,
-		type
-	} as MenuItem
-}
+
 
 
 const rootSubmenuKeys = ['sub1','sub2','sub22']
@@ -50,45 +42,57 @@ export const NavPractices = () => {
 	const refArray:any = [ref1, ref2, ref3];
 	const [open, setOpen] = useState<boolean>(false);
 	const orientation  = useWindowOrientation()
-	const isMobile = isMobileDevice()
+	const isMobile = false
 
-	useEffect(()=>{
-		
-	},[])
 
 	const items: any = [
-		getItem('Справочники', 'sub1', <PracticesSvg />, [
-			getItem('Реестр договоров', 'registerContracts'),
-			getItem('Индивидуальные задания', 'individualTasks'),
-			getItem('Практики', 'practical.ts')
-		]),
-		getItem('Формирование документов', 'sub2', <PracticesSvg />, [
-			getItem('График практик', 'formingSchedule'),
-			getItem('Представление в приказ', 'representation'),
-			getItem('Приказ по практике', 'practiceOrder'),
-			getItem('Приложение 4', 'appendix')
-		]),
-		getItem('Итоговая проверка', 'sub22', <PracticesSvg />, [
-			getItem('Итоговая проверка', 'finally'),
-			
-		]),
-		getItem(<Button className='opacity-70 mt-1 items-center'  onClick={() => {
+		{
+		  key: 'sub1',
+		  label: 'Справочники',
+		  icon: <PracticesSvg />,
+		  children: [
+			{ key: 'registerContracts', label: 'Реестр договоров' },
+			{ key: 'individualTasks', label: 'Индивидуальные задания' },
+			{ key: 'practical.ts', label: 'Практики' }
+		  ],
+		},
+		{
+		  key: 'sub2',
+		  label: 'Формирование документов',
+		  icon: <PracticesSvg />,
+		  children: [
+			{ key: 'formingSchedule', label: 'График практик' },
+			{ key: 'representation', label: 'Представление в приказ' },
+			{ key: 'practiceOrder', label: 'Приказ по практике' },
+			{ key: 'appendix', label: 'Приложение 4' }
+		  ],
+		},
+		{
+		  key: 'sub22',
+		  label: 'Итоговая проверка',
+		  icon: <PracticesSvg />,
+		  children: [
+			{ key: 'finally', label: 'Итоговая проверка' }
+		  ],
+		},
+		{
+		  key: 'sub3',
+		  label: <Button className='opacity-70 mt-1 items-center' onClick={() => {
 			if(!ref1.current?.closest('li')?.classList.contains('ant-menu-submenu-open') ){
-				ref1.current?.click()
+			  ref1.current?.click()
 			}
 			if(!ref2.current?.closest('li')?.classList.contains('ant-menu-submenu-open') ){
-				ref2.current?.click()
+			  ref2.current?.click()
 			}
 			if(!ref3.current?.closest('li')?.classList.contains('ant-menu-submenu-open') ){
-				ref3.current?.click()
+			  ref3.current?.click()
 			}
-	
-
-			
 			setOpen(true);
-		  }}>Пройти обучение</Button>, 'sub3', <QuestionCircleOutlined className='invisible absolute top-1/2 -translate-y-1/2 right-4 '/>),
-		
-	]
+		  }}>Пройти обучение</Button>,
+		  icon: <QuestionCircleOutlined className='invisible absolute top-1/2 -translate-y-1/2 right-4' />
+		}
+	  ]
+	  
   
 	const steps: any = [
 		{

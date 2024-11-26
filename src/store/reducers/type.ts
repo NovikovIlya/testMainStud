@@ -5,7 +5,8 @@ export interface InitialState {
 	accessToken: string | null
 	refreshToken: string | null
 	user: User | null
-	edit: boolean
+	edit: boolean,
+	subRole:any,
 }
 export type Documentation = {
 	links: {

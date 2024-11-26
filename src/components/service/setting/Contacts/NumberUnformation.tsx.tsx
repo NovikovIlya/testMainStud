@@ -60,7 +60,14 @@ export const NumberInformation = () => {
 		}
 		postMail({ phone: text })
 			.unwrap()
-			.then(res => sendVerOne(res.id))
+			.then(res => {	
+				sendVerOne(res.id)
+			})
+			.catch(err => {
+				alert('Ошибка, такой номер уже есть')
+			})
+			
+			
 		form.setFieldValue('inputText', '')
 	}
 
@@ -102,7 +109,16 @@ export const NumberInformation = () => {
 		finalVerify({
 			id: idUser,
 			otp: code
-		}).unwrap()
+		}).unwrap().then(res => {
+			if(res.verified){
+				alert('Номер подтвержден')
+				handleCancel()
+			}
+			else{
+				alert('Неверный код')
+				handleCancel()
+			}
+		})
 	}
 
 	const sortedEmails = data?.slice().sort((a: any, b: any) => {

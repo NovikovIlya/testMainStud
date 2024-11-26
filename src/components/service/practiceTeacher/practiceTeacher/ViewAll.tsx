@@ -22,6 +22,7 @@ import {
 	useGetGroupNumbersNewQuery,
 	useGetPracticeTypeForPracticeQuery,
 	useGetPracticesAllQuery,
+	useGetPractiseSubdevisionApiTeacherQuery,
 	useGetPractiseSubdevisionNewQuery,
 	useGetSubdivisionForPracticeQuery
 } from '../../../../store/api/practiceApi/individualTask'
@@ -36,6 +37,7 @@ import { TitleHeadCell } from '../../businessTrip/NewBusinessTrip/archive/stepTw
 import { disableParents } from '../../../../utils/disableParents'
 import { OptionsNameSpecialty } from '../../practices/roster/registerContracts/RegisterContracts'
 import { useGetAllPracticeTeacherQuery } from '../../../../store/api/practiceApi/practiceTeacher'
+import { useGetSubmissionsSpecPracticeQuery, useGetSubmissionsTypePracticeQuery } from '../../../../store/api/practiceApi/formingSchedule'
 
 const optionYears = [
 	{value:'Все'},
@@ -74,12 +76,12 @@ export const ViewAll = () => {
 		dateYear:'Учебный год (по убыванию)'
 	})
 	const {data: dataPractiseAll,isSuccess: isSuccessPractiseAll,isFetching: isFetchingPractiseAll} = useGetAllPracticeTeacherQuery()
-	const {data:dataSubdevisionPracticeNew} = useGetPractiseSubdevisionNewQuery()
+	const {data:dataSubdevisionPracticeNew} = useGetPractiseSubdevisionApiTeacherQuery()
 	const [tableData, setTableData] = useState<any[]>(dataPractiseAll)
 	const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
-	const { data: dataDepartments, isSuccess: isSuccessDepartments } = useGetSubdivisionForPracticeQuery()
-	const { data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty } = useGetSpecialtyNamesForPractiseQuery(subDevisionId, {skip:!subDevisionId})
-	const { data: dataPracticeType, isSuccess: isSuccessPracticeType } = useGetPracticeTypeForPracticeQuery(objType, {skip: objType.subDivisionId === null || !objType.specialtyNameId })
+	// const { data: dataDepartments, isSuccess: isSuccessDepartments } = useGetSubdivisionForPracticeQuery()
+	const { data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty } = useGetSubmissionsSpecPracticeQuery(subDevisionId, {skip:!subDevisionId || subDevisionId==='Все'})
+	const { data: dataPracticeType, isSuccess: isSuccessPracticeType } = useGetSubmissionsTypePracticeQuery(subDevisionId,{ skip: !subDevisionId  || subDevisionId==='Все'})
 	const {data:dataGroupNumberNew} = useGetGroupNumbersNewQuery(subDevisionId,{ skip: !subDevisionId })
 	const [treeLine, setTreeLine] = useState(true);
     const [showLeafIcon, setShowLeafIcon] = useState(false);
@@ -269,13 +271,9 @@ export const ViewAll = () => {
 	]
 
 	useEffect(() => {
-		if (isSuccessDepartments) {
-			setDepartments(processingOfDivisions(dataDepartments))
+		if (isSuccessPractiseAll) {
+			setTableData(dataPractiseAll)
 		}
-	}, [dataDepartments])
-
-	useEffect(() => {
-		if (isSuccessPractiseAll) setTableData(dataPractiseAll)
 	}, [isSuccessPractiseAll, isFetchingPractiseAll])
 
 	useEffect(() => {
@@ -291,7 +289,6 @@ export const ViewAll = () => {
 	}, [filter, isSuccessPractiseAll])
 
 	useEffect(() => {
-	
 		if (isSuccessNameSpecialty && subDevisionId && isSuccessNameSpecialty) {
 			const pickSpecialityId = dataNameSpecialty?.find((elem: any) => {
 				if (elem.value === pickSpeciality) {
@@ -309,7 +306,6 @@ export const ViewAll = () => {
 
 	useEffect(()=>{
 		if(pickCourse === 'Все'){
-		
 			setFilter({
 				...filter,
 				semester: 'Все'
@@ -328,7 +324,6 @@ export const ViewAll = () => {
 		}
 
 		function filterDepartment(elem: any) {
-			
 			if (filter.department === 'Все') {
 				return elem
 			} else {
@@ -336,12 +331,12 @@ export const ViewAll = () => {
 			}
 		}
 		function filterSubdivision(elem: any) {
-
 			if (filter.subdivision === 'Все') {
 				return elem
 			} 
 			else {
-	
+				console.log('filter.subdivision,',filter.subdivision)
+				console.log('elem', elem)
 				// @ts-ignore
 				return elem.subdivisionId === filter.subdivision
 			}
@@ -381,10 +376,10 @@ export const ViewAll = () => {
 		}
 		function filterPast(elem: any) {
 			if (filter.dateFilling === 'Прошедшие') {
-				return dayjs(elem.period.split(' - ')[1].trim()).format('DD.MM.YYYY') > dayjs().format('DD.MM.YYYY')
+				return dayjs(elem.period.split(' - ')[1].trim()).format('DD.MM.YYYY') < dayjs().format('DD.MM.YYYY')
             }
 			if (filter.dateFilling === 'Текущие') {
-				return dayjs(elem.period.split(' - ')[1].trim()).format('DD.MM.YYYY') < dayjs().format('DD.MM.YYYY')
+				return dayjs(elem.period.split(' - ')[1].trim()).format('DD.MM.YYYY') >= dayjs().format('DD.MM.YYYY')
             }
 			else{
 				return elem
@@ -434,7 +429,6 @@ export const ViewAll = () => {
         console.log('onPopupScroll', e);
     };
 	const handleSelect = (value:any)=>{
-		
 		setPickSpeciality(value)
 	}
 
@@ -505,7 +499,6 @@ export const ViewAll = () => {
     }):[])]
 
 	const uniqueCourseNumbers = [...new Set(tableData?.map((item:any) => item.course))];
-
 
 	return (
 		<>

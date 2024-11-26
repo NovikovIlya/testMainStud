@@ -28,28 +28,31 @@ import {
 import { blue307 } from '../../utils/color'
 
 import { ImagesLayout } from './ImagesLayout'
+import { useLocalStorageState } from 'ahooks'
+import { useEffect } from 'react'
+import { useGetRoleQuery } from '../../store/api/serviceApi'
 
 export const DocumentForm = () => {
 	const { t, i18n } = useTranslation()
 	dayjs.locale(i18n.language)
 	const dispatch = useDispatch()
-	const userRole = useAppSelector(state => state.auth.user?.roles[0].type)
 	const { data: documents } = useGetAllDocumentsQuery()
 	const { data: getDocument } = useGetMyDocumentsQuery()
-
 	if (getDocument !== undefined) dispatch(allData(getDocument))
 	const documentData = useAppSelector(state => state.Document)
 	const [postDocument] = usePostDocumentMutation()
-
 	const navigate = useNavigate()
+
 
 	const handleCancel = () => {
 		navigate('/form')
 	}
 	const handleOk = () => {
 		postDocument(documentData)
-		if (userRole && userRole === 'SCHOOL') navigate('/parent')
-		else navigate('/education')
+		// if (userRole && userRole === 'SCHOOL') navigate('/parent')
+		// else navigate('/education')
+		 navigate('/education')
+		// else navigate('/user')
 	}
 	const handleSkip = () => {
 		navigate('/user')

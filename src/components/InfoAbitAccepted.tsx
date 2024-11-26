@@ -6,7 +6,7 @@ const InfoAbitAccepted = ( { login='123', password='123' }) => {
     const { t } = useTranslation();
 
 	return (
-		<Card className='border-l-rose-500 mt-5'>
+		<Card className='border-l-rose-500 mt-5 mb-4'>
 			<div>{t('welcome_message')}</div>
             <div><span dangerouslySetInnerHTML={{ __html: t('account_creation_message', { login, password }) }} /></div>
             <div> {t('yandex_instructions_title')}</div>

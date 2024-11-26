@@ -1,5 +1,5 @@
 import { LoadingOutlined, ReloadOutlined } from '@ant-design/icons'
-import { Badge, Button, Col, Form, Radio, Row, Select, Spin, Table, Typography } from 'antd'
+import { Button, Col, Form, Radio, Row, Select, Spin, Table, Typography } from 'antd'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -117,7 +117,7 @@ export const MyPractice = () => {
 		}
 	]
 
-	function filterDataFull() {
+	const filterDataFull = () => {
 		function filterCourse(elem: any) {
 			if (filter.courseNumber === 'Все') {
 				return elem
@@ -126,15 +126,6 @@ export const MyPractice = () => {
 			}
 		}
 
-		function sortDateFilling(a: any, b: any) {
-			if (filter.dateFilling === 'По дате (сначала новые)') {
-				return +new Date(b.dateFilling) - +new Date(a.dateFilling)
-			}
-			if (filter.dateFilling === 'По дате (сначала старые)') {
-				return +new Date(a.dateFilling) - +new Date(b.dateFilling)
-			}
-			return 0
-		}
 
 		return dataAllMyPractices ? dataAllMyPractices.filter((elem: any) => filterCourse(elem)) : []
 	}
@@ -169,10 +160,10 @@ export const MyPractice = () => {
 								options={[
 									{ key: 2244612, value: 'Все', label: 'Все' },
 									...(dataAllMyPractices
-										? dataAllMyPractices.map((item: any) => ({
-												key: item.specialty,
-												value: item.specialty,
-												label: item.specialty
+										? [...new Set(dataAllMyPractices.map(item => item.specialty))].map(specialty => ({
+											key: specialty,
+											value: specialty,
+											label: specialty
 										  }))
 										: [])
 								]}

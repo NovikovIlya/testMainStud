@@ -112,7 +112,7 @@ export const ContactInformation = () => {
 		})
 	}
 
-	const sortedEmails = dataEmail?.slice().sort((a:any, b:any) => {
+	const sortedEmails = dataEmail?.toSorted((a:any, b:any) => {
 		return b.verified === a.verified ? 0 : b.verified ? 1 : -1
 	})
 

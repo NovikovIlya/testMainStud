@@ -7,10 +7,7 @@ import pencil from '../../assets/images/pencil.png'
 import rectangle from '../../assets/images/rectangle.png'
 import { LogoIasSvg } from '../../assets/svg'
 
-export const ImagesLayout: FC<PropsWithChildren<{ first?: boolean }>> = ({
-	children,
-	first
-}) => {
+export const ImagesLayout: FC<PropsWithChildren<{ first?: boolean }>> = ({children,first}) => {
 	const { t, i18n } = useTranslation()
 
 	const changeLanguage = (language: string) => {
@@ -31,7 +28,7 @@ export const ImagesLayout: FC<PropsWithChildren<{ first?: boolean }>> = ({
 							{ value: 'en', label: 'Eng' }
 						]}
 					/>
-					<Popover
+					{/* <Popover
 						placement="left"
 						className="h-fit"
 						content={
@@ -47,7 +44,7 @@ export const ImagesLayout: FC<PropsWithChildren<{ first?: boolean }>> = ({
 						}
 					>
 						<QuestionCircleOutlined />
-					</Popover>
+					</Popover> */}
 				</div>
 			</div>
 			{children}

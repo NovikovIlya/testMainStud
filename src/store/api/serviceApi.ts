@@ -178,7 +178,18 @@ export const serviceApi = apiSlice.injectEndpoints({
                     body: body,
                     method: 'POST'
                 }
-            }
+            },
+            invalidatesTags: ['role']
+        }),
+        getRole: builder.query({
+            query: () => {
+                return {
+                    url: 'user-api/users/me/role',
+                    method: 'GET'
+                }
+            },
+            keepUnusedDataFor: 1,
+            providesTags: ['role']
         })
        
     })
@@ -206,6 +217,7 @@ export const {
     useDeleteAccMutation,
     useVerifyAccPhoneMutation,
     useFinalVerifyPhoneMutation,
-    useDeleteAccPhoneMutation
+    useDeleteAccPhoneMutation,
+    useGetRoleQuery
     
 } = serviceApi

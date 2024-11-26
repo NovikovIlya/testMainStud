@@ -205,6 +205,12 @@ export const individualTasks = apiSlice.injectEndpoints({
                 method: 'GET',
             })
         }),
+        getPractiseSubdevisionApiTeacher: builder.query<any, void>({
+            query: () => ({
+                url: `services/api-practices/orders/subdivisions`,
+                method: 'GET',
+            })
+        }),
 
     })
 })
@@ -232,5 +238,6 @@ export const {
     useGetGroupNumberQuery,
     useGetPractiseSubdevisionNewQuery,
     useGetGroupNumbersNewQuery,
-    useGetCafedraNewQuery
+    useGetCafedraNewQuery,
+    useGetPractiseSubdevisionApiTeacherQuery
 } = individualTasks

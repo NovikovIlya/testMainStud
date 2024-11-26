@@ -10,34 +10,15 @@ import i18next from 'i18next'
 import { logOut, setCredentials } from '../reducers/authSlice'
 const baseQuery = fetchBaseQuery({
 	baseUrl: 'https://newlk.kpfu.ru/',
-	prepareHeaders(headers, { getState }) {
-		const token = (getState() as RootState).auth.accessToken
-		if (token) {
-			headers.set('authorization', `Bearer ${token.replaceAll('"', '')}`)
-		}
-		headers.set('Accept-Language', i18next.language)
-		return headers
-	}
+
 })
 const baseQueryWithReAuth = async (
 	args: string | FetchArgs,
 	api: BaseQueryApi,
-	extraOptions: {}
-) => {
+	extraOptions: {}) => {
 	let result = await baseQuery(args, api, extraOptions)
 	if (result?.error?.status === 403 || result?.error?.status === 401) {
-		console.log('sending refresh token')
-		// const refreshResult = await baseQuery(
-		// 	{
-		// 		url: 'user-api/token/refresh',
-		// 		body: {
-		// 			refreshToken: localStorage.getItem('refresh')?.replaceAll('"', '')
-		// 		},
-		// 		method: 'POST'
-		// 	},
-		// 	api,
-		// 	extraOptions
-		// )
+		
 		const refreshToken =  localStorage.getItem('refresh')?.replaceAll('"', '');
 		const refreshResult = await fetch('https://newlk.kpfu.ru/user-api/token/refresh', {
 			method: 'POST',
@@ -62,7 +43,7 @@ const baseQueryWithReAuth = async (
 	}
 	return result
 }
-export const apiSlice = createApi({
+export const apiSliceNotAuth = createApi({
 	baseQuery: baseQueryWithReAuth,
 	endpoints: () => ({}),
 	tagTypes: ['Tasks', 'Contracts', 'Practice','Schedule','Submissions','Application','Order','MyPractice','practiceTeacher','emails','phones','Education','role'],

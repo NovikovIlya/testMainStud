@@ -21,6 +21,7 @@ import {
 	useGetGroupNumbersNewQuery,
 	useGetPracticeTypeForPracticeQuery,
 	useGetPracticesAllQuery,
+	useGetPractiseSubdevisionApiTeacherQuery,
 	useGetPractiseSubdevisionNewQuery,
 	useGetSubdivisionForPracticeQuery
 } from '../../../../store/api/practiceApi/individualTask'
@@ -73,17 +74,17 @@ export const ViewFinally = () => {
 		dateYear:'Учебный год (по убыванию)'
 	})
 	const {data: dataPractiseAll,isSuccess: isSuccessPractiseAll,isFetching: isFetchingPractiseAll} = useGetAllPracticesFinalQuery()
-	const {data:dataSubdevisionPracticeNew} = useGetPractiseSubdevisionNewQuery()
+	const {data:dataSubdevisionPracticeNew} = useGetPractiseSubdevisionApiTeacherQuery()
 	const [tableData, setTableData] = useState<any[]>(dataPractiseAll)
 	const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
-	const { data: dataDepartments, isSuccess: isSuccessDepartments } = useGetSubdivisionForPracticeQuery()
+	// const { data: dataDepartments, isSuccess: isSuccessDepartments } = useGetSubdivisionForPracticeQuery()
 	const { data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty } = useGetSpecialtyNamesForPractiseQuery(subDevisionId, {skip:!subDevisionId || subDevisionId==='Все'})
 	const { data: dataPracticeType, isSuccess: isSuccessPracticeType } = useGetPracticeTypeForPracticeQuery(objType, {skip: objType.subDivisionId === null || !objType.specialtyNameId })
 	const {data:dataGroupNumberNew} = useGetGroupNumbersNewQuery(subDevisionId,{ skip: !subDevisionId || subDevisionId === 'Все' })
 	const [treeLine, setTreeLine] = useState(true);
 	const [showLeafIcon, setShowLeafIcon] = useState(false);
 	const [value, setValue] = useState<any>();
-	console.log('subDevisionId',subDevisionId)
+
 	const columns = [
 		{
 			key: 'subdivision',
@@ -211,11 +212,11 @@ export const ViewFinally = () => {
 		
 	]
 
-	useEffect(() => {
-		if (isSuccessDepartments) {
-			setDepartments(processingOfDivisions(dataDepartments))
-		}
-	}, [dataDepartments])
+	// useEffect(() => {
+	// 	if (isSuccessDepartments) {
+	// 		setDepartments(processingOfDivisions(dataDepartments))
+	// 	}
+	// }, [dataDepartments])
 
 	useEffect(() => {
 		if (isSuccessPractiseAll) setTableData(dataPractiseAll)
@@ -324,10 +325,10 @@ export const ViewFinally = () => {
 		}
 		function filterPast(elem: any) {
 			if (filter.dateFilling === 'Прошедшие') {
-				return dayjs(elem.period.split(' - ')[1].trim()).format('DD.MM.YYYY') > dayjs().format('DD.MM.YYYY')
+				return dayjs(elem.period.split(' - ')[1].trim()).format('DD.MM.YYYY') < dayjs().format('DD.MM.YYYY')
             }
 			if (filter.dateFilling === 'Текущие') {
-				return dayjs(elem.period.split(' - ')[1].trim()).format('DD.MM.YYYY') < dayjs().format('DD.MM.YYYY')
+				return dayjs(elem.period.split(' - ')[1].trim()).format('DD.MM.YYYY') >= dayjs().format('DD.MM.YYYY')
             }
 			else{
 				return elem
@@ -458,7 +459,7 @@ export const ViewFinally = () => {
 			<Form form={form} initialValues={initialFormValues}>
 				<Row>
 					<Col flex={'auto'}>
-						<span className="mb-14 text-[28px]">Практики для деканата</span>
+						<span className="mb-14 text-[28px]">Итоговая проверка</span>
 					</Col>
 				
 				</Row>

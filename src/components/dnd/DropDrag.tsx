@@ -51,11 +51,7 @@ const DropDrag = () => {
 	const layout = block
 	const edit = useAppSelector(state => state.auth.edit)
 	const { data: dataCheck, isSuccess: isSuccessCheck, isLoading: isLoadingCheck } = useCheckIsEmployeeQuery()
-	const {
-		data: dataGetInfoSubrole,
-		isLoading: isLoadingGetInfoSubrole,
-		isSuccess: isSuccessGetInfoSubrole
-	} = useGetInfoUserQuery()
+	const {data: dataGetInfoSubrole,isLoading: isLoadingGetInfoSubrole,isSuccess: isSuccessGetInfoSubrole} = useGetInfoUserQuery()
 	const [currentBreakpoint, setCurrentBreakpoint] = useState<string>('lg')
 	const [mounted, setMounted] = useState(false)
 	const [toolbox, setToolbox] = useState<{ [index: string]: any[] }>({ lg: [] })

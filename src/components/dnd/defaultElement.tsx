@@ -73,7 +73,7 @@ export const jsxElements = [
 		key: 'Staff',
 		element: (
 			<TemplateCard
-				href="https://shelly.kpfu.ru/e-ksu/portal_person.kurs_cifra#tab1"
+				href="https://kpfu.ru/staff/sotrudniki-kfu"
 				img="/image24.png"
 				info="StaffInfo"
 				title="Staff"

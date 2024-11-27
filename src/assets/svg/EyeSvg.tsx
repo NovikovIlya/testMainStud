@@ -10,7 +10,7 @@ export const EyeSvg = ({ white }: TypeMenuSvgProps) => {
 
 	return (
 		<svg
-			width="26"
+			width="23"
 			height="23"
 			viewBox="0 0 26 23"
 			fill="none"

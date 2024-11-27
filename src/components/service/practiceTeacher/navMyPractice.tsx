@@ -167,7 +167,7 @@ export const NavPracticeTeacher = () => {
 				mode="inline"
 				onClick={onClick}
 				onOpenChange={onOpenChange}
-				className="min-w-[230px] max-w-[230px] flex flex-col gap-7 mt-28"
+				className="min-w-[230px] max-w-[230px] flex flex-col gap-7 mt-28 h-full"
 				// @ts-ignore
 				items={items.map((item, index) => ({
 					key: item.key,
@@ -181,7 +181,7 @@ export const NavPracticeTeacher = () => {
 				  }))}
 			/>
 			{isMobile && orientation === 'portrait' ? <div className='flex justify-center items-center text-center p-4'>Для данного устройства модуль работает только в горизонтальном положении, поверните устройство</div> : 
-			<div className="bg-[#F5F8FB] w-full pt-14 px-14  xl:mt-20 mt-20 ">
+			<div className="bg-[#F5F8FB] w-full pt-14 px-14  xl:mt-20 mt-20  h-full">
 				{current === 'practiceteacher' && <RoutePracticeTeacher/>}
 				
 				

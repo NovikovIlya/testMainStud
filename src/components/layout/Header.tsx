@@ -30,6 +30,8 @@ import { isMobileDevice } from '../../utils/hooks/useIsMobile'
 import { ModalNav } from '../service/ModalNav'
 import { useFakeLoginMutation } from '../../store/api/fakeLogin'
 import { LogoIasSvgEn } from '../../assets/svg/LogoIasSvgEn'
+// @ts-ignore
+import userhelperlibrary from "userhelperlibrary";
 
 
 
@@ -71,6 +73,10 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 			showMobileMenuEffect()
 		}
 	}, [location])
+
+	useEffect(() => {
+		userhelperlibrary({ lang: 'ru'});
+	}, []);
 
 
 	const getRole = (role: string | undefined) => {
@@ -225,6 +231,9 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 			// document.querySelector('header').style.marginLeft = '-100px'
 		}
 	}
+	const handleVisibleInspired = () =>{
+		// userhelperlibrary({ lang: 'ru'});
+	}
 
 	console.log('i18n.language,i18n.language', i18n.language)
 	const showModal = () => {
@@ -362,6 +371,9 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						>
 							<EyeSvg white={type === 'service'} />
 						</div> */}
+					<div className='cursor-pointer mx-3' onClick={handleVisibleInspired}>
+						<EyeSvg  white={type === 'service'}  />
+					</div>
 					</div>
 					<Select
 						defaultValue={paramValue === 'eng' ? 'en' : i18n.language}

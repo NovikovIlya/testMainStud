@@ -9,16 +9,17 @@ import {
 	YoutubeSvg
 } from '../../assets/svg'
 import { useTranslation } from 'react-i18next'
+import { LogoSvgEn } from '../../assets/svg/LogoSvgEn'
 
 export const Footer = () => {
 	const year = new Date().getFullYear()
-	const {t} =  useTranslation()
-
+	const {t,i18n} =  useTranslation()
+	console.log('i18n',i18n.language)
 	return (
 		<footer className="w-full min-h-[200px] text-base py-14 flex max-md:flex-col justify-between container mx-auto px-3">
 			<div className="flex  flex-col">
 				<div className="flex mb-10 max-sm:flex-col">
-					<LogoSvg />
+					{i18n.language==='ru' ? <LogoSvg /> : <LogoSvgEn />}
 					<div className=" flex flex-col max-sm:mt-7">
 						<span>
 							<strong>{t('adress2')}:</strong> {t('adress3')}

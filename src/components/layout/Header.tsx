@@ -29,6 +29,8 @@ import { logOut, setEdit, setIsCollapsed } from '../../store/reducers/authSlice'
 import { isMobileDevice } from '../../utils/hooks/useIsMobile'
 import { ModalNav } from '../service/ModalNav'
 import { useFakeLoginMutation } from '../../store/api/fakeLogin'
+import { LogoIasSvgEn } from '../../assets/svg/LogoIasSvgEn'
+
 
 
 export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
@@ -223,7 +225,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 			// document.querySelector('header').style.marginLeft = '-100px'
 		}
 	}
-	console.log('paramValue', paramValue)
+
 	console.log('i18n.language,i18n.language', i18n.language)
 	const showModal = () => {
 		setIsModalOpen(true)
@@ -239,7 +241,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const setCollapsed = () => {
 		dispatch(setIsCollapsed())
 	}
-	console.log('location',location)
+
 	return (
 		<header
 			className={clsx(
@@ -293,7 +295,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 							type="primary"
 							icon={<MenuSvg white={type === 'service'} />}
 						/> :''} */}
-						<LogoIasSvg white={type === 'service'} />
+						{i18n.language === 'ru' ? <LogoIasSvg white={type === 'service'} /> : <LogoIasSvgEn white={type === 'service'} />}
 						<Divider type="vertical" className="border-l-white h-10 m-0 hidden sm:block" />
 						<div onClick={showMobileMenu} className="text-white text-base font-bold hidden sm:block">
 							 {service}

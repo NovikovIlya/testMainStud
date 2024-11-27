@@ -4,7 +4,7 @@ import { Button, Divider, Drawer, Modal, Select ,Dropdown, Space} from 'antd'
 import type { MenuProps } from 'antd'
 
 import clsx from 'clsx'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -30,8 +30,8 @@ import { isMobileDevice } from '../../utils/hooks/useIsMobile'
 import { ModalNav } from '../service/ModalNav'
 import { useFakeLoginMutation } from '../../store/api/fakeLogin'
 import { LogoIasSvgEn } from '../../assets/svg/LogoIasSvgEn'
-// @ts-ignore
-import userhelperlibrary from "userhelperlibrary";
+import AccessibilityHelper from '../AccessibilityHelper/AccessibilityHelper'
+import { useClickAway } from 'ahooks';
 
 
 
@@ -58,6 +58,8 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 		defaultValue: 'STUD'
 	})
 	const [login,{ data:dataLogin,isSuccess, isLoading }] = useFakeLoginMutation()
+	const [isOpen, setIsOpen] = useState(false);
+	const ref = useRef<any>(null);
 
 	useEffect(() => {
 		if (isSuccessSubRole) {
@@ -74,9 +76,11 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 		}
 	}, [location])
 
-	useEffect(() => {
-		userhelperlibrary({ lang: 'ru'});
-	}, []);
+	useClickAway((event) => {
+	
+		console.log('333')
+		setIsOpen(false)
+	  }, ref);
 
 
 	const getRole = (role: string | undefined) => {
@@ -233,6 +237,8 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	}
 	const handleVisibleInspired = () =>{
 		// userhelperlibrary({ lang: 'ru'});
+		setIsOpen(!isOpen)
+		console.log('123123')
 	}
 
 	console.log('i18n.language,i18n.language', i18n.language)
@@ -371,9 +377,13 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						>
 							<EyeSvg white={type === 'service'} />
 						</div> */}
-					<div className='cursor-pointer mx-3' onClick={handleVisibleInspired}>
+					<div className='cursor-pointer mx-3' onClick={(e)=>{
+						e.stopPropagation();
+						handleVisibleInspired()}}>
 						<EyeSvg  white={type === 'service'}  />
+						
 					</div>
+					<div  ><AccessibilityHelper ref={ref} isOpen={isOpen} lang={i18n.language}/></div>
 					</div>
 					<Select
 						defaultValue={paramValue === 'eng' ? 'en' : i18n.language}

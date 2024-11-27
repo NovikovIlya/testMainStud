@@ -28,6 +28,8 @@ import { InfoUserUpdate } from './components/formUser/InfoUserUpdate'
 
 const App = () => {
 	const [email, changeEmail] = useState('')
+
+
 	
 	useEffect(() => {
 		const wasReset = checkAndResetStorage();

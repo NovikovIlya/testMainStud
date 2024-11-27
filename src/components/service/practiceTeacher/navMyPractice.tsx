@@ -181,7 +181,7 @@ export const NavPracticeTeacher = () => {
 				  }))}
 			/>
 			{isMobile && orientation === 'portrait' ? <div className='flex justify-center items-center text-center p-4'>Для данного устройства модуль работает только в горизонтальном положении, поверните устройство</div> : 
-			<div className="bg-[#F5F8FB] w-full pt-14 px-14  xl:mt-20 mt-20  h-full">
+			<div className="bg-[#F5F8FB] w-full pt-14 px-14  xl:mt-20 mt-20  min-h-screen ">
 				{current === 'practiceteacher' && <RoutePracticeTeacher/>}
 				
 				

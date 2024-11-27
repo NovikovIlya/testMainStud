@@ -23,8 +23,8 @@ export const Service = () => {
 	const isEmployee = userData === 'practice'
 
 	return (
-		<div  className=" w-screen">
-			<div className="h-screen flex min-h-full">
+		<div  className=" w-screen h-screen">
+			<div className=" flex h-auto ">
 				{pathname.includes('/services/schedule') && <NavSchedule />}
 				{pathname.includes('/services/session') && <NavSession />}
 				{pathname.includes('/services/aboutMe') && <NavAboutMe />}

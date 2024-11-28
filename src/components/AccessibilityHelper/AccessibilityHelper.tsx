@@ -87,7 +87,7 @@ const AccessibilityHelper: React.FC<AccessibilityHelperProps> = forwardRef(({ la
     //     ? prev.filter(item => item !== option)
     //     : [...prev, option]))
     const newActiveOptions = activeOptions.includes(option)
-      ? activeOptions.filter(item => item !== option)
+      ? activeOptions.filter((item:any) => item !== option)
       : [...activeOptions, option];
 
     dispatch(setActiveOptions(newActiveOptions));
@@ -108,7 +108,7 @@ const AccessibilityHelper: React.FC<AccessibilityHelperProps> = forwardRef(({ la
 
   useEffect(() => {
     document.body.classList.remove('helper-core-tabHighlight', 'helper-core-blockAnim', 'helper-core-grey', 'helper-core-invert', 'helper-core-underline', 'helper-core-zoom', 'helper-core-blmouse', 'helper-core-whmouse', 'helper-core-titlesubline');
-    activeOptions.forEach(option => {
+    activeOptions.forEach((option:any) => {
       document.body.classList.add(option);
     });
   }, [activeOptions]);

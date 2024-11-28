@@ -102,7 +102,7 @@ export const NavSetting = () => {
 				)}
 
 				{/* Основной контент */}
-				<div className="bg-[#F5F8FB] w-full pt-14 px-14">
+				<div className="bg-[#F5F8FB] w-full pt-14 px-14 h-screen">
 					{pathname === navList[0].id && <MainContact />}
 					{pathname === navList[1].id && <ChangePassword />}
 				</div>

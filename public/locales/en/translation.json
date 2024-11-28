@@ -313,9 +313,11 @@
 	"myPracticeInfo": "Here you can view the information about the practice",
 	"practiceTeacherInfo": "This contains information about practices for teachers.",
 	"practiceTeacher": "Practice for teachers",
-	"OldLk": "in the old LK",
+	"OldLk": "Back to the old version",
 	"soc": "Social networks",
 	"adress2": "Address",
 	"adress3": "420008 Kazan, st. Kremlevskaya, 18",
-	"copywrigh": " Kazan Federal University"
+	"copywrigh": " Kazan Federal University",
+	"messages": "Messages",
+	"moduleMessage": "Module messages"
 }

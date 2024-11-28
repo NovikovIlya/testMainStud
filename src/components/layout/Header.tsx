@@ -1,8 +1,8 @@
-import { UserSwitchOutlined } from '@ant-design/icons'
+import { MessageOutlined, UserSwitchOutlined } from '@ant-design/icons'
 import { useLocalStorageState } from 'ahooks'
-import { Button, Divider, Drawer, Modal, Select ,Dropdown, Space} from 'antd'
+import { useClickAway } from 'ahooks'
+import { Button, Divider, Drawer, Dropdown, Modal, Select, Space } from 'antd'
 import type { MenuProps } from 'antd'
-
 import clsx from 'clsx'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -21,19 +21,17 @@ import {
 	SettingSvg
 } from '../../assets/svg'
 import { ArrowLeftBackInOldAccount } from '../../assets/svg/ArrowLeftBackInOldAccount'
+import { LogoIasSvgEn } from '../../assets/svg/LogoIasSvgEn'
+import { MessageModuleSvg } from '../../assets/svg/MessagesModuleSvg'
 import PersonalizationSvg from '../../assets/svg/PersonalizationSvg'
 import { TypeHeaderProps } from '../../models/layout'
 import { useAppSelector } from '../../store'
+import { useFakeLoginMutation } from '../../store/api/fakeLogin'
 import { useGetRoleQuery } from '../../store/api/serviceApi'
 import { logOut, setEdit, setIsCollapsed } from '../../store/reducers/authSlice'
 import { isMobileDevice } from '../../utils/hooks/useIsMobile'
-import { ModalNav } from '../service/ModalNav'
-import { useFakeLoginMutation } from '../../store/api/fakeLogin'
-import { LogoIasSvgEn } from '../../assets/svg/LogoIasSvgEn'
 import AccessibilityHelper from '../AccessibilityHelper/AccessibilityHelper'
-import { useClickAway } from 'ahooks';
-
-
+import { ModalNav } from '../service/ModalNav'
 
 export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const [isModalOpen, setIsModalOpen] = useState(false)
@@ -47,7 +45,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const paramValue = searchParams.get('lan')
 	const user = useAppSelector(state => state.auth.user)
 	// const subRole = useAppSelector(state => state.auth.subRole)
-	const isMobile = isMobileDevice()
+	const isMobile = false
 	const urlContainsPractice = location.pathname.includes('practice')
 	const { data: dataSubRole, isSuccess: isSuccessSubRole, isLoading: isLoadingSubRole } = useGetRoleQuery(null)
 	const roles = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '')?.roles : []
@@ -57,9 +55,9 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const [mainRole, setmainRole] = useLocalStorageState<any>('typeAcc', {
 		defaultValue: 'STUD'
 	})
-	const [login,{ data:dataLogin,isSuccess, isLoading }] = useFakeLoginMutation()
-	const [isOpen, setIsOpen] = useState(false);
-	const ref = useRef<any>(null);
+	const [login, { data: dataLogin, isSuccess, isLoading }] = useFakeLoginMutation()
+	const [isOpen, setIsOpen] = useState(false)
+	const ref = useRef<any>(null)
 
 	useEffect(() => {
 		if (isSuccessSubRole) {
@@ -76,12 +74,10 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 		}
 	}, [location])
 
-	useClickAway((event) => {
-	
+	useClickAway(event => {
 		console.log('333')
 		setIsOpen(false)
-	  }, ref);
-
+	}, ref)
 
 	const getRole = (role: string | undefined) => {
 		switch (role) {
@@ -119,6 +115,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 		{
 			type: 'divider'
 		},
+
 		{
 			label: (
 				<div
@@ -148,6 +145,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 			),
 			key: '1'
 		},
+
 		{
 			label: (
 				<div
@@ -235,7 +233,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 			// document.querySelector('header').style.marginLeft = '-100px'
 		}
 	}
-	const handleVisibleInspired = () =>{
+	const handleVisibleInspired = () => {
 		// userhelperlibrary({ lang: 'ru'});
 		setIsOpen(!isOpen)
 		console.log('123123')
@@ -253,9 +251,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const handleCancel = () => {
 		setIsModalOpen(false)
 	}
-	const setCollapsed = () => {
-		dispatch(setIsCollapsed())
-	}
+
 
 	return (
 		<header
@@ -310,10 +306,15 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 							type="primary"
 							icon={<MenuSvg white={type === 'service'} />}
 						/> :''} */}
-						{i18n.language === 'ru' ? <LogoIasSvg white={type === 'service'} /> : <LogoIasSvgEn white={type === 'service'} />}
+						{i18n.language === 'ru' ? (
+							<LogoIasSvg white={type === 'service'} />
+						) : (
+							<LogoIasSvgEn white={type === 'service'} />
+						)}
+
 						<Divider type="vertical" className="border-l-white h-10 m-0 hidden sm:block" />
 						<div onClick={showMobileMenu} className="text-white text-base font-bold hidden sm:block">
-							 {service}
+							{t('messages')}
 						</div>
 					</div>
 				</div>
@@ -330,7 +331,6 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 							<span
 								className={clsx(`text-[14px] text-[#3073D7]`, type === 'service' ? 'text-white' : 'text-[#3073D7]')}
 							>
-								
 								{t('OldLk')}
 							</span>
 						</a>
@@ -377,13 +377,26 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						>
 							<EyeSvg white={type === 'service'} />
 						</div> */}
-					<div className='cursor-pointer mx-3' onClick={(e)=>{
-						e.stopPropagation();
-						handleVisibleInspired()}}>
-						<EyeSvg  white={type === 'service'}  />
-						
-					</div>
-					<div  ><AccessibilityHelper ref={ref} isOpen={isOpen} lang={i18n.language}/></div>
+						<div
+							className="cursor-pointer mx-3"
+							onClick={() => {
+								navigate('/services/messages')
+							}}
+						>
+							<MessageModuleSvg white={type === 'service'} />
+						</div>
+						<div
+							className="cursor-pointer mx-3"
+							onClick={e => {
+								e.stopPropagation()
+								handleVisibleInspired()
+							}}
+						>
+							<EyeSvg white={type === 'service'} />
+						</div>
+						<div>
+							<AccessibilityHelper ref={ref} isOpen={isOpen} lang={i18n.language} />
+						</div>
 					</div>
 					<Select
 						defaultValue={paramValue === 'eng' ? 'en' : i18n.language}
@@ -424,13 +437,13 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 									<div className="text-sm">
 										{user?.roles && user?.roles?.length > 1
 											? user?.roles
-													.toSorted((a:any, b:any) => (a.type === mainRole ? -1 : b.type === mainRole ? 1 : 0))
-													.map((item:any) => (
+													.toSorted((a: any, b: any) => (a.type === mainRole ? -1 : b.type === mainRole ? 1 : 0))
+													.map((item: any) => (
 														<div className={`${item.type === mainRole ? '' : 'text-gray-300'}`}>
 															{getRole(item.type)}
 														</div>
 													))
-											: String(user?.roles?.map((item:any) => getRole(item.type)))}
+											: String(user?.roles?.map((item: any) => getRole(item.type)))}
 									</div>
 
 									<div>{getRole(subRole)}</div>
@@ -475,54 +488,46 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 			<Modal footer={null} title="" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
 				<div className="p-8 flex flex-col gap-2">
 					{user?.roles && user?.roles?.length > 1
-						? user?.roles?.map((item:any) => (
+						? user?.roles?.map((item: any) => (
 								<Button
 									onClick={async () => {
 										if (mainRole === item.type) {
 											return
 										}
 										setmainRole(item.type)
-											
+
 										// логика для обновления куков в случае смены роли
-										const storedPassword = localStorage.getItem('password');
-										const password = storedPassword ? JSON.parse(storedPassword) : '';
+										const storedPassword = localStorage.getItem('password')
+										const password = storedPassword ? JSON.parse(storedPassword) : ''
 										login({
 											username: item.login,
 											password: password
-										}).unwrap()
-										.then((data)=>{
-											document.cookie = `refresh=${
-												data.refreshToken
-											}; max-age=31536000; domain=${
-												document.domain !== 'localhost' ? 'kpfu.ru' : 'localhost'
-											}; path=/; samesite=strict`
-											document.cookie = `s_id=${
-												data.user.sessionId
-											}; max-age=31536000; domain=${
-												document.domain !== 'localhost' ? 'kpfu.ru' : 'localhost'
-											}; path=/; samesite=strict`
-											document.cookie = `h_id=${
-												data.user.sessionHash
-											}; max-age=31536000; domain=${
-												document.domain !== 'localhost' ? 'kpfu.ru' : 'localhost'
-											}; path=/; samesite=strict`
-											document.cookie = `a_id=${
-												data.user.allId
-											}; max-age=31536000; domain=${
-												document.domain !== 'localhost' ? 'kpfu.ru' : 'localhost'
-											}; path=/; samesite=strict`
-											console.log('меняю роль')
-											window.location.replace('/user');
-											
+										})
+											.unwrap()
+											.then(data => {
+												document.cookie = `refresh=${data.refreshToken}; max-age=31536000; domain=${
+													document.domain !== 'localhost' ? 'kpfu.ru' : 'localhost'
+												}; path=/; samesite=strict`
+												document.cookie = `s_id=${data.user.sessionId}; max-age=31536000; domain=${
+													document.domain !== 'localhost' ? 'kpfu.ru' : 'localhost'
+												}; path=/; samesite=strict`
+												document.cookie = `h_id=${data.user.sessionHash}; max-age=31536000; domain=${
+													document.domain !== 'localhost' ? 'kpfu.ru' : 'localhost'
+												}; path=/; samesite=strict`
+												document.cookie = `a_id=${data.user.allId}; max-age=31536000; domain=${
+													document.domain !== 'localhost' ? 'kpfu.ru' : 'localhost'
+												}; path=/; samesite=strict`
+												console.log('меняю роль')
+												window.location.replace('/user')
 
-											// window.location.reload()
-										})
-										.catch((error)=>{
-											console.log(error)
-											window.location.replace('/user');
-										})
-										
-									}}									className={`${item.type === mainRole ? 'font-extrabold' : ''} cursor-pointer`}
+												// window.location.reload()
+											})
+											.catch(error => {
+												console.log(error)
+												window.location.replace('/user')
+											})
+									}}
+									className={`${item.type === mainRole ? 'font-extrabold' : ''} cursor-pointer`}
 								>
 									{getRole(item.type)}
 								</Button>

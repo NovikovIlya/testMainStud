@@ -14,6 +14,7 @@ import {useGetContractsAllQuery} from "../../store/api/practiceApi/roster";
 import { NavMyPractices } from './myPractice/navMyPractice'
 import AboutUniversity from '../aboutUniversity/AboutUnversity'
 import { NavPracticeTeacher } from './practiceTeacher/navMyPractice'
+import { NavMessages } from './messages/navMessages'
 
 export const Service = () => {
 	const { pathname } = useLocation()
@@ -48,6 +49,7 @@ export const Service = () => {
 					<NavUnifiedServiceCenter />
 				)}
 				{pathname.includes('/services/aboutUniversity') && <AboutUniversity />}
+				{pathname.includes('/services/messages') && <NavMessages />}
 			</div>
 		</div>
 	)

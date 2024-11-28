@@ -10,6 +10,7 @@ const initialState: any = {
 	edit: false,
 	subRole: '',
 	isCollapsed: localStorage.getItem('isCollapsed') === 'true',
+	activeOptions: localStorage.getItem('activeOptions') ? localStorage.getItem('activeOptions')?.split(',') : [],
 }
 
 const authSlice = createSlice({
@@ -54,11 +55,15 @@ const authSlice = createSlice({
 		setIsCollapsed: (state) => {
 			state.isCollapsed = !state.isCollapsed
 			localStorage.setItem('isCollapsed', state.isCollapsed.toString())
+		},
+		setActiveOptions:(state,action)=>{
+			state.activeOptions = action.payload
+			localStorage.setItem('activeOptions', action.payload.toString())
 		}
 	}
 })
 
-export const { logOut, setCredentials, setEdit, setRole,setSubRole, setIsCollapsed } = authSlice.actions
+export const { logOut, setCredentials, setEdit, setRole,setSubRole, setIsCollapsed,setActiveOptions } = authSlice.actions
 
 export default authSlice.reducer
 

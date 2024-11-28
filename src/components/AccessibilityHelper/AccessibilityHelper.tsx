@@ -1,6 +1,8 @@
 import React, { useState, useEffect, forwardRef } from 'react';
 import { KeyOutlined, BulbOutlined, ExpandOutlined, AimOutlined, LinkOutlined, FontSizeOutlined, SyncOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
+import { useAppDispatch, useAppSelector } from '../../store';
+import { setActiveOptions } from '../../store/reducers/authSlice';
 
 
 interface AccessibilityHelperProps {
@@ -11,8 +13,10 @@ interface AccessibilityHelperProps {
 
 const AccessibilityHelper: React.FC<AccessibilityHelperProps> = forwardRef(({ lang = 'en',isOpen },ref:any) => {
   const [activeText,setActiveText] = useState<any>(null)
-  const [activeOptions, setActiveOptions] = useState<string[]>([]);
-
+  // const [activeOptions, setActiveOptions] = useState<string[]>([]);
+  const activeOptions = useAppSelector((state) => state.auth.activeOptions);
+  const dispatch = useAppDispatch()
+  console.log('activeOptions',activeOptions)
   const text = {
     en: {
       tabs: 'Highlight Selected Items',
@@ -73,15 +77,24 @@ const AccessibilityHelper: React.FC<AccessibilityHelperProps> = forwardRef(({ la
 
 
   const toggleOption = (option: string) => {
-    setActiveOptions(prev => 
-      prev.includes(option) 
-        ? prev.filter(item => item !== option)
-        : [...prev, option]
-    );
+    // setActiveOptions(prev => 
+    //   prev.includes(option) 
+    //     ? prev.filter(item => item !== option)
+    //     : [...prev, option]
+    // );
+    // dispatch(setActiveOptions(prev => 
+    //   prev.includes(option) 
+    //     ? prev.filter(item => item !== option)
+    //     : [...prev, option]))
+    const newActiveOptions = activeOptions.includes(option)
+      ? activeOptions.filter(item => item !== option)
+      : [...activeOptions, option];
+
+    dispatch(setActiveOptions(newActiveOptions));
   };
 
   const resetOptions = () => {
-    setActiveOptions([]);
+    dispatch(setActiveOptions([]));
     document.body.style.fontSize = '';
     // window.location.reload();
     changeTextSize('')

@@ -33,16 +33,27 @@ export const TestResultItem = () => {
                                 className="text-center font-content-font font-normal flex items-start text-black text-[16px]/[20px]">
                                 Вы действительно хотите отметить, что соискатель подписал все необходимые документы?
                             </p>
-                            <Button
-                                className="rounded-[54.5px] text-[14px] w-full py-[13px]"
-                                type="primary"
-                                onClick={() => {
-                                    setIsTestResultApproveModalOpen(false)
-                                    setSeekerSigned({ subStageId: 1 })
-                                }}
-                            >
-                                Ок
-                            </Button>
+                            <div className="flex flex-row gap-[12px] px-[20px]">
+                                <Button
+                                    className="rounded-[54.5px] border-black text-[14px] h-[40px] w-full py-[13px]"
+                                    type="default"
+                                    onClick={() => {
+                                        setIsTestResultApproveModalOpen(false)
+                                    }}
+                                >
+                                    Нет
+                                </Button>
+                                <Button
+                                    className="rounded-[54.5px] text-[14px] h-[40px] w-full py-[13px]"
+                                    type="primary"
+                                    onClick={() => {
+                                        setIsTestResultApproveModalOpen(false)
+                                        setSeekerSigned({ subStageId: 1 })
+                                    }}
+                                >
+                                    Да
+                                </Button>
+                            </div>
                         </div>
                     </Modal>
                 </ConfigProvider>
@@ -61,7 +72,7 @@ export const TestResultItem = () => {
                 </div>
                 <div className="w-[36.5%] flex ">
                     <button
-                        className="opacity-[80%] ml-[45%] gap-[12px] text-[16px] flex border-[1px] border-solid black cursor-pointer bg-white px-[24px] py-[8px] rounded-[5px]"
+                        className=" hover:opacity-[100%] opacity-[80%] ml-[45%] gap-[12px] text-[16px] flex border-[1px] border-solid black cursor-pointer bg-white px-[24px] py-[8px] rounded-[5px]"
                         onClick={() => {
                             setIsTestResultApproveModalOpen(true)
 

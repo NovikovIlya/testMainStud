@@ -1,5 +1,4 @@
 import { SearchInputIconSvg } from "../../../../../assets/svg/SearchInputIconSvg";
-import '../extra.css'
 import { SignedItem } from './SignedItem';
 import React from "react";
 import {useGetTestResultsQuery} from "../../../../../store/api/serviceApi";
@@ -20,7 +19,7 @@ export const Signed = () => {
                         <SearchInputIconSvg/>
                     </div>
                     <input type="text"
-                           className="custominput h-[32px] w-[500px] border-[#0000001A] border-[1px] pl-[46px] px-[17px] rounded-[5px]"
+                           className="text-[16px] focus:outline-0 h-[32px] w-[500px] border-[#0000001A] border-[1px] pl-[46px] px-[17px] rounded-[5px]"
                            placeholder="Поиск по ФИО"
                     />
                 </label>

@@ -255,7 +255,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	return (
 		<header
 			className={clsx(
-				' z-[1001] flex flex-wrap  h-[80px] fixed flex items-center justify-center w-full',
+				'shadow z-[1001] flex flex-wrap  h-[80px] fixed flex items-center justify-center w-full',
 				type === 'main' ? 'bg-white' : `bg-blue65A`
 			)}
 		>
@@ -383,7 +383,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 								navigate('/services/messages')
 							}}
 						>
-							<Badge className="top-[60px] !right-[470px]  absolute" count={5}></Badge>
+							<Badge className="top-[60px] !right-[500px]  absolute" count={5}></Badge>
 							<MessageModuleSvg white={type === 'service'} />
 						</div>
 
@@ -428,7 +428,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 							trigger={['click']}
 							className="cursor-pointer h-full  box-border"
 						>
-							<Space className="px-10 max-sm:px-5 max-[455px]:!gap-0 gap-2">
+							<Space className="px-10 max-sm:px-5 max-[455px]:!gap-0 gap-2 w-[228px]">
 								<PersonSvg white={type === 'service'} />
 								<div className={clsx('h-full max-[455px]:hidden', type === 'service' && 'text-white')}>
 									<div className="font-bold text-sm truncate max-w-[120px]">

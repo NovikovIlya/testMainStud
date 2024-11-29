@@ -2,6 +2,8 @@ import { SearchInputIconSvg } from "../../../../../assets/svg/SearchInputIconSvg
 import { SignedItem } from './SignedItem';
 import React from "react";
 import {useGetTestResultsQuery} from "../../../../../store/api/serviceApi";
+import {LoadingOutlined} from "@ant-design/icons";
+import {Spin} from "antd";
 
 
 export const Signed = () => {
@@ -9,6 +11,23 @@ export const Signed = () => {
     const { data: signed_data = [], isLoading : loading } = useGetTestResultsQuery({signed : false});
 
     console.log(signed_data)
+
+    if (loading) {
+        return (
+            <>
+                <div className="w-screen h-screen flex items-center">
+                    <div className="text-center ml-auto mr-[50%]">
+                        <Spin
+                            indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}
+                        ></Spin>
+                        <p className="font-content-font font-normal text-black text-[18px]/[18px]">
+                            Идёт загрузка...
+                        </p>
+                    </div>
+                </div>
+            </>
+        )
+    }
 
     return (
         <>
@@ -35,10 +54,7 @@ export const Signed = () => {
                     <div className="mt-[16px] gap-[12px] flex flex-col">
                         {signed_data.map(item => (
                             <SignedItem {...item} key={item.id}></SignedItem>
-                        ))}
-                        <SignedItem></SignedItem>
-                        <SignedItem></SignedItem>
-                        <SignedItem></SignedItem>
+                        ))} 
                     </div>
                 </div>
             </div>

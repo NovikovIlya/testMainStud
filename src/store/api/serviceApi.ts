@@ -1136,29 +1136,20 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		getTestResults: builder.query<SignedItemType[], { signed: boolean; query?: string; }>({
 			query: arg => ({
-				url: `http://${emplBaseURL}employment-api/v1/management/employment/sub-stage/test-stage`,
+				url: `http://${emplBaseURL}employment-api/v1/management/employment/sub-stage/test-stage/?required=false`,
 				method: 'GET',
-				headers: {
-					Authorization: `Bearer ${laborProtectionToken}`
-				}
 			})
 		}),
 		setTestResultSigned: builder.mutation<void, { subStageId: number; }>({
 			query: arg => ({
 				url: `http://${emplBaseURL}employment-api/v1/management/employment/sub-stage/test-stage/${arg.subStageId}/signed`,
 				method: 'PATCH',
-				headers: {
-					Authorization: `Bearer ${laborProtectionToken}`
-				}
 			})
 		}),
 		setTestResultHidden: builder.mutation<void, { subStageId: number; }>({
 			query: arg => ({
 				url: `http://${emplBaseURL}employment-api/v1/management/employment/sub-stage/test-stage/${arg.subStageId}/hidden`,
 				method: 'PATCH',
-				headers: {
-					Authorization: `Bearer ${laborProtectionToken}`
-				}
 			})
 		}),
 

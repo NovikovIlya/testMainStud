@@ -4,8 +4,9 @@ import {Button, ConfigProvider, Modal} from "antd";
 import {useState} from "react";
 import {useSetTestResultHiddenMutation} from "../../../../../store/api/serviceApi";
 import {WarningModalIconSvg} from "../../../../../assets/svg/WarningModalIconSvg";
+import {SignedItemType} from "../../../../../store/reducers/type";
 
-export const SignedItem = () => {
+export const SignedItem = ( props: SignedItemType ) => {
 
     const [isApproveSignedModalOpen, setIsApproveSignedModalOpen] = useState(false)
 
@@ -53,7 +54,7 @@ export const SignedItem = () => {
                                     className="cursor-pointer flex items-center justify-center border-[1px] border-solid outline-0 border-[#FF5A5A] text-white rounded-[54.5px] bg-[#FF5A5A] hover:bg-[#FF8181] text-[14px] h-[40px] w-full py-[13px]"
                                     onClick={() => {
                                         setIsApproveSignedModalOpen(false)
-                                        setSeekerHidden({subStageId: 1})
+                                        setSeekerHidden({subStageId: props.id})
                                     }}
                                 >
                                     Удалить
@@ -71,9 +72,15 @@ export const SignedItem = () => {
             <ApproveSignedModal/>
             <div className="w-[100%] h-[80px] bg-white flex flex-row items-center">
                 <div className="ml-[1.5%] w-[62%] flex flex-row">
-                    <span className="w-[38%] text-[16px] text-[##000000] font-normal">Алексеев Дмитрий Иванович</span>
-                    <span className="w-[54%] text-[16px] text-[##000000] font-normal">Специалист отдела развития сотрудничества</span>
-                    <span className="w-[8%] text-[16px] text-[##000000] font-normal">Пройден</span>
+                    <span className="w-[38%] text-[16px] text-[##000000] font-normal">
+                        {props.seeker.lastName + ' ' + props.seeker.firstName + ' ' + props.seeker.middleName}
+                    </span>
+                    <span className="w-[54%] text-[16px] text-[##000000] font-normal">
+                        {props.post}
+                    </span>
+                    <span className="w-[8%] text-[16px] text-[##000000] font-normal">
+                        {props.testPassed}
+                    </span>
                 </div>
                 <div className="w-[36.5%] flex ">
                     <button

@@ -1,8 +1,10 @@
 import React, {useState} from 'react';
 import {Button, ConfigProvider, Modal} from "antd";
 import {useSetTestResultSignedMutation} from "../../../../../store/api/serviceApi";
+import {SignedItemType} from "../../../../../store/reducers/type";
 
-export const TestResultItem = () => {
+
+export const TestResultItem = ( props: SignedItemType ) => {
 
     const [isTestResultApproveModalOpen, setIsTestResultApproveModalOpen] = useState(false)
 
@@ -48,7 +50,7 @@ export const TestResultItem = () => {
                                     type="primary"
                                     onClick={() => {
                                         setIsTestResultApproveModalOpen(false)
-                                        setSeekerSigned({ subStageId: 1 })
+                                        setSeekerSigned({ subStageId: props.id })
                                     }}
                                 >
                                     Да
@@ -66,16 +68,21 @@ export const TestResultItem = () => {
             <TestResultApproveModal></TestResultApproveModal>
             <div className="w-[100%] h-[80px] bg-white flex flex-row items-center">
                 <div className="ml-[1.5%] w-[62%] flex flex-row">
-                    <span className="w-[38%] text-[16px] text-[##000000] font-normal">Алексеев Дмитрий Иванович</span>
-                    <span className="w-[54%] text-[16px] text-[##000000] font-normal">Специалист отдела развития сотрудничества</span>
-                    <span className="w-[8%] text-[16px] text-[##000000] font-normal">Пройден</span>
+                    <span className="w-[38%] text-[16px] text-[##000000] font-normal">
+                        {props.seeker.lastName + ' ' + props.seeker.firstName + ' ' + props.seeker.middleName}
+                    </span>
+                    <span className="w-[54%] text-[16px] text-[##000000] font-normal">
+                        {props.post}
+                    </span>
+                    <span className="w-[8%] text-[16px] text-[##000000] font-normal">
+                        {props.testPassed}
+                    </span>
                 </div>
                 <div className="w-[36.5%] flex ">
                     <button
                         className=" hover:opacity-[100%] opacity-[80%] ml-[45%] gap-[12px] text-[16px] flex border-[1px] border-solid black cursor-pointer bg-white px-[24px] py-[8px] rounded-[5px]"
                         onClick={() => {
                             setIsTestResultApproveModalOpen(true)
-
                         }}
                     >
                         Подписано

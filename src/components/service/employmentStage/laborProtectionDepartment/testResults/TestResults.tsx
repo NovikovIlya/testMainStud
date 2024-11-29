@@ -2,12 +2,31 @@ import React from 'react';
 import {SearchInputIconSvg} from "../../../../../assets/svg/SearchInputIconSvg";
 import {TestResultItem} from "./TestResultItem";
 import {useGetTestResultsQuery} from "../../../../../store/api/serviceApi";
+import {Spin} from "antd";
+import {LoadingOutlined} from "@ant-design/icons";
 
 export const TestResults = () => {
 
     const { data: test_result_data = [], isLoading : loading } = useGetTestResultsQuery({signed : false});
 
     console.log(test_result_data)
+
+    if (loading) {
+        return (
+            <>
+                <div className="w-screen h-screen flex items-center">
+                    <div className="text-center ml-auto mr-[50%]">
+                        <Spin
+                            indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}
+                        ></Spin>
+                        <p className="font-content-font font-normal text-black text-[18px]/[18px]">
+                            Идёт загрузка...
+                        </p>
+                    </div>
+                </div>
+            </>
+        )
+    }
 
     return (
         <>
@@ -35,9 +54,6 @@ export const TestResults = () => {
                         {test_result_data.map(item => (
                             <TestResultItem {...item} key={item.id}></TestResultItem>
                         ))}
-                        <TestResultItem></TestResultItem>
-                        <TestResultItem></TestResultItem>
-                        <TestResultItem></TestResultItem>
                     </div>
                 </div>
             </div>

@@ -288,7 +288,7 @@ export const ChatPage = () => {
 					method: 'POST',
 					body: formData,
 					headers: {
-						Authorization: `Bearer ${token}`,
+						Authorization: `Bearer ${token?.replaceAll('"', '')}`,
 						'X-User-Name': sessionId
 					}
 				}

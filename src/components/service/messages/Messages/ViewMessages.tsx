@@ -79,8 +79,12 @@ export const ViewMessage = () => {
   
 	if (initialLoading) {
 	  return (
-		<div className="p-4 mt-20 w-full flex justify-center h-screen">
-		  <Spin  className='mt-20'/>
+		<div className="screen fixed z-[10000000]">
+			<div className="loader">
+				<div className="inner one"></div>
+				<div className="inner two"></div>
+				<div className="inner three"></div>
+			</div>
 		</div>
 	  );
 	}

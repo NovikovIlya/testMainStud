@@ -25,7 +25,7 @@ function getWeekDay(date: Date): week {
 }
 
 function truncateString(str:string) {
-	const n = 17
+	const n = 26
     if (str.length > n) { 
         return str.slice(0, n) + '...';
     }

@@ -118,8 +118,9 @@ export const ViewMessage = () => {
 			  dataLength={dialogs.length}
 			  next={loadMoreData}
 			  hasMore={dialogs.length < 50}
-			  loader={loading && <Skeleton paragraph={{ rows: 1 }} active />}
+			  loader={loading && <Skeleton className='pl-4 pt-4' paragraph={{ rows: 1 }} active />}
 			  scrollableTarget="scrollableDialogs"
+			  scrollThreshold="200px"
 			>
 			  <List
 				dataSource={dialogs}

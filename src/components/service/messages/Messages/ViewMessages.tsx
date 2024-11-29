@@ -1,8 +1,8 @@
 import {
-    Button, Form, Input, Modal, Segmented, Skeleton, Spin
+    Button, Divider, Form, Input, List, Modal, Segmented, Skeleton, Spin
 } from 'antd'
 import dayjs from 'dayjs'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 
 import { useAppSelector } from '../../../../store'
@@ -14,140 +14,174 @@ import { setText } from '../../../../store/reducers/notificationSlice'
 import { CommentNewTeacher } from './CommentTeacher'
 import InputText from './InputText'
 import { PlusCircleOutlined, SearchOutlined } from '@ant-design/icons'
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 export const ViewMessage = () => {
-	const path = useLocation()
-	const id = path.pathname.split('/').at(-1)!
-	const [files, setFiles] = useState<any>({
-		report: null,
-		diary: null,
-		tasks: null
-	})
-	const [form] = Form.useForm()
-	const {data: { students, isSentToDekanat, isReportExist } = {},isSuccess: isSuccessOrder,isFetching: isFetchingMyPractice,refetch: refetchAll} = useGetOneGroupQuery(id, { skip: !id })
-	const { data: dataChat, isFetching: isFethcingChat, refetch } = useGetChatQuery('123')
-	const [sendMessageApi, { isLoading }] = useSendMessageMutation()
-	const [activeDialog, setActiveDialog] = useState<any>(null)
-    const [value, setValue] = useState<any>('Все');
-    const [isModalOpen, setIsModalOpen] = useState(false);
+	const [form] = Form.useForm();
+	const [loading, setLoading] = useState(false);
+	const [initialLoading, setInitialLoading] = useState(true);
+	const [dialogs, setDialogs] = useState<any>([]);
+	const [value, setValue] = useState('Все');
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [activeDialog, setActiveDialog] = useState<any>(null);
+  
+	
+	useEffect(() => {
+	  loadInitialData();
+	}, []);
+  
+	const loadInitialData = async () => {
+	  setInitialLoading(true);
+	  // Simulate initial API call
+	  setTimeout(() => {
+		const initialDialogs = Array(10).fill(null).map((_, index) => ({
+		  id: index.toString(),
+		  name: `Пользователь ${index + 1}`,
+		  lastMessage: `Последнее сообщение ${index + 1}`,
+		  time: `12:${(index + 1).toString().padStart(2, '0')}`,
+		  avatar: `https://xsgames.co/randomusers/avatar.php?g=pixel&key=${index}`
+		}));
+		setDialogs(initialDialogs);
+		setInitialLoading(false);
+	  }, 1000);
+	};
+  
+	const loadMoreData = () => {
+	  if (loading) return;
+	  
+	  setLoading(true);
+	  // Simulate API call for more data
+	  setTimeout(() => {
+		const newDialogs = Array(5).fill(null).map((_, index) => ({
+		  id: (dialogs.length + index).toString(),
+		  name: `Пользователь ${dialogs.length + index + 1}`,
+		  lastMessage: `Последнее сообщение ${dialogs.length + index + 1}`,
+		  time: `12:${(dialogs.length + index + 1).toString().padStart(2, '0')}`,
+		  avatar: `https://xsgames.co/randomusers/avatar.php?g=pixel&key=${dialogs.length + index}`
+		}));
+		setDialogs([...dialogs, ...newDialogs]);
+		setLoading(false);
+	  }, 1000);
+	};
+  
+	const showModal = () => setIsModalOpen(true);
+	const handleOk = () => setIsModalOpen(false);
+	const handleCancel = () => setIsModalOpen(false)
+	const onFinish =()=>{
 
-	const clickTextArea = () => {
-		// refetch()
 	}
+	const clickTextArea = ()=>{
 
-	const onFinish = () => {
-		
 	}
+	const refetch = ()=>{
 
-    const showModal = () => {
-        setIsModalOpen(true);
-      };
-    
-      const handleOk = () => {
-        setIsModalOpen(false);
-      };
-    
-      const handleCancel = () => {
-        setIsModalOpen(false);
-      };
-
+	}
+  
+	if (initialLoading) {
+	  return (
+		<div className="p-4 mt-20 w-full flex justify-center h-screen">
+		  <Spin  className='mt-20'/>
+		</div>
+	  );
+	}
+  
 	return (
-		<Form form={form}>
-			<Spin spinning={isFetchingMyPractice}>
-				<section className=" animate-fade-in">
-					<div className="grid grid-cols-3 gap-2">
-						{/* Диалоги */}
-						<div className="bg-white h-screen  shadow-xl ">
-							{/* Блок добавления */}
-							<div className="mt-36 ml-4">
-								<Button onClick={showModal}><PlusCircleOutlined />Новый диалог</Button>
-							</div>
-                            <div className="mt-3 p-4 ">
-								<Input placeholder='Поиск по сообщениям' prefix={<SearchOutlined />}/>
-							</div>
-                            <div className="mt-3 p-4 ">
-                                <Segmented
-                                    value={value} 
-                                    options={['Все', 'Новые']}
-                                    onChange={(value) => {
-                                        setValue(value)
-                                    }}
-                                />
-                            </div>
-
-
-							{/* Список диалогов */}
-							<div className="mt-4 grid grid-cols-1  ">
-								{/* Один диалог */}
-								<div
-									onClick={() => {
-										setActiveDialog(1)
-									}}
-                                    style={{borderBottom: '1px solid #E9EFF8'}}
-									className={`${
-										activeDialog === 1 ? 'bg-[#E9EFF8]' : ''
-									} grid grid-cols-6 gap-2 px-5 py-6 cursor-pointer `}
-								>
-									<div className="col-span-4">
-										<div className="font-extrabold">Собакевич Михаил Семенович</div>
-										<div>Вышли срочно ваши отчеты</div>
-									</div>
-
-									<div className="col-span-2 ">
-										<div className="flex justify-end">12:23</div>
-									</div>
-								</div>
-
-								<div
-									onClick={() => {
-										setActiveDialog(2)
-									}}
-                                    style={{borderBottom: '1px solid #E9EFF8'}}
-									className={`${
-										activeDialog === 2 ? 'bg-[#E9EFF8]' : ''
-									} grid grid-cols-6 gap-2 px-5 py-6 cursor-pointer `}
-								>
-									<div className="col-span-4">
-										<div className="font-extrabold">Черепашкин</div>
-										<div>Ниндзязович</div>
-									</div>
-
-									<div className="col-span-2 ">
-										<div className="flex justify-end">12:43</div>
-									</div>
-								</div>
-
-							</div>
-						</div>
-
-						{/* Чат */}
-						<div className="h-screen col-span-2 p-4 w-full flex justify-center">
-							{!isFethcingChat ? (
-								<div className=" w-full  flex flex-wrap flex-col justify-between">
-									<CommentNewTeacher files={files} dataChat={dataChat} refetch={refetch} />
-
-									<Form form={form} className="flex  w-full flex-wrap " onFinish={onFinish}>
-										<div className="flex w-full mt-4 ">
-											<InputText clickTextArea={clickTextArea} />
-										</div>
-									</Form>
-								</div>
-							) : (
-								<>
-									<Skeleton active />
-									<Skeleton.Input active className="mt-10 mb-5 !h-[400px] !w-[500px]" />
-									<Skeleton.Input active className="mt-10 !h-14 !w-[500px]" />
-								</>
-							)}
-						</div>
-					</div>
-				</section>
-                <Modal title="Создание диалога" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={null}>
-                        <p>Some contents...</p>
-                        <p>Some contents...</p>
-                        <p>Some contents...</p>
-                </Modal>
-			</Spin>
-		</Form>
-	)
-}
+	  <div className="grid grid-cols-3 gap-2">
+		<div className="bg-white h-screen shadow-xl">
+		  <div className="mt-36 "></div>
+		  
+		  <div className="mt-5 p-4">
+			<Input placeholder="Поиск по сообщениям" prefix={<SearchOutlined />} />
+		  </div>
+		  
+		  <div className="mt-1 px-4 pb-4 flex justify-between items-center" style={{ borderBottom: '1px solid #E9EFF8' }}>
+			<Segmented
+			  value={value}
+			  options={['Все', 'Новые']}
+			  onChange={setValue}
+			/>
+			<Button className='' onClick={showModal}>
+			  <PlusCircleOutlined />Новый диалог
+			</Button>
+		  </div>
+  
+		  <div
+			id="scrollableDialogs"
+			className="!overflow-y-scroll"
+			style={{
+			  height: 'calc(100vh - 285px)',
+			  overflow: 'auto',
+			  padding: '0 16px',
+			}}
+		  >
+			<InfiniteScroll
+			  dataLength={dialogs.length}
+			  next={loadMoreData}
+			  hasMore={dialogs.length < 50}
+			  loader={loading && <Skeleton paragraph={{ rows: 1 }} active />}
+			  scrollableTarget="scrollableDialogs"
+			>
+			  <List
+				dataSource={dialogs}
+				renderItem={(item:any) => (
+				  <List.Item
+					key={item.id}
+					onClick={() => setActiveDialog(item.id)}
+					className={`cursor-pointer rounded-xl !p-4 ${
+					  activeDialog === item.id ? '!bg-[#E9EFF8]' : ''
+					}`}
+					style={{
+					  borderBottom: '1px solid #E9EFF8',
+					}}
+				  >
+					<List.Item.Meta
+					  title={<span className="font-extrabold">{item.name}</span>}
+					  description={item.lastMessage}
+					/>
+					<div>{item.time}</div>
+				  </List.Item>
+				)}
+			  />
+			</InfiniteScroll>
+		  </div>
+		</div>
+  
+		<div className="h-screen col-span-2 p-4 flex justify-center items-center">
+		  {!activeDialog ? (
+			<div className="text-gray-500">Выберите диалог или создайте новый</div>
+		  ) : (
+			<div className="h-screen col-span-2 p-4 w-full flex justify-center">
+        {!false ? (
+          <div className="w-full flex flex-wrap flex-col justify-between">
+            <CommentNewTeacher files={[]} dataChat={[]} refetch={refetch} />
+            <Form form={form} className="flex w-full flex-wrap" onFinish={onFinish}>
+              <div className="flex w-full mt-4">
+                <InputText clickTextArea={clickTextArea} />
+              </div>
+            </Form>
+          </div>
+        ) : (
+          <>
+            <Skeleton active />
+            <Skeleton.Input active className="mt-10 mb-5 !h-[400px] !w-[500px]" />
+            <Skeleton.Input active className="mt-10 !h-14 !w-[500px]" />
+          </>
+        )}
+      </div>
+		  )}
+		</div>
+  
+		<Modal 
+		  title="Создание диалога" 
+		  open={isModalOpen} 
+		  onOk={handleOk} 
+		  onCancel={handleCancel} 
+		  footer={null}
+		>
+		  <p>Some contents...</p>
+		  <p>Some contents...</p>
+		  <p>Some contents...</p>
+		</Modal>
+	  </div>
+	);
+  }

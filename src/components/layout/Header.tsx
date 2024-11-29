@@ -1,7 +1,7 @@
 import { MessageOutlined, UserSwitchOutlined } from '@ant-design/icons'
 import { useLocalStorageState } from 'ahooks'
 import { useClickAway } from 'ahooks'
-import { Button, Divider, Drawer, Dropdown, Modal, Select, Space } from 'antd'
+import { Badge, Button, Divider, Drawer, Dropdown, Modal, Select, Space } from 'antd'
 import type { MenuProps } from 'antd'
 import clsx from 'clsx'
 import { useEffect, useRef, useState } from 'react'
@@ -252,7 +252,6 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 		setIsModalOpen(false)
 	}
 
-
 	return (
 		<header
 			className={clsx(
@@ -377,14 +376,17 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						>
 							<EyeSvg white={type === 'service'} />
 						</div> */}
+
 						<div
-							className="cursor-pointer mx-3"
+							className="cursor-pointer "
 							onClick={() => {
 								navigate('/services/messages')
 							}}
 						>
+							<Badge className="top-[60px] !right-[470px]  absolute" count={5}></Badge>
 							<MessageModuleSvg white={type === 'service'} />
 						</div>
+
 						<div
 							className="cursor-pointer mx-3"
 							onClick={e => {

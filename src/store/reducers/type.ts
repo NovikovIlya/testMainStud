@@ -257,7 +257,7 @@ export type ResponceType = {
 		firstname: string
 		patronymic: string
 		birthday: string
-		citizenship: string
+		countryId: number
 		phone: string
 		email: string
 	}
@@ -306,8 +306,8 @@ export type VacancyRespondItemType = {
 		age: number
 		email: string
 		phone: string
-		country: string
-		bday: string
+		countryId: number
+		birthday: string
 	}
 	respondData: {
 		coverLetter: string
@@ -448,6 +448,7 @@ export type EmploymentDataType = {
 			docType: string
 			status: 'ATTACHED' | 'NOT_ATTACHED'
 			name: string
+			size: number
 		}[]
 		hasRequisites?: boolean
 		testLink?: string

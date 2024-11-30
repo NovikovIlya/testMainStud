@@ -17,7 +17,9 @@ export const VacancyEditView = () => {
 	const { currentVacancy } = useAppSelector(state => state.currentVacancy)
 
 	const { data: categories = [] } = useGetCategoriesQuery()
-	const [categoryTitle, setCategoryTitle] = useState<string>('')
+	const [categoryTitle, setCategoryTitle] = useState<string>(
+		currentVacancy?.acf.category as string
+	)
 	const { data: directions = [] } = useGetDirectionsQuery(categoryTitle)
 	const { data: subdivisions = [] } = useGetSubdivisionsQuery(categoryTitle)
 
@@ -101,9 +103,58 @@ export const VacancyEditView = () => {
 	)
 
 	const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
+	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+
+	const [editForm] = Form.useForm()
 
 	return (
 		<>
+			<ConfigProvider
+				theme={{
+					token: {
+						boxShadow: '0 0 19px 0 rgba(212, 227, 241, 0.6)'
+					}
+				}}
+			>
+				<Modal
+					bodyStyle={{ padding: 53 }}
+					centered
+					open={isDeleteModalOpen}
+					onCancel={() => {
+						setIsDeleteModalOpen(false)
+					}}
+					title={null}
+					footer={null}
+					width={407}
+				>
+					<p className="font-content-font font-normal text-black text-[16px]/[20px] text-center">
+						Вы действительно хотите удалить вакансию?
+					</p>
+					<div className="mt-[40px] flex gap-[12px]">
+						<Button
+							className="ml-auto"
+							onClick={() => {
+								setIsDeleteModalOpen(false)
+							}}
+						>
+							Отмена
+						</Button>
+						<Button
+							className="mr-auto"
+							type="primary"
+							onClick={() => {
+								deleteVacancy(currentVacancy?.id as number)
+									.unwrap()
+									.then(() => {
+										navigate('/services/personnelaccounting/vacancies')
+									})
+							}}
+						>
+							Удалить
+						</Button>
+					</div>
+				</Modal>
+			</ConfigProvider>
 			<ConfigProvider
 				theme={{
 					token: {
@@ -145,20 +196,21 @@ export const VacancyEditView = () => {
 				<div className="flex">
 					<button
 						onClick={() => {
-							navigate('/services/personnelaccounting/vacancies')
+							isEdit
+								? setIsEdit(false)
+								: navigate('/services/personnelaccounting/vacancies')
 						}}
 						className="bg-inherit border-none cursor-pointer"
 					>
 						<ArrowIcon />
 					</button>
 					<p className="ml-[40px] font-content-font font-normal text-black text-[28px]/[33.6px]">
-						{currentVacancy !== null
-							? '«' + currentVacancy.title.rendered + '»'
-							: ''}
+						{currentVacancy !== null ? '«' + post + '»' : ''}
 					</p>
 				</div>
 				{isEdit ? (
 					<Form
+						form={editForm}
 						initialValues={{
 							post: post,
 							salary: salary,
@@ -166,7 +218,10 @@ export const VacancyEditView = () => {
 							skills: skills,
 							conditions: conditions,
 							category: category,
-							direction: direction,
+							direction: categories.find(cat => cat.title === categoryTitle)
+								?.direction
+								? direction
+								: subdivision,
 							experience: experience,
 							employment: employment
 						}}
@@ -316,7 +371,11 @@ export const VacancyEditView = () => {
 										value: category.title,
 										label: category.title
 									}))}
-									onChange={e => setCategoryTitle(e)}
+									onChange={e => {
+										setCategoryTitle(e)
+										console.log('test log')
+										editForm.setFieldValue(['direction'], null)
+									}}
 								></Select>
 							</Form.Item>
 							<Form.Item
@@ -355,15 +414,7 @@ export const VacancyEditView = () => {
 						</Form.Item>
 					</Form>
 				) : (
-					<div className="w-[50%] mt-[80px] flex flex-col gap-[40px]">
-						<div className="flex flex-col gap-[16px]">
-							<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-								Должность:
-							</p>
-							<p className="font-content-font font-normal text-black text-[18px]/[21px]">
-								{post && post}
-							</p>
-						</div>
+					<div className="w-[50%] mt-[52px] flex flex-col gap-[40px]">
 						<div className="flex gap-[60px]">
 							<div className="flex flex-col gap-[16px]">
 								<p className="font-content-font font-bold text-black text-[18px]/[21px]">
@@ -447,11 +498,7 @@ export const VacancyEditView = () => {
 							</Button>
 							<Button
 								onClick={() => {
-									deleteVacancy(currentVacancy?.id as number)
-										.unwrap()
-										.then(() => {
-											navigate('/services/personnelaccounting/vacancies')
-										})
+									setIsDeleteModalOpen(true)
 								}}
 								className="w-[151px] font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black bg-inherit"
 							>

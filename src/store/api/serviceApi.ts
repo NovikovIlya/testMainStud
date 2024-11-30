@@ -156,9 +156,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		getSeekerResponds: builder.query<RespondItemType[], string>({
 			query: status => ({
-				url:
-					`http://${emplBaseURL}employment-api/v1/seeker/responds?status=` +
-					status,
+				url: `http://${emplBaseURL}employment-api/v1/seeker/responds?${status}`,
 				headers: {
 					Authorization: `Bearer ${seekerToken}`
 				}
@@ -217,14 +215,16 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
-		getRespondFullInfoAccounting: builder.query<VacancyRespondItemType, number>({
-			query: id => ({
-				url: `http://${emplBaseURL}employment-api/v1/respond/${id}`,
-				headers: {
-					Authorization: `Bearer ${accountingToken}`
-				}
-			})
-		}),
+		getRespondFullInfoAccounting: builder.query<VacancyRespondItemType, number>(
+			{
+				query: id => ({
+					url: `http://${emplBaseURL}employment-api/v1/respond/${id}`,
+					headers: {
+						Authorization: `Bearer ${accountingToken}`
+					}
+				})
+			}
+		),
 		getChatIdByRespondId: builder.query<
 			{
 				id: number
@@ -475,6 +475,22 @@ export const serviceApi = apiSlice.injectEndpoints({
 					Authorization: `Bearer ${seekerToken}`
 				}
 			})
+		}),
+		downloadEmploymentSeekerFile: builder.query<
+			{ href: string },
+			{ respondId: number; docId: number }
+		>({
+			query: ({ respondId, docId }) => ({
+				url: `http://${emplBaseURL}employment-api/v1/respond/${respondId}/employment/file/${docId}`,
+				responseHandler: async res => {
+					const data = await res.blob()
+					const file = new Blob([data], {
+						type: res.headers.get('content-type') as string
+					})
+					return { href: window.URL.createObjectURL(file) }
+				}
+			}),
+			keepUnusedDataFor: 0
 		}),
 		postPhone: builder.mutation({
 			query: phone => {
@@ -1122,7 +1138,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 			})
 		}),
 		uploadEmploymentDocument: builder.mutation<
-			void,
+			{ id: number; name: string; size: number },
 			{ respondId: number; id: number; file: File; fileName: string }
 		>({
 			query: ({ respondId, id, file, fileName }) => ({
@@ -1259,7 +1275,8 @@ export const {
 	useLazyDownloadEmploymentStageFileQuery,
 	useUploadEmploymentDocumentMutation,
 	useGetRespondFullInfoAccountingQuery,
+	useLazyDownloadEmploymentSeekerFileQuery,
 	useGetTestResultsQuery,
 	useSetTestResultSignedMutation,
-	useSetTestResultHiddenMutation,
+	useSetTestResultHiddenMutation
 } = serviceApi

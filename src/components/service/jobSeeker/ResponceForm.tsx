@@ -120,6 +120,7 @@ export const ResponseForm = () => {
 	})
 
 	const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
+	const [resultModalText, setResultModalText] = useState<string>('')
 
 	return (
 		<>
@@ -160,7 +161,7 @@ export const ResponseForm = () => {
 				>
 					<div className="text-center">
 						<p className="font-content-font font-normal text-black text-[16px]/[20px] mb-[40px]">
-							Спасибо, ваш отклик успешно отправлен
+							{resultModalText}
 						</p>
 						<Button
 							type="primary"
@@ -407,58 +408,79 @@ export const ResponseForm = () => {
 							<Button
 								className="mr-auto mt-[40px] rounded-[54.5px]"
 								type="primary"
-								onClick={async () => {
-									try {
-										await (currentVacancy !== null &&
-											getVacancy({
-												id: currentVacancy?.id,
-												coverLetter: coverLetter,
-												aboutMe: {
-													gender: aboutMeData.gender,
-													lastname: aboutMeData.surName,
-													firstname: aboutMeData.name,
-													patronymic: aboutMeData.patronymic,
-													birthday: aboutMeData.birthDay
-														.split('-')
-														.reverse()
-														.join('-'),
-													citizenship: 'Российская федерация (РФ)',
-													phone: aboutMeData.phone,
-													email: aboutMeData.email
-												},
-												educations: educationData.educations.map(edu => ({
-													institution: edu.education.nameofInstitute,
-													endYear: parseInt(edu.education.graduateYear),
-													country: countries?.find(
-														cou => cou.id === edu.education.countryId
-													)?.shortName!,
-													educationLevel: levels?.find(
-														educ => educ.id === edu.education.educationLevelId
-													)?.name!,
-													speciality: edu.education.specialization
-												})),
-												portfolio: {
-													url: experienceData.portfolio,
-													workExperiences: experienceData.experiences.map(
-														exp => ({
-															workPlace: exp.experience.workplace,
-															beginWork: exp.experience.beginWork
-																.split('-')
-																.reverse()
-																.join('-'),
-															endWork: exp.experience.endWork
-																.split('-')
-																.reverse()
-																.join('-'),
-															position: exp.experience.seat,
-															duties: exp.experience.duties
-														})
+								onClick={() => {
+									currentVacancy !== null &&
+										getVacancy({
+											id: currentVacancy?.id,
+											coverLetter: coverLetter,
+											aboutMe: {
+												gender: aboutMeData.gender,
+												lastname: aboutMeData.surName,
+												firstname: aboutMeData.name,
+												patronymic: aboutMeData.patronymic,
+												birthday: aboutMeData.birthDay
+													.split('.')
+													.reverse()
+													.join('-'),
+												countryId: countries?.find(
+													cou => cou.id === aboutMeData.countryId
+												)?.id!,
+												phone: aboutMeData.phone,
+												email: aboutMeData.email
+											},
+											educations: educationData.educations.map(edu => ({
+												institution: edu.education.nameofInstitute,
+												endYear: parseInt(edu.education.graduateYear),
+												country: countries?.find(
+													cou => cou.id === edu.education.countryId
+												)?.shortName!,
+												educationLevel: levels?.find(
+													educ => educ.id === edu.education.educationLevelId
+												)?.name!,
+												speciality: edu.education.specialization
+											})),
+											portfolio: {
+												url: experienceData.portfolio,
+												workExperiences: experienceData.experiences.map(
+													exp => ({
+														workPlace: exp.experience.workplace,
+														beginWork: exp.experience.beginWork
+															.split('.')
+															.reverse()
+															.join('-'),
+														endWork: exp.experience.endWork
+															.split('.')
+															.reverse()
+															.join('-'),
+														position: exp.experience.seat,
+														duties: exp.experience.duties
+													})
+												)
+											},
+											skills: {
+												keySkills: skillsData.skills,
+												aboutMe: skillsData.details
+											}
+										})
+											.unwrap()
+											.then(() => {
+												setResultModalText(
+													'Спасибо, ваш отклик успешно отправлен'
+												)
+												setIsFormOpen(false)
+												setIsSuccessModalOpen(true)
+											})
+											.catch(error => {
+												try {
+													console.log(error)
+													setResultModalText(error.data.message as string)
+												} catch (err) {
+													setResultModalText(
+														'Что-то пошло не так, приносим извинения за неудобства'
 													)
-												},
-												skills: {
-													keySkills: skillsData.skills,
-													aboutMe: skillsData.details
 												}
+												setIsFormOpen(false)
+												setIsSuccessModalOpen(true)
 											})
 												.unwrap()
 												.then(() => {
@@ -488,10 +510,12 @@ export const ResponseForm = () => {
 								name: aboutMeData.name,
 								surname: aboutMeData.surName,
 								patronymic: aboutMeData.patronymic,
-								birthDay: dayjs(
-									aboutMeData.birthDay.split('.').join('-'),
-									'DD.MM.YYYY'
-								),
+								birthDay: aboutMeData.birthDay
+									? dayjs(
+											aboutMeData.birthDay.split('.').join('-'),
+											'DD.MM.YYYY'
+									  )
+									: null,
 								country: aboutMeData.countryId,
 								phoneNumber: aboutMeData.phone,
 								email: aboutMeData.email
@@ -500,10 +524,7 @@ export const ResponseForm = () => {
 								dispatch(
 									allData({
 										...values,
-										birthDay: values.birthDay.$d
-											.toLocaleDateString()
-											.split('.')
-											.join('-'),
+										birthDay: values.birthDay.$d.toLocaleDateString(),
 										surName: values.surname,
 										phone: values.phoneNumber,
 										countryId: values.country
@@ -863,6 +884,8 @@ export const ResponseForm = () => {
 							>
 								<Select
 									className="w-full rounded-lg"
+									showSearch
+									optionFilterProp="label"
 									options={
 										countries === undefined
 											? []
@@ -1020,6 +1043,8 @@ export const ResponseForm = () => {
 								rules={[{ required: true, message: 'Не выбрана страна' }]}
 							>
 								<Select
+									showSearch
+									optionFilterProp="label"
 									className="w-full rounded-lg"
 									options={
 										countries === undefined
@@ -1216,47 +1241,6 @@ export const ResponseForm = () => {
 													  dayjs(exp.experience.endWork, 'DD.MM.YYYY')
 															.toDate()
 															.getFullYear()}{' '}
-												{/* {dayjs(exp.experience.endWork, 'DD.MM.YYYY')
-													.toDate()
-													.getFullYear() -
-													dayjs(exp.experience.beginWork, 'DD.MM.YYYY')
-														.toDate()
-														.getFullYear() ===
-												0
-													? ''
-													: dayjs(exp.experience.endWork, 'DD.MM.YYYY')
-															.toDate()
-															.getFullYear() -
-															(dayjs(exp.experience.beginWork, 'DD.MM.YYYY')
-																.toDate()
-																.getFullYear() %
-																10) ===
-													  1
-													? '1 год'
-													: dayjs(exp.experience.endWork, 'DD.MM.YYYY')
-															.toDate()
-															.getFullYear() -
-															(dayjs(exp.experience.beginWork, 'DD.MM.YYYY')
-																.toDate()
-																.getFullYear() %
-																10) <=
-													  4
-													? `${
-															dayjs(exp.experience.endWork, 'DD.MM.YYYY')
-																.toDate()
-																.getFullYear() -
-															dayjs(exp.experience.beginWork, 'DD.MM.YYYY')
-																.toDate()
-																.getFullYear()
-													  } года`
-													: `${
-															dayjs(exp.experience.endWork, 'DD.MM.YYYY')
-																.toDate()
-																.getFullYear() -
-															dayjs(exp.experience.beginWork, 'DD.MM.YYYY')
-																.toDate()
-																.getFullYear()
-													  } лет`} */}
 											</p>
 										</div>
 										<div className="flex gap-[12px]">
@@ -1334,14 +1318,8 @@ export const ResponseForm = () => {
 											workplace: values.workplace,
 											seat: values.seat,
 											duties: values.duties,
-											beginWork: values.beginWork.$d
-												.toLocaleDateString()
-												.split('.')
-												.join('-'),
-											endWork: values.endWork.$d
-												.toLocaleDateString()
-												.split('.')
-												.join('-')
+											beginWork: values.beginWork.$d.toLocaleDateString(),
+											endWork: values.endWork.$d.toLocaleDateString()
 										}
 									})
 								)
@@ -1476,14 +1454,8 @@ export const ResponseForm = () => {
 										alterExperience({
 											id: experienceToEdit.id,
 											workplace: values.workplace,
-											beginWork: values.beginWork.$d
-												.toLocaleDateString()
-												.split('.')
-												.join('-'),
-											endWork: values.endWork.$d
-												.toLocaleDateString()
-												.split('.')
-												.join('-'),
+											beginWork: values.beginWork.$d.toLocaleDateString(),
+											endWork: values.endWork.$d.toLocaleDateString(),
 											seat: values.seat,
 											duties: values.duties
 										})

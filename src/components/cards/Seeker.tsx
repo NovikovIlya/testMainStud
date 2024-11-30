@@ -1,9 +1,16 @@
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import img from '../../assets/images/image44.png'
+import {
+	keepFilterCategory,
+	keepFilterSubCategory,
+	keepFilterType
+} from '../../store/reducers/CatalogFilterSlice'
 
 export const Seeker = () => {
 	const navigate = useNavigate()
+	const dispatch = useDispatch()
 
 	return (
 		<div
@@ -45,7 +52,12 @@ export const Seeker = () => {
 			</div>
 			<div
 				className="flex w-fit max-[560px]:w-full justify-center items-center mr-[10%]"
-				onClick={() => navigate('/services/jobseeker/catalog')}
+				onClick={() => {
+					dispatch(keepFilterCategory('АУП'))
+					dispatch(keepFilterSubCategory('Все'))
+					dispatch(keepFilterType('DIRECTORY'))
+					navigate('/services/jobseeker/catalog')
+				}}
 			>
 				<svg
 					width="87"

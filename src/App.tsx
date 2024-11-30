@@ -20,6 +20,7 @@ import {Redirect} from "./components/redirect/Redirect";
 import ru_RU from 'antd/locale/ru_RU';
 import { NotFound } from './components/NotFound'
 import { Notification } from './components/notification/Notification'
+import {AlertProvider} from "./utils/AlertMessage";
 
 
 
@@ -28,44 +29,46 @@ const App = () => {
 
 	return (
 		<>
-			<ConfigProvider
-				theme={{
-					token: {
-						colorPrimary: blue307,
-						colorPrimaryHover: blue004
-					}
-				}}
-				locale={ru_RU}
-			>
-				<Routes>
-					<Route path="/">
-						<Route path={"/redirect/:id"} element={<Redirect/>}/>
-						<Route path="/" element={<Login />} />
-						<Route
-							path="/registration"
-							element={<Registration email={email} changeEmail={changeEmail} />}
-						/>
-						<Route
-							path="/registration/checkingEmail"
-							element={<CheckEmail email={email} />}
-						/>
-						<Route path="/api/register/approve/*" element={<ApproveEmail />} />
-					</Route>
-					<Route element={<RequireAuth />}>
-						<Route path="/user/*" element={<User />} />
-						<Route path="/infoUser" element={<InfoUser />} />
-						<Route path="/form" element={<FormModal />} />
-						<Route path="/education" element={<EducationForm />} />
-						<Route path="/documents" element={<DocumentForm />} />
-						<Route path="/work" element={<WorkForm />} />
-						<Route path="/parent" element={<ParentForm />} />
-						<Route path="/services/*" element={<Service />} />
-						<Route path="/*" element={<NotFound/>} />
-						
-					</Route>
-				</Routes>
-			</ConfigProvider>
-			<Notification/>
+			<AlertProvider>
+				<ConfigProvider
+					theme={{
+						token: {
+							colorPrimary: blue307,
+							colorPrimaryHover: blue004
+						}
+					}}
+					locale={ru_RU}
+				>
+					<Routes>
+						<Route path="/">
+							<Route path={"/redirect/:id"} element={<Redirect/>}/>
+							<Route path="/" element={<Login />} />
+							<Route
+								path="/registration"
+								element={<Registration email={email} changeEmail={changeEmail} />}
+							/>
+							<Route
+								path="/registration/checkingEmail"
+								element={<CheckEmail email={email} />}
+							/>
+							<Route path="/api/register/approve/*" element={<ApproveEmail />} />
+						</Route>
+						<Route element={<RequireAuth />}>
+							<Route path="/user/*" element={<User />} />
+							<Route path="/infoUser" element={<InfoUser />} />
+							<Route path="/form" element={<FormModal />} />
+							<Route path="/education" element={<EducationForm />} />
+							<Route path="/documents" element={<DocumentForm />} />
+							<Route path="/work" element={<WorkForm />} />
+							<Route path="/parent" element={<ParentForm />} />
+							<Route path="/services/*" element={<Service />} />
+							<Route path="/*" element={<NotFound/>} />
+
+						</Route>
+					</Routes>
+				</ConfigProvider>
+				<Notification/>
+			</AlertProvider>
 		</>
 	)
 }

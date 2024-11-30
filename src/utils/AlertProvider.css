@@ -1,0 +1,68 @@
+.ant-message {
+    left: 90% !important;
+    top: 11% !important;
+}
+
+.alert-message {
+    min-width: 400px;
+    height: 65px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-size: 16px;
+    color: black;
+    background-color: #ffffff;
+}
+
+/* Позиционируем сообщения */
+.ant-message-notice-content {
+    position: relative;
+    right: 50px;
+    z-index: 10000000;
+    padding: 0px !important;
+    border-radius: 0px !important;
+
+}
+.ant-message-notice-wrapper {
+    padding: 0px;
+}
+.ant-message-error {
+    color: #ffffff !IMPORTANT;
+}
+.anticon {
+    margin-right: 0px !important;
+    position: absolute;
+    display: none;
+}
+
+.left-side-icon {
+    content: '';
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 65px;
+    width: 46px;
+}
+.info-side {
+    background-color: #63ABFF;
+    color: #63ABFF;
+}
+.error-side {
+    background-color: #FF5A5A;
+    color: #FF5A5A;
+}
+.success-side {
+    background-color: #61D689;
+    color: #61D689;
+}
+.warning-side {
+    background-color: #ff9200;
+    color: #ff9200;
+}
+.krestik-wrapper {
+    cursor: pointer;
+    transition: 0.2s ease-in-out;
+}
+.krestik-wrapper:hover {
+    transform: scale(1.5);
+}

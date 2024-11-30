@@ -10,8 +10,12 @@ import {
 } from '../../../../../store/api/serviceApi'
 import { setCurrentVacancy } from '../../../../../store/reducers/CurrentVacancySlice'
 import { VacancyItemType } from '../../../../../store/reducers/type'
+import {useAlert} from "../../../../../utils/AlertMessage";
 
 export default function VacancyItem(props: VacancyItemType) {
+
+	const { openAlert } = useAlert()
+
 	const [getVacancy, result] = useLazyGetVacancyViewQuery()
 	const navigate = useNavigate()
 	const [isModalOpen, setModalOpen] = useState(false)
@@ -90,13 +94,19 @@ export default function VacancyItem(props: VacancyItemType) {
 						<Button
 							type="primary"
 							className="rounded-[54.5px] mr-auto"
-							onClick={() => {
-								requestDeleteVacancy(props.id)
-									.unwrap()
-									.then(() => {
-										setModalOpen(false)
-										setIsSuccessModalOpen(true)
-									})
+							onClick={async () => {
+								try {
+									await requestDeleteVacancy(props.id)
+										.unwrap()
+										.then(() => {
+											setModalOpen(false)
+											setIsSuccessModalOpen(true)
+										})
+									setIsSuccessModalOpen(true);
+								} catch (error : any) {
+									let errorStr = error.status + " " + error.data.message;
+									openAlert({ type: 'error', text: errorStr });
+								}
 							}}
 						>
 							Удалить

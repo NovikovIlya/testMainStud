@@ -10,8 +10,12 @@ import {
 	useRequestUpdateVacancyMutation
 } from '../../../../../store/api/serviceApi'
 import ArrowIcon from '../../../jobSeeker/ArrowIcon'
+import {useAlert} from "../../../../../utils/AlertMessage";
 
 export const SupervisorUpdateVacancy = () => {
+
+	const { openAlert } = useAlert()
+
 	const { currentVacancy } = useAppSelector(state => state.currentVacancy)
 
 	const { data: categories = [] } = useGetCategoriesQuery()
@@ -384,21 +388,26 @@ export const SupervisorUpdateVacancy = () => {
 							</Button>
 							{isSendRequestButtonActivated && (
 								<Button
-									onClick={() => {
-										requestUpdate({
-											post: post as string,
-											experience: experience as string,
-											salary: salary as string,
-											employment: employment as string,
-											responsibilities: responsibilities as string,
-											skills: skills as string,
-											conditions: conditions as string,
-											vacancyId: currentVacancy?.id as number
-										})
-											.unwrap()
-											.then(() => {
-												setIsSuccessModalOpen(true)
+									onClick={async () => {
+										try {
+											await requestUpdate({
+												post: post as string,
+												experience: experience as string,
+												salary: salary as string,
+												employment: employment as string,
+												responsibilities: responsibilities as string,
+												skills: skills as string,
+												conditions: conditions as string,
+												vacancyId: currentVacancy?.id as number
 											})
+												.unwrap()
+												.then(() => {
+													setIsSuccessModalOpen(true)
+												})
+										} catch (error : any) {
+											let errorStr = error.status + " " + error.data.message;
+											openAlert({ type: 'error', text: errorStr });
+										}
 									}}
 									type="primary"
 									className="rounded-[54.5px] w-[121px]"

@@ -54,6 +54,7 @@ import ArrowIcon from './ArrowIcon'
 import { AttachIcon } from './AttachIcon'
 import { ButtonPlusIcon } from './ButtonPlusIcon'
 import { CheckedIcon } from './CheckedIcon'
+import {useAlert} from "../../../utils/AlertMessage";
 
 export const ResponseForm = () => {
 	const { t, i18n } = useTranslation()
@@ -75,6 +76,8 @@ export const ResponseForm = () => {
 	const skillsData = useAppSelector(state => state.skills)
 	const educationData = useAppSelector(state => state.RespondEducation)
 	const experienceData = useAppSelector(state => state.Experience)
+
+	const { openAlert } = useAlert()
 
 	const [currentFormskills, setcurrentFormSkills] = useState<string[]>(
 		skillsData.skills
@@ -479,6 +482,17 @@ export const ResponseForm = () => {
 												setIsFormOpen(false)
 												setIsSuccessModalOpen(true)
 											})
+												.unwrap()
+												.then(() => {
+													!result.isSuccess && setIsFormOpen(false)
+												})
+												.then(() => {
+													!result.isSuccess && setIsSuccessModalOpen(true)
+												}))
+									} catch (error : any) {
+										let errorStr = error.status + " " + error.data.message;
+										openAlert({ type: 'error', text: errorStr });
+									}
 								}}
 							>
 								Отправить

@@ -37,6 +37,10 @@ import { RespondsSupervisor } from './supervisor/RespondsSupervisor'
 import { SupervisorCreateVacancyForm } from './supervisor/vacancy/SupervisorCreateVacancyForm'
 import { SupervisorUpdateVacancy } from './supervisor/vacancy/SupervisorUpdateVacancy'
 import { SupervisorVacancies } from './supervisor/vacancy/SupervisorVacancies'
+import {TestResultsIconSvg} from "../../../assets/svg/TestResultsIconSvg";
+import {SignedIconSvg} from "../../../assets/svg/SignedIconSvg";
+import {TestResults} from "../employmentStage/laborProtectionDepartment/testResults/TestResults";
+import {Signed} from "../employmentStage/laborProtectionDepartment/signed/Signed";
 
 export const NavPesonnelAccounting = () => {
 	const { pathname } = useLocation()
@@ -55,6 +59,8 @@ export const NavPesonnelAccounting = () => {
 	const isSupervisor = rolesData?.find(role => role === 'SUPERVISOR')
 
 	const isAccounting = rolesData?.find(role => role === 'ACCOUNTING')
+
+	const isLaborProtection = rolesData?.find(role => role === 'LABOR_PROTECTION_DEPARTMENT')
 
 
 	const navEmployeeList = [
@@ -108,6 +114,19 @@ export const NavPesonnelAccounting = () => {
 		id: '/services/personnelaccounting/accounting/requisite',
 		icon: <VacanciesIcon />,
 		name: 'Реквизиты'
+		},
+	]
+
+	const navLaborProtectionList = [
+		{
+			id: '/services/personnelaccounting/labor-protection/test-results',
+			icon: <TestResultsIconSvg />,
+			name: 'Результаты тестов'
+		},
+		{
+			id: '/services/personnelaccounting/labor-protection/signed',
+			icon: <SignedIconSvg />,
+			name: 'Подписанные'
 		},
 	]
 
@@ -442,7 +461,26 @@ export const NavPesonnelAccounting = () => {
 			)
 		}
 	)
-	if (!(isPersonnelDepartment || isSupervisor || isAccounting))
+	const handleLaborProtectionList = navLaborProtectionList.map(
+		({ id, icon, name }, index) => {
+			return (
+				<li
+					key={index}
+					className={clsx(
+						'w-full flex items-center py-2 pl-8 hover:bg-[#F5F8FB]  cursor-pointer',
+						id === pathname && 'bg-[#F5F8FB]'
+					)}
+					onClick={() => handleNavigate(id)}
+				>
+					<div className="flex items-center gap-[10px]">
+						{icon}
+						<p className="text-base">{name}</p>
+					</div>
+				</li>
+			)
+		}
+	)
+	if (!(isPersonnelDepartment || isSupervisor || isAccounting || isLaborProtection))
 		return (
 			<>
 				<Header type="service" service="employment" />
@@ -457,6 +495,7 @@ export const NavPesonnelAccounting = () => {
 					{isPersonnelDepartment ? handleList : <></>}
 					{isSupervisor ? handleSupervisorList : <></>}
 					{isAccounting ? handleAccountingList : <></>}
+					{isLaborProtection ? handleLaborProtectionList : <></>}
 				</ul>
 			</div>
 			<div className="bg-[#F5F8FB] flex w-full">
@@ -533,6 +572,12 @@ export const NavPesonnelAccounting = () => {
 				{pathname === '/services/personnelaccounting/accounting/requisite/requisite-review/seeker-info' && (
 						<RequisiteSeeker/>
 					)}
+				{pathname === '/services/personnelaccounting/labor-protection/test-results' && (
+					<TestResults/>
+				)}
+				{pathname === '/services/personnelaccounting/labor-protection/signed' && (
+					<Signed/>
+				)}
 			</div>
 		</>
 	)

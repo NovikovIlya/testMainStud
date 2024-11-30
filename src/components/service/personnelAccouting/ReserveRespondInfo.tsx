@@ -1,6 +1,7 @@
 import { LoadingOutlined } from '@ant-design/icons'
 import { Button, ConfigProvider, Modal, Spin, Tag } from 'antd'
 import { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { Margin, usePDF } from 'react-to-pdf'
@@ -19,9 +20,11 @@ import {
 	useGetSeekerResumeFileQuery,
 	useLazyGetSeekerResumeFileQuery
 } from '../../../store/api/serviceApi'
+import { useGetCountriesQuery } from '../../../store/api/utilsApi'
 import { openChat } from '../../../store/reducers/ChatRespondStatusSlice'
 import { setRespondId } from '../../../store/reducers/CurrentRespondIdSlice'
 import { setCurrentVacancyId } from '../../../store/reducers/CurrentVacancyIdSlice'
+import { setCurrentVacancyName } from '../../../store/reducers/CurrentVacancyNameSlice'
 import { setChatId } from '../../../store/reducers/chatIdSlice'
 import { NocircleArrowIcon } from '../jobSeeker/NoCircleArrowIcon'
 
@@ -34,6 +37,14 @@ export const ReserveRespondInfo = (props: {
 	const respondId = useAppSelector(state => state.currentResponce)
 
 	const { data: res } = useGetReservedRespondFullInfoQuery(respondId.respondId)
+
+	const date = new Date()
+
+	const { t, i18n } = useTranslation()
+	const { data: countries, isLoading: isLoadingCountry } = useGetCountriesQuery(
+		i18n.language
+	)
+
 	//const { data: resume } = useGetSeekerResumeFileQuery(respondId.respondId)
 	const [getResume] = useLazyGetSeekerResumeFileQuery()
 	const { refetch } = useGetReservedResponcesQuery('все')
@@ -199,7 +210,43 @@ export const ReserveRespondInfo = (props: {
 												res?.userData?.middlename}
 										</p>
 										<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-											Мужчина, 21 год
+											{res.userData?.sex === 'M' ? 'Мужчина' : 'Женщина'},{' '}
+											{date.getFullYear() -
+												parseInt(
+													res.userData?.birthday.split('-')[0] as string
+												)}{' '}
+											{date.getFullYear() -
+												parseInt(
+													res.userData?.birthday.split('-')[0] as string
+												) >=
+												10 &&
+											date.getFullYear() -
+												parseInt(
+													res.userData?.birthday.split('-')[0] as string
+												) <=
+												20
+												? 'лет'
+												: (date.getFullYear() -
+														parseInt(
+															res.userData?.birthday.split('-')[0] as string
+														)) %
+														10 >=
+														2 &&
+												  (date.getFullYear() -
+														parseInt(
+															res.userData?.birthday.split('-')[0] as string
+														)) %
+														10 <=
+														4
+												? 'года'
+												: (date.getFullYear() -
+														parseInt(
+															res.userData?.birthday.split('-')[0] as string
+														)) %
+														10 ==
+												  1
+												? 'год'
+												: 'лет'}
 										</p>
 										<div className="flex gap-[36px]">
 											<div className="flex flex-col gap-[8px]">
@@ -207,7 +254,10 @@ export const ReserveRespondInfo = (props: {
 													Дата рождения
 												</p>
 												<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-													16.05.2002
+													{res.userData?.birthday
+														.split('-')
+														.reverse()
+														.join('.')}
 												</p>
 											</div>
 											<div className="flex flex-col gap-[8px]">
@@ -215,7 +265,11 @@ export const ReserveRespondInfo = (props: {
 													Страна гражданства
 												</p>
 												<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-													РФ
+													{
+														countries?.find(
+															country => country.id === res.userData?.countryId
+														)?.shortName
+													}
 												</p>
 											</div>
 										</div>
@@ -270,6 +324,13 @@ export const ReserveRespondInfo = (props: {
 										/>
 										<Button
 											onClick={() => {
+												dispatch(
+													setCurrentVacancyName(
+														res.oldVacancyName
+															? res.oldVacancyName
+															: res.desiredJob
+													)
+												)
 												handleNavigate(
 													`/services/personnelaccounting/chat/id/${chatId.id}`
 												)
@@ -518,7 +579,18 @@ export const ReserveRespondInfo = (props: {
 											}}
 										/>
 										<Button
-											onClick={() => {}}
+											onClick={() => {
+												dispatch(
+													setCurrentVacancyName(
+														res.oldVacancyName
+															? res.oldVacancyName
+															: res.desiredJob
+													)
+												)
+												handleNavigate(
+													`/services/personnelaccounting/chat/id/${chatId.id}`
+												)
+											}}
 											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
 										>
 											Перейти в чат

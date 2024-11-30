@@ -13,6 +13,11 @@ import {
 	useLazyGetVacancyPreviewByDirectionQuery,
 	useLazyGetVacancyPreviewBySubdivisionQuery
 } from '../../../store/api/serviceApi'
+import {
+	keepFilterCategory,
+	keepFilterSubCategory,
+	keepFilterType
+} from '../../../store/reducers/CatalogFilterSlice'
 import { allData } from '../../../store/reducers/SeekerFormReducers/AboutMeReducer'
 import { VacancyItemType } from '../../../store/reducers/type'
 
@@ -21,18 +26,30 @@ import VacancyItem from './CatalogForEditItem'
 export default function Catalog() {
 	const dispatch = useDispatch()
 	const user = useAppSelector(state => state.auth.user)
+	const catalogFilter = useAppSelector(state => state.catalogFilter)
 
-	const [categoryTitle, setCategoryTitle] = useState('АУП')
-	const [directoryTitle, setDirectoryTitle] = useState('Все')
-	const [subdivisionTitle, setSubdivisionTitle] = useState('')
+	const [categoryTitle, setCategoryTitle] = useState(catalogFilter.category)
+	const [directoryTitle, setDirectoryTitle] = useState(
+		catalogFilter.subcategory
+	)
+	const [subdivisionTitle, setSubdivisionTitle] = useState(
+		catalogFilter.subcategory
+	)
 	const [page, setPage] = useState(0)
-	const [secondOption, setSecondOption] = useState<string | null>('Все')
+	const [secondOption, setSecondOption] = useState<string | null>(
+		catalogFilter.subcategory
+	)
 	const [requestData, setRequestData] = useState<{
 		category: string
 		subcategory: string
 		type: 'DIRECTORY' | 'SUBDIVISION'
 		page: number
-	}>({ category: 'АУП', subcategory: 'Все', type: 'DIRECTORY', page: 0 })
+	}>({
+		category: catalogFilter.category,
+		subcategory: catalogFilter.subcategory,
+		type: catalogFilter.type,
+		page: 0
+	})
 	const [blockPageAddition, setBlockPageAddition] = useState<boolean>(true)
 	const [isBottomOfCatalogVisible, setIsBottomOfCatalogVisible] =
 		useState<boolean>(true)
@@ -153,7 +170,7 @@ export default function Catalog() {
 		return (
 			<>
 				<div className="w-full h-full flex items-center">
-					<div className="text-center ml-auto mr-auto mb-[10%]">
+					<div className="text-center ml-auto mr-auto">
 						<Spin
 							indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}
 						></Spin>
@@ -168,7 +185,7 @@ export default function Catalog() {
 
 	return (
 		<>
-			<div className="pt-[120px] pl-[52px]">
+			<div className="pt-[120px] pl-[52px] w-full pr-[52px]">
 				<h1 className="font-content-font font-normal text-[28px]/[28px] text-black">
 					Каталог вакансий
 				</h1>
@@ -182,7 +199,7 @@ export default function Catalog() {
 						value: category.title,
 						label: category.title
 					}))}
-					defaultValue={'АУП'}
+					defaultValue={catalogFilter.category}
 					onChange={(value: string) => {
 						;(() => {
 							setBlockPageAddition(true)
@@ -194,11 +211,13 @@ export default function Catalog() {
 							})
 							setCategoryTitle(value)
 							setSecondOption(null)
+							dispatch(keepFilterCategory(value))
 						})()
 					}}
 					placeholder={!isCategoriesLoading && 'Выбрать'}
 					loading={isCategoriesLoading}
 					disabled={isCategoriesLoading}
+					value={categoryTitle}
 				/>
 				<h2 className="mt-[36px] font-content-font font-normal text-[18px]/[18px] text-black">
 					{categories.find(category => category.title === categoryTitle)
@@ -224,7 +243,7 @@ export default function Catalog() {
 									label: sub.title
 							  }))
 					}
-					defaultValue={'Все'}
+					defaultValue={catalogFilter.subcategory}
 					onChange={(value: string) => {
 						categories.find(category => category.title === categoryTitle)
 							?.direction
@@ -237,6 +256,8 @@ export default function Catalog() {
 										page: 0
 									}))
 									setSecondOption(value)
+									dispatch(keepFilterSubCategory(value))
+									dispatch(keepFilterType('DIRECTORY'))
 							  })()
 							: (() => {
 									setBlockPageAddition(true)
@@ -247,6 +268,8 @@ export default function Catalog() {
 										page: 0
 									}))
 									setSecondOption(value)
+									dispatch(keepFilterSubCategory(value))
+									dispatch(keepFilterType('SUBDIVISION'))
 							  })()
 					}}
 					placeholder={

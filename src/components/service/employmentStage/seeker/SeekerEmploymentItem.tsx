@@ -14,6 +14,7 @@ import {
 import { setStage } from '../../../../store/reducers/CurrentEmploymentStage'
 import { setRespondId } from '../../../../store/reducers/CurrentRespondIdSlice'
 import { setCurrentVacancyId } from '../../../../store/reducers/CurrentVacancyIdSlice'
+import { setCurrentVacancyName } from '../../../../store/reducers/CurrentVacancyNameSlice'
 import { setChatId } from '../../../../store/reducers/chatIdSlice'
 import { RespondItemType, respondStatus } from '../../../../store/reducers/type'
 
@@ -115,8 +116,8 @@ export const SeekerEmploymentItem = (props: RespondItemType) => {
 												comm.type === 'SECOND'
 													? dispatch(setStage(2))
 													: comm.type === 'FOURTH'
-													? dispatch(setStage(4))
-													: dispatch(setStage(6))
+													? dispatch(setStage(3))
+													: dispatch(setStage(5))
 												navigate(
 													`/services/myresponds/employment/stages/${props.vacancyId}/${props.id}`
 												)
@@ -125,8 +126,8 @@ export const SeekerEmploymentItem = (props: RespondItemType) => {
 											{comm.type === 'SECOND'
 												? 'Этап №2 «Прикрепление документов»'
 												: comm.type === 'FOURTH'
-												? 'Этап №4 «Медицинский осмотр»'
-												: 'Этап №6 «Реквизиты»'}
+												? 'Этап №3 «Медицинский осмотр»'
+												: 'Этап №5 «Реквизиты»'}
 										</a>
 									</div>
 								) : (
@@ -169,6 +170,11 @@ export const SeekerEmploymentItem = (props: RespondItemType) => {
 					</Button>
 					<Button
 						onClick={() => {
+							dispatch(
+								setCurrentVacancyName(
+									props.name ? props.name : props.desiredJob
+								)
+							)
 							handleNavigate(`/services/myresponds/chat/id/${chatId.id}`)
 						}}
 						className="font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black"

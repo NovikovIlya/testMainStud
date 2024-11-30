@@ -15,6 +15,7 @@ import {
 import { setCurrentResponce } from '../../../store/reducers/CurrentResponceSlice'
 import { setRespondId } from '../../../store/reducers/CurrentRespondIdSlice'
 import { setCurrentVacancyId } from '../../../store/reducers/CurrentVacancyIdSlice'
+import { setCurrentVacancyName } from '../../../store/reducers/CurrentVacancyNameSlice'
 import { setChatId } from '../../../store/reducers/chatIdSlice'
 import { RespondItemType, respondStatus } from '../../../store/reducers/type'
 
@@ -141,6 +142,11 @@ export const RespondItem = (props: RespondItemType & { refetch: Function }) => {
 					{props.name && (
 						<Button
 							onClick={() => {
+								dispatch(
+									setCurrentVacancyName(
+										props.name ? props.name : props.desiredJob
+									)
+								)
 								handleNavigate(`/services/myresponds/chat/id/${chatId.id}`)
 							}}
 							className="font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black"

@@ -419,9 +419,9 @@ export const ResponseForm = () => {
 													.split('.')
 													.reverse()
 													.join('-'),
-												citizenship: countries?.find(
+												countryId: countries?.find(
 													cou => cou.id === aboutMeData.countryId
-												)?.shortName!,
+												)?.id!,
 												phone: aboutMeData.phone,
 												email: aboutMeData.email
 											},

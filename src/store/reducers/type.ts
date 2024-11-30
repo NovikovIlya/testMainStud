@@ -257,7 +257,7 @@ export type ResponceType = {
 		firstname: string
 		patronymic: string
 		birthday: string
-		citizenship: string
+		countryId: number
 		phone: string
 		email: string
 	}

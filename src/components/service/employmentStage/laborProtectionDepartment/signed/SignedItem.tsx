@@ -73,13 +73,13 @@ export const SignedItem = ( props: SignedItemType ) => {
             <div className="w-[100%] h-[80px] bg-white flex flex-row items-center">
                 <div className="ml-[1.5%] w-[62%] flex flex-row">
                     <span className="w-[38%] text-[16px] text-[##000000] font-normal">
-                        {props.seeker.lastName + ' ' + props.seeker.firstName + ' ' + props.seeker.middleName}
+                        {props.seeker.lastname + ' ' + props.seeker.firstname + ' ' + props.seeker.middlename}
                     </span>
                     <span className="w-[54%] text-[16px] text-[##000000] font-normal">
                         {props.post}
                     </span>
                     <span className="w-[8%] text-[16px] text-[##000000] font-normal">
-                        {props.testPassed}
+                        {props.testPassed === true ? 'Пройдено' : 'Не пройдено'}
                     </span>
                 </div>
                 <div className="w-[36.5%] flex ">

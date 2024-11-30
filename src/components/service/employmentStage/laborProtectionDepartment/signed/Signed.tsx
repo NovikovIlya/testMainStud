@@ -8,7 +8,7 @@ import {Spin} from "antd";
 
 export const Signed = () => {
 
-    const { data: signed_data = [], isLoading : loading } = useGetTestResultsQuery({signed : false});
+    const { data: signed_data = [], isLoading : loading } = useGetTestResultsQuery({signed : true});
 
     console.log(signed_data)
 

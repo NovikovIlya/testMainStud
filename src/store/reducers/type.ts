@@ -504,9 +504,9 @@ export type ChangeStageStatusType = {
 export type SignedItemType = {
 	id: number
 	seeker: {
-		firstName: string
-		middleName: string
-		lastName: string
+		firstname: string
+		middlename: string
+		lastname: string
 	}
 	post: string
 	testPassed: boolean

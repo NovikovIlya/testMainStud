@@ -54,6 +54,7 @@ import ArrowIcon from './ArrowIcon'
 import { AttachIcon } from './AttachIcon'
 import { ButtonPlusIcon } from './ButtonPlusIcon'
 import { CheckedIcon } from './CheckedIcon'
+import {useAlert} from "../../../utils/AlertMessage";
 
 export const ResponseForm = () => {
 	const { t, i18n } = useTranslation()
@@ -75,6 +76,8 @@ export const ResponseForm = () => {
 	const skillsData = useAppSelector(state => state.skills)
 	const educationData = useAppSelector(state => state.RespondEducation)
 	const experienceData = useAppSelector(state => state.Experience)
+
+	const { openAlert } = useAlert()
 
 	const [currentFormskills, setcurrentFormSkills] = useState<string[]>(
 		skillsData.skills
@@ -404,65 +407,70 @@ export const ResponseForm = () => {
 							<Button
 								className="mr-auto mt-[40px] rounded-[54.5px]"
 								type="primary"
-								onClick={() => {
-									currentVacancy !== null &&
-										getVacancy({
-											id: currentVacancy?.id,
-											coverLetter: coverLetter,
-											aboutMe: {
-												gender: aboutMeData.gender,
-												lastname: aboutMeData.surName,
-												firstname: aboutMeData.name,
-												patronymic: aboutMeData.patronymic,
-												birthday: aboutMeData.birthDay
-													.split('-')
-													.reverse()
-													.join('-'),
-												citizenship: 'Российская федерация (РФ)',
-												phone: aboutMeData.phone,
-												email: aboutMeData.email
-											},
-											educations: educationData.educations.map(edu => ({
-												institution: edu.education.nameofInstitute,
-												endYear: parseInt(edu.education.graduateYear),
-												country: countries?.find(
-													cou => cou.id === edu.education.countryId
-												)?.shortName!,
-												educationLevel: levels?.find(
-													educ => educ.id === edu.education.educationLevelId
-												)?.name!,
-												speciality: edu.education.specialization
-											})),
-											portfolio: {
-												url: experienceData.portfolio,
-												workExperiences: experienceData.experiences.map(
-													exp => ({
-														workPlace: exp.experience.workplace,
-														beginWork: exp.experience.beginWork
-															.split('-')
-															.reverse()
-															.join('-'),
-														endWork: exp.experience.endWork
-															.split('-')
-															.reverse()
-															.join('-'),
-														position: exp.experience.seat,
-														duties: exp.experience.duties
-													})
-												)
-											},
-											skills: {
-												keySkills: skillsData.skills,
-												aboutMe: skillsData.details
-											}
-										})
-											.unwrap()
-											.then(() => {
-												!result.isSuccess && setIsFormOpen(false)
+								onClick={async () => {
+									try {
+										await (currentVacancy !== null &&
+											getVacancy({
+												id: currentVacancy?.id,
+												coverLetter: coverLetter,
+												aboutMe: {
+													gender: aboutMeData.gender,
+													lastname: aboutMeData.surName,
+													firstname: aboutMeData.name,
+													patronymic: aboutMeData.patronymic,
+													birthday: aboutMeData.birthDay
+														.split('-')
+														.reverse()
+														.join('-'),
+													citizenship: 'Российская федерация (РФ)',
+													phone: aboutMeData.phone,
+													email: aboutMeData.email
+												},
+												educations: educationData.educations.map(edu => ({
+													institution: edu.education.nameofInstitute,
+													endYear: parseInt(edu.education.graduateYear),
+													country: countries?.find(
+														cou => cou.id === edu.education.countryId
+													)?.shortName!,
+													educationLevel: levels?.find(
+														educ => educ.id === edu.education.educationLevelId
+													)?.name!,
+													speciality: edu.education.specialization
+												})),
+												portfolio: {
+													url: experienceData.portfolio,
+													workExperiences: experienceData.experiences.map(
+														exp => ({
+															workPlace: exp.experience.workplace,
+															beginWork: exp.experience.beginWork
+																.split('-')
+																.reverse()
+																.join('-'),
+															endWork: exp.experience.endWork
+																.split('-')
+																.reverse()
+																.join('-'),
+															position: exp.experience.seat,
+															duties: exp.experience.duties
+														})
+													)
+												},
+												skills: {
+													keySkills: skillsData.skills,
+													aboutMe: skillsData.details
+												}
 											})
-											.then(() => {
-												!result.isSuccess && setIsSuccessModalOpen(true)
-											})
+												.unwrap()
+												.then(() => {
+													!result.isSuccess && setIsFormOpen(false)
+												})
+												.then(() => {
+													!result.isSuccess && setIsSuccessModalOpen(true)
+												}))
+									} catch (error : any) {
+										let errorStr = error.status + " " + error.data.message;
+										openAlert({ type: 'error', text: errorStr });
+									}
 								}}
 							>
 								Отправить

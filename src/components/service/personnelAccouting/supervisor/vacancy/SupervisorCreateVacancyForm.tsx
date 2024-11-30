@@ -77,7 +77,6 @@ export const SupervisorCreateVacancyForm = () => {
 							await requestCreateVacancy(values).unwrap();
 							setIsSuccessModalOpen(true);
 						} catch (error : any) {
-							console.error('Ошибка:', error)
 							let errorStr = error.status + " " + error.data.message;
 							openAlert({ type: 'error', text: errorStr });
 						}

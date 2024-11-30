@@ -49,12 +49,12 @@ import {
 	educationResponceItemType
 } from '../../../store/reducers/SeekerFormReducers/RespondEducationReducer'
 import { allSkillsData } from '../../../store/reducers/SeekerFormReducers/SkillsReducer'
+import { useAlert } from '../../../utils/AlertMessage'
 
 import ArrowIcon from './ArrowIcon'
 import { AttachIcon } from './AttachIcon'
 import { ButtonPlusIcon } from './ButtonPlusIcon'
 import { CheckedIcon } from './CheckedIcon'
-import {useAlert} from "../../../utils/AlertMessage";
 
 export const ResponseForm = () => {
 	const { t, i18n } = useTranslation()
@@ -471,28 +471,10 @@ export const ResponseForm = () => {
 												setIsSuccessModalOpen(true)
 											})
 											.catch(error => {
-												try {
-													console.log(error)
-													setResultModalText(error.data.message as string)
-												} catch (err) {
-													setResultModalText(
-														'Что-то пошло не так, приносим извинения за неудобства'
-													)
-												}
+												let errorStr = error.status + ' ' + error.data.message
+												openAlert({ type: 'error', text: errorStr })
 												setIsFormOpen(false)
-												setIsSuccessModalOpen(true)
 											})
-												.unwrap()
-												.then(() => {
-													!result.isSuccess && setIsFormOpen(false)
-												})
-												.then(() => {
-													!result.isSuccess && setIsSuccessModalOpen(true)
-												}))
-									} catch (error : any) {
-										let errorStr = error.status + " " + error.data.message;
-										openAlert({ type: 'error', text: errorStr });
-									}
 								}}
 							>
 								Отправить

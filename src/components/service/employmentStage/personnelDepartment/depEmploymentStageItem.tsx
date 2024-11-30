@@ -1,4 +1,4 @@
-	import { useState, useRef } from 'react'
+	import React, { useState, useRef } from 'react'
 import { GreenCheck } from '../../../../assets/svg/GreenCheck'
 import { Button, ConfigProvider, Input, Modal } from 'antd'
 import { DocumentElem } from './components/DocumentElem'
@@ -22,6 +22,7 @@ import { setSixStageStatusPersonnel } from '../../../../store/reducers/Employmen
 import {
 	setSixStageCommentVisibility
 } from '../../../../store/reducers/EmploymentStageReducers/comments/SixStageCommentVisibilitySlice'
+	import {useAlert} from "../../../../utils/AlertMessage";
 
 interface Document {
 	id: number
@@ -42,6 +43,8 @@ interface DepEmploymentStageItemProps {
 export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 
 	console.log(props.stageStatus)
+
+	const { openAlert } = useAlert();
 
 	const secondStageStatus = useAppSelector(state => state.secondStageStatus)
 	const thirdStageStatus = useAppSelector(state => state.thirdStageStatus)
@@ -104,6 +107,7 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 									markBankCardApplicationFormed({ subStageId: 5 })
 									dispatch(setFifthStageStatus('ACCEPTED'))
 									setIsReqModalOpen(false)
+									openAlert({type: 'info', text: 'Сообщение отправлено'})
 								}}
 							>
 								Ок
@@ -132,6 +136,7 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 										});
 										dispatch(setSecondStageStatus('ACCEPTED'))
 										dispatch(setSecondStageCommentVisibility('invisible'))
+										openAlert({type: 'success', text: 'Этап принят'})
 									}}
 								>
 									Принять
@@ -181,6 +186,7 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 							});
 							dispatch(setThirdStageStatus('ACCEPTED'))
 							dispatch(setThirdStageCommentVisibility('invisible'))
+							openAlert({type: 'success', text: 'Этап принят'})
 						}}
 							>
 							Принять
@@ -229,6 +235,7 @@ export const DepEmploymentStageItem = ( props: DepEmploymentStageItemProps) => {
 										});
 										dispatch(setFifthStageStatus('ACCEPTED'))
 										dispatch(setFifthStageCommentVisibility('invisible'))
+										openAlert({type: 'success', text: 'Этап принят'})
 									}}
 								>
 									Принять
@@ -391,7 +398,7 @@ const StageContentComponent = () => {
 										})
 										dispatch(setSecondStageStatus('REFINE'))
 										dispatch(setSecondStageCommentVisibility('visible'))
-										console.log(secondStageCommentVisibility.secondStageCommentVisibility)
+										openAlert({type: 'info', text: 'Этап отправлен на доработку'})
 										setIsRevisionModalOpen(false)
 								}}
 							>
@@ -410,7 +417,7 @@ const StageContentComponent = () => {
 										});
 										dispatch(setThirdStageStatus('REFINE'))
 										dispatch(setThirdStageCommentVisibility('visible'))
-										console.log(thirdStageCommentVisibility.thirdStageCommentVisibility)
+										openAlert({type: 'info', text: 'Этап отправлен на доработку'})
 										setIsRevisionModalOpen(false)
 								}}
 							>
@@ -428,7 +435,7 @@ const StageContentComponent = () => {
 											subStageId: props.stage
 										});
 										dispatch(setForthStageStatus('REFINE'))
-										dispatch(setForthStageCommentVisibility('visible'))
+										openAlert({type: 'info', text: 'Этап отправлен на доработку'})
 										setIsRevisionModalOpen(false)
 								}}
 							>
@@ -446,7 +453,7 @@ const StageContentComponent = () => {
 										subStageId: props.stage
 									});
 									dispatch(setFifthStageStatus('REFINE'))
-									dispatch(setFifthStageCommentVisibility('visible'))
+									openAlert({type: 'info', text: 'Этап отправлен на доработку'})
 									setIsRevisionModalOpen(false)
 								}}
 							>

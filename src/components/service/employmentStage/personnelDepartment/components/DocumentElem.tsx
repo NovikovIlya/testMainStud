@@ -31,7 +31,7 @@ export const DocumentElem = (props: DocumentElemProps) => {
 			onClick={() => {
 				const link = document.createElement('a')
 				link.href = resume
-				link.download = props.fileName
+				link.download = decodeURI(props.name)
 				link.click()
 			}}
 		>

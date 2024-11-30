@@ -1,5 +1,5 @@
-import { Button, ConfigProvider, Form, Modal, Select } from 'antd'
-import { useState } from 'react'
+import {Button, ConfigProvider, Form, Modal, Select, Spin} from 'antd'
+import React, { useState } from 'react'
 
 import { AvatartandardSvg } from '../../../../../assets/svg/AvatarStandardSvg'
 import { useAppSelector } from '../../../../../store'
@@ -8,6 +8,7 @@ import {
 	useGetRespondFullInfoQuery
 } from '../../../../../store/api/serviceApi'
 import { NocircleArrowIcon } from '../../../jobSeeker/NoCircleArrowIcon'
+import {LoadingOutlined} from "@ant-design/icons";
 
 export const SupervisorInterviewSeekerInfo = () => {
 	const respondId = useAppSelector(state => state.currentResponce)
@@ -17,7 +18,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 		state => state.currentInterviewTimeFormated
 	)
 
-	const { data } = useGetRespondFullInfoQuery(respondId.respondId)
+	const { data, isLoading: loading } = useGetRespondFullInfoQuery(respondId.respondId)
 
 	const [isRefuseModalOpen, setIsRefuseModalOpen] = useState(false)
 
@@ -34,6 +35,23 @@ export const SupervisorInterviewSeekerInfo = () => {
 		time: string
 		timeFormated: string
 		format: string
+	}
+
+	if (loading) {
+		return (
+			<>
+				<div className="w-full h-full flex items-center">
+					<div className="text-center ml-auto mr-auto">
+						<Spin
+							indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}
+						></Spin>
+						<p className="font-content-font font-normal text-black text-[18px]/[18px]">
+							Идёт загрузка...
+						</p>
+					</div>
+				</div>
+			</>
+		)
 	}
 
 	const Component = (props: ComponentProps) => {

@@ -500,4 +500,16 @@ export type ChangeStageStatusType = {
 	comment: string
 }
 
+export type SignedItemType = {
+	id: number
+	seeker: {
+		firstName: string
+		middleName: string
+		lastName: string
+	}
+	post: string
+	testPassed: boolean
+	signed: boolean
+}
+
 export type DocumentDefinitionType = EmploymentDocsType & { required: boolean }

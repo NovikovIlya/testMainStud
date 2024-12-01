@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import { DeleteSvg } from '../../../assets/svg/DeleteSvg'
 import { useDeleteRespondFromArchiveMutation } from '../../../store/api/serviceApi'
 import { setCurrentResponce } from '../../../store/reducers/CurrentResponceSlice'
+import {useAlert} from "../../../utils/AlertMessage";
 
 export const ArchiveItem = (props: {
 	id: number
@@ -18,7 +19,7 @@ export const ArchiveItem = (props: {
 	const dispatch = useDispatch()
 	const [isModalOpen, setModalOpen] = useState(false)
 	const [deleteVacancy, deleteResult] = useDeleteRespondFromArchiveMutation()
-
+	const { openAlert } = useAlert()
 	return (
 		<>
 			<ConfigProvider
@@ -54,13 +55,19 @@ export const ArchiveItem = (props: {
 						<Button
 							type="primary"
 							className="rounded-[54.5px] mr-auto"
-							onClick={() => {
-								deleteVacancy(props.id)
-									.unwrap()
-									.then(() => {
-										setModalOpen(false)
-										props.refetch()
-									})
+							onClick={async () => {
+								try {
+									await deleteVacancy(props.id)
+										.unwrap()
+										.then(() => {
+											setModalOpen(false)
+											props.refetch()
+										})
+									openAlert({ type: 'success', text: 'Резюме успешно удалено' });
+								} catch (error : any) {
+									let errorStr = error.status + " " + error.data.message;
+									openAlert({ type: 'error', text: errorStr });
+								}
 							}}
 						>
 							Удалить

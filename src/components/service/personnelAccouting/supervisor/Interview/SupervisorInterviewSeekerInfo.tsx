@@ -9,6 +9,7 @@ import {
 } from '../../../../../store/api/serviceApi'
 import { NocircleArrowIcon } from '../../../jobSeeker/NoCircleArrowIcon'
 import {LoadingOutlined} from "@ant-design/icons";
+import {useAlert} from "../../../../../utils/AlertMessage";
 
 export const SupervisorInterviewSeekerInfo = () => {
 	const respondId = useAppSelector(state => state.currentResponce)
@@ -17,6 +18,8 @@ export const SupervisorInterviewSeekerInfo = () => {
 	const timeFormated = useAppSelector(
 		state => state.currentInterviewTimeFormated
 	)
+
+	const { openAlert } = useAlert()
 
 	const { data, isLoading: loading } = useGetRespondFullInfoQuery(respondId.respondId)
 
@@ -148,16 +151,22 @@ export const SupervisorInterviewSeekerInfo = () => {
 							<Button
 								disabled={isEmploymentRequestSent || isSeekerRejected}
 								className="h-[40px] w-[257px] bg-[#3073D7] rounded-[54.5px] text-white text-[16px]/[16px]"
-								onClick={values => {
-									aproveSeeker({
-										rejectionReason: 'approve',
-										action: 'EMPLOY',
-										respondId: respondId.respondId
-									})
-										.unwrap()
-										.then(() => {
-											setIsEmploymentRequestSent(true)
+								onClick={async values => {
+									try {
+										await aproveSeeker({
+											rejectionReason: 'approve',
+											action: 'EMPLOY',
+											respondId: respondId.respondId
 										})
+											.unwrap()
+											.then(() => {
+												setIsEmploymentRequestSent(true)
+											})
+										openAlert({ type: 'success', text: 'Приглашение успешно отправлено' });
+									} catch (error : any) {
+										let errorStr = error.status + " " + error.data.message;
+										openAlert({ type: 'error', text: errorStr });
+									}
 								}}
 							>
 								Пригласить на работу
@@ -312,17 +321,23 @@ export const SupervisorInterviewSeekerInfo = () => {
 									layout="vertical"
 									requiredMark={false}
 									className="p-[20px]"
-									onFinish={values => {
-										rejectSeeker({
-											rejectionReason: values.reason,
-											action: 'REJECT',
-											respondId: respondId.respondId
-										})
-											.unwrap()
-											.then(() => {
-												setIsSeekerRejected(true)
+									onFinish={async values => {
+										try {
+											await rejectSeeker({
+												rejectionReason: values.reason,
+												action: 'REJECT',
+												respondId: respondId.respondId
 											})
-										setIsRefuseModalOpen(false)
+												.unwrap()
+												.then(() => {
+													setIsSeekerRejected(true)
+												})
+											setIsRefuseModalOpen(false)
+											openAlert({ type: 'success', text: 'Отказ успешно отправлен' });
+										} catch (error : any) {
+											let errorStr = error.status + " " + error.data.message;
+											openAlert({ type: 'error', text: errorStr });
+										}
 									}}
 								>
 									<h2 className="font-normal text-[18px]">

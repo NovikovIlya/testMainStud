@@ -266,12 +266,18 @@ export const RespondInfo = (props: {
 										}`}
 									>
 										<Button
-											onClick={() => {
-												approveRespond(respondId.respondId)
-													.unwrap()
-													.then(() => {
-														setIsRespondSentToSupervisor(true)
-													})
+											onClick={ async () => {
+												try {
+													await approveRespond(respondId.respondId)
+														.unwrap()
+														.then(() => {
+															setIsRespondSentToSupervisor(true)
+														})
+													openAlert({ type: 'success', text: 'Отклик отправлен руководителю' });
+												} catch (error : any) {
+													let errorStr = error.status + " " + error.data.message;
+													openAlert({ type: 'error', text: errorStr });
+												}
 											}}
 											disabled={
 												isRespondSentToSupervisor ||
@@ -284,15 +290,21 @@ export const RespondInfo = (props: {
 											Отправить руководителю
 										</Button>
 										<Button
-											onClick={() => {
-												sendToArchive({
-													id: respondId.respondId,
-													role: 'PERSONNEL_DEPARTMENT'
-												})
-													.unwrap()
-													.then(() => {
-														setIsRespondSentToArchive(true)
+											onClick={ async () => {
+												try {
+													 await sendToArchive({
+														id: respondId.respondId,
+														role: 'PERSONNEL_DEPARTMENT'
 													})
+														.unwrap()
+														.then(() => {
+															setIsRespondSentToArchive(true)
+														})
+													openAlert({ type: 'success', text: 'Отказ успешно отправлен' });
+												} catch (error : any) {
+													let errorStr = error.status + " " + error.data.message;
+													openAlert({ type: 'error', text: errorStr });
+												}
 											}}
 											disabled={
 												isRespondSentToSupervisor ||
@@ -309,12 +321,18 @@ export const RespondInfo = (props: {
 												isRespondSentToReserve ||
 												isRespondSentToArchive
 											}
-											onClick={() => {
-												sendToReserve(respondId.respondId)
-													.unwrap()
-													.then(() => {
-														setIsRespondSentToReserve(true)
-													})
+											onClick={ async () => {
+												try {
+													await sendToReserve(respondId.respondId)
+														.unwrap()
+														.then(() => {
+															setIsRespondSentToReserve(true)
+														})
+													openAlert({ type: 'success', text: 'Отклик отправлен в резерв' });
+												} catch (error : any) {
+													let errorStr = error.status + " " + error.data.message;
+													openAlert({ type: 'error', text: errorStr });
+												}
 											}}
 											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
 										>
@@ -367,15 +385,21 @@ export const RespondInfo = (props: {
 												isRespondInvited ||
 												isRespondEmployed
 											}
-											onClick={() => {
-												sendToArchive({
-													id: respondId.respondId,
-													role: 'SUPERVISOR'
-												})
-													.unwrap()
-													.then(() => {
-														setIsRespondSentToArchive(true)
+											onClick={async () => {
+												try {
+													await sendToArchive({
+														id: respondId.respondId,
+														role: 'SUPERVISOR'
 													})
+														.unwrap()
+														.then(() => {
+															setIsRespondSentToArchive(true)
+														})
+													openAlert({ type: 'success', text: 'Резюме отправлено в архив' });
+												} catch (error : any) {
+													let errorStr = error.status + " " + error.data.message;
+													openAlert({ type: 'error', text: errorStr });
+												}
 											}}
 											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[257px] h-[40px] py-[8px] px-[24px] border-black"
 										>

@@ -5,6 +5,7 @@ import {
 	useApproveReservedRespondMutation,
 	useGetAllVacanciesQuery
 } from '../../../store/api/serviceApi'
+import {useAlert} from "../../../utils/AlertMessage";
 
 export const ApproveRespondForm = (props: {
 	respondId: number
@@ -18,6 +19,7 @@ export const ApproveRespondForm = (props: {
 	// 	useState<boolean>(props.isRespondSentToSupervisor)
 	const [approveRespond, result] = useApproveReservedRespondMutation()
 	const { data: vacancies = [] } = useGetAllVacanciesQuery()
+	const { openAlert } = useAlert()
 
 	return (
 		<>
@@ -38,17 +40,23 @@ export const ApproveRespondForm = (props: {
 				<Form
 					requiredMark={false}
 					layout="vertical"
-					onFinish={values => {
-						console.log(values.vacancy)
-						approveRespond({
-							respondId: props.respondId,
-							vacancyId: values.vacancy
-						})
-							.unwrap()
-							.then(() => {
-								props.callback()
-								setIsFormOpen(false)
+					onFinish={async values => {
+						try {
+							await console.log(values.vacancy)
+							approveRespond({
+								respondId: props.respondId,
+								vacancyId: values.vacancy
 							})
+								.unwrap()
+								.then(() => {
+									props.callback()
+									setIsFormOpen(false)
+								})
+							openAlert({ type: 'success', text: 'Отправлено руководителю' });
+						} catch (error : any) {
+							let errorStr = error.status + " " + error.data.message;
+							openAlert({ type: 'error', text: errorStr });
+						}
 					}}
 				>
 					<p className="mb-[40px] font-content-font font-bold text-black text-[18px]/[21.6px]">

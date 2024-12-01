@@ -30,6 +30,7 @@ import { NocircleArrowIcon } from '../jobSeeker/NoCircleArrowIcon'
 
 import { ApproveRespondForm } from './ApproveRespondForm'
 import { InviteSeekerForm } from './supervisor/InviteSeekerForm'
+import {useAlert} from "../../../utils/AlertMessage";
 
 export const ReserveRespondInfo = (props: {
 	type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
@@ -44,6 +45,8 @@ export const ReserveRespondInfo = (props: {
 	const { data: countries, isLoading: isLoadingCountry } = useGetCountriesQuery(
 		i18n.language
 	)
+
+	const { openAlert } = useAlert()
 
 	//const { data: resume } = useGetSeekerResumeFileQuery(respondId.respondId)
 	const [getResume] = useLazyGetSeekerResumeFileQuery()
@@ -164,14 +167,20 @@ export const ReserveRespondInfo = (props: {
 								<Button
 									type="primary"
 									className="rounded-[54.5px] mr-auto"
-									onClick={() => {
-										deleteRespond(respondId.respondId)
-											.unwrap()
-											.then(() => {
-												refetch().then(() => {
-													navigate('/services/personnelaccounting/reserve')
-												})
-											})
+									onClick={ async () => {
+											try {
+												await deleteRespond(respondId.respondId)
+													.unwrap()
+													.then(() => {
+														refetch().then(() => {
+															navigate('/services/personnelaccounting/reserve')
+														})
+													})
+												openAlert({ type: 'success', text: 'Отклик удален' });
+											} catch (error : any) {
+												let errorStr = error.status + " " + error.data.message;
+												openAlert({ type: 'error', text: errorStr });
+											}
 									}}
 								>
 									Удалить

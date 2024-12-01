@@ -28,6 +28,7 @@ import { setChatId } from '../../../store/reducers/chatIdSlice'
 import { NocircleArrowIcon } from '../jobSeeker/NoCircleArrowIcon'
 
 import { InviteSeekerForm } from './supervisor/InviteSeekerForm'
+import {useAlert} from "../../../utils/AlertMessage";
 
 export const ArchiveRespondInfo = (props: {
 	type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
@@ -35,6 +36,8 @@ export const ArchiveRespondInfo = (props: {
 	const respondId = useAppSelector(state => state.currentResponce)
 
 	const { data: res } = useGetArchivedRespondFullInfoQuery(respondId.respondId)
+
+	const { openAlert } = useAlert()
 
 	const date = new Date()
 
@@ -159,14 +162,20 @@ export const ArchiveRespondInfo = (props: {
 								<Button
 									type="primary"
 									className="rounded-[54.5px] mr-auto"
-									onClick={() => {
-										deleteRespond(respondId.respondId)
-											.unwrap()
-											.then(() => {
-												refetch().then(() => {
-													navigate('/services/personnelaccounting/reserve')
+									onClick={async () => {
+										try {
+											await deleteRespond(respondId.respondId)
+												.unwrap()
+												.then(() => {
+													refetch().then(() => {
+														navigate('/services/personnelaccounting/reserve')
+													})
 												})
-											})
+											openAlert({ type: 'success', text: 'Успешно удалено' });
+										} catch (error : any) {
+											let errorStr = error.status + " " + error.data.message;
+											openAlert({ type: 'error', text: errorStr });
+										}
 									}}
 								>
 									Удалить
@@ -290,14 +299,20 @@ export const ArchiveRespondInfo = (props: {
 										}`}
 									>
 										<Button
-											onClick={() => {
-												approveRespond(respondId.respondId)
-													.unwrap()
-													.then(() => {
-														setIsRespondSentToSupervisor(true)
-														refetch()
-														navigate('/services/personnelaccounting/archive')
-													})
+											onClick={async () => {
+												try {
+													await approveRespond(respondId.respondId)
+														.unwrap()
+														.then(() => {
+															setIsRespondSentToSupervisor(true)
+															refetch()
+															navigate('/services/personnelaccounting/archive')
+														})
+													openAlert({ type: 'success', text: 'Отправлено руководителю' });
+												} catch (error : any) {
+													let errorStr = error.status + " " + error.data.message;
+													openAlert({ type: 'error', text: errorStr });
+												}
 											}}
 											disabled={isRespondSentToSupervisor}
 											type="primary"
@@ -575,14 +590,20 @@ export const ArchiveRespondInfo = (props: {
 								{props.type === 'PERSONNEL_DEPARTMENT' && (
 									<div className="self-center flex flex-col gap-[12px]">
 										<Button
-											onClick={() => {
-												approveRespond(respondId.respondId)
-													.unwrap()
-													.then(() => {
-														setIsRespondSentToSupervisor(true)
-														refetch()
-														navigate('/services/personnelaccounting/archive')
-													})
+											onClick={async () => {
+												try {
+													await approveRespond(respondId.respondId)
+														.unwrap()
+														.then(() => {
+															setIsRespondSentToSupervisor(true)
+															refetch()
+															navigate('/services/personnelaccounting/archive')
+														})
+													openAlert({ type: 'success', text: 'Отправлено руководителю' });
+												}catch (error : any) {
+													let errorStr = error.status + " " + error.data.message;
+													openAlert({ type: 'error', text: errorStr });
+												}
 											}}
 											disabled={isRespondSentToSupervisor}
 											type="primary"

@@ -1,15 +1,103 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {SearchInputIconSvg} from "../../../../../assets/svg/SearchInputIconSvg";
-import {TestResultItem} from "./TestResultItem";
-import {useGetTestResultsQuery} from "../../../../../store/api/serviceApi";
-import {Spin} from "antd";
+import {useGetTestResultsQuery, useSetTestResultSignedMutation} from "../../../../../store/api/serviceApi";
+import {Button, ConfigProvider, Modal, Spin} from "antd";
 import {LoadingOutlined} from "@ant-design/icons";
+import {SignedItemType} from "../../../../../store/reducers/type";
+import {useRef} from "react";
 
 export const TestResults = () => {
 
-    const { data: test_result_data = [], isLoading : loading } = useGetTestResultsQuery({signed : false});
+    let { data: test_result_data = [], isLoading : loading, refetch } = useGetTestResultsQuery({signed : false});
 
     console.log(test_result_data)
+
+    const [isTestResultApproveModalOpen, setIsTestResultApproveModalOpen] = useState(false)
+
+    const [setSeekerSigned] = useSetTestResultSignedMutation()
+
+    const handleRefresh = () => {
+        refetch();
+    };
+
+    const TestResultItem = ( props: SignedItemType ) => {
+
+        return (
+            <>
+                <div className="w-[100%] h-[80px] bg-white flex flex-row items-center">
+                    <div className="ml-[1.5%] w-[62%] flex flex-row">
+                    <span className="w-[38%] text-[16px] text-[##000000] font-normal">
+                        {props.seeker.lastname + ' ' + props.seeker.firstname + ' ' + props.seeker.middlename}
+                    </span>
+                        <span className="w-[54%] text-[16px] text-[##000000] font-normal">
+                        {props.post}
+                    </span>
+                        <span className="w-[8%] text-[16px] text-[##000000] font-normal">
+                        {props.testPassed === true ? 'Пройдено' : 'Не пройдено'}
+                    </span>
+                    </div>
+                    <div className="w-[36.5%] flex ">
+                        <button
+                            className=" hover:opacity-[100%] opacity-[80%] ml-[45%] gap-[12px] text-[16px] flex border-[1px] border-solid black cursor-pointer bg-white px-[24px] py-[8px] rounded-[5px]"
+                            onClick={() => {
+                                setIsTestResultApproveModalOpen(true)
+
+                            }}
+                        >
+                            Подписано
+                        </button>
+                    </div>
+                </div>
+                <ConfigProvider
+                    theme={{
+                        token: {
+                            boxShadow: '0 0 19px 0 rgba(212, 227, 241, 0.6)'
+                        }
+                    }}
+                >
+                    <Modal
+                        centered
+                        open={isTestResultApproveModalOpen}
+                        onCancel={() => {
+                            setIsTestResultApproveModalOpen(false)
+                        }}
+                        title={null}
+                        footer={null}
+                        width={407}
+                    >
+                        <div className='flex flex-col px-[15px] pt-[50px] pb-[30px] gap-[34px]'>
+                            <p
+                                className="text-center font-content-font font-normal flex items-start text-black text-[16px]/[20px]">
+                                Вы действительно хотите отметить, что соискатель подписал все необходимые документы?
+                            </p>
+                            <div className="flex flex-row gap-[12px] px-[20px]">
+                                <Button
+                                    className="rounded-[54.5px] border-black text-[14px] h-[40px] w-full py-[13px]"
+                                    type="default"
+                                    onClick={() => {
+                                        setIsTestResultApproveModalOpen(false)
+                                    }}
+                                >
+                                    Нет
+                                </Button>
+                                <Button
+                                    className="rounded-[54.5px] text-[14px] h-[40px] w-full py-[13px]"
+                                    type="primary"
+                                    onClick={async () => {
+                                        setIsTestResultApproveModalOpen(false)
+                                        await setSeekerSigned({ subStageId: props.id})
+                                        handleRefresh()
+                                    }}
+                                >
+                                    Да
+                                </Button>
+                            </div>
+                        </div>
+                    </Modal>
+                </ConfigProvider>
+            </>
+        )
+    }
 
     if (loading) {
         return (

@@ -1152,7 +1152,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		getTestResults: builder.query<SignedItemType[], { signed: boolean; query?: string; }>({
 			query: arg => ({
-				url: `http://${emplBaseURL}employment-api/v1/management/employment/sub-stage/test-stage/?required=${arg.signed}`,
+				url: `http://${emplBaseURL}employment-api/v1/management/employment/sub-stage/test-stage?signed=${arg.signed}`,
 				method: 'GET',
 			})
 		}),

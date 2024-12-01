@@ -18,8 +18,11 @@ import { setCurrentVacancyId } from '../../../store/reducers/CurrentVacancyIdSli
 import { setCurrentVacancyName } from '../../../store/reducers/CurrentVacancyNameSlice'
 import { setChatId } from '../../../store/reducers/chatIdSlice'
 import { RespondItemType, respondStatus } from '../../../store/reducers/type'
+import {useAlert} from "../../../utils/AlertMessage";
 
 export const RespondItem = (props: RespondItemType & { refetch: Function }) => {
+	const { openAlert } = useAlert()
+
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
 	const [isModalOpen, setModalOpen] = useState(false)
@@ -93,13 +96,19 @@ export const RespondItem = (props: RespondItemType & { refetch: Function }) => {
 						<Button
 							type="primary"
 							className="rounded-[54.5px] mr-auto"
-							onClick={() => {
-								deleteVacancy(props.id)
-									.unwrap()
-									.then(() => {
-										setModalOpen(false)
-										props.refetch()
-									})
+							onClick={async () => {
+								try {
+									await deleteVacancy(props.id)
+										.unwrap()
+										.then(() => {
+											setModalOpen(false)
+											props.refetch()
+										})
+									openAlert({type: 'success', text: 'Отклик успешно удален'});
+								} catch (error : any) {
+									let errorStr = error.status + " " + error.data.message;
+									openAlert({type: 'error', text: errorStr});
+								}
 							}}
 						>
 							Удалить

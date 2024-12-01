@@ -635,6 +635,8 @@ export const ResponseForm = () => {
 								<Select
 									className="w-full rounded-lg"
 									value={aboutMeData.countryId}
+									showSearch
+									optionFilterProp="label"
 									// onChange={e => dispatch(country(e))}
 									options={
 										countries === undefined
@@ -762,9 +764,7 @@ export const ResponseForm = () => {
 							</div>
 							<div
 								style={{ textAlign: 'center' }}
-								className={`flex flex-col items-center ${
-									haveNoExprience && 'opacity-50 pointer-events-none'
-								}`}
+								className={`flex flex-col items-center`}
 							>
 								<ConfigProvider
 									theme={{

@@ -16,17 +16,19 @@ import InputText from './InputText'
 import { PlusCircleOutlined, SearchOutlined } from '@ant-design/icons'
 import InfiniteScroll from 'react-infinite-scroll-component';
 import TextArea from 'antd/es/input/TextArea'
+import { useTranslation } from 'react-i18next'
 
 export const ViewMessage = () => {
 	const [form] = Form.useForm();
 	const [loading, setLoading] = useState(false);
 	const [initialLoading, setInitialLoading] = useState(true);
 	const [dialogs, setDialogs] = useState<any>([]);
-	const [value, setValue] = useState('Все');
+	const {t,i18n} = useTranslation()
+	const [value, setValue] = useState(t('all'));
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [activeDialog, setActiveDialog] = useState<any>(null);
+
 	
-  
 	
 	useEffect(() => {
 	  loadInitialData();
@@ -97,17 +99,17 @@ export const ViewMessage = () => {
 		  <div className="mt-36 "></div>
 		  
 		  <div className="mt-5 p-4">
-			<Input placeholder="Поиск по сообщениям" prefix={<SearchOutlined />} />
+			<Input placeholder={t('searchMEssage')} prefix={<SearchOutlined />} />
 		  </div>
 		  
 		  <div className="mt-1 px-4 pb-4 flex justify-between items-center" style={{ borderBottom: '1px solid #E9EFF8' }}>
 			<Segmented
-			  value={value}
-			  options={['Все', 'Новые']}
+			  value={value===t('all')?t('all'):t('new')}
+			  options={[t('all'), t('new')]}
 			  onChange={setValue}
 			/>
 			<Button className='' onClick={showModal}>
-			  <PlusCircleOutlined />Новый диалог
+			  <PlusCircleOutlined />{t('newDialog')}
 			</Button>
 		  </div>
   
@@ -153,14 +155,15 @@ export const ViewMessage = () => {
 		  </div>
 		</div>
   
-		<div className="h-screen col-span-2 p-4 flex justify-center items-center">
+		<div className="!h-screen   col-span-2  flex justify-center items-center">
 		  {!activeDialog ? (
 			<div className="text-gray-500">Выберите диалог или создайте новый</div>
 		  ) : (
-			<div className="h-screen col-span-2 p-4 w-full flex justify-center">
+			<>
+			<div className="mt-36 p-4 col-span-2  w-full flex justify-center flex-wrap ">
         {!false ? (
-          <div className="w-full flex flex-wrap flex-col justify-between">
-            <CommentNewTeacher files={[]} dataChat={[]} refetch={refetch} />
+          <div className="w-full flex flex-wrap flex-col ">
+            <CommentNewTeacher files={[]} refetch={refetch} />
             <Form form={form} className="flex w-full flex-wrap" onFinish={onFinish}>
               <div className="flex w-full mt-4">
                 <InputText clickTextArea={clickTextArea} />
@@ -174,7 +177,7 @@ export const ViewMessage = () => {
             <Skeleton.Input active className="mt-10 !h-14 !w-[500px]" />
           </>
         )}
-      </div>
+     		 </div></>
 		  )}
 		</div>
   
@@ -187,7 +190,6 @@ export const ViewMessage = () => {
 		  footer={null}
 		>
 		  <Form   
-		  	
 		    labelCol={{ span: 6 }}
     		wrapperCol={{ span:18 }} 
 			form={form}
@@ -203,7 +205,10 @@ export const ViewMessage = () => {
 			<Form.Item   label="Аспирант" name={'graduate'}>
 		  		<Select placeholder={'Введите ФИО'}/>
 			</Form.Item>
-			{/* <TextArea  placeholder='Введите текст сообщения' /> */}
+			<Form.Item   label="Сообщение" name={'text'}>
+				<TextArea  placeholder='Введите текст сообщения' />
+			</Form.Item>
+			
 			<div className='w-full flex justify-center'><Button htmlType='submit' type='primary'>Создать диалог</Button></div>
 		  </Form>
 		</Modal>

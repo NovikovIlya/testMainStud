@@ -2,16 +2,17 @@ import { FileOutlined, FileTextOutlined, ReloadOutlined } from '@ant-design/icon
 import { Button } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useRef, useState } from 'react'
-
-import avaStudent from '../../../../assets/images/avaStudent.png'
-import avaTeacher from '../../../../assets/images/avaTeacher.png'
 import { useGetAttachmentQuery } from '../../../../store/api/practiceApi/mypractice'
 
-// import './myPracticeStyle.scss'
 
-export const CommentNewTeacher = ({ files, dataChat, isLoading, dataOneLength, refetch }: any) => {
+
+export const CommentNewTeacher = ({ files,  isLoading, dataOneLength, refetch }: any) => {
+	const [loading, setLoading] = useState(false);
+	const [messages, setMessages] = useState<any>([])
+	const [dataChat,setDataChat] = useState<any>([])
 	const [name, sendName] = useState(null)
 	const [idAttachment, setIdAttachment] = useState<any>(null)
+	const [page, setPage] = useState(1)
 	const { data, isSuccess, isFetching, refetch: ref } = useGetAttachmentQuery(idAttachment, { skip: !idAttachment })
 	const messagesEndRef = useRef<HTMLDivElement | null>(null)
 	const dataChaTwo = [
@@ -34,44 +35,74 @@ export const CommentNewTeacher = ({ files, dataChat, isLoading, dataOneLength, r
 		"senderType": "TEACHER",
 		"dateTime": "2024-10-11T09:55:01Z",
 		"attachments": []
+	},
+	{
+		text: "Тест",
+		senderName: "Файзуллин Аяз",
+		senderType: "STUDENT",
+		dateTime: "2024-10-11T09:54:50Z",
+		attachments: [
+			{
+				"id": "3e5138ad-50bf-4766-b816-d9cf2d328464",
+				"name": "1.docx",
+				"type": "report"
+			}
+		]
+	},
+	{
+		"text": "ТЕСТ!",
+		"senderName": "Файзуллин Аяз",
+		"senderType": "TEACHER",
+		"dateTime": "2024-10-11T09:55:01Z",
+		"attachments": []
+	},
+	{
+		text: "Тест",
+		senderName: "Файзуллин Аяз",
+		senderType: "STUDENT",
+		dateTime: "2024-10-11T09:54:50Z",
+		attachments: [
+			{
+				"id": "3e5138ad-50bf-4766-b816-d9cf2d328464",
+				"name": "1.docx",
+				"type": "report"
+			}
+		]
+	},
+	{
+		"text": "ТЕСТ!",
+		"senderName": "Файзуллин Аяз",
+		"senderType": "TEACHER",
+		"dateTime": "2024-10-11T09:55:01Z",
+		"attachments": []
 	}
-]
+	]
 
-	const sendAttachments = (attachment: any) => {
-		if (attachment.id === idAttachment) {
-			ref()
-			return
-		}
-		setIdAttachment(attachment.id)
-		sendName(attachment.name)
-	}
+	const loadMessages = async (page:any) => {
+		console.log('сработал')
+		setLoading(true);
+		const response = await fetch(`/api/messages?page=${page}`);
+		const newMessages = await response.json();
+		setMessages((prevMessages:any) => [...newMessages, ...prevMessages]);
+		setLoading(false);
+	};
 
-	const download = async () => {
-		const link = document.createElement('a')
-		link.href = data
-		link.setAttribute('download', `${name}.docx`)
-		document.body.appendChild(link)
-		link.click()
-	}
+
+
+
 
 	useEffect(() => {
-		if (isSuccess) {
-			download()
+		if (messagesEndRef.current) {
+			messagesEndRef.current.scrollIntoView() // Прокручиваем вниз
 		}
-	}, [isSuccess])
-
-	// useEffect(() => {
-	// 	if (messagesEndRef.current) {
-	// 		messagesEndRef.current.scrollIntoView() // Прокручиваем вниз
-	// 	}
-	// }, [dataOneLength])
+	}, [dataOneLength])
 
 	const chatValid = dataChat ? [...dataChat].sort((a: any, b: any) => dayjs(a.dateTime).unix() - dayjs(b.dateTime).unix()) : []
 
 	return (
 		<>
-			<div className="space-y-4 h-[450px] overflow-y-auto p-10 bg-[#f5f8fb] rounded-[10px_10px_0px_0px] mt-16">
-				
+			<div  className="flex-col-reverse h-[calc(100vh-270px)] space-y-4  overflow-y-auto p-10 bg-[#f5f8fb] rounded-[10px_10px_0px_0px] ">
+				<div className='w-full flex justify-center'><Button htmlType='button' onClick={loadMessages}>Загрузить больше</Button></div>
 				<div className="mb-8 ml-8 absolute top-0.5 right-20 flex flex-wrap  gap-5 backdrop:blur-[3px] m-[15px]">
 					<div className="">
 						{files?.report ? (
@@ -133,7 +164,7 @@ export const CommentNewTeacher = ({ files, dataChat, isLoading, dataOneLength, r
 												<div  key={attachment.id} className="flex gap-3 justify-end text-end">
 													<div
 														onClick={() => {
-															sendAttachments(attachment)
+															
 														}}
 														className="text-blue-500 cursor-pointer"
 													>
@@ -174,7 +205,11 @@ export const CommentNewTeacher = ({ files, dataChat, isLoading, dataOneLength, r
 											{message.attachments.map((attachment: any) => (
 												<div  key={attachment.id} className="flex gap-3">
 													<FileOutlined style={{ color: '' }} className="w-4 h-4 cursor-pointer mt-1 color-white" />
-													<div onClick={() => sendAttachments(attachment)} className="text-blue-500 cursor-pointer">
+													<div onClick={() => {
+
+															}
+														} 
+														className="text-blue-500 cursor-pointer">
 														{attachment.name}
 													</div>
 												</div>

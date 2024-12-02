@@ -319,5 +319,10 @@
 	"adress3": "420008 Kazan, st. Kremlevskaya, 18",
 	"copywrigh": " Kazan Federal University",
 	"messages": "Messages",
-	"moduleMessage": "Module messages"
+	"moduleMessage": "Module messages",
+	"all": "All",
+	"new": "New",
+	"newDialog": "New dialog",
+	"searchMEssage": "Search",
+	"loadMore": "load more"
 }

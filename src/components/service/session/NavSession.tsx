@@ -52,7 +52,7 @@ export const NavSession = () => {
 		<>
 			<Header type="service" service={t('SessionService')} />
 
-			<div className="shadowNav mt-20">
+			<div className="shadowNav mt-20 h-screen">
 				<ul className="min-w-[230px] pt-14 flex flex-col gap-4 ">
 					{handleList}
 				</ul>

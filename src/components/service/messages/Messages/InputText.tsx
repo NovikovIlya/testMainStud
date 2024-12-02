@@ -1,10 +1,19 @@
 import { SendOutlined } from '@ant-design/icons'
 import { Button, Form } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 const InputText = ({files,text='',clickTextArea,isModal=false }: any) => {
    const [value,setValue] = useState('')
+   const textAreaRef = useRef<HTMLTextAreaElement>(null)
+
+   useEffect(() => {
+    if (textAreaRef.current) {
+      textAreaRef.current.style.height = 'auto'
+      textAreaRef.current.style.height = textAreaRef.current.scrollHeight + 'px'
+    }
+  }, [value])
+
 
     const handleClick = (event: React.MouseEvent) => {
         event.stopPropagation(); 
@@ -24,7 +33,6 @@ const InputText = ({files,text='',clickTextArea,isModal=false }: any) => {
 					maxLength={75}
 					placeholder="Напишите сообщение собеседнику!"
 					className={`${isModal ? `rounded-[10px_0px_0px_10px]` : `rounded-[10px_0px_0px_10px]` }   !h-[54px]`}
-					style={{ resize: 'none' }}
 					onClick={clickTextArea}
                     value={text}
                     onChange={(e) => setValue(e.target.value)}

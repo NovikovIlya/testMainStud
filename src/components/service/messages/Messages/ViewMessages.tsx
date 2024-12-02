@@ -147,7 +147,11 @@ export const ViewMessage = () => {
 					  title={<span className="font-extrabold">{item.name}</span>}
 					  description={item.lastMessage}
 					/>
-					<div>{item.time}</div>
+					<div className=''>
+						<div>{item.time}</div>
+						{/* <div className='w-full flex justify-center'><div className='rounded-full bg-blue-600 w-4 h-4'></div></div> */}
+						<div className='h-4'></div>
+					</div>
 				  </List.Item>
 				)}
 			  />

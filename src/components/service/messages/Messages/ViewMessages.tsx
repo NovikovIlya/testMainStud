@@ -1,5 +1,5 @@
 import {
-    Button, Divider, Form, Input, List, Modal, Segmented, Skeleton, Spin
+    Button, Divider, Form, Input, List, Modal, Segmented, Select, Skeleton, Spin
 } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
@@ -15,6 +15,7 @@ import { CommentNewTeacher } from './CommentTeacher'
 import InputText from './InputText'
 import { PlusCircleOutlined, SearchOutlined } from '@ant-design/icons'
 import InfiniteScroll from 'react-infinite-scroll-component';
+import TextArea from 'antd/es/input/TextArea'
 
 export const ViewMessage = () => {
 	const [form] = Form.useForm();
@@ -24,6 +25,7 @@ export const ViewMessage = () => {
 	const [value, setValue] = useState('Все');
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [activeDialog, setActiveDialog] = useState<any>(null);
+	
   
 	
 	useEffect(() => {
@@ -68,7 +70,7 @@ export const ViewMessage = () => {
 	const handleOk = () => setIsModalOpen(false);
 	const handleCancel = () => setIsModalOpen(false)
 	const onFinish =()=>{
-
+		handleCancel()
 	}
 	const clickTextArea = ()=>{
 
@@ -177,15 +179,33 @@ export const ViewMessage = () => {
 		</div>
   
 		<Modal 
-		  title="Создание диалога" 
+			className='p-12'
+		  title="Выберите роль" 
 		  open={isModalOpen} 
 		  onOk={handleOk} 
 		  onCancel={handleCancel} 
 		  footer={null}
 		>
-		  <p>Some contents...</p>
-		  <p>Some contents...</p>
-		  <p>Some contents...</p>
+		  <Form   
+		  	
+		    labelCol={{ span: 6 }}
+    		wrapperCol={{ span:18 }} 
+			form={form}
+			onFinish={onFinish}
+			style={{ maxWidth: 600 }}
+			>
+		  	<Form.Item  className='mt-6'  label="Студент" name={'student'}>
+		  		<Select options={  [{ value: 'jack', label: 'Jack' }]} placeholder={'Введите ФИО'} />
+			</Form.Item>
+			<Form.Item   label="Сотрудник" name={'teacher'}>
+		  		<Select placeholder={'Введите ФИО'}/>
+			</Form.Item>
+			<Form.Item   label="Аспирант" name={'graduate'}>
+		  		<Select placeholder={'Введите ФИО'}/>
+			</Form.Item>
+			{/* <TextArea  placeholder='Введите текст сообщения' /> */}
+			<div className='w-full flex justify-center'><Button htmlType='submit' type='primary'>Создать диалог</Button></div>
+		  </Form>
 		</Modal>
 	  </div>
 	);

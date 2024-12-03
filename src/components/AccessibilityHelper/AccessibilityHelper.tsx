@@ -2,7 +2,7 @@ import React, { useState, useEffect, forwardRef } from 'react';
 import { KeyOutlined, BulbOutlined, ExpandOutlined, AimOutlined, LinkOutlined, FontSizeOutlined, SyncOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 import { useAppDispatch, useAppSelector } from '../../store';
-import { setActiveOptions } from '../../store/reducers/authSlice';
+import { setActiveOptions, setActiveOptionsReset } from '../../store/reducers/authSlice';
 
 
 interface AccessibilityHelperProps {
@@ -94,16 +94,23 @@ const AccessibilityHelper: React.FC<AccessibilityHelperProps> = forwardRef(({ la
   };
 
   const resetOptions = () => {
-    dispatch(setActiveOptions([]));
+    dispatch(setActiveOptionsReset());
     document.body.style.fontSize = '';
     // window.location.reload();
-    changeTextSize('')
+    // changeTextSize('')
+    resetText()
   };
+
+  const resetText = ()=>{
+    document.documentElement.style.fontSize = '';
+    setActiveText('')
+  }
 
   const changeTextSize = (size: string) => {
     // document.body.style.fontSize = size;
     document.documentElement.style.fontSize = size;
     setActiveText(size)
+    toggleOption('helper-core-blockAnim')
   };
 
   useEffect(() => {
@@ -114,12 +121,12 @@ const AccessibilityHelper: React.FC<AccessibilityHelperProps> = forwardRef(({ la
   }, [activeOptions]);
 
   return (
-    <div  className="fixed top-[678px] right-20 z-5000 ">
+    <div  className={` fixed ${activeText==='18px' ? 'top-[748px]': activeText==='20px'  ? 'top-[810px]'  : activeText==='15px'  ?  'top-[645px]' : 'top-[678px]' } right-20 z-5000 `}>
       {/* <button onClick={toggleHelper} className="bg-blue-500 text-white p-2 rounded-full">
         <KeyOutlined className="h-6 w-6" />
       </button> */}
       {isOpen && (
-        <div ref={ref} className="absolute bottom-12 right-0 w-74 bg-white shadow-lg rounded-lg p-8">
+        <div ref={ref} className="absolute bottom-12 right-0 w-74 bg-white shadow-lg rounded-lg p-8 accesibility-helper">
           <div  className="grid gap-4">
             {[
               { icon: KeyOutlined, text: text?.tabs, option: 'helper-core-tabHighlight' },

@@ -386,7 +386,9 @@ body {
   }
   
   .helper-core-blockAnim{
-  animation-play-state: paused !important;
+  	animation-play-state: paused !important;
+  -webkit-filter: grayscale(0%);
+  filter: grayscale(0%);
   }
   
   .helper-core-titlesubline h1{
@@ -412,3 +414,11 @@ body {
   .helper-core-titlesubline h6{
 	border-bottom: solid 2px #111111 !important;
   }
+
+
+
+
+
+// .accesibility-helper .grid button {
+//     font-size: 14px !important;
+// }

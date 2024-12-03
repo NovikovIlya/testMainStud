@@ -313,7 +313,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 
 						<Divider type="vertical" className="border-l-white h-10 m-0 hidden sm:block" />
 						<div onClick={showMobileMenu} className="text-white text-base font-bold hidden sm:block">
-							{t('messages')}
+							{service}
 						</div>
 					</div>
 				</div>

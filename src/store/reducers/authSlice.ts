@@ -59,11 +59,16 @@ const authSlice = createSlice({
 		setActiveOptions:(state,action)=>{
 			state.activeOptions = action.payload
 			localStorage.setItem('activeOptions', action.payload.toString())
+		},
+		setActiveOptionsReset:(state)=>{
+			localStorage.removeItem('activeOptions')
+			state.activeOptions = []
+			console.log('reset')
 		}
 	}
 })
 
-export const { logOut, setCredentials, setEdit, setRole,setSubRole, setIsCollapsed,setActiveOptions } = authSlice.actions
+export const { logOut, setCredentials, setEdit, setRole,setSubRole, setIsCollapsed,setActiveOptions ,setActiveOptionsReset} = authSlice.actions
 
 export default authSlice.reducer
 

@@ -1,5 +1,5 @@
 import { ThemeProvider } from '@material-tailwind/react'
-import { Button, ConfigProvider, DatePicker, Form, Input, Modal, Select } from 'antd'
+import {Button, ConfigProvider, DatePicker, Form, Input, Modal, Select, Spin} from 'antd'
 import React, { useEffect, useState } from 'react'
 
 import { useAppSelector } from '../../../../../store'
@@ -13,6 +13,7 @@ import { VacancyRespondItemType } from '../../../../../store/reducers/type'
 
 import value = ThemeProvider.propTypes.value
 import TextArea from 'antd/es/input/TextArea'
+import {LoadingOutlined} from "@ant-design/icons";
 
 export const SupervisorInterviewCreate = () => {
 	const [responds, setResponds] = useState<VacancyRespondItemType[]>([])
@@ -21,7 +22,7 @@ export const SupervisorInterviewCreate = () => {
 
 	const respondId = useAppSelector(state => state.currentResponce)
 
-	const { data: vacancies = [] } = useGetSupervisorVacancyQuery()
+	const { data: vacancies = [], isLoading: loading } = useGetSupervisorVacancyQuery()
 
 	const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
 
@@ -76,6 +77,31 @@ export const SupervisorInterviewCreate = () => {
 		value: resp,
 		label: resp
 	}))
+
+	const vacancyNameArray = vacancies.map(vacancy => vacancy.title)
+
+	const formattedJobs = vacancyNameArray.map(title => ({
+		value: title,
+		label: title
+	}));
+
+	if (loading) {
+		return (
+			<>
+				<div className="w-full h-full flex items-center">
+					<div className="text-center ml-auto mr-auto">
+						<Spin
+							indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}
+						></Spin>
+						<p className="font-content-font font-normal text-black text-[18px]/[18px]">
+							Идёт загрузка...
+						</p>
+					</div>
+				</div>
+			</>
+		)
+	}
+
 	return (
 		<>
 			<ConfigProvider
@@ -173,6 +199,8 @@ export const SupervisorInterviewCreate = () => {
 						<Select
 							placeholder="Выбрать"
 							options={respondFIOSet}
+							showSearch
+							optionFilterProp="label"
 							onChange={value => {
 								setFIO(value)
 							}}
@@ -187,7 +215,12 @@ export const SupervisorInterviewCreate = () => {
 						}
 						rules={[{ required: true, message: 'не указана должность' }]}
 					>
-						<Select placeholder="Выбрать" options={respondPosSet}></Select>
+						<Select
+							placeholder="Выбрать"
+							showSearch
+							optionFilterProp="label"
+							options={formattedJobs}
+						></Select>
 					</Form.Item>
 					<div className="flex flex-row w-full gap-[20px]">
 						<Form.Item
@@ -242,7 +275,9 @@ export const SupervisorInterviewCreate = () => {
 						}
 						rules={[{ required: true, message: 'Адрес не указан' }]}
 					>
-						<TextArea autoSize={{minRows: 1, maxRows: 6}}></TextArea>
+						<TextArea
+							placeholder="Ввести текст"
+							autoSize={{minRows: 1, maxRows: 6}}></TextArea>
 					</Form.Item>
 					<Form.Item>
 						<Button

@@ -386,7 +386,7 @@ export const ChatPage = () => {
 				<div className="sticky bottom-0 h-[80px] w-full bg-white">
 					<form
 						onSubmit={handleSubmit(handleMessage)}
-						className="w-full flex py-[24px] pl-[40px] pr-[85px]"
+						className="w-full h-full flex py-[24px] pl-[40px] pr-[85px]"
 					>
 						<Controller
 							name="text"

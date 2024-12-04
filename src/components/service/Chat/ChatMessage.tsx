@@ -43,7 +43,7 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 			<div
 				ref={ref}
 				className={clsx(
-					'rounded-[16px] w-[50%] p-[20px] flex flex-col gap-[16px] font-content-font font-normal text-black text-[16px]/[19.2px]',
+					'rounded-[16px] max-w-[50%] p-[20px] flex flex-col gap-[16px] font-content-font font-normal text-black text-[16px]/[19.2px]',
 					{
 						'self-start rounded-bl-none bg-white':
 							(props.msgData.sender === 'SEEKER' && isEmpDep) ||
@@ -151,19 +151,18 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 					</button>
 				</div>
 			)}
-			{(props.msgData.type === 'INVITATION_RESERVE') &&
-				(props.msgData.reserveTimes !== null) && (
-					<div className={clsx(
-						'w-[50%] flex flex-col',
-						{
+			{props.msgData.type === 'INVITATION_RESERVE' &&
+				props.msgData.reserveTimes !== null && (
+					<div
+						className={clsx('w-[50%] flex flex-col', {
 							'self-start':
 								(props.msgData.sender === 'SEEKER' && isEmpDep) ||
 								(props.msgData.sender === 'PERSONNEL_DEPARTMENT' && !isEmpDep),
 							'self-end':
 								(props.msgData.sender === 'SEEKER' && !isEmpDep) ||
 								(props.msgData.sender === 'PERSONNEL_DEPARTMENT' && isEmpDep)
-						}
-					)}>
+						})}
+					>
 						<div className="mt-[24px] w-[100%] flex flex-col gap-[14px]">
 							<div className="flex flex-row justify-between gap-[14px] test:gap-[10px]">
 								{props.msgData.reserveTimes.map(time => (
@@ -194,17 +193,16 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 					</div>
 				)}
 			{props.msgData.type === 'EMPLOYMENT_REQUEST' && (
-				<div className={clsx(
-					'w-[50%] flex flex-col',
-					{
+				<div
+					className={clsx('w-[50%] flex flex-col', {
 						'self-start':
 							(props.msgData.sender === 'SEEKER' && isEmpDep) ||
 							(props.msgData.sender === 'PERSONNEL_DEPARTMENT' && !isEmpDep),
 						'self-end':
 							(props.msgData.sender === 'SEEKER' && !isEmpDep) ||
 							(props.msgData.sender === 'PERSONNEL_DEPARTMENT' && isEmpDep)
-					}
-				)}>
+					})}
+				>
 					<div className="mt-[24px] w-[100%] flex flex-row gap-[20px]">
 						<button
 							onClick={() => {

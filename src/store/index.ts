@@ -22,6 +22,7 @@ import { abiturientApi } from './api/abiturent/abitRedirect'
 import { apiSliceStudent } from './api/apiSliceStudent'
 import { apiSliceTeacher } from './api/apiSliceTeacher'
 import { setupListeners } from '@reduxjs/toolkit/query'
+import { testApiSlice } from './api/testApiSlice'
 
 
 export const store = configureStore({
@@ -43,6 +44,7 @@ export const store = configureStore({
 		SecretaryItemTabs: SecretaryItemTabsReducer,
 		[practiceApi.reducerPath]: practiceApi.reducer,
 		[apiSlice.reducerPath]: apiSlice.reducer,
+		[testApiSlice.reducerPath]: testApiSlice.reducer,
 		[abiturientApi.reducerPath]: abiturientApi.reducer,
 		[apiSliceStudent.reducerPath]: apiSliceStudent.reducer,
 		[apiSliceTeacher.reducerPath]: apiSliceTeacher.reducer
@@ -54,7 +56,8 @@ export const store = configureStore({
 			.concat(apiSlice.middleware, practiceApi.middleware)
 			.concat(abiturientApi.middleware)
 			.concat(apiSliceStudent.middleware)
-			.concat(apiSliceTeacher.middleware),
+			.concat(apiSliceTeacher.middleware)
+			.concat(testApiSlice.middleware),
 	devTools: true
 })
 

@@ -36,6 +36,16 @@
     opacity: 1;
     content: "";
   }
+  .ant-table-row{
+    height: 99px !important;
+  }
+  .text-xs{
+    font-size: 16px !important;
+  }
+  .ant-table-selection-column{
+    padding-right: 30px !important;
+    padding-left: 10px !important;
+  }
 }
 
 

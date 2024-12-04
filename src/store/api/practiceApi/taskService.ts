@@ -168,7 +168,7 @@ export const taskService = practiceApi.injectEndpoints({
         createDocument: builder.mutation<IDocumentStatus, IDocument>({
             query: body => {
                 return {
-                    url: '/document',
+                    url: '/services/api-practices/document',
                     body: body,
                     method: 'POST'
                 }

@@ -1,9 +1,7 @@
 import {
     Button,
     Col,
-    DatePicker,
-    Input,
-    InputNumber,
+    DatePicker, InputNumber,
     Popover,
     Radio,
     Row,
@@ -11,30 +9,33 @@ import {
     Spin,
     Table,
     TableProps,
+    Tour,
     Typography
-} from 'antd'
-import React, {ChangeEvent, useEffect, useState} from 'react'
-import './RegisterContracts.scss'
+} from 'antd';
+import { useEffect, useRef, useState } from 'react';
+import './RegisterContracts.scss';
 import {
     TitleHeadCell
 } from "../../../businessTrip/NewBusinessTrip/archive/stepTwo/tableStepTwo/titleHeadCell/TitleHeadCell";
-import {EditSvg} from "../../../../../assets/svg/EditSvg";
-import {PointsSvg} from "../../../../../assets/svg/PointsSvg";
+import { EditSvg } from "../../../../../assets/svg/EditSvg";
+import { PointsSvg } from "../../../../../assets/svg/PointsSvg";
 import dayjs from "dayjs";
 import clsx from "clsx";
-import {RegisterPopoverContent} from "../../popover/register/RegisterPopoverContent";
-import {RegisterPopoverMain} from "../../popover/register/RegisterPopoverMain";
-import {useNavigate} from "react-router-dom";
+import { RegisterPopoverContent } from "../../popover/register/RegisterPopoverContent";
+import { RegisterPopoverMain } from "../../popover/register/RegisterPopoverMain";
+import { useNavigate } from "react-router-dom";
 import {
     useGetContractFacilitiesQuery,
     useGetContractsAllQuery,
     useGetContractsShortQuery,
+    useGetMestQuery,
     useGetSpecialtyNamesQuery
 } from "../../../../../store/api/practiceApi/roster";
-import {ContractFacilities, ContractsAll, ContractShort, NameSpecialty} from "../../../../../models/Practice";
-import {copyFileDocument} from "../../../../../utils/downloadDocument/copyFileDocument";
-import {agreementFileDocument} from "../../../../../utils/downloadDocument/agreementFileDocument";
+import { ContractFacilities, ContractsAll, ContractShort, NameSpecialty } from "../../../../../models/Practice";
+import { copyFileDocument } from "../../../../../utils/downloadDocument/copyFileDocument";
+import { agreementFileDocument } from "../../../../../utils/downloadDocument/agreementFileDocument";
 import { LoadingOutlined } from '@ant-design/icons';
+import { isArray } from 'util';
 
 
 export interface ColumnsTableCompressedView {
@@ -56,6 +57,7 @@ export interface ColumnsTableFull {
     key: string
     contractFacility: string
     specialtyName: string
+    specialtyNames:any
     contractNumber: string
     conclusionDate: string
     contractType: string
@@ -73,12 +75,21 @@ export interface OptionsNameSpecialty {
     id: string | number
 }
 
+const optionsTypeContract = [
+    {value: 'Все', label: 'Все'},
+    {value: 'Бессрочный', label: 'Бессрочный'},
+    {value: 'Срочный', label: 'Срочный'},
+    {value: 'С пролонгацией', label: 'С пролонгацией'}
+]
+const optionsSort = [
+    {value: 'По дате (сначала новые)', label: 'По дате (сначала новые)'},
+    {value: 'По дате (сначала старые)', label: 'По дате (сначала старые)'},
+]
 
 export const RegisterContracts = () => {
     const tokenAccess = localStorage.getItem('access')!.replaceAll('"', '')
-
-    const {data: dataAll, isSuccess: isSuccessAll,isFetching} = useGetContractsAllQuery()
-    const {data: dataShort, isSuccess: isSuccessShort} = useGetContractsShortQuery()
+    const {data: dataAll, isSuccess: isSuccessAll,isLoading} = useGetContractsAllQuery(null)
+    const {data: dataShort, isSuccess: isSuccessShort,isLoading:isLoadingShort} = useGetContractsShortQuery()
     const nav = useNavigate()
     const [filter, setFilter] = useState({
         contractType: 'Все',
@@ -87,97 +98,20 @@ export const RegisterContracts = () => {
         sortDateConclusionContract: 'По дате (сначала новые)',
         nameSpecialty: 'Все',
         numberSeats: 'Все',
-
+        mest: 'Все'
     })
-    const [
-        tableDataCompressed,
-        setTableDataCompressed
-    ] = useState<ColumnsTableCompressedView[]>()
-    const [
-        tableDataFull,
-        setTableDataFull
-    ] = useState<ColumnsTableFull[]>()
-    const [tableView, setTableView] = useState({
-        compressed: true,
-        table: false
-    })
-    const [
-        selectedFieldsCompressed,
-        setSelectedFieldsCompressed
-    ] = useState<ColumnsTableCompressedView[]>()
-
-    const [
-        selectedFieldsFull,
-        setSelectedFieldFull
-    ] = useState<ColumnsTableFull[]>()
-
-    function prolonAge(prolon: string) {
-        if (prolon === '1') {
-            return 'год'
-        } else if (prolon === '2' || prolon === '3' || prolon === '4') {
-            return 'года'
-        } else if (prolon === '11' || prolon === '12') {
-            return 'лет'
-        } else if (prolon.length > 1 && prolon.at(-1) === '1') {
-            return 'лет'
-        } else if (prolon.at(-1) === '2' || prolon.at(-1) === '3' || prolon.at(-1) === '4') {
-            return 'года'
-        } else {
-            return 'лет'
-        }
-    }
-
-    function changeListDataAll(elem: ContractsAll) {
-        const newElem: ColumnsTableFull = {
-            id: elem.id,
-            key: elem.id,
-            contractFacility: elem.contractFacility,
-            specialtyName: elem.specialtyName,
-            contractNumber: elem.contractNumber,
-            conclusionDate: elem.conclusionDate,
-            contractType: elem.contractType,
-            endDate: elem.endDate,
-            legalFacility: elem.legalFacility,
-            actualFacility: elem.actualFacility,
-            placesAmount: elem.placesAmount,
-            prolongation: elem.prolongation,
-            links: {
-                documentCopyId: elem.documentCopyId,
-                documentAgreementId: elem.documentAgreementId
-            },
-        }
-        return newElem
-    }
-
-    function changeListDataShort(elem: ContractShort) {
-        const newElem: ColumnsTableCompressedView = {
-            id: elem.id,
-            key: elem.id,
-            contractFacility: elem.contractFacility,
-            fillingDate: elem.fillingDate,
-            contractType: elem.contractType,
-            conclusionDate: elem.conclusionDate
-        }
-        return newElem
-    }
-
-    function changeListNameSpecialty(list: NameSpecialty[]) {
-        function changeElemNameSpecialty(elem: NameSpecialty) {
-            const newElem: OptionsNameSpecialty = {
-                value: elem.value,
-                label: elem.label,
-            }
-            return newElem
-        }
-        const finalList: OptionsNameSpecialty[] = [{value: 'Все', label: 'Все'}]
-        const newList: OptionsNameSpecialty[] = list.map(elem => changeElemNameSpecialty(elem))
-        return finalList.concat(newList)
-    }
-
-    function changeListContractFacilities(list: ContractFacilities[]) {
-        const finalList: ContractFacilities[] = [{value: 'Все', label: 'Все'}]
-        return finalList.concat(list)
-    }
+    const [ tableDataCompressed,setTableDataCompressed] = useState<ColumnsTableCompressedView[]>()
+    const [ tableDataFull,setTableDataFull] = useState<ColumnsTableFull[]>()
+    const [tableView, setTableView] = useState({ compressed: true, table: false})
+    const [selectedFieldsCompressed, setSelectedFieldsCompressed] = useState<ColumnsTableCompressedView[]>()
+    const [ selectedFieldsFull, setSelectedFieldFull] = useState<ColumnsTableFull[]>()
+    const { data:dataMest}= useGetMestQuery()
+    const ref1 = useRef(null);
+    const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
+    const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery(null)
+    const [contractFacilities, setContractFacilities] = useState<ContractFacilities[]>()
+    const {data: dataContractFacilities, isSuccess: isSuccessContractFacilities} = useGetContractFacilitiesQuery()
+    const [first,setFirst] = useState(false)
 
     const columnsCompressedView: TableProps<ColumnsTableCompressedView>['columns'] = [
         {
@@ -185,19 +119,19 @@ export const RegisterContracts = () => {
             dataIndex: 'contractFacility',
             align: "left",
             width: 150,
-            render: (text, record) =>
-                <div className={'flex items-center'}>
-                    <span className={'underline flex w-[200px]'}>
-                        {text}
-                    </span>
-                    <Button
-                        type="text"
-                        icon={<EditSvg/>}
-                        onClick={() => {
-                            nav(`/services/practices/registerContracts/editContract/${record.key}`)
-                        }}
-                    />
-                </div>
+            // render: (text, record) =>
+            //     <div className={'flex items-center'}>
+            //         <span className={'underline flex w-[200px]'}>
+            //             {text}
+            //         </span>
+            //         <Button
+            //             type="text"
+            //             icon={<EditSvg/>}
+            //             onClick={() => {
+            //                 nav(`/services/practices/registerContracts/editContract/${record.key}`)
+            //             }}
+            //         />
+            //     </div>
         },
         {
             title: <TitleHeadCell title={'Дата заполнения'}/>,
@@ -236,12 +170,14 @@ export const RegisterContracts = () => {
                 </Popover>,
             width: 200,
             align: 'center',
+            className: 'p-1',
             render: (record) =>
                 <Popover content={<RegisterPopoverContent recordCompressed={record}
                                                           tableDataCompressed={tableDataCompressed}
                                                           setTableDataCompressed={setTableDataCompressed}/>}
                          trigger={'click'}>
                     <Button
+                     onClick={(e) => { e.stopPropagation()}} 
                         type="text"
                         className="opacity-50"
                         icon={<PointsSvg/>}
@@ -256,23 +192,26 @@ export const RegisterContracts = () => {
             align: "left",
             className: 'text-xs',
             width: 200,
-            render: (text, record) =>
-                <div className={'flex items-center'}>
-                    <span className={'underline flex w-[150px]'}>
-                        {text}
-                    </span>
-                    <Button
-                        type="text"
-                        icon={<EditSvg/>}
-                        onClick={() => nav(`/services/practices/registerContracts/editContract/${record.key}`)}
-                    />
-                </div>
+            // render: (text, record) =>
+            //     <div className={'flex items-center'}>
+            //         <span className={'underline flex w-[150px]'}>
+            //             {text}
+            //         </span>
+            //         <Button
+            //             type="text"
+            //             icon={<EditSvg/>}
+            //             onClick={() => nav(`/services/practices/registerContracts/editContract/${record.key}`)}
+            //         />
+            //     </div>
         },
         {
             title: <span className={'text-xs'}>Шифр и наименование специальности</span>,
-            dataIndex: 'specialtyName',
+            dataIndex: 'specialtyNames',
             align: "center",
-            className: 'text-xs'
+            className: 'text-xs',
+            render: (text, record) => {
+                return record.specialtyName
+            },
         },
         {
             title: <span className={'text-xs'}>Номер договора</span>,
@@ -303,13 +242,6 @@ export const RegisterContracts = () => {
                 </div>
         },
         {
-            title: <span className={'text-xs'}>Срок действия договора</span>,
-            dataIndex: 'endDate',
-            align: "center",
-            className: 'text-xs',
-            render: (value, record, index) => dayjs(value).format('DD.MM.YYYY')
-        },
-        {
             title: <span className={'text-xs'}>Юридический адрес организации</span>,
             dataIndex: 'legalFacility',
             align: "center",
@@ -336,11 +268,13 @@ export const RegisterContracts = () => {
             render: (value, record, index) =>
                 <div className={'flex flex-col gap-2'}>
                     <a onClick={() => copyFileDocument(tokenAccess, record.links.documentCopyId)}>
-                        Cкан договора
+                        <Button>Cкан договора</Button>
                     </a>
+                   {record.links.documentAgreementId!==null ?
                     <a onClick={() => agreementFileDocument(tokenAccess, record.links.documentAgreementId)} >
                         Доп. соглашение к договору
-                    </a>
+                    </a> : ''
+                     }
                 </div>
         },
         {
@@ -364,6 +298,7 @@ export const RegisterContracts = () => {
                                                           tableDataFull={tableDataFull}
                                                           setTableDataFull={setTableDataFull}/>}>
                     <Button
+                         onClick={(e) => { e.stopPropagation()}} 
                         type="text"
                         className="opacity-50"
                         icon={<PointsSvg/>}
@@ -376,32 +311,90 @@ export const RegisterContracts = () => {
     ]
 
 
-    const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
-    const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery()
     useEffect(() => {
         if (isSuccessNameSpecialty) {
             setNameSpecialty(changeListNameSpecialty(dataNameSpecialty))
         }
     }, [dataNameSpecialty]);
 
-    const [contractFacilities, setContractFacilities] = useState<ContractFacilities[]>()
-    const {data: dataContractFacilities, isSuccess: isSuccessContractFacilities} = useGetContractFacilitiesQuery()
     useEffect(() => {
         if (isSuccessContractFacilities) {
             setContractFacilities(changeListContractFacilities(dataContractFacilities))
         }
     }, [dataContractFacilities]);
 
-    const optionsTypeContract = [
-        {value: 'Все', label: 'Все'},
-        {value: 'Бессрочный', label: 'Бессрочный'},
-        {value: 'С пролонгацией', label: 'С пролонгацией'}
-    ]
-    const optionsSort = [
-        {value: 'По дате (сначала новые)', label: 'По дате (сначала новые)'},
-        {value: 'По дате (сначала старые)', label: 'По дате (сначала старые)'},
-    ]
+    useEffect(() => {
+        setTableDataCompressed(filterDataCompressed())
+        setTableDataFull(filterDataFull())
+    }, [dataAll,dataShort,filter])
+   
+    function prolonAge(prolon: string) {
+        if (prolon === '1') {
+            return 'год'
+        } else if (prolon === '2' || prolon === '3' || prolon === '4') {
+            return 'года'
+        } else if (prolon === '11' || prolon === '12') {
+            return 'лет'
+        } else if (prolon.length > 1 && prolon.at(-1) === '1') {
+            return 'лет'
+        } else if (prolon.at(-1) === '2' || prolon.at(-1) === '3' || prolon.at(-1) === '4') {
+            return 'года'
+        } else {
+            return 'лет'
+        }
+    }
 
+    function changeListDataAll(elem: any) {
+        const newElem: any = {
+            id: elem.id,
+            key: elem.id,
+            contractFacility: elem.contractFacility,
+            specialtyName: elem?.specialtyNames?.join(','),
+            contractNumber: elem.contractNumber,
+            conclusionDate: elem.conclusionDate,
+            contractType: elem.contractType,
+            endDate: elem.endDate,
+            legalFacility: elem.legalFacility,
+            actualFacility: elem.actualFacility,
+            placesAmount: elem.placesAmount,
+            prolongation: elem.prolongation,
+            links: {
+                documentCopyId: elem.documentCopyId,
+                documentAgreementId: elem.documentAgreementId
+            },
+        }
+        return newElem
+    }
+
+    function changeListDataShort(elem: ContractShort) {
+        const newElem: ColumnsTableCompressedView = {
+            id: elem.id,
+            key: elem.id,
+            contractFacility: elem.contractFacility,
+            fillingDate: elem.fillingDate,
+            contractType: elem.contractType,
+            conclusionDate: elem.conclusionDate
+        }
+        return newElem
+    }
+
+    function changeListNameSpecialty(list: NameSpecialty[]) {
+        function changeElemNameSpecialty(elem: NameSpecialty) {
+            const newElem: any = {
+                value: elem.value,
+                label: elem.label,
+            }
+            return newElem
+        }
+        const finalList: any[] = [{value: 'Все', label: 'Все'}]
+        const newList: OptionsNameSpecialty[] = list.map(elem => changeElemNameSpecialty(elem))
+        return finalList.concat(newList)
+    }
+
+    function changeListContractFacilities(list: ContractFacilities[]) {
+        const finalList: ContractFacilities[] = [{value: 'Все', label: 'Все'}]
+        return finalList.concat(list)
+    }
 
     function isCompressedTable() {
         setTableView({
@@ -481,7 +474,8 @@ export const RegisterContracts = () => {
         }
 
         if (isSuccessShort) {
-            const filterDataShort: ColumnsTableCompressedView[] = dataShort.map(elem => changeListDataShort(elem))
+            const filterDataShort: ColumnsTableCompressedView[] = dataShort.map((elem:any) => changeListDataShort(elem))
+            setFirst(true)
             return filterDataShort
                 .filter(elem => filterNameOrg(elem))
                 .filter(elem => filterContractType(elem))
@@ -496,6 +490,15 @@ export const RegisterContracts = () => {
                 return elem
             } else {
                 return elem.contractFacility === filter.nameOrg
+            }
+        }
+        function filterMest(elem: ColumnsTableFull) {
+            console.log('mest',filter.mest)
+            console.log('elem.placesAmount',elem.placesAmount)
+            if (filter.mest === 'Все') {
+                return elem
+            } else {
+                return Number(elem.placesAmount) === Number(filter.mest)
             }
         }
 
@@ -518,7 +521,10 @@ export const RegisterContracts = () => {
         function filterDataNameSpecialty(elem: ColumnsTableFull) {
             if (filter.nameSpecialty === 'Все') {
                 return elem
-            } else {
+            } else if(filter.nameSpecialty !== 'Все' ){
+                return elem.specialtyName.includes(filter.nameSpecialty)
+            }else {
+
                 return elem.specialtyName === filter.nameSpecialty
             }
         }
@@ -542,45 +548,46 @@ export const RegisterContracts = () => {
         }
 
         if (isSuccessAll) {
-            const filterDataAll: ColumnsTableFull[] = dataAll.map(elem => (changeListDataAll(elem)))
+            const filterDataAll: ColumnsTableFull[] = dataAll.map((elem:any) => (changeListDataAll(elem)))
             return filterDataAll
                 .filter(elem => filterNameOrg(elem))
                 .filter(elem => filterContractType(elem))
                 .filter(elem => filterDateConclusionContract(elem))
                 .filter(elem => filterDataNameSpecialty(elem))
                 .filter(elem => filterNumberSeats(elem))
+                .filter(elem => filterMest(elem))
                 .sort((a, b) => sortDateConclusionContract(a, b))
         }
     }
 
-    useEffect(() => {
-        setTableDataCompressed(filterDataCompressed())
-        setTableDataFull(filterDataFull())
-    }, [filter])
 
 
-    useEffect(() => {
-        if (isSuccessAll) {
-            const newDataAll: ColumnsTableFull[] = dataAll.map(elem => (changeListDataAll(elem)))
-            setTableDataFull(newDataAll)
+    const handleRowClick = (record:any) => {
+		nav(`/services/practices/registerContracts/editContract/${record.key}`)
+    };
+
+    const handleKeyDown = (event:any) => {
+        // Разрешаем ввод только цифр и некоторых специальных символов
+        const validKeys = ['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', 'Delete', 'Enter', 'Escape'];
+        if (
+          !validKeys.includes(event.key) &&
+          !/^\d$/.test(event.key) && // Разрешаем ввод только цифр
+          event.key !== '.' // Разрешаем ввод точки для разделения дат
+        ) {
+          event.preventDefault(); // Запрещаем ввод недопустимых символов
         }
-    }, [dataAll]);
-
-    useEffect(() => {
-        if (isSuccessShort) {
-            if (isSuccessShort) {
-                const newDataShort: ColumnsTableCompressedView[] = dataShort.map(elem => (changeListDataShort(elem)))
-                setTableDataCompressed(newDataShort)
-            }
-        }
-
-    }, [dataShort]);
-
-
-
-
+    };
+   
+    let arraySpec:any = []
+    dataAll?.forEach((item:any)=>{
+        // @ts-ignore
+        item?.specialtyNames?.forEach((i)=>{
+            arraySpec.push(i)
+        })
+    })
+    console.log('tableDataCompressed',tableDataCompressed)
     return (
-        <section className={'container'}>
+        <section className={'container  animate-fade-in'}>
             <Row gutter={[16, 16]}>
                 <Col span={24}>
                     <Typography.Text className="text-[28px] mb-14">
@@ -588,45 +595,71 @@ export const RegisterContracts = () => {
                     </Typography.Text>
                 </Col>
             </Row>
-            <Row gutter={[16, 16]} className={'mt-12'}>
+            
+            <Row gutter={[16, 16]} className={'mt-12 gtc'}>
                 <Col span={12} className={'flex items-center gap-0'}>
                     <Col span={8} className={clsx(
                         'flex items-center gap-2',
                         !tableView.table && 'hidden')}
                     >
                         <span className={'whitespace-nowrap'}>Количество мест</span>
-                        <InputNumber
+                        {/* <InputNumber
                             controls={false}
                             type={'number'}
                             onChange={value => setFilterNumberSeats(value)}
+                            min={0}
+                        /> */}
+                            <Select
+                            popupMatchSelectWidth={false}
+                            defaultValue="Все"
+                            className="w-full"
+                            options={dataMest ? [{key:'Все',value:'Все',label:'Все'},...(dataMest.map((item:any)=>{
+                                return{
+                                    key:item,
+                                    value:item,
+                                    label:item
+                                }
+                            }))] : []}
+                            onChange={(value, option) => {
+                                setFilter({
+                                    ...filter,
+                                    mest: value
+                                })
+                            }}
                         />
                     </Col>
-                    <Col span={!tableView.table ? 24 : 16} className={'flex items-center gap-10 justify-between'}
+                    <Col span={!tableView.table ? 24 : 16} className={'flex items-center gap-2 mobileFirst '}
                          style={{
                              paddingRight: 0,
-                             paddingLeft: tableView.table ? 16 : 8
+                             paddingLeft: tableView.table ? 16 : 0
                          }}>
-                        <span className={'whitespace-nowrap'}>Дата заключения договора</span>
-                        <DatePicker className={'w-[90%]'}
-                                    placeholder={'ДД.ММ.ГГГГ'}
-                                    format={'DD.MM.YYYY'}
-                                    onChange={date => setFilterDate(date)}
-                        />
+                        <Col span={8} className='overWrite mobileFirst'>
+                            <span className={'whitespace-nowrap'}>Дата заключения договора</span>
+                        </Col>
+                        <Col span={16} className='overWrite mobileFirst'>
+                            <DatePicker className={'w-full overWrite'}
+                                        placeholder={'ДД.ММ.ГГГГ'}
+                                        format={'DD.MM.YYYY'}
+                                        onChange={date => setFilterDate(date)}
+                                        allowClear
+                                        onKeyDown={handleKeyDown}
+                            />
+                        </Col>
                     </Col>
                 </Col>
-                <Col span={3} offset={9}>
-                    <Button type={"primary"}
+                <Col span={3} offset={9} className='overWrite flex justify-end '>
+                    <Button type={"primary"} ref={ref1}
                             onClick={() => {
                                 nav('/services/practices/registerContracts/createContract')
                             }}
-                            className={'rounded-full'}
+                            className={'rounded-full my-buttonContract h-10'}
                     >
-                        Создать договор
+                      
                     </Button>
                 </Col>
             </Row>
-            <Row gutter={[16, 16]} className={'mt-4'}>
-                <Col span={12} className={'flex items-center gap-2'}>
+            <Row gutter={[16, 16]} className={'mt-4 '}>
+                <Col span={12} className={'flex items-center gap-2 overWrite'}>
                     <Col span={8}>
                         <span className={'whitespace-nowrap'}>Наименование организации</span>
                     </Col>
@@ -651,16 +684,20 @@ export const RegisterContracts = () => {
                 'mt-4',
                 !tableView.table && 'hidden'
             )}>
-                <Col span={12} className={'flex items-center gap-2'}>
+                <Col span={12} className={'flex items-center gap-2 overWrite'}>
                     <Col span={8}>
                         <span className={'whitespace-nowrap'}>Наименование специальности</span>
                     </Col>
-                    <Col span={16}>
+                    <Col span={16} className='overWrite'>
                         <Select
                             popupMatchSelectWidth={false}
                             defaultValue="Все"
                             className="w-full"
-                            options={nameSpecialty}
+                            options={
+                                arraySpec?.length > 0 
+                                    ? [{ value: 'Все', label: 'Все' }, ...Array.from(new Set(arraySpec)).map(item => ({ value: item, label: item }))] 
+                                    : []
+                            }
                             onChange={value => {
                                 setFilter({
                                     ...filter,
@@ -673,7 +710,7 @@ export const RegisterContracts = () => {
             </Row>
 
             <Row gutter={[16, 16]} className={'mt-4'}>
-                <Col span={12} className={'flex items-center gap-2'}>
+                <Col span={12} className={'flex items-center gap-2 overWrite'}>
                     <Col span={8}>
                         <span className={'whitespace-nowrap'}>Тип договора</span>
                     </Col>
@@ -693,13 +730,13 @@ export const RegisterContracts = () => {
                     </Col>
                 </Col>
             </Row>
-            <Row className="mt-12 flex items-center">
-                <Col span={12} flex="50%">
-                    <Radio.Group defaultValue="compressedView" buttonStyle="solid">
+            <Row className="mt-12 mb-6 flex items-center">
+                <Col span={12} flex="50%" className='mobileFirst'>
+                    <Radio.Group defaultValue="compressedView" buttonStyle="solid" className=''>
                         <Radio.Button
                             onClick={isCompressedTable}
                             value="compressedView"
-                            className="!rounded-l-full">
+                            className="!rounded-l-full ">
                             Посмотреть в сжатом виде
                         </Radio.Button>
                         <Radio.Button
@@ -710,12 +747,12 @@ export const RegisterContracts = () => {
                         </Radio.Button>
                     </Radio.Group>
                 </Col>
-                <Col span={8} offset={4}>
+                <Col span={8} offset={4} className='mobileFirst'>
                     <div className={'flex gap-2 items-center'}>
                         <span className={'mr-2'}>Сортировка</span>
                         <Select
                             popupMatchSelectWidth={false}
-                            defaultValue="По дате (сначала новые)"
+                            value={filter.sortDateConclusionContract}
                             className="w-full"
                             options={optionsSort}
                             onChange={value => {
@@ -730,20 +767,31 @@ export const RegisterContracts = () => {
 
                 </Col>
             </Row>
-            {isFetching ? <Spin className='w-full mt-20' indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />  : 
+            {!tableDataCompressed || isLoading ? <Spin className='w-full mt-20' indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />  : 
             <>
-            {
-                tableView.compressed
-                &&
+            
+               { tableView.compressed
+                ?
                 <div className={'registerContracts'}>
                     <Table
+                        onRow={(record) => ({
+                            onClick: (e) => {
+                                // @ts-ignore
+                                if (e.target.closest('.ant-table-selection-column')) {
+                                    return
+                                }
+                                handleRowClick(record)},
+                        })}
+                        className=''
                         columns={columnsCompressedView}
                         pagination={false}
                         size={"middle"}
                         dataSource={tableDataCompressed}
+                        rowClassName={() => 'animate-fade-in'}
                         rowSelection={{
                             type: "checkbox",
                             onSelect: (record, selected, selectedRows, nativeEvent) => {
+                                nativeEvent.stopPropagation();
                                 setSelectedFieldsCompressed(selectedRows)
                             },
                             onSelectAll: (selected, selectedRows, changeRows) => {
@@ -752,15 +800,25 @@ export const RegisterContracts = () => {
                         }}
                     />
                 </div>
-            }
-            {
-                tableView.table
-                &&
-                <Table columns={columnsFullView}
-                       pagination={false}
+            
+            
+                :
+                <Table 
+                        onRow={(record) => ({
+                            onClick: (e) => {
+                                // @ts-ignore
+                                if (e.target.closest('.ant-table-selection-column') || e.target.closest('.ant-btn-default')) {
+                                    return
+                                }
+                                handleRowClick(record)},
+                        })}
+                        columns={columnsFullView}
+                        pagination={tableDataFull && tableDataFull?.length<10?false:{
+                            pageSize: 10
+                        }}
                        dataSource={tableDataFull}
                        size={"middle"}
-                       className={'mt-5'}
+                       className={'mt-5 animate-fade-in'}
                        rowSelection={{
                            type: "checkbox",
                            onSelect: (record, selected, selectedRows, nativeEvent) => {
@@ -771,8 +829,9 @@ export const RegisterContracts = () => {
                            }
                        }}
                 />
-            }
+                    }
             </>}
+           
         </section>
     )
 }

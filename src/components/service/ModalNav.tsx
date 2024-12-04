@@ -9,12 +9,19 @@ import { useDispatch } from 'react-redux'
 import { useAppSelector } from '../../store' 
 import { addCard } from '../../store/reducers/LayoutsSlice' 
 import { jsxElements } from '../dnd/defaultElement' 
+import { useLocalStorageState } from 'ahooks'
  
 export const ModalNav = () => { 
  const [searchText, setSearchText] = useState('') 
  const { t } = useTranslation() 
  const layouts = useAppSelector(state => state.Layout) 
  const dispatch = useDispatch() 
+ const [message, setMessage] = useLocalStorageState<any>(
+  'typeAcc',
+  {
+    defaultValue: 'STUD',
+  },
+  );
  
  const onChange = (e: RadioChangeEvent) => { 
   console.log(e.target.value) 
@@ -23,9 +30,34 @@ export const ModalNav = () => {
  if (!role) return <></> 
  const isStudent = role[0].type === 'STUD' 
  
- const filteredData = jsxElements.filter(item => 
+ const filteredData = jsxElements.filter((item)=>{
+  if(message==='STUD'){
+    return item.index==='Schedule' ||
+         item.index==='ElectronicBook' ||
+         item.index==='Session' ||
+         item.index==='Dormitory' ||
+         item.index==='myPractices' ||
+         item.index==='EducationalCourses' ||
+         item.index==='PsychologicalHelp' ||
+         item.index==='News' ||
+         item.index==='DocumentFlow' ||
+         item.index==='VirtualAudience' ||
+         item.index==='DigitalDepartments' ||
+         item.index==='ManagementScientificProjects' 
+
+
+  }else{
+    return item.index==='Schedule' ||
+           item.index==='Practices' ||
+         item.index==='practiceTeacher' ||
+         item.index==='Staff' ||
+         item.index==='Vacancies' ||
+         item.index==='News' 
+  }
+}).filter(item => 
   t(item.index.toString()).toLowerCase().includes(searchText.toLowerCase()) 
  ) 
+ console.log('jsxElements',jsxElements)
  
  return ( 
   <Row> 
@@ -36,14 +68,14 @@ export const ModalNav = () => {
      {t('OurServices')} 
     </Typography.Text> 
    </Col> 
-   <Col span={20}> 
+   <Col span={24} className='mb-6'> 
     <Input.Search 
      onChange={e => setSearchText(e.target.value)} 
      size="large" 
      placeholder={t('SearchFavorite')} 
     /> 
    </Col> 
-   <Col offset={1} span={3} className="flex justify-center items-center"> 
+   {/* <Col offset={1} span={3} className="flex justify-center items-center mb-6"> 
     <Button 
      type="text" 
      icon={<TagOutlined />} 
@@ -51,8 +83,8 @@ export const ModalNav = () => {
     > 
      {t('Favorites')} 
     </Button> 
-   </Col> 
-   <Col span={24} className="mt-8"> 
+   </Col>  */}
+   {/* <Col span={24} className="mt-8"> 
     <div 
      className={clsx('radio mb-16 w-full h-full ', !isStudent && 'hidden')} 
     > 
@@ -100,7 +132,7 @@ export const ModalNav = () => {
       </Radio.Button> 
      </Radio.Group> 
     </div> 
-   </Col> 
+   </Col>  */}
    {layouts.lg.length === jsxElements.length ? ( 
     <div className="text-3xl">{t('NoService')}</div> 
    ) : ( 

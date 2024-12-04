@@ -11,6 +11,15 @@ export const authApiSlice = apiSlice.injectEndpoints({
                 }
             }
         }),
+        // fakeLogin: builder.mutation({
+        //     query: credentials => {
+        //         return {
+        //             url: 'user-api/login',
+        //             method: 'POST',
+        //             body: {...credentials}
+        //         }
+        //     }
+        // }),
         register: builder.mutation({
             query: credentials => {
                 return {
@@ -28,12 +37,14 @@ export const authApiSlice = apiSlice.injectEndpoints({
                     body: credentials
                 }
             }
-        })
+        }),
+        
     })
 })
 
 export const {
 	useLoginMutation,
 	useRegisterMutation,
-	useRedirectMutation
+	useRedirectMutation,
+    
 } = authApiSlice

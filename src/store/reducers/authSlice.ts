@@ -3,11 +3,14 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 import { InitialState } from './type'
 
-const initialState: InitialState = {
+const initialState: any = {
 	accessToken: localStorage.getItem('access'),
 	refreshToken: localStorage.getItem('refresh'),
 	user: JSON.parse(localStorage.getItem('user') || '{}'),
-	edit: false
+	edit: false,
+	subRole: '',
+	isCollapsed: localStorage.getItem('isCollapsed') === 'true',
+	activeOptions: localStorage.getItem('activeOptions') ? localStorage.getItem('activeOptions')?.split(',') : [],
 }
 
 const authSlice = createSlice({
@@ -16,6 +19,7 @@ const authSlice = createSlice({
 	reducers: {
 		setCredentials: (state, action: PayloadAction<InitialState>) => {
 			state.accessToken = action.payload.accessToken
+			localStorage.setItem('access', action.payload.accessToken || '')
 			if (action.payload.refreshToken)
 				state.refreshToken = action.payload.refreshToken
 			if (state.user && action.payload.user)
@@ -30,17 +34,41 @@ const authSlice = createSlice({
 			localStorage.removeItem('access')
 			localStorage.removeItem('refresh')
 			localStorage.removeItem('practice') //удаляю возможность зайти на сервис практки с аккаунта без доступа
+			localStorage.removeItem('dashboard')
+			localStorage.removeItem('subRole')
+			localStorage.removeItem('typeAcc')
+			localStorage.removeItem('password')
+			localStorage.removeItem('acceptedData')
+	
+			
+			// localStorage.clear()
 		},
 		setEdit: state => {
 			state.edit = !state.edit
 		},
 		setRole: (state, action: PayloadAction<string>) => {
 			if (state.user) state.user.roles[0].type = action.payload
+		},
+		setSubRole: (state, action: PayloadAction<string>) => {
+			state.subRole = action.payload
+		},
+		setIsCollapsed: (state) => {
+			state.isCollapsed = !state.isCollapsed
+			localStorage.setItem('isCollapsed', state.isCollapsed.toString())
+		},
+		setActiveOptions:(state,action)=>{
+			state.activeOptions = action.payload
+			localStorage.setItem('activeOptions', action.payload.toString())
+		},
+		setActiveOptionsReset:(state)=>{
+			localStorage.removeItem('activeOptions')
+			state.activeOptions = []
+			console.log('reset')
 		}
 	}
 })
 
-export const { logOut, setCredentials, setEdit, setRole } = authSlice.actions
+export const { logOut, setCredentials, setEdit, setRole,setSubRole, setIsCollapsed,setActiveOptions ,setActiveOptionsReset} = authSlice.actions
 
 export default authSlice.reducer
 

@@ -11,8 +11,9 @@ export const Notification = () => {
   useEffect(() => {
     if (message) {
       api.open({
-        message: 'Внимание!',
+        message: type === 'error' ? 'Внимание!' : 'Уведомление',
         description: message,
+        // @ts-ignore
         type: type,
         onClose: () => dispatch(hideNotification())
       });

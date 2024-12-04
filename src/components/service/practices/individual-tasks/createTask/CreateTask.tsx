@@ -1,5 +1,5 @@
 import {DeleteOutlined, PlusOutlined} from '@ant-design/icons'
-import {Button, Col, Form, Row, Select, Space} from 'antd'
+import {Button, Col, Form, Row, Select, Space, TreeSelect} from 'antd'
 import React, {useEffect, useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {ArrowLeftSvg} from '../../../../../assets/svg'
@@ -16,6 +16,10 @@ import {OptionsNameSpecialty} from "../../roster/registerContracts/RegisterContr
 import {useGetSpecialtyNamesQuery} from "../../../../../store/api/practiceApi/roster";
 import {string} from "yup";
 import {processingOfDivisions} from "../../../../../utils/processingOfDivisions";
+import { useAppDispatch } from '../../../../../store'
+import { showNotification } from '../../../../../store/reducers/notificationSlice'
+import { newProcessing } from '../../../../../utils/newProcessing'
+import { Vector } from '../../../../../assets/svg/Vector'
 
 
 
@@ -25,19 +29,25 @@ const CreateTask = () => {
     const [createTask] = useCreateTaskMutation()
     const navigate = useNavigate()
     const [form] = Form.useForm()
-
+    const [subDivision, setSubDivision] = useState<any>(null)
     const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
-    const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery()
+    const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery(subDivision)
+    const [practiceType, setPracticeType] = useState<PracticeType[]>()
+    const {data: dataPracticeType, isSuccess: isSuccessPracticeType} = useGetPracticeTypeQuery(subDivision)
+    const [departments, setDepartments] = useState<any[]>([])
+    const {data: dataDepartments, isSuccess: isSuccessDepartments} = useGetDepartmentsQuery()
+    const dispatch = useAppDispatch()
+    const [treeLine, setTreeLine] = useState(true);
+    const [showLeafIcon, setShowLeafIcon] = useState(false);
+    const [value, setValue] = useState<string>();
+    const [specValue,setSpecValue] = useState<any>(null)
 
     useEffect(() => {
         if (isSuccessNameSpecialty) {
             setNameSpecialty(dataNameSpecialty)
         }
     }, [dataNameSpecialty]);
-
-    const [practiceType, setPracticeType] = useState<PracticeType[]>()
-    const {data: dataPracticeType, isSuccess: isSuccessPracticeType} = useGetPracticeTypeQuery()
-
+    console.log('specValue',specValue)
 
     useEffect(() => {
         if (isSuccessPracticeType) {
@@ -45,51 +55,115 @@ const CreateTask = () => {
         }
     }, [dataPracticeType]);
 
-    const [departments, setDepartments] = useState<Department[]>()
-    const {data: dataDepartments, isSuccess: isSuccessDepartments} = useGetDepartmentsQuery()
 
     useEffect(() => {
         if (isSuccessDepartments) {
             setDepartments(processingOfDivisions(dataDepartments))
+            // setDepartments(newProcessing(dataDepartments))
         }
     }, [dataDepartments]);
 
 
-    function onFinish(values: Task) {
-        const specName = dataNameSpecialty!.find(elem => {
-            if (elem.value === values.specialityName) {
-                return elem
-            }
-        })
-        const practiceType = dataPracticeType!.find(elem => {
+    function onFinish(values: any) {
+        const practiceType = dataPracticeType?.find(elem => {
             if (elem.value === values.practiceType) {
                 return elem
-            }
+            }    
         })
-        const subDivision = departments!.find(elem => {
-            if (elem.value === values.subDivision) {
-                return elem
-            }
-        })
-        const newData: TaskSend = {
-            specialityNameId: String(specName!.id),
-            practiceTypeId: String(practiceType!.id),
-            subdivisionNameId: String(subDivision!.id),
-            tasks: values.tasks.map(elem => elem.task)
+       
+        const newData: any = {
+            specialityNameId: specValue,
+            practiceTypeId: String(practiceType?.id),
+            subdivisionNameId: subDivision,
+            // tasks: values.tasks.map(elem => elem.task)
+            tasks: values.tasks.map((elem:any,index:any) => {
+                return{
+                    taskDescription: elem.task,
+                    number:index+1.
+                }
+            })
         }
+        // console.log('newData',newData)
+        
         createTask(newData)
-            .then(data => data)
-            .catch(e => e)
-        navigate('services/practices/individualTasks/')
+            .unwrap()
+            .then(data => {
+                navigate('services/practices/individualTasks/')
+            })
+            .catch((error)=>{
+                console.log('bb',error)
+                if (error.status === 400) {
+                    console.log('e mama')
+                    dispatch(showNotification({ message: error.data.message, type: 'error' }));
+                  }
+            })
+       
     }
 
+    const disableParents = (data:any) => {
+        return data?.map((item: any) => ({
+          ...item,
+          disabled: !!item.children, // Делаем родительские элементы недоступными
+          children: item.children ? disableParents(item.children) : undefined,
+        }));
+    };
+
+    const handlePodrazdelenie = (value:any)=>{
+        if(value.length === 0){
+            return
+        }
+        const podrazdelenie = departments?.find(elem => {
+            if(elem.value === value){
+                return elem
+            }
+            if('responses' in elem){
+                // @ts-ignore
+                return elem.responses?.find((elem:any)=> {
+                    if(elem.value === value){
+                        return elem
+                    }
+                })
+            }
+        })
+        setSubDivision(podrazdelenie?.id)
+        form.setFieldValue('specialityName', null)
+        form.setFieldValue('practiceType', null)
+    }
+
+    const onChange = (newValue: string) => {
+        console.log('newValue',newValue)
+        setSubDivision(newValue);
+
+        form.setFieldValue('specialityName', null)
+        form.setFieldValue('practiceType', null)
+      };
+    
+    const onPopupScroll: any = (e:any) => {
+        console.log('onPopupScroll', e);
+    };
+    const treeData = dataDepartments?.map((item)=>{
+        return{
+            title:item.value,
+            value:item.id,
+            // @ts-ignore
+            children: item?.responses?.map((item)=>{
+                return{
+                    title:item.value,
+                    value:item.id,
+                }
+            })
+        }
+    })
+
     return (
-        <section className="container">
+        <section className="container animate-fade-in">
             <Space size={10} align="center">
                 <Button
                     size="large"
-                    className="mt-1"
-                    icon={<ArrowLeftSvg className="w-4 h-4 cursor-pointer mt-1"/>}
+                    className="mt-1 mr-6 rounded-full border border-black"
+                    style={{width:'48px'}}
+              
+                    icon={<Vector />}
                     type="text"
                     onClick={() => {
                         navigate('/services/practices/individualTasks/')
@@ -100,10 +174,11 @@ const CreateTask = () => {
 				</span>
             </Space>
             <Form<Task>
-                validateMessages={validateMessages}
+                  validateMessages={validateMessages}
                   onFinish={(values) => {onFinish(values)}}
                   layout={'vertical'}
                   form={form}
+                  className='mt-14'
             >
                 <Row gutter={[16, 16]} className="mt-4">
                     <Col xs={24} sm={24} md={18} lg={16} xl={12}>
@@ -111,11 +186,19 @@ const CreateTask = () => {
                             <Form.Item label={'Подразделение'}
                                        rules={[{required: true}]}
                                        name={'subDivision'}>
-                                <Select
-                                    size="large"
-                                    popupMatchSelectWidth={false}
-                                    className="w-full"
-                                    options={departments}
+                                <TreeSelect
+                                    treeLine={treeLine && { showLeafIcon }}
+                                    showSearch
+                                    style={{ height:'38px',width: '100%' }}
+                                    value={value}
+                                    dropdownStyle={{  overflow: 'auto' }}
+                                    placeholder=""
+                                    allowClear
+                                    treeDefaultExpandAll
+                                    onChange={onChange}
+                                    treeData={disableParents(treeData)}
+                                    onPopupScroll={onPopupScroll}
+                                    treeNodeFilterProp="title"
                                 />
                             </Form.Item>
                         </Space>
@@ -128,10 +211,20 @@ const CreateTask = () => {
                                 rules={[{required: true}]}
                                 name={'specialityName'}>
                                 <Select
+                                    disabled={!subDivision}
                                     size="large"
                                     popupMatchSelectWidth={false}
                                     className="w-full"
-                                    options={nameSpecialty}
+                                    onChange={(value)=>{
+                                        setSpecValue(value)
+                                    }}
+                                    options={nameSpecialty?.map((item)=>{
+                                        return{
+                                            key:item.id,
+                                            value:item.id,
+                                            label:item.value
+                                        }
+                                    })}
                                 />
                             </Form.Item>
                         </Space>
@@ -145,6 +238,7 @@ const CreateTask = () => {
                                 rules={[{required: true}]}
                                 name={"practiceType"}>
                                 <Select
+                                 disabled={!subDivision}
                                     size="large"
                                     popupMatchSelectWidth={false}
                                     className="w-full"
@@ -199,6 +293,7 @@ const CreateTask = () => {
                                                                   size="large"
                                                                   placeholder="Добавить задание"
                                                                   className={'textArea'}
+                                                                  required
 
                                                         />
                                                     </Form.Item>

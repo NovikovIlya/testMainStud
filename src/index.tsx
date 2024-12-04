@@ -11,8 +11,8 @@ import { store } from './store'
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
 root.render(
-	<BrowserRouter>
-		{/* <React.StrictMode> */}
+	// <BrowserRouter>
+	<React.StrictMode>
 		<Suspense
 			fallback={
 				<div className="screen">
@@ -28,6 +28,6 @@ root.render(
 				<App />
 			</Provider>
 		</Suspense>
-		{/* </React.StrictMode> */}
-	</BrowserRouter>
+	</React.StrictMode>
+	//  </BrowserRouter>
 )

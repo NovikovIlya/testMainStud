@@ -1,4 +1,7 @@
 {
 	"cSpell.words": ["Subhonbek"],
-	"cSpell.language": "en,ru,ru-RU"
+	"cSpell.language": "en,ru,ru-RU",
+	"Codegeex.GenerationPreference": "automatic",
+	"Codegeex.SidebarUI.LanguagePreference": "English",
+	"Codegeex.CommitMessage.LanguagePreference": "English"
 }

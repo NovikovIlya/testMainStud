@@ -1,5 +1,5 @@
 import {DeleteOutlined, PlusOutlined} from '@ant-design/icons'
-import {Button, Col, Form, Row, Select, Space} from 'antd'
+import {Button, Col, Form, Row, Select, Space, TreeSelect} from 'antd'
 import React, {useEffect, useState} from 'react'
 import {useLocation, useNavigate} from 'react-router-dom'
 import {ArrowLeftSvg} from '../../../../assets/svg'
@@ -16,6 +16,11 @@ import {Department, PracticeType, Task, TaskEdit, TaskSend} from "../../../../mo
 import {OptionsNameSpecialty} from "../roster/registerContracts/RegisterContracts";
 import {useGetSpecialtyNamesQuery} from "../../../../store/api/practiceApi/roster";
 import {processingOfDivisions} from "../../../../utils/processingOfDivisions";
+import { useAppDispatch } from '../../../../store'
+import { showNotification } from '../../../../store/reducers/notificationSlice'
+import { SkeletonPage } from './Skeleton'
+import { disableParents } from '../../../../utils/disableParents'
+import { Vector } from '../../../../assets/svg/Vector'
 
 const EditTask = () => {
     const path = useLocation()
@@ -25,18 +30,24 @@ const EditTask = () => {
     const {data, isSuccess} = useGetOneTaskQuery(id)
     const [edit] = useEditTaskMutation()
     const [msg, setMsg] = useState('')
+    const [subDivision, setSubDivision] = useState<any>(null)
     const [pozrazdelenie,setPodrazdelenie] = useState<any>(null)
     const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
-    const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery()
+    const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery(subDivision)
+    const [practiceType, setPracticeType] = useState<PracticeType[]>()
+    const {data: dataPracticeType, isSuccess: isSuccessPracticeType} = useGetPracticeTypeQuery(subDivision)
+    const [departments, setDepartments] = useState<Department[]>()
+    const {data: dataDepartments, isSuccess: isSuccessDepartments,isFetching:isLoading} = useGetDepartmentsQuery()
+    const dispatch = useAppDispatch()
+    const [treeLine, setTreeLine] = useState(true);
+    const [showLeafIcon, setShowLeafIcon] = useState(false);
+    const [value, setValue] = useState<any>();
 
     useEffect(() => {
         if (isSuccessNameSpecialty) {
             setNameSpecialty(dataNameSpecialty)
         }
     }, [dataNameSpecialty]);
-
-    const [practiceType, setPracticeType] = useState<PracticeType[]>()
-    const {data: dataPracticeType, isSuccess: isSuccessPracticeType} = useGetPracticeTypeQuery()
 
 
     useEffect(() => {
@@ -46,9 +57,6 @@ const EditTask = () => {
     }, [dataPracticeType]);
 
 
-    const [departments, setDepartments] = useState<Department[]>()
-    const {data: dataDepartments, isSuccess: isSuccessDepartments} = useGetDepartmentsQuery()
-
     useEffect(() => {
         if (isSuccessDepartments) {
             setDepartments(processingOfDivisions(dataDepartments))
@@ -57,26 +65,38 @@ const EditTask = () => {
 
     useEffect(() => {
         if (isSuccess && isSuccessDepartments) {
-            dataDepartments?.forEach((item)=>{
-                if(item.value===data.subdivisionName) {
-                    form.setFieldValue('subDivision', `${data.subdivisionName}`)
-                    setPodrazdelenie(data.subdivisionName)
-                    return true
-                }
-                if('responses' in item){
-                    return item.responses?.find((elem)=> {
-                        if(data.subdivisionName.toLowerCase()===elem.value.toLowerCase()){
-                            form.setFieldValue('subDivision', `${item.value + ' - ' + elem.value}`)
-                        }      
-                    })
-                }
-                else{
-                    console.log('vx',item.value)
-                }
-            })
-            
-            
-  
+            // dataDepartments?.forEach((item)=>{
+            //     if(item.value===data.subdivisionName) {
+            //         form.setFieldValue('subDivision', `${data.subdivisionName}`)
+            //         setPodrazdelenie(data.subdivisionName)
+            //         return true
+            //     }
+            //     if('responses' in item){
+            //         return item.responses?.find((elem)=> {
+            //             if(data.subdivisionName.toLowerCase()===elem.value.toLowerCase()){
+            //                 form.setFieldValue('subDivision', `${item.value + ' - ' + elem.value}`)
+            //             }      
+            //         })
+            //     }
+            //     else{
+                  
+            //     }
+            // })
+            // form.setFieldValue('subDivision', `${data.subdivisionName}`)
+            // setPodrazdelenie(data.subdivisionName)
+            // setValue([
+            //     {
+            //       "title": "Институт физики",
+            //       "value": 6 // Или "key": 6, если вы используете "key" в treeData
+            //     }
+            //   ]);
+       
+          
+            form.setFieldValue('subDivision', [{
+                title: data.subdivisionName,
+                // @ts-ignore
+                value: data.subdivisionNameId}]);
+           
             
             form.setFieldValue('specialityName', data.specialityName)
             form.setFieldValue('practiceType', data.practiceType)
@@ -102,19 +122,19 @@ const EditTask = () => {
                 return elem
             }
         })
-        const subDivision = dataDepartments?.find(elem => {
-            if ('responses' in elem){
-                return elem?.responses?.find((item)=>{
-                    if(item.value===values.subDivision){
-                     
-                        return item
-                    }
-                }) 
-            }
-            else {
-                return elem
-            }   
-        })
+        // const subDivision = dataDepartments?.find(elem => {
+        //     if (elem.value === values.subDivision) {
+        //         return elem
+        //     }
+        //     if('responses' in elem){
+        //         // @ts-ignore
+        //         return elem.responses?.find((elem:any)=> {
+        //             if(form?.getFieldValue('subDivision')?.split(" - ")[1] === elem.value){
+        //                 return elem
+        //             }      
+        //         })
+        //     }
+        // })
     
 
         const newData: TaskEdit = {
@@ -122,34 +142,68 @@ const EditTask = () => {
             specialityNameId: String(specName!.id),
             practiceTypeId: String(practiceType!.id),
             // @ts-ignore
-            subdivisionNameId: dataDepartments?.find((item)=>{
-                return item.value === form.getFieldValue('subDivision')
-            })?.id,
+            subdivisionNameId: subDivision,
             tasks: values.tasks.map(elem => elem.task)
         }
 
         edit(newData)
+            .unwrap()
             .then(() => {
                 setMsg('Данные сохранены')
+                navigate('/services/practices/individualTasks')
             })
-            .catch(e => console.log(e))
+            .catch((error)=>{
+                console.log('bb',error)
+                if (error.status === 400) {
+                    dispatch(showNotification({ message: error.data.message, type: 'error' }));
+                  }
+            })
+
+        // navigate('/services/practices/individualTasks')
     }
 
+  
+    const onChange = (newValue: string) => {
+        setSubDivision(newValue)
+        form.setFieldValue('specialityName', null)
+        form.setFieldValue('practiceType', null)
+      };
+    
+      const onPopupScroll: any = (e:any) => {
+        console.log('onPopupScroll', e);
+    };
+
+    const treeData = dataDepartments?.map((item)=>{
+        return{
+            title:item.value,
+            value:item.id,
+            // @ts-ignore
+            children: item?.responses?.map((item)=>{
+                return{
+                    title:item.value,
+                    value:item.id,
+                }
+            })
+        }
+    })
+
+    if(isLoading) return <SkeletonPage/>
 
     return (
-        <section className="container">
+        <section className="container animate-fade-in">
             <Space size={10} align="center">
                 <Button
                     size="large"
-                    className="mt-1"
-                    icon={<ArrowLeftSvg className="w-4 h-4 cursor-pointer mt-1"/>}
+                    style={{width:'48px'}}
+                    className="mt-1 mr-6 w-[48px] rounded-full border border-black"
+                    icon={<Vector />}
                     type="text"
                     onClick={() => {
                         navigate('/services/practices/individualTasks/')
                     }}
                 />
                 <span className="text-[28px] font-normal">
-					Редактировать задание
+					Редактировать задание {}
 				</span>
             </Space>
             <Form<Task>
@@ -158,17 +212,33 @@ const EditTask = () => {
                 layout={'vertical'}
                 form={form}
             >
-                <Row gutter={[16, 16]} className="mt-4">
+                <Row gutter={[16, 16]} className="mt-12">
                     <Col xs={24} sm={24} md={18} lg={16} xl={12}>
                         <Space direction={'vertical'} className={'w-full'}>
                             <Form.Item label={'Подразделение'}
                                        rules={[{required: true}]}
                                        name={'subDivision'}>
-                                <Select
+                                {/* <Select
                                     size="large"
                                     popupMatchSelectWidth={false}
                                     className="w-full"
                                     options={departments}
+                                    onChange={handlePodrazdelenie}
+                                /> */}
+                                 <TreeSelect
+                                    treeLine={treeLine && { showLeafIcon }}
+                                    showSearch
+                                    style={{ height:'38px',width: '100%' }}
+                                    value={value}
+                                    dropdownStyle={{  overflow: 'auto' }}
+                                    placeholder=""
+                                    allowClear
+                                    treeDefaultExpandAll
+                                    onChange={onChange}
+                                    treeData={disableParents(treeData)}
+                                    onPopupScroll={onPopupScroll}
+                                    treeNodeFilterProp="title"
+                                   
                                 />
                             </Form.Item>
                         </Space>
@@ -179,9 +249,10 @@ const EditTask = () => {
                         <Space direction={'vertical'} className={'w-full'}>
                             <Form.Item label={'Шифр и наименование специальности'}
                                        rules={[{required: true}]}
-                                       initialValue={'Test 1'}
+                                    //    initialValue={'Test 1'}
                                        name={'specialityName'}>
                                 <Select
+                                    disabled={!form.getFieldValue('subDivision') }
                                     size="large"
                                     popupMatchSelectWidth={false}
                                     className="w-full"
@@ -203,9 +274,10 @@ const EditTask = () => {
                             <Form.Item
                                 label={'Тип практики'}
                                 rules={[{required: true}]}
-                                initialValue={'Test 1'}
+                                // initialValue={'Test 1'}
                                 name={"practiceType"}>
                                 <Select
+                                    disabled={!form.getFieldValue('subDivision') }
                                     size="large"
                                     popupMatchSelectWidth={false}
                                     className="w-full"

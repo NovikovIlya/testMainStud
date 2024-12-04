@@ -1,8 +1,9 @@
+
 import { Form, Typography } from 'antd'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import { IError } from '../../api/types'
 import logo from '../../assets/images/group.png'
@@ -12,19 +13,66 @@ import { BackMainPage } from '../BackMainPage'
 
 import { Buttons } from './Buttons'
 import { Inputs } from './Inputs'
+import { useAppDispatch } from '../../store'
+
+import { block } from '../dnd/constant'
+import { useLocalStorageState } from 'ahooks'
+import { useGetInfoUserQuery } from '../../store/api/formApi'
+import { useCheckIsEmployeeQuery } from '../../store/api/practiceApi/contracts'
+import { useGetRoleQuery } from '../../store/api/serviceApi'
 
 const { Title } = Typography
 
 export const Login = () => {
+	const [form] = Form.useForm()
 	const navigate = useNavigate()
-	const { t } = useTranslation()
-	const dispatch = useDispatch()
-	const [login] = useLoginMutation()
+	const { t, i18n } = useTranslation()
+	// const dispatch = useDispatch()
+	const [login,{ data:dataLogin,isSuccess, isLoading }] = useLoginMutation()
+
 	const [error, setError] = useState<IError | null>(null)
+	const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+    const paramValue = searchParams.get('lan');
+	// const {data:dataSubRole,isSuccess:isSuccessSubRole} = useGetRoleQuery(null,{skip:!isSuccess})
+	const [message, setMessage] = useLocalStorageState<any>(
+		'typeAcc',
+		{
+		  defaultValue: 'STUD',
+		},
+	);
+	const [subRole, setSubrole] = useLocalStorageState<any>(
+		'subRole',
+		{
+		  defaultValue: '',
+		},
+	);
+
+	const dispatch = useAppDispatch()
+
 
 	useEffect(()=>{
 		document.title = 'Казанский Федеральный Университет'
+
+		if(paramValue==='eng'){
+			i18n.changeLanguage('en')
+		}
 	},[])
+
+	useEffect(() => {
+		if (isSuccess) {
+			const type = dataLogin.user.roles.find((item:any) => item.login === form.getFieldValue('email')||item.email===form.getFieldValue('email'))?.type
+			console.log('type',type)
+			// dispatch(setMainRole(type))
+			setMessage(type) // mainRole
+			if(type==='EMPL'){
+			    
+			}
+			navigate('/user') // Редирект на компонент User
+		}
+	}, [isSuccess]) 
+
+
 
 	const onFinish = async (values: { email: string; password: string }) => {
 		try {
@@ -55,9 +103,10 @@ export const Login = () => {
 			}; path=/; samesite=strict`
 
 			localStorage.setItem('user', JSON.stringify(userData.user))
+			localStorage.setItem('password', JSON.stringify(values.password))
 			localStorage.setItem('access', JSON.stringify(userData.accessToken))
 			localStorage.setItem('refresh', JSON.stringify(userData.refreshToken))
-			navigate('/user')
+			// navigate('/user')
 		} catch (e: any) {
 			console.log(e)
 			setError(e.data)
@@ -66,9 +115,10 @@ export const Login = () => {
 
 	return (
 		<div className="flex flex-col items-center min-h-screen">
-			<BackMainPage />
+			<BackMainPage notAuth={true}/>
 			<div className="flex flex-row justify-center gap-24 text-base max-xl:gap-4 max-lg:flex-col max-lg:items-center h-full w-full">
 				<Form
+				    form={form}
 					name="login"
 					className="min-w-[400px] mx-2 max-sm:min-w-[345px] max-[321px]:min-w-[300px]"
 					initialValues={{ remember: true }}

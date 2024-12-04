@@ -191,7 +191,7 @@ export const PreviewContracts = () => {
                     onClick={() => nav('/services/practices/registerContracts')}
                 />
                 <Typography.Text className="text-black text-3xl font-normal">
-                    Название
+                    Договор {contract?.contractNumber}
                 </Typography.Text>
             </Space>
 
@@ -239,7 +239,9 @@ export const PreviewContracts = () => {
                 columns={columns}
                 dataSource={dataTest}
                 bordered
-                pagination={false}
+                pagination={{
+                    pageSize: 10
+                }}
                 className="my-10"
             />
         </section>

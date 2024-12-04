@@ -14,8 +14,15 @@ import { CardForm } from './cardForm'
 export const ApproveEmail = () => {
 	const [searchParams] = useSearchParams()
 	const navigate = useNavigate()
-	const [approve] = useApproveEmailMutation()
+	const [approve,{data:dataApprove,isSuccess :isSuccesAprove}] = useApproveEmailMutation()
 	const dispatch = useDispatch()
+
+	useEffect(()=>{
+		if(isSuccesAprove){
+			localStorage.setItem('refresh', JSON.stringify(dataApprove.refreshToken))
+		}
+	},[isSuccesAprove])
+
 	useEffect(() => {
 		try {
 			const fetchData = async () => {
@@ -53,10 +60,10 @@ export const ApproveEmail = () => {
 			mainTittle="Добро пожаловать"
 			secondTittle={
 				<span>
-					"Здесь нужен интересный приветственный текст о том, что может делать
+					{/* "Здесь нужен интересный приветственный текст о том, что может делать
 					пользователь. Не следует, однако, забывать, что высокотехнологичная
 					концепция общественного уклада не даёт нам иного выбора, кроме
-					определения новых предложений."
+					определения новых предложений." */}
 				</span>
 			}
 			buttonText="Начнём"

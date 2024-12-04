@@ -16,3 +16,8 @@ export interface DataTypeService {
 	fullNameManager: string
 	contactPhone: string
 }
+
+export interface OptionSortDate {
+    value: string;
+    label: string;
+}

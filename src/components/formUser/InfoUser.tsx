@@ -12,10 +12,11 @@ import { useNavigate } from 'react-router-dom'
 
 import { useAppSelector } from '../../store'
 import { useSetRoleMutation } from '../../store/api/serviceApi'
-import { setRole } from '../../store/reducers/authSlice'
+import { setRole,setSubRole } from '../../store/reducers/authSlice'
 import { blue307 } from '../../utils/color'
 
 import { ImagesLayout } from './ImagesLayout'
+import { useLocalStorageState } from 'ahooks'
 
 export const InfoUser = () => {
 	const dispatch = useDispatch()
@@ -23,10 +24,17 @@ export const InfoUser = () => {
 
 	const [postRole] = useSetRoleMutation()
 	const role = useAppSelector(state => state.auth.user?.roles[0].type)
+	const subRole = useAppSelector(state => state.auth.subRole)
+	const [subRoleLocal, setSubrole] = useLocalStorageState<any>(
+		'subRole',
+		{
+		  defaultValue: '',
+		},
+	);
 
 	const { t } = useTranslation()
 	const handleOk = async () => {
-		role && postRole({ role: role })
+		role && postRole({ role: subRole })
 		navigate('/form')
 	}
 	const handleSkip = () => {
@@ -49,15 +57,17 @@ export const InfoUser = () => {
 						className="p-0 mt-5"
 						onChange={e => {
 							//@ts-ignore
-							dispatch(setRole(e.target.id))
-						}}
-					>
-						<ListItem className="p-0">
+							// dispatch(setRole(e.target.id))
+							dispatch(setSubRole(e.target.id))
+							//@ts-ignore
+							setSubrole(e.target.id)
+						} } placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}					>
+						<ListItem className="p-0"  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
 							<label
 								htmlFor="GUEST"
 								className="px-3 py-2 flex items-start mt-1 w-full cursor-pointer"
 							>
-								<ListItemPrefix className="mr-3">
+								<ListItemPrefix className="mr-3" placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
 									<Radio
 										crossOrigin="true"
 										name="vertical-list"
@@ -67,21 +77,20 @@ export const InfoUser = () => {
 										className="hover:before:opacity-0 mt-1"
 										containerProps={{
 											className: 'p-0'
-										}}
-									/>
+										}} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}									/>
 								</ListItemPrefix>
-								<Typography color="blue-gray" className="font-medium text-sm">
+								<Typography color="blue-gray" className="font-medium text-sm" placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
 									<strong>{t('roleGuest')}</strong>
 									{t('roleGuestDescription')}
 								</Typography>
 							</label>
 						</ListItem>
-						<ListItem className="p-0 ">
+						{/* <ListItem className="p-0 "  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
 							<label
 								htmlFor="SCHOOL"
 								className="px-3 py-2 flex items-start  w-full cursor-pointer"
 							>
-								<ListItemPrefix className="mr-3">
+								<ListItemPrefix className="mr-3"  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
 									<Radio
 										crossOrigin="true"
 										name="vertical-list"
@@ -91,21 +100,20 @@ export const InfoUser = () => {
 										containerProps={{
 											className: 'p-0'
 										}}
-										defaultChecked={role === 'SCHOOL' ? true : false}
-									/>
+										defaultChecked={role === 'SCHOOL' ? true : false} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}									/>
 								</ListItemPrefix>
-								<Typography color="blue-gray" className="font-medium text-sm">
+								<Typography color="blue-gray" className="font-medium text-sm"  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
 									<strong>{t('roleSchoolboy')}</strong>
 									{t('roleSchoolboyDescription')}
 								</Typography>
 							</label>
-						</ListItem>
-						<ListItem className="p-0">
+						</ListItem> */}
+						<ListItem className="p-0"  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
 							<label
 								htmlFor="ABIT"
 								className="px-3 py-2 flex items-start  w-full cursor-pointer"
 							>
-								<ListItemPrefix className="mr-3">
+								<ListItemPrefix className="mr-3"  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
 									<Radio
 										crossOrigin="true"
 										name="vertical-list"
@@ -115,21 +123,20 @@ export const InfoUser = () => {
 										containerProps={{
 											className: 'p-0'
 										}}
-										defaultChecked={role === 'ABIT' ? true : false}
-									/>
+										defaultChecked={role === 'ABIT' ? true : false} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}									/>
 								</ListItemPrefix>
-								<Typography color="blue-gray" className="font-medium text-sm">
+								<Typography color="blue-gray" className="font-medium text-sm"  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
 									<strong>{t('roleEntrant')}</strong>
 									{t('roleEntrantDescription')}
 								</Typography>
 							</label>
 						</ListItem>
-						<ListItem className="p-0">
+						{/* <ListItem className="p-0"  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
 							<label
 								htmlFor="ATTEND"
 								className="px-3 py-2 flex items-start  w-full cursor-pointer"
 							>
-								<ListItemPrefix className="mr-3">
+								<ListItemPrefix className="mr-3" placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
 									<Radio
 										name="vertical-list"
 										id="ATTEND"
@@ -139,21 +146,20 @@ export const InfoUser = () => {
 										containerProps={{
 											className: 'p-0'
 										}}
-										defaultChecked={role === 'ATTEND' ? true : false}
-									/>
+										defaultChecked={role === 'ATTEND' ? true : false} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}									/>
 								</ListItemPrefix>
-								<Typography color="blue-gray" className="font-medium text-sm">
+								<Typography color="blue-gray" className="font-medium text-sm"  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
 									<strong>{t('roleListener')}</strong>
 									{t('roleListenerDescription')}
 								</Typography>
 							</label>
-						</ListItem>
-						<ListItem className="p-0">
+						</ListItem> */}
+						{/* <ListItem className="p-0"  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
 							<label
 								htmlFor="SEEKER"
 								className="px-3 py-2 flex items-start  w-full cursor-pointer"
 							>
-								<ListItemPrefix className="mr-3">
+								<ListItemPrefix className="mr-3"  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
 									<Radio
 										name="vertical-list"
 										id="SEEKER"
@@ -163,19 +169,18 @@ export const InfoUser = () => {
 										containerProps={{
 											className: 'p-0'
 										}}
-										defaultChecked={role === 'SEEKER' ? true : false}
-									/>
+										defaultChecked={role === 'SEEKER' ? true : false} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}									/>
 								</ListItemPrefix>
-								<Typography color="blue-gray" className="font-medium text-sm">
+								<Typography color="blue-gray" className="font-medium text-sm"  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
 									<strong>{t('roleApplicant')}</strong>
 									{t('roleApplicantDescription')}
 								</Typography>
 							</label>
-						</ListItem>
+						</ListItem> */}
 					</List>
 
 					<div className="border border-[#BDBDBD] border-solid rounded py-6 px-12 px- mt-10">
-						<p className="text-center text-sm">{t('chooseRole')}</p>
+						<p className="text-center text-sm">Изменить роль вы сможете через меню</p>
 					</div>
 					<div className="w-full flex justify-center items-center gap-8 mt-[60px] ">
 						<Button

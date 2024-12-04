@@ -1,0 +1,37 @@
+.ant-drawer-header-title{ 
+    flex-direction: row-reverse; 
+}
+// .ant-dropdown-menu-title-content .ant-upload-wrapper  .ant-upload-list{
+//     // margin-left: 200px ;
+//     margin-left: 15px ;
+//     // top: 20px ;
+//     top:30px;
+//     color: red ;
+   
+// }
+.item2{
+   
+
+}
+.ant-modal-content{
+    padding: 33px !important;
+}
+.ant-dropdown-menu-title-content .ant-upload-wrapper  .ant-upload-list{
+    top:15px;
+    color:white !important;
+}
+
+@media screen and (max-width: 768px) {
+    .ant-table{
+        position: relative !important;
+        right: 0px;
+       
+    }
+    .ant-table2{
+        position: relative !important;
+        right: 40px;
+    }
+    .mobileFirst{
+        display: none;
+    }
+}

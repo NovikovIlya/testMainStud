@@ -10,6 +10,8 @@ import {DeleteRedSvg} from "../../../../../assets/svg/DeleteRedSvg";
 import {ListIdDeleteTasks} from "../../../../../models/Practice";
 import {useDeleteSeveralContractMutation} from "../../../../../store/api/practiceApi/contracts";
 import {useDeleteSeveralTasksMutation} from "../../../../../store/api/practiceApi/individualTask";
+import { useAppDispatch } from '../../../../../store';
+import { showNotification } from '../../../../../store/reducers/notificationSlice';
 
 interface Props {
     recordCompressedAll?: CompressedIndividualTask[]
@@ -32,6 +34,7 @@ export const IndTaskPopoverMain = ({
                                    }: Props) => {
 
     const [severalDelete] = useDeleteSeveralTasksMutation()
+    const dispatch = useAppDispatch()
 
     function translateColumnsIntoRussia({isPrint}: { isPrint?: boolean }) {
         const newData: any = []
@@ -107,10 +110,21 @@ export const IndTaskPopoverMain = ({
             const listIdDelete: ListIdDeleteTasks = {
                 listIdDelete: listId
             }
-            severalDelete(listIdDelete)
-            setRecordCompressed(recordCompressedAll.filter(elem => {
-                return !listId.includes(elem.id)
-            }))
+            severalDelete(listIdDelete).unwrap()
+            .then(() => {
+                setRecordCompressed(recordCompressedAll.filter(elem => {
+                    return !listId.includes(elem.id)
+                }))
+            })
+            .catch((error)=>{
+                console.log('bb',error)
+                if (error.status === 409) {
+                    dispatch(showNotification({ message: 'Часть записей имеет связи, удаление невозможно', type: 'error' }));
+                  }
+            })
+            // setRecordCompressed(recordCompressedAll.filter(elem => {
+            //     return !listId.includes(elem.id)
+            // }))
         }
         if (setRecordFull && recordFull && recordFullAll) {
             const recordFullWithoutUndefinedElem = recordFull.filter(elem => elem !== undefined)

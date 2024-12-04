@@ -7,26 +7,28 @@ import {
     Row,
     Select,
     Space,
-    Typography
+    Spin,
+    TreeSelect
 } from 'antd';
 import { useEffect, useState } from 'react';
 import { ArrowLeftSvg } from '../../../../assets/svg';
 import { validateMessages } from "../../../../utils/validateMessage";
-import { AcademicYear, Department, FilterType, NewPractice, NewPracticeSend } from "../../../../models/Practice";
+import { Department, FilterType } from "../../../../models/Practice";
 import dayjs from "dayjs";
-import TextArea from "antd/es/input/TextArea";
-import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import { useLocation, useNavigate } from "react-router-dom";
 import { OptionsNameSpecialty } from "../roster/registerContracts/RegisterContracts";
-import { useGetSpecialtyNamesForPractiseQuery, useGetSpecialtyNamesQuery } from "../../../../store/api/practiceApi/roster";
-import { useGetCompentencesQuery, useGetDepartmentDirectorsQuery, useGetDepartmentsQuery, useGetGroupNumbersQuery, useGetPracticeKindQuery, useGetPracticeOneQuery, useGetPracticeTypeForPracticeQuery, useGetPracticeTypeQuery, useGetSubdivisionForPracticeQuery, useGetTasksForPracticeQuery, useUpdatePracticeOneMutation } from '../../../../store/api/practiceApi/individualTask';
-import { parse } from 'date-fns';
+import { useGetSpecialtyNamesForPractiseQuery } from "../../../../store/api/practiceApi/roster";
+import { useGetCompentencesQuery, useGetDepartmentDirectorsQuery, useGetGroupNumbersQuery, useGetPracticeKindQuery, useGetPracticeOneQuery, useGetPracticeTypeForPracticeQuery, useGetSubdivisionForPracticeQuery, useGetTasksForPracticeQuery, useIsPeopleInGroupQuery, useUpdatePracticeOneMutation } from '../../../../store/api/practiceApi/individualTask';
 import { processingOfDivisions } from '../../../../utils/processingOfDivisions';
 import { useGetCafDepartmentsQuery } from '../../../../store/api/practiceApi/practical';
 import { useAppDispatch } from '../../../../store';
+import './EditPractical.module.scss';
 import { showNotification } from '../../../../store/reducers/notificationSlice';
-import   './EditPractical.module.scss'
-
+import { SkeletonPage } from './Skeleton';
+import { DeleteOutlined } from '@ant-design/icons';
+import { DeleteRedSvg } from '../../../../assets/svg/DeleteRedSvg';
+import { disableParents } from '../../../../utils/disableParents';
+import { Vector } from '../../../../assets/svg/Vector';
 
 
 
@@ -56,25 +58,17 @@ const optionsCourse: FilterType[] = [
         label: '6'
     }
 ]
-const optionsSemester: FilterType[] = [
-    {
-        value: '1',
-        label: '1'
-    },
-    {
-        value: '2',
-        label: '2'
-    }
-]
-
 
 
 export const EditPractical = () => {
+    const [form] = Form.useForm<any>()
     const [departments, setDepartments] = useState<Department[]>()
     const path = useLocation()
-    const id: string = path.pathname.split('/').at(-1)!
+    const id = path.pathname.split('/').at(-1)!
     const nav = useNavigate()
-    const [form] = Form.useForm<any>()
+    const [pickCourse, setPickCourse] = useState<any>(form?.getFieldValue('course'))
+    const [pickSpeciality, setPickSpeciality] = useState<any>(null)
+    const [pickKund,setPickKind] = useState(null)
     const [arqTask,setArqTask] = useState<any>(null)
     const [pickDate, setPickDate] = useState<any>(null)
     const [fullDate,setFullDate] = useState<any>(null)
@@ -85,32 +79,53 @@ export const EditPractical = () => {
             subdivisionId :null,
             specialtyNameId :null 
     })
+    const [nameSpecialtyId,setNameSpecialtyId] = useState<any>(null)
     const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
-    const [objectForCompetences, setObjectForCompetences] = useState<any>(null)
-    const {data:dataOnePractise,isSuccess:isSuccesOnePractise} = useGetPracticeOneQuery(id)
-    // const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery()
-    const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesForPractiseQuery(dataOnePractise?.subdivisionId, {skip: !dataOnePractise?.subdivisionId})
-    
-    const {data:dataCompetences, isSuccess: isSuccessCompetences} = useGetCompentencesQuery(objectForCompetences,{skip: objectForCompetences === null})
+    const [objectForCompetences, setObjectForCompetences] = useState<any>({
+        specialityId:null,
+        practiceKindId:null
+      
+    })
+    const {data:dataOnePractise,isSuccess:isSuccesOnePractise,isFetching:isFetchingDataOnePractise} = useGetPracticeOneQuery(id)
+    const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesForPractiseQuery(subDivisionId, {skip: !subDivisionId})
+    const {data:dataCompetences, isSuccess: isSuccessCompetences} = useGetCompentencesQuery(objectForCompetences,{skip: true === null || objectForCompetences.practiceKindId === null})
     const {data: dataDepartments, isSuccess: isSuccessDepartments} = useGetSubdivisionForPracticeQuery()
-  
-    const {data: dataPracticeType, isSuccess: isSuccessPracticeType} = useGetPracticeTypeForPracticeQuery(objType, {skip: objType.subdivisionId === null})
-    
-    const {data: dataDepartmentDirector, isSuccess: isSuccessDepartmentDirector} = useGetDepartmentDirectorsQuery(dataOnePractise?.subdivisionId, {skip: !dataOnePractise?.subdivisionId})
-    const {data: dataCaf, isSuccess: isSuccessCaf} = useGetCafDepartmentsQuery(dataOnePractise?.subdivisionId,{skip: !dataOnePractise?.subdivisionId})
-    const {data: dataGroupNumbers, isSuccess: isSuccessGroupNumbers} = useGetGroupNumbersQuery(dataOnePractise?.subdivisionId, {skip: !dataOnePractise?.subdivisionId})
-    const {data: dataPraciseKind, isSuccess: isSuccesPractiseKind} = useGetPracticeKindQuery(dataOnePractise?.subdivisionId, {skip: !dataOnePractise?.subdivisionId})
-    const{data:dataSubdivisonForPractise} = useGetSubdivisionForPracticeQuery()
-    const [updateForm] = useUpdatePracticeOneMutation()
-    const {data:dataTask, isSuccess:isSuccessTask,error:errorTasks} = useGetTasksForPracticeQuery(arqTask,{skip:!arqTask})
+    const {data: dataPracticeType, isSuccess: isSuccessPracticeType} = useGetPracticeTypeForPracticeQuery(objType, {skip: objType.subdivisionId === null || objType.specialtyNameId === null})
+    const {data: dataDepartmentDirector} = useGetDepartmentDirectorsQuery(subDivisionId, {skip: !subDivisionId})
+    const {data: dataCaf} = useGetCafDepartmentsQuery(subDivisionId,{skip: !subDivisionId})
+    const {data: dataGroupNumbers} = useGetGroupNumbersQuery(subDivisionId, {skip: !subDivisionId})
+    const {data: dataPraciseKind, isSuccess: isSuccesPractiseKind} = useGetPracticeKindQuery(subDivisionId, {skip: !subDivisionId})
+    const {data:dataSubdivisonForPractise} = useGetSubdivisionForPracticeQuery()
+    const {data:dataTask, isSuccess:isSuccessTask} = useGetTasksForPracticeQuery(arqTask,{skip:!arqTask})
+    // const {data:dataIsPeopleInGroup} = useIsPeopleInGroupQuery(form.getFieldValue('groupNumber'))
+    const [updateForm,{isLoading:isLoadingSendForm}] = useUpdatePracticeOneMutation()
+    const [copyDataCompetences, setCopyDataCompetences] = useState<any>([])
+    const [flagCompetence,setFlagCompentence] = useState(false)
+    const [flag,setFlag] = useState(false)
     const dispatch = useAppDispatch()
+    const [treeLine, setTreeLine] = useState(true);
+    const [showLeafIcon, setShowLeafIcon] = useState(false);
+    const [value, setValue] = useState<any>();
+    console.log('objectForCompetences',objectForCompetences)
+	useEffect(()=>{
+		if(!flagCompetence){
+            setCopyDataCompetences( dataOnePractise?.competence)
 
+        }
+        if(flagCompetence){
+            setCopyDataCompetences(dataCompetences)
 
-
-   console.log('objTypeobjTypeobjType',objType)
+        }
+ 
+		
+	},[dataCompetences, dataOnePractise?.competence, flagCompetence])
 
     useEffect(()=>{
-        const idSubdevision = dataDepartments?.find((item)=>{
+        setSubDevisionId(dataOnePractise?.subdivisionId)
+    },[isSuccesOnePractise])
+
+    useEffect(()=>{
+        const idSubdevision = dataDepartments?.find((item:any)=>{
             if(item.value===dataOnePractise?.subdivision){
                 return item
             }
@@ -124,51 +139,76 @@ export const EditPractical = () => {
         setIdSub(idSubdevision?.id)
     },[dataDepartments, dataOnePractise?.subdivision])
 
+    // объект для практики
     useEffect(()=>{
-
-        if(isSuccesOnePractise){
-            console.log('dataOnePractise?.subdivisionId',dataOnePractise?.subdivisionId)
+        if(isSuccessDepartments && isSuccessNameSpecialty){
             const objTypeZ = {
             ...objType,
-            subdivisionId: dataOnePractise?.subdivisionId,
-            specialtyNameId :dataOnePractise?.specialtyNameId 
+            subdivisionId: subDivisionId,
+            specialtyNameId :dataNameSpecialty?.find((item:any)=>{
+                if(item.value===form.getFieldValue('specialityName')){
+                    return item
+                }
+            })?.id 
         }
+        // @ts-ignore
         setObjType(objTypeZ)
-        }
-    
-},[isSuccesOnePractise,dataOnePractise])
+    }
+    },[ form,  dataNameSpecialty,isSuccessDepartments,isSuccessNameSpecialty])
 
+    useEffect(() => {
+        if (isSuccessDepartments && isSuccessNameSpecialty) {
+            const objTypeZ = {
+                ...objType,
+                subdivisionId: subDivisionId || null,
+                specialtyNameId: dataNameSpecialty?.find((item: any) => {
+                    if (item.value === form.getFieldValue('specialityName')) {
+                        return item
+                    }
+                })?.id || null
+            }
+            // @ts-ignore
+            setObjType(objTypeZ)
+        }
+    }, [pickSpeciality, form, dataDepartments, dataNameSpecialty, isSuccessDepartments, isSuccessNameSpecialty, subDivisionId])
+
+    // получение подразделений
     useEffect(() => {
         if (isSuccessDepartments) {
             setDepartments(processingOfDivisions(dataDepartments))
         }
     }, [dataDepartments]);
 
-    // получение кафедр
-    useEffect(() => {
-        if (isSuccessDepartments) {
-            setDepartments(processingOfDivisions(dataDepartments))
-        }
-    }, [dataDepartments]);
-
+    // получение наименование специальностей
     useEffect(() => {
         if (isSuccessNameSpecialty) {
             setNameSpecialty(dataNameSpecialty)
         }
     }, [dataNameSpecialty]);
 
+    // очистка полей при смене подразделения
+    useEffect(() => {
+        if(isSuccesOnePractise){
+           if(subDivisionId !== dataOnePractise?.subdivisionId || flag){
+            form.setFieldValue('specialityName','')
+            form.setFieldValue('practiceType','')
+            form.setFieldValue('groupNumber','')
+            form.setFieldValue('director','')
+            form.setFieldValue('department','')    
+            form.setFieldValue('practiceKind','')
+            }
+            // проверить на работоспособность кода
+            else{
+                setFlag(true)
+            }
+        }
+    }, [dataOnePractise,subDivisionId,isSuccesOnePractise]);
+
     // заполнения объекта для компетенции
     useEffect(()=>{
-        if(isSuccesOnePractise && isSuccesPractiseKind&&isSuccessNameSpecialty && form.getFieldValue('practiceType')!== undefined){
-           
-            console.log('11',
-                dataPraciseKind?.find(elem => {
-                if (elem.value === form.getFieldValue('practiceKind')) {
-                    return elem
-                }
-            })?.id)
+        if(isSuccesOnePractise && isSuccesPractiseKind&&isSuccessNameSpecialty ){
             setObjectForCompetences({
-                specialityId: dataNameSpecialty?.find(elem => {
+                specialityId: dataNameSpecialty?.find((elem:any) => {
                     if (elem.value === form.getFieldValue('specialityName')) {
                         return elem
                     }
@@ -178,13 +218,11 @@ export const EditPractical = () => {
                     if (elem.value === form.getFieldValue('practiceKind')) {
                         return elem
                     }
-                })?.id,
-                startYear:form.getFieldValue('academicYear')[0].$y
-
+                })?.id
+                
             })
         }   
-    },[dataNameSpecialty, isSuccesOnePractise,dataPraciseKind,form])
-
+    },[dataNameSpecialty, isSuccesOnePractise,dataPraciseKind,form,pickKund,dataPraciseKind,fullDate])
 
     // вставка 
     useEffect(()=>{
@@ -201,123 +239,63 @@ export const EditPractical = () => {
             const endDate = dayjs(endYear, 'YYYY');
             form.setFieldValue('academicYear', [startDate, endDate]);
 
-           
-            const fullSubDivision = dataDepartments?.forEach((item:any)=>{
-                if(item.value===dataOnePractise?.subdivision) {
-                    form.setFieldValue('subDivision', `${dataOnePractise.subdivision}`)
-                    
-                    return true
-                }
-                if('responses' in item){
-                    return item.responses?.find((elem:any)=> {
-                        if(dataOnePractise?.subdivision.toLowerCase()===elem.value.toLowerCase()){
-                            form.setFieldValue('subDivision', `${item.value + ' - ' + elem.value}`)
-                        }      
-                    })
-                }
-                else{
-                    
-                }
-            })
+            // dataDepartments?.forEach((item:any)=>{
+            //     if(item.value===dataOnePractise?.subdivision) {
+            //         form.setFieldValue('subDivision', `${dataOnePractise.subdivision}`)
+                   
+                   
+            //     }
+            //     if('responses' in item){
+            //          item.responses?.find((elem:any)=> {
+            //             if(dataOnePractise?.subdivision.toLowerCase()===elem.value.toLowerCase()){
+            //                 form.setFieldValue('subDivision', `${item.value + ' - ' + elem.value}`)
+                        
+            //             }      
+            //         })
+            //     }
+            //     else{
+            //         console.log('item.value3',item.value)
+            //     }
+            // })
+            form.setFieldValue('subDivision', [{
+                title: dataOnePractise.subdivision,
+                // @ts-ignore
+                value: dataOnePractise.subdivisionId}]);
 
             form.setFieldValue('courseStudy', dataOnePractise.courseNumber);
-            form.setFieldValue('startStudy', dayjs(dataOnePractise.practicePeriod[0], 'YYYY.MM.DD'));
-            form.setFieldValue('endStudy', dayjs(dataOnePractise.practicePeriod[1], 'YYYY.MM.DD'));
-
+            form.setFieldValue('period', [dayjs(dataOnePractise.practicePeriod[0], 'YYYY.MM.DD'),dayjs(dataOnePractise.practicePeriod[1], 'YYYY.MM.DD')]);
             form.setFieldValue('amountHours', dataOnePractise.totalHours);
-
             form.setFieldValue('director', dataOnePractise.departmentDirector);
-
         }
     },[isSuccesOnePractise,isSuccessDepartments])
 
-      // получение инд заданий
-      useEffect(()=>{
-        if(isSuccessTask  ){
-            const pickTypeId = dataPracticeType?.find(elem => {
+    // получение инд заданий
+    useEffect(()=>{
+        if(isSuccessPracticeType){
+            const pickTypeId = dataPracticeType?.find((elem:any) => {
                 if (elem.value === form.getFieldValue('practiceType')) {
                     return elem
                 }
             })
             const pickSpecialityId = dataNameSpecialty?.find((elem:any) => {
-                console.log('ss',form.getFieldValue('specialityName'))
+               
                 if (elem.value === form.getFieldValue('specialityName')) {
                     return elem
                 }
             })
-            console.log('vvvvvvvvvvvvvvvvvvvvvv',pickSpecialityId)
-            setArqTask({specialtyNameId : pickSpecialityId?.id, practiceTypeId : pickTypeId?.id})
-        }
-    },[isSuccessTask, form,form.getFieldValue('practiceType')])
-    console.log('argtask',arqTask)
+            setArqTask({...arqTask,specialtyNameId : pickSpecialityId?.id, practiceTypeId : pickTypeId?.id})
+        } 
+    },[ dataNameSpecialty, dataPracticeType, isSuccessTask, pickSpeciality, pickType,form])
 
-    // function onFinish(values: NewPractice) {
-    //     values.startStudy = dayjs(values.startStudy).format('DD.MM.YYYY')
-    //     values.endStudy = dayjs(values.endStudy).format('DD.MM.YYYY')
-    //     const academicYear: AcademicYear = {
-    //         start: dayjs(values.academicYear[0]).format('YYYY'),
-    //         end: dayjs(values.academicYear[1]).format('YYYY')
-    //     }
-
-    //     const sendData: NewPracticeSend = {
-    //         specialityName: values.specialityName,
-    //         practiceType: values.practiceType,
-    //         department: values.department,
-    //         groupNumber: values.groupNumber,
-    //         semester: values.semester,
-    //         academicYear: academicYear,
-    //         courseStudy: values.courseStudy,
-    //         startStudy: values.startStudy,
-    //         amountHours: String(values.amountHours),
-    //         endStudy: values.endStudy,
-    //         tasks: values.tasks.map(elem => elem.task),
-    //         codeCompetencies: values.codeCompetencies.map(elem => elem.codeCompetence),
-    //         director: values.director
-    //     }
-
-    //     console.log(sendData)
-
-    // }
+   
     function onFinish(values: any) {
-        // const specialtyNameId = dataNameSpecialty!.find(elem => {
-        //     if (elem.value === values.specialityName) {
-        //         return elem.id
-        //     }
-        // })
-        // const practiceTypeId = dataPracticeType!.find(elem => {
-        //     if (elem.value === values.practiceType) {
-        //         return elem.id
-        //     }
-        // })
-        // const department = 0
-        // values.startStudy = dayjs(values.startStudy).format('DD.MM.YYYY')
-        // values.endStudy = dayjs(values.endStudy).format('DD.MM.YYYY')
-        // const academicYear: AcademicYear = {
-        //     start: dayjs(values.academicYear[0]).format('YYYY'),
-        //     end: dayjs(values.academicYear[1]).format('YYYY')
-        // }
-        //
-        // console.log('form.getFieldsValue',form.getFieldsValue("academicYear"))
-        // const dateString = fullDate[0].$d
-        // const date = new Date(dateString)
-        // const year = date.getFullYear();
-        // const month = String(date.getMonth() + 1).padStart(2, '0');
-        // const day = String(date.getDate()).padStart(2, '0');
-        // const formattedDate = `${year}.${month}.${day}`;
-        // console.log('formattedDate',fullDate[0].$y,fullDate[0].$M+1,fullDate[0].$D)
-        // console.log('formattedDateformattedDate',formattedDate)
-        // const dateStringEnd = fullDate[1].$d
-        // const dateEnd = new Date(dateStringEnd)
-        // const yearEnd = dateEnd.getFullYear();
-        // const monthEnd = String(dateEnd.getMonth() + 1).padStart(2, '0');
-        // const dayEnd = String(dateEnd.getDate()).padStart(2, '0');
-        // const formattedDateEnd = `${yearEnd}.${monthEnd}.${dayEnd}`;
-
+ 
         const directorId = dataDepartmentDirector?.find((elem:any) => {
             if (elem.value === values.director) {
                 return elem
             }
         })
+      
         const groupNumberId = dataGroupNumbers?.find((elem:any) => {
             if (elem.value === values.groupNumber) {
                 return elem
@@ -328,7 +306,7 @@ export const EditPractical = () => {
                 return elem
             }
         })
-        const practisePickId = dataPracticeType?.find(elem => {
+        const practisePickId = dataPracticeType?.find((elem:any) => {
             if (elem.value === values.practiceType) {
                 return elem
             }
@@ -339,55 +317,60 @@ export const EditPractical = () => {
             }
         })
     
-
         const [startDate, endDate] = form.getFieldValue('academicYear');
+
+        const mother = dataSubdivisonForPractise?.find((item:any)=>{    
+            if(form.getFieldValue('subDivision').includes('-')){
+                if('responses' in item){
+                    return item.responses?.find((elem:any)=> {
+                        if(form.getFieldValue('subDivision').split(" - ")[1] === elem.value){  
+                            return elem
+                        }      
+                    })
+                }
+                
+                if(item.value === form.getFieldValue('subDivision').split(" - ")[1]){
+                    return item
+                }else{
+                    return form.getFieldValue('subDivision').split(" - ")[1]
+              }
+            }else{
+                if('responses' in item){
+                    return item.responses?.find((elem:any)=> {
+                        if(form.getFieldValue('subDivision') === elem.value){
+                            return elem
+                        }
+                    })
+                }
+                if(item.value === form.getFieldValue('subDivision')){
+                    return item
+                }else{
+                    return form.getFieldValue('subDivision')
+                }
+            }
+        })
     
-
-        const dateString = form.getFieldValue('startStudy').$d
-        const date = new Date(dateString)
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        const formattedDate = `${year}.${month}.${day}`;
-
-        const dateStringEnd = form.getFieldValue('endStudy').$d
-        const dateEnd = new Date(dateStringEnd)
-        const yearEnd = dateEnd.getFullYear();
-        const monthEnd = String(dateEnd.getMonth() + 1).padStart(2, '0');
-        const dayEnd = String(dateEnd.getDate()).padStart(2, '0');
-        const formattedDateEnd = `${yearEnd}.${monthEnd}.${dayEnd}`;
-
+        const child = (form.getFieldValue('subDivision').includes('-')) ? 
+            mother?.responses?.find((item:any)=>item.value === form.getFieldValue('subDivision').split(" - ")[1]).id
+            : mother?.id
+   
         const sendData: any = {
-            // specialityName: values.specialityName,
             id: dataOnePractise?.id,
             practiceType: values.practiceType,
             department: values.department,
             groupNumberId: groupNumberId?.id,
             semester: values.semester,
             academicYear: {
-                       start:startDate.$y,
-                      end:endDate.$y
+                    start:startDate.$y,
+                    end:endDate.$y
             },
             courseNumber: values.courseStudy,
-            startDate: formattedDate,
-            endDate: formattedDateEnd,
+            startDate: `${String(form?.getFieldValue('period')[0].$D)}.${String(form?.getFieldValue('period')[0].$M+1).padStart(2, '0')}.${String(form?.getFieldValue('period')[0].$y)}`,
+            endDate: `${String(form?.getFieldValue('period')[1].$D)}.${String(form?.getFieldValue('period')[1].$M+1).padStart(2, '0')}.${String(form?.getFieldValue('period')[1].$y)}`,
             totalHours: String(values.amountHours),
-            // endDate: dataOnePractise.practicePeriod[1] ,
-            // individualTaskId: dataOnePractise.tasks[0].id,
-            competenceIds: dataCompetences,
+            competenceIds: copyDataCompetences?.map((item:any)=>String(item.id)),
             departmentDirectorId: directorId?.id, 
-            subdivisionId: dataSubdivisonForPractise?.find((item:any)=>{
-                if('responses' in item){
-                    return item.responses?.find((elem:any)=> {
-                        if(form.getFieldValue('subDivision') === elem.value){
-                            return elem
-                        }      
-                    })
-                }
-                if(item.value === form.getFieldValue('subDivision')){
-                    return item
-                }
-            })?.id,
+            subdivisionId: subDivisionId,
             specialtyNameId:pickSpecialityId?.id,
             practiceKindId: dataPraciseKind?.find((item)=>{
                 if(item.value===values.practiceKind){
@@ -396,458 +379,455 @@ export const EditPractical = () => {
             })?.id,
             practiceTypeId: practisePickId?.id,
             // @ts-ignore
-            departmentId : departmenIdZ?.id,
-           
+            departmentId : departmenIdZ?.id,   
         }
-        console.log('sendData',sendData)
         updateForm(sendData)
-        nav('/services/practices/practical')
+        .unwrap()
+        .then(()=>{
+            nav('/services/practices/practical')
+        })
+        .catch((error)=>{
+			if (error.status === 400) {
+				dispatch(showNotification({ message: 'Такая практика уже создана', type: 'error' }));
+			}
+		})
     }
+
 
     const onChangePicker = (value:any)=>{
         setPickDate([value[0].$y,value[1].$y])
         setFullDate(value)
+        setFlagCompentence(true)
     }
-    const onChangeTypePick = (value)=>{
+
+    const onChangeTypePick = (value:any)=>{
         setPickType(value)
+        setFlagCompentence(true)
     }
-    const dataTaskValid = dataOnePractise?.tasks.map((item:any)=>item.taskDescription)
-   
+
+    const handleChange = (value: string) => {
+        departments?.find(elem => {
+            if (elem.label === value) {
+                setSubDevisionId(elem.id)
+            }
+        })  
+        setFlagCompentence(true)
+    };
+
+    const handleKind = (value:any)=>{
+        setPickKind(value)
+        setFlagCompentence(true)
+    }
+
+    const handleSpeciality = (value:any)=>{
+        setPickSpeciality(value)
+        form.setFieldValue('practiceType','')
+        setFlagCompentence(true)
+    }
+
+    const onChangePickerPeriodPractise = (value:any)=>{
+        console.log(value)
+   }
+
+   const handleCourse = (value:any)=>{
+        setPickCourse(value)
+        form.setFieldValue('semester', '')
+    }
+
+
+    const dataTaskValid = dataTask?.tasks.map((item:any)=>item.taskDescription)
+
+
+    const optionsCourseValid = (() => {
+        const validPickCourse = pickCourse === undefined ? dataOnePractise?.courseNumber : pickCourse
+		switch (validPickCourse) {
+			case '1':
+				return [
+					{ value: '1', label: '1' },
+					{ value: '2', label: '2' }
+				];
+			case '2':
+				return [
+
+					{ value: '3', label: '3' },
+					{ value: '4', label: '4' }
+				];
+			case '3':
+				return [
+					{ value: '5', label: '5' },
+					{ value: '6', label: '6' }
+				];
+			case '4':
+				return [
+					{ value: '7', label: '7' },
+					{ value: '8', label: '8' }
+				];
+			case '5':
+				return [
+					{ value: '9', label: '9' },
+					{ value: '10', label: '10' }
+				];
+			case '6':
+				return [
+					{ value: '11', label: '11' },
+					{ value: '12', label: '12' }
+				];
+			default:
+				return [];
+		}
+	})()
+
+    const deleteCompetence = (item: any) => {
+		const newCompetences = copyDataCompetences.filter((elem:any) => elem.id!== item.id)
+		setCopyDataCompetences(newCompetences)
+	}
+    const onPopupScroll: any = (e:any) => {
+        console.log('onPopupScroll', e);
+    };
+    const onChange = (newValue: string) => {
+        console.log('newValue',newValue)
+        // setSubDivision(newValue);
+
+        setSubDevisionId(newValue)
+        // form.setFieldValue('specialityName', null)
+        // form.setFieldValue('practiceType', null)
+      };
+
+    const treeData = dataDepartments?.map((item:any)=>{
+        return{
+            title:item.value,
+            value:item.id,
+            // @ts-ignore
+            children: item?.responses?.map((item)=>{
+                return{
+                    title:item.value,
+                    value:item.id,
+                }
+            })
+        }
+    })
+
+    if(isFetchingDataOnePractise) return <SkeletonPage/>
 
     return (
-        <section className="container">
-            <Space size={10} align="center">
-                <Button
-                    size="large"
-                    className="mt-1"
-                    icon={<ArrowLeftSvg className="w-4 h-4 cursor-pointer mt-1"/>}
-                    type="text"
-                    onClick={() => {
-                        nav('/services/practices/practical.ts/')
-                    }}
-                />
-                <span className=" text-[28px] font-normal">
-                    Редактировать практику
-                </span>
-            </Space>
-            <Form<any>
-                validateMessages={validateMessages}
-                form={form}
-                onFinish={(values) => onFinish(values)}
-                layout={'vertical'}>
-                <Row gutter={[16, 16]} className="mt-4">
-                    <Col xs={24} sm={24} md={18} lg={16} xl={12}>
-                        <Form.Item
-                            label={'Шифр и наименование специальности'}
-                            name={'specialityName'}
-                            rules={[{required: true}]}>
-                            <Select
-                                size="large"
-                                popupMatchSelectWidth={false}
-                                className="w-full"
-                                options={nameSpecialty?.map((item)=>{
-                                    return{
-                                        key:item.id,
-                                        value:item.value,
-                                        label:item.value
-                                    }
-                                })}
-                            />
-                        </Form.Item>
-                    </Col>
-                </Row>
-                <Row gutter={[16, 16]}>
-                    <Col xs={24} sm={24} md={18} lg={16} xl={12}>
-                        <Form.Item
-                            rules={[{required: true}]}
-                            name={'practiceType'}
-                            label={'Тип практики'}>
-                            <Select
-                                onChange={onChangeTypePick}
-                                size="large"
-                                popupMatchSelectWidth={false}
-                                className="w-full"
-                                options={dataPracticeType?.map((item)=>{
-                                    return{
-                                        key:item.id,
-                                        value:item.value,
-                                        label:item.value
-                                    }
-                                })}
-                            />
-                        </Form.Item>
-                    </Col>
-                </Row>
-                <Row gutter={[16, 16]}>
-                    <Col xs={24} sm={24} md={18} lg={16} xl={12}>
-                        <Form.Item
-                            name={'practiceKind'}
-                            label={'Вид практики'}>
-                            <Select
-                                size="large"
-                                popupMatchSelectWidth={false}
-                              
-                                className="w-full"
-                                options={dataPraciseKind}
-                            />
-                        </Form.Item>
-                    </Col>
-                </Row>
-                <Row gutter={[16, 16]} className="mt-4">
-                    <Col xs={24} sm={24} md={18} lg={16} xl={12}>
-                        <Space direction={'vertical'} className={'w-full'}>
-                            <Form.Item label={'Подразделение'}
-                                       rules={[{required: true}]}
-                                       name={'subDivision'}>
+        <Spin spinning={isLoadingSendForm}>
+            <section className="container animate-fade-in">
+                <Space size={10} align="center">
+                    <Button
+                        size="large"
+                        style={{width:'48px'}}
+                        className="mt-1 mr-6 w-[48px] rounded-full border border-black"
+                        icon={<Vector />}
+                        type="text"
+                        onClick={() => {
+                            nav('/services/practices/practical.ts/')
+                        }}
+                    />
+                    <span className=" text-[28px] font-normal">
+                        Редактировать практику
+                    </span>
+                </Space>
+                <Form<any>
+                    validateMessages={validateMessages}
+                    form={form}
+                    onFinish={(values) => onFinish(values)}
+                    layout={'vertical'}>
+                    <Row gutter={[16, 16]} className="mt-12">
+                        <Col xs={24} sm={24} md={18} lg={16} xl={12}>
+                            <Space direction={'vertical'} className={'w-full'}>
+                                <Form.Item label={'Подразделение'}
+                                        rules={[{required: true}]}
+                                        name={'subDivision'}>
+                                  
+                                        <TreeSelect
+                                        treeLine={treeLine && { showLeafIcon }}
+                                        showSearch
+                                        style={{ height:'38px',width: '100%' }}
+                                        value={value}
+                                        dropdownStyle={{  overflow: 'auto' }}
+                                        placeholder=""
+                                        allowClear
+                                        treeDefaultExpandAll
+                                        onChange={onChange}
+                                        treeData={disableParents(treeData)}
+                                        onPopupScroll={onPopupScroll}
+                                        treeNodeFilterProp="title"
+                                    
+                                    />
+                                </Form.Item>
+                            </Space>
+                        </Col>
+                    </Row>
+                    <Row gutter={[16, 16]} className="">
+                        <Col xs={24} sm={24} md={18} lg={16} xl={12}>
+                            <Form.Item
+                                label={'Шифр и наименование специальности'}
+                                name={'specialityName'}
+                                rules={[{required: true}]}>
+                                <Select
+                                    size="large"
+                                    onChange={handleSpeciality}
+                                    popupMatchSelectWidth={false}
+                                    className="w-full"
+                                    options={nameSpecialty?.map((item)=>{
+                                        return{
+                                            key:item.id,
+                                            value:item.value,
+                                            label:item.value
+                                        }
+                                    })}
+                                />
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row gutter={[16, 16]}>
+                        <Col xs={24} sm={24} md={18} lg={16} xl={12}>
+                            <Form.Item
+                                rules={[{required: true}]}
+                                name={'practiceType'}
+                                label={'Тип практики'}>
+                                <Select
+                                    onChange={onChangeTypePick}
+                                    size="large"
+                                    popupMatchSelectWidth={false}
+                                    className="w-full"
+                                    options={dataPracticeType?.map((item:any)=>{
+                                        return{
+                                            key:item.id,
+                                            value:item.value,
+                                            label:item.value
+                                        }
+                                    })}
+                                />
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row gutter={[16, 16]}>
+                        <Col xs={24} sm={24} md={18} lg={16} xl={12}>
+                            <Form.Item
+                                rules={[{required: true}]}
+                                name={'practiceKind'}
+                                label={'Вид практики'}>
+                                <Select
+                                    size="large"
+                                    popupMatchSelectWidth={false}
+                                    onChange={handleKind}
+                                    className="w-full"
+                                    options={dataPraciseKind}
+                                />
+                            </Form.Item>
+                        </Col>
+                    </Row>
+
+                    <Row gutter={[16, 16]}>
+                        <Col xs={24} sm={24} md={18} lg={16} xl={12}>
+                            <Form.Item
+                                rules={[{required: true}]}
+                                name={'department'}
+                                label={'Кафедра'}>
                                 <Select
                                     size="large"
                                     popupMatchSelectWidth={false}
                                     className="w-full"
-                                    options={departments}
+                                    options={dataCaf}
                                 />
                             </Form.Item>
-                        </Space>
-                    </Col>
-                </Row>
-                <Row gutter={[16, 16]}>
-                    <Col xs={24} sm={24} md={18} lg={16} xl={12}>
-                        <Form.Item
-                            rules={[{required: true}]}
-                            name={'department'}
-                            label={'Кафедра'}>
-                            <Select
-                                size="large"
-                                popupMatchSelectWidth={false}
-                                className="w-full"
-                                options={dataCaf}
-                            />
-                        </Form.Item>
-                    </Col>
-                </Row>
-                <Row gutter={[16, 16]}>
-                    <Col xs={24} sm={24} md={18} lg={16} xl={12}>
-                        <Form.Item
-                            rules={[{required: true}]}
-                            name={'groupNumber'}
-                            label={'Номер группы'}>
-                            <Select
-                                size="large"
-                                popupMatchSelectWidth={false}
-                                className="w-full"
-                                options={dataGroupNumbers?.map((item)=>{
-                                    return{
-                                        key:item.id,
-                                        value:item.value,
-                                        label:item.label
-                                    }
-                                })}
-                            />
-                        </Form.Item>
-                    </Col>
-                </Row>
-                <Row gutter={[16, 16]}>
-                    <Col xs={24} sm={24} md={18} lg={16} xl={12}>
-                        <Form.Item
-                            name={'competences'}
-                            label={'Код и наименование компетенции'}>
-                            <Select
-                               
-                                size="large"
-                                popupMatchSelectWidth={false}
-                                className="w-full"
-                                options={dataCompetences}
-                            />
-                        </Form.Item>
-                    </Col>
-                </Row>
-                <Row gutter={[16, 16]}>
-                    <Col xs={24} sm={24} md={18} lg={8} xl={6}>
-                        <Form.Item
-                            rules={[{required: true}]}
-                            name={'semester'}
-                            label={'Семестр'}>
-                            <Select
-                                size="large"
-                                popupMatchSelectWidth={false}
-                                className="w-full"
-                                options={optionsSemester}
-                            />
-                        </Form.Item>
-                    </Col>
-                    <Col xs={24} sm={24} md={18} lg={8} xl={6}>
-                        <Form.Item
-                            rules={[{required: true}]}
-                            name={'academicYear'}
-                            label={'Учебный год'}>
+                        </Col>
+                    </Row>
+                    <Row gutter={[16, 16]}>
+                        <Col xs={24} sm={24} md={18} lg={16} xl={12}>
+                            <Form.Item
+                                rules={[{required: true}]}
+                                name={'groupNumber'}
+                                label={'Номер группы'}>
+                                <Select
+                                    showSearch
+                                    optionFilterProp="label"
 
-                            <DatePicker.RangePicker
-                             onChange={onChangePicker}
-                                picker={'year'}
-                                size={'large'}
-                                placeholder={['Начало', 'Конец']}
-                            />
+                                    size="large"
+                                    popupMatchSelectWidth={false}
+                                    className="w-full"
+                                    options={dataGroupNumbers?.map((item:any)=>{
+                                        return{
+                                            key:item.id,
+                                            value:item.value,
+                                            label:item.label
+                                        }
+                                    })}
+                                />
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row gutter={[16, 16]}>
+                        <Col xs={24} sm={24} md={18} lg={8} xl={6}>
+                            <Form.Item
+                                rules={[{required: true}]}
+                                name={'semester'}
+                                label={'Семестр'}>
+                                <Select
+                                    size="large"
+                                    popupMatchSelectWidth={false}
+                                    className="w-full"
+                                    options={optionsCourseValid}
+                                />
+                            </Form.Item>
+                        </Col>
+                        <Col xs={24} sm={24} md={18} lg={8} xl={6}>
+                            <Form.Item
+                                rules={[{required: true}]}
+                                name={'academicYear'}
+                                label={'Учебный год'}>
 
-                        </Form.Item>
-                    </Col>
-                </Row>
-                <Row gutter={[16, 16]}>
-                    <Col xs={24} sm={24} md={18} lg={8} xl={6}>
-                        <Form.Item
-                            rules={[{required: true}]}
-                            name={'courseStudy'}
-                            label={'Курс обучения'}>
-                            <Select
-                                size="large"
-                                popupMatchSelectWidth={false}
-                                className="w-full"
-                                options={optionsCourse}
-                            />
-                        </Form.Item>
-                    </Col>
-                    <Col xs={24} sm={24} md={18} lg={8} xl={6}>
-                        <Form.Item
-                            rules={[{required: true}]}
-                            name={'startStudy'}
-                            label={'Дата начала практики'}>
-                            <DatePicker
-                                size="large"
-                                format="DD.MM.YYYY"
-                                placeholder=""
-                                className="w-full"
-                            />
-                        </Form.Item>
-                    </Col>
-                </Row>
-                <Row gutter={[16, 16]}>
-                    <Col xs={24} sm={24} md={18} lg={8} xl={6}>
-                        <Form.Item
-                            rules={[{required: true}]}
-                            name={'amountHours'}
-                            label={'Общее кол-во часов'}>
-                            <InputNumber
-                                type="number"
-                                className="w-full"
-                                size="large"
-                                controls={false}
-                            />
-                        </Form.Item>
-                    </Col>
-                    <Col xs={24} sm={24} md={18} lg={8} xl={6}>
-                        <Form.Item
-                            rules={[{required: true}]}
-                            name={'endStudy'}
-                            label={'Дата окончания практики'}>
-                            <DatePicker
-                                size="large"
-                                format="DD.MM.YYYY"
-                                className="w-full"
-                            />
-                        </Form.Item>
-                    </Col>
-                </Row>
+                                <DatePicker.RangePicker
+                                onChange={onChangePicker}
+                                    picker={'year'}
+                                    size={'large'}
+                                    placeholder={['Начало', 'Конец']}
+                                />
 
-                <Row gutter={[16, 16]}>
-                    {/* <Col xs={24} sm={24} md={18} lg={16} xl={12}>
-                        <Space direction="vertical" className="w-full mb-4">
-                            <span className="font-bold">
-                                Индивидуальные задания (от 1 до 10)
-                            </span>
-                        </Space>
-                        <Form.List name={'tasks'}
-                                   initialValue={[{}]}
-                                   rules={[{
-                                       validator: async (_, tasks) => {
-                                           if (tasks.length < 1 || tasks.length > 10) {
-                                               return Promise.reject(new Error('Заданий может быть от 1 до 10'))
-                                           }
-                                       }
-                                   }]}
-                        >
-                            {(fields, operation, {errors}) => (
-                                <>
-                                    {fields.map((field) => (
-                                        <Space.Compact className={'w-full'}
-                                                       key={field.key}>
-                                            <div className={'flex items-center w-full gap-5'}>
-                                                <div className={'flex w-full'}>
-                                                    <div
-                                                        className={'flex items-center justify-center bg-[#E9EFF8] p-[7px] border-solid border-[1px] border-[#d9d9d9] rounded-l-lg mb-[24px]'}>
-                                                        <span className={'text-base font-bold'}>
-                                                            {field.name + 1}
-                                                        </span>
-                                                    </div>
-                                                    <Form.Item name={[field.name, 'task']}
-                                                               className={'w-full h-min'}
-                                                               rules={[{
-                                                                   required: true
-                                                               }]}
-                                                    >
-                                                        <TextArea autoSize
-                                                                  size="large"
-                                                                  placeholder="Добавить задание"
-                                                                  className={'textArea'}
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row gutter={[16, 16]}>
+                        <Col xs={24} sm={24} md={18} lg={8} xl={6}>
+                            <Form.Item
+                                rules={[{required: true}]}
+                                name={'courseStudy'}
+                                label={'Курс обучения'}>
+                                <Select
+                                    size="large"
+                                    popupMatchSelectWidth={false}
+                                    className="w-full"
+                                    options={optionsCourse}
+                                    onChange={handleCourse}
+                                />
+                            </Form.Item>
+                        </Col>
+                        <Col xs={24} sm={24} md={18} lg={8} xl={6}>
+                            <Form.Item
+                                //rules={[{required: true}]}
+                                name={'period'}
+                                label={'Период практики'}>
 
-                                                        />
-                                                    </Form.Item>
-                                                </div>
-                                                <Button
-                                                    className={'mb-[24px]'}
-                                                    size="large"
-                                                    type="primary"
-                                                    icon={<DeleteOutlined/>}
-                                                    onClick={() => {
-                                                        operation.remove(field.name)
-                                                    }}
-                                                />
-                                            </div>
-                                        </Space.Compact>
-                                    ))}
+                                <DatePicker.RangePicker 
+                                    size={'large'}
+                                    placeholder={['Начало', 'Конец']}
+                                    format="DD.MM.YYYY"
+                                    onChange={onChangePickerPeriodPractise}
+                                    
+                                />
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row gutter={[16, 16]}>
+                        <Col xs={24} sm={24} md={18} lg={8} xl={6}>
+                            <Form.Item
+                                rules={[{required: true}]}
+                                name={'amountHours'}
+                                label={'Общее кол-во часов'}>
+                                <InputNumber
+                                    type="number"
+                                    className="w-full"
+                                    size="large"
+                                    controls={false}
+                                    min={1}
+                                />
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row gutter={[16, 16]}>
+                    </Row>
+                    <Row gutter={[16, 16]} className={'mt-4'}>
+                        <Col xs={24} sm={24} md={18} lg={16} xl={12}>
+                            <Form.Item
+                                rules={[{required: true}]}
+                                name={'director'}
+                                label={'Руководитель практики'}>
+                                <Select
+                                    size="large"
+                                    popupMatchSelectWidth={false}
+                                    className="w-full"
+                                    options={dataDepartmentDirector?.map((item)=>{
+                                        return{
+                                            key:item.id,
+                                            value:item.value,
+                                            label:item.value
+                                        }
+                                    })}
+                                />
+                            </Form.Item>
+                        </Col>
+                    </Row>
 
-                                    <Form.ErrorList
-                                        errors={errors}
-                                        className={'mb-[15px] text-red-600'}
-                                    />
+                    <Row gutter={[16, 16]} className={'mt-4'}>
+                        <Col xs={24} sm={24} md={18} lg={16} xl={12}>
+                            <List
+                                header={<div>Код и наименование компетенции:</div>}
+                                style={{
+                                    overflow: 'auto',
+                                    maxHeight: 300,	
+                                }}
+                                bordered
+                                // @ts-ignore
+                                dataSource={isSuccesOnePractise ? copyDataCompetences : ''}
+                                renderItem={(item: any, index: number) => (
+                                    <List.Item
+                                    style={{
+                                        display: 'flex',
+                                    }}
+                                    // @ts-ignore
+                                    actions={dataOnePractise?.isInSubmission ? null :
+                                        [
+                                    <div  onClick={() => deleteCompetence(item)} className='cursor-pointer'><DeleteRedSvg /></div>
+                                ]}
+                                    >
+                                        <div className='flex items-center'>
+                                            <div className=' p-3'>{index + 1}</div> 
+                                            <div className='ml-2'>{item.value}</div>
+                                        </div>
+                                    </List.Item>
+                                )}
+                            />
+                        </Col>
+                    </Row>
 
-                                    <Button
-                                        size="large"
-                                        type="primary"
-                                        icon={<PlusOutlined/>}
-                                        onClick={() => operation.add()}
-                                        disabled={fields.length === 10}
-                                    />
-                                </>
+                    <Row gutter={[16, 16]} className={`mt-4 `}>
+                        <Col xs={24} sm={24} md={18} lg={16} xl={12}>
+                        <List
+                            className='newAntd'
+                            header={<div>Индивидуальные задания:</div>}
+                            style={{
+                                overflow: 'auto',
+                                maxHeight: 300,	
+                            }}
+                            bordered
+                            dataSource={isSuccesOnePractise?dataTaskValid : ''}
+                            renderItem={(item:any,index:number) => (
+                                <List.Item>
+                                {index+ 1}. {item}
+                                </List.Item>
                             )}
-                        </Form.List>
-                    </Col> */}
-                    {/* <Col xs={24} sm={24} md={18} lg={16} xl={12}>
-                        <Space direction="vertical" className="w-full mb-4">
-                            <span className="font-bold">
-                                Код и наименование компетенции (от 1 до 15)
-                            </span>
-                        </Space>
-                        <Form.List name={'codeCompetencies'}
-                                   initialValue={[{}]}
-                                   rules={[{
-                                       validator: async (_, tasks) => {
-                                           if (tasks.length < 1 || tasks.length > 15) {
-                                               return Promise.reject(new Error('Компетенций может быть от 1 до 15'))
-                                           }
-                                       }
-                                   }]}
-                        >
-                            {(fields, operation, {errors}) => (
-                                <>
-                                    {fields.map((field) => (
-                                        <Space.Compact className={'w-full'}
-                                                       key={field.key}>
-                                            <div className={'flex items-center w-full gap-5'}>
-                                                <div className={'flex w-full'}>
-                                                    <div
-                                                        className={'flex items-center justify-center bg-[#E9EFF8] p-[7px] border-solid border-[1px] border-[#d9d9d9] rounded-l-lg mb-[24px]'}>
-                                                        <span className={'text-base font-bold'}>
-                                                            {field.name + 1}
-                                                        </span>
-                                                    </div>
-                                                    <Form.Item name={[field.name, 'codeCompetence']}
-                                                               className={'w-full h-min'}
-                                                               rules={[{
-                                                                   required: true
-                                                               }]}
-                                                    >
-                                                        <TextArea autoSize
-                                                                  size="large"
-                                                                  placeholder="Добавить компетенцию"
-                                                                  className={'textArea'}
-
-                                                        />
-                                                    </Form.Item>
-                                                </div>
-                                                <Button
-                                                    className={'mb-[24px]'}
-                                                    size="large"
-                                                    type="primary"
-                                                    icon={<DeleteOutlined/>}
-                                                    onClick={() => {
-                                                        operation.remove(field.name)
-                                                    }}
-                                                />
-                                            </div>
-                                        </Space.Compact>
-                                    ))}
-
-                                    <Form.ErrorList
-                                        errors={errors}
-                                        className={'mb-[15px] text-red-600'}
-                                    />
-
-                                    <Button
-                                        size="large"
-                                        type="primary"
-                                        icon={<PlusOutlined/>}
-                                        onClick={() => operation.add()}
-                                        disabled={fields.length === 15}
-                                    />
-                                </>
-                            )}
-                        </Form.List>
-                    </Col> */}
-                </Row>
-
-                <Row gutter={[16, 16]} className={'mt-4'}>
-                    <Col xs={24} sm={24} md={18} lg={16} xl={12}>
-                        <Form.Item
-                            rules={[{required: true}]}
-                            name={'director'}
-                            label={'Заведующий опорной кафедрой'}>
-                            <Select
-                                size="large"
-                                popupMatchSelectWidth={false}
-                                className="w-full"
-                                options={dataDepartmentDirector?.map((item)=>{
-                                    return{
-                                        key:item.id,
-                                        value:item.value,
-                                        label:item.value
-                                    }
-                                })}
                             />
-                        </Form.Item>
-                    </Col>
-                </Row>
+                        </Col>
+                    </Row>
 
-                <Row gutter={[16, 16]} className={`mt-4 `}>
-                    <Col xs={24} sm={24} md={18} lg={16} xl={12}>
-                    <List
-                        className='newAntd'
-                        header={<div>Индивидуальные задания:</div>}
-                       
-                        bordered
-                        dataSource={isSuccesOnePractise?dataTaskValid : ''}
-                        renderItem={(item:any,index:number) => (
-                            <List.Item>
-                            {index+ 1}. {item}
-                            </List.Item>
-                        )}
-                        />
-                    </Col>
-                </Row>
-
-                <Row gutter={[16, 16]} className="my-8">
-                    <Col xs={24} sm={24} md={18} lg={8} xl={6}>
-                        <Space className="w-full">
-                            <Button
-                                className="!rounded-full"
-                                size="large"
-                                type="primary"
-                                htmlType="submit"
-                            >
-                                Сохранить
-                            </Button>
-                        </Space>
-                    </Col>
-                </Row>
-            </Form>
-        </section>
+                    <Row gutter={[16, 16]} className="my-8">
+                        <Col xs={24} sm={24} md={18} lg={8} xl={6}>
+                            <Space className="w-full">
+                                <Button
+                                    className="!rounded-full"
+                                    size="large"
+                                    type="primary"
+                                    htmlType="submit"
+                                >
+                                    Сохранить
+                                </Button>
+                            </Space>
+                        </Col>
+                    </Row>
+                </Form>
+            </section>
+        </Spin>
     )
 }
 

@@ -11,7 +11,7 @@ export enum ColorBg {
 interface Props {
     children: ReactNode
     color: ColorBg
-    onClick: () => void
+    onClick?: () => void
     disabled?: boolean
 }
 

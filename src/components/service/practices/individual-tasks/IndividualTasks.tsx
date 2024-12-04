@@ -8,7 +8,7 @@ import {
     TableColumnsType,
     Spin
 } from 'antd'
-import React, {useEffect, useRef, useState} from 'react'
+import {useEffect, useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {NameSpecialty, PracticeType, TasksAll} from '../../../../models/Practice'
 import './IndividualTasks.scss'
@@ -19,7 +19,6 @@ import {PointsSvg} from "../../../../assets/svg/PointsSvg";
 import {IndTaskPopoverContent} from "../popover/individualTask/IndTaskPopoverContent";
 import {IndTaskPopoverMain} from "../popover/individualTask/IndTaskPopoverMain";
 import dayjs from "dayjs";
-import {EditSvg} from "../../../../assets/svg/EditSvg";
 import {useGetAllTasksQuery, useGetPracticeTypeQuery} from "../../../../store/api/practiceApi/individualTask";
 import {useGetSpecialtyNamesQuery} from "../../../../store/api/practiceApi/roster";
 import {OptionsNameSpecialty} from "../roster/registerContracts/RegisterContracts";
@@ -54,9 +53,9 @@ export interface FullIndividualTask {
 const IndividualTasks = () => {
     const navigate = useNavigate()
     const [nameSpecialty, setNameSpecialty] = useState<OptionsNameSpecialty[]>()
-    const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery()
+    const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery(null)
     const [practiceType, setPracticeType] = useState<FilterType[]>()
-    const {data: dataPracticeType, isSuccess: isSuccessPracticeType} = useGetPracticeTypeQuery()
+    const {data: dataPracticeType, isSuccess: isSuccessPracticeType} = useGetPracticeTypeQuery(null)
     const {data, isSuccess, isFetching } = useGetAllTasksQuery()
     const [
         tableDataCompressed,
@@ -77,6 +76,7 @@ const IndividualTasks = () => {
         selectedFieldsFull,
         setSelectedFieldFull
     ] = useState<FullIndividualTask[]>()
+ 
 
     const [tableView, setTableView] = useState({
         compressed: true,
@@ -100,9 +100,6 @@ const IndividualTasks = () => {
             setPracticeType(changeListPracticeType(dataPracticeType))
         }
     }, [dataPracticeType]);
-   
-
-
    
 
     function changeListNameSpecialty(list: NameSpecialty[]) {
@@ -146,14 +143,15 @@ const IndividualTasks = () => {
         return finalList.concat(newList)
     }
 
-    function changeListDataAll(data: TasksAll) {
-        const newData: FullIndividualTask = {
+    function changeListDataAll(data: any) {
+        const newData: any = {
             id: data.id,
             key: data.key,
             specialityName: data.specialityName,
             practiceType: data.practiceType,
             dateFilling: data.dateFilling,
-            tasks: data.tasks.map(elem => elem.taskDescription)
+            subdivision: data.subdivisionName,
+            tasks: data.tasks.map((elem:any) => elem.taskDescription)
         }
         return newData
     }
@@ -181,19 +179,19 @@ const IndividualTasks = () => {
             title: <TitleHeadCell title={'Шифр и наименование специальности'}/>,
             dataIndex: 'specialityName',
             width: '20%',
-            render: (text, record) =>
-                <div className={'flex items-center'}>
-                    <span className={'underline flex w-[200px]'}>
-                        {text}
-                    </span>
-                    <Button
-                        type="text"
-                        icon={<EditSvg/>}
-                        onClick={() => {
-                            navigate(`/services/practices/individualTasks/editTask/${record.id}`)
-                        }}
-                    />
-                </div>
+            // render: (text, record) =>
+            //     <div className={'flex items-center'}>
+            //         <span className={'underline flex w-[200px]'}>
+            //             {text}
+            //         </span>
+            //         <Button
+            //             type="text"
+            //             icon={<EditSvg/>}
+            //             onClick={() => {
+            //                 navigate(`/services/practices/individualTasks/editTask/${record.id}`)
+            //             }}
+            //         />
+            //     </div>
         },
         {
             title: <TitleHeadCell title={'Дата заполнения'}/>,
@@ -216,6 +214,7 @@ const IndividualTasks = () => {
                          />}
                 >
                     <Button
+                    onClick={(e) => { e.stopPropagation()}}
                         type="text"
                         className="opacity-50"
                         icon={<PointsSvg/>}
@@ -230,6 +229,7 @@ const IndividualTasks = () => {
                                                     tableDataCompressed={tableDataCompressed}
                                                     setTableDataCompressed={setTableDataCompressed}/>}>
                     <Button
+                    onClick={(e) => { e.stopPropagation()}}
                         type="text"
                         className="opacity-50"
                         icon={<PointsSvg/>}
@@ -239,28 +239,66 @@ const IndividualTasks = () => {
     ]
     const columnsFull: TableColumnsType<FullIndividualTask> = [
         {
+            title: <span className={'text-base'}>Подразделение</span>,
+            dataIndex: 'subdivision',
+            width: '20%',
+            // render: (text, record) =>
+            //     <div className={'flex items-center'}>
+            //         <span className={'underline flex w-[200px] font-bold'}>
+            //             {text}
+            //         </span>
+            //         <Button
+            //             type="text"
+            //             icon={<EditSvg/>}
+            //             onClick={() => {
+            //                 navigate(`/services/practices/individualTasks/editTask/${record.id}`)
+            //             }}
+            //         />
+            //     </div>
+        },
+        {
             title: <span className={'text-base'}>Шифр и наименование специальности</span>,
             dataIndex: 'specialityName',
             width: '20%',
-            render: (text, record) =>
-                <div className={'flex items-center'}>
-                    <span className={'underline flex w-[200px] font-bold'}>
-                        {text}
-                    </span>
-                    <Button
-                        type="text"
-                        icon={<EditSvg/>}
-                        onClick={() => {
-                            navigate(`/services/practices/individualTasks/editTask/${record.id}`)
-                        }}
-                    />
-                </div>
+            // render: (text, record) =>
+            //     <div className={'flex items-center'}>
+            //         <span className={'underline flex w-[200px] font-bold'}>
+            //             {text}
+            //         </span>
+            //         <Button
+            //             type="text"
+            //             icon={<EditSvg/>}
+            //             onClick={() => {
+            //                 navigate(`/services/practices/individualTasks/editTask/${record.id}`)
+            //             }}
+            //         />
+            //     </div>
+        },
+        {
+            title: <span className={'text-base'}>Дата заполнения</span>,
+            dataIndex: 'dateFilling',
+            width: '20%',
+            render: (text) => dayjs(text).format('DD.MM.YYYY')
+            // render: (text, record) =>
+            //     <div className={'flex items-center'}>
+            //         <span className={'underline flex w-[200px] font-bold'}>
+            //             {text}
+            //         </span>
+            //         <Button
+            //             type="text"
+            //             icon={<EditSvg/>}
+            //             onClick={() => {
+            //                 navigate(`/services/practices/individualTasks/editTask/${record.id}`)
+            //             }}
+            //         />
+            //     </div>
         },
         {
             title: <span className={'text-base'}>Тип практики</span>,
             dataIndex: 'practiceType',
             width: '20%',
             align: 'left',
+            render: (value) => <span className={''}>{value}</span>
         },
         {
             title: <span className={'text-base'}>Индивидуальные задания</span>,
@@ -366,7 +404,7 @@ const IndividualTasks = () => {
         }
 
         if (isSuccess) {
-            const dataFull: FullIndividualTask[] = data.map(elem => changeListDataAll(elem))
+            const dataFull: any[] = data.map(elem => changeListDataAll(elem))
             return dataFull
                 .filter(elem => filterPracticeType(elem))
                 .filter(elem => filterNameSpecialty(elem))
@@ -377,20 +415,49 @@ const IndividualTasks = () => {
     useEffect(() => {
         setTableDataCompressed(filterDataCompressed())
         setTableDataFull(filterDataFull())
-    }, [filter]);
+    }, [filter,isSuccess]);
 
-    useEffect(() => {
-        if (isSuccess) {
-            const dataCompressed: CompressedIndividualTask[] = data.map(elem => changeListDataShort(elem))
-            setTableDataCompressed(dataCompressed)
-            const dataFull: FullIndividualTask[] = data.map(elem => changeListDataAll(elem))
-            setTableDataFull(dataFull)
-        }
-    }, [data]);
+    // useEffect(() => {
+    //     if (isSuccess) {
+    //         const dataCompressed: CompressedIndividualTask[] = data.map(elem => changeListDataShort(elem))
+    //         setTableDataCompressed(dataCompressed)
+    //         const dataFull: FullIndividualTask[] = data.map(elem => changeListDataAll(elem))
+    //         setTableDataFull(dataFull)
+    //     }
+    // }, [data]);
 
+    const handleRowClick = (record:any) => {
+		navigate(`/services/practices/individualTasks/editTask/${record.id}`)
+    };
 
+    const arraySpec = [
+        { key: 2244612, value: "Все", label: "Все" },
+        ...(data ? 
+            data.map((item) => ({
+                key: item.id,
+                value: item.specialityName,
+                label: item.specialityName
+            })) 
+        : [])
+    ];
+    const arrayType = [
+        { key: 2244612, value: "Все", label: "Все" },
+        ...(data ?
+            data.map((item) => ({
+                key: item.id,
+                value: item.practiceType,
+                label: item.practiceType
+            }))
+        : [])
+    ];
+
+    const uniqueSpecialityNames = Array.from(new Set(arraySpec.map(item => item.value)))
+    .map(value => ({ value, label: value }));
+    const uniqueTypes           = Array.from(new Set(arrayType.map(item => item.value)))
+    .map(value => ({ value, label: value }));
+   
     return (
-        <section className="container">
+        <section className="container animate-fade-in">
             <Row>
                 <Col>
 					<span className="mb-14 text-[28px]">
@@ -398,23 +465,17 @@ const IndividualTasks = () => {
 					</span>
                 </Col>
             </Row>
-            <Row gutter={[16, 16]} className="mt-12">
-                <Col span={5}>
+            <Row gutter={[16, 16]} className="mt-12 overWrite">
+                <Col span={5} className='overWrite'>
                     <span>Наименование специальности</span>
                 </Col>
-                <Col span={7}>
+                <Col span={7} className='overWrite'>
                     <Select
                         popupMatchSelectWidth={false}
                         defaultValue="Все"
                         className="w-full"
-                        options={[
-                            {key: 2244612, value: "Все", label: "Все"},
-                            ...(dataNameSpecialty ? dataNameSpecialty.map((item) => ({
-                              key: item.id,
-                              value: item.value,
-                              label: item.label
-                            })) : [])
-                          ]}
+                        style={{ width: '100% !important' }}
+                        options={uniqueSpecialityNames.length > 1 ? uniqueSpecialityNames : []}
                         onChange={value => {
                             setFilter({
                                 ...filter,
@@ -423,37 +484,30 @@ const IndividualTasks = () => {
                         }}
                     />
                 </Col>
-                <Col span={7} offset={5}>
-                    <Space className="w-full flex-row-reverse">
+                <Col span={7} offset={5} className='orderHigh overWrite'>
+                    <Space className="w-full flex-row-reverse ">
                         <Button
                             type="primary"
-                            className="!rounded-full"
+                            className="!rounded-full my-button h-10"
                             onClick={() => {
                                 navigate('/services/practices/individualTasks/createTask')
                             }}
                         >
-                            Добавить индивидуальные задания
+                            
                         </Button>
                     </Space>
                 </Col>
             </Row>
-            <Row gutter={[16, 16]} className="mt-4">
-                <Col span={5}>
+            <Row gutter={[16, 16]} className="mt-4 overWrite">
+                <Col span={5} className='overWrite'>
                     <span>Тип практики</span>
                 </Col>
-                <Col span={7}>
+                <Col span={7} className='overWrite'>
                     <Select
                         popupMatchSelectWidth={false}
                         defaultValue="Все"
                         className="w-full"
-                        options={[
-                            {key: 2244612, value: "Все", label: "Все"},
-                            ...(dataPracticeType ? dataPracticeType.map((item) => ({
-                              key: item.id,
-                              value: item.value,
-                              label: item.label
-                            })) : [])
-                          ]}
+                        options={uniqueTypes.length > 1 ? uniqueTypes : []}
                         onChange={value => {
                             setFilter({
                                 ...filter,
@@ -463,8 +517,8 @@ const IndividualTasks = () => {
                     />
                 </Col>
             </Row>
-            <Row className="mt-12 flex items-center">
-                <Col span={12} flex="50%">
+            <Row className="mt-12 mb-6 flex items-center">
+                <Col span={12} flex="50%" className='mobileFirst'>
                     <Radio.Group defaultValue="compressedView" buttonStyle="solid">
                         <Radio.Button
                             onClick={isCompressedTable}
@@ -480,12 +534,12 @@ const IndividualTasks = () => {
                         </Radio.Button>
                     </Radio.Group>
                 </Col>
-                <Col span={8} offset={4}>
+                <Col span={8} offset={4} className='mobileFirst'>
                     <div className={'flex gap-2 items-center'}>
                         <span className={'mr-2'}>Сортировка</span>
                         <Select
                             popupMatchSelectWidth={false}
-                            defaultValue="По дате (сначала новые)"
+                            value={filter.dateFilling}
                             className="w-full"
                             options={optionsSortDate}
                             onChange={value => {
@@ -499,18 +553,27 @@ const IndividualTasks = () => {
 
                 </Col>
             </Row>
-            {isFetching ? <Spin className='w-full mt-20' indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />  : 
+            {!tableDataCompressed || isFetching ? <Spin className='w-full mt-20' indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />  : 
             <>
             {
                 tableView.compressed
                 &&
-                <div className={'individualTasks'}>
+                <div className={'individualTasks mb-4'}>
                     <Table
+                        onRow={(record) => ({
+                            onClick: (e) => {
+                                // @ts-ignore
+                                if (e.target.closest('.ant-table-selection-column')) {
+                                    return
+                                }
+                                handleRowClick(record)},
+                        })}
                         // @ts-ignore
                         keyExtractor={record => record.id} 
                         columns={columnsCompressed}
                         dataSource={tableDataCompressed}
                         pagination={false}
+                        rowClassName={() => 'animate-fade-in'}
                         rowSelection={{
                             type: 'checkbox',
                             onSelect: (record, selected, selectedRows, nativeEvent) => {
@@ -529,10 +592,21 @@ const IndividualTasks = () => {
                 &&
                 
                 <Table
-                    className={'mt-5'}
+                    onRow={(record) => ({
+                        onClick: (e) => {
+                            // @ts-ignore
+                            if (e.target.closest('.ant-table-selection-column')) {
+                                return
+                            }
+                            handleRowClick(record)},
+                    })}
+                    className={'mt-5 mb-4'}
                     columns={columnsFull}
                     dataSource={tableDataFull}
-                    pagination={false}
+                    pagination={tableDataFull && tableDataFull?.length<10?false:{
+                        pageSize: 10
+                    }}
+                    rowClassName={() => 'animate-fade-in'}
                     rowSelection={{
                         type: 'checkbox',
                         onSelect: (record, selected, selectedRows, nativeEvent) => {

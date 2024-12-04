@@ -21,7 +21,7 @@ module.exports = {
 				'button-focus-border-blue': '#045ADB'
 			},
 			screens: {
-				'test': {'min': '0px', 'max': '1580px'}
+				test: { min: '0px', max: '1580px' }
 				// тестовые медиа запросик
 			},
 			fontFamily: {
@@ -31,6 +31,16 @@ module.exports = {
 			boxShadow: {
 				'custom-shadow': '0 0 19px 0 rgba(212, 227, 241, 0.6)'
 			},
+			animation: {
+				'bounce-slow': 'bounce 12s  infinite ease-in-out',
+				'fade-in': 'fadeIn 0.6s ease-in-out'
+			},
+			keyframes: {
+				fadeIn: {
+					'0%': { opacity: 0 },
+					'100%': { opacity: 1 }
+				}
+			}
 		}
 	},
 	corePlugins: {

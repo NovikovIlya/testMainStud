@@ -473,6 +473,15 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			}
 		}),
+		verifyAccPhone: builder.mutation({
+			query: id => {
+				return {
+					url: `user-api/settings/phones/${id}/send-verification`,
+					method: 'POST'
+				}
+			}
+			// invalidatesTags:['phones']
+		}),
 		changePassword: builder.mutation({
 			query: ({ newPassword, oldPassword }: { oldPassword: string; newPassword: string }) => {
 				return {

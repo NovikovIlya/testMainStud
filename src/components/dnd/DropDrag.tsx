@@ -11,16 +11,16 @@ import { Link } from 'react-router-dom'
 import { useAppSelector } from '../../store'
 import { useGetInfoUserQuery } from '../../store/api/formApi'
 import { useCheckIsEmployeeQuery } from '../../store/api/practiceApi/contracts'
+import { useGetModulesQuery } from '../../store/api/roleModel/roleModel'
 import { useGetRoleQuery } from '../../store/api/serviceApi'
 import { changeLayout, removeCard } from '../../store/reducers/LayoutsSlice'
 import { AboutUniversityCard } from '../aboutUniversity/AboutUniversityCard'
 import { Apply } from '../apply/Apply'
+import { Schedule } from '../cards/Schedule'
+import { TemplateCard } from '../cards/Template'
 
 import { block } from './constant'
 import { jsxElements } from './defaultElement'
-import { useGetModulesQuery } from '../../store/api/roleModel/roleModel'
-import { TemplateCard } from '../cards/Template'
-import { Schedule } from '../cards/Schedule'
 
 const studentKeys = [
 	'Schedule',
@@ -35,7 +35,11 @@ const studentKeys = [
 	'VirtualAudience',
 	'DigitalDepartments',
 	'ManagementScientificProjects',
-	'Testing'
+	'Testing',
+	'jobSeeker',
+	'myResponds',
+	'DirectResume',
+	'personnelAccounting'
 ]
 
 const employeeKeys = [
@@ -43,7 +47,8 @@ const employeeKeys = [
 	'practiceTeacher',
 	'Staff',
 	'Vacancies',
-	'News'
+	'News',
+	'personnelAccounting'
 ]
 
 const DropDrag = () => {
@@ -51,7 +56,11 @@ const DropDrag = () => {
 	const layout = block
 	const edit = useAppSelector(state => state.auth.edit)
 	const { data: dataCheck, isSuccess: isSuccessCheck, isLoading: isLoadingCheck } = useCheckIsEmployeeQuery()
-	const {data: dataGetInfoSubrole,isLoading: isLoadingGetInfoSubrole,isSuccess: isSuccessGetInfoSubrole} = useGetInfoUserQuery()
+	const {
+		data: dataGetInfoSubrole,
+		isLoading: isLoadingGetInfoSubrole,
+		isSuccess: isSuccessGetInfoSubrole
+	} = useGetInfoUserQuery()
 	const [currentBreakpoint, setCurrentBreakpoint] = useState<string>('lg')
 	const [mounted, setMounted] = useState(false)
 	const [toolbox, setToolbox] = useState<{ [index: string]: any[] }>({ lg: [] })
@@ -60,7 +69,7 @@ const DropDrag = () => {
 	const { data: dataSubRole, isSuccess: isSuccessSubRole, isLoading: isLoadingSubRole } = useGetRoleQuery(null)
 	const [subRole, setSubrole] = useLocalStorageState<any>('subRole', { defaultValue: '' })
 	const [windowSize, setWindowSize] = useState(getWindowSize())
-	const {data:dataModules} = useGetModulesQuery()
+	const { data: dataModules } = useGetModulesQuery()
 	console.log('dataModules', dataModules)
 	// получение саброли
 	useEffect(() => {
@@ -107,10 +116,8 @@ const DropDrag = () => {
 
 	useEffect(() => {
 		if (dataModules && Array.isArray(dataModules)) {
-			dataModules?.map((module:any) => {
-				return (
-					<TemplateCard title={module.moduleName} info={module.description} href={module.link} />
-				)
+			dataModules?.map((module: any) => {
+				return <TemplateCard title={module.moduleName} info={module.description} href={module.link} />
 			})
 		}
 	}, [dataModules])
@@ -129,7 +136,7 @@ const DropDrag = () => {
 			})
 		// .some(obj2 => obj1.i === obj2.key)
 	)
-	
+
 	const generateDOM = layoutValid
 		.map(item => {
 			return (
@@ -236,27 +243,27 @@ const DropDrag = () => {
 					<Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
 				</>
 			)
-			return (
-				<ResponsiveReactGridLayout
-					className="layout"
-					cols={{ lg: 3, md: 2, sm: 2, xs: 2, xxs: 1 }}
-					rowHeight={windowSize.innerWidth < 768 ? 210 : 320}
-					containerPadding={[0, 0]}
-					margin={[20, 20]}
-					layouts={layout}
-					measureBeforeMount={true}
-					useCSSTransforms={mounted}
-					onLayoutChange={onLayoutChange}
-					onBreakpointChange={onBreakpointChange}
-					isDraggable={edit}
-					isResizable={false}
-					compactType="vertical"
-					verticalCompact={true}
-					preventCollision={true}
-				>
-					{generateDOM}
-				</ResponsiveReactGridLayout>
-			)	
+		return (
+			<ResponsiveReactGridLayout
+				className="layout"
+				cols={{ lg: 3, md: 2, sm: 2, xs: 2, xxs: 1 }}
+				rowHeight={windowSize.innerWidth < 768 ? 210 : 320}
+				containerPadding={[0, 0]}
+				margin={[20, 20]}
+				layouts={layout}
+				measureBeforeMount={true}
+				useCSSTransforms={mounted}
+				onLayoutChange={onLayoutChange}
+				onBreakpointChange={onBreakpointChange}
+				isDraggable={edit}
+				isResizable={false}
+				compactType="vertical"
+				verticalCompact={true}
+				preventCollision={true}
+			>
+				{generateDOM}
+			</ResponsiveReactGridLayout>
+		)
 		// return (
 		// 	<div className="grid grid-cols-3 grid-rows-3 gap-4 ">
 		// 		{dataModules?.toSorted((a:any, b:any) => {

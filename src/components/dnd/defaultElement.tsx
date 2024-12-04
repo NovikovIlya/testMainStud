@@ -15,7 +15,7 @@ const aId = cookies[4]?.split('=')[1] || ''
  */
 export const jsxElements = [
 	{
-		index: 'jobSeeker',
+		key: 'jobSeeker',
 		element: <Seeker />,
 		place: {
 			w: 3,
@@ -28,7 +28,7 @@ export const jsxElements = [
 		}
 	},
 	{
-		index: 'myResponds',
+		key: 'myResponds',
 		element: (
 			<TemplateCard
 				title="Мои отклики"
@@ -49,7 +49,7 @@ export const jsxElements = [
 		}
 	},
 	{
-		index: 'DirectResume',
+		key: 'DirectResume',
 		element: (
 			<DirectResume
 				href="#"
@@ -72,7 +72,7 @@ export const jsxElements = [
 		}
 	},
 	{
-		index: 'personnelAccounting',
+		key: 'personnelAccounting',
 		element: <TemplateCard title="Трудоустройство" info="" href="/services/personnelaccounting" buttonText="Изучить" />,
 		place: {
 			w: 1,
@@ -83,7 +83,7 @@ export const jsxElements = [
 		}
 	},
 	{
-		index: 'ElectronicBook',
+		key: 'ElectronicBook',
 		element: (
 			<TemplateCard
 				href="/services/electronicBook/estimation"

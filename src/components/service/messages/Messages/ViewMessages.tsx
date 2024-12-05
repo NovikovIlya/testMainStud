@@ -1,39 +1,34 @@
 import {
-	AutoComplete,
-    Button, Divider, Form, Input, List, Modal, Segmented, Select, Skeleton, Spin
+	Button, Form, Input, List, Segmented, Skeleton, Spin
 } from 'antd'
-import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
 
-import { useAppSelector } from '../../../../store'
-import {
-    useGetChatQuery, useGetOneGroupQuery, useSendMessageMutation
-} from '../../../../store/api/practiceApi/practiceTeacher'
-import { setText } from '../../../../store/reducers/notificationSlice'
+import { useAppDispatch, useAppSelector } from '../../../../store'
 
 import { CommentNewTeacher } from './CommentTeacher'
 import InputText from './InputText'
 import { PlusCircleOutlined, SearchOutlined } from '@ant-design/icons'
-import InfiniteScroll from 'react-infinite-scroll-component';
-import TextArea from 'antd/es/input/TextArea'
+import InfiniteScroll from 'react-infinite-scroll-component'
 import { useTranslation } from 'react-i18next'
-import { useGetAllDialogsQuery, useGetEmployeesMessageQuery,  useGetStudentsMessaageQuery, useSendMessageChatMutation } from '../../../../store/api/messages/messageApi'
+import { useAddNewChatMutation, useGetAllDialogsQuery, useGetOneChatQuery, useSendMessageChatMutation } from '../../../../store/api/messages/messageApi'
+import { NewDialogModal } from './NewDialogModal'
+import { apiSlice } from '../../../../store/api/apiSlice'
 
 export const ViewMessage = () => {
+	
 	const [form] = Form.useForm();
 	const [dialogs, setDialogs] = useState<any>([]);
 	const {t,i18n} = useTranslation()
 	const [value, setValue] = useState(t('all'));
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [activeDialog, setActiveDialog] = useState<any>(null);
-	const [nameEmployee, setNameEmployee] = useState(null)
-	const [nameStudent, setNameStudent] = useState(null)
-	const {data:dataGetEmployees} = useGetEmployeesMessageQuery(nameEmployee,{skip: !nameEmployee})
-	const {data:dataGetStudents} = useGetStudentsMessaageQuery(nameStudent,{skip: !nameStudent})
 	const [page,setPage] = useState(0)
 	const {data:dataAllDialogs,isLoading,isError,isFetching} = useGetAllDialogsQuery({page,size:15})
-	const [sendMessage,{}] = useSendMessageChatMutation()
+	const [sendMessage,{isLoading:isLoadingSend}] = useSendMessageChatMutation()
+	const [pageChat,setPageChat] = useState(0)
+	const {data:dataOneChat} = useGetOneChatQuery({id:activeDialog?.id,  page: pageChat,    size:15},{skip: !activeDialog?.id})
+	const dispatch = useAppDispatch()
+
 
 	useEffect(()=>{
 		if(dataAllDialogs){
@@ -41,7 +36,6 @@ export const ViewMessage = () => {
 		}
 	},[dataAllDialogs])
 
-	console.log('dataAllDialogs',dataAllDialogs)
 
   
 	const loadMoreData = () => {
@@ -52,17 +46,23 @@ export const ViewMessage = () => {
 	};
   
 	const showModal = () => setIsModalOpen(true);
-	const handleOk = () => setIsModalOpen(false);
-	const handleCancel = () => setIsModalOpen(false)
-	const onFinish =()=>{
-		handleCancel()
-	}
+	const handleCancel = () => {
+		
+		setIsModalOpen(false)}
+
+
+
 	const clickTextArea = ()=>{
 
 	}
 	const refetch = ()=>{
 
 	}
+	const onFinish = (values: any) => {
+		console.log('Success:', values);
+	  };
+
+
 
   
 	return (
@@ -137,7 +137,7 @@ export const ViewMessage = () => {
 		  ) : (
 			<>
 			<div className="mt-36 p-4 col-span-2  w-full flex justify-center flex-wrap ">
-        {!false ? (
+        {!true ? (
           <div className="w-full flex flex-wrap flex-col ">
             <CommentNewTeacher files={[]} refetch={refetch} />
             <Form form={form} className="flex w-full flex-wrap" onFinish={onFinish}>
@@ -148,54 +148,19 @@ export const ViewMessage = () => {
           </div>
         ) : (
           <>
-            <Skeleton active />
-            <Skeleton.Input active className="mt-10 mb-5 !h-[400px] !w-[500px]" />
-            <Skeleton.Input active className="mt-10 !h-14 !w-[500px]" />
+            <Spin  />
           </>
         )}
      		 </div></>
 		  )}
 		</div>
   
-		<Modal 
-			className='p-12'
-		  title="Выберите роль" 
-		  open={isModalOpen} 
-		  onOk={handleOk} 
-		  onCancel={handleCancel} 
-		  footer={null}
-		>
-		  <Form   
-		    labelCol={{ span: 6 }}
-    		wrapperCol={{ span:18 }} 
-			form={form}
-			onFinish={onFinish}
-			style={{ maxWidth: 600 }}
-			>
-		  	<Form.Item  className='mt-6'  label="Студент" name={'student'}>
-			  <AutoComplete
-					placeholder={'Введите ФИО'}
-					onChange={setNameStudent}
-					options={dataGetStudents?.map((student:any) => ({ value: student.name }))}
-				/>
-			</Form.Item>
-			<Form.Item   label="Сотрудник" name={'teacher'}>
-				<AutoComplete
-					placeholder={'Введите ФИО'}
-					onChange={setNameEmployee}
-					options={dataGetEmployees?.map((employee:any) => ({ value: employee.name }))}
-				/>
-			</Form.Item>
-			<Form.Item   label="Аспирант" name={'graduate'}>
-		  		<Select placeholder={'Введите ФИО'}/>
-			</Form.Item>
-			<Form.Item   label="Сообщение" name={'text'}>
-				<TextArea  placeholder='Введите текст сообщения' />
-			</Form.Item>
-			
-			<div className='w-full flex justify-center'><Button htmlType='submit' type='primary'>Создать диалог</Button></div>
-		  </Form>
-		</Modal>
+
+		 <NewDialogModal 
+        isModalOpen={isModalOpen}
+        onCancel={handleCancel}
+       
+      />
 	  </div>
 	);
   }

@@ -2,7 +2,7 @@ import { apiSlice } from '../apiSlice'
 import { testApiSlice } from '../testApiSlice'
 
 
-export const messagesService = testApiSlice.injectEndpoints({
+export const messagesService = apiSlice.injectEndpoints({
     endpoints: builder => ({
         getEmployeesMessage: builder.query<any, any>({
             query: (name) => {
@@ -49,6 +49,29 @@ export const messagesService = testApiSlice.injectEndpoints({
 
             
         }),
+        getOneChat: builder.query<any, any>({
+            query: ({id,page,size}) => {
+                return {
+                    url: `/user-api/chat/${id}?page=${page}&size=${size}`,
+                    method: 'GET'
+                }
+            },
+            providesTags: ['Messages'],
+            keepUnusedDataFor:1,
+            
+        }),
+        addNewChat: builder.mutation<any, any>({
+            query: (body) => {
+                return {
+                    url: `/user-api/chat/new`,
+                    method: 'POST',
+                    body
+                }
+            },
+            invalidatesTags: ['Messages'],
+  
+            
+        }),
         
         
     })
@@ -58,7 +81,9 @@ export const {
     useGetEmployeesMessageQuery,
     useGetStudentsMessaageQuery,
     useGetAllDialogsQuery,
-    useSendMessageChatMutation
+    useSendMessageChatMutation,
+    useGetOneChatQuery,
+    useAddNewChatMutation
   
 
 } = messagesService

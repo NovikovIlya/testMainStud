@@ -1,11 +1,8 @@
 import { Button, Form, Modal, Select } from 'antd'
 import { useState } from 'react'
 
-import {
-	useApproveReservedRespondMutation,
-	useGetAllVacanciesQuery
-} from '../../../store/api/serviceApi'
-import {useAlert} from "../../../utils/AlertMessage";
+import { useApproveReservedRespondMutation, useGetAllVacanciesQuery } from '../../../store/api/serviceApi'
+import { useAlert } from '../../../utils/AlertMessage'
 
 export const ApproveRespondForm = (props: {
 	respondId: number
@@ -52,10 +49,10 @@ export const ApproveRespondForm = (props: {
 									props.callback()
 									setIsFormOpen(false)
 								})
-							openAlert({ type: 'success', text: 'Отправлено руководителю' });
-						} catch (error : any) {
-							let errorStr = error.status + " " + error.data.message;
-							openAlert({ type: 'error', text: errorStr });
+							openAlert({ type: 'success', text: 'Отклик успешно отправлен руководителю' })
+						} catch (error: any) {
+							let errorStr = error.status + ' ' + error.data.message
+							openAlert({ type: 'error', text: errorStr })
 						}
 					}}
 				>
@@ -65,11 +62,7 @@ export const ApproveRespondForm = (props: {
 					<Form.Item
 						name={'vacancy'}
 						rules={[{ required: true, message: 'Не выбрана вакансия' }]}
-						label={
-							<label className="text-black text-[18px]/[18px] font-content-font font-normal">
-								Вакансия
-							</label>
-						}
+						label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Вакансия</label>}
 					>
 						<Select
 							options={vacancies.map(vac => ({
@@ -81,11 +74,7 @@ export const ApproveRespondForm = (props: {
 					</Form.Item>
 					<Form.Item>
 						<div style={{ textAlign: 'right', marginTop: 20 }}>
-							<Button
-								type="primary"
-								htmlType="submit"
-								className="rounded-[54.5px]"
-							>
+							<Button type="primary" htmlType="submit" className="rounded-[54.5px]">
 								Отправить
 							</Button>
 						</div>
@@ -93,14 +82,19 @@ export const ApproveRespondForm = (props: {
 				</Form>
 			</Modal>
 			<Button
-				onClick={() => {
-					props.mode === 'RESUME'
-						? setIsFormOpen(true)
-						: approveRespond({ respondId: props.respondId, vacancyId: 0 })
-								.unwrap()
-								.then(() => {
-									props.callback()
-								})
+				onClick={async () => {
+					if (props.mode === 'RESUME') {
+						setIsFormOpen(true)
+					} else {
+						try {
+							await approveRespond({ respondId: props.respondId, vacancyId: 0 }).unwrap()
+							props.callback()
+							openAlert({ type: 'success', text: 'Отклик успешно отправлен руководителю' })
+						} catch (error: any) {
+							let errorStr = error.status + ' ' + error.data.message
+							openAlert({ type: 'error', text: errorStr })
+						}
+					}
 				}}
 				type="primary"
 				disabled={props.isRespondSentToSupervisor}

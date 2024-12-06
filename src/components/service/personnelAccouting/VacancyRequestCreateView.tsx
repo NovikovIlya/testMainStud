@@ -1,14 +1,5 @@
 import { LoadingOutlined } from '@ant-design/icons'
-import {
-	Button,
-	Checkbox,
-	ConfigProvider,
-	Form,
-	Input,
-	Modal,
-	Select,
-	Spin
-} from 'antd'
+import { Button, Checkbox, ConfigProvider, Form, Input, Modal, Select, Spin } from 'antd'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -28,8 +19,7 @@ import ArrowIcon from '../jobSeeker/ArrowIcon'
 export const VacancyRequestCreateView = () => {
 	const { requestId } = useAppSelector(state => state.currentRequest)
 	const navigate = useNavigate()
-	const [getVacancyRequestView, queryStatus] =
-		useLazyGetVacancyRequestViewQuery()
+	const [getVacancyRequestView, queryStatus] = useLazyGetVacancyRequestViewQuery()
 	const [acceptRequest] = useAcceptCreateVacancyRequestMutation()
 	const [alterRequest] = useAlterCreateVacancyRequestMutation()
 
@@ -39,11 +29,7 @@ export const VacancyRequestCreateView = () => {
 	const [categoryTitle, setCategoryTitle] = useState<string>('')
 	const { data: directions = [] } = useGetDirectionsQuery(categoryTitle)
 	const { data: subdivisions = [] } = useGetSubdivisionsQuery(categoryTitle)
-	const {
-		data: definitions = [],
-		isLoading: loading,
-		isFetching: fetching
-	} = useGetAllDocumentDefinitionsQuery()
+	const { data: definitions = [], isLoading: loading, isFetching: fetching } = useGetAllDocumentDefinitionsQuery()
 
 	const [isEdit, setIsEdit] = useState<boolean>(false)
 	const [isEdited, setIsEdited] = useState<boolean>(false)
@@ -56,9 +42,7 @@ export const VacancyRequestCreateView = () => {
 	const [direction, setDirection] = useState<string>('')
 	const [subdivision, setSubdivision] = useState<string>('')
 
-	const [responsibilities, setResponsibilities] = useState<string | undefined>(
-		undefined
-	)
+	const [responsibilities, setResponsibilities] = useState<string | undefined>(undefined)
 
 	const [skills, setSkills] = useState<string | undefined>(undefined)
 
@@ -132,12 +116,8 @@ export const VacancyRequestCreateView = () => {
 			<>
 				<div className="w-full h-full flex items-center">
 					<div className="text-center ml-auto mr-auto">
-						<Spin
-							indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}
-						></Spin>
-						<p className="font-content-font font-normal text-black text-[18px]/[18px]">
-							Идёт загрузка...
-						</p>
+						<Spin indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}></Spin>
+						<p className="font-content-font font-normal text-black text-[18px]/[18px]">Идёт загрузка...</p>
 					</div>
 				</div>
 			</>
@@ -167,9 +147,7 @@ export const VacancyRequestCreateView = () => {
 						setIsResultModalOpen(false)
 					}}
 				>
-					<p className="text-center font-content-font text-black text-[16px]/[20px] font-normal">
-						{resultModalText}
-					</p>
+					<p className="text-center font-content-font text-black text-[16px]/[20px] font-normal">{resultModalText}</p>
 					<Button
 						className="rounded-[40px] w-full !py-[13px] mt-[40px]"
 						type="primary"
@@ -230,17 +208,6 @@ export const VacancyRequestCreateView = () => {
 												setIsResultModalOpen(true)
 											})
 									})
-									.catch(error => {
-										try {
-											setResultModalText(error.data.errors[0].message as string)
-										} catch (err) {
-											setResultModalText(
-												'Что-то пошло не так, приносим извинения за неудобства'
-											)
-										}
-										setIsModalOpen(false)
-										setIsResultModalOpen(true)
-									})
 							: acceptRequest({
 									data: {
 										category: categoryTitle,
@@ -248,9 +215,7 @@ export const VacancyRequestCreateView = () => {
 										subdivision: subdivision,
 										emplDocDefIds: [
 											...values.formDocs,
-											definitions.find(
-												def => def.employmentStageType === 'SIXTH'
-											)?.id
+											definitions.find(def => def.employmentStageType === 'SIXTH')?.id
 										]
 									},
 									requestId: requestId
@@ -259,18 +224,7 @@ export const VacancyRequestCreateView = () => {
 									.then(() => {
 										refetch()
 										setIsModalOpen(false)
-										setResultModalText('Заявка успешно опубликована')
-										setIsResultModalOpen(true)
-									})
-									.catch(error => {
-										try {
-											setResultModalText(error.data.errors[0].message as string)
-										} catch (err) {
-											setResultModalText(
-												'Что-то пошло не так, приносим извинения за неудобства'
-											)
-										}
-										setIsModalOpen(false)
+										setResultModalText('Вакансия успешно опубликована')
 										setIsResultModalOpen(true)
 									})
 					}}
@@ -304,9 +258,7 @@ export const VacancyRequestCreateView = () => {
 					<Form.Item
 						label={
 							<label className="text-black text-[18px]/[18px] font-content-font font-normal opacity-80">
-								{categories.find(cat => cat.title === categoryTitle)?.direction
-									? 'Профобласть'
-									: 'Подразделение'}
+								{categories.find(cat => cat.title === categoryTitle)?.direction ? 'Профобласть' : 'Подразделение'}
 							</label>
 						}
 						rules={[{ required: true, message: 'Не указана подкатегория' }]}
@@ -493,17 +445,11 @@ export const VacancyRequestCreateView = () => {
 					<Form.Item
 						name={'responsibilities'}
 						label={
-							<label className="text-black text-[18px]/[18px] font-content-font font-normal opacity-80">
-								Задачи
-							</label>
+							<label className="text-black text-[18px]/[18px] font-content-font font-normal opacity-80">Задачи</label>
 						}
 						rules={[{ required: true, message: 'Не указаны задачи' }]}
 					>
-						<Input.TextArea
-							autoSize
-							className="!h-[107px]"
-							placeholder="Ввести текст..."
-						></Input.TextArea>
+						<Input.TextArea autoSize className="!h-[107px]" placeholder="Ввести текст..."></Input.TextArea>
 					</Form.Item>
 					<Form.Item
 						name={'skills'}
@@ -514,26 +460,16 @@ export const VacancyRequestCreateView = () => {
 						}
 						rules={[{ required: true, message: 'Не указаны требования' }]}
 					>
-						<Input.TextArea
-							autoSize
-							className="!h-[107px]"
-							placeholder="Ввести текст..."
-						></Input.TextArea>
+						<Input.TextArea autoSize className="!h-[107px]" placeholder="Ввести текст..."></Input.TextArea>
 					</Form.Item>
 					<Form.Item
 						name={'conditions'}
 						label={
-							<label className="text-black text-[18px]/[18px] font-content-font font-normal opacity-80">
-								Условия
-							</label>
+							<label className="text-black text-[18px]/[18px] font-content-font font-normal opacity-80">Условия</label>
 						}
 						rules={[{ required: true, message: 'Не указаны условия' }]}
 					>
-						<Input.TextArea
-							autoSize
-							className="!h-[107px]"
-							placeholder="Ввести текст..."
-						></Input.TextArea>
+						<Input.TextArea autoSize className="!h-[107px]" placeholder="Ввести текст..."></Input.TextArea>
 					</Form.Item>
 					<Form.Item>
 						<Button type="primary" htmlType="submit">
@@ -542,16 +478,11 @@ export const VacancyRequestCreateView = () => {
 					</Form.Item>
 				</Form>
 			) : (
-				<div
-					id="wrapper"
-					className="pl-[54px] pr-[54px] pt-[120px] pb-[52px] w-full"
-				>
+				<div id="wrapper" className="pl-[54px] pr-[54px] pt-[120px] pb-[52px] w-full">
 					<div className="flex">
 						<button
 							onClick={() => {
-								isEdit
-									? setIsEdit(false)
-									: navigate('/services/personnelaccounting/vacancyrequests')
+								isEdit ? setIsEdit(false) : navigate('/services/personnelaccounting/vacancyrequests')
 							}}
 							className="bg-inherit border-none cursor-pointer"
 						>
@@ -564,50 +495,38 @@ export const VacancyRequestCreateView = () => {
 					<div className="w-[50%] mt-[52px] flex flex-col gap-[40px]">
 						<div className="flex gap-[60px]">
 							<div className="flex flex-col gap-[16px]">
-								<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-									Требуемый опыт работы:
-								</p>
+								<p className="font-content-font font-bold text-black text-[18px]/[21px]">Требуемый опыт работы:</p>
 								<p className="font-content-font font-normal text-black text-[18px]/[21px]">
 									{experience !== undefined ? experience : ''}
 								</p>
 							</div>
 							<div className="flex flex-col gap-[16px]">
-								<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-									Тип занятости:
-								</p>
+								<p className="font-content-font font-bold text-black text-[18px]/[21px]">Тип занятости:</p>
 								<p className="font-content-font font-normal text-black text-[18px]/[21px]">
 									{employment !== undefined ? employment : ''}
 								</p>
 							</div>
 							<div className="flex flex-col gap-[16px]">
-								<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-									Заработная плата:
-								</p>
+								<p className="font-content-font font-bold text-black text-[18px]/[21px]">Заработная плата:</p>
 								<p className="font-content-font font-normal text-black text-[18px]/[21px]">
 									{salary !== undefined ? salary : ''}
 								</p>
 							</div>
 						</div>
 						<div className="flex flex-col gap-[16px]">
-							<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-								Задачи:
-							</p>
+							<p className="font-content-font font-bold text-black text-[18px]/[21px]">Задачи:</p>
 							<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-pre-line">
 								{responsibilities !== undefined ? responsibilities : ''}
 							</p>
 						</div>
 						<div className="flex flex-col gap-[16px]">
-							<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-								Требования:
-							</p>
+							<p className="font-content-font font-bold text-black text-[18px]/[21px]">Требования:</p>
 							<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-pre-line">
 								{skills !== undefined ? skills : ''}
 							</p>
 						</div>
 						<div className="flex flex-col gap-[16px]">
-							<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-								Условия:
-							</p>
+							<p className="font-content-font font-bold text-black text-[18px]/[21px]">Условия:</p>
 							<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-pre-line">
 								{conditions !== undefined ? conditions : ''}
 							</p>

@@ -24,18 +24,14 @@ import { openChat } from '../../../store/reducers/ChatRespondStatusSlice'
 import { setRespondId } from '../../../store/reducers/CurrentRespondIdSlice'
 import { setCurrentVacancyId } from '../../../store/reducers/CurrentVacancyIdSlice'
 import { setChatId } from '../../../store/reducers/chatIdSlice'
+import { useAlert } from '../../../utils/AlertMessage'
 import { NocircleArrowIcon } from '../jobSeeker/NoCircleArrowIcon'
 
 import { InviteSeekerForm } from './supervisor/InviteSeekerForm'
-import {useAlert} from "../../../utils/AlertMessage";
 
-export const RespondInfo = (props: {
-	type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR' | 'SEEKER'
-}) => {
+export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR' | 'SEEKER' }) => {
 	const { t, i18n } = useTranslation()
-	const { data: countries, isLoading: isLoadingCountry } = useGetCountriesQuery(
-		i18n.language
-	)
+	const { data: countries, isLoading: isLoadingCountry } = useGetCountriesQuery(i18n.language)
 
 	const { openAlert } = useAlert()
 
@@ -47,20 +43,13 @@ export const RespondInfo = (props: {
 	const [sendToReserve] = useSendRespondToReserveMutation()
 	const [getResume] = useLazyGetSeekerResumeFileQuery()
 
-	const [isRespondSentToSupervisor, setIsRespondSentToSupervisor] =
-		useState<boolean>(res?.status === 'IN_SUPERVISOR_REVIEW')
-	const [isRespondSentToArchive, setIsRespondSentToArchive] = useState<boolean>(
-		res?.status === 'ARCHIVE'
+	const [isRespondSentToSupervisor, setIsRespondSentToSupervisor] = useState<boolean>(
+		res?.status === 'IN_SUPERVISOR_REVIEW'
 	)
-	const [isRespondSentToReserve, setIsRespondSentToReserve] = useState<boolean>(
-		res?.status === 'IN_RESERVE'
-	)
-	const [isRespondInvited, setIsRespondInvited] = useState<boolean>(
-		res?.status === 'INVITATION'
-	)
-	const [isRespondEmployed, setIsRespondEmployed] = useState<boolean>(
-		res?.status === 'EMPLOYMENT_REQUEST'
-	)
+	const [isRespondSentToArchive, setIsRespondSentToArchive] = useState<boolean>(res?.status === 'ARCHIVE')
+	const [isRespondSentToReserve, setIsRespondSentToReserve] = useState<boolean>(res?.status === 'IN_RESERVE')
+	const [isRespondInvited, setIsRespondInvited] = useState<boolean>(res?.status === 'INVITATION')
+	const [isRespondEmployed, setIsRespondEmployed] = useState<boolean>(res?.status === 'EMPLOYMENT_REQUEST')
 
 	const [resume, setResume] = useState<string>('')
 	const [resumeSize, setResumeSize] = useState<number>(0)
@@ -79,8 +68,7 @@ export const RespondInfo = (props: {
 		isLoading: isChatIdLoading
 	} = useGetChatIdByRespondIdQuery({
 		chatId: res ? res.id : 0,
-		role:
-			props.type === 'PERSONNEL_DEPARTMENT' ? 'PERSONNEL_DEPARTMENT' : 'SEEKER'
+		role: props.type === 'PERSONNEL_DEPARTMENT' ? 'PERSONNEL_DEPARTMENT' : 'SEEKER'
 	})
 
 	const handleNavigate = (url: string) => {
@@ -93,9 +81,7 @@ export const RespondInfo = (props: {
 
 	useEffect(() => {
 		setIsRespondSentToSupervisor(
-			res?.status === 'IN_SUPERVISOR_REVIEW' ||
-				res?.status === 'INVITATION' ||
-				res?.status === 'EMPLOYMENT_REQUEST'
+			res?.status === 'IN_SUPERVISOR_REVIEW' || res?.status === 'INVITATION' || res?.status === 'EMPLOYMENT_REQUEST'
 		)
 		setIsRespondSentToArchive(res?.status === 'ARCHIVE')
 		setIsRespondSentToReserve(res?.status === 'IN_RESERVE')
@@ -115,12 +101,7 @@ export const RespondInfo = (props: {
 	const navigate = useNavigate()
 
 	const { toPDF, targetRef } = usePDF({
-		filename:
-			res?.userData?.lastname +
-			' ' +
-			res?.userData?.firstname +
-			' ' +
-			res?.userData?.middlename,
+		filename: res?.userData?.lastname + ' ' + res?.userData?.firstname + ' ' + res?.userData?.middlename,
 		page: {
 			margin: Margin.SMALL
 		}
@@ -133,12 +114,8 @@ export const RespondInfo = (props: {
 			<>
 				<div className="w-full h-full flex items-center">
 					<div className="text-center ml-auto mr-auto">
-						<Spin
-							indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}
-						></Spin>
-						<p className="font-content-font font-normal text-black text-[18px]/[18px]">
-							Идёт загрузка...
-						</p>
+						<Spin indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}></Spin>
+						<p className="font-content-font font-normal text-black text-[18px]/[18px]">Идёт загрузка...</p>
 					</div>
 				</div>
 			</>
@@ -174,48 +151,18 @@ export const RespondInfo = (props: {
 									</div>
 									<div className="flex flex-col gap-[8px]">
 										<p className="font-content-font font-normal text-black text-[24px]/[28.8px]">
-											{res?.userData?.lastname +
-												' ' +
-												res?.userData?.firstname +
-												' ' +
-												res?.userData?.middlename}
+											{res?.userData?.lastname + ' ' + res?.userData?.firstname + ' ' + res?.userData?.middlename}
 										</p>
 										<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
 											{res.userData?.sex === 'M' ? 'Мужчина' : 'Женщина'},{' '}
-											{date.getFullYear() -
-												parseInt(
-													res.userData?.birthday.split('-')[0] as string
-												)}{' '}
-											{date.getFullYear() -
-												parseInt(
-													res.userData?.birthday.split('-')[0] as string
-												) >=
-												10 &&
-											date.getFullYear() -
-												parseInt(
-													res.userData?.birthday.split('-')[0] as string
-												) <=
-												20
+											{date.getFullYear() - parseInt(res.userData?.birthday.split('-')[0] as string)}{' '}
+											{date.getFullYear() - parseInt(res.userData?.birthday.split('-')[0] as string) >= 10 &&
+											date.getFullYear() - parseInt(res.userData?.birthday.split('-')[0] as string) <= 20
 												? 'лет'
-												: (date.getFullYear() -
-														parseInt(
-															res.userData?.birthday.split('-')[0] as string
-														)) %
-														10 >=
-														2 &&
-												  (date.getFullYear() -
-														parseInt(
-															res.userData?.birthday.split('-')[0] as string
-														)) %
-														10 <=
-														4
+												: (date.getFullYear() - parseInt(res.userData?.birthday.split('-')[0] as string)) % 10 >= 2 &&
+												  (date.getFullYear() - parseInt(res.userData?.birthday.split('-')[0] as string)) % 10 <= 4
 												? 'года'
-												: (date.getFullYear() -
-														parseInt(
-															res.userData?.birthday.split('-')[0] as string
-														)) %
-														10 ==
-												  1
+												: (date.getFullYear() - parseInt(res.userData?.birthday.split('-')[0] as string)) % 10 == 1
 												? 'год'
 												: 'лет'}
 										</p>
@@ -225,10 +172,7 @@ export const RespondInfo = (props: {
 													Дата рождения
 												</p>
 												<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-													{res.userData?.birthday
-														.split('-')
-														.reverse()
-														.join('.')}
+													{res.userData?.birthday.split('-').reverse().join('.')}
 												</p>
 											</div>
 											<div className="flex flex-col gap-[8px]">
@@ -236,11 +180,7 @@ export const RespondInfo = (props: {
 													Страна гражданства
 												</p>
 												<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-													{
-														countries?.find(
-															country => country.id === res.userData?.countryId
-														)?.shortName
-													}
+													{countries?.find(country => country.id === res.userData?.countryId)?.shortName}
 												</p>
 											</div>
 										</div>
@@ -266,33 +206,29 @@ export const RespondInfo = (props: {
 										}`}
 									>
 										<Button
-											onClick={ async () => {
+											onClick={async () => {
 												try {
 													await approveRespond(respondId.respondId)
 														.unwrap()
 														.then(() => {
 															setIsRespondSentToSupervisor(true)
 														})
-													openAlert({ type: 'success', text: 'Отклик отправлен руководителю' });
-												} catch (error : any) {
-													let errorStr = error.status + " " + error.data.message;
-													openAlert({ type: 'error', text: errorStr });
+													openAlert({ type: 'success', text: 'Отклик успешно отправлен руководителю' })
+												} catch (error: any) {
+													let errorStr = error.status + ' ' + error.data.message
+													openAlert({ type: 'error', text: errorStr })
 												}
 											}}
-											disabled={
-												isRespondSentToSupervisor ||
-												isRespondSentToReserve ||
-												isRespondSentToArchive
-											}
+											disabled={isRespondSentToSupervisor || isRespondSentToReserve || isRespondSentToArchive}
 											type="primary"
 											className="font-content-font font-normal text-white text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px]"
 										>
 											Отправить руководителю
 										</Button>
 										<Button
-											onClick={ async () => {
+											onClick={async () => {
 												try {
-													 await sendToArchive({
+													await sendToArchive({
 														id: respondId.respondId,
 														role: 'PERSONNEL_DEPARTMENT'
 													})
@@ -300,38 +236,30 @@ export const RespondInfo = (props: {
 														.then(() => {
 															setIsRespondSentToArchive(true)
 														})
-													openAlert({ type: 'success', text: 'Отказ успешно отправлен' });
-												} catch (error : any) {
-													let errorStr = error.status + " " + error.data.message;
-													openAlert({ type: 'error', text: errorStr });
+													openAlert({ type: 'success', text: 'Отклик успешно отправлен в архив' })
+												} catch (error: any) {
+													let errorStr = error.status + ' ' + error.data.message
+													openAlert({ type: 'error', text: errorStr })
 												}
 											}}
-											disabled={
-												isRespondSentToSupervisor ||
-												isRespondSentToReserve ||
-												isRespondSentToArchive
-											}
+											disabled={isRespondSentToSupervisor || isRespondSentToReserve || isRespondSentToArchive}
 											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
 										>
 											Отказать
 										</Button>
 										<Button
-											disabled={
-												isRespondSentToSupervisor ||
-												isRespondSentToReserve ||
-												isRespondSentToArchive
-											}
-											onClick={ async () => {
+											disabled={isRespondSentToSupervisor || isRespondSentToReserve || isRespondSentToArchive}
+											onClick={async () => {
 												try {
 													await sendToReserve(respondId.respondId)
 														.unwrap()
 														.then(() => {
 															setIsRespondSentToReserve(true)
 														})
-													openAlert({ type: 'success', text: 'Отклик отправлен в резерв' });
-												} catch (error : any) {
-													let errorStr = error.status + " " + error.data.message;
-													openAlert({ type: 'error', text: errorStr });
+													openAlert({ type: 'success', text: 'Отклик успешно отправлен в резерв' })
+												} catch (error: any) {
+													let errorStr = error.status + ' ' + error.data.message
+													openAlert({ type: 'error', text: errorStr })
 												}
 											}}
 											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
@@ -340,9 +268,7 @@ export const RespondInfo = (props: {
 										</Button>
 										<Button
 											onClick={() => {
-												handleNavigate(
-													`/services/personnelaccounting/chat/id/${chatId.id}`
-												)
+												handleNavigate(`/services/personnelaccounting/chat/id/${chatId.id}`)
 											}}
 											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
 										>
@@ -370,21 +296,13 @@ export const RespondInfo = (props: {
 									>
 										<InviteSeekerForm
 											respondId={respondId.respondId}
-											isButtonDisabled={
-												isRespondSentToArchive ||
-												isRespondInvited ||
-												isRespondEmployed
-											}
+											isButtonDisabled={isRespondSentToArchive || isRespondInvited || isRespondEmployed}
 											callback={() => {
 												setIsRespondInvited(true)
 											}}
 										/>
 										<Button
-											disabled={
-												isRespondSentToArchive ||
-												isRespondInvited ||
-												isRespondEmployed
-											}
+											disabled={isRespondSentToArchive || isRespondInvited || isRespondEmployed}
 											onClick={async () => {
 												try {
 													await sendToArchive({
@@ -395,10 +313,10 @@ export const RespondInfo = (props: {
 														.then(() => {
 															setIsRespondSentToArchive(true)
 														})
-													openAlert({ type: 'success', text: 'Резюме отправлено в архив' });
-												} catch (error : any) {
-													let errorStr = error.status + " " + error.data.message;
-													openAlert({ type: 'error', text: errorStr });
+													openAlert({ type: 'success', text: 'Резюме отправлено в архив' })
+												} catch (error: any) {
+													let errorStr = error.status + ' ' + error.data.message
+													openAlert({ type: 'error', text: errorStr })
 												}
 											}}
 											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[257px] h-[40px] py-[8px] px-[24px] border-black"
@@ -431,52 +349,34 @@ export const RespondInfo = (props: {
 							</div>
 							<hr />
 							<div className="flex flex-col gap-[24px]">
-								<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">
-									Опыт работы
-								</p>
+								<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">Опыт работы</p>
 								<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
 									{res.respondData.portfolio.workExperiences.map(exp => (
 										<>
 											<div className="flex flex-col gap-[4px]">
 												<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
 													{exp.beginWork.substring(0, 4)}-
-													{parseInt(exp.endWork.substring(0, 4)) ===
-													date.getFullYear()
+													{parseInt(exp.endWork.substring(0, 4)) === date.getFullYear()
 														? 'по наст.время'
 														: exp.endWork.substring(0, 4)}
 												</p>
 												<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-													{parseInt(exp.endWork.substring(0, 4)) -
-														parseInt(exp.beginWork.substring(0, 4)) ===
-													0
+													{parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) === 0
 														? ''
-														: parseInt(exp.endWork.substring(0, 4)) -
-														  parseInt(exp.beginWork.substring(0, 4))}
-													{parseInt(exp.endWork.substring(0, 4)) -
-														parseInt(exp.beginWork.substring(0, 4)) ===
-														1 && ' год'}
-													{parseInt(exp.endWork.substring(0, 4)) -
-														parseInt(exp.beginWork.substring(0, 4)) >=
-														2 &&
-														parseInt(exp.endWork.substring(0, 4)) -
-															parseInt(exp.beginWork.substring(0, 4)) <=
-															4 &&
+														: parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4))}
+													{parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) === 1 &&
+														' год'}
+													{parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) >= 2 &&
+														parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) <= 4 &&
 														' года'}
-													{parseInt(exp.endWork.substring(0, 4)) -
-														parseInt(exp.beginWork.substring(0, 4)) >
-														4 && ' лет'}
+													{parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) > 4 &&
+														' лет'}
 												</p>
 											</div>
 											<div className="flex flex-col gap-[8px]">
-												<p className="font-content-font font-bold text-black text-[16px]/[19.2px]">
-													{exp.position}
-												</p>
-												<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-													{exp.workPlace}
-												</p>
-												<p className="font-content-font font-normal text-black text-[14px]/[16.8px]">
-													{exp.duties}
-												</p>
+												<p className="font-content-font font-bold text-black text-[16px]/[19.2px]">{exp.position}</p>
+												<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">{exp.workPlace}</p>
+												<p className="font-content-font font-normal text-black text-[14px]/[16.8px]">{exp.duties}</p>
 											</div>
 										</>
 									))}
@@ -492,15 +392,11 @@ export const RespondInfo = (props: {
 							</div>
 							<hr />
 							<div className="flex flex-col gap-[24px]">
-								<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">
-									Образование
-								</p>
+								<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">Образование</p>
 								<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
 									{res.educations.map(edu => (
 										<>
-											<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-												{edu.endYear}
-											</p>
+											<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">{edu.endYear}</p>
 											<div className="flex flex-col gap-[8px]">
 												<p className="font-content-font font-bold text-black text-[16px]/[19.2px]">
 													{edu.nameOfInstitute + ', ' + edu.country}
@@ -516,9 +412,7 @@ export const RespondInfo = (props: {
 							</div>
 							<hr />
 							<div className="flex flex-col gap-[24px]">
-								<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">
-									О себе
-								</p>
+								<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">О себе</p>
 								<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
 									{res.respondData.skills.aboutMe}
 								</p>
@@ -571,11 +465,7 @@ export const RespondInfo = (props: {
 									</div>
 									<div className="flex flex-col gap-[8px]">
 										<p className="font-content-font font-normal text-black text-[24px]/[28.8px]">
-											{res?.userData?.lastname +
-												' ' +
-												res?.userData?.firstname +
-												' ' +
-												res?.userData?.middlename}
+											{res?.userData?.lastname + ' ' + res?.userData?.firstname + ' ' + res?.userData?.middlename}
 										</p>
 										<div className="flex flex-col gap-[8px]">
 											<p className="font-content-font font-normal text-black text-[12px]/[14.4x] opacity-40">
@@ -593,9 +483,7 @@ export const RespondInfo = (props: {
 									</div>
 								</div>
 								{props.type === 'PERSONNEL_DEPARTMENT' && (
-									<div
-										className={`self-center grid grid-cols-2 grid-rows-[40px_40px_40px] gap-x-[12px] gap-y-[12px]`}
-									>
+									<div className={`self-center grid grid-cols-2 grid-rows-[40px_40px_40px] gap-x-[12px] gap-y-[12px]`}>
 										<Button
 											onClick={async () => {
 												try {
@@ -604,17 +492,13 @@ export const RespondInfo = (props: {
 														.then(() => {
 															setIsRespondSentToSupervisor(true)
 														})
-													openAlert({ type: 'success', text: "Отклик отправлен руководителю" });
-												} catch (error : any) {
-													let errorStr = error.status + " " + error.data.message;
-													openAlert({ type: 'error', text: errorStr });
+													openAlert({ type: 'success', text: 'Отклик успешно отправлен руководителю' })
+												} catch (error: any) {
+													let errorStr = error.status + ' ' + error.data.message
+													openAlert({ type: 'error', text: errorStr })
 												}
 											}}
-											disabled={
-												isRespondSentToSupervisor ||
-												isRespondSentToReserve ||
-												isRespondSentToArchive
-											}
+											disabled={isRespondSentToSupervisor || isRespondSentToReserve || isRespondSentToArchive}
 											type="primary"
 											className="font-content-font font-normal text-white text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px]"
 										>
@@ -631,27 +515,19 @@ export const RespondInfo = (props: {
 														.then(() => {
 															setIsRespondSentToArchive(true)
 														})
-													openAlert({ type: 'success', text: "Отказ успешно отправлен" });
-												} catch (error : any) {
-													let errorStr = error.status + " " + error.data.message;
-													openAlert({ type: 'error', text: errorStr });
+													openAlert({ type: 'success', text: 'Отклик успешно отправлен в архив' })
+												} catch (error: any) {
+													let errorStr = error.status + ' ' + error.data.message
+													openAlert({ type: 'error', text: errorStr })
 												}
 											}}
-											disabled={
-												isRespondSentToSupervisor ||
-												isRespondSentToReserve ||
-												isRespondSentToArchive
-											}
+											disabled={isRespondSentToSupervisor || isRespondSentToReserve || isRespondSentToArchive}
 											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
 										>
 											Отказать
 										</Button>
 										<Button
-											disabled={
-												isRespondSentToSupervisor ||
-												isRespondSentToReserve ||
-												isRespondSentToArchive
-											}
+											disabled={isRespondSentToSupervisor || isRespondSentToReserve || isRespondSentToArchive}
 											onClick={async () => {
 												try {
 													await sendToReserve(respondId.respondId)
@@ -659,10 +535,10 @@ export const RespondInfo = (props: {
 														.then(() => {
 															setIsRespondSentToReserve(true)
 														})
-													openAlert({ type: 'success', text: "Отклик отправлен в резерв" });
-												} catch (error : any) {
-													let errorStr = error.status + " " + error.data.message;
-													openAlert({ type: 'error', text: errorStr });
+													openAlert({ type: 'success', text: 'Отклик успешно отправлен в резерв' })
+												} catch (error: any) {
+													let errorStr = error.status + ' ' + error.data.message
+													openAlert({ type: 'error', text: errorStr })
 												}
 											}}
 											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
@@ -671,9 +547,7 @@ export const RespondInfo = (props: {
 										</Button>
 										<Button
 											onClick={() => {
-												handleNavigate(
-													`/services/personnelaccounting/chat/id/${chatId.id}`
-												)
+												handleNavigate(`/services/personnelaccounting/chat/id/${chatId.id}`)
 											}}
 											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
 										>
@@ -682,26 +556,16 @@ export const RespondInfo = (props: {
 									</div>
 								)}
 								{props.type === 'SUPERVISOR' && (
-									<div
-										className={`self-center grid grid-cols-1 grid-rows-[40px_40px_40px] gap-y-[12px]`}
-									>
+									<div className={`self-center grid grid-cols-1 grid-rows-[40px_40px_40px] gap-y-[12px]`}>
 										<InviteSeekerForm
 											respondId={respondId.respondId}
-											isButtonDisabled={
-												isRespondSentToArchive ||
-												isRespondInvited ||
-												isRespondEmployed
-											}
+											isButtonDisabled={isRespondSentToArchive || isRespondInvited || isRespondEmployed}
 											callback={() => {
 												setIsRespondInvited(true)
 											}}
 										/>
 										<Button
-											disabled={
-												isRespondSentToArchive ||
-												isRespondInvited ||
-												isRespondEmployed
-											}
+											disabled={isRespondSentToArchive || isRespondInvited || isRespondEmployed}
 											onClick={async () => {
 												try {
 													await sendToArchive({
@@ -712,10 +576,10 @@ export const RespondInfo = (props: {
 														.then(() => {
 															setIsRespondSentToArchive(true)
 														})
-													openAlert({ type: 'success', text: "Отказ успешно отправлен" });
-												} catch (error : any) {
-													let errorStr = error.status + " " + error.data.message;
-													openAlert({ type: 'error', text: errorStr });
+													openAlert({ type: 'success', text: 'Отклик успешно отправлен в архив' })
+												} catch (error: any) {
+													let errorStr = error.status + ' ' + error.data.message
+													openAlert({ type: 'error', text: errorStr })
 												}
 											}}
 											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[257px] h-[40px] py-[8px] px-[24px] border-black"
@@ -728,20 +592,14 @@ export const RespondInfo = (props: {
 							<hr />
 							<div className="flex flex-col gap-[24px]">
 								<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
-									<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-										Желаемая должность
-									</p>
-									<p className="font-content-font font-bold text-black text-[16px]/[19.2px]">
-										{res?.desiredJob}
-									</p>
+									<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">Желаемая должность</p>
+									<p className="font-content-font font-bold text-black text-[16px]/[19.2px]">{res?.desiredJob}</p>
 								</div>
 							</div>
 							<hr />
 							<div className="flex flex-col gap-[24px]">
 								<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
-									<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-										Резюме
-									</p>
+									<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">Резюме</p>
 									<div className="bg-white rounded-[16px] shadow-custom-shadow h-[59px] w-[65%] p-[20px] flex">
 										<MyDocsSvg />
 										<p

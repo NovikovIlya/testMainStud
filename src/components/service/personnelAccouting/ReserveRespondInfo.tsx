@@ -26,15 +26,13 @@ import { setRespondId } from '../../../store/reducers/CurrentRespondIdSlice'
 import { setCurrentVacancyId } from '../../../store/reducers/CurrentVacancyIdSlice'
 import { setCurrentVacancyName } from '../../../store/reducers/CurrentVacancyNameSlice'
 import { setChatId } from '../../../store/reducers/chatIdSlice'
+import { useAlert } from '../../../utils/AlertMessage'
 import { NocircleArrowIcon } from '../jobSeeker/NoCircleArrowIcon'
 
 import { ApproveRespondForm } from './ApproveRespondForm'
 import { InviteSeekerForm } from './supervisor/InviteSeekerForm'
-import {useAlert} from "../../../utils/AlertMessage";
 
-export const ReserveRespondInfo = (props: {
-	type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
-}) => {
+export const ReserveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR' }) => {
 	const respondId = useAppSelector(state => state.currentResponce)
 
 	const { data: res } = useGetReservedRespondFullInfoQuery(respondId.respondId)
@@ -42,9 +40,7 @@ export const ReserveRespondInfo = (props: {
 	const date = new Date()
 
 	const { t, i18n } = useTranslation()
-	const { data: countries, isLoading: isLoadingCountry } = useGetCountriesQuery(
-		i18n.language
-	)
+	const { data: countries, isLoading: isLoadingCountry } = useGetCountriesQuery(i18n.language)
 
 	const { openAlert } = useAlert()
 
@@ -54,8 +50,9 @@ export const ReserveRespondInfo = (props: {
 	const [approveRespond] = useApproveReservedRespondMutation()
 	const [deleteRespond] = useDeleteReserveRespondMutation()
 
-	const [isRespondSentToSupervisor, setIsRespondSentToSupervisor] =
-		useState<boolean>(res?.status === 'IN_SUPERVISOR_REVIEW')
+	const [isRespondSentToSupervisor, setIsRespondSentToSupervisor] = useState<boolean>(
+		res?.status === 'IN_SUPERVISOR_REVIEW'
+	)
 	const [isModalOpen, setModalOpen] = useState(false)
 	const [resume, setResume] = useState<string>('')
 	const [resumeSize, setResumeSize] = useState<number>(0)
@@ -78,12 +75,7 @@ export const ReserveRespondInfo = (props: {
 	const navigate = useNavigate()
 
 	const { toPDF, targetRef } = usePDF({
-		filename:
-			res?.userData?.lastname +
-			' ' +
-			res?.userData?.firstname +
-			' ' +
-			res?.userData?.middlename,
+		filename: res?.userData?.lastname + ' ' + res?.userData?.firstname + ' ' + res?.userData?.middlename,
 		page: {
 			margin: Margin.SMALL
 		}
@@ -103,8 +95,7 @@ export const ReserveRespondInfo = (props: {
 		isLoading: isChatIdLoading
 	} = useGetChatIdByRespondIdQuery({
 		chatId: res ? res.id : 0,
-		role:
-			props.type === 'PERSONNEL_DEPARTMENT' ? 'PERSONNEL_DEPARTMENT' : 'SEEKER'
+		role: props.type === 'PERSONNEL_DEPARTMENT' ? 'PERSONNEL_DEPARTMENT' : 'SEEKER'
 	})
 
 	const handleNavigate = (url: string) => {
@@ -120,12 +111,8 @@ export const ReserveRespondInfo = (props: {
 			<>
 				<div className="w-full h-full flex items-center">
 					<div className="text-center ml-auto mr-auto">
-						<Spin
-							indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}
-						></Spin>
-						<p className="font-content-font font-normal text-black text-[18px]/[18px]">
-							Идёт загрузка...
-						</p>
+						<Spin indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}></Spin>
+						<p className="font-content-font font-normal text-black text-[18px]/[18px]">Идёт загрузка...</p>
 					</div>
 				</div>
 			</>
@@ -167,20 +154,20 @@ export const ReserveRespondInfo = (props: {
 								<Button
 									type="primary"
 									className="rounded-[54.5px] mr-auto"
-									onClick={ async () => {
-											try {
-												await deleteRespond(respondId.respondId)
-													.unwrap()
-													.then(() => {
-														refetch().then(() => {
-															navigate('/services/personnelaccounting/reserve')
-														})
+									onClick={async () => {
+										try {
+											await deleteRespond(respondId.respondId)
+												.unwrap()
+												.then(() => {
+													refetch().then(() => {
+														navigate('/services/personnelaccounting/reserve')
 													})
-												openAlert({ type: 'success', text: 'Отклик удален' });
-											} catch (error : any) {
-												let errorStr = error.status + " " + error.data.message;
-												openAlert({ type: 'error', text: errorStr });
-											}
+												})
+											openAlert({ type: 'success', text: 'Отклик удален' })
+										} catch (error: any) {
+											let errorStr = error.status + ' ' + error.data.message
+											openAlert({ type: 'error', text: errorStr })
+										}
 									}}
 								>
 									Удалить
@@ -194,9 +181,7 @@ export const ReserveRespondInfo = (props: {
 								onClick={() => {
 									props.type === 'PERSONNEL_DEPARTMENT'
 										? navigate('/services/personnelaccounting/reserve')
-										: navigate(
-												'/services/personnelaccounting/supervisor/responds'
-										  )
+										: navigate('/services/personnelaccounting/supervisor/responds')
 								}}
 								className="bg-inherit h-[38px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer"
 							>
@@ -212,48 +197,18 @@ export const ReserveRespondInfo = (props: {
 									</div>
 									<div className="flex flex-col gap-[8px]">
 										<p className="font-content-font font-normal text-black text-[24px]/[28.8px]">
-											{res?.userData?.lastname +
-												' ' +
-												res?.userData?.firstname +
-												' ' +
-												res?.userData?.middlename}
+											{res?.userData?.lastname + ' ' + res?.userData?.firstname + ' ' + res?.userData?.middlename}
 										</p>
 										<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
 											{res.userData?.sex === 'M' ? 'Мужчина' : 'Женщина'},{' '}
-											{date.getFullYear() -
-												parseInt(
-													res.userData?.birthday.split('-')[0] as string
-												)}{' '}
-											{date.getFullYear() -
-												parseInt(
-													res.userData?.birthday.split('-')[0] as string
-												) >=
-												10 &&
-											date.getFullYear() -
-												parseInt(
-													res.userData?.birthday.split('-')[0] as string
-												) <=
-												20
+											{date.getFullYear() - parseInt(res.userData?.birthday.split('-')[0] as string)}{' '}
+											{date.getFullYear() - parseInt(res.userData?.birthday.split('-')[0] as string) >= 10 &&
+											date.getFullYear() - parseInt(res.userData?.birthday.split('-')[0] as string) <= 20
 												? 'лет'
-												: (date.getFullYear() -
-														parseInt(
-															res.userData?.birthday.split('-')[0] as string
-														)) %
-														10 >=
-														2 &&
-												  (date.getFullYear() -
-														parseInt(
-															res.userData?.birthday.split('-')[0] as string
-														)) %
-														10 <=
-														4
+												: (date.getFullYear() - parseInt(res.userData?.birthday.split('-')[0] as string)) % 10 >= 2 &&
+												  (date.getFullYear() - parseInt(res.userData?.birthday.split('-')[0] as string)) % 10 <= 4
 												? 'года'
-												: (date.getFullYear() -
-														parseInt(
-															res.userData?.birthday.split('-')[0] as string
-														)) %
-														10 ==
-												  1
+												: (date.getFullYear() - parseInt(res.userData?.birthday.split('-')[0] as string)) % 10 == 1
 												? 'год'
 												: 'лет'}
 										</p>
@@ -263,10 +218,7 @@ export const ReserveRespondInfo = (props: {
 													Дата рождения
 												</p>
 												<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-													{res.userData?.birthday
-														.split('-')
-														.reverse()
-														.join('.')}
+													{res.userData?.birthday.split('-').reverse().join('.')}
 												</p>
 											</div>
 											<div className="flex flex-col gap-[8px]">
@@ -274,11 +226,7 @@ export const ReserveRespondInfo = (props: {
 													Страна гражданства
 												</p>
 												<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-													{
-														countries?.find(
-															country => country.id === res.userData?.countryId
-														)?.shortName
-													}
+													{countries?.find(country => country.id === res.userData?.countryId)?.shortName}
 												</p>
 											</div>
 										</div>
@@ -333,16 +281,8 @@ export const ReserveRespondInfo = (props: {
 										/>
 										<Button
 											onClick={() => {
-												dispatch(
-													setCurrentVacancyName(
-														res.oldVacancyName
-															? res.oldVacancyName
-															: res.desiredJob
-													)
-												)
-												handleNavigate(
-													`/services/personnelaccounting/chat/id/${chatId.id}`
-												)
+												dispatch(setCurrentVacancyName(res.oldVacancyName ? res.oldVacancyName : res.desiredJob))
+												handleNavigate(`/services/personnelaccounting/chat/id/${chatId.id}`)
 											}}
 											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
 										>
@@ -373,11 +313,7 @@ export const ReserveRespondInfo = (props: {
 								)}
 								{props.type === 'SUPERVISOR' && (
 									<div className="self-center grid grid-cols-1 grid-rows-[40px_40px] gap-y-[12px]">
-										<InviteSeekerForm
-											respondId={respondId.respondId}
-											isButtonDisabled
-											callback={() => {}}
-										/>
+										<InviteSeekerForm respondId={respondId.respondId} isButtonDisabled callback={() => {}} />
 										<Button
 											onClick={() => {}}
 											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[257px] h-[40px] py-[8px] px-[24px] border-black"
@@ -398,49 +334,31 @@ export const ReserveRespondInfo = (props: {
 							</div>
 							<hr />
 							<div className="flex flex-col gap-[24px]">
-								<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">
-									Опыт работы
-								</p>
+								<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">Опыт работы</p>
 								<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
 									{res.respondData.portfolio.workExperiences.map(exp => (
 										<>
 											<div className="flex flex-col gap-[4px]">
 												<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-													{exp.beginWork.substring(0, 4)}-
-													{exp.endWork.substring(0, 4)}
+													{exp.beginWork.substring(0, 4)}-{exp.endWork.substring(0, 4)}
 												</p>
 												<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-													{parseInt(exp.endWork.substring(0, 4)) -
-														parseInt(exp.beginWork.substring(0, 4)) ===
-													0
+													{parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) === 0
 														? ''
-														: parseInt(exp.endWork.substring(0, 4)) -
-														  parseInt(exp.beginWork.substring(0, 4))}
-													{parseInt(exp.endWork.substring(0, 4)) -
-														parseInt(exp.beginWork.substring(0, 4)) ===
-														1 && ' год'}
-													{parseInt(exp.endWork.substring(0, 4)) -
-														parseInt(exp.beginWork.substring(0, 4)) >=
-														2 &&
-														parseInt(exp.endWork.substring(0, 4)) -
-															parseInt(exp.beginWork.substring(0, 4)) <=
-															4 &&
+														: parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4))}
+													{parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) === 1 &&
+														' год'}
+													{parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) >= 2 &&
+														parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) <= 4 &&
 														' года'}
-													{parseInt(exp.endWork.substring(0, 4)) -
-														parseInt(exp.beginWork.substring(0, 4)) >
-														4 && ' лет'}
+													{parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) > 4 &&
+														' лет'}
 												</p>
 											</div>
 											<div className="flex flex-col gap-[8px]">
-												<p className="font-content-font font-bold text-black text-[16px]/[19.2px]">
-													{exp.position}
-												</p>
-												<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-													{exp.workPlace}
-												</p>
-												<p className="font-content-font font-normal text-black text-[14px]/[16.8px]">
-													{exp.duties}
-												</p>
+												<p className="font-content-font font-bold text-black text-[16px]/[19.2px]">{exp.position}</p>
+												<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">{exp.workPlace}</p>
+												<p className="font-content-font font-normal text-black text-[14px]/[16.8px]">{exp.duties}</p>
 											</div>
 										</>
 									))}
@@ -456,9 +374,7 @@ export const ReserveRespondInfo = (props: {
 							</div>
 							<hr />
 							<div className="flex flex-col gap-[24px]">
-								<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">
-									Образование
-								</p>
+								<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">Образование</p>
 								{/* <div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
 									{res.educations.map(edu => (
 										<>
@@ -480,9 +396,7 @@ export const ReserveRespondInfo = (props: {
 							</div>
 							<hr />
 							<div className="flex flex-col gap-[24px]">
-								<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">
-									О себе
-								</p>
+								<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">О себе</p>
 								<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
 									{res.respondData.skills.aboutMe}
 								</p>
@@ -518,9 +432,7 @@ export const ReserveRespondInfo = (props: {
 								onClick={() => {
 									props.type === 'PERSONNEL_DEPARTMENT'
 										? navigate('/services/personnelaccounting/reserve')
-										: navigate(
-												'/services/personnelaccounting/supervisor/responds'
-										  )
+										: navigate('/services/personnelaccounting/supervisor/responds')
 								}}
 								className="bg-inherit h-[38px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer"
 							>
@@ -536,11 +448,7 @@ export const ReserveRespondInfo = (props: {
 									</div>
 									<div className="flex flex-col gap-[8px]">
 										<p className="font-content-font font-normal text-black text-[24px]/[28.8px]">
-											{res?.userData?.lastname +
-												' ' +
-												res?.userData?.firstname +
-												' ' +
-												res?.userData?.middlename}
+											{res?.userData?.lastname + ' ' + res?.userData?.firstname + ' ' + res?.userData?.middlename}
 										</p>
 										<div className="flex flex-col gap-[8px]">
 											<p className="font-content-font font-normal text-black text-[12px]/[14.4x] opacity-40">
@@ -589,16 +497,8 @@ export const ReserveRespondInfo = (props: {
 										/>
 										<Button
 											onClick={() => {
-												dispatch(
-													setCurrentVacancyName(
-														res.oldVacancyName
-															? res.oldVacancyName
-															: res.desiredJob
-													)
-												)
-												handleNavigate(
-													`/services/personnelaccounting/chat/id/${chatId.id}`
-												)
+												dispatch(setCurrentVacancyName(res.oldVacancyName ? res.oldVacancyName : res.desiredJob))
+												handleNavigate(`/services/personnelaccounting/chat/id/${chatId.id}`)
 											}}
 											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
 										>
@@ -624,20 +524,14 @@ export const ReserveRespondInfo = (props: {
 							<hr />
 							<div className="flex flex-col gap-[24px]">
 								<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
-									<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-										Желаемая должность
-									</p>
-									<p className="font-content-font font-bold text-black text-[16px]/[19.2px]">
-										{res?.desiredJob}
-									</p>
+									<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">Желаемая должность</p>
+									<p className="font-content-font font-bold text-black text-[16px]/[19.2px]">{res?.desiredJob}</p>
 								</div>
 							</div>
 							<hr />
 							<div className="flex flex-col gap-[24px]">
 								<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
-									<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-										Резюме
-									</p>
+									<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">Резюме</p>
 									<div className="bg-white rounded-[16px] shadow-custom-shadow h-[59px] w-[65%] p-[20px] flex">
 										<MyDocsSvg />
 										<p

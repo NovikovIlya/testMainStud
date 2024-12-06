@@ -7,18 +7,12 @@ import { useSendEmploymentDocsMutation } from '../../../../store/api/serviceApi'
 
 import { FileAttachment } from './FileAttachment'
 
-export const EmplSend = (props: {
-	respondId: number
-	stageId: number
-	stageName: string
-}) => {
+export const EmplSend = (props: { respondId: number; stageId: number; stageName: string }) => {
 	const { empData } = useAppSelector(state => state.employmentData)
 	const { docs } = useAppSelector(state => state.employmentSeekerDocs)
 
 	const [sendDocs] = useSendEmploymentDocsMutation()
-	const hasNotRequisites = empData.stages.find(
-		stage => stage.type === 'SIXTH'
-	)?.hasRequisites
+	const hasNotRequisites = empData.stages.find(stage => stage.type === 'SIXTH')?.hasRequisites
 	const bank = empData.stages.find(stage => stage.type === 'SIXTH')?.bank
 
 	const [isResultModalOpen, setIsResultModalOpen] = useState<boolean>(false)
@@ -51,16 +45,13 @@ export const EmplSend = (props: {
 						setIsResultModalOpen(false)
 					}}
 				>
-					<p className="text-center font-content-font text-black text-[16px]/[20px] font-normal">
-						{resultModalText}
-					</p>
+					<p className="text-center font-content-font text-black text-[16px]/[20px] font-normal">{resultModalText}</p>
 					<Button
 						className="rounded-[40px] w-full !py-[13px] mt-[40px]"
 						type="primary"
 						onClick={() => {
 							setIsResultModalOpen(false)
-							resultModalText ===
-								'Документы успешно отправлены. Ожидайте проверки.' &&
+							resultModalText === 'Документы успешно отправлены. Ожидайте проверки.' &&
 								navigate('/services/myresponds/employment')
 						}}
 					>
@@ -70,14 +61,11 @@ export const EmplSend = (props: {
 			</ConfigProvider>
 			<div className="flex flex-col gap-[40px] font-content-font font-normal text-black text-[16px]/[19.2px]">
 				<p className="w-[60%]">
-					Идейные соображения высшего порядка, а также консультация с широким
-					активом играет важную роль в формировании позиций, занимаемых
-					участниками в отношении поставленных задач. С другой стороны новая
-					модель организационной деятельности способствует подготовки и
-					реализации новых предложений. С другой стороны постоянное
-					информационно-пропагандистское обеспечение нашей деятельности в
-					значительной степени обуславливает создание направлений прогрессивного
-					развития.
+					Идейные соображения высшего порядка, а также консультация с широким активом играет важную роль в формировании
+					позиций, занимаемых участниками в отношении поставленных задач. С другой стороны новая модель организационной
+					деятельности способствует подготовки и реализации новых предложений. С другой стороны постоянное
+					информационно-пропагандистское обеспечение нашей деятельности в значительной степени обуславливает создание
+					направлений прогрессивного развития.
 				</p>
 				<ol className="flex flex-col gap-[40px] ml-[2%]">
 					<li>С трудовыми условиями ознакомлен (а)</li>
@@ -86,21 +74,13 @@ export const EmplSend = (props: {
 				<div className="bg-white rounded-[16px] shadow-custom-shadow p-[20px] w-[70%] flex flex-col gap-[20px]">
 					<div className="grid gap-x-[36px] gap-y-[12px] grid-cols-[auto_10%_auto] items-center w-full">
 						{docs.map(doc => (
-							<FileAttachment
-								{...doc}
-								respondId={props.respondId}
-								stageName={doc.employmentStageType}
-								seventhStage
-							/>
+							<FileAttachment {...doc} respondId={props.respondId} stageName={doc.employmentStageType} seventhStage />
 						))}
 					</div>
 				</div>
 				{!hasNotRequisites && (
 					<ol start={3} className="flex flex-col gap-[40px] ml-[2%]">
-						<li>
-							Необходимо завести банковскую карту{' '}
-							{bank === 'SBER' ? 'Сбербанк' : 'ВТБ'}
-						</li>
+						<li>Необходимо завести банковскую карту {bank === 'SBER' ? 'Сбербанк' : 'ВТБ'}</li>
 					</ol>
 				)}
 				<Checkbox
@@ -123,18 +103,8 @@ export const EmplSend = (props: {
 							.unwrap()
 							.then(() => {
 								setResultModalText(
-									'Документы успешно отправлены. Ожидайте проверки.'
+									'Документы успешно отправлены. Следите за статусом ваших документов на этапе трудоустройства.'
 								)
-								setIsResultModalOpen(true)
-							})
-							.catch(error => {
-								try {
-									setResultModalText(error.data.errors[0].message as string)
-								} catch (err) {
-									setResultModalText(
-										'Что-то пошло не так, приносим извинения за неудобства'
-									)
-								}
 								setIsResultModalOpen(true)
 							})
 					}}

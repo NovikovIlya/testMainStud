@@ -18,8 +18,7 @@ import ArrowIcon from '../jobSeeker/ArrowIcon'
 export const VacancyRequestUpdateView = () => {
 	const { requestId } = useAppSelector(state => state.currentRequest)
 	const { data: requestView } = useGetVacancyRequestViewQuery(requestId)
-	const [getVacancyRequestView, queryStatus] =
-		useLazyGetVacancyRequestViewQuery()
+	const [getVacancyRequestView, queryStatus] = useLazyGetVacancyRequestViewQuery()
 	const navigate = useNavigate()
 	const [acceptRequest] = useAcceptUpdateVacancyRequestMutation()
 	const [alterRequest] = useAlterUpdateVacancyRequestMutation()
@@ -35,9 +34,7 @@ export const VacancyRequestUpdateView = () => {
 	const [employment, setEmployment] = useState<string | undefined>(undefined)
 	const [salary, setSalary] = useState<string | undefined>(undefined)
 
-	const [responsibilities, setResponsibilities] = useState<string | undefined>(
-		undefined
-	)
+	const [responsibilities, setResponsibilities] = useState<string | undefined>(undefined)
 
 	const [skills, setSkills] = useState<string | undefined>(undefined)
 
@@ -111,12 +108,8 @@ export const VacancyRequestUpdateView = () => {
 			<>
 				<div className="w-full h-full flex items-center">
 					<div className="text-center ml-auto mr-auto">
-						<Spin
-							indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}
-						></Spin>
-						<p className="font-content-font font-normal text-black text-[18px]/[18px]">
-							Идёт загрузка...
-						</p>
+						<Spin indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}></Spin>
+						<p className="font-content-font font-normal text-black text-[18px]/[18px]">Идёт загрузка...</p>
 					</div>
 				</div>
 			</>
@@ -146,9 +139,7 @@ export const VacancyRequestUpdateView = () => {
 						setIsResultModalOpen(false)
 					}}
 				>
-					<p className="text-center font-content-font text-black text-[16px]/[20px] font-normal">
-						{resultModalText}
-					</p>
+					<p className="text-center font-content-font text-black text-[16px]/[20px] font-normal">{resultModalText}</p>
 					<Button
 						className="rounded-[40px] w-full !py-[13px] mt-[40px]"
 						type="primary"
@@ -263,17 +254,11 @@ export const VacancyRequestUpdateView = () => {
 					<Form.Item
 						name={'responsibilities'}
 						label={
-							<label className="text-black text-[18px]/[18px] font-content-font font-normal opacity-80">
-								Задачи
-							</label>
+							<label className="text-black text-[18px]/[18px] font-content-font font-normal opacity-80">Задачи</label>
 						}
 						rules={[{ required: true, message: 'Не указаны задачи' }]}
 					>
-						<Input.TextArea
-							autoSize
-							className="!h-[107px]"
-							placeholder="Ввести текст..."
-						></Input.TextArea>
+						<Input.TextArea autoSize className="!h-[107px]" placeholder="Ввести текст..."></Input.TextArea>
 					</Form.Item>
 					<Form.Item
 						name={'skills'}
@@ -284,26 +269,16 @@ export const VacancyRequestUpdateView = () => {
 						}
 						rules={[{ required: true, message: 'Не указаны требования' }]}
 					>
-						<Input.TextArea
-							autoSize
-							className="!h-[107px]"
-							placeholder="Ввести текст..."
-						></Input.TextArea>
+						<Input.TextArea autoSize className="!h-[107px]" placeholder="Ввести текст..."></Input.TextArea>
 					</Form.Item>
 					<Form.Item
 						name={'conditions'}
 						label={
-							<label className="text-black text-[18px]/[18px] font-content-font font-normal opacity-80">
-								Условия
-							</label>
+							<label className="text-black text-[18px]/[18px] font-content-font font-normal opacity-80">Условия</label>
 						}
 						rules={[{ required: true, message: 'Не указаны условия' }]}
 					>
-						<Input.TextArea
-							autoSize
-							className="!h-[107px]"
-							placeholder="Ввести текст..."
-						></Input.TextArea>
+						<Input.TextArea autoSize className="!h-[107px]" placeholder="Ввести текст..."></Input.TextArea>
 					</Form.Item>
 					<Form.Item>
 						<Button type="primary" htmlType="submit">
@@ -335,13 +310,9 @@ export const VacancyRequestUpdateView = () => {
 										return test
 									})().map(diff =>
 										diff[0] < 0 ? (
-											<span className="bg-red-400 bg-opacity-60">
-												{diff[1]}
-											</span>
+											<span className="bg-red-400 bg-opacity-60">{diff[1]}</span>
 										) : diff[0] > 0 ? (
-											<span className="bg-green-400 bg-opacity-60">
-												{diff[1]}
-											</span>
+											<span className="bg-green-400 bg-opacity-60">{diff[1]}</span>
 										) : (
 											<span>{diff[1]}</span>
 										)
@@ -356,29 +327,21 @@ export const VacancyRequestUpdateView = () => {
 					<div className="w-[50%] mt-[52px] flex flex-col gap-[40px]">
 						<div className="flex gap-[60px]">
 							<div className="flex flex-col gap-[16px]">
-								<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-									Требуемый опыт работы:
-								</p>
+								<p className="font-content-font font-bold text-black text-[18px]/[21px]">Требуемый опыт работы:</p>
 								<p className="font-content-font font-normal text-black text-[18px]/[21px]">
 									{requestView !== undefined && requestView.oldData !== null
 										? (() => {
 												var test = dmp.diff_main(
 													requestView.oldData.experience,
-													isEdited
-														? (experience as string)
-														: requestView.newData.experience
+													isEdited ? (experience as string) : requestView.newData.experience
 												)
 												dmp.diff_cleanupSemantic(test)
 												return test
 										  })().map(diff =>
 												diff[0] < 0 ? (
-													<span className="bg-red-400 bg-opacity-60">
-														{diff[1]}
-													</span>
+													<span className="bg-red-400 bg-opacity-60">{diff[1]}</span>
 												) : diff[0] > 0 ? (
-													<span className="bg-green-400 bg-opacity-60">
-														{diff[1]}
-													</span>
+													<span className="bg-green-400 bg-opacity-60">{diff[1]}</span>
 												) : (
 													<span>{diff[1]}</span>
 												)
@@ -387,29 +350,21 @@ export const VacancyRequestUpdateView = () => {
 								</p>
 							</div>
 							<div className="flex flex-col gap-[16px]">
-								<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-									Тип занятости:
-								</p>
+								<p className="font-content-font font-bold text-black text-[18px]/[21px]">Тип занятости:</p>
 								<p className="font-content-font font-normal text-black text-[18px]/[21px]">
 									{requestView !== undefined && requestView.oldData !== null
 										? (() => {
 												var test = dmp.diff_main(
 													requestView.oldData.employment,
-													isEdited
-														? (employment as string)
-														: requestView.newData.employment
+													isEdited ? (employment as string) : requestView.newData.employment
 												)
 												dmp.diff_cleanupSemantic(test)
 												return test
 										  })().map(diff =>
 												diff[0] < 0 ? (
-													<span className="bg-red-400 bg-opacity-60">
-														{diff[1]}
-													</span>
+													<span className="bg-red-400 bg-opacity-60">{diff[1]}</span>
 												) : diff[0] > 0 ? (
-													<span className="bg-green-400 bg-opacity-60">
-														{diff[1]}
-													</span>
+													<span className="bg-green-400 bg-opacity-60">{diff[1]}</span>
 												) : (
 													<span>{diff[1]}</span>
 												)
@@ -418,29 +373,21 @@ export const VacancyRequestUpdateView = () => {
 								</p>
 							</div>
 							<div className="flex flex-col gap-[16px]">
-								<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-									Заработная плата:
-								</p>
+								<p className="font-content-font font-bold text-black text-[18px]/[21px]">Заработная плата:</p>
 								<p className="font-content-font font-normal text-black text-[18px]/[21px]">
 									{requestView !== undefined && requestView.oldData !== null
 										? (() => {
 												var test = dmp.diff_main(
 													requestView.oldData.salary,
-													isEdited
-														? (salary as string)
-														: requestView.newData.salary
+													isEdited ? (salary as string) : requestView.newData.salary
 												)
 												dmp.diff_cleanupSemantic(test)
 												return test
 										  })().map(diff =>
 												diff[0] < 0 ? (
-													<span className="bg-red-400 bg-opacity-60">
-														{diff[1]}
-													</span>
+													<span className="bg-red-400 bg-opacity-60">{diff[1]}</span>
 												) : diff[0] > 0 ? (
-													<span className="bg-green-400 bg-opacity-60">
-														{diff[1]}
-													</span>
+													<span className="bg-green-400 bg-opacity-60">{diff[1]}</span>
 												) : (
 													<span>{diff[1]}</span>
 												)
@@ -450,29 +397,21 @@ export const VacancyRequestUpdateView = () => {
 							</div>
 						</div>
 						<div className="flex flex-col gap-[16px]">
-							<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-								Задачи:
-							</p>
+							<p className="font-content-font font-bold text-black text-[18px]/[21px]">Задачи:</p>
 							<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-pre-line">
 								{requestView !== undefined && requestView.oldData !== null
 									? (() => {
 											var test = dmp.diff_main(
 												requestView.oldData.responsibilities,
-												isEdited
-													? (responsibilities as string)
-													: requestView.newData.responsibilities
+												isEdited ? (responsibilities as string) : requestView.newData.responsibilities
 											)
 											dmp.diff_cleanupSemantic(test)
 											return test
 									  })().map(diff =>
 											diff[0] < 0 ? (
-												<span className="bg-red-400 bg-opacity-60">
-													{diff[1]}
-												</span>
+												<span className="bg-red-400 bg-opacity-60">{diff[1]}</span>
 											) : diff[0] > 0 ? (
-												<span className="bg-green-400 bg-opacity-60">
-													{diff[1]}
-												</span>
+												<span className="bg-green-400 bg-opacity-60">{diff[1]}</span>
 											) : (
 												<span>{diff[1]}</span>
 											)
@@ -481,29 +420,21 @@ export const VacancyRequestUpdateView = () => {
 							</p>
 						</div>
 						<div className="flex flex-col gap-[16px]">
-							<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-								Требования:
-							</p>
+							<p className="font-content-font font-bold text-black text-[18px]/[21px]">Требования:</p>
 							<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-pre-line">
 								{requestView !== undefined && requestView.oldData !== null
 									? (() => {
 											var test = dmp.diff_main(
 												requestView.oldData.skills,
-												isEdited
-													? (skills as string)
-													: requestView.newData.skills
+												isEdited ? (skills as string) : requestView.newData.skills
 											)
 											dmp.diff_cleanupSemantic(test)
 											return test
 									  })().map(diff =>
 											diff[0] < 0 ? (
-												<span className="bg-red-400 bg-opacity-60">
-													{diff[1]}
-												</span>
+												<span className="bg-red-400 bg-opacity-60">{diff[1]}</span>
 											) : diff[0] > 0 ? (
-												<span className="bg-green-400 bg-opacity-60">
-													{diff[1]}
-												</span>
+												<span className="bg-green-400 bg-opacity-60">{diff[1]}</span>
 											) : (
 												<span>{diff[1]}</span>
 											)
@@ -512,29 +443,21 @@ export const VacancyRequestUpdateView = () => {
 							</p>
 						</div>
 						<div className="flex flex-col gap-[16px]">
-							<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-								Условия:
-							</p>
+							<p className="font-content-font font-bold text-black text-[18px]/[21px]">Условия:</p>
 							<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-pre-line">
 								{requestView !== undefined && requestView.oldData !== null
 									? (() => {
 											var test = dmp.diff_main(
 												requestView.oldData.conditions,
-												isEdited
-													? (conditions as string)
-													: requestView.newData.conditions
+												isEdited ? (conditions as string) : requestView.newData.conditions
 											)
 											dmp.diff_cleanupSemantic(test)
 											return test
 									  })().map(diff =>
 											diff[0] < 0 ? (
-												<span className="bg-red-400 bg-opacity-60">
-													{diff[1]}
-												</span>
+												<span className="bg-red-400 bg-opacity-60">{diff[1]}</span>
 											) : diff[0] > 0 ? (
-												<span className="bg-green-400 bg-opacity-60">
-													{diff[1]}
-												</span>
+												<span className="bg-green-400 bg-opacity-60">{diff[1]}</span>
 											) : (
 												<span>{diff[1]}</span>
 											)
@@ -633,21 +556,9 @@ export const VacancyRequestUpdateView = () => {
 																refetch()
 															})
 															.then(() => {
-																setResultModalText('Вакансия успешно обновлена')
+																setResultModalText('Описание вакансии успешно обновлено')
 																setIsResultModalOpen(true)
 															})
-													})
-													.catch(error => {
-														try {
-															setResultModalText(
-																error.data.errors[0].message as string
-															)
-														} catch (err) {
-															setResultModalText(
-																'Что-то пошло не так, приносим извинения за неудобства'
-															)
-														}
-														setIsResultModalOpen(true)
 													})
 										  }
 										: () => {
@@ -657,19 +568,7 @@ export const VacancyRequestUpdateView = () => {
 														refetch()
 													})
 													.then(() => {
-														setResultModalText('Вакансия успешно обновлена')
-														setIsResultModalOpen(true)
-													})
-													.catch(error => {
-														try {
-															setResultModalText(
-																error.data.errors[0].message as string
-															)
-														} catch (err) {
-															setResultModalText(
-																'Что-то пошло не так, приносим извинения за неудобства'
-															)
-														}
+														setResultModalText('Описание вакансии успешно обновлено')
 														setIsResultModalOpen(true)
 													})
 										  }

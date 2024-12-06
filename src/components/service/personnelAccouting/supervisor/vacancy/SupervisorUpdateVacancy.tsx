@@ -9,11 +9,10 @@ import {
 	useGetSubdivisionsQuery,
 	useRequestUpdateVacancyMutation
 } from '../../../../../store/api/serviceApi'
+import { useAlert } from '../../../../../utils/AlertMessage'
 import ArrowIcon from '../../../jobSeeker/ArrowIcon'
-import {useAlert} from "../../../../../utils/AlertMessage";
 
 export const SupervisorUpdateVacancy = () => {
-
 	const { openAlert } = useAlert()
 
 	const { currentVacancy } = useAppSelector(state => state.currentVacancy)
@@ -27,30 +26,15 @@ export const SupervisorUpdateVacancy = () => {
 	const [requestUpdate] = useRequestUpdateVacancyMutation()
 
 	const [isEdit, setIsEdit] = useState<boolean>(false)
-	const [isSendRequestButtonActivated, setIsSendRequestButtonActivated] =
-		useState<boolean>(false)
+	const [isSendRequestButtonActivated, setIsSendRequestButtonActivated] = useState<boolean>(false)
 
-	const [post, setPost] = useState<string | undefined>(
-		currentVacancy?.title.rendered
-	)
-	const [experience, setExperience] = useState<string | undefined>(
-		currentVacancy?.acf.experience
-	)
-	const [employment, setEmployment] = useState<string | undefined>(
-		currentVacancy?.acf.employment
-	)
-	const [salary, setSalary] = useState<string | undefined>(
-		currentVacancy?.acf.salary
-	)
-	const [category, setCategory] = useState<string | undefined>(
-		currentVacancy?.acf.category
-	)
-	const [direction, setDirection] = useState<string | undefined>(
-		currentVacancy?.acf.direction
-	)
-	const [subdivision, setSubdivision] = useState<string | undefined>(
-		currentVacancy?.acf.subdivision
-	)
+	const [post, setPost] = useState<string | undefined>(currentVacancy?.title.rendered)
+	const [experience, setExperience] = useState<string | undefined>(currentVacancy?.acf.experience)
+	const [employment, setEmployment] = useState<string | undefined>(currentVacancy?.acf.employment)
+	const [salary, setSalary] = useState<string | undefined>(currentVacancy?.acf.salary)
+	const [category, setCategory] = useState<string | undefined>(currentVacancy?.acf.category)
+	const [direction, setDirection] = useState<string | undefined>(currentVacancy?.acf.direction)
+	const [subdivision, setSubdivision] = useState<string | undefined>(currentVacancy?.acf.subdivision)
 
 	const [responsibilities, setResponsibilities] = useState<string | undefined>(
 		currentVacancy?.acf.responsibilities
@@ -123,7 +107,7 @@ export const SupervisorUpdateVacancy = () => {
 					width={407}
 				>
 					<p className="font-content-font font-normal text-black text-[16px]/[20px] text-center">
-						Ваша заявка успешно отправлена. Вакансия будет обновлена после
+						Ваша заявка на редактирование вакансии успешно отправлена. Описание вакансии будет обновлено после
 						рассмотрения заявки кадрами.
 					</p>
 					<div className="mt-[40px] flex gap-[12px]">
@@ -139,16 +123,11 @@ export const SupervisorUpdateVacancy = () => {
 					</div>
 				</Modal>
 			</ConfigProvider>
-			<div
-				id="wrapper"
-				className="pl-[54px] pr-[54px] pt-[60px] mt-[60px] mb-[52px] w-full"
-			>
+			<div id="wrapper" className="pl-[54px] pr-[54px] pt-[60px] mt-[60px] mb-[52px] w-full">
 				<div className="flex">
 					<button
 						onClick={() => {
-							isEdit
-								? setIsEdit(false)
-								: navigate('/services/personnelaccounting/supervisor/vacancies')
+							isEdit ? setIsEdit(false) : navigate('/services/personnelaccounting/supervisor/vacancies')
 						}}
 						className="bg-inherit border-none cursor-pointer"
 					>
@@ -255,17 +234,11 @@ export const SupervisorUpdateVacancy = () => {
 						<Form.Item
 							name={'responsibilities'}
 							label={
-								<label className="text-black text-[18px]/[18px] font-content-font font-normal opacity-80">
-									Задачи
-								</label>
+								<label className="text-black text-[18px]/[18px] font-content-font font-normal opacity-80">Задачи</label>
 							}
 							rules={[{ required: true, message: 'Не указаны задачи' }]}
 						>
-							<Input.TextArea
-								autoSize
-								className="!h-[107px]"
-								placeholder="Ввести текст..."
-							></Input.TextArea>
+							<Input.TextArea autoSize className="!h-[107px]" placeholder="Ввести текст..."></Input.TextArea>
 						</Form.Item>
 						<Form.Item
 							name={'skills'}
@@ -276,11 +249,7 @@ export const SupervisorUpdateVacancy = () => {
 							}
 							rules={[{ required: true, message: 'Не указаны требования' }]}
 						>
-							<Input.TextArea
-								autoSize
-								className="!h-[107px]"
-								placeholder="Ввести текст..."
-							></Input.TextArea>
+							<Input.TextArea autoSize className="!h-[107px]" placeholder="Ввести текст..."></Input.TextArea>
 						</Form.Item>
 						<Form.Item
 							name={'conditions'}
@@ -291,11 +260,7 @@ export const SupervisorUpdateVacancy = () => {
 							}
 							rules={[{ required: true, message: 'Не указаны условия' }]}
 						>
-							<Input.TextArea
-								autoSize
-								className="!h-[107px]"
-								placeholder="Ввести текст..."
-							></Input.TextArea>
+							<Input.TextArea autoSize className="!h-[107px]" placeholder="Ввести текст..."></Input.TextArea>
 						</Form.Item>
 						<Form.Item>
 							<Button type="primary" htmlType="submit">
@@ -307,73 +272,51 @@ export const SupervisorUpdateVacancy = () => {
 					<div className="w-[50%] mt-[52px] flex flex-col gap-[40px]">
 						<div className="flex gap-[60px]">
 							<div className="flex flex-col gap-[16px]">
-								<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-									Требуемый опыт работы:
-								</p>
+								<p className="font-content-font font-bold text-black text-[18px]/[21px]">Требуемый опыт работы:</p>
 								<p className="font-content-font font-normal text-black text-[18px]/[21px]">
 									{experience && experience}
 								</p>
 							</div>
 							<div className="flex flex-col gap-[16px]">
-								<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-									Тип занятости:
-								</p>
+								<p className="font-content-font font-bold text-black text-[18px]/[21px]">Тип занятости:</p>
 								<p className="font-content-font font-normal text-black text-[18px]/[21px]">
 									{employment && employment}
 								</p>
 							</div>
 							<div className="flex flex-col gap-[16px]">
-								<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-									Заработная плата:
-								</p>
-								<p className="font-content-font font-normal text-black text-[18px]/[21px]">
-									{salary && salary}
-								</p>
+								<p className="font-content-font font-bold text-black text-[18px]/[21px]">Заработная плата:</p>
+								<p className="font-content-font font-normal text-black text-[18px]/[21px]">{salary && salary}</p>
 							</div>
 						</div>
 						<div className="flex flex-col gap-[16px]">
-							<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-								Задачи:
-							</p>
+							<p className="font-content-font font-bold text-black text-[18px]/[21px]">Задачи:</p>
 							<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-pre-line">
 								{responsibilities && responsibilities}
 							</p>
 						</div>
 						<div className="flex flex-col gap-[16px]">
-							<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-								Требования:
-							</p>
+							<p className="font-content-font font-bold text-black text-[18px]/[21px]">Требования:</p>
 							<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-pre-line">
 								{skills && skills}
 							</p>
 						</div>
 						<div className="flex flex-col gap-[16px]">
-							<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-								Условия:
-							</p>
+							<p className="font-content-font font-bold text-black text-[18px]/[21px]">Условия:</p>
 							<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-pre-line">
 								{conditions && conditions}
 							</p>
 						</div>
 						<div className="flex gap-[40px]">
 							<div className="flex flex-col gap-[16px]">
-								<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-									Категория сотрудников
-								</p>
-								<p className="font-content-font font-normal text-black text-[18px]/[21px]">
-									{category && category}
-								</p>
+								<p className="font-content-font font-bold text-black text-[18px]/[21px]">Категория сотрудников</p>
+								<p className="font-content-font font-normal text-black text-[18px]/[21px]">{category && category}</p>
 							</div>
 							<div className="flex flex-col gap-[16px]">
 								<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-									{direction && direction !== 'false'
-										? 'Профобласть'
-										: subdivision && 'Подразделение'}
+									{direction && direction !== 'false' ? 'Профобласть' : subdivision && 'Подразделение'}
 								</p>
 								<p className="font-content-font font-normal text-black text-[18px]/[21px]">
-									{direction && direction !== 'false'
-										? direction
-										: subdivision && subdivision}
+									{direction && direction !== 'false' ? direction : subdivision && subdivision}
 								</p>
 							</div>
 						</div>
@@ -404,9 +347,9 @@ export const SupervisorUpdateVacancy = () => {
 												.then(() => {
 													setIsSuccessModalOpen(true)
 												})
-										} catch (error : any) {
-											let errorStr = error.status + " " + error.data.message;
-											openAlert({ type: 'error', text: errorStr });
+										} catch (error: any) {
+											let errorStr = error.status + ' ' + error.data.message
+											openAlert({ type: 'error', text: errorStr })
 										}
 									}}
 									type="primary"

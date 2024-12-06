@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import { DeleteSvg } from '../../../assets/svg/DeleteSvg'
 import { useDeleteRespondFromArchiveMutation } from '../../../store/api/serviceApi'
 import { setCurrentResponce } from '../../../store/reducers/CurrentResponceSlice'
-import {useAlert} from "../../../utils/AlertMessage";
+import { useAlert } from '../../../utils/AlertMessage'
 
 export const ArchiveItem = (props: {
 	id: number
@@ -41,7 +41,7 @@ export const ArchiveItem = (props: {
 					width={407}
 				>
 					<p className="font-content-font font-normal text-black text-[16px]/[20px] text-center">
-						Вы действительно хотите удалить резюме?
+						Вы действительно хотите удалить отклик?
 					</p>
 					<div className="mt-[40px] flex gap-[12px]">
 						<Button
@@ -63,10 +63,10 @@ export const ArchiveItem = (props: {
 											setModalOpen(false)
 											props.refetch()
 										})
-									openAlert({ type: 'success', text: 'Резюме успешно удалено' });
-								} catch (error : any) {
-									let errorStr = error.status + " " + error.data.message;
-									openAlert({ type: 'error', text: errorStr });
+									openAlert({ type: 'success', text: 'Отклик успешно удалён.' })
+								} catch (error: any) {
+									let errorStr = error.status + ' ' + error.data.message
+									openAlert({ type: 'error', text: errorStr })
 								}
 							}}
 						>
@@ -78,9 +78,7 @@ export const ArchiveItem = (props: {
 			<div className="w-full mb-[12px] flex items-center bg-white shadow-custom-shadow pl-[20px] pr-[55px] pt-[20px] pb-[20px]">
 				<p className="w-[30%]">{props.post}</p>
 				<p className="ml-[5%] w-[20%]">{props.name}</p>
-				<p className="ml-[5%] w-[8%]">
-					{props.respondDate.split('-').reverse().join('.')}
-				</p>
+				<p className="ml-[5%] w-[8%]">{props.respondDate.split('-').reverse().join('.')}</p>
 				<Button
 					onClick={() => {
 						dispatch(setCurrentResponce(props.id))

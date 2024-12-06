@@ -4,16 +4,12 @@ import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import { DeleteSvg } from '../../../../../assets/svg/DeleteSvg'
-import {
-	useLazyGetVacancyViewQuery,
-	useRequestDeleteVacancyMutation
-} from '../../../../../store/api/serviceApi'
+import { useLazyGetVacancyViewQuery, useRequestDeleteVacancyMutation } from '../../../../../store/api/serviceApi'
 import { setCurrentVacancy } from '../../../../../store/reducers/CurrentVacancySlice'
 import { VacancyItemType } from '../../../../../store/reducers/type'
-import {useAlert} from "../../../../../utils/AlertMessage";
+import { useAlert } from '../../../../../utils/AlertMessage'
 
 export default function VacancyItem(props: VacancyItemType) {
-
 	const { openAlert } = useAlert()
 
 	const [getVacancy, result] = useLazyGetVacancyViewQuery()
@@ -45,8 +41,8 @@ export default function VacancyItem(props: VacancyItemType) {
 					width={407}
 				>
 					<p className="font-content-font font-normal text-black text-[16px]/[20px] text-center">
-						Ваша заявка успешно отправлена. Вакансия будет удалена после
-						рассмотрения заявки кадрами.
+						Ваша заявка на удаление вакансии успешно отправлена. Вакансия будет удалена после рассмотрения заявки
+						кадрами.
 					</p>
 					<div className="mt-[40px] flex gap-[12px]">
 						<Button
@@ -102,10 +98,10 @@ export default function VacancyItem(props: VacancyItemType) {
 											setModalOpen(false)
 											setIsSuccessModalOpen(true)
 										})
-									setIsSuccessModalOpen(true);
-								} catch (error : any) {
-									let errorStr = error.status + " " + error.data.message;
-									openAlert({ type: 'error', text: errorStr });
+									setIsSuccessModalOpen(true)
+								} catch (error: any) {
+									let errorStr = error.status + ' ' + error.data.message
+									openAlert({ type: 'error', text: errorStr })
 								}
 							}}
 						>
@@ -115,9 +111,7 @@ export default function VacancyItem(props: VacancyItemType) {
 				</Modal>
 			</ConfigProvider>
 			<div className="flex w-full bg-white pl-[20px] pr-[55px] pt-[20px] pb-[20px] items-center shadow-custom-shadow">
-				<p className="w-[238px] shrink-0 font-content-font font-normal text-[16px]/[19px] text-black">
-					{props.title}
-				</p>
+				<p className="w-[238px] shrink-0 font-content-font font-normal text-[16px]/[19px] text-black">{props.title}</p>
 				<div className="ml-[30px] flex gap-[40px] justify-between">
 					<p className="w-[104px] font-content-font font-normal text-[16px]/[19px] text-black whitespace-nowrap">
 						{props.experience}

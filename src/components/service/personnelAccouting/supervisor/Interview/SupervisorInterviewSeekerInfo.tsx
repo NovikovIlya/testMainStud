@@ -1,23 +1,18 @@
-import {Button, ConfigProvider, Form, Modal, Select, Spin} from 'antd'
+import { LoadingOutlined } from '@ant-design/icons'
+import { Button, ConfigProvider, Form, Modal, Select, Spin } from 'antd'
 import React, { useState } from 'react'
 
 import { AvatartandardSvg } from '../../../../../assets/svg/AvatarStandardSvg'
 import { useAppSelector } from '../../../../../store'
-import {
-	useEmployeeSeekerRequestMutation,
-	useGetRespondFullInfoQuery
-} from '../../../../../store/api/serviceApi'
+import { useEmployeeSeekerRequestMutation, useGetRespondFullInfoQuery } from '../../../../../store/api/serviceApi'
+import { useAlert } from '../../../../../utils/AlertMessage'
 import { NocircleArrowIcon } from '../../../jobSeeker/NoCircleArrowIcon'
-import {LoadingOutlined} from "@ant-design/icons";
-import {useAlert} from "../../../../../utils/AlertMessage";
 
 export const SupervisorInterviewSeekerInfo = () => {
 	const respondId = useAppSelector(state => state.currentResponce)
 	const format = useAppSelector(state => state.currentInterviewFormat)
 	const time = useAppSelector(state => state.currentInterviewTime)
-	const timeFormated = useAppSelector(
-		state => state.currentInterviewTimeFormated
-	)
+	const timeFormated = useAppSelector(state => state.currentInterviewTimeFormated)
 
 	const { openAlert } = useAlert()
 
@@ -30,8 +25,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 	const [rejectSeeker] = useEmployeeSeekerRequestMutation()
 	const [aproveSeeker] = useEmployeeSeekerRequestMutation()
 
-	const [isEmploymentRequestSent, setIsEmploymentRequestSent] =
-		useState<boolean>(false)
+	const [isEmploymentRequestSent, setIsEmploymentRequestSent] = useState<boolean>(false)
 	const [isSeekerRejected, setIsSeekerRejected] = useState<boolean>(false)
 
 	interface ComponentProps {
@@ -45,12 +39,8 @@ export const SupervisorInterviewSeekerInfo = () => {
 			<>
 				<div className="w-full h-full flex items-center">
 					<div className="text-center ml-auto mr-auto">
-						<Spin
-							indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}
-						></Spin>
-						<p className="font-content-font font-normal text-black text-[18px]/[18px]">
-							Идёт загрузка...
-						</p>
+						<Spin indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}></Spin>
+						<p className="font-content-font font-normal text-black text-[18px]/[18px]">Идёт загрузка...</p>
 					</div>
 				</div>
 			</>
@@ -100,19 +90,15 @@ export const SupervisorInterviewSeekerInfo = () => {
 			datePublicString += 'Осталось ' + days + ' дн ' + hours + ' ч'
 		}
 		return (
-			<div className='flex flex-col gap-[30px]'>
+			<div className="flex flex-col gap-[30px]">
 				{format.format === 'OFFLINE' &&
 					!isInterviewStarted && ( // Офлайн собес, ожидание
 						<div className="flex flex-col justify-center">
-							<h3 className=" mb-[20px] font-content-font font-bold text-black text-[16px]/[19.2px]">
-								Собеседование
-							</h3>
+							<h3 className=" mb-[20px] font-content-font font-bold text-black text-[16px]/[19.2px]">Собеседование</h3>
 							<h4 className=" mb-[10px] font-content-font font-normal text-black text-[12px]/[14.4x] opacity-40">
 								Дата и время:
 							</h4>
-							<h4 className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-								{props.timeFormated}
-							</h4>
+							<h4 className="font-content-font font-normal text-black text-[16px]/[19.2px]">{props.timeFormated}</h4>
 						</div>
 					)}
 				{format.format === 'ONLINE' &&
@@ -127,12 +113,8 @@ export const SupervisorInterviewSeekerInfo = () => {
 							</button>
 						</div>
 					)}
-				{((format.format === 'ONLINE' &&
-					isInterviewStarted &&
-					is5MinBeforeInterviewStarted) ||
-					(format.format === 'ONLINE' &&
-						isInterviewStarted &&
-						!is30MinAfterInterviewEnded)) && ( // Онлайн собес, подкбчиться 5 | 30
+				{((format.format === 'ONLINE' && isInterviewStarted && is5MinBeforeInterviewStarted) ||
+					(format.format === 'ONLINE' && isInterviewStarted && !is30MinAfterInterviewEnded)) && ( // Онлайн собес, подкбчиться 5 | 30
 					<div className="flex flex-col justify-center">
 						<h4 className="mb-[20px] font-content-font font-normal text-black text-[16px]/[19.2px]">
 							Подключитесь к онлайн-конференции
@@ -162,10 +144,10 @@ export const SupervisorInterviewSeekerInfo = () => {
 											.then(() => {
 												setIsEmploymentRequestSent(true)
 											})
-										openAlert({ type: 'success', text: 'Приглашение успешно отправлено' });
-									} catch (error : any) {
-										let errorStr = error.status + " " + error.data.message;
-										openAlert({ type: 'error', text: errorStr });
+										openAlert({ type: 'success', text: 'Приглашение на работу успешно отправлено' })
+									} catch (error: any) {
+										let errorStr = error.status + ' ' + error.data.message
+										openAlert({ type: 'error', text: errorStr })
 									}
 								}}
 							>
@@ -258,11 +240,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 							</div>
 							<div className="flex flex-col gap-[8px]">
 								<p className="font-content-font font-normal text-black text-[24px]/[28.8px]">
-										{data?.userData?.lastname +
-										' ' +
-										data?.userData?.firstname +
-										' ' +
-										data?.userData?.middlename}
+									{data?.userData?.lastname + ' ' + data?.userData?.firstname + ' ' + data?.userData?.middlename}
 								</p>
 								<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
 									{data?.userData?.sex}, {data?.userData?.age} года
@@ -286,9 +264,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 									</div>
 								</div>
 								<div className="flex flex-col gap-[8px]">
-									<p className="font-content-font font-normal text-black text-[12px]/[14.4x] opacity-40">
-										Контакты:
-									</p>
+									<p className="font-content-font font-normal text-black text-[12px]/[14.4x] opacity-40">Контакты:</p>
 									<div className="flex gap-[24px]">
 										<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
 											{data?.userData?.phone}
@@ -333,19 +309,15 @@ export const SupervisorInterviewSeekerInfo = () => {
 													setIsSeekerRejected(true)
 												})
 											setIsRefuseModalOpen(false)
-											openAlert({ type: 'success', text: 'Отказ успешно отправлен' });
-										} catch (error : any) {
-											let errorStr = error.status + " " + error.data.message;
-											openAlert({ type: 'error', text: errorStr });
+											openAlert({ type: 'success', text: 'Причина отказа успешно отправлена' })
+										} catch (error: any) {
+											let errorStr = error.status + ' ' + error.data.message
+											openAlert({ type: 'error', text: errorStr })
 										}
 									}}
 								>
-									<h2 className="font-normal text-[18px]">
-										Отказ на должность
-									</h2>
-									<h3 className="mb-[40px] font-bold text-[18px]">
-										«{data?.vacancyName}»
-									</h3>
+									<h2 className="font-normal text-[18px]">Отказ на должность</h2>
+									<h3 className="mb-[40px] font-bold text-[18px]">«{data?.vacancyName}»</h3>
 									<Form.Item
 										name={'reason'}
 										label={
@@ -378,11 +350,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 								</Form>
 							</Modal>
 						</ConfigProvider>
-						<Component
-							time={time.time}
-							format={format.format}
-							timeFormated={timeFormated.timeFormated}
-						></Component>
+						<Component time={time.time} format={format.format} timeFormated={timeFormated.timeFormated}></Component>
 					</div>
 					<hr />
 					<div className="flex flex-col gap-[24px]">
@@ -395,49 +363,29 @@ export const SupervisorInterviewSeekerInfo = () => {
 					</div>
 					<hr />
 					<div className="flex flex-col gap-[24px]">
-						<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">
-							Опыт работы
-						</p>
+						<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">Опыт работы</p>
 						<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
 							{data?.respondData.portfolio.workExperiences.map(exp => (
 								<>
 									<div className="flex flex-col gap-[4px]">
 										<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-											{exp.beginWork.substring(0, 4)}-
-											{exp.endWork.substring(0, 4)}
+											{exp.beginWork.substring(0, 4)}-{exp.endWork.substring(0, 4)}
 										</p>
 										<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-											{parseInt(exp.endWork.substring(0, 4)) -
-												parseInt(exp.beginWork.substring(0, 4)) ===
-											0
+											{parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) === 0
 												? ''
-												: parseInt(exp.endWork.substring(0, 4)) -
-												  parseInt(exp.beginWork.substring(0, 4))}
-											{parseInt(exp.endWork.substring(0, 4)) -
-												parseInt(exp.beginWork.substring(0, 4)) ===
-												1 && ' год'}
-											{parseInt(exp.endWork.substring(0, 4)) -
-												parseInt(exp.beginWork.substring(0, 4)) >=
-												2 &&
-												parseInt(exp.endWork.substring(0, 4)) -
-													parseInt(exp.beginWork.substring(0, 4)) <=
-													4 &&
+												: parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4))}
+											{parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) === 1 && ' год'}
+											{parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) >= 2 &&
+												parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) <= 4 &&
 												' года'}
-											{parseInt(exp.endWork.substring(0, 4)) -
-												parseInt(exp.beginWork.substring(0, 4)) >
-												4 && ' лет'}
+											{parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) > 4 && ' лет'}
 										</p>
 									</div>
 									<div className="flex flex-col gap-[8px]">
-										<p className="font-content-font font-bold text-black text-[16px]/[19.2px]">
-											{exp.position}
-										</p>
-										<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-											{exp.workPlace}
-										</p>
-										<p className="font-content-font font-normal text-black text-[14px]/[16.8px]">
-											{exp.duties}
-										</p>
+										<p className="font-content-font font-bold text-black text-[16px]/[19.2px]">{exp.position}</p>
+										<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">{exp.workPlace}</p>
+										<p className="font-content-font font-normal text-black text-[14px]/[16.8px]">{exp.duties}</p>
 									</div>
 								</>
 							))}
@@ -445,19 +393,13 @@ export const SupervisorInterviewSeekerInfo = () => {
 					</div>
 					<hr />
 					<div className="flex flex-col gap-[24px]">
-						<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">
-							Образование
-						</p>
+						<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">Образование</p>
 						<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
 							{data?.educations.map(edu => (
 								<>
-									<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-										{edu.endYear}
-									</p>
+									<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">{edu.endYear}</p>
 									<div className="flex flex-col gap-[8px]">
-										<p className="font-content-font font-bold text-black text-[16px]/[19.2px]">
-											{edu.nameOfInstitute}
-										</p>
+										<p className="font-content-font font-bold text-black text-[16px]/[19.2px]">{edu.nameOfInstitute}</p>
 										<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
 											{edu.speciality === null ? '' : edu.speciality + ', '}
 											{edu.educationLevel}

@@ -15,10 +15,7 @@ import {
 } from '../../../store/api/serviceApi'
 import { openChat } from '../../../store/reducers/ChatRespondStatusSlice'
 import { setChatId } from '../../../store/reducers/chatIdSlice'
-import {
-	ChatMessageDateDisplayEnum,
-	ChatMessageType
-} from '../../../store/reducers/type'
+import { ChatMessageDateDisplayEnum, ChatMessageType } from '../../../store/reducers/type'
 import { AttachIcon } from '../jobSeeker/AttachIcon'
 
 import { ChatMessage } from './ChatMessage'
@@ -51,12 +48,10 @@ export const ChatPage = () => {
 	const chatPageRef = useRef<null | HTMLDivElement>(null)
 	const chatPageMessagesRef = useRef<Array<HTMLDivElement | null>>([])
 
-	const [isBottomOfChatVisible, setIsBottomOfChatVisible] =
-		useState<boolean>(true)
+	const [isBottomOfChatVisible, setIsBottomOfChatVisible] = useState<boolean>(true)
 	const [isTopOfChatVisible, setIsTopOfChatVisible] = useState<boolean>(false)
 	const [lastMessageId, setLastMessageId] = useState<number>(0)
-	const [initialLoadingFinished, setInitialLoadingFinished] =
-		useState<boolean>(false)
+	const [initialLoadingFinished, setInitialLoadingFinished] = useState<boolean>(false)
 
 	const [scrollPosition, setScrollPosition] = useState<number | undefined>(0)
 
@@ -76,15 +71,14 @@ export const ChatPage = () => {
 
 	const token = useAppSelector(state => state.auth.accessToken)
 
+	const [fileName, setFileName] = useState<string | undefined>('')
+
 	useEffect(() => {
 		setLastMessageId(0)
 	}, [chatIdState])
 
 	useEffect(() => {
-		chatPageMessagesRef.current = chatPageMessagesRef.current.slice(
-			0,
-			messages.length
-		)
+		chatPageMessagesRef.current = chatPageMessagesRef.current.slice(0, messages.length)
 	}, [messages])
 
 	useEffect(() => {
@@ -94,9 +88,7 @@ export const ChatPage = () => {
 		if (scrollPosition) {
 			if (chatPageRef.current) {
 				console.log(chatPageRef.current.scrollHeight - scrollPosition)
-				document
-					.querySelector('body')
-					?.scrollTo(0, chatPageRef.current.scrollHeight - scrollPosition)
+				document.querySelector('body')?.scrollTo(0, chatPageRef.current.scrollHeight - scrollPosition)
 				// chatPageRef.current.scrollTo(0, 500)
 				// chatPageRef.current.children[19].scrollIntoView()
 			}
@@ -146,9 +138,7 @@ export const ChatPage = () => {
 				}
 				msgBody.type === 'READ' &&
 					(msgBody.message.ids as number[]).map(id =>
-						setMessages(prev => [
-							...prev.map(msg => (msg.id === id ? { ...msg, read: true } : msg))
-						])
+						setMessages(prev => [...prev.map(msg => (msg.id === id ? { ...msg, read: true } : msg))])
 					)
 			})
 		})
@@ -282,17 +272,14 @@ export const ChatPage = () => {
 			for (let i = 0; i < data.files.length; i++) {
 				formData.append('files', data.files[i])
 			}
-			fetch(
-				`http://${emplBaseURL}employment-api/v1/chat/${chatIdState.chatId}/file`,
-				{
-					method: 'POST',
-					body: formData,
-					headers: {
-						Authorization: `Bearer ${token?.replaceAll('"', '')}`,
-						'X-User-Name': sessionId
-					}
+			fetch(`http://${emplBaseURL}employment-api/v1/chat/${chatIdState.chatId}/file`, {
+				method: 'POST',
+				body: formData,
+				headers: {
+					Authorization: `Bearer ${token?.replaceAll('"', '')}`,
+					'X-User-Name': sessionId
 				}
-			).then(res => {
+			}).then(res => {
 				res.json().then(resData => {
 					const typedData = resData as ChatMessageType
 					setMessages([typedData, ...messages])
@@ -316,6 +303,7 @@ export const ChatPage = () => {
 	useEffect(() => {
 		if (formState.isSubmitSuccessful) {
 			reset()
+			setFileName('')
 			console.log('Success')
 		}
 	}, [formState])
@@ -324,29 +312,19 @@ export const ChatPage = () => {
 
 	return (
 		<>
-			<div className="flex flex-col w-full">
-				<div
-					ref={chatPageRef}
-					className="w-full h-full flex flex-col pt-[60px] pr-[40px] pl-[40px] overflow-scroll"
-				>
-					<div
-						className="h-[1px]"
-						key={'verkhnyi_osobyi_kluch'}
-						ref={chatPageUpperRef}
-					/>
+			<div className="flex flex-col w-full relative">
+				<div ref={chatPageRef} className="w-full h-full flex flex-col pt-[60px] pr-[40px] pl-[40px] overflow-scroll">
+					<div className="h-[1px]" key={'verkhnyi_osobyi_kluch'} ref={chatPageUpperRef} />
 					{[...messages].reverse().map((msg, msgIndex, msgArray) => (
 						<>
-							{(msg.sendDate.substring(0, 10) !== msgDate.current ||
-								msgIndex === 0) &&
+							{(msg.sendDate.substring(0, 10) !== msgDate.current || msgIndex === 0) &&
 								((msgDate.current = msg.sendDate.substring(0, 10)),
 								console.log(msg.sendDate.substring(0, 10)),
 								(
 									<div className="self-center font-content-font font-normal text-black text-[14px]/[16.8px] opacity-60 mt-[60px] mb-[30px]">
 										{parseInt(msg.sendDate.substring(8, 10)) +
 											' ' +
-											ChatMessageDateDisplayEnum[
-												parseInt(msg.sendDate.substring(5, 7)) - 1
-											]}
+											ChatMessageDateDisplayEnum[parseInt(msg.sendDate.substring(5, 7)) - 1]}
 									</div>
 								))}
 							<ChatMessage
@@ -354,11 +332,7 @@ export const ChatPage = () => {
 								key={msg.id}
 								msgData={msg}
 								senderChange={
-									msgArray[msgIndex - 1]
-										? msgArray[msgIndex - 1].sender !== msg.sender
-											? true
-											: false
-										: false
+									msgArray[msgIndex - 1] ? (msgArray[msgIndex - 1].sender !== msg.sender ? true : false) : false
 								}
 							/>
 						</>
@@ -373,38 +347,38 @@ export const ChatPage = () => {
 					</div> */}
 					{ChatStatus.chatClosed && (
 						<div className="mt-auto py-[10px] text-center font-content-font font-normal text-[16px]/[16px] text-black text-opacity-40">
-							Вы сможете писать в чат после того, как руководитель пригласит вас
-							на собеседование
+							Вы сможете писать в чат после того, как руководитель пригласит вас на собеседование
 						</div>
 					)}
-					<div
-						className="h-[1px]"
-						key={'osobyi_kluch'}
-						ref={chatPageLowerRef}
-					/>
+					<div className="h-[1px]" key={'osobyi_kluch'} ref={chatPageLowerRef} />
 				</div>
-				<div className="sticky bottom-0 h-[80px] w-full bg-white">
+				<div className="sticky bottom-0 min-h-[80px] w-full bg-white">
 					<form
 						onSubmit={handleSubmit(handleMessage)}
-						className="w-full h-full flex py-[24px] pl-[40px] pr-[85px]"
+						className="w-full h-full flex items-center py-[24px] pl-[40px] pr-[85px]"
 					>
 						<Controller
 							name="text"
 							control={control}
 							render={({ field }) => (
-								<textarea
-									disabled={ChatStatus.chatClosed}
-									{...register('text')}
-									value={msgInputText}
-									onChange={e => {
-										setMsgInputText(e.target.value)
-									}}
-									className="w-full h-full font-content-font font-normal text-black text-[16px]/[16px] placeholder:opacity-50 resize-none border-none focus:outline-none pt-[8px] disabled:bg-white"
-									placeholder="Ввести сообщение"
-								></textarea>
+								<div className="flex flex-col w-full min-h-full">
+									<textarea
+										disabled={ChatStatus.chatClosed}
+										{...register('text')}
+										value={msgInputText}
+										onChange={e => {
+											setMsgInputText(e.target.value)
+										}}
+										className="w-full h-full font-content-font font-normal text-black text-[16px]/[16px] placeholder:opacity-50 resize-none border-none focus:outline-none pt-[8px] disabled:bg-white"
+										placeholder="Ввести сообщение"
+									></textarea>
+									<p className="w-[80%] whitespace-nowrap text-ellipsis overflow-auto font-content-font text-[14px]/[14px] font-normal text-black">
+										{fileName}
+									</p>
+								</div>
 							)}
 						/>
-						<div className="ml-auto flex gap-[8px]">
+						<div className="ml-auto flex items-center gap-[8px]">
 							<Controller
 								name="files"
 								control={control}
@@ -412,16 +386,17 @@ export const ChatPage = () => {
 									<>
 										<input
 											disabled={ChatStatus.chatClosed}
-											{...register('files')}
+											{...register('files', {
+												onChange(event) {
+													setFileName(event.target.files?.[0].name)
+												}
+											})}
 											id="files"
 											className="hidden"
 											type="file"
 											multiple={true}
 										></input>
-										<label
-											htmlFor="files"
-											className="self-center cursor-pointer"
-										>
+										<label htmlFor="files" className="self-center cursor-pointer">
 											<AttachIcon />
 										</label>
 									</>
@@ -429,7 +404,7 @@ export const ChatPage = () => {
 							/>
 							<Button
 								disabled={ChatStatus.chatClosed}
-								className="rounded-[54.5px] h-[32px] px-[24px]"
+								className="rounded-[54.5px] h-[32px] px-[24px] mb-[5px]"
 								type="primary"
 								htmlType="submit"
 							>

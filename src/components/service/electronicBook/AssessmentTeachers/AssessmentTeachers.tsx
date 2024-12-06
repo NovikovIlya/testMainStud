@@ -64,6 +64,8 @@ export const AssessmentTeachers = () => {
                     Выбрать преподавателя
                 </Typography.Text>
                 <Select
+                    showSearch
+                     optionFilterProp="label"
                     onChange={(value) => {
                         setIdTeacher(value)
                         setSendData(false)

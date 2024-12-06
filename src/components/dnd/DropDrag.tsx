@@ -35,14 +35,14 @@ const studentKeys = [
 	'VirtualAudience',
 	'DigitalDepartments',
 	'ManagementScientificProjects',
-	'Testing'
+	'Testing',
+	'Vacancies',
 ]
 
 const employeeKeys = [
 	'Practices', // Проверка isSuccessCheck будет выполнена отдельно
 	'practiceTeacher',
 	'Staff',
-	'Vacancies',
 	'News'
 ]
 

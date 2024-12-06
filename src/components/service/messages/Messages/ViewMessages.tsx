@@ -15,7 +15,7 @@ import { NewDialogModal } from './NewDialogModal'
 import { apiSlice } from '../../../../store/api/apiSlice'
 
 export const ViewMessage = () => {
-	
+	const user = useAppSelector(state => state.auth.user)
 	const [form] = Form.useForm();
 	const [dialogs, setDialogs] = useState<any>([]);
 	const {t,i18n} = useTranslation()
@@ -25,32 +25,68 @@ export const ViewMessage = () => {
 	const [page,setPage] = useState(0)
 	const {data:dataAllDialogs,isLoading,isError,isFetching} = useGetAllDialogsQuery({page,size:15})
 	const [sendMessage,{isLoading:isLoadingSend}] = useSendMessageChatMutation()
-	const [pageChat,setPageChat] = useState(0)
-	const {data:dataOneChat} = useGetOneChatQuery({id:activeDialog?.id,  page: pageChat,    size:15},{skip: !activeDialog?.id})
+	//////////////////////////////
+	const [pageChat,setPageChat] = useState(1)
+	const [isLast,setIslast] = useState(false)
+	const {data:dataOneChat,isFetching:isFetchingOneChat,isLoading:isLoadingChat} = useGetOneChatQuery({id:activeDialog,  page:  isLast ? 1 : pageChat,    size:50},{skip: !activeDialog,
+		pollingInterval: 5000,
+	})
+	const [chatArray,setChatArray] = useState<any>([])
 	const dispatch = useAppDispatch()
+	const [hideBtn,setHideBtn] = useState(false)
+	const [gotToBottom,setGotoBottom] = useState(0)
+	////// если false - то нет скрола вниз(при нажатии на "добавить еще" становится false)
+	const [flag,setFlag] = useState(true)
 
 
-	useEffect(()=>{
-		if(dataAllDialogs){
-			setDialogs((prevDialogs:any) =>[...prevDialogs, ...dataAllDialogs])
+	useEffect(() => {
+		if (dataAllDialogs) {
+		  setDialogs((prevDialogs:any) => {
+			
+			if (dataAllDialogs.length === prevDialogs.length) return prevDialogs;
+	  
+			// Создаем Set из ID существующих диалогов
+			// Set используется для быстрого поиска, так как операция проверки наличия элемента в Set происходит за O(1)
+			const existingDialogIds = new Set(
+			  prevDialogs.map((dialog:any) => dialog.id)
+			);
+	  
+			// Фильтруем новые диалоги, оставляя только те, которых еще нет в существующем массиве
+			// Проверяем каждый диалог из dataAllDialogs на наличие его ID в Set существующих диалогов
+			const uniqueNewDialogs = dataAllDialogs.filter(
+			  (dialog:any) => !existingDialogIds.has(dialog.id)
+			);
+	  
+			// Возвращаем объединенный массив: существующие диалоги + новые уникальные
+			return [...prevDialogs, ...uniqueNewDialogs];
+		  });
 		}
-	},[dataAllDialogs])
+	  }, [dataAllDialogs]);
 
+	useEffect(() => {
+		if (dataOneChat?.messages) {
+		  // Append new messages to existing ones
+		  setChatArray((prevMessages:any) => {
+			const newMessages = [...dataOneChat.messages];
+			const existingMessageIds = new Set(prevMessages.map((msg: any) => msg.id));
+			const uniqueNewMessages = newMessages.filter((msg: any) => !existingMessageIds.has(msg.id));
+			return [...prevMessages, ...uniqueNewMessages];
+		  });
+		}
+		if(flag)  setGotoBottom(p=>p+1)
+		// setGotoBottom(p=>p+1)
+	  }, [dataOneChat]);
 
   
 	const loadMoreData = () => {
 		if(isFetching || isLoading) return
 		setPage(p=>p+1)
-	  
-
 	};
   
 	const showModal = () => setIsModalOpen(true);
 	const handleCancel = () => {
-		
-		setIsModalOpen(false)}
-
-
+		setIsModalOpen(false)
+	}
 
 	const clickTextArea = ()=>{
 
@@ -58,14 +94,36 @@ export const ViewMessage = () => {
 	const refetch = ()=>{
 
 	}
-	const onFinish = (values: any) => {
-		console.log('Success:', values);
+	const onFinish = async(values: any) => {
+		const obj = {
+			message: form.getFieldValue('textArea'),
+			senderName: `${user.lastname} ${user.firstname} ${user.middlename}`,
+			chatId: activeDialog
+		}
+		console.log('obj',obj)
+		sendMessage(obj).unwrap()
+		.then(()=>{
+			//////////////////////////////////
+			/////////////// надо узнать последняя ли это страница
+			setIslast(true)
+			
+		})
+
+		setFlag(true)
+		form.resetFields()
 	  };
 
+	const loadMessages = ()=>{
+		if(isFetchingOneChat) return
+		setFlag(false)
 
+		setPageChat(p=>p-1)
+		setIslast(false)
+	}
 
   
 	return (
+		
 	  <div className="grid grid-cols-3 gap-2">
 		<div className="bg-white h-screen shadow-xl">
 		  <div className="mt-36 "></div>
@@ -102,12 +160,20 @@ export const ViewMessage = () => {
 			  scrollableTarget="scrollableDialogs"
 			  scrollThreshold="200px"
 			>
-			  <List
+			 {isLoading ? '': <List
+			  	locale={{ emptyText:null }} 
 				dataSource={dialogs}
 				renderItem={(item:any) => (
 				  <List.Item
 					key={item.id}
-					onClick={() => setActiveDialog(item.id)}
+					onClick={() => {
+						if(item.id===activeDialog) return
+						setHideBtn(false)
+						/////////////////////// чат максимальный
+						setChatArray([])
+						setPageChat(0)
+						setActiveDialog(item.id)
+					}}
 					className={`cursor-pointer rounded-xl !p-4 ${
 					  activeDialog === item.id ? '!bg-[#E9EFF8]' : ''
 					}`}
@@ -116,7 +182,7 @@ export const ViewMessage = () => {
 					}}
 				  >
 					<List.Item.Meta
-					  title={<span className="font-extrabold">{item.name}</span>}
+					  title={<span className="font-extrabold">{item.userName}</span>}
 					  description={item.lastMessage}
 					/>
 					<div className=''>
@@ -126,7 +192,7 @@ export const ViewMessage = () => {
 					</div>
 				  </List.Item>
 				)}
-			  />
+			  />}
 			</InfiniteScroll>
 		  </div>
 		</div>
@@ -136,16 +202,19 @@ export const ViewMessage = () => {
 			<div className="text-gray-500">Выберите диалог или создайте новый</div>
 		  ) : (
 			<>
+		
 			<div className="mt-36 p-4 col-span-2  w-full flex justify-center flex-wrap ">
-        {!true ? (
+        {!isLoadingChat ? (
+		
           <div className="w-full flex flex-wrap flex-col ">
-            <CommentNewTeacher files={[]} refetch={refetch} />
+            <CommentNewTeacher gotToBottom={gotToBottom} loadMessages={loadMessages} hideBtn={hideBtn} chatArray={chatArray} files={[]} refetch={refetch} />
             <Form form={form} className="flex w-full flex-wrap" onFinish={onFinish}>
               <div className="flex w-full mt-4">
                 <InputText clickTextArea={clickTextArea} />
               </div>
             </Form>
           </div>
+
         ) : (
           <>
             <Spin  />

@@ -41,9 +41,8 @@ export const ChatEmpDemp = () => {
 	// const [getGroupedResponds] = useLazyGetVacancyGroupedResponcesQuery()
 
 	const [blockPageAddition, setBlockPageAddition] = useState<boolean>(true)
-	const [isBottomOfChatPreviewsVisible, setIsBottomOfChatPreviewsVisible] =
-		useState<boolean>(true)
-	const chatPreviewsBottomRef = useRef<null | HTMLDivElement>(null)
+	const [isBottomOfChatPreviewsVisible, setIsBottomOfChatPreviewsVisible] = useState<boolean>(true)
+	const chatPreviewsBottomRef = useRef<null | HTMLLIElement>(null)
 
 	const [chats, setChats] = useState<
 		{
@@ -55,8 +54,7 @@ export const ChatEmpDemp = () => {
 		}[]
 	>([])
 
-	const [getChatPreviews, chatPreviewsQueryState] =
-		useLazyGetChatPreviewsQuery()
+	const [getChatPreviews, chatPreviewsQueryState] = useLazyGetChatPreviewsQuery()
 	const { data: vacancies = [] } = useGetAllVacanciesQuery()
 
 	useEffect(() => {
@@ -163,18 +161,12 @@ export const ChatEmpDemp = () => {
 		<>
 			{' '}
 			<div className="bg-[#F5F8FB] flex w-full">
-				{!pathname.includes(
-					'/services/personnelaccounting/chat/vacancyview'
-				) && (
+				{!pathname.includes('/services/personnelaccounting/chat/vacancyview') && (
 					<div className="shadowNav bg-white relative z-[5] mt-[60px] w-[461px]">
-						<div className="sticky top-[80px] h-full overflow-scroll">
+						<div className="sticky top-[80px]">
 							<div className="flex items-center px-[30px] pt-14 pb-[40px]">
-								<p className="font-content-font font-normal text-black text-[20px]/[20px] ">
-									Все сообщения
-								</p>
-								<ConfigProvider
-									theme={{ components: { Button: { textHoverBg: '#ffffff' } } }}
-								>
+								<p className="font-content-font font-normal text-black text-[20px]/[20px] ">Все сообщения</p>
+								<ConfigProvider theme={{ components: { Button: { textHoverBg: '#ffffff' } } }}>
 									<Button
 										type="text"
 										onClick={() => {
@@ -191,9 +183,7 @@ export const ChatEmpDemp = () => {
 								<>
 									<div className="px-[30px] pt-[20px] pb-[40px] flex flex-col gap-[20px] w-full">
 										<div className="flex flex-col gap-[8px]">
-											<p className="font-content-font font-normal text-[14px]/[14px] text-black opacity-80">
-												Вакансия
-											</p>
+											<p className="font-content-font font-normal text-[14px]/[14px] text-black opacity-80">Вакансия</p>
 											<Select
 												options={vacancies.map(vac => ({
 													value: vac.id,
@@ -293,35 +283,16 @@ export const ChatEmpDemp = () => {
 									</div>
 								</>
 							)}
-							{chatPreviewsQueryState.isFetching ||
-							chatPreviewsQueryState.isLoading ? (
-								<>
-									<div className="flex items-center">
-										<div className="text-center ml-auto mr-auto mb-[10%]">
-											<Spin
-												indicator={
-													<LoadingOutlined style={{ fontSize: 36 }} spin />
-												}
-											></Spin>
-											<p className="font-content-font font-normal text-black text-[18px]/[18px]">
-												Идёт загрузка...
-											</p>
-										</div>
-									</div>
-								</>
-							) : (
-								<ul className="flex flex-col">{handleList}</ul>
-							)}
-							<div className="h-[1px]" ref={chatPreviewsBottomRef}></div>
+
+							<ul className="h-[75vh] w-[461px] flex flex-col gap-4 overflow-auto">
+								{handleList}
+								<li className="h-[1px]" ref={chatPreviewsBottomRef}></li>
+							</ul>
 						</div>
 					</div>
 				)}
-				{pathname.match('services/personnelaccounting/chat/id/*') && (
-					<ChatPage />
-				)}
-				{pathname.includes(
-					'/services/personnelaccounting/chat/vacancyview'
-				) && <VacancyView type="CHAT" />}
+				{pathname.match('services/personnelaccounting/chat/id/*') && <ChatPage />}
+				{pathname.includes('/services/personnelaccounting/chat/vacancyview') && <VacancyView type="CHAT" />}
 			</div>
 		</>
 	)

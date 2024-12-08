@@ -21,38 +21,53 @@ import {
 } from '../../../store/reducers/FormReducers/AddressReducer'
 
 import { SkeletonPage } from './Skeleton'
+import { useLocalStorageState } from 'ahooks'
 
 export const Address = () => {
 	const { t, i18n } = useTranslation()
 	const dispatch = useDispatch()
 	const role = useAppSelector(state => state.auth.user?.roles[0].type)
-	const { data: countries, isLoading: isLoadingCountries } =
-		useGetCountriesQuery(i18n.language)
-	const {
-		data: address,
-		refetch,
-		isLoading: isLoadingAddress
-	} = useGetAddressQuery()
+	const { data: countries, isLoading: isLoadingCountries } =useGetCountriesQuery(i18n.language)
+	const {data: address,refetch,isLoading: isLoadingAddress,isSuccess} = useGetAddressQuery()
+	const [acceptedData,setAcceptedData] = useLocalStorageState<any>('acceptedData',{defaultValue:null})
+    const [typeAcc, _] = useLocalStorageState<any>('typeAcc',{  defaultValue: 'STUD',});
 	const [postAddress] = usePostAddressMutation()
 	const [isEdit, setIsEdit] = useState(false)
-	const [isResident, setIsResident] = useState(
-		address?.residenceAddress ? 0 : 1
-	)
-	const registrationAddressData = useAppSelector(
-		state => state.Address.registrationAddress
-	)
-	const residenceAddressData = useAppSelector(
-		state => state.Address.residenceAddress
-	)
-	const isStudent = role === 'STUD'
+	const [isResident, setIsResident] = useState(0)
+	const registrationAddress = useAppSelector(state => state.Address.registrationAddress)
+	const residenceAddress = useAppSelector(state => state.Address.residenceAddress)
+	console.log('isResident',isResident)
+	const isChanged = typeAcc === 'OTHER' ||  (typeAcc === 'ABITUR' && !acceptedData[0])
+	
+	useEffect(()=>{
+		if(isSuccess){
+			const isEqual = JSON.stringify(address?.residenceAddress) === JSON.stringify(address?.registrationAddress)
+			if(isEqual){
+				setIsResident(0)
+				return
+			}
+			const isNullresidenceAddress = Object.values(address?.residenceAddress).every((item:any)=>!item)
+			setIsResident(isNullresidenceAddress ? 0 : 1)
+
+		}
+	},[isSuccess])
+
 	useEffect(() => {
 		address && dispatch(allData(address))
 	}, [refetch, address, dispatch])
+
 	const onSubmit = () => {
-		postAddress({ residenceAddressData, registrationAddressData, isResident })
+		postAddress(
+			{ 
+				residenceAddress: isResident  ? residenceAddress : null, 
+				registrationAddress, 
+				isResident 
+			})
 		setIsEdit(false)
 	}
+
 	if (isLoadingCountries || isLoadingAddress) return <SkeletonPage />
+
 	return (
 		<div className="m-14 radio w-full max-w-2xl">
 			<Space.Compact block direction="vertical" className="gap-5">
@@ -79,15 +94,16 @@ export const Address = () => {
 						<div className="bg-white p-2 h-10 rounded-md">
 							<Typography.Text>
 								{countries?.find(
-									item => item.id === registrationAddressData.countryId
+									item => item.id === registrationAddress.countryId
 								)?.shortName || '-'}
 							</Typography.Text>
 						</div>
 					) : (
 						<Select
+							
 							size="large"
 							className="w-full  rounded-lg"
-							value={registrationAddressData.countryId}
+							value={registrationAddress.countryId}
 							onChange={e =>
 								dispatch(country({ target: 'registrationAddress', country: e }))
 							}
@@ -108,14 +124,15 @@ export const Address = () => {
 					{!isEdit ? (
 						<div className="bg-white p-2 h-10 rounded-md">
 							<Typography.Text>
-								{registrationAddressData.city || '-'}
+								{registrationAddress.city || '-'}
 							</Typography.Text>
 						</div>
 					) : (
 						<Input
+							required
 							size="large"
 							maxLength={200}
-							value={registrationAddressData.city}
+							value={registrationAddress.city}
 							onChange={e =>
 								dispatch(
 									city({ target: 'registrationAddress', city: e.target.value })
@@ -130,14 +147,15 @@ export const Address = () => {
 					{!isEdit ? (
 						<div className="bg-white p-2 h-10 rounded-md">
 							<Typography.Text>
-								{registrationAddressData.street || '-'}
+								{registrationAddress.street || '-'}
 							</Typography.Text>
 						</div>
 					) : (
 						<Input
+						required
 							maxLength={200}
 							size="large"
-							value={registrationAddressData.street}
+							value={registrationAddress.street}
 							onChange={e =>
 								dispatch(
 									street({
@@ -155,14 +173,15 @@ export const Address = () => {
 					{!isEdit ? (
 						<div className="bg-white p-2 h-10 rounded-md">
 							<Typography.Text>
-								{registrationAddressData.house || '-'}
+								{registrationAddress.house || '-'}
 							</Typography.Text>
 						</div>
 					) : (
 						<Input
+						required
 							maxLength={5}
 							size="large"
-							value={registrationAddressData.house}
+							value={registrationAddress.house}
 							onChange={e =>
 								dispatch(
 									house({
@@ -180,11 +199,12 @@ export const Address = () => {
 					{!isEdit ? (
 						<div className="bg-white p-2 h-10 rounded-md">
 							<Typography.Text>
-								{registrationAddressData.apartment || '-'}
+								{registrationAddress.apartment || '-'}
 							</Typography.Text>
 						</div>
 					) : (
 						<Input
+						required
 							maxLength={5}
 							size="large"
 							onChange={e =>
@@ -195,7 +215,7 @@ export const Address = () => {
 									})
 								)
 							}
-							value={registrationAddressData.apartment}
+							value={registrationAddress.apartment}
 						/>
 					)}
 				</Space>
@@ -205,13 +225,14 @@ export const Address = () => {
 					{!isEdit ? (
 						<div className="bg-white p-2 h-10 rounded-md">
 							<Typography.Text>
-								{registrationAddressData.index || '-'}
+								{registrationAddress.index || '-'}
 							</Typography.Text>
 						</div>
 					) : (
 						<Input
+						required
 							size="large"
-							value={registrationAddressData.index}
+							value={registrationAddress.index}
 							onChange={e =>
 								dispatch(
 									index({
@@ -246,6 +267,7 @@ export const Address = () => {
 						</Radio.Group>
 					)}
 				</Space>
+
 				<div className={clsx(!isResident && 'hidden', 'w-full max-w-2xl')}>
 					<Space.Compact direction="vertical" block className="gap-5">
 						<Typography.Text
@@ -253,6 +275,7 @@ export const Address = () => {
 							ellipsis
 						>
 							{t('AddressStay')}
+							<div className='text-red-500'>Чтобы данные сохранились, заполните форму ниже</div>
 						</Typography.Text>
 						<Space direction="vertical" size={'small'}>
 							<Typography.Text>{t('Country')}</Typography.Text>
@@ -260,15 +283,16 @@ export const Address = () => {
 								<div className="bg-white p-2 h-10 rounded-md">
 									<Typography.Text>
 										{countries?.find(
-											item => item.id === residenceAddressData.countryId
+											item => item.id === residenceAddress.countryId
 										)?.shortName || '-'}
 									</Typography.Text>
 								</div>
 							) : (
 								<Select
+								
 									size="large"
 									className="w-full rounded-lg"
-									value={residenceAddressData.countryId}
+									value={residenceAddress.countryId}
 									onChange={e =>
 										dispatch(
 											country({
@@ -294,14 +318,15 @@ export const Address = () => {
 							{!isEdit ? (
 								<div className="bg-white p-2 h-10 rounded-md">
 									<Typography.Text>
-										{residenceAddressData.city || '-'}
+										{residenceAddress.city || '-'}
 									</Typography.Text>
 								</div>
 							) : (
 								<Input
+								required
 									maxLength={200}
 									size="large"
-									value={residenceAddressData.city}
+									value={residenceAddress.city}
 									onChange={e =>
 										dispatch(
 											city({ target: 'residenceAddress', city: e.target.value })
@@ -315,14 +340,15 @@ export const Address = () => {
 							{!isEdit ? (
 								<div className="bg-white p-2 h-10 rounded-md">
 									<Typography.Text>
-										{residenceAddressData.street || '-'}
+										{residenceAddress.street || '-'}
 									</Typography.Text>
 								</div>
 							) : (
 								<Input
+								required
 									maxLength={200}
 									size="large"
-									value={residenceAddressData.street}
+									value={residenceAddress.street}
 									onChange={e =>
 										dispatch(
 											street({
@@ -339,14 +365,15 @@ export const Address = () => {
 							{!isEdit ? (
 								<div className="bg-white p-2 h-10 rounded-md">
 									<Typography.Text>
-										{residenceAddressData.house || '-'}
+										{residenceAddress.house || '-'}
 									</Typography.Text>
 								</div>
 							) : (
 								<Input
+								required
 									size="large"
 									maxLength={5}
-									value={residenceAddressData.house}
+									value={residenceAddress.house}
 									onChange={e =>
 										dispatch(
 											house({
@@ -364,14 +391,15 @@ export const Address = () => {
 							{!isEdit ? (
 								<div className="bg-white p-2 h-10 rounded-md">
 									<Typography.Text>
-										{residenceAddressData.apartment || '-'}
+										{residenceAddress.apartment || '-'}
 									</Typography.Text>
 								</div>
 							) : (
 								<Input
+								required
 									maxLength={5}
 									size="large"
-									value={residenceAddressData.apartment}
+									value={residenceAddress.apartment}
 									onChange={e =>
 										dispatch(
 											apartment({
@@ -389,14 +417,15 @@ export const Address = () => {
 							{!isEdit ? (
 								<div className="bg-white p-2 h-10 rounded-md">
 									<Typography.Text>
-										{residenceAddressData.index || '-'}
+										{residenceAddress.index || '-'}
 									</Typography.Text>
 								</div>
 							) : (
 								<Input
+								required
 									size="large"
 									maxLength={6}
-									value={residenceAddressData.index}
+									value={residenceAddress.index}
 									onChange={e =>
 										dispatch(
 											index({
@@ -413,7 +442,7 @@ export const Address = () => {
 				<Space
 					direction="vertical"
 					size={'small'}
-					className={clsx('mt-4', isStudent && 'hidden')}
+					className={clsx('mt-4', !isChanged && 'hidden')}
 				>
 					{!isEdit ? (
 						<Button
@@ -429,7 +458,7 @@ export const Address = () => {
 							className="border-solid border-bluekfu border-[1px] text-bluekfu !rounded-md"
 							onClick={onSubmit}
 						>
-							{t('save')}
+						 Сохранить
 						</Button>
 					)}
 				</Space>

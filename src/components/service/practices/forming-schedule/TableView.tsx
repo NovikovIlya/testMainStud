@@ -142,7 +142,7 @@ export const TableView = () => {
         >
             <Table
                 rowSelection={{type: "checkbox",}}
-                columns={columnsTableSchedule}
+                columns={columns}
                 pagination={false}
                 size={'middle'}
                 dataSource={dataTable}

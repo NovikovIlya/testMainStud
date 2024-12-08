@@ -30,10 +30,37 @@ export const practical = apiSlice.injectEndpoints({
             // @ts-ignore
             invalidatesTags: ['Practise']
         }),
+        getAllPracticesFinal: builder.query<any, void>({
+            query: () => ({
+                url: `services/api-teacher-practices/final-check/practices`,
+                method: 'GET',
+            })
+        }),
+        getAllStudentsFinal: builder.query<any, any>({
+            query: (id) => ({
+                url: `services/api-teacher-practices/final-check/students?studentId=${id}`,
+                method: 'GET',
+            })
+        }),
+        getAttachmentsFinal: builder.query<any, any>({
+            query: ({studentId ,documentType }) => ({
+                url: `services/api-teacher-practices/chat/attachment?studentId=${studentId}&documentType=${documentType}`,
+                method: 'GET',
+                responseHandler: async (response) => {
+                    const blob = await response.blob();
+                    return window.URL.createObjectURL(blob); 
+                },
+                keepUnusedDataFor: 0,
+            })
+        }),
+        
     })
 })
 export const {
     useGetCafDepartmentsQuery,
     useDeletePractiseMutation,
-    useDeletePractiseSeveralMutation
+    useDeletePractiseSeveralMutation,
+    useGetAllPracticesFinalQuery,
+    useGetAllStudentsFinalQuery,
+    useGetAttachmentsFinalQuery
 } = practical

@@ -1,16 +1,4 @@
-import {
-	Button,
-	Checkbox,
-	ConfigProvider,
-	DatePicker,
-	Form,
-	Input,
-	Modal,
-	Radio,
-	Select,
-	Tag,
-	Upload
-} from 'antd'
+import { Button, Checkbox, ConfigProvider, DatePicker, Form, Input, Modal, Radio, Select, Tag, Upload } from 'antd'
 import dayjs from 'dayjs'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -23,10 +11,7 @@ import { DeleteSvg } from '../../../assets/svg/DeleteSvg'
 import { EditSvg } from '../../../assets/svg/EditSvg'
 import { useAppSelector } from '../../../store'
 import { usePostVacancyRespondMutation } from '../../../store/api/serviceApi'
-import {
-	useGetCountriesQuery,
-	useGetEducationLevelQuery
-} from '../../../store/api/utilsApi'
+import { useGetCountriesQuery, useGetEducationLevelQuery } from '../../../store/api/utilsApi'
 import { allData } from '../../../store/reducers/SeekerFormReducers/AboutMeReducer'
 import {
 	addExperience,
@@ -58,33 +43,24 @@ import { CheckedIcon } from './CheckedIcon'
 
 export const ResponseForm = () => {
 	const { t, i18n } = useTranslation()
-	const { data: countries, isLoading: isLoadingCountry } = useGetCountriesQuery(
-		i18n.language
-	)
+	const { data: countries, isLoading: isLoadingCountry } = useGetCountriesQuery(i18n.language)
 	const { data: levels } = useGetEducationLevelQuery(i18n.language)
 	const [isFormOpen, setIsFormOpen] = useState(false)
 	const dispatch = useDispatch()
 
 	const aboutMeData = useAppSelector(state => state.seekerAboutMe)
 	const { currentVacancy } = useAppSelector(state => state.currentVacancy)
-	const {
-		aboutMeCompleted,
-		skillsCompleted,
-		educationCompleted,
-		experienceCompleted
-	} = useAppSelector(state => state.formCompletion)
+	const { aboutMeCompleted, skillsCompleted, educationCompleted, experienceCompleted } = useAppSelector(
+		state => state.formCompletion
+	)
 	const skillsData = useAppSelector(state => state.skills)
 	const educationData = useAppSelector(state => state.RespondEducation)
 	const experienceData = useAppSelector(state => state.Experience)
 
 	const { openAlert } = useAlert()
 
-	const [currentFormskills, setcurrentFormSkills] = useState<string[]>(
-		skillsData.skills
-	)
-	const [haveNoExprience, setHaveNoExperience] = useState(
-		experienceData.noExperienceFlag
-	)
+	const [currentFormskills, setcurrentFormSkills] = useState<string[]>(skillsData.skills)
+	const [haveNoExprience, setHaveNoExperience] = useState(experienceData.noExperienceFlag)
 	const [skillInputValue, setSkillInputValue] = useState<string>('')
 	const [coverLetter, setCoverLetter] = useState('')
 	const date = new Date()
@@ -93,9 +69,7 @@ export const ResponseForm = () => {
 	const navigate = useNavigate()
 	const [getVacancy, result] = usePostVacancyRespondMutation()
 
-	const [experienceToEdit, setExperienceToEdit] = useState<
-		experienceItemType | undefined
-	>({
+	const [experienceToEdit, setExperienceToEdit] = useState<experienceItemType | undefined>({
 		id: '',
 		experience: {
 			workplace: '',
@@ -106,9 +80,7 @@ export const ResponseForm = () => {
 		}
 	})
 
-	const [educationToEdit, setEducationToEdit] = useState<
-		educationResponceItemType | undefined
-	>({
+	const [educationToEdit, setEducationToEdit] = useState<educationResponceItemType | undefined>({
 		id: '',
 		education: {
 			nameofInstitute: '',
@@ -160,9 +132,7 @@ export const ResponseForm = () => {
 					}}
 				>
 					<div className="text-center">
-						<p className="font-content-font font-normal text-black text-[16px]/[20px] mb-[40px]">
-							{resultModalText}
-						</p>
+						<p className="font-content-font font-normal text-black text-[16px]/[20px] mb-[40px]">{resultModalText}</p>
 						<Button
 							type="primary"
 							className="w-full rounded-[55.5px]"
@@ -197,13 +167,9 @@ export const ResponseForm = () => {
 						navigate('/services/jobseeker/vacancyview')
 					}}
 				>
-					{pathname.includes(
-						'/services/jobseeker/vacancyview/respond/main'
-					) && (
+					{pathname.includes('/services/jobseeker/vacancyview/respond/main') && (
 						<>
-							<p className="font-content-font text-black text-[18px]/[21.6px] font-normal">
-								Откликнуться на вакансию
-							</p>
+							<p className="font-content-font text-black text-[18px]/[21.6px] font-normal">Откликнуться на вакансию</p>
 							<p className="font-content-font text-black text-[18px]/[21.6px] font-bold">
 								{currentVacancy?.title.rendered}
 							</p>
@@ -224,34 +190,21 @@ export const ResponseForm = () => {
 								</div>
 								<div
 									onClick={() => {
-										navigate(
-											'/services/jobseeker/vacancyview/respond/education/main'
-										)
+										navigate('/services/jobseeker/vacancyview/respond/education/main')
 									}}
 									className="h-[43px] pl-[16px] pr-[16px] flex justify-between items-center border-[1px] border-dashed border-blue1f5 rounded-[5px] cursor-pointer"
 								>
-									<p className="font-content-font text-black text-[16px]/[19.2px] font-bold select-none">
-										Образование
-									</p>
-									{educationData.educations.length !== 0 ? (
-										<CheckedIcon />
-									) : (
-										<EditSvg />
-									)}
+									<p className="font-content-font text-black text-[16px]/[19.2px] font-bold select-none">Образование</p>
+									{educationData.educations.length !== 0 ? <CheckedIcon /> : <EditSvg />}
 								</div>
 								<div
 									onClick={() => {
-										navigate(
-											'/services/jobseeker/vacancyview/respond/experience/main'
-										)
+										navigate('/services/jobseeker/vacancyview/respond/experience/main')
 									}}
 									className="h-[43px] pl-[16px] pr-[16px] flex justify-between items-center border-[1px] border-dashed border-blue1f5 rounded-[5px] cursor-pointer"
 								>
-									<p className="font-content-font text-black text-[16px]/[19.2px] font-bold select-none">
-										Опыт работы
-									</p>
-									{experienceData.noExperienceFlag ||
-									experienceData.experiences.length !== 0 ? (
+									<p className="font-content-font text-black text-[16px]/[19.2px] font-bold select-none">Опыт работы</p>
+									{experienceData.noExperienceFlag || experienceData.experiences.length !== 0 ? (
 										<CheckedIcon />
 									) : (
 										<EditSvg />
@@ -274,30 +227,19 @@ export const ResponseForm = () => {
 									onClick={
 										!aboutMeCompleted
 											? () => {
-													navigate(
-														'/services/jobseeker/vacancyview/respond/aboutme'
-													)
+													navigate('/services/jobseeker/vacancyview/respond/aboutme')
 											  }
 											: educationData.educations.length === 0
 											? () => {
-													navigate(
-														'services/jobseeker/vacancyview/respond/education/main'
-													)
+													navigate('services/jobseeker/vacancyview/respond/education/main')
 											  }
-											: !(
-													experienceData.noExperienceFlag ||
-													experienceData.experiences.length !== 0
-											  )
+											: !(experienceData.noExperienceFlag || experienceData.experiences.length !== 0)
 											? () => {
-													navigate(
-														'services/jobseeker/vacancyview/respond/experience/main'
-													)
+													navigate('services/jobseeker/vacancyview/respond/experience/main')
 											  }
 											: !skillsCompleted
 											? () => {
-													navigate(
-														'services/jobseeker/vacancyview/respond/skills'
-													)
+													navigate('services/jobseeker/vacancyview/respond/skills')
 											  }
 											: () => {
 													// currentVacancy !== null &&
@@ -353,16 +295,13 @@ export const ResponseForm = () => {
 													// 		.then(() => {
 													// 			!result.isSuccess && setIsSuccessModalOpen(true)
 													// 		})
-													navigate(
-														'/services/jobseeker/vacancyview/respond/coverletter'
-													)
+													navigate('/services/jobseeker/vacancyview/respond/coverletter')
 											  }
 									}
 								>
 									{aboutMeCompleted &&
 									educationData.educations.length !== 0 &&
-									(experienceData.noExperienceFlag ||
-										experienceData.experiences.length !== 0) &&
+									(experienceData.noExperienceFlag || experienceData.experiences.length !== 0) &&
 									skillsCompleted
 										? 'Откликнуться'
 										: 'Дальше'}
@@ -370,17 +309,11 @@ export const ResponseForm = () => {
 							</div>
 						</>
 					)}
-					{pathname.includes(
-						'/services/jobseeker/vacancyview/respond/coverletter'
-					) && (
+					{pathname.includes('/services/jobseeker/vacancyview/respond/coverletter') && (
 						<>
-							<p className="mb-[36px] font-content-font text-black text-[18px]/[18px] font-normal">
-								Откликнуться
-							</p>
+							<p className="mb-[36px] font-content-font text-black text-[18px]/[18px] font-normal">Откликнуться</p>
 							<div className="mb-[20px] rounded-[8px] bg-[#E5EBFB] py-[12px] px-[20px] relative">
-								<p className="font-content-font text-black text-[16px]/[19.2px] font-normal opacity-40">
-									Вакансия
-								</p>
+								<p className="font-content-font text-black text-[16px]/[19.2px] font-normal opacity-40">Вакансия</p>
 								<p className="font-content-font text-black text-[16px]/[19.2px] font-normal w-[90%]">
 									{currentVacancy?.title.rendered}
 								</p>
@@ -418,44 +351,27 @@ export const ResponseForm = () => {
 												lastname: aboutMeData.surName,
 												firstname: aboutMeData.name,
 												patronymic: aboutMeData.patronymic,
-												birthday: aboutMeData.birthDay
-													.split('.')
-													.reverse()
-													.join('-'),
-												countryId: countries?.find(
-													cou => cou.id === aboutMeData.countryId
-												)?.id!,
+												birthday: aboutMeData.birthDay.split('.').reverse().join('-'),
+												countryId: countries?.find(cou => cou.id === aboutMeData.countryId)?.id!,
 												phone: aboutMeData.phone,
 												email: aboutMeData.email
 											},
 											educations: educationData.educations.map(edu => ({
 												institution: edu.education.nameofInstitute,
 												endYear: parseInt(edu.education.graduateYear),
-												country: countries?.find(
-													cou => cou.id === edu.education.countryId
-												)?.shortName!,
-												educationLevel: levels?.find(
-													educ => educ.id === edu.education.educationLevelId
-												)?.name!,
+												country: countries?.find(cou => cou.id === edu.education.countryId)?.shortName!,
+												educationLevel: levels?.find(educ => educ.id === edu.education.educationLevelId)?.name!,
 												speciality: edu.education.specialization
 											})),
 											portfolio: {
 												url: experienceData.portfolio,
-												workExperiences: experienceData.experiences.map(
-													exp => ({
-														workPlace: exp.experience.workplace,
-														beginWork: exp.experience.beginWork
-															.split('.')
-															.reverse()
-															.join('-'),
-														endWork: exp.experience.endWork
-															.split('.')
-															.reverse()
-															.join('-'),
-														position: exp.experience.seat,
-														duties: exp.experience.duties
-													})
-												)
+												workExperiences: experienceData.experiences.map(exp => ({
+													workPlace: exp.experience.workplace,
+													beginWork: exp.experience.beginWork.split('.').reverse().join('-'),
+													endWork: exp.experience.endWork.split('.').reverse().join('-'),
+													position: exp.experience.seat,
+													duties: exp.experience.duties
+												}))
 											},
 											skills: {
 												keySkills: skillsData.skills,
@@ -464,9 +380,7 @@ export const ResponseForm = () => {
 										})
 											.unwrap()
 											.then(() => {
-												setResultModalText(
-													'Спасибо, ваш отклик успешно отправлен'
-												)
+												setResultModalText('Спасибо, ваш отклик успешно отправлен.')
 												setIsFormOpen(false)
 												setIsSuccessModalOpen(true)
 											})
@@ -481,9 +395,7 @@ export const ResponseForm = () => {
 							</Button>
 						</>
 					)}
-					{pathname.includes(
-						'/services/jobseeker/vacancyview/respond/aboutme'
-					) && (
+					{pathname.includes('/services/jobseeker/vacancyview/respond/aboutme') && (
 						<Form
 							layout="vertical"
 							requiredMark={false}
@@ -492,12 +404,7 @@ export const ResponseForm = () => {
 								name: aboutMeData.name,
 								surname: aboutMeData.surName,
 								patronymic: aboutMeData.patronymic,
-								birthDay: aboutMeData.birthDay
-									? dayjs(
-											aboutMeData.birthDay.split('.').join('-'),
-											'DD.MM.YYYY'
-									  )
-									: null,
+								birthDay: aboutMeData.birthDay ? dayjs(aboutMeData.birthDay.split('.').join('-'), 'DD.MM.YYYY') : null,
 								country: aboutMeData.countryId,
 								phoneNumber: aboutMeData.phone,
 								email: aboutMeData.email
@@ -514,9 +421,7 @@ export const ResponseForm = () => {
 								)
 								dispatch(completeAboutMe())
 								console.log(values.birthDay)
-								console.log(
-									values.birthDay.$d.toLocaleDateString().split('.').join('-')
-								)
+								console.log(values.birthDay.$d.toLocaleDateString().split('.').join('-'))
 								navigate('/services/jobseeker/vacancyview/respond/main')
 							}}
 						>
@@ -535,11 +440,7 @@ export const ResponseForm = () => {
 							</div>
 							<Form.Item
 								name={'gender'}
-								label={
-									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
-										Пол
-									</label>
-								}
+								label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Пол</label>}
 								rules={[{ required: true, message: 'Не выбран пол' }]}
 							>
 								<Radio.Group
@@ -552,14 +453,8 @@ export const ResponseForm = () => {
 							</Form.Item>
 							<Form.Item
 								name={'surname'}
-								label={
-									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
-										Фамилия
-									</label>
-								}
-								rules={[
-									{ required: true, message: 'Поле фамилии не заполнено' }
-								]}
+								label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Фамилия</label>}
+								rules={[{ required: true, message: 'Поле фамилии не заполнено' }]}
 							>
 								<Input
 									value={aboutMeData.surName}
@@ -570,11 +465,7 @@ export const ResponseForm = () => {
 							</Form.Item>
 							<Form.Item
 								name={'name'}
-								label={
-									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
-										Имя
-									</label>
-								}
+								label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Имя</label>}
 								rules={[{ required: true, message: 'Поле имени не заполнено' }]}
 							>
 								<Input
@@ -586,14 +477,8 @@ export const ResponseForm = () => {
 							</Form.Item>
 							<Form.Item
 								name={'patronymic'}
-								label={
-									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
-										Отчество
-									</label>
-								}
-								rules={[
-									{ required: true, message: 'Поле отчества не заполнено' }
-								]}
+								label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Отчество</label>}
+								rules={[{ required: true, message: 'Поле отчества не заполнено' }]}
 							>
 								<Input
 									value={aboutMeData.patronymic}
@@ -605,13 +490,9 @@ export const ResponseForm = () => {
 							<Form.Item
 								name={'birthDay'}
 								label={
-									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
-										Дата рождения
-									</label>
+									<label className="text-black text-[18px]/[18px] font-content-font font-normal">Дата рождения</label>
 								}
-								rules={[
-									{ required: true, message: 'Не введена дата рождения' }
-								]}
+								rules={[{ required: true, message: 'Не введена дата рождения' }]}
 							>
 								<DatePicker
 									format={'DD-MM-YYYY'}
@@ -635,6 +516,8 @@ export const ResponseForm = () => {
 								<Select
 									className="w-full rounded-lg"
 									value={aboutMeData.countryId}
+									showSearch
+									optionFilterProp="label"
 									// onChange={e => dispatch(country(e))}
 									options={
 										countries === undefined
@@ -648,11 +531,7 @@ export const ResponseForm = () => {
 							</Form.Item>
 							<Form.Item
 								name={'phoneNumber'}
-								label={
-									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
-										Телефон
-									</label>
-								}
+								label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Телефон</label>}
 								rules={[
 									{
 										required: true,
@@ -695,9 +574,7 @@ export const ResponseForm = () => {
 							</div>
 						</Form>
 					)}
-					{pathname.includes(
-						'/services/jobseeker/vacancyview/respond/education/main'
-					) && (
+					{pathname.includes('/services/jobseeker/vacancyview/respond/education/main') && (
 						<Form layout="vertical" requiredMark={false}>
 							<div className="flex items-center mb-[38px]">
 								<button
@@ -724,11 +601,7 @@ export const ResponseForm = () => {
 											</p>
 											<p className="font-content-font text-black text-[16px]/[16px] font-normal select-none">
 												{edu.education.specialization},{' '}
-												{
-													levels?.find(
-														educ => educ.id === edu.education.educationLevelId
-													)?.name
-												}
+												{levels?.find(educ => educ.id === edu.education.educationLevelId)?.name}
 											</p>
 											<p className="font-content-font text-black text-[14px]/[14px] font-normal select-none opacity-60">
 												{edu.education.graduateYear}
@@ -739,14 +612,8 @@ export const ResponseForm = () => {
 												type="text"
 												icon={<EditSvg />}
 												onClick={() => {
-													setEducationToEdit(
-														educationData.educations.find(
-															educa => educa.id === edu.id
-														)
-													)
-													navigate(
-														'/services/jobseeker/vacancyview/respond/education/edit'
-													)
+													setEducationToEdit(educationData.educations.find(educa => educa.id === edu.id))
+													navigate('/services/jobseeker/vacancyview/respond/education/edit')
 												}}
 											/>
 											<Button
@@ -760,12 +627,7 @@ export const ResponseForm = () => {
 									</div>
 								))}
 							</div>
-							<div
-								style={{ textAlign: 'center' }}
-								className={`flex flex-col items-center ${
-									haveNoExprience && 'opacity-50 pointer-events-none'
-								}`}
-							>
+							<div style={{ textAlign: 'center' }} className={`flex flex-col items-center`}>
 								<ConfigProvider
 									theme={{
 										components: {
@@ -778,9 +640,7 @@ export const ResponseForm = () => {
 								>
 									<Button
 										onClick={() => {
-											navigate(
-												'/services/jobseeker/vacancyview/respond/education/add'
-											)
+											navigate('/services/jobseeker/vacancyview/respond/education/add')
 										}}
 										icon={<ButtonPlusIcon />}
 										type="text"
@@ -792,9 +652,7 @@ export const ResponseForm = () => {
 							</div>
 						</Form>
 					)}
-					{pathname.includes(
-						'/services/jobseeker/vacancyview/respond/education/add'
-					) && (
+					{pathname.includes('/services/jobseeker/vacancyview/respond/education/add') && (
 						<Form
 							layout="vertical"
 							requiredMark={false}
@@ -812,17 +670,13 @@ export const ResponseForm = () => {
 									})
 								)
 								dispatch(completeEducation())
-								navigate(
-									'/services/jobseeker/vacancyview/respond/education/main'
-								)
+								navigate('/services/jobseeker/vacancyview/respond/education/main')
 							}}
 						>
 							<div className="flex items-center mb-[38px]">
 								<button
 									onClick={() => {
-										navigate(
-											'/services/jobseeker/vacancyview/respond/education/main'
-										)
+										navigate('/services/jobseeker/vacancyview/respond/education/main')
 									}}
 									className="bg-white border-none cursor-pointer"
 								>
@@ -839,9 +693,7 @@ export const ResponseForm = () => {
 										Уровень образования
 									</label>
 								}
-								rules={[
-									{ required: true, message: 'Не выбран уровень образования' }
-								]}
+								rules={[{ required: true, message: 'Не выбран уровень образования' }]}
 							>
 								<Select
 									className="w-full rounded-lg"
@@ -885,9 +737,7 @@ export const ResponseForm = () => {
 										Учебное заведение
 									</label>
 								}
-								rules={[
-									{ required: true, message: 'Не введено учебное заведение' }
-								]}
+								rules={[{ required: true, message: 'Не введено учебное заведение' }]}
 							>
 								<Input
 									onPressEnter={e => {
@@ -898,13 +748,9 @@ export const ResponseForm = () => {
 							<Form.Item
 								name={'specialization'}
 								label={
-									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
-										Специальность
-									</label>
+									<label className="text-black text-[18px]/[18px] font-content-font font-normal">Специальность</label>
 								}
-								rules={[
-									{ required: true, message: 'Не введена специальность' }
-								]}
+								rules={[{ required: true, message: 'Не введена специальность' }]}
 							>
 								<Input
 									onPressEnter={e => {
@@ -915,9 +761,7 @@ export const ResponseForm = () => {
 							<Form.Item
 								name={'graduateYear'}
 								label={
-									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
-										Год окончания
-									</label>
+									<label className="text-black text-[18px]/[18px] font-content-font font-normal">Год окончания</label>
 								}
 								rules={[{ required: true, message: 'Не выбран год' }]}
 							>
@@ -925,10 +769,7 @@ export const ResponseForm = () => {
 									className="w-full rounded-lg"
 									options={Array.from(
 										{
-											length:
-												date.getMonth() >= 6
-													? date.getFullYear() - 1969
-													: date.getFullYear() - 1970
+											length: date.getMonth() >= 6 ? date.getFullYear() - 1969 : date.getFullYear() - 1970
 										},
 										(_, i) => i + 1970
 									).map(year => ({
@@ -946,9 +787,7 @@ export const ResponseForm = () => {
 							</Form.Item>
 						</Form>
 					)}
-					{pathname.includes(
-						'/services/jobseeker/vacancyview/respond/education/edit'
-					) && (
+					{pathname.includes('/services/jobseeker/vacancyview/respond/education/edit') && (
 						<Form
 							layout="vertical"
 							requiredMark={false}
@@ -965,9 +804,7 @@ export const ResponseForm = () => {
 										})
 									)
 								dispatch(completeEducation())
-								navigate(
-									'/services/jobseeker/vacancyview/respond/education/main'
-								)
+								navigate('/services/jobseeker/vacancyview/respond/education/main')
 							}}
 							initialValues={{
 								specialization: educationToEdit?.education.specialization,
@@ -980,9 +817,7 @@ export const ResponseForm = () => {
 							<div className="flex items-center mb-[38px]">
 								<button
 									onClick={() => {
-										navigate(
-											'/services/jobseeker/vacancyview/respond/education/main'
-										)
+										navigate('/services/jobseeker/vacancyview/respond/education/main')
 									}}
 									className="bg-white border-none cursor-pointer"
 								>
@@ -999,9 +834,7 @@ export const ResponseForm = () => {
 										Уровень образования
 									</label>
 								}
-								rules={[
-									{ required: true, message: 'Не выбран уровень образования' }
-								]}
+								rules={[{ required: true, message: 'Не выбран уровень образования' }]}
 							>
 								<Select
 									className="w-full rounded-lg"
@@ -1045,9 +878,7 @@ export const ResponseForm = () => {
 										Учебное заведение
 									</label>
 								}
-								rules={[
-									{ required: true, message: 'Не введено учебное заведение' }
-								]}
+								rules={[{ required: true, message: 'Не введено учебное заведение' }]}
 							>
 								<Input
 									onPressEnter={e => {
@@ -1058,13 +889,9 @@ export const ResponseForm = () => {
 							<Form.Item
 								name={'specialization'}
 								label={
-									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
-										Специальность
-									</label>
+									<label className="text-black text-[18px]/[18px] font-content-font font-normal">Специальность</label>
 								}
-								rules={[
-									{ required: true, message: 'Не введена специальность' }
-								]}
+								rules={[{ required: true, message: 'Не введена специальность' }]}
 							>
 								<Input
 									onPressEnter={e => {
@@ -1075,9 +902,7 @@ export const ResponseForm = () => {
 							<Form.Item
 								name={'graduateYear'}
 								label={
-									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
-										Год окончания
-									</label>
+									<label className="text-black text-[18px]/[18px] font-content-font font-normal">Год окончания</label>
 								}
 								rules={[{ required: true, message: 'Не выбран год' }]}
 							>
@@ -1085,10 +910,7 @@ export const ResponseForm = () => {
 									className="w-full rounded-lg"
 									options={Array.from(
 										{
-											length:
-												date.getMonth() >= 6
-													? date.getFullYear() - 1969
-													: date.getFullYear() - 1970
+											length: date.getMonth() >= 6 ? date.getFullYear() - 1969 : date.getFullYear() - 1970
 										},
 										(_, i) => i + 1970
 									).map(year => ({
@@ -1106,9 +928,7 @@ export const ResponseForm = () => {
 							</Form.Item>
 						</Form>
 					)}
-					{pathname.includes(
-						'/services/jobseeker/vacancyview/respond/experience/main'
-					) && (
+					{pathname.includes('/services/jobseeker/vacancyview/respond/experience/main') && (
 						<Form layout="vertical" requiredMark={false}>
 							<div className="flex items-center mb-[38px]">
 								<button
@@ -1126,9 +946,7 @@ export const ResponseForm = () => {
 							<p className="font-content-font text-black text-[18px]/[18px]">
 								<b>Портфолио</b> (не обязательно)
 							</p>
-							<p className="mt-[24px] font-content-font text-black text-[16px]/[16px]">
-								Ссылка
-							</p>
+							<p className="mt-[24px] font-content-font text-black text-[16px]/[16px]">Ссылка</p>
 							<Form.Item className="mt-[18px]">
 								<Input
 									placeholder="https://disk.yandex.ru"
@@ -1151,17 +969,13 @@ export const ResponseForm = () => {
 							</Upload>
 							<Form.Item
 								name={'haveExperienceFlag'}
-								className={`mt-[40px] ${
-									experienceData.experiences.length !== 0 && 'hidden'
-								}`}
+								className={`mt-[40px] ${experienceData.experiences.length !== 0 && 'hidden'}`}
 							>
 								<Checkbox
 									checked={haveNoExprience}
 									onChange={e => {
 										setHaveNoExperience(prev => !prev)
-										!haveNoExprience
-											? dispatch(raiseNoExperienceFlag())
-											: dispatch(lowerNoExperienceFlag())
+										!haveNoExprience ? dispatch(raiseNoExperienceFlag()) : dispatch(lowerNoExperienceFlag())
 									}}
 								>
 									Я не имею опыта работы
@@ -1181,48 +995,18 @@ export const ResponseForm = () => {
 												{exp.experience.workplace}
 											</p>
 											<p className="font-content-font text-black text-[14px]/[14px] font-normal select-none opacity-60">
-												{dayjs(exp.experience.beginWork, 'DD.MM.YYYY')
-													.toDate()
-													.getMonth() +
-													1 <
-												10
-													? '0' +
-													  (dayjs(exp.experience.beginWork, 'DD.MM.YYYY')
-															.toDate()
-															.getMonth() +
-															1)
-													: dayjs(exp.experience.beginWork, 'DD.MM.YYYY')
-															.toDate()
-															.getMonth() + 1}
-												.
-												{dayjs(exp.experience.beginWork, 'DD.MM.YYYY')
-													.toDate()
-													.getFullYear()}{' '}
-												-{' '}
-												{dayjs(exp.experience.endWork, 'DD.MM.YYYY')
-													.toDate()
-													.getFullYear() === date.getFullYear() &&
-												dayjs(exp.experience.endWork, 'DD.MM.YYYY')
-													.toDate()
-													.getMonth() === date.getMonth()
+												{dayjs(exp.experience.beginWork, 'DD.MM.YYYY').toDate().getMonth() + 1 < 10
+													? '0' + (dayjs(exp.experience.beginWork, 'DD.MM.YYYY').toDate().getMonth() + 1)
+													: dayjs(exp.experience.beginWork, 'DD.MM.YYYY').toDate().getMonth() + 1}
+												.{dayjs(exp.experience.beginWork, 'DD.MM.YYYY').toDate().getFullYear()} -{' '}
+												{dayjs(exp.experience.endWork, 'DD.MM.YYYY').toDate().getFullYear() === date.getFullYear() &&
+												dayjs(exp.experience.endWork, 'DD.MM.YYYY').toDate().getMonth() === date.getMonth()
 													? 'по наст.время'
-													: (dayjs(exp.experience.endWork, 'DD.MM.YYYY')
-															.toDate()
-															.getMonth() +
-															1 <
-													  10
-															? '0' +
-															  (dayjs(exp.experience.endWork, 'DD.MM.YYYY')
-																	.toDate()
-																	.getMonth() +
-																	1)
-															: dayjs(exp.experience.endWork, 'DD.MM.YYYY')
-																	.toDate()
-																	.getMonth() + 1) +
+													: (dayjs(exp.experience.endWork, 'DD.MM.YYYY').toDate().getMonth() + 1 < 10
+															? '0' + (dayjs(exp.experience.endWork, 'DD.MM.YYYY').toDate().getMonth() + 1)
+															: dayjs(exp.experience.endWork, 'DD.MM.YYYY').toDate().getMonth() + 1) +
 													  '.' +
-													  dayjs(exp.experience.endWork, 'DD.MM.YYYY')
-															.toDate()
-															.getFullYear()}{' '}
+													  dayjs(exp.experience.endWork, 'DD.MM.YYYY').toDate().getFullYear()}{' '}
 											</p>
 										</div>
 										<div className="flex gap-[12px]">
@@ -1230,14 +1014,8 @@ export const ResponseForm = () => {
 												type="text"
 												icon={<EditSvg />}
 												onClick={() => {
-													setExperienceToEdit(
-														experienceData.experiences.find(
-															expa => expa.id === exp.id
-														)
-													)
-													navigate(
-														'/services/jobseeker/vacancyview/respond/experience/edit'
-													)
+													setExperienceToEdit(experienceData.experiences.find(expa => expa.id === exp.id))
+													navigate('/services/jobseeker/vacancyview/respond/experience/edit')
 												}}
 											/>
 											<Button
@@ -1253,9 +1031,7 @@ export const ResponseForm = () => {
 							</div>
 							<div
 								style={{ textAlign: 'center' }}
-								className={`flex flex-col items-center ${
-									haveNoExprience && 'opacity-50 pointer-events-none'
-								}`}
+								className={`flex flex-col items-center ${haveNoExprience && 'opacity-50 pointer-events-none'}`}
 							>
 								<ConfigProvider
 									theme={{
@@ -1269,9 +1045,7 @@ export const ResponseForm = () => {
 								>
 									<Button
 										onClick={() => {
-											navigate(
-												'/services/jobseeker/vacancyview/respond/experience/add'
-											)
+											navigate('/services/jobseeker/vacancyview/respond/experience/add')
 										}}
 										icon={<ButtonPlusIcon />}
 										type="text"
@@ -1283,16 +1057,12 @@ export const ResponseForm = () => {
 							</div>
 						</Form>
 					)}
-					{pathname.includes(
-						'/services/jobseeker/vacancyview/respond/experience/add'
-					) && (
+					{pathname.includes('/services/jobseeker/vacancyview/respond/experience/add') && (
 						<Form
 							layout="vertical"
 							requiredMark={false}
 							onFinish={values => {
-								console.log(
-									values.beginWork.$d.toLocaleDateString().split('.').join('-')
-								)
+								console.log(values.beginWork.$d.toLocaleDateString().split('.').join('-'))
 								dispatch(
 									addExperience({
 										id: uuid(),
@@ -1305,17 +1075,13 @@ export const ResponseForm = () => {
 										}
 									})
 								)
-								navigate(
-									'/services/jobseeker/vacancyview/respond/experience/main'
-								)
+								navigate('/services/jobseeker/vacancyview/respond/experience/main')
 							}}
 						>
 							<div className="flex items-center mb-[38px]">
 								<button
 									onClick={() => {
-										navigate(
-											'/services/jobseeker/vacancyview/respond/experience/main'
-										)
+										navigate('/services/jobseeker/vacancyview/respond/experience/main')
 									}}
 									className="bg-white border-none cursor-pointer"
 								>
@@ -1329,9 +1095,7 @@ export const ResponseForm = () => {
 								name={'workplace'}
 								rules={[{ required: true, message: 'Введите место работы' }]}
 								label={
-									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
-										Место работы
-									</label>
+									<label className="text-black text-[18px]/[18px] font-content-font font-normal">Место работы</label>
 								}
 							>
 								<Input
@@ -1344,11 +1108,7 @@ export const ResponseForm = () => {
 							<Form.Item
 								name={'seat'}
 								rules={[{ required: true, message: 'Введите должность' }]}
-								label={
-									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
-										Должность
-									</label>
-								}
+								label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Должность</label>}
 							>
 								<Input
 									onPressEnter={e => {
@@ -1363,44 +1123,27 @@ export const ResponseForm = () => {
 									name={'beginWork'}
 									rules={[{ required: true, message: 'Укажите период работы' }]}
 									label={
-										<label className="text-black text-[18px]/[18px] font-content-font font-normal">
-											Период работы
-										</label>
+										<label className="text-black text-[18px]/[18px] font-content-font font-normal">Период работы</label>
 									}
 								>
-									<DatePicker.MonthPicker
-										className="w-full"
-										disabled={haveNoExprience}
-									/>
+									<DatePicker.MonthPicker className="w-full" disabled={haveNoExprience} />
 								</Form.Item>
 								<Form.Item
 									name={'endWork'}
 									className="w-[50%] mt-auto"
 									rules={[{ required: true, message: 'Укажите период работы' }]}
 								>
-									<DatePicker.MonthPicker
-										className="w-full"
-										disabled={haveNoExprience}
-										maxDate={dayjs(date)}
-									/>
+									<DatePicker.MonthPicker className="w-full" disabled={haveNoExprience} maxDate={dayjs(date)} />
 								</Form.Item>
 							</div>
 							<Form.Item
 								name={'duties'}
-								rules={[
-									{ required: true, message: 'Укажите свои обязанности' }
-								]}
+								rules={[{ required: true, message: 'Укажите свои обязанности' }]}
 								label={
-									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
-										Обязанности
-									</label>
+									<label className="text-black text-[18px]/[18px] font-content-font font-normal">Обязанности</label>
 								}
 							>
-								<Input.TextArea
-									autoSize={true}
-									className="!h-[107px]"
-									disabled={haveNoExprience}
-								></Input.TextArea>
+								<Input.TextArea autoSize={true} className="!h-[107px]" disabled={haveNoExprience}></Input.TextArea>
 							</Form.Item>
 							<Form.Item>
 								<div style={{ textAlign: 'right', marginTop: 40 }}>
@@ -1411,22 +1154,14 @@ export const ResponseForm = () => {
 							</Form.Item>
 						</Form>
 					)}
-					{pathname.includes(
-						'/services/jobseeker/vacancyview/respond/experience/edit'
-					) && (
+					{pathname.includes('/services/jobseeker/vacancyview/respond/experience/edit') && (
 						<Form
 							layout="vertical"
 							requiredMark={false}
 							initialValues={{
 								workplace: experienceToEdit?.experience.workplace,
-								beginWork: dayjs(
-									experienceToEdit?.experience.beginWork,
-									'DD.MM.YYYY'
-								),
-								endWork: dayjs(
-									experienceToEdit?.experience.endWork,
-									'DD.MM.YYYY'
-								),
+								beginWork: dayjs(experienceToEdit?.experience.beginWork, 'DD.MM.YYYY'),
+								endWork: dayjs(experienceToEdit?.experience.endWork, 'DD.MM.YYYY'),
 								seat: experienceToEdit?.experience.seat,
 								duties: experienceToEdit?.experience.duties
 							}}
@@ -1442,17 +1177,13 @@ export const ResponseForm = () => {
 											duties: values.duties
 										})
 									)
-								navigate(
-									'/services/jobseeker/vacancyview/respond/experience/main'
-								)
+								navigate('/services/jobseeker/vacancyview/respond/experience/main')
 							}}
 						>
 							<div className="flex items-center mb-[38px]">
 								<button
 									onClick={() => {
-										navigate(
-											'/services/jobseeker/vacancyview/respond/experience/main'
-										)
+										navigate('/services/jobseeker/vacancyview/respond/experience/main')
 									}}
 									className="bg-white border-none cursor-pointer"
 								>
@@ -1465,9 +1196,7 @@ export const ResponseForm = () => {
 							<Form.Item
 								name={'workplace'}
 								label={
-									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
-										Место работы
-									</label>
+									<label className="text-black text-[18px]/[18px] font-content-font font-normal">Место работы</label>
 								}
 							>
 								<Input
@@ -1479,11 +1208,7 @@ export const ResponseForm = () => {
 							</Form.Item>
 							<Form.Item
 								name={'seat'}
-								label={
-									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
-										Должность
-									</label>
-								}
+								label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Должность</label>}
 							>
 								<Input
 									onPressEnter={e => {
@@ -1498,41 +1223,26 @@ export const ResponseForm = () => {
 									name={'beginWork'}
 									rules={[{ required: true, message: 'Укажите период работы' }]}
 									label={
-										<label className="text-black text-[18px]/[18px] font-content-font font-normal">
-											Период работы
-										</label>
+										<label className="text-black text-[18px]/[18px] font-content-font font-normal">Период работы</label>
 									}
 								>
-									<DatePicker.MonthPicker
-										className="w-full"
-										disabled={haveNoExprience}
-									/>
+									<DatePicker.MonthPicker className="w-full" disabled={haveNoExprience} />
 								</Form.Item>
 								<Form.Item
 									name={'endWork'}
 									className="w-[50%] mt-auto"
 									rules={[{ required: true, message: 'Укажите период работы' }]}
 								>
-									<DatePicker.MonthPicker
-										className="w-full"
-										disabled={haveNoExprience}
-										maxDate={dayjs(date)}
-									/>
+									<DatePicker.MonthPicker className="w-full" disabled={haveNoExprience} maxDate={dayjs(date)} />
 								</Form.Item>
 							</div>
 							<Form.Item
 								name={'duties'}
 								label={
-									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
-										Обязанности
-									</label>
+									<label className="text-black text-[18px]/[18px] font-content-font font-normal">Обязанности</label>
 								}
 							>
-								<Input.TextArea
-									autoSize={true}
-									className="!h-[107px]"
-									disabled={haveNoExprience}
-								></Input.TextArea>
+								<Input.TextArea autoSize={true} className="!h-[107px]" disabled={haveNoExprience}></Input.TextArea>
 							</Form.Item>
 							<Form.Item>
 								<div style={{ textAlign: 'right', marginTop: 40 }}>
@@ -1543,9 +1253,7 @@ export const ResponseForm = () => {
 							</Form.Item>
 						</Form>
 					)}
-					{pathname.includes(
-						'/services/jobseeker/vacancyview/respond/skills'
-					) && (
+					{pathname.includes('/services/jobseeker/vacancyview/respond/skills') && (
 						<Form
 							layout="vertical"
 							requiredMark={false}
@@ -1595,10 +1303,7 @@ export const ResponseForm = () => {
 									}}
 									onPressEnter={e => {
 										e.preventDefault()
-										setcurrentFormSkills([
-											...currentFormskills,
-											skillInputValue
-										])
+										setcurrentFormSkills([...currentFormskills, skillInputValue])
 										setSkillInputValue('')
 									}}
 									value={skillInputValue}
@@ -1616,9 +1321,7 @@ export const ResponseForm = () => {
 										// }}
 										onClose={() => {
 											console.log(currentFormskills)
-											setcurrentFormSkills(prev => [
-												...prev.filter(currentSkill => currentSkill !== skill)
-											])
+											setcurrentFormSkills(prev => [...prev.filter(currentSkill => currentSkill !== skill)])
 											console.log(currentFormskills)
 										}}
 									>
@@ -1634,11 +1337,7 @@ export const ResponseForm = () => {
 									</label>
 								}
 							>
-								<Input.TextArea
-									autoSize={true}
-									value={skillsData.details}
-									className="!h-[107px]"
-								/>
+								<Input.TextArea autoSize={true} value={skillsData.details} className="!h-[107px]" />
 							</Form.Item>
 							<Form.Item>
 								<div style={{ textAlign: 'right', marginTop: 40 }}>

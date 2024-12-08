@@ -17,9 +17,7 @@ export const VacancyEditView = () => {
 	const { currentVacancy } = useAppSelector(state => state.currentVacancy)
 
 	const { data: categories = [] } = useGetCategoriesQuery()
-	const [categoryTitle, setCategoryTitle] = useState<string>(
-		currentVacancy?.acf.category as string
-	)
+	const [categoryTitle, setCategoryTitle] = useState<string>(currentVacancy?.acf.category as string)
 	const { data: directions = [] } = useGetDirectionsQuery(categoryTitle)
 	const { data: subdivisions = [] } = useGetSubdivisionsQuery(categoryTitle)
 
@@ -29,30 +27,15 @@ export const VacancyEditView = () => {
 	const [deleteVacancy] = useDeleteVacancyAsPerDepartmentMutation()
 
 	const [isEdit, setIsEdit] = useState<boolean>(false)
-	const [isSendRequestButtonActivated, setIsSendRequestButtonActivated] =
-		useState<boolean>(false)
+	const [isSendRequestButtonActivated, setIsSendRequestButtonActivated] = useState<boolean>(false)
 
-	const [post, setPost] = useState<string | undefined>(
-		currentVacancy?.title.rendered
-	)
-	const [experience, setExperience] = useState<string | undefined>(
-		currentVacancy?.acf.experience
-	)
-	const [employment, setEmployment] = useState<string | undefined>(
-		currentVacancy?.acf.employment
-	)
-	const [salary, setSalary] = useState<string | undefined>(
-		currentVacancy?.acf.salary
-	)
-	const [category, setCategory] = useState<string | undefined>(
-		currentVacancy?.acf.category
-	)
-	const [direction, setDirection] = useState<string | undefined>(
-		currentVacancy?.acf.direction
-	)
-	const [subdivision, setSubdivision] = useState<string | undefined>(
-		currentVacancy?.acf.subdivision
-	)
+	const [post, setPost] = useState<string | undefined>(currentVacancy?.title.rendered)
+	const [experience, setExperience] = useState<string | undefined>(currentVacancy?.acf.experience)
+	const [employment, setEmployment] = useState<string | undefined>(currentVacancy?.acf.employment)
+	const [salary, setSalary] = useState<string | undefined>(currentVacancy?.acf.salary)
+	const [category, setCategory] = useState<string | undefined>(currentVacancy?.acf.category)
+	const [direction, setDirection] = useState<string | undefined>(currentVacancy?.acf.direction)
+	const [subdivision, setSubdivision] = useState<string | undefined>(currentVacancy?.acf.subdivision)
 
 	const [responsibilities, setResponsibilities] = useState<string | undefined>(
 		currentVacancy?.acf.responsibilities
@@ -174,7 +157,7 @@ export const VacancyEditView = () => {
 					width={407}
 				>
 					<p className="font-content-font font-normal text-black text-[16px]/[20px] text-center">
-						Вакансия успешно обновлена.
+						Описание вакансии успешно обновлено.
 					</p>
 					<div className="mt-[40px] flex gap-[12px]">
 						<Button
@@ -189,16 +172,11 @@ export const VacancyEditView = () => {
 					</div>
 				</Modal>
 			</ConfigProvider>
-			<div
-				id="wrapper"
-				className="pl-[54px] pr-[54px] pt-[120px] pb-[52px] w-full"
-			>
+			<div id="wrapper" className="pl-[54px] pr-[54px] pt-[120px] pb-[52px] w-full">
 				<div className="flex">
 					<button
 						onClick={() => {
-							isEdit
-								? setIsEdit(false)
-								: navigate('/services/personnelaccounting/vacancies')
+							isEdit ? setIsEdit(false) : navigate('/services/personnelaccounting/vacancies')
 						}}
 						className="bg-inherit border-none cursor-pointer"
 					>
@@ -218,10 +196,7 @@ export const VacancyEditView = () => {
 							skills: skills,
 							conditions: conditions,
 							category: category,
-							direction: categories.find(cat => cat.title === categoryTitle)
-								?.direction
-								? direction
-								: subdivision,
+							direction: categories.find(cat => cat.title === categoryTitle)?.direction ? direction : subdivision,
 							experience: experience,
 							employment: employment
 						}}
@@ -244,11 +219,7 @@ export const VacancyEditView = () => {
 					>
 						<Form.Item
 							name={'post'}
-							label={
-								<label className="text-black text-[18px]/[18px] font-content-font font-normal">
-									Должность
-								</label>
-							}
+							label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Должность</label>}
 							rules={[{ required: true, message: 'Не указана должность' }]}
 						>
 							<Input placeholder="Ввести название"></Input>
@@ -282,9 +253,7 @@ export const VacancyEditView = () => {
 							<Form.Item
 								name={'employment'}
 								label={
-									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
-										Тип занятости
-									</label>
+									<label className="text-black text-[18px]/[18px] font-content-font font-normal">Тип занятости</label>
 								}
 								rules={[{ required: true, message: 'Не указан тип' }]}
 							>
@@ -312,48 +281,24 @@ export const VacancyEditView = () => {
 						</div>
 						<Form.Item
 							name={'responsibilities'}
-							label={
-								<label className="text-black text-[18px]/[18px] font-content-font font-normal">
-									Задачи
-								</label>
-							}
+							label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Задачи</label>}
 							rules={[{ required: true, message: 'Не указаны задачи' }]}
 						>
-							<Input.TextArea
-								autoSize
-								className="!h-[107px]"
-								placeholder="Ввести текст..."
-							></Input.TextArea>
+							<Input.TextArea autoSize className="!h-[107px]" placeholder="Ввести текст..."></Input.TextArea>
 						</Form.Item>
 						<Form.Item
 							name={'skills'}
-							label={
-								<label className="text-black text-[18px]/[18px] font-content-font font-normal">
-									Требования
-								</label>
-							}
+							label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Требования</label>}
 							rules={[{ required: true, message: 'Не указаны требования' }]}
 						>
-							<Input.TextArea
-								autoSize
-								className="!h-[107px]"
-								placeholder="Ввести текст..."
-							></Input.TextArea>
+							<Input.TextArea autoSize className="!h-[107px]" placeholder="Ввести текст..."></Input.TextArea>
 						</Form.Item>
 						<Form.Item
 							name={'conditions'}
-							label={
-								<label className="text-black text-[18px]/[18px] font-content-font font-normal">
-									Условия
-								</label>
-							}
+							label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Условия</label>}
 							rules={[{ required: true, message: 'Не указаны условия' }]}
 						>
-							<Input.TextArea
-								autoSize
-								className="!h-[107px]"
-								placeholder="Ввести текст..."
-							></Input.TextArea>
+							<Input.TextArea autoSize className="!h-[107px]" placeholder="Ввести текст..."></Input.TextArea>
 						</Form.Item>
 						<div className="flex gap-[20px] w-full">
 							<Form.Item
@@ -382,10 +327,7 @@ export const VacancyEditView = () => {
 								name={'direction'}
 								label={
 									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
-										{categories.find(cat => cat.title === categoryTitle)
-											?.direction
-											? 'Профобласть'
-											: 'Подразделение'}
+										{categories.find(cat => cat.title === categoryTitle)?.direction ? 'Профобласть' : 'Подразделение'}
 									</label>
 								}
 								rules={[{ required: true, message: 'Не указана подкатегория' }]}
@@ -393,8 +335,7 @@ export const VacancyEditView = () => {
 								<Select
 									placeholder="Выбрать"
 									options={
-										categories.find(cat => cat.title === categoryTitle)
-											?.direction
+										categories.find(cat => cat.title === categoryTitle)?.direction
 											? directions.map(dir => ({
 													value: dir.title,
 													label: dir.title
@@ -417,73 +358,51 @@ export const VacancyEditView = () => {
 					<div className="w-[50%] mt-[52px] flex flex-col gap-[40px]">
 						<div className="flex gap-[60px]">
 							<div className="flex flex-col gap-[16px]">
-								<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-									Требуемый опыт работы:
-								</p>
+								<p className="font-content-font font-bold text-black text-[18px]/[21px]">Требуемый опыт работы:</p>
 								<p className="font-content-font font-normal text-black text-[18px]/[21px]">
 									{experience && experience}
 								</p>
 							</div>
 							<div className="flex flex-col gap-[16px]">
-								<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-									Тип занятости:
-								</p>
+								<p className="font-content-font font-bold text-black text-[18px]/[21px]">Тип занятости:</p>
 								<p className="font-content-font font-normal text-black text-[18px]/[21px]">
 									{employment && employment}
 								</p>
 							</div>
 							<div className="flex flex-col gap-[16px]">
-								<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-									Заработная плата:
-								</p>
-								<p className="font-content-font font-normal text-black text-[18px]/[21px]">
-									{salary && salary}
-								</p>
+								<p className="font-content-font font-bold text-black text-[18px]/[21px]">Заработная плата:</p>
+								<p className="font-content-font font-normal text-black text-[18px]/[21px]">{salary && salary}</p>
 							</div>
 						</div>
 						<div className="flex flex-col gap-[16px]">
-							<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-								Задачи:
-							</p>
+							<p className="font-content-font font-bold text-black text-[18px]/[21px]">Задачи:</p>
 							<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-pre-line">
 								{responsibilities && responsibilities}
 							</p>
 						</div>
 						<div className="flex flex-col gap-[16px]">
-							<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-								Требования:
-							</p>
+							<p className="font-content-font font-bold text-black text-[18px]/[21px]">Требования:</p>
 							<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-pre-line">
 								{skills && skills}
 							</p>
 						</div>
 						<div className="flex flex-col gap-[16px]">
-							<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-								Условия:
-							</p>
+							<p className="font-content-font font-bold text-black text-[18px]/[21px]">Условия:</p>
 							<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-pre-line">
 								{conditions && conditions}
 							</p>
 						</div>
 						<div className="flex gap-[40px]">
 							<div className="flex flex-col gap-[16px]">
-								<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-									Категория сотрудников
-								</p>
-								<p className="font-content-font font-normal text-black text-[18px]/[21px]">
-									{category && category}
-								</p>
+								<p className="font-content-font font-bold text-black text-[18px]/[21px]">Категория сотрудников</p>
+								<p className="font-content-font font-normal text-black text-[18px]/[21px]">{category && category}</p>
 							</div>
 							<div className="flex flex-col gap-[16px]">
 								<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-									{direction && direction !== 'false'
-										? 'Профобласть'
-										: subdivision && 'Подразделение'}
+									{direction && direction !== 'false' ? 'Профобласть' : subdivision && 'Подразделение'}
 								</p>
 								<p className="font-content-font font-normal text-black text-[18px]/[21px]">
-									{direction && direction !== 'false'
-										? direction
-										: subdivision && subdivision}
+									{direction && direction !== 'false' ? direction : subdivision && subdivision}
 								</p>
 							</div>
 						</div>

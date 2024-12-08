@@ -8,10 +8,9 @@ import {
 	useGetSubdivisionsQuery,
 	useRequestCreateVacancyMutation
 } from '../../../../../store/api/serviceApi'
-import {useAlert} from "../../../../../utils/AlertMessage";
+import { useAlert } from '../../../../../utils/AlertMessage'
 
 export const SupervisorCreateVacancyForm = () => {
-
 	const { openAlert } = useAlert()
 
 	const { data: categories = [] } = useGetCategoriesQuery()
@@ -47,7 +46,7 @@ export const SupervisorCreateVacancyForm = () => {
 					width={407}
 				>
 					<p className="font-content-font font-normal text-black text-[16px]/[20px] text-center">
-						Ваша заявка успешно отправлена. Вакансия будет добавлена после
+						Ваша заявка на создание вакансии успешно отправлена. Вакансия будет добавлена в сервис "Все вакансии" после
 						рассмотрения заявки кадрами.
 					</p>
 					<div className="mt-[40px] flex gap-[12px]">
@@ -65,20 +64,18 @@ export const SupervisorCreateVacancyForm = () => {
 				</Modal>
 			</ConfigProvider>
 			<div className="pl-[54px] pr-[54px] pb-[52px] pt-[120px] w-full bg-content-gray">
-				<h1 className="font-content-font font-normal text-[28px]/[28px] text-black">
-					Создать вакансию
-				</h1>
+				<h1 className="font-content-font font-normal text-[28px]/[28px] text-black">Создать вакансию</h1>
 				<Form
 					layout="vertical"
 					requiredMark={false}
 					className="w-[52%] mt-[52px]"
 					onFinish={async values => {
 						try {
-							await requestCreateVacancy(values).unwrap();
-							setIsSuccessModalOpen(true);
-						} catch (error : any) {
-							let errorStr = error.status + " " + error.data.message;
-							openAlert({ type: 'error', text: errorStr });
+							await requestCreateVacancy(values).unwrap()
+							setIsSuccessModalOpen(true)
+						} catch (error: any) {
+							let errorStr = error.status + ' ' + error.data.message
+							openAlert({ type: 'error', text: errorStr })
 						}
 					}}
 				>
@@ -147,17 +144,11 @@ export const SupervisorCreateVacancyForm = () => {
 					<Form.Item
 						name={'responsibilities'}
 						label={
-							<label className="text-black text-[18px]/[18px] font-content-font font-normal opacity-80">
-								Задачи
-							</label>
+							<label className="text-black text-[18px]/[18px] font-content-font font-normal opacity-80">Задачи</label>
 						}
 						rules={[{ required: true, message: 'Не указаны задачи' }]}
 					>
-						<Input.TextArea
-							autoSize
-							className="!h-[107px]"
-							placeholder="Ввести текст..."
-						></Input.TextArea>
+						<Input.TextArea autoSize className="!h-[107px]" placeholder="Ввести текст..."></Input.TextArea>
 					</Form.Item>
 					<Form.Item
 						name={'skills'}
@@ -168,26 +159,16 @@ export const SupervisorCreateVacancyForm = () => {
 						}
 						rules={[{ required: true, message: 'Не указаны требования' }]}
 					>
-						<Input.TextArea
-							autoSize
-							className="!h-[107px]"
-							placeholder="Ввести текст..."
-						></Input.TextArea>
+						<Input.TextArea autoSize className="!h-[107px]" placeholder="Ввести текст..."></Input.TextArea>
 					</Form.Item>
 					<Form.Item
 						name={'conditions'}
 						label={
-							<label className="text-black text-[18px]/[18px] font-content-font font-normal opacity-80">
-								Условия
-							</label>
+							<label className="text-black text-[18px]/[18px] font-content-font font-normal opacity-80">Условия</label>
 						}
 						rules={[{ required: true, message: 'Не указаны условия' }]}
 					>
-						<Input.TextArea
-							autoSize
-							className="!h-[107px]"
-							placeholder="Ввести текст..."
-						></Input.TextArea>
+						<Input.TextArea autoSize className="!h-[107px]" placeholder="Ввести текст..."></Input.TextArea>
 					</Form.Item>
 					<Form.Item>
 						<Button type="primary" htmlType="submit">

@@ -3,10 +3,10 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { RootState } from '../..'
 import { IParentState } from '../../../api/types'
 
-const initialState: IParentState = {
+const initialState: any = {
 	dateIssue: '',
 	divisionCode: '',
-	documentTypeId: 1,
+	documentTypeId: null,
 	eMail: '',
 	FIO: '',
 	id: '0',

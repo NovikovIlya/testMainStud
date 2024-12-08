@@ -15,7 +15,7 @@ const aId = cookies[4]?.split('=')[1] || ''
  */
 export const jsxElements = [
 	{
-		index: 'jobSeeker',
+		key: 'jobSeeker',
 		element: <Seeker />,
 		place: {
 			w: 3,
@@ -28,7 +28,7 @@ export const jsxElements = [
 		}
 	},
 	{
-		index: 'myResponds',
+		key: 'myResponds',
 		element: (
 			<TemplateCard
 				title="Мои отклики"
@@ -49,7 +49,7 @@ export const jsxElements = [
 		}
 	},
 	{
-		index: 'DirectResume',
+		key: 'DirectResume',
 		element: (
 			<DirectResume
 				href="#"
@@ -72,15 +72,8 @@ export const jsxElements = [
 		}
 	},
 	{
-		index: 'personnelAccounting',
-		element: (
-			<TemplateCard
-				title="Трудоустройство"
-				info=""
-				href="/services/personnelaccounting"
-				buttonText="Изучить"
-			/>
-		),
+		key: 'personnelAccounting',
+		element: <TemplateCard title="Трудоустройство" info="" href="/services/personnelaccounting" buttonText="Изучить" />,
 		place: {
 			w: 1,
 			h: 1,
@@ -90,7 +83,7 @@ export const jsxElements = [
 		}
 	},
 	{
-		index: 'ElectronicBook',
+		key: 'ElectronicBook',
 		element: (
 			<TemplateCard
 				href="/services/electronicBook/estimation"
@@ -108,7 +101,7 @@ export const jsxElements = [
 		}
 	},
 	{
-		index: 'Session',
+		key: 'Session',
 		element: (
 			<TemplateCard
 				href="/services/session/session"
@@ -128,7 +121,7 @@ export const jsxElements = [
 		}
 	},
 	{
-		index: 'Applications',
+		key: 'Applications',
 		element: (
 			<TemplateCard
 				href="https://shelly.kpfu.ru/e-ksu/site_student_sh_pr_ac.offor_document?p_menu=14&p_type_menu_open=151"
@@ -148,10 +141,10 @@ export const jsxElements = [
 		}
 	},
 	{
-		index: 'Staff',
+		key: 'Staff',
 		element: (
 			<TemplateCard
-				href="https://shelly.kpfu.ru/e-ksu/portal_person.kurs_cifra#tab1"
+				href="https://kpfu.ru/staff/sotrudniki-kfu"
 				img="/image24.png"
 				info="StaffInfo"
 				title="Staff"
@@ -169,7 +162,7 @@ export const jsxElements = [
 		}
 	},
 	{
-		index: 'Vacancies',
+		key: 'Vacancies',
 		element: (
 			<TemplateCard
 				href="https://career.kpfu.ru/"
@@ -188,10 +181,10 @@ export const jsxElements = [
 		}
 	},
 	{
-		index: 'EducationalCourses',
+		key: 'EducationalCourses',
 		element: (
 			<TemplateCard
-				href="https://shelly.kpfu.ru/e-ksu/portal_person.kurs_cifra?p_type_menu_open=2#tab1"
+				href="https://edu.kpfu.ru"
 				info="EducationalCoursesInfo"
 				title="EducationalCourses"
 				img="/image2.png"
@@ -202,7 +195,7 @@ export const jsxElements = [
 			/>
 		),
 		place: {
-			w: 2,
+			w: 1,
 			h: 1,
 			x: 0,
 			y: 0,
@@ -210,19 +203,20 @@ export const jsxElements = [
 		}
 	},
 	{
-		index: 'Schedule',
+		key: 'Schedule',
 		element: <Schedule />,
 		place: {
 			w: 3,
 			h: 1,
-			minW: 2,
+
 			x: 0,
 			y: 0,
-			i: 'Schedule'
+			i: 'Schedule',
+			static: true
 		}
 	},
 	{
-		index: 'News',
+		key: 'News',
 		element: (
 			<TemplateCard
 				href="https://media.kpfu.ru/news?kn%5B0%5D=Новости%20науки&created="
@@ -243,7 +237,7 @@ export const jsxElements = [
 		}
 	},
 	{
-		index: 'Testing',
+		key: 'Testing',
 		element: (
 			<TemplateCard
 				href="https://shelly.kpfu.ru/e-ksu/SITE_STUDENT_SH_PR_AC.test_student_personal?p_menu=28"
@@ -255,7 +249,6 @@ export const jsxElements = [
 				width={98}
 				height={125}
 				positionImage={'mt-2'}
-
 			/>
 		),
 		place: {
@@ -267,7 +260,7 @@ export const jsxElements = [
 		}
 	},
 	{
-		index: 'DocumentFlow',
+		key: 'DocumentFlow',
 		element: (
 			<TemplateCard
 				href="/services/unifiedServiceCenter/documentFlow"
@@ -287,7 +280,7 @@ export const jsxElements = [
 		}
 	},
 	// {
-	// 	index: 'PaySheet',
+	// 	key: 'PaySheet',
 	// 	element: (
 	// 		<TemplateCard
 	// 			href={`https://shelly.kpfu.ru/e-ksu/student_grants.pay_list?p1=${aId}&p2=${sId}&p_h=${hId}`}
@@ -308,13 +301,14 @@ export const jsxElements = [
 	// 	}
 	// },
 	{
-		index: 'Practices',
+		key: 'Practices',
 		element: (
 			<TemplateCard
 				href="/services/practices"
 				info="PracticesInfo"
 				title="Practices"
 				buttonText="Study"
+				img="/Group499.png"
 			/>
 		),
 		place: {
@@ -325,8 +319,46 @@ export const jsxElements = [
 			i: 'Practices'
 		}
 	},
+	{
+		key: 'myPractices',
+		element: (
+			<TemplateCard
+				href="/services/mypractices"
+				info="myPracticeInfo"
+				title="myPractices"
+				buttonText="Study"
+				img="/Group499.png"
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 0,
+			y: 0,
+			i: 'myPractices'
+		}
+	},
+	{
+		key: 'practiceTeacher',
+		element: (
+			<TemplateCard
+				href="/services/practiceteacher"
+				info="practiceTeacherInfo"
+				title="practiceTeacher"
+				buttonText="Study"
+				img="/Group499.png"
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 0,
+			y: 0,
+			i: 'practiceTeacher'
+		}
+	},
 	// {
-	// 	index: 'SitAnKFU',
+	// 	key: 'SitAnKFU',
 	// 	element: (
 	// 		<TemplateCard
 	// 			href="https://sa.kpfu.ru/news_aggregator/news/"
@@ -346,7 +378,7 @@ export const jsxElements = [
 	// 	}
 	// },
 	{
-		index: 'Dormitory',
+		key: 'Dormitory',
 		element: (
 			<TemplateCard
 				href="https://shelly.kpfu.ru/e-ksu/SITE_STUDENT_SH_PR_AC.dormitory_work_document?p_menu=37"
@@ -366,7 +398,7 @@ export const jsxElements = [
 		}
 	},
 	{
-		index: 'VirtualAudience',
+		key: 'VirtualAudience',
 		element: (
 			<TemplateCard
 				href="https://shelly.kpfu.ru/e-ksu/site_student_services.study_tasks"
@@ -388,7 +420,7 @@ export const jsxElements = [
 		}
 	},
 	{
-		index: 'PsychologicalHelp',
+		key: 'PsychologicalHelp',
 		element: (
 			<TemplateCard
 				href="https://shelly.kpfu.ru/e-ksu/student_psi_test.record_medic?p_menu=42"
@@ -410,7 +442,7 @@ export const jsxElements = [
 		}
 	},
 	{
-		index: 'DigitalDepartments',
+		key: 'DigitalDepartments',
 		element: (
 			<TemplateCard
 				href="https://shelly.kpfu.ru/e-ksu/portal_person.kurs_cifra#tab1"
@@ -432,7 +464,7 @@ export const jsxElements = [
 		}
 	},
 	{
-		index: 'ManagementScientificProjects',
+		key: 'ManagementScientificProjects',
 		element: (
 			<TemplateCard
 				href="https://shelly.kpfu.ru/e-ksu/portal_person.kurs_cifra?p_type_menu_open=2#tab1"
@@ -452,5 +484,5 @@ export const jsxElements = [
 			y: 0,
 			i: 'ManagementScientificProjects'
 		}
-	},
+	}
 ]

@@ -58,7 +58,7 @@ export const Work = () => {
 	const dispatch = useDispatch()
 	const { data: work } = useGetWorkQuery()
 	const { data: works } = useGetWorksQuery()
-	console.log(works, work, '=================work')
+
 
 	const workData = useAppSelector(state => state.Work)
 	//if (work !== undefined && work.items.length) dispatch(allData(work))
@@ -72,7 +72,7 @@ export const Work = () => {
 		<div className="m-14">
 			<Space direction="vertical" size={20}>
 				<Typography.Title level={3}>{t('work')}</Typography.Title>
-				<Checkbox>{t('EmployedMoment')}</Checkbox>
+				<Checkbox className='flex items-center'>{t('EmployedMoment')}</Checkbox>
 
 				{workData.items.map((item, index) => (
 					<div key={item.id} className="flex flex-col gap-[20px]">

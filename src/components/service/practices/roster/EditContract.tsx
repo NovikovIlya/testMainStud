@@ -1,4 +1,4 @@
-import {PlusOutlined} from '@ant-design/icons'
+import { PlusOutlined } from '@ant-design/icons'
 import {
     Button,
     Col,
@@ -8,32 +8,26 @@ import {
     Select,
     Space,
     Typography,
-    Upload,
-    UploadFile,
-    UploadProps,
-    message, Form, InputNumber
+    Upload, Form, InputNumber
 } from 'antd'
 import dayjs from 'dayjs'
-import React, {Dispatch, SetStateAction, useEffect, useState} from 'react'
-import {useLocation, useNavigate} from 'react-router-dom'
-import {ArrowLeftSvg} from '../../../../assets/svg'
+import { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { ArrowLeftSvg } from '../../../../assets/svg'
 import {
-    IContractInfo,
-    IContractInfoFull,
-    ICreateContract,
-    ICreateContractFull,
-    NameSpecialty
+    ICreateContract, NameSpecialty
 } from '../../../../models/Practice'
-import {validateMessages} from "../../../../utils/validateMessage";
+import { validateMessages } from "../../../../utils/validateMessage"
 import {
     useEditContractMutation,
-    useGetContractForEditQuery,
-    useGetContractQuery
-} from "../../../../store/api/practiceApi/contracts";
-import {string} from "yup";
-import {useGetSpecialtyNamesQuery} from "../../../../store/api/practiceApi/roster";
-import {copyFileDocument} from "../../../../utils/downloadDocument/copyFileDocument";
-import {agreementFileDocument} from "../../../../utils/downloadDocument/agreementFileDocument";
+    useGetContractForEditQuery
+} from "../../../../store/api/practiceApi/contracts"
+import { useGetSpecialtyNamesQuery } from "../../../../store/api/practiceApi/roster"
+import { copyFileDocument } from "../../../../utils/downloadDocument/copyFileDocument"
+import { agreementFileDocument } from "../../../../utils/downloadDocument/agreementFileDocument"
+import { SkeletonPage } from './Skeleton'
+import { endOfDay, isAfter } from 'date-fns'
+import { Vector } from '../../../../assets/svg/Vector'
 
 export interface PdfContract {
     uid: string,
@@ -47,7 +41,7 @@ export const EditContract = () => {
     const path = useLocation()
     const nav = useNavigate()
     const id: string = path.pathname.split('/').at(-1)!
-    const {data, isSuccess} = useGetContractForEditQuery(id)
+    const {data, isSuccess,isLoading} = useGetContractForEditQuery(id)
     const [editContract] = useEditContractMutation()
     const tokenAccess = localStorage.getItem('access')!.replaceAll('"', '')
     const optionsContractsType = [
@@ -56,9 +50,14 @@ export const EditContract = () => {
             label: 'Бессрочный'
         },
         {
+            value: 'Срочный',
+            label: 'Срочный'
+        },
+        {
             value: 'С пролонгацией',
             label: 'С пролонгацией'
         }]
+    const [hideSrok,setHideSrok] = useState(true)
     const [prolongation, setProlongation] = useState(false)
     const [inn, setInn] = useState<string | number | null>(0)
     const [files, setFiles] = useState<{
@@ -72,8 +71,26 @@ export const EditContract = () => {
 
     const [pdfContract, setPdfContract] = useState<any[]>()
     const [pdfAgreement, setPdfAgreement] = useState<any[]>()
-    const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery()
+    const {data: dataNameSpecialty, isSuccess: isSuccessNameSpecialty} = useGetSpecialtyNamesQuery(null)
     const [optionsNameSpec, setOptionsNameSpec] = useState<NameSpecialty[]>([])
+    const [nameSpec,setNameSpec] = useState<any>(null)
+    console.log('nameSpec',nameSpec)
+    useEffect(()=>{
+        if(isSuccess){
+            const x = dataNameSpecialty?.filter((item)=>{
+                console.log('data?.specialtyName',data?.specialtyNames)
+                return data?.specialtyNames?.includes(item.label)
+            })
+            setNameSpec(x?.map((item)=>{
+                return{
+                    key:item.id,
+                    value:item.id,
+                    label:item.label
+                }
+            }))
+            console.log('x',x)
+        }
+    },[dataNameSpecialty,data,isSuccess])
 
     useEffect(() => {
         if (isSuccess) {
@@ -82,6 +99,7 @@ export const EditContract = () => {
         }
             const dataValid = dataNameSpecialty?.filter(item => data?.specialtyNames.includes(item.value))
     }, [ isSuccess,dataNameSpecialty]);
+
     useEffect(() => {
         if (isSuccess) {
             form.setFieldValue('ITN', data.itn)
@@ -100,8 +118,10 @@ export const EditContract = () => {
 
             form.setFieldValue('contractNumber', data.contractNumber)
             form.setFieldValue('conclusionDate', dayjs(data.conclusionDate))
-            form.setFieldValue('endDate', dayjs(data.endDate))
-            form.setFieldValue('specialtyNameIds', optionsNameSpec.map(i=>i.value))
+            if(!hideSrok){
+                form.setFieldValue('endDate', dayjs(data.endDate))
+            }
+            form.setFieldValue('specialtyNameIds', nameSpec)
             form.setFieldValue('actualFacility', data.actualFacility)
             form.setFieldValue('placesAmount', data.placesAmount)
             form.setFieldValue('pdfContract', data.documentCopyId)
@@ -110,13 +130,15 @@ export const EditContract = () => {
                 name: <a onClick={() => copyFileDocument(tokenAccess, data.documentCopyId)}>Скан договора</a>,
                 status: 'done',
             }])
-
-            form.setFieldValue('pdfAgreement', data.documentAgreementId)
-            setPdfAgreement([{
-                uid: '2',
-                name: <a onClick={() => agreementFileDocument(tokenAccess, data.documentAgreementId)}>Доп.соглашение</a>,
-                status: 'done',
-            }])
+            if(data.documentAgreementId!==null){
+                form.setFieldValue('pdfAgreement', data.documentAgreementId)
+                 setPdfAgreement([{
+                    uid: '2',
+                    name: <a onClick={() => agreementFileDocument(tokenAccess, data.documentAgreementId)}>Доп.соглашение</a>,
+                    status: 'done',
+                   }])
+            }
+            
         }
 
         //при загруке данных проверять, есть ли пролонгация. Если есть, то ставить setProlongation(true)
@@ -124,14 +146,8 @@ export const EditContract = () => {
 
     function onFinish(values: ICreateContract) {
         const formDataEditContract = new FormData()
-        const specName = dataNameSpecialty!.find(elem => {
-            if (elem.value === values.specialtyNameId) {
-                return elem
-            }
-        })
-        console.log('values.specialtyNameId',values.specialtyNameId)
-        console.log('specName',specName)
-        values.specialtyNameIds = dataNameSpecialty?.filter(item => values.specialtyNameIds.includes(item.value)).map(item => item.id)
+   
+        values.specialtyNameIds = nameSpec,
         // values.specialtyNameId = specName!.id
         values.placesAmount = String(values.placesAmount)
         values.ITN = String(values.ITN)
@@ -146,8 +162,8 @@ export const EditContract = () => {
             conclusionDate: values.conclusionDate,
             contractType: values.contractType,
             prolongation: values.prolongation,
-            endDate: values.endDate,
-            specialtyNameIds: dataNameSpecialty?.filter(item => values.specialtyNameIds.includes(item.value)).map(item => item.id),
+            endDate: hideSrok ? null : values.endDate,
+            specialtyNameIds: nameSpec,
             legalFacility: values.legalFacility,
             actualFacility: values.actualFacility,
             placesAmount: values.placesAmount
@@ -197,14 +213,17 @@ export const EditContract = () => {
         }
     }, [inn]);
 
-    console.log('optionsNameSpec',optionsNameSpec)
+    if(isLoading) return <SkeletonPage/>
+
+    
     return (
-        <section className="container">
+        <section className="container animate-fade-in">
             <Space size={10}>
                 <Button
                     size="large"
-                    className="mt-1"
-                    icon={<ArrowLeftSvg className="w-4 h-4 cursor-pointer mt-1"/>}
+                    style={{width:'48px'}}
+                    className="mt-1 mr-6 w-[48px] rounded-full border border-black"
+                    icon={<Vector />}
                     type="text"
                     onClick={() => nav('/services/practices/registerContracts')}
                 />
@@ -280,6 +299,10 @@ export const EditContract = () => {
                                 placeholder={''}
                                 className="w-full"
                                 size={'large'}
+                                disabledDate={(current) => {
+                                    // Отключаем даты, которые больше текущей даты
+                                    return current && isAfter(current.toDate(), endOfDay(new Date()));
+                                }}
                             />
                         </Form.Item>
 
@@ -298,7 +321,15 @@ export const EditContract = () => {
                                 onChange={value => {
                                     if (value === 'С пролонгацией') {
                                         setProlongation(true)
-                                    } else setProlongation(false)
+                                        setHideSrok(false)
+                                    } else if(value === 'Бессрочный'){
+                                        setProlongation(false)
+                                        setHideSrok(true)
+
+                                    }else {
+                                        setHideSrok(false)
+                                        setProlongation(false)
+                                    }
                                 }}
                             />
                         </Form.Item>
@@ -323,8 +354,10 @@ export const EditContract = () => {
 
                 }
                 <Row gutter={[16, 16]}>
+                {hideSrok ? '' :
                     <Col xs={24} sm={24} md={18} lg={8} xl={6}>
-                        <Form.Item label={'Срок действия договора'}
+                   
+                        <Form.Item label={'Срок действия  договора'}
                                    name={'endDate'}
                                    rules={[{required: true}]}>
                             <DatePicker
@@ -334,8 +367,8 @@ export const EditContract = () => {
                                 size={'large'}
                             />
                         </Form.Item>
-                    </Col>
-                    <Col xs={24} sm={24} md={18} lg={8} xl={6}>
+                    </Col>}
+                    <Col xs={24} sm={24} md={18} lg={hideSrok ? 16 : 8} xl={hideSrok ? 12 : 6}>
                         <Form.Item label={'Шифр и наименование специальности'}
                                    name={'specialtyNameIds'}
                                    rules={[{required: false}]}>
@@ -344,16 +377,21 @@ export const EditContract = () => {
                                 size="large"
                                 popupMatchSelectWidth={false}
                                 placeholder=""
-                              
+                                value={nameSpec}
                                 className="w-full"
-                                options={dataNameSpecialty?.map((item)=>{
+                                onChange={(value)=>setNameSpec(value)}
+                              
+                                options={dataNameSpecialty?.filter((option, index, self) =>
+                                    index === self.findIndex((o) => (
+                                        o.value === option.value
+                                    ))
+                                ).map((item)=>{
                                     return{
                                         key:item.id,
-                                        value:item.value,
+                                        value:item.id,
                                         label:item.label
                                     }
-                                })}
-                                
+                                })} 
                             />
                         </Form.Item>
 
@@ -387,7 +425,8 @@ export const EditContract = () => {
                     <Col xs={24} sm={24} md={18} lg={16} xl={12}>
                         <Form.Item label={'Количество мест'}
                                    name={'placesAmount'}
-                                   rules={[{required: true}]}>
+                                //    rules={[{required: true}]}
+                                   >
                             <InputNumber
                                 className="w-full"
                                 size="large"
@@ -423,7 +462,6 @@ export const EditContract = () => {
                                 onRemove={file => {
                                     setPdfContract(undefined)
                                 }}
-
                             >
                                 <Button
                                     className="w-full"
@@ -435,14 +473,13 @@ export const EditContract = () => {
                                 </Button>
                             </Upload>
                         </Form.Item>
-
                     </Col>
                 </Row>
                 <Row gutter={[16, 16]}>
                     <Col xs={24} sm={24} md={18} lg={8} xl={6}>
                         <Form.Item label={'Прикрепить дополнительный документ в формате pdf'}
                                    name={'pdfAgreement'}
-                                   rules={[{required: true}]}
+                                //    rules={[{required: true}]}
                         >
                             <Upload
                                 beforeUpload={(file) => {

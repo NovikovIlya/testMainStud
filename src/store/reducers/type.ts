@@ -5,7 +5,8 @@ export interface InitialState {
 	accessToken: string | null
 	refreshToken: string | null
 	user: User | null
-	edit: boolean
+	edit: boolean,
+	subRole:any,
 }
 export type Documentation = {
 	links: {
@@ -62,6 +63,7 @@ export interface Role {
 	id: string
 	userId: string
 	type: string
+	credentials?:any
 }
 export interface ICalendarItem {
 	semester: number

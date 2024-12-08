@@ -1,8 +1,12 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
+import { setupListeners } from '@reduxjs/toolkit/query'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import logger from 'redux-logger'
 
+import { abiturientApi } from './api/abiturent/abitRedirect'
 import { apiSlice } from './api/apiSlice'
+import { apiSliceStudent } from './api/apiSliceStudent'
+import { apiSliceTeacher } from './api/apiSliceTeacher'
 import { practiceApi } from './api/practiceApi/practiceApi'
 import CatalogFilterSlice from './reducers/CatalogFilterSlice'
 import ChatRespondStatusSlice from './reducers/ChatRespondStatusSlice'
@@ -111,14 +115,23 @@ export const store = configureStore({
 		forthStageCommentVisibility: forthStageCommentVisibilitySlice,
 		fifthStageCommentVisibility: fifthStageCommentVisibilitySlice,
 		sixStageCommentVisibility: sixStageCommentVisibilitySlice,
-		catalogFilter: CatalogFilterSlice
+		catalogFilter: CatalogFilterSlice,
+		[abiturientApi.reducerPath]: abiturientApi.reducer,
+		[apiSliceStudent.reducerPath]: apiSliceStudent.reducer,
+		[apiSliceTeacher.reducerPath]: apiSliceTeacher.reducer
 	},
+	//@ts-ignore
 	middleware: getDefaultMiddleware =>
 		getDefaultMiddleware()
 			//.concat(...(process.env.NODE_ENV !== 'production' ? [logger] : []))
-			.concat(apiSlice.middleware, practiceApi.middleware),
+			.concat(apiSlice.middleware, practiceApi.middleware)
+			.concat(abiturientApi.middleware)
+			.concat(apiSliceStudent.middleware)
+			.concat(apiSliceTeacher.middleware),
 	devTools: true
 })
+
+setupListeners(store.dispatch)
 
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch

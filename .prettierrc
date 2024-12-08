@@ -23,5 +23,6 @@
     "^./(.*)"
   ],
   "importOrderSeparation": true,
-  "importOrderSortSpecifiers": true
+  "importOrderSortSpecifiers": true,
+  "printWidth": 120
 }

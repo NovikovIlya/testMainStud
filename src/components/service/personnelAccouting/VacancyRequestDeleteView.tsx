@@ -3,10 +3,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useAppSelector } from '../../../store'
-import {
-	useAcceptDeleteVacancyRequestMutation,
-	useGetVacancyRequestsQuery
-} from '../../../store/api/serviceApi'
+import { useAcceptDeleteVacancyRequestMutation, useGetVacancyRequestsQuery } from '../../../store/api/serviceApi'
 import ArrowIcon from '../jobSeeker/ArrowIcon'
 
 export const VacancyRequestDeleteView = () => {
@@ -18,27 +15,13 @@ export const VacancyRequestDeleteView = () => {
 
 	const { refetch } = useGetVacancyRequestsQuery('все')
 
-	const [post, setPost] = useState<string | undefined>(
-		currentVacancy?.title.rendered
-	)
-	const [experience, setExperience] = useState<string | undefined>(
-		currentVacancy?.acf.experience
-	)
-	const [employment, setEmployment] = useState<string | undefined>(
-		currentVacancy?.acf.employment
-	)
-	const [salary, setSalary] = useState<string | undefined>(
-		currentVacancy?.acf.salary
-	)
-	const [category, setCategory] = useState<string | undefined>(
-		currentVacancy?.acf.category
-	)
-	const [direction, setDirection] = useState<string | undefined>(
-		currentVacancy?.acf.direction
-	)
-	const [subdivision, setSubdivision] = useState<string | undefined>(
-		currentVacancy?.acf.subdivision
-	)
+	const [post, setPost] = useState<string | undefined>(currentVacancy?.title.rendered)
+	const [experience, setExperience] = useState<string | undefined>(currentVacancy?.acf.experience)
+	const [employment, setEmployment] = useState<string | undefined>(currentVacancy?.acf.employment)
+	const [salary, setSalary] = useState<string | undefined>(currentVacancy?.acf.salary)
+	const [category, setCategory] = useState<string | undefined>(currentVacancy?.acf.category)
+	const [direction, setDirection] = useState<string | undefined>(currentVacancy?.acf.direction)
+	const [subdivision, setSubdivision] = useState<string | undefined>(currentVacancy?.acf.subdivision)
 
 	const [responsibilities, setResponsibilities] = useState<string | undefined>(
 		currentVacancy?.acf.responsibilities
@@ -114,9 +97,7 @@ export const VacancyRequestDeleteView = () => {
 						setIsResultModalOpen(false)
 					}}
 				>
-					<p className="text-center font-content-font text-black text-[16px]/[20px] font-normal">
-						{resultModalText}
-					</p>
+					<p className="text-center font-content-font text-black text-[16px]/[20px] font-normal">{resultModalText}</p>
 					<Button
 						className="rounded-[40px] w-full !py-[13px] mt-[40px]"
 						type="primary"
@@ -129,10 +110,7 @@ export const VacancyRequestDeleteView = () => {
 					</Button>
 				</Modal>
 			</ConfigProvider>
-			<div
-				id="wrapper"
-				className="pl-[54px] pr-[54px] pt-[120px] pb-[52px] w-full"
-			>
+			<div id="wrapper" className="pl-[54px] pr-[54px] pt-[120px] pb-[52px] w-full">
 				<div className="flex">
 					<button
 						onClick={() => {
@@ -148,82 +126,52 @@ export const VacancyRequestDeleteView = () => {
 				</div>
 				<div className="w-[50%] mt-[52px] flex flex-col gap-[40px]">
 					<div className="flex flex-col gap-[16px]">
-						<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-							Должность:
-						</p>
-						<p className="font-content-font font-normal text-black text-[18px]/[21px]">
-							{post && '«' + post + '»'}
-						</p>
+						<p className="font-content-font font-bold text-black text-[18px]/[21px]">Должность:</p>
+						<p className="font-content-font font-normal text-black text-[18px]/[21px]">{post && '«' + post + '»'}</p>
 					</div>
 					<div className="flex gap-[60px]">
 						<div className="flex flex-col gap-[16px]">
-							<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-								Требуемый опыт работы:
-							</p>
-							<p className="font-content-font font-normal text-black text-[18px]/[21px]">
-								{experience && experience}
-							</p>
+							<p className="font-content-font font-bold text-black text-[18px]/[21px]">Требуемый опыт работы:</p>
+							<p className="font-content-font font-normal text-black text-[18px]/[21px]">{experience && experience}</p>
 						</div>
 						<div className="flex flex-col gap-[16px]">
-							<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-								Тип занятости:
-							</p>
-							<p className="font-content-font font-normal text-black text-[18px]/[21px]">
-								{employment && employment}
-							</p>
+							<p className="font-content-font font-bold text-black text-[18px]/[21px]">Тип занятости:</p>
+							<p className="font-content-font font-normal text-black text-[18px]/[21px]">{employment && employment}</p>
 						</div>
 						<div className="flex flex-col gap-[16px]">
-							<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-								Заработная плата:
-							</p>
-							<p className="font-content-font font-normal text-black text-[18px]/[21px]">
-								{salary && salary}
-							</p>
+							<p className="font-content-font font-bold text-black text-[18px]/[21px]">Заработная плата:</p>
+							<p className="font-content-font font-normal text-black text-[18px]/[21px]">{salary && salary}</p>
 						</div>
 					</div>
 					<div className="flex flex-col gap-[16px]">
-						<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-							Задачи:
-						</p>
+						<p className="font-content-font font-bold text-black text-[18px]/[21px]">Задачи:</p>
 						<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-pre-line">
 							{responsibilities && responsibilities}
 						</p>
 					</div>
 					<div className="flex flex-col gap-[16px]">
-						<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-							Требования:
-						</p>
+						<p className="font-content-font font-bold text-black text-[18px]/[21px]">Требования:</p>
 						<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-pre-line">
 							{skills && skills}
 						</p>
 					</div>
 					<div className="flex flex-col gap-[16px]">
-						<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-							Условия:
-						</p>
+						<p className="font-content-font font-bold text-black text-[18px]/[21px]">Условия:</p>
 						<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-pre-line">
 							{conditions && conditions}
 						</p>
 					</div>
 					<div className="flex gap-[40px]">
 						<div className="flex flex-col gap-[16px]">
-							<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-								Категория сотрудников
-							</p>
-							<p className="font-content-font font-normal text-black text-[18px]/[21px]">
-								{category && category}
-							</p>
+							<p className="font-content-font font-bold text-black text-[18px]/[21px]">Категория сотрудников</p>
+							<p className="font-content-font font-normal text-black text-[18px]/[21px]">{category && category}</p>
 						</div>
 						<div className="flex flex-col gap-[16px]">
 							<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-								{direction && direction !== 'false'
-									? 'Профобласть'
-									: subdivision && 'Подразделение'}
+								{direction && direction !== 'false' ? 'Профобласть' : subdivision && 'Подразделение'}
 							</p>
 							<p className="font-content-font font-normal text-black text-[18px]/[21px]">
-								{direction && direction !== 'false'
-									? direction
-									: subdivision && subdivision}
+								{direction && direction !== 'false' ? direction : subdivision && subdivision}
 							</p>
 						</div>
 					</div>
@@ -233,20 +181,6 @@ export const VacancyRequestDeleteView = () => {
 								.unwrap()
 								.then(() => {
 									refetch()
-								})
-								.catch(error => {
-									try {
-										setResultModalText(error.data.errors[0].message as string)
-									} catch (err) {
-										setResultModalText(
-											'Что-то пошло не так, приносим извинения за неудобства'
-										)
-									}
-									setIsResultModalOpen(true)
-								})
-								.then(() => {
-									setResultModalText('Вакансия успешно удалена')
-									setIsResultModalOpen(true)
 								})
 						}}
 						type="primary"

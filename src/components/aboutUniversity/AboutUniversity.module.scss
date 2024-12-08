@@ -1,0 +1,15 @@
+.button:hover {
+	color: #004ec2;
+}
+
+.button .arrowStyles {
+	transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+	color: #000;
+	transform: translateX(0);
+}
+
+.button:hover .arrowStyles {
+	transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+	color: #004ec2;
+	transform: translateX(-10px);
+}

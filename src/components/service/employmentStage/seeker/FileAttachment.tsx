@@ -49,7 +49,7 @@ export const FileAttachment = (
 			{foundDoc ? (
 				<>
 					<p
-						className="col-start-2 text-ellipsis overflow-clip pointer-events-auto underline text-blue-600 cursor-pointer"
+						className="col-start-2 h-[20px] text-ellipsis overflow-clip pointer-events-auto underline text-blue-600 cursor-pointer"
 						onClick={() => {
 							downloadDoc({ respondId: props.respondId, docId: foundDoc.id })
 								.unwrap()

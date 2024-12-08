@@ -348,8 +348,7 @@ export const SupervisorUpdateVacancy = () => {
 													setIsSuccessModalOpen(true)
 												})
 										} catch (error: any) {
-											let errorStr = error.status + ' ' + error.data.message
-											openAlert({ type: 'error', text: errorStr })
+											openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 										}
 									}}
 									type="primary"

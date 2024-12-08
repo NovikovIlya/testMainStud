@@ -65,8 +65,7 @@ export const ArchiveItem = (props: {
 										})
 									openAlert({ type: 'success', text: 'Отклик успешно удалён.' })
 								} catch (error: any) {
-									let errorStr = error.status + ' ' + error.data.message
-									openAlert({ type: 'error', text: errorStr })
+									openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 								}
 							}}
 						>

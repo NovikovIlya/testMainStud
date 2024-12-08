@@ -165,8 +165,7 @@ export const ReserveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 												})
 											openAlert({ type: 'success', text: 'Отклик удален' })
 										} catch (error: any) {
-											let errorStr = error.status + ' ' + error.data.message
-											openAlert({ type: 'error', text: errorStr })
+											openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 										}
 									}}
 								>

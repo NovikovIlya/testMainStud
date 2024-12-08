@@ -215,8 +215,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 														})
 													openAlert({ type: 'success', text: 'Отклик успешно отправлен руководителю' })
 												} catch (error: any) {
-													let errorStr = error.status + ' ' + error.data.message
-													openAlert({ type: 'error', text: errorStr })
+													openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 												}
 											}}
 											disabled={isRespondSentToSupervisor || isRespondSentToReserve || isRespondSentToArchive}
@@ -238,8 +237,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 														})
 													openAlert({ type: 'success', text: 'Отклик успешно отправлен в архив' })
 												} catch (error: any) {
-													let errorStr = error.status + ' ' + error.data.message
-													openAlert({ type: 'error', text: errorStr })
+													openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 												}
 											}}
 											disabled={isRespondSentToSupervisor || isRespondSentToReserve || isRespondSentToArchive}
@@ -258,8 +256,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 														})
 													openAlert({ type: 'success', text: 'Отклик успешно отправлен в резерв' })
 												} catch (error: any) {
-													let errorStr = error.status + ' ' + error.data.message
-													openAlert({ type: 'error', text: errorStr })
+													openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 												}
 											}}
 											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
@@ -315,8 +312,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 														})
 													openAlert({ type: 'success', text: 'Резюме отправлено в архив' })
 												} catch (error: any) {
-													let errorStr = error.status + ' ' + error.data.message
-													openAlert({ type: 'error', text: errorStr })
+													openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 												}
 											}}
 											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[257px] h-[40px] py-[8px] px-[24px] border-black"
@@ -494,8 +490,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 														})
 													openAlert({ type: 'success', text: 'Отклик успешно отправлен руководителю' })
 												} catch (error: any) {
-													let errorStr = error.status + ' ' + error.data.message
-													openAlert({ type: 'error', text: errorStr })
+													openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 												}
 											}}
 											disabled={isRespondSentToSupervisor || isRespondSentToReserve || isRespondSentToArchive}
@@ -517,8 +512,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 														})
 													openAlert({ type: 'success', text: 'Отклик успешно отправлен в архив' })
 												} catch (error: any) {
-													let errorStr = error.status + ' ' + error.data.message
-													openAlert({ type: 'error', text: errorStr })
+													openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 												}
 											}}
 											disabled={isRespondSentToSupervisor || isRespondSentToReserve || isRespondSentToArchive}
@@ -537,8 +531,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 														})
 													openAlert({ type: 'success', text: 'Отклик успешно отправлен в резерв' })
 												} catch (error: any) {
-													let errorStr = error.status + ' ' + error.data.message
-													openAlert({ type: 'error', text: errorStr })
+													openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 												}
 											}}
 											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
@@ -578,8 +571,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 														})
 													openAlert({ type: 'success', text: 'Отклик успешно отправлен в архив' })
 												} catch (error: any) {
-													let errorStr = error.status + ' ' + error.data.message
-													openAlert({ type: 'error', text: errorStr })
+													openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 												}
 											}}
 											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[257px] h-[40px] py-[8px] px-[24px] border-black"

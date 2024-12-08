@@ -5,7 +5,7 @@ import React, { useState } from 'react'
 import { AvatartandardSvg } from '../../../../../assets/svg/AvatarStandardSvg'
 import { useAppSelector } from '../../../../../store'
 import { useEmployeeSeekerRequestMutation, useGetRespondFullInfoQuery } from '../../../../../store/api/serviceApi'
-import { useAlert } from '../../../../../utils/AlertMessage'
+import { useAlert } from '../../../../../utils/Alert/AlertMessage'
 import { NocircleArrowIcon } from '../../../jobSeeker/NoCircleArrowIcon'
 
 export const SupervisorInterviewSeekerInfo = () => {

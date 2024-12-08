@@ -9,7 +9,7 @@ import {
 	useGetSubdivisionsQuery,
 	useRequestUpdateVacancyMutation
 } from '../../../../../store/api/serviceApi'
-import { useAlert } from '../../../../../utils/AlertMessage'
+import { useAlert } from '../../../../../utils/Alert/AlertMessage'
 import ArrowIcon from '../../../jobSeeker/ArrowIcon'
 
 export const SupervisorUpdateVacancy = () => {

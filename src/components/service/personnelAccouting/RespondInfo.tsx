@@ -24,7 +24,7 @@ import { openChat } from '../../../store/reducers/ChatRespondStatusSlice'
 import { setRespondId } from '../../../store/reducers/CurrentRespondIdSlice'
 import { setCurrentVacancyId } from '../../../store/reducers/CurrentVacancyIdSlice'
 import { setChatId } from '../../../store/reducers/chatIdSlice'
-import { useAlert } from '../../../utils/AlertMessage'
+import { useAlert } from '../../../utils/Alert/AlertMessage'
 import { NocircleArrowIcon } from '../jobSeeker/NoCircleArrowIcon'
 
 import { InviteSeekerForm } from './supervisor/InviteSeekerForm'

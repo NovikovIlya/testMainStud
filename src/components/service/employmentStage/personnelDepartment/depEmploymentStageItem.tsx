@@ -20,7 +20,7 @@ import { setSecondStageStatus } from '../../../../store/reducers/EmploymentStage
 import { setSixStageStatusPersonnel } from '../../../../store/reducers/EmploymentStageReducers/stages/SixStageStatusPersonnelSlice'
 import { setSixStageStatus } from '../../../../store/reducers/EmploymentStageReducers/stages/SixStageStatusSlice'
 import { setThirdStageStatus } from '../../../../store/reducers/EmploymentStageReducers/stages/ThirdStageStatusSlice'
-import { useAlert } from '../../../../utils/AlertMessage'
+import { useAlert } from '../../../../utils/Alert/AlertMessage'
 
 import { DocumentElem } from './components/DocumentElem'
 import { StageComment } from './components/StageComment'

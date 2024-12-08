@@ -8,7 +8,7 @@ import {
 	useGetSubdivisionsQuery,
 	useRequestCreateVacancyMutation
 } from '../../../../../store/api/serviceApi'
-import { useAlert } from '../../../../../utils/AlertMessage'
+import { useAlert } from '../../../../../utils/Alert/AlertMessage'
 
 export const SupervisorCreateVacancyForm = () => {
 	const { openAlert } = useAlert()

@@ -7,7 +7,7 @@ import { DeleteSvg } from '../../../../../assets/svg/DeleteSvg'
 import { useLazyGetVacancyViewQuery, useRequestDeleteVacancyMutation } from '../../../../../store/api/serviceApi'
 import { setCurrentVacancy } from '../../../../../store/reducers/CurrentVacancySlice'
 import { VacancyItemType } from '../../../../../store/reducers/type'
-import { useAlert } from '../../../../../utils/AlertMessage'
+import { useAlert } from '../../../../../utils/Alert/AlertMessage'
 
 export default function VacancyItem(props: VacancyItemType) {
 	const { openAlert } = useAlert()

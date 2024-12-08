@@ -2,7 +2,7 @@ import { Button, Form, Modal, Select } from 'antd'
 import { useState } from 'react'
 
 import { useApproveReservedRespondMutation, useGetAllVacanciesQuery } from '../../../store/api/serviceApi'
-import { useAlert } from '../../../utils/AlertMessage'
+import { useAlert } from '../../../utils/Alert/AlertMessage'
 
 export const ApproveRespondForm = (props: {
 	respondId: number

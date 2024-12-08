@@ -3,7 +3,7 @@ import { useState } from 'react'
 import uuid from 'react-uuid'
 
 import { useInviteSeekerMutation } from '../../../../store/api/serviceApi'
-import { useAlert } from '../../../../utils/AlertMessage'
+import { useAlert } from '../../../../utils/Alert/AlertMessage'
 
 export const InviteSeekerForm = (props: { respondId: number; isButtonDisabled: boolean; callback: Function }) => {
 	const [isFormOpen, setIsFormOpen] = useState<boolean>(false)

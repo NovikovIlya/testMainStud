@@ -15,6 +15,7 @@ import {
 	useLazyGetVacancyRequestViewQuery
 } from '../../../store/api/serviceApi'
 import ArrowIcon from '../jobSeeker/ArrowIcon'
+import {useAlert} from "../../../utils/Alert/AlertMessage";
 
 export const VacancyRequestCreateView = () => {
 	const { requestId } = useAppSelector(state => state.currentRequest)
@@ -22,6 +23,8 @@ export const VacancyRequestCreateView = () => {
 	const [getVacancyRequestView, queryStatus] = useLazyGetVacancyRequestViewQuery()
 	const [acceptRequest] = useAcceptCreateVacancyRequestMutation()
 	const [alterRequest] = useAlterCreateVacancyRequestMutation()
+
+	const { openAlert } = useAlert()
 
 	const { refetch } = useGetVacancyRequestsQuery('все')
 
@@ -177,9 +180,10 @@ export const VacancyRequestCreateView = () => {
 				<Form
 					layout="vertical"
 					requiredMark={false}
-					onFinish={values => {
-						isEdited
-							? alterRequest({
+					onFinish={async values => {
+						try {
+							if (isEdited) {
+								await alterRequest({
 									post: post as string,
 									experience: experience as string,
 									salary: salary as string,
@@ -188,27 +192,19 @@ export const VacancyRequestCreateView = () => {
 									skills: skills as string,
 									conditions: conditions as string,
 									vacancyRequestId: requestId
-							  })
-									.unwrap()
-									.then(() => {
-										acceptRequest({
-											data: {
-												category: categoryTitle,
-												direction: direction,
-												subdivision: subdivision,
-												emplDocDefIds: values.formDocs
-											},
-											requestId: requestId
-										})
-											.unwrap()
-											.then(() => {
-												refetch()
-												setIsModalOpen(false)
-												setResultModalText('Вакансия успешно опубликована')
-												setIsResultModalOpen(true)
-											})
-									})
-							: acceptRequest({
+								}).unwrap();
+
+								await acceptRequest({
+									data: {
+										category: categoryTitle,
+										direction: direction,
+										subdivision: subdivision,
+										emplDocDefIds: values.formDocs
+									},
+									requestId: requestId
+								}).unwrap();
+							} else {
+								await acceptRequest({
 									data: {
 										category: categoryTitle,
 										direction: direction,
@@ -219,14 +215,17 @@ export const VacancyRequestCreateView = () => {
 										]
 									},
 									requestId: requestId
-							  })
-									.unwrap()
-									.then(() => {
-										refetch()
-										setIsModalOpen(false)
-										setResultModalText('Вакансия успешно опубликована')
-										setIsResultModalOpen(true)
-									})
+								}).unwrap();
+							}
+
+							refetch();
+							setIsModalOpen(false);
+							setResultModalText('Вакансия успешно опубликована');
+							setIsResultModalOpen(true);
+
+						} catch (error: any) {
+							openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' });
+						}
 					}}
 				>
 					<p className="font-content-font font-bold text-[18px]/[21.6px] text-black opacity-80 mb-[40px]">

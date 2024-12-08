@@ -151,16 +151,20 @@ export const SupervisorUpdateVacancy = () => {
 						layout="vertical"
 						requiredMark={false}
 						className="w-[50%] mt-[52px]"
-						onFinish={values => {
-							setPost(prev => values.post)
-							setExperience(prev => values.experience)
-							setEmployment(prev => values.employment)
-							setSalary(prev => values.salary)
-							setResponsibilities(prev => values.responsibilities)
-							setSkills(prev => values.skills)
-							setConditions(prev => values.conditions)
-							setIsSendRequestButtonActivated(true)
-							setIsEdit(false)
+						onFinish={async values => {
+							try {
+								setPost(prev => values.post)
+								setExperience(prev => values.experience)
+								setEmployment(prev => values.employment)
+								setSalary(prev => values.salary)
+								setResponsibilities(prev => values.responsibilities)
+								setSkills(prev => values.skills)
+								setConditions(prev => values.conditions)
+								setIsSendRequestButtonActivated(true)
+								setIsEdit(false)
+							} catch (error: any) {
+								openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' });
+							}
 						}}
 					>
 						<Form.Item

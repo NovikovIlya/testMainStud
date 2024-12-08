@@ -24,6 +24,7 @@ import { useAlert } from '../../../../utils/Alert/AlertMessage'
 
 import { DocumentElem } from './components/DocumentElem'
 import { StageComment } from './components/StageComment'
+import {SuccessModalIconSvg} from "../../../../assets/svg/SuccessModalIconSvg";
 
 interface Document {
 	id: number
@@ -42,7 +43,6 @@ interface DepEmploymentStageItemProps {
 }
 
 export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
-	console.log(props.stageStatus)
 
 	const { openAlert } = useAlert()
 
@@ -59,6 +59,7 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 	const sixStageCommentVisibility = useAppSelector(state => state.sixStageCommentVisibility)
 
 	const [isReqModalOpen, setIsReqModalOpen] = useState(false)
+	const [isReqModalSuccessOpen, setIsReqModalSuccessOpen] = useState(false)
 
 	const dispatch = useDispatch()
 
@@ -101,13 +102,18 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 								необходимо подойти и подписать его.
 							</p>
 							<Button
-								className="rounded-[54.5px] text-[14px] w-full py-[13px]"
+								className="rounded-[54.5px] text-[14px] w-full min-h-[40px] py-[13px]"
 								type="primary"
-								onClick={() => {
-									markBankCardApplicationFormed({ subStageId: 5 })
-									dispatch(setFifthStageStatus('ACCEPTED'))
-									setIsReqModalOpen(false)
-									openAlert({ type: 'info', text: 'Сообщение отправлено' })
+								onClick={ async () => {
+									try {
+										await markBankCardApplicationFormed({ subStageId: 5 })
+										dispatch(setFifthStageStatus('ACCEPTED'))
+										setIsReqModalOpen(false)
+										setIsReqModalSuccessOpen(true)
+
+									} catch (error: any) {
+										openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+									}
 								}}
 							>
 								Ок
@@ -118,6 +124,48 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 			</>
 		)
 	}
+
+	const ReqModalSuccess = () => {
+		return (
+			<>
+				<ConfigProvider
+					theme={{
+						token: {
+							boxShadow: '0 0 19px 0 rgba(212, 227, 241, 0.6)'
+						}
+					}}
+				>
+					<Modal
+						centered
+						open={isReqModalSuccessOpen}
+						onCancel={() => {
+							setIsReqModalSuccessOpen(false)
+						}}
+						title={null}
+						footer={null}
+						width={407}
+					>
+						<div className="flex flex-col items-center px-[15px] pt-[50px] pb-[30px] gap-[34px]">
+							<SuccessModalIconSvg></SuccessModalIconSvg>
+							<p className="text-center font-content-font font-normal flex items-start text-black text-[16px]/[20px]">
+								Заявление успешно сформировано
+							</p>
+							<Button
+								className="rounded-[54.5px] text-[14px] w-full min-h-[40px] py-[13px]"
+								type="primary"
+								onClick={() => {
+									setIsReqModalSuccessOpen(false)
+								}}
+							>
+								Ок
+							</Button>
+						</div>
+					</Modal>
+				</ConfigProvider>
+			</>
+		)
+	}
+
 	const StageStatusComponent = () => {
 		return (
 			<>
@@ -128,15 +176,20 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 								<Button
 									className="text-[#FFFFFF] py-[8px] px-[24px] border-none rounded-[54.5px] text-[16px] font-normal"
 									type="primary"
-									onClick={() => {
-										changeStatus({
-											status: 'ACCEPTED',
-											comment: textRef.current,
-											subStageId: props.stage
-										})
-										dispatch(setSecondStageStatus('ACCEPTED'))
-										dispatch(setSecondStageCommentVisibility('invisible'))
-										openAlert({ type: 'success', text: 'Этап успешно принят' })
+									onClick={async () => {
+										try {
+											await changeStatus({
+												status: 'ACCEPTED',
+												comment: textRef.current,
+												subStageId: props.stage
+											})
+											dispatch(setSecondStageStatus('ACCEPTED'))
+											dispatch(setSecondStageCommentVisibility('invisible'))
+											openAlert({ type: 'success', text: 'Этап успешно принят'})
+										} catch (error: any) {
+											openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+										}
+
 									}}
 								>
 									Принять
@@ -179,15 +232,19 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 								<Button
 									className="text-[#FFFFFF] py-[8px] px-[24px] border-none rounded-[54.5px] text-[16px] font-normal"
 									type="primary"
-									onClick={() => {
-										changeStatus({
-											status: 'ACCEPTED',
-											comment: textRef.current,
-											subStageId: props.stage
-										})
-										dispatch(setThirdStageStatus('ACCEPTED'))
-										dispatch(setThirdStageCommentVisibility('invisible'))
-										openAlert({ type: 'success', text: 'Этап успешно принят' })
+									onClick={ async () => {
+										try {
+											await changeStatus({
+												status: 'ACCEPTED',
+												comment: textRef.current,
+												subStageId: props.stage
+											})
+											dispatch(setThirdStageStatus('ACCEPTED'))
+											dispatch(setThirdStageCommentVisibility('invisible'))
+											openAlert({ type: 'success', text: 'Этап успешно принят' })
+										} catch (error: any) {
+											openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+										}
 									}}
 								>
 									Принять
@@ -230,15 +287,20 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 								<Button
 									className="text-[#FFFFFF] py-[8px] px-[24px] border-none rounded-[54.5px] text-[16px] font-normal"
 									type="primary"
-									onClick={() => {
-										changeStatusAccounting({
-											status: 'ACCEPTED',
-											comment: textRef.current,
-											subStageId: props.stage
-										})
-										dispatch(setFifthStageStatus('ACCEPTED'))
-										dispatch(setFifthStageCommentVisibility('invisible'))
-										openAlert({ type: 'success', text: 'Этап успешно принят' })
+									onClick={async () => {
+										try {
+											await changeStatusAccounting({
+												status: 'ACCEPTED',
+												comment: textRef.current,
+												subStageId: props.stage
+											})
+											dispatch(setFifthStageStatus('ACCEPTED'))
+											dispatch(setFifthStageCommentVisibility('invisible'))
+											openAlert({ type: 'success', text: 'Этап успешно принят' })
+										} catch (error: any) {
+											openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+										}
+
 									}}
 								>
 									Принять
@@ -414,16 +476,21 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 								<Button
 									className="rounded-[54.5px] py-[12px] px-[24px]  text-[16px]"
 									type="primary"
-									onClick={() => {
-										changeStatus({
-											status: 'REFINE',
-											comment: textRef.current,
-											subStageId: props.stage
-										})
-										dispatch(setSecondStageStatus('REFINE'))
-										dispatch(setSecondStageCommentVisibility('visible'))
-										openAlert({ type: 'info', text: 'Этап успешно отправлен на доработку' })
-										setIsRevisionModalOpen(false)
+									onClick={async () => {
+										try {
+											await changeStatus({
+												status: 'REFINE',
+												comment: textRef.current,
+												subStageId: props.stage
+											})
+											dispatch(setSecondStageStatus('REFINE'))
+											dispatch(setSecondStageCommentVisibility('visible'))
+											setIsRevisionModalOpen(false)
+											openAlert({ type: 'success', text: 'Этап успешно отправлен на доработку' })
+										} catch (error: any) {
+											openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+										}
+
 									}}
 								>
 									Отправить
@@ -433,16 +500,21 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 								<Button
 									className="rounded-[54.5px] py-[12px] px-[24px]  text-[16px]"
 									type="primary"
-									onClick={() => {
-										changeStatus({
-											status: 'REFINE',
-											comment: textRef.current,
-											subStageId: props.stage
-										})
-										dispatch(setThirdStageStatus('REFINE'))
-										dispatch(setThirdStageCommentVisibility('visible'))
-										openAlert({ type: 'info', text: 'Этап успешно отправлен на доработку' })
-										setIsRevisionModalOpen(false)
+									onClick={async () => {
+										try {
+											await changeStatus({
+												status: 'REFINE',
+												comment: textRef.current,
+												subStageId: props.stage
+											})
+											dispatch(setThirdStageStatus('REFINE'))
+											dispatch(setThirdStageCommentVisibility('visible'))
+											setIsRevisionModalOpen(false)
+											openAlert({ type: 'success', text: 'Этап успешно отправлен на доработку' })
+										} catch (error: any) {
+											openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+										}
+
 									}}
 								>
 									Отправить
@@ -452,15 +524,20 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 								<Button
 									className="rounded-[54.5px] py-[12px] px-[24px]  text-[16px]"
 									type="primary"
-									onClick={() => {
-										changeStatus({
-											status: 'REFINE',
-											comment: textRef.current,
-											subStageId: props.stage
-										})
-										dispatch(setForthStageStatus('REFINE'))
-										openAlert({ type: 'info', text: 'Этап успешно отправлен на доработку' })
-										setIsRevisionModalOpen(false)
+									onClick={async () => {
+										try {
+											await changeStatus({
+												status: 'REFINE',
+												comment: textRef.current,
+												subStageId: props.stage
+											})
+											dispatch(setForthStageStatus('REFINE'))
+											setIsRevisionModalOpen(false)
+											openAlert({ type: 'success', text: 'Этап успешно отправлен на доработку' })
+										} catch (error: any) {
+											openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+										}
+
 									}}
 								>
 									Отправить
@@ -470,15 +547,19 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 								<Button
 									className="rounded-[54.5px] py-[12px] px-[24px]  text-[16px]"
 									type="primary"
-									onClick={() => {
-										changeStatusAccounting({
-											status: 'REFINE',
-											comment: textRef.current,
-											subStageId: props.stage
-										})
-										dispatch(setFifthStageStatus('REFINE'))
-										openAlert({ type: 'info', text: 'Этап успешно отправлен на доработку' })
-										setIsRevisionModalOpen(false)
+									onClick={async () => {
+										try {
+											await changeStatusAccounting({
+												status: 'REFINE',
+												comment: textRef.current,
+												subStageId: props.stage
+											})
+											dispatch(setFifthStageStatus('REFINE'))
+											setIsRevisionModalOpen(false)
+											openAlert({ type: 'success', text: 'Этап успешно отправлен на доработку' })
+										} catch (error: any) {
+											openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+										}
 									}}
 								>
 									Отправить
@@ -494,6 +575,7 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 	return (
 		<>
 			<ReqModal></ReqModal>
+			<ReqModalSuccess></ReqModalSuccess>
 			<StageStatusModal></StageStatusModal>
 			<div className="p-[20px] pr-[0px] gap-[20px] flex flex-col w-full bg-[#FFFFFF]">
 				<div className="flex flex-row items-center justify-between min-h-[32px]">

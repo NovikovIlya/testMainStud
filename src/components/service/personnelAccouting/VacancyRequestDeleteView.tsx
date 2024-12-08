@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAppSelector } from '../../../store'
 import { useAcceptDeleteVacancyRequestMutation, useGetVacancyRequestsQuery } from '../../../store/api/serviceApi'
 import ArrowIcon from '../jobSeeker/ArrowIcon'
+import {useAlert} from "../../../utils/Alert/AlertMessage";
 
 export const VacancyRequestDeleteView = () => {
 	const { currentVacancy } = useAppSelector(state => state.currentVacancy)
@@ -12,6 +13,8 @@ export const VacancyRequestDeleteView = () => {
 
 	const navigate = useNavigate()
 	const [acceptRequest] = useAcceptDeleteVacancyRequestMutation()
+
+	const { openAlert } = useAlert()
 
 	const { refetch } = useGetVacancyRequestsQuery('все')
 
@@ -176,12 +179,17 @@ export const VacancyRequestDeleteView = () => {
 						</div>
 					</div>
 					<Button
-						onClick={() => {
-							acceptRequest(requestId)
-								.unwrap()
-								.then(() => {
-									refetch()
-								})
+						onClick={async () => {
+							try {
+								await acceptRequest(requestId)
+									.unwrap()
+									.then(() => {
+										refetch()
+									})
+								openAlert({ type: 'success', text: 'NEED_TEXT' })
+							} catch (error: any) {
+								openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+							}
 						}}
 						type="primary"
 						className="rounded-[54.5px] w-[121px]"

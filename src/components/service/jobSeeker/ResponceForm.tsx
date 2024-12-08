@@ -1320,6 +1320,27 @@ export const ResponseForm = () => {
 							>
 								<Input
 									placeholder='Например, "Прототипирование"'
+									suffix={
+										<ConfigProvider
+											theme={{
+												components: {
+													Button: {
+														colorBgTextHover: '#ffffff',
+														colorBgTextActive: '#ffffff'
+													}
+												}
+											}}
+										>
+											<Button
+												onClick={() => {
+													skillInputValue !== '' &&
+														(setcurrentFormSkills([...currentFormskills, skillInputValue]), setSkillInputValue(''))
+												}}
+												icon={<ButtonPlusIcon />}
+												type="text"
+											></Button>
+										</ConfigProvider>
+									}
 									onChange={e => {
 										setSkillInputValue(e.target.value)
 									}}

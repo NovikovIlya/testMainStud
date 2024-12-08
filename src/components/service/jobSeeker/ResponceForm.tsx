@@ -345,7 +345,7 @@ export const ResponseForm = () => {
 									currentVacancy !== null &&
 										getVacancy({
 											id: currentVacancy?.id,
-											coverLetter: coverLetter,
+											coverLetter: coverLetter === '' ? null : coverLetter,
 											aboutMe: {
 												gender: aboutMeData.gender,
 												lastname: aboutMeData.surName,
@@ -375,7 +375,7 @@ export const ResponseForm = () => {
 											},
 											skills: {
 												keySkills: skillsData.skills,
-												aboutMe: skillsData.details
+												aboutMe: skillsData.details === '' ? null : skillsData.details
 											}
 										})
 											.unwrap()
@@ -447,8 +447,20 @@ export const ResponseForm = () => {
 									value={aboutMeData.gender}
 									// onChange={e => dispatch(gender(e.target.value))}
 								>
-									<Radio value={'M'}>Мужской</Radio>
-									<Radio value={'W'}>Женский</Radio>
+									<Radio
+										value={'M'}
+										tabIndex={aboutMeData.isGenderSet ? -1 : 0}
+										className={`${aboutMeData.isGenderSet && 'pointer-events-none'}`}
+									>
+										Мужской
+									</Radio>
+									<Radio
+										value={'W'}
+										tabIndex={aboutMeData.isGenderSet ? -1 : 0}
+										className={`${aboutMeData.isGenderSet && 'pointer-events-none'}`}
+									>
+										Женский
+									</Radio>
 								</Radio.Group>
 							</Form.Item>
 							<Form.Item
@@ -457,6 +469,8 @@ export const ResponseForm = () => {
 								rules={[{ required: true, message: 'Поле фамилии не заполнено' }]}
 							>
 								<Input
+									className="pointer-events-none"
+									tabIndex={-1}
 									value={aboutMeData.surName}
 									onPressEnter={e => {
 										e.preventDefault()
@@ -469,6 +483,8 @@ export const ResponseForm = () => {
 								rules={[{ required: true, message: 'Поле имени не заполнено' }]}
 							>
 								<Input
+									className="pointer-events-none"
+									tabIndex={-1}
 									value={aboutMeData.name}
 									onPressEnter={e => {
 										e.preventDefault()
@@ -481,6 +497,8 @@ export const ResponseForm = () => {
 								rules={[{ required: true, message: 'Поле отчества не заполнено' }]}
 							>
 								<Input
+									tabIndex={aboutMeData.isPatronymicSet ? -1 : 0}
+									className={`${aboutMeData.isPatronymicSet && 'pointer-events-none'}`}
 									value={aboutMeData.patronymic}
 									onPressEnter={e => {
 										e.preventDefault()
@@ -495,9 +513,13 @@ export const ResponseForm = () => {
 								rules={[{ required: true, message: 'Не введена дата рождения' }]}
 							>
 								<DatePicker
+									tabIndex={aboutMeData.isBirthDaySet ? -1 : 0}
+									className={`${aboutMeData.isBirthDaySet && 'pointer-events-none'} w-full`}
+									onKeyDown={e => {
+										e.code !== 'Tab' && aboutMeData.isBirthDaySet && e.preventDefault()
+									}}
 									format={'DD-MM-YYYY'}
 									value={dayjs(aboutMeData.birthDay, 'DD.MM.YYYY')}
-									className="w-full"
 									onChange={(e, date) => {
 										// dispatch(birthDay(date))
 										// setBirthDayDate(date)
@@ -593,7 +615,7 @@ export const ResponseForm = () => {
 								{educationData.educations.map(edu => (
 									<div
 										key={edu.id}
-										className="h-[90px] pl-[16px] pr-[16px] pb-[20px] mb-[20px] border-solid flex justify-between items-center border-0 border-b-[1px] border-black border-opacity-20 cursor-pointer"
+										className="min-h-[90px] pl-[16px] pr-[16px] pb-[20px] mb-[20px] border-solid flex justify-between items-center border-0 border-b-[1px] border-black border-opacity-20 cursor-pointer"
 									>
 										<div className="flex flex-col gap-[12px]">
 											<p className="font-content-font text-black text-[16px]/[16px] font-bold select-none">
@@ -985,7 +1007,7 @@ export const ResponseForm = () => {
 								{experienceData.experiences.map(exp => (
 									<div
 										key={exp.id}
-										className="h-[90px] pl-[16px] pr-[16px] pb-[20px] mb-[20px] border-solid flex justify-between items-center border-0 border-b-[1px] border-black border-opacity-20 cursor-pointer"
+										className="min-h-[90px] pl-[16px] pr-[16px] pb-[20px] mb-[20px] border-solid flex justify-between items-center border-0 border-b-[1px] border-black border-opacity-20 cursor-pointer"
 									>
 										<div className="flex flex-col gap-[12px]">
 											<p className="font-content-font text-black text-[16px]/[16px] font-bold select-none">

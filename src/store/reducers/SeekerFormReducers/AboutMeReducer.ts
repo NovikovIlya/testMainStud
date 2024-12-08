@@ -3,7 +3,12 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { RootState, useAppSelector } from '../..'
 import { IGender, formItem } from '../../../api/types'
 
-const initialState: formItem & { email: string } = {
+const initialState: formItem & {
+	email: string
+	isPatronymicSet: boolean
+	isGenderSet: boolean
+	isBirthDaySet: boolean
+} = {
 	name: '',
 	surName: '',
 	patronymic: '',
@@ -11,13 +16,21 @@ const initialState: formItem & { email: string } = {
 	gender: 'M',
 	phone: '',
 	email: '',
-	countryId: 184
+	countryId: 184,
+	isPatronymicSet: false,
+	isGenderSet: false,
+	isBirthDaySet: false
 }
 export const AboutMe = createSlice({
 	name: 'AboutMe',
 	initialState,
 	reducers: {
-		allData: (_, action: PayloadAction<formItem & { email: string }>) => {
+		allData: (
+			_,
+			action: PayloadAction<
+				formItem & { email: string; isPatronymicSet: boolean; isGenderSet: boolean; isBirthDaySet: boolean }
+			>
+		) => {
 			return action.payload
 		},
 		name: (state, action: PayloadAction<string>) => {
@@ -47,17 +60,7 @@ export const AboutMe = createSlice({
 	}
 })
 
-export const {
-	name,
-	surName,
-	patronymic,
-	birthDay,
-	gender,
-	phone,
-	country,
-	email,
-	allData
-} = AboutMe.actions
+export const { name, surName, patronymic, birthDay, gender, phone, country, email, allData } = AboutMe.actions
 
 export default AboutMe.reducer
 

@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux'
 import { useLocation } from 'react-router-dom'
 
 import { useAppSelector } from '../../../store'
+import { useLazyGetInfoUserQuery } from '../../../store/api/formApi'
 import {
 	useGetCategoriesQuery,
 	useGetDirectionsQuery,
@@ -12,11 +13,7 @@ import {
 	useLazyGetVacancyPreviewByDirectionQuery,
 	useLazyGetVacancyPreviewBySubdivisionQuery
 } from '../../../store/api/serviceApi'
-import {
-	keepFilterCategory,
-	keepFilterSubCategory,
-	keepFilterType
-} from '../../../store/reducers/CatalogFilterSlice'
+import { keepFilterCategory, keepFilterSubCategory, keepFilterType } from '../../../store/reducers/CatalogFilterSlice'
 import { allData } from '../../../store/reducers/SeekerFormReducers/AboutMeReducer'
 import { VacancyItemType } from '../../../store/reducers/type'
 
@@ -28,16 +25,10 @@ export default function Catalog() {
 	const catalogFilter = useAppSelector(state => state.catalogFilter)
 
 	const [categoryTitle, setCategoryTitle] = useState(catalogFilter.category)
-	const [directoryTitle, setDirectoryTitle] = useState(
-		catalogFilter.subcategory
-	)
-	const [subdivisionTitle, setSubdivisionTitle] = useState(
-		catalogFilter.subcategory
-	)
+	const [directoryTitle, setDirectoryTitle] = useState(catalogFilter.subcategory)
+	const [subdivisionTitle, setSubdivisionTitle] = useState(catalogFilter.subcategory)
 	const [page, setPage] = useState(0)
-	const [secondOption, setSecondOption] = useState<string | null>(
-		catalogFilter.subcategory
-	)
+	const [secondOption, setSecondOption] = useState<string | null>(catalogFilter.subcategory)
 	const [requestData, setRequestData] = useState<{
 		category: string
 		subcategory: string
@@ -50,35 +41,40 @@ export default function Catalog() {
 		page: 0
 	})
 	const [blockPageAddition, setBlockPageAddition] = useState<boolean>(true)
-	const [isBottomOfCatalogVisible, setIsBottomOfCatalogVisible] =
-		useState<boolean>(true)
+	const [isBottomOfCatalogVisible, setIsBottomOfCatalogVisible] = useState<boolean>(true)
 	const catalogBottomRef = useRef<null | HTMLDivElement>(null)
 	const [previews, setPreviews] = useState<VacancyItemType[]>([])
-	const { data: categories = [], isLoading: isCategoriesLoading } =
-		useGetCategoriesQuery()
-	const { data: directions = [], isLoading: isDirectionsLoading } =
-		useGetDirectionsQuery(categoryTitle)
-	const { data: subdivisions = [], isLoading: isSubdivisionsLoading } =
-		useGetSubdivisionsQuery(categoryTitle)
+	const { data: categories = [], isLoading: isCategoriesLoading } = useGetCategoriesQuery()
+	const { data: directions = [], isLoading: isDirectionsLoading } = useGetDirectionsQuery(categoryTitle)
+	const { data: subdivisions = [], isLoading: isSubdivisionsLoading } = useGetSubdivisionsQuery(categoryTitle)
 
-	const [getVacByDir, preLoadStatus] =
-		useLazyGetVacancyPreviewByDirectionQuery()
+	const [getVacByDir, preLoadStatus] = useLazyGetVacancyPreviewByDirectionQuery()
 	const [getVacBySub] = useLazyGetVacancyPreviewBySubdivisionQuery()
+	const [getInfo] = useLazyGetInfoUserQuery()
 
 	useEffect(() => {
 		if (user) {
-			dispatch(
-				allData({
-					name: user.firstname,
-					surName: user.lastname,
-					patronymic: user.middlename,
-					phone: user.phone,
-					email: user.email,
-					birthDay: user.birthday,
-					gender: 'M',
-					countryId: 184
+			getInfo()
+				.unwrap()
+				.then(info => {
+					dispatch(
+						allData({
+							name: user.firstname,
+							surName: user.lastname,
+							patronymic: user.middlename,
+							phone: user.phone,
+							email: user.email,
+							birthDay: user.birthday,
+							gender: info.gender,
+							countryId: info.countryId,
+							isPatronymicSet:
+								user.middlename === null || user.middlename === undefined || user.middlename === '' ? false : true,
+							isBirthDaySet:
+								user.birthday === null || user.birthday === undefined || user.birthday === '' ? false : true,
+							isGenderSet: info.gender === null || info.gender === undefined ? false : true
+						})
+					)
 				})
-			)
 		}
 	}, [])
 
@@ -170,12 +166,8 @@ export default function Catalog() {
 			<>
 				<div className="w-full h-full flex items-center">
 					<div className="text-center ml-auto mr-auto">
-						<Spin
-							indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}
-						></Spin>
-						<p className="font-content-font font-normal text-black text-[18px]/[18px]">
-							Идёт загрузка вакансий...
-						</p>
+						<Spin indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}></Spin>
+						<p className="font-content-font font-normal text-black text-[18px]/[18px]">Идёт загрузка вакансий...</p>
 					</div>
 				</div>
 			</>
@@ -184,12 +176,8 @@ export default function Catalog() {
 
 	return (
 		<>
-			<h1 className="font-content-font font-normal text-[28px]/[28px] text-black">
-				Каталог вакансий
-			</h1>
-			<h2 className="mt-[52px] font-content-font font-normal text-[18px]/[18px] text-black">
-				Категория сотрудников
-			</h2>
+			<h1 className="font-content-font font-normal text-[28px]/[28px] text-black">Каталог вакансий</h1>
+			<h2 className="mt-[52px] font-content-font font-normal text-[18px]/[18px] text-black">Категория сотрудников</h2>
 
 			<Select
 				className="mt-[16px]"
@@ -221,18 +209,14 @@ export default function Catalog() {
 			/>
 
 			<h2 className="mt-[36px] font-content-font font-normal text-[18px]/[18px] text-black">
-				{categories.find(category => category.title === categoryTitle)
-					?.direction
-					? 'Профобласть'
-					: 'Подразделение'}
+				{categories.find(category => category.title === categoryTitle)?.direction ? 'Профобласть' : 'Подразделение'}
 			</h2>
 
 			<Select
 				className="mt-[16px]"
 				style={{ width: 622 }}
 				options={
-					categories.find(category => category.title === categoryTitle)
-						?.direction
+					categories.find(category => category.title === categoryTitle)?.direction
 						? [
 								{ value: 'Все', label: 'Все' },
 								...directions.map(dir => ({
@@ -247,8 +231,7 @@ export default function Catalog() {
 				}
 				defaultValue={catalogFilter.subcategory}
 				onChange={(value: string) => {
-					categories.find(category => category.title === categoryTitle)
-						?.direction
+					categories.find(category => category.title === categoryTitle)?.direction
 						? (() => {
 								setBlockPageAddition(true)
 								setRequestData(prev => ({
@@ -274,50 +257,27 @@ export default function Catalog() {
 								dispatch(keepFilterType('SUBDIVISION'))
 						  })()
 				}}
-				placeholder={
-					!isDirectionsLoading && !isSubdivisionsLoading && 'Выбрать'
-				}
-				loading={
-					categoryTitle === ''
-						? false
-						: isDirectionsLoading || isSubdivisionsLoading
-				}
-				disabled={
-					categoryTitle === ''
-						? true
-						: isDirectionsLoading || isSubdivisionsLoading
-				}
+				placeholder={!isDirectionsLoading && !isSubdivisionsLoading && 'Выбрать'}
+				loading={categoryTitle === '' ? false : isDirectionsLoading || isSubdivisionsLoading}
+				disabled={categoryTitle === '' ? true : isDirectionsLoading || isSubdivisionsLoading}
 				value={secondOption}
 			/>
 
-			<div
-				style={previews.length === 0 ? { display: 'none' } : {}}
-				className="mt-[60px] ml-[20px] flex"
-			>
+			<div style={previews.length === 0 ? { display: 'none' } : {}} className="mt-[60px] ml-[20px] flex">
 				<h3 className="w-[388px] shrink-0 font-content-font font-normal text-[14px]/[14px] text-text-gray">
 					Должность
 				</h3>
 				<div className="ml-[30px] flex gap-[40px]">
-					<h3 className="w-[104px] font-content-font font-normal text-[14px]/[14px] text-text-gray">
-						Опыт работы
-					</h3>
-					<h3 className="w-[104px] font-content-font font-normal text-[14px]/[14px] text-text-gray">
-						Тип занятости
-					</h3>
+					<h3 className="w-[104px] font-content-font font-normal text-[14px]/[14px] text-text-gray">Опыт работы</h3>
+					<h3 className="w-[104px] font-content-font font-normal text-[14px]/[14px] text-text-gray">Тип занятости</h3>
 				</div>
-				<h3 className="ml-[140px] font-content-font font-normal text-[14px]/[14px] text-text-gray">
-					Заработная плата
-				</h3>
+				<h3 className="ml-[140px] font-content-font font-normal text-[14px]/[14px] text-text-gray">Заработная плата</h3>
 			</div>
 			<div className="mt-[16px] mb-[50px] flex flex-col w-full gap-[10px]">
 				{previews.map(prev => (
 					<VacancyItem {...prev} key={prev.id} />
 				))}
-				<div
-					className="h-[1px]"
-					ref={catalogBottomRef}
-					key={'catalog_bottom_key'}
-				></div>
+				<div className="h-[1px]" ref={catalogBottomRef} key={'catalog_bottom_key'}></div>
 			</div>
 		</>
 	)

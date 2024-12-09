@@ -84,7 +84,7 @@ export const Signed = () => {
         )
     }
 
-    const SuccessSignedModal = ( props : modalProps ) => {
+    const SuccessSignedModal = () => {
         return (
             <>
                 <ConfigProvider

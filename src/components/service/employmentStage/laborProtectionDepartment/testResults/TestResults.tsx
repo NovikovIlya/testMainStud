@@ -91,7 +91,7 @@ export const TestResults = () => {
                                             await setSeekerSigned({ subStageId: props.id})
                                             setIsTestResultApproveModalOpen(false)
                                             handleRefresh()
-                                            openAlert({ type: 'success', text: 'NEED_TEXT' })
+                                            /*тут сделать модалку -> Соискатель успешно перемещён в сервис "Подписанные"*/
                                         } catch (error: any) {
                                             openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
                                         }

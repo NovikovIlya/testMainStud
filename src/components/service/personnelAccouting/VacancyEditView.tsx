@@ -135,7 +135,7 @@ export const VacancyEditView = () => {
 										.then(() => {
 											navigate('/services/personnelaccounting/vacancies')
 										})
-									openAlert({ type: 'success', text: 'NEED_TEXT' })
+
 								} catch (error: any) {
 									openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 								}
@@ -451,7 +451,7 @@ export const VacancyEditView = () => {
 												.then(() => {
 													setIsSuccessModalOpen(true)
 												})
-											openAlert({ type: 'success', text: 'NEED_TEXT' })
+
 										} catch (error: any) {
 											openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 										}

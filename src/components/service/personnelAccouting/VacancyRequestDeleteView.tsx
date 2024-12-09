@@ -186,7 +186,7 @@ export const VacancyRequestDeleteView = () => {
 									.then(() => {
 										refetch()
 									})
-								openAlert({ type: 'success', text: 'NEED_TEXT' })
+
 							} catch (error: any) {
 								openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 							}

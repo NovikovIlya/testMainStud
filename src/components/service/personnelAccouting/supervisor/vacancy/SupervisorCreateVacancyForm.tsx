@@ -122,7 +122,7 @@ export const SupervisorCreateVacancyForm = () => {
 							<Select
 								placeholder="Выбрать"
 								options={[
-									{ value: 'Полный график', label: 'Полный график' },
+									{ value: 'Полный день', label: 'Полный день' },
 									{ value: 'Гибкий график', label: 'Гибкий график' },
 									{ value: 'Сменный график', label: 'Сменный график' },
 									{ value: 'Удалённая работа', label: 'Удалённая работа' }

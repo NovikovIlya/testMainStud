@@ -444,23 +444,12 @@ export const ResponseForm = () => {
 								rules={[{ required: true, message: 'Не выбран пол' }]}
 							>
 								<Radio.Group
+									disabled={aboutMeData.isGenderSet}
 									value={aboutMeData.gender}
 									// onChange={e => dispatch(gender(e.target.value))}
 								>
-									<Radio
-										value={'M'}
-										tabIndex={aboutMeData.isGenderSet ? -1 : 0}
-										className={`${aboutMeData.isGenderSet && 'pointer-events-none'}`}
-									>
-										Мужской
-									</Radio>
-									<Radio
-										value={'W'}
-										tabIndex={aboutMeData.isGenderSet ? -1 : 0}
-										className={`${aboutMeData.isGenderSet && 'pointer-events-none'}`}
-									>
-										Женский
-									</Radio>
+									<Radio value={'M'}>Мужской</Radio>
+									<Radio value={'W'}>Женский</Radio>
 								</Radio.Group>
 							</Form.Item>
 							<Form.Item
@@ -469,8 +458,7 @@ export const ResponseForm = () => {
 								rules={[{ required: true, message: 'Поле фамилии не заполнено' }]}
 							>
 								<Input
-									className="pointer-events-none"
-									tabIndex={-1}
+									disabled
 									value={aboutMeData.surName}
 									onPressEnter={e => {
 										e.preventDefault()
@@ -483,8 +471,7 @@ export const ResponseForm = () => {
 								rules={[{ required: true, message: 'Поле имени не заполнено' }]}
 							>
 								<Input
-									className="pointer-events-none"
-									tabIndex={-1}
+									disabled
 									value={aboutMeData.name}
 									onPressEnter={e => {
 										e.preventDefault()
@@ -497,8 +484,7 @@ export const ResponseForm = () => {
 								rules={[{ required: true, message: 'Поле отчества не заполнено' }]}
 							>
 								<Input
-									tabIndex={aboutMeData.isPatronymicSet ? -1 : 0}
-									className={`${aboutMeData.isPatronymicSet && 'pointer-events-none'}`}
+									disabled={aboutMeData.isPatronymicSet}
 									value={aboutMeData.patronymic}
 									onPressEnter={e => {
 										e.preventDefault()
@@ -513,13 +499,10 @@ export const ResponseForm = () => {
 								rules={[{ required: true, message: 'Не введена дата рождения' }]}
 							>
 								<DatePicker
-									tabIndex={aboutMeData.isBirthDaySet ? -1 : 0}
-									className={`${aboutMeData.isBirthDaySet && 'pointer-events-none'} w-full`}
-									onKeyDown={e => {
-										e.code !== 'Tab' && aboutMeData.isBirthDaySet && e.preventDefault()
-									}}
+									disabled={aboutMeData.isBirthDaySet}
 									format={'DD-MM-YYYY'}
 									value={dayjs(aboutMeData.birthDay, 'DD.MM.YYYY')}
+									className="w-full"
 									onChange={(e, date) => {
 										// dispatch(birthDay(date))
 										// setBirthDayDate(date)

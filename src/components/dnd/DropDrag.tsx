@@ -38,7 +38,8 @@ const studentKeys = [
 	'Testing',
 	'jobSeeker',
 	'myResponds',
-	'DirectResume'
+	'DirectResume',
+	'personnelAccounting'
 ]
 
 const employeeKeys = [

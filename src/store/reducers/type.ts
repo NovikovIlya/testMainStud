@@ -447,6 +447,7 @@ export type EmploymentDataType = {
 		}[]
 		hasRequisites?: boolean
 		testLink?: string
+		testPassed: boolean | null
 		workingConditionAccepted?: boolean
 		bank?: 'SBER' | 'VTB'
 	}[]

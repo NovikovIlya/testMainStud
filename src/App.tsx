@@ -152,7 +152,6 @@ const App = () => {
                 { path: "services/*", element: <Service /> },
                 { path: "*", element: <NotFound /> },
 			
-                // Uncomment the following line if you want to include the EditSchedule route
                 // { path: "services/practices/formingSchedule/edit/:id", element: <EditSchedule /> },
             ],
         },

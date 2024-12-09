@@ -37,6 +37,17 @@ export const messagesService = apiSlice.injectEndpoints({
             keepUnusedDataFor:1,
             
         }),
+        getAllDialogsOld: builder.query<any, any>({
+            query: ({page,size}) => {
+                return {
+                    url: `/user-api/chat?page=${page}&size=${size}`,
+                    method: 'GET'
+                }
+            },
+            // providesTags: ['Messages'],
+            keepUnusedDataFor:1,
+            
+        }),
         sendMessageChat: builder.mutation<any, any>({
             query: (body) => {
                 return {
@@ -57,6 +68,17 @@ export const messagesService = apiSlice.injectEndpoints({
                 }
             },
             providesTags: ['Messages'],
+            keepUnusedDataFor:1,
+            
+        }),
+        getOneChatOld: builder.query<any, any>({
+            query: ({id,page,size}) => {
+                return {
+                    url: `/user-api/chat/${id}?page=${page}&size=${size}`,
+                    method: 'GET'
+                }
+            },
+            // providesTags: ['Messages'],
             keepUnusedDataFor:1,
             
         }),
@@ -83,7 +105,8 @@ export const {
     useGetAllDialogsQuery,
     useSendMessageChatMutation,
     useGetOneChatQuery,
-    useAddNewChatMutation
-  
+    useAddNewChatMutation,
+    useGetOneChatOldQuery,
+   useGetAllDialogsOldQuery
 
 } = messagesService

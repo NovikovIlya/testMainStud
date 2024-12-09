@@ -10,9 +10,10 @@ import InputText from './InputText'
 import { PlusCircleOutlined, SearchOutlined } from '@ant-design/icons'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { useTranslation } from 'react-i18next'
-import { useAddNewChatMutation, useGetAllDialogsQuery, useGetOneChatQuery, useSendMessageChatMutation } from '../../../../store/api/messages/messageApi'
+import { useGetAllDialogsOldQuery, useGetAllDialogsQuery, useGetOneChatOldQuery, useGetOneChatQuery, useSendMessageChatMutation } from '../../../../store/api/messages/messageApi'
 import { NewDialogModal } from './NewDialogModal'
-import { apiSlice } from '../../../../store/api/apiSlice'
+import dayjs from 'dayjs'
+import { truncateString } from '../../../../utils/truncateString'
 
 export const ViewMessage = () => {
 	const user = useAppSelector(state => state.auth.user)
@@ -21,51 +22,86 @@ export const ViewMessage = () => {
 	const {t,i18n} = useTranslation()
 	const [value, setValue] = useState(t('all'));
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [activeDialog, setActiveDialog] = useState<any>(null);
+	const [activeDialog, setActiveDialog] = useState(null);
 	const [page,setPage] = useState(0)
-	const {data:dataAllDialogs,isLoading,isError,isFetching} = useGetAllDialogsQuery({page,size:15})
+	const {data:dataAllDialogsOld,isLoadingOld,isErrorOld,isFetchingOld} = useGetAllDialogsOldQuery<any>({page,size:8})
+	const {data:dataAllDialogs,isLoading,isError,isFetching} = useGetAllDialogsQuery<any>({page:0,size:8},{pollingInterval:5000})
 	const [sendMessage,{isLoading:isLoadingSend}] = useSendMessageChatMutation()
-	//////////////////////////////
-	const [pageChat,setPageChat] = useState(1)
-	const [isLast,setIslast] = useState(false)
-	const {data:dataOneChat,isFetching:isFetchingOneChat,isLoading:isLoadingChat} = useGetOneChatQuery({id:activeDialog,  page:  isLast ? 1 : pageChat,    size:50},{skip: !activeDialog,
+	const [pageChat,setPageChat] = useState(0)
+	const {data:dataOneChat,isFetching:isFetchingOneChat,isLoading:isLoadingChat} = useGetOneChatQuery({id:activeDialog,  page:  0,    size:100},{skip: !activeDialog,
 		pollingInterval: 5000,
 	})
+	const {data:dataOneChatOld,isFetching:isFetchingOneChatOld,isLoading:isLoadingChatOld} = useGetOneChatOldQuery({id:activeDialog,  page:   pageChat,    size:100},{skip: !activeDialog})
 	const [chatArray,setChatArray] = useState<any>([])
 	const dispatch = useAppDispatch()
 	const [hideBtn,setHideBtn] = useState(false)
 	const [gotToBottom,setGotoBottom] = useState(0)
-	////// если false - то нет скрола вниз(при нажатии на "добавить еще" становится false)
-	const [flag,setFlag] = useState(true)
 
 
+	
 	useEffect(() => {
 		if (dataAllDialogs) {
-		  setDialogs((prevDialogs:any) => {
+		  setDialogs((prevDialogs: any[]) => {
+			// Создаем Map из предыдущих диалогов для быстрого поиска
+			const dialogMap = new Map(prevDialogs.map(dialog => [dialog.id, dialog]));
 			
-			if (dataAllDialogs.length === prevDialogs.length) return prevDialogs;
-	  
-			// Создаем Set из ID существующих диалогов
-			// Set используется для быстрого поиска, так как операция проверки наличия элемента в Set происходит за O(1)
-			const existingDialogIds = new Set(
-			  prevDialogs.map((dialog:any) => dialog.id)
-			);
-	  
-			// Фильтруем новые диалоги, оставляя только те, которых еще нет в существующем массиве
-			// Проверяем каждый диалог из dataAllDialogs на наличие его ID в Set существующих диалогов
-			const uniqueNewDialogs = dataAllDialogs.filter(
-			  (dialog:any) => !existingDialogIds.has(dialog.id)
-			);
-	  
-			// Возвращаем объединенный массив: существующие диалоги + новые уникальные
-			return [...prevDialogs, ...uniqueNewDialogs];
+			// Обрабатываем каждый диалог из новых данных
+			dataAllDialogs.forEach((newDialog:any) => {
+			  const existingDialog = dialogMap.get(newDialog.id);
+			  
+			  if (existingDialog) {
+				// Если диалог существует и данные изменились, обновляем его
+				if (existingDialog.lastMessage !== newDialog.lastMessage || 
+					existingDialog.lastMessageTime !== newDialog.lastMessageTime ||
+					existingDialog.isRead !== newDialog.isRead) {
+				  dialogMap.set(newDialog.id, newDialog);
+				}
+			  } else {
+				// Если диалога нет, добавляем новый
+				dialogMap.set(newDialog.id, newDialog);
+			  }
+			});
+			
+			// Преобразуем Map обратно в массив и сортируем по времени последнего сообщения
+			return Array.from(dialogMap.values())
+			  .sort((a, b) => new Date(b.lastMessageTime).getTime() - new Date(a.lastMessageTime).getTime());
 		  });
 		}
 	  }, [dataAllDialogs]);
 
 	useEffect(() => {
+	if (dataAllDialogsOld) {
+		setDialogs((prevDialogs: any[]) => {
+		// Создаем Map из предыдущих диалогов для быстрого поиска
+		const dialogMap = new Map(prevDialogs.map(dialog => [dialog.id, dialog]));
+		
+		// Обрабатываем каждый диалог из новых данных
+		dataAllDialogsOld.forEach((newDialog:any) => {
+			const existingDialog = dialogMap.get(newDialog.id);
+			
+			if (existingDialog) {
+			// Если диалог существует и данные изменились, обновляем его
+			if (existingDialog.lastMessage !== newDialog.lastMessage || 
+				existingDialog.lastMessageTime !== newDialog.lastMessageTime ||
+				existingDialog.isRead !== newDialog.isRead) {
+				dialogMap.set(newDialog.id, newDialog);
+			}
+			} else {
+			// Если диалога нет, добавляем новый
+			dialogMap.set(newDialog.id, newDialog);
+			}
+		});
+		
+		// Преобразуем Map обратно в массив и сортируем по времени последнего сообщения
+		return Array.from(dialogMap.values())
+			.sort((a, b) => new Date(b.lastMessageTime).getTime() - new Date(a.lastMessageTime).getTime());
+		});
+	}
+	}, [dataAllDialogsOld]);
+	  
+
+	useEffect(() => {
 		if (dataOneChat?.messages) {
-		  // Append new messages to existing ones
 		  setChatArray((prevMessages:any) => {
 			const newMessages = [...dataOneChat.messages];
 			const existingMessageIds = new Set(prevMessages.map((msg: any) => msg.id));
@@ -73,9 +109,22 @@ export const ViewMessage = () => {
 			return [...prevMessages, ...uniqueNewMessages];
 		  });
 		}
-		if(flag)  setGotoBottom(p=>p+1)
-		// setGotoBottom(p=>p+1)
+
+		setGotoBottom(p=>p+1)
 	  }, [dataOneChat]);
+
+	useEffect(() => {
+	if (dataOneChatOld?.messages) {
+		setChatArray((prevMessages:any) => {
+		const newMessages = [...dataOneChatOld.messages];
+		const existingMessageIds = new Set(prevMessages.map((msg: any) => msg.id));
+		const uniqueNewMessages = newMessages.filter((msg: any) => !existingMessageIds.has(msg.id));
+		return [...prevMessages, ...uniqueNewMessages];
+		});
+	}
+    
+	
+	}, [dataOneChatOld]);
 
   
 	const loadMoreData = () => {
@@ -94,40 +143,27 @@ export const ViewMessage = () => {
 	const refetch = ()=>{
 
 	}
-	const onFinish = async(values: any) => {
+	const onFinish = async() => {
 		const obj = {
 			message: form.getFieldValue('textArea'),
 			senderName: `${user.lastname} ${user.firstname} ${user.middlename}`,
 			chatId: activeDialog
 		}
-		console.log('obj',obj)
 		sendMessage(obj).unwrap()
-		.then(()=>{
-			//////////////////////////////////
-			/////////////// надо узнать последняя ли это страница
-			setIslast(true)
-			
-		})
-
-		setFlag(true)
 		form.resetFields()
 	  };
 
 	const loadMessages = ()=>{
-		if(isFetchingOneChat) return
-		setFlag(false)
-
-		setPageChat(p=>p-1)
-		setIslast(false)
+		if(isFetchingOneChatOld) return
+		setPageChat(p=>p+1)
 	}
 
   
 	return (
-		
 	  <div className="grid grid-cols-3 gap-2">
+		<Spin spinning={isLoadingSend} fullscreen></Spin>
 		<div className="bg-white h-screen shadow-xl">
 		  <div className="mt-36 "></div>
-		  
 		  <div className="mt-5 p-4">
 			<Input placeholder={t('searchMEssage')} prefix={<SearchOutlined />} />
 		  </div>
@@ -145,7 +181,7 @@ export const ViewMessage = () => {
   
 		  <div
 			id="scrollableDialogs"
-			className="!overflow-y-scroll"
+			className="!overflow-y-scroll mt-1"
 			style={{
 			  height: 'calc(100vh - 285px)',
 			  overflow: 'auto',
@@ -169,7 +205,6 @@ export const ViewMessage = () => {
 					onClick={() => {
 						if(item.id===activeDialog) return
 						setHideBtn(false)
-						/////////////////////// чат максимальный
 						setChatArray([])
 						setPageChat(0)
 						setActiveDialog(item.id)
@@ -183,12 +218,13 @@ export const ViewMessage = () => {
 				  >
 					<List.Item.Meta
 					  title={<span className="font-extrabold">{item.userName}</span>}
-					  description={item.lastMessage}
+					  description={truncateString(10,item.lastMessage)}
 					/>
-					<div className=''>
-						<div>{item.time}</div>
+					<div className='pt-2 flex flex-col items-end gap-[9px]'>
+						<div className='text-[10px] '>{dayjs(item.lastMessageTime).format('HH:mm')}</div>
+						<div className='text-[10px]'>{dayjs(item.lastMessageTime).format('DD.MM.YYYY')}</div>
 						{/* <div className='w-full flex justify-center'><div className='rounded-full bg-blue-600 w-4 h-4'></div></div> */}
-						<div className='h-4'></div>
+						
 					</div>
 				  </List.Item>
 				)}
@@ -202,15 +238,13 @@ export const ViewMessage = () => {
 			<div className="text-gray-500">Выберите диалог или создайте новый</div>
 		  ) : (
 			<>
-		
 			<div className="mt-36 p-4 col-span-2  w-full flex justify-center flex-wrap ">
         {!isLoadingChat ? (
-		
           <div className="w-full flex flex-wrap flex-col ">
-            <CommentNewTeacher gotToBottom={gotToBottom} loadMessages={loadMessages} hideBtn={hideBtn} chatArray={chatArray} files={[]} refetch={refetch} />
+            <CommentNewTeacher dataOneChatOld={dataOneChatOld} gotToBottom={gotToBottom} loadMessages={loadMessages} hideBtn={hideBtn} chatArray={chatArray} files={[]} refetch={refetch} />
             <Form form={form} className="flex w-full flex-wrap" onFinish={onFinish}>
               <div className="flex w-full mt-4">
-                <InputText clickTextArea={clickTextArea} />
+                <InputText form={form} clickTextArea={clickTextArea} />
               </div>
             </Form>
           </div>
@@ -223,12 +257,9 @@ export const ViewMessage = () => {
      		 </div></>
 		  )}
 		</div>
-  
-
 		 <NewDialogModal 
         isModalOpen={isModalOpen}
         onCancel={handleCancel}
-       
       />
 	  </div>
 	);

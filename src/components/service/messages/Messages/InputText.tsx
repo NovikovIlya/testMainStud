@@ -4,7 +4,14 @@ import TextArea from 'antd/es/input/TextArea'
 import React, { useEffect, useRef, useState } from 'react'
 import { useSendMessageChatMutation } from '../../../../store/api/messages/messageApi'
 
-const InputText = ({files,text='',clickTextArea,isModal=false }: any) => {
+const InputText = ({files,text='',clickTextArea,isModal=false,form }: any) => {
+
+	const handleKeyPress = (e: any) => {
+		if (e.key === 'Enter' && !e.shiftKey) {
+			e.preventDefault(); // Предотвращаем перенос строки
+			form.submit(); // Вызываем отправку формы
+		}
+	};
 
 	return (
 		<>
@@ -17,6 +24,7 @@ const InputText = ({files,text='',clickTextArea,isModal=false }: any) => {
 					onClick={clickTextArea}
                     value={text}
 					required
+					onKeyPress={handleKeyPress}
 				/>
 			</Form.Item>
 			<Button

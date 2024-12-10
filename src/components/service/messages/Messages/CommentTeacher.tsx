@@ -7,7 +7,7 @@ import { useAppSelector } from '../../../../store'
 
 
 
-export const CommentNewTeacher = ({dataOneChatOld, files, hideBtn, isLoading, gotToBottom, refetch ,chatArray,loadMessages}: any) => {
+export const CommentNewTeacher = ({dataOneChatOld, files, isLoading, gotToBottom, refetch ,chatArray,loadMessages}: any) => {
 	const user = useAppSelector((state) => state.auth.user)
 	const [idAttachment, setIdAttachment] = useState<any>(null)
 	const messagesEndRef = useRef<HTMLDivElement | null>(null)

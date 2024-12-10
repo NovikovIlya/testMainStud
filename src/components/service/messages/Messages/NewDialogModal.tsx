@@ -76,8 +76,10 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 	}
 
 	return (
+		<>
+		<Spin fullscreen spinning={isLoadingNew} />
 		<Modal className="p-12" title="Выберите роль" open={isModalOpen} onCancel={onCancel} footer={null}>
-			<Spin fullscreen spinning={isLoadingNew} />
+			
 			<Form labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} form={form} onFinish={onFinish} style={{ maxWidth: 600 }}>
 				<Form.Item className="mt-6" label="Студент" name="student">
 					<AutoComplete
@@ -128,7 +130,7 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 				</Form.Item>
 
 				<Form.Item label="Сообщение" name="text">
-					<TextArea placeholder="Введите текст сообщения" />
+					<TextArea required placeholder="Введите текст сообщения" />
 				</Form.Item>
 
 				<div className="w-full flex justify-center">
@@ -140,5 +142,6 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 				{/* {isButtonDisabled() && <div className="w-full text-center mt-2">Необходимо выбрать только одну роль</div>} */}
 			</Form>
 		</Modal>
+		</>
 	)
 }

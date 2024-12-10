@@ -10,7 +10,7 @@ import InputText from './InputText'
 import { PlusCircleOutlined, SearchOutlined } from '@ant-design/icons'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { useTranslation } from 'react-i18next'
-import { useGetAllDialogsOldQuery, useGetAllDialogsQuery, useGetOneChatOldQuery, useGetOneChatQuery, useSendMessageChatMutation } from '../../../../store/api/messages/messageApi'
+import { useGetAllDialogsOldQuery, useGetAllDialogsQuery, useGetOneChatOldQuery, useGetOneChatQuery, useReadMessageMutation, useSendMessageChatMutation } from '../../../../store/api/messages/messageApi'
 import { NewDialogModal } from './NewDialogModal'
 import dayjs from 'dayjs'
 import { truncateString } from '../../../../utils/truncateString'
@@ -34,10 +34,14 @@ export const ViewMessage = () => {
 	const {data:dataOneChatOld,isFetching:isFetchingOneChatOld,isLoading:isLoadingChatOld} = useGetOneChatOldQuery({id:activeDialog,  page:   pageChat,    size:100},{skip: !activeDialog})
 	const [chatArray,setChatArray] = useState<any>([])
 	const dispatch = useAppDispatch()
-	const [hideBtn,setHideBtn] = useState(false)
+	const [flag,setFlag] = useState(true)
 	const [gotToBottom,setGotoBottom] = useState(0)
+	const [isReadArray,setIsReadArray] = useState<any>([])
+	const [readMessage] = useReadMessageMutation()
+	const [currentItem,setCurrentItem] = useState(null)
 
 
+	console.log('flag',flag)
 	
 	useEffect(() => {
 		if (dataAllDialogs) {
@@ -111,6 +115,7 @@ export const ViewMessage = () => {
 		}
 
 		setGotoBottom(p=>p+1)
+		setFlag(false)
 	  }, [dataOneChat]);
 
 	useEffect(() => {
@@ -158,6 +163,34 @@ export const ViewMessage = () => {
 		setPageChat(p=>p+1)
 	}
 
+	const changeIsReady = (id:any)=>{
+		const newDialogs = dialogs.map((dialog:any) => {
+			if (dialog.id === activeDialog) {
+			  return {
+				...dialog,
+				isRead: true
+			  };
+			}
+			return dialog;
+		  });
+		  setDialogs(newDialogs);
+		  readMessage(id)
+	}
+
+	const readOnWindow = (item:any)=>{
+		console.log('item',item)
+		const validItem = dialogs.find((dialog:any)=>dialog.id===item.id)
+		if(validItem.isRead) return
+		readMessage(activeDialog)
+	}
+
+	if(isLoading) return <div className="screen !z-[100000000] relative">
+		<div className="loader">
+		<div className="inner one"></div>
+		<div className="inner two"></div>
+		<div className="inner three"></div>
+		</div>
+	</div>
   
 	return (
 	  <div className="grid grid-cols-3 gap-2">
@@ -204,10 +237,14 @@ export const ViewMessage = () => {
 					key={item.id}
 					onClick={() => {
 						if(item.id===activeDialog) return
-						setHideBtn(false)
+				
 						setChatArray([])
 						setPageChat(0)
 						setActiveDialog(item.id)
+						form.resetFields()
+						setFlag(true)
+						changeIsReady(item.id)
+						setCurrentItem(item)
 					}}
 					className={`cursor-pointer rounded-xl !p-4 ${
 					  activeDialog === item.id ? '!bg-[#E9EFF8]' : ''
@@ -220,11 +257,11 @@ export const ViewMessage = () => {
 					  title={<span className="font-extrabold">{item.userName}</span>}
 					  description={truncateString(10,item.lastMessage)}
 					/>
-					<div className='pt-2 flex flex-col items-end gap-[9px]'>
-						<div className='text-[10px] '>{dayjs(item.lastMessageTime).format('HH:mm')}</div>
-						<div className='text-[10px]'>{dayjs(item.lastMessageTime).format('DD.MM.YYYY')}</div>
+					<div className='pt-2 flex flex-col  gap-[9px]'>
+						{dayjs(item.lastMessageTime).isSame(dayjs(), 'day') ? <div className='text-[10px] '>{dayjs(item.lastMessageTime).format('HH:mm')}</div> :
+						<div className='text-[10px]'>{dayjs(item.lastMessageTime).format('DD.MM.YYYY')}</div>}
 						{/* <div className='w-full flex justify-center'><div className='rounded-full bg-blue-600 w-4 h-4'></div></div> */}
-						
+						{!item.isRead?<div className='w-full flex justify-end'><div className='rounded-full bg-blue-600 w-4 h-4'></div></div>:''}
 					</div>
 				  </List.Item>
 				)}
@@ -239,9 +276,12 @@ export const ViewMessage = () => {
 		  ) : (
 			<>
 			<div className="mt-36 p-4 col-span-2  w-full flex justify-center flex-wrap ">
-        {!isLoadingChat ? (
-          <div className="w-full flex flex-wrap flex-col ">
-            <CommentNewTeacher dataOneChatOld={dataOneChatOld} gotToBottom={gotToBottom} loadMessages={loadMessages} hideBtn={hideBtn} chatArray={chatArray} files={[]} refetch={refetch} />
+        { !flag ? (
+          <div onClick={()=>{
+			console.log('был клик')
+			readOnWindow(currentItem)
+		  }} className="w-full flex flex-wrap flex-col ">
+            <CommentNewTeacher dataOneChatOld={dataOneChatOld} gotToBottom={gotToBottom} loadMessages={loadMessages} chatArray={chatArray} files={[]} refetch={refetch} />
             <Form form={form} className="flex w-full flex-wrap" onFinish={onFinish}>
               <div className="flex w-full mt-4">
                 <InputText form={form} clickTextArea={clickTextArea} />

@@ -90,8 +90,27 @@ export const messagesService = apiSlice.injectEndpoints({
                     body
                 }
             },
-            invalidatesTags: ['Messages'],
-  
+            invalidatesTags: ['Messages'], 
+        }),
+        readMessage: builder.mutation<any, any>({
+            query: (id) => {
+                return {
+                    url: `/user-api/chat/read?chatId=${id}`,
+                    method: 'PATCH',
+                    
+                }
+            },
+            invalidatesTags: ['Messages'],  
+        }),
+        getAllUnRead: builder.query<any, void>({
+            query: () => {
+                return {
+                    url: `/user-api/chat/unread`,
+                    method: 'GET'
+                }
+            },
+            providesTags: ['Messages'],
+            keepUnusedDataFor:1,
             
         }),
         
@@ -107,6 +126,8 @@ export const {
     useGetOneChatQuery,
     useAddNewChatMutation,
     useGetOneChatOldQuery,
-   useGetAllDialogsOldQuery
+   useGetAllDialogsOldQuery,
+   useReadMessageMutation,
+   useGetAllUnReadQuery
 
 } = messagesService

@@ -32,6 +32,7 @@ import { logOut, setEdit, setIsCollapsed } from '../../store/reducers/authSlice'
 import { isMobileDevice } from '../../utils/hooks/useIsMobile'
 import AccessibilityHelper from '../AccessibilityHelper/AccessibilityHelper'
 import { ModalNav } from '../service/ModalNav'
+import { useGetAllUnReadQuery } from '../../store/api/messages/messageApi'
 
 export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const [isModalOpen, setIsModalOpen] = useState(false)
@@ -58,6 +59,8 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const [login, { data: dataLogin, isSuccess, isLoading }] = useFakeLoginMutation()
 	const [isOpen, setIsOpen] = useState(false)
 	const ref = useRef<any>(null)
+	const {data:dataUnReadMessage} = useGetAllUnReadQuery()
+	console.log('dataUnReadMessage?.unreadChatsCount',dataUnReadMessage?.unreadChatsCount)
 
 	useEffect(() => {
 		if (isSuccessSubRole) {
@@ -383,7 +386,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 								navigate('/services/messages')
 							}}
 						>
-							<Badge className="top-[60px] !right-[500px]  absolute" count={5}></Badge>
+							<Badge className="top-[60px] !right-[500px]  absolute" count={dataUnReadMessage?.unreadChatsCount ? dataUnReadMessage?.unreadChatsCount : null}></Badge>
 							<MessageModuleSvg white={type === 'service'} />
 						</div>
 

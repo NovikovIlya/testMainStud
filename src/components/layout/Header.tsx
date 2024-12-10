@@ -59,7 +59,10 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const [login, { data: dataLogin, isSuccess, isLoading }] = useFakeLoginMutation()
 	const [isOpen, setIsOpen] = useState(false)
 	const ref = useRef<any>(null)
-	const {data:dataUnReadMessage} = useGetAllUnReadQuery()
+	const {data:dataUnReadMessage} = useGetAllUnReadQuery(null,{
+		pollingInterval: 5000,
+		skipPollingIfUnfocused: true,
+	})
 	console.log('dataUnReadMessage?.unreadChatsCount',dataUnReadMessage?.unreadChatsCount)
 
 	useEffect(() => {
@@ -119,7 +122,8 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 			type: 'divider'
 		},
 
-		{
+		...(maiRole === 'OTHER' ? [
+			{
 			label: (
 				<div
 					onClick={() => {
@@ -132,7 +136,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 				</div>
 			),
 			key: '7'
-		},
+		}]:[]),
 		{
 			label: (
 				<div
@@ -321,7 +325,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 					</div>
 				</div>
 				<div className="flex gap-5 items-center h-full max-[1000px]:gap-0 w-fit justify-center">
-					<div className="flex h-full items-center max-[1000px]:hidden">
+					<div className="flex h-full items-center ">
 						<a
 							className={clsx(
 								'h-full flex gap-2 items-center px-3 cursor-pointer no-underline',

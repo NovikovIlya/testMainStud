@@ -5,9 +5,10 @@ import {
 	FetchArgs,
 	createApi,
 	fetchBaseQuery
-} from '@reduxjs/toolkit/dist/query/react'
+} from '@reduxjs/toolkit/query/react'
 import i18next from 'i18next'
 import { logOut, setCredentials } from '../reducers/authSlice'
+
 const baseQuery = fetchBaseQuery({
 	baseUrl: 'https://newlk.kpfu.ru/',
 	prepareHeaders(headers, { getState }) {

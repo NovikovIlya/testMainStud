@@ -3,6 +3,7 @@ import { testApiSlice } from '../testApiSlice'
 
 
 export const messagesService = apiSlice.injectEndpoints({
+
     endpoints: builder => ({
         getEmployeesMessage: builder.query<any, any>({
             query: (name) => {
@@ -102,7 +103,7 @@ export const messagesService = apiSlice.injectEndpoints({
             },
             invalidatesTags: ['Messages'],  
         }),
-        getAllUnRead: builder.query<any, void>({
+        getAllUnRead: builder.query<any, any>({
             query: () => {
                 return {
                     url: `/user-api/chat/unread`,

@@ -10,7 +10,7 @@ import InputText from './InputText'
 import { PlusCircleOutlined, SearchOutlined } from '@ant-design/icons'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { useTranslation } from 'react-i18next'
-import { useGetAllDialogsOldQuery, useGetAllDialogsQuery, useGetOneChatOldQuery, useGetOneChatQuery, useReadMessageMutation, useSendMessageChatMutation } from '../../../../store/api/messages/messageApi'
+import { useGetAllDialogsOldQuery, useGetAllDialogsQuery, useGetAllUnReadQuery, useGetOneChatOldQuery, useGetOneChatQuery, useReadMessageMutation, useSendMessageChatMutation } from '../../../../store/api/messages/messageApi'
 import { NewDialogModal } from './NewDialogModal'
 import dayjs from 'dayjs'
 import { truncateString } from '../../../../utils/truncateString'
@@ -39,6 +39,7 @@ export const ViewMessage = () => {
 	const [isReadArray,setIsReadArray] = useState<any>([])
 	const [readMessage] = useReadMessageMutation()
 	const [currentItem,setCurrentItem] = useState(null)
+
 
 
 	console.log('flag',flag)
@@ -254,7 +255,7 @@ export const ViewMessage = () => {
 					}}
 				  >
 					<List.Item.Meta
-					  title={<span className="font-extrabold">{item.userName}</span>}
+					  title={<span className="font-extrabold">{truncateString(27,item.userName)}</span>}
 					  description={truncateString(10,item.lastMessage)}
 					/>
 					<div className='pt-2 flex flex-col  gap-[9px]'>

@@ -4,14 +4,14 @@ import dayjs from 'dayjs'
 import { useEffect, useRef, useState } from 'react'
 import { useGetAttachmentQuery } from '../../../../store/api/practiceApi/mypractice'
 import { useAppSelector } from '../../../../store'
+import { useGetAllUnReadQuery } from '../../../../store/api/messages/messageApi'
 
 
 
 export const CommentNewTeacher = ({dataOneChatOld, files, isLoading, gotToBottom, refetch ,chatArray,loadMessages}: any) => {
 	const user = useAppSelector((state) => state.auth.user)
-	const [idAttachment, setIdAttachment] = useState<any>(null)
 	const messagesEndRef = useRef<HTMLDivElement | null>(null)
-
+	const {data:dataUnReadMessage} = useGetAllUnReadQuery(null)
 
 	useEffect(() => {
 		if (messagesEndRef.current) {
@@ -61,7 +61,7 @@ export const CommentNewTeacher = ({dataOneChatOld, files, isLoading, gotToBottom
 					)}
 				</div>
 				{chatValid?.map((message: any) => {
-					const isMe = message.senderName ===  `${user.lastname} ${user.firstname} ${user.middlename}`
+					const isMe = (message.senderId ===  dataUnReadMessage.currentUserInternalId)  && (dataUnReadMessage.userType === message.senderType)
 
 					return (
 						<div className={`mb-4 flex items-start ${isMe ? 'justify-end' : ''}`} key={message.dateTime}>

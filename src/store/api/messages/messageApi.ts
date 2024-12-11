@@ -118,7 +118,7 @@ export const messagesService = apiSlice.injectEndpoints({
                     method: 'GET'
                 }
             },
-            // providesTags: ['Messages'],
+            providesTags: ['Messages'],
             keepUnusedDataFor:1,
         }),
         

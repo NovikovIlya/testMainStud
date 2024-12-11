@@ -41,10 +41,22 @@ export const ViewMessage = () => {
 	const [isReadArray,setIsReadArray] = useState<any>([])
 	const [readMessage] = useReadMessageMutation()
 	const [currentItem,setCurrentItem] = useState(null)
-	const [searchResults, setSearchResults] = useState<any>(null);
-	const [isEmplty,setIsEmpty] = useState(true) 
 
-	console.log('searchResults',searchResults)
+	const [isEmplty,setIsEmpty] = useState(true) 
+	const [debouncedSearchValue, setDebouncedSearchValue] = useState('');
+	const {data:dataSearch,isFetching:isFetchingSearch} = useSearchUserQuery({name:debouncedSearchValue,page:0,size:15},{skip:!debouncedSearchValue})
+	const [dataSearchValue,setdataSearchValue] = useState<any>([])
+
+
+	useEffect(()=>{
+		if(dataSearch?.length > 0){
+			setdataSearchValue(dataSearch)
+		}
+		if(dataSearch?.length === 0){
+			setdataSearchValue([])
+		}
+	
+	},[dataSearch])
 	
 	useEffect(() => {
 		if (dataAllDialogs) {
@@ -132,6 +144,12 @@ export const ViewMessage = () => {
     
 	
 	}, [dataOneChatOld]);
+
+	useEffect(()=>{
+		if(isEmplty){
+			setdataSearchValue([])
+		}
+	},[isEmplty])
   
 
 	const loadMoreData = () => {
@@ -189,13 +207,17 @@ export const ViewMessage = () => {
 		readMessage(activeDialog)
 	}
 
-	const onSearchResults = (results: any) => {
-		setSearchResults(results);
-	  };
-	  const searchEmpty= (values:any)=>{
+
+	const searchEmpty= (values:any)=>{
 		setIsEmpty(values)
-	  }
-	  console.log('isEmplty',isEmplty)
+		
+	
+	}
+
+	const handleDebouncedValueChange = (value: string) => {
+	setDebouncedSearchValue(value);
+	};
+
 
 	if(isLoading) return <div className="screen !z-[100000000] relative">
 		<div className="loader">
@@ -223,9 +245,9 @@ export const ViewMessage = () => {
 			</Button>
 		  </div>
 
-		<SearchComponent searchEmpty={searchEmpty} onSearchResults={onSearchResults} />
+		<SearchComponent onDebouncedValueChange={handleDebouncedValueChange} searchEmpty={searchEmpty} />
   
-		  <div
+		  {isFetchingSearch  ? <div className='w-full flex justify-center'><Spin  spinning={true}/></div>:<div
 			id="scrollableDialogs"
 			className="!overflow-y-scroll mt-1"
 			style={{
@@ -235,7 +257,7 @@ export const ViewMessage = () => {
 			}}
 		  >
 			<InfiniteScroll
-			  dataLength={searchResults?.length && !isEmplty ? searchResults.length : dialogs.length}
+			  dataLength={!isEmplty ? dataSearchValue.length : dialogs.length}
 			  next={loadMoreData}
 			  hasMore={dialogs.length < 50}
 			  loader={isLoading && <Skeleton className='pl-4 pt-4' paragraph={{ rows: 1 }} active />}
@@ -244,7 +266,7 @@ export const ViewMessage = () => {
 			>
 			 {isLoading ? '': <List
 			  	locale={{ emptyText:null }} 
-				dataSource={searchResults?.length && !isEmplty ? searchResults : dialogs}
+				dataSource={ !isEmplty ? dataSearchValue : dialogs}
 				renderItem={(item:any) => (
 				  <List.Item
 					key={item.id}
@@ -280,7 +302,7 @@ export const ViewMessage = () => {
 				)}
 			  />}
 			</InfiniteScroll>
-		  </div>
+		  </div>}
 		</div>
   
 		<div className="!h-screen   col-span-2  flex justify-center items-center">

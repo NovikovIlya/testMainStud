@@ -47,7 +47,7 @@ export const ViewMessage = () => {
 	const {data:dataSearch,isFetching:isFetchingSearch} = useSearchUserQuery({name:debouncedSearchValue,page:0,size:15},{skip:!debouncedSearchValue})
 	const [dataSearchValue,setdataSearchValue] = useState<any>([])
 
-
+	console.log('isFetchingSearch',isFetchingSearch)
 	useEffect(()=>{
 		if(dataSearch?.length > 0){
 			setdataSearchValue(dataSearch)
@@ -228,9 +228,9 @@ export const ViewMessage = () => {
 	</div>
   
 	return (
-	  <div className="grid grid-cols-3 gap-2">
+	  <div className="grid grid-cols-4 gap-2">
 		<Spin spinning={isLoadingSend} fullscreen></Spin>
-		<div className="bg-white h-screen shadow-xl">
+		<div className="bg-white h-screen shadow-xl col-span-1 ">
 		  <div className="mt-36 "></div>
 		  
 		  
@@ -247,7 +247,7 @@ export const ViewMessage = () => {
 
 		<SearchComponent onDebouncedValueChange={handleDebouncedValueChange} searchEmpty={searchEmpty} />
   
-		  {isFetchingSearch  ? <div className='w-full flex justify-center'><Spin  spinning={true}/></div>:<div
+		  {<div
 			id="scrollableDialogs"
 			className="!overflow-y-scroll mt-1"
 			style={{
@@ -265,21 +265,27 @@ export const ViewMessage = () => {
 			  scrollThreshold="200px"
 			>
 			 {isLoading ? '': <List
-			  	locale={{ emptyText:null }} 
+			  	locale={{
+					emptyText: (
+					  <div>
+						
+					  </div>
+					)
+				  }}
 				dataSource={ !isEmplty ? dataSearchValue : dialogs}
 				renderItem={(item:any) => (
 				  <List.Item
 					key={item.id}
-					onClick={() => {
+					onClick={(e) => {
 						if(item.id===activeDialog) return
-				
-						setChatArray([])
-						setPageChat(0)
-						setActiveDialog(item.id)
-						form.resetFields()
-						setFlag(true)
-						changeIsReady(item.id)
-						setCurrentItem(item)
+							e.stopPropagation()
+							setChatArray([])
+							setPageChat(0)
+							setActiveDialog(item.id)
+							form.resetFields()
+							setFlag(true)
+							changeIsReady(item.id)
+							setCurrentItem(item)
 					}}
 					className={`cursor-pointer rounded-xl !p-4 ${
 					  activeDialog === item.id ? '!bg-[#E9EFF8]' : ''
@@ -305,7 +311,7 @@ export const ViewMessage = () => {
 		  </div>}
 		</div>
   
-		<div className="!h-screen   col-span-2  flex justify-center items-center">
+		<div className="!h-screen   col-span-3  flex justify-center items-center">
 		  {!activeDialog ? (
 			<div className="text-gray-500">Выберите диалог или создайте новый</div>
 		  ) : (

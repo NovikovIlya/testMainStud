@@ -58,8 +58,6 @@ export const messagesService = apiSlice.injectEndpoints({
                 }
             },
             invalidatesTags: ['Messages'],
-
-            
         }),
         getOneChat: builder.query<any, any>({
             query: ({id,page,size}) => {
@@ -112,7 +110,16 @@ export const messagesService = apiSlice.injectEndpoints({
             },
             providesTags: ['Messages'],
             keepUnusedDataFor:1,
-            
+        }),
+        searchUser: builder.query<any, any>({
+            query: ({name,page,size}) => {
+                return {
+                    url: `/user-api/chat/search?name=${name}&page=${page}&size=${size}`,
+                    method: 'GET'
+                }
+            },
+            // providesTags: ['Messages'],
+            keepUnusedDataFor:1,
         }),
         
         
@@ -127,8 +134,9 @@ export const {
     useGetOneChatQuery,
     useAddNewChatMutation,
     useGetOneChatOldQuery,
-   useGetAllDialogsOldQuery,
-   useReadMessageMutation,
-   useGetAllUnReadQuery
+    useGetAllDialogsOldQuery,
+    useReadMessageMutation,
+    useGetAllUnReadQuery,
+    useSearchUserQuery
 
 } = messagesService

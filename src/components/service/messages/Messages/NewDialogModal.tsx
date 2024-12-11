@@ -25,9 +25,10 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 	const { data: dataGetEmployees } = useGetEmployeesMessageQuery(debouncedNameEmployee, {skip: !debouncedNameEmployee})
 	const { data: dataGetStudents } = useGetStudentsMessaageQuery(debouncedNameStudent, { skip: !debouncedNameStudent })
 	const [newChat, { isLoading: isLoadingNew }] = useAddNewChatMutation()
-
+    const [load,setIsload] = useState(false)
 
 	const onFinish = () => {
+		setIsload(true)
 		const obj = {
 			message: form.getFieldValue('text'),
 			senderName: `${user.lastname} ${user.firstname} ${user.middlename}`,
@@ -40,13 +41,12 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 					: form.getFieldValue('student'),
 			recipientId: id
 		}
-		// sendMessage(obj)
-		console.log('obj', obj)
 		newChat(obj)
 			.unwrap()
 			.then(() => {
 				form.resetFields()
 				onCancel()
+				setIsload(false)
 			})
 			.catch(err => {
 				console.log(err)
@@ -57,11 +57,11 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 		const graduate = form.getFieldValue('graduate')
 		const teacher = form.getFieldValue('teacher')
 		const student = form.getFieldValue('student')
-
+		
 		if (graduate) return 'graduate'
 		if (teacher) return 'teacher'
 		if (student) return 'student'
-
+		
 		return null // Если ни одно поле не заполнено
 	}
 
@@ -77,11 +77,11 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 
 	return (
 		<>
-		<Spin fullscreen spinning={isLoadingNew} />
-		<Modal className="p-12" title="Выберите роль" open={isModalOpen} onCancel={onCancel} footer={null}>
+		{load ?<Spin fullscreen spinning={true} className='!z-[10000000000000000000]'/> :
+		<Modal className="p-12" title="Выберите пользователя" open={isModalOpen} onCancel={onCancel} footer={null}>
 			
 			<Form labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} form={form} onFinish={onFinish} style={{ maxWidth: 600 }}>
-				<Form.Item className="mt-6" label="Студент" name="student">
+				<Form.Item className="mt-6" label="Пользователь" name="student">
 					<AutoComplete
 						allowClear
 						disabled={form.getFieldValue('graduate') || form.getFieldValue('teacher')}
@@ -91,13 +91,12 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 							id: student.id
 						}))}
 						onSelect={(value, option) => {
-							console.log('Selected student ID:', value, option) // Здесь вы получите student.id
 							setId(option.id)
 						}}
 					/>
 				</Form.Item>
 
-				<Form.Item label="Сотрудник" name="teacher">
+			 <Form.Item label="Сотрудник" name="teacher">
 					<AutoComplete
 						allowClear
 						disabled={form.getFieldValue('graduate') || form.getFieldValue('student')}
@@ -107,13 +106,12 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 							id: employee.id
 						}))}
 						onSelect={(value, option) => {
-							console.log('Selected  ID:', value, option)
 							setId(option.id)
 						}}
 					/>
 				</Form.Item>
 
-				<Form.Item label="Аспирант" name="graduate">
+					{/*<Form.Item label="Аспирант" name="graduate">
 					<AutoComplete
 						allowClear
 						disabled={form.getFieldValue('student') || form.getFieldValue('teacher')}
@@ -123,11 +121,10 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 							id: employee.id
 						}))}
 						onSelect={(value, option) => {
-							console.log('Selected  ID:', value, option)
 							setId(option.id)
 						}}
 					/>
-				</Form.Item>
+				</Form.Item> */}
 
 				<Form.Item label="Сообщение" name="text">
 					<TextArea required placeholder="Введите текст сообщения" />
@@ -141,7 +138,7 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 
 				{/* {isButtonDisabled() && <div className="w-full text-center mt-2">Необходимо выбрать только одну роль</div>} */}
 			</Form>
-		</Modal>
+		</Modal>}
 		</>
 	)
 }

@@ -1,48 +1,50 @@
 import {
-	Button, Form, Input, List, Segmented, Skeleton, Spin
+	Button, Form, Input, List,
+	Skeleton, Spin
 } from 'antd'
 import { useEffect, useState } from 'react'
 
 import { useAppDispatch, useAppSelector } from '../../../../store'
 
+import { PlusCircleOutlined, SearchOutlined } from '@ant-design/icons'
+import dayjs from 'dayjs'
+import { useTranslation } from 'react-i18next'
+import InfiniteScroll from 'react-infinite-scroll-component'
+import { useGetAllDialogsOldQuery, useGetAllDialogsQuery, useGetOneChatOldQuery, useGetOneChatQuery, useReadMessageMutation, useSearchUserQuery, useSendMessageChatMutation } from '../../../../store/api/messages/messageApi'
+import { truncateString } from '../../../../utils/truncateString'
 import { CommentNewTeacher } from './CommentTeacher'
 import InputText from './InputText'
-import { PlusCircleOutlined, SearchOutlined } from '@ant-design/icons'
-import InfiniteScroll from 'react-infinite-scroll-component'
-import { useTranslation } from 'react-i18next'
-import { useGetAllDialogsOldQuery, useGetAllDialogsQuery, useGetAllUnReadQuery, useGetOneChatOldQuery, useGetOneChatQuery, useReadMessageMutation, useSendMessageChatMutation } from '../../../../store/api/messages/messageApi'
 import { NewDialogModal } from './NewDialogModal'
-import dayjs from 'dayjs'
-import { truncateString } from '../../../../utils/truncateString'
+import SearchComponent from './SearchComponent'
+
 
 export const ViewMessage = () => {
 	const user = useAppSelector(state => state.auth.user)
 	const [form] = Form.useForm();
 	const [dialogs, setDialogs] = useState<any>([]);
-	const {t,i18n} = useTranslation()
+	const {t} = useTranslation()
 	const [value, setValue] = useState(t('all'));
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [activeDialog, setActiveDialog] = useState(null);
 	const [page,setPage] = useState(0)
-	const {data:dataAllDialogsOld,isLoadingOld,isErrorOld,isFetchingOld} = useGetAllDialogsOldQuery<any>({page,size:8})
-	const {data:dataAllDialogs,isLoading,isError,isFetching} = useGetAllDialogsQuery<any>({page:0,size:8},{pollingInterval:5000})
+	const {data:dataAllDialogsOld} = useGetAllDialogsOldQuery<any>({page,size:8})
+	const {data:dataAllDialogs,isLoading,isFetching} = useGetAllDialogsQuery<any>({page:0,size:8},{pollingInterval:5000})
 	const [sendMessage,{isLoading:isLoadingSend}] = useSendMessageChatMutation()
 	const [pageChat,setPageChat] = useState(0)
-	const {data:dataOneChat,isFetching:isFetchingOneChat,isLoading:isLoadingChat} = useGetOneChatQuery({id:activeDialog,  page:  0,    size:100},{skip: !activeDialog,
+	const {data:dataOneChat} = useGetOneChatQuery({id:activeDialog,  page:  0,    size:100},{skip: !activeDialog,
 		pollingInterval: 5000,
 	})
-	const {data:dataOneChatOld,isFetching:isFetchingOneChatOld,isLoading:isLoadingChatOld} = useGetOneChatOldQuery({id:activeDialog,  page:   pageChat,    size:100},{skip: !activeDialog})
+	const {data:dataOneChatOld,isFetching:isFetchingOneChatOld} = useGetOneChatOldQuery({id:activeDialog,  page:   pageChat,    size:100},{skip: !activeDialog})
 	const [chatArray,setChatArray] = useState<any>([])
-	const dispatch = useAppDispatch()
 	const [flag,setFlag] = useState(true)
 	const [gotToBottom,setGotoBottom] = useState(0)
 	const [isReadArray,setIsReadArray] = useState<any>([])
 	const [readMessage] = useReadMessageMutation()
 	const [currentItem,setCurrentItem] = useState(null)
+	const [searchResults, setSearchResults] = useState<any>(null);
+	const [isEmplty,setIsEmpty] = useState(true) 
 
-
-
-	console.log('flag',flag)
+	console.log('searchResults',searchResults)
 	
 	useEffect(() => {
 		if (dataAllDialogs) {
@@ -104,7 +106,6 @@ export const ViewMessage = () => {
 	}
 	}, [dataAllDialogsOld]);
 	  
-
 	useEffect(() => {
 		if (dataOneChat?.messages) {
 		  setChatArray((prevMessages:any) => {
@@ -131,14 +132,15 @@ export const ViewMessage = () => {
     
 	
 	}, [dataOneChatOld]);
-
   
+
 	const loadMoreData = () => {
 		if(isFetching || isLoading) return
 		setPage(p=>p+1)
 	};
   
 	const showModal = () => setIsModalOpen(true);
+
 	const handleCancel = () => {
 		setIsModalOpen(false)
 	}
@@ -146,9 +148,11 @@ export const ViewMessage = () => {
 	const clickTextArea = ()=>{
 
 	}
+
 	const refetch = ()=>{
 
 	}
+
 	const onFinish = async() => {
 		const obj = {
 			message: form.getFieldValue('textArea'),
@@ -157,7 +161,7 @@ export const ViewMessage = () => {
 		}
 		sendMessage(obj).unwrap()
 		form.resetFields()
-	  };
+	};
 
 	const loadMessages = ()=>{
 		if(isFetchingOneChatOld) return
@@ -185,6 +189,14 @@ export const ViewMessage = () => {
 		readMessage(activeDialog)
 	}
 
+	const onSearchResults = (results: any) => {
+		setSearchResults(results);
+	  };
+	  const searchEmpty= (values:any)=>{
+		setIsEmpty(values)
+	  }
+	  console.log('isEmplty',isEmplty)
+
 	if(isLoading) return <div className="screen !z-[100000000] relative">
 		<div className="loader">
 		<div className="inner one"></div>
@@ -198,32 +210,32 @@ export const ViewMessage = () => {
 		<Spin spinning={isLoadingSend} fullscreen></Spin>
 		<div className="bg-white h-screen shadow-xl">
 		  <div className="mt-36 "></div>
-		  <div className="mt-5 p-4">
-			<Input placeholder={t('searchMEssage')} prefix={<SearchOutlined />} />
-		  </div>
 		  
-		  <div className="mt-1 px-4 pb-4 flex justify-between items-center" style={{ borderBottom: '1px solid #E9EFF8' }}>
-			<Segmented
+		  
+		  <div className="mt-1 px-4 pb-2 flex justify-between items-center" >
+			{/* <Segmented
 			  value={value===t('all')?t('all'):t('new')}
 			  options={[t('all'), t('new')]}
 			  onChange={setValue}
-			/>
+			/> */}
 			<Button className='' onClick={showModal}>
 			  <PlusCircleOutlined />{t('newDialog')}
 			</Button>
 		  </div>
+
+		<SearchComponent searchEmpty={searchEmpty} onSearchResults={onSearchResults} />
   
 		  <div
 			id="scrollableDialogs"
 			className="!overflow-y-scroll mt-1"
 			style={{
-			  height: 'calc(100vh - 285px)',
+			  height: 'calc(100vh - 255px)',
 			  overflow: 'auto',
 			  padding: '0 16px',
 			}}
 		  >
 			<InfiniteScroll
-			  dataLength={dialogs.length}
+			  dataLength={searchResults?.length && !isEmplty ? searchResults.length : dialogs.length}
 			  next={loadMoreData}
 			  hasMore={dialogs.length < 50}
 			  loader={isLoading && <Skeleton className='pl-4 pt-4' paragraph={{ rows: 1 }} active />}
@@ -232,7 +244,7 @@ export const ViewMessage = () => {
 			>
 			 {isLoading ? '': <List
 			  	locale={{ emptyText:null }} 
-				dataSource={dialogs}
+				dataSource={searchResults?.length && !isEmplty ? searchResults : dialogs}
 				renderItem={(item:any) => (
 				  <List.Item
 					key={item.id}
@@ -299,9 +311,9 @@ export const ViewMessage = () => {
 		  )}
 		</div>
 		 <NewDialogModal 
-        isModalOpen={isModalOpen}
-        onCancel={handleCancel}
-      />
+        	isModalOpen={isModalOpen}
+        	onCancel={handleCancel}
+      	/>
 	  </div>
 	);
   }

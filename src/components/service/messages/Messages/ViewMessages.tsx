@@ -280,7 +280,7 @@ export const ViewMessage = () => {
 			  onChange={setValue}
 			/> */}
 			<Button type="primary"
-							className="!rounded-full  h-10"  onClick={showModal}>
+							className="!rounded-full  h-10 w-full"  onClick={showModal}>
 			  <PlusCircleOutlined />{t('newDialog')}
 			</Button>
 		  </div>

@@ -73,7 +73,7 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 				form.resetFields()
 				onCancel()
 				setIsload(false)
-				dispatch(apiSlice.util.resetApiState())
+				// dispatch(apiSlice.util.resetApiState())
 			})
 			.catch(err => {
 				console.log(err)
@@ -111,7 +111,7 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 				setdataGetStudentsValue([])
 			}} footer={null}>
 			
-			<Form labelCol={{ span: 4 }} wrapperCol={{ span: 18 }} form={form} onFinish={onFinish} className='flex justify-center flex-col '>
+			<Form labelCol={{ span: 5 }} wrapperCol={{ span: 18 }} form={form} onFinish={onFinish} className='flex justify-center flex-col '>
 				<Form.Item 
 					
 					help={student && student.length < 4 ? "Введите минимум 4 символа" : ""}

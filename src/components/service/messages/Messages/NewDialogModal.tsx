@@ -30,11 +30,14 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
     const [load,setIsload] = useState(false)
 	const dispatch = useAppDispatch()
 	const [dataGetStudentsValue,setdataGetStudentsValue] = useState<any>([])
+	const [flag,setFlag] = useState(false)
 
 	useEffect(()=>{
 		if(dataGetStudents){
 			setdataGetStudentsValue(dataGetStudents)
+			setFlag(true)
 		}
+		
 	},[dataGetStudents])
 	
 
@@ -101,7 +104,7 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 
 		return (filledCount.length !== 1) || (!id)
 	}
-
+	console.log('flag',flag)
 	return (
 		<>
 		{load ?<Spin fullscreen spinning={true} className='!z-[10000000000000000000]'/> :
@@ -137,7 +140,17 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 								},
 						  ]
 						:
-						dataGetStudentsValue?.map((student: any) => ({
+					(flag &&	dataGetStudentsValue?.length===0 ) ? [
+							{
+								value: 'NULL',
+								disabled: true,
+								label: (
+									<div className='flex items-center justify-center w-full h-[100px]'>
+										Не найден
+									</div>
+								),
+							},
+					  ] :	dataGetStudentsValue?.map((student: any) => ({
 							value: student.name,
 							id: student.id
 						}))}

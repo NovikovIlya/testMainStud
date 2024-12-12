@@ -25,7 +25,7 @@ export const Service = () => {
 
 	return (
 		<div  className=" w-screen h-screen">
-			<div className=" flex h-auto ">
+			<div className=" flex h-auto  bg-[#F5F8FB] ">
 				{pathname.includes('/services/schedule') && <NavSchedule />}
 				{pathname.includes('/services/session') && <NavSession />}
 				{pathname.includes('/services/aboutMe') && <NavAboutMe />}

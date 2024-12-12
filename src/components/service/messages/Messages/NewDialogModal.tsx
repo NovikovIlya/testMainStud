@@ -1,15 +1,17 @@
 import { useDebounce } from 'ahooks'
-import { AutoComplete, Button, Form, Modal, Spin } from 'antd'
+import { AutoComplete, Button, Form, Modal, Skeleton, Spin } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useAppSelector } from '../../../../store'
+import { useAppDispatch, useAppSelector } from '../../../../store'
 import {
 	useAddNewChatMutation,
 	useGetEmployeesMessageQuery,
 	useGetStudentsMessaageQuery
 } from '../../../../store/api/messages/messageApi'
+import { apiSlice } from '../../../../store/api/apiSlice'
+import { t } from 'i18next'
 
 export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 	const user = useAppSelector(state => state.auth.user)
@@ -22,10 +24,34 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 	const debouncedNameStudent = useDebounce(student, { wait: 1000 })
 	const debouncedNameAspir = useDebounce(graduate, { wait: 1000 })
 
-	const { data: dataGetEmployees } = useGetEmployeesMessageQuery(debouncedNameEmployee, {skip: !debouncedNameEmployee})
-	const { data: dataGetStudents } = useGetStudentsMessaageQuery(debouncedNameStudent, { skip: !debouncedNameStudent })
+	const { data: dataGetEmployees } = useGetEmployeesMessageQuery(debouncedNameEmployee, {skip: !debouncedNameEmployee || debouncedNameEmployee.length < 4 || !isModalOpen})
+	const { data: dataGetStudents ,isFetching} = useGetStudentsMessaageQuery(debouncedNameStudent, {skip: !debouncedNameStudent || debouncedNameStudent.length < 4 || !isModalOpen})
 	const [newChat, { isLoading: isLoadingNew }] = useAddNewChatMutation()
     const [load,setIsload] = useState(false)
+	const dispatch = useAppDispatch()
+	const [dataGetStudentsValue,setdataGetStudentsValue] = useState<any>([])
+
+	useEffect(()=>{
+		if(dataGetStudents){
+			setdataGetStudentsValue(dataGetStudents)
+		}
+	},[dataGetStudents])
+	
+
+	const handleSearch = (value: string, field: string) => {
+		if (value.length < 4) {
+		  form.setFields([{
+			name: field,
+			errors: ['Введите минимум 4 символа']
+		  }]);
+		} else {
+		  form.setFields([{
+			name: field,
+			errors: []
+		  }]);
+		}
+	  };
+	  
 
 	const onFinish = () => {
 		setIsload(true)
@@ -47,6 +73,7 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 				form.resetFields()
 				onCancel()
 				setIsload(false)
+				dispatch(apiSlice.util.resetApiState())
 			})
 			.catch(err => {
 				console.log(err)
@@ -72,28 +99,61 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 			form.getFieldValue('student')
 		].filter(Boolean)
 
-		return filledCount.length !== 1
+		return (filledCount.length !== 1) || (!id)
 	}
 
 	return (
 		<>
 		{load ?<Spin fullscreen spinning={true} className='!z-[10000000000000000000]'/> :
-		<Modal className="p-12" title="Выберите пользователя" open={isModalOpen} onCancel={onCancel} footer={null}>
+		<Modal    maskClosable={false} className="p-12 !min-w-[400px] !w-6/12" title={t('SelectUser')} open={isModalOpen} onCancel={()=>{
+				onCancel()
+				form.resetFields()
+				setdataGetStudentsValue([])
+			}} footer={null}>
 			
-			<Form labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} form={form} onFinish={onFinish} style={{ maxWidth: 600 }}>
-				<Form.Item className="mt-6" label="Пользователь" name="student">
-					<AutoComplete
+			<Form labelCol={{ span: 4 }} wrapperCol={{ span: 18 }} form={form} onFinish={onFinish} className='flex justify-center flex-col '>
+				<Form.Item 
+					
+					help={student && student.length < 4 ? "Введите минимум 4 символа" : ""}
+					validateStatus={student && student.length < 4 ? "error" : ""}
+					className="mt-6" label={t('user')} name="student">
+
+					{ <AutoComplete
+						onChange={(value) => handleSearch(value, 'student')}
+						
 						allowClear
 						disabled={form.getFieldValue('graduate') || form.getFieldValue('teacher')}
 						placeholder="Введите ФИО"
-						options={dataGetStudents?.map((student: any) => ({
+						options={
+							isFetching? [
+								{
+									value: 'NULL',
+									disabled: true,
+									label: (
+										<div className='flex items-center justify-center w-full h-[100px]'>
+											<Spin size='large' />
+										</div>
+									),
+								},
+						  ]
+						:
+						dataGetStudentsValue?.map((student: any) => ({
 							value: student.name,
 							id: student.id
 						}))}
+						dropdownRender={(menu) => (
+							<>
+								
+								<div className='flex flex-col gap-2 whitespace-normal border-b-2'>
+								{menu}
+								</div>
+							</>
+						)}
 						onSelect={(value, option) => {
 							setId(option.id)
 						}}
-					/>
+						// notFoundContent={isFetching ? <Spin className='w-full flex justify-center' size="small" /> : null}
+					/>}
 				</Form.Item>
 
 			 <Form.Item label="Сотрудник" name="teacher">
@@ -126,13 +186,14 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 					/>
 				</Form.Item> */}
 
-				<Form.Item label="Сообщение" name="text">
+				<Form.Item label={t('message')} name="text">
 					<TextArea required placeholder="Введите текст сообщения" />
 				</Form.Item>
 
 				<div className="w-full flex justify-center">
-					<Button loading={isLoadingNew} disabled={isButtonDisabled()} htmlType="submit" type="primary">
-						Создать диалог
+					<Button type="primary"
+							className="!rounded-full  h-10" loading={isLoadingNew} disabled={isButtonDisabled()} htmlType="submit" >
+						{t('createDialog')}
 					</Button>
 				</div>
 

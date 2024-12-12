@@ -324,7 +324,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						</div>
 					</div>
 				</div>
-				<div className="flex gap-5 items-center h-full max-[1000px]:gap-0 w-fit justify-center">
+				<div className="flex gap-3 items-center h-full max-[1000px]:gap-0 w-fit justify-center">
 					<div className="flex h-full items-center ">
 						<a
 							className={clsx(
@@ -385,17 +385,17 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						</div> */}
 
 						<div
-							className="cursor-pointer "
+							className={`cursor-pointer h-full p-2 flex items-center   ${type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'}`}
 							onClick={() => {
 								navigate('/services/messages')
 							}}
 						>
-							<Badge className="top-[60px] !right-[500px]  absolute" count={dataUnReadMessage?.unreadChatsCount ? dataUnReadMessage?.unreadChatsCount : null}></Badge>
+							<Badge className="top-[60px] !right-[505px]  absolute" count={dataUnReadMessage?.unreadChatsCount ? dataUnReadMessage?.unreadChatsCount : null}></Badge>
 							<MessageModuleSvg white={type === 'service'} />
 						</div>
 
 						<div
-							className="cursor-pointer mx-3"
+							className={`cursor-pointer mx-3 p-2 h-full flex items-center ${type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'}`}
 							onClick={e => {
 								e.stopPropagation()
 								handleVisibleInspired()
@@ -403,7 +403,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						>
 							<EyeSvg white={type === 'service'} />
 						</div>
-						<div>
+						<div className='h-full'>
 							<AccessibilityHelper ref={ref} isOpen={isOpen} lang={i18n.language} />
 						</div>
 					</div>
@@ -411,7 +411,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						defaultValue={paramValue === 'eng' ? 'en' : i18n.language}
 						style={{ width: 70 }}
 						variant="borderless"
-						className={clsx('max-sm:hidden ', type === 'service' && 'text-white')}
+						className={clsx(type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307', 'h-full flex items-center max-sm:hidden ', type === 'service' && 'text-white')}
 						dropdownStyle={{ color: 'white' }}
 						popupClassName="text-white"
 						onChange={e => changeLanguage(e.valueOf())}

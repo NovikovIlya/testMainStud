@@ -50,7 +50,7 @@ const DropDrag = () => {
 	const dispatch = useDispatch()
 	const layout = block
 	const edit = useAppSelector(state => state.auth.edit)
-	const { data: dataCheck, isSuccess: isSuccessCheck, isLoading: isLoadingCheck } = useCheckIsEmployeeQuery()
+	const { data: dataCheck, isSuccess: isSuccessCheck, isLoading: isLoadingCheck,isFetching:isFetchingIsEmpl } = useCheckIsEmployeeQuery()
 	const {data: dataGetInfoSubrole,isLoading: isLoadingGetInfoSubrole,isSuccess: isSuccessGetInfoSubrole} = useGetInfoUserQuery()
 	const [currentBreakpoint, setCurrentBreakpoint] = useState<string>('lg')
 	const [mounted, setMounted] = useState(false)
@@ -289,6 +289,9 @@ const DropDrag = () => {
 		// 	</div>
 		// )
 	}
+
+	
+
 
 	return <div className="  ">{renderContent()}</div>
 }

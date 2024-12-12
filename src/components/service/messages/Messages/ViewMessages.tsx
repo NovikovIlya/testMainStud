@@ -10,7 +10,7 @@ import { PlusCircleOutlined, SearchOutlined } from '@ant-design/icons'
 import dayjs from 'dayjs'
 import { useTranslation } from 'react-i18next'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { useGetAllDialogsOldQuery, useGetAllDialogsQuery, useGetOneChatOldQuery, useGetOneChatQuery, useReadMessageMutation, useSearchUserQuery, useSendMessageChatMutation } from '../../../../store/api/messages/messageApi'
+import { useGetAllDialogsOldQuery, useGetAllDialogsQuery, useGetOneChatOldQuery, useGetOneChatQuery, useReadMessageMutation, useSearchUserOldQuery, useSearchUserQuery, useSendMessageChatMutation } from '../../../../store/api/messages/messageApi'
 import { truncateString } from '../../../../utils/truncateString'
 import { CommentNewTeacher } from './CommentTeacher'
 import InputText from './InputText'
@@ -41,13 +41,17 @@ export const ViewMessage = () => {
 	const [isReadArray,setIsReadArray] = useState<any>([])
 	const [readMessage] = useReadMessageMutation()
 	const [currentItem,setCurrentItem] = useState(null)
-
 	const [isEmplty,setIsEmpty] = useState(true) 
 	const [debouncedSearchValue, setDebouncedSearchValue] = useState('');
-	const {data:dataSearch,isFetching:isFetchingSearch} = useSearchUserQuery({name:debouncedSearchValue,page:0,size:15},{skip:!debouncedSearchValue})
+	const [pageSearch,setPageSearch] = useState(0)
+	const {data:dataSearch,isFetching:isFetchingSearch} = useSearchUserQuery({name:debouncedSearchValue,page:0,size:15},{skip:!debouncedSearchValue,
+		pollingInterval: 5000,
+	})
+	const {data:dataSearchOld,isFetching:isFetchingSearchOld} = useSearchUserOldQuery({name:debouncedSearchValue,page:pageSearch,size:15},{skip:!debouncedSearchValue,})
 	const [dataSearchValue,setdataSearchValue] = useState<any>([])
 
-	console.log('isFetchingSearch',isFetchingSearch)
+	
+
 	useEffect(()=>{
 		if(dataSearch?.length > 0){
 			setdataSearchValue(dataSearch)
@@ -57,6 +61,36 @@ export const ViewMessage = () => {
 		}
 	
 	},[dataSearch])
+
+	useEffect(() => {
+		if (dataSearchOld) {
+			setdataSearchValue((prevDialogs: any[]) => {
+			// Создаем Map из предыдущих диалогов для быстрого поиска
+			const dialogMap = new Map(prevDialogs.map(dialog => [dialog.id, dialog]));
+			
+			// Обрабатываем каждый диалог из новых данных
+			dataSearchOld.forEach((newDialog:any) => {
+				const existingDialog = dialogMap.get(newDialog.id);
+				
+				if (existingDialog) {
+				// Если диалог существует и данные изменились, обновляем его
+				if (existingDialog.lastMessage !== newDialog.lastMessage || 
+					existingDialog.lastMessageTime !== newDialog.lastMessageTime ||
+					existingDialog.isRead !== newDialog.isRead) {
+					dialogMap.set(newDialog.id, newDialog);
+				}
+				} else {
+				// Если диалога нет, добавляем новый
+				dialogMap.set(newDialog.id, newDialog);
+				}
+			});
+			
+			// Преобразуем Map обратно в массив и сортируем по времени последнего сообщения
+			return Array.from(dialogMap.values())
+				.sort((a, b) => new Date(b.lastMessageTime).getTime() - new Date(a.lastMessageTime).getTime());
+			});
+		}
+		}, [dataSearchOld]);
 	
 	useEffect(() => {
 		if (dataAllDialogs) {
@@ -154,6 +188,10 @@ export const ViewMessage = () => {
 
 	const loadMoreData = () => {
 		if(isFetching || isLoading) return
+		if(!isEmplty){
+			setPageSearch(p=>p+1)
+			return
+		}
 		setPage(p=>p+1)
 	};
   
@@ -161,6 +199,7 @@ export const ViewMessage = () => {
 
 	const handleCancel = () => {
 		setIsModalOpen(false)
+	
 	}
 
 	const clickTextArea = ()=>{
@@ -210,12 +249,12 @@ export const ViewMessage = () => {
 
 	const searchEmpty= (values:any)=>{
 		setIsEmpty(values)
-		
+		setPageSearch(0)
 	
 	}
 
 	const handleDebouncedValueChange = (value: string) => {
-	setDebouncedSearchValue(value);
+		setDebouncedSearchValue(value);
 	};
 
 
@@ -240,7 +279,8 @@ export const ViewMessage = () => {
 			  options={[t('all'), t('new')]}
 			  onChange={setValue}
 			/> */}
-			<Button className='' onClick={showModal}>
+			<Button type="primary"
+							className="!rounded-full  h-10"  onClick={showModal}>
 			  <PlusCircleOutlined />{t('newDialog')}
 			</Button>
 		  </div>
@@ -251,7 +291,7 @@ export const ViewMessage = () => {
 			id="scrollableDialogs"
 			className="!overflow-y-scroll mt-1"
 			style={{
-			  height: 'calc(100vh - 255px)',
+			  height: 'calc(100vh - 265px)',
 			  overflow: 'auto',
 			  padding: '0 16px',
 			}}

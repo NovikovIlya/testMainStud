@@ -324,5 +324,26 @@
 	"new": "New",
 	"newDialog": "New dialog",
 	"searchMEssage": "Search",
-	"loadMore": "load more"
+	"loadMore": "load more",
+	"user":"User",
+	"message":"Message",
+	"SelectUser" : "Select user",
+	"createDialog":"Create dialog",
+	"monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday",
+    "sunday": "Sunday",
+	"mySchedule": "My schedule",
+	"streamingLecture" : "Streaming lecture",
+	"lecture" : "Lecture",
+	"seminar" : "Seminar",
+	"laboratory" : "Laboratory",
+	"elective" : "Elective",
+	"practice" : "Practice",
+	"exam" : "Exam",
+	"notExam" : "Not exam"
+
 }

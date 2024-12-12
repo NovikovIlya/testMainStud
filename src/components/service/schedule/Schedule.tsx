@@ -8,6 +8,7 @@ import './StyleSchedule.scss'
 import { DataType } from '../../../models/schedule'
 import useWindowOrientation from '../../../utils/hooks/useDeviceOrientation'
 import { isMobileDevice } from '../../../utils/hooks/useIsMobile'
+import { t } from 'i18next'
 
 
 
@@ -88,7 +89,7 @@ export const Schedule = () => {
 
 	return (
 		<div className={`${isMobile ? 'mx-0' : 'mx-14'} mt-14  radio`}>
-			<div className="mb-14 text-[28px]">Мое расписание</div>
+			{/* <div className="mb-14 text-[28px]">Мое расписание</div> */}
 			<Radio.Group
 				onChange={onChange}
 				defaultValue="monday"
@@ -99,37 +100,37 @@ export const Schedule = () => {
 					className="rounded-full bg-transparent h-full flex items-center  text-base"
 					value="monday"
 				>
-					Понедельник
+					{t('monday')}
 				</Radio.Button>
 				<Radio.Button
 					className="rounded-full h-full flex items-center text-base bg-transparent"
 					value="tuesday"
 				>
-					Вторник
+					{t('tuesday')}
 				</Radio.Button>
 				<Radio.Button
 					className="rounded-full h-full flex items-center text-base bg-transparent"
 					value="wednesday"
 				>
-					Среда
+					{t('wednesday')}
 				</Radio.Button>
 				<Radio.Button
 					className="rounded-full h-full flex items-center text-base bg-transparent"
 					value="thursday"
 				>
-					Четверг
+					{t('thursday')}
 				</Radio.Button>
 				<Radio.Button
 					className="rounded-full h-full flex items-center text-base bg-transparent"
 					value="friday"
 				>
-					Пятница
+					{t('friday')}
 				</Radio.Button>
 				<Radio.Button
 					className="rounded-full h-full flex items-center text-base bg-transparent"
 					value="saturday"
 				>
-					Суббота
+					{t('saturday')}
 				</Radio.Button>
 			</Radio.Group>
 			<div className="my-10 gap-5 flex">
@@ -142,35 +143,35 @@ export const Schedule = () => {
 				<div className={`${isMobile? 'hidden' :''} flex flex-col gap-6 text-sm`}>
 					<div className="flex items-center gap-2">
 						<div className="min-w-3 min-h-3 w-[11px] h-[11px]  rounded-full bg-[#A7FAFF]" />
-						Потоковая лекция
+						{t('streamingLecture')}
 					</div>
 					<div className="flex items-center gap-2">
 						<div className="min-w-3 min-h-3 w-[11px] h-[11px] rounded-full bg-[#3A92E3]" />
-						Лекция
+						{t('lecture')}
 					</div>
 					<div className="flex items-center gap-2">
 						<div className="min-w-3 min-h-3 w-[11px] h-[11px] rounded-full bg-[#FFE24C]" />
-						Семинар
+						{t('seminar')}
 					</div>
 					<div className="flex items-center gap-2">
 						<div className="min-w-3 min-h-3 w-[11px] h-[11px] rounded-full bg-[#59C348]" />
-						Лабораторное занятие
+						{t('laboratory')}
 					</div>
 					<div className="flex items-center gap-2">
 						<div className="min-w-3 min-h-3 w-[11px] h-[11px] rounded-full bg-[#E93A3A]" />
-						Факультатив
+						{t('elective')}
 					</div>
 					<div className="flex items-center gap-2">
 						<div className="min-w-3 min-h-3 w-[11px] h-[11px] rounded-full bg-[#844EC9]" />
-						Практика
+						{t('practice')}
 					</div>
 					<div className="flex items-center gap-2">
 						<div className="min-w-3 min-h-3 w-[11px] h-[11px] rounded-full bg-[#FF9838]" />
-						Тестирование
+						{t('exam')}
 					</div>
 					<div className="flex items-center gap-2">
 						<div className="min-w-3 min-h-3 w-[11px] h-[11px] rounded-full bg-[#B3B3B3]" />
-						Тип дисциплины не указан
+						{t('notExam')}
 					</div>
 				</div>
 			</div>

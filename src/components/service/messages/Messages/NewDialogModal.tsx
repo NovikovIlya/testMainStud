@@ -77,6 +77,9 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 				form.resetFields()
 				onCancel()
 				setIsload(false)
+
+				setdataGetStudentsValue([])
+				setFlag(false)
 			})
 			.catch(err => {
 				console.log(err)
@@ -90,10 +93,11 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 						type: 'error'
 					})
 				)
+
+				setdataGetStudentsValue([])
+				setFlag(false)
 			})
 	}
-
-
 
 	const isButtonDisabled = () => {
 		const filledCount = [
@@ -110,7 +114,7 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 			{load ? <Spin fullscreen spinning/>: (
 				<Modal
 					maskClosable={false}
-					className="p-12 !min-w-[400px] !w-6/12"
+					className="p-12 !min-w-[400px] !w-5/12"
 					title={t('SelectUser')}
 					open={isModalOpen}
 					onCancel={() => {
@@ -122,7 +126,7 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 					footer={null}
 				>
 					<Form
-						labelCol={{ span: 5 }}
+						labelCol={{ span: 6 }}
 						wrapperCol={{ span: 18 }}
 						form={form}
 						onFinish={onFinish}
@@ -183,7 +187,6 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 															<div style={{ fontSize: '12px', color: '#888' }}>
 																{hasBrackets(student.name) ? extractContentWithinBrackets(student.name) : ''}
 															</div>{' '}
-															{/* Дополнительная информация */}
 														</div>
 													)
 											  }))
@@ -191,16 +194,13 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 									onSelect={(value, option) => {
 										setId(option.id)
 										setType(option.userType)
-										console.log('value',value)
 									}}
-									
 								/>
 							}
 						</Form.Item>
 
-						
 						<Form.Item label={t('message')} name="text">
-							<TextArea required placeholder={t('inputMessage')} />
+							<TextArea 	maxLength={75}  required placeholder={t('inputMessage')} />
 						</Form.Item>
 
 						<div className="w-full flex justify-center">

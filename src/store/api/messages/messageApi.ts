@@ -14,7 +14,6 @@ export const messagesService = apiSlice.injectEndpoints({
             },
             providesTags: ['Messages'],
             keepUnusedDataFor:1,
-            
         }),
         getStudentsMessaage: builder.query<any, any>({
             query: (name) => {
@@ -25,7 +24,6 @@ export const messagesService = apiSlice.injectEndpoints({
             },
             providesTags: ['Messages'],
             keepUnusedDataFor:1,
-            
         }),
         getUsersMessages: builder.query<any, any>({
             query: (name) => {
@@ -35,8 +33,7 @@ export const messagesService = apiSlice.injectEndpoints({
                 }
             },
             providesTags: ['Messages'],
-            keepUnusedDataFor:1,
-            
+            keepUnusedDataFor:1, 
         }),
         getAllDialogs: builder.query<any, any>({
             query: ({page,size}) => {
@@ -47,7 +44,6 @@ export const messagesService = apiSlice.injectEndpoints({
             },
             providesTags: ['Messages'],
             keepUnusedDataFor:1,
-            
         }),
         getAllDialogsOld: builder.query<any, any>({
             query: ({page,size}) => {
@@ -141,9 +137,7 @@ export const messagesService = apiSlice.injectEndpoints({
             },
             providesTags: ['Messages'],
             keepUnusedDataFor:1,
-        }),
-        
-        
+        }),     
     })
 })
 

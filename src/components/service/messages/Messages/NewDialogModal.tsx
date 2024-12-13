@@ -1,17 +1,12 @@
 import { useDebounce } from 'ahooks'
-import { AutoComplete, Button, Form, Modal, Skeleton, Spin } from 'antd'
+import { AutoComplete, Button, Form, Modal, Spin } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
 import { t } from 'i18next'
 import { useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 
 import { useAppDispatch, useAppSelector } from '../../../../store'
-import { apiSlice } from '../../../../store/api/apiSlice'
 import {
-	useAddNewChatMutation,
-	useGetEmployeesMessageQuery,
-	useGetStudentsMessaageQuery,
-	useGetUsersMessagesQuery
+	useAddNewChatMutation, useGetUsersMessagesQuery
 } from '../../../../store/api/messages/messageApi'
 import { ContentWithinBrackets, extractContentWithinBrackets, hasBrackets } from '../../../../utils/extractBrackets'
 import { showNotification } from '../../../../store/reducers/notificationSlice'
@@ -101,8 +96,6 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 
 	const isButtonDisabled = () => {
 		const filledCount = [
-			form.getFieldValue('graduate'),
-			form.getFieldValue('teacher'),
 			form.getFieldValue('student')
 		].filter(Boolean)
 
@@ -111,8 +104,8 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 
 	return (
 		<>
-			{load ? <Spin fullscreen spinning/>: (
-				<Modal
+			{load ? <Spin fullscreen spinning/>: 
+				(<Modal
 					maskClosable={false}
 					className="p-12 !min-w-[400px] !w-5/12"
 					title={t('SelectUser')}
@@ -122,7 +115,8 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 						form.resetFields()
 						setdataGetStudentsValue([])
 						setFlag(false)
-					}}
+						}
+					}
 					footer={null}
 				>
 					<Form
@@ -146,9 +140,10 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 									disabled={form.getFieldValue('graduate') || form.getFieldValue('teacher')}
 									placeholder={t('inputFio')}
 									onClear={() => {
-										setdataGetStudentsValue([])
-										setFlag(false)
-									}}
+											setdataGetStudentsValue([])
+											setFlag(false)
+										}
+									}
 									options={
 										isFetching
 											? [
@@ -186,15 +181,16 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 															</div>
 															<div style={{ fontSize: '12px', color: '#888' }}>
 																{hasBrackets(student.name) ? extractContentWithinBrackets(student.name) : ''}
-															</div>{' '}
+															</div>
 														</div>
 													)
 											  }))
 									}
 									onSelect={(value, option) => {
-										setId(option.id)
-										setType(option.userType)
-									}}
+											setId(option.id)
+											setType(option.userType)
+										}
+									}
 								/>
 							}
 						</Form.Item>
@@ -217,8 +213,8 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 
 						{/* {isButtonDisabled() && <div className="w-full text-center mt-2">Необходимо выбрать только одну роль</div>} */}
 					</Form>
-				</Modal>
-			)}
+				</Modal>)
+			}
 		</>
 	)
 }

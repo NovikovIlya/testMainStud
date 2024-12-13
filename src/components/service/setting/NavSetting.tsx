@@ -86,7 +86,7 @@ export const NavSetting = () => {
 				<div
 					className={clsx(
 						'shadowNav fixed md:relative z-40 bg-white transition-transform duration-300 ease-in-out',
-						'w-[230px] h-full',
+						'w-[230px] h-screen',
 						isMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
 					)}
 				>

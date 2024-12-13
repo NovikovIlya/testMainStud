@@ -27,6 +27,17 @@ export const messagesService = apiSlice.injectEndpoints({
             keepUnusedDataFor:1,
             
         }),
+        getUsersMessages: builder.query<any, any>({
+            query: (name) => {
+                return {
+                    url: `/user-api/chat/users?name=${name}`,
+                    method: 'GET'
+                }
+            },
+            providesTags: ['Messages'],
+            keepUnusedDataFor:1,
+            
+        }),
         getAllDialogs: builder.query<any, any>({
             query: ({page,size}) => {
                 return {
@@ -148,6 +159,7 @@ export const {
     useReadMessageMutation,
     useGetAllUnReadQuery,
     useSearchUserQuery,
-    useSearchUserOldQuery
+    useSearchUserOldQuery,
+    useGetUsersMessagesQuery
 
 } = messagesService

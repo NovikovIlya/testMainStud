@@ -16,6 +16,7 @@ import { CommentNewTeacher } from './CommentTeacher'
 import InputText from './InputText'
 import { NewDialogModal } from './NewDialogModal'
 import SearchComponent from './SearchComponent'
+import { ContentWithinBrackets, extractContentWithinBrackets, hasBrackets } from '../../../../utils/extractBrackets'
 
 
 export const ViewMessage = () => {
@@ -40,13 +41,11 @@ export const ViewMessage = () => {
 	const [gotToBottom,setGotoBottom] = useState(0)
 	const [isReadArray,setIsReadArray] = useState<any>([])
 	const [readMessage] = useReadMessageMutation()
-	const [currentItem,setCurrentItem] = useState(null)
+	const [currentItem,setCurrentItem] = useState<any>(null)
 	const [isEmplty,setIsEmpty] = useState(true) 
 	const [debouncedSearchValue, setDebouncedSearchValue] = useState('');
 	const [pageSearch,setPageSearch] = useState(0)
-	const {data:dataSearch,isFetching:isFetchingSearch} = useSearchUserQuery({name:debouncedSearchValue,page:0,size:15},{skip:!debouncedSearchValue,
-		pollingInterval: 5000,
-	})
+	const {data:dataSearch,isFetching:isFetchingSearch} = useSearchUserQuery({name:debouncedSearchValue,page:0,size:15},{skip:!debouncedSearchValue,pollingInterval: 5000,})
 	const {data:dataSearchOld,isFetching:isFetchingSearchOld} = useSearchUserOldQuery({name:debouncedSearchValue,page:pageSearch,size:15},{skip:!debouncedSearchValue,})
 	const [dataSearchValue,setdataSearchValue] = useState<any>([])
 
@@ -65,32 +64,30 @@ export const ViewMessage = () => {
 	useEffect(() => {
 		if (dataSearchOld) {
 			setdataSearchValue((prevDialogs: any[]) => {
-			// Создаем Map из предыдущих диалогов для быстрого поиска
 			const dialogMap = new Map(prevDialogs.map(dialog => [dialog.id, dialog]));
 			
-			// Обрабатываем каждый диалог из новых данных
 			dataSearchOld.forEach((newDialog:any) => {
 				const existingDialog = dialogMap.get(newDialog.id);
 				
 				if (existingDialog) {
-				// Если диалог существует и данные изменились, обновляем его
+				
 				if (existingDialog.lastMessage !== newDialog.lastMessage || 
 					existingDialog.lastMessageTime !== newDialog.lastMessageTime ||
 					existingDialog.isRead !== newDialog.isRead) {
 					dialogMap.set(newDialog.id, newDialog);
 				}
 				} else {
-				// Если диалога нет, добавляем новый
+				
 				dialogMap.set(newDialog.id, newDialog);
 				}
 			});
 			
-			// Преобразуем Map обратно в массив и сортируем по времени последнего сообщения
+			
 			return Array.from(dialogMap.values())
 				.sort((a, b) => new Date(b.lastMessageTime).getTime() - new Date(a.lastMessageTime).getTime());
 			});
 		}
-		}, [dataSearchOld]);
+	}, [dataSearchOld]);
 	
 	useEffect(() => {
 		if (dataAllDialogs) {
@@ -120,7 +117,7 @@ export const ViewMessage = () => {
 			  .sort((a, b) => new Date(b.lastMessageTime).getTime() - new Date(a.lastMessageTime).getTime());
 		  });
 		}
-	  }, [dataAllDialogs]);
+	}, [dataAllDialogs]);
 
 	useEffect(() => {
 	if (dataAllDialogsOld) {
@@ -164,7 +161,7 @@ export const ViewMessage = () => {
 
 		setGotoBottom(p=>p+1)
 		setFlag(false)
-	  }, [dataOneChat]);
+	}, [dataOneChat]);
 
 	useEffect(() => {
 	if (dataOneChatOld?.messages) {
@@ -199,7 +196,6 @@ export const ViewMessage = () => {
 
 	const handleCancel = () => {
 		setIsModalOpen(false)
-	
 	}
 
 	const clickTextArea = ()=>{
@@ -240,7 +236,6 @@ export const ViewMessage = () => {
 	}
 
 	const readOnWindow = (item:any)=>{
-		console.log('item',item)
 		const validItem = dialogs.find((dialog:any)=>dialog.id===item.id)
 		if(validItem.isRead) return
 		readMessage(activeDialog)
@@ -250,12 +245,12 @@ export const ViewMessage = () => {
 	const searchEmpty= (values:any)=>{
 		setIsEmpty(values)
 		setPageSearch(0)
-	
 	}
 
 	const handleDebouncedValueChange = (value: string) => {
 		setDebouncedSearchValue(value);
 	};
+
 
 
 	if(isLoading) return <div className="screen !z-[100000000] relative">
@@ -274,11 +269,6 @@ export const ViewMessage = () => {
 		  
 		  
 		  <div className="mt-1 px-4 pb-2 flex justify-between items-center" >
-			{/* <Segmented
-			  value={value===t('all')?t('all'):t('new')}
-			  options={[t('all'), t('new')]}
-			  onChange={setValue}
-			/> */}
 			<Button type="primary"
 							className="!rounded-full  h-10 w-full"  onClick={showModal}>
 			  <PlusCircleOutlined />{t('newDialog')}
@@ -335,13 +325,17 @@ export const ViewMessage = () => {
 					}}
 				  >
 					<List.Item.Meta
-					  title={<span className="font-extrabold">{truncateString(27,item.userName)}</span>}
+					  title={<><span className="font-extrabold">{hasBrackets(item.userName) ? 
+						hasBrackets(ContentWithinBrackets(item.userName)) ? ContentWithinBrackets(ContentWithinBrackets(item.userName)) : ContentWithinBrackets(item.userName)
+						: item.userName}</span>
+						<div style={{ fontSize: '12px', color: '#888' }}>{hasBrackets(item.userName) ? extractContentWithinBrackets(item.userName) : ''}</div></>
+					}
 					  description={truncateString(10,item.lastMessage)}
 					/>
 					<div className='pt-2 flex flex-col  gap-[9px]'>
 						{dayjs(item.lastMessageTime).isSame(dayjs(), 'day') ? <div className='text-[10px] '>{dayjs(item.lastMessageTime).format('HH:mm')}</div> :
 						<div className='text-[10px]'>{dayjs(item.lastMessageTime).format('DD.MM.YYYY')}</div>}
-						{/* <div className='w-full flex justify-center'><div className='rounded-full bg-blue-600 w-4 h-4'></div></div> */}
+						
 						{!item.isRead?<div className='w-full flex justify-end'><div className='rounded-full bg-blue-600 w-4 h-4'></div></div>:''}
 					</div>
 				  </List.Item>
@@ -353,16 +347,21 @@ export const ViewMessage = () => {
   
 		<div className="!h-screen   col-span-3  flex justify-center items-center">
 		  {!activeDialog ? (
-			<div className="text-gray-500">Выберите диалог или создайте новый</div>
+			<div className="text-gray-500">{t('selectDialog')}</div>
 		  ) : (
 			<>
 			<div className="mt-36 p-4 col-span-2  w-full flex justify-center flex-wrap ">
         { !flag ? (
           <div onClick={()=>{
-			console.log('был клик')
+		
 			readOnWindow(currentItem)
 		  }} className="w-full flex flex-wrap flex-col ">
-            <CommentNewTeacher dataOneChatOld={dataOneChatOld} gotToBottom={gotToBottom} loadMessages={loadMessages} chatArray={chatArray} files={[]} refetch={refetch} />
+            <CommentNewTeacher dataOneChatOld={dataOneChatOld} gotToBottom={gotToBottom} loadMessages={loadMessages} chatArray={chatArray} files={[]} refetch={refetch} >
+				<><span className="font-extrabold">{hasBrackets(currentItem?.userName) ? 
+						hasBrackets(ContentWithinBrackets(currentItem?.userName)) ? ContentWithinBrackets(ContentWithinBrackets(currentItem?.userName)) : ContentWithinBrackets(currentItem?.userName)
+						: currentItem?.userName}</span>
+						<div style={{ fontSize: '12px', color: '#888' }}>{hasBrackets(currentItem.userName) ? extractContentWithinBrackets(currentItem?.userName) : ''}</div></>
+			</CommentNewTeacher>
             <Form form={form} className="flex w-full flex-wrap" onFinish={onFinish}>
               <div className="flex w-full mt-4">
                 <InputText form={form} clickTextArea={clickTextArea} />

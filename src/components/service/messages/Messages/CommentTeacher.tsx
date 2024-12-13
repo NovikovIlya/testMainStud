@@ -1,15 +1,12 @@
-import { FileOutlined, FileTextOutlined, ReloadOutlined } from '@ant-design/icons'
+import { FileTextOutlined } from '@ant-design/icons'
 import { Button } from 'antd'
 import dayjs from 'dayjs'
-import { useEffect, useRef, useState } from 'react'
-import { useGetAttachmentQuery } from '../../../../store/api/practiceApi/mypractice'
-import { useAppSelector } from '../../../../store'
+import { useEffect, useRef } from 'react'
 import { useGetAllUnReadQuery } from '../../../../store/api/messages/messageApi'
 
 
 
-export const CommentNewTeacher = ({dataOneChatOld, files, isLoading, gotToBottom, refetch ,chatArray,loadMessages}: any) => {
-	const user = useAppSelector((state) => state.auth.user)
+export const CommentNewTeacher = ({dataOneChatOld, files, isLoading, gotToBottom, refetch ,chatArray,loadMessages,children}: any) => {
 	const messagesEndRef = useRef<HTMLDivElement | null>(null)
 	const {data:dataUnReadMessage} = useGetAllUnReadQuery(null)
 
@@ -84,38 +81,13 @@ export const CommentNewTeacher = ({dataOneChatOld, files, isLoading, gotToBottom
 												{new Date(message.dateTime).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Moscow' })}
 											</div>
 										</div>
-										{/* <div className="flex flex-wrap gap-3 mt-4 flex-col">
-											{message.attachments.map((attachment: any) => (
-												<div  key={attachment.id} className="flex gap-3 justify-end text-end">
-													<div
-														onClick={() => {
-															
-														}}
-														className="text-blue-500 cursor-pointer"
-													>
-														{attachment.name}
-													</div>
-													<FileOutlined style={{ color: '' }} className="w-4 h-4 cursor-pointer mt-1 color-white" />
-												</div>
-											))}
-										</div> */}
 									</div>
-									{/* <div className="flex-shrink-0 ml-3">
-										<div className="w-10 h-10 rounded-full overflow-hidden">
-											<img className="w-full h-full object-cover" src={avaStudent} alt="student" />
-										</div>
-									</div> */}
 								</div>
 							) : (
 								<>
-									{/* <div className="flex-shrink-0 mr-3">
-										<div className="w-10 h-10 rounded-full overflow-hidden">
-											<img className="w-full h-full object-cover" src={avaTeacher} alt="teacher" />
-										</div>
-									</div> */}
 									<div className="flex flex-col">
 										<div className="flex items-center mb-1">
-											<span className="font-bold mr-2">{message.senderName}</span>
+											<span className="font-bold mr-2">{children}</span>
 											<span className="text-xs text-gray-500 flex gap-2 mt-[2px]">
 												<span>{dayjs(message.dateTime).isSame(dayjs(), 'day')
 														? 'Сегодня'
@@ -128,20 +100,7 @@ export const CommentNewTeacher = ({dataOneChatOld, files, isLoading, gotToBottom
 												{new Date(message.dateTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
 											</div>
 										</div>
-										{/* <div className="flex gap-3 mt-4 flex-col">
-											{message.attachments.map((attachment: any) => (
-												<div  key={attachment.id} className="flex gap-3">
-													<FileOutlined style={{ color: '' }} className="w-4 h-4 cursor-pointer mt-1 color-white" />
-													<div onClick={() => {
-
-															}
-														} 
-														className="text-blue-500 cursor-pointer">
-														{attachment.name}
-													</div>
-												</div>
-											))}
-										</div> */}
+		
 									</div>
 								</>
 							)}

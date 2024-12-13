@@ -14,21 +14,26 @@ import {
 	useGetUsersMessagesQuery
 } from '../../../../store/api/messages/messageApi'
 import { ContentWithinBrackets, extractContentWithinBrackets, hasBrackets } from '../../../../utils/extractBrackets'
+import { showNotification } from '../../../../store/reducers/notificationSlice'
 
 export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 	const user = useAppSelector(state => state.auth.user)
 	const [form] = Form.useForm()
-	const teacher = Form.useWatch('teacher', form)
 	const student = Form.useWatch('student', form)
 	const [id, setId] = useState(null)
-	const debouncedNameEmployee = useDebounce(teacher, { wait: 1000 })
 	const debouncedNameStudent = useDebounce(student, { wait: 1000 })
-	const { data: dataGetStudents, isFetching } = useGetUsersMessagesQuery(debouncedNameStudent, {skip: !debouncedNameStudent || debouncedNameStudent.length < 4 || !isModalOpen})
+	const { data: dataGetStudents, isFetching } = useGetUsersMessagesQuery(hasBrackets(debouncedNameStudent)
+	? hasBrackets(ContentWithinBrackets(debouncedNameStudent))
+		? ContentWithinBrackets(ContentWithinBrackets(debouncedNameStudent))
+		: ContentWithinBrackets(debouncedNameStudent)
+	: debouncedNameStudent, 
+	{skip: !debouncedNameStudent || debouncedNameStudent.length < 4 || !isModalOpen})
 	const [newChat, { isLoading: isLoadingNew }] = useAddNewChatMutation()
 	const [load, setIsload] = useState(false)
 	const [dataGetStudentsValue, setdataGetStudentsValue] = useState<any>([])
 	const [flag, setFlag] = useState(false)
 	const [type,setType] = useState(null)
+	const dispatch = useAppDispatch()
 
 	useEffect(() => {
 		if (dataGetStudents) {
@@ -56,7 +61,7 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 			])
 		}
 	}
-	console.log('type',type)
+
 	const onFinish = () => {
 		setIsload(true)
 		const obj = {
@@ -75,6 +80,16 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 			})
 			.catch(err => {
 				console.log(err)
+				
+				setIsload(false)
+				onCancel()
+				form.resetFields()
+				dispatch(
+					showNotification({
+						message: `Такой диалог уже создан`,
+						type: 'error'
+					})
+				)
 			})
 	}
 
@@ -92,9 +107,7 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 
 	return (
 		<>
-			{load ? (
-				<Spin fullscreen spinning={true} className="!z-[10000000000000000000]" />
-			) : (
+			{load ? <Spin fullscreen spinning/>: (
 				<Modal
 					maskClosable={false}
 					className="p-12 !min-w-[400px] !w-6/12"
@@ -175,53 +188,17 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 													)
 											  }))
 									}
-									// dropdownRender={(menu) => (
-									// 	<>
-
-									// 		<div className='flex flex-col gap-2 whitespace-normal border-b-2'>
-									// 		{menu}
-									// 		</div>
-									// 	</>
-									// )}
 									onSelect={(value, option) => {
 										setId(option.id)
 										setType(option.userType)
+										console.log('value',value)
 									}}
-									// notFoundContent={isFetching ? <Spin className='w-full flex justify-center' size="small" /> : null}
+									
 								/>
 							}
 						</Form.Item>
 
-						{/* <Form.Item label="Сотрудник" name="teacher">
-					<AutoComplete
-						allowClear
-						disabled={form.getFieldValue('graduate') || form.getFieldValue('student')}
-						placeholder="Введите ФИО"
-						options={dataGetEmployees?.map((employee: any) => ({
-							value: employee.name,
-							id: employee.id
-						}))}
-						onSelect={(value, option) => {
-							setId(option.id)
-						}}
-					/>
-				</Form.Item> */}
-
-						{/*<Form.Item label="Аспирант" name="graduate">
-					<AutoComplete
-						allowClear
-						disabled={form.getFieldValue('student') || form.getFieldValue('teacher')}
-						placeholder="Введите ФИО"
-						options={dataGetEmployees?.map((employee: any) => ({
-							value: employee.name,
-							id: employee.id
-						}))}
-						onSelect={(value, option) => {
-							setId(option.id)
-						}}
-					/>
-				</Form.Item> */}
-
+						
 						<Form.Item label={t('message')} name="text">
 							<TextArea required placeholder={t('inputMessage')} />
 						</Form.Item>
@@ -230,7 +207,7 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 							<Button
 								type="primary"
 								className="!rounded-full  h-10"
-								loading={isLoadingNew}
+								loading={load}
 								disabled={isButtonDisabled()}
 								htmlType="submit"
 							>

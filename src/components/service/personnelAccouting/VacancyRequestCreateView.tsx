@@ -3,6 +3,7 @@ import { Button, Checkbox, ConfigProvider, Form, Input, Modal, Select, Spin } fr
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import { ModalOkSvg } from '../../../assets/svg/ModalOkSvg'
 import { useAppSelector } from '../../../store'
 import {
 	useAcceptCreateVacancyRequestMutation,
@@ -147,17 +148,24 @@ export const VacancyRequestCreateView = () => {
 						setIsResultModalOpen(false)
 					}}
 				>
-					<p className="text-center font-content-font text-black text-[16px]/[20px] font-normal">{resultModalText}</p>
-					<Button
-						className="rounded-[40px] w-full !py-[13px] mt-[40px]"
-						type="primary"
-						onClick={() => {
-							setIsResultModalOpen(false)
-							navigate('/services/personnelaccounting/vacancyrequests')
-						}}
-					>
-						Ок
-					</Button>
+					<div className="flex flex-col w-full">
+						<div className="w-full flex justify-center">
+							<ModalOkSvg />
+						</div>
+						<p className="text-center font-content-font text-black text-[16px]/[20px] font-normal mt-[22px]">
+							{resultModalText}
+						</p>
+						<Button
+							className="rounded-[40px] w-full !py-[13px] mt-[40px]"
+							type="primary"
+							onClick={() => {
+								setIsResultModalOpen(false)
+								navigate('/services/personnelaccounting/vacancyrequests')
+							}}
+						>
+							Ок
+						</Button>
+					</div>
 				</Modal>
 			</ConfigProvider>
 			<Modal

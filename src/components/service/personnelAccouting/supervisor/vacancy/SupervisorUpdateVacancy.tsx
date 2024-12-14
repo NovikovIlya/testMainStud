@@ -2,6 +2,7 @@ import { Button, ConfigProvider, Form, Input, Modal, Select } from 'antd'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import { ModalOkSvg } from '../../../../../assets/svg/ModalOkSvg'
 import { useAppSelector } from '../../../../../store'
 import {
 	useGetCategoriesQuery,
@@ -106,16 +107,20 @@ export const SupervisorUpdateVacancy = () => {
 					footer={null}
 					width={407}
 				>
-					<p className="font-content-font font-normal text-black text-[16px]/[20px] text-center">
-						Ваша заявка на редактирование вакансии успешно отправлена. Описание вакансии будет обновлено после
-						рассмотрения заявки кадрами.
-					</p>
-					<div className="mt-[40px] flex gap-[12px]">
+					<div className="flex flex-col">
+						<div className="w-full flex justify-center">
+							<ModalOkSvg />
+						</div>
+						<p className="font-content-font font-normal text-black text-[16px]/[20px] text-center mt-[22px]">
+							Ваша заявка на редактирование вакансии успешно отправлена. Описание вакансии будет обновлено после
+							рассмотрения заявки кадрами.
+						</p>
 						<Button
-							className="ml-auto mr-auto"
+							className="rounded-[40px] mt-[40px]"
 							type="primary"
 							onClick={() => {
 								setIsSuccessModalOpen(false)
+								navigate(-1)
 							}}
 						>
 							ОК

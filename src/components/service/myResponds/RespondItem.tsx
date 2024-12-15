@@ -4,21 +4,16 @@ import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import { DeleteSvg } from '../../../assets/svg/DeleteSvg'
-import {
-	useDeleteVacancyRespondMutation,
-	useGetChatIdByRespondIdQuery
-} from '../../../store/api/serviceApi'
-import {
-	closeChat,
-	openChat
-} from '../../../store/reducers/ChatRespondStatusSlice'
+import { WarningModalIconSvg } from '../../../assets/svg/WarningModalIconSvg'
+import { useDeleteVacancyRespondMutation, useGetChatIdByRespondIdQuery } from '../../../store/api/serviceApi'
+import { closeChat, openChat } from '../../../store/reducers/ChatRespondStatusSlice'
 import { setCurrentResponce } from '../../../store/reducers/CurrentResponceSlice'
 import { setRespondId } from '../../../store/reducers/CurrentRespondIdSlice'
 import { setCurrentVacancyId } from '../../../store/reducers/CurrentVacancyIdSlice'
 import { setCurrentVacancyName } from '../../../store/reducers/CurrentVacancyNameSlice'
 import { setChatId } from '../../../store/reducers/chatIdSlice'
 import { RespondItemType, respondStatus } from '../../../store/reducers/type'
-import {useAlert} from "../../../utils/AlertMessage";
+import { useAlert } from '../../../utils/AlertMessage'
 
 export const RespondItem = (props: RespondItemType & { refetch: Function }) => {
 	const { openAlert } = useAlert()
@@ -81,21 +76,23 @@ export const RespondItem = (props: RespondItemType & { refetch: Function }) => {
 					footer={null}
 					width={407}
 				>
-					<p className="font-content-font font-normal text-black text-[16px]/[20px] text-center">
+					<div className="w-full flex justify-center">
+						<WarningModalIconSvg />
+					</div>
+					<p className="font-content-font font-normal text-black text-[16px]/[20px] text-center mt-[22px]">
 						Вы действительно хотите удалить отклик?
 					</p>
 					<div className="mt-[40px] flex gap-[12px]">
 						<Button
-							className="ml-auto"
+							className="ml-auto w-full rounded-[54.5px] text-black font-content-font font-medium text-[16px]/[20px] border-black h-[40px]"
 							onClick={() => {
 								setModalOpen(false)
 							}}
 						>
-							Отменить
+							Оставить
 						</Button>
-						<Button
-							type="primary"
-							className="rounded-[54.5px] mr-auto"
+						<button
+							className="cursor-pointer flex items-center justify-center border-[1px] border-solid outline-0 border-[#FF5A5A] hover:border-[#FF8181] text-white rounded-[54.5px] bg-[#FF5A5A] hover:bg-[#FF8181] text-[14px] h-[40px] w-full py-[13px]"
 							onClick={async () => {
 								try {
 									await deleteVacancy(props.id)
@@ -104,26 +101,23 @@ export const RespondItem = (props: RespondItemType & { refetch: Function }) => {
 											setModalOpen(false)
 											props.refetch()
 										})
-									openAlert({type: 'success', text: 'Отклик успешно удален'});
-								} catch (error : any) {
-									let errorStr = error.status + " " + error.data.message;
-									openAlert({type: 'error', text: errorStr});
+									openAlert({ type: 'success', text: 'Отклик успешно удален' })
+								} catch (error: any) {
+									let errorStr = error.status + ' ' + error.data.message
+									openAlert({ type: 'error', text: errorStr })
 								}
 							}}
 						>
 							Удалить
-						</Button>
+						</button>
 					</div>
 				</Modal>
 			</ConfigProvider>
 			<div className="w-full mb-[12px] flex items-center bg-white shadow-custom-shadow pl-[20px] pr-[55px] pt-[20px] pb-[20px] flex-wrap">
 				<p className="w-[25%]">{props.name ? props.name : props.desiredJob}</p>
-				<p className="ml-[5%] w-[8%]">
-					{props.respondDate.split('-').reverse().join('.')}
-				</p>
+				<p className="ml-[5%] w-[8%]">{props.respondDate.split('-').reverse().join('.')}</p>
 				<p className="ml-[2%] w-[25%]">
-					{props.status ===
-					respondStatus[respondStatus.IN_PERSONNEL_DEPT_REVIEW]
+					{props.status === respondStatus[respondStatus.IN_PERSONNEL_DEPT_REVIEW]
 						? 'на рассмотрении у HR'
 						: props.status === respondStatus[respondStatus.IN_SUPERVISOR_REVIEW]
 						? 'на рассмотрении у руководителя'
@@ -151,11 +145,7 @@ export const RespondItem = (props: RespondItemType & { refetch: Function }) => {
 					{props.name && (
 						<Button
 							onClick={() => {
-								dispatch(
-									setCurrentVacancyName(
-										props.name ? props.name : props.desiredJob
-									)
-								)
+								dispatch(setCurrentVacancyName(props.name ? props.name : props.desiredJob))
 								handleNavigate(`/services/myresponds/chat/id/${chatId.id}`)
 							}}
 							className="font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black"

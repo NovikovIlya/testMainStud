@@ -2,6 +2,8 @@ import { Button, ConfigProvider, Modal } from 'antd'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import { ModalOkSvg } from '../../../assets/svg/ModalOkSvg'
+import { WarningModalIconSvg } from '../../../assets/svg/WarningModalIconSvg'
 import { useAppSelector } from '../../../store'
 import { useAcceptDeleteVacancyRequestMutation, useGetVacancyRequestsQuery } from '../../../store/api/serviceApi'
 import ArrowIcon from '../jobSeeker/ArrowIcon'
@@ -75,6 +77,7 @@ export const VacancyRequestDeleteView = () => {
 	)
 
 	const [isResultModalOpen, setIsResultModalOpen] = useState<boolean>(false)
+	const [isVerifyModalOpen, setIsVerifyModalOpen] = useState<boolean>(false)
 	const [resultModalText, setResultModalText] = useState<string>('')
 
 	return (
@@ -100,17 +103,82 @@ export const VacancyRequestDeleteView = () => {
 						setIsResultModalOpen(false)
 					}}
 				>
-					<p className="text-center font-content-font text-black text-[16px]/[20px] font-normal">{resultModalText}</p>
-					<Button
-						className="rounded-[40px] w-full !py-[13px] mt-[40px]"
-						type="primary"
-						onClick={() => {
-							setIsResultModalOpen(false)
-							navigate('/services/personnelaccounting/vacancyrequests')
-						}}
-					>
-						Ок
-					</Button>
+					<div className="flex flex-col">
+						<div className="w-full flex justify-center">
+							<ModalOkSvg />
+						</div>
+						<p className="text-center font-content-font text-black text-[16px]/[20px] font-normal mt-[22px]">
+							{resultModalText}
+						</p>
+						<Button
+							className="rounded-[40px] w-full !py-[13px] mt-[40px]"
+							type="primary"
+							onClick={() => {
+								setIsResultModalOpen(false)
+								navigate('/services/personnelaccounting/vacancyrequests')
+							}}
+						>
+							Ок
+						</Button>
+					</div>
+				</Modal>
+			</ConfigProvider>
+			<ConfigProvider
+				theme={{
+					token: {
+						boxShadow: '0 0 19px 0 rgba(212, 227, 241, 0.6)'
+					}
+				}}
+			>
+				<Modal
+					bodyStyle={{ padding: 53 }}
+					centered
+					open={isVerifyModalOpen}
+					onCancel={() => {
+						setIsVerifyModalOpen(false)
+					}}
+					title={null}
+					footer={null}
+					width={407}
+				>
+					<div className="flex flex-col">
+						<div className="w-full flex justify-center">
+							<WarningModalIconSvg />
+						</div>
+						<p className="font-content-font font-normal text-black text-[16px]/[20px] text-center mt-[22px]">
+							Вы действительно хотите удалить вакансию?
+						</p>
+						<div className="mt-[40px] flex gap-[12px] w-full">
+							<Button
+								className="ml-auto w-full rounded-[54.5px] text-black font-content-font font-medium text-[16px]/[20px] border-black h-[40px]"
+								onClick={() => {
+									setIsVerifyModalOpen(false)
+								}}
+							>
+								Оставить
+							</Button>
+							<button
+								className="cursor-pointer flex items-center justify-center border-[1px] border-solid outline-0 border-[#FF5A5A] hover:border-[#FF8181] text-white rounded-[54.5px] bg-[#FF5A5A] hover:bg-[#FF8181] text-[14px] h-[40px] w-full py-[13px]"
+								onClick={async () => {
+									try{
+										await acceptRequest(requestId)
+										.unwrap()
+										.then(() => {
+											refetch().then(() => {
+												setResultModalText('Вакансия успешно удалена')
+												setIsVerifyModalOpen(false)
+												setIsResultModalOpen(true)
+											})
+										})
+							} catch (error: any) {
+								openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+							}
+								}}
+							>
+								Удалить
+							</button>
+						</div>
+					</div>
 				</Modal>
 			</ConfigProvider>
 			<div id="wrapper" className="pl-[54px] pr-[54px] pt-[120px] pb-[52px] w-full">
@@ -179,17 +247,8 @@ export const VacancyRequestDeleteView = () => {
 						</div>
 					</div>
 					<Button
-						onClick={async () => {
-							try {
-								await acceptRequest(requestId)
-									.unwrap()
-									.then(() => {
-										refetch()
-									})
-
-							} catch (error: any) {
-								openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
-							}
+						onClick={() => {
+							setIsVerifyModalOpen(true)
 						}}
 						type="primary"
 						className="rounded-[54.5px] w-[121px]"

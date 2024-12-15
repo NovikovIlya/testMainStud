@@ -1,7 +1,9 @@
+import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 
 import { useAppSelector } from '../../../../store'
-import { setStage } from '../../../../store/reducers/CurrentEmploymentStage'
+import { useLazyCheckIfTestIsPassedQuery } from '../../../../store/api/serviceApi'
+import { setStageProgressAsReady } from '../../../../store/reducers/EmploymentProgressSlice'
 
 import { NavPanelElement } from './NavPanelElement'
 
@@ -16,9 +18,25 @@ export const NavPanel = () => {
 		{ id: 6, text: 'Отправка' }
 	]
 
+	const { empData } = useAppSelector(state => state.employmentData)
+	const foundStage = empData.stages.find(stage => stage.testLink)
 	const dispatch = useDispatch()
 
-	const { currentStage } = useAppSelector(state => state.currentEmploymentStage)
+	const [check] = useLazyCheckIfTestIsPassedQuery()
+
+	useEffect(() => {
+		console.log('reeffect in navpanel')
+		let interval = setInterval(() => {
+			check({ testStageId: foundStage?.id! })
+				.unwrap()
+				.then(res => {
+					res.testPassed === true && dispatch(setStageProgressAsReady(foundStage?.id!))
+				})
+		}, 5000)
+		return () => {
+			clearInterval(interval)
+		}
+	}, [foundStage])
 
 	return (
 		<nav className="w-[80%] flex justify-between relative h-[68px] mt-[52px]">

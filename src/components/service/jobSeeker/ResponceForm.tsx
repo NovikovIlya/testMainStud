@@ -9,6 +9,7 @@ import uuid from 'react-uuid'
 import { ArrowToTheRight } from '../../../assets/svg/ArrowToTheRight'
 import { DeleteSvg } from '../../../assets/svg/DeleteSvg'
 import { EditSvg } from '../../../assets/svg/EditSvg'
+import { ModalOkSvg } from '../../../assets/svg/ModalOkSvg'
 import { useAppSelector } from '../../../store'
 import { usePostVacancyRespondMutation } from '../../../store/api/serviceApi'
 import { useGetCountriesQuery, useGetEducationLevelQuery } from '../../../store/api/utilsApi'
@@ -132,7 +133,12 @@ export const ResponseForm = () => {
 					}}
 				>
 					<div className="text-center">
-						<p className="font-content-font font-normal text-black text-[16px]/[20px] mb-[40px]">{resultModalText}</p>
+						<div className="w-full flex justify-center">
+							<ModalOkSvg />
+						</div>
+						<p className="font-content-font font-normal text-black text-[16px]/[20px] mt-[22px] mb-[40px]">
+							{resultModalText}
+						</p>
 						<Button
 							type="primary"
 							className="w-full rounded-[55.5px]"
@@ -345,7 +351,7 @@ export const ResponseForm = () => {
 									currentVacancy !== null &&
 										getVacancy({
 											id: currentVacancy?.id,
-											coverLetter: coverLetter,
+											coverLetter: coverLetter === '' ? null : coverLetter,
 											aboutMe: {
 												gender: aboutMeData.gender,
 												lastname: aboutMeData.surName,
@@ -375,7 +381,7 @@ export const ResponseForm = () => {
 											},
 											skills: {
 												keySkills: skillsData.skills,
-												aboutMe: skillsData.details
+												aboutMe: skillsData.details === '' ? null : skillsData.details
 											}
 										})
 											.unwrap()
@@ -443,6 +449,7 @@ export const ResponseForm = () => {
 								rules={[{ required: true, message: 'Не выбран пол' }]}
 							>
 								<Radio.Group
+									disabled={aboutMeData.isGenderSet}
 									value={aboutMeData.gender}
 									// onChange={e => dispatch(gender(e.target.value))}
 								>
@@ -456,6 +463,7 @@ export const ResponseForm = () => {
 								rules={[{ required: true, message: 'Поле фамилии не заполнено' }]}
 							>
 								<Input
+									disabled
 									value={aboutMeData.surName}
 									onPressEnter={e => {
 										e.preventDefault()
@@ -468,6 +476,7 @@ export const ResponseForm = () => {
 								rules={[{ required: true, message: 'Поле имени не заполнено' }]}
 							>
 								<Input
+									disabled
 									value={aboutMeData.name}
 									onPressEnter={e => {
 										e.preventDefault()
@@ -480,6 +489,7 @@ export const ResponseForm = () => {
 								rules={[{ required: true, message: 'Поле отчества не заполнено' }]}
 							>
 								<Input
+									disabled={aboutMeData.isPatronymicSet}
 									value={aboutMeData.patronymic}
 									onPressEnter={e => {
 										e.preventDefault()
@@ -494,6 +504,7 @@ export const ResponseForm = () => {
 								rules={[{ required: true, message: 'Не введена дата рождения' }]}
 							>
 								<DatePicker
+									disabled={aboutMeData.isBirthDaySet}
 									format={'DD-MM-YYYY'}
 									value={dayjs(aboutMeData.birthDay, 'DD.MM.YYYY')}
 									className="w-full"
@@ -592,7 +603,7 @@ export const ResponseForm = () => {
 								{educationData.educations.map(edu => (
 									<div
 										key={edu.id}
-										className="h-[90px] pl-[16px] pr-[16px] pb-[20px] mb-[20px] border-solid flex justify-between items-center border-0 border-b-[1px] border-black border-opacity-20 cursor-pointer"
+										className="min-h-[90px] pl-[16px] pr-[16px] pb-[20px] mb-[20px] border-solid flex justify-between items-center border-0 border-b-[1px] border-black border-opacity-20 cursor-pointer"
 									>
 										<div className="flex flex-col gap-[12px]">
 											<p className="font-content-font text-black text-[16px]/[16px] font-bold select-none">
@@ -984,7 +995,7 @@ export const ResponseForm = () => {
 								{experienceData.experiences.map(exp => (
 									<div
 										key={exp.id}
-										className="h-[90px] pl-[16px] pr-[16px] pb-[20px] mb-[20px] border-solid flex justify-between items-center border-0 border-b-[1px] border-black border-opacity-20 cursor-pointer"
+										className="min-h-[90px] pl-[16px] pr-[16px] pb-[20px] mb-[20px] border-solid flex justify-between items-center border-0 border-b-[1px] border-black border-opacity-20 cursor-pointer"
 									>
 										<div className="flex flex-col gap-[12px]">
 											<p className="font-content-font text-black text-[16px]/[16px] font-bold select-none">
@@ -1297,6 +1308,27 @@ export const ResponseForm = () => {
 							>
 								<Input
 									placeholder='Например, "Прототипирование"'
+									suffix={
+										<ConfigProvider
+											theme={{
+												components: {
+													Button: {
+														colorBgTextHover: '#ffffff',
+														colorBgTextActive: '#ffffff'
+													}
+												}
+											}}
+										>
+											<Button
+												onClick={() => {
+													skillInputValue !== '' &&
+														(setcurrentFormSkills([...currentFormskills, skillInputValue]), setSkillInputValue(''))
+												}}
+												icon={<ButtonPlusIcon />}
+												type="text"
+											></Button>
+										</ConfigProvider>
+									}
 									onChange={e => {
 										setSkillInputValue(e.target.value)
 									}}

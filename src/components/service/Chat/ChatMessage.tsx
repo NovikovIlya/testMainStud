@@ -1,4 +1,5 @@
 import clsx from 'clsx'
+import dayjs from 'dayjs'
 import { forwardRef } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -97,7 +98,8 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 				)}
 				<div className="flex items-center gap-[12px]">
 					<p className="ml-auto font-content-font font-normal text-black text-[12px]/[14.4px] opacity-[52%]">
-						{props.msgData.sendDate.substring(11, 16)}
+						{/* {props.msgData.sendDate.substring(11, 16)} */}
+						{dayjs(props.msgData.sendDate).format().substring(11, 16)}
 					</p>
 					{(props.msgData.sender === 'SEEKER' && !isEmpDep) ||
 					(props.msgData.sender === 'PERSONNEL_DEPARTMENT' && isEmpDep) ? (
@@ -113,17 +115,14 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 			</div>
 			{props.msgData.type === 'INVITATION' && (
 				<div
-					className={clsx(
-						'mt-[24px] w-[50%] grid grid-cols-2 grid-rows-[40px_40px] gap-[20px]',
-						{
-							'self-start':
-								(props.msgData.sender === 'SEEKER' && isEmpDep) ||
-								(props.msgData.sender === 'PERSONNEL_DEPARTMENT' && !isEmpDep),
-							'self-end':
-								(props.msgData.sender === 'SEEKER' && !isEmpDep) ||
-								(props.msgData.sender === 'PERSONNEL_DEPARTMENT' && isEmpDep)
-						}
-					)}
+					className={clsx('mt-[24px] w-[50%] grid grid-cols-2 grid-rows-[40px_40px] gap-[20px]', {
+						'self-start':
+							(props.msgData.sender === 'SEEKER' && isEmpDep) ||
+							(props.msgData.sender === 'PERSONNEL_DEPARTMENT' && !isEmpDep),
+						'self-end':
+							(props.msgData.sender === 'SEEKER' && !isEmpDep) ||
+							(props.msgData.sender === 'PERSONNEL_DEPARTMENT' && isEmpDep)
+					})}
 				>
 					<button
 						onClick={() => {
@@ -151,48 +150,44 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 					</button>
 				</div>
 			)}
-			{props.msgData.type === 'INVITATION_RESERVE' &&
-				props.msgData.reserveTimes !== null && (
-					<div
-						className={clsx('w-[50%] flex flex-col', {
-							'self-start':
-								(props.msgData.sender === 'SEEKER' && isEmpDep) ||
-								(props.msgData.sender === 'PERSONNEL_DEPARTMENT' && !isEmpDep),
-							'self-end':
-								(props.msgData.sender === 'SEEKER' && !isEmpDep) ||
-								(props.msgData.sender === 'PERSONNEL_DEPARTMENT' && isEmpDep)
-						})}
-					>
-						<div className="mt-[24px] w-[100%] flex flex-col gap-[14px]">
-							<div className="flex flex-row gap-[20px] justify-between ">
-								{props.msgData.reserveTimes.map(time => (
-									<button
-										onClick={() => {
-											answerReserveTime({
-												respondId: respondId,
-												time: time
-											})
-										}}
-										className="w-full text-[16px]/[19.2px] rounded-[54.5px] py-[12px] px-[20px] text-center bg-inherit outline-none border cursor-pointer test:px-[12px]"
-									>
-										{time.substring(0, 10).split('-').reverse().join('.') +
-											', ' +
-											time.substring(11, 16)}
-
-									</button>
-								))}
-							</div>
-							<button
-								onClick={() => {
-									answerReserveTime({ respondId: respondId })
-								}}
-								className="text-[16px]/[19.2px]  rounded-[54.5px]  py-[12px] px-[56px] bg-inherit outline-none border cursor-pointer"
-							>
-								Нет подходящего времени
-							</button>
+			{props.msgData.type === 'INVITATION_RESERVE' && props.msgData.reserveTimes !== null && (
+				<div
+					className={clsx('w-[50%] flex flex-col', {
+						'self-start':
+							(props.msgData.sender === 'SEEKER' && isEmpDep) ||
+							(props.msgData.sender === 'PERSONNEL_DEPARTMENT' && !isEmpDep),
+						'self-end':
+							(props.msgData.sender === 'SEEKER' && !isEmpDep) ||
+							(props.msgData.sender === 'PERSONNEL_DEPARTMENT' && isEmpDep)
+					})}
+				>
+					<div className="mt-[24px] w-[100%] flex flex-col gap-[14px]">
+						<div className="flex flex-row gap-[20px] justify-between ">
+							{props.msgData.reserveTimes.map(time => (
+								<button
+									onClick={() => {
+										answerReserveTime({
+											respondId: respondId,
+											time: time
+										})
+									}}
+									className="w-full text-[16px]/[19.2px] rounded-[54.5px] py-[12px] px-[20px] text-center bg-inherit outline-none border cursor-pointer test:px-[12px]"
+								>
+									{time.substring(0, 10).split('-').reverse().join('.') + ', ' + time.substring(11, 16)}
+								</button>
+							))}
 						</div>
+						<button
+							onClick={() => {
+								answerReserveTime({ respondId: respondId })
+							}}
+							className="text-[16px]/[19.2px]  rounded-[54.5px]  py-[12px] px-[56px] bg-inherit outline-none border cursor-pointer"
+						>
+							Нет подходящего времени
+						</button>
 					</div>
-				)}
+				</div>
+			)}
 			{props.msgData.type === 'EMPLOYMENT_REQUEST' && (
 				<div
 					className={clsx('w-[50%] flex flex-col', {

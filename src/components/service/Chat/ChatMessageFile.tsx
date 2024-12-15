@@ -14,11 +14,7 @@ const host = import.meta.env.REACT_APP_HOST
 const port = import.meta.env.REACT_APP_PORT
 const emplBaseURL = `${host ? host : 'localhost'}:${port ? port : 8082}/`
 
-export const ChatMessageFile = (props: {
-	id: number
-	name: string
-	msgId: number
-}) => {
+export const ChatMessageFile = (props: { id: number; name: string; msgId: number }) => {
 	const chatId = useAppSelector(state => state.chatId)
 	const linkRef = useRef<HTMLAnchorElement | null>(null)
 
@@ -29,9 +25,7 @@ export const ChatMessageFile = (props: {
 
 	useEffect(() => {
 		fetch(
-			`http://${emplBaseURL}employment-api/v1/chat/${chatId.chatId}/message/${
-				props.msgId
-			}/file/${props.id}?sender=${
+			`http://${emplBaseURL}employment-api/v1/chat/${chatId.chatId}/message/${props.msgId}/file/${props.id}?sender=${
 				isEmpDemp ? 'PERSONNEL_DEPARTMENT' : 'SEEKER'
 			}`,
 			{
@@ -57,13 +51,13 @@ export const ChatMessageFile = (props: {
 
 	return (
 		<>
-			<div className="h-[64px] w-full bg-white rounded-[8px] flex items-center justify-between py-[12px] pl-[12px] pr-[20px]">
-				{props.name.substring(props.name.length - 4) &&
-					props.name.substring(props.name.length - 4) === '.pdf' && <PdfIcon />}
-				{props.name.substring(props.name.length - 5) &&
-					props.name.substring(props.name.length - 5) === '.docx' && (
-						<DocxIcon />
-					)}
+			<div className="min-h-[64px] shadow-custom-shadow w-full bg-white rounded-[8px] flex items-center justify-between py-[12px] pl-[12px] pr-[20px]">
+				{props.name.substring(props.name.length - 4) && props.name.substring(props.name.length - 4) === '.pdf' && (
+					<PdfIcon />
+				)}
+				{props.name.substring(props.name.length - 5) && props.name.substring(props.name.length - 5) === '.docx' && (
+					<DocxIcon />
+				)}
 				<p className="font-content-font text-black font-normal text-[16px]/[19.2px] w-[70%] overflow-hidden text-ellipsis">
 					{props.name}
 				</p>

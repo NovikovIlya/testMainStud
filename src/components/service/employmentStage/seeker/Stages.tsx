@@ -5,10 +5,7 @@ import { useDispatch } from 'react-redux'
 import { useLocation } from 'react-router-dom'
 
 import { useAppSelector } from '../../../../store'
-import {
-	useLazyGetEmploymentDataQuery,
-	useLazyGetEmploymentDocsQuery
-} from '../../../../store/api/serviceApi'
+import { useLazyGetEmploymentDataQuery, useLazyGetEmploymentDocsQuery } from '../../../../store/api/serviceApi'
 import { setAllData } from '../../../../store/reducers/EmploymentDataSlice'
 import { setAllProgress } from '../../../../store/reducers/EmploymentProgressSlice'
 import { setDocs } from '../../../../store/reducers/EmploymentSeekerDocsSlice'
@@ -28,11 +25,7 @@ export const Stages = () => {
 
 	const respondId = parseInt(pathname.substring(pathname.lastIndexOf('/') + 1))
 
-	const vacancyId = parseInt(
-		pathname.substring(
-			pathname.substring(0, pathname.lastIndexOf('/')).lastIndexOf('/') + 1
-		)
-	)
+	const vacancyId = parseInt(pathname.substring(pathname.substring(0, pathname.lastIndexOf('/')).lastIndexOf('/') + 1))
 
 	const { currentStage } = useAppSelector(state => state.currentEmploymentStage)
 	const { docs } = useAppSelector(state => state.employmentSeekerDocs)
@@ -66,12 +59,11 @@ export const Stages = () => {
 							return { ...stage, status: 'READY' }
 						} else if (stage.hasRequisites === false) {
 							return { ...stage, status: 'READY' }
+						} else if (stage.testPassed === true) {
+							return { ...stage, status: 'READY' }
 						} else if (
-							docs.filter(doc => doc.employmentStageType === stage.type)
-								.length !== 0 &&
-							stage.documents.length ===
-								docs.filter(doc => doc.employmentStageType === stage.type)
-									.length
+							docs.filter(doc => doc.employmentStageType === stage.type).length !== 0 &&
+							stage.documents.length === docs.filter(doc => doc.employmentStageType === stage.type).length
 						) {
 							return { ...stage, status: 'READY' }
 						} else {
@@ -87,17 +79,12 @@ export const Stages = () => {
 		)
 	}, [empData])
 
-	if (
-		currentStage === 0 &&
-		(empDataStatus.isFetching || empDataStatus.isLoading)
-	) {
+	if (currentStage === 0 && (empDataStatus.isFetching || empDataStatus.isLoading)) {
 		return (
 			<>
-				<div className="w-screen h-screen flex items-center">
+				<div className="w-full h-full flex items-center">
 					<div className="text-center ml-auto mr-auto">
-						<Spin
-							indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}
-						></Spin>
+						<Spin indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}></Spin>
 						<p className="font-content-font font-normal text-black text-[18px]/[18px]">
 							Идёт загрузка этапа трудоустройства...
 						</p>
@@ -116,24 +103,11 @@ export const Stages = () => {
 				<NavPanel />
 				<div
 					className={`w-full mt-[40px] ${
-						(empData.status === 'VERIFYING' || empData.status === 'ACCEPTED') &&
-						'pointer-events-none'
+						(empData.status === 'VERIFYING' || empData.status === 'ACCEPTED') && 'pointer-events-none'
 					}`}
 				>
-					{currentStage === 1 && (
-						<EmplMedInvite
-							respondId={respondId}
-							stageId={1}
-							stageName="FIRST"
-						/>
-					)}
-					{currentStage === 2 && (
-						<EmplDocAttachment
-							respondId={respondId}
-							stageId={2}
-							stageName="SECOND"
-						/>
-					)}
+					{currentStage === 1 && <EmplMedInvite respondId={respondId} stageId={1} stageName="FIRST" />}
+					{currentStage === 2 && <EmplDocAttachment respondId={respondId} stageId={2} stageName="SECOND" />}
 					{/* {currentStage === 3 && (
 						<EmplWorkConditions
 							respondId={respondId}
@@ -141,26 +115,10 @@ export const Stages = () => {
 							stageName="THIRD"
 						/>
 					)} */}
-					{currentStage === 3 && (
-						<EmplMedExam respondId={respondId} stageId={3} stageName="FOURTH" />
-					)}
-					{currentStage === 4 && (
-						<EmplInstruction
-							respondId={respondId}
-							stageId={4}
-							stageName="FIFTH"
-						/>
-					)}
-					{currentStage === 5 && (
-						<EmplRequisites
-							respondId={respondId}
-							stageId={5}
-							stageName="SIXTH"
-						/>
-					)}
-					{currentStage === 6 && (
-						<EmplSend respondId={respondId} stageId={7} stageName="SEVENTH" />
-					)}
+					{currentStage === 3 && <EmplMedExam respondId={respondId} stageId={3} stageName="FOURTH" />}
+					{currentStage === 4 && <EmplInstruction respondId={respondId} stageId={4} stageName="FIFTH" />}
+					{currentStage === 5 && <EmplRequisites respondId={respondId} stageId={5} stageName="SIXTH" />}
+					{currentStage === 6 && <EmplSend respondId={respondId} stageId={7} stageName="SEVENTH" />}
 				</div>
 			</div>
 		</>

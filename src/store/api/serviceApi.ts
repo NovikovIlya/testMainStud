@@ -1103,6 +1103,11 @@ export const serviceApi = apiSlice.injectEndpoints({
 			},
 			keepUnusedDataFor: 1,
 			providesTags: ['role']
+		}),
+		checkIfTestIsPassed: builder.query<{ testPassed: boolean }, { testStageId: number }>({
+			query: ({ testStageId }) => ({
+				url: `http://${emplBaseURL}employment-api/v1/employment/test-stage/${testStageId}`
+			})
 		})
 	})
 })
@@ -1220,5 +1225,6 @@ export const {
 	useVerifyAccPhoneMutation,
 	useFinalVerifyPhoneMutation,
 	useDeleteAccPhoneMutation,
-	useGetRoleQuery
+	useGetRoleQuery,
+	useLazyCheckIfTestIsPassedQuery
 } = serviceApi

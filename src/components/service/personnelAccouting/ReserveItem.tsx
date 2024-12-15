@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import { DeleteSvg } from '../../../assets/svg/DeleteSvg'
+import { WarningModalIconSvg } from '../../../assets/svg/WarningModalIconSvg'
 import { useDeleteReserveRespondMutation } from '../../../store/api/serviceApi'
 import { setCurrentResponce } from '../../../store/reducers/CurrentResponceSlice'
 import { useAlert } from '../../../utils/Alert/AlertMessage'
@@ -40,21 +41,23 @@ export const ReserveItem = (props: {
 					footer={null}
 					width={407}
 				>
-					<p className="font-content-font font-normal text-black text-[16px]/[20px] text-center">
+					<div className="w-full flex justify-center">
+						<WarningModalIconSvg />
+					</div>
+					<p className="font-content-font font-normal text-black text-[16px]/[20px] text-center mt-[22px]">
 						Вы действительно хотите удалить отклик?
 					</p>
 					<div className="mt-[40px] flex gap-[12px]">
 						<Button
-							className="ml-auto"
+							className="ml-auto w-full rounded-[54.5px] text-black font-content-font font-medium text-[16px]/[20px] border-black h-[40px]"
 							onClick={() => {
 								setModalOpen(false)
 							}}
 						>
-							Отменить
+							Оставить
 						</Button>
-						<Button
-							type="primary"
-							className="rounded-[54.5px] mr-auto"
+						<button
+							className="cursor-pointer flex items-center justify-center border-[1px] border-solid outline-0 border-[#FF5A5A] hover:border-[#FF8181] text-white rounded-[54.5px] bg-[#FF5A5A] hover:bg-[#FF8181] text-[14px] h-[40px] w-full py-[13px]"
 							onClick={async () => {
 								try {
 									deleteVacancy(props.id)
@@ -63,14 +66,14 @@ export const ReserveItem = (props: {
 											setModalOpen(false)
 											props.refetch()
 										})
-									openAlert({ type: 'success', text: 'Отклик успешно удалён.' })
+									openAlert({ type: 'success', text: 'Резюме успешно удалено.' })
 								} catch (error: any) {
 									openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 								}
 							}}
 						>
 							Удалить
-						</Button>
+						</button>
 					</div>
 				</Modal>
 			</ConfigProvider>

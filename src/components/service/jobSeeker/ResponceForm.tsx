@@ -9,6 +9,7 @@ import uuid from 'react-uuid'
 import { ArrowToTheRight } from '../../../assets/svg/ArrowToTheRight'
 import { DeleteSvg } from '../../../assets/svg/DeleteSvg'
 import { EditSvg } from '../../../assets/svg/EditSvg'
+import { ModalOkSvg } from '../../../assets/svg/ModalOkSvg'
 import { useAppSelector } from '../../../store'
 import { usePostVacancyRespondMutation } from '../../../store/api/serviceApi'
 import { useGetCountriesQuery, useGetEducationLevelQuery } from '../../../store/api/utilsApi'
@@ -132,7 +133,12 @@ export const ResponseForm = () => {
 					}}
 				>
 					<div className="text-center">
-						<p className="font-content-font font-normal text-black text-[16px]/[20px] mb-[40px]">{resultModalText}</p>
+						<div className="w-full flex justify-center">
+							<ModalOkSvg />
+						</div>
+						<p className="font-content-font font-normal text-black text-[16px]/[20px] mt-[22px] mb-[40px]">
+							{resultModalText}
+						</p>
 						<Button
 							type="primary"
 							className="w-full rounded-[55.5px]"

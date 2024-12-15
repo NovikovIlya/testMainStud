@@ -2,6 +2,7 @@ import { Button, Checkbox, ConfigProvider, Modal } from 'antd'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import { ModalOkSvg } from '../../../../assets/svg/ModalOkSvg'
 import { useAppSelector } from '../../../../store'
 import { useSendEmploymentDocsMutation } from '../../../../store/api/serviceApi'
 
@@ -45,7 +46,12 @@ export const EmplSend = (props: { respondId: number; stageId: number; stageName:
 						setIsResultModalOpen(false)
 					}}
 				>
-					<p className="text-center font-content-font text-black text-[16px]/[20px] font-normal">{resultModalText}</p>
+					<div className="w-full flex justify-center">
+						<ModalOkSvg />
+					</div>
+					<p className="text-center font-content-font text-black text-[16px]/[20px] font-normal mt-[22px]">
+						{resultModalText}
+					</p>
 					<Button
 						className="rounded-[40px] w-full !py-[13px] mt-[40px]"
 						type="primary"

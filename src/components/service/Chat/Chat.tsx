@@ -1,10 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 
-import {
-	useGetSeekerRespondsQuery,
-	useLazyGetSeekerChatPreviewsQuery
-} from '../../../store/api/serviceApi'
+import { useGetSeekerRespondsQuery, useLazyGetSeekerChatPreviewsQuery } from '../../../store/api/serviceApi'
 import VacancyView from '../jobSeeker/VacancyView'
 
 import { ChatPage } from './ChatPage'
@@ -24,9 +21,8 @@ export const Chat = () => {
 	}>({ page: 0, pageSize: 10 })
 
 	const [blockPageAddition, setBlockPageAddition] = useState<boolean>(true)
-	const [isBottomOfChatPreviewsVisible, setIsBottomOfChatPreviewsVisible] =
-		useState<boolean>(true)
-	const chatPreviewsBottomRef = useRef<null | HTMLDivElement>(null)
+	const [isBottomOfChatPreviewsVisible, setIsBottomOfChatPreviewsVisible] = useState<boolean>(true)
+	const chatPreviewsBottomRef = useRef<null | HTMLLIElement>(null)
 
 	const [chats, setChats] = useState<
 		{
@@ -40,8 +36,7 @@ export const Chat = () => {
 		}[]
 	>([])
 
-	const [getChatPreviews, chatPreviewsQueryState] =
-		useLazyGetSeekerChatPreviewsQuery()
+	const [getChatPreviews, chatPreviewsQueryState] = useLazyGetSeekerChatPreviewsQuery()
 
 	useEffect(() => {
 		const lowerObserver = new IntersectionObserver(entries => {
@@ -122,17 +117,15 @@ export const Chat = () => {
 									Все отклики
 								</p>
 							</div>
-							<ul className="h-[500px] w-[461px] flex flex-col gap-4 overflow-auto">
+							<ul className="h-[75vh] w-[461px] flex flex-col gap-4 overflow-auto">
 								{handleList}
+								<li className="h-[1px]" ref={chatPreviewsBottomRef}></li>
 							</ul>
-							<div className="h-[1px]" ref={chatPreviewsBottomRef}></div>
 						</div>
 					</div>
 				)}
 				{pathname.match('services/myresponds/chat/id/*') && <ChatPage />}
-				{pathname.includes('/services/myresponds/chat/vacancyview') && (
-					<VacancyView type="CHAT" />
-				)}
+				{pathname.includes('/services/myresponds/chat/vacancyview') && <VacancyView type="CHAT" />}
 			</div>
 		</>
 	)

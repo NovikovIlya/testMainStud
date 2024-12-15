@@ -2,6 +2,7 @@ import { Button, ConfigProvider, Form, Input, Modal, Select } from 'antd'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import { ModalOkSvg } from '../../../../../assets/svg/ModalOkSvg'
 import {
 	useGetCategoriesQuery,
 	useGetDirectionsQuery,
@@ -45,13 +46,16 @@ export const SupervisorCreateVacancyForm = () => {
 					footer={null}
 					width={407}
 				>
-					<p className="font-content-font font-normal text-black text-[16px]/[20px] text-center">
-						Ваша заявка на создание вакансии успешно отправлена. Вакансия будет добавлена в сервис "Все вакансии" после
-						рассмотрения заявки кадрами.
-					</p>
-					<div className="mt-[40px] flex gap-[12px]">
+					<div className="flex flex-col">
+						<div className="w-full flex justify-center">
+							<ModalOkSvg />
+						</div>
+						<p className="font-content-font font-normal text-black text-[16px]/[20px] text-center mt-[22px]">
+							Ваша заявка на создание вакансии успешно отправлена. Вакансия будет добавлена в сервис "Все вакансии"
+							после рассмотрения заявки кадрами.
+						</p>
 						<Button
-							className="ml-auto mr-auto"
+							className="rounded-[40px] mt-[40px]"
 							type="primary"
 							onClick={() => {
 								setIsSuccessModalOpen(false)
@@ -121,7 +125,7 @@ export const SupervisorCreateVacancyForm = () => {
 							<Select
 								placeholder="Выбрать"
 								options={[
-									{ value: 'Полный график', label: 'Полный график' },
+									{ value: 'Полный день', label: 'Полный день' },
 									{ value: 'Гибкий график', label: 'Гибкий график' },
 									{ value: 'Сменный график', label: 'Сменный график' },
 									{ value: 'Удалённая работа', label: 'Удалённая работа' }

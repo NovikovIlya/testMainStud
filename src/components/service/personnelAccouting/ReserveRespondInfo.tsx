@@ -10,6 +10,7 @@ import uuid from 'react-uuid'
 import { AvatartandardSvg } from '../../../assets/svg/AvatarStandardSvg'
 import { MyDocsSvg } from '../../../assets/svg/MyDocsSvg'
 import { RespondDownload } from '../../../assets/svg/RespondDownload'
+import { WarningModalIconSvg } from '../../../assets/svg/WarningModalIconSvg'
 import { useAppSelector } from '../../../store'
 import {
 	useApproveReservedRespondMutation,
@@ -139,21 +140,23 @@ export const ReserveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 							footer={null}
 							width={407}
 						>
-							<p className="font-content-font font-normal text-black text-[16px]/[20px] text-center">
+							<div className="w-full flex justify-center">
+								<WarningModalIconSvg />
+							</div>
+							<p className="font-content-font font-normal text-black text-[16px]/[20px] text-center mt-[22px]">
 								Вы действительно хотите удалить отклик?
 							</p>
 							<div className="mt-[40px] flex gap-[12px]">
 								<Button
-									className="ml-auto"
+									className="ml-auto w-full rounded-[54.5px] text-black font-content-font font-medium text-[16px]/[20px] border-black h-[40px]"
 									onClick={() => {
 										setModalOpen(false)
 									}}
 								>
-									Отменить
+									Оставить
 								</Button>
-								<Button
-									type="primary"
-									className="rounded-[54.5px] mr-auto"
+								<button
+									className="cursor-pointer flex items-center justify-center border-[1px] border-solid outline-0 border-[#FF5A5A] hover:border-[#FF8181] text-white rounded-[54.5px] bg-[#FF5A5A] hover:bg-[#FF8181] text-[14px] h-[40px] w-full py-[13px]"
 									onClick={async () => {
 										try {
 											await deleteRespond(respondId.respondId)
@@ -170,7 +173,7 @@ export const ReserveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 									}}
 								>
 									Удалить
-								</Button>
+								</button>
 							</div>
 						</Modal>
 					</ConfigProvider>

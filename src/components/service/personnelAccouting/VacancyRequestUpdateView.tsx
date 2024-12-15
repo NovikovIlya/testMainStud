@@ -4,6 +4,7 @@ import { diff_match_patch } from 'diff-match-patch'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import { ModalOkSvg } from '../../../assets/svg/ModalOkSvg'
 import { useAppSelector } from '../../../store'
 import {
 	useAcceptUpdateVacancyRequestMutation,
@@ -41,6 +42,7 @@ export const VacancyRequestUpdateView = () => {
 	const [conditions, setConditions] = useState<string | undefined>(undefined)
 
 	const [isResultModalOpen, setIsResultModalOpen] = useState<boolean>(false)
+	const [isVerifyModalOpen, setIsVerifyModalOpen] = useState<boolean>(false)
 	const [resultModalText, setResultModalText] = useState<string>('')
 
 	useEffect(() => {
@@ -139,17 +141,105 @@ export const VacancyRequestUpdateView = () => {
 						setIsResultModalOpen(false)
 					}}
 				>
-					<p className="text-center font-content-font text-black text-[16px]/[20px] font-normal">{resultModalText}</p>
-					<Button
-						className="rounded-[40px] w-full !py-[13px] mt-[40px]"
-						type="primary"
-						onClick={() => {
-							setIsResultModalOpen(false)
-							navigate('/services/personnelaccounting/vacancyrequests')
-						}}
-					>
-						Ок
-					</Button>
+					<div className="flex flex-col">
+						<div className="w-full flex justify-center">
+							<ModalOkSvg />
+						</div>
+						<p className="text-center font-content-font text-black text-[16px]/[20px] font-normal mt-[22px]">
+							{resultModalText}
+						</p>
+						<Button
+							className="rounded-[40px] w-full !py-[13px] mt-[40px]"
+							type="primary"
+							onClick={() => {
+								setIsResultModalOpen(false)
+								navigate('/services/personnelaccounting/vacancyrequests')
+							}}
+						>
+							Ок
+						</Button>
+					</div>
+				</Modal>
+			</ConfigProvider>
+			<ConfigProvider
+				theme={{
+					token: {
+						boxShadow: '0 0 19px 0 rgba(212, 227, 241, 0.6)'
+					}
+				}}
+			>
+				<Modal
+					bodyStyle={{ padding: 53 }}
+					centered
+					open={isVerifyModalOpen}
+					onCancel={() => {
+						setIsVerifyModalOpen(false)
+					}}
+					title={null}
+					footer={null}
+					width={407}
+				>
+					<div className="flex flex-col">
+						<p className="font-content-font font-normal text-black text-[16px]/[20px] text-center">
+							Вы действительно хотите отредактировать описание вакансии?
+						</p>
+						<div className="mt-[40px] flex gap-[12px] w-full">
+							<Button
+								className="ml-auto w-full rounded-[54.5px] text-black font-content-font font-medium text-[16px]/[20px] border-black"
+								onClick={() => {
+									setIsVerifyModalOpen(false)
+								}}
+							>
+								Отменить
+							</Button>
+							<Button
+								type="primary"
+								className="mr-auto w-full rounded-[54.5px]"
+								onClick={
+									isEdited
+										? () => {
+												alterRequest({
+													post: post as string,
+													experience: experience as string,
+													salary: salary as string,
+													employment: employment as string,
+													responsibilities: responsibilities as string,
+													skills: skills as string,
+													conditions: conditions as string,
+													vacancyRequestId: requestId
+												})
+													.unwrap()
+													.then(() => {
+														acceptRequest(requestId)
+															.unwrap()
+															.then(() => {
+																refetch()
+															})
+															.then(() => {
+																setResultModalText('Описание вакансии успешно обновлено')
+																setIsVerifyModalOpen(false)
+																setIsResultModalOpen(true)
+															})
+													})
+										  }
+										: () => {
+												acceptRequest(requestId)
+													.unwrap()
+													.then(() => {
+														refetch()
+													})
+													.then(() => {
+														setResultModalText('Описание вакансии успешно обновлено')
+														setIsVerifyModalOpen(false)
+														setIsResultModalOpen(true)
+													})
+										  }
+								}
+							>
+								Отправить
+							</Button>
+						</div>
+					</div>
 				</Modal>
 			</ConfigProvider>
 			{isEdit ? (
@@ -465,66 +555,6 @@ export const VacancyRequestUpdateView = () => {
 									: ''}
 							</p>
 						</div>
-						{/* <div className="flex gap-[40px]">
-						<div className="flex flex-col gap-[16px]">
-							<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-								Категория сотрудников
-							</p>
-							<p className="font-content-font font-normal text-black text-[18px]/[21px]">
-								{requestView !== undefined && requestView.oldData !== null
-									? (() => {
-											var test = dmp.diff_main(
-												requestView.oldData.category,
-												requestView.newData.category
-											)
-											dmp.diff_cleanupSemantic(test)
-											return test
-									  })().map(diff =>
-											diff[0] < 0 ? (
-												<span className="bg-red-400 bg-opacity-60">
-													{diff[1]}
-												</span>
-											) : diff[0] > 0 ? (
-												<span className="bg-green-400 bg-opacity-60">
-													{diff[1]}
-												</span>
-											) : (
-												<span>{diff[1]}</span>
-											)
-									  )
-									: ''}
-							</p>
-						</div>
-						<div className="flex flex-col gap-[16px]">
-							<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-								Профобласть
-							</p>
-							<p className="font-content-font font-normal text-black text-[18px]/[21px]">
-								{requestView !== undefined && requestView.oldData !== null
-									? (() => {
-											var test = dmp.diff_main(
-												requestView.oldData.direction,
-												requestView.newData.direction
-											)
-											dmp.diff_cleanupSemantic(test)
-											return test
-									  })().map(diff =>
-											diff[0] < 0 ? (
-												<span className="bg-red-400 bg-opacity-60">
-													{diff[1]}
-												</span>
-											) : diff[0] > 0 ? (
-												<span className="bg-green-400 bg-opacity-60">
-													{diff[1]}
-												</span>
-											) : (
-												<span>{diff[1]}</span>
-											)
-									  )
-									: ''}
-							</p>
-						</div>
-					</div> */}
 						<div className="flex gap-[20px]">
 							<Button
 								onClick={() => {
@@ -535,44 +565,9 @@ export const VacancyRequestUpdateView = () => {
 								Редактировать
 							</Button>
 							<Button
-								onClick={
-									isEdited
-										? () => {
-												alterRequest({
-													post: post as string,
-													experience: experience as string,
-													salary: salary as string,
-													employment: employment as string,
-													responsibilities: responsibilities as string,
-													skills: skills as string,
-													conditions: conditions as string,
-													vacancyRequestId: requestId
-												})
-													.unwrap()
-													.then(() => {
-														acceptRequest(requestId)
-															.unwrap()
-															.then(() => {
-																refetch()
-															})
-															.then(() => {
-																setResultModalText('Описание вакансии успешно обновлено')
-																setIsResultModalOpen(true)
-															})
-													})
-										  }
-										: () => {
-												acceptRequest(requestId)
-													.unwrap()
-													.then(() => {
-														refetch()
-													})
-													.then(() => {
-														setResultModalText('Описание вакансии успешно обновлено')
-														setIsResultModalOpen(true)
-													})
-										  }
-								}
+								onClick={() => {
+									setIsVerifyModalOpen(true)
+								}}
 								type="primary"
 								className="rounded-[54.5px] w-[121px]"
 							>

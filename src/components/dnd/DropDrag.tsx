@@ -48,6 +48,9 @@ const employeeKeys = [
 	'Staff',
 	'Vacancies',
 	'News',
+	'jobSeeker',
+	'myResponds',
+	'DirectResume',
 	'personnelAccounting'
 ]
 

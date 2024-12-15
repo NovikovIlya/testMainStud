@@ -5,8 +5,8 @@ export interface InitialState {
 	accessToken: string | null
 	refreshToken: string | null
 	user: User | null
-	edit: boolean,
-	subRole:any,
+	edit: boolean
+	subRole: any
 }
 export type Documentation = {
 	links: {
@@ -63,7 +63,7 @@ export interface Role {
 	id: string
 	userId: string
 	type: string
-	credentials?:any
+	credentials?: any
 }
 export interface ICalendarItem {
 	semester: number
@@ -252,7 +252,7 @@ type educationResponceType = {
 }
 
 export type ResponceType = {
-	coverLetter: string
+	coverLetter: string | null
 	aboutMe: {
 		gender: IGender
 		lastname: string
@@ -270,7 +270,7 @@ export type ResponceType = {
 	}
 	skills: {
 		keySkills: string[]
-		aboutMe: string
+		aboutMe: string | null
 	}
 }
 
@@ -428,14 +428,7 @@ export type EmploymentRequestType = {
 	answer: 'YES' | 'NO'
 }
 
-export type EmployementStatus =
-	| 'FILLING'
-	| 'VERIFYING'
-	| 'REFINE'
-	| 'COMPLETE'
-	| 'READY'
-	| 'ACCEPTED'
-	| 'UPDATED'
+export type EmployementStatus = 'FILLING' | 'VERIFYING' | 'REFINE' | 'COMPLETE' | 'READY' | 'ACCEPTED' | 'UPDATED'
 
 export type EmploymentDataType = {
 	id: number
@@ -454,6 +447,7 @@ export type EmploymentDataType = {
 		}[]
 		hasRequisites?: boolean
 		testLink?: string
+		testPassed: boolean | null
 		workingConditionAccepted?: boolean
 		bank?: 'SBER' | 'VTB'
 	}[]

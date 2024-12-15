@@ -2,6 +2,8 @@ import { Button, ConfigProvider, Form, Input, Modal, Select } from 'antd'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import { ModalOkSvg } from '../../../assets/svg/ModalOkSvg'
+import { WarningModalIconSvg } from '../../../assets/svg/WarningModalIconSvg'
 import { useAppSelector } from '../../../store'
 import {
 	useDeleteVacancyAsPerDepartmentMutation,
@@ -88,8 +90,9 @@ export const VacancyEditView = () => {
 			.replace(/<\/li>/g, '')
 	)
 
-	const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
-	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+	const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<boolean>(false)
+	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false)
+	const [resultModalText, setResultModalText] = useState<string>('')
 
 	const [editForm] = Form.useForm()
 
@@ -113,36 +116,39 @@ export const VacancyEditView = () => {
 					footer={null}
 					width={407}
 				>
-					<p className="font-content-font font-normal text-black text-[16px]/[20px] text-center">
+					<div className="w-full flex justify-center">
+						<WarningModalIconSvg />
+					</div>
+					<p className="font-content-font font-normal text-black text-[16px]/[20px] text-center mt-[22px]">
 						Вы действительно хотите удалить вакансию?
 					</p>
 					<div className="mt-[40px] flex gap-[12px]">
 						<Button
-							className="ml-auto"
+							className="ml-auto w-full rounded-[54.5px] text-black font-content-font font-medium text-[16px]/[20px] border-black h-[40px]"
 							onClick={() => {
 								setIsDeleteModalOpen(false)
 							}}
 						>
-							Отмена
+							Оставить
 						</Button>
-						<Button
-							className="mr-auto"
-							type="primary"
+						<button
+							className="cursor-pointer flex items-center justify-center border-[1px] border-solid outline-0 border-[#FF5A5A] hover:border-[#FF8181] text-white rounded-[54.5px] bg-[#FF5A5A] hover:bg-[#FF8181] text-[14px] h-[40px] w-full py-[13px]"
 							onClick={async () => {
-								try {
+								try{
 									await deleteVacancy(currentVacancy?.id as number)
-										.unwrap()
-										.then(() => {
-											navigate('/services/personnelaccounting/vacancies')
-										})
-
+									.unwrap()
+									.then(() => {
+										setResultModalText('Вакансия успешно удалена.')
+										setIsDeleteModalOpen(false)
+										setIsSuccessModalOpen(true)
+									})
 								} catch (error: any) {
 									openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 								}
 							}}
 						>
 							Удалить
-						</Button>
+						</button>
 					</div>
 				</Modal>
 			</ConfigProvider>
@@ -164,20 +170,21 @@ export const VacancyEditView = () => {
 					footer={null}
 					width={407}
 				>
-					<p className="font-content-font font-normal text-black text-[16px]/[20px] text-center">
-						Описание вакансии успешно обновлено.
-					</p>
-					<div className="mt-[40px] flex gap-[12px]">
-						<Button
-							className="ml-auto mr-auto"
-							type="primary"
-							onClick={() => {
-								setIsSuccessModalOpen(false)
-							}}
-						>
-							ОК
-						</Button>
+					<div className="w-full flex justify-center">
+						<ModalOkSvg />
 					</div>
+					<p className="font-content-font font-normal text-black text-[16px]/[20px] text-center mt-[22px]">
+						{resultModalText}
+					</p>
+					<Button
+						className="mt-[40px] rounded-[40px] w-full"
+						type="primary"
+						onClick={() => {
+							navigate(-1)
+						}}
+					>
+						ОК
+					</Button>
 				</Modal>
 			</ConfigProvider>
 			<div id="wrapper" className="pl-[54px] pr-[54px] pt-[120px] pb-[52px] w-full">
@@ -434,24 +441,23 @@ export const VacancyEditView = () => {
 							{isSendRequestButtonActivated && (
 								<Button
 									onClick={async () => {
-										try {
+										try{
 											await editVacancy({
-												post: post as string,
-												experience: experience as string,
-												salary: salary as string,
-												employment: employment as string,
-												responsibilities: responsibilities as string,
-												skills: skills as string,
-												conditions: conditions as string,
-												category: category as string,
-												direction: direction as string,
-												vacancyId: currentVacancy?.id as number
-											})
-												.unwrap()
-												.then(() => {
-													setIsSuccessModalOpen(true)
-												})
-
+											post: post as string,
+											experience: experience as string,
+											salary: salary as string,
+											employment: employment as string,
+											responsibilities: responsibilities as string,
+											skills: skills as string,
+											conditions: conditions as string,
+											category: category as string,
+											direction: direction as string,
+											vacancyId: currentVacancy?.id as number
+										})
+											.unwrap()
+											.then(() => {
+												setResultModalText('Описание вакансии успешно обновлено.')
+												setIsSuccessModalOpen(true)})
 										} catch (error: any) {
 											openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 										}

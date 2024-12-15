@@ -5,6 +5,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { SubmitHandler } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
+import { ModalOkSvg } from '../../assets/svg/ModalOkSvg'
 import { useAppSelector } from '../../store'
 import { AttachIcon } from '../service/jobSeeker/AttachIcon'
 
@@ -133,7 +134,10 @@ export const DirectResume = ({
 					}}
 				>
 					<div className="text-center">
-						<p className="font-content-font font-normal text-black text-[16px]/[20px] mb-[40px]">
+						<div className="w-full flex justify-center">
+							<ModalOkSvg />
+						</div>
+						<p className="font-content-font font-normal text-black text-[16px]/[20px] mt-[22px] mb-[40px]">
 							Спасибо, ваше резюме успешно отправлено
 						</p>
 						<Button
@@ -362,11 +366,7 @@ export const DirectResume = ({
 								шаблон
 							</a>
 						</p>
-						<Button
-							htmlType="submit"
-							className="ml-auto mt-[40px] rounded-[54.5px]"
-							type="primary"
-						>
+						<Button htmlType="submit" className="ml-auto mt-[40px] rounded-[54.5px]" type="primary">
 							Отправить
 						</Button>
 					</form>
@@ -375,18 +375,12 @@ export const DirectResume = ({
 			<div className="flex flex-col px-7 py-8 justify-between h-full max-[874px]:p-0 max-[874px]:py-3 max-[874px]:items-center ">
 				<div className="flex max-[874px]:flex-col max-[874px]:h-full max-[874px]:w-full max-[874px]:items-center">
 					<div className="text-left">
-						<div className="leading-7 text-xl font-bold whitespace-nowrap">
-							{t(title)}
-						</div>
-						<div className="text-base w-[85%] font-normal leading-relaxed mt-7 max-[874px]:hidden">
-							{t(info)}
-						</div>
+						<div className="leading-7 text-xl font-bold whitespace-nowrap">{t(title)}</div>
+						<div className="text-base w-[85%] font-normal leading-relaxed mt-7 max-[874px]:hidden">{t(info)}</div>
 					</div>
 					{img && (
 						<div className="mr-6 w-60 justify-center flex max-[874px]:h-full max-[874px]:w-full max-[874px]:items-center">
-							<div
-								className={`bg-[#3E89F9] bg-opacity-80 w-[125px] h-[125px] rounded-full absolute -z-10 ${mt}`}
-							/>
+							<div className={`bg-[#3E89F9] bg-opacity-80 w-[125px] h-[125px] rounded-full absolute -z-10 ${mt}`} />
 							<img
 								src={img}
 								width={width}

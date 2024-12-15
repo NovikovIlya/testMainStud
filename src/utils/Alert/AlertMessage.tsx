@@ -1,10 +1,10 @@
 import { message } from 'antd'
 import React, { ReactNode, createContext, useContext, useRef, useState } from 'react'
-import { InfoAlertIconSvg } from "../assets/svg/InfoAlertIconSvg"
-import { KrestikSvg } from '../assets/svg/KrestikSvg'
+import { InfoAlertIconSvg } from "../../assets/svg/InfoAlertIconSvg"
+import { KrestikSvg } from '../../assets/svg/KrestikSvg'
 import './AlertProvider.css'
-import {ErrorAlertIconSvg} from "../assets/svg/ErrorAlertIconSvg";
-import {SuccessAlertIconSvg} from "../assets/svg/SuccessAlertIconSvg";
+import {ErrorAlertIconSvg} from "../../assets/svg/ErrorAlertIconSvg";
+import {SuccessAlertIconSvg} from "../../assets/svg/SuccessAlertIconSvg";
 
 // Определяем интерфейс для пропсов openAlert
 interface OpenAlertProps {
@@ -72,7 +72,7 @@ export const AlertProvider: React.FC<AlertProviderProps> = ({ children }) => {
                     </div>
                 </div>
             ),
-            duration: 5,
+            duration: 4,
             icon: null
         })
     }

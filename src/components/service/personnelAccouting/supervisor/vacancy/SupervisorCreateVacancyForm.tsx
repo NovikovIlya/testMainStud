@@ -8,7 +8,7 @@ import {
 	useGetSubdivisionsQuery,
 	useRequestCreateVacancyMutation
 } from '../../../../../store/api/serviceApi'
-import { useAlert } from '../../../../../utils/AlertMessage'
+import { useAlert } from '../../../../../utils/Alert/AlertMessage'
 
 export const SupervisorCreateVacancyForm = () => {
 	const { openAlert } = useAlert()
@@ -74,8 +74,7 @@ export const SupervisorCreateVacancyForm = () => {
 							await requestCreateVacancy(values).unwrap()
 							setIsSuccessModalOpen(true)
 						} catch (error: any) {
-							let errorStr = error.status + ' ' + error.data.message
-							openAlert({ type: 'error', text: errorStr })
+							openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 						}
 					}}
 				>

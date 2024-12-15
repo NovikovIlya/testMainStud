@@ -5,7 +5,7 @@ import React, { useState } from 'react'
 import { AvatartandardSvg } from '../../../../../assets/svg/AvatarStandardSvg'
 import { useAppSelector } from '../../../../../store'
 import { useEmployeeSeekerRequestMutation, useGetRespondFullInfoQuery } from '../../../../../store/api/serviceApi'
-import { useAlert } from '../../../../../utils/AlertMessage'
+import { useAlert } from '../../../../../utils/Alert/AlertMessage'
 import { NocircleArrowIcon } from '../../../jobSeeker/NoCircleArrowIcon'
 
 export const SupervisorInterviewSeekerInfo = () => {
@@ -146,8 +146,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 											})
 										openAlert({ type: 'success', text: 'Приглашение на работу успешно отправлено' })
 									} catch (error: any) {
-										let errorStr = error.status + ' ' + error.data.message
-										openAlert({ type: 'error', text: errorStr })
+										openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 									}
 								}}
 							>
@@ -311,8 +310,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 											setIsRefuseModalOpen(false)
 											openAlert({ type: 'success', text: 'Причина отказа успешно отправлена' })
 										} catch (error: any) {
-											let errorStr = error.status + ' ' + error.data.message
-											openAlert({ type: 'error', text: errorStr })
+											openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 										}
 									}}
 								>

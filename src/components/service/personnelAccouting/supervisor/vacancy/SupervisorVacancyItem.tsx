@@ -7,7 +7,7 @@ import { DeleteSvg } from '../../../../../assets/svg/DeleteSvg'
 import { useLazyGetVacancyViewQuery, useRequestDeleteVacancyMutation } from '../../../../../store/api/serviceApi'
 import { setCurrentVacancy } from '../../../../../store/reducers/CurrentVacancySlice'
 import { VacancyItemType } from '../../../../../store/reducers/type'
-import { useAlert } from '../../../../../utils/AlertMessage'
+import { useAlert } from '../../../../../utils/Alert/AlertMessage'
 
 export default function VacancyItem(props: VacancyItemType) {
 	const { openAlert } = useAlert()
@@ -100,8 +100,7 @@ export default function VacancyItem(props: VacancyItemType) {
 										})
 									setIsSuccessModalOpen(true)
 								} catch (error: any) {
-									let errorStr = error.status + ' ' + error.data.message
-									openAlert({ type: 'error', text: errorStr })
+									openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 								}
 							}}
 						>

@@ -18,7 +18,7 @@ import { setCurrentVacancyId } from '../../../store/reducers/CurrentVacancyIdSli
 import { setCurrentVacancyName } from '../../../store/reducers/CurrentVacancyNameSlice'
 import { setChatId } from '../../../store/reducers/chatIdSlice'
 import { RespondItemType, respondStatus } from '../../../store/reducers/type'
-import {useAlert} from "../../../utils/AlertMessage";
+import {useAlert} from "../../../utils/Alert/AlertMessage";
 
 export const RespondItem = (props: RespondItemType & { refetch: Function }) => {
 	const { openAlert } = useAlert()

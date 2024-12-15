@@ -5,10 +5,13 @@ import {Button, ConfigProvider, Modal, Spin} from "antd";
 import {LoadingOutlined} from "@ant-design/icons";
 import {SignedItemType} from "../../../../../store/reducers/type";
 import {useRef} from "react";
+import {useAlert} from "../../../../../utils/Alert/AlertMessage";
 
 export const TestResults = () => {
 
     let { data: test_result_data = [], isLoading : loading, refetch } = useGetTestResultsQuery({signed : false});
+
+    const { openAlert } = useAlert()
 
     console.log(test_result_data)
 
@@ -84,9 +87,14 @@ export const TestResults = () => {
                                     className="rounded-[54.5px] text-[14px] h-[40px] w-full py-[13px]"
                                     type="primary"
                                     onClick={async () => {
-                                        setIsTestResultApproveModalOpen(false)
-                                        await setSeekerSigned({ subStageId: props.id})
-                                        handleRefresh()
+                                        try {
+                                            await setSeekerSigned({ subStageId: props.id})
+                                            setIsTestResultApproveModalOpen(false)
+                                            handleRefresh()
+                                            /*тут сделать модалку -> Соискатель успешно перемещён в сервис "Подписанные"*/
+                                        } catch (error: any) {
+                                            openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+                                        }
                                     }}
                                 >
                                     Да

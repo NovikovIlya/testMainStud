@@ -12,6 +12,7 @@ import {
 	useRequestUpdateVacancyMutation
 } from '../../../store/api/serviceApi'
 import ArrowIcon from '../jobSeeker/ArrowIcon'
+import {useAlert} from "../../../utils/Alert/AlertMessage";
 
 export const VacancyEditView = () => {
 	const { currentVacancy } = useAppSelector(state => state.currentVacancy)
@@ -20,6 +21,8 @@ export const VacancyEditView = () => {
 	const [categoryTitle, setCategoryTitle] = useState<string>(currentVacancy?.acf.category as string)
 	const { data: directions = [] } = useGetDirectionsQuery(categoryTitle)
 	const { data: subdivisions = [] } = useGetSubdivisionsQuery(categoryTitle)
+
+	const { openAlert } = useAlert()
 
 	const navigate = useNavigate()
 	const [requestUpdate] = useRequestUpdateVacancyMutation()
@@ -125,12 +128,17 @@ export const VacancyEditView = () => {
 						<Button
 							className="mr-auto"
 							type="primary"
-							onClick={() => {
-								deleteVacancy(currentVacancy?.id as number)
-									.unwrap()
-									.then(() => {
-										navigate('/services/personnelaccounting/vacancies')
-									})
+							onClick={async () => {
+								try {
+									await deleteVacancy(currentVacancy?.id as number)
+										.unwrap()
+										.then(() => {
+											navigate('/services/personnelaccounting/vacancies')
+										})
+
+								} catch (error: any) {
+									openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+								}
 							}}
 						>
 							Удалить
@@ -425,23 +433,28 @@ export const VacancyEditView = () => {
 							</Button>
 							{isSendRequestButtonActivated && (
 								<Button
-									onClick={() => {
-										editVacancy({
-											post: post as string,
-											experience: experience as string,
-											salary: salary as string,
-											employment: employment as string,
-											responsibilities: responsibilities as string,
-											skills: skills as string,
-											conditions: conditions as string,
-											category: category as string,
-											direction: direction as string,
-											vacancyId: currentVacancy?.id as number
-										})
-											.unwrap()
-											.then(() => {
-												setIsSuccessModalOpen(true)
+									onClick={async () => {
+										try {
+											await editVacancy({
+												post: post as string,
+												experience: experience as string,
+												salary: salary as string,
+												employment: employment as string,
+												responsibilities: responsibilities as string,
+												skills: skills as string,
+												conditions: conditions as string,
+												category: category as string,
+												direction: direction as string,
+												vacancyId: currentVacancy?.id as number
 											})
+												.unwrap()
+												.then(() => {
+													setIsSuccessModalOpen(true)
+												})
+
+										} catch (error: any) {
+											openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+										}
 									}}
 									type="primary"
 									className="rounded-[54.5px] w-[121px]"

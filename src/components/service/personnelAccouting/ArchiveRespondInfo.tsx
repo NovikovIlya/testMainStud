@@ -25,7 +25,7 @@ import { setRespondId } from '../../../store/reducers/CurrentRespondIdSlice'
 import { setCurrentVacancyId } from '../../../store/reducers/CurrentVacancyIdSlice'
 import { setCurrentVacancyName } from '../../../store/reducers/CurrentVacancyNameSlice'
 import { setChatId } from '../../../store/reducers/chatIdSlice'
-import { useAlert } from '../../../utils/AlertMessage'
+import { useAlert } from '../../../utils/Alert/AlertMessage'
 import { NocircleArrowIcon } from '../jobSeeker/NoCircleArrowIcon'
 
 import { InviteSeekerForm } from './supervisor/InviteSeekerForm'
@@ -160,8 +160,7 @@ export const ArchiveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 												})
 											openAlert({ type: 'success', text: 'Отклик успешно удалён.' })
 										} catch (error: any) {
-											let errorStr = error.status + ' ' + error.data.message
-											openAlert({ type: 'error', text: errorStr })
+											openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 										}
 									}}
 								>
@@ -258,8 +257,7 @@ export const ArchiveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 														})
 													openAlert({ type: 'success', text: 'Отклик успешно отправлен руководителю' })
 												} catch (error: any) {
-													let errorStr = error.status + ' ' + error.data.message
-													openAlert({ type: 'error', text: errorStr })
+													openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 												}
 											}}
 											disabled={isRespondSentToSupervisor}
@@ -511,8 +509,7 @@ export const ArchiveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 														})
 													openAlert({ type: 'success', text: 'Отклик успешно отправлен руководителю' })
 												} catch (error: any) {
-													let errorStr = error.status + ' ' + error.data.message
-													openAlert({ type: 'error', text: errorStr })
+													openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 												}
 											}}
 											disabled={isRespondSentToSupervisor}

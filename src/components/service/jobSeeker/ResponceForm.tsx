@@ -34,7 +34,7 @@ import {
 	educationResponceItemType
 } from '../../../store/reducers/SeekerFormReducers/RespondEducationReducer'
 import { allSkillsData } from '../../../store/reducers/SeekerFormReducers/SkillsReducer'
-import { useAlert } from '../../../utils/AlertMessage'
+import { useAlert } from '../../../utils/Alert/AlertMessage'
 
 import ArrowIcon from './ArrowIcon'
 import { AttachIcon } from './AttachIcon'
@@ -385,8 +385,7 @@ export const ResponseForm = () => {
 												setIsSuccessModalOpen(true)
 											})
 											.catch(error => {
-												let errorStr = error.status + ' ' + error.data.message
-												openAlert({ type: 'error', text: errorStr })
+												openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 												setIsFormOpen(false)
 											})
 								}}

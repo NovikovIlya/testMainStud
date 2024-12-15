@@ -9,7 +9,7 @@ import {
 	useGetSubdivisionsQuery,
 	useRequestUpdateVacancyMutation
 } from '../../../../../store/api/serviceApi'
-import { useAlert } from '../../../../../utils/AlertMessage'
+import { useAlert } from '../../../../../utils/Alert/AlertMessage'
 import ArrowIcon from '../../../jobSeeker/ArrowIcon'
 
 export const SupervisorUpdateVacancy = () => {
@@ -151,16 +151,20 @@ export const SupervisorUpdateVacancy = () => {
 						layout="vertical"
 						requiredMark={false}
 						className="w-[50%] mt-[52px]"
-						onFinish={values => {
-							setPost(prev => values.post)
-							setExperience(prev => values.experience)
-							setEmployment(prev => values.employment)
-							setSalary(prev => values.salary)
-							setResponsibilities(prev => values.responsibilities)
-							setSkills(prev => values.skills)
-							setConditions(prev => values.conditions)
-							setIsSendRequestButtonActivated(true)
-							setIsEdit(false)
+						onFinish={async values => {
+							try {
+								setPost(prev => values.post)
+								setExperience(prev => values.experience)
+								setEmployment(prev => values.employment)
+								setSalary(prev => values.salary)
+								setResponsibilities(prev => values.responsibilities)
+								setSkills(prev => values.skills)
+								setConditions(prev => values.conditions)
+								setIsSendRequestButtonActivated(true)
+								setIsEdit(false)
+							} catch (error: any) {
+								openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' });
+							}
 						}}
 					>
 						<Form.Item
@@ -348,8 +352,7 @@ export const SupervisorUpdateVacancy = () => {
 													setIsSuccessModalOpen(true)
 												})
 										} catch (error: any) {
-											let errorStr = error.status + ' ' + error.data.message
-											openAlert({ type: 'error', text: errorStr })
+											openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 										}
 									}}
 									type="primary"

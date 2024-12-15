@@ -166,7 +166,7 @@ export const ReserveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 														navigate('/services/personnelaccounting/reserve')
 													})
 												})
-											openAlert({ type: 'success', text: 'Отклик удален' })
+											openAlert({ type: 'success', text: 'Отклик успешно удален' })
 										} catch (error: any) {
 											openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 										}

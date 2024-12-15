@@ -61,7 +61,7 @@
 .ant-message-error {
     color: #ffffff !IMPORTANT;
 }
-.anticon {
+.anticon-close-circle,.anticon-check-circle  {
     margin-right: 0px !important;
     position: absolute;
     display: none;

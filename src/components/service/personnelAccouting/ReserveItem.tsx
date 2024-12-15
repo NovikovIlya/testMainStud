@@ -7,7 +7,7 @@ import { DeleteSvg } from '../../../assets/svg/DeleteSvg'
 import { WarningModalIconSvg } from '../../../assets/svg/WarningModalIconSvg'
 import { useDeleteReserveRespondMutation } from '../../../store/api/serviceApi'
 import { setCurrentResponce } from '../../../store/reducers/CurrentResponceSlice'
-import { useAlert } from '../../../utils/AlertMessage'
+import { useAlert } from '../../../utils/Alert/AlertMessage'
 
 export const ReserveItem = (props: {
 	id: number
@@ -68,8 +68,7 @@ export const ReserveItem = (props: {
 										})
 									openAlert({ type: 'success', text: 'Резюме успешно удалено.' })
 								} catch (error: any) {
-									let errorStr = error.status + ' ' + error.data.message
-									openAlert({ type: 'error', text: errorStr })
+									openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 								}
 							}}
 						>

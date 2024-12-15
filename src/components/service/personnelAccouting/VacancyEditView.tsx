@@ -14,6 +14,7 @@ import {
 	useRequestUpdateVacancyMutation
 } from '../../../store/api/serviceApi'
 import ArrowIcon from '../jobSeeker/ArrowIcon'
+import {useAlert} from "../../../utils/Alert/AlertMessage";
 
 export const VacancyEditView = () => {
 	const { currentVacancy } = useAppSelector(state => state.currentVacancy)
@@ -22,6 +23,8 @@ export const VacancyEditView = () => {
 	const [categoryTitle, setCategoryTitle] = useState<string>(currentVacancy?.acf.category as string)
 	const { data: directions = [] } = useGetDirectionsQuery(categoryTitle)
 	const { data: subdivisions = [] } = useGetSubdivisionsQuery(categoryTitle)
+
+	const { openAlert } = useAlert()
 
 	const navigate = useNavigate()
 	const [requestUpdate] = useRequestUpdateVacancyMutation()
@@ -130,14 +133,18 @@ export const VacancyEditView = () => {
 						</Button>
 						<button
 							className="cursor-pointer flex items-center justify-center border-[1px] border-solid outline-0 border-[#FF5A5A] hover:border-[#FF8181] text-white rounded-[54.5px] bg-[#FF5A5A] hover:bg-[#FF8181] text-[14px] h-[40px] w-full py-[13px]"
-							onClick={() => {
-								deleteVacancy(currentVacancy?.id as number)
+							onClick={async () => {
+								try{
+									await deleteVacancy(currentVacancy?.id as number)
 									.unwrap()
 									.then(() => {
 										setResultModalText('Вакансия успешно удалена.')
 										setIsDeleteModalOpen(false)
 										setIsSuccessModalOpen(true)
 									})
+								} catch (error: any) {
+									openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+								}
 							}}
 						>
 							Удалить
@@ -433,8 +440,9 @@ export const VacancyEditView = () => {
 							</Button>
 							{isSendRequestButtonActivated && (
 								<Button
-									onClick={() => {
-										editVacancy({
+									onClick={async () => {
+										try{
+											await editVacancy({
 											post: post as string,
 											experience: experience as string,
 											salary: salary as string,
@@ -449,8 +457,10 @@ export const VacancyEditView = () => {
 											.unwrap()
 											.then(() => {
 												setResultModalText('Описание вакансии успешно обновлено.')
-												setIsSuccessModalOpen(true)
-											})
+												setIsSuccessModalOpen(true)})
+										} catch (error: any) {
+											openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+										}
 									}}
 									type="primary"
 									className="rounded-[54.5px] w-[121px]"

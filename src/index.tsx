@@ -7,7 +7,7 @@ import './18n'
 import App from './App'
 import './index.scss'
 import { store } from './store'
-import { AlertProvider } from './utils/AlertMessage'
+import { AlertProvider } from './utils/Alert/AlertMessage'
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 

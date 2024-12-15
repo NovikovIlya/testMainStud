@@ -7,10 +7,13 @@ import { useAppSelector } from '../../../../store'
 import { useSendEmploymentDocsMutation } from '../../../../store/api/serviceApi'
 
 import { FileAttachment } from './FileAttachment'
+import {useAlert} from "../../../../utils/Alert/AlertMessage";
 
 export const EmplSend = (props: { respondId: number; stageId: number; stageName: string }) => {
 	const { empData } = useAppSelector(state => state.employmentData)
 	const { docs } = useAppSelector(state => state.employmentSeekerDocs)
+
+	const { openAlert } = useAlert()
 
 	const [sendDocs] = useSendEmploymentDocsMutation()
 	const hasNotRequisites = empData.stages.find(stage => stage.type === 'SIXTH')?.hasRequisites
@@ -101,18 +104,22 @@ export const EmplSend = (props: { respondId: number; stageId: number; stageName:
 					disabled={!agree}
 					type="primary"
 					className="rounded-[54.5px] w-[282px]"
-					onClick={() => {
-						sendDocs({
-							respondId: props.respondId,
-							hasNotRequisites: !hasNotRequisites
-						})
-							.unwrap()
-							.then(() => {
-								setResultModalText(
-									'Документы успешно отправлены. Следите за статусом ваших документов на этапе трудоустройства.'
-								)
-								setIsResultModalOpen(true)
+					onClick={async () => {
+						try {
+							await sendDocs({
+								respondId: props.respondId,
+								hasNotRequisites: !hasNotRequisites
 							})
+								.unwrap()
+								.then(() => {
+									setResultModalText(
+										'Документы успешно отправлены. Следите за статусом ваших документов на этапе трудоустройства.'
+									)
+									setIsResultModalOpen(true)
+								})
+						} catch (error: any) {
+							openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+						}
 					}}
 				>
 					Подтвердить и отправить данные

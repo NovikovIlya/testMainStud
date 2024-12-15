@@ -6,11 +6,16 @@ import {Button, ConfigProvider, Modal, Spin} from "antd";
 import {WarningModalIconSvg} from "../../../../../assets/svg/WarningModalIconSvg";
 import {DeleteIconLaborSvg} from "../../../../../assets/svg/DeleteIconLaborSvg";
 import {SignedItemType} from "../../../../../store/reducers/type";
+import {SuccessModalIconSvg} from "../../../../../assets/svg/SuccessModalIconSvg";
+import {useAlert} from "../../../../../utils/Alert/AlertMessage";
 
 
 export const Signed = () => {
 
+    const { openAlert } = useAlert()
+
     const [isApproveSignedModalOpen, setIsApproveSignedModalOpen] = useState(false)
+    const [isSuccessSignedModalOpen, setIsSuccessSignedModalOpen] = useState(false)
 
     let { data: signed_data = [],  isLoading : loading, refetch } = useGetTestResultsQuery({signed : true});
     const [setSeekerHidden] = useSetTestResultHiddenMutation()
@@ -59,9 +64,14 @@ export const Signed = () => {
                                 <button
                                     className="cursor-pointer flex items-center justify-center border-[1px] border-solid outline-0 border-[#FF5A5A] text-white rounded-[54.5px] bg-[#FF5A5A] hover:bg-[#FF8181] text-[14px] h-[40px] w-full py-[13px]"
                                     onClick={async () => {
-                                        setIsApproveSignedModalOpen(false)
-                                        await setSeekerHidden({subStageId: props.id})
-                                        handleRefresh()
+                                        try {
+                                            await setSeekerHidden({subStageId: props.id})
+                                            setIsApproveSignedModalOpen(false)
+                                            setIsSuccessSignedModalOpen(true)
+                                            handleRefresh()
+                                        } catch (error: any) {
+                                        openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+                                    }
                                     }}
                                 >
                                     Удалить
@@ -74,10 +84,53 @@ export const Signed = () => {
         )
     }
 
+    const SuccessSignedModal = () => {
+        return (
+            <>
+                <ConfigProvider
+                    theme={{
+                        token: {
+                            boxShadow: '0 0 19px 0 rgba(212, 227, 241, 0.6)'
+                        }
+                    }}
+                >
+                    <Modal
+                        centered
+                        open={isSuccessSignedModalOpen}
+                        onCancel={() => {
+                            setIsSuccessSignedModalOpen(false)
+                        }}
+                        title={null}
+                        footer={null}
+                        width={407}
+                    >
+                        <div className='flex items-center justify-center flex-col px-[15px] pt-[50px] pb-[30px] gap-[34px]'>
+                            <SuccessModalIconSvg></SuccessModalIconSvg>
+                            <p
+                                className="text-center font-content-font font-normal flex items-start text-black text-[16px]/[20px]">
+                                Соискатель успешно удалён
+                            </p>
+                            <Button
+                                className="rounded-[54.5px] border-black text-[14px] h-[40px] w-full py-[13px]"
+                                type="default"
+                                onClick={() => {
+                                    setIsSuccessSignedModalOpen(false)
+                                }}
+                            >
+                                Ок
+                            </Button>
+                        </div>
+                    </Modal>
+                </ConfigProvider>
+            </>
+        )
+    }
+
     const SignedItem = ( props: SignedItemType ) => {
         return (
             <>
                 <ApproveSignedModal id={props.id}/>
+                <SuccessSignedModal></SuccessSignedModal>
                 <div className="w-[100%] h-[80px] bg-white flex flex-row items-center">
                     <div className="ml-[1.5%] w-[62%] flex flex-row">
                     <span className="w-[38%] text-[16px] text-[##000000] font-normal">

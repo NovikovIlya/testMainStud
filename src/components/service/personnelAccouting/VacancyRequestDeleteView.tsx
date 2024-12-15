@@ -7,6 +7,7 @@ import { WarningModalIconSvg } from '../../../assets/svg/WarningModalIconSvg'
 import { useAppSelector } from '../../../store'
 import { useAcceptDeleteVacancyRequestMutation, useGetVacancyRequestsQuery } from '../../../store/api/serviceApi'
 import ArrowIcon from '../jobSeeker/ArrowIcon'
+import {useAlert} from "../../../utils/Alert/AlertMessage";
 
 export const VacancyRequestDeleteView = () => {
 	const { currentVacancy } = useAppSelector(state => state.currentVacancy)
@@ -14,6 +15,8 @@ export const VacancyRequestDeleteView = () => {
 
 	const navigate = useNavigate()
 	const [acceptRequest] = useAcceptDeleteVacancyRequestMutation()
+
+	const { openAlert } = useAlert()
 
 	const { refetch } = useGetVacancyRequestsQuery('все')
 
@@ -156,8 +159,9 @@ export const VacancyRequestDeleteView = () => {
 							</Button>
 							<button
 								className="cursor-pointer flex items-center justify-center border-[1px] border-solid outline-0 border-[#FF5A5A] hover:border-[#FF8181] text-white rounded-[54.5px] bg-[#FF5A5A] hover:bg-[#FF8181] text-[14px] h-[40px] w-full py-[13px]"
-								onClick={() => {
-									acceptRequest(requestId)
+								onClick={async () => {
+									try{
+										await acceptRequest(requestId)
 										.unwrap()
 										.then(() => {
 											refetch().then(() => {
@@ -166,6 +170,9 @@ export const VacancyRequestDeleteView = () => {
 												setIsResultModalOpen(true)
 											})
 										})
+							} catch (error: any) {
+								openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+							}
 								}}
 							>
 								Удалить

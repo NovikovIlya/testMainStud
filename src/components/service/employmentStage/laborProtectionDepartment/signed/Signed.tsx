@@ -8,6 +8,7 @@ import {DeleteIconLaborSvg} from "../../../../../assets/svg/DeleteIconLaborSvg";
 import {SignedItemType} from "../../../../../store/reducers/type";
 import {SuccessModalIconSvg} from "../../../../../assets/svg/SuccessModalIconSvg";
 import {useAlert} from "../../../../../utils/Alert/AlertMessage";
+import {DeleteIconHoverLaborSvg} from "../../../../../assets/svg/DeleteIconHoverLaborSvg";
 
 
 export const Signed = () => {
@@ -18,6 +19,7 @@ export const Signed = () => {
     const [isSuccessSignedModalOpen, setIsSuccessSignedModalOpen] = useState(false)
 
     let { data: signed_data = [],  isLoading : loading, refetch } = useGetTestResultsQuery({signed : true});
+
     const [setSeekerHidden] = useSetTestResultHiddenMutation()
 
     interface modalProps {
@@ -65,10 +67,10 @@ export const Signed = () => {
                                     className="cursor-pointer flex items-center justify-center border-[1px] border-solid outline-0 border-[#FF5A5A] text-white rounded-[54.5px] bg-[#FF5A5A] hover:bg-[#FF8181] text-[14px] h-[40px] w-full py-[13px]"
                                     onClick={async () => {
                                         try {
-                                            await setSeekerHidden({subStageId: props.id})
                                             setIsApproveSignedModalOpen(false)
-                                            setIsSuccessSignedModalOpen(true)
+                                            await setSeekerHidden({subStageId: props.id})
                                             handleRefresh()
+                                            setIsSuccessSignedModalOpen(true)
                                         } catch (error: any) {
                                         openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
                                     }
@@ -150,8 +152,18 @@ export const Signed = () => {
                                 setIsApproveSignedModalOpen(true)
                             }}
                         >
-                            <DeleteIconLaborSvg></DeleteIconLaborSvg>
-                            <span className="group-hover:text-[#EA0000] group-hover:opacity-[70%] text-[16px] text-[#999999] font-normal">Удалить</span>
+                            <span
+                                className="group-hover:hidden"
+                            >
+                                <DeleteIconLaborSvg></DeleteIconLaborSvg>
+                            </span>
+                            <span
+                                className="hidden group-hover:block"
+                            >
+                                <DeleteIconHoverLaborSvg></DeleteIconHoverLaborSvg>
+                            </span>
+                            <span
+                                className="group-hover:text-[#EA0000] group-hover:opacity-[50%] text-[16px] text-[#999999] font-normal">Удалить</span>
                         </button>
                     </div>
                 </div>
@@ -169,7 +181,7 @@ export const Signed = () => {
                 <div className="w-full h-full flex items-center">
                     <div className="text-center ml-auto mr-auto">
                         <Spin
-                            indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}
+                            indicator={<LoadingOutlined style={{fontSize: 36}} spin/>}
                         ></Spin>
                         <p className="font-content-font font-normal text-black text-[18px]/[18px]">
                             Идёт загрузка...

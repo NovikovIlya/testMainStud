@@ -106,9 +106,9 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 								type="primary"
 								onClick={ async () => {
 									try {
+										setIsReqModalOpen(false)
 										await markBankCardApplicationFormed({ subStageId: 5 })
 										dispatch(setFifthStageStatus('ACCEPTED'))
-										setIsReqModalOpen(false)
 										setIsReqModalSuccessOpen(true)
 
 									} catch (error: any) {
@@ -169,9 +169,6 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 	const StageStatusComponent = () => {
 		return (
 			<>
-				<Button onClick={()=>{
-					openAlert({ type: 'success', text: 'Этап успешно принят'})
-				}}></Button>
 				{props.stage === 2 && (
 					<div className="min-w-[300px] items-left">
 						{props.stageStatus === 'VERIFYING' && secondStageStatus.secondStageStatus === 'VERIFYING' && (

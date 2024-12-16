@@ -141,8 +141,8 @@ export const block = {
         {
             w: 1,
             h: 1,
-            x: 1,
-            y: 4,
+            x: 2,
+            y: 5,
             i: 'Staff',
           
             moved: true,
@@ -164,7 +164,7 @@ export const block = {
             w: 1,
             h: 1,
             x: 0,
-            y: 5,
+            y: 4,
             i: 'News',
            
             moved: true,

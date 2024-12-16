@@ -40,10 +40,12 @@ const studentKeys = [
 ]
 
 const employeeKeys = [
-	'Practices', // Проверка isSuccessCheck будет выполнена отдельно
+	'News',
+	'Practices', 
 	'practiceTeacher',
 	'Staff',
-	'News'
+
+	
 ]
 
 const DropDrag = () => {

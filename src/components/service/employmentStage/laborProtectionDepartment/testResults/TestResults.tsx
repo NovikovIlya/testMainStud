@@ -12,15 +12,18 @@ export const TestResults = () => {
     let { data: test_result_data = [], isLoading : loading, refetch } = useGetTestResultsQuery({signed : false});
 
     const { openAlert } = useAlert()
-
+    const [reLoading, setReLoading] = useState(false);
     console.log(test_result_data)
 
     const [isTestResultApproveModalOpen, setIsTestResultApproveModalOpen] = useState(false)
+    const [isRefresh, setIsRefresh] = useState(false)
 
-    const [setSeekerSigned] = useSetTestResultSignedMutation()
+    const [setSeekerSigned, {isLoading}] = useSetTestResultSignedMutation()
 
-    const handleRefresh = () => {
-        refetch();
+    const handleRefresh = async () => {
+        setReLoading(true); // Устанавливаем состояние загрузки
+        await refetch(); // Ждем завершения рефреша
+        setReLoading(false); // Сбрасываем состояние загрузки
     };
 
     const TestResultItem = ( props: SignedItemType ) => {
@@ -88,8 +91,8 @@ export const TestResults = () => {
                                     type="primary"
                                     onClick={async () => {
                                         try {
-                                            await setSeekerSigned({ subStageId: props.id})
                                             setIsTestResultApproveModalOpen(false)
+                                            await setSeekerSigned({ subStageId: props.id})
                                             handleRefresh()
                                             /*тут сделать модалку -> Соискатель успешно перемещён в сервис "Подписанные"*/
                                         } catch (error: any) {
@@ -107,7 +110,7 @@ export const TestResults = () => {
         )
     }
 
-    if (loading) {
+    if (loading || isLoading || reLoading) {
         return (
             <>
                 <div className="w-full h-full flex items-center">

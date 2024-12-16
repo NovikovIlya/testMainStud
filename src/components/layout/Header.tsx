@@ -60,7 +60,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const [isOpen, setIsOpen] = useState(false)
 	const ref = useRef<any>(null)
 	const {data:dataUnReadMessage} = useGetAllUnReadQuery(null,{
-		pollingInterval: 5000,
+		pollingInterval: 2000,
 		skipPollingIfUnfocused: true,
 	})
 	console.log('dataUnReadMessage?.unreadChatsCount',dataUnReadMessage?.unreadChatsCount)

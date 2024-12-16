@@ -1,3 +1,4 @@
+import { ChatResponse } from '../../../models/chat'
 import { apiSlice } from '../apiSlice'
 import { testApiSlice } from '../testApiSlice'
 
@@ -35,7 +36,7 @@ export const messagesService = apiSlice.injectEndpoints({
             providesTags: ['Messages'],
             keepUnusedDataFor:1, 
         }),
-        getAllDialogs: builder.query<any, any>({
+        getAllDialogs: builder.query<ChatResponse[], any>({
             query: ({page,size}) => {
                 return {
                     url: `/user-api/chat?page=${page}&size=${size}`,
@@ -45,7 +46,7 @@ export const messagesService = apiSlice.injectEndpoints({
             providesTags: ['Messages'],
             keepUnusedDataFor:1,
         }),
-        getAllDialogsOld: builder.query<any, any>({
+        getAllDialogsOld: builder.query<ChatResponse[], any>({
             query: ({page,size}) => {
                 return {
                     url: `/user-api/chat?page=${page}&size=${size}`,

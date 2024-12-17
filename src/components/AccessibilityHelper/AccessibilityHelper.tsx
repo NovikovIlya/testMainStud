@@ -16,7 +16,6 @@ const AccessibilityHelper: React.FC<AccessibilityHelperProps> = forwardRef(({ la
   // const [activeOptions, setActiveOptions] = useState<string[]>([]);
   const activeOptions = useAppSelector((state) => state.auth.activeOptions);
   const dispatch = useAppDispatch()
-  console.log('activeOptions',activeOptions)
   const text = {
     en: {
       tabs: 'Highlight Selected Items',

@@ -172,7 +172,7 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 													userType:student.userType,
 													label: (
 														<div>
-															<div className="">
+															{/* <div className="">
 																{hasBrackets(student.name)
 																	? hasBrackets(ContentWithinBrackets(student.name))
 																		? ContentWithinBrackets(ContentWithinBrackets(student.name))
@@ -181,6 +181,12 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 															</div>
 															<div style={{ fontSize: '12px', color: '#888' }}>
 																{hasBrackets(student.name) ? extractContentWithinBrackets(student.name) : ''}
+															</div> */}
+															<div className="">
+																	{student?.name}
+															</div>
+															<div style={{ fontSize: '12px', color: '#888' }}>
+															{student?.userInfo}
 															</div>
 														</div>
 													)

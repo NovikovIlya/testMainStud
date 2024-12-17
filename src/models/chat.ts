@@ -16,6 +16,7 @@ export interface MessageResponse {
     lastMessageTime: string;
     userId: number;
     userName: string;
+    userInfo: string;
   }
   
   export interface MessageRequest {

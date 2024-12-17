@@ -34,11 +34,21 @@ export const ViewMessage = () => {
 	const [activeDialog, setActiveDialog] = useState(null)
 	const [page, setPage] = useState(0)
 	const { data: dataAllDialogsOld } = useGetAllDialogsOldQuery({ page, size: 8 })
-	const {data: dataAllDialogs,isLoading,isFetching} = useGetAllDialogsQuery({ page: 0, size: 8 }, { pollingInterval: 2000 })
+	const {
+		data: dataAllDialogs,
+		isLoading,
+		isFetching
+	} = useGetAllDialogsQuery({ page: 0, size: 8 }, { pollingInterval: 2000 })
 	const [sendMessage, { isLoading: isLoadingSend }] = useSendMessageChatMutation()
 	const [pageChat, setPageChat] = useState(0)
-	const { data: dataOneChat } = useGetOneChatQuery({ id: activeDialog, page: 0, size: 100 },{ skip: !activeDialog, pollingInterval: 2000 })
-	const { data: dataOneChatOld, isFetching: isFetchingOneChatOld } = useGetOneChatOldQuery({ id: activeDialog, page: pageChat, size: 100 },{ skip: !activeDialog })
+	const { data: dataOneChat } = useGetOneChatQuery(
+		{ id: activeDialog, page: 0, size: 100 },
+		{ skip: !activeDialog, pollingInterval: 2000 }
+	)
+	const { data: dataOneChatOld, isFetching: isFetchingOneChatOld } = useGetOneChatOldQuery(
+		{ id: activeDialog, page: pageChat, size: 100 },
+		{ skip: !activeDialog }
+	)
 	const [chatArray, setChatArray] = useState<ChatResponse[]>([])
 	const [flag, setFlag] = useState(true)
 	const [gotToBottom, setGotoBottom] = useState(0)
@@ -47,8 +57,14 @@ export const ViewMessage = () => {
 	const [isEmplty, setIsEmpty] = useState(true)
 	const [debouncedSearchValue, setDebouncedSearchValue] = useState('')
 	const [pageSearch, setPageSearch] = useState(0)
-	const { data: dataSearch, isFetching: isFetchingSearch } = useSearchUserQuery({ name: debouncedSearchValue, page: 0, size: 15 },{ skip: !debouncedSearchValue, pollingInterval: 5000 })
-	const { data: dataSearchOld, isFetching: isFetchingSearchOld } = useSearchUserOldQuery({ name: debouncedSearchValue, page: pageSearch, size: 15 },{ skip: !debouncedSearchValue })
+	const { data: dataSearch, isFetching: isFetchingSearch } = useSearchUserQuery(
+		{ name: debouncedSearchValue, page: 0, size: 15 },
+		{ skip: !debouncedSearchValue, pollingInterval: 5000 }
+	)
+	const { data: dataSearchOld, isFetching: isFetchingSearchOld } = useSearchUserOldQuery(
+		{ name: debouncedSearchValue, page: pageSearch, size: 15 },
+		{ skip: !debouncedSearchValue }
+	)
 	const [dataSearchValue, setdataSearchValue] = useState<ChatResponse[]>([])
 
 	useEffect(() => {
@@ -170,7 +186,6 @@ export const ViewMessage = () => {
 			})
 		}
 	}, [dataOneChatOld])
-
 
 	useEffect(() => {
 		if (isEmplty) {
@@ -315,7 +330,7 @@ export const ViewMessage = () => {
 											<List.Item.Meta
 												title={
 													<>
-														<span className="font-extrabold">
+														{/* <span className="font-extrabold">
 															{hasBrackets(item.userName)
 																? hasBrackets(ContentWithinBrackets(item.userName))
 																	? ContentWithinBrackets(ContentWithinBrackets(item.userName))
@@ -324,7 +339,9 @@ export const ViewMessage = () => {
 														</span>
 														<div style={{ fontSize: '12px', color: '#888' }}>
 															{hasBrackets(item.userName) ? extractContentWithinBrackets(item.userName) : ''}
-														</div>
+														</div> */}
+														<span className="font-extrabold">{item.userName}</span>
+														<div style={{ fontSize: '12px', color: '#888' }}>{item.userInfo}</div>
 													</>
 												}
 												description={truncateString(10, item.lastMessage)}
@@ -375,18 +392,8 @@ export const ViewMessage = () => {
 										refetch={refetch}
 									>
 										<>
-											<span className="font-extrabold">
-												{hasBrackets(currentItem ? currentItem?.userName : '')
-													? hasBrackets(ContentWithinBrackets(currentItem ? currentItem?.userName : ''))
-														? ContentWithinBrackets(ContentWithinBrackets(currentItem ? currentItem?.userName : ''))
-														: ContentWithinBrackets(currentItem ? currentItem?.userName : '')
-													: currentItem?.userName}
-											</span>
-											<div style={{ fontSize: '12px', color: '#888' }}>
-												{hasBrackets(currentItem ? currentItem?.userName : '')
-													? extractContentWithinBrackets(currentItem ? currentItem?.userName : '')
-													: ''}
-											</div>
+											<span className="font-extrabold">{currentItem?.userName}</span>
+											<div style={{ fontSize: '12px', color: '#888' }}>{currentItem?.userInfo}</div>
 										</>
 									</CommentNewTeacher>
 									<Form form={form} className="flex w-full flex-wrap" onFinish={onFinish}>

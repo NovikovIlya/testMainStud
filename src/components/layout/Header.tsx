@@ -1,4 +1,4 @@
-import { MessageOutlined, UserSwitchOutlined } from '@ant-design/icons'
+import { UserSwitchOutlined } from '@ant-design/icons'
 import { useLocalStorageState } from 'ahooks'
 import { useClickAway } from 'ahooks'
 import { Badge, Button, Divider, Drawer, Dropdown, Modal, Select, Space } from 'antd'
@@ -9,27 +9,22 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-import logo from '../../assets/images/logo.svg'
 import {
 	EyeSvg,
 	LogoIasSvg,
 	LogoutSvg,
 	MenuSvg,
 	PersonCardSvg,
-	PersonSvg,
-	SearchSvg,
-	SettingSvg
+	PersonSvg, SettingSvg
 } from '../../assets/svg'
 import { ArrowLeftBackInOldAccount } from '../../assets/svg/ArrowLeftBackInOldAccount'
 import { LogoIasSvgEn } from '../../assets/svg/LogoIasSvgEn'
 import { MessageModuleSvg } from '../../assets/svg/MessagesModuleSvg'
-import PersonalizationSvg from '../../assets/svg/PersonalizationSvg'
 import { TypeHeaderProps } from '../../models/layout'
 import { useAppSelector } from '../../store'
 import { useFakeLoginMutation } from '../../store/api/fakeLogin'
 import { useGetRoleQuery } from '../../store/api/serviceApi'
-import { logOut, setEdit, setIsCollapsed } from '../../store/reducers/authSlice'
-import { isMobileDevice } from '../../utils/hooks/useIsMobile'
+import { logOut } from '../../store/reducers/authSlice'
 import AccessibilityHelper from '../AccessibilityHelper/AccessibilityHelper'
 import { ModalNav } from '../service/ModalNav'
 import { useGetAllUnReadQuery } from '../../store/api/messages/messageApi'
@@ -45,7 +40,6 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const searchParams = new URLSearchParams(location.search)
 	const paramValue = searchParams.get('lan')
 	const user = useAppSelector(state => state.auth.user)
-	// const subRole = useAppSelector(state => state.auth.subRole)
 	const isMobile = false
 	const urlContainsPractice = location.pathname.includes('practice')
 	const { data: dataSubRole, isSuccess: isSuccessSubRole, isLoading: isLoadingSubRole } = useGetRoleQuery(null)
@@ -53,23 +47,17 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const username = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '')?.username : ''
 	const maiRole = roles.find((item: any) => item.login === username)?.type || ''
 	const [subRole, setSubrole] = useLocalStorageState<any>('subRole', { defaultValue: '' })
-	const [mainRole, setmainRole] = useLocalStorageState<any>('typeAcc', {
-		defaultValue: 'STUD'
-	})
+	const [mainRole, setmainRole] = useLocalStorageState<any>('typeAcc', {defaultValue: 'STUD'})
 	const [login, { data: dataLogin, isSuccess, isLoading }] = useFakeLoginMutation()
 	const [isOpen, setIsOpen] = useState(false)
 	const ref = useRef<any>(null)
-	const {data:dataUnReadMessage} = useGetAllUnReadQuery(null,{
-		pollingInterval: 2000,
-		skipPollingIfUnfocused: true,
-	})
-	console.log('dataUnReadMessage?.unreadChatsCount',dataUnReadMessage?.unreadChatsCount)
+	const {data:dataUnReadMessage} = useGetAllUnReadQuery(null,{pollingInterval: 2000,skipPollingIfUnfocused: true,})
+	
 
 	useEffect(() => {
 		if (isSuccessSubRole) {
 			if (mainRole === 'OTHER') {
 				setSubrole(dataSubRole ? dataSubRole[0].role : '')
-				// setSubrole(dataSubRole ? dataSubRole : '')
 			}
 		}
 	}, [isSuccessSubRole, dataSubRole])
@@ -81,7 +69,6 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	}, [location])
 
 	useClickAway(event => {
-		console.log('333')
 		setIsOpen(false)
 	}, ref)
 
@@ -169,24 +156,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 			),
 			key: '3'
 		},
-		// ...(user?.roles && user?.roles.length > 1
-		// 	? [
-		// 			{
-		// 				label: (
-		// 					<div
-		// 						className="flex items-center gap-[15px] px-[4px] py-[5px]"
-		// 						onClick={() => {
-		// 							showModal()
-		// 						}}
-		// 					>
-		// 						<UserSwitchOutlined className="w-[22px] h-[22px] text-blue1f5 flex items-center justify-center" />
-		// 						Сменить роль
-		// 					</div>
-		// 				),
-		// 				key: '9'
-		// 			}
-		// 	  ]
-		// 	: []),
+
 
 		{
 			label: (
@@ -243,10 +213,10 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const handleVisibleInspired = () => {
 		// userhelperlibrary({ lang: 'ru'});
 		setIsOpen(!isOpen)
-		console.log('123123')
+
 	}
 
-	console.log('i18n.language,i18n.language', i18n.language)
+
 	const showModal = () => {
 		setIsModalOpen(true)
 	}

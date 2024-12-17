@@ -14,7 +14,7 @@ const SearchComponent = ({searchEmpty,onDebouncedValueChange} :any) => {
   const {t} = useTranslation()
   const debouncedValue = useDebounce(value, { wait: 500 })
  
-  console.log('value',value)
+ 
 
   useEffect(() => {
     onDebouncedValueChange(debouncedValue || '');
@@ -28,7 +28,8 @@ const SearchComponent = ({searchEmpty,onDebouncedValueChange} :any) => {
       searchEmpty(true);
     }
   };
-    
+
+
   return (
     <Form form={form} className='m-0 p-0'>
       <Form.Item  className='p-0 m-0' name={'input'}>

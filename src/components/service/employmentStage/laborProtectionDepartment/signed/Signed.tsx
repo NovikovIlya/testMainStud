@@ -15,16 +15,26 @@ export const Signed = () => {
 
     const { openAlert } = useAlert()
 
+    const [reLoading, setReLoading] = useState(false);
     const [isApproveSignedModalOpen, setIsApproveSignedModalOpen] = useState(false)
     const [isSuccessSignedModalOpen, setIsSuccessSignedModalOpen] = useState(false)
 
     let { data: signed_data = [],  isLoading : loading, refetch } = useGetTestResultsQuery({signed : true});
 
-    const [setSeekerHidden] = useSetTestResultHiddenMutation()
+    const [setSeekerHidden, {isLoading}] = useSetTestResultHiddenMutation()
 
     interface modalProps {
         id: number;
     }
+
+    const handleRefresh = async () => {
+        setReLoading(true); // Устанавливаем состояние загрузки
+        await refetch(); // Ждем завершения рефреша
+        setReLoading(false); // Сбрасываем состояние загрузки
+
+        setIsSuccessSignedModalOpen(true)
+    };
+
     const ApproveSignedModal = ( props : modalProps ) => {
         return (
             <>
@@ -69,7 +79,7 @@ export const Signed = () => {
                                         try {
                                             setIsApproveSignedModalOpen(false)
                                             await setSeekerHidden({subStageId: props.id})
-                                            handleRefresh()
+                                            await handleRefresh()
                                             setIsSuccessSignedModalOpen(true)
                                         } catch (error: any) {
                                         openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
@@ -171,11 +181,7 @@ export const Signed = () => {
         )
     }
 
-    const handleRefresh = () => {
-        refetch();
-    };
-
-    if (loading) {
+    if (loading || reLoading || isLoading) {
         return (
             <>
                 <div className="w-full h-full flex items-center">

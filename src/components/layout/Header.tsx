@@ -51,7 +51,13 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const [login, { data: dataLogin, isSuccess, isLoading }] = useFakeLoginMutation()
 	const [isOpen, setIsOpen] = useState(false)
 	const ref = useRef<any>(null)
-	const {data:dataUnReadMessage} = useGetAllUnReadQuery(null,{pollingInterval: 2000,skipPollingIfUnfocused: true,})
+	const { unreadChatsCount } = useGetAllUnReadQuery(null, {
+		pollingInterval: 2000,
+		skipPollingIfUnfocused: true,
+		selectFromResult: ({ data }) => ({
+		  unreadChatsCount: data?.unreadChatsCount
+		}),
+	  })
 	
 
 	useEffect(() => {
@@ -360,7 +366,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 								navigate('/services/messages')
 							}}
 						>
-							<Badge className="top-[60px] !right-[505px]  absolute" count={dataUnReadMessage?.unreadChatsCount ? dataUnReadMessage?.unreadChatsCount : null}></Badge>
+							<Badge className="top-[60px] !right-[505px]  absolute" count={unreadChatsCount || null}></Badge>
 							<MessageModuleSvg white={type === 'service'} />
 						</div>
 

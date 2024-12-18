@@ -14,8 +14,7 @@ const SearchComponent = ({searchEmpty,onDebouncedValueChange} :any) => {
   const {t} = useTranslation()
   const debouncedValue = useDebounce(value, { wait: 500 })
  
- 
-
+  // Передача значения в родительский компонент
   useEffect(() => {
     onDebouncedValueChange(debouncedValue || '');
   }, [debouncedValue, onDebouncedValueChange]);
@@ -28,13 +27,12 @@ const SearchComponent = ({searchEmpty,onDebouncedValueChange} :any) => {
       searchEmpty(true);
     }
   };
-
-
+  
   return (
     <Form form={form} className='m-0 p-0'>
       <Form.Item  className='p-0 m-0' name={'input'}>
         <div className="p-4">
-            <Input allowClear   onChange={handleInputChange} placeholder={t('searchMEssage')} prefix={<SearchOutlined />} />
+            <Input allowClear onChange={handleInputChange} placeholder={t('searchMEssage')} prefix={<SearchOutlined />} />
         </div>
       </Form.Item>
     </Form>

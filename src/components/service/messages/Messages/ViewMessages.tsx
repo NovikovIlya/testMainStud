@@ -252,9 +252,6 @@ export const ViewMessage = () => {
 		setPageSearch(0)
 	}
 
-	const handleDebouncedValueChange = (value: string) => {
-		setDebouncedSearchValue(value)
-	}
 
 	if (isLoading)
 		return (
@@ -280,7 +277,7 @@ export const ViewMessage = () => {
 					</Button>
 				</div>
 
-				<SearchComponent onDebouncedValueChange={handleDebouncedValueChange} searchEmpty={searchEmpty} />
+				<SearchComponent onDebouncedValueChange={setDebouncedSearchValue} searchEmpty={searchEmpty} />
 
 				{
 					<div
@@ -322,7 +319,7 @@ export const ViewMessage = () => {
 												changeIsReady(item.id)
 												setCurrentItem(item)
 											}}
-											className={`cursor-pointer rounded-xl !p-4 ${activeDialog === item.id ? '!bg-[#E9EFF8]' : ''}`}
+											className={`  cursor-pointer rounded-xl !p-4 ${activeDialog === item.id ? '!bg-[#E9EFF8]' : ''}`}
 											style={{
 												borderBottom: '1px solid #E9EFF8'
 											}}
@@ -340,7 +337,7 @@ export const ViewMessage = () => {
 														<div style={{ fontSize: '12px', color: '#888' }}>
 															{hasBrackets(item.userName) ? extractContentWithinBrackets(item.userName) : ''}
 														</div> */}
-														<span className="font-extrabold">{item.userName}</span>
+														<span className="  font-extrabold">{item.userName}</span>
 														<div style={{ fontSize: '12px', color: '#888' }}>{item.userInfo}</div>
 													</>
 												}

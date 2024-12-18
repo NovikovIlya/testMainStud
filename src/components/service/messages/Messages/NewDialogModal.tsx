@@ -23,7 +23,7 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 		: ContentWithinBrackets(debouncedNameStudent)
 	: debouncedNameStudent, 
 	{skip: !debouncedNameStudent || debouncedNameStudent.length < 4 || !isModalOpen})
-	const [newChat, { isLoading: isLoadingNew }] = useAddNewChatMutation()
+	const [newChat] = useAddNewChatMutation()
 	const [load, setIsload] = useState(false)
 	const [dataGetStudentsValue, setdataGetStudentsValue] = useState<any>([])
 	const [flag, setFlag] = useState(false)
@@ -172,16 +172,6 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 													userType:student.userType,
 													label: (
 														<div>
-															{/* <div className="">
-																{hasBrackets(student.name)
-																	? hasBrackets(ContentWithinBrackets(student.name))
-																		? ContentWithinBrackets(ContentWithinBrackets(student.name))
-																		: ContentWithinBrackets(student.name)
-																	: student.name}
-															</div>
-															<div style={{ fontSize: '12px', color: '#888' }}>
-																{hasBrackets(student.name) ? extractContentWithinBrackets(student.name) : ''}
-															</div> */}
 															<div className="">
 																	{student?.name}
 															</div>

@@ -15,13 +15,18 @@ export const Signed = () => {
 
     const { openAlert } = useAlert()
 
+    let [searchQuery, setSearchQuery] = useState('');
     const [reLoading, setReLoading] = useState(false);
     const [isApproveSignedModalOpen, setIsApproveSignedModalOpen] = useState(false)
     const [isSuccessSignedModalOpen, setIsSuccessSignedModalOpen] = useState(false)
 
-    let { data: signed_data = [],  isLoading : loading, refetch } = useGetTestResultsQuery({signed : true});
+    let { data: signed_data = [],  isLoading : loading, refetch } = useGetTestResultsQuery({signed : true, query: searchQuery});
 
     const [setSeekerHidden, {isLoading}] = useSetTestResultHiddenMutation()
+
+    const handleInputChange = async (event: any) => {
+        setSearchQuery(event.target.value);
+    };
 
     interface modalProps {
         id: number;
@@ -203,12 +208,16 @@ export const Signed = () => {
             <div className="w-full px-[53px] pt-[140px] flex flex-col">
                 <h2 className="text-[28px] text-black font-normal">Подписанные</h2>
                 <label className="relative mt-[52px] flex flex-row>">
-                    <div className="absolute left-[16px] top-[7px] cursor-pointer">
+                    <button
+                        className="absolute h-[20px] w-[20px] left-[16px] top-[7px] p-[2px] border-none bg-white cursor-pointer rounded-[10%] hover:bg-[#ECECE9]">
                         <SearchInputIconSvg/>
-                    </div>
-                    <input type="text"
-                           className="text-[16px] focus:outline-0 h-[32px] w-[500px] border-[#0000001A] border-[1px] pl-[46px] px-[17px] rounded-[5px]"
-                           placeholder="Поиск по ФИО"
+                    </button>
+                    <input
+                        type="text"
+                        className="text-[16px] focus:outline-0 h-[32px] w-[500px] border-[#0000001A] border-[1px] pl-[46px] px-[17px] rounded-[5px]"
+                        placeholder="Поиск по ФИО"
+                        value={searchQuery}
+                        onChange={handleInputChange}
                     />
                 </label>
                 <div>

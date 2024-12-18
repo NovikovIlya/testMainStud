@@ -8,23 +8,21 @@ import { useAlert } from "../../../../../utils/Alert/AlertMessage";
 
 
 export const TestResults = () => {
-    
+
     let [searchQuery, setSearchQuery] = useState('');
     let [reLoading, setReLoading] = useState(false);
     let [isTestResultApproveModalOpen, setIsTestResultApproveModalOpen] = useState(false)
-    
+
     const { openAlert } = useAlert()
-    
+
     let { data: test_result_data = [], isLoading : loading, refetch } = useGetTestResultsQuery({signed : false, query: searchQuery});
 
     const [setSeekerSigned, {isLoading}] = useSetTestResultSignedMutation()
 
     const handleInputChange = async (event: any) => {
-        setSearchQuery(event.target.value);
-        await refetch()
-        console.log(searchQuery)
+		setSearchQuery(event.target.value);
     };
-    
+
     const handleRefresh = async () => {
         setReLoading(true); // Устанавливаем состояние загрузки
         await refetch(); // Ждем завершения рефреша
@@ -112,7 +110,7 @@ export const TestResults = () => {
 
     const ItemsContainer = () => {
 
-        if (isLoading || loading) {
+        if (false) {
             return (
                 <>
                     <div className="w-full h-full flex items-center">

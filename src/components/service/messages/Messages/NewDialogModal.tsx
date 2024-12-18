@@ -10,6 +10,7 @@ import {
 } from '../../../../store/api/messages/messageApi'
 import { ContentWithinBrackets, extractContentWithinBrackets, hasBrackets } from '../../../../utils/extractBrackets'
 import { showNotification } from '../../../../store/reducers/notificationSlice'
+import { truncateString } from '../../../../utils/truncateString'
 
 export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 	const user = useAppSelector(state => state.auth.user)
@@ -38,7 +39,7 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 	}, [dataGetStudents])
 
 	const handleSearch = (value: string, field: string) => {
-		if (value.length < 4) {
+		if (value?.length < 4) {
 			form.setFields([
 				{
 					name: field,
@@ -175,8 +176,11 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 															<div className="">
 																	{student?.name}
 															</div>
-															<div style={{ fontSize: '12px', color: '#888' }}>
-															{student?.userInfo}
+															{/* <div className={'w-auto h-auto'} style={{ fontSize: '12px', color: '#888' }}>
+															{(student?.userInfo)}
+															</div> */}
+															<div className={'w-auto'} style={{ fontSize: '12px', color: '#888', whiteSpace: 'normal', wordBreak: 'break-word' }}>
+																{truncateString(90,student?.userInfo)}
 															</div>
 														</div>
 													)

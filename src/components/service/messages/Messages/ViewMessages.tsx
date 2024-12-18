@@ -290,6 +290,7 @@ export const ViewMessage = () => {
 						}}
 					>
 						<InfiniteScroll
+							
 							dataLength={!isEmplty ? dataSearchValue.length : dialogs.length}
 							next={loadMoreData}
 							hasMore={dialogs.length < 50}
@@ -301,6 +302,7 @@ export const ViewMessage = () => {
 								''
 							) : (
 								<List
+								
 									locale={{
 										emptyText: <div></div>
 									}}

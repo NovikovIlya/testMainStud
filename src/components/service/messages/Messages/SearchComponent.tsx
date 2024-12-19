@@ -32,7 +32,7 @@ const SearchComponent = ({searchEmpty,onDebouncedValueChange} :any) => {
     <Form form={form} className='m-0 p-0'>
       <Form.Item  className='p-0 m-0' name={'input'}>
         <div className="p-4">
-            <Input allowClear onChange={handleInputChange} placeholder={t('searchMEssage')} prefix={<SearchOutlined />} />
+            <Input allowClear onChange={handleInputChange} placeholder={t('searchMEssage')} prefix={<SearchOutlined className='pl-1'/>} />
         </div>
       </Form.Item>
     </Form>

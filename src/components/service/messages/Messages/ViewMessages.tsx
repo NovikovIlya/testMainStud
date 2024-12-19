@@ -24,6 +24,7 @@ import { CommentNewTeacher } from './CommentTeacher'
 import InputText from './InputText'
 import { NewDialogModal } from './NewDialogModal'
 import SearchComponent from './SearchComponent'
+import { PlusMessage } from '../../../../assets/svg/PlusMessage'
 
 export const ViewMessage = () => {
 	const user = useAppSelector(state => state.auth.user)
@@ -261,13 +262,13 @@ export const ViewMessage = () => {
 		<div className="grid grid-cols-4 gap-2">
 			<Spin spinning={isLoadingSend} fullscreen></Spin>
 			<div className="bg-white h-screen shadow-xl col-span-1 ">
-				<div className="mt-36 "></div>
+				<div className="mt-28 "></div>
 
 				<div className="mt-1 px-4 pb-2 flex justify-between items-center">
-					<Button type="primary" className="!rounded-full  h-10 w-full " onClick={showModal}>
-						<PlusCircleOutlined />
+					<div className="flex items-center gap-2 h-10 w-auto py-5 px-3  hover:shadow hover:bg-gray-100 hover:cursor-pointer rounded-xl" onClick={showModal}>
+						<PlusMessage />
 						{t('newDialog')}
-					</Button>
+					</div>
 				</div>
 
 				<SearchComponent onDebouncedValueChange={setDebouncedSearchValue} searchEmpty={searchEmpty} />
@@ -277,7 +278,7 @@ export const ViewMessage = () => {
 						id="scrollableDialogs"
 						className="!overflow-y-scroll mt-1"
 						style={{
-							height: 'calc(100vh - 265px)',
+							height: 'calc(100vh - 235px)',
 							overflow: 'auto',
 							padding: '0 16px'
 						}}

@@ -18,7 +18,7 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 	const student = Form.useWatch('student', form)
 	const [id, setId] = useState(null)
 	const debouncedNameStudent = useDebounce(student, { wait: 1000 })
-	const { data: dataGetStudents, isFetching } = useGetUsersMessagesQuery(hasBrackets(debouncedNameStudent)
+	const { data: dataGetStudents, isFetching,isError  } = useGetUsersMessagesQuery(hasBrackets(debouncedNameStudent)
 	? hasBrackets(ContentWithinBrackets(debouncedNameStudent))
 		? ContentWithinBrackets(ContentWithinBrackets(debouncedNameStudent))
 		: ContentWithinBrackets(debouncedNameStudent)
@@ -102,6 +102,16 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 
 		return filledCount.length !== 1 || !id
 	}
+	
+	if(isError ){
+		dispatch(
+			showNotification({
+				message: `Произошла ошибка при поиске пользователя`,
+				type: 'error'
+			})
+		)
+		
+	}
 
 	return (
 		<>
@@ -180,7 +190,7 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 															{(student?.userInfo)}
 															</div> */}
 															<div className={'w-auto'} style={{ fontSize: '12px', color: '#888', whiteSpace: 'normal', wordBreak: 'break-word' }}>
-																{truncateString(90,student?.userInfo)}
+																{truncateString(160,student?.userInfo)}
 															</div>
 														</div>
 													)

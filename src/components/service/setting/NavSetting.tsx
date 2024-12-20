@@ -85,7 +85,7 @@ export const NavSetting = () => {
 				{/* Боковое меню */}
 				<div
 					className={clsx(
-						'shadowNav !h-[100vh + 80px]   bg-white ',
+						'shadowNav h-[calc(100vh-80px)]   bg-white ',
 						'w-[230px] ',
 						isMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
 					)}

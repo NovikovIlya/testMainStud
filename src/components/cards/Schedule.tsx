@@ -143,7 +143,7 @@ export const Schedule = () => {
 							</div>
 						))
 					) : (
-						<div>Нет пар</div>
+						<div>{t('notLesson')}</div>
 					)
 				) : (
 					<h3>{isFetching ? '' : t('NoLesson')}</h3>

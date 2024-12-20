@@ -39,7 +39,7 @@ export const NavSetting = () => {
 		{
 			id: '/services/setting/contactInformation',
 			icon: <ContactInformationSvg />,
-			name: 'Контактные данные',
+			name: t('contactInformation'),
 			hidden: false,
 		},
 		{

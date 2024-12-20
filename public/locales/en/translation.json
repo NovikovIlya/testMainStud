@@ -347,6 +347,17 @@
 	"notExam" : "Not exam",
 	"inputFio" : "Enter your full name",
 	"inputMessage" : "Enter your message",
-	"selectDialog": "Select dialog"
+	"selectDialog": "Select dialog",
+	"notLesson" : "No lessons",
+	"contactInformation": "Contact Information",
+	"mainMail": "Main Email",
+	"privateMail": "Personal Email",
+	"requiredVerification": "Verification Required",
+	"putYourEmail": "Enter your email",
+	"telephoneBtn": "Phone",
+	"addBtn": "Add",
+	"verification": "Verified",
+	"addNumber": "Enter phone number"
+	
 
 }

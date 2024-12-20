@@ -422,6 +422,11 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 									<div className="text-sm">
 										{user?.roles && user?.roles?.length > 1
 											? user?.roles
+													.filter((item:any, index:any, self:any) => 
+														index === self.findIndex((t:any) => (
+															t.type === item.type
+														))
+													) 
 													.toSorted((a: any, b: any) => (a.type === mainRole ? -1 : b.type === mainRole ? 1 : 0))
 													.map((item: any) => (
 														<div className={`${item.type === mainRole ? '' : 'text-gray-300'}`}>

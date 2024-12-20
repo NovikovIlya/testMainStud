@@ -18,6 +18,7 @@ import { useInterval, useUpdateEffect } from 'ahooks'
 import { useAppDispatch, useAppSelector } from '../../../../store'
 import { apiSlice } from '../../../../store/api/apiSlice'
 import { showNotification } from '../../../../store/reducers/notificationSlice'
+import { t } from 'i18next'
 
 export const ContactInformation = () => {
 	const [form] = Form.useForm()
@@ -123,9 +124,9 @@ export const ContactInformation = () => {
 	
 		<Form form={form} onFinish={onSubmitPhone2}>
 			<section className="max-w-2xl">
-				<h3 className="text-black text-2xl font-bold leading-normal">Контактные данные</h3>
+				{/* <h3 className="text-black text-2xl font-bold leading-normal">Контактные данные</h3> */}
 				<Card className='bg-white rounded-xl shadow-md overflow-hidden mt-4 '>
-					<h3>Основная почта:</h3>
+					<h3>{t('mainMail')}</h3>
 					<div className='bg-gray-50 rounded-lg mt-2 p-3'>
 						<a href={`mailto:${mail}`}>{mail}</a>
 								

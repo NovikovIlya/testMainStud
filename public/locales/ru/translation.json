@@ -348,5 +348,16 @@
     "notExam": "Не указан",
 	"inputFio" : "Введите ФИО",
 	"inputMessage" : "Введите текст сообщения",
-	"selectDialog": "Выберите диалог или создайте новый"
+	"selectDialog": "Выберите диалог или создайте новый",
+	"notLesson" : "Нет пар",
+	"contactInformation" : "Контактная информация",
+	"mainMail" : "Основной почта",
+	"privateMail" : "Личная почта",
+	"requiredVerification" : "Требуется верификация",
+	"putYourEmail" : "Введите ваш email",
+	"telephoneBtn" : "Телефон",
+	"addBtn":"Добавить",
+	"verification" : "Верифицирован",
+	"addNumber" : "Введите телефон"
+
 }

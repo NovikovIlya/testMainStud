@@ -120,7 +120,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 			label: (
 				<div
 					onClick={() => {
-						navigate('/infoUserUpdate')
+						navigate('/infoUser')
 					}}
 					className={`${maiRole === 'OTHER' ? '' : 'hidden'} flex items-center gap-[15px] px-[4px] py-[5px]`}
 				>

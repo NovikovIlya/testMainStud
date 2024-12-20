@@ -88,7 +88,7 @@ export const Schedule = () => {
 	if(isMobile && orientation === 'portrait') return <div className='max-w-full text-center mt-10'>В данном разрешении модуль не работает, пожалуйста поверните телефон</div>
 
 	return (
-		<div className={`${isMobile ? 'mx-0' : 'mx-14'} mt-14  radio`}>
+		<div className={`${isMobile ? 'mx-0' : 'mx-14'} mt-14  radio w-full justify-center`}>
 			{/* <div className="mb-14 text-[28px]">Мое расписание</div> */}
 			<Radio.Group
 				onChange={onChange}
@@ -133,7 +133,7 @@ export const Schedule = () => {
 					{t('saturday')}
 				</Radio.Button>
 			</Radio.Group>
-			<div className="my-10 gap-5 flex">
+			<div className="my-10  flex gap-12">
 				<Table
 					columns={columns}
 					dataSource={data}

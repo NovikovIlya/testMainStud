@@ -147,7 +147,7 @@ export const NavMyPractices = () => {
 	return (
 		<>
 			<Header type={'service'} service={t('Practices')} />
-			<div className="">
+			<div className="h-screen">
 				<Menu
 					inlineCollapsed={isCollapsed}
 					defaultOpenKeys={['sub1', 'sub2']}
@@ -156,7 +156,7 @@ export const NavMyPractices = () => {
 					style={{ width: isCollapsed ? 80 : 256 }}
 					onClick={onClick}
 					onOpenChange={onOpenChange}
-					className="mt-32"
+					className="mt-32 "
 					// @ts-ignore
 					items={items.map((item, index) => ({
 						key: item.key,

@@ -18,17 +18,17 @@ body {
 
 @layer utilities {
 	*::-webkit-scrollbar {
-		width: 16px; /* Ширина вертикального скролла */
-		height: 16px; /* Высота горизонтального скролла */
+		width: 10px; /* Ширина вертикального скролла */
+		height: 12px; /* Высота горизонтального скролла */
 		
 	}
 
 	*::-webkit-scrollbar-thumb {
-		background: #888; /* Цвет ползунка */
+		 background: #c1c1c1; /* Цвет ползунка */
 		border-radius: 0px; /* Скругление углов ползунка */
 	}
 	*::-webkit-scrollbar-track {
-		background: #111111b6; 
+		 background: #f1f1f1
 	}
 }
 .ant-modal .ant-modal-content {

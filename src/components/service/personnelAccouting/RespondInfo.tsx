@@ -310,7 +310,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 														.then(() => {
 															setIsRespondSentToArchive(true)
 														})
-													openAlert({ type: 'success', text: 'Резюме отправлено в архив' })
+													openAlert({ type: 'success', text: 'Резюме успешно отклонено' })
 												} catch (error: any) {
 													openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 												}

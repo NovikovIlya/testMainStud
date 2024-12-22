@@ -181,7 +181,7 @@ export const VacancyRequestUpdateView = () => {
 				>
 					<div className="flex flex-col">
 						<p className="font-content-font font-normal text-black text-[16px]/[20px] text-center">
-							Вы действительно хотите отредактировать описание вакансии?
+							Вы действительно хотите обновить описание вакансии?
 						</p>
 						<div className="mt-[40px] flex gap-[12px] w-full">
 							<Button
@@ -236,7 +236,7 @@ export const VacancyRequestUpdateView = () => {
 										  }
 								}
 							>
-								Отправить
+								Обновить
 							</Button>
 						</div>
 					</div>

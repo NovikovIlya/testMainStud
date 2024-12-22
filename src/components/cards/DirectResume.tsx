@@ -122,6 +122,8 @@ export const DirectResume = ({
 					setValue('name', info.name)
 					setValue('lastname', info.surName)
 					info.patronymic !== '' && (setValue('middlename', info.patronymic), setIsPatronymicSet(true))
+					setValue('email', user.email)
+					setValue('phone', info.phone)
 				})
 		}
 	}, [])

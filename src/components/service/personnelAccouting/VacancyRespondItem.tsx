@@ -40,8 +40,8 @@ export const VacancyRespondItem = (
 					</>
 				) : (
 					<>
-						<p className="ml-[5%] w-[15%]">{props.vacancyName}</p>
-						<p className="ml-[5%] w-[8%]">{props.responseDate.split('-').reverse().join('.')}</p>
+						<p className="ml-[1%] w-[15%]">{props.vacancyName}</p>
+						<p className="ml-[10%] w-[8%]">{props.responseDate.split('-').reverse().join('.')}</p>
 						<p className="ml-[5%] w-[15%]">
 							{props.status === respondStatus[respondStatus.IN_PERSONNEL_DEPT_REVIEW]
 								? 'на рассмотрении у отдела кадров'
@@ -62,7 +62,7 @@ export const VacancyRespondItem = (
 							? navigate(`services/personnelaccounting/responds/fullinfo`)
 							: navigate('services/personnelaccounting/supervisor/responds/fullinfo')
 					}}
-					className="ml-[10%] max-w-[15%] font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black"
+					className="ml-auto max-w-[15%] font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black"
 				>
 					Подробнее
 				</Button>

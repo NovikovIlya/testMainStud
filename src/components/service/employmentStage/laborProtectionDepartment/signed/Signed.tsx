@@ -80,12 +80,17 @@ export const Signed = () => {
                                 </Button>
                                 <button
                                     className="cursor-pointer flex items-center justify-center border-[1px] border-solid outline-0 border-[#FF5A5A] text-white rounded-[54.5px] bg-[#FF5A5A] hover:bg-[#FF8181] text-[14px] h-[40px] w-full py-[13px]"
-                                    onClick={async () => {
+                                    onClick={() => {
                                         try {
                                             setIsApproveSignedModalOpen(false)
-                                            await setSeekerHidden({subStageId: props.id})
-                                            await handleRefresh()
-                                            setIsSuccessSignedModalOpen(true)
+                                            setSeekerHidden({subStageId: props.id})
+                                                .unwrap()
+                                                .then(()=>{
+                                                    handleRefresh().then(() => {
+                                                            setIsSuccessSignedModalOpen(true)
+
+                                                    })
+                                            })
                                         } catch (error: any) {
                                         openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
                                     }
@@ -147,7 +152,6 @@ export const Signed = () => {
         return (
             <>
                 <ApproveSignedModal id={props.id}/>
-                <SuccessSignedModal></SuccessSignedModal>
                 <div className="w-[100%] h-[80px] bg-white flex flex-row items-center">
                     <div className="ml-[1.5%] w-[62%] flex flex-row">
                     <span className="w-[38%] text-[16px] text-[##000000] font-normal">
@@ -205,6 +209,7 @@ export const Signed = () => {
 
     return (
         <>
+            <SuccessSignedModal></SuccessSignedModal>
             <div className="w-full px-[53px] pt-[140px] flex flex-col">
                 <h2 className="text-[28px] text-black font-normal">Подписанные</h2>
                 <label className="relative mt-[52px] flex flex-row>">

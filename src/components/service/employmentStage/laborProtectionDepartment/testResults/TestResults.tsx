@@ -1,10 +1,11 @@
 import { LoadingOutlined } from "@ant-design/icons";
 import { Button, ConfigProvider, Modal, Spin } from "antd";
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { SearchInputIconSvg } from "../../../../../assets/svg/SearchInputIconSvg";
 import { useGetTestResultsQuery, useSetTestResultSignedMutation } from "../../../../../store/api/serviceApi";
 import { SignedItemType } from "../../../../../store/reducers/type";
 import { useAlert } from "../../../../../utils/Alert/AlertMessage";
+import {SuccessModalIconSvg} from "../../../../../assets/svg/SuccessModalIconSvg";
 
 
 export const TestResults = () => {
@@ -12,6 +13,8 @@ export const TestResults = () => {
     let [searchQuery, setSearchQuery] = useState('');
     let [reLoading, setReLoading] = useState(false);
     let [isTestResultApproveModalOpen, setIsTestResultApproveModalOpen] = useState(false)
+    let [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
+    let [isApproveModalOpen, setIsApproveModalOpen] = useState(false)
 
     const { openAlert } = useAlert()
 
@@ -32,6 +35,7 @@ export const TestResults = () => {
     const TestResultItem = (props: SignedItemType) => {
 			return (
 				<>
+					<ApproveModal id={props.id}></ApproveModal>
 					<div className="w-[100%] h-[80px] bg-white flex flex-row items-center">
 						<div className="ml-[1.5%] w-[62%] flex flex-row">
 							<span className="w-[38%] text-[16px] text-[##000000] font-normal">
@@ -46,67 +50,121 @@ export const TestResults = () => {
 							<button
 								className=" hover:opacity-[100%] opacity-[80%] ml-[45%] gap-[12px] text-[16px] flex border-[1px] border-solid black cursor-pointer bg-white px-[24px] py-[8px] rounded-[5px]"
 								onClick={() => {
-									setIsTestResultApproveModalOpen(true)
+									setIsApproveModalOpen(true)
 								}}
 							>
 								Подписано
 							</button>
 						</div>
 					</div>
-					<ConfigProvider
-						theme={{
-							token: {
-								boxShadow: '0 0 19px 0 rgba(212, 227, 241, 0.6)'
-							}
-						}}
-					>
-						<Modal
-							centered
-							open={isTestResultApproveModalOpen}
-							onCancel={() => {
-								setIsTestResultApproveModalOpen(false)
-							}}
-							title={null}
-							footer={null}
-							width={407}
-						>
-							<div className="flex flex-col px-[15px] pt-[50px] pb-[30px] gap-[34px]">
-								<p className="text-center font-content-font font-normal flex items-start text-black text-[16px]/[20px]">
-									Вы действительно хотите отметить, что соискатель подписал все необходимые документы?
-								</p>
-								<div className="flex flex-row gap-[12px] px-[20px]">
-									<Button
-										className="rounded-[54.5px] border-black text-[14px] h-[40px] w-full py-[13px]"
-										type="default"
-										onClick={() => {
-											setIsTestResultApproveModalOpen(false)
-										}}
-									>
-										Нет
-									</Button>
-									<Button
-										className="rounded-[54.5px] text-[14px] h-[40px] w-full py-[13px]"
-										type="primary"
-										onClick={async () => {
-											try {
-												setIsTestResultApproveModalOpen(false)
-												await setSeekerSigned({ subStageId: props.id })
-												await handleRefresh()
-												/*тут сделать модалку -> Соискатель успешно перемещён в сервис "Подписанные"*/
-											} catch (error: any) {
-												openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
-											}
-										}}
-									>
-										Да
-									</Button>
-								</div>
-							</div>
-						</Modal>
-					</ConfigProvider>
+
 				</>
 			)
 		}
+
+	const ApproveModal = (props: {id: number}) => {
+		return (
+			<>
+				<ConfigProvider
+					theme={{
+						token: {
+							boxShadow: '0 0 19px 0 rgba(212, 227, 241, 0.6)'
+						}
+					}}
+				>
+					<Modal
+						centered
+						open={isApproveModalOpen}
+						onCancel={() => {
+							setIsApproveModalOpen(false)
+						}}
+						title={null}
+						footer={null}
+						width={407}
+					>
+						<div className="flex flex-col px-[15px] pt-[50px] pb-[30px] gap-[34px]">
+							<p className="text-center font-content-font font-normal flex items-start text-black text-[16px]/[20px]">
+								Вы действительно хотите отметить, что соискатель подписал все необходимые документы?
+							</p>
+							<div className="flex flex-row gap-[12px] px-[20px]">
+								<Button
+									className="rounded-[54.5px] border-black text-[14px] h-[40px] w-full py-[13px]"
+									type="default"
+									onClick={() => {
+										setIsApproveModalOpen(false)
+									}}
+								>
+									Нет
+								</Button>
+								<Button
+									className="rounded-[54.5px] text-[14px] h-[40px] w-full py-[13px]"
+									type="primary"
+									onClick={() => {
+										try {
+											setIsApproveModalOpen(false)
+											setSeekerSigned({subStageId: props.id})
+												.unwrap()
+												.then(()=>{
+													handleRefresh().then(() => {
+														setIsSuccessModalOpen(true)
+													})
+												})
+										} catch (error: any) {
+											openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+										}
+									}}
+								>
+									Да
+								</Button>
+							</div>
+						</div>
+					</Modal>
+				</ConfigProvider>
+			</>
+		)
+	}
+
+	const SuccessModal = () => {
+		return (
+			<>
+				<ConfigProvider
+					theme={{
+						token: {
+							boxShadow: '0 0 19px 0 rgba(212, 227, 241, 0.6)'
+						}
+					}}
+				>
+					<Modal
+						centered
+						open={isSuccessModalOpen}
+						onCancel={() => {
+							setIsSuccessModalOpen(false)
+						}}
+						title={null}
+						footer={null}
+						width={407}
+					>
+						<div className='flex items-center justify-center flex-col px-[15px] pt-[50px] pb-[30px] gap-[34px]'>
+							<SuccessModalIconSvg></SuccessModalIconSvg>
+							<p
+								className="text-center font-content-font font-normal flex items-start text-black text-[16px]/[20px]">
+								Соискатель успешно удалён
+							</p>
+							<Button
+								className="rounded-[54.5px] border-black text-[14px] h-[40px] w-full py-[13px]"
+								type="default"
+								onClick={() => {
+									setIsSuccessModalOpen(false)
+								}}
+							>
+								Ок
+							</Button>
+						</div>
+					</Modal>
+				</ConfigProvider>
+			</>
+		)
+	}
 
     const ItemsContainer = () => {
 
@@ -155,6 +213,7 @@ export const TestResults = () => {
 
     return (
         <>
+			<SuccessModal></SuccessModal>
             <div className="w-full px-[53px] pt-[140px] flex flex-col">
                 <h2 className="text-[28px] text-black font-normal">Результаты тестов</h2>
                 <label className="relative mt-[52px] flex flex-row>">

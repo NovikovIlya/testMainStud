@@ -1,5 +1,5 @@
 import { SearchInputIconSvg } from "../../../../../assets/svg/SearchInputIconSvg"
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useGetTestResultsQuery, useSetTestResultHiddenMutation} from "../../../../../store/api/serviceApi";
 import {LoadingOutlined} from "@ant-design/icons";
 import {Button, ConfigProvider, Modal, Spin} from "antd";
@@ -19,14 +19,13 @@ export const Signed = () => {
     const [reLoading, setReLoading] = useState(false);
     const [isApproveSignedModalOpen, setIsApproveSignedModalOpen] = useState(false)
     const [isSuccessSignedModalOpen, setIsSuccessSignedModalOpen] = useState(false)
+    const [debouncedQuery, setDebouncedQuery] = useState(searchQuery);
+    let [DynamicLoading, setDynamicLoading] = useState(false);
+    const [timer, setTimer] = useState<NodeJS.Timeout | null>(null)
 
     let { data: signed_data = [],  isLoading : loading, refetch } = useGetTestResultsQuery({signed : true, query: searchQuery});
 
     const [setSeekerHidden, {isLoading}] = useSetTestResultHiddenMutation()
-
-    const handleInputChange = async (event: any) => {
-        setSearchQuery(event.target.value);
-    };
 
     interface modalProps {
         id: number;
@@ -39,6 +38,29 @@ export const Signed = () => {
 
         setIsSuccessSignedModalOpen(true)
     };
+
+    const handleInputChange = (event : any) => {
+        setDynamicLoading(true)
+        const value = event.target.value
+        setSearchQuery(value)
+
+        if (timer) {
+            clearTimeout(timer)
+        }
+
+        setTimer(setTimeout(() => {
+            setDebouncedQuery(value)
+            setDynamicLoading(false)
+        }, 300))
+    }
+
+    useEffect(() => {
+        return () => {
+            if (timer) {
+                clearTimeout(timer);
+            }
+        };
+    }, [timer]);
 
     const ApproveSignedModal = ( props : modalProps ) => {
         return (
@@ -149,6 +171,24 @@ export const Signed = () => {
     }
 
     const SignedItem = ( props: SignedItemType ) => {
+
+        if (DynamicLoading) {
+            return (
+                <>
+                    <div className="w-full h-full flex items-center">
+                        <div className="text-center ml-auto mr-auto">
+                            <Spin
+                                indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}
+                            ></Spin>
+                            <p className="font-content-font font-normal text-black text-[18px]/[18px]">
+                                Идёт загрузка...
+                            </p>
+                        </div>
+                    </div>
+                </>
+            )
+        }
+
         return (
             <>
                 <ApproveSignedModal id={props.id}/>

@@ -1,6 +1,6 @@
 import { LoadingOutlined } from "@ant-design/icons";
 import { Button, ConfigProvider, Modal, Spin } from "antd";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SearchInputIconSvg } from "../../../../../assets/svg/SearchInputIconSvg";
 import { useGetTestResultsQuery, useSetTestResultSignedMutation } from "../../../../../store/api/serviceApi";
 import { SignedItemType } from "../../../../../store/reducers/type";
@@ -11,20 +11,18 @@ import {SuccessModalIconSvg} from "../../../../../assets/svg/SuccessModalIconSvg
 export const TestResults = () => {
 
     let [searchQuery, setSearchQuery] = useState('');
+	const [debouncedQuery, setDebouncedQuery] = useState(searchQuery);
     let [reLoading, setReLoading] = useState(false);
-    let [isTestResultApproveModalOpen, setIsTestResultApproveModalOpen] = useState(false)
+    let [DynamicLoading, setDynamicLoading] = useState(false);
     let [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
     let [isApproveModalOpen, setIsApproveModalOpen] = useState(false)
+	const [timer, setTimer] = useState<NodeJS.Timeout | null>(null)
 
     const { openAlert } = useAlert()
 
-    let { data: test_result_data = [], isLoading : loading, refetch } = useGetTestResultsQuery({signed : false, query: searchQuery});
+    let { data: test_result_data = [], isLoading : loading, refetch } = useGetTestResultsQuery({signed : false, query: debouncedQuery});
 
     const [setSeekerSigned, {isLoading}] = useSetTestResultSignedMutation()
-
-    const handleInputChange = async (event: any) => {
-		setSearchQuery(event.target.value);
-    };
 
     const handleRefresh = async () => {
         setReLoading(true); // Устанавливаем состояние загрузки
@@ -32,7 +30,31 @@ export const TestResults = () => {
         setReLoading(false); // Сбрасываем состояние загрузки
     };
 
-    const TestResultItem = (props: SignedItemType) => {
+	const handleInputChange = (event : any) => {
+		setDynamicLoading(true)
+		const value = event.target.value
+		setSearchQuery(value)
+
+		if (timer) {
+			clearTimeout(timer)
+		}
+
+		setTimer(setTimeout(() => {
+			setDebouncedQuery(value)
+			setDynamicLoading(false)
+		}, 300))
+	}
+
+	useEffect(() => {
+		return () => {
+			if (timer) {
+				clearTimeout(timer);
+			}
+		};
+	}, [timer]);
+
+
+	const TestResultItem = (props: SignedItemType) => {
 			return (
 				<>
 					<ApproveModal id={props.id}></ApproveModal>
@@ -43,7 +65,7 @@ export const TestResults = () => {
 							</span>
 							<span className="w-[54%] text-[16px] text-[##000000] font-normal">{props.post}</span>
 							<span className="w-[8%] text-[16px] text-[##000000] font-normal">
-								{props.testPassed === true ? 'Пройдено' : 'Не пройдено'}
+								{props.testPassed ? 'Пройдено' : 'Не пройдено'}
 							</span>
 						</div>
 						<div className="w-[36.5%] flex ">
@@ -168,7 +190,7 @@ export const TestResults = () => {
 
     const ItemsContainer = () => {
 
-        if (false) {
+        if (DynamicLoading) {
             return (
                 <>
                     <div className="w-full h-full flex items-center">

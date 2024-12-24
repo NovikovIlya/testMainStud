@@ -129,13 +129,29 @@ const App = () => {
 
     const router = createBrowserRouter([
         {
+            path: "redirect/:id",
+            element: <Redirect />,
+        },
+        {
+            path: "registration",
+            element: <Registration email={email} changeEmail={changeEmail}  />,
+        },
+        {
+            path: "registration/checkingEmail",
+            element: <CheckEmail email={email}  />,
+        },
+        {
+            path: "api/register/approve/*",
+            element: <ApproveEmail  />,
+        },
+        {
             path: "/",
             element: <Login />,
             children: [
-                { path: "redirect/:id", element: <Redirect /> },
-                { path: "registration", element: <Registration email={email} changeEmail={changeEmail} /> },
-                { path: "registration/checkingEmail", element: <CheckEmail email={email} /> },
-                { path: "api/register/approve/*", element: <ApproveEmail /> },
+                // { path: "redirect/:id", element: <Redirect /> },
+                // { path: "registration", element: <Registration email={email} changeEmail={changeEmail} /> },
+                // { path: "registration/checkingEmail", element: <CheckEmail email={email} /> },
+                // { path: "api/register/approve/*", element: <ApproveEmail /> },
             ],
         },
         {

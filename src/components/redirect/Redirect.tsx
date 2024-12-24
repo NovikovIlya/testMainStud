@@ -5,7 +5,6 @@ import { useRedirectMutation } from "../../store/api/authApiSlice";
 import { useDispatch } from "react-redux";
 import { setCredentials } from "../../store/reducers/authSlice";
 import { P2 } from '../../models/redirect';
-import { useLocalStorageState } from 'ahooks';
 
 
 
@@ -14,10 +13,10 @@ export const Redirect = () => {
     const [redirect] = useRedirectMutation()
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const [mainRole,setMainRole] = useLocalStorageState<any>('typeAcc', { defaultValue: 'STUD' })
 
     async function redirectSuccess(p2: P2) {
         try {
+            console.log('p22222222222',p2)
             const userData = await redirect(p2).unwrap()
             dispatch(setCredentials({ ...userData }))
             //так как s_id и h_id доступны из старого лк, то заново в куки их добавлять не нужно
@@ -38,17 +37,15 @@ export const Redirect = () => {
             navigate('/user')
             console.log(userData.user)
         } catch (e: any) {
-            console.log(e)
+            console.log('ошибка',e)
         }
     }
 
     useEffect(() => {
+        console.log('p2222000000000022222222',)
         const p_2 = params.id
         const p2 = {p2: p_2}
-        // setMainRole('STUD')
-        localStorage.setItem('typeAcc', 'STUD')
         redirectSuccess(p2)
-
 
     }, []);
 

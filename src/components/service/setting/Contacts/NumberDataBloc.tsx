@@ -86,11 +86,11 @@ const NumberDataBloc = ({isLoadingPost, sortedEmails, sendVer, handleDeleteEmail
 												const num = detectCountry(item.phone)
 												
 												console.log('num',num)
-												if(num !== 'Страна:  Россия/Казахстан'){
-													console.log('asd')
-													setDetectedCountry(num);
-													return
-												}
+												// if(num !== 'Страна:  Россия/Казахстан'){
+												// 	console.log('asd')
+												// 	setDetectedCountry(num);
+												// 	return
+												// }
 												sendVer(item.id)}
 												}>
 												{t('requiredVerification')}

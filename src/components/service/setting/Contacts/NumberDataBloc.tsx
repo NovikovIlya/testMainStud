@@ -13,8 +13,50 @@ import {
 } from '../../../../store/api/serviceApi'
 import { t } from 'i18next'
 
+
 const NumberDataBloc = ({isLoadingPost, sortedEmails, sendVer, handleDeleteEmail, showModal }: any) => {
+	const [detectedCountry, setDetectedCountry] = useState<string>('');
+
+	// Common country codes and their names
+	const countryPrefixes: { [key: string]: string } = {
+	'1': t('us_ca') + t('warningNumber'),
+	'7': t('ru_kz'),
+	'33': t('fr') + t('warningNumber'),
+	'34': t('es') + t('warningNumber'),
+	'39': t('it') + t('warningNumber'),
+	'44': t('uk') + t('warningNumber'),
+	'46': t('se') + t('warningNumber'),
+	'49': t('de') + t('warningNumber'),
+	'81': t('jp')+ t('warningNumber') ,
+	'86': t('cn') + t('warningNumber'),
+	'91': t('in') + t('warningNumber'),
+	'351': t('pt') + t('warningNumber'),
+	'380': t('ua') + t('warningNumber'),
+	'375': t('by') + t('warningNumber'),
+	"89": t('country') + t('notAllow') + t('warningNumber')
+  	};
+  
+   const detectCountry = (phoneNumber: string): string => {
+	// Remove any non-digit characters
+	const cleanNumber = phoneNumber.replace(/\D/g, '');
 	
+	// Try matching longer prefixes first
+	for (let length = 3; length >= 1; length--) {
+	  const prefix = cleanNumber.slice(0, length);
+
+	  if (countryPrefixes[prefix]) {
+		return `${prefix==='89'? '' : (t('country') + ':' )}  ${countryPrefixes[prefix]}`;
+	  }
+	}
+	
+	return 'Страна не определена.';
+  	};
+
+	const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        const country = detectCountry(value);
+        setDetectedCountry(country);
+    };
     
 	return (
 		<Spin spinning={isLoadingPost}>
@@ -39,7 +81,18 @@ const NumberDataBloc = ({isLoadingPost, sortedEmails, sendVer, handleDeleteEmail
 										{item.verified ? (
 											t('verification')
 										) : (
-											<div className="cursor-pointer shadow-sm" onClick={() => sendVer(item.id)}>
+											<div className="cursor-pointer shadow-sm" onClick={() => {
+												console.log('item',item)
+												const num = detectCountry(item.phone)
+												
+												console.log('num',num)
+												if(num !== 'Страна:  Россия/Казахстан'){
+													console.log('asd')
+													setDetectedCountry(num);
+													return
+												}
+												sendVer(item.id)}
+												}>
 												{t('requiredVerification')}
 											</div>
 										)}
@@ -62,21 +115,24 @@ const NumberDataBloc = ({isLoadingPost, sortedEmails, sendVer, handleDeleteEmail
 						<Form.Item
 							name={'inputText'}
 							className="p-0 w-full"
-							// rules={[
-							// 	{
-							// 		pattern: /^7\d{0,11}$/,
-							// 		message: 'Номер должен начинаться с 7 и содержать до 11 цифр'
-							// 	}
+							rules={[
+								{
+									pattern: /^\d{11}$/,
+									message: t('validNumber')
+								}
 						
-							// ]}
+							]}
 						>
 							<Input 
 								type='number'
 								maxLength={12}
+							
 								placeholder={t('addNumber')}
 								className="w-full  h-[40px] flex items-center rounded-lg border-gray-300 shadow-sm  bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+								onChange={handlePhoneChange}
 							/>
 						</Form.Item>
+						
 
 						<Button
 						
@@ -87,6 +143,7 @@ const NumberDataBloc = ({isLoadingPost, sortedEmails, sendVer, handleDeleteEmail
 							<span>{t('addBtn')}</span>
 						</Button>
 					</div>
+					{detectedCountry ? <div className="text-sm text-gray-500 mt-1 ml-1">{detectedCountry}</div> : ''}
 				</div>
 			</div>
 		</div>

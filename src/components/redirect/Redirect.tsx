@@ -5,6 +5,7 @@ import { useRedirectMutation } from "../../store/api/authApiSlice";
 import { useDispatch } from "react-redux";
 import { setCredentials } from "../../store/reducers/authSlice";
 import { P2 } from '../../models/redirect';
+import { useLocalStorageState } from 'ahooks';
 
 
 
@@ -13,6 +14,7 @@ export const Redirect = () => {
     const [redirect] = useRedirectMutation()
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const [mainRole,setMainRole] = useLocalStorageState<any>('typeAcc', { defaultValue: 'STUD' })
 
     async function redirectSuccess(p2: P2) {
         try {
@@ -43,7 +45,9 @@ export const Redirect = () => {
     useEffect(() => {
         const p_2 = params.id
         const p2 = {p2: p_2}
+        setMainRole('STUD')
         redirectSuccess(p2)
+
 
     }, []);
 

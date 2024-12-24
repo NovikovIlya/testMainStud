@@ -86,6 +86,7 @@ export const NumberInformation = () => {
 	}
 
 	const sendVer = (id: any) => {
+
 		showModal()
 		setIdUser(id)
 		// отправить код

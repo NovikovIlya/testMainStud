@@ -357,7 +357,25 @@
 	"telephoneBtn": "Phone",
 	"addBtn": "Add",
 	"verification": "Verified",
-	"addNumber": "Enter phone number"
+	"addNumber": "Enter phone number",
+	"us_ca": "United States/Canada",
+	"ru_kz": "Russia/Kazakhstan",
+	"fr": "France",
+	"es": "Spain",
+	"it": "Italy",
+	"uk": "United Kingdom",
+	"se": "Sweden",
+	"de": "Germany",
+	"jp": "Japan",
+	"cn": "China",
+	"in": "India",
+	"pt": "Portugal",
+	"ua": "Ukraine",
+	"by": "Belarus",
+	"country" : "Country",
+	"validNumber":"The number must contain 11 digits",
+	"warningNumber":". Please note that verification only works for Russian numbers.",
+	"notAllow": " not allow"
 	
 
 }

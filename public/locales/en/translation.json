@@ -373,9 +373,10 @@
 	"ua": "Ukraine",
 	"by": "Belarus",
 	"country" : "Country",
-	"validNumber":"The number must contain 11 digits",
+	"validNumber":"The number must contain no less 13  digits",
 	"warningNumber":". Please note that verification only works for Russian numbers.",
-	"notAllow": " not allow"
+	"notAllow": " not allow",
+	"countryNotDetermined": "Country not determined"
 	
 
 }

@@ -49,13 +49,13 @@ const NumberDataBloc = ({isLoadingPost, sortedEmails, sendVer, handleDeleteEmail
 	  }
 	}
 	
-	return 'Страна не определена.';
+	return t('countryNotDetermined');
   	};
 
 	const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         const country = detectCountry(value);
-        setDetectedCountry(country);
+        setDetectedCountry(value==='' ? '' : country);
     };
     
 	return (
@@ -115,17 +115,18 @@ const NumberDataBloc = ({isLoadingPost, sortedEmails, sendVer, handleDeleteEmail
 						<Form.Item
 							name={'inputText'}
 							className="p-0 w-full"
-							rules={[
-								{
-									pattern: /^\d{11}$/,
-									message: t('validNumber')
-								}
+							// rules={[
+							// 	{
+							// 		pattern: /^\d{11,13}$/,
+							// 		message: t('validNumber')
+							// 	}
 						
-							]}
+							// ]}
 						>
 							<Input 
+								allowClear
 								type='number'
-								maxLength={12}
+								// maxLength={12}
 							
 								placeholder={t('addNumber')}
 								className="w-full  h-[40px] flex items-center rounded-lg border-gray-300 shadow-sm  bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"

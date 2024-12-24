@@ -43,6 +43,7 @@ export const Redirect = () => {
 
     useEffect(() => {
         console.log('p2222000000000022222222',)
+        localStorage.setItem('typeAcc', 'STUD')
         const p_2 = params.id
         const p2 = {p2: p_2}
         redirectSuccess(p2)

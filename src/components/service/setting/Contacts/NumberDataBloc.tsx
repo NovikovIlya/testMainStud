@@ -62,13 +62,13 @@ const NumberDataBloc = ({isLoadingPost, sortedEmails, sendVer, handleDeleteEmail
 						<Form.Item
 							name={'inputText'}
 							className="p-0 w-full"
-							rules={[
-								{
-									pattern: /^7\d{0,11}$/,
-									message: 'Номер должен начинаться с 7 и содержать до 11 цифр'
-								}
+							// rules={[
+							// 	{
+							// 		pattern: /^7\d{0,11}$/,
+							// 		message: 'Номер должен начинаться с 7 и содержать до 11 цифр'
+							// 	}
 						
-							]}
+							// ]}
 						>
 							<Input 
 								type='number'

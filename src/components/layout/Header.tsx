@@ -361,6 +361,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						</div> */}
 
 						<div
+							id='messagesForTest'
 							className={`cursor-pointer h-full p-2 flex items-center   ${type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'}`}
 							onClick={() => {
 								navigate('/services/messages')

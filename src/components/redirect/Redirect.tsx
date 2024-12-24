@@ -45,7 +45,8 @@ export const Redirect = () => {
     useEffect(() => {
         const p_2 = params.id
         const p2 = {p2: p_2}
-        setMainRole('STUD')
+        // setMainRole('STUD')
+        localStorage.setItem('typeAcc', 'STUD')
         redirectSuccess(p2)
 
 

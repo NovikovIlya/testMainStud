@@ -9,16 +9,41 @@ import { LoadingOutlined } from '@ant-design/icons'
 import {MyDocsSvg} from "../../../../assets/svg/MyDocsSvg";
 import {useEffect, useState} from "react";
 import {Margin, usePDF} from "react-to-pdf";
+import {useGetCountriesQuery} from "../../../../store/api/utilsApi";
+import {useTranslation} from "react-i18next";
 
 export const DepEmploymentSeekerInfo = ( ) => {
 
 	const respondId = useAppSelector(state => state.currentResponce)
 
 	const { data, isLoading : loading } = useGetRespondFullInfoQuery(respondId.respondId)
-	const [getResume] = useLazyGetSeekerResumeFileQuery()
 
+	const { t, i18n } = useTranslation()
+	const { data: countries, isLoading: isLoadingCountry } = useGetCountriesQuery(i18n.language)
+
+	const [getResume] = useLazyGetSeekerResumeFileQuery()
+	console.log(data)
 	const [resume, setResume] = useState<string>('')
 	const [resumeSize, setResumeSize] = useState<number>(0)
+
+	const calculateAge = (birthDateStr: string) => {
+		const birthDate = new Date(birthDateStr);
+		const currentDate = new Date();
+
+		let age = currentDate.getFullYear() - birthDate.getFullYear();
+		const monthDifference = currentDate.getMonth() - birthDate.getMonth();
+
+		// Если день рождения еще не был в этом году, уменьшаем возраст на 1
+		if (monthDifference < 0 || (monthDifference === 0 && currentDate.getDate() < birthDate.getDate())) {
+			age--;
+		}
+
+		return age;
+	}
+
+	const age = calculateAge(data?.userData?.birthday)
+
+	const updatedDateStr = data?.userData?.birthday.replace(/-/g, '.');
 
 	const getFormattedSize = (sizeInBytes: number): string => {
 		const sizeInKilobytes = sizeInBytes / 1024;
@@ -88,7 +113,9 @@ export const DepEmploymentSeekerInfo = ( ) => {
 										data?.userData?.middlename}
 								</p>
 								<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-									{data?.userData?.sex}, {data?.userData?.age} года
+									{data?.userData?.sex === 'M' ? 'Мужчина' : ''}
+									{data?.userData?.sex === 'Ж' ? 'Женщина' : ''}
+									, {age} года
 								</p>
 								<div className="flex gap-[36px]">
 									<div className="flex flex-col gap-[8px]">
@@ -96,7 +123,7 @@ export const DepEmploymentSeekerInfo = ( ) => {
 											Дата рождения
 										</p>
 										<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-											{data?.userData?.bday}
+											{updatedDateStr}
 										</p>
 									</div>
 									<div className="flex flex-col gap-[8px]">
@@ -104,7 +131,7 @@ export const DepEmploymentSeekerInfo = ( ) => {
 											Страна гражданства
 										</p>
 										<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-											{data?.userData?.country}
+											{countries?.find(country => country.id === data?.userData?.countryId)?.shortName}
 										</p>
 									</div>
 								</div>

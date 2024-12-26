@@ -2,8 +2,7 @@
 import { Form, Typography } from 'antd'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useDispatch } from 'react-redux'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import { IError } from '../../api/types'
 import logo from '../../assets/images/group.png'
@@ -15,11 +14,7 @@ import { Buttons } from './Buttons'
 import { Inputs } from './Inputs'
 import { useAppDispatch } from '../../store'
 
-import { block } from '../dnd/constant'
 import { useLocalStorageState } from 'ahooks'
-import { useGetInfoUserQuery } from '../../store/api/formApi'
-import { useCheckIsEmployeeQuery } from '../../store/api/practiceApi/contracts'
-import { useGetRoleQuery } from '../../store/api/serviceApi'
 
 const { Title } = Typography
 
@@ -27,14 +22,11 @@ export const Login = () => {
 	const [form] = Form.useForm()
 	const navigate = useNavigate()
 	const { t, i18n } = useTranslation()
-	// const dispatch = useDispatch()
 	const [login,{ data:dataLogin,isSuccess, isLoading }] = useLoginMutation()
-
 	const [error, setError] = useState<IError | null>(null)
 	const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const paramValue = searchParams.get('lan');
-	// const {data:dataSubRole,isSuccess:isSuccessSubRole} = useGetRoleQuery(null,{skip:!isSuccess})
 	const [message, setMessage] = useLocalStorageState<any>(
 		'typeAcc',
 		{

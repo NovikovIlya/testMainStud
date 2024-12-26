@@ -376,7 +376,8 @@
 	"validNumber":"The number must contain no less 13  digits",
 	"warningNumber":". Please note that verification only works for Russian numbers.",
 	"notAllow": " not allow",
-	"countryNotDetermined": "Country not determined"
+	"countryNotDetermined": "Country not determined",
+	"noOtherMessages": "Нет других сообщений"
 	
 
 }

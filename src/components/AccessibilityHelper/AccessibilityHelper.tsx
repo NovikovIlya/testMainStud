@@ -109,7 +109,7 @@ const AccessibilityHelper: React.FC<AccessibilityHelperProps> = forwardRef(({ la
     // document.body.style.fontSize = size;
     document.documentElement.style.fontSize = size;
     setActiveText(size)
-    toggleOption('helper-core-blockAnim')
+    // toggleOption('helper-core-blockAnim')
   };
 
   useEffect(() => {

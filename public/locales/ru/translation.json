@@ -351,7 +351,7 @@
 	"selectDialog": "Выберите диалог или создайте новый",
 	"notLesson" : "Нет пар",
 	"contactInformation" : "Контактная информация",
-	"mainMail" : "Основной почта",
+	"mainMail" : "Основная почта",
 	"privateMail" : "Личная почта",
 	"requiredVerification" : "Требуется верификация",
 	"putYourEmail" : "Введите ваш email",
@@ -377,6 +377,7 @@
 	"validNumber":"Номер должен содержать  до 13 цифр",
 	"warningNumber":". Обратите внимание, что верификация работает только для Российских номеров",
 	"notAllow": " не определена",
-	"countryNotDetermined": "Страна не определена"
-
+	"countryNotDetermined": "Страна не определена",
+	"noOtherMessages": "Нет других сообщений"
+	
 }

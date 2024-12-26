@@ -99,7 +99,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 			case 'EMPL':
 				return t('EMPL')
 			case 'OTHER':
-				return 'Other'
+				return ''
 		}
 	}
 
@@ -120,7 +120,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 			label: (
 				<div
 					onClick={() => {
-						navigate('/infoUser')
+						navigate('/infoUserUpdate')
 					}}
 					className={`${maiRole === 'OTHER' ? '' : 'hidden'} flex items-center gap-[15px] px-[4px] py-[5px]`}
 				>
@@ -420,7 +420,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 											user?.middlename === '' ? '' : user?.middlename.charAt(0) + '.'
 										}`}
 									</div>
-									<div className="text-sm">
+									<div className="text-sm ">
 										{user?.roles && user?.roles?.length > 1
 											? user?.roles
 													.filter((item:any, index:any, self:any) => 

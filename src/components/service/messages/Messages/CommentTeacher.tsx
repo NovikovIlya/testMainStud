@@ -3,6 +3,7 @@ import { Button } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useRef } from 'react'
 import { useGetAllUnReadQuery } from '../../../../store/api/messages/messageApi'
+import { t } from 'i18next'
 
 
 
@@ -23,13 +24,11 @@ export const CommentNewTeacher = ({dataOneChatOld, files, isLoading, gotToBottom
 	return (
 		<>
 			<div  className="flex-col-reverse h-[calc(100vh-270px)] space-y-4  overflow-y-auto p-10 bg-[#f5f8fb] rounded-[10px_10px_0px_0px] ">
-				{dataOneChatOld?.messages.length===0 ? <div className='w-full text-center mb-[33px] text-[12px] text-opacity-35 text-gray-600'>Нет других сообщений</div>: <div className='w-full flex justify-center'><Button htmlType='button' onClick={loadMessages}>Загрузить больше</Button></div>}
-
+				{dataOneChatOld?.messages.length===0 ? <div className='w-full text-center mb-[33px] text-[12px] text-opacity-35 text-gray-600'>{t('noOtherMessages')}</div>: <div className='w-full flex justify-center'><Button htmlType='button' onClick={loadMessages}>{t('loadMore')}</Button></div>}
 				<div className="mb-8 ml-8 absolute top-0.5 right-20 flex flex-wrap  gap-5 backdrop:blur-[3px] m-[15px]">
 					<div className="">
 						{files?.report ? (
 							<div>
-							
 								<Button icon={<FileTextOutlined />} shape="circle"></Button>
 								<div className="!text-xs">Отчет</div>
 							</div>
@@ -40,7 +39,6 @@ export const CommentNewTeacher = ({dataOneChatOld, files, isLoading, gotToBottom
 
 					{files?.diary ? (
 						<div className="flex items-center flex-col">
-					
 							<Button icon={<FileTextOutlined />} shape="circle"></Button>
 							<div className="!text-xs">Дневник</div>
 						</div>

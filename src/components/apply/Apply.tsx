@@ -122,7 +122,7 @@ export const Apply = () => {
 	return (
 		<Spin spinning={isLoading}>
 		<div
-			className="rounded-[1vw] w-full px-[54px] py-[75px] flex h-full overflow-y-auto"
+			className="rounded-[1vw] w-full px-[54px] py-[75px] flex h-full overflow-y-auto mt-12"
 			style={{
 				background: 'linear-gradient(89.94deg, #71AAFF 12.16%, #3D7AD5 104.42%)'
 			}}

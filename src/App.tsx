@@ -122,6 +122,7 @@ import { Notification } from './components/notification/Notification';
 import EditSchedule from './components/service/practices/forming-schedule/EditSchedule';
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorFallback from './components/ErrorFallback';
+import { InfoUserUpdate } from './components/formUser/InfoUserUpdate';
 
 
 const App = () => {
@@ -160,6 +161,7 @@ const App = () => {
             children: [
                 { path: "user/*", element: <User /> },
                 { path: "infoUser", element: <InfoUser /> },
+                { path: "infoUserUpdate", element: <InfoUserUpdate /> },
                 { path: "form", element: <FormModal /> },
                 { path: "education", element: <EducationForm /> },
                 { path: "documents", element: <DocumentForm /> },

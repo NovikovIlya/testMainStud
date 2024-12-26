@@ -1,16 +1,10 @@
 import { Button, Card, Form, Input, Modal, Spin } from 'antd'
-import PhoneInput from 'antd-phone-input'
-import FormItem from 'antd/es/form/FormItem'
 import { useEffect, useState } from 'react'
 
 import {
 	useDeleteAccMutation,
 	useFinalVerifyMutation,
-	useGetEmailQuery,
-	useGetPhoneUserQuery,
-	usePostEmailMutation,
-	usePostPhoneMutation,
-	useVerifyAccMutation
+	useGetEmailQuery, usePostEmailMutation, useVerifyAccMutation
 } from '../../../../store/api/serviceApi'
 import { SkeletonPage } from '../../aboutMe/Skeleton'
 import ContactDataBlock from './ContactDataBlock'
@@ -124,12 +118,10 @@ export const ContactInformation = () => {
 	
 		<Form form={form} onFinish={onSubmitPhone2}>
 			<section className="max-w-2xl">
-				{/* <h3 className="text-black text-2xl font-bold leading-normal">Контактные данные</h3> */}
 				<Card className='bg-white rounded-xl shadow-md overflow-hidden mt-4 '>
 					<h3>{t('mainMail')}</h3>
 					<div className='bg-gray-50 rounded-lg mt-2 p-3'>
-						<a href={`mailto:${mail}`}>{mail}</a>
-								
+						<a href={`mailto:${mail}`}>{mail}</a>		
 					</div>
 				</Card>
 				<article className=" mt-10">

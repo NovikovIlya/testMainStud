@@ -1,46 +1,51 @@
-import { Collapse, CollapseProps, ConfigProvider } from 'antd'
-import clsx from 'clsx'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Collapse, CollapseProps, ConfigProvider } from 'antd';
+import clsx from 'clsx';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-import { BriefcaseSvg } from '../../../assets/svg/BriefcaseSvg'
-import { useAppSelector } from '../../../store'
-import { useGetEmploymentPossibleRolesQuery } from '../../../store/api/serviceApi'
-import { Header } from '../../layout/Header'
-import { ChatEmpDemp } from '../Chat/ChatEmpDemp'
-import { DepEmployment } from '../employmentStage/personnelDepartment/depEmployment'
-import { DepEmploymentSeekerInfo } from '../employmentStage/personnelDepartment/depEmploymentSeekerInfo'
-import { EmploymentStageInfo } from '../employmentStage/personnelDepartment/employmentStageInfo'
-import { RequisiteMain } from '../employmentStage/accountingDepartment/requisite/RequisiteMain'
-import { RequisiteSeeker } from '../employmentStage/accountingDepartment/requisite/RequisiteSeeker'
-import { RequisiteStage } from '../employmentStage/accountingDepartment/requisite/RequisiteStage'
 
-import { Archive } from './Archive'
-import { ArchiveRespondInfo } from './ArchiveRespondInfo'
-import Catalog from './CatalogForEdit'
-import { ChatIcon } from './ChatIcon'
-import { Reserve } from './Reserve'
-import { ReserveRespondInfo } from './ReserveRespondInfo'
-import { RespondInfo } from './RespondInfo'
-import { Responds } from './Responds'
-import { RespondsIcon } from './RespondsIcon'
-import { VacanciesIcon } from './VacanciesIcon'
-import { VacancyEditView } from './VacancyEditView'
-import { VacancyRequestCreateView } from './VacancyRequestCreateView'
-import { VacancyRequestDeleteView } from './VacancyRequestDeleteView'
-import { VacancyRequestUpdateView } from './VacancyRequestUpdateView'
-import { VacancyRequestsPage } from './VacancyRequestsPage'
-import { VacancyResponces } from './VacancyResponces'
-import { SupervisorInterviewCreate } from './supervisor/Interview/SupervisorInterviewCreate'
-import { SupervisorInterviewSeekerInfo } from './supervisor/Interview/SupervisorInterviewSeekerInfo'
-import { SupervisorInterviews } from './supervisor/Interview/SupervisorInterviews'
-import { RespondsSupervisor } from './supervisor/RespondsSupervisor'
-import { SupervisorCreateVacancyForm } from './supervisor/vacancy/SupervisorCreateVacancyForm'
-import { SupervisorUpdateVacancy } from './supervisor/vacancy/SupervisorUpdateVacancy'
-import { SupervisorVacancies } from './supervisor/vacancy/SupervisorVacancies'
-import {TestResultsIconSvg} from "../../../assets/svg/TestResultsIconSvg";
-import {SignedIconSvg} from "../../../assets/svg/SignedIconSvg";
-import {TestResults} from "../employmentStage/laborProtectionDepartment/testResults/TestResults";
-import {Signed} from "../employmentStage/laborProtectionDepartment/signed/Signed";
+
+import { BriefcaseSvg } from '../../../assets/svg/BriefcaseSvg';
+import { SignedIconSvg } from "../../../assets/svg/SignedIconSvg";
+import { TestResultsIconSvg } from "../../../assets/svg/TestResultsIconSvg";
+import { useAppSelector } from '../../../store';
+import { useGetEmploymentPossibleRolesQuery } from '../../../store/api/serviceApi';
+import { Header } from '../../layout/Header';
+import { ChatEmpDemp } from '../Chat/ChatEmpDemp';
+import { RequisiteMain } from '../employmentStage/accountingDepartment/requisite/RequisiteMain';
+import { RequisiteSeeker } from '../employmentStage/accountingDepartment/requisite/RequisiteSeeker';
+import { RequisiteStage } from '../employmentStage/accountingDepartment/requisite/RequisiteStage';
+import { Signed } from "../employmentStage/laborProtectionDepartment/signed/Signed";
+import { TestResults } from "../employmentStage/laborProtectionDepartment/testResults/TestResults";
+import { DepEmployment } from '../employmentStage/personnelDepartment/depEmployment';
+import { DepEmploymentSeekerInfo } from '../employmentStage/personnelDepartment/depEmploymentSeekerInfo';
+import { EmploymentStageInfo } from '../employmentStage/personnelDepartment/employmentStageInfo';
+
+
+
+import { Archive } from './Archive';
+import { ArchiveRespondInfo } from './ArchiveRespondInfo';
+import Catalog from './CatalogForEdit';
+import { ChatIcon } from './ChatIcon';
+import { Reserve } from './Reserve';
+import { ReserveRespondInfo } from './ReserveRespondInfo';
+import { RespondInfo } from './RespondInfo';
+import { Responds } from './Responds';
+import { RespondsIcon } from './RespondsIcon';
+import { VacanciesIcon } from './VacanciesIcon';
+import { VacancyEditView } from './VacancyEditView';
+import { VacancyRequestCreateView } from './VacancyRequestCreateView';
+import { VacancyRequestDeleteView } from './VacancyRequestDeleteView';
+import { VacancyRequestUpdateView } from './VacancyRequestUpdateView';
+import { VacancyRequestsPage } from './VacancyRequestsPage';
+import { VacancyResponces } from './VacancyResponces';
+import { SupervisorInterviewCreate } from './supervisor/Interview/SupervisorInterviewCreate';
+import { SupervisorInterviewSeekerInfo } from './supervisor/Interview/SupervisorInterviewSeekerInfo';
+import { SupervisorInterviews } from './supervisor/Interview/SupervisorInterviews';
+import { RespondsSupervisor } from './supervisor/RespondsSupervisor';
+import { SupervisorCreateVacancyForm } from './supervisor/vacancy/SupervisorCreateVacancyForm';
+import { SupervisorUpdateVacancy } from './supervisor/vacancy/SupervisorUpdateVacancy';
+import { SupervisorVacancies } from './supervisor/vacancy/SupervisorVacancies';
+
 
 export const NavPesonnelAccounting = () => {
 	const { pathname } = useLocation()
@@ -144,8 +149,8 @@ export const NavPesonnelAccounting = () => {
 					<p
 						className={clsx(
 							'font-content-font text-black text-[14px]/[14px] font-normal',
-							pathname !== '/services/personnelaccounting/vacancies' &&
-								'opacity-[52%]'
+							(!((pathname === '/services/personnelaccounting/vacancies') || (pathname === '/services/personnelaccounting/vacancies/vacancyedit')) &&
+								('opacity-[52%]'))
 						)}
 						onClick={() => {
 							navigate('/services/personnelaccounting/vacancies')
@@ -156,8 +161,8 @@ export const NavPesonnelAccounting = () => {
 					<p
 						className={clsx(
 							'font-content-font text-black text-[14px]/[14px] font-normal',
-							pathname !== '/services/personnelaccounting/vacancyrequests' &&
-								'opacity-[52%]'
+							(!((pathname === '/services/personnelaccounting/vacancyrequests') || (pathname === '/services/personnelaccounting/request/create')) &&
+								('opacity-[52%]'))
 						)}
 						onClick={() => {
 							navigate('/services/personnelaccounting/vacancyrequests')
@@ -184,8 +189,13 @@ export const NavPesonnelAccounting = () => {
 					<p
 						className={clsx(
 							'font-content-font text-black text-[14px]/[14px] font-normal',
-							pathname !== '/services/personnelaccounting/reserve' &&
-								'opacity-[52%]'
+							!(
+								(pathname === '/services/personnelaccounting/reserve') ||
+								(pathname === '/services/services/personnelaccounting/reserve') ||
+								(pathname === '/services/services/personnelaccounting/reserve/fullinfo')
+							)
+							&&
+							'opacity-[52%]'
 						)}
 						onClick={() => {
 							navigate('/services/personnelaccounting/reserve')
@@ -196,7 +206,12 @@ export const NavPesonnelAccounting = () => {
 					<p
 						className={clsx(
 							'font-content-font text-black text-[14px]/[14px] font-normal',
-							pathname !== '/services/personnelaccounting/archive' &&
+							!(
+								(pathname === '/services/personnelaccounting/archive') ||
+								(pathname === '/services/services/personnelaccounting/archive') ||
+								(pathname === '/services/services/personnelaccounting/archive/fullinfo')
+							)
+							&&
 								'opacity-[52%]'
 						)}
 						onClick={() => {
@@ -224,8 +239,11 @@ export const NavPesonnelAccounting = () => {
 					<p
 						className={clsx(
 							'font-content-font text-black text-[14px]/[14px] font-normal',
-							pathname !==
-								'/services/personnelaccounting/supervisor/vacancies' &&
+							!(
+								pathname === '/services/personnelaccounting/supervisor/vacancies' ||
+								pathname === '/services/personnelaccounting/supervisor/vacancyview'
+
+							) &&
 								'opacity-[52%]'
 						)}
 						onClick={() => {
@@ -237,8 +255,9 @@ export const NavPesonnelAccounting = () => {
 					<p
 						className={clsx(
 							'font-content-font text-black text-[14px]/[14px] font-normal',
-							pathname !==
-								'/services/personnelaccounting/supervisor/createvacancy' &&
+							!(
+								pathname === '/services/personnelaccounting/supervisor/createvacancy'
+							) &&
 								'opacity-[52%]'
 						)}
 						onClick={() => {
@@ -266,9 +285,10 @@ export const NavPesonnelAccounting = () => {
 					<p
 						className={clsx(
 							'font-content-font text-black text-[14px]/[14px] font-normal',
-							pathname !==
-								'/services/personnelaccounting/supervisor/invitation' &&
-								'opacity-[52%]'
+							!(
+								pathname === '/services/personnelaccounting/supervisor/invitation' ||
+								pathname === '/services/personnelaccounting/supervisor/invitation/seekerinfo'
+							) && 'opacity-[52%]'
 						)}
 						onClick={() => {
 							navigate('/services/personnelaccounting/supervisor/invitation')
@@ -279,14 +299,12 @@ export const NavPesonnelAccounting = () => {
 					<p
 						className={clsx(
 							'font-content-font text-black text-[14px]/[14px] font-normal',
-							pathname !==
-								'/services/personnelaccounting/supervisor/scheduleinvitation' &&
-								'opacity-[52%]'
+							!(
+								pathname === '/services/personnelaccounting/supervisor/scheduleinvitation'
+							) && 'opacity-[52%]'
 						)}
 						onClick={() => {
-							navigate(
-								'/services/personnelaccounting/supervisor/scheduleinvitation'
-							)
+							navigate('/services/personnelaccounting/supervisor/scheduleinvitation')
 						}}
 					>
 						Назначить собеседование
@@ -302,8 +320,15 @@ export const NavPesonnelAccounting = () => {
 				<li
 					key={index}
 					className={clsx(
-						'w-full flex items-center pl-[16px] hover:bg-[#F5F8FB]  cursor-pointer',
-						id === pathname && 'bg-[#F5F8FB]'
+						'w-full flex items-center pl-[16px] hover:bg-[#F5F8FB] cursor-pointer',
+						(
+							pathname === '/services/personnelaccounting/vacancies' ||
+							pathname === '/services/personnelaccounting/vacancies/vacancyedit' ||
+							pathname === '/services/personnelaccounting/vacancyrequests' ||
+							pathname === '/services/personnelaccounting/request/create' ||
+							pathname === '/services/personnelaccounting/request/update' ||
+							pathname === '/services/personnelaccounting/request/delete'
+						) && 'bg-[#F5F8FB]'
 					)}
 				>
 					<ConfigProvider
@@ -331,26 +356,121 @@ export const NavPesonnelAccounting = () => {
 				<li
 					key={index}
 					className={clsx(
-						'w-full flex items-center pl-[16px] hover:bg-[#F5F8FB]  cursor-pointer',
-						id === pathname && 'bg-[#F5F8FB]'
+						'w-full flex items-center pl-[16px] hover:bg-[#F5F8FB] cursor-pointer',
+						(
+							pathname === '/services/personnelaccounting/reserve' ||
+							pathname === '/services/personnelaccounting/archive' ||
+							pathname === '/services/personnelaccounting/reserve/fullinfo' ||
+							pathname === '/services/personnelaccounting/archive/fullinfo' ||
+							pathname === '/services/services/personnelaccounting/reserve/fullinfo' ||
+							pathname === '/services/services/personnelaccounting/archive/fullinfo'
+						) && 'bg-[#F5F8FB]'
 					)}
 				>
-					<Collapse
-						className="w-full !bg-inherit"
-						items={navEmployeeListReserveItems}
-						expandIconPosition="end"
-						bordered={false}
-						style={{}}
-					/>
+					<ConfigProvider>
+						<Collapse
+							className="w-full !bg-inherit"
+							items={navEmployeeListReserveItems}
+							expandIconPosition="end"
+							bordered={false}
+							style={{}}
+						/>
+					</ConfigProvider>
 				</li>
 			)
-		} else {
+		}
+		else if (name === 'Этап трудоустройства') {
 			return (
 				<li
 					key={index}
 					className={clsx(
-						'w-full flex items-center py-2 pl-8 hover:bg-[#F5F8FB]  cursor-pointer',
-						id === pathname && 'bg-[#F5F8FB]'
+						'w-full flex items-center py-2 pl-8 hover:bg-[#F5F8FB] cursor-pointer',
+						(
+							pathname === '/services/personnelaccounting/personnel-department/employment' ||
+							pathname === '/services/personnelaccounting/personnel-department/employment/stages' ||
+							pathname === '/services/personnelaccounting/personnel-department/employment/stages/seeker-info'
+						) && 'bg-[#F5F8FB]'
+					)}
+					onClick={() => handleNavigate(id)}
+				>
+					<div className="flex items-center gap-[10px]">
+						{icon}
+						<p className="text-base">{name}</p>
+					</div>
+				</li>
+			)
+		} else if (name === 'Сообщения') {
+			return (
+				<li
+					key={index}
+					className={clsx(
+						'w-full flex items-center py-2 pl-8 hover:bg-[#F5F8FB] cursor-pointer',
+						(
+							pathname === '/services/personnelaccounting/chat' ||
+							pathname === '/services/personnelaccounting/chat/id/4'||
+							pathname === '/services/personnelaccounting/chat/vacancyview'
+						) && 'bg-[#F5F8FB]'
+					)}
+					onClick={() => handleNavigate(id)}
+				>
+					<div className="flex items-center gap-[10px]">
+						{icon}
+						<p className="text-base">{name}</p>
+					</div>
+				</li>
+			)
+		} else if (name === 'Отклики') {
+			return (
+				<li
+					key={index}
+					className={clsx(
+						'w-full flex items-center py-2 pl-8 hover:bg-[#F5F8FB] cursor-pointer',
+						(
+							pathname === '/services/personnelaccounting/responds' ||
+							pathname === '/services/personnelaccounting/responds/byvacancy/146' ||
+							pathname === '/services/services/personnelaccounting/responds/fullinfo'
+						) && 'bg-[#F5F8FB]'
+					)}
+					onClick={() => handleNavigate(id)}
+				>
+					<div className="flex items-center gap-[10px]">
+						{icon}
+						<p className="text-base">{name}</p>
+					</div>
+				</li>
+			)
+		}
+		else if (name === 'Отклики') {
+			return (
+				<li
+					key={index}
+					className={clsx(
+						'w-full flex items-center py-2 pl-8 hover:bg-[#F5F8FB] cursor-pointer',
+						(
+							pathname === 'services/personnelaccounting/personnel-department/employment' ||
+							pathname === 'services/personnelaccounting/personnel-department/employment/stages' ||
+							pathname === 'services/personnelaccounting/personnel-department/employment/stages/seeker-info'
+						) && 'bg-[#F5F8FB]'
+					)}
+					onClick={() => handleNavigate(id)}
+				>
+					<div className="flex items-center gap-[10px]">
+						{icon}
+						<p className="text-base">{name}</p>
+					</div>
+				</li>
+			)
+		} else if (name === 'Сообщения') {
+			return (
+				<li
+					key={index}
+					className={clsx(
+						'w-full flex items-center py-2 pl-8 hover:bg-[#F5F8FB] cursor-pointer',
+						(
+							pathname === 'services/personnelaccounting/personnel-department/employment' ||
+							pathname === 'services/personnelaccounting/personnel-department/employment/stages' ||
+							pathname === 'services/personnelaccounting/personnel-department/employment/stages/seeker-info'
+						) && 'bg-[#F5F8FB]'
 					)}
 					onClick={() => handleNavigate(id)}
 				>
@@ -371,7 +491,12 @@ export const NavPesonnelAccounting = () => {
 						key={index}
 						className={clsx(
 							'w-full flex items-center pl-[16px] hover:bg-[#F5F8FB]  cursor-pointer',
-							id === pathname && 'bg-[#F5F8FB]'
+							(
+								id === pathname ||
+								pathname === '/services/personnelaccounting/supervisor/vacancies' ||
+								pathname === '/services/personnelaccounting/supervisor/createvacancy' ||
+								pathname === '/services/personnelaccounting/supervisor/vacancyview'
+							) && 'bg-[#F5F8FB]'
 						)}
 					>
 						<ConfigProvider
@@ -400,7 +525,12 @@ export const NavPesonnelAccounting = () => {
 						key={index}
 						className={clsx(
 							'w-full flex items-center pl-5 hover:bg-[#F5F8FB]  cursor-pointer',
-							id === pathname && 'bg-[#F5F8FB]'
+							(
+								id === pathname ||
+								pathname === '/services/personnelaccounting/supervisor/invitation' ||
+								pathname === '/services/personnelaccounting/supervisor/invitation/seekerinfo' ||
+								pathname === '/services/personnelaccounting/supervisor/scheduleinvitation'
+							) && 'bg-[#F5F8FB]'
 						)}
 					>
 						<ConfigProvider
@@ -421,6 +551,25 @@ export const NavPesonnelAccounting = () => {
 								style={{}}
 							/>
 						</ConfigProvider>
+					</li>
+				)
+			} else if (name === 'Отклики') {
+				return (
+					<li
+						key={index}
+						className={clsx(
+							'w-full flex items-center py-2 pl-8 hover:bg-[#F5F8FB]  cursor-pointer',
+							(
+								pathname === '/services/personnelaccounting/supervisor/responds' ||
+								pathname === '/services/services/personnelaccounting/supervisor/responds/fullinfo'
+							) && 'bg-[#F5F8FB]'
+						)}
+						onClick={() => handleNavigate(id)}
+					>
+						<div className="flex items-center gap-[10px]">
+							{icon}
+							<p className="text-base">{name}</p>
+						</div>
 					</li>
 				)
 			} else {
@@ -444,21 +593,27 @@ export const NavPesonnelAccounting = () => {
 	)
 	const handleAccountingList = navAccountingList.map(
 		({ id, icon, name }, index) => {
-			return (
-				<li
-					key={index}
-					className={clsx(
-						'w-full flex items-center py-2 pl-8 hover:bg-[#F5F8FB]  cursor-pointer',
-						id === pathname && 'bg-[#F5F8FB]'
-					)}
-					onClick={() => handleNavigate(id)}
-				>
-					<div className="flex items-center gap-[10px]">
-						{icon}
-						<p className="text-base">{name}</p>
-					</div>
-				</li>
-			)
+			if (name === "Реквизиты") {
+				return (
+					<li
+						key={index}
+						className={clsx(
+							'w-full flex items-center py-2 pl-8 hover:bg-[#F5F8FB]  cursor-pointer',
+							(
+								pathname === '/services/personnelaccounting/accounting/requisite' ||
+								pathname === '/services/personnelaccounting/accounting/requisite/requisite-review' ||
+								pathname === '/services/personnelaccounting/accounting/requisite/requisite-review/seeker-info'
+							) && 'bg-[#F5F8FB]'
+						)}
+						onClick={() => handleNavigate(id)}
+					>
+						<div className="flex items-center gap-[10px]">
+							{icon}
+							<p className="text-base">{name}</p>
+						</div>
+					</li>
+				)
+			}
 		}
 	)
 	const handleLaborProtectionList = navLaborProtectionList.map(

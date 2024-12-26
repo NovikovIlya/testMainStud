@@ -178,7 +178,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 							</Button>
 							<Button
 								disabled={isEmploymentRequestSent || isSeekerRejected}
-								className=" mr-[50px] h-[40px] font-content-font font-normal text-black border-[1px] border-black text-[16px]/[16px] rounded-[54.5px]"
+								className=" mr-[50px] h-[40px]  w-[257px] font-content-font font-normal text-black border-[1px] border-black text-[16px]/[16px] rounded-[54.5px]"
 								onClick={() => {
 									setIsRefuseModalOpen(true)
 								}}
@@ -187,6 +187,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 							</Button>
 						</div>
 					)}
+				{/*
 				<Button
 					disabled={isEmploymentRequestSent || isSeekerRejected}
 					className="h-[40px] w-[257px] bg-[#3073D7] rounded-[54.5px] text-white text-[16px]/[16px]"
@@ -204,6 +205,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 				>
 					invite without time check
 				</Button>
+				*/}
 			</div>
 		)
 	}

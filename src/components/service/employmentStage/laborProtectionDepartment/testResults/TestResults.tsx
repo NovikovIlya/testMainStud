@@ -170,7 +170,7 @@ export const TestResults = () => {
 							<SuccessModalIconSvg></SuccessModalIconSvg>
 							<p
 								className="text-center font-content-font font-normal flex items-start text-black text-[16px]/[20px]">
-								Соискатель успешно удалён
+								Соискатель успешно перемещëн в сервис "Подписанные"
 							</p>
 							<Button
 								className="rounded-[54.5px] border-black text-[14px] h-[40px] w-full py-[13px]"

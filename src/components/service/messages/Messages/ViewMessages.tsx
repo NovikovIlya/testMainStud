@@ -60,7 +60,7 @@ export const ViewMessage = () => {
 		{ skip: !debouncedSearchValue }
 	)
 	const [dataSearchValue, setdataSearchValue] = useState<ChatResponse[]>([])
-
+	
 	useEffect(() => {
 		if (dataSearch?.length > 0) {
 			setdataSearchValue(dataSearch)
@@ -323,16 +323,6 @@ export const ViewMessage = () => {
 											<List.Item.Meta
 												title={
 													<>
-														{/* <span className="font-extrabold">
-															{hasBrackets(item.userName)
-																? hasBrackets(ContentWithinBrackets(item.userName))
-																	? ContentWithinBrackets(ContentWithinBrackets(item.userName))
-																	: ContentWithinBrackets(item.userName)
-																: item.userName}
-														</span>
-														<div style={{ fontSize: '12px', color: '#888' }}>
-															{hasBrackets(item.userName) ? extractContentWithinBrackets(item.userName) : ''}
-														</div> */}
 														<span className="  font-extrabold">{item.userName}</span>
 														<div style={{ fontSize: '12px', color: '#888' }}>{item.userInfo}</div>
 													</>
@@ -404,7 +394,7 @@ export const ViewMessage = () => {
 					</>
 				)}
 			</div>
-			<NewDialogModal isModalOpen={isModalOpen} onCancel={handleCancel} />
+			<NewDialogModal  isModalOpen={isModalOpen} onCancel={handleCancel} />
 		</div>
 	)
 }

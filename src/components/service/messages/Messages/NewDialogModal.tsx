@@ -30,7 +30,12 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 	const [flag, setFlag] = useState(false)
 	const [type,setType] = useState(null)
 	const dispatch = useAppDispatch()
+	const [recipientName,setRecipientName] = useState('')
+	
 
+
+	console.log('dataGetStudents',dataGetStudents)
+	console.log('dataGetStudentsValue',dataGetStudentsValue)
 	useEffect(() => {
 		if (dataGetStudents) {
 			setdataGetStudentsValue(dataGetStudents)
@@ -65,7 +70,8 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 			senderName: `${user.lastname} ${user.firstname} ${user.middlename}`,
 			recipientType: type,
 			recipientName: form.getFieldValue('student'),
-			recipientId: id
+			recipientId: id,
+			recipientInfo: recipientName
 		}
 		newChat(obj)
 			.unwrap()
@@ -138,7 +144,7 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 						className="flex justify-center flex-col "
 					>
 						<Form.Item
-							help={student && student.length < 4 ? 'Введите минимум 4 символа' : ''}
+							help={student && student.length < 4 ? t('minimumFour') : ''}
 							validateStatus={student && student.length < 4 ? 'error' : ''}
 							className="mt-6"
 							label={t('user')}
@@ -181,6 +187,7 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 													value: student.name,
 													id: student.id,
 													userType:student.userType,
+													userInfo: student.userInfo,
 													label: (
 														<div>
 															<div className="">
@@ -197,8 +204,10 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 											  }))
 									}
 									onSelect={(value, option) => {
+										    console.log('option',option)
 											setId(option.id)
 											setType(option.userType)
+											setRecipientName(option.userInfo)
 										}
 									}
 								/>

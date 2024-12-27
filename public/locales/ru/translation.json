@@ -380,6 +380,7 @@
 	"countryNotDetermined": "Страна не определена",
 	"noOtherMessages": "Нет других сообщений",
 	"petitionForDocument":"Единый центр обслуживания",
-	"petitionForDocumentInfo":"Здесь вы можете подать заявки на оформление документов"
+	"petitionForDocumentInfo":"Здесь вы можете подать заявки на оформление документов",
+	"minimumFour": "Введите минимум 4 символа"
 	
 }

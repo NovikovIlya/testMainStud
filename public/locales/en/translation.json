@@ -379,7 +379,8 @@
 	"countryNotDetermined": "Country not determined",
 	"noOtherMessages": "No other messages",
 	"petitionForDocument":"Single service center",
-	"petitionForDocumentInfo":"Here you can submit applications for documents"
+	"petitionForDocumentInfo":"Here you can submit applications for documents",
+	"minimumFour": "Please enter at least 4 characters"
 	
 
 }

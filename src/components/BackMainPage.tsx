@@ -6,6 +6,7 @@ import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 
 const { Link } = Typography
+
 export const BackMainPage = ({notAuth=false}) => {
 	const { t, i18n } = useTranslation()
 	const location = useLocation();

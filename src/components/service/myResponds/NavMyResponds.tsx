@@ -38,21 +38,68 @@ export const NavMyResponds = () => {
 	]
 
 	const handleList = navList.map(({ id, icon, name }, index) => {
-		return (
-			<li
-				key={index}
-				className={clsx(
-					'w-full flex items-center py-2 pl-8 hover:bg-[#F5F8FB]  cursor-pointer',
-					id === pathname && 'bg-[#F5F8FB]'
-				)}
-				onClick={() => handleNavigate(id)}
-			>
-				<div className="flex items-center gap-[10px]">
-					{icon}
-					<p className="text-base">{name}</p>
-				</div>
-			</li>
-		)
+		if (name === "Мои отклики") {
+			return (
+				<li
+					key={index}
+					className={clsx(
+						'w-full flex items-center py-2 pl-8 hover:bg-[#F5F8FB]  cursor-pointer',
+						(
+							pathname === '/services/myresponds/responds' ||
+							pathname === '/services/myresponds/responds/fullinfo'
+
+						) && 'bg-[#F5F8FB]'
+					)}
+					onClick={() => handleNavigate(id)}
+				>
+					<div className="flex items-center gap-[10px]">
+						{icon}
+						<p className="text-base">{name}</p>
+					</div>
+				</li>
+			)
+		} else if (name === "Сообщения") {
+			return (
+				<li
+					key={index}
+					className={clsx(
+						'w-full flex items-center py-2 pl-8 hover:bg-[#F5F8FB]  cursor-pointer',
+						(
+							pathname === '/services/myresponds/chat' ||
+							/\/services\/myresponds\/chat\/id\/\d+/.test(pathname) ||
+							pathname === '/services/myresponds/chat/vacancyview'
+
+						) && 'bg-[#F5F8FB]'
+					)}
+					onClick={() => handleNavigate(id)}
+				>
+					<div className="flex items-center gap-[10px]">
+						{icon}
+						<p className="text-base">{name}</p>
+					</div>
+				</li>
+			)
+		} else if (name === "Этап трудоустройства") {
+			return (
+				<li
+					key={index}
+					className={clsx(
+						'w-full flex items-center py-2 pl-8 hover:bg-[#F5F8FB]  cursor-pointer',
+						(
+							pathname === '/services/myresponds/employment' ||
+							/\/services\/myresponds\/employment\/stages\/\d+\/\d+/.test(pathname)
+
+						) && 'bg-[#F5F8FB]'
+					)}
+					onClick={() => handleNavigate(id)}
+				>
+					<div className="flex items-center gap-[10px]">
+						{icon}
+						<p className="text-base">{name}</p>
+					</div>
+				</li>
+			)
+		}
 	})
 
 	return (

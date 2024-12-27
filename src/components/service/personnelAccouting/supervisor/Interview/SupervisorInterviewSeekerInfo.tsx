@@ -38,7 +38,8 @@ export const SupervisorInterviewSeekerInfo = () => {
 		return age;
 	}
 
-	const age = calculateAge(data?.userData?.birthday)
+	const birthday = data?.userData?.birthday
+	const age = birthday ? calculateAge(birthday) : undefined
 
 	const updatedDateStr = data?.userData?.birthday.replace(/-/g, '.');
 
@@ -187,7 +188,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 							</Button>
 						</div>
 					)}
-				{/*
+
 				<Button
 					disabled={isEmploymentRequestSent || isSeekerRejected}
 					className="h-[40px] w-[257px] bg-[#3073D7] rounded-[54.5px] text-white text-[16px]/[16px]"
@@ -205,7 +206,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 				>
 					invite without time check
 				</Button>
-				*/}
+
 			</div>
 		)
 	}

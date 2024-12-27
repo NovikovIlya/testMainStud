@@ -41,7 +41,9 @@ export const DepEmploymentSeekerInfo = ( ) => {
 		return age;
 	}
 
-	const age = calculateAge(data?.userData?.birthday)
+	const birthday = data?.userData?.birthday
+	const age = birthday ? calculateAge(birthday) : undefined
+
 
 	const updatedDateStr = data?.userData?.birthday.replace(/-/g, '.');
 

@@ -149,8 +149,11 @@ export const NavPesonnelAccounting = () => {
 					<p
 						className={clsx(
 							'font-content-font text-black text-[14px]/[14px] font-normal',
-							(!((pathname === '/services/personnelaccounting/vacancies') || (pathname === '/services/personnelaccounting/vacancies/vacancyedit')) &&
-								('opacity-[52%]'))
+							(!(
+								pathname === '/services/personnelaccounting/vacancies'
+									||
+								pathname === '/services/personnelaccounting/vacancies/vacancyedit'
+								) && 'opacity-[52%]')
 						)}
 						onClick={() => {
 							navigate('/services/personnelaccounting/vacancies')
@@ -161,8 +164,11 @@ export const NavPesonnelAccounting = () => {
 					<p
 						className={clsx(
 							'font-content-font text-black text-[14px]/[14px] font-normal',
-							(!((pathname === '/services/personnelaccounting/vacancyrequests') || (pathname === '/services/personnelaccounting/request/create')) &&
-								('opacity-[52%]'))
+							(!(
+								pathname === '/services/personnelaccounting/vacancyrequests'
+								||
+								pathname === '/services/personnelaccounting/request/create'
+								) && 'opacity-[52%]')
 						)}
 						onClick={() => {
 							navigate('/services/personnelaccounting/vacancyrequests')
@@ -407,7 +413,7 @@ export const NavPesonnelAccounting = () => {
 						'w-full flex items-center py-2 pl-8 hover:bg-[#F5F8FB] cursor-pointer',
 						(
 							pathname === '/services/personnelaccounting/chat' ||
-							pathname === '/services/personnelaccounting/chat/id/4'||
+							/\/services\/personnelaccounting\/chat\/id\/\d+/.test(pathname) ||
 							pathname === '/services/personnelaccounting/chat/vacancyview'
 						) && 'bg-[#F5F8FB]'
 					)}
@@ -427,7 +433,7 @@ export const NavPesonnelAccounting = () => {
 						'w-full flex items-center py-2 pl-8 hover:bg-[#F5F8FB] cursor-pointer',
 						(
 							pathname === '/services/personnelaccounting/responds' ||
-							pathname === '/services/personnelaccounting/responds/byvacancy/146' ||
+							/\/services\/personnelaccounting\/responds\/byvacancy\/\d+/.test(pathname) ||
 							pathname === '/services/services/personnelaccounting/responds/fullinfo'
 						) && 'bg-[#F5F8FB]'
 					)}

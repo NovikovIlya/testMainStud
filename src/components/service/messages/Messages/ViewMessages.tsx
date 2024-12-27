@@ -323,8 +323,8 @@ export const ViewMessage = () => {
 											<List.Item.Meta
 												title={
 													<>
-														<span className="  font-extrabold">{item.userName}</span>
-														<div style={{ fontSize: '12px', color: '#888' }}>{item.userInfo}</div>
+														<span className="  font-extrabold ">{item.userName}</span>
+														<div className='mb-3' style={{ fontSize: '9px', color: '#888' }}>{truncateString(100,item.userInfo)}</div>
 													</>
 												}
 												description={truncateString(10, item.lastMessage)}
@@ -376,7 +376,7 @@ export const ViewMessage = () => {
 									>
 										<>
 											<span className="font-extrabold">{currentItem?.userName}</span>
-											<div style={{ fontSize: '12px', color: '#888' }}>{currentItem?.userInfo}</div>
+											<div style={{ fontSize: '9px', color: '#888' }}>{truncateString(100,currentItem  ?  currentItem.userInfo : '')}</div>
 										</>
 									</CommentNewTeacher>
 									<Form form={form} className="flex w-full flex-wrap" onFinish={onFinish}>

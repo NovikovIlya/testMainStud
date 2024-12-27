@@ -196,7 +196,7 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 															{/* <div className={'w-auto h-auto'} style={{ fontSize: '12px', color: '#888' }}>
 															{(student?.userInfo)}
 															</div> */}
-															<div className={'w-auto'} style={{ fontSize: '12px', color: '#888', whiteSpace: 'normal', wordBreak: 'break-word' }}>
+															<div className={'w-auto'} style={{ fontSize: '10px', color: '#888', whiteSpace: 'normal', wordBreak: 'break-word' }}>
 																{truncateString(160,student?.userInfo)}
 															</div>
 														</div>

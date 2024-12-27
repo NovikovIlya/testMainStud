@@ -415,4 +415,25 @@ export const jsxElements = [
 			i: 'ManagementScientificProjects'
 		}
 	},
+	{
+		key: 'petitionForDocument',
+		element: (
+			<TemplateCard
+				href="https://shelly.kpfu.ru/e-ksu/SITE_STUDENT_SH_PR_AC.offor_document?p_menu=14"
+				info="petitionForDocumentInfo"
+				title="petitionForDocument"
+				buttonText="Watch"
+				img={'/petition.png'}
+				className='object-contain'
+				positionImage={'mt-7'}
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 0,
+			y: 0,
+			i: 'ManagementScientificProjects'
+		}
+	},
 ]

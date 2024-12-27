@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { SessionProps } from '../../models/cards'
 
 
-export const TemplateCard = ({href,img,info,title,height = 112,width = 112,buttonText = 'Watch',mt = 'mt-3',positionImage,isRounded,buttonType = 'default'}: SessionProps) => {
+export const TemplateCard = ({className,href,img,info,title,height = 112,width = 112,buttonText = 'Watch',mt = 'mt-3',positionImage,isRounded,buttonType = 'default'}: SessionProps) => {
 	const { t } = useTranslation()
 
 	return (
@@ -28,7 +28,7 @@ export const TemplateCard = ({href,img,info,title,height = 112,width = 112,butto
 							width={width}
 							height={height}
 							alt=""
-							className={clsx(positionImage, isRounded && 'rounded-full')}
+							className={clsx(className,positionImage, isRounded && 'rounded-full')}
 						/>
 					</div>
 				)}

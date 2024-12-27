@@ -377,7 +377,9 @@
 	"warningNumber":". Please note that verification only works for Russian numbers.",
 	"notAllow": " not allow",
 	"countryNotDetermined": "Country not determined",
-	"noOtherMessages": "Нет других сообщений"
+	"noOtherMessages": "No other messages",
+	"petitionForDocument":"Single service center",
+	"petitionForDocumentInfo":"Here you can submit applications for documents"
 	
 
 }

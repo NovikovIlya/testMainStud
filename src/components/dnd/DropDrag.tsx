@@ -37,6 +37,7 @@ const studentKeys = [
 	'ManagementScientificProjects',
 	'Testing',
 	'Vacancies',
+	'petitionForDocument'
 ]
 
 const employeeKeys = [

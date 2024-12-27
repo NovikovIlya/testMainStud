@@ -173,8 +173,8 @@ export const TestResults = () => {
 								Соискатель успешно перемещëн в сервис "Подписанные"
 							</p>
 							<Button
-								className="rounded-[54.5px] border-black text-[14px] h-[40px] w-full py-[13px]"
-								type="default"
+								className="rounded-[54.5px] text-[14px] h-[40px] w-full py-[13px]"
+								type="primary"
 								onClick={() => {
 									setIsSuccessModalOpen(false)
 								}}
@@ -193,7 +193,7 @@ export const TestResults = () => {
         if (DynamicLoading) {
             return (
                 <>
-                    <div className="w-full h-full flex items-center">
+                    <div className="w-full min-h-[26vh] flex items-end">
                         <div className="text-center ml-auto mr-auto">
                             <Spin
                                 indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}
@@ -260,6 +260,7 @@ export const TestResults = () => {
                         <div className="w-[36.5%]"></div>
                     </div>
                     <ItemsContainer></ItemsContainer>
+
                 </div>
             </div>
         </>

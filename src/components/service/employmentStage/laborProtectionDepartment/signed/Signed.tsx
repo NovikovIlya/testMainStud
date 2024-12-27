@@ -23,7 +23,7 @@ export const Signed = () => {
     let [DynamicLoading, setDynamicLoading] = useState(false);
     const [timer, setTimer] = useState<NodeJS.Timeout | null>(null)
 
-    let { data: signed_data = [],  isLoading : loading, refetch } = useGetTestResultsQuery({signed : true, query: searchQuery});
+    let { data: signed_data = [],  isLoading : loading, refetch } = useGetTestResultsQuery({signed : true, query: debouncedQuery});
 
     const [setSeekerHidden, {isLoading}] = useSetTestResultHiddenMutation()
 
@@ -62,7 +62,49 @@ export const Signed = () => {
         };
     }, [timer]);
 
-    const ApproveSignedModal = ( props : modalProps ) => {
+    const SignedItem = ( props: SignedItemType ) => {
+        return (
+            <>
+                <ApproveSignedModal id={props.id}/>
+                <div className="w-[100%] h-[80px] bg-white flex flex-row items-center">
+                    <div className="ml-[1.5%] w-[62%] flex flex-row">
+                    <span className="w-[38%] text-[16px] text-[##000000] font-normal">
+                        {props.seeker.lastname + ' ' + props.seeker.firstname + ' ' + props.seeker.middlename}
+                    </span>
+                        <span className="w-[54%] text-[16px] text-[##000000] font-normal">
+                        {props.post}
+                    </span>
+                        <span className="w-[8%] text-[16px] text-[##000000] font-normal">
+                        {props.testPassed === true ? 'Пройдено' : 'Не пройдено'}
+                    </span>
+                    </div>
+                    <div className="w-[36.5%] flex ">
+                        <button
+                            className="ml-[50%] gap-[12px] flex bg-[#fff] border-0 cursor-pointer group"
+                            onClick={() => {
+                                setIsApproveSignedModalOpen(true)
+                            }}
+                        >
+                            <span
+                                className="group-hover:hidden"
+                            >
+                                <DeleteIconLaborSvg></DeleteIconLaborSvg>
+                            </span>
+                            <span
+                                className="hidden group-hover:block"
+                            >
+                                <DeleteIconHoverLaborSvg></DeleteIconHoverLaborSvg>
+                            </span>
+                            <span
+                                className="group-hover:text-[#EA0000] group-hover:opacity-[50%] text-[16px] text-[#999999] font-normal">Удалить</span>
+                        </button>
+                    </div>
+                </div>
+            </>
+        )
+    }
+
+    const ApproveSignedModal = ( props: {id: number} ) => {
         return (
             <>
                 <ConfigProvider
@@ -155,8 +197,8 @@ export const Signed = () => {
                                 Соискатель успешно удалён
                             </p>
                             <Button
-                                className="rounded-[54.5px] border-black text-[14px] h-[40px] w-full py-[13px]"
-                                type="default"
+                                className="rounded-[54.5px] text-[14px] h-[40px] w-full py-[13px]"
+                                type="primary"
                                 onClick={() => {
                                     setIsSuccessSignedModalOpen(false)
                                 }}
@@ -170,12 +212,12 @@ export const Signed = () => {
         )
     }
 
-    const SignedItem = ( props: SignedItemType ) => {
+    const ItemsContainer = () => {
 
         if (DynamicLoading) {
             return (
                 <>
-                    <div className="w-full h-full flex items-center">
+                    <div className="w-full min-h-[26vh] flex items-end">
                         <div className="text-center ml-auto mr-auto">
                             <Spin
                                 indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}
@@ -190,43 +232,11 @@ export const Signed = () => {
         }
 
         return (
-            <>
-                <ApproveSignedModal id={props.id}/>
-                <div className="w-[100%] h-[80px] bg-white flex flex-row items-center">
-                    <div className="ml-[1.5%] w-[62%] flex flex-row">
-                    <span className="w-[38%] text-[16px] text-[##000000] font-normal">
-                        {props.seeker.lastname + ' ' + props.seeker.firstname + ' ' + props.seeker.middlename}
-                    </span>
-                        <span className="w-[54%] text-[16px] text-[##000000] font-normal">
-                        {props.post}
-                    </span>
-                        <span className="w-[8%] text-[16px] text-[##000000] font-normal">
-                        {props.testPassed === true ? 'Пройдено' : 'Не пройдено'}
-                    </span>
-                    </div>
-                    <div className="w-[36.5%] flex ">
-                        <button
-                            className="ml-[50%] gap-[12px] flex bg-[#fff] border-0 cursor-pointer group"
-                            onClick={() => {
-                                setIsApproveSignedModalOpen(true)
-                            }}
-                        >
-                            <span
-                                className="group-hover:hidden"
-                            >
-                                <DeleteIconLaborSvg></DeleteIconLaborSvg>
-                            </span>
-                            <span
-                                className="hidden group-hover:block"
-                            >
-                                <DeleteIconHoverLaborSvg></DeleteIconHoverLaborSvg>
-                            </span>
-                            <span
-                                className="group-hover:text-[#EA0000] group-hover:opacity-[50%] text-[16px] text-[#999999] font-normal">Удалить</span>
-                        </button>
-                    </div>
-                </div>
-            </>
+            <div className="mt-[16px] gap-[12px] flex flex-col">
+                {signed_data.map(item => (
+                    <SignedItem {...item} key={item.id}></SignedItem>
+                ))}
+            </div>
         )
     }
 
@@ -235,7 +245,7 @@ export const Signed = () => {
             <>
                 <div className="w-full h-full flex items-center">
                     <div className="text-center ml-auto mr-auto">
-                        <Spin
+                    <Spin
                             indicator={<LoadingOutlined style={{fontSize: 36}} spin/>}
                         ></Spin>
                         <p className="font-content-font font-normal text-black text-[18px]/[18px]">
@@ -274,11 +284,7 @@ export const Signed = () => {
                         </div>
                         <div className="w-[36.5%]"></div>
                     </div>
-                    <div className="mt-[16px] gap-[12px] flex flex-col">
-                        {signed_data.map(item => (
-                            <SignedItem {...item} key={item.id}></SignedItem>
-                        ))} 
-                    </div>
+                    <ItemsContainer></ItemsContainer>
                 </div>
             </div>
         </>

@@ -25,6 +25,7 @@ import InputText from './InputText'
 import { NewDialogModal } from './NewDialogModal'
 import SearchComponent from './SearchComponent'
 import { PlusMessage } from '../../../../assets/svg/PlusMessage'
+import ChatSkeleton from './ChatSkeleton'
 
 export const ViewMessage = () => {
 	const user = useAppSelector(state => state.auth.user)
@@ -386,9 +387,9 @@ export const ViewMessage = () => {
 									</Form>
 								</div>
 							) : (
-								<>
-									<Spin />
-								</>
+						
+								<ChatSkeleton/>
+								  
 							)}
 						</div>
 					</>

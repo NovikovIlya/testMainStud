@@ -7,7 +7,7 @@ import { t } from 'i18next'
 
 
 
-export const CommentNewTeacher = ({dataOneChatOld, files, isLoading, gotToBottom, refetch ,chatArray,loadMessages,children}: any) => {
+export const CommentNewTeacher = ({dataOneChatOld, files, gotToBottom ,chatArray,loadMessages,children}: any) => {
 	const messagesEndRef = useRef<HTMLDivElement | null>(null)
 	const {data:dataUnReadMessage} = useGetAllUnReadQuery(null)
 
@@ -18,7 +18,6 @@ export const CommentNewTeacher = ({dataOneChatOld, files, isLoading, gotToBottom
 	}, [gotToBottom])
 
 	
-
 	const chatValid = chatArray ? [...chatArray].sort((a: any, b: any) => dayjs(a.dateTime).unix() - dayjs(b.dateTime).unix()) : []
 
 	return (

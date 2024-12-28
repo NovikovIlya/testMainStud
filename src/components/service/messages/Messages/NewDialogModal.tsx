@@ -32,10 +32,6 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 	const dispatch = useAppDispatch()
 	const [recipientName,setRecipientName] = useState('')
 	
-
-
-	console.log('dataGetStudents',dataGetStudents)
-	console.log('dataGetStudentsValue',dataGetStudentsValue)
 	useEffect(() => {
 		if (dataGetStudents) {
 			setdataGetStudentsValue(dataGetStudents)
@@ -121,7 +117,7 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 
 	return (
 		<>
-			{load ? <Spin fullscreen spinning/>: 
+			{load ? <Spin fullscreen spinning/> : 
 				(<Modal
 					maskClosable={false}
 					className="p-12 !min-w-[400px] !w-5/12"

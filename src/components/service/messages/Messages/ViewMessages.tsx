@@ -324,7 +324,7 @@ export const ViewMessage = () => {
 												title={
 													<>
 														<span className="  font-extrabold ">{item.userName}</span>
-														<div className='mb-3' style={{ fontSize: '9px', color: '#888' }}>{truncateString(100,item.userInfo)}</div>
+														<div className='mb-3' style={{ fontSize: '9px', color: '#888' }}>{truncateString(80,item.userInfo)}</div>
 													</>
 												}
 												description={truncateString(10, item.lastMessage)}
@@ -375,8 +375,8 @@ export const ViewMessage = () => {
 										refetch={refetch}
 									>
 										<>
-											<span className="font-extrabold">{currentItem?.userName}</span>
-											<div style={{ fontSize: '9px', color: '#888' }}>{truncateString(100,currentItem  ?  currentItem.userInfo : '')}</div>
+											<span className="font-extrabold text-[10px]">{currentItem?.userName}</span>
+											<div style={{ fontSize: '9px', color: '#888' }}>{truncateString(25,currentItem  ?  currentItem.userInfo : '')}</div>
 										</>
 									</CommentNewTeacher>
 									<Form form={form} className="flex w-full flex-wrap" onFinish={onFinish}>

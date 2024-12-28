@@ -67,13 +67,13 @@ export const CommentNewTeacher = ({dataOneChatOld, files, isLoading, gotToBottom
 											<span className="text-xs text-gray-500 flex gap-2">
 												<span>
 													{dayjs(message.dateTime).isSame(dayjs(), 'day')
-														? 'Сегодня'
+														? <div className='text-[8px]'>Сегодня</div>
 														: new Date(message.dateTime).toLocaleDateString()}
 												</span>
 											</span>
-											<span className="font-bold ml-2">{message.senderName}</span>
+											<span className="font-bold ml-2 text-[10px]">{message.senderName}</span>
 										</div>
-										<div className="bg-blue-500 text-white rounded-lg rounded-tr-none p-3 flex flex-wrap  w-[91%] animate-fade-in">
+										<div className="bg-blue-500 text-white rounded-lg rounded-tr-none p-3 flex flex-wrap  w-[100%] animate-fade-in">
 											<div className="break-all w-full">{message.message}</div>
 											<div className="text-[10px]  w-full flex justify-end mt-3">
 												{new Date(message.dateTime).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Moscow' })}
@@ -88,11 +88,11 @@ export const CommentNewTeacher = ({dataOneChatOld, files, isLoading, gotToBottom
 											<span className="font-bold mr-2">{children}</span>
 											<span className="text-xs text-gray-500 flex gap-2 mt-[2px]">
 												<span>{dayjs(message.dateTime).isSame(dayjs(), 'day')
-														? 'Сегодня'
+														? <div className='text-[8px]'>Сегодня</div>
 														: new Date(message.dateTime).toLocaleDateString()}</span>
 											</span>
 										</div>
-										<div className="bg-gray-200 rounded-lg rounded-tl-none p-3  flex flex-wrap w-[91%] animate-fade-in ">
+										<div className="bg-gray-200 rounded-lg rounded-tl-none p-3  flex flex-wrap w-[100%] animate-fade-in  ">
 											<div className="break-all w-full">{message.message}</div>
 											<div className="text-[10px]  w-full flex justify-end mt-3">
 												{new Date(message.dateTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}

@@ -1,12 +1,13 @@
 import { Button, ConfigProvider, Input, Modal, message } from 'antd'
 import clsx from 'clsx'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { SubmitHandler } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { ModalOkSvg } from '../../assets/svg/ModalOkSvg'
 import { useAppSelector } from '../../store'
+import { useLazyGetInfoUserQuery } from '../../store/api/formApi'
 import { AttachIcon } from '../service/jobSeeker/AttachIcon'
 
 type formDataType = {
@@ -50,6 +51,7 @@ export const DirectResume = ({
 	const [isOpen, setIsOpen] = useState(false)
 	const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
 	const [filename, setFilename] = useState<string | undefined>('')
+	const [isPatronymicSet, setIsPatronymicSet] = useState<boolean>(false)
 
 	const envs = import.meta.env
 	const defEnvs = import.meta.env
@@ -63,8 +65,12 @@ export const DirectResume = ({
 	console.log(defEnvs)
 
 	const token = useAppSelector(state => state.auth.accessToken)
+	const user = useAppSelector(state => state.auth.user)
+	const aboutMeData = useAppSelector(state => state.seekerAboutMe)
 
-	const { control, register, handleSubmit, formState } = useForm({
+	const [getInfo] = useLazyGetInfoUserQuery()
+
+	const { control, register, handleSubmit, formState, setValue } = useForm({
 		defaultValues: {
 			name: '',
 			lastname: '',
@@ -107,6 +113,20 @@ export const DirectResume = ({
 			}
 		})
 	}
+
+	useEffect(() => {
+		if (user) {
+			getInfo()
+				.unwrap()
+				.then(info => {
+					setValue('name', info.name)
+					setValue('lastname', info.surName)
+					info.patronymic !== '' && (setValue('middlename', info.patronymic), setIsPatronymicSet(true))
+					setValue('email', user.email)
+					setValue('phone', info.phone)
+				})
+		}
+	}, [])
 
 	return (
 		<>
@@ -188,6 +208,7 @@ export const DirectResume = ({
 										onPressEnter={e => e.preventDefault()}
 										type="text"
 										placeholder="Фамилия*"
+										disabled
 										{...field}
 									/>
 								)}
@@ -212,6 +233,7 @@ export const DirectResume = ({
 										className={`${errors.name && 'border-[#C11616]'}`}
 										type="text"
 										placeholder="Имя*"
+										disabled
 										{...field}
 									/>
 								)}
@@ -236,6 +258,7 @@ export const DirectResume = ({
 										className={`${errors.middlename && 'border-[#C11616]'}`}
 										type="text"
 										placeholder="Отчество"
+										disabled={isPatronymicSet}
 										{...field}
 									/>
 								)}

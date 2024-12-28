@@ -173,11 +173,11 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		getVacancyGroupedResponces: builder.query<
 			VacancyGroupedResponcesType[],
-			{ category: string; direction?: string; role: string }
+			{ category: string; direction?: string; role: string; type: 'DIRECTORY' | 'SUBDIVISION' }
 		>({
-			query: ({ category, direction, role }) => ({
+			query: ({ category, direction, role, type }) => ({
 				url: `http://${emplBaseURL}employment-api/v1/responds/grouped?category=${category}${
-					direction !== undefined ? '&direction=' + direction : ''
+					direction !== undefined ? `&${type === 'DIRECTORY' ? 'direction=' : 'subdivision='}` + direction : ''
 				}`,
 				headers: {
 					Authorization: `Bearer ${role === 'PERSONNEL_DEPARTMENT' ? personnelDeparmentToken : supervisorToken}`
@@ -1108,6 +1108,15 @@ export const serviceApi = apiSlice.injectEndpoints({
 			query: ({ testStageId }) => ({
 				url: `http://${emplBaseURL}employment-api/v1/employment/test-stage/${testStageId}`
 			})
+		}),
+		getEmploymentStageStatusForSupervisor: builder.query<EmploymentDataType, { respondId: number }>({
+			query: arg => ({
+				url: `http://${emplBaseURL}employment-api/v1/management/respond/${arg.respondId}/employment`,
+				method: 'GET',
+				headers: {
+					Authorization: `Bearer ${personnelDeparmentToken}`
+				}
+			})
 		})
 	})
 })
@@ -1226,5 +1235,6 @@ export const {
 	useFinalVerifyPhoneMutation,
 	useDeleteAccPhoneMutation,
 	useGetRoleQuery,
-	useLazyCheckIfTestIsPassedQuery
+	useLazyCheckIfTestIsPassedQuery,
+	useLazyGetEmploymentStageStatusForSupervisorQuery
 } = serviceApi

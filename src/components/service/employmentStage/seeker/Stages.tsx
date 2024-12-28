@@ -100,7 +100,7 @@ export const Stages = () => {
 				<div className="font-content-font font-normal text-[28px]/[28px] text-black mt-[120px]">
 					Вакансия «Специалист отдела сотрудничества»
 				</div>
-				<NavPanel />
+				<NavPanel type="SEEKER" />
 				<div
 					className={`w-full mt-[40px] ${
 						(empData.status === 'VERIFYING' || empData.status === 'ACCEPTED') && 'pointer-events-none'

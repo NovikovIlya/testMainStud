@@ -7,7 +7,7 @@ import { setStageProgressAsReady } from '../../../../store/reducers/EmploymentPr
 
 import { NavPanelElement } from './NavPanelElement'
 
-export const NavPanel = () => {
+export const NavPanel = (props: { type: 'SEEKER' | 'SUPERVISOR' }) => {
 	const stages: { id: number; text: string }[] = [
 		{ id: 1, text: 'Направление на мед. осмотр' },
 		{ id: 2, text: 'Прикрепление документов' },
@@ -27,11 +27,12 @@ export const NavPanel = () => {
 	useEffect(() => {
 		console.log('reeffect in navpanel')
 		let interval = setInterval(() => {
-			check({ testStageId: foundStage?.id! })
-				.unwrap()
-				.then(res => {
-					res.testPassed === true && dispatch(setStageProgressAsReady(foundStage?.id!))
-				})
+			foundStage?.id &&
+				check({ testStageId: foundStage.id })
+					.unwrap()
+					.then(res => {
+						res.testPassed === true && dispatch(setStageProgressAsReady(foundStage?.id!))
+					})
 		}, 5000)
 		return () => {
 			clearInterval(interval)
@@ -39,7 +40,11 @@ export const NavPanel = () => {
 	}, [foundStage])
 
 	return (
-		<nav className="w-[80%] flex justify-between relative h-[68px] mt-[52px]">
+		<nav
+			className={`${
+				props.type === 'SEEKER' ? 'w-[80%]' : 'w-full pointer-events-none'
+			} flex justify-between relative h-[68px] mt-[52px]`}
+		>
 			<div className="absolute bg-[#757778] opacity-[52%] h-[1px] left-[5%] right-[5%] z-[1] top-[20%]"></div>
 			<div className="absolute bg-[#3073D7] h-[1px] left-[5%] right-[5%] z-[2] top-[20%]"></div>
 			{stages.map(stage => (

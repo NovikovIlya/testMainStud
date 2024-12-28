@@ -108,7 +108,7 @@ export const VacancyRespondItem = (
 								className="ml-[5%] w-[15%] underline text-dasha-blue underline-offset-4 cursor-pointer"
 								onClick={() => {
 									setIsModalOpen(true)
-									getEmpDocs(props.id)
+									getEmpDocs(props.vacancyId)
 										.unwrap()
 										.then(res => {
 											dispatch(setDocs(res))

@@ -421,7 +421,10 @@ export const ResponseForm = () => {
 										birthDay: values.birthDay.$d.toLocaleDateString(),
 										surName: values.surname,
 										phone: values.phoneNumber,
-										countryId: values.country
+										countryId: values.country,
+										isBirthDaySet: aboutMeData.isBirthDaySet,
+										isPatronymicSet: aboutMeData.isPatronymicSet,
+										isGenderSet: aboutMeData.isGenderSet
 									})
 								)
 								dispatch(completeAboutMe())

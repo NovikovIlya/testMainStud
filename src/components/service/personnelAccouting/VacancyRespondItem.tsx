@@ -25,7 +25,7 @@ export const VacancyRespondItem = (
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
 
-	const { docs } = useAppSelector(state => state.employmentSeekerDocs)
+	//const { docs } = useAppSelector(state => state.employmentSeekerDocs)
 	const [empStatus, setEmpStatus] = useState<string>('')
 
 	const [getEmpData, empDataStatus] = useLazyGetEmploymentStageStatusForSupervisorQuery()
@@ -112,8 +112,9 @@ export const VacancyRespondItem = (
 										.unwrap()
 										.then(res => {
 											dispatch(setDocs(res))
+											return res
 										})
-										.then(() => {
+										.then(docs => {
 											getEmpData({ respondId: props.id })
 												.unwrap()
 												.then(empData => {

@@ -85,7 +85,7 @@ export const EmplDocAttachment = (props: { respondId: number; stageId: number; s
 						<Popover
 							overlayClassName="p-[20px] w-[369px]"
 							className="pointer-events-auto"
-							placement="bottomLeft"
+							placement="right"
 							arrow={false}
 							content={
 								<>

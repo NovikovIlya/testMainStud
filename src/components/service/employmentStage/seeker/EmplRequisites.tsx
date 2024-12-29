@@ -69,7 +69,7 @@ export const EmplRequisites = (props: { respondId: number; stageId: number; stag
 						<Popover
 							overlayClassName="p-[20px] w-[369px]"
 							className="pointer-events-auto"
-							placement="bottomLeft"
+							placement="right"
 							arrow={false}
 							content={
 								<>

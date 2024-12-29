@@ -66,7 +66,7 @@ export const EmplMedExam = (props: { respondId: number; stageId: number; stageNa
 						<Popover
 							overlayClassName="p-[20px] w-[369px]"
 							className="pointer-events-auto"
-							placement="bottomLeft"
+							placement="right"
 							arrow={false}
 							content={
 								<>

@@ -1328,7 +1328,7 @@ export const ResponseForm = () => {
 													skillInputValue !== '' &&
 														(setcurrentFormSkills([...currentFormskills, skillInputValue]), setSkillInputValue(''))
 												}}
-												icon={<ButtonPlusIcon />}
+												icon={<ButtonPlusIcon special />}
 												type="text"
 											></Button>
 										</ConfigProvider>

@@ -510,6 +510,7 @@ export const ResponseForm = () => {
 									disabled={aboutMeData.isBirthDaySet}
 									format={'DD-MM-YYYY'}
 									value={dayjs(aboutMeData.birthDay, 'DD.MM.YYYY')}
+									maxDate={dayjs(date)}
 									className="w-full"
 									onChange={(e, date) => {
 										// dispatch(birthDay(date))
@@ -1139,7 +1140,7 @@ export const ResponseForm = () => {
 										<label className="text-black text-[18px]/[18px] font-content-font font-normal">Период работы</label>
 									}
 								>
-									<DatePicker.MonthPicker className="w-full" disabled={haveNoExprience} />
+									<DatePicker.MonthPicker className="w-full" disabled={haveNoExprience} maxDate={dayjs(date)} />
 								</Form.Item>
 								<Form.Item
 									name={'endWork'}
@@ -1239,7 +1240,7 @@ export const ResponseForm = () => {
 										<label className="text-black text-[18px]/[18px] font-content-font font-normal">Период работы</label>
 									}
 								>
-									<DatePicker.MonthPicker className="w-full" disabled={haveNoExprience} />
+									<DatePicker.MonthPicker className="w-full" disabled={haveNoExprience} maxDate={dayjs(date)} />
 								</Form.Item>
 								<Form.Item
 									name={'endWork'}

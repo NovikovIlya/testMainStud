@@ -7,6 +7,8 @@ import { useAppSelector } from '../../../../../store'
 import { useEmployeeSeekerRequestMutation, useGetRespondFullInfoQuery } from '../../../../../store/api/serviceApi'
 import { useAlert } from '../../../../../utils/Alert/AlertMessage'
 import { NocircleArrowIcon } from '../../../jobSeeker/NoCircleArrowIcon'
+import {useTranslation} from "react-i18next";
+import {useGetCountriesQuery} from "../../../../../store/api/utilsApi";
 
 export const SupervisorInterviewSeekerInfo = () => {
 	const respondId = useAppSelector(state => state.currentResponce)
@@ -17,6 +19,29 @@ export const SupervisorInterviewSeekerInfo = () => {
 	const { openAlert } = useAlert()
 
 	const { data, isLoading: loading } = useGetRespondFullInfoQuery(respondId.respondId)
+
+	const { t, i18n } = useTranslation()
+	const { data: countries, isLoading: isLoadingCountry } = useGetCountriesQuery(i18n.language)
+
+	const calculateAge = (birthDateStr: string) => {
+		const birthDate = new Date(birthDateStr);
+		const currentDate = new Date();
+
+		let age = currentDate.getFullYear() - birthDate.getFullYear();
+		const monthDifference = currentDate.getMonth() - birthDate.getMonth();
+
+		// Если день рождения еще не был в этом году, уменьшаем возраст на 1
+		if (monthDifference < 0 || (monthDifference === 0 && currentDate.getDate() < birthDate.getDate())) {
+			age--;
+		}
+
+		return age;
+	}
+
+	const birthday = data?.userData?.birthday
+	const age = birthday ? calculateAge(birthday) : undefined
+
+	const updatedDateStr = data?.userData?.birthday.replace(/-/g, '.');
 
 	const [isRefuseModalOpen, setIsRefuseModalOpen] = useState(false)
 
@@ -154,7 +179,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 							</Button>
 							<Button
 								disabled={isEmploymentRequestSent || isSeekerRejected}
-								className=" mr-[50px] h-[40px] font-content-font font-normal text-black border-[1px] border-black text-[16px]/[16px] rounded-[54.5px]"
+								className=" mr-[50px] h-[40px]  w-[257px] font-content-font font-normal text-black border-[1px] border-black text-[16px]/[16px] rounded-[54.5px]"
 								onClick={() => {
 									setIsRefuseModalOpen(true)
 								}}
@@ -163,6 +188,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 							</Button>
 						</div>
 					)}
+
 				<Button
 					disabled={isEmploymentRequestSent || isSeekerRejected}
 					className="h-[40px] w-[257px] bg-[#3073D7] rounded-[54.5px] text-white text-[16px]/[16px]"
@@ -180,6 +206,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 				>
 					invite without time check
 				</Button>
+
 			</div>
 		)
 	}
@@ -239,10 +266,16 @@ export const SupervisorInterviewSeekerInfo = () => {
 							</div>
 							<div className="flex flex-col gap-[8px]">
 								<p className="font-content-font font-normal text-black text-[24px]/[28.8px]">
-									{data?.userData?.lastname + ' ' + data?.userData?.firstname + ' ' + data?.userData?.middlename}
+									{data?.userData?.lastname +
+										' ' +
+										data?.userData?.firstname +
+										' ' +
+										data?.userData?.middlename}
 								</p>
 								<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-									{data?.userData?.sex}, {data?.userData?.age} года
+									{data?.userData?.sex === 'M' ? 'Мужчина' : ''}
+									{data?.userData?.sex === 'Ж' ? 'Женщина' : ''}
+									, {age} года
 								</p>
 								<div className="flex gap-[36px]">
 									<div className="flex flex-col gap-[8px]">
@@ -250,7 +283,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 											Дата рождения
 										</p>
 										<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-											{data?.userData?.bday}
+											{updatedDateStr}
 										</p>
 									</div>
 									<div className="flex flex-col gap-[8px]">
@@ -258,7 +291,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 											Страна гражданства
 										</p>
 										<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-											{data?.userData?.country}
+											{countries?.find(country => country.id === data?.userData?.countryId)?.shortName}
 										</p>
 									</div>
 								</div>

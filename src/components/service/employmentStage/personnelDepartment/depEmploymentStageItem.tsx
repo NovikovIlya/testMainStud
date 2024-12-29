@@ -108,8 +108,11 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 									try {
 										setIsReqModalOpen(false)
 										await markBankCardApplicationFormed({ subStageId: 5 })
-										dispatch(setFifthStageStatus('ACCEPTED'))
-										setIsReqModalSuccessOpen(true)
+											.unwrap()
+											.then(()=>{
+												dispatch(setFifthStageStatus('ACCEPTED'))
+												setIsReqModalSuccessOpen(true)
+											})
 
 									} catch (error: any) {
 										openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
@@ -183,9 +186,12 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 												comment: textRef.current,
 												subStageId: props.stage
 											})
-											dispatch(setSecondStageStatus('ACCEPTED'))
-											dispatch(setSecondStageCommentVisibility('invisible'))
-											openAlert({ type: 'success', text: 'Этап успешно принят'})
+												.unwrap()
+												.then(()=>{
+													dispatch(setSecondStageStatus('ACCEPTED'))
+													dispatch(setSecondStageCommentVisibility('invisible'))
+													openAlert({ type: 'success', text: 'Этап успешно принят'})
+												})
 										} catch (error: any) {
 											openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 										}
@@ -239,9 +245,12 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 												comment: textRef.current,
 												subStageId: props.stage
 											})
-											dispatch(setThirdStageStatus('ACCEPTED'))
-											dispatch(setThirdStageCommentVisibility('invisible'))
-											openAlert({ type: 'success', text: 'Этап успешно принят' })
+												.unwrap()
+												.then(()=>{
+													dispatch(setThirdStageStatus('ACCEPTED'))
+													dispatch(setThirdStageCommentVisibility('invisible'))
+													openAlert({ type: 'success', text: 'Этап успешно принят' })
+												})
 										} catch (error: any) {
 											openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 										}
@@ -294,9 +303,12 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 												comment: textRef.current,
 												subStageId: props.stage
 											})
-											dispatch(setFifthStageStatus('ACCEPTED'))
-											dispatch(setFifthStageCommentVisibility('invisible'))
-											openAlert({ type: 'success', text: 'Этап успешно принят' })
+												.unwrap()
+												.then(()=>{
+													dispatch(setFifthStageStatus('ACCEPTED'))
+													dispatch(setFifthStageCommentVisibility('invisible'))
+													openAlert({ type: 'success', text: 'Этап успешно принят' })
+												})
 										} catch (error: any) {
 											openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 										}
@@ -478,15 +490,19 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 									type="primary"
 									onClick={async () => {
 										try {
+											setIsRevisionModalOpen(false)
 											await changeStatus({
 												status: 'REFINE',
 												comment: textRef.current,
 												subStageId: props.stage
 											})
-											dispatch(setSecondStageStatus('REFINE'))
-											dispatch(setSecondStageCommentVisibility('visible'))
-											setIsRevisionModalOpen(false)
-											openAlert({ type: 'success', text: 'Этап успешно отправлен на доработку' })
+												.unwrap()
+												.then(()=>{
+													dispatch(setSecondStageStatus('REFINE'))
+													dispatch(setSecondStageCommentVisibility('visible'))
+													openAlert({ type: 'success', text: 'Этап успешно отправлен на доработку' })
+												})
+
 										} catch (error: any) {
 											openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 										}
@@ -500,17 +516,20 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 								<Button
 									className="rounded-[54.5px] py-[12px] px-[24px]  text-[16px]"
 									type="primary"
-									onClick={async () => {
+									onClick={async() => {
 										try {
+											setIsRevisionModalOpen(false)
 											await changeStatus({
 												status: 'REFINE',
 												comment: textRef.current,
 												subStageId: props.stage
 											})
-											dispatch(setThirdStageStatus('REFINE'))
-											dispatch(setThirdStageCommentVisibility('visible'))
-											setIsRevisionModalOpen(false)
-											openAlert({ type: 'success', text: 'Этап успешно отправлен на доработку' })
+												.unwrap()
+												.then(()=>{
+													dispatch(setThirdStageStatus('REFINE'))
+													dispatch(setThirdStageCommentVisibility('visible'))
+													openAlert({ type: 'success', text: 'Этап успешно отправлен на доработку' })
+												})
 										} catch (error: any) {
 											openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 										}
@@ -526,14 +545,17 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 									type="primary"
 									onClick={async () => {
 										try {
+											setIsRevisionModalOpen(false)
 											await changeStatus({
 												status: 'REFINE',
 												comment: textRef.current,
 												subStageId: props.stage
 											})
-											dispatch(setForthStageStatus('REFINE'))
-											setIsRevisionModalOpen(false)
-											openAlert({ type: 'success', text: 'Этап успешно отправлен на доработку' })
+												.unwrap()
+												.then(()=>{
+													dispatch(setForthStageStatus('REFINE'))
+													openAlert({ type: 'success', text: 'Этап успешно отправлен на доработку' })
+												})
 										} catch (error: any) {
 											openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 										}
@@ -549,14 +571,18 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 									type="primary"
 									onClick={async () => {
 										try {
+											setIsRevisionModalOpen(false)
 											await changeStatusAccounting({
 												status: 'REFINE',
 												comment: textRef.current,
 												subStageId: props.stage
 											})
-											dispatch(setFifthStageStatus('REFINE'))
-											setIsRevisionModalOpen(false)
-											openAlert({ type: 'success', text: 'Этап успешно отправлен на доработку' })
+												.unwrap()
+												.then(()=>{
+													dispatch(setFifthStageStatus('REFINE'))
+													openAlert({ type: 'success', text: 'Этап успешно отправлен на доработку' })
+												})
+
 										} catch (error: any) {
 											openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 										}

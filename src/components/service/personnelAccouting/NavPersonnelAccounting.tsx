@@ -165,9 +165,11 @@ export const NavPesonnelAccounting = () => {
 						className={clsx(
 							'font-content-font text-black text-[14px]/[14px] font-normal',
 							(!(
-								pathname === '/services/personnelaccounting/vacancyrequests'
-								||
-								pathname === '/services/personnelaccounting/request/create'
+								pathname === '/services/personnelaccounting/vacancyrequests' ||
+								pathname === '/services/personnelaccounting/request/create' ||
+								pathname === '/services/personnelaccounting/request/update' ||
+								pathname === '/services/personnelaccounting/request/delete'
+
 								) && 'opacity-[52%]')
 						)}
 						onClick={() => {

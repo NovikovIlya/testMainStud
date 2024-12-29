@@ -58,6 +58,7 @@ export const RequisiteSeeker = () => {
 	const birthday = data?.userData?.birthday
 	const age = birthday ? calculateAge(birthday) : undefined
 
+	const date = new Date()
 
 	const updatedDateStr = data?.userData?.birthday.replace(/-/g, '.');
 
@@ -177,68 +178,14 @@ export const RequisiteSeeker = () => {
 					</div>
 					<hr/>
 					<div className="flex flex-col gap-[24px]">
-						<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">
-							Опыт работы
-						</p>
+						<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">Образование</p>
 						<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
-							{data?.respondData.portfolio.workExperiences.map(exp => (
+							{data.educations.map(edu => (
 								<>
-									<div className="flex flex-col gap-[4px]">
-										<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-											{exp.beginWork.substring(0, 4)}-
-											{exp.endWork.substring(0, 4)}
-										</p>
-										<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-											{parseInt(exp.endWork.substring(0, 4)) -
-											parseInt(exp.beginWork.substring(0, 4)) ===
-											0
-												? ''
-												: parseInt(exp.endWork.substring(0, 4)) -
-												parseInt(exp.beginWork.substring(0, 4))}
-											{parseInt(exp.endWork.substring(0, 4)) -
-												parseInt(exp.beginWork.substring(0, 4)) ===
-												1 && ' год'}
-											{parseInt(exp.endWork.substring(0, 4)) -
-												parseInt(exp.beginWork.substring(0, 4)) >=
-												2 &&
-												parseInt(exp.endWork.substring(0, 4)) -
-												parseInt(exp.beginWork.substring(0, 4)) <=
-												4 &&
-												' года'}
-											{parseInt(exp.endWork.substring(0, 4)) -
-												parseInt(exp.beginWork.substring(0, 4)) >
-												4 && ' лет'}
-										</p>
-									</div>
+									<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">{edu.endYear}</p>
 									<div className="flex flex-col gap-[8px]">
 										<p className="font-content-font font-bold text-black text-[16px]/[19.2px]">
-											{exp.position}
-										</p>
-										<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-											{exp.workPlace}
-										</p>
-										<p className="font-content-font font-normal text-black text-[14px]/[16.8px]">
-											{exp.duties}
-										</p>
-									</div>
-								</>
-							))}
-						</div>
-					</div>
-					<hr/>
-					<div className="flex flex-col gap-[24px]">
-						<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">
-							Образование
-						</p>
-						<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
-							{data?.educations.map(edu => (
-								<>
-									<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-										{edu.endYear}
-									</p>
-									<div className="flex flex-col gap-[8px]">
-										<p className="font-content-font font-bold text-black text-[16px]/[19.2px]">
-											{edu.nameOfInstitute}
+											{edu.nameOfInstitute + ', ' + edu.country}
 										</p>
 										<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
 											{edu.speciality === null ? '' : edu.speciality + ', '}
@@ -248,6 +195,50 @@ export const RequisiteSeeker = () => {
 								</>
 							))}
 						</div>
+					</div>
+					<hr/>
+					<div className="flex flex-col gap-[24px]">
+						<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">Опыт
+							работы</p>
+						{data.respondData.portfolio.workExperiences.length === 0 ? (
+							<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
+								Соискатель не имеет опыта работы
+							</p>
+						) : (
+							<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
+								{data.respondData.portfolio.workExperiences.map(exp => (
+									<>
+										<div className="flex flex-col gap-[4px]">
+											<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
+												{exp.beginWork.substring(0, 4)}-
+												{parseInt(exp.endWork.substring(0, 4)) === date.getFullYear()
+													? 'по наст.время'
+													: exp.endWork.substring(0, 4)}
+											</p>
+											<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
+												{parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) === 0
+													? ''
+													: parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4))}
+												{parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) === 1 &&
+													' год'}
+												{parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) >= 2 &&
+													parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) <= 4 &&
+													' года'}
+												{parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) > 4 &&
+													' лет'}
+											</p>
+										</div>
+										<div className="flex flex-col gap-[8px]">
+											<p className="font-content-font font-bold text-black text-[16px]/[19.2px]">{exp.position}</p>
+											<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
+												{exp.workPlace}
+											</p>
+											<p className="font-content-font font-normal text-black text-[14px]/[16.8px]">{exp.duties}</p>
+										</div>
+									</>
+								))}
+							</div>
+						)}
 					</div>
 					<hr/>
 					<div className="flex flex-col">

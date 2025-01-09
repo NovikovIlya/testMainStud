@@ -436,4 +436,46 @@ export const jsxElements = [
 			i: 'ManagementScientificProjects'
 		}
 	},
+	{
+		key: 'contractEducation',
+		element: (
+			<TemplateCard
+				href="https://shelly.kpfu.ru/e-ksu/SITE_STUDENT_SH_PR_AC.contracts?p_menu=34"
+				info="petitionForDocumentInfo"
+				title="contractEducation"
+				buttonText="Watch"
+				img={'/petition.png'}
+				className='object-contain'
+				positionImage={'mt-7'}
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 0,
+			y: 0,
+			i: 'ManagementScientificProjects'
+		}
+	},
+	{
+		key: 'educationPrograms',
+		element: (
+			<TemplateCard
+				href="https://kpfu.ru/sveden/education/#eduop"
+				info="educationProgramsInfo"
+				title="educationPrograms"
+				buttonText="Watch"
+				img={'/petition.png'}
+				className='object-contain'
+				positionImage={'mt-7'}
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 0,
+			y: 0,
+			i: 'ManagementScientificProjects'
+		}
+	},
 ]

@@ -227,8 +227,28 @@ export const block = {
             w: 1,
             h: 1,
             x: 1,
-            y: 5,
+            y: 4,
             i: 'petitionForDocument',
+         
+            moved: true,
+            static: false,
+        },
+        {
+            w: 1,
+            h: 1,
+            x: 0,
+            y: 4,
+            i: 'contractEducation',
+         
+            moved: true,
+            static: false,
+        },
+        {
+            w: 1,
+            h: 1,
+            x: 0,
+            y: 5,
+            i: 'educationPrograms',
          
             moved: true,
             static: false,

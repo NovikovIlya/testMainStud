@@ -380,7 +380,11 @@
 	"noOtherMessages": "No other messages",
 	"petitionForDocument":"Single service center",
 	"petitionForDocumentInfo":"Here you can submit applications for documents",
-	"minimumFour": "Please enter at least 4 characters"
+	"minimumFour": "Please enter at least 4 characters",
+	"contractEducation": "Contract Education",
+	"contractEducationInfo": "You can take all information about payment for education here and control previously committed transactions",
+	"educationPrograms": "Education programs",
+	"educationProgramsInfo": "You can find information about Main professional education programs of all specialties in KFU"
 	
 
 }

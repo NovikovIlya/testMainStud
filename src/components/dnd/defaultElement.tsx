@@ -444,7 +444,7 @@ export const jsxElements = [
 				info="petitionForDocumentInfo"
 				title="contractEducation"
 				buttonText="Watch"
-				img={'/petition.png'}
+				img={'/contractEduc.png'}
 				className='object-contain'
 				positionImage={'mt-7'}
 			/>
@@ -465,7 +465,7 @@ export const jsxElements = [
 				info="educationProgramsInfo"
 				title="educationPrograms"
 				buttonText="Watch"
-				img={'/petition.png'}
+				img={'/educProg.png'}
 				className='object-contain'
 				positionImage={'mt-7'}
 			/>

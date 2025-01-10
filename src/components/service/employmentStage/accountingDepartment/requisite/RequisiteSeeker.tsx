@@ -1,4 +1,4 @@
-import {Button, Spin} from 'antd'
+import {Button, Spin, Tag} from 'antd'
 import { NocircleArrowIcon } from '../../../jobSeeker/NoCircleArrowIcon'
 import { AvatartandardSvg } from '../../../../../assets/svg/AvatarStandardSvg'
 import { useAppSelector } from '../../../../../store'
@@ -12,6 +12,7 @@ import {Margin, usePDF} from "react-to-pdf";
 import {MyDocsSvg} from "../../../../../assets/svg/MyDocsSvg";
 import {useTranslation} from "react-i18next";
 import {useGetCountriesQuery} from "../../../../../store/api/utilsApi";
+import uuid from "react-uuid";
 
 
 export const RequisiteSeeker = () => {
@@ -241,18 +242,28 @@ export const RequisiteSeeker = () => {
 						)}
 					</div>
 					<hr/>
+					<div className="flex flex-col gap-[24px]">
+						<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">О
+							себе</p>
+						<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
+							{data.respondData.skills.aboutMe}
+						</p>
+					</div>
+					<hr/>
 					<div className="flex flex-col">
 						<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40 w-[194px]">
 							Профессиональные навыки
 						</p>
 						<div className="grid grid-cols-[194px_auto] gap-x-[20px] w-[90%]">
-							<div className="col-start-2">
-								{/*
-								{data?.respondData.skills.aboutMe}
-								TODO: разобраться почему приходит undefined
-								*/}
-							</div>
-							<div className="col-start-2 flex gap-[8px] flex-wrap">
+							<div className="col-start-2 mt-[24px] flex gap-[8px] flex-wrap">
+								{data.respondData.skills.keySkills.map(skill => (
+									<Tag
+										className="bg-black bg-opacity-10 rounded-[40px] py-[8px] px-[16px] font-content-font font-normal text-black text-[16px]/[19.2px]"
+										key={uuid()}
+									>
+										{skill}
+									</Tag>
+								))}
 							</div>
 						</div>
 					</div>

@@ -1,5 +1,5 @@
 import { LoadingOutlined } from '@ant-design/icons'
-import { Button, ConfigProvider, Form, Modal, Select, Spin } from 'antd'
+import {Button, ConfigProvider, Form, Modal, Select, Spin, Tag} from 'antd'
 import React, { useState } from 'react'
 
 import { AvatartandardSvg } from '../../../../../assets/svg/AvatarStandardSvg'
@@ -9,6 +9,7 @@ import { useAlert } from '../../../../../utils/Alert/AlertMessage'
 import { NocircleArrowIcon } from '../../../jobSeeker/NoCircleArrowIcon'
 import {useTranslation} from "react-i18next";
 import {useGetCountriesQuery} from "../../../../../store/api/utilsApi";
+import uuid from "react-uuid";
 
 export const SupervisorInterviewSeekerInfo = () => {
 	const respondId = useAppSelector(state => state.currentResponce)
@@ -264,7 +265,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 					<div className="flex flex-wrap gap-[150px]">
 						<div className="flex gap-[20px]">
 							<div className="flex h-[167px] w-[167px] bg-[#D9D9D9]">
-								<AvatartandardSvg />
+								<AvatartandardSvg/>
 							</div>
 							<div className="flex flex-col gap-[8px]">
 								<p className="font-content-font font-normal text-black text-[24px]/[28.8px]">
@@ -343,9 +344,9 @@ export const SupervisorInterviewSeekerInfo = () => {
 													setIsSeekerRejected(true)
 												})
 											setIsRefuseModalOpen(false)
-											openAlert({ type: 'success', text: 'Причина отказа успешно отправлена' })
+											openAlert({type: 'success', text: 'Причина отказа успешно отправлена'})
 										} catch (error: any) {
-											openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+											openAlert({type: 'error', text: 'Извините, что-то пошло не так...'})
 										}
 									}}
 								>
@@ -354,11 +355,12 @@ export const SupervisorInterviewSeekerInfo = () => {
 									<Form.Item
 										name={'reason'}
 										label={
-											<label className="mb-[10px] text-black text-[18px]/[18px] font-content-font font-normal">
+											<label
+												className="mb-[10px] text-black text-[18px]/[18px] font-content-font font-normal">
 												Причина отказа
 											</label>
 										}
-										rules={[{ message: 'не выбрана причина отказа' }]}
+										rules={[{message: 'не выбрана причина отказа'}]}
 									>
 										<Select
 											placeholder="Не хватает опыта"
@@ -383,9 +385,10 @@ export const SupervisorInterviewSeekerInfo = () => {
 								</Form>
 							</Modal>
 						</ConfigProvider>
-						<Component time={time.time} format={format.format} timeFormated={timeFormated.timeFormated}></Component>
+						<Component time={time.time} format={format.format}
+								   timeFormated={timeFormated.timeFormated}></Component>
 					</div>
-					<hr />
+					<hr/>
 					<div className="flex flex-col gap-[24px]">
 						<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">
 							Сопроводительное письмо
@@ -394,7 +397,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 							{data?.respondData.coverLetter}
 						</p>
 					</div>
-					<hr />
+					<hr/>
 					<div className="flex flex-col gap-[24px]">
 						<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">Образование</p>
 						<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
@@ -459,18 +462,29 @@ export const SupervisorInterviewSeekerInfo = () => {
 						)}
 					</div>
 					<hr/>
+					<div className="flex flex-col gap-[24px]">
+						<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">О
+							себе</p>
+						<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
+							{data?.respondData.skills.aboutMe}
+						</p>
+					</div>
+					<hr/>
 					<div className="flex flex-col">
 						<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40 w-[194px]">
 							Профессиональные навыки
 						</p>
 						<div className="grid grid-cols-[194px_auto] gap-x-[20px] w-[90%]">
-							<div className="col-start-2">
-								{/*
-                {data?.respondData.skills.aboutMe}
-                TODO: разобраться почему приходит undefined
-                */}
+							<div className="col-start-2 mt-[24px] flex gap-[8px] flex-wrap">
+								{data?.respondData.skills.keySkills.map(skill => (
+									<Tag
+										className="bg-black bg-opacity-10 rounded-[40px] py-[8px] px-[16px] font-content-font font-normal text-black text-[16px]/[19.2px]"
+										key={uuid()}
+									>
+										{skill}
+									</Tag>
+								))}
 							</div>
-							<div className="col-start-2 flex gap-[8px] flex-wrap"></div>
 						</div>
 					</div>
 				</div>

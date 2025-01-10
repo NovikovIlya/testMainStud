@@ -70,7 +70,7 @@ export const Estimation = () => {
 			title: t('Type'),
 			key: 'type',
 			dataIndex: 'type',
-			render: item => <p className="text-base">{item}</p>,
+			render: item => <p className="text-base">{t(item)}</p>,
 			align: "center",
 		},
 		{

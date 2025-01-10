@@ -441,7 +441,7 @@ export const jsxElements = [
 		element: (
 			<TemplateCard
 				href="https://shelly.kpfu.ru/e-ksu/SITE_STUDENT_SH_PR_AC.contracts?p_menu=34"
-				info="petitionForDocumentInfo"
+				info="contractEducationInfo"
 				title="contractEducation"
 				buttonText="Watch"
 				img={'/contractEduc.png'}

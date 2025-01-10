@@ -344,6 +344,7 @@
 	"elective" : "Elective",
 	"practice" : "Practice",
 	"exam" : "Exam",
+	"quiz": "Quiz",
 	"notExam" : "Not exam",
 	"inputFio" : "Enter your full name",
 	"inputMessage" : "Enter your message",

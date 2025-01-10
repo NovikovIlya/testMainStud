@@ -13,7 +13,7 @@ export const LeftMenu = (props: ILeftMenu) => {
         navigate(url)
     }
     return (
-        <div className={'shadowNav mt-20 h-screen'}>
+        <div className={'shadowNav mt-20 min-h-screen'}>
             <ul className="min-w-[260px] pt-14 flex flex-col gap-4 ">
                 {
                     props.navList.map((elem, index) => (

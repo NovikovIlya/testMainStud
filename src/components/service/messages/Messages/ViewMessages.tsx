@@ -325,7 +325,7 @@ export const ViewMessage = () => {
 												title={
 													<>
 														<span className="  font-extrabold ">{item.userName}</span>
-														<div className='mb-3 w-[300px]' style={{ fontSize: '9px', color: '#888' }}>{truncateString(130,item.userInfo)}</div>
+														<div className='mb-3 w-[80%]' style={{ fontSize: '9px', color: '#888' }}>{truncateString(130,item.userInfo)}</div>
 													</>
 												}
 												description={truncateString(10, item.lastMessage)}

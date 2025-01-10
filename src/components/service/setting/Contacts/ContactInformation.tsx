@@ -44,9 +44,9 @@ export const ContactInformation = () => {
 	},[isErrorPost])
 
 	useInterval(() => { 
-		setCount(count - 1);},
-		// Интервал будет работать только когда модальное окно открыто и count > 0
-		isModalOpen && count > 0 ? 1000 : undefined
+		setCount(count - 1);
+		// Интервал будет работать только когда модальное окно открыто и count > 0, где 1000 - это мс
+		}, isModalOpen && (count > 0) ? 1000 : undefined
 	);
 
 	const onSubmitPhone2 = () => {

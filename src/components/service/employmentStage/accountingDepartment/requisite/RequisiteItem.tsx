@@ -48,7 +48,7 @@ export const RequisiteItem = ( props : EmploymentStageItemType ) => {
 							dispatch(setCurrentResponce(props.respondId))
 							dispatch(setCurrentRequisiteSeekerVacancy(props.vacancy.name))
 							dispatch(setCurrentRequisiteSeekerName( props.applicant.lastName + ' ' + props.applicant.firstName + ' ' + props.applicant.middleName))
-							navigate(`/services/personnelaccounting/accounting/requisite/requisite-review`)
+							navigate(`/services/personnelaccounting/accounting/requisite/requisite-review/${props.respondId}`)
 						}}>
 						Подробнее
 					</Button>

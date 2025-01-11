@@ -17,8 +17,18 @@ export const RequisiteStage = () => {
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 
+	const currentUrl = window.location.pathname;
+	const match = currentUrl.match(/\/requisite-review\/(\d+)$/);
 
-	const { data: req_data, isLoading : loading } = useGetEmploymentReqStageStatusQuery({ respondId: respondId.respondId })
+	let id_from_url: string | undefined
+
+	if (match) {
+		id_from_url = match[1]
+	} else {
+		console.error('id miss')
+	}
+
+	const { data: req_data, isLoading : loading } = useGetEmploymentReqStageStatusQuery({ respondId: id_from_url })
 
 	console.log(req_data)
 
@@ -59,7 +69,7 @@ export const RequisiteStage = () => {
 					className="max-w-[102px] mt-[20px] bg-[#F5F8FB] py-[8px] px-[24px] text-[#333333] border-[#333333] border-[1px] rounded-[54.5px] text-[16px]"
 					onClick={() => {
 						dispatch(setCurrentResponce(respondId.respondId))
-						navigate('/services/personnelaccounting/accounting/requisite/requisite-review/seeker-info')
+						navigate(`/services/personnelaccounting/accounting/requisite/requisite-review/${id_from_url}/seeker-info`)
 					}}
 				>Резюме</Button>
 				<h3 className="mt-[53px] text-[18px] font-normal">

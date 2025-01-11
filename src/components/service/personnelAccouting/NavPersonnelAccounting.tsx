@@ -395,8 +395,8 @@ export const NavPesonnelAccounting = () => {
 						'w-full flex items-center py-2 pl-8 hover:bg-[#F5F8FB] cursor-pointer',
 						(
 							pathname === '/services/personnelaccounting/personnel-department/employment' ||
-							pathname === '/services/personnelaccounting/personnel-department/employment/stages' ||
-							pathname === '/services/personnelaccounting/personnel-department/employment/stages/seeker-info'
+							pathname.match(/\/services\/personnelaccounting\/personnel-department\/employment\/stages\/\d+/) ||  // Для пути с произвольным ID
+							pathname.match(/\/services\/personnelaccounting\/personnel-department\/employment\/stages\/\d+\/seeker-info/)  // Для пути с ID и seeker-info
 						) && 'bg-[#F5F8FB]'
 					)}
 					onClick={() => handleNavigate(id)}
@@ -609,8 +609,8 @@ export const NavPesonnelAccounting = () => {
 							'w-full flex items-center py-2 pl-8 hover:bg-[#F5F8FB]  cursor-pointer',
 							(
 								pathname === '/services/personnelaccounting/accounting/requisite' ||
-								pathname === '/services/personnelaccounting/accounting/requisite/requisite-review' ||
-								pathname === '/services/personnelaccounting/accounting/requisite/requisite-review/seeker-info'
+								pathname.match(/\/services\/personnelaccounting\/accounting\/requisite\/requisite-review\/\d+/) ||  // Для пути с произвольным ID
+								pathname.match(/\/services\/personnelaccounting\/accounting\/requisite\/requisite-review\/\d+\/seeker-info/)  // Для пути с ID и seeker-info
 							) && 'bg-[#F5F8FB]'
 						)}
 						onClick={() => handleNavigate(id)}
@@ -720,21 +720,21 @@ export const NavPesonnelAccounting = () => {
 					'/services/personnelaccounting/supervisor/invitation/seekerinfo' && (
 					<SupervisorInterviewSeekerInfo />
 				)}
-				{pathname === `/services/personnelaccounting/personnel-department/employment/stages` && (
-					<EmploymentStageInfo/>
+				{pathname.match(/\/services\/personnelaccounting\/personnel-department\/employment\/stages\/\d+/) && !pathname.includes('/seeker-info') && (
+					<EmploymentStageInfo />
 				)}
-				{pathname === '/services/personnelaccounting/personnel-department/employment/stages/seeker-info' && (
-					<DepEmploymentSeekerInfo/>
+				{pathname.match(/\/services\/personnelaccounting\/personnel-department\/employment\/stages\/\d+\/seeker-info/) && (
+					<DepEmploymentSeekerInfo />
 				)}
 				{pathname === '/services/personnelaccounting/accounting/requisite' && (
 					<RequisiteMain/>
 				)}
-				{pathname === `/services/personnelaccounting/accounting/requisite/requisite-review` && (
-						<RequisiteStage/>
-					)}
-				{pathname === '/services/personnelaccounting/accounting/requisite/requisite-review/seeker-info' && (
-						<RequisiteSeeker/>
-					)}
+				{pathname.match(/\/services\/personnelaccounting\/accounting\/requisite\/requisite-review\/\d+/) && !pathname.includes('/seeker-info') && (
+					<RequisiteStage/>
+				)}
+				{pathname.match(/\/services\/personnelaccounting\/accounting\/requisite\/requisite-review\/\d+\/seeker-info/) && (
+					<RequisiteSeeker/>
+				)}
 				{pathname === '/services/personnelaccounting/labor-protection/test-results' && (
 					<TestResults/>
 				)}

@@ -19,11 +19,24 @@ export const EmploymentStageInfo = ( ) => {
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 
+	const currentUrl = window.location.pathname;
+	const match = currentUrl.match(/\/stages\/(\d+)$/);
+
+	let id_from_url: string | undefined
+
+	if (match) {
+		id_from_url = match[1]
+	} else {
+		console.error('id miss')
+	}
+
 	const employmentSeekerName  = useAppSelector(state => state.employmentSeeker.currentEmploymentSeekerName)
 	const employmentSeekerVacancy  = useAppSelector(state => state.employmentSeeker.currentEmploymentSeekerVacancy)
 	const respondId = useAppSelector(state => state.currentResponce)
 
-	const { data: stages, isLoading: loadingReq } = useGetEmploymentStageStatusQuery({ respondId: respondId.respondId})
+	const { data: stages, isLoading: loadingReq } = useGetEmploymentStageStatusQuery({ respondId: id_from_url})
+
+	console.log(stages)
 
 	const stagesArray = stages?.stages || [] // массив массивов c этапами
 	const sortedStages = stagesArray.flat().sort((a, b) => a.id - b.id) // сортирую потому что приходит вперемешку
@@ -57,13 +70,13 @@ export const EmploymentStageInfo = ( ) => {
 					<NocircleArrowIcon />
 					Назад
 				</Button>
-				<h1 className="font-normal text-[28px]/[28px]">{employmentSeekerName}</h1>
+				<h1 className="font-normal text-[28px]/[28px]">{employmentSeekerName} sdfsdfsda</h1>
 				<Button
 					type="default"
 					className="max-w-[102px] bg-[#F5F8FB] mt-[20px] py-[8px] px-[24px] text-[#333333] border-[#333333] border-[1px] rounded-[54.5px] text-[16px]"
 					onClick={() => {
 						dispatch(setCurrentResponce(respondId.respondId))
-						navigate('/services/personnelaccounting/personnel-department/employment/stages/seeker-info')
+						navigate(`/services/personnelaccounting/personnel-department/employment/stages/${id_from_url}/seeker-info`)
 					}}
 				>
 					Резюме

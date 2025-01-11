@@ -19,7 +19,18 @@ export const RequisiteSeeker = () => {
 
 	const respondId = useAppSelector(state => state.currentResponce)
 
-	const { data, isLoading: loading } = useGetRespondFullInfoAccountingQuery(respondId.respondId)
+	const currentUrl = window.location.pathname
+	const match = currentUrl.match(/\/requisite-review\/(\d+)(?=\/|$)/)
+
+	let id_from_url: string | undefined
+
+	if (match) {
+		id_from_url = match[1]
+	} else {
+		console.error('id miss')
+	}
+
+	const { data, isLoading: loading } = useGetRespondFullInfoAccountingQuery(id_from_url)
 	const [getResume] = useLazyGetSeekerResumeFileQuery()
 
 	const [resume, setResume] = useState<string>('')

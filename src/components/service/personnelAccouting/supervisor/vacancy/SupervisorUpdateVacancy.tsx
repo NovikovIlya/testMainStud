@@ -102,6 +102,7 @@ export const SupervisorUpdateVacancy = () => {
 					open={isSuccessModalOpen}
 					onCancel={() => {
 						setIsSuccessModalOpen(false)
+						navigate('/services/personnelaccounting/supervisor/vacancies')
 					}}
 					title={null}
 					footer={null}
@@ -168,7 +169,7 @@ export const SupervisorUpdateVacancy = () => {
 								setIsSendRequestButtonActivated(true)
 								setIsEdit(false)
 							} catch (error: any) {
-								openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' });
+								openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 							}
 						}}
 					>

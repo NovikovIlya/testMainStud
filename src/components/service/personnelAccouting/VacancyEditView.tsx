@@ -13,8 +13,8 @@ import {
 	useGetSubdivisionsQuery,
 	useRequestUpdateVacancyMutation
 } from '../../../store/api/serviceApi'
+import { useAlert } from '../../../utils/Alert/AlertMessage'
 import ArrowIcon from '../jobSeeker/ArrowIcon'
-import {useAlert} from "../../../utils/Alert/AlertMessage";
 
 export const VacancyEditView = () => {
 	const { currentVacancy } = useAppSelector(state => state.currentVacancy)
@@ -111,6 +111,7 @@ export const VacancyEditView = () => {
 					open={isDeleteModalOpen}
 					onCancel={() => {
 						setIsDeleteModalOpen(false)
+						navigate(-1)
 					}}
 					title={null}
 					footer={null}
@@ -134,14 +135,14 @@ export const VacancyEditView = () => {
 						<button
 							className="cursor-pointer flex items-center justify-center border-[1px] border-solid outline-0 border-[#FF5A5A] hover:border-[#FF8181] text-white rounded-[54.5px] bg-[#FF5A5A] hover:bg-[#FF8181] text-[14px] h-[40px] w-full py-[13px]"
 							onClick={async () => {
-								try{
+								try {
 									await deleteVacancy(currentVacancy?.id as number)
-									.unwrap()
-									.then(() => {
-										setResultModalText('Вакансия успешно удалена.')
-										setIsDeleteModalOpen(false)
-										setIsSuccessModalOpen(true)
-									})
+										.unwrap()
+										.then(() => {
+											setResultModalText('Вакансия успешно удалена.')
+											setIsDeleteModalOpen(false)
+											setIsSuccessModalOpen(true)
+										})
 								} catch (error: any) {
 									openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 								}
@@ -165,6 +166,7 @@ export const VacancyEditView = () => {
 					open={isSuccessModalOpen}
 					onCancel={() => {
 						setIsSuccessModalOpen(false)
+						navigate(-1)
 					}}
 					title={null}
 					footer={null}
@@ -441,23 +443,24 @@ export const VacancyEditView = () => {
 							{isSendRequestButtonActivated && (
 								<Button
 									onClick={async () => {
-										try{
+										try {
 											await editVacancy({
-											post: post as string,
-											experience: experience as string,
-											salary: salary as string,
-											employment: employment as string,
-											responsibilities: responsibilities as string,
-											skills: skills as string,
-											conditions: conditions as string,
-											category: category as string,
-											direction: direction as string,
-											vacancyId: currentVacancy?.id as number
-										})
-											.unwrap()
-											.then(() => {
-												setResultModalText('Описание вакансии успешно обновлено.')
-												setIsSuccessModalOpen(true)})
+												post: post as string,
+												experience: experience as string,
+												salary: salary as string,
+												employment: employment as string,
+												responsibilities: responsibilities as string,
+												skills: skills as string,
+												conditions: conditions as string,
+												category: category as string,
+												direction: direction as string,
+												vacancyId: currentVacancy?.id as number
+											})
+												.unwrap()
+												.then(() => {
+													setResultModalText('Описание вакансии успешно обновлено.')
+													setIsSuccessModalOpen(true)
+												})
 										} catch (error: any) {
 											openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 										}

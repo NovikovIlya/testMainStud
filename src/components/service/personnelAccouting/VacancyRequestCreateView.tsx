@@ -15,8 +15,8 @@ import {
 	useGetVacancyRequestsQuery,
 	useLazyGetVacancyRequestViewQuery
 } from '../../../store/api/serviceApi'
+import { useAlert } from '../../../utils/Alert/AlertMessage'
 import ArrowIcon from '../jobSeeker/ArrowIcon'
-import {useAlert} from "../../../utils/Alert/AlertMessage";
 
 export const VacancyRequestCreateView = () => {
 	const { requestId } = useAppSelector(state => state.currentRequest)
@@ -148,7 +148,7 @@ export const VacancyRequestCreateView = () => {
 					footer={null}
 					centered
 					onCancel={() => {
-						setIsResultModalOpen(false)
+						navigate(-1)
 					}}
 				>
 					<div className="flex flex-col w-full">
@@ -200,7 +200,7 @@ export const VacancyRequestCreateView = () => {
 									skills: skills as string,
 									conditions: conditions as string,
 									vacancyRequestId: requestId
-								}).unwrap();
+								}).unwrap()
 
 								await acceptRequest({
 									data: {
@@ -210,7 +210,7 @@ export const VacancyRequestCreateView = () => {
 										emplDocDefIds: values.formDocs
 									},
 									requestId: requestId
-								}).unwrap();
+								}).unwrap()
 							} else {
 								await acceptRequest({
 									data: {
@@ -223,16 +223,15 @@ export const VacancyRequestCreateView = () => {
 										]
 									},
 									requestId: requestId
-								}).unwrap();
+								}).unwrap()
 							}
 
-							refetch();
-							setIsModalOpen(false);
-							setResultModalText('Вакансия успешно опубликована');
-							setIsResultModalOpen(true);
-
+							refetch()
+							setIsModalOpen(false)
+							setResultModalText('Вакансия успешно опубликована')
+							setIsResultModalOpen(true)
 						} catch (error: any) {
-							openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' });
+							openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 						}
 					}}
 				>

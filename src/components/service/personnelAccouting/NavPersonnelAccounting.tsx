@@ -499,7 +499,7 @@ export const NavPesonnelAccounting = () => {
 					<li
 						key={index}
 						className={clsx(
-							'w-full flex items-center pl-[16px] hover:bg-[#F5F8FB]  cursor-pointer',
+							'w-full flex items-center pl-4 hover:bg-[#F5F8FB]  cursor-pointer',
 							(
 								id === pathname ||
 								pathname === '/services/personnelaccounting/supervisor/vacancies' ||
@@ -533,7 +533,7 @@ export const NavPesonnelAccounting = () => {
 					<li
 						key={index}
 						className={clsx(
-							'w-full flex items-center pl-5 hover:bg-[#F5F8FB]  cursor-pointer',
+							'w-full flex pl-4 items-center hover:bg-[#F5F8FB]  cursor-pointer',
 							(
 								id === pathname ||
 								pathname === '/services/personnelaccounting/supervisor/invitation' ||

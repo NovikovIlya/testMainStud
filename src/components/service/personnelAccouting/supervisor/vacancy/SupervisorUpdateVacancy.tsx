@@ -1,5 +1,5 @@
 import { Button, ConfigProvider, Form, Input, Modal, Select } from 'antd'
-import { useState } from 'react'
+import {useEffect, useState} from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { ModalOkSvg } from '../../../../../assets/svg/ModalOkSvg'
@@ -16,16 +16,32 @@ import ArrowIcon from '../../../jobSeeker/ArrowIcon'
 import {VacancyViewResponceType} from "../../../../../store/reducers/type";
 
 export const SupervisorUpdateVacancy = () => {
-	const currentUrl = window.location.pathname;
-	const match = currentUrl.match(/\/vacancyview\/(\d+)$/);
 
-	let id_from_url: string | undefined
+	const [getVacancy, { data, isLoading, error }] = useLazyGetVacancyViewQuery();
 
-	if (match) {
-		id_from_url = match[1]
-	} else {
-		console.error('id miss')
-	}
+	useEffect(() => {
+		// Получаем текущий URL
+		const currentUrl = window.location.pathname;
+
+		// Ищем id из URL
+		const match = currentUrl.match(/\/vacancyview\/(\d+)$/);
+
+		let id_from_url: string | undefined;
+
+		if (match) {
+			id_from_url = match[1];
+		} else {
+			console.error('ID not found');
+			return;  // Возвращаемся, если id нет
+		}
+
+		// Если id найден, запускаем запрос
+		if (id_from_url) {
+			getVacancy(id_from_url);
+		}
+	}, [getVacancy]);
+
+	console.log(data)
 
 	const { openAlert } = useAlert()
 
@@ -296,42 +312,46 @@ export const SupervisorUpdateVacancy = () => {
 							<div className="flex flex-col gap-[16px]">
 								<p className="font-content-font font-bold text-black text-[18px]/[21px]">Требуемый опыт работы:</p>
 								<p className="font-content-font font-normal text-black text-[18px]/[21px]">
-									{experience && experience}
+									{data?.acf.experience}
 								</p>
 							</div>
 							<div className="flex flex-col gap-[16px]">
 								<p className="font-content-font font-bold text-black text-[18px]/[21px]">Тип занятости:</p>
 								<p className="font-content-font font-normal text-black text-[18px]/[21px]">
-									{employment && employment}
+									{data?.acf.employment}
 								</p>
 							</div>
 							<div className="flex flex-col gap-[16px]">
 								<p className="font-content-font font-bold text-black text-[18px]/[21px]">Заработная плата:</p>
-								<p className="font-content-font font-normal text-black text-[18px]/[21px]">{salary && salary}</p>
+								<p className="font-content-font font-normal text-black text-[18px]/[21px]">
+									{data?.acf.salary}
+								</p>
 							</div>
 						</div>
 						<div className="flex flex-col gap-[16px]">
 							<p className="font-content-font font-bold text-black text-[18px]/[21px]">Задачи:</p>
 							<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-pre-line">
-								{responsibilities && responsibilities}
+								{data?.acf.responsibilities}
 							</p>
 						</div>
 						<div className="flex flex-col gap-[16px]">
 							<p className="font-content-font font-bold text-black text-[18px]/[21px]">Требования:</p>
 							<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-pre-line">
-								{skills && skills}
+								{data?.acf.skills}
 							</p>
 						</div>
 						<div className="flex flex-col gap-[16px]">
 							<p className="font-content-font font-bold text-black text-[18px]/[21px]">Условия:</p>
 							<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-pre-line">
-								{conditions && conditions}
+								{data?.acf.conditions}
 							</p>
 						</div>
 						<div className="flex gap-[40px]">
 							<div className="flex flex-col gap-[16px]">
-								<p className="font-content-font font-bold text-black text-[18px]/[21px]">Категория сотрудников</p>
-								<p className="font-content-font font-normal text-black text-[18px]/[21px]">{category && category}</p>
+								<p className="font-content-font font-bold text-black text-[18px]/[21px]">Категория сотрудников </p>
+								<p className="font-content-font font-normal text-black text-[18px]/[21px]">
+									{data?.acf.category}
+								</p>
 							</div>
 							<div className="flex flex-col gap-[16px]">
 								<p className="font-content-font font-bold text-black text-[18px]/[21px]">

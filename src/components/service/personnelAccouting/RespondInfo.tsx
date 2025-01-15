@@ -35,9 +35,21 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 
 	const { openAlert } = useAlert()
 
+	const currentUrl = window.location.pathname
+
+	const match = currentUrl.match(/\/fullinfo\/(\d+)$/);
+
+	let id_from_url: string | number
+
+	if (match) {
+		id_from_url = match[1]
+	} else {
+		console.error('id miss')
+	}
+
 	const respondId = useAppSelector(state => state.currentResponce)
 
-	const { data: res } = useGetRespondFullInfoQuery(respondId.respondId)
+	const { data: res } = useGetRespondFullInfoQuery(id_from_url)
 	const [approveRespond] = useApproveRespondMutation()
 	const [sendToArchive] = useSendRespondToArchiveMutation()
 	const [sendToReserve] = useSendRespondToReserveMutation()

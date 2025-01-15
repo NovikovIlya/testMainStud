@@ -152,7 +152,7 @@ export const NavPesonnelAccounting = () => {
 							(!(
 								pathname === '/services/personnelaccounting/vacancies'
 									||
-								pathname === '/services/personnelaccounting/vacancies/vacancyedit'
+								pathname.match(/\/services\/personnelaccounting\/vacancies\/vacancyedit\/\d+/)
 
 								) && 'opacity-[52%]')
 						)}
@@ -167,9 +167,9 @@ export const NavPesonnelAccounting = () => {
 							'font-content-font text-black text-[14px]/[14px] font-normal',
 							(!(
 								pathname === '/services/personnelaccounting/vacancyrequests' ||
-								pathname === '/services/personnelaccounting/request/create' ||
-								pathname === '/services/personnelaccounting/request/update' ||
-								pathname === '/services/personnelaccounting/request/delete'
+								pathname.match(/\/services\/personnelaccounting\/request\/create\/\d+/) ||
+								pathname.match(/\/services\/personnelaccounting\/request\/update\/\d+/) ||
+								pathname.match(/\/services\/personnelaccounting\/request\/delete\/\d+/)
 
 								) && 'opacity-[52%]')
 						)}
@@ -332,11 +332,11 @@ export const NavPesonnelAccounting = () => {
 						'w-full flex items-center pl-[16px] hover:bg-[#F5F8FB] cursor-pointer',
 						(
 							pathname === '/services/personnelaccounting/vacancies' ||
-							pathname === '/services/personnelaccounting/vacancies/vacancyedit' ||
+							pathname.match(/\/services\/personnelaccounting\/vacancies\/vacancyedit\/\d+/) ||
 							pathname === '/services/personnelaccounting/vacancyrequests' ||
-							pathname === '/services/personnelaccounting/request/create' ||
-							pathname === '/services/personnelaccounting/request/update' ||
-							pathname === '/services/personnelaccounting/request/delete'
+							pathname.match(/\/services\/personnelaccounting\/request\/create\/\d+/) ||
+							pathname.match(/\/services\/personnelaccounting\/request\/update\/\d+/) ||
+							pathname.match(/\/services\/personnelaccounting\/request\/delete\/\d+/)
 						) && 'bg-[#F5F8FB]'
 					)}
 				>
@@ -682,15 +682,17 @@ export const NavPesonnelAccounting = () => {
 				{pathname === '/services/personnelaccounting/vacancyrequests' && (
 					<VacancyRequestsPage />
 				)}
-				{pathname === '/services/personnelaccounting/request/create' && (
+
+				{pathname.match(/\/services\/personnelaccounting\/request\/create\/\d+/) && (
 					<VacancyRequestCreateView />
 				)}
-				{pathname === '/services/personnelaccounting/request/update' && (
+				{pathname.match(/\/services\/personnelaccounting\/request\/update\/\d+/) && (
 					<VacancyRequestUpdateView />
 				)}
-				{pathname === '/services/personnelaccounting/request/delete' && (
+				{pathname.match(/\/services\/personnelaccounting\/request\/delete\/\d+/) && (
 					<VacancyRequestDeleteView />
 				)}
+
 				{pathname === navEmployeeList[4].id && <Reserve />}
 				{pathname.match('/services/personnelaccounting/reserve/fullinfo') && (
 					<ReserveRespondInfo type="PERSONNEL_DEPARTMENT" />

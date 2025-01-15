@@ -33,9 +33,7 @@ export default function VacancyItem(props: VacancyItemType) {
 						.unwrap()
 						.then(result => {
 							dispatch(setCurrentVacancy(result))
-							console.log(result)
-							console.log(result.acf.responsibilities)
-							navigate('/services/personnelaccounting/vacancies/vacancyedit')
+							navigate(`/services/personnelaccounting/vacancies/vacancyedit/${props.id}`)
 						})
 				}}
 			>

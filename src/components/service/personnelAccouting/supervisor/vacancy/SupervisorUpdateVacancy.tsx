@@ -1,4 +1,4 @@
-import { Button, ConfigProvider, Form, Input, Modal, Select } from 'antd'
+import {Button, ConfigProvider, Form, Input, Modal, Select, Spin} from 'antd'
 import {useEffect, useState} from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -14,6 +14,7 @@ import {
 import { useAlert } from '../../../../../utils/Alert/AlertMessage'
 import ArrowIcon from '../../../jobSeeker/ArrowIcon'
 import {VacancyViewResponceType} from "../../../../../store/reducers/type";
+import {LoadingOutlined} from "@ant-design/icons";
 
 export const SupervisorUpdateVacancy = () => {
 
@@ -115,6 +116,23 @@ export const SupervisorUpdateVacancy = () => {
 	)
 
 	const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
+
+	if (isLoading) {
+		return (
+			<>
+				<div className="w-full h-full flex items-center">
+					<div className="text-center ml-auto mr-auto">
+						<Spin
+							indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}
+						></Spin>
+						<p className="font-content-font font-normal text-black text-[18px]/[18px]">
+							Идёт загрузка...
+						</p>
+					</div>
+				</div>
+			</>
+		)
+	}
 
 	return (
 		<>

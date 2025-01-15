@@ -19,7 +19,8 @@ export const EmploymentStageInfo = ( ) => {
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 
-	const currentUrl = window.location.pathname;
+	const currentUrl = window.location.pathname
+
 	const match = currentUrl.match(/\/stages\/(\d+)$/);
 
 	let id_from_url: string | undefined

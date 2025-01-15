@@ -19,7 +19,18 @@ export const SupervisorInterviewSeekerInfo = () => {
 
 	const { openAlert } = useAlert()
 
-	const { data, isLoading: loading } = useGetRespondFullInfoQuery(respondId.respondId)
+	const currentUrl = window.location.pathname;
+	const match = currentUrl.match(/\/seekerinfo\/(\d+)$/);
+
+	let id_from_url: string | undefined
+
+	if (match) {
+		id_from_url = match[1]
+	} else {
+		console.error('id miss')
+	}
+
+	const { data, isLoading: loading } = useGetRespondFullInfoQuery(id_from_url)
 
 	const date = new Date()
 

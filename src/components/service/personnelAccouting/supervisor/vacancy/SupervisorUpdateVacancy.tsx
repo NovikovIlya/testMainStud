@@ -8,12 +8,25 @@ import {
 	useGetCategoriesQuery,
 	useGetDirectionsQuery,
 	useGetSubdivisionsQuery,
+	useLazyGetVacancyViewQuery,
 	useRequestUpdateVacancyMutation
 } from '../../../../../store/api/serviceApi'
 import { useAlert } from '../../../../../utils/Alert/AlertMessage'
 import ArrowIcon from '../../../jobSeeker/ArrowIcon'
+import {VacancyViewResponceType} from "../../../../../store/reducers/type";
 
 export const SupervisorUpdateVacancy = () => {
+	const currentUrl = window.location.pathname;
+	const match = currentUrl.match(/\/vacancyview\/(\d+)$/);
+
+	let id_from_url: string | undefined
+
+	if (match) {
+		id_from_url = match[1]
+	} else {
+		console.error('id miss')
+	}
+
 	const { openAlert } = useAlert()
 
 	const { currentVacancy } = useAppSelector(state => state.currentVacancy)

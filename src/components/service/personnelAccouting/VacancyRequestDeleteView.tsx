@@ -192,14 +192,10 @@ export const VacancyRequestDeleteView = () => {
 						<ArrowIcon />
 					</button>
 					<p className="ml-[40px] font-content-font font-normal text-black text-[28px]/[33.6px]">
-						{currentVacancy !== null ? currentVacancy.title.rendered : ''}
+						{currentVacancy !== null ? '«' + currentVacancy.title.rendered + '»' : ''}
 					</p>
 				</div>
 				<div className="w-[50%] mt-[52px] flex flex-col gap-[40px]">
-					<div className="flex flex-col gap-[16px]">
-						<p className="font-content-font font-bold text-black text-[18px]/[21px]">Должность:</p>
-						<p className="font-content-font font-normal text-black text-[18px]/[21px]">{post && '«' + post + '»'}</p>
-					</div>
 					<div className="flex gap-[60px]">
 						<div className="flex flex-col gap-[16px]">
 							<p className="font-content-font font-bold text-black text-[18px]/[21px]">Требуемый опыт работы:</p>

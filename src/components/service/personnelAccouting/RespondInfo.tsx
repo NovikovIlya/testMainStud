@@ -1,6 +1,6 @@
 import { LoadingOutlined } from '@ant-design/icons'
 import { Button, Spin, Tag } from 'antd'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -28,6 +28,10 @@ import { useAlert } from '../../../utils/Alert/AlertMessage'
 import { NocircleArrowIcon } from '../jobSeeker/NoCircleArrowIcon'
 
 import { InviteSeekerForm } from './supervisor/InviteSeekerForm'
+import {DeleteIconLaborSvg} from "../../../assets/svg/DeleteIconLaborSvg";
+import {DeleteIconHoverLaborSvg} from "../../../assets/svg/DeleteIconHoverLaborSvg";
+import {NocircleArrowIconHover} from "../../../assets/svg/NocircleArrowIconHover";
+import {RespondDownloadHover} from "../../../assets/svg/RespondDownloadHover";
 
 export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR' | 'SEEKER' }) => {
 	const { t, i18n } = useTranslation()
@@ -138,28 +142,50 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 				<>
 					<div className="pl-[52px] pr-[10%] py-[60px] mt-[60px] w-full">
 						<div>
-							<Button
+							<button
 								onClick={() => {
-									// props.type === 'PERSONNEL_DEPARTMENT'
-									// 	? navigate('/services/personnelaccounting/responds')
-									// 	: props.type === 'SUPERVISOR'
-									// 	? navigate(
-									// 			'/services/personnelaccounting/supervisor/responds'
-									// 	  )
-									// 	: navigate('/services/myresponds/responds')
 									navigate(-1)
 								}}
-								className="bg-inherit h-[38px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer"
+								className="
+										   group
+								 		   items-center
+								 		   gap-[8px]
+								 		   hover:border-[#004EC2]
+								 		   outline-0
+								 		   hover:bg-white
+								 		   transition-all duration-200
+								 		   flex bg-inherit
+								 		   h-[38px]
+								 		   pt-[12px]
+								 		   pb-[12px]
+								 		   pr-[16px]
+								 		   pl-[16px]
+								 		   rounded-[50px]
+								 		   border
+								 		   border-solid
+								 		   border-black
+								 		   cursor-pointer
+								 		  "
 							>
-								<NocircleArrowIcon />
-								Назад
-							</Button>
+								{/* Иконка при наведении */}
+								<div className="absolute mt-[3px] group-hover:opacity-100 group-hover:scale-100 opacity-0 scale-95 transition-all duration-200">
+									<NocircleArrowIconHover />
+								</div>
+
+								{/* Иконка по умолчанию */}
+								<div className="mt-[3px] group-hover:opacity-0 group-hover:scale-95 opacity-100 scale-100 transition-all duration-200">
+									<NocircleArrowIcon />
+								</div>
+								<span className="group-hover:text-[#004EC2] transition-all duration-200 text-[16px] font-normal">
+									Назад
+								</span>
+							</button>
 						</div>
 						<div className="mt-[52px] flex flex-col gap-[36px]" ref={targetRef}>
 							<div className="flex flex-wrap gap-[150px]">
 								<div className="flex gap-[20px]">
 									<div className="flex h-[167px] w-[167px] bg-[#D9D9D9]">
-										<AvatartandardSvg />
+										<AvatartandardSvg/>
 									</div>
 									<div className="flex flex-col gap-[8px]">
 										<p className="font-content-font font-normal text-black text-[24px]/[28.8px]">
@@ -225,9 +251,12 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 														.then(() => {
 															setIsRespondSentToSupervisor(true)
 														})
-													openAlert({ type: 'success', text: 'Отклик успешно отправлен руководителю' })
+													openAlert({
+														type: 'success',
+														text: 'Отклик успешно отправлен руководителю'
+													})
 												} catch (error: any) {
-													openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+													openAlert({type: 'error', text: 'Извините, что-то пошло не так...'})
 												}
 											}}
 											disabled={isRespondSentToSupervisor || isRespondSentToReserve || isRespondSentToArchive}
@@ -247,9 +276,12 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 														.then(() => {
 															setIsRespondSentToArchive(true)
 														})
-													openAlert({ type: 'success', text: 'Отклик успешно отправлен в архив' })
+													openAlert({
+														type: 'success',
+														text: 'Отклик успешно отправлен в архив'
+													})
 												} catch (error: any) {
-													openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+													openAlert({type: 'error', text: 'Извините, что-то пошло не так...'})
 												}
 											}}
 											disabled={isRespondSentToSupervisor || isRespondSentToReserve || isRespondSentToArchive}
@@ -266,9 +298,12 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 														.then(() => {
 															setIsRespondSentToReserve(true)
 														})
-													openAlert({ type: 'success', text: 'Отклик успешно отправлен в резерв' })
+													openAlert({
+														type: 'success',
+														text: 'Отклик успешно отправлен в резерв'
+													})
 												} catch (error: any) {
-													openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+													openAlert({type: 'error', text: 'Извините, что-то пошло не так...'})
 												}
 											}}
 											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
@@ -283,7 +318,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 										>
 											Перейти в чат
 										</Button>
-										<Button
+										<button
 											onClick={() => {
 												setIsButtonsHidden(true)
 												setTimeout(() => {
@@ -291,10 +326,44 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 													setIsButtonsHidden(false)
 												}, 0)
 											}}
-											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
+											className="
+										   group
+								 		   items-center
+								 		   justify-center
+								 		   gap-[8px]
+								 		   hover:border-[#004EC2]
+								 		   outline-0
+								 		   hover:bg-white
+								 		   transition-all duration-200
+								 		   flex bg-inherit
+								 		   h-[38px]
+								 		   pt-[12px]
+								 		   pb-[12px]
+								 		   pr-[16px]
+								 		   pl-[16px]
+								 		   rounded-[50px]
+								 		   border
+								 		   border-solid
+								 		   border-black
+								 		   cursor-pointer
+								 		  "
 										>
-											<RespondDownload /> Скачать
-										</Button>
+											{/* Иконка при наведении */}
+											<div
+												className="absolute mr-[62px] mt-[3px] group-hover:opacity-100 group-hover:scale-100 opacity-0 scale-95 transition-all duration-200">
+												<RespondDownloadHover/>
+											</div>
+
+											{/* Иконка по умолчанию */}
+											<div
+												className="mt-[3px] group-hover:opacity-0 group-hover:scale-95 opacity-100 scale-100 transition-all duration-200">
+												<RespondDownload/>
+											</div>
+											<span
+												className="group-hover:text-[#004EC2] transition-all duration-200 text-[16px] font-normal">
+												Скачать
+											</span>
+										</button>
 									</div>
 								)}
 								{props.type === 'SUPERVISOR' && (
@@ -322,9 +391,9 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 														.then(() => {
 															setIsRespondSentToArchive(true)
 														})
-													openAlert({ type: 'success', text: 'Резюме отправлено в архив' })
+													openAlert({type: 'success', text: 'Резюме отправлено в архив'})
 												} catch (error: any) {
-													openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+													openAlert({type: 'error', text: 'Извините, что-то пошло не так...'})
 												}
 											}}
 											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[257px] h-[40px] py-[8px] px-[24px] border-black"

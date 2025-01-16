@@ -61,7 +61,7 @@ export const VacancyRespondItem = (
 					onClick={() => {
 						dispatch(setCurrentResponce(props.id))
 						props.itemType === 'PERSONNEL_DEPARTMENT'
-							? navigate(`services/personnelaccounting/responds/fullinfo`)
+							? navigate(`services/personnelaccounting/responds/fullinfo/${props.id}`)
 							: navigate(
 									`services/personnelaccounting/supervisor/responds/fullinfo/${props.id}`
 							  )

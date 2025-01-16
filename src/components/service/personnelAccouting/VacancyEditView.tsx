@@ -230,7 +230,7 @@ export const VacancyEditView = () => {
 							setResponsibilities(prev => values.responsibilities)
 							setSkills(prev => values.skills)
 							setConditions(prev => values.conditions)
-							setIsSendRequestButtonActivated(true)
+							editForm.isFieldsTouched() && setIsSendRequestButtonActivated(true)
 							setIsEdit(false)
 						}}
 					>
@@ -432,14 +432,16 @@ export const VacancyEditView = () => {
 							>
 								Редактировать
 							</Button>
-							<Button
-								onClick={() => {
-									setIsDeleteModalOpen(true)
-								}}
-								className="w-[151px] font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black bg-inherit"
-							>
-								Удалить
-							</Button>
+							{!isSendRequestButtonActivated && (
+								<Button
+									onClick={() => {
+										setIsDeleteModalOpen(true)
+									}}
+									className="w-[151px] font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black bg-inherit"
+								>
+									Удалить
+								</Button>
+							)}
 							{isSendRequestButtonActivated && (
 								<Button
 									onClick={async () => {

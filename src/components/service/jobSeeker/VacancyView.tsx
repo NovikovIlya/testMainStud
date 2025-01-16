@@ -5,8 +5,39 @@ import { usePostVacancyRespondMutation } from '../../../store/api/serviceApi'
 
 import ArrowIcon from './ArrowIcon'
 import { ResponseForm } from './ResponceForm'
+import {useEffect} from "react";
+import {
+	useLazyGetVacancyViewQuery
+} from '../../../store/api/serviceApi'
 
 export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
+
+	const [getVacancy, { data, isLoading, error }] = useLazyGetVacancyViewQuery();
+
+	useEffect(() => {
+		// Получаем текущий URL
+		const currentUrl = window.location.pathname;
+
+		// Ищем id из URL
+		const match = currentUrl.match(/\/vacancyview\/(\d+)$/);
+
+		let id_from_url: string | undefined;
+
+		if (match) {
+			id_from_url = match[1];
+		} else {
+			console.error('ID not found');
+			return;  // Возвращаемся, если id нет
+		}
+
+		// Если id найден, запускаем запрос
+		if (id_from_url) {
+			getVacancy(id_from_url);
+		}
+	}, [getVacancy]);
+
+	console.log(data)
+
 	const { user } = useAppSelector(state => state.auth)
 	const { currentVacancy } = useAppSelector(state => state.currentVacancy)
 	const { chatId } = useAppSelector(state => state.chatId)
@@ -99,9 +130,7 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 						<ArrowIcon />
 					</button>
 					<p className="mb-[2px] ml-[40px] font-content-font font-normal text-black text-[28px]/[33.6px]">
-						{currentVacancy !== null
-							? '«' + currentVacancy.title.rendered + '»'
-							: ''}
+						{'«' + data?.title.rendered + '»'}
 					</p>
 				</div>
 				<div className="w-[50%] mt-[52px] grid grid-cols-[repeat(3,_minmax(106px,_auto))_143px] gap-x-[120px] gap-y-[16px]">
@@ -122,13 +151,13 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 						</>
 					)}
 					<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-nowrap">
-						{currentVacancy !== null ? currentVacancy.acf.experience : ''}
+						{data?.acf.experience}
 					</p>
 					<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-nowrap">
-						{currentVacancy !== null ? currentVacancy.acf.employment : ''}
+						{data?.acf.employment}
 					</p>
 					<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-nowrap">
-						{currentVacancy !== null ? currentVacancy.acf.salary : ''}
+						{data?.acf.salary}
 					</p>
 				</div>
 				<div className="w-[60%] mt-[60px] mb-[86px] grid grid-cols-[9%_auto] gap-x-[160px] gap-y-[40px]">
@@ -146,7 +175,7 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 						</ul>
 					) : (
 						<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-pre-line">
-							{responsibilities}
+							{data?.acf.responsibilities}
 						</p>
 					)}
 					{/* <ul className="list-disc">
@@ -171,7 +200,7 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 						</ul>
 					) : (
 						<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-pre-line">
-							{skills}
+							{data?.acf.skills}
 						</p>
 					)}
 					{/* <ul className="list-disc">
@@ -196,7 +225,7 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 						</ul>
 					) : (
 						<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-pre-line">
-							{conditions}
+							{data?.acf.conditions}
 						</p>
 					)}
 					{/* <ul className="list-disc">

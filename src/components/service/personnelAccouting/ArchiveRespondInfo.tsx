@@ -1,6 +1,6 @@
 import { LoadingOutlined } from '@ant-design/icons'
 import { Button, ConfigProvider, Modal, Spin, Tag } from 'antd'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -30,11 +30,23 @@ import { useAlert } from '../../../utils/Alert/AlertMessage'
 import { NocircleArrowIcon } from '../jobSeeker/NoCircleArrowIcon'
 
 import { InviteSeekerForm } from './supervisor/InviteSeekerForm'
+import {NocircleArrowIconHover} from "../../../assets/svg/NocircleArrowIconHover";
 
 export const ArchiveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR' }) => {
 	const respondId = useAppSelector(state => state.currentResponce)
 
-	const { data: res } = useGetArchivedRespondFullInfoQuery(respondId.respondId)
+	const currentUrl = window.location.pathname;
+	const match = currentUrl.match(/\/fullinfo\/(\d+)(?=\/|$)/);
+
+	let id_from_url: string | number
+
+	if (match) {
+		id_from_url = match[1]
+	} else {
+		console.error('id miss')
+	}
+
+	const { data: res } = useGetArchivedRespondFullInfoQuery(id_from_url)
 
 	const { openAlert } = useAlert()
 
@@ -174,23 +186,55 @@ export const ArchiveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 					</ConfigProvider>
 					<div className="pl-[52px] pr-[10%] py-[60px] w-full mt-[60px]">
 						<div>
-							<Button
+							<button
 								onClick={() => {
 									props.type === 'PERSONNEL_DEPARTMENT'
 										? navigate('/services/personnelaccounting/archive')
 										: navigate('/services/personnelaccounting/supervisor/responds')
 								}}
-								className="bg-inherit h-[38px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer"
+								className="
+										   group
+								 		   items-center
+								 		   gap-[8px]
+								 		   hover:border-[#004EC2]
+								 		   outline-0
+								 		   hover:bg-white
+								 		   transition-all duration-200
+								 		   flex bg-inherit
+								 		   h-[38px]
+								 		   mb-[30px]
+								 		   pt-[12px]
+								 		   pb-[12px]
+								 		   pr-[16px]
+								 		   pl-[16px]
+								 		   rounded-[50px]
+								 		   border
+								 		   border-solid
+								 		   border-black
+								 		   cursor-pointer
+								 		  "
 							>
-								<NocircleArrowIcon />
-								Назад
-							</Button>
+								{/* Иконка при наведении */}
+								<div
+									className="absolute mt-[3px] group-hover:opacity-100 group-hover:scale-100 opacity-0 scale-95 transition-all duration-200">
+									<NocircleArrowIconHover/>
+								</div>
+
+								{/* Иконка по умолчанию */}
+								<div
+									className="mt-[3px] group-hover:opacity-0 group-hover:scale-95 opacity-100 scale-100 transition-all duration-200">
+									<NocircleArrowIcon/>
+								</div>
+								<span
+									className="group-hover:text-[#004EC2] transition-all duration-200 text-[14px] font-normal">Назад
+								</span>
+							</button>
 						</div>
 						<div className="mt-[52px] flex flex-col gap-[36px]" ref={targetRef}>
 							<div className="flex flex-wrap gap-[150px]">
 								<div className="flex gap-[20px]">
 									<div className="flex h-[167px] w-[167px] bg-[#D9D9D9]">
-										<AvatartandardSvg />
+										<AvatartandardSvg/>
 									</div>
 									<div className="flex flex-col gap-[8px]">
 										<p className="font-content-font font-normal text-black text-[24px]/[28.8px]">
@@ -203,7 +247,7 @@ export const ArchiveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 											date.getFullYear() - parseInt(res.userData?.birthday.split('-')[0] as string) <= 20
 												? 'лет'
 												: (date.getFullYear() - parseInt(res.userData?.birthday.split('-')[0] as string)) % 10 >= 2 &&
-												  (date.getFullYear() - parseInt(res.userData?.birthday.split('-')[0] as string)) % 10 <= 4
+												(date.getFullYear() - parseInt(res.userData?.birthday.split('-')[0] as string)) % 10 <= 4
 												? 'года'
 												: (date.getFullYear() - parseInt(res.userData?.birthday.split('-')[0] as string)) % 10 == 1
 												? 'год'

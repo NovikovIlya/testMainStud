@@ -7,6 +7,8 @@ import { LoadingOutlined } from '@ant-design/icons'
 import { useGetEmploymentReqStageStatusQuery } from '../../../../../store/api/serviceApi'
 import { DepEmploymentStageItem } from '../../personnelDepartment/depEmploymentStageItem'
 import {NocircleArrowIcon} from "../../../jobSeeker/NoCircleArrowIcon";
+import {NocircleArrowIconHover} from "../../../../../assets/svg/NocircleArrowIconHover";
+import React from "react";
 
 export const RequisiteStage = () => {
 
@@ -54,15 +56,50 @@ export const RequisiteStage = () => {
 	return (
 		<>
 			<div className="w-full flex flex-col px-[53px] mt-[140px]">
-				<Button
-					onClick={() => {
-						window.history.back()
-					}}
-					className="bg-inherit w-[102px] mb-[30px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer"
-				>
-					<NocircleArrowIcon />
-					Назад
-				</Button>
+				<div>
+					<button
+						onClick={() => {
+							window.history.back()
+						}}
+						className="
+										   group
+								 		   items-center
+								 		   gap-[8px]
+								 		   hover:border-[#004EC2]
+								 		   outline-0
+								 		   hover:bg-white
+								 		   transition-all duration-200
+								 		   flex bg-inherit
+								 		   h-[38px]
+								 		   mb-[30px]
+								 		   pt-[12px]
+								 		   pb-[12px]
+								 		   pr-[16px]
+								 		   pl-[16px]
+								 		   rounded-[50px]
+								 		   border
+								 		   border-solid
+								 		   border-black
+								 		   cursor-pointer
+								 		  "
+					>
+						{/* Иконка при наведении */}
+						<div
+							className="absolute mt-[3px] group-hover:opacity-100 group-hover:scale-100 opacity-0 scale-95 transition-all duration-200">
+							<NocircleArrowIconHover/>
+						</div>
+
+						{/* Иконка по умолчанию */}
+						<div
+							className="mt-[3px] group-hover:opacity-0 group-hover:scale-95 opacity-100 scale-100 transition-all duration-200">
+							<NocircleArrowIcon/>
+						</div>
+						<span
+							className="group-hover:text-[#004EC2] transition-all duration-200 text-[14px] font-normal">
+									Назад
+								</span>
+					</button>
+				</div>
 				<h1 className="font-normal text-[28px]/[28px]">{seekerName}</h1>
 				<Button
 					type="default"

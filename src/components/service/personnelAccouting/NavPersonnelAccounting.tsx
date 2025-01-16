@@ -200,8 +200,7 @@ export const NavPesonnelAccounting = () => {
 							'font-content-font text-black text-[14px]/[14px] font-normal',
 							!(
 								(pathname === '/services/personnelaccounting/reserve') ||
-								(pathname === '/services/services/personnelaccounting/reserve') ||
-								(pathname === '/services/services/personnelaccounting/reserve/fullinfo')
+								pathname.match(/\/services\/personnelaccounting\/reserve\/fullinfo\/\d+/)
 							)
 							&&
 							'opacity-[52%]'
@@ -217,8 +216,7 @@ export const NavPesonnelAccounting = () => {
 							'font-content-font text-black text-[14px]/[14px] font-normal',
 							!(
 								(pathname === '/services/personnelaccounting/archive') ||
-								(pathname === '/services/services/personnelaccounting/archive') ||
-								(pathname === '/services/services/personnelaccounting/archive/fullinfo')
+								pathname.match(/\/services\/personnelaccounting\/archive\/fullinfo\/\d+/)
 							)
 							&&
 								'opacity-[52%]'
@@ -369,10 +367,8 @@ export const NavPesonnelAccounting = () => {
 						(
 							pathname === '/services/personnelaccounting/reserve' ||
 							pathname === '/services/personnelaccounting/archive' ||
-							pathname === '/services/personnelaccounting/reserve/fullinfo' ||
-							pathname === '/services/personnelaccounting/archive/fullinfo' ||
-							pathname === '/services/services/personnelaccounting/reserve/fullinfo' ||
-							pathname === '/services/services/personnelaccounting/archive/fullinfo'
+							pathname.match(/\/services\/personnelaccounting\/reserve\/fullinfo\/\d+/) ||
+							pathname.match(/\/services\/personnelaccounting\/archive\/fullinfo\/\d+/)
 						) && 'bg-[#F5F8FB]'
 					)}
 				>
@@ -437,7 +433,7 @@ export const NavPesonnelAccounting = () => {
 						(
 							pathname === '/services/personnelaccounting/responds' ||
 							/\/services\/personnelaccounting\/responds\/byvacancy\/\d+/.test(pathname) ||
-							pathname === '/services/services/personnelaccounting/responds/fullinfo'
+							/\/services\/services\/personnelaccounting\/responds\/fullinfo\/\d+/.test(pathname)
 						) && 'bg-[#F5F8FB]'
 					)}
 					onClick={() => handleNavigate(id)}
@@ -694,11 +690,11 @@ export const NavPesonnelAccounting = () => {
 				)}
 
 				{pathname === navEmployeeList[4].id && <Reserve />}
-				{pathname.match('/services/personnelaccounting/reserve/fullinfo') && (
+				{pathname.match(/\/services\/personnelaccounting\/reserve\/fullinfo\/\d+/)  && (
 					<ReserveRespondInfo type="PERSONNEL_DEPARTMENT" />
 				)}
 				{pathname === '/services/personnelaccounting/archive' && <Archive />}
-				{pathname.match('services/personnelaccounting/archive/fullinfo') && (
+				{pathname.match(/\/services\/personnelaccounting\/archive\/fullinfo\/\d+/)  && (
 					<ArchiveRespondInfo type="PERSONNEL_DEPARTMENT" />
 				)}
 				{pathname === navSupervisorList[0].id && <RespondsSupervisor />}

@@ -15,7 +15,7 @@ import {
 	useApproveRespondMutation,
 	useGetChatIdByRespondIdQuery,
 	useGetRespondFullInfoQuery,
-	useLazyGetSeekerResumeFileQuery,
+	useLazyGetSeekerResumeFileQuery, useLazyGetVacancyViewQuery,
 	useSendRespondToArchiveMutation,
 	useSendRespondToReserveMutation
 } from '../../../store/api/serviceApi'
@@ -39,8 +39,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 
 	const { openAlert } = useAlert()
 
-	const currentUrl = window.location.pathname
-
+	const currentUrl = window.location.pathname;
 	const match = currentUrl.match(/\/fullinfo\/(\d+)$/);
 
 	let id_from_url: string | number
@@ -50,6 +49,8 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 	} else {
 		console.error('id miss')
 	}
+
+	console.log(id_from_url)
 
 	const respondId = useAppSelector(state => state.currentResponce)
 
@@ -176,7 +177,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 								<div className="mt-[3px] group-hover:opacity-0 group-hover:scale-95 opacity-100 scale-100 transition-all duration-200">
 									<NocircleArrowIcon />
 								</div>
-								<span className="group-hover:text-[#004EC2] transition-all duration-200 text-[16px] font-normal">
+								<span className="group-hover:text-[#004EC2] transition-all duration-200 text-[14px] font-normal">
 									Назад
 								</span>
 							</button>

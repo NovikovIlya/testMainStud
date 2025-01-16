@@ -7,11 +7,12 @@ import {
 import { NocircleArrowIcon } from '../../jobSeeker/NoCircleArrowIcon'
 import { LoadingOutlined } from '@ant-design/icons'
 import {MyDocsSvg} from "../../../../assets/svg/MyDocsSvg";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Margin, usePDF} from "react-to-pdf";
 import {useGetCountriesQuery} from "../../../../store/api/utilsApi";
 import {useTranslation} from "react-i18next";
 import uuid from "react-uuid";
+import {NocircleArrowIconHover} from "../../../../assets/svg/NocircleArrowIconHover";
 
 export const DepEmploymentSeekerInfo = ( ) => {
 
@@ -104,15 +105,48 @@ export const DepEmploymentSeekerInfo = ( ) => {
 		return (
 			<div className="pl-[52px] pr-[10%] py-[140px] w-full">
 				<div>
-					<Button
+					<button
 						onClick={() => {
 							window.history.back()
 						}}
-						className="bg-inherit h-[38px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer"
+						className="
+										   group
+								 		   items-center
+								 		   gap-[8px]
+								 		   hover:border-[#004EC2]
+								 		   outline-0
+								 		   hover:bg-white
+								 		   transition-all duration-200
+								 		   flex bg-inherit
+								 		   h-[38px]
+								 		   mb-[30px]
+								 		   pt-[12px]
+								 		   pb-[12px]
+								 		   pr-[16px]
+								 		   pl-[16px]
+								 		   rounded-[50px]
+								 		   border
+								 		   border-solid
+								 		   border-black
+								 		   cursor-pointer
+								 		  "
 					>
-						<NocircleArrowIcon/>
-						Назад
-					</Button>
+						{/* Иконка при наведении */}
+						<div
+							className="absolute mt-[3px] group-hover:opacity-100 group-hover:scale-100 opacity-0 scale-95 transition-all duration-200">
+							<NocircleArrowIconHover/>
+						</div>
+
+						{/* Иконка по умолчанию */}
+						<div
+							className="mt-[3px] group-hover:opacity-0 group-hover:scale-95 opacity-100 scale-100 transition-all duration-200">
+							<NocircleArrowIcon/>
+						</div>
+						<span
+							className="group-hover:text-[#004EC2] transition-all duration-200 text-[14px] font-normal">
+									Назад
+								</span>
+					</button>
 				</div>
 				<div className="mt-[52px] flex flex-col gap-[36px]">
 					<div className="flex flex-wrap gap-[150px]">

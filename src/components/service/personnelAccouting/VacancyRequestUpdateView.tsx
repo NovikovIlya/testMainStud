@@ -12,13 +12,29 @@ import {
 	useDenyVacancyRequestMutation,
 	useGetVacancyRequestViewQuery,
 	useGetVacancyRequestsQuery,
-	useLazyGetVacancyRequestViewQuery
+	useLazyGetVacancyRequestViewQuery, useLazyGetVacancyViewQuery
 } from '../../../store/api/serviceApi'
 import ArrowIcon from '../jobSeeker/ArrowIcon'
 
 export const VacancyRequestUpdateView = () => {
+
+	const currentUrl = window.location.pathname;
+
+	// Ищем id из URL
+	const match = currentUrl.match(/\/update\/(\d+)$/);
+
+	let id_from_url: string | number;
+
+	if (match) {
+		id_from_url = match[1];
+	} else {
+		console.error('ID not found');
+	}
+
 	const { requestId } = useAppSelector(state => state.currentRequest)
-	const { data: requestView } = useGetVacancyRequestViewQuery(requestId)
+
+	const { data: requestView } = useGetVacancyRequestViewQuery(id_from_url)
+
 	const [getVacancyRequestView, queryStatus] = useLazyGetVacancyRequestViewQuery()
 	const navigate = useNavigate()
 	const [acceptRequest] = useAcceptUpdateVacancyRequestMutation()
@@ -419,6 +435,7 @@ export const VacancyRequestUpdateView = () => {
 							<div className="flex flex-col gap-[16px]">
 								<p className="font-content-font font-bold text-black text-[18px]/[21px]">Требуемый опыт работы:</p>
 								<p className="font-content-font font-normal text-black text-[18px]/[21px]">
+
 									{requestView !== undefined && requestView.oldData !== null
 										? (() => {
 												var test = dmp.diff_main(
@@ -442,6 +459,7 @@ export const VacancyRequestUpdateView = () => {
 							<div className="flex flex-col gap-[16px]">
 								<p className="font-content-font font-bold text-black text-[18px]/[21px]">Тип занятости:</p>
 								<p className="font-content-font font-normal text-black text-[18px]/[21px]">
+
 									{requestView !== undefined && requestView.oldData !== null
 										? (() => {
 												var test = dmp.diff_main(
@@ -465,6 +483,7 @@ export const VacancyRequestUpdateView = () => {
 							<div className="flex flex-col gap-[16px]">
 								<p className="font-content-font font-bold text-black text-[18px]/[21px]">Заработная плата:</p>
 								<p className="font-content-font font-normal text-black text-[18px]/[21px]">
+
 									{requestView !== undefined && requestView.oldData !== null
 										? (() => {
 												var test = dmp.diff_main(
@@ -489,6 +508,7 @@ export const VacancyRequestUpdateView = () => {
 						<div className="flex flex-col gap-[16px]">
 							<p className="font-content-font font-bold text-black text-[18px]/[21px]">Задачи:</p>
 							<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-pre-line">
+
 								{requestView !== undefined && requestView.oldData !== null
 									? (() => {
 											var test = dmp.diff_main(
@@ -512,6 +532,7 @@ export const VacancyRequestUpdateView = () => {
 						<div className="flex flex-col gap-[16px]">
 							<p className="font-content-font font-bold text-black text-[18px]/[21px]">Требования:</p>
 							<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-pre-line">
+
 								{requestView !== undefined && requestView.oldData !== null
 									? (() => {
 											var test = dmp.diff_main(
@@ -535,6 +556,7 @@ export const VacancyRequestUpdateView = () => {
 						<div className="flex flex-col gap-[16px]">
 							<p className="font-content-font font-bold text-black text-[18px]/[21px]">Условия:</p>
 							<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-pre-line">
+
 								{requestView !== undefined && requestView.oldData !== null
 									? (() => {
 											var test = dmp.diff_main(

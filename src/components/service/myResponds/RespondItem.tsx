@@ -137,7 +137,7 @@ export const RespondItem = (props: RespondItemType & { refetch: Function }) => {
 						type="primary"
 						onClick={() => {
 							dispatch(setCurrentResponce(props.id))
-							navigate('/services/myresponds/responds/fullinfo')
+							navigate(`/services/myresponds/responds/fullinfo/${props.id}`)
 						}}
 					>
 						Посмотреть

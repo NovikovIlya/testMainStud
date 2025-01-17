@@ -204,7 +204,7 @@ export const SupervisorInterviewItem = (props: InterviewItemType) => {
 							setCurrentInterviewTimeFormated(InterviewTimeStringForSeeker)
 						)
 						navigate(
-							'/services/personnelaccounting/supervisor/invitation/seekerinfo'
+							`/services/personnelaccounting/supervisor/invitation/seekerinfo/${props.id}`
 						)
 					}}
 					className="font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black"

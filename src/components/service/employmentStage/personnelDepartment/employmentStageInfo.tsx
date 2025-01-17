@@ -10,20 +10,35 @@ import {
 	useMarkBankCardApplicationFormedMutation,
 	useGetPersonnelStagesQuery, useGetEmploymentReqStageStatusQuery
 } from '../../../../store/api/serviceApi'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { DocumentElem } from './components/DocumentElem'
 import { NocircleArrowIcon } from '../../jobSeeker/NoCircleArrowIcon'
+import {NocircleArrowIconHover} from "../../../../assets/svg/NocircleArrowIconHover";
 
 export const EmploymentStageInfo = ( ) => {
 
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 
+	const currentUrl = window.location.pathname
+
+	const match = currentUrl.match(/\/stages\/(\d+)$/);
+
+	let id_from_url: string | undefined
+
+	if (match) {
+		id_from_url = match[1]
+	} else {
+		console.error('id miss')
+	}
+
 	const employmentSeekerName  = useAppSelector(state => state.employmentSeeker.currentEmploymentSeekerName)
 	const employmentSeekerVacancy  = useAppSelector(state => state.employmentSeeker.currentEmploymentSeekerVacancy)
 	const respondId = useAppSelector(state => state.currentResponce)
 
-	const { data: stages, isLoading: loadingReq } = useGetEmploymentStageStatusQuery({ respondId: respondId.respondId})
+	const { data: stages, isLoading: loadingReq } = useGetEmploymentStageStatusQuery({ respondId: id_from_url})
+
+	console.log(stages)
 
 	const stagesArray = stages?.stages || [] // массив массивов c этапами
 	const sortedStages = stagesArray.flat().sort((a, b) => a.id - b.id) // сортирую потому что приходит вперемешку
@@ -48,22 +63,57 @@ export const EmploymentStageInfo = ( ) => {
 	return (
 		<>
 			<div className="w-full flex flex-col px-[53px] mt-[140px]">
-				<Button
-					onClick={() => {
-						window.history.back()
-					}}
-					className="bg-inherit w-[102px] mb-[30px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer"
-				>
-					<NocircleArrowIcon />
-					Назад
-				</Button>
-				<h1 className="font-normal text-[28px]/[28px]">{employmentSeekerName}</h1>
+				<div>
+					<button
+						onClick={() => {
+							window.history.back()
+						}}
+						className="
+										   group
+								 		   items-center
+								 		   gap-[8px]
+								 		   hover:border-[#004EC2]
+								 		   outline-0
+								 		   hover:bg-white
+								 		   transition-all duration-200
+								 		   flex bg-inherit
+								 		   h-[38px]
+								 		   mb-[30px]
+								 		   pt-[12px]
+								 		   pb-[12px]
+								 		   pr-[16px]
+								 		   pl-[16px]
+								 		   rounded-[50px]
+								 		   border
+								 		   border-solid
+								 		   border-black
+								 		   cursor-pointer
+								 		  "
+					>
+						{/* Иконка при наведении */}
+						<div
+							className="absolute mt-[3px] group-hover:opacity-100 group-hover:scale-100 opacity-0 scale-95 transition-all duration-200">
+							<NocircleArrowIconHover/>
+						</div>
+
+						{/* Иконка по умолчанию */}
+						<div
+							className="mt-[3px] group-hover:opacity-0 group-hover:scale-95 opacity-100 scale-100 transition-all duration-200">
+							<NocircleArrowIcon/>
+						</div>
+						<span
+							className="group-hover:text-[#004EC2] transition-all duration-200 text-[14px] font-normal">
+									Назад
+								</span>
+					</button>
+				</div>
+				<h1 className="font-normal text-[28px]/[28px]">{employmentSeekerName} sdfsdfsda</h1>
 				<Button
 					type="default"
 					className="max-w-[102px] bg-[#F5F8FB] mt-[20px] py-[8px] px-[24px] text-[#333333] border-[#333333] border-[1px] rounded-[54.5px] text-[16px]"
 					onClick={() => {
 						dispatch(setCurrentResponce(respondId.respondId))
-						navigate('/services/personnelaccounting/personnel-department/employment/stages/seeker-info')
+						navigate(`/services/personnelaccounting/personnel-department/employment/stages/${id_from_url}/seeker-info`)
 					}}
 				>
 					Резюме
@@ -88,7 +138,7 @@ export const EmploymentStageInfo = ( ) => {
 							comment={sortedStages[2].comment}
 							stageStatus={sortedStages[2].status}
 							documentArray={sortedStages[2].documents}
-						 	bank={''}/>
+							bank={''}/>
 					)}
 
 					{sortedStages?.[3] && (
@@ -98,7 +148,7 @@ export const EmploymentStageInfo = ( ) => {
 							comment={sortedStages[3].comment}
 							stageStatus={sortedStages[3].status}
 							documentArray={sortedStages[3].documents}
-						 	bank={''}/>
+							bank={''}/>
 					)}
 					{sortedStages?.[4] && (
 						<>

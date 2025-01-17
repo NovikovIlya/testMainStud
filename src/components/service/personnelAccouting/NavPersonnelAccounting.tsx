@@ -152,7 +152,8 @@ export const NavPesonnelAccounting = () => {
 							(!(
 								pathname === '/services/personnelaccounting/vacancies'
 									||
-								pathname === '/services/personnelaccounting/vacancies/vacancyedit'
+								pathname.match(/\/services\/personnelaccounting\/vacancies\/vacancyedit\/\d+/)
+
 								) && 'opacity-[52%]')
 						)}
 						onClick={() => {
@@ -166,9 +167,9 @@ export const NavPesonnelAccounting = () => {
 							'font-content-font text-black text-[14px]/[14px] font-normal',
 							(!(
 								pathname === '/services/personnelaccounting/vacancyrequests' ||
-								pathname === '/services/personnelaccounting/request/create' ||
-								pathname === '/services/personnelaccounting/request/update' ||
-								pathname === '/services/personnelaccounting/request/delete'
+								pathname.match(/\/services\/personnelaccounting\/request\/create\/\d+/) ||
+								pathname.match(/\/services\/personnelaccounting\/request\/update\/\d+/) ||
+								pathname.match(/\/services\/personnelaccounting\/request\/delete\/\d+/)
 
 								) && 'opacity-[52%]')
 						)}
@@ -199,8 +200,7 @@ export const NavPesonnelAccounting = () => {
 							'font-content-font text-black text-[14px]/[14px] font-normal',
 							!(
 								(pathname === '/services/personnelaccounting/reserve') ||
-								(pathname === '/services/services/personnelaccounting/reserve') ||
-								(pathname === '/services/services/personnelaccounting/reserve/fullinfo')
+								pathname.match(/\/services\/personnelaccounting\/reserve\/fullinfo\/\d+/)
 							)
 							&&
 							'opacity-[52%]'
@@ -216,8 +216,7 @@ export const NavPesonnelAccounting = () => {
 							'font-content-font text-black text-[14px]/[14px] font-normal',
 							!(
 								(pathname === '/services/personnelaccounting/archive') ||
-								(pathname === '/services/services/personnelaccounting/archive') ||
-								(pathname === '/services/services/personnelaccounting/archive/fullinfo')
+								pathname.match(/\/services\/personnelaccounting\/archive\/fullinfo\/\d+/)
 							)
 							&&
 								'opacity-[52%]'
@@ -249,7 +248,7 @@ export const NavPesonnelAccounting = () => {
 							'font-content-font text-black text-[14px]/[14px] font-normal',
 							!(
 								pathname === '/services/personnelaccounting/supervisor/vacancies' ||
-								pathname === '/services/personnelaccounting/supervisor/vacancyview'
+								pathname.match(/\/services\/personnelaccounting\/supervisor\/vacancyview\/\d+/)
 
 							) &&
 								'opacity-[52%]'
@@ -295,7 +294,7 @@ export const NavPesonnelAccounting = () => {
 							'font-content-font text-black text-[14px]/[14px] font-normal',
 							!(
 								pathname === '/services/personnelaccounting/supervisor/invitation' ||
-								pathname === '/services/personnelaccounting/supervisor/invitation/seekerinfo'
+								pathname.match(/\/services\/personnelaccounting\/supervisor\/invitation\/seekerinfo\/\d+/)
 							) && 'opacity-[52%]'
 						)}
 						onClick={() => {
@@ -331,11 +330,11 @@ export const NavPesonnelAccounting = () => {
 						'w-full flex items-center pl-[16px] hover:bg-[#F5F8FB] cursor-pointer',
 						(
 							pathname === '/services/personnelaccounting/vacancies' ||
-							pathname === '/services/personnelaccounting/vacancies/vacancyedit' ||
+							pathname.match(/\/services\/personnelaccounting\/vacancies\/vacancyedit\/\d+/) ||
 							pathname === '/services/personnelaccounting/vacancyrequests' ||
-							pathname === '/services/personnelaccounting/request/create' ||
-							pathname === '/services/personnelaccounting/request/update' ||
-							pathname === '/services/personnelaccounting/request/delete'
+							pathname.match(/\/services\/personnelaccounting\/request\/create\/\d+/) ||
+							pathname.match(/\/services\/personnelaccounting\/request\/update\/\d+/) ||
+							pathname.match(/\/services\/personnelaccounting\/request\/delete\/\d+/)
 						) && 'bg-[#F5F8FB]'
 					)}
 				>
@@ -368,10 +367,8 @@ export const NavPesonnelAccounting = () => {
 						(
 							pathname === '/services/personnelaccounting/reserve' ||
 							pathname === '/services/personnelaccounting/archive' ||
-							pathname === '/services/personnelaccounting/reserve/fullinfo' ||
-							pathname === '/services/personnelaccounting/archive/fullinfo' ||
-							pathname === '/services/services/personnelaccounting/reserve/fullinfo' ||
-							pathname === '/services/services/personnelaccounting/archive/fullinfo'
+							pathname.match(/\/services\/personnelaccounting\/reserve\/fullinfo\/\d+/) ||
+							pathname.match(/\/services\/personnelaccounting\/archive\/fullinfo\/\d+/)
 						) && 'bg-[#F5F8FB]'
 					)}
 				>
@@ -395,8 +392,8 @@ export const NavPesonnelAccounting = () => {
 						'w-full flex items-center py-2 pl-8 hover:bg-[#F5F8FB] cursor-pointer',
 						(
 							pathname === '/services/personnelaccounting/personnel-department/employment' ||
-							pathname === '/services/personnelaccounting/personnel-department/employment/stages' ||
-							pathname === '/services/personnelaccounting/personnel-department/employment/stages/seeker-info'
+							pathname.match(/\/services\/personnelaccounting\/personnel-department\/employment\/stages\/\d+/) ||  // Для пути с произвольным ID
+							pathname.match(/\/services\/personnelaccounting\/personnel-department\/employment\/stages\/\d+\/seeker-info/)  // Для пути с ID и seeker-info
 						) && 'bg-[#F5F8FB]'
 					)}
 					onClick={() => handleNavigate(id)}
@@ -436,7 +433,7 @@ export const NavPesonnelAccounting = () => {
 						(
 							pathname === '/services/personnelaccounting/responds' ||
 							/\/services\/personnelaccounting\/responds\/byvacancy\/\d+/.test(pathname) ||
-							pathname === '/services/services/personnelaccounting/responds/fullinfo'
+							/\/services\/services\/personnelaccounting\/responds\/fullinfo\/\d+/.test(pathname)
 						) && 'bg-[#F5F8FB]'
 					)}
 					onClick={() => handleNavigate(id)}
@@ -498,12 +495,12 @@ export const NavPesonnelAccounting = () => {
 					<li
 						key={index}
 						className={clsx(
-							'w-full flex items-center pl-[16px] hover:bg-[#F5F8FB]  cursor-pointer',
+							'w-full flex items-center pl-4 hover:bg-[#F5F8FB]  cursor-pointer',
 							(
 								id === pathname ||
 								pathname === '/services/personnelaccounting/supervisor/vacancies' ||
 								pathname === '/services/personnelaccounting/supervisor/createvacancy' ||
-								pathname === '/services/personnelaccounting/supervisor/vacancyview'
+								pathname.match(/\/services\/personnelaccounting\/supervisor\/vacancyview\/\d+/)
 							) && 'bg-[#F5F8FB]'
 						)}
 					>
@@ -532,11 +529,11 @@ export const NavPesonnelAccounting = () => {
 					<li
 						key={index}
 						className={clsx(
-							'w-full flex items-center pl-5 hover:bg-[#F5F8FB]  cursor-pointer',
+							'w-full flex pl-4 items-center hover:bg-[#F5F8FB]  cursor-pointer',
 							(
 								id === pathname ||
 								pathname === '/services/personnelaccounting/supervisor/invitation' ||
-								pathname === '/services/personnelaccounting/supervisor/invitation/seekerinfo' ||
+								pathname.match(/\/services\/personnelaccounting\/supervisor\/invitation\/seekerinfo\/\d+/) ||
 								pathname === '/services/personnelaccounting/supervisor/scheduleinvitation'
 							) && 'bg-[#F5F8FB]'
 						)}
@@ -569,7 +566,7 @@ export const NavPesonnelAccounting = () => {
 							'w-full flex items-center py-2 pl-8 hover:bg-[#F5F8FB]  cursor-pointer',
 							(
 								pathname === '/services/personnelaccounting/supervisor/responds' ||
-								pathname === '/services/services/personnelaccounting/supervisor/responds/fullinfo'
+								pathname.match(/\/services\/personnelaccounting\/supervisor\/responds\/fullinfo\/\d+/)
 							) && 'bg-[#F5F8FB]'
 						)}
 						onClick={() => handleNavigate(id)}
@@ -609,8 +606,8 @@ export const NavPesonnelAccounting = () => {
 							'w-full flex items-center py-2 pl-8 hover:bg-[#F5F8FB]  cursor-pointer',
 							(
 								pathname === '/services/personnelaccounting/accounting/requisite' ||
-								pathname === '/services/personnelaccounting/accounting/requisite/requisite-review' ||
-								pathname === '/services/personnelaccounting/accounting/requisite/requisite-review/seeker-info'
+								pathname.match(/\/services\/personnelaccounting\/accounting\/requisite\/requisite-review\/\d+/) ||  // Для пути с произвольным ID
+								pathname.match(/\/services\/personnelaccounting\/accounting\/requisite\/requisite-review\/\d+\/seeker-info/)  // Для пути с ID и seeker-info
 							) && 'bg-[#F5F8FB]'
 						)}
 						onClick={() => handleNavigate(id)}
@@ -669,9 +666,9 @@ export const NavPesonnelAccounting = () => {
 				{pathname.match('services/personnelaccounting/responds/fullinfo') && (
 					<RespondInfo type="PERSONNEL_DEPARTMENT" />
 				)}
-				{pathname.match(
-					'services/personnelaccounting/supervisor/responds/fullinfo'
-				) && <RespondInfo type="SUPERVISOR" />}
+				{pathname.match(/\/services\/personnelaccounting\/supervisor\/responds\/fullinfo\/\d+/) && (
+					<RespondInfo type="SUPERVISOR" />
+				)}
 				{pathname.includes(navEmployeeList[1].id) && <ChatEmpDemp />}
 				{pathname === navEmployeeList[2].id && <DepEmployment />}
 				{pathname === navEmployeeList[3].id && <Catalog />}
@@ -681,21 +678,23 @@ export const NavPesonnelAccounting = () => {
 				{pathname === '/services/personnelaccounting/vacancyrequests' && (
 					<VacancyRequestsPage />
 				)}
-				{pathname === '/services/personnelaccounting/request/create' && (
+
+				{pathname.match(/\/services\/personnelaccounting\/request\/create\/\d+/) && (
 					<VacancyRequestCreateView />
 				)}
-				{pathname === '/services/personnelaccounting/request/update' && (
+				{pathname.match(/\/services\/personnelaccounting\/request\/update\/\d+/) && (
 					<VacancyRequestUpdateView />
 				)}
-				{pathname === '/services/personnelaccounting/request/delete' && (
+				{pathname.match(/\/services\/personnelaccounting\/request\/delete\/\d+/) && (
 					<VacancyRequestDeleteView />
 				)}
+
 				{pathname === navEmployeeList[4].id && <Reserve />}
-				{pathname.match('/services/personnelaccounting/reserve/fullinfo') && (
+				{pathname.match(/\/services\/personnelaccounting\/reserve\/fullinfo\/\d+/)  && (
 					<ReserveRespondInfo type="PERSONNEL_DEPARTMENT" />
 				)}
 				{pathname === '/services/personnelaccounting/archive' && <Archive />}
-				{pathname.match('services/personnelaccounting/archive/fullinfo') && (
+				{pathname.match(/\/services\/personnelaccounting\/archive\/fullinfo\/\d+/)  && (
 					<ArchiveRespondInfo type="PERSONNEL_DEPARTMENT" />
 				)}
 				{pathname === navSupervisorList[0].id && <RespondsSupervisor />}
@@ -705,8 +704,7 @@ export const NavPesonnelAccounting = () => {
 					'/services/personnelaccounting/supervisor/createvacancy' && (
 					<SupervisorCreateVacancyForm />
 				)}
-				{pathname ===
-					'/services/personnelaccounting/supervisor/vacancyview' && (
+				{pathname.match(/\/services\/personnelaccounting\/supervisor\/vacancyview\/\d+/) && (
 					<SupervisorUpdateVacancy />
 				)}
 				{pathname === '/services/personnelaccounting/supervisor/invitation' && (
@@ -716,25 +714,24 @@ export const NavPesonnelAccounting = () => {
 					'/services/personnelaccounting/supervisor/scheduleinvitation' && (
 					<SupervisorInterviewCreate />
 				)}
-				{pathname ===
-					'/services/personnelaccounting/supervisor/invitation/seekerinfo' && (
+				{pathname.match(/\/services\/personnelaccounting\/supervisor\/invitation\/seekerinfo\/\d+/) && (
 					<SupervisorInterviewSeekerInfo />
 				)}
-				{pathname === `/services/personnelaccounting/personnel-department/employment/stages` && (
-					<EmploymentStageInfo/>
+				{pathname.match(/\/services\/personnelaccounting\/personnel-department\/employment\/stages\/\d+/) && !pathname.includes('/seeker-info') && (
+					<EmploymentStageInfo />
 				)}
-				{pathname === '/services/personnelaccounting/personnel-department/employment/stages/seeker-info' && (
-					<DepEmploymentSeekerInfo/>
+				{pathname.match(/\/services\/personnelaccounting\/personnel-department\/employment\/stages\/\d+\/seeker-info/) && (
+					<DepEmploymentSeekerInfo />
 				)}
 				{pathname === '/services/personnelaccounting/accounting/requisite' && (
 					<RequisiteMain/>
 				)}
-				{pathname === `/services/personnelaccounting/accounting/requisite/requisite-review` && (
-						<RequisiteStage/>
-					)}
-				{pathname === '/services/personnelaccounting/accounting/requisite/requisite-review/seeker-info' && (
-						<RequisiteSeeker/>
-					)}
+				{pathname.match(/\/services\/personnelaccounting\/accounting\/requisite\/requisite-review\/\d+/) && !pathname.includes('/seeker-info') && (
+					<RequisiteStage/>
+				)}
+				{pathname.match(/\/services\/personnelaccounting\/accounting\/requisite\/requisite-review\/\d+\/seeker-info/) && (
+					<RequisiteSeeker/>
+				)}
 				{pathname === '/services/personnelaccounting/labor-protection/test-results' && (
 					<TestResults/>
 				)}

@@ -10,6 +10,7 @@ import { NavSeekerEmployment } from '../employmentStage/seeker/NavSeekerEmployme
 import { RespondInfo } from '../personnelAccouting/RespondInfo'
 
 import { MyResponds } from './MyResponds'
+import {VacancyRequestDeleteView} from "../personnelAccouting/VacancyRequestDeleteView";
 
 export const NavMyResponds = () => {
 	const { pathname } = useLocation()
@@ -46,7 +47,7 @@ export const NavMyResponds = () => {
 						'w-full flex items-center py-2 pl-8 hover:bg-[#F5F8FB]  cursor-pointer',
 						(
 							pathname === '/services/myresponds/responds' ||
-							pathname === '/services/myresponds/responds/fullinfo'
+							/\/services\/myresponds\/responds\/fullinfo\/\d+/.test(pathname)
 
 						) && 'bg-[#F5F8FB]'
 					)}
@@ -67,7 +68,7 @@ export const NavMyResponds = () => {
 						(
 							pathname === '/services/myresponds/chat' ||
 							/\/services\/myresponds\/chat\/id\/\d+/.test(pathname) ||
-							pathname === '/services/myresponds/chat/vacancyview'
+							/\/services\/myresponds\/chat\/vacancyview\/\d+/.test(pathname)
 
 						) && 'bg-[#F5F8FB]'
 					)}
@@ -112,8 +113,8 @@ export const NavMyResponds = () => {
 			</div>
 			<div className="bg-[#F5F8FB] flex w-full">
 				{pathname === navList[0].id && <MyResponds />}
-				{pathname === navList[0].id + '/fullinfo' && (
-					<RespondInfo type="SEEKER" />
+				{pathname.match(/\/services\/myresponds\/responds\/fullinfo\/\d+/) && (
+					<RespondInfo type="SEEKER"/>
 				)}
 				{pathname.includes(navList[1].id) && <Chat />}
 				{pathname.includes(navList[2].id) && <NavSeekerEmployment />}

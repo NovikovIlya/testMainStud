@@ -425,12 +425,10 @@ export const ReserveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 								{/* <div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
 									{res.educations.map(edu => (
 										<>
-											<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-												{edu.endYear}
-											</p>
+											<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">{edu.endYear}</p>
 											<div className="flex flex-col gap-[8px]">
 												<p className="font-content-font font-bold text-black text-[16px]/[19.2px]">
-													{edu.nameOfInstitute}
+													{edu.nameOfInstitute + ', ' + edu.country}
 												</p>
 												<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
 													{edu.speciality === null ? '' : edu.speciality + ', '}
@@ -455,7 +453,7 @@ export const ReserveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 									Профессиональные навыки
 								</p>
 								<div className="grid grid-cols-[194px_auto] gap-x-[20px] w-[90%]">
-									<div className="col-start-2 mt-[111px] flex gap-[8px] flex-wrap">
+									<div className="col-start-2 flex gap-[8px] flex-wrap">
 										{res.respondData.skills.keySkills.map(skill => (
 											<Tag
 												className="bg-black bg-opacity-10 rounded-[40px] py-[8px] px-[16px] font-content-font font-normal text-black text-[16px]/[19.2px]"

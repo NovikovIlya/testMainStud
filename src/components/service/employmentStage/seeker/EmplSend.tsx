@@ -5,9 +5,9 @@ import { useNavigate } from 'react-router-dom'
 import { ModalOkSvg } from '../../../../assets/svg/ModalOkSvg'
 import { useAppSelector } from '../../../../store'
 import { useSendEmploymentDocsMutation } from '../../../../store/api/serviceApi'
+import { useAlert } from '../../../../utils/Alert/AlertMessage'
 
 import { FileAttachment } from './FileAttachment'
-import {useAlert} from "../../../../utils/Alert/AlertMessage";
 
 export const EmplSend = (props: { respondId: number; stageId: number; stageName: string }) => {
 	const { empData } = useAppSelector(state => state.employmentData)
@@ -20,7 +20,6 @@ export const EmplSend = (props: { respondId: number; stageId: number; stageName:
 	const bank = empData.stages.find(stage => stage.type === 'SIXTH')?.bank
 
 	const [isResultModalOpen, setIsResultModalOpen] = useState<boolean>(false)
-	const [resultModalText, setResultModalText] = useState<string>('')
 
 	const navigate = useNavigate()
 
@@ -53,15 +52,14 @@ export const EmplSend = (props: { respondId: number; stageId: number; stageName:
 						<ModalOkSvg />
 					</div>
 					<p className="text-center font-content-font text-black text-[16px]/[20px] font-normal mt-[22px]">
-						{resultModalText}
+						Документы успешно отправлены. Следите за статусом ваших документов на этапе трудоустройства.
 					</p>
 					<Button
 						className="rounded-[40px] w-full !py-[13px] mt-[40px]"
 						type="primary"
 						onClick={() => {
 							setIsResultModalOpen(false)
-							resultModalText === 'Документы успешно отправлены. Ожидайте проверки.' &&
-								navigate('/services/myresponds/employment')
+							navigate('/services/myresponds/employment')
 						}}
 					>
 						Ок
@@ -112,9 +110,6 @@ export const EmplSend = (props: { respondId: number; stageId: number; stageName:
 							})
 								.unwrap()
 								.then(() => {
-									setResultModalText(
-										'Документы успешно отправлены. Следите за статусом ваших документов на этапе трудоустройства.'
-									)
 									setIsResultModalOpen(true)
 								})
 						} catch (error: any) {

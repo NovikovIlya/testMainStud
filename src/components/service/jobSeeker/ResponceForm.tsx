@@ -421,7 +421,10 @@ export const ResponseForm = () => {
 										birthDay: values.birthDay.$d.toLocaleDateString(),
 										surName: values.surname,
 										phone: values.phoneNumber,
-										countryId: values.country
+										countryId: values.country,
+										isBirthDaySet: aboutMeData.isBirthDaySet,
+										isPatronymicSet: aboutMeData.isPatronymicSet,
+										isGenderSet: aboutMeData.isGenderSet
 									})
 								)
 								dispatch(completeAboutMe())
@@ -507,6 +510,7 @@ export const ResponseForm = () => {
 									disabled={aboutMeData.isBirthDaySet}
 									format={'DD-MM-YYYY'}
 									value={dayjs(aboutMeData.birthDay, 'DD.MM.YYYY')}
+									maxDate={dayjs(date)}
 									className="w-full"
 									onChange={(e, date) => {
 										// dispatch(birthDay(date))
@@ -1136,7 +1140,7 @@ export const ResponseForm = () => {
 										<label className="text-black text-[18px]/[18px] font-content-font font-normal">Период работы</label>
 									}
 								>
-									<DatePicker.MonthPicker className="w-full" disabled={haveNoExprience} />
+									<DatePicker.MonthPicker className="w-full" disabled={haveNoExprience} maxDate={dayjs(date)} />
 								</Form.Item>
 								<Form.Item
 									name={'endWork'}
@@ -1236,7 +1240,7 @@ export const ResponseForm = () => {
 										<label className="text-black text-[18px]/[18px] font-content-font font-normal">Период работы</label>
 									}
 								>
-									<DatePicker.MonthPicker className="w-full" disabled={haveNoExprience} />
+									<DatePicker.MonthPicker className="w-full" disabled={haveNoExprience} maxDate={dayjs(date)} />
 								</Form.Item>
 								<Form.Item
 									name={'endWork'}
@@ -1324,7 +1328,7 @@ export const ResponseForm = () => {
 													skillInputValue !== '' &&
 														(setcurrentFormSkills([...currentFormskills, skillInputValue]), setSkillInputValue(''))
 												}}
-												icon={<ButtonPlusIcon />}
+												icon={<ButtonPlusIcon special />}
 												type="text"
 											></Button>
 										</ConfigProvider>

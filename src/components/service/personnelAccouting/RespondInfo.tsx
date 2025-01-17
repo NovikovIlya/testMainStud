@@ -392,7 +392,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 														.then(() => {
 															setIsRespondSentToArchive(true)
 														})
-													openAlert({type: 'success', text: 'Резюме отправлено в архив'})
+													openAlert({ type: 'success', text: 'Резюме успешно отклонено' })
 												} catch (error: any) {
 													openAlert({type: 'error', text: 'Извините, что-то пошло не так...'})
 												}
@@ -427,49 +427,6 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 							</div>
 							<hr />
 							<div className="flex flex-col gap-[24px]">
-								<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">Опыт работы</p>
-								<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
-									{res.respondData.portfolio.workExperiences.map(exp => (
-										<>
-											<div className="flex flex-col gap-[4px]">
-												<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-													{exp.beginWork.substring(0, 4)}-
-													{parseInt(exp.endWork.substring(0, 4)) === date.getFullYear()
-														? 'по наст.время'
-														: exp.endWork.substring(0, 4)}
-												</p>
-												<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-													{parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) === 0
-														? ''
-														: parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4))}
-													{parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) === 1 &&
-														' год'}
-													{parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) >= 2 &&
-														parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) <= 4 &&
-														' года'}
-													{parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) > 4 &&
-														' лет'}
-												</p>
-											</div>
-											<div className="flex flex-col gap-[8px]">
-												<p className="font-content-font font-bold text-black text-[16px]/[19.2px]">{exp.position}</p>
-												<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">{exp.workPlace}</p>
-												<p className="font-content-font font-normal text-black text-[14px]/[16.8px]">{exp.duties}</p>
-											</div>
-										</>
-									))}
-								</div>
-								{res.respondData.portfolio.url !== '' && (
-									<div className="grid grid-cols-[164px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
-										<p>Ссылка на портфолио:</p>
-										<a href={res.respondData.portfolio.url} target="_blank">
-											{res.respondData.portfolio.url}
-										</a>
-									</div>
-								)}
-							</div>
-							<hr />
-							<div className="flex flex-col gap-[24px]">
 								<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">Образование</p>
 								<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
 									{res.educations.map(edu => (
@@ -487,6 +444,57 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 										</>
 									))}
 								</div>
+							</div>
+							<hr />
+							<div className="flex flex-col gap-[24px]">
+								<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">Опыт работы</p>
+								{res.respondData.portfolio.workExperiences.length === 0 ? (
+									<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
+										Соискатель не имеет опыта работы
+									</p>
+								) : (
+									<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
+										{res.respondData.portfolio.workExperiences.map(exp => (
+											<>
+												<div className="flex flex-col gap-[4px]">
+													<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
+														{exp.beginWork.substring(0, 4)}-
+														{parseInt(exp.endWork.substring(0, 4)) === date.getFullYear()
+															? 'по наст.время'
+															: exp.endWork.substring(0, 4)}
+													</p>
+													<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
+														{parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) === 0
+															? ''
+															: parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4))}
+														{parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) === 1 &&
+															' год'}
+														{parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) >= 2 &&
+															parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) <= 4 &&
+															' года'}
+														{parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) > 4 &&
+															' лет'}
+													</p>
+												</div>
+												<div className="flex flex-col gap-[8px]">
+													<p className="font-content-font font-bold text-black text-[16px]/[19.2px]">{exp.position}</p>
+													<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
+														{exp.workPlace}
+													</p>
+													<p className="font-content-font font-normal text-black text-[14px]/[16.8px]">{exp.duties}</p>
+												</div>
+											</>
+										))}
+									</div>
+								)}
+								{res.respondData.portfolio.url !== '' && (
+									<div className="grid grid-cols-[164px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
+										<p>Ссылка на портфолио:</p>
+										<a href={res.respondData.portfolio.url} target="_blank">
+											{res.respondData.portfolio.url}
+										</a>
+									</div>
+								)}
 							</div>
 							<hr />
 							<div className="flex flex-col gap-[24px]">

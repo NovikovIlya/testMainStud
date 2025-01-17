@@ -1,8 +1,8 @@
-export const ButtonPlusIcon = () => {
+export const ButtonPlusIcon = (props: { special?: boolean }) => {
 	return (
 		<svg
-			width="31"
-			height="30"
+			width={`${props.special ? '24' : '31'}`}
+			height={`${props.special ? '23' : '30'}`}
 			viewBox="0 0 31 30"
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"

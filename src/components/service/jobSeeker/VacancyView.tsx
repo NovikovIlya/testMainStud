@@ -5,10 +5,12 @@ import { usePostVacancyRespondMutation } from '../../../store/api/serviceApi'
 
 import ArrowIcon from './ArrowIcon'
 import { ResponseForm } from './ResponceForm'
-import {useEffect} from "react";
+import React, {useEffect} from "react";
 import {
 	useLazyGetVacancyViewQuery
 } from '../../../store/api/serviceApi'
+import {Spin} from "antd";
+import {LoadingOutlined} from "@ant-design/icons";
 
 export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 
@@ -108,6 +110,18 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 		)
 	}
 
+	if (isLoading) {
+		return (
+			<>
+				<div className="w-full h-full flex items-center">
+					<div className="text-center ml-auto mr-auto">
+						<Spin indicator={<LoadingOutlined style={{fontSize: 36}} spin/>}></Spin>
+						<p className="font-content-font font-normal text-black text-[18px]/[18px]">Идёт загрузка...</p>
+					</div>
+				</div>
+			</>
+		)
+	}
 	return (
 		<>
 			<div

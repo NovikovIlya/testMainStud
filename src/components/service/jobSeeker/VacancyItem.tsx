@@ -35,7 +35,7 @@ export default function VacancyItem(props: VacancyItemType) {
 							dispatch(setCurrentVacancy(result))
 							console.log(result)
 							console.log(result.acf.responsibilities)
-							navigate('/services/jobseeker/vacancyview')
+							navigate(`/services/jobseeker/vacancyview/${props.id}`)
 						})
 				}}
 			>

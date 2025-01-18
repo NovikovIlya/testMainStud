@@ -31,6 +31,7 @@ import { NocircleArrowIcon } from '../jobSeeker/NoCircleArrowIcon'
 
 import { InviteSeekerForm } from './supervisor/InviteSeekerForm'
 import {NocircleArrowIconHover} from "../../../assets/svg/NocircleArrowIconHover";
+import {RespondDownloadHover} from "../../../assets/svg/RespondDownloadHover";
 
 export const ArchiveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR' }) => {
 	const respondId = useAppSelector(state => state.currentResponce)
@@ -330,7 +331,7 @@ export const ArchiveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 										>
 											Удалить
 										</Button>
-										<Button
+										<button
 											onClick={() => {
 												setIsButtonsHidden(true)
 												setTimeout(() => {
@@ -338,17 +339,54 @@ export const ArchiveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 													setIsButtonsHidden(false)
 												}, 0)
 											}}
-											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
+											className="
+                        						group
+                        						items-center
+                        						justify-center
+                        						gap-[8px]
+                        						hover:border-[#004EC2]
+                        						outline-0
+                        						hover:bg-white
+                        						transition-all duration-200
+                        						flex bg-inherit
+                        						h-[38px]
+                        						pt-[12px]
+                        						pb-[12px]
+                        						pr-[16px]
+                        						pl-[16px]
+                        						rounded-[50px]
+                        						border
+                        						border-solid
+                        						border-black
+                        						cursor-pointer
+                       						"
 										>
-											<RespondDownload /> Скачать
-										</Button>
+											{/* Иконка при наведении */}
+											<div
+												className="absolute mr-[62px] mt-[3px] group-hover:opacity-100 group-hover:scale-100 opacity-0 scale-95 transition-all duration-200">
+												<RespondDownloadHover/>
+											</div>
+
+											{/* Иконка по умолчанию */}
+											<div
+												className="mt-[3px] group-hover:opacity-0 group-hover:scale-95 opacity-100 scale-100 transition-all duration-200">
+												<RespondDownload/>
+											</div>
+											<span
+												className="group-hover:text-[#004EC2] transition-all duration-200 text-[16px] font-normal">
+                        					Скачать
+                      						</span>
+										</button>
 									</div>
 								)}
 								{props.type === 'SUPERVISOR' && (
 									<div className="self-center grid grid-cols-1 grid-rows-[40px_40px] gap-y-[12px]">
-										<InviteSeekerForm respondId={respondId.respondId} isButtonDisabled callback={() => {}} />
+										<InviteSeekerForm respondId={respondId.respondId} isButtonDisabled
+														  callback={() => {
+														  }}/>
 										<Button
-											onClick={() => {}}
+											onClick={() => {
+											}}
 											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[257px] h-[40px] py-[8px] px-[24px] border-black"
 										>
 											Отказать
@@ -356,7 +394,7 @@ export const ArchiveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 									</div>
 								)}
 							</div>
-							<hr />
+							<hr/>
 							<div className="flex flex-col gap-[24px]">
 								<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">
 									Сопроводительное письмо
@@ -365,7 +403,7 @@ export const ArchiveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 									{res.respondData.coverLetter}
 								</p>
 							</div>
-							<hr />
+							<hr/>
 							<div className="flex flex-col gap-[24px]">
 								<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">Образование</p>
 								<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">

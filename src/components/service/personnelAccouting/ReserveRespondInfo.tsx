@@ -422,7 +422,7 @@ export const ReserveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 							<hr/>
 							<div className="flex flex-col gap-[24px]">
 								<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">Образование</p>
-								{/* <div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
+								<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
 									{res.educations.map(edu => (
 										<>
 											<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">{edu.endYear}</p>
@@ -437,7 +437,7 @@ export const ReserveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 											</div>
 										</>
 									))}
-								</div> */}
+								</div>
 							</div>
 							<hr/>
 							<div className="flex flex-col gap-[24px]">

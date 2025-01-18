@@ -154,7 +154,7 @@ export const VacancyRequestUpdateView = () => {
 					footer={null}
 					centered
 					onCancel={() => {
-						setIsResultModalOpen(false)
+						navigate(-1)
 					}}
 				>
 					<div className="flex flex-col">

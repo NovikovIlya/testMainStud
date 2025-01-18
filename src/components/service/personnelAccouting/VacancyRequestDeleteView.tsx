@@ -148,7 +148,7 @@ export const VacancyRequestDeleteView = () => {
 					footer={null}
 					centered
 					onCancel={() => {
-						setIsResultModalOpen(false)
+						navigate(-1)
 					}}
 				>
 					<div className="flex flex-col">
@@ -208,19 +208,19 @@ export const VacancyRequestDeleteView = () => {
 							<button
 								className="cursor-pointer flex items-center justify-center border-[1px] border-solid outline-0 border-[#FF5A5A] hover:border-[#FF8181] text-white rounded-[54.5px] bg-[#FF5A5A] hover:bg-[#FF8181] text-[14px] h-[40px] w-full py-[13px]"
 								onClick={async () => {
-									try{
+									try {
 										await acceptRequest(requestId)
-										.unwrap()
-										.then(() => {
-											refetch().then(() => {
-												setResultModalText('Вакансия успешно удалена')
-												setIsVerifyModalOpen(false)
-												setIsResultModalOpen(true)
+											.unwrap()
+											.then(() => {
+												refetch().then(() => {
+													setResultModalText('Вакансия успешно удалена')
+													setIsVerifyModalOpen(false)
+													setIsResultModalOpen(true)
+												})
 											})
-										})
-							} catch (error: any) {
-								openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
-							}
+									} catch (error: any) {
+										openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+									}
 								}}
 							>
 								Удалить
@@ -240,17 +240,10 @@ export const VacancyRequestDeleteView = () => {
 						<ArrowIcon />
 					</button>
 					<p className="ml-[40px] font-content-font font-normal text-black text-[28px]/[33.6px]">
-						{currentVacancy !== null ? currentVacancy.title.rendered : ''}
+						{currentVacancy !== null ? '«' + currentVacancy.title.rendered + '»' : ''}
 					</p>
 				</div>
 				<div className="w-[50%] mt-[52px] flex flex-col gap-[40px]">
-					<div className="flex flex-col gap-[16px]">
-						<p className="font-content-font font-bold text-black text-[18px]/[21px]">Должность:</p>
-						<p className="font-content-font font-normal text-black text-[18px]/[21px]">
-							{post && '«' + post + '»'}
-							{data?.title.rendered}
-						</p>
-					</div>
 					<div className="flex gap-[60px]">
 						<div className="flex flex-col gap-[16px]">
 							<p className="font-content-font font-bold text-black text-[18px]/[21px]">Требуемый опыт работы:</p>

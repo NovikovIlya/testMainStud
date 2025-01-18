@@ -84,7 +84,7 @@ export const ArchiveItem = (props: {
 				<Button
 					onClick={() => {
 						dispatch(setCurrentResponce(props.id))
-						navigate('services/personnelaccounting/archive/fullinfo')
+						navigate(`services/personnelaccounting/archive/fullinfo/${props.id}`)
 					}}
 					className="ml-auto max-w-[15%] font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black"
 				>

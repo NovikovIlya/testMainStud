@@ -179,8 +179,10 @@ export const VacancyRespondItem = (
 					onClick={() => {
 						dispatch(setCurrentResponce(props.id))
 						props.itemType === 'PERSONNEL_DEPARTMENT'
-							? navigate(`services/personnelaccounting/responds/fullinfo`)
-							: navigate('services/personnelaccounting/supervisor/responds/fullinfo')
+							? navigate(`services/personnelaccounting/responds/fullinfo/${props.id}`)
+							: navigate(
+									`services/personnelaccounting/supervisor/responds/fullinfo/${props.id}`
+							  )
 					}}
 					className="ml-auto max-w-[15%] font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black"
 				>

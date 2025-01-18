@@ -1,4 +1,4 @@
-import { Button, Spin } from 'antd'
+import {Button, Spin, Tag} from 'antd'
 import { AvatartandardSvg } from '../../../../assets/svg/AvatarStandardSvg'
 import { useAppSelector } from '../../../../store'
 import {
@@ -7,16 +7,29 @@ import {
 import { NocircleArrowIcon } from '../../jobSeeker/NoCircleArrowIcon'
 import { LoadingOutlined } from '@ant-design/icons'
 import {MyDocsSvg} from "../../../../assets/svg/MyDocsSvg";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Margin, usePDF} from "react-to-pdf";
 import {useGetCountriesQuery} from "../../../../store/api/utilsApi";
 import {useTranslation} from "react-i18next";
+import uuid from "react-uuid";
+import {NocircleArrowIconHover} from "../../../../assets/svg/NocircleArrowIconHover";
 
 export const DepEmploymentSeekerInfo = ( ) => {
 
 	const respondId = useAppSelector(state => state.currentResponce)
 
-	const { data, isLoading : loading } = useGetRespondFullInfoQuery(respondId.respondId)
+	const currentUrl = window.location.pathname;
+	const match = currentUrl.match(/\/stages\/(\d+)(?=\/|$)/);
+
+	let id_from_url: string | undefined
+
+	if (match) {
+		id_from_url = match[1]
+	} else {
+		console.error('id miss')
+	}
+
+	const { data, isLoading : loading } = useGetRespondFullInfoQuery(id_from_url)
 
 	const date = new Date()
 
@@ -92,15 +105,48 @@ export const DepEmploymentSeekerInfo = ( ) => {
 		return (
 			<div className="pl-[52px] pr-[10%] py-[140px] w-full">
 				<div>
-					<Button
+					<button
 						onClick={() => {
 							window.history.back()
 						}}
-						className="bg-inherit h-[38px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer"
+						className="
+										   group
+								 		   items-center
+								 		   gap-[8px]
+								 		   hover:border-[#004EC2]
+								 		   outline-0
+								 		   hover:bg-white
+								 		   transition-all duration-200
+								 		   flex bg-inherit
+								 		   h-[38px]
+								 		   mb-[30px]
+								 		   pt-[12px]
+								 		   pb-[12px]
+								 		   pr-[16px]
+								 		   pl-[16px]
+								 		   rounded-[50px]
+								 		   border
+								 		   border-solid
+								 		   border-black
+								 		   cursor-pointer
+								 		  "
 					>
-						<NocircleArrowIcon/>
-						Назад
-					</Button>
+						{/* Иконка при наведении */}
+						<div
+							className="absolute mt-[3px] group-hover:opacity-100 group-hover:scale-100 opacity-0 scale-95 transition-all duration-200">
+							<NocircleArrowIconHover/>
+						</div>
+
+						{/* Иконка по умолчанию */}
+						<div
+							className="mt-[3px] group-hover:opacity-0 group-hover:scale-95 opacity-100 scale-100 transition-all duration-200">
+							<NocircleArrowIcon/>
+						</div>
+						<span
+							className="group-hover:text-[#004EC2] transition-all duration-200 text-[14px] font-normal">
+									Назад
+								</span>
+					</button>
 				</div>
 				<div className="mt-[52px] flex flex-col gap-[36px]">
 					<div className="flex flex-wrap gap-[150px]">
@@ -229,18 +275,27 @@ export const DepEmploymentSeekerInfo = ( ) => {
 						)}
 					</div>
 					<hr/>
+					<div className="flex flex-col gap-[24px]">
+						<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">О себе</p>
+						<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
+							{data.respondData.skills.aboutMe}
+						</p>
+					</div>
+					<hr/>
 					<div className="flex flex-col">
 						<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40 w-[194px]">
 							Профессиональные навыки
 						</p>
 						<div className="grid grid-cols-[194px_auto] gap-x-[20px] w-[90%]">
-							<div className="col-start-2">
-								{/*
-								{data?.respondData.skills.aboutMe}
-								TODO: разобраться почему приходит undefined
-								*/}
-							</div>
-							<div className="col-start-2 flex gap-[8px] flex-wrap">
+							<div className="col-start-2 mt-[24px] flex gap-[8px] flex-wrap">
+								{data.respondData.skills.keySkills.map(skill => (
+									<Tag
+										className="bg-black bg-opacity-10 rounded-[40px] py-[8px] px-[16px] font-content-font font-normal text-black text-[16px]/[19.2px]"
+										key={uuid()}
+									>
+										{skill}
+									</Tag>
+								))}
 							</div>
 						</div>
 					</div>
@@ -263,7 +318,7 @@ export const DepEmploymentSeekerInfo = ( ) => {
 					</Button>
 				</div>
 				<div className="mt-[52px] flex flex-col gap-[36px]">
-					<div className="flex flex-wrap gap-[150px]">
+				<div className="flex flex-wrap gap-[150px]">
 						<div className="flex gap-[20px]">
 							<div className="flex h-[167px] w-[167px] bg-[#D9D9D9]">
 								<AvatartandardSvg/>

@@ -13,13 +13,33 @@ import {
 	useGetDirectionsQuery,
 	useGetSubdivisionsQuery,
 	useGetVacancyRequestsQuery,
+	useGetVacancyRequestViewQuery,
 	useLazyGetVacancyRequestViewQuery
 } from '../../../store/api/serviceApi'
 import { useAlert } from '../../../utils/Alert/AlertMessage'
 import ArrowIcon from '../jobSeeker/ArrowIcon'
 
 export const VacancyRequestCreateView = () => {
+
+	const currentUrl = window.location.pathname;
+
+	// Ищем id из URL
+	const match = currentUrl.match(/\/create\/(\d+)$/);
+
+	let id_from_url: string | number;
+
+	if (match) {
+		id_from_url = match[1];
+	} else {
+		console.error('ID not found');
+	}
+
 	const { requestId } = useAppSelector(state => state.currentRequest)
+
+	const { data: requestView } = useGetVacancyRequestViewQuery(id_from_url)
+
+	console.log(requestView)
+
 	const navigate = useNavigate()
 	const [getVacancyRequestView, queryStatus] = useLazyGetVacancyRequestViewQuery()
 	const [acceptRequest] = useAcceptCreateVacancyRequestMutation()
@@ -60,7 +80,7 @@ export const VacancyRequestCreateView = () => {
 	const [resultModalText, setResultModalText] = useState<string>('')
 
 	useEffect(() => {
-		getVacancyRequestView(requestId)
+		getVacancyRequestView(id_from_url)
 			.unwrap()
 			.then(req => {
 				setPost(req.newData.post)

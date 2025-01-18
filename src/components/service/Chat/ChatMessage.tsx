@@ -71,8 +71,8 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 								.then(result => {
 									dispatch(setCurrentVacancy(result))
 									isEmpDep
-										? navigate('/services/personnelaccounting/chat/vacancyview')
-										: navigate('/services/myresponds/chat/vacancyview')
+										? navigate(`/services/personnelaccounting/chat/vacancyview/${currentVacancyId}`)
+										: navigate(`/services/myresponds/chat/vacancyview/${currentVacancyId}`)
 								})
 						}}
 					>

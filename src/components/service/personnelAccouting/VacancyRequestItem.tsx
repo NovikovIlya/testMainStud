@@ -47,12 +47,12 @@ export const VacancyRequestItem = (props: {
 						props.action === 'CREATE'
 							? () => {
 									dispatch(setRequestId(props.requestId))
-									navigate(`/services/personnelaccounting/request/create`)
+									navigate(`/services/personnelaccounting/request/create/${props.requestId}`)
 							  }
 							: props.action === 'UPDATE'
 							? () => {
 									dispatch(setRequestId(props.requestId))
-									navigate(`/services/personnelaccounting/request/update`)
+									navigate(`/services/personnelaccounting/request/update/${props.requestId}`)
 							  }
 							: () => {
 									getVacancy(props.vacancyId)
@@ -62,7 +62,7 @@ export const VacancyRequestItem = (props: {
 											dispatch(setRequestId(props.requestId))
 											console.log(result)
 											console.log(result.acf.responsibilities)
-											navigate('/services/personnelaccounting/request/delete')
+											navigate(`/services/personnelaccounting/request/delete/${props.vacancyId}`)
 										})
 							  }
 					}

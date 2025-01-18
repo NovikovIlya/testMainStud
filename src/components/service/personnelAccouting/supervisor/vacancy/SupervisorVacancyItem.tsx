@@ -140,7 +140,7 @@ export default function VacancyItem(props: VacancyItemType) {
 								dispatch(setCurrentVacancy(result))
 								console.log(result)
 								console.log(result.acf.responsibilities)
-								navigate('/services/personnelaccounting/supervisor/vacancyview')
+								navigate(`/services/personnelaccounting/supervisor/vacancyview/${props.id}`)
 							})
 					}}
 					className="ml-[60px] font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black"

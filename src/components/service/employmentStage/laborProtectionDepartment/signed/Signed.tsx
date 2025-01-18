@@ -96,7 +96,8 @@ export const Signed = () => {
                                 <DeleteIconHoverLaborSvg></DeleteIconHoverLaborSvg>
                             </span>
                             <span
-                                className="group-hover:text-[#EA0000] group-hover:opacity-[50%] text-[16px] text-[#999999] font-normal">Удалить</span>
+                                className="group-hover:text-[#EA0000] group-hover:opacity-[50%] text-[16px] text-[#999999] font-normal">Удалить
+                            </span>
                         </button>
                     </div>
                 </div>

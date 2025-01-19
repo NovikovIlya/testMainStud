@@ -240,7 +240,7 @@ export const VacancyRequestDeleteView = () => {
 						<ArrowIcon />
 					</button>
 					<p className="ml-[40px] font-content-font font-normal text-black text-[28px]/[33.6px]">
-						{currentVacancy !== null ? '«' + currentVacancy.title.rendered + '»' : ''}
+						{data?.title.rendered}
 					</p>
 				</div>
 				<div className="w-[50%] mt-[52px] flex flex-col gap-[40px]">

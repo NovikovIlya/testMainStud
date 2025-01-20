@@ -1,5 +1,6 @@
-import {Button, ConfigProvider, Form, Input, Modal, Select, Spin} from 'antd'
-import {useEffect, useState} from 'react'
+import { LoadingOutlined } from '@ant-design/icons'
+import { Button, ConfigProvider, Form, Input, Modal, Select, Spin } from 'antd'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { ModalOkSvg } from '../../../assets/svg/ModalOkSvg'
@@ -19,30 +20,29 @@ import ArrowIcon from '../jobSeeker/ArrowIcon'
 import {LoadingOutlined} from "@ant-design/icons";
 
 export const VacancyEditView = () => {
-
-	const [getVacancy, { data, isLoading, error }] = useLazyGetVacancyViewQuery();
+	const [getVacancy, { data, isLoading, error }] = useLazyGetVacancyViewQuery()
 
 	useEffect(() => {
 		// Получаем текущий URL
-		const currentUrl = window.location.pathname;
+		const currentUrl = window.location.pathname
 
 		// Ищем id из URL
-		const match = currentUrl.match(/\/vacancyedit\/(\d+)$/);
+		const match = currentUrl.match(/\/vacancyedit\/(\d+)$/)
 
-		let id_from_url: string | undefined;
+		let id_from_url: string | undefined
 
 		if (match) {
-			id_from_url = match[1];
+			id_from_url = match[1]
 		} else {
-			console.error('ID not found');
-			return;  // Возвращаемся, если id нет
+			console.error('ID not found')
+			return // Возвращаемся, если id нет
 		}
 
 		// Если id найден, запускаем запрос
 		if (id_from_url) {
-			getVacancy(id_from_url);
+			getVacancy(id_from_url)
 		}
-	}, [getVacancy]);
+	}, [getVacancy])
 
 	console.log(data)
 
@@ -130,12 +130,8 @@ export const VacancyEditView = () => {
 			<>
 				<div className="w-full h-full flex items-center">
 					<div className="text-center ml-auto mr-auto">
-						<Spin
-							indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}
-						></Spin>
-						<p className="font-content-font font-normal text-black text-[18px]/[18px]">
-							Идёт загрузка...
-						</p>
+						<Spin indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}></Spin>
+						<p className="font-content-font font-normal text-black text-[18px]/[18px]">Идёт загрузка...</p>
 					</div>
 				</div>
 			</>
@@ -422,21 +418,15 @@ export const VacancyEditView = () => {
 						<div className="flex gap-[60px]">
 							<div className="flex flex-col gap-[16px]">
 								<p className="font-content-font font-bold text-black text-[18px]/[21px]">Требуемый опыт работы:</p>
-								<p className="font-content-font font-normal text-black text-[18px]/[21px]">
-									{data?.acf.experience}
-								</p>
+								<p className="font-content-font font-normal text-black text-[18px]/[21px]">{data?.acf.experience}</p>
 							</div>
 							<div className="flex flex-col gap-[16px]">
 								<p className="font-content-font font-bold text-black text-[18px]/[21px]">Тип занятости:</p>
-								<p className="font-content-font font-normal text-black text-[18px]/[21px]">
-									{data?.acf.employment}
-								</p>
+								<p className="font-content-font font-normal text-black text-[18px]/[21px]">{data?.acf.employment}</p>
 							</div>
 							<div className="flex flex-col gap-[16px]">
 								<p className="font-content-font font-bold text-black text-[18px]/[21px]">Заработная плата:</p>
-								<p className="font-content-font font-normal text-black text-[18px]/[21px]">
-									{data?.acf.salary}
-								</p>
+								<p className="font-content-font font-normal text-black text-[18px]/[21px]">{data?.acf.salary}</p>
 							</div>
 						</div>
 						<div className="flex flex-col gap-[16px]">
@@ -460,9 +450,7 @@ export const VacancyEditView = () => {
 						<div className="flex gap-[40px]">
 							<div className="flex flex-col gap-[16px]">
 								<p className="font-content-font font-bold text-black text-[18px]/[21px]">Категория сотрудников </p>
-								<p className="font-content-font font-normal text-black text-[18px]/[21px]">
-									{data?.acf.category}
-								</p>
+								<p className="font-content-font font-normal text-black text-[18px]/[21px]">{data?.acf.category}</p>
 							</div>
 							<div className="flex flex-col gap-[16px]">
 								<p className="font-content-font font-bold text-black text-[18px]/[21px]">

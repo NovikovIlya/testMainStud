@@ -26,7 +26,7 @@ const personnelDeparmentToken =
 	'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJTdWJCQXNhZHVsbG9ldkBzdHVkLmtwZnUucnUiLCJpYXQiOjE3MTE3MjQ1NDQsImV4cCI6MTcxMTczNTM0NCwic2NvcGUiOiJ1c2VyIiwicm9sZXMiOlt7InVzZXJJZCI6IjciLCJzZXNzaW9uSWQiOiIyNDA0NzM4MTc3NzI3MjIwMTMzMDkwNzU0ODQ2ODU5MSIsInNlc3Npb25IYXNoIjoiNTZEMTZENTNDOTc5MDk5MTk0QTY4OEY4Qjk0M0I0N0MiLCJkb2N1bWVudHNIYXNoIjoiQTdCMkI0MUU4MjQ4NDYzNkY2ODZDNTQ3NEY0NEREMjYiLCJsb2dpbiI6IlNCQXNhZHVsbG9ldiIsInR5cGUiOiJQRVJTT05ORUxfREVQQVJUTUVOVCJ9LHsidXNlcklkIjoiMzQ4NTQxIiwic2Vzc2lvbklkIjoiMjQwNDczODA1NjYxMjc2MDM3NTM5NjI3MjY1MTM0OTQiLCJzZXNzaW9uSGFzaCI6IkUzQUZFMTUzNUVCMTU3NEUyMkZCNUJDNEYxNUFERkUwIiwiZG9jdW1lbnRzSGFzaCI6IiIsImxvZ2luIjoiU3ViQkFzYWR1bGxvZXYiLCJ0eXBlIjoiRU1QTCJ9LHsidXNlcklkIjoiMzM2MDM3Iiwic2Vzc2lvbklkIjoiMjQwNDczODI0NDUwMjI3MTM5NzgzNzQ5OTMwNjk4MDciLCJzZXNzaW9uSGFzaCI6IjcxMEExMTFFM0FCN0Q4NDczNTVFOEM0QkUxMDI4RTZBIiwiZG9jdW1lbnRzSGFzaCI6IkEyMkE3NURCRTBBNzg4MDE4OTY4NjZCQjgzNUIxNDQxIiwibG9naW4iOiJTdUJBc2FkdWxsb2V2IiwidHlwZSI6IlNUVUQifV0sInNlc3Npb25JZCI6IjI0MDQ3MzgxNzc3MjcyMjAxMzMwOTA3NTQ4NDY4NTkxIiwic2Vzc2lvbkhhc2giOiI1NkQxNkQ1M0M5NzkwOTkxOTRBNjg4RjhCOTQzQjQ3QyIsImFsbElkIjoiMjM5MTc0IiwiZW1haWwiOiJCYXN1YmhvbmJla0BnbWFpbC5jb20ifQ.MMK47Gd4AKG8tPzmPAwgNq79zVEmfzdFCuoZjcXeW_o'
 
 export const ChatEmpDemp = () => {
-	const [isFilterWindowOpen, setIsFilterWindowOpen] = useState<boolean>(false)
+	const [isFilterWindowOpen, setIsFilterWindowOpen] = useState<boolean>(true)
 
 	const [requestData, setRequestData] = useState<{
 		vacancyId: number | null
@@ -34,7 +34,7 @@ export const ChatEmpDemp = () => {
 		sort: 'ALL' | 'UNREAD' | null
 		page: number
 		pageSize: number
-	}>({ vacancyId: null, status: null, sort: null, page: 0, pageSize: 10 })
+	}>({ vacancyId: null, status: 'IN_PERSONNEL_DEPT_REVIEW', sort: null, page: 0, pageSize: 10 })
 
 	// const [getResponds] = useLazyGetResponcesByVacancyQuery()
 	// const [responds, setResponds] = useState<VacancyRespondItemType[]>([])
@@ -162,9 +162,9 @@ export const ChatEmpDemp = () => {
 			{' '}
 			<div className="bg-[#F5F8FB] flex w-full">
 				{!pathname.includes('/services/personnelaccounting/chat/vacancyview') && (
-					<div className="shadowNav bg-white relative z-[5] mt-[60px] w-[461px]">
+					<div className="shadowNav bg-white relative z-[5] w-[461px]">
 						<div className="sticky top-[80px]">
-							<div className="flex items-center px-[30px] pt-14 pb-[40px]">
+							<div className="flex items-center px-[30px] pt-[80px] pb-[20px]">
 								<p className="font-content-font font-normal text-black text-[20px]/[20px] ">Все сообщения</p>
 								<ConfigProvider theme={{ components: { Button: { textHoverBg: '#ffffff' } } }}>
 									<Button
@@ -181,10 +181,12 @@ export const ChatEmpDemp = () => {
 							</div>
 							{isFilterWindowOpen && (
 								<>
-									<div className="px-[30px] pt-[20px] pb-[40px] flex flex-col gap-[20px] w-full">
+									<div className="px-[30px] pb-[40px] flex flex-col gap-[20px] w-full">
 										<div className="flex flex-col gap-[8px]">
 											<p className="font-content-font font-normal text-[14px]/[14px] text-black opacity-80">Вакансия</p>
 											<Select
+												showSearch
+												optionFilterProp="label"
 												options={vacancies.map(vac => ({
 													value: vac.id,
 													label: vac.post
@@ -284,7 +286,7 @@ export const ChatEmpDemp = () => {
 								</>
 							)}
 
-							<ul className="h-[75vh] w-[461px] flex flex-col gap-4 overflow-auto">
+							<ul className="h-[40vh] w-[461px] flex flex-col gap-4 overflow-auto">
 								{handleList}
 								<li className="h-[1px]" ref={chatPreviewsBottomRef}></li>
 							</ul>

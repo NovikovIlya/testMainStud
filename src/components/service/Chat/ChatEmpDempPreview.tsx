@@ -6,22 +6,13 @@ import { useLocation, useNavigate } from 'react-router-dom'
 
 import { AvatartandardSvg } from '../../../assets/svg/AvatarStandardSvg'
 import { useAppSelector } from '../../../store'
-import {
-	useGetChatIdByRespondIdQuery,
-	useGetUnreadMessagesCountQuery
-} from '../../../store/api/serviceApi'
-import {
-	closeChat,
-	openChat
-} from '../../../store/reducers/ChatRespondStatusSlice'
+import { useGetChatIdByRespondIdQuery, useGetUnreadMessagesCountQuery } from '../../../store/api/serviceApi'
+import { closeChat, openChat } from '../../../store/reducers/ChatRespondStatusSlice'
 import { setRespondId } from '../../../store/reducers/CurrentRespondIdSlice'
 import { setCurrentVacancyId } from '../../../store/reducers/CurrentVacancyIdSlice'
 import { setCurrentVacancyName } from '../../../store/reducers/CurrentVacancyNameSlice'
 import { setChatId } from '../../../store/reducers/chatIdSlice'
-import {
-	ChatMessageDateDisplayEnum,
-	respondStatus
-} from '../../../store/reducers/type'
+import { ChatMessageDateDisplayEnum, respondStatus } from '../../../store/reducers/type'
 
 export const ChatEmpDempPreview = (props: {
 	chatId: number
@@ -82,10 +73,13 @@ export const ChatEmpDempPreview = (props: {
 							<p
 								className={`font-content-font font-normal text-[16px]/[19.2px] ${
 									props.status === 'INVITATION'
-										? 'text-[#00AB30]'
-										: props.status === 'ARCHIVE' ||
-										  props.status === 'IN_RESERVE'
+										? 'text-yellow-300'
+										: props.status === 'ARCHIVE' || props.status === 'IN_RESERVE'
 										? 'text-[#D40000]'
+										: props.status === 'IN_SUPERVISOR_REVIEW'
+										? 'text-[#1F5CB8]'
+										: props.status === 'EMPLOYMENT' || props.status === 'EMPLOYMENT_REQUEST'
+										? 'text-[#00AB30]'
 										: 'text-[#1F5CB8]'
 								}`}
 							>
@@ -93,6 +87,10 @@ export const ChatEmpDempPreview = (props: {
 									? 'Приглашение'
 									: props.status === 'ARCHIVE' || props.status === 'IN_RESERVE'
 									? 'Отказ'
+									: props.status === 'IN_SUPERVISOR_REVIEW'
+									? 'На рассмотрении у руководителя'
+									: props.status === 'EMPLOYMENT' || props.status === 'EMPLOYMENT_REQUEST'
+									? 'Трудоустройство'
 									: 'На рассмотрении'}
 							</p>
 						</div>
@@ -101,21 +99,14 @@ export const ChatEmpDempPreview = (props: {
 								<p className=" font-content-font font-normal text-black text-[12px]/[14.4px] opacity-[52%]">
 									{props.lastMessageDate.substring(8, 10) +
 										' ' +
-										ChatMessageDateDisplayEnum[
-											parseInt(props.lastMessageDate.substring(5, 7)) - 1
-										].substring(0, 3) +
+										ChatMessageDateDisplayEnum[parseInt(props.lastMessageDate.substring(5, 7)) - 1].substring(0, 3) +
 										' ' +
 										props.lastMessageDate.substring(11, 16)}
 								</p>
 							)}
 
 							{props.unreadCount !== 0 && !isChatOpen && (
-								<Badge
-									className="ml-auto mt-[4px]"
-									count={props.unreadCount}
-									size="default"
-									color="#D40000"
-								/>
+								<Badge className="ml-auto mt-[4px]" count={props.unreadCount} size="default" color="#D40000" />
 							)}
 						</div>
 					</div>

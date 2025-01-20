@@ -162,8 +162,8 @@ export const ChatEmpDemp = () => {
 			{' '}
 			<div className="bg-[#F5F8FB] flex w-full">
 				{!pathname.includes('/services/personnelaccounting/chat/vacancyview') && (
-					<div className="shadowNav bg-white relative z-[5] mt-[60px] w-[461px]">
-						<div className="sticky top-[61px]">
+					<div className="shadowNav bg-white relative z-[5] w-[461px]">
+						<div className="sticky top-[80px]">
 							<div className="flex items-center px-[30px] pt-[80px] pb-[20px]">
 								<p className="font-content-font font-normal text-black text-[20px]/[20px] ">Все сообщения</p>
 								<ConfigProvider theme={{ components: { Button: { textHoverBg: '#ffffff' } } }}>
@@ -286,7 +286,7 @@ export const ChatEmpDemp = () => {
 								</>
 							)}
 
-							<ul className="h-[75vh] w-[461px] flex flex-col gap-4 overflow-auto">
+							<ul className="h-[40vh] w-[461px] flex flex-col gap-4 overflow-auto">
 								{handleList}
 								<li className="h-[1px]" ref={chatPreviewsBottomRef}></li>
 							</ul>

@@ -232,7 +232,7 @@
 	"PracticesInfo": "How to get into the top two and many other answers on the location of KFU buildings can be found in this service",
 	"SitAnKFUInfo": "News articles indicating sources for subsequent analysis of international situations",
 	"NoService": "There are no services yet",
-	"FirstYear": "1st course",
+	"FirstYear": "1st year",
 	"NameDiscipline": "Name of the discipline",
 	"Total": "Total",
 	"ByStandard": "By the state standard",
@@ -284,7 +284,7 @@
 	"DigitalDepartments": "Digital Departments",
 	"DigitalDepartmentsInfo": "Get a qualification in the field of IT and put your knowledge into practice",
 	"ManagementScientificProjects": "Management of scientific projects",
-	"ManagementScientificProjectsInfo": "Management of scientific projects",
+	"ManagementScientificProjectsInfo": "Scientific projects, their management, as well as intellectual property and licensing issues",
 	"EvaluationTeachersWork": "Evaluation of teachers' work",
 	"NewBusinessTrip": "New business trip",
 	"CurrentBusinessTrips": "Current business trips",
@@ -385,7 +385,13 @@
 	"contractEducation": "Contract Education",
 	"contractEducationInfo": "You can take all information about payment for education here and control previously committed transactions",
 	"educationPrograms": "Education programs",
-	"educationProgramsInfo": "You can find information about Main professional education programs of all specialties in KFU"
+	"educationProgramsInfo": "You can find information about Main professional education programs of all specialties in KFU",
+	"changeRole": "Change role",
+	"time": "Time",
+	"lesson": "Lessson",
+	"teacher": "Teacher",
+	"campus": "Campus",
+	"auditorium": "Auditorium"
 	
 
 }

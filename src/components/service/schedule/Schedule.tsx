@@ -42,31 +42,31 @@ export const Schedule = () => {
 			  
 		},
 		{
-			title: 'Время',
+			title: t('time'),
 			dataIndex: 'time',
 			key: 'time',
 			render: item => <p className="text-base whitespace-nowrap">{item}</p>
 		},
 		{
-			title: 'Предмет',
+			title: t('lesson'),
 			dataIndex: 'name',
 			key: 'name',
 			render: item => <p className="text-base">{item}</p>
 		},
 		{
-			title: 'Преподаватель',
+			title: t('teacher'),
 			dataIndex: 'teacher',
 			key: 'teacher',
 			render: item => <p className="text-base">{item}</p>
 		},
 		{
-			title: 'Корпус',
+			title: t('campus'),
 			key: 'building',
 			dataIndex: 'building',
 			render: item => <p className="text-base">{item}</p>
 		},
 		{
-			title: 'Аудитория',
+			title: t('auditorium'),
 			key: 'room',
 			dataIndex: 'room',
 			render: item => <p className="text-base">{item}</p>

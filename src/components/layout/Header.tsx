@@ -125,7 +125,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 					className={`${maiRole === 'OTHER' ? '' : 'hidden'} flex items-center gap-[15px] px-[4px] py-[5px]`}
 				>
 					<UserSwitchOutlined className="w-[22px] h-[22px] text-blue1f5 flex items-center justify-center" />
-					Изменить роль
+					{t("changeRole")}
 				</div>
 			),
 			key: '7'

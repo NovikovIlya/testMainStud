@@ -188,19 +188,19 @@ export const Estimation = () => {
 					className="rounded-full h-full flex items-center text-base bg-transparent"
 					value="2"
 				>
-					{t('2nd year')}
+					{t('SecondYear')}
 				</Radio.Button>
 				<Radio.Button
 					className="rounded-full h-full flex items-center text-base bg-transparent"
 					value="3"
 				>
-					{t('3rd year')}
+					{t('ThirdYear')}
 				</Radio.Button>
 				<Radio.Button
 					className="rounded-full h-full flex items-center text-base bg-transparent"
 					value="4"
 				>
-					{t('4th year')}
+					{t('FourthYear')}
 				</Radio.Button>
 			</Radio.Group>
 			<div className="my-10 gap-5 flex flex-col">

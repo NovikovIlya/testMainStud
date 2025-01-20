@@ -8,6 +8,7 @@ import {
 	useGetDocumentsPracticeQuery,
 	useGetDocumentsTemplatesQuery
 } from '../../../store/api/serviceApi'
+import { t } from 'i18next'
 
 export const DocumentFlow = () => {
 	const handleChange = (value: number) => {
@@ -38,13 +39,13 @@ export const DocumentFlow = () => {
 		<section className=" m-14">
 			<Row gutter={[16, 16]}>
 				<Col span={24}>
-					<Typography.Text className=" text-[28px]">Документы</Typography.Text>
+					{/* <Typography.Text className=" text-[28px]">Документы</Typography.Text> */}
 				</Col>
 			</Row>
 			<Row gutter={[16, 16]} className="mt-4">
 				<Col xs={24} sm={24} md={18} lg={16} xl={12}>
 					<Space direction="vertical" className="w-full">
-						<Typography.Text>Выбрать тип документов</Typography.Text>
+						<Typography.Text>{t('ChooseDocument')}</Typography.Text>
 						<Select
 							size="large"
 							popupMatchSelectWidth={false}
@@ -54,11 +55,11 @@ export const DocumentFlow = () => {
 							onChange={handleChange}
 							className="w-full"
 							options={[
-								{ value: 1, label: 'Электронные библиотеки' },
-								{ value: 2, label: 'Шаблоны документов' },
-								{ value: 3, label: 'Документы по практике' },
-								{ value: 4, label: 'Мои документы' },
-								{ value: 5, label: 'Документация по работе в КС КФУ' }
+								{ value: 1, label: t('electronicLibraries')},
+								{ value: 2, label: t('documentTemplates')},
+								{ value: 3, label: t('practicalDocuments') },
+								{ value: 4, label: t('myDocuments')},
+								{ value: 5, label: t('documentationForWork') }
 							]}
 						/>
 					</Space>
@@ -80,9 +81,9 @@ export const DocumentFlow = () => {
 								}}
 								className="w-full"
 								options={[
-									{ value: 'CorporateNetwork', label: 'Корпоративная сеть' },
-									{ value: 'YandexServices', label: 'Сервисы Яндекс.360' },
-									{ value: 'StudentCabinet', label: 'Кабинет студента' }
+									{ value: 'CorporateNetwork', label: t('corporateNetwork') },
+									{ value: 'YandexServices', label: t('Yandex 360 services') },
+									{ value: 'StudentCabinet', label: t('Student services') }
 								]}
 							/>
 						</Space>
@@ -113,8 +114,8 @@ export const DocumentFlow = () => {
 						size="large"
 						header={
 							<div className="w-full justify-between flex items-center px-12">
-								<Typography.Text>Название</Typography.Text>
-								<Typography.Text>Ссылка</Typography.Text>
+								<Typography.Text>{t('title')}</Typography.Text>
+								<Typography.Text>{t('link')}</Typography.Text>
 							</div>
 						}
 						dataSource={selectDataSours()}
@@ -129,7 +130,7 @@ export const DocumentFlow = () => {
 									className="rounded-full"
 									href={item.link}
 								>
-									Скачать
+									{t('download')}
 								</Button>
 							</List.Item>
 						)}

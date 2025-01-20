@@ -7,6 +7,7 @@ import {
 import { IAssessmentNumber, IValuesAssessment, TestQuery } from "../../../../models/Teacher";
 import { useState } from "react";
 import { RatingTeacher } from "./RatingTeacher/RatingTeacher";
+import { t } from 'i18next';
 
 
 const objQuestId = {
@@ -54,14 +55,14 @@ export const AssessmentTeachers = () => {
 
     return (
         <>
-            <div className={`mb-14 
+            {/* <div className={`mb-14 
             text-[28px]`}>
                 Оценка работы преподавателей
-            </div>
-            <Space direction="vertical" size={'small'}>
+            </div> */}
+            <Space className='mt-2' direction="vertical" size={'small'}>
                 <Typography.Text className={`text-[18px]/[18px]
                 `}>
-                    Выбрать преподавателя
+                    {t('selectTeacher')}
                 </Typography.Text>
                 <Select
                     showSearch
@@ -70,7 +71,7 @@ export const AssessmentTeachers = () => {
                         setIdTeacher(value)
                         setSendData(false)
                     }}
-                    placeholder={'Выбрать'}
+                   
                     size="large"
                     className={`w-[624px] rounded-lg
                     `}

@@ -165,7 +165,7 @@ export const Estimation = () => {
 	}
 	return (
 		<div className="radio">
-			<div className="mb-14 text-[28px]">{t('ElectronicBook')}</div>
+			{/* <div className="mb-14 text-[28px]">{t('ElectronicBook')}</div> */}
 			<Radio.Group
 				defaultValue="0"
 				onChange={e => changeSemester(e.target.value)}
@@ -210,6 +210,7 @@ export const Estimation = () => {
 					pagination={false}
 					loading={!data ? true : false}
 					className="w-full drop-shadow-lg shadow-[#d4e3f1] rounded-none"
+					locale={{ emptyText: t('noData') }}
 				/>
 			</div>
 		</div>

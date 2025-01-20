@@ -139,6 +139,7 @@ export const Schedule = () => {
 					dataSource={data}
 					pagination={false}
 					className="max-w-[1050px] w-full drop--lg -[#d4e3f1] rounded-none"
+					locale={{ emptyText: t('noData') }}
 				/>
 				<div className={`${isMobile? 'hidden' :''} flex flex-col gap-6 text-sm`}>
 					<div className="flex items-center gap-2">

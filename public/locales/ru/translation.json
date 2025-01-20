@@ -392,6 +392,24 @@
 	"lesson": "Предмет",
 	"teacher": "Преподаватель",
 	"campus": "Корпус",
-	"Auditorium": "Корпус"
+	"Auditorium": "Корпус",
+	"Documents": "Документы",
+	"ChooseDocument": "Выберите тип документов",
+
+	"electronicLibraries": "Электронные библиотеки",
+    "documentTemplates": "Шаблоны документов",
+    "practicalDocuments": "Документы по практике",
+    "myDocuments": "Мои документы",
+    "documentationForWork": "Документация по работе в КС КФУ",
+
+	"corporateNetwork": "Корпоративная сеть",
+    "yandex360Services": "Сервисы Яндекс 360",
+    "studentServices": "Кабинет студента",
+	"forDostup" : "Для доступа к электронным библиотекам вне университета необходимо настроить на своем компьютере VPN-подключение к внутренней сети КФУ. Объяснение здесь.",
+	"title": "Название",
+	"link": "Ссылка",
+	"download": "Скачать",
+	"noData": "Нет данных",
+	"selectTeacher": "Выбрать преподавателя"
 	
 }

@@ -391,7 +391,25 @@
 	"lesson": "Lessson",
 	"teacher": "Teacher",
 	"campus": "Campus",
-	"auditorium": "Auditorium"
+	"auditorium": "Auditorium",
+	"Documents": "Documents",
+	"ChooseDocument": "Choose the type of document",
+
+	"electronicLibraries": "Electronic Libraries",
+    "documentTemplates": "Document Templates",
+    "practicalDocuments": "Practical Documents",
+    "myDocuments": "My Documents",
+    "documentationForWork": "Documentation for Work in KSU KFU",
+
+	"corporateNetwork": "Corporate network",
+    "yandex360Services": "Yandex 360 services",
+    "studentServices": "Student services",
+	"forDostup": "To access electronic libraries outside the university, you need to set up a VPN connection to the KFU's internal network on your computer. The explanation is here.",
+	"title": "Title",
+	"link": "Link",
+	"download": "Download",
+	"noData": "No data",
+	"selectTeacher": "Select teacher"
 	
 
 }

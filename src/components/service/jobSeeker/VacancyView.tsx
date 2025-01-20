@@ -23,7 +23,7 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 		// Ищем id из URL
 		const match = currentUrl.match(/\/vacancyview\/(\d+)$/);
 
-		let id_from_url: string | undefined;
+		let id_from_url: string | number;
 
 		if (match) {
 			id_from_url = match[1];

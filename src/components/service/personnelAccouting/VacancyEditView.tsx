@@ -17,6 +17,7 @@ import {
 } from '../../../store/api/serviceApi'
 import { useAlert } from '../../../utils/Alert/AlertMessage'
 import ArrowIcon from '../jobSeeker/ArrowIcon'
+import {LoadingOutlined} from "@ant-design/icons";
 
 export const VacancyEditView = () => {
 	const [getVacancy, { data, isLoading, error }] = useLazyGetVacancyViewQuery()

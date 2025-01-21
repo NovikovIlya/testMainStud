@@ -15,6 +15,7 @@ import { NavMyPractices } from './myPractice/navMyPractice'
 import AboutUniversity from '../aboutUniversity/AboutUnversity'
 import { NavPracticeTeacher } from './practiceTeacher/navMyPractice'
 import { NavMessages } from './messages/navMessages'
+import { NavForTeachers } from './forTeachers/navForTeachers'
 
 export const Service = () => {
 	const { pathname } = useLocation()
@@ -31,6 +32,7 @@ export const Service = () => {
 				{pathname.includes('/services/aboutMe') && <NavAboutMe />}
 				{pathname.includes('/services/electronicBook') && <NavElectronicBook />}
 				{pathname.includes('/services/setting') && <NavSetting />}
+				{pathname.includes('/services/forTeachers') && <NavForTeachers />}
 				{/* {
 					isEmployee
 					&&

@@ -252,6 +252,16 @@ export const block = {
          
             moved: true,
             static: false,
+        },
+        {
+            w: 1,
+            h: 1,
+            x: 1,
+            y: 5,
+            i: 'forTeachers',
+         
+            moved: true,
+            static: false,
         }
 
 

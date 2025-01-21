@@ -409,7 +409,9 @@
 	"link": "Link",
 	"download": "Download",
 	"noData": "No data",
-	"selectTeacher": "Select teacher"
+	"selectTeacher": "Select teacher",
+	"forTeachers": "To the teacher",
+	"forTeachersinfo": "Here you can see information about practical classes"
 	
 
 }

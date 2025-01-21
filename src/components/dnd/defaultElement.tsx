@@ -478,4 +478,23 @@ export const jsxElements = [
 			i: 'ManagementScientificProjects'
 		}
 	},
+	{
+		key: 'forTeachers',
+		element: (
+			<TemplateCard
+				info="forTeachersinfo"
+				title="forTeachers"
+				buttonText="Watch"
+				img={'/educProg.png'}
+				href="/services/forTeachers"
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 0,
+			y: 0,
+			i: 'ManagementScientificProjects'
+		}
+	},
 ]

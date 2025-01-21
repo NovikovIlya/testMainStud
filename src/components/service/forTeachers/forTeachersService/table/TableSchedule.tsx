@@ -2,32 +2,30 @@ import { Radio, RadioChangeEvent, Table } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 import { useEffect, useState } from 'react'
 
-import { useGetScheduleQuery } from '../../../store/api/serviceApi'
+
 
 import './StyleSchedule.scss'
-import { DataType } from '../../../models/schedule'
-import useWindowOrientation from '../../../utils/hooks/useDeviceOrientation'
-import { isMobileDevice } from '../../../utils/hooks/useIsMobile'
+
+
 import { t } from 'i18next'
 
 
 
 
 
-export const Schedule = () => {
-	const { data: schedule, isLoading } = useGetScheduleQuery()
-	const [data, setData] = useState<DataType[] | undefined>()
-	const isMobile = isMobileDevice()
-	const orientation  = useWindowOrientation()
-	const columns: ColumnsType<DataType> = [
+export const TableSchedule = ({schedule}:any) => {
+	// const { data: schedule, isLoading } = useGetScheduleQuery()
+	const [data, setData] = useState<any>()
+
+	const columns: any = [
 		{
 			title: '',
 			dataIndex: 'type',
 			key: 'type',
 			className: '',
-			render: (item, item2) => {
+			render: (item:any, item2:any) => {
 				return (
-				  <div className={` ${isMobile ? 'hidden' : ''} !h-[105px] w-[32px] ${
+				  <div className={` $ !h-[105px] w-[32px] ${
 					item2.type === 'Практика' ? 'bg-[#844EC9]' :
 					item2.type === 'Потоковая лекция' ? 'bg-[#A7FAFF]' :
 					item2.type === 'Лекция' ? 'bg-[#3A92E3]' :
@@ -45,37 +43,37 @@ export const Schedule = () => {
 			title: t('time'),
 			dataIndex: 'time',
 			key: 'time',
-			render: item => <p className="text-base whitespace-nowrap">{item}</p>
+			render: (item:any) => <p className="text-base whitespace-nowrap">{item}</p>
 		},
 		{
 			title: t('lesson'),
 			dataIndex: 'name',
 			key: 'name',
-			render: item => <p className="text-base">{item}</p>
+			render: (item:any) => <p className="text-base">{item}</p>
 		},
 		{
 			title: t('teacher'),
 			dataIndex: 'teacher',
 			key: 'teacher',
-			render: item => <p className="text-base">{item}</p>
+			render: (item:any) => <p className="text-base">{item}</p>
 		},
 		{
 			title: t('campus'),
 			key: 'building',
 			dataIndex: 'building',
-			render: item => <p className="text-base">{item}</p>
+			render: (item:any) => <p className="text-base">{item}</p>
 		},
 		{
 			title: t('auditorium'),
 			key: 'room',
 			dataIndex: 'room',
-			render: item => <p className="text-base">{item}</p>
+			render: (item:any) => <p className="text-base">{item}</p>
 		}
 	]
 
-	useEffect(() => {
-		setData(schedule?.monday)
-	}, [isLoading, schedule])
+	// useEffect(() => {
+	// 	setData(schedule?.monday)
+	// }, [isLoading, schedule])
 	
 
 	const onChange = (e: RadioChangeEvent) => {
@@ -84,12 +82,12 @@ export const Schedule = () => {
 		setData(schedule[e.target.value])
 	}
 
-	if (schedule === undefined) return null
+	
 
-	if(isMobile && orientation === 'portrait') return <div className='max-w-full text-center mt-10'>В данном разрешении модуль не работает, пожалуйста поверните телефон</div>
+	
 
 	return (
-		<div className={`${isMobile ? 'mx-0' : 'mx-14'} mt-14  radio w-full justify-center`}>
+		<div className={` mt-14  radio w-full justify-center`}>
 			{/* <div className="mb-14 text-[28px]">Мое расписание</div> */}
 			<Radio.Group
 				onChange={onChange}
@@ -142,7 +140,7 @@ export const Schedule = () => {
 					className="max-w-[1050px] w-full drop--lg -[#d4e3f1] rounded-none"
 					locale={{ emptyText: t('noData') }}
 				/>
-				<div className={`${isMobile? 'hidden' :''} flex flex-col gap-6 text-sm`}>
+				<div className={` flex flex-col gap-6 text-sm`}>
 					<div className="flex items-center gap-2">
 						<div className="min-w-3 min-h-3 w-[11px] h-[11px]  rounded-full bg-[#A7FAFF]" />
 						{t('streamingLecture')}

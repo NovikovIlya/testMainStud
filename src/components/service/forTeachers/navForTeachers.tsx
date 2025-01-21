@@ -6,13 +6,17 @@ import { MessageOutlined, PieChartOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
 import { Header } from '../../layout/Header'
 import Brs from './forTeachersService/Brs'
+import { BrsSvg } from '../../../assets/svg/BrsSvg'
+import { Raspis } from '../../../assets/svg/Raspis'
+import { Schedule } from '../../cards/Schedule'
+import ScheduleTeacher from './forTeachersService/ScheduleTeacher'
 
 
 
 
 
 export const NavForTeachers = () => {
-	const [current, setCurrent] = useState('messages')
+	const [current, setCurrent] = useState('schedule')
 	const navigate = useNavigate()
 	const {t} = useTranslation()
 	const ref1 = useRef(null);
@@ -22,8 +26,8 @@ export const NavForTeachers = () => {
 	console.log('current',current)
 
 	const items: any = [
-		{ key: 'schedule', icon: <MessageOutlined  />, label: 'Расписание' },
-		{ key: 'BRS', icon: <PieChartOutlined />, label: 'БРС' },
+		{ key: 'schedule', icon: <Raspis  />, label: <p className='ml-[10px]'>Расписание</p> },
+		{ key: 'BRS', icon: <BrsSvg />, label: <p className='ml-[10px]'>БРС</p> },
 		
 		
 	]
@@ -41,9 +45,9 @@ export const NavForTeachers = () => {
 
 	return (
 		<>
-			<Header type={"service"} service={'Расписани'}/>
+			<Header type={"service"} service={'Расписание'}/>
 			<Menu
-				defaultSelectedKeys={['messages']}
+				defaultSelectedKeys={['schedule']}
 	
 				mode="inline"
 				onClick={onClick}
@@ -61,7 +65,7 @@ export const NavForTeachers = () => {
 			/>
 			
 			<div className="bg-[#F5F8FB] w-full pt-[80px]      ">
-				{current === 'schedule' && <div>ss</div>}
+				{current === 'schedule' && <ScheduleTeacher/>}
 				{current === 'BRS' ? <Brs/> : ''}
 			</div>
 			

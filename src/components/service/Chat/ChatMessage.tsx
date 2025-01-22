@@ -156,7 +156,7 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 					<button
 						onClick={() => {
 							answerMainTime({ id: respondId, ans: 'YES' }).then(() => {
-								setIsSeekerOnStatusEmploymentRequest(false)
+								setIsSeekerOnStatusInvitation(false)
 							})
 						}}
 						disabled={isEmpDep || !isSeekerOnStatusInvitation}
@@ -167,7 +167,7 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 					<button
 						onClick={() => {
 							answerMainTime({ id: respondId, ans: 'NO' }).then(() => {
-								setIsSeekerOnStatusEmploymentRequest(false)
+								setIsSeekerOnStatusInvitation(false)
 							})
 						}}
 						disabled={isEmpDep || !isSeekerOnStatusInvitation}
@@ -178,7 +178,7 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 					<button
 						onClick={() => {
 							answerMainTime({ id: respondId, ans: 'NOT_RELEVANT' }).then(() => {
-								setIsSeekerOnStatusEmploymentRequest(false)
+								setIsSeekerOnStatusInvitation(false)
 							})
 						}}
 						disabled={isEmpDep || !isSeekerOnStatusInvitation}

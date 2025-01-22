@@ -26,11 +26,11 @@ export const NavForTeachers = () => {
 	console.log('current',current)
 
 	const items: any = [
-		{ key: 'schedule', icon: <Raspis  />, label: <p className='ml-[10px]'>Расписание</p> },
-		{ key: 'BRS', icon: <BrsSvg />, label: <p className='ml-[10px]'>БРС</p> },
+		{ key: 'schedule', icon: <Raspis  />, label: <p className='ml-[10px]'>{t('Schedule')}</p> },
+		{ key: 'BRS', icon: <BrsSvg />, label: <p className='ml-[10px]'>{t('BRS')}</p> },
 		
 		
-	]
+	]	
   
 	const onClick: MenuProps['onClick'] = e => {
 		console.log('click ', e)
@@ -45,7 +45,7 @@ export const NavForTeachers = () => {
 
 	return (
 		<>
-			<Header type={"service"} service={'Расписание'}/>
+			<Header type={"service"} service={t('Schedule')}/>
 			<Menu
 				defaultSelectedKeys={['schedule']}
 	

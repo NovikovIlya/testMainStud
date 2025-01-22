@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import type { GetRef, InputRef, TableProps } from 'antd';
 import { Button, Form, Input, Popconfirm, Table } from 'antd';
+import { t } from 'i18next';
 
 type FormInstance<T> = GetRef<typeof Form<T>>;
 
@@ -183,7 +184,7 @@ const TableBrs = ({dataSource,setDataSource}:any) => {
         className=''
       
       />
-      <Button className='top-[-50px] rounded-xl' type='primary'>Сохранить</Button>
+      <Button className='top-[-50px] rounded-xl' type='primary'>{t('Save')}</Button>
     </div>
   );
 };

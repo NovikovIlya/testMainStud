@@ -411,7 +411,16 @@
 	"noData": "No data",
 	"selectTeacher": "Select teacher",
 	"forTeachers": "To the teacher",
-	"forTeachersinfo": "Here you can see information about practical classes"
-	
+	"forTeachersinfo": "Here you can see information about practical classes",
+
+	"infoTextScdedule": "Dear teacher! If there is no schedule or if there are discrepancies between the schedule displayed and your actual schedule for the academic year you have specified, please contact the dean's office of your institute or faculty to correct the errors.",
+	"infoTextBrs": "The BRS functionality allows you to enter the results of current monitoring of students' academic performance during the semester on a monthly basis (the column of the accounting month can only be filled in during the given month and five days of the following month)",
+	"infoTextBrs2": "Before working with the BRS tab, you must go to the Schedule tab and check that your dean's office has entered your class schedule correctly.",
+	"academicYear": "Academic year",
+	"discipline": "Discipline",
+	"group": "Group",
+	"printJournalEmpty" : "Print Journal (Blank)",
+	"printJournalFiled": "Print journal (filled)",
+	"BRS": "BRS"
 
 }

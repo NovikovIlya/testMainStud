@@ -1,15 +1,8 @@
 import { Radio, RadioChangeEvent, Table } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 import { useEffect, useState } from 'react'
-
-
-
 import './StyleSchedule.scss'
-
-
 import { t } from 'i18next'
-
-
 
 
 
@@ -52,8 +45,8 @@ export const TableSchedule = ({schedule}:any) => {
 			render: (item:any) => <p className="text-base">{item}</p>
 		},
 		{
-			title: t('teacher'),
-			dataIndex: 'teacher',
+			title: 'Группа',
+			dataIndex: 'group',
 			key: 'teacher',
 			render: (item:any) => <p className="text-base">{item}</p>
 		},

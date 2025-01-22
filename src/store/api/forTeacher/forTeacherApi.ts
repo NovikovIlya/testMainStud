@@ -10,7 +10,7 @@ export const fotTeacherService = apiSlice.injectEndpoints({
                     method: 'GET'
                 }
             },
-            providesTags: ['Messages'],
+            providesTags: ['forTeacherScedule'],
             keepUnusedDataFor:1,
         }),
        

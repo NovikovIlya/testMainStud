@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux'
 
 import { useAppSelector } from '../../../../store'
 import { setStageProgressAsReady } from '../../../../store/reducers/EmploymentProgressSlice'
+import React from "react";
 
 export const EmplInstruction = (props: { respondId: number; stageId: number; stageName: string }) => {
 	const { empData } = useAppSelector(state => state.employmentData)
@@ -13,19 +14,47 @@ export const EmplInstruction = (props: { respondId: number; stageId: number; sta
 		<>
 			<div className="font-content-font font-normal text-black text-[16px]/[19.2px] flex flex-col">
 				<div className="flex flex-col gap-[12px]">
-					<p>Посмотрите видео-инструктаж</p>
-					<video controls className="w-[50%] rounded-[16px]">
-						<source src="http://192.168.63.96:9090/employment-api/v1/file/1" type="video/mp4"></source>
-					</video>
-					<video controls className="w-[50%] rounded-[16px]">
-						<source src="http://192.168.63.96:9090/employment-api/v1/file/2" type="video/mp4"></source>
-					</video>
-					<video controls className="w-[50%] rounded-[16px]">
-						<source src="http://192.168.63.96:9090/employment-api/v1/file/3" type="video/mp4"></source>
-					</video>
-					<video controls className="w-[50%] rounded-[16px]">
-						<source src="http://192.168.63.96:9090/employment-api/v1/file/4" type="video/mp4"></source>
-					</video>
+					<span className="font-content-font font-normal text-black text-[16px]/[19.2px]">Посмотрите видео-инструктаж, а затем пройдите тест</span>
+					<div className="overflow-hidden rounded-2xl w-[730px] h-[400px] items-center">
+						<iframe width="100%" height="100%"
+								src="https://rutube.ru/play/embed/96127725cc229372ae2e5c52fd398d49/"
+								frameBorder="0"
+								allow="clipboard-write; autoplay"
+								webkitAllowFullScreen
+								mozallowfullscreen
+								allowFullScreen>
+						</iframe>
+					</div>
+					<div className="overflow-hidden rounded-2xl w-[730px] h-[400px] items-center">
+						<iframe width="100%" height="100%"
+								src="https://rutube.ru/play/embed/96127725cc229372ae2e5c52fd398d49/"
+								frameBorder="0"
+								allow="clipboard-write; autoplay"
+								webkitAllowFullScreen
+								mozallowfullscreen
+								allowFullScreen>
+						</iframe>
+					</div>
+					<div className="overflow-hidden rounded-2xl w-[730px] h-[400px] items-center">
+						<iframe width="100%" height="100%"
+								src="https://rutube.ru/play/embed/96127725cc229372ae2e5c52fd398d49/"
+								frameBorder="0"
+								allow="clipboard-write; autoplay"
+								webkitAllowFullScreen
+								mozallowfullscreen
+								allowFullScreen>
+						</iframe>
+					</div>
+					<div className="overflow-hidden rounded-2xl w-[730px] h-[400px] items-center">
+						<iframe width="100%" height="100%"
+								src="https://rutube.ru/play/embed/96127725cc229372ae2e5c52fd398d49/"
+								frameBorder="0"
+								allow="clipboard-write; autoplay"
+								webkitAllowFullScreen
+								mozallowfullscreen
+								allowFullScreen>
+						</iframe>
+					</div>
 				</div>
 				<Button
 					type="link"

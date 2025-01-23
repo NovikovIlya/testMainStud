@@ -47,15 +47,11 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 
 	const {data: respond_data, isLoading : loading, refetch} = useGetRespondFullInfoQuery(id_from_url)
 
-	console.log(respond_data?.status)
 
 	const [isSeekerOnStatusInvitation, setIsSeekerOnStatusInvitation] = useState<boolean>(respond_data?.status === 'INVITATION')
 
 	const [isSeekerOnStatusEmploymentRequest, setIsSeekerOnStatusEmploymentRequest] = useState<boolean>(respond_data?.status === 'EMPLOYMENT_REQUEST')
 
-
-	console.log(isSeekerOnStatusEmploymentRequest)
-	console.log(isSeekerOnStatusInvitation)
 
 	useEffect(() => {
 		setIsSeekerOnStatusInvitation(respond_data?.status === 'INVITATION')
@@ -66,14 +62,14 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 	const navigate = useNavigate()
 	const [answerReserveTime] = useAnswerToInvitationReserveTimeRequestMutation()
 	const [answerEmploymentRequest] = useAnswerEmploymentRequestMutation()
-
+	console.log(props.msgData.type)
 	return (
 		<>
 			{' '}
 			<div
 				ref={ref}
 				className={clsx(
-					'rounded-[16px] max-w-[50%] p-[20px] flex flex-col gap-[16px] font-content-font font-normal text-black text-[16px]/[19.2px]',
+					'rounded-[16px] min-w-[50%] max-w-[50%] p-[20px] flex flex-col gap-[16px] font-content-font font-normal text-black text-[16px]/[19.2px]',
 					{
 						'self-start rounded-bl-none bg-white':
 							(props.msgData.sender === 'SEEKER' && isEmpDep) ||

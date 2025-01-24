@@ -1,6 +1,6 @@
 import React from 'react'
 import InfoCard from './InfoCard'
-import { Col, Form, Row, Select } from 'antd'
+import { Button, Col, Form, Row, Select } from 'antd'
 import { TableSchedule } from './table/TableSchedule'
 import { t } from 'i18next'
 
@@ -41,6 +41,12 @@ const ScheduleTeacher = () => {
           </Row>
 			  </Form>
 
+        <Row>
+          <Col span={24}>
+            <Button className='rounded-xl' type='primary'>Сформировать</Button>
+          </Col>
+        </Row>
+        
        <TableSchedule data={null} />
     </div>
   )

@@ -171,7 +171,7 @@ export const NavMyPractices = () => {
 					Для данного устройства модуль работает только в горизонтальном положении, поверните устройство
 				</div>
 			) : (
-				<div className="bg-[#F5F8FB] min-h-[900px] w-full pt-14 px-14  xl:mt-20 mt-20 h-screen">
+				<div className="bg-[#F5F8FB] min-h-[900px] w-full pt-14 px-14  xl:mt-20 mt-20 ">
 					{current === 'myPractice' && <RouteMyPractice />}
 
 					<Tour open={open} onClose={() => setOpen(false)} steps={steps} />

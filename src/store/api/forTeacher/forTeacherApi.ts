@@ -5,13 +5,13 @@ export const fotTeacherService = apiSlice.injectEndpoints({
     endpoints: builder => ({
         getEmployeesMessage: builder.query<any, any>({
             query: (name) => {
-                return {
+            return {
                     url: `/user-api/chat/employees?name=${name}`,
                     method: 'GET'
                 }
             },
             providesTags: ['forTeacherScedule'],
-            keepUnusedDataFor:1,
+            keepUnusedDataFor:0,
         }),
        
     })

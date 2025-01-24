@@ -13,11 +13,11 @@ export const EmplInstruction = (props: { respondId: number; stageId: number; sta
 	return (
 		<>
 			<div className="font-content-font font-normal text-black text-[16px]/[19.2px] flex flex-col">
-				<div className="flex flex-col gap-[12px]">
+				<div className="flex flex-col pointer-events-auto gap-[12px]">
 					<span className="font-content-font font-normal text-black text-[16px]/[19.2px]">Посмотрите видео-инструктаж, а затем пройдите тест</span>
 					<div className="overflow-hidden rounded-2xl w-[730px] h-[400px] items-center">
 						<iframe width="100%" height="100%"
-								src="https://rutube.ru/play/embed/96127725cc229372ae2e5c52fd398d49/"
+								src="https://rutube.ru/play/embed/90a608d867f646a2edddd9447299a5d9"
 								frameBorder="0"
 								allow="clipboard-write; autoplay"
 								webkitAllowFullScreen
@@ -27,7 +27,7 @@ export const EmplInstruction = (props: { respondId: number; stageId: number; sta
 					</div>
 					<div className="overflow-hidden rounded-2xl w-[730px] h-[400px] items-center">
 						<iframe width="100%" height="100%"
-								src="https://rutube.ru/play/embed/96127725cc229372ae2e5c52fd398d49/"
+								src="https://rutube.ru/play/embed/4503bb06599a0090e9391a8e58e7f17b"
 								frameBorder="0"
 								allow="clipboard-write; autoplay"
 								webkitAllowFullScreen
@@ -37,7 +37,7 @@ export const EmplInstruction = (props: { respondId: number; stageId: number; sta
 					</div>
 					<div className="overflow-hidden rounded-2xl w-[730px] h-[400px] items-center">
 						<iframe width="100%" height="100%"
-								src="https://rutube.ru/play/embed/96127725cc229372ae2e5c52fd398d49/"
+								src="https://rutube.ru/play/embed/ec4b40a32d7feb115da5258ab729b9db"
 								frameBorder="0"
 								allow="clipboard-write; autoplay"
 								webkitAllowFullScreen
@@ -47,7 +47,7 @@ export const EmplInstruction = (props: { respondId: number; stageId: number; sta
 					</div>
 					<div className="overflow-hidden rounded-2xl w-[730px] h-[400px] items-center">
 						<iframe width="100%" height="100%"
-								src="https://rutube.ru/play/embed/96127725cc229372ae2e5c52fd398d49/"
+								src="https://rutube.ru/play/embed/543c7afafe1ce60d4069eb2677f956d3"
 								frameBorder="0"
 								allow="clipboard-write; autoplay"
 								webkitAllowFullScreen

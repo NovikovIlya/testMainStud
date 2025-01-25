@@ -1,8 +1,6 @@
-import { LoadingOutlined } from '@ant-design/icons'
 import { Button, ConfigProvider, Form, Input, Modal, Select, Spin } from 'antd'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-
 import { ModalOkSvg } from '../../../assets/svg/ModalOkSvg'
 import { WarningModalIconSvg } from '../../../assets/svg/WarningModalIconSvg'
 import { useAppSelector } from '../../../store'

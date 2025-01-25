@@ -1,8 +1,8 @@
 import clsx from 'clsx'
 import dayjs from 'dayjs'
-import { forwardRef } from 'react'
+import {forwardRef, useEffect, useState} from 'react'
 import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import {useLocation, useNavigate} from 'react-router-dom'
 
 import { ArrowToTheRight } from '../../../assets/svg/ArrowToTheRight'
 import { MessageReadSvg } from '../../../assets/svg/MessageReadSvg'
@@ -11,9 +11,10 @@ import { useAppSelector } from '../../../store'
 import {
 	useAnswerEmploymentRequestMutation,
 	useAnswerToInivitationMainTimeMutation,
-	useAnswerToInvitationReserveTimeRequestMutation
+	useAnswerToInvitationReserveTimeRequestMutation, useGetRespondFullInfoQuery
 } from '../../../store/api/serviceApi'
-import { useLazyGetVacancyViewQuery } from '../../../store/api/serviceApi'
+import { useLazyGetVacancyViewQuery
+} from '../../../store/api/serviceApi'
 import { setCurrentVacancy } from '../../../store/reducers/CurrentVacancySlice'
 import { ChatMessageType } from '../../../store/reducers/type'
 
@@ -30,8 +31,36 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 	const isSeeker = user?.roles[0].type === 'STUD'
 	const isEmpDep = user?.roles.find(role => role.type === 'EMPL')
 
+	const currentUrl = useLocation()
+	const match = currentUrl.pathname.match(/\/id\/(\d+)$/);
+
+	let id_from_url: string | number
+
+	if (match) {
+		id_from_url = match[1]
+	} else {
+		console.error('id miss')
+	}
+
 	const [answerMainTime] = useAnswerToInivitationMainTimeMutation()
 	const [getVacancy, result] = useLazyGetVacancyViewQuery()
+
+	const {data: respond_data, isLoading : loading, refetch} = useGetRespondFullInfoQuery(id_from_url)
+
+	console.log(respond_data?.status)
+
+	const [isSeekerOnStatusInvitation, setIsSeekerOnStatusInvitation] = useState<boolean>(respond_data?.status === 'INVITATION')
+
+	const [isSeekerOnStatusEmploymentRequest, setIsSeekerOnStatusEmploymentRequest] = useState<boolean>(respond_data?.status === 'EMPLOYMENT_REQUEST')
+
+
+	console.log(isSeekerOnStatusEmploymentRequest)
+	console.log(isSeekerOnStatusInvitation)
+
+	useEffect(() => {
+		setIsSeekerOnStatusInvitation(respond_data?.status === 'INVITATION')
+		setIsSeekerOnStatusEmploymentRequest(respond_data?.status === 'EMPLOYMENT_REQUEST')
+	}, [respond_data])
 
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
@@ -126,24 +155,33 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 				>
 					<button
 						onClick={() => {
-							answerMainTime({ id: respondId, ans: 'YES' })
+							answerMainTime({ id: respondId, ans: 'YES' }).then(() => {
+								setIsSeekerOnStatusInvitation(false)
+							})
 						}}
+						disabled={isEmpDep || !isSeekerOnStatusInvitation}
 						className="rounded-[54.5px] bg-inherit outline-none border cursor-pointer"
 					>
 						Да
 					</button>
 					<button
 						onClick={() => {
-							answerMainTime({ id: respondId, ans: 'NO' })
+							answerMainTime({ id: respondId, ans: 'NO' }).then(() => {
+								setIsSeekerOnStatusInvitation(false)
+							})
 						}}
+						disabled={isEmpDep || !isSeekerOnStatusInvitation}
 						className="rounded-[54.5px] bg-inherit outline-none border cursor-pointer"
 					>
 						Не удобно
 					</button>
 					<button
 						onClick={() => {
-							answerMainTime({ id: respondId, ans: 'NOT_RELEVANT' })
+							answerMainTime({ id: respondId, ans: 'NOT_RELEVANT' }).then(() => {
+								setIsSeekerOnStatusInvitation(false)
+							})
 						}}
+						disabled={isEmpDep || !isSeekerOnStatusInvitation}
 						className="col-span-2 rounded-[54.5px] bg-inherit outline-none border cursor-pointer"
 					>
 						Вакансия не актуальна
@@ -169,8 +207,11 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 										answerReserveTime({
 											respondId: respondId,
 											time: time
+										}).then(() => {
+											setIsSeekerOnStatusInvitation(false)
 										})
 									}}
+									disabled={isEmpDep || !isSeekerOnStatusInvitation}
 									className="w-full text-[16px]/[19.2px] rounded-[54.5px] py-[12px] px-[20px] text-center bg-inherit outline-none border cursor-pointer test:px-[12px]"
 								>
 									{time.substring(0, 10).split('-').reverse().join('.') + ', ' + time.substring(11, 16)}
@@ -179,8 +220,11 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 						</div>
 						<button
 							onClick={() => {
-								answerReserveTime({ respondId: respondId })
+								answerReserveTime({ respondId: respondId }).then(() => {
+									setIsSeekerOnStatusInvitation(false)
+								})
 							}}
+							disabled={isEmpDep || !isSeekerOnStatusInvitation}
 							className="text-[16px]/[19.2px]  rounded-[54.5px]  py-[12px] px-[56px] bg-inherit outline-none border cursor-pointer"
 						>
 							Нет подходящего времени
@@ -202,16 +246,22 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 					<div className="mt-[24px] w-[100%] flex flex-row gap-[20px]">
 						<button
 							onClick={() => {
-								answerEmploymentRequest({ respondId: respondId, answer: 'YES' })
+								answerEmploymentRequest({ respondId: respondId, answer: 'YES' }).then(()=>{
+									setIsSeekerOnStatusEmploymentRequest(false)
+								})
 							}}
+							disabled={isEmpDep || !isSeekerOnStatusEmploymentRequest}
 							className="w-6/12 text-[16px]/[19.2px] rounded-[54.5px]  text-center bg-inherit outline-none border cursor-pointer"
 						>
 							Да
 						</button>
 						<button
 							onClick={() => {
-								answerEmploymentRequest({ respondId: respondId, answer: 'NO' })
+								answerEmploymentRequest({ respondId: respondId, answer: 'NO' }).then(()=>{
+									setIsSeekerOnStatusEmploymentRequest(false)
+								})
 							}}
+							disabled={isEmpDep || !isSeekerOnStatusEmploymentRequest}
 							className="w-6/12 text-[16px]/[19.2px] rounded-[54.5px] text-center py-[12px] bg-inherit outline-none border cursor-pointer"
 						>
 							Нет

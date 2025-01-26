@@ -85,8 +85,10 @@ export const ChatEmpDempPreview = (props: {
 							>
 								{props.status === 'INVITATION'
 									? 'Приглашение'
-									: props.status === 'ARCHIVE' || props.status === 'IN_RESERVE'
+									: props.status === 'ARCHIVE'
 									? 'Отказ'
+									: props.status === 'IN_RESERVE'
+									? 'Резерв'
 									: props.status === 'IN_SUPERVISOR_REVIEW'
 									? 'На рассмотрении у руководителя'
 									: props.status === 'EMPLOYMENT' || props.status === 'EMPLOYMENT_REQUEST'

@@ -767,9 +767,9 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
-		answerToInivitationMainTime: builder.mutation<void, { id: number; ans: string }>({
-			query: ({ id, ans }) => ({
-				url: `http://${emplBaseURL}employment-api/v1/respond/${id}/chat/buttons/interview/main-time?answer=${ans}`,
+		answerToInivitationMainTime: builder.mutation<void, { id: number; ans: string; messageId: number }>({
+			query: ({ id, ans, messageId }) => ({
+				url: `http://${emplBaseURL}employment-api/v1/respond/${id}/chat/buttons/interview/main-time?answer=${ans}&message-id=${messageId}`,
 				method: 'POST',
 				headers: {
 					Authorization: `Bearer ${seekerToken}`
@@ -874,9 +874,9 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
-		answerToInvitationReserveTimeRequest: builder.mutation<void, ReserveTimeRequestType & { respondId: number }>({
+		answerToInvitationReserveTimeRequest: builder.mutation<void, ReserveTimeRequestType & { respondId: number, messageId: number }>({
 			query: arg => ({
-				url: `http://${emplBaseURL}employment-api/v1/respond/${arg.respondId}/chat/buttons/interview/reserve-time`,
+				url: `http://${emplBaseURL}employment-api/v1/respond/${arg.respondId}/chat/buttons/interview/reserve-time?message-id=${arg.messageId}`,
 				method: 'POST',
 				body: {
 					time: arg.time ? arg.time : null
@@ -886,9 +886,9 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
-		answerEmploymentRequest: builder.mutation<void, EmploymentRequestType & { respondId: number }>({
+		answerEmploymentRequest: builder.mutation<void, EmploymentRequestType & { respondId: number, messageId: number }>({
 			query: arg => ({
-				url: `http://${emplBaseURL}employment-api/v1/respond/${arg.respondId}/chat/buttons/employment-request?answer=${arg.answer}`,
+				url: `http://${emplBaseURL}employment-api/v1/respond/${arg.respondId}/chat/buttons/employment-request?answer=${arg.answer}&message-id=${arg.messageId}`,
 				method: 'POST',
 				headers: {
 					Authorization: `Bearer ${seekerToken}`
@@ -1171,6 +1171,7 @@ export const {
 	useGetChatIdByRespondIdQuery,
 	useGetUnreadMessagesCountQuery,
 	useLazyGetChatMessagesQuery,
+	useGetChatMessagesQuery,
 	usePostChatMessageMutation,
 	useReadChatMessageMutation,
 	useLazyGetResponcesByVacancyQuery,

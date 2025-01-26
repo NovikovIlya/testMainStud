@@ -352,6 +352,7 @@ export type ChatMessageType = {
 		| 'EMPLOYMENT_REQUEST'
 		| 'INVITATION_RESERVE'
 	reserveTimes: string[] | null
+	responsed: boolean
 	fileInfos: { id: number; name: string }[] | null
 }
 

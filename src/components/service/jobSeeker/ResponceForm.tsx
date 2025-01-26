@@ -14,6 +14,7 @@ import { useAppSelector } from '../../../store'
 import { usePostVacancyRespondMutation } from '../../../store/api/serviceApi'
 import { useGetCountriesQuery, useGetEducationLevelQuery } from '../../../store/api/utilsApi'
 import { allData } from '../../../store/reducers/SeekerFormReducers/AboutMeReducer'
+import { nullifyFile, setFile } from '../../../store/reducers/SeekerFormReducers/ExperienceFileReducer'
 import {
 	addExperience,
 	alterExperience,
@@ -57,6 +58,7 @@ export const ResponseForm = () => {
 	const skillsData = useAppSelector(state => state.skills)
 	const educationData = useAppSelector(state => state.RespondEducation)
 	const experienceData = useAppSelector(state => state.Experience)
+	const fileData = useAppSelector(state => state.experienceFile)
 
 	const { openAlert } = useAlert()
 
@@ -351,6 +353,14 @@ export const ResponseForm = () => {
 									currentVacancy !== null &&
 										getVacancy({
 											id: currentVacancy?.id,
+											resume:
+												fileData.file === ''
+													? null
+													: {
+															name: fileData.filename,
+															contentType: fileData.fileType,
+															bytes: fileData.file
+													  },
 											coverLetter: coverLetter === '' ? null : coverLetter,
 											aboutMe: {
 												gender: aboutMeData.gender,
@@ -973,7 +983,33 @@ export const ResponseForm = () => {
 									}}
 								></Input>
 							</Form.Item>
-							<Upload>
+							<Upload
+								maxCount={1}
+								defaultFileList={
+									fileData.file !== '' ? [{ name: fileData.filename, uid: uuid(), status: 'error' }] : undefined
+								}
+								onChange={options => {
+									console.log(options.file.type)
+									console.log(options.file.name)
+									let filereader = new FileReader()
+									try {
+										filereader.readAsDataURL(options.file.originFileObj as Blob)
+									} catch {
+										console.log('Удаление файла')
+										dispatch(nullifyFile())
+									}
+									filereader.onload = () => {
+										console.log(filereader.result)
+										dispatch(
+											setFile({
+												file: String(filereader.result).split(',')[1],
+												filename: options.file.name,
+												fileType: options.file.type!
+											})
+										)
+									}
+								}}
+							>
 								<div className="flex items-center gap-[12px] cursor-pointer">
 									<AttachIcon />
 									<p className="font-content-font font-normal text-[16px]/[16px] text-black underline select-none">

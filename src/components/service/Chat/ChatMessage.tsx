@@ -1,8 +1,8 @@
 import clsx from 'clsx'
 import dayjs from 'dayjs'
-import {forwardRef, useEffect, useState} from 'react'
+import { forwardRef, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import {useLocation, useNavigate} from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import { ArrowToTheRight } from '../../../assets/svg/ArrowToTheRight'
 import { MessageReadSvg } from '../../../assets/svg/MessageReadSvg'
@@ -15,6 +15,7 @@ import {
 	useLazyGetVacancyViewQuery,
 	useGetChatMessagesQuery
 } from '../../../store/api/serviceApi'
+import { useLazyGetVacancyViewQuery } from '../../../store/api/serviceApi'
 import { setCurrentVacancy } from '../../../store/reducers/CurrentVacancySlice'
 import { ChatMessageType } from '../../../store/reducers/type'
 
@@ -33,7 +34,7 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 	const current_role = isSeeker === true ? "SEEKER" : "PERSONNEL_DEPARTMENT"
 
 	const currentUrl = useLocation()
-	const match = currentUrl.pathname.match(/\/id\/(\d+)$/);
+	const match = currentUrl.pathname.match(/\/id\/(\d+)$/)
 
 	let id_from_url: string
 	let page_id : number
@@ -89,7 +90,7 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 						'mt-[12px]': !props.senderChange
 					},
 					{
-						'min-w-[50%]': props.msgData.type === 'RESPOND'
+						'min-w-[50%]': props.msgData.type === 'RESPOND' || props.msgData.fileInfos
 					}
 				)}
 			>

@@ -52,6 +52,7 @@ import LayoutSlice from './reducers/LayoutsSlice'
 import currentRequisiteSeekerReducer from './reducers/RequisiteReducers/RequisiteSeekerReducer'
 import currentCommentVisibilitySlice from './reducers/RequisiteReducers/StageCommentReducer'
 import AboutMeReducer from './reducers/SeekerFormReducers/AboutMeReducer'
+import ExperienceFileReducer from './reducers/SeekerFormReducers/ExperienceFileReducer'
 import ExperienceReducer from './reducers/SeekerFormReducers/ExperienceReducer'
 import FormCompletionReducer from './reducers/SeekerFormReducers/FormCompletionReducer'
 import RespondEducationReducer from './reducers/SeekerFormReducers/RespondEducationReducer'
@@ -118,7 +119,8 @@ export const store = configureStore({
 		catalogFilter: CatalogFilterSlice,
 		[abiturientApi.reducerPath]: abiturientApi.reducer,
 		[apiSliceStudent.reducerPath]: apiSliceStudent.reducer,
-		[apiSliceTeacher.reducerPath]: apiSliceTeacher.reducer
+		[apiSliceTeacher.reducerPath]: apiSliceTeacher.reducer,
+		experienceFile: ExperienceFileReducer
 	},
 	//@ts-ignore
 	middleware: getDefaultMiddleware =>

@@ -164,7 +164,7 @@ export const ChatEmpDemp = () => {
 				{!pathname.includes('/services/personnelaccounting/chat/vacancyview') && (
 					<div className="shadowNav bg-white relative z-[5] w-[461px]">
 						<div className="sticky top-[80px]">
-							<div className="flex items-center px-[30px] pt-[80px] pb-[20px]">
+							<div className="flex items-center px-[30px] pt-[60px] pb-[20px]">
 								<p className="font-content-font font-normal text-black text-[20px]/[20px] ">Все сообщения</p>
 								<ConfigProvider theme={{ components: { Button: { textHoverBg: '#ffffff' } } }}>
 									<Button
@@ -181,7 +181,7 @@ export const ChatEmpDemp = () => {
 							</div>
 							{isFilterWindowOpen && (
 								<>
-									<div className="px-[30px] pb-[40px] flex flex-col gap-[20px] w-full">
+									<div className="px-[30px] pb-[40px] flex flex-col gap-[20px] w-full h-[200px]">
 										<div className="flex flex-col gap-[8px]">
 											<p className="font-content-font font-normal text-[14px]/[14px] text-black opacity-80">Вакансия</p>
 											<Select
@@ -286,7 +286,11 @@ export const ChatEmpDemp = () => {
 								</>
 							)}
 
-							<ul className="h-[40vh] w-[461px] flex flex-col gap-4 overflow-auto">
+							<ul
+								className={`h-[calc(100vh-${
+									isFilterWindowOpen ? '400' : '340'
+								}px)] w-[461px] flex flex-col gap-4 overflow-auto`}
+							>
 								{handleList}
 								<li className="h-[1px]" ref={chatPreviewsBottomRef}></li>
 							</ul>

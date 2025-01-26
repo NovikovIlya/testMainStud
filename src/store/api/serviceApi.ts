@@ -1117,6 +1117,25 @@ export const serviceApi = apiSlice.injectEndpoints({
 					Authorization: `Bearer ${personnelDeparmentToken}`
 				}
 			})
+		}),
+		downloadChatFile: builder.query<
+			{ href: string },
+			{ chatId: number; msgId: number; id: number; isEmpDemp: boolean }
+		>({
+			query: arg => ({
+				url: `http://${emplBaseURL}employment-api/v1/chat/${arg.chatId}/message/${arg.msgId}/file/${arg.id}?sender=${
+					arg.isEmpDemp ? 'PERSONNEL_DEPARTMENT' : 'SEEKER'
+				}`,
+				method: 'GET',
+				responseHandler: async res => {
+					const data = await res.blob()
+					const file = new Blob([data], {
+						type: res.headers.get('content-type') as string
+					})
+					return { href: window.URL.createObjectURL(file) }
+				}
+			}),
+			keepUnusedDataFor: 0
 		})
 	})
 })
@@ -1236,5 +1255,6 @@ export const {
 	useDeleteAccPhoneMutation,
 	useGetRoleQuery,
 	useLazyCheckIfTestIsPassedQuery,
-	useLazyGetEmploymentStageStatusForSupervisorQuery
+	useLazyGetEmploymentStageStatusForSupervisorQuery,
+	useLazyDownloadChatFileQuery
 } = serviceApi

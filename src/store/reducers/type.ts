@@ -252,6 +252,11 @@ type educationResponceType = {
 }
 
 export type ResponceType = {
+	resume: {
+		name: string
+		contentType: string
+		bytes: string
+	} | null
 	coverLetter: string | null
 	aboutMe: {
 		gender: IGender

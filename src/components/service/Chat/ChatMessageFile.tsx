@@ -1,6 +1,7 @@
 import { resolve } from 'path'
 import { useEffect, useRef } from 'react'
 
+import { ChatFileIcon } from '../../../assets/svg/ChatFileIcon'
 import { DocxIcon } from '../../../assets/svg/DocxIcon'
 import { FileDownloadIcon } from '../../../assets/svg/FileDownloadIcon'
 import { PdfIcon } from '../../../assets/svg/PdfIcon'
@@ -27,14 +28,9 @@ export const ChatMessageFile = (props: { id: number; name: string; msgId: number
 
 	return (
 		<>
-			<div className="min-h-[64px] shadow-custom-shadow w-full bg-white rounded-[8px] flex items-center justify-between py-[12px] pl-[12px] pr-[20px]">
-				{props.name.substring(props.name.length - 4) && props.name.substring(props.name.length - 4) === '.pdf' && (
-					<PdfIcon />
-				)}
-				{props.name.substring(props.name.length - 5) && props.name.substring(props.name.length - 5) === '.docx' && (
-					<DocxIcon />
-				)}
-				<p className="font-content-font text-black font-normal text-[16px]/[19.2px] w-[70%] overflow-hidden text-ellipsis">
+			<div className="h-[64px] shadow-custom-shadow w-full bg-white rounded-[8px] flex items-center justify-between py-[12px] pl-[12px] pr-[20px] overflow-hidden">
+				<ChatFileIcon extension={props.name.substring(props.name.lastIndexOf('.') + 1).toLocaleUpperCase()} />
+				<p className="font-content-font text-black font-normal text-[16px]/[19.2px] w-[70%] h-[55%] overflow-hidden text-ellipsis">
 					{props.name}
 				</p>
 				<div className="flex items-center gap-[20px]">

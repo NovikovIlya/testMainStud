@@ -1,8 +1,8 @@
 import clsx from 'clsx'
 import dayjs from 'dayjs'
-import {forwardRef, useEffect, useState} from 'react'
+import { forwardRef, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import {useLocation, useNavigate} from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import { ArrowToTheRight } from '../../../assets/svg/ArrowToTheRight'
 import { MessageReadSvg } from '../../../assets/svg/MessageReadSvg'
@@ -11,10 +11,10 @@ import { useAppSelector } from '../../../store'
 import {
 	useAnswerEmploymentRequestMutation,
 	useAnswerToInivitationMainTimeMutation,
-	useAnswerToInvitationReserveTimeRequestMutation, useGetRespondFullInfoQuery
+	useAnswerToInvitationReserveTimeRequestMutation,
+	useGetRespondFullInfoQuery
 } from '../../../store/api/serviceApi'
-import { useLazyGetVacancyViewQuery
-} from '../../../store/api/serviceApi'
+import { useLazyGetVacancyViewQuery } from '../../../store/api/serviceApi'
 import { setCurrentVacancy } from '../../../store/reducers/CurrentVacancySlice'
 import { ChatMessageType } from '../../../store/reducers/type'
 
@@ -32,7 +32,7 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 	const isEmpDep = user?.roles.find(role => role.type === 'EMPL')
 
 	const currentUrl = useLocation()
-	const match = currentUrl.pathname.match(/\/id\/(\d+)$/);
+	const match = currentUrl.pathname.match(/\/id\/(\d+)$/)
 
 	let id_from_url: string | number
 
@@ -45,14 +45,17 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 	const [answerMainTime] = useAnswerToInivitationMainTimeMutation()
 	const [getVacancy, result] = useLazyGetVacancyViewQuery()
 
-	const {data: respond_data, isLoading : loading, refetch} = useGetRespondFullInfoQuery(id_from_url)
+	const { data: respond_data, isLoading: loading, refetch } = useGetRespondFullInfoQuery(id_from_url)
 
 	console.log(respond_data?.status)
 
-	const [isSeekerOnStatusInvitation, setIsSeekerOnStatusInvitation] = useState<boolean>(respond_data?.status === 'INVITATION')
+	const [isSeekerOnStatusInvitation, setIsSeekerOnStatusInvitation] = useState<boolean>(
+		respond_data?.status === 'INVITATION'
+	)
 
-	const [isSeekerOnStatusEmploymentRequest, setIsSeekerOnStatusEmploymentRequest] = useState<boolean>(respond_data?.status === 'EMPLOYMENT_REQUEST')
-
+	const [isSeekerOnStatusEmploymentRequest, setIsSeekerOnStatusEmploymentRequest] = useState<boolean>(
+		respond_data?.status === 'EMPLOYMENT_REQUEST'
+	)
 
 	console.log(isSeekerOnStatusEmploymentRequest)
 	console.log(isSeekerOnStatusInvitation)
@@ -87,7 +90,7 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 						'mt-[12px]': !props.senderChange
 					},
 					{
-						'min-w-[50%]': props.msgData.type === 'RESPOND'
+						'min-w-[50%]': props.msgData.type === 'RESPOND' || props.msgData.fileInfos
 					}
 				)}
 			>
@@ -246,7 +249,7 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 					<div className="mt-[24px] w-[100%] flex flex-row gap-[20px]">
 						<button
 							onClick={() => {
-								answerEmploymentRequest({ respondId: respondId, answer: 'YES' }).then(()=>{
+								answerEmploymentRequest({ respondId: respondId, answer: 'YES' }).then(() => {
 									setIsSeekerOnStatusEmploymentRequest(false)
 								})
 							}}
@@ -257,7 +260,7 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 						</button>
 						<button
 							onClick={() => {
-								answerEmploymentRequest({ respondId: respondId, answer: 'NO' }).then(()=>{
+								answerEmploymentRequest({ respondId: respondId, answer: 'NO' }).then(() => {
 									setIsSeekerOnStatusEmploymentRequest(false)
 								})
 							}}

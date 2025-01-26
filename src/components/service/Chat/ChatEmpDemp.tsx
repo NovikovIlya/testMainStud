@@ -164,7 +164,7 @@ export const ChatEmpDemp = () => {
 				{!pathname.includes('/services/personnelaccounting/chat/vacancyview') && (
 					<div className="shadowNav bg-white relative z-[5] w-[461px]">
 						<div className="sticky top-[80px]">
-							<div className="flex items-center px-[30px] pt-[80px] pb-[20px]">
+							<div className="flex items-center px-[30px] pt-[60px] pb-[20px]">
 								<p className="font-content-font font-normal text-black text-[20px]/[20px] ">Все сообщения</p>
 								<ConfigProvider theme={{ components: { Button: { textHoverBg: '#ffffff' } } }}>
 									<Button

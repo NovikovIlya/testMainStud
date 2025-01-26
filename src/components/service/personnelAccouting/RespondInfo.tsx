@@ -8,14 +8,19 @@ import { Margin, usePDF } from 'react-to-pdf'
 import uuid from 'react-uuid'
 
 import { AvatartandardSvg } from '../../../assets/svg/AvatarStandardSvg'
+import { DeleteIconHoverLaborSvg } from '../../../assets/svg/DeleteIconHoverLaborSvg'
+import { DeleteIconLaborSvg } from '../../../assets/svg/DeleteIconLaborSvg'
 import { MyDocsSvg } from '../../../assets/svg/MyDocsSvg'
+import { NocircleArrowIconHover } from '../../../assets/svg/NocircleArrowIconHover'
 import { RespondDownload } from '../../../assets/svg/RespondDownload'
+import { RespondDownloadHover } from '../../../assets/svg/RespondDownloadHover'
 import { useAppSelector } from '../../../store'
 import {
 	useApproveRespondMutation,
 	useGetChatIdByRespondIdQuery,
 	useGetRespondFullInfoQuery,
-	useLazyGetSeekerResumeFileQuery, useLazyGetVacancyViewQuery,
+	useLazyGetSeekerResumeFileQuery,
+	useLazyGetVacancyViewQuery,
 	useSendRespondToArchiveMutation,
 	useSendRespondToReserveMutation
 } from '../../../store/api/serviceApi'
@@ -28,10 +33,6 @@ import { useAlert } from '../../../utils/Alert/AlertMessage'
 import { NocircleArrowIcon } from '../jobSeeker/NoCircleArrowIcon'
 
 import { InviteSeekerForm } from './supervisor/InviteSeekerForm'
-import {DeleteIconLaborSvg} from "../../../assets/svg/DeleteIconLaborSvg";
-import {DeleteIconHoverLaborSvg} from "../../../assets/svg/DeleteIconHoverLaborSvg";
-import {NocircleArrowIconHover} from "../../../assets/svg/NocircleArrowIconHover";
-import {RespondDownloadHover} from "../../../assets/svg/RespondDownloadHover";
 
 export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR' | 'SEEKER' }) => {
 	const { t, i18n } = useTranslation()
@@ -39,8 +40,8 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 
 	const { openAlert } = useAlert()
 
-	const currentUrl = window.location.pathname;
-	const match = currentUrl.match(/\/fullinfo\/(\d+)$/);
+	const currentUrl = window.location.pathname
+	const match = currentUrl.match(/\/fullinfo\/(\d+)$/)
 
 	let id_from_url: string | number
 
@@ -186,7 +187,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 							<div className="flex flex-wrap gap-[150px]">
 								<div className="flex gap-[20px]">
 									<div className="flex h-[167px] w-[167px] bg-[#D9D9D9]">
-										<AvatartandardSvg/>
+										<AvatartandardSvg />
 									</div>
 									<div className="flex flex-col gap-[8px]">
 										<p className="font-content-font font-normal text-black text-[24px]/[28.8px]">
@@ -257,7 +258,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 														text: 'Отклик успешно отправлен руководителю'
 													})
 												} catch (error: any) {
-													openAlert({type: 'error', text: 'Извините, что-то пошло не так...'})
+													openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 												}
 											}}
 											disabled={isRespondSentToSupervisor || isRespondSentToReserve || isRespondSentToArchive}
@@ -282,7 +283,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 														text: 'Отклик успешно отправлен в архив'
 													})
 												} catch (error: any) {
-													openAlert({type: 'error', text: 'Извините, что-то пошло не так...'})
+													openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 												}
 											}}
 											disabled={isRespondSentToSupervisor || isRespondSentToReserve || isRespondSentToArchive}
@@ -304,7 +305,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 														text: 'Отклик успешно отправлен в резерв'
 													})
 												} catch (error: any) {
-													openAlert({type: 'error', text: 'Извините, что-то пошло не так...'})
+													openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 												}
 											}}
 											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
@@ -350,18 +351,15 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 								 		  "
 										>
 											{/* Иконка при наведении */}
-											<div
-												className="absolute mr-[62px] mt-[3px] group-hover:opacity-100 group-hover:scale-100 opacity-0 scale-95 transition-all duration-200">
-												<RespondDownloadHover/>
+											<div className="absolute mr-[62px] mt-[3px] group-hover:opacity-100 group-hover:scale-100 opacity-0 scale-95 transition-all duration-200">
+												<RespondDownloadHover />
 											</div>
 
 											{/* Иконка по умолчанию */}
-											<div
-												className="mt-[3px] group-hover:opacity-0 group-hover:scale-95 opacity-100 scale-100 transition-all duration-200">
-												<RespondDownload/>
+											<div className="mt-[3px] group-hover:opacity-0 group-hover:scale-95 opacity-100 scale-100 transition-all duration-200">
+												<RespondDownload />
 											</div>
-											<span
-												className="group-hover:text-[#004EC2] transition-all duration-200 text-[16px] font-normal">
+											<span className="group-hover:text-[#004EC2] transition-all duration-200 text-[16px] font-normal">
 												Скачать
 											</span>
 										</button>
@@ -394,7 +392,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 														})
 													openAlert({ type: 'success', text: 'Резюме успешно отклонено' })
 												} catch (error: any) {
-													openAlert({type: 'error', text: 'Извините, что-то пошло не так...'})
+													openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 												}
 											}}
 											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[257px] h-[40px] py-[8px] px-[24px] border-black"
@@ -432,25 +430,22 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
                        						"
 										>
 											{/* Иконка при наведении */}
-											<div
-												className="absolute mr-[62px] mt-[3px] group-hover:opacity-100 group-hover:scale-100 opacity-0 scale-95 transition-all duration-200">
-												<RespondDownloadHover/>
+											<div className="absolute mr-[62px] mt-[3px] group-hover:opacity-100 group-hover:scale-100 opacity-0 scale-95 transition-all duration-200">
+												<RespondDownloadHover />
 											</div>
 
 											{/* Иконка по умолчанию */}
-											<div
-												className="mt-[3px] group-hover:opacity-0 group-hover:scale-95 opacity-100 scale-100 transition-all duration-200">
-												<RespondDownload/>
+											<div className="mt-[3px] group-hover:opacity-0 group-hover:scale-95 opacity-100 scale-100 transition-all duration-200">
+												<RespondDownload />
 											</div>
-											<span
-												className="group-hover:text-[#004EC2] transition-all duration-200 text-[16px] font-normal">
-                        					Скачать
-                      						</span>
+											<span className="group-hover:text-[#004EC2] transition-all duration-200 text-[16px] font-normal">
+												Скачать
+											</span>
 										</button>
 									</div>
 								)}
 							</div>
-							<hr/>
+							<hr />
 							<div className="flex flex-col gap-[24px]">
 								<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">
 									Сопроводительное письмо
@@ -459,7 +454,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 									{res.respondData.coverLetter}
 								</p>
 							</div>
-							<hr/>
+							<hr />
 							<div className="flex flex-col gap-[24px]">
 								<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">Образование</p>
 								<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
@@ -479,10 +474,9 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 									))}
 								</div>
 							</div>
-							<hr/>
+							<hr />
 							<div className="flex flex-col gap-[24px]">
-								<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">Опыт
-									работы</p>
+								<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">Опыт работы</p>
 								{res.respondData.portfolio.workExperiences.length === 0 ? (
 									<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
 										Соискатель не имеет опыта работы
@@ -523,13 +517,38 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 									</div>
 								)}
 								{res.respondData.portfolio.url !== '' && (
-									<div className="grid grid-cols-[164px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
+									<div className="grid grid-cols-[164px_auto] gap-x-[50px] gap-y-[24px] w-[90%]">
 										<p>Ссылка на портфолио:</p>
 										<a href={res.respondData.portfolio.url} target="_blank">
 											{res.respondData.portfolio.url}
 										</a>
 									</div>
 								)}
+								<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
+									<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">Резюме</p>
+									<div className="bg-white rounded-[16px] shadow-custom-shadow h-[59px] w-[65%] p-[20px] flex">
+										<MyDocsSvg />
+										<p
+											className="ml-[20px] font-content-font font-normal text-black text-[16px]/[19.2px] underline cursor-pointer"
+											onClick={() => {
+												const link = document.createElement('a')
+												link.href = resume
+												link.download = 'Резюме'
+												link.click()
+											}}
+										>
+											{'Резюме ' +
+												res.userData?.lastname +
+												' ' +
+												res.userData?.firstname +
+												' ' +
+												res.userData?.middlename}
+										</p>
+										<p className="ml-auto font-content-font font-normal text-black text-[16px]/[19.2px] opacity-70">
+											{resumeSize}
+										</p>
+									</div>
+								</div>
 							</div>
 							<hr />
 							<div className="flex flex-col gap-[24px]">

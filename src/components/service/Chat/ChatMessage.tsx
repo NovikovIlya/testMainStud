@@ -12,10 +12,9 @@ import {
 	useAnswerEmploymentRequestMutation,
 	useAnswerToInivitationMainTimeMutation,
 	useAnswerToInvitationReserveTimeRequestMutation,
-	useLazyGetVacancyViewQuery,
-	useGetChatMessagesQuery
+	useGetChatMessagesQuery,
+	useLazyGetVacancyViewQuery
 } from '../../../store/api/serviceApi'
-import { useLazyGetVacancyViewQuery } from '../../../store/api/serviceApi'
 import { setCurrentVacancy } from '../../../store/reducers/CurrentVacancySlice'
 import { ChatMessageType } from '../../../store/reducers/type'
 
@@ -31,13 +30,13 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 	const { currentVacancyId } = useAppSelector(state => state.currentVacancyId)
 	const isSeeker = user?.roles[0].type === 'STUD'
 	const isEmpDep = user?.roles.find(role => role.type === 'EMPL')
-	const current_role = isSeeker === true ? "SEEKER" : "PERSONNEL_DEPARTMENT"
+	const current_role = isSeeker === true ? 'SEEKER' : 'PERSONNEL_DEPARTMENT'
 
 	const currentUrl = useLocation()
 	const match = currentUrl.pathname.match(/\/id\/(\d+)$/)
 
 	let id_from_url: string
-	let page_id : number
+	let page_id: number
 
 	if (match) {
 		id_from_url = match[1]
@@ -49,19 +48,27 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 	const [answerMainTime] = useAnswerToInivitationMainTimeMutation()
 	const [getVacancy, result] = useLazyGetVacancyViewQuery()
 
-	const {data: chat_data} = useGetChatMessagesQuery({chatId: page_id, role: current_role})
+	const { data: chat_data } = useGetChatMessagesQuery({ chatId: page_id, role: current_role })
 
-	const invitation_msg = chat_data?.filter(message => message.type === "INVITATION")
-	const invitation_reserve_msg = chat_data?.filter(message => message.type === "INVITATION_RESERVE")
-	const empl_req_msg = chat_data?.filter(message => message.type === "EMPLOYMENT_REQUEST")
+	const invitation_msg = chat_data?.filter(message => message.type === 'INVITATION')
+	const invitation_reserve_msg = chat_data?.filter(message => message.type === 'INVITATION_RESERVE')
+	const empl_req_msg = chat_data?.filter(message => message.type === 'EMPLOYMENT_REQUEST')
 
-	const [isSeekerResponsedInvitationMessage, setIsSeekerResponsedInvitationMessage] = useState<boolean>(invitation_msg === undefined ? false : invitation_msg[0]?.responsed)
-	const [isSeekerResponsedInvitationReserveMessage, setIsSeekerResponsedInvitationReserveMessage] = useState<boolean>(invitation_reserve_msg === undefined ? false : invitation_reserve_msg[0]?.responsed)
-	const [isSeekerResponsedEmploymentRequestMessage, setIsSeekerResponsedEmploymentRequestMessage] = useState<boolean>(empl_req_msg === undefined ? false : empl_req_msg[0]?.responsed)
+	const [isSeekerResponsedInvitationMessage, setIsSeekerResponsedInvitationMessage] = useState<boolean>(
+		invitation_msg === undefined ? false : invitation_msg[0]?.responsed
+	)
+	const [isSeekerResponsedInvitationReserveMessage, setIsSeekerResponsedInvitationReserveMessage] = useState<boolean>(
+		invitation_reserve_msg === undefined ? false : invitation_reserve_msg[0]?.responsed
+	)
+	const [isSeekerResponsedEmploymentRequestMessage, setIsSeekerResponsedEmploymentRequestMessage] = useState<boolean>(
+		empl_req_msg === undefined ? false : empl_req_msg[0]?.responsed
+	)
 
 	useEffect(() => {
 		setIsSeekerResponsedInvitationMessage(invitation_msg === undefined ? false : invitation_msg[0]?.responsed)
-		setIsSeekerResponsedInvitationReserveMessage(invitation_reserve_msg === undefined ? false : invitation_reserve_msg[0]?.responsed)
+		setIsSeekerResponsedInvitationReserveMessage(
+			invitation_reserve_msg === undefined ? false : invitation_reserve_msg[0]?.responsed
+		)
 		setIsSeekerResponsedEmploymentRequestMessage(empl_req_msg === undefined ? false : empl_req_msg[0]?.responsed)
 	}, [chat_data])
 
@@ -159,26 +166,30 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 					<button
 						onClick={() => {
 							if (invitation_msg) {
-								answerMainTime({id: respondId, ans: 'YES', messageId: invitation_msg[0].id}).then(() => {
+								answerMainTime({ id: respondId, ans: 'YES', messageId: invitation_msg[0].id }).then(() => {
 									setIsSeekerResponsedInvitationMessage(true)
 								})
 							}
 						}}
 						disabled={isEmpDep || isSeekerResponsedInvitationMessage}
-						className={`rounded-[54.5px] bg-inherit outline-none border cursor-pointer ${isEmpDep || isSeekerResponsedInvitationMessage ? 'select-none !cursor-not-allowed' : ''}`}
+						className={`rounded-[54.5px] bg-inherit outline-none border cursor-pointer ${
+							isEmpDep || isSeekerResponsedInvitationMessage ? 'select-none !cursor-not-allowed' : ''
+						}`}
 					>
 						Да
 					</button>
 					<button
 						onClick={() => {
 							if (invitation_msg) {
-								answerMainTime({id: respondId, ans: 'NO', messageId: invitation_msg[0].id}).then(() => {
-									setIsSeekerResponsedInvitationMessage(true);
-								});
+								answerMainTime({ id: respondId, ans: 'NO', messageId: invitation_msg[0].id }).then(() => {
+									setIsSeekerResponsedInvitationMessage(true)
+								})
 							}
 						}}
 						disabled={isEmpDep || isSeekerResponsedInvitationMessage}
-						className={`rounded-[54.5px] bg-inherit outline-none border cursor-pointer ${isEmpDep || isSeekerResponsedInvitationMessage ? 'select-none !cursor-not-allowed' : ''}`}
+						className={`rounded-[54.5px] bg-inherit outline-none border cursor-pointer ${
+							isEmpDep || isSeekerResponsedInvitationMessage ? 'select-none !cursor-not-allowed' : ''
+						}`}
 					>
 						Не удобно
 					</button>
@@ -195,7 +206,9 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 							}
 						}}
 						disabled={isEmpDep || isSeekerResponsedInvitationMessage}
-						className={`col-span-2 rounded-[54.5px] bg-inherit outline-none border cursor-pointer ${isEmpDep || isSeekerResponsedInvitationMessage ? 'select-none !cursor-not-allowed' : ''}`}
+						className={`col-span-2 rounded-[54.5px] bg-inherit outline-none border cursor-pointer ${
+							isEmpDep || isSeekerResponsedInvitationMessage ? 'select-none !cursor-not-allowed' : ''
+						}`}
 					>
 						Вакансия не актуальна
 					</button>
@@ -228,7 +241,9 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 										}
 									}}
 									disabled={isEmpDep || isSeekerResponsedInvitationReserveMessage}
-									className={`w-full text-[16px]/[19.2px] rounded-[54.5px] py-[12px] px-[20px] text-center bg-inherit outline-none border cursor-pointer test:px-[12px]  ${isEmpDep || isSeekerResponsedInvitationReserveMessage ? 'select-none !cursor-not-allowed' : ''}`}
+									className={`w-full text-[16px]/[19.2px] rounded-[54.5px] py-[12px] px-[20px] text-center bg-inherit outline-none border cursor-pointer test:px-[12px]  ${
+										isEmpDep || isSeekerResponsedInvitationReserveMessage ? 'select-none !cursor-not-allowed' : ''
+									}`}
 								>
 									{time.substring(0, 10).split('-').reverse().join('.') + ', ' + time.substring(11, 16)}
 								</button>
@@ -237,12 +252,15 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 						<button
 							onClick={() => {
 								if (invitation_reserve_msg) {
-									answerReserveTime({ respondId: respondId, messageId: invitation_reserve_msg[0].id}).then(() => {
+									answerReserveTime({ respondId: respondId, messageId: invitation_reserve_msg[0].id }).then(() => {
 										setIsSeekerResponsedInvitationReserveMessage(true)
-									})}
+									})
+								}
 							}}
 							disabled={isEmpDep || isSeekerResponsedInvitationReserveMessage}
-							className={`text-[16px]/[19.2px]  rounded-[54.5px]  py-[12px] px-[56px] bg-inherit outline-none border cursor-pointer ${isEmpDep || isSeekerResponsedInvitationReserveMessage ? 'select-none !cursor-not-allowed' : ''}`}
+							className={`text-[16px]/[19.2px]  rounded-[54.5px]  py-[12px] px-[56px] bg-inherit outline-none border cursor-pointer ${
+								isEmpDep || isSeekerResponsedInvitationReserveMessage ? 'select-none !cursor-not-allowed' : ''
+							}`}
 						>
 							Нет подходящего времени
 						</button>
@@ -268,13 +286,15 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 										respondId: respondId,
 										answer: 'YES',
 										messageId: empl_req_msg[0].id
-									}).then(()=>{
+									}).then(() => {
 										setIsSeekerResponsedEmploymentRequestMessage(true)
 									})
 								}
 							}}
 							disabled={isEmpDep || isSeekerResponsedEmploymentRequestMessage}
-							className={`w-6/12 text-[16px]/[19.2px] rounded-[54.5px]  text-center bg-inherit outline-none border cursor-pointer ${isEmpDep || isSeekerResponsedEmploymentRequestMessage ? 'select-none !cursor-not-allowed' : ''}`}
+							className={`w-6/12 text-[16px]/[19.2px] rounded-[54.5px]  text-center bg-inherit outline-none border cursor-pointer ${
+								isEmpDep || isSeekerResponsedEmploymentRequestMessage ? 'select-none !cursor-not-allowed' : ''
+							}`}
 						>
 							Да
 						</button>
@@ -285,13 +305,15 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 										respondId: respondId,
 										answer: 'NO',
 										messageId: empl_req_msg[0].id
-									}).then(()=>{
+									}).then(() => {
 										setIsSeekerResponsedEmploymentRequestMessage(true)
 									})
 								}
 							}}
 							disabled={isEmpDep || isSeekerResponsedEmploymentRequestMessage}
-							className={`w-6/12 text-[16px]/[19.2px] rounded-[54.5px] text-center py-[12px] bg-inherit outline-none border cursor-pointer ${isEmpDep || isSeekerResponsedEmploymentRequestMessage ? 'select-none !cursor-not-allowed' : ''}`}
+							className={`w-6/12 text-[16px]/[19.2px] rounded-[54.5px] text-center py-[12px] bg-inherit outline-none border cursor-pointer ${
+								isEmpDep || isSeekerResponsedEmploymentRequestMessage ? 'select-none !cursor-not-allowed' : ''
+							}`}
 						>
 							Нет
 						</button>

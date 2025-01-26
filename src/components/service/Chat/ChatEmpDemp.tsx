@@ -181,7 +181,7 @@ export const ChatEmpDemp = () => {
 							</div>
 							{isFilterWindowOpen && (
 								<>
-									<div className="px-[30px] pb-[40px] flex flex-col gap-[20px] w-full">
+									<div className="px-[30px] pb-[40px] flex flex-col gap-[20px] w-full h-[200px]">
 										<div className="flex flex-col gap-[8px]">
 											<p className="font-content-font font-normal text-[14px]/[14px] text-black opacity-80">Вакансия</p>
 											<Select
@@ -286,7 +286,11 @@ export const ChatEmpDemp = () => {
 								</>
 							)}
 
-							<ul className="h-[40vh] w-[461px] flex flex-col gap-4 overflow-auto">
+							<ul
+								className={`h-[calc(100vh-${
+									isFilterWindowOpen ? '400' : '340'
+								}px)] w-[461px] flex flex-col gap-4 overflow-auto`}
+							>
 								{handleList}
 								<li className="h-[1px]" ref={chatPreviewsBottomRef}></li>
 							</ul>

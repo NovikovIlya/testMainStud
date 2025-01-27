@@ -43,7 +43,6 @@ export const VacancyRequestDeleteView = () => {
 	}, [getVacancy]);
 
 	console.log(data)
-
 	const navigate = useNavigate()
 	const [acceptRequest] = useAcceptDeleteVacancyRequestMutation()
 
@@ -209,7 +208,7 @@ export const VacancyRequestDeleteView = () => {
 								className="cursor-pointer flex items-center justify-center border-[1px] border-solid outline-0 border-[#FF5A5A] hover:border-[#FF8181] text-white rounded-[54.5px] bg-[#FF5A5A] hover:bg-[#FF8181] text-[14px] h-[40px] w-full py-[13px]"
 								onClick={async () => {
 									try {
-										await acceptRequest(requestId)
+										await acceptRequest(data.id)
 											.unwrap()
 											.then(() => {
 												refetch().then(() => {
@@ -240,7 +239,7 @@ export const VacancyRequestDeleteView = () => {
 						<ArrowIcon />
 					</button>
 					<p className="ml-[40px] font-content-font font-normal text-black text-[28px]/[33.6px]">
-						{data?.title.rendered}
+						{"«" + data?.title.rendered + "»"}
 					</p>
 				</div>
 				<div className="w-[50%] mt-[52px] flex flex-col gap-[40px]">
@@ -291,10 +290,10 @@ export const VacancyRequestDeleteView = () => {
 						</div>
 						<div className="flex flex-col gap-[16px]">
 							<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-								{direction && direction !== 'false' ? 'Профобласть' : subdivision && 'Подразделение'}
+								{data?.acf.direction === "" ? "Подразделение" : "Профобласть"}
 							</p>
 							<p className="font-content-font font-normal text-black text-[18px]/[21px]">
-								{direction && direction !== 'false' ? direction : subdivision && subdivision}
+								{data?.acf.direction === "" ? data?.acf.subdivision : data?.acf.direction}
 							</p>
 						</div>
 					</div>

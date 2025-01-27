@@ -15,7 +15,6 @@ import {
 	useLazyGetVacancyViewQuery,
 	useGetChatMessagesQuery
 } from '../../../store/api/serviceApi'
-import { useLazyGetVacancyViewQuery } from '../../../store/api/serviceApi'
 import { setCurrentVacancy } from '../../../store/reducers/CurrentVacancySlice'
 import { ChatMessageType } from '../../../store/reducers/type'
 

@@ -26,17 +26,19 @@ export const VacancyRequestCreateView = () => {
 	// Ищем id из URL
 	const match = currentUrl.match(/\/create\/(\d+)$/);
 
-	let id_from_url: string | number;
+	let id_from_url: string
+	let page_id : number
 
 	if (match) {
-		id_from_url = match[1];
+		id_from_url = match[1]
 	} else {
-		console.error('ID not found');
+		console.error('id miss')
 	}
+	page_id = Number(id_from_url)
 
-	const { requestId } = useAppSelector(state => state.currentRequest)
+	const requestId = page_id
 
-	const { data: requestView } = useGetVacancyRequestViewQuery(id_from_url)
+	const { data: requestView } = useGetVacancyRequestViewQuery(page_id)
 
 	console.log(requestView)
 

@@ -59,10 +59,10 @@ export const VacancyRequestItem = (props: {
 										.unwrap()
 										.then(result => {
 											dispatch(setCurrentVacancy(result))
-											dispatch(setRequestId(props.requestId))
+											dispatch(setRequestId(props.vacancyId))
 											console.log(result)
 											console.log(result.acf.responsibilities)
-											navigate(`/services/personnelaccounting/request/delete/${props.requestId}`)
+											navigate(`/services/personnelaccounting/request/delete/${props.vacancyId}`)
 										})
 							  }
 					}

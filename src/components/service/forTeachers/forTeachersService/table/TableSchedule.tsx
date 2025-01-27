@@ -114,7 +114,23 @@ export const TableSchedule = ({schedule,isFetching}:any) => {
 	
 		setData(filteredData)
 	}
-
+	console.log('data',data)
+	
+	const sortedData = data?.sort((a:any, b:any) => {
+		// Функция для преобразования времени в минуты
+		const getStartTimeMinutes = (timeSchedule:any) => {
+			const [startTime] = timeSchedule.split('-'); // Получаем начало временного интервала
+			const [hours, minutes] = startTime.split(':').map(Number); // Разделяем часы и минуты
+			return hours * 60 + minutes; // Возвращаем общее количество минут
+		};
+	
+		// Получаем минуты для каждого элемента
+		const aMinutes = getStartTimeMinutes(a.total_time_schedule);
+		const bMinutes = getStartTimeMinutes(b.total_time_schedule);
+	
+		// Сортируем по возрастанию
+		return aMinutes - bMinutes;
+	});
 	
 
 	
@@ -167,7 +183,7 @@ export const TableSchedule = ({schedule,isFetching}:any) => {
 			<div className="my-10  flex gap-12">
 				<Table
 					columns={columns}
-					dataSource={data}
+					dataSource={sortedData}
 					pagination={false}
 					className="max-w-[1050px] w-full drop--lg -[#d4e3f1] rounded-none"
 					locale={{ emptyText: t('noData') }}

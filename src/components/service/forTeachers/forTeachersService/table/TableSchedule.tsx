@@ -115,23 +115,51 @@ export const TableSchedule = ({schedule,isFetching}:any) => {
 		setData(filteredData)
 	}
 	console.log('data',data)
+
+	// const sortedData = data?.sort((a:any, b:any) => {
+	// 	// Функция для преобразования времени в минуты
+	// 	const getStartTimeMinutes = (timeSchedule:any) => {
+	// 		const [startTime] = timeSchedule.split('-'); // Получаем начало временного интервала
+	// 		const [hours, minutes] = startTime.split(':').map(Number); // Разделяем часы и минуты
+	// 		return hours * 60 + minutes; // Возвращаем общее количество минут
+	// 	};
 	
+	// 	// Получаем минуты для каждого элемента
+	// 	const aMinutes = getStartTimeMinutes(a.total_time_schedule);
+	// 	const bMinutes = getStartTimeMinutes(b.total_time_schedule);
+	
+	// 	// Сортируем по возрастанию
+	// 	return aMinutes - bMinutes;
+	// });
 	const sortedData = data?.sort((a:any, b:any) => {
-		// Функция для преобразования времени в минуты
-		const getStartTimeMinutes = (timeSchedule:any) => {
-			const [startTime] = timeSchedule.split('-'); // Получаем начало временного интервала
-			const [hours, minutes] = startTime.split(':').map(Number); // Разделяем часы и минуты
-			return hours * 60 + minutes; // Возвращаем общее количество минут
+		// Преобразуем время начала в минуты
+		const getMinutes = (timeStr:any) => {
+			const [start] = timeStr.split('-');
+			const [h, m] = start.split(':').map(Number);
+			return h * 60 + m;
 		};
 	
-		// Получаем минуты для каждого элемента
-		const aMinutes = getStartTimeMinutes(a.total_time_schedule);
-		const bMinutes = getStartTimeMinutes(b.total_time_schedule);
+		// Преобразуем дату в timestamp (пустые даты считаем минимальными)
+		const getDate = (dateStr:any) => {
+			if (!dateStr) return 0; // Пустые даты идут первыми
+			const [day, month, year] = dateStr.split('.').map(Number);
+			return new Date(2000 + year, month - 1, day).getTime();
+		};
 	
-		// Сортируем по возрастанию
-		return aMinutes - bMinutes;
+		// Сравниваем время
+		const aTime = getMinutes(a.total_time_schedule);
+		const bTime = getMinutes(b.total_time_schedule);
+		
+		if (aTime !== bTime) {
+			return aTime - bTime; // Сортировка по времени
+		}
+	
+		// Если время совпадает, сравниваем даты
+		const aDate = getDate(a.start_day_schedule);
+		const bDate = getDate(b.start_day_schedule);
+		
+		return aDate - bDate; // Сортировка по дате
 	});
-	
 
 	
 

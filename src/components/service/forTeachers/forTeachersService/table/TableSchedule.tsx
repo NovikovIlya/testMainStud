@@ -42,7 +42,7 @@ export const TableSchedule = ({schedule,isFetching}:any) => {
 			title: 'Период',
 			dataIndex: 'total_time_schedule',
 			key: 'time',
-			render: (item:any,array:any) => <p className="text-base whitespace-nowrap">{array?.start_day_schedule ? `${array?.start_day_schedule} - ${array?.finish_day_schedule}` : ''}</p>
+			render: (item:any,array:any) => <p className="text-base whitespace-nowrap">{array?.start_day_schedule ? `${array?.start_day_schedule} - ${array?.finish_day_schedule}` : 'Не указан'}</p>
 		},
 		{
 			title: t('lesson'),
@@ -67,7 +67,13 @@ export const TableSchedule = ({schedule,isFetching}:any) => {
 			key: 'num_auditorium_schedule',
 			dataIndex: 'num_auditorium_schedule',
 			render: (item:any) => <p className="text-base">{item}</p>
-		}
+		},
+		// {
+		// 	title: 'Часы',
+		// 	key: 'num_auditorium_schedule',
+		// 	dataIndex: 'num_auditorium_schedule',
+		// 	render: (item:any) => <p className="text-base">{item}</p>
+		// }
 	]
 
 	useEffect(() => {
@@ -114,7 +120,7 @@ export const TableSchedule = ({schedule,isFetching}:any) => {
 	
 
 	return (
-		<div className={` mt-14  radio w-full justify-center`}>
+		<div className={` mt-14  radio w-full justify-center animate-fade-in`}>
 			<Radio.Group
 				onChange={onChange}
 				defaultValue="monday"

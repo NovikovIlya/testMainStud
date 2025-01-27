@@ -15,6 +15,7 @@ const ScheduleTeacher = () => {
     form.resetFields(['semestr']);
   }
   
+  
   return (
     <div className="p-[80px]">
         <InfoCard text={t('infoTextScdedule')}/>

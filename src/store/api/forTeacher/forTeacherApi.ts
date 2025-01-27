@@ -1,12 +1,13 @@
 import { apiSlice } from '../apiSlice'
+import { testApiSlice } from '../testApiSlice'
 
 
-export const fotTeacherService = apiSlice.injectEndpoints({
+export const fotTeacherService = testApiSlice.injectEndpoints({
     endpoints: builder => ({
-        getEmployeesMessage: builder.query<any, any>({
-            query: (name) => {
+        getScheduleForTeacher: builder.query<any, any>({
+            query: ({year,semester}) => {
             return {
-                    url: `/user-api/chat/employees?name=${name}`,
+                    url: `/to-teacher/schedule?year=${year}&semester=${semester}`,
                     method: 'GET'
                 }
             },
@@ -18,6 +19,6 @@ export const fotTeacherService = apiSlice.injectEndpoints({
 })
 
 export const {
-    useGetEmployeesMessageQuery,
+    useGetScheduleForTeacherQuery,
 } = fotTeacherService
 

@@ -9,7 +9,7 @@ import {
 import i18next from 'i18next'
 import { logOut, setCredentials } from '../reducers/authSlice'
 const baseQuery = fetchBaseQuery({
-	baseUrl: 'http://10.160.88.46/',
+	baseUrl: 'http://178.213.240.20:8080/',
 	prepareHeaders(headers, { getState }) {
 		const token = (getState() as RootState).auth.accessToken
 		if (token) {
@@ -66,5 +66,5 @@ export const testApiSlice = createApi({
 	reducerPath: 'test',
 	baseQuery: baseQueryWithReAuth,
 	endpoints: () => ({}),
-	tagTypes: ['Tasks', 'Contracts', 'Practice','Schedule','Submissions','Application','Order','MyPractice','practiceTeacher','emails','phones','Education','role','Messages'],
+	tagTypes: ['Tasks', 'Contracts', 'Practice','Schedule','Submissions','Application','Order','MyPractice','practiceTeacher','emails','phones','Education','role','Messages','forTeacherScedule'],
 })

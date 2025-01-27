@@ -6,10 +6,9 @@ import { t } from 'i18next'
 
 
 
-export const TableSchedule = ({schedule}:any) => {
-	// const { data: schedule, isLoading } = useGetScheduleQuery()
+export const TableSchedule = ({schedule,isFetching}:any) => {
 	const [data, setData] = useState<any>()
-
+	const [radio,setRadio] = useState('monday')
 	const columns: any = [
 		{
 			title: '',
@@ -17,15 +16,16 @@ export const TableSchedule = ({schedule}:any) => {
 			key: 'type',
 			className: '',
 			render: (item:any, item2:any) => {
+				console.log('item2',item2)
 				return (
 				  <div className={` $ !h-[105px] w-[32px] ${
-					item2.type === 'Практика' ? 'bg-[#844EC9]' :
-					item2.type === 'Потоковая лекция' ? 'bg-[#A7FAFF]' :
-					item2.type === 'Лекция' ? 'bg-[#3A92E3]' :
-					item2.type === 'Семинар' ? 'bg-[#FFE24C]' :
-					item2.type === 'Лабораторное занятие' ? 'bg-[#59C348]' :
-					item2.type === 'Факультатив' ? 'bg-[#E93A3A]' :
-					item2.type === 'Тестирование' ? 'bg-[#FF9838]' :
+					item2?.subject_kind_name === 'Практика' ? 'bg-[#844EC9]' :
+					item2?.subject_kind_name === 'Потоковая лекция' ? 'bg-[#A7FAFF]' :
+					item2?.subject_kind_name === 'Лекция' ? 'bg-[#3A92E3]' :
+					item2?.subject_kind_name === 'Семинар' ? 'bg-[#FFE24C]' :
+					item2?.subject_kind_name === 'Лабораторное занятие' ? 'bg-[#59C348]' :
+					item2?.subject_kind_name === 'Факультатив' ? 'bg-[#E93A3A]' :
+					item2?.subject_kind_name === 'Тестирование' ? 'bg-[#FF9838]' :
 					'bg-[#B3B3B3]' // Default case for "Тип дисциплины не указан"
 				  }`}></div>
 				)
@@ -34,45 +34,79 @@ export const TableSchedule = ({schedule}:any) => {
 		},
 		{
 			title: t('time'),
-			dataIndex: 'time',
+			dataIndex: 'total_time_schedule',
 			key: 'time',
 			render: (item:any) => <p className="text-base whitespace-nowrap">{item}</p>
 		},
 		{
+			title: 'Период',
+			dataIndex: 'total_time_schedule',
+			key: 'time',
+			render: (item:any,array:any) => <p className="text-base whitespace-nowrap">{array?.start_day_schedule ? `${array?.start_day_schedule} - ${array?.finish_day_schedule}` : ''}</p>
+		},
+		{
 			title: t('lesson'),
-			dataIndex: 'name',
+			dataIndex: 'subject_name',
 			key: 'name',
 			render: (item:any) => <p className="text-base">{item}</p>
 		},
 		{
-			title: 'Группа',
-			dataIndex: 'group',
+			title: t('group'),
+			dataIndex: 'group_list',
 			key: 'teacher',
 			render: (item:any) => <p className="text-base">{item}</p>
 		},
 		{
 			title: t('campus'),
 			key: 'building',
-			dataIndex: 'building',
+			dataIndex: 'building_id',
 			render: (item:any) => <p className="text-base">{item}</p>
 		},
 		{
 			title: t('auditorium'),
-			key: 'room',
-			dataIndex: 'room',
+			key: 'num_auditorium_schedule',
+			dataIndex: 'num_auditorium_schedule',
 			render: (item:any) => <p className="text-base">{item}</p>
 		}
 	]
 
-	// useEffect(() => {
-	// 	setData(schedule?.monday)
-	// }, [isLoading, schedule])
+	useEffect(() => {
+		if(schedule){
+			const filteredData = schedule?.filter((item: any) => {
+				switch (radio) {
+					case 'monday': return item.day_week_schedule === 1
+					case 'tuesday': return item.day_week_schedule === 2
+					case 'wednesday': return item.day_week_schedule === 3
+					case 'thursday': return item.day_week_schedule === 4
+					case 'friday': return item.day_week_schedule === 5
+					case 'saturday': return item.day_week_schedule === 6
+					default: return true
+				}
+			})
+			setData(filteredData)
+		}
+		
+	}, [isFetching, schedule])
 	
 
 	const onChange = (e: RadioChangeEvent) => {
 		console.log('e', e)
-		//@ts-ignore
-		setData(schedule[e.target.value])
+		const radioBtn = e.target.value
+		setRadio(e.target.value)
+
+		const filteredData = schedule?.filter((item: any) => {
+			switch (radioBtn) {
+				case 'monday': return item.day_week_schedule === 1
+				case 'tuesday': return item.day_week_schedule === 2
+				case 'wednesday': return item.day_week_schedule === 3
+				case 'thursday': return item.day_week_schedule === 4
+				case 'friday': return item.day_week_schedule === 5
+				case 'saturday': return item.day_week_schedule === 6
+				default: return true
+			}
+		})
+	
+		setData(filteredData)
 	}
 
 	
@@ -81,7 +115,6 @@ export const TableSchedule = ({schedule}:any) => {
 
 	return (
 		<div className={` mt-14  radio w-full justify-center`}>
-			{/* <div className="mb-14 text-[28px]">Мое расписание</div> */}
 			<Radio.Group
 				onChange={onChange}
 				defaultValue="monday"

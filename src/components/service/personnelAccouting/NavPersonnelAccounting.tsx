@@ -169,7 +169,7 @@ export const NavPesonnelAccounting = () => {
 								pathname === '/services/personnelaccounting/vacancyrequests' ||
 								pathname.match(/\/services\/personnelaccounting\/request\/create\/\d+/) ||
 								pathname.match(/\/services\/personnelaccounting\/request\/update\/\d+/) ||
-								pathname.match(/\/services\/personnelaccounting\/request\/delete\/\d+/)
+								pathname.match(/\/services\/personnelaccounting\/request\/(\d+)\/delete\/(\d+)/)
 
 								) && 'opacity-[52%]')
 						)}
@@ -685,7 +685,7 @@ export const NavPesonnelAccounting = () => {
 				{pathname.match(/\/services\/personnelaccounting\/request\/update\/\d+/) && (
 					<VacancyRequestUpdateView />
 				)}
-				{pathname.match(/\/services\/personnelaccounting\/request\/delete\/\d+/) && (
+				{pathname.match(/\/services\/personnelaccounting\/request\/(\d+)\/delete\/(\d+)/) && (
 					<VacancyRequestDeleteView />
 				)}
 

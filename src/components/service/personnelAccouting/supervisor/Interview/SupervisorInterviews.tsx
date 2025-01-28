@@ -51,7 +51,7 @@ export const SupervisorInterviews = () => {
 							w-[8%] ml-[3%] shrink-0 font-content-font font-normal text-[14px]/[14px] text-text-gray
 							"
 					>
-						Дата
+						Дата и время
 					</h3>
 					<h3
 						className="

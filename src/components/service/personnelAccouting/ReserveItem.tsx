@@ -66,7 +66,7 @@ export const ReserveItem = (props: {
 											setModalOpen(false)
 											props.refetch()
 										})
-									openAlert({ type: 'success', text: 'Резюме успешно удалено.' })
+									openAlert({ type: 'success', text: 'Отклик успешно удалён.' })
 								} catch (error: any) {
 									openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 								}

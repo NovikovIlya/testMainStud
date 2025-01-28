@@ -9,7 +9,7 @@ const ScheduleTeacher = () => {
   const [form] = Form.useForm()
   const yearForm = Form.useWatch('year', form);
   const semestrForm = Form.useWatch('semestr', form);
-  const {data:dataSchedule,isFetching} = useGetScheduleForTeacherQuery({year:yearForm,semester:semestrForm},{skip:!yearForm || !semestrForm})
+  const {data:dataSchedule,isFetching,isError,error} = useGetScheduleForTeacherQuery({year:yearForm,semester:semestrForm},{skip:!yearForm || !semestrForm})
 
   const handleYearChange = () => {
     form.resetFields(['semestr']);
@@ -29,7 +29,11 @@ const ScheduleTeacher = () => {
     return years;
   }
   
-  
+  if(isError){
+    // @ts-ignore
+    alert(`Ошибка загрузки данных ${error?.error}`)
+  }
+
   return (
     <div className="p-[80px]">
         <InfoCard text={t('infoTextScdedule')}/>

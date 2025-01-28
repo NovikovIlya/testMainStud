@@ -7,8 +7,10 @@ import { t } from 'i18next'
 
 
 export const TableSchedule = ({schedule,isFetching}:any) => {
+	const initialDay = getCurrentDayName();
+	console.log('initialDay',initialDay)
 	const [data, setData] = useState<any>()
-	const [radio,setRadio] = useState('monday')
+	const [radio,setRadio] = useState(initialDay)
 	const columns: any = [
 		{
 			title: '',
@@ -114,23 +116,23 @@ export const TableSchedule = ({schedule,isFetching}:any) => {
 	
 		setData(filteredData)
 	}
-	console.log('data',data)
 
-	// const sortedData = data?.sort((a:any, b:any) => {
-	// 	// Функция для преобразования времени в минуты
-	// 	const getStartTimeMinutes = (timeSchedule:any) => {
-	// 		const [startTime] = timeSchedule.split('-'); // Получаем начало временного интервала
-	// 		const [hours, minutes] = startTime.split(':').map(Number); // Разделяем часы и минуты
-	// 		return hours * 60 + minutes; // Возвращаем общее количество минут
-	// 	};
+
+	function getCurrentDayName() {
+		const days = [
+		  'sunday', 
+		  'monday', 
+		  'tuesday', 
+		  'wednesday', 
+		  'thursday', 
+		  'friday', 
+		  'saturday'
+		];
+		const currentDayIndex = new Date().getDay();
+		return days[currentDayIndex];
+	}
+
 	
-	// 	// Получаем минуты для каждого элемента
-	// 	const aMinutes = getStartTimeMinutes(a.total_time_schedule);
-	// 	const bMinutes = getStartTimeMinutes(b.total_time_schedule);
-	
-	// 	// Сортируем по возрастанию
-	// 	return aMinutes - bMinutes;
-	// });
 	const sortedData = data?.sort((a:any, b:any) => {
 		// Преобразуем время начала в минуты
 		const getMinutes = (timeStr:any) => {
@@ -167,7 +169,7 @@ export const TableSchedule = ({schedule,isFetching}:any) => {
 		<div className={` mt-14  radio w-full justify-center animate-fade-in`}>
 			<Radio.Group
 				onChange={onChange}
-				defaultValue="monday"
+				defaultValue={initialDay}
 				buttonStyle="solid"
 				className="flex gap-[10px] h-9"
 			>

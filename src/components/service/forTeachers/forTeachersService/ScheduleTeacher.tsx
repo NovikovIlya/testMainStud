@@ -14,6 +14,20 @@ const ScheduleTeacher = () => {
   const handleYearChange = () => {
     form.resetFields(['semestr']);
   }
+
+  const generateYearsArray = () => {
+    const currentYear = new Date().getFullYear();
+    const years = [];
+    
+    for (let year = currentYear; year >= 2008; year--) {
+      years.push({
+        value: year,
+        label: `${year}/${year + 1}`
+      });
+    }
+    
+    return years;
+  }
   
   
   return (
@@ -30,7 +44,7 @@ const ScheduleTeacher = () => {
                 labelCol={{ span: 4 }} // Фиксированная ширина лейбла
                 wrapperCol={{ span: 10 }} // Оставшаяся ширина для инпута
               >
-                <Select   allowClear options={[{ value: 2024, label: '2024' },{ value: 2023, label: '2023' }]}  onChange={handleYearChange} />
+                <Select   allowClear options={generateYearsArray()}  onChange={handleYearChange} />
               </Form.Item>
             </Col>
 
@@ -42,7 +56,7 @@ const ScheduleTeacher = () => {
                 labelCol={{ span: 4 }} // Такая же ширина лейбла
                 wrapperCol={{ span: 10 }} // Такая же ширина инпута
               >
-                <Select disabled={!yearForm}  allowClear options={[{value:1,label:'1'},{value:2,label:'2'}]}/>
+                <Select disabled={!yearForm}  allowClear options={[{value:1,label:'1'},{value:2,label:'2'},{value:3,label:'3'}]}/>
               </Form.Item>
             </Col>
           </Row>

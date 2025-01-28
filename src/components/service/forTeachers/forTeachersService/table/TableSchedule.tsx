@@ -39,7 +39,7 @@ export const TableSchedule = ({schedule,isFetching}:any) => {
 			render: (item:any) => <p className="text-base whitespace-nowrap">{item}</p>
 		},
 		{
-			title: 'Период',
+			title: t('period'),
 			dataIndex: 'total_time_schedule',
 			key: 'time',
 			render: (item:any,array:any) => <p className="text-base whitespace-nowrap">{array?.start_day_schedule ? `${array?.start_day_schedule} - ${array?.finish_day_schedule}` : 'Не указан'}</p>

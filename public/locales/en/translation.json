@@ -421,6 +421,7 @@
 	"group": "Group",
 	"printJournalEmpty" : "Print Journal (Blank)",
 	"printJournalFiled": "Print journal (filled)",
-	"BRS": "BRS"
+	"BRS": "BRS",
+	"period": "Period"
 
 }

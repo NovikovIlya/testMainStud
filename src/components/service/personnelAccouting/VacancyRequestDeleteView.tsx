@@ -20,29 +20,40 @@ export const VacancyRequestDeleteView = () => {
 
 	const [getVacancy, { data, isLoading, error }] = useLazyGetVacancyViewQuery();
 
+	const currentUrl = window.location.pathname;
+
+	let request_id_from_url: string
+
+	const match = currentUrl.match(/\/services\/personnelaccounting\/request\/(\d+)\/delete\/(\d+)/);
+
+	if (match) {
+		request_id_from_url = match[1]
+	} else {
+		console.error('ID not found');
+		return;
+	}
+
 	useEffect(() => {
-		// Получаем текущий URL
-		const currentUrl = window.location.pathname;
+		let vacancy_id_from_url: string
 
-		// Ищем id из URL
-		const match = currentUrl.match(/\/delete\/(\d+)$/);
-
-		let id_from_url: string | undefined;
+		const match = currentUrl.match(/\/services\/personnelaccounting\/request\/(\d+)\/delete\/(\d+)/);
 
 		if (match) {
-			id_from_url = match[1];
+			vacancy_id_from_url = match[2]
 		} else {
-			console.error('ID not found');
-			return;  // Возвращаемся, если id нет
+			console.error('ID not found')
+			return
 		}
-		console.log(id_from_url);
-		// Если id найден, запускаем запрос
-		if (id_from_url) {
-			getVacancy(id_from_url);
-		}
-	}, [getVacancy]);
 
-	console.log(data)
+		if (vacancy_id_from_url) {
+			getVacancy(Number(vacancy_id_from_url))
+		}
+		console.log(vacancy_id_from_url)
+	}, [getVacancy])
+
+
+	console.log(request_id_from_url)
+
 	const navigate = useNavigate()
 	const [acceptRequest] = useAcceptDeleteVacancyRequestMutation()
 
@@ -208,7 +219,7 @@ export const VacancyRequestDeleteView = () => {
 								className="cursor-pointer flex items-center justify-center border-[1px] border-solid outline-0 border-[#FF5A5A] hover:border-[#FF8181] text-white rounded-[54.5px] bg-[#FF5A5A] hover:bg-[#FF8181] text-[14px] h-[40px] w-full py-[13px]"
 								onClick={async () => {
 									try {
-										await acceptRequest(data.id)
+										await acceptRequest(Number(request_id_from_url))
 											.unwrap()
 											.then(() => {
 												refetch().then(() => {

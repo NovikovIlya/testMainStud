@@ -261,13 +261,13 @@ export const VacancyRequestUpdateView = () => {
 			{isEdit ? (
 				<Form
 					initialValues={{
-						post: requestView?.oldData?.post,
-						salary: requestView?.oldData?.salary,
-						responsibilities: requestView?.oldData?.responsibilities,
-						skills: requestView?.oldData?.skills,
-						conditions: requestView?.oldData?.conditions,
-						experience: requestView?.oldData?.experience,
-						employment: requestView?.oldData?.employment,
+						post: requestView?.newData?.post,
+						salary: requestView?.newData?.salary,
+						responsibilities: requestView?.newData?.responsibilities,
+						skills: requestView?.newData?.skills,
+						conditions: requestView?.newData?.conditions,
+						experience: requestView?.newData?.experience,
+						employment: requestView?.newData?.employment,
 					}}
 					layout="vertical"
 					requiredMark={false}

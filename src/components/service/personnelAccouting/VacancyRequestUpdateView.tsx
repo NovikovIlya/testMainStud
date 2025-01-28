@@ -23,18 +23,18 @@ export const VacancyRequestUpdateView = () => {
 	// Ищем id из URL
 	const match = currentUrl.match(/\/update\/(\d+)$/);
 
-	let id_from_url: string | number;
-
+	let id_from_url: string;
+	let current_page_id : number
 	if (match) {
 		id_from_url = match[1];
 	} else {
 		console.error('ID not found');
 	}
-
+	current_page_id = Number(id_from_url)
 	const { requestId } = useAppSelector(state => state.currentRequest)
 
-	const { data: requestView } = useGetVacancyRequestViewQuery(id_from_url)
-
+	const { data: requestView } = useGetVacancyRequestViewQuery(current_page_id)
+	console.log(requestView)
 	const [getVacancyRequestView, queryStatus] = useLazyGetVacancyRequestViewQuery()
 	const navigate = useNavigate()
 	const [acceptRequest] = useAcceptUpdateVacancyRequestMutation()
@@ -62,7 +62,7 @@ export const VacancyRequestUpdateView = () => {
 	const [resultModalText, setResultModalText] = useState<string>('')
 
 	useEffect(() => {
-		getVacancyRequestView(requestId)
+		getVacancyRequestView(current_page_id)
 			.unwrap()
 			.then(req => {
 				setPost(req.newData.post)
@@ -222,11 +222,11 @@ export const VacancyRequestUpdateView = () => {
 													responsibilities: responsibilities as string,
 													skills: skills as string,
 													conditions: conditions as string,
-													vacancyRequestId: requestId
+													vacancyRequestId: current_page_id
 												})
 													.unwrap()
 													.then(() => {
-														acceptRequest(requestId)
+														acceptRequest(current_page_id)
 															.unwrap()
 															.then(() => {
 																refetch()
@@ -239,7 +239,7 @@ export const VacancyRequestUpdateView = () => {
 													})
 										  }
 										: () => {
-												acceptRequest(requestId)
+												acceptRequest(current_page_id)
 													.unwrap()
 													.then(() => {
 														refetch()
@@ -261,13 +261,13 @@ export const VacancyRequestUpdateView = () => {
 			{isEdit ? (
 				<Form
 					initialValues={{
-						post: post,
-						salary: salary,
-						responsibilities: responsibilities,
-						skills: skills,
-						conditions: conditions,
-						experience: experience,
-						employment: employment
+						post: requestView?.newData?.post,
+						salary: requestView?.newData?.salary,
+						responsibilities: requestView?.newData?.responsibilities,
+						skills: requestView?.newData?.skills,
+						conditions: requestView?.newData?.conditions,
+						experience: requestView?.newData?.experience,
+						employment: requestView?.newData?.employment,
 					}}
 					layout="vertical"
 					requiredMark={false}

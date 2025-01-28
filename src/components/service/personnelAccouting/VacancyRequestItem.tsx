@@ -62,7 +62,7 @@ export const VacancyRequestItem = (props: {
 											dispatch(setRequestId(props.requestId))
 											console.log(result)
 											console.log(result.acf.responsibilities)
-											navigate(`/services/personnelaccounting/request/delete/${props.requestId}`)
+											navigate(`/services/personnelaccounting/request/${props.requestId}/delete/${props.vacancyId}`)
 										})
 							  }
 					}

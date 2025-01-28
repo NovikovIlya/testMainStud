@@ -4,11 +4,25 @@ import uuid from 'react-uuid'
 
 import { useInviteSeekerMutation } from '../../../../store/api/serviceApi'
 import { useAlert } from '../../../../utils/Alert/AlertMessage'
+import {useLocation} from "react-router-dom";
 
 export const InviteSeekerForm = (props: { respondId: number; isButtonDisabled: boolean; callback: Function }) => {
 	const [isFormOpen, setIsFormOpen] = useState<boolean>(false)
 	const [format, setFormat] = useState<'OFFLINE' | 'ONLINE'>('OFFLINE')
 	const [reservedTime, setReservedTimes] = useState<{ id: string; time: string; timeToSend: any }[]>([])
+
+	const currentUrl = window.location.pathname;
+
+	const match = currentUrl.match(/\/fullinfo\/(\d+)$/);
+
+	let id_from_url: string;
+	let current_page_id : number
+	if (match) {
+		id_from_url = match[1];
+	} else {
+		console.error('ID not found');
+	}
+	current_page_id = Number(id_from_url)
 
 	const [inviteSeeker, inviteSeekerQueryStatus] = useInviteSeekerMutation()
 
@@ -104,7 +118,7 @@ export const InviteSeekerForm = (props: { respondId: number; isButtonDisabled: b
 									'.020Z'
 							)
 							inviteSeeker({
-								respondId: props.respondId,
+								respondId: current_page_id,
 								format: values.format,
 								mainTime:
 									values.mainTime.$y +

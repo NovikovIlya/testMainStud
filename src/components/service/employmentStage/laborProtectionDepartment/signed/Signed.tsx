@@ -1,6 +1,10 @@
 import { SearchInputIconSvg } from "../../../../../assets/svg/SearchInputIconSvg"
-import React, {useEffect, useState} from "react";
-import {useGetTestResultsQuery, useSetTestResultHiddenMutation} from "../../../../../store/api/serviceApi";
+import {useEffect, useRef, useState} from "react";
+import {
+    useGetTestResultsQuery,
+    useLazyGetTestResultsQuery,
+    useSetTestResultHiddenMutation
+} from "../../../../../store/api/serviceApi";
 import {LoadingOutlined} from "@ant-design/icons";
 import {Button, ConfigProvider, Modal, Spin} from "antd";
 import {WarningModalIconSvg} from "../../../../../assets/svg/WarningModalIconSvg";
@@ -13,17 +17,17 @@ import {DeleteIconHoverLaborSvg} from "../../../../../assets/svg/DeleteIconHover
 
 export const Signed = () => {
 
-    const { openAlert } = useAlert()
-
-    let [searchQuery, setSearchQuery] = useState('');
-    const [reLoading, setReLoading] = useState(false);
     const [isApproveSignedModalOpen, setIsApproveSignedModalOpen] = useState(false)
     const [isSuccessSignedModalOpen, setIsSuccessSignedModalOpen] = useState(false)
-    const [debouncedQuery, setDebouncedQuery] = useState(searchQuery);
-    let [DynamicLoading, setDynamicLoading] = useState(false);
-    const [timer, setTimer] = useState<NodeJS.Timeout | null>(null)
+    const [searchQuery, setSearchQuery] = useState("")
+    const [isSearching, setIsSearching] = useState(false)
+    const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
-    let { data: signed_data = [],  isLoading : loading, refetch } = useGetTestResultsQuery({signed : true, query: debouncedQuery});
+    const { openAlert } = useAlert()
+
+    const { data: test_result_data = [], isLoading: loading, refetch } = useGetTestResultsQuery({signed: false, query: ""})
+
+    const [triggerSearch, { data: searchData, isLoading: isSearchLoading }] = useLazyGetTestResultsQuery()
 
     const [setSeekerHidden, {isLoading}] = useSetTestResultHiddenMutation()
 
@@ -31,36 +35,31 @@ export const Signed = () => {
         id: number;
     }
 
-    const handleRefresh = async () => {
-        setReLoading(true); // Устанавливаем состояние загрузки
-        await refetch(); // Ждем завершения рефреша
-        setReLoading(false); // Сбрасываем состояние загрузки
+    useEffect(() => {
 
-        setIsSuccessSignedModalOpen(true)
-    };
-
-    const handleInputChange = (event : any) => {
-        setDynamicLoading(true)
-        const value = event.target.value
-        setSearchQuery(value)
-
-        if (timer) {
-            clearTimeout(timer)
+        if (searchTimeoutRef.current) {
+            clearTimeout(searchTimeoutRef.current)
         }
 
-        setTimer(setTimeout(() => {
-            setDebouncedQuery(value)
-            setDynamicLoading(false)
-        }, 300))
-    }
 
-    useEffect(() => {
+        searchTimeoutRef.current = setTimeout(() => {
+            setIsSearching(true)
+            triggerSearch({ signed: false, query: searchQuery }).then(() => {
+                setIsSearching(false)
+            })
+        }, 500)
+
+
         return () => {
-            if (timer) {
-                clearTimeout(timer);
+            if (searchTimeoutRef.current) {
+                clearTimeout(searchTimeoutRef.current)
             }
-        };
-    }, [timer]);
+        }
+    }, [searchQuery])
+
+    const handleSearchChange = (e: any) => {
+        setSearchQuery(e.target.value)
+    }
 
     const SignedItem = ( props: SignedItemType ) => {
         return (
@@ -149,13 +148,6 @@ export const Signed = () => {
                                         try {
                                             setIsApproveSignedModalOpen(false)
                                             setSeekerHidden({subStageId: props.id})
-                                                .unwrap()
-                                                .then(()=>{
-                                                    handleRefresh().then(() => {
-                                                            setIsSuccessSignedModalOpen(true)
-
-                                                    })
-                                            })
                                         } catch (error: any) {
                                         openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
                                     }
@@ -214,8 +206,7 @@ export const Signed = () => {
     }
 
     const ItemsContainer = () => {
-
-        if (DynamicLoading) {
+        if (isSearching || isSearchLoading) {
             return (
                 <>
                     <div className="w-full min-h-[26vh] flex items-end">
@@ -234,14 +225,14 @@ export const Signed = () => {
 
         return (
             <div className="mt-[16px] gap-[12px] flex flex-col">
-                {signed_data.map(item => (
+                {(searchData || test_result_data).map(item => (
                     <SignedItem {...item} key={item.id}></SignedItem>
                 ))}
             </div>
         )
     }
 
-    if (loading || reLoading || isLoading) {
+    if (loading) {
         return (
             <>
                 <div className="w-full h-full flex items-center">
@@ -263,9 +254,9 @@ export const Signed = () => {
             <SuccessSignedModal></SuccessSignedModal>
             <div className="w-full px-[53px] pt-[140px] flex flex-col">
                 <h2 className="text-[28px] text-black font-normal">Подписанные</h2>
-                <label className="relative mt-[52px] flex flex-row>">
+                <label className="relative mt-[52px] flex flex-row">
                     <button
-                        className="absolute h-[20px] w-[20px] left-[16px] top-[7px] p-[2px] border-none bg-white cursor-pointer rounded-[10%] hover:bg-[#ECECE9]">
+                        className="absolute h-[20px] w-[20px] left-[16px] top-[7px] p-[2px] border-none bg-white cursor-auto rounded-[10%]">
                         <SearchInputIconSvg/>
                     </button>
                     <input
@@ -273,7 +264,7 @@ export const Signed = () => {
                         className="text-[16px] focus:outline-0 h-[32px] w-[500px] border-[#0000001A] border-[1px] pl-[46px] px-[17px] rounded-[5px]"
                         placeholder="Поиск по ФИО"
                         value={searchQuery}
-                        onChange={handleInputChange}
+                        onChange={handleSearchChange}
                     />
                 </label>
                 <div>

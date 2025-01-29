@@ -1246,6 +1246,7 @@ export const {
 	useGetRespondFullInfoAccountingQuery,
 	useLazyDownloadEmploymentSeekerFileQuery,
 	useGetTestResultsQuery,
+	useLazyGetTestResultsQuery,
 	useSetTestResultSignedMutation,
 	useSetTestResultHiddenMutation,
 	useGetSubdivisionUserQuery,

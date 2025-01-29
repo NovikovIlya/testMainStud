@@ -27,7 +27,7 @@ export const NavForTeachers = () => {
 
 	const items: any = [
 		{ key: 'schedule', icon: <Raspis  />, label: <p className='ml-[10px]'>{t('Schedule')}</p> },
-		{ key: 'BRS', icon: <BrsSvg />, label: <p className='ml-[10px]'>{t('BRS')}</p> },
+		// { key: 'BRS', icon: <BrsSvg />, label: <p className='ml-[10px]'>{t('BRS')}</p> },
 		
 		
 	]	

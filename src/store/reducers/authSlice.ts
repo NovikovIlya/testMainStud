@@ -11,6 +11,7 @@ const initialState: any = {
 	subRole: '',
 	isCollapsed: localStorage.getItem('isCollapsed') === 'true',
 	activeOptions: localStorage.getItem('activeOptions') ? localStorage.getItem('activeOptions')?.split(',') : [],
+	isEditTableScheduleTeacher: false,
 }
 
 const authSlice = createSlice({
@@ -64,11 +65,14 @@ const authSlice = createSlice({
 			localStorage.removeItem('activeOptions')
 			state.activeOptions = []
 			console.log('reset')
+		},
+		setIsEditTableScheduleTeacher:(state,action)=>{
+			state.isEditTableScheduleTeacher = action.payload
 		}
 	}
 })
 
-export const { logOut, setCredentials, setEdit, setRole,setSubRole, setIsCollapsed,setActiveOptions ,setActiveOptionsReset} = authSlice.actions
+export const { logOut, setCredentials, setEdit, setRole,setSubRole, setIsCollapsed,setActiveOptions ,setActiveOptionsReset,setIsEditTableScheduleTeacher} = authSlice.actions
 
 export default authSlice.reducer
 

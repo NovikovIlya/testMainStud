@@ -422,6 +422,10 @@
 	"printJournalEmpty" : "Print Journal (Blank)",
 	"printJournalFiled": "Print journal (filled)",
 	"BRS": "BRS",
-	"period": "Period"
+	"period": "Period",
+	"selectYearSemest": "Select academic year and semester",
+	"vedomosti":"Journal",
+	"journalPos": "Visitor log",
+	"rpd":"PPD, PGE, PVKR"
 
 }

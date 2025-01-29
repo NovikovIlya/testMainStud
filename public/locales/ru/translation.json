@@ -240,7 +240,7 @@
 	"ByStandard": "По стандарту",
 	"Lectures": "Лекции",
 	"Practical": "Практическое",
-	"Laboratory": "Лаборатория",
+	"Laboratory": "Лабораторное занятие",
 	"Independent": "Независимый",
 	"Control": "Контроль",
 	"FirstSemester": " курс - 1 семестр",
@@ -341,7 +341,7 @@
     "streamingLecture": "Потоковая лекция",
     "lecture": "Лекция",
     "seminar": "Семинар",
-    "laboratory": "Лаборатория",
+    "laboratory": "Лабораторное занятие",
     "elective": "Выборочная дисциплина",
     "practice": "Практика",
     "exam": "Экзамен",
@@ -424,7 +424,11 @@
 	"printJournalEmpty" : "Печать журнала (пустой)",
 	"printJournalFiled": "Печать журнала (заполненный)",
 	"BRS": "БРС",
-	"period": "Период"
+	"period": "Период",
+	"selectYearSemest": "Выберите учебный год и семестр",
+	"vedomosti":"Ведомости",
+	"journalPos": "Журнал посещений",
+	"rpd":"РПД, ПГЭ, ПВКР"
 	
 
 }

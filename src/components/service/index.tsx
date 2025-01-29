@@ -16,6 +16,7 @@ import AboutUniversity from '../aboutUniversity/AboutUnversity'
 import { NavPracticeTeacher } from './practiceTeacher/navMyPractice'
 import { NavMessages } from './messages/navMessages'
 import { NavForTeachers } from './forTeachers/navForTeachers'
+import ShortLink from './ShortLink/ShortLink'
 
 export const Service = () => {
 	const { pathname } = useLocation()
@@ -52,6 +53,7 @@ export const Service = () => {
 				)}
 				{pathname.includes('/services/aboutUniversity') && <AboutUniversity />}
 				{pathname.includes('/services/messages') && <NavMessages />}
+				{pathname.includes('/services/shorturl') && <ShortLink />}
 			</div>
 		</div>
 	)

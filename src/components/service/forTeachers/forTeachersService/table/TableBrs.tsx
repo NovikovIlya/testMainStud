@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import type { GetRef, InputRef, TableProps } from 'antd';
 import { Button, Form, Input, Popconfirm, Table } from 'antd';
 import { t } from 'i18next';
+import { useAppDispatch } from '../../../../../store';
+import { setIsEditTableScheduleTeacher } from '../../../../../store/reducers/authSlice';
 
 type FormInstance<T> = GetRef<typeof Form<T>>;
 
@@ -106,11 +108,9 @@ interface DataType {
 
 type ColumnTypes = Exclude<TableProps<DataType>['columns'], undefined>;
 
-const TableBrs = ({dataSource,setDataSource}:any) => {
- 
-
-
-
+const TableBrs = ({dataSource, setDataSource}:any) => {
+  const dispatch = useAppDispatch()
+  const semesctr = 0
 
   const defaultColumns: (ColumnTypes[number] & { editable?: boolean; dataIndex: string })[] = [
     {
@@ -119,21 +119,82 @@ const TableBrs = ({dataSource,setDataSource}:any) => {
         width: '10%',
     },
     {
-      title: 'name',
+      title: 'ФИО',
       dataIndex: 'name',
-      width: '30%',
+      width: '20%',
     },
     {
-      title: 'age',
+      title: 'Сентябрь',
       dataIndex: 'age',
       editable: true,
-      width: '30%',
+      width: '15%',
     },
     {
-      title: 'address',
+      title: 'Октябрь',
       dataIndex: 'address',
       editable: true,
-      width: '30%',
+      width: '15%',
+    },  {
+      title: 'Ноябрь',
+      dataIndex: 'address',
+      editable: true,
+      width: '15%',
+    },
+    {
+      title: 'Декабрь',
+      dataIndex: 'address',
+      editable: true,
+      width: '15%',
+    },
+    {
+      title: 'Сумма баллов',
+      dataIndex: 'address',
+      editable: true,
+      width: '10%',
+    },
+   
+  ];
+
+  const defaultColumnsTwo: (ColumnTypes[number] & { editable?: boolean; dataIndex: string })[] = [
+    {
+        title: 'N',
+        dataIndex: 'N',
+        width: '10%',
+    },
+    {
+      title: 'ФИО',
+      dataIndex: 'name',
+      width: '20%',
+    },
+    {
+      title: 'Февраль',
+      dataIndex: 'age',
+      editable: true,
+      width: '15%',
+    },
+    {
+      title: 'Март',
+      dataIndex: 'address',
+      editable: true,
+      width: '15%',
+    },
+    {
+      title: 'Апрель',
+      dataIndex: 'address',
+      editable: true,
+      width: '15%',
+    },
+    {
+      title: 'Май',
+      dataIndex: 'address',
+      editable: true,
+      width: '15%',
+    },
+    {
+      title: 'Сумма баллов',
+      dataIndex: 'address',
+      editable: true,
+      width: '10%',
     },
    
   ];
@@ -148,6 +209,7 @@ const TableBrs = ({dataSource,setDataSource}:any) => {
       ...row,
     });
     setDataSource(newData);
+    dispatch(setIsEditTableScheduleTeacher(true))
   };
 
   const components = {
@@ -157,7 +219,24 @@ const TableBrs = ({dataSource,setDataSource}:any) => {
     },
   };
 
-  const columns = defaultColumns.map((col) => {
+  const columns = semesctr === 0 ? 
+    defaultColumns.map((col) => {
+    if (!col.editable) {
+      return col;
+    }
+    return {
+      ...col,
+      onCell: (record: DataType) => ({
+        record,
+        editable: col.editable,
+        dataIndex: col.dataIndex,
+        title: col.title,
+        handleSave,
+      }),
+    };
+  }) 
+    :
+    defaultColumnsTwo.map((col) => {
     if (!col.editable) {
       return col;
     }

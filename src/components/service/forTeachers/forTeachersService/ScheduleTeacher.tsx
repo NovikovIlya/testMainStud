@@ -57,8 +57,8 @@ const ScheduleTeacher = () => {
                 name="semestr"
                 label={t('Semester')}
                 labelAlign="left"
-                labelCol={{ span: 4 }} // Такая же ширина лейбла
-                wrapperCol={{ span: 10 }} // Такая же ширина инпута
+                labelCol={{ span: 4 }} 
+                wrapperCol={{ span: 10 }} 
               >
                 <Select disabled={!yearForm}  allowClear options={[{value:1,label:'1'},{value:2,label:'2'},{value:3,label:'3'}]}/>
               </Form.Item>
@@ -78,7 +78,7 @@ const ScheduleTeacher = () => {
           <TableSchedule isFetching={isFetching} schedule={dataSchedule?.subjects} />
           : <Result
               title=""
-              extra='Выберите учебный год и семестр'
+              extra={t('selectYearSemest')}
             />
         }
        </Spin>

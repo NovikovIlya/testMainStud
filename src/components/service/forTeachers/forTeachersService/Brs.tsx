@@ -1,5 +1,5 @@
 import { PrinterOutlined, StarOutlined } from '@ant-design/icons'
-import { Button, Col, Form, Row, Select } from 'antd'
+import { Button, Col, Form, Result, Row, Select } from 'antd'
 import { t } from 'i18next'
 import React, { useState } from 'react'
 
@@ -28,6 +28,8 @@ const Brs = () => {
 		}
 	])
 
+	
+
 	return (
 		<div className="p-[80px]">
 			<InfoCard text={t('infoTextBrs')} />
@@ -43,7 +45,6 @@ const Brs = () => {
 							wrapperCol={{ span: 18 }} // Оставшаяся ширина для инпута
 						>
 							<Select
-								
 								allowClear
 								options={[
 									{ value: '1', label: 'Дисциплина 1' },
@@ -67,18 +68,24 @@ const Brs = () => {
 				</Row>
 			</Form>
 
-			<Row className="flex gap-2">
-				<Button className="rounded-xl" icon={<PrinterOutlined />}>
-					{t('printJournalEmpty')}
-				</Button>
-				<Button className="rounded-xl" icon={<PrinterOutlined />}>
-					{t('printJournalFiled')}
-				</Button>
-			</Row>
+			{true ? (
+				<div className='animate-fade-in'>
+					<Row className="flex gap-2">
+						<Button className="rounded-xl" icon={<PrinterOutlined />}>
+							{t('printJournalEmpty')}
+						</Button>
+						<Button className="rounded-xl" icon={<PrinterOutlined />}>
+							{t('printJournalFiled')}
+						</Button>
+					</Row>
 
-			<TableBrs setDataSource={setDataSource} dataSource={dataSource} />
+					<TableBrs setDataSource={setDataSource} dataSource={dataSource} />
 
-			<InfoCard text={t('infoTextBrs2')}/>
+					<InfoCard text={t('infoTextBrs2')} />
+				</div>
+			) : (
+				<Result title="" extra={t('selectYearSemest')} />
+			)}
 		</div>
 	)
 }

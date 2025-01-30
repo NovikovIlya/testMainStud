@@ -9,18 +9,26 @@ export const ShortLinkApi = emptyApiSlice.injectEndpoints({
             query: (body) => {
             return {
                     url: `https://s.kpfu.ru/yourls-api.php`,
+                   
                     method: 'POST',
-                    body
+                    body :new URLSearchParams(body),
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'Referer': 'https://shelly.kpfu.ru/',
+                        'Accept': '*/*',
+                    }
                 }
             },
          
            
         }),
+        
        
     })
 })
 
 export const {
     useSendShortLinkMutation,
+  
 } = ShortLinkApi
 

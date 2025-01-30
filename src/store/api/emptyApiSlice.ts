@@ -11,7 +11,7 @@ import i18next from 'i18next'
 import { logOut, setCredentials } from '../reducers/authSlice'
 
 const baseQuery = fetchBaseQuery({
-	baseUrl: '',
+	baseUrl: 'https://s.kpfu.ru/',
 	prepareHeaders(headers, { getState }) {
 		const token = (getState() as RootState).auth.accessToken
 		if (token) {
@@ -73,7 +73,8 @@ const baseQueryWithReAuth = async (
 // });
 
 export const emptyApiSlice = createApi({
-	baseQuery: baseQueryWithReAuth,
+	reducerPath: 'testEmpty',
+	baseQuery: baseQuery,
 	endpoints: () => ({}),
-	tagTypes: ['Tasks', 'Contracts', 'Practice','Schedule','Submissions','Application','Order','MyPractice','practiceTeacher','emails','phones','Education','role','Messages','forTeacherScedule'],
+	tagTypes: ['Tasks', 'Contracts', 'Practice','Schedule','Submissions','Application','Order','MyPractice','practiceTeacher','emails','phones','Education','role','Messages','forTeacherScedule','ShortLink'],
 })

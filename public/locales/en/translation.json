@@ -411,11 +411,11 @@
 	"noData": "No data",
 	"selectTeacher": "Select teacher",
 	"forTeachers": "To the teacher",
-	"forTeachersinfo": "Here you can see information about practical classes",
+	"forTeachersinfo": "Tools for tracking personal schedules, student attendance, and managing academic documentation",
 
-	"infoTextScdedule": "Dear teacher! If there is no schedule or if there are discrepancies between the schedule displayed and your actual schedule for the academic year you have specified, please contact the dean's office of your institute or faculty to correct the errors.",
-	"infoTextBrs": "The BRS functionality allows you to enter the results of current monitoring of students' academic performance during the semester on a monthly basis (the column of the accounting month can only be filled in during the given month and five days of the following month)",
-	"infoTextBrs2": "Before working with the BRS tab, you must go to the Schedule tab and check that your dean's office has entered your class schedule correctly.",
+	"infoTextScdedule": "Dear teacher! If there is no timetable or discrepancies are found between the displayed timetable and your actual timetable for the academic year you have determined, PLEASE CONTACT the DEAN's OFFICE of your institute or faculty to correct the identified errors.",
+	"infoTextBrs": "Dear teachers, the PRS functionality allows you to enter the results of the current monitoring of students' academic performance during the semester on a monthly basis (the accounting month column can only be filled in during this month and five days of the following month).",
+	"infoTextBrs2": "Dear teachers, before working with the 'PRS' tab, you need to go to the 'Schedule' tab and check that your dean's office has entered the schedule of your classes correctly",
 	"academicYear": "Academic year",
 	"discipline": "Discipline",
 	"group": "Group",
@@ -426,6 +426,8 @@
 	"selectYearSemest": "Select academic year and semester",
 	"vedomosti":"Journal",
 	"journalPos": "Visitor log",
-	"rpd":"PPD, PGE, PVKR"
+	"rpd":"PPD, PGE, PVKR",
+	"shortLink" : "Short link",
+	"shortLinkInfo": "Здесь вы можете создать короткие ссылки"
 
 }

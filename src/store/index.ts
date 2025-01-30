@@ -23,6 +23,7 @@ import { apiSliceStudent } from './api/apiSliceStudent'
 import { apiSliceTeacher } from './api/apiSliceTeacher'
 import { setupListeners } from '@reduxjs/toolkit/query'
 import { testApiSlice } from './api/testApiSlice'
+import { emptyApiSlice } from './api/emptyApiSlice'
 
 
 export const store = configureStore({
@@ -47,7 +48,8 @@ export const store = configureStore({
 		[testApiSlice.reducerPath]: testApiSlice.reducer,
 		[abiturientApi.reducerPath]: abiturientApi.reducer,
 		[apiSliceStudent.reducerPath]: apiSliceStudent.reducer,
-		[apiSliceTeacher.reducerPath]: apiSliceTeacher.reducer
+		[apiSliceTeacher.reducerPath]: apiSliceTeacher.reducer,
+		[emptyApiSlice.reducerPath]: emptyApiSlice.reducer
 	},
 	//@ts-ignore
 	middleware: getDefaultMiddleware =>
@@ -57,7 +59,8 @@ export const store = configureStore({
 			.concat(abiturientApi.middleware)
 			.concat(apiSliceStudent.middleware)
 			.concat(apiSliceTeacher.middleware)
-			.concat(testApiSlice.middleware),
+			.concat(testApiSlice.middleware)
+			.concat(emptyApiSlice.middleware),
 	devTools: true
 })
 

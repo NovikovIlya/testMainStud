@@ -262,6 +262,16 @@ export const block = {
          
             moved: true,
             static: false,
+        },
+        {
+            w: 1,
+            h: 1,
+            x: 2,
+            y: 5,
+            i: 'shortLink',
+         
+            moved: true,
+            static: false,
         }
 
 

@@ -53,7 +53,7 @@ export const Service = () => {
 				)}
 				{pathname.includes('/services/aboutUniversity') && <AboutUniversity />}
 				{pathname.includes('/services/messages') && <NavMessages />}
-				{pathname.includes('/services/shorturl') && <ShortLink />}
+				{/* {pathname.includes('/services/shorturl') && <ShortLink />} */}
 			</div>
 		</div>
 	)

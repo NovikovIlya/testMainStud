@@ -123,6 +123,7 @@ import EditSchedule from './components/service/practices/forming-schedule/EditSc
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorFallback from './components/ErrorFallback';
 import { InfoUserUpdate } from './components/formUser/InfoUserUpdate';
+import ShortLink from './components/service/ShortLink/ShortLink';
 
 
 const App = () => {
@@ -169,6 +170,7 @@ const App = () => {
                 { path: "parent", element: <ParentForm /> },
                 { path: "services/*", element: <Service /> },
                 { path: "*", element: <NotFound /> },
+                {path:"services/shorturl", element: <ShortLink/>},
 			
                 // { path: "services/practices/formingSchedule/edit/:id", element: <EditSchedule /> },
             ],

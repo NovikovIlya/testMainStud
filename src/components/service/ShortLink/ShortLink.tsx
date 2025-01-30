@@ -1,31 +1,36 @@
 import React, { useEffect, useState } from 'react'
 import { useSendShortLinkMutation } from '../../../store/api/shortLink/ShortLinkApi'
-import { Button, Form, Input, Spin } from 'antd'
+import { Button, Form, Input, List, message, Spin, Typography } from 'antd'
 import { Header } from '../../layout/Header'
 import { useLocalStorageState } from 'ahooks'
-import { LinkOutlined } from '@ant-design/icons'
-
+import { ArrowRightOutlined, CopyOutlined, LinkOutlined } from '@ant-design/icons'
+const { Text } = Typography
 const ShortLink = () => {
   const [form] = Form.useForm()
   const inputForm = Form.useWatch('input', form)
   const [sendShortLink,{data,isLoading,isSuccess} ] = useSendShortLinkMutation()
   const [localData,setLocalData] = useLocalStorageState<any>('use-local-storage-state-demo1',
     {
-      defaultValue: [{newUrl:'ss',oldUrl:'xx'}],
+      defaultValue: [],
     }
   )
 
-  // useEffect(() => {
-  //   if(isSuccess){
-  //     console.log('111',data)
-  //     setLocalData([...localData,{newUrl:data,oldUrl:inputForm}])
-  //   }
-  // },[data,isSuccess])
+  useEffect(() => {
+    if(isSuccess){
+      console.log('111',data)
+      console.log('222',inputForm)
+      setLocalData([
+        {newUrl: data.newUrl,
+          oldUrl:inputForm
+        },
+        ...localData
+       
+      ])
+      form.resetFields()
+    }
+  },[data,isSuccess])
 
-  // console.log(
-  //   `%c ${localData}`,
-  //   "color: white; background: red; font-size: 18px; padding: 5px; border-radius: 5px;"
-  // );
+ 
 
   const onFinish = () => {
     sendShortLink({
@@ -35,28 +40,34 @@ const ShortLink = () => {
         username:'usr-kpfu',
         password:'pass-A7usj82ks'
     }).unwrap().then((res=>{
-      console.log(res)
-      setLocalData([...localData,{newUrl:res,oldUrl:inputForm}])
+      // console.log('reeeeeees',res)
+      // setLocalData([...localData,{newUrl:res,oldUrl:inputForm}])
     }))
   
-    form.resetFields()
+    
+  }
+
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      message.success("Ссылка скопирована в буфер обмена!")
+    })
   }
 
   return (
     <>
     <Header type="service" service="" />
     <Spin spinning={isLoading}>
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
-        <div className="max-w-4xl mx-auto pt-[100px] px-4 sm:px-6 lg:px-8">
+      <div className="w-full">
+        <div className="  pt-[100px] px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <div className="flex justify-center mb-4">
-              <LinkOutlined className="w-16 h-16 text-indigo-600" />
+              <img className='w-[100px] h-[100px]' src='https://cdn-icons-png.flaticon.com/512/6994/6994770.png'/>
             </div>
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">
-              URL Shortener
+            <h1 className="text-4xl font-bold text-gray-900 mb-4 mt-8">
+              Сократитель ссылок
             </h1>
             <p className="text-lg text-gray-600">
-              Transform your long URLs into short, memorable links
+              Сократите ссылки с помощью нашего сервиса.
             </p>
           </div>
 
@@ -69,60 +80,64 @@ const ShortLink = () => {
               <Form.Item name="input" className="mb-6">
                 <Input 
                   size="large"
-                  placeholder="Paste your long URL here..."
+                  placeholder="Вставьте ссылку для сокращения"
                   className="rounded-lg"
                 />
               </Form.Item>
               <Button
                 htmlType="submit"
                 size="large"
-                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg h-12"
+                type='primary'
+            
+                className="w-full  font-semibold rounded-lg h-12"
               >
-                Shorten URL
+                Получить короткую ссылку
+              </Button>
+              <Button 
+               size="large"
+                className="w-full  font-semibold rounded-lg h-12"
+              onClick={()=>{
+                setLocalData([])
+              }}>
+                Очистить список
               </Button>
             </Form>
           </div>
 
-          {localData?.length > 1 && (
-            <div className="bg-white rounded-xl shadow-xl p-8">
-              <div className="flex items-center mb-6">
-                <LinkOutlined className="w-6 h-6 text-indigo-600 mr-2" />
-                <h2 className="text-2xl font-semibold text-gray-900">
-                  Recent Links
-                </h2>
-              </div>
-              <div className="space-y-4">
-                {localData.slice(1).map((item: any) => (
-                  <div
-                    key={item.newUrl}
-                    className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-                  >
-                    <div className="flex-1 min-w-0 mb-2 sm:mb-0">
-                      <p className="text-sm text-gray-500 truncate">
+
+          <div className="bg-white rounded-xl shadow-xl p-8 mb-4">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">История сокращений</h2>
+              <List
+                itemLayout="horizontal"
+                dataSource={localData}
+                renderItem={(item: { oldUrl: string; newUrl: string }, index: number) => (
+                  <List.Item key={index} className="flex items-center py-4 border-b last:border-b-0">
+                    <div className="flex-grow">
+                      <Text className="text-gray-600 mb-1 block" >
+                        <LinkOutlined className="mr-2 text-indigo-600" />
                         {item.oldUrl}
-                      </p>
-                      <a
-                        href={item.newUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-indigo-600 hover:text-indigo-700 font-medium truncate flex items-center gap-1"
-                      >
+                      </Text>
+                      <Text className="text-indigo-600 font-medium block" >
+                        <ArrowRightOutlined className="mr-2" />
                         {item.newUrl}
-                        <LinkOutlined className="w-4 h-4" />
-                      </a>
+                      </Text>
                     </div>
-                    <Button
-                      type="text"
-                      className="text-gray-600 hover:text-indigo-600"
-                      onClick={() => navigator.clipboard.writeText(item.newUrl)}
-                    >
-                      Copy
-                    </Button>
-                  </div>
-                ))}
-              </div>
+                    <div className="flex items-center gap-2">
+                      <Button icon={<CopyOutlined />} onClick={() => copyToClipboard(item.newUrl)} className="ml-4">
+                        Копировать
+                      </Button>
+                      <Button onClick={()=>{
+                        setLocalData((prev:any)=>prev.filter((item:any,i:any)=>i!==index))
+                      }} >Удалить</Button>
+                    </div>
+                  </List.Item>
+                )}
+              />
             </div>
-          )}
+
+          
+
+       
         </div>
       </div>
     </Spin>

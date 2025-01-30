@@ -497,4 +497,23 @@ export const jsxElements = [
 			i: 'ManagementScientificProjects'
 		}
 	},
+	{
+		key: 'shortLink',
+		element: (
+			<TemplateCard
+				info="shortLinkInfo"
+				title="shortLink"
+				buttonText="Watch"
+				img={'/educProg.png'}
+				href="/services/shorturl"
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 0,
+			y: 0,
+			i: 'ManagementScientificProjects'
+		}
+	},
 ]

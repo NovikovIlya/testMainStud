@@ -17,14 +17,22 @@ const Brs = () => {
 			key: '0',
 			name: 'Edward King 0',
 			age: '32',
-			address: 'London, Park Lane no. 0'
+			address: 'London, Park Lane no. 0',
+			september:'sad',
+			october:'azzsdasd',
+			november:'bbasdasd',
+			december:'asssdasd',
 		},
 		{
 			N: '2',
 			key: '1',
-			name: 'Edward King 1',
+			name: '11',
 			age: '32',
-			address: 'London, Park Lane no. 1'
+			address: 'ии',
+			september:'00',
+			october:'55',
+			november:'66',
+			december:'77',
 		}
 	])
 

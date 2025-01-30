@@ -51,7 +51,7 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
   const [editing, setEditing] = useState(false);
   const inputRef = useRef<InputRef>(null);
   const form = useContext(EditableContext)!;
-
+ 
   useEffect(() => {
     if (editing) {
       inputRef.current?.focus();
@@ -66,9 +66,10 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
   const save = async () => {
     try {
       const values = await form.validateFields();
-
+    
       toggleEdit();
-      handleSave({ ...record, ...values });
+      // @ts-ignore
+      handleSave({ ...record, ...values },children);
     } catch (errInfo) {
       console.log('Save failed:', errInfo);
     }
@@ -83,7 +84,7 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
         name={dataIndex}
         rules={[{ required: true, message: `${title} is required.` }]}
       >
-        <Input ref={inputRef} onPressEnter={save} onBlur={save} />
+        <Input  ref={inputRef} onPressEnter={save} onBlur={save} />
       </Form.Item>
     ) : (
       <div
@@ -125,24 +126,24 @@ const TableBrs = ({dataSource, setDataSource}:any) => {
     },
     {
       title: 'Сентябрь',
-      dataIndex: 'age',
+      dataIndex: 'september',
       editable: true,
       width: '15%',
     },
     {
       title: 'Октябрь',
-      dataIndex: 'address',
+      dataIndex: 'october',
       editable: true,
       width: '15%',
     },  {
       title: 'Ноябрь',
-      dataIndex: 'address',
+      dataIndex: 'november',
       editable: true,
       width: '15%',
     },
     {
       title: 'Декабрь',
-      dataIndex: 'address',
+      dataIndex: 'december',
       editable: true,
       width: '15%',
     },
@@ -200,17 +201,45 @@ const TableBrs = ({dataSource, setDataSource}:any) => {
   ];
 
 
-  const handleSave = (row: DataType) => {
+  const handleSave = (row: any,children:any) => {
+    console.log('children',children)
+    console.log('row',row)
     const newData = [...dataSource];
     const index = newData.findIndex((item) => row.key === item.key);
+    console.log('index',index)
     const item = newData[index];
+    console.log('item',item)
     newData.splice(index, 1, {
       ...item,
       ...row,
     });
     setDataSource(newData);
-    dispatch(setIsEditTableScheduleTeacher(true))
+    console.log('0000',children[1],'----',row.address)
+    if(children[1]!==row.address){
+      dispatch(setIsEditTableScheduleTeacher(true))
+    }
+   
   };
+  // const handleSave = (row: any) => {
+  //   const newData = [...dataSource];
+  //   const index = newData.findIndex((item) => row.key === item.key);
+  //   const item = newData[index];
+  
+  //   // Обновляем только измененные поля
+  //   const updatedRow = {
+  //     ...item,
+  //     ...row,
+  //   };
+  
+  //   newData.splice(index, 1, updatedRow);
+  //   setDataSource(newData);
+  
+  //   // Проверка на изменение значения
+  //   if (item.address !== row.address) {
+  //     dispatch(setIsEditTableScheduleTeacher(true));
+  //   }
+  // };
+  
 
   const components = {
     body: {
@@ -251,10 +280,11 @@ const TableBrs = ({dataSource, setDataSource}:any) => {
       }),
     };
   });
-
+  console.log('dataSource',dataSource)
   return (
     <div className='mt-4'>
       <Table<DataType>
+        rowKey={(record) => record.key}
         components={components}
         rowClassName={() => 'editable-row'}
         bordered

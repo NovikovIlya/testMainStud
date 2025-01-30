@@ -69,7 +69,7 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
     
       toggleEdit();
       // @ts-ignore
-      handleSave({ ...record, ...values },children);
+      handleSave({ ...record, ...values },children,record[dataIndex]);
     } catch (errInfo) {
       console.log('Save failed:', errInfo);
     }
@@ -201,7 +201,7 @@ const TableBrs = ({dataSource, setDataSource}:any) => {
   ];
 
 
-  const handleSave = (row: any,children:any) => {
+  const handleSave = (row: any,children:any,oldValue:any) => {
     console.log('children',children)
     console.log('row',row)
     const newData = [...dataSource];
@@ -214,8 +214,8 @@ const TableBrs = ({dataSource, setDataSource}:any) => {
       ...row,
     });
     setDataSource(newData);
-    console.log('0000',children[1],'----',row.address)
-    if(children[1]!==row.address){
+    console.log('0000',children[1],'----',oldValue)
+    if(children[1]!==oldValue){
       dispatch(setIsEditTableScheduleTeacher(true))
     }
    

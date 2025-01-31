@@ -218,7 +218,7 @@ export const TableSchedule = ({schedule,isFetching}:any) => {
 					className="max-w-[1050px] w-full drop--lg -[#d4e3f1] rounded-none"
 					locale={{ emptyText: t('noData') }}
 				/>
-				<div className={` flex flex-col gap-6 text-sm`}>
+				<div className={` flex flex-col gap-6 text-sm `}>
 					<div className="flex items-center gap-2">
 						<div className="min-w-3 min-h-3 w-[11px] h-[11px]  rounded-full bg-[#A7FAFF]" />
 						{t('streamingLecture')}

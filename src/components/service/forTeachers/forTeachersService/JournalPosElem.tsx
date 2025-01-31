@@ -5,8 +5,9 @@ import React, { useState } from 'react'
 
 import InfoCard from './InfoCard'
 import TableBrs from './table/TableBrs'
+import TableJournalPos from './table/TableJournalPos'
 
-const Brs = () => {
+const JournalPosElem = () => {
 	const [form] = Form.useForm()
 	const discilineForm = Form.useWatch('disciline', form)
 	const groupeForm = Form.useWatch('group', form)
@@ -87,7 +88,7 @@ const Brs = () => {
 						</Button>
 					</Row>
 
-					<TableBrs setDataSource={setDataSource} dataSource={dataSource} />
+					<TableJournalPos setDataSource={setDataSource} dataSource={dataSource} />
 
 					<InfoCard text={t('infoTextBrs2')} />
 				</div>
@@ -98,4 +99,4 @@ const Brs = () => {
 	)
 }
 
-export default Brs
+export default JournalPosElem

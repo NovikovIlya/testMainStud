@@ -62,7 +62,7 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
       <Form.Item
         style={{ margin: 0 ,width:'auto'}}
         name={dataIndex}
-        rules={[{ required: true, message: `${title} является обязательным.` }]}
+        rules={[{ required: true, message: `${title} is required.` }]}
       >
         <Input  ref={inputRef} onPressEnter={save} onBlur={save} />
       </Form.Item>
@@ -85,7 +85,7 @@ const TableBrs = ({dataSource, setDataSource}:any) => {
   const dispatch = useAppDispatch()
   const semesctr = 0
 
-  const defaultColumns: (ColumnTypes[number] & { editable?: boolean; dataIndex: string })[] = [
+  const defaultColumns: any = [
     {
         title: 'N',
         dataIndex: 'N',
@@ -97,10 +97,17 @@ const TableBrs = ({dataSource, setDataSource}:any) => {
       width: '20%',
     },
     {
-      title: 'Сентябрь',
-      dataIndex: 'september',
-      editable: true,
-      width: '15%',
+      title: 'ПН',
+      
+      children: [
+        {
+          title: 'Age',
+          dataIndex: 'age',
+          key: 'age',
+          width: 150,
+          
+        }
+      ],
     },
     {
       title: 'Октябрь',
@@ -210,7 +217,7 @@ const TableBrs = ({dataSource, setDataSource}:any) => {
   };
 
   const columns = semesctr === 0 ? 
-    defaultColumns.map((col) => {
+    defaultColumns.map((col:any) => {
     if (!col.editable) {
       return col;
     }
@@ -226,7 +233,7 @@ const TableBrs = ({dataSource, setDataSource}:any) => {
     };
   }) 
     :
-    defaultColumnsTwo.map((col) => {
+    defaultColumnsTwo.map((col:any) => {
     if (!col.editable) {
       return col;
     }

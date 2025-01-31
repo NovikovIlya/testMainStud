@@ -15,6 +15,7 @@ import { JournalPos } from '../../../assets/svg/JournalPos'
 import { useAppDispatch, useAppSelector } from '../../../store'
 import { setIsEditTableScheduleTeacher } from '../../../store/reducers/authSlice'
 import { Pvd } from '../../../assets/svg/Pvd'
+import JournalPosElem from './forTeachersService/JournalPosElem'
 
 
 
@@ -79,6 +80,8 @@ export const NavForTeachers = () => {
 			<div className="bg-[#F5F8FB] w-full pt-[80px]      ">
 				{current === 'schedule' && <ScheduleTeacher/>}
 				{current === 'BRS' ? <Brs/> : ''}
+				{current === 'vedomosti' ? <></> : ''}
+				{current === 'journalPos' ? <JournalPosElem/> : ''}
 			</div>
 			
 			

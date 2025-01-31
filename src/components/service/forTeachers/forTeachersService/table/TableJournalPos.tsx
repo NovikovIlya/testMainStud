@@ -258,7 +258,6 @@ const TableBrs = ({dataSource, setDataSource}:any) => {
         bordered
         dataSource={dataSource}
         columns={columns as ColumnTypes}
-        className=''
       
       />
       <Button className='top-[-50px] rounded-xl' type='primary'>{t('Save')}</Button>

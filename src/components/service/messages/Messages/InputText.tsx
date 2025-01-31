@@ -38,7 +38,7 @@ const InputText = ({disabled=false,files,text='',clickTextArea,isModal=false,for
 						color: disabled ? 'rgba(0, 0, 0, 0.25)' : 'black' // Цвет текста
 					  }}
 					maxLength={75}
-					placeholder="Напишите сообщение собеседнику!"
+					
 					className={`${isModal ? `rounded-[10px_0px_0px_10px]` : `rounded-[10px_0px_0px_10px]` }   !h-[54px]`}
 					onClick={clickTextArea}
                     value={text}

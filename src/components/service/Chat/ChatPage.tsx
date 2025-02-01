@@ -126,6 +126,7 @@ export const ChatPage = () => {
 				const msgBody = JSON.parse(message.body)
 				if (msgBody.type === 'MESSAGE') {
 					setMessages(prev => [msgBody.message as ChatMessageType, ...prev])
+					dispatchEvent(new CustomEvent('newmessage', { detail: { date: msgBody.message.sendDate } }))
 					readMsg({
 						chatId: chatIdState.chatId,
 						messageId: msgBody.message.id,

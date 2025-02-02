@@ -7,8 +7,8 @@ import { respondStatus } from '../../../../store/reducers/type'
 import { VacancyRespondItem } from '../VacancyRespondItem'
 
 export const RespondsSupervisor = () => {
-	const [status, setStatus] = useState('все')
-	const { data: responds = [], isLoading: loading } = useGetSupervisorRespondsQuery()
+	const [status, setStatus] = useState<string>('status=')
+	const { data: responds = [], isLoading: loading } = useGetSupervisorRespondsQuery(status)
 
 	if (loading) {
 		return (
@@ -38,52 +38,55 @@ export const RespondsSupervisor = () => {
 					>
 						<label
 							className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
-								status === 'все' ? 'text-white bg-dasha-blue' : 'text-black border-solid border-black border-[1px]'
+								status === 'status=' ? 'text-white bg-dasha-blue' : 'text-black border-solid border-black border-[1px]'
 							} font-normal text-[16px]/[16px]`}
 						>
-							<Radio value={'все'} className="hidden"></Radio>
+							<Radio value={'status='} className="hidden"></Radio>
 							все
 						</label>
 						<label
 							className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
-								status === respondStatus[respondStatus.IN_PERSONNEL_DEPT_REVIEW]
-									? 'text-white bg-dasha-blue'
-									: 'text-black border-solid border-black border-[1px]'
-							} font-normal text-[16px]/[16px]`}
-						>
-							<Radio value={respondStatus[respondStatus.IN_PERSONNEL_DEPT_REVIEW]} className="hidden"></Radio>
-							на рассмотрении
-						</label>
-						<label
-							className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
-								status === respondStatus[respondStatus.INVITATION]
-									? 'text-white bg-dasha-blue'
-									: 'text-black border-solid border-black border-[1px]'
-							} font-normal text-[16px]/[16px]`}
-						>
-							<Radio value={respondStatus[respondStatus.INVITATION]} className="hidden"></Radio>
-							приглашение на собеседование
-						</label>
-						<label
-							className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
-								status === respondStatus[respondStatus.EMPLOYMENT_REQUEST]
-									? 'text-white bg-dasha-blue'
-									: 'text-black border-solid border-black border-[1px]'
-							} font-normal text-[16px]/[16px]`}
-						>
-							<Radio value={respondStatus[respondStatus.EMPLOYMENT_REQUEST]} className="hidden"></Radio>
-							этап трудоустройства
-						</label>
-						<label
-							className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
-								status ===
-								`statuses=${respondStatus[respondStatus.IN_RESERVE]}&statuses=${respondStatus[respondStatus.ARCHIVE]}`
+								status === 'status=' + respondStatus[respondStatus.IN_PERSONNEL_DEPT_REVIEW]
 									? 'text-white bg-dasha-blue'
 									: 'text-black border-solid border-black border-[1px]'
 							} font-normal text-[16px]/[16px]`}
 						>
 							<Radio
-								value={`statuses=${respondStatus[respondStatus.IN_RESERVE]}&statuses=${
+								value={'status=' + respondStatus[respondStatus.IN_PERSONNEL_DEPT_REVIEW]}
+								className="hidden"
+							></Radio>
+							на рассмотрении
+						</label>
+						<label
+							className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
+								status === 'status=' + respondStatus[respondStatus.INVITATION]
+									? 'text-white bg-dasha-blue'
+									: 'text-black border-solid border-black border-[1px]'
+							} font-normal text-[16px]/[16px]`}
+						>
+							<Radio value={'status=' + respondStatus[respondStatus.INVITATION]} className="hidden"></Radio>
+							приглашение на собеседование
+						</label>
+						<label
+							className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
+								status === 'status=' + respondStatus[respondStatus.EMPLOYMENT]
+									? 'text-white bg-dasha-blue'
+									: 'text-black border-solid border-black border-[1px]'
+							} font-normal text-[16px]/[16px]`}
+						>
+							<Radio value={'status=' + respondStatus[respondStatus.EMPLOYMENT]} className="hidden"></Radio>
+							этап трудоустройства
+						</label>
+						<label
+							className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
+								status ===
+								`status=${respondStatus[respondStatus.IN_RESERVE]}&status=${respondStatus[respondStatus.ARCHIVE]}`
+									? 'text-white bg-dasha-blue'
+									: 'text-black border-solid border-black border-[1px]'
+							} font-normal text-[16px]/[16px]`}
+						>
+							<Radio
+								value={`status=${respondStatus[respondStatus.IN_RESERVE]}&status=${
 									respondStatus[respondStatus.ARCHIVE]
 								}`}
 								className="hidden"

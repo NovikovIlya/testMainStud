@@ -199,9 +199,7 @@ export const SupervisorUpdateVacancy = () => {
 					>
 						<ArrowIcon />
 					</button>
-					<p className="ml-[32px] font-content-font font-normal text-black text-[28px]/[33.6px]">
-						{'«' + post + '»'}
-					</p>
+					<p className="ml-[32px] font-content-font font-normal text-black text-[28px]/[33.6px]">{'«' + post + '»'}</p>
 				</div>
 				{isEdit ? (
 					<Form

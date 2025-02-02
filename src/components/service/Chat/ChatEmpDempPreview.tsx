@@ -1,6 +1,7 @@
 import { Badge } from 'antd'
 import clsx from 'clsx'
-import { useState } from 'react'
+import dayjs from 'dayjs'
+import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 
@@ -40,6 +41,23 @@ export const ChatEmpDempPreview = (props: {
 	}
 
 	const [isChatOpen, setIsChatOpen] = useState<boolean>(false)
+
+	const [lastMessageDate, setLastMessageDate] = useState<string>(props.lastMessageDate)
+
+	const smallhandler = (e: CustomEventInit) => {
+		console.log('Отработка')
+		console.log(pathname)
+		pathname.includes(props.chatId.toString()) && console.log('Received a new message!')
+		pathname.includes(props.chatId.toString()) && console.log(e.detail.date)
+		pathname.includes(props.chatId.toString()) && setLastMessageDate(prev => e.detail.date as string)
+	}
+
+	useEffect(() => {
+		window.addEventListener('newmessage', smallhandler)
+		return () => {
+			window.removeEventListener('newmessage', smallhandler)
+		}
+	}, [pathname])
 
 	return (
 		<>
@@ -97,13 +115,13 @@ export const ChatEmpDempPreview = (props: {
 							</p>
 						</div>
 						<div className="flex flex-col ml-auto">
-							{props.lastMessageDate && (
+							{lastMessageDate && (
 								<p className=" font-content-font font-normal text-black text-[12px]/[14.4px] opacity-[52%]">
-									{props.lastMessageDate.substring(8, 10) +
+									{lastMessageDate.substring(8, 10) +
 										' ' +
-										ChatMessageDateDisplayEnum[parseInt(props.lastMessageDate.substring(5, 7)) - 1].substring(0, 3) +
+										ChatMessageDateDisplayEnum[parseInt(lastMessageDate.substring(5, 7)) - 1].substring(0, 3) +
 										' ' +
-										props.lastMessageDate.substring(11, 16)}
+										dayjs(lastMessageDate).format().substring(11, 16)}
 								</p>
 							)}
 

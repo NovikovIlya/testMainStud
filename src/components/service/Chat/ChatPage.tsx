@@ -288,16 +288,19 @@ export const ChatPage = () => {
 				})
 			})
 		} else {
-			data.text !== '' &&
+			msgInputText !== '' &&
 				postMsg({
 					id: chatIdState.chatId,
-					text: data.text,
+					text: msgInputText,
 					name: sessionId,
 					role: isEmpDemp ? 'PERSONNEL_DEPARTMENT' : 'SEEKER'
 				})
 					.unwrap()
 					.then(msgData => setMessages([msgData, ...messages]))
-			setMsgInputText('')
+					.then(() => {
+						console.log('Зачистка')
+						setMsgInputText('')
+					})
 		}
 	}
 
@@ -364,6 +367,9 @@ export const ChatPage = () => {
 							render={({ field }) => (
 								<div className="flex flex-col w-full min-h-full">
 									<textarea
+										onKeyDown={e => {
+											!e.shiftKey && e.code === 'Enter' && handleSubmit(handleMessage)()
+										}}
 										disabled={ChatStatus.chatClosed}
 										{...register('text')}
 										value={msgInputText}

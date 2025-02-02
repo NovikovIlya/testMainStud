@@ -73,6 +73,8 @@ export const ChatPreview = (props: {
 		navigate(url)
 	}
 
+	const ChatStatus = useAppSelector(state => state.chatResponceStatus)
+
 	const [isChatOpen, setIsChatOpen] = useState<boolean>(false)
 
 	return (
@@ -86,8 +88,8 @@ export const ChatPreview = (props: {
 					dispatch(setCurrentVacancyName(props.respName))
 					handleNavigate(
 						isEmpDemp
-							? `/services/personnelaccounting/chat/id/${chatInfo.id}`
-							: `/services/myresponds/chat/id/${chatInfo.id}`
+							? `/services/personnelaccounting/chat/id/${chatInfo.id}?status=opened`
+							: `/services/myresponds/chat/id/${chatInfo.id}?status=opened`
 					)
 					setIsChatOpen(true)
 				}}

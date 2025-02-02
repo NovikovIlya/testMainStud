@@ -48,11 +48,8 @@ export const VacancyRequestDeleteView = () => {
 		if (vacancy_id_from_url) {
 			getVacancy(Number(vacancy_id_from_url))
 		}
-		console.log(vacancy_id_from_url)
 	}, [getVacancy])
 
-
-	console.log(request_id_from_url)
 
 	const navigate = useNavigate()
 	const [acceptRequest] = useAcceptDeleteVacancyRequestMutation()

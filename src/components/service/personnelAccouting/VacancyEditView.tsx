@@ -49,8 +49,8 @@ export const VacancyEditView = () => {
 
 	const { data: categories = [] } = useGetCategoriesQuery()
 	const [categoryTitle, setCategoryTitle] = useState<string>(currentVacancy?.acf.category as string)
-	const { data: directions = [] } = useGetDirectionsQuery(categoryTitle)
-	const { data: subdivisions = [] } = useGetSubdivisionsQuery(categoryTitle)
+	const { data: directions = [] } = useGetDirectionsQuery(data?.acf.category as string)
+	const { data: subdivisions = [] } = useGetSubdivisionsQuery(data?.acf.category as string)
 
 	const { openAlert } = useAlert()
 
@@ -62,16 +62,26 @@ export const VacancyEditView = () => {
 	const [isEdit, setIsEdit] = useState<boolean>(false)
 	const [isSendRequestButtonActivated, setIsSendRequestButtonActivated] = useState<boolean>(false)
 
-	const [post, setPost] = useState<string | undefined>(currentVacancy?.title.rendered)
-	const [experience, setExperience] = useState<string | undefined>(currentVacancy?.acf.experience)
-	const [employment, setEmployment] = useState<string | undefined>(currentVacancy?.acf.employment)
-	const [salary, setSalary] = useState<string | undefined>(currentVacancy?.acf.salary)
-	const [category, setCategory] = useState<string | undefined>(currentVacancy?.acf.category)
-	const [direction, setDirection] = useState<string | undefined>(currentVacancy?.acf.direction)
-	const [subdivision, setSubdivision] = useState<string | undefined>(currentVacancy?.acf.subdivision)
+	const [post, setPost] = useState<string | undefined>(data?.title.rendered)
+	const [experience, setExperience] = useState<string | undefined>(data?.acf.experience)
+	const [employment, setEmployment] = useState<string | undefined>(data?.acf.employment)
+	const [salary, setSalary] = useState<string | undefined>(data?.acf.salary)
+	const [category, setCategory] = useState<string | undefined>(data?.acf.category)
+	const [direction, setDirection] = useState<string | undefined>(data?.acf.direction)
+	const [subdivision, setSubdivision] = useState<string | undefined>(data?.acf.subdivision)
+
+	useEffect(()=>{
+		setPost(data?.title.rendered)
+		setExperience(data?.acf.experience)
+		setEmployment(data?.acf.employment)
+		setSalary(data?.acf.salary)
+		setCategory(data?.acf.category)
+		setDirection(data?.acf.direction)
+		setSubdivision(data?.acf.subdivision)
+	}, [data])
 
 	const [responsibilities, setResponsibilities] = useState<string | undefined>(
-		currentVacancy?.acf.responsibilities
+		data?.acf.responsibilities
 			.replace(/<strong>/g, '')
 			.replace(/<\/strong>/g, '')
 			.replace(/<u>/g, '')
@@ -87,7 +97,7 @@ export const VacancyEditView = () => {
 	)
 
 	const [skills, setSkills] = useState<string | undefined>(
-		currentVacancy?.acf.skills
+		data?.acf.skills
 			.replace(/<strong>/g, '')
 			.replace(/<\/strong>/g, '')
 			.replace(/<u>/g, '')
@@ -103,7 +113,7 @@ export const VacancyEditView = () => {
 	)
 
 	const [conditions, setConditions] = useState<string | undefined>(
-		currentVacancy?.acf.conditions
+		data?.acf.conditions
 			.replace(/<strong>/g, '')
 			.replace(/<\/strong>/g, '')
 			.replace(/<u>/g, '')
@@ -117,6 +127,12 @@ export const VacancyEditView = () => {
 			.replace(/<li>/g, '')
 			.replace(/<\/li>/g, '')
 	)
+
+	useEffect(()=>{
+		setResponsibilities(data?.acf.responsibilities)
+		setSkills(data?.acf.skills)
+		setConditions(data?.acf.conditions)
+	}, [data])
 
 	const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<boolean>(false)
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false)
@@ -176,7 +192,7 @@ export const VacancyEditView = () => {
 							className="cursor-pointer flex items-center justify-center border-[1px] border-solid outline-0 border-[#FF5A5A] hover:border-[#FF8181] text-white rounded-[54.5px] bg-[#FF5A5A] hover:bg-[#FF8181] text-[14px] h-[40px] w-full py-[13px]"
 							onClick={async () => {
 								try {
-									await deleteVacancy(currentVacancy?.id as number)
+									await deleteVacancy(data?.id as number)
 										.unwrap()
 										.then(() => {
 											setResultModalText('Вакансия успешно удалена.')
@@ -240,7 +256,7 @@ export const VacancyEditView = () => {
 						<ArrowIcon />
 					</button>
 					<p className="ml-[40px] font-content-font font-normal text-black text-[28px]/[33.6px]">
-						{currentVacancy !== null ? '«' + post + '»' : ''}
+						{post}
 					</p>
 				</div>
 				{isEdit ? (
@@ -253,7 +269,7 @@ export const VacancyEditView = () => {
 							skills: skills,
 							conditions: conditions,
 							category: category,
-							direction: categories.find(cat => cat.title === categoryTitle)?.direction ? direction : subdivision,
+							direction: categories.find(cat => cat.title === data?.acf.category)?.direction ? direction : subdivision,
 							experience: experience,
 							employment: employment
 						}}
@@ -416,46 +432,46 @@ export const VacancyEditView = () => {
 						<div className="flex gap-[60px]">
 							<div className="flex flex-col gap-[16px]">
 								<p className="font-content-font font-bold text-black text-[18px]/[21px]">Требуемый опыт работы:</p>
-								<p className="font-content-font font-normal text-black text-[18px]/[21px]">{data?.acf.experience}</p>
+								<p className="font-content-font font-normal text-black text-[18px]/[21px]">{experience}</p>
 							</div>
 							<div className="flex flex-col gap-[16px]">
 								<p className="font-content-font font-bold text-black text-[18px]/[21px]">Тип занятости:</p>
-								<p className="font-content-font font-normal text-black text-[18px]/[21px]">{data?.acf.employment}</p>
+								<p className="font-content-font font-normal text-black text-[18px]/[21px]">{employment}</p>
 							</div>
 							<div className="flex flex-col gap-[16px]">
 								<p className="font-content-font font-bold text-black text-[18px]/[21px]">Заработная плата:</p>
-								<p className="font-content-font font-normal text-black text-[18px]/[21px]">{data?.acf.salary}</p>
+								<p className="font-content-font font-normal text-black text-[18px]/[21px]">{salary}</p>
 							</div>
 						</div>
 						<div className="flex flex-col gap-[16px]">
 							<p className="font-content-font font-bold text-black text-[18px]/[21px]">Задачи:</p>
 							<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-pre-line">
-								{data?.acf.responsibilities}
+								{responsibilities}
 							</p>
 						</div>
 						<div className="flex flex-col gap-[16px]">
 							<p className="font-content-font font-bold text-black text-[18px]/[21px]">Требования:</p>
 							<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-pre-line">
-								{data?.acf.skills}
+								{skills}
 							</p>
 						</div>
 						<div className="flex flex-col gap-[16px]">
 							<p className="font-content-font font-bold text-black text-[18px]/[21px]">Условия:</p>
 							<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-pre-line">
-								{data?.acf.conditions}
+								{conditions}
 							</p>
 						</div>
 						<div className="flex gap-[40px]">
 							<div className="flex flex-col gap-[16px]">
 								<p className="font-content-font font-bold text-black text-[18px]/[21px]">Категория сотрудников </p>
-								<p className="font-content-font font-normal text-black text-[18px]/[21px]">{data?.acf.category}</p>
+								<p className="font-content-font font-normal text-black text-[18px]/[21px]">{category}</p>
 							</div>
 							<div className="flex flex-col gap-[16px]">
 								<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-									{direction && direction !== 'false' ? 'Профобласть' : subdivision && 'Подразделение'}
+									{direction === "" ? "Подразделение" : "Профобласть"}
 								</p>
 								<p className="font-content-font font-normal text-black text-[18px]/[21px]">
-									{direction && direction !== 'false' ? direction : subdivision && subdivision}
+									{direction === "" ? subdivision : direction}
 								</p>
 							</div>
 						</div>
@@ -492,7 +508,7 @@ export const VacancyEditView = () => {
 												conditions: conditions as string,
 												category: category as string,
 												direction: direction as string,
-												vacancyId: currentVacancy?.id as number
+												vacancyId: data?.id as number
 											})
 												.unwrap()
 												.then(() => {

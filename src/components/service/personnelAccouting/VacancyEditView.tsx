@@ -1,6 +1,8 @@
+import { LoadingOutlined } from '@ant-design/icons'
 import { Button, ConfigProvider, Form, Input, Modal, Select, Spin } from 'antd'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+
 import { ModalOkSvg } from '../../../assets/svg/ModalOkSvg'
 import { WarningModalIconSvg } from '../../../assets/svg/WarningModalIconSvg'
 import { useAppSelector } from '../../../store'
@@ -15,7 +17,6 @@ import {
 } from '../../../store/api/serviceApi'
 import { useAlert } from '../../../utils/Alert/AlertMessage'
 import ArrowIcon from '../jobSeeker/ArrowIcon'
-import {LoadingOutlined} from "@ant-design/icons";
 
 export const VacancyEditView = () => {
 	const [getVacancy, { data, isLoading, error }] = useLazyGetVacancyViewQuery()
@@ -151,7 +152,6 @@ export const VacancyEditView = () => {
 					open={isDeleteModalOpen}
 					onCancel={() => {
 						setIsDeleteModalOpen(false)
-						navigate(-1)
 					}}
 					title={null}
 					footer={null}

@@ -183,9 +183,7 @@ export const SupervisorUpdateVacancy = () => {
 					>
 						<ArrowIcon />
 					</button>
-					<p className="ml-[32px] font-content-font font-normal text-black text-[28px]/[33.6px]">
-						{'«' + data?.title.rendered + '»'}
-					</p>
+					<p className="ml-[32px] font-content-font font-normal text-black text-[28px]/[33.6px]">{'«' + post + '»'}</p>
 				</div>
 				{isEdit ? (
 					<Form
@@ -328,33 +326,33 @@ export const SupervisorUpdateVacancy = () => {
 						<div className="flex gap-[60px]">
 							<div className="flex flex-col gap-[16px]">
 								<p className="font-content-font font-bold text-black text-[18px]/[21px]">Требуемый опыт работы:</p>
-								<p className="font-content-font font-normal text-black text-[18px]/[21px]">{data?.acf.experience}</p>
+								<p className="font-content-font font-normal text-black text-[18px]/[21px]">{experience}</p>
 							</div>
 							<div className="flex flex-col gap-[16px]">
 								<p className="font-content-font font-bold text-black text-[18px]/[21px]">Тип занятости:</p>
-								<p className="font-content-font font-normal text-black text-[18px]/[21px]">{data?.acf.employment}</p>
+								<p className="font-content-font font-normal text-black text-[18px]/[21px]">{employment}</p>
 							</div>
 							<div className="flex flex-col gap-[16px]">
 								<p className="font-content-font font-bold text-black text-[18px]/[21px]">Заработная плата:</p>
-								<p className="font-content-font font-normal text-black text-[18px]/[21px]">{data?.acf.salary}</p>
+								<p className="font-content-font font-normal text-black text-[18px]/[21px]">{salary}</p>
 							</div>
 						</div>
 						<div className="flex flex-col gap-[16px]">
 							<p className="font-content-font font-bold text-black text-[18px]/[21px]">Задачи:</p>
 							<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-pre-line">
-								{data?.acf.responsibilities}
+								{responsibilities}
 							</p>
 						</div>
 						<div className="flex flex-col gap-[16px]">
 							<p className="font-content-font font-bold text-black text-[18px]/[21px]">Требования:</p>
 							<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-pre-line">
-								{data?.acf.skills}
+								{skills}
 							</p>
 						</div>
 						<div className="flex flex-col gap-[16px]">
 							<p className="font-content-font font-bold text-black text-[18px]/[21px]">Условия:</p>
 							<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-pre-line">
-								{data?.acf.conditions}
+								{conditions}
 							</p>
 						</div>
 						<div className="flex gap-[40px]">

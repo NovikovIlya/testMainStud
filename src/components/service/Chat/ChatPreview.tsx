@@ -1,5 +1,6 @@
 import { Badge } from 'antd'
 import clsx from 'clsx'
+import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -66,6 +67,10 @@ export const ChatPreview = (props: {
 	const [lastMessageDate, setLastMessageDate] = useState<string>('')
 
 	const smallhandler = (e: CustomEventInit) => {
+		console.log('Отработка')
+		console.log(pathname)
+		pathname.includes(props.respondId.toString()) && console.log('Received a new message!')
+		pathname.includes(props.respondId.toString()) && console.log(e.detail.date)
 		pathname.includes(props.respondId.toString()) && setLastMessageDate(prev => e.detail.date as string)
 	}
 
@@ -78,7 +83,7 @@ export const ChatPreview = (props: {
 		return () => {
 			window.removeEventListener('newmessage', smallhandler)
 		}
-	}, [])
+	}, [pathname])
 
 	return (
 		<>
@@ -108,7 +113,7 @@ export const ChatPreview = (props: {
 										' ' +
 										ChatMessageDateDisplayEnum[parseInt(lastMessageDate.substring(5, 7)) - 1].substring(0, 3) +
 										' ' +
-										lastMessageDate.substring(11, 16)}
+										dayjs(lastMessageDate).format().substring(11, 16)}
 								</p>
 							)}
 							{unreadCount !== 0 && !isChatOpen && (

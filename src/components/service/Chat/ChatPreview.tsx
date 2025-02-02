@@ -63,11 +63,15 @@ export const ChatPreview = (props: {
 	}
 
 	const [isChatOpen, setIsChatOpen] = useState<boolean>(false)
+	const [lastMessageDate, setLastMessageDate] = useState<string>('')
 
 	const smallhandler = (e: CustomEventInit) => {
-		console.log('Received new message!')
-		console.log(e.detail.date)
+		pathname.includes(props.respondId.toString()) && setLastMessageDate(prev => e.detail.date as string)
 	}
+
+	useEffect(() => {
+		setLastMessageDate(prev => chatInfo.lastMessageDate)
+	}, [chatInfo.lastMessageDate])
 
 	useEffect(() => {
 		window.addEventListener('newmessage', smallhandler)
@@ -98,13 +102,13 @@ export const ChatPreview = (props: {
 					<div className="w-full flex justify-between">
 						<p className="text-base w-[60%]">{props.respName}</p>
 						<div className="flex flex-col">
-							{chatInfo.lastMessageDate && (
+							{lastMessageDate && (
 								<p className=" font-content-font font-normal text-black text-[12px]/[14.4px] opacity-[52%]">
-									{chatInfo.lastMessageDate.substring(8, 10) +
+									{lastMessageDate.substring(8, 10) +
 										' ' +
-										ChatMessageDateDisplayEnum[parseInt(chatInfo.lastMessageDate.substring(5, 7)) - 1].substring(0, 3) +
+										ChatMessageDateDisplayEnum[parseInt(lastMessageDate.substring(5, 7)) - 1].substring(0, 3) +
 										' ' +
-										chatInfo.lastMessageDate.substring(11, 16)}
+										lastMessageDate.substring(11, 16)}
 								</p>
 							)}
 							{unreadCount !== 0 && !isChatOpen && (

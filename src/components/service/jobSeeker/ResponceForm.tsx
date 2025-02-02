@@ -349,6 +349,7 @@ export const ResponseForm = () => {
 							<Button
 								className="mr-auto mt-[40px] rounded-[54.5px]"
 								type="primary"
+								loading={result.isLoading}
 								onClick={() => {
 									currentVacancy !== null &&
 										getVacancy({

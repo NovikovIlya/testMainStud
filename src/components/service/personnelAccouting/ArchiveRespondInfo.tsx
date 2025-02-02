@@ -9,7 +9,9 @@ import uuid from 'react-uuid'
 
 import { AvatartandardSvg } from '../../../assets/svg/AvatarStandardSvg'
 import { MyDocsSvg } from '../../../assets/svg/MyDocsSvg'
+import { NocircleArrowIconHover } from '../../../assets/svg/NocircleArrowIconHover'
 import { RespondDownload } from '../../../assets/svg/RespondDownload'
+import { RespondDownloadHover } from '../../../assets/svg/RespondDownloadHover'
 import { WarningModalIconSvg } from '../../../assets/svg/WarningModalIconSvg'
 import { useAppSelector } from '../../../store'
 import {
@@ -30,14 +32,12 @@ import { useAlert } from '../../../utils/Alert/AlertMessage'
 import { NocircleArrowIcon } from '../jobSeeker/NoCircleArrowIcon'
 
 import { InviteSeekerForm } from './supervisor/InviteSeekerForm'
-import {NocircleArrowIconHover} from "../../../assets/svg/NocircleArrowIconHover";
-import {RespondDownloadHover} from "../../../assets/svg/RespondDownloadHover";
 
 export const ArchiveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR' }) => {
 	const respondId = useAppSelector(state => state.currentResponce)
 
-	const currentUrl = window.location.pathname;
-	const match = currentUrl.match(/\/fullinfo\/(\d+)(?=\/|$)/);
+	const currentUrl = window.location.pathname
+	const match = currentUrl.match(/\/fullinfo\/(\d+)(?=\/|$)/)
 
 	let id_from_url: string | number
 
@@ -171,7 +171,7 @@ export const ArchiveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 												.unwrap()
 												.then(() => {
 													refetch().then(() => {
-														navigate('/services/personnelaccounting/reserve')
+														navigate('/services/personnelaccounting/archive')
 													})
 												})
 											openAlert({ type: 'success', text: 'Отклик успешно удалён.' })
@@ -216,18 +216,16 @@ export const ArchiveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 								 		  "
 							>
 								{/* Иконка при наведении */}
-								<div
-									className="absolute mt-[3px] group-hover:opacity-100 group-hover:scale-100 opacity-0 scale-95 transition-all duration-200">
-									<NocircleArrowIconHover/>
+								<div className="absolute mt-[3px] group-hover:opacity-100 group-hover:scale-100 opacity-0 scale-95 transition-all duration-200">
+									<NocircleArrowIconHover />
 								</div>
 
 								{/* Иконка по умолчанию */}
-								<div
-									className="mt-[3px] group-hover:opacity-0 group-hover:scale-95 opacity-100 scale-100 transition-all duration-200">
-									<NocircleArrowIcon/>
+								<div className="mt-[3px] group-hover:opacity-0 group-hover:scale-95 opacity-100 scale-100 transition-all duration-200">
+									<NocircleArrowIcon />
 								</div>
-								<span
-									className="group-hover:text-[#004EC2] transition-all duration-200 text-[14px] font-normal">Назад
+								<span className="group-hover:text-[#004EC2] transition-all duration-200 text-[14px] font-normal">
+									Назад
 								</span>
 							</button>
 						</div>
@@ -235,7 +233,7 @@ export const ArchiveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 							<div className="flex flex-wrap gap-[150px]">
 								<div className="flex gap-[20px]">
 									<div className="flex h-[167px] w-[167px] bg-[#D9D9D9]">
-										<AvatartandardSvg/>
+										<AvatartandardSvg />
 									</div>
 									<div className="flex flex-col gap-[8px]">
 										<p className="font-content-font font-normal text-black text-[24px]/[28.8px]">
@@ -248,7 +246,7 @@ export const ArchiveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 											date.getFullYear() - parseInt(res.userData?.birthday.split('-')[0] as string) <= 20
 												? 'лет'
 												: (date.getFullYear() - parseInt(res.userData?.birthday.split('-')[0] as string)) % 10 >= 2 &&
-												(date.getFullYear() - parseInt(res.userData?.birthday.split('-')[0] as string)) % 10 <= 4
+												  (date.getFullYear() - parseInt(res.userData?.birthday.split('-')[0] as string)) % 10 <= 4
 												? 'года'
 												: (date.getFullYear() - parseInt(res.userData?.birthday.split('-')[0] as string)) % 10 == 1
 												? 'год'
@@ -362,31 +360,25 @@ export const ArchiveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
                        						"
 										>
 											{/* Иконка при наведении */}
-											<div
-												className="absolute mr-[62px] mt-[3px] group-hover:opacity-100 group-hover:scale-100 opacity-0 scale-95 transition-all duration-200">
-												<RespondDownloadHover/>
+											<div className="absolute mr-[62px] mt-[3px] group-hover:opacity-100 group-hover:scale-100 opacity-0 scale-95 transition-all duration-200">
+												<RespondDownloadHover />
 											</div>
 
 											{/* Иконка по умолчанию */}
-											<div
-												className="mt-[3px] group-hover:opacity-0 group-hover:scale-95 opacity-100 scale-100 transition-all duration-200">
-												<RespondDownload/>
+											<div className="mt-[3px] group-hover:opacity-0 group-hover:scale-95 opacity-100 scale-100 transition-all duration-200">
+												<RespondDownload />
 											</div>
-											<span
-												className="group-hover:text-[#004EC2] transition-all duration-200 text-[16px] font-normal">
-                        					Скачать
-                      						</span>
+											<span className="group-hover:text-[#004EC2] transition-all duration-200 text-[16px] font-normal">
+												Скачать
+											</span>
 										</button>
 									</div>
 								)}
 								{props.type === 'SUPERVISOR' && (
 									<div className="self-center grid grid-cols-1 grid-rows-[40px_40px] gap-y-[12px]">
-										<InviteSeekerForm respondId={respondId.respondId} isButtonDisabled
-														  callback={() => {
-														  }}/>
+										<InviteSeekerForm respondId={respondId.respondId} isButtonDisabled callback={() => {}} />
 										<Button
-											onClick={() => {
-											}}
+											onClick={() => {}}
 											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[257px] h-[40px] py-[8px] px-[24px] border-black"
 										>
 											Отказать
@@ -394,7 +386,7 @@ export const ArchiveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 									</div>
 								)}
 							</div>
-							<hr/>
+							<hr />
 							<div className="flex flex-col gap-[24px]">
 								<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">
 									Сопроводительное письмо
@@ -403,7 +395,7 @@ export const ArchiveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 									{res.respondData.coverLetter}
 								</p>
 							</div>
-							<hr/>
+							<hr />
 							<div className="flex flex-col gap-[24px]">
 								<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">Образование</p>
 								<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
@@ -544,7 +536,7 @@ export const ArchiveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 											.unwrap()
 											.then(() => {
 												refetch().then(() => {
-													navigate(-1)
+													navigate('/services/personnelaccounting/archive')
 												})
 											})
 									}}

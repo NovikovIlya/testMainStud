@@ -1,221 +1,401 @@
-import {
-    Button, Divider, Form, Input, List, Modal, Segmented, Select, Skeleton, Spin
-} from 'antd'
+import { PlusCircleOutlined, SearchOutlined } from '@ant-design/icons'
+import { Button, Form, Input, List, Skeleton, Spin } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
+import InfiniteScroll from 'react-infinite-scroll-component'
 
-import { useAppSelector } from '../../../../store'
+import { ChatResponse } from '../../../../models/chat'
+import { useAppDispatch, useAppSelector } from '../../../../store'
 import {
-    useGetChatQuery, useGetOneGroupQuery, useSendMessageMutation
-} from '../../../../store/api/practiceApi/practiceTeacher'
-import { setText } from '../../../../store/reducers/notificationSlice'
+	useGetAllDialogsOldQuery,
+	useGetAllDialogsQuery,
+	useGetOneChatOldQuery,
+	useGetOneChatQuery,
+	useReadMessageMutation,
+	useSearchUserOldQuery,
+	useSearchUserQuery,
+	useSendMessageChatMutation
+} from '../../../../store/api/messages/messageApi'
+import { ContentWithinBrackets, extractContentWithinBrackets, hasBrackets } from '../../../../utils/extractBrackets'
+import { truncateString } from '../../../../utils/truncateString'
 
 import { CommentNewTeacher } from './CommentTeacher'
 import InputText from './InputText'
-import { PlusCircleOutlined, SearchOutlined } from '@ant-design/icons'
-import InfiniteScroll from 'react-infinite-scroll-component';
-import TextArea from 'antd/es/input/TextArea'
-import { useTranslation } from 'react-i18next'
+import { NewDialogModal } from './NewDialogModal'
+import SearchComponent from './SearchComponent'
+import { PlusMessage } from '../../../../assets/svg/PlusMessage'
+import ChatSkeleton from './ChatSkeleton'
 
 export const ViewMessage = () => {
-	const [form] = Form.useForm();
-	const [loading, setLoading] = useState(false);
-	const [initialLoading, setInitialLoading] = useState(true);
-	const [dialogs, setDialogs] = useState<any>([]);
-	const {t,i18n} = useTranslation()
-	const [value, setValue] = useState(t('all'));
-	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [activeDialog, setActiveDialog] = useState<any>(null);
-
-	
+	const user = useAppSelector(state => state.auth.user)
+	const [form] = Form.useForm()
+	const [dialogs, setDialogs] = useState<ChatResponse[]>([])
+	const { t } = useTranslation()
+	const [isModalOpen, setIsModalOpen] = useState(false)
+	const [activeDialog, setActiveDialog] = useState(null)
+	const [page, setPage] = useState(0)
+	const { data: dataAllDialogsOld } = useGetAllDialogsOldQuery({ page, size: 15 })
+	const {data: dataAllDialogs,isLoading,isFetching} = useGetAllDialogsQuery({ page: 0, size: 15 }, { pollingInterval: 2000 })
+	const [sendMessage, { isLoading: isLoadingSend }] = useSendMessageChatMutation()
+	const [pageChat, setPageChat] = useState(0)
+	const { data: dataOneChat } = useGetOneChatQuery({ id: activeDialog, page: 0, size: 100 },{ skip: !activeDialog, pollingInterval: 2000 })
+	const { data: dataOneChatOld, isFetching: isFetchingOneChatOld } = useGetOneChatOldQuery(
+		{ id: activeDialog, page: pageChat, size: 100 },
+		{ skip: !activeDialog }
+	)
+	const [chatArray, setChatArray] = useState<ChatResponse[]>([])
+	const [flag, setFlag] = useState(true)
+	const [gotToBottom, setGotoBottom] = useState(0)
+	const [readMessage] = useReadMessageMutation()
+	const [currentItem, setCurrentItem] = useState<ChatResponse | null>(null)
+	const [isEmplty, setIsEmpty] = useState(true)
+	const [debouncedSearchValue, setDebouncedSearchValue] = useState('')
+	const [pageSearch, setPageSearch] = useState(0)
+	const { data: dataSearch, isFetching: isFetchingSearch } = useSearchUserQuery(
+		{ name: debouncedSearchValue, page: 0, size: 15 },
+		{ skip: !debouncedSearchValue, pollingInterval: 5000 }
+	)
+	const { data: dataSearchOld, isFetching: isFetchingSearchOld } = useSearchUserOldQuery(
+		{ name: debouncedSearchValue, page: pageSearch, size: 15 },
+		{ skip: !debouncedSearchValue }
+	)
+	const [dataSearchValue, setdataSearchValue] = useState<ChatResponse[]>([])
 	
 	useEffect(() => {
-	  loadInitialData();
-	}, []);
-  
-	const loadInitialData = async () => {
-	  setInitialLoading(true);
-	  // Simulate initial API call
-	  setTimeout(() => {
-		const initialDialogs = Array(10).fill(null).map((_, index) => ({
-		  id: index.toString(),
-		  name: `Пользователь ${index + 1}`,
-		  lastMessage: `Последнее сообщение ${index + 1}`,
-		  time: `12:${(index + 1).toString().padStart(2, '0')}`,
-		  avatar: `https://xsgames.co/randomusers/avatar.php?g=pixel&key=${index}`
-		}));
-		setDialogs(initialDialogs);
-		setInitialLoading(false);
-	  }, 1000);
-	};
-  
+		if (dataSearch?.length > 0) {
+			setdataSearchValue(dataSearch)
+		}
+		if (dataSearch?.length === 0) {
+			setdataSearchValue([])
+		}
+	}, [dataSearch])
+
+	useEffect(() => {
+		if (dataSearchOld) {
+			setdataSearchValue(prevDialogs => {
+				const dialogMap = new Map(prevDialogs.map(dialog => [dialog.id, dialog]))
+
+				dataSearchOld.forEach((newDialog: ChatResponse) => {
+					const existingDialog = dialogMap.get(newDialog.id)
+
+					if (existingDialog) {
+						if (
+							existingDialog.lastMessage !== newDialog.lastMessage ||
+							existingDialog.lastMessageTime !== newDialog.lastMessageTime ||
+							existingDialog.isRead !== newDialog.isRead
+						) {
+							dialogMap.set(newDialog.id, newDialog)
+						}
+					} else {
+						dialogMap.set(newDialog.id, newDialog)
+					}
+				})
+
+				return Array.from(dialogMap.values()).sort(
+					(a, b) => new Date(b.lastMessageTime).getTime() - new Date(a.lastMessageTime).getTime()
+				)
+			})
+		}
+	}, [dataSearchOld])
+
+	useEffect(() => {
+		if (dataAllDialogs) {
+			setDialogs(prevDialogs => {
+				const dialogMap = new Map(prevDialogs.map(dialog => [dialog.id, dialog]))
+
+				dataAllDialogs.forEach(newDialog => {
+					const existingDialog = dialogMap.get(newDialog.id)
+
+					if (existingDialog) {
+						if (
+							existingDialog.lastMessage !== newDialog.lastMessage ||
+							existingDialog.lastMessageTime !== newDialog.lastMessageTime ||
+							existingDialog.isRead !== newDialog.isRead
+						) {
+							dialogMap.set(newDialog.id, newDialog)
+						}
+					} else {
+						dialogMap.set(newDialog.id, newDialog)
+					}
+				})
+
+				return Array.from(dialogMap.values()).sort(
+					(a, b) => new Date(b.lastMessageTime).getTime() - new Date(a.lastMessageTime).getTime()
+				)
+			})
+		}
+	}, [dataAllDialogs])
+
+	useEffect(() => {
+		if (dataAllDialogsOld) {
+			setDialogs(prevDialogs => {
+				const dialogMap = new Map(prevDialogs.map(dialog => [dialog.id, dialog]))
+
+				dataAllDialogsOld.forEach(newDialog => {
+					const existingDialog = dialogMap.get(newDialog.id)
+
+					if (existingDialog) {
+						// Если диалог существует и данные изменились, обновляем его
+						if (
+							existingDialog.lastMessage !== newDialog.lastMessage ||
+							existingDialog.lastMessageTime !== newDialog.lastMessageTime ||
+							existingDialog.isRead !== newDialog.isRead
+						) {
+							dialogMap.set(newDialog.id, newDialog)
+						}
+					} else {
+						// Если диалога нет, добавляем новый
+						dialogMap.set(newDialog.id, newDialog)
+					}
+				})
+
+				return Array.from(dialogMap.values()).sort(
+					(a, b) => new Date(b.lastMessageTime).getTime() - new Date(a.lastMessageTime).getTime()
+				)
+			})
+		}
+	}, [dataAllDialogsOld])
+
+	useEffect(() => {
+		if (dataOneChat?.messages) {
+			setChatArray(prevMessages => {
+				const newMessages = [...dataOneChat.messages]
+				const existingMessageIds = new Set(prevMessages.map((msg: any) => msg.id))
+				const uniqueNewMessages = newMessages.filter((msg: any) => !existingMessageIds.has(msg.id))
+				return [...prevMessages, ...uniqueNewMessages]
+			})
+		}
+
+		setGotoBottom(p => p + 1)
+		setFlag(false)
+	}, [dataOneChat])
+
+	useEffect(() => {
+		if (dataOneChatOld?.messages) {
+			setChatArray(prevMessages => {
+				const newMessages = [...dataOneChatOld.messages]
+				const existingMessageIds = new Set(prevMessages.map((msg: any) => msg.id))
+				const uniqueNewMessages = newMessages.filter((msg: any) => !existingMessageIds.has(msg.id))
+				return [...prevMessages, ...uniqueNewMessages]
+			})
+		}
+	}, [dataOneChatOld])
+
+	useEffect(() => {
+		if (isEmplty) {
+			setdataSearchValue([])
+		}
+	}, [isEmplty])
+
 	const loadMoreData = () => {
-	  if (loading) return;
-	  
-	  setLoading(true);
-	  // Simulate API call for more data
-	  setTimeout(() => {
-		const newDialogs = Array(5).fill(null).map((_, index) => ({
-		  id: (dialogs.length + index).toString(),
-		  name: `Пользователь ${dialogs.length + index + 1}`,
-		  lastMessage: `Последнее сообщение ${dialogs.length + index + 1}`,
-		  time: `12:${(dialogs.length + index + 1).toString().padStart(2, '0')}`,
-		  avatar: `https://xsgames.co/randomusers/avatar.php?g=pixel&key=${dialogs.length + index}`
-		}));
-		setDialogs([...dialogs, ...newDialogs]);
-		setLoading(false);
-	  }, 1000);
-	};
-  
-	const showModal = () => setIsModalOpen(true);
-	const handleOk = () => setIsModalOpen(false);
-	const handleCancel = () => setIsModalOpen(false)
-	const onFinish =()=>{
-		handleCancel()
+		if (isFetching || isLoading) return
+		if (!isEmplty) {
+			setPageSearch(p => p + 1)
+			return
+		}
+		setPage(p => p + 1)
 	}
-	const clickTextArea = ()=>{
 
-	}
-	const refetch = ()=>{
+	const showModal = () => setIsModalOpen(true)
 
+	const handleCancel = () => {
+		setIsModalOpen(false)
 	}
-  
-	if (initialLoading) {
-	  return (
-		<div className="screen fixed z-[10000000]">
-			<div className="loader">
-				<div className="inner one"></div>
-				<div className="inner two"></div>
-				<div className="inner three"></div>
+
+	const clickTextArea = () => {}
+
+	const refetch = () => {}
+
+	const onFinish = async () => {
+		const obj = {
+			message: form.getFieldValue('textArea'),
+			senderName: `${user.lastname} ${user.firstname} ${user.middlename}`,
+			chatId: activeDialog
+		}
+		sendMessage(obj).unwrap()
+		form.resetFields()
+	}
+
+	const loadMessages = () => {
+		if (isFetchingOneChatOld) return
+		setPageChat(p => p + 1)
+	}
+
+	const changeIsReady = (id: number) => {
+		const newDialogs = dialogs.map((dialog: any) => {
+			if (dialog.id === activeDialog) {
+				return {
+					...dialog,
+					isRead: true
+				}
+			}
+			return dialog
+		})
+		setDialogs(newDialogs)
+		readMessage(id)
+	}
+
+	const readOnWindow = (item: any) => {
+		const validItem = dialogs.find((dialog: any) => dialog.id === item.id)
+		if (validItem?.isRead) return
+		readMessage(activeDialog)
+	}
+
+	const searchEmpty = (values: any) => {
+		setIsEmpty(values)
+		setPageSearch(0)
+	}
+
+
+	if (isLoading)
+		return (
+			<div className="screen !z-[100000000] relative">
+				<div className="loader">
+					<div className="inner one"></div>
+					<div className="inner two"></div>
+					<div className="inner three"></div>
+				</div>
 			</div>
-		</div>
-	  );
-	}
-  
+		)
+
 	return (
-	  <div className="grid grid-cols-3 gap-2">
-		<div className="bg-white h-screen shadow-xl">
-		  <div className="mt-36 "></div>
-		  
-		  <div className="mt-5 p-4">
-			<Input placeholder={t('searchMEssage')} prefix={<SearchOutlined />} />
-		  </div>
-		  
-		  <div className="mt-1 px-4 pb-4 flex justify-between items-center" style={{ borderBottom: '1px solid #E9EFF8' }}>
-			<Segmented
-			  value={value===t('all')?t('all'):t('new')}
-			  options={[t('all'), t('new')]}
-			  onChange={setValue}
-			/>
-			<Button className='' onClick={showModal}>
-			  <PlusCircleOutlined />{t('newDialog')}
-			</Button>
-		  </div>
-  
-		  <div
-			id="scrollableDialogs"
-			className="!overflow-y-scroll"
-			style={{
-			  height: 'calc(100vh - 285px)',
-			  overflow: 'auto',
-			  padding: '0 16px',
-			}}
-		  >
-			<InfiniteScroll
-			  dataLength={dialogs.length}
-			  next={loadMoreData}
-			  hasMore={dialogs.length < 50}
-			  loader={loading && <Skeleton className='pl-4 pt-4' paragraph={{ rows: 1 }} active />}
-			  scrollableTarget="scrollableDialogs"
-			  scrollThreshold="200px"
-			>
-			  <List
-				dataSource={dialogs}
-				renderItem={(item:any) => (
-				  <List.Item
-					key={item.id}
-					onClick={() => setActiveDialog(item.id)}
-					className={`cursor-pointer rounded-xl !p-4 ${
-					  activeDialog === item.id ? '!bg-[#E9EFF8]' : ''
-					}`}
-					style={{
-					  borderBottom: '1px solid #E9EFF8',
-					}}
-				  >
-					<List.Item.Meta
-					  title={<span className="font-extrabold">{item.name}</span>}
-					  description={item.lastMessage}
-					/>
-					<div className=''>
-						<div>{item.time}</div>
-						{/* <div className='w-full flex justify-center'><div className='rounded-full bg-blue-600 w-4 h-4'></div></div> */}
-						<div className='h-4'></div>
+		<div className="grid grid-cols-4 gap-2">
+			<Spin spinning={isLoadingSend} fullscreen></Spin>
+			<div className="bg-white h-screen shadow-xl col-span-1 ">
+				<div className="mt-28 "></div>
+
+				<div className="mt-1 px-4 pb-2 flex justify-between items-center">
+					<div className="flex items-center gap-2 h-10 w-auto py-5 px-3  hover:shadow hover:bg-gray-100 hover:cursor-pointer rounded-xl" onClick={showModal}>
+						<PlusMessage />
+						{t('newDialog')}
 					</div>
-				  </List.Item>
+				</div>
+
+				<SearchComponent onDebouncedValueChange={setDebouncedSearchValue} searchEmpty={searchEmpty} />
+
+				{
+					<div
+						id="scrollableDialogs"
+						className="!overflow-y-scroll mt-1"
+						style={{
+							height: 'calc(100vh - 235px)',
+							overflow: 'auto',
+							padding: '0 16px'
+						}}
+					>
+						<InfiniteScroll
+							
+							dataLength={!isEmplty ? dataSearchValue.length : dialogs.length}
+							next={loadMoreData}
+							hasMore={dialogs.length < 50}
+							loader={isLoading && <Skeleton className="pl-4 pt-4" paragraph={{ rows: 1 }} active />}
+							scrollableTarget="scrollableDialogs"
+							scrollThreshold="200px"
+						>
+							{isLoading ? (
+								''
+							) : (
+								<List
+								
+									locale={{
+										emptyText: <div></div>
+									}}
+									dataSource={!isEmplty ? dataSearchValue : dialogs}
+									renderItem={(item: any) => (
+										<List.Item
+											key={item.id}
+											onClick={e => {
+												if (item.id === activeDialog) return
+												e.stopPropagation()
+												setChatArray([])
+												setPageChat(0)
+												setActiveDialog(item.id)
+												form.resetFields()
+												setFlag(true)
+												changeIsReady(item.id)
+												setCurrentItem(item)
+											}}
+											className={`  cursor-pointer rounded-xl !p-4 ${activeDialog === item.id ? '!bg-[#E9EFF8]' : ''}`}
+											style={{
+												borderBottom: '1px solid #E9EFF8'
+											}}
+										>
+											<List.Item.Meta
+												title={
+													<>
+														<span className="  font-extrabold ">{item.userName}</span>
+														<div className='mb-3 w-[80%]' style={{ fontSize: '9px', color: '#888' }}>{truncateString(130,item.userInfo)}</div>
+													</>
+												}
+												description={truncateString(10, item.lastMessage)}
+											/>
+											<div className="pt-2 flex flex-col  gap-[9px]">
+												{dayjs(item.lastMessageTime).isSame(dayjs(), 'day') ? (
+													<div className="text-[10px] ">{dayjs(item.lastMessageTime).format('HH:mm')}</div>
+												) : (
+													<div className="text-[10px]">{dayjs(item.lastMessageTime).format('DD.MM.YYYY')}</div>
+												)}
+
+												{!item.isRead ? (
+													<div className="w-full flex justify-end">
+														<div className="rounded-full bg-blue-600 w-4 h-4"></div>
+													</div>
+												) : (
+													''
+												)}
+											</div>
+										</List.Item>
+									)}
+								/>
+							)}
+						</InfiniteScroll>
+					</div>
+				}
+			</div>
+
+			<div className="!h-screen   col-span-3  flex justify-center items-center">
+				{!activeDialog ? (
+					<div className="text-gray-500">{t('selectDialog')}</div>
+				) : (
+					<>
+						<div className="mt-36 p-4 col-span-2  w-full flex justify-center flex-wrap ">
+							{!flag ? (
+								<div
+									onClick={() => {
+										readOnWindow(currentItem)
+									}}
+									className="w-full flex flex-wrap flex-col "
+								>
+									<CommentNewTeacher
+										dataOneChatOld={dataOneChatOld}
+										gotToBottom={gotToBottom}
+										loadMessages={loadMessages}
+										chatArray={chatArray}
+										files={[]}
+										refetch={refetch}
+									>
+										<>
+											<span className="font-extrabold text-[10px]">{currentItem?.userName}</span>
+											<div style={{ fontSize: '9px', color: '#888' }}>{truncateString(25,currentItem  ?  currentItem.userInfo : '')}</div>
+										</>
+									</CommentNewTeacher>
+									<Form form={form} className="flex w-full flex-wrap" onFinish={onFinish}>
+										<div className="flex w-full mt-4">
+											<InputText form={form} clickTextArea={clickTextArea} />
+										</div>
+									</Form>
+								</div>
+							) : (
+						
+								<ChatSkeleton/>
+								  
+							)}
+						</div>
+					</>
 				)}
-			  />
-			</InfiniteScroll>
-		  </div>
+			</div>
+			<NewDialogModal  isModalOpen={isModalOpen} onCancel={handleCancel} />
 		</div>
-  
-		<div className="!h-screen   col-span-2  flex justify-center items-center">
-		  {!activeDialog ? (
-			<div className="text-gray-500">Выберите диалог или создайте новый</div>
-		  ) : (
-			<>
-			<div className="mt-36 p-4 col-span-2  w-full flex justify-center flex-wrap ">
-        {!false ? (
-          <div className="w-full flex flex-wrap flex-col ">
-            <CommentNewTeacher files={[]} refetch={refetch} />
-            <Form form={form} className="flex w-full flex-wrap" onFinish={onFinish}>
-              <div className="flex w-full mt-4">
-                <InputText clickTextArea={clickTextArea} />
-              </div>
-            </Form>
-          </div>
-        ) : (
-          <>
-            <Skeleton active />
-            <Skeleton.Input active className="mt-10 mb-5 !h-[400px] !w-[500px]" />
-            <Skeleton.Input active className="mt-10 !h-14 !w-[500px]" />
-          </>
-        )}
-     		 </div></>
-		  )}
-		</div>
-  
-		<Modal 
-			className='p-12'
-		  title="Выберите роль" 
-		  open={isModalOpen} 
-		  onOk={handleOk} 
-		  onCancel={handleCancel} 
-		  footer={null}
-		>
-		  <Form   
-		    labelCol={{ span: 6 }}
-    		wrapperCol={{ span:18 }} 
-			form={form}
-			onFinish={onFinish}
-			style={{ maxWidth: 600 }}
-			>
-		  	<Form.Item  className='mt-6'  label="Студент" name={'student'}>
-		  		<Select options={  [{ value: 'jack', label: 'Jack' }]} placeholder={'Введите ФИО'} />
-			</Form.Item>
-			<Form.Item   label="Сотрудник" name={'teacher'}>
-		  		<Select placeholder={'Введите ФИО'}/>
-			</Form.Item>
-			<Form.Item   label="Аспирант" name={'graduate'}>
-		  		<Select placeholder={'Введите ФИО'}/>
-			</Form.Item>
-			<Form.Item   label="Сообщение" name={'text'}>
-				<TextArea  placeholder='Введите текст сообщения' />
-			</Form.Item>
-			
-			<div className='w-full flex justify-center'><Button htmlType='submit' type='primary'>Создать диалог</Button></div>
-		  </Form>
-		</Modal>
-	  </div>
-	);
-  }
+	)
+}

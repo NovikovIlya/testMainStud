@@ -16,6 +16,7 @@ export const Redirect = () => {
 
     async function redirectSuccess(p2: P2) {
         try {
+            console.log('p22222222222',p2)
             const userData = await redirect(p2).unwrap()
             dispatch(setCredentials({ ...userData }))
             //так как s_id и h_id доступны из старого лк, то заново в куки их добавлять не нужно
@@ -36,11 +37,13 @@ export const Redirect = () => {
             navigate('/user')
             console.log(userData.user)
         } catch (e: any) {
-            console.log(e)
+            console.log('ошибка',e)
         }
     }
 
     useEffect(() => {
+        console.log('p2222000000000022222222',)
+        localStorage.setItem('typeAcc', 'STUD')
         const p_2 = params.id
         const p2 = {p2: p_2}
         redirectSuccess(p2)

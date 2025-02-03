@@ -51,7 +51,7 @@ export const NavSchedule = () => {
   })
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen w-full ">
       <Header type="service" service={t('ScheduleService')} />
 
       <div className="flex flex-col md:flex-row w-full mt-20">
@@ -65,7 +65,7 @@ export const NavSchedule = () => {
         </button>
 
         {/* Sidebar Navigation */}
-        <div
+        {/* <div
           className={clsx(
             'fixed md:relative z-40 bg-white transition-all duration-300 ease-in-out',
             'w-[230px] h-[calc(100vh-80px)]',
@@ -74,7 +74,7 @@ export const NavSchedule = () => {
           )}
         >
           <ul className="pt-14 flex flex-col gap-4">{handleList}</ul>
-        </div>
+        </div> */}
 
         {/* Mobile Overlay */}
         {isMenuOpen && (
@@ -85,7 +85,7 @@ export const NavSchedule = () => {
         )}
 
         {/* Main Content */}
-        <div className="bg-[#F5F8FB] w-full min-h-[calc(100vh-80px)] p-4 md:p-6">
+        <div className="bg-[#F5F8FB] w-full min-h-[calc(100vh-80px)] p-4 md:p-6  ">
           {pathname === navList[0].id && <Schedule />}
         </div>
       </div>

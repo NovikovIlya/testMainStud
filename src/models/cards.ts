@@ -20,5 +20,6 @@ export type week =
         buttonType?: 'link' | 'text' | 'default' | 'primary' | 'dashed' | undefined
         mt?: string
         positionImage?: string
-        isRounded?: boolean
+        isRounded?: boolean,
+        className?:any,
     }

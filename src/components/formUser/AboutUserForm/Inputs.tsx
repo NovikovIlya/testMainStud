@@ -32,12 +32,14 @@ export const Inputs = () => {
 	dayjs.locale(i18n.language)
 	const { data: countries } = useGetCountriesQuery(i18n.language)
 	const user = useAppSelector(state => state.auth.user)
+
 	useEffect(() => {
 		if (user) {
 			dispatch(surName(user.firstname))
 			dispatch(name(user.lastname))
 		}
 	}, [user, dispatch])
+	
 	useEffect(() => {
 		refetch()
 		userInfo && dispatch(allData(userInfo))
@@ -63,7 +65,7 @@ export const Inputs = () => {
 			<span className="text-sm">{t('name')}</span>
 			<div className="mt-2 mb-4">
 				<Input
-				    disabled
+					disabled
 					size="large"
 					type="text"
 					maxLength={200}
@@ -93,20 +95,11 @@ export const Inputs = () => {
 				<ConfigProvider locale={i18n.language === 'ru' ? ruPicker : enPicker}>
 					<DatePicker
 						className={'block'}
-						onChange={e =>
-							dispatch(birthDay(e == null ? '' : e?.format('YYYY-MM-DD')))
-						}
+						onChange={(e: any) => dispatch(birthDay(e == null ? '' : e.format('YYYY-MM-DD')))}
 						placeholder={t('selectDate')}
 						size="large"
 						format={'DD.MM.YYYY'}
-						value={
-							info.birthDay !== null && info.birthDay !== ''
-								? dayjs(
-										info.birthDay.split('-').reverse().join('.'),
-										'DD.MM.YYYY'
-								  )
-								: null
-						}
+						value={null}
 					/>
 				</ConfigProvider>
 			</div>
@@ -119,11 +112,7 @@ export const Inputs = () => {
 				onChange={e => {
 					dispatch(country(e))
 				}}
-				options={
-					countries === undefined
-						? []
-						: countries.map(el => ({ value: el.id, label: el.shortName }))
-				}
+				options={countries === undefined ? [] : countries.map(el => ({ value: el.id, label: el.shortName }))}
 				value={info.countryId}
 			/>
 

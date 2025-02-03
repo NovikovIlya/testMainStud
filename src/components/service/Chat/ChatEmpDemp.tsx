@@ -61,7 +61,7 @@ export const ChatEmpDemp = () => {
 		const lowerObserver = new IntersectionObserver(entries => {
 			const target = entries[0]
 			if (target.isIntersecting) {
-				console.log('I see the depths of hell below')
+				console.log('I see the depths of hell below review version')
 				setIsBottomOfChatPreviewsVisible(true)
 			}
 			if (!target.isIntersecting) {
@@ -116,7 +116,7 @@ export const ChatEmpDemp = () => {
 				setRequestData(prev => ({ ...prev, page: prev.page + 1 }))
 			}
 		}
-	}, [isBottomOfChatPreviewsVisible])
+	}, [isBottomOfChatPreviewsVisible, blockPageAddition])
 
 	// useEffect(() => {
 	// 	getGroupedResponds({ category: 'АУП', role: 'PERSONNEL_DEPARTMENT' })
@@ -179,121 +179,125 @@ export const ChatEmpDemp = () => {
 									</Button>
 								</ConfigProvider>
 							</div>
-							{isFilterWindowOpen && (
-								<>
-									<div className="px-[30px] pb-[40px] flex flex-col gap-[20px] w-full h-[200px]">
-										<div className="flex flex-col gap-[8px]">
-											<p className="font-content-font font-normal text-[14px]/[14px] text-black opacity-80">Вакансия</p>
-											<Select
-												showSearch
-												optionFilterProp="label"
-												options={vacancies.map(vac => ({
-													value: vac.id,
-													label: vac.post
-												}))}
-												value={requestData.vacancyId}
-												onChange={value =>
-													setRequestData(prev => ({
-														...prev,
-														vacancyId: value,
-														page: 0
-													}))
-												}
-												className="w-full h-[40px]"
-												placeholder="Выбрать"
-											/>
-										</div>
-										<div className="flex flex-col gap-[8px]">
-											<p className="font-content-font font-normal text-[14px]/[14px] text-black opacity-80">
-												Статус отклика
-											</p>
-											<Select
-												options={[
-													{
-														value: 'IN_PERSONNEL_DEPT_REVIEW',
-														label: 'На рассмотрении'
-													},
-													{
-														value: 'IN_SUPERVISOR_REVIEW',
-														label: 'На рассмотрении у руководителя'
-													},
-													{
-														value: 'INVITATION',
-														label: 'Приглашение'
-													},
-													{
-														value: 'EMPLOYMENT',
-														label: 'Трудоустройство'
-													},
-													{
-														value: 'IN_RESERVE',
-														label: 'Резерв'
-													},
-													{
-														value: 'ARCHIVE',
-														label: 'Отказ'
+							<div className="overflow-auto flex flex-col h-[calc(100vh-200px)]">
+								{isFilterWindowOpen && (
+									<>
+										<div className="px-[30px] pb-[40px] flex flex-col gap-[20px] w-full h-[200px]">
+											<div className="flex flex-col gap-[8px]">
+												<p className="font-content-font font-normal text-[14px]/[14px] text-black opacity-80">
+													Вакансия
+												</p>
+												<Select
+													showSearch
+													optionFilterProp="label"
+													options={vacancies.map(vac => ({
+														value: vac.id,
+														label: vac.post
+													}))}
+													value={requestData.vacancyId}
+													onChange={value =>
+														setRequestData(prev => ({
+															...prev,
+															vacancyId: value,
+															page: 0
+														}))
 													}
-												]}
-												value={requestData.status}
-												onChange={value => {
-													setRequestData(prev => ({
-														...prev,
-														status: value,
-														page: 0
-													}))
-												}}
-												className="w-full h-[40px]"
-												placeholder="Выбрать"
-											/>
+													className="w-full h-[40px]"
+													placeholder="Выбрать"
+												/>
+											</div>
+											<div className="flex flex-col gap-[8px]">
+												<p className="font-content-font font-normal text-[14px]/[14px] text-black opacity-80">
+													Статус отклика
+												</p>
+												<Select
+													options={[
+														{
+															value: 'IN_PERSONNEL_DEPT_REVIEW',
+															label: 'На рассмотрении'
+														},
+														{
+															value: 'IN_SUPERVISOR_REVIEW',
+															label: 'На рассмотрении у руководителя'
+														},
+														{
+															value: 'INVITATION',
+															label: 'Приглашение'
+														},
+														{
+															value: 'EMPLOYMENT',
+															label: 'Трудоустройство'
+														},
+														{
+															value: 'IN_RESERVE',
+															label: 'Резерв'
+														},
+														{
+															value: 'ARCHIVE',
+															label: 'Отказ'
+														}
+													]}
+													value={requestData.status}
+													onChange={value => {
+														setRequestData(prev => ({
+															...prev,
+															status: value,
+															page: 0
+														}))
+													}}
+													className="w-full h-[40px]"
+													placeholder="Выбрать"
+												/>
+											</div>
+											<div className="flex items-center gap-[12px] w-full">
+												<p className="font-content-font font-normal text-[14px]/[14px] text-black opacity-80">
+													Сортировка
+												</p>
+												<Select
+													options={[
+														{ value: 'ALL', label: 'Все' },
+														{ value: 'UNREAD', label: 'Непрочитанные' }
+													]}
+													value={requestData.sort}
+													onChange={value => {
+														setRequestData(prev => ({
+															...prev,
+															sort: value,
+															page: 0
+														}))
+													}}
+													className="w-[40%] h-[32px]"
+													placeholder="Все"
+												/>
+												<Button
+													onClick={() => {
+														setRequestData(prev => ({
+															vacancyId: null,
+															status: null,
+															sort: null,
+															page: 0,
+															pageSize: 10
+														}))
+													}}
+													type="text"
+													className="ml-auto !pr-0 !pl-0 font-content-font font-normal text-[14px]/[14px] text-black"
+												>
+													Сбросить <ChatCrossIcon />
+												</Button>
+											</div>
 										</div>
-										<div className="flex items-center gap-[12px] w-full">
-											<p className="font-content-font font-normal text-[14px]/[14px] text-black opacity-80">
-												Сортировка
-											</p>
-											<Select
-												options={[
-													{ value: 'ALL', label: 'Все' },
-													{ value: 'UNREAD', label: 'Непрочитанные' }
-												]}
-												value={requestData.sort}
-												onChange={value => {
-													setRequestData(prev => ({
-														...prev,
-														sort: value,
-														page: 0
-													}))
-												}}
-												className="w-[40%] h-[32px]"
-												placeholder="Все"
-											/>
-											<Button
-												onClick={() => {
-													setRequestData(prev => ({
-														vacancyId: null,
-														status: null,
-														sort: null,
-														page: 0,
-														pageSize: 10
-													}))
-												}}
-												type="text"
-												className="ml-auto !pr-0 !pl-0 font-content-font font-normal text-[14px]/[14px] text-black"
-											>
-												Сбросить <ChatCrossIcon />
-											</Button>
-										</div>
-									</div>
-								</>
-							)}
-
-							<ul
-								className={`h-[calc(100vh-${
-									isFilterWindowOpen ? '400' : '340'
-								}px)] w-[461px] flex flex-col gap-4 overflow-auto`}
-							>
-								{handleList}
-								<li className="h-[1px]" ref={chatPreviewsBottomRef}></li>
-							</ul>
+									</>
+								)}
+								<ul
+									// className={`h-[calc(100vh-${
+									// 	isFilterWindowOpen ? '400' : '340'
+									// }px)] w-[461px] flex flex-col gap-4 overflow-auto`}
+									className="w-[461px] flex flex-col gap-4 overflow-auto"
+								>
+									{handleList}
+									<li className="h-[1px]" ref={chatPreviewsBottomRef}></li>
+								</ul>
+							</div>
 						</div>
 					</div>
 				)}

@@ -390,9 +390,9 @@ export const serviceApi = apiSlice.injectEndpoints({
 				headers: { Authorization: `Bearer ${seekerToken}` }
 			})
 		}),
-		getSupervisorResponds: builder.query<VacancyRespondItemType[], void>({
-			query: () => ({
-				url: `http://${emplBaseURL}employment-api/v1/supervisor/vacancy/respond`,
+		getSupervisorResponds: builder.query<VacancyRespondItemType[], string>({
+			query: status => ({
+				url: `http://${emplBaseURL}employment-api/v1/supervisor/vacancy/respond?${status}`,
 				headers: { Authorization: `Bearer ${supervisorToken}` }
 			}),
 			transformResponse: (response: VacancyRespondItemType[]) => {
@@ -874,7 +874,10 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
-		answerToInvitationReserveTimeRequest: builder.mutation<void, ReserveTimeRequestType & { respondId: number, messageId: number }>({
+		answerToInvitationReserveTimeRequest: builder.mutation<
+			void,
+			ReserveTimeRequestType & { respondId: number; messageId: number }
+		>({
 			query: arg => ({
 				url: `http://${emplBaseURL}employment-api/v1/respond/${arg.respondId}/chat/buttons/interview/reserve-time?message-id=${arg.messageId}`,
 				method: 'POST',
@@ -886,7 +889,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
-		answerEmploymentRequest: builder.mutation<void, EmploymentRequestType & { respondId: number, messageId: number }>({
+		answerEmploymentRequest: builder.mutation<void, EmploymentRequestType & { respondId: number; messageId: number }>({
 			query: arg => ({
 				url: `http://${emplBaseURL}employment-api/v1/respond/${arg.respondId}/chat/buttons/employment-request?answer=${arg.answer}&message-id=${arg.messageId}`,
 				method: 'POST',
@@ -1246,6 +1249,7 @@ export const {
 	useGetRespondFullInfoAccountingQuery,
 	useLazyDownloadEmploymentSeekerFileQuery,
 	useGetTestResultsQuery,
+	useLazyGetTestResultsQuery,
 	useSetTestResultSignedMutation,
 	useSetTestResultHiddenMutation,
 	useGetSubdivisionUserQuery,

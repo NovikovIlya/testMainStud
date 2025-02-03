@@ -70,7 +70,7 @@ export const Estimation = () => {
 			title: t('Type'),
 			key: 'type',
 			dataIndex: 'type',
-			render: item => <p className="text-base">{item}</p>,
+			render: item => <p className="text-base">{t(item)}</p>,
 			align: "center",
 		},
 		{
@@ -165,7 +165,7 @@ export const Estimation = () => {
 	}
 	return (
 		<div className="radio">
-			<div className="mb-14 text-[28px]">{t('ElectronicBook')}</div>
+			{/* <div className="mb-14 text-[28px]">{t('ElectronicBook')}</div> */}
 			<Radio.Group
 				defaultValue="0"
 				onChange={e => changeSemester(e.target.value)}
@@ -188,19 +188,19 @@ export const Estimation = () => {
 					className="rounded-full h-full flex items-center text-base bg-transparent"
 					value="2"
 				>
-					{t('2nd year')}
+					{t('SecondYear')}
 				</Radio.Button>
 				<Radio.Button
 					className="rounded-full h-full flex items-center text-base bg-transparent"
 					value="3"
 				>
-					{t('3rd year')}
+					{t('ThirdYear')}
 				</Radio.Button>
 				<Radio.Button
 					className="rounded-full h-full flex items-center text-base bg-transparent"
 					value="4"
 				>
-					{t('4th year')}
+					{t('FourthYear')}
 				</Radio.Button>
 			</Radio.Group>
 			<div className="my-10 gap-5 flex flex-col">
@@ -210,6 +210,7 @@ export const Estimation = () => {
 					pagination={false}
 					loading={!data ? true : false}
 					className="w-full drop-shadow-lg shadow-[#d4e3f1] rounded-none"
+					locale={{ emptyText: t('noData') }}
 				/>
 			</div>
 		</div>

@@ -8,6 +8,7 @@ import './StyleSchedule.scss'
 import { DataType } from '../../../models/schedule'
 import useWindowOrientation from '../../../utils/hooks/useDeviceOrientation'
 import { isMobileDevice } from '../../../utils/hooks/useIsMobile'
+import { t } from 'i18next'
 
 
 
@@ -41,31 +42,31 @@ export const Schedule = () => {
 			  
 		},
 		{
-			title: 'Время',
+			title: t('time'),
 			dataIndex: 'time',
 			key: 'time',
 			render: item => <p className="text-base whitespace-nowrap">{item}</p>
 		},
 		{
-			title: 'Предмет',
+			title: t('lesson'),
 			dataIndex: 'name',
 			key: 'name',
 			render: item => <p className="text-base">{item}</p>
 		},
 		{
-			title: 'Преподаватель',
+			title: t('teacher'),
 			dataIndex: 'teacher',
 			key: 'teacher',
 			render: item => <p className="text-base">{item}</p>
 		},
 		{
-			title: 'Корпус',
+			title: t('campus'),
 			key: 'building',
 			dataIndex: 'building',
 			render: item => <p className="text-base">{item}</p>
 		},
 		{
-			title: 'Аудитория',
+			title: t('auditorium'),
 			key: 'room',
 			dataIndex: 'room',
 			render: item => <p className="text-base">{item}</p>
@@ -78,6 +79,7 @@ export const Schedule = () => {
 	
 
 	const onChange = (e: RadioChangeEvent) => {
+		console.log('e', e)
 		//@ts-ignore
 		setData(schedule[e.target.value])
 	}
@@ -87,8 +89,8 @@ export const Schedule = () => {
 	if(isMobile && orientation === 'portrait') return <div className='max-w-full text-center mt-10'>В данном разрешении модуль не работает, пожалуйста поверните телефон</div>
 
 	return (
-		<div className={`${isMobile ? 'mx-0' : 'mx-14'} mt-14  radio`}>
-			<div className="mb-14 text-[28px]">Мое расписание</div>
+		<div className={`${isMobile ? 'mx-0' : 'mx-14'} mt-14  radio w-full justify-center`}>
+			{/* <div className="mb-14 text-[28px]">Мое расписание</div> */}
 			<Radio.Group
 				onChange={onChange}
 				defaultValue="monday"
@@ -99,78 +101,79 @@ export const Schedule = () => {
 					className="rounded-full bg-transparent h-full flex items-center  text-base"
 					value="monday"
 				>
-					Понедельник
+					{t('monday')}
 				</Radio.Button>
 				<Radio.Button
 					className="rounded-full h-full flex items-center text-base bg-transparent"
 					value="tuesday"
 				>
-					Вторник
+					{t('tuesday')}
 				</Radio.Button>
 				<Radio.Button
 					className="rounded-full h-full flex items-center text-base bg-transparent"
 					value="wednesday"
 				>
-					Среда
+					{t('wednesday')}
 				</Radio.Button>
 				<Radio.Button
 					className="rounded-full h-full flex items-center text-base bg-transparent"
 					value="thursday"
 				>
-					Четверг
+					{t('thursday')}
 				</Radio.Button>
 				<Radio.Button
 					className="rounded-full h-full flex items-center text-base bg-transparent"
 					value="friday"
 				>
-					Пятница
+					{t('friday')}
 				</Radio.Button>
 				<Radio.Button
 					className="rounded-full h-full flex items-center text-base bg-transparent"
 					value="saturday"
 				>
-					Суббота
+					{t('saturday')}
 				</Radio.Button>
 			</Radio.Group>
-			<div className="my-10 gap-5 flex">
+			<div className="my-10  flex gap-12">
 				<Table
 					columns={columns}
 					dataSource={data}
 					pagination={false}
 					className="max-w-[1050px] w-full drop--lg -[#d4e3f1] rounded-none"
+					locale={{ emptyText: t('noData') }}
 				/>
 				<div className={`${isMobile? 'hidden' :''} flex flex-col gap-6 text-sm`}>
 					<div className="flex items-center gap-2">
 						<div className="min-w-3 min-h-3 w-[11px] h-[11px]  rounded-full bg-[#A7FAFF]" />
-						Потоковая лекция
+						{t('streamingLecture')}
 					</div>
 					<div className="flex items-center gap-2">
 						<div className="min-w-3 min-h-3 w-[11px] h-[11px] rounded-full bg-[#3A92E3]" />
-						Лекция
+						{t('lecture')}
 					</div>
 					<div className="flex items-center gap-2">
 						<div className="min-w-3 min-h-3 w-[11px] h-[11px] rounded-full bg-[#FFE24C]" />
-						Семинар
+						{t('seminar')}
 					</div>
 					<div className="flex items-center gap-2">
 						<div className="min-w-3 min-h-3 w-[11px] h-[11px] rounded-full bg-[#59C348]" />
-						Лабораторное занятие
+						{t('laboratory')}
 					</div>
 					<div className="flex items-center gap-2">
 						<div className="min-w-3 min-h-3 w-[11px] h-[11px] rounded-full bg-[#E93A3A]" />
-						Факультатив
+						{t('elective')}
 					</div>
 					<div className="flex items-center gap-2">
 						<div className="min-w-3 min-h-3 w-[11px] h-[11px] rounded-full bg-[#844EC9]" />
-						Практика
+						{t('practice')}
 					</div>
 					<div className="flex items-center gap-2">
 						<div className="min-w-3 min-h-3 w-[11px] h-[11px] rounded-full bg-[#FF9838]" />
-						Тестирование
+						{t('exam')}
 					</div>
 					<div className="flex items-center gap-2">
 						<div className="min-w-3 min-h-3 w-[11px] h-[11px] rounded-full bg-[#B3B3B3]" />
-						Тип дисциплины не указан
+						{t('notExam')}
 					</div>
 				</div>
 			</div>

@@ -1,4 +1,4 @@
-import { MessageOutlined, UserSwitchOutlined } from '@ant-design/icons'
+import { UserSwitchOutlined } from '@ant-design/icons'
 import { useLocalStorageState } from 'ahooks'
 import { useClickAway } from 'ahooks'
 import { Badge, Button, Divider, Drawer, Dropdown, Modal, Select, Space } from 'antd'
@@ -9,29 +9,25 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-import logo from '../../assets/images/logo.svg'
 import {
 	EyeSvg,
 	LogoIasSvg,
 	LogoutSvg,
 	MenuSvg,
 	PersonCardSvg,
-	PersonSvg,
-	SearchSvg,
-	SettingSvg
+	PersonSvg, SettingSvg
 } from '../../assets/svg'
 import { ArrowLeftBackInOldAccount } from '../../assets/svg/ArrowLeftBackInOldAccount'
 import { LogoIasSvgEn } from '../../assets/svg/LogoIasSvgEn'
 import { MessageModuleSvg } from '../../assets/svg/MessagesModuleSvg'
-import PersonalizationSvg from '../../assets/svg/PersonalizationSvg'
 import { TypeHeaderProps } from '../../models/layout'
 import { useAppSelector } from '../../store'
 import { useFakeLoginMutation } from '../../store/api/fakeLogin'
 import { useGetRoleQuery } from '../../store/api/serviceApi'
-import { logOut, setEdit, setIsCollapsed } from '../../store/reducers/authSlice'
-import { isMobileDevice } from '../../utils/hooks/useIsMobile'
+import { logOut } from '../../store/reducers/authSlice'
 import AccessibilityHelper from '../AccessibilityHelper/AccessibilityHelper'
 import { ModalNav } from '../service/ModalNav'
+import { useGetAllUnReadQuery } from '../../store/api/messages/messageApi'
 
 export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const [isModalOpen, setIsModalOpen] = useState(false)
@@ -44,7 +40,6 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const searchParams = new URLSearchParams(location.search)
 	const paramValue = searchParams.get('lan')
 	const user = useAppSelector(state => state.auth.user)
-	// const subRole = useAppSelector(state => state.auth.subRole)
 	const isMobile = false
 	const urlContainsPractice = location.pathname.includes('practice')
 	const { data: dataSubRole, isSuccess: isSuccessSubRole, isLoading: isLoadingSubRole } = useGetRoleQuery(null)
@@ -52,18 +47,23 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const username = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '')?.username : ''
 	const maiRole = roles.find((item: any) => item.login === username)?.type || ''
 	const [subRole, setSubrole] = useLocalStorageState<any>('subRole', { defaultValue: '' })
-	const [mainRole, setmainRole] = useLocalStorageState<any>('typeAcc', {
-		defaultValue: 'STUD'
-	})
+	const [mainRole, setmainRole] = useLocalStorageState<any>('typeAcc', {defaultValue: 'STUD'})
 	const [login, { data: dataLogin, isSuccess, isLoading }] = useFakeLoginMutation()
 	const [isOpen, setIsOpen] = useState(false)
 	const ref = useRef<any>(null)
+	const { unreadChatsCount } = useGetAllUnReadQuery(null, {
+		pollingInterval: 2000,
+		skipPollingIfUnfocused: true,
+		selectFromResult: ({ data }) => ({
+		  unreadChatsCount: data?.unreadChatsCount
+		}),
+	  })
+	
 
 	useEffect(() => {
 		if (isSuccessSubRole) {
 			if (mainRole === 'OTHER') {
 				setSubrole(dataSubRole ? dataSubRole[0].role : '')
-				// setSubrole(dataSubRole ? dataSubRole : '')
 			}
 		}
 	}, [isSuccessSubRole, dataSubRole])
@@ -75,7 +75,6 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	}, [location])
 
 	useClickAway(event => {
-		console.log('333')
 		setIsOpen(false)
 	}, ref)
 
@@ -100,7 +99,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 			case 'EMPL':
 				return t('EMPL')
 			case 'OTHER':
-				return 'Other'
+				return ''
 		}
 	}
 
@@ -116,7 +115,8 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 			type: 'divider'
 		},
 
-		{
+		...(maiRole === 'OTHER' ? [
+			{
 			label: (
 				<div
 					onClick={() => {
@@ -125,11 +125,11 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 					className={`${maiRole === 'OTHER' ? '' : 'hidden'} flex items-center gap-[15px] px-[4px] py-[5px]`}
 				>
 					<UserSwitchOutlined className="w-[22px] h-[22px] text-blue1f5 flex items-center justify-center" />
-					Изменить роль
+					{t("changeRole")}
 				</div>
 			),
 			key: '7'
-		},
+		}]:[]),
 		{
 			label: (
 				<div
@@ -162,24 +162,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 			),
 			key: '3'
 		},
-		// ...(user?.roles && user?.roles.length > 1
-		// 	? [
-		// 			{
-		// 				label: (
-		// 					<div
-		// 						className="flex items-center gap-[15px] px-[4px] py-[5px]"
-		// 						onClick={() => {
-		// 							showModal()
-		// 						}}
-		// 					>
-		// 						<UserSwitchOutlined className="w-[22px] h-[22px] text-blue1f5 flex items-center justify-center" />
-		// 						Сменить роль
-		// 					</div>
-		// 				),
-		// 				key: '9'
-		// 			}
-		// 	  ]
-		// 	: []),
+
 
 		{
 			label: (
@@ -236,10 +219,10 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const handleVisibleInspired = () => {
 		// userhelperlibrary({ lang: 'ru'});
 		setIsOpen(!isOpen)
-		console.log('123123')
+
 	}
 
-	console.log('i18n.language,i18n.language', i18n.language)
+
 	const showModal = () => {
 		setIsModalOpen(true)
 	}
@@ -317,8 +300,8 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						</div>
 					</div>
 				</div>
-				<div className="flex gap-5 items-center h-full max-[1000px]:gap-0 w-fit justify-center">
-					<div className="flex h-full items-center max-[1000px]:hidden">
+				<div className="flex gap-3 items-center h-full max-[1000px]:gap-0 w-fit justify-center">
+					<div className="flex h-full items-center ">
 						<a
 							className={clsx(
 								'h-full flex gap-2 items-center px-3 cursor-pointer no-underline',
@@ -378,17 +361,18 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						</div> */}
 
 						<div
-							className="cursor-pointer "
+							id='messagesForTest'
+							className={`cursor-pointer h-full p-2 flex items-center   ${type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'}`}
 							onClick={() => {
 								navigate('/services/messages')
 							}}
 						>
-							<Badge className="top-[60px] !right-[500px]  absolute" count={5}></Badge>
+							<Badge className="top-[60px] !right-[505px]  absolute" count={unreadChatsCount || null}></Badge>
 							<MessageModuleSvg white={type === 'service'} />
 						</div>
 
 						<div
-							className="cursor-pointer mx-3"
+							className={`cursor-pointer mx-3 p-2 h-full flex items-center ${type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'}`}
 							onClick={e => {
 								e.stopPropagation()
 								handleVisibleInspired()
@@ -396,7 +380,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						>
 							<EyeSvg white={type === 'service'} />
 						</div>
-						<div>
+						<div className='h-full'>
 							<AccessibilityHelper ref={ref} isOpen={isOpen} lang={i18n.language} />
 						</div>
 					</div>
@@ -404,7 +388,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						defaultValue={paramValue === 'eng' ? 'en' : i18n.language}
 						style={{ width: 70 }}
 						variant="borderless"
-						className={clsx('max-sm:hidden ', type === 'service' && 'text-white')}
+						className={clsx(type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307', 'h-full flex items-center max-sm:hidden ', type === 'service' && 'text-white')}
 						dropdownStyle={{ color: 'white' }}
 						popupClassName="text-white"
 						onChange={e => changeLanguage(e.valueOf())}
@@ -436,9 +420,14 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 											user?.middlename === '' ? '' : user?.middlename.charAt(0) + '.'
 										}`}
 									</div>
-									<div className="text-sm">
+									<div className="text-sm ">
 										{user?.roles && user?.roles?.length > 1
 											? user?.roles
+													.filter((item:any, index:any, self:any) => 
+														index === self.findIndex((t:any) => (
+															t.type === item.type
+														))
+													) 
 													.toSorted((a: any, b: any) => (a.type === mainRole ? -1 : b.type === mainRole ? 1 : 0))
 													.map((item: any) => (
 														<div className={`${item.type === mainRole ? '' : 'text-gray-300'}`}>

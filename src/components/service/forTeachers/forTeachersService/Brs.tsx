@@ -1,7 +1,14 @@
 import { PrinterOutlined, StarOutlined } from '@ant-design/icons'
 import { Button, Col, Form, Result, Row, Select } from 'antd'
 import { t } from 'i18next'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+
+import { dataBrs, Student } from '../../../../models/forTeacher'
+import {
+	useGetBrsForTeacherQuery,
+	useGetBrsGroupsQuery,
+	useGetBrsSubjectsQuery
+} from '../../../../store/api/forTeacher/forTeacherApi'
 
 import InfoCard from './InfoCard'
 import TableBrs from './table/TableBrs'
@@ -10,33 +17,53 @@ const Brs = () => {
 	const [form] = Form.useForm()
 	const discilineForm = Form.useWatch('disciline', form)
 	const groupeForm = Form.useWatch('group', form)
+	const { data } = useGetBrsForTeacherQuery(
+		{ subjectId: discilineForm, groupId: groupeForm },
+		{ skip: !discilineForm || !groupeForm }
+	)
+	const { data: dataSubjects } = useGetBrsSubjectsQuery()
+	const { data: dataGroups } = useGetBrsGroupsQuery(discilineForm, { skip: !discilineForm })
+	const [dataSource, setDataSource] = useState<Student[]>(
+		[]
+	)
+	// {
+	// 	N: '1',
+	// 	key: '0',
+	// 	name: 'Edward King 0',
+	// 	age: '32',
+	// 	address: 'London, Park Lane no. 0',
+	// 	september: 'sad',
+	// 	october: 'azzsdasd',
+	// 	november: 'bbasdasd',
+	// 	december: 'asssdasd'
+	// },
+	// {
+	// 	N: '2',
+	// 	key: '1',
+	// 	name: '11',
+	// 	age: '32',
+	// 	address: 'ии',
+	// 	september: '00',
+	// 	october: '55',
+	// 	november: '66',
+	// 	december: '77'
+	// }
 
-	const [dataSource, setDataSource] = useState<any[]>([
-		{
-			N: '1',
-			key: '0',
-			name: 'Edward King 0',
-			age: '32',
-			address: 'London, Park Lane no. 0',
-			september:'sad',
-			october:'azzsdasd',
-			november:'bbasdasd',
-			december:'asssdasd',
-		},
-		{
-			N: '2',
-			key: '1',
-			name: '11',
-			age: '32',
-			address: 'ии',
-			september:'00',
-			october:'55',
-			november:'66',
-			december:'77',
+	console.log('data', data)
+
+	useEffect(() => {
+		if (data?.students) {
+			setDataSource(data.students.map((item: Student,index:number) => ({
+				...item,
+				key: item.studId,
+				N: index+1
+			})))
 		}
-	])
-	
-	
+	}, [data])
+
+	const handleYearChange = () => {
+		form.resetFields(['group'])
+	}
 
 	return (
 		<div className="p-[80px]">
@@ -54,10 +81,21 @@ const Brs = () => {
 						>
 							<Select
 								allowClear
-								options={[
-									{ value: '1', label: 'Дисциплина 1' },
-									{ value: '2', label: 'Дисциплина 2' }
-								]}
+								showSearch
+								filterOption={(input, option) => {
+									if (option?.label) {
+										// Проверяем, что label существует
+										return option.label.toString().toLowerCase().includes(input.toLowerCase())
+									}
+									return false
+								}}
+								options={
+									dataSubjects?.map((item: any) => ({
+										label: item.subjectName,
+										value: item.subjectId
+									})) || []
+								}
+								onChange={handleYearChange}
 							/>
 						</Form.Item>
 					</Col>
@@ -70,14 +108,31 @@ const Brs = () => {
 							labelCol={{ span: 4 }} // Такая же ширина лейбла
 							wrapperCol={{ span: 10 }} // Такая же ширина инпута
 						>
-							<Select disabled={!discilineForm} allowClear />
+							<Select
+								showSearch
+								filterOption={(input, option) => {
+									if (option?.label) {
+										// Проверяем, что label существует
+										return option.label.toString().toLowerCase().includes(input.toLowerCase())
+									}
+									return false
+								}}
+								disabled={!discilineForm}
+								allowClear
+								options={
+									dataGroups?.map((item: any) => ({
+										label: item.groupName,
+										value: item.groupId
+									})) || []
+								}
+							/>
 						</Form.Item>
 					</Col>
 				</Row>
 			</Form>
 
-			{true ? (
-				<div className='animate-fade-in'>
+			{data?.students?.length ? (
+				<div className="animate-fade-in">
 					<Row className="flex gap-2">
 						<Button className="rounded-xl" icon={<PrinterOutlined />}>
 							{t('printJournalEmpty')}
@@ -87,7 +142,7 @@ const Brs = () => {
 						</Button>
 					</Row>
 
-					<TableBrs setDataSource={setDataSource} dataSource={dataSource} />
+					<TableBrs semester={data.semester} dataSource={dataSource} setDataSource={setDataSource} />
 
 					<InfoCard text={t('infoTextBrs2')} />
 				</div>
@@ -97,5 +152,4 @@ const Brs = () => {
 		</div>
 	)
 }
-
 export default Brs

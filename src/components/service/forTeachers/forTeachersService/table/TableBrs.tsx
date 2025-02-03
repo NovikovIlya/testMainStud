@@ -5,6 +5,7 @@ import { t } from 'i18next';
 import { useAppDispatch } from '../../../../../store';
 import { setIsEditTableScheduleTeacher } from '../../../../../store/reducers/authSlice';
 import { ColumnTypes, DataType, EditableCellProps, EditableRowProps } from '../../../../../models/tables';
+import { dataBrs, Student } from '../../../../../models/forTeacher';
 
 const EditableContext = React.createContext<FormInstance<any> | null>(null);
 
@@ -80,93 +81,144 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
   return <td {...restProps}>{childNode}</td>;
 };
 
+type Props = {
+  dataSource: Student[];
+  semester:any,
+  setDataSource: any;
+};
 
-const TableBrs = ({dataSource, setDataSource}:any) => {
+const TableBrs = ({dataSource, setDataSource,semester}: Props) => {
   const dispatch = useAppDispatch()
-  const semesctr = 0
+  console.log('dataSource',dataSource)
 
-  const defaultColumns: (ColumnTypes[number] & { editable?: boolean; dataIndex: string })[] = [
+  const defaultColumns: any = [
     {
         title: 'N',
         dataIndex: 'N',
         width: '10%',
+      
     },
     {
       title: 'ФИО',
-      dataIndex: 'name',
+      dataIndex: 'studName',
       width: '20%',
     },
     {
       title: 'Сентябрь',
-      dataIndex: 'september',
+      dataIndex: 'firstMonth',
       editable: true,
       width: '15%',
     },
     {
       title: 'Октябрь',
-      dataIndex: 'october',
+      dataIndex: 'secondMonth',
       editable: true,
       width: '15%',
     },  
     {
       title: 'Ноябрь',
-      dataIndex: 'november',
+      dataIndex: 'thirdMonth',
       editable: true,
       width: '15%',
     },
     {
       title: 'Декабрь',
-      dataIndex: 'december',
+      dataIndex: 'fourthMonth',
       editable: true,
       width: '15%',
     },
     {
       title: 'Сумма баллов',
-      dataIndex: 'address',
+      dataIndex: 'sum',
       editable: true,
       width: '10%',
     },
    
   ];
 
-  const defaultColumnsTwo: (ColumnTypes[number] & { editable?: boolean; dataIndex: string })[] = [
+  const defaultColumnsTwo: any = [
     {
         title: 'N',
         dataIndex: 'N',
         width: '10%',
+      
     },
     {
       title: 'ФИО',
-      dataIndex: 'name',
+      dataIndex: 'studName',
       width: '20%',
     },
     {
       title: 'Февраль',
-      dataIndex: 'age',
+      dataIndex: 'firstMonth',
       editable: true,
       width: '15%',
     },
     {
       title: 'Март',
-      dataIndex: 'address',
+      dataIndex: 'secondMonth',
       editable: true,
       width: '15%',
     },
     {
       title: 'Апрель',
-      dataIndex: 'address',
+      dataIndex: 'thirdMonth',
       editable: true,
       width: '15%',
     },
     {
       title: 'Май',
-      dataIndex: 'address',
+      dataIndex: 'fourthMonth',
       editable: true,
       width: '15%',
     },
     {
       title: 'Сумма баллов',
-      dataIndex: 'address',
+      dataIndex: 'sum',
+      editable: true,
+      width: '10%',
+    },
+   
+  ];
+  const defaultColumnsThree: any = [
+    {
+        title: 'N',
+        dataIndex: 'N',
+        width: '10%',
+        
+    },
+    {
+      title: 'ФИО',
+      dataIndex: 'studName',
+      width: '20%',
+    },
+    {
+      title: 'Июнь',
+      dataIndex: 'firstMonth',
+      editable: true,
+      width: '15%',
+    },
+    {
+      title: 'Июль',
+      dataIndex: 'secondMonth',
+      editable: true,
+      width: '15%',
+    },
+    {
+      title: 'Август',
+      dataIndex: 'thirdMonth',
+      editable: true,
+      width: '15%',
+    },
+    {
+      title: 'Май',
+      dataIndex: 'fourthMonth',
+      editable: true,
+      width: '15%',
+    },
+    {
+      title: 'Сумма баллов',
+      dataIndex: 'sum',
       editable: true,
       width: '10%',
     },
@@ -185,6 +237,7 @@ const TableBrs = ({dataSource, setDataSource}:any) => {
       // Сравнение старых и новых значений
       const hasChanges = Object
         .keys(row)
+        // @ts-ignore
         .some(key => item[key] !== row[key]);
 
       // Обновление строки новыми значениями
@@ -209,8 +262,8 @@ const TableBrs = ({dataSource, setDataSource}:any) => {
     },
   };
 
-  const columns = semesctr === 0 ? 
-    defaultColumns.map((col) => {
+  const columns =  semester === 1 ? 
+    defaultColumns.map((col:any) => {
     if (!col.editable) {
       return col;
     }
@@ -224,9 +277,9 @@ const TableBrs = ({dataSource, setDataSource}:any) => {
         handleSave,
       }),
     };
-  }) 
-    :
-    defaultColumnsTwo.map((col) => {
+  })  :
+  semester === 2 ?
+    defaultColumnsTwo.map((col:any) => {
     if (!col.editable) {
       return col;
     }
@@ -240,17 +293,17 @@ const TableBrs = ({dataSource, setDataSource}:any) => {
         handleSave,
       }),
     };
-  });
+  }) : defaultColumnsThree;
 
   return (
     <div className='mt-4'>
-      <Table<DataType>
+      <Table
         rowKey={(record) => record.key}
         components={components}
         rowClassName={() => 'editable-row'}
         bordered
         dataSource={dataSource}
-        columns={columns as ColumnTypes}
+        columns={columns}
         className=''
       
       />

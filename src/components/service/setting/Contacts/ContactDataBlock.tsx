@@ -1,15 +1,17 @@
 import { DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons'
 import { Button, Form, Input, Spin } from 'antd'
+import { useTranslation } from 'react-i18next'
 
 
 const ContactDataBlock = ({isLoadingPost, sortedEmails, sendVer, handleDeleteEmail, showModal }: any) => {
+	const { t } = useTranslation()
     
 	return (
 		<Spin spinning={isLoadingPost}>
             <div className="">
 			<div className=" mx-auto bg-white rounded-xl shadow-md overflow-hidden">
 				<div className="p-6">
-					<h1 className='mb-4'>Личная почта:</h1>
+					<h1 className='mb-4'>{t('privateMail')}:</h1>
 					{/* Список почт */}
 					<div className="space-y-3 mb-6">
 						{sortedEmails?.map((email: any, index: number) => (
@@ -21,10 +23,10 @@ const ContactDataBlock = ({isLoadingPost, sortedEmails, sendVer, handleDeleteEma
 								<div className="flex gap-3">
 									<span className="text-gray-400">
 										{email.verified ? (
-											'Верифицирован'
+											t('verification')
 										) : (
 											<div className="cursor-pointer shadow-sm" onClick={() => sendVer(email.id)}>
-												Требуется верификации
+												{t('requiredVerification')}
 											</div>
 										)}
 									</span>
@@ -53,7 +55,7 @@ const ContactDataBlock = ({isLoadingPost, sortedEmails, sendVer, handleDeleteEma
 						>
 							<Input
 								type="email"
-								placeholder="Введите email"
+								placeholder={t('putYourEmail')}
 								className="flex-1 rounded-lg border-gray-300 shadow-sm px-4 py-2 bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
 							/>
 						</Form.Item>
@@ -64,7 +66,7 @@ const ContactDataBlock = ({isLoadingPost, sortedEmails, sendVer, handleDeleteEma
 							className="h-[40px] flex items-center"
 						>
 							<PlusCircleOutlined className=" " />
-							<span>Добавить</span>
+							<span>{t('addBtn')}</span>
 						</Button>
 					</div>
 				</div>

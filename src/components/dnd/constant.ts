@@ -170,8 +170,8 @@ export const block = {
 		{
 			w: 1,
 			h: 1,
-			x: 1,
-			y: 4,
+			x: 2,
+			y: 5,
 			i: 'Staff',
 
 			moved: true,
@@ -193,7 +193,7 @@ export const block = {
 			w: 1,
 			h: 1,
 			x: 0,
-			y: 5,
+			y: 4,
 			i: 'News',
 
 			moved: true,
@@ -248,6 +248,56 @@ export const block = {
 			x: 2,
 			y: 2,
 			i: 'ManagementScientificProjects',
+
+			moved: true,
+			static: false
+		},
+		{
+			w: 1,
+			h: 1,
+			x: 1,
+			y: 4,
+			i: 'petitionForDocument',
+
+			moved: true,
+			static: false
+		},
+		{
+			w: 1,
+			h: 1,
+			x: 0,
+			y: 4,
+			i: 'contractEducation',
+
+			moved: true,
+			static: false
+		},
+		{
+			w: 1,
+			h: 1,
+			x: 0,
+			y: 5,
+			i: 'educationPrograms',
+
+			moved: true,
+			static: false
+		},
+		{
+			w: 1,
+			h: 1,
+			x: 1,
+			y: 5,
+			i: 'forTeachers',
+
+			moved: true,
+			static: false
+		},
+		{
+			w: 1,
+			h: 1,
+			x: 2,
+			y: 5,
+			i: 'shortLink',
 
 			moved: true,
 			static: false

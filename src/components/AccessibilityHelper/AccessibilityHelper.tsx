@@ -16,7 +16,6 @@ const AccessibilityHelper: React.FC<AccessibilityHelperProps> = forwardRef(({ la
   // const [activeOptions, setActiveOptions] = useState<string[]>([]);
   const activeOptions = useAppSelector((state) => state.auth.activeOptions);
   const dispatch = useAppDispatch()
-  console.log('activeOptions',activeOptions)
   const text = {
     en: {
       tabs: 'Highlight Selected Items',
@@ -110,7 +109,7 @@ const AccessibilityHelper: React.FC<AccessibilityHelperProps> = forwardRef(({ la
     // document.body.style.fontSize = size;
     document.documentElement.style.fontSize = size;
     setActiveText(size)
-    toggleOption('helper-core-blockAnim')
+    // toggleOption('helper-core-blockAnim')
   };
 
   useEffect(() => {
@@ -126,7 +125,7 @@ const AccessibilityHelper: React.FC<AccessibilityHelperProps> = forwardRef(({ la
         <KeyOutlined className="h-6 w-6" />
       </button> */}
       {isOpen && (
-        <div ref={ref} className="absolute bottom-12 right-0 w-74 bg-white shadow-lg rounded-lg p-8 accesibility-helper">
+        <div ref={ref} className="absolute bottom-12 right-2 w-74 bg-white shadow-lg rounded-lg p-8 accesibility-helper">
           <div  className="grid gap-4">
             {[
               { icon: KeyOutlined, text: text?.tabs, option: 'helper-core-tabHighlight' },

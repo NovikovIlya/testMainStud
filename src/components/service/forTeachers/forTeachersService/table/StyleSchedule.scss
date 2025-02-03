@@ -1,0 +1,59 @@
+.radio {
+	.ant-radio-button-wrapper:not(:first-child)::before {
+		width: 0;
+	}
+	.ant-radio-button-wrapper:first-child,
+	.ant-radio-button-wrapper:last-child {
+		border-radius: 99999px;
+	}
+	.ant-radio-button-wrapper {
+		border-block-start-width: 1px;
+		border-inline-start-width: 1px;
+		border-inline-end-width: 1px;
+		border-color: black;
+	}
+}
+.rotate {
+	transform: rotate(270deg);
+	white-space: nowrap;
+	width: 32px;
+	position: inherit;
+	bottom: -70px;
+}
+.ant-table-wrapper .ant-table-container {
+	border-start-start-radius: unset;
+	border-start-end-radius: unset;
+}
+.ant-table-wrapper .ant-table-thead > tr > th,
+.ant-table-wrapper .ant-table-thead > tr > td {
+	background-color: rgba(31, 92, 184, 0.2) !important;
+	color: rgba(0, 0, 0, 1);
+	border-radius: 0 !important;
+	font-size: 16px;
+	font-style: normal;
+	font-weight: 400;
+	line-height: 120%;
+}
+.ant-table-wrapper
+	.ant-table-thead
+	> tr
+	> th:not(:last-child):not(.ant-table-selection-column):not(
+		.ant-table-row-expand-icon-cell
+	):not([colspan])::before,
+.ant-table-wrapper
+	.ant-table-thead
+	> tr
+	> td:not(:last-child):not(.ant-table-selection-column):not(
+		.ant-table-row-expand-icon-cell
+	):not([colspan])::before {
+	width: 0;
+}
+.shadowNav {
+	box-shadow: 0px 0px 19px 0px rgba(212, 227, 241, 0.6);
+	position: inherit;
+	z-index: 10;
+}
+table {
+	border-collapse: separate !important;
+	border-spacing: 0;
+}

@@ -93,6 +93,7 @@ import { FormModal } from './components/formUser/AboutUserForm/UserForm'
 import { DocumentForm } from './components/formUser/DocumentForm'
 import { EducationForm } from './components/formUser/EducationForm'
 import { InfoUser } from './components/formUser/InfoUser'
+import { InfoUserUpdate } from './components/formUser/InfoUserUpdate'
 import { ParentForm } from './components/formUser/ParentForm'
 import { WorkForm } from './components/formUser/WorkForm'
 import { Login } from './components/login/Login'
@@ -100,6 +101,7 @@ import { Notification } from './components/notification/Notification'
 import { Redirect } from './components/redirect/Redirect'
 import { Registration } from './components/registration/Registration'
 import { Service } from './components/service'
+import ShortLink from './components/service/ShortLink/ShortLink'
 import EditSchedule from './components/service/practices/forming-schedule/EditSchedule'
 import { blue004, blue307 } from './utils/color'
 
@@ -108,13 +110,29 @@ const App = () => {
 
 	const router = createBrowserRouter([
 		{
+			path: 'redirect/:id',
+			element: <Redirect />
+		},
+		{
+			path: 'registration',
+			element: <Registration email={email} changeEmail={changeEmail} />
+		},
+		{
+			path: 'registration/checkingEmail',
+			element: <CheckEmail email={email} />
+		},
+		{
+			path: 'api/register/approve/*',
+			element: <ApproveEmail />
+		},
+		{
 			path: '/',
 			element: <Login />,
 			children: [
-				{ path: 'redirect/:id', element: <Redirect /> },
-				{ path: 'registration', element: <Registration email={email} changeEmail={changeEmail} /> },
-				{ path: 'registration/checkingEmail', element: <CheckEmail email={email} /> },
-				{ path: 'api/register/approve/*', element: <ApproveEmail /> }
+				// { path: "redirect/:id", element: <Redirect /> },
+				// { path: "registration", element: <Registration email={email} changeEmail={changeEmail} /> },
+				// { path: "registration/checkingEmail", element: <CheckEmail email={email} /> },
+				// { path: "api/register/approve/*", element: <ApproveEmail /> },
 			]
 		},
 		{
@@ -123,15 +141,16 @@ const App = () => {
 			children: [
 				{ path: 'user/*', element: <User /> },
 				{ path: 'infoUser', element: <InfoUser /> },
+				{ path: 'infoUserUpdate', element: <InfoUserUpdate /> },
 				{ path: 'form', element: <FormModal /> },
 				{ path: 'education', element: <EducationForm /> },
 				{ path: 'documents', element: <DocumentForm /> },
 				{ path: 'work', element: <WorkForm /> },
 				{ path: 'parent', element: <ParentForm /> },
 				{ path: 'services/*', element: <Service /> },
-				{ path: '*', element: <NotFound /> }
+				{ path: '*', element: <NotFound /> },
+				{ path: 'services/shorturl', element: <ShortLink /> }
 
-				// Uncomment the following line if you want to include the EditSchedule route
 				// { path: "services/practices/formingSchedule/edit/:id", element: <EditSchedule /> },
 			]
 		}

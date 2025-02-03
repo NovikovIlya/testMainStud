@@ -58,6 +58,7 @@ export const Session = () => {
 				dataSource={exam}
 				pagination={false}
 				className=" mt-[50px]  rounded-none max-w-[1300px]"
+				locale={{ emptyText: t('noData') }}
 			/>
 		</div>
 	)

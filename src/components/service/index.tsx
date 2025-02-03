@@ -5,10 +5,12 @@ import { useCheckIsEmployeeQuery } from '../../store/api/practiceApi/contracts'
 import { useGetContractsAllQuery } from '../../store/api/practiceApi/roster'
 import AboutUniversity from '../aboutUniversity/AboutUnversity'
 
+import ShortLink from './ShortLink/ShortLink'
 import { NavAboutMe } from './aboutMe/NavAboutMe'
 import { NavBusinessTrip } from './businessTrip/NavBusinessTrip'
 import { NavUnifiedServiceCenter } from './documentFlow/NavUnifiedServiceCenter'
 import { NavElectronicBook } from './electronicBook/NavElectronicBook'
+import { NavForTeachers } from './forTeachers/navForTeachers'
 import { NavJobSeeker } from './jobSeeker/NavJobSeeker'
 import { NavMessages } from './messages/navMessages'
 import { NavMyPractices } from './myPractice/navMyPractice'
@@ -35,6 +37,7 @@ export const Service = () => {
 				{pathname.includes('/services/aboutMe') && <NavAboutMe />}
 				{pathname.includes('/services/electronicBook') && <NavElectronicBook />}
 				{pathname.includes('/services/setting') && <NavSetting />}
+				{pathname.includes('/services/forTeachers') && <NavForTeachers />}
 				{/* {
 					isEmployee
 					&&
@@ -55,6 +58,7 @@ export const Service = () => {
 				{pathname.includes('/services/unifiedServiceCenter') && <NavUnifiedServiceCenter />}
 				{pathname.includes('/services/aboutUniversity') && <AboutUniversity />}
 				{pathname.includes('/services/messages') && <NavMessages />}
+				{/* {pathname.includes('/services/shorturl') && <ShortLink />} */}
 			</div>
 		</div>
 	)

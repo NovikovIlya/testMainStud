@@ -7,7 +7,9 @@ import { abiturientApi } from './api/abiturent/abitRedirect'
 import { apiSlice } from './api/apiSlice'
 import { apiSliceStudent } from './api/apiSliceStudent'
 import { apiSliceTeacher } from './api/apiSliceTeacher'
+import { emptyApiSlice } from './api/emptyApiSlice'
 import { practiceApi } from './api/practiceApi/practiceApi'
+import { testApiSlice } from './api/testApiSlice'
 import CatalogFilterSlice from './reducers/CatalogFilterSlice'
 import ChatRespondStatusSlice from './reducers/ChatRespondStatusSlice'
 import CurrentEmploymentStage from './reducers/CurrentEmploymentStage'
@@ -117,9 +119,11 @@ export const store = configureStore({
 		fifthStageCommentVisibility: fifthStageCommentVisibilitySlice,
 		sixStageCommentVisibility: sixStageCommentVisibilitySlice,
 		catalogFilter: CatalogFilterSlice,
+		[testApiSlice.reducerPath]: testApiSlice.reducer,
 		[abiturientApi.reducerPath]: abiturientApi.reducer,
 		[apiSliceStudent.reducerPath]: apiSliceStudent.reducer,
 		[apiSliceTeacher.reducerPath]: apiSliceTeacher.reducer,
+		[emptyApiSlice.reducerPath]: emptyApiSlice.reducer,
 		experienceFile: ExperienceFileReducer
 	},
 	//@ts-ignore
@@ -129,7 +133,9 @@ export const store = configureStore({
 			.concat(apiSlice.middleware, practiceApi.middleware)
 			.concat(abiturientApi.middleware)
 			.concat(apiSliceStudent.middleware)
-			.concat(apiSliceTeacher.middleware),
+			.concat(apiSliceTeacher.middleware)
+			.concat(testApiSlice.middleware)
+			.concat(emptyApiSlice.middleware),
 	devTools: true
 })
 

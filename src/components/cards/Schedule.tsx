@@ -7,6 +7,7 @@ import img from '../../assets/images/image15.png'
 import { useGetScheduleQuery } from '../../store/api/serviceApi'
 import { blue004 } from '../../utils/color'
 import { week } from '../../models/cards'
+import { truncateString } from '../../utils/truncateString'
 
 
 function getWeekDay(date: Date): week {
@@ -24,13 +25,6 @@ function getWeekDay(date: Date): week {
 	return days[date.getDay()]
 }
 
-function truncateString(str:string) {
-	const n = 16
-    if (str.length > n) { 
-        return str.slice(0, n) + '...';
-    }
-    return str;
-}
 
 export const Schedule = () => {
 	const navigate = useNavigate()
@@ -141,7 +135,7 @@ export const Schedule = () => {
 								{el ? (
 									<>
 										<span className="text-start">{el.time.replace("-", " - ")}</span>
-										<span className="font-bold text-start">{truncateString(el.name)}</span>
+										<span className="font-bold text-start">{truncateString(16,el.name)}</span>
 									</>
 								) : (
 									<div>Нет пар</div>
@@ -149,7 +143,7 @@ export const Schedule = () => {
 							</div>
 						))
 					) : (
-						<div>Нет пар</div>
+						<div>{t('notLesson')}</div>
 					)
 				) : (
 					<h3>{isFetching ? '' : t('NoLesson')}</h3>

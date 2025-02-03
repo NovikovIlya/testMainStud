@@ -65,7 +65,7 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
         name={dataIndex}
         rules={[{ required: true, message: `${title} является обязательным.` }]}
       >
-        <Input  ref={inputRef} onPressEnter={save} onBlur={save} />
+        <Input type='number' min={0} max={100} ref={inputRef} onPressEnter={save} onBlur={save} />
       </Form.Item>
     ) : (
       <div

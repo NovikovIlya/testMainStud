@@ -36,6 +36,10 @@ const studentKeys = [
 	'DigitalDepartments',
 	'ManagementScientificProjects',
 	'Testing',
+	'Vacancies',
+	'petitionForDocument',
+	'contractEducation',
+	'educationPrograms',
 	'jobSeeker',
 	'myResponds',
 	'DirectResume',
@@ -43,22 +47,28 @@ const studentKeys = [
 ]
 
 const employeeKeys = [
-	'Practices', // Проверка isSuccessCheck будет выполнена отдельно
+	'News',
+	'Practices',
 	'practiceTeacher',
 	'Staff',
-	'Vacancies',
-	'News',
+	'forTeachers',
 	'jobSeeker',
 	'myResponds',
 	'DirectResume',
 	'personnelAccounting'
+	// 'shortLink'
 ]
 
 const DropDrag = () => {
 	const dispatch = useDispatch()
 	const layout = block
 	const edit = useAppSelector(state => state.auth.edit)
-	const { data: dataCheck, isSuccess: isSuccessCheck, isLoading: isLoadingCheck } = useCheckIsEmployeeQuery()
+	const {
+		data: dataCheck,
+		isSuccess: isSuccessCheck,
+		isLoading: isLoadingCheck,
+		isFetching: isFetchingIsEmpl
+	} = useCheckIsEmployeeQuery()
 	const {
 		data: dataGetInfoSubrole,
 		isLoading: isLoadingGetInfoSubrole,

@@ -149,7 +149,10 @@ export const Estimation = () => {
 				term: el.semester,
 				discipline: el.subject_name,
 				scoreSemester: el.semester_points,
-				type: el.type === 'e' ? 'exam' : 'quiz',
+				// type: el.type === 'e' ? 'exam' : 'quiz',
+				type: el.is_exam==='y' ? 'exam' : 
+				el.is_test==='y' ? 'quiz' : 'Дифзачет',
+				
 				scoreReceived: el.exam_points,
 				dateDelivery: el.pass_date,
 				finalScore: el.total_points,

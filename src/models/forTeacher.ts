@@ -10,6 +10,7 @@ export interface Student {
     sum: number; // Суммарная оценка
     key:number;
     index: number;
+    N?: number;
 }
 
 // Интерфейс для описания всей структуры данных

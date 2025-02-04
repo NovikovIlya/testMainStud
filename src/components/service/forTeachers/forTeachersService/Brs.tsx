@@ -1,5 +1,5 @@
 import { PrinterOutlined, StarOutlined } from '@ant-design/icons'
-import { Button, Col, Form, Result, Row, Select } from 'antd'
+import { Button, Col, Form, Result, Row, Select, Spin } from 'antd'
 import { t } from 'i18next'
 import React, { useEffect, useState } from 'react'
 
@@ -24,7 +24,7 @@ const Brs = () => {
 	)
 	const { data: dataSubjects } = useGetBrsSubjectsQuery()
 	const { data: dataGroups } = useGetBrsGroupsQuery(discilineForm, { skip: !discilineForm })
-	const [saveBrs] = useSaveBrsMutation()
+	const [saveBrs,{data:dataSave,isLoading}] = useSaveBrsMutation()
 	const [dataSource, setDataSource] = useState<Student[]>([])
 	
 
@@ -43,12 +43,21 @@ const Brs = () => {
 	const handleYearChange = () => {
 		form.resetFields(['group'])
 	}
+	console.log('dataSource',dataSource)
 
-	const onFinish = (values: any) => {
-		saveBrs()
+	const onFinish = () => {
+		const filteredData = dataSource.map(({key, N, ...rest}) => rest);
+
+		saveBrs({
+			subjectId: discilineForm,
+			groupId: groupeForm,
+			semester: data?.semester,
+			students:filteredData
+		})
 	}
 
 	return (
+		<Spin spinning={isLoading}>
 		<Form  onFinish={onFinish} form={form} className="p-[80px]">
 			<InfoCard text={t('infoTextBrs')} />
 
@@ -135,6 +144,7 @@ const Brs = () => {
 				<Result title="" extra={t('selectYearSemest')} />
 			)}
 		</Form>
+		</Spin>
 	)
 }
 export default Brs

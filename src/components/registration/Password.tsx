@@ -56,7 +56,7 @@ export const Password: FC<IPasswordProps> = ({ error }) => {
 					)
 				}
 			>
-				<Input
+				<Input.Password
 					value={confirm}
 					onChange={e => setConfirm(e.currentTarget.value)}
 					size="large"

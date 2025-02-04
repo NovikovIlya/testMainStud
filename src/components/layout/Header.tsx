@@ -367,8 +367,9 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 								navigate('/services/messages')
 							}}
 						>
-							<Badge className="top-[60px] !right-[505px]  absolute" count={unreadChatsCount || null}></Badge>
-							<MessageModuleSvg white={type === 'service'} />
+							<Badge className="" count={unreadChatsCount || null}>
+								<MessageModuleSvg white={type === 'service'} />
+							</Badge>
 						</div>
 
 						<div

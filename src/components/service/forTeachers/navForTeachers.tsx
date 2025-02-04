@@ -59,7 +59,7 @@ export const NavForTeachers = () => {
 
 	return (
 		<>
-			<Header type={"service"} service={t('Schedule')}/>
+			<Header type={"service"} service={t('ToTeacher')}/>
 			<Menu
 				selectedKeys={[current]}
 				mode="inline"

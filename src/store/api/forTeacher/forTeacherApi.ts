@@ -45,6 +45,17 @@ export const fotTeacherService = testApiSlice.injectEndpoints({
             providesTags: ['forTeacherSceduleBrs'],
             keepUnusedDataFor:0,
         }),
+        saveBrs: builder.mutation<any, void>({
+            query: (body ) => {
+            return {
+                    url: `/to-teacher/brs/grades/save`,
+                    method: 'POST',
+                    body
+                }
+            },
+            invalidatesTags: ['forTeacherSceduleBrs'],
+           
+        }),
        
     })
 })
@@ -53,6 +64,7 @@ export const {
     useGetScheduleForTeacherQuery,
     useGetBrsForTeacherQuery,
     useGetBrsGroupsQuery,
-    useGetBrsSubjectsQuery
+    useGetBrsSubjectsQuery,
+    useSaveBrsMutation
 } = fotTeacherService
 

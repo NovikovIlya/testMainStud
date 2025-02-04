@@ -7,7 +7,8 @@ import { dataBrs, Student } from '../../../../models/forTeacher'
 import {
 	useGetBrsForTeacherQuery,
 	useGetBrsGroupsQuery,
-	useGetBrsSubjectsQuery
+	useGetBrsSubjectsQuery,
+	useSaveBrsMutation
 } from '../../../../store/api/forTeacher/forTeacherApi'
 
 import InfoCard from './InfoCard'
@@ -23,31 +24,9 @@ const Brs = () => {
 	)
 	const { data: dataSubjects } = useGetBrsSubjectsQuery()
 	const { data: dataGroups } = useGetBrsGroupsQuery(discilineForm, { skip: !discilineForm })
-	const [dataSource, setDataSource] = useState<Student[]>(
-		[]
-	)
-	// {
-	// 	N: '1',
-	// 	key: '0',
-	// 	name: 'Edward King 0',
-	// 	age: '32',
-	// 	address: 'London, Park Lane no. 0',
-	// 	september: 'sad',
-	// 	october: 'azzsdasd',
-	// 	november: 'bbasdasd',
-	// 	december: 'asssdasd'
-	// },
-	// {
-	// 	N: '2',
-	// 	key: '1',
-	// 	name: '11',
-	// 	age: '32',
-	// 	address: 'ии',
-	// 	september: '00',
-	// 	october: '55',
-	// 	november: '66',
-	// 	december: '77'
-	// }
+	const [saveBrs] = useSaveBrsMutation()
+	const [dataSource, setDataSource] = useState<Student[]>([])
+	
 
 	console.log('data', data)
 
@@ -65,11 +44,15 @@ const Brs = () => {
 		form.resetFields(['group'])
 	}
 
+	const onFinish = (values: any) => {
+		saveBrs()
+	}
+
 	return (
-		<div className="p-[80px]">
+		<Form  onFinish={onFinish} form={form} className="p-[80px]">
 			<InfoCard text={t('infoTextBrs')} />
 
-			<Form className="mt-8" form={form}>
+			<div className="mt-8">
 				<Row>
 					<Col span={24}>
 						<Form.Item
@@ -129,9 +112,9 @@ const Brs = () => {
 						</Form.Item>
 					</Col>
 				</Row>
-			</Form>
+			</div>
 
-			{data?.students?.length ? (
+			{groupeForm && data?.students?.length ? (
 				<div className="animate-fade-in">
 					<Row className="flex gap-2">
 						<Button className="rounded-xl" icon={<PrinterOutlined />}>
@@ -144,12 +127,14 @@ const Brs = () => {
 
 					<TableBrs semester={data.semester} dataSource={dataSource} setDataSource={setDataSource} />
 
+					  <Button htmlType="submit" className='top-[-50px] rounded-xl' type='primary'>{t('Save')}</Button>
+
 					<InfoCard text={t('infoTextBrs2')} />
 				</div>
 			) : (
 				<Result title="" extra={t('selectYearSemest')} />
 			)}
-		</div>
+		</Form>
 	)
 }
 export default Brs

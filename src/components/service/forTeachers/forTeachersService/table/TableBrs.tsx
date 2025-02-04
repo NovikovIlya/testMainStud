@@ -149,69 +149,25 @@ const TableBrs = ({dataSource, setDataSource,semester}: Props) => {
       width: '20%',
     },
     {
-      title: 'Февраль',
-      dataIndex: 'firstMonth',
-      editable: true,
-      width: '15%',
-    },
-    {
       title: 'Март',
-      dataIndex: 'secondMonth',
+      dataIndex: 'firstMonth',
       editable: true,
       width: '15%',
     },
     {
       title: 'Апрель',
-      dataIndex: 'thirdMonth',
-      editable: true,
-      width: '15%',
-    },
-    {
-      title: 'Май',
-      dataIndex: 'fourthMonth',
-      editable: true,
-      width: '15%',
-    },
-    {
-      title: 'Сумма баллов',
-      dataIndex: 'sum',
-      editable: true,
-      width: '10%',
-    },
-   
-  ];
-  const defaultColumnsThree: any = [
-    {
-        title: 'N',
-        dataIndex: 'N',
-        width: '10%',
-        
-    },
-    {
-      title: 'ФИО',
-      dataIndex: 'studName',
-      width: '20%',
-    },
-    {
-      title: 'Июнь',
-      dataIndex: 'firstMonth',
-      editable: true,
-      width: '15%',
-    },
-    {
-      title: 'Июль',
       dataIndex: 'secondMonth',
       editable: true,
       width: '15%',
     },
     {
-      title: 'Август',
+      title: 'Май',
       dataIndex: 'thirdMonth',
       editable: true,
       width: '15%',
     },
     {
-      title: 'Май',
+      title: 'Июнь',
       dataIndex: 'fourthMonth',
       editable: true,
       width: '15%',
@@ -224,6 +180,50 @@ const TableBrs = ({dataSource, setDataSource,semester}: Props) => {
     },
    
   ];
+  // const defaultColumnsThree: any = [
+  //   {
+  //       title: 'N',
+  //       dataIndex: 'N',
+  //       width: '10%',
+        
+  //   },
+  //   {
+  //     title: 'ФИО',
+  //     dataIndex: 'studName',
+  //     width: '20%',
+  //   },
+  //   {
+  //     title: 'Июль',
+  //     dataIndex: 'firstMonth',
+  //     editable: true,
+  //     width: '15%',
+  //   },
+  //   {
+  //     title: 'Август',
+  //     dataIndex: 'secondMonth',
+  //     editable: true,
+  //     width: '15%',
+  //   },
+  //   {
+  //     title: 'Август',
+  //     dataIndex: 'thirdMonth',
+  //     editable: true,
+  //     width: '15%',
+  //   },
+  //   {
+  //     title: 'Май',
+  //     dataIndex: 'fourthMonth',
+  //     editable: true,
+  //     width: '15%',
+  //   },
+  //   {
+  //     title: 'Сумма баллов',
+  //     dataIndex: 'sum',
+  //     editable: true,
+  //     width: '10%',
+  //   },
+   
+  // ];
 
 
   const handleSave = (row: any) => {
@@ -278,7 +278,6 @@ const TableBrs = ({dataSource, setDataSource,semester}: Props) => {
       }),
     };
   })  :
-  semester === 2 ?
     defaultColumnsTwo.map((col:any) => {
     if (!col.editable) {
       return col;
@@ -293,7 +292,7 @@ const TableBrs = ({dataSource, setDataSource,semester}: Props) => {
         handleSave,
       }),
     };
-  }) : defaultColumnsThree;
+  }) 
 
   return (
     <div className='mt-4'>
@@ -307,7 +306,7 @@ const TableBrs = ({dataSource, setDataSource,semester}: Props) => {
         className=''
       
       />
-      <Button className='top-[-50px] rounded-xl' type='primary'>{t('Save')}</Button>
+      {/* <Button className='top-[-50px] rounded-xl' type='primary'>{t('Save')}</Button> */}
     </div>
   );
 };

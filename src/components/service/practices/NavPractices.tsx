@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom'
 import { PracticesSvg } from '../../../assets/svg/PracticesSvg'
 
 import './Practices.sass'
-import './PracticesStyle.scss'
+
 import { Tasks } from './individual-tasks/Tasks'
 import { Practical } from './practical/Practical'
 import { Roster } from './roster/Roster'

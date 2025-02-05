@@ -8,7 +8,6 @@ import { useGetEmploymentReqStageStatusQuery } from '../../../../../store/api/se
 import { DepEmploymentStageItem } from '../../personnelDepartment/depEmploymentStageItem'
 import {NocircleArrowIcon} from "../../../jobSeeker/NoCircleArrowIcon";
 import {NocircleArrowIconHover} from "../../../../../assets/svg/NocircleArrowIconHover";
-import React from "react";
 
 export const RequisiteStage = () => {
 

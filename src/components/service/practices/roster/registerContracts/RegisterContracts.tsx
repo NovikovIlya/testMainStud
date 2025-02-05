@@ -14,6 +14,7 @@ import {
 } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import './RegisterContracts.scss';
+import '../../PracticesStyle.scss'
 import {
     TitleHeadCell
 } from "../../../businessTrip/NewBusinessTrip/archive/stepTwo/tableStepTwo/titleHeadCell/TitleHeadCell";

@@ -484,5 +484,106 @@ export const jsxElements = [
 			y: 0,
 			i: 'ManagementScientificProjects'
 		}
+	},
+	{
+		key: 'petitionForDocument',
+		element: (
+			<TemplateCard
+				href="https://shelly.kpfu.ru/e-ksu/SITE_STUDENT_SH_PR_AC.offor_document?p_menu=14"
+				info="petitionForDocumentInfo"
+				title="petitionForDocument"
+				buttonText="Watch"
+				img={'/petition.png'}
+				className="object-contain"
+				positionImage={'mt-7'}
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 0,
+			y: 0,
+			i: 'ManagementScientificProjects'
+		}
+	},
+	{
+		key: 'contractEducation',
+		element: (
+			<TemplateCard
+				href="https://shelly.kpfu.ru/e-ksu/SITE_STUDENT_SH_PR_AC.contracts?p_menu=34"
+				info="contractEducationInfo"
+				title="contractEducation"
+				buttonText="Watch"
+				img={'/contractEduc.png'}
+				className="object-contain"
+				positionImage={'mt-7'}
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 0,
+			y: 0,
+			i: 'ManagementScientificProjects'
+		}
+	},
+	{
+		key: 'educationPrograms',
+		element: (
+			<TemplateCard
+				href="https://kpfu.ru/sveden/education/#eduop"
+				info="educationProgramsInfo"
+				title="educationPrograms"
+				buttonText="Watch"
+				img={'/educProg.png'}
+				className="object-contain"
+				positionImage={'mt-7'}
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 0,
+			y: 0,
+			i: 'ManagementScientificProjects'
+		}
+	},
+	{
+		key: 'forTeachers',
+		element: (
+			<TemplateCard
+				info="forTeachersinfo"
+				title="forTeachers"
+				buttonText="Watch"
+				img={'/educProg.png'}
+				href="/services/forTeachers"
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 0,
+			y: 0,
+			i: 'ManagementScientificProjects'
+		}
+	},
+	{
+		key: 'shortLink',
+		element: (
+			<TemplateCard
+				info="shortLinkInfo"
+				title="shortLink"
+				buttonText="Watch"
+				img={'/educProg.png'}
+				href="/services/shorturl"
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 0,
+			y: 0,
+			i: 'ManagementScientificProjects'
+		}
 	}
 ]

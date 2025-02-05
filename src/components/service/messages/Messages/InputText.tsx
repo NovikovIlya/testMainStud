@@ -1,52 +1,66 @@
 import { SendOutlined } from '@ant-design/icons'
 import { Button, Form } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
-import React, { useEffect, useRef, useState } from 'react'
 
-const InputText = ({files,text='',clickTextArea,isModal=false }: any) => {
-   const [value,setValue] = useState('')
-   const textAreaRef = useRef<HTMLTextAreaElement>(null)
+const InputText = ({disabled=false,files,text='',clickTextArea,isModal=false,form }: any) => {
 
-   useEffect(() => {
-    if (textAreaRef.current) {
-      textAreaRef.current.style.height = 'auto'
-      textAreaRef.current.style.height = textAreaRef.current.scrollHeight + 'px'
-    }
-  }, [value])
-
-
-    const handleClick = (event: React.MouseEvent) => {
-        event.stopPropagation(); 
-        if(isModal ) {
-            if( value==='' || Object.values(files).every(value => !value )){
-                alert('Напишите комментарий к работе и выберите хотя бы один файл')
-                return
-            }
-        }
-        
-    };
+	const handleKeyPress = (e: any) => {
+		if (e.key === 'Enter' && !e.shiftKey) {
+		  e.preventDefault()
+		  
+		  // Получаем значение из поля
+		  const textAreaValue = form.getFieldValue('textArea')
+		  
+		  // Проверяем, не пустое ли поле
+		  if (!textAreaValue?.trim()) {
+			// Устанавливаем ошибку валидации
+			form.setFields([
+			  {
+				name: 'textArea',
+				errors: ['']
+			  }
+			])
+			return
+		  }
+		  
+		  form.submit()
+		}
+	  }
 
 	return (
 		<>
 			<Form.Item className=" w-full" name={'textArea'}>
 				<TextArea
+				
+					disabled={disabled ? true : false}
+                     style={{resize: 'none',
+						backgroundColor: disabled ? '#FFFFF0' : 'white', // Задайте цвет в зависимости от состояния
+						color: disabled ? 'rgba(0, 0, 0, 0.25)' : 'black' // Цвет текста
+					  }}
 					maxLength={75}
-					placeholder="Напишите сообщение собеседнику!"
+					
 					className={`${isModal ? `rounded-[10px_0px_0px_10px]` : `rounded-[10px_0px_0px_10px]` }   !h-[54px]`}
 					onClick={clickTextArea}
                     value={text}
-                    onChange={(e) => setValue(e.target.value)}
 					required
+					onKeyPress={handleKeyPress}
 				/>
 			</Form.Item>
 			<Button
+			style={{
+				backgroundColor: disabled ? '#FFFFF0' : 'white', // Задайте цвет в зависимости от состояния
+				
+			  }}
+				disabled={disabled ? true : false}
 				htmlType="submit"
 				icon={<SendOutlined />}
 				className="rounded-[0px_10px_10px_0px] h-[54px] "
 				size="large"
-                onClick={handleClick}
+               
 			/>
+            
 		</>
+    
 	)
 }
 

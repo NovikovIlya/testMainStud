@@ -6,12 +6,13 @@ import { ElectronicBookSvg } from '../../../assets/svg/ElectronicBookSvg'
 import { Header } from '../../layout/Header'
 
 import { DocumentFlow } from './DocumentFlow'
+import { t } from 'i18next'
 
 const navList = [
 	{
 		id: '/services/unifiedServiceCenter/documentFlow',
 		icon: <ElectronicBookSvg />,
-		name: 'Документы'
+		name: t('Documents')
 	}
 ]
 export const NavUnifiedServiceCenter = () => {

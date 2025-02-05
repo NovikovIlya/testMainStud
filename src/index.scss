@@ -16,17 +16,16 @@ body {
 
 @layer utilities {
 	*::-webkit-scrollbar {
-		width: 16px; /* Ширина вертикального скролла */
-		height: 16px; /* Высота горизонтального скролла */
+		width: 10px; /* Ширина вертикального скролла */
+		height: 12px; /* Высота горизонтального скролла */
 	}
 
-	body::-webkit-scrollbar-thumb {
-		background: #ccc;
+	*::-webkit-scrollbar-thumb {
+		background: #c1c1c1; /* Цвет ползунка */
+		border-radius: 0px; /* Скругление углов ползунка */
 	}
-
-	input:-webkit-autofill {
-		-webkit-box-shadow: 0 0 0px 1000px #fff inset;
-		transition: background-color 5000s ease-in-out 0s;
+	*::-webkit-scrollbar-track {
+		background: #f1f1f1;
 	}
 }
 .ant-modal .ant-modal-content {

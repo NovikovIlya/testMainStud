@@ -86,6 +86,7 @@ export const NumberInformation = () => {
 	}
 
 	const sendVer = (id: any) => {
+
 		showModal()
 		setIdUser(id)
 		// отправить код
@@ -161,7 +162,7 @@ export const NumberInformation = () => {
 								) : (
 									<>
 										<p>Оставшееся время: {count}</p>
-										<p className="mb-2">На ваш телефон будет произведен звонок с 4-х значным кодом! Впишите этот код в поле ниже:</p>
+										<p className="mb-2">На ваш телефон будет произведен звонок. Четыре последние цифры номера являются кодом верификации</p>
 										<Form.Item name={'code'}>
 											<Input.OTP length={4} />
 										</Form.Item>

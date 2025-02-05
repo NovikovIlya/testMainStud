@@ -147,6 +147,7 @@ export const ChatPage = () => {
 				const msgBody = JSON.parse(message.body)
 				if (msgBody.type === 'MESSAGE') {
 					setMessages(prev => [msgBody.message as ChatMessageType, ...prev])
+					dispatchEvent(new CustomEvent('newmessage', { detail: { date: msgBody.message.sendDate } }))
 					readMsg({
 						chatId: chatIdState.chatId,
 						messageId: msgBody.message.id,
@@ -308,16 +309,19 @@ export const ChatPage = () => {
 				})
 			})
 		} else {
-			data.text !== '' &&
+			msgInputText !== '' &&
 				postMsg({
 					id: chatIdState.chatId,
-					text: data.text,
+					text: msgInputText,
 					name: sessionId,
 					role: isEmpDemp ? 'PERSONNEL_DEPARTMENT' : 'SEEKER'
 				})
 					.unwrap()
 					.then(msgData => setMessages([msgData, ...messages]))
-			setMsgInputText('')
+					.then(() => {
+						console.log('Зачистка')
+						setMsgInputText('')
+					})
 		}
 	}
 
@@ -376,6 +380,9 @@ export const ChatPage = () => {
 							render={({ field }) => (
 								<div className="flex flex-col w-full min-h-full">
 									<textarea
+										onKeyDown={e => {
+											!e.shiftKey && e.code === 'Enter' && handleSubmit(handleMessage)()
+										}}
 										disabled={chat_status === "closed"}
 										{...register('text')}
 										value={msgInputText}

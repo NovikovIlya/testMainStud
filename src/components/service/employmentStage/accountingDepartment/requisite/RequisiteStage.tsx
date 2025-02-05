@@ -22,7 +22,7 @@ export const RequisiteStage = () => {
 	const currentUrl = window.location.pathname;
 	const match = currentUrl.match(/\/requisite-review\/(\d+)$/);
 
-	let id_from_url: string | undefined
+	let id_from_url: string
 
 	if (match) {
 		id_from_url = match[1]
@@ -30,7 +30,9 @@ export const RequisiteStage = () => {
 		console.error('id miss')
 	}
 
-	const { data: req_data, isLoading : loading } = useGetEmploymentReqStageStatusQuery({ respondId: id_from_url })
+	let id = Number(id_from_url)
+
+	const { data: req_data, isLoading : loading } = useGetEmploymentReqStageStatusQuery({ respondId: id })
 
 	console.log(req_data)
 

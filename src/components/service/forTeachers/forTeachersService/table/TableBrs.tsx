@@ -63,9 +63,9 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
       <Form.Item
         style={{ margin: 0 ,width:'auto'}}
         name={dataIndex}
-        rules={[{ required: true, message: `${title} является обязательным.` }]}
+        // rules={[{ required: true, message: `${title} является обязательным.` }]}
       >
-        <Input type='number' min={0} max={100} ref={inputRef} onPressEnter={save} onBlur={save} />
+        <Input type='number' min={0} max={9} ref={inputRef} onPressEnter={save} onBlur={save} />
       </Form.Item>
     ) : (
       <div
@@ -104,31 +104,31 @@ const TableBrs = ({dataSource, setDataSource,semester}: Props) => {
       width: '20%',
     },
     {
-      title: 'Сентябрь',
+      title: t('september'),
       dataIndex: 'firstMonth',
       editable: true,
       width: '15%',
     },
     {
-      title: 'Октябрь',
+      title: t('october'),
       dataIndex: 'secondMonth',
       editable: true,
       width: '15%',
     },  
     {
-      title: 'Ноябрь',
+      title: t('november'),
       dataIndex: 'thirdMonth',
       editable: true,
       width: '15%',
     },
     {
-      title: 'Декабрь',
+      title: t('december'),
       dataIndex: 'fourthMonth',
       editable: true,
       width: '15%',
     },
     {
-      title: 'Сумма баллов',
+      title: t('sum'),
       dataIndex: 'sum',
       editable: true,
       width: '10%',
@@ -149,82 +149,38 @@ const TableBrs = ({dataSource, setDataSource,semester}: Props) => {
       width: '20%',
     },
     {
-      title: 'Март',
+      title: t('march'),
       dataIndex: 'firstMonth',
       editable: true,
       width: '15%',
     },
     {
-      title: 'Апрель',
+      title: t('april'),
       dataIndex: 'secondMonth',
       editable: true,
       width: '15%',
     },
     {
-      title: 'Май',
+      title: t('may'),
       dataIndex: 'thirdMonth',
       editable: true,
       width: '15%',
     },
     {
-      title: 'Июнь',
+      title: t('june'),
       dataIndex: 'fourthMonth',
       editable: true,
       width: '15%',
     },
     {
-      title: 'Сумма баллов',
+      title: t('sum'),
       dataIndex: 'sum',
       editable: true,
       width: '10%',
     },
    
   ];
-  // const defaultColumnsThree: any = [
-  //   {
-  //       title: 'N',
-  //       dataIndex: 'N',
-  //       width: '10%',
-        
-  //   },
-  //   {
-  //     title: 'ФИО',
-  //     dataIndex: 'studName',
-  //     width: '20%',
-  //   },
-  //   {
-  //     title: 'Июль',
-  //     dataIndex: 'firstMonth',
-  //     editable: true,
-  //     width: '15%',
-  //   },
-  //   {
-  //     title: 'Август',
-  //     dataIndex: 'secondMonth',
-  //     editable: true,
-  //     width: '15%',
-  //   },
-  //   {
-  //     title: 'Август',
-  //     dataIndex: 'thirdMonth',
-  //     editable: true,
-  //     width: '15%',
-  //   },
-  //   {
-  //     title: 'Май',
-  //     dataIndex: 'fourthMonth',
-  //     editable: true,
-  //     width: '15%',
-  //   },
-  //   {
-  //     title: 'Сумма баллов',
-  //     dataIndex: 'sum',
-  //     editable: true,
-  //     width: '10%',
-  //   },
-   
-  // ];
-
+  
 
   const handleSave = (row: any) => {
     const newData = [...dataSource];

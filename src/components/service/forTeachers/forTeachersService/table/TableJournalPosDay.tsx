@@ -177,7 +177,7 @@ const TableJournalPosDay = ({dataSource, setDataSource}:any) => {
         columns={columns as ColumnTypes}
       
       />
-      <Button className='top-[-50px] rounded-xl' type='primary'>{t('Save')}</Button>
+      <Button className='mt-8 mb-8 rounded-xl' type='primary'>{t('Save')}</Button>
     </div>
   );
 };

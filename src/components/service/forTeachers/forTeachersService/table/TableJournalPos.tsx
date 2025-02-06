@@ -278,9 +278,9 @@ const TableBrs = ({dataSource, setDataSource}:any) => {
         bordered
         dataSource={dataSource}
         columns={columns as ColumnTypes}
-      
+        pagination={false}
       />
-      <Button className='top-[-50px] rounded-xl' type='primary'>{t('Save')}</Button>
+      <Button className='mt-4 mb-4 rounded-xl' type='primary'>{t('Save')}</Button>
     </div>
   );
 };

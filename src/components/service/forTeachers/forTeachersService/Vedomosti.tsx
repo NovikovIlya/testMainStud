@@ -1,79 +1,70 @@
-import { PrinterOutlined, StarOutlined } from '@ant-design/icons'
-import { Button, Col, Form, Result, Row, Select, Spin } from 'antd'
-import Title from 'antd/es/typography/Title'
-import { t } from 'i18next'
 import React, { useEffect, useState } from 'react'
-
-import { Student, dataBrs } from '../../../../models/forTeacher'
-import { useAppDispatch } from '../../../../store'
-import {
-	useGetBrsForTeacherQuery,
-	useGetBrsGroupsQuery,
-	useGetBrsSubjectsQuery,
-	useSaveBrsMutation
-} from '../../../../store/api/forTeacher/forTeacherApi'
-import { setIsEditTableScheduleTeacher } from '../../../../store/reducers/authSlice'
-
+import TableVedomosti from './table/TableVedomosti'
+import { Button, Col, Form, Result, Row, Select, Spin } from 'antd'
 import InfoCard from './InfoCard'
-import TableBrs from './table/TableBrs'
+import { PrinterOutlined } from '@ant-design/icons'
+import { t } from 'i18next'
 
-const Brs = () => {
-	const dispatch = useAppDispatch()
-	const [form2] = Form.useForm()
-	const discilineForm = Form.useWatch('disciline', form2)
-	const groupeForm = Form.useWatch('group', form2)
-	const { data, isError, error, isFetching } = useGetBrsForTeacherQuery({ subjectId: discilineForm, groupId: groupeForm },{ skip: !discilineForm || !groupeForm }
-	)
-	const { data: dataSubjects } = useGetBrsSubjectsQuery()
-	const { data: dataGroups } = useGetBrsGroupsQuery(discilineForm, { skip: !discilineForm })
-	const [saveBrs, { data: dataSave, isLoading }] = useSaveBrsMutation()
-	const [dataSource, setDataSource] = useState<Student[]>([])
+import { setIsEditTableScheduleTeacher } from '../../../../store/reducers/authSlice'
+import { useAppDispatch } from '../../../../store'
+import { useGetBrsForTeacherQuery, useGetBrsGroupsQuery, useGetBrsSubjectsQuery, useSaveBrsMutation } from '../../../../store/api/forTeacher/forTeacherApi'
+import Title from 'antd/es/typography/Title'
 
+const Vedomosti = () => {
+    const dispatch = useAppDispatch()
+    const [form2] = Form.useForm()
+    const discilineForm = Form.useWatch('disciline', form2)
+    const groupeForm = Form.useWatch('group', form2)
+    const { data, isError, error, isFetching } = useGetBrsForTeacherQuery({ subjectId: discilineForm, groupId: groupeForm },{ skip: !discilineForm || !groupeForm }
+    )
+    const { data: dataSubjects } = useGetBrsSubjectsQuery()
+    const { data: dataGroups } = useGetBrsGroupsQuery(discilineForm, { skip: !discilineForm })
+    const [saveBrs, { data: dataSave, isLoading }] = useSaveBrsMutation()
+    const [dataSource, setDataSource] = useState<any>([])
+  
+  
+    useEffect(() => {
+      if (data?.students) {
+        setDataSource(
+          data.students.map((item: any, index: number) => ({
+            ...item,
+            key: item.studId,
+            N: index + 1
+          }))
+        )
+      }
+    }, [data])
+  
+    const handleYearChange = () => {
+      form2.resetFields(['group'])
+    }
+  
+    const onFinish = () => {
+      const filteredData = dataSource
+        .map(({ key, N, ...rest }:any) => rest)
+        .map((student:any) => ({
+          ...student,
+          firstMonth: Number(student.firstMonth),
+          secondMonth: Number(student.secondMonth),
+          thirdMonth: Number(student.thirdMonth),
+          fourthMonth: Number(student.fourthMonth)
+        }))
+  
+      saveBrs({
+        subjectId: discilineForm,
+        groupId: groupeForm,
+        semester: data?.semester,
+        students: filteredData
+      })
+      dispatch(setIsEditTableScheduleTeacher(false))
+    }
 
-	useEffect(() => {
-		if (data?.students) {
-			setDataSource(
-				data.students.map((item: Student, index: number) => ({
-					...item,
-					key: item.studId,
-					N: index + 1
-				}))
-			)
-		}
-	}, [data])
-
-	const handleYearChange = () => {
-		form2.resetFields(['group'])
-	}
-
-	const onFinish = () => {
-		const filteredData = dataSource
-			.map(({ key, N, ...rest }) => rest)
-			.map(student => ({
-				...student,
-				firstMonth: Number(student.firstMonth),
-				secondMonth: Number(student.secondMonth),
-				thirdMonth: Number(student.thirdMonth),
-				fourthMonth: Number(student.fourthMonth)
-			}))
-
-		saveBrs({
-			subjectId: discilineForm,
-			groupId: groupeForm,
-			semester: data?.semester,
-			students: filteredData
-		})
-		dispatch(setIsEditTableScheduleTeacher(false))
-	}
-
-
-
-	return (
-		<Spin spinning={isLoading || isFetching}>
+  return (
+    <Spin spinning={isLoading || isFetching}>
 			<Form onFinish={onFinish} form={form2} className="px-[80px]">
 				<InfoCard text={t('infoTextBrs')} />
 				<Title className="mt-8" level={2}>
-					БРС
+					Ведомости
 				</Title>
 				<div className="mt-8">
 					<Row>
@@ -137,7 +128,7 @@ const Brs = () => {
 					</Row>
 				</div>
 
-				{groupeForm && data?.students?.length ? (
+				{true ? (
 					<div className="animate-fade-in">
 						<Row className="flex gap-2">
 							<Button className="rounded-xl" icon={<PrinterOutlined />}>
@@ -148,7 +139,7 @@ const Brs = () => {
 							</Button>
 						</Row>
 
-						<TableBrs semester={data.semester} dataSource={dataSource} setDataSource={setDataSource} />
+						<TableVedomosti semester={data?.semester} dataSource={dataSource} setDataSource={setDataSource} />
 
 						<Button htmlType="submit" className="mt-8 mb-8 rounded-xl" type="primary">
 							{t('Save')}
@@ -161,6 +152,7 @@ const Brs = () => {
 				)}
 			</Form>
 		</Spin>
-	)
+  )
 }
-export default Brs
+
+export default Vedomosti

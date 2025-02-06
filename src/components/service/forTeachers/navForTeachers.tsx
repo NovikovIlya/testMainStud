@@ -20,6 +20,7 @@ import Brs from './forTeachersService/Brs'
 import JournalPosElem from './forTeachersService/JournalPosElem'
 import ScheduleTeacher from './forTeachersService/ScheduleTeacher'
 import NavJournal from './forTeachersService/navJournal'
+import Vedomosti from './forTeachersService/Vedomosti'
 
 export const NavForTeachers = () => {
 	const dispatch = useAppDispatch()
@@ -34,7 +35,7 @@ export const NavForTeachers = () => {
 	const isEditTableScheduleTeacher = useAppSelector(state => state.auth.isEditTableScheduleTeacher)
 	const yearForm = Form.useWatch('year', form)
 	const semestrForm = Form.useWatch('semestr', form)
-	
+
 	useEffect(() => {
 		dispatch(setYearForm(yearForm))
 	}, [yearForm])
@@ -159,7 +160,7 @@ export const NavForTeachers = () => {
 				</Form>
 				{current === 'schedule' && <ScheduleTeacher />}
 				{current === 'BRS' ? <Brs /> : ''}
-				{current === 'vedomosti' ? <></> : ''}
+				{current === 'vedomosti' ? <Vedomosti/> : ''}
 				{current === 'journalPos' ? <NavJournal /> : ''}
 			</div>
 		</>

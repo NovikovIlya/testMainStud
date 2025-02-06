@@ -18,6 +18,7 @@ export interface Item {
     dataIndex: keyof Item;
     record: Item;
     handleSave: (record: Item) => void;
+    inputType?: string;
   }
 
   export interface DataType {

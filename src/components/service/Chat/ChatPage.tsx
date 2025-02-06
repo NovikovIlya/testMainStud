@@ -2,6 +2,7 @@ import { Button } from 'antd'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
+import { useLocation } from 'react-router-dom'
 import SockJS from 'sockjs-client'
 // const Stomp = require('stompjs/lib/stomp').Stomp
 import Stomp from 'stompjs'
@@ -13,13 +14,12 @@ import {
 	usePostChatMessageMutation,
 	useReadChatMessageMutation
 } from '../../../store/api/serviceApi'
-import { openChat, closeChat } from '../../../store/reducers/ChatRespondStatusSlice'
+import { closeChat, openChat } from '../../../store/reducers/ChatRespondStatusSlice'
 import { setChatId } from '../../../store/reducers/chatIdSlice'
 import { ChatMessageDateDisplayEnum, ChatMessageType } from '../../../store/reducers/type'
 import { AttachIcon } from '../jobSeeker/AttachIcon'
 
 import { ChatMessage } from './ChatMessage'
-import {useLocation} from "react-router-dom";
 
 const seekerToken =
 	'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJJQU1pdHJvZmFub3ZAc3R1ZC5rcGZ1LnJ1IiwiaWF0IjoxNzExNTc3OTMwLCJleHAiOjE3MTE1ODg3MzAsInNjb3BlIjoidXNlciIsInJvbGVzIjpbeyJ1c2VySWQiOiIyNTMxNjIiLCJzZXNzaW9uSWQiOiIyNDAzMjI3MTQ4NzUxOTQ4Mjk3MzMwOTA0NzM1MzY2NyIsInNlc3Npb25IYXNoIjoiRDJBMjI1QTc0OTlGMUNFMTZDQkUwMkI5RjZDOTE3RTEiLCJkb2N1bWVudHNIYXNoIjoiQjI2Q0IwQzNFOEFDMzZENkEwQ0I1MTJDRjMwMjM3NzciLCJsb2dpbiI6IklBTWl0cm9mYW5vdiIsInR5cGUiOiJTRUVLRVIifV0sInNlc3Npb25JZCI6IjI0MDMyMjcxNDg3NTE5NDgyOTczMzA5MDQ3MzUzNjY3Iiwic2Vzc2lvbkhhc2giOiJEMkEyMjVBNzQ5OUYxQ0UxNkNCRTAyQjlGNkM5MTdFMSIsImFsbElkIjoiMTc4NDQwIiwiZW1haWwiOiJtaXRyb18wMkBtYWlsLnJ1In0.4dmYBUEDz9UzKxvxWtQhA6poTVwFOkRn-YoSzngfVUs'
@@ -36,7 +36,6 @@ type ChatMessageFormDataType = {
 }
 
 export const ChatPage = () => {
-
 	const dispatch = useDispatch()
 
 	const location = useLocation()
@@ -53,7 +52,7 @@ export const ChatPage = () => {
 		id_from_url = match_1[1]
 	}
 
-	const chat_id = { chatId: Number(id_from_url)}
+	const chat_id = { chatId: Number(id_from_url) }
 
 	const chatIdState = useAppSelector(state => state.chatId)
 	const ChatStatus = useAppSelector(state => state.chatResponceStatus)
@@ -165,8 +164,8 @@ export const ChatPage = () => {
 			})
 		})
 		return () => {
-			client.disconnect(() => {})
-			socket.close()
+			chatIdState.chatId !== 0 && client.disconnect(() => {})
+			chatIdState.chatId !== 0 && socket.close()
 		}
 	}, [chatIdState])
 
@@ -362,7 +361,7 @@ export const ChatPage = () => {
 							/>
 						</>
 					))}
-					{chat_status === "closed" && (
+					{chat_status === 'closed' && (
 						<div className="mt-auto py-[10px] text-center font-content-font font-normal text-[16px]/[16px] text-black text-opacity-40">
 							Вы сможете писать в чат после того, как руководитель пригласит вас на собеседование
 						</div>
@@ -383,7 +382,7 @@ export const ChatPage = () => {
 										onKeyDown={e => {
 											!e.shiftKey && e.code === 'Enter' && handleSubmit(handleMessage)()
 										}}
-										disabled={chat_status === "closed"}
+										disabled={chat_status === 'closed'}
 										{...register('text')}
 										value={msgInputText}
 										onChange={e => {
@@ -405,7 +404,7 @@ export const ChatPage = () => {
 								render={({ field }) => (
 									<>
 										<input
-											disabled={chat_status === "closed"}
+											disabled={chat_status === 'closed'}
 											{...register('files', {
 												onChange(event) {
 													setFileName(event.target.files?.[0].name)

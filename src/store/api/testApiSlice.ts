@@ -9,7 +9,7 @@ import {
 import i18next from 'i18next'
 import { logOut, setCredentials } from '../reducers/authSlice'
 const baseQuery = fetchBaseQuery({
-	baseUrl: 'https://newlk-test.kpfu.ru:443/',
+	baseUrl: 'https://newlk-test.kpfu.ru/',
 	prepareHeaders(headers, { getState }) {
 		const token = (getState() as RootState).auth.accessToken
 		if (token) {

@@ -1,7 +1,7 @@
 import { PrinterOutlined, StarOutlined } from '@ant-design/icons'
 import { Button, Col, Form, Radio, Result, Row, Select } from 'antd'
 import { t } from 'i18next'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import InfoCard from './InfoCard'
 import TableBrs from './table/TableBrs'
@@ -12,6 +12,8 @@ const JournalPosElem = () => {
 	const [form] = Form.useForm()
 	const discilineForm = Form.useWatch('disciline', form)
 	const groupeForm = Form.useWatch('group', form)
+
+	
 
 	const [dataSource, setDataSource] = useState<any[]>([
 		{
@@ -43,8 +45,8 @@ const JournalPosElem = () => {
 	}
 
 	return (
-		<div className="p-[80px]">
-			<InfoCard text='Перед работой со вкладкой «Журнал посещений» необходимо зайти во вкладку «Расписание» и проверить правильность занесения Вашим деканатом расписания Ваших занятий.' />
+		<div className="">
+			
 
 			<Form className="mt-8" form={form}>
 				<Row>

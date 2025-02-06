@@ -56,7 +56,7 @@ export const ContactInformation = () => {
 		}
 		const text = form.getFieldValue('inputText')
 		if(!text){
-			alert('Напишите почту')
+			// alert(t('emailNeed'))
 			return
 		}
 		postMail({ email: text }).unwrap().then(res => sendVerOne(res.id))
@@ -128,19 +128,19 @@ export const ContactInformation = () => {
 					<ContactDataBlock isLoadingPost={isLoadingPost} sortedEmails={sortedEmails} sendVer={sendVer} handleDeleteEmail={handleDeleteEmail} showModal={showModal}/>
 				</article>
 			</section>
-			<Modal   maskClosable={false}  title="Верификация почты" footer={null} open={isModalOpen} onCancel={handleCancel}>
-			{isErrorVerif ? "Пожалуйста повторите позже, запрос на следующее подтвеждение будет доступен через 1 минуту" :
+			<Modal   maskClosable={false}  title="" footer={null} open={isModalOpen} onCancel={handleCancel}>
+			{isErrorVerif ? t('verErr') :
 				<Spin  spinning={isLoadingVer || isLoadingFin}>
-					{count <= 0 ? <div>{!isLoadingVer ? 'Время истекло, повторите попытку позже' : 'Идет загрузка...'}</div>:
+					{count <= 0 ? <div>{!isLoadingVer ? t('verText3') : t('loading')}</div>:
 					<>
-					{dataFin?.verified ? <div className='text-center'>Верификация пройдена успешна!</div>:<>
-					<p>Оставшееся время: {count}</p> 
-					<p className="mb-2">На вашу почту отправлен код! Скопируйте его и напишите в поле ниже:</p>
+					{dataFin?.verified ? <div className='text-center'>{t('verSuc')}</div>:<>
+					<p>{t('verText')}: {count}</p> 
+					<p className="mb-2">{t('verText2')}</p>
 					<Form.Item name={'code'} >
 						<Input.OTP length={4}  />
 					</Form.Item>
 					<Button className="w-full" onClick={finalFnVer}>
-						Подтвердить
+						{t('addBtn')}
 					</Button></>} 
 					</>}
 				</Spin>

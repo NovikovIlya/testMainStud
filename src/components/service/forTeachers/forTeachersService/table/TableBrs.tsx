@@ -260,6 +260,7 @@ const TableBrs = ({dataSource, setDataSource,semester}: Props) => {
         dataSource={dataSource}
         columns={columns}
         className=''
+        pagination={false}
       
       />
       {/* <Button className='top-[-50px] rounded-xl' type='primary'>{t('Save')}</Button> */}

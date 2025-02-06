@@ -442,6 +442,13 @@
     "november": "November",
     "december": "December",
 	"sum":"Sum",
-	"today":"Today"
+	"today":"Today",
+	"emailNeed": "Write mail",
+	"verText": "Time remaining",
+	"verText2": "A code has been sent to your email! Copy it and write it in the field below:",
+	"verText3": "Time expired, please try again later",
+	"loading": "loading",
+	"verSuc": "Verification completed successfully",
+	"verErr": "Please try again later, the next confirmation request will be available in 1 minute"
 
 }

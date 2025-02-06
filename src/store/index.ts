@@ -24,6 +24,7 @@ import { apiSliceTeacher } from './api/apiSliceTeacher'
 import { setupListeners } from '@reduxjs/toolkit/query'
 import { testApiSlice } from './api/testApiSlice'
 import { emptyApiSlice } from './api/emptyApiSlice'
+import forTeacherSlice from './reducers/forTeacherSlice'
 
 
 export const store = configureStore({
@@ -43,6 +44,7 @@ export const store = configureStore({
 		StaffItemTabs: StaffItemTabsReducer,
 		SecretaryStepFormBusinessTrip: SecretaryStepFormBusinessTrip,
 		SecretaryItemTabs: SecretaryItemTabsReducer,
+		forTeacher:forTeacherSlice,
 		[practiceApi.reducerPath]: practiceApi.reducer,
 		[apiSlice.reducerPath]: apiSlice.reducer,
 		[testApiSlice.reducerPath]: testApiSlice.reducer,

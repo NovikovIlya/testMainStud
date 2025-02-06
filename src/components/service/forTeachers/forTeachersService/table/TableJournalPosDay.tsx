@@ -81,9 +81,9 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
 };
 
 
-const TableBrs = ({dataSource, setDataSource}:any) => {
+const TableJournalPosDay = ({dataSource, setDataSource}:any) => {
   const dispatch = useAppDispatch()
-  const semesctr = 0
+
   function handleCheckboxChange(e:any,text:any)  {
     console.log(e.target.checked,text)
   }
@@ -100,105 +100,17 @@ const TableBrs = ({dataSource, setDataSource}:any) => {
       width: '20%',
       fixed: 'left',
     },
+   
     {
-      title: 'ПН',
-       editable: true,
-      children: [
-        {
-          title: (
-            <div className='w-20 flex justify-center items-center flex-col'>
-               <div className='text-xs'>10:30 - 12:00</div>
-               <Tooltip title="Подтвердить?"><Checkbox onChange={(e)=>handleCheckboxChange(e,'10:30 - 12:00')} /></Tooltip>
-            </div>
-          ),
-          dataIndex: 'age2',
-          editable: true,
-          key: 'age',
-          width: 150,
-         
-          
-        },
-        {
-          title: '12:00 - 13:40',
-          dataIndex: 'age3',
-          editable: true,
-          key: 'age',
-          width: 150,
-        }
-      ],
-    },
-    {
-      title: 'Октябрь',
+      title: 'Учет посещения',
       dataIndex: 'october',
       editable: true,
       width: '15%',
-    },  
-    {
-      title: 'Ноябрь',
-      dataIndex: 'november',
-      editable: true,
-      width: '15%',
-    },
-    {
-      title: 'Декабрь',
-      dataIndex: 'december',
-      editable: true,
-      width: '15%',
-    },
-    {
-      title: 'Сумма баллов',
-      dataIndex: 'address',
-      editable: true,
-      width: '10%',
-    },
+   },
    
   ];
 
-  const defaultColumnsTwo: (ColumnTypes[number] & { editable?: boolean; dataIndex: string })[] = [
-    {
-        title: 'N',
-        dataIndex: 'N',
-        width: '10%',
-        fixed: 'left',
-    },
-    {
-      title: 'ФИО',
-      dataIndex: 'name',
-      width: '20%',
-      fixed: 'left',
-    },
-    {
-      title: 'Февраль',
-      dataIndex: 'age',
-      editable: true,
-      width: '15%',
-    },
-    {
-      title: 'Март',
-      dataIndex: 'address',
-      editable: true,
-      width: '15%',
-    },
-    {
-      title: 'Апрель',
-      dataIndex: 'address',
-      editable: true,
-      width: '15%',
-    },
-    {
-      title: 'Май',
-      dataIndex: 'address',
-      editable: true,
-      width: '15%',
-    },
-    {
-      title: 'Сумма баллов',
-      dataIndex: 'address',
-      editable: true,
-      width: '10%',
-    },
-   
-  ];
+  
 
 
   const handleSave = (row: any) => {
@@ -236,7 +148,7 @@ const TableBrs = ({dataSource, setDataSource}:any) => {
     },
   };
 
-  const columns = semesctr === 0 ? 
+  const columns =  
     defaultColumns.map((col:any) => {
     if (!col.editable) {
       return col;
@@ -252,22 +164,7 @@ const TableBrs = ({dataSource, setDataSource}:any) => {
       }),
     };
   }) 
-    :
-    defaultColumnsTwo.map((col:any) => {
-    if (!col.editable) {
-      return col;
-    }
-    return {
-      ...col,
-      onCell: (record: DataType) => ({
-        record,
-        editable: col.editable,
-        dataIndex: col.dataIndex,
-        title: col.title,
-        handleSave,
-      }),
-    };
-  });
+   
 
   return (
     <div className='mt-4'>
@@ -285,4 +182,4 @@ const TableBrs = ({dataSource, setDataSource}:any) => {
   );
 };
 
-export default TableBrs;
+export default TableJournalPosDay;

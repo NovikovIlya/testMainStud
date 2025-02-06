@@ -122,8 +122,16 @@ const TableVedomosti = ({dataSource, setDataSource,semester}: any) => {
     {
       title: 'Итоговая оценка вносимая в зачетную книжку',
       dataIndex: 'fourthMonth',
-   
+      
       width: '15%',
+      render: (text: any) => {
+        return (
+          <div >
+            {text==='Удовлетворительно' ? <div className='rounded-xl bg-yellow-400 w-[10px]' ></div> : <div ></div>}
+            {text}
+          </div>
+        );
+      }
     },
     {
       title: 'Комментарий',

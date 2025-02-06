@@ -441,6 +441,7 @@
     "october": "October",
     "november": "November",
     "december": "December",
-	"sum":"Sum"
+	"sum":"Sum",
+	"today":"Today"
 
 }

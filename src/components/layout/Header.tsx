@@ -46,6 +46,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const roles = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '')?.roles : []
 	const username = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '')?.username : ''
 	const maiRole = roles.find((item: any) => item.login === username)?.type || ''
+	const maiRoleArray = roles.find((item: any) => item.login === username)
 	const [subRole, setSubrole] = useLocalStorageState<any>('subRole', { defaultValue: '' })
 	const [mainRole, setmainRole] = useLocalStorageState<any>('typeAcc', {defaultValue: 'STUD'})
 	const [login, { data: dataLogin, isSuccess, isLoading }] = useFakeLoginMutation()
@@ -58,7 +59,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 		  unreadChatsCount: data?.unreadChatsCount
 		}),
 	  })
-	
+	console.log('maiRole',maiRole)
 
 	useEffect(() => {
 		if (isSuccessSubRole) {
@@ -302,12 +303,13 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 				</div>
 				<div className="flex gap-3 items-center h-full max-[1000px]:gap-0 w-fit justify-center">
 					<div className="flex h-full items-center ">
+						{maiRole==='ABITUR' || maiRole==='OTHER' ? '':
 						<a
 							className={clsx(
 								'h-full flex gap-2 items-center px-3 cursor-pointer no-underline',
 								type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'
 							)}
-							href={'https://shelly.kpfu.ru/e-ksu/main_blocks.startpage'}
+							href={`${maiRole==='EMPL' ? `https://shelly.kpfu.ru/e-ksu/e_university.show_notification?p1=${maiRoleArray?.userId}&p2=${maiRoleArray?.sessionId}&p_h=${maiRoleArray?.sessionHash}&p_c_sess=1` : 'https://shelly.kpfu.ru/e-ksu/main_blocks.startpage'}`}
 						>
 							<ArrowLeftBackInOldAccount white={type === 'service'} />
 							<span
@@ -315,7 +317,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 							>
 								{t('OldLk')}
 							</span>
-						</a>
+						</a>}
 
 						{/* <div
 							className={clsx(

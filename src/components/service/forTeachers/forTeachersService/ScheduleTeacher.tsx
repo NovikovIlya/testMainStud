@@ -10,7 +10,7 @@ const ScheduleTeacher = () => {
   const yearForm = Form.useWatch('year', form);
   const semestrForm = Form.useWatch('semestr', form);
   const {data:dataSchedule,isFetching,isError,error} = useGetScheduleForTeacherQuery({year:yearForm,semester:semestrForm},{skip:!yearForm || !semestrForm})
-
+  console.log('yearForm',yearForm)
   const handleYearChange = () => {
     form.resetFields(['semestr']);
   }
@@ -28,17 +28,32 @@ const ScheduleTeacher = () => {
     
     return years;
   }
+
+  function getCurrentAcademicYear() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth(); // Месяцы начинаются с 0 (январь)
   
-  if(isError){
-    // @ts-ignore
-    alert(`Ошибка загрузки данных ${error?.error}`)
+    // Учебный год обычно начинается в сентябре
+    if (month >= 8) {
+      return `${year}/${year + 1}`;
+    } else {
+      return `${year - 1}/${year}`;
+    }
   }
+  
+ 
 
   return (
     <div className="p-[80px]">
         <InfoCard text={t('infoTextScdedule')}/>
 
-        <Form className='mt-8' form={form}>
+        <Form 
+          initialValues={{
+           year: `${getCurrentAcademicYear()}`,
+          }} 
+          className='mt-8' 
+          form={form}>
           <Row >
             <Col span={24}>
               <Form.Item
@@ -60,7 +75,7 @@ const ScheduleTeacher = () => {
                 labelCol={{ span: 4 }} 
                 wrapperCol={{ span: 10 }} 
               >
-                <Select disabled={!yearForm}  allowClear options={[{value:1,label:'1'},{value:2,label:'2'},{value:3,label:'3'}]}/>
+                <Select disabled={!yearForm}  allowClear options={[{value:1,label:'1'},{value:2,label:'2'}]}/>
               </Form.Item>
             </Col>
           </Row>

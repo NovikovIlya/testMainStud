@@ -1,5 +1,5 @@
 import { PrinterOutlined, StarOutlined } from '@ant-design/icons'
-import { Button, Col, Form, Result, Row, Select } from 'antd'
+import { Button, Col, Form, Radio, Result, Row, Select } from 'antd'
 import { t } from 'i18next'
 import React, { useState } from 'react'
 
@@ -8,6 +8,7 @@ import TableBrs from './table/TableBrs'
 import TableJournalPos from './table/TableJournalPos'
 
 const JournalPosElem = () => {
+	const initialDay = ''
 	const [form] = Form.useForm()
 	const discilineForm = Form.useWatch('disciline', form)
 	const groupeForm = Form.useWatch('group', form)
@@ -37,11 +38,13 @@ const JournalPosElem = () => {
 		}
 	])
 	console.log('dataSource',dataSource)
-	
+	const onChange = ()=>{
+
+	}
 
 	return (
 		<div className="p-[80px]">
-			<InfoCard text={t('infoTextBrs')} />
+			<InfoCard text='Перед работой со вкладкой «Журнал посещений» необходимо зайти во вкладку «Расписание» и проверить правильность занесения Вашим деканатом расписания Ваших занятий.' />
 
 			<Form className="mt-8" form={form}>
 				<Row>
@@ -63,21 +66,59 @@ const JournalPosElem = () => {
 						</Form.Item>
 					</Col>
 
-					<Col span={24}>
-						<Form.Item
-							name="group"
-							label={t('group')}
-							labelAlign="left"
-							labelCol={{ span: 4 }} // Такая же ширина лейбла
-							wrapperCol={{ span: 10 }} // Такая же ширина инпута
-						>
-							<Select disabled={!discilineForm} allowClear />
-						</Form.Item>
-					</Col>
+
 				</Row>
 			</Form>
 
+			
+
 			{true ? (
+				<>
+				<div className={` mt-14  radio w-full justify-center animate-fade-in mb-6`}>
+					<Radio.Group
+						onChange={onChange}
+						defaultValue={initialDay}
+						buttonStyle="solid"
+						className="flex gap-[10px] h-9"
+					>
+						<Radio.Button
+							className="rounded-full bg-transparent h-full flex items-center  text-base"
+							value="monday"
+						>
+							{t('monday')}
+						</Radio.Button>
+						<Radio.Button
+							className="rounded-full h-full flex items-center text-base bg-transparent"
+							value="tuesday"
+						>
+							{t('tuesday')}
+						</Radio.Button>
+						<Radio.Button
+							className="rounded-full h-full flex items-center text-base bg-transparent"
+							value="wednesday"
+						>
+							{t('wednesday')}
+						</Radio.Button>
+						<Radio.Button
+							className="rounded-full h-full flex items-center text-base bg-transparent"
+							value="thursday"
+						>
+							{t('thursday')}
+						</Radio.Button>
+						<Radio.Button
+							className="rounded-full h-full flex items-center text-base bg-transparent"
+							value="friday"
+						>
+							{t('friday')}
+						</Radio.Button>
+						<Radio.Button
+							className="rounded-full h-full flex items-center text-base bg-transparent"
+							value="saturday"
+						>
+							{t('saturday')}
+						</Radio.Button>
+					</Radio.Group>
+				</div>
 				<div className='animate-fade-in'>
 					<Row className="flex gap-2">
 						<Button className="rounded-xl" icon={<PrinterOutlined />}>
@@ -90,8 +131,9 @@ const JournalPosElem = () => {
 
 					<TableJournalPos setDataSource={setDataSource} dataSource={dataSource} />
 
-					<InfoCard text={t('infoTextBrs2')} />
+					
 				</div>
+				</>
 			) : (
 				<Result title="" extra={t('selectYearSemest')} />
 			)}

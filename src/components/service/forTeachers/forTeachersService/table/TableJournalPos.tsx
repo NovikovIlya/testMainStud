@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import type { FormInstance, GetRef, InputRef, TableProps } from 'antd';
-import { Button, Form, Input, Popconfirm, Table } from 'antd';
+import { Button, Checkbox, Form, Input, Popconfirm, Table, Tooltip } from 'antd';
 import { t } from 'i18next';
 import { useAppDispatch } from '../../../../../store';
 import { setIsEditTableScheduleTeacher } from '../../../../../store/reducers/authSlice';
@@ -84,28 +84,46 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
 const TableBrs = ({dataSource, setDataSource}:any) => {
   const dispatch = useAppDispatch()
   const semesctr = 0
-
+  function handleCheckboxChange(e:any,text:any)  {
+    console.log(e.target.checked,text)
+  }
   const defaultColumns: any = [
     {
         title: 'N',
         dataIndex: 'N',
         width: '10%',
+        fixed: 'left',
     },
     {
       title: 'ФИО',
       dataIndex: 'name',
       width: '20%',
+      fixed: 'left',
     },
     {
       title: 'ПН',
-      
+       editable: true,
       children: [
         {
-          title: 'Age',
-          dataIndex: 'age',
+          title: (
+            <div className='w-20 flex justify-center items-center flex-col'>
+               <Tooltip title="Подтвердить?"><Checkbox onChange={(e)=>handleCheckboxChange(e,'10:30 - 12:00')} /></Tooltip>
+               <div className='text-xs'>10:30 - 12:00</div>
+            </div>
+          ),
+          dataIndex: 'age2',
+          editable: true,
           key: 'age',
           width: 150,
+         
           
+        },
+        {
+          title: '12:00 - 13:40',
+          dataIndex: 'age3',
+          editable: true,
+          key: 'age',
+          width: 150,
         }
       ],
     },
@@ -141,11 +159,13 @@ const TableBrs = ({dataSource, setDataSource}:any) => {
         title: 'N',
         dataIndex: 'N',
         width: '10%',
+        fixed: 'left',
     },
     {
       title: 'ФИО',
       dataIndex: 'name',
       width: '20%',
+      fixed: 'left',
     },
     {
       title: 'Февраль',

@@ -72,7 +72,7 @@ const Vedomosti = () => {
 		<Spin spinning={isLoading || isFetching}>
 			{semestrForm ? (
 				<Form onFinish={onFinish} form={form2} className="px-[80px] mb-8">
-					<InfoCard text={t('infoTextBrs')} />
+					<InfoCard text={t('infoTextVed')} />
 					<Title className="mt-8" level={2}>
 						Ведомости
 					</Title>
@@ -156,7 +156,7 @@ const Vedomosti = () => {
 								{t('Save')}
 							</Button>
 
-							<InfoCard text={t('infoTextVed')} />
+							<InfoCard text={t('infoTextVed2')} />
 						</div>
 					) : (
 						<Result className="mb-4" title="" extra={t('selectDis')} />

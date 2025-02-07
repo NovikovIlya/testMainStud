@@ -449,6 +449,9 @@
 	"verText3": "Time expired, please try again later",
 	"loading": "loading",
 	"verSuc": "Verification completed successfully",
-	"verErr": "Please try again later, the next confirmation request will be available in 1 minute"
+	"verErr": "Please try again later, the next confirmation request will be available in 1 minute",
+	"selectDis": "Select a discipline and group",
+	"infoTextVed" : "Уважаемые преподаватели! В функционале “Ведомости” реализована возможность выгрузки экзаменационно-зачётной ведомости. Обращаем ваше внимание, что заполнение данной ведомости доступно исключительно в период сессии."
+	
 
 }

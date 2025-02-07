@@ -47,7 +47,7 @@ export const Registration: FC<IRegProps> = ({ changeEmail, email }) => {
 			<div className="flex flex-row justify-between gap-24 text-base max-xl:gap-4 max-lg:flex-col  max-lg:items-center">
 				<Form
 					name="login"
-					className="max-w-[400px] p-2 max-sm:min-w-[345px] max-[321px]:min-w-[300px]"
+					className="max-w-[400px] p-2 max-sm:min-w-[345px] max-[321px]:min-w-[300px] rounded-lg shadow-[0_2px_22px_-4px_rgba(93,96,127,0.2)] p-6 mb-4"
 					initialValues={{ remember: true }}
 					onFinish={onFinish}
 				>

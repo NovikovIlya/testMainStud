@@ -5,7 +5,7 @@ import { t } from 'i18next'
 import React, { useEffect, useState } from 'react'
 
 import { Student, dataBrs } from '../../../../models/forTeacher'
-import { useAppDispatch } from '../../../../store'
+import { useAppDispatch, useAppSelector } from '../../../../store'
 import {
 	useGetBrsForTeacherQuery,
 	useGetBrsGroupsQuery,
@@ -22,13 +22,13 @@ const Brs = () => {
 	const [form2] = Form.useForm()
 	const discilineForm = Form.useWatch('disciline', form2)
 	const groupeForm = Form.useWatch('group', form2)
-	const { data, isError, error, isFetching } = useGetBrsForTeacherQuery({ subjectId: discilineForm, groupId: groupeForm },{ skip: !discilineForm || !groupeForm }
-	)
-	const { data: dataSubjects } = useGetBrsSubjectsQuery()
-	const { data: dataGroups } = useGetBrsGroupsQuery(discilineForm, { skip: !discilineForm })
+	const { data, isError, error, isFetching } = useGetBrsForTeacherQuery({ subjectId: discilineForm, groupId: groupeForm },{ skip: !discilineForm || !groupeForm })
+	const { data: dataSubjects,isFetching:isFetchingSubject } = useGetBrsSubjectsQuery()
+	const { data: dataGroups,isFetching:isFetchingGroup } = useGetBrsGroupsQuery(discilineForm, { skip: !discilineForm })
 	const [saveBrs, { data: dataSave, isLoading }] = useSaveBrsMutation()
 	const [dataSource, setDataSource] = useState<Student[]>([])
-
+	const yearForm = useAppSelector(state => state.forTeacher.yearForm)
+	const semestrForm = useAppSelector(state => state.forTeacher.semestrForm)
 
 	useEffect(() => {
 		if (data?.students) {
@@ -66,100 +66,104 @@ const Brs = () => {
 		dispatch(setIsEditTableScheduleTeacher(false))
 	}
 
-
-
 	return (
 		<Spin spinning={isLoading || isFetching}>
-			<Form onFinish={onFinish} form={form2} className="px-[80px]">
-				<InfoCard text={t('infoTextBrs')} />
-				<Title className="mt-8" level={2}>
-					БРС
-				</Title>
-				<div className="mt-8">
-					<Row>
-						<Col span={24}>
-							<Form.Item
-								name="disciline"
-								label={t('discipline')}
-								labelAlign="left"
-								labelCol={{ span: 4 }} // Фиксированная ширина лейбла
-								wrapperCol={{ span: 18 }} // Оставшаяся ширина для инпута
-							>
-								<Select
-									allowClear
-									showSearch
-									filterOption={(input, option) => {
-										if (option?.label) {
-											// Проверяем, что label существует
-											return option.label.toString().toLowerCase().includes(input.toLowerCase())
+			{semestrForm ? (
+				<Form onFinish={onFinish} form={form2} className="px-[80px] mb-8">
+					<InfoCard text={t('infoTextBrs')} />
+					<Title className="mt-8" level={2}>
+						БРС
+					</Title>
+					<div className="mt-8">
+						<Row>
+							<Col span={24}>
+								<Form.Item
+									name="disciline"
+									label={t('discipline')}
+									labelAlign="left"
+									labelCol={{ span: 4 }} // Фиксированная ширина лейбла
+									wrapperCol={{ span: 18 }} // Оставшаяся ширина для инпута
+								>
+									<Select
+										loading={isFetchingSubject}
+										allowClear
+										showSearch
+										filterOption={(input, option) => {
+											if (option?.label) {
+												// Проверяем, что label существует
+												return option.label.toString().toLowerCase().includes(input.toLowerCase())
+											}
+											return false
+										}}
+										options={
+											dataSubjects?.map((item: any) => ({
+												label: item.subjectName,
+												value: item.subjectId
+											})) || []
 										}
-										return false
-									}}
-									options={
-										dataSubjects?.map((item: any) => ({
-											label: item.subjectName,
-											value: item.subjectId
-										})) || []
-									}
-									onChange={handleYearChange}
-								/>
-							</Form.Item>
-						</Col>
+										onChange={handleYearChange}
+									/>
+								</Form.Item>
+							</Col>
 
-						<Col span={24}>
-							<Form.Item
-								name="group"
-								label={t('group')}
-								labelAlign="left"
-								labelCol={{ span: 4 }} // Такая же ширина лейбла
-								wrapperCol={{ span: 10 }} // Такая же ширина инпута
-							>
-								<Select
-									showSearch
-									filterOption={(input, option) => {
-										if (option?.label) {
-											// Проверяем, что label существует
-											return option.label.toString().toLowerCase().includes(input.toLowerCase())
+							<Col span={24}>
+								<Form.Item
+									name="group"
+									label={t('group')}
+									labelAlign="left"
+									labelCol={{ span: 4 }} // Такая же ширина лейбла
+									wrapperCol={{ span: 10 }} // Такая же ширина инпута
+								>
+									<Select
+									    loading={isFetchingGroup}
+										showSearch
+										filterOption={(input, option) => {
+											if (option?.label) {
+												// Проверяем, что label существует
+												return option.label.toString().toLowerCase().includes(input.toLowerCase())
+											}
+											return false
+										}}
+										disabled={!discilineForm}
+										allowClear
+										options={
+											dataGroups?.map((item: any) => ({
+												label: item.groupName,
+												value: item.groupId
+											})) || []
 										}
-										return false
-									}}
-									disabled={!discilineForm}
-									allowClear
-									options={
-										dataGroups?.map((item: any) => ({
-											label: item.groupName,
-											value: item.groupId
-										})) || []
-									}
-								/>
-							</Form.Item>
-						</Col>
-					</Row>
-				</div>
-
-				{groupeForm && data?.students?.length ? (
-					<div className="animate-fade-in">
-						<Row className="flex gap-2">
-							<Button className="rounded-xl" icon={<PrinterOutlined />}>
-								{t('printJournalEmpty')}
-							</Button>
-							<Button className="rounded-xl" icon={<PrinterOutlined />}>
-								{t('printJournalFiled')}
-							</Button>
+									/>
+								</Form.Item>
+							</Col>
 						</Row>
-
-						<TableBrs semester={data.semester} dataSource={dataSource} setDataSource={setDataSource} />
-
-						<Button htmlType="submit" className="mt-8 mb-8 rounded-xl" type="primary">
-							{t('Save')}
-						</Button>
-
-						<InfoCard  text={t('infoTextBrs2')} />
 					</div>
-				) : (
-					<Result className='mb-4' title="" extra={t('selectYearSemest')} />
-				)}
-			</Form>
+
+					{groupeForm && data?.students?.length ? (
+						<div className="animate-fade-in">
+							<Row className="flex gap-2">
+								<Button className="rounded-xl" icon={<PrinterOutlined />}>
+									{t('printJournalEmpty')}
+								</Button>
+								<Button className="rounded-xl" icon={<PrinterOutlined />}>
+									{t('printJournalFiled')}
+								</Button>
+							</Row>
+
+							<TableBrs semester={data.semester} dataSource={dataSource} setDataSource={setDataSource} />
+
+							<Button htmlType="submit" className="mt-8 mb-8 rounded-xl" type="primary">
+								{t('Save')}
+							</Button>
+
+							<InfoCard text={t('infoTextBrs2')} />
+						</div>
+					) : (
+						<Result className="mb-4" title="" extra={t('selectDis')} />
+					)}
+				</Form>
+			) : (
+				<Result title="" extra={t('selectYearSemest')} />
+			)}
 		</Spin>
 	)
 }

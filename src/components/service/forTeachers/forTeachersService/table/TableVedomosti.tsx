@@ -6,6 +6,7 @@ import { useAppDispatch } from '../../../../../store';
 import { setIsEditTableScheduleTeacher } from '../../../../../store/reducers/authSlice';
 import { ColumnTypes, DataType, EditableCellProps, EditableRowProps } from '../../../../../models/tables';
 import { dataBrs, Student } from '../../../../../models/forTeacher';
+import { truncateString } from '../../../../../utils/truncateString';
 
 const EditableContext = React.createContext<FormInstance<any> | null>(null);
 
@@ -70,7 +71,7 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
       </Form.Item>
     ) : (
       <div
-        className="editable-cell-value-wrap"
+        className="editable-cell-value-wrap min-h-[27px]"
         style={{ paddingInlineEnd: 24 ,width:'auto'}}
         onClick={toggleEdit}
       >
@@ -84,16 +85,15 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
 
 
 
-const TableVedomosti = ({dataSource, setDataSource,semester}: any) => {
+const TableVedomosti = ({dataSource, setDataSource,subj_type,is_session}: any) => {
   const dispatch = useAppDispatch()
   console.log('dataSource',dataSource)
 
   const defaultColumns: any = [
     {
-        title: 'N',
-        dataIndex: 'N',
-        width: '10%',
-      
+      title: 'N',
+      dataIndex: 'N',
+      width: '10%',
     },
     {
       title: 'ФИО',
@@ -102,42 +102,51 @@ const TableVedomosti = ({dataSource, setDataSource,semester}: any) => {
     },
     {
       title: 'Отметка работы студента в семестре',
-      dataIndex: 'firstMonth',
-    
-      width: '15%',
+      dataIndex: 'semesterMark',
+      width: '10%',
     },
     {
       title: 'Отметка о сдаче экзамена',
-      dataIndex: 'secondMonth',
+      dataIndex: 'subjectMark',
       editable: true,
-      width: '15%',
+      width: '10%',
       inputType: 'number',
     },  
     {
       title: 'Рейтинговый показатель по дисциплине',
-      dataIndex: 'thirdMonth',
-    
+      dataIndex: 'subjectRate',
       width: '15%',
     },
     {
       title: 'Итоговая оценка вносимая в зачетную книжку',
-      dataIndex: 'fourthMonth',
-      
-      width: '15%',
+      dataIndex: 'subjectMarkvalue',
+      width: '25%',
       render: (text: any) => {
         return (
-          <div >
-            {text==='Удовлетворительно' ? <div className='rounded-xl bg-yellow-400 w-[10px]' ></div> : <div ></div>}
-            {text}
+          <div className='flex flex-wrap  items-center '>
+            {text==='удовлетворительно' ? <div className='rounded-xl bg-yellow-400 w-[10px] h-[10px]' ></div> : <div ></div>}
+            {text==='не зачтено' ? <div className='rounded-xl bg-yellow-500 w-[10px] h-[10px]' ></div> : <div ></div>}
+            {text==='отлично' ? <div className='rounded-xl bg-red-500 w-[10px] h-[10px]' ></div> : <div ></div>}
+            {text==='зачтено' ? <div className='rounded-xl bg-green-500 w-[10px] h-[10px]' ></div> : <div ></div>}
+            {text==='не сдает' ? <div className='rounded-xl bg-gray-300 w-[10px] h-[10px]' ></div> : <div ></div>}
+            {text==='неудовлетворительно' ? <div className='rounded-xl bg-yellow-500 w-[10px] h-[10px]' ></div> : <div ></div>}
+            {text==='хорошо' ? <div className='rounded-xl bg-green-500 w-[10px] h-[10px]' ></div> : <div ></div>}
+            <div className='ml-2'>{text}</div>
           </div>
         );
       }
     },
     {
-      title: 'Комментарий',
-      dataIndex: 'sum',
+      title: 'Комментарии',
+      dataIndex: 'subjectComments',
       editable: true,
       width: '10%',
+      className: ' !truncate',
+      render:(text:any)=>{
+        return(
+         <div> {truncateString(10,text)}</div>
+        )
+      }
     },
    
   ];

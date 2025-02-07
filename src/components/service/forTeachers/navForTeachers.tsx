@@ -19,8 +19,9 @@ import { Header } from '../../layout/Header'
 import Brs from './forTeachersService/Brs'
 import JournalPosElem from './forTeachersService/JournalPosElem'
 import ScheduleTeacher from './forTeachersService/ScheduleTeacher'
-import NavJournal from './forTeachersService/navJournal'
+
 import Vedomosti from './forTeachersService/Vedomosti'
+import NavJournal from './forTeachersService/NavJournal'
 
 export const NavForTeachers = () => {
 	const dispatch = useAppDispatch()
@@ -97,6 +98,35 @@ export const NavForTeachers = () => {
 		}
 	}
 
+	function getCurrentSemester() {
+		const now = new Date();
+		const currentYear = now.getFullYear();
+	
+		// Определяем начало первого семестра (1 сентября текущего или предыдущего года)
+		let startFirstSemester = new Date(currentYear, 8, 1); // 8 = сентябрь
+		if (now < startFirstSemester) {
+			startFirstSemester = new Date(currentYear - 1, 8, 1);
+		}
+	
+		// Окончание первого семестра (31 января следующего года)
+		const endFirstSemester = new Date(startFirstSemester.getFullYear() + 1, 0, 31);
+	
+		// Начало второго семестра (1 февраля следующего года)
+		const startSecondSemester = new Date(startFirstSemester.getFullYear() + 1, 1, 1);
+	
+		// Окончание второго семестра (30 июня)
+		const endSecondSemester = new Date(startFirstSemester.getFullYear() + 1, 5, 30);
+	
+		if (now >= startFirstSemester && now <= endFirstSemester) {
+			return 1;
+		} else if (now >= startSecondSemester && now <= endSecondSemester) {
+			return 2;
+		} else {
+			// Для июля, августа и дней после окончания второго семестра возвращаем 2
+			return 2;
+		}
+	}
+
 	return (
 		<>
 			<Header type={'service'} service={t('ToTeacher')} />
@@ -121,7 +151,8 @@ export const NavForTeachers = () => {
 				<Form
 					form={form}
 					initialValues={{
-						year: `${getCurrentAcademicYear()}`
+						year: `${getCurrentAcademicYear()}`,
+						// semestr: `${getCurrentSemester()}`
 					}}
 					className="px-[80px] pt-[80px]"
 				>

@@ -25,6 +25,7 @@ export const fotTeacherService = testApiSlice.injectEndpoints({
             providesTags: ['forTeacherSceduleBrs'],
             keepUnusedDataFor:0,
         }),
+
         getBrsSubjects: builder.query<any, void>({
             query: () => {
             return {
@@ -35,6 +36,7 @@ export const fotTeacherService = testApiSlice.injectEndpoints({
             providesTags: ['forTeacherSceduleBrs'],
             keepUnusedDataFor:0,
         }),
+
         getBrsGroups: builder.query<any, void>({
             query: (subjectId ) => {
             return {
@@ -45,6 +47,7 @@ export const fotTeacherService = testApiSlice.injectEndpoints({
             providesTags: ['forTeacherSceduleBrs'],
             keepUnusedDataFor:0,
         }),
+
         saveBrs: builder.mutation<any, any>({
             query: (body ) => {
             return {
@@ -54,7 +57,37 @@ export const fotTeacherService = testApiSlice.injectEndpoints({
                 }
             },
             invalidatesTags: ['forTeacherSceduleBrs'],
-           
+        }),
+
+        getVedomostSubjects: builder.query<any, void>({
+            query: () => {
+            return {
+                    url: `/to-teacher/vedomost/subjects`,
+                    method: 'GET'
+                }
+            },
+            providesTags: ['forTeacherSceduleVedomost'],
+            keepUnusedDataFor:0,
+        }),
+        getVedomostGroups: builder.query<any, void>({
+            query: (subjectId ) => {
+            return {
+                    url: `/to-teacher/vedomost/groups?subjectId=${subjectId}`,
+                    method: 'GET'
+                }
+            },
+            providesTags: ['forTeacherSceduleVedomost'],
+            keepUnusedDataFor:0,
+        }),
+        getVedomostForTeacher: builder.query<any, any>({
+            query: ({subjectId,groupId}) => {
+            return {
+                    url: `/to-teacher/vedomost/vedomost?subjectId=${subjectId}&groupId=${groupId}`,
+                    method: 'GET'
+                }
+            },
+            providesTags: ['forTeacherSceduleVedomost'],
+            keepUnusedDataFor:0,
         }),
        
     })
@@ -65,6 +98,9 @@ export const {
     useGetBrsForTeacherQuery,
     useGetBrsGroupsQuery,
     useGetBrsSubjectsQuery,
-    useSaveBrsMutation
+    useSaveBrsMutation,
+    useGetVedomostSubjectsQuery,
+    useGetVedomostGroupsQuery,
+    useGetVedomostForTeacherQuery
 } = fotTeacherService
 

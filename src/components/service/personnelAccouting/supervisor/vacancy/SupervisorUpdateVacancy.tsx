@@ -6,9 +6,11 @@ import { useNavigate } from 'react-router-dom'
 import { ModalOkSvg } from '../../../../../assets/svg/ModalOkSvg'
 import { useAppSelector } from '../../../../../store'
 import {
+	useAlterUpdateVacancyRequestMutation,
 	useGetCategoriesQuery,
 	useGetDirectionsQuery,
 	useGetSubdivisionsQuery,
+	useLazyGetAllSupervisorRequestsQuery,
 	useLazyGetVacancyViewQuery,
 	useRequestUpdateVacancyMutation
 } from '../../../../../store/api/serviceApi'
@@ -54,6 +56,8 @@ export const SupervisorUpdateVacancy = () => {
 
 	const navigate = useNavigate()
 	const [requestUpdate] = useRequestUpdateVacancyMutation()
+	const [getAllRequests] = useLazyGetAllSupervisorRequestsQuery()
+	const [alterRequest] = useAlterUpdateVacancyRequestMutation()
 
 	const [isEdit, setIsEdit] = useState<boolean>(false)
 	const [isSendRequestButtonActivated, setIsSendRequestButtonActivated] = useState<boolean>(false)
@@ -66,7 +70,7 @@ export const SupervisorUpdateVacancy = () => {
 	const [direction, setDirection] = useState<string | undefined>(data?.acf.direction)
 	const [subdivision, setSubdivision] = useState<string | undefined>(data?.acf.subdivision)
 
-	useEffect(()=>{
+	useEffect(() => {
 		setPost(data?.title.rendered)
 		setExperience(data?.acf.experience)
 		setEmployment(data?.acf.employment)
@@ -124,7 +128,7 @@ export const SupervisorUpdateVacancy = () => {
 			.replace(/<\/li>/g, '')
 	)
 
-	useEffect(()=>{
+	useEffect(() => {
 		setResponsibilities(data?.acf.responsibilities)
 		setSkills(data?.acf.skills)
 		setConditions(data?.acf.conditions)
@@ -378,10 +382,10 @@ export const SupervisorUpdateVacancy = () => {
 							</div>
 							<div className="flex flex-col gap-[16px]">
 								<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-									{direction === "" ? "Подразделение" : "Профобласть"}
+									{direction === '' ? 'Подразделение' : 'Профобласть'}
 								</p>
 								<p className="font-content-font font-normal text-black text-[18px]/[21px]">
-									{direction === "" ? subdivision : direction}
+									{direction === '' ? subdivision : direction}
 								</p>
 							</div>
 						</div>
@@ -398,19 +402,48 @@ export const SupervisorUpdateVacancy = () => {
 								<Button
 									onClick={async () => {
 										try {
-											await requestUpdate({
-												post: post as string,
-												experience: experience as string,
-												salary: salary as string,
-												employment: employment as string,
-												responsibilities: responsibilities as string,
-												skills: skills as string,
-												conditions: conditions as string,
-												vacancyId: data?.id as number
-											})
+											await getAllRequests()
 												.unwrap()
-												.then(() => {
-													setIsSuccessModalOpen(true)
+												.then(requests => {
+													let alreadyRequest = requests.find(req => {
+														return (
+															req.vacancy.id ===
+																parseInt(
+																	window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1)
+																) && req.status === 'VERIFYING'
+														)
+													})
+													console.log(form.getFieldValue(['skills']))
+													console.log(form.getFieldValue(['conditions']))
+													alreadyRequest
+														? alterRequest({
+																post: post as string,
+																experience: experience as string,
+																salary: salary as string,
+																employment: employment as string,
+																responsibilities: responsibilities as string,
+																skills: skills as string,
+																conditions: conditions as string,
+																vacancyRequestId: alreadyRequest.id
+														  })
+																.unwrap()
+																.then(() => {
+																	setIsSuccessModalOpen(true)
+																})
+														: requestUpdate({
+																post: post as string,
+																experience: experience as string,
+																salary: salary as string,
+																employment: employment as string,
+																responsibilities: responsibilities as string,
+																skills: skills as string,
+																conditions: conditions as string,
+																vacancyId: data?.id as number
+														  })
+																.unwrap()
+																.then(() => {
+																	setIsSuccessModalOpen(true)
+																})
 												})
 										} catch (error: any) {
 											openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })

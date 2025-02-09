@@ -11,6 +11,7 @@ import {
 	useGetDirectionsQuery,
 	useGetSubdivisionsQuery,
 	useLazyGetAllSupervisorRequestsQuery,
+	useLazyGetVacancyRequestViewQuery,
 	useLazyGetVacancyViewQuery,
 	useRequestUpdateVacancyMutation
 } from '../../../../../store/api/serviceApi'
@@ -58,14 +59,19 @@ export const SupervisorUpdateVacancy = () => {
 	const [requestUpdate] = useRequestUpdateVacancyMutation()
 	const [getAllRequests] = useLazyGetAllSupervisorRequestsQuery()
 	const [alterRequest] = useAlterUpdateVacancyRequestMutation()
+	const [getRequest] = useLazyGetVacancyRequestViewQuery()
 
 	const [isEdit, setIsEdit] = useState<boolean>(false)
 	const [isSendRequestButtonActivated, setIsSendRequestButtonActivated] = useState<boolean>(false)
 
 	const [post, setPost] = useState<string | undefined>(data?.title.rendered)
+	const [isPostChanged, setIsPostChanged] = useState<boolean>(false)
 	const [experience, setExperience] = useState<string | undefined>(data?.acf.experience)
+	const [isExperienceChanged, setIsExperienceChanged] = useState<boolean>(false)
 	const [employment, setEmployment] = useState<string | undefined>(data?.acf.employment)
+	const [isEmploymentChanged, setIsEmploymentChanged] = useState<boolean>(false)
 	const [salary, setSalary] = useState<string | undefined>(data?.acf.salary)
+	const [isSalaryChanged, setIsSalaryChanged] = useState<boolean>(false)
 	const [category, setCategory] = useState<string | undefined>(data?.acf.category)
 	const [direction, setDirection] = useState<string | undefined>(data?.acf.direction)
 	const [subdivision, setSubdivision] = useState<string | undefined>(data?.acf.subdivision)
@@ -95,6 +101,7 @@ export const SupervisorUpdateVacancy = () => {
 			.replace(/<li>/g, '')
 			.replace(/<\/li>/g, '')
 	)
+	const [isResponsibilitiesChanged, setIsResponsibilitiesChanged] = useState<boolean>(false)
 	console.log(responsibilities)
 	const [skills, setSkills] = useState<string | undefined>(
 		data?.acf.skills
@@ -111,6 +118,7 @@ export const SupervisorUpdateVacancy = () => {
 			.replace(/<li>/g, '')
 			.replace(/<\/li>/g, '')
 	)
+	const [isSkillsChanged, setIsSkillsChanged] = useState<boolean>(false)
 
 	const [conditions, setConditions] = useState<string | undefined>(
 		data?.acf.conditions
@@ -127,6 +135,7 @@ export const SupervisorUpdateVacancy = () => {
 			.replace(/<li>/g, '')
 			.replace(/<\/li>/g, '')
 	)
+	const [isConditionsChanged, setIsConditionsChanged] = useState<boolean>(false)
 
 	useEffect(() => {
 		setResponsibilities(data?.acf.responsibilities)
@@ -223,12 +232,19 @@ export const SupervisorUpdateVacancy = () => {
 						onFinish={async values => {
 							try {
 								setPost(prev => values.post)
+								form.isFieldTouched('post') && setIsPostChanged(true)
 								setExperience(prev => values.experience)
+								form.isFieldTouched('experience') && setIsExperienceChanged(true)
 								setEmployment(prev => values.employment)
+								form.isFieldTouched('employment') && setIsEmploymentChanged(true)
 								setSalary(prev => values.salary)
+								form.isFieldTouched('salary') && setIsSalaryChanged(true)
 								setResponsibilities(prev => values.responsibilities)
+								form.isFieldTouched('responsibilities') && setIsResponsibilitiesChanged(true)
 								setSkills(prev => values.skills)
+								form.isFieldTouched('skills') && setIsSkillsChanged(true)
 								setConditions(prev => values.conditions)
+								form.isFieldTouched('conditions') && setIsConditionsChanged(true)
 								form.isFieldsTouched() && setIsSendRequestButtonActivated(true)
 								setIsEdit(false)
 							} catch (error: any) {
@@ -413,22 +429,26 @@ export const SupervisorUpdateVacancy = () => {
 																) && req.status === 'VERIFYING'
 														)
 													})
-													console.log(form.getFieldValue(['skills']))
-													console.log(form.getFieldValue(['conditions']))
 													alreadyRequest
-														? alterRequest({
-																post: post as string,
-																experience: experience as string,
-																salary: salary as string,
-																employment: employment as string,
-																responsibilities: responsibilities as string,
-																skills: skills as string,
-																conditions: conditions as string,
-																vacancyRequestId: alreadyRequest.id
-														  })
+														? getRequest(alreadyRequest.id)
 																.unwrap()
-																.then(() => {
-																	setIsSuccessModalOpen(true)
+																.then(data => {
+																	alterRequest({
+																		post: isPostChanged ? (post as string) : data.newData.post,
+																		experience: isExperienceChanged ? (experience as string) : data.newData.experience,
+																		salary: isSalaryChanged ? (salary as string) : data.newData.salary,
+																		employment: isEmploymentChanged ? (employment as string) : data.newData.employment,
+																		responsibilities: isResponsibilitiesChanged
+																			? (responsibilities as string)
+																			: data.newData.responsibilities,
+																		skills: isSkillsChanged ? (skills as string) : data.newData.skills,
+																		conditions: isConditionsChanged ? (conditions as string) : data.newData.conditions,
+																		vacancyRequestId: alreadyRequest.id
+																	})
+																		.unwrap()
+																		.then(() => {
+																			setIsSuccessModalOpen(true)
+																		})
 																})
 														: requestUpdate({
 																post: post as string,

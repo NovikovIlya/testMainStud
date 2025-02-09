@@ -1269,5 +1269,6 @@ export const {
 	useLazyCheckIfTestIsPassedQuery,
 	useLazyGetEmploymentStageStatusForSupervisorQuery,
 	useLazyDownloadChatFileQuery,
-	useLazyGetAllSupervisorRequestsQuery
+	useLazyGetAllSupervisorRequestsQuery,
+	useLazyGetVacancyRequestsQuery
 } = serviceApi

@@ -1,0 +1,13 @@
+.custom-table-container {
+    scrollbar-width: thin;
+    scrollbar-color: #eaeaea transparent;
+  }
+  
+  .custom-table-container::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .custom-table-container::-webkit-scrollbar-thumb {
+    background-color: #eaeaea;
+    border-radius: 4px;
+  }

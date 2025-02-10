@@ -5,6 +5,8 @@ import { t } from 'i18next';
 import { useAppDispatch } from '../../../../../store';
 import { setIsEditTableScheduleTeacher } from '../../../../../store/reducers/authSlice';
 import { ColumnTypes, DataType, EditableCellProps, EditableRowProps } from '../../../../../models/tables';
+import { truncateString } from '../../../../../utils/truncateString';
+import './TableJournal.scss'
 
 const EditableContext = React.createContext<FormInstance<any> | null>(null);
 
@@ -64,12 +66,12 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
         name={dataIndex}
         rules={[{ required: true, message: `${title} is required.` }]}
       >
-        <Input  ref={inputRef} onPressEnter={save} onBlur={save} />
+        <Input className='w-[35px]' ref={inputRef} onPressEnter={save} onBlur={save} />
       </Form.Item>
     ) : (
       <div
-        className="editable-cell-value-wrap"
-        style={{ paddingInlineEnd: 24 ,width:'auto'}}
+        className="editable-cell-value-wrap truncate "
+        style={{  width:'auto'}}
         onClick={toggleEdit}
       >
         {children}
@@ -82,6 +84,11 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
 
 
 const TableBrs = ({dataSource, setDataSource}:any) => {
+  const tableStyle = {
+    scrollbarWidth: 'thin',
+    scrollbarColor: '#eaeaea transparent',
+    scrollbarGutter: 'stable',
+  };
   const dispatch = useAppDispatch()
   const semesctr = 0
   function handleCheckboxChange(e:any,text:any)  {
@@ -91,18 +98,18 @@ const TableBrs = ({dataSource, setDataSource}:any) => {
     {
         title: 'N',
         dataIndex: 'N',
-        width: '10%',
+        width: '100px',
         fixed: 'left',
     },
     {
       title: 'ФИО',
       dataIndex: 'name',
-      width: '20%',
+      width: '100px',
       fixed: 'left',
     },
     {
       title: 'ПН',
-       editable: true,
+       
       children: [
         {
           title: (
@@ -114,7 +121,8 @@ const TableBrs = ({dataSource, setDataSource}:any) => {
           dataIndex: 'age2',
           editable: true,
           key: 'age',
-          width: 150,
+          width: '10%',
+
          
           
         },
@@ -123,33 +131,54 @@ const TableBrs = ({dataSource, setDataSource}:any) => {
           dataIndex: 'age3',
           editable: true,
           key: 'age',
-          width: 150,
+          width: '10%',
         }
+        
       ],
     },
     {
       title: 'Октябрь',
       dataIndex: 'october',
       editable: true,
-      width: '15%',
+      width: '10%',
+      render:(text:any)=>{
+        return(
+         <div> {truncateString(2,text)}</div>
+        )
+      }
     },  
     {
       title: 'Ноябрь',
       dataIndex: 'november',
       editable: true,
-      width: '15%',
+      width: '10%',
+      render:(text:any)=>{
+        return(
+         <div> {truncateString(2,text)}</div>
+        )
+      }
     },
     {
       title: 'Декабрь',
       dataIndex: 'december',
       editable: true,
-      width: '15%',
+      width: '10%',
+      render:(text:any)=>{
+        return(
+         <div> {truncateString(2,text)}</div>
+        )
+      }
     },
     {
       title: 'Сумма баллов',
       dataIndex: 'address',
       editable: true,
       width: '10%',
+      render:(text:any)=>{
+        return(
+         <div> {truncateString(2,text)}</div>
+        )
+      }
     },
    
   ];
@@ -172,30 +201,55 @@ const TableBrs = ({dataSource, setDataSource}:any) => {
       dataIndex: 'age',
       editable: true,
       width: '15%',
+      render:(text:any)=>{
+        return(
+         <div> {truncateString(2,text)}</div>
+        )
+      }
     },
     {
       title: 'Март',
       dataIndex: 'address',
       editable: true,
       width: '15%',
+      render:(text:any)=>{
+        return(
+         <div> {truncateString(2,text)}</div>
+        )
+      }
     },
     {
       title: 'Апрель',
       dataIndex: 'address',
       editable: true,
       width: '15%',
+      render:(text:any)=>{
+        return(
+         <div> {truncateString(2,text)}</div>
+        )
+      }
     },
     {
       title: 'Май',
       dataIndex: 'address',
       editable: true,
       width: '15%',
+      render:(text:any)=>{
+        return(
+         <div> {truncateString(2,text)}</div>
+        )
+      }
     },
     {
       title: 'Сумма баллов',
       dataIndex: 'address',
       editable: true,
       width: '10%',
+      render:(text:any)=>{
+        return(
+         <div> {truncateString(2,text)}</div>
+        )
+      }
     },
    
   ];
@@ -270,8 +324,8 @@ const TableBrs = ({dataSource, setDataSource}:any) => {
   });
 
   return (
-    <div className='mt-4'>
-      <Table<DataType>
+    <div  className='mt-4 custom-table-container' >
+      <Table<DataType> 
         rowKey={(record) => record.key}
         components={components}
         rowClassName={() => 'editable-row'}
@@ -279,6 +333,8 @@ const TableBrs = ({dataSource, setDataSource}:any) => {
         dataSource={dataSource}
         columns={columns as ColumnTypes}
         pagination={false}
+        
+        scroll={{ x: 'max-content' }}
       />
       <Button className='mt-4 mb-4 rounded-xl' type='primary'>{t('Save')}</Button>
     </div>

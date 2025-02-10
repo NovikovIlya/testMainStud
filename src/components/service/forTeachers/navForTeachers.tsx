@@ -92,9 +92,9 @@ export const NavForTeachers = () => {
 
 		// Учебный год обычно начинается в сентябре
 		if (month >= 8) {
-			return `${year}/${year + 1}`
+			return `${year}`
 		} else {
-			return `${year - 1}/${year}`
+			return `${year - 1}`
 		}
 	}
 

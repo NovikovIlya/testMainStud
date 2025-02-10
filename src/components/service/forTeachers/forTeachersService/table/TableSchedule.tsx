@@ -110,6 +110,7 @@ export const TableSchedule = ({schedule,isFetching}:any) => {
 				case 'thursday': return item.day_week_schedule === 4
 				case 'friday': return item.day_week_schedule === 5
 				case 'saturday': return item.day_week_schedule === 6
+				case 'sunday': return item.day_week_schedule === 7
 				default: return true
 			}
 		})

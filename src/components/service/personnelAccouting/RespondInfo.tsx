@@ -56,9 +56,9 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 	const respondId = useAppSelector(state => state.currentResponce)
 
 	const { data: res } = useGetRespondFullInfoQuery(id_from_url)
-	const [approveRespond] = useApproveRespondMutation()
-	const [sendToArchive] = useSendRespondToArchiveMutation()
-	const [sendToReserve] = useSendRespondToReserveMutation()
+	const [approveRespond, { isLoading : approveRespondLoading }] = useApproveRespondMutation()
+	const [sendToArchive, { isLoading : sendToArchiveLoading }] = useSendRespondToArchiveMutation()
+	const [sendToReserve, { isLoading : sendToReserveLoading }] = useSendRespondToReserveMutation()
 	const [getResume] = useLazyGetSeekerResumeFileQuery()
 
 	const [isRespondSentToSupervisor, setIsRespondSentToSupervisor] = useState<boolean>(
@@ -262,6 +262,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 												}
 											}}
 											disabled={isRespondSentToSupervisor || isRespondSentToReserve || isRespondSentToArchive}
+											loading={approveRespondLoading}
 											type="primary"
 											className="font-content-font font-normal text-white text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px]"
 										>
@@ -287,12 +288,14 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 												}
 											}}
 											disabled={isRespondSentToSupervisor || isRespondSentToReserve || isRespondSentToArchive}
+											loading={sendToArchiveLoading}
 											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
 										>
 											Отказать
 										</Button>
 										<Button
 											disabled={isRespondSentToSupervisor || isRespondSentToReserve || isRespondSentToArchive}
+											loading={sendToReserveLoading}
 											onClick={async () => {
 												try {
 													await sendToReserve(respondId.respondId)
@@ -395,6 +398,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 													openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 												}
 											}}
+											loading={sendToArchiveLoading}
 											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[257px] h-[40px] py-[8px] px-[24px] border-black"
 										>
 											Отказать
@@ -638,6 +642,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 												}
 											}}
 											disabled={isRespondSentToSupervisor || isRespondSentToReserve || isRespondSentToArchive}
+											loading={approveRespondLoading}
 											type="primary"
 											className="font-content-font font-normal text-white text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px]"
 										>
@@ -660,6 +665,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 												}
 											}}
 											disabled={isRespondSentToSupervisor || isRespondSentToReserve || isRespondSentToArchive}
+											loading={sendToArchiveLoading}
 											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
 										>
 											Отказать
@@ -678,6 +684,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 													openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 												}
 											}}
+											loading={sendToReserveLoading}
 											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
 										>
 											Отправить в резерв
@@ -703,6 +710,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 										/>
 										<Button
 											disabled={isRespondSentToArchive || isRespondInvited || isRespondEmployed}
+											loading={sendToArchiveLoading}
 											onClick={async () => {
 												try {
 													await sendToArchive({

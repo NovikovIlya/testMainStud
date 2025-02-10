@@ -232,6 +232,7 @@ export const ResponseForm = () => {
 								<Button
 									className="ml-auto mt-[40px] rounded-[54.5px]"
 									type="primary"
+									loading={result.isLoading}
 									onClick={
 										!aboutMeCompleted
 											? () => {

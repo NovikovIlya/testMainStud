@@ -53,7 +53,7 @@ export const SupervisorUpdateVacancy = () => {
 	const { data: subdivisions = [] } = useGetSubdivisionsQuery(categoryTitle)
 
 	const navigate = useNavigate()
-	const [requestUpdate] = useRequestUpdateVacancyMutation()
+	const [requestUpdate, { isLoading: loading }] = useRequestUpdateVacancyMutation()
 
 	const [isEdit, setIsEdit] = useState<boolean>(false)
 	const [isSendRequestButtonActivated, setIsSendRequestButtonActivated] = useState<boolean>(false)
@@ -433,6 +433,7 @@ export const SupervisorUpdateVacancy = () => {
 									}}
 									type="primary"
 									className="rounded-[54.5px] w-[121px]"
+									loading={loading}
 								>
 									Отправить
 								</Button>

@@ -96,6 +96,7 @@ export const ApproveRespondForm = (props: {
 				}}
 				type="primary"
 				disabled={props.isRespondSentToSupervisor}
+				loading={result.isLoading}
 				className="font-content-font font-normal text-white text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px]"
 			>
 				Отправить руководителю

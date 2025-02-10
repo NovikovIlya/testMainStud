@@ -20,7 +20,7 @@ export default function VacancyItem(props: VacancyItemType) {
 	const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
 	const dispatch = useDispatch()
 
-	const [requestDeleteVacancy] = useRequestDeleteVacancyMutation()
+	const [requestDeleteVacancy, {isLoading: deleteRequestLoading} ] = useRequestDeleteVacancyMutation()
 
 	return (
 		<>
@@ -96,8 +96,25 @@ export default function VacancyItem(props: VacancyItemType) {
 							>
 								Оставить
 							</Button>
-							<button
-								className="cursor-pointer flex items-center justify-center border-[1px] border-solid outline-0 border-[#FF5A5A] hover:border-[#FF8181] text-white rounded-[54.5px] bg-[#FF5A5A] hover:bg-[#FF8181] text-[14px] h-[40px] w-full py-[13px]"
+							<Button
+								className="
+								 cursor-pointer
+								 flex
+								 items-center
+								 justify-center
+								 border-[1px]
+								 border-solid
+								 outline-0
+								 border-[#FF5A5A]
+								 hover:border-[#FF8181]
+								 text-white
+								 rounded-[54.5px]
+								 bg-[#FF5A5A]
+								 hover:bg-red
+								 text-[14px]
+								 h-[40px]
+								 w-full
+							     py-[13px]"
 								onClick={async () => {
 									try {
 										await requestDeleteVacancy(props.id)
@@ -112,9 +129,10 @@ export default function VacancyItem(props: VacancyItemType) {
 										openAlert({ type: 'error', text: errorStr })
 									}
 								}}
+								loading={deleteRequestLoading}
 							>
 								Удалить
-							</button>
+							</Button>
 						</div>
 					</div>
 				</Modal>

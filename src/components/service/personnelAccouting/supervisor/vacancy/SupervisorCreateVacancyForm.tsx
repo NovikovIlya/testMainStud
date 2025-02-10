@@ -19,7 +19,7 @@ export const SupervisorCreateVacancyForm = () => {
 	const { data: directions = [] } = useGetDirectionsQuery(categoryTitle)
 	const { data: subdivisions = [] } = useGetSubdivisionsQuery(categoryTitle)
 
-	const [requestCreateVacancy] = useRequestCreateVacancyMutation()
+	const [requestCreateVacancy, { isLoading }] = useRequestCreateVacancyMutation()
 
 	const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
 
@@ -197,7 +197,7 @@ export const SupervisorCreateVacancyForm = () => {
 						<Input.TextArea autoSize className="!h-[107px]" placeholder="Ввести текст..."></Input.TextArea>
 					</Form.Item>
 					<Form.Item>
-						<Button type="primary" htmlType="submit">
+						<Button type="primary" htmlType="submit" loading={isLoading}>
 							Отправить
 						</Button>
 					</Form.Item>

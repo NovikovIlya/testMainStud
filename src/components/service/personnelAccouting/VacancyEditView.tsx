@@ -56,8 +56,8 @@ export const VacancyEditView = () => {
 
 	const navigate = useNavigate()
 	const [requestUpdate] = useRequestUpdateVacancyMutation()
-	const [editVacancy] = useEditVacancyAsPerDepartmentMutation()
-	const [deleteVacancy] = useDeleteVacancyAsPerDepartmentMutation()
+	const [editVacancy, { isLoading : editVacancyLoading }] = useEditVacancyAsPerDepartmentMutation()
+	const [deleteVacancy, { isLoading : deleteVacancyLoading }] = useDeleteVacancyAsPerDepartmentMutation()
 
 	const [isEdit, setIsEdit] = useState<boolean>(false)
 	const [isSendRequestButtonActivated, setIsSendRequestButtonActivated] = useState<boolean>(false)
@@ -188,7 +188,7 @@ export const VacancyEditView = () => {
 						>
 							Оставить
 						</Button>
-						<button
+						<Button
 							className="cursor-pointer flex items-center justify-center border-[1px] border-solid outline-0 border-[#FF5A5A] hover:border-[#FF8181] text-white rounded-[54.5px] bg-[#FF5A5A] hover:bg-[#FF8181] text-[14px] h-[40px] w-full py-[13px]"
 							onClick={async () => {
 								try {
@@ -203,9 +203,10 @@ export const VacancyEditView = () => {
 									openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 								}
 							}}
+							loading={deleteVacancyLoading}
 						>
 							Удалить
-						</button>
+						</Button>
 					</div>
 				</Modal>
 			</ConfigProvider>
@@ -422,7 +423,10 @@ export const VacancyEditView = () => {
 							</Form.Item>
 						</div>
 						<Form.Item>
-							<Button type="primary" htmlType="submit">
+							<Button
+								type="primary"
+								htmlType="submit"
+							>
 								Сохранить
 							</Button>
 						</Form.Item>
@@ -521,6 +525,7 @@ export const VacancyEditView = () => {
 									}}
 									type="primary"
 									className="rounded-[54.5px] w-[121px]"
+									loading={editVacancyLoading}
 								>
 									Сохранить
 								</Button>

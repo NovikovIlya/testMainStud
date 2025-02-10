@@ -56,8 +56,8 @@ export const ArchiveItem = (props: {
 						>
 							Оставить
 						</Button>
-						<button
-							className="cursor-pointer flex items-center justify-center border-[1px] border-solid outline-0 border-[#FF5A5A] hover:border-[#FF8181] text-white rounded-[54.5px] bg-[#FF5A5A] hover:bg-[#FF8181] text-[14px] h-[40px] w-full py-[13px]"
+						<Button
+							className="cursor-pointer flex items-center justify-center border-[1px] border-solid outline-0 border-[#FF5A5A] hover:border-[#FF8181]  text-white rounded-[54.5px] bg-[#FF5A5A] hover:bg-[#FF8181] text-[16px]/[20px] h-[40px] w-full py-[13px]"
 							onClick={async () => {
 								try {
 									await deleteVacancy(props.id)
@@ -71,9 +71,10 @@ export const ArchiveItem = (props: {
 									openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 								}
 							}}
+							loading={deleteResult.isLoading}
 						>
 							Удалить
-						</button>
+						</Button>
 					</div>
 				</Modal>
 			</ConfigProvider>

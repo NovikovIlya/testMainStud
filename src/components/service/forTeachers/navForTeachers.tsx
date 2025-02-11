@@ -172,7 +172,7 @@ export const NavForTeachers = () => {
 								name="year"
 								label={t('academicYear')}
 								labelAlign="left"
-								labelCol={{ span: 8 }} // Фиксированная ширина лейбла
+								labelCol={{ span: 9 }} // Фиксированная ширина лейбла
 								wrapperCol={{ span: 13 }} // Оставшаяся ширина для инпута
 							>
 								<Select allowClear options={generateYearsArray()} onChange={handleYearChange} />

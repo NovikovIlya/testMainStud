@@ -85,19 +85,29 @@ export const NavForTeachers = () => {
 		return years
 	}
 
-	function getCurrentAcademicYear() {
-		const now = new Date()
-		const year = now.getFullYear()
-		const month = now.getMonth() // Месяцы начинаются с 0 (январь)
+	// function getCurrentAcademicYear() {
+	// 	const now = new Date()
+	// 	const year = now.getFullYear()
+	// 	const month = now.getMonth() // Месяцы начинаются с 0 (январь)
 
+	// 	// Учебный год обычно начинается в сентябре
+	// 	if (month >= 8) {
+	// 		return {value: year, label: `${year}/${year + 1}`}
+	// 	} else {
+	// 		return {value: year-1, label: `${year-1}/${year }`}
+	// 	}
+	// }
+	function getCurrentAcademicYear() {
+		const now = new Date();
+		const year = now.getFullYear();
+		const month = now.getMonth(); // Месяцы начинаются с 0 (январь)
 		// Учебный год обычно начинается в сентябре
 		if (month >= 8) {
-			return `${year}`
+		  return { value: year, label: `${year}/${year + 1}` };
 		} else {
-			return `${year - 1}`
+		  return { value: year - 1, label: `${year - 1}/${year}` };
 		}
-	}
-
+	  }
 	function getCurrentSemester() {
 		const now = new Date();
 		const currentYear = now.getFullYear();
@@ -151,9 +161,9 @@ export const NavForTeachers = () => {
 				<Form
 					form={form}
 					initialValues={{
-						year: `${getCurrentAcademicYear()}`,
-						// semestr: `${getCurrentSemester()}`
-					}}
+						year: getCurrentAcademicYear().value, // Только значение `value`
+						// semestr: getCurrentSemester(),
+					  }}
 					className="px-[80px] pt-[80px]"
 				>
 					<Row>
@@ -174,7 +184,7 @@ export const NavForTeachers = () => {
 								name="semestr"
 								label={t('Semester')}
 								labelAlign="left"
-								labelCol={{ span: 4 }}
+								labelCol={{ span: 5 }}
 								wrapperCol={{ span: 10 }}
 							>
 								<Select

@@ -454,6 +454,35 @@
 	"infoTextVed" : "Dear Professors, the “Statements” functionality now includes the ability to download the exam and credit report. Please note that completing this report is available exclusively during the examination period",
 	"infoTextVed2": "Dear Professors, before working with the “Statements” tab, please go to the “Schedule” tab and verify that your dean’s office has correctly entered the schedule of your classes",
 	"noSubjects" : "No subjects",
-	"infoTextJournal": "Dear Professors, the “Statements” functionality now includes the ability to download the exam and credit report. Please note that completing this report is available exclusively during the examination period"
+	"infoTextJournal": "Dear Professors, the “Statements” functionality now includes the ability to download the exam and credit report. Please note that completing this report is available exclusively during the examination period",
+
+
+		
+		
+
+		  "spravochnik": "Directory",
+		  "registerContracts": "Register of Contracts",
+		  "individualTasks": "Individual Tasks",
+		  "practical.ts": "Practical",
+		  "formingDocuments": "Forming Documents",
+		  "formingSchedule": "Practice Schedule",
+		  "representation": "Representation in Order",
+		  "practiceOrder": "Practice Order",
+		  "appendix": "Appendix 4",
+		  "finalCheck": "Final Check",
+		  "finally": "Final Check",
+		  "takeTutorial": "Take Tutorial",
+		  "moduleDescription": "The 'Student Practices' module is designed to automate the process of assigning students to practical training and also to control the completion of student practices, i.e., for creating and submitting reports for approval.",
+		  "spravochnikDescription": "Directories represent a 'bank of information' that is later used to form documents. The Register of Contracts is a 'bank of contracts' between KFU and organizations where KFU students can undergo practice. Information about these organizations is later used when forming the Representation in Order (RIO), Practice Order (PO), and Appendix 4 (A4).",
+		  "registerContractsDescription": "The principles of working in the 'Register of Contracts': all fields must be filled out, especially attaching documents (the contract file and additional agreements) - since if a student completes a practice at an organization with which a contract has not yet been signed or renewed, the practice will not be counted. To prevent such situations, these fields have been made mandatory.",
+		  "individualTasksDescription": "In the 'Individual Tasks' directory, there is a list of individual tasks for a specific specialty and type of practice. These tasks will be needed to create documents in the Student Personal Account.",
+		  "practicalDescription": "The Practice directory contains information about a specific (taking place during a certain period) practice, as well as individual tasks and competencies acquired during the completion of this practice.",
+		  "formingDocumentsDescription": "The tab represents tables for creating, editing, printing documents, and sending them for approval.",
+		  "formingScheduleDescription": "The Practice Schedule is a document that contains general information about practices for the entire department (without the names of students and teachers). The document represents the schedule of practices for the entire department for the academic year.",
+		  "representationDescription": "Representation in Order is a document containing information about specific students who are assigned to N practice in M period. It is necessary to separately fill in information about the organizations and the students undergoing practice in them during the M period.",
+		  "practiceOrderDescription": "Practice Order is a document containing information about specific students assigned to practice during a certain period. It is a logical continuation of the 'Representation in Order' tab.",
+		  "appendixDescription": "Appendix 4 is a document containing information about students being sent for practical training in a specialized organization.",
+		  "finalCheckDescription": "Final Check is a document containing information about students who have completed their practice and are awaiting verification.",
+		  "rotateDeviceMessage": "For this device, the module works only in landscape orientation. Please rotate your device."
 
 }

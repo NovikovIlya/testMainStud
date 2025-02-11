@@ -8,6 +8,7 @@ import { WarningModalIconSvg } from '../../../assets/svg/WarningModalIconSvg'
 import { useDeleteReserveRespondMutation } from '../../../store/api/serviceApi'
 import { setCurrentResponce } from '../../../store/reducers/CurrentResponceSlice'
 import { useAlert } from '../../../utils/Alert/AlertMessage'
+import styles from "../../../utils/deleteOverwriteAntButton.module.css";
 
 export const ReserveItem = (props: {
 	id: number
@@ -56,8 +57,8 @@ export const ReserveItem = (props: {
 						>
 							Оставить
 						</Button>
-						<button
-							className="cursor-pointer flex items-center justify-center border-[1px] border-solid outline-0 border-[#FF5A5A] hover:border-[#FF8181] text-white rounded-[54.5px] bg-[#FF5A5A] hover:bg-[#FF8181] text-[14px] h-[40px] w-full py-[13px]"
+						<Button
+							className={`${styles.customAntButton}`}
 							onClick={async () => {
 								try {
 									deleteVacancy(props.id)
@@ -71,9 +72,10 @@ export const ReserveItem = (props: {
 									openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 								}
 							}}
+							loading={deleteResult.isLoading}
 						>
 							Удалить
-						</button>
+						</Button>
 					</div>
 				</Modal>
 			</ConfigProvider>

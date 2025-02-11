@@ -63,9 +63,9 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 
 	const dispatch = useDispatch()
 
-	const [markBankCardApplicationFormed] = useMarkBankCardApplicationFormedMutation()
-	const [changeStatus] = useChangeEmploymentStageStatusRequestMutation()
-	const [changeStatusAccounting] = useChangeEmploymentStageAccountingStatusRequestMutation()
+	const [markBankCardApplicationFormed, {isLoading : markBankCardApplicationFormedLoading }] = useMarkBankCardApplicationFormedMutation()
+	const [changeStatus, { isLoading : changeStatusLoading }] = useChangeEmploymentStageStatusRequestMutation()
+	const [changeStatusAccounting, { isLoading : changeStatusAccountingLoading }] = useChangeEmploymentStageAccountingStatusRequestMutation()
 
 	const [isRevisionModalOpen, setIsRevisionModalOpen] = useState(false)
 
@@ -179,6 +179,7 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 								<Button
 									className="text-[#FFFFFF] py-[8px] px-[24px] border-none rounded-[54.5px] text-[16px] font-normal"
 									type="primary"
+									loading={changeStatusLoading}
 									onClick={async () => {
 										try {
 											await changeStatus({
@@ -238,6 +239,7 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 								<Button
 									className="text-[#FFFFFF] py-[8px] px-[24px] border-none rounded-[54.5px] text-[16px] font-normal"
 									type="primary"
+									loading={changeStatusLoading}
 									onClick={ async () => {
 										try {
 											await changeStatus({
@@ -296,6 +298,7 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 								<Button
 									className="text-[#FFFFFF] py-[8px] px-[24px] border-none rounded-[54.5px] text-[16px] font-normal"
 									type="primary"
+									loading={changeStatusAccountingLoading}
 									onClick={async () => {
 										try {
 											await changeStatusAccounting({
@@ -355,6 +358,7 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 								<Button
 									className="text-[#FFFFFF] py-[8px] px-[24px] border-none rounded-[54.5px] text-[16px] font-normal"
 									type="primary"
+									loading={markBankCardApplicationFormedLoading}
 									onClick={() => {
 										setIsReqModalOpen(true)
 									}}
@@ -488,6 +492,7 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 								<Button
 									className="rounded-[54.5px] py-[12px] px-[24px]  text-[16px]"
 									type="primary"
+									loading={changeStatusLoading}
 									onClick={async () => {
 										try {
 											setIsRevisionModalOpen(false)
@@ -516,6 +521,7 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 								<Button
 									className="rounded-[54.5px] py-[12px] px-[24px]  text-[16px]"
 									type="primary"
+									loading={changeStatusLoading}
 									onClick={async() => {
 										try {
 											setIsRevisionModalOpen(false)
@@ -543,6 +549,7 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 								<Button
 									className="rounded-[54.5px] py-[12px] px-[24px]  text-[16px]"
 									type="primary"
+									loading={changeStatusLoading}
 									onClick={async () => {
 										try {
 											setIsRevisionModalOpen(false)
@@ -569,6 +576,7 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 								<Button
 									className="rounded-[54.5px] py-[12px] px-[24px]  text-[16px]"
 									type="primary"
+									loading={changeStatusAccountingLoading}
 									onClick={async () => {
 										try {
 											setIsRevisionModalOpen(false)

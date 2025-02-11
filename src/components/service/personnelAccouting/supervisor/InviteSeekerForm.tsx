@@ -105,17 +105,17 @@ export const InviteSeekerForm = (props: { respondId: number; isButtonDisabled: b
 						onFinish={values => {
 							console.log(
 								values.mainTime.$y +
-									'-' +
-									(values.mainTime.$M + 1 >= 10 ? values.mainTime.$M + 1 : '0' + (values.mainTime.$M + 1)) +
-									'-' +
-									values.mainTime.$D +
-									'T' +
-									values.mainTime.$H +
-									':' +
-									(values.mainTime.$m >= 10 ? values.mainTime.$m : '0' + values.mainTime.$m) +
-									':' +
-									(values.mainTime.$s >= 10 ? values.mainTime.$s : '0' + values.mainTime.$s) +
-									'.020Z'
+								'-' +
+								(values.mainTime.$M + 1 >= 10 ? values.mainTime.$M + 1 : '0' + (values.mainTime.$M + 1)) +
+								'-' +
+								values.mainTime.$D +
+								'T' +
+								values.mainTime.$H +
+								':' +
+								(values.mainTime.$m >= 10 ? values.mainTime.$m : '0' + values.mainTime.$m) +
+								':' +
+								(values.mainTime.$s >= 10 ? values.mainTime.$s : '0' + values.mainTime.$s) +
+								'.020Z'
 							)
 							inviteSeeker({
 								respondId: current_page_id,
@@ -164,7 +164,7 @@ export const InviteSeekerForm = (props: { respondId: number; isButtonDisabled: b
 										setIsFormOpen(false)
 										setIsResultModalOpen(true)
 									} catch (error: any) {
-										openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+										openAlert({type: 'error', text: 'Извините, что-то пошло не так...'})
 										form.resetFields(['reserveTime'])
 									}
 								})
@@ -177,7 +177,7 @@ export const InviteSeekerForm = (props: { respondId: number; isButtonDisabled: b
 									Формат собеседования
 								</label>
 							}
-							rules={[{ required: true, message: 'Не выбран формат' }]}
+							rules={[{required: true, message: 'Не выбран формат собеседования'}]}
 						>
 							<Select
 								placeholder="Выбрать"
@@ -185,17 +185,20 @@ export const InviteSeekerForm = (props: { respondId: number; isButtonDisabled: b
 									setFormat(e)
 								}}
 								options={[
-									{ value: 'OFFLINE', label: 'Оффлайн' },
-									{ value: 'ONLINE', label: 'Онлайн' }
+									{value: 'OFFLINE', label: 'Оффлайн'},
+									{value: 'ONLINE', label: 'Онлайн'}
 								]}
 							></Select>
 						</Form.Item>
 						<Form.Item
 							name={'mainTime'}
 							label={
-								<label className="text-black text-[18px]/[18px] font-content-font font-normal">Дата и время</label>
+								<label className="text-black text-[18px]/[18px] font-content-font font-normal">Дата и
+									время</label>
 							}
-							rules={[{ required: true, message: 'Не выбрано основное время' }]}
+							rules={[
+								{required: true, message: 'Не выбрано основное время'},
+							]}
 						>
 							<DatePicker
 								format={'DD.MM.YYYY, HH:mm'}
@@ -219,13 +222,11 @@ export const InviteSeekerForm = (props: { respondId: number; isButtonDisabled: b
 						<Form.Item
 							name={'reserveTime'}
 							label={
-								<label className="text-black text-[18px]/[18px] font-content-font font-normal">Дата и время</label>
+								<label className="text-black text-[18px]/[18px] font-content-font font-normal">Дата и
+									время</label>
 							}
 							rules={[
-								{
-									required: reservedTime.length === 0,
-									message: 'Не выбрано резервное время'
-								}
+								{required: reservedTime.length === 0, message: 'Не выбрано резервное время'},	
 							]}
 						>
 							<DatePicker
@@ -240,27 +241,31 @@ export const InviteSeekerForm = (props: { respondId: number; isButtonDisabled: b
 								className="w-full"
 								onChange={(e, dateString) => {
 									dateString !== '' &&
-										setReservedTimes([...reservedTime, { id: uuid(), time: dateString as string, timeToSend: e }])
+									setReservedTimes([...reservedTime, {
+										id: uuid(),
+										time: dateString as string,
+										timeToSend: e
+									}])
 								}}
 							></DatePicker>
-							<ul className="mt-[24px] ml-[20px]">
-								{reservedTime.map(res => (
-									<li>
-										<div className="flex gap-[60px]">
-											<p className="w-[140px]">{res.time}</p>
-											<label
-												className="cursor-pointer underline text-black font-content-font font-normal text-[16px]/[16px] opacity-40"
-												onClick={() => {
-													setReservedTimes(prev => reservedTime.filter(delTime => delTime.id !== res.id))
-												}}
-											>
-												Удалить
-											</label>
-										</div>
-									</li>
-								))}
-							</ul>
 						</Form.Item>
+						<ul className="mt-[24px] ml-[20px]">
+							{reservedTime.map(res => (
+								<li>
+									<div className="flex gap-[60px]">
+										<p className="w-[140px]">{res.time}</p>
+										<label
+											className="cursor-pointer underline text-black font-content-font font-normal text-[16px]/[16px] opacity-40"
+											onClick={() => {
+												setReservedTimes(prev => reservedTime.filter(delTime => delTime.id !== res.id))
+											}}
+										>
+											Удалить
+										</label>
+									</div>
+								</li>
+							))}
+						</ul>
 						{format === 'OFFLINE' && (
 							<Form.Item
 								name={'details'}
@@ -269,13 +274,16 @@ export const InviteSeekerForm = (props: { respondId: number; isButtonDisabled: b
 										Адрес и дополнительная информация
 									</label>
 								}
-								rules={[{ required: true, message: 'Не указан адрес' }]}
+								rules={[
+									{required: true, message: 'Не указан адрес и дополнительная информация'},
+									{max: 1000, message: "Количество символов было превышено"}
+								]}
 							>
 								<Input.TextArea autoSize className="!h-[107px]"></Input.TextArea>
 							</Form.Item>
 						)}
 						<Form.Item>
-							<div style={{ textAlign: 'right', marginTop: 40 }}>
+							<div style={{textAlign: 'right', marginTop: 40}}>
 								<Button type="primary" htmlType="submit" loading={inviteSeekerQueryStatus.isLoading}>
 									Пригласить
 								</Button>

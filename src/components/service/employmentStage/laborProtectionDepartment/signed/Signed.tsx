@@ -13,6 +13,7 @@ import {SignedItemType} from "../../../../../store/reducers/type";
 import {SuccessModalIconSvg} from "../../../../../assets/svg/SuccessModalIconSvg";
 import {useAlert} from "../../../../../utils/Alert/AlertMessage";
 import {DeleteIconHoverLaborSvg} from "../../../../../assets/svg/DeleteIconHoverLaborSvg";
+import styles from "../../../../../utils/deleteOverwriteAntButton.module.css";
 
 
 export const Signed = () => {
@@ -143,7 +144,7 @@ export const Signed = () => {
                                     Оставить
                                 </Button>
                                 <button
-                                    className="cursor-pointer flex items-center justify-center border-[1px] border-solid outline-0 border-[#FF5A5A] text-white rounded-[54.5px] bg-[#FF5A5A] hover:bg-[#FF8181] text-[14px] h-[40px] w-full py-[13px]"
+                                    className={`${styles.customAntButton}`}
                                     onClick={() => {
                                         try {
                                             setIsApproveSignedModalOpen(false)

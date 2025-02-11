@@ -24,7 +24,7 @@ export const TestResults = () => {
 
 	const [triggerSearch, { data: searchData, isLoading: isSearchLoading }] = useLazyGetTestResultsQuery()
 
-	const [setSeekerSigned] = useSetTestResultSignedMutation()
+	const [setSeekerSigned, { isLoading : setSeekerSignedLoading }] = useSetTestResultSignedMutation()
 
 	useEffect(() => {
 

@@ -128,6 +128,36 @@ export const DirectResume = ({
 		}
 	}, [])
 
+	const formatPhoneNumber = (value: string) => {
+		if (!value) return value;
+
+		// Оставляем только цифры
+		const cleaned = value.replace(/\D/g, '');
+
+		// Ограничиваем длину номера 11 цифрами
+		const trimmed = cleaned.slice(0, 11);
+
+		// Форматируем номер
+		let formatted = '';
+		if (trimmed.length > 0) {
+			formatted += '+7';
+		}
+		if (trimmed.length > 1) {
+			formatted += ` ${trimmed.slice(1, 4)}`;
+		}
+		if (trimmed.length > 4) {
+			formatted += ` ${trimmed.slice(4, 7)}`;
+		}
+		if (trimmed.length > 7) {
+			formatted += `-${trimmed.slice(7, 9)}`;
+		}
+		if (trimmed.length > 9) {
+			formatted += `-${trimmed.slice(9, 11)}`;
+		}
+
+		return formatted;
+	};
+
 	return (
 		<>
 			{contextHolder}
@@ -196,12 +226,10 @@ export const DirectResume = ({
 							<Controller
 								name="lastname"
 								control={control}
-								rules={{
-									required: {
-										value: true,
-										message: 'Фамилия введена некорректно'
-									}
-								}}
+								rules={[
+									{ required: true, message: 'Фамилия введена некорректно' }, // Отдельное правило
+									{ maxLength: 500, message: 'Количество символов было превышено' }, // Отдельное правило
+								]}
 								render={({ field }) => (
 									<Input
 										className={`${errors.lastname && 'border-[#C11616]'}`}
@@ -221,12 +249,10 @@ export const DirectResume = ({
 							<Controller
 								name="name"
 								control={control}
-								rules={{
-									required: {
-										value: true,
-										message: 'Имя введено некорректно'
-									}
-								}}
+								rules={[
+									{ required: true, message: 'Имя введено некорректно' },
+									{ maxLength: 500, message: 'Количество символов было превышено' },
+								]}
 								render={({ field }) => (
 									<Input
 										onPressEnter={e => e.preventDefault()}
@@ -246,12 +272,10 @@ export const DirectResume = ({
 							<Controller
 								name="middlename"
 								control={control}
-								rules={{
-									required: {
-										value: true,
-										message: 'Отчество введено некорректно'
-									}
-								}}
+								rules={[
+								{ required: true, message: 'Отчество введено некорректно' }, // Отдельное правило
+								{ maxLength: 500, message: 'Количество символов было превышено' }, // Отдельное правило
+							]}
 								render={({ field }) => (
 									<Input
 										onPressEnter={e => e.preventDefault()}
@@ -271,18 +295,16 @@ export const DirectResume = ({
 							<Controller
 								name="email"
 								control={control}
-								rules={{
-									required: {
-										value: true,
-										message: 'Почта введена некорректно'
-									}
-								}}
+								rules={[
+									{ required: true, message: 'Отчество введено некорректно' }, // Отдельное правило
+									{ maxLength: 500, message: 'Количество символов было превышено' }, // Отдельное правило
+								]}
 								render={({ field }) => (
 									<Input
 										onPressEnter={e => e.preventDefault()}
 										className={`${errors.email && 'border-[#C11616]'}`}
 										type="text"
-										placeholder="E-mail*"
+										placeholder="example@mail.com"
 										{...field}
 									/>
 								)}
@@ -298,18 +320,31 @@ export const DirectResume = ({
 								rules={{
 									required: {
 										value: true,
-										message: 'Телефон введён некорректно'
-									}
+										message: 'Телефон введён некорректно',
+									},
+									validate: (value) => {
+										const cleaned = value.replace(/\D/g, ''); // Удаляем всё, кроме цифр
+										return cleaned.length === 11 || 'Номер телефона должен содержать 11 цифр';
+									},
 								}}
-								render={({ field }) => (
-									<Input
-										onPressEnter={e => e.preventDefault()}
-										className={`${errors.phone && 'border-[#C11616]'}`}
-										type="text"
-										placeholder="Моб.телефон"
-										{...field}
-									/>
-								)}
+								render={({ field }) => {
+									const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+										const value = e.target.value.replace(/\D/g, ''); // Удаляем всё, кроме цифр
+										const formatted = formatPhoneNumber(value); // Форматируем номер
+										field.onChange(formatted); // Обновляем значение поля
+									};
+
+									return (
+										<Input
+											onPressEnter={(e) => e.preventDefault()}
+											onChange={handlePhoneChange} // Обработчик ввода
+											value={field.value} // Значение поля
+											className={`${errors.phone && 'border-[#C11616]'}`}
+											type="text"
+											placeholder="Моб.телефон"
+										/>
+									);
+								}}
 							/>
 							{errors.phone && (
 								<p className="font-content-font text-[10px]/[12.94px] font-normal text-[#C11616]">
@@ -319,12 +354,10 @@ export const DirectResume = ({
 							<Controller
 								name="vacancy"
 								control={control}
-								rules={{
-									required: {
-										value: true,
-										message: 'Должность введена некорректно'
-									}
-								}}
+								rules={[
+									{ required: true, message: 'Должность введена некорректно' }, // Отдельное правило
+									{ maxLength: 1000, message: 'Количество символов было превышено' }, // Отдельное правило
+								]}
 								render={({ field }) => (
 									<Input
 										onPressEnter={e => e.preventDefault()}

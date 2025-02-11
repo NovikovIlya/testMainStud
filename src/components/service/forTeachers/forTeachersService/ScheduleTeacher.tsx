@@ -18,7 +18,21 @@ const ScheduleTeacher = () => {
 
 
   
- 
+  if(isFetching){
+		return (
+			<Spin className='w-full flex justify-center align-center mt-16' spinning={isFetching }>
+			</Spin>
+		)
+	}
+
+	if(dataSchedule?.subjects?.length === 0){
+		return (
+			<Result
+				status="info"
+				title={'В выбранном диапазоне нет данных'}
+			/>
+		)
+	}
 
   return (
     <div className="px-[80px] pb-[80px]">

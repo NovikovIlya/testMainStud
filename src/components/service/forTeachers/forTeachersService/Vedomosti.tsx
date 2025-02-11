@@ -22,15 +22,16 @@ import TableVedomosti from './table/TableVedomosti'
 const Vedomosti = () => {
 	const dispatch = useAppDispatch()
 	const [form2] = Form.useForm()
-	const discilineForm = Form.useWatch('disciline', form2)
-	const groupeForm = Form.useWatch('group', form2)
-	const { data, isError, error, isFetching } = useGetVedomostForTeacherQuery({ subjectId: discilineForm, groupId: groupeForm },{ skip: !discilineForm || !groupeForm })
-	const { data: dataSubjects } = useGetVedomostSubjectsQuery()
-	const { data: dataGroups,isFetching:isFetchingGroup } = useGetVedomostGroupsQuery(discilineForm, { skip: !discilineForm })
-	const [saveBrs, { data: dataSave, isLoading }] = useSaveBrsMutation()
-	const [dataSource, setDataSource] = useState<any>([])
 	const yearForm = useAppSelector(state => state.forTeacher.yearForm)
 	const semestrForm = useAppSelector(state => state.forTeacher.semestrForm)
+	const discilineForm = Form.useWatch('disciline', form2)
+	const groupeForm = Form.useWatch('group', form2)
+	const { data, isError, error, isFetching } = useGetVedomostForTeacherQuery({ subjectId: discilineForm, groupId: groupeForm,year:yearForm,semester :semestrForm},{ skip: !discilineForm || !groupeForm })
+	const { data: dataSubjects,isFetching:isFetchingSub } = useGetVedomostSubjectsQuery({year:yearForm,semester :semestrForm},{ skip: !yearForm || !semestrForm })
+	const { data: dataGroups,isFetching:isFetchingGroup } = useGetVedomostGroupsQuery({subjectId:discilineForm,year:yearForm,semester :semestrForm}, { skip: !discilineForm })
+	const [saveBrs, { data: dataSave, isLoading }] = useSaveBrsMutation()
+	const [dataSource, setDataSource] = useState<any>([])
+	
 
 	useEffect(() => {
 		if (data?.students) {
@@ -68,8 +69,24 @@ const Vedomosti = () => {
 		dispatch(setIsEditTableScheduleTeacher(false))
 	}
 
+	if(isFetchingSub){
+		return (
+			<Spin className='w-full flex justify-center align-center mt-16' spinning={isLoading || isFetching || isFetchingSub}>
+			</Spin>
+		)
+	}
+
+	if(dataSubjects?.subjects?.length === 0){
+		return (
+			<Result
+				status="info"
+				title={t('noSubjects')}
+			/>
+		)
+	}
+
 	return (
-		<Spin spinning={isLoading || isFetching}>
+		<Spin spinning={isLoading || isFetching || isFetchingSub}>
 			{semestrForm ? (
 				<Form onFinish={onFinish} form={form2} className="px-[80px] mb-8">
 					<InfoCard text={t('infoTextVed')} />

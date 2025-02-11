@@ -66,6 +66,22 @@ const Brs = () => {
 		dispatch(setIsEditTableScheduleTeacher(false))
 	}
 
+	if(isFetchingSubject){
+		return (
+			<Spin className='w-full flex justify-center align-center mt-16' spinning={isFetchingSubject }>
+			</Spin>
+		)
+	}
+
+	if(dataSubjects?.subjects?.length === 0){
+		return (
+			<Result
+				status="info"
+				title={'В выбранном диапазоне нет данных'}
+			/>
+		)
+	}
+
 	return (
 		<Spin spinning={isLoading || isFetching}>
 			{semestrForm ? (

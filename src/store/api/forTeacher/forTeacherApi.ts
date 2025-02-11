@@ -59,20 +59,20 @@ export const fotTeacherService = testApiSlice.injectEndpoints({
             invalidatesTags: ['forTeacherSceduleBrs'],
         }),
 
-        getVedomostSubjects: builder.query<any, void>({
-            query: () => {
+        getVedomostSubjects: builder.query<any, any>({
+            query: ({year,semester}) => {
             return {
-                    url: `/to-teacher/vedomost/subjects`,
+                    url: `/to-teacher/vedomost/subjects?year=${year}&semester=${semester}`,
                     method: 'GET'
                 }
             },
             providesTags: ['forTeacherSceduleVedomost'],
             keepUnusedDataFor:0,
         }),
-        getVedomostGroups: builder.query<any, void>({
-            query: (subjectId ) => {
+        getVedomostGroups: builder.query<any, any>({
+            query: ({subjectId,year,semester} ) => {
             return {
-                    url: `/to-teacher/vedomost/groups?subjectId=${subjectId}`,
+                    url: `/to-teacher/vedomost/groups?subjectId=${subjectId}&year=${year}&semester=${semester}`,
                     method: 'GET'
                 }
             },
@@ -80,9 +80,9 @@ export const fotTeacherService = testApiSlice.injectEndpoints({
             keepUnusedDataFor:0,
         }),
         getVedomostForTeacher: builder.query<any, any>({
-            query: ({subjectId,groupId}) => {
+            query: ({subjectId,groupId,year,semester}) => {
             return {
-                    url: `/to-teacher/vedomost/vedomost?subjectId=${subjectId}&groupId=${groupId}`,
+                    url: `/to-teacher/vedomost/vedomost?subjectId=${subjectId}&groupId=${groupId}&year=${year}&semester=${semester}`,
                     method: 'GET'
                 }
             },

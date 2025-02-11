@@ -452,6 +452,7 @@
 	"verErr": "Please try again later, the next confirmation request will be available in 1 minute",
 	"selectDis": "Select a discipline and group",
 	"infoTextVed" : "Уважаемые преподаватели! В функционале “Ведомости” реализована возможность выгрузки экзаменационно-зачётной ведомости. Обращаем ваше внимание, что заполнение данной ведомости доступно исключительно в период сессии.",
-	"infoTextVed2": "Dear Professors, before working with the “Statements” tab, please go to the “Schedule” tab and verify that your dean’s office has correctly entered the schedule of your classes"
+	"infoTextVed2": "Dear Professors, before working with the “Statements” tab, please go to the “Schedule” tab and verify that your dean’s office has correctly entered the schedule of your classes",
+	"noSubjects" : "No subjects"
 
 }

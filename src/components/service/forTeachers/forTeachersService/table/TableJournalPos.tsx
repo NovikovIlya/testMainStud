@@ -6,7 +6,7 @@ import { useAppDispatch } from '../../../../../store';
 import { setIsEditTableScheduleTeacher } from '../../../../../store/reducers/authSlice';
 import { ColumnTypes, DataType, EditableCellProps, EditableRowProps } from '../../../../../models/tables';
 import { truncateString } from '../../../../../utils/truncateString';
-import './TableJournal.scss'
+
 
 const EditableContext = React.createContext<FormInstance<any> | null>(null);
 
@@ -100,12 +100,24 @@ const TableBrs = ({dataSource, setDataSource}:any) => {
         dataIndex: 'N',
         width: '100px',
         fixed: 'left',
+        customCell: () => ({
+          style: {
+            backgroundColor: 'rgba(31, 92, 184, 0.2)',
+            color: 'rgba(0, 0, 0, 1)',
+          },
+        }),
     },
     {
       title: 'ФИО',
       dataIndex: 'name',
       width: '100px',
       fixed: 'left',
+      customCell: () => ({
+        style: {
+          backgroundColor: 'rgba(31, 92, 184, 0.2)',
+          color: 'rgba(0, 0, 0, 1)',
+        },
+      }),
     },
     {
       title: 'ПН',

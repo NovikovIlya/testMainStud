@@ -88,7 +88,7 @@ const Brs = () => {
 				<Form onFinish={onFinish} form={form2} className="px-[80px] mb-8">
 					<InfoCard text={t('infoTextBrs')} />
 					<Title className="mt-8" level={2}>
-						БРС
+						{t('BRS')}
 					</Title>
 					<div className="mt-8">
 						<Row>

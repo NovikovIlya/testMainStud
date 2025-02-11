@@ -37,7 +37,7 @@ const ScheduleTeacher = () => {
   return (
     <div className="px-[80px] pb-[80px]">
         <InfoCard text={t('infoTextScdedule')}/>
-        <Title className='mt-8' level={2}>Расписание</Title>
+        <Title className='mt-8' level={2}>{t('Schedule')}</Title>
 
         
         <Spin spinning={isFetching}>

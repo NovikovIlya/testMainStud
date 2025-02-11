@@ -19,7 +19,7 @@ const NavJournal = () => {
 				<>
 					<InfoCard text="Перед работой со вкладкой «Журнал посещений» необходимо зайти во вкладку «Расписание» и проверить правильность занесения Вашим деканатом расписания Ваших занятий." />
 					<Title className="mt-8" level={2}>
-						Журнал посещений
+						{t('journalPos')}
 					</Title>
 					<Tabs defaultActiveKey="1" className="mt-6">
 						<Tabs.TabPane tab={'Заполнение по дням'} key={1}>

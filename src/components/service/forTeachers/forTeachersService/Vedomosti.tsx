@@ -91,7 +91,7 @@ const Vedomosti = () => {
 				<Form onFinish={onFinish} form={form2} className="px-[80px] mb-8">
 					<InfoCard text={t('infoTextVed')} />
 					<Title className="mt-8" level={2}>
-						Ведомости
+						{t('vedomosti')}
 					</Title>
 					<div className="mt-8">
 						<Row>

@@ -32,7 +32,7 @@ export const Inputs: FC<IInputsProps> = ({ error }) => {
 				name="password"
 				style={{ marginBottom: 30 }}
 				validateStatus={error !== null ? 'error' : undefined}
-				help={error !== null && <div>{error?.error}</div>}
+				help={error !== null && <div className='w-80'>{error?.error}</div>}
 			>
 				<Input.Password
 					className="rounded-lg h-12 px-5 py-3"

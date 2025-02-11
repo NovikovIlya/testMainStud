@@ -108,11 +108,11 @@ export const Login = () => {
 	return (
 		<div className="flex flex-col items-center min-h-screen">
 			<BackMainPage notAuth={true}/>
-			<div className="flex flex-row justify-center gap-24 text-base max-xl:gap-4 max-lg:flex-col max-lg:items-center h-full w-full">
+			<div className="flex  flex-row justify-center gap-24 text-base max-xl:gap-4 max-lg:flex-col max-lg:items-center h-full w-full">
 				<Form
 				    form={form}
 					name="login"
-					className="min-w-[400px] mx-2 max-sm:min-w-[345px] max-[321px]:min-w-[300px]"
+					className="min-w-[400px] rounded-lg shadow-[0_2px_22px_-4px_rgba(93,96,127,0.2)] p-6 mb-4 mx-2 max-sm:min-w-[345px] max-[321px]:min-w-[300px]"
 					initialValues={{ remember: true }}
 					onFinish={onFinish}
 				>
@@ -122,7 +122,7 @@ export const Login = () => {
 					<Inputs error={error!} />
 					<Buttons />
 				</Form>
-				<div className="flex items-start mt-10">
+				<div className="flex items-start items-center">
 					<img
 						className="max-lg:hidden w-[400px] h-[400px]"
 						src={logo}

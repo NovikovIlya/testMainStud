@@ -421,11 +421,11 @@
 	"group": "Group",
 	"printJournalEmpty" : "Print Journal (Blank)",
 	"printJournalFiled": "Print journal (filled)",
-	"BRS": "BRS",
+	"BRS": "Point Rating System",
 	"period": "Period",
 	"selectYearSemest": "Select academic year and semester",
-	"vedomosti":"Journal",
-	"journalPos": "Visitor log",
+	"vedomosti":"Statements",
+	"journalPos": "Lesson log",
 	"rpd":"PPD, PGE, PVKR",
 	"shortLink" : "Short link",
 	"shortLinkInfo": "Здесь вы можете создать короткие ссылки",
@@ -451,8 +451,9 @@
 	"verSuc": "Verification completed successfully",
 	"verErr": "Please try again later, the next confirmation request will be available in 1 minute",
 	"selectDis": "Select a discipline and group",
-	"infoTextVed" : "Уважаемые преподаватели! В функционале “Ведомости” реализована возможность выгрузки экзаменационно-зачётной ведомости. Обращаем ваше внимание, что заполнение данной ведомости доступно исключительно в период сессии.",
+	"infoTextVed" : "Dear Professors, the “Statements” functionality now includes the ability to download the exam and credit report. Please note that completing this report is available exclusively during the examination period",
 	"infoTextVed2": "Dear Professors, before working with the “Statements” tab, please go to the “Schedule” tab and verify that your dean’s office has correctly entered the schedule of your classes",
-	"noSubjects" : "No subjects"
+	"noSubjects" : "No subjects",
+	"infoTextJournal": "Dear Professors, the “Statements” functionality now includes the ability to download the exam and credit report. Please note that completing this report is available exclusively during the examination period"
 
 }

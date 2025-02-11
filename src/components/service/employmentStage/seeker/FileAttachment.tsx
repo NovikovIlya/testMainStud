@@ -35,9 +35,9 @@ export const FileAttachment = (
 		?.documents.find(doc => doc.docType === props.name)
 
 	const dispatch = useDispatch()
-	const [deleteDoc] = useDeleteEmploymentDocMutation()
+	const [deleteDoc, {isLoading : deleteDocLoading }] = useDeleteEmploymentDocMutation()
 	const [getEmpData] = useLazyGetEmploymentDataQuery()
-	const [uploadDoc] = useUploadEmploymentDocumentMutation()
+	const [uploadDoc, {isLoading : uploadDocLoading }] = useUploadEmploymentDocumentMutation()
 	const [downloadDoc] = useLazyDownloadEmploymentSeekerFileQuery()
 
 	return (
@@ -75,6 +75,7 @@ export const FileAttachment = (
 							<Button
 								className="bg-inherit ml-auto opacity-40 underline"
 								type="text"
+								loading={deleteDocLoading}
 								onClick={() => {
 									deleteDoc({ respondId: props.respondId, docId: foundDoc.id })
 										.unwrap()
@@ -144,7 +145,7 @@ export const FileAttachment = (
 				>
 					{' '}
 					<Button
-						loading={isFileUploading}
+						loading={uploadDocLoading}
 						className="border-black border rounded-[5px] py-[12px] px-[20px]"
 						type="text"
 					>

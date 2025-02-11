@@ -211,7 +211,7 @@ export const VacancyRequestUpdateView = () => {
 							<Button
 								type="primary"
 								className="mr-auto w-full rounded-[54.5px]"
-								loading={acceptRequestLoading || alterRequest}
+								loading={acceptRequestLoading || alterRequestLoading}
 								onClick={
 									isEdited
 										? () => {

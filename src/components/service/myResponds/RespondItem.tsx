@@ -14,6 +14,7 @@ import { setCurrentVacancyName } from '../../../store/reducers/CurrentVacancyNam
 import { setChatId } from '../../../store/reducers/chatIdSlice'
 import { RespondItemType, respondStatus } from '../../../store/reducers/type'
 import {useAlert} from "../../../utils/Alert/AlertMessage";
+import styles from "../../../utils/deleteOverwriteAntButton.module.css";
 
 export const RespondItem = (props: RespondItemType & { refetch: Function }) => {
 	const { openAlert } = useAlert()
@@ -92,7 +93,7 @@ export const RespondItem = (props: RespondItemType & { refetch: Function }) => {
 							Оставить
 						</Button>
 						<Button
-							className="cursor-pointer flex items-center justify-center border-[1px] border-solid outline-0 border-[#FF5A5A] hover:border-[#FF8181] text-white rounded-[54.5px] bg-[#FF5A5A] hover:bg-[#FF8181] text-[14px] h-[40px] w-full py-[13px]"
+							className={`${styles.customAntButton}`}
 							onClick={async () => {
 								try {
 									await deleteVacancy(props.id)

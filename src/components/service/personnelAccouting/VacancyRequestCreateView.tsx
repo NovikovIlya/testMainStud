@@ -44,8 +44,8 @@ export const VacancyRequestCreateView = () => {
 
 	const navigate = useNavigate()
 	const [getVacancyRequestView, queryStatus] = useLazyGetVacancyRequestViewQuery()
-	const [acceptRequest] = useAcceptCreateVacancyRequestMutation()
-	const [alterRequest] = useAlterCreateVacancyRequestMutation()
+	const [acceptRequest, {isLoading: acceptRequestLoading} ] = useAcceptCreateVacancyRequestMutation()
+	const [alterRequest, {isLoading: alterRequestLoading}] = useAlterCreateVacancyRequestMutation()
 
 	const { openAlert } = useAlert()
 
@@ -82,7 +82,7 @@ export const VacancyRequestCreateView = () => {
 	const [resultModalText, setResultModalText] = useState<string>('')
 
 	useEffect(() => {
-		getVacancyRequestView(id_from_url)
+		getVacancyRequestView(page_id)
 			.unwrap()
 			.then(req => {
 				setPost(req.newData.post)
@@ -364,6 +364,7 @@ export const VacancyRequestCreateView = () => {
 								className="rounded-[54.5px] w-[121px] ml-auto"
 								htmlType="submit"
 								disabled={categoryTitle === '' || secondOption === null}
+								loading={acceptRequestLoading || alterRequestLoading}
 							>
 								Опубликовать
 							</Button>
@@ -500,7 +501,11 @@ export const VacancyRequestCreateView = () => {
 						<Input.TextArea autoSize className="!h-[107px]" placeholder="Ввести текст..."></Input.TextArea>
 					</Form.Item>
 					<Form.Item>
-						<Button type="primary" htmlType="submit">
+						<Button
+							type="primary"
+							htmlType="submit"
+							loading={acceptRequestLoading || alterRequestLoading}
+						>
 							Сохранить
 						</Button>
 					</Form.Item>

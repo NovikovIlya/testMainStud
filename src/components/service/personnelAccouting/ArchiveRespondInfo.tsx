@@ -33,6 +33,7 @@ import { useAlert } from '../../../utils/Alert/AlertMessage'
 import { NocircleArrowIcon } from '../jobSeeker/NoCircleArrowIcon'
 
 import { InviteSeekerForm } from './supervisor/InviteSeekerForm'
+import styles from "../../../utils/deleteOverwriteAntButton.module.css";
 
 export const ArchiveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR' }) => {
 	const respondId = useAppSelector(state => state.currentResponce)
@@ -58,8 +59,8 @@ export const ArchiveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 	const { data: countries, isLoading: isLoadingCountry } = useGetCountriesQuery(i18n.language)
 
 	const { refetch } = useGetArchivedResponcesQuery()
-	const [approveRespond] = useApproveArchivedRespondMutation()
-	const [deleteRespond] = useDeleteRespondFromArchiveMutation()
+	const [approveRespond, { isLoading : approveRespondLoading}] = useApproveArchivedRespondMutation()
+	const [deleteRespond, { isLoading : deleteRespondLoading}] = useDeleteRespondFromArchiveMutation()
 	const [getResume] = useLazyGetSeekerResumeFileQuery()
 
 	const [isRespondSentToSupervisor, setIsRespondSentToSupervisor] = useState<boolean>(
@@ -164,8 +165,8 @@ export const ArchiveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 								>
 									Оставить
 								</Button>
-								<button
-									className="cursor-pointer flex items-center justify-center border-[1px] border-solid outline-0 border-[#FF5A5A] hover:border-[#FF8181] text-white rounded-[54.5px] bg-[#FF5A5A] hover:bg-[#FF8181] text-[14px] h-[40px] w-full py-[13px]"
+								<Button
+									className={`${styles.customAntButton}`}
 									onClick={async () => {
 										try {
 											await deleteRespond(respondId.respondId)
@@ -180,9 +181,10 @@ export const ArchiveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 											openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 										}
 									}}
+									loading={deleteRespondLoading}
 								>
 									Удалить
-								</button>
+								</Button>
 							</div>
 						</Modal>
 					</ConfigProvider>
@@ -308,6 +310,7 @@ export const ArchiveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 												}
 											}}
 											disabled={isRespondSentToSupervisor}
+											loading={approveRespondLoading}
 											type="primary"
 											className="font-content-font font-normal text-white text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px]"
 										>
@@ -542,6 +545,7 @@ export const ArchiveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 												})
 											})
 									}}
+									loading={deleteRespondLoading}
 								>
 									Удалить
 								</Button>
@@ -603,6 +607,7 @@ export const ArchiveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 												}
 											}}
 											disabled={isRespondSentToSupervisor}
+											loading={approveRespondLoading}
 											type="primary"
 											className="font-content-font font-normal text-white text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px]"
 										>

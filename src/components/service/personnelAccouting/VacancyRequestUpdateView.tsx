@@ -37,8 +37,8 @@ export const VacancyRequestUpdateView = () => {
 	console.log(requestView)
 	const [getVacancyRequestView, queryStatus] = useLazyGetVacancyRequestViewQuery()
 	const navigate = useNavigate()
-	const [acceptRequest] = useAcceptUpdateVacancyRequestMutation()
-	const [alterRequest] = useAlterUpdateVacancyRequestMutation()
+	const [acceptRequest, {isLoading: acceptRequestLoading} ] = useAcceptUpdateVacancyRequestMutation()
+	const [alterRequest, {isLoading: alterRequestLoading}] = useAlterUpdateVacancyRequestMutation()
 	const [denyRequest] = useDenyVacancyRequestMutation()
 
 	const { refetch } = useGetVacancyRequestsQuery('все')
@@ -211,6 +211,7 @@ export const VacancyRequestUpdateView = () => {
 							<Button
 								type="primary"
 								className="mr-auto w-full rounded-[54.5px]"
+								loading={acceptRequestLoading || alterRequestLoading}
 								onClick={
 									isEdited
 										? () => {
@@ -387,7 +388,10 @@ export const VacancyRequestUpdateView = () => {
 						<Input.TextArea autoSize className="!h-[107px]" placeholder="Ввести текст..."></Input.TextArea>
 					</Form.Item>
 					<Form.Item>
-						<Button type="primary" htmlType="submit">
+						<Button
+							type="primary"
+							htmlType="submit"
+						>
 							Сохранить
 						</Button>
 					</Form.Item>

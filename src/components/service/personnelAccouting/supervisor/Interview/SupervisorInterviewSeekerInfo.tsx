@@ -62,8 +62,8 @@ export const SupervisorInterviewSeekerInfo = () => {
 
 	const [isUnsuccessModalOpen, setIsUnsuccessModalOpen] = useState(false)
 
-	const [rejectSeeker] = useEmployeeSeekerRequestMutation()
-	const [aproveSeeker] = useEmployeeSeekerRequestMutation()
+	const [rejectSeeker, { isLoading : rejectSeekerLoading}] = useEmployeeSeekerRequestMutation()
+	const [aproveSeeker, { isLoading : aproveSeekerLoading}] = useEmployeeSeekerRequestMutation()
 
 	const [isEmploymentRequestSent, setIsEmploymentRequestSent] = useState<boolean>(false)
 	const [isSeekerRejected, setIsSeekerRejected] = useState<boolean>(false)
@@ -189,6 +189,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 										openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 									}
 								}}
+								loading={aproveSeekerLoading}
 							>
 								Пригласить на работу
 							</Button>
@@ -198,6 +199,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 								onClick={() => {
 									setIsRefuseModalOpen(true)
 								}}
+								loading={rejectSeekerLoading}
 							>
 								Отказать
 							</Button>

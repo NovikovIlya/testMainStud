@@ -28,6 +28,7 @@ import {
 	RespondItemType,
 	SeekerStatusChangeType,
 	SignedItemType,
+	SupervisorRequestType,
 	Template,
 	TypeSchedule,
 	VacancyGroupedResponcesType,
@@ -1139,6 +1140,12 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			}),
 			keepUnusedDataFor: 0
+		}),
+		getAllSupervisorRequests: builder.query<SupervisorRequestType[], void>({
+			query: () => ({
+				url: `http://${emplBaseURL}employment-api/v1/management/vacancy-requests?action=UPDATE`,
+				method: 'GET'
+			})
 		})
 	})
 })
@@ -1261,5 +1268,7 @@ export const {
 	useGetRoleQuery,
 	useLazyCheckIfTestIsPassedQuery,
 	useLazyGetEmploymentStageStatusForSupervisorQuery,
-	useLazyDownloadChatFileQuery
+	useLazyDownloadChatFileQuery,
+	useLazyGetAllSupervisorRequestsQuery,
+	useLazyGetVacancyRequestsQuery
 } = serviceApi

@@ -6,9 +6,12 @@ import { useNavigate } from 'react-router-dom'
 import { ModalOkSvg } from '../../../../../assets/svg/ModalOkSvg'
 import { useAppSelector } from '../../../../../store'
 import {
+	useAlterUpdateVacancyRequestMutation,
 	useGetCategoriesQuery,
 	useGetDirectionsQuery,
 	useGetSubdivisionsQuery,
+	useLazyGetAllSupervisorRequestsQuery,
+	useLazyGetVacancyRequestViewQuery,
 	useLazyGetVacancyViewQuery,
 	useRequestUpdateVacancyMutation
 } from '../../../../../store/api/serviceApi'
@@ -54,19 +57,26 @@ export const SupervisorUpdateVacancy = () => {
 
 	const navigate = useNavigate()
 	const [requestUpdate, { isLoading: loading }] = useRequestUpdateVacancyMutation()
+	const [getAllRequests] = useLazyGetAllSupervisorRequestsQuery()
+	const [alterRequest] = useAlterUpdateVacancyRequestMutation()
+	const [getRequest] = useLazyGetVacancyRequestViewQuery()
 
 	const [isEdit, setIsEdit] = useState<boolean>(false)
 	const [isSendRequestButtonActivated, setIsSendRequestButtonActivated] = useState<boolean>(false)
 
 	const [post, setPost] = useState<string | undefined>(data?.title.rendered)
+	const [isPostChanged, setIsPostChanged] = useState<boolean>(false)
 	const [experience, setExperience] = useState<string | undefined>(data?.acf.experience)
+	const [isExperienceChanged, setIsExperienceChanged] = useState<boolean>(false)
 	const [employment, setEmployment] = useState<string | undefined>(data?.acf.employment)
+	const [isEmploymentChanged, setIsEmploymentChanged] = useState<boolean>(false)
 	const [salary, setSalary] = useState<string | undefined>(data?.acf.salary)
+	const [isSalaryChanged, setIsSalaryChanged] = useState<boolean>(false)
 	const [category, setCategory] = useState<string | undefined>(data?.acf.category)
 	const [direction, setDirection] = useState<string | undefined>(data?.acf.direction)
 	const [subdivision, setSubdivision] = useState<string | undefined>(data?.acf.subdivision)
 
-	useEffect(()=>{
+	useEffect(() => {
 		setPost(data?.title.rendered)
 		setExperience(data?.acf.experience)
 		setEmployment(data?.acf.employment)
@@ -91,6 +101,7 @@ export const SupervisorUpdateVacancy = () => {
 			.replace(/<li>/g, '')
 			.replace(/<\/li>/g, '')
 	)
+	const [isResponsibilitiesChanged, setIsResponsibilitiesChanged] = useState<boolean>(false)
 	console.log(responsibilities)
 	const [skills, setSkills] = useState<string | undefined>(
 		data?.acf.skills
@@ -107,6 +118,7 @@ export const SupervisorUpdateVacancy = () => {
 			.replace(/<li>/g, '')
 			.replace(/<\/li>/g, '')
 	)
+	const [isSkillsChanged, setIsSkillsChanged] = useState<boolean>(false)
 
 	const [conditions, setConditions] = useState<string | undefined>(
 		data?.acf.conditions
@@ -123,8 +135,9 @@ export const SupervisorUpdateVacancy = () => {
 			.replace(/<li>/g, '')
 			.replace(/<\/li>/g, '')
 	)
+	const [isConditionsChanged, setIsConditionsChanged] = useState<boolean>(false)
 
-	useEffect(()=>{
+	useEffect(() => {
 		setResponsibilities(data?.acf.responsibilities)
 		setSkills(data?.acf.skills)
 		setConditions(data?.acf.conditions)
@@ -219,12 +232,19 @@ export const SupervisorUpdateVacancy = () => {
 						onFinish={async values => {
 							try {
 								setPost(prev => values.post)
+								form.isFieldTouched('post') && setIsPostChanged(true)
 								setExperience(prev => values.experience)
+								form.isFieldTouched('experience') && setIsExperienceChanged(true)
 								setEmployment(prev => values.employment)
+								form.isFieldTouched('employment') && setIsEmploymentChanged(true)
 								setSalary(prev => values.salary)
+								form.isFieldTouched('salary') && setIsSalaryChanged(true)
 								setResponsibilities(prev => values.responsibilities)
+								form.isFieldTouched('responsibilities') && setIsResponsibilitiesChanged(true)
 								setSkills(prev => values.skills)
+								form.isFieldTouched('skills') && setIsSkillsChanged(true)
 								setConditions(prev => values.conditions)
+								form.isFieldTouched('conditions') && setIsConditionsChanged(true)
 								form.isFieldsTouched() && setIsSendRequestButtonActivated(true)
 								setIsEdit(false)
 							} catch (error: any) {
@@ -393,10 +413,10 @@ export const SupervisorUpdateVacancy = () => {
 							</div>
 							<div className="flex flex-col gap-[16px]">
 								<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-									{direction === "" ? "Подразделение" : "Профобласть"}
+									{direction === '' ? 'Подразделение' : 'Профобласть'}
 								</p>
 								<p className="font-content-font font-normal text-black text-[18px]/[21px]">
-									{direction === "" ? subdivision : direction}
+									{direction === '' ? subdivision : direction}
 								</p>
 							</div>
 						</div>
@@ -413,19 +433,52 @@ export const SupervisorUpdateVacancy = () => {
 								<Button
 									onClick={async () => {
 										try {
-											await requestUpdate({
-												post: post as string,
-												experience: experience as string,
-												salary: salary as string,
-												employment: employment as string,
-												responsibilities: responsibilities as string,
-												skills: skills as string,
-												conditions: conditions as string,
-												vacancyId: data?.id as number
-											})
+											await getAllRequests()
 												.unwrap()
-												.then(() => {
-													setIsSuccessModalOpen(true)
+												.then(requests => {
+													let alreadyRequest = requests.find(req => {
+														return (
+															req.vacancy.id ===
+																parseInt(
+																	window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1)
+																) && req.status === 'VERIFYING'
+														)
+													})
+													alreadyRequest
+														? getRequest(alreadyRequest.id)
+																.unwrap()
+																.then(data => {
+																	alterRequest({
+																		post: isPostChanged ? (post as string) : data.newData.post,
+																		experience: isExperienceChanged ? (experience as string) : data.newData.experience,
+																		salary: isSalaryChanged ? (salary as string) : data.newData.salary,
+																		employment: isEmploymentChanged ? (employment as string) : data.newData.employment,
+																		responsibilities: isResponsibilitiesChanged
+																			? (responsibilities as string)
+																			: data.newData.responsibilities,
+																		skills: isSkillsChanged ? (skills as string) : data.newData.skills,
+																		conditions: isConditionsChanged ? (conditions as string) : data.newData.conditions,
+																		vacancyRequestId: alreadyRequest.id
+																	})
+																		.unwrap()
+																		.then(() => {
+																			setIsSuccessModalOpen(true)
+																		})
+																})
+														: requestUpdate({
+																post: post as string,
+																experience: experience as string,
+																salary: salary as string,
+																employment: employment as string,
+																responsibilities: responsibilities as string,
+																skills: skills as string,
+																conditions: conditions as string,
+																vacancyId: data?.id as number
+														  })
+																.unwrap()
+																.then(() => {
+																	setIsSuccessModalOpen(true)
+																})
 												})
 										} catch (error: any) {
 											openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })

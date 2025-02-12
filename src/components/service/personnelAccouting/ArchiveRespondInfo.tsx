@@ -23,6 +23,7 @@ import {
 	useLazyGetSeekerResumeFileQuery
 } from '../../../store/api/serviceApi'
 import { useGetCountriesQuery } from '../../../store/api/utilsApi'
+import { setChatFilter } from '../../../store/reducers/ChatFilterSlice'
 import { openChat } from '../../../store/reducers/ChatRespondStatusSlice'
 import { setRespondId } from '../../../store/reducers/CurrentRespondIdSlice'
 import { setCurrentVacancyId } from '../../../store/reducers/CurrentVacancyIdSlice'
@@ -318,6 +319,7 @@ export const ArchiveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 										<Button
 											onClick={() => {
 												dispatch(setCurrentVacancyName(res.vacancyName ? res.vacancyName : res.desiredJob))
+												dispatch(setChatFilter('ARCHIVE'))
 												handleNavigate(`/services/personnelaccounting/chat/id/${chatId.id}`)
 											}}
 											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
@@ -614,6 +616,7 @@ export const ArchiveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 										<Button
 											onClick={() => {
 												dispatch(setCurrentVacancyName(res.vacancyName ? res.vacancyName : res.desiredJob))
+												dispatch(setChatFilter('ARCHIVE'))
 												handleNavigate(`/services/personnelaccounting/chat/id/${chatId.id}`)
 											}}
 											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"

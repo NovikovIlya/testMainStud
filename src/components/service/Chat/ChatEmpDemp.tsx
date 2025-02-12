@@ -5,6 +5,7 @@ import { useLocation } from 'react-router-dom'
 
 import { ChatCrossIcon } from '../../../assets/svg/ChatCrossIcon'
 import { ChatFilterIcon } from '../../../assets/svg/ChatFilterIcon'
+import { useAppSelector } from '../../../store'
 import {
 	useGetAllVacanciesQuery,
 	useGetSeekerRespondsQuery,
@@ -28,13 +29,15 @@ const personnelDeparmentToken =
 export const ChatEmpDemp = () => {
 	const [isFilterWindowOpen, setIsFilterWindowOpen] = useState<boolean>(true)
 
+	const { filter } = useAppSelector(state => state.chatFilter)
+
 	const [requestData, setRequestData] = useState<{
 		vacancyId: number | null
 		status: string | null
 		sort: 'ALL' | 'UNREAD' | null
 		page: number
 		pageSize: number
-	}>({ vacancyId: null, status: 'IN_PERSONNEL_DEPT_REVIEW', sort: null, page: 0, pageSize: 10 })
+	}>({ vacancyId: null, status: filter, sort: null, page: 0, pageSize: 10 })
 
 	// const [getResponds] = useLazyGetResponcesByVacancyQuery()
 	// const [responds, setResponds] = useState<VacancyRespondItemType[]>([])

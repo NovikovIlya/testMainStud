@@ -11,6 +11,7 @@ import { emptyApiSlice } from './api/emptyApiSlice'
 import { practiceApi } from './api/practiceApi/practiceApi'
 import { testApiSlice } from './api/testApiSlice'
 import CatalogFilterSlice from './reducers/CatalogFilterSlice'
+import ChatFilterSlice from './reducers/ChatFilterSlice'
 import ChatRespondStatusSlice from './reducers/ChatRespondStatusSlice'
 import CurrentEmploymentStage from './reducers/CurrentEmploymentStage'
 import CurrentInterviewFormatSlice from './reducers/CurrentInterviewFormatSlice'
@@ -124,7 +125,8 @@ export const store = configureStore({
 		[apiSliceStudent.reducerPath]: apiSliceStudent.reducer,
 		[apiSliceTeacher.reducerPath]: apiSliceTeacher.reducer,
 		[emptyApiSlice.reducerPath]: emptyApiSlice.reducer,
-		experienceFile: ExperienceFileReducer
+		experienceFile: ExperienceFileReducer,
+		chatFilter: ChatFilterSlice
 	},
 	//@ts-ignore
 	middleware: getDefaultMiddleware =>

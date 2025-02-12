@@ -1,5 +1,5 @@
 import { PrinterOutlined } from '@ant-design/icons'
-import { Button, Col, Form, Result, Row, Select, Spin } from 'antd'
+import { Button, Col, Empty, Form, Result, Row, Select, Spin } from 'antd'
 import Title from 'antd/es/typography/Title'
 import { t } from 'i18next'
 import React, { useEffect, useState } from 'react'
@@ -83,10 +83,7 @@ const Vedomosti = () => {
 
 	if(dataSubjects?.subjects?.length === 0){
 		return (
-			<Result
-				status="info"
-				title={t('noSubjects')}
-			/>
+			<Empty className='mt-10' description={t('noSubjects')}></Empty>
 		)
 	}
 

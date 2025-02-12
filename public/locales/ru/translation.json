@@ -1,6 +1,7 @@
 
 {
 	"welcome": "Добро пожаловать КФУ!",
+	"practiceForTeacher": "Практики для преподавателя",
 	"KFU": "КФУ",
 	"role": "Для того, чтобы мы настроили личный кабинет персонально для Вас, выберите с какой целью Вы регистрировались на сайте:",
 	"roleGuest": "Я гость. ",
@@ -602,7 +603,31 @@
 	"fullTime": "Очная",
 	"partTime": "Заочная",
 	"distance": "Дистанционная",
-	"combined": "Очно-заочная"
+	"combined": "Очно-заочная",
+	"viewAllPractices": "Практики для преподавателя",
+    "groupNumber": "Номер группы",
+    "sendReport": "Сформирован отчет",
+    "sendToDeanery": "Отправлен в деканат",
+    "current": "Текущие",
+    "past": "Прошедшие",
+    "tableView": "Посмотреть данные в таблице",
+    "noDataMessage": "Нет данных для отображения",
+    "emptyFieldDepartmentMessage": "Поле 'Подразделение' не должно быть пустым",
+	"fioStudent": "ФИО обучающегося",
+    "grade": "Оценка",
+    "status": "Статус",
+    "availabilityDocuments": "Наличие документов",
+    "reportAvailability": "Наличие отчета",
+    "reportGenerated": "Отчет сформирован",
+    "reportNotGenerated": "Отчет не сформирован",
+    "formReport": "Сформировать отчет",
+    "sendDean": "Отправить в деканат",
+    "statusGeneration": "Статус формирования",
+    "formed": "Сформирован",
+    "notFormed": "Не сформирован",
+    "statusSendingDean": "Статус отправки в деканат",
+    "sent": "Отправлено",
+    "notSent": "Не отправлено"
    
    
 	

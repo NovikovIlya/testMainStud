@@ -454,7 +454,7 @@
 	"selectDis": "Select a discipline and group",
 	"infoTextVed": "Dear Professors, the “Statements” functionality now includes the ability to download the exam and credit report. Please note that completing this report is available exclusively during the examination period",
 	"infoTextVed2": "Dear Professors, before working with the “Statements” tab, please go to the “Schedule” tab and verify that your dean’s office has correctly entered the schedule of your classes",
-	"noSubjects": "No subjects",
+	"noSubjects": "There is no data in the selected range",
 	"infoTextJournal": "Dear Professors, the “Statements” functionality now includes the ability to download the exam and credit report. Please note that completing this report is available exclusively during the examination period",
 
 	"spravochnik": "Directory",
@@ -598,7 +598,33 @@
 	"combined": "combined",
 	"createSchedule": "Create",
 	"addPracticeSchedule": "Add practice schedule",
-	"KFU": "KFU"
+	"KFU": "KFU",
+	"practiceForTeacher": "Practice for teacher",
+	"viewAllPractices": "Practices for Teacher",
+    "sendReport": "Report Formed",
+    "sendToDeanery": "Sent to Deanery",
+    "current": "Current",
+    "past": "Past",
+    "tableView": "View Data in Table",
+    "noDataMessage": "No data to display",
+    "emptyFieldDepartmentMessage": "The 'Department' field must not be empty",
+	"fioStudent": "Full name of student",
+    "grade": "Grade",
+    "status": "Status",
+    "availabilityDocuments": "Availability of documents",
+    "reportAvailability": "Report availability",
+    "reportGenerated": "Report generated",
+    "reportNotGenerated": "Report not generated",
+    "formReport": "Form report",
+    "sendDean": "Send to dean's office",
+    "statusGeneration": "Status of formation",
+    "formed": "Formed",
+    "notFormed": "Not formed",
+    "statusSendingDean": "Sending status to the dean's office",
+    "sent": "Sent",
+    "notSent": "Not sent"
+  
+
 	
   
   

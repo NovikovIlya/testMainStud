@@ -48,8 +48,8 @@ export const NavPracticeTeacher = () => {
 
 
 	const items: any = [
-		getItem('Практики', 'sub1', <PracticesSvg />, [
-			getItem('Практики для преподавателя', 'practiceteacher'),
+		getItem(t("Practices"), 'sub1', <PracticesSvg />, [
+			getItem(t('practiceForTeacher'), 'practiceteacher'),
 			
 		])
 		

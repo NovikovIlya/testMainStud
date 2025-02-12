@@ -77,7 +77,7 @@ const Brs = () => {
 		return (
 			<Result
 				status="info"
-				title={'В выбранном диапазоне нет данных'}
+				title={t('noSubjects')}
 			/>
 		)
 	}

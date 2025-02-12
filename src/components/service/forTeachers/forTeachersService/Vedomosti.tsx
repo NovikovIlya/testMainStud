@@ -18,6 +18,7 @@ import { setIsEditTableScheduleTeacher } from '../../../../store/reducers/authSl
 
 import InfoCard from './InfoCard'
 import TableVedomosti from './table/TableVedomosti'
+import { getCurrentAcademicYear } from '../../../../utils/getCurrentAcademicYear'
 
 const Vedomosti = () => {
 	const dispatch = useAppDispatch()
@@ -32,6 +33,10 @@ const Vedomosti = () => {
 	const [saveBrs, { data: dataSave, isLoading }] = useSaveBrsMutation()
 	const [dataSource, setDataSource] = useState<any>([])
 	
+	useEffect(() => {
+		form2.resetFields(['disciline', 'group']);
+		setDataSource([]); // Очищаем данные таблицы
+	}, [semestrForm]);
 
 	useEffect(() => {
 		if (data?.students) {
@@ -169,7 +174,7 @@ const Vedomosti = () => {
 
 							<TableVedomosti subj_type={data?.subj_type} is_session={data?.is_session} dataSource={dataSource} setDataSource={setDataSource} />
 
-							<Button htmlType="submit" className="mt-8 mb-8 rounded-xl" type="primary">
+							<Button disabled={getCurrentAcademicYear().value!==yearForm} htmlType="submit" className="mt-8 mb-8 rounded-xl" type="primary">
 								{t('Save')}
 							</Button>
 

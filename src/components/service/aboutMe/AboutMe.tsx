@@ -163,14 +163,7 @@ export const AboutMe = () => {
 								onChange={e =>
 									dispatch(birthDay(!e ? '' : e.format('YYYY-MM-DD')))
 								}
-								value={
-									formData.birthDay
-										? dayjs(
-												formData.birthDay.split('-').reverse().join('.'),
-												'DD.MM.YYYY'
-										  )
-										: null
-								}
+								
 							/>
 						</ConfigProvider>
 					)}
@@ -255,7 +248,7 @@ export const AboutMe = () => {
 							className="border-solid border-bluekfu border-[1px] text-bluekfu !rounded-md"
 							onClick={() => onSubmit()}
 						>
-							Сохранить
+							{t('save')}
 						</Button>
 					)}
 				</Space>

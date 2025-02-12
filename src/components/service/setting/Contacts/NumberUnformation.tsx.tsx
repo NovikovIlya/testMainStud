@@ -162,7 +162,7 @@ export const NumberInformation = () => {
 									<div className="text-center">{t('verSuc')}</div>
 								) : (
 									<>
-										<p>Оставшееся время: {count}</p>
+										<p>{t('verText')}: {count}</p>
 										<p className="mb-2">{t('verText2')}</p>
 										<Form.Item name={'code'}>
 											<Input.OTP length={4} />

@@ -22,6 +22,7 @@ import ScheduleTeacher from './forTeachersService/ScheduleTeacher'
 
 import Vedomosti from './forTeachersService/Vedomosti'
 import NavJournal from './forTeachersService/NavJournal'
+import { getCurrentAcademicYear } from '../../../utils/getCurrentAcademicYear'
 
 export const NavForTeachers = () => {
 	const dispatch = useAppDispatch()
@@ -97,17 +98,7 @@ export const NavForTeachers = () => {
 	// 		return {value: year-1, label: `${year-1}/${year }`}
 	// 	}
 	// }
-	function getCurrentAcademicYear() {
-		const now = new Date();
-		const year = now.getFullYear();
-		const month = now.getMonth(); // Месяцы начинаются с 0 (январь)
-		// Учебный год обычно начинается в сентябре
-		if (month >= 8) {
-		  return { value: year, label: `${year}/${year + 1}` };
-		} else {
-		  return { value: year - 1, label: `${year - 1}/${year}` };
-		}
-	  }
+
 	function getCurrentSemester() {
 		const now = new Date();
 		const currentYear = now.getFullYear();

@@ -106,6 +106,13 @@ export const Stages = () => {
 						(empData.status === 'VERIFYING' || empData.status === 'ACCEPTED') && 'pointer-events-none'
 					}`}
 				>
+					{currentStage === 0 && (
+						<div className="w-full h-full flex flex-col">
+							<p className="text-centerfont-content-font text-[20px]/[20px] text-black font-normal opacity-60 mt-[15%] mx-auto">
+								Выберите этап, который вы бы хотели пройти
+							</p>
+						</div>
+					)}
 					{currentStage === 1 && <EmplMedInvite respondId={respondId} stageId={1} stageName="FIRST" />}
 					{currentStage === 2 && <EmplDocAttachment respondId={respondId} stageId={2} stageName="SECOND" />}
 					{/* {currentStage === 3 && (

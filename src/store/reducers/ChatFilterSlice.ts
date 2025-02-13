@@ -1,6 +1,12 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
-type chatFilterType = 'IN_PERSONNEL_DEPT_REVIEW' | 'IN_RESERVE' | 'ARCHIVE'
+export type chatFilterType =
+	| 'IN_PERSONNEL_DEPT_REVIEW'
+	| 'IN_RESERVE'
+	| 'ARCHIVE'
+	| 'IN_SUPERVISOR_REVIEW'
+	| 'INVITATION'
+	| 'EMPLOYMENT'
 
 const initialState: { filter: chatFilterType } = { filter: 'IN_PERSONNEL_DEPT_REVIEW' }
 

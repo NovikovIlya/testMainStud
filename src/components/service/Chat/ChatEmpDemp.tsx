@@ -1,6 +1,7 @@
 import { LoadingOutlined } from '@ant-design/icons'
 import { Button, ConfigProvider, Select, Spin } from 'antd'
 import { useEffect, useRef, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { useLocation } from 'react-router-dom'
 
 import { ChatCrossIcon } from '../../../assets/svg/ChatCrossIcon'
@@ -14,6 +15,7 @@ import {
 	useLazyGetResponcesByVacancyQuery,
 	useLazyGetVacancyGroupedResponcesQuery
 } from '../../../store/api/serviceApi'
+import { chatFilterType, setChatFilter } from '../../../store/reducers/ChatFilterSlice'
 import { VacancyRespondItemType } from '../../../store/reducers/type'
 import VacancyView from '../jobSeeker/VacancyView'
 
@@ -139,6 +141,8 @@ export const ChatEmpDemp = () => {
 
 	const { pathname } = useLocation()
 
+	const dispatch = useDispatch()
+
 	const handleList = chats.map(chat => {
 		return (
 			// <ChatPreview
@@ -247,6 +251,7 @@ export const ChatEmpDemp = () => {
 															status: value,
 															page: 0
 														}))
+														dispatch(setChatFilter(value as chatFilterType))
 													}}
 													className="w-full h-[40px]"
 													placeholder="Выбрать"

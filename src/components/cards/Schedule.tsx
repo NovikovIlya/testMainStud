@@ -111,6 +111,13 @@ export const Schedule = () => {
 					>
 						{t('Sat')}
 					</Button>
+					<Button
+						style={activeButton === 'sunday' ? activeStyles : disableStyle}
+						onClick={() => setActiveButton('sunday')}
+						className="text-lg font-bold h-[40px]"
+					>
+						{t('Sun')}
+					</Button>
 				</div>
 			</div>
 			<div className="hidden max-md:flex items-center justify-center w-full">
@@ -143,10 +150,10 @@ export const Schedule = () => {
 							</div>
 						))
 					) : (
-						<div>{t('notLesson')}</div>
+						<div>{t('NoLesson')}</div>
 					)
 				) : (
-					<h3>{isFetching ? '' : t('NoLesson')}</h3>
+					<div>{isFetching ? '' : t('NoLesson')}</div>
 				)}
 			</div>
 

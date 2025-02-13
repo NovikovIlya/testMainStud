@@ -115,9 +115,9 @@ const saveDate = async (date:any) => {
       <Form.Item
         style={{ margin: 0 }}
         name={dataIndex}
-        className='w-[200px] lg:w-[300px]'
+        className='w-[200px] lg:w-[300px] '
       >
-        <Input  ref={inputRef} onPressEnter={save} onBlur={save}  />
+        <Input maxLength={40}  ref={inputRef} onPressEnter={save} onBlur={save}  />
       </Form.Item>
     ) 
     :(  <div

@@ -393,7 +393,7 @@ export const Education = () => {
 						>
 							+
 						</Button>
-					</Space> :'Информации нет'}
+					</Space> : t('noData')}
 			
 				<Space
 					direction="vertical"

@@ -28,6 +28,9 @@ import { logOut } from '../../store/reducers/authSlice'
 import AccessibilityHelper from '../AccessibilityHelper/AccessibilityHelper'
 import { ModalNav } from '../service/ModalNav'
 import { useGetAllUnReadQuery } from '../../store/api/messages/messageApi'
+import { LogoSvgNew } from '../../assets/svg/LogoSvgNew'
+
+
 
 export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const [isModalOpen, setIsModalOpen] = useState(false)
@@ -290,9 +293,10 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 							icon={<MenuSvg white={type === 'service'} />}
 						/> :''} */}
 						{i18n.language === 'ru' ? (
-							<LogoIasSvg white={type === 'service'} />
+							<LogoIasSvg white={type === 'service'}  />
 						) : (
-							<LogoIasSvgEn white={type === 'service'} />
+							// <LogoIasSvgEn white={type === 'service'} />
+							<LogoSvgNew white={type === 'service'}  />
 						)}
 
 						<Divider type="vertical" className="border-l-white h-10 m-0 hidden sm:block" />

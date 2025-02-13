@@ -180,7 +180,7 @@ export const InfoUser = () => {
 					</List>
 
 					<div className="border border-[#BDBDBD] border-solid rounded py-6 px-12 px- mt-10">
-						<p className="text-center text-sm">Изменить роль вы сможете через меню</p>
+						<p className="text-center text-sm">{t('chageRoleGuest')}</p>
 					</div>
 					<div className="w-full flex justify-center items-center gap-8 mt-[60px] ">
 						<Button

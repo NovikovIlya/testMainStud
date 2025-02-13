@@ -20,24 +20,19 @@ export const VacancyResponces = () => {
 	const vacancyId = parseInt(pathVacancyId)
 
 	const [status, setStatus] = useState('все')
-	const { data: responds = [], isLoading: loading } =
-		useGetResponcesByVacancyQuery({
-			id: vacancyId,
-			status: status,
-			role: 'PERSONNEL_DEPARTMENT'
-		})
+	const { data: responds = [], isLoading: loading } = useGetResponcesByVacancyQuery({
+		id: vacancyId,
+		status: status,
+		role: 'PERSONNEL_DEPARTMENT'
+	})
 
 	if (loading) {
 		return (
 			<>
 				<div className="w-full h-full flex items-center">
 					<div className="text-center ml-auto mr-auto">
-						<Spin
-							indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}
-						></Spin>
-						<p className="font-content-font font-normal text-black text-[18px]/[18px]">
-							Идёт загрузка...
-						</p>
+						<Spin indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}></Spin>
+						<p className="font-content-font font-normal text-black text-[18px]/[18px]">Идёт загрузка...</p>
 					</div>
 				</div>
 			</>
@@ -71,9 +66,7 @@ export const VacancyResponces = () => {
 					>
 						<label
 							className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
-								status === 'все'
-									? 'text-white bg-dasha-blue'
-									: 'text-black border-solid border-black border-[1px]'
+								status === 'все' ? 'text-white bg-dasha-blue' : 'text-black border-solid border-black border-[1px]'
 							} font-normal text-[16px]/[16px]`}
 						>
 							<Radio value={'все'} className="hidden"></Radio>
@@ -86,10 +79,7 @@ export const VacancyResponces = () => {
 									: 'text-black border-solid border-black border-[1px]'
 							} font-normal text-[16px]/[16px]`}
 						>
-							<Radio
-								value={respondStatus[respondStatus.IN_PERSONNEL_DEPT_REVIEW]}
-								className="hidden"
-							></Radio>
+							<Radio value={respondStatus[respondStatus.IN_PERSONNEL_DEPT_REVIEW]} className="hidden"></Radio>
 							на рассмотрении
 						</label>
 						<label
@@ -99,10 +89,7 @@ export const VacancyResponces = () => {
 									: 'text-black border-solid border-black border-[1px]'
 							} font-normal text-[16px]/[16px]`}
 						>
-							<Radio
-								value={respondStatus[respondStatus.IN_SUPERVISOR_REVIEW]}
-								className="hidden"
-							></Radio>
+							<Radio value={respondStatus[respondStatus.IN_SUPERVISOR_REVIEW]} className="hidden"></Radio>
 							на рассмотрении у руководителя
 						</label>
 						<label
@@ -112,10 +99,7 @@ export const VacancyResponces = () => {
 									: 'text-black border-solid border-black border-[1px]'
 							} font-normal text-[16px]/[16px]`}
 						>
-							<Radio
-								value={respondStatus[respondStatus.INVITATION]}
-								className="hidden"
-							></Radio>
+							<Radio value={respondStatus[respondStatus.INVITATION]} className="hidden"></Radio>
 							приглашение на собеседование
 						</label>
 						<label
@@ -125,17 +109,14 @@ export const VacancyResponces = () => {
 									: 'text-black border-solid border-black border-[1px]'
 							} font-normal text-[16px]/[16px]`}
 						>
-							<Radio
-								value={respondStatus[respondStatus.EMPLOYMENT_REQUEST]}
-								className="hidden"
-							></Radio>
+							<Radio value={respondStatus[respondStatus.EMPLOYMENT_REQUEST]} className="hidden"></Radio>
 							этап трудоустройства
 						</label>
 					</Radio.Group>
 				</div>
 				<div className="flex mb-[16px] pl-[20px] pr-[55px]">
 					<h3 className="w-[25%] font-content-font text-black font-normal text-[14px]/[14px] opacity-[60%]">
-						ФИО
+						Соискатель
 					</h3>
 
 					<h3 className="ml-[10%] w-[8%] font-content-font text-black font-normal text-[14px]/[14px] opacity-[60%]">

@@ -1,45 +1,47 @@
-import { LoadingOutlined } from "@ant-design/icons"
-import { Button, ConfigProvider, Modal, Spin } from "antd"
-import { useState, useEffect, useRef } from 'react'
-import { SearchInputIconSvg } from "../../../../../assets/svg/SearchInputIconSvg"
-import { useGetTestResultsQuery,
+import { LoadingOutlined } from '@ant-design/icons'
+import { Button, ConfigProvider, Modal, Spin } from 'antd'
+import { useEffect, useRef, useState } from 'react'
+
+import { SearchInputIconSvg } from '../../../../../assets/svg/SearchInputIconSvg'
+import { SuccessModalIconSvg } from '../../../../../assets/svg/SuccessModalIconSvg'
+import {
+	useGetTestResultsQuery,
 	useLazyGetTestResultsQuery,
 	useSetTestResultSignedMutation
-} from "../../../../../store/api/serviceApi"
-import { SignedItemType } from "../../../../../store/reducers/type"
-import { useAlert } from "../../../../../utils/Alert/AlertMessage"
-import {SuccessModalIconSvg} from "../../../../../assets/svg/SuccessModalIconSvg"
+} from '../../../../../store/api/serviceApi'
+import { SignedItemType } from '../../../../../store/reducers/type'
+import { useAlert } from '../../../../../utils/Alert/AlertMessage'
 
 export const TestResults = () => {
-
 	const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
 	const [isApproveModalOpen, setIsApproveModalOpen] = useState(false)
-	const [searchQuery, setSearchQuery] = useState("")
+	const [searchQuery, setSearchQuery] = useState('')
 	const [isSearching, setIsSearching] = useState(false)
 	const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
 	const { openAlert } = useAlert()
 
-	const { data: test_result_data = [], isLoading: loading, refetch } = useGetTestResultsQuery({signed: false, query: ""})
+	const {
+		data: test_result_data = [],
+		isLoading: loading,
+		refetch
+	} = useGetTestResultsQuery({ signed: true, query: '' })
 
 	const [triggerSearch, { data: searchData, isLoading: isSearchLoading }] = useLazyGetTestResultsQuery()
 
-	const [setSeekerSigned, { isLoading : setSeekerSignedLoading }] = useSetTestResultSignedMutation()
+	const [setSeekerSigned, { isLoading: setSeekerSignedLoading }] = useSetTestResultSignedMutation()
 
 	useEffect(() => {
-
 		if (searchTimeoutRef.current) {
 			clearTimeout(searchTimeoutRef.current)
 		}
 
-
 		searchTimeoutRef.current = setTimeout(() => {
 			setIsSearching(true)
-			triggerSearch({ signed: false, query: searchQuery }).then(() => {
+			triggerSearch({ signed: true, query: searchQuery }).then(() => {
 				setIsSearching(false)
 			})
 		}, 500)
-
 
 		return () => {
 			if (searchTimeoutRef.current) {
@@ -58,13 +60,13 @@ export const TestResults = () => {
 				<ApproveModal id={props.id}></ApproveModal>
 				<div className="w-[100%] h-[80px] bg-white flex flex-row items-center">
 					<div className="ml-[1.5%] w-[62%] flex flex-row">
-                        <span className="w-[38%] text-[16px] text-[##000000] font-normal">
-                            {props.seeker.lastname + ' ' + props.seeker.firstname + ' ' + props.seeker.middlename}
-                        </span>
+						<span className="w-[38%] text-[16px] text-[##000000] font-normal">
+							{props.seeker.lastname + ' ' + props.seeker.firstname + ' ' + props.seeker.middlename}
+						</span>
 						<span className="w-[54%] text-[16px] text-[##000000] font-normal">{props.post}</span>
 						<span className="w-[8%] text-[16px] text-[##000000] font-normal">
-                            {props.testPassed ? 'Пройдено' : 'Не пройдено'}
-                        </span>
+							{props.testPassed ? 'Пройдено' : 'Не пройдено'}
+						</span>
 					</div>
 					<div className="w-[36.5%] flex ">
 						<button
@@ -157,10 +159,9 @@ export const TestResults = () => {
 						footer={null}
 						width={407}
 					>
-						<div className='flex items-center justify-center flex-col px-[15px] pt-[50px] pb-[30px] gap-[34px]'>
+						<div className="flex items-center justify-center flex-col px-[15px] pt-[50px] pb-[30px] gap-[34px]">
 							<SuccessModalIconSvg></SuccessModalIconSvg>
-							<p
-								className="text-center font-content-font font-normal flex items-start text-black text-[16px]/[20px]">
+							<p className="text-center font-content-font font-normal flex items-start text-black text-[16px]/[20px]">
 								Соискатель успешно перемещëн в сервис "Подписанные"
 							</p>
 							<Button
@@ -185,12 +186,8 @@ export const TestResults = () => {
 				<>
 					<div className="w-full min-h-[56vh] flex items-center">
 						<div className="text-center ml-auto mr-auto">
-							<Spin
-								indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}
-							></Spin>
-							<p className="font-content-font font-normal text-black text-[18px]/[18px]">
-								Идёт загрузка...
-							</p>
+							<Spin indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}></Spin>
+							<p className="font-content-font font-normal text-black text-[18px]/[18px]">Идёт загрузка...</p>
 						</div>
 					</div>
 				</>
@@ -211,12 +208,8 @@ export const TestResults = () => {
 			<>
 				<div className="w-full h-full flex items-center">
 					<div className="text-center ml-auto mr-auto">
-						<Spin
-							indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}
-						></Spin>
-						<p className="font-content-font font-normal text-black text-[18px]/[18px]">
-							Идёт загрузка...
-						</p>
+						<Spin indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}></Spin>
+						<p className="font-content-font font-normal text-black text-[18px]/[18px]">Идёт загрузка...</p>
 					</div>
 				</div>
 			</>
@@ -229,8 +222,7 @@ export const TestResults = () => {
 			<div className="w-full px-[53px] pt-[140px] flex flex-col">
 				<h2 className="text-[28px] text-black font-normal">Результаты тестов</h2>
 				<label className="relative mt-[52px] flex flex-row">
-					<button
-						className="absolute h-[20px] w-[20px] left-[16px] top-[7px] p-[2px] border-none bg-white cursor-auto rounded-[10%]">
+					<button className="absolute h-[20px] w-[20px] left-[16px] top-[7px] p-[2px] border-none bg-white cursor-auto rounded-[10%]">
 						<SearchInputIconSvg />
 					</button>
 					<input

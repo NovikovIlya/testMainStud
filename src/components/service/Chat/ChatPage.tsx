@@ -360,7 +360,7 @@ export const ChatPage = () => {
 							/>
 						</>
 					))}
-					{chat_status === 'closed' && (
+					{ChatStatus.chatClosed && (
 						<div className="mt-auto py-[10px] text-center font-content-font font-normal text-[16px]/[16px] text-black text-opacity-40">
 							Вы сможете писать в чат после того, как руководитель пригласит вас на собеседование
 						</div>
@@ -381,7 +381,7 @@ export const ChatPage = () => {
 										onKeyDown={e => {
 											!e.shiftKey && e.code === 'Enter' && handleSubmit(handleMessage)()
 										}}
-										disabled={chat_status === 'closed'}
+										disabled={ChatStatus.chatClosed}
 										{...register('text')}
 										value={msgInputText}
 										onChange={e => {
@@ -403,7 +403,7 @@ export const ChatPage = () => {
 								render={({ field }) => (
 									<>
 										<input
-											disabled={chat_status === 'closed'}
+											disabled={ChatStatus.chatClosed}
 											{...register('files', {
 												onChange(event) {
 													setFileName(event.target.files?.[0].name)

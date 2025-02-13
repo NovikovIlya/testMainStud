@@ -1,22 +1,21 @@
+import { LoadingOutlined } from '@ant-design/icons'
 import { Button, Spin } from 'antd'
-import { useNavigate } from 'react-router-dom'
-import { FileIconSvg } from "../../../../assets/svg/FileIconSvg"
-import { setCurrentResponce } from '../../../../store/reducers/CurrentResponceSlice'
-import {
-	useGetChatIdByRespondIdQuery
-} from '../../../../store/api/serviceApi'
 import { useDispatch } from 'react-redux'
-import { EmploymentStageItemType } from '../../../../store/reducers/type'
+import { useNavigate } from 'react-router-dom'
+
+import { FileIconSvg } from '../../../../assets/svg/FileIconSvg'
+import { useAppSelector } from '../../../../store'
+import { useGetChatIdByRespondIdQuery } from '../../../../store/api/serviceApi'
+import { setChatFilter } from '../../../../store/reducers/ChatFilterSlice'
+import { setCurrentResponce } from '../../../../store/reducers/CurrentResponceSlice'
 import {
 	setCurrentEmploymentSeekerName,
 	setCurrentEmploymentSeekerVacancy
 } from '../../../../store/reducers/EmploymentStageReducers/EmploymentStageSeekerReducer'
-import { useAppSelector } from '../../../../store'
-import { LoadingOutlined } from '@ant-design/icons'
 import { setChatId } from '../../../../store/reducers/chatIdSlice'
+import { EmploymentStageItemType } from '../../../../store/reducers/type'
 
-export const DepEmploymentItem = (  props : EmploymentStageItemType ) => {
-
+export const DepEmploymentItem = (props: EmploymentStageItemType) => {
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 
@@ -39,9 +38,7 @@ export const DepEmploymentItem = (  props : EmploymentStageItemType ) => {
 				<div className="flex ml-[1.5%] w-[24%]">
 					{props.applicant.lastName + ' ' + props.applicant.firstName + ' ' + props.applicant.middleName}
 				</div>
-				<div className="flex w-[20%] mr-[5%]">
-					{props.vacancy.name}
-				</div>
+				<div className="flex w-[20%] mr-[5%]">{props.vacancy.name}</div>
 				{props.status === 'REFINE' && (
 					<div className="flex items-center w-[16%] gap-[12px]">
 						<div className="w-[11px] h-[11px] rounded-[100%] bg-[#FFD600]"></div>
@@ -62,34 +59,42 @@ export const DepEmploymentItem = (  props : EmploymentStageItemType ) => {
 				)}
 				<div className="flex mr-[5%] w-[28.5%] flex-row justify-between">
 					<Button
-						className='text-[#FFFFFF] py-[8px] px-[24px] border-none rounded-[54.5px] text-[16px] font-normal'
+						className="text-[#FFFFFF] py-[8px] px-[24px] border-none rounded-[54.5px] text-[16px] font-normal"
 						type="primary"
 						onClick={() => {
 							dispatch(setCurrentResponce(props.respondId))
 							dispatch(setCurrentEmploymentSeekerVacancy(props.vacancy.name))
-							dispatch(setCurrentEmploymentSeekerName(props.applicant.lastName + ' ' + props.applicant.firstName + ' ' + props.applicant.middleName))
+							dispatch(
+								setCurrentEmploymentSeekerName(
+									props.applicant.lastName + ' ' + props.applicant.firstName + ' ' + props.applicant.middleName
+								)
+							)
 							navigate(`/services/personnelaccounting/personnel-department/employment/stages/${props.respondId}`)
-						}}>
+						}}
+					>
 						Подробнее
 					</Button>
 					<Button
-						className='bg-[#FFFFFF] py-[8px] px-[24px] text-[#333333] border-[#333333] border-[1px] rounded-[54.5px] text-[16px] font-normal cursor-pointer'
+						className="bg-[#FFFFFF] py-[8px] px-[24px] text-[#333333] border-[#333333] border-[1px] rounded-[54.5px] text-[16px] font-normal cursor-pointer"
 						onClick={() => {
 							dispatch(setCurrentResponce(props.respondId))
-							navigate(`/services/personnelaccounting/personnel-department/employment/stages/${props.respondId}/seeker-info`)
+							navigate(
+								`/services/personnelaccounting/personnel-department/employment/stages/${props.respondId}/seeker-info`
+							)
 						}}
 					>
 						Резюме
 					</Button>
 					<Button
-						className='bg-[#FFFFFF] py-[8px] px-[24px] text-[#333333] border-[#333333] border-[1px] rounded-[54.5px] cursor-pointer'
+						className="bg-[#FFFFFF] py-[8px] px-[24px] text-[#333333] border-[#333333] border-[1px] rounded-[54.5px] cursor-pointer"
 						onClick={() => {
+							dispatch(setChatFilter('EMPLOYMENT'))
 							dispatch(setChatId(chatId.id))
 							navigate(`/services/personnelaccounting/chat/id/${chatId.id}`)
 						}}
 					>
 						<FileIconSvg></FileIconSvg>
-						<span className='text-[16px] font-normal'>Чат</span>
+						<span className="text-[16px] font-normal">Чат</span>
 					</Button>
 				</div>
 			</div>

@@ -62,8 +62,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 		  unreadChatsCount: data?.unreadChatsCount
 		}),
 	  })
-	console.log('maiRole',maiRole)
-
+	
 	useEffect(() => {
 		if (isSuccessSubRole) {
 			if (mainRole === 'OTHER') {
@@ -423,9 +422,13 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 								<PersonSvg white={type === 'service'} />
 								<div className={clsx('h-full max-[455px]:hidden', type === 'service' && 'text-white')}>
 									<div className="font-bold text-sm truncate max-w-[120px]">
-										{`${user?.lastname} ${user?.firstname.charAt(0)}. ${
-											user?.middlename === '' ? '' : user?.middlename.charAt(0) + '.'
-										}`}
+										
+										{i18n.language === 'ru' ?
+											`${user?.lastname} ${user?.firstname.charAt(0)}. ${
+											user?.middlename === '' ? '' : user?.middlename.charAt(0) + '.'}`  : 
+											`${user?.lastname} ${user?.firstname.charAt(0)}. ${
+											user?.middlename === '' ? '' : user?.middlename.charAt(0) + '.'}`
+									}
 									</div>
 									<div className="text-sm ">
 										{user?.roles && user?.roles?.length > 1

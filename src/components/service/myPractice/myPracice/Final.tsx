@@ -113,7 +113,7 @@ const Final = ({ dataOneLength,isSuccessFull,refetch, id, dataOnePlace, chat }: 
 							/>
 						</div>
 
-						<div className="flex w-full gap-4 mt-4 justify-between flex-wrap">
+						<div className="flex w-full gap-4 mt-4 justify-between flex-wrap flex-col">
 							<Upload
 								maxCount={1}
 								onChange={info => {

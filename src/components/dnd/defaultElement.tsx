@@ -1,3 +1,4 @@
+import { useAppSelector } from '../../store'
 import { Schedule } from '../cards/Schedule'
 import { TemplateCard } from '../cards/Template'
 
@@ -10,6 +11,9 @@ const aId = cookies[4]?.split('=')[1] || ''
  * s_id:"22408606452196311228958538938715"
  * h_id:"9BC8497C61F2354B23D2AE0FCDCA318E"
  */
+const user = localStorage.getItem('user')
+const urlObrProgram = user?.filial === 's' ? 'https://kpfu.ru/sveden/education/#eduop' : 'https://stat-elabuga.kpfu.ru/sveden/education/#eduop'
+
 export const jsxElements = [
 	{
 		key: 'ElectronicBook',
@@ -19,6 +23,7 @@ export const jsxElements = [
 				img="/image23.png"
 				info="ElectronicBookInfo"
 				title="ElectronicBook"
+				
 			/>
 		),
 		place: {
@@ -59,6 +64,7 @@ export const jsxElements = [
 				title="Applications"
 				width={96}
 				height={114}
+				isLink
 			/>
 		),
 		place: {
@@ -80,6 +86,7 @@ export const jsxElements = [
 				width={130}
 				height={137}
 				isRounded
+				isLink
 			/>
 		),
 		place: {
@@ -99,6 +106,7 @@ export const jsxElements = [
 				title="Vacancies"
 				img={'/image55.png'}
 				positionImage={'mt-8 ml-5'}
+				isLink
 			/>
 		),
 		place: {
@@ -121,6 +129,7 @@ export const jsxElements = [
 				height={150}
 				buttonText="SignUp"
 				buttonType="primary"
+				isLink
 			/>
 		),
 		place: {
@@ -155,6 +164,7 @@ export const jsxElements = [
 				positionImage="-mt-4"
 				width={177}
 				height={170}
+				isLink
 			/>
 		),
 		place: {
@@ -178,7 +188,7 @@ export const jsxElements = [
 				width={98}
 				height={125}
 				positionImage={'mt-2'}
-
+				isLink
 			/>
 		),
 		place: {
@@ -317,6 +327,7 @@ export const jsxElements = [
 				buttonText="Study"
 				img={'/image47.png'}
 				positionImage={'mt-6'}
+				isLink
 			/>
 		),
 		place: {
@@ -339,6 +350,7 @@ export const jsxElements = [
 				width={137}
 				height={106}
 				positionImage={'mt-6'}
+				isLink
 			/>
 		),
 		place: {
@@ -361,6 +373,7 @@ export const jsxElements = [
 				width={110}
 				height={132}
 				mt={'mt-1'}
+				isLink
 			/>
 		),
 		place: {
@@ -383,6 +396,7 @@ export const jsxElements = [
 				width={99}
 				height={97}
 				positionImage={'mt-7 ml-2'}
+				isLink
 			/>
 		),
 		place: {
@@ -405,6 +419,7 @@ export const jsxElements = [
 				width={113}
 				height={95}
 				positionImage={'mt-7'}
+				isLink
 			/>
 		),
 		place: {
@@ -426,6 +441,7 @@ export const jsxElements = [
 				img={'/petition.png'}
 				className='object-contain'
 				positionImage={'mt-7'}
+				isLink
 			/>
 		),
 		place: {
@@ -447,6 +463,7 @@ export const jsxElements = [
 				img={'/contractEduc.png'}
 				className='object-contain'
 				positionImage={'mt-7'}
+				isLink
 			/>
 		),
 		place: {
@@ -461,13 +478,14 @@ export const jsxElements = [
 		key: 'educationPrograms',
 		element: (
 			<TemplateCard
-				href="https://kpfu.ru/sveden/education/#eduop"
+				href={urlObrProgram}
 				info="educationProgramsInfo"
 				title="educationPrograms"
 				buttonText="Watch"
 				img={'/educProg.png'}
 				className='object-contain'
 				positionImage={'mt-7'}
+				isLink
 			/>
 		),
 		place: {

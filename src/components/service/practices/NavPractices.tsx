@@ -231,7 +231,7 @@ export const NavPractices = () => {
           {current === 'practiceOrder' && <PracticeOrder />}
           {current === 'appendix' && <Appendix />}
           {current === 'finally' && <Finally />}
-          <Tour open={open} onClose={() => setOpen(false)} steps={steps} />
+          {/* <Tour open={open} onClose={() => setOpen(false)} steps={steps} /> */}
         </div>
       )}
     </>

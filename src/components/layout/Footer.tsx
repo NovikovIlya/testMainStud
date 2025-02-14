@@ -16,7 +16,7 @@ export const Footer = () => {
 	const {t,i18n} =  useTranslation()
 	console.log('i18n',i18n.language)
 	return (
-		<footer className="w-full min-h-[200px] text-base py-14 flex max-md:flex-col justify-between container mx-auto px-3">
+		<footer className="w-full min-h-[200px] text-base py-14 flex max-md:flex-col justify-between container mx-auto px-3 ">
 			<div className="flex  flex-col">
 				<div className="flex mb-10 max-sm:flex-col">
 					{i18n.language==='ru' ? <LogoSvg /> : <LogoSvgEn />}

@@ -11,7 +11,8 @@ const initialState: any = {
 	subRole: '',
 	isCollapsed: localStorage.getItem('isCollapsed') === 'true',
 	activeOptions: localStorage.getItem('activeOptions') ? localStorage.getItem('activeOptions')?.split(',') : [],
-	isEditTableScheduleTeacher: false,
+	isEditTableScheduleTeacher: false
+
 }
 
 const authSlice = createSlice({

@@ -25,7 +25,7 @@ export const TestResults = () => {
 		data: test_result_data = [],
 		isLoading: loading,
 		refetch
-	} = useGetTestResultsQuery({ signed: true, query: '' })
+	} = useGetTestResultsQuery({ signed: false, query: '' })
 
 	const [triggerSearch, { data: searchData, isLoading: isSearchLoading }] = useLazyGetTestResultsQuery()
 
@@ -38,7 +38,7 @@ export const TestResults = () => {
 
 		searchTimeoutRef.current = setTimeout(() => {
 			setIsSearching(true)
-			triggerSearch({ signed: true, query: searchQuery }).then(() => {
+			triggerSearch({ signed: false, query: searchQuery }).then(() => {
 				setIsSearching(false)
 			})
 		}, 500)

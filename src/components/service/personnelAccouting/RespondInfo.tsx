@@ -559,7 +559,11 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 												res.userData?.middlename}
 										</p>
 										<p className="ml-auto font-content-font font-normal text-black text-[16px]/[19.2px] opacity-70">
-											{resumeSize}
+											{Math.round(resumeSize / 1000000) > 0
+												? Math.round(resumeSize / 1000000) + ' Мб'
+												: Math.round(resumeSize / 1000) > 0
+												? Math.round(resumeSize / 1000) + ' Кб'
+												: resumeSize + ' б'}
 										</p>
 									</div>
 								</div>

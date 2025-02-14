@@ -16,15 +16,9 @@ export const NavPanelElement = (props: { id: number; text: string }) => {
 
 	useEffect(() => {
 		if (progress === undefined) {
-			const verifying = stages.find(
-				stage => stage.status === 'VERIFYING' || stage.status === 'ACCEPTED'
-			)
-			const refining = stages.find(
-				stage => stage.status === 'REFINE' || stage.status === 'READY'
-			)
-			const notReady = stages.find(
-				stage => stage.status === 'FILLING' || stage.status === 'REFINE'
-			)
+			const verifying = stages.find(stage => stage.status === 'VERIFYING' || stage.status === 'ACCEPTED')
+			const refining = stages.find(stage => stage.status === 'REFINE' || stage.status === 'READY')
+			const notReady = stages.find(stage => stage.status === 'FILLING' || stage.status === 'REFINE')
 
 			if (verifying && !refining) {
 				setIsBeingVerified(true)
@@ -73,18 +67,12 @@ export const NavPanelElement = (props: { id: number; text: string }) => {
 				<>
 					<div
 						className={`shrink-0 h-[28px] w-[28px] rounded-[32px] border-solid border-2 ${
-							currentStage === props.id
-								? 'text-[#3073D7] border-[#3073D7]'
-								: 'text-[#757778] border-[#757778]'
+							currentStage === props.id ? 'text-[#3073D7] border-[#3073D7]' : 'text-[#757778] border-[#757778]'
 						} flex justify-center items-center bg-[#F5F8FB]`}
 					>
-						{props.id}
+						{props.id - 1}
 					</div>
-					<div
-						className={`${
-							currentStage === props.id ? 'text-[#3073D7]' : 'text-[#757778]'
-						}  text-center`}
-					>
+					<div className={`${currentStage === props.id ? 'text-[#3073D7]' : 'text-[#757778]'}  text-center`}>
 						{props.text}
 					</div>
 				</>
@@ -103,18 +91,12 @@ export const NavPanelElement = (props: { id: number; text: string }) => {
 				<>
 					<div
 						className={`shrink-0 h-[28px] w-[28px] rounded-[32px] border-solid border-2 ${
-							currentStage === props.id
-								? 'text-[#3073D7] border-[#3073D7]'
-								: 'text-[#757778] border-[#757778]'
+							currentStage === props.id ? 'text-[#3073D7] border-[#3073D7]' : 'text-[#757778] border-[#757778]'
 						} flex justify-center items-center bg-[#F5F8FB]`}
 					>
-						{props.id}
+						{props.id - 1}
 					</div>
-					<div
-						className={`${
-							currentStage === props.id ? 'text-[#3073D7]' : 'text-[#757778]'
-						}  text-center`}
-					>
+					<div className={`${currentStage === props.id ? 'text-[#3073D7]' : 'text-[#757778]'}  text-center`}>
 						{props.text}
 					</div>
 				</>

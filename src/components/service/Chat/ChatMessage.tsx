@@ -1,3 +1,4 @@
+import { Button } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { forwardRef, useEffect, useState } from 'react'
@@ -19,7 +20,6 @@ import { setCurrentVacancy } from '../../../store/reducers/CurrentVacancySlice'
 import { ChatMessageType } from '../../../store/reducers/type'
 
 import { ChatMessageFile } from './ChatMessageFile'
-import {Button} from "antd";
 
 type Props = { msgData: ChatMessageType } & { senderChange: boolean }
 type Ref = HTMLDivElement
@@ -46,14 +46,20 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 	}
 	page_id = Number(id_from_url)
 
-	const [answerMainTime, { isLoading : answerMainTimeLoading}] = useAnswerToInivitationMainTimeMutation()
+	const [answerMainTime, { isLoading: answerMainTimeLoading }] = useAnswerToInivitationMainTimeMutation()
 	const [getVacancy, result] = useLazyGetVacancyViewQuery()
 
-	const { data: chat_data } = useGetChatMessagesQuery({ chatId: page_id, role: current_role })
+	const { data: chat_data, refetch } = useGetChatMessagesQuery({ chatId: page_id, role: current_role })
 
-	const invitation_msg = chat_data?.filter(message => message.type === 'INVITATION')
-	const invitation_reserve_msg = chat_data?.filter(message => message.type === 'INVITATION_RESERVE')
-	const empl_req_msg = chat_data?.filter(message => message.type === 'EMPLOYMENT_REQUEST')
+	const [invitation_msg, set_Invitation_Msg] = useState<ChatMessageType[] | undefined>(
+		chat_data?.filter(message => message.type === 'INVITATION')
+	)
+	const [invitation_reserve_msg, set_Invitation_Reserve_Msg] = useState<ChatMessageType[] | undefined>(
+		chat_data?.filter(message => message.type === 'INVITATION_RESERVE')
+	)
+	const [empl_req_msg, set_Empl_Req_Msg] = useState<ChatMessageType[] | undefined>(
+		chat_data?.filter(message => message.type === 'EMPLOYMENT_REQUEST')
+	)
 
 	const [isSeekerResponsedInvitationMessage, setIsSeekerResponsedInvitationMessage] = useState<boolean>(
 		invitation_msg === undefined ? false : invitation_msg[0]?.responsed
@@ -66,12 +72,24 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 	)
 
 	useEffect(() => {
-		setIsSeekerResponsedInvitationMessage(invitation_msg === undefined ? false : invitation_msg[0]?.responsed)
-		setIsSeekerResponsedInvitationReserveMessage(
-			invitation_reserve_msg === undefined ? false : invitation_reserve_msg[0]?.responsed
-		)
-		setIsSeekerResponsedEmploymentRequestMessage(empl_req_msg === undefined ? false : empl_req_msg[0]?.responsed)
+		// setIsSeekerResponsedInvitationMessage(invitation_msg === undefined ? false : invitation_msg[0]?.responsed)
+		// setIsSeekerResponsedInvitationReserveMessage(
+		// 	invitation_reserve_msg === undefined ? false : invitation_reserve_msg[0]?.responsed
+		// )
+		// setIsSeekerResponsedEmploymentRequestMessage(empl_req_msg === undefined ? false : empl_req_msg[0]?.responsed)
+		set_Invitation_Msg(chat_data?.filter(message => message.type === 'INVITATION'))
+		set_Invitation_Reserve_Msg(chat_data?.filter(message => message.type === 'INVITATION_RESERVE'))
+		set_Empl_Req_Msg(chat_data?.filter(message => message.type === 'EMPLOYMENT_REQUEST'))
 	}, [chat_data])
+
+	useEffect(() => {
+		const int = setInterval(() => {
+			refetch()
+		}, 3000)
+		return () => {
+			clearInterval(int)
+		}
+	})
 
 	const dispatch = useDispatch()
 	const navigate = useNavigate()

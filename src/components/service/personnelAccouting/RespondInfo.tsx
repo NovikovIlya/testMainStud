@@ -25,6 +25,7 @@ import {
 	useSendRespondToReserveMutation
 } from '../../../store/api/serviceApi'
 import { useGetCountriesQuery } from '../../../store/api/utilsApi'
+import { setChatFilter } from '../../../store/reducers/ChatFilterSlice'
 import { openChat } from '../../../store/reducers/ChatRespondStatusSlice'
 import { setRespondId } from '../../../store/reducers/CurrentRespondIdSlice'
 import { setCurrentVacancyId } from '../../../store/reducers/CurrentVacancyIdSlice'
@@ -56,9 +57,9 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 	const respondId = useAppSelector(state => state.currentResponce)
 
 	const { data: res } = useGetRespondFullInfoQuery(id_from_url)
-	const [approveRespond, { isLoading : approveRespondLoading }] = useApproveRespondMutation()
-	const [sendToArchive, { isLoading : sendToArchiveLoading }] = useSendRespondToArchiveMutation()
-	const [sendToReserve, { isLoading : sendToReserveLoading }] = useSendRespondToReserveMutation()
+	const [approveRespond, { isLoading: approveRespondLoading }] = useApproveRespondMutation()
+	const [sendToArchive, { isLoading: sendToArchiveLoading }] = useSendRespondToArchiveMutation()
+	const [sendToReserve, { isLoading: sendToReserveLoading }] = useSendRespondToReserveMutation()
 	const [getResume] = useLazyGetSeekerResumeFileQuery()
 
 	const [isRespondSentToSupervisor, setIsRespondSentToSupervisor] = useState<boolean>(
@@ -317,6 +318,15 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 										</Button>
 										<Button
 											onClick={() => {
+												dispatch(
+													setChatFilter(
+														res.status === 'IN_REVIEW'
+															? 'IN_PERSONNEL_DEPT_REVIEW'
+															: res.status === 'IN_SUPERVISOR_REVIEW'
+															? 'IN_SUPERVISOR_REVIEW'
+															: 'INVITATION'
+													)
+												)
 												handleNavigate(`/services/personnelaccounting/chat/id/${chatId.id}`)
 											}}
 											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
@@ -549,7 +559,11 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 												res.userData?.middlename}
 										</p>
 										<p className="ml-auto font-content-font font-normal text-black text-[16px]/[19.2px] opacity-70">
-											{resumeSize}
+											{Math.round(resumeSize / 1000000) > 0
+												? Math.round(resumeSize / 1000000) + ' Мб'
+												: Math.round(resumeSize / 1000) > 0
+												? Math.round(resumeSize / 1000) + ' Кб'
+												: resumeSize + ' б'}
 										</p>
 									</div>
 								</div>

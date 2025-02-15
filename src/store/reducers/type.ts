@@ -516,3 +516,13 @@ export type SignedItemType = {
 }
 
 export type DocumentDefinitionType = EmploymentDocsType & { required: boolean }
+
+export type SupervisorRequestType = {
+	id: number
+	vacancy: {
+		id: number
+		post: string
+	}
+	action: 'CREATE' | 'UPDATE' | 'DELETE'
+	status: string
+}

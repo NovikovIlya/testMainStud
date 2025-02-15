@@ -12,22 +12,21 @@ import {
 	useGetCategoriesQuery,
 	useGetDirectionsQuery,
 	useGetSubdivisionsQuery,
-	useGetVacancyRequestsQuery,
 	useGetVacancyRequestViewQuery,
+	useGetVacancyRequestsQuery,
 	useLazyGetVacancyRequestViewQuery
 } from '../../../store/api/serviceApi'
 import { useAlert } from '../../../utils/Alert/AlertMessage'
 import ArrowIcon from '../jobSeeker/ArrowIcon'
 
 export const VacancyRequestCreateView = () => {
-
-	const currentUrl = window.location.pathname;
+	const currentUrl = window.location.pathname
 
 	// Ищем id из URL
-	const match = currentUrl.match(/\/create\/(\d+)$/);
+	const match = currentUrl.match(/\/create\/(\d+)$/)
 
 	let id_from_url: string
-	let page_id : number
+	let page_id: number
 
 	if (match) {
 		id_from_url = match[1]
@@ -44,8 +43,8 @@ export const VacancyRequestCreateView = () => {
 
 	const navigate = useNavigate()
 	const [getVacancyRequestView, queryStatus] = useLazyGetVacancyRequestViewQuery()
-	const [acceptRequest, {isLoading: acceptRequestLoading} ] = useAcceptCreateVacancyRequestMutation()
-	const [alterRequest, {isLoading: alterRequestLoading}] = useAlterCreateVacancyRequestMutation()
+	const [acceptRequest, { isLoading: acceptRequestLoading }] = useAcceptCreateVacancyRequestMutation()
+	const [alterRequest, { isLoading: alterRequestLoading }] = useAlterCreateVacancyRequestMutation()
 
 	const { openAlert } = useAlert()
 
@@ -324,7 +323,7 @@ export const VacancyRequestCreateView = () => {
 							className="flex flex-col gap-[8px]"
 						>
 							<p className="font-content-font text-black font-bold text-[18px]/[21.6px] opacity-80 mb-[16px]">
-								2 этап. Прикрепление документов
+								1 этап. Прикрепление документов
 							</p>
 							{definitions.map(def =>
 								def.employmentStageType === 'SECOND' ? (
@@ -340,7 +339,7 @@ export const VacancyRequestCreateView = () => {
 								)
 							)}
 							<p className="font-content-font text-black font-bold text-[18px]/[21.6px] opacity-80 mb-[16px] mt-[24px]">
-								4 этап. Медицинский осмотр
+								2 этап. Медицинский осмотр
 							</p>
 							{definitions.map(def =>
 								def.employmentStageType === 'FOURTH' ? (
@@ -501,11 +500,7 @@ export const VacancyRequestCreateView = () => {
 						<Input.TextArea autoSize className="!h-[107px]" placeholder="Ввести текст..."></Input.TextArea>
 					</Form.Item>
 					<Form.Item>
-						<Button
-							type="primary"
-							htmlType="submit"
-							loading={acceptRequestLoading || alterRequestLoading}
-						>
+						<Button type="primary" htmlType="submit" loading={acceptRequestLoading || alterRequestLoading}>
 							Сохранить
 						</Button>
 					</Form.Item>

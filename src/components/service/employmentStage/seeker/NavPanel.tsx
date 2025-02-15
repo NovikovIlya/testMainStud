@@ -9,7 +9,7 @@ import { NavPanelElement } from './NavPanelElement'
 
 export const NavPanel = (props: { type: 'SEEKER' | 'SUPERVISOR' }) => {
 	const stages: { id: number; text: string }[] = [
-		{ id: 1, text: 'Направление на мед. осмотр' },
+		// { id: 1, text: 'Направление на мед. осмотр' },
 		{ id: 2, text: 'Прикрепление документов' },
 		// { id: 3, text: 'Трудовые условия' },
 		{ id: 3, text: 'Медицинский осмотр' },

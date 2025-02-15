@@ -988,8 +988,24 @@ export const ResponseForm = () => {
 							<Upload
 								maxCount={1}
 								defaultFileList={
-									fileData.file !== '' ? [{ name: fileData.filename, uid: uuid(), status: 'error' }] : undefined
+									fileData.file !== ''
+										? [{ name: fileData.filename, uid: uuid(), status: 'error', size: fileData.fileSize }]
+										: undefined
 								}
+								itemRender={(originNode, file, _, actions) => (
+									<div className="flex justify-between items-center">
+										<p>{file.name}</p>
+										<p>
+											{' '}
+											{Math.round(fileData.fileSize / 1000000) > 0
+												? Math.round(fileData.fileSize / 1000000) + ' Мб'
+												: Math.round(fileData.fileSize / 1000) > 0
+												? Math.round(fileData.fileSize / 1000) + ' Кб'
+												: fileData.fileSize + ' б'}
+										</p>
+										<Button onClick={actions.remove} icon={<DeleteSvg />} type="text"></Button>
+									</div>
+								)}
 								onChange={options => {
 									console.log(options.file.type)
 									console.log(options.file.name)
@@ -1006,7 +1022,8 @@ export const ResponseForm = () => {
 											setFile({
 												file: String(filereader.result).split(',')[1],
 												filename: options.file.name,
-												fileType: options.file.type!
+												fileType: options.file.type!,
+												fileSize: options.file.size!
 											})
 										)
 									}
@@ -1017,6 +1034,7 @@ export const ResponseForm = () => {
 									<p className="font-content-font font-normal text-[16px]/[16px] text-black underline select-none">
 										Прикрепить файл
 									</p>
+									<p className="font-content-font font-normal text-[16px]/[16px] text-black">(не более 10 мб)</p>
 								</div>
 							</Upload>
 							<Form.Item

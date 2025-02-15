@@ -98,8 +98,8 @@ export const ChatPreview = (props: {
 					dispatch(setCurrentVacancyName(props.respName))
 					handleNavigate(
 						isEmpDemp
-							? `/services/personnelaccounting/chat/id/${chatInfo.id}?status=opened`
-							: `/services/myresponds/chat/id/${chatInfo.id}?status=opened`
+							? `/services/personnelaccounting/chat/id/${chatInfo.id}`
+							: `/services/myresponds/chat/id/${chatInfo.id}`
 					)
 					setIsChatOpen(true)
 				}}

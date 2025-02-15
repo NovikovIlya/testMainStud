@@ -7,7 +7,7 @@ import { useLocation } from 'react-router-dom'
 import { useAppSelector } from '../../../../store'
 import { useLazyGetEmploymentDataQuery, useLazyGetEmploymentDocsQuery } from '../../../../store/api/serviceApi'
 import { setAllData } from '../../../../store/reducers/EmploymentDataSlice'
-import { setAllProgress } from '../../../../store/reducers/EmploymentProgressSlice'
+import { setAllProgress, setStageProgressAsReady } from '../../../../store/reducers/EmploymentProgressSlice'
 import { setDocs } from '../../../../store/reducers/EmploymentSeekerDocsSlice'
 
 import { EmplDocAttachment } from './EmplDocAttachment'
@@ -77,6 +77,7 @@ export const Stages = () => {
 				})
 			)
 		)
+		dispatch(setStageProgressAsReady(1))
 	}, [empData])
 
 	if (currentStage === 0 && (empDataStatus.isFetching || empDataStatus.isLoading)) {
@@ -106,7 +107,14 @@ export const Stages = () => {
 						(empData.status === 'VERIFYING' || empData.status === 'ACCEPTED') && 'pointer-events-none'
 					}`}
 				>
-					{currentStage === 1 && <EmplMedInvite respondId={respondId} stageId={1} stageName="FIRST" />}
+					{currentStage === 0 && (
+						<div className="w-full h-full flex flex-col">
+							<p className="text-centerfont-content-font text-[20px]/[20px] text-black font-normal opacity-60 mt-[15%] mx-auto">
+								Выберите этап, который вы бы хотели пройти
+							</p>
+						</div>
+					)}
+					{/* {currentStage === 1 && <EmplMedInvite respondId={respondId} stageId={1} stageName="FIRST" />} */}
 					{currentStage === 2 && <EmplDocAttachment respondId={respondId} stageId={2} stageName="SECOND" />}
 					{/* {currentStage === 3 && (
 						<EmplWorkConditions

@@ -69,7 +69,7 @@ export const DocumentFlow = () => {
 				<Row gutter={[16, 16]} className="mt-4">
 					<Col xs={24} sm={24} md={18} lg={16} xl={12}>
 						<Space direction="vertical" className="w-full">
-							<Typography.Text>Выбрать тип документов</Typography.Text>
+							<Typography.Text>{t("seletctType")}</Typography.Text>
 							<Select
 								size="large"
 								popupMatchSelectWidth={false}
@@ -94,15 +94,14 @@ export const DocumentFlow = () => {
 				<Row gutter={[16, 16]} className="mt-12">
 					<Col xs={24} sm={24} md={18} lg={16} xl={12}>
 						<Typography.Text>
-							Для доступа к электронным библиотекам вне университета необходимо
-							настроить на своем компьютере VPN-подключение к внутренней сети
-							КФУ. Объяснение{' '}
+							{t('bilio')}
+							{' '}
 						</Typography.Text>
 						<Typography.Link
 							className="!underline"
 							href="https://kpfu.ru/portal/docs/F2100705556/VPN.pdf"
 						>
-							здесь.
+							-{'>'}
 						</Typography.Link>
 					</Col>
 				</Row>
@@ -118,6 +117,7 @@ export const DocumentFlow = () => {
 								<Typography.Text>{t('link')}</Typography.Text>
 							</div>
 						}
+						locale={{ emptyText: t('noData') }}
 						dataSource={selectDataSours()}
 						renderItem={(item, index) => (
 							<List.Item key={item.link} className="bg-white mb-3">

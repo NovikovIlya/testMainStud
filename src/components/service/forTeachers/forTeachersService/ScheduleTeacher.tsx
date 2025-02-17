@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import InfoCard from './InfoCard'
-import { Button, Col, Form, Result, Row, Select, Spin } from 'antd'
+import { Button, Col, Empty, Form, Result, Row, Select, Spin } from 'antd'
 import { TableSchedule } from './table/TableSchedule'
 import { t } from 'i18next'
 import { useGetScheduleForTeacherQuery } from '../../../../store/api/forTeacher/forTeacherApi'
@@ -27,10 +27,7 @@ const ScheduleTeacher = () => {
 
 	if(dataSchedule?.subjects?.length === 0){
 		return (
-			<Result
-				status="info"
-				title={t('noSubjects')}
-			/>
+			<Empty className='mt-10' description={t('noSubjects')}></Empty>
 		)
 	}
 

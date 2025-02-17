@@ -244,7 +244,7 @@ const DropDrag = () => {
 			)
 			return (
 				<ResponsiveReactGridLayout
-					className="layout"
+					className="layout mb-10"
 					cols={{ lg: 3, md: 2, sm: 2, xs: 2, xxs: 1 }}
 					rowHeight={windowSize.innerWidth < 768 ? 210 : 320}
 					containerPadding={[0, 0]}

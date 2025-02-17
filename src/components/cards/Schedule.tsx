@@ -153,7 +153,7 @@ export const Schedule = () => {
 						<div>{t('NoLesson')}</div>
 					)
 				) : (
-					<div>{isFetching ? '' : t('NoLesson')}</div>
+					<div className='text-start'>{isFetching ? '' : t('NoLesson')}</div>
 				)}
 			</div>
 

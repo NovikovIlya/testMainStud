@@ -117,7 +117,7 @@ export const Education = () => {
 		putEducation(data)
 	}
 
-	const isChanged = typeAcc === 'OTHER' ||  (typeAcc === 'ABITUR' && !acceptedData[0])
+	const isChanged = typeAcc === 'OTHER' ||  (typeAcc === 'ABITUR' && !acceptedData)
 
 	useEffect(()=>{
 		if(isSuccess){

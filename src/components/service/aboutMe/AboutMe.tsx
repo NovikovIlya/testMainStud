@@ -74,7 +74,7 @@ export const AboutMe = () => {
 		setIsEdit(true)
 	}
 	
-	const isChanged = typeAcc === 'OTHER' ||  (typeAcc === 'ABITUR' && !acceptedData[0])
+	const isChanged = typeAcc === 'OTHER' ||  (typeAcc === 'ABITUR' && !acceptedData )
 
 	if (isLoadingCountry ) return <SkeletonPage />
 

@@ -175,7 +175,7 @@ const DropDrag = () => {
 			return (
 				<>
 					<Apply />
-					<Row>
+					<Row className='mb-10'>
 						<Col span={8}>
 							<AboutUniversityCard />
 						</Col>

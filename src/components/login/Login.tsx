@@ -27,6 +27,12 @@ export const Login = () => {
 	const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const paramValue = searchParams.get('lan');
+	const [info, setInfo] = useLocalStorageState<any>(
+		'info',
+		{
+		  defaultValue: '',
+		},
+	);
 	const [message, setMessage] = useLocalStorageState<any>(
 		'typeAcc',
 		{
@@ -98,6 +104,7 @@ export const Login = () => {
 			localStorage.setItem('password', JSON.stringify(values.password))
 			localStorage.setItem('access', JSON.stringify(userData.accessToken))
 			localStorage.setItem('refresh', JSON.stringify(userData.refreshToken))
+			setInfo(userData)
 			// navigate('/user')
 		} catch (e: any) {
 			console.log(e)

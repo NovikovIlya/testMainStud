@@ -54,6 +54,12 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const [mainRole, setmainRole] = useLocalStorageState<any>('typeAcc', {defaultValue: 'STUD'})
 	const [login, { data: dataLogin, isSuccess, isLoading }] = useFakeLoginMutation()
 	const [isOpen, setIsOpen] = useState(false)
+	const [info, setInfo] = useLocalStorageState<any>(
+		'info',
+		{
+		  defaultValue: '',
+		},
+	);
 	const ref = useRef<any>(null)
 	const { unreadChatsCount } = useGetAllUnReadQuery(null, {
 		pollingInterval: 2000,
@@ -237,6 +243,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const handleCancel = () => {
 		setIsModalOpen(false)
 	}
+	console.log('info',info)
 
 	return (
 		<header
@@ -426,8 +433,8 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 										{i18n.language === 'ru' ?
 											`${user?.lastname} ${user?.firstname.charAt(0)}. ${
 											user?.middlename === '' ? '' : user?.middlename.charAt(0) + '.'}`  : 
-											`${user?.lastname} ${user?.firstname.charAt(0)}. ${
-											user?.middlename === '' ? '' : user?.middlename.charAt(0) + '.'}`
+											`${info?.engLastname} ${info?.engFirstname.charAt(0)}. ${
+											info?.engMiddlename === '' ? '' : info?.engMiddlename.charAt(0) + '.'}`
 									}
 									</div>
 									<div className="text-sm ">

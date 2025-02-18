@@ -7,12 +7,26 @@ const cookies = document.cookie.split('; ')
 const sId = cookies[2]?.split('=')[1] || ''
 const hId = cookies[3]?.split('=')[1] || ''
 const aId = cookies[4]?.split('=')[1] || ''
-/**
- * s_id:"22408606452196311228958538938715"
- * h_id:"9BC8497C61F2354B23D2AE0FCDCA318E"
- */
-const user = localStorage.getItem('user')
-const urlObrProgram = user?.filial === 's' ? 'https://kpfu.ru/sveden/education/#eduop' : 'https://stat-elabuga.kpfu.ru/sveden/education/#eduop'
+
+
+const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '') : null;
+const urlObrProgram = (() => {
+
+    switch (user?.filialType) {
+        case 'KAZAN':
+            return 'https://kpfu.ru/sveden/education/#eduop';
+        case 'ELABUGA':
+            return 'https://stat-elabuga.kpfu.ru/sveden/education/#eduop';
+        case 'CHELNY':
+            return 'https://kpfu.ru/chelny/sveden/';
+        case 'DZHIZAK':
+            return 'https://kpfu.ru/dzhizak/sveden/education/';
+        case 'CAIRO':
+            return '';
+        default:
+            return ''; // или любое другое значение по умолчанию
+    }
+});
 
 export const jsxElements = [
 	{
@@ -478,7 +492,7 @@ export const jsxElements = [
 		key: 'educationPrograms',
 		element: (
 			<TemplateCard
-				href={urlObrProgram}
+				href={urlObrProgram()}
 				info="educationProgramsInfo"
 				title="educationPrograms"
 				buttonText="Watch"

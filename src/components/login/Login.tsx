@@ -33,6 +33,12 @@ export const Login = () => {
 		  defaultValue: '',
 		},
 	);
+	const [href, setHref] = useLocalStorageState<any>(
+		'href',
+		{
+		  defaultValue: '',
+		},
+	);
 	const [message, setMessage] = useLocalStorageState<any>(
 		'typeAcc',
 		{
@@ -105,6 +111,7 @@ export const Login = () => {
 			localStorage.setItem('access', JSON.stringify(userData.accessToken))
 			localStorage.setItem('refresh', JSON.stringify(userData.refreshToken))
 			setInfo(userData)
+			setHref(userData?.user?.filialType)
 			// navigate('/user')
 		} catch (e: any) {
 			console.log(e)
@@ -127,7 +134,7 @@ export const Login = () => {
 						{t('authorization')}
 					</Title>
 					<Inputs error={error!} />
-					<Buttons />
+					<Buttons isLoading={isLoading}/>
 				</Form>
 				<div className="flex items-start items-center">
 					<img

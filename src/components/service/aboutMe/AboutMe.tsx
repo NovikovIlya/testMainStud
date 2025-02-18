@@ -151,7 +151,7 @@ export const AboutMe = () => {
 					<Typography.Text>{t('birth')}</Typography.Text>
 					{isEdit ? (
 						<div className="bg-white p-2 rounded-md">
-							<Typography.Text>{dayjs(formData.birthDay).format('DD.MM.YYYY') || '-'}</Typography.Text>
+							<Typography.Text>{dayjs(formData.birthDay).isValid() ? dayjs(formData.birthDay).format('DD.MM.YYYY') : '-' }</Typography.Text>
 						</div>
 					) : (
 						<ConfigProvider locale={ruPicker}>

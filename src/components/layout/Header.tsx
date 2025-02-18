@@ -431,10 +431,10 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 									<div className="font-bold text-sm truncate max-w-[120px]">
 										
 										{i18n.language === 'ru' ?
-											`${user?.lastname} ${user?.firstname.charAt(0)}. ${
-											user?.middlename === '' ? '' : user?.middlename.charAt(0) + '.'}`  : 
-											`${info?.engLastname} ${info?.engFirstname.charAt(0)}. ${
-											info?.engMiddlename === '' ? '' : info?.engMiddlename.charAt(0) + '.'}`
+											`${user?.lastname} ${user?.firstname?.charAt(0)}. ${
+											user?.middlename === '' ? '' : (user?.middlename?.charAt(0) ?? '') }`  : 
+											`${info?.engLastname} ${info?.engFirstname?.charAt(0)}. ${
+											info?.engMiddlename === '' ? '' : (info?.engMiddlename?.charAt(0) ?? '') }`
 									}
 									</div>
 									<div className="text-sm ">

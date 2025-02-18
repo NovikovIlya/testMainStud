@@ -164,10 +164,7 @@ export const Document = () => {
 									format={'DD.MM.YYYY'}
 									value={
 										documentData.dateIssue
-											? dayjs(
-													documentData.dateIssue.split('-').reverse().join('.'),
-													'DD.MM.YYYY'
-											  )
+											? dayjs((documentData.dateIssue || '').split('-').reverse().join('.'), 'DD.MM.YYYY')
 											: null
 									}
 								/>

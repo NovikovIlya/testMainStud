@@ -363,7 +363,7 @@ export const Education = () => {
 									setIsBlur((prev:any)=>prev.filter((el:any)=>el!==item.id))
 								}}
 							>
-								Отмена
+								{t('cancel')}
 							</Button>
 							<Button
 								className="border-solid border-bluekfu border-[1px] text-bluekfu !rounded-md"
@@ -372,7 +372,7 @@ export const Education = () => {
 									setIsBlur((prev:any)=>prev.filter((el:any)=>el!==item.id))
 								}}
 							>
-								Сохранить
+								{t('save')}
 							</Button>
 						</div>
 					)}

@@ -617,6 +617,7 @@ export const Curriculum = () => {
 				className="tableCustom my-10"
 				pagination={false}
 				loading={isLoading}
+				locale={{ emptyText: t('noData') }}
 			/>
 		</div>
 	)

@@ -511,6 +511,7 @@ export const MyPractice = () => {
 								onRow={record => ({
 									onClick: () => handleRowClick(record)
 								})}
+								locale={{ emptyText: t('noData') }}
 								rowKey="id"
 								columns={columnsMini}
 								dataSource={dataTable ? dataTable : []}

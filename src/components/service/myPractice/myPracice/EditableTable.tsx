@@ -113,7 +113,7 @@ const save = (date: any) => {
        rules={[{ required: true, message: `${title} is required.` }]}
      >
         <Button className='h-[40px] text-sm'  onClick={save} >
-      Отмена
+      {t('cancel')}
       </Button>
     </Form.Item>
     </div>

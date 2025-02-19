@@ -791,7 +791,10 @@
 	"groupReportFileNameShort": "Group Report.docx",
 	"pendingReview": "Pending Review",
 	"addRepresentationPr": "Adding a View to an Order",
-	"addData" : "Fill in the details"
+	"addData" : "Fill in the details",
+	"credit" : "Сredit",
+	"difcredit" : "Difcredit",
+	"kindControl": "Type of intermediate control"
 	  
 	  
 	  

@@ -69,7 +69,30 @@ export const NavForTeachers = () => {
 		dispatch(setIsEditTableScheduleTeacher(false))
 	}
 	const handleYearChange = () => {
-		form.resetFields(['semestr'])
+		if (isEditTableScheduleTeacher) {
+			let conf = window.confirm('Вы действительно хотите продолжить? Есть несохраненные изменения')
+			if (!conf) {
+				form.setFieldsValue({ year: yearForm });
+				return
+			}
+		}else{
+			form.resetFields(['semestr'])
+			dispatch(setIsEditTableScheduleTeacher(false))
+		}
+		
+	}
+
+	const handleSemesctrChange = ()=>{
+		if (isEditTableScheduleTeacher) {
+			let conf = window.confirm('Вы действительно хотите продолжить? Есть несохраненные изменения')
+			if (!conf) {
+				form.setFieldsValue({ semestr: semestrForm });
+				return
+			}
+		}else{
+			dispatch(setIsEditTableScheduleTeacher(false))
+		}
+		
 	}
 
 	const generateYearsArray = () => {
@@ -86,18 +109,6 @@ export const NavForTeachers = () => {
 		return years
 	}
 
-	// function getCurrentAcademicYear() {
-	// 	const now = new Date()
-	// 	const year = now.getFullYear()
-	// 	const month = now.getMonth() // Месяцы начинаются с 0 (январь)
-
-	// 	// Учебный год обычно начинается в сентябре
-	// 	if (month >= 8) {
-	// 		return {value: year, label: `${year}/${year + 1}`}
-	// 	} else {
-	// 		return {value: year-1, label: `${year-1}/${year }`}
-	// 	}
-	// }
 
 	function getCurrentSemester() {
 		const now = new Date();
@@ -157,9 +168,10 @@ export const NavForTeachers = () => {
 					  }}
 					className="px-[80px] pt-[80px]"
 				>
-					<Row>
-						<Col span={7}>
+					<Row className='shadow my-4 pt-4 pb-0 px-4 rounded-lg bg-white'>
+						<Col span={7} className=''>
 							<Form.Item
+								className=''
 								name="year"
 								label={t('academicYear')}
 								labelAlign="left"
@@ -172,6 +184,7 @@ export const NavForTeachers = () => {
 
 						<Col span={9}>
 							<Form.Item
+								className=' '
 								name="semestr"
 								label={t('Semester')}
 								labelAlign="left"
@@ -179,6 +192,7 @@ export const NavForTeachers = () => {
 								wrapperCol={{ span: 10 }}
 							>
 								<Select
+									onChange={handleSemesctrChange}
 									disabled={!yearForm}
 									allowClear
 									options={[

@@ -16,9 +16,9 @@ export const fotTeacherService = testApiSlice.injectEndpoints({
             keepUnusedDataFor:0,
         }),
         getBrsForTeacher: builder.query<dataBrs, any>({
-            query: ({subjectId,groupId}) => {
+            query: ({subjectId,groupId,year,semester}) => {
             return {
-                    url: `/to-teacher/brs/grades?subjectId=${subjectId}&groupId=${groupId}`,
+                    url: `/to-teacher/brs/grades?subjectId=${subjectId}&groupId=${groupId}&year=${year}&semester=${semester}`,
                     method: 'GET'
                 }
             },
@@ -26,10 +26,10 @@ export const fotTeacherService = testApiSlice.injectEndpoints({
             keepUnusedDataFor:0,
         }),
 
-        getBrsSubjects: builder.query<any, void>({
-            query: () => {
+        getBrsSubjects: builder.query<any, any>({
+            query: ({year,semester}) => {
             return {
-                    url: `/to-teacher/brs/subjects`,
+                    url: `/to-teacher/brs/subjects?year=${year}&semester=${semester}`,
                     method: 'GET'
                 }
             },
@@ -37,10 +37,10 @@ export const fotTeacherService = testApiSlice.injectEndpoints({
             keepUnusedDataFor:0,
         }),
 
-        getBrsGroups: builder.query<any, void>({
-            query: (subjectId ) => {
+        getBrsGroups: builder.query<any, any>({
+            query: ({subjectId,year,semester} ) => {
             return {
-                    url: `/to-teacher/brs/groups?subjectId=${subjectId}`,
+                    url: `/to-teacher/brs/groups?subjectId=${subjectId}&year=${year}&semester=${semester}`,
                     method: 'GET'
                 }
             },
@@ -80,9 +80,9 @@ export const fotTeacherService = testApiSlice.injectEndpoints({
             keepUnusedDataFor:0,
         }),
         getVedomostForTeacher: builder.query<any, any>({
-            query: ({subjectId,groupId,year,semester}) => {
+            query: ({subjectId,groupId,year,semester,type}) => {
             return {
-                    url: `/to-teacher/vedomost/vedomost?subjectId=${subjectId}&groupId=${groupId}&year=${year}&semester=${semester}`,
+                    url: `/to-teacher/vedomost/vedomost?subjectId=${subjectId}&groupId=${groupId}&year=${year}&semester=${semester}&type=${type}`,
                     method: 'GET'
                 }
             },

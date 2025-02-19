@@ -790,7 +790,10 @@
 	"groupReportFileNameShort": "Отчет по конкретной группе.docx",
 	"pendingReview": "Ожидает проверки",
 	"addRepresentationPr": "Добавление представления в приказ",
-	"addData" : "Заполните данные"
+	"addData" : "Заполните данные",
+	"credit": "Зачет",
+	"difcredit" : "Дифзачет",
+	"kindControl": "Вид промежуточного контроля"
 	
 	  
 	  

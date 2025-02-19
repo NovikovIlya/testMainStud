@@ -58,7 +58,7 @@ export const InfoUserUpdate = () => {
 							//@ts-ignore
 							setSubrole(e.target.id)
 						} } placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}					>
-						<ListItem className="p-0"  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
+						{/* <ListItem className="p-0"  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
 							<label
 								htmlFor="GUEST"
 								className="px-3 py-2 flex items-start mt-1 w-full cursor-pointer"
@@ -80,8 +80,8 @@ export const InfoUserUpdate = () => {
 									{t('roleGuestDescription')}
 								</Typography>
 							</label>
-						</ListItem>
-						{/* <ListItem className="p-0 "  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
+						</ListItem> */}
+						<ListItem className="p-0 "  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
 							<label
 								htmlFor="SCHOOL"
 								className="px-3 py-2 flex items-start  w-full cursor-pointer"
@@ -103,7 +103,7 @@ export const InfoUserUpdate = () => {
 									{t('roleSchoolboyDescription')}
 								</Typography>
 							</label>
-						</ListItem> */}
+						</ListItem>
 						<ListItem className="p-0"  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
 							<label
 								htmlFor="ABIT"
@@ -175,9 +175,9 @@ export const InfoUserUpdate = () => {
 						</ListItem> */}
 					</List>
 
-					<div className="border border-[#BDBDBD] border-solid rounded py-6 px-12 px- mt-10">
+					{/* <div className="border border-[#BDBDBD] border-solid rounded py-6 px-12 px- mt-10">
 						<p className="text-center text-sm">{t('chageRoleGuest')}</p>
-					</div>
+					</div> */}
 					<div className="w-full flex justify-center items-center gap-8 mt-[60px] ">
 						
 						<Button

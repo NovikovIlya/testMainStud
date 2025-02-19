@@ -22,13 +22,14 @@ const Brs = () => {
 	const [form2] = Form.useForm()
 	const discilineForm = Form.useWatch('disciline', form2)
 	const groupeForm = Form.useWatch('group', form2)
-	const { data, isError, error, isFetching } = useGetBrsForTeacherQuery({ subjectId: discilineForm, groupId: groupeForm },{ skip: !discilineForm || !groupeForm })
-	const { data: dataSubjects,isFetching:isFetchingSubject } = useGetBrsSubjectsQuery()
-	const { data: dataGroups,isFetching:isFetchingGroup } = useGetBrsGroupsQuery(discilineForm, { skip: !discilineForm })
-	const [saveBrs, { data: dataSave, isLoading }] = useSaveBrsMutation()
-	const [dataSource, setDataSource] = useState<Student[]>([])
 	const yearForm = useAppSelector(state => state.forTeacher.yearForm)
 	const semestrForm = useAppSelector(state => state.forTeacher.semestrForm)
+	const { data, isError, error, isFetching } = useGetBrsForTeacherQuery({ subjectId: discilineForm, groupId: groupeForm,year:yearForm,semester :semestrForm },{ skip: !discilineForm || !groupeForm || !yearForm || !semestrForm })
+	const { data: dataSubjects,isFetching:isFetchingSubject } = useGetBrsSubjectsQuery({year:yearForm,semester :semestrForm},{skip: !yearForm || !semestrForm})
+	const { data: dataGroups,isFetching:isFetchingGroup } = useGetBrsGroupsQuery({subjectId:discilineForm,year:yearForm,semester :semestrForm}, { skip: !discilineForm || !yearForm || !semestrForm})
+	const [saveBrs, { data: dataSave, isLoading }] = useSaveBrsMutation()
+	const [dataSource, setDataSource] = useState<Student[]>([])
+	
 
 	useEffect(() => {
 		if (data?.students) {
@@ -42,9 +43,15 @@ const Brs = () => {
 		}
 	}, [data])
 
+	useEffect(() => {
+		form2.resetFields();
+		setDataSource([]); 
+	}, [semestrForm]);
+
 	const handleYearChange = () => {
 		form2.resetFields(['group'])
 	}
+	
 
 	const onFinish = () => {
 		const filteredData = dataSource

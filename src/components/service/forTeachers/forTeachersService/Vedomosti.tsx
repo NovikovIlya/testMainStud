@@ -1,5 +1,5 @@
 import { PrinterOutlined } from '@ant-design/icons'
-import { Button, Col, Empty, Form, Result, Row, Select, Spin } from 'antd'
+import { Button, Col, Empty, Form, message, Result, Row, Select, Spin } from 'antd'
 import Title from 'antd/es/typography/Title'
 import { t } from 'i18next'
 import React, { useEffect, useState } from 'react'
@@ -27,7 +27,8 @@ const Vedomosti = () => {
 	const semestrForm = useAppSelector(state => state.forTeacher.semestrForm)
 	const discilineForm = Form.useWatch('disciline', form2)
 	const groupeForm = Form.useWatch('group', form2)
-	const { data, isError, error, isFetching } = useGetVedomostForTeacherQuery({ subjectId: discilineForm, groupId: groupeForm,year:yearForm,semester :semestrForm},{ skip: !discilineForm || !groupeForm })
+	const kindForm = Form.useWatch('kind', form2)
+	const { data, isError, error, isFetching } = useGetVedomostForTeacherQuery({ subjectId: discilineForm, groupId: groupeForm,year:yearForm,semester :semestrForm,type:kindForm},{ skip: !discilineForm || !groupeForm || !kindForm})
 	const { data: dataSubjects,isFetching:isFetchingSub } = useGetVedomostSubjectsQuery({year:yearForm,semester :semestrForm},{ skip: !yearForm || !semestrForm })
 	const { data: dataGroups,isFetching:isFetchingGroup } = useGetVedomostGroupsQuery({subjectId:discilineForm,year:yearForm,semester :semestrForm}, { skip: !discilineForm })
 	const [saveBrs, { data: dataSave, isLoading }] = useSaveBrsMutation()
@@ -59,10 +60,10 @@ const Vedomosti = () => {
 			.map(({ key, N, ...rest }: any) => rest)
 			.map((student: any) => ({
 				...student,
-				firstMonth: Number(student.firstMonth),
-				secondMonth: Number(student.secondMonth),
-				thirdMonth: Number(student.thirdMonth),
-				fourthMonth: Number(student.fourthMonth)
+				// firstMonth: Number(student.firstMonth),
+				// secondMonth: Number(student.secondMonth),
+				// thirdMonth: Number(student.thirdMonth),
+				// fourthMonth: Number(student.fourthMonth)
 			}))
 
 		saveBrs({
@@ -73,6 +74,8 @@ const Vedomosti = () => {
 		})
 		dispatch(setIsEditTableScheduleTeacher(false))
 	}
+
+
 
 	if(isFetchingSub){
 		return (
@@ -155,10 +158,41 @@ const Vedomosti = () => {
 									/>
 								</Form.Item>
 							</Col>
+
+							<Col span={24}>
+								<Form.Item
+									name="kind"
+									label={t('kindControl')}
+									labelAlign="left"
+									labelCol={{ span: 6 }} // Такая же ширина лейбла
+									wrapperCol={{ span: 8 }} // Такая же ширина инпута
+								>
+									<Select
+										loading={isFetchingGroup}
+										showSearch
+										filterOption={(input, option) => {
+											if (option?.label) {
+												// Проверяем, что label существует
+												return option.label.toString().toLowerCase().includes(input.toLowerCase())
+											}
+											return false
+										}}
+										disabled={!groupeForm}
+										allowClear
+										options={
+											[
+												{ label: t('exam'), value: 'e' },
+												{ label: t('credit'), value: 'q' },
+												{ label: t('difcredit'), value: 'd' }
+											]
+										}
+									/>
+								</Form.Item>
+							</Col>
 						</Row>
 					</div>
 
-					{groupeForm ? (
+					{kindForm ? (
 						<div className="animate-fade-in">
 							<Row className="flex gap-2">
 								<Button className="rounded-xl" icon={<PrinterOutlined />}>
@@ -170,7 +204,7 @@ const Vedomosti = () => {
 							</Row>
 
 							<TableVedomosti subj_type={data?.subj_type} is_session={data?.is_session} dataSource={dataSource} setDataSource={setDataSource} />
-
+							{data?.students?.length === 0 ? <div className='text-red-500 mt-4 w-full justify-center text-center'>Для выбранного вида нет данных, измените вид</div> : ''}
 							<Button disabled={getCurrentAcademicYear().value!==yearForm} htmlType="submit" className="mt-8 mb-8 rounded-xl" type="primary">
 								{t('Save')}
 							</Button>

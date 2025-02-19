@@ -37,8 +37,8 @@ const AboutUniversity = () => {
 								</span>
 							</div>
 						</Button>
-						<div className="flex justify-between w-full mb-40 max-lg:flex-col max-lg:items-center">
-							<div className="flex flex-col w-5/12 max-lg:w-3/4 max-lg:mb-5">
+						<div className="flex justify-between w-full mb-20 max-lg:flex-col max-lg:items-center">
+							<div className="flex flex-col w-5/12 max-lg:w-3/4 max-lg:mb-5 justify-center">
 								<Typography.Title level={2} className="font-normal">
 									{t('AboutTheUniversity')}
 								</Typography.Title>
@@ -52,16 +52,17 @@ const AboutUniversity = () => {
 								</div>
 							</div>
 							<img
-								src="https://egp.kpfu.ru/static/media/universityView.16fe930cb1fd794e1b5c.png"
+								src="https://i.ibb.co/ZzGHbpZs/image.png"
 								alt=""
-								className="w-1/2 max-lg:w-3/4"
+								className="w-1/2 max-lg:w-3/4 rounded-lg shadow-xl  h-[400px] object-cover"
 							/>
 						</div>
-						<div className="mx-auto flex flex-col gap-10 items-center">
-							<LargeLogoSVG />
-							{/* <QuotationMarksSVG />  */}
+						<div className='shadow bg-gray-100 rounded-md p-8 flex flex-col w-full mb-20 max-lg:flex-col max-lg:items-center'>
+							<div className=" mx-auto flex flex-col gap-10 items-center">
+								<LargeLogoSVG />
+							</div>
+							<span className="mx-auto mt-10  w-4/6 text-center">{t('aboutKFU')}</span>
 						</div>
-						<span className="mx-auto mt-10 mb-40 w-4/6 text-center">{t('aboutKFU')}</span>
 						<div className="relative m-auto min-[1100px]:w-[885px] w-[885px] min-[1100px]:h-[500px] h-[500px] max-[1100px]:hidden">
 							{/* <div
 						className="absolute right-32 bottom-16 z-10 bg-bluekfu w-[100px] min-[1100px]:w-[80px] min-[1100px]:h-[80px] h-[100px] cursor-pointer flex justify-center items-center rounded-full"

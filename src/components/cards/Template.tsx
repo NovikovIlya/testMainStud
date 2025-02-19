@@ -9,7 +9,7 @@ export const TemplateCard = ({isLink,className,href,img,info,title,height = 112,
 	const { t } = useTranslation()
 
 	return (
-		<div className="shadow-md flex w-full bg-white rounded-3xl h-[320px] flex-col px-7 py-8 justify-between h-full max-[874px]:p-0 max-[874px]:py-3 max-[874px]:items-center ">
+		<div className="hover:shadow-lg shadow-md flex w-full bg-white rounded-3xl h-[320px] flex-col px-7 py-8 justify-between h-full max-[874px]:p-0 max-[874px]:py-3 max-[874px]:items-center ">
 			<div className="flex max-[874px]:flex-col max-[874px]:h-full max-[874px]:w-full max-[874px]:items-center">
 				<div className="text-left">
 						<div className="leading-7 text-xl font-bold whitespace-nowrap">

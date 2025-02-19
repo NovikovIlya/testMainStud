@@ -7,6 +7,7 @@ import { setIsEditTableScheduleTeacher } from '../../../../../store/reducers/aut
 import { ColumnTypes, DataType, EditableCellProps, EditableRowProps } from '../../../../../models/tables';
 import { dataBrs, Student } from '../../../../../models/forTeacher';
 import { truncateString } from '../../../../../utils/truncateString';
+import TextArea from 'antd/es/input/TextArea';
 
 const EditableContext = React.createContext<FormInstance<any> | null>(null);
 
@@ -63,11 +64,28 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
   if (editable) {
     childNode = editing ? (
       <Form.Item
-        style={{ margin: 0 ,width:'auto'}}
+        style={{ margin: 0 ,width:'auto',padding:0}}
         name={dataIndex}
+        className='  '
         // rules={[{ required: true, message: `${title} является обязательным.` }]}
       >
-        <Input  type={inputType || 'text'}  ref={inputRef} onPressEnter={save} onBlur={save} />
+        {/* <Input className='!oveflow-auto h-40'  type={inputType || 'text'}  ref={inputRef} onPressEnter={save} onBlur={save} /> */}
+       { /* @ts-ignore  */ }
+        {dataIndex === 'subjectComments' ? (
+        <TextArea
+          autoSize={{ minRows: 2, maxRows: 6 }}
+          style={{ }}
+          ref={inputRef}
+          onBlur={save}
+      />
+    ) : (
+      <Input
+        type={inputType || 'text'}
+        ref={inputRef}
+        onPressEnter={save}
+        onBlur={save}
+      />
+    )}
       </Form.Item>
     ) : (
       <div
@@ -144,7 +162,7 @@ const TableVedomosti = ({dataSource, setDataSource,subj_type,is_session}: any) =
       className: ' !truncate',
       render:(text:any)=>{
         return(
-         <div> {truncateString(10,text)}</div>
+         <div className='oveflow-auto'> {truncateString(10,text)}</div>
         )
       }
     },

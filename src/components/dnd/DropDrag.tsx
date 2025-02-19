@@ -20,6 +20,7 @@ import { Schedule } from '../cards/Schedule'
 import { TemplateCard } from '../cards/Template'
 
 import { block } from './constant'
+import i18n from '../../18n'
 
 const studentKeys = [
 	'Schedule',
@@ -204,7 +205,7 @@ const DropDrag = () => {
 			key: 'EducationalCourses',
 			element: (
 				<TemplateCard
-					href="https://edu.kpfu.ru"
+					href={`${i18n.language === 'ru' ? "https://edu.kpfu.ru" : " https://edu.kpfu.ru/?lang=en"}`}
 					info="EducationalCoursesInfo"
 					title="EducationalCourses"
 					img="/image2.png"
@@ -240,7 +241,7 @@ const DropDrag = () => {
 			key: 'News',
 			element: (
 				<TemplateCard
-					href="https://media.kpfu.ru/news?kn%5B0%5D=Новости%20науки&created="
+					href={`${i18n.language === 'ru' ? "https://media.kpfu.ru/news?kn%5B0%5D=Новости%20науки&created=" : "https://eng.kpfu.ru/news-archive/"}`}
 					info="NewsInfo"
 					title="News"
 					img="/image3.png"

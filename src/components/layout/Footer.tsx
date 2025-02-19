@@ -10,6 +10,7 @@ import {
 } from '../../assets/svg'
 import { useTranslation } from 'react-i18next'
 import { LogoSvgEn } from '../../assets/svg/LogoSvgEn'
+import { RutubeSvg } from '../../assets/svg/RutubeSvg'
 
 export const Footer = () => {
 	const year = new Date().getFullYear()
@@ -39,6 +40,7 @@ export const Footer = () => {
 				</span>
 				<div className="flex gap-3 mt-5">
 					<a href='https://vk.com/kazan_federal_university'><VkSvg /></a>
+					<a href='https://rutube.ru/u/univertv/'><RutubeSvg /></a>
 					<a href='https://www.youtube.com/univertv'><YoutubeSvg /></a>
 					<a href='https://dzen.ru/kazan_federal_university'><DzenSvg /></a>
 					<a href='https://ok.ru/kznuniversity'><OkSvg /></a>

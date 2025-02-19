@@ -432,7 +432,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 										
 										{i18n.language === 'ru' ?
 											`${user?.lastname} ${user?.firstname?.charAt(0)}. ${
-											user?.middlename === '' ? '' : (user?.middlename?.charAt(0) ?? '') }`  : 
+											user?.middlename === '' ? '' : (user?.middleName?.charAt(0) ?? '') }`  : 
 											`${info?.engLastname} ${info?.engFirstname?.charAt(0)}. ${
 											info?.engMiddlename === '' ? '' : (info?.engMiddlename?.charAt(0) ?? '') }`
 									}

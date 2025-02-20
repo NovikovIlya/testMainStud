@@ -146,7 +146,7 @@ export const NavForTeachers = () => {
 				selectedKeys={[current]}
 				mode="inline"
 				onClick={onClick}
-				className="min-w-[230px] max-w-[230px] flex flex-col  mt-36 h-[calc(100vh-144px)]"
+				className="min-w-[230px] max-w-[230px] flex flex-col  mt-36 h-[calc(100vh-144px)] shadow"
 				items={items.map((item: any, index: number) => ({
 					key: item.key,
 					icon: item.icon,
@@ -168,7 +168,7 @@ export const NavForTeachers = () => {
 					  }}
 					className="px-[80px] pt-[80px]"
 				>
-					<Row className='shadow my-4 pt-4 pb-0 px-4 rounded-lg bg-white'>
+					<Row className='shadow mb-4 pt-4 pb-0 px-4 rounded-lg bg-white'>
 						<Col span={7} className=''>
 							<Form.Item
 								className=''

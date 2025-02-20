@@ -77,6 +77,8 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
           style={{ }}
           ref={inputRef}
           onBlur={save}
+          className='w-[121px]'
+          
       />
     ) : (
       <Input
@@ -229,12 +231,13 @@ const TableVedomosti = ({dataSource, setDataSource,subj_type,is_session}: any) =
       <Table
         rowKey={(record) => record.key}
         components={components}
-        rowClassName={() => 'editable-row'}
+        rowClassName={() => 'editable-row '}
         bordered
         dataSource={dataSource}
         columns={columns}
         className=''
         pagination={false}
+        size='large'
       
       />
       {/* <Button className='top-[-50px] rounded-xl' type='primary'>{t('Save')}</Button> */}

@@ -1,5 +1,5 @@
 import { PrinterOutlined, StarOutlined } from '@ant-design/icons'
-import { Button, Col, Form, Result, Row, Select, Spin } from 'antd'
+import { Button, Col, Form, Result, Row, Select, Spin ,message} from 'antd'
 import Title from 'antd/es/typography/Title'
 import { t } from 'i18next'
 import React, { useEffect, useState } from 'react'
@@ -12,7 +12,7 @@ import {
 	useGetBrsSubjectsQuery,
 	useSaveBrsMutation
 } from '../../../../store/api/forTeacher/forTeacherApi'
-import { setIsEditTableScheduleTeacher } from '../../../../store/reducers/authSlice'
+import { logOut, setIsEditTableScheduleTeacher } from '../../../../store/reducers/authSlice'
 
 import InfoCard from './InfoCard'
 import TableBrs from './table/TableBrs'
@@ -27,9 +27,9 @@ const Brs = () => {
 	const { data, isError, error, isFetching } = useGetBrsForTeacherQuery({ subjectId: discilineForm, groupId: groupeForm,year:yearForm,semester :semestrForm },{ skip: !discilineForm || !groupeForm || !yearForm || !semestrForm })
 	const { data: dataSubjects,isFetching:isFetchingSubject } = useGetBrsSubjectsQuery({year:yearForm,semester :semestrForm},{skip: !yearForm || !semestrForm})
 	const { data: dataGroups,isFetching:isFetchingGroup } = useGetBrsGroupsQuery({subjectId:discilineForm,year:yearForm,semester :semestrForm}, { skip: !discilineForm || !yearForm || !semestrForm})
-	const [saveBrs, { data: dataSave, isLoading }] = useSaveBrsMutation()
+	const [saveBrs, { data: dataSave, isLoading,isError:isErrorSave ,error:errorSave}] = useSaveBrsMutation()
 	const [dataSource, setDataSource] = useState<Student[]>([])
-	
+	const [errorDisplayed, setErrorDisplayed] = useState(false);
 
 	useEffect(() => {
 		if (data?.students) {
@@ -51,7 +51,19 @@ const Brs = () => {
 	const handleYearChange = () => {
 		form2.resetFields(['group'])
 	}
-	
+	console.log('isErrorSave',isErrorSave)
+	// if(isErrorSave){
+	// 	// @ts-ignore
+	// 	message.info(errorSave?.data);
+ 	// 	// dispatch(logOut())
+	//  }
+	useEffect(() => {
+		if (isErrorSave && !errorDisplayed) {
+		 // @ts-ignore
+		  message.info(errorSave?.data === 'OK' ?  'Сохранено':errorSave?.data);
+		  setErrorDisplayed(true);
+		}
+	  }, [isErrorSave, errorDisplayed, errorSave]);
 
 	const onFinish = () => {
 		const filteredData = dataSource
@@ -71,6 +83,11 @@ const Brs = () => {
 			students: filteredData
 		})
 		dispatch(setIsEditTableScheduleTeacher(false))
+		setErrorDisplayed(false);
+	}
+
+	if(dataSave) {
+		console.log('dataSave',dataSave);
 	}
 
 	if(isFetchingSubject){
@@ -88,9 +105,10 @@ const Brs = () => {
 			/>
 		)
 	}
+	
 
 	return (
-		<Spin spinning={isLoading || isFetching}>
+		<Spin spinning={ isFetching}>
 			{semestrForm ? (
 				<Form onFinish={onFinish} form={form2} className="px-[80px] mb-8">
 					<InfoCard text={t('infoTextBrs')} />
@@ -171,9 +189,9 @@ const Brs = () => {
 									{t('printJournalFiled')}
 								</Button>
 							</Row>
-
+							<Spin spinning={isLoading}>
 							<TableBrs semester={data.semester} dataSource={dataSource} setDataSource={setDataSource} />
-
+							</Spin>
 							<Button htmlType="submit" className="mt-8 mb-8 rounded-xl" type="primary">
 								{t('Save')}
 							</Button>

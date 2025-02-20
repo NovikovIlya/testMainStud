@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import type { FormInstance, GetRef, InputRef, TableProps } from 'antd';
-import { Button, Form, Input, Popconfirm, Table } from 'antd';
+import { Button, Form, Input, Popconfirm, Table, Tooltip } from 'antd';
 import { t } from 'i18next';
 import { useAppDispatch } from '../../../../../store';
 import { setIsEditTableScheduleTeacher } from '../../../../../store/reducers/authSlice';
@@ -59,13 +59,13 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
   let childNode = children;
 
   if (editable) {
-    childNode = editing ? (
+    childNode = !record.isBlocked ? editing ? (
       <Form.Item
         style={{ margin: 0 ,width:'auto'}}
         name={dataIndex}
         // rules={[{ required: true, message: `${title} является обязательным.` }]}
       >
-        <Input type='number' min={0} max={9} ref={inputRef} onPressEnter={save} onBlur={save} />
+        <Input  type='number' min={0} max={9} ref={inputRef} onPressEnter={save} onBlur={save} />
       </Form.Item>
     ) : (
       <div
@@ -75,7 +75,13 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
       >
         {children}
       </div>
-    );
+    ) :  <Tooltip title="Ведомость для этого студента сформирована — нельзя проставить оценку"><div
+    className="editable-cell-value-wrap"
+    style={{ paddingInlineEnd: 24 ,width:'auto'}}
+    onClick={toggleEdit}
+  >
+    {children}
+  </div></Tooltip>;
   }
 
   return <td {...restProps}>{childNode}</td>;
@@ -225,11 +231,12 @@ const TableBrs = ({dataSource, setDataSource,semester}: Props) => {
     }
     return {
       ...col,
-      onCell: (record: DataType) => ({
+      onCell: (record: any) => ({
         record,
         editable: col.editable,
         dataIndex: col.dataIndex,
         title: col.title,
+        isBlocked: record.isBlocked, 
         handleSave,
       }),
     };

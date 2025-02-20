@@ -12,7 +12,8 @@ import {
 	useGetVedomostForTeacherQuery,
 	useGetVedomostGroupsQuery,
 	useGetVedomostSubjectsQuery,
-	useSaveBrsMutation
+	useSaveBrsMutation,
+	useSaveVedomostMutation
 } from '../../../../store/api/forTeacher/forTeacherApi'
 import { setIsEditTableScheduleTeacher } from '../../../../store/reducers/authSlice'
 
@@ -31,7 +32,7 @@ const Vedomosti = () => {
 	const { data, isError, error, isFetching } = useGetVedomostForTeacherQuery({ subjectId: discilineForm, groupId: groupeForm,year:yearForm,semester :semestrForm,type:kindForm},{ skip: !discilineForm || !groupeForm || !kindForm})
 	const { data: dataSubjects,isFetching:isFetchingSub } = useGetVedomostSubjectsQuery({year:yearForm,semester :semestrForm},{ skip: !yearForm || !semestrForm })
 	const { data: dataGroups,isFetching:isFetchingGroup } = useGetVedomostGroupsQuery({subjectId:discilineForm,year:yearForm,semester :semestrForm}, { skip: !discilineForm })
-	const [saveBrs, { data: dataSave, isLoading }] = useSaveBrsMutation()
+	const [saveBrs, { data: dataSave, isLoading }] = useSaveVedomostMutation()
 	const [dataSource, setDataSource] = useState<any>([])
 	
 	useEffect(() => {
@@ -57,20 +58,20 @@ const Vedomosti = () => {
 
 	const onFinish = () => {
 		const filteredData = dataSource
-			.map(({ key, N, ...rest }: any) => rest)
+			.map(({ key,semesterMark,studName,subjectRate, N, ...rest }: any) => rest)
 			.map((student: any) => ({
 				...student,
-				// firstMonth: Number(student.firstMonth),
-				// secondMonth: Number(student.secondMonth),
-				// thirdMonth: Number(student.thirdMonth),
-				// fourthMonth: Number(student.fourthMonth)
+				
 			}))
 
 		saveBrs({
-			subjectId: discilineForm,
+			subjectId: String(discilineForm),
+			subjectType: data?.subjectType,
+			studDate: data?.studDate,
 			groupId: groupeForm,
-			semester: data?.semester,
-			students: filteredData
+			semester: String(data?.semester),
+			students: filteredData,
+			journalId: data?.journalId
 		})
 		dispatch(setIsEditTableScheduleTeacher(false))
 	}

@@ -33,7 +33,7 @@ export const fotTeacherService = testApiSlice.injectEndpoints({
                     method: 'GET'
                 }
             },
-            providesTags: ['forTeacherSceduleBrs'],
+            // providesTags: ['forTeacherSceduleBrs'],
             keepUnusedDataFor:0,
         }),
 
@@ -44,7 +44,7 @@ export const fotTeacherService = testApiSlice.injectEndpoints({
                     method: 'GET'
                 }
             },
-            providesTags: ['forTeacherSceduleBrs'],
+            // providesTags: ['forTeacherSceduleBrs'],
             keepUnusedDataFor:0,
         }),
 
@@ -58,6 +58,16 @@ export const fotTeacherService = testApiSlice.injectEndpoints({
             },
             invalidatesTags: ['forTeacherSceduleBrs'],
         }),
+        saveVedomost: builder.mutation<any, any>({
+            query: (body ) => {
+            return {
+                    url: `/to-teacher/vedomost/vedomost/save`,
+                    method: 'POST',
+                    body
+                }
+            },
+            invalidatesTags: ['forTeacherSceduleVedomost'],
+        }),
 
         getVedomostSubjects: builder.query<any, any>({
             query: ({year,semester}) => {
@@ -66,7 +76,7 @@ export const fotTeacherService = testApiSlice.injectEndpoints({
                     method: 'GET'
                 }
             },
-            providesTags: ['forTeacherSceduleVedomost'],
+            // providesTags: ['forTeacherSceduleVedomost'],
             keepUnusedDataFor:0,
         }),
         getVedomostGroups: builder.query<any, any>({
@@ -76,7 +86,7 @@ export const fotTeacherService = testApiSlice.injectEndpoints({
                     method: 'GET'
                 }
             },
-            providesTags: ['forTeacherSceduleVedomost'],
+            // providesTags: ['forTeacherSceduleVedomost'],
             keepUnusedDataFor:0,
         }),
         getVedomostForTeacher: builder.query<any, any>({
@@ -101,6 +111,7 @@ export const {
     useSaveBrsMutation,
     useGetVedomostSubjectsQuery,
     useGetVedomostGroupsQuery,
-    useGetVedomostForTeacherQuery
+    useGetVedomostForTeacherQuery,
+    useSaveVedomostMutation
 } = fotTeacherService
 

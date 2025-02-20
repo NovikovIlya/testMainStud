@@ -1,6 +1,7 @@
 import { Form, GetRef, TableProps } from "antd";
 
 export interface Item {
+    isBlocked: any;
     key: string;
     name: string;
     age: string;

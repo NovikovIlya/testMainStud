@@ -194,7 +194,9 @@ export const SupervisorInterviewCreate = () => {
 								Соискатель
 							</label>
 						}
-						rules={[{ required: true, message: 'не выбран соискатель' }]}
+						rules={[
+							{ required: true, message: 'Не выбран соискатель' }
+						]}
 					>
 						<Select
 							placeholder="Выбрать"
@@ -213,7 +215,7 @@ export const SupervisorInterviewCreate = () => {
 								Должность
 							</label>
 						}
-						rules={[{ required: true, message: 'не указана должность' }]}
+						rules={[{ required: true, message: 'Не выбрана должность' }]}
 					>
 						<Select
 							placeholder="Выбрать"
@@ -227,18 +229,18 @@ export const SupervisorInterviewCreate = () => {
 							className="w-6/12"
 							name={'date'}
 							label={
-								<label className="opacity-[80%] text-black text-[18px]/[18px] font-content-font font-normal">
-									Дата
+<label className="opacity-[80%] text-black text-[18px]/[18px] font-content-font font-normal">
+									Дата и время
 								</label>
 							}
-							rules={[{ required: true, message: 'Не указаны дата и время' }]}
+							rules={[{ required: true, message: 'Не выбраны дата и время' }]}
 						>
 							<DatePicker
 								format={'DD.MM.YYYY, h:mm'}
 								showTime={{
 									minuteStep: 15,
 									disabledHours: () => {
-										return [0, 1, 2, 3, 4, 5, 6, 7, 20, 21, 22, 23]
+										return [0, 1, 2, 3, 4, 5, 6, 7, 21, 22, 23]
 									},
 									hideDisabledOptions: true
 								}}
@@ -252,10 +254,10 @@ export const SupervisorInterviewCreate = () => {
 							name={'format'}
 							label={
 								<label className="opacity-[80%] text-black text-[18px]/[18px] font-content-font font-normal">
-									Формат
+									Формат собеседования
 								</label>
 							}
-							rules={[{ required: true, message: 'Не указан формат' }]}
+							rules={[{ required: true, message: 'Не выбран формат собеседования' }]}
 						>
 							<Select
 								placeholder="-"
@@ -273,7 +275,10 @@ export const SupervisorInterviewCreate = () => {
 								Адрес и дополнительная информация
 							</label>
 						}
-						rules={[{ required: true, message: 'Адрес не указан' }]}
+						rules={[
+							{ required: true, message: 'Адрес не указан' },
+							{ max: 1000, message: 'Количество символов было превышено'}
+						]}
 					>
 						<TextArea
 							placeholder="Ввести текст"

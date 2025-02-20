@@ -794,7 +794,16 @@
 	"addData" : "Fill in the details",
 	"credit" : "Сredit",
 	"difcredit" : "Difcredit",
-	"kindControl": "Type of intermediate control"
+	"kindControl": "Type of intermediate control",
+	"job": "Job",
+	"rating": "Rating",
+	"friendliness": "Friendliness",
+	"knowledge": "Knowledge",
+	"vid" : "Appearance and demeanor",
+	"punkt": "Punctuality",
+	"allGolos" :"Total",
+	"golos": "votes",
+	"dataSend": "Data send"
 	  
 	  
 	  

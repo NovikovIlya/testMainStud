@@ -120,7 +120,7 @@ export const AssessmentTeachers = () => {
                                             <p className={`text-black 
                                     text-base 
                                     font-bold`}>
-                                                Должность:
+                                                {t('job')}:
                                             </p>
                                             <p className={`max-w-sm 
                                     min-w-[384px]`}>

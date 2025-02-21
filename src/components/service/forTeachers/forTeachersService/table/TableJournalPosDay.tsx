@@ -95,14 +95,14 @@ const TableJournalPosDay = ({dataSource, setDataSource}:any) => {
         fixed: 'left',
     },
     {
-      title: 'ФИО',
+      title: t('fioStudent'),
       dataIndex: 'name',
       width: '20%',
       fixed: 'left',
     },
    
     {
-      title: 'Учет посещения',
+      title: t('ychet'),
       dataIndex: 'october',
       editable: true,
       width: '15%',
@@ -175,6 +175,7 @@ const TableJournalPosDay = ({dataSource, setDataSource}:any) => {
         bordered
         dataSource={dataSource}
         columns={columns as ColumnTypes}
+        locale={{ emptyText: t('noData') }}
       
       />
       <Button className='mt-8 mb-8 rounded-xl' type='primary'>{t('Save')}</Button>

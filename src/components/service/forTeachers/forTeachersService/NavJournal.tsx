@@ -17,17 +17,17 @@ const NavJournal = () => {
 		<div className="px-[80px]">
 			{semestrForm ? (
 				<>
-					<InfoCard text="Перед работой со вкладкой «Журнал посещений» необходимо зайти во вкладку «Расписание» и проверить правильность занесения Вашим деканатом расписания Ваших занятий." />
+					<InfoCard text={t('textLessonLog')} />
 					<Title className="mt-8" level={2}>
 						{t('journalPos')}
 					</Title>
 					<Tabs defaultActiveKey="1" className="mt-6">
-						<Tabs.TabPane tab={'Заполнение по дням'} key={1}>
+						<Tabs.TabPane tab={t('days')} key={1}>
 							<>
 								<JournalPosDay />
 							</>
 						</Tabs.TabPane>
-						<Tabs.TabPane tab={'Заполнение на семестр'} key={2}>
+						<Tabs.TabPane tab={t('sem')} key={2}>
 							<>
 								<JournalPosElem />
 							</>

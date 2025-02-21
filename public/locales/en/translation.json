@@ -803,7 +803,16 @@
 	"punkt": "Punctuality",
 	"allGolos" :"Total",
 	"golos": "votes",
-	"dataSend": "Data send"
+	"dataSend": "Data send",
+	"textLessonLog": "Before working with the 'Attendance Log' tab, you must go to the 'Schedule' tab and check that your dean's office has entered your class schedule correctly.",
+	"days": "Filling by days",
+	"sem": "Filling by semesters",
+	"textLessonLog2": "To display the list of disciplines, select the required date in the calendar: (filling options: n - was not, b - was sick)",
+	"ychet":"Attendance tracking",
+	"bringShortLink" : "Get a short link",
+	"clear" : "Clear list",
+	"historyClean": "History clean",
+	"historyText": "Shorten links with our service"
 	  
 	  
 	  

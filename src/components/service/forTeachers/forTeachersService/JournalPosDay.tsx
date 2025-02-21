@@ -3,6 +3,10 @@ import React, { useState } from 'react'
 import ru_RU from 'antd/locale/ru_RU';
 import Title from 'antd/es/typography/Title';
 import TableJournalPosDay from './table/TableJournalPosDay';
+import { t } from 'i18next';
+import i18n from '../../../../18n';
+import en_US from 'antd/locale/en_US';
+import JournalPosTable from './table/JournalPosTable';
 
 const { Text, Link } = Typography
 
@@ -16,17 +20,14 @@ const JournalPosDay = () => {
 	return (
 		<div>
             <Space direction="vertical">
-			    <Text>Для отображения списка дисциплин выберите необходимую дату в календаре: (варианты заполнения: н — не был, б — болел)</Text>
-                <ConfigProvider locale={ru_RU}>
-		    	    <DatePicker onChange={onChange} format="DD.MM.YYYY" />
+			    <Text>{t('textLessonLog2')}</Text>
+                <ConfigProvider locale={i18n.language==='ru'?ru_RU:en_US}>
+		    	    <DatePicker   onChange={onChange} format="DD.MM.YYYY" />
                 </ConfigProvider>
 
-                <Title className='mt-8' level={4}>Группа 6-409</Title>
-                <Text>08:30 - 10:00 - Компьютерные</Text>
-                <TableJournalPosDay dataSource={dataSource} setDataSource={setDataSource}/>
+             
+				<JournalPosTable dataSource={dataSource} setDataSource={setDataSource}/>
             </Space>
-
-
 		</div>
 	)
 }

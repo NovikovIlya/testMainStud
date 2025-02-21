@@ -48,15 +48,6 @@ const Brs = () => {
 		setDataSource([]); 
 	}, [semestrForm]);
 
-	const handleYearChange = () => {
-		form2.resetFields(['group'])
-	}
-	console.log('isErrorSave',isErrorSave)
-	// if(isErrorSave){
-	// 	// @ts-ignore
-	// 	message.info(errorSave?.data);
- 	// 	// dispatch(logOut())
-	//  }
 	useEffect(() => {
 		if (isErrorSave && !errorDisplayed) {
 		 // @ts-ignore
@@ -64,6 +55,10 @@ const Brs = () => {
 		  setErrorDisplayed(true);
 		}
 	  }, [isErrorSave, errorDisplayed, errorSave]);
+
+	const handleYearChange = () => {
+		form2.resetFields(['group'])
+	}
 
 	const onFinish = () => {
 		const filteredData = dataSource
@@ -84,10 +79,6 @@ const Brs = () => {
 		})
 		dispatch(setIsEditTableScheduleTeacher(false))
 		setErrorDisplayed(false);
-	}
-
-	if(dataSave) {
-		console.log('dataSave',dataSave);
 	}
 
 	if(isFetchingSubject){

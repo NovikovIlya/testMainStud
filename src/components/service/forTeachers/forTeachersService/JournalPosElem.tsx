@@ -52,7 +52,7 @@ const JournalPosElem = () => {
 					<Col span={24}>
 						<Form.Item
 							name="disciline"
-							label={t('discipline')}
+							label='Предмет/Группа'
 							labelAlign="left"
 							labelCol={{ span: 4 }} // Фиксированная ширина лейбла
 							wrapperCol={{ span: 18 }} // Оставшаяся ширина для инпута

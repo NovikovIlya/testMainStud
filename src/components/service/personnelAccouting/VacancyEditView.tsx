@@ -49,7 +49,7 @@ export const VacancyEditView = () => {
 	const { currentVacancy } = useAppSelector(state => state.currentVacancy)
 
 	const { data: categories = [] } = useGetCategoriesQuery()
-	const [categoryTitle, setCategoryTitle] = useState<string>(currentVacancy?.acf.category as string)
+	const [categoryTitle, setCategoryTitle] = useState<string>(data?.acf.category as string)
 	const { data: directions = [] } = useGetDirectionsQuery(data?.acf.category as string)
 	const { data: subdivisions = [] } = useGetSubdivisionsQuery(data?.acf.category as string)
 
@@ -79,6 +79,7 @@ export const VacancyEditView = () => {
 		setCategory(data?.acf.category)
 		setDirection(data?.acf.direction)
 		setSubdivision(data?.acf.subdivision)
+		setCategoryTitle(data?.acf.category)
 	}, [data])
 
 	const [responsibilities, setResponsibilities] = useState<string | undefined>(
@@ -140,6 +141,8 @@ export const VacancyEditView = () => {
 	const [resultModalText, setResultModalText] = useState<string>('')
 
 	const [editForm] = Form.useForm()
+	console.log(categories)
+	console.log(categoryTitle)
 
 	if (isLoading) {
 		return (
@@ -421,7 +424,7 @@ export const VacancyEditView = () => {
 								name={'direction'}
 								label={
 									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
-										{categories.find(cat => cat.title === categoryTitle)?.direction ? 'Профобласть' : 'Подразделение'}
+										{categories.find(cat => cat.title === categoryTitle)?.direction ? "Подразделение" : "Профобласть"}
 									</label>
 								}
 								rules={[{ required: true, message: 'Не указана подкатегория' }]}
@@ -492,7 +495,7 @@ export const VacancyEditView = () => {
 							</div>
 							<div className="flex flex-col gap-[16px]">
 								<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-									{direction === "" ? "Подразделение" : "Профобласть"}
+									{direction ===  "false" ? "Подразделение" : "Профобласть"}
 								</p>
 								<p className="font-content-font font-normal text-black text-[18px]/[21px]">
 									{direction === "" ? subdivision : direction}

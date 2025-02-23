@@ -124,7 +124,7 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 					<div
 						className="cursor-pointer"
 						onClick={() => {
-							getVacancy(currentVacancyId)
+							getVacancy(currentVacancyId) /// TODO currentVacancyId умирает после f5, нужно либо брать запросом, либо закидывать в url
 								.unwrap()
 								.then(result => {
 									dispatch(setCurrentVacancy(result))

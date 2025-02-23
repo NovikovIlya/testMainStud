@@ -16,8 +16,8 @@ import {
 	useRequestUpdateVacancyMutation
 } from '../../../store/api/serviceApi'
 import { useAlert } from '../../../utils/Alert/AlertMessage'
+import styles from '../../../utils/deleteOverwriteAntButton.module.css'
 import ArrowIcon from '../jobSeeker/ArrowIcon'
-import styles from "../../../utils/deleteOverwriteAntButton.module.css";
 
 export const VacancyEditView = () => {
 	const [getVacancy, { data, isLoading, error }] = useLazyGetVacancyViewQuery()
@@ -57,8 +57,8 @@ export const VacancyEditView = () => {
 
 	const navigate = useNavigate()
 	const [requestUpdate] = useRequestUpdateVacancyMutation()
-	const [editVacancy, { isLoading : editVacancyLoading }] = useEditVacancyAsPerDepartmentMutation()
-	const [deleteVacancy, { isLoading : deleteVacancyLoading }] = useDeleteVacancyAsPerDepartmentMutation()
+	const [editVacancy, { isLoading: editVacancyLoading }] = useEditVacancyAsPerDepartmentMutation()
+	const [deleteVacancy, { isLoading: deleteVacancyLoading }] = useDeleteVacancyAsPerDepartmentMutation()
 
 	const [isEdit, setIsEdit] = useState<boolean>(false)
 	const [isSendRequestButtonActivated, setIsSendRequestButtonActivated] = useState<boolean>(false)
@@ -71,7 +71,7 @@ export const VacancyEditView = () => {
 	const [direction, setDirection] = useState<string | undefined>(data?.acf.direction)
 	const [subdivision, setSubdivision] = useState<string | undefined>(data?.acf.subdivision)
 
-	useEffect(()=>{
+	useEffect(() => {
 		setPost(data?.title.rendered)
 		setExperience(data?.acf.experience)
 		setEmployment(data?.acf.employment)
@@ -129,7 +129,7 @@ export const VacancyEditView = () => {
 			.replace(/<\/li>/g, '')
 	)
 
-	useEffect(()=>{
+	useEffect(() => {
 		setResponsibilities(data?.acf.responsibilities)
 		setSkills(data?.acf.skills)
 		setConditions(data?.acf.conditions)
@@ -258,7 +258,7 @@ export const VacancyEditView = () => {
 						<ArrowIcon />
 					</button>
 					<p className="ml-[40px] font-content-font font-normal text-black text-[28px]/[33.6px]">
-						{post}
+						{post !== undefined ? '«' + post + '»' : ''}
 					</p>
 				</div>
 				{isEdit ? (
@@ -424,10 +424,7 @@ export const VacancyEditView = () => {
 							</Form.Item>
 						</div>
 						<Form.Item>
-							<Button
-								type="primary"
-								htmlType="submit"
-							>
+							<Button type="primary" htmlType="submit">
 								Сохранить
 							</Button>
 						</Form.Item>
@@ -473,10 +470,10 @@ export const VacancyEditView = () => {
 							</div>
 							<div className="flex flex-col gap-[16px]">
 								<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-									{direction === "" ? "Подразделение" : "Профобласть"}
+									{direction === '' ? 'Подразделение' : 'Профобласть'}
 								</p>
 								<p className="font-content-font font-normal text-black text-[18px]/[21px]">
-									{direction === "" ? subdivision : direction}
+									{direction === '' ? subdivision : direction}
 								</p>
 							</div>
 						</div>

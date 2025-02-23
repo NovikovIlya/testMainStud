@@ -31,11 +31,11 @@ import { setCurrentVacancyId } from '../../../store/reducers/CurrentVacancyIdSli
 import { setCurrentVacancyName } from '../../../store/reducers/CurrentVacancyNameSlice'
 import { setChatId } from '../../../store/reducers/chatIdSlice'
 import { useAlert } from '../../../utils/Alert/AlertMessage'
+import styles from '../../../utils/deleteOverwriteAntButton.module.css'
 import { NocircleArrowIcon } from '../jobSeeker/NoCircleArrowIcon'
 
 import { ApproveRespondForm } from './ApproveRespondForm'
 import { InviteSeekerForm } from './supervisor/InviteSeekerForm'
-import styles from "../../../utils/deleteOverwriteAntButton.module.css";
 
 export const ReserveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR' }) => {
 	const respondId = useAppSelector(state => state.currentResponce)
@@ -64,7 +64,7 @@ export const ReserveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 	const [getResume] = useLazyGetSeekerResumeFileQuery()
 	const { refetch } = useGetReservedResponcesQuery('все')
 	const [approveRespond] = useApproveReservedRespondMutation()
-	const [deleteRespond, { isLoading : deleteRespondLoading }] = useDeleteReserveRespondMutation()
+	const [deleteRespond, { isLoading: deleteRespondLoading }] = useDeleteReserveRespondMutation()
 
 	const [isRespondSentToSupervisor, setIsRespondSentToSupervisor] = useState<boolean>(
 		res?.status === 'IN_SUPERVISOR_REVIEW'
@@ -411,6 +411,26 @@ export const ReserveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 							</div>
 							<hr />
 							<div className="flex flex-col gap-[24px]">
+								<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">Образование</p>
+								<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
+									{res.educations.map(edu => (
+										<>
+											<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">{edu.endYear}</p>
+											<div className="flex flex-col gap-[8px]">
+												<p className="font-content-font font-bold text-black text-[16px]/[19.2px]">
+													{edu.nameOfInstitute + ', ' + edu.country}
+												</p>
+												<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
+													{edu.speciality === null ? '' : edu.speciality + ', '}
+													{edu.educationLevel}
+												</p>
+											</div>
+										</>
+									))}
+								</div>
+							</div>
+							<hr />
+							<div className="flex flex-col gap-[24px]">
 								<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">Опыт работы</p>
 								{res.respondData.portfolio.workExperiences.length === 0 ? (
 									<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
@@ -456,26 +476,6 @@ export const ReserveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 										</a>
 									</div>
 								)}
-							</div>
-							<hr />
-							<div className="flex flex-col gap-[24px]">
-								<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">Образование</p>
-								<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
-									{res.educations.map(edu => (
-										<>
-											<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">{edu.endYear}</p>
-											<div className="flex flex-col gap-[8px]">
-												<p className="font-content-font font-bold text-black text-[16px]/[19.2px]">
-													{edu.nameOfInstitute + ', ' + edu.country}
-												</p>
-												<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-													{edu.speciality === null ? '' : edu.speciality + ', '}
-													{edu.educationLevel}
-												</p>
-											</div>
-										</>
-									))}
-								</div>
 							</div>
 							<hr />
 							<div className="flex flex-col gap-[24px]">

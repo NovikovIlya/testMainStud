@@ -2,6 +2,7 @@ import React from 'react'
 import TableJournalPosDay from './TableJournalPosDay'
 import { Typography } from 'antd'
 import Title from 'antd/es/typography/Title'
+
 const { Text, Link } = Typography
 
 const JournalPosTable = ({dataSource,setDataSource}:any) => {
@@ -15,5 +16,6 @@ const JournalPosTable = ({dataSource,setDataSource}:any) => {
 		</>
 	)
 }
+
 
 export default JournalPosTable

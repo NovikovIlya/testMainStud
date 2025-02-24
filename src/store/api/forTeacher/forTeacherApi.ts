@@ -99,6 +99,18 @@ export const fotTeacherService = testApiSlice.injectEndpoints({
             providesTags: ['forTeacherSceduleVedomost'],
             keepUnusedDataFor:0,
         }),
+
+
+        getLinkEmpty: builder.query<any, any>({
+            query: ({subjectId,groupId,year,semester,type}) => {
+            return {
+                    url: `/to-teacher/vedomost/vedomost?subjectId=${subjectId}&groupId=${groupId}&year=${year}&semester=${semester}&type=${type}`,
+                    method: 'GET'
+                }
+            },
+            providesTags: ['forTeacherSceduleVedomost'],
+            keepUnusedDataFor:0,
+        }),
        
     })
 })

@@ -5,6 +5,7 @@ import { testApiSlice } from '../testApiSlice'
 
 export const fotTeacherService = testApiSlice.injectEndpoints({
     endpoints: builder => ({
+        // Расписание
         getScheduleForTeacher: builder.query<any, any>({
             query: ({year,semester}) => {
             return {
@@ -15,6 +16,8 @@ export const fotTeacherService = testApiSlice.injectEndpoints({
             providesTags: ['forTeacherScedule'],
             keepUnusedDataFor:0,
         }),
+
+        // БРС
         getBrsForTeacher: builder.query<dataBrs, any>({
             query: ({subjectId,groupId,year,semester}) => {
             return {
@@ -58,6 +61,8 @@ export const fotTeacherService = testApiSlice.injectEndpoints({
             },
             invalidatesTags: ['forTeacherSceduleBrs'],
         }),
+
+        // Ведомости
         saveVedomost: builder.mutation<any, any>({
             query: (body ) => {
             return {
@@ -101,6 +106,7 @@ export const fotTeacherService = testApiSlice.injectEndpoints({
         }),
 
 
+        // Журнал посещения
         getLinkEmpty: builder.query<any, any>({
             query: ({subjectId,groupId,year,semester,type}) => {
             return {

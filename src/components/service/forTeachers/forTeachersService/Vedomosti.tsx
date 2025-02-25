@@ -20,6 +20,7 @@ import { setIsEditTableScheduleTeacher } from '../../../../store/reducers/authSl
 import InfoCard from './InfoCard'
 import TableVedomosti from './table/TableVedomosti'
 import { getCurrentAcademicYear } from '../../../../utils/getCurrentAcademicYear'
+import { Link } from 'react-router-dom'
 
 const Vedomosti = () => {
 	const dispatch = useAppDispatch()
@@ -193,15 +194,20 @@ const Vedomosti = () => {
 						</Row>
 					</div>
 
-					{kindForm ? (
+					{groupeForm && kindForm ? (
 						<div className="animate-fade-in">
 							<Row className="flex gap-2">
-								<Button className="rounded-xl" icon={<PrinterOutlined />}>
+								<a href={data?.emptyPrintForm}  target="_blank">
+								<Button  className="rounded-xl" icon={<PrinterOutlined />}>
+								
 									{t('printJournalEmpty')}
 								</Button>
+								</a>
+								<a href={data?.filledPrintForm}  target="_blank">
 								<Button className="rounded-xl" icon={<PrinterOutlined />}>
 									{t('printJournalFiled')}
 								</Button>
+								</a>
 							</Row>
 
 							<TableVedomosti subj_type={data?.subj_type} is_session={data?.is_session} dataSource={dataSource} setDataSource={setDataSource} />

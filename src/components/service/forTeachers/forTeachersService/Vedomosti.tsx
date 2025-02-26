@@ -1,26 +1,21 @@
 import { PrinterOutlined } from '@ant-design/icons'
-import { Button, Col, Empty, Form, message, Result, Row, Select, Spin } from 'antd'
+import { Button, Col, Empty, Form, Result, Row, Select, Spin } from 'antd'
 import Title from 'antd/es/typography/Title'
 import { t } from 'i18next'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useAppDispatch, useAppSelector } from '../../../../store'
 import {
-	useGetBrsForTeacherQuery,
-	useGetBrsGroupsQuery,
-	useGetBrsSubjectsQuery,
 	useGetVedomostForTeacherQuery,
 	useGetVedomostGroupsQuery,
-	useGetVedomostSubjectsQuery,
-	useSaveBrsMutation,
-	useSaveVedomostMutation
+	useGetVedomostKindQuery,
+	useGetVedomostSubjectsQuery, useSaveVedomostMutation
 } from '../../../../store/api/forTeacher/forTeacherApi'
 import { setIsEditTableScheduleTeacher } from '../../../../store/reducers/authSlice'
 
 import InfoCard from './InfoCard'
 import TableVedomosti from './table/TableVedomosti'
 import { getCurrentAcademicYear } from '../../../../utils/getCurrentAcademicYear'
-import { Link } from 'react-router-dom'
 
 const Vedomosti = () => {
 	const dispatch = useAppDispatch()
@@ -30,9 +25,10 @@ const Vedomosti = () => {
 	const discilineForm = Form.useWatch('disciline', form2)
 	const groupeForm = Form.useWatch('group', form2)
 	const kindForm = Form.useWatch('kind', form2)
-	const { data, isError, error, isFetching } = useGetVedomostForTeacherQuery({ subjectId: discilineForm, groupId: groupeForm,year:yearForm,semester :semestrForm,type:kindForm},{ skip: !discilineForm || !groupeForm || !kindForm})
+	const { data, isFetching } = useGetVedomostForTeacherQuery({ subjectId: discilineForm, groupId: groupeForm,year:yearForm,semester :semestrForm,type:kindForm},{ skip: !discilineForm || !groupeForm || !kindForm})
 	const { data: dataSubjects,isFetching:isFetchingSub } = useGetVedomostSubjectsQuery({year:yearForm,semester :semestrForm},{ skip: !yearForm || !semestrForm })
 	const { data: dataGroups,isFetching:isFetchingGroup } = useGetVedomostGroupsQuery({subjectId:discilineForm,year:yearForm,semester :semestrForm}, { skip: !discilineForm })
+	const { data: dataKind } = useGetVedomostKindQuery({subjectId:discilineForm,year:yearForm,semester :semestrForm,groupId:groupeForm}, { skip: !discilineForm || !groupeForm})
 	const [saveBrs, { data: dataSave, isLoading }] = useSaveVedomostMutation()
 	const [dataSource, setDataSource] = useState<any>([])
 	

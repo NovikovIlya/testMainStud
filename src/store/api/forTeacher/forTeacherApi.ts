@@ -94,6 +94,16 @@ export const fotTeacherService = testApiSlice.injectEndpoints({
             // providesTags: ['forTeacherSceduleVedomost'],
             keepUnusedDataFor:0,
         }),
+        getVedomostKind: builder.query<any, any>({
+            query: ({subjectId,year,semester,groupId} ) => {
+            return {
+                    url: `/to-teacher/vedomost/type?subjectId=${subjectId}&year=${year}&semester=${semester}&groupId=${groupId}`,
+                    method: 'GET'
+                }
+            },
+            // providesTags: ['forTeacherSceduleVedomost'],
+            keepUnusedDataFor:0,
+        }),
         getVedomostForTeacher: builder.query<any, any>({
             query: ({subjectId,groupId,year,semester,type}) => {
             return {
@@ -130,6 +140,7 @@ export const {
     useGetVedomostSubjectsQuery,
     useGetVedomostGroupsQuery,
     useGetVedomostForTeacherQuery,
-    useSaveVedomostMutation
+    useSaveVedomostMutation,
+    useGetVedomostKindQuery
 } = fotTeacherService
 

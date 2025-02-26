@@ -178,11 +178,10 @@ const Vedomosti = () => {
 										disabled={!groupeForm}
 										allowClear
 										options={
-											[
-												{ label: t('exam'), value: 'e' },
-												{ label: t('credit'), value: 'q' },
-												{ label: t('difcredit'), value: 'd' }
-											]
+											dataKind?.typeVedomostList?.map((item: any) => ({
+												label: t(item.subjectTypeName),
+												value: item.subjectType
+											})) || []
 										}
 									/>
 								</Form.Item>
@@ -206,7 +205,7 @@ const Vedomosti = () => {
 								</a>
 							</Row>
 
-							<TableVedomosti subj_type={data?.subj_type} is_session={data?.is_session} dataSource={dataSource} setDataSource={setDataSource} />
+							<TableVedomosti kindForm={kindForm} subj_type={data?.subj_type} is_session={data?.is_session} dataSource={dataSource} setDataSource={setDataSource} />
 							{data?.students?.length === 0 ? <div className='text-red-500 mt-4 w-full justify-center text-center'>Для выбранного вида нет данных, измените вид</div> : ''}
 							<Button disabled={getCurrentAcademicYear().value!==yearForm} htmlType="submit" className="mt-8 mb-8 rounded-xl" type="primary">
 								{t('Save')}

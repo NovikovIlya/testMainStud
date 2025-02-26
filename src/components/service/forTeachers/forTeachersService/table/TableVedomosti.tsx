@@ -1,11 +1,9 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import type { FormInstance, GetRef, InputRef, TableProps } from 'antd';
-import { Button, Form, Input, Popconfirm, Table } from 'antd';
-import { t } from 'i18next';
+import type { FormInstance, InputRef } from 'antd';
+import { Form, Input, Table } from 'antd';
 import { useAppDispatch } from '../../../../../store';
 import { setIsEditTableScheduleTeacher } from '../../../../../store/reducers/authSlice';
-import { ColumnTypes, DataType, EditableCellProps, EditableRowProps } from '../../../../../models/tables';
-import { dataBrs, Student } from '../../../../../models/forTeacher';
+import { DataType, EditableCellProps, EditableRowProps } from '../../../../../models/tables';
 import { truncateString } from '../../../../../utils/truncateString';
 import TextArea from 'antd/es/input/TextArea';
 
@@ -105,9 +103,8 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
 
 
 
-const TableVedomosti = ({dataSource, setDataSource,subj_type,is_session}: any) => {
+const TableVedomosti = ({kindForm,dataSource, setDataSource,subj_type,is_session}: any) => {
   const dispatch = useAppDispatch()
-  console.log('dataSource',dataSource)
 
   const defaultColumns: any = [
     {
@@ -126,7 +123,7 @@ const TableVedomosti = ({dataSource, setDataSource,subj_type,is_session}: any) =
       width: '10%',
     },
     {
-      title: 'Отметка о сдаче экзамена',
+      title: `Отметка о сдаче ${kindForm==='e' ? 'экзамена' : kindForm === 'q' ? 'зачета' : 'дифзачета'}`,
       dataIndex: 'subjectMark',
       editable: true,
       width: '10%',

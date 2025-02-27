@@ -18,8 +18,8 @@ export const Password: FC<IPasswordProps> = ({ error }) => {
 				style={{ marginBottom: 30 }}
 				validateStatus={
 					error !== null &&
-					error.details.length > 0 &&
-					error.details.some(el => el.field === 'password')
+					error?.details?.length > 0 &&
+					error?.details?.some(el => el.field === 'password')
 						? 'error'
 						: undefined
 				}

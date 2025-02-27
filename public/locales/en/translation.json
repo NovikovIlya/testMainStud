@@ -69,7 +69,7 @@
 	"errorName": "Please enter your name!",
 	"errorSurnameName": "Please enter your last name!",
 	"errorMinLength": "The minimum password length is 6",
-	"password": "Password",
+	"password": "Create password",
 	"rememberPassword": "I don't remember the password",
 	"enter": "Login",
 	"loginVia": "Log in via",

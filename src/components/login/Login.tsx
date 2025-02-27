@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { IError } from '../../api/types'
-import logo from '../../assets/images/group.png'
+import logo from '../../assets/images/logoTwo.png'
 import { useLoginMutation } from '../../store/api/authApiSlice'
 import { setCredentials } from '../../store/reducers/authSlice'
 import { BackMainPage } from '../BackMainPage'
@@ -120,9 +120,9 @@ export const Login = () => {
 	}
 
 	return (
-		<div className="flex flex-col items-center min-h-screen">
+		<div className="flex flex-col items-center min-h-screen ">
 			<BackMainPage notAuth={true}/>
-			<div className="flex  flex-row justify-center gap-24 text-base max-xl:gap-4 max-lg:flex-col max-lg:items-center h-full w-full">
+			<div className="flex   justify-center gap-24 text-base max-xl:gap-4 items-center  w-full min-h-screen">
 				<Form
 				    form={form}
 					name="login"
@@ -130,7 +130,7 @@ export const Login = () => {
 					initialValues={{ remember: true }}
 					onFinish={onFinish}
 				>
-					<Title className="mb-[20px] text-start text-2xl font-bold">
+					<Title level={3} className="mb-[20px] text-start text-2xl font-bold">
 						{t('authorization')}
 					</Title>
 					<Inputs error={error!} />

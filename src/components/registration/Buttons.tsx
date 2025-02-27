@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 import { IButtonsProps } from '../../models/registration'
 
 
-export const Buttons: FC<IButtonsProps> = ({ setCheck, check }) => {
+export const Buttons: FC<IButtonsProps> = ({isLoading, setCheck, check }) => {
 	const { t } = useTranslation()
 	const onChangeCheckbox = (e: CheckboxChangeEvent) =>
 		setCheck(e.target.checked)
@@ -19,6 +19,7 @@ export const Buttons: FC<IButtonsProps> = ({ setCheck, check }) => {
 					htmlType="submit"
 					className="!h-12"
 					disabled={!check}
+					loading={isLoading}
 				>
 					{t('register')}
 				</Button>

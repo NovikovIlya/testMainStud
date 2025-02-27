@@ -287,7 +287,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 					</Button> */}
 						</>
 					)}
-					<div className="flex items-center gap-5">
+					<div className={`flex items-center gap-5 hover:scale-105 duration-500`}>
 						{/* бургер для сворачивания */}
 						{/* {location?.pathname !== "/user" ? <Button
 							onClick={setCollapsed}

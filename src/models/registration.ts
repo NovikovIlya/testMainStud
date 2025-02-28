@@ -2,7 +2,8 @@ import { IError } from "../api/types"
 
 export interface IButtonsProps {
 	check: boolean
-	setCheck: (value: boolean) => void
+	setCheck: (value: boolean) => void,
+	isLoading: boolean
 }
 
 export interface IInputsProps {

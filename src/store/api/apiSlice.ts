@@ -5,7 +5,8 @@ import i18next from 'i18next'
 import { logOut, setCredentials } from '../reducers/authSlice'
 
 const baseQuery = fetchBaseQuery({
-	baseUrl: 'https://newlk.kpfu.ru/',
+	// baseUrl: 'https://newlk.kpfu.ru/',
+	baseUrl: 'https://newlk-test.kpfu.ru/',
 	prepareHeaders(headers, { getState }) {
 		const token = (getState() as RootState).auth.accessToken
 		if (token) {
@@ -81,6 +82,7 @@ export const apiSlice = createApi({
 		'role',
 		'Messages',
 		'forTeacherScedule',
-		'forTeacherSceduleBrs'
+		'forTeacherSceduleBrs',
+		'forTeacherSceduleVedomost'
 	]
 })

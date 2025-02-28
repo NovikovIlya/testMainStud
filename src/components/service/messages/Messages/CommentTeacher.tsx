@@ -87,7 +87,7 @@ export const CommentNewTeacher = ({dataOneChatOld, files, gotToBottom ,chatArray
 											<span className="font-bold mr-2">{children}</span>
 											<span className="text-xs text-gray-500 flex gap-2 mt-[2px]">
 												<span>{dayjs(message.dateTime).isSame(dayjs(), 'day')
-														? <div className='text-[8px]'>Сегодня</div>
+														? <div className='text-[8px]'>{t('today')}</div>
 														: new Date(message.dateTime).toLocaleDateString()}</span>
 											</span>
 										</div>

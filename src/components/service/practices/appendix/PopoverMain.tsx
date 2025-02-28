@@ -8,6 +8,7 @@ import { ColorBg, WrapperButton } from '../popover/WrapperButton';
 import { Load } from '../../../../assets/svg/Load';
 import { PrintSvg } from '../../../../assets/svg/PrintSvg';
 import { DeleteRedSvg } from '../../../../assets/svg/DeleteRedSvg';
+import { t } from 'i18next';
 
 
 
@@ -130,7 +131,7 @@ export const PopoverMain = ({recordFull,recordFullAll,setRecordFull,setSelectedF
                 disabled={recordFull!.length === 0}
             >
                 <Load/>
-                <span>Скачать выбранное</span>
+                <span>{t('download')}</span>
             </WrapperButton>
             {/* <WrapperButton
                 color={ColorBg.BLUEF2}

@@ -20,6 +20,7 @@ import { Education } from './Education'
 import { Parent } from './Parent'
 import { ProfessionalSkills } from './ProfessionalSkills'
 import { Work } from './Work'
+import { useLocalStorageState } from 'ahooks'
 
 export const NavAboutMe = () => {
 	const { pathname } = useLocation()
@@ -27,6 +28,7 @@ export const NavAboutMe = () => {
 	const role = useAppSelector(state => state.auth.user?.roles)
 	const [isMenuOpen, setIsMenuOpen] = useState(false)
 	const { t } = useTranslation()
+	const [typeAcc] = useLocalStorageState<any>('typeAcc')
 
 	const handleNavigate = (url: string) => {
 		navigate(url)
@@ -61,10 +63,11 @@ export const NavAboutMe = () => {
 		{
 			id: '/services/aboutMe/parent',
 			icon: <ParentSvg />,
-			name: t('Parents')
+			name: t('Parents'),
+			 condition: typeAcc !== 'EMPL'
 		}
-	]
-
+	].filter(item => item?.condition !== false)
+	console.log('navList',navList)
 	if (!role) return <></>
 	const isStudent = role[0].type === 'STUD'
 
@@ -121,11 +124,11 @@ export const NavAboutMe = () => {
 
 				{/* Основной контент */}
 				<div className="bg-[#F5F8FB] flex w-full">
-					{pathname === navList[0].id && <AboutMe />}
-					{pathname === navList[1].id && <Document />}
-					{pathname === navList[2].id && <Address />}
-					{pathname === navList[3].id && <Education />}
-					{pathname === navList[4].id && <Parent />}
+					{pathname === navList[0]?.id && <AboutMe />}
+					{pathname === navList[1]?.id && <Document />}
+					{pathname === navList[2]?.id && <Address />}
+					{pathname === navList[3]?.id && <Education />}
+					{pathname === navList[4]?.id && <Parent />}
 				</div>
 			</div>
 		</>

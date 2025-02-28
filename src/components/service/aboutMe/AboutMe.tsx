@@ -74,7 +74,7 @@ export const AboutMe = () => {
 		setIsEdit(true)
 	}
 	
-	const isChanged = typeAcc === 'OTHER' ||  (typeAcc === 'ABITUR' && !acceptedData[0])
+	const isChanged = typeAcc === 'OTHER' ||  (typeAcc === 'ABITUR' && !acceptedData )
 
 	if (isLoadingCountry ) return <SkeletonPage />
 
@@ -151,7 +151,7 @@ export const AboutMe = () => {
 					<Typography.Text>{t('birth')}</Typography.Text>
 					{isEdit ? (
 						<div className="bg-white p-2 rounded-md">
-							<Typography.Text>{dayjs(formData.birthDay).format('DD.MM.YYYY') || '-'}</Typography.Text>
+							<Typography.Text>{dayjs(formData.birthDay).isValid() ? dayjs(formData.birthDay).format('DD.MM.YYYY') : '-' }</Typography.Text>
 						</div>
 					) : (
 						<ConfigProvider locale={ruPicker}>
@@ -163,14 +163,7 @@ export const AboutMe = () => {
 								onChange={e =>
 									dispatch(birthDay(!e ? '' : e.format('YYYY-MM-DD')))
 								}
-								value={
-									formData.birthDay
-										? dayjs(
-												formData.birthDay.split('-').reverse().join('.'),
-												'DD.MM.YYYY'
-										  )
-										: null
-								}
+								
 							/>
 						</ConfigProvider>
 					)}
@@ -255,7 +248,7 @@ export const AboutMe = () => {
 							className="border-solid border-bluekfu border-[1px] text-bluekfu !rounded-md"
 							onClick={() => onSubmit()}
 						>
-							Сохранить
+							{t('save')}
 						</Button>
 					)}
 				</Space>

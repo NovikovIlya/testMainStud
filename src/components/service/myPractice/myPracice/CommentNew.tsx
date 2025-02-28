@@ -9,6 +9,7 @@ import avaTeacher from '../../../../assets/images/avaTeacher.png'
 import { useGetAttachmentQuery } from '../../../../store/api/practiceApi/mypractice'
 
 import './myPracticeStyle.scss'
+import { t } from 'i18next'
 
 export const CommentNew = ({ isLoading,dataOneLength,refetch, chat }: any) => {
 	const [name,sendName] = useState(null)
@@ -58,20 +59,20 @@ export const CommentNew = ({ isLoading,dataOneLength,refetch, chat }: any) => {
 			<Spin spinning={isFetching||isLoading}>
 				<Row className="mb-20">
 					<Col xs={24}  md={12}>
-						<Typography.Title level={2}>Комментарии по практике</Typography.Title>
-						<span>Загружайте пакет документов на проверку и получайте обратную связь прямо в окне комментариев </span>
+						<Typography.Title level={2}>{t('CommentsPractice')}</Typography.Title>
+						<span>{t('comment')} </span>
 					</Col>
 					
 				</Row>
 
 				<div className="space-y-4 w-full h-[400px] overflow-y-auto p-10 bg-white rounded-xl">
-					<Button
+					{/* <Button
 						onClick={refetch}
 						className="  absolute right-4 top-[200px]"
 						size="large"
 						shape="circle"
 						icon={<ReloadOutlined />}
-					/>
+					/> */}
 					
 					{chatValid?.map((message: any) => {
 						const isStudent = message.senderType === 'STUDENT'

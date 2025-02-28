@@ -645,13 +645,13 @@ const DropDrag = () => {
 		}
 	}, [])
 
-	useEffect(() => {
-		if (dataModules && Array.isArray(dataModules)) {
-			dataModules?.map((module: any) => {
-				return <TemplateCard title={module.moduleName} info={module.description} href={module.link} />
-			})
-		}
-	}, [dataModules])
+	// useEffect(() => {
+	// 	if (dataModules && Array.isArray(dataModules)) {
+	// 		dataModules?.map((module: any) => {
+	// 			return <TemplateCard title={module.moduleName} info={module.description} href={module.link} />
+	// 		})
+	// 	}
+	// }, [dataModules])
 
 	const onBreakpointChange = (breakpoint: any) => {
 		setCurrentBreakpoint(breakpoint)

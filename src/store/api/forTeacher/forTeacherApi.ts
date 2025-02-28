@@ -117,14 +117,25 @@ export const fotTeacherService = testApiSlice.injectEndpoints({
 
 
         // Журнал посещения
-        getLinkEmpty: builder.query<any, any>({
-            query: ({subjectId,groupId,year,semester,type}) => {
+        getByDate: builder.query<any, any>({
+            query: (date) => {
             return {
-                    url: `/to-teacher/vedomost/vedomost?subjectId=${subjectId}&groupId=${groupId}&year=${year}&semester=${semester}&type=${type}`,
+                    url: `/to-teacher/journal/by-date?date=${date}`,
                     method: 'GET'
                 }
             },
-            providesTags: ['forTeacherSceduleVedomost'],
+            providesTags: ['forTeacherJournalDay'],
+            keepUnusedDataFor:0,
+        }),
+
+        getDisciplineSemester: builder.query<any, any>({
+            query: ({year,semester}) => {
+            return {
+                    url: `/to-teacher/journal/disciplines?year=${year}&semester=${semester}`,
+                    method: 'GET'
+                }
+            },
+            providesTags: ['forTeacherJournalSemester'],
             keepUnusedDataFor:0,
         }),
        
@@ -141,6 +152,8 @@ export const {
     useGetVedomostGroupsQuery,
     useGetVedomostForTeacherQuery,
     useSaveVedomostMutation,
-    useGetVedomostKindQuery
+    useGetVedomostKindQuery,
+    useGetByDateQuery,
+    useGetDisciplineSemesterQuery
 } = fotTeacherService
 

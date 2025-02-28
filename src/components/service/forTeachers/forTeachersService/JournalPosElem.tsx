@@ -6,13 +6,17 @@ import React, { useEffect, useState } from 'react'
 import InfoCard from './InfoCard'
 import TableBrs from './table/TableBrs'
 import TableJournalPos from './table/TableJournalPos'
+import { useGetDisciplineSemesterQuery } from '../../../../store/api/forTeacher/forTeacherApi'
+import { useAppSelector } from '../../../../store'
 
 const JournalPosElem = () => {
 	const initialDay = ''
 	const [form] = Form.useForm()
+	const yearForm = useAppSelector(state => state.forTeacher.yearForm)
+	const semestrForm = useAppSelector(state => state.forTeacher.semestrForm)
 	const discilineForm = Form.useWatch('disciline', form)
 	const groupeForm = Form.useWatch('group', form)
-
+    const {data} = useGetDisciplineSemesterQuery({year:yearForm,semester:semestrForm},{skip:!yearForm || !semestrForm})
 	
 
 	const [dataSource, setDataSource] = useState<any[]>([

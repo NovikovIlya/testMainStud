@@ -9,14 +9,18 @@ import i18n from '../../../../18n'
 
 import JournalPosTable from './table/JournalPosTable'
 import TableJournalPosDay from './table/TableJournalPosDay'
+import { useGetByDateQuery } from '../../../../store/api/forTeacher/forTeacherApi'
 
 const { Text } = Typography
 
 const JournalPosDay = () => {
 	const [dataSource, setDataSource] = useState([])
-
+	const [date, setDate] = useState<any>('')
+	
+	const {data} = useGetByDateQuery(date,{skip:!date})
 	const onChange: DatePickerProps['onChange'] = (date, dateString) => {
 		console.log(date, dateString)
+		setDate(dateString)
 	}
 
 	return (

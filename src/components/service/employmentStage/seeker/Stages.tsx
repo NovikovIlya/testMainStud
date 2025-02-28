@@ -28,6 +28,7 @@ export const Stages = () => {
 	const vacancyId = parseInt(pathname.substring(pathname.substring(0, pathname.lastIndexOf('/')).lastIndexOf('/') + 1))
 
 	const { currentStage } = useAppSelector(state => state.currentEmploymentStage)
+	// TODO обсудить возможность закидывать номер текущего этапа в url	
 	const { docs } = useAppSelector(state => state.employmentSeekerDocs)
 	const { empData } = useAppSelector(state => state.employmentData)
 

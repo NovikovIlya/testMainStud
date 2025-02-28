@@ -249,10 +249,10 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 		<header
 			className={clsx(
 				'shadow z-[1001] flex flex-wrap  h-[80px] fixed flex items-center justify-center w-full',
-				type === 'main' ? 'bg-white' : `bg-blue65A`
+				type === 'main' ? 'bg-white ' : `bg-blue65A`
 			)}
 		>
-			<div className="w-screen flex h-full justify-between px-8 max-sm:px-5">
+			<div className={`w-screen flex h-full justify-between px-8 max-sm:px-5 ${type === 'main' ? 'max-w-[1650px] animate-fade-in' : 'animate-fade-in'} `}>
 				<div className="flex gap-8 max-sm:gap-2 items-center">
 					{user?.roles[0].type === 'ABITUR' || user?.roles[0].type === 'OTHER' ? (
 						''
@@ -383,7 +383,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 								<MessageModuleSvg white={type === 'service'} />
 							</Badge>
 						</div>
-
+						<div className="relative inline-block h-full">
 						<div
 							className={`cursor-pointer mx-3 p-2 h-full flex items-center ${type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'}`}
 							onClick={e => {
@@ -395,6 +395,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						</div>
 						<div className='h-full'>
 							<AccessibilityHelper ref={ref} isOpen={isOpen} lang={i18n.language} />
+						</div>
 						</div>
 					</div>
 					<Select
@@ -425,7 +426,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 							trigger={['click']}
 							className="cursor-pointer h-full  box-border"
 						>
-							<Space className="px-10 max-sm:px-5 max-[455px]:!gap-0 gap-2 w-[228px]">
+							<Space className="px-10 max-sm:px-5 max-[455px]:!gap-0 gap-2 w-[200px] flex justify-end">
 								<PersonSvg white={type === 'service'} />
 								<div className={clsx('h-full max-[455px]:hidden', type === 'service' && 'text-white')}>
 									<div className="font-bold text-sm truncate max-w-[120px]">

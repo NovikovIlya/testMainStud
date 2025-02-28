@@ -1141,9 +1141,9 @@ export const serviceApi = apiSlice.injectEndpoints({
 			}),
 			keepUnusedDataFor: 0
 		}),
-		getAllSupervisorRequests: builder.query<SupervisorRequestType[], void>({
-			query: () => ({
-				url: `http://${emplBaseURL}employment-api/v1/management/vacancy-requests?action=UPDATE`,
+		getAllSupervisorRequests: builder.query<SupervisorRequestType[], string>({
+			query: action => ({
+				url: `http://${emplBaseURL}employment-api/v1/management/vacancy-requests?action=${action}`,
 				method: 'GET'
 			})
 		})

@@ -433,7 +433,7 @@ export const SupervisorUpdateVacancy = () => {
 								<Button
 									onClick={async () => {
 										try {
-											await getAllRequests()
+											await getAllRequests('UPDATE')
 												.unwrap()
 												.then(requests => {
 													let alreadyRequest = requests.find(req => {

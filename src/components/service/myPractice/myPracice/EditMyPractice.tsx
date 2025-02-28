@@ -1,8 +1,278 @@
+// import { VerticalAlignBottomOutlined } from '@ant-design/icons'
+// import { Button, Card, Col, Descriptions, Divider, Form, List, Popover, Row, Skeleton, Space, Spin, Tabs, Typography } from 'antd'
+// import dayjs from 'dayjs'
+// import { useState } from 'react'
+// import { useLocation, useNavigate } from 'react-router-dom'
+
+// import {  useAddReportQuery, useGetOneMyPracticesQuery } from '../../../../store/api/practiceApi/mypractice'
+// import { validateMessages } from '../../../../utils/validateMessage'
+
+// import Diary from './Diary'
+// import Final from './Final'
+// import Plan from './Plan'
+// import { Vector } from '../../../../assets/svg/Vector'
+// import {Znak} from '../../../../assets/svg/Znak'
+
+// export const EditMyPractice = () => {
+// 	const [form] = Form.useForm<any>()
+// 	const path = useLocation()
+// 	const id = path.pathname.split('/').at(-1)!
+// 	const nav = useNavigate()
+// 	const [showFinal, setShowFinal] = useState(false)
+// 	const [showFinalTwo, setShowFinalTwo] = useState(false)
+// 	const { data: dataOne, isFetching, isSuccess,refetch } = useGetOneMyPracticesQuery(id)
+// 	const {data,isLoading,isSuccess:isSuccessReport}  = useAddReportQuery(id,{skip:!id})
+	
+// 	const formatedDate = () => {
+// 		if (isSuccess) {
+// 			const [start, end] = dataOne?.practicePeriod?.split(' - ')
+// 			const formattedStart = dayjs(start).format('DD.MM.YYYY')
+// 			const formattedEnd = dayjs(end).format('DD.MM.YYYY')
+// 			return [formattedStart, formattedEnd]
+// 		}
+// 		return []
+// 	}
+
+// 	const items: any = [
+// 		{
+// 			key: '1',
+// 			label: 'Где будет проходить практика',
+// 			children: dataOne?.place ? dataOne.place : 'Не указано'
+// 		},
+// 		{
+// 			key: '2',
+// 			label: 'Место прохождение практики',
+// 			children: dataOne?.profilePlace !=='На кафедре КФУ' ? dataOne?.profilePlace : dataOne?.department,
+// 			className: dataOne?.profilePlace !== 'В структурном подразделении' ? '' : 'hide'
+// 		},
+// 		{
+// 			key: '3',
+// 			label: 'Шифр',
+// 			children: dataOne?.specialty ? dataOne.specialty : 'Не указано'
+// 		},
+// 		{
+// 			key: '4',
+// 			label: 'Профиль',
+// 			children: dataOne?.profile ? dataOne.profile : 'Не указано'
+// 		},
+// 		{
+// 			key: '5',
+// 			label: 'Уровень образования',
+// 			children: dataOne?.educationLevel ? dataOne.educationLevel : 'Не указано'
+// 		},
+// 		{
+// 			key: '6',
+// 			label: 'Курс',
+// 			children: dataOne?.course ? dataOne.course : 'Не указано'
+// 		},
+// 		{
+// 			key: '7',
+// 			label: 'Группа',
+// 			children: dataOne?.group ? dataOne.group : 'Не указано'
+// 		},
+
+// 		{
+// 			key: '9',
+// 			label: 'Тип практики',
+// 			children: dataOne?.practiceType ? dataOne.practiceType : 'Не указано'
+// 		},
+// 		{
+// 			key: '10',
+// 			label: 'Вид практики',
+// 			children: dataOne?.practiceKind ? dataOne.practiceKind : 'Не указано'
+// 		},
+// 		{
+// 			key: '11',
+// 			label: 'Период практики',
+// 			children: dataOne?.practicePeriod ? `${formatedDate()[0]} - ${formatedDate()[1]}` : 'Не указано'
+// 		},
+// 		{
+// 			key: '12',
+// 			label: 'Учебный год',
+// 			children: dataOne?.academicYear ? dataOne.academicYear : 'Не указано'
+// 		},
+// 		{
+// 			key: '13',
+// 			label: 'ФИО руководителя практики',
+// 			children: dataOne?.departmentDirector ? dataOne.departmentDirector : 'Не указано'
+// 		},
+// 		{
+// 			key: '14',
+// 			label: 'ФИО руководителя от организации',
+// 			children: dataOne?.contractDepartmentDirector ? dataOne.contractDepartmentDirector : 'Не указано'
+// 		},
+// 		{
+// 			key: '15',
+// 			label: 'Юридический адресс',
+// 			children: dataOne?.contractAddress ? dataOne.contractAddress : 'Не указано'
+// 		}
+// 	]
+
+// 	const onChange = (key: string) => {
+// 		console.log(key)
+// 	}
+
+// 	const download = async ()=>{
+// 		if(data){
+// 			const link = document.createElement('a')
+// 			link.href = data
+// 			link.setAttribute('download', `Отчет.docx`)
+// 			document.body.appendChild(link)
+// 			link.click()
+// 		}
+// 	}
+
+// 	const handleSave = ()=>{
+// 		download()
+// 	}
+	
+
+// 	return (
+// 		<Spin spinning={isFetching}>
+// 		<section className="container animate-fade-in">
+// 			<Space size={10} align="center">
+// 				<Button
+// 					size="large"
+// 					style={{width:'48px'}}
+// 					className="mt-1 mr-6 w-[48px] rounded-full border border-black"
+// 					icon={<Vector />}
+// 					type="text"
+// 					onClick={() => {
+// 						nav('/services/mypractices/')
+// 					}}
+// 				/>
+// 				<span className="text-[10px] lg:text-[28px] font-normal">
+// 					{isFetching ? <><Skeleton.Input style={{width:'300px'}}  active   /></> : <>Учебная практика по специальности "{dataOne?.specialty}" с {formatedDate()[0]} по {formatedDate()[1]}{' '}</>}
+// 				</span>
+// 			</Space>
+// 			<Tabs defaultActiveKey="1" onChange={onChange} className="mt-6">
+// 				<Tabs.TabPane tab={'Основная информация'} key={1}>
+// 						<>
+// 							<Row className="mb-4 mt-9">
+// 								<Col xs={24} sm={12} span={12} className="pr-[8px] ">
+// 									<Card title="Оценка" bordered={false} className="mb-4">
+// 										<Row>
+// 											<Descriptions.Item className="block sm:flex" span={3} label={'1'} key={'1'}>
+// 												<div className="">{dataOne?.grade ? dataOne.grade : 'Нет оценки'}</div>
+// 											</Descriptions.Item>
+// 										</Row>
+// 									</Card>
+// 									<Card title="Основные сведения" bordered={false}>
+// 										<Row>
+// 											<Descriptions className="">
+// 												{items.map((item: any) => (
+// 													<Descriptions.Item className="" span={3} label={item.label} key={item.key}>
+// 														<div className="">{item.children}</div>
+// 													</Descriptions.Item>
+// 												))}
+// 											</Descriptions>
+// 										</Row>
+// 									</Card>
+// 								</Col>
+// 							</Row>
+// 						</>
+// 				</Tabs.TabPane>
+// 				<Tabs.TabPane tab={'Заполнение документов'} key={2}>
+// 					<Form<any> validateMessages={validateMessages} form={form} layout={'vertical'} className="mb-8">
+// 						<Spin style={{width:'50%',display:'flex',flexWrap:'wrap'}} className='w-[50%] flex !flex-wrap' spinning={isLoading} >
+// 						<Row className='mt-9'>
+// 							<Col>
+// 								<Typography.Title level={2}>Отчет</Typography.Title>
+// 							</Col>
+// 						</Row>
+// 						<Row gutter={[16, 16]} className={'mt-4'}>
+// 							<Col xs={24} sm={24} md={24} lg={24} xl={24}>
+// 								<List
+// 									header={<div>Код и наименование компетенции:</div>}
+// 									style={{
+// 										overflow: 'auto',
+// 										maxHeight: 300
+// 									}}
+// 									bordered
+// 									dataSource={dataOne?.competences}
+// 									renderItem={(item: any, index: number) => (
+// 										<List.Item
+// 											style={{
+// 												display: 'flex'
+// 											}}
+// 										>
+// 											<div className="flex items-center">
+// 												<div className=" p-3">{index + 1}</div>
+// 												<div className="ml-2">{item}</div>
+// 											</div>
+// 										</List.Item>
+// 									)}
+// 								/>
+// 								<Row className='mt-4'>
+// 									<Col xs={24} md={24} span={24}>
+// 										<Card title={<div className='flex gap-3 items-center'><Znak />Обратите внимание</div>} bordered={false}>
+// 										<ul className='pl-5 pr-5 '>
+// 											<li className='mb-3'>Отчет должен заполняться самостоятельно. В модуле “Практики студентов” формируется только титульный лист отчета.</li>
+											
+// 										</ul>
+// 										</Card>
+// 									</Col>
+// 								</Row>
+// 								<Row gutter={[16, 16]} className="my-8">
+// 									<Col xs={24} sm={24} md={18} lg={8} xl={6}>
+// 										<Space className="w-full">
+// 											<Button
+// 												className="!rounded-full text-[10px] sm:text-base"
+// 												size="large"
+// 												onClick={handleSave}
+// 											>
+// 												<VerticalAlignBottomOutlined />	Скачать отчет
+// 											</Button>
+// 										</Space>
+// 									</Col>
+// 								</Row>
+// 								<Divider />
+// 							</Col>
+// 						</Row>
+// 						</Spin>
+// 					</Form>
+					
+
+// 					<Plan id={id} dataTasks={dataOne?.tasks} setShowFinal={setShowFinal} dataOnePlace={dataOne?.place} />
+// 					<Diary id={id} dataDiary={dataOne?.diary} setShowFinalTwo={setShowFinalTwo} />
+// 				</Tabs.TabPane>
+// 				<Tabs.TabPane
+// 					tab={<Popover content={!showFinal || !showFinalTwo ? null : null}>Отправка документов</Popover>}
+// 					key={3}
+// 				>
+// 					<Row gutter={16} className="mt-9 mb-10">
+// 						<Col sm={24} md={12} lg={12}>
+// 							<Card
+// 								title={
+// 									<div className="flex gap-3 items-center">
+// 										<Znak />
+// 										Обратите внимание:
+// 									</div>
+// 								}
+// 								bordered={false}
+// 							>
+// 								<div className="mb-3">Ваш пакет документов должен содержать:</div>
+// 								<ul className="ml-6">
+// 									<li>Отчет по практике</li>
+// 									{dataOne?.place === 'На кафедре КФУ' ? <li>Индивидуальные задания</li> : <li>Путевка</li>}
+// 									<li>Дневник практиканта (по требованию кафедры)</li>
+// 								</ul>
+// 							</Card>
+// 						</Col>
+// 					</Row>
+// 					<Final dataOneLength={dataOne?.chat?.length} isSuccessFull={isSuccess} refetch={refetch} id={id} dataOnePlace={dataOne?.place} chat={dataOne?.chat}/>
+// 				</Tabs.TabPane>
+// 			</Tabs>
+// 		</section>
+// 		</Spin>
+// 	)
+// }
 import { VerticalAlignBottomOutlined } from '@ant-design/icons'
 import { Button, Card, Col, Descriptions, Divider, Form, List, Popover, Row, Skeleton, Space, Spin, Tabs, Typography } from 'antd'
 import dayjs from 'dayjs'
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next';
 
 import {  useAddReportQuery, useGetOneMyPracticesQuery } from '../../../../store/api/practiceApi/mypractice'
 import { validateMessages } from '../../../../utils/validateMessage'
@@ -14,6 +284,7 @@ import { Vector } from '../../../../assets/svg/Vector'
 import {Znak} from '../../../../assets/svg/Znak'
 
 export const EditMyPractice = () => {
+	const { t } = useTranslation();
 	const [form] = Form.useForm<any>()
 	const path = useLocation()
 	const id = path.pathname.split('/').at(-1)!
@@ -36,75 +307,75 @@ export const EditMyPractice = () => {
 	const items: any = [
 		{
 			key: '1',
-			label: 'Где будет проходить практика',
-			children: dataOne?.place ? dataOne.place : 'Не указано'
+			label: t('practiceLocation'),
+			children: dataOne?.place ? dataOne.place : t('notSpecified')
 		},
 		{
 			key: '2',
-			label: 'Место прохождение практики',
+			label: t('practicePlace'),
 			children: dataOne?.profilePlace !=='На кафедре КФУ' ? dataOne?.profilePlace : dataOne?.department,
 			className: dataOne?.profilePlace !== 'В структурном подразделении' ? '' : 'hide'
 		},
 		{
 			key: '3',
-			label: 'Шифр',
-			children: dataOne?.specialty ? dataOne.specialty : 'Не указано'
+			label: t('cipher'),
+			children: dataOne?.specialty ? dataOne.specialty : t('notSpecified')
 		},
 		{
 			key: '4',
-			label: 'Профиль',
-			children: dataOne?.profile ? dataOne.profile : 'Не указано'
+			label: t('profile'),
+			children: dataOne?.profile ? dataOne.profile : t('notSpecified')
 		},
 		{
 			key: '5',
-			label: 'Уровень образования',
-			children: dataOne?.educationLevel ? dataOne.educationLevel : 'Не указано'
+			label: t('educationLevel'),
+			children: dataOne?.educationLevel ? dataOne.educationLevel : t('notSpecified')
 		},
 		{
 			key: '6',
-			label: 'Курс',
-			children: dataOne?.course ? dataOne.course : 'Не указано'
+			label: t('course'),
+			children: dataOne?.course ? dataOne.course : t('notSpecified')
 		},
 		{
 			key: '7',
-			label: 'Группа',
-			children: dataOne?.group ? dataOne.group : 'Не указано'
+			label: t('group'),
+			children: dataOne?.group ? dataOne.group : t('notSpecified')
 		},
 
 		{
 			key: '9',
-			label: 'Тип практики',
-			children: dataOne?.practiceType ? dataOne.practiceType : 'Не указано'
+			label: t('practiceType'),
+			children: dataOne?.practiceType ? dataOne.practiceType : t('notSpecified')
 		},
 		{
 			key: '10',
-			label: 'Вид практики',
-			children: dataOne?.practiceKind ? dataOne.practiceKind : 'Не указано'
+			label: t('practiceKind'),
+			children: dataOne?.practiceKind ? dataOne.practiceKind : t('notSpecified')
 		},
 		{
 			key: '11',
-			label: 'Период практики',
-			children: dataOne?.practicePeriod ? `${formatedDate()[0]} - ${formatedDate()[1]}` : 'Не указано'
+			label: t('practicePeriod'),
+			children: dataOne?.practicePeriod ? `${formatedDate()[0]} - ${formatedDate()[1]}` : t('notSpecified')
 		},
 		{
 			key: '12',
-			label: 'Учебный год',
-			children: dataOne?.academicYear ? dataOne.academicYear : 'Не указано'
+			label: t('academicYear'),
+			children: dataOne?.academicYear ? dataOne.academicYear : t('notSpecified')
 		},
 		{
 			key: '13',
-			label: 'ФИО руководителя практики',
-			children: dataOne?.departmentDirector ? dataOne.departmentDirector : 'Не указано'
+			label: t('departmentDirector'),
+			children: dataOne?.departmentDirector ? dataOne.departmentDirector : t('notSpecified')
 		},
 		{
 			key: '14',
-			label: 'ФИО руководителя от организации',
-			children: dataOne?.contractDepartmentDirector ? dataOne.contractDepartmentDirector : 'Не указано'
+			label: t('contractDepartmentDirector'),
+			children: dataOne?.contractDepartmentDirector ? dataOne.contractDepartmentDirector : t('notSpecified')
 		},
 		{
 			key: '15',
-			label: 'Юридический адресс',
-			children: dataOne?.contractAddress ? dataOne.contractAddress : 'Не указано'
+			label: t('legalAddress'),
+			children: dataOne?.contractAddress ? dataOne.contractAddress : t('notSpecified')
 		}
 	]
 
@@ -116,7 +387,7 @@ export const EditMyPractice = () => {
 		if(data){
 			const link = document.createElement('a')
 			link.href = data
-			link.setAttribute('download', `Отчет.docx`)
+			link.setAttribute('download', `${t('reportFile')}.docx`)
 			document.body.appendChild(link)
 			link.click()
 		}
@@ -125,7 +396,6 @@ export const EditMyPractice = () => {
 	const handleSave = ()=>{
 		download()
 	}
-	
 
 	return (
 		<Spin spinning={isFetching}>
@@ -142,22 +412,22 @@ export const EditMyPractice = () => {
 					}}
 				/>
 				<span className="text-[10px] lg:text-[28px] font-normal">
-					{isFetching ? <><Skeleton.Input style={{width:'300px'}}  active   /></> : <>Учебная практика по специальности "{dataOne?.specialty}" с {formatedDate()[0]} по {formatedDate()[1]}{' '}</>}
+					{isFetching ? <><Skeleton.Input style={{width:'300px'}}  active   /></> : <>{t('practiceSpecialty', { specialty: dataOne?.specialty, startDate: formatedDate()[0], endDate: formatedDate()[1] })}{' '}</>}
 				</span>
 			</Space>
 			<Tabs defaultActiveKey="1" onChange={onChange} className="mt-6">
-				<Tabs.TabPane tab={'Основная информация'} key={1}>
+				<Tabs.TabPane tab={t('basicInfo')} key={1}>
 						<>
 							<Row className="mb-4 mt-9">
 								<Col xs={24} sm={12} span={12} className="pr-[8px] ">
-									<Card title="Оценка" bordered={false} className="mb-4">
+									<Card title={t('grade')} bordered={false} className="mb-4">
 										<Row>
 											<Descriptions.Item className="block sm:flex" span={3} label={'1'} key={'1'}>
-												<div className="">{dataOne?.grade ? dataOne.grade : 'Нет оценки'}</div>
+												<div className="">{dataOne?.grade ? dataOne.grade : t('noGrade')}</div>
 											</Descriptions.Item>
 										</Row>
 									</Card>
-									<Card title="Основные сведения" bordered={false}>
+									<Card title={t('generalInfo')} bordered={false}>
 										<Row>
 											<Descriptions className="">
 												{items.map((item: any) => (
@@ -172,18 +442,18 @@ export const EditMyPractice = () => {
 							</Row>
 						</>
 				</Tabs.TabPane>
-				<Tabs.TabPane tab={'Заполнение документов'} key={2}>
+				<Tabs.TabPane tab={t('documentFilling')} key={2}>
 					<Form<any> validateMessages={validateMessages} form={form} layout={'vertical'} className="mb-8">
 						<Spin style={{width:'50%',display:'flex',flexWrap:'wrap'}} className='w-[50%] flex !flex-wrap' spinning={isLoading} >
 						<Row className='mt-9'>
 							<Col>
-								<Typography.Title level={2}>Отчет</Typography.Title>
+								<Typography.Title level={2}>{t('report')}</Typography.Title>
 							</Col>
 						</Row>
 						<Row gutter={[16, 16]} className={'mt-4'}>
 							<Col xs={24} sm={24} md={24} lg={24} xl={24}>
 								<List
-									header={<div>Код и наименование компетенции:</div>}
+									header={<div>{t('competenceCode')}</div>}
 									style={{
 										overflow: 'auto',
 										maxHeight: 300
@@ -205,9 +475,9 @@ export const EditMyPractice = () => {
 								/>
 								<Row className='mt-4'>
 									<Col xs={24} md={24} span={24}>
-										<Card title={<div className='flex gap-3 items-center'><Znak />Обратите внимание</div>} bordered={false}>
+										<Card title={<div className='flex gap-3 items-center'><Znak />{t('attention')}</div>} bordered={false}>
 										<ul className='pl-5 pr-5 '>
-											<li className='mb-3'>Отчет должен заполняться самостоятельно. В модуле “Практики студентов” формируется только титульный лист отчета.</li>
+											<li className='mb-3'>{t('reportInfo')}</li>
 											
 										</ul>
 										</Card>
@@ -221,7 +491,7 @@ export const EditMyPractice = () => {
 												size="large"
 												onClick={handleSave}
 											>
-												<VerticalAlignBottomOutlined />	Скачать отчет
+												<VerticalAlignBottomOutlined />	{t('downloadReport')}
 											</Button>
 										</Space>
 									</Col>
@@ -237,7 +507,7 @@ export const EditMyPractice = () => {
 					<Diary id={id} dataDiary={dataOne?.diary} setShowFinalTwo={setShowFinalTwo} />
 				</Tabs.TabPane>
 				<Tabs.TabPane
-					tab={<Popover content={!showFinal || !showFinalTwo ? null : null}>Отправка документов</Popover>}
+					tab={<Popover content={!showFinal || !showFinalTwo ? null : null}>{t('documentSending')}</Popover>}
 					key={3}
 				>
 					<Row gutter={16} className="mt-9 mb-10">
@@ -246,16 +516,16 @@ export const EditMyPractice = () => {
 								title={
 									<div className="flex gap-3 items-center">
 										<Znak />
-										Обратите внимание:
+										{t('attention')}:
 									</div>
 								}
 								bordered={false}
 							>
-								<div className="mb-3">Ваш пакет документов должен содержать:</div>
+								<div className="mb-3">{t('documentPackage')}</div>
 								<ul className="ml-6">
-									<li>Отчет по практике</li>
-									{dataOne?.place === 'На кафедре КФУ' ? <li>Индивидуальные задания</li> : <li>Путевка</li>}
-									<li>Дневник практиканта (по требованию кафедры)</li>
+									<li>{t('practiceReport')}</li>
+									{dataOne?.place === 'На кафедре КФУ' ? <li>{t('individualTasks')}</li> : <li>{t('referral')}</li>}
+									<li>{t('traineeDiary')}</li>
 								</ul>
 							</Card>
 						</Col>

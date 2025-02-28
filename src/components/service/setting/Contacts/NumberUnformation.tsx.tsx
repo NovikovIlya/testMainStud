@@ -23,6 +23,7 @@ import { SkeletonPage } from '../../aboutMe/Skeleton'
 
 import ContactDataBlock from './ContactDataBlock'
 import NumberDataBloc from './NumberDataBloc'
+import { t } from 'i18next'
 
 export const NumberInformation = () => {
 	const [form] = Form.useForm()
@@ -55,7 +56,7 @@ export const NumberInformation = () => {
 		}
 		const text = form.getFieldValue('inputText')
 		if(!text){
-			alert('Напишите телефон')
+			// alert('Напишите телефон')
 			return
 		}
 		postMail({ phone: text })
@@ -148,26 +149,26 @@ export const NumberInformation = () => {
 					/>
 				</article>
 			</section>
-			<Modal   maskClosable={false}  title="Верификация телефона" footer={null} open={isModalOpen} onCancel={handleCancel}>
+			<Modal   maskClosable={false}  title="" footer={null} open={isModalOpen} onCancel={handleCancel}>
 				{isErrorVerif ? (
-					'Пожалуйста повторите позже, запрос на следующее подтвеждение будет доступен через 1 минуту'
+					t('verErr')
 				) : (
 					<Spin spinning={isLoadingVer || isLoadingFin}>
 						{count <= 0 ? (
-							<div>{!isLoadingVer ? 'Время истекло, повторите попытку позже' : 'Идет загрузка...'}</div>
+							<div>{!isLoadingVer ? t('verText3') :  t('loading')}</div>
 						) : (
 							<>
 								{dataFin?.verified ? (
-									<div className="text-center">Верификация пройдена успешна!</div>
+									<div className="text-center">{t('verSuc')}</div>
 								) : (
 									<>
-										<p>Оставшееся время: {count}</p>
-										<p className="mb-2">На ваш телефон будет произведен звонок. Четыре последние цифры номера являются кодом верификации</p>
+										<p>{t('verText')}: {count}</p>
+										<p className="mb-2">{t('verText2')}</p>
 										<Form.Item name={'code'}>
 											<Input.OTP length={4} />
 										</Form.Item>
 										<Button className="w-full" onClick={finalFnVer}>
-											Подтвердить
+										{t('addBtn')}
 										</Button>
 									</>
 								)}

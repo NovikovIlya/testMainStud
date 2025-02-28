@@ -328,7 +328,7 @@ export const ViewMessage = () => {
 														<div className='mb-3 w-[80%]' style={{ fontSize: '9px', color: '#888' }}>{truncateString(130,item.userInfo)}</div>
 													</>
 												}
-												description={truncateString(10, item.lastMessage)}
+												description={truncateString(25, item.lastMessage)}
 											/>
 											<div className="pt-2 flex flex-col  gap-[9px]">
 												{dayjs(item.lastMessageTime).isSame(dayjs(), 'day') ? (

@@ -28,6 +28,9 @@ import { logOut } from '../../store/reducers/authSlice'
 import AccessibilityHelper from '../AccessibilityHelper/AccessibilityHelper'
 import { ModalNav } from '../service/ModalNav'
 import { useGetAllUnReadQuery } from '../../store/api/messages/messageApi'
+import { LogoSvgNew } from '../../assets/svg/LogoSvgNew'
+
+
 
 export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const [isModalOpen, setIsModalOpen] = useState(false)
@@ -46,10 +49,17 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const roles = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '')?.roles : []
 	const username = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '')?.username : ''
 	const maiRole = roles.find((item: any) => item.login === username)?.type || ''
+	const maiRoleArray = roles.find((item: any) => item.login === username)
 	const [subRole, setSubrole] = useLocalStorageState<any>('subRole', { defaultValue: '' })
 	const [mainRole, setmainRole] = useLocalStorageState<any>('typeAcc', {defaultValue: 'STUD'})
 	const [login, { data: dataLogin, isSuccess, isLoading }] = useFakeLoginMutation()
 	const [isOpen, setIsOpen] = useState(false)
+	const [info, setInfo] = useLocalStorageState<any>(
+		'info',
+		{
+		  defaultValue: '',
+		},
+	);
 	const ref = useRef<any>(null)
 	const { unreadChatsCount } = useGetAllUnReadQuery(null, {
 		pollingInterval: 2000,
@@ -59,7 +69,6 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 		}),
 	  })
 	
-
 	useEffect(() => {
 		if (isSuccessSubRole) {
 			if (mainRole === 'OTHER') {
@@ -234,15 +243,16 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const handleCancel = () => {
 		setIsModalOpen(false)
 	}
+	console.log('info',info)
 
 	return (
 		<header
 			className={clsx(
 				'shadow z-[1001] flex flex-wrap  h-[80px] fixed flex items-center justify-center w-full',
-				type === 'main' ? 'bg-white' : `bg-blue65A`
+				type === 'main' ? 'bg-white ' : `bg-blue65A`
 			)}
 		>
-			<div className="w-screen flex h-full justify-between px-8 max-sm:px-5">
+			<div className={`w-screen flex h-full justify-between px-8 max-sm:px-5 ${type === 'main' ? 'max-w-[1650px] animate-fade-in' : 'animate-fade-in'} `}>
 				<div className="flex gap-8 max-sm:gap-2 items-center">
 					{user?.roles[0].type === 'ABITUR' || user?.roles[0].type === 'OTHER' ? (
 						''
@@ -277,7 +287,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 					</Button> */}
 						</>
 					)}
-					<div className="flex items-center gap-5">
+					<div className={`flex items-center gap-5 hover:scale-105 duration-500`}>
 						{/* бургер для сворачивания */}
 						{/* {location?.pathname !== "/user" ? <Button
 							onClick={setCollapsed}
@@ -289,9 +299,10 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 							icon={<MenuSvg white={type === 'service'} />}
 						/> :''} */}
 						{i18n.language === 'ru' ? (
-							<LogoIasSvg white={type === 'service'} />
+							<LogoIasSvg white={type === 'service'}  />
 						) : (
-							<LogoIasSvgEn white={type === 'service'} />
+							// <LogoIasSvgEn white={type === 'service'} />
+							<LogoSvgNew white={type === 'service'}  />
 						)}
 
 						<Divider type="vertical" className="border-l-white h-10 m-0 hidden sm:block" />
@@ -302,12 +313,13 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 				</div>
 				<div className="flex gap-3 items-center h-full max-[1000px]:gap-0 w-fit justify-center">
 					<div className="flex h-full items-center ">
+						{maiRole==='ABITUR' || maiRole==='OTHER' ? '':
 						<a
 							className={clsx(
 								'h-full flex gap-2 items-center px-3 cursor-pointer no-underline',
 								type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'
 							)}
-							href={'https://shelly.kpfu.ru/e-ksu/main_blocks.startpage'}
+							href={`${maiRole==='EMPL' ? `https://shelly.kpfu.ru/e-ksu/e_university.show_notification?p1=${maiRoleArray?.userId}&p2=${maiRoleArray?.sessionId}&p_h=${maiRoleArray?.sessionHash}&p_c_sess=1` : 'https://shelly.kpfu.ru/e-ksu/main_blocks.startpage'}`}
 						>
 							<ArrowLeftBackInOldAccount white={type === 'service'} />
 							<span
@@ -315,7 +327,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 							>
 								{t('OldLk')}
 							</span>
-						</a>
+						</a>}
 
 						{/* <div
 							className={clsx(
@@ -371,7 +383,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 								<MessageModuleSvg white={type === 'service'} />
 							</Badge>
 						</div>
-
+						<div className="relative inline-block h-full">
 						<div
 							className={`cursor-pointer mx-3 p-2 h-full flex items-center ${type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'}`}
 							onClick={e => {
@@ -383,6 +395,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						</div>
 						<div className='h-full'>
 							<AccessibilityHelper ref={ref} isOpen={isOpen} lang={i18n.language} />
+						</div>
 						</div>
 					</div>
 					<Select
@@ -413,13 +426,17 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 							trigger={['click']}
 							className="cursor-pointer h-full  box-border"
 						>
-							<Space className="px-10 max-sm:px-5 max-[455px]:!gap-0 gap-2 w-[228px]">
+							<Space className="px-10 max-sm:px-5 max-[455px]:!gap-0 gap-2 w-[200px] flex justify-end">
 								<PersonSvg white={type === 'service'} />
 								<div className={clsx('h-full max-[455px]:hidden', type === 'service' && 'text-white')}>
 									<div className="font-bold text-sm truncate max-w-[120px]">
-										{`${user?.lastname} ${user?.firstname.charAt(0)}. ${
-											user?.middlename === '' ? '' : user?.middlename.charAt(0) + '.'
-										}`}
+										
+										{i18n.language === 'ru' ?
+											`${user?.lastname} ${user?.firstname?.charAt(0)}. ${
+											user?.middlename === '' ? '' : (user?.middleName?.charAt(0) ?? '') }`  : 
+											`${info?.engLastname} ${info?.engFirstname?.charAt(0)}. ${
+											info?.engMiddlename === '' ? '' : (info?.engMiddlename?.charAt(0) ?? '') }`
+									}
 									</div>
 									<div className="text-sm ">
 										{user?.roles && user?.roles?.length > 1

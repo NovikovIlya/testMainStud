@@ -136,7 +136,7 @@ export const Apply = () => {
 						requestStatus === 'error' && 'bg-red-500',
 						requestStatus === 'success' && 'bg-green-500',
 						requestStatus === 'none' && 'bg-none',
-						'mt-10'
+						'mt-10  '
 					)}
 				>
 					{requestStatus === 'none' && <>	{t('Apply')}</>}

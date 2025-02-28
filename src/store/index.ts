@@ -62,6 +62,7 @@ import RespondEducationReducer from './reducers/SeekerFormReducers/RespondEducat
 import SkillsReducer from './reducers/SeekerFormReducers/SkillsReducer'
 import authSlice from './reducers/authSlice'
 import chatIdSlice from './reducers/chatIdSlice'
+import forTeacherSlice from './reducers/forTeacherSlice'
 import inviteSeekerButtonReducer from './reducers/inviteSeekerButtonReducer'
 import notificationSlice from './reducers/notificationSlice'
 
@@ -96,6 +97,7 @@ export const store = configureStore({
 		StaffItemTabs: StaffItemTabsReducer,
 		SecretaryStepFormBusinessTrip: SecretaryStepFormBusinessTrip,
 		SecretaryItemTabs: SecretaryItemTabsReducer,
+		forTeacher: forTeacherSlice,
 		[practiceApi.reducerPath]: practiceApi.reducer,
 		[apiSlice.reducerPath]: apiSlice.reducer,
 		currentVacancyId: CurrentVacancyIdSlice,

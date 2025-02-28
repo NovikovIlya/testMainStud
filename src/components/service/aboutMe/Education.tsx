@@ -117,7 +117,7 @@ export const Education = () => {
 		putEducation(data)
 	}
 
-	const isChanged = typeAcc === 'OTHER' ||  (typeAcc === 'ABITUR' && !acceptedData[0])
+	const isChanged = typeAcc === 'OTHER' ||  (typeAcc === 'ABITUR' && !acceptedData)
 
 	useEffect(()=>{
 		if(isSuccess){
@@ -363,7 +363,7 @@ export const Education = () => {
 									setIsBlur((prev:any)=>prev.filter((el:any)=>el!==item.id))
 								}}
 							>
-								Отмена
+								{t('cancel')}
 							</Button>
 							<Button
 								className="border-solid border-bluekfu border-[1px] text-bluekfu !rounded-md"
@@ -372,7 +372,7 @@ export const Education = () => {
 									setIsBlur((prev:any)=>prev.filter((el:any)=>el!==item.id))
 								}}
 							>
-								Сохранить
+								{t('save')}
 							</Button>
 						</div>
 					)}
@@ -393,7 +393,7 @@ export const Education = () => {
 						>
 							+
 						</Button>
-					</Space> :'Информации нет'}
+					</Space> : t('noData')}
 			
 				<Space
 					direction="vertical"

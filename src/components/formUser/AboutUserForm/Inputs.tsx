@@ -1,4 +1,4 @@
-import { ConfigProvider, DatePicker, Input, Select } from 'antd'
+import { ConfigProvider, DatePicker, Input, message, Select } from 'antd'
 import PhoneInput from 'antd-phone-input'
 import FormItem from 'antd/es/form/FormItem'
 import enPicker from 'antd/locale/en_US'
@@ -95,7 +95,14 @@ export const Inputs = () => {
 				<ConfigProvider locale={i18n.language === 'ru' ? ruPicker : enPicker}>
 					<DatePicker
 						className={'block'}
-						onChange={(e: any) => dispatch(birthDay(e == null ? '' : e.format('YYYY-MM-DD')))}
+						// onChange={(e: any) => dispatch(birthDay(e == null ? '' : e.format('YYYY-MM-DD')))}
+						onChange={(date: any) => {
+							if (date && dayjs().diff(date, 'year') < 6) {
+							  message.error(t('ageError'))
+							  return
+							}
+							dispatch(birthDay(date == null ? '' : date.format('YYYY-MM-DD')))
+						  }}
 						placeholder={t('selectDate')}
 						size="large"
 						format={'DD.MM.YYYY'}

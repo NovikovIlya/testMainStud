@@ -1,10 +1,12 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import type { FormInstance, GetRef, InputRef, TableProps } from 'antd';
-import { Button, Form, Input, Popconfirm, Table } from 'antd';
+import { Button, Checkbox, Form, Input, Popconfirm, Table, Tooltip } from 'antd';
 import { t } from 'i18next';
 import { useAppDispatch } from '../../../../../store';
 import { setIsEditTableScheduleTeacher } from '../../../../../store/reducers/authSlice';
 import { ColumnTypes, DataType, EditableCellProps, EditableRowProps } from '../../../../../models/tables';
+import { truncateString } from '../../../../../utils/truncateString';
+
 
 const EditableContext = React.createContext<FormInstance<any> | null>(null);
 
@@ -64,12 +66,12 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
         name={dataIndex}
         rules={[{ required: true, message: `${title} is required.` }]}
       >
-        <Input  ref={inputRef} onPressEnter={save} onBlur={save} />
+        <Input className='w-[35px]' ref={inputRef} onPressEnter={save} onBlur={save} />
       </Form.Item>
     ) : (
       <div
-        className="editable-cell-value-wrap"
-        style={{ paddingInlineEnd: 24 ,width:'auto'}}
+        className="editable-cell-value-wrap truncate "
+        style={{  width:'auto'}}
         onClick={toggleEdit}
       >
         {children}
@@ -82,56 +84,113 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
 
 
 const TableBrs = ({dataSource, setDataSource}:any) => {
+  const tableStyle = {
+    scrollbarWidth: 'thin',
+    scrollbarColor: '#eaeaea transparent',
+    scrollbarGutter: 'stable',
+  };
   const dispatch = useAppDispatch()
   const semesctr = 0
-
+  function handleCheckboxChange(e:any,text:any)  {
+    console.log(e.target.checked,text)
+  }
   const defaultColumns: any = [
     {
         title: 'N',
         dataIndex: 'N',
-        width: '10%',
+        width: '100px',
+        fixed: 'left',
+        customCell: () => ({
+          style: {
+            backgroundColor: 'rgba(31, 92, 184, 0.2)',
+            color: 'rgba(0, 0, 0, 1)',
+          },
+        }),
     },
     {
       title: 'ФИО',
       dataIndex: 'name',
-      width: '20%',
+      width: '100px',
+      fixed: 'left',
+      customCell: () => ({
+        style: {
+          backgroundColor: 'rgba(31, 92, 184, 0.2)',
+          color: 'rgba(0, 0, 0, 1)',
+        },
+      }),
     },
     {
       title: 'ПН',
-      
+       
       children: [
         {
-          title: 'Age',
-          dataIndex: 'age',
+          title: (
+            <div className='w-20 flex justify-center items-center flex-col'>
+               <div className='text-xs'>10:30 - 12:00</div>
+               <Tooltip title="Подтвердить?"><Checkbox onChange={(e)=>handleCheckboxChange(e,'10:30 - 12:00')} /></Tooltip>
+            </div>
+          ),
+          dataIndex: 'age2',
+          editable: true,
           key: 'age',
-          width: 150,
+          width: '10%',
+
+         
           
+        },
+        {
+          title: '12:00 - 13:40',
+          dataIndex: 'age3',
+          editable: true,
+          key: 'age',
+          width: '10%',
         }
+        
       ],
     },
     {
       title: 'Октябрь',
       dataIndex: 'october',
       editable: true,
-      width: '15%',
+      width: '10%',
+      render:(text:any)=>{
+        return(
+         <div> {truncateString(2,text)}</div>
+        )
+      }
     },  
     {
       title: 'Ноябрь',
       dataIndex: 'november',
       editable: true,
-      width: '15%',
+      width: '10%',
+      render:(text:any)=>{
+        return(
+         <div> {truncateString(2,text)}</div>
+        )
+      }
     },
     {
       title: 'Декабрь',
       dataIndex: 'december',
       editable: true,
-      width: '15%',
+      width: '10%',
+      render:(text:any)=>{
+        return(
+         <div> {truncateString(2,text)}</div>
+        )
+      }
     },
     {
       title: 'Сумма баллов',
       dataIndex: 'address',
       editable: true,
       width: '10%',
+      render:(text:any)=>{
+        return(
+         <div> {truncateString(2,text)}</div>
+        )
+      }
     },
    
   ];
@@ -141,41 +200,68 @@ const TableBrs = ({dataSource, setDataSource}:any) => {
         title: 'N',
         dataIndex: 'N',
         width: '10%',
+        fixed: 'left',
     },
     {
       title: 'ФИО',
       dataIndex: 'name',
       width: '20%',
+      fixed: 'left',
     },
     {
       title: 'Февраль',
       dataIndex: 'age',
       editable: true,
       width: '15%',
+      render:(text:any)=>{
+        return(
+         <div> {truncateString(2,text)}</div>
+        )
+      }
     },
     {
       title: 'Март',
       dataIndex: 'address',
       editable: true,
       width: '15%',
+      render:(text:any)=>{
+        return(
+         <div> {truncateString(2,text)}</div>
+        )
+      }
     },
     {
       title: 'Апрель',
       dataIndex: 'address',
       editable: true,
       width: '15%',
+      render:(text:any)=>{
+        return(
+         <div> {truncateString(2,text)}</div>
+        )
+      }
     },
     {
       title: 'Май',
       dataIndex: 'address',
       editable: true,
       width: '15%',
+      render:(text:any)=>{
+        return(
+         <div> {truncateString(2,text)}</div>
+        )
+      }
     },
     {
       title: 'Сумма баллов',
       dataIndex: 'address',
       editable: true,
       width: '10%',
+      render:(text:any)=>{
+        return(
+         <div> {truncateString(2,text)}</div>
+        )
+      }
     },
    
   ];
@@ -250,17 +336,19 @@ const TableBrs = ({dataSource, setDataSource}:any) => {
   });
 
   return (
-    <div className='mt-4'>
-      <Table<DataType>
+    <div  className='mt-4 custom-table-container' >
+      <Table<DataType> 
         rowKey={(record) => record.key}
         components={components}
         rowClassName={() => 'editable-row'}
         bordered
         dataSource={dataSource}
         columns={columns as ColumnTypes}
-      
+        pagination={false}
+        
+        scroll={{ x: 'max-content' }}
       />
-      <Button className='top-[-50px] rounded-xl' type='primary'>{t('Save')}</Button>
+      <Button className='mt-4 mb-4 rounded-xl' type='primary'>{t('Save')}</Button>
     </div>
   );
 };

@@ -33,7 +33,7 @@ export const Session = () => {
 			title: t('Subject'),
 			key: 'name',
 			dataIndex: 'name',
-			render: item => <p className="text-base max-w-xs">{item}</p>
+			render: item => <p className="text-base max-w-xs text-start">{item}</p>
 		},
 		{
 			title: t('DateCertification'),

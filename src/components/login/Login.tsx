@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { IError } from '../../api/types'
-import logo from '../../assets/images/group.png'
+import logo from '../../assets/images/logoTwo.png'
 import { useLoginMutation } from '../../store/api/authApiSlice'
 import { setCredentials } from '../../store/reducers/authSlice'
 import { BackMainPage } from '../BackMainPage'
@@ -27,6 +27,18 @@ export const Login = () => {
 	const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const paramValue = searchParams.get('lan');
+	const [info, setInfo] = useLocalStorageState<any>(
+		'info',
+		{
+		  defaultValue: '',
+		},
+	);
+	const [href, setHref] = useLocalStorageState<any>(
+		'href',
+		{
+		  defaultValue: '',
+		},
+	);
 	const [message, setMessage] = useLocalStorageState<any>(
 		'typeAcc',
 		{
@@ -98,6 +110,8 @@ export const Login = () => {
 			localStorage.setItem('password', JSON.stringify(values.password))
 			localStorage.setItem('access', JSON.stringify(userData.accessToken))
 			localStorage.setItem('refresh', JSON.stringify(userData.refreshToken))
+			setInfo(userData)
+			setHref(userData?.user?.filialType)
 			// navigate('/user')
 		} catch (e: any) {
 			console.log(e)
@@ -106,23 +120,23 @@ export const Login = () => {
 	}
 
 	return (
-		<div className="flex flex-col items-center min-h-screen">
+		<div className="flex flex-col items-center min-h-screen ">
 			<BackMainPage notAuth={true}/>
-			<div className="flex flex-row justify-center gap-24 text-base max-xl:gap-4 max-lg:flex-col max-lg:items-center h-full w-full">
+			<div className="flex   justify-center gap-24 text-base max-xl:gap-4 items-center  w-full min-h-screen">
 				<Form
 				    form={form}
 					name="login"
-					className="min-w-[400px] mx-2 max-sm:min-w-[345px] max-[321px]:min-w-[300px]"
+					className="min-w-[400px] rounded-lg shadow-[0_2px_22px_-4px_rgba(93,96,127,0.2)] p-6 mb-4 mx-2 max-sm:min-w-[345px] max-[321px]:min-w-[300px]"
 					initialValues={{ remember: true }}
 					onFinish={onFinish}
 				>
-					<Title className="mb-[20px] text-start text-2xl font-bold">
+					<Title level={3} className="mb-[20px] text-start text-2xl font-bold">
 						{t('authorization')}
 					</Title>
 					<Inputs error={error!} />
-					<Buttons />
+					<Buttons isLoading={isLoading}/>
 				</Form>
-				<div className="flex items-start mt-10">
+				<div className="flex items-start items-center">
 					<img
 						className="max-lg:hidden w-[400px] h-[400px]"
 						src={logo}

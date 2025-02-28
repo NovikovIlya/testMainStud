@@ -4,6 +4,7 @@ import { Button, Form, Input, List, message, Spin, Typography } from 'antd'
 import { Header } from '../../layout/Header'
 import { useLocalStorageState } from 'ahooks'
 import { ArrowRightOutlined, CopyOutlined, LinkOutlined } from '@ant-design/icons'
+import { t } from 'i18next'
 const { Text } = Typography
 const ShortLink = () => {
   const [form] = Form.useForm()
@@ -58,7 +59,7 @@ const ShortLink = () => {
     <Header type="service" service="" />
     <Spin spinning={isLoading}>
       <div className="w-full">
-        <div className="  pt-[100px] px-4 sm:px-6 lg:px-8">
+        <div className="  pt-[100px] px-4 sm:px-6 lg:px-8 min-h-screen">
           <div className="text-center mb-12">
             <div className="flex justify-center mb-4">
               <img className='w-[100px] h-[100px]' src='https://cdn-icons-png.flaticon.com/512/6994/6994770.png'/>
@@ -67,7 +68,7 @@ const ShortLink = () => {
               Сократитель ссылок
             </h1>
             <p className="text-lg text-gray-600">
-              Сократите ссылки с помощью нашего сервиса.
+              {t('historyText')}
             </p>
           </div>
 
@@ -80,7 +81,7 @@ const ShortLink = () => {
               <Form.Item name="input" className="mb-6">
                 <Input 
                   size="large"
-                  placeholder="Вставьте ссылку для сокращения"
+                  placeholder=""
                   className="rounded-lg"
                 />
               </Form.Item>
@@ -91,7 +92,7 @@ const ShortLink = () => {
             
                 className="w-full  font-semibold rounded-lg h-12"
               >
-                Получить короткую ссылку
+                {t('bringShortLink')}
               </Button>
               <Button 
                size="large"
@@ -99,15 +100,16 @@ const ShortLink = () => {
               onClick={()=>{
                 setLocalData([])
               }}>
-                Очистить список
+                {t('clear')}
               </Button>
             </Form>
           </div>
 
 
           <div className="bg-white rounded-xl shadow-xl p-8 mb-4">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">История сокращений</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">{t('historyClean')}</h2>
               <List
+                locale={{ emptyText: t('noData') }}
                 itemLayout="horizontal"
                 dataSource={localData}
                 renderItem={(item: { oldUrl: string; newUrl: string }, index: number) => (

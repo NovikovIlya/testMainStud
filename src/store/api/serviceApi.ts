@@ -262,7 +262,13 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
-		getVacancyRequests: builder.query<VacancyRequestItemType[], string>({
+		getVacancyRequests: builder.query<
+			{
+				content: VacancyRequestItemType[]
+				page: { size: number; number: number; totalElements: number; totalPages: number }
+			},
+			string
+		>({
 			query: action => ({
 				url: `http://${emplBaseURL}employment-api/v1/management/vacancy-requests${
 					action === 'все' ? '' : `?action=${action}`

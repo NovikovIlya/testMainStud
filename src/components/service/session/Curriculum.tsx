@@ -9,6 +9,7 @@ import { useGetStudyPlanQuery } from '../../../store/api/serviceApi'
 
 import './Styles.scss'
 import { DataType } from '../../../models/session'
+import { truncateString } from '../../../utils/truncateString'
 
 
 
@@ -119,7 +120,7 @@ export const Curriculum = () => {
 					return (
 						<div className="absolute top-0 bottom-0">
 							<span className="w-1/4">{item.split('~')[0]}</span>
-							<span className="w-3/4">{item.split('~')[1]}</span>
+							<span className="ml-4 text-start">{truncateString(30,item.split('~')[1])}</span>
 						</div>
 					)
 			},
@@ -616,6 +617,7 @@ export const Curriculum = () => {
 				className="tableCustom my-10"
 				pagination={false}
 				loading={isLoading}
+				locale={{ emptyText: t('noData') }}
 			/>
 		</div>
 	)

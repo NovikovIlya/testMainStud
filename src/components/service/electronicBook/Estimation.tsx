@@ -56,7 +56,7 @@ export const Estimation = () => {
 			title: t('Discipline'),
 			dataIndex: 'discipline',
 			key: 'discipline',
-			render: item => <p className="text-bas">{item}</p>,
+			render: item => <p className="text-bas text-start">{item}</p>,
 			align: "center",
 		},
 		{

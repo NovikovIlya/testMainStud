@@ -11,6 +11,7 @@ import { useAppSelector } from '../../../../store'
 import { useAddSendMutation } from '../../../../store/api/practiceApi/mypractice'
 
 import { CommentNew } from './CommentNew'
+import { t } from 'i18next'
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
@@ -112,7 +113,7 @@ const Final = ({ dataOneLength,isSuccessFull,refetch, id, dataOnePlace, chat }: 
 							/>
 						</div>
 
-						<div className="flex w-full gap-4 mt-4 justify-between flex-wrap">
+						<div className="flex w-full gap-4 mt-4 justify-between flex-wrap flex-col">
 							<Upload
 								maxCount={1}
 								onChange={info => {
@@ -148,7 +149,7 @@ const Final = ({ dataOneLength,isSuccessFull,refetch, id, dataOnePlace, chat }: 
 								className="flex items-center  "
 							>
 								<Button className="rounded-[20px_20px_20px_20px] h-14" icon={<PlusOutlined />}>
-									Загрузить отчёт
+									{t('loadOtchet')}
 								</Button>
 							</Upload>
 
@@ -187,7 +188,7 @@ const Final = ({ dataOneLength,isSuccessFull,refetch, id, dataOnePlace, chat }: 
 								className="flex items-center  "
 							>
 								<Button className="rounded-[20px_20px_20px_20px] h-14" icon={<PlusOutlined />}>
-									Загрузить дневник
+									{t('loadDiary')}
 								</Button>
 							</Upload>
 
@@ -217,7 +218,7 @@ const Final = ({ dataOneLength,isSuccessFull,refetch, id, dataOnePlace, chat }: 
 								className="flex items-center "
 							>
 								<Button className="rounded-[20px_20px_20px_20px] h-14" icon={<PlusOutlined />}>
-									Загрузить {dataOnePlace === 'На кафедре КФУ' ? 'задания' : 'путевку'}
+									{t('loadPutevkaa')} {dataOnePlace === 'На кафедре КФУ' ? t('zadanie') : t('putevka')}
 								</Button>
 							</Upload>
 						</div>

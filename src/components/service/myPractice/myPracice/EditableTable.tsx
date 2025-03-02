@@ -3,6 +3,7 @@ import './index.css';
 import type { GetRef, InputRef, TableProps } from 'antd';
 import { Button, Calendar, DatePicker, Form, Input, Table } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
+import { t } from 'i18next';
 
 type FormInstance<T> = GetRef<typeof Form<T>>;
 
@@ -112,7 +113,7 @@ const save = (date: any) => {
        rules={[{ required: true, message: `${title} is required.` }]}
      >
         <Button className='h-[40px] text-sm'  onClick={save} >
-      Отмена
+      {t('cancel')}
       </Button>
     </Form.Item>
     </div>
@@ -149,13 +150,13 @@ const EditableTable = ({setShow,dataSource,setDataSource,setIsDisabled}:any) => 
         render: (text: any, record: any, index: any) => <div>{record.number}</div>
     },
     {
-      title: 'Индивидуальные задания',
+      title: t('individualAssignments'),
       dataIndex: 'name',
       width: '30%',
     
     },
     {
-      title: 'Период выполнения',
+      title: t('periodOperation'),
       dataIndex: 'period',
       editable: true,
       render: (_: any, record: any) => <div className={'flex items-center gap-3 h-8'}>

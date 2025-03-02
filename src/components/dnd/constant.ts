@@ -53,8 +53,8 @@ export const block = {
 			w: 1,
 			h: 1,
 
-			x: 0,
-			y: 1,
+			x: 1,
+			y: 0,
 			i: 'ElectronicBook',
 			moved: true,
 			static: false
@@ -63,8 +63,8 @@ export const block = {
 			w: 1,
 			h: 1,
 
-			x: 1,
-			y: 1,
+			x: 0,
+			y: 0,
 			i: 'Session',
 			moved: true,
 			static: false
@@ -149,7 +149,7 @@ export const block = {
 			h: 1,
 
 			x: 0,
-			y: 0,
+			y: 1,
 			i: 'PsychologicalHelp',
 
 			moved: true,

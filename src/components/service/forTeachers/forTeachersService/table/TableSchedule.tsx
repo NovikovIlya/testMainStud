@@ -110,6 +110,7 @@ export const TableSchedule = ({schedule,isFetching}:any) => {
 				case 'thursday': return item.day_week_schedule === 4
 				case 'friday': return item.day_week_schedule === 5
 				case 'saturday': return item.day_week_schedule === 6
+				case 'sunday': return item.day_week_schedule === 7
 				default: return true
 			}
 		})
@@ -208,6 +209,12 @@ export const TableSchedule = ({schedule,isFetching}:any) => {
 					value="saturday"
 				>
 					{t('saturday')}
+				</Radio.Button>
+				<Radio.Button
+					className="rounded-full h-full flex items-center text-base bg-transparent"
+					value="sunday"
+				>
+					{t('sunday')}
 				</Radio.Button>
 			</Radio.Group>
 			<div className="my-10  flex gap-12">

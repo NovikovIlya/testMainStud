@@ -9,7 +9,7 @@ import {
 import i18next from 'i18next'
 import { logOut, setCredentials } from '../reducers/authSlice'
 const baseQuery = fetchBaseQuery({
-	baseUrl: 'https://newlk-test.kpfu.ru:443/',
+	baseUrl: 'https://newlk-test.kpfu.ru/',
 	prepareHeaders(headers, { getState }) {
 		const token = (getState() as RootState).auth.accessToken
 		if (token) {
@@ -25,6 +25,22 @@ const baseQueryWithReAuth = async (
 	extraOptions: {}
 ) => {
 	let result = await baseQuery(args, api, extraOptions)
+	console.log('reeees',result)
+	if (result?.error?.status === 500 ){
+		// @ts-ignore
+		const errorMessage = result.error.data?.errors?.[0]?.message; // Извлекаем сообщение об ошибке
+		if (errorMessage === "Истекло время или неверное значение session Id. Перезайдите на сайт.") {
+			alert('Время сессии истекло. Пожалуйста, пройдите процедуру авторизации заново.');
+			api.dispatch(logOut())
+		}
+	}
+	// @ts-ignore
+	if(result?.error?.originalStatus===501){
+		if(result?.error?.data === 'Истекло время или неверное значение session Id. Перезайдите на сайт.'){
+			alert('Время сессии истекло. Пожалуйста, пройдите процедуру авторизации заново.');
+			api.dispatch(logOut())
+		}
+	}
 	if (result?.error?.status === 403 || result?.error?.status === 401) {
 		console.log('sending refresh token')
 		// const refreshResult = await baseQuery(
@@ -66,5 +82,5 @@ export const testApiSlice = createApi({
 	reducerPath: 'test',
 	baseQuery: baseQueryWithReAuth,
 	endpoints: () => ({}),
-	tagTypes: ['Tasks', 'Contracts', 'Practice','Schedule','Submissions','Application','Order','MyPractice','practiceTeacher','emails','phones','Education','role','Messages','forTeacherScedule','forTeacherSceduleBrs'],
+	tagTypes: ['Tasks', 'Contracts', 'Practice','Schedule','Submissions','Application','Order','MyPractice','practiceTeacher','emails','phones','Education','role','Messages','forTeacherScedule','forTeacherSceduleBrs','forTeacherSceduleVedomost','forTeacherJournalDay','forTeacherJournalSemester'],
 })

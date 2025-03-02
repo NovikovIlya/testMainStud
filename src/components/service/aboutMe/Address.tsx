@@ -37,7 +37,7 @@ export const Address = () => {
 	const registrationAddress = useAppSelector(state => state.Address.registrationAddress)
 	const residenceAddress = useAppSelector(state => state.Address.residenceAddress)
 	console.log('isResident',isResident)
-	const isChanged = typeAcc === 'OTHER' ||  (typeAcc === 'ABITUR' && !acceptedData[0])
+	const isChanged = typeAcc === 'OTHER' ||  (typeAcc === 'ABITUR' && !acceptedData)
 	
 	useEffect(()=>{
 		if(isSuccess){

@@ -9,6 +9,7 @@ import {ColorBg, WrapperButton} from "../WrapperButton";
 import {DeleteRedSvg} from "../../../../../assets/svg/DeleteRedSvg";
 import {useDeleteSeveralContractMutation} from "../../../../../store/api/practiceApi/contracts";
 import {ListIdDeleteContracts} from "../../../../../models/Practice";
+import { t } from 'i18next';
 
 interface Props {
     recordCompressedAll?: ColumnsTableCompressedView[]
@@ -137,7 +138,7 @@ export const RegisterPopoverMain = ({
                 disabled={translateColumnsIntoRussia().length === 0}
             >
                 <Load/>
-                <span>Скачать выбранное</span>
+                <span>{t('download')}</span>
             </WrapperButton>
             <WrapperButton
                 color={ColorBg.BLUEF2}
@@ -145,7 +146,7 @@ export const RegisterPopoverMain = ({
                 disabled={translateColumnsIntoRussia().length === 0}
             >
                 <PrintSvg/>
-                <span>Печать выбранного</span>
+                <span>{t('print')}</span>
             </WrapperButton>
             <WrapperButton
                 color={ColorBg.REDE5}
@@ -153,7 +154,7 @@ export const RegisterPopoverMain = ({
                 disabled={translateColumnsIntoRussia().length === 0}
             >
                 <DeleteRedSvg/>
-                <span className={'text-[#E04545]'}>Удалить выбранное</span>
+                <span className={'text-[#E04545]'}>{t('delete')}</span>
             </WrapperButton>
         </div>
     );

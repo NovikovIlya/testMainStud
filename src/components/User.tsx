@@ -51,7 +51,7 @@ export const User = () => {
 
 	return (
 		<Layout>
-			<div className="px-10 flex items-center justify-center"> 
+			<div className="px-10 flex items-center justify-center animate-fade-in"> 
 				<div className="max-w-[1600px] w-[1600px]">
 					<div className={`mt-[125px] text-2xl font-bold text-blue1f5 justify-between flex`}>
 						{/* {t('PersonalAccount')} */}

@@ -208,8 +208,16 @@ export const VacancyRequestCreateView = () => {
 			>
 				<Form
 					layout="vertical"
+					initialValues={{
+						formDocs: definitions.map(def => {
+							if (def.required) {
+								return def.id
+							}
+						})
+					}}
 					requiredMark={false}
 					onFinish={async values => {
+						console.log(values.formDocs)
 						try {
 							if (isEdited) {
 								await alterRequest({
@@ -252,6 +260,7 @@ export const VacancyRequestCreateView = () => {
 							setResultModalText('Вакансия успешно опубликована')
 							setIsResultModalOpen(true)
 						} catch (error: any) {
+							console.log(error)
 							openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 						}
 					}}

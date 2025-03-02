@@ -44,12 +44,12 @@ export const NavUnifiedServiceCenter = () => {
 		<>
 			<Header type="service" service={t('UnifiedServiceCenter')} />
 
-			<div className="shadowNav mt-20">
+			{/* <div className="shadowNav mt-20">
 				<ul className="min-w-[230px] pt-14 flex flex-col gap-4 ">
 					{handleList}
 				</ul>
-			</div>
-			<div className="bg-[#F5F8FB] w-full mt-20">
+			</div> */}
+			<div className="bg-[#F5F8FB] w-full mt-20 min-h-screen">
 				{pathname === navList[0].id && <DocumentFlow />}
 			</div>
 		</>

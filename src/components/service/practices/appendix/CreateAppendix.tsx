@@ -21,6 +21,7 @@ import PracticeModal from './practicalModal'
 import TableEdit from './tableEdit'
 import { Vector } from '../../../../assets/svg/Vector'
 import dayjs from 'dayjs';
+import { t } from 'i18next'
 
 export const CreateAppendix = () => {
 	const tableRef = useRef(null)
@@ -165,7 +166,7 @@ export const CreateAppendix = () => {
 								nav('/services/practices/representation')
 							}}
 						/>
-						<Typography.Text className=" text-[28px] mb-14">Добавление приложения 4</Typography.Text>
+						<Typography.Text className=" text-[28px] mb-14">{t('addingAnApplication4')}</Typography.Text>
 					</Col>
 				</Row>
 
@@ -177,13 +178,13 @@ export const CreateAppendix = () => {
 							current={step}
 							items={[
 								{
-									title: 'Выберите приказ'
+									title: t('selectOrder')
 								},
 								{
-									title: 'Выберите договор и заполните таблицу'
+									title: t('SelectTable')
 								},
 								{
-									title: 'Сохраните приложение'
+									title: t('save')
 								}
 							]}
 						/>
@@ -200,7 +201,7 @@ export const CreateAppendix = () => {
 											okText="Да"
 											cancelText="Нет"
 										>
-											<Button>Изменить приказ</Button>
+											<Button>{t('changeOrder')}</Button>
 										</Popconfirm>
 									) : (
 										<Button onClick={showModalOne}>Выбрать приказ</Button>
@@ -213,7 +214,7 @@ export const CreateAppendix = () => {
 				<Divider />
 				<Row>
 					<Col span={24}>
-						<Typography.Text>Договор</Typography.Text>
+						<Typography.Text>{t('agreement')}</Typography.Text>
 					</Col>
 					<Col className="mt-2" span={12}>
 						<Select
@@ -263,7 +264,7 @@ export const CreateAppendix = () => {
 												sendData()
 											}}
 										>
-											Сохранить
+											{t('save')}
 										</Button>
 									</Space>
 								</Col>

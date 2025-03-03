@@ -17,7 +17,7 @@ const JournalPosDay = () => {
 	const [dataSource, setDataSource] = useState<any>([])
 	const [date, setDate] = useState<any>('')
 	const {data} = useGetByDateQuery(date,{skip:!date})
-
+	const [flag,setFlag] = useState(false)
 	useEffect(()=>{
 		if(data){
 			setDataSource(data)
@@ -27,6 +27,8 @@ const JournalPosDay = () => {
 	const onChange: DatePickerProps['onChange'] = (date, dateString) => {
 		console.log(date, dateString)
 		setDate(dateString)
+		setFlag(true)
+		setDataSource([])
 	}
 	console.log('dataSource',dataSource)
 
@@ -38,8 +40,8 @@ const JournalPosDay = () => {
 					<DatePicker className='mb-4' onChange={onChange} format="DD.MM.YYYY" />
 				</ConfigProvider>
 				{dataSource?.map((item:any)=>{
-					return <div key={item?.groupId + item?.time}>
-						<JournalPosTable groupId={item.groupId} setDataSource={setDataSource} description={item?.subjectName} title={item?.groupName} data={item.students} />
+					return <div >
+						<JournalPosTable flag={flag} setFlag={setFlag} dataSource={dataSource}    key={`${item.groupId}-${date}`} groupId={item.groupId} setDataSource={setDataSource} description={item?.subjectName} title={item?.groupName} data={item.students} />
 					</div>
 				})}
 				{dataSource?.length===0 && <Title level={4}>{t('noData')}</Title>}

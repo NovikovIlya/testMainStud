@@ -6,20 +6,30 @@ import { t } from 'i18next'
 
 const { Text, Link } = Typography
 
-const JournalPosTable = ({groupId,description,title,data,setData}:any) => {
-	const [localData, setLocalData] = useState([])
+const JournalPosTable = ({flag,setFlag,dataSource,groupId,description,title,data,setData}:any) => {
+	// const [localData, setLocalData] = useState([])
+	const [localData, setLocalData] = useState(() => {
+		
+		if (dataSource?.length===0) {
+			return []
+		}
+		return data?.map((item: any) => ({
+		  ...item,
+		  key: item.studentId
+		})) || []
+	  })
 
-	useEffect(()=>{
-		if(data)
-		setLocalData(data?.map((item:any)=>{
-			return {
-				...item,
-				key:item.studentId
-			}
-		}))
-	},[data])
+	// useEffect(()=>{
+	// 	if(data)
+	// 	setLocalData(data?.map((item:any)=>{
+	// 		return {
+	// 			...item,
+	// 			key:item.studentId
+	// 		}
+	// 	}))
+	// },[data])
 
-	console.log('localData,',localData)
+	console.log('data,',data)
 	return (
 		<>
 			<Title className="mt-8" level={4}>

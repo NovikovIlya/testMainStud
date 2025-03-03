@@ -5,6 +5,7 @@ import { t } from 'i18next';
 import { useAppDispatch } from '../../../../../store';
 import { setIsEditTableScheduleTeacher } from '../../../../../store/reducers/authSlice';
 import { ColumnTypes, DataType, EditableCellProps, EditableRowProps } from '../../../../../models/tables';
+import { render } from 'react-dom';
 
 const EditableContext = React.createContext<FormInstance<any> | null>(null);
 
@@ -62,7 +63,7 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
       <Form.Item
         style={{ margin: 0 ,width:'auto'}}
         name={dataIndex}
-        rules={[{ required: true, message: `${title} is required.` }]}
+        
       >
         <Input  ref={inputRef} onPressEnter={save} onBlur={save} />
       </Form.Item>
@@ -81,7 +82,7 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
 };
 
 
-const TableJournalPosDay = ({dataSource, setDataSource}:any) => {
+const TableJournalPosDay = ({dataSource, setLocalData}:any) => {
   const dispatch = useAppDispatch()
 
   function handleCheckboxChange(e:any,text:any)  {
@@ -93,19 +94,27 @@ const TableJournalPosDay = ({dataSource, setDataSource}:any) => {
         dataIndex: 'N',
         width: '10%',
         fixed: 'left',
+        render: (text:any, record:any, index:any) => index + 1,
     },
     {
       title: t('fioStudent'),
-      dataIndex: 'name',
+      dataIndex: 'studentName',
       width: '20%',
       fixed: 'left',
     },
    
     {
       title: t('ychet'),
-      dataIndex: 'october',
+      dataIndex: 'visitType',
       editable: true,
       width: '15%',
+      render: (text:any, record:any, index:any) => {
+        return (
+          <div>
+            {text===null?'Нет данных':text}
+          </div>
+        );
+      }
    },
    
   ];
@@ -117,10 +126,8 @@ const TableJournalPosDay = ({dataSource, setDataSource}:any) => {
     const newData = [...dataSource];
     // находим индекс строки
     const index = newData.findIndex((item) => row.key === item.key);
-
     if (index > -1) {
       const item = newData[index];
-
       // Сравнение старых и новых значений
       const hasChanges = Object
         .keys(row)
@@ -131,8 +138,7 @@ const TableJournalPosDay = ({dataSource, setDataSource}:any) => {
         ...item,
         ...row,
       });
-
-      setDataSource(newData);
+      setLocalData(newData);
 
       // Отправка действия, если есть изменения
       if (hasChanges) {
@@ -173,12 +179,16 @@ const TableJournalPosDay = ({dataSource, setDataSource}:any) => {
         components={components}
         rowClassName={() => 'editable-row'}
         bordered
-        dataSource={dataSource}
+        dataSource={dataSource?.map((item:any, index:any) => ({
+          ...item,
+          key: item?.studentId,
+        }))}
         columns={columns as ColumnTypes}
         locale={{ emptyText: t('noData') }}
+        pagination={false}
       
       />
-      <Button className='mt-8 mb-8 rounded-xl' type='primary'>{t('Save')}</Button>
+      {/* <Button className='mt-8 mb-8 rounded-xl' type='primary'>{t('Save')}</Button> */}
     </div>
   );
 };

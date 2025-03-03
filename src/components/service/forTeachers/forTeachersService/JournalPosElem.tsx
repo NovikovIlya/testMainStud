@@ -16,7 +16,7 @@ const JournalPosElem = () => {
 	const semestrForm = useAppSelector(state => state.forTeacher.semestrForm)
 	const discilineForm = Form.useWatch('disciline', form)
 	const groupeForm = Form.useWatch('group', form)
-    const {data} = useGetDisciplineSemesterQuery({year:yearForm,semester:semestrForm},{skip:!yearForm || !semestrForm})
+    const {data,isFetching} = useGetDisciplineSemesterQuery({year:yearForm,semester:semestrForm},{skip:!yearForm || !semestrForm})
 	
 
 	const [dataSource, setDataSource] = useState<any[]>([
@@ -49,8 +49,6 @@ const JournalPosElem = () => {
 
 	return (
 		<div className="">
-			
-
 			<Form className="mt-8" form={form}>
 				<Row>
 					<Col span={24}>
@@ -62,11 +60,16 @@ const JournalPosElem = () => {
 							wrapperCol={{ span: 18 }} // Оставшаяся ширина для инпута
 						>
 							<Select
+							    loading={isFetching}
 								allowClear
-								options={[
-									{ value: '1', label: 'Дисциплина 1' },
-									{ value: '2', label: 'Дисциплина 2' }
-								]}
+								options={
+									data?.map((item:any)=>{
+										return {
+											label:item.disciplineName + ' / ' + item.groupName,
+											value:item.disciplineId + ' ' + item.groupId
+										}
+									})
+								}
 							/>
 						</Form.Item>
 					</Col>

@@ -141,13 +141,18 @@ const TableVedomosti = ({kindForm,dataSource, setDataSource,subj_type,is_session
       render: (text: any) => {
         return (
           <div className='flex flex-wrap  items-center '>
-            {text==='удовлетворительно' ? <div className='rounded-xl bg-yellow-400 w-[10px] h-[10px]' ></div> : <div ></div>}
-            {text==='не зачтено' ? <div className='rounded-xl bg-yellow-500 w-[10px] h-[10px]' ></div> : <div ></div>}
-            {text==='отлично' ? <div className='rounded-xl bg-red-500 w-[10px] h-[10px]' ></div> : <div ></div>}
-            {text==='зачтено' ? <div className='rounded-xl bg-green-500 w-[10px] h-[10px]' ></div> : <div ></div>}
-            {text==='не сдает' ? <div className='rounded-xl bg-gray-300 w-[10px] h-[10px]' ></div> : <div ></div>}
-            {text==='неудовлетворительно' ? <div className='rounded-xl bg-yellow-500 w-[10px] h-[10px]' ></div> : <div ></div>}
-            {text==='хорошо' ? <div className='rounded-xl bg-green-500 w-[10px] h-[10px]' ></div> : <div ></div>}
+            {text==='удовлетворительно' || text==='satisfactorily' ? <div className='rounded-xl bg-yellow-400 w-[10px] h-[10px]' ></div> : <div ></div>}
+            {text==='не зачтено' || text==='not credited'? <div className='rounded-xl bg-yellow-500 w-[10px] h-[10px]' ></div> : <div ></div>}
+            
+            {text==='отлично'  ? <div className='rounded-xl bg-red-500 w-[10px] h-[10px]' ></div> : <div ></div>}
+            {text==='excellent' ? <div className='rounded-xl bg-red-500 w-[10px] h-[10px]' ></div> : <div ></div>}
+
+            {(text==='зачтено')? <div className='rounded-xl bg-green-500 w-[10px] h-[10px]' ></div> : <div ></div>}
+            {(text==='credited')? <div className='rounded-xl bg-green-500 w-[10px] h-[10px]' ></div> : <div ></div>}
+
+            {text==='не сдает' ||text=== "doesn't pass" ? <div className='rounded-xl bg-gray-300 w-[10px] h-[10px]' ></div> : <div ></div>}
+            {text==='не удовлетворительно' || text==='unsatisfactory'? <div className='rounded-xl bg-yellow-500 w-[10px] h-[10px]' ></div> : <div ></div>}
+            {text==='хорошо' || text==='good'? <div className='rounded-xl bg-green-500 w-[10px] h-[10px]' ></div> : <div ></div>}
             <div className='ml-2'>{text}</div>
           </div>
         );

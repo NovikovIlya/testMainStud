@@ -1,18 +1,33 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import TableJournalPosDay from './TableJournalPosDay'
-import { Typography } from 'antd'
+import { Button, Typography } from 'antd'
 import Title from 'antd/es/typography/Title'
+import { t } from 'i18next'
 
 const { Text, Link } = Typography
 
-const JournalPosTable = ({dataSource,setDataSource}:any) => {
+const JournalPosTable = ({groupId,description,title,data,setData}:any) => {
+	const [localData, setLocalData] = useState([])
+
+	useEffect(()=>{
+		if(data)
+		setLocalData(data?.map((item:any)=>{
+			return {
+				...item,
+				key:item.studentId
+			}
+		}))
+	},[data])
+
+	console.log('localData,',localData)
 	return (
 		<>
 			<Title className="mt-8" level={4}>
-				Группа 6-409
+				{title}
 			</Title>
-			<Text>08:30 - 10:00 - Компьютерные</Text>
-			<TableJournalPosDay dataSource={dataSource} setDataSource={setDataSource} />
+			<Text>{description}</Text>
+			<TableJournalPosDay dataSource={localData} setLocalData={setLocalData} />
+			<Button className='mt-8 mb-8 rounded-xl' type='primary'>{t('Save')}</Button>
 		</>
 	)
 }

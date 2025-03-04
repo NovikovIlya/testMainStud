@@ -9,10 +9,6 @@ const { Text, Link } = Typography
 const JournalPosTable = ({flag,setFlag,dataSource,groupId,description,title,data,setData}:any) => {
 	// const [localData, setLocalData] = useState([])
 	const [localData, setLocalData] = useState(() => {
-		
-		if (dataSource?.length===0) {
-			return []
-		}
 		return data?.map((item: any) => ({
 		  ...item,
 		  key: item.studentId

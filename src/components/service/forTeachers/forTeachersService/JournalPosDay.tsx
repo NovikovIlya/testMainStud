@@ -30,7 +30,6 @@ const JournalPosDay = () => {
 		
 		setDataSource([])
 	}
-	console.log('dataSource',dataSource)
 
 	return (
 		<Spin spinning={isFetching}>
@@ -41,11 +40,10 @@ const JournalPosDay = () => {
 				</ConfigProvider>
 				{dataSource?.map((item:any)=>{
 					return <div >
-						<JournalPosTable  dataSource={dataSource}    key={`${item.groupId}-${date}`} groupId={item.groupId} setDataSource={setDataSource} description={item?.subjectName} title={item?.groupName} data={item.students} />
+						<JournalPosTable    key={`${item.groupId}-${date}`} groupId={item.groupId} description={item?.subjectName} title={item?.groupName} data={item.students} />
 					</div>
 				})}
 				{dataSource?.length===0 && <Title level={4}>{t('noData')}</Title>}
-				
 			</Space>
 		</Spin>
 	)

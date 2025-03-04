@@ -1,7 +1,7 @@
 import { Result, Tabs } from 'antd'
 import Title from 'antd/es/typography/Title'
 import { t } from 'i18next'
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import { useAppSelector } from '../../../../store'
 
@@ -13,6 +13,7 @@ const NavJournal = () => {
 	const yearForm = useAppSelector(state => state.forTeacher.yearForm)
 	const semestrForm = useAppSelector(state => state.forTeacher.semestrForm)
 
+
 	return (
 		<div className="px-[80px]">
 			{semestrForm ? (
@@ -21,7 +22,7 @@ const NavJournal = () => {
 					<Title className="mt-8" level={2}>
 						{t('journalPos')}
 					</Title>
-					<Tabs defaultActiveKey="1" className="mt-6">
+					<Tabs key={`tabs-${semestrForm}`} defaultActiveKey="1" className="mt-6">
 						<Tabs.TabPane tab={t('days')} key={1}>
 							<>
 								<JournalPosDay />

@@ -5,7 +5,7 @@ import { t } from 'i18next';
 import { useAppDispatch } from '../../../../../store';
 import { setIsEditTableScheduleTeacher } from '../../../../../store/reducers/authSlice';
 import { ColumnTypes, DataType, EditableCellProps, EditableRowProps } from '../../../../../models/tables';
-import { render } from 'react-dom';
+
 
 const EditableContext = React.createContext<FormInstance<any> | null>(null);
 

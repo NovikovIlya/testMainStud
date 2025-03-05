@@ -17,4 +17,6 @@ export interface Student {
 export interface dataBrs {
     semester: number; // Номер семестра
     students: Student[]; // Массив студентов
+    emptyPrintForm:string,
+    filledPrintForm:string;
 }

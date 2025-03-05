@@ -173,12 +173,16 @@ const Brs = () => {
 					{groupeForm && data?.students?.length ? (
 						<div className="animate-fade-in">
 							<Row className="flex gap-2">
+							<a href={data?.emptyPrintForm}  target="_blank">
 								<Button className="rounded-xl" icon={<PrinterOutlined />}>
 									{t('printJournalEmpty')}
 								</Button>
+								</a>
+								<a href={data?.filledPrintForm}  target="_blank">
 								<Button className="rounded-xl" icon={<PrinterOutlined />}>
 									{t('printJournalFiled')}
 								</Button>
+								</a>
 							</Row>
 							<Spin spinning={isLoading}>
 							<TableBrs semester={data.semester} dataSource={dataSource} setDataSource={setDataSource} />

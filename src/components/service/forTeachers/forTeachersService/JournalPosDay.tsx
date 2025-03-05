@@ -43,7 +43,7 @@ const JournalPosDay = () => {
 						<JournalPosTable    key={`${item.groupId}-${date}`} groupId={item.groupId} description={item?.subjectName} title={item?.groupName} data={item.students} />
 					</div>
 				})}
-				{dataSource?.length===0 && <Title level={4}>{t('noData')}</Title>}
+				{date && dataSource?.length===0 && <Title level={4}>{t('noData')}</Title>}
 			</Space>
 		</Spin>
 	)

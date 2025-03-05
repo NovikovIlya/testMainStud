@@ -3,11 +3,7 @@ import { useDispatch } from 'react-redux'
 
 import { setStageProgressAsReady } from '../../../../store/reducers/EmploymentProgressSlice'
 
-export const EmplMedInvite = (props: {
-	respondId: number
-	stageId: number
-	stageName: string
-}) => {
+export const EmplMedInvite = (props: { respondId: number; stageId: number; stageName: string }) => {
 	const dispatch = useDispatch()
 
 	return (
@@ -15,7 +11,7 @@ export const EmplMedInvite = (props: {
 			type="primary"
 			className="rounded-[54.5px]"
 			onClick={() => {
-				dispatch(setStageProgressAsReady(props.stageId))
+				dispatch(setStageProgressAsReady(props.stageName))
 			}}
 		>
 			Получить направление

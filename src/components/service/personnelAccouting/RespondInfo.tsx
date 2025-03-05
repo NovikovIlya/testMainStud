@@ -68,7 +68,9 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 	const [isRespondSentToArchive, setIsRespondSentToArchive] = useState<boolean>(res?.status === 'ARCHIVE')
 	const [isRespondSentToReserve, setIsRespondSentToReserve] = useState<boolean>(res?.status === 'IN_RESERVE')
 	const [isRespondInvited, setIsRespondInvited] = useState<boolean>(res?.status === 'INVITATION')
-	const [isRespondEmployed, setIsRespondEmployed] = useState<boolean>(res?.status === 'EMPLOYMENT_REQUEST')
+	const [isRespondEmployed, setIsRespondEmployed] = useState<boolean>(
+		res?.status === 'EMPLOYMENT_REQUEST' || res?.status === 'EMPLOYMENT'
+	)
 
 	const [resume, setResume] = useState<string>('')
 	const [resumeSize, setResumeSize] = useState<number>(0)
@@ -105,7 +107,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 		setIsRespondSentToArchive(res?.status === 'ARCHIVE')
 		setIsRespondSentToReserve(res?.status === 'IN_RESERVE')
 		setIsRespondInvited(res?.status === 'INVITATION')
-		setIsRespondEmployed(res?.status === 'EMPLOYMENT_REQUEST')
+		setIsRespondEmployed(res?.status === 'EMPLOYMENT_REQUEST' || res?.status === 'EMPLOYMENT')
 	}, [res])
 
 	useEffect(() => {

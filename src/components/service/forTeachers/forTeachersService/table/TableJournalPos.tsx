@@ -106,10 +106,12 @@ const TableBrs = ({dataSource, setDataSource}:any) => {
             color: 'rgba(0, 0, 0, 1)',
           },
         }),
+        // @ts-ignore
+        render: (_, __, index) => index + 1 
     },
     {
       title: 'ФИО',
-      dataIndex: 'name',
+      dataIndex: 'studentName',
       width: '100px',
       fixed: 'left',
       customCell: () => ({
@@ -120,8 +122,8 @@ const TableBrs = ({dataSource, setDataSource}:any) => {
       }),
     },
     {
-      title: 'ПН',
-       
+       title: 'ПН',
+
       children: [
         {
           title: (
@@ -138,60 +140,11 @@ const TableBrs = ({dataSource, setDataSource}:any) => {
          
           
         },
-        {
-          title: '12:00 - 13:40',
-          dataIndex: 'age3',
-          editable: true,
-          key: 'age',
-          width: '10%',
-        }
+        
         
       ],
     },
-    {
-      title: 'Октябрь',
-      dataIndex: 'october',
-      editable: true,
-      width: '10%',
-      render:(text:any)=>{
-        return(
-         <div> {truncateString(2,text)}</div>
-        )
-      }
-    },  
-    {
-      title: 'Ноябрь',
-      dataIndex: 'november',
-      editable: true,
-      width: '10%',
-      render:(text:any)=>{
-        return(
-         <div> {truncateString(2,text)}</div>
-        )
-      }
-    },
-    {
-      title: 'Декабрь',
-      dataIndex: 'december',
-      editable: true,
-      width: '10%',
-      render:(text:any)=>{
-        return(
-         <div> {truncateString(2,text)}</div>
-        )
-      }
-    },
-    {
-      title: 'Сумма баллов',
-      dataIndex: 'address',
-      editable: true,
-      width: '10%',
-      render:(text:any)=>{
-        return(
-         <div> {truncateString(2,text)}</div>
-        )
-      }
-    },
+   
    
   ];
 

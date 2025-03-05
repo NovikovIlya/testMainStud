@@ -91,13 +91,17 @@ type Props = {
   dataSource: Student[];
   semester:any,
   setDataSource: any;
+  yearForm:any
 };
 
-const TableBrs = ({dataSource, setDataSource,semester}: Props) => {
+const TableBrs = ({yearForm,dataSource, setDataSource,semester}: Props) => {
   const dispatch = useAppDispatch()
-  console.log('dataSource',dataSource)
+  console.log('yearForm',yearForm)
+  console.log('semester',semester)
+  
 
-  const defaultColumns: any = [
+  const defaultColumns: any = yearForm === 2024 ? 
+  [
     {
         title: 'N',
         dataIndex: 'N',
@@ -140,9 +144,51 @@ const TableBrs = ({dataSource, setDataSource,semester}: Props) => {
       width: '10%',
     },
    
-  ];
+  ] : [
+    {
+      title: 'N',
+      dataIndex: 'N',
+      width: '10%',
+    
+  },
+  {
+    title: 'ФИО',
+    dataIndex: 'studName',
+    width: '20%',
+  },
+  {
+    title: t('september'),
+    dataIndex: 'firstMonth',
+    editable: true,
+    width: '15%',
+  },
+  {
+    title: t('october'),
+    dataIndex: 'secondMonth',
+    editable: true,
+    width: '15%',
+  },  
+  {
+    title: t('november'),
+    dataIndex: 'thirdMonth',
+    editable: true,
+    width: '15%',
+  },
+  {
+    title: t('december'),
+    dataIndex: 'fourthMonth',
+    editable: true,
+    width: '15%',
+  },
+  {
+    title: t('sum'),
+    dataIndex: 'sum',
+    editable: true,
+    width: '10%',
+  },
+  ]
 
-  const defaultColumnsTwo: any = [
+  const defaultColumnsTwo: any = yearForm === 2024 ? [
     {
         title: 'N',
         dataIndex: 'N',
@@ -185,7 +231,51 @@ const TableBrs = ({dataSource, setDataSource,semester}: Props) => {
       width: '10%',
     },
    
-  ];
+  ] : [
+    
+    {
+      title: 'N',
+      dataIndex: 'N',
+      width: '10%',
+    
+  },
+  {
+    title: 'ФИО',
+    dataIndex: 'studName',
+    width: '20%',
+  },
+  {
+    title: t('february'),
+    dataIndex: 'firstMonth',
+    editable: true,
+    width: '15%',
+  },
+  {
+    title: t('march'),
+    dataIndex: 'secondMonth',
+    editable: true,
+    width: '15%',
+  },
+  {
+    title: t('april'),
+    dataIndex: 'thirdMonth',
+    editable: true,
+    width: '15%',
+  },
+  {
+    title: t('may'),
+    dataIndex: 'fourthMonth',
+    editable: true,
+    width: '15%',
+  },
+  
+  {
+    title: t('sum'),
+    dataIndex: 'sum',
+    editable: true,
+    width: '10%',
+  },
+  ]
   
 
   const handleSave = (row: any) => {

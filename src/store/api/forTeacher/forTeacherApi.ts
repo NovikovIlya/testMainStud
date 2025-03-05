@@ -138,6 +138,17 @@ export const fotTeacherService = testApiSlice.injectEndpoints({
             providesTags: ['forTeacherJournalSemester'],
             keepUnusedDataFor:0,
         }),
+
+        getDataSemester: builder.query<any, any>({
+            query: ({subjectId,groupId,year,semester,month}) => {
+            return {
+                    url: `to-teacher/journal/by-semester?subjectId=${subjectId}&groupId=${groupId}&year=${year}&semester=${semester}&month=${month}`,
+                    method: 'GET'
+                }
+            },
+            providesTags: ['forTeacherJournalSemester'],
+            keepUnusedDataFor:0,
+        }),
        
     })
 })
@@ -154,6 +165,7 @@ export const {
     useSaveVedomostMutation,
     useGetVedomostKindQuery,
     useGetByDateQuery,
-    useGetDisciplineSemesterQuery
+    useGetDisciplineSemesterQuery,
+    useGetDataSemesterQuery
 } = fotTeacherService
 

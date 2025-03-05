@@ -24,6 +24,7 @@ const Brs = () => {
 	const groupeForm = Form.useWatch('group', form2)
 	const yearForm = useAppSelector(state => state.forTeacher.yearForm)
 	const semestrForm = useAppSelector(state => state.forTeacher.semestrForm)
+	console.log('semestrForm',semestrForm)
 	const { data, isError, error, isFetching } = useGetBrsForTeacherQuery({ subjectId: discilineForm, groupId: groupeForm,year:yearForm,semester :semestrForm },{ skip: !discilineForm || !groupeForm || !yearForm || !semestrForm })
 	const { data: dataSubjects,isFetching:isFetchingSubject } = useGetBrsSubjectsQuery({year:yearForm,semester :semestrForm},{skip: !yearForm || !semestrForm})
 	const { data: dataGroups,isFetching:isFetchingGroup } = useGetBrsGroupsQuery({subjectId:discilineForm,year:yearForm,semester :semestrForm}, { skip: !discilineForm || !yearForm || !semestrForm})
@@ -185,7 +186,7 @@ const Brs = () => {
 								</a>
 							</Row>
 							<Spin spinning={isLoading}>
-							<TableBrs semester={data.semester} dataSource={dataSource} setDataSource={setDataSource} />
+							<TableBrs yearForm={yearForm} semester={semestrForm} dataSource={dataSource} setDataSource={setDataSource} />
 							</Spin>
 							<Button htmlType="submit" className="mt-8 mb-8 rounded-xl" type="primary">
 								{t('Save')}

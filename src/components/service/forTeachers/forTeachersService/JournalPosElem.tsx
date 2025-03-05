@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react'
 import InfoCard from './InfoCard'
 import TableBrs from './table/TableBrs'
 import TableJournalPos from './table/TableJournalPos'
-import { useGetDisciplineSemesterQuery } from '../../../../store/api/forTeacher/forTeacherApi'
+import { useGetDataSemesterQuery, useGetDisciplineSemesterQuery } from '../../../../store/api/forTeacher/forTeacherApi'
 import { useAppSelector } from '../../../../store'
 
 const JournalPosElem = () => {
@@ -16,33 +16,34 @@ const JournalPosElem = () => {
 	const semestrForm = useAppSelector(state => state.forTeacher.semestrForm)
 	const discilineForm = Form.useWatch('disciline', form)
 	const groupeForm = Form.useWatch('group', form)
+	const [monthValue,setMonthValue] = useState(null)
+	const [disciplineId,setDisciplineId] = useState<any>(null)
+	const [groupId,setGroupId] = useState<any>(null)
     const {data,isFetching} = useGetDisciplineSemesterQuery({year:yearForm,semester:semestrForm},{skip:!yearForm || !semestrForm})
-	
+	const {data:dataGetSemestr} = useGetDataSemesterQuery({subjectId:disciplineId,groupId:groupId,month:monthValue,year:yearForm,semester:semestrForm},{skip:!yearForm || !semestrForm || !monthValue || !groupId })	
+	const [dataSource, setDataSource] = useState<any[]>([])
 
-	const [dataSource, setDataSource] = useState<any[]>([
-		{
-			N: '1',
-			key: '0',
-			name: 'Edward King 0',
-			age: '32',
-			address: 'London, Park Lane no. 0',
-			september:'sad',
-			october:'azzsdasd',
-			november:'bbasdasd',
-			december:'asssdasd',
-		},
-		{
-			N: '2',
-			key: '1',
-			name: '11',
-			age: '32',
-			address: 'ии',
-			september:'00',
-			october:'55',
-			november:'66',
-			december:'77',
+	useEffect(()=>{
+		if(dataGetSemestr){
+			setDataSource(dataGetSemestr)
 		}
-	])
+	},[dataGetSemestr])
+
+
+	const getMonthsBySemester = (semester: any, year: any) => {
+		if (semester === 1) {
+		  return ['september', 'october', 'november', 'december']
+		}
+		
+		if (year === 2025) {
+		  return ['march', 'april', 'may', 'june']
+		}
+		
+		return ['february', 'march', 'april', 'may']
+	}
+
+	const months = getMonthsBySemester(semestrForm, yearForm)
+
 	const onChange = ()=>{
 
 	}
@@ -62,11 +63,18 @@ const JournalPosElem = () => {
 							<Select
 							    loading={isFetching}
 								allowClear
+								onSelect={(value)=>{
+									console.log('22222',value)
+									console.log('3333444',Number(value.split('/')[0]))
+									setDisciplineId(Number(value.split('/')[0]))
+									setGroupId(Number(value.split('/')[1]))
+								}}
 								options={
 									data?.map((item:any)=>{
 										return {
 											label:item.disciplineName + ' / ' + item.groupName,
-											value:item.disciplineId + ' ' + item.groupId
+											value:item.disciplineId + '/' + item.groupId,
+											key:item.disciplineId + '/' + item.groupId
 										}
 									})
 								}
@@ -83,55 +91,25 @@ const JournalPosElem = () => {
 			{true ? (
 				<>
 				<div className={` mt-14  radio w-full justify-center animate-fade-in mb-6`}>
-					<Radio.Group
-						onChange={onChange}
-						defaultValue={initialDay}
-						buttonStyle="solid"
-						className="flex gap-[10px] h-9"
+				<Radio.Group
+					onChange={onChange}
+					defaultValue={initialDay}
+					buttonStyle="solid"
+					className="flex gap-[10px] h-9"
 					>
+					{months.map((month,index) => (
 						<Radio.Button
-							className="rounded-full bg-transparent h-full flex items-center  text-base"
-							value="monday"
-						>
-							{t('monday')}
+							className="rounded-full bg-transparent h-full flex items-center text-base"
+							onChange={(value)=>{
+								setMonthValue(value.target.value)
+								console.log('value,',Number(value.target.value))}
+							}
+							value={index+1}
+							>
+							{t(month)}
 						</Radio.Button>
-						<Radio.Button
-							className="rounded-full h-full flex items-center text-base bg-transparent"
-							value="tuesday"
-						>
-							{t('tuesday')}
-						</Radio.Button>
-						<Radio.Button
-							className="rounded-full h-full flex items-center text-base bg-transparent"
-							value="wednesday"
-						>
-							{t('wednesday')}
-						</Radio.Button>
-						<Radio.Button
-							className="rounded-full h-full flex items-center text-base bg-transparent"
-							value="thursday"
-						>
-							{t('thursday')}
-						</Radio.Button>
-						<Radio.Button
-							className="rounded-full h-full flex items-center text-base bg-transparent"
-							value="friday"
-						>
-							{t('friday')}
-						</Radio.Button>
-						<Radio.Button
-							className="rounded-full h-full flex items-center text-base bg-transparent"
-							value="saturday"
-						>
-							{t('saturday')}
-						</Radio.Button>
-						<Radio.Button
-							className="rounded-full h-full flex items-center text-base bg-transparent"
-							value="sunday"
-						>
-							{t('sunday')}
-						</Radio.Button>
-					</Radio.Group>
+					))}
+				</Radio.Group>
 				</div>
 				<div className='animate-fade-in'>
 					<Row className="flex gap-2">

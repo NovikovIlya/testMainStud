@@ -4,7 +4,7 @@ import { t } from 'i18next'
 import React, { useEffect, useState } from 'react'
 
 import { useAppSelector } from '../../../../store'
-import { useGetDataSemesterQuery, useGetDisciplineSemesterQuery } from '../../../../store/api/forTeacher/forTeacherApi'
+import { useGetDataSemesterQuery, useGetDisciplineSemesterQuery, useSendDataSemesterMutation } from '../../../../store/api/forTeacher/forTeacherApi'
 
 import InfoCard from './InfoCard'
 import TableBrs from './table/TableBrs'
@@ -25,6 +25,7 @@ const JournalPosElem = () => {
 	const [dataSource, setDataSource] = useState<any[]>([])
 	const [checkboxValue, setCheckboxValue] = useState<any>([])
 	const [isModalOpen, setIsModalOpen] = useState(false)
+	const [sendData,{}]= useSendDataSemesterMutation()
 
 	useEffect(() => {
 		if (dataGetSemestr) {
@@ -63,11 +64,22 @@ const JournalPosElem = () => {
 		console.log('checkboxValue', checkboxValue)
 		const checks = checkboxValue.map((item: any) => item.columnNumber)
 		console.log('ckecks', checks)
-		console.log('dataSource', dataSource)
+		
+		const data = {
+			students:dataSource,
+			approvedColumnNumbers: checks,
+			semester: semestrForm,
+			year: yearForm,
+			groupId: groupId,
+			subjectId: disciplineId,
+			month: monthValue,
+		}
+		console.log('data', data)
+		sendData(data)
 	}
 
 	return (
-		<Spin spinning={isFetchingData} className="container ">
+		<Spin spinning={isFetchingData} className=" ">
 			<Form className="mt-8" form={form}>
 				<Row>
 					<Col span={24}>
@@ -75,7 +87,7 @@ const JournalPosElem = () => {
 							name="disciline"
 							label="Предмет/Группа"
 							labelAlign="left"
-							labelCol={{ span: 2 }} // Фиксированная ширина лейбла
+							labelCol={{ span: 3 }} // Фиксированная ширина лейбла
 							wrapperCol={{ span: 10 }} // Оставшаяся ширина для инпута
 						>
 							<Select
@@ -102,7 +114,7 @@ const JournalPosElem = () => {
 
 			{true ? (
 				<>
-					<div className={` mt-10  radio w-full justify-center animate-fade-in mb-6`}>
+					<div className={` mt-10  radio  justify-center animate-fade-in mb-6 `}>
 						<Radio.Group
 							onChange={onChange}
 							defaultValue={initialDay}
@@ -123,7 +135,7 @@ const JournalPosElem = () => {
 							))}
 						</Radio.Group>
 					</div>
-					<div className="animate-fade-in w-[80vw]">
+					<div className="animate-fade-in ">
 						<Row className="flex gap-2">
 							<Button className="rounded-xl" icon={<PrinterOutlined />}>
 								{t('printJournalEmpty')}
@@ -144,7 +156,7 @@ const JournalPosElem = () => {
 					style={{ height: 'calc(100vh - 55px)' }}
 				
 					> */}
-						<TableJournalPos
+						{monthValue ? <><TableJournalPos
 							setCheckboxValue={setCheckboxValue}
 							setDataSource={setDataSource}
 							dataSource={dataSource}
@@ -152,7 +164,9 @@ const JournalPosElem = () => {
 						{/* </Modal> */}
 						<Button onClick={saveData} className="mt-4 mb-4 rounded-xl" type="primary">
 							{t('Save')}
-						</Button>
+						</Button></> :  <Result
+    title="Выберите предмет/группу и  месяц"
+  />}
 					</div>
 				</>
 			) : (

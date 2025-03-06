@@ -15,7 +15,7 @@ const NavJournal = () => {
 
 
 	return (
-		<div className="px-[80px]">
+		<div className="px-[80px] ">
 			{semestrForm ? (
 				<>
 					<InfoCard text={t('textLessonLog')} />

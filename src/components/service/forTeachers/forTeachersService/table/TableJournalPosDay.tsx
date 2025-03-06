@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import type { FormInstance, GetRef, InputRef, TableProps } from 'antd';
-import { Button, Checkbox, Form, Input, Popconfirm, Table, Tooltip } from 'antd';
+import { Button, Checkbox, Form, Input, Popconfirm, Select, Table, Tooltip } from 'antd';
 import { t } from 'i18next';
 import { useAppDispatch } from '../../../../../store';
 import { setIsEditTableScheduleTeacher } from '../../../../../store/reducers/authSlice';
@@ -32,7 +32,8 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
   const [editing, setEditing] = useState(false);
   const inputRef = useRef<InputRef>(null);
   const form = useContext(EditableContext)!;
- 
+  const selectRef = useRef<any>(null);
+  
   useEffect(() => {
     if (editing) {
       inputRef.current?.focus();
@@ -65,7 +66,19 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
         name={dataIndex}
         
       >
-        <Input  ref={inputRef} onPressEnter={save} onBlur={save} />
+        {/* <Input  ref={inputRef} onPressEnter={save} onBlur={save} /> */}
+        <Select
+        open
+    className="w-[50px]"
+    ref={selectRef}
+    onBlur={save}
+    onChange={save}
+    options={[
+      { value: null, label: '' },
+      { value: 'б', label: 'б' },
+      { value: 'н', label: 'н' }
+    ]}
+  />
       </Form.Item>
     ) : (
       <div

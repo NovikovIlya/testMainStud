@@ -64,6 +64,7 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
       <Form.Item style={{ margin: 0, width: "auto" }} name={dataIndex} rules={[{ required: false }]}>
         {/* <Input  className="w-[35px]" ref={inputRef} onPressEnter={save} onBlur={save} /> */}
         <Select
+        open
     className="w-[50px]"
     ref={selectRef}
     onBlur={save}
@@ -317,7 +318,7 @@ const TableBrs = ({setCheckboxValue, dataSource, setDataSource }: any) => {
 
   // В return заменяем columns на modifiedColumns
   return (
-    <div className="mt-4 ">
+    <div className="mt-4 w-[calc(100vw-370px)]">
       <Table
         components={components}
         rowClassName={() => "editable-row"}
@@ -326,7 +327,7 @@ const TableBrs = ({setCheckboxValue, dataSource, setDataSource }: any) => {
         // @ts-ignore
         columns={modifiedColumns}
         pagination={false}
-        className="w-full "
+        className=" "
         scroll={{ x: 'max-content', y: '50vh' }}
       />
       {/* <Button className="mt-4 mb-4 rounded-xl" type="primary">

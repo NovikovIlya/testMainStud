@@ -96,8 +96,7 @@ type Props = {
 
 const TableBrs = ({yearForm,dataSource, setDataSource,semester}: Props) => {
   const dispatch = useAppDispatch()
-  console.log('yearForm',yearForm)
-  console.log('semester',semester)
+
   
 
   const defaultColumns: any = yearForm === 2024 ? 

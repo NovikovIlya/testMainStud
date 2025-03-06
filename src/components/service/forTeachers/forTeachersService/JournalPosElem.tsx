@@ -4,7 +4,11 @@ import { t } from 'i18next'
 import React, { useEffect, useState } from 'react'
 
 import { useAppSelector } from '../../../../store'
-import { useGetDataSemesterQuery, useGetDisciplineSemesterQuery, useSendDataSemesterMutation } from '../../../../store/api/forTeacher/forTeacherApi'
+import {
+	useGetDataSemesterQuery,
+	useGetDisciplineSemesterQuery,
+	useSendDataSemesterMutation
+} from '../../../../store/api/forTeacher/forTeacherApi'
 
 import InfoCard from './InfoCard'
 import TableBrs from './table/TableBrs'
@@ -20,22 +24,19 @@ const JournalPosElem = () => {
 	const [monthValue, setMonthValue] = useState(null)
 	const [disciplineId, setDisciplineId] = useState<any>(null)
 	const [groupId, setGroupId] = useState<any>(null)
-	const { data, isFetching } = useGetDisciplineSemesterQuery(	{ year: yearForm, semester: semestrForm },{ skip: !yearForm || !semestrForm })
-	const { data: dataGetSemestr,isFetching:isFetchingData } = useGetDataSemesterQuery({ subjectId: disciplineId, groupId: groupId, month: monthValue, year: yearForm, semester: semestrForm },{ skip: !yearForm || !semestrForm || !monthValue || !groupId })
+	const { data, isFetching } = useGetDisciplineSemesterQuery({ year: yearForm, semester: semestrForm },{ skip: !yearForm || !semestrForm })
+	const { data: dataGetSemestr, isFetching: isFetchingData } = useGetDataSemesterQuery({ subjectId: disciplineId, groupId: groupId, month: monthValue, year: yearForm, semester: semestrForm },{ skip: !yearForm || !semestrForm || !monthValue || !groupId })
 	const [dataSource, setDataSource] = useState<any[]>([])
 	const [checkboxValue, setCheckboxValue] = useState<any>([])
 	const [isModalOpen, setIsModalOpen] = useState(false)
-	const [sendData,{}]= useSendDataSemesterMutation()
-	const [radioKey, setRadioKey] = useState(Math.random());
+	const [sendData, {}] = useSendDataSemesterMutation()
+	const [radioKey, setRadioKey] = useState(Math.random())
 
 	useEffect(() => {
 		if (dataGetSemestr) {
 			setDataSource(dataGetSemestr)
 		}
 	}, [dataGetSemestr])
-
-	console.log('disciplineId', disciplineId)
-
 
 	const getMonthsBySemester = (semester: any, year: any) => {
 		if (semester === 1) {
@@ -62,27 +63,23 @@ const JournalPosElem = () => {
 	}
 
 	const saveData = () => {
-		console.log('checkboxValue', checkboxValue)
 		const checks = checkboxValue.map((item: any) => item.columnNumber)
-		console.log('ckecks', checks)
-		
 		const data = {
-			students:dataSource,
+			students: dataSource,
 			approvedColumnNumbers: checks,
 			semester: semestrForm,
 			year: yearForm,
 			groupId: groupId,
 			subjectId: disciplineId,
-			month: monthValue,
+			month: monthValue
 		}
-		console.log('data', data)
 		sendData(data)
 	}
 
 	const onChangeSelect = () => {
 		setMonthValue(null)
 		setDataSource([])
-		setRadioKey(Math.random());
+		setRadioKey(Math.random())
 	}
 
 	return (
@@ -99,18 +96,14 @@ const JournalPosElem = () => {
 						>
 							<Select
 								loading={isFetching}
-								
 								onSelect={value => {
-									if(value){
-										console.log('22222', value)
-										console.log('3333444', Number(value.split('/')[0]))
+									if (value) {
 										setDisciplineId(Number(value.split('/')[0]))
 										setGroupId(Number(value.split('/')[1]))
-									}else {
+									} else {
 										// setDisciplineId(null)
 										// setGroupId(null)
-									  }
-									
+									}
 								}}
 								onChange={onChangeSelect}
 								options={data?.map((item: any) => {
@@ -130,7 +123,7 @@ const JournalPosElem = () => {
 				<>
 					<div className={` mt-10  radio  justify-center animate-fade-in mb-6 `}>
 						<Radio.Group
-						  key={radioKey}
+							key={radioKey}
 							onChange={onChange}
 							defaultValue={initialDay}
 							buttonStyle="solid"
@@ -138,7 +131,6 @@ const JournalPosElem = () => {
 						>
 							{months.map((month, index) => (
 								<Radio.Button
-								
 									className="rounded-full bg-transparent h-full flex items-center text-base"
 									onChange={value => {
 										setMonthValue(value.target.value)
@@ -162,33 +154,33 @@ const JournalPosElem = () => {
 						</Row>
 						{/* <Button onClick={showModal}>Открыть журнал</Button> */}
 						{/* <Modal
-					maskClosable={false}
-					title="Журнал посещаемости"
-					open={isModalOpen}
-					
-					onCancel={handleClose}
-					footer={null}
-					width="100%"
-					style={{ height: 'calc(100vh - 55px)' }}
-				
-					> */}
-						{monthValue && disciplineId ? <><TableJournalPos
-							setCheckboxValue={setCheckboxValue}
-							setDataSource={setDataSource}
-							dataSource={dataSource}
-						/>
-						{/* </Modal> */}
-						<Button onClick={saveData} className="mt-4 mb-4 rounded-xl" type="primary">
-							{t('Save')}
-						</Button></> :  <Result
-    title="Выберите месяц"
-  />}
+							maskClosable={false}
+							title="Журнал посещаемости"
+							open={isModalOpen}
+							onCancel={handleClose}
+							footer={null}
+							width="100%"
+							style={{ height: 'calc(100vh - 55px)' }}
+							> */}
+						{monthValue && disciplineId ? (
+							<>
+								<TableJournalPos
+									setCheckboxValue={setCheckboxValue}
+									setDataSource={setDataSource}
+									dataSource={dataSource}
+								/>
+								{/* </Modal> */}
+								<Button onClick={saveData} className="mt-4 mb-4 rounded-xl" type="primary">
+									{t('Save')}
+								</Button>
+							</>
+						) : (
+							<Result title="Выберите месяц" />
+						)}
 					</div>
 				</>
 			) : (
-				<Result
-				title="Выберите предмет/группу"
-			  />
+				<Result title="Выберите предмет/группу" />
 			)}
 		</Spin>
 	)

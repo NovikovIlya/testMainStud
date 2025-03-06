@@ -35,7 +35,7 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
   const form = useContext(EditableContext)!
   const selectRef = useRef<any>(null);
 
-
+ 
   useEffect(() => {
     if (editing) {
       inputRef.current?.focus()
@@ -58,9 +58,12 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
   }
 
   let childNode = children
+  
+  
 
   if (editable) {
-    childNode = editing ? (
+    // @ts-ignore
+    childNode = record.columnNumber!==4 ? editing ? (
       <Form.Item style={{ margin: 0, width: "auto" }} name={dataIndex} rules={[{ required: false }]}>
         {/* <Input  className="w-[35px]" ref={inputRef} onPressEnter={save} onBlur={save} /> */}
         <Select
@@ -85,7 +88,13 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
       >
         {children}
       </div>
-    )
+    ) : <Tooltip title={'ыы'}><div
+    className="editable-cell-value-wrap truncate"
+    style={{ width: "auto", minHeight: "22px", cursor: "pointer" }}
+    onClick={toggleEdit}
+  >
+    {children}
+  </div></Tooltip>
   }
 
   return <td {...restProps}>{childNode}</td>
@@ -189,7 +198,16 @@ const TableBrs = ({setCheckboxValue, dataSource, setDataSource }: any) => {
           dataIndex: `status_${date}_${timeInfo.timeIntervalId}`,
           width: "80px",
           editable: true,
-          render: (status: string | null) => status || "",
+          // render: (status: string | null) => status || "",
+          render: (status: string | null, record: any) => {
+            // Добавляем columnNumber в record для каждой ячейки
+            return {
+              children: status || "",
+              props: {
+                columnNumber: timeInfo.columnNumber,
+              },
+            }
+          },
         })),
       }
     })
@@ -208,6 +226,9 @@ const TableBrs = ({setCheckboxValue, dataSource, setDataSource }: any) => {
       student.attendance.forEach((att: any) => {
         const key = `status_${att.date}_${att.timeIntervalId}`
         row[key] = att.status || ""
+
+        // Добавляем columnNumber для каждой ячейки
+        row[`${key}_columnNumber`] = att.columnNumber
       })
 
       return row
@@ -291,23 +312,64 @@ const TableBrs = ({setCheckboxValue, dataSource, setDataSource }: any) => {
   }
 
   // Модифицируем columns для поддержки редактирования
+  // const modifiedColumns = columns.map((col) => {
+  //   // @ts-ignore
+  //   if (col?.children) {
+  //     return {
+  //       ...col,
+  //        // @ts-ignore
+  //       children: col?.children.map((childCol) => {
+  //         if (childCol.editable) {
+  //           return {
+  //             ...childCol,
+  //             onCell: (record: any) => ({
+  //               record,
+  //               editable: childCol.editable,
+  //               dataIndex: childCol.dataIndex,
+  //               title: childCol.title,
+  //               handleSave,
+  //             }),
+  //           }
+  //         }
+  //         return childCol
+  //       }),
+  //     }
+  //   }
+  //   return col
+  // })
+
   const modifiedColumns = columns.map((col) => {
     // @ts-ignore
     if (col?.children) {
       return {
         ...col,
-         // @ts-ignore
+        // @ts-ignore
         children: col?.children.map((childCol) => {
           if (childCol.editable) {
             return {
               ...childCol,
-              onCell: (record: any) => ({
-                record,
-                editable: childCol.editable,
-                dataIndex: childCol.dataIndex,
-                title: childCol.title,
-                handleSave,
-              }),
+              onCell: (record: any) => {
+                // Получаем columnNumber для текущей ячейки
+                const dataIndex = childCol.dataIndex
+                const parts = dataIndex.split("_")
+                const date = parts[1]
+                const timeIntervalId = parts[2]
+
+                // Находим соответствующую запись в attendance
+                const attendance = dataSource.find((s:any) => s.studentId === record.key)?.attendance || []
+                const att = attendance.find((a:any) => a.date === date && a.timeIntervalId === timeIntervalId)
+
+                return {
+                  record: {
+                    ...record,
+                    columnNumber: att?.columnNumber, // Добавляем columnNumber в record
+                  },
+                  editable: childCol.editable,
+                  dataIndex: childCol.dataIndex,
+                  title: childCol.title,
+                  handleSave,
+                }
+              },
             }
           }
           return childCol
@@ -316,7 +378,6 @@ const TableBrs = ({setCheckboxValue, dataSource, setDataSource }: any) => {
     }
     return col
   })
-
   // В return заменяем columns на modifiedColumns
   return (
     <div className="mt-4 w-[calc(100vw-370px)]">

@@ -26,6 +26,7 @@ const JournalPosElem = () => {
 	const [checkboxValue, setCheckboxValue] = useState<any>([])
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const [sendData,{}]= useSendDataSemesterMutation()
+	const [radioKey, setRadioKey] = useState(Math.random());
 
 	useEffect(() => {
 		if (dataGetSemestr) {
@@ -33,8 +34,8 @@ const JournalPosElem = () => {
 		}
 	}, [dataGetSemestr])
 
-	console.log('dataSource', dataSource)
-	console.log('checkboxValue', checkboxValue)
+	console.log('disciplineId', disciplineId)
+
 
 	const getMonthsBySemester = (semester: any, year: any) => {
 		if (semester === 1) {
@@ -78,6 +79,12 @@ const JournalPosElem = () => {
 		sendData(data)
 	}
 
+	const onChangeSelect = () => {
+		setMonthValue(null)
+		setDataSource([])
+		setRadioKey(Math.random());
+	}
+
 	return (
 		<Spin spinning={isFetchingData} className=" ">
 			<Form className="mt-8" form={form}>
@@ -92,13 +99,20 @@ const JournalPosElem = () => {
 						>
 							<Select
 								loading={isFetching}
-								allowClear
+								
 								onSelect={value => {
-									console.log('22222', value)
-									console.log('3333444', Number(value.split('/')[0]))
-									setDisciplineId(Number(value.split('/')[0]))
-									setGroupId(Number(value.split('/')[1]))
+									if(value){
+										console.log('22222', value)
+										console.log('3333444', Number(value.split('/')[0]))
+										setDisciplineId(Number(value.split('/')[0]))
+										setGroupId(Number(value.split('/')[1]))
+									}else {
+										// setDisciplineId(null)
+										// setGroupId(null)
+									  }
+									
 								}}
+								onChange={onChangeSelect}
 								options={data?.map((item: any) => {
 									return {
 										label: item.disciplineName + ' / ' + item.groupName,
@@ -116,6 +130,7 @@ const JournalPosElem = () => {
 				<>
 					<div className={` mt-10  radio  justify-center animate-fade-in mb-6 `}>
 						<Radio.Group
+						  key={radioKey}
 							onChange={onChange}
 							defaultValue={initialDay}
 							buttonStyle="solid"
@@ -123,6 +138,7 @@ const JournalPosElem = () => {
 						>
 							{months.map((month, index) => (
 								<Radio.Button
+								
 									className="rounded-full bg-transparent h-full flex items-center text-base"
 									onChange={value => {
 										setMonthValue(value.target.value)
@@ -156,7 +172,7 @@ const JournalPosElem = () => {
 					style={{ height: 'calc(100vh - 55px)' }}
 				
 					> */}
-						{monthValue ? <><TableJournalPos
+						{monthValue && disciplineId ? <><TableJournalPos
 							setCheckboxValue={setCheckboxValue}
 							setDataSource={setDataSource}
 							dataSource={dataSource}

@@ -64,16 +64,17 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
       <Form.Item style={{ margin: 0, width: "auto" }} name={dataIndex} rules={[{ required: false }]}>
         {/* <Input  className="w-[35px]" ref={inputRef} onPressEnter={save} onBlur={save} /> */}
         <Select
+        allowClear
         open
-    className="w-[50px]"
-    ref={selectRef}
-    onBlur={save}
-    onChange={save}
-    options={[
-      { value: null, label: '' },
-      { value: 'б', label: 'б' },
-      { value: 'н', label: 'н' }
-    ]}
+        className="w-[50px]"
+        ref={selectRef}
+        onBlur={save}
+        onChange={save}
+        options={[
+          { value: null, label: '' },
+          { value: 'б', label: 'б' },
+          { value: 'н', label: 'н' }
+        ]}
   />
       </Form.Item>
     ) : (

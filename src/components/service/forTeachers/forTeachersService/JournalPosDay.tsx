@@ -16,7 +16,7 @@ const { Text } = Typography
 const JournalPosDay = () => {
 	const [dataSource, setDataSource] = useState<any>([])
 	const [date, setDate] = useState<any>('')
-	const {data,isFetching} = useGetByDateQuery(date,{skip:!date})
+	const {data,isFetching,isSuccess} = useGetByDateQuery(date,{skip:!date})
 
 	useEffect(()=>{
 		if(data){
@@ -30,8 +30,12 @@ const JournalPosDay = () => {
 		
 		setDataSource([])
 	}
+	// if(isFetching){
+	// 	return <Spin />
+	// }
 
 	return (
+		<>
 		<Spin spinning={isFetching}>
 			<Space direction="vertical">
 				<Text>{t('textLessonLog2')}</Text>
@@ -43,9 +47,11 @@ const JournalPosDay = () => {
 						<JournalPosTable    key={`${item.groupId}-${date}`} groupId={item.groupId} description={item?.subjectName} title={item?.groupName} data={item.students} />
 					</div>
 				})}
-				{date && dataSource?.length===0 && <Title level={4}>{t('noData')}</Title>}
+				
 			</Space>
 		</Spin>
+		{isSuccess && !isFetching && date && data?.length===0 ? <Title className='animate-fade-in' level={4}>{t('noData')}</Title> : ''}
+		</>
 	)
 }
 

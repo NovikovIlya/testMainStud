@@ -68,6 +68,7 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
       >
         {/* <Input  ref={inputRef} onPressEnter={save} onBlur={save} /> */}
         <Select
+        allowClear
         open
     className="w-[50px]"
     ref={selectRef}
@@ -82,7 +83,7 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
       </Form.Item>
     ) : (
       <div
-        className="editable-cell-value-wrap"
+        className="editable-cell-value-wrap h-8"
         style={{ paddingInlineEnd: 24 ,width:'auto'}}
         onClick={toggleEdit}
       >
@@ -124,7 +125,7 @@ const TableJournalPosDay = ({dataSource, setLocalData}:any) => {
       render: (text:any, record:any, index:any) => {
         return (
           <div>
-            {text===null?'Нет данных':text}
+            {text===null?'':text}
           </div>
         );
       }

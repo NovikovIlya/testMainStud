@@ -86,6 +86,19 @@ export const DirectResume = ({
 
 	const [messageApi, contextHolder] = message.useMessage()
 
+	const emailRegex = /^[a-zA-Z0-9]+([.]{1}[a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-]{1}[a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/;
+
+	// Функция для проверки на запрещенные символы
+	const hasForbiddenCharacters = (value) => {
+		const forbiddenChars = /[&=+<>,_'\-]/;
+		return forbiddenChars.test(value);
+	};
+
+	// Функция для проверки на несколько точек подряд
+	const hasMultipleDots = (value) => {
+		return /\.{2,}/.test(value);
+	};
+
 	const onSubmit: SubmitHandler<formDataType> = data => {
 		const formData = new FormData()
 		data.resumeFile && formData.append('resumeFile', data.resumeFile[0])
@@ -295,17 +308,48 @@ export const DirectResume = ({
 							<Controller
 								name="email"
 								control={control}
-								rules={[
-									{ required: true, message: 'Отчество введено некорректно' }, // Отдельное правило
-									{ maxLength: 500, message: 'Количество символов было превышено' }, // Отдельное правило
-								]}
+								rules={{
+									required: 'Поле email обязательно для заполнения',
+									maxLength: {
+										value: 500,
+										message: 'Количество символов было превышено',
+									},
+									validate: {
+										// Проверка на английские буквы и стандарт почты
+										validEmail: (value) => {
+											if (!emailRegex.test(value)) {
+												return 'Email введен некорректно';
+											}
+											return true;
+										},
+										// Проверка на запрещенные символы
+										noForbiddenChars: (value) => {
+											if (hasForbiddenCharacters(value)) {
+												return 'Email содержит запрещенные символы';
+											}
+											return true;
+										},
+										// Проверка на несколько точек подряд
+										noMultipleDots: (value) => {
+											if (hasMultipleDots(value)) {
+												return 'Email содержит несколько точек подряд';
+											}
+											return true;
+										},
+									},
+								}}
 								render={({ field }) => (
 									<Input
-										onPressEnter={e => e.preventDefault()}
+										onPressEnter={(e) => e.preventDefault()}
 										className={`${errors.email && 'border-[#C11616]'}`}
 										type="text"
 										placeholder="example@mail.com"
 										{...field}
+										onChange={(e) => {
+											// Очистка значения от запрещенных символов
+											const value = e.target.value.replace(/[^a-zA-Z0-9@.]/g, '');
+											field.onChange(value);
+										}}
 									/>
 								)}
 							/>
@@ -394,13 +438,25 @@ export const DirectResume = ({
 											{...register('resumeFile', {
 												required: {
 													value: true,
-													message: 'Пожалуйста, прикрепите резюме'
+													message: 'Пожалуйста, прикрепите резюме',
 												},
-												onChange(event) {
-													setFilename(event.target.files?.[0].name)
-												}
+												validate: {
+													// Проверка размера файла (не более 10 МБ)
+													fileSize: (fileList) => {
+														const file = fileList[0];
+														if (file && file.size > 10 * 1024 * 1024) {
+															return 'Размер файла не должен превышать 10 МБ';
+														}
+													},
+												},
+												onChange: (event) => {
+													const file = event.target.files?.[0];
+													if (file) {
+														setFilename(file.name);
+													}
+												},
 											})}
-										></input>
+										/>
 									</div>
 								)}
 							/>

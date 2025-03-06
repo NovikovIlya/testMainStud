@@ -97,6 +97,23 @@ export const ResponseForm = () => {
 	const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
 	const [resultModalText, setResultModalText] = useState<string>('')
 
+	const validateEmail = (_, value) => {
+		// Регулярное выражение для валидации email
+		const emailRegex = /^[a-zA-Z0-9]+([._]?[a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-]?[a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/;
+
+		// Запрещенные символы
+		const forbiddenChars = /[&=+<>,_'\-]/;
+
+		// Проверка на несколько точек подряд
+		const multipleDots = /\.{2,}/;
+
+		if ((forbiddenChars.test(value)) || (multipleDots.test(value)) || (!emailRegex.test(value))) {
+			return Promise.reject(new Error('Некорректный формат почты'));
+		}
+
+		return Promise.resolve();
+	};
+
 	return (
 		<>
 			<Button
@@ -461,7 +478,9 @@ export const ResponseForm = () => {
 							<Form.Item
 								name={'gender'}
 								label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Пол</label>}
-								rules={[{ required: true, message: 'Не выбран пол' }]}
+								rules={[
+									{ required: true, message: 'Не выбран пол' }
+								]}
 							>
 								<Radio.Group
 									disabled={aboutMeData.isGenderSet}
@@ -475,7 +494,10 @@ export const ResponseForm = () => {
 							<Form.Item
 								name={'surname'}
 								label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Фамилия</label>}
-								rules={[{ required: true, message: 'Поле фамилии не заполнено' }]}
+								rules={[
+									{ required: true, message: 'Поле фамилии не заполнено' },
+									{ max: 500, message: 'Количество символов было превышено' },
+								]}
 							>
 								<Input
 									disabled
@@ -488,7 +510,10 @@ export const ResponseForm = () => {
 							<Form.Item
 								name={'name'}
 								label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Имя</label>}
-								rules={[{ required: true, message: 'Поле имени не заполнено' }]}
+								rules={[
+									{ required: true, message: 'Поле имени не заполнено' },
+									{ max: 500, message: 'Количество символов было превышено' },
+								]}
 							>
 								<Input
 									disabled
@@ -501,7 +526,10 @@ export const ResponseForm = () => {
 							<Form.Item
 								name={'patronymic'}
 								label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Отчество</label>}
-								rules={[{ required: true, message: 'Поле отчества не заполнено' }]}
+								rules={[
+									{ required: true, message: 'Поле отчества не заполнено' },
+									{ max: 500, message: 'Количество символов было превышено' },
+								]}
 							>
 								<Input
 									disabled={aboutMeData.isPatronymicSet}
@@ -559,10 +587,8 @@ export const ResponseForm = () => {
 								name={'phoneNumber'}
 								label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Телефон</label>}
 								rules={[
-									{
-										required: true,
-										message: 'Поле номера телефона не заполнено'
-									}
+									{ required: true, message: 'Поле номера телефона не заполнено' },
+
 								]}
 							>
 								<Input
@@ -580,10 +606,8 @@ export const ResponseForm = () => {
 									</label>
 								}
 								rules={[
-									{
-										required: true,
-										message: 'Поле электронной почты не заполнено'
-									}
+									{ required: true, message: 'Поле электронной почты не заполнено' },
+									{ validator: validateEmail },
 								]}
 							>
 								<Input

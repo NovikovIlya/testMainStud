@@ -1,6 +1,7 @@
 import { ThemeProvider } from '@material-tailwind/react'
 import {Button, ConfigProvider, DatePicker, Form, Input, Modal, Select, Spin} from 'antd'
 import React, { useEffect, useState } from 'react'
+import moment from 'moment';
 
 import { useAppSelector } from '../../../../../store'
 import {
@@ -102,6 +103,13 @@ export const SupervisorInterviewCreate = () => {
 		)
 	}
 
+	const validateDateTime = (_ : any, value : any) => {
+		if (value && value.isBefore(moment())) {
+			return Promise.reject(new Error('Выбранное время уже наступило'));
+		}
+		return Promise.resolve();
+	};
+
 	return (
 		<>
 			<ConfigProvider
@@ -195,7 +203,8 @@ export const SupervisorInterviewCreate = () => {
 							</label>
 						}
 						rules={[
-							{ required: true, message: 'Не выбран соискатель' }
+							{ required: true, message: 'Не выбран соискатель' },
+							{ max: 500, message: 'Количество символов было превышено'}
 						]}
 					>
 						<Select
@@ -215,7 +224,10 @@ export const SupervisorInterviewCreate = () => {
 								Должность
 							</label>
 						}
-						rules={[{ required: true, message: 'Не выбрана должность' }]}
+						rules={[
+							{ required: true, message: 'Не выбрана должность' },
+							{ max: 500, message: 'Количество символов было превышено'}
+						]}
 					>
 						<Select
 							placeholder="Выбрать"
@@ -227,27 +239,29 @@ export const SupervisorInterviewCreate = () => {
 					<div className="flex flex-row w-full gap-[20px]">
 						<Form.Item
 							className="w-6/12"
-							name={'date'}
+							name="date"
 							label={
-<label className="opacity-[80%] text-black text-[18px]/[18px] font-content-font font-normal">
+								<label className="opacity-[80%] text-black text-[18px]/[18px] font-content-font font-normal">
 									Дата и время
 								</label>
 							}
-							rules={[{ required: true, message: 'Не выбраны дата и время' }]}
+							rules={[
+								{ required: true, message: 'Не выбраны дата и время' },
+								{ validator: validateDateTime },
+							]}
 						>
 							<DatePicker
 								format={'DD.MM.YYYY, h:mm'}
 								showTime={{
 									minuteStep: 15,
 									disabledHours: () => {
-										return [0, 1, 2, 3, 4, 5, 6, 7, 21, 22, 23]
+										return [0, 1, 2, 3, 4, 5, 6, 7, 21, 22, 23];
 									},
-									hideDisabledOptions: true
+									hideDisabledOptions: true,
 								}}
 								className="w-full"
-								onChange={(e, dateString) => {}}
 								placeholder="Выбрать"
-							></DatePicker>
+							/>
 						</Form.Item>
 						<Form.Item
 							className="w-6/12"

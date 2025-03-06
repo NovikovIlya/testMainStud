@@ -14,7 +14,7 @@ export const VacancyResponces = () => {
 	const { pathname } = useLocation()
 	const navigate = useNavigate()
 	const currentVacancyTitle = useAppSelector(state => state.currentVacancyName)
-
+	
 	const pathVacancyId = pathname.split('/').pop() as string
 
 	const vacancyId = parseInt(pathVacancyId)

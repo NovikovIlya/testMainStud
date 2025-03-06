@@ -126,7 +126,7 @@ const JournalPosElem = () => {
 				</Row>
 			</Form>
 
-			{true ? (
+			{disciplineId ? (
 				<>
 					<div className={` mt-10  radio  justify-center animate-fade-in mb-6 `}>
 						<Radio.Group
@@ -181,12 +181,14 @@ const JournalPosElem = () => {
 						<Button onClick={saveData} className="mt-4 mb-4 rounded-xl" type="primary">
 							{t('Save')}
 						</Button></> :  <Result
-    title="Выберите предмет/группу и  месяц"
+    title="Выберите месяц"
   />}
 					</div>
 				</>
 			) : (
-				<Result title="" extra={t('selectYearSemest')} />
+				<Result
+				title="Выберите предмет/группу"
+			  />
 			)}
 		</Spin>
 	)

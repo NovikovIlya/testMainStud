@@ -179,6 +179,7 @@ const TableBrs = ({setCheckboxValue, dataSource, setDataSource }: any) => {
     const dateColumns = Object.entries(groupedByDate).map(([date, times]) => {
       // Берем день недели из первого элемента массива times
       const weekDay = times[0]?.weekDay
+      console.log('times',times)
       return {
         title: (
           <div className="flex flex-col items-center">
@@ -190,9 +191,9 @@ const TableBrs = ({setCheckboxValue, dataSource, setDataSource }: any) => {
           title: (
             <div className=" flex justify-center items-center flex-col">
               <div className="text-[10px] text-center mb-2">{timeInfo.time}</div>
-              <Tooltip title="Подтвердить?">
+              {timeInfo.columnNumber!==4 ?<Tooltip title="Подтвердить?">
                 <Checkbox onChange={(e) => handleCheckboxChange(e, { date, ...timeInfo })} />
-              </Tooltip>
+              </Tooltip> : ''}
             </div>
           ),
           dataIndex: `status_${date}_${timeInfo.timeIntervalId}`,

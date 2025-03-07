@@ -89,7 +89,7 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
         {children}
       </div>
     ) : <Tooltip title={'ыы'}><div
-    className="editable-cell-value-wrap truncate"
+    className="editable-cell-value-wrap truncate "
     style={{ width: "auto", minHeight: "22px", cursor: "pointer" }}
     onClick={toggleEdit}
   >

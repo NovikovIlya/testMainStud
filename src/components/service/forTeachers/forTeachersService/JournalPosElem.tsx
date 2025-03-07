@@ -5,8 +5,10 @@ import React, { useEffect, useState } from 'react'
 
 import { useAppSelector } from '../../../../store'
 import {
+
 	useGetDataSemesterQuery,
 	useGetDisciplineSemesterQuery,
+	useLazyExportExcelQuery,
 	useSendDataSemesterMutation
 } from '../../../../store/api/forTeacher/forTeacherApi'
 
@@ -31,6 +33,7 @@ const JournalPosElem = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const [sendData, {}] = useSendDataSemesterMutation()
 	const [radioKey, setRadioKey] = useState(Math.random())
+	const [triggerExportExcel, { isFetching: isExporting }]  = useLazyExportExcelQuery()
 
 	useEffect(() => {
 		if (dataGetSemestr) {
@@ -81,6 +84,21 @@ const JournalPosElem = () => {
 		setDataSource([])
 		setRadioKey(Math.random())
 	}
+
+	const download = async () => {
+		if (disciplineId && groupId && monthValue && yearForm && semestrForm) {
+		  await triggerExportExcel({ 
+			subjectId: disciplineId, 
+			groupId: groupId, 
+			month: monthValue, 
+			year: yearForm, 
+			semester: semestrForm 
+		  })
+		} else {
+		  // Можно добавить уведомление о том, что не все параметры заполнены
+		  console.warn('Не все параметры для скачивания файла заполнены')
+		}
+	  }
 
 	return (
 		<Spin spinning={isFetchingData} className=" ">
@@ -145,11 +163,11 @@ const JournalPosElem = () => {
 					</div>
 					<div className="animate-fade-in ">
 						<Row className="flex gap-2">
-							<Button className="rounded-xl" icon={<PrinterOutlined />}>
+							{/* <Button className="rounded-xl" icon={<PrinterOutlined />}>
 								{t('printJournalEmpty')}
-							</Button>
-							<Button className="rounded-xl" icon={<PrinterOutlined />}>
-								{t('printJournalFiled')}
+							</Button> */}
+							<Button loading={isExporting} onClick={()=>download()} className="rounded-xl" icon={<PrinterOutlined />}>
+								Печать xml
 							</Button>
 						</Row>
 						{/* <Button onClick={showModal}>Открыть журнал</Button> */}

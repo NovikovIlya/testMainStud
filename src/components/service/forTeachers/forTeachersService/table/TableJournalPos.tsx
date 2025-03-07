@@ -7,6 +7,7 @@ import { t } from "i18next"
 import { useAppDispatch } from "../../../../../store"
 import { setIsEditTableScheduleTeacher } from "../../../../../store/reducers/authSlice"
 import type { EditableCellProps, EditableRowProps } from "../../../../../models/tables"
+import { StopOutlined } from "@ant-design/icons"
 
 const EditableContext = React.createContext<FormInstance<any> | null>(null)
 
@@ -58,12 +59,12 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
   }
 
   let childNode = children
-  
+  console.log('children',children)
   
 
   if (editable) {
     // @ts-ignore
-    childNode = record.columnNumber!==4 ? editing ? (
+    childNode = record.isBlocked===false ? editing ? (
       <Form.Item style={{ margin: 0, width: "auto" }} name={dataIndex} rules={[{ required: false }]}>
         {/* <Input  className="w-[35px]" ref={inputRef} onPressEnter={save} onBlur={save} /> */}
         <Select
@@ -82,18 +83,19 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
       </Form.Item>
     ) : (
       <div
-        className="editable-cell-value-wrap truncate"
+        className="editable-cell-value-wrap truncate h-8 text-center"
         style={{ width: "auto", minHeight: "22px", cursor: "pointer" }}
         onClick={toggleEdit}
       >
         {children}
       </div>
-    ) : <Tooltip title={'ыы'}><div
-    className="editable-cell-value-wrap truncate "
+    ) : <Tooltip title={'Ячейка заблокирована'}><div
+    className="editable-cell-value-wrap truncate h-8 backdrop-blur-sm  text-center opacity-15"
     style={{ width: "auto", minHeight: "22px", cursor: "pointer" }}
     onClick={toggleEdit}
   >
-    {children}
+     { /* @ts-ignore  */ }
+    {children?.[1] ? children : <StopOutlined />}
   </div></Tooltip>
   }
 
@@ -137,6 +139,7 @@ const TableBrs = ({collapsed,setCheckboxValue, dataSource, setDataSource }: any)
             timeIntervalId: att.timeIntervalId,
             weekDay: att.weekDay,
             columnNumber:att.columnNumber,
+            isBlocked:att.isBlocked,
           })
         }
       })
@@ -191,7 +194,7 @@ const TableBrs = ({collapsed,setCheckboxValue, dataSource, setDataSource }: any)
           title: (
             <div className=" flex justify-center items-center flex-col">
               <div className="text-[10px] text-center mb-2">{timeInfo.time}</div>
-              {timeInfo.columnNumber!==4 ?<Tooltip title="Подтвердить?">
+              {timeInfo.isBlocked===false ?<Tooltip title="Подтвердить?">
                 <Checkbox onChange={(e) => handleCheckboxChange(e, { date, ...timeInfo })} />
               </Tooltip> : ''}
             </div>
@@ -206,6 +209,7 @@ const TableBrs = ({collapsed,setCheckboxValue, dataSource, setDataSource }: any)
               children: status || "",
               props: {
                 columnNumber: timeInfo.columnNumber,
+                isBlocked:timeInfo.isBlocked
               },
             }
           },
@@ -364,6 +368,7 @@ const TableBrs = ({collapsed,setCheckboxValue, dataSource, setDataSource }: any)
                   record: {
                     ...record,
                     columnNumber: att?.columnNumber, // Добавляем columnNumber в record
+                    isBlocked: att?.isBlocked, 
                   },
                   editable: childCol.editable,
                   dataIndex: childCol.dataIndex,

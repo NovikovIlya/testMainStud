@@ -9,7 +9,7 @@ import InfoCard from './InfoCard'
 import JournalPosDay from './JournalPosDay'
 import JournalPosElem from './JournalPosElem'
 
-const NavJournal = () => {
+const NavJournal = ({collapsed}:{collapsed:boolean}) => {
 	const yearForm = useAppSelector(state => state.forTeacher.yearForm)
 	const semestrForm = useAppSelector(state => state.forTeacher.semestrForm)
 
@@ -30,7 +30,7 @@ const NavJournal = () => {
 						</Tabs.TabPane>
 						<Tabs.TabPane tab={t('sem')} key={2}>
 							<>
-								<JournalPosElem />
+								<JournalPosElem collapsed={collapsed} />
 							</>
 						</Tabs.TabPane>
 					</Tabs>

@@ -100,7 +100,7 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
   return <td {...restProps}>{childNode}</td>
 }
 
-const TableBrs = ({setCheckboxValue, dataSource, setDataSource }: any) => {
+const TableBrs = ({collapsed,setCheckboxValue, dataSource, setDataSource }: any) => {
   
 
   // Добавляем стили для редактируемых ячеек
@@ -379,9 +379,11 @@ const TableBrs = ({setCheckboxValue, dataSource, setDataSource }: any) => {
     }
     return col
   })
+  console.log('collapsed',collapsed)
+  const width = `calc(100vw - ${collapsed ? '240px' : '370px'})`;
   // В return заменяем columns на modifiedColumns
   return (
-    <div className="mt-4 w-[calc(100vw-370px)]">
+    <div style={{ width }} className={`mt-4 `}>
       <Table
         components={components}
         rowClassName={() => "editable-row"}

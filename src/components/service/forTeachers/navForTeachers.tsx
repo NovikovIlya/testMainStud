@@ -1,6 +1,6 @@
-import { MessageOutlined, PieChartOutlined } from '@ant-design/icons'
+import { MenuFoldOutlined, MenuUnfoldOutlined, MessageOutlined, PieChartOutlined } from '@ant-design/icons'
 import type { MenuProps } from 'antd'
-import { Col, Form, Menu, Row, Select } from 'antd'
+import { Button, Col, Form, Menu, Row, Select } from 'antd'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -37,6 +37,11 @@ export const NavForTeachers = () => {
 	const isEditTableScheduleTeacher = useAppSelector(state => state.auth.isEditTableScheduleTeacher)
 	const yearForm = Form.useWatch('year', form)
 	const semestrForm = Form.useWatch('semestr', form)
+	const [collapsed, setCollapsed] = useState(false);
+
+	const toggleCollapsed = () => {
+	  setCollapsed(!collapsed);
+	};
 
 	useEffect(() => {
 		dispatch(setYearForm(yearForm))
@@ -143,10 +148,11 @@ export const NavForTeachers = () => {
 		<>
 			<Header type={'service'} service={t('ToTeacher')} />
 			<Menu
+			 inlineCollapsed={collapsed}
 				selectedKeys={[current]}
 				mode="inline"
 				onClick={onClick}
-				className="min-w-[230px] max-w-[230px] flex flex-col  mt-36 h-[calc(100vh-144px)] shadow"
+				className=" max-w-[230px] flex flex-col  mt-36 h-[calc(100vh-144px)] shadow"
 				items={items.map((item: any, index: number) => ({
 					key: item.key,
 					icon: item.icon,
@@ -158,6 +164,9 @@ export const NavForTeachers = () => {
 					)
 				}))}
 			/>
+			<Button type="primary" className='fixed bottom-[10px] left-[-10px]' onClick={toggleCollapsed} style={{ marginBottom: 16 }}>
+        {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+      </Button>
 
 			<div className="bg-[#F5F8FB] w-full pt-[70px]      ">
 				<Form
@@ -207,7 +216,7 @@ export const NavForTeachers = () => {
 				{current === 'schedule' && <ScheduleTeacher />}
 				{current === 'BRS' ? <Brs /> : ''}
 				{current === 'vedomosti' ? <Vedomosti/> : ''}
-				{current === 'journalPos' ? <NavJournal /> : ''}
+				{current === 'journalPos' ? <NavJournal collapsed={collapsed}/> : ''}
 			</div>
 		</>
 	)

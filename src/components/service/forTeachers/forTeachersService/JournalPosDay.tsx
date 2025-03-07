@@ -38,9 +38,9 @@ const JournalPosDay = () => {
 		<>
 		<Spin spinning={isFetching}>
 			<Space direction="vertical">
-				<Text>{t('textLessonLog2')}</Text>
+				<Text className=''>{t('textLessonLog2')}</Text>
 				<ConfigProvider locale={i18n.language === 'ru' ? ru_RU : en_US}>
-					<DatePicker className='mb-4' onChange={onChange} format="DD.MM.YYYY" />
+					<DatePicker className='mb-4 mt-2' onChange={onChange} format="DD.MM.YYYY" />
 				</ConfigProvider>
 				{dataSource?.map((item:any)=>{
 					return <div >

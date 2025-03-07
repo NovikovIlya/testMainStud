@@ -16,7 +16,7 @@ import InfoCard from './InfoCard'
 import TableBrs from './table/TableBrs'
 import TableJournalPos from './table/TableJournalPos'
 
-const JournalPosElem = () => {
+const JournalPosElem = ({ collapsed }: { collapsed: boolean }) => {
 	const initialDay = ''
 	const [form] = Form.useForm()
 	const yearForm = useAppSelector(state => state.forTeacher.yearForm)
@@ -43,10 +43,11 @@ const JournalPosElem = () => {
 
 	const getMonthsBySemester = (semester: any, year: any) => {
 		if (semester === 1) {
-			return ['september', 'october', 'november', 'december']
+			return ['september', 'october', 'november', 'december']    
+		         
 		}
-
-		if (year === 2025) {
+		
+		if (year === 2024) {
 			return ['march', 'april', 'may', 'june']
 		}
 
@@ -99,11 +100,11 @@ const JournalPosElem = () => {
 		  console.warn('Не все параметры для скачивания файла заполнены')
 		}
 	  }
-
+	
 	return (
 		<Spin spinning={isFetchingData} className=" ">
-			<Form className="mt-8" form={form}>
-				<Row>
+			<Form className="mt-4" form={form}>
+				<Row className='w-[1000px]'>
 					<Col span={24}>
 						<Form.Item
 							name="disciline"
@@ -139,7 +140,7 @@ const JournalPosElem = () => {
 
 			{disciplineId ? (
 				<>
-					<div className={` mt-10  radio  justify-center animate-fade-in mb-6 `}>
+					<div className={` mt-6   radio  justify-center animate-fade-in mb-4 `}>
 						<Radio.Group
 							key={radioKey}
 							onChange={onChange}
@@ -166,9 +167,9 @@ const JournalPosElem = () => {
 							{/* <Button className="rounded-xl" icon={<PrinterOutlined />}>
 								{t('printJournalEmpty')}
 							</Button> */}
-							<Button loading={isExporting} onClick={()=>download()} className="rounded-xl" icon={<PrinterOutlined />}>
-								Печать xml
-							</Button>
+							{/* <Button loading={isExporting} onClick={()=>download()} className="rounded-xl" icon={<PrinterOutlined />}>
+								Печать
+							</Button> */}
 						</Row>
 						{/* <Button onClick={showModal}>Открыть журнал</Button> */}
 						{/* <Modal
@@ -186,11 +187,18 @@ const JournalPosElem = () => {
 									setCheckboxValue={setCheckboxValue}
 									setDataSource={setDataSource}
 									dataSource={dataSource}
+									collapsed={collapsed}
 								/>
 								{/* </Modal> */}
-								<Button onClick={saveData} className="mt-4 mb-4 rounded-xl" type="primary">
+								
+								<Row className="flex gap-2 items-center justify-between mt-4 mb-4">
+								<Button onClick={saveData} className=" rounded-xl" type="primary">
 									{t('Save')}
 								</Button>
+								<Button loading={isExporting} onClick={()=>download()} className="rounded-xl" icon={<PrinterOutlined />}>
+								Печать
+							</Button>
+								</Row>
 							</>
 						) : (
 							<Result title="Выберите месяц" />

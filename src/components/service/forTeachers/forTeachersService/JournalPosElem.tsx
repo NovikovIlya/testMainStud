@@ -77,6 +77,7 @@ const JournalPosElem = ({ collapsed }: { collapsed: boolean }) => {
 			subjectId: disciplineId,
 			month: monthValue
 		}
+		console.log('data',data)
 		sendData(data)
 	}
 

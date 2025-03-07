@@ -127,6 +127,17 @@ export const fotTeacherService = testApiSlice.injectEndpoints({
             providesTags: ['forTeacherJournalDay'],
             keepUnusedDataFor:0,
         }),
+        sendByDate: builder.mutation<any, any>({
+            query: (body) => {
+            return {
+                    url: `to-teacher/journal/by-date/save`,
+                    method: 'POST',
+                    body
+                }
+            },
+            invalidatesTags: ['forTeacherJournalDay'],
+
+        }),
 
         getDisciplineSemester: builder.query<any, any>({
             query: ({year,semester}) => {
@@ -203,6 +214,7 @@ export const {
     useGetDisciplineSemesterQuery,
     useGetDataSemesterQuery,
     useSendDataSemesterMutation,
-    useLazyExportExcelQuery
+    useLazyExportExcelQuery,
+    useSendByDateMutation
 } = fotTeacherService
 

@@ -9,7 +9,7 @@ import i18n from '../../../../18n'
 
 import JournalPosTable from './table/JournalPosTable'
 import TableJournalPosDay from './table/TableJournalPosDay'
-import { useGetByDateQuery } from '../../../../store/api/forTeacher/forTeacherApi'
+import { useGetByDateQuery, useSendByDateMutation } from '../../../../store/api/forTeacher/forTeacherApi'
 
 const { Text } = Typography
 
@@ -17,6 +17,7 @@ const JournalPosDay = () => {
 	const [dataSource, setDataSource] = useState<any>([])
 	const [date, setDate] = useState<any>('')
 	const {data,isFetching,isSuccess} = useGetByDateQuery(date,{skip:!date})
+	
 
 	useEffect(()=>{
 		if(data){
@@ -44,7 +45,7 @@ const JournalPosDay = () => {
 				</ConfigProvider>
 				{dataSource?.map((item:any)=>{
 					return <div >
-						<JournalPosTable    key={`${item.groupId}-${date}`} groupId={item.groupId} description={item?.subjectName} title={item?.groupName} data={item.students} />
+						<JournalPosTable date={date}   key={`${item.groupId}-${date}`} groupId={item.groupId} description={item?.subjectName} fixDay={item?.fixDay} time={item?.time} timeId={item?.timeId} title={item?.groupName} data={item.students} />
 					</div>
 				})}
 				

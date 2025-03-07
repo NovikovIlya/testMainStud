@@ -147,28 +147,35 @@ export const NavForTeachers = () => {
 	return (
 		<>
 			<Header type={'service'} service={t('ToTeacher')} />
-			<Menu
-			 inlineCollapsed={collapsed}
-				selectedKeys={[current]}
-				mode="inline"
-				onClick={onClick}
-				className=" max-w-[230px] flex flex-col  mt-36 h-[calc(100vh-144px)] shadow"
-				items={items.map((item: any, index: number) => ({
-					key: item.key,
-					icon: item.icon,
-					children: item.children,
-					label: (
-						<div className="" ref={refArray[index]}>
-							{item?.label}
-						</div>
-					)
-				}))}
-			/>
-			<Button type="primary" className='fixed bottom-[10px] left-[-10px]' onClick={toggleCollapsed} style={{ marginBottom: 16 }}>
-        {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-      </Button>
+			<div className={`fixed left-0 top-[144px] h-[calc(100vh-144px)] z-50 ${collapsed ? 'w-[80px]' : 'w-[230px]'}`}>
+  <Menu
+    inlineCollapsed={collapsed}
+    selectedKeys={[current]}
+    mode="inline"
+    onClick={onClick}
+    className="h-full shadow flex flex-col"
+    items={items.map((item: any, index: number) => ({
+      key: item.key,
+      icon: item.icon,
+      children: item.children,
+      label: (
+        <div ref={refArray[index]}>
+          {item?.label}
+        </div>
+      )
+    }))}
+  />
+  <Button
+    type="primary"
+    className='absolute bottom-[10px] left-[-2px]'
+    onClick={toggleCollapsed}
+    style={{ marginBottom: 16 }}
+  >
+    {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+  </Button>
+</div>
 
-			<div className="bg-[#F5F8FB] w-full pt-[70px]      ">
+			<div className={`${collapsed ? 'ml-[80px]' : ' ml-[229px]'} bg-[#F5F8FB] w-full pt-[70px]  min-h-screen   `}>
 				<Form
 					form={form}
 					initialValues={{

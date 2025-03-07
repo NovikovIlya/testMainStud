@@ -20,6 +20,80 @@ const EditableRow: React.FC<EditableRowProps> = ({ index, ...props }) => {
   );
 };
 
+// const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
+//   title,
+//   editable,
+//   children,
+//   dataIndex,
+//   record,
+//   handleSave,
+//   ...restProps
+// }) => {
+//   const [editing, setEditing] = useState(false);
+//   const inputRef = useRef<InputRef>(null);
+//   const form = useContext(EditableContext)!;
+//   const selectRef = useRef<any>(null);
+  
+//   useEffect(() => {
+//     if (editing) {
+//       inputRef.current?.focus();
+//     }
+//   }, [editing]);
+
+//   const toggleEdit = () => {
+//     setEditing(!editing);
+//     form.setFieldsValue({ [dataIndex]: record[dataIndex] });
+//   };
+
+//   const save = async () => {
+//     try {
+//       const values = await form.validateFields();
+    
+//       toggleEdit();
+//       // @ts-ignore
+//       handleSave({ ...record, ...values });
+//     } catch (errInfo) {
+//       console.log('Save failed:', errInfo);
+//     }
+//   };
+
+//   let childNode = children;
+
+//   if (editable) {
+//     childNode = editing ? (
+//       <Form.Item
+//         style={{ margin: 0 ,width:'auto'}}
+//         name={dataIndex}
+        
+//       >
+//         {/* <Input  ref={inputRef} onPressEnter={save} onBlur={save} /> */}
+//         <Select
+//         allowClear
+//         open
+//     className="w-[50px]"
+//     ref={selectRef}
+//     onBlur={save}
+//     onChange={save}
+//     options={[
+//       { value: null, label: '' },
+//       { value: 'б', label: 'б' },
+//       { value: 'н', label: 'н' }
+//     ]}
+//   />
+//       </Form.Item>
+//     ) : (
+//       <div
+//         className="editable-cell-value-wrap h-8"
+//         style={{ paddingInlineEnd: 24 ,width:'auto'}}
+//         onClick={toggleEdit}
+//       >
+//         {children}
+//       </div>
+//     );
+//   }
+
+//   return <td {...restProps}>{childNode}</td>;
+// };
 const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
   title,
   editable,
@@ -30,15 +104,33 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
   ...restProps
 }) => {
   const [editing, setEditing] = useState(false);
-  const inputRef = useRef<InputRef>(null);
   const form = useContext(EditableContext)!;
+  const cellRef = useRef<HTMLTableCellElement>(null);
   const selectRef = useRef<any>(null);
   
   useEffect(() => {
     if (editing) {
-      inputRef.current?.focus();
+      selectRef.current?.focus();
     }
   }, [editing]);
+
+  useEffect(() => {
+    if (editing) {
+      const handleClickOutside = (event: MouseEvent) => {
+        const target = event.target as Node;
+        console.log('selectRef',selectRef)
+
+        if ( cellRef.current && !cellRef.current.contains(target) && selectRef.current === null) {
+          toggleEdit();
+        }
+      };
+
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }
+  }, [editing, cellRef]);
 
   const toggleEdit = () => {
     setEditing(!editing);
@@ -48,7 +140,6 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
   const save = async () => {
     try {
       const values = await form.validateFields();
-    
       toggleEdit();
       // @ts-ignore
       handleSave({ ...record, ...values });
@@ -62,29 +153,28 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
   if (editable) {
     childNode = editing ? (
       <Form.Item
-        style={{ margin: 0 ,width:'auto'}}
+        style={{ margin: 0, width: 'auto' }}
         name={dataIndex}
-        
       >
-        {/* <Input  ref={inputRef} onPressEnter={save} onBlur={save} /> */}
+        
         <Select
-        allowClear
-        open
-    className="w-[50px]"
-    ref={selectRef}
-    onBlur={save}
-    onChange={save}
-    options={[
-      { value: null, label: '' },
-      { value: 'б', label: 'б' },
-      { value: 'н', label: 'н' }
-    ]}
-  />
+          allowClear
+          open
+          className="w-[50px]"
+          ref={selectRef}
+          onBlur={save}
+          onChange={save}
+          options={[
+            { value: null, label: '' },
+            { value: 'б', label: 'б' },
+            { value: 'н', label: 'н' }
+          ]}
+        />
       </Form.Item>
     ) : (
       <div
         className="editable-cell-value-wrap h-8"
-        style={{ paddingInlineEnd: 24 ,width:'auto'}}
+        style={{ paddingInlineEnd: 24, width: 'auto' }}
         onClick={toggleEdit}
       >
         {children}
@@ -92,7 +182,7 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
     );
   }
 
-  return <td {...restProps}>{childNode}</td>;
+  return <td ref={cellRef} {...restProps}>{childNode}</td>;
 };
 
 

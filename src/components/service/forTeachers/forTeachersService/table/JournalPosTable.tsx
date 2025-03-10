@@ -50,10 +50,12 @@ const JournalPosTable = ({date,fixDay,time,timeId,groupId,description,title,data
 				{title}
 			</Title>
 			<Text>{description}</Text>
-			<TableJournalPosDay dataSource={localData} setLocalData={setLocalData} />
+			<TableJournalPosDay dataSource={localData} setLocalData={setLocalData} fixDay={fixDay}/>
 			
-			<Row className='mt-6'><Checkbox onChange={onChange}>Подтвердить?</Checkbox></Row>
-			<Button onClick={send} className='mt-8 mb-8 rounded-xl' type='primary'>{t('Save')}</Button>
+			<Row className='mt-6'>
+				{fixDay ? <div>Дата подтверждения: {fixDay} </div> : <Checkbox  onChange={onChange}>Подтвердить?</Checkbox>}
+			</Row>
+			<Button disabled={fixDay!==null ? true : false} onClick={send} className='mt-8 mb-8 rounded-xl' type='primary'>{t('Save')}</Button>
 		</>
 	)
 }

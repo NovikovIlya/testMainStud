@@ -42,14 +42,20 @@ const JournalPosElem = ({ collapsed }: { collapsed: boolean }) => {
 	}, [dataGetSemestr])
 
 	const getMonthsBySemester = (semester: any, year: any) => {
-		if (semester === 1) {
-			return ['september', 'october', 'november', 'december']    
-		         
-		}
-		
-		if (year === 2024) {
+		if (year === 2024){
+			if (semester === 1) {
+				return ['september', 'october', 'november', 'december']    
+					 
+			}
 			return ['march', 'april', 'may', 'june']
 		}
+
+
+		if (semester === 1) {
+			return ['september', 'october', 'november', 'december']     
+		}
+		
+		
 
 		return ['february', 'march', 'april', 'may']
 	}

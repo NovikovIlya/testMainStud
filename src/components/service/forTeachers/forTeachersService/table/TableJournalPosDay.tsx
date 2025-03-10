@@ -101,13 +101,15 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
   dataIndex,
   record,
   handleSave,
+  // @ts-ignore
+  fixDay,
   ...restProps
 }) => {
   const [editing, setEditing] = useState(false);
   const form = useContext(EditableContext)!;
   const cellRef = useRef<HTMLTableCellElement>(null);
   const selectRef = useRef<any>(null);
-  
+  console.log('record',record)
   useEffect(() => {
     if (editing) {
       selectRef.current?.focus();
@@ -147,11 +149,16 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
       console.log('Save failed:', errInfo);
     }
   };
-
+  const options=[
+    { value: null, label: "" },
+    { value: "б", label: t('b') },
+    { value: "н", label: t('n')},
+  ]
+  const optionsMap = new Map(options.map(opt => [opt.value, opt.label]));
   let childNode = children;
 
   if (editable) {
-    childNode = editing ? (
+    childNode = fixDay===null ? editing  ? (
       <Form.Item
         style={{ margin: 0, width: 'auto' }}
         name={dataIndex}
@@ -177,16 +184,24 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
         style={{ paddingInlineEnd: 24, width: 'auto' }}
         onClick={toggleEdit}
       >
-        {children}
+          {/* @ts-ignore */}
+          {optionsMap.get(children?.[1]) || children}
       </div>
-    );
+    ) :  <div
+    className="editable-cell-value-wrap h-8 opacity-30"
+    style={{ paddingInlineEnd: 24, width: 'auto' }}
+    onClick={toggleEdit}
+  >
+      {/* @ts-ignore */}
+      {optionsMap.get(children?.[1]) || children}
+  </div>
   }
 
   return <td ref={cellRef} {...restProps}>{childNode}</td>;
 };
 
 
-const TableJournalPosDay = ({dataSource, setLocalData}:any) => {
+const TableJournalPosDay = ({fixDay,dataSource, setLocalData}:any) => {
   const dispatch = useAppDispatch()
 
   function handleCheckboxChange(e:any,text:any)  {
@@ -271,6 +286,7 @@ const TableJournalPosDay = ({dataSource, setLocalData}:any) => {
         dataIndex: col.dataIndex,
         title: col.title,
         handleSave,
+        fixDay
       }),
     };
   }) 
@@ -279,6 +295,7 @@ const TableJournalPosDay = ({dataSource, setLocalData}:any) => {
   return (
     <div className='mt-4'>
       <Table<DataType>
+        
         rowKey={(record) => record.key}
         components={components}
         rowClassName={() => 'editable-row'}
@@ -292,7 +309,7 @@ const TableJournalPosDay = ({dataSource, setLocalData}:any) => {
         pagination={false}
       
       />
-      {/* <Button className='mt-8 mb-8 rounded-xl' type='primary'>{t('Save')}</Button> */}
+    
     </div>
   );
 };

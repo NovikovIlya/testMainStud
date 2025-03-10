@@ -192,22 +192,22 @@ const JournalPosElem = ({ collapsed }: { collapsed: boolean }) => {
 								/>
 								{/* </Modal> */}
 								
-								<Row className="flex gap-2 items-center justify-between mt-4 mb-4">
+								<Row className="flex gap-2 items-center  mt-4 mb-4">
 								<Button onClick={saveData} className=" rounded-xl" type="primary">
 									{t('Save')}
 								</Button>
 								<Button loading={isExporting} onClick={()=>download()} className="rounded-xl" icon={<PrinterOutlined />}>
-								Печать
+								{t('print')}
 							</Button>
 								</Row>
 							</>
 						) : (
-							<Result title="Выберите месяц" />
+							<Result title={t('selectMonth')} />
 						)}
 					</div>
 				</>
 			) : (
-				<Result title="Выберите предмет/группу" />
+				<Result title={t('selectGroup')} />
 			)}
 		</Spin>
 	)

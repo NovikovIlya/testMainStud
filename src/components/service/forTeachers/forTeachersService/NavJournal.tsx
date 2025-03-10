@@ -15,7 +15,7 @@ const NavJournal = ({collapsed}:{collapsed:boolean}) => {
 
 
 	return (
-		<div className="px-[80px] ">
+		<div className="px-[80px] max-w-[1100px]">
 			{semestrForm ? (
 				<>
 					<InfoCard text={t('textLessonLog')} />

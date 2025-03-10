@@ -818,7 +818,11 @@
 	"discipline/group" : "Предмет/группа",
 	"fixed-term" : "Срочный",
 	"with-prolongation" : "С пролонгацией",
-	"tasksRange" : "Индивидуальные задания"
+	"tasksRange" : "Индивидуальные задания",
+	"b": "б",
+	"n": "н",
+	"selectGroup": "Выберите предмет/группу",
+	"selectMonth": "Выберите месяц"
 
 	
 	  

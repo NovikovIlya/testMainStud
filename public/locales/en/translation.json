@@ -810,7 +810,7 @@
 	"textLessonLog": "Before working with the 'Attendance Log' tab, you must go to the 'Schedule' tab and check that your dean's office has entered your class schedule correctly.",
 	"days": "Filling by days",
 	"sem": "Filling by semesters",
-	"textLessonLog2": "To display the list of disciplines, select the required date in the calendar: (filling options: n - was not, b - was sick)",
+	"textLessonLog2": "To display the list of disciplines, select the required date in the calendar: (filling options: a - absent, i - was ill)",
 	"ychet":"Attendance tracking",
 	"bringShortLink" : "Get a short link",
 	"clear" : "Clear list",
@@ -818,7 +818,11 @@
 	"historyText": "Shorten links with our service",
 	"discipline/group" : "Discipline/group",
 	"fixed-term" : "Fixed-term",
-	"with-prolongation" : "with  prolongation"
+	"with-prolongation" : "with  prolongation",
+	"b": "i",
+	"n": "a",
+	"selectGroup": "Select discipline/group",
+	"selectMonth": "Select month"
 	
 	  
 	  

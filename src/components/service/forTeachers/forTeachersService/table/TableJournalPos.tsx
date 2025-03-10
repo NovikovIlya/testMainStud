@@ -14,6 +14,7 @@ import { useAppDispatch } from "../../../../../store";
 import { setIsEditTableScheduleTeacher } from "../../../../../store/reducers/authSlice";
 import type { EditableCellProps, EditableRowProps } from "../../../../../models/tables";
 import { StopOutlined } from "@ant-design/icons";
+import i18n from "../../../../../18n";
 
 const EditableContext = React.createContext<FormInstance<any> | null>(null);
 
@@ -79,8 +80,33 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
       console.log("Save failed:", errInfo);
     }
   };
+  const getOptionalLabel = (val:any)=>{
+    if(i18n.language === 'ru') {
+      if(val==='б'){
+        return  'б'
+      }
+      if(val==='н') {
+        return 'н'
+      }
+    }
+    if(i18n.language === 'en') {
+      if(val==='б'){
+        return  'i'
+      }
+      if(val==='н') {
+        return 'a'
+      }
+    }
+  }
+  const options=[
+    { value: null, label: "" },
+    { value: "б", label: t('b') },
+    { value: "н", label: t('n')},
+  ]
+  const optionsMap = new Map(options.map(opt => [opt.value, opt.label]));
 
   let childNode = children;
+  console.log('children',children)
   if (editable) {
     childNode = record.isBlocked === false ? (
       editing ? (
@@ -98,8 +124,8 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
             onChange={save}
             options={[
               { value: null, label: "" },
-              { value: "б", label: "б" },
-              { value: "н", label: "н" },
+              { value: "б", label: t('b') },
+              { value: "н", label: t('n')},
             ]}
           />
         </Form.Item>
@@ -113,7 +139,8 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
           }}
           onClick={toggleEdit}
         >
-          {children}
+          {/* @ts-ignore */}
+          {optionsMap.get(children?.[1]) || children}
         </div>
       )
     ) : (
@@ -128,7 +155,7 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
           onClick={toggleEdit}
         >
           {/* @ts-ignore */}
-          {children?.[1] ? children : <StopOutlined className="opacity-30" />}
+          {children?.[1] ? optionsMap.get(children?.[1]) || children : <StopOutlined className="opacity-30" />}
         </div>
       </Tooltip>
     );
@@ -177,7 +204,8 @@ const TableJournalPos = ({ collapsed, setCheckboxValue, dataSource, setDataSourc
   };
 
   const generateColumns = (groupedByDate: { [key: string]: any[] }) => {
-    const weekDayNames = ["", t('monday'), "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"];
+    const weekDayNames = ["", t('monday'), t('tuesday'), t('wednesday'), t('thursday'), t('friday'), t('saturday'), t('sunday')];
+
     
     const baseColumns = [
       {
@@ -194,7 +222,7 @@ const TableJournalPos = ({ collapsed, setCheckboxValue, dataSource, setDataSourc
         render: (_:any, __:any, index:any) => index + 1,
       },
       {
-        title: t('fio'),
+        title: t('fioStudent'),
         dataIndex: "studentName",
         width: "200px",
         fixed: "left",
@@ -346,7 +374,7 @@ const TableJournalPos = ({ collapsed, setCheckboxValue, dataSource, setDataSourc
     return col;
   });
 
-  const width = `calc(100vw - ${collapsed ? '240px' : '370px'})`;
+  const width = `calc(100vw - ${collapsed ? '240px' : '350px'})`;
 
   return (
     <div style={{ width }} className="mt-4">

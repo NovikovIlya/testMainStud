@@ -47,9 +47,9 @@ const JournalPosTable = ({date,fixDay,time,timeId,groupId,description,title,data
 	return (
 		<>
 			<Title className="mt-2 px-2" level={4}>
-				Группа: {title}
+				{title}
 			</Title>
-			<Text className='px-2'>Предмет: {description}</Text>
+			<Text className='px-2'>{description}</Text>
 			<TableJournalPosDay dataSource={localData} setLocalData={setLocalData} fixDay={fixDay}/>
 			
 			<Row className='mt-6 px-2' >

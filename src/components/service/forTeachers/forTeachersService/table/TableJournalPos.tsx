@@ -387,6 +387,7 @@ const TableJournalPos = ({ collapsed, setCheckboxValue, dataSource, setDataSourc
         }}
         rowClassName={() => "editable-row"}
         bordered
+        locale={{ emptyText: t('noData') }}
         dataSource={transformedData}
         // @ts-ignore
         columns={modifiedColumns}

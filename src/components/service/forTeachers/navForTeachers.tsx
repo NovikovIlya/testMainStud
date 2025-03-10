@@ -167,7 +167,7 @@ export const NavForTeachers = () => {
   />
   <Button
     type="primary"
-    className='absolute bottom-[10px] left-[-3px]'
+    className='absolute bottom-[10px] left-[-4px]'
     onClick={toggleCollapsed}
     style={{ marginBottom: 16 }}
   >

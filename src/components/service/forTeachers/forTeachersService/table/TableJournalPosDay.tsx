@@ -188,7 +188,7 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
           {optionsMap.get(children?.[1]) || children}
       </div>
     ) :  <div
-    className="editable-cell-value-wrap h-8 opacity-30"
+    className="editable-cell-value-wrap h-8 "
     style={{ paddingInlineEnd: 24, width: 'auto' }}
     onClick={toggleEdit}
   >
@@ -260,9 +260,9 @@ const TableJournalPosDay = ({fixDay,dataSource, setLocalData}:any) => {
       setLocalData(newData);
 
       // Отправка действия, если есть изменения
-      if (hasChanges) {
-        dispatch(setIsEditTableScheduleTeacher(true));
-      }
+      // if (hasChanges) {
+      //   dispatch(setIsEditTableScheduleTeacher(true));
+      // }
     }
   };
 
@@ -293,7 +293,7 @@ const TableJournalPosDay = ({fixDay,dataSource, setLocalData}:any) => {
    
 
   return (
-    <div className='mt-4'>
+    <div className={`${fixDay!==null ?'opacity-40':''} mt-4`}>
       <Table<DataType>
         
         rowKey={(record) => record.key}

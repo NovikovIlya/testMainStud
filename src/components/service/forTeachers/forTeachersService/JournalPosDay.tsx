@@ -1,36 +1,37 @@
-import { ConfigProvider, DatePicker, DatePickerProps, Space, Spin, Typography } from 'antd'
-import Title from 'antd/es/typography/Title'
-import en_US from 'antd/locale/en_US'
-import ru_RU from 'antd/locale/ru_RU'
-import { t } from 'i18next'
-import React, { useEffect, useState } from 'react'
-import dayjs from 'dayjs'
-import i18n from '../../../../18n'
+import { ConfigProvider, DatePicker, DatePickerProps, Space, Spin, Typography } from 'antd';
+import Title from 'antd/es/typography/Title';
+import en_US from 'antd/locale/en_US';
+import ru_RU from 'antd/locale/ru_RU';
+import { t } from 'i18next';
+import React, { useEffect, useState } from 'react';
+import dayjs from 'dayjs';
+import i18n from '../../../../18n';
 
-import JournalPosTable from './table/JournalPosTable'
-import { useGetByDateQuery } from '../../../../store/api/forTeacher/forTeacherApi'
-import { useAppSelector } from '../../../../store'
+import JournalPosTable from './table/JournalPosTable';
+import { useGetByDateQuery } from '../../../../store/api/forTeacher/forTeacherApi';
+import { useAppSelector } from '../../../../store';
 
-const { Text } = Typography
+const { Text } = Typography;
 
 const JournalPosDay = () => {
-  const [dataSource, setDataSource] = useState<any>([])
-  const [date, setDate] = useState<any>('')
-  const { data, isFetching, isSuccess } = useGetByDateQuery(date, { skip: !date })
-  const yearForm = useAppSelector(state => state.forTeacher.yearForm)
-  const semestrForm = useAppSelector(state => state.forTeacher.semestrForm)
+  const [dataSource, setDataSource] = useState<any>([]);
+  const [date, setDate] = useState<any>('');
+  const [firstAvailableDate, setFirstAvailableDate] = useState<any>(null);
+  
+  const { data, isFetching, isSuccess } = useGetByDateQuery(date, { skip: !date });
+  const yearForm = useAppSelector(state => state.forTeacher.yearForm);
+  const semestrForm = useAppSelector(state => state.forTeacher.semestrForm);
 
   useEffect(() => {
     if (data) {
-      setDataSource(data)
+      setDataSource(data);
     }
-  }, [data])
+  }, [data]);
 
   // Функция для определения границ семестра
   const getSemesterBoundaries = () => {
-    
-    const  startYear = yearForm
-	const  endYear = yearForm ? yearForm+1 : 2099;
+    const startYear = yearForm;
+    const endYear = yearForm ? yearForm + 1 : 2099;
     let startDate, endDate;
     if (semestrForm === 1) {
       // Первый семестр: 1 сентября - 31 января
@@ -46,17 +47,34 @@ const JournalPosDay = () => {
   };
 
   // Создаем функцию disabledDate на основе границ семестра
-  const disabledDate = (current:any) => {
+  const disabledDate = (current: any) => {
     const { startDate, endDate } = getSemesterBoundaries();
     // Блокируем даты вне текущего семестра
     return current && (current.isBefore(startDate, 'day') || current.isAfter(endDate, 'day'));
   };
 
+  // Функция для нахождения первого доступного дня
+  const findFirstAvailableDate = () => {
+    const { startDate } = getSemesterBoundaries();
+    let dateToCheck = startDate.clone();
+
+    while (disabledDate(dateToCheck)) {
+      dateToCheck = dateToCheck.add(1, 'day');
+    }
+
+    return dateToCheck;
+  };
+
+  useEffect(() => {
+    // Устанавливаем первый доступный день при монтировании компонента
+    setFirstAvailableDate(findFirstAvailableDate());
+  }, [yearForm, semestrForm]);
+
   const onChange: DatePickerProps['onChange'] = (date, dateString) => {
-    console.log(date, dateString)
-    setDate(dateString)
-    setDataSource([])
-  }
+    console.log(date, dateString);
+    setDate(dateString);
+    setDataSource([]);
+  };
 
   return (
     <>
@@ -69,10 +87,11 @@ const JournalPosDay = () => {
               onChange={onChange} 
               format="DD.MM.YYYY"
               disabledDate={disabledDate}
+              defaultPickerValue={firstAvailableDate||dayjs(`2020-06-20`)} // Используем firstAvailableDate
             />
           </ConfigProvider>
-          {dataSource?.map((item: any) => {
-            return <div key={`${item.groupId}-${date}`}>
+          {dataSource?.map((item: any) => (
+            <div className='border-2 border-indigo-600 shadow  rounded py-[1px] mb-2' key={`${item.groupId}-${date}`}>
               <JournalPosTable 
                 date={date} 
                 groupId={item.groupId} 
@@ -84,12 +103,14 @@ const JournalPosDay = () => {
                 data={item.students} 
               />
             </div>
-          })}
+          ))}
         </Space>
       </Spin>
-      {isSuccess && !isFetching && date && data?.length === 0 ? <Title className='animate-fade-in' level={4}>{t('noData')}</Title> : ''}
+      {isSuccess && !isFetching && date && data?.length === 0 ? (
+        <Title className='animate-fade-in' level={4}>{t('noData')}</Title>
+      ) : null}
     </>
-  )
-}
+  );
+};
 
-export default JournalPosDay
+export default JournalPosDay;

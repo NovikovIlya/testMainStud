@@ -177,7 +177,7 @@ const TableJournalPos = ({ collapsed, setCheckboxValue, dataSource, setDataSourc
   };
 
   const generateColumns = (groupedByDate: { [key: string]: any[] }) => {
-    const weekDayNames = ["", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"];
+    const weekDayNames = ["", t('monday'), "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"];
     
     const baseColumns = [
       {
@@ -194,7 +194,7 @@ const TableJournalPos = ({ collapsed, setCheckboxValue, dataSource, setDataSourc
         render: (_:any, __:any, index:any) => index + 1,
       },
       {
-        title: "ФИО",
+        title: t('fio'),
         dataIndex: "studentName",
         width: "200px",
         fixed: "left",

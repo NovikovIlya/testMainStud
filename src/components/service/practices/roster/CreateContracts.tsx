@@ -712,10 +712,10 @@ export const CreateContracts = () => {
                   size={"large"}
                   allowClear
                   onKeyDown={handleKeyDown}
-                  disabledDate={(current) => {
-                    // Отключаем даты, которые больше текущей даты
-                    return current && isAfter(current.toDate(), endOfDay(new Date()))
-                  }}
+                  // disabledDate={(current) => {
+                  //   // Отключаем даты, которые больше текущей даты
+                  //   return current && isAfter(current.toDate(), endOfDay(new Date()))
+                  // }}
                 />
               </Form.Item>
             </Col>

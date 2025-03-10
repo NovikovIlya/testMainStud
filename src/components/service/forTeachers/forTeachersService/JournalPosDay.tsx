@@ -91,7 +91,7 @@ const JournalPosDay = () => {
             />
           </ConfigProvider>
           {dataSource?.map((item: any) => (
-            <div className='border-2 border-indigo-600 shadow  rounded py-[1px] mb-2' key={`${item.groupId}-${date}`}>
+            <div className='border-2 border-solid border-gray-100 shadow  rounded py-[1px] mb-2' key={`${item.groupId}-${date}`}>
               <JournalPosTable 
                 date={date} 
                 groupId={item.groupId} 

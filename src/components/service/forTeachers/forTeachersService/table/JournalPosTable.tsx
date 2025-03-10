@@ -47,15 +47,15 @@ const JournalPosTable = ({date,fixDay,time,timeId,groupId,description,title,data
 	return (
 		<>
 			<Title className="mt-2 px-2" level={4}>
-				{title}
+				Группа: {title}
 			</Title>
-			<Text className='px-2'>{description}</Text>
+			<Text className='px-2'>Предмет: {description}</Text>
 			<TableJournalPosDay dataSource={localData} setLocalData={setLocalData} fixDay={fixDay}/>
 			
 			<Row className='mt-6 px-2' >
-				{fixDay ? <div className='flex gap-2'><span>{t('dataAprove')}:</span><span>{fixDay}</span> </div> : <Checkbox  onChange={onChange}>Подтвердить?</Checkbox>}
+				{fixDay ? <div className='flex gap-2'><span>{t('dataAprove')}:</span><span className='mb-3'>{fixDay}</span> </div> : <Checkbox  onChange={onChange}>Подтвердить?</Checkbox>}
 			</Row>
-			<Button disabled={fixDay!==null ? true : false} onClick={send} className='mt-4 mb-8 rounded-xl mx-2' type='primary'>{t('Save')}</Button>
+			{fixDay===null ? <Button disabled={fixDay!==null ? true : false} onClick={send} className='mt-4 mb-8 rounded-xl mx-2' type='primary'>{t('Save')}</Button>:''}
 		</>
 	)
 }

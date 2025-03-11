@@ -144,7 +144,7 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
         </div>
       )
     ) : (
-      <Tooltip title={"Ячейка заблокирована"}>
+      <Tooltip title={t('isBlocked')}>
         <div
           className="editable-cell-value-wrap truncate h-8 backdrop-blur-sm text-center opacity-60"
           style={{

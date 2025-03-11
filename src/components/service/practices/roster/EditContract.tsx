@@ -658,7 +658,10 @@ export const EditContract = () => {
             if (!hideSrok) {
                 form.setFieldValue('endDate', dayjs(data.endDate))
             }
-            form.setFieldValue('specialtyNameIds', nameSpec)
+
+            setNameSpec(data?.specialtyNames.map((item:any)=>item.id))
+            form.setFieldValue('specialtyNameIds', data?.specialtyNames)
+
             form.setFieldValue('actualFacility', data.actualFacility)
             form.setFieldValue('placesAmount', data.placesAmount)
             form.setFieldValue('pdfContract', data.documentCopyId)
@@ -712,7 +715,7 @@ export const EditContract = () => {
             .catch(e => console.log(e))
         nav('/services/practices/registerContracts')
     }
-
+    console.log('nameSpec',nameSpec)
     useEffect(() => {
         let url = "https://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/party";
         let options = {
@@ -743,6 +746,7 @@ export const EditContract = () => {
             form.resetFields(['contractFacility', 'legalFacility'])
         }
     }, [inn]);
+    console.log('data',data)
 
     if (isLoading) return <SkeletonPage />
 
@@ -911,16 +915,21 @@ export const EditContract = () => {
                                 placeholder=""
                                 value={nameSpec}
                                 className="w-full"
-                                onChange={(value) => setNameSpec(value)}
-                                options={dataNameSpecialty?.filter((option, index, self) =>
-                                    index === self.findIndex((o) => (
-                                        o.value === option.value
-                                    ))
-                                ).map((item) => {
+                                // onChange={(value) => setNameSpec(value)}
+                                onSelect={(value, option) => {
+                                    // option.id доступен здесь
+                                    setNameSpec((prev:any) => [...prev, option.id])
+                                }}
+                                onDeselect={(value, option) => {
+                                    setNameSpec((prev:any) => prev.filter((id:any) => id !== option.id))
+                                }}
+                                options={dataNameSpecialty?.map((item) => {
                                     return {
+                                        // @ts-ignore
+                                        label: item.value,
+                                        value: item.value,
                                         key: item.id,
-                                        value: item.id,
-                                        label: item.label
+                                        id:item.id
                                     }
                                 })}
                             />

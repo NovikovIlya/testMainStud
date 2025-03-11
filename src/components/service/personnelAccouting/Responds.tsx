@@ -34,20 +34,22 @@ export const Responds = () => {
 	const { data: categories = [], isLoading: isCategoriesLoading } = useGetCategoriesQuery()
 	const { data: directions = [], isLoading: isDirectionsLoading } = useGetDirectionsQuery(categoryTitle)
 	const { data: subdivisions = [], isLoading: isSubdivisionsLoading } = useGetSubdivisionsQuery(categoryTitle)
-	const { data: responds = [], isLoading: loading } = useGetVacancyGroupedResponcesQuery(
+	const { data: response = {}, isLoading: loading } = useGetVacancyGroupedResponcesQuery(
 		requestData.subcategory === 'Все'
 			? {
-					category: requestData.category,
-					role: 'PERSONNEL_DEPARTMENT',
-					type: requestData.type
-			  }
+				category: requestData.category,
+				role: 'PERSONNEL_DEPARTMENT',
+				type: requestData.type,
+			}
 			: {
-					category: requestData.category,
-					direction: requestData.subcategory,
-					role: 'PERSONNEL_DEPARTMENT',
-					type: requestData.type
-			  }
+				category: requestData.category,
+				direction: requestData.subcategory,
+				role: 'PERSONNEL_DEPARTMENT',
+				type: requestData.type,
+			}
 	)
+
+	const responds = response.content || []
 
 	const dispatch = useDispatch()
 

@@ -6,8 +6,10 @@ import { useGetSupervisorVacancyQuery } from '../../../../../store/api/serviceAp
 import SupervisorVacancyItem from './SupervisorVacancyItem'
 
 export const SupervisorVacancies = () => {
-	const { data: vacancies = [], isLoading: loading } =
+	const { data: response = {}, isLoading: loading } =
 		useGetSupervisorVacancyQuery()
+
+	const vacancies = response.content || []
 
 	if (loading) {
 		return (

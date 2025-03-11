@@ -9,8 +9,9 @@ import { VacancyRequestItem } from './VacancyRequestItem'
 export const VacancyRequestsPage = () => {
 	const [action, setAction] = useState<string>('все')
 
-	const { data: requests = [], isLoading: loading } =
-		useGetVacancyRequestsQuery(action)
+	const { data: response = {}, isLoading: loading } = useGetVacancyRequestsQuery(action)
+
+	const requests = response.content || []
 
 	if (loading) {
 		return (

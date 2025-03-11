@@ -696,12 +696,12 @@ export const EditContract = () => {
             contractType: values.contractType,
             prolongation: values.prolongation,
             endDate: hideSrok ? null : values.endDate,
-            specialtyNameIds: nameSpec,
+            specialtyNameIds: Array.isArray(nameSpec) && nameSpec.every(item => typeof item === 'object' && item !== null) ? nameSpec?.map((item)=>item.key) : nameSpec,
             legalFacility: values.legalFacility,
             actualFacility: values.actualFacility,
             placesAmount: values.placesAmount
         }
-
+        console.log('contract',contract)
         const jsonData = JSON.stringify(contract)
         const blob = new Blob([jsonData], { type: 'application/json' })
         formDataEditContract.append('contract', blob)

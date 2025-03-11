@@ -28,7 +28,7 @@ const Vedomosti = () => {
 	const { data, isFetching } = useGetVedomostForTeacherQuery({ subjectId: discilineForm, groupId: groupeForm,year:yearForm,semester :semestrForm,type:kindForm},{ skip: !discilineForm || !groupeForm || !kindForm})
 	const { data: dataSubjects,isFetching:isFetchingSub } = useGetVedomostSubjectsQuery({year:yearForm,semester :semestrForm},{ skip: !yearForm || !semestrForm })
 	const { data: dataGroups,isFetching:isFetchingGroup } = useGetVedomostGroupsQuery({subjectId:discilineForm,year:yearForm,semester :semestrForm}, { skip: !discilineForm })
-	const { data: dataKind } = useGetVedomostKindQuery({subjectId:discilineForm,year:yearForm,semester :semestrForm,groupId:groupeForm}, { skip: !discilineForm || !groupeForm})
+	const { data: dataKind,isError,error } = useGetVedomostKindQuery({subjectId:discilineForm,year:yearForm,semester :semestrForm,groupId:groupeForm}, { skip: !discilineForm || !groupeForm})
 	const [saveBrs, { data: dataSave, isLoading }] = useSaveVedomostMutation()
 	const [dataSource, setDataSource] = useState<any>([])
 	
@@ -73,7 +73,7 @@ const Vedomosti = () => {
 		dispatch(setIsEditTableScheduleTeacher(false))
 	}
 
-
+	console.log('error',error)
 
 	if(isFetchingSub){
 		return (
@@ -213,8 +213,10 @@ const Vedomosti = () => {
 
 							<InfoCard text={t('infoTextVed2')} />
 						</div>
-					) : (
-						<Result className="mb-4" title="" extra={t('selectDis')} />
+					) : (<>
+						{!isError ? <Result className="mb-4" title="" extra={t('selectDis')} />: ''}
+						 {/* @ts-ignore */}
+						<div className='w-full justify-center text-red-400 text-center'>{isError ? error?.data?.message : ''}</div></>
 					)}
 				</Form>
 			) : (

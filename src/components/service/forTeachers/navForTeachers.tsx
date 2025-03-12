@@ -23,6 +23,7 @@ import ScheduleTeacher from './forTeachersService/ScheduleTeacher'
 import Vedomosti from './forTeachersService/Vedomosti'
 import NavJournal from './forTeachersService/NavJournal'
 import { getCurrentAcademicYear } from '../../../utils/getCurrentAcademicYear'
+import Rpd from './forTeachersService/Rpd'
 
 export const NavForTeachers = () => {
 	const dispatch = useAppDispatch()
@@ -56,6 +57,7 @@ export const NavForTeachers = () => {
 		{ key: 'BRS', icon: <BrsSvg />, label: <p className="ml-[10px]">{t('BRS')}</p> },
 		{ key: 'vedomosti', icon: <VedomostiSvg />, label: <p className="ml-[10px]">{t('vedomosti')}</p> },
 		{ key: 'journalPos', icon: <JournalPos />, label: <p className="ml-[10px]">{t('journalPos')}</p> },
+		
 		// { key: 'rpd', icon: <Pvd />, label: <p className="ml-[10px]">{t('rpd')}</p> }
 	]
 
@@ -224,6 +226,7 @@ export const NavForTeachers = () => {
 				{current === 'BRS' ? <Brs /> : ''}
 				{current === 'vedomosti' ? <Vedomosti/> : ''}
 				{current === 'journalPos' ? <NavJournal collapsed={collapsed}/> : ''}
+				{current === 'rpd' ? <Rpd collapsed={collapsed}/> : ''}
 			</div>
 		</>
 	)

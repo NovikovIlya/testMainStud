@@ -1021,15 +1021,16 @@ export const RegisterContracts = () => {
             className: 'text-xs',
             width: 200,
         },
-        {
-            title: <span className={'text-xs'}>Шифр и наименование специальности</span>,
-            dataIndex: 'specialtyNames',
-            align: "center",
-            className: 'text-xs',
-            render: (text, record) => {
-                return record.specialtyName
-            },
-        },
+        // {
+        //     title: <span className={'text-xs'}>Шифр и наименование специальности</span>,
+        //     dataIndex: 'specialtyNames',
+        //     align: "center",
+        //     className: 'text-xs',
+        //     render: (text, record) => {
+        //         console.log('record',record)
+        //         // return record?.map((item:any)=>item.label)
+        //     },
+        // },
         {
             title: <span className={'text-xs'}>Номер договора</span>,
             dataIndex: 'contractNumber',
@@ -1620,9 +1621,7 @@ export const RegisterContracts = () => {
                                 handleRowClick(record)},
                         })}
                         columns={columnsFullView}
-                        pagination={tableDataFull && tableDataFull?.length<10?false:{
-                            pageSize: 10
-                        }}
+                        pagination={false}
                        dataSource={tableDataFull}
                        size={"middle"}
                        className={'mt-5 animate-fade-in'}

@@ -111,7 +111,7 @@ export default function Catalog() {
 				})
 					.unwrap()
 					.then(res => {
-						setPreviews(res)
+						setPreviews(res.content)
 						setBlockPageAddition(false)
 					})
 			} else {
@@ -122,7 +122,7 @@ export default function Catalog() {
 				})
 					.unwrap()
 					.then(res => {
-						setPreviews(res)
+						setPreviews(res.content)
 						setBlockPageAddition(false)
 					})
 			}
@@ -135,7 +135,7 @@ export default function Catalog() {
 				})
 					.unwrap()
 					.then(res => {
-						setPreviews(prev => [...prev, ...res])
+						setPreviews(prev => [...prev, ...res.content])
 						setBlockPageAddition(false)
 					})
 			} else {
@@ -146,7 +146,7 @@ export default function Catalog() {
 				})
 					.unwrap()
 					.then(res => {
-						setPreviews(prev => [...prev, ...res])
+						setPreviews(prev => [...prev, ...res.content])
 						setBlockPageAddition(false)
 					})
 			}

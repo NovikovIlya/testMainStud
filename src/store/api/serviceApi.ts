@@ -131,12 +131,12 @@ export const serviceApi = apiSlice.injectEndpoints({
 			})
 		}),
 		getVacancyPreviewByDirection: builder.query<
-			VacancyItemType[],
+			{ content: VacancyItemType[] },
 			{ category: string; direction: string; page: number }
 		>({
 			query: ({ category, direction, page }) => ({
 				url:
-					`http://${emplBaseURL}employment-api/v1/vacancy/direction?category=` +
+					`http://${emplBaseURL}employment-api/v2/vacancy?category=` +
 					category +
 					'&direction=' +
 					direction +
@@ -145,12 +145,12 @@ export const serviceApi = apiSlice.injectEndpoints({
 			})
 		}),
 		getVacancyPreviewBySubdivision: builder.query<
-			VacancyItemType[],
+			{ content: VacancyItemType[] },
 			{ category: string; subdivision: string; page: number }
 		>({
 			query: ({ category, subdivision, page }) => ({
 				url:
-					`http://${emplBaseURL}employment-api/v1/vacancy/subdivisions?category=` +
+					`http://${emplBaseURL}employment-api/v2/vacancy?category=` +
 					category +
 					'&subdivisions=' +
 					subdivision +

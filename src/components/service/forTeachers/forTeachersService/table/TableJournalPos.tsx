@@ -248,13 +248,13 @@ const TableJournalPos = ({ collapsed, setCheckboxValue, dataSource, setDataSourc
           title: (
             <div className="flex justify-center items-center flex-col">
               <div className="text-[10px] text-center mb-2">{timeInfo.time}</div>
-              {timeInfo.isBlocked === false && (
+              {timeInfo.isBlocked === false ? (
                 <Tooltip title="Подтвердить?">
                   <Checkbox 
                     onChange={(e) => handleCheckboxChange(e, { date, ...timeInfo })}
                   />
                 </Tooltip>
-              )}
+              ):<div className="h-[22px] "></div>}
             </div>
           ),
           dataIndex: `status_${date}_${timeInfo.timeIntervalId}`,

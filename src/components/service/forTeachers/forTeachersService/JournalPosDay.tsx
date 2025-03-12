@@ -17,7 +17,7 @@ const JournalPosDay = () => {
   const [dataSource, setDataSource] = useState<any>([]);
   const [date, setDate] = useState<any>('');
   const [firstAvailableDate, setFirstAvailableDate] = useState<any>(null);
-  
+  const [defaultDate, setDefaultDate] = useState<any>(null);
   const { data, isFetching, isSuccess } = useGetByDateQuery(date, { skip: !date });
   const yearForm = useAppSelector(state => state.forTeacher.yearForm);
   const semestrForm = useAppSelector(state => state.forTeacher.semestrForm);
@@ -27,6 +27,20 @@ const JournalPosDay = () => {
       setDataSource(data);
     }
   }, [data]);
+
+  useEffect(() => {
+    // Устанавливаем первый доступный день при монтировании компонента
+    const firstDate = findFirstAvailableDate();
+    setFirstAvailableDate(firstDate);
+
+    // Проверяем, является ли сегодня допустимой датой
+    const today = dayjs();
+    if (!disabledDate(today)) {
+      setDefaultDate(today);
+    } else {
+      setDefaultDate(firstDate);
+    }
+  }, [yearForm, semestrForm]);
 
   // Функция для определения границ семестра
   const getSemesterBoundaries = () => {
@@ -42,7 +56,7 @@ const JournalPosDay = () => {
       startDate = dayjs(`${endYear}-02-01`);
       endDate = dayjs(`${endYear}-06-30`);
     }
-    
+
     return { startDate, endDate };
   };
 
@@ -65,10 +79,7 @@ const JournalPosDay = () => {
     return dateToCheck;
   };
 
-  useEffect(() => {
-    // Устанавливаем первый доступный день при монтировании компонента
-    setFirstAvailableDate(findFirstAvailableDate());
-  }, [yearForm, semestrForm]);
+  
 
   const onChange: DatePickerProps['onChange'] = (date, dateString) => {
     console.log(date, dateString);
@@ -82,25 +93,25 @@ const JournalPosDay = () => {
         <Space direction="vertical">
           <Text className=''>{t('textLessonLog2')}</Text>
           <ConfigProvider locale={i18n.language === 'ru' ? ru_RU : en_US}>
-            <DatePicker 
-              className='mb-4 mt-2' 
-              onChange={onChange} 
+            <DatePicker
+              className='mb-4 mt-2'
+              onChange={onChange}
               format="DD.MM.YYYY"
               disabledDate={disabledDate}
-              defaultPickerValue={firstAvailableDate||dayjs(`2020-06-20`)} // Используем firstAvailableDate
+              defaultPickerValue={defaultDate || dayjs(`2020-06-20`)} // Используем defaultDate
             />
           </ConfigProvider>
           {dataSource?.map((item: any) => (
             <div className='border-2 border-solid border-gray-100 shadow  rounded py-[1px] mb-2' key={`${item.groupId}-${date}`}>
-              <JournalPosTable 
-                date={date} 
-                groupId={item.groupId} 
-                description={item?.subjectName} 
-                fixDay={item?.fixDay} 
-                time={item?.time} 
-                timeId={item?.timeId} 
-                title={item?.groupName} 
-                data={item.students} 
+              <JournalPosTable
+                date={date}
+                groupId={item.groupId}
+                description={item?.subjectName}
+                fixDay={item?.fixDay}
+                time={item?.time}
+                timeId={item?.timeId}
+                title={item?.groupName}
+                data={item.students}
               />
             </div>
           ))}

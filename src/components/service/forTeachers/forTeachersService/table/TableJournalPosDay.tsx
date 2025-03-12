@@ -156,6 +156,7 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
   ]
   const optionsMap = new Map(options.map(opt => [opt.value, opt.label]));
   let childNode = children;
+  console.log('22222222222222222children',children)
 
   if (editable) {
     childNode = fixDay===null ? editing  ? (
@@ -173,8 +174,8 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
           onChange={save}
           options={[
             { value: null, label: '' },
-            { value: 'б', label: 'б' },
-            { value: 'н', label: 'н' }
+            { value: 'б', label: t('b')  },
+            { value: 'н', label:  t('n') }
           ]}
         />
       </Form.Item>
@@ -185,7 +186,8 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
         onClick={toggleEdit}
       >
           {/* @ts-ignore */}
-          {optionsMap.get(children?.[1]) || children}
+          {/* {optionsMap.get(children?.[1]) || children} */}
+          {optionsMap.get(record[dataIndex])}
       </div>
     ) :  <div
     className="editable-cell-value-wrap h-8 "
@@ -193,7 +195,8 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
     onClick={toggleEdit}
   >
       {/* @ts-ignore */}
-      {optionsMap.get(children?.[1]) || children}
+      {/* {optionsMap.get(children?.[1]) || children} */}
+      {optionsMap.get(record[dataIndex])}
   </div>
   }
 

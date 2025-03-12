@@ -53,7 +53,7 @@ const JournalPosTable = ({date,fixDay,time,timeId,groupId,description,title,data
 			<TableJournalPosDay dataSource={localData} setLocalData={setLocalData} fixDay={fixDay}/>
 			
 			<Row className='mt-6 px-2' >
-				{fixDay ? <div className='flex gap-2'><Text className='text-gray-500'>{t('dataAprove')}:</Text><span className='mb-3'>{fixDay}</span> </div> : <Checkbox  onChange={onChange}>Подтвердить?</Checkbox>}
+				{fixDay ? <div className='flex gap-2'><Text className='text-gray-500'>{t('dataAprove')}:</Text><span className='mb-3'>{fixDay}</span> </div> : <Checkbox  onChange={onChange}>{t('confirmData')}</Checkbox>}
 			</Row>
 			{fixDay===null ? <Button disabled={fixDay!==null ? true : false} onClick={send} className='mt-4 mb-8 rounded-xl mx-2' type='primary'>{t('Save')}</Button>:''}
 		</>

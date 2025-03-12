@@ -108,7 +108,7 @@ const TableBrs = ({yearForm,dataSource, setDataSource,semester}: Props) => {
       
     },
     {
-      title: 'ФИО',
+      title: t('fioStudent'),
       dataIndex: 'studName',
       width: '20%',
     },

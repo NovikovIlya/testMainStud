@@ -111,9 +111,10 @@ const JournalPosElem = ({ collapsed }: { collapsed: boolean }) => {
 	return (
 		<Spin spinning={isFetchingData} className=" ">
 			<Form className="mt-4" form={form}>
-				<Row className='w-[1000px]'>
+				<Row className=''>
 					<Col span={24}>
 						<Form.Item
+							className='p-0 m-0'
 							name="disciline"
 							label={t('discipline/group')}
 							labelAlign="left"

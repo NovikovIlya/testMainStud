@@ -195,6 +195,28 @@ export const fotTeacherService = testApiSlice.injectEndpoints({
           
             keepUnusedDataFor:0,
         }),
+
+        exportExcelEmpty: builder.query<any, any>({
+            query: ({subjectId,groupId,year,semester,month}) => {
+            return {
+                    url: `to-teacher/journal/export/empty?subjectId=${subjectId}&groupId=${groupId}&year=${year}&semester=${semester}&month=${month}`,
+                    method: 'GET',
+                    responseHandler: async (response) => {
+                        const blob = await response.blob();
+                        const url = window.URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = 'journal.xlsx'; // Имя файла для скачивания
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        window.URL.revokeObjectURL(url);
+                      },
+                }
+            },
+          
+            keepUnusedDataFor:0,
+        }),
        
     })
 })
@@ -215,6 +237,7 @@ export const {
     useGetDataSemesterQuery,
     useSendDataSemesterMutation,
     useLazyExportExcelQuery,
-    useSendByDateMutation
+    useSendByDateMutation,
+    useLazyExportExcelEmptyQuery
 } = fotTeacherService
 

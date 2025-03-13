@@ -5,9 +5,9 @@ import React, { useEffect, useState } from 'react'
 
 import { useAppSelector } from '../../../../store'
 import {
-
 	useGetDataSemesterQuery,
 	useGetDisciplineSemesterQuery,
+	useLazyExportExcelEmptyQuery,
 	useLazyExportExcelQuery,
 	useSendDataSemesterMutation
 } from '../../../../store/api/forTeacher/forTeacherApi'
@@ -34,6 +34,7 @@ const JournalPosElem = ({ collapsed }: { collapsed: boolean }) => {
 	const [sendData, {}] = useSendDataSemesterMutation()
 	const [radioKey, setRadioKey] = useState(Math.random())
 	const [triggerExportExcel, { isFetching: isExporting }]  = useLazyExportExcelQuery()
+	const [triggerExportExcelEmpty, { isFetching: isExportingEmpty }]  = useLazyExportExcelEmptyQuery()
 
 	useEffect(() => {
 		if (dataGetSemestr) {
@@ -106,7 +107,22 @@ const JournalPosElem = ({ collapsed }: { collapsed: boolean }) => {
 		  // Можно добавить уведомление о том, что не все параметры заполнены
 		  console.warn('Не все параметры для скачивания файла заполнены')
 		}
-	  }
+	}
+
+	const download2 = async () => {
+	if (disciplineId && groupId && monthValue && yearForm && semestrForm) {
+		await triggerExportExcelEmpty({ 
+		subjectId: disciplineId, 
+		groupId: groupId, 
+		month: monthValue, 
+		year: yearForm, 
+		semester: semestrForm 
+		})
+	} else {
+		// Можно добавить уведомление о том, что не все параметры заполнены
+		console.warn('Не все параметры для скачивания файла заполнены')
+	}
+	}
 	
 	return (
 		<Spin spinning={isFetchingData} className=" ">
@@ -191,6 +207,10 @@ const JournalPosElem = ({ collapsed }: { collapsed: boolean }) => {
 							> */}
 						{monthValue && disciplineId ? (
 							<>
+							<Button loading={isExportingEmpty} onClick={()=>download2()} className="rounded-xl mt-1" icon={<PrinterOutlined />}>{t('printJournalEmpty')}</Button>
+								<Button loading={isExporting} onClick={()=>download()} className="rounded-xl" icon={<PrinterOutlined />}>
+								{t('printJournalFiled')}
+							</Button>
 								<TableJournalPos
 									setCheckboxValue={setCheckboxValue}
 									setDataSource={setDataSource}
@@ -203,9 +223,7 @@ const JournalPosElem = ({ collapsed }: { collapsed: boolean }) => {
 								<Button onClick={saveData} className=" rounded-xl" type="primary">
 									{t('Save')}
 								</Button>
-								<Button loading={isExporting} onClick={()=>download()} className="rounded-xl" icon={<PrinterOutlined />}>
-								{t('print')}
-							</Button>
+								
 								</Row>
 							</>
 						) : (

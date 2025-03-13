@@ -825,7 +825,8 @@
 	"selectMonth": "Select month",
 	"dataAprove": "Confirmation date",
 	"isBlocked": "is Blocked",
-	"confirmData":"Сonfirm?"
+	"confirmData":"Сonfirm?",
+	"printEmpty": "Print empty"
 	
 
 	

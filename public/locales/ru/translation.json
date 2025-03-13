@@ -825,7 +825,8 @@
 	"selectMonth": "Выберите месяц",
 	"dataAprove": "Дата подтверждения",
 	"isBlocked": "Ячейка заблокирована",
-	"confirmData":"Подтвердить?"
+	"confirmData":"Подтвердить?",
+	"printEmpty": "Печатать пустой "
 
 	
 	  

@@ -1,16 +1,76 @@
 import { LoadingOutlined } from '@ant-design/icons'
 import { Radio, Spin } from 'antd'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
-import { useGetSupervisorRespondsQuery } from '../../../../store/api/serviceApi'
-import { respondStatus } from '../../../../store/reducers/type'
+import { useLazyGetSupervisorRespondsQuery } from '../../../../store/api/serviceApi'
+import { VacancyRespondItemType, respondStatus } from '../../../../store/reducers/type'
 import { VacancyRespondItem } from '../VacancyRespondItem'
 
 export const RespondsSupervisor = () => {
-	const [status, setStatus] = useState<string>('status=')
-	const { data: responds = [], isLoading: loading } = useGetSupervisorRespondsQuery(status)
+	const [getResponds, getRespondsStatus] = useLazyGetSupervisorRespondsQuery()
 
-	if (loading) {
+	const [requestData, setRequestData] = useState<{
+		status: string
+		page: number
+	}>({
+		status: 'status=',
+		page: 0
+	})
+	const [blockPageAddition, setBlockPageAddition] = useState<boolean>(true)
+	const [isBottomOfCatalogVisible, setIsBottomOfCatalogVisible] = useState<boolean>(true)
+	const catalogBottomRef = useRef<null | HTMLDivElement>(null)
+	const [responds, setResponds] = useState<VacancyRespondItemType[]>([])
+
+	useEffect(() => {
+		const lowerObserver = new IntersectionObserver(entries => {
+			const target = entries[0]
+			if (target.isIntersecting) {
+				console.log('I see the depths of hell below')
+				setIsBottomOfCatalogVisible(true)
+			}
+			if (!target.isIntersecting) {
+				setIsBottomOfCatalogVisible(false)
+			}
+		})
+
+		if (catalogBottomRef.current) {
+			lowerObserver.observe(catalogBottomRef.current)
+		}
+
+		return () => {
+			if (catalogBottomRef.current) {
+				lowerObserver.unobserve(catalogBottomRef.current)
+			}
+		}
+	}, [responds.length])
+
+	useEffect(() => {
+		if (requestData.page === 0) {
+			getResponds({ status: requestData.status, page: requestData.page })
+				.unwrap()
+				.then(res => {
+					setResponds(res.content)
+					setBlockPageAddition(false)
+				})
+		} else {
+			getResponds({ status: requestData.status, page: requestData.page })
+				.unwrap()
+				.then(res => {
+					setResponds(prev => [...prev, ...res.content])
+					setBlockPageAddition(false)
+				})
+		}
+	}, [requestData])
+
+	useEffect(() => {
+		if (isBottomOfCatalogVisible) {
+			if (!blockPageAddition) {
+				setRequestData(prev => ({ ...prev, page: prev.page + 1 }))
+			}
+		}
+	}, [isBottomOfCatalogVisible])
+
+	if (getRespondsStatus.isLoading) {
 		return (
 			<>
 				<div className="w-full h-full flex items-center">
@@ -30,15 +90,17 @@ export const RespondsSupervisor = () => {
 				<div className="mt-[52px] mb-[60px] flex items-center gap-[16px]">
 					<Radio.Group
 						className="flex flex-wrap gap-[12px]"
-						value={status}
+						value={requestData.status}
 						onChange={e => {
-							setStatus(e.target.value)
+							setRequestData({ status: e.target.value, page: 0 })
 							console.log(status)
 						}}
 					>
 						<label
 							className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
-								status === 'status=' ? 'text-white bg-dasha-blue' : 'text-black border-solid border-black border-[1px]'
+								requestData.status === 'status='
+									? 'text-white bg-dasha-blue'
+									: 'text-black border-solid border-black border-[1px]'
 							} font-normal text-[16px]/[16px]`}
 						>
 							<Radio value={'status='} className="hidden"></Radio>
@@ -46,7 +108,7 @@ export const RespondsSupervisor = () => {
 						</label>
 						<label
 							className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
-								status === 'status=' + respondStatus[respondStatus.IN_PERSONNEL_DEPT_REVIEW]
+								requestData.status === 'status=' + respondStatus[respondStatus.IN_PERSONNEL_DEPT_REVIEW]
 									? 'text-white bg-dasha-blue'
 									: 'text-black border-solid border-black border-[1px]'
 							} font-normal text-[16px]/[16px]`}
@@ -59,7 +121,7 @@ export const RespondsSupervisor = () => {
 						</label>
 						<label
 							className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
-								status === 'status=' + respondStatus[respondStatus.INVITATION]
+								requestData.status === 'status=' + respondStatus[respondStatus.INVITATION]
 									? 'text-white bg-dasha-blue'
 									: 'text-black border-solid border-black border-[1px]'
 							} font-normal text-[16px]/[16px]`}
@@ -69,7 +131,7 @@ export const RespondsSupervisor = () => {
 						</label>
 						<label
 							className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
-								status === 'status=' + respondStatus[respondStatus.EMPLOYMENT]
+								requestData.status === 'status=' + respondStatus[respondStatus.EMPLOYMENT]
 									? 'text-white bg-dasha-blue'
 									: 'text-black border-solid border-black border-[1px]'
 							} font-normal text-[16px]/[16px]`}
@@ -79,7 +141,7 @@ export const RespondsSupervisor = () => {
 						</label>
 						<label
 							className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
-								status ===
+								requestData.status ===
 								`status=${respondStatus[respondStatus.IN_RESERVE]}&status=${respondStatus[respondStatus.ARCHIVE]}`
 									? 'text-white bg-dasha-blue'
 									: 'text-black border-solid border-black border-[1px]'
@@ -112,6 +174,7 @@ export const RespondsSupervisor = () => {
 				{responds.map(resp => (
 					<VacancyRespondItem {...resp} itemType="SUPERVISOR" />
 				))}
+				<div className="h-[1px]" ref={catalogBottomRef} key={'catalog_bottom_key'}></div>
 			</div>
 		</>
 	)

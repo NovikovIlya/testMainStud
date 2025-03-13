@@ -135,13 +135,9 @@ export const serviceApi = apiSlice.injectEndpoints({
 			{ category: string; direction: string; page: number }
 		>({
 			query: ({ category, direction, page }) => ({
-				url:
-					`http://${emplBaseURL}employment-api/v2/vacancy?category=` +
-					category +
-					'&direction=' +
-					direction +
-					'&page=' +
-					page
+				url: `http://${emplBaseURL}employment-api/v2/vacancy?category=${category}${
+					direction === 'Все' ? '' : `&direction=${direction}`
+				}&page=${page}`
 			})
 		}),
 		getVacancyPreviewBySubdivision: builder.query<

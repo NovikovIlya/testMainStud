@@ -118,7 +118,7 @@ const JournalPosElem = ({ collapsed }: { collapsed: boolean }) => {
 							label={t('discipline/group')}
 							labelAlign="left"
 							labelCol={{ span: 3 }} // Фиксированная ширина лейбла
-							wrapperCol={{ span: 10 }} // Оставшаяся ширина для инпута
+							wrapperCol={{ span: 21 }} // Оставшаяся ширина для инпута
 						>
 							<Select
 								loading={isFetching}

@@ -252,7 +252,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 				type === 'main' ? 'bg-white ' : `bg-blue65A`
 			)}
 		>
-			<div className={`w-screen flex h-full justify-between px-9 max-sm:px-5 ${type === 'main' ? 'max-w-[1650px] animate-fade-in' : 'animate-fade-in'} `}>
+			<div className={`w-screen flex h-full justify-between px-10 max-sm:px-5 ${type === 'main' ? 'max-w-[1680px] animate-fade-in' : 'animate-fade-in'} `}>
 				<div className="flex gap-8 max-sm:gap-2 items-center">
 					{user?.roles[0].type === 'ABITUR' || user?.roles[0].type === 'OTHER' ? (
 						''

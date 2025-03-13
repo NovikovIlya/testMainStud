@@ -73,6 +73,12 @@ const Vedomosti = () => {
 		dispatch(setIsEditTableScheduleTeacher(false))
 	}
 
+	const handleYearGroup = ()=>{
+		form2.resetFields(['kind'])
+		setDataSource([]);
+
+	}
+
 	console.log('error',error)
 
 	if(isFetchingSub){
@@ -146,6 +152,7 @@ const Vedomosti = () => {
 											return false
 										}}
 										disabled={!discilineForm}
+										onChange={handleYearGroup}
 										allowClear
 										options={
 											dataGroups?.groups?.map((item: any) => ({
@@ -175,7 +182,7 @@ const Vedomosti = () => {
 											}
 											return false
 										}}
-										disabled={!groupeForm}
+										disabled={!groupeForm||isError}
 										allowClear
 										options={
 											dataKind?.typeVedomostList?.map((item: any) => ({

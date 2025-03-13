@@ -32,6 +32,9 @@ export const Responds = () => {
 		type: catalogFilter.type,
 		page: 0
 	})
+
+	const [showSpin, setShowSpin] = useState<boolean>(true)
+
 	const [blockPageAddition, setBlockPageAddition] = useState<boolean>(true)
 	const [isBottomOfCatalogVisible, setIsBottomOfCatalogVisible] = useState<boolean>(true)
 	const catalogBottomRef = useRef<null | HTMLDivElement>(null)
@@ -105,6 +108,7 @@ export const Responds = () => {
 					.unwrap()
 					.then(res => {
 						setResponds(prev => [...prev, ...res.content])
+						res.content.length === 0 && setShowSpin(false)
 						setBlockPageAddition(false)
 					})
 			} else {
@@ -118,6 +122,7 @@ export const Responds = () => {
 					.unwrap()
 					.then(res => {
 						setResponds(prev => [...prev, ...res.content])
+						res.content.length === 0 && setShowSpin(false)
 						setBlockPageAddition(false)
 					})
 			}
@@ -202,6 +207,7 @@ export const Responds = () => {
 					onChange={(value: string) => {
 						categories.find(category => category.title === categoryTitle)?.direction
 							? (() => {
+									setShowSpin(true)
 									setRequestData(prev => ({
 										category: prev.category,
 										subcategory: value,
@@ -213,6 +219,7 @@ export const Responds = () => {
 									dispatch(keepFilterType('DIRECTORY'))
 							  })()
 							: (() => {
+									setShowSpin(true)
 									setRequestData(prev => ({
 										category: prev.category,
 										subcategory: value,
@@ -240,6 +247,12 @@ export const Responds = () => {
 				{responds.map(resp => (
 					<RespondItem {...resp} />
 				))}
+				{getRespondsStatus.isFetching && showSpin && (
+					<div className="text-center ml-auto mr-auto">
+						<Spin indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}></Spin>
+						<p className="font-content-font font-normal text-black text-[18px]/[18px]">Идёт загрузка...</p>
+					</div>
+				)}
 				<div className="h-[1px]" ref={catalogBottomRef} key={'catalog_bottom_key'}></div>
 			</div>
 		</>

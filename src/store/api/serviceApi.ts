@@ -171,13 +171,13 @@ export const serviceApi = apiSlice.injectEndpoints({
 			}
 		}),
 		getVacancyGroupedResponces: builder.query<
-			VacancyGroupedResponcesType[],
-			{ category: string; direction?: string; role: string; type: 'DIRECTORY' | 'SUBDIVISION' }
+			{ content: VacancyGroupedResponcesType[] },
+			{ category: string; direction?: string; role: string; type: 'DIRECTORY' | 'SUBDIVISION'; page: number }
 		>({
-			query: ({ category, direction, role, type }) => ({
+			query: ({ category, direction, role, type, page }) => ({
 				url: `http://${emplBaseURL}employment-api/v1/responds/grouped?category=${category}${
 					direction !== undefined ? `&${type === 'DIRECTORY' ? 'direction=' : 'subdivision='}` + direction : ''
-				}`,
+				}&page=${page}`,
 				headers: {
 					Authorization: `Bearer ${role === 'PERSONNEL_DEPARTMENT' ? personnelDeparmentToken : supervisorToken}`
 				}

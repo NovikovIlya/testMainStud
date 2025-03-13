@@ -1,6 +1,6 @@
 import { LoadingOutlined } from '@ant-design/icons'
 import { Select, Spin } from 'antd'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 import { useAppSelector } from '../../../store'
@@ -8,9 +8,10 @@ import {
 	useGetCategoriesQuery,
 	useGetDirectionsQuery,
 	useGetSubdivisionsQuery,
-	useGetVacancyGroupedResponcesQuery
+	useLazyGetVacancyGroupedResponcesQuery
 } from '../../../store/api/serviceApi'
 import { keepFilterCategory, keepFilterSubCategory, keepFilterType } from '../../../store/reducers/CatalogFilterSlice'
+import { VacancyGroupedResponcesType } from '../../../store/reducers/type'
 
 import { RespondItem } from './RespondItem'
 
@@ -31,27 +32,109 @@ export const Responds = () => {
 		type: catalogFilter.type,
 		page: 0
 	})
+	const [blockPageAddition, setBlockPageAddition] = useState<boolean>(true)
+	const [isBottomOfCatalogVisible, setIsBottomOfCatalogVisible] = useState<boolean>(true)
+	const catalogBottomRef = useRef<null | HTMLDivElement>(null)
+	const [responds, setResponds] = useState<VacancyGroupedResponcesType[]>([])
+
+	const [getResponds, getRespondsStatus] = useLazyGetVacancyGroupedResponcesQuery()
+
 	const { data: categories = [], isLoading: isCategoriesLoading } = useGetCategoriesQuery()
 	const { data: directions = [], isLoading: isDirectionsLoading } = useGetDirectionsQuery(categoryTitle)
 	const { data: subdivisions = [], isLoading: isSubdivisionsLoading } = useGetSubdivisionsQuery(categoryTitle)
-	const { data: responds = [], isLoading: loading } = useGetVacancyGroupedResponcesQuery(
-		requestData.subcategory === 'Все'
-			? {
+
+	useEffect(() => {
+		const lowerObserver = new IntersectionObserver(entries => {
+			const target = entries[0]
+			if (target.isIntersecting) {
+				console.log('I see the depths of hell below')
+				setIsBottomOfCatalogVisible(true)
+			}
+			if (!target.isIntersecting) {
+				setIsBottomOfCatalogVisible(false)
+			}
+		})
+
+		if (catalogBottomRef.current) {
+			lowerObserver.observe(catalogBottomRef.current)
+		}
+
+		return () => {
+			if (catalogBottomRef.current) {
+				lowerObserver.unobserve(catalogBottomRef.current)
+			}
+		}
+	}, [responds.length])
+
+	useEffect(() => {
+		if (requestData.page === 0) {
+			if (requestData.subcategory === 'Все') {
+				getResponds({
 					category: requestData.category,
 					role: 'PERSONNEL_DEPARTMENT',
-					type: requestData.type
-			  }
-			: {
+					type: requestData.type,
+					page: requestData.page
+				})
+					.unwrap()
+					.then(res => {
+						setResponds(res.content)
+						setBlockPageAddition(false)
+					})
+			} else {
+				getResponds({
 					category: requestData.category,
 					direction: requestData.subcategory,
 					role: 'PERSONNEL_DEPARTMENT',
-					type: requestData.type
-			  }
-	)
+					type: requestData.type,
+					page: requestData.page
+				})
+					.unwrap()
+					.then(res => {
+						setResponds(res.content)
+						setBlockPageAddition(false)
+					})
+			}
+		} else {
+			if (requestData.subcategory === 'Все') {
+				getResponds({
+					category: requestData.category,
+					role: 'PERSONNEL_DEPARTMENT',
+					type: requestData.type,
+					page: requestData.page
+				})
+					.unwrap()
+					.then(res => {
+						setResponds(prev => [...prev, ...res.content])
+						setBlockPageAddition(false)
+					})
+			} else {
+				getResponds({
+					category: requestData.category,
+					direction: requestData.subcategory,
+					role: 'PERSONNEL_DEPARTMENT',
+					type: requestData.type,
+					page: requestData.page
+				})
+					.unwrap()
+					.then(res => {
+						setResponds(prev => [...prev, ...res.content])
+						setBlockPageAddition(false)
+					})
+			}
+		}
+	}, [requestData])
+
+	useEffect(() => {
+		if (isBottomOfCatalogVisible) {
+			if (!blockPageAddition) {
+				setRequestData(prev => ({ ...prev, page: prev.page + 1 }))
+			}
+		}
+	}, [isBottomOfCatalogVisible])
 
 	const dispatch = useDispatch()
 
-	if (loading) {
+	if (getRespondsStatus.isLoading) {
 		return (
 			<>
 				<div className="w-full h-full flex items-center">
@@ -157,6 +240,7 @@ export const Responds = () => {
 				{responds.map(resp => (
 					<RespondItem {...resp} />
 				))}
+				<div className="h-[1px]" ref={catalogBottomRef} key={'catalog_bottom_key'}></div>
 			</div>
 		</>
 	)

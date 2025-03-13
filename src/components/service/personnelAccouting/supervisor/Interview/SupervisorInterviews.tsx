@@ -1,15 +1,75 @@
 import { LoadingOutlined } from '@ant-design/icons'
 import { Spin } from 'antd'
-import React from 'react'
+import { useEffect, useRef, useState } from 'react'
 
-import { useGetSupervisorInterviewQuery } from '../../../../../store/api/serviceApi'
+import { useLazyGetSupervisorInterviewQuery } from '../../../../../store/api/serviceApi'
+import { InterviewItemType } from '../../../../../store/reducers/type'
 
 import { SupervisorInterviewItem } from './SupervisorInterviewItem'
 
 export const SupervisorInterviews = () => {
-	const { data: interviews = [], isLoading: loading } = useGetSupervisorInterviewQuery()
+	const [getInterviews, getInterviewsStatus] = useLazyGetSupervisorInterviewQuery()
 
-	if (loading) {
+	const [requestData, setRequestData] = useState<{
+		page: number
+	}>({
+		page: 0
+	})
+	const [blockPageAddition, setBlockPageAddition] = useState<boolean>(true)
+	const [isBottomOfCatalogVisible, setIsBottomOfCatalogVisible] = useState<boolean>(true)
+	const catalogBottomRef = useRef<null | HTMLDivElement>(null)
+	const [interviews, setInterviews] = useState<InterviewItemType[]>([])
+
+	useEffect(() => {
+		const lowerObserver = new IntersectionObserver(entries => {
+			const target = entries[0]
+			if (target.isIntersecting) {
+				console.log('I see the depths of hell below')
+				setIsBottomOfCatalogVisible(true)
+			}
+			if (!target.isIntersecting) {
+				setIsBottomOfCatalogVisible(false)
+			}
+		})
+
+		if (catalogBottomRef.current) {
+			lowerObserver.observe(catalogBottomRef.current)
+		}
+
+		return () => {
+			if (catalogBottomRef.current) {
+				lowerObserver.unobserve(catalogBottomRef.current)
+			}
+		}
+	}, [interviews.length])
+
+	useEffect(() => {
+		if (requestData.page === 0) {
+			getInterviews(requestData.page)
+				.unwrap()
+				.then(res => {
+					setInterviews(res.content)
+					setBlockPageAddition(false)
+				})
+		} else {
+			getInterviews(requestData.page)
+				.unwrap()
+				.then(res => {
+					setInterviews(prev => [...prev, ...res.content])
+					setBlockPageAddition(false)
+				})
+		}
+	}, [requestData])
+
+	useEffect(() => {
+		if (isBottomOfCatalogVisible) {
+			if (!blockPageAddition) {
+				setRequestData(prev => ({ ...prev, page: prev.page + 1 }))
+			}
+		}
+	}, [isBottomOfCatalogVisible])
+
+	if (getInterviewsStatus.isLoading) {
 		return (
 			<>
 				<div className="w-full h-full flex items-center">

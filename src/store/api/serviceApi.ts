@@ -854,11 +854,10 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
-		getSupervisorInterview: builder.query<InterviewItemType[], void>({
+		getSupervisorInterview: builder.query<{ content: InterviewItemType[] }, number>({
 			query: arg => ({
-				url: `http://${emplBaseURL}employment-api/v1/interview`,
+				url: `http://${emplBaseURL}employment-api/v1/interview?page=${arg}`,
 				method: 'GET',
-				body: arg,
 				headers: {
 					Authorization: `Bearer ${supervisorToken}`
 				}
@@ -1283,5 +1282,6 @@ export const {
 	useLazyGetAllSupervisorRequestsQuery,
 	useLazyGetVacancyRequestsQuery,
 	useLazyGetSeekerRespondsQuery,
-	useLazyGetSupervisorRespondsQuery
+	useLazyGetSupervisorRespondsQuery,
+	useLazyGetSupervisorInterviewQuery
 } = serviceApi

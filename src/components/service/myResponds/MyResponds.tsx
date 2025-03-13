@@ -192,13 +192,7 @@ export const MyResponds = () => {
 					</h3>
 				</div>
 				{responds.map(respond => (
-					<RespondItem
-						key={respond.id}
-						{...respond}
-						refetch={() => {
-							setRequestData(prev => ({ ...prev, page: 0 }))
-						}}
-					/>
+					<RespondItem key={respond.id} {...respond} />
 				))}
 				<div className="h-[1px]" ref={catalogBottomRef} key={'catalog_bottom_key'}></div>
 			</div>

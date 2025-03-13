@@ -154,18 +154,20 @@ export const serviceApi = apiSlice.injectEndpoints({
 					page
 			})
 		}),
-		getSeekerResponds: builder.query<RespondItemType[], string>({
-			query: status => ({
-				url: `http://${emplBaseURL}employment-api/v1/seeker/responds?${status}`,
+		getSeekerResponds: builder.query<{ content: RespondItemType[] }, { status: string; page: number }>({
+			query: ({ status, page }) => ({
+				url: `http://${emplBaseURL}employment-api/v1/seeker/responds?${status}&page=${page}`,
 				headers: {
 					Authorization: `Bearer ${seekerToken}`
 				}
 			}),
-			transformResponse: (response: RespondItemType[]) => {
-				return response.map(resp => ({
-					...resp,
-					respondDate: resp.respondDate.substring(0, 10)
-				}))
+			transformResponse: (response: { content: RespondItemType[] }) => {
+				return {
+					content: response.content.map(resp => ({
+						...resp,
+						respondDate: resp.respondDate.substring(0, 10)
+					}))
+				}
 			}
 		}),
 		getVacancyGroupedResponces: builder.query<
@@ -1272,5 +1274,6 @@ export const {
 	useLazyGetEmploymentStageStatusForSupervisorQuery,
 	useLazyDownloadChatFileQuery,
 	useLazyGetAllSupervisorRequestsQuery,
-	useLazyGetVacancyRequestsQuery
+	useLazyGetVacancyRequestsQuery,
+	useLazyGetSeekerRespondsQuery
 } = serviceApi

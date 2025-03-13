@@ -1,31 +1,83 @@
 import { LoadingOutlined } from '@ant-design/icons'
-import { Radio, Select, Spin } from 'antd'
-import { useState } from 'react'
+import { Radio, Spin } from 'antd'
+import { useEffect, useRef, useState } from 'react'
 
-import { useGetSeekerRespondsQuery } from '../../../store/api/serviceApi'
-import { respondStatus } from '../../../store/reducers/type'
+import { useLazyGetSeekerRespondsQuery } from '../../../store/api/serviceApi'
+import { RespondItemType, respondStatus } from '../../../store/reducers/type'
 
 import { RespondItem } from './RespondItem'
 
 export const MyResponds = () => {
-	const [status, setStatus] = useState('')
-	const {
-		data: responds = [],
-		refetch,
-		isLoading: loading
-	} = useGetSeekerRespondsQuery(status)
+	const [getResponds, getRespondsStatus] = useLazyGetSeekerRespondsQuery()
 
-	if (loading) {
+	const [requestData, setRequestData] = useState<{
+		status: string
+		page: number
+	}>({
+		status: '',
+		page: 0
+	})
+	const [blockPageAddition, setBlockPageAddition] = useState<boolean>(true)
+	const [isBottomOfCatalogVisible, setIsBottomOfCatalogVisible] = useState<boolean>(true)
+	const catalogBottomRef = useRef<null | HTMLDivElement>(null)
+	const [responds, setResponds] = useState<RespondItemType[]>([])
+
+	useEffect(() => {
+		const lowerObserver = new IntersectionObserver(entries => {
+			const target = entries[0]
+			if (target.isIntersecting) {
+				console.log('I see the depths of hell below')
+				setIsBottomOfCatalogVisible(true)
+			}
+			if (!target.isIntersecting) {
+				setIsBottomOfCatalogVisible(false)
+			}
+		})
+
+		if (catalogBottomRef.current) {
+			lowerObserver.observe(catalogBottomRef.current)
+		}
+
+		return () => {
+			if (catalogBottomRef.current) {
+				lowerObserver.unobserve(catalogBottomRef.current)
+			}
+		}
+	}, [responds.length])
+
+	useEffect(() => {
+		if (requestData.page === 0) {
+			getResponds({ status: requestData.status, page: requestData.page })
+				.unwrap()
+				.then(res => {
+					setResponds(res.content)
+					setBlockPageAddition(false)
+				})
+		} else {
+			getResponds({ status: requestData.status, page: requestData.page })
+				.unwrap()
+				.then(res => {
+					setResponds(prev => [...prev, ...res.content])
+					setBlockPageAddition(false)
+				})
+		}
+	}, [requestData])
+
+	useEffect(() => {
+		if (isBottomOfCatalogVisible) {
+			if (!blockPageAddition) {
+				setRequestData(prev => ({ ...prev, page: prev.page + 1 }))
+			}
+		}
+	}, [isBottomOfCatalogVisible])
+
+	if (getRespondsStatus.isLoading) {
 		return (
 			<>
 				<div className="w-full h-full flex items-center">
 					<div className="text-center ml-auto mr-auto">
-						<Spin
-							indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}
-						></Spin>
-						<p className="font-content-font font-normal text-black text-[18px]/[18px]">
-							Идёт загрузка...
-						</p>
+						<Spin indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}></Spin>
+						<p className="font-content-font font-normal text-black text-[18px]/[18px]">Идёт загрузка...</p>
 					</div>
 				</div>
 			</>
@@ -35,21 +87,18 @@ export const MyResponds = () => {
 	return (
 		<>
 			<div className="mt-[120px] pl-[52px] w-full">
-				<h1 className="font-content-font font-normal text-black text-[28px]/[28px]">
-					Мои отклики
-				</h1>
+				<h1 className="font-content-font font-normal text-black text-[28px]/[28px]">Мои отклики</h1>
 				<div className="mt-[52px] mb-[40px] flex items-center gap-[16px]">
 					<Radio.Group
 						className="flex gap-[8px]"
-						value={status}
+						value={requestData.status}
 						onChange={e => {
-							setStatus(e.target.value)
-							console.log(status)
+							setRequestData({ status: e.target.value, page: 0 })
 						}}
 					>
 						<label
 							className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
-								status === ''
+								requestData.status === ''
 									? 'text-white bg-dasha-blue'
 									: 'text-black border-solid border-black border-[1px]'
 							} font-normal text-[16px]/[16px]`}
@@ -72,80 +121,61 @@ export const MyResponds = () => {
 						</label> */}
 						<label
 							className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
-								status ===
-								`statuses=${respondStatus[respondStatus.IN_RESERVE]}&statuses=${
-									respondStatus[respondStatus.ARCHIVE]
-								}`
+								requestData.status ===
+								`statuses=${respondStatus[respondStatus.IN_RESERVE]}&statuses=${respondStatus[respondStatus.ARCHIVE]}`
 									? 'text-white bg-dasha-blue'
 									: 'text-black border-solid border-black border-[1px]'
 							} font-normal text-[16px]/[16px]`}
 						>
 							<Radio
-								value={`statuses=${
-									respondStatus[respondStatus.IN_RESERVE]
-								}&statuses=${respondStatus[respondStatus.ARCHIVE]}`}
+								value={`statuses=${respondStatus[respondStatus.IN_RESERVE]}&statuses=${
+									respondStatus[respondStatus.ARCHIVE]
+								}`}
 								className="hidden"
 							></Radio>
 							отказано
 						</label>
 						<label
 							className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
-								status ===
-								`statuses=${respondStatus[respondStatus.IN_SUPERVISOR_REVIEW]}`
+								requestData.status === `statuses=${respondStatus[respondStatus.IN_SUPERVISOR_REVIEW]}`
 									? 'text-white bg-dasha-blue'
 									: 'text-black border-solid border-black border-[1px]'
 							} font-normal text-[16px]/[16px]`}
 						>
-							<Radio
-								value={`statuses=${
-									respondStatus[respondStatus.IN_SUPERVISOR_REVIEW]
-								}`}
-								className="hidden"
-							></Radio>
+							<Radio value={`statuses=${respondStatus[respondStatus.IN_SUPERVISOR_REVIEW]}`} className="hidden"></Radio>
 							на рассмотрении у руководителя
 						</label>
 						<label
 							className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
-								status ===
-								`statuses=${
-									respondStatus[respondStatus.IN_PERSONNEL_DEPT_REVIEW]
-								}`
+								requestData.status === `statuses=${respondStatus[respondStatus.IN_PERSONNEL_DEPT_REVIEW]}`
 									? 'text-white bg-dasha-blue'
 									: 'text-black border-solid border-black border-[1px]'
 							} font-normal text-[16px]/[16px]`}
 						>
 							<Radio
-								value={`statuses=${
-									respondStatus[respondStatus.IN_PERSONNEL_DEPT_REVIEW]
-								}`}
+								value={`statuses=${respondStatus[respondStatus.IN_PERSONNEL_DEPT_REVIEW]}`}
 								className="hidden"
 							></Radio>
 							на рассмотрении у HR
 						</label>
 						<label
 							className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
-								status === `statuses=${respondStatus[respondStatus.INVITATION]}`
+								requestData.status === `statuses=${respondStatus[respondStatus.INVITATION]}`
 									? 'text-white bg-dasha-blue'
 									: 'text-black border-solid border-black border-[1px]'
 							} font-normal text-[16px]/[16px]`}
 						>
-							<Radio
-								value={`statuses=${respondStatus[respondStatus.INVITATION]}`}
-								className="hidden"
-							></Radio>
+							<Radio value={`statuses=${respondStatus[respondStatus.INVITATION]}`} className="hidden"></Radio>
 							приглашение на собеседование
 						</label>
 						<label
 							className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
-								status === `statuses=${respondStatus[respondStatus.EMPLOYMENT]}`
+								requestData.status === `statuses=${respondStatus[respondStatus.EMPLOYMENT]}`
 									? 'text-white bg-dasha-blue'
 									: 'text-black border-solid border-black border-[1px]'
 							} font-normal text-[16px]/[16px]`}
 						>
-							<Radio
-								value={`statuses=${respondStatus[respondStatus.EMPLOYMENT]}`}
-								className="hidden"
-							></Radio>
+							<Radio value={`statuses=${respondStatus[respondStatus.EMPLOYMENT]}`} className="hidden"></Radio>
 							трудоустройство
 						</label>
 					</Radio.Group>
@@ -162,8 +192,15 @@ export const MyResponds = () => {
 					</h3>
 				</div>
 				{responds.map(respond => (
-					<RespondItem key={respond.id} {...respond} refetch={refetch} />
+					<RespondItem
+						key={respond.id}
+						{...respond}
+						refetch={() => {
+							setRequestData(prev => ({ ...prev, page: 0 }))
+						}}
+					/>
 				))}
+				<div className="h-[1px]" ref={catalogBottomRef} key={'catalog_bottom_key'}></div>
 			</div>
 		</>
 	)

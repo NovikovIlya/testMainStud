@@ -183,19 +183,24 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
-		getResponcesByVacancy: builder.query<VacancyRespondItemType[], { id: number; status: string; role: string }>({
-			query: ({ id, status, role }) => ({
-				url: `http://${emplBaseURL}employment-api/v1/vacancy/${id}/responds?status=${status}`,
+		getResponcesByVacancy: builder.query<
+			{ content: VacancyRespondItemType[] },
+			{ id: number; status: string; role: string; page: number }
+		>({
+			query: ({ id, status, role, page }) => ({
+				url: `http://${emplBaseURL}employment-api/v1/vacancy/${id}/responds?status=${status}&page=${page}`,
 				headers: {
 					Authorization: `Bearer ${role === 'PERSONNEL_DEPARTMENT' ? personnelDeparmentToken : supervisorToken}`
 				},
 				keepUnusedDataFor: 0
 			}),
-			transformResponse: (response: VacancyRespondItemType[]) => {
-				return response.map(resp => ({
-					...resp,
-					responseDate: resp.responseDate.substring(0, 10)
-				}))
+			transformResponse: (response: { content: VacancyRespondItemType[] }) => {
+				return {
+					content: response.content.map(resp => ({
+						...resp,
+						responseDate: resp.responseDate.substring(0, 10)
+					}))
+				}
 			}
 		}),
 		getRespondFullInfo: builder.query<VacancyRespondItemType, number>({

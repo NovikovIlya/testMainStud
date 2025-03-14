@@ -23,6 +23,7 @@ import {
 	InterviewItemType,
 	InterviewRequestType,
 	InterviewViewResponseType,
+	PageableType,
 	ReserveTimeRequestType,
 	ResponceType,
 	RespondItemType,
@@ -154,15 +155,16 @@ export const serviceApi = apiSlice.injectEndpoints({
 					page
 			})
 		}),
-		getSeekerResponds: builder.query<{ content: RespondItemType[] }, { status: string; page: number }>({
+		getSeekerResponds: builder.query<PageableType<RespondItemType>, { status: string; page: number }>({
 			query: ({ status, page }) => ({
 				url: `http://${emplBaseURL}employment-api/v1/seeker/responds?${status}&page=${page}`,
 				headers: {
 					Authorization: `Bearer ${seekerToken}`
 				}
 			}),
-			transformResponse: (response: { content: RespondItemType[] }) => {
+			transformResponse: (response: PageableType<RespondItemType>) => {
 				return {
+					...response,
 					content: response.content.map(resp => ({
 						...resp,
 						respondDate: resp.respondDate.substring(0, 10)

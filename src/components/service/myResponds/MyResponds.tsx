@@ -19,6 +19,7 @@ export const MyResponds = () => {
 	})
 
 	const [showSpin, setShowSpin] = useState<boolean>(true)
+	const [morePagesToGo, setMorePagesToGo] = useState<boolean>(true)
 
 	const [blockPageAddition, setBlockPageAddition] = useState<boolean>(true)
 	const [isBottomOfCatalogVisible, setIsBottomOfCatalogVisible] = useState<boolean>(true)
@@ -46,7 +47,7 @@ export const MyResponds = () => {
 				lowerObserver.unobserve(catalogBottomRef.current)
 			}
 		}
-	}, [responds.length])
+	}, [responds])
 
 	useEffect(() => {
 		if (requestData.page === 0) {
@@ -54,6 +55,7 @@ export const MyResponds = () => {
 				.unwrap()
 				.then(res => {
 					setResponds(res.content)
+					requestData.page === res.page.totalPages - 1 && setMorePagesToGo(false)
 					setBlockPageAddition(false)
 				})
 		} else {
@@ -62,6 +64,7 @@ export const MyResponds = () => {
 				.then(res => {
 					setResponds(prev => [...prev, ...res.content])
 					res.content.length === 0 && setShowSpin(false)
+					requestData.page === res.page.totalPages - 1 && setMorePagesToGo(false)
 					setBlockPageAddition(false)
 				})
 		}
@@ -70,10 +73,12 @@ export const MyResponds = () => {
 	useEffect(() => {
 		if (isBottomOfCatalogVisible) {
 			if (!blockPageAddition) {
-				setRequestData(prev => ({ ...prev, page: prev.page + 1 }))
+				if (morePagesToGo) {
+					setRequestData(prev => ({ ...prev, page: prev.page + 1 }))
+				}
 			}
 		}
-	}, [isBottomOfCatalogVisible])
+	}, [isBottomOfCatalogVisible, blockPageAddition, morePagesToGo])
 
 	if (getRespondsStatus.isLoading) {
 		return (
@@ -97,7 +102,9 @@ export const MyResponds = () => {
 						className="flex gap-[8px]"
 						value={requestData.status}
 						onChange={e => {
+							setBlockPageAddition(true)
 							setRequestData({ status: e.target.value, page: 0 })
+							setMorePagesToGo(true)
 							setShowSpin(true)
 						}}
 					>
@@ -201,9 +208,9 @@ export const MyResponds = () => {
 								<Spin indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}></Spin>
 							</div>
 						)}
+						<div className="h-[1px]" ref={catalogBottomRef} key={'catalog_bottom_key'}></div>
 					</>
 				)}
-				<div className="h-[1px]" ref={catalogBottomRef} key={'catalog_bottom_key'}></div>
 			</div>
 		</>
 	)

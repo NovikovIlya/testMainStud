@@ -113,15 +113,12 @@ export const RespondsSupervisor = () => {
 						</label>
 						<label
 							className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
-								requestData.status === 'status=' + respondStatus[respondStatus.IN_PERSONNEL_DEPT_REVIEW]
+								requestData.status === 'status=' + respondStatus[respondStatus.IN_SUPERVISOR_REVIEW]
 									? 'text-white bg-dasha-blue'
 									: 'text-black border-solid border-black border-[1px]'
 							} font-normal text-[16px]/[16px]`}
 						>
-							<Radio
-								value={'status=' + respondStatus[respondStatus.IN_PERSONNEL_DEPT_REVIEW]}
-								className="hidden"
-							></Radio>
+							<Radio value={'status=' + respondStatus[respondStatus.IN_SUPERVISOR_REVIEW]} className="hidden"></Radio>
 							на рассмотрении
 						</label>
 						<label
@@ -194,9 +191,9 @@ export const RespondsSupervisor = () => {
 								<Spin indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}></Spin>
 							</div>
 						)}
+						<div className="h-[1px]" ref={catalogBottomRef} key={'catalog_bottom_key'}></div>
 					</>
 				)}
-				<div className="h-[1px]" ref={catalogBottomRef} key={'catalog_bottom_key'}></div>
 			</div>
 		</>
 	)

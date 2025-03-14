@@ -368,24 +368,26 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
-		getSeekerEmploymentResponds: builder.query<RespondItemType[], void>({
-			query: () => ({
-				url: `http://${emplBaseURL}employment-api/v1/seeker/responds?status=все`,
+		getSeekerEmploymentResponds: builder.query<{ content: RespondItemType[] }, number>({
+			query: page => ({
+				url: `http://${emplBaseURL}employment-api/v1/seeker/responds?statuses=EMPLOYMENT&page=${page}`,
 				headers: {
 					Authorization: `Bearer ${seekerToken}`
 				}
 			}),
-			transformResponse: (response: RespondItemType[]) => {
+			transformResponse: (response: { content: RespondItemType[] }) => {
 				// return response.map(resp => ({
 				// 	...resp,
 				// 	respondDate: resp.respondDate.substring(0, 10)
 				// }))
-				return response
-					.filter(resp => resp.status === 'EMPLOYMENT')
-					.map(resp => ({
-						...resp,
-						respondDate: resp.respondDate.substring(0, 10)
-					}))
+				return {
+					content: response.content
+						.filter(resp => resp.status === 'EMPLOYMENT')
+						.map(resp => ({
+							...resp,
+							respondDate: resp.respondDate.substring(0, 10)
+						}))
+				}
 			}
 		}),
 		getEmploymentData: builder.query<EmploymentDataType, number>({
@@ -1283,5 +1285,6 @@ export const {
 	useLazyGetVacancyRequestsQuery,
 	useLazyGetSeekerRespondsQuery,
 	useLazyGetSupervisorRespondsQuery,
-	useLazyGetSupervisorInterviewQuery
+	useLazyGetSupervisorInterviewQuery,
+	useLazyGetSeekerEmploymentRespondsQuery
 } = serviceApi

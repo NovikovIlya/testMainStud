@@ -1,15 +1,79 @@
 import { LoadingOutlined } from '@ant-design/icons'
 import { Spin } from 'antd'
-import { useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
-import { useGetSeekerEmploymentRespondsQuery } from '../../../../store/api/serviceApi'
+import { useLazyGetSeekerEmploymentRespondsQuery } from '../../../../store/api/serviceApi'
 import { setStage } from '../../../../store/reducers/CurrentEmploymentStage'
+import { RespondItemType } from '../../../../store/reducers/type'
 
 import { SeekerEmploymentItem } from './SeekerEmploymentItem'
 
 export const SeekerEmployment = () => {
-	const { data: responds = [], refetch, isLoading: loading } = useGetSeekerEmploymentRespondsQuery()
+	const [requestData, setRequestData] = useState<{
+		page: number
+	}>({
+		page: 0
+	})
+
+	const [showSpin, setShowSpin] = useState<boolean>(true)
+
+	const [blockPageAddition, setBlockPageAddition] = useState<boolean>(true)
+	const [isBottomOfCatalogVisible, setIsBottomOfCatalogVisible] = useState<boolean>(true)
+	const catalogBottomRef = useRef<null | HTMLDivElement>(null)
+	const [responds, setResponds] = useState<RespondItemType[]>([])
+
+	const [getResponds, getRespondsStatus] = useLazyGetSeekerEmploymentRespondsQuery()
+
+	useEffect(() => {
+		const lowerObserver = new IntersectionObserver(entries => {
+			const target = entries[0]
+			if (target.isIntersecting) {
+				console.log('I see the depths of hell below')
+				setIsBottomOfCatalogVisible(true)
+			}
+			if (!target.isIntersecting) {
+				setIsBottomOfCatalogVisible(false)
+			}
+		})
+
+		if (catalogBottomRef.current) {
+			lowerObserver.observe(catalogBottomRef.current)
+		}
+
+		return () => {
+			if (catalogBottomRef.current) {
+				lowerObserver.unobserve(catalogBottomRef.current)
+			}
+		}
+	}, [responds.length])
+
+	useEffect(() => {
+		if (requestData.page === 0) {
+			getResponds(requestData.page)
+				.unwrap()
+				.then(res => {
+					setResponds(res.content)
+					setBlockPageAddition(false)
+				})
+		} else {
+			getResponds(requestData.page)
+				.unwrap()
+				.then(res => {
+					setResponds(prev => [...prev, ...res.content])
+					res.content.length === 0 && setShowSpin(false)
+					setBlockPageAddition(false)
+				})
+		}
+	}, [requestData])
+
+	useEffect(() => {
+		if (isBottomOfCatalogVisible) {
+			if (!blockPageAddition) {
+				setRequestData(prev => ({ ...prev, page: prev.page + 1 }))
+			}
+		}
+	}, [isBottomOfCatalogVisible])
 
 	const dispatch = useDispatch()
 
@@ -17,7 +81,7 @@ export const SeekerEmployment = () => {
 		dispatch(setStage(''))
 	}, [])
 
-	if (loading) {
+	if (getRespondsStatus.isLoading) {
 		return (
 			<>
 				<div className="w-full h-full flex items-center">
@@ -47,6 +111,13 @@ export const SeekerEmployment = () => {
 						{responds.map(resp => (
 							<SeekerEmploymentItem {...resp} />
 						))}
+						{getRespondsStatus.isFetching && showSpin && (
+							<div className="text-center ml-auto mr-auto">
+								<Spin indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}></Spin>
+								<p className="font-content-font font-normal text-black text-[18px]/[18px]">Идёт загрузка...</p>
+							</div>
+						)}
+						<div className="h-[1px]" ref={catalogBottomRef} key={'catalog_bottom_key'}></div>
 					</>
 				)}
 			</div>

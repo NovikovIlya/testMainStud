@@ -15,6 +15,9 @@ export const SupervisorInterviews = () => {
 	}>({
 		page: 0
 	})
+
+	const [showSpin, setShowSpin] = useState<boolean>(true)
+
 	const [blockPageAddition, setBlockPageAddition] = useState<boolean>(true)
 	const [isBottomOfCatalogVisible, setIsBottomOfCatalogVisible] = useState<boolean>(true)
 	const catalogBottomRef = useRef<null | HTMLDivElement>(null)
@@ -56,6 +59,7 @@ export const SupervisorInterviews = () => {
 				.unwrap()
 				.then(res => {
 					setInterviews(prev => [...prev, ...res.content])
+					res.content.length === 0 && setShowSpin(false)
 					setBlockPageAddition(false)
 				})
 		}
@@ -121,6 +125,12 @@ export const SupervisorInterviews = () => {
 					{interviews.map(inter => (
 						<SupervisorInterviewItem {...inter} key={inter.id} />
 					))}
+					{getInterviewsStatus.isFetching && showSpin && (
+						<div className="text-center ml-auto mr-auto mb-[3%]">
+							<Spin indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}></Spin>
+						</div>
+					)}
+					<div className="h-[1px]" ref={catalogBottomRef} key={'catalog_bottom_key'}></div>
 				</div>
 			</div>
 		</div>

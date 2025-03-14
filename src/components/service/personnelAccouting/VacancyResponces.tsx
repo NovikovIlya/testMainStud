@@ -26,6 +26,9 @@ export const VacancyResponces = () => {
 		status: 'все',
 		page: 0
 	})
+
+	const [showSpin, setShowSpin] = useState<boolean>(true)
+
 	const [blockPageAddition, setBlockPageAddition] = useState<boolean>(true)
 	const [isBottomOfCatalogVisible, setIsBottomOfCatalogVisible] = useState<boolean>(true)
 	const catalogBottomRef = useRef<null | HTMLDivElement>(null)
@@ -69,6 +72,7 @@ export const VacancyResponces = () => {
 				.unwrap()
 				.then(res => {
 					setResponds(prev => [...prev, ...res.content])
+					res.content.length === 0 && setShowSpin(false)
 					setBlockPageAddition(false)
 				})
 		}
@@ -114,9 +118,10 @@ export const VacancyResponces = () => {
 				<div className="mt-[52px] mb-[60px] flex items-center gap-[16px]">
 					<Radio.Group
 						className="flex flex-wrap gap-[12px]"
-						value={status}
+						value={requestData.status}
 						onChange={e => {
 							setRequestData({ status: e.target.value, page: 0 })
+							setShowSpin(true)
 						}}
 					>
 						<label
@@ -183,9 +188,26 @@ export const VacancyResponces = () => {
 						Статус
 					</h3>
 				</div>
-				{responds.map(respond => (
-					<VacancyRespondItem {...respond} itemType="PERSONNEL_DEPARTMENT" />
-				))}
+				{getRespondsStatus.isFetching && requestData.page === 0 && showSpin ? (
+					<>
+						{' '}
+						<div className="text-center ml-auto mr-auto mb-[3%]">
+							<Spin indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}></Spin>
+						</div>
+					</>
+				) : (
+					<>
+						{' '}
+						{responds.map(respond => (
+							<VacancyRespondItem {...respond} itemType="PERSONNEL_DEPARTMENT" />
+						))}
+						{getRespondsStatus.isFetching && requestData.page > 0 && showSpin && (
+							<div className="text-center ml-auto mr-auto mb-[3%]">
+								<Spin indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}></Spin>
+							</div>
+						)}
+					</>
+				)}
 			</div>
 		</>
 	)

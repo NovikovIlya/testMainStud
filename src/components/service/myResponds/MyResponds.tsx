@@ -183,14 +183,25 @@ export const MyResponds = () => {
 						Статус
 					</h3>
 				</div>
-				{responds.map(respond => (
-					<RespondItem key={respond.id} {...respond} />
-				))}
-				{getRespondsStatus.isFetching && showSpin && (
-					<div className="text-center ml-auto mr-auto">
-						<Spin indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}></Spin>
-						<p className="font-content-font font-normal text-black text-[18px]/[18px]">Идёт загрузка...</p>
-					</div>
+				{getRespondsStatus.isFetching && requestData.page === 0 && showSpin ? (
+					<>
+						{' '}
+						<div className="text-center ml-auto mr-auto mb-[3%]">
+							<Spin indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}></Spin>
+						</div>
+					</>
+				) : (
+					<>
+						{' '}
+						{responds.map(respond => (
+							<RespondItem key={respond.id} {...respond} />
+						))}
+						{getRespondsStatus.isFetching && requestData.page > 0 && showSpin && (
+							<div className="text-center ml-auto mr-auto mb-[3%]">
+								<Spin indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}></Spin>
+							</div>
+						)}
+					</>
 				)}
 				<div className="h-[1px]" ref={catalogBottomRef} key={'catalog_bottom_key'}></div>
 			</div>

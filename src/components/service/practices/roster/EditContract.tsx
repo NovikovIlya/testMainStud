@@ -645,12 +645,20 @@ export const EditContract = () => {
             form.setFieldValue('ITN', data.itn)
             setInn(data.itn)
 
+            if (data.contractType === 'Срочный') {
+                setHideSrok(false)
+            } else if (data.contractType === 'Бессрочный') {
+                setHideSrok(true)
+            }
+
             if (data.contractType === 'С пролонгацией') {
                 form.setFieldValue('contractType', data.contractType)
                 setProlongation(true)
+                setHideSrok(false)
                 form.setFieldValue('prolongation', data.prolongation)
             } else {
                 form.setFieldValue('contractType', data.contractType)
+                setProlongation(false)
             }
 
             form.setFieldValue('contractNumber', data.contractNumber)
@@ -684,8 +692,8 @@ export const EditContract = () => {
     function onFinish(values: ICreateContract) {
         const formDataEditContract = new FormData()
 
-        values.specialtyNameIds = nameSpec,
-            values.placesAmount = String(values.placesAmount)
+        values.specialtyNameIds = nameSpec
+        values.placesAmount = String(values.placesAmount)
         values.ITN = String(values.ITN)
         values.conclusionDate = dayjs(values.conclusionDate).format('DD.MM.YYYY')
         values.endDate = dayjs(values.endDate).format('DD.MM.YYYY')
@@ -861,7 +869,7 @@ export const EditContract = () => {
                                     } else if (value === 'Бессрочный') {
                                         setProlongation(false)
                                         setHideSrok(true)
-                                    } else {
+                                    } else if (value === 'Срочный') {
                                         setHideSrok(false)
                                         setProlongation(false)
                                     }
@@ -894,6 +902,8 @@ export const EditContract = () => {
                             <Form.Item label={t("endDate")}
                                 name={'endDate'}
                                 rules={[{ required: true }]}
+                                labelCol={{ style: { height: 54, display: 'flex', alignItems: 'center' } }}
+                              
                             >
                                 <DatePicker
                                     format={'DD.MM.YYYY'}

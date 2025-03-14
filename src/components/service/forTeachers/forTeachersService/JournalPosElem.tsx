@@ -207,8 +207,8 @@ const JournalPosElem = ({ collapsed }: { collapsed: boolean }) => {
 							> */}
 						{monthValue && disciplineId ? (
 							<>
-							<Button loading={isExportingEmpty} onClick={()=>download2()} className="rounded-xl mt-1" icon={<PrinterOutlined />}>{t('printJournalEmpty')}</Button>
-								<Button loading={isExporting} onClick={()=>download()} className="rounded-xl" icon={<PrinterOutlined />}>
+							<Button disabled={dataGetSemestr?.length===0} loading={isExportingEmpty} onClick={()=>download2()} className="rounded-xl mt-1" icon={<PrinterOutlined />}>{t('printJournalEmpty')}</Button>
+								<Button disabled={dataGetSemestr?.length===0} loading={isExporting} onClick={()=>download()} className="rounded-xl" icon={<PrinterOutlined />}>
 								{t('printJournalFiled')}
 							</Button>
 								<TableJournalPos
@@ -220,7 +220,7 @@ const JournalPosElem = ({ collapsed }: { collapsed: boolean }) => {
 								{/* </Modal> */}
 								
 								<Row className="flex gap-2 items-center  mt-4 mb-4">
-								<Button onClick={saveData} className=" rounded-xl" type="primary">
+								<Button disabled={dataGetSemestr?.length===0} onClick={saveData} className=" rounded-xl" type="primary">
 									{t('Save')}
 								</Button>
 								
@@ -232,8 +232,9 @@ const JournalPosElem = ({ collapsed }: { collapsed: boolean }) => {
 					</div>
 				</>
 			) : (
-				<Result title={t('selectGroup')} />
+				<Result title={data?.length === 0 ? t('emptyJournal') : t('selectGroup')} />
 			)}
+		
 		</Spin>
 	)
 }

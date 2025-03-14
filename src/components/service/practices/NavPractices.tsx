@@ -65,29 +65,29 @@ export const NavPractices = () => {
       icon: <PracticesSvg />,
       children: [{ key: 'finally', label: t('finally') }]
     },
-    {
-      key: 'sub3',
-      label: (
-        <Button
-          className='opacity-70 mt-1 items-center'
-          onClick={() => {
-            if (!ref1.current?.closest('li')?.classList.contains('ant-menu-submenu-open')) {
-              ref1.current?.click()
-            }
-            if (!ref2.current?.closest('li')?.classList.contains('ant-menu-submenu-open')) {
-              ref2.current?.click()
-            }
-            if (!ref3.current?.closest('li')?.classList.contains('ant-menu-submenu-open')) {
-              ref3.current?.click()
-            }
-            setOpen(true)
-          }}
-        >
-          {t('takeTutorial')}
-        </Button>
-      ),
-      icon: <QuestionCircleOutlined className='invisible absolute top-1/2 -translate-y-1/2 right-4' />
-    }
+    // {
+    //   key: 'sub3',
+    //   label: (
+    //     <Button
+    //       className='opacity-70 mt-1 items-center'
+    //       onClick={() => {
+    //         if (!ref1.current?.closest('li')?.classList.contains('ant-menu-submenu-open')) {
+    //           ref1.current?.click()
+    //         }
+    //         if (!ref2.current?.closest('li')?.classList.contains('ant-menu-submenu-open')) {
+    //           ref2.current?.click()
+    //         }
+    //         if (!ref3.current?.closest('li')?.classList.contains('ant-menu-submenu-open')) {
+    //           ref3.current?.click()
+    //         }
+    //         setOpen(true)
+    //       }}
+    //     >
+    //       {t('takeTutorial')}
+    //     </Button>
+    //   ),
+    //   icon: <QuestionCircleOutlined className='invisible absolute top-1/2 -translate-y-1/2 right-4' />
+    // }
   ]
 
   const steps: any = [

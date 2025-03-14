@@ -3,7 +3,7 @@ import { apiSlice } from '../apiSlice'
 import { testApiSlice } from '../testApiSlice'
 
 
-export const fotTeacherService = testApiSlice.injectEndpoints({
+export const fotTeacherService = apiSlice.injectEndpoints({
     endpoints: builder => ({
         // Расписание
         getScheduleForTeacher: builder.query<any, any>({

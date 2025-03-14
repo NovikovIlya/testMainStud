@@ -74,7 +74,7 @@ const DropDrag = () => {
 	const { data: dataSubRole, isSuccess: isSuccessSubRole, isLoading: isLoadingSubRole } = useGetRoleQuery(null)
 	const [subRole, setSubrole] = useLocalStorageState<any>('subRole', { defaultValue: '' })
 	const [windowSize, setWindowSize] = useState(getWindowSize())
-	const { data: dataModules } = useGetModulesQuery()
+	// const { data: dataModules } = useGetModulesQuery()
 	const [user, setInfo] = useLocalStorageState<any>('user')
 
 	const [href, setHref] = useLocalStorageState<any>('href', {

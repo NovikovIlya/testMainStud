@@ -17,6 +17,9 @@ export const MyResponds = () => {
 		status: '',
 		page: 0
 	})
+
+	const [showSpin, setShowSpin] = useState<boolean>(true)
+
 	const [blockPageAddition, setBlockPageAddition] = useState<boolean>(true)
 	const [isBottomOfCatalogVisible, setIsBottomOfCatalogVisible] = useState<boolean>(true)
 	const catalogBottomRef = useRef<null | HTMLDivElement>(null)
@@ -58,6 +61,7 @@ export const MyResponds = () => {
 				.unwrap()
 				.then(res => {
 					setResponds(prev => [...prev, ...res.content])
+					res.content.length === 0 && setShowSpin(false)
 					setBlockPageAddition(false)
 				})
 		}
@@ -94,6 +98,7 @@ export const MyResponds = () => {
 						value={requestData.status}
 						onChange={e => {
 							setRequestData({ status: e.target.value, page: 0 })
+							setShowSpin(true)
 						}}
 					>
 						<label
@@ -106,19 +111,6 @@ export const MyResponds = () => {
 							<Radio value={''} className="hidden"></Radio>
 							все
 						</label>
-						{/* <label
-							className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
-								status === respondStatus[respondStatus.ARCHIVE]
-									? 'text-white bg-dasha-blue'
-									: 'text-black border-solid border-black border-[1px]'
-							} font-normal text-[16px]/[16px]`}
-						>
-							<Radio
-								value={respondStatus[respondStatus.ARCHIVE]}
-								className="hidden"
-							></Radio>
-							архив
-						</label> */}
 						<label
 							className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
 								requestData.status ===
@@ -194,6 +186,12 @@ export const MyResponds = () => {
 				{responds.map(respond => (
 					<RespondItem key={respond.id} {...respond} />
 				))}
+				{getRespondsStatus.isFetching && showSpin && (
+					<div className="text-center ml-auto mr-auto">
+						<Spin indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}></Spin>
+						<p className="font-content-font font-normal text-black text-[18px]/[18px]">Идёт загрузка...</p>
+					</div>
+				)}
 				<div className="h-[1px]" ref={catalogBottomRef} key={'catalog_bottom_key'}></div>
 			</div>
 		</>

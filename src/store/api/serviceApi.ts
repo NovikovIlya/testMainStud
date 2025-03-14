@@ -314,18 +314,21 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
-		getReservedResponces: builder.query<VacancyRespondItemType[], string>({
-			query: type => ({
-				url: `http://${emplBaseURL}employment-api/v1/reserve?reserveType=${type}`,
+		getReservedResponces: builder.query<PageableType<VacancyRespondItemType>, { type: string; page: number }>({
+			query: ({ page, type }) => ({
+				url: `http://${emplBaseURL}employment-api/v1/reserve?reserveType=${type}&page=${page}`,
 				headers: {
 					Authorization: `Bearer ${personnelDeparmentToken}`
 				}
 			}),
-			transformResponse: (response: VacancyRespondItemType[]) => {
-				return response.map(resp => ({
-					...resp,
-					respondDate: resp.respondDate.substring(0, 10)
-				}))
+			transformResponse: (response: PageableType<VacancyRespondItemType>) => {
+				return {
+					...response,
+					content: response.content.map(resp => ({
+						...resp,
+						respondDate: resp.respondDate.substring(0, 10)
+					}))
+				}
 			}
 		}),
 		getReservedRespondFullInfo: builder.query<VacancyRespondItemType, number>({
@@ -1288,5 +1291,6 @@ export const {
 	useLazyGetSeekerRespondsQuery,
 	useLazyGetSupervisorRespondsQuery,
 	useLazyGetSupervisorInterviewQuery,
-	useLazyGetSeekerEmploymentRespondsQuery
+	useLazyGetSeekerEmploymentRespondsQuery,
+	useLazyGetReservedResponcesQuery
 } = serviceApi

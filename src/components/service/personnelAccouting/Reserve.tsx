@@ -164,7 +164,9 @@ export const Reserve = () => {
 									respond.userData?.lastname + ' ' + respond.userData?.firstname + ' ' + respond.userData?.middlename
 								}
 								respondDate={respond.respondDate}
-								refetch={() => {}}
+								refetch={() => {
+									setRequestData(prev => ({ ...prev, page: 0 }))
+								}}
 								post={respond.oldVacancyName ? respond.oldVacancyName : respond.desiredJob}
 							/>
 						))}

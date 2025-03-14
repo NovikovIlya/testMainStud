@@ -292,18 +292,21 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
-		getArchivedResponces: builder.query<VacancyRespondItemType[], void>({
-			query: () => ({
-				url: `http://${emplBaseURL}employment-api/v1/archive`,
+		getArchivedResponces: builder.query<PageableType<VacancyRespondItemType>, number>({
+			query: page => ({
+				url: `http://${emplBaseURL}employment-api/v1/archive?page=${page}`,
 				headers: {
 					Authorization: `Bearer ${personnelDeparmentToken}`
 				}
 			}),
-			transformResponse: (response: VacancyRespondItemType[]) => {
-				return response.map(resp => ({
-					...resp,
-					responseDate: resp.responseDate.substring(0, 10)
-				}))
+			transformResponse: (response: PageableType<VacancyRespondItemType>) => {
+				return {
+					...response,
+					content: response.content.map(resp => ({
+						...resp,
+						responseDate: resp.responseDate.substring(0, 10)
+					}))
+				}
 			}
 		}),
 		getArchivedRespondFullInfo: builder.query<VacancyRespondItemType, number>({
@@ -1292,5 +1295,6 @@ export const {
 	useLazyGetSupervisorRespondsQuery,
 	useLazyGetSupervisorInterviewQuery,
 	useLazyGetSeekerEmploymentRespondsQuery,
-	useLazyGetReservedResponcesQuery
+	useLazyGetReservedResponcesQuery,
+	useLazyGetArchivedResponcesQuery
 } = serviceApi

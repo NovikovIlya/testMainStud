@@ -20,14 +20,11 @@ export const VacancyResponces = () => {
 	const vacancyId = parseInt(pathVacancyId)
 
 	const [status, setStatus] = useState('все')
-	const { data: response = {}, isLoading: loading } = useGetResponcesByVacancyQuery({
+	const { data: responds = [], isLoading: loading } = useGetResponcesByVacancyQuery({
 		id: vacancyId,
 		status: status,
 		role: 'PERSONNEL_DEPARTMENT'
 	})
-
-	const responds = response || []
-	console.log(response)
 
 	if (loading) {
 		return (

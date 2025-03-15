@@ -7,6 +7,7 @@ import { LoadingOutlined } from '@ant-design/icons'
 export const DepEmployment = () => {
 
 	const { data: employment_stage_items = [], isLoading : loading } = useGetPersonnelStagesQuery();
+
 	console.log(employment_stage_items)
 
 	const verifyingItems = employment_stage_items.filter(item => item.status === 'VERIFYING');

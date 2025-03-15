@@ -1,38 +1,29 @@
-import { LoadingOutlined } from "@ant-design/icons";
-import { ThemeProvider } from '@material-tailwind/react';
-import { Button, ConfigProvider, DatePicker, Form, Input, Modal, Select, Spin } from 'antd';
-import TextArea from 'antd/es/input/TextArea';
+import { ThemeProvider } from '@material-tailwind/react'
+import {Button, ConfigProvider, DatePicker, Form, Input, Modal, Select, Spin} from 'antd'
+import React, { useEffect, useState } from 'react'
 import moment from 'moment';
-import React, { useEffect, useState } from 'react';
 
-import { useAppSelector } from '../../../../../store';
+import { useAppSelector } from '../../../../../store'
 import {
 	useGetSupervisorVacancyQuery,
 	useLazyGetResponcesByVacancyQuery,
 	useLazyGetVacancyGroupedResponcesQuery,
 	useRequestCreateInterviewMutation
-} from '../../../../../store/api/serviceApi';
-import { VacancyRespondItemType } from '../../../../../store/reducers/type';
+} from '../../../../../store/api/serviceApi'
+import { VacancyRespondItemType } from '../../../../../store/reducers/type'
 
 import value = ThemeProvider.propTypes.value
-import {setRespondId} from "../../../../../store/reducers/CurrentRespondIdSlice";
-import {useDispatch} from "react-redux";
+import TextArea from 'antd/es/input/TextArea'
+import {LoadingOutlined} from "@ant-design/icons";
 
 export const SupervisorInterviewCreate = () => {
-
-	const dispatch = useDispatch()
-
-	const [formId, setFormId] = useState<number>(0)
-
 	const [responds, setResponds] = useState<VacancyRespondItemType[]>([])
 
 	const [requestCreateInterview] = useRequestCreateInterviewMutation()
 
 	const respondId = useAppSelector(state => state.currentResponce)
 
-	const { data: response = {}, isLoading: loading } = useGetSupervisorVacancyQuery()
-
-	const vacancies = response.content || []
+	const { data: vacancies = [], isLoading: loading } = useGetSupervisorVacancyQuery()
 
 	const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
 
@@ -44,74 +35,49 @@ export const SupervisorInterviewCreate = () => {
 	const [getResponds] = useLazyGetResponcesByVacancyQuery()
 
 	useEffect(() => {
-		getGroupedResponds({
-			category: 'АУП',
-			role: 'SUPERVISOR',
-			type: 'DIRECTORY'
-		})
+		getGroupedResponds({ category: 'АУП', role: 'SUPERVISOR' })
 			.unwrap()
 			.then(grData => {
-				// Проверяем, что grData.content существует и является массивом
-				// @ts-ignore
-				if (grData.content && Array.isArray(grData.content)) {
-					// @ts-ignore
-					grData.content.forEach(vacResp => {
-						getResponds({
-							id: vacResp.vacancyId,
-							status: '',
-							role: 'SUPERVISOR'
-						})
-							.unwrap()
-							.then(response => {
-								// Проверяем, что response является массивом
-								if (Array.isArray(response)) {
-									setResponds(prev => [...prev, ...response]);
-								} else {
-									console.error("Ожидался массив response, но получено:", response);
-								}
-								console.log("Данные по вакансии:", response);
-							})
-							.catch(error => {
-								console.error("Ошибка при получении данных:", error);
-							});
-					});
-				} else {
-					console.error("Ожидался массив grData.content, но получено:", grData);
-				}
+				grData.map(vacResp => {
+					getResponds({
+						id: vacResp.vacancyId,
+						status: '',
+						role: 'SUPERVISOR'
+					})
+						.unwrap()
+						.then(data => setResponds(prev => [...prev, ...data]))
+				})
 			})
-			.catch(error => {
-				console.error("Ошибка при получении группированных данных:", error);
-			});
-	}, [getGroupedResponds, getResponds, setResponds]);
-	console.log(responds)
+	}, [])
+
 	let respondFIOSet = Array.from(
 		new Set(
-			responds
-				.map(resp => {
-					console.log(resp)
-					if (resp.userData) {
-						return {
-							fio:
-								resp.userData.lastname +
-								' ' +
-								resp.userData.firstname +
-								' ' +
-								resp.userData.middlename,
-							id: resp.id // Добавляем respondId
-						};
-					}
-					// Если userData отсутствует, возвращаем null
-					return null;
-				})
-				.filter(item => item !== null) // Убираем null
+			responds.map(
+				resp =>
+					resp.userData?.lastname +
+					' ' +
+					resp.userData?.firstname +
+					' ' +
+					resp.userData?.middlename
+			)
 		)
-	).map(item => ({
-		value: item.fio, // ФИО как значение
-		label: item.fio, // ФИО как метка
-		id: item?.id // Добавляем respondId
-	}));
+	).map(fio => ({ value: fio, label: fio }))
 
-	console.log(fio)
+	const respondPosSet = Array.from(
+		new Set(
+			responds
+				.filter(
+					resp =>
+						resp.userData?.firstname === fio.split(' ')[0] &&
+						resp.userData?.middlename === fio.split(' ')[1] &&
+						resp.userData?.lastname === fio.split(' ')[2]
+				)
+				.map(resp => resp.vacancyName)
+		)
+	).map(resp => ({
+		value: resp,
+		label: resp
+	}))
 
 	const vacancyNameArray = vacancies.map(vacancy => vacancy.title)
 
@@ -214,20 +180,19 @@ export const SupervisorInterviewCreate = () => {
 					layout="vertical"
 					requiredMark={false}
 					onFinish={values => {
-						console.log(respondId)
 						requestCreateInterview({
 							date: values.date,
 							format: values.format,
-							respondId: formId,
+							respondId: respondId.respondId,
 							address: values.extraInfo
 						})
 							.unwrap()
 							.then(() => {
-								setIsSuccessModalOpen(true);
+								setIsSuccessModalOpen(true)
 							})
 							.catch(() => {
-								setIsUnsuccessModalOpen(true);
-							});
+								setIsUnsuccessModalOpen(true)
+							})
 					}}
 				>
 					<Form.Item
@@ -247,9 +212,8 @@ export const SupervisorInterviewCreate = () => {
 							options={respondFIOSet}
 							showSearch
 							optionFilterProp="label"
-							onChange={(value, option) => {
-								setFIO(value); // Устанавливаем ФИО
-								dispatch(setFormId(option.id)) // Устанавливаем respondId)
+							onChange={value => {
+								setFIO(value)
 							}}
 						></Select>
 					</Form.Item>

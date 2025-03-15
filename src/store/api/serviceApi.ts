@@ -193,14 +193,11 @@ export const serviceApi = apiSlice.injectEndpoints({
 				},
 				keepUnusedDataFor: 0
 			}),
-			transformResponse: (response: { content: VacancyRespondItemType[] }) => {
-				if (response.content && Array.isArray(response.content)) {
-					return response.content.map(resp => ({
-						...resp,
-						responseDate: resp.responseDate.substring(0, 10)
-					}));
-				}
-				return [];
+			transformResponse: (response: VacancyRespondItemType[]) => {
+				return response.map(resp => ({
+					...resp,
+					responseDate: resp.responseDate.substring(0, 10)
+				}))
 			}
 		}),
 		getRespondFullInfo: builder.query<VacancyRespondItemType, number>({

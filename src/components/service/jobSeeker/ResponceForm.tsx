@@ -66,6 +66,7 @@ export const ResponseForm = () => {
 	const [haveNoExprience, setHaveNoExperience] = useState(experienceData.noExperienceFlag)
 	const [skillInputValue, setSkillInputValue] = useState<string>('')
 	const [coverLetter, setCoverLetter] = useState('')
+	const [eduValidHidden, setEduValidUnhidden] = useState<boolean>(true)
 	const date = new Date()
 
 	const { pathname } = useLocation()
@@ -690,7 +691,12 @@ export const ResponseForm = () => {
 								>
 									<Button
 										onClick={() => {
-											navigate('/services/jobseeker/vacancyview/respond/education/add')
+											if (educationData.educations.length < 20) {
+												setEduValidUnhidden(true)
+												navigate('/services/jobseeker/vacancyview/respond/education/add')
+											} else {
+												setEduValidUnhidden(false)
+											}
 										}}
 										icon={<ButtonPlusIcon />}
 										type="text"
@@ -699,6 +705,11 @@ export const ResponseForm = () => {
 								<p className="mt-[5px] w-[94px] font-main-font font-normal text-[14px]/[18px] opacity-40">
 									добавить образование
 								</p>
+								{!eduValidHidden && (
+									<p className="mt-[20px] w-[250px] text-[#FF0133] font-main-font font-normal text-[14px]/[18px] opacity-100">
+										Вы уже добавили максимальное количество образований
+									</p>
+								)}
 							</div>
 						</Form>
 					)}
@@ -743,7 +754,7 @@ export const ResponseForm = () => {
 										Уровень образования
 									</label>
 								}
-								rules={[{ required: true, message: 'Не выбран уровень образования' }]}
+								rules={[{ required: true, message: 'Не указан уровень образования' }]}
 							>
 								<Select
 									className="w-full rounded-lg"
@@ -764,7 +775,7 @@ export const ResponseForm = () => {
 										Страна получения образования
 									</label>
 								}
-								rules={[{ required: true, message: 'Не выбрана страна' }]}
+								rules={[{ required: true, message: 'Не указана страна' }]}
 							>
 								<Select
 									className="w-full rounded-lg"
@@ -787,7 +798,10 @@ export const ResponseForm = () => {
 										Учебное заведение
 									</label>
 								}
-								rules={[{ required: true, message: 'Не введено учебное заведение' }]}
+								rules={[
+									{ required: true, message: 'Не указано учебное заведение' },
+									{ max: 1000, message: 'Количество символов было превышено'}
+								]}
 							>
 								<Input
 									onPressEnter={e => {
@@ -800,7 +814,7 @@ export const ResponseForm = () => {
 								label={
 									<label className="text-black text-[18px]/[18px] font-content-font font-normal">Специальность</label>
 								}
-								rules={[{ required: true, message: 'Не введена специальность' }]}
+								rules={[{ required: true, message: 'Не указана специальность' }]}
 							>
 								<Input
 									onPressEnter={e => {
@@ -813,7 +827,7 @@ export const ResponseForm = () => {
 								label={
 									<label className="text-black text-[18px]/[18px] font-content-font font-normal">Год окончания</label>
 								}
-								rules={[{ required: true, message: 'Не выбран год' }]}
+								rules={[{ required: true, message: 'Не указан год' }]}
 							>
 								<Select
 									className="w-full rounded-lg"

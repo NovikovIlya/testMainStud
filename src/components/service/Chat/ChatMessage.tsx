@@ -49,6 +49,7 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 	const [getVacancy, result] = useLazyGetVacancyViewQuery()
 
 	const [isResponsed, setIsResponsed] = useState<boolean>(props.msgData.responsed)
+	const [pressedButton, setPressedButton] = useState<number>(-1)
 
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
@@ -198,9 +199,10 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 							(props.msgData.sender === 'PERSONNEL_DEPARTMENT' && isEmpDep)
 					})}
 				>
-					{props.msgData.reserveTimes.map(time => (
+					{props.msgData.reserveTimes.map((time, i) => (
 						<Button
 							onClick={() => {
+								setPressedButton(i)
 								answerReserveTime({
 									respondId: page_id,
 									time: time,
@@ -210,7 +212,7 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 								})
 							}}
 							disabled={isEmpDep || isResponsed}
-							loading={answerReserveTimeLoading}
+							loading={answerReserveTimeLoading && pressedButton === i}
 							className={`w-full text-[16px]/[19.2px] text-wrap h-full border-black rounded-[54.5px] py-[12px] px-[20px] text-center bg-inherit outline-none border cursor-pointer test:px-[12px]  ${
 								isEmpDep || isResponsed ? 'select-none !cursor-not-allowed' : ''
 							}`}
@@ -220,11 +222,12 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 					))}
 					<Button
 						onClick={() => {
+							setPressedButton(3)
 							answerReserveTime({ respondId: page_id, messageId: props.msgData.id }).then(() => {
 								setIsResponsed(true)
 							})
 						}}
-						loading={answerReserveTimeLoading}
+						loading={answerReserveTimeLoading && pressedButton === 3}
 						disabled={isEmpDep || isResponsed}
 						className={`row-span-2 col-span-3 text-[16px]/[19.2px] h-full border-black rounded-[54.5px]  py-[12px] px-[56px] bg-inherit outline-none border cursor-pointer ${
 							isEmpDep || isResponsed ? 'select-none !cursor-not-allowed' : ''
@@ -248,6 +251,7 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 					<div className="mt-[24px] w-[100%] flex flex-row gap-[20px]">
 						<Button
 							onClick={() => {
+								setPressedButton(4)
 								answerEmploymentRequest({
 									respondId: page_id,
 									answer: 'YES',
@@ -256,7 +260,7 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 									setIsResponsed(true)
 								})
 							}}
-							loading={answerEmploymentRequestLoading}
+							loading={answerEmploymentRequestLoading && pressedButton === 4}
 							disabled={isEmpDep || isResponsed}
 							className={`w-6/12 text-[16px]/[19.2px] rounded-[54.5px] h-full border-black text-center bg-inherit outline-none border cursor-pointer ${
 								isEmpDep || isResponsed ? 'select-none !cursor-not-allowed' : ''
@@ -266,6 +270,7 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 						</Button>
 						<Button
 							onClick={() => {
+								setPressedButton(5)
 								answerEmploymentRequest({
 									respondId: page_id,
 									answer: 'NO',
@@ -275,7 +280,7 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 								})
 							}}
 							disabled={isEmpDep || isResponsed}
-							loading={answerEmploymentRequestLoading}
+							loading={answerEmploymentRequestLoading && pressedButton === 5}
 							className={`w-6/12 text-[16px]/[19.2px] rounded-[54.5px] h-full border-black text-center py-[12px] bg-inherit outline-none border cursor-pointer ${
 								isEmpDep || isResponsed ? 'select-none !cursor-not-allowed' : ''
 							}`}

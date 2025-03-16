@@ -241,7 +241,7 @@ export const ChatEmpDemp = () => {
 														},
 														{
 															value: 'ARCHIVE',
-															label: 'Отказ'
+															label: 'Архив'
 														}
 													]}
 													value={requestData.status}

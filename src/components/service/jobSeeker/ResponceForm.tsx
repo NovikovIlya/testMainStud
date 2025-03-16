@@ -68,6 +68,7 @@ export const ResponseForm = () => {
 	const [coverLetter, setCoverLetter] = useState('')
 	const [eduValidHidden, setEduValidUnhidden] = useState<boolean>(true)
 	const [jobValidHidden, setJobValidUnhidden] = useState<boolean>(true)
+	const [skillsValidHidden, setSkillsValidUnhidden] = useState<boolean>(true)
 	const date = new Date()
 
 	const { pathname } = useLocation()
@@ -1416,7 +1417,7 @@ export const ResponseForm = () => {
 								rules={[
 									{
 										required: currentFormskills.length === 0,
-										message: 'Введите свои навыки'
+										message: 'Не указаны ключевые навыки'
 									}
 								]}
 								label={
@@ -1440,8 +1441,13 @@ export const ResponseForm = () => {
 										>
 											<Button
 												onClick={() => {
-													skillInputValue !== '' &&
+													if (currentFormskills.length < 100) {
+														setSkillsValidUnhidden(true)
+														skillInputValue !== '' &&
 														(setcurrentFormSkills([...currentFormskills, skillInputValue]), setSkillInputValue(''))
+													} else {
+														setSkillsValidUnhidden(false)
+													}
 												}}
 												icon={<ButtonPlusIcon special />}
 												type="text"
@@ -1478,9 +1484,19 @@ export const ResponseForm = () => {
 										{skill}
 									</Tag>
 								))}
+								{!skillsValidHidden && (
+									<p className="mt-[20px] w-[250px] text-[#FF0133] font-main-font font-normal text-[14px]/[18px] opacity-100">
+										Вы уже добавили максимальное количество ключевых навыков
+									</p>
+								)}
 							</Form.Item>
 							<Form.Item
 								name={'details'}
+								rules={[
+								{
+									max: 10000, message: 'Количество символов было превышено'
+								}
+							]}
 								label={
 									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
 										О себе (необязательно)

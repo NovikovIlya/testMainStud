@@ -12,7 +12,6 @@ import { setCurrentResponce } from '../../../../../store/reducers/CurrentResponc
 import { InterviewItemType } from '../../../../../store/reducers/type'
 
 export const SupervisorInterviewItem = (props: InterviewItemType) => {
-	const respondId = useAppSelector(state => state.currentResponce)
 
 	interface InterviewButtonElemProps {
 		id: any
@@ -159,20 +158,23 @@ export const SupervisorInterviewItem = (props: InterviewItemType) => {
 		const shortYear: string = year.slice(-2)
 		const shortTime: string = timePart.substring(0, 5)
 		const datePublicString =
-			day + '.' + month + '.' + shortYear + ' ' + shortTime
+			day + '.' + month + '.' + shortYear + ' '
 
 		return (
-			<>
-				<span className="w-[8%] ml-[3%]">{datePublicString}</span>
-			</>
+			<div className="w-[10%] ml-[3%]">
+				<span>{datePublicString}
+								<br/>
+						{shortTime}
+								</span>
+			</div>
 		)
 	}
 	const InterviewFormatElem = (props: InterviewFormatElemProps) => {
 		return (
-			<>
-				{props.format === 'OFFLINE' && <span className="w-[8%] ">Оффлайн</span>}
-				{props.format === 'ONLINE' && <span className="w-[8%] ">Онлайн</span>}
-			</>
+			<div className="w-[10%] ml-[1%] ">
+				{props.format === 'OFFLINE' && <span >Оффлайн</span>}
+				{props.format === 'ONLINE' && <span >Онлайн</span>}
+			</div>
 		)
 	}
 	const InterviewButtonElem = (props: InterviewButtonElemProps) => {
@@ -197,12 +199,6 @@ export const SupervisorInterviewItem = (props: InterviewItemType) => {
 			<>
 				<Button
 					onClick={() => {
-						dispatch(setCurrentResponce(props.id))
-						dispatch(setCurrentInterviewTime(props.time))
-						dispatch(setCurrentInterviewFormat(props.format))
-						dispatch(
-							setCurrentInterviewTimeFormated(InterviewTimeStringForSeeker)
-						)
 						navigate(
 							`/services/personnelaccounting/supervisor/invitation/seekerinfo/${props.id}`
 						)
@@ -251,11 +247,11 @@ export const SupervisorInterviewItem = (props: InterviewItemType) => {
 				</Modal>
 			</ConfigProvider>
 			<div className="w-full flex bg-white p-5 items-center">
-				<span className="w-[22%] ">{props.vacancyName}</span>
+				<span className="w-[22%]">{props.vacancyName}</span>
 				<span className="w-[22%] ml-[3%]">{seekerName}</span>
 				<InterviewTimeElem eventTime={props.time}></InterviewTimeElem>
 				<InterviewFormatElem format={props.format}></InterviewFormatElem>
-				<div className="w-[31%] mr-[3%] gap-[21px] flex flex-row items-center justify-evenly">
+				<div className="w-[25%] mr-[2%] gap-[21px] flex flex-row items-center justify-evenly">
 					<InterviewCountdownTimeElem
 						eventTime={props.time}
 						format={props.format}

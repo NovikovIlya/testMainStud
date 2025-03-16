@@ -43,19 +43,19 @@ export const SupervisorInterviews = () => {
 					</h3>
 					<h3
 						className="
-							w-[8%] ml-[3%] shrink-0 font-content-font font-normal text-[14px]/[14px] text-text-gray
+							w-[10%] ml-[3%] shrink-0 font-content-font font-normal text-[14px]/[14px] text-text-gray
 							"
 					>
 						Дата и время
 					</h3>
 					<h3
 						className="
-							w-[8%]  shrink-0 font-content-font font-normal text-[14px]/[14px] text-text-gray
+							w-[10%] ml-[1%] shrink-0 font-content-font font-normal text-[14px]/[14px] text-text-gray
 							"
 					>
 						Формат
 					</h3>
-					<h3 className="w-[31%] mr-[3%]"></h3>
+					<h3 className="w-[37%] mr-[2%]"></h3>
 				</div>
 				<div className="flex flex-col gap-[12px]">
 					{interviews.map(inter => (

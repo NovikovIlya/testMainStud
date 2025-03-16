@@ -52,7 +52,7 @@ export const DirectResume = ({
 	const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
 	const [filename, setFilename] = useState<string | undefined>('')
 	const [isPatronymicSet, setIsPatronymicSet] = useState<boolean>(false)
-
+	const [buttonLoading, setButtonLoading] = useState<boolean>(false)
 	const envs = import.meta.env
 	const defEnvs = import.meta.env
 	const host = import.meta.env.REACT_APP_HOST
@@ -109,6 +109,7 @@ export const DirectResume = ({
 		formData.append('phone', data.phone)
 		formData.append('desiredJob', data.vacancy)
 		console.log(data)
+		setButtonLoading(true)
 		fetch(`http://${emplBaseURL}employment-api/v1/resume`, {
 			method: 'POST',
 			body: formData,
@@ -117,9 +118,11 @@ export const DirectResume = ({
 			}
 		}).then(response => {
 			if (response.ok) {
+				setButtonLoading(false)
 				setIsOpen(false)
 				setIsSuccessModalOpen(true)
 			} else {
+				setButtonLoading(false)
 				response.json().then(data => {
 					messageApi.open({ type: 'error', content: data.errors[0].message })
 				})
@@ -478,7 +481,7 @@ export const DirectResume = ({
 								шаблон
 							</a>
 						</p>
-						<Button htmlType="submit" className="ml-auto mt-[40px] rounded-[54.5px]" type="primary">
+						<Button htmlType="submit" loading={buttonLoading} className="ml-auto mt-[40px] rounded-[54.5px]" type="primary">
 							Отправить
 						</Button>
 					</form>

@@ -11,13 +11,16 @@ import ArrowIcon from '../jobSeeker/ArrowIcon'
 import { VacancyRespondItem } from './VacancyRespondItem'
 
 export const VacancyResponces = () => {
-	const { pathname } = useLocation()
-	const navigate = useNavigate()
-	const currentVacancyTitle = useAppSelector(state => state.currentVacancyName)
-	
-	const pathVacancyId = pathname.split('/').pop() as string
 
-	const vacancyId = parseInt(pathVacancyId)
+	const currentUrl = window.location.href;
+
+	const url = new URL(currentUrl);
+
+	const navigate = useNavigate()
+	const currentVacancyTitle = url.searchParams.get('vacancy');
+
+	const vacancyId = Number(url.searchParams.get('id'))
+	console.log(vacancyId)
 
 	const [status, setStatus] = useState('все')
 	const { data: responds = [], isLoading: loading } = useGetResponcesByVacancyQuery({
@@ -52,7 +55,7 @@ export const VacancyResponces = () => {
 						<ArrowIcon />
 					</button>
 					<p className="ml-[40px] font-content-font font-normal text-black text-[28px]/[33.6px]">
-						Отклики на вакансию «{currentVacancyTitle.vacancyTitle}»
+						Отклики на вакансию «{currentVacancyTitle}»
 					</p>
 				</div>
 				<div className="mt-[52px] mb-[60px] flex items-center gap-[16px]">

@@ -133,7 +133,7 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 				<div className="flex">
 					<button
 						onClick={() => {
-							navigate(-1)
+							navigate(`/services/jobseeker/catalog`)
 						}}
 						className="bg-inherit border-none cursor-pointer"
 					>

@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import { FileIconSvg } from '../../../../assets/svg/FileIconSvg'
-import { useAppSelector } from '../../../../store'
+import { FileIconSvgHover } from '../../../../assets/svg/FileIconSvgHover'
 import { useGetChatIdByRespondIdQuery } from '../../../../store/api/serviceApi'
 import { setChatFilter } from '../../../../store/reducers/ChatFilterSlice'
 import { setCurrentResponce } from '../../../../store/reducers/CurrentResponceSlice'
@@ -14,6 +14,7 @@ import {
 } from '../../../../store/reducers/EmploymentStageReducers/EmploymentStageSeekerReducer'
 import { setChatId } from '../../../../store/reducers/chatIdSlice'
 import { EmploymentStageItemType } from '../../../../store/reducers/type'
+import React from 'react'
 
 export const DepEmploymentItem = (props: EmploymentStageItemType) => {
 	const dispatch = useDispatch()
@@ -85,17 +86,26 @@ export const DepEmploymentItem = (props: EmploymentStageItemType) => {
 					>
 						Резюме
 					</Button>
-					<Button
-						className="bg-[#FFFFFF] py-[8px] px-[24px] text-[#333333] border-[#333333] border-[1px] rounded-[54.5px] cursor-pointer"
+					<button
+						className="group w-[100px] h-[32px] flex items-center hover:border-[#004EC2] gap-[4px] outline-0 bg-[#FFFFFF] py-[8px] px-[24px] text-[#333333] border-[#333333] border-solid border-[1px] rounded-[54.5px] cursor-pointer transition-all duration-200"
 						onClick={() => {
 							dispatch(setChatFilter('EMPLOYMENT'))
 							dispatch(setChatId(chatId.id))
 							navigate(`/services/personnelaccounting/chat/id/${chatId.id}`)
 						}}
 					>
-						<FileIconSvg></FileIconSvg>
-						<span className="text-[16px] font-normal">Чат</span>
-					</Button>
+						<div className="absolute mr-[32px] mt-[4px] group-hover:opacity-100 group-hover:scale-100 opacity-0 scale-95 transition-all duration-200">
+							<FileIconSvgHover />
+						</div>
+
+						{/* Иконка по умолчанию */}
+						<div className="mt-[3px] group-hover:opacity-0 group-hover:scale-95 opacity-100 scale-100 transition-all duration-200">
+							<FileIconSvg />
+						</div>
+						<span className="group-hover:text-[#004EC2] transition-all duration-200 text-[16px] font-normal">
+							Чат
+						</span>
+					</button>
 				</div>
 			</div>
 		</div>

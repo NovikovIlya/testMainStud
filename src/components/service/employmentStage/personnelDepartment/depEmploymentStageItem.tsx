@@ -1,4 +1,4 @@
-import { Button, ConfigProvider, Input, Modal } from 'antd'
+import {Button, ConfigProvider, Form, Input, Modal} from 'antd'
 import React, { useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
@@ -477,122 +477,149 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 						footer={null}
 						width={620}
 					>
-						<p className="font-content-font font-normal mb-[18px] flex items-start text-black opacity-[80%] text-[16px]/[20px]">
-							Комментарий
-						</p>
-						<TextArea
-							autoSize={{ minRows: 4, maxRows: 8 }}
-							style={{ height: 107, resize: 'none', width: 520 }}
-							onChange={checkInputChange}
-						/>
-						<div className="mt-[40px] flex gap-[12px] w-full justify-end ">
-							{props.stage === 2 && (
-								<Button
-									className="rounded-[54.5px] py-[12px] px-[24px]  text-[16px]"
-									type="primary"
-									loading={changeStatusLoading}
-									onClick={async () => {
-										try {
-											setIsRevisionModalOpen(false)
-											await changeStatus({
-												status: 'REFINE',
-												comment: textRef.current,
-												subStageId: props.stage
-											})
-												.unwrap()
-												.then(() => {
-													dispatch(setSecondStageStatus('REFINE'))
-													dispatch(setSecondStageCommentVisibility('visible'))
-													openAlert({ type: 'success', text: 'Этап успешно отправлен на доработку' })
+						<Form
+							layout="vertical"
+							requiredMark={false}
+						>
+							<p className="font-content-font font-normal mb-[18px] flex items-start text-black opacity-[80%] text-[16px]/[20px]">
+								Комментарий
+							</p>
+							<Form.Item
+								name={'comment'}
+								rules={[
+									{ required: true, message: 'Не написан комментарий' },
+									{ max: 2000, message: 'Количество символов было превышено' },
+									{ min: 1, message: 'Не написан комментарий' }
+								]}
+							>
+								<TextArea
+									autoSize={{minRows: 4, maxRows: 8}}
+									style={{height: 107, resize: 'none', width: 520}}
+									onChange={checkInputChange}
+								/>
+							</Form.Item>
+
+							<div className="mt-[40px] flex gap-[12px] w-full justify-end ">
+								{props.stage === 2 && (
+									<Button
+										className="rounded-[54.5px] py-[12px] px-[24px]  text-[16px]"
+										type="primary"
+										loading={changeStatusLoading}
+										onClick={async () => {
+											try {
+												setIsRevisionModalOpen(false)
+												await changeStatus({
+													status: 'REFINE',
+													comment: textRef.current,
+													subStageId: props.stage
 												})
-										} catch (error: any) {
-											openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
-										}
-									}}
-								>
-									Отправить
-								</Button>
-							)}
-							{props.stage === 3 && (
-								<Button
-									className="rounded-[54.5px] py-[12px] px-[24px]  text-[16px]"
-									type="primary"
-									loading={changeStatusLoading}
-									onClick={async () => {
-										try {
-											setIsRevisionModalOpen(false)
-											await changeStatus({
-												status: 'REFINE',
-												comment: textRef.current,
-												subStageId: props.stage
-											})
-												.unwrap()
-												.then(() => {
-													dispatch(setThirdStageStatus('REFINE'))
-													dispatch(setThirdStageCommentVisibility('visible'))
-													openAlert({ type: 'success', text: 'Этап успешно отправлен на доработку' })
+													.unwrap()
+													.then(() => {
+														dispatch(setSecondStageStatus('REFINE'))
+														dispatch(setSecondStageCommentVisibility('visible'))
+														openAlert({
+															type: 'success',
+															text: 'Этап успешно отправлен на доработку'
+														})
+													})
+											} catch (error: any) {
+												openAlert({type: 'error', text: 'Извините, что-то пошло не так...'})
+											}
+										}}
+									>
+										Отправить
+									</Button>
+								)}
+								{props.stage === 3 && (
+									<Button
+										className="rounded-[54.5px] py-[12px] px-[24px]  text-[16px]"
+										type="primary"
+										loading={changeStatusLoading}
+										onClick={async () => {
+											try {
+												setIsRevisionModalOpen(false)
+												await changeStatus({
+													status: 'REFINE',
+													comment: textRef.current,
+													subStageId: props.stage
 												})
-										} catch (error: any) {
-											openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
-										}
-									}}
-								>
-									Отправить
-								</Button>
-							)}
-							{props.stage === 4 && (
-								<Button
-									className="rounded-[54.5px] py-[12px] px-[24px]  text-[16px]"
-									type="primary"
-									loading={changeStatusLoading}
-									onClick={async () => {
-										try {
-											setIsRevisionModalOpen(false)
-											await changeStatus({
-												status: 'REFINE',
-												comment: textRef.current,
-												subStageId: props.stage
-											})
-												.unwrap()
-												.then(() => {
-													dispatch(setForthStageStatus('REFINE'))
-													openAlert({ type: 'success', text: 'Этап успешно отправлен на доработку' })
+													.unwrap()
+													.then(() => {
+														dispatch(setThirdStageStatus('REFINE'))
+														dispatch(setThirdStageCommentVisibility('visible'))
+														openAlert({
+															type: 'success',
+															text: 'Этап успешно отправлен на доработку'
+														})
+													})
+											} catch (error: any) {
+												openAlert({type: 'error', text: 'Извините, что-то пошло не так...'})
+											}
+										}}
+									>
+										Отправить
+									</Button>
+								)}
+								{props.stage === 4 && (
+									<Button
+										className="rounded-[54.5px] py-[12px] px-[24px]  text-[16px]"
+										type="primary"
+										loading={changeStatusLoading}
+										onClick={async () => {
+											try {
+												setIsRevisionModalOpen(false)
+												await changeStatus({
+													status: 'REFINE',
+													comment: textRef.current,
+													subStageId: props.stage
 												})
-										} catch (error: any) {
-											openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
-										}
-									}}
-								>
-									Отправить
-								</Button>
-							)}
-							{props.stage === 5 && props.role === 'accounting' && (
-								<Button
-									className="rounded-[54.5px] py-[12px] px-[24px]  text-[16px]"
-									type="primary"
-									loading={changeStatusAccountingLoading}
-									onClick={async () => {
-										try {
-											setIsRevisionModalOpen(false)
-											await changeStatusAccounting({
-												status: 'REFINE',
-												comment: textRef.current,
-												subStageId: props.stage
-											})
-												.unwrap()
-												.then(() => {
-													dispatch(setFifthStageStatus('REFINE'))
-													openAlert({ type: 'success', text: 'Этап успешно отправлен на доработку' })
+													.unwrap()
+													.then(() => {
+														dispatch(setForthStageStatus('REFINE'))
+														openAlert({
+															type: 'success',
+															text: 'Этап успешно отправлен на доработку'
+														})
+													})
+											} catch (error: any) {
+												openAlert({type: 'error', text: 'Извините, что-то пошло не так...'})
+											}
+										}}
+									>
+										Отправить
+									</Button>
+								)}
+								{props.stage === 5 && props.role === 'accounting' && (
+									<Button
+										className="rounded-[54.5px] py-[12px] px-[24px]  text-[16px]"
+										type="primary"
+										loading={changeStatusAccountingLoading}
+										onClick={ async () => {
+											try {
+												await changeStatusAccounting({
+													status: 'REFINE',
+													comment: textRef.current,
+													subStageId: props.stage
 												})
-										} catch (error: any) {
-											openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
-										}
-									}}
-								>
-									Отправить
-								</Button>
-							)}
-						</div>
+													.unwrap()
+													.then(() => {
+														setIsRevisionModalOpen(false)
+														dispatch(setFifthStageStatus('REFINE'))
+														openAlert({
+															type: 'success',
+															text: 'Этап успешно отправлен на доработку'
+														})
+													})
+											} catch (error: any) {
+												openAlert({type: 'error', text: 'Извините, что-то пошло не так...'})
+											}
+										}}
+									>
+										Отправить
+									</Button>
+								)}
+							</div>
+						</Form>
 					</Modal>
 				</ConfigProvider>
 			</>

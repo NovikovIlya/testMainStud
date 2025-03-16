@@ -101,21 +101,32 @@ export const ResponseForm = () => {
 	const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
 	const [resultModalText, setResultModalText] = useState<string>('')
 
-	const validateEmail = (_, value) => {
-		// Регулярное выражение для валидации email
-		const emailRegex = /^[a-zA-Z0-9]+([._]?[a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-]?[a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/;
+	const handleKeyDownPhone = (e: React.KeyboardEvent<HTMLInputElement>) => {
+		const allowedKeys = [
+			'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+			' ', '(', ')', '-', '+',
+			'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight',
+		];
 
-		// Запрещенные символы
-		const forbiddenChars = /[&=+<>,_'\-]/;
-
-		// Проверка на несколько точек подряд
-		const multipleDots = /\.{2,}/;
-
-		if ((forbiddenChars.test(value)) || (multipleDots.test(value)) || (!emailRegex.test(value))) {
-			return Promise.reject(new Error('Некорректный формат почты'));
+		if (!allowedKeys.includes(e.key)) {
+			e.preventDefault();
 		}
+	};
 
-		return Promise.resolve();
+	const handleKeyDownEmail = (e: React.KeyboardEvent<HTMLInputElement>) => {
+		const allowedKeys = [
+			'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+			'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+			'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+			'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+			'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+			'@', '.', '_', '%', '+', '-',
+			'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight'
+		];
+
+		if (!allowedKeys.includes(e.key)) {
+			e.preventDefault();
+		}
 	};
 
 	return (
@@ -509,7 +520,7 @@ export const ResponseForm = () => {
 								name={'surname'}
 								label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Фамилия</label>}
 								rules={[
-									{ required: true, message: 'Поле фамилии не заполнено' },
+									{ required: true, message: 'Не указано Фамилия' },
 									{ max: 500, message: 'Количество символов было превышено' },
 								]}
 							>
@@ -525,7 +536,7 @@ export const ResponseForm = () => {
 								name={'name'}
 								label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Имя</label>}
 								rules={[
-									{ required: true, message: 'Поле имени не заполнено' },
+									{ required: true, message: 'Не указано Имя' },
 									{ max: 500, message: 'Количество символов было превышено' },
 								]}
 							>
@@ -541,7 +552,7 @@ export const ResponseForm = () => {
 								name={'patronymic'}
 								label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Отчество</label>}
 								rules={[
-									{ required: true, message: 'Поле отчества не заполнено' },
+									{ required: true, message: 'Не указано Отчество' },
 									{ max: 500, message: 'Количество символов было превышено' },
 								]}
 							>
@@ -598,19 +609,22 @@ export const ResponseForm = () => {
 								/>
 							</Form.Item>
 							<Form.Item
-								name={'phoneNumber'}
+								name="phoneNumber"
 								label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Телефон</label>}
 								rules={[
 									{ required: true, message: 'Поле номера телефона не заполнено' },
-
+									{
+										pattern: /^\+7 \d{3} \d{3}-\d{2}-\d{2}$/,
+										message: 'Номер телефона должен быть в формате +7 999 999-99-99',
+									},
 								]}
 							>
 								<Input
-									value={aboutMeData.phone}
-									onPressEnter={e => {
-										e.preventDefault()
+									onKeyDown={handleKeyDownPhone}
+									onPressEnter={(e) => {
+										e.preventDefault();
 									}}
-								></Input>
+								/>
 							</Form.Item>
 							<Form.Item
 								name={'email'}
@@ -621,10 +635,14 @@ export const ResponseForm = () => {
 								}
 								rules={[
 									{ required: true, message: 'Поле электронной почты не заполнено' },
-									{ validator: validateEmail },
+									{
+										pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+										message: 'Введите корректный адрес электронной почты',
+									},
 								]}
 							>
 								<Input
+									onKeyDown={handleKeyDownEmail}
 									value={aboutMeData.email}
 									onPressEnter={e => {
 										e.preventDefault()

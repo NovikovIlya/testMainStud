@@ -11,6 +11,7 @@ import { emptyApiSlice } from './api/emptyApiSlice'
 import { practiceApi } from './api/practiceApi/practiceApi'
 import { testApiSlice } from './api/testApiSlice'
 import CatalogFilterSlice from './reducers/CatalogFilterSlice'
+import ChatFilterSlice from './reducers/ChatFilterSlice'
 import ChatRespondStatusSlice from './reducers/ChatRespondStatusSlice'
 import CurrentEmploymentStage from './reducers/CurrentEmploymentStage'
 import CurrentInterviewFormatSlice from './reducers/CurrentInterviewFormatSlice'
@@ -61,6 +62,7 @@ import RespondEducationReducer from './reducers/SeekerFormReducers/RespondEducat
 import SkillsReducer from './reducers/SeekerFormReducers/SkillsReducer'
 import authSlice from './reducers/authSlice'
 import chatIdSlice from './reducers/chatIdSlice'
+import forTeacherSlice from './reducers/forTeacherSlice'
 import inviteSeekerButtonReducer from './reducers/inviteSeekerButtonReducer'
 import notificationSlice from './reducers/notificationSlice'
 
@@ -95,6 +97,7 @@ export const store = configureStore({
 		StaffItemTabs: StaffItemTabsReducer,
 		SecretaryStepFormBusinessTrip: SecretaryStepFormBusinessTrip,
 		SecretaryItemTabs: SecretaryItemTabsReducer,
+		forTeacher: forTeacherSlice,
 		[practiceApi.reducerPath]: practiceApi.reducer,
 		[apiSlice.reducerPath]: apiSlice.reducer,
 		currentVacancyId: CurrentVacancyIdSlice,
@@ -124,7 +127,8 @@ export const store = configureStore({
 		[apiSliceStudent.reducerPath]: apiSliceStudent.reducer,
 		[apiSliceTeacher.reducerPath]: apiSliceTeacher.reducer,
 		[emptyApiSlice.reducerPath]: emptyApiSlice.reducer,
-		experienceFile: ExperienceFileReducer
+		experienceFile: ExperienceFileReducer,
+		chatFilter: ChatFilterSlice
 	},
 	//@ts-ignore
 	middleware: getDefaultMiddleware =>

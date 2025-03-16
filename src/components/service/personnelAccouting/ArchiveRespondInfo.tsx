@@ -23,12 +23,14 @@ import {
 	useLazyGetSeekerResumeFileQuery
 } from '../../../store/api/serviceApi'
 import { useGetCountriesQuery } from '../../../store/api/utilsApi'
+import { setChatFilter } from '../../../store/reducers/ChatFilterSlice'
 import { openChat } from '../../../store/reducers/ChatRespondStatusSlice'
 import { setRespondId } from '../../../store/reducers/CurrentRespondIdSlice'
 import { setCurrentVacancyId } from '../../../store/reducers/CurrentVacancyIdSlice'
 import { setCurrentVacancyName } from '../../../store/reducers/CurrentVacancyNameSlice'
 import { setChatId } from '../../../store/reducers/chatIdSlice'
 import { useAlert } from '../../../utils/Alert/AlertMessage'
+import styles from '../../../utils/deleteOverwriteAntButton.module.css'
 import { NocircleArrowIcon } from '../jobSeeker/NoCircleArrowIcon'
 
 import { InviteSeekerForm } from './supervisor/InviteSeekerForm'
@@ -57,9 +59,9 @@ export const ArchiveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 	const { data: countries, isLoading: isLoadingCountry } = useGetCountriesQuery(i18n.language)
 
 	const { refetch } = useGetArchivedResponcesQuery()
-	const [approveRespond] = useApproveArchivedRespondMutation()
-	const [deleteRespond] = useDeleteRespondFromArchiveMutation()
-	const [getResume] = useLazyGetSeekerResumeFileQuery()
+	const [approveRespond, { isLoading: approveRespondLoading }] = useApproveArchivedRespondMutation()
+	const [deleteRespond, { isLoading: deleteRespondLoading }] = useDeleteRespondFromArchiveMutation()
+	const [getResume, resumeQueryStatus] = useLazyGetSeekerResumeFileQuery()
 
 	const [isRespondSentToSupervisor, setIsRespondSentToSupervisor] = useState<boolean>(
 		res?.status === 'IN_SUPERVISOR_REVIEW'
@@ -163,8 +165,8 @@ export const ArchiveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 								>
 									Оставить
 								</Button>
-								<button
-									className="cursor-pointer flex items-center justify-center border-[1px] border-solid outline-0 border-[#FF5A5A] hover:border-[#FF8181] text-white rounded-[54.5px] bg-[#FF5A5A] hover:bg-[#FF8181] text-[14px] h-[40px] w-full py-[13px]"
+								<Button
+									className={`${styles.customAntButton}`}
 									onClick={async () => {
 										try {
 											await deleteRespond(respondId.respondId)
@@ -179,9 +181,10 @@ export const ArchiveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 											openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 										}
 									}}
+									loading={deleteRespondLoading}
 								>
 									Удалить
-								</button>
+								</Button>
 							</div>
 						</Modal>
 					</ConfigProvider>
@@ -307,6 +310,7 @@ export const ArchiveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 												}
 											}}
 											disabled={isRespondSentToSupervisor}
+											loading={approveRespondLoading}
 											type="primary"
 											className="font-content-font font-normal text-white text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px]"
 										>
@@ -315,6 +319,7 @@ export const ArchiveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 										<Button
 											onClick={() => {
 												dispatch(setCurrentVacancyName(res.vacancyName ? res.vacancyName : res.desiredJob))
+												dispatch(setChatFilter('ARCHIVE'))
 												handleNavigate(`/services/personnelaccounting/chat/id/${chatId.id}`)
 											}}
 											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
@@ -465,6 +470,37 @@ export const ArchiveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 										</a>
 									</div>
 								)}
+								{resumeQueryStatus.isSuccess && (
+									<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
+										<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">Резюме</p>
+										<div className="bg-white rounded-[16px] shadow-custom-shadow h-[59px] w-[65%] p-[20px] flex">
+											<MyDocsSvg />
+											<p
+												className="ml-[20px] font-content-font font-normal text-black text-[16px]/[19.2px] underline cursor-pointer"
+												onClick={() => {
+													const link = document.createElement('a')
+													link.href = resume
+													link.download = 'Резюме'
+													link.click()
+												}}
+											>
+												{'Резюме ' +
+													res.userData?.lastname +
+													' ' +
+													res.userData?.firstname +
+													' ' +
+													res.userData?.middlename}
+											</p>
+											<p className="ml-auto font-content-font font-normal text-black text-[16px]/[19.2px] opacity-70">
+												{Math.round(resumeSize / 1000000) > 0
+													? Math.round(resumeSize / 1000000) + ' Мб'
+													: Math.round(resumeSize / 1000) > 0
+													? Math.round(resumeSize / 1000) + ' Кб'
+													: resumeSize + ' б'}
+											</p>
+										</div>
+									</div>
+								)}
 							</div>
 							<hr />
 							<div className="flex flex-col gap-[24px]">
@@ -540,6 +576,7 @@ export const ArchiveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 												})
 											})
 									}}
+									loading={deleteRespondLoading}
 								>
 									Удалить
 								</Button>
@@ -601,6 +638,7 @@ export const ArchiveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 												}
 											}}
 											disabled={isRespondSentToSupervisor}
+											loading={approveRespondLoading}
 											type="primary"
 											className="font-content-font font-normal text-white text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px]"
 										>
@@ -609,6 +647,7 @@ export const ArchiveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 										<Button
 											onClick={() => {
 												dispatch(setCurrentVacancyName(res.vacancyName ? res.vacancyName : res.desiredJob))
+												dispatch(setChatFilter('ARCHIVE'))
 												handleNavigate(`/services/personnelaccounting/chat/id/${chatId.id}`)
 											}}
 											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"

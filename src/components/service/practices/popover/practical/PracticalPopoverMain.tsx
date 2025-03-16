@@ -11,6 +11,7 @@ import {ListIdDeleteContracts} from "../../../../../models/Practice";
 import { useDeletePractiseMutation, useDeletePractiseSeveralMutation } from '../../../../../store/api/practiceApi/practical';
 import { showNotification } from '../../../../../store/reducers/notificationSlice';
 import { useAppDispatch } from '../../../../../store';
+import { t } from 'i18next';
 
 interface Props {
     recordFullAll?: TablePractical[]
@@ -146,7 +147,7 @@ export const PracticalPopoverMain = ({recordFull,recordFullAll,setRecordFull,set
                 disabled={recordFull!.length === 0}
             >
                 <Load/>
-                <span>Скачать выбранное</span>
+                <span>{t('download')}</span>
             </WrapperButton>
             <WrapperButton
                 color={ColorBg.BLUEF2}
@@ -154,7 +155,7 @@ export const PracticalPopoverMain = ({recordFull,recordFullAll,setRecordFull,set
                 disabled={recordFull!.length === 0}
             >
                 <PrintSvg/>
-                <span>Печать выбранного</span>
+                <span>{t('print')}</span>
             </WrapperButton>
             <WrapperButton
                 color={ColorBg.REDE5}
@@ -162,7 +163,7 @@ export const PracticalPopoverMain = ({recordFull,recordFullAll,setRecordFull,set
                 disabled={recordFull!.length === 0}
             >
                 <DeleteRedSvg/>
-                <span className={'text-[#E04545]'}>Удалить выбранное</span>
+                <span className={'text-[#E04545]'}>{t('delete')}</span>
             </WrapperButton>
         </div>
     );

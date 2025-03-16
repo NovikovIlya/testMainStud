@@ -1,10 +1,12 @@
 import { LoadingOutlined } from '@ant-design/icons'
 import { Button, ConfigProvider, Select, Spin } from 'antd'
 import { useEffect, useRef, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { useLocation } from 'react-router-dom'
 
 import { ChatCrossIcon } from '../../../assets/svg/ChatCrossIcon'
 import { ChatFilterIcon } from '../../../assets/svg/ChatFilterIcon'
+import { useAppSelector } from '../../../store'
 import {
 	useGetAllVacanciesQuery,
 	useGetSeekerRespondsQuery,
@@ -13,6 +15,7 @@ import {
 	useLazyGetResponcesByVacancyQuery,
 	useLazyGetVacancyGroupedResponcesQuery
 } from '../../../store/api/serviceApi'
+import { chatFilterType, setChatFilter } from '../../../store/reducers/ChatFilterSlice'
 import { VacancyRespondItemType } from '../../../store/reducers/type'
 import VacancyView from '../jobSeeker/VacancyView'
 
@@ -28,13 +31,15 @@ const personnelDeparmentToken =
 export const ChatEmpDemp = () => {
 	const [isFilterWindowOpen, setIsFilterWindowOpen] = useState<boolean>(true)
 
+	const { filter } = useAppSelector(state => state.chatFilter)
+
 	const [requestData, setRequestData] = useState<{
 		vacancyId: number | null
 		status: string | null
 		sort: 'ALL' | 'UNREAD' | null
 		page: number
 		pageSize: number
-	}>({ vacancyId: null, status: 'IN_PERSONNEL_DEPT_REVIEW', sort: null, page: 0, pageSize: 10 })
+	}>({ vacancyId: null, status: filter, sort: null, page: 0, pageSize: 10 })
 
 	// const [getResponds] = useLazyGetResponcesByVacancyQuery()
 	// const [responds, setResponds] = useState<VacancyRespondItemType[]>([])
@@ -136,6 +141,8 @@ export const ChatEmpDemp = () => {
 
 	const { pathname } = useLocation()
 
+	const dispatch = useDispatch()
+
 	const handleList = chats.map(chat => {
 		return (
 			// <ChatPreview
@@ -234,7 +241,7 @@ export const ChatEmpDemp = () => {
 														},
 														{
 															value: 'ARCHIVE',
-															label: 'Отказ'
+															label: 'Архив'
 														}
 													]}
 													value={requestData.status}
@@ -244,6 +251,7 @@ export const ChatEmpDemp = () => {
 															status: value,
 															page: 0
 														}))
+														dispatch(setChatFilter(value as chatFilterType))
 													}}
 													className="w-full h-[40px]"
 													placeholder="Выбрать"

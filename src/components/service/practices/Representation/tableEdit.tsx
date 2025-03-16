@@ -3,6 +3,7 @@ import { Form, Input, InputNumber, Select, Table } from 'antd'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useAppSelector } from '../../../../store'
 import './index.css'
+import { t } from 'i18next'
 
 type FormInstance<T> = GetRef<typeof Form<T>>
 
@@ -140,7 +141,7 @@ export const TableEdit = ({selectedPlace, status='',active = true,visiting, full
 		{
 			key: 'nane',
 			dataIndex: 'name',
-			title: 'ФИО обучающегося',
+			title: t('studentFullName'),
 			name: 'ФИО обучающегося',
 			className: 'text-xs !p-2'
 		},
@@ -148,7 +149,7 @@ export const TableEdit = ({selectedPlace, status='',active = true,visiting, full
 		{
 			key: `${create ? 'groupNumber' : 'groupNumbers' }`,
 			dataIndex:  `${create ? 'groupNumber' : 'groupNumbers' }`,
-			title: 'Номер группы',
+			title: t('groupNumbers'),
 			className: 'text-xs !p-2'
 		},
 		// {
@@ -161,14 +162,14 @@ export const TableEdit = ({selectedPlace, status='',active = true,visiting, full
 		{
 			key: 'place',
 			dataIndex: 'place',
-			title: 'Место прохождения практики',
+			title: t('practicePlace'),
 			className: `text-xs !p-2  ${selectedPlace === 'В профильной организации' ? '' : 'hidden'}`,
 			editable: active && status !== 'Согласован' ? true :false
 		},
 		{
 			key: 'departmentDirector',
 			dataIndex: 'departmentDirector',
-			title: 'ФИО руководителя от кафедры',
+			title: t('departmentDirector1'),
 			className: 'text-xs !p-2'
 		},
 		{

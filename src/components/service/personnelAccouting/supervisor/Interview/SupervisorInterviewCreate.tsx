@@ -1,6 +1,7 @@
 import { ThemeProvider } from '@material-tailwind/react'
 import {Button, ConfigProvider, DatePicker, Form, Input, Modal, Select, Spin} from 'antd'
 import React, { useEffect, useState } from 'react'
+import moment from 'moment';
 
 import { useAppSelector } from '../../../../../store'
 import {
@@ -17,10 +18,9 @@ import {LoadingOutlined} from "@ant-design/icons";
 
 export const SupervisorInterviewCreate = () => {
 	const [responds, setResponds] = useState<VacancyRespondItemType[]>([])
+	const [interviewId, setInterviewId] = useState<number>()
 
 	const [requestCreateInterview] = useRequestCreateInterviewMutation()
-
-	const respondId = useAppSelector(state => state.currentResponce)
 
 	const { data: vacancies = [], isLoading: loading } = useGetSupervisorVacancyQuery()
 
@@ -49,34 +49,37 @@ export const SupervisorInterviewCreate = () => {
 			})
 	}, [])
 
-	let respondFIOSet = Array.from(
-		new Set(
-			responds.map(
-				resp =>
-					resp.userData?.lastname +
-					' ' +
-					resp.userData?.firstname +
-					' ' +
-					resp.userData?.middlename
-			)
-		)
-	).map(fio => ({ value: fio, label: fio }))
+	console.log(responds)
 
-	const respondPosSet = Array.from(
-		new Set(
+	let respondFIOSet = Array.from(
+		// Используем Map для уникальности по respondId
+		new Map(
 			responds
-				.filter(
-					resp =>
-						resp.userData?.firstname === fio.split(' ')[0] &&
-						resp.userData?.middlename === fio.split(' ')[1] &&
-						resp.userData?.lastname === fio.split(' ')[2]
-				)
-				.map(resp => resp.vacancyName)
-		)
-	).map(resp => ({
-		value: resp,
-		label: resp
-	}))
+				.map(resp => {
+					// Проверяем, что userData существует
+					if (resp?.userData) {
+						const fio =
+							resp.userData.lastname +
+							' ' +
+							resp.userData.firstname +
+							' ' +
+							resp.userData.middlename;
+						return {
+							fio,
+							respondId: resp.id
+						};
+					}
+					// Если userData отсутствует, возвращаем null
+					return null;
+				})
+				.filter(item => item !== null) // Убираем null
+				.map(item => [item?.respondId, item]) // Используем respondId как ключ в Map
+		).values() // Получаем значения из Map
+	).map(item => ({
+		value: item?.fio,
+		label: item?.fio,
+		respondId: item?.respondId
+	}));
 
 	const vacancyNameArray = vacancies.map(vacancy => vacancy.title)
 
@@ -101,6 +104,13 @@ export const SupervisorInterviewCreate = () => {
 			</>
 		)
 	}
+
+	const validateDateTime = (_ : any, value : any) => {
+		if (value && value.isBefore(moment())) {
+			return Promise.reject(new Error('Выбранное время уже наступило'));
+		}
+		return Promise.resolve();
+	};
 
 	return (
 		<>
@@ -172,10 +182,11 @@ export const SupervisorInterviewCreate = () => {
 					layout="vertical"
 					requiredMark={false}
 					onFinish={values => {
+						console.log(values)
 						requestCreateInterview({
 							date: values.date,
 							format: values.format,
-							respondId: respondId.respondId,
+							respondId: interviewId,
 							address: values.extraInfo
 						})
 							.unwrap()
@@ -194,15 +205,19 @@ export const SupervisorInterviewCreate = () => {
 								Соискатель
 							</label>
 						}
-						rules={[{ required: true, message: 'не выбран соискатель' }]}
+						rules={[
+							{ required: true, message: 'Не выбран соискатель' },
+							{ max: 500, message: 'Количество символов было превышено'}
+						]}
 					>
 						<Select
 							placeholder="Выбрать"
 							options={respondFIOSet}
 							showSearch
 							optionFilterProp="label"
-							onChange={value => {
+							onChange={(value, option) => {
 								setFIO(value)
+								setInterviewId(option.respondId)
 							}}
 						></Select>
 					</Form.Item>
@@ -213,7 +228,10 @@ export const SupervisorInterviewCreate = () => {
 								Должность
 							</label>
 						}
-						rules={[{ required: true, message: 'не указана должность' }]}
+						rules={[
+							{ required: true, message: 'Не выбрана должность' },
+							{ max: 500, message: 'Количество символов было превышено'}
+						]}
 					>
 						<Select
 							placeholder="Выбрать"
@@ -225,37 +243,39 @@ export const SupervisorInterviewCreate = () => {
 					<div className="flex flex-row w-full gap-[20px]">
 						<Form.Item
 							className="w-6/12"
-							name={'date'}
+							name="date"
 							label={
 								<label className="opacity-[80%] text-black text-[18px]/[18px] font-content-font font-normal">
-									Дата
+									Дата и время
 								</label>
 							}
-							rules={[{ required: true, message: 'Не указаны дата и время' }]}
+							rules={[
+								{ required: true, message: 'Не выбраны дата и время' },
+								{ validator: validateDateTime },
+							]}
 						>
 							<DatePicker
 								format={'DD.MM.YYYY, h:mm'}
 								showTime={{
 									minuteStep: 15,
 									disabledHours: () => {
-										return [0, 1, 2, 3, 4, 5, 6, 7, 20, 21, 22, 23]
+										return [0, 1, 2, 3, 4, 5, 6, 7, 21, 22, 23];
 									},
-									hideDisabledOptions: true
+									hideDisabledOptions: true,
 								}}
 								className="w-full"
-								onChange={(e, dateString) => {}}
 								placeholder="Выбрать"
-							></DatePicker>
+							/>
 						</Form.Item>
 						<Form.Item
 							className="w-6/12"
 							name={'format'}
 							label={
 								<label className="opacity-[80%] text-black text-[18px]/[18px] font-content-font font-normal">
-									Формат
+									Формат собеседования
 								</label>
 							}
-							rules={[{ required: true, message: 'Не указан формат' }]}
+							rules={[{ required: true, message: 'Не выбран формат собеседования' }]}
 						>
 							<Select
 								placeholder="-"
@@ -273,7 +293,10 @@ export const SupervisorInterviewCreate = () => {
 								Адрес и дополнительная информация
 							</label>
 						}
-						rules={[{ required: true, message: 'Адрес не указан' }]}
+						rules={[
+							{ required: true, message: 'Адрес не указан' },
+							{ max: 1000, message: 'Количество символов было превышено'}
+						]}
 					>
 						<TextArea
 							placeholder="Ввести текст"

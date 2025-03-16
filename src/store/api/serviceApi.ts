@@ -23,11 +23,13 @@ import {
 	InterviewItemType,
 	InterviewRequestType,
 	InterviewViewResponseType,
+	PageableType,
 	ReserveTimeRequestType,
 	ResponceType,
 	RespondItemType,
 	SeekerStatusChangeType,
 	SignedItemType,
+	SupervisorRequestType,
 	Template,
 	TypeSchedule,
 	VacancyGroupedResponcesType,
@@ -130,26 +132,22 @@ export const serviceApi = apiSlice.injectEndpoints({
 			})
 		}),
 		getVacancyPreviewByDirection: builder.query<
-			VacancyItemType[],
+			{ content: VacancyItemType[] },
 			{ category: string; direction: string; page: number }
 		>({
 			query: ({ category, direction, page }) => ({
-				url:
-					`http://${emplBaseURL}employment-api/v1/vacancy/direction?category=` +
-					category +
-					'&direction=' +
-					direction +
-					'&page=' +
-					page
+				url: `http://${emplBaseURL}employment-api/v2/vacancy?category=${category}${
+					direction === 'Все' ? '' : `&direction=${direction}`
+				}&page=${page}`
 			})
 		}),
 		getVacancyPreviewBySubdivision: builder.query<
-			VacancyItemType[],
+			{ content: VacancyItemType[] },
 			{ category: string; subdivision: string; page: number }
 		>({
 			query: ({ category, subdivision, page }) => ({
 				url:
-					`http://${emplBaseURL}employment-api/v1/vacancy/subdivisions?category=` +
+					`http://${emplBaseURL}employment-api/v2/vacancy?category=` +
 					category +
 					'&subdivisions=' +
 					subdivision +
@@ -157,46 +155,54 @@ export const serviceApi = apiSlice.injectEndpoints({
 					page
 			})
 		}),
-		getSeekerResponds: builder.query<RespondItemType[], string>({
-			query: status => ({
-				url: `http://${emplBaseURL}employment-api/v1/seeker/responds?${status}`,
+		getSeekerResponds: builder.query<PageableType<RespondItemType>, { status: string; page: number }>({
+			query: ({ status, page }) => ({
+				url: `http://${emplBaseURL}employment-api/v1/seeker/responds?${status}&page=${page}`,
 				headers: {
 					Authorization: `Bearer ${seekerToken}`
 				}
 			}),
-			transformResponse: (response: RespondItemType[]) => {
-				return response.map(resp => ({
-					...resp,
-					respondDate: resp.respondDate.substring(0, 10)
-				}))
+			transformResponse: (response: PageableType<RespondItemType>) => {
+				return {
+					...response,
+					content: response.content.map(resp => ({
+						...resp,
+						respondDate: resp.respondDate.substring(0, 10)
+					}))
+				}
 			}
 		}),
 		getVacancyGroupedResponces: builder.query<
-			VacancyGroupedResponcesType[],
-			{ category: string; direction?: string; role: string; type: 'DIRECTORY' | 'SUBDIVISION' }
+			{ content: VacancyGroupedResponcesType[] },
+			{ category: string; direction?: string; role: string; type: 'DIRECTORY' | 'SUBDIVISION'; page: number }
 		>({
-			query: ({ category, direction, role, type }) => ({
+			query: ({ category, direction, role, type, page }) => ({
 				url: `http://${emplBaseURL}employment-api/v1/responds/grouped?category=${category}${
 					direction !== undefined ? `&${type === 'DIRECTORY' ? 'direction=' : 'subdivision='}` + direction : ''
-				}`,
+				}&page=${page}`,
 				headers: {
 					Authorization: `Bearer ${role === 'PERSONNEL_DEPARTMENT' ? personnelDeparmentToken : supervisorToken}`
 				}
 			})
 		}),
-		getResponcesByVacancy: builder.query<VacancyRespondItemType[], { id: number; status: string; role: string }>({
-			query: ({ id, status, role }) => ({
-				url: `http://${emplBaseURL}employment-api/v1/vacancy/${id}/responds?status=${status}`,
+		getResponcesByVacancy: builder.query<
+			{ content: VacancyRespondItemType[] },
+			{ id: number; status: string; role: string; page: number }
+		>({
+			query: ({ id, status, role, page }) => ({
+				url: `http://${emplBaseURL}employment-api/v1/vacancy/${id}/responds?status=${status}&page=${page}`,
 				headers: {
 					Authorization: `Bearer ${role === 'PERSONNEL_DEPARTMENT' ? personnelDeparmentToken : supervisorToken}`
 				},
 				keepUnusedDataFor: 0
 			}),
-			transformResponse: (response: VacancyRespondItemType[]) => {
-				return response.map(resp => ({
-					...resp,
-					responseDate: resp.responseDate.substring(0, 10)
-				}))
+			transformResponse: (response: { content: VacancyRespondItemType[] }) => {
+				return {
+					content: response.content.map(resp => ({
+						...resp,
+						responseDate: resp.responseDate.substring(0, 10)
+					}))
+				}
 			}
 		}),
 		getRespondFullInfo: builder.query<VacancyRespondItemType, number>({
@@ -261,7 +267,13 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
-		getVacancyRequests: builder.query<VacancyRequestItemType[], string>({
+		getVacancyRequests: builder.query<
+			{
+				content: VacancyRequestItemType[]
+				page: { size: number; number: number; totalElements: number; totalPages: number }
+			},
+			string
+		>({
 			query: action => ({
 				url: `http://${emplBaseURL}employment-api/v1/management/vacancy-requests${
 					action === 'все' ? '' : `?action=${action}`
@@ -280,18 +292,21 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
-		getArchivedResponces: builder.query<VacancyRespondItemType[], void>({
-			query: () => ({
-				url: `http://${emplBaseURL}employment-api/v1/archive`,
+		getArchivedResponces: builder.query<PageableType<VacancyRespondItemType>, number>({
+			query: page => ({
+				url: `http://${emplBaseURL}employment-api/v1/archive?page=${page}`,
 				headers: {
 					Authorization: `Bearer ${personnelDeparmentToken}`
 				}
 			}),
-			transformResponse: (response: VacancyRespondItemType[]) => {
-				return response.map(resp => ({
-					...resp,
-					responseDate: resp.responseDate.substring(0, 10)
-				}))
+			transformResponse: (response: PageableType<VacancyRespondItemType>) => {
+				return {
+					...response,
+					content: response.content.map(resp => ({
+						...resp,
+						responseDate: resp.responseDate.substring(0, 10)
+					}))
+				}
 			}
 		}),
 		getArchivedRespondFullInfo: builder.query<VacancyRespondItemType, number>({
@@ -302,18 +317,21 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
-		getReservedResponces: builder.query<VacancyRespondItemType[], string>({
-			query: type => ({
-				url: `http://${emplBaseURL}employment-api/v1/reserve?reserveType=${type}`,
+		getReservedResponces: builder.query<PageableType<VacancyRespondItemType>, { type: string; page: number }>({
+			query: ({ page, type }) => ({
+				url: `http://${emplBaseURL}employment-api/v1/reserve?reserveType=${type}&page=${page}`,
 				headers: {
 					Authorization: `Bearer ${personnelDeparmentToken}`
 				}
 			}),
-			transformResponse: (response: VacancyRespondItemType[]) => {
-				return response.map(resp => ({
-					...resp,
-					respondDate: resp.respondDate.substring(0, 10)
-				}))
+			transformResponse: (response: PageableType<VacancyRespondItemType>) => {
+				return {
+					...response,
+					content: response.content.map(resp => ({
+						...resp,
+						respondDate: resp.respondDate.substring(0, 10)
+					}))
+				}
 			}
 		}),
 		getReservedRespondFullInfo: builder.query<VacancyRespondItemType, number>({
@@ -358,24 +376,26 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
-		getSeekerEmploymentResponds: builder.query<RespondItemType[], void>({
-			query: () => ({
-				url: `http://${emplBaseURL}employment-api/v1/seeker/responds?status=все`,
+		getSeekerEmploymentResponds: builder.query<{ content: RespondItemType[] }, number>({
+			query: page => ({
+				url: `http://${emplBaseURL}employment-api/v1/seeker/responds?statuses=EMPLOYMENT&page=${page}`,
 				headers: {
 					Authorization: `Bearer ${seekerToken}`
 				}
 			}),
-			transformResponse: (response: RespondItemType[]) => {
+			transformResponse: (response: { content: RespondItemType[] }) => {
 				// return response.map(resp => ({
 				// 	...resp,
 				// 	respondDate: resp.respondDate.substring(0, 10)
 				// }))
-				return response
-					.filter(resp => resp.status === 'EMPLOYMENT')
-					.map(resp => ({
-						...resp,
-						respondDate: resp.respondDate.substring(0, 10)
-					}))
+				return {
+					content: response.content
+						.filter(resp => resp.status === 'EMPLOYMENT')
+						.map(resp => ({
+							...resp,
+							respondDate: resp.respondDate.substring(0, 10)
+						}))
+				}
 			}
 		}),
 		getEmploymentData: builder.query<EmploymentDataType, number>({
@@ -390,16 +410,18 @@ export const serviceApi = apiSlice.injectEndpoints({
 				headers: { Authorization: `Bearer ${seekerToken}` }
 			})
 		}),
-		getSupervisorResponds: builder.query<VacancyRespondItemType[], string>({
-			query: status => ({
-				url: `http://${emplBaseURL}employment-api/v1/supervisor/vacancy/respond?${status}`,
+		getSupervisorResponds: builder.query<{ content: VacancyRespondItemType[] }, { status: string; page: number }>({
+			query: ({ status, page }) => ({
+				url: `http://${emplBaseURL}employment-api/v1/supervisor/vacancy/respond?${status}&page=${page}`,
 				headers: { Authorization: `Bearer ${supervisorToken}` }
 			}),
-			transformResponse: (response: VacancyRespondItemType[]) => {
-				return response.map(resp => ({
-					...resp,
-					responseDate: resp.responseDate.substring(0, 10)
-				}))
+			transformResponse: (response: { content: VacancyRespondItemType[] }) => {
+				return {
+					content: response.content.map(resp => ({
+						...resp,
+						responseDate: resp.responseDate.substring(0, 10)
+					}))
+				}
 			}
 		}),
 		getSeekerResumeFile: builder.query<{ href: string; size: number }, number>({
@@ -842,11 +864,10 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
-		getSupervisorInterview: builder.query<InterviewItemType[], void>({
+		getSupervisorInterview: builder.query<{ content: InterviewItemType[] }, number>({
 			query: arg => ({
-				url: `http://${emplBaseURL}employment-api/v1/interview`,
+				url: `http://${emplBaseURL}employment-api/v1/interview?page=${arg}`,
 				method: 'GET',
-				body: arg,
 				headers: {
 					Authorization: `Bearer ${supervisorToken}`
 				}
@@ -1139,6 +1160,18 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			}),
 			keepUnusedDataFor: 0
+		}),
+		getAllSupervisorRequests: builder.query<SupervisorRequestType[], string>({
+			query: action => ({
+				url: `http://${emplBaseURL}employment-api/v1/management/vacancy-requests?action=${action}`,
+				method: 'GET'
+			})
+		}),
+		getSeekerVacancyRelation: builder.query<{ canRespond: boolean }, number>({
+			query: vacancyId => ({
+				url: `http://${emplBaseURL}employment-api/v1/vacancy/${vacancyId}/seeker-relation`,
+				method: 'GET'
+			})
 		})
 	})
 })
@@ -1261,5 +1294,14 @@ export const {
 	useGetRoleQuery,
 	useLazyCheckIfTestIsPassedQuery,
 	useLazyGetEmploymentStageStatusForSupervisorQuery,
-	useLazyDownloadChatFileQuery
+	useLazyDownloadChatFileQuery,
+	useLazyGetAllSupervisorRequestsQuery,
+	useLazyGetVacancyRequestsQuery,
+	useLazyGetSeekerRespondsQuery,
+	useLazyGetSupervisorRespondsQuery,
+	useLazyGetSupervisorInterviewQuery,
+	useLazyGetSeekerEmploymentRespondsQuery,
+	useLazyGetReservedResponcesQuery,
+	useLazyGetArchivedResponcesQuery,
+	useLazyGetSeekerVacancyRelationQuery
 } = serviceApi

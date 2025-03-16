@@ -43,7 +43,7 @@ import { AttachIcon } from './AttachIcon'
 import { ButtonPlusIcon } from './ButtonPlusIcon'
 import { CheckedIcon } from './CheckedIcon'
 
-export const ResponseForm = () => {
+export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 	const { t, i18n } = useTranslation()
 	const { data: countries, isLoading: isLoadingCountry } = useGetCountriesQuery(i18n.language)
 	const { data: levels } = useGetEducationLevelQuery(i18n.language)
@@ -66,6 +66,10 @@ export const ResponseForm = () => {
 	const [haveNoExprience, setHaveNoExperience] = useState(experienceData.noExperienceFlag)
 	const [skillInputValue, setSkillInputValue] = useState<string>('')
 	const [coverLetter, setCoverLetter] = useState('')
+	const [eduValidHidden, setEduValidUnhidden] = useState<boolean>(true)
+	const [jobValidHidden, setJobValidUnhidden] = useState<boolean>(true)
+	const [skillsValidHidden, setSkillsValidUnhidden] = useState<boolean>(true)
+	const [letterValidHidden, setLetterValidUnhidden] = useState<boolean>(true)
 	const date = new Date()
 
 	const { pathname } = useLocation()
@@ -97,6 +101,34 @@ export const ResponseForm = () => {
 	const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
 	const [resultModalText, setResultModalText] = useState<string>('')
 
+	const handleKeyDownPhone = (e: React.KeyboardEvent<HTMLInputElement>) => {
+		const allowedKeys = [
+			'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+			' ', '(', ')', '-', '+',
+			'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight',
+		];
+
+		if (!allowedKeys.includes(e.key)) {
+			e.preventDefault();
+		}
+	};
+
+	const handleKeyDownEmail = (e: React.KeyboardEvent<HTMLInputElement>) => {
+		const allowedKeys = [
+			'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+			'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+			'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+			'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+			'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+			'@', '.', '_', '%', '+', '-',
+			'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight'
+		];
+
+		if (!allowedKeys.includes(e.key)) {
+			e.preventDefault();
+		}
+	};
+
 	return (
 		<>
 			<Button
@@ -109,6 +141,7 @@ export const ResponseForm = () => {
 					navigate('/services/jobseeker/vacancyview/respond/main')
 					setIsFormOpen(true)
 				}}
+				disabled={props.canRespond === undefined || props.canRespond === false}
 			>
 				Откликнуться
 			</Button>
@@ -232,6 +265,7 @@ export const ResponseForm = () => {
 								<Button
 									className="ml-auto mt-[40px] rounded-[54.5px]"
 									type="primary"
+									loading={result.isLoading}
 									onClick={
 										!aboutMeCompleted
 											? () => {
@@ -343,9 +377,19 @@ export const ResponseForm = () => {
 								placeholder="Введите сообщение"
 								value={coverLetter}
 								onChange={e => {
-									setCoverLetter(e.target.value)
+									if (e.target.value.length < 10000) {
+										setLetterValidUnhidden(true)
+										setCoverLetter(e.target.value)
+									} else {
+										setLetterValidUnhidden(false)
+									}
 								}}
 							/>
+							{!letterValidHidden && (
+								<p className="mt-[20px] w-[250px] text-[#FF0133] font-main-font font-normal text-[14px]/[18px] opacity-100">
+									Вы уже добавили максимальное количество ключевых навыков
+								</p>
+							)}
 							<Button
 								className="mr-auto mt-[40px] rounded-[54.5px]"
 								type="primary"
@@ -460,7 +504,9 @@ export const ResponseForm = () => {
 							<Form.Item
 								name={'gender'}
 								label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Пол</label>}
-								rules={[{ required: true, message: 'Не выбран пол' }]}
+								rules={[
+									{ required: true, message: 'Не выбран пол' }
+								]}
 							>
 								<Radio.Group
 									disabled={aboutMeData.isGenderSet}
@@ -474,7 +520,10 @@ export const ResponseForm = () => {
 							<Form.Item
 								name={'surname'}
 								label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Фамилия</label>}
-								rules={[{ required: true, message: 'Поле фамилии не заполнено' }]}
+								rules={[
+									{ required: true, message: 'Не указано Фамилия' },
+									{ max: 500, message: 'Количество символов было превышено' },
+								]}
 							>
 								<Input
 									disabled
@@ -487,7 +536,10 @@ export const ResponseForm = () => {
 							<Form.Item
 								name={'name'}
 								label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Имя</label>}
-								rules={[{ required: true, message: 'Поле имени не заполнено' }]}
+								rules={[
+									{ required: true, message: 'Не указано Имя' },
+									{ max: 500, message: 'Количество символов было превышено' },
+								]}
 							>
 								<Input
 									disabled
@@ -500,7 +552,10 @@ export const ResponseForm = () => {
 							<Form.Item
 								name={'patronymic'}
 								label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Отчество</label>}
-								rules={[{ required: true, message: 'Поле отчества не заполнено' }]}
+								rules={[
+									{ required: true, message: 'Не указано Отчество' },
+									{ max: 500, message: 'Количество символов было превышено' },
+								]}
 							>
 								<Input
 									disabled={aboutMeData.isPatronymicSet}
@@ -555,21 +610,22 @@ export const ResponseForm = () => {
 								/>
 							</Form.Item>
 							<Form.Item
-								name={'phoneNumber'}
+								name="phoneNumber"
 								label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Телефон</label>}
 								rules={[
+									{ required: true, message: 'Поле номера телефона не заполнено' },
 									{
-										required: true,
-										message: 'Поле номера телефона не заполнено'
-									}
+										pattern: /^\+7 \d{3} \d{3}-\d{2}-\d{2}$/,
+										message: 'Номер телефона должен быть в формате +7 999 999-99-99',
+									},
 								]}
 							>
 								<Input
-									value={aboutMeData.phone}
-									onPressEnter={e => {
-										e.preventDefault()
+									onKeyDown={handleKeyDownPhone}
+									onPressEnter={(e) => {
+										e.preventDefault();
 									}}
-								></Input>
+								/>
 							</Form.Item>
 							<Form.Item
 								name={'email'}
@@ -579,13 +635,15 @@ export const ResponseForm = () => {
 									</label>
 								}
 								rules={[
+									{ required: true, message: 'Поле электронной почты не заполнено' },
 									{
-										required: true,
-										message: 'Поле электронной почты не заполнено'
-									}
+										pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+										message: 'Введите корректный адрес электронной почты',
+									},
 								]}
 							>
 								<Input
+									onKeyDown={handleKeyDownEmail}
 									value={aboutMeData.email}
 									onPressEnter={e => {
 										e.preventDefault()
@@ -665,7 +723,12 @@ export const ResponseForm = () => {
 								>
 									<Button
 										onClick={() => {
-											navigate('/services/jobseeker/vacancyview/respond/education/add')
+											if (educationData.educations.length < 20) {
+												setEduValidUnhidden(true)
+												navigate('/services/jobseeker/vacancyview/respond/education/add')
+											} else {
+												setEduValidUnhidden(false)
+											}
 										}}
 										icon={<ButtonPlusIcon />}
 										type="text"
@@ -674,6 +737,11 @@ export const ResponseForm = () => {
 								<p className="mt-[5px] w-[94px] font-main-font font-normal text-[14px]/[18px] opacity-40">
 									добавить образование
 								</p>
+								{!eduValidHidden && (
+									<p className="mt-[20px] w-[250px] text-[#FF0133] font-main-font font-normal text-[14px]/[18px] opacity-100">
+										Вы уже добавили максимальное количество образований
+									</p>
+								)}
 							</div>
 						</Form>
 					)}
@@ -718,7 +786,7 @@ export const ResponseForm = () => {
 										Уровень образования
 									</label>
 								}
-								rules={[{ required: true, message: 'Не выбран уровень образования' }]}
+								rules={[{ required: true, message: 'Не указан уровень образования' }]}
 							>
 								<Select
 									className="w-full rounded-lg"
@@ -739,7 +807,7 @@ export const ResponseForm = () => {
 										Страна получения образования
 									</label>
 								}
-								rules={[{ required: true, message: 'Не выбрана страна' }]}
+								rules={[{ required: true, message: 'Не указана страна' }]}
 							>
 								<Select
 									className="w-full rounded-lg"
@@ -762,7 +830,10 @@ export const ResponseForm = () => {
 										Учебное заведение
 									</label>
 								}
-								rules={[{ required: true, message: 'Не введено учебное заведение' }]}
+								rules={[
+									{ required: true, message: 'Не указано учебное заведение' },
+									{ max: 1000, message: 'Количество символов было превышено'}
+								]}
 							>
 								<Input
 									onPressEnter={e => {
@@ -775,7 +846,7 @@ export const ResponseForm = () => {
 								label={
 									<label className="text-black text-[18px]/[18px] font-content-font font-normal">Специальность</label>
 								}
-								rules={[{ required: true, message: 'Не введена специальность' }]}
+								rules={[{ required: true, message: 'Не указана специальность' }]}
 							>
 								<Input
 									onPressEnter={e => {
@@ -788,7 +859,7 @@ export const ResponseForm = () => {
 								label={
 									<label className="text-black text-[18px]/[18px] font-content-font font-normal">Год окончания</label>
 								}
-								rules={[{ required: true, message: 'Не выбран год' }]}
+								rules={[{ required: true, message: 'Не указан год' }]}
 							>
 								<Select
 									className="w-full rounded-lg"
@@ -987,8 +1058,24 @@ export const ResponseForm = () => {
 							<Upload
 								maxCount={1}
 								defaultFileList={
-									fileData.file !== '' ? [{ name: fileData.filename, uid: uuid(), status: 'error' }] : undefined
+									fileData.file !== ''
+										? [{ name: fileData.filename, uid: uuid(), status: 'error', size: fileData.fileSize }]
+										: undefined
 								}
+								itemRender={(originNode, file, _, actions) => (
+									<div className="flex justify-between items-center">
+										<p>{file.name}</p>
+										<p>
+											{' '}
+											{Math.round(fileData.fileSize / 1000000) > 0
+												? Math.round(fileData.fileSize / 1000000) + ' Мб'
+												: Math.round(fileData.fileSize / 1000) > 0
+												? Math.round(fileData.fileSize / 1000) + ' Кб'
+												: fileData.fileSize + ' б'}
+										</p>
+										<Button onClick={actions.remove} icon={<DeleteSvg />} type="text"></Button>
+									</div>
+								)}
 								onChange={options => {
 									console.log(options.file.type)
 									console.log(options.file.name)
@@ -1005,7 +1092,8 @@ export const ResponseForm = () => {
 											setFile({
 												file: String(filereader.result).split(',')[1],
 												filename: options.file.name,
-												fileType: options.file.type!
+												fileType: options.file.type!,
+												fileSize: options.file.size!
 											})
 										)
 									}
@@ -1016,6 +1104,7 @@ export const ResponseForm = () => {
 									<p className="font-content-font font-normal text-[16px]/[16px] text-black underline select-none">
 										Прикрепить файл
 									</p>
+									<p className="font-content-font font-normal text-[16px]/[16px] text-black">(не более 10 мб)</p>
 								</div>
 							</Upload>
 							<Form.Item
@@ -1096,7 +1185,13 @@ export const ResponseForm = () => {
 								>
 									<Button
 										onClick={() => {
-											navigate('/services/jobseeker/vacancyview/respond/experience/add')
+											console.log(experienceData.experiences.length)
+											if (experienceData.experiences.length < 50) {
+												setJobValidUnhidden(true)
+												navigate('/services/jobseeker/vacancyview/respond/experience/add')
+											} else {
+												setJobValidUnhidden(false)
+											}
 										}}
 										icon={<ButtonPlusIcon />}
 										type="text"
@@ -1105,6 +1200,11 @@ export const ResponseForm = () => {
 								<p className="mt-[5px] w-[94px] font-main-font font-normal text-[14px]/[18px] opacity-40">
 									добавить место работы
 								</p>
+								{!jobValidHidden && (
+									<p className="mt-[20px] w-[250px] text-[#FF0133] font-main-font font-normal text-[14px]/[18px] opacity-100">
+										Вы уже добавили максимальное количество мест работ
+									</p>
+								)}
 							</div>
 						</Form>
 					)}
@@ -1144,7 +1244,10 @@ export const ResponseForm = () => {
 							</div>
 							<Form.Item
 								name={'workplace'}
-								rules={[{ required: true, message: 'Введите место работы' }]}
+								rules={[
+									{ required: true, message: 'Не указано Место работы"' },
+									{ max: 1000, message: "Количество символов было превышено"}
+								]}
 								label={
 									<label className="text-black text-[18px]/[18px] font-content-font font-normal">Место работы</label>
 								}
@@ -1158,7 +1261,10 @@ export const ResponseForm = () => {
 							</Form.Item>
 							<Form.Item
 								name={'seat'}
-								rules={[{ required: true, message: 'Введите должность' }]}
+								rules={[
+									{ required: true, message: 'Не указана должность' },
+									{ max: 1000, message: "Количество символов было превышено"}
+								]}
 								label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Должность</label>}
 							>
 								<Input
@@ -1189,7 +1295,10 @@ export const ResponseForm = () => {
 							</div>
 							<Form.Item
 								name={'duties'}
-								rules={[{ required: true, message: 'Укажите свои обязанности' }]}
+								rules={[
+									{ required: true, message: 'Не указаны обязанности' },
+									{ max: 1000, message: "Количество символов было превышено"}
+								]}
 								label={
 									<label className="text-black text-[18px]/[18px] font-content-font font-normal">Обязанности</label>
 								}
@@ -1338,7 +1447,7 @@ export const ResponseForm = () => {
 								rules={[
 									{
 										required: currentFormskills.length === 0,
-										message: 'Введите свои навыки'
+										message: 'Не указаны ключевые навыки'
 									}
 								]}
 								label={
@@ -1362,8 +1471,13 @@ export const ResponseForm = () => {
 										>
 											<Button
 												onClick={() => {
-													skillInputValue !== '' &&
+													if (currentFormskills.length < 100) {
+														setSkillsValidUnhidden(true)
+														skillInputValue !== '' &&
 														(setcurrentFormSkills([...currentFormskills, skillInputValue]), setSkillInputValue(''))
+													} else {
+														setSkillsValidUnhidden(false)
+													}
 												}}
 												icon={<ButtonPlusIcon special />}
 												type="text"
@@ -1400,9 +1514,19 @@ export const ResponseForm = () => {
 										{skill}
 									</Tag>
 								))}
+								{!skillsValidHidden && (
+									<p className="mt-[20px] w-[250px] text-[#FF0133] font-main-font font-normal text-[14px]/[18px] opacity-100">
+										Вы уже добавили максимальное количество ключевых навыков
+									</p>
+								)}
 							</Form.Item>
 							<Form.Item
 								name={'details'}
+								rules={[
+								{
+									max: 10000, message: 'Количество символов было превышено'
+								}
+							]}
 								label={
 									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
 										О себе (необязательно)

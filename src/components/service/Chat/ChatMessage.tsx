@@ -1,6 +1,7 @@
+import { Button } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
-import { forwardRef, useEffect, useState } from 'react'
+import { forwardRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 
@@ -12,7 +13,6 @@ import {
 	useAnswerEmploymentRequestMutation,
 	useAnswerToInivitationMainTimeMutation,
 	useAnswerToInvitationReserveTimeRequestMutation,
-	useGetChatMessagesQuery,
 	useLazyGetVacancyViewQuery
 } from '../../../store/api/serviceApi'
 import { setCurrentVacancy } from '../../../store/reducers/CurrentVacancySlice'
@@ -45,37 +45,16 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 	}
 	page_id = Number(id_from_url)
 
-	const [answerMainTime] = useAnswerToInivitationMainTimeMutation()
+	const [answerMainTime, { isLoading: answerMainTimeLoading }] = useAnswerToInivitationMainTimeMutation()
 	const [getVacancy, result] = useLazyGetVacancyViewQuery()
 
-	const { data: chat_data } = useGetChatMessagesQuery({ chatId: page_id, role: current_role })
-
-	const invitation_msg = chat_data?.filter(message => message.type === 'INVITATION')
-	const invitation_reserve_msg = chat_data?.filter(message => message.type === 'INVITATION_RESERVE')
-	const empl_req_msg = chat_data?.filter(message => message.type === 'EMPLOYMENT_REQUEST')
-
-	const [isSeekerResponsedInvitationMessage, setIsSeekerResponsedInvitationMessage] = useState<boolean>(
-		invitation_msg === undefined ? false : invitation_msg[0]?.responsed
-	)
-	const [isSeekerResponsedInvitationReserveMessage, setIsSeekerResponsedInvitationReserveMessage] = useState<boolean>(
-		invitation_reserve_msg === undefined ? false : invitation_reserve_msg[0]?.responsed
-	)
-	const [isSeekerResponsedEmploymentRequestMessage, setIsSeekerResponsedEmploymentRequestMessage] = useState<boolean>(
-		empl_req_msg === undefined ? false : empl_req_msg[0]?.responsed
-	)
-
-	useEffect(() => {
-		setIsSeekerResponsedInvitationMessage(invitation_msg === undefined ? false : invitation_msg[0]?.responsed)
-		setIsSeekerResponsedInvitationReserveMessage(
-			invitation_reserve_msg === undefined ? false : invitation_reserve_msg[0]?.responsed
-		)
-		setIsSeekerResponsedEmploymentRequestMessage(empl_req_msg === undefined ? false : empl_req_msg[0]?.responsed)
-	}, [chat_data])
+	const [isResponsed, setIsResponsed] = useState<boolean>(props.msgData.responsed)
+	const [pressedButton, setPressedButton] = useState<number>(-1)
 
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
-	const [answerReserveTime] = useAnswerToInvitationReserveTimeRequestMutation()
-	const [answerEmploymentRequest] = useAnswerEmploymentRequestMutation()
+	const [answerReserveTime, { isLoading: answerReserveTimeLoading }] = useAnswerToInvitationReserveTimeRequestMutation()
+	const [answerEmploymentRequest, { isLoading: answerEmploymentRequestLoading }] = useAnswerEmploymentRequestMutation()
 
 	return (
 		<>
@@ -105,7 +84,7 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 					<div
 						className="cursor-pointer"
 						onClick={() => {
-							getVacancy(currentVacancyId)
+							getVacancy(currentVacancyId) /// TODO currentVacancyId умирает после f5, нужно либо брать запросом, либо закидывать в url
 								.unwrap()
 								.then(result => {
 									dispatch(setCurrentVacancy(result))
@@ -163,60 +142,55 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 							(props.msgData.sender === 'PERSONNEL_DEPARTMENT' && isEmpDep)
 					})}
 				>
-					<button
+					<Button
 						onClick={() => {
-							if (invitation_msg) {
-								answerMainTime({ id: respondId, ans: 'YES', messageId: invitation_msg[0].id }).then(() => {
-									setIsSeekerResponsedInvitationMessage(true)
-								})
-							}
+							answerMainTime({ id: page_id, ans: 'YES', messageId: props.msgData.id }).then(() => {
+								setIsResponsed(true)
+							})
 						}}
-						disabled={isEmpDep || isSeekerResponsedInvitationMessage}
-						className={`rounded-[54.5px] bg-inherit outline-none border cursor-pointer ${
-							isEmpDep || isSeekerResponsedInvitationMessage ? 'select-none !cursor-not-allowed' : ''
+						loading={answerMainTimeLoading}
+						disabled={isEmpDep || isResponsed}
+						className={`rounded-[54.5px] h-full border-black bg-inherit outline-none border cursor-pointer ${
+							isEmpDep || isResponsed ? 'select-none !cursor-not-allowed' : ''
 						}`}
 					>
 						Да
-					</button>
-					<button
+					</Button>
+					<Button
 						onClick={() => {
-							if (invitation_msg) {
-								answerMainTime({ id: respondId, ans: 'NO', messageId: invitation_msg[0].id }).then(() => {
-									setIsSeekerResponsedInvitationMessage(true)
-								})
-							}
+							answerMainTime({ id: page_id, ans: 'NO', messageId: props.msgData.id }).then(() => {
+								setIsResponsed(true)
+							})
 						}}
-						disabled={isEmpDep || isSeekerResponsedInvitationMessage}
-						className={`rounded-[54.5px] bg-inherit outline-none border cursor-pointer ${
-							isEmpDep || isSeekerResponsedInvitationMessage ? 'select-none !cursor-not-allowed' : ''
+						disabled={isEmpDep || isResponsed}
+						className={`rounded-[54.5px] h-full border-black bg-inherit outline-none border cursor-pointer ${
+							isEmpDep || isResponsed ? 'select-none !cursor-not-allowed' : ''
 						}`}
 					>
 						Не удобно
-					</button>
-					<button
+					</Button>
+					<Button
 						onClick={() => {
-							if (invitation_msg) {
-								answerMainTime({
-									id: respondId,
-									ans: 'NOT_RELEVANT',
-									messageId: invitation_msg[0].id
-								}).then(() => {
-									setIsSeekerResponsedInvitationMessage(true)
-								})
-							}
+							answerMainTime({
+								id: page_id,
+								ans: 'NOT_RELEVANT',
+								messageId: props.msgData.id
+							}).then(() => {
+								setIsResponsed(true)
+							})
 						}}
-						disabled={isEmpDep || isSeekerResponsedInvitationMessage}
-						className={`col-span-2 rounded-[54.5px] bg-inherit outline-none border cursor-pointer ${
-							isEmpDep || isSeekerResponsedInvitationMessage ? 'select-none !cursor-not-allowed' : ''
+						disabled={isEmpDep || isResponsed}
+						className={`col-span-2 rounded-[54.5px] h-full border-black bg-inherit outline-none border cursor-pointer ${
+							isEmpDep || isResponsed ? 'select-none !cursor-not-allowed' : ''
 						}`}
 					>
 						Вакансия не актуальна
-					</button>
+					</Button>
 				</div>
 			)}
 			{props.msgData.type === 'INVITATION_RESERVE' && props.msgData.reserveTimes !== null && (
 				<div
-					className={clsx('w-[50%] flex flex-col', {
+					className={clsx('mt-[24px] w-[50%] grid grid-cols-3 grid-rows-[40px_40px] gap-[20px]', {
 						'self-start':
 							(props.msgData.sender === 'SEEKER' && isEmpDep) ||
 							(props.msgData.sender === 'PERSONNEL_DEPARTMENT' && !isEmpDep),
@@ -225,46 +199,42 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 							(props.msgData.sender === 'PERSONNEL_DEPARTMENT' && isEmpDep)
 					})}
 				>
-					<div className="mt-[24px] w-[100%] flex flex-col gap-[14px]">
-						<div className="flex flex-row gap-[20px] justify-between ">
-							{props.msgData.reserveTimes.map(time => (
-								<button
-									onClick={() => {
-										if (invitation_reserve_msg) {
-											answerReserveTime({
-												respondId: respondId,
-												time: time,
-												messageId: invitation_reserve_msg[0].id
-											}).then(() => {
-												setIsSeekerResponsedInvitationReserveMessage(true)
-											})
-										}
-									}}
-									disabled={isEmpDep || isSeekerResponsedInvitationReserveMessage}
-									className={`w-full text-[16px]/[19.2px] rounded-[54.5px] py-[12px] px-[20px] text-center bg-inherit outline-none border cursor-pointer test:px-[12px]  ${
-										isEmpDep || isSeekerResponsedInvitationReserveMessage ? 'select-none !cursor-not-allowed' : ''
-									}`}
-								>
-									{time.substring(0, 10).split('-').reverse().join('.') + ', ' + time.substring(11, 16)}
-								</button>
-							))}
-						</div>
-						<button
+					{props.msgData.reserveTimes.map((time, i) => (
+						<Button
 							onClick={() => {
-								if (invitation_reserve_msg) {
-									answerReserveTime({ respondId: respondId, messageId: invitation_reserve_msg[0].id }).then(() => {
-										setIsSeekerResponsedInvitationReserveMessage(true)
-									})
-								}
+								setPressedButton(i)
+								answerReserveTime({
+									respondId: page_id,
+									time: time,
+									messageId: props.msgData.id
+								}).then(() => {
+									setIsResponsed(true)
+								})
 							}}
-							disabled={isEmpDep || isSeekerResponsedInvitationReserveMessage}
-							className={`text-[16px]/[19.2px]  rounded-[54.5px]  py-[12px] px-[56px] bg-inherit outline-none border cursor-pointer ${
-								isEmpDep || isSeekerResponsedInvitationReserveMessage ? 'select-none !cursor-not-allowed' : ''
+							disabled={isEmpDep || isResponsed}
+							loading={answerReserveTimeLoading && pressedButton === i}
+							className={`w-full text-[16px]/[19.2px] text-wrap h-full border-black rounded-[54.5px] py-[12px] px-[20px] text-center bg-inherit outline-none border cursor-pointer test:px-[12px]  ${
+								isEmpDep || isResponsed ? 'select-none !cursor-not-allowed' : ''
 							}`}
 						>
-							Нет подходящего времени
-						</button>
-					</div>
+							{time.substring(0, 10).split('-').reverse().join('.') + ', ' + time.substring(11, 16)}
+						</Button>
+					))}
+					<Button
+						onClick={() => {
+							setPressedButton(3)
+							answerReserveTime({ respondId: page_id, messageId: props.msgData.id }).then(() => {
+								setIsResponsed(true)
+							})
+						}}
+						loading={answerReserveTimeLoading && pressedButton === 3}
+						disabled={isEmpDep || isResponsed}
+						className={`row-span-2 col-span-3 text-[16px]/[19.2px] h-full border-black rounded-[54.5px]  py-[12px] px-[56px] bg-inherit outline-none border cursor-pointer ${
+							isEmpDep || isResponsed ? 'select-none !cursor-not-allowed' : ''
+						}`}
+					>
+						Нет подходящего времени
+					</Button>
 				</div>
 			)}
 			{props.msgData.type === 'EMPLOYMENT_REQUEST' && (
@@ -279,44 +249,44 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 					})}
 				>
 					<div className="mt-[24px] w-[100%] flex flex-row gap-[20px]">
-						<button
+						<Button
 							onClick={() => {
-								if (empl_req_msg) {
-									answerEmploymentRequest({
-										respondId: respondId,
-										answer: 'YES',
-										messageId: empl_req_msg[0].id
-									}).then(() => {
-										setIsSeekerResponsedEmploymentRequestMessage(true)
-									})
-								}
+								setPressedButton(4)
+								answerEmploymentRequest({
+									respondId: page_id,
+									answer: 'YES',
+									messageId: props.msgData.id
+								}).then(() => {
+									setIsResponsed(true)
+								})
 							}}
-							disabled={isEmpDep || isSeekerResponsedEmploymentRequestMessage}
-							className={`w-6/12 text-[16px]/[19.2px] rounded-[54.5px]  text-center bg-inherit outline-none border cursor-pointer ${
-								isEmpDep || isSeekerResponsedEmploymentRequestMessage ? 'select-none !cursor-not-allowed' : ''
+							loading={answerEmploymentRequestLoading && pressedButton === 4}
+							disabled={isEmpDep || isResponsed}
+							className={`w-6/12 text-[16px]/[19.2px] rounded-[54.5px] h-full border-black text-center bg-inherit outline-none border cursor-pointer ${
+								isEmpDep || isResponsed ? 'select-none !cursor-not-allowed' : ''
 							}`}
 						>
 							Да
-						</button>
-						<button
+						</Button>
+						<Button
 							onClick={() => {
-								if (empl_req_msg) {
-									answerEmploymentRequest({
-										respondId: respondId,
-										answer: 'NO',
-										messageId: empl_req_msg[0].id
-									}).then(() => {
-										setIsSeekerResponsedEmploymentRequestMessage(true)
-									})
-								}
+								setPressedButton(5)
+								answerEmploymentRequest({
+									respondId: page_id,
+									answer: 'NO',
+									messageId: props.msgData.id
+								}).then(() => {
+									setIsResponsed(true)
+								})
 							}}
-							disabled={isEmpDep || isSeekerResponsedEmploymentRequestMessage}
-							className={`w-6/12 text-[16px]/[19.2px] rounded-[54.5px] text-center py-[12px] bg-inherit outline-none border cursor-pointer ${
-								isEmpDep || isSeekerResponsedEmploymentRequestMessage ? 'select-none !cursor-not-allowed' : ''
+							disabled={isEmpDep || isResponsed}
+							loading={answerEmploymentRequestLoading && pressedButton === 5}
+							className={`w-6/12 text-[16px]/[19.2px] rounded-[54.5px] h-full border-black text-center py-[12px] bg-inherit outline-none border cursor-pointer ${
+								isEmpDep || isResponsed ? 'select-none !cursor-not-allowed' : ''
 							}`}
 						>
 							Нет
-						</button>
+						</Button>
 					</div>
 				</div>
 			)}

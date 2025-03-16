@@ -21,7 +21,7 @@ export const RespondItem = ({
 				onClick={() => {
 					dispatch(setCurrentVacancyName(vacancyTitle))
 					navigate(
-						`/services/personnelaccounting/responds/byvacancy/${vacancyId}`
+						`/services/personnelaccounting/responds/byvacancy/?vacancy=${vacancyTitle}&id=${vacancyId}`
 					)
 				}}
 				className="ml-[15%] max-w-[15%] font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black"

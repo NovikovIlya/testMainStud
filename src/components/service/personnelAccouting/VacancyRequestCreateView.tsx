@@ -12,22 +12,21 @@ import {
 	useGetCategoriesQuery,
 	useGetDirectionsQuery,
 	useGetSubdivisionsQuery,
-	useGetVacancyRequestsQuery,
 	useGetVacancyRequestViewQuery,
+	useGetVacancyRequestsQuery,
 	useLazyGetVacancyRequestViewQuery
 } from '../../../store/api/serviceApi'
 import { useAlert } from '../../../utils/Alert/AlertMessage'
 import ArrowIcon from '../jobSeeker/ArrowIcon'
 
 export const VacancyRequestCreateView = () => {
-
-	const currentUrl = window.location.pathname;
+	const currentUrl = window.location.pathname
 
 	// Ищем id из URL
-	const match = currentUrl.match(/\/create\/(\d+)$/);
+	const match = currentUrl.match(/\/create\/(\d+)$/)
 
 	let id_from_url: string
-	let page_id : number
+	let page_id: number
 
 	if (match) {
 		id_from_url = match[1]
@@ -44,8 +43,8 @@ export const VacancyRequestCreateView = () => {
 
 	const navigate = useNavigate()
 	const [getVacancyRequestView, queryStatus] = useLazyGetVacancyRequestViewQuery()
-	const [acceptRequest] = useAcceptCreateVacancyRequestMutation()
-	const [alterRequest] = useAlterCreateVacancyRequestMutation()
+	const [acceptRequest, { isLoading: acceptRequestLoading }] = useAcceptCreateVacancyRequestMutation()
+	const [alterRequest, { isLoading: alterRequestLoading }] = useAlterCreateVacancyRequestMutation()
 
 	const { openAlert } = useAlert()
 
@@ -82,7 +81,7 @@ export const VacancyRequestCreateView = () => {
 	const [resultModalText, setResultModalText] = useState<string>('')
 
 	useEffect(() => {
-		getVacancyRequestView(id_from_url)
+		getVacancyRequestView(page_id)
 			.unwrap()
 			.then(req => {
 				setPost(req.newData.post)
@@ -209,8 +208,16 @@ export const VacancyRequestCreateView = () => {
 			>
 				<Form
 					layout="vertical"
+					initialValues={{
+						formDocs: definitions.map(def => {
+							if (def.required) {
+								return def.id
+							}
+						})
+					}}
 					requiredMark={false}
 					onFinish={async values => {
+						console.log(values.formDocs)
 						try {
 							if (isEdited) {
 								await alterRequest({
@@ -253,6 +260,7 @@ export const VacancyRequestCreateView = () => {
 							setResultModalText('Вакансия успешно опубликована')
 							setIsResultModalOpen(true)
 						} catch (error: any) {
+							console.log(error)
 							openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 						}
 					}}
@@ -324,7 +332,7 @@ export const VacancyRequestCreateView = () => {
 							className="flex flex-col gap-[8px]"
 						>
 							<p className="font-content-font text-black font-bold text-[18px]/[21.6px] opacity-80 mb-[16px]">
-								2 этап. Прикрепление документов
+								1 этап. Прикрепление документов
 							</p>
 							{definitions.map(def =>
 								def.employmentStageType === 'SECOND' ? (
@@ -340,7 +348,7 @@ export const VacancyRequestCreateView = () => {
 								)
 							)}
 							<p className="font-content-font text-black font-bold text-[18px]/[21.6px] opacity-80 mb-[16px] mt-[24px]">
-								4 этап. Медицинский осмотр
+								2 этап. Медицинский осмотр
 							</p>
 							{definitions.map(def =>
 								def.employmentStageType === 'FOURTH' ? (
@@ -364,6 +372,7 @@ export const VacancyRequestCreateView = () => {
 								className="rounded-[54.5px] w-[121px] ml-auto"
 								htmlType="submit"
 								disabled={categoryTitle === '' || secondOption === null}
+								loading={acceptRequestLoading || alterRequestLoading}
 							>
 								Опубликовать
 							</Button>
@@ -417,7 +426,10 @@ export const VacancyRequestCreateView = () => {
 								Должность
 							</label>
 						}
-						rules={[{ required: true, message: 'Не указана должность' }]}
+						rules={[
+							{ required: true, message: 'Не указана должность' },
+							{ max: 500, message: 'Количество символов было превышено'}
+						]}
 					>
 						<Input placeholder="Ввести название"></Input>
 					</Form.Item>
@@ -465,7 +477,10 @@ export const VacancyRequestCreateView = () => {
 									Заработная плата
 								</label>
 							}
-							rules={[{ required: true, message: 'Не указана зарплата' }]}
+							rules={[
+								{ required: true, message: 'Не указана зарплата' },
+								{ max: 70, message: 'Количество символов было превышено'}
+							]}
 						>
 							<Input placeholder="Ввести"></Input>
 						</Form.Item>
@@ -475,7 +490,10 @@ export const VacancyRequestCreateView = () => {
 						label={
 							<label className="text-black text-[18px]/[18px] font-content-font font-normal opacity-80">Задачи</label>
 						}
-						rules={[{ required: true, message: 'Не указаны задачи' }]}
+						rules={[
+							{ required: true, message: 'Не указаны задачи' },
+							{ max: 5000, message: 'Количество символов было превышено'}
+						]}
 					>
 						<Input.TextArea autoSize className="!h-[107px]" placeholder="Ввести текст..."></Input.TextArea>
 					</Form.Item>
@@ -486,7 +504,10 @@ export const VacancyRequestCreateView = () => {
 								Требования
 							</label>
 						}
-						rules={[{ required: true, message: 'Не указаны требования' }]}
+						rules={[
+							{ required: true, message: 'Не указаны требования' },
+							{ max: 5000, message: 'Количество символов было превышено'}
+						]}
 					>
 						<Input.TextArea autoSize className="!h-[107px]" placeholder="Ввести текст..."></Input.TextArea>
 					</Form.Item>
@@ -495,12 +516,15 @@ export const VacancyRequestCreateView = () => {
 						label={
 							<label className="text-black text-[18px]/[18px] font-content-font font-normal opacity-80">Условия</label>
 						}
-						rules={[{ required: true, message: 'Не указаны условия' }]}
+						rules={[
+							{ required: true, message: 'Не указаны условия' },
+							{ max: 5000, message: 'Количество символов было превышено'}
+						]}
 					>
 						<Input.TextArea autoSize className="!h-[107px]" placeholder="Ввести текст..."></Input.TextArea>
 					</Form.Item>
 					<Form.Item>
-						<Button type="primary" htmlType="submit">
+						<Button type="primary" htmlType="submit" loading={acceptRequestLoading || alterRequestLoading}>
 							Сохранить
 						</Button>
 					</Form.Item>

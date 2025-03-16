@@ -19,7 +19,7 @@ export const SupervisorCreateVacancyForm = () => {
 	const { data: directions = [] } = useGetDirectionsQuery(categoryTitle)
 	const { data: subdivisions = [] } = useGetSubdivisionsQuery(categoryTitle)
 
-	const [requestCreateVacancy] = useRequestCreateVacancyMutation()
+	const [requestCreateVacancy, { isLoading }] = useRequestCreateVacancyMutation()
 
 	const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
 
@@ -89,7 +89,10 @@ export const SupervisorCreateVacancyForm = () => {
 								Должность
 							</label>
 						}
-						rules={[{ required: true, message: 'Не указана должность' }]}
+						rules={[
+							{ required: true, message: 'Не указана должность' },
+							{ max: 500, message: 'Количество символов было превышено' },
+						]}
 					>
 						<Input placeholder="Ввести название"></Input>
 					</Form.Item>
@@ -101,7 +104,9 @@ export const SupervisorCreateVacancyForm = () => {
 									Требуемый опыт работы
 								</label>
 							}
-							rules={[{ required: true, message: 'Не указана опыт' }]}
+							rules={[
+								{ required: true, message: 'Не указана опыт' },
+							]}
 						>
 							<Select
 								placeholder="Выбрать"
@@ -120,7 +125,9 @@ export const SupervisorCreateVacancyForm = () => {
 									Тип занятости
 								</label>
 							}
-							rules={[{ required: true, message: 'Не указан тип' }]}
+							rules={[
+								{ required: true, message: 'Не указан тип' },
+							]}
 						>
 							<Select
 								placeholder="Выбрать"
@@ -139,7 +146,10 @@ export const SupervisorCreateVacancyForm = () => {
 									Заработная плата
 								</label>
 							}
-							rules={[{ required: true, message: 'Не указана зарплата' }]}
+							rules={[
+								{ required: true, message: 'Не указана зарплата' },
+								{ max: 70, message: 'Количество символов было превышено' },
+							]}
 						>
 							<Input placeholder="Ввести"></Input>
 						</Form.Item>
@@ -147,9 +157,14 @@ export const SupervisorCreateVacancyForm = () => {
 					<Form.Item
 						name={'responsibilities'}
 						label={
-							<label className="text-black text-[18px]/[18px] font-content-font font-normal opacity-80">Задачи</label>
+							<label className="text-black text-[18px]/[18px] font-content-font font-normal opacity-80">
+								Задачи
+							</label>
 						}
-						rules={[{ required: true, message: 'Не указаны задачи' }]}
+						rules={[
+							{ required: true, message: 'Не указаны задачи' },
+							{ max: 5000, message: 'Количество символов было превышено' },
+						]}
 					>
 						<Input.TextArea autoSize className="!h-[107px]" placeholder="Ввести текст..."></Input.TextArea>
 					</Form.Item>
@@ -160,21 +175,29 @@ export const SupervisorCreateVacancyForm = () => {
 								Требования
 							</label>
 						}
-						rules={[{ required: true, message: 'Не указаны требования' }]}
+						rules={[
+							{ required: true, message: 'Не указаны требования' },
+							{ max: 5000, message: 'Количество символов было превышено' }
+						]}
 					>
 						<Input.TextArea autoSize className="!h-[107px]" placeholder="Ввести текст..."></Input.TextArea>
 					</Form.Item>
 					<Form.Item
 						name={'conditions'}
 						label={
-							<label className="text-black text-[18px]/[18px] font-content-font font-normal opacity-80">Условия</label>
+							<label className="text-black text-[18px]/[18px] font-content-font font-normal opacity-80">
+								Условия
+							</label>
 						}
-						rules={[{ required: true, message: 'Не указаны условия' }]}
+						rules={[
+							{ required: true, message: 'Не указаны условия' },
+							{ max: 5000, message: 'Количество символов было превышено' },
+						]}
 					>
 						<Input.TextArea autoSize className="!h-[107px]" placeholder="Ввести текст..."></Input.TextArea>
 					</Form.Item>
 					<Form.Item>
-						<Button type="primary" htmlType="submit">
+						<Button type="primary" htmlType="submit" loading={isLoading}>
 							Отправить
 						</Button>
 					</Form.Item>

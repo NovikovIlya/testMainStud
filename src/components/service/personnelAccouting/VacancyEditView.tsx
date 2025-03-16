@@ -16,6 +16,7 @@ import {
 	useRequestUpdateVacancyMutation
 } from '../../../store/api/serviceApi'
 import { useAlert } from '../../../utils/Alert/AlertMessage'
+import styles from '../../../utils/deleteOverwriteAntButton.module.css'
 import ArrowIcon from '../jobSeeker/ArrowIcon'
 
 export const VacancyEditView = () => {
@@ -48,7 +49,7 @@ export const VacancyEditView = () => {
 	const { currentVacancy } = useAppSelector(state => state.currentVacancy)
 
 	const { data: categories = [] } = useGetCategoriesQuery()
-	const [categoryTitle, setCategoryTitle] = useState<string>(currentVacancy?.acf.category as string)
+	const [categoryTitle, setCategoryTitle] = useState<string>(data?.acf.category as string)
 	const { data: directions = [] } = useGetDirectionsQuery(data?.acf.category as string)
 	const { data: subdivisions = [] } = useGetSubdivisionsQuery(data?.acf.category as string)
 
@@ -56,8 +57,8 @@ export const VacancyEditView = () => {
 
 	const navigate = useNavigate()
 	const [requestUpdate] = useRequestUpdateVacancyMutation()
-	const [editVacancy] = useEditVacancyAsPerDepartmentMutation()
-	const [deleteVacancy] = useDeleteVacancyAsPerDepartmentMutation()
+	const [editVacancy, { isLoading: editVacancyLoading }] = useEditVacancyAsPerDepartmentMutation()
+	const [deleteVacancy, { isLoading: deleteVacancyLoading }] = useDeleteVacancyAsPerDepartmentMutation()
 
 	const [isEdit, setIsEdit] = useState<boolean>(false)
 	const [isSendRequestButtonActivated, setIsSendRequestButtonActivated] = useState<boolean>(false)
@@ -70,7 +71,7 @@ export const VacancyEditView = () => {
 	const [direction, setDirection] = useState<string | undefined>(data?.acf.direction)
 	const [subdivision, setSubdivision] = useState<string | undefined>(data?.acf.subdivision)
 
-	useEffect(()=>{
+	useEffect(() => {
 		setPost(data?.title.rendered)
 		setExperience(data?.acf.experience)
 		setEmployment(data?.acf.employment)
@@ -78,6 +79,7 @@ export const VacancyEditView = () => {
 		setCategory(data?.acf.category)
 		setDirection(data?.acf.direction)
 		setSubdivision(data?.acf.subdivision)
+		setCategoryTitle(data?.acf.category)
 	}, [data])
 
 	const [responsibilities, setResponsibilities] = useState<string | undefined>(
@@ -128,7 +130,7 @@ export const VacancyEditView = () => {
 			.replace(/<\/li>/g, '')
 	)
 
-	useEffect(()=>{
+	useEffect(() => {
 		setResponsibilities(data?.acf.responsibilities)
 		setSkills(data?.acf.skills)
 		setConditions(data?.acf.conditions)
@@ -139,6 +141,8 @@ export const VacancyEditView = () => {
 	const [resultModalText, setResultModalText] = useState<string>('')
 
 	const [editForm] = Form.useForm()
+	console.log(categories)
+	console.log(categoryTitle)
 
 	if (isLoading) {
 		return (
@@ -188,8 +192,8 @@ export const VacancyEditView = () => {
 						>
 							Оставить
 						</Button>
-						<button
-							className="cursor-pointer flex items-center justify-center border-[1px] border-solid outline-0 border-[#FF5A5A] hover:border-[#FF8181] text-white rounded-[54.5px] bg-[#FF5A5A] hover:bg-[#FF8181] text-[14px] h-[40px] w-full py-[13px]"
+						<Button
+							className={`${styles.customAntButton}`}
 							onClick={async () => {
 								try {
 									await deleteVacancy(data?.id as number)
@@ -203,9 +207,10 @@ export const VacancyEditView = () => {
 									openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 								}
 							}}
+							loading={deleteVacancyLoading}
 						>
 							Удалить
-						</button>
+						</Button>
 					</div>
 				</Modal>
 			</ConfigProvider>
@@ -256,7 +261,7 @@ export const VacancyEditView = () => {
 						<ArrowIcon />
 					</button>
 					<p className="ml-[40px] font-content-font font-normal text-black text-[28px]/[33.6px]">
-						{post}
+						{post !== undefined ? '«' + post + '»' : ''}
 					</p>
 				</div>
 				{isEdit ? (
@@ -292,8 +297,13 @@ export const VacancyEditView = () => {
 					>
 						<Form.Item
 							name={'post'}
-							label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Должность</label>}
-							rules={[{ required: true, message: 'Не указана должность' }]}
+							label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">
+								Должность
+							</label>}
+							rules={[
+								{ required: true, message: 'Не указана должность' },
+								{ max: 500, message: 'Количество символов было превышено'}
+							]}
 						>
 							<Input placeholder="Ввести название"></Input>
 						</Form.Item>
@@ -305,7 +315,9 @@ export const VacancyEditView = () => {
 										Требуемый опыт работы
 									</label>
 								}
-								rules={[{ required: true, message: 'Не указана опыт' }]}
+								rules={[
+									{ required: true, message: 'Не указана опыт' }
+								]}
 							>
 								<Select
 									placeholder="Выбрать"
@@ -347,7 +359,10 @@ export const VacancyEditView = () => {
 										Заработная плата
 									</label>
 								}
-								rules={[{ required: true, message: 'Не указана зарплата' }]}
+								rules={[
+									{ required: true, message: 'Не указана зарплата' },
+									{ max: 70, message: 'Количество символов было превышено'}
+								]}
 							>
 								<Input placeholder="Ввести"></Input>
 							</Form.Item>
@@ -355,21 +370,30 @@ export const VacancyEditView = () => {
 						<Form.Item
 							name={'responsibilities'}
 							label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Задачи</label>}
-							rules={[{ required: true, message: 'Не указаны задачи' }]}
+							rules={[
+								{ required: true, message: 'Не указаны задачи' },
+								{ max: 5000, message: 'Количество символов было превышено'}
+							]}
 						>
 							<Input.TextArea autoSize className="!h-[107px]" placeholder="Ввести текст..."></Input.TextArea>
 						</Form.Item>
 						<Form.Item
 							name={'skills'}
 							label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Требования</label>}
-							rules={[{ required: true, message: 'Не указаны требования' }]}
+							rules={[
+								{ required: true, message: 'Не указаны требования' },
+								{ max: 5000, message: 'Количество символов было превышено'}
+							]}
 						>
 							<Input.TextArea autoSize className="!h-[107px]" placeholder="Ввести текст..."></Input.TextArea>
 						</Form.Item>
 						<Form.Item
 							name={'conditions'}
 							label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Условия</label>}
-							rules={[{ required: true, message: 'Не указаны условия' }]}
+							rules={[
+								{ required: true, message: 'Не указаны условия' },
+								{ max: 5000, message: 'Количество символов было превышено'}
+							]}
 						>
 							<Input.TextArea autoSize className="!h-[107px]" placeholder="Ввести текст..."></Input.TextArea>
 						</Form.Item>
@@ -400,7 +424,7 @@ export const VacancyEditView = () => {
 								name={'direction'}
 								label={
 									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
-										{categories.find(cat => cat.title === categoryTitle)?.direction ? 'Профобласть' : 'Подразделение'}
+										{categories.find(cat => cat.title === categoryTitle)?.direction ? "Подразделение" : "Профобласть"}
 									</label>
 								}
 								rules={[{ required: true, message: 'Не указана подкатегория' }]}
@@ -468,10 +492,10 @@ export const VacancyEditView = () => {
 							</div>
 							<div className="flex flex-col gap-[16px]">
 								<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-									{direction === "" ? "Подразделение" : "Профобласть"}
+									{direction ===  "false" ? "Подразделение" : "Профобласть"}
 								</p>
 								<p className="font-content-font font-normal text-black text-[18px]/[21px]">
-									{direction === "" ? subdivision : direction}
+									{direction === '' ? subdivision : direction}
 								</p>
 							</div>
 						</div>
@@ -521,6 +545,7 @@ export const VacancyEditView = () => {
 									}}
 									type="primary"
 									className="rounded-[54.5px] w-[121px]"
+									loading={editVacancyLoading}
 								>
 									Сохранить
 								</Button>

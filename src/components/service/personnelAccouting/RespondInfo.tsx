@@ -25,6 +25,7 @@ import {
 	useSendRespondToReserveMutation
 } from '../../../store/api/serviceApi'
 import { useGetCountriesQuery } from '../../../store/api/utilsApi'
+import { setChatFilter } from '../../../store/reducers/ChatFilterSlice'
 import { openChat } from '../../../store/reducers/ChatRespondStatusSlice'
 import { setRespondId } from '../../../store/reducers/CurrentRespondIdSlice'
 import { setCurrentVacancyId } from '../../../store/reducers/CurrentVacancyIdSlice'
@@ -56,10 +57,10 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 	const respondId = useAppSelector(state => state.currentResponce)
 
 	const { data: res } = useGetRespondFullInfoQuery(id_from_url)
-	const [approveRespond] = useApproveRespondMutation()
-	const [sendToArchive] = useSendRespondToArchiveMutation()
-	const [sendToReserve] = useSendRespondToReserveMutation()
-	const [getResume] = useLazyGetSeekerResumeFileQuery()
+	const [approveRespond, { isLoading: approveRespondLoading }] = useApproveRespondMutation()
+	const [sendToArchive, { isLoading: sendToArchiveLoading }] = useSendRespondToArchiveMutation()
+	const [sendToReserve, { isLoading: sendToReserveLoading }] = useSendRespondToReserveMutation()
+	const [getResume, resumeQueryStatus] = useLazyGetSeekerResumeFileQuery()
 
 	const [isRespondSentToSupervisor, setIsRespondSentToSupervisor] = useState<boolean>(
 		res?.status === 'IN_SUPERVISOR_REVIEW'
@@ -67,7 +68,9 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 	const [isRespondSentToArchive, setIsRespondSentToArchive] = useState<boolean>(res?.status === 'ARCHIVE')
 	const [isRespondSentToReserve, setIsRespondSentToReserve] = useState<boolean>(res?.status === 'IN_RESERVE')
 	const [isRespondInvited, setIsRespondInvited] = useState<boolean>(res?.status === 'INVITATION')
-	const [isRespondEmployed, setIsRespondEmployed] = useState<boolean>(res?.status === 'EMPLOYMENT_REQUEST')
+	const [isRespondEmployed, setIsRespondEmployed] = useState<boolean>(
+		res?.status === 'EMPLOYMENT_REQUEST' || res?.status === 'EMPLOYMENT'
+	)
 
 	const [resume, setResume] = useState<string>('')
 	const [resumeSize, setResumeSize] = useState<number>(0)
@@ -104,7 +107,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 		setIsRespondSentToArchive(res?.status === 'ARCHIVE')
 		setIsRespondSentToReserve(res?.status === 'IN_RESERVE')
 		setIsRespondInvited(res?.status === 'INVITATION')
-		setIsRespondEmployed(res?.status === 'EMPLOYMENT_REQUEST')
+		setIsRespondEmployed(res?.status === 'EMPLOYMENT_REQUEST' || res?.status === 'EMPLOYMENT')
 	}, [res])
 
 	useEffect(() => {
@@ -262,6 +265,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 												}
 											}}
 											disabled={isRespondSentToSupervisor || isRespondSentToReserve || isRespondSentToArchive}
+											loading={approveRespondLoading}
 											type="primary"
 											className="font-content-font font-normal text-white text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px]"
 										>
@@ -287,12 +291,14 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 												}
 											}}
 											disabled={isRespondSentToSupervisor || isRespondSentToReserve || isRespondSentToArchive}
+											loading={sendToArchiveLoading}
 											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
 										>
 											Отказать
 										</Button>
 										<Button
 											disabled={isRespondSentToSupervisor || isRespondSentToReserve || isRespondSentToArchive}
+											loading={sendToReserveLoading}
 											onClick={async () => {
 												try {
 													await sendToReserve(respondId.respondId)
@@ -314,6 +320,15 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 										</Button>
 										<Button
 											onClick={() => {
+												dispatch(
+													setChatFilter(
+														res.status === 'IN_REVIEW'
+															? 'IN_PERSONNEL_DEPT_REVIEW'
+															: res.status === 'IN_SUPERVISOR_REVIEW'
+															? 'IN_SUPERVISOR_REVIEW'
+															: 'INVITATION'
+													)
+												)
 												handleNavigate(`/services/personnelaccounting/chat/id/${chatId.id}`)
 											}}
 											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
@@ -395,6 +410,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 													openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 												}
 											}}
+											loading={sendToArchiveLoading}
 											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[257px] h-[40px] py-[8px] px-[24px] border-black"
 										>
 											Отказать
@@ -524,31 +540,37 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 										</a>
 									</div>
 								)}
-								<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
-									<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">Резюме</p>
-									<div className="bg-white rounded-[16px] shadow-custom-shadow h-[59px] w-[65%] p-[20px] flex">
-										<MyDocsSvg />
-										<p
-											className="ml-[20px] font-content-font font-normal text-black text-[16px]/[19.2px] underline cursor-pointer"
-											onClick={() => {
-												const link = document.createElement('a')
-												link.href = resume
-												link.download = 'Резюме'
-												link.click()
-											}}
-										>
-											{'Резюме ' +
-												res.userData?.lastname +
-												' ' +
-												res.userData?.firstname +
-												' ' +
-												res.userData?.middlename}
-										</p>
-										<p className="ml-auto font-content-font font-normal text-black text-[16px]/[19.2px] opacity-70">
-											{resumeSize}
-										</p>
+								{resumeQueryStatus.isSuccess && (
+									<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
+										<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">Резюме</p>
+										<div className="bg-white rounded-[16px] shadow-custom-shadow h-[59px] w-[65%] p-[20px] flex">
+											<MyDocsSvg />
+											<p
+												className="ml-[20px] font-content-font font-normal text-black text-[16px]/[19.2px] underline cursor-pointer"
+												onClick={() => {
+													const link = document.createElement('a')
+													link.href = resume
+													link.download = 'Резюме'
+													link.click()
+												}}
+											>
+												{'Резюме ' +
+													res.userData?.lastname +
+													' ' +
+													res.userData?.firstname +
+													' ' +
+													res.userData?.middlename}
+											</p>
+											<p className="ml-auto font-content-font font-normal text-black text-[16px]/[19.2px] opacity-70">
+												{Math.round(resumeSize / 1000000) > 0
+													? Math.round(resumeSize / 1000000) + ' Мб'
+													: Math.round(resumeSize / 1000) > 0
+													? Math.round(resumeSize / 1000) + ' Кб'
+													: resumeSize + ' б'}
+											</p>
+										</div>
 									</div>
-								</div>
+								)}
 							</div>
 							<hr />
 							<div className="flex flex-col gap-[24px]">
@@ -638,6 +660,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 												}
 											}}
 											disabled={isRespondSentToSupervisor || isRespondSentToReserve || isRespondSentToArchive}
+											loading={approveRespondLoading}
 											type="primary"
 											className="font-content-font font-normal text-white text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px]"
 										>
@@ -660,6 +683,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 												}
 											}}
 											disabled={isRespondSentToSupervisor || isRespondSentToReserve || isRespondSentToArchive}
+											loading={sendToArchiveLoading}
 											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
 										>
 											Отказать
@@ -678,6 +702,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 													openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 												}
 											}}
+											loading={sendToReserveLoading}
 											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
 										>
 											Отправить в резерв
@@ -703,6 +728,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 										/>
 										<Button
 											disabled={isRespondSentToArchive || isRespondInvited || isRespondEmployed}
+											loading={sendToArchiveLoading}
 											onClick={async () => {
 												try {
 													await sendToArchive({

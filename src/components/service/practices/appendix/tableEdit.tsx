@@ -4,6 +4,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useAppSelector } from '../../../../store'
 import './index.css'
 import { format, parse } from 'date-fns';
+import { t } from 'i18next'
 
 type FormInstance<T> = GetRef<typeof Form<T>>
 
@@ -119,7 +120,7 @@ export const TableEdit = ({ isSuccessDataOne,visiting, fullTable=[], setFullTabl
 		{
 			key: 'name',
 			dataIndex: 'name',
-			title: 'ФИО обучающегося',
+			title: t('fioStudent'),
 			name: 'ФИО обучающегося',
 			className: 'text-xs !p-2'
 		},
@@ -127,7 +128,7 @@ export const TableEdit = ({ isSuccessDataOne,visiting, fullTable=[], setFullTabl
 		{
 			key: 'period',
 			dataIndex: 'period',
-			title: 'Период практики',
+			title: t('period'),
 			className: 'text-xs !p-2 mobileFirst'
 		},
 		{
@@ -141,21 +142,21 @@ export const TableEdit = ({ isSuccessDataOne,visiting, fullTable=[], setFullTabl
 		{
 			key: 'specialtyName',
 			dataIndex: 'specialtyName',
-			title: 'Шифр и наименование спциальности',
+			title: t('specialtyName'),
 			className: 'text-xs !p-2',
 			
 		},
 		{
 			key: 'FIO',
 			dataIndex: 'FIO',
-			title: 'ФИО руководителя практики от Организации',
+			title: t('fi'),
 			className: 'text-xs !p-2 mobileFirst',
 			
 		},
 		{
 			key: 'FIOProf',
 			dataIndex: 'FIOProf',
-			title: 'ФИО руководителя практики от Профильной Организации',
+			title: t('fi2'),
 			className: 'text-xs !p-2 mobileFirst',
 			editable:true
 			

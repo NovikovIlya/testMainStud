@@ -40,6 +40,7 @@ import { changeStatus, changeStatusTrue, showNotification } from '../../../../st
 import { EditableCell } from './EditableCell'
 import PracticeModal from './practicalModal'
 import TableEdit from './tableEdit'
+import { t } from 'i18next'
 
 const optionMock = [
 	{ value: 'контракт', label: 'контракт' },
@@ -226,34 +227,34 @@ export const CreateRepresentation = () => {
 	const items: DescriptionsProps['items'] = [
 		{
 			key: '1',
-			label: 'Подразделение',
+			label: t('subdivision'),
 			children: fullSelectedPractise ? fullSelectedPractise.subdivision : ''
 		},
 		{
 			key: '2',
-			label: 'Наименование специальности',
+			label: t('specialtyInfo'),
 			children: fullSelectedPractise ? fullSelectedPractise.specialtyName : ''
 		},
 
 		{
 			key: '4',
-			label: 'Вид',
+			label: t('practiceKind'),
 			children: fullSelectedPractise ? fullSelectedPractise.practiceKind : ''
 		},
 		{
 			key: '5',
-			label: 'Курс',
+			label: t('course'),
 			children: fullSelectedPractise ? fullSelectedPractise.courseNumber : ''
 		},
 		{
 			key: '5',
-			label: 'Тип',
+			label: t("type"),
 			children: fullSelectedPractise ? fullSelectedPractise.practiceType : ''
 		},
 
 		{
 			key: '7',
-			label: 'Статус',
+			label: t('status'),
 			children: 'В ожидании'
 		}
 	]
@@ -628,7 +629,7 @@ export const CreateRepresentation = () => {
 								nav('/services/practices/representation')
 							}}
 						/>
-						<Typography.Text className=" text-[28px] mb-14">Добавление представления в приказ</Typography.Text>
+						<Typography.Text className=" text-[28px] mb-14">{t('addRepresentationPr')}</Typography.Text>
 					</Col>
 				</Row>
 
@@ -640,13 +641,13 @@ export const CreateRepresentation = () => {
 							current={step}
 							items={[
 								{
-									title: 'Выберите практику'
+									title: t('selectPractice')
 								},
 								{
-									title: 'Заполните данные'
+									title: t('addData')
 								},
 								{
-									title: 'Сохраните'
+									title: t('save')
 								}
 							]}
 						/>
@@ -663,7 +664,7 @@ export const CreateRepresentation = () => {
 										okText="Да"
 										cancelText="Нет"
 									>
-										<Button>Изменить практику</Button>
+										<Button>{t('changePractice')}</Button>
 									</Popconfirm>
 								) : (
 									<Button onClick={showModalOne}>Выбрать практику</Button>
@@ -682,10 +683,10 @@ export const CreateRepresentation = () => {
 								<Radio.Group onChange={onChange} value={value}>
 									<Space direction="vertical">
 										<Radio value={1} onClick={() => setVisiting(false)}>
-											Невыездная практика
+											{t("nonVisiting")}
 										</Radio>
 										<Radio value={2} onClick={() => setVisiting(true)}>
-											Выездная практика
+											{t('visiting')}
 										</Radio>
 									</Space>
 								</Radio.Group>
@@ -693,7 +694,7 @@ export const CreateRepresentation = () => {
 						</Row>
 						<Row className="items-center flex gap-2">
 							<Col>
-								<span>Где будет проходить практика</span>
+								<span>{t('wherePlace')}</span>
 							</Col>
 							<Col span={3}>
 								<Select
@@ -773,7 +774,7 @@ export const CreateRepresentation = () => {
 												sendData()
 											}}
 										>
-											Отправить на согласование
+											{t('SubmitForApproval')}
 										</Button>
 									</Space>
 								</Col>
@@ -785,7 +786,7 @@ export const CreateRepresentation = () => {
 												sendDataTwo()
 											}}
 										>
-											Сохранить со статусом "Новый"
+											{t('SaveWithStatus')}
 										</Button>
 									</Space>
 								</Col>

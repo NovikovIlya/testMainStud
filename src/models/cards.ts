@@ -22,4 +22,5 @@ export type week =
         positionImage?: string
         isRounded?: boolean,
         className?:any,
+        isLink?:boolean
     }

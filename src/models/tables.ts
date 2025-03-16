@@ -1,6 +1,7 @@
 import { Form, GetRef, TableProps } from "antd";
 
 export interface Item {
+    isBlocked: any;
     key: string;
     name: string;
     age: string;
@@ -18,6 +19,7 @@ export interface Item {
     dataIndex: keyof Item;
     record: Item;
     handleSave: (record: Item) => void;
+    inputType?: string;
   }
 
   export interface DataType {

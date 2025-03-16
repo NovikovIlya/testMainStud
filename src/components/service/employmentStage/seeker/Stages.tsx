@@ -7,7 +7,7 @@ import { useLocation } from 'react-router-dom'
 import { useAppSelector } from '../../../../store'
 import { useLazyGetEmploymentDataQuery, useLazyGetEmploymentDocsQuery } from '../../../../store/api/serviceApi'
 import { setAllData } from '../../../../store/reducers/EmploymentDataSlice'
-import { setAllProgress } from '../../../../store/reducers/EmploymentProgressSlice'
+import { setAllProgress, setStageProgressAsReady } from '../../../../store/reducers/EmploymentProgressSlice'
 import { setDocs } from '../../../../store/reducers/EmploymentSeekerDocsSlice'
 
 import { EmplDocAttachment } from './EmplDocAttachment'
@@ -28,6 +28,7 @@ export const Stages = () => {
 	const vacancyId = parseInt(pathname.substring(pathname.substring(0, pathname.lastIndexOf('/')).lastIndexOf('/') + 1))
 
 	const { currentStage } = useAppSelector(state => state.currentEmploymentStage)
+	// TODO обсудить возможность закидывать номер текущего этапа в url
 	const { docs } = useAppSelector(state => state.employmentSeekerDocs)
 	const { empData } = useAppSelector(state => state.employmentData)
 
@@ -77,9 +78,10 @@ export const Stages = () => {
 				})
 			)
 		)
+		dispatch(setStageProgressAsReady('FIRST'))
 	}, [empData])
 
-	if (currentStage === 0 && (empDataStatus.isFetching || empDataStatus.isLoading)) {
+	if (currentStage === '' && (empDataStatus.isFetching || empDataStatus.isLoading)) {
 		return (
 			<>
 				<div className="w-full h-full flex items-center">
@@ -106,8 +108,15 @@ export const Stages = () => {
 						(empData.status === 'VERIFYING' || empData.status === 'ACCEPTED') && 'pointer-events-none'
 					}`}
 				>
-					{currentStage === 1 && <EmplMedInvite respondId={respondId} stageId={1} stageName="FIRST" />}
-					{currentStage === 2 && <EmplDocAttachment respondId={respondId} stageId={2} stageName="SECOND" />}
+					{currentStage === '' && (
+						<div className="w-full h-full flex flex-col">
+							<p className="text-centerfont-content-font text-[20px]/[20px] text-black font-normal opacity-60 mt-[15%] mx-auto">
+								Выберите этап, который вы бы хотели пройти
+							</p>
+						</div>
+					)}
+					{/* {currentStage === 1 && <EmplMedInvite respondId={respondId} stageId={1} stageName="FIRST" />} */}
+					{currentStage === 'SECOND' && <EmplDocAttachment respondId={respondId} stageId={2} stageName="SECOND" />}
 					{/* {currentStage === 3 && (
 						<EmplWorkConditions
 							respondId={respondId}
@@ -115,10 +124,10 @@ export const Stages = () => {
 							stageName="THIRD"
 						/>
 					)} */}
-					{currentStage === 3 && <EmplMedExam respondId={respondId} stageId={3} stageName="FOURTH" />}
-					{currentStage === 4 && <EmplInstruction respondId={respondId} stageId={4} stageName="FIFTH" />}
-					{currentStage === 5 && <EmplRequisites respondId={respondId} stageId={5} stageName="SIXTH" />}
-					{currentStage === 6 && <EmplSend respondId={respondId} stageId={7} stageName="SEVENTH" />}
+					{currentStage === 'FOURTH' && <EmplMedExam respondId={respondId} stageId={3} stageName="FOURTH" />}
+					{currentStage === 'FIFTH' && <EmplInstruction respondId={respondId} stageId={4} stageName="FIFTH" />}
+					{currentStage === 'SIXTH' && <EmplRequisites respondId={respondId} stageId={5} stageName="SIXTH" />}
+					{currentStage === 'SEVENTH' && <EmplSend respondId={respondId} stageId={7} stageName="SEVENTH" />}
 				</div>
 			</div>
 		</>

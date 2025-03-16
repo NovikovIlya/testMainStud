@@ -30,9 +30,9 @@ export const NavMyPractices = () => {
 	const items: any = [
 		{
 			key: 'sub1',
-			label: 'Практики',
+			label: t('practices'),
 			icon: <PracticesSvg />,
-			children: [{ key: 'myPractice', label: 'Мои практики' }]
+			children: [{ key: 'myPractice', label: t('myPractices') }]
 		}
 	]
 

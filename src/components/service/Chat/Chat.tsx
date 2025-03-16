@@ -125,6 +125,13 @@ export const Chat = () => {
 					</div>
 				)}
 				{pathname.match('services/myresponds/chat/id/*') && <ChatPage />}
+				{pathname === '/services/myresponds/chat' && (
+					<div className="w-full h-full flex flex-col">
+						<p className="text-centerfont-content-font text-[20px]/[20px] text-black font-normal opacity-60 my-auto mx-auto">
+							Выберите, кому бы вы хотели написать
+						</p>
+					</div>
+				)}
 				{pathname.includes('/services/myresponds/chat/vacancyview') && <VacancyView type="CHAT" />}
 			</div>
 		</>

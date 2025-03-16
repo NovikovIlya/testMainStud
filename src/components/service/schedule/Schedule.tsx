@@ -133,6 +133,12 @@ export const Schedule = () => {
 				>
 					{t('saturday')}
 				</Radio.Button>
+				<Radio.Button
+					className="rounded-full h-full flex items-center text-base bg-transparent"
+					value="sunday"
+				>
+					{t('sunday')}
+				</Radio.Button>
 			</Radio.Group>
 			<div className="my-10  flex gap-12">
 				<Table

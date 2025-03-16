@@ -120,7 +120,7 @@ const AccessibilityHelper: React.FC<AccessibilityHelperProps> = forwardRef(({ la
   }, [activeOptions]);
 
   return (
-    <div  className={` fixed ${activeText==='18px' ? 'top-[748px]': activeText==='20px'  ? 'top-[810px]'  : activeText==='15px'  ?  'top-[645px]' : 'top-[678px]' } right-20 z-5000 `}>
+    <div  className={` absolute top-full left-[340px] mt-[600px] z-[5000] `}>
       {/* <button onClick={toggleHelper} className="bg-blue-500 text-white p-2 rounded-full">
         <KeyOutlined className="h-6 w-6" />
       </button> */}

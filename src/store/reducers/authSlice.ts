@@ -12,6 +12,8 @@ const initialState: any = {
 	isCollapsed: localStorage.getItem('isCollapsed') === 'true',
 	activeOptions: localStorage.getItem('activeOptions') ? localStorage.getItem('activeOptions')?.split(',') : [],
 	isEditTableScheduleTeacher: false,
+	
+
 }
 
 const authSlice = createSlice({
@@ -47,6 +49,7 @@ const authSlice = createSlice({
 		setEdit: state => {
 			state.edit = !state.edit
 		},
+		
 		setRole: (state, action: PayloadAction<string>) => {
 			if (state.user) state.user.roles[0].type = action.payload
 		},
@@ -72,7 +75,7 @@ const authSlice = createSlice({
 	}
 })
 
-export const { logOut, setCredentials, setEdit, setRole,setSubRole, setIsCollapsed,setActiveOptions ,setActiveOptionsReset,setIsEditTableScheduleTeacher} = authSlice.actions
+export const { logOut,setCredentials, setEdit, setRole,setSubRole, setIsCollapsed,setActiveOptions ,setActiveOptionsReset,setIsEditTableScheduleTeacher} = authSlice.actions
 
 export default authSlice.reducer
 

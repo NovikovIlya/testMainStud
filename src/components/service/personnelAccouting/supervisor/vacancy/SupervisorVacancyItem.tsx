@@ -6,10 +6,15 @@ import { useNavigate } from 'react-router-dom'
 import { DeleteSvg } from '../../../../../assets/svg/DeleteSvg'
 import { ModalOkSvg } from '../../../../../assets/svg/ModalOkSvg'
 import { WarningModalIconSvg } from '../../../../../assets/svg/WarningModalIconSvg'
-import { useLazyGetVacancyViewQuery, useRequestDeleteVacancyMutation } from '../../../../../store/api/serviceApi'
+import {
+	useLazyGetAllSupervisorRequestsQuery,
+	useLazyGetVacancyViewQuery,
+	useRequestDeleteVacancyMutation
+} from '../../../../../store/api/serviceApi'
 import { setCurrentVacancy } from '../../../../../store/reducers/CurrentVacancySlice'
 import { VacancyItemType } from '../../../../../store/reducers/type'
 import { useAlert } from '../../../../../utils/Alert/AlertMessage'
+import styles from '../../../../../utils/deleteOverwriteAntButton.module.css'
 
 export default function VacancyItem(props: VacancyItemType) {
 	const { openAlert } = useAlert()
@@ -18,9 +23,11 @@ export default function VacancyItem(props: VacancyItemType) {
 	const navigate = useNavigate()
 	const [isModalOpen, setModalOpen] = useState(false)
 	const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
+	const [successModalText, setSuccessModalText] = useState<string>('')
 	const dispatch = useDispatch()
 
-	const [requestDeleteVacancy] = useRequestDeleteVacancyMutation()
+	const [requestDeleteVacancy, { isLoading: deleteRequestLoading }] = useRequestDeleteVacancyMutation()
+	const [getAllRequests] = useLazyGetAllSupervisorRequestsQuery()
 
 	return (
 		<>
@@ -44,11 +51,15 @@ export default function VacancyItem(props: VacancyItemType) {
 				>
 					<div className="flex flex-col">
 						<div className="w-full flex justify-center">
-							<ModalOkSvg />
+							{successModalText ===
+							'Ваша заявка на удаление вакансии успешно отправлена. Вакансия будет удалена после рассмотрения заявки кадрами.' ? (
+								<ModalOkSvg />
+							) : (
+								<WarningModalIconSvg />
+							)}
 						</div>
 						<p className="font-content-font font-normal text-black text-[16px]/[20px] text-center mt-[22px]">
-							Ваша заявка на удаление вакансии успешно отправлена. Вакансия будет удалена после рассмотрения заявки
-							кадрами.
+							{successModalText}
 						</p>
 						<Button
 							className="rounded-[40px] mt-[40px]"
@@ -96,25 +107,41 @@ export default function VacancyItem(props: VacancyItemType) {
 							>
 								Оставить
 							</Button>
-							<button
-								className="cursor-pointer flex items-center justify-center border-[1px] border-solid outline-0 border-[#FF5A5A] hover:border-[#FF8181] text-white rounded-[54.5px] bg-[#FF5A5A] hover:bg-[#FF8181] text-[14px] h-[40px] w-full py-[13px]"
+							<Button
+								className={`${styles.customAntButton}`}
 								onClick={async () => {
 									try {
-										await requestDeleteVacancy(props.id)
+										await getAllRequests('DELETE')
 											.unwrap()
-											.then(() => {
-												setModalOpen(false)
-												setIsSuccessModalOpen(true)
+											.then(requests => {
+												let alreadyRequest = requests.find(req => {
+													return req.vacancy.id === props.id && req.status === 'VERIFYING'
+												})
+												alreadyRequest
+													? (setModalOpen(false),
+													  setSuccessModalText(
+															'Вы уже отправляли заявку на удаление данной вакансии. Она будет удалена, как только ваша заявка будет рассмотрена.'
+													  ),
+													  setIsSuccessModalOpen(true))
+													: requestDeleteVacancy(props.id)
+															.unwrap()
+															.then(() => {
+																setModalOpen(false)
+																setSuccessModalText(
+																	'Ваша заявка на удаление вакансии успешно отправлена. Вакансия будет удалена после рассмотрения заявки кадрами.'
+																)
+																setIsSuccessModalOpen(true)
+															})
 											})
-										setIsSuccessModalOpen(true)
 									} catch (error: any) {
 										let errorStr = error.status + ' ' + error.data.message
 										openAlert({ type: 'error', text: errorStr })
 									}
 								}}
+								loading={deleteRequestLoading}
 							>
 								Удалить
-							</button>
+							</Button>
 						</div>
 					</div>
 				</Modal>

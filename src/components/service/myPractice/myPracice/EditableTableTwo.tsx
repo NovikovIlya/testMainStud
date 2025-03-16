@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import uuid from 'react-uuid'
 import { DeleteRedSvg } from '../../../../assets/svg/DeleteRedSvg';
 import   './diaryStyle.module.scss'
+import { t } from 'i18next';
 
 type FormInstance<T> = GetRef<typeof Form<T>>;
 
@@ -114,9 +115,9 @@ const saveDate = async (date:any) => {
       <Form.Item
         style={{ margin: 0 }}
         name={dataIndex}
-        className='w-[200px] lg:w-[300px]'
+        className='w-[200px] lg:w-[300px] '
       >
-        <Input  ref={inputRef} onPressEnter={save} onBlur={save}  />
+        <Input maxLength={40}  ref={inputRef} onPressEnter={save} onBlur={save}  />
       </Form.Item>
     ) 
     :(  <div
@@ -177,7 +178,7 @@ const EditableTableTwo = ({setShow,dataSource,setDataSource,setIsDisabled}:any) 
         render: (_, __, index) => index + 1 
     },
     {
-      title: 'Содержание выполненной работы',
+      title: t('sod'),
       dataIndex: 'description',
       width: '30%',
       editable: true,
@@ -185,7 +186,7 @@ const EditableTableTwo = ({setShow,dataSource,setDataSource,setIsDisabled}:any) 
     
     },
     {
-      title: 'Период выполнения',
+      title: t('period'),
       dataIndex: 'period',
       editable: true,
       render: (_: any, record: any) => <div className={'flex items-center gap-3 h-8 mobileFirst min-w-60'}>
@@ -198,9 +199,9 @@ const EditableTableTwo = ({setShow,dataSource,setDataSource,setIsDisabled}:any) 
       dataIndex: 'operation',
       render: (_, record) =>
         dataSource.length >= 1 ? (
-          <Popconfirm title="Вы действительно хотите удалить?" onConfirm={() => handleDelete(record.key)}>
-            <a><DeleteRedSvg /></a>
-          </Popconfirm>
+         
+            <a onClick={() => handleDelete(record.key)}><DeleteRedSvg /></a>
+         
         ) : null,
     },
   ];
@@ -268,7 +269,7 @@ const EditableTableTwo = ({setShow,dataSource,setDataSource,setIsDisabled}:any) 
       />
       <div className='flex items-center  flex-col mt-4 animate-pulse w-fit  sm:w-auto'>
         <div className='rounded-full mb-1 flex  w-[40px] h-[40px] justify-center  bg-[#3073d7] text-white text-center items-center text-xl cursor-pointer' onClick={handleAdd}>+</div>
-        <div className='text-center mt1'>Добавить <br></br> работу</div>
+        <div className='text-center mt1'>{t('add')} <br></br> </div>
       </div>
     </div>
 

@@ -24,12 +24,14 @@ import {
 	useLazyGetSeekerResumeFileQuery
 } from '../../../store/api/serviceApi'
 import { useGetCountriesQuery } from '../../../store/api/utilsApi'
+import { setChatFilter } from '../../../store/reducers/ChatFilterSlice'
 import { openChat } from '../../../store/reducers/ChatRespondStatusSlice'
 import { setRespondId } from '../../../store/reducers/CurrentRespondIdSlice'
 import { setCurrentVacancyId } from '../../../store/reducers/CurrentVacancyIdSlice'
 import { setCurrentVacancyName } from '../../../store/reducers/CurrentVacancyNameSlice'
 import { setChatId } from '../../../store/reducers/chatIdSlice'
 import { useAlert } from '../../../utils/Alert/AlertMessage'
+import styles from '../../../utils/deleteOverwriteAntButton.module.css'
 import { NocircleArrowIcon } from '../jobSeeker/NoCircleArrowIcon'
 
 import { ApproveRespondForm } from './ApproveRespondForm'
@@ -59,10 +61,10 @@ export const ReserveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 	const { openAlert } = useAlert()
 
 	//const { data: resume } = useGetSeekerResumeFileQuery(respondId.respondId)
-	const [getResume] = useLazyGetSeekerResumeFileQuery()
+	const [getResume, resumeQueryStatus] = useLazyGetSeekerResumeFileQuery()
 	const { refetch } = useGetReservedResponcesQuery('все')
 	const [approveRespond] = useApproveReservedRespondMutation()
-	const [deleteRespond] = useDeleteReserveRespondMutation()
+	const [deleteRespond, { isLoading: deleteRespondLoading }] = useDeleteReserveRespondMutation()
 
 	const [isRespondSentToSupervisor, setIsRespondSentToSupervisor] = useState<boolean>(
 		res?.status === 'IN_SUPERVISOR_REVIEW'
@@ -168,8 +170,8 @@ export const ReserveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 								>
 									Оставить
 								</Button>
-								<button
-									className="cursor-pointer flex items-center justify-center border-[1px] border-solid outline-0 border-[#FF5A5A] hover:border-[#FF8181] text-white rounded-[54.5px] bg-[#FF5A5A] hover:bg-[#FF8181] text-[14px] h-[40px] w-full py-[13px]"
+								<Button
+									className={`${styles.customAntButton}`}
 									onClick={async () => {
 										try {
 											await deleteRespond(respondId.respondId)
@@ -184,9 +186,10 @@ export const ReserveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 											openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 										}
 									}}
+									loading={deleteRespondLoading}
 								>
 									Удалить
-								</button>
+								</Button>
 							</div>
 						</Modal>
 					</ConfigProvider>
@@ -324,6 +327,7 @@ export const ReserveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 										<Button
 											onClick={() => {
 												dispatch(setCurrentVacancyName(res.oldVacancyName ? res.oldVacancyName : res.desiredJob))
+												dispatch(setChatFilter('IN_RESERVE'))
 												handleNavigate(`/services/personnelaccounting/chat/id/${chatId.id}`)
 											}}
 											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
@@ -407,6 +411,26 @@ export const ReserveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 							</div>
 							<hr />
 							<div className="flex flex-col gap-[24px]">
+								<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">Образование</p>
+								<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
+									{res.educations.map(edu => (
+										<>
+											<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">{edu.endYear}</p>
+											<div className="flex flex-col gap-[8px]">
+												<p className="font-content-font font-bold text-black text-[16px]/[19.2px]">
+													{edu.nameOfInstitute + ', ' + edu.country}
+												</p>
+												<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
+													{edu.speciality === null ? '' : edu.speciality + ', '}
+													{edu.educationLevel}
+												</p>
+											</div>
+										</>
+									))}
+								</div>
+							</div>
+							<hr />
+							<div className="flex flex-col gap-[24px]">
 								<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">Опыт работы</p>
 								{res.respondData.portfolio.workExperiences.length === 0 ? (
 									<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
@@ -452,26 +476,37 @@ export const ReserveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 										</a>
 									</div>
 								)}
-							</div>
-							<hr />
-							<div className="flex flex-col gap-[24px]">
-								<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">Образование</p>
-								<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
-									{res.educations.map(edu => (
-										<>
-											<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">{edu.endYear}</p>
-											<div className="flex flex-col gap-[8px]">
-												<p className="font-content-font font-bold text-black text-[16px]/[19.2px]">
-													{edu.nameOfInstitute + ', ' + edu.country}
-												</p>
-												<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-													{edu.speciality === null ? '' : edu.speciality + ', '}
-													{edu.educationLevel}
-												</p>
-											</div>
-										</>
-									))}
-								</div>
+								{resumeQueryStatus.isSuccess && (
+									<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
+										<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">Резюме</p>
+										<div className="bg-white rounded-[16px] shadow-custom-shadow h-[59px] w-[65%] p-[20px] flex">
+											<MyDocsSvg />
+											<p
+												className="ml-[20px] font-content-font font-normal text-black text-[16px]/[19.2px] underline cursor-pointer"
+												onClick={() => {
+													const link = document.createElement('a')
+													link.href = resume
+													link.download = 'Резюме'
+													link.click()
+												}}
+											>
+												{'Резюме ' +
+													res.userData?.lastname +
+													' ' +
+													res.userData?.firstname +
+													' ' +
+													res.userData?.middlename}
+											</p>
+											<p className="ml-auto font-content-font font-normal text-black text-[16px]/[19.2px] opacity-70">
+												{Math.round(resumeSize / 1000000) > 0
+													? Math.round(resumeSize / 1000000) + ' Мб'
+													: Math.round(resumeSize / 1000) > 0
+													? Math.round(resumeSize / 1000) + ' Кб'
+													: resumeSize + ' б'}
+											</p>
+										</div>
+									</div>
+								)}
 							</div>
 							<hr />
 							<div className="flex flex-col gap-[24px]">
@@ -577,6 +612,7 @@ export const ReserveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 										<Button
 											onClick={() => {
 												dispatch(setCurrentVacancyName(res.oldVacancyName ? res.oldVacancyName : res.desiredJob))
+												dispatch(setChatFilter('IN_RESERVE'))
 												handleNavigate(`/services/personnelaccounting/chat/id/${chatId.id}`)
 											}}
 											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"

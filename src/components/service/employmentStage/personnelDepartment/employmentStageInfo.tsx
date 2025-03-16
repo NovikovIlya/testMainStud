@@ -107,7 +107,7 @@ export const EmploymentStageInfo = ( ) => {
 								</span>
 					</button>
 				</div>
-				<h1 className="font-normal text-[28px]/[28px]">{employmentSeekerName} sdfsdfsda</h1>
+				<h1 className="font-normal text-[28px]/[28px]">{employmentSeekerName}</h1>
 				<Button
 					type="default"
 					className="max-w-[102px] bg-[#F5F8FB] mt-[20px] py-[8px] px-[24px] text-[#333333] border-[#333333] border-[1px] rounded-[54.5px] text-[16px]"

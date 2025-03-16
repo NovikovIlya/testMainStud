@@ -23,7 +23,7 @@ export const Registration: FC<IRegProps> = ({ changeEmail, email }) => {
 	const { t } = useTranslation()
 	const [check, setCheck] = useState(false)
 
-	const [register] = useRegisterMutation()
+	const [register,{data:dataRegister,isLoading}] = useRegisterMutation()
 
 	const onFinish = async (values: IRegForm) => {
 		try {
@@ -42,21 +42,21 @@ export const Registration: FC<IRegProps> = ({ changeEmail, email }) => {
 	}
 
 	return (
-		<div className="flex flex-col items-center">
+		<div className="flex flex-col items-center min-h-screen">
 			<BackMainPage />
-			<div className="flex flex-row justify-between gap-24 text-base max-xl:gap-4 max-lg:flex-col  max-lg:items-center">
+			<div className="flex flex-row justify-between gap-24 text-base max-xl:gap-4 max-lg:flex-col  max-lg:items-center min-h-screen items-center">
 				<Form
 					name="login"
-					className="max-w-[400px] p-2 max-sm:min-w-[345px] max-[321px]:min-w-[300px]"
+					className="max-w-[400px] p-2 max-sm:min-w-[345px] max-[321px]:min-w-[300px] rounded-lg shadow-[0_2px_22px_-4px_rgba(93,96,127,0.2)] p-6 mb-4"
 					initialValues={{ remember: true }}
 					onFinish={onFinish}
 				>
-					<Title className="mb-[20px] text-start text-2xl font-bold">
+					<Title level={3} className="mb-[20px] text-start text-2xl font-bold">
 						{t('registration')}
 					</Title>
 					<Inputs email={email} error={error} changeEmail={changeEmail} />
 					<Password error={error} />
-					<Buttons check={check} setCheck={setCheck} />
+					<Buttons isLoading={isLoading} check={check} setCheck={setCheck} />
 				</Form>
 				<div className="flex items-start mt-10">
 					<img

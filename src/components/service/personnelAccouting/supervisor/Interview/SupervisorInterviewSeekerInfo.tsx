@@ -33,11 +33,12 @@ export const SupervisorInterviewSeekerInfo = () => {
 	}
 
 	const { data: interviews = [], isLoading : interviewDataLoading } = useGetSupervisorInterviewQuery()
-	console.log(interviews)
-	const foundInterview = interviews.find(interview => interview.id === id_from_url)
 
+	const foundInterview = interviews.find(interview => interview.respondId === id_from_url)
+	console.log(interviews)
 	const format = foundInterview?.format || ''
 	const time = foundInterview?.time
+	console.log(time)
 
 	const createTimeFormatted = (time: string) => {
 		if (time) {
@@ -125,6 +126,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 
 	const Component = (props: ComponentProps) => {
 		const targetDate = new Date(props.time)
+		console.log(props.time)
 		const now = new Date()
 		const difference = targetDate.getTime() - now.getTime()
 		let isInterviewStarted: boolean = false

@@ -61,14 +61,14 @@ export default function Catalog() {
 						allData({
 							name: user.firstname,
 							surName: user.lastname,
-							patronymic: user.middlename,
+							patronymic: user.middleName,
 							phone: user.phone,
 							email: user.email,
 							birthDay: user.birthday,
 							gender: info.gender,
 							countryId: info.countryId,
 							isPatronymicSet:
-								user.middlename === null || user.middlename === undefined || user.middlename === '' ? false : true,
+								user.middleName === null || user.middleName === undefined || user.middleName === '' ? false : true,
 							isBirthDaySet:
 								user.birthday === null || user.birthday === undefined || user.birthday === '' ? false : true,
 							isGenderSet: info.gender === null || info.gender === undefined ? false : true
@@ -111,7 +111,7 @@ export default function Catalog() {
 				})
 					.unwrap()
 					.then(res => {
-						setPreviews(res)
+						setPreviews(res.content)
 						setBlockPageAddition(false)
 					})
 			} else {
@@ -122,7 +122,7 @@ export default function Catalog() {
 				})
 					.unwrap()
 					.then(res => {
-						setPreviews(res)
+						setPreviews(res.content)
 						setBlockPageAddition(false)
 					})
 			}
@@ -135,7 +135,7 @@ export default function Catalog() {
 				})
 					.unwrap()
 					.then(res => {
-						setPreviews(prev => [...prev, ...res])
+						setPreviews(prev => [...prev, ...res.content])
 						setBlockPageAddition(false)
 					})
 			} else {
@@ -146,7 +146,7 @@ export default function Catalog() {
 				})
 					.unwrap()
 					.then(res => {
-						setPreviews(prev => [...prev, ...res])
+						setPreviews(prev => [...prev, ...res.content])
 						setBlockPageAddition(false)
 					})
 			}

@@ -526,3 +526,13 @@ export type SupervisorRequestType = {
 	action: 'CREATE' | 'UPDATE' | 'DELETE'
 	status: string
 }
+
+export type PageableType<ContentType> = {
+	content: ContentType[]
+	page: {
+		size: number
+		number: number
+		totalElements: number
+		totalPages: number
+	}
+}

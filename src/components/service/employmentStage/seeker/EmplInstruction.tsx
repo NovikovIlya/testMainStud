@@ -124,7 +124,7 @@ export const EmplInstruction = (props: { respondId: number; stageId: number; sta
 					type="primary"
 					className="rounded-[54.5px] mt-[40px] w-[131px]"
 					onClick={() => {
-						dispatch(setStageProgressAsReady(props.stageId))
+						dispatch(setStageProgressAsReady(props.stageName))
 					}}
 				>
 					Я прошёл тест

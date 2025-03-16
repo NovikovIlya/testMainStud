@@ -13,15 +13,16 @@ import { setCurrentVacancyId } from '../../../store/reducers/CurrentVacancyIdSli
 import { setCurrentVacancyName } from '../../../store/reducers/CurrentVacancyNameSlice'
 import { setChatId } from '../../../store/reducers/chatIdSlice'
 import { RespondItemType, respondStatus } from '../../../store/reducers/type'
-import {useAlert} from "../../../utils/Alert/AlertMessage";
-import styles from "../../../utils/deleteOverwriteAntButton.module.css";
+import { useAlert } from '../../../utils/Alert/AlertMessage'
+import styles from '../../../utils/deleteOverwriteAntButton.module.css'
 
-export const RespondItem = (props: RespondItemType & { refetch: Function }) => {
+export const RespondItem = (props: RespondItemType) => {
 	const { openAlert } = useAlert()
 
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
 	const [isModalOpen, setModalOpen] = useState(false)
+	const [status, setStatus] = useState<string>(props.status)
 	const [deleteVacancy, deleteResult] = useDeleteVacancyRespondMutation()
 
 	const {
@@ -100,7 +101,7 @@ export const RespondItem = (props: RespondItemType & { refetch: Function }) => {
 										.unwrap()
 										.then(() => {
 											setModalOpen(false)
-											props.refetch()
+											setStatus('отказано')
 										})
 									openAlert({ type: 'success', text: 'Отклик успешно удален' })
 								} catch (error: any) {
@@ -119,17 +120,17 @@ export const RespondItem = (props: RespondItemType & { refetch: Function }) => {
 				<p className="w-[25%]">{props.name ? props.name : props.desiredJob}</p>
 				<p className="ml-[5%] w-[8%]">{props.respondDate.split('-').reverse().join('.')}</p>
 				<p className="ml-[2%] w-[25%]">
-					{props.status === respondStatus[respondStatus.IN_PERSONNEL_DEPT_REVIEW]
+					{status === respondStatus[respondStatus.IN_PERSONNEL_DEPT_REVIEW]
 						? 'на рассмотрении у HR'
-						: props.status === respondStatus[respondStatus.IN_SUPERVISOR_REVIEW]
+						: status === respondStatus[respondStatus.IN_SUPERVISOR_REVIEW]
 						? 'на рассмотрении у руководителя'
-						: props.status === respondStatus[respondStatus.INVITATION]
+						: status === respondStatus[respondStatus.INVITATION]
 						? 'приглашение'
-						: props.status === respondStatus[respondStatus.IN_RESERVE]
+						: status === respondStatus[respondStatus.IN_RESERVE]
 						? 'отказано'
-						: props.status === respondStatus[respondStatus.EMPLOYMENT_REQUEST]
+						: status === respondStatus[respondStatus.EMPLOYMENT_REQUEST]
 						? 'приглашение'
-						: props.status === respondStatus[respondStatus.EMPLOYMENT]
+						: status === respondStatus[respondStatus.EMPLOYMENT]
 						? 'трудоустройство'
 						: 'отказано'}
 				</p>

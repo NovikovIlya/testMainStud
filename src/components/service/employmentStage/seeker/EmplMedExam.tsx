@@ -32,10 +32,10 @@ export const EmplMedExam = (props: { respondId: number; stageId: number; stageNa
 			}
 			if (foundStage.documents.length === docs.filter(doc => doc.employmentStageType === props.stageName).length) {
 				console.log('Все файлы на данном этапе загружены')
-				dispatch(setStageProgressAsReady(props.stageId))
+				dispatch(setStageProgressAsReady(props.stageName))
 			} else {
 				console.log('Какого-то из файлов не хватает')
-				dispatch(setStageProgressAsFilling(props.stageId))
+				dispatch(setStageProgressAsFilling(props.stageName))
 			}
 		}
 	}, [empData])
@@ -107,7 +107,7 @@ export const EmplMedExam = (props: { respondId: number; stageId: number; stageNa
 							updateDocuments(foundStage.id)
 								.unwrap()
 								.then(() => {
-									dispatch(setStageProgressAsReady(props.stageId))
+									dispatch(setStageProgressAsReady(props.stageName))
 								})
 						}}
 					>

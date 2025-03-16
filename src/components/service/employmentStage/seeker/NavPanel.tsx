@@ -8,14 +8,14 @@ import { setStageProgressAsReady } from '../../../../store/reducers/EmploymentPr
 import { NavPanelElement } from './NavPanelElement'
 
 export const NavPanel = (props: { type: 'SEEKER' | 'SUPERVISOR' }) => {
-	const stages: { id: number; text: string }[] = [
+	const stages: { id: number; text: string; type: string }[] = [
 		// { id: 1, text: 'Направление на мед. осмотр' },
-		{ id: 2, text: 'Прикрепление документов' },
+		{ id: 2, text: 'Прикрепление документов', type: 'SECOND' },
 		// { id: 3, text: 'Трудовые условия' },
-		{ id: 3, text: 'Медицинский осмотр' },
-		{ id: 4, text: 'Инструктаж' },
-		{ id: 5, text: 'Реквизиты' },
-		{ id: 6, text: 'Отправка' }
+		{ id: 3, text: 'Медицинский осмотр', type: 'FOURTH' },
+		{ id: 4, text: 'Инструктаж', type: 'FIFTH' },
+		{ id: 5, text: 'Реквизиты', type: 'SIXTH' },
+		{ id: 6, text: 'Отправка', type: 'SEVENTH' }
 	]
 
 	const { empData } = useAppSelector(state => state.employmentData)
@@ -31,7 +31,7 @@ export const NavPanel = (props: { type: 'SEEKER' | 'SUPERVISOR' }) => {
 				check({ testStageId: foundStage.id })
 					.unwrap()
 					.then(res => {
-						res.testPassed === true && dispatch(setStageProgressAsReady(foundStage?.id!))
+						res.testPassed === true && dispatch(setStageProgressAsReady(foundStage?.type!))
 					})
 		}, 5000)
 		return () => {

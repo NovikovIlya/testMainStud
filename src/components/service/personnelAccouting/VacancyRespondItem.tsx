@@ -166,10 +166,11 @@ export const VacancyRespondItem = (
 									? 'на рассмотрении у отдела кадров'
 									: props.status === respondStatus[respondStatus.IN_SUPERVISOR_REVIEW]
 									? 'на рассмотрении'
-									: props.status === respondStatus[respondStatus.INVITATION]
+									: props.status === respondStatus[respondStatus.INVITATION] ||
+									  props.status === respondStatus[respondStatus.EMPLOYMENT_REQUEST]
 									? 'приглашение'
-									: props.status === respondStatus[respondStatus.REJECTED]
-									? 'отклонено'
+									: props.status === respondStatus[respondStatus.ARCHIVE]
+									? 'отказано'
 									: 'на рассмотрении'}
 							</p>
 						)}
@@ -180,9 +181,7 @@ export const VacancyRespondItem = (
 						dispatch(setCurrentResponce(props.id))
 						props.itemType === 'PERSONNEL_DEPARTMENT'
 							? navigate(`services/personnelaccounting/responds/fullinfo/${props.id}`)
-							: navigate(
-									`services/personnelaccounting/supervisor/responds/fullinfo/${props.id}`
-							  )
+							: navigate(`services/personnelaccounting/supervisor/responds/fullinfo/${props.id}`)
 					}}
 					className="ml-auto max-w-[15%] font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black"
 				>

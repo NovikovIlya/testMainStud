@@ -3,14 +3,8 @@ import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-import {
-	useGetChatIdByRespondIdQuery,
-	useLazyGetEmploymentDataQuery
-} from '../../../../store/api/serviceApi'
-import {
-	closeChat,
-	openChat
-} from '../../../../store/reducers/ChatRespondStatusSlice'
+import { useGetChatIdByRespondIdQuery, useLazyGetEmploymentDataQuery } from '../../../../store/api/serviceApi'
+import { closeChat, openChat } from '../../../../store/reducers/ChatRespondStatusSlice'
 import { setStage } from '../../../../store/reducers/CurrentEmploymentStage'
 import { setRespondId } from '../../../../store/reducers/CurrentRespondIdSlice'
 import { setCurrentVacancyId } from '../../../../store/reducers/CurrentVacancyIdSlice'
@@ -25,9 +19,7 @@ export const SeekerEmploymentItem = (props: RespondItemType) => {
 	const [getEmpData, empDataStatus] = useLazyGetEmploymentDataQuery()
 
 	const [isModalOpen, setIsModalOpen] = useState(false)
-	const [comments, setComments] = useState<{ comment: string; type: string }[]>(
-		[]
-	)
+	const [comments, setComments] = useState<{ comment: string; type: string }[]>([])
 
 	const {
 		data: chatId = {
@@ -103,9 +95,7 @@ export const SeekerEmploymentItem = (props: RespondItemType) => {
 						<p>Loading</p>
 					) : (
 						<>
-							<p className="text-black text-[18px]/[21.6px] font-bold font-content-font mb-[40px]">
-								Комменатарий
-							</p>
+							<p className="text-black text-[18px]/[21.6px] font-bold font-content-font mb-[40px]">Комменатарий</p>
 							{comments.map(comm =>
 								comm.comment ? (
 									<div className="mt-[15px]">
@@ -114,13 +104,11 @@ export const SeekerEmploymentItem = (props: RespondItemType) => {
 											className="underline underline-offset-[3px]"
 											onClick={() => {
 												comm.type === 'SECOND'
-													? dispatch(setStage(2))
+													? dispatch(setStage('SECOND'))
 													: comm.type === 'FOURTH'
-													? dispatch(setStage(3))
-													: dispatch(setStage(5))
-												navigate(
-													`/services/myresponds/employment/stages/${props.vacancyId}/${props.id}`
-												)
+													? dispatch(setStage('FOURTH'))
+													: dispatch(setStage('FIFTH'))
+												navigate(`/services/myresponds/employment/stages/${props.vacancyId}/${props.id}`)
 											}}
 										>
 											{comm.type === 'SECOND'
@@ -161,20 +149,14 @@ export const SeekerEmploymentItem = (props: RespondItemType) => {
 						className="ml-[5%] rounded-[54px] font-content-font font-normal text-[16px]/[16px]"
 						type="primary"
 						onClick={() => {
-							navigate(
-								`/services/myresponds/employment/stages/${props.vacancyId}/${props.id}`
-							)
+							navigate(`/services/myresponds/employment/stages/${props.vacancyId}/${props.id}`)
 						}}
 					>
 						Пройти этапы
 					</Button>
 					<Button
 						onClick={() => {
-							dispatch(
-								setCurrentVacancyName(
-									props.name ? props.name : props.desiredJob
-								)
-							)
+							dispatch(setCurrentVacancyName(props.name ? props.name : props.desiredJob))
 							handleNavigate(`/services/myresponds/chat/id/${chatId.id}`)
 						}}
 						className="font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black"

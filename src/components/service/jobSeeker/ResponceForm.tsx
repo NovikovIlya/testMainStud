@@ -67,6 +67,7 @@ export const ResponseForm = () => {
 	const [skillInputValue, setSkillInputValue] = useState<string>('')
 	const [coverLetter, setCoverLetter] = useState('')
 	const [eduValidHidden, setEduValidUnhidden] = useState<boolean>(true)
+	const [jobValidHidden, setJobValidUnhidden] = useState<boolean>(true)
 	const date = new Date()
 
 	const { pathname } = useLocation()
@@ -1153,7 +1154,13 @@ export const ResponseForm = () => {
 								>
 									<Button
 										onClick={() => {
-											navigate('/services/jobseeker/vacancyview/respond/experience/add')
+											console.log(experienceData.experiences.length)
+											if (experienceData.experiences.length < 50) {
+												setJobValidUnhidden(true)
+												navigate('/services/jobseeker/vacancyview/respond/experience/add')
+											} else {
+												setJobValidUnhidden(false)
+											}
 										}}
 										icon={<ButtonPlusIcon />}
 										type="text"
@@ -1162,6 +1169,11 @@ export const ResponseForm = () => {
 								<p className="mt-[5px] w-[94px] font-main-font font-normal text-[14px]/[18px] opacity-40">
 									добавить место работы
 								</p>
+								{!jobValidHidden && (
+									<p className="mt-[20px] w-[250px] text-[#FF0133] font-main-font font-normal text-[14px]/[18px] opacity-100">
+										Вы уже добавили максимальное количество мест работ
+									</p>
+								)}
 							</div>
 						</Form>
 					)}
@@ -1201,7 +1213,10 @@ export const ResponseForm = () => {
 							</div>
 							<Form.Item
 								name={'workplace'}
-								rules={[{ required: true, message: 'Введите место работы' }]}
+								rules={[
+									{ required: true, message: 'Не указано Место работы"' },
+									{ max: 1000, message: "Количество символов было превышено"}
+								]}
 								label={
 									<label className="text-black text-[18px]/[18px] font-content-font font-normal">Место работы</label>
 								}
@@ -1215,7 +1230,10 @@ export const ResponseForm = () => {
 							</Form.Item>
 							<Form.Item
 								name={'seat'}
-								rules={[{ required: true, message: 'Введите должность' }]}
+								rules={[
+									{ required: true, message: 'Не указана должность' },
+									{ max: 1000, message: "Количество символов было превышено"}
+								]}
 								label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Должность</label>}
 							>
 								<Input
@@ -1246,7 +1264,10 @@ export const ResponseForm = () => {
 							</div>
 							<Form.Item
 								name={'duties'}
-								rules={[{ required: true, message: 'Укажите свои обязанности' }]}
+								rules={[
+									{ required: true, message: 'Не указаны обязанности' },
+									{ max: 1000, message: "Количество символов было превышено"}
+								]}
 								label={
 									<label className="text-black text-[18px]/[18px] font-content-font font-normal">Обязанности</label>
 								}

@@ -189,7 +189,7 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 			)}
 			{props.msgData.type === 'INVITATION_RESERVE' && props.msgData.reserveTimes !== null && (
 				<div
-					className={clsx('w-[50%] flex flex-col', {
+					className={clsx('mt-[24px] w-[50%] grid grid-cols-3 grid-rows-[40px_40px] gap-[20px]', {
 						'self-start':
 							(props.msgData.sender === 'SEEKER' && isEmpDep) ||
 							(props.msgData.sender === 'PERSONNEL_DEPARTMENT' && !isEmpDep),
@@ -198,44 +198,40 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 							(props.msgData.sender === 'PERSONNEL_DEPARTMENT' && isEmpDep)
 					})}
 				>
-					<div className="mt-[24px] w-[100%] flex flex-col gap-[14px]">
-						<div className="flex flex-row gap-[20px] justify-between ">
-							{props.msgData.reserveTimes.map(time => (
-								<Button
-									onClick={() => {
-										answerReserveTime({
-											respondId: page_id,
-											time: time,
-											messageId: props.msgData.id
-										}).then(() => {
-											setIsResponsed(true)
-										})
-									}}
-									disabled={isEmpDep || isResponsed}
-									loading={answerReserveTimeLoading}
-									className={`w-full text-[16px]/[19.2px] h-full border-black border-black rounded-[54.5px] py-[12px] px-[20px] text-center bg-inherit outline-none border cursor-pointer test:px-[12px]  ${
-										isEmpDep || isResponsed ? 'select-none !cursor-not-allowed' : ''
-									}`}
-								>
-									{time.substring(0, 10).split('-').reverse().join('.') + ', ' + time.substring(11, 16)}
-								</Button>
-							))}
-						</div>
+					{props.msgData.reserveTimes.map(time => (
 						<Button
 							onClick={() => {
-								answerReserveTime({ respondId: page_id, messageId: props.msgData.id }).then(() => {
+								answerReserveTime({
+									respondId: page_id,
+									time: time,
+									messageId: props.msgData.id
+								}).then(() => {
 									setIsResponsed(true)
 								})
 							}}
-							loading={answerReserveTimeLoading}
 							disabled={isEmpDep || isResponsed}
-							className={`text-[16px]/[19.2px] h-full border-black rounded-[54.5px]  py-[12px] px-[56px] bg-inherit outline-none border cursor-pointer ${
+							loading={answerReserveTimeLoading}
+							className={`w-full text-[16px]/[19.2px] text-wrap h-full border-black rounded-[54.5px] py-[12px] px-[20px] text-center bg-inherit outline-none border cursor-pointer test:px-[12px]  ${
 								isEmpDep || isResponsed ? 'select-none !cursor-not-allowed' : ''
 							}`}
 						>
-							Нет подходящего времени
+							{time.substring(0, 10).split('-').reverse().join('.') + ', ' + time.substring(11, 16)}
 						</Button>
-					</div>
+					))}
+					<Button
+						onClick={() => {
+							answerReserveTime({ respondId: page_id, messageId: props.msgData.id }).then(() => {
+								setIsResponsed(true)
+							})
+						}}
+						loading={answerReserveTimeLoading}
+						disabled={isEmpDep || isResponsed}
+						className={`row-span-2 col-span-3 text-[16px]/[19.2px] h-full border-black rounded-[54.5px]  py-[12px] px-[56px] bg-inherit outline-none border cursor-pointer ${
+							isEmpDep || isResponsed ? 'select-none !cursor-not-allowed' : ''
+						}`}
+					>
+						Нет подходящего времени
+					</Button>
 				</div>
 			)}
 			{props.msgData.type === 'EMPLOYMENT_REQUEST' && (

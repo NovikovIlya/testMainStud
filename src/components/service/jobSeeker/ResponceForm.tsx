@@ -69,6 +69,7 @@ export const ResponseForm = () => {
 	const [eduValidHidden, setEduValidUnhidden] = useState<boolean>(true)
 	const [jobValidHidden, setJobValidUnhidden] = useState<boolean>(true)
 	const [skillsValidHidden, setSkillsValidUnhidden] = useState<boolean>(true)
+	const [letterValidHidden, setLetterValidUnhidden] = useState<boolean>(true)
 	const date = new Date()
 
 	const { pathname } = useLocation()
@@ -364,9 +365,19 @@ export const ResponseForm = () => {
 								placeholder="Введите сообщение"
 								value={coverLetter}
 								onChange={e => {
-									setCoverLetter(e.target.value)
+									if (e.target.value.length < 10000) {
+										setLetterValidUnhidden(true)
+										setCoverLetter(e.target.value)
+									} else {
+										setLetterValidUnhidden(false)
+									}
 								}}
 							/>
+							{!letterValidHidden && (
+								<p className="mt-[20px] w-[250px] text-[#FF0133] font-main-font font-normal text-[14px]/[18px] opacity-100">
+									Вы уже добавили максимальное количество ключевых навыков
+								</p>
+							)}
 							<Button
 								className="mr-auto mt-[40px] rounded-[54.5px]"
 								type="primary"

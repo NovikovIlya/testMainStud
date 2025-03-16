@@ -43,7 +43,7 @@ import { AttachIcon } from './AttachIcon'
 import { ButtonPlusIcon } from './ButtonPlusIcon'
 import { CheckedIcon } from './CheckedIcon'
 
-export const ResponseForm = () => {
+export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 	const { t, i18n } = useTranslation()
 	const { data: countries, isLoading: isLoadingCountry } = useGetCountriesQuery(i18n.language)
 	const { data: levels } = useGetEducationLevelQuery(i18n.language)
@@ -109,6 +109,7 @@ export const ResponseForm = () => {
 					navigate('/services/jobseeker/vacancyview/respond/main')
 					setIsFormOpen(true)
 				}}
+				disabled={props.canRespond === undefined || props.canRespond === false}
 			>
 				Откликнуться
 			</Button>

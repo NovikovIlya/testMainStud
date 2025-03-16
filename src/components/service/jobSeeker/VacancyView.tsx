@@ -1,42 +1,43 @@
+import { LoadingOutlined } from '@ant-design/icons'
+import { Spin } from 'antd'
+import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { useAppSelector } from '../../../store'
-import { usePostVacancyRespondMutation } from '../../../store/api/serviceApi'
+import { useLazyGetSeekerVacancyRelationQuery, usePostVacancyRespondMutation } from '../../../store/api/serviceApi'
+import { useLazyGetVacancyViewQuery } from '../../../store/api/serviceApi'
 
 import ArrowIcon from './ArrowIcon'
 import { ResponseForm } from './ResponceForm'
-import React, {useEffect} from "react";
-import {
-	useLazyGetVacancyViewQuery
-} from '../../../store/api/serviceApi'
-import {Spin} from "antd";
-import {LoadingOutlined} from "@ant-design/icons";
 
 export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
+	const [canRespond, setCanRespond] = useState<boolean>(false)
 
-	const [getVacancy, { data, isLoading, error }] = useLazyGetVacancyViewQuery();
+	const [getVacancy, { data, isLoading, error }] = useLazyGetVacancyViewQuery()
+	const [getRelation, getRelationStatus] = useLazyGetSeekerVacancyRelationQuery()
 
 	useEffect(() => {
 		// Получаем текущий URL
-		const currentUrl = window.location.pathname;
+		const currentUrl = window.location.pathname
 
 		// Ищем id из URL
-		const match = currentUrl.match(/\/vacancyview\/(\d+)$/);
+		const match = currentUrl.match(/\/vacancyview\/(\d+)$/)
 
-		let id_from_url: string | number;
+		let id_from_url: string | number
 
 		if (match) {
-			id_from_url = match[1];
+			id_from_url = match[1]
 		} else {
-			console.error('ID not found');
-			return;  // Возвращаемся, если id нет
+			console.error('ID not found')
+			return // Возвращаемся, если id нет
 		}
 
 		// Если id найден, запускаем запрос
 		if (id_from_url) {
-			getVacancy(id_from_url);
+			getVacancy(id_from_url)
+			getRelation(parseInt(id_from_url))
 		}
-	}, [getVacancy]);
+	}, [])
 
 	console.log(data)
 
@@ -68,12 +69,8 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 			.replace(/<\/em'>/g, '')
 
 		responsibilities.includes('<li>')
-			? (responsibilitiesArr = responsibilities.match(
-					/<li>[a-zA-Zа-яА-ЯёЁ0-9\s\:\,\.\/\–\—\(\)\+\-]+/g
-			  ))
-			: (responsibilitiesArr = responsibilities.match(
-					/\r\n\r\n—[a-zA-Zа-яА-ЯёЁ0-9\s\:\,\.\/\–\—\(\)\+\-]+/g
-			  ))
+			? (responsibilitiesArr = responsibilities.match(/<li>[a-zA-Zа-яА-ЯёЁ0-9\s\:\,\.\/\–\—\(\)\+\-]+/g))
+			: (responsibilitiesArr = responsibilities.match(/\r\n\r\n—[a-zA-Zа-яА-ЯёЁ0-9\s\:\,\.\/\–\—\(\)\+\-]+/g))
 
 		// responsibilitiesArr = responsibilities.match(
 		// 	/<li>[a-zA-Zа-яА-ЯёЁ0-9\s\:\,\.\/\–\—\(\)\+\-]+/g
@@ -105,17 +102,15 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 			.replace(/<em>/g, '')
 			.replace(/<\/em'>/g, '')
 
-		conditionsArr = conditions.match(
-			/<li>[a-zA-Zа-яА-ЯёЁ0-9\s\:\,\.\/\–\—\(\)\+\-]+/g
-		)
+		conditionsArr = conditions.match(/<li>[a-zA-Zа-яА-ЯёЁ0-9\s\:\,\.\/\–\—\(\)\+\-]+/g)
 	}
 
-	if (isLoading) {
+	if (isLoading || getRelationStatus.isLoading) {
 		return (
 			<>
 				<div className="w-full h-full flex items-center">
 					<div className="text-center ml-auto mr-auto">
-						<Spin indicator={<LoadingOutlined style={{fontSize: 36}} spin/>}></Spin>
+						<Spin indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}></Spin>
 						<p className="font-content-font font-normal text-black text-[18px]/[18px]">Идёт загрузка...</p>
 					</div>
 				</div>
@@ -124,12 +119,7 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 	}
 	return (
 		<>
-			<div
-				id="wrapper"
-				className={`pl-[54px] pr-[54px] ${
-					props.type === 'CHAT' && 'mt-[120px]'
-				}`}
-			>
+			<div id="wrapper" className={`pl-[54px] pr-[54px] ${props.type === 'CHAT' && 'mt-[120px]'}`}>
 				<div className="flex">
 					<button
 						onClick={() => {
@@ -144,17 +134,11 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 					</p>
 				</div>
 				<div className="w-[50%] mt-[52px] grid grid-cols-[repeat(3,_minmax(106px,_auto))_143px] gap-x-[120px] gap-y-[16px]">
-					<p className="w-[106px] font-content-font font-bold text-black text-[18px]/[21px]">
-						Требуемый опыт работы
-					</p>
-					<p className="w-[106px] font-content-font font-bold text-black text-[18px]/[21px]">
-						Тип занятости
-					</p>
-					<p className="w-[106px] font-content-font font-bold text-black text-[18px]/[21px]">
-						Заработная плата
-					</p>
+					<p className="w-[106px] font-content-font font-bold text-black text-[18px]/[21px]">Требуемый опыт работы</p>
+					<p className="w-[106px] font-content-font font-bold text-black text-[18px]/[21px]">Тип занятости</p>
+					<p className="w-[106px] font-content-font font-bold text-black text-[18px]/[21px]">Заработная плата</p>
 					{props.type === 'CATALOG' ? (
-						<ResponseForm />
+						<ResponseForm canRespond={getRelationStatus.data?.canRespond} />
 					) : (
 						<>
 							<div className="w-[143px]"></div>
@@ -171,16 +155,12 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 					</p>
 				</div>
 				<div className="w-[60%] mt-[60px] mb-[86px] grid grid-cols-[9%_auto] gap-x-[160px] gap-y-[40px]">
-					<p className="font-content-font font-bold text-black text-[18px]/[21px] whitespace-nowrap">
-						Задачи:
-					</p>
+					<p className="font-content-font font-bold text-black text-[18px]/[21px] whitespace-nowrap">Задачи:</p>
 					{responsibilities.includes('<li>') ? (
 						<ul className="list-disc">
 							{responsibilitiesArr !== null &&
 								responsibilitiesArr.map(resp => (
-									<li className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-										{resp.substring(4)}
-									</li>
+									<li className="font-content-font font-normal text-black text-[16px]/[19.2px]">{resp.substring(4)}</li>
 								))}
 						</ul>
 					) : (
@@ -196,9 +176,7 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 								</li>
 							))}
 					</ul> */}
-					<p className="font-content-font font-bold text-black text-[18px]/[21px] whitespace-nowrap">
-						Требования:
-					</p>
+					<p className="font-content-font font-bold text-black text-[18px]/[21px] whitespace-nowrap">Требования:</p>
 					{skills.includes('<li>') ? (
 						<ul className="list-disc">
 							{skillsArr !== null &&
@@ -221,16 +199,12 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 								</li>
 							))}
 					</ul> */}
-					<p className="font-content-font font-bold text-black text-[18px]/[21px] whitespace-nowrap">
-						Условия:
-					</p>
+					<p className="font-content-font font-bold text-black text-[18px]/[21px] whitespace-nowrap">Условия:</p>
 					{conditions.includes('<li>') ? (
 						<ul className="list-disc">
 							{conditionsArr !== null &&
 								conditionsArr.map(cond => (
-									<li className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-										{cond.substring(4)}
-									</li>
+									<li className="font-content-font font-normal text-black text-[16px]/[19.2px]">{cond.substring(4)}</li>
 								))}
 						</ul>
 					) : (

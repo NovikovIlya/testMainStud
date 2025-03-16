@@ -1166,6 +1166,12 @@ export const serviceApi = apiSlice.injectEndpoints({
 				url: `http://${emplBaseURL}employment-api/v1/management/vacancy-requests?action=${action}`,
 				method: 'GET'
 			})
+		}),
+		getSeekerVacancyRelation: builder.query<{ canRespond: boolean }, number>({
+			query: vacancyId => ({
+				url: `http://${emplBaseURL}employment-api/v1/vacancy/${vacancyId}/seeker-relation`,
+				method: 'GET'
+			})
 		})
 	})
 })
@@ -1296,5 +1302,6 @@ export const {
 	useLazyGetSupervisorInterviewQuery,
 	useLazyGetSeekerEmploymentRespondsQuery,
 	useLazyGetReservedResponcesQuery,
-	useLazyGetArchivedResponcesQuery
+	useLazyGetArchivedResponcesQuery,
+	useLazyGetSeekerVacancyRelationQuery
 } = serviceApi

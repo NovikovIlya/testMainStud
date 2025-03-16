@@ -86,17 +86,32 @@ export const DirectResume = ({
 
 	const [messageApi, contextHolder] = message.useMessage()
 
-	const emailRegex = /^[a-zA-Z0-9]+([.]{1}[a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-]{1}[a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/;
+	const handleKeyDownPhone = (e: React.KeyboardEvent<HTMLInputElement>) => {
+		const allowedKeys = [
+			'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+			' ', '(', ')', '-', '+',
+			'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight',
+		];
 
-	// Функция для проверки на запрещенные символы
-	const hasForbiddenCharacters = (value) => {
-		const forbiddenChars = /[&=+<>,_'\-]/;
-		return forbiddenChars.test(value);
+		if (!allowedKeys.includes(e.key)) {
+			e.preventDefault();
+		}
 	};
 
-	// Функция для проверки на несколько точек подряд
-	const hasMultipleDots = (value) => {
-		return /\.{2,}/.test(value);
+	const handleKeyDownEmail = (e: React.KeyboardEvent<HTMLInputElement>) => {
+		const allowedKeys = [
+			'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+			'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+			'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+			'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+			'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+			'@', '.', '_', '%', '+', '-',
+			'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight'
+		];
+
+		if (!allowedKeys.includes(e.key)) {
+			e.preventDefault();
+		}
 	};
 
 	const onSubmit: SubmitHandler<formDataType> = data => {
@@ -143,36 +158,6 @@ export const DirectResume = ({
 				})
 		}
 	}, [])
-
-	const formatPhoneNumber = (value: string) => {
-		if (!value) return value;
-
-		// Оставляем только цифры
-		const cleaned = value.replace(/\D/g, '');
-
-		// Ограничиваем длину номера 11 цифрами
-		const trimmed = cleaned.slice(0, 11);
-
-		// Форматируем номер
-		let formatted = '';
-		if (trimmed.length > 0) {
-			formatted += '+7';
-		}
-		if (trimmed.length > 1) {
-			formatted += ` ${trimmed.slice(1, 4)}`;
-		}
-		if (trimmed.length > 4) {
-			formatted += ` ${trimmed.slice(4, 7)}`;
-		}
-		if (trimmed.length > 7) {
-			formatted += `-${trimmed.slice(7, 9)}`;
-		}
-		if (trimmed.length > 9) {
-			formatted += `-${trimmed.slice(9, 11)}`;
-		}
-
-		return formatted;
-	};
 
 	return (
 		<>
@@ -313,54 +298,34 @@ export const DirectResume = ({
 								control={control}
 								rules={{
 									required: 'Поле email обязательно для заполнения',
+									pattern: {
+										value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+										message: 'Введите корректный адрес электронной почты',
+									},
 									maxLength: {
 										value: 500,
 										message: 'Количество символов было превышено',
 									},
-									validate: {
-										// Проверка на английские буквы и стандарт почты
-										validEmail: (value) => {
-											if (!emailRegex.test(value)) {
-												return 'Email введен некорректно';
-											}
-											return true;
-										},
-										// Проверка на запрещенные символы
-										noForbiddenChars: (value) => {
-											if (hasForbiddenCharacters(value)) {
-												return 'Email содержит запрещенные символы';
-											}
-											return true;
-										},
-										// Проверка на несколько точек подряд
-										noMultipleDots: (value) => {
-											if (hasMultipleDots(value)) {
-												return 'Email содержит несколько точек подряд';
-											}
-											return true;
-										},
-									},
 								}}
-								render={({ field }) => (
-									<Input
-										onPressEnter={(e) => e.preventDefault()}
-										className={`${errors.email && 'border-[#C11616]'}`}
-										type="text"
-										placeholder="example@mail.com"
-										{...field}
-										onChange={(e) => {
-											// Очистка значения от запрещенных символов
-											const value = e.target.value.replace(/[^a-zA-Z0-9@.]/g, '');
-											field.onChange(value);
-										}}
-									/>
+								render={({ field, fieldState: { error } }) => (
+									<div>
+										<Input
+											{...field}
+											onKeyDown={handleKeyDownEmail}
+											onPressEnter={(e) => e.preventDefault()}
+											className={error ? 'border-[#C11616]' : ''}
+											type="text"
+											placeholder="example@mail.com"
+										/>
+										{errors.email && (
+											<p className="font-content-font text-[10px]/[12.94px] font-normal text-[#C11616]">
+												{errors.email?.message}
+											</p>
+										)}
+									</div>
 								)}
 							/>
-							{errors.email && (
-								<p className="font-content-font text-[10px]/[12.94px] font-normal text-[#C11616]">
-									{errors.email?.message}
-								</p>
-							)}
+
 							<Controller
 								name="phone"
 								control={control}
@@ -369,57 +334,55 @@ export const DirectResume = ({
 										value: true,
 										message: 'Телефон введён некорректно',
 									},
-									validate: (value) => {
-										const cleaned = value.replace(/\D/g, ''); // Удаляем всё, кроме цифр
-										return cleaned.length === 11 || 'Номер телефона должен содержать 11 цифр';
+									pattern: {
+										value: /^\+7 \d{3} \d{3}-\d{2}-\d{2}$/, // Формат +7 999 999-99-99
+										message: 'Телефон должен быть в формате +7 999 999-99-99',
 									},
 								}}
-								render={({ field }) => {
-									const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-										const value = e.target.value.replace(/\D/g, ''); // Удаляем всё, кроме цифр
-										const formatted = formatPhoneNumber(value); // Форматируем номер
-										field.onChange(formatted); // Обновляем значение поля
-									};
-
-									return (
+								render={({ field, fieldState: { error } }) => (
+									<div>
 										<Input
+											{...field}
+											onKeyDown={handleKeyDownPhone}
 											onPressEnter={(e) => e.preventDefault()}
-											onChange={handlePhoneChange} // Обработчик ввода
-											value={field.value} // Значение поля
-											className={`${errors.phone && 'border-[#C11616]'}`}
+											value={field.value}
+											className={error ? 'border-[#C11616]' : ''}
 											type="text"
 											placeholder="Моб.телефон"
 										/>
-									);
-								}}
+										{errors.phone && (
+											<p className="font-content-font text-[10px]/[12.94px] font-normal text-[#C11616]">
+												{error.message}
+											</p>
+										)}
+									</div>
+								)}
 							/>
-							{errors.phone && (
-								<p className="font-content-font text-[10px]/[12.94px] font-normal text-[#C11616]">
-									{errors.phone?.message}
-								</p>
-							)}
 							<Controller
 								name="vacancy"
 								control={control}
 								rules={[
-									{ required: true, message: 'Должность введена некорректно' }, // Отдельное правило
-									{ maxLength: 1000, message: 'Количество символов было превышено' }, // Отдельное правило
+									{ required: true, message: 'Должность введена некорректно' },
+									{ maxLength: 1000, message: 'Количество символов было превышено' },
 								]}
 								render={({ field }) => (
-									<Input
-										onPressEnter={e => e.preventDefault()}
-										className={`${errors.vacancy && 'border-[#C11616]'}`}
-										type="text"
-										placeholder="Желаемая должность"
-										{...field}
-									/>
+									<div>
+										<Input
+											onPressEnter={e => e.preventDefault()}
+											className={`${errors.vacancy && 'border-[#C11616]'}`}
+											type="text"
+											placeholder="Желаемая должность"
+											{...field}
+										/>
+										{errors.vacancy && (
+											<p className="font-content-font text-[10px]/[12.94px] font-normal text-[#C11616]">
+												{errors.vacancy?.message}
+											</p>
+										)}
+									</div>
 								)}
 							/>
-							{errors.vacancy && (
-								<p className="font-content-font text-[10px]/[12.94px] font-normal text-[#C11616]">
-									{errors.vacancy?.message}
-								</p>
-							)}
+
 						</div>
 						<div className="flex gap-[18px] mt-[36px]">
 							<AttachIcon />

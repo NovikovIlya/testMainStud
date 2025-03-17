@@ -1,28 +1,30 @@
-import { Button, ConfigProvider, Modal, Spin } from 'antd'
-import { useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
-import { useAppSelector} from '../../../../store'
-import { setCurrentResponce } from '../../../../store/reducers/CurrentResponceSlice'
-import { DepEmploymentStageItem } from './depEmploymentStageItem'
 import { LoadingOutlined } from '@ant-design/icons'
-import {
-	useGetEmploymentStageStatusQuery,
-	useMarkBankCardApplicationFormedMutation,
-	useGetPersonnelStagesQuery, useGetEmploymentReqStageStatusQuery
-} from '../../../../store/api/serviceApi'
+import { Button, ConfigProvider, Modal, Spin } from 'antd'
 import React, { useState } from 'react'
-import { DocumentElem } from './components/DocumentElem'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+
+import { NocircleArrowIconHover } from '../../../../assets/svg/NocircleArrowIconHover'
+import { useAppSelector } from '../../../../store'
+import {
+	useGetEmploymentReqStageStatusQuery,
+	useGetEmploymentStageStatusQuery,
+	useGetPersonnelStagesQuery,
+	useMarkBankCardApplicationFormedMutation
+} from '../../../../store/api/serviceApi'
+import { setCurrentResponce } from '../../../../store/reducers/CurrentResponceSlice'
 import { NocircleArrowIcon } from '../../jobSeeker/NoCircleArrowIcon'
-import {NocircleArrowIconHover} from "../../../../assets/svg/NocircleArrowIconHover";
 
-export const EmploymentStageInfo = ( ) => {
+import { DocumentElem } from './components/DocumentElem'
+import { DepEmploymentStageItem } from './depEmploymentStageItem'
 
+export const EmploymentStageInfo = () => {
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 
 	const currentUrl = window.location.pathname
 
-	const match = currentUrl.match(/\/stages\/(\d+)$/);
+	const match = currentUrl.match(/\/stages\/(\d+)$/)
 
 	let id_from_url: string | undefined
 
@@ -32,11 +34,11 @@ export const EmploymentStageInfo = ( ) => {
 		console.error('id miss')
 	}
 
-	const employmentSeekerName  = useAppSelector(state => state.employmentSeeker.currentEmploymentSeekerName)
-	const employmentSeekerVacancy  = useAppSelector(state => state.employmentSeeker.currentEmploymentSeekerVacancy)
+	const employmentSeekerName = useAppSelector(state => state.employmentSeeker.currentEmploymentSeekerName)
+	const employmentSeekerVacancy = useAppSelector(state => state.employmentSeeker.currentEmploymentSeekerVacancy)
 	const respondId = useAppSelector(state => state.currentResponce)
 
-	const { data: stages, isLoading: loadingReq } = useGetEmploymentStageStatusQuery({ respondId: id_from_url})
+	const { data: stages, isLoading: loadingReq } = useGetEmploymentStageStatusQuery({ respondId: id_from_url })
 
 	console.log(stages)
 
@@ -49,12 +51,8 @@ export const EmploymentStageInfo = ( ) => {
 			<>
 				<div className="w-full h-full flex items-center">
 					<div className="text-center ml-auto mr-auto">
-						<Spin
-							indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}
-						></Spin>
-						<p className="font-content-font font-normal text-black text-[18px]/[18px]">
-							Идёт загрузка...
-						</p>
+						<Spin indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}></Spin>
+						<p className="font-content-font font-normal text-black text-[18px]/[18px]">Идёт загрузка...</p>
 					</div>
 				</div>
 			</>
@@ -91,20 +89,17 @@ export const EmploymentStageInfo = ( ) => {
 								 		  "
 					>
 						{/* Иконка при наведении */}
-						<div
-							className="absolute mt-[3px] group-hover:opacity-100 group-hover:scale-100 opacity-0 scale-95 transition-all duration-200">
-							<NocircleArrowIconHover/>
+						<div className="absolute mt-[3px] group-hover:opacity-100 group-hover:scale-100 opacity-0 scale-95 transition-all duration-200">
+							<NocircleArrowIconHover />
 						</div>
 
 						{/* Иконка по умолчанию */}
-						<div
-							className="mt-[3px] group-hover:opacity-0 group-hover:scale-95 opacity-100 scale-100 transition-all duration-200">
-							<NocircleArrowIcon/>
+						<div className="mt-[3px] group-hover:opacity-0 group-hover:scale-95 opacity-100 scale-100 transition-all duration-200">
+							<NocircleArrowIcon />
 						</div>
-						<span
-							className="group-hover:text-[#004EC2] transition-all duration-200 text-[14px] font-normal">
-									Назад
-								</span>
+						<span className="group-hover:text-[#004EC2] transition-all duration-200 text-[14px] font-normal">
+							Назад
+						</span>
 					</button>
 				</div>
 				<h1 className="font-normal text-[28px]/[28px]">{employmentSeekerName}</h1>
@@ -124,45 +119,53 @@ export const EmploymentStageInfo = ( ) => {
 				<div className="mt-[40px] mb-[100px] gap-[12px] flex flex-col ">
 					{sortedStages?.[1] && (
 						<DepEmploymentStageItem
-							stage={2}
+							stage={sortedStages[1].id}
+							type={sortedStages[1].type}
 							role={'personnel'}
 							comment={sortedStages[1].comment}
 							stageStatus={sortedStages[1].status}
 							documentArray={sortedStages[1].documents}
-							bank={''}/>
+							bank={''}
+						/>
 					)}
 					{sortedStages?.[2] && (
 						<DepEmploymentStageItem
-							stage={3}
+							stage={sortedStages[2].id}
+							type={sortedStages[2].type}
 							role={'personnel'}
 							comment={sortedStages[2].comment}
 							stageStatus={sortedStages[2].status}
 							documentArray={sortedStages[2].documents}
-							bank={''}/>
+							bank={''}
+						/>
 					)}
 
 					{sortedStages?.[3] && (
 						<DepEmploymentStageItem
-							stage={4}
+							stage={sortedStages[3].id}
+							type={sortedStages[3].type}
 							role={'personnel'}
 							comment={sortedStages[3].comment}
 							stageStatus={sortedStages[3].status}
 							documentArray={sortedStages[3].documents}
-							bank={''}/>
+							bank={''}
+						/>
 					)}
 					{sortedStages?.[4] && (
 						<>
-							{(!sortedStages[4].hasRequisites) && (
+							{!sortedStages[4].hasRequisites && (
 								<>
-									{(sortedStages?.[4]) && (
+									{sortedStages?.[4] && (
 										<>
 											<DepEmploymentStageItem
-												stage={5}
+												stage={sortedStages[4].id}
+												type={sortedStages[4].type}
 												role={'personnel'}
 												comment={''}
 												stageStatus={sortedStages[4].status}
 												documentArray={sortedStages[4].documents}
-												bank={sortedStages[4].bank}/>
+												bank={sortedStages[4].bank}
+											/>
 										</>
 									)}
 								</>

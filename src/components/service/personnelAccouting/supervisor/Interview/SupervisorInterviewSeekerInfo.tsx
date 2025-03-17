@@ -7,31 +7,65 @@ import uuid from 'react-uuid'
 import { AvatartandardSvg } from '../../../../../assets/svg/AvatarStandardSvg'
 import { NocircleArrowIconHover } from '../../../../../assets/svg/NocircleArrowIconHover'
 import { useAppSelector } from '../../../../../store'
-import { useEmployeeSeekerRequestMutation, useGetRespondFullInfoQuery } from '../../../../../store/api/serviceApi'
+import {
+	useEmployeeSeekerRequestMutation,
+	useGetRespondFullInfoQuery, useGetSupervisorInterviewQuery,
+	useLazyGetSeekerResumeFileQuery
+} from '../../../../../store/api/serviceApi'
 import { useGetCountriesQuery } from '../../../../../store/api/utilsApi'
 import { useAlert } from '../../../../../utils/Alert/AlertMessage'
 import { NocircleArrowIcon } from '../../../jobSeeker/NoCircleArrowIcon'
+import {MyDocsSvg} from "../../../../../assets/svg/MyDocsSvg";
 
 export const SupervisorInterviewSeekerInfo = () => {
-	const respondId = useAppSelector(state => state.currentResponce)
-	const format = useAppSelector(state => state.currentInterviewFormat)
-	const time = useAppSelector(state => state.currentInterviewTime)
-	const timeFormated = useAppSelector(state => state.currentInterviewTimeFormated)
 
 	const { openAlert } = useAlert()
 
 	const currentUrl = window.location.pathname
 	const match = currentUrl.match(/\/seekerinfo\/(\d+)$/)
 
-	let id_from_url: string | undefined
+	let id_from_url: number
 
 	if (match) {
-		id_from_url = match[1]
+		id_from_url = Number(match[1])
 	} else {
 		console.error('id miss')
 	}
 
+	const { data: interviews = [], isLoading : interviewDataLoading } = useGetSupervisorInterviewQuery()
+
+	const foundInterview = interviews.find(interview => interview.respondId === id_from_url)
+	console.log(interviews)
+	const format = foundInterview?.format || ''
+	const time = foundInterview?.time
+	console.log(time)
+
+	const createTimeFormatted = (time: string) => {
+		if (time) {
+			const date = new Date(time);
+
+			// Извлекаем компоненты даты
+			const day = String(date.getUTCDate()).padStart(2, '0'); // День (с ведущим нулем)
+			const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Месяц (с ведущим нулем)
+			const shortYear = String(date.getUTCFullYear()).slice(-2); // Последние две цифры года
+
+			// Извлекаем компоненты времени
+			const hours = String(date.getUTCHours()).padStart(2, '0'); // Часы (с ведущим нулем)
+			const minutes = String(date.getUTCMinutes()).padStart(2, '0'); // Минуты (с ведущим нулем)
+
+			// Форматируем дату и время
+			const timeFormated = `${day}.${month}.${shortYear} в ${hours}:${minutes}`;
+
+			return timeFormated;
+		} else {
+			console.error("Время не найдено.");
+		}
+	}
+	let timeFormated = createTimeFormatted(time)
+
 	const { data, isLoading: loading } = useGetRespondFullInfoQuery(id_from_url)
+
+	const [getResume] = useLazyGetSeekerResumeFileQuery()
 
 	const date = new Date()
 
@@ -68,13 +102,16 @@ export const SupervisorInterviewSeekerInfo = () => {
 	const [isEmploymentRequestSent, setIsEmploymentRequestSent] = useState<boolean>(false)
 	const [isSeekerRejected, setIsSeekerRejected] = useState<boolean>(false)
 
+	const [resume, setResume] = useState<string>('')
+	const [resumeSize, setResumeSize] = useState<number>(0)
+
 	interface ComponentProps {
 		time: string
 		timeFormated: string
 		format: string
 	}
 
-	if (loading) {
+	if (loading || interviewDataLoading) {
 		return (
 			<>
 				<div className="w-full h-full flex items-center">
@@ -89,6 +126,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 
 	const Component = (props: ComponentProps) => {
 		const targetDate = new Date(props.time)
+		console.log(props.time)
 		const now = new Date()
 		const difference = targetDate.getTime() - now.getTime()
 		let isInterviewStarted: boolean = false
@@ -131,7 +169,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 		}
 		return (
 			<div className="flex flex-col gap-[30px]">
-				{format.format === 'OFFLINE' &&
+				{format === 'OFFLINE' &&
 					!isInterviewStarted && ( // Офлайн собес, ожидание
 						<div className="flex flex-col justify-center">
 							<h3 className=" mb-[20px] font-content-font font-bold text-black text-[16px]/[19.2px]">Собеседование</h3>
@@ -141,7 +179,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 							<h4 className="font-content-font font-normal text-black text-[16px]/[19.2px]">{props.timeFormated}</h4>
 						</div>
 					)}
-				{format.format === 'ONLINE' &&
+				{format === 'ONLINE' &&
 					!isInterviewStarted &&
 					!is5MinBeforeInterviewStarted && ( // Онлайн собес, ождиание
 						<div className="flex flex-col justify-center">
@@ -153,8 +191,8 @@ export const SupervisorInterviewSeekerInfo = () => {
 							</button>
 						</div>
 					)}
-				{((format.format === 'ONLINE' && isInterviewStarted && is5MinBeforeInterviewStarted) ||
-					(format.format === 'ONLINE' && isInterviewStarted && !is30MinAfterInterviewEnded)) && ( // Онлайн собес, подкбчиться 5 | 30
+				{((format === 'ONLINE' && isInterviewStarted && is5MinBeforeInterviewStarted) ||
+					(format === 'ONLINE' && isInterviewStarted && !is30MinAfterInterviewEnded)) && ( // Онлайн собес, подкбчиться 5 | 30
 					<div className="flex flex-col justify-center">
 						<h4 className="mb-[20px] font-content-font font-normal text-black text-[16px]/[19.2px]">
 							Подключитесь к онлайн-конференции
@@ -178,7 +216,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 										await aproveSeeker({
 											rejectionReason: 'approve',
 											action: 'EMPLOY',
-											respondId: respondId.respondId
+											respondId: id_from_url
 										})
 											.unwrap()
 											.then(() => {
@@ -212,7 +250,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 						aproveSeeker({
 							rejectionReason: 'approve',
 							action: 'EMPLOY',
-							respondId: respondId.respondId
+							respondId: id_from_url
 						})
 							.unwrap()
 							.then(() => {
@@ -372,7 +410,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 											await rejectSeeker({
 												rejectionReason: values.reason,
 												action: 'REJECT',
-												respondId: respondId.respondId
+												respondId: id_from_url
 											})
 												.unwrap()
 												.then(() => {
@@ -419,7 +457,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 								</Form>
 							</Modal>
 						</ConfigProvider>
-						<Component time={time.time} format={format.format} timeFormated={timeFormated.timeFormated}></Component>
+						<Component time={time} format={format} timeFormated={timeFormated}></Component>
 					</div>
 					<hr />
 					<div className="flex flex-col gap-[24px]">
@@ -452,7 +490,8 @@ export const SupervisorInterviewSeekerInfo = () => {
 					</div>
 					<hr />
 					<div className="flex flex-col gap-[24px]">
-						<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">Опыт работы</p>
+						<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">Опыт
+							работы</p>
 						{data?.respondData.portfolio.workExperiences.length === 0 ? (
 							<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
 								Соискатель не имеет опыта работы
@@ -489,15 +528,46 @@ export const SupervisorInterviewSeekerInfo = () => {
 								))}
 							</div>
 						)}
+						<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
+							<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">Резюме</p>
+							<div
+								className="bg-white rounded-[16px] shadow-custom-shadow h-[59px] w-[65%] p-[20px] flex">
+								<MyDocsSvg/>
+								<p
+									className="ml-[20px] font-content-font font-normal text-black text-[16px]/[19.2px] underline cursor-pointer"
+									onClick={() => {
+										const link = document.createElement('a')
+										link.href = resume
+										link.download = 'Резюме'
+										link.click()
+									}}
+								>
+									{'Резюме ' +
+										data?.userData?.lastname +
+										' ' +
+										data?.userData?.firstname +
+										' ' +
+										data?.userData?.middlename}
+								</p>
+								<p className="ml-auto font-content-font font-normal text-black text-[16px]/[19.2px] opacity-70">
+									{Math.round(resumeSize / 1000000) > 0
+										? Math.round(resumeSize / 1000000) + ' Мб'
+										: Math.round(resumeSize / 1000) > 0
+											? Math.round(resumeSize / 1000) + ' Кб'
+											: resumeSize + ' б'}
+								</p>
+							</div>
+						</div>
 					</div>
-					<hr />
+					<hr/>
 					<div className="flex flex-col gap-[24px]">
-						<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">О себе</p>
+						<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">О
+							себе</p>
 						<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
 							{data?.respondData.skills.aboutMe}
 						</p>
 					</div>
-					<hr />
+					<hr/>
 					<div className="flex flex-col">
 						<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40 w-[194px]">
 							Профессиональные навыки

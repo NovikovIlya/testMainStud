@@ -1,10 +1,11 @@
-import { Button, ConfigProvider, DatePicker, Form, Input, Modal, Select } from 'antd'
+import {Button, ConfigProvider, DatePicker, Form, Input, message, Modal, Select} from 'antd'
 import { useState } from 'react'
 import uuid from 'react-uuid'
 
 import { useInviteSeekerMutation } from '../../../../store/api/serviceApi'
 import { useAlert } from '../../../../utils/Alert/AlertMessage'
 import {useLocation} from "react-router-dom";
+import dayjs from "dayjs";
 
 export const InviteSeekerForm = (props: { respondId: number; isButtonDisabled: boolean; callback: Function }) => {
 	const [isFormOpen, setIsFormOpen] = useState<boolean>(false)
@@ -32,6 +33,30 @@ export const InviteSeekerForm = (props: { respondId: number; isButtonDisabled: b
 	const [form] = Form.useForm()
 
 	const { openAlert } = useAlert()
+
+	const handleDateChange = (e : any, dateString : any) => {
+
+		if (dayjs(e).isBefore(dayjs(), 'minute')) {
+			message.error('Нельзя выбрать время, которое уже наступило');
+			return;
+		}
+
+		if (reservedTime.length >= 3) {
+			message.error('Максимальное количество резервных времён - 3');
+			return;
+		}
+
+		if (dateString !== '') {
+			setReservedTimes([
+				...reservedTime,
+				{
+					id: uuid(),
+					time: dateString,
+					timeToSend: e,
+				},
+			]);
+		}
+	};
 
 	return (
 		<>
@@ -214,6 +239,10 @@ export const InviteSeekerForm = (props: { respondId: number; isButtonDisabled: b
 									console.log(e)
 									console.log(dateString)
 								}}
+								disabledDate={(current) => {
+									// Запрещаем выбирать даты, которые уже прошли
+									return current && current < dayjs().startOf('day');
+								}}
 							></DatePicker>
 						</Form.Item>
 						<p className="mt-[40px] mb-[24px] font-content-font font-normal text-[16px]/[16px] text-black">
@@ -222,11 +251,12 @@ export const InviteSeekerForm = (props: { respondId: number; isButtonDisabled: b
 						<Form.Item
 							name={'reserveTime'}
 							label={
-								<label className="text-black text-[18px]/[18px] font-content-font font-normal">Дата и
-									время</label>
+								<label className="text-black text-[18px]/[18px] font-content-font font-normal">
+									Дата и время
+								</label>
 							}
 							rules={[
-								{required: reservedTime.length === 0, message: 'Не выбрано резервное время'},	
+								{ required: reservedTime.length === 0, message: 'Не выбрано резервное время' },
 							]}
 						>
 							<DatePicker
@@ -234,20 +264,16 @@ export const InviteSeekerForm = (props: { respondId: number; isButtonDisabled: b
 								showTime={{
 									minuteStep: 15,
 									disabledHours: () => {
-										return [0, 1, 2, 3, 4, 5, 6, 7, 20, 21, 22, 23]
+										return [0, 1, 2, 3, 4, 5, 6, 7, 20, 21, 22, 23];
 									},
-									hideDisabledOptions: true
+									hideDisabledOptions: true,
 								}}
 								className="w-full"
-								onChange={(e, dateString) => {
-									dateString !== '' &&
-									setReservedTimes([...reservedTime, {
-										id: uuid(),
-										time: dateString as string,
-										timeToSend: e
-									}])
+								onChange={handleDateChange}
+								disabledDate={(current) => {
+									return current && current < dayjs().startOf('day');
 								}}
-							></DatePicker>
+							/>
 						</Form.Item>
 						<ul className="mt-[24px] ml-[20px]">
 							{reservedTime.map(res => (

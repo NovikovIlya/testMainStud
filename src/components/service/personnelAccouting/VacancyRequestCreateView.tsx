@@ -426,7 +426,10 @@ export const VacancyRequestCreateView = () => {
 								Должность
 							</label>
 						}
-						rules={[{ required: true, message: 'Не указана должность' }]}
+						rules={[
+							{ required: true, message: 'Не указана должность' },
+							{ max: 500, message: 'Количество символов было превышено'}
+						]}
 					>
 						<Input placeholder="Ввести название"></Input>
 					</Form.Item>
@@ -474,7 +477,10 @@ export const VacancyRequestCreateView = () => {
 									Заработная плата
 								</label>
 							}
-							rules={[{ required: true, message: 'Не указана зарплата' }]}
+							rules={[
+								{ required: true, message: 'Не указана зарплата' },
+								{ max: 70, message: 'Количество символов было превышено'}
+							]}
 						>
 							<Input placeholder="Ввести"></Input>
 						</Form.Item>
@@ -484,7 +490,10 @@ export const VacancyRequestCreateView = () => {
 						label={
 							<label className="text-black text-[18px]/[18px] font-content-font font-normal opacity-80">Задачи</label>
 						}
-						rules={[{ required: true, message: 'Не указаны задачи' }]}
+						rules={[
+							{ required: true, message: 'Не указаны задачи' },
+							{ max: 5000, message: 'Количество символов было превышено'}
+						]}
 					>
 						<Input.TextArea autoSize className="!h-[107px]" placeholder="Ввести текст..."></Input.TextArea>
 					</Form.Item>
@@ -495,7 +504,10 @@ export const VacancyRequestCreateView = () => {
 								Требования
 							</label>
 						}
-						rules={[{ required: true, message: 'Не указаны требования' }]}
+						rules={[
+							{ required: true, message: 'Не указаны требования' },
+							{ max: 5000, message: 'Количество символов было превышено'}
+						]}
 					>
 						<Input.TextArea autoSize className="!h-[107px]" placeholder="Ввести текст..."></Input.TextArea>
 					</Form.Item>
@@ -504,7 +516,10 @@ export const VacancyRequestCreateView = () => {
 						label={
 							<label className="text-black text-[18px]/[18px] font-content-font font-normal opacity-80">Условия</label>
 						}
-						rules={[{ required: true, message: 'Не указаны условия' }]}
+						rules={[
+							{ required: true, message: 'Не указаны условия' },
+							{ max: 5000, message: 'Количество символов было превышено'}
+						]}
 					>
 						<Input.TextArea autoSize className="!h-[107px]" placeholder="Ввести текст..."></Input.TextArea>
 					</Form.Item>

@@ -5,8 +5,8 @@ import { blue1f5 } from '../../utils/color'
 export const AboutMeSvg = () => {
 	return (
 		<svg
-			width="20"
-			height="18"
+			width="14"
+			height="14"
 			viewBox="0 0 20 18"
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"

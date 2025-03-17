@@ -42,9 +42,9 @@ export const Registration: FC<IRegProps> = ({ changeEmail, email }) => {
 	}
 
 	return (
-		<div className="flex flex-col items-center min-h-screen">
-			<BackMainPage />
-			<div className="flex flex-row justify-between gap-24 text-base max-xl:gap-4 max-lg:flex-col  max-lg:items-center min-h-screen items-center">
+		<div className="flex flex-wrap justify-center items-center min-h-screen">
+			<BackMainPage className='top-0'/>
+			<div className="flex mt-32  flex-row justify-between gap-24 text-base max-xl:gap-4 max-lg:flex-col  max-lg:items-center  items-center">
 				<Form
 					name="login"
 					className="max-w-[400px] p-2 max-sm:min-w-[345px] max-[321px]:min-w-[300px] rounded-lg shadow-[0_2px_22px_-4px_rgba(93,96,127,0.2)] p-6 mb-4"

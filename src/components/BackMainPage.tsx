@@ -7,7 +7,7 @@ import { ArrowLeftSvg } from '../assets/svg'
 
 const { Link } = Typography
 
-export const BackMainPage = ({ notAuth = false }) => {
+export const BackMainPage = ({ className,notAuth = false }:{className?:string, notAuth?:boolean}) => {
 	const { t, i18n } = useTranslation()
 	const location = useLocation()
 	const searchParams = new URLSearchParams(location.search)
@@ -22,7 +22,7 @@ export const BackMainPage = ({ notAuth = false }) => {
 	}, [t])
 
 	return (
-		<div className="flex w-full items-center justify-between px-8  absolute ">
+		<div className={`${className} flex w-full items-center justify-between  pr-8 pl-0  absolute `}>
 			<div className=" flex w-fit items-center gap-[10px] my-[50px] ml-[50px] cursor-pointer ">
 				{notAuth ? (
 					<div className="h-3"></div>

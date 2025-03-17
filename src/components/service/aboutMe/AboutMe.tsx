@@ -86,7 +86,7 @@ export const AboutMe = () => {
 				<Space direction="vertical" size={'small'} className="w-full">
 					<div>
 
-						{/* <UploadAvatar/> */}
+						<UploadAvatar/> 
 					</div>
 					
 					<Typography.Text className=" mt-10 opacity-80 text-black text-sm font-normal">

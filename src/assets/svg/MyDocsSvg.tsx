@@ -5,8 +5,8 @@ import { blue1f5 } from '../../utils/color'
 export const MyDocsSvg = () => {
 	return (
 		<svg
-			width="17"
-			height="19"
+			width="14"
+			height="14"
 			viewBox="0 0 17 19"
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"

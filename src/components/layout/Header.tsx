@@ -116,10 +116,10 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 		setOpenDrawer(false)
 	}
 	const items: MenuProps['items'] = [
-		{
-			label: <div className={`p-2 text-sm text-blue1f5 font-bold cursor-default`}>{user?.email}</div>,
-			key: '0'
-		},
+		// {
+		// 	label: <div className={`p-2 text-sm text-blue1f5 font-bold cursor-default`}>{user?.email}</div>,
+		// 	key: '0'
+		// },
 		{
 			type: 'divider'
 		},
@@ -155,22 +155,22 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 			key: '1'
 		},
 
-		{
-			label: (
-				<div
-					className="flex items-center gap-[15px] px-[4px] py-[5px]"
-					onClick={() => {
-						setOpenMenu(false)
+		// {
+		// 	label: (
+		// 		<div
+		// 			className="flex items-center gap-[15px] px-[4px] py-[5px]"
+		// 			onClick={() => {
+		// 				setOpenMenu(false)
 
-						navigate('/services/setting/contactInformation')
-					}}
-				>
-					<SettingSvg />
-					{t('Setting')}
-				</div>
-			),
-			key: '3'
-		},
+		// 				navigate('/services/setting/contactInformation')
+		// 			}}
+		// 		>
+		// 			<SettingSvg />
+		// 			{t('Setting')}
+		// 		</div>
+		// 	),
+		// 	key: '3'
+		// },
 
 
 		{

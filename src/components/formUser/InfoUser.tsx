@@ -35,7 +35,8 @@ export const InfoUser = () => {
 	const { t } = useTranslation()
 	const handleOk = async () => {
 		role && postRole({ role: subRole })
-		navigate('/form')
+		// navigate('/form')
+		navigate('/user')
 	}
 	const handleSkip = () => {
 		navigate('/user')
@@ -183,19 +184,19 @@ export const InfoUser = () => {
 						<p className="text-center text-sm">{t('chageRoleGuest')}</p>
 					</div>
 					<div className="w-full flex justify-center items-center gap-8 mt-[60px] ">
-						<Button
+						{/* <Button
 							disabled
 							type="default"
 							className={`w-[200px] h-[50px] font-bold rounded-full border-[${blue307}] text-[${blue307}]`}
 						>
-							{t('back')}
-						</Button>
+							{{t('back')}}
+						</Button> */}
 						<Button
 							onClick={handleOk}
 							type="primary"
 							className="w-[200px] h-[50px] rounded-full font-bold"
 						>
-							{t('next')}
+							Ок
 						</Button>
 					</div>
 					<Button

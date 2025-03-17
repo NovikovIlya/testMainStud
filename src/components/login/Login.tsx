@@ -121,7 +121,7 @@ export const Login = () => {
 
 	return (
 		<div className="flex flex-col items-center min-h-screen ">
-			<BackMainPage notAuth={true}/>
+			<BackMainPage className='' notAuth={true}/>
 			<div className="flex   justify-center gap-24 text-base max-xl:gap-4 items-center  w-full min-h-screen">
 				<Form
 				    form={form}

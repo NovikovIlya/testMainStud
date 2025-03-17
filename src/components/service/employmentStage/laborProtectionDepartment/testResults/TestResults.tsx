@@ -72,7 +72,7 @@ export const TestResults = () => {
 			triggerSearch({
 				signed: false,
 				query: requestData.query,
-				page: 0
+				page: requestData.page
 			})
 				.unwrap()
 				.then(res => {
@@ -103,6 +103,7 @@ export const TestResults = () => {
 	}, [searchQuery])
 
 	const handleSearchChange = (e: any) => {
+		setBlockPageAddition(true)
 		setSearchQuery(e.target.value)
 	}
 

@@ -952,9 +952,9 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
-		getAccountingStages: builder.query<EmploymentStageItemType[], void>({
-			query: arg => ({
-				url: `http://${emplBaseURL}employment-api/v1/management/employment`,
+		getAccountingStages: builder.query<PageableType<EmploymentStageItemType>, number>({
+			query: page => ({
+				url: `http://${emplBaseURL}employment-api/v1/management/employment?page=${page}`,
 				method: 'GET',
 				headers: {
 					Authorization: `Bearer ${accountingToken}`
@@ -1304,5 +1304,6 @@ export const {
 	useLazyGetReservedResponcesQuery,
 	useLazyGetArchivedResponcesQuery,
 	useLazyGetSeekerVacancyRelationQuery,
-	useLazyGetPersonnelStagesQuery
+	useLazyGetPersonnelStagesQuery,
+	useLazyGetAccountingStagesQuery
 } = serviceApi

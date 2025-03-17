@@ -4,11 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 
 import { SearchInputIconSvg } from '../../../../../assets/svg/SearchInputIconSvg'
 import { SuccessModalIconSvg } from '../../../../../assets/svg/SuccessModalIconSvg'
-import {
-	useGetTestResultsQuery,
-	useLazyGetTestResultsQuery,
-	useSetTestResultSignedMutation
-} from '../../../../../store/api/serviceApi'
+import { useLazyGetTestResultsQuery, useSetTestResultSignedMutation } from '../../../../../store/api/serviceApi'
 import { SignedItemType } from '../../../../../store/reducers/type'
 import { useAlert } from '../../../../../utils/Alert/AlertMessage'
 
@@ -16,37 +12,93 @@ export const TestResults = () => {
 	const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
 	const [isApproveModalOpen, setIsApproveModalOpen] = useState(false)
 	const [searchQuery, setSearchQuery] = useState('')
-	const [isSearching, setIsSearching] = useState(false)
-	const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
 	const { openAlert } = useAlert()
 
-	const {
-		data: test_result_data = [],
-		isLoading: loading,
-		refetch
-	} = useGetTestResultsQuery({ signed: false, query: '' })
+	const [requestData, setRequestData] = useState<{
+		query: string
+		page: number
+	}>({
+		query: '',
+		page: 0
+	})
 
-	const [triggerSearch, { data: searchData, isLoading: isSearchLoading }] = useLazyGetTestResultsQuery()
+	const [showSpin, setShowSpin] = useState<boolean>(true)
+
+	const [blockPageAddition, setBlockPageAddition] = useState<boolean>(true)
+	const [isBottomOfCatalogVisible, setIsBottomOfCatalogVisible] = useState<boolean>(true)
+	const catalogBottomRef = useRef<null | HTMLDivElement>(null)
+	const [stages, setStages] = useState<SignedItemType[]>([])
+
+	const [triggerSearch, { data: searchData, isLoading: isSearchLoading, isFetching: isSearchFetching }] =
+		useLazyGetTestResultsQuery()
+
+	useEffect(() => {
+		const lowerObserver = new IntersectionObserver(entries => {
+			const target = entries[0]
+			if (target.isIntersecting) {
+				console.log('I see the depths of hell below')
+				setIsBottomOfCatalogVisible(true)
+			}
+			if (!target.isIntersecting) {
+				setIsBottomOfCatalogVisible(false)
+			}
+		})
+
+		if (catalogBottomRef.current) {
+			lowerObserver.observe(catalogBottomRef.current)
+		}
+
+		return () => {
+			if (catalogBottomRef.current) {
+				lowerObserver.unobserve(catalogBottomRef.current)
+			}
+		}
+	}, [stages])
+
+	useEffect(() => {
+		if (requestData.page === 0) {
+			triggerSearch({
+				signed: false,
+				query: requestData.query,
+				page: 0
+			})
+				.unwrap()
+				.then(res => {
+					setStages(res.content)
+					setBlockPageAddition(false)
+				})
+		} else {
+			triggerSearch({
+				signed: false,
+				query: requestData.query,
+				page: 0
+			})
+				.unwrap()
+				.then(res => {
+					setStages(prev => [...prev, ...res.content])
+					res.content.length === 0 && setShowSpin(false)
+					setBlockPageAddition(false)
+				})
+		}
+	}, [requestData])
+
+	useEffect(() => {
+		if (isBottomOfCatalogVisible) {
+			if (!blockPageAddition) {
+				setRequestData(prev => ({ ...prev, page: prev.page + 1 }))
+			}
+		}
+	}, [isBottomOfCatalogVisible])
 
 	const [setSeekerSigned, { isLoading: setSeekerSignedLoading }] = useSetTestResultSignedMutation()
 
 	useEffect(() => {
-		if (searchTimeoutRef.current) {
-			clearTimeout(searchTimeoutRef.current)
-		}
-
-		searchTimeoutRef.current = setTimeout(() => {
-			setIsSearching(true)
-			triggerSearch({ signed: false, query: searchQuery }).then(() => {
-				setIsSearching(false)
-			})
+		const timeout = setTimeout(() => {
+			setRequestData({ query: searchQuery, page: 0 })
 		}, 500)
-
 		return () => {
-			if (searchTimeoutRef.current) {
-				clearTimeout(searchTimeoutRef.current)
-			}
+			clearTimeout(timeout)
 		}
 	}, [searchQuery])
 
@@ -181,7 +233,7 @@ export const TestResults = () => {
 	}
 
 	const ItemsContainer = () => {
-		if (isSearching || isSearchLoading) {
+		if (isSearchLoading) {
 			return (
 				<>
 					<div className="w-full min-h-[56vh] flex items-center">
@@ -196,14 +248,34 @@ export const TestResults = () => {
 
 		return (
 			<div className="mt-[16px] gap-[12px] flex flex-col">
-				{(searchData || test_result_data).map(item => (
-					<TestResultItem {...item} key={item.id}></TestResultItem>
-				))}
+				{isSearchFetching && requestData.page === 0 && showSpin ? (
+					<>
+						{' '}
+						<div className="text-center ml-auto mr-auto mb-[3%]">
+							<Spin indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}></Spin>
+						</div>
+					</>
+				) : (
+					<>
+						{' '}
+						<div className="flex flex-col gap-[12px]">
+							{stages.map(item => (
+								<TestResultItem {...item} key={item.id}></TestResultItem>
+							))}
+						</div>
+						{isSearchFetching && requestData.page > 0 && showSpin && (
+							<div className="text-center ml-auto mr-auto mb-[3%]">
+								<Spin indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}></Spin>
+							</div>
+						)}
+						<div className="h-[1px]" ref={catalogBottomRef} key={'catalog_bottom_key'}></div>
+					</>
+				)}
 			</div>
 		)
 	}
 
-	if (loading) {
+	if (isSearchLoading) {
 		return (
 			<>
 				<div className="w-full h-full flex items-center">

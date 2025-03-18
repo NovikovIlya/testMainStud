@@ -734,7 +734,7 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 								rules={[
 									{ required: true, message: 'Поле номера телефона не заполнено' },
 									{
-										pattern: /^\+7 \d{3} \d{3}-\d{2}-\d{2}$/,
+										pattern: /^(\+7|8)\d{10}$/,
 										message: 'Номер телефона должен быть в формате +7 999 999-99-99'
 									}
 								]}

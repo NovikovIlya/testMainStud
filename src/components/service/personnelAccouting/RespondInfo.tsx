@@ -322,7 +322,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 											onClick={() => {
 												dispatch(
 													setChatFilter(
-														res.status === 'IN_REVIEW'
+														res.status === 'IN_REVIEW' || res.status === 'IN_PERSONNEL_DEPT_REVIEW'
 															? 'IN_PERSONNEL_DEPT_REVIEW'
 															: res.status === 'IN_SUPERVISOR_REVIEW'
 															? 'IN_SUPERVISOR_REVIEW'

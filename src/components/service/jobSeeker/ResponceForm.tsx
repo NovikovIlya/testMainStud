@@ -10,6 +10,7 @@ import { ArrowToTheRight } from '../../../assets/svg/ArrowToTheRight'
 import { DeleteSvg } from '../../../assets/svg/DeleteSvg'
 import { EditSvg } from '../../../assets/svg/EditSvg'
 import { ModalOkSvg } from '../../../assets/svg/ModalOkSvg'
+import { WarningModalIconSvg } from '../../../assets/svg/WarningModalIconSvg'
 import { useAppSelector } from '../../../store'
 import { usePostVacancyRespondMutation } from '../../../store/api/serviceApi'
 import { useGetCountriesQuery, useGetEducationLevelQuery } from '../../../store/api/utilsApi'
@@ -100,34 +101,116 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 
 	const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
 	const [resultModalText, setResultModalText] = useState<string>('')
+	const [isFailedModalOpen, setIsFailedModalOpen] = useState<boolean>(false)
 
 	const handleKeyDownPhone = (e: React.KeyboardEvent<HTMLInputElement>) => {
 		const allowedKeys = [
-			'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-			' ', '(', ')', '-', '+',
-			'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight',
-		];
+			'0',
+			'1',
+			'2',
+			'3',
+			'4',
+			'5',
+			'6',
+			'7',
+			'8',
+			'9',
+			' ',
+			'(',
+			')',
+			'-',
+			'+',
+			'Backspace',
+			'Delete',
+			'ArrowLeft',
+			'ArrowRight'
+		]
 
 		if (!allowedKeys.includes(e.key)) {
-			e.preventDefault();
+			e.preventDefault()
 		}
-	};
+	}
 
 	const handleKeyDownEmail = (e: React.KeyboardEvent<HTMLInputElement>) => {
 		const allowedKeys = [
-			'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-			'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-			'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-			'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-			'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-			'@', '.', '_', '%', '+', '-',
-			'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight'
-		];
+			'0',
+			'1',
+			'2',
+			'3',
+			'4',
+			'5',
+			'6',
+			'7',
+			'8',
+			'9',
+			'a',
+			'b',
+			'c',
+			'd',
+			'e',
+			'f',
+			'g',
+			'h',
+			'i',
+			'j',
+			'k',
+			'l',
+			'm',
+			'n',
+			'o',
+			'p',
+			'q',
+			'r',
+			's',
+			't',
+			'u',
+			'v',
+			'w',
+			'x',
+			'y',
+			'z',
+			'A',
+			'B',
+			'C',
+			'D',
+			'E',
+			'F',
+			'G',
+			'H',
+			'I',
+			'J',
+			'K',
+			'L',
+			'M',
+			'N',
+			'O',
+			'P',
+			'Q',
+			'R',
+			'S',
+			'T',
+			'U',
+			'V',
+			'W',
+			'X',
+			'Y',
+			'Z',
+			'@',
+			'.',
+			'_',
+			'%',
+			'+',
+			'-',
+			'Backspace',
+			'Delete',
+			'ArrowLeft',
+			'ArrowRight'
+		]
 
 		if (!allowedKeys.includes(e.key)) {
-			e.preventDefault();
+			e.preventDefault()
 		}
-	};
+	}
 
 	return (
 		<>
@@ -138,13 +221,51 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 					e.preventDefault()
 				}}
 				onClick={e => {
-					navigate('/services/jobseeker/vacancyview/respond/main')
-					setIsFormOpen(true)
+					props.canRespond === undefined || props.canRespond === false
+						? setIsFailedModalOpen(true)
+						: (navigate('/services/jobseeker/vacancyview/respond/main'), setIsFormOpen(true))
 				}}
-				disabled={props.canRespond === undefined || props.canRespond === false}
 			>
 				Откликнуться
 			</Button>
+
+			<ConfigProvider
+				theme={{
+					token: {
+						boxShadow: '0 0 19px 0 rgba(212, 227, 241, 0.6)'
+					}
+				}}
+			>
+				<Modal
+					bodyStyle={{ padding: 53 }}
+					centered
+					open={isFailedModalOpen}
+					onCancel={() => {
+						setIsFailedModalOpen(false)
+					}}
+					title={null}
+					footer={null}
+					width={407}
+				>
+					<div className="flex flex-col">
+						<div className="w-full flex justify-center">
+							<WarningModalIconSvg />
+						</div>
+						<p className="font-content-font font-normal text-black text-[16px]/[20px] text-center mt-[22px]">
+							Вы уже откликались на данную вакансию.
+						</p>
+						<Button
+							className="rounded-[40px] mt-[40px]"
+							type="primary"
+							onClick={() => {
+								setIsFailedModalOpen(false)
+							}}
+						>
+							ОК
+						</Button>
+					</div>
+				</Modal>
+			</ConfigProvider>
 
 			<ConfigProvider
 				theme={{
@@ -504,9 +625,7 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 							<Form.Item
 								name={'gender'}
 								label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Пол</label>}
-								rules={[
-									{ required: true, message: 'Не выбран пол' }
-								]}
+								rules={[{ required: true, message: 'Не выбран пол' }]}
 							>
 								<Radio.Group
 									disabled={aboutMeData.isGenderSet}
@@ -522,7 +641,7 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 								label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Фамилия</label>}
 								rules={[
 									{ required: true, message: 'Не указано Фамилия' },
-									{ max: 500, message: 'Количество символов было превышено' },
+									{ max: 500, message: 'Количество символов было превышено' }
 								]}
 							>
 								<Input
@@ -538,7 +657,7 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 								label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Имя</label>}
 								rules={[
 									{ required: true, message: 'Не указано Имя' },
-									{ max: 500, message: 'Количество символов было превышено' },
+									{ max: 500, message: 'Количество символов было превышено' }
 								]}
 							>
 								<Input
@@ -554,7 +673,7 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 								label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Отчество</label>}
 								rules={[
 									{ required: true, message: 'Не указано Отчество' },
-									{ max: 500, message: 'Количество символов было превышено' },
+									{ max: 500, message: 'Количество символов было превышено' }
 								]}
 							>
 								<Input
@@ -616,14 +735,14 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 									{ required: true, message: 'Поле номера телефона не заполнено' },
 									{
 										pattern: /^\+7 \d{3} \d{3}-\d{2}-\d{2}$/,
-										message: 'Номер телефона должен быть в формате +7 999 999-99-99',
-									},
+										message: 'Номер телефона должен быть в формате +7 999 999-99-99'
+									}
 								]}
 							>
 								<Input
 									onKeyDown={handleKeyDownPhone}
-									onPressEnter={(e) => {
-										e.preventDefault();
+									onPressEnter={e => {
+										e.preventDefault()
 									}}
 								/>
 							</Form.Item>
@@ -638,8 +757,8 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 									{ required: true, message: 'Поле электронной почты не заполнено' },
 									{
 										pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-										message: 'Введите корректный адрес электронной почты',
-									},
+										message: 'Введите корректный адрес электронной почты'
+									}
 								]}
 							>
 								<Input
@@ -832,7 +951,7 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 								}
 								rules={[
 									{ required: true, message: 'Не указано учебное заведение' },
-									{ max: 1000, message: 'Количество символов было превышено'}
+									{ max: 1000, message: 'Количество символов было превышено' }
 								]}
 							>
 								<Input
@@ -1246,7 +1365,7 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 								name={'workplace'}
 								rules={[
 									{ required: true, message: 'Не указано Место работы"' },
-									{ max: 1000, message: "Количество символов было превышено"}
+									{ max: 1000, message: 'Количество символов было превышено' }
 								]}
 								label={
 									<label className="text-black text-[18px]/[18px] font-content-font font-normal">Место работы</label>
@@ -1263,7 +1382,7 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 								name={'seat'}
 								rules={[
 									{ required: true, message: 'Не указана должность' },
-									{ max: 1000, message: "Количество символов было превышено"}
+									{ max: 1000, message: 'Количество символов было превышено' }
 								]}
 								label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Должность</label>}
 							>
@@ -1297,7 +1416,7 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 								name={'duties'}
 								rules={[
 									{ required: true, message: 'Не указаны обязанности' },
-									{ max: 1000, message: "Количество символов было превышено"}
+									{ max: 1000, message: 'Количество символов было превышено' }
 								]}
 								label={
 									<label className="text-black text-[18px]/[18px] font-content-font font-normal">Обязанности</label>
@@ -1474,7 +1593,7 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 													if (currentFormskills.length < 100) {
 														setSkillsValidUnhidden(true)
 														skillInputValue !== '' &&
-														(setcurrentFormSkills([...currentFormskills, skillInputValue]), setSkillInputValue(''))
+															(setcurrentFormSkills([...currentFormskills, skillInputValue]), setSkillInputValue(''))
 													} else {
 														setSkillsValidUnhidden(false)
 													}
@@ -1523,10 +1642,11 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 							<Form.Item
 								name={'details'}
 								rules={[
-								{
-									max: 10000, message: 'Количество символов было превышено'
-								}
-							]}
+									{
+										max: 10000,
+										message: 'Количество символов было превышено'
+									}
+								]}
 								label={
 									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
 										О себе (необязательно)

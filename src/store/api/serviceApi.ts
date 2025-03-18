@@ -267,16 +267,10 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
-		getVacancyRequests: builder.query<
-			{
-				content: VacancyRequestItemType[]
-				page: { size: number; number: number; totalElements: number; totalPages: number }
-			},
-			string
-		>({
-			query: action => ({
-				url: `http://${emplBaseURL}employment-api/v1/management/vacancy-requests${
-					action === 'все' ? '' : `?action=${action}`
+		getVacancyRequests: builder.query<PageableType<VacancyRequestItemType>, { action: string; page: number }>({
+			query: ({ action, page }) => ({
+				url: `http://${emplBaseURL}employment-api/v1/management/vacancy-requests?page=${page}${
+					action === 'все' ? '' : `&action=${action}`
 				}`,
 				headers: {
 					Authorization: `Bearer ${personnelDeparmentToken}`

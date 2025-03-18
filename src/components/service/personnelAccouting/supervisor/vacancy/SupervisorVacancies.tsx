@@ -116,13 +116,12 @@ export const SupervisorVacancies = () => {
 							{vacancies.map(vac => (
 								<SupervisorVacancyItem {...vac} key={vac.id} />
 							))}
-							{getVacanciesStatus.isFetching && requestData.page > 0 && showSpin ? (
+							{getVacanciesStatus.isFetching && requestData.page > 0 && showSpin && (
 								<div className="text-center ml-auto mr-auto mb-[3%]">
 									<Spin indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}></Spin>
 								</div>
-							) : (
-								<div className="h-[1px]" ref={catalogBottomRef} key={'catalog_bottom_key'}></div>
 							)}
+							<div className="h-[1px]" ref={catalogBottomRef} key={'catalog_bottom_key'}></div>
 						</>
 					)}
 				</div>

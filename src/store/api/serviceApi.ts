@@ -259,9 +259,9 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
-		getSupervisorVacancy: builder.query<VacancyItemType[], void>({
-			query: () => ({
-				url: `http://${emplBaseURL}employment-api/v1/management/supervisor/vacancy`,
+		getSupervisorVacancy: builder.query<PageableType<VacancyItemType>, number>({
+			query: page => ({
+				url: `http://${emplBaseURL}employment-api/v1/management/supervisor/vacancy?page=${page}`,
 				headers: {
 					Authorization: `Bearer ${supervisorToken}`
 				}
@@ -1161,9 +1161,9 @@ export const serviceApi = apiSlice.injectEndpoints({
 			}),
 			keepUnusedDataFor: 0
 		}),
-		getAllSupervisorRequests: builder.query<SupervisorRequestType[], string>({
+		getAllSupervisorRequests: builder.query<PageableType<SupervisorRequestType>, string>({
 			query: action => ({
-				url: `http://${emplBaseURL}employment-api/v1/management/vacancy-requests?action=${action}`,
+				url: `http://${emplBaseURL}employment-api/v1/management/vacancy-requests?action=${action}&size=2000&page=0`,
 				method: 'GET'
 			})
 		}),
@@ -1305,5 +1305,6 @@ export const {
 	useLazyGetArchivedResponcesQuery,
 	useLazyGetSeekerVacancyRelationQuery,
 	useLazyGetPersonnelStagesQuery,
-	useLazyGetAccountingStagesQuery
+	useLazyGetAccountingStagesQuery,
+	useLazyGetSupervisorVacancyQuery
 } = serviceApi

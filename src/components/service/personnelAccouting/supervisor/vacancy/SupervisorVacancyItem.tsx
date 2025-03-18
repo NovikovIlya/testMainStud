@@ -114,7 +114,7 @@ export default function VacancyItem(props: VacancyItemType) {
 										await getAllRequests('DELETE')
 											.unwrap()
 											.then(requests => {
-												let alreadyRequest = requests.find(req => {
+												let alreadyRequest = requests.content.find(req => {
 													return req.vacancy.id === props.id && req.status === 'VERIFYING'
 												})
 												alreadyRequest

@@ -416,10 +416,6 @@ export const DirectResume = ({
 									required: {
 										value: true,
 										message: 'Телефон введён некорректно'
-									},
-									pattern: {
-										value: /^(\+7|8)\d{10}$/, // Формат +7 999 999-99-99
-										message: 'Телефон должен быть в формате +7 999 999-99-99'
 									}
 								}}
 								render={({ field }) => (

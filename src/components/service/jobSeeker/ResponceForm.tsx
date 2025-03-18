@@ -102,6 +102,7 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 	const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
 	const [resultModalText, setResultModalText] = useState<string>('')
 	const [isFailedModalOpen, setIsFailedModalOpen] = useState<boolean>(false)
+	const [canRespond, setCanRespond] = useState<boolean | undefined>(props.canRespond)
 
 	const handleKeyDownPhone = (e: React.KeyboardEvent<HTMLInputElement>) => {
 		const allowedKeys = [
@@ -221,7 +222,7 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 					e.preventDefault()
 				}}
 				onClick={e => {
-					props.canRespond === undefined || props.canRespond === false
+					canRespond === undefined || canRespond === false
 						? setIsFailedModalOpen(true)
 						: (navigate('/services/jobseeker/vacancyview/respond/main'), setIsFormOpen(true))
 				}}
@@ -252,7 +253,8 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 							<WarningModalIconSvg />
 						</div>
 						<p className="font-content-font font-normal text-black text-[16px]/[20px] text-center mt-[22px]">
-							Вы уже откликались на данную вакансию.
+							Спасибо за интерес к нашей вакансии! Мы заметили, что вы уже откликнулись на эту позицию. К сожалению,
+							повторные отклики на данную вакансию не принимаются.
 						</p>
 						<Button
 							className="rounded-[40px] mt-[40px]"
@@ -562,6 +564,7 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 										})
 											.unwrap()
 											.then(() => {
+												setCanRespond(false)
 												setResultModalText('Спасибо, ваш отклик успешно отправлен.')
 												setIsFormOpen(false)
 												setIsSuccessModalOpen(true)
@@ -731,13 +734,7 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 							<Form.Item
 								name="phoneNumber"
 								label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Телефон</label>}
-								rules={[
-									{ required: true, message: 'Поле номера телефона не заполнено' },
-									{
-										pattern: /^(\+7|8)\d{10}$/,
-										message: 'Номер телефона должен быть в формате +7 999 999-99-99'
-									}
-								]}
+								rules={[{ required: true, message: 'Поле номера телефона не заполнено' }]}
 							>
 								<Input
 									onKeyDown={handleKeyDownPhone}

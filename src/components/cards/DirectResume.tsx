@@ -71,7 +71,7 @@ export const DirectResume = ({
 
 	const [getInfo] = useLazyGetInfoUserQuery()
 
-	const { control, register, handleSubmit, formState, setValue, watch } = useForm({
+	const { control, register, handleSubmit, formState, setValue, watch } = useForm<formDataType>({
 		defaultValues: {
 			name: '',
 			lastname: '',
@@ -80,7 +80,8 @@ export const DirectResume = ({
 			phone: '',
 			vacancy: '',
 			resumeFile: null
-		}
+		},
+		mode: 'onChange'
 	})
 
 	const { errors } = formState
@@ -490,8 +491,10 @@ export const DirectResume = ({
 												validate: {
 													// Проверка размера файла (не более 10 МБ)
 													fileSize: fileList => {
-														const file = fileList[0]
+														console.log('Валидация')
+														const file = fileList?.[0]
 														if (file && file.size > 10 * 1024 * 1024) {
+															console.log('Не подходит')
 															return 'Размер файла не должен превышать 10 МБ'
 														}
 													}
@@ -522,7 +525,7 @@ export const DirectResume = ({
 									icon={<DeleteSvg />}
 									type="text"
 									onClick={() => {
-										setValue('resumeFile', null)
+										setValue('resumeFile', null, { shouldValidate: true })
 										setFilename('')
 									}}
 								/>

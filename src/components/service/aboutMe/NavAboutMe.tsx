@@ -163,6 +163,9 @@ import { useLocalStorageState } from 'ahooks'
 import { ContactInformationSvg } from '../../../assets/svg/ContactInformationSvg'
 import MainContact from '../setting/Contacts/MainContact'
 import AboutMeNew from './AboutMeNew'
+import Languages from './Languages'
+import { LanguageSvg } from '../../../assets/svg/LanguageSvg'
+import { LanguagesSvgNew } from '../../../assets/svg/LanguagesSvgNew'
 
 export const NavAboutMe = () => {
   const { pathname } = useLocation()
@@ -186,9 +189,25 @@ export const NavAboutMe = () => {
 	{
 		key: '/services/aboutMe/contactInformation',
 		icon: <ContactInformationSvg />,
-		label: <p className="ml-[10px]">{ t('contactInformation')}</p>
+		label: (			<div className="ml-[10px] min-w-0">
+      <p className="whitespace-normal break-words text-wrap text-sm leading-4">
+      { t('contactInformation')}
+      </p>
+    </div>)
+   
 		
 	  },
+    {
+      key: '/services/aboutMe/languages',
+      icon: <LanguagesSvgNew />,
+      label: (			<div className="ml-[10px] min-w-0">
+        <p className="whitespace-normal break-words text-wrap text-sm leading-4">
+       Знание языков
+        </p>
+      </div>)
+     
+      
+      },
     {
       key: '/services/aboutMe/document',
       icon: <MyDocsSvg />,
@@ -278,6 +297,7 @@ export const NavAboutMe = () => {
       <div className={`${collapsed ? 'ml-[80px]' : 'ml-[229px]'} bg-[#F5F8FB] w-full pt-[70px] min-h-screen`}>
         {pathname === '/services/aboutMe/personalData' && <AboutMeNew />}
 		{pathname === '/services/aboutMe/contactInformation' && <MainContact />}
+    {pathname === '/services/aboutMe/languages' && <Languages />}
         {pathname === '/services/aboutMe/document' && <Document />}
         {pathname === '/services/aboutMe/address' && <Address />}
         {pathname === '/services/aboutMe/education' && <Education />}

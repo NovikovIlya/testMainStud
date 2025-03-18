@@ -61,6 +61,8 @@ const Languages = () => {
 									]}
 								/>
 							</Form.Item>
+
+							<Button className='mt-4' type="primary" htmlType="submit">Сохранить</Button>
 						</Form>
 					</Col>
 				</Row>

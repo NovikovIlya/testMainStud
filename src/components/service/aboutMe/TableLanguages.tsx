@@ -86,7 +86,10 @@ const TableLanguages: React.FC = () => {
 	
 	return (
 		<>
-			<Table<DataType> pagination={false} columns={columns} dataSource={data} />
+			<Table<DataType>
+			 pagination={false} columns={columns} dataSource={data} 
+			 className='w-full'
+			 />
 			
 		</>
 	)

@@ -1,66 +1,73 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { UploadOutlined, UserOutlined } from '@ant-design/icons';
-import type { UploadProps } from 'antd';
-import { Button, message, Upload } from 'antd';
-import { Flex, Divider, Form, Radio, Skeleton, Space, Switch } from 'antd';
-import { PersonSvg } from '../../../assets/svg';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@reduxjs/toolkit/query';
-import i18next from 'i18next';
-import { apiSlice } from '../../../store/api/apiSlice';
-
-
+import { Avatar, Button, message, Upload } from 'antd';
+import { useAddAvatarMutation, useGetAvatarQuery, usePutAvatarMutation } from '../../../store/api/aboutMe/forAboutMe';
 
 const UploadAvatar: React.FC = () => {
-    const accessToken = useSelector((state: any) => state.auth.accessToken);
-    const cleanedToken = accessToken?.replaceAll('"', '') || '';
-    const dispatch = useDispatch();
-    const [avatar,setAvatar]  = useState(null)
+  const { data: avatarUrl } = useGetAvatarQuery();
+  const [addAvatar, { isLoading }] = useAddAvatarMutation();
+  const [putAvatar, { isLoading: isLoadingPut }] = usePutAvatarMutation();
+  const beforeUpload = (file: File) => {
+    const isImage = file.type.startsWith('image/');
+    const isLt5M = file.size / 1024 / 1024 < 5;
 
-    const props: UploadProps = {
-        name: 'file',
-      
-        action: 'https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload',
-        headers: {
-          ...(cleanedToken && { Authorization: `Bearer ${cleanedToken}` }),
-          'Accept-Language': i18next.language,
-        },
-        onChange(info) {
-          if (info.file.status !== 'uploading') {
-            console.log(info.file, info.fileList);
-          }
-          if (info.file.status === 'done') {
-            message.success(`${info.file.name} file uploaded successfully`);
-    
-            console.log("Успешный ответ сервера:", info.file.response);
-            setAvatar(info.file.response)
+    if (!isImage) {
+      message.error('Можно загружать только изображения!');
+      return false;
+    }
 
-            // dispatch(apiSlice.util.invalidateTags(['']));
-          } else if (info.file.status === 'error') {
-            message.error(`${info.file.name} file upload failed.`);
-          }
-        },
-      
-        itemRender: (originNode: React.ReactNode, file: any) => {
-          // Обрезаем имя файла до 10 символов и добавляем многоточие
-          const shortName = file.name.length > 10 ? `${file.name.slice(0, 10)}...` : file.name;
-          return (
-            <div>
-              <span>{''}</span>
-            </div>
-          );
-        },
-      };
-    
-    return(
-    <div className='relative w-[180px] mb-4 '>  
-        <div className='w-[180px] h-[180px] bg-[#cbdaf1] rounded-[50%]'></div>
-        <div className='absolute right-3 bottom-3 '>
-            <Upload  maxCount={1} {...props} >
-                <Button className=' !rounded-[50%]' icon={<UploadOutlined />}></Button>
-             </Upload>
-        </div>
+    if (!isLt5M) {
+      message.error('Файл должен быть меньше 5MB!');
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleUpload = async (file: File) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    console.log('avatarUrl',avatarUrl)
+    try {
+      if(avatarUrl){
+        await putAvatar(formData).unwrap();
+        message.success('Аватар успешно обновлен');
+      } else {
+        await addAvatar(formData).unwrap();
+        message.success('Аватар успешно обновлен');
+      }
+      // await addAvatar(formData).unwrap();
+      // message.success('Аватар успешно обновлен');
+    } catch (error) {
+      message.error('Ошибка при загрузке аватара');
+    }
+  };
+
+  return (
+    <div className='relative w-[180px] mb-4'>
+      <Avatar
+        className='bg-[#cbdaf1] rounded-[50%]'
+        size={180}
+        src={avatarUrl}
+        icon={!avatarUrl && <UserOutlined />}
+      />
+      <div className='absolute right-3 bottom-3'>
+        <Upload
+          maxCount={1}
+          showUploadList={false}
+          beforeUpload={beforeUpload}
+          accept="image/png, image/jpeg, image/webp"
+          customRequest={({ file }) => handleUpload(file as File)}
+        >
+          <Button
+            className='!rounded-[50%]'
+            icon={<UploadOutlined />}
+            loading={isLoading}
+          />
+        </Upload>
+      </div>
     </div>
-)}
+  );
+};
 
 export default UploadAvatar;

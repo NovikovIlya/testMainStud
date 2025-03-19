@@ -134,7 +134,7 @@ export const NumberInformation = () => {
 			subTitle="Произошла ошибка, попробуйте пожалуйста позднее."
 		
 		/></div>}
-	if (data === undefined || isLoading) return <SkeletonPage />
+	// if (data === undefined || isLoading) return <SkeletonPage />
 
 	return (
 		<Form form={form} onFinish={onSubmitPhone2}>

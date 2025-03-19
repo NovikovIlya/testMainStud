@@ -77,7 +77,7 @@ const Languages = () => {
 				<Row>
 					<TableLanguages />
 				</Row>
-				<Row className="flex justify-center mt-2">
+				<Row className="flex justify-center mt-4">
 					<Button onClick={showModal} type="primary" style={{ marginBottom: 16 }}>
 						Добавить язык
 					</Button>

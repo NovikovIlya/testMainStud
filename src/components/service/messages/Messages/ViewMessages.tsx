@@ -29,6 +29,7 @@ import ChatSkeleton from './ChatSkeleton'
 
 export const ViewMessage = () => {
 	const user = useAppSelector(state => state.auth.user)
+
 	const [form] = Form.useForm()
 	const [dialogs, setDialogs] = useState<ChatResponse[]>([])
 	const { t } = useTranslation()
@@ -127,6 +128,7 @@ export const ViewMessage = () => {
 		}
 	}, [dataAllDialogs])
 
+	
 	useEffect(() => {
 		if (dataAllDialogsOld) {
 			setDialogs(prevDialogs => {
@@ -210,9 +212,10 @@ export const ViewMessage = () => {
 	const onFinish = async () => {
 		const obj = {
 			message: form.getFieldValue('textArea'),
-			senderName: `${user.lastname} ${user.firstname} ${user.middlename}`,
+			senderName: `${user.lastname} ${user.firstname} ${user.middleName}`,
 			chatId: activeDialog
 		}
+	
 		sendMessage(obj).unwrap()
 		form.resetFields()
 	}
@@ -307,6 +310,7 @@ export const ViewMessage = () => {
 											key={item.id}
 											onClick={e => {
 												if (item.id === activeDialog) return
+											
 												e.stopPropagation()
 												setChatArray([])
 												setPageChat(0)

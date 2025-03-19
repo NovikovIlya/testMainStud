@@ -79,7 +79,7 @@
 	"confirm": "The field does not match the above password",
 	"repeatPassword": "Repeat the password",
 	"email": "Email",
-	"userAgreement": "I accept the user agreement and give permission to the CFU portal to process my personal data in accordance with Federal Law No. 152-FZ of 27.07.2006 'On Personal Data'",
+	"userAgreement": "User agrement",
 	"seletctType": "Select document type",
 	"alreadyProfile": "Already have a profile?",
 	"login": "Log in",
@@ -828,7 +828,23 @@
 	"isBlocked": "is Blocked",
 	"confirmData":"Сonfirm?",
 	"printEmpty": "Print empty",
-	"emptyJournal": "Empty journal"
+	"emptyJournal": "Empty journal",
+	"fullName": "Full Name",
+	"birthDate": "Date of Birth",
+	"citizenshipType": "Citizenship Type",
+	"citizenshipCountry": "Citizenship Country",
+	"birthPlace": "Place of Birth",
+	"agreementTooltip": "Agreement tooltip",
+	"codexAgreement": "Familiarized with the “Code of Ethics of KFU Students”",
+	"libraryRegulations": "Familiarized with the “General Library Regulations”",
+	"generalAgreement": "I accept the agreement between participants of electronic interaction and confirm that I have read the terms of this agreement",
+	"saveButton": "Save",
+	"bachelorsDegree": "Bachelor's Degree",
+	"additionalInfo": "Additional Information",
+	"insitute": "Insitute",
+		"typeObr": "Education form"
+		
+	  
 	
 
 	

@@ -1,5 +1,5 @@
 import type { MenuProps } from 'antd'
-import { Button, Menu, Tour } from 'antd'
+import { Button, Menu, Tour ,ConfigProvider } from 'antd'
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { PracticesSvg } from '../../../assets/svg/PracticesSvg'
@@ -17,6 +17,8 @@ import { QuestionCircleOutlined } from '@ant-design/icons'
 import { Finally } from './finally/Finally'
 import useWindowOrientation from '../../../utils/hooks/useDeviceOrientation'
 import { isMobileDevice } from '../../../utils/hooks/useIsMobile'
+import ruRU from 'antd/locale/ru_RU'
+import enUS from 'antd/locale/en_US'
 
 type MenuItem = Required<MenuProps>['items'][number]
 
@@ -26,7 +28,7 @@ export const NavPractices = () => {
   const [openKeys, setOpenKeys] = useState(['sub1'])
   const [current, setCurrent] = useState('registerContracts')
   const navigate = useNavigate()
-  const { t } = useTranslation()
+  const { t,i18n } = useTranslation()
 
   const ref1 = useRef<HTMLButtonElement | null>(null)
   const ref2 = useRef<HTMLButtonElement | null>(null)
@@ -65,29 +67,29 @@ export const NavPractices = () => {
       icon: <PracticesSvg />,
       children: [{ key: 'finally', label: t('finally') }]
     },
-    // {
-    //   key: 'sub3',
-    //   label: (
-    //     <Button
-    //       className='opacity-70 mt-1 items-center'
-    //       onClick={() => {
-    //         if (!ref1.current?.closest('li')?.classList.contains('ant-menu-submenu-open')) {
-    //           ref1.current?.click()
-    //         }
-    //         if (!ref2.current?.closest('li')?.classList.contains('ant-menu-submenu-open')) {
-    //           ref2.current?.click()
-    //         }
-    //         if (!ref3.current?.closest('li')?.classList.contains('ant-menu-submenu-open')) {
-    //           ref3.current?.click()
-    //         }
-    //         setOpen(true)
-    //       }}
-    //     >
-    //       {t('takeTutorial')}
-    //     </Button>
-    //   ),
-    //   icon: <QuestionCircleOutlined className='invisible absolute top-1/2 -translate-y-1/2 right-4' />
-    // }
+    {
+      key: 'sub3',
+      label: (
+        <Button
+          className='opacity-70 mt-1 items-center'
+          onClick={() => {
+            if (!ref1.current?.closest('li')?.classList.contains('ant-menu-submenu-open')) {
+              ref1.current?.click()
+            }
+            if (!ref2.current?.closest('li')?.classList.contains('ant-menu-submenu-open')) {
+              ref2.current?.click()
+            }
+            if (!ref3.current?.closest('li')?.classList.contains('ant-menu-submenu-open')) {
+              ref3.current?.click()
+            }
+            setOpen(true)
+          }}
+        >
+          {t('takeTutorial')}
+        </Button>
+      ),
+      icon: <QuestionCircleOutlined className='invisible absolute top-1/2 -translate-y-1/2 right-4' />
+    }
   ]
 
   const steps: any = [
@@ -194,6 +196,7 @@ export const NavPractices = () => {
       setOpenKeys(latestOpenKey ? [latestOpenKey] : [])
     }
   }
+  const currentLocale = i18n.language === 'ru' ? ruRU : enUS
 
   return (
     <>
@@ -231,7 +234,9 @@ export const NavPractices = () => {
           {current === 'practiceOrder' && <PracticeOrder />}
           {current === 'appendix' && <Appendix />}
           {current === 'finally' && <Finally />}
-          {/* <Tour open={open} onClose={() => setOpen(false)} steps={steps} /> */}
+          <ConfigProvider locale={currentLocale}>
+         <Tour open={open} onClose={() => setOpen(false)} steps={steps} />
+         </ConfigProvider>
         </div>
       )}
     </>

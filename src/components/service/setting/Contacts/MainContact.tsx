@@ -4,7 +4,7 @@ import { NumberInformation } from './NumberUnformation.tsx'
 
 const MainContact = () => {
   return (
-    <div className='px-[50px] pb-[80px] pt-[50px]'>
+    <div className='px-[50px] pb-[80px] pt-[40px]'>
         <ContactInformation/>
         <NumberInformation/>
     </div>

@@ -1,7 +1,7 @@
 import { UserSwitchOutlined } from '@ant-design/icons'
 import { useLocalStorageState } from 'ahooks'
 import { useClickAway } from 'ahooks'
-import { Badge, Button, Divider, Drawer, Dropdown, Modal, Select, Space } from 'antd'
+import { Avatar, Badge, Button, Divider, Drawer, Dropdown, Modal, Select, Space } from 'antd'
 import type { MenuProps } from 'antd'
 import clsx from 'clsx'
 import { useEffect, useRef, useState } from 'react'
@@ -29,6 +29,7 @@ import AccessibilityHelper from '../AccessibilityHelper/AccessibilityHelper'
 import { ModalNav } from '../service/ModalNav'
 import { useGetAllUnReadQuery } from '../../store/api/messages/messageApi'
 import { LogoSvgNew } from '../../assets/svg/LogoSvgNew'
+import { useGetAvatarQuery } from '../../store/api/aboutMe/forAboutMe'
 
 
 
@@ -54,12 +55,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const [mainRole, setmainRole] = useLocalStorageState<any>('typeAcc', {defaultValue: 'STUD'})
 	const [login, { data: dataLogin, isSuccess, isLoading }] = useFakeLoginMutation()
 	const [isOpen, setIsOpen] = useState(false)
-	const [info, setInfo] = useLocalStorageState<any>(
-		'info',
-		{
-		  defaultValue: '',
-		},
-	);
+	const [info, setInfo] = useLocalStorageState<any>('info',{  defaultValue: '',},);
 	const ref = useRef<any>(null)
 	const { unreadChatsCount } = useGetAllUnReadQuery(null, {
 		pollingInterval: 2000,
@@ -67,7 +63,8 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 		selectFromResult: ({ data }) => ({
 		  unreadChatsCount: data?.unreadChatsCount
 		}),
-	  })
+	})
+	const { data: avatarUrl, isLoading: isAvatarLoading } = useGetAvatarQuery();
 	
 	useEffect(() => {
 		if (isSuccessSubRole) {
@@ -427,7 +424,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 							className="cursor-pointer h-full  box-border"
 						>
 							<Space className="px-10 max-sm:px-5 max-[455px]:!gap-0 gap-2 w-[200px] flex justify-end">
-								<PersonSvg white={type === 'service'} />
+								{!avatarUrl?<PersonSvg white={type === 'service'} /> : <Avatar src={avatarUrl}/>}
 								<div className={clsx('h-full max-[455px]:hidden', type === 'service' && 'text-white')}>
 									<div className="font-bold text-sm truncate max-w-[120px]">
 										

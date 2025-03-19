@@ -1,20 +1,81 @@
 import { LoadingOutlined } from '@ant-design/icons'
 import { Radio, Spin } from 'antd'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
-import { useGetVacancyRequestsQuery } from '../../../store/api/serviceApi'
+import { useLazyGetVacancyRequestsQuery } from '../../../store/api/serviceApi'
+import { VacancyRequestItemType } from '../../../store/reducers/type'
 
 import { VacancyRequestItem } from './VacancyRequestItem'
 
 export const VacancyRequestsPage = () => {
-	const [action, setAction] = useState<string>('все')
+	const [requestData, setRequestData] = useState<{
+		page: number
+		action: string
+	}>({
+		page: 0,
+		action: 'все'
+	})
 
-	const {
-		data: requests = { content: [], page: { size: 0, number: 0, totalElements: 0, totalPages: 0 } },
-		isLoading: loading
-	} = useGetVacancyRequestsQuery(action)
+	const [showSpin, setShowSpin] = useState<boolean>(true)
 
-	if (loading) {
+	const [blockPageAddition, setBlockPageAddition] = useState<boolean>(true)
+	const [isBottomOfCatalogVisible, setIsBottomOfCatalogVisible] = useState<boolean>(true)
+	const catalogBottomRef = useRef<null | HTMLDivElement>(null)
+	const [requests, setRequests] = useState<VacancyRequestItemType[]>([])
+
+	const [getRequests, getRequestsStatus] = useLazyGetVacancyRequestsQuery()
+
+	useEffect(() => {
+		const lowerObserver = new IntersectionObserver(entries => {
+			const target = entries[0]
+			if (target.isIntersecting) {
+				console.log('I see the depths of hell below')
+				setIsBottomOfCatalogVisible(true)
+			}
+			if (!target.isIntersecting) {
+				setIsBottomOfCatalogVisible(false)
+			}
+		})
+
+		if (catalogBottomRef.current) {
+			lowerObserver.observe(catalogBottomRef.current)
+		}
+
+		return () => {
+			if (catalogBottomRef.current) {
+				lowerObserver.unobserve(catalogBottomRef.current)
+			}
+		}
+	}, [requests])
+
+	useEffect(() => {
+		if (requestData.page === 0) {
+			getRequests({ page: requestData.page, action: requestData.action })
+				.unwrap()
+				.then(res => {
+					setRequests(res.content)
+					setBlockPageAddition(false)
+				})
+		} else {
+			getRequests({ page: requestData.page, action: requestData.action })
+				.unwrap()
+				.then(res => {
+					setRequests(prev => [...prev, ...res.content])
+					res.content.length === 0 && setShowSpin(false)
+					setBlockPageAddition(false)
+				})
+		}
+	}, [requestData])
+
+	useEffect(() => {
+		if (isBottomOfCatalogVisible) {
+			if (!blockPageAddition) {
+				setRequestData(prev => ({ ...prev, page: prev.page + 1 }))
+			}
+		}
+	}, [isBottomOfCatalogVisible])
+
+	if (getRequestsStatus.isLoading) {
 		return (
 			<>
 				<div className="w-full h-full flex items-center">
@@ -33,14 +94,16 @@ export const VacancyRequestsPage = () => {
 				<h1 className="font-content-font font-normal text-[28px]/[28px] text-black">Заявки от руководилей</h1>
 				<Radio.Group
 					className="mt-[40px] flex gap-[12px]"
-					value={action}
+					value={requestData.action}
 					onChange={e => {
-						setAction(e.target.value)
+						setRequestData({ page: 0, action: e.target.value })
 					}}
 				>
 					<label
 						className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
-							action === 'все' ? 'text-white bg-dasha-blue' : 'text-black border-solid border-black border-[1px]'
+							requestData.action === 'все'
+								? 'text-white bg-dasha-blue'
+								: 'text-black border-solid border-black border-[1px]'
 						} font-normal text-[16px]/[16px]`}
 					>
 						<Radio value={'все'} className="hidden"></Radio>
@@ -48,7 +111,9 @@ export const VacancyRequestsPage = () => {
 					</label>
 					<label
 						className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
-							action === 'UPDATE' ? 'text-white bg-dasha-blue' : 'text-black border-solid border-black border-[1px]'
+							requestData.action === 'UPDATE'
+								? 'text-white bg-dasha-blue'
+								: 'text-black border-solid border-black border-[1px]'
 						} font-normal text-[16px]/[16px]`}
 					>
 						<Radio value={'UPDATE'} className="hidden"></Radio>
@@ -56,7 +121,9 @@ export const VacancyRequestsPage = () => {
 					</label>
 					<label
 						className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
-							action === 'CREATE' ? 'text-white bg-dasha-blue' : 'text-black border-solid border-black border-[1px]'
+							requestData.action === 'CREATE'
+								? 'text-white bg-dasha-blue'
+								: 'text-black border-solid border-black border-[1px]'
 						} font-normal text-[16px]/[16px]`}
 					>
 						<Radio value={'CREATE'} className="hidden"></Radio>
@@ -64,7 +131,9 @@ export const VacancyRequestsPage = () => {
 					</label>
 					<label
 						className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
-							action === 'DELETE' ? 'text-white bg-dasha-blue' : 'text-black border-solid border-black border-[1px]'
+							requestData.action === 'DELETE'
+								? 'text-white bg-dasha-blue'
+								: 'text-black border-solid border-black border-[1px]'
 						} font-normal text-[16px]/[16px]`}
 					>
 						<Radio value={'DELETE'} className="hidden"></Radio>
@@ -75,14 +144,32 @@ export const VacancyRequestsPage = () => {
 					<h3 className="w-[40%] font-content-font font-normal text-[14px]/[14px] text-text-gray">Должность</h3>
 					<h3 className="w-[10%] ml-[10%] font-content-font font-normal text-[14px]/[14px] text-text-gray">Заявка</h3>
 				</div>
-				{requests.content.map(req => (
-					<VacancyRequestItem
-						vacancyTitle={req.vacancy.post}
-						action={req.action}
-						vacancyId={req.vacancy.id}
-						requestId={req.id}
-					/>
-				))}
+				{getRequestsStatus.isFetching && requestData.page === 0 && showSpin ? (
+					<>
+						{' '}
+						<div className="text-center ml-auto mr-auto mb-[3%]">
+							<Spin indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}></Spin>
+						</div>
+					</>
+				) : (
+					<>
+						{' '}
+						{requests.map(req => (
+							<VacancyRequestItem
+								vacancyTitle={req.vacancy.post}
+								action={req.action}
+								vacancyId={req.vacancy.id}
+								requestId={req.id}
+							/>
+						))}
+						{getRequestsStatus.isFetching && requestData.page > 0 && showSpin && (
+							<div className="text-center ml-auto mr-auto mb-[3%]">
+								<Spin indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}></Spin>
+							</div>
+						)}
+						<div className="h-[1px]" ref={catalogBottomRef} key={'catalog_bottom_key'}></div>
+					</>
+				)}
 			</div>
 		</>
 	)

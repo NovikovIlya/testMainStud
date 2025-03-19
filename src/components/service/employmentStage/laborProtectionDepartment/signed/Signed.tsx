@@ -26,10 +26,10 @@ export const Signed = () => {
 	const { openAlert } = useAlert()
 
 	const {
-		data: test_result_data = [],
+		data: test_result_data = { content: [] },
 		isLoading: loading,
 		refetch
-	} = useGetTestResultsQuery({ signed: true, query: '' })
+	} = useGetTestResultsQuery({ signed: true, query: '', page: 0 })
 
 	const [triggerSearch, { data: searchData, isLoading: isSearchLoading }] = useLazyGetTestResultsQuery()
 
@@ -46,7 +46,7 @@ export const Signed = () => {
 
 		searchTimeoutRef.current = setTimeout(() => {
 			setIsSearching(true)
-			triggerSearch({ signed: true, query: searchQuery }).then(() => {
+			triggerSearch({ signed: true, query: searchQuery, page: 0 }).then(() => {
 				setIsSearching(false)
 			})
 		}, 500)
@@ -215,7 +215,7 @@ export const Signed = () => {
 
 		return (
 			<div className="mt-[16px] gap-[12px] flex flex-col">
-				{(searchData || test_result_data).map(item => (
+				{(searchData || test_result_data).content.map(item => (
 					<SignedItem {...item} key={item.id}></SignedItem>
 				))}
 			</div>

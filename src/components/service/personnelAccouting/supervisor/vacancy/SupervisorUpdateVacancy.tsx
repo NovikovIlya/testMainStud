@@ -436,7 +436,7 @@ export const SupervisorUpdateVacancy = () => {
 											await getAllRequests('UPDATE')
 												.unwrap()
 												.then(requests => {
-													let alreadyRequest = requests.find(req => {
+													let alreadyRequest = requests.content.find(req => {
 														return (
 															req.vacancy.id ===
 																parseInt(

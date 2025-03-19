@@ -259,24 +259,18 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
-		getSupervisorVacancy: builder.query<VacancyItemType[], void>({
-			query: () => ({
-				url: `http://${emplBaseURL}employment-api/v1/management/supervisor/vacancy`,
+		getSupervisorVacancy: builder.query<PageableType<VacancyItemType>, number>({
+			query: page => ({
+				url: `http://${emplBaseURL}employment-api/v1/management/supervisor/vacancy?page=${page}`,
 				headers: {
 					Authorization: `Bearer ${supervisorToken}`
 				}
 			})
 		}),
-		getVacancyRequests: builder.query<
-			{
-				content: VacancyRequestItemType[]
-				page: { size: number; number: number; totalElements: number; totalPages: number }
-			},
-			string
-		>({
-			query: action => ({
-				url: `http://${emplBaseURL}employment-api/v1/management/vacancy-requests${
-					action === 'все' ? '' : `?action=${action}`
+		getVacancyRequests: builder.query<PageableType<VacancyRequestItemType>, { action: string; page: number }>({
+			query: ({ action, page }) => ({
+				url: `http://${emplBaseURL}employment-api/v1/management/vacancy-requests?page=${page}${
+					action === 'все' ? '' : `&action=${action}`
 				}`,
 				headers: {
 					Authorization: `Bearer ${personnelDeparmentToken}`
@@ -943,18 +937,18 @@ export const serviceApi = apiSlice.injectEndpoints({
 					: { acceptance: true }
 			})
 		}),
-		getPersonnelStages: builder.query<EmploymentStageItemType[], void>({
-			query: arg => ({
-				url: `http://${emplBaseURL}employment-api/v1/management/employment`,
+		getPersonnelStages: builder.query<PageableType<EmploymentStageItemType>, number>({
+			query: page => ({
+				url: `http://${emplBaseURL}employment-api/v1/management/employment?page=${page}`,
 				method: 'GET',
 				headers: {
 					Authorization: `Bearer ${personnelDeparmentToken}`
 				}
 			})
 		}),
-		getAccountingStages: builder.query<EmploymentStageItemType[], void>({
-			query: arg => ({
-				url: `http://${emplBaseURL}employment-api/v1/management/employment`,
+		getAccountingStages: builder.query<PageableType<EmploymentStageItemType>, number>({
+			query: page => ({
+				url: `http://${emplBaseURL}employment-api/v1/management/employment?page=${page}`,
 				method: 'GET',
 				headers: {
 					Authorization: `Bearer ${accountingToken}`
@@ -1100,9 +1094,9 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
-		getTestResults: builder.query<SignedItemType[], { signed: boolean; query?: string }>({
+		getTestResults: builder.query<PageableType<SignedItemType>, { signed: boolean; query?: string; page: number }>({
 			query: arg => ({
-				url: `http://${emplBaseURL}employment-api/v1/management/employment/sub-stage/test-stage?signed=${arg.signed}&query=${arg.query}`,
+				url: `http://${emplBaseURL}employment-api/v1/management/employment/sub-stage/test-stage?signed=${arg.signed}&query=${arg.query}&page=${arg.page}`,
 				method: 'GET'
 			})
 		}),
@@ -1161,9 +1155,9 @@ export const serviceApi = apiSlice.injectEndpoints({
 			}),
 			keepUnusedDataFor: 0
 		}),
-		getAllSupervisorRequests: builder.query<SupervisorRequestType[], string>({
+		getAllSupervisorRequests: builder.query<PageableType<SupervisorRequestType>, string>({
 			query: action => ({
-				url: `http://${emplBaseURL}employment-api/v1/management/vacancy-requests?action=${action}`,
+				url: `http://${emplBaseURL}employment-api/v1/management/vacancy-requests?action=${action}&size=2000&page=0`,
 				method: 'GET'
 			})
 		}),
@@ -1303,5 +1297,8 @@ export const {
 	useLazyGetSeekerEmploymentRespondsQuery,
 	useLazyGetReservedResponcesQuery,
 	useLazyGetArchivedResponcesQuery,
-	useLazyGetSeekerVacancyRelationQuery
+	useLazyGetSeekerVacancyRelationQuery,
+	useLazyGetPersonnelStagesQuery,
+	useLazyGetAccountingStagesQuery,
+	useLazyGetSupervisorVacancyQuery
 } = serviceApi

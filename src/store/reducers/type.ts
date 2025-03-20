@@ -332,7 +332,7 @@ export type VacancyRespondItemType = {
 		country: string
 		endYear: string
 		speciality: string | null
-		nameOfInstitute: string
+		institution: string
 	}[]
 }
 

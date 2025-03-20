@@ -418,7 +418,7 @@ export const ReserveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 											<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">{edu.endYear}</p>
 											<div className="flex flex-col gap-[8px]">
 												<p className="font-content-font font-bold text-black text-[16px]/[19.2px]">
-													{edu.nameOfInstitute + ', ' + edu.country}
+													{edu.institution + ', ' + edu.country}
 												</p>
 												<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
 													{edu.speciality === null ? '' : edu.speciality + ', '}

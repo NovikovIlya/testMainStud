@@ -3,7 +3,6 @@ import dayjs from 'dayjs'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
-import { useLocation, useNavigate } from 'react-router-dom'
 import uuid from 'react-uuid'
 
 import { ArrowToTheRight } from '../../../assets/svg/ArrowToTheRight'
@@ -44,18 +43,17 @@ import { AttachIcon } from './AttachIcon'
 import { ButtonPlusIcon } from './ButtonPlusIcon'
 import { CheckedIcon } from './CheckedIcon'
 
-export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
+export const ResponseForm = (props: { canRespond: boolean }) => {
+	console.log(props.canRespond)
 	const { t, i18n } = useTranslation()
-	const { data: countries, isLoading: isLoadingCountry } = useGetCountriesQuery(i18n.language)
+	const { data: countries } = useGetCountriesQuery(i18n.language)
 	const { data: levels } = useGetEducationLevelQuery(i18n.language)
 	const [isFormOpen, setIsFormOpen] = useState(false)
 	const dispatch = useDispatch()
 
 	const aboutMeData = useAppSelector(state => state.seekerAboutMe)
 	const { currentVacancy } = useAppSelector(state => state.currentVacancy)
-	const { aboutMeCompleted, skillsCompleted, educationCompleted, experienceCompleted } = useAppSelector(
-		state => state.formCompletion
-	)
+	const { aboutMeCompleted, skillsCompleted } = useAppSelector(state => state.formCompletion)
 	const skillsData = useAppSelector(state => state.skills)
 	const educationData = useAppSelector(state => state.RespondEducation)
 	const experienceData = useAppSelector(state => state.Experience)
@@ -73,8 +71,6 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 	const [letterValidHidden, setLetterValidUnhidden] = useState<boolean>(true)
 	const date = new Date()
 
-	const { pathname } = useLocation()
-	const navigate = useNavigate()
 	const [getVacancy, result] = usePostVacancyRespondMutation()
 
 	const [experienceToEdit, setExperienceToEdit] = useState<experienceItemType | undefined>({
@@ -103,6 +99,8 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 	const [resultModalText, setResultModalText] = useState<string>('')
 	const [isFailedModalOpen, setIsFailedModalOpen] = useState<boolean>(false)
 	const [canRespond, setCanRespond] = useState<boolean | undefined>(props.canRespond)
+	console.log('State ' + canRespond)
+	const [page, setPage] = useState<string>('')
 
 	const handleKeyDownPhone = (e: React.KeyboardEvent<HTMLInputElement>) => {
 		const allowedKeys = [
@@ -222,9 +220,7 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 					e.preventDefault()
 				}}
 				onClick={e => {
-					canRespond === undefined || canRespond === false
-						? setIsFailedModalOpen(true)
-						: (navigate('/services/jobseeker/vacancyview/respond/main'), setIsFormOpen(true))
+					canRespond ? (setPage('main'), setIsFormOpen(true)) : setIsFailedModalOpen(true)
 				}}
 			>
 				Откликнуться
@@ -328,10 +324,10 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 					footer={null}
 					onCancel={() => {
 						setIsFormOpen(false)
-						navigate('/services/jobseeker/vacancyview')
+						setPage('')
 					}}
 				>
-					{pathname.includes('/services/jobseeker/vacancyview/respond/main') && (
+					{page === 'main' && (
 						<>
 							<p className="font-content-font text-black text-[18px]/[21.6px] font-normal">Откликнуться на вакансию</p>
 							<p className="font-content-font text-black text-[18px]/[21.6px] font-bold">
@@ -343,7 +339,7 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 							<div className="mt-[36px] flex flex-col gap-[12px]">
 								<div
 									onClick={() => {
-										navigate('/services/jobseeker/vacancyview/respond/aboutme')
+										setPage('aboutme')
 									}}
 									className="h-[43px] pl-[16px] pr-[16px] flex justify-between items-center border-[1px] border-dashed border-blue1f5 rounded-[5px] cursor-pointer"
 								>
@@ -354,7 +350,7 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 								</div>
 								<div
 									onClick={() => {
-										navigate('/services/jobseeker/vacancyview/respond/education/main')
+										setPage('education/main')
 									}}
 									className="h-[43px] pl-[16px] pr-[16px] flex justify-between items-center border-[1px] border-dashed border-blue1f5 rounded-[5px] cursor-pointer"
 								>
@@ -363,7 +359,7 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 								</div>
 								<div
 									onClick={() => {
-										navigate('/services/jobseeker/vacancyview/respond/experience/main')
+										setPage('experience/main')
 									}}
 									className="h-[43px] pl-[16px] pr-[16px] flex justify-between items-center border-[1px] border-dashed border-blue1f5 rounded-[5px] cursor-pointer"
 								>
@@ -376,7 +372,7 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 								</div>
 								<div
 									onClick={() => {
-										navigate('/services/jobseeker/vacancyview/respond/skills')
+										setPage('skills')
 									}}
 									className="h-[43px] pl-[16px] pr-[16px] flex justify-between items-center border-[1px] border-dashed border-blue1f5 rounded-[5px] cursor-pointer"
 								>
@@ -392,19 +388,19 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 									onClick={
 										!aboutMeCompleted
 											? () => {
-													navigate('/services/jobseeker/vacancyview/respond/aboutme')
+													setPage('aboutme')
 											  }
 											: educationData.educations.length === 0
 											? () => {
-													navigate('services/jobseeker/vacancyview/respond/education/main')
+													setPage('education/main')
 											  }
 											: !(experienceData.noExperienceFlag || experienceData.experiences.length !== 0)
 											? () => {
-													navigate('services/jobseeker/vacancyview/respond/experience/main')
+													setPage('experience/main')
 											  }
 											: !skillsCompleted
 											? () => {
-													navigate('services/jobseeker/vacancyview/respond/skills')
+													setPage('skills')
 											  }
 											: () => {
 													// currentVacancy !== null &&
@@ -460,7 +456,7 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 													// 		.then(() => {
 													// 			!result.isSuccess && setIsSuccessModalOpen(true)
 													// 		})
-													navigate('/services/jobseeker/vacancyview/respond/coverletter')
+													setPage('coverletter')
 											  }
 									}
 								>
@@ -474,7 +470,7 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 							</div>
 						</>
 					)}
-					{pathname.includes('/services/jobseeker/vacancyview/respond/coverletter') && (
+					{page === 'coverletter' && (
 						<>
 							<p className="mb-[36px] font-content-font text-black text-[18px]/[18px] font-normal">Откликнуться</p>
 							<div className="mb-[20px] rounded-[8px] bg-[#E5EBFB] py-[12px] px-[20px] relative">
@@ -484,7 +480,7 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 								</p>
 								<div
 									onClick={() => {
-										navigate('/services/jobseeker/vacancyview/respond/main')
+										setPage('main')
 									}}
 									className="absolute top-[50%] bottom-[50%] right-[29px] cursor-pointer"
 								>
@@ -579,7 +575,7 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 							</Button>
 						</>
 					)}
-					{pathname.includes('/services/jobseeker/vacancyview/respond/aboutme') && (
+					{page === 'aboutme' && (
 						<Form
 							layout="vertical"
 							requiredMark={false}
@@ -609,13 +605,13 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 								dispatch(completeAboutMe())
 								console.log(values.birthDay)
 								console.log(values.birthDay.$d.toLocaleDateString().split('.').join('-'))
-								navigate('/services/jobseeker/vacancyview/respond/main')
+								setPage('main')
 							}}
 						>
 							<div className="flex items-center mb-[38px]">
 								<button
 									onClick={() => {
-										navigate('/services/jobseeker/vacancyview/respond/main')
+										setPage('main')
 									}}
 									className="bg-white border-none cursor-pointer"
 								>
@@ -773,12 +769,12 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 							</div>
 						</Form>
 					)}
-					{pathname.includes('/services/jobseeker/vacancyview/respond/education/main') && (
+					{page === 'education/main' && (
 						<Form layout="vertical" requiredMark={false}>
 							<div className="flex items-center mb-[38px]">
 								<button
 									onClick={() => {
-										navigate('/services/jobseeker/vacancyview/respond/main')
+										setPage('main')
 									}}
 									className="bg-white border-none cursor-pointer"
 								>
@@ -812,7 +808,7 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 												icon={<EditSvg />}
 												onClick={() => {
 													setEducationToEdit(educationData.educations.find(educa => educa.id === edu.id))
-													navigate('/services/jobseeker/vacancyview/respond/education/edit')
+													setPage('education/edit')
 												}}
 											/>
 											<Button
@@ -841,7 +837,7 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 										onClick={() => {
 											if (educationData.educations.length < 20) {
 												setEduValidUnhidden(true)
-												navigate('/services/jobseeker/vacancyview/respond/education/add')
+												setPage('education/add')
 											} else {
 												setEduValidUnhidden(false)
 											}
@@ -861,7 +857,7 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 							</div>
 						</Form>
 					)}
-					{pathname.includes('/services/jobseeker/vacancyview/respond/education/add') && (
+					{page === 'education/add' && (
 						<Form
 							layout="vertical"
 							requiredMark={false}
@@ -879,13 +875,13 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 									})
 								)
 								dispatch(completeEducation())
-								navigate('/services/jobseeker/vacancyview/respond/education/main')
+								setPage('education/main')
 							}}
 						>
 							<div className="flex items-center mb-[38px]">
 								<button
 									onClick={() => {
-										navigate('/services/jobseeker/vacancyview/respond/education/main')
+										setPage('education/main')
 									}}
 									className="bg-white border-none cursor-pointer"
 								>
@@ -999,7 +995,7 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 							</Form.Item>
 						</Form>
 					)}
-					{pathname.includes('/services/jobseeker/vacancyview/respond/education/edit') && (
+					{page === 'education/edit' && (
 						<Form
 							layout="vertical"
 							requiredMark={false}
@@ -1016,7 +1012,7 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 										})
 									)
 								dispatch(completeEducation())
-								navigate('/services/jobseeker/vacancyview/respond/education/main')
+								setPage('education/main')
 							}}
 							initialValues={{
 								specialization: educationToEdit?.education.specialization,
@@ -1029,7 +1025,7 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 							<div className="flex items-center mb-[38px]">
 								<button
 									onClick={() => {
-										navigate('/services/jobseeker/vacancyview/respond/education/main')
+										setPage('education/main')
 									}}
 									className="bg-white border-none cursor-pointer"
 								>
@@ -1140,12 +1136,12 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 							</Form.Item>
 						</Form>
 					)}
-					{pathname.includes('/services/jobseeker/vacancyview/respond/experience/main') && (
+					{page === 'experience/main' && (
 						<Form layout="vertical" requiredMark={false}>
 							<div className="flex items-center mb-[38px]">
 								<button
 									onClick={() => {
-										navigate('/services/jobseeker/vacancyview/respond/main')
+										setPage('main')
 									}}
 									className="bg-white border-none cursor-pointer"
 								>
@@ -1271,7 +1267,7 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 												icon={<EditSvg />}
 												onClick={() => {
 													setExperienceToEdit(experienceData.experiences.find(expa => expa.id === exp.id))
-													navigate('/services/jobseeker/vacancyview/respond/experience/edit')
+													setPage('experience/edit')
 												}}
 											/>
 											<Button
@@ -1304,7 +1300,7 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 											console.log(experienceData.experiences.length)
 											if (experienceData.experiences.length < 50) {
 												setJobValidUnhidden(true)
-												navigate('/services/jobseeker/vacancyview/respond/experience/add')
+												setPage('experience/add')
 											} else {
 												setJobValidUnhidden(false)
 											}
@@ -1324,7 +1320,7 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 							</div>
 						</Form>
 					)}
-					{pathname.includes('/services/jobseeker/vacancyview/respond/experience/add') && (
+					{page === 'experience/add' && (
 						<Form
 							layout="vertical"
 							requiredMark={false}
@@ -1342,13 +1338,13 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 										}
 									})
 								)
-								navigate('/services/jobseeker/vacancyview/respond/experience/main')
+								setPage('experience/main')
 							}}
 						>
 							<div className="flex items-center mb-[38px]">
 								<button
 									onClick={() => {
-										navigate('/services/jobseeker/vacancyview/respond/experience/main')
+										setPage('experience/main')
 									}}
 									className="bg-white border-none cursor-pointer"
 								>
@@ -1430,7 +1426,7 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 							</Form.Item>
 						</Form>
 					)}
-					{pathname.includes('/services/jobseeker/vacancyview/respond/experience/edit') && (
+					{page === 'experience/edit' && (
 						<Form
 							layout="vertical"
 							requiredMark={false}
@@ -1453,13 +1449,13 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 											duties: values.duties
 										})
 									)
-								navigate('/services/jobseeker/vacancyview/respond/experience/main')
+								setPage('experience/main')
 							}}
 						>
 							<div className="flex items-center mb-[38px]">
 								<button
 									onClick={() => {
-										navigate('/services/jobseeker/vacancyview/respond/experience/main')
+										setPage('experience/main')
 									}}
 									className="bg-white border-none cursor-pointer"
 								>
@@ -1529,7 +1525,7 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 							</Form.Item>
 						</Form>
 					)}
-					{pathname.includes('/services/jobseeker/vacancyview/respond/skills') && (
+					{page === 'skills' && (
 						<Form
 							layout="vertical"
 							requiredMark={false}
@@ -1542,13 +1538,13 @@ export const ResponseForm = (props: { canRespond: boolean | undefined }) => {
 									})
 								)
 								dispatch(completeSkills())
-								navigate('services/jobseeker/vacancyview/respond/main')
+								setPage('main')
 							}}
 						>
 							<div className="flex items-center mb-[38px]">
 								<button
 									onClick={() => {
-										navigate('/services/jobseeker/vacancyview/respond/main')
+										setPage('main')
 									}}
 									className="bg-white border-none cursor-pointer"
 								>

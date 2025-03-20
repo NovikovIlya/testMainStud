@@ -11,8 +11,6 @@ import ArrowIcon from './ArrowIcon'
 import { ResponseForm } from './ResponceForm'
 
 export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
-	const [canRespond, setCanRespond] = useState<boolean>(false)
-
 	const [getVacancy, { data, isLoading, error }] = useLazyGetVacancyViewQuery()
 	const [getRelation, getRelationStatus] = useLazyGetSeekerVacancyRelationQuery()
 
@@ -123,7 +121,7 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 				<div className="flex">
 					<button
 						onClick={() => {
-							navigate(`/services/jobseeker/catalog`)
+							navigate(-1)
 						}}
 						className="bg-inherit border-none cursor-pointer"
 					>
@@ -138,7 +136,7 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 					<p className="w-[106px] font-content-font font-bold text-black text-[18px]/[21px]">Тип занятости</p>
 					<p className="w-[106px] font-content-font font-bold text-black text-[18px]/[21px]">Заработная плата</p>
 					{props.type === 'CATALOG' ? (
-						<ResponseForm canRespond={getRelationStatus.data?.canRespond} />
+						<ResponseForm canRespond={getRelationStatus.data?.canRespond!} />
 					) : (
 						<>
 							<div className="w-[143px]"></div>

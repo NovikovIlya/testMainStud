@@ -96,7 +96,7 @@ export const ChatEmpDemp = () => {
 			})
 				.unwrap()
 				.then(res => {
-					setChats(res)
+					setChats(res.content)
 					setBlockPageAddition(false)
 				})
 		} else {
@@ -109,7 +109,7 @@ export const ChatEmpDemp = () => {
 			})
 				.unwrap()
 				.then(res => {
-					setChats(prev => [...prev, ...res])
+					setChats(prev => [...prev, ...res.content])
 					setBlockPageAddition(false)
 				})
 		}

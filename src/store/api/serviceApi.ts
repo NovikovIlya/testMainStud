@@ -345,13 +345,13 @@ export const serviceApi = apiSlice.injectEndpoints({
 			})
 		}),
 		getChatPreviews: builder.query<
-			{
+			PageableType<{
 				id: number
 				respondInfo: VacancyRespondItemType & { vacancyId: number }
 				unreadCount: number
 				lastMessageDate: string
 				chatName: string
-			}[],
+			}>,
 			{
 				vacancyId: number | null
 				status: string | null

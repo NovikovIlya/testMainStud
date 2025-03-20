@@ -85,7 +85,13 @@ const AboutMeNew = () => {
                   </Checkbox>
                 </Form.Item>
                 <Form.Item className='mb-[20px]' name="approve" valuePropName="checked" label={null}>
-                  <Checkbox>{t('generalAgreement')}</Checkbox>
+                  <Checkbox>
+                 
+                    <a className='underline ml-1' href="https://shelly.kpfu.ru/e-ksu/docs/F_437732066/prikaz_soglashenie_na_PEP211_docx_18_05_2022.docx" target="_blank" rel="noopener noreferrer">
+                      {t('generalAgreement')}
+                    </a>
+                    {t('generalAgreement2')}
+                    </Checkbox>
                 </Form.Item>
                 <Form.Item className='mb-[20px]' name="sogl" valuePropName="checked" label={null}>
                   <Checkbox>

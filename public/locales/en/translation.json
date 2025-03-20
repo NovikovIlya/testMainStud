@@ -834,15 +834,22 @@
 	"citizenshipType": "Citizenship Type",
 	"citizenshipCountry": "Citizenship Country",
 	"birthPlace": "Place of Birth",
-	"agreementTooltip": "Agreement tooltip",
-	"codexAgreement": "Familiarized with the “Code of Ethics of KFU Students”",
-	"libraryRegulations": "Familiarized with the “General Library Regulations”",
+	"agreementTooltip": "On your personal page of the KFU portal, the questionnaire data that you marked with the icon will be presented.",
+	"codexAgreement": "Familiarized with the ",
+	"codexAgreemen2t": "“Code of Ethics of KFU Students”",
+	"libraryRegulations": "Familiarized with the ",
+	"libraryRegulations2": "“General Library Regulations”",
 	"generalAgreement": "I accept the agreement between participants of electronic interaction and confirm that I have read the terms of this agreement",
 	"saveButton": "Save",
 	"bachelorsDegree": "Bachelor's Degree",
 	"additionalInfo": "Additional Information",
 	"insitute": "Insitute",
-		"typeObr": "Education form"
+	"typeObr": "Education form",
+	"politics": "Familiar with the ",
+	"politics2": "policy of processing personal data at KFU",
+	"sogl": "I agree to the ",
+	"sogl2" : "processing of personal data",
+	"razr": "I accept the User Agreement and give permission to the KFU portal to process my personal data in accordance with Federal Law No. 152-FZ of July 27, 2006 'On Personal Data'."
 		
 	  
 	

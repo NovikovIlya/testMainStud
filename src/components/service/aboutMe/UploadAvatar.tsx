@@ -7,6 +7,7 @@ const UploadAvatar: React.FC = () => {
   const { data: avatarUrl } = useGetAvatarQuery();
   const [addAvatar, { isLoading }] = useAddAvatarMutation();
   const [putAvatar, { isLoading: isLoadingPut }] = usePutAvatarMutation();
+  
   const beforeUpload = (file: File) => {
     const isImage = file.type.startsWith('image/');
     const isLt5M = file.size / 1024 / 1024 < 5;

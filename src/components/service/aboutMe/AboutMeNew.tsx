@@ -8,6 +8,7 @@ import React, { useEffect } from 'react';
 import UploadAvatar from './UploadAvatar';
 import TextArea from 'antd/es/input/TextArea';
 
+
 const AboutMeNew = () => {
   const { t } = useTranslation();
   const [form] = Form.useForm();
@@ -23,6 +24,8 @@ const AboutMeNew = () => {
   const handleSubmit = (values: { content: string }) => {
     // Обработка отправки формы
   };
+
+
 
   return (
     <div className="px-[50px] pt-[60px] mb-[50px]">
@@ -53,7 +56,7 @@ const AboutMeNew = () => {
       <div className="bg-white rounded-xl shadow-md mt-7">
         <Row>
           <Col span={24}>
-            <div className="flex flex-wrap justify-start p-4">
+            <div className="flex flex-wrap justify-start p-6">
               <div className="flex items-center gap-2">
                 <Title className="!mb-0" level={5}>
                   {t('userAgreement')}
@@ -64,17 +67,46 @@ const AboutMeNew = () => {
               </div>
               <Divider />
 
-              <Form onFinish={onFinish}>
-                <Form.Item name="codex" valuePropName="checked" label={null}>
-                  <Checkbox>{t('codexAgreement')}</Checkbox>
+              <Form className='' onFinish={onFinish}>
+                <Form.Item className='mb-[20px]' name="codex" valuePropName="checked" label={null}>
+                  <Checkbox >
+                    {t('codexAgreement')}
+                    <a className='underline ml-1' href="https://kpfu.ru/portal/docs/F1769183796/Kodeks.etiki.obuch_sya.pdf" target="_blank" rel="noopener noreferrer">
+                      {t('codexAgreement2')}
+                    </a>
+                  </Checkbox>
                 </Form.Item>
-                <Form.Item name="library" valuePropName="checked" label={null}>
-                  <Checkbox>{t('libraryRegulations')}</Checkbox>
+                <Form.Item className='mb-[20px]' name="library" valuePropName="checked" label={null}>
+                  <Checkbox>
+                    {t('libraryRegulations')}
+                    <a className='underline ml-1' href="https://kpfu.ru/library/obschie-polozheniya-iz-pravil-polzovaniya" target="_blank" rel="noopener noreferrer">
+                      {t('libraryRegulations2')}
+                    </a>
+                  </Checkbox>
                 </Form.Item>
-                <Form.Item name="approve" valuePropName="checked" label={null}>
+                <Form.Item className='mb-[20px]' name="approve" valuePropName="checked" label={null}>
                   <Checkbox>{t('generalAgreement')}</Checkbox>
                 </Form.Item>
-                <Form.Item>
+                <Form.Item className='mb-[20px]' name="sogl" valuePropName="checked" label={null}>
+                  <Checkbox>
+                     {t('sogl')}
+                      <a className='underline ' href="/Soglasie.docx" target="_blank" rel="noopener noreferrer">
+                        {t('sogl2')}
+                      </a>
+                    </Checkbox>
+                </Form.Item>
+                <Form.Item className='mb-[20px]' name="oznak" valuePropName="checked" label={null}>
+                  <Checkbox>
+                    {t('politics')}
+                    <a className='underline ml-1' href="/politika.pdf" target="_blank" rel="noopener noreferrer">
+                      {t('politics2')}
+                    </a>
+                    </Checkbox>
+                </Form.Item>
+                <Form.Item className='mb-[24px]  !flex !items-start' name="razr" valuePropName="checked" label={null}>
+                  <Checkbox  className='flex !items-start'>{t('razr')}</Checkbox>
+                </Form.Item>
+                <Form.Item className='mb-[5px] mt-[15px]'>
                   <Button type="primary" htmlType="submit">
                     {t('saveButton')}
                   </Button>
@@ -89,7 +121,7 @@ const AboutMeNew = () => {
       <div className="bg-white rounded-xl shadow-md mt-7">
         <Row>
           <Col span={24}>
-            <div className="flex flex-wrap justify-start p-4">
+            <div className="flex flex-wrap justify-start p-6">
               <div className="flex items-center gap-2">
                 <Title className="!mb-0" level={5}>
                   {t('bachelorsDegree')}
@@ -100,7 +132,7 @@ const AboutMeNew = () => {
               <div className="flex flex-wrap justify-start">
                 <Descriptions column={1} title="">
                   <Descriptions.Item label={t('insitute')}>2020</Descriptions.Item>
-				  <Descriptions.Item label={t('specialization')}>Исскуство</Descriptions.Item>
+				          <Descriptions.Item label={t('specialization')}>Исскуство</Descriptions.Item>
                   <Descriptions.Item label={t('typeObr')}>ТЕСТ</Descriptions.Item>
                   <Descriptions.Item label={t('category')}>Бюджет</Descriptions.Item>
                  
@@ -116,7 +148,7 @@ const AboutMeNew = () => {
       <div className="bg-white rounded-xl shadow-md mt-7">
         <Row>
           <Col span={24}>
-            <div className="flex flex-wrap justify-start p-4">
+            <div className="flex flex-wrap justify-start p-6">
               <div className="flex items-center gap-2">
                 <Title className="!mb-0" level={5}>
                   {t('additionalInfo')}

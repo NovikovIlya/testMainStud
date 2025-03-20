@@ -136,7 +136,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 			{ category: string; direction: string; page: number }
 		>({
 			query: ({ category, direction, page }) => ({
-				url: `http://${emplBaseURL}employment-api/v2/vacancy?category=${category}${
+				url: `http://${emplBaseURL}employment-api/v1/vacancy?category=${category}${
 					direction === 'Все' ? '' : `&direction=${direction}`
 				}&page=${page}`
 			})
@@ -147,7 +147,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		>({
 			query: ({ category, subdivision, page }) => ({
 				url:
-					`http://${emplBaseURL}employment-api/v2/vacancy?category=` +
+					`http://${emplBaseURL}employment-api/v1/vacancy?category=` +
 					category +
 					'&subdivisions=' +
 					subdivision +

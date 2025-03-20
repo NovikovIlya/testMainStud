@@ -117,9 +117,9 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 		// 	label: <div className={`p-2 text-sm text-blue1f5 font-bold cursor-default`}>{user?.email}</div>,
 		// 	key: '0'
 		// },
-		{
-			type: 'divider'
-		},
+		// {
+		// 	type: 'divider'
+		// },
 
 		...(maiRole === 'OTHER' ? [
 			{
@@ -185,10 +185,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 			),
 			key: '5'
 		},
-		{
-			label: <div className="cursor-default" />,
-			key: '6'
-		}
+		
 	]
 	const changeLanguage = (language: string) => {
 		i18n.changeLanguage(language)

@@ -112,7 +112,7 @@ export const ContactInformation = () => {
 	})
 
 	if (isError) return <></>
-	if (dataEmail === undefined ) return <SkeletonPage />
+	if (dataEmail === undefined ) return <div className='mt-[-45px] ml-[-40px]'><SkeletonPage /></div>
 
 	return (
 	

@@ -33,13 +33,13 @@ const AboutMeNew = () => {
       <div className="bg-white rounded-xl shadow-md">
         <Row>
           <Col span={12}>
-            <div className="flex flex-wrap justify-center p-4">
+            <div className="flex flex-wrap justify-center p-[40px]">
               <UploadAvatar />
               <div className="w-full text-center">{t('fullName')}</div>
             </div>
           </Col>
           <Col span={12}>
-            <div className="flex flex-wrap justify-start p-4">
+            <div className="flex flex-wrap justify-start p-[40px]">
               <Descriptions column={1} title={t('generalInfo')}>
                 <Descriptions.Item label={t('birthDate')}>Zhou Maomao</Descriptions.Item>
                 <Descriptions.Item label={t('gender')}>1810000000</Descriptions.Item>

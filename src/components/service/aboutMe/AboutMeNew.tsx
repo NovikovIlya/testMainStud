@@ -7,6 +7,7 @@ import Title from 'antd/es/typography/Title';
 import React, { useEffect } from 'react';
 import UploadAvatar from './UploadAvatar';
 import TextArea from 'antd/es/input/TextArea';
+import { SkeletonPage } from './Skeleton';
 
 
 const AboutMeNew = () => {
@@ -25,6 +26,8 @@ const AboutMeNew = () => {
     // Обработка отправки формы
   };
 
+
+  // if() return <div className='mt-[-45px] ml-[-40px]'><SkeletonPage /></div>
 
 
   return (
@@ -109,9 +112,9 @@ const AboutMeNew = () => {
                     </a>
                     </Checkbox>
                 </Form.Item>
-                <Form.Item className='mb-[24px]  !flex !items-start' name="razr" valuePropName="checked" label={null}>
+                {/* <Form.Item className='mb-[24px]  !flex !items-start' name="razr" valuePropName="checked" label={null}>
                   <Checkbox  className='flex !items-start'>{t('razr')}</Checkbox>
-                </Form.Item>
+                </Form.Item> */}
                 <Form.Item className='mb-[5px] mt-[15px]'>
                   <Button type="primary" htmlType="submit">
                     {t('saveButton')}

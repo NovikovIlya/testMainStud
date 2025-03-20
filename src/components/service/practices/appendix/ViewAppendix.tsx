@@ -568,7 +568,8 @@ import {
 	Spin,
 	Table,
 	Typography, Form,
-	TreeSelect
+	TreeSelect,
+	ConfigProvider
 } from 'antd';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -1044,7 +1045,15 @@ export const ViewAppendix = () => {
 						{isFetchingAppend ? (
 							<Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
 						) : (
-							<Table
+							<ConfigProvider
+															theme={{
+																components: {
+																	Table: {
+																		headerBg: 'rgb(218, 231, 251)'
+																	}
+																}
+															}}
+														><Table
 								onRow={(record) => ({
 									onClick: () => handleRowClick(record)
 								})}
@@ -1071,7 +1080,7 @@ export const ViewAppendix = () => {
 										</div>
 									)
 								}}
-							/>
+							/></ConfigProvider>
 						)}
 					</Col>
 				</Row>

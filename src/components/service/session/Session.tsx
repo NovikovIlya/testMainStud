@@ -1,10 +1,9 @@
-import { Table } from 'antd'
+import { ConfigProvider, Table } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 import { useTranslation } from 'react-i18next'
 
-import { useGetExamsScheduleQuery } from '../../../store/api/serviceApi'
 import { DataTypeSession } from '../../../models/session'
-
+import { useGetExamsScheduleQuery } from '../../../store/api/serviceApi'
 
 export const Session = () => {
 	const { data: exam } = useGetExamsScheduleQuery()
@@ -50,16 +49,24 @@ export const Session = () => {
 	]
 	return (
 		<div>
-			<div className="text-black text-3xl font-normal leading-7">
-				{t('SessionSchedule')}
-			</div>
-			<Table
-				columns={columns}
-				dataSource={exam}
-				pagination={false}
-				className=" mt-[50px]  rounded-none max-w-[1300px]"
-				locale={{ emptyText: t('noData') }}
-			/>
+			<div className="text-black text-3xl font-normal leading-7">{t('SessionSchedule')}</div>
+			<ConfigProvider
+				theme={{
+					components: {
+						Table: {
+							headerBg: 'rgb(218, 231, 251)'
+						}
+					}
+				}}
+			>
+				<Table
+					columns={columns}
+					dataSource={exam}
+					pagination={false}
+					className=" mt-[50px]  rounded-none max-w-[1300px]"
+					locale={{ emptyText: t('noData') }}
+				/>
+			</ConfigProvider>
 		</div>
 	)
 }

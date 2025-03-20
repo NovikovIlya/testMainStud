@@ -1,7 +1,7 @@
 import { UserSwitchOutlined } from '@ant-design/icons'
 import { useLocalStorageState } from 'ahooks'
 import { useClickAway } from 'ahooks'
-import { Avatar, Badge, Button, Divider, Drawer, Dropdown, Modal, Select, Space } from 'antd'
+import { Avatar, Badge, Button, Divider, Drawer, Dropdown, Modal, Select, Space, Spin } from 'antd'
 import type { MenuProps } from 'antd'
 import clsx from 'clsx'
 import { useEffect, useRef, useState } from 'react'
@@ -421,7 +421,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 							className="cursor-pointer h-full  box-border"
 						>
 							<Space className="px-10 max-sm:px-5 max-[455px]:!gap-0 gap-2 w-[200px] flex justify-end">
-								{!avatarUrl?<PersonSvg white={type === 'service'} /> : <Avatar src={avatarUrl}/>}
+								<Spin spinning={isAvatarLoading}>{!avatarUrl?<PersonSvg white={type === 'service'} /> : <Avatar src={avatarUrl}/>}</Spin>
 								<div className={clsx('h-full max-[455px]:hidden', type === 'service' && 'text-white')}>
 									<div className="font-bold text-sm truncate max-w-[120px]">
 										

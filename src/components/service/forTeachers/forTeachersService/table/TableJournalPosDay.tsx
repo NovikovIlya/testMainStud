@@ -296,7 +296,7 @@ const TableJournalPosDay = ({fixDay,dataSource, setLocalData}:any) => {
    
 
   return (
-    <div className={`${fixDay!==null ?'opacity-40':''} mt-4`}>
+    <div className={`${fixDay!==null ?'opacity-40':''} mt-4 styleCustom`}>
       <Table<DataType>
         
         rowKey={(record) => record.key}

@@ -377,7 +377,7 @@ const TableJournalPos = ({ collapsed, setCheckboxValue, dataSource, setDataSourc
   const width = `calc(100vw - ${collapsed ? '240px' : '350px'})`;
 
   return (
-    <div style={{ width }} className="mt-4">
+    <div style={{ width }} className="mt-4 styleCustom">
       <Table
         components={{
           body: {

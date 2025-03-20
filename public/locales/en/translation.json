@@ -79,7 +79,7 @@
 	"confirm": "The field does not match the above password",
 	"repeatPassword": "Repeat the password",
 	"email": "Email",
-	"userAgreement": "User agrement",
+	"userAgreement": "I accept the user agreement and give permission to the KFU portal to process my personal data in accordance with Federal Law No. 152-FZ of July 27, 2006 “On Personal Data”",
 	"seletctType": "Select document type",
 	"alreadyProfile": "Already have a profile?",
 	"login": "Log in",
@@ -850,7 +850,8 @@
 	"politics2": "policy of processing personal data at KFU",
 	"sogl": "I agree to the ",
 	"sogl2" : "processing of personal data",
-	"razr": "I accept the User Agreement and give permission to the KFU portal to process my personal data in accordance with Federal Law No. 152-FZ of July 27, 2006 'On Personal Data'."
+	"razr": "I accept the User Agreement and give permission to the KFU portal to process my personal data in accordance with Federal Law No. 152-FZ of July 27, 2006 'On Personal Data'.",
+	"avatarChange": "Avatar successfully updated"
 		
 	  
 	

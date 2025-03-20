@@ -1,5 +1,5 @@
 import { DeleteTwoTone, EditTwoTone, EyeTwoTone } from '@ant-design/icons'
-import { Button, Row, Space, Table, Tag } from 'antd'
+import { Button, ConfigProvider, Row, Space, Table, Tag } from 'antd'
 import type { TableProps } from 'antd'
 import React from 'react'
 
@@ -83,14 +83,19 @@ const data: DataType[] = [
 ]
 
 const TableLanguages: React.FC = () => {
-	
 	return (
 		<>
-			<Table<DataType>
-			 pagination={false} columns={columns} dataSource={data} 
-			 className='w-full'
-			 />
-			
+			<ConfigProvider
+				theme={{
+					components: {
+						Table: {
+							headerBg: 'rgb(218, 231, 251)'
+						}
+					}
+				}}
+			>
+				<Table<DataType> pagination={false} columns={columns} dataSource={data} className="w-full" />
+			</ConfigProvider>
 		</>
 	)
 }

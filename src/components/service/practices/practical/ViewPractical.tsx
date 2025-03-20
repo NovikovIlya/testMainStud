@@ -921,6 +921,7 @@ import { LoadingOutlined } from '@ant-design/icons'
 import {
 	Button,
 	Col,
+	ConfigProvider,
 	Form,
 	Popover,
 	Radio,
@@ -954,6 +955,7 @@ import { PracticalPopoverMain } from '../popover/practical/PracticalPopoverMain'
 import { OptionsNameSpecialty } from '../roster/registerContracts/RegisterContracts'
 
 import './ViewPractical.scss'
+import './StyleSchedule.scss'
 import { TitleHeadCell } from '../../businessTrip/NewBusinessTrip/archive/stepTwo/tableStepTwo/titleHeadCell/TitleHeadCell'
 import { disableParents } from '../../../../utils/disableParents'
 import { useGetSubmissionsSpecPracticeQuery, useGetSubmissionsTypePracticeQuery } from '../../../../store/api/practiceApi/formingSchedule'
@@ -1764,7 +1766,15 @@ export const ViewPractical = () => {
 					indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}
 				/>
 			) : (fullTable ?
-				<Table
+				<ConfigProvider
+				theme={{
+					components: {
+						Table: {
+							headerBg: 'rgb(218, 231, 251)'
+						}
+					}
+				}}
+			><Table
 					onRow={(record) => ({
 						onClick: (e) => {
 							// @ts-ignore
@@ -1780,7 +1790,7 @@ export const ViewPractical = () => {
 					columns={columns}
 					dataSource={tableData ? tableData : []}
 					pagination={false}
-					className="my-10"
+					className="my-10 styleCustom"
 					rowSelection={{
 						type: 'checkbox',
 						onSelect: (record, selected, selectedRows, nativeEvent) => {
@@ -1790,7 +1800,7 @@ export const ViewPractical = () => {
 							setSelectedFieldFull(selectedRows)
 						}
 					}}
-				/> :
+				/></ConfigProvider> :
 				<div className='viewPractical'>
 				<Table
 					onRow={(record) => ({
@@ -1810,7 +1820,7 @@ export const ViewPractical = () => {
                         pageSize: 10
                     }}
 					rowClassName={() => 'animate-fade-in'}
-					className="my-"
+					className="styleCustom"
 					rowSelection={{
 						type: 'checkbox',
 						onSelect: (record, selected, selectedRows, nativeEvent) => {

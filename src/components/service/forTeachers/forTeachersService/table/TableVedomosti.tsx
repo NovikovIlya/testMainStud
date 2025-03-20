@@ -7,6 +7,7 @@ import { DataType, EditableCellProps, EditableRowProps } from '../../../../../mo
 import { truncateString } from '../../../../../utils/truncateString';
 import TextArea from 'antd/es/input/TextArea';
 
+
 const EditableContext = React.createContext<FormInstance<any> | null>(null);
 
 const EditableRow: React.FC<EditableRowProps> = ({ index, ...props }) => {
@@ -229,7 +230,7 @@ const TableVedomosti = ({kindForm,dataSource, setDataSource,subj_type,is_session
   })  
 
   return (
-    <div className='mt-4'>
+    <div className='mt-4 styleCustom'>
       <Table
         rowKey={(record) => record.key}
         components={components}

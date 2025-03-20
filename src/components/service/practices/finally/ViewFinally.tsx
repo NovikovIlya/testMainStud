@@ -776,6 +776,7 @@ import { LoadingOutlined } from '@ant-design/icons'
 import {
 	Button,
 	Col,
+	ConfigProvider,
 	Form,
 	Row,
 	Select,
@@ -1409,7 +1410,15 @@ export const ViewFinally = () => {
         {isFetchingPractiseAll ? (
           <Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
         ) : fullTable ? (
-          <Table
+          <ConfigProvider
+                                        theme={{
+                                          components: {
+                                            Table: {
+                                              headerBg: 'rgb(218, 231, 251)'
+                                            }
+                                          }
+                                        }}
+                                      ><Table
             onRow={(record) => ({
               onClick: (e) => {
                 // @ts-ignore
@@ -1427,7 +1436,7 @@ export const ViewFinally = () => {
             dataSource={tableData ? tableData : []}
             pagination={false}
             className="my-10"
-          />
+          /></ConfigProvider>
         ) : (
           <div className="viewPractical">
             <Table

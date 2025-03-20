@@ -347,7 +347,7 @@ const TableBrs = ({yearForm,dataSource, setDataSource,semester}: Props) => {
   }) 
 
   return (
-    <div className='mt-4'>
+    <div className='mt-4 styleCustom'>
       <Table
         rowKey={(record) => record.key}
         components={components}

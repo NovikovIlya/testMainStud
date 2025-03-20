@@ -2,12 +2,9 @@
 // import { Button, Col, Form, Radio, Row, Select, Spin, Table, Typography } from 'antd'
 // import { useEffect, useState } from 'react'
 // import { useNavigate } from 'react-router-dom'
-
 // import { useGetAllMyPracticesQuery } from '../../../../store/api/practiceApi/mypractice'
 // import { useGetAllOrderQuery } from '../../../../store/api/practiceApi/representation'
 // import { t } from 'i18next'
-
-
 // export const MyPractice = () => {
 // 	const [fullTable, setFullTable] = useState(false)
 // 	const [currentPage, setCurrentPage] = useState(1)
@@ -22,13 +19,11 @@
 // 	const {data: dataAllOrder,isSuccess: isSuccessOrder,isFetching: isLoadingOrder} = useGetAllOrderQuery({ subdivisionId: selectSubdivisionId, page: currentPage - 1, size: '5' },{ skip: !selectSubdivisionId || !currentPage })
 // 	const [dataTable, setDataTable] = useState<any>([])
 // 	const {data: dataAllMyPractices,isSuccess: isSuccessMyPractice,isFetching: isFetchingMyPractice,refetch} = useGetAllMyPracticesQuery()
-
 // 	useEffect(() => {
 // 		if (isSuccessMyPractice) {
 // 			setDataTable(filterDataFull())
 // 		}
 // 	}, [filter, isSuccessMyPractice])
-
 // 	const columns = [
 // 		{
 // 			key: 'specialty',
@@ -66,14 +61,12 @@
 // 			title: 'Вид',
 // 			className: 'text-xs !p-2 mobileFirst'
 // 		},
-
 // 		{
 // 			key: 'departmentDirectorName',
 // 			dataIndex: 'departmentDirectorName',
 // 			title: 'ФИО руководителя от кафедры, должность',
 // 			className: 'text-xs !p-2 mobileFirst'
 // 		},
-
 // 		{
 // 			key: 'grade',
 // 			dataIndex: 'grade',
@@ -82,7 +75,6 @@
 // 			render: (text: any, record: any, index: any) => <div>{record?.grade ? record?.grade : 'Нет оценки'}</div>
 // 		}
 // 	]
-
 // 	const columnsMini = [
 // 		{
 // 			key: 'specialty',
@@ -90,7 +82,6 @@
 // 			title: 'Шифр и наименование специальности',
 // 			className: 'text-xs !p-4'
 // 		},
-
 // 		{
 // 			key: 'academicYear',
 // 			dataIndex: 'academicYear',
@@ -114,10 +105,9 @@
 // 			dataIndex: 'grade',
 // 			title: 'Оценка',
 // 			className: 'text-xs !p-4',
-// 			render: (text: any, record: any, index: any) => <div>{record?.grade ? record?.grade : 'Нет оценки'}</div>	
+// 			render: (text: any, record: any, index: any) => <div>{record?.grade ? record?.grade : 'Нет оценки'}</div>
 // 		}
 // 	]
-
 // 	const filterDataFull = () => {
 // 		function filterCourse(elem: any) {
 // 			if (filter.courseNumber === 'Все') {
@@ -126,19 +116,13 @@
 // 				return elem.course === filter.courseNumber
 // 			}
 // 		}
-
-
 // 		return dataAllMyPractices ? dataAllMyPractices.filter((elem: any) => filterCourse(elem)) : []
 // 	}
 // 	const handleRowClick = (record: any) => {
 // 		navigate(`/services/mypractices/myPractices/edit/${record.id}`)
 // 	}
-
 // 	const uniqueCourseNumbers = [...new Set(dataTable?.map((item: any) => item.course))]
-
-
 // 	if(isFetchingMyPractice)return(<Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />)
-	
 // 	return (
 // 		<Form form={form}>
 // 			<section className="container animate-fade-in">
@@ -147,7 +131,6 @@
 // 						<Typography.Text className=" text-[28px] mb-14">{t('myPractices')}</Typography.Text>
 // 					</Col>
 // 				</Row>
-
 // 				<Row gutter={[16, 16]} className="mt-14 flex items-center">
 // 					<Col span={5}>
 // 						<span>Наименование специальности</span>
@@ -175,7 +158,6 @@
 // 						</Form.Item>
 // 					</Col>
 // 				</Row>
-
 // 				<Row gutter={[16, 16]} className="mt-4 flex items-center">
 // 					<Col span={5}>
 // 						<span>Курс</span>
@@ -198,7 +180,6 @@
 // 						/>
 // 					</Col>
 // 				</Row>
-
 // 				<Row className="mt-12 flex items-center">
 // 					<Col span={12} flex="50%" className="mobileFirst">
 // 						<Radio.Group defaultValue="compressedView" buttonStyle="solid">
@@ -220,7 +201,6 @@
 // 						/>
 // 					</Col>
 // 				</Row>
-
 // 				<Row className="mt-4">
 // 					<Col flex={'auto'}>
 // 						{ !fullTable ?(
@@ -279,18 +259,17 @@
 // }
 // export default MyPractice
 import { LoadingOutlined, ReloadOutlined } from '@ant-design/icons'
-import { Button, Col, Form, Radio, Row, Select, Spin, Table, Typography } from 'antd'
+import { Button, Col, ConfigProvider, Form, Radio, Row, Select, Spin, Table, Typography } from 'antd'
+import { t } from 'i18next'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
-import { useTranslation } from 'react-i18next';
 
 import { useGetAllMyPracticesQuery } from '../../../../store/api/practiceApi/mypractice'
 import { useGetAllOrderQuery } from '../../../../store/api/practiceApi/representation'
-import { t } from 'i18next'
-
 
 export const MyPractice = () => {
-	const { t } = useTranslation();
+	const { t } = useTranslation()
 	const [fullTable, setFullTable] = useState(false)
 	const [currentPage, setCurrentPage] = useState(1)
 	const [form] = Form.useForm()
@@ -301,9 +280,21 @@ export const MyPractice = () => {
 		dateFilling: 'По дате (сначала новые)'
 	})
 	const [selectSubdivisionId, setSelectSubdivisionId] = useState(null)
-	const {data: dataAllOrder,isSuccess: isSuccessOrder,isFetching: isLoadingOrder} = useGetAllOrderQuery({ subdivisionId: selectSubdivisionId, page: currentPage - 1, size: '5' },{ skip: !selectSubdivisionId || !currentPage })
+	const {
+		data: dataAllOrder,
+		isSuccess: isSuccessOrder,
+		isFetching: isLoadingOrder
+	} = useGetAllOrderQuery(
+		{ subdivisionId: selectSubdivisionId, page: currentPage - 1, size: '5' },
+		{ skip: !selectSubdivisionId || !currentPage }
+	)
 	const [dataTable, setDataTable] = useState<any>([])
-	const {data: dataAllMyPractices,isSuccess: isSuccessMyPractice,isFetching: isFetchingMyPractice,refetch} = useGetAllMyPracticesQuery()
+	const {
+		data: dataAllMyPractices,
+		isSuccess: isSuccessMyPractice,
+		isFetching: isFetchingMyPractice,
+		refetch
+	} = useGetAllMyPracticesQuery()
 
 	useEffect(() => {
 		if (isSuccessMyPractice) {
@@ -345,7 +336,7 @@ export const MyPractice = () => {
 		{
 			key: 'practiceKind',
 			dataIndex: 'practiceKind',
-			title:  t('kind'),
+			title: t('kind'),
 			className: 'text-xs !p-2 mobileFirst'
 		},
 
@@ -396,7 +387,7 @@ export const MyPractice = () => {
 			dataIndex: 'grade',
 			title: t('grade'),
 			className: 'text-xs !p-4',
-			render: (text: any, record: any, index: any) => <div>{record?.grade ? record?.grade :  t('noGrade')}</div>	
+			render: (text: any, record: any, index: any) => <div>{record?.grade ? record?.grade : t('noGrade')}</div>
 		}
 	]
 
@@ -409,7 +400,6 @@ export const MyPractice = () => {
 			}
 		}
 
-
 		return dataAllMyPractices ? dataAllMyPractices.filter((elem: any) => filterCourse(elem)) : []
 	}
 	const handleRowClick = (record: any) => {
@@ -418,9 +408,9 @@ export const MyPractice = () => {
 
 	const uniqueCourseNumbers = [...new Set(dataTable?.map((item: any) => item.course))]
 
+	if (isFetchingMyPractice)
+		return <Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
 
-	if(isFetchingMyPractice)return(<Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />)
-	
 	return (
 		<Form form={form}>
 			<section className="container animate-fade-in">
@@ -444,9 +434,9 @@ export const MyPractice = () => {
 									{ key: 2244612, value: 'Все', label: t('all') },
 									...(dataAllMyPractices
 										? [...new Set(dataAllMyPractices.map(item => item.specialty))].map(specialty => ({
-											key: specialty,
-											value: specialty,
-											label: specialty
+												key: specialty,
+												value: specialty,
+												label: specialty
 										  }))
 										: [])
 								]}
@@ -485,74 +475,78 @@ export const MyPractice = () => {
 					<Col span={12} flex="50%" className="mobileFirst">
 						<Radio.Group defaultValue="compressedView" buttonStyle="solid">
 							<Radio.Button onClick={() => setFullTable(false)} value="compressedView" className="!rounded-l-full">
-							{t('compressedView')}
+								{t('compressedView')}
 							</Radio.Button>
 							<Radio.Button onClick={() => setFullTable(true)} value="tableView" className="!rounded-r-full">
 								{t('tableView')}
 							</Radio.Button>
 						</Radio.Group>
 					</Col>
-					<Col className='flex justify-end' span={12}>
-						<Button
-						onClick={refetch}
-						className=""
-						size="large"
-						shape="circle"
-						icon={<ReloadOutlined />}
-						/>
+					<Col className="flex justify-end" span={12}>
+						<Button onClick={refetch} className="" size="large" shape="circle" icon={<ReloadOutlined />} />
 					</Col>
 				</Row>
 
 				<Row className="mt-4">
 					<Col flex={'auto'}>
-						{ !fullTable ?(
+						{!fullTable ? (
 							<div className="viewPractical">
-							<Table
-								onRow={record => ({
-									onClick: () => handleRowClick(record)
-								})}
-								locale={{ emptyText: t('noData') }}
-								rowKey="id"
-								columns={columnsMini}
-								dataSource={dataTable ? dataTable : []}
-								pagination={
-									dataTable && dataTable?.length < 10
-										? false
-										: {
-												pageSize: 10
-											}
-								}
-								rowClassName={() => 'animate-fade-in '}
-								className="my- "
-							/>
-						</div>
-						) :  (
-							<Table
-								onRow={record => ({
-									onClick: () => handleRowClick(record)
-								})}
-								size="large"
-								rowKey="id"
-								columns={columns}
-								dataSource={dataTable}
-								pagination={
-									dataTable.length > 10 && {
-										current: currentPage,
-										pageSize: 10,
-										total: dataAllOrder?.length,
-										onChange: page => setCurrentPage(page)
+								<Table
+									onRow={record => ({
+										onClick: () => handleRowClick(record)
+									})}
+									locale={{ emptyText: t('noData') }}
+									rowKey="id"
+									columns={columnsMini}
+									dataSource={dataTable ? dataTable : []}
+									pagination={
+										dataTable && dataTable?.length < 10
+											? false
+											: {
+													pageSize: 10
+											  }
 									}
-								}
-								className="my-10  absolute  sm:relative sm:left-0 top-10 sm:top-0"
-								rowClassName={() => 'animate-fade-in'}
-								locale={{
-									emptyText: (
-										<div>
-											<h3>{t('noData')}</h3>
-										</div>
-									)
+									rowClassName={() => 'animate-fade-in '}
+									className="my- "
+								/>
+							</div>
+						) : (
+							<ConfigProvider
+								theme={{
+									components: {
+										Table: {
+											headerBg: 'rgb(218, 231, 251)'
+										}
+									}
 								}}
-							/>
+							>
+								<Table
+									onRow={record => ({
+										onClick: () => handleRowClick(record)
+									})}
+									size="large"
+									rowKey="id"
+									columns={columns}
+									dataSource={dataTable}
+									pagination={
+										dataTable.length > 10 && {
+											current: currentPage,
+											pageSize: 10,
+											total: dataAllOrder?.length,
+											onChange: page => setCurrentPage(page)
+										}
+									}
+									className="my-10  absolute  sm:relative sm:left-0 top-10 sm:top-0"
+									rowClassName={() => 'animate-fade-in'}
+									locale={{
+										emptyText: (
+											<div>
+												<h3>{t('noData')}</h3>
+											</div>
+										)
+									}}
+								/>
+							</ConfigProvider>
 						)}
 					</Col>
 				</Row>

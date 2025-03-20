@@ -1,7 +1,8 @@
 import React from 'react';
 import { UploadOutlined, UserOutlined } from '@ant-design/icons';
-import { Avatar, Button, message, Upload } from 'antd';
+import { Avatar, Button, message, Spin, Upload } from 'antd';
 import { useAddAvatarMutation, useGetAvatarQuery, usePutAvatarMutation } from '../../../store/api/aboutMe/forAboutMe';
+import { t } from 'i18next';
 
 const UploadAvatar: React.FC = () => {
   const { data: avatarUrl } = useGetAvatarQuery();
@@ -28,24 +29,24 @@ const UploadAvatar: React.FC = () => {
   const handleUpload = async (file: File) => {
     const formData = new FormData();
     formData.append('file', file);
-    console.log('avatarUrl',avatarUrl)
+  
     try {
       if(avatarUrl){
         await putAvatar(formData).unwrap();
-        message.success('Аватар успешно обновлен');
+        message.success(t('avatarChange'));
       } else {
         await addAvatar(formData).unwrap();
-        message.success('Аватар успешно обновлен');
+        message.success(t('avatarChange'));
       }
       // await addAvatar(formData).unwrap();
       // message.success('Аватар успешно обновлен');
     } catch (error) {
-      message.error('Ошибка при загрузке аватара');
+      message.error(t('error'));
     }
   };
 
   return (
-    <div className='relative w-[180px] mb-4'>
+    <Spin spinning={isLoadingPut || isLoading} className='relative w-[180px] mb-4'>
       <Avatar
         className='bg-[#cbdaf1] rounded-[50%]'
         size={180}
@@ -67,7 +68,7 @@ const UploadAvatar: React.FC = () => {
           />
         </Upload>
       </div>
-    </div>
+    </Spin>
   );
 };
 

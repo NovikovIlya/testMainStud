@@ -839,6 +839,7 @@
 import {
     Button,
     Col,
+    ConfigProvider,
     DatePicker, InputNumber,
     Popover,
     Radio,
@@ -1576,7 +1577,7 @@ export const RegisterContracts = () => {
 
                 </Col>
             </Row>
-            {!tableDataCompressed || isLoading ? <Spin className='w-full mt-20' indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />  :
+            { isLoading ? <Spin className='w-full mt-20' indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />  :
             <>
 
                { tableView.compressed
@@ -1611,7 +1612,15 @@ export const RegisterContracts = () => {
                 </div>
 
                 :
-                <Table
+                <ConfigProvider
+                                        theme={{
+                                          components: {
+                                            Table: {
+                                              headerBg: 'rgb(218, 231, 251)'
+                                            }
+                                          }
+                                        }}
+                                      ><Table
                         onRow={(record) => ({
                             onClick: (e) => {
                                 // @ts-ignore
@@ -1634,7 +1643,7 @@ export const RegisterContracts = () => {
                                setSelectedFieldFull(selectedRows)
                            }
                        }}
-                />
+                /></ConfigProvider>
                     }
             </>}
 

@@ -31,7 +31,7 @@ export const RequisiteSeeker = () => {
 	}
 
 	const { data, isLoading: loading } = useGetRespondFullInfoAccountingQuery(id_from_url)
-	const [getResume] = useLazyGetSeekerResumeFileQuery()
+	const [getResume, resumeQueryStatus] = useLazyGetSeekerResumeFileQuery()
 
 	const [resume, setResume] = useState<string>('')
 	const [resumeSize, setResumeSize] = useState<number>(0)
@@ -256,6 +256,45 @@ export const RequisiteSeeker = () => {
 										</div>
 									</>
 								))}
+							</div>
+						)}
+						{data?.respondData.portfolio.url !== '' && (
+							<div className="grid grid-cols-[164px_auto] gap-x-[50px] gap-y-[24px] w-[90%]">
+								<p>Ссылка на портфолио:</p>
+								<a href={data?.respondData.portfolio.url} target="_blank">
+									{data?.respondData.portfolio.url}
+								</a>
+							</div>
+						)}
+						{resumeQueryStatus.isSuccess && (
+							<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
+								<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">Резюме</p>
+								<div className="bg-white rounded-[16px] shadow-custom-shadow h-[59px] w-[65%] p-[20px] flex">
+									<MyDocsSvg />
+									<p
+										className="ml-[20px] font-content-font font-normal text-black text-[16px]/[19.2px] underline cursor-pointer"
+										onClick={() => {
+											const link = document.createElement('a')
+											link.href = resume
+											link.download = 'Резюме'
+											link.click()
+										}}
+									>
+										{'Резюме ' +
+											data?.userData?.lastname +
+											' ' +
+											data?.userData?.firstname +
+											' ' +
+											data?.userData?.middlename}
+									</p>
+									<p className="ml-auto font-content-font font-normal text-black text-[16px]/[19.2px] opacity-70">
+										{Math.round(resumeSize / 1000000) > 0
+											? Math.round(resumeSize / 1000000) + ' Мб'
+											: Math.round(resumeSize / 1000) > 0
+											? Math.round(resumeSize / 1000) + ' Кб'
+											: resumeSize + ' б'}
+									</p>
+								</div>
 							</div>
 						)}
 					</div>

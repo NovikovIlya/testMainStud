@@ -32,9 +32,9 @@ export const SupervisorInterviewSeekerInfo = () => {
 		console.error('id miss')
 	}
 
-	const { data: interviews = [], isLoading: interviewDataLoading } = useGetSupervisorInterviewQuery()
+	const { data: interviews = { content: [] }, isLoading: interviewDataLoading } = useGetSupervisorInterviewQuery(0)
 
-	const foundInterview = interviews.find(interview => interview.respondId === id_from_url)
+	const foundInterview = interviews.content.find(interview => interview.respondId === id_from_url)
 	console.log(interviews)
 	const format = foundInterview?.format || ''
 	const time = foundInterview?.time

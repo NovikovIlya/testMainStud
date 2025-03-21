@@ -79,6 +79,7 @@
 	"confirm": "The field does not match the above password",
 	"repeatPassword": "Repeat the password",
 	"email": "Email",
+	"userAgreementText": "User agreement",
 	"userAgreement": "I accept the user agreement and give permission to the KFU portal to process my personal data in accordance with Federal Law No. 152-FZ of July 27, 2006 “On Personal Data”",
 	"seletctType": "Select document type",
 	"alreadyProfile": "Already have a profile?",

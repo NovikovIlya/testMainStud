@@ -17,7 +17,7 @@ const AboutMeNew = () => {
   }, [form]);
 
   const onFinish = (values: any) => {
-    console.log('Отправка:', values);
+    console.log('Отправка чекбоксов:', values);
   };
 
   const handleSubmit = (values: { content: string }) => {
@@ -60,7 +60,7 @@ const AboutMeNew = () => {
             <div className="flex flex-wrap justify-start p-6">
               <div className="flex items-center gap-2">
                 <Title className="!mb-0" level={5}>
-                  {t('userAgreement')}
+                  {t('userAgreementText')}
                 </Title>
                 <Tooltip title={t('agreementTooltip')}>
                   <QuestionCircleOutlined />

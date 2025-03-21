@@ -21,7 +21,7 @@ const AboutMeNew = () => {
   };
 
   const handleSubmit = (values: { content: string }) => {
-    
+    console.log('Отправка:', values);
   };
 
 

@@ -379,7 +379,7 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 									<p className="font-content-font text-black text-[16px]/[19.2px] font-bold select-none">
 										Профессиональные навыки
 									</p>
-									{skillsCompleted ? <CheckedIcon /> : <EditSvg />}
+									{skillsData.skills.length !== 0 ? <CheckedIcon /> : <EditSvg />}
 								</div>
 								<Button
 									className="ml-auto mt-[40px] rounded-[54.5px]"
@@ -398,7 +398,7 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 											? () => {
 													setPage('experience/main')
 											  }
-											: !skillsCompleted
+											: skillsData.skills.length === 0
 											? () => {
 													setPage('skills')
 											  }
@@ -463,7 +463,7 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 									{aboutMeCompleted &&
 									educationData.educations.length !== 0 &&
 									(experienceData.noExperienceFlag || experienceData.experiences.length !== 0) &&
-									skillsCompleted
+									skillsData.skills.length !== 0
 										? 'Откликнуться'
 										: 'Дальше'}
 								</Button>

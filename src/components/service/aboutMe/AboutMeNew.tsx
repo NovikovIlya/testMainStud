@@ -30,7 +30,7 @@ const AboutMeNew = () => {
 
   return (
     <div className="px-[50px] pt-[60px] mb-[50px]">
-      {/* Секция с основной информацией */}
+   
       <div className="bg-white rounded-xl shadow-md">
         <Row>
           <Col span={12}>

@@ -2,12 +2,10 @@ import { useTranslation } from 'react-i18next';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Col, Divider, Form, Row, Tooltip } from 'antd';
 import { Descriptions } from 'antd';
-import type { DescriptionsProps } from 'antd';
 import Title from 'antd/es/typography/Title';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import UploadAvatar from './UploadAvatar';
 import TextArea from 'antd/es/input/TextArea';
-import { SkeletonPage } from './Skeleton';
 
 
 const AboutMeNew = () => {

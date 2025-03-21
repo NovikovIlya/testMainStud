@@ -23,7 +23,7 @@ const AboutMeNew = () => {
   };
 
   const handleSubmit = (values: { content: string }) => {
-    // Обработка отправки формы
+    
   };
 
 

@@ -83,7 +83,7 @@ export interface OptionsNameSpecialty {
 export const RegisterContracts = () => {
     const tokenAccess = localStorage.getItem('access')!.replaceAll('"', '')
     const {data: dataAll, isSuccess: isSuccessAll,isFetching} = useGetContractsAllQuery(null)
-    const {data: dataShort, isSuccess: isSuccessShort,isFetching:isLoadingShort} = useGetContractsShortQuery()
+    const {data: dataShort, isSuccess: isSuccessShort,isFetching:isLoadingShort,isError} = useGetContractsShortQuery()
     const nav = useNavigate()
     const [filter, setFilter] = useState({
         contractType: 'Все',
@@ -106,6 +106,7 @@ export const RegisterContracts = () => {
     const [contractFacilities, setContractFacilities] = useState<ContractFacilities[]>()
     const {data: dataContractFacilities, isSuccess: isSuccessContractFacilities} = useGetContractFacilitiesQuery()
     const [first,setFirst] = useState(false)
+    const [check,setCheck] = useState(false)
 
     const optionsTypeContract = [
         { value: "Все", label: t("all") },
@@ -307,9 +308,18 @@ export const RegisterContracts = () => {
     }, [dataContractFacilities]);
 
     useEffect(() => {
+       
         setTableDataCompressed(filterDataCompressed())
         setTableDataFull(filterDataFull())
+
     }, [dataAll,dataShort,filter])
+
+    useEffect(()=>{
+        setCheck(false)
+    },[])
+   console.log('check,',check)
+
+   
 
     function prolonAge(prolon: string) {
         if (prolon === '1') {
@@ -465,6 +475,7 @@ export const RegisterContracts = () => {
                 .filter(elem => filterDateConclusionContract(elem))
                 .sort((a, b) => sortDateConclusionContract(a, b))
         }
+        setCheck(true)
     }
 
     function filterDataFull() {
@@ -744,10 +755,13 @@ export const RegisterContracts = () => {
 
                 </Col>
             </Row>
-            {first && isLoadingShort&&isFetchingMest && isFetching ? <Spin className='w-full mt-20' indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />  :
+            {!isFetching && isError ? <div className='w-full flex justify-center text-center'>Нет данных</div>: ''}
+            
+            {isError ? '' :
+             !tableDataCompressed  && isFetching ? <Spin className='w-full mt-20' indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />  :
             <>
 
-               { tableView.compressed
+               { tableView.compressed 
                 ?
                 <div className={'registerContracts animate-fade-in'}>
                     <Table
@@ -765,6 +779,7 @@ export const RegisterContracts = () => {
                         size={"middle"}
                         dataSource={tableDataCompressed}
                         rowClassName={() => 'animate-fade-in'}
+                        locale={{ emptyText: '' }}
                         rowSelection={{
                             type: "checkbox",
                             onSelect: (record, selected, selectedRows, nativeEvent) => {
@@ -813,6 +828,7 @@ export const RegisterContracts = () => {
                 /></ConfigProvider>
                     }
             </>}
+            
 
         </section>
     )

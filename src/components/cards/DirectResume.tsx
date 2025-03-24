@@ -230,6 +230,8 @@ export const DirectResume = ({
 
 	useEffect(() => {
 		if (user) {
+			setValue('name', user.firstname)
+			setValue('lastname', user.lastname)
 			getInfo()
 				.unwrap()
 				.then(info => {

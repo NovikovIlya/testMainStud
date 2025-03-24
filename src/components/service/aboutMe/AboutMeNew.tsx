@@ -15,7 +15,6 @@ const AboutMeNew = () => {
 	const [content, setContent] = useState(
 		'<p><strong><a href="https://scholar.google.ru/citations?user=UlOzbD0AAAAJ&amp;hl=ru" target="_blank">Google Scholar</a></strong></p>\r\n<p>&nbsp;</p>\r\n<p><strong><a href="http://www.researcherid.com/rid/N-5374-2016" target="_blank">ResearcherID:&nbsp;N-5374-2016</a></strong></p>\r\n<p>&nbsp;</p>\r\n<p><strong><a href="https://www.scopus.com/authid/detail.uri?authorId=58150677300">Author ID:&nbsp;58150677300&#65279;</a></strong></p>\r\n<p>&nbsp;</p>\r\n<p><strong><a href="http://orcid.org/0000-0002-6721-7488">ORCID ID:&nbsp;0000-0002-6721-7488</a></strong></p>\r\n<p>&nbsp;</p>\r\n<p><strong><a href="http://www.mathnet.ru/rus/person/121217" target="_blank">Math-Net ID:&nbsp;121217</a></strong></p>\r\n<p><strong>------------------------------------</strong></p>\r\n<p><strong>Член редколлегии журнала РАН <a href="https://sciencejournals.ru/journal/vysen/">"Химия высоких энергий"</a></strong></p>\r\n<p><strong><strong>Рецензент журналов: <a href="http://jetpletters.ru/ru/jetpl.shtml">Письма в ЖЭТФ</a>,&nbsp;<a href="https://link.springer.com/journal/11452">Plasma Physics Reports</a>,&nbsp;</strong><a href="https://benthamscience.com/journals/current-nanoscience/">Current Nanoscience</a>, <a href="https://www.mdpi.com/journal/plasma">Plasma&#65279;</a>, <a href="https://www.mdpi.com/journal/metals">Metals</a>, <a href="https://www.springer.com/journal/10733/">High Energy Chemistry</a>,&nbsp;<a href="https://www.mdpi.com/journal/biomolecules">Biomolecules&#65279;</a><br /></strong></p>'
 	)
-	const [isPreview, setIsPreview] = useState(false)
 
 	useEffect(() => {
 		form.setFieldsValue({ content: 'sss' })
@@ -24,7 +23,7 @@ const AboutMeNew = () => {
 	const onFinish = (values: any) => {
 		console.log('Отправка чекбоксов:', values)
 	}
-  console.log('content',content)
+	console.log('content', content)
 
 	// if() return <div className='mt-[-45px] ml-[-40px]'><SkeletonPage /></div>
 
@@ -123,9 +122,7 @@ const AboutMeNew = () => {
 										</a>
 									</Checkbox>
 								</Form.Item>
-								{/* <Form.Item className='mb-[24px]  !flex !items-start' name="razr" valuePropName="checked" label={null}>
-                  <Checkbox  className='flex !items-start'>{t('razr')}</Checkbox>
-                </Form.Item> */}
+
 								<Form.Item className="mb-[5px] mt-[15px]">
 									<Button type="primary" htmlType="submit">
 										{t('saveButton')}
@@ -176,41 +173,18 @@ const AboutMeNew = () => {
 							</div>
 							<Divider />
 
-							<div className="">
+							<div className="w-full">
 								<Row>
 									<QuillComponents
 										content={content}
 										setContent={setContent}
-										isPreview={isPreview}
-										setIsPreview={setIsPreview}
+										
 									/>
 								</Row>
 								<Row>
 									<Button type="primary">Сохранить</Button>
-									{/* <Button
-                          onClick={() => setIsPreview(!isPreview)}
-                          
-                          className=""
-                        >
-                          {isPreview ? (
-                            <>
-                              <EditOutlined  size={18} /> Редактировать
-                            </>
-                          ) : (
-                            <>
-                              <EyeOutlined  size={18} /> Предпросмотр
-                            </>
-                          )}
-                        </Button> */}
 								</Row>
 							</div>
-							{/* <Form className='w-full' form={form} onFinish={handleSubmit}>
-                <Form.Item className='' name="content" label="">
-                 <TextArea className='' placeholder={t('aboutMePlaceholder')} />
-                 
-                </Form.Item>
-                <Button type='primary' htmlType="submit">{t('saveButton')}</Button>
-              </Form> */}
 						</div>
 					</Col>
 				</Row>

@@ -98,7 +98,8 @@ export const PreviewContracts = () => {
     	{
     		key: '6',
     		name: 'Шифр и наименование специальности',
-    		medic: contract?.specialtyName || ''
+            // @ts-ignore
+    		medic: contract?.specialtyNames.map((item: any) => item.value).join(', ') || ''
     	},
     	{
     		key: '7',

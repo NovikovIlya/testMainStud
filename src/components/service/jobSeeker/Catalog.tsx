@@ -14,7 +14,7 @@ import {
 	useLazyGetVacancyPreviewBySubdivisionQuery
 } from '../../../store/api/serviceApi'
 import { keepFilterCategory, keepFilterSubCategory, keepFilterType } from '../../../store/reducers/CatalogFilterSlice'
-import { allData } from '../../../store/reducers/SeekerFormReducers/AboutMeReducer'
+import { allData, name, surName } from '../../../store/reducers/SeekerFormReducers/AboutMeReducer'
 import { VacancyItemType } from '../../../store/reducers/type'
 
 import VacancyItem from './VacancyItem'
@@ -54,6 +54,8 @@ export default function Catalog() {
 
 	useEffect(() => {
 		if (user) {
+			dispatch(name(user.firstname))
+			dispatch(surName(user.lastname))
 			getInfo()
 				.unwrap()
 				.then(info => {

@@ -163,7 +163,7 @@ export const NumberInformation = () => {
 								) : (
 									<>
 										<p>{t('verText')}: {count}</p>
-										<p className="mb-2">{t('verText2')}</p>
+										<p className="mb-2">{t('verText22')}</p>
 										<Form.Item name={'code'}>
 											<Input.OTP length={4} />
 										</Form.Item>

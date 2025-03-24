@@ -457,6 +457,8 @@
 	"emailNeed": "Write mail",
 	"verText": "Time remaining",
 	"verText2": "A code has been sent to your email! Copy it and write it in the field below:",
+	"verText22": "A call with a code will be made to your phone! Copy it and write it in the field below:",
+
 	"verText3": "Time expired, please try again later",
 	"loading": "loading",
 	"verSuc": "Verification completed successfully",

@@ -143,18 +143,12 @@ export const RespondsSupervisor = () => {
 						</label>
 						<label
 							className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
-								requestData.status ===
-								`status=${respondStatus[respondStatus.IN_RESERVE]}&status=${respondStatus[respondStatus.ARCHIVE]}`
+								requestData.status === 'status=' + respondStatus[respondStatus.ARCHIVE]
 									? 'text-white bg-dasha-blue'
 									: 'text-black border-solid border-black border-[1px]'
 							} font-normal text-[16px]/[16px]`}
 						>
-							<Radio
-								value={`status=${respondStatus[respondStatus.IN_RESERVE]}&status=${
-									respondStatus[respondStatus.ARCHIVE]
-								}`}
-								className="hidden"
-							></Radio>
+							<Radio value={'status=' + respondStatus[respondStatus.ARCHIVE]} className="hidden"></Radio>
 							отказано
 						</label>
 					</Radio.Group>

@@ -50,8 +50,6 @@ export const VacancyEditView = () => {
 
 	const { data: categories = [] } = useGetCategoriesQuery()
 	const [categoryTitle, setCategoryTitle] = useState<string>(data?.acf.category as string)
-	const { data: directions = [] } = useGetDirectionsQuery(data?.acf.category as string)
-	const { data: subdivisions = [] } = useGetSubdivisionsQuery(data?.acf.category as string)
 
 	const { openAlert } = useAlert()
 
@@ -79,7 +77,7 @@ export const VacancyEditView = () => {
 		setCategory(data?.acf.category)
 		setDirection(data?.acf.direction)
 		setSubdivision(data?.acf.subdivision)
-		setCategoryTitle(data?.acf.category)
+		setCategoryTitle(data?.acf.category!)
 	}, [data])
 
 	const [responsibilities, setResponsibilities] = useState<string | undefined>(
@@ -297,12 +295,10 @@ export const VacancyEditView = () => {
 					>
 						<Form.Item
 							name={'post'}
-							label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">
-								Должность
-							</label>}
+							label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Должность</label>}
 							rules={[
 								{ required: true, message: 'Не указана должность' },
-								{ max: 500, message: 'Количество символов было превышено'}
+								{ max: 500, message: 'Количество символов было превышено' }
 							]}
 						>
 							<Input placeholder="Ввести название"></Input>
@@ -315,9 +311,7 @@ export const VacancyEditView = () => {
 										Требуемый опыт работы
 									</label>
 								}
-								rules={[
-									{ required: true, message: 'Не указана опыт' }
-								]}
+								rules={[{ required: true, message: 'Не указана опыт' }]}
 							>
 								<Select
 									placeholder="Выбрать"
@@ -361,7 +355,7 @@ export const VacancyEditView = () => {
 								}
 								rules={[
 									{ required: true, message: 'Не указана зарплата' },
-									{ max: 70, message: 'Количество символов было превышено'}
+									{ max: 70, message: 'Количество символов было превышено' }
 								]}
 							>
 								<Input placeholder="Ввести"></Input>
@@ -372,7 +366,7 @@ export const VacancyEditView = () => {
 							label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Задачи</label>}
 							rules={[
 								{ required: true, message: 'Не указаны задачи' },
-								{ max: 5000, message: 'Количество символов было превышено'}
+								{ max: 5000, message: 'Количество символов было превышено' }
 							]}
 						>
 							<Input.TextArea autoSize className="!h-[107px]" placeholder="Ввести текст..."></Input.TextArea>
@@ -382,7 +376,7 @@ export const VacancyEditView = () => {
 							label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Требования</label>}
 							rules={[
 								{ required: true, message: 'Не указаны требования' },
-								{ max: 5000, message: 'Количество символов было превышено'}
+								{ max: 5000, message: 'Количество символов было превышено' }
 							]}
 						>
 							<Input.TextArea autoSize className="!h-[107px]" placeholder="Ввести текст..."></Input.TextArea>
@@ -392,7 +386,7 @@ export const VacancyEditView = () => {
 							label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Условия</label>}
 							rules={[
 								{ required: true, message: 'Не указаны условия' },
-								{ max: 5000, message: 'Количество символов было превышено'}
+								{ max: 5000, message: 'Количество символов было превышено' }
 							]}
 						>
 							<Input.TextArea autoSize className="!h-[107px]" placeholder="Ввести текст..."></Input.TextArea>
@@ -424,24 +418,32 @@ export const VacancyEditView = () => {
 								name={'direction'}
 								label={
 									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
-										{categories.find(cat => cat.title === categoryTitle)?.direction ? "Подразделение" : "Профобласть"}
+										{categories.find(cat => cat.title === categoryTitle)?.direction ? 'Подразделение' : 'Профобласть'}
 									</label>
 								}
 								rules={[{ required: true, message: 'Не указана подкатегория' }]}
 							>
 								<Select
 									placeholder="Выбрать"
-									options={
-										categories.find(cat => cat.title === categoryTitle)?.direction
-											? directions.map(dir => ({
-													value: dir.title,
-													label: dir.title
-											  }))
-											: subdivisions.map(sub => ({
-													value: sub.title,
-													label: sub.title
-											  }))
-									}
+									options={(() => {
+										let cat = categories.find(category => category.title === categoryTitle)
+										return cat && cat.directions.length !== 0
+											? [
+													{ value: 'Все', label: 'Все' },
+													...cat.directions.map(dir => ({
+														value: dir,
+														label: dir
+													}))
+											  ]
+											: cat && cat.subdivisionsList.length !== 0
+											? [
+													...cat.subdivisionsList.map(sub => ({
+														value: sub,
+														label: sub
+													}))
+											  ]
+											: []
+									})()}
 								></Select>
 							</Form.Item>
 						</div>
@@ -492,7 +494,7 @@ export const VacancyEditView = () => {
 							</div>
 							<div className="flex flex-col gap-[16px]">
 								<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-									{direction ===  "false" ? "Подразделение" : "Профобласть"}
+									{direction === 'false' ? 'Подразделение' : 'Профобласть'}
 								</p>
 								<p className="font-content-font font-normal text-black text-[18px]/[21px]">
 									{direction === '' ? subdivision : direction}

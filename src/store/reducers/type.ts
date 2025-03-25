@@ -139,7 +139,9 @@ export type VacancyItemType = {
 export type CategoryType = {
 	title: string
 	direction: boolean
-	subdivision: boolean
+	directions: string[]
+	subdivisions: boolean
+	subdivisionsList: string[]
 }
 
 export type VacancyViewResponceType = {

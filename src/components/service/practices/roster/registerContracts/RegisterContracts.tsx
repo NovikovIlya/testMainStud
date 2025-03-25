@@ -180,14 +180,14 @@ export const RegisterContracts = () => {
     ]
     const columnsFullView: TableProps<ColumnsTableFull>['columns'] = [
         {
-            title: <span className={'text-xs'}>Наименование организации</span>,
+            title: <span className={'text-xs'}>{t('contractFacility')}</span>,
             dataIndex: 'contractFacility',
             align: "left",
             className: 'text-xs',
             width: 200,
         },
         {
-            title: <span className={'text-xs'}>Специальности</span>,
+            title: <span className={'text-xs'}>{t('specialtyName')}</span>,
             dataIndex: 'specialtyNames',
             align: "left",
             className: 'text-xs',
@@ -199,20 +199,20 @@ export const RegisterContracts = () => {
            
         },
         {
-            title: <span className={'text-xs'}>Номер договора</span>,
+            title: <span className={'text-xs'}>{t('contractNumber')}</span>,
             dataIndex: 'contractNumber',
             align: "center",
             className: 'text-xs'
         },
         {
-            title: <span className={'text-xs'}>Дата заключения договора</span>,
+            title: <span className={'text-xs'}>{t('conclusionDate')}</span>,
             dataIndex: 'conclusionDate',
             align: "center",
             className: 'text-xs',
             render: (text) => dayjs(text).format('DD.MM.YYYY')
         },
         {
-            title: <span className={'text-xs'}>Тип договора</span>,
+            title: <span className={'text-xs'}>{t('contractType')}</span>,
             dataIndex: 'contractType',
             align: "center",
             className: 'text-xs',
@@ -227,25 +227,25 @@ export const RegisterContracts = () => {
                 </div>
         },
         {
-            title: <span className={'text-xs'}>Юридический адрес организации</span>,
+            title: <span className={'text-xs'}>{t('legalFacility')}</span>,
             dataIndex: 'legalFacility',
             align: "center",
             className: 'text-xs'
         },
         {
-            title: <span className={'text-xs'}>Фактический адрес организации</span>,
+            title: <span className={'text-xs'}>{t('actualFacility')}</span>,
             dataIndex: 'actualFacility',
             align: "center",
             className: 'text-xs'
         },
         {
-            title: <span className={'text-xs'}>Количество мест</span>,
+            title: <span className={'text-xs'}>{t('placesAmount')}</span>,
             dataIndex: 'placesAmount',
             align: "center",
             className: 'text-xs'
         },
         {
-            title: <span className={'text-xs'}>Ссылки</span>,
+            title: <span className={'text-xs'}>{t('links')}</span>,
             dataIndex: 'links',
             align: "center",
             width: 100,

@@ -35,112 +35,92 @@ export const NavAboutMe = () => {
 
 	const handleNavigate = (url: string) => navigate(url)
 
-	const navItems = [
-	  {
-	    key: '/services/aboutMe/personalData',
-	    icon: <AboutMeSvg />,
-	    label: <p className="ml-[10px]">{ t('PersonalData')}</p>
-
-	  },
-	    {
-	    key: '/services/aboutMe/document',
-	    icon: <MyDocsSvg />,
-	    label: <p className="ml-[10px]">{ t('documents')}</p>
-
-	  },
-	  {
-	    key: '/services/aboutMe/address',
-	    icon: <AddressSvg />,
-	    label: <p className="ml-[10px]">{ t('adress')}</p>
-
-	  },
-	{
-		key: '/services/aboutMe/contactInformation',
-		icon: <ContactInformationSvg />,
-		label: (			<div className="ml-[10px] min-w-0">
-	    <p className="whitespace-normal break-words text-wrap text-sm leading-4">
-	    { t('contactInformation')}
-	    </p>
-	  </div>)
-
-	  },
-	  {
-	    key: '/services/aboutMe/education',
-	    icon: <EducationSvg />,
-	    label:<p className="ml-[10px]">{ t('education')}</p>
-
-	  },
-	//   {
-	//     key: '/services/aboutMe/languages',
-	//     icon: <LanguagesSvgNew />,
-	//     label: (			<div className="ml-[10px] min-w-0">
-	//       <p className="whitespace-normal break-words text-wrap text-sm leading-4">
-	//      Знание языков
-	//       </p>
-	//     </div>)
-
-	//     }
-	
-
-	
-	  // {
-	  //   key: '/services/aboutMe/parent',
-	  //   icon: <ParentSvg />,
-	  //   label: <p className="ml-[10px]">{t('Parents')}</p>,
-	  //   condition: typeAcc !== 'EMPL'
-
-	  // }
-	// @ts-ignore
-	].filter(item => item?.condition !== false)
 	// const navItems = [
-	// 	{
-	// 		key: '/services/aboutMe/personalData',
-	// 		icon: <AboutMeSvg />,
-	// 		label: <p className="ml-[10px]">{t('PersonalData')}</p>
-	// 	},
-	// 	{
-	// 		key: '/services/aboutMe/contactInformation',
-	// 		icon: <ContactInformationSvg />,
-	// 		label: (
-	// 			<div className="ml-[10px] min-w-0">
-	// 				<p className="whitespace-normal break-words text-wrap text-sm leading-4">{t('contactInformation')}</p>
-	// 			</div>
-	// 		)
-	// 	},
-	// 	{
-	// 		key: '/services/aboutMe/education',
-	// 		icon: <EducationSvg />,
-	// 		label: <p className="ml-[10px]">{t('education')}</p>
-	// 	},
-	// 	{
-	// 		key: '/services/aboutMe/languages',
-	// 		icon: <LanguagesSvgNew />,
-	// 		label: (
-	// 			<div className="ml-[10px] min-w-0">
-	// 				<p className="whitespace-normal break-words text-wrap text-sm leading-4">Знание языков</p>
-	// 			</div>
-	// 		)
-	// 	},
+	//   {
+	//     key: '/services/aboutMe/personalData',
+	//     icon: <AboutMeSvg />,
+	//     label: <p className="ml-[10px]">{ t('PersonalData')}</p>
 
-	// 	{
-	// 		key: '/services/aboutMe/social',
-	// 		icon: <SocialSvg />,
-	// 		label: (
-	// 			<div className="ml-[10px] min-w-0">
-	// 				<p className="whitespace-normal break-words text-wrap text-sm leading-4">Общественная деятельность</p>
-	// 			</div>
-	// 		)
-	// 	},
-	// 	{
-	// 		key: '/services/aboutMe/scientific',
-	// 		icon: <ScientificSvg />,
-	// 		label: (
-	// 			<div className="ml-[10px] min-w-0">
-	// 				<p className="whitespace-normal break-words text-wrap text-sm leading-4">Научная деятельность</p>
-	// 			</div>
-	// 		)
-	// 	}
-	// ]
+	//   },
+	//     {
+	//     key: '/services/aboutMe/document',
+	//     icon: <MyDocsSvg />,
+	//     label: <p className="ml-[10px]">{ t('documents')}</p>
+
+	//   },
+	//   {
+	//     key: '/services/aboutMe/address',
+	//     icon: <AddressSvg />,
+	//     label: <p className="ml-[10px]">{ t('adress')}</p>
+
+	//   },
+	// {
+	// 	key: '/services/aboutMe/contactInformation',
+	// 	icon: <ContactInformationSvg />,
+	// 	label: (			<div className="ml-[10px] min-w-0">
+	//     <p className="whitespace-normal break-words text-wrap text-sm leading-4">
+	//     { t('contactInformation')}
+	//     </p>
+	//   </div>)
+
+	//   },
+	//   {
+	//     key: '/services/aboutMe/education',
+	//     icon: <EducationSvg />,
+	//     label:<p className="ml-[10px]">{ t('education')}</p>
+
+	//   },
+	// // @ts-ignore
+	// ].filter(item => item?.condition !== false)
+	const navItems = [
+		{
+			key: '/services/aboutMe/personalData',
+			icon: <AboutMeSvg />,
+			label: <p className="ml-[10px]">{t('PersonalData')}</p>
+		},
+		{
+			key: '/services/aboutMe/contactInformation',
+			icon: <ContactInformationSvg />,
+			label: (
+				<div className="ml-[10px] min-w-0">
+					<p className="whitespace-normal break-words text-wrap text-sm leading-4">{t('contactInformation')}</p>
+				</div>
+			)
+		},
+		{
+			key: '/services/aboutMe/education',
+			icon: <EducationSvg />,
+			label: <p className="ml-[10px]">{t('education')}</p>
+		},
+		{
+			key: '/services/aboutMe/languages',
+			icon: <LanguagesSvgNew />,
+			label: (
+				<div className="ml-[10px] min-w-0">
+					<p className="whitespace-normal break-words text-wrap text-sm leading-4">Знание языков</p>
+				</div>
+			)
+		},
+
+		{
+			key: '/services/aboutMe/social',
+			icon: <SocialSvg />,
+			label: (
+				<div className="ml-[10px] min-w-0">
+					<p className="whitespace-normal break-words text-wrap text-sm leading-4">Общественная деятельность</p>
+				</div>
+			)
+		},
+		{
+			key: '/services/aboutMe/scientific',
+			icon: <ScientificSvg />,
+			label: (
+				<div className="ml-[10px] min-w-0">
+					<p className="whitespace-normal break-words text-wrap text-sm leading-4">Научная деятельность</p>
+				</div>
+			)
+		}
+	]
 
 	const onClick: MenuProps['onClick'] = e => {
 		handleNavigate(e.key)
@@ -167,19 +147,19 @@ export const NavAboutMe = () => {
 			</div>
 
 			<div className={`${'ml-[229px]'} bg-[#F5F8FB] w-full pt-[70px] min-h-screen`}>
-				{pathname === '/services/aboutMe/personalData' && <AboutMe />}
+				{/* {pathname === '/services/aboutMe/personalData' && <AboutMe />}
 		   		{pathname === '/services/aboutMe/contactInformation' && <MainContact />}
 				{pathname === '/services/aboutMe/document' && <Document />}
 				{pathname === '/services/aboutMe/address' && <Address />}
-				{pathname === '/services/aboutMe/education' && <Education />}
+				{pathname === '/services/aboutMe/education' && <Education />} */}
 			
-{/* 
+
 				{pathname === '/services/aboutMe/personalData' && <AboutMeNew />}
 				{pathname === '/services/aboutMe/contactInformation' && <MainContact />}
 				{pathname === '/services/aboutMe/education' && <EducationNew />}
 				{pathname === '/services/aboutMe/languages' && <Languages />}
 				{pathname === '/services/aboutMe/social' && <Social />}
-				{pathname === '/services/aboutMe/scientific' && <Scientific />} */}
+				{pathname === '/services/aboutMe/scientific' && <Scientific />}
 			</div>
 		</>
 	)

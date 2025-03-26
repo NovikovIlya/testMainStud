@@ -48,14 +48,14 @@ export const SupervisorVacancies = () => {
 
 	useEffect(() => {
 		if (requestData.page === 0) {
-			getVacancies(requestData.page)
+			getVacancies({ page: requestData.page })
 				.unwrap()
 				.then(res => {
 					setVacancies(res.content)
 					setBlockPageAddition(false)
 				})
 		} else {
-			getVacancies(requestData.page)
+			getVacancies({ page: requestData.page })
 				.unwrap()
 				.then(res => {
 					setVacancies(prev => [...prev, ...res.content])

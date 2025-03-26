@@ -10,6 +10,7 @@ import { NocircleArrowIconHover } from '../../../../../assets/svg/NocircleArrowI
 import { useAppSelector } from '../../../../../store'
 import {
 	useEmployeeSeekerRequestMutation,
+	useGetInterviewQuery,
 	useGetRespondFullInfoQuery,
 	useGetSupervisorInterviewQuery,
 	useLazyGetSeekerResumeFileQuery
@@ -32,10 +33,8 @@ export const SupervisorInterviewSeekerInfo = () => {
 		console.error('id miss')
 	}
 
-	const { data: interviews = { content: [] }, isLoading: interviewDataLoading } = useGetSupervisorInterviewQuery(0)
+	const { data: foundInterview, isLoading: interviewDataLoading } = useGetInterviewQuery(id_from_url)
 
-	const foundInterview = interviews.content.find(interview => interview.respondId === id_from_url)
-	console.log(interviews)
 	const format = foundInterview?.format || ''
 	const time = foundInterview?.time
 	console.log(time)

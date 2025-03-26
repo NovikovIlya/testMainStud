@@ -421,6 +421,7 @@ export type InterviewItemType = {
 	format: 'OFFLINE' | 'ONLINE'
 	time: string
 	vacancyName: string
+	url: string
 }
 
 export type SeekerStatusChangeType = {

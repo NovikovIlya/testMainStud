@@ -39,14 +39,55 @@ export const SupervisorInterviewItem = (props: InterviewItemType) => {
 	const seekerName = props.seeker.lastName + ' ' + props.seeker.firstName + ' ' + props.seeker.middleName
 
 	const InterviewCountdownTimeElem = (props: CountdownButtonProps) => {
-		const [timeLeft, setTimeLeft] = useState<number>(0)
+		const [isInterviewStarted, setIsInterviewStarted] = useState<boolean>(false)
+		const [is5MinBeforeInterviewStarted, setIs5MinBeforeInterviewStarted] = useState<boolean>(false)
+		const [is30MinAfterInterviewEnded, SetIs30MinAfterInterviewEnded] = useState<boolean>(false)
+		const [datePublicString, setDatePublicString] = useState<string>('')
 
 		useEffect(() => {
 			const updateTimeLeft = () => {
 				const targetDate = new Date(props.eventTime)
 				const now = new Date()
 				const difference = targetDate.getTime() - now.getTime()
-				setTimeLeft(difference)
+				const minutes: number = Math.round((difference / 1000 / 60) % 60)
+				const hours: number = Math.floor((difference / (1000 * 60 * 60)) % 24)
+				const days: number = Math.floor(difference / (1000 * 60 * 60 * 24))
+				let datePublicString: string = ''
+				const isDaysEmpty: boolean = days === 0
+				const isHoursEmpty: boolean = hours === 0
+
+				if (isDaysEmpty && isHoursEmpty) {
+					datePublicString += 'Осталось ' + minutes + ' минут'
+				}
+				if (isDaysEmpty && !isHoursEmpty) {
+					datePublicString += 'Осталось ' + hours + ' ч' + minutes + ' м'
+				}
+				if (!isDaysEmpty && !isHoursEmpty) {
+					datePublicString += 'Осталось ' + days + ' дн ' + hours + ' ч'
+				}
+				setDatePublicString(datePublicString)
+
+				if (difference < 0) {
+					setIsInterviewStarted(true)
+				} else {
+					setIsInterviewStarted(false)
+				}
+
+				if (difference > 0 && difference <= 60 * 1000 * 5) {
+					// 5 мин
+					setIs5MinBeforeInterviewStarted(true)
+				} else {
+					setIs5MinBeforeInterviewStarted(false)
+				}
+
+				if (difference * -1 < 60 * 1000 * 30) {
+					SetIs30MinAfterInterviewEnded(false)
+				} else {
+					SetIs30MinAfterInterviewEnded(true)
+				}
+				console.log(targetDate)
+				console.log(now)
+				console.log(difference)
 				return difference
 			}
 
@@ -57,48 +98,6 @@ export const SupervisorInterviewItem = (props: InterviewItemType) => {
 			return () => clearInterval(intervalId) // Очищаем интервал при размонтировании
 		}, [props.eventTime])
 
-		const targetDate = new Date(props.eventTime)
-		const now = new Date()
-		const difference = targetDate.getTime() - now.getTime()
-		const minutes: number = Math.floor((difference / 1000 / 60) % 60)
-		const hours: number = Math.floor((difference / (1000 * 60 * 60)) % 24)
-		const days: number = Math.floor(difference / (1000 * 60 * 60 * 24))
-		let isInterviewStarted: boolean = false
-		let is5MinBeforeInterviewStarted: boolean = false
-		let is30MinAfterInterviewEnded: boolean = false
-
-		if (difference < 0) {
-			isInterviewStarted = true
-		} else {
-			isInterviewStarted = false
-		}
-
-		if (difference > 0 && difference <= 60 * 1000 * 5) {
-			// 5 мин
-			is5MinBeforeInterviewStarted = true
-		} else {
-			is5MinBeforeInterviewStarted = false
-		}
-
-		if (difference * -1 < 60 * 1000 * 30) {
-			is30MinAfterInterviewEnded = false
-		} else {
-			is30MinAfterInterviewEnded = true
-		}
-
-		let datePublicString: string = ''
-		const isDaysEmpty: boolean = days === 0
-		const isHoursEmpty: boolean = hours === 0
-
-		if (isDaysEmpty && isHoursEmpty) {
-			datePublicString += 'Осталось ' + minutes + ' минут'
-		}
-		if (isDaysEmpty && !isHoursEmpty) {
-			datePublicString += 'Осталось ' + hours + ' ч' + minutes + ' м'
-		}
-		if (!isDaysEmpty && !isHoursEmpty) {
-			datePublicString += 'Осталось ' + days + ' дн ' + hours + ' ч'
-		}
 		return (
 			<div className="flex items-center">
 				{props.format === 'OFFLINE' && <span className="min-w-[220px] opacity-[0%]"></span>}

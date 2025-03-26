@@ -2,6 +2,7 @@ import { apiSlice } from "../apiSlice";
 
 export const myPracticeService = apiSlice.injectEndpoints({
     endpoints: builder => ({
+      // Аватарка
       getAvatar: builder.query<string, void>({
         query: () => ({
           url: '/user-api/settings/photo',
@@ -38,6 +39,9 @@ export const myPracticeService = apiSlice.injectEndpoints({
         },
         invalidatesTags: ['Avatar'],
       }),
+
+      //  Личные данные
+      //  Знание языкв
     })
   });
 

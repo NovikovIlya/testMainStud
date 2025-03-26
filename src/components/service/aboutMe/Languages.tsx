@@ -52,6 +52,9 @@ const Languages = () => {
 								layout="vertical"
 							>
 								<Select
+									loading={false}
+								    showSearch
+									optionFilterProp="label"
 									mode="multiple"
 									allowClear
 									placeholder="Добавить язык"

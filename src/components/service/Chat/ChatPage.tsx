@@ -40,23 +40,22 @@ export const ChatPage = () => {
 
 	const location = useLocation()
 
-	const searchParams = new URLSearchParams(location.search)
+	// const searchParams = new URLSearchParams(location.search)
 
-	const chat_status = 'opened'
+	// const chat_status = 'opened'
 
-	const match_1 = location.pathname.match(/\/id\/(\d+)$/)
+	// const match_1 = location.pathname.match(/\/id\/(\d+)$/)
 
-	let id_from_url: string
+	// let id_from_url: string
 
-	if (match_1) {
-		id_from_url = match_1[1]
-	}
+	// if (match_1) {
+	// 	id_from_url = match_1[1]
+	// }
 
-	const chat_id = { chatId: Number(id_from_url) }
+	// const chat_id = { chatId: Number(id_from_url) }
 
-	const chatIdState = useAppSelector(state => state.chatId)
+	const { chatId } = useAppSelector(state => state.chatId)
 	const ChatStatus = useAppSelector(state => state.chatResponceStatus)
-	dispatch(setChatId(chat_id.chatId))
 	const user = useAppSelector(state => state.auth.user)
 	const { data: rolesData = undefined } = useGetEmploymentPossibleRolesQuery()
 	const isEmpDemp = rolesData?.find(role => role === 'PERSONNEL_DEPARTMENT')
@@ -93,7 +92,7 @@ export const ChatPage = () => {
 
 	useEffect(() => {
 		setLastMessageId(0)
-	}, [chatIdState])
+	}, [chatId])
 
 	useEffect(() => {
 		chatPageMessagesRef.current = chatPageMessagesRef.current.slice(0, messages.length)
@@ -140,14 +139,14 @@ export const ChatPage = () => {
 			console.log(message.headers['user-name'])
 			const sessionId = message.headers['user-name']
 			setSessionId(message.headers['user-name'])
-			client.subscribe(`/chat/topic/${chat_id.chatId}`, (message: any) => {
+			client.subscribe(`/chat/topic/${chatId}`, (message: any) => {
 				console.log(message)
 				const msgBody = JSON.parse(message.body)
 				if (msgBody.type === 'MESSAGE') {
 					setMessages(prev => [msgBody.message as ChatMessageType, ...prev])
 					dispatchEvent(new CustomEvent('newmessage', { detail: { date: msgBody.message.sendDate } }))
 					readMsg({
-						chatId: chat_id.chatId,
+						chatId: chatId,
 						messageId: msgBody.message.id,
 						sessionId: sessionId,
 						role: isEmpDemp ? 'PERSONNEL_DEPARTMENT' : 'SEEKER'
@@ -163,14 +162,14 @@ export const ChatPage = () => {
 			})
 		})
 		return () => {
-			chatIdState.chatId !== 0 && client.disconnect(() => {})
-			chatIdState.chatId !== 0 && socket.close()
+			chatId !== 0 && client.disconnect(() => {})
+			chatId !== 0 && socket.close()
 		}
-	}, [chatIdState])
+	}, [chatId])
 
 	useEffect(() => {
 		getChatMessages({
-			chatId: chat_id.chatId,
+			chatId: chatId,
 			size: 20,
 			role: isEmpDemp ? 'PERSONNEL_DEPARTMENT' : 'SEEKER'
 		})
@@ -185,7 +184,7 @@ export const ChatPage = () => {
 		return () => {
 			setInitialLoadingFinished(false)
 		}
-	}, [chatIdState])
+	}, [chatId])
 
 	useEffect(() => {
 		console.log('I AM... SCROOOOOOLING')
@@ -223,7 +222,7 @@ export const ChatPage = () => {
 	const loadMessagesFromTop = () => {
 		console.log(lastMessageId)
 		getChatMessages({
-			chatId: chat_id.chatId,
+			chatId: chatId,
 			lastMessageId: lastMessageId,
 			size: 20,
 			role: isEmpDemp ? 'PERSONNEL_DEPARTMENT' : 'SEEKER'
@@ -292,7 +291,7 @@ export const ChatPage = () => {
 			for (let i = 0; i < data.files.length; i++) {
 				formData.append('files', data.files[i])
 			}
-			fetch(`http://${emplBaseURL}employment-api/v1/chat/${chat_id.chatId}/file`, {
+			fetch(`http://${emplBaseURL}employment-api/v1/chat/${chatId}/file`, {
 				method: 'POST',
 				body: formData,
 				headers: {
@@ -309,7 +308,7 @@ export const ChatPage = () => {
 		} else {
 			msgInputText !== '' &&
 				postMsg({
-					id: chat_id.chatId,
+					id: chatId,
 					text: msgInputText,
 					name: sessionId,
 					role: isEmpDemp ? 'PERSONNEL_DEPARTMENT' : 'SEEKER'

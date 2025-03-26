@@ -10,6 +10,7 @@ import { NocircleArrowIconHover } from '../../../../../assets/svg/NocircleArrowI
 import { useAppSelector } from '../../../../../store'
 import {
 	useEmployeeSeekerRequestMutation,
+	useGetInterviewQuery,
 	useGetRespondFullInfoQuery,
 	useGetSupervisorInterviewQuery,
 	useLazyGetSeekerResumeFileQuery
@@ -32,10 +33,8 @@ export const SupervisorInterviewSeekerInfo = () => {
 		console.error('id miss')
 	}
 
-	const { data: interviews = { content: [] }, isLoading: interviewDataLoading } = useGetSupervisorInterviewQuery(0)
+	const { data: foundInterview, isLoading: interviewDataLoading } = useGetInterviewQuery(id_from_url)
 
-	const foundInterview = interviews.content.find(interview => interview.respondId === id_from_url)
-	console.log(interviews)
 	const format = foundInterview?.format || ''
 	const time = foundInterview?.time
 	console.log(time)
@@ -134,48 +133,64 @@ export const SupervisorInterviewSeekerInfo = () => {
 	}
 
 	const Component = (props: ComponentProps) => {
-		const targetDate = new Date(props.time)
-		console.log(props.time)
-		const now = new Date()
-		const difference = targetDate.getTime() - now.getTime()
-		let isInterviewStarted: boolean = false
-		let is5MinBeforeInterviewStarted: boolean = false
-		let is30MinAfterInterviewEnded: boolean = false
+		const [isInterviewStarted, setIsInterviewStarted] = useState<boolean>(false)
+		const [is5MinBeforeInterviewStarted, setIs5MinBeforeInterviewStarted] = useState<boolean>(false)
+		const [is30MinAfterInterviewEnded, SetIs30MinAfterInterviewEnded] = useState<boolean>(false)
+		const [datePublicString, setDatePublicString] = useState<string>('')
 
-		if (difference < 0) {
-			isInterviewStarted = true
-		} else {
-			isInterviewStarted = false
-		}
+		useEffect(() => {
+			const updateTimeLeft = () => {
+				const targetDate = new Date(props.time)
+				const now = new Date()
+				const difference = targetDate.getTime() - now.getTime()
+				const minutes: number = Math.round((difference / 1000 / 60) % 60)
+				const hours: number = Math.floor((difference / (1000 * 60 * 60)) % 24)
+				const days: number = Math.floor(difference / (1000 * 60 * 60 * 24))
+				let datePublicString: string = ''
+				const isDaysEmpty: boolean = days === 0
+				const isHoursEmpty: boolean = hours === 0
 
-		if (difference > 0 && difference <= 60 * 1000 * 5) {
-			// 5 мин
-			is5MinBeforeInterviewStarted = true
-		} else {
-			is5MinBeforeInterviewStarted = false
-		}
+				if (isDaysEmpty && isHoursEmpty) {
+					datePublicString += 'Осталось ' + minutes + ' минут'
+				}
+				if (isDaysEmpty && !isHoursEmpty) {
+					datePublicString += 'Осталось ' + hours + ' ч' + minutes + ' м'
+				}
+				if (!isDaysEmpty && !isHoursEmpty) {
+					datePublicString += 'Осталось ' + days + ' дн ' + hours + ' ч'
+				}
+				setDatePublicString(datePublicString)
 
-		if (difference * -1 < 60 * 1000 * 30) {
-			is30MinAfterInterviewEnded = false
-		} else {
-			is30MinAfterInterviewEnded = true
-		}
+				if (difference < 0) {
+					setIsInterviewStarted(true)
+				} else {
+					setIsInterviewStarted(false)
+				}
 
-		const minutes: number = Math.floor((difference / 1000 / 60) % 60)
-		const hours: number = Math.floor((difference / (1000 * 60 * 60)) % 24)
-		const days: number = Math.floor(difference / (1000 * 60 * 60 * 24))
-		let datePublicString: string = ''
-		const isDaysEmpty: boolean = days === 0
-		const isHoursEmpty: boolean = hours === 0
-		if (isDaysEmpty && isHoursEmpty) {
-			datePublicString += 'Осталось ' + minutes + ' минут'
-		}
-		if (isDaysEmpty && !isHoursEmpty) {
-			datePublicString += 'Осталось ' + hours + ' ч' + minutes + ' м'
-		}
-		if (!isDaysEmpty && !isHoursEmpty) {
-			datePublicString += 'Осталось ' + days + ' дн ' + hours + ' ч'
-		}
+				if (difference > 0 && difference <= 60 * 1000 * 5) {
+					// 5 мин
+					setIs5MinBeforeInterviewStarted(true)
+				} else {
+					setIs5MinBeforeInterviewStarted(false)
+				}
+
+				if (difference * -1 < 60 * 1000 * 30) {
+					SetIs30MinAfterInterviewEnded(false)
+				} else {
+					SetIs30MinAfterInterviewEnded(true)
+				}
+				console.log(targetDate)
+				console.log(now)
+				console.log(difference)
+				return difference
+			}
+
+			updateTimeLeft() // Обновляем сразу при монтировании
+
+			const intervalId = setInterval(updateTimeLeft, 1000) // Обновляем каждую секунду
+
+			return () => clearInterval(intervalId) // Очищаем интервал при размонтировании
+		}, [props.time])
 		return (
 			<div className="flex flex-col gap-[30px]">
 				{format === 'OFFLINE' &&
@@ -208,7 +223,9 @@ export const SupervisorInterviewSeekerInfo = () => {
 						</h4>
 						<Button
 							className="h-[40px] w-[257px] bg-[#3073D7] rounded-[54.5px] text-white text-[16px]/[16px]"
-							onClick={() => {}}
+							type="link"
+							target="_blank"
+							href={foundInterview?.url}
 						>
 							Подключиться
 						</Button>

@@ -259,9 +259,11 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
-		getSupervisorVacancy: builder.query<PageableType<VacancyItemType>, number>({
-			query: page => ({
-				url: `http://${emplBaseURL}employment-api/v1/management/supervisor/vacancy?page=${page}`,
+		getSupervisorVacancy: builder.query<PageableType<VacancyItemType>, { page: number; pageSize?: number }>({
+			query: ({ page, pageSize }) => ({
+				url: `http://${emplBaseURL}employment-api/v1/management/supervisor/vacancy?page=${page}${
+					pageSize ? `&size=${pageSize}` : ``
+				}`,
 				headers: {
 					Authorization: `Bearer ${supervisorToken}`
 				}
@@ -404,9 +406,14 @@ export const serviceApi = apiSlice.injectEndpoints({
 				headers: { Authorization: `Bearer ${seekerToken}` }
 			})
 		}),
-		getSupervisorResponds: builder.query<{ content: VacancyRespondItemType[] }, { status: string; page: number }>({
-			query: ({ status, page }) => ({
-				url: `http://${emplBaseURL}employment-api/v1/supervisor/vacancy/respond?${status}&page=${page}`,
+		getSupervisorResponds: builder.query<
+			{ content: VacancyRespondItemType[] },
+			{ status: string; page: number; pageSize?: number }
+		>({
+			query: ({ status, page, pageSize }) => ({
+				url: `http://${emplBaseURL}employment-api/v1/supervisor/vacancy/respond?${status}&page=${page}${
+					pageSize ? `&size=${pageSize}` : ``
+				}`,
 				headers: { Authorization: `Bearer ${supervisorToken}` }
 			}),
 			transformResponse: (response: { content: VacancyRespondItemType[] }) => {
@@ -1166,6 +1173,12 @@ export const serviceApi = apiSlice.injectEndpoints({
 				url: `http://${emplBaseURL}employment-api/v1/vacancy/${vacancyId}/seeker-relation`,
 				method: 'GET'
 			})
+		}),
+		getInterview: builder.query<InterviewItemType, number>({
+			query: interviewId => ({
+				url: `http://${emplBaseURL}employment-api/v1/interview/${interviewId}`,
+				method: 'GET'
+			})
 		})
 	})
 })
@@ -1300,5 +1313,6 @@ export const {
 	useLazyGetSeekerVacancyRelationQuery,
 	useLazyGetPersonnelStagesQuery,
 	useLazyGetAccountingStagesQuery,
-	useLazyGetSupervisorVacancyQuery
+	useLazyGetSupervisorVacancyQuery,
+	useGetInterviewQuery
 } = serviceApi

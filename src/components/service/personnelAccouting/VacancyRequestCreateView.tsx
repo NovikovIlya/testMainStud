@@ -48,12 +48,8 @@ export const VacancyRequestCreateView = () => {
 
 	const { openAlert } = useAlert()
 
-	const { refetch } = useGetVacancyRequestsQuery('все')
-
 	const { data: categories = [] } = useGetCategoriesQuery()
 	const [categoryTitle, setCategoryTitle] = useState<string>('')
-	const { data: directions = [] } = useGetDirectionsQuery(categoryTitle)
-	const { data: subdivisions = [] } = useGetSubdivisionsQuery(categoryTitle)
 	const { data: definitions = [], isLoading: loading, isFetching: fetching } = useGetAllDocumentDefinitionsQuery()
 
 	const [isEdit, setIsEdit] = useState<boolean>(false)
@@ -255,7 +251,6 @@ export const VacancyRequestCreateView = () => {
 								}).unwrap()
 							}
 
-							refetch()
 							setIsModalOpen(false)
 							setResultModalText('Вакансия успешно опубликована')
 							setIsResultModalOpen(true)
@@ -301,17 +296,25 @@ export const VacancyRequestCreateView = () => {
 					>
 						<Select
 							placeholder="Выбрать"
-							options={
-								categories.find(cat => cat.title === categoryTitle)?.direction
-									? directions.map(dir => ({
-											value: dir.title,
-											label: dir.title
-									  }))
-									: subdivisions.map(sub => ({
-											value: sub.title,
-											label: sub.title
-									  }))
-							}
+							options={(() => {
+								let cat = categories.find(category => category.title === categoryTitle)
+								return cat && cat.directions.length !== 0
+									? [
+											{ value: 'Все', label: 'Все' },
+											...cat.directions.map(dir => ({
+												value: dir,
+												label: dir
+											}))
+									  ]
+									: cat && cat.subdivisionsList.length !== 0
+									? [
+											...cat.subdivisionsList.map(sub => ({
+												value: sub,
+												label: sub
+											}))
+									  ]
+									: []
+							})()}
 							onChange={value => {
 								setSecondOption(value)
 								categories.find(cat => cat.title === categoryTitle)?.direction

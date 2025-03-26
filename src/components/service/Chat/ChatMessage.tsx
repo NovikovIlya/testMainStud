@@ -229,7 +229,7 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 						}}
 						loading={answerReserveTimeLoading && pressedButton === 3}
 						disabled={isEmpDep || isResponsed}
-						className={`row-span-2 col-span-3 rounded-[54.5px] h-full border-black bg-inherit outline-none border cursor-pointer ${
+						className={`row-start-2 row-end-2 col-span-3 rounded-[54.5px] h-full border-black bg-inherit outline-none border cursor-pointer ${
 							isEmpDep || isResponsed ? 'select-none !cursor-not-allowed' : ''
 						}`}
 					>

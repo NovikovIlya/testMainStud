@@ -21,6 +21,7 @@ import { TemplateCard } from '../cards/Template'
 
 import { block } from './constant'
 import i18n from '../../18n'
+import CookieConsent from './CookieConsent'
 
 const studentKeys = [
 	'Schedule',
@@ -844,7 +845,10 @@ const DropDrag = () => {
 		// )
 	}
 
-	return <div className="  ">{renderContent()}</div>
+	return <div className="  ">
+		{renderContent()}
+		
+		</div>
 }
 
 function getWindowSize() {

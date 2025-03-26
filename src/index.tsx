@@ -7,6 +7,7 @@ import './18n'
 import App from './App'
 import './index.scss'
 import { store } from './store'
+import CookieConsent from './components/dnd/CookieConsent'
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
@@ -26,7 +27,7 @@ root.render(
 			>
 				<Provider store={store}>
 					<App />
-					
+					<CookieConsent/>
 				</Provider>
 			</Suspense>
 		</React.StrictMode>

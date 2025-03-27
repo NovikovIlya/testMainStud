@@ -3,12 +3,7 @@ import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-import { useAppSelector } from '../../../../../store'
-import { useLazyGetInterviewViewQuery } from '../../../../../store/api/serviceApi'
-import { setCurrentInterviewFormat } from '../../../../../store/reducers/CurrentInterviewFormatSlice'
-import { setCurrentInterviewTimeFormated } from '../../../../../store/reducers/CurrentInterviewTimeFormatedSlice'
-import { setCurrentInterviewTime } from '../../../../../store/reducers/CurrentInterviewTimeSlice'
-import { setCurrentResponce } from '../../../../../store/reducers/CurrentResponceSlice'
+import { useLazyGetInterviewQuery, useLazyGetInterviewViewQuery } from '../../../../../store/api/serviceApi'
 import { InterviewItemType } from '../../../../../store/reducers/type'
 
 export const SupervisorInterviewItem = (props: InterviewItemType) => {
@@ -24,6 +19,7 @@ export const SupervisorInterviewItem = (props: InterviewItemType) => {
 		format: string
 	}
 	interface CountdownButtonProps {
+		id: number
 		eventTime: string
 		format: string
 		url: string
@@ -43,6 +39,9 @@ export const SupervisorInterviewItem = (props: InterviewItemType) => {
 		const [is5MinBeforeInterviewStarted, setIs5MinBeforeInterviewStarted] = useState<boolean>(false)
 		const [is30MinAfterInterviewEnded, SetIs30MinAfterInterviewEnded] = useState<boolean>(false)
 		const [datePublicString, setDatePublicString] = useState<string>('')
+		const [url, setUrl] = useState<string>(props.url)
+
+		const [getInterview, getInterviewStatus] = useLazyGetInterviewQuery()
 
 		useEffect(() => {
 			const updateTimeLeft = () => {
@@ -98,6 +97,16 @@ export const SupervisorInterviewItem = (props: InterviewItemType) => {
 			return () => clearInterval(intervalId) // Очищаем интервал при размонтировании
 		}, [props.eventTime])
 
+		useEffect(() => {
+			console.log('Собеседование стартовало, подгружаем ссылку')
+			is5MinBeforeInterviewStarted &&
+				getInterview(props.id)
+					.unwrap()
+					.then(res => {
+						setUrl(res.url)
+					})
+		}, [is5MinBeforeInterviewStarted])
+
 		return (
 			<div className="flex items-center">
 				{props.format === 'OFFLINE' && <span className="min-w-[220px] opacity-[0%]"></span>}
@@ -109,7 +118,7 @@ export const SupervisorInterviewItem = (props: InterviewItemType) => {
 				{props.format === 'ONLINE' && is5MinBeforeInterviewStarted && !isInterviewStarted && (
 					<Button
 						type="link"
-						href={props.url}
+						href={url}
 						target="_blank"
 						className="cursor-pointer w-[200px] flex justify-center bg-[#3073D7] text-white font-content-font cursor pointer font-normal text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[35px] border-0"
 					>
@@ -119,7 +128,7 @@ export const SupervisorInterviewItem = (props: InterviewItemType) => {
 				{props.format === 'ONLINE' && !is30MinAfterInterviewEnded && isInterviewStarted && (
 					<Button
 						type="link"
-						href={props.url}
+						href={url}
 						target="_blank"
 						className="cursor-pointer w-[200px] flex justify-center bg-[#3073D7] text-white font-content-font cursor pointer font-normal text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[35px] border-0"
 					>
@@ -242,7 +251,7 @@ export const SupervisorInterviewItem = (props: InterviewItemType) => {
 				<InterviewTimeElem eventTime={props.time}></InterviewTimeElem>
 				<InterviewFormatElem format={props.format}></InterviewFormatElem>
 				<div className="w-[25%] mr-[2%] gap-[21px] flex flex-row items-center justify-evenly">
-					<InterviewCountdownTimeElem eventTime={props.time} format={props.format} url={props.url} />
+					<InterviewCountdownTimeElem eventTime={props.time} format={props.format} url={props.url} id={props.id} />
 					<InterviewButtonElem id={props.respondId} format={props.format} time={props.time}></InterviewButtonElem>
 				</div>
 			</div>

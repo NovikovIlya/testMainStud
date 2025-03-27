@@ -13,6 +13,7 @@ import {
 	useAnswerEmploymentRequestMutation,
 	useAnswerToInivitationMainTimeMutation,
 	useAnswerToInvitationReserveTimeRequestMutation,
+	useGetEmploymentPossibleRolesQuery,
 	useLazyGetVacancyViewQuery
 } from '../../../store/api/serviceApi'
 import { setCurrentVacancy } from '../../../store/reducers/CurrentVacancySlice'
@@ -26,11 +27,9 @@ type Ref = HTMLDivElement
 export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 	const { user } = useAppSelector(state => state.auth)
 	const { vacancyTitle } = useAppSelector(state => state.currentVacancyName)
-	const { respondId } = useAppSelector(state => state.respondId)
 	const { currentVacancyId } = useAppSelector(state => state.currentVacancyId)
-	const isSeeker = user?.roles[0].type === 'STUD'
-	const isEmpDep = user?.roles.find(role => role.type === 'EMPL')
-	const current_role = isSeeker === true ? 'SEEKER' : 'PERSONNEL_DEPARTMENT'
+	const { data: rolesData = undefined } = useGetEmploymentPossibleRolesQuery()
+	const isEmpDep = rolesData?.find(role => role === 'PERSONNEL_DEPARTMENT')
 
 	const currentUrl = useLocation()
 	const match = currentUrl.pathname.match(/\/id\/(\d+)$/)

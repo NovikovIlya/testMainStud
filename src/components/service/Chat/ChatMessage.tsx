@@ -216,7 +216,9 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 								isEmpDep || isResponsed ? 'select-none !cursor-not-allowed' : ''
 							}`}
 						>
-							{time.substring(0, 10).split('-').reverse().join('.') + ', ' + time.substring(11, 16)}
+							{dayjs(time).format().substring(0, 10).split('-').reverse().join('.') +
+								', ' +
+								dayjs(time).format().substring(11, 16)}
 						</Button>
 					))}
 					<Button

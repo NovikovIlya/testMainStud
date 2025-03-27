@@ -338,6 +338,8 @@
 	"bilet": "Library card number and password:",
 	"ident": "Identifier",
 	"naych": "Scientific Director",
+	"numberCabinet": "Office number",
+	"jobSovm": "Part-time positions",
 	"message": "Message",
 	"SelectUser": "Select user",
 	"createDialog": "Create dialog",

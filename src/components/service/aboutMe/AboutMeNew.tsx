@@ -216,16 +216,38 @@ const AboutMeNew = () => {
 						</div>
 					</Col>
 				</Row> : ''}
-
-
-				
 			</div>: ''}
 
 			
 
 			{/* Секция сотрудника */}
-			{dataAboutMe?.employeeAddedDto ? 
+			{dataAboutMe?.employeeAddedDto ? <>
 			<div className="bg-white rounded-xl shadow-md mt-7">
+			<Row className=''>
+				<Col span={24}>
+						<div className="flex flex-wrap justify-start p-6">
+							<div className="flex items-center gap-2">
+								<Title className="!mb-0" level={5}>
+									{'О работе'}
+								</Title>
+							</div>
+							<Divider />
+
+							<div className="flex flex-wrap justify-start">
+								<Descriptions column={1} title="">
+								{dataAboutMe?.employeeAddedDto?.POSITION ?<Descriptions.Item label={t('job')}>{dataAboutMe?.employeeAddedDto?.POSITION}</Descriptions.Item>:''}
+									{dataAboutMe?.employeeAddedDto?.WORKADDRESS_BUILDING ?<Descriptions.Item label={t('adress')}>{dataAboutMe?.employeeAddedDto?.WORKADDRESS_BUILDING}</Descriptions.Item>:''}
+									{dataAboutMe?.employeeAddedDto?.WORKADDRESS_ROOM ?<Descriptions.Item label={t('numberCabinet')}>{dataAboutMe?.employeeAddedDto?.WORKADDRESS_ROOM}</Descriptions.Item>: ''}
+									{dataAboutMe?.employeeAddedDto?.PARTTIMEWORK ?<Descriptions.Item label={t('jobSovm')}>{dataAboutMe?.employeeAddedDto?.PARTTIMEWORK}</Descriptions.Item>: ''}
+								</Descriptions>
+							</div>
+						</div>
+					</Col>
+				</Row>
+			</div>
+
+			<div className="bg-white rounded-xl shadow-md mt-7">
+				
 				<Row>
 					<Col span={24}>
 						<div className="flex flex-wrap justify-start p-6">
@@ -252,7 +274,7 @@ const AboutMeNew = () => {
 						</div>
 					</Col>
 				</Row>
-			</div>: ''}
+			</div></>: ''}
 		</div>
 	)
 }

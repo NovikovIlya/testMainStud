@@ -4,7 +4,7 @@ import { Avatar, Button, message, Spin, Upload } from 'antd';
 import { useAddAvatarMutation, useGetAvatarQuery, usePutAvatarMutation } from '../../../store/api/aboutMe/forAboutMe';
 import { t } from 'i18next';
 
-const UploadAvatar: React.FC = () => {
+const UploadAvatar = ({dataAboutMe}:any) => {
   const { data: avatarUrl } = useGetAvatarQuery();
   const [addAvatar, { isLoading }] = useAddAvatarMutation();
   const [putAvatar, { isLoading: isLoadingPut }] = usePutAvatarMutation();

@@ -22,11 +22,11 @@ export const Footer = () => {
 				<div className="flex mb-10 max-sm:flex-col">
 					{i18n.language==='ru' ? <LogoSvg /> : <LogoSvgEn />}
 					<div className=" flex flex-col max-sm:mt-7">
-						<span>
-							<strong>{t('adress2')}:</strong> {t('adress3')}
+						<span className='max-w-[500px]'>
+							<strong className=''>{t('adress2')}:</strong> {t('adress3')}
 						</span>
 						<span>
-							<strong>Email:</strong> public.mail@kpfu.ru
+							<strong>Email:</strong> {t('email1')}
 						</span>
 					</div>
 				</div>

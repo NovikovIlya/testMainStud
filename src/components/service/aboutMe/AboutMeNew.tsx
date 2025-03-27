@@ -8,24 +8,27 @@ import { useTranslation } from 'react-i18next'
 
 import QuillComponents from './QuillComponents'
 import UploadAvatar from './UploadAvatar'
+import { useGetAboutMeQuery } from '../../../store/api/aboutMe/forAboutMe'
+import { SkeletonPage } from './Skeleton'
 
 const AboutMeNew = () => {
 	const { t } = useTranslation()
 	const [form] = Form.useForm()
-	const [content, setContent] = useState(
-		'<p><strong><a href="https://scholar.google.ru/citations?user=UlOzbD0AAAAJ&amp;hl=ru" target="_blank">Google Scholar</a></strong></p>\r\n<p>&nbsp;</p>\r\n<p><strong><a href="http://www.researcherid.com/rid/N-5374-2016" target="_blank">ResearcherID:&nbsp;N-5374-2016</a></strong></p>\r\n<p>&nbsp;</p>\r\n<p><strong><a href="https://www.scopus.com/authid/detail.uri?authorId=58150677300">Author ID:&nbsp;58150677300&#65279;</a></strong></p>\r\n<p>&nbsp;</p>\r\n<p><strong><a href="http://orcid.org/0000-0002-6721-7488">ORCID ID:&nbsp;0000-0002-6721-7488</a></strong></p>\r\n<p>&nbsp;</p>\r\n<p><strong><a href="http://www.mathnet.ru/rus/person/121217" target="_blank">Math-Net ID:&nbsp;121217</a></strong></p>\r\n<p><strong>------------------------------------</strong></p>\r\n<p><strong>Член редколлегии журнала РАН <a href="https://sciencejournals.ru/journal/vysen/">"Химия высоких энергий"</a></strong></p>\r\n<p><strong><strong>Рецензент журналов: <a href="http://jetpletters.ru/ru/jetpl.shtml">Письма в ЖЭТФ</a>,&nbsp;<a href="https://link.springer.com/journal/11452">Plasma Physics Reports</a>,&nbsp;</strong><a href="https://benthamscience.com/journals/current-nanoscience/">Current Nanoscience</a>, <a href="https://www.mdpi.com/journal/plasma">Plasma&#65279;</a>, <a href="https://www.mdpi.com/journal/metals">Metals</a>, <a href="https://www.springer.com/journal/10733/">High Energy Chemistry</a>,&nbsp;<a href="https://www.mdpi.com/journal/biomolecules">Biomolecules&#65279;</a><br /></strong></p>'
-	)
+	const [content, setContent] = useState('')
+	const {data:dataAboutMe,isFetching:isFetchingAboutMe} = useGetAboutMeQuery()
 
-	useEffect(() => {
-		form.setFieldsValue({ content: 'sss' })
-	}, [form])
+	useEffect(()=>{
+		if(dataAboutMe?.employeeAddedDto?.COMMENT){
+			setContent(dataAboutMe?.employeeAddedDto?.COMMENT)
+		}
+	},[dataAboutMe])
 
 	const onFinish = (values: any) => {
 		console.log('Отправка чекбоксов:', values)
 	}
-	console.log('content', content)
 
-	// if() return <div className='mt-[-45px] ml-[-40px]'><SkeletonPage /></div>
+
+	if(isFetchingAboutMe) return <div className='mt-[-10px] ml-[6px]'><SkeletonPage /></div>
 
 	return (
 		<div className="px-[50px] pt-[60px] mb-[50px]">
@@ -33,18 +36,18 @@ const AboutMeNew = () => {
 				<Row>
 					<Col span={12}>
 						<div className="flex flex-wrap justify-center p-[40px]">
-							<UploadAvatar />
-							<div className="w-full text-center">{t('fullName')}</div>
+							<UploadAvatar dataAboutMe={dataAboutMe} />
+							<div className="w-full mt-3 text-center">{`${dataAboutMe?.LASTNAME} ${dataAboutMe?.FIRSTNAME} ${dataAboutMe?.SECONDNAME}`}</div>
 						</div>
 					</Col>
 					<Col span={12}>
 						<div className="flex flex-wrap justify-start p-[40px]">
 							<Descriptions column={1} title={t('generalInfo')}>
-								<Descriptions.Item label={t('birthDate')}>Zhou Maomao</Descriptions.Item>
-								<Descriptions.Item label={t('gender')}>1810000000</Descriptions.Item>
-								<Descriptions.Item label={t('citizenshipType')}>Hangzhou, Zhejiang</Descriptions.Item>
-								<Descriptions.Item label={t('citizenshipCountry')}>empty</Descriptions.Item>
-								<Descriptions.Item label={t('birthPlace')}>No. 18,</Descriptions.Item>
+								<Descriptions.Item label={t('birthDate')}>{dataAboutMe?.BIRTH_DATE}</Descriptions.Item>
+								<Descriptions.Item label={t('gender')}>{dataAboutMe?.SEX==='m'?'Мужской': 'Женский'}</Descriptions.Item>
+								<Descriptions.Item label={t('citizenshipType')}>{dataAboutMe?.CITIZENSHIP_TYPE}</Descriptions.Item>
+								<Descriptions.Item label={t('citizenshipCountry')}>{dataAboutMe?.CITIZENSHIP_COUNTRY}</Descriptions.Item>
+								{dataAboutMe?.BIRTH_PLACE ? <Descriptions.Item label={t('birthPlace')}>{dataAboutMe?.BIRTH_PLACE}</Descriptions.Item>: ''}
 							</Descriptions>
 						</div>
 					</Col>
@@ -134,34 +137,94 @@ const AboutMeNew = () => {
 				</Row>
 			</div>
 
-			{/* Секция бакалавриата */}
+			{/* Секция образования */}
+			{dataAboutMe?.studentAddedDto ?
 			<div className="bg-white rounded-xl shadow-md mt-7">
-				<Row>
+				{dataAboutMe?.studentAddedDto?.GRADE==='bachelor'?<Row>
 					<Col span={24}>
 						<div className="flex flex-wrap justify-start p-6">
 							<div className="flex items-center gap-2">
 								<Title className="!mb-0" level={5}>
-									{t('bachelorsDegree')}
+									{t(dataAboutMe?.studentAddedDto?.GRADE)}
 								</Title>
 							</div>
 							<Divider />
 
 							<div className="flex flex-wrap justify-start">
 								<Descriptions column={1} title="">
-									<Descriptions.Item label={t('insitute')}>2020</Descriptions.Item>
-									<Descriptions.Item label={t('specialization')}>Исскуство</Descriptions.Item>
-									<Descriptions.Item label={t('typeObr')}>ТЕСТ</Descriptions.Item>
-									<Descriptions.Item label={t('category')}>Бюджет</Descriptions.Item>
+									<Descriptions.Item label={t('insitute')}>{dataAboutMe?.studentAddedDto?.FACULTY}</Descriptions.Item>
+									<Descriptions.Item label={t('specialization')}>{dataAboutMe?.studentAddedDto?.SPECIALITY}</Descriptions.Item>
+									<Descriptions.Item label={t('typeObr')}>{dataAboutMe?.studentAddedDto?.STUDY_TYPE}</Descriptions.Item>
+									<Descriptions.Item label={t('category')}>{dataAboutMe?.studentAddedDto?.CATEGORY}</Descriptions.Item>
 
-									<Descriptions.Item label={t('status')}>{t('activeStatus')}</Descriptions.Item>
+									<Descriptions.Item label={t('ident')}>{dataAboutMe?.studentAddedDto?.IDENT}</Descriptions.Item>
+									<Descriptions.Item label={t('groupNumbers')}>{dataAboutMe?.studentAddedDto?.GROUP}</Descriptions.Item>
+									<Descriptions.Item label={t('bilet')}>{dataAboutMe?.studentAddedDto?.LIBCARD}</Descriptions.Item>
+									<Descriptions.Item label={t('graduateYear')}>{dataAboutMe?.studentAddedDto?.STUDYEND}</Descriptions.Item>
 								</Descriptions>
 							</div>
 						</div>
 					</Col>
-				</Row>
-			</div>
+				</Row> : ''}
 
-			{/* Секция дополнительной информации */}
+				{dataAboutMe?.studentAddedDto?.GRADE===''?<Row>
+					<Col span={24}>
+						<div className="flex flex-wrap justify-start p-6">
+							<div className="flex items-center gap-2">
+								<Title className="!mb-0" level={5}>
+									{t(dataAboutMe?.studentAddedDto?.GRADE)}
+								</Title>
+							</div>
+							<Divider />
+
+							<div className="flex flex-wrap justify-start">
+								<Descriptions column={1} title="">
+									<Descriptions.Item label={t('insitute')}>{dataAboutMe?.studentAddedDto?.FACULTY}</Descriptions.Item>
+									<Descriptions.Item label={t('specialization')}>{dataAboutMe?.studentAddedDto?.SPECIALITY}</Descriptions.Item>
+									<Descriptions.Item label={t('typeObr')}>{dataAboutMe?.studentAddedDto?.STUDY_TYPE}</Descriptions.Item>
+									<Descriptions.Item label={t('category')}>{dataAboutMe?.studentAddedDto?.CATEGORY}</Descriptions.Item>
+
+									<Descriptions.Item label={t('groupNumbers')}>{dataAboutMe?.studentAddedDto?.GROUP}</Descriptions.Item>
+									<Descriptions.Item label={t('graduateYear')}>{dataAboutMe?.studentAddedDto?.STUDYEND}</Descriptions.Item>
+								</Descriptions>
+							</div>
+						</div>
+					</Col>
+				</Row> : ''}
+
+				{dataAboutMe?.studentAddedDto?.GRADE===''?<Row>
+					<Col span={24}>
+						<div className="flex flex-wrap justify-start p-6">
+							<div className="flex items-center gap-2">
+								<Title className="!mb-0" level={5}>
+									{t(dataAboutMe?.studentAddedDto?.GRADE)}
+								</Title>
+							</div>
+							<Divider />
+
+							<div className="flex flex-wrap justify-start">
+								<Descriptions column={1} title="">
+									<Descriptions.Item label={t('insitute')}>{dataAboutMe?.studentAddedDto?.FACULTY}</Descriptions.Item>
+									<Descriptions.Item label={t('specialization')}>{dataAboutMe?.studentAddedDto?.SPECIALITY}</Descriptions.Item>
+									<Descriptions.Item label={t('typeObr')}>{dataAboutMe?.studentAddedDto?.STUDY_TYPE}</Descriptions.Item>
+									<Descriptions.Item label={t('category')}>{dataAboutMe?.studentAddedDto?.CATEGORY}</Descriptions.Item>
+
+									<Descriptions.Item label={t('naych')}>ыы</Descriptions.Item>
+									<Descriptions.Item label={t('graduateYear')}>{dataAboutMe?.studentAddedDto?.STUDYEND}</Descriptions.Item>
+								</Descriptions>
+							</div>
+						</div>
+					</Col>
+				</Row> : ''}
+
+
+				
+			</div>: ''}
+
+			
+
+			{/* Секция сотрудника */}
+			{dataAboutMe?.employeeAddedDto ? 
 			<div className="bg-white rounded-xl shadow-md mt-7">
 				<Row>
 					<Col span={24}>
@@ -175,20 +238,21 @@ const AboutMeNew = () => {
 
 							<div className="w-full">
 								<Row>
+									
 									<QuillComponents
 										content={content}
 										setContent={setContent}
 										
-									/>
+									/> 
 								</Row>
 								<Row>
-									<Button type="primary">Сохранить</Button>
+									<Button type="primary">{t('save')}</Button>
 								</Row>
 							</div>
 						</div>
 					</Col>
 				</Row>
-			</div>
+			</div>: ''}
 		</div>
 	)
 }

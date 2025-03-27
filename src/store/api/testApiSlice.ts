@@ -82,5 +82,5 @@ export const testApiSlice = createApi({
 	reducerPath: 'test',
 	baseQuery: baseQueryWithReAuth,
 	endpoints: () => ({}),
-	tagTypes: ['Tasks', 'Contracts', 'Practice','Schedule','Submissions','Application','Order','MyPractice','practiceTeacher','emails','phones','Education','role','Messages','forTeacherScedule','forTeacherSceduleBrs','forTeacherSceduleVedomost','forTeacherJournalDay','forTeacherJournalSemester'],
+	tagTypes: ['Tasks', 'Contracts', 'Practice','Schedule','Submissions','Application','Order','MyPractice','practiceTeacher','emails','phones','Education','role','Messages','forTeacherScedule','forTeacherSceduleBrs','forTeacherSceduleVedomost','forTeacherJournalDay','forTeacherJournalSemester','Avatar','AboutMe','nativeLanguages','foreignLanguages'],
 })

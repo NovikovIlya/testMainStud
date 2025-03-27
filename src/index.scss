@@ -425,3 +425,9 @@ body {
 .ql-action,.ql-remove{
 	display: none;
 }
+.ql-tooltip::before {
+	display: none;
+}
+.ql-tooltip{
+	z-index: 1000000000 !important;
+}

@@ -1,3 +1,4 @@
+import { UserDto } from "../../../models/aboutMe";
 import { apiSlice } from "../apiSlice";
 
 export const myPracticeService = apiSlice.injectEndpoints({
@@ -41,9 +42,26 @@ export const myPracticeService = apiSlice.injectEndpoints({
       }),
 
       //  Личные данные
+      getAboutMe: builder.query<UserDto, void>({
+        query: () => ({
+          url: '/about-me/about-me',
+          method: 'GET',
+         
+        }),
+        
+        providesTags: ['AboutMe'],
+        keepUnusedDataFor: 1,
+      }),
+
+      
       //  Знание языкв
     })
   });
 
 
-  export const { useAddAvatarMutation,useGetAvatarQuery,usePutAvatarMutation } = myPracticeService;
+  export const { 
+    useAddAvatarMutation,
+    useGetAvatarQuery,
+    usePutAvatarMutation,
+    useGetAboutMeQuery
+   } = myPracticeService;

@@ -55,7 +55,7 @@ export const store = configureStore({
 	},
 	//@ts-ignore
 	middleware: getDefaultMiddleware =>
-		getDefaultMiddleware()
+		getDefaultMiddleware({serializableCheck: false,})
 			//.concat(...(process.env.NODE_ENV !== 'production' ? [logger] : []))
 			.concat(apiSlice.middleware, practiceApi.middleware)
 			.concat(abiturientApi.middleware)

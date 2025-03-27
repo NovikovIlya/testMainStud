@@ -53,7 +53,7 @@ export const myPracticeService = apiSlice.injectEndpoints({
         keepUnusedDataFor: 1,
       }),
 
-      
+
       //  Знание языкв
     })
   });

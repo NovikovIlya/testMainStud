@@ -1314,5 +1314,6 @@ export const {
 	useLazyGetPersonnelStagesQuery,
 	useLazyGetAccountingStagesQuery,
 	useLazyGetSupervisorVacancyQuery,
-	useGetInterviewQuery
+	useGetInterviewQuery,
+	useLazyGetInterviewQuery
 } = serviceApi

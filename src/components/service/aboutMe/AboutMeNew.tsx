@@ -276,48 +276,52 @@ const AboutMeNew = () => {
 						''
 					)}
 
-					{dataAboutMe?.AspirAddedDto?.SPECIALITY === '' ? (
+					
+				</div>
+			) : (
+				''
+			)}
+
+{dataAboutMe?.aspirAddedDto?.FACULTY  ? (
+	<div className="bg-white rounded-xl shadow-md mt-7">
 						<Row>
 							<Col span={24}>
 								<div className="flex flex-wrap justify-start p-6">
 									<div className="flex items-center gap-2">
 										<Title className="!mb-0" level={5}>
-											{t(dataAboutMe?.AspirAddedDto?.GRADE)}
+											{'Аспирантура'}
 										</Title>
 									</div>
 									<Divider />
 
 									<div className="flex flex-wrap justify-start">
 										<Descriptions column={1} title="">
-											<Descriptions.Item label={t('insitute')}>{dataAboutMe?.AspirAddedDto?.FACULTY}</Descriptions.Item>
+											<Descriptions.Item label={t('insitute')}>{dataAboutMe?.aspirAddedDto?.FACULTY}</Descriptions.Item>
 											<Descriptions.Item label={t('specialization')}>
-												{dataAboutMe?.AspirAddedDto?.SPECIALITY}
+												{dataAboutMe?.aspirAddedDto?.SPECIALITY}
 											</Descriptions.Item>
 											<Descriptions.Item label={t('typeObr')}>
-												{dataAboutMe?.AspirAddedDto?.STUDY_TYPE}
+												{dataAboutMe?.aspirAddedDto?.STUDY_TYPE}
 											</Descriptions.Item>
 											<Descriptions.Item label={t('category')}>
-												{dataAboutMe?.AspirAddedDto?.CATEGORY}
+												{dataAboutMe?.aspirAddedDto?.CATEGORY}
 											</Descriptions.Item>
 
 											<Descriptions.Item label={'Супервизор'}>
-												{dataAboutMe?.AspirAddedDto?.SCI_SUPERVISOR}
+												{dataAboutMe?.aspirAddedDto?.SCI_SUPERVISOR}
 											</Descriptions.Item>
 											<Descriptions.Item label={t('graduateYear')}>
-												{dataAboutMe?.AspirAddedDto?.STUDYEND}
+												{dataAboutMe?.aspirAddedDto?.STUDYEND}
 											</Descriptions.Item>
 										</Descriptions>
 									</div>
 								</div>
 							</Col>
 						</Row>
+						</div>
 					) : (
 						''
 					)}
-				</div>
-			) : (
-				''
-			)}
 
 			{/* Секция сотрудника */}
 			{dataAboutMe?.employeeAddedDto ? (

@@ -23,7 +23,7 @@ export interface StudentAddedDto {
   export interface UserDto {
     studentAddedDto: StudentAddedDto;
     employeeAddedDto: EmployeeAddedDto;
-    AspirAddedDto:any;
+    aspirAddedDto:any;
     ID: number;
     LASTNAME: string;
     FIRSTNAME: string;

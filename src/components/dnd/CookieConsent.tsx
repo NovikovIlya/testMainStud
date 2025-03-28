@@ -17,7 +17,7 @@ const CookieConsent = () => {
   const handleAccept = () => {
     setState('1')
   }
-  console.log('mainRole',accessToken)
+  
   if (state === '1' || !accessToken) return null;
 
   return (

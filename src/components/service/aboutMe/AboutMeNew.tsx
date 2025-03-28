@@ -6,29 +6,34 @@ import Title from 'antd/es/typography/Title'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import QuillComponents from './QuillComponents'
-import UploadAvatar from './UploadAvatar'
 import { useGetAboutMeQuery } from '../../../store/api/aboutMe/forAboutMe'
+
+import QuillComponents from './QuillComponents'
 import { SkeletonPage } from './Skeleton'
+import UploadAvatar from './UploadAvatar'
 
 const AboutMeNew = () => {
 	const { t } = useTranslation()
 	const [form] = Form.useForm()
 	const [content, setContent] = useState('')
-	const {data:dataAboutMe,isFetching:isFetchingAboutMe} = useGetAboutMeQuery()
+	const { data: dataAboutMe, isFetching: isFetchingAboutMe } = useGetAboutMeQuery()
 
-	useEffect(()=>{
-		if(dataAboutMe?.employeeAddedDto?.COMMENT){
+	useEffect(() => {
+		if (dataAboutMe?.employeeAddedDto?.COMMENT) {
 			setContent(dataAboutMe?.employeeAddedDto?.COMMENT)
 		}
-	},[dataAboutMe])
+	}, [dataAboutMe])
 
 	const onFinish = (values: any) => {
 		console.log('Отправка чекбоксов:', values)
 	}
 
-
-	if(isFetchingAboutMe) return <div className='mt-[-10px] ml-[6px]'><SkeletonPage /></div>
+	if (isFetchingAboutMe)
+		return (
+			<div className="mt-[-10px] ml-[6px]">
+				<SkeletonPage />
+			</div>
+		)
 
 	return (
 		<div className="px-[50px] pt-[60px] mb-[50px]">
@@ -44,10 +49,18 @@ const AboutMeNew = () => {
 						<div className="flex flex-wrap justify-start p-[40px]">
 							<Descriptions column={1} title={t('generalInfo')}>
 								<Descriptions.Item label={t('birthDate')}>{dataAboutMe?.BIRTH_DATE}</Descriptions.Item>
-								<Descriptions.Item label={t('gender')}>{dataAboutMe?.SEX==='m'?'Мужской': 'Женский'}</Descriptions.Item>
+								<Descriptions.Item label={t('gender')}>
+									{dataAboutMe?.SEX === 'm' ? 'Мужской' : 'Женский'}
+								</Descriptions.Item>
 								<Descriptions.Item label={t('citizenshipType')}>{dataAboutMe?.CITIZENSHIP_TYPE}</Descriptions.Item>
-								<Descriptions.Item label={t('citizenshipCountry')}>{dataAboutMe?.CITIZENSHIP_COUNTRY}</Descriptions.Item>
-								{dataAboutMe?.BIRTH_PLACE ? <Descriptions.Item label={t('birthPlace')}>{dataAboutMe?.BIRTH_PLACE}</Descriptions.Item>: ''}
+								<Descriptions.Item label={t('citizenshipCountry')}>
+									{dataAboutMe?.CITIZENSHIP_COUNTRY}
+								</Descriptions.Item>
+								{dataAboutMe?.BIRTH_CITY ? (
+									<Descriptions.Item label={t('birthPlace')}>{dataAboutMe?.BIRTH_CITY}</Descriptions.Item>
+								) : (
+									''
+								)}
 							</Descriptions>
 						</div>
 					</Col>
@@ -138,169 +151,252 @@ const AboutMeNew = () => {
 			</div>
 
 			{/* Секция образования */}
-			{dataAboutMe?.studentAddedDto ?
-			<div className="bg-white rounded-xl shadow-md mt-7">
-				{dataAboutMe?.studentAddedDto?.GRADE==='bachelor'?<Row>
-					<Col span={24}>
-						<div className="flex flex-wrap justify-start p-6">
-							<div className="flex items-center gap-2">
-								<Title className="!mb-0" level={5}>
-									{t(dataAboutMe?.studentAddedDto?.GRADE)}
-								</Title>
-							</div>
-							<Divider />
+			{dataAboutMe?.studentAddedDto ? (
+				<div className="bg-white rounded-xl shadow-md mt-7">
+					{dataAboutMe?.studentAddedDto?.GRADE === 'bachelor' ? (
+						<Row>
+							<Col span={24}>
+								<div className="flex flex-wrap justify-start p-6">
+									<div className="flex items-center gap-2">
+										<Title className="!mb-0" level={5}>
+											{t(dataAboutMe?.studentAddedDto?.GRADE)}
+										</Title>
+									</div>
+									<Divider />
 
-							<div className="flex flex-wrap justify-start">
-								<Descriptions column={1} title="">
-									<Descriptions.Item label={t('insitute')}>{dataAboutMe?.studentAddedDto?.FACULTY}</Descriptions.Item>
-									<Descriptions.Item label={t('specialization')}>{dataAboutMe?.studentAddedDto?.SPECIALITY}</Descriptions.Item>
-									<Descriptions.Item label={t('typeObr')}>{dataAboutMe?.studentAddedDto?.STUDY_TYPE}</Descriptions.Item>
-									<Descriptions.Item label={t('category')}>{dataAboutMe?.studentAddedDto?.CATEGORY}</Descriptions.Item>
+									<div className="flex flex-wrap justify-start">
+										<Descriptions column={1} title="">
+											<Descriptions.Item label={t('insitute')}>
+												{dataAboutMe?.studentAddedDto?.FACULTY}
+											</Descriptions.Item>
+											<Descriptions.Item label={t('specialization')}>
+												{dataAboutMe?.studentAddedDto?.SPECIALITY}
+											</Descriptions.Item>
+											<Descriptions.Item label={t('typeObr')}>
+												{dataAboutMe?.studentAddedDto?.STUDY_TYPE}
+											</Descriptions.Item>
+											<Descriptions.Item label={t('category')}>
+												{dataAboutMe?.studentAddedDto?.CATEGORY}
+											</Descriptions.Item>
 
-									<Descriptions.Item label={t('ident')}>{dataAboutMe?.studentAddedDto?.IDENT}</Descriptions.Item>
-									<Descriptions.Item label={t('groupNumbers')}>{dataAboutMe?.studentAddedDto?.GROUP}</Descriptions.Item>
-									<Descriptions.Item label={t('bilet')}>{dataAboutMe?.studentAddedDto?.LIBCARD}</Descriptions.Item>
-									<Descriptions.Item label={t('graduateYear')}>{dataAboutMe?.studentAddedDto?.STUDYEND}</Descriptions.Item>
-								</Descriptions>
-							</div>
-						</div>
-					</Col>
-				</Row> : ''}
+											<Descriptions.Item label={t('ident')}>{dataAboutMe?.studentAddedDto?.IDENT}</Descriptions.Item>
+											<Descriptions.Item label={t('groupNumbers')}>
+												{dataAboutMe?.studentAddedDto?.GROUP}
+											</Descriptions.Item>
+											<Descriptions.Item label={t('bilet')}>{dataAboutMe?.studentAddedDto?.LIBCARD}</Descriptions.Item>
+											<Descriptions.Item label={t('graduateYear')}>
+												{dataAboutMe?.studentAddedDto?.STUDYEND}
+											</Descriptions.Item>
+										</Descriptions>
+									</div>
+								</div>
+							</Col>
+						</Row>
+					) : (
+						''
+					)}
 
-				{dataAboutMe?.studentAddedDto?.GRADE===''?<Row>
-					<Col span={24}>
-						<div className="flex flex-wrap justify-start p-6">
-							<div className="flex items-center gap-2">
-								<Title className="!mb-0" level={5}>
-									{t(dataAboutMe?.studentAddedDto?.GRADE)}
-								</Title>
-							</div>
-							<Divider />
+					{dataAboutMe?.studentAddedDto?.GRADE === '' ? (
+						<Row>
+							<Col span={24}>
+								<div className="flex flex-wrap justify-start p-6">
+									<div className="flex items-center gap-2">
+										<Title className="!mb-0" level={5}>
+											{t(dataAboutMe?.studentAddedDto?.GRADE)}
+										</Title>
+									</div>
+									<Divider />
 
-							<div className="flex flex-wrap justify-start">
-								<Descriptions column={1} title="">
-									<Descriptions.Item label={t('insitute')}>{dataAboutMe?.studentAddedDto?.FACULTY}</Descriptions.Item>
-									<Descriptions.Item label={t('specialization')}>{dataAboutMe?.studentAddedDto?.SPECIALITY}</Descriptions.Item>
-									<Descriptions.Item label={t('typeObr')}>{dataAboutMe?.studentAddedDto?.STUDY_TYPE}</Descriptions.Item>
-									<Descriptions.Item label={t('category')}>{dataAboutMe?.studentAddedDto?.CATEGORY}</Descriptions.Item>
+									<div className="flex flex-wrap justify-start">
+										<Descriptions column={1} title="">
+											<Descriptions.Item label={t('insitute')}>
+												{dataAboutMe?.studentAddedDto?.FACULTY}
+											</Descriptions.Item>
+											<Descriptions.Item label={t('specialization')}>
+												{dataAboutMe?.studentAddedDto?.SPECIALITY}
+											</Descriptions.Item>
+											<Descriptions.Item label={t('typeObr')}>
+												{dataAboutMe?.studentAddedDto?.STUDY_TYPE}
+											</Descriptions.Item>
+											<Descriptions.Item label={t('category')}>
+												{dataAboutMe?.studentAddedDto?.CATEGORY}
+											</Descriptions.Item>
 
-									<Descriptions.Item label={t('groupNumbers')}>{dataAboutMe?.studentAddedDto?.GROUP}</Descriptions.Item>
-									<Descriptions.Item label={t('graduateYear')}>{dataAboutMe?.studentAddedDto?.STUDYEND}</Descriptions.Item>
-								</Descriptions>
-							</div>
-						</div>
-					</Col>
-				</Row> : ''}
+											<Descriptions.Item label={t('groupNumbers')}>
+												{dataAboutMe?.studentAddedDto?.GROUP}
+											</Descriptions.Item>
+											<Descriptions.Item label={t('graduateYear')}>
+												{dataAboutMe?.studentAddedDto?.STUDYEND}
+											</Descriptions.Item>
+										</Descriptions>
+									</div>
+								</div>
+							</Col>
+						</Row>
+					) : (
+						''
+					)}
 
-				{dataAboutMe?.studentAddedDto?.GRADE===''?<Row>
-					<Col span={24}>
-						<div className="flex flex-wrap justify-start p-6">
-							<div className="flex items-center gap-2">
-								<Title className="!mb-0" level={5}>
-									{t(dataAboutMe?.studentAddedDto?.GRADE)}
-								</Title>
-							</div>
-							<Divider />
+					{dataAboutMe?.studentAddedDto?.GRADE === '' ? (
+						<Row>
+							<Col span={24}>
+								<div className="flex flex-wrap justify-start p-6">
+									<div className="flex items-center gap-2">
+										<Title className="!mb-0" level={5}>
+											{t(dataAboutMe?.studentAddedDto?.GRADE)}
+										</Title>
+									</div>
+									<Divider />
 
-							<div className="flex flex-wrap justify-start">
-								<Descriptions column={1} title="">
-									<Descriptions.Item label={t('insitute')}>{dataAboutMe?.studentAddedDto?.FACULTY}</Descriptions.Item>
-									<Descriptions.Item label={t('specialization')}>{dataAboutMe?.studentAddedDto?.SPECIALITY}</Descriptions.Item>
-									<Descriptions.Item label={t('typeObr')}>{dataAboutMe?.studentAddedDto?.STUDY_TYPE}</Descriptions.Item>
-									<Descriptions.Item label={t('category')}>{dataAboutMe?.studentAddedDto?.CATEGORY}</Descriptions.Item>
+									<div className="flex flex-wrap justify-start">
+										<Descriptions column={1} title="">
+											<Descriptions.Item label={t('insitute')}>
+												{dataAboutMe?.studentAddedDto?.FACULTY}
+											</Descriptions.Item>
+											<Descriptions.Item label={t('specialization')}>
+												{dataAboutMe?.studentAddedDto?.SPECIALITY}
+											</Descriptions.Item>
+											<Descriptions.Item label={t('typeObr')}>
+												{dataAboutMe?.studentAddedDto?.STUDY_TYPE}
+											</Descriptions.Item>
+											<Descriptions.Item label={t('category')}>
+												{dataAboutMe?.studentAddedDto?.CATEGORY}
+											</Descriptions.Item>
 
-									<Descriptions.Item label={t('naych')}>ыы</Descriptions.Item>
-									<Descriptions.Item label={t('graduateYear')}>{dataAboutMe?.studentAddedDto?.STUDYEND}</Descriptions.Item>
-								</Descriptions>
-							</div>
-						</div>
-					</Col>
-				</Row> : ''}
+											<Descriptions.Item label={t('naych')}>ыы</Descriptions.Item>
+											<Descriptions.Item label={t('graduateYear')}>
+												{dataAboutMe?.studentAddedDto?.STUDYEND}
+											</Descriptions.Item>
+										</Descriptions>
+									</div>
+								</div>
+							</Col>
+						</Row>
+					) : (
+						''
+					)}
 
+					{dataAboutMe?.AspirAddedDto?.SPECIALITY === '' ? (
+						<Row>
+							<Col span={24}>
+								<div className="flex flex-wrap justify-start p-6">
+									<div className="flex items-center gap-2">
+										<Title className="!mb-0" level={5}>
+											{t(dataAboutMe?.AspirAddedDto?.GRADE)}
+										</Title>
+									</div>
+									<Divider />
 
-				{dataAboutMe?.AspirAddedDto?.SPECIALITY===''?<Row>
-					<Col span={24}>
-						<div className="flex flex-wrap justify-start p-6">
-							<div className="flex items-center gap-2">
-								<Title className="!mb-0" level={5}>
-									{t(dataAboutMe?.AspirAddedDto?.GRADE)}
-								</Title>
-							</div>
-							<Divider />
+									<div className="flex flex-wrap justify-start">
+										<Descriptions column={1} title="">
+											<Descriptions.Item label={t('insitute')}>{dataAboutMe?.AspirAddedDto?.FACULTY}</Descriptions.Item>
+											<Descriptions.Item label={t('specialization')}>
+												{dataAboutMe?.AspirAddedDto?.SPECIALITY}
+											</Descriptions.Item>
+											<Descriptions.Item label={t('typeObr')}>
+												{dataAboutMe?.AspirAddedDto?.STUDY_TYPE}
+											</Descriptions.Item>
+											<Descriptions.Item label={t('category')}>
+												{dataAboutMe?.AspirAddedDto?.CATEGORY}
+											</Descriptions.Item>
 
-							<div className="flex flex-wrap justify-start">
-								<Descriptions column={1} title="">
-									<Descriptions.Item label={t('insitute')}>{dataAboutMe?.AspirAddedDto?.FACULTY}</Descriptions.Item>
-									<Descriptions.Item label={t('specialization')}>{dataAboutMe?.AspirAddedDto?.SPECIALITY}</Descriptions.Item>
-									<Descriptions.Item label={t('typeObr')}>{dataAboutMe?.AspirAddedDto?.STUDY_TYPE}</Descriptions.Item>
-									<Descriptions.Item label={t('category')}>{dataAboutMe?.AspirAddedDto?.CATEGORY}</Descriptions.Item>
-
-									<Descriptions.Item label={'Супервизор'}>{dataAboutMe?.AspirAddedDto?.SCI_SUPERVISOR}</Descriptions.Item>
-									<Descriptions.Item label={t('graduateYear')}>{dataAboutMe?.AspirAddedDto?.STUDYEND}</Descriptions.Item>
-								</Descriptions>
-							</div>
-						</div>
-					</Col>
-				</Row> : ''}
-			</div>: ''}
-
-			
+											<Descriptions.Item label={'Супервизор'}>
+												{dataAboutMe?.AspirAddedDto?.SCI_SUPERVISOR}
+											</Descriptions.Item>
+											<Descriptions.Item label={t('graduateYear')}>
+												{dataAboutMe?.AspirAddedDto?.STUDYEND}
+											</Descriptions.Item>
+										</Descriptions>
+									</div>
+								</div>
+							</Col>
+						</Row>
+					) : (
+						''
+					)}
+				</div>
+			) : (
+				''
+			)}
 
 			{/* Секция сотрудника */}
-			{dataAboutMe?.employeeAddedDto ? <>
-			<div className="bg-white rounded-xl shadow-md mt-7">
-			<Row className=''>
-				<Col span={24}>
-						<div className="flex flex-wrap justify-start p-6">
-							<div className="flex items-center gap-2">
-								<Title className="!mb-0" level={5}>
-									{'О работе'}
-								</Title>
-							</div>
-							<Divider />
+			{dataAboutMe?.employeeAddedDto ? (
+				<>
+					<div className="bg-white rounded-xl shadow-md mt-7">
+						<Row className="">
+							<Col span={24}>
+								<div className="flex flex-wrap justify-start p-6">
+									<div className="flex items-center gap-2">
+										<Title className="!mb-0" level={5}>
+											{'О работе'}
+										</Title>
+									</div>
+									<Divider />
 
-							<div className="flex flex-wrap justify-start">
-								<Descriptions column={1} title="">
-								{dataAboutMe?.employeeAddedDto?.POSITION ?<Descriptions.Item label={t('job')}>{dataAboutMe?.employeeAddedDto?.POSITION}</Descriptions.Item>:''}
-									{dataAboutMe?.employeeAddedDto?.WORKADDRESS_BUILDING ?<Descriptions.Item label={t('adress')}>{dataAboutMe?.employeeAddedDto?.WORKADDRESS_BUILDING}</Descriptions.Item>:''}
-									{dataAboutMe?.employeeAddedDto?.WORKADDRESS_ROOM ?<Descriptions.Item label={t('numberCabinet')}>{dataAboutMe?.employeeAddedDto?.WORKADDRESS_ROOM}</Descriptions.Item>: ''}
-									{dataAboutMe?.employeeAddedDto?.PARTTIMEWORK ?<Descriptions.Item label={t('jobSovm')}>{dataAboutMe?.employeeAddedDto?.PARTTIMEWORK}</Descriptions.Item>: ''}
-								</Descriptions>
-							</div>
-						</div>
-					</Col>
-				</Row>
-			</div>
+									<div className="flex flex-wrap justify-start">
+										<Descriptions column={1} title="">
+											{dataAboutMe?.employeeAddedDto?.POSITION ? (
+												<Descriptions.Item label={t('job')}>
+													{dataAboutMe?.employeeAddedDto?.POSITION}
+												</Descriptions.Item>
+											) : (
+												''
+											)}
+											{dataAboutMe?.employeeAddedDto?.WORKADDRESS_BUILDING ? (
+												<Descriptions.Item label={t('adress')}>
+													{dataAboutMe?.employeeAddedDto?.WORKADDRESS_BUILDING}
+												</Descriptions.Item>
+											) : (
+												''
+											)}
+											{dataAboutMe?.employeeAddedDto?.WORKADDRESS_ROOM ? (
+												<Descriptions.Item label={t('numberCabinet')}>
+													{dataAboutMe?.employeeAddedDto?.WORKADDRESS_ROOM}
+												</Descriptions.Item>
+											) : (
+												''
+											)}
+											{dataAboutMe?.employeeAddedDto?.PARTTIMEWORK ? (
+												<Descriptions.Item label={t('jobSovm')}>
+													{dataAboutMe?.employeeAddedDto?.PARTTIMEWORK}
+												</Descriptions.Item>
+											) : (
+												''
+											)}
+										</Descriptions>
+									</div>
+								</div>
+							</Col>
+						</Row>
+					</div>
 
-			<div className="bg-white rounded-xl shadow-md mt-7">
-				
-				<Row>
-					<Col span={24}>
-						<div className="flex flex-wrap justify-start p-6">
-							<div className="flex items-center gap-2">
-								<Title className="!mb-0" level={5}>
-									{t('additionalInfo')}
-								</Title>
-							</div>
-							<Divider />
+					<div className="bg-white rounded-xl shadow-md mt-7">
+						<Row>
+							<Col span={24}>
+								<div className="flex flex-wrap justify-start p-6">
+									<div className="flex items-center gap-2">
+										<Title className="!mb-0" level={5}>
+											{t('additionalInfo')}
+										</Title>
+									</div>
+									<Divider />
 
-							<div className="w-full">
-								<Row>
-									
-									<QuillComponents
-										content={content}
-										setContent={setContent}
-										
-									/> 
-								</Row>
-								<Row>
-									<Button type="primary">{t('save')}</Button>
-								</Row>
-							</div>
-						</div>
-					</Col>
-				</Row>
-			</div></>: ''}
+									<div className="w-full">
+										<Row>
+											<QuillComponents content={content} setContent={setContent} />
+										</Row>
+										<Row>
+											<Button type="primary">{t('save')}</Button>
+										</Row>
+									</div>
+								</div>
+							</Col>
+						</Row>
+					</div>
+				</>
+			) : (
+				''
+			)}
 		</div>
 	)
 }

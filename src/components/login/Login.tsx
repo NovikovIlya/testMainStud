@@ -12,7 +12,7 @@ import { BackMainPage } from '../BackMainPage'
 
 import { Buttons } from './Buttons'
 import { Inputs } from './Inputs'
-import { useAppDispatch } from '../../store'
+import { useAppDispatch, useAppSelector } from '../../store'
 
 import { useLocalStorageState } from 'ahooks'
 
@@ -20,6 +20,7 @@ const { Title } = Typography
 
 export const Login = () => {
 	const [form] = Form.useForm()
+	const accessToken = useAppSelector((state) => state.auth.accessToken);
 	const navigate = useNavigate()
 	const { t, i18n } = useTranslation()
 	const [login,{ data:dataLogin,isSuccess, isLoading }] = useLoginMutation()
@@ -118,6 +119,12 @@ export const Login = () => {
 			setError(e.data)
 		}
 	}
+
+	useEffect(() => {
+		if (accessToken) {
+		  navigate('/user')
+		}
+	  }, [accessToken, navigate]) 
 
 	return (
 		<div className="flex flex-col items-center min-h-screen ">

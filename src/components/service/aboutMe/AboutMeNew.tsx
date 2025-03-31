@@ -287,7 +287,7 @@ const AboutMeNew = () => {
 								<div className="flex flex-wrap justify-start p-6">
 									<div className="flex items-center gap-2">
 										<Title className="!mb-0" level={5}>
-											{'Аспирантура'}
+											{t('Postgraduate')}
 										</Title>
 									</div>
 									<Divider />
@@ -330,7 +330,7 @@ const AboutMeNew = () => {
 								<div className="flex flex-wrap justify-start p-6">
 									<div className="flex items-center gap-2">
 										<Title className="!mb-0" level={5}>
-											{'О работе'}
+											{t('aboutWork')}
 										</Title>
 									</div>
 									<Divider />

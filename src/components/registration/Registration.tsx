@@ -1,5 +1,5 @@
 import { Form, Typography } from 'antd'
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
@@ -12,6 +12,7 @@ import { Buttons } from './Buttons'
 import { Inputs } from './Inputs'
 import { Password } from './Password'
 import { IRegProps } from '../../models/registration'
+import { useAppSelector } from '../../store'
 
 const { Title } = Typography
 
@@ -22,8 +23,15 @@ export const Registration: FC<IRegProps> = ({ changeEmail, email }) => {
 
 	const { t } = useTranslation()
 	const [check, setCheck] = useState(false)
+	const accessToken = useAppSelector((state) => state.auth.accessToken);
 
 	const [register,{data:dataRegister,isLoading}] = useRegisterMutation()
+
+	useEffect(() => {
+		if (accessToken) {
+		  navigate('/user')
+		}
+	  }, [accessToken, navigate]) 
 
 	const onFinish = async (values: IRegForm) => {
 		try {

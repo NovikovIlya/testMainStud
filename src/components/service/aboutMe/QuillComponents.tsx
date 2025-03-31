@@ -10,7 +10,7 @@ function QuillComponents({ content, setContent }: any ) {
 
   const modules = {
     toolbar: [
-      [{ 'header': [1, 2, 3, false] }],
+      // [{ 'header': [1, 2, 3, false] }],
       ['bold', 'italic', 'underline', 'strike'],
       [{ 'list': 'ordered'}, { 'list': 'bullet' }],
       ['link'],

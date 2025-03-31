@@ -85,6 +85,7 @@
 	"seletctType": "Select document type",
 	"alreadyProfile": "Already have a profile?",
 	"login": "Log in",
+	"master": "Master",
 	"diplomaSeries": "Diploma Series",
 	"diplomaNumber": "Diploma number",
 	"graduateYear": "Year of graduation",
@@ -865,7 +866,8 @@
 	"privacyPolicy" : "privacy policy",
 	"continue": "By continuing to use the site, you agree to the processing of cookies and other user data in accordance with",
 	"block" : "You can block the use of cookies by the site in your browser settings.",
-	"itClear" : "It's clear"
+	"itClear" : "It's clear",
+	"aboutWork": "About work"
 		
 	  
 	

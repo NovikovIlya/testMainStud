@@ -198,29 +198,31 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 							(props.msgData.sender === 'PERSONNEL_DEPARTMENT' && isEmpDep)
 					})}
 				>
-					{props.msgData.reserveTimes.map((time, i) => (
-						<Button
-							onClick={() => {
-								setPressedButton(i)
-								answerReserveTime({
-									respondId: page_id,
-									time: time,
-									messageId: props.msgData.id
-								}).then(() => {
-									setIsResponsed(true)
-								})
-							}}
-							disabled={isEmpDep || isResponsed}
-							loading={answerReserveTimeLoading && pressedButton === i}
-							className={`w-full text-[16px]/[19.2px] text-wrap h-full border-black rounded-[54.5px] py-[12px] px-[20px] text-center bg-inherit outline-none border cursor-pointer test:px-[12px]  ${
-								isEmpDep || isResponsed ? 'select-none !cursor-not-allowed' : ''
-							}`}
-						>
-							{dayjs(time).format().substring(0, 10).split('-').reverse().join('.') +
-								', ' +
-								dayjs(time).format().substring(11, 16)}
-						</Button>
-					))}
+					<div className="col-span-3 flex justify-between gap-[20px]">
+						{props.msgData.reserveTimes.map((time, i) => (
+							<Button
+								onClick={() => {
+									setPressedButton(i)
+									answerReserveTime({
+										respondId: page_id,
+										time: time,
+										messageId: props.msgData.id
+									}).then(() => {
+										setIsResponsed(true)
+									})
+								}}
+								disabled={isEmpDep || isResponsed}
+								loading={answerReserveTimeLoading && pressedButton === i}
+								className={`w-full text-[16px]/[19.2px] text-wrap h-full border-black rounded-[54.5px] py-[12px] px-[20px] text-center bg-inherit outline-none border cursor-pointer test:px-[12px]  ${
+									isEmpDep || isResponsed ? 'select-none !cursor-not-allowed' : ''
+								}`}
+							>
+								{dayjs(time).format().substring(0, 10).split('-').reverse().join('.') +
+									', ' +
+									dayjs(time).format().substring(11, 16)}
+							</Button>
+						))}
+					</div>
 					<Button
 						onClick={() => {
 							setPressedButton(3)

@@ -826,6 +826,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 				vacancyId: number
 				category: string
 				direction: string
+				subdivision: string
 			}
 		>({
 			query: arg => ({

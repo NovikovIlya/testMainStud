@@ -11,6 +11,8 @@ import ArrowIcon from './ArrowIcon'
 import { ResponseForm } from './ResponceForm'
 
 export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
+	const [canRespond, setCanRespond] = useState<boolean>(false)
+
 	const [getVacancy, { data, isLoading, error }] = useLazyGetVacancyViewQuery()
 	const [getRelation, getRelationStatus] = useLazyGetSeekerVacancyRelationQuery()
 
@@ -33,7 +35,14 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 		// Если id найден, запускаем запрос
 		if (id_from_url) {
 			getVacancy(id_from_url)
-			getRelation(parseInt(id_from_url))
+				.unwrap()
+				.then(() => {
+					getRelation(parseInt(id_from_url))
+						.unwrap()
+						.then(res => {
+							setCanRespond(res.canRespond)
+						})
+				})
 		}
 	}, [])
 
@@ -136,7 +145,7 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 					<p className="w-[106px] font-content-font font-bold text-black text-[18px]/[21px]">Тип занятости</p>
 					<p className="w-[106px] font-content-font font-bold text-black text-[18px]/[21px]">Заработная плата</p>
 					{props.type === 'CATALOG' ? (
-						<ResponseForm canRespond={getRelationStatus.data?.canRespond!} />
+						<ResponseForm canRespond={canRespond} />
 					) : (
 						<>
 							<div className="w-[143px]"></div>

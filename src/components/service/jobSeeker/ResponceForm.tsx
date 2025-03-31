@@ -1,6 +1,6 @@
 import { Button, Checkbox, ConfigProvider, DatePicker, Form, Input, Modal, Radio, Select, Tag, Upload } from 'antd'
 import dayjs from 'dayjs'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import uuid from 'react-uuid'
@@ -44,7 +44,6 @@ import { ButtonPlusIcon } from './ButtonPlusIcon'
 import { CheckedIcon } from './CheckedIcon'
 
 export const ResponseForm = (props: { canRespond: boolean }) => {
-	console.log(props.canRespond)
 	const { t, i18n } = useTranslation()
 	const { data: countries } = useGetCountriesQuery(i18n.language)
 	const { data: levels } = useGetEducationLevelQuery(i18n.language)
@@ -98,8 +97,7 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 	const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
 	const [resultModalText, setResultModalText] = useState<string>('')
 	const [isFailedModalOpen, setIsFailedModalOpen] = useState<boolean>(false)
-	const [canRespond, setCanRespond] = useState<boolean | undefined>(props.canRespond)
-	console.log('State ' + canRespond)
+	const [canRespond, setCanRespond] = useState<boolean>(props.canRespond)
 	const [page, setPage] = useState<string>('')
 
 	const handleKeyDownPhone = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -210,6 +208,10 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 			e.preventDefault()
 		}
 	}
+
+	useEffect(() => {
+		setCanRespond(props.canRespond)
+	}, [props.canRespond])
 
 	return (
 		<>

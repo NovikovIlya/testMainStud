@@ -38,8 +38,6 @@ import { ApproveRespondForm } from './ApproveRespondForm'
 import { InviteSeekerForm } from './supervisor/InviteSeekerForm'
 
 export const ReserveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR' }) => {
-	const respondId = useAppSelector(state => state.currentResponce)
-
 	const currentUrl = window.location.pathname
 	const match = currentUrl.match(/\/fullinfo\/(\d+)(?=\/|$)/)
 
@@ -80,13 +78,14 @@ export const ReserveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 	}, [res])
 
 	useEffect(() => {
-		getResume(respondId.respondId)
-			.unwrap()
-			.then(resume => {
-				setResume(prev => resume.href)
-				setResumeSize(prev => resume.size)
-			})
-	}, [])
+		res &&
+			getResume(res.id)
+				.unwrap()
+				.then(resume => {
+					setResume(prev => resume.href)
+					setResumeSize(prev => resume.size)
+				})
+	}, [res])
 
 	const navigate = useNavigate()
 
@@ -174,7 +173,7 @@ export const ReserveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 									className={`${styles.customAntButton}`}
 									onClick={async () => {
 										try {
-											await deleteRespond(respondId.respondId)
+											await deleteRespond(res.id)
 												.unwrap()
 												.then(() => {
 													refetch().then(() => {
@@ -390,7 +389,7 @@ export const ReserveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 								)}
 								{props.type === 'SUPERVISOR' && (
 									<div className="self-center grid grid-cols-1 grid-rows-[40px_40px] gap-y-[12px]">
-										<InviteSeekerForm respondId={respondId.respondId} isButtonDisabled callback={() => {}} />
+										<InviteSeekerForm respondId={res.id} isButtonDisabled callback={() => {}} />
 										<Button
 											onClick={() => {}}
 											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[257px] h-[40px] py-[8px] px-[24px] border-black"
@@ -621,7 +620,7 @@ export const ReserveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 										</Button>
 										<Button
 											onClick={() => {
-												deleteRespond(respondId.respondId)
+												deleteRespond(res.id)
 													.unwrap()
 													.then(() => {
 														refetch()

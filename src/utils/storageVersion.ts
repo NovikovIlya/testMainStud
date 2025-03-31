@@ -1,5 +1,5 @@
 // Текущая версия хранилища
-export const STORAGE_VERSION = '1.0.1';
+export const STORAGE_VERSION = '1.0.2';
 
 // Ключ для хранения версии
 const VERSION_KEY = 'app_storage_version';

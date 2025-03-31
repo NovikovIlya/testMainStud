@@ -153,7 +153,7 @@ const AboutMeNew = () => {
 			{/* Секция образования */}
 			{dataAboutMe?.studentAddedDto ? (
 				<div className="bg-white rounded-xl shadow-md mt-7">
-					{dataAboutMe?.studentAddedDto?.GRADE === 'bachelor' ? (
+					
 						<Row>
 							<Col span={24}>
 								<div className="flex flex-wrap justify-start p-6">
@@ -192,11 +192,9 @@ const AboutMeNew = () => {
 								</div>
 							</Col>
 						</Row>
-					) : (
-						''
-					)}
+					 
 
-					{dataAboutMe?.studentAddedDto?.GRADE === '' ? (
+					{/* {dataAboutMe?.studentAddedDto?.GRADE === 'master' ? (
 						<Row>
 							<Col span={24}>
 								<div className="flex flex-wrap justify-start p-6">
@@ -274,7 +272,7 @@ const AboutMeNew = () => {
 						</Row>
 					) : (
 						''
-					)}
+					)} */}
 
 					
 				</div>
@@ -282,8 +280,8 @@ const AboutMeNew = () => {
 				''
 			)}
 
-{dataAboutMe?.aspirAddedDto?.FACULTY  ? (
-	<div className="bg-white rounded-xl shadow-md mt-7">
+				{dataAboutMe?.aspirAddedDto?.FACULTY  ? (
+						<div className="bg-white rounded-xl shadow-md mt-7">
 						<Row>
 							<Col span={24}>
 								<div className="flex flex-wrap justify-start p-6">

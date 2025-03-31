@@ -861,7 +861,11 @@
 	"sogl": "I agree to the ",
 	"sogl2" : "processing of personal data",
 	"razr": "I accept the User Agreement and give permission to the KFU portal to process my personal data in accordance with Federal Law No. 152-FZ of July 27, 2006 'On Personal Data'.",
-	"avatarChange": "Avatar successfully updated"
+	"avatarChange": "Avatar successfully updated",
+	"privacyPolicy" : "privacy policy",
+	"continue": "By continuing to use the site, you agree to the processing of cookies and other user data in accordance with",
+	"block" : "You can block the use of cookies by the site in your browser settings.",
+	"itClear" : "It's clear"
 		
 	  
 	

@@ -234,7 +234,7 @@ export const ReserveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 							</span>
 						</button>
 						<div className="mt-[52px] flex flex-col gap-[36px]" ref={targetRef}>
-							<div className="flex flex-wrap gap-[150px]">
+							<div className="flex justify-between flex-wrap gap-y-[40px]">
 								<div className="flex gap-[20px]">
 									<div className="flex h-[167px] w-[167px] bg-[#D9D9D9]">
 										<AvatartandardSvg />
@@ -554,7 +554,7 @@ export const ReserveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 							</Button>
 						</div>
 						<div className="mt-[52px] flex flex-col gap-[36px]">
-							<div className="flex flex-wrap gap-[150px]">
+							<div className="flex justify-between flex-wrap gap-y-[40px]">
 								<div className="flex gap-[20px]">
 									<div className="flex h-[167px] w-[167px] bg-[#D9D9D9]">
 										<AvatartandardSvg />

@@ -10,15 +10,17 @@ import React, { useEffect, useState } from 'react'
 
 import TableLanguages from './TableLanguages'
 import UploadAvatar from './UploadAvatar'
+import { useGetforeignLanguagesQuery, useGetNativeLanguagesQuery } from '../../../store/api/aboutMe/forAboutMe'
+
 
 const Languages = () => {
 	const [form] = Form.useForm()
 	const [isModalOpen, setIsModalOpen] = useState(false)
-
-	useEffect(() => {
-		form.setFieldsValue({ content: 'sss' }) // Установка значения в форму
-		// setLoading(false);
-	}, [form])
+	const {data:dataNative} = useGetNativeLanguagesQuery()
+	const {data:dataForeign} = useGetforeignLanguagesQuery()
+	const nativeLanguageForm = Form.useWatch('languages', form)
+	console.log('nativeLanguageForm',nativeLanguageForm)
+	
 
 	const onFinish = (values: any) => {
 		// values содержит { checkboxes: [...] }
@@ -43,7 +45,7 @@ const Languages = () => {
 			<div className="bg-white rounded-xl shadow-md p-[24px]">
 				<Row>
 					<Col span={24}>
-						<Form>
+						<Form form={form}>
 							<Form.Item
 								label={<div className="text-[16px] font-bold">Родной язык</div>} // Лейбл сверху
 								name="languages" // Ключ для данных формы
@@ -58,10 +60,17 @@ const Languages = () => {
 									mode="multiple"
 									allowClear
 									placeholder="Добавить язык"
-									options={[
-										{ value: 'en', label: 'English' },
-										{ value: 'es', label: 'Spanish' }
-									]}
+									options={
+										dataNative ? 
+										dataNative?.languages?.map((item:any)=>{
+											return {
+												label:item.language,
+												value:item.code
+
+											}
+										})
+										: []
+									}
 								/>
 							</Form.Item>
 
@@ -78,7 +87,7 @@ const Languages = () => {
 					</Title>
 				</Row>
 				<Row>
-					<TableLanguages />
+					<TableLanguages dataForeign={dataForeign}/>
 				</Row>
 				<Row className="flex justify-center mt-4">
 					<Button onClick={showModal} type="primary" style={{ marginBottom: 16 }}>

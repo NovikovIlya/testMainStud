@@ -54,7 +54,27 @@ export const myPracticeService = apiSlice.injectEndpoints({
       }),
 
 
-      //  Знание языкв
+      //  Знание языков
+      getNativeLanguages: builder.query<any, void>({
+        query: () => ({
+          url: '/languages/native',
+          method: 'GET',
+         
+        }),
+        providesTags: ['nativeLanguages'],
+        keepUnusedDataFor: 1,
+      }),
+
+
+      getforeignLanguages: builder.query<any, void>({
+        query: () => ({
+          url: '/languages/foreign',
+          method: 'GET',
+         
+        }),
+        providesTags: ['foreignLanguages'],
+        keepUnusedDataFor: 1,
+      }),
     })
   });
 
@@ -63,5 +83,7 @@ export const myPracticeService = apiSlice.injectEndpoints({
     useAddAvatarMutation,
     useGetAvatarQuery,
     usePutAvatarMutation,
-    useGetAboutMeQuery
+    useGetAboutMeQuery,
+    useGetNativeLanguagesQuery,
+    useGetforeignLanguagesQuery
    } = myPracticeService;

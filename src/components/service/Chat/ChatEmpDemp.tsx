@@ -171,7 +171,7 @@ export const ChatEmpDemp = () => {
 				{!pathname.includes('/services/personnelaccounting/chat/vacancyview') && (
 					<div className="shadowNav bg-white relative z-[5] w-[461px]">
 						<div className="sticky top-[80px]">
-							<div className="flex items-center px-[30px] pt-[60px] pb-[20px]">
+							<div className="flex items-center px-[30px] pt-[20px] pb-[20px]">
 								<p className="font-content-font font-normal text-black text-[20px]/[20px] ">Все сообщения</p>
 								<ConfigProvider theme={{ components: { Button: { textHoverBg: '#ffffff' } } }}>
 									<Button
@@ -186,7 +186,7 @@ export const ChatEmpDemp = () => {
 									</Button>
 								</ConfigProvider>
 							</div>
-							<div className="overflow-auto flex flex-col h-[calc(100vh-200px)]">
+							<div className="overflow-auto flex flex-col h-[calc(100vh-160px)]">
 								{isFilterWindowOpen && (
 									<>
 										<div className="px-[30px] pb-[40px] flex flex-col gap-[20px] w-full h-[200px]">

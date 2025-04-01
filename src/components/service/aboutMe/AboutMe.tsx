@@ -37,6 +37,7 @@ import {
 import { SkeletonPage } from './Skeleton'
 import { useLocalStorageState } from 'ahooks'
 import UploadAvatar from './UploadAvatar'
+import { useSetCommentMutation } from '../../../store/api/aboutMe/forAboutMe'
 
 export const AboutMe = () => {
 	const { t, i18n } = useTranslation()
@@ -52,6 +53,7 @@ export const AboutMe = () => {
 	const formData = useAppSelector(state => state.Form)
 	const user = useAppSelector(state => state.auth.user)
 	const [acceptedData,setAcceptedData] = useLocalStorageState<any>('acceptedData',{defaultValue:null})
+	const [sendComment,{}] = useSetCommentMutation()
 	const [typeAcc, _] = useLocalStorageState<any>(
 		'typeAcc',
 		{

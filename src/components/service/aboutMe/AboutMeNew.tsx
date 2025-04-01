@@ -6,7 +6,7 @@ import Title from 'antd/es/typography/Title'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useGetAboutMeQuery } from '../../../store/api/aboutMe/forAboutMe'
+import { useGetAboutMeQuery, useSetCommentMutation } from '../../../store/api/aboutMe/forAboutMe'
 
 import QuillComponents from './QuillComponents'
 import { SkeletonPage } from './Skeleton'
@@ -17,7 +17,8 @@ const AboutMeNew = () => {
 	const [form] = Form.useForm()
 	const [content, setContent] = useState('')
 	const { data: dataAboutMe, isFetching: isFetchingAboutMe } = useGetAboutMeQuery()
-
+	const [sendComment,{}] = useSetCommentMutation()
+	console.log('content',content)
 	useEffect(() => {
 		if (dataAboutMe?.employeeAddedDto?.COMMENT) {
 			setContent(dataAboutMe?.employeeAddedDto?.COMMENT)
@@ -26,6 +27,10 @@ const AboutMeNew = () => {
 
 	const onFinish = (values: any) => {
 		console.log('Отправка чекбоксов:', values)
+	}
+
+	const sendDop = ()=>{
+		sendComment({comment:content})
 	}
 
 	if (isFetchingAboutMe)
@@ -388,7 +393,7 @@ const AboutMeNew = () => {
 											<QuillComponents content={content} setContent={setContent} />
 										</Row>
 										<Row>
-											<Button type="primary">{t('save')}</Button>
+											<Button onClick={sendDop} type="primary">{t('save')}</Button>
 										</Row>
 									</div>
 								</div>

@@ -52,6 +52,16 @@ export const myPracticeService = apiSlice.injectEndpoints({
         providesTags: ['AboutMe'],
         keepUnusedDataFor: 1,
       }),
+      setComment: builder.mutation<any, any>({
+        query: (body) => ({
+            url: '/about-me/set-comment',
+            method: 'POST',
+            body,
+           
+          }),
+         
+          invalidatesTags: ['AboutMe'],
+      }),
 
 
       //  Знание языков
@@ -85,5 +95,6 @@ export const myPracticeService = apiSlice.injectEndpoints({
     usePutAvatarMutation,
     useGetAboutMeQuery,
     useGetNativeLanguagesQuery,
-    useGetforeignLanguagesQuery
+    useGetforeignLanguagesQuery,
+    useSetCommentMutation
    } = myPracticeService;

@@ -112,15 +112,15 @@ export const Chat = () => {
 				{!pathname.includes('/services/myresponds/chat/vacancyview') && (
 					<div className=" shadowNav bg-white relative z-[5]">
 						<div className="sticky top-[80px]">
-							<div className="">
-								<p className="pl-[53px] pt-14 pb-[40px] font-content-font font-normal text-black text-[20px]/[20px] ">
-									Все отклики
-								</p>
+							<div className="flex items-center pt-[20px] pb-[20px]">
+								<p className="pl-[53px] font-content-font font-normal text-black text-[20px]/[20px] ">Все отклики</p>
 							</div>
-							<ul className="h-[75vh] w-[461px] flex flex-col gap-4 overflow-auto">
-								{handleList}
-								<li className="h-[1px]" ref={chatPreviewsBottomRef}></li>
-							</ul>
+							<div className="overflow-auto flex flex-col h-[calc(100vh-160px)]">
+								<ul className="w-[461px] flex flex-col gap-4 overflow-auto">
+									{handleList}
+									<li className="h-[1px]" ref={chatPreviewsBottomRef}></li>
+								</ul>
+							</div>
 						</div>
 					</div>
 				)}

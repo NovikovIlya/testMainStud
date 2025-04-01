@@ -86,7 +86,7 @@ export const ChatPreview = (props: {
 	}, [chatInfo.lastMessageDate])
 
 	useEffect(() => {
-		pathname.includes(props.respondId.toString()) &&
+		props.respondId === parseInt(pathname.substring(pathname.lastIndexOf('/') + 1)) &&
 			chatInfo.id !== 0 &&
 			(dispatch(setCurrentVacancyName(props.respName)),
 			handleNavigate(

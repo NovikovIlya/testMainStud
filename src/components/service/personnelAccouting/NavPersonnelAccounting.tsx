@@ -406,7 +406,7 @@ export const NavPesonnelAccounting = () => {
 					className={clsx(
 						'w-full flex items-center py-2 pl-8 hover:bg-[#F5F8FB] cursor-pointer',
 						(pathname === '/services/personnelaccounting/responds' ||
-							/\/services\/personnelaccounting\/responds\/byvacancy\/\d+/.test(pathname) ||
+							/\/services\/personnelaccounting\/responds\/byvacancy\/*/.test(pathname) ||
 							/\/services\/services\/personnelaccounting\/responds\/fullinfo\/\d+/.test(pathname)) &&
 							'bg-[#F5F8FB]'
 					)}

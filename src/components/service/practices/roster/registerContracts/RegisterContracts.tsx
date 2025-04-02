@@ -3,7 +3,7 @@ import {
     Button,
     Col,
     ConfigProvider,
-    DatePicker, InputNumber,
+    DatePicker, Empty, InputNumber,
     Popover,
     Radio,
     Row,
@@ -755,7 +755,7 @@ export const RegisterContracts = () => {
 
                 </Col>
             </Row>
-            {!isFetching && isError ? <div className='w-full flex justify-center text-center'>Нет данных</div>: ''}
+            {!isFetching && isError ? <div className='w-full flex justify-center text-center bg-white h-[120px] items-center'><Empty image={Empty.PRESENTED_IMAGE_SIMPLE}/></div>: ''}
             
             {isError ? '' :
              !tableDataCompressed  && isFetching ? <Spin className='w-full mt-20' indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />  :

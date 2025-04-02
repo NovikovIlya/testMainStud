@@ -30,7 +30,7 @@ export const myPracticeService = apiSlice.injectEndpoints({
       }),
       addAvatar: builder.mutation<string, FormData>({
         query: (formData) => ({
-          url: '/user-api/settings/photo',
+          url: '/about-me/set-photo',
           method: 'POST',
           body: formData,
           responseHandler: (response) => response.blob(),

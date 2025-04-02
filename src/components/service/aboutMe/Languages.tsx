@@ -1,5 +1,5 @@
 import { QuestionCircleOutlined, UploadOutlined } from '@ant-design/icons'
-import { Button, Checkbox, Col, Divider, Form, Modal, Row, Tooltip, Upload } from 'antd'
+import { Button, Checkbox, Col, Divider, Form, Modal, Row, Spin, Tooltip, Upload } from 'antd'
 import { Descriptions } from 'antd'
 import type { DescriptionsProps } from 'antd'
 import { Select, Space } from 'antd'
@@ -11,12 +11,13 @@ import React, { useEffect, useState } from 'react'
 import TableLanguages from './TableLanguages'
 import UploadAvatar from './UploadAvatar'
 import { useGetforeignLanguagesQuery, useGetNativeLanguagesQuery } from '../../../store/api/aboutMe/forAboutMe'
+import { SkeletonPage } from './Skeleton'
 
 
 const Languages = () => {
 	const [form] = Form.useForm()
 	const [isModalOpen, setIsModalOpen] = useState(false)
-	const {data:dataNative} = useGetNativeLanguagesQuery()
+	const {data:dataNative,isFetching:isFetchingNative} = useGetNativeLanguagesQuery()
 	const {data:dataForeign} = useGetforeignLanguagesQuery()
 	const nativeLanguageForm = Form.useWatch('languages', form)
 	console.log('nativeLanguageForm',nativeLanguageForm)
@@ -40,9 +41,17 @@ const Languages = () => {
 		setIsModalOpen(false)
 	}
 
+	if (isFetchingNative)
+			return (
+				<div className="mt-[-10px] ml-[6px]">
+					<SkeletonPage />
+				</div>
+			)
+
 	return (
 		<div className="px-[50px] pt-[60px] mb-[50px]">
 			<div className="bg-white rounded-xl shadow-md p-[24px]">
+				<Spin spinning={false}>
 				<Row>
 					<Col span={24}>
 						<Form form={form}>
@@ -78,9 +87,11 @@ const Languages = () => {
 						</Form>
 					</Col>
 				</Row>
+				</Spin>
 			</div>
 
 			<div className="bg-white rounded-xl shadow-md mt-4 p-[24px]">
+				<Spin spinning={false}>
 				<Row className="mb-3">
 					<Title className="!mb-0" level={5}>
 						Иностранные языки
@@ -94,6 +105,7 @@ const Languages = () => {
 						Добавить язык
 					</Button>
 				</Row>
+				</Spin>
 
 				<Modal className='' footer={null} title="Знание языков" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
 					<Form  className='mt-4'>

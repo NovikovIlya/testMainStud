@@ -1,7 +1,9 @@
 import { DeleteTwoTone, EditTwoTone, EyeTwoTone } from '@ant-design/icons'
 import { Button, ConfigProvider, Row, Space, Table, Tag } from 'antd'
 import type { TableProps } from 'antd'
+import { t } from 'i18next'
 import React from 'react'
+import { truncateString } from '../../../utils/truncateString'
 
 interface DataType {
 	key: string
@@ -21,17 +23,30 @@ const TableLanguages = ({dataForeign}:any) => {
 			title: 'Язык',
 			dataIndex: 'language',
 			key: 'name',
-			render: text => <a>{text}</a>
+			render: text => <div>{text}</div>
 		},
 		{
 			title: 'Уровень владения',
-			dataIndex: 'language_level',
+			dataIndex: 'languageLevel',
 			key: 'age'
 		},
 		{
 			title: 'Языковой сертификат',
-			dataIndex: 'address',
-			key: 'address'
+			dataIndex: 'certificates',
+			key: 'address',
+			render: (certificates) => (
+			  <>
+				{certificates?.map((item:any, index:any) => (
+				  <div key={index}>
+					<a target="_blank" href={item.certificateLink} rel="noopener noreferrer">
+					  {item.certificateName}
+					</a>
+				  </div>
+				))}
+			  </>
+			),
+		  
+		  
 		},
 	
 		{
@@ -98,7 +113,13 @@ const TableLanguages = ({dataForeign}:any) => {
 					}
 				}}
 			>
-				<Table<DataType> pagination={false} columns={columns} dataSource={dataForeign} className="w-full" />
+				<Table<DataType> 
+					pagination={false} 
+					columns={columns} 
+					dataSource={dataForeign} 
+					className="w-full" 
+					locale={{ emptyText: t('noData') }}
+				/>
 			</ConfigProvider>
 		</>
 	)

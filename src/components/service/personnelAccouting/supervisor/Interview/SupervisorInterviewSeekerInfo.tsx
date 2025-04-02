@@ -192,7 +192,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 			return () => clearInterval(intervalId) // Очищаем интервал при размонтировании
 		}, [props.time])
 		return (
-			<div className="flex flex-col gap-[30px]">
+			<div className="flex flex-col gap-[30px] mr-[10%]">
 				{format === 'OFFLINE' &&
 					!isInterviewStarted && ( // Офлайн собес, ожидание
 						<div className="flex flex-col justify-center">

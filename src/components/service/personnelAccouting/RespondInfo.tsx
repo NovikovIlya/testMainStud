@@ -382,7 +382,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 								)}
 								{props.type === 'SUPERVISOR' && (
 									<div
-										className={`self-center grid grid-cols-1 grid-rows-[40px_40px_40px] gap-y-[12px] ${
+										className={`self-center grid grid-cols-1 grid-rows-[40px_40px_40px] gap-y-[12px] mr-[15%] ${
 											buttonsHidden && 'hidden'
 										}`}
 									>

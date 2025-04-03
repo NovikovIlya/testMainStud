@@ -68,6 +68,7 @@ export const VacancyEditView = () => {
 	const [category, setCategory] = useState<string | undefined>(data?.acf.category)
 	const [direction, setDirection] = useState<string | undefined>(data?.acf.direction)
 	const [subdivision, setSubdivision] = useState<string | undefined>(data?.acf.subdivision)
+	const [categoryOption, setCategoryOption] = useState<string | undefined>(data?.acf.category)
 
 	useEffect(() => {
 		setPost(data?.title.rendered)
@@ -78,6 +79,7 @@ export const VacancyEditView = () => {
 		setDirection(data?.acf.direction)
 		setSubdivision(data?.acf.subdivision)
 		setCategoryTitle(data?.acf.category!)
+		setCategoryOption(data?.acf.category)
 	}, [data])
 
 	const [responsibilities, setResponsibilities] = useState<string | undefined>(
@@ -408,7 +410,7 @@ export const VacancyEditView = () => {
 										label: category.title
 									}))}
 									onChange={e => {
-										setCategoryTitle(e)
+										setCategoryOption(e)
 										console.log('test log')
 										editForm.setFieldValue(['direction'], null)
 									}}
@@ -418,7 +420,9 @@ export const VacancyEditView = () => {
 								name={'direction'}
 								label={
 									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
-										{categories.find(cat => cat.title === categoryTitle)?.direction ? 'Подразделение' : 'Профобласть'}
+										{categories.find(cat => cat.title === categoryOption)?.directions.length !== 0
+											? 'Профобласть'
+											: 'Подразделение'}
 									</label>
 								}
 								rules={[{ required: true, message: 'Не указана подкатегория' }]}
@@ -426,7 +430,7 @@ export const VacancyEditView = () => {
 								<Select
 									placeholder="Выбрать"
 									options={(() => {
-										let cat = categories.find(category => category.title === categoryTitle)
+										let cat = categories.find(category => category.title === categoryOption)
 										return cat && cat.directions.length !== 0
 											? [
 													{ value: 'Все', label: 'Все' },
@@ -494,10 +498,14 @@ export const VacancyEditView = () => {
 							</div>
 							<div className="flex flex-col gap-[16px]">
 								<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-									{direction === 'false' ? 'Подразделение' : 'Профобласть'}
+									{categories.find(cat => cat.title === categoryOption)?.directions.length !== 0
+										? 'Профобласть'
+										: 'Подразделение'}
 								</p>
 								<p className="font-content-font font-normal text-black text-[18px]/[21px]">
-									{direction === '' ? subdivision : direction}
+									{categories.find(cat => cat.title === categoryOption)?.directions.length !== 0
+										? direction
+										: subdivision}
 								</p>
 							</div>
 						</div>
@@ -533,7 +541,14 @@ export const VacancyEditView = () => {
 												skills: skills as string,
 												conditions: conditions as string,
 												category: category as string,
-												direction: direction as string,
+												direction:
+													categories.find(cat => cat.title === categoryOption)?.directions.length !== 0
+														? (direction as string)
+														: (direction as string),
+												subdivision:
+													categories.find(cat => cat.title === categoryOption)?.subdivisionsList.length !== 0
+														? (direction as string)
+														: (direction as string),
 												vacancyId: data?.id as number
 											})
 												.unwrap()

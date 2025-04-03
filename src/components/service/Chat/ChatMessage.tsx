@@ -105,7 +105,44 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 						<div className="h-[1px] bg-black bg-opacity-[24%] mt-[16px]"></div>
 					</div>
 				)}
-				<p className="whitespace-pre-line">{props.msgData.text}</p>
+				<p className="whitespace-pre-line">
+					{props.msgData.text && props.msgData.text.match(/(https?:\/\/[^\s]+)/g) ? (
+						<>
+							{/* <span className="whitespace-pre-line">{props.msgData.text.split(/(https?:\/\/[^\s]+)/g)?.[0]}</span>
+							<a
+								className="whitespace-pre-line"
+								target="_blank"
+								href={props.msgData.text.match(/(https?:\/\/[^\s]+)/g)?.[0]}
+							>
+								{props.msgData.text.match(/(https?:\/\/[^\s]+)/g)?.[0]}
+							</a>
+							<span className="whitespace-pre-line">{props.msgData.text.split(/(https?:\/\/[^\s]+)/g)?.[2]}</span> */}
+							{props.msgData.text.split(/(https?:\/\/[^\s]+)/g).map((text, i) =>
+								i % 2 == 0 ? (
+									<span className="whitespace-pre-line">{text}</span>
+								) : (
+									<a className="whitespace-pre-line" target="_blank" href={text}>
+										{text}
+									</a>
+								)
+							)}
+						</>
+					) : props.msgData.text && props.msgData.text.includes('«Этап трудоустройства»') ? (
+						<>
+							<span>{props.msgData.text.substring(0, props.msgData.text.indexOf('«'))}</span>
+							<a
+								onClick={() => {
+									navigate('/services/myresponds/employment')
+								}}
+								className="underline text-blue-600 cursor-pointer"
+							>
+								«Этап трудоустройства»
+							</a>
+						</>
+					) : (
+						props.msgData.text
+					)}
+				</p>
 				{props.msgData.fileInfos && (
 					<div className="flex flex-col gap-[8px]">
 						{props.msgData.fileInfos.map(fileInfo => (
@@ -198,29 +235,31 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 							(props.msgData.sender === 'PERSONNEL_DEPARTMENT' && isEmpDep)
 					})}
 				>
-					{props.msgData.reserveTimes.map((time, i) => (
-						<Button
-							onClick={() => {
-								setPressedButton(i)
-								answerReserveTime({
-									respondId: page_id,
-									time: time,
-									messageId: props.msgData.id
-								}).then(() => {
-									setIsResponsed(true)
-								})
-							}}
-							disabled={isEmpDep || isResponsed}
-							loading={answerReserveTimeLoading && pressedButton === i}
-							className={`w-full text-[16px]/[19.2px] text-wrap h-full border-black rounded-[54.5px] py-[12px] px-[20px] text-center bg-inherit outline-none border cursor-pointer test:px-[12px]  ${
-								isEmpDep || isResponsed ? 'select-none !cursor-not-allowed' : ''
-							}`}
-						>
-							{dayjs(time).format().substring(0, 10).split('-').reverse().join('.') +
-								', ' +
-								dayjs(time).format().substring(11, 16)}
-						</Button>
-					))}
+					<div className="col-span-3 flex justify-between gap-[20px]">
+						{props.msgData.reserveTimes.map((time, i) => (
+							<Button
+								onClick={() => {
+									setPressedButton(i)
+									answerReserveTime({
+										respondId: page_id,
+										time: time,
+										messageId: props.msgData.id
+									}).then(() => {
+										setIsResponsed(true)
+									})
+								}}
+								disabled={isEmpDep || isResponsed}
+								loading={answerReserveTimeLoading && pressedButton === i}
+								className={`w-full text-[16px]/[19.2px] text-wrap h-full border-black rounded-[54.5px] py-[12px] px-[20px] text-center bg-inherit outline-none border cursor-pointer test:px-[12px]  ${
+									isEmpDep || isResponsed ? 'select-none !cursor-not-allowed' : ''
+								}`}
+							>
+								{dayjs(time).format().substring(0, 10).split('-').reverse().join('.') +
+									', ' +
+									dayjs(time).format().substring(11, 16)}
+							</Button>
+						))}
+					</div>
 					<Button
 						onClick={() => {
 							setPressedButton(3)

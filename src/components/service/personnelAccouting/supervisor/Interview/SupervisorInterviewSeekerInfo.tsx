@@ -192,7 +192,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 			return () => clearInterval(intervalId) // Очищаем интервал при размонтировании
 		}, [props.time])
 		return (
-			<div className="flex flex-col gap-[30px]">
+			<div className="flex flex-col gap-[30px] mr-[10%]">
 				{format === 'OFFLINE' &&
 					!isInterviewStarted && ( // Офлайн собес, ожидание
 						<div className="flex flex-col justify-center">
@@ -368,7 +368,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 					</button>
 				</div>
 				<div className="mt-[52px] flex flex-col gap-[36px]">
-					<div className="flex flex-wrap gap-[150px]">
+					<div className="flex justify-between flex-wrap gap-y-[40px]">
 						<div className="flex gap-[20px]">
 							<div className="flex h-[167px] w-[167px] bg-[#D9D9D9]">
 								<AvatartandardSvg />

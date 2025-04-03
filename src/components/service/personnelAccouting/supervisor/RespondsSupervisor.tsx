@@ -102,50 +102,50 @@ export const RespondsSupervisor = () => {
 						}}
 					>
 						<label
-							className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
+							className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font cursor-pointer ${
 								requestData.status === 'status='
 									? 'text-white bg-dasha-blue'
-									: 'text-black border-solid border-black border-[1px]'
+									: 'text-black border-solid border-black border-[1px] hover:bg-white hover:border-dasha-light-blue hover:text-dasha-light-blue'
 							} font-normal text-[16px]/[16px]`}
 						>
 							<Radio value={'status='} className="hidden"></Radio>
 							все
 						</label>
 						<label
-							className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
+							className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font cursor-pointer ${
 								requestData.status === 'status=' + respondStatus[respondStatus.IN_SUPERVISOR_REVIEW]
 									? 'text-white bg-dasha-blue'
-									: 'text-black border-solid border-black border-[1px]'
+									: 'text-black border-solid border-black border-[1px] hover:bg-white hover:border-dasha-light-blue hover:text-dasha-light-blue'
 							} font-normal text-[16px]/[16px]`}
 						>
 							<Radio value={'status=' + respondStatus[respondStatus.IN_SUPERVISOR_REVIEW]} className="hidden"></Radio>
 							на рассмотрении
 						</label>
 						<label
-							className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
+							className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font cursor-pointer ${
 								requestData.status === 'status=' + respondStatus[respondStatus.INVITATION]
 									? 'text-white bg-dasha-blue'
-									: 'text-black border-solid border-black border-[1px]'
+									: 'text-black border-solid border-black border-[1px] hover:bg-white hover:border-dasha-light-blue hover:text-dasha-light-blue'
 							} font-normal text-[16px]/[16px]`}
 						>
 							<Radio value={'status=' + respondStatus[respondStatus.INVITATION]} className="hidden"></Radio>
 							приглашение на собеседование
 						</label>
 						<label
-							className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
+							className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font cursor-pointer ${
 								requestData.status === 'status=' + respondStatus[respondStatus.EMPLOYMENT]
 									? 'text-white bg-dasha-blue'
-									: 'text-black border-solid border-black border-[1px]'
+									: 'text-black border-solid border-black border-[1px] hover:bg-white hover:border-dasha-light-blue hover:text-dasha-light-blue'
 							} font-normal text-[16px]/[16px]`}
 						>
 							<Radio value={'status=' + respondStatus[respondStatus.EMPLOYMENT]} className="hidden"></Radio>
 							этап трудоустройства
 						</label>
 						<label
-							className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
+							className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font cursor-pointer ${
 								requestData.status === 'status=' + respondStatus[respondStatus.ARCHIVE]
 									? 'text-white bg-dasha-blue'
-									: 'text-black border-solid border-black border-[1px]'
+									: 'text-black border-solid border-black border-[1px] hover:bg-white hover:border-dasha-light-blue hover:text-dasha-light-blue'
 							} font-normal text-[16px]/[16px]`}
 						>
 							<Radio value={'status=' + respondStatus[respondStatus.ARCHIVE]} className="hidden"></Radio>

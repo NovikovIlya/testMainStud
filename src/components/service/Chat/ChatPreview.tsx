@@ -86,19 +86,11 @@ export const ChatPreview = (props: {
 	}, [chatInfo.lastMessageDate])
 
 	useEffect(() => {
-		pathname.includes(props.respondId.toString()) &&
-			chatInfo.id !== 0 &&
-			(dispatch(setCurrentVacancyName(props.respName)),
-			handleNavigate(
-				isEmpDemp
-					? `/services/personnelaccounting/chat/id/${chatInfo.id}`
-					: `/services/myresponds/chat/id/${chatInfo.id}`
-			))
 		window.addEventListener('newmessage', smallhandler)
 		return () => {
 			window.removeEventListener('newmessage', smallhandler)
 		}
-	}, [pathname, chatInfo])
+	}, [])
 
 	return (
 		<>

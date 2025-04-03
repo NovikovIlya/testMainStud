@@ -94,6 +94,8 @@ export const VacancyRespondItem = (
 								? 'на рассмотрении у руководителя'
 								: props.status === respondStatus[respondStatus.INVITATION]
 								? 'приглашение'
+								: props.status === respondStatus[respondStatus.EMPLOYMENT]
+								? 'трудоустройство'
 								: props.status === respondStatus[respondStatus.REJECTED]
 								? 'отклонено'
 								: 'на рассмотрении'}

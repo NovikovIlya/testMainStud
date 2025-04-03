@@ -1,12 +1,11 @@
 import { performanceItem } from '../../api/types'
 
-
 export interface InitialState {
 	accessToken: string | null
 	refreshToken: string | null
 	user: User | null
-	edit: boolean,
-	subRole:any,
+	edit: boolean
+	subRole: any
 }
 export type Documentation = {
 	links: {
@@ -62,7 +61,7 @@ export interface Role {
 	login: string
 	id: string
 	type: string
-	credentials?:any
+	credentials?: any
 }
 export interface ICalendarItem {
 	semester: number
@@ -127,3 +126,11 @@ export interface IMe {
 	countryId: number
 }
 
+export type EducationTableDataType = {
+	language: 'RU' | 'ENG'
+	beginningYear: string
+	graduateYear: string
+	educationLevelId: number
+	specialization: string
+	nameOfInstitute: string
+}

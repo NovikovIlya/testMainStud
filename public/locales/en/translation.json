@@ -867,7 +867,13 @@
 	"continue": "By continuing to use the site, you agree to the processing of cookies and other user data in accordance with",
 	"block" : "You can block the use of cookies by the site in your browser settings.",
 	"itClear" : "It's clear",
-	"aboutWork": "About work"
+	"aboutWork": "About work",
+	"nativeLanguage": "Native Language",
+	"foreignLanguage": "Foreign Languages",
+	"sert": "Language certificate",
+	"langZnan": "Knowledge of languages",
+	"prikrep": "Attach certificate",
+	"razrer": "I give permission to publish on the KFU portal" 
 		
 	  
 	

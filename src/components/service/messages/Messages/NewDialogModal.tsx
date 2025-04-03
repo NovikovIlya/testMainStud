@@ -63,7 +63,7 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 		setIsload(true)
 		const obj = {
 			message: form.getFieldValue('text'),
-			senderName: `${user.lastname} ${user.firstname} ${user.middlename}`,
+			senderName: `${user.lastname} ${user.firstname} ${user.middleName}`,
 			recipientType: type,
 			recipientName: form.getFieldValue('student'),
 			recipientId: id,

@@ -12,6 +12,7 @@ import TableLanguages from './TableLanguages'
 import UploadAvatar from './UploadAvatar'
 import { useGetforeignLanguagesQuery, useGetNativeLanguagesQuery } from '../../../store/api/aboutMe/forAboutMe'
 import { SkeletonPage } from './Skeleton'
+import { t } from 'i18next'
 
 
 const Languages = () => {
@@ -21,7 +22,10 @@ const Languages = () => {
 	const {data:dataForeign} = useGetforeignLanguagesQuery()
 	const nativeLanguageForm = Form.useWatch('languages', form)
 	console.log('nativeLanguageForm',nativeLanguageForm)
-	
+
+	useEffect(() => {
+		form.setFieldsValue({ languages: [{value:'123',label:'123'}] }); // Устанавливает '123' как выбранный
+	}, []);
 
 	const onFinish = (values: any) => {
 		// values содержит { checkboxes: [...] }
@@ -56,7 +60,7 @@ const Languages = () => {
 					<Col span={24}>
 						<Form form={form}>
 							<Form.Item
-								label={<div className="text-[16px] font-bold">Родной язык</div>} // Лейбл сверху
+								label={<div className="text-[16px] font-bold">{t('nativeLanguage')}</div>} // Лейбл сверху
 								name="languages" // Ключ для данных формы
 								labelCol={{ span: 6 }}
 								wrapperCol={{ span: 12 }}
@@ -68,22 +72,17 @@ const Languages = () => {
 									optionFilterProp="label"
 									mode="multiple"
 									allowClear
-									placeholder="Добавить язык"
-									options={
-										dataNative ? 
-										dataNative?.languages?.map((item:any)=>{
-											return {
-												label:item.language,
-												value:item.code
-
-											}
-										})
-										: []
+									
+									options={ 
+										[
+											{value:'123',label:'123'},
+											{value:'321',label:'321'}
+										]
 									}
 								/>
 							</Form.Item>
 
-							<Button className='mt-4' type="primary" htmlType="submit">Сохранить</Button>
+							<Button className='mt-4' type="primary" htmlType="submit">{t('save')}</Button>
 						</Form>
 					</Col>
 				</Row>
@@ -94,7 +93,7 @@ const Languages = () => {
 				<Spin spinning={false}>
 				<Row className="mb-3">
 					<Title className="!mb-0" level={5}>
-						Иностранные языки
+						{t('foreignLanguage')}
 					</Title>
 				</Row>
 				<Row>
@@ -102,15 +101,15 @@ const Languages = () => {
 				</Row>
 				<Row className="flex justify-center mt-4">
 					<Button onClick={showModal} type="primary" style={{ marginBottom: 16 }}>
-						Добавить язык
+						{t('add')}
 					</Button>
 				</Row>
 				</Spin>
 
-				<Modal className='' footer={null} title="Знание языков" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+				<Modal className='' footer={null} title={t('langZnan')} open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
 					<Form  className='mt-4'>
 						<Form.Item
-								label={<div className="">Язык</div>} 
+								label={<div className="">{t('language')}</div>} 
 								name="languagesForm" 
 								labelCol={{ span: 6 }}
 								wrapperCol={{ span: 24 }}
@@ -120,7 +119,7 @@ const Languages = () => {
 								<Select
 									mode="multiple"
 									allowClear
-									placeholder="Добавить язык"
+									placeholder={t('add')}
 									options={[
 										{ value: 'en', label: 'English' },
 										{ value: 'es', label: 'Spanish' }
@@ -130,7 +129,7 @@ const Languages = () => {
 
 
 							<Form.Item
-								label={<div className="">Уровень владения</div>} 
+								label={<div className="">{t('level')}</div>} 
 								name="levelForm" 
 								labelCol={{ span: 12 }}
 								wrapperCol={{ span: 24 }}
@@ -140,7 +139,7 @@ const Languages = () => {
 								<Select
 									mode="multiple"
 									allowClear
-									placeholder="Добавить язык"
+									placeholder={t('add')}
 									options={[
 										{ value: 'en', label: 'English' },
 										{ value: 'es', label: 'Spanish' }
@@ -150,7 +149,7 @@ const Languages = () => {
 
 
 							<Form.Item
-								label={<div className="">Языковые сертификаты</div>} 
+								label={<div className="">{t('sert')}</div>} 
 								name="sertificateForm" 
 								labelCol={{ span: 12 }}
 								wrapperCol={{ span: 24 }}
@@ -160,7 +159,7 @@ const Languages = () => {
 								<Select
 									mode="multiple"
 									allowClear
-									placeholder="Добавить язык"
+									placeholder={t('add')}
 									options={[
 										{ value: 'en', label: 'English' },
 										{ value: 'es', label: 'Spanish' }
@@ -169,17 +168,17 @@ const Languages = () => {
 							</Form.Item>
 
 
-							<div className='mt-14 mb-2'>Прикрепить сертификат</div>
+							<div className='mt-14 mb-2'>{t('prikrep')}</div>
 							<Upload className=''  maxCount={1}  >
-               					 <Button className=' ' icon={<UploadOutlined />}>Добавить файл</Button>
+               					 <Button className=' ' icon={<UploadOutlined />}>{t('add')}</Button>
              				</Upload>
 
 							 <Form.Item className='mt-6' name="sogl" valuePropName="checked" label={null}>
-							   <Checkbox>Даю разрешение публиковать на портале КФУ</Checkbox>
+							   <Checkbox>{t('razrer')}</Checkbox>
 							 </Form.Item>
 							
 
-							<Button type='primary' htmlType='submit'>Добавить</Button>
+							<Button type='primary' htmlType='submit'>{t('add')}</Button>
 					</Form>
 				</Modal>
 			</div>

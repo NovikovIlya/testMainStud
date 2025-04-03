@@ -20,18 +20,18 @@ interface DataType {
 const TableLanguages = ({dataForeign}:any) => {
 	const columns: TableProps<DataType>['columns'] = [
 		{
-			title: 'Язык',
+			title: t('language'),
 			dataIndex: 'language',
 			key: 'name',
 			render: text => <div>{text}</div>
 		},
 		{
-			title: 'Уровень владения',
+			title: t('level'),
 			dataIndex: 'languageLevel',
 			key: 'age'
 		},
 		{
-			title: 'Языковой сертификат',
+			title: t('sert'),
 			dataIndex: 'certificates',
 			key: 'address',
 			render: (certificates) => (

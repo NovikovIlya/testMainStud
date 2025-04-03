@@ -44,13 +44,13 @@ const UploadAvatar = ({dataAboutMe}:any) => {
       message.error(t('error'));
     }
   };
-
+  console.log('avatarUrl111',avatarUrl)
   return (
     <Spin spinning={isLoadingPut || isLoading} className='relative w-[180px] mb-4'>
       <Avatar
         className='bg-[#cbdaf1] rounded-[50%]'
         size={180}
-        src={avatarUrl}
+        src={avatarUrl?.url}
         icon={!avatarUrl && <UserOutlined />}
       />
       <div className='absolute right-3 bottom-3'>

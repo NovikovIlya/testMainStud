@@ -4,15 +4,15 @@ import { apiSlice } from "../apiSlice";
 export const myPracticeService = apiSlice.injectEndpoints({
     endpoints: builder => ({
       // Аватарка
-      getAvatar: builder.query<string, void>({
+      getAvatar: builder.query<any, void>({
         query: () => ({
-          url: '/user-api/settings/photo',
+          url: '/about-me/get-photo',
           method: 'GET',
-          responseHandler: (response) => response.blob(),
+          // responseHandler: (response) => response.blob(),
         }),
-        transformResponse: (blob: Blob) => {
-          return URL.createObjectURL(blob);
-        },
+        // transformResponse: (blob: Blob) => {
+        //   return URL.createObjectURL(blob);
+        // },
         providesTags: ['Avatar'],
         keepUnusedDataFor: 1,
       }),

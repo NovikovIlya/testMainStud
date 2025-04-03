@@ -119,7 +119,7 @@ const Languages = () => {
 								<Select
 									mode="multiple"
 									allowClear
-									placeholder={t('add')}
+								
 									options={[
 										{ value: 'en', label: 'English' },
 										{ value: 'es', label: 'Spanish' }
@@ -139,7 +139,7 @@ const Languages = () => {
 								<Select
 									mode="multiple"
 									allowClear
-									placeholder={t('add')}
+								
 									options={[
 										{ value: 'en', label: 'English' },
 										{ value: 'es', label: 'Spanish' }
@@ -159,7 +159,7 @@ const Languages = () => {
 								<Select
 									mode="multiple"
 									allowClear
-									placeholder={t('add')}
+								
 									options={[
 										{ value: 'en', label: 'English' },
 										{ value: 'es', label: 'Spanish' }

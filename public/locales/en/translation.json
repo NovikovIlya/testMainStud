@@ -873,7 +873,9 @@
 	"sert": "Language certificate",
 	"langZnan": "Knowledge of languages",
 	"prikrep": "Attach certificate",
-	"razrer": "I give permission to publish on the KFU portal" 
+	"razrer": "I give permission to publish on the KFU portal",
+	"language": "Language",
+	"level": "Level"
 		
 	  
 	

@@ -28,7 +28,7 @@ const AboutMeNew = () => {
 
 	return (
 		<div className="px-[50px] pt-[60px] mb-[50px]">
-
+      ыфвфыв
 		</div>
 	)
 }

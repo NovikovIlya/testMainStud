@@ -1,5 +1,5 @@
 import { EditOutlined, EyeOutlined, QuestionCircleOutlined } from '@ant-design/icons'
-import { Button, Checkbox, Col, Divider, Form, Row, Tooltip } from 'antd'
+import { Button, Checkbox, Col, Divider, Form, Row, Spin, Tooltip } from 'antd'
 import { Descriptions } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
 import Title from 'antd/es/typography/Title'
@@ -16,8 +16,8 @@ const AboutMeNew = () => {
 	const { t } = useTranslation()
 	const [form] = Form.useForm()
 	const [content, setContent] = useState('')
-	const { data: dataAboutMe, isFetching: isFetchingAboutMe } = useGetAboutMeQuery()
-	const [sendComment,{}] = useSetCommentMutation()
+	const { data: dataAboutMe, isLoading: isFetchingAboutMe } = useGetAboutMeQuery()
+	const [sendComment,{isLoading:isLoadComment}] = useSetCommentMutation()
 	console.log('content',content)
 	useEffect(() => {
 		if (dataAboutMe?.employeeAddedDto?.COMMENT) {
@@ -378,6 +378,7 @@ const AboutMeNew = () => {
 					</div>
 
 					<div className="bg-white rounded-xl shadow-md mt-7">
+						<Spin spinning={isLoadComment}>
 						<Row>
 							<Col span={24}>
 								<div className="flex flex-wrap justify-start p-6">
@@ -399,6 +400,7 @@ const AboutMeNew = () => {
 								</div>
 							</Col>
 						</Row>
+						</Spin>
 					</div>
 				</>
 			) : (

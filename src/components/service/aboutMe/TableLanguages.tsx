@@ -39,7 +39,7 @@ const TableLanguages = ({dataForeign}:any) => {
 				{certificates?.map((item:any, index:any) => (
 				  <div key={index}>
 					<a target="_blank" href={item.certificateLink} rel="noopener noreferrer">
-					  {item.certificateName}
+					  {item.certificateName} {index===certificates.length-1 ? '' : ', '}
 					</a>
 				  </div>
 				))}

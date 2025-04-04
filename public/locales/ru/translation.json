@@ -867,5 +867,14 @@
 	"rus": "Русский",
 	"eng": "Английский",
 	"publicationLanguage": "Язык публикации",
-	"educationNotChosen": "Не выбран уровень образования"
+	"educationNotChosen": "Не выбран уровень образования",
+	"institutionNameNotEntered": "Не введено наименование учебного заведения",
+	"educationSubdivision": "Факультет или подразделение",
+	"beginningYear": "Год поступления",
+	"beginningYearNotChosen": "Не выбран год поступления",
+	"graduateYearNotChosen": "Не выбран год окончания",
+	"documentSeries": "Серия документа об окончании",
+	"documentNumber": "Номер документа об окончании",
+	"qualification": "Квалифиакация",
+	"issueDate": "Дата выдачи"
 }

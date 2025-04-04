@@ -1,5 +1,6 @@
 import { PlusCircleFilled } from '@ant-design/icons'
-import { Button, ConfigProvider, Form, Modal, Radio, Select } from 'antd'
+import { Button, ConfigProvider, DatePicker, Form, Input, Modal, Radio, Select } from 'antd'
+import dayjs from 'dayjs'
 import i18next, { t } from 'i18next'
 import { useState } from 'react'
 
@@ -59,6 +60,54 @@ export const AddEducationModal = () => {
 								></Select>
 							</Form.Item>
 						</div>
+						<Form.Item
+							name={'nameOfInstitute'}
+							label={t('nameEducational') + '*'}
+							rules={[{ required: true, message: t('institutionNameNotEntered') }]}
+						>
+							<Input className="w-full"></Input>
+						</Form.Item>
+						<Form.Item name={'subdivision'} label={t('educationSubdivision')}>
+							<Input className="w-full"></Input>
+						</Form.Item>
+						<Form.Item name={'subdivision'} label={t('educationSubdivision')}>
+							<Input className="w-full"></Input>
+						</Form.Item>
+						<div className="flex w-full gap-[32px]">
+							<Form.Item
+								name={'beginningYear'}
+								label={t('beginningYear') + '*'}
+								rules={[{ required: true, message: t('beginningYearNotChosen') }]}
+								className="w-full"
+							>
+								<DatePicker.YearPicker className="w-full" maxDate={dayjs()}></DatePicker.YearPicker>
+							</Form.Item>
+							<Form.Item
+								name={'graduateYear'}
+								label={t('graduateYear') + '*'}
+								className="w-full"
+								rules={[{ required: true, message: t('graduateYearNotChosen') }]}
+							>
+								<DatePicker.YearPicker className="w-full" maxDate={dayjs()}></DatePicker.YearPicker>
+							</Form.Item>
+						</div>
+						<div className="flex w-full gap-[32px]">
+							<Form.Item name={'series'} label={t('documentSeries')} className="w-full">
+								<Input></Input>
+							</Form.Item>
+							<Form.Item name={'number'} label={t('documentNumber')} className="w-full">
+								<Input></Input>
+							</Form.Item>
+						</div>
+						<Form.Item name={'specialization'} label={t('specialization')}>
+							<Input className="w-full"></Input>
+						</Form.Item>
+						<Form.Item name={'qualification'} label={t('qualification')}>
+							<Input className="w-full"></Input>
+						</Form.Item>
+						<Form.Item name={'issueDate'} label={t('issueDate')}>
+							<DatePicker className="w-[47%]" maxDate={dayjs()}></DatePicker>
+						</Form.Item>
 						<Button htmlType="submit" type="primary" className="!rounded-[54.5px]">
 							{t('Save')}
 						</Button>

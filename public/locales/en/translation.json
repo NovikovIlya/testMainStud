@@ -877,5 +877,14 @@
 	"rus": "Russian",
 	"eng": "English",
 	"publicationLanguage": "Publication language",
-	"educationNotChosen": "Choose education level"
+	"educationNotChosen": "Choose education level",
+	"institutionNameNotEntered": "Enter institution name",
+	"educationSubdivision": "Faculty or subdivision",
+	"beginningYear": "Admission year",
+	"beginningYearNotChosen": "Enter admission year",
+	"graduateYearNotChosen": "Enter graduate year",
+	"documentSeries": "Graduation document series",
+	"documentNumber": "Graduation document number",
+	"qualification": "Qualification",
+	"issueDate": "Issue date"
 }

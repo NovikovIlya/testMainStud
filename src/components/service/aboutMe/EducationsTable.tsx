@@ -42,23 +42,7 @@ export const EducationsTable = () => {
 			render: (_, record) => (
 				<Space size="middle">
 					<EyeTwoTone />
-				</Space>
-			)
-		},
-		{
-			title: '',
-			key: 'action',
-			render: (_, record) => (
-				<Space size="middle">
 					<EditTwoTone />
-				</Space>
-			)
-		},
-		{
-			title: '',
-			key: 'action',
-			render: (_, record) => (
-				<Space size="middle">
 					<DeleteTwoTone />
 				</Space>
 			)
@@ -99,7 +83,8 @@ export const EducationsTable = () => {
 				theme={{
 					components: {
 						Table: {
-							headerBg: 'rgb(245, 248, 251)'
+							headerBg: 'rgb(245, 248, 251)',
+							cellPaddingInline: 40
 						}
 					}
 				}}

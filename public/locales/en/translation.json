@@ -872,5 +872,10 @@
 	"razrer": "I give permission to publish on the KFU portal",
 	"finishedEducationalInstitutions": "Finished educational institutions",
 	"language": "Language",
-	"years": "Education years"
+	"years": "Education years",
+	"addEducation": "add education",
+	"rus": "Russian",
+	"eng": "English",
+	"publicationLanguage": "Publication language",
+	"educationNotChosen": "Choose education level"
 }

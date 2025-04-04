@@ -862,5 +862,10 @@
 	"razrer": "Даю разрешение публиковать на портале КФУ",
 	"finishedEducationalInstitutions": "Оконченные учебные заведения",
 	"language": "Язык",
-	"years": "Годы обучения"
+	"years": "Годы обучения",
+	"addEducation": "добавить образование",
+	"rus": "Русский",
+	"eng": "Английский",
+	"publicationLanguage": "Язык публикации",
+	"educationNotChosen": "Не выбран уровень образования"
 }

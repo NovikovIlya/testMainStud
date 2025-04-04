@@ -7,6 +7,7 @@ import Title from 'antd/es/typography/Title'
 import { t } from 'i18next'
 import React, { useEffect } from 'react'
 
+import { AddEducationModal } from './AddEducationModal'
 import { EducationsTable } from './EducationsTable'
 import UploadAvatar from './UploadAvatar'
 
@@ -30,6 +31,7 @@ const EducationNew = () => {
 			<h1 className="font-bold text-[28px]/[28px]">{t('education')}</h1>
 			<h2 className="pt-[52px] font-bold text-[14px]/[100%]">{t('finishedEducationalInstitutions')}</h2>
 			<EducationsTable />
+			<AddEducationModal />
 		</div>
 	)
 }

@@ -74,6 +74,25 @@ export const myPracticeService = apiSlice.injectEndpoints({
         providesTags: ['nativeLanguages'],
         keepUnusedDataFor: 1,
       }),
+      getAllNativeLanguages: builder.query<any, void>({
+        query: () => ({
+          url: '/languages',
+          method: 'GET',
+         
+        }),
+        providesTags: ['nativeLanguages'],
+        keepUnusedDataFor: 1,
+      }),
+      setNative: builder.mutation<any, any>({
+        query: (body) => ({
+            url: '/languages/native',
+            method: 'POST',
+            body,
+           
+          }),
+         
+          invalidatesTags: ['nativeLanguages'],
+      }),
 
 
       getforeignLanguages: builder.query<any, void>({
@@ -85,6 +104,9 @@ export const myPracticeService = apiSlice.injectEndpoints({
         providesTags: ['foreignLanguages'],
         keepUnusedDataFor: 1,
       }),
+
+
+
     })
   });
 
@@ -96,5 +118,7 @@ export const myPracticeService = apiSlice.injectEndpoints({
     useGetAboutMeQuery,
     useGetNativeLanguagesQuery,
     useGetforeignLanguagesQuery,
-    useSetCommentMutation
+    useSetCommentMutation,
+    useGetAllNativeLanguagesQuery,
+    useSetNativeMutation,
    } = myPracticeService;

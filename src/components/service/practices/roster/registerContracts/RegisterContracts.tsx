@@ -317,7 +317,7 @@ export const RegisterContracts = () => {
     useEffect(()=>{
         setCheck(false)
     },[])
-   console.log('check,',check)
+     console.log('check,',check)
 
    
 

@@ -875,7 +875,9 @@
 	"prikrep": "Attach certificate",
 	"razrer": "I give permission to publish on the KFU portal",
 	"language": "Language",
-	"level": "Level"
+	"level": "Level",
+	"m": "Male",
+	"w": "Female"
 		
 	  
 	

@@ -47,7 +47,7 @@ const AboutMeNew = () => {
 					<Col span={12}>
 						<div className="flex flex-wrap justify-center p-[40px]">
 							<UploadAvatar dataAboutMe={dataAboutMe} />
-							<div className="w-full mt-3 text-center">{`${dataAboutMe?.LASTNAME} ${dataAboutMe?.FIRSTNAME} ${dataAboutMe?.SECONDNAME}`}</div>
+							<div className="w-full mt-3 text-center">{`${dataAboutMe?.LASTNAME || ''} ${dataAboutMe?.FIRSTNAME || ''} ${dataAboutMe?.SECONDNAME || ''}`}</div>
 						</div>
 					</Col>
 					<Col span={12}>
@@ -55,12 +55,13 @@ const AboutMeNew = () => {
 							<Descriptions column={1} title={t('generalInfo')}>
 								<Descriptions.Item label={t('birthDate')}>{dataAboutMe?.BIRTH_DATE}</Descriptions.Item>
 								<Descriptions.Item label={t('gender')}>
-									{dataAboutMe?.SEX === 'm' ? 'Мужской' : 'Женский'}
+									{dataAboutMe?.SEX ? t(dataAboutMe?.SEX) : ''}
 								</Descriptions.Item>
 								<Descriptions.Item label={t('citizenshipType')}>{dataAboutMe?.CITIZENSHIP_TYPE}</Descriptions.Item>
+								{dataAboutMe?.CITIZENSHIP_COUNTRY ? 
 								<Descriptions.Item label={t('citizenshipCountry')}>
 									{dataAboutMe?.CITIZENSHIP_COUNTRY}
-								</Descriptions.Item>
+								</Descriptions.Item> : ''}
 								{dataAboutMe?.BIRTH_CITY ? (
 									<Descriptions.Item label={t('birthPlace')}>{dataAboutMe?.BIRTH_CITY}</Descriptions.Item>
 								) : (

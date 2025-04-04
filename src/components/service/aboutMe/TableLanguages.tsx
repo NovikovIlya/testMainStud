@@ -1,10 +1,19 @@
-import { DeleteTwoTone, EditTwoTone, EyeTwoTone, UploadOutlined } from '@ant-design/icons'
+import {
+	DeleteTwoTone,
+	EditTwoTone,
+	EyeInvisibleOutlined,
+	EyeInvisibleTwoTone,
+	EyeTwoTone,
+	UploadOutlined
+} from '@ant-design/icons'
 import { Button, Checkbox, ConfigProvider, Form, Modal, Row, Select, Space, Table, Tag, Upload } from 'antd'
 import type { TableProps } from 'antd'
 import { t } from 'i18next'
 import React, { useState } from 'react'
 
 import { truncateString } from '../../../utils/truncateString'
+
+import './TableLanguage.scss'
 
 interface DataType {
 	key: string
@@ -14,9 +23,10 @@ interface DataType {
 	tags: string[]
 }
 
-const TableLanguages = ({ dataForeign, setSelectId }: any) => {
+const TableLanguages = ({ dataForeign, setSelectId, selectId }: any) => {
 	const [isModalOpenEdit, setIsModalOpenEdit] = useState(false)
-
+	const [rowStates, setRowStates] = useState({})
+	console.log('rowStates', rowStates)
 	const columns: TableProps<DataType>['columns'] = [
 		{
 			title: t('language'),
@@ -49,10 +59,60 @@ const TableLanguages = ({ dataForeign, setSelectId }: any) => {
 		{
 			title: '',
 			key: 'action',
+			dataIndex: 'isPublished',
 			render: (_, record) => (
-				<Space size="middle">
-					<EyeTwoTone />
-				</Space>
+				<>
+					{/* @ts-ignore */}
+					{record?.isPublished ? (
+						<EyeTwoTone
+							// @ts-ignore
+							className={`hover:scale-[140%]`}
+							onClick={e => {
+								e.preventDefault()
+								e.stopPropagation()
+								// @ts-ignore
+								setSelectId(record?.studLangId)
+								// setRowStates(prevState => {
+								// 	const newStates = { ...prevState };
+								// 	// @ts-ignore
+								// 	if (newStates[record?.studLangId]) {
+								// 			// @ts-ignore
+								// 	  delete newStates[record?.studLangId]; // Снимаем выделение
+								// 	// @ts-ignore
+								// 	} else {
+								// 	// @ts-ignore
+								// 	  newStates[record?.studLangId] = true; // Выделяем
+								// 	}
+								// 	return newStates;
+								//   });
+							}}
+						/>
+					) : (
+						<EyeInvisibleTwoTone
+							// @ts-ignore
+							className={` hover:scale-[140%]`}
+							onClick={e => {
+								e.preventDefault()
+								e.stopPropagation()
+								// @ts-ignore
+								setSelectId(record?.studLangId)
+								// setRowStates(prevState => {
+								// 	const newStates = { ...prevState };
+								// 	// @ts-ignore
+								// 	if (newStates[record?.studLangId]) {
+								// 			// @ts-ignore
+								// 	  delete newStates[record?.studLangId]; // Снимаем выделение
+								// 	// @ts-ignore
+								// 	} else {
+								// 	// @ts-ignore
+								// 	  newStates[record?.studLangId] = true; // Выделяем
+								// 	}
+								// 	return newStates;
+								//   });
+							}}
+						/>
+					)}
+				</>
 			)
 		},
 		{
@@ -61,7 +121,8 @@ const TableLanguages = ({ dataForeign, setSelectId }: any) => {
 			render: (_, record) => (
 				<Space size="middle">
 					<EditTwoTone
-						className='hover:scale-[140%] '
+						className="hover:scale-[140%] transition-transform duration-200 delay-100"
+
 						onClick={() => {
 							console.log('record', record)
 							// @ts-ignore
@@ -77,7 +138,7 @@ const TableLanguages = ({ dataForeign, setSelectId }: any) => {
 			key: 'action',
 			render: (_, record) => (
 				<Space size="middle">
-					<DeleteTwoTone />
+					<DeleteTwoTone className="hover:scale-[140%] " />
 				</Space>
 			)
 		}
@@ -206,13 +267,22 @@ const TableLanguages = ({ dataForeign, setSelectId }: any) => {
 						</Button>
 					</Form>
 				</Modal>
-				<Table<DataType>
-					pagination={false}
-					columns={columns}
-					dataSource={dataForeign}
-					className="w-full"
-					locale={{ emptyText: t('noData') }}
-				/>
+				<div className={'registerContracts animate-fade-in w-full'}>
+					<Table<DataType>
+						pagination={false}
+						columns={columns}
+						dataSource={dataForeign?.map((item: any) => ({
+							...item,
+							key: item.studLangId
+						}))}
+						rowClassName={record => {
+							// @ts-ignore
+							return record?.isPublished ? '' : 'bg-gray-200 opacity-60'
+						}}
+						className="w-full my-custom-table  select-none"
+						locale={{ emptyText: t('noData') }}
+					/>
+				</div>
 			</ConfigProvider>
 		</>
 	)

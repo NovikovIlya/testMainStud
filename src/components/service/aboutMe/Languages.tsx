@@ -9,7 +9,7 @@ import Title from 'antd/es/typography/Title'
 import { t } from 'i18next'
 import React, { useEffect, useState } from 'react'
 
-import { useGetNativeLanguagesQuery, useGetforeignLanguagesQuery } from '../../../store/api/aboutMe/forAboutMe'
+import { useGetAllNativeLanguagesQuery, useGetNativeLanguagesQuery, useGetforeignLanguagesQuery, useSetNativeMutation } from '../../../store/api/aboutMe/forAboutMe'
 
 import { SkeletonPage } from './Skeleton'
 import TableLanguages from './TableLanguages'
@@ -20,17 +20,23 @@ const Languages = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const [selectId, setSelectId] = useState(null)
 	const { data: dataNative, isFetching: isFetchingNative } = useGetNativeLanguagesQuery()
+	const {data:dataAll} = useGetAllNativeLanguagesQuery()
 	const { data: dataForeign } = useGetforeignLanguagesQuery()
+	const [setNative,{}] = useSetNativeMutation()
 	const nativeLanguageForm = Form.useWatch('languages', form)
 	console.log('selectId', selectId)
 
 	useEffect(() => {
-		form.setFieldsValue({ languages: [{ value: '123', label: '123' }] }) // Устанавливает '123' как выбранный
+		form.setFieldsValue({ languages: dataNative }) // Устанавливает '123' как выбранный
 	}, [])
 
-	const onFinish = (values: any) => {
+	const onFinish = () => {
 		// values содержит { checkboxes: [...] }
-		console.log('Отправка:', values)
+		console.log('dataNative',dataNative)
+		console.log('nativeLanguageForm',nativeLanguageForm)
+		setNative(
+			{languageCodes:nativeLanguageForm}
+		)
 	}
 
 	const handleSubmit = (values: { content: string }) => {}
@@ -55,11 +61,11 @@ const Languages = () => {
 
 	return (
 		<div className="px-[50px] pt-[60px] mb-[50px]">
-			<div className="bg-white rounded-xl shadow-md p-[24px]">
+			<div className=" rounded-xl  animate-fade-in">
 				<Spin spinning={false}>
-					<Row>
+					<Row className='mb-4 mt-3'>
 						<Col span={24}>
-							<Form form={form}>
+							<Form form={form} onFinish={onFinish}>	
 								<Form.Item
 									label={<div className="text-[16px] font-bold">{t('nativeLanguage')}</div>} // Лейбл сверху
 									name="languages" // Ключ для данных формы
@@ -73,14 +79,14 @@ const Languages = () => {
 										optionFilterProp="label"
 										mode="multiple"
 										allowClear
-										options={[
-											{ value: '123', label: '123' },
-											{ value: '321', label: '321' }
-										]}
+										options={dataAll?.map((item:any) => ({
+											value: item.code,
+											label: item.language,
+										}))}
 									/>
 								</Form.Item>
 
-								<Button className="mt-4" type="primary" htmlType="submit">
+								<Button  className="mt-4" type="primary" htmlType="submit">
 									{t('save')}
 								</Button>
 							</Form>
@@ -89,7 +95,7 @@ const Languages = () => {
 				</Spin>
 			</div>
 
-			<div className="bg-white rounded-xl shadow-md mt-4 p-[24px]">
+			<div className=" rounded-xl  mt-16 animate-fade-in">
 				<Spin spinning={false}>
 					<Row className="mb-3">
 						<Title className="!mb-0" level={5}>
@@ -97,12 +103,15 @@ const Languages = () => {
 						</Title>
 					</Row>
 					<Row>
-						<TableLanguages setSelectId={setSelectId} dataForeign={dataForeign} />
+						<TableLanguages selectId={selectId} setSelectId={setSelectId} dataForeign={dataForeign} />
 					</Row>
-					<Row className="flex justify-center mt-4">
-						<Button onClick={showModal} type="primary" style={{ marginBottom: 16 }}>
-							{t('add')}
+					<Row className="flex items-center justify-start mt-4 gap-2">
+						<div onClick={showModal} className='gap-2 flex items-center cursor-pointer hover:animate-pulse transition delay-150 '>
+						<Button className='rounded-[50%] !w-[28px] hover:animate-spin transition delay-150 '  type="primary" >
+							+ 
 						</Button>
+						<span>{t('add')}</span>
+						</div>
 					</Row>
 				</Spin>
 

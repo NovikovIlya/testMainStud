@@ -107,6 +107,7 @@ export const ContactInformation = () => {
 		})
 	}
 
+	// @ts-ignore
 	const sortedEmails = dataEmail?.toSorted((a:any, b:any) => {
 		return b.verified === a.verified ? 0 : b.verified ? 1 : -1
 	})
@@ -116,9 +117,9 @@ export const ContactInformation = () => {
 
 	return (
 	
-		<Form form={form} onFinish={onSubmitPhone2}>
-			<section className="max-w-2xl">
-				<Card className='bg-white rounded-xl shadow-md overflow-hidden mt-4 '>
+		<Form form={form} onFinish={onSubmitPhone2} className='w-full'>
+			<section className=" w-full">
+				<Card className='bg-white rounded-xl shadow-md overflow-hidden mt-4 w-full'>
 					<h3>{t('mainMail')}</h3>
 					<div className='bg-gray-50 rounded-lg mt-2 p-3'>
 						<a href={`mailto:${mail}`}>{mail}</a>		

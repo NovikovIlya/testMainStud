@@ -26,6 +26,7 @@ export const CustomRangePicker = () => {
                 className={`text-2xl w-full`}
                 format={'DD.MM.YYYY'}
                 onChange={(dates) => {
+                    // @ts-ignore
                     changeDatePicker(dates)
                     console.log(dates)
                 }}

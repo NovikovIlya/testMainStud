@@ -142,6 +142,7 @@ export const TableView = () => {
         >
             <Table
                 rowSelection={{type: "checkbox",}}
+                // @ts-ignore
                 columns={columns}
                 pagination={false}
                 size={'middle'}

@@ -34,7 +34,19 @@ export const AddEducationModal = () => {
 						setIsModalOpen(false)
 					}}
 				>
-					<Form form={form} layout="vertical" requiredMark={false} className="w-full">
+					<Form
+						form={form}
+						layout="vertical"
+						requiredMark={false}
+						className="w-full"
+						onFinish={values => {
+							let reader = new FileReader()
+							reader.onload = e => {
+								console.log({ ...values, file: e.target?.result })
+							}
+							reader.readAsDataURL(values.file.file.originFileObj)
+						}}
+					>
 						<Form.Item name={'language'} label={t('publicationLanguage')}>
 							<Radio.Group>
 								<Radio value={'RU'}>{t('rus')}</Radio>
@@ -65,9 +77,6 @@ export const AddEducationModal = () => {
 							label={t('nameEducational') + '*'}
 							rules={[{ required: true, message: t('institutionNameNotEntered') }]}
 						>
-							<Input className="w-full"></Input>
-						</Form.Item>
-						<Form.Item name={'subdivision'} label={t('educationSubdivision')}>
 							<Input className="w-full"></Input>
 						</Form.Item>
 						<Form.Item name={'subdivision'} label={t('educationSubdivision')}>
@@ -136,7 +145,14 @@ export const AddEducationModal = () => {
 								</div>
 							}
 						>
-							<Upload>
+							<Upload
+								customRequest={data => {
+									const { file, onSuccess } = data
+									onSuccess && onSuccess(file)
+								}}
+								maxCount={1}
+								accept=".pdf"
+							>
 								<Button type="primary">{t('AddFile')}</Button>
 							</Upload>
 						</Form.Item>

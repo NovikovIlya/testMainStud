@@ -886,5 +886,8 @@
 	"documentSeries": "Graduation document series",
 	"documentNumber": "Graduation document number",
 	"qualification": "Qualification",
-	"issueDate": "Issue date"
+	"issueDate": "Issue date",
+	"addEducationPopover1": "Here you need to attach documents in PDF format, the data of which was entered above, namely:",
+	"addEducationPopover2": "- a scan of the spread of the diploma of higher education",
+	"addEducationPopover3": ", where the series and number of the document, as well as the specialty are visible"
 }

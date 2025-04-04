@@ -1,5 +1,5 @@
 import { PlusCircleFilled } from '@ant-design/icons'
-import { Button, ConfigProvider, DatePicker, Form, Input, Modal, Radio, Select } from 'antd'
+import { Button, ConfigProvider, DatePicker, Form, Input, Modal, Popover, Radio, Select, Upload } from 'antd'
 import dayjs from 'dayjs'
 import i18next, { t } from 'i18next'
 import { useState } from 'react'
@@ -107,6 +107,38 @@ export const AddEducationModal = () => {
 						</Form.Item>
 						<Form.Item name={'issueDate'} label={t('issueDate')}>
 							<DatePicker className="w-[47%]" maxDate={dayjs()}></DatePicker>
+						</Form.Item>
+						<Form.Item
+							name={'file'}
+							label={
+								<div className="flex gap-[10px]">
+									{t('AttachDocuments')}
+									<Popover
+										overlayClassName="p-[20px] w-[369px]"
+										placement="right"
+										arrow={false}
+										content={
+											<>
+												<p>{t('addEducationPopover1')}</p>
+												<p>
+													{' '}
+													<span className="font-bold">{t('addEducationPopover2')}</span>
+													{t('addEducationPopover3')}
+												</p>
+											</>
+										}
+									>
+										{' '}
+										<p className="h-[18px] w-[18px] border border-black border-solid text-center content-center text-[12px]/[12px] opacity-40">
+											?
+										</p>
+									</Popover>
+								</div>
+							}
+						>
+							<Upload>
+								<Button type="primary">{t('AddFile')}</Button>
+							</Upload>
 						</Form.Item>
 						<Button htmlType="submit" type="primary" className="!rounded-[54.5px]">
 							{t('Save')}

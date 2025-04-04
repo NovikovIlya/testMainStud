@@ -2,6 +2,8 @@ import { DeleteTwoTone, EditTwoTone, EyeTwoTone } from '@ant-design/icons'
 import { ConfigProvider, Space, Table, TableProps } from 'antd'
 import { t } from 'i18next'
 
+import { EngFlagSvg } from '../../../assets/svg/EngFlagSvg'
+import { RuFlagSvg } from '../../../assets/svg/RuFlagSvg'
 import { EducationTableDataType } from '../../../store/reducers/type'
 
 export const EducationsTable = () => {
@@ -10,7 +12,7 @@ export const EducationsTable = () => {
 			title: t('language'),
 			dataIndex: 'language',
 			key: 'language',
-			render: text => <div>{text}</div>
+			render: (_, record) => (record.language === 'RU' ? <RuFlagSvg /> : <EngFlagSvg />)
 		},
 		{
 			title: t('years'),
@@ -71,6 +73,22 @@ export const EducationsTable = () => {
 			educationLevelId: 1,
 			specialization: 'Веб-дизайн',
 			nameOfInstitute: 'Казанский (Приволжский) Федеральный Университет'
+		},
+		{
+			language: 'RU',
+			beginningYear: '2016',
+			graduateYear: '2020',
+			educationLevelId: 1,
+			specialization: 'Графический дизайн',
+			nameOfInstitute: 'Казанский (Приволжский) Федеральный Университет'
+		},
+		{
+			language: 'ENG',
+			beginningYear: '2020',
+			graduateYear: '2022',
+			educationLevelId: 1,
+			specialization: 'Web-design',
+			nameOfInstitute: 'Kazan federal university'
 		}
 	]
 
@@ -81,7 +99,7 @@ export const EducationsTable = () => {
 				theme={{
 					components: {
 						Table: {
-							headerBg: 'rgb(218, 231, 251)'
+							headerBg: 'rgb(245, 248, 251)'
 						}
 					}
 				}}

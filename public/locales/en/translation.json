@@ -877,7 +877,8 @@
 	"language": "Language",
 	"level": "Level",
 	"m": "Male",
-	"w": "Female"
+	"w": "Female",
+	"maxLanguagesError": "You can only add up to 10 languages"
 		
 	  
 	

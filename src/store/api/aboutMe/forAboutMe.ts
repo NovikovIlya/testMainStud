@@ -76,7 +76,7 @@ export const myPracticeService = apiSlice.injectEndpoints({
       }),
       getAllNativeLanguages: builder.query<any, void>({
         query: () => ({
-          url: '/languages',
+          url: '/languages/all',
           method: 'GET',
          
         }),
@@ -90,7 +90,6 @@ export const myPracticeService = apiSlice.injectEndpoints({
             body,
            
           }),
-         
           invalidatesTags: ['nativeLanguages'],
       }),
 

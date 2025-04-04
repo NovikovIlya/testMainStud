@@ -26,7 +26,6 @@ interface DataType {
 const TableLanguages = ({ dataForeign, setSelectId, selectId }: any) => {
 	const [isModalOpenEdit, setIsModalOpenEdit] = useState(false)
 	const [rowStates, setRowStates] = useState({})
-	console.log('rowStates', rowStates)
 	const columns: TableProps<DataType>['columns'] = [
 		{
 			title: t('language'),
@@ -124,7 +123,6 @@ const TableLanguages = ({ dataForeign, setSelectId, selectId }: any) => {
 						className="hover:scale-[140%] transition-transform duration-200 delay-100"
 
 						onClick={() => {
-							console.log('record', record)
 							// @ts-ignore
 							setSelectId(record?.studLangId)
 							showModalEdit()

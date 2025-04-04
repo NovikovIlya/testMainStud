@@ -18,12 +18,34 @@ const AboutMeNew = () => {
 	const [content, setContent] = useState('')
 	const { data: dataAboutMe, isLoading: isFetchingAboutMe } = useGetAboutMeQuery()
 	const [sendComment,{isLoading:isLoadComment}] = useSetCommentMutation()
-	console.log('content',content)
+	const [initialCheckboxes, setInitialCheckboxes] = useState({
+		codex: false,
+		library: false,
+		approve: false,
+		sogl: false,
+		oznak: false,
+	  });
+
 	useEffect(() => {
 		if (dataAboutMe?.employeeAddedDto?.COMMENT) {
 			setContent(dataAboutMe?.employeeAddedDto?.COMMENT)
 		}
 	}, [dataAboutMe])
+
+	useEffect(() => {
+		// if (dataAboutMe?.employeeAddedDto) {
+		  
+		  const initialCheckboxes = {
+			codex:  false,
+			library: false,
+			approve: false,
+			sogl:  false,
+			oznak: true,
+		  };
+		  form.setFieldsValue(initialCheckboxes);
+		  setInitialCheckboxes(initialCheckboxes);
+		// }
+	  }, []);
 
 	const onFinish = (values: any) => {
 		console.log('Отправка чекбоксов:', values)
@@ -88,9 +110,11 @@ const AboutMeNew = () => {
 							</div>
 							<Divider />
 
-							<Form className="" onFinish={onFinish}>
+							<Form form={form} className="" onFinish={onFinish}>
 								<Form.Item className="mb-[20px]" name="codex" valuePropName="checked" label={null}>
-									<Checkbox>
+									<Checkbox
+											disabled={initialCheckboxes.codex}
+									>
 										{t('codexAgreement')}
 										<a
 											className="underline ml-1"
@@ -103,7 +127,9 @@ const AboutMeNew = () => {
 									</Checkbox>
 								</Form.Item>
 								<Form.Item className="mb-[20px]" name="library" valuePropName="checked" label={null}>
-									<Checkbox>
+									<Checkbox
+										disabled={initialCheckboxes.library}
+									>
 										{t('libraryRegulations')}
 										<a
 											className="underline ml-1"
@@ -116,7 +142,9 @@ const AboutMeNew = () => {
 									</Checkbox>
 								</Form.Item>
 								<Form.Item className="mb-[20px]" name="approve" valuePropName="checked" label={null}>
-									<Checkbox>
+									<Checkbox
+										disabled={initialCheckboxes.approve}
+									>
 										<a
 											className="underline mr-1"
 											href="https://shelly.kpfu.ru/e-ksu/docs/F_437732066/prikaz_soglashenie_na_PEP211_docx_18_05_2022.docx"
@@ -129,15 +157,22 @@ const AboutMeNew = () => {
 									</Checkbox>
 								</Form.Item>
 								<Form.Item className="mb-[20px]" name="sogl" valuePropName="checked" label={null}>
-									<Checkbox>
+									<Checkbox
+										disabled={initialCheckboxes.sogl}
+									>
 										{t('sogl')}
 										<a className="underline " href="/Soglasie.docx" target="_blank" rel="noopener noreferrer">
 											{t('sogl2')}
 										</a>
 									</Checkbox>
 								</Form.Item>
-								<Form.Item className="mb-[20px]" name="oznak" valuePropName="checked" label={null}>
-									<Checkbox>
+								<Form.Item 
+									// className={`${initialCheckboxes.oznak ? 'opacity-[60%]' : ''}`}
+								 	name="oznak" valuePropName="checked" label={null}>
+									<Checkbox
+										disabled={initialCheckboxes.oznak}
+								
+									>
 										{t('politics')}
 										<a className="underline ml-1" href="/politika.pdf" target="_blank" rel="noopener noreferrer">
 											{t('politics2')}

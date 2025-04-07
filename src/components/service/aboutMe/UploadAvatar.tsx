@@ -61,11 +61,11 @@ const UploadAvatar = ({dataAboutMe}:any) => {
           accept="image/png, image/jpeg, image/webp"
           customRequest={({ file }) => handleUpload(file as File)}
         >
-          <Button
+          {/* <Button
             className='!rounded-[50%]'
             icon={<UploadOutlined />}
             loading={isLoading}
-          />
+          /> */}
         </Upload>
       </div>
     </Spin>

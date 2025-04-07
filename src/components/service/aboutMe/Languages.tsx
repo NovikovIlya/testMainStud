@@ -23,14 +23,16 @@ import UploadAvatar from './UploadAvatar'
 
 const Languages = () => {
 	const [form] = Form.useForm()
+	const [form2] = Form.useForm()
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const [selectId, setSelectId] = useState(null)
+	const [fileList, setFileList] = useState<any>([])
 	const { data: dataNative, isLoading: isFetchingNative, refetch } = useGetNativeLanguagesQuery()
 	const { data: dataAll } = useGetAllNativeLanguagesQuery()
 	const { data: dataForeign } = useGetforeignLanguagesQuery()
 	const [setNative, { isLoading }] = useSetNativeMutation()
 	const nativeLanguageForm = Form.useWatch('languages', form)
-	console.log('dataNative 222222222:', dataNative)
+
 	useEffect(() => {
 		console.log('dataNative updated:', dataNative)
 		if (dataNative) {
@@ -46,6 +48,24 @@ const Languages = () => {
 		setNative({ languageCodes: nativeLanguageForm }).unwrap()
 	}
 
+	const onFinishForm2 = (values: any) => {
+		console.log('Данные формы form2:', values)
+		const formData = new FormData()
+		if (fileList.length > 0) {
+			formData.append('file', values.file[0].originFileObj)
+		}
+		Object.entries(values)
+			.filter(([key]) => key !== 'file') // Исключаем поле с файлом 
+			.forEach(([key, value]) => {
+				const items = Array.isArray(value) ? value : [value] // Приводим к массиву 
+				items.forEach(item => formData.append(key, item)) // Добавляем все элементы
+			})
+		console.log([...formData])
+		formData.forEach((value, key) => {
+			console.log(`Ключ: ${key}, Значение: ${value}`);
+			});
+	}
+
 	const handleSubmit = (values: { content: string }) => {}
 	const showModal = () => {
 		setIsModalOpen(true)
@@ -57,6 +77,22 @@ const Languages = () => {
 
 	const handleCancel = () => {
 		setIsModalOpen(false)
+	}
+	const beforeUpload = (file: File) => {
+		const isImage = file.type.startsWith('image/')
+		const isLt5M = file.size / 1024 / 1024 < 5
+
+		if (!isImage) {
+			message.error('Можно загружать только изображения!')
+			return false
+		}
+
+		if (!isLt5M) {
+			message.error('Файл должен быть меньше 5MB!')
+			return false
+		}
+		setFileList([file])
+		return false
 	}
 
 	if (isFetchingNative)
@@ -146,7 +182,7 @@ const Languages = () => {
 					onOk={handleOk}
 					onCancel={handleCancel}
 				>
-					<Form className="mt-4">
+					<Form className="mt-4" form={form2} onFinish={onFinishForm2}>
 						<Form.Item
 							label={<div className="">{t('language')}</div>}
 							name="languagesForm"
@@ -156,12 +192,12 @@ const Languages = () => {
 							className="mt-4"
 						>
 							<Select
-								mode="multiple"
+								
 								allowClear
-								options={[
-									{ value: 'en', label: 'English' },
-									{ value: 'es', label: 'Spanish' }
-								]}
+								options={dataAll?.map((item: any) => ({
+									value: item.code,
+									label: item.language
+								}))}
 							/>
 						</Form.Item>
 
@@ -174,12 +210,13 @@ const Languages = () => {
 							className="mt-14"
 						>
 							<Select
-								mode="multiple"
+							
+								options={dataAll?.map((item: any) => ({
+									value: item.languageLevelCode,
+									label: item.languageLevel
+								}))}
 								allowClear
-								options={[
-									{ value: 'en', label: 'English' },
-									{ value: 'es', label: 'Spanish' }
-								]}
+								
 							/>
 						</Form.Item>
 
@@ -192,23 +229,25 @@ const Languages = () => {
 							className="mt-14"
 						>
 							<Select
-								mode="multiple"
+								
 								allowClear
-								options={[
-									{ value: 'en', label: 'English' },
-									{ value: 'es', label: 'Spanish' }
-								]}
+								options={dataAll?.map((item: any) => ({
+									value: item.certificateCode,
+									label: item.certificateName
+								}))}
 							/>
 						</Form.Item>
 
 						<div className="mt-14 mb-2">{t('prikrep')}</div>
-						<Upload className="" maxCount={1}>
-							<Button className=" " icon={<UploadOutlined />}>
-								{t('add')}
-							</Button>
-						</Upload>
+						<Form.Item name="file" getValueFromEvent={e => e?.fileList}>
+							<Upload maxCount={1} beforeUpload={beforeUpload} accept="image/png, image/jpeg, image/webp">
+								<Button className=" " icon={<UploadOutlined />}>
+									{t('add')}
+								</Button>
+							</Upload>
+						</Form.Item>
 
-						<Form.Item className="mt-6" name="sogl" valuePropName="checked" label={null}>
+						<Form.Item className="mt-6" name="isPublished" valuePropName="checked" label={null}>
 							<Checkbox>{t('razrer')}</Checkbox>
 						</Form.Item>
 

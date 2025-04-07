@@ -29,7 +29,7 @@ const Languages = () => {
 	const [fileList, setFileList] = useState<any>([])
 	const { data: dataNative, isLoading: isFetchingNative, refetch } = useGetNativeLanguagesQuery()
 	const { data: dataAll } = useGetAllNativeLanguagesQuery()
-	const { data: dataForeign } = useGetforeignLanguagesQuery()
+	const { data: dataForeign ,isLoading: isFetchingForeign} = useGetforeignLanguagesQuery()
 	const [setNative, { isLoading }] = useSetNativeMutation()
 	const nativeLanguageForm = Form.useWatch('languages', form)
 
@@ -95,7 +95,7 @@ const Languages = () => {
 		return false
 	}
 
-	if (isFetchingNative)
+	if (isFetchingNative || isFetchingForeign)
 		return (
 			<div className="mt-[-10px] ml-[6px]">
 				<SkeletonPage />

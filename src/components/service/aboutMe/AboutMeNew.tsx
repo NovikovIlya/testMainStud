@@ -6,7 +6,7 @@ import Title from 'antd/es/typography/Title'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useGetAboutMeQuery, useSetCommentMutation } from '../../../store/api/aboutMe/forAboutMe'
+import { useGetAboutMeQuery, useGetCheckboxQuery, useSetCheckboxMutation, useSetCommentMutation } from '../../../store/api/aboutMe/forAboutMe'
 
 import QuillComponents from './QuillComponents'
 import { SkeletonPage } from './Skeleton'
@@ -18,13 +18,15 @@ const AboutMeNew = () => {
 	const [content, setContent] = useState('')
 	const { data: dataAboutMe, isLoading: isFetchingAboutMe } = useGetAboutMeQuery()
 	const [sendComment,{isLoading:isLoadComment}] = useSetCommentMutation()
+	const {data:dataCheckbox} = useGetCheckboxQuery()
+	const [setCheckbox,{isLoading:isLoadingCheckbox}] = useSetCheckboxMutation()
 	const [initialCheckboxes, setInitialCheckboxes] = useState({
 		codex: false,
 		library: false,
 		approve: false,
 		sogl: false,
 		oznak: false,
-	  });
+	});
 
 	useEffect(() => {
 		if (dataAboutMe?.employeeAddedDto?.COMMENT) {
@@ -33,22 +35,36 @@ const AboutMeNew = () => {
 	}, [dataAboutMe])
 
 	useEffect(() => {
-		// if (dataAboutMe?.employeeAddedDto) {
-		  
-		  const initialCheckboxes = {
-			codex:  false,
-			library: false,
-			approve: false,
-			sogl:  false,
-			oznak: true,
-		  };
-		  form.setFieldsValue(initialCheckboxes);
-		  setInitialCheckboxes(initialCheckboxes);
-		// }
-	  }, []);
+		if (dataCheckbox) {
+			// Обновление состояния чекбоксов на основе данных с бэкенда
+			const updatedCheckboxes = {
+				codex: dataCheckbox.IS_CHECKED_ETIQ === 1,
+				library: dataCheckbox.IS_CHECKED_LIB === 1,
+				approve: dataCheckbox.IS_CHECKED_REL === 1,
+				sogl: dataCheckbox.IS_CHECKED_HANDLING === 1,
+				oznak: dataCheckbox.IS_CHECKED_PERS_DATA === 1,
+			};
+
+			form.setFieldsValue(updatedCheckboxes);
+			setInitialCheckboxes(updatedCheckboxes);
+		}
+	}, [dataCheckbox]);
 
 	const onFinish = (values: any) => {
 		console.log('Отправка чекбоксов:', values)
+		const transformedObject = Object.fromEntries(
+			Object.entries(values).map(([key, value]) => [key, value ? 1 : 0])
+		);
+		const transformedObjectValid = {
+			IS_CHECKED_ETIQ: transformedObject.codex,
+			IS_CHECKED_LIB: transformedObject.library,
+			IS_CHECKED_REL: transformedObject.approve,
+			IS_CHECKED_HANDLING: transformedObject.sogl,
+			IS_CHECKED_PERS_DATA: transformedObject.oznak
+		};
+		console.log('transformedObjectValid:', transformedObjectValid)
+		setCheckbox(transformedObjectValid)
+
 	}
 
 	const sendDop = ()=>{
@@ -96,6 +112,7 @@ const AboutMeNew = () => {
 			</div>
 
 			{/* Секция пользовательского соглашения */}
+			<Spin spinning={isLoadingCheckbox} >
 			<div className="bg-white rounded-xl shadow-md mt-7">
 				<Row>
 					<Col span={24}>
@@ -190,6 +207,7 @@ const AboutMeNew = () => {
 					</Col>
 				</Row>
 			</div>
+			</Spin>
 
 			{/* Секция образования */}
 			{dataAboutMe?.studentAddedDto ? (
@@ -234,88 +252,6 @@ const AboutMeNew = () => {
 							</Col>
 						</Row>
 					 
-
-					{/* {dataAboutMe?.studentAddedDto?.GRADE === 'master' ? (
-						<Row>
-							<Col span={24}>
-								<div className="flex flex-wrap justify-start p-6">
-									<div className="flex items-center gap-2">
-										<Title className="!mb-0" level={5}>
-											{t(dataAboutMe?.studentAddedDto?.GRADE)}
-										</Title>
-									</div>
-									<Divider />
-
-									<div className="flex flex-wrap justify-start">
-										<Descriptions column={1} title="">
-											<Descriptions.Item label={t('insitute')}>
-												{dataAboutMe?.studentAddedDto?.FACULTY}
-											</Descriptions.Item>
-											<Descriptions.Item label={t('specialization')}>
-												{dataAboutMe?.studentAddedDto?.SPECIALITY}
-											</Descriptions.Item>
-											<Descriptions.Item label={t('typeObr')}>
-												{dataAboutMe?.studentAddedDto?.STUDY_TYPE}
-											</Descriptions.Item>
-											<Descriptions.Item label={t('category')}>
-												{dataAboutMe?.studentAddedDto?.CATEGORY}
-											</Descriptions.Item>
-
-											<Descriptions.Item label={t('groupNumbers')}>
-												{dataAboutMe?.studentAddedDto?.GROUP}
-											</Descriptions.Item>
-											<Descriptions.Item label={t('graduateYear')}>
-												{dataAboutMe?.studentAddedDto?.STUDYEND}
-											</Descriptions.Item>
-										</Descriptions>
-									</div>
-								</div>
-							</Col>
-						</Row>
-					) : (
-						''
-					)}
-
-					{dataAboutMe?.studentAddedDto?.GRADE === '' ? (
-						<Row>
-							<Col span={24}>
-								<div className="flex flex-wrap justify-start p-6">
-									<div className="flex items-center gap-2">
-										<Title className="!mb-0" level={5}>
-											{t(dataAboutMe?.studentAddedDto?.GRADE)}
-										</Title>
-									</div>
-									<Divider />
-
-									<div className="flex flex-wrap justify-start">
-										<Descriptions column={1} title="">
-											<Descriptions.Item label={t('insitute')}>
-												{dataAboutMe?.studentAddedDto?.FACULTY}
-											</Descriptions.Item>
-											<Descriptions.Item label={t('specialization')}>
-												{dataAboutMe?.studentAddedDto?.SPECIALITY}
-											</Descriptions.Item>
-											<Descriptions.Item label={t('typeObr')}>
-												{dataAboutMe?.studentAddedDto?.STUDY_TYPE}
-											</Descriptions.Item>
-											<Descriptions.Item label={t('category')}>
-												{dataAboutMe?.studentAddedDto?.CATEGORY}
-											</Descriptions.Item>
-
-											<Descriptions.Item label={t('naych')}>ыы</Descriptions.Item>
-											<Descriptions.Item label={t('graduateYear')}>
-												{dataAboutMe?.studentAddedDto?.STUDYEND}
-											</Descriptions.Item>
-										</Descriptions>
-									</div>
-								</div>
-							</Col>
-						</Row>
-					) : (
-						''
-					)} */}
-
-					
 				</div>
 			) : (
 				''

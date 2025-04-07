@@ -51,7 +51,7 @@ const UploadAvatar = ({dataAboutMe}:any) => {
         className='bg-[#cbdaf1] rounded-[50%]'
         size={180}
         src={avatarUrl?.url}
-        icon={!avatarUrl && <UserOutlined />}
+        icon={!avatarUrl?.url && <UserOutlined />}
       />
       <div className='absolute right-3 bottom-3'>
         <Upload

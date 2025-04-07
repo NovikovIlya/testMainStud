@@ -1,5 +1,5 @@
 import { QuestionCircleOutlined, UploadOutlined } from '@ant-design/icons'
-import { Button, Checkbox, Col, Divider, Form, message, Modal, Row, Spin, Tooltip, Upload } from 'antd'
+import { Button, Checkbox, Col, Divider, Form, Modal, Row, Spin, Tooltip, Upload, message } from 'antd'
 import { Descriptions } from 'antd'
 import type { DescriptionsProps } from 'antd'
 import { Select, Space } from 'antd'
@@ -25,14 +25,14 @@ const Languages = () => {
 	const [form] = Form.useForm()
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const [selectId, setSelectId] = useState(null)
-	const { data: dataNative, isLoading: isFetchingNative,refetch } = useGetNativeLanguagesQuery()
+	const { data: dataNative, isLoading: isFetchingNative, refetch } = useGetNativeLanguagesQuery()
 	const { data: dataAll } = useGetAllNativeLanguagesQuery()
 	const { data: dataForeign } = useGetforeignLanguagesQuery()
-	const [setNative, {isLoading}] = useSetNativeMutation()
+	const [setNative, { isLoading }] = useSetNativeMutation()
 	const nativeLanguageForm = Form.useWatch('languages', form)
-	console.log('dataNative 222222222:', dataNative); 
+	console.log('dataNative 222222222:', dataNative)
 	useEffect(() => {
-		console.log('dataNative updated:', dataNative); 
+		console.log('dataNative updated:', dataNative)
 		if (dataNative) {
 			const initialValues = {
 				languages: dataNative.languages?.map((lang: any) => lang.code) || []
@@ -44,7 +44,6 @@ const Languages = () => {
 	const onFinish = () => {
 		// values содержит { checkboxes: [...] }
 		setNative({ languageCodes: nativeLanguageForm }).unwrap()
-		
 	}
 
 	const handleSubmit = (values: { content: string }) => {}
@@ -70,46 +69,48 @@ const Languages = () => {
 	return (
 		<div className="px-[50px] pt-[60px] mb-[50px]">
 			<div className=" rounded-xl  animate-fade-in">
-				<Spin spinning={isLoading}>
-					<Row className="mb-4 mt-3">
+				<Spin spinning={isLoading} className="flex gap-2">
+					<Row className="mb-0 mt-3">
 						<Col span={24}>
-							<Form form={form} onFinish={onFinish} className="flex gap-4 flex-wrap flex-col">
-								<Form.Item
-									label={<div className="text-[16px] font-bold mb-2">{t('nativeLanguage')}</div>}
-									name="languages"
-									labelCol={{ span: 6 }}
-									wrapperCol={{ span: 24 }}
-									layout="vertical"
-									rules={[
-										{
-											validator: (_, value) =>
-												value?.length > 10 ? Promise.reject(new Error(t('maxLanguagesError'))) : Promise.resolve()
-										}
-									]}
-								>
-									<Select
-										mode="multiple"
-										allowClear
-										options={dataAll?.map((item:any) => ({
-											value: item.code,
-											label: item.language
-										}))}
-										onChange={values => {
-											if (values.length > 10) {
-												message.error(t('maxLanguagesError'))
-												form.setFieldsValue({
-													languages: values.slice(0, 10)
-												})
+							<div className="text-[16px] font-bold mb-2">{t('nativeLanguage')}</div>
+							<Form form={form} onFinish={onFinish} className="flex gap-8 flex-wrap ">
+								<div className="w-full h-auto">
+									<Form.Item
+										name="languages"
+										className="mb-0 w-full !h-auto"
+										rules={[
+											{
+												validator: (_, value) =>
+													value?.length > 10 ? Promise.reject(new Error(t('maxLanguagesError'))) : Promise.resolve()
 											}
-										}}
-									/>
-								</Form.Item>
-
-								<Button className="mt-4 w-[100px]" type="primary" htmlType="submit">
-									{t('save')}
-								</Button>
+										]}
+									>
+										<Select
+											mode="multiple"
+											allowClear
+											className=" !h-auto"
+											options={dataAll?.map((item: any) => ({
+												value: item.code,
+												label: item.language
+											}))}
+											onChange={values => {
+												if (values.length > 10) {
+													message.error(t('maxLanguagesError'))
+													form.setFieldsValue({
+														languages: values.slice(0, 10)
+													})
+												}
+											}}
+										/>
+									</Form.Item>
+								</div>
 							</Form>
 						</Col>
+					</Row>
+					<Row>
+						<Button className="mt-4 w-[100px]" type="primary" htmlType="submit">
+							{t('save')}
+						</Button>
 					</Row>
 				</Spin>
 			</div>
@@ -129,7 +130,7 @@ const Languages = () => {
 							onClick={showModal}
 							className="gap-2 flex items-center cursor-pointer hover:animate-pulse transition delay-150 "
 						>
-							<Button className="rounded-[50%] !w-[28px] hover:animate-spin transition delay-150 " type="primary">
+							<Button className="rounded-[50%] !w-[28px] hover:animate-pulse transition delay-150 " type="primary">
 								+
 							</Button>
 							<span>{t('add')}</span>

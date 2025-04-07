@@ -1,4 +1,4 @@
-import { UserDto } from "../../../models/aboutMe";
+import { CheckedFlags, UserDto } from "../../../models/aboutMe";
 import { apiSlice } from "../apiSlice";
 
 export const myPracticeService = apiSlice.injectEndpoints({
@@ -59,8 +59,26 @@ export const myPracticeService = apiSlice.injectEndpoints({
             body,
            
           }),
-         
           invalidatesTags: ['AboutMe'],
+      }),
+      // Чекбоксы
+      getCheckbox: builder.query<any, void>({
+        query: () => ({
+          url: '/about-me/get-checkboxes',
+          method: 'GET',
+         
+        }),
+        providesTags: ['Сheckboxes'],
+        keepUnusedDataFor: 1,
+      }),
+      setCheckbox: builder.mutation<CheckedFlags, any>({
+        query: (body) => ({
+            url: '/about-me/set-checkboxes',
+            method: 'POST',
+            body,
+           
+          }),
+          invalidatesTags: ['Сheckboxes'],
       }),
 
 
@@ -120,4 +138,6 @@ export const myPracticeService = apiSlice.injectEndpoints({
     useSetCommentMutation,
     useGetAllNativeLanguagesQuery,
     useSetNativeMutation,
+    useGetCheckboxQuery,
+    useSetCheckboxMutation
    } = myPracticeService;

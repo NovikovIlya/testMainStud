@@ -1,5 +1,5 @@
 import { PlusCircleFilled } from '@ant-design/icons'
-import { Button, ConfigProvider, DatePicker, Form, Input, Modal, Popover, Radio, Select, Upload } from 'antd'
+import { Button, Checkbox, ConfigProvider, DatePicker, Form, Input, Modal, Popover, Radio, Select, Upload } from 'antd'
 import dayjs from 'dayjs'
 import i18next, { t } from 'i18next'
 import { useState } from 'react'
@@ -155,6 +155,9 @@ export const AddEducationModal = () => {
 							>
 								<Button type="primary">{t('AddFile')}</Button>
 							</Upload>
+						</Form.Item>
+						<Form.Item name={'accept'} valuePropName="checked">
+							<Checkbox>{t('razrer')}</Checkbox>
 						</Form.Item>
 						<Button htmlType="submit" type="primary" className="!rounded-[54.5px]">
 							{t('Save')}

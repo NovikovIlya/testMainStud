@@ -121,6 +121,24 @@ export const myPracticeService = apiSlice.injectEndpoints({
         providesTags: ['foreignLanguages'],
         keepUnusedDataFor: 1,
       }),
+      getLevels: builder.query<any, void>({
+        query: () => ({
+          url: '/languages/levels',
+          method: 'GET',
+         
+        }),
+        providesTags: ['levelsLanguages'],
+        keepUnusedDataFor: 1,
+      }),
+      getCertificate: builder.query<any, void>({
+        query: () => ({
+          url: '/languages/certificate-names',
+          method: 'GET',
+         
+        }),
+        providesTags: ['certificateLanguages'],
+        keepUnusedDataFor: 1,
+      }),
 
 
 
@@ -139,5 +157,7 @@ export const myPracticeService = apiSlice.injectEndpoints({
     useGetAllNativeLanguagesQuery,
     useSetNativeMutation,
     useGetCheckboxQuery,
-    useSetCheckboxMutation
+    useSetCheckboxMutation,
+    useGetLevelsQuery,
+    useGetCertificateQuery
    } = myPracticeService;

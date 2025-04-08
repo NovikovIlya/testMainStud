@@ -11,6 +11,8 @@ import React, { useEffect, useState } from 'react'
 
 import {
 	useGetAllNativeLanguagesQuery,
+	useGetCertificateQuery,
+	useGetLevelsQuery,
 	useGetNativeLanguagesQuery,
 	useGetforeignLanguagesQuery,
 	useSetNativeMutation
@@ -28,6 +30,8 @@ const Languages = () => {
 	const [selectId, setSelectId] = useState(null)
 	const [fileList, setFileList] = useState<any>([])
 	const { data: dataNative, isLoading: isFetchingNative, refetch } = useGetNativeLanguagesQuery()
+	const {data:dataLevels} = useGetLevelsQuery()
+	const {data:dataCertificate} = useGetCertificateQuery()
 	const { data: dataAll } = useGetAllNativeLanguagesQuery()
 	const { data: dataForeign ,isLoading: isFetchingForeign} = useGetforeignLanguagesQuery()
 	const [setNative, { isLoading }] = useSetNativeMutation()
@@ -43,11 +47,13 @@ const Languages = () => {
 		}
 	}, [dataNative])
 
+	// Добавление Родной язык
 	const onFinish = () => {
 		// values содержит { checkboxes: [...] }
 		setNative({ languageCodes: nativeLanguageForm }).unwrap()
 	}
 
+	// Добавление Иностранный язык
 	const onFinishForm2 = (values: any) => {
 		console.log('Данные формы form2:', values)
 		const formData = new FormData()
@@ -211,7 +217,7 @@ const Languages = () => {
 						>
 							<Select
 							
-								options={dataAll?.map((item: any) => ({
+								options={dataLevels?.map((item: any) => ({
 									value: item.languageLevelCode,
 									label: item.languageLevel
 								}))}
@@ -231,7 +237,7 @@ const Languages = () => {
 							<Select
 								
 								allowClear
-								options={dataAll?.map((item: any) => ({
+								options={dataCertificate?.map((item: any) => ({
 									value: item.certificateCode,
 									label: item.certificateName
 								}))}

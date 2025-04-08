@@ -889,5 +889,7 @@
 	"issueDate": "Issue date",
 	"addEducationPopover1": "Here you need to attach documents in PDF format, the data of which was entered above, namely:",
 	"addEducationPopover2": "- a scan of the spread of the diploma of higher education",
-	"addEducationPopover3": ", where the series and number of the document, as well as the specialty are visible"
+	"addEducationPopover3": ", where the series and number of the document, as well as the specialty are visible",
+	"medal": "Medal",
+	"previousEducation": "Previous education"
 }

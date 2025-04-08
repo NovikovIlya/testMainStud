@@ -300,7 +300,6 @@ export const VacancyRequestCreateView = () => {
 								let cat = categories.find(category => category.title === categoryTitle)
 								return cat && cat.directions.length !== 0
 									? [
-											{ value: 'Все', label: 'Все' },
 											...cat.directions.map(dir => ({
 												value: dir,
 												label: dir

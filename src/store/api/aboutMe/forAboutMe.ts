@@ -139,6 +139,15 @@ export const myPracticeService = apiSlice.injectEndpoints({
         providesTags: ['certificateLanguages'],
         keepUnusedDataFor: 1,
       }),
+      setForeign: builder.mutation<any, any>({
+        query: (body) => ({
+            url: '/languages/foreign',
+            method: 'POST',
+            body,
+           
+          }),
+          invalidatesTags: ['nativeLanguages'],
+      }),
 
 
 
@@ -159,5 +168,6 @@ export const myPracticeService = apiSlice.injectEndpoints({
     useGetCheckboxQuery,
     useSetCheckboxMutation,
     useGetLevelsQuery,
-    useGetCertificateQuery
+    useGetCertificateQuery,
+    useSetForeignMutation
    } = myPracticeService;

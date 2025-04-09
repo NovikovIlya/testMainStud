@@ -51,7 +51,7 @@ const UploadAvatar = ({dataAboutMe}:any) => {
         className='bg-[#cbdaf1] rounded-[50%]'
         size={180}
         src={avatarUrl?.url}
-        icon={!avatarUrl && <UserOutlined />}
+        icon={!avatarUrl?.url && <UserOutlined />}
       />
       <div className='absolute right-3 bottom-3'>
         <Upload
@@ -61,11 +61,11 @@ const UploadAvatar = ({dataAboutMe}:any) => {
           accept="image/png, image/jpeg, image/webp"
           customRequest={({ file }) => handleUpload(file as File)}
         >
-          <Button
+          {/* <Button
             className='!rounded-[50%]'
             icon={<UploadOutlined />}
             loading={isLoading}
-          />
+          /> */}
         </Upload>
       </div>
     </Spin>

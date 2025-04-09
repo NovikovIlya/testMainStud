@@ -91,13 +91,19 @@ const EditTask = () => {
                 return elem
             }
         })
-
+       
         const newData: TaskEdit = {
             id: data!.id,
             specialityNameId: String(specName!.id),
             practiceTypeId: String(practiceType!.id),
             subdivisionNameId: subDivision,
-            tasks: values.tasks.map(elem => elem.task)
+            // @ts-ignore
+            tasks: values.tasks.map((elem,index) => {
+                return {taskDescription:elem.task,
+                    number: index+1
+    
+                }
+            })
         }
 
         edit(newData)
@@ -266,7 +272,7 @@ const EditTask = () => {
                                                     >
                                                         <TextArea autoSize
                                                             size="large"
-                                                            placeholder={t("taskDescription")}
+                                                          
                                                             className={'textArea'}
                                                         />
                                                     </Form.Item>

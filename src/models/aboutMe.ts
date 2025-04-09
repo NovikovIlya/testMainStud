@@ -35,3 +35,11 @@ export interface StudentAddedDto {
     BIRTH_CITY: string;
     BIRTH_PLACE: string | null;
   }
+
+export interface CheckedFlags {
+  IS_CHECKED_ETIQ: number;
+  IS_CHECKED_LIB: number;
+  IS_CHECKED_REL: number;
+  IS_CHECKED_HANDLING: number;
+  IS_CHECKED_PERS_DATA: number;
+}

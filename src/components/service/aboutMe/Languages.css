@@ -1,0 +1,11 @@
+.custom-select .ant-select-selection-item {
+    padding: 0px 18px !important; /* Увеличиваем padding */
+    margin-right: 4px; /* Добавляем отступ справа между элементами */
+    border: 1px solid #d9d9d9; /* Добавляем границу для наглядности */
+    background-color: #fafafa; /* Изменяем цвет фона */
+    border-radius: 4px; /* Добавляем скругление */
+}
+
+.custom-select .ant-select-selection-item-content {
+    margin-right: 4px !important; /* Добавляем отступ справа от текста */
+}

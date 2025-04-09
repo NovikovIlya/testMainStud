@@ -891,5 +891,9 @@
 	"addEducationPopover2": "- a scan of the spread of the diploma of higher education",
 	"addEducationPopover3": ", where the series and number of the document, as well as the specialty are visible",
 	"medal": "Medal",
-	"previousEducation": "Previous education"
+	"previousEducation": "Previous education",
+	"level": "Level",
+	"m": "Male",
+	"w": "Female",
+	"maxLanguagesError": "You can only add up to 10 languages"
 }

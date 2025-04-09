@@ -138,7 +138,7 @@ export const NumberInformation = () => {
 
 	return (
 		<Form form={form} onFinish={onSubmitPhone2}>
-			<section className="max-w-2xl mb-6">
+			<section className=" mb-6">
 				<article className=" mt-10">
 					<NumberDataBloc
 						isLoadingPost={isLoadingPost}

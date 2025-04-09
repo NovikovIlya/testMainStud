@@ -1,6 +1,6 @@
 .registerContracts {
   .ant-table-wrapper .ant-table-thead > tr > th {
-    background-color: #F5F8FB !important;
+    background-color: #f5f8fb ;
   }
 
   .ant-table-wrapper table {
@@ -13,30 +13,9 @@
     padding: 0;
   }
 
-  .ant-checkbox .ant-checkbox-inner:after {
-    box-sizing: border-box;
-    position: absolute;
-    top: 50%;
-    inset-inline-start: 25%;
-    display: flex;
-    width: 5px;
-    height: 9px;
-    border: 2px solid #fff;
-    border-top: 0;
-    border-inline-start: 0;
-  }
 
-  .ant-checkbox-indeterminate .ant-checkbox-inner:after {
-    top: 50%;
-    inset-inline-start: 50%;
-    width: 8px;
-    height: 8px;
-    background-color: #3073d7;
-    border: 0;
-    transform: translate(-50%, -50%) scale(1);
-    opacity: 1;
-    content: "";
-  }
+
+
 }
 
 

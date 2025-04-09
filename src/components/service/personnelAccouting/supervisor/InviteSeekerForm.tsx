@@ -205,7 +205,8 @@ export const InviteSeekerForm = (props: { respondId: number; isButtonDisabled: b
 							></DatePicker>
 						</Form.Item>
 						<p className="mt-[40px] mb-[24px] font-content-font font-normal text-[16px]/[16px] text-black">
-							Выберете резервное время для собеседования, если кандидат не сможет в основное
+							Выберете резервное время для собеседования, если кандидат не сможет в основное (вы можете указать только 3
+							резервных времени)
 						</p>
 						<Form.Item
 							name={'reserveTime'}

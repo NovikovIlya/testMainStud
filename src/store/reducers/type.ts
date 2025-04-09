@@ -136,9 +136,9 @@ export type EducationTableDataType = {
 }
 
 export type OldEducationTableDataType = {
-	graduateYear: string
-	educationLevelId: number
-	nameOfInstitute: string
-	city: string
-	medal: string
+	INSTITUTION_YEAR: string
+	GRADE: string
+	INSTITUTION_NAME: string
+	INSTITUTION_PLACE: string
+	MEDAL: string
 }

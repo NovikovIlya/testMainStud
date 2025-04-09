@@ -15,6 +15,7 @@ import {
 	useGetLevelsQuery,
 	useGetNativeLanguagesQuery,
 	useGetforeignLanguagesQuery,
+	useSetForeignMutation,
 	useSetNativeMutation
 } from '../../../store/api/aboutMe/forAboutMe'
 
@@ -35,8 +36,10 @@ const Languages = () => {
 	const { data: dataAll } = useGetAllNativeLanguagesQuery()
 	const { data: dataForeign ,isLoading: isFetchingForeign} = useGetforeignLanguagesQuery()
 	const [setNative, { isLoading }] = useSetNativeMutation()
+	const [setForeign,{} ] = useSetForeignMutation()
 	const nativeLanguageForm = Form.useWatch('languages', form)
-
+	const sertificateFormVal = Form.useWatch('sertificateForm', form2)
+	
 	useEffect(() => {
 		console.log('dataNative updated:', dataNative)
 		if (dataNative) {
@@ -57,19 +60,35 @@ const Languages = () => {
 	const onFinishForm2 = (values: any) => {
 		console.log('Данные формы form2:', values)
 		const formData = new FormData()
-		if (fileList.length > 0) {
-			formData.append('file', values.file[0].originFileObj)
-		}
+		// if (fileList.length > 0) {
+		// 	formData.append('file', values.file[0].originFileObj)
+		// }
+		if (fileList.length > 0 && sertificateFormVal) {
+			const originalFile = values.file[0].originFileObj
+			const fileExtension = originalFile.name.split('.').pop() // Получаем расширение файла
+			const newFileName = `${sertificateFormVal}.${fileExtension}`
+			
+			// Создаем новый файл с измененным именем
+			const modifiedFile = new File([originalFile], newFileName, { 
+			  type: originalFile.type,
+			  lastModified: originalFile.lastModified 
+			})
+			
+			formData.append('file', modifiedFile)
+		  }
+		  console.log('values',values)
 		Object.entries(values)
-			.filter(([key]) => key !== 'file') // Исключаем поле с файлом 
+			.filter(([key]) => key !== 'file' ) // Исключаем поле с файлом 
 			.forEach(([key, value]) => {
 				const items = Array.isArray(value) ? value : [value] // Приводим к массиву 
-				items.forEach(item => formData.append(key, item)) // Добавляем все элементы
+				items
+				.forEach(item => formData.append(key, item)) // Добавляем все элементы
 			})
 		console.log([...formData])
 		formData.forEach((value, key) => {
 			console.log(`Ключ: ${key}, Значение: ${value}`);
 			});
+		setForeign(formData).unwrap()
 	}
 
 	const handleSubmit = (values: { content: string }) => {}
@@ -97,6 +116,7 @@ const Languages = () => {
 			message.error('Файл должен быть меньше 5MB!')
 			return false
 		}
+		
 		setFileList([file])
 		return false
 	}
@@ -191,7 +211,7 @@ const Languages = () => {
 					<Form className="mt-4" form={form2} onFinish={onFinishForm2}>
 						<Form.Item
 							label={<div className="">{t('language')}</div>}
-							name="languagesForm"
+							name="languageCode"
 							labelCol={{ span: 6 }}
 							wrapperCol={{ span: 24 }}
 							layout="vertical"
@@ -209,7 +229,7 @@ const Languages = () => {
 
 						<Form.Item
 							label={<div className="">{t('level')}</div>}
-							name="levelForm"
+							name="languageLevelCode"
 							labelCol={{ span: 12 }}
 							wrapperCol={{ span: 24 }}
 							layout="vertical"
@@ -238,7 +258,7 @@ const Languages = () => {
 								
 								allowClear
 								options={dataCertificate?.map((item: any) => ({
-									value: item.certificateCode,
+									value: item.certificateName,
 									label: item.certificateName
 								}))}
 							/>

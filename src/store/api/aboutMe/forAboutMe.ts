@@ -146,7 +146,7 @@ export const myPracticeService = apiSlice.injectEndpoints({
             body,
            
           }),
-          invalidatesTags: ['nativeLanguages'],
+          invalidatesTags: ['foreignLanguages'],
       }),
 
 

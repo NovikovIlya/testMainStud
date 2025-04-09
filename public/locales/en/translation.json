@@ -313,6 +313,7 @@
 	"redirectText": "Are you sure you want to proceed?",
 	"cancel": "Cancel",
 	"welcome_message": "Dear first-year student, congratulations on the beginning of the school year.",
+	"welcome_message_student" : "",
 	"account_creation_message": "An account has been created for you to access the university's information resources. To log in to your student's personal account on the website <a href='https://kpfu.ru' target='_blank'>https://kpfu.ru</a> , use the login {{login}} and password {{password}} You can change your password in your personal account",
 	"yandex_instructions_title": "In addition,an account in Yandex 360 has been created. In order to use this service, you need to do the following steps:",
 	"yandex_step_1": "Go to the website <a href='https://ya.ru/' target='_blank'>https://ya.ru/</a> and add an account",

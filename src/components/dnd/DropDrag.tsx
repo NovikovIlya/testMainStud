@@ -22,6 +22,7 @@ import { TemplateCard } from '../cards/Template'
 import { block } from './constant'
 import i18n from '../../18n'
 import CookieConsent from './CookieConsent'
+import InfoStudent from '../InfoStudent'
 
 const studentKeys = [
 	'Schedule',
@@ -792,6 +793,10 @@ const DropDrag = () => {
 				</>
 			)
 		return (
+			<>
+			{mainRole === 'STUD' ? 
+			<InfoStudent/> : ''
+			}
 			<ResponsiveReactGridLayout
 				className="layout mb-10"
 				cols={{ lg: 3, md: 2, sm: 2, xs: 2, xxs: 1 }}
@@ -811,7 +816,9 @@ const DropDrag = () => {
 			>
 				{generateDOM}
 			</ResponsiveReactGridLayout>
+			</>
 		)
+		
 		// return (
 		// 	<div className="grid grid-cols-3 grid-rows-3 gap-4 ">
 		// 		{dataModules?.toSorted((a:any, b:any) => {

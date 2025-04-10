@@ -1,5 +1,5 @@
 import { QuestionCircleOutlined, UploadOutlined } from '@ant-design/icons'
-import { Button, Checkbox, Col, Divider, Form, Modal, Row, Spin, Tooltip, Upload, message } from 'antd'
+import { Button, Checkbox, Col, Divider, Form, Modal, Result, Row, Spin, Tooltip, Upload, message } from 'antd'
 import { Descriptions } from 'antd'
 import type { DescriptionsProps } from 'antd'
 import { Select, Space } from 'antd'
@@ -30,17 +30,17 @@ const Languages = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const [selectId, setSelectId] = useState(null)
 	const [fileList, setFileList] = useState<any>([])
-	const { data: dataNative, isLoading: isFetchingNative, refetch } = useGetNativeLanguagesQuery()
-	const {data:dataLevels} = useGetLevelsQuery()
-	const {data:dataCertificate} = useGetCertificateQuery()
+	const { data: dataNative, isLoading: isFetchingNative, refetch, isError } = useGetNativeLanguagesQuery()
+	const { data: dataLevels } = useGetLevelsQuery()
+	const { data: dataCertificate } = useGetCertificateQuery()
 	const { data: dataAll } = useGetAllNativeLanguagesQuery()
-	const { data: dataForeign ,isLoading: isFetchingForeign} = useGetforeignLanguagesQuery()
+	const { data: dataForeign, isLoading: isFetchingForeign, isError: isErrorForeign } = useGetforeignLanguagesQuery()
 	const [setNative, { isLoading }] = useSetNativeMutation()
-	const [setForeign,{isLoading:isLoadingSetForeign} ] = useSetForeignMutation()
-	const [selectedLabel, setSelectedLabel] = useState(null);
+	const [setForeign, { isLoading: isLoadingSetForeign }] = useSetForeignMutation()
+	const [selectedLabel, setSelectedLabel] = useState(null)
 	const nativeLanguageForm = Form.useWatch('languages', form)
 	const sertificateFormVal = Form.useWatch('certificateId', form2)
-	
+
 	useEffect(() => {
 		console.log('dataNative updated:', dataNative)
 		if (dataNative) {
@@ -53,7 +53,6 @@ const Languages = () => {
 
 	// Добавление Родной язык
 	const onFinish = () => {
-		// values содержит { checkboxes: [...] }
 		setNative({ languageCodes: nativeLanguageForm }).unwrap()
 	}
 
@@ -65,33 +64,30 @@ const Languages = () => {
 			const originalFile = values.file[0].originFileObj
 			const fileExtension = originalFile.name.split('.').pop() // Получаем расширение файла
 			const newFileName = `${selectedLabel}.${fileExtension}`
-			
-			const modifiedFile = new File([originalFile], newFileName, { 
-			  type: originalFile.type,
-			  lastModified: originalFile.lastModified 
-			})
-			
-			formData.append('certificate', modifiedFile)
-		  }
-		
-	
-		 delete values.file
 
+			const modifiedFile = new File([originalFile], newFileName, {
+				type: originalFile.type,
+				lastModified: originalFile.lastModified
+			})
+
+			formData.append('certificate', modifiedFile)
+		}
+
+		delete values.file
 
 		const jsonData = JSON.stringify(values)
-		const blob = new Blob([jsonData], { type: "application/json" })
-		const reader = new FileReader();
-		reader.onload = function() {
-		console.log('Содержимое Blob:', reader.result); 
-		};
-		reader.readAsText(blob); 
+		const blob = new Blob([jsonData], { type: 'application/json' })
+		const reader = new FileReader()
+		reader.onload = function () {
+			console.log('Содержимое Blob:', reader.result)
+		}
+		reader.readAsText(blob)
 
-		formData.append("language ", blob)
+		formData.append('language ', blob)
 
 		setForeign(formData).unwrap()
 		setIsModalOpen(false)
 		form2.resetFields()
-		
 	}
 
 	const handleSubmit = (values: { content: string }) => {}
@@ -106,10 +102,9 @@ const Languages = () => {
 	const handleCancel = () => {
 		setIsModalOpen(false)
 		form2.resetFields()
-		
 	}
 	const beforeUpload = (file: File) => {
-		const isImage =  file.type === 'application/pdf';
+		const isImage = file.type === 'application/pdf'
 		const isLt5M = file.size / 1024 / 1024 < 5
 
 		if (!isImage) {
@@ -121,9 +116,21 @@ const Languages = () => {
 			message.error('Файл должен быть меньше 5MB!')
 			return false
 		}
-		
+
 		setFileList([file])
 		return false
+	}
+	if (isError || isErrorForeign) {
+		return (
+			<div className="mt-[75px] ml-[20px]">
+				<Result
+					status="error"
+					title=""
+					subTitle={t('errorFetch')}
+					
+				></Result>
+			</div>
+		)
 	}
 
 	if (isFetchingNative || isFetchingForeign)
@@ -136,12 +143,15 @@ const Languages = () => {
 	return (
 		<div className="px-[50px] pt-[60px] mb-[50px]">
 			<div className=" rounded-xl  animate-fade-in">
-				<Spin spinning={isLoading} className="flex gap-2">
-					<Row className='mb-5'><Title level={2}>{t('langZnan')}</Title></Row>
-					<Row className="mb-0 mt-3">
-						<Col span={24}>
-							<div className="text-[16px] font-bold mb-2">{t('nativeLanguage')}</div>
-							<Form form={form} onFinish={onFinish} className="flex gap-8 flex-wrap ">
+				<Form form={form} onFinish={onFinish} className=" ">
+					<Spin spinning={isLoading} className="flex gap-2">
+						<Row className="mb-5">
+							<Title level={2}>{t('langZnan')}</Title>
+						</Row>
+						<Row className="mb-0 mt-3 w-full">
+							<Col span={24}>
+								<div className="text-[16px] font-bold mb-2">{t('nativeLanguage')}</div>
+
 								<div className="w-full h-auto">
 									<Form.Item
 										name="languages"
@@ -156,7 +166,7 @@ const Languages = () => {
 										<Select
 											mode="multiple"
 											allowClear
-											className=" !h-auto"
+											className=" !h-auto w-full"
 											options={dataAll?.map((item: any) => ({
 												value: item.code,
 												label: item.language
@@ -172,15 +182,15 @@ const Languages = () => {
 										/>
 									</Form.Item>
 								</div>
-							</Form>
-						</Col>
-					</Row>
-					<Row>
-						<Button className="mt-4 w-[100px]" type="primary" htmlType="submit">
-							{t('save')}
-						</Button>
-					</Row>
-				</Spin>
+							</Col>
+						</Row>
+						<Row>
+							<Button className="mt-4 w-[100px]" type="primary" htmlType="submit">
+								{t('save')}
+							</Button>
+						</Row>
+					</Spin>
+				</Form>
 			</div>
 
 			<div className=" rounded-xl  mt-16 animate-fade-in">
@@ -222,10 +232,9 @@ const Languages = () => {
 							wrapperCol={{ span: 24 }}
 							layout="vertical"
 							className="mt-4 h-[35px]"
-							rules={[{ required: true, message: '' }]} 
+							rules={[{ required: true, message: '' }]}
 						>
 							<Select
-								
 								allowClear
 								options={dataAll?.map((item: any) => ({
 									value: item.code,
@@ -233,7 +242,7 @@ const Languages = () => {
 								}))}
 							/>
 						</Form.Item>
-						
+
 						<Form.Item
 							label={<div className="">{t('level')}</div>}
 							name="languageLevelCode"
@@ -241,8 +250,7 @@ const Languages = () => {
 							wrapperCol={{ span: 24 }}
 							layout="vertical"
 							className="mt-14 h-[35px]"
-							rules={[{ required: true, message: '' }]} 
-						
+							rules={[{ required: true, message: '' }]}
 						>
 							<Select
 								aria-required
@@ -251,8 +259,6 @@ const Languages = () => {
 									label: item.languageLevel
 								}))}
 								allowClear
-
-								
 							/>
 						</Form.Item>
 
@@ -263,21 +269,19 @@ const Languages = () => {
 							wrapperCol={{ span: 24 }}
 							layout="vertical"
 							className="mt-14 h-[35px]"
-							rules={[{ required: true, message: '' }]} 
+							rules={[{ required: true, message: '' }]}
 						>
 							<Select
 								onSelect={(value: any) => {
-									const selectedOption = dataCertificate.find((item:any) => item.id === value);
+									const selectedOption = dataCertificate.find((item: any) => item.id === value)
 									if (selectedOption) {
-									  setSelectedLabel(selectedOption.certificateName);
-									  
+										setSelectedLabel(selectedOption.certificateName)
 									}
 								}}
 								allowClear
 								options={dataCertificate?.map((item: any) => ({
 									value: item.id,
-									label: item.certificateName,
-									
+									label: item.certificateName
 								}))}
 							/>
 						</Form.Item>

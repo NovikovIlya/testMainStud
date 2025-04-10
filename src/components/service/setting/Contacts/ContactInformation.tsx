@@ -37,7 +37,7 @@ export const ContactInformation = () => {
 	useEffect(()=>{
 		if(isErrorPost){
 			dispatch(showNotification({
-				message: `Такая почта уже занята`,
+				message: t('errorText'),
 				type: 'warning'
 			}))
 		}

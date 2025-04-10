@@ -1,5 +1,5 @@
-import { EditOutlined, EyeOutlined, QuestionCircleOutlined } from '@ant-design/icons'
-import { Button, Checkbox, Col, Divider, Form, Row, Spin, Tooltip } from 'antd'
+import { DownOutlined, EditOutlined, EyeOutlined, QuestionCircleOutlined, UpOutlined } from '@ant-design/icons'
+import { Button, Checkbox, Col, Collapse, Divider, Form, Row, Spin, Tooltip } from 'antd'
 import { Descriptions } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
 import Title from 'antd/es/typography/Title'
@@ -119,90 +119,111 @@ const AboutMeNew = () => {
 			{/* Секция пользовательского соглашения */}
 			<Spin spinning={isLoadingCheckbox}>
 				<div className="bg-white rounded-xl shadow-md mt-7">
-					<Row>
-						<Col span={24}>
-							<div className="flex flex-wrap justify-start p-6">
-								<div className="flex items-center gap-2">
-									<Title className="!mb-0" level={5}>
-										{t('userAgreementText')}
-									</Title>
-									<Tooltip title={t('agreementTooltip')}>
-										<QuestionCircleOutlined />
-									</Tooltip>
-								</div>
-								<Divider />
-
-								<Form form={form} className="" onFinish={onFinish}>
-									<Form.Item className="mb-[20px]" name="codex" valuePropName="checked" label={null}>
-										<Checkbox disabled={initialCheckboxes.codex}>
-											{t('codexAgreement')}
-											<a
-												className="underline ml-1"
-												href="https://kpfu.ru/portal/docs/F1769183796/Kodeks.etiki.obuch_sya.pdf"
-												target="_blank"
-												rel="noopener noreferrer"
-											>
-												{t('codexAgreement2')}
-											</a>
-										</Checkbox>
-									</Form.Item>
-									<Form.Item className="mb-[20px]" name="library" valuePropName="checked" label={null}>
-										<Checkbox disabled={initialCheckboxes.library}>
-											{t('libraryRegulations')}
-											<a
-												className="underline ml-1"
-												href="https://kpfu.ru/library/obschie-polozheniya-iz-pravil-polzovaniya"
-												target="_blank"
-												rel="noopener noreferrer"
-											>
-												{t('libraryRegulations2')}
-											</a>
-										</Checkbox>
-									</Form.Item>
-									<Form.Item className="mb-[20px]" name="approve" valuePropName="checked" label={null}>
-										<Checkbox disabled={initialCheckboxes.approve}>
-											<a
-												className="underline mr-1"
-												href="https://shelly.kpfu.ru/e-ksu/docs/F_437732066/prikaz_soglashenie_na_PEP211_docx_18_05_2022.docx"
-												target="_blank"
-												rel="noopener noreferrer"
-											>
-												{t('generalAgreement')}
-											</a>
-											{t('generalAgreement2')}
-										</Checkbox>
-									</Form.Item>
-									<Form.Item className="mb-[20px]" name="sogl" valuePropName="checked" label={null}>
-										<Checkbox disabled={initialCheckboxes.sogl}>
-											{t('sogl')}
-											<a className="underline " href="/Soglasie.docx" target="_blank" rel="noopener noreferrer">
-												{t('sogl2')}
-											</a>
-										</Checkbox>
-									</Form.Item>
-									<Form.Item
-										// className={`${initialCheckboxes.oznak ? 'opacity-[60%]' : ''}`}
-										name="oznak"
-										valuePropName="checked"
-										label={null}
-									>
-										<Checkbox disabled={initialCheckboxes.oznak}>
-											{t('politics')}
-											<a className="underline ml-1" href="/politika.pdf" target="_blank" rel="noopener noreferrer">
-												{t('politics2')}
-											</a>
-										</Checkbox>
-									</Form.Item>
-
-									<Form.Item className="mb-[5px] mt-[15px]">
-										<Button type="primary" htmlType="submit">
-											{t('saveButton')}
-										</Button>
-									</Form.Item>
-								</Form>
+					<Collapse
+						accordion
+						ghost
+						expandIconPosition="right"
+						expandIcon={({ isActive }) => (
+							<div className="translate transition " style={{ float: 'right' }}>
+								{isActive ? <UpOutlined /> : <DownOutlined />}
 							</div>
-						</Col>
-					</Row>
+						)}
+					>
+						<Collapse.Panel
+							 showArrow={true} 
+							 forceRender 
+							className="p-2 p-3 transition-all duration-500 ease-in-ou"
+							header={
+								<Title className="!mb-0" level={5}>
+									{t('userAgreementText')}
+								</Title>
+							}
+							key="1"
+						>
+							<Row>
+								<Col span={24}>
+									<div className="flex flex-wrap justify-start ">
+										<div className="flex items-center gap-2">
+											{/* <Tooltip title={t('agreementTooltip')}>
+										<QuestionCircleOutlined />
+									</Tooltip> */}
+										</div>
+
+										<Divider className="mt-0" />
+
+										<Form form={form} className="" onFinish={onFinish}>
+											<Form.Item className="mb-[20px]" name="codex" valuePropName="checked" label={null}>
+												<Checkbox disabled={initialCheckboxes.codex}>
+													{t('codexAgreement')}
+													<a
+														className="underline ml-1"
+														href="https://kpfu.ru/portal/docs/F1769183796/Kodeks.etiki.obuch_sya.pdf"
+														target="_blank"
+														rel="noopener noreferrer"
+													>
+														{t('codexAgreement2')}
+													</a>
+												</Checkbox>
+											</Form.Item>
+											<Form.Item className="mb-[20px]" name="library" valuePropName="checked" label={null}>
+												<Checkbox disabled={initialCheckboxes.library}>
+													{t('libraryRegulations')}
+													<a
+														className="underline ml-1"
+														href="https://kpfu.ru/library/obschie-polozheniya-iz-pravil-polzovaniya"
+														target="_blank"
+														rel="noopener noreferrer"
+													>
+														{t('libraryRegulations2')}
+													</a>
+												</Checkbox>
+											</Form.Item>
+											<Form.Item className="mb-[20px]" name="approve" valuePropName="checked" label={null}>
+												<Checkbox disabled={initialCheckboxes.approve}>
+													<a
+														className="underline mr-1"
+														href="https://shelly.kpfu.ru/e-ksu/docs/F_437732066/prikaz_soglashenie_na_PEP211_docx_18_05_2022.docx"
+														target="_blank"
+														rel="noopener noreferrer"
+													>
+														{t('generalAgreement')}
+													</a>
+													{t('generalAgreement2')}
+												</Checkbox>
+											</Form.Item>
+											<Form.Item className="mb-[20px]" name="sogl" valuePropName="checked" label={null}>
+												<Checkbox disabled={initialCheckboxes.sogl}>
+													{t('sogl')}
+													<a className="underline " href="/Soglasie.docx" target="_blank" rel="noopener noreferrer">
+														{t('sogl2')}
+													</a>
+												</Checkbox>
+											</Form.Item>
+											<Form.Item
+												// className={`${initialCheckboxes.oznak ? 'opacity-[60%]' : ''}`}
+												name="oznak"
+												valuePropName="checked"
+												label={null}
+											>
+												<Checkbox disabled={initialCheckboxes.oznak}>
+													{t('politics')}
+													<a className="underline ml-1" href="/politika.pdf" target="_blank" rel="noopener noreferrer">
+														{t('politics2')}
+													</a>
+												</Checkbox>
+											</Form.Item>
+
+											<Form.Item className="mb-[5px] mt-[15px]">
+												<Button type="primary" htmlType="submit">
+													{t('saveButton')}
+												</Button>
+											</Form.Item>
+										</Form>
+									</div>
+								</Col>
+							</Row>
+						</Collapse.Panel>
+					</Collapse>
 				</div>
 			</Spin>
 

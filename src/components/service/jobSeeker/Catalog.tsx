@@ -4,21 +4,18 @@ import { useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 import { useAppSelector } from '../../../store'
-import { useLazyGetInfoUserQuery } from '../../../store/api/formApi'
 import {
 	useGetCategoriesQuery,
 	useLazyGetVacancyPreviewByDirectionQuery,
 	useLazyGetVacancyPreviewBySubdivisionQuery
 } from '../../../store/api/serviceApi'
 import { keepFilterCategory, keepFilterSubCategory, keepFilterType } from '../../../store/reducers/CatalogFilterSlice'
-import { allData, name, surName } from '../../../store/reducers/SeekerFormReducers/AboutMeReducer'
 import { VacancyItemType } from '../../../store/reducers/type'
 
 import VacancyItem from './VacancyItem'
 
 export default function Catalog() {
 	const dispatch = useDispatch()
-	const user = useAppSelector(state => state.auth.user)
 	const catalogFilter = useAppSelector(state => state.catalogFilter)
 
 	const [categoryTitle, setCategoryTitle] = useState(catalogFilter.category)
@@ -42,35 +39,6 @@ export default function Catalog() {
 
 	const [getVacByDir, preLoadStatus] = useLazyGetVacancyPreviewByDirectionQuery()
 	const [getVacBySub] = useLazyGetVacancyPreviewBySubdivisionQuery()
-	const [getInfo] = useLazyGetInfoUserQuery()
-
-	useEffect(() => {
-		if (user) {
-			dispatch(name(user.firstname))
-			dispatch(surName(user.lastname))
-			getInfo()
-				.unwrap()
-				.then(info => {
-					dispatch(
-						allData({
-							name: user.firstname,
-							surName: user.lastname,
-							patronymic: user.middleName,
-							phone: user.phone,
-							email: user.email,
-							birthDay: user.birthday,
-							gender: info.gender,
-							countryId: info.countryId,
-							isPatronymicSet:
-								user.middleName === null || user.middleName === undefined || user.middleName === '' ? false : true,
-							isBirthDaySet:
-								user.birthday === null || user.birthday === undefined || user.birthday === '' ? false : true,
-							isGenderSet: info.gender === null || info.gender === undefined ? false : true
-						})
-					)
-				})
-		}
-	}, [])
 
 	useEffect(() => {
 		const lowerObserver = new IntersectionObserver(entries => {

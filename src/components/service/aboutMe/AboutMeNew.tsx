@@ -130,8 +130,8 @@ const AboutMeNew = () => {
 						)}
 					>
 						<Collapse.Panel
-							 showArrow={true} 
-							 forceRender 
+							showArrow={true}
+							forceRender
 							className="p-2 p-3 transition-all duration-500 ease-in-ou"
 							header={
 								<Title className="!mb-0" level={5}>
@@ -242,25 +242,71 @@ const AboutMeNew = () => {
 
 								<div className="flex flex-wrap justify-start">
 									<Descriptions column={1} title="">
-										<Descriptions.Item label={t('insitute')}>{dataAboutMe?.studentAddedDto?.FACULTY}</Descriptions.Item>
-										<Descriptions.Item label={t('specialization')}>
-											{dataAboutMe?.studentAddedDto?.SPECIALITY}
-										</Descriptions.Item>
-										<Descriptions.Item label={t('typeObr')}>
-											{dataAboutMe?.studentAddedDto?.STUDY_TYPE}
-										</Descriptions.Item>
-										<Descriptions.Item label={t('category')}>
-											{dataAboutMe?.studentAddedDto?.CATEGORY}
-										</Descriptions.Item>
+										{/* Институт */}
+										{dataAboutMe?.studentAddedDto?.FACULTY ? (
+											<Descriptions.Item label={t('insitute')}>{dataAboutMe.studentAddedDto.FACULTY}</Descriptions.Item>
+										) : (
+											''
+										)}
 
-										<Descriptions.Item label={t('ident')}>{dataAboutMe?.studentAddedDto?.IDENT}</Descriptions.Item>
-										<Descriptions.Item label={t('groupNumbers')}>
-											{dataAboutMe?.studentAddedDto?.GROUP}
-										</Descriptions.Item>
-										<Descriptions.Item label={t('bilet')}>{dataAboutMe?.studentAddedDto?.LIBCARD}</Descriptions.Item>
-										<Descriptions.Item label={t('graduateYear')}>
-											{dataAboutMe?.studentAddedDto?.STUDYEND}
-										</Descriptions.Item>
+										{/* Специализация */}
+										{dataAboutMe?.studentAddedDto?.SPECIALITY ? (
+											<Descriptions.Item label={t('specialization')}>
+												{dataAboutMe.studentAddedDto.SPECIALITY}
+											</Descriptions.Item>
+										) : (
+											''
+										)}
+
+										{/* Тип обучения */}
+										{dataAboutMe?.studentAddedDto?.STUDY_TYPE ? (
+											<Descriptions.Item label={t('typeObr')}>
+												{dataAboutMe.studentAddedDto.STUDY_TYPE}
+											</Descriptions.Item>
+										) : (
+											''
+										)}
+
+										{/* Категория */}
+										{dataAboutMe?.studentAddedDto?.CATEGORY ? (
+											<Descriptions.Item label={t('category')}>
+												{dataAboutMe.studentAddedDto.CATEGORY}
+											</Descriptions.Item>
+										) : (
+											''
+										)}
+
+										{/* Идентификатор */}
+										{dataAboutMe?.studentAddedDto?.IDENT ? (
+											<Descriptions.Item label={t('ident')}>{dataAboutMe.studentAddedDto.IDENT}</Descriptions.Item>
+										) : (
+											''
+										)}
+
+										{/* Номер группы */}
+										{dataAboutMe?.studentAddedDto?.GROUP ? (
+											<Descriptions.Item label={t('groupNumbers')}>
+												{dataAboutMe.studentAddedDto.GROUP}
+											</Descriptions.Item>
+										) : (
+											''
+										)}
+
+										{/* Билет */}
+										{dataAboutMe?.studentAddedDto?.LIBCARD ? (
+											<Descriptions.Item label={t('bilet')}>{dataAboutMe.studentAddedDto.LIBCARD}</Descriptions.Item>
+										) : (
+											''
+										)}
+
+										{/* Год окончания */}
+										{dataAboutMe?.studentAddedDto?.STUDYEND ? (
+											<Descriptions.Item label={t('graduateYear')}>
+												{dataAboutMe.studentAddedDto.STUDYEND}
+											</Descriptions.Item>
+										) : (
+											''
+										)}
 									</Descriptions>
 								</div>
 							</div>

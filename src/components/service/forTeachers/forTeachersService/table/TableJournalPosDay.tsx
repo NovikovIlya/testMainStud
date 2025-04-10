@@ -20,80 +20,7 @@ const EditableRow: React.FC<EditableRowProps> = ({ index, ...props }) => {
   );
 };
 
-// const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
-//   title,
-//   editable,
-//   children,
-//   dataIndex,
-//   record,
-//   handleSave,
-//   ...restProps
-// }) => {
-//   const [editing, setEditing] = useState(false);
-//   const inputRef = useRef<InputRef>(null);
-//   const form = useContext(EditableContext)!;
-//   const selectRef = useRef<any>(null);
-  
-//   useEffect(() => {
-//     if (editing) {
-//       inputRef.current?.focus();
-//     }
-//   }, [editing]);
 
-//   const toggleEdit = () => {
-//     setEditing(!editing);
-//     form.setFieldsValue({ [dataIndex]: record[dataIndex] });
-//   };
-
-//   const save = async () => {
-//     try {
-//       const values = await form.validateFields();
-    
-//       toggleEdit();
-//       // @ts-ignore
-//       handleSave({ ...record, ...values });
-//     } catch (errInfo) {
-//       console.log('Save failed:', errInfo);
-//     }
-//   };
-
-//   let childNode = children;
-
-//   if (editable) {
-//     childNode = editing ? (
-//       <Form.Item
-//         style={{ margin: 0 ,width:'auto'}}
-//         name={dataIndex}
-        
-//       >
-//         {/* <Input  ref={inputRef} onPressEnter={save} onBlur={save} /> */}
-//         <Select
-//         allowClear
-//         open
-//     className="w-[50px]"
-//     ref={selectRef}
-//     onBlur={save}
-//     onChange={save}
-//     options={[
-//       { value: null, label: '' },
-//       { value: 'б', label: 'б' },
-//       { value: 'н', label: 'н' }
-//     ]}
-//   />
-//       </Form.Item>
-//     ) : (
-//       <div
-//         className="editable-cell-value-wrap h-8"
-//         style={{ paddingInlineEnd: 24 ,width:'auto'}}
-//         onClick={toggleEdit}
-//       >
-//         {children}
-//       </div>
-//     );
-//   }
-
-//   return <td {...restProps}>{childNode}</td>;
-// };
 const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
   title,
   editable,
@@ -109,7 +36,7 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
   const form = useContext(EditableContext)!;
   const cellRef = useRef<HTMLTableCellElement>(null);
   const selectRef = useRef<any>(null);
-  console.log('record',record)
+
   useEffect(() => {
     if (editing) {
       selectRef.current?.focus();
@@ -153,10 +80,11 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
     { value: null, label: "" },
     { value: "б", label: t('b') },
     { value: "н", label: t('n')},
+    { value: 'о', label: t('o')  },
+    { value: 'у', label:  t('y') }
   ]
   const optionsMap = new Map(options.map(opt => [opt.value, opt.label]));
   let childNode = children;
-  console.log('22222222222222222children',children)
 
   if (editable) {
     childNode = fixDay===null ? editing  ? (
@@ -164,7 +92,6 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
         style={{ margin: 0, width: 'auto' }}
         name={dataIndex}
       >
-        
         <Select
           allowClear
           open
@@ -175,7 +102,9 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
           options={[
             { value: null, label: '' },
             { value: 'б', label: t('b')  },
-            { value: 'н', label:  t('n') }
+            { value: 'н', label:  t('n') },
+            { value: 'о', label: t('o')  },
+            { value: 'у', label:  t('y') }
           ]}
         />
       </Form.Item>
@@ -262,10 +191,7 @@ const TableJournalPosDay = ({fixDay,dataSource, setLocalData}:any) => {
       });
       setLocalData(newData);
 
-      // Отправка действия, если есть изменения
-      // if (hasChanges) {
-      //   dispatch(setIsEditTableScheduleTeacher(true));
-      // }
+     
     }
   };
 
@@ -296,7 +222,7 @@ const TableJournalPosDay = ({fixDay,dataSource, setLocalData}:any) => {
    
 
   return (
-    <div className={`${fixDay!==null ?'opacity-40':''} mt-4 styleCustom`}>
+    <div className={`${fixDay!==null ?'opacity-40':''} mt-4 styleCustom `}>
       <Table<DataType>
         
         rowKey={(record) => record.key}
@@ -312,7 +238,6 @@ const TableJournalPosDay = ({fixDay,dataSource, setLocalData}:any) => {
         pagination={false}
       
       />
-    
     </div>
   );
 };

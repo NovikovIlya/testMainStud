@@ -208,7 +208,7 @@ const Languages = () => {
 							onClick={showModal}
 							className="gap-2 flex items-center cursor-pointer hover:animate-pulse transition delay-150 "
 						>
-							<Button className="rounded-[50%] !w-[28px] hover:animate-pulse transition delay-150 " type="primary">
+							<Button className="rounded-[50%] !w-[28px] hover:animate-pulse transition delay-150 text-[28px] " type="primary">
 								+
 							</Button>
 							<span>{t('add')}</span>

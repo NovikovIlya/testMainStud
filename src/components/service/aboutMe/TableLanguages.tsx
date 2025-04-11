@@ -69,7 +69,7 @@ const TableLanguages: React.FC<TableLanguagesProps> = ({isSuccess, dataCertifica
 			key: 'action',
 			render: (_, record) => (
 				<Space size="middle">
-					<DeleteTwoTone className="hover:scale-[140%] " />
+					<DeleteTwoTone onClick={()=>handleDelete(record)} className="hover:scale-[140%] " />
 				</Space>
 			)
 		}
@@ -92,6 +92,10 @@ const TableLanguages: React.FC<TableLanguagesProps> = ({isSuccess, dataCertifica
 			});
 		}
 	}, [isSuccess, selectInfo, form2])
+
+	const handleDelete = (record:any)=>{
+		console.log('recordDelete', record)
+	}
 
 	const showModalEdit = () => {
 		setIsModalOpenEdit(true)

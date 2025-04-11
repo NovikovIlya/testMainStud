@@ -1,41 +1,33 @@
 import { PlusCircleFilled } from '@ant-design/icons'
 import { Button, Checkbox, ConfigProvider, DatePicker, Form, Input, Modal, Popover, Radio, Select, Upload } from 'antd'
+import { FormInstance } from 'antd/lib'
+import en_US from 'antd/locale/en_US'
+import ru_RU from 'antd/locale/ru_RU'
 import dayjs from 'dayjs'
 import i18next, { t } from 'i18next'
 import { useState } from 'react'
 
+import { useGetEducationTypesQuery } from '../../../store/api/serviceApi'
 import { useGetCountriesQuery } from '../../../store/api/utilsApi'
 
-export const AddEducationModal = () => {
+export const AddEducationModal = (props: { form: FormInstance; open: boolean; onCancel: Function }) => {
 	const { data: countries = [] } = useGetCountriesQuery(i18next.language)
-
-	const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
-
-	const [form] = Form.useForm()
+	const { data: levels = { edu_types: [] } } = useGetEducationTypesQuery()
 
 	return (
 		<>
-			<Button
-				type="text"
-				className="!pl-0 mt-[32px]"
-				onClick={() => {
-					setIsModalOpen(true)
-				}}
-			>
-				<PlusCircleFilled className="!text-[28px]/[28px]" style={{ height: 28, width: 28, color: '#3073D7' }} />
-				{t('addEducation')}
-			</Button>
 			<ConfigProvider>
 				<Modal
-					open={isModalOpen}
+					width={'35%'}
+					open={props.open}
 					footer={null}
 					title={'Добавление образования'}
 					onCancel={() => {
-						setIsModalOpen(false)
+						props.onCancel()
 					}}
 				>
 					<Form
-						form={form}
+						form={props.form}
 						layout="vertical"
 						requiredMark={false}
 						className="w-full"
@@ -47,10 +39,10 @@ export const AddEducationModal = () => {
 							reader.readAsDataURL(values.file.file.originFileObj)
 						}}
 					>
-						<Form.Item name={'language'} label={t('publicationLanguage')}>
+						<Form.Item name={'language'} label={t('publicationLanguage')} initialValue={1}>
 							<Radio.Group>
-								<Radio value={'RU'}>{t('rus')}</Radio>
-								<Radio value={'ENG'}>{t('eng')}</Radio>
+								<Radio value={1}>{t('rus')}</Radio>
+								<Radio value={2}>{t('eng')}</Radio>
 							</Radio.Group>
 						</Form.Item>
 						<div className="flex w-full gap-[32px]">
@@ -61,13 +53,13 @@ export const AddEducationModal = () => {
 								className="w-full"
 							>
 								<Select
-									options={countries.map(country => ({ value: country.id, label: country.shortName }))}
+									options={levels.edu_types.map(country => ({ value: country.id, label: country.name }))}
 									placeholder="Выбрать"
 								></Select>
 							</Form.Item>
 							<Form.Item name={'countryId'} label={t('countryEducation')} className="w-full">
 								<Select
-									options={countries.map(country => ({ value: country.id, label: country.shortName }))}
+									options={countries.map(country => ({ value: country.shortName, label: country.shortName }))}
 									placeholder="Выбрать"
 								></Select>
 							</Form.Item>
@@ -83,22 +75,26 @@ export const AddEducationModal = () => {
 							<Input className="w-full"></Input>
 						</Form.Item>
 						<div className="flex w-full gap-[32px]">
-							<Form.Item
-								name={'beginningYear'}
-								label={t('beginningYear') + '*'}
-								rules={[{ required: true, message: t('beginningYearNotChosen') }]}
-								className="w-full"
-							>
-								<DatePicker.YearPicker className="w-full" maxDate={dayjs()}></DatePicker.YearPicker>
-							</Form.Item>
-							<Form.Item
-								name={'graduateYear'}
-								label={t('graduateYear') + '*'}
-								className="w-full"
-								rules={[{ required: true, message: t('graduateYearNotChosen') }]}
-							>
-								<DatePicker.YearPicker className="w-full" maxDate={dayjs()}></DatePicker.YearPicker>
-							</Form.Item>
+							<ConfigProvider locale={i18next.language === 'ru' ? ru_RU : en_US}>
+								<Form.Item
+									name={'beginningYear'}
+									label={t('beginningYear') + '*'}
+									rules={[{ required: true, message: t('beginningYearNotChosen') }]}
+									className="w-full"
+								>
+									<DatePicker.YearPicker className="w-full" maxDate={dayjs()}></DatePicker.YearPicker>
+								</Form.Item>
+							</ConfigProvider>
+							<ConfigProvider locale={i18next.language === 'ru' ? ru_RU : en_US}>
+								<Form.Item
+									name={'graduateYear'}
+									label={t('graduateYear') + '*'}
+									className="w-full"
+									rules={[{ required: true, message: t('graduateYearNotChosen') }]}
+								>
+									<DatePicker.YearPicker className="w-full" maxDate={dayjs()}></DatePicker.YearPicker>
+								</Form.Item>
+							</ConfigProvider>
 						</div>
 						<div className="flex w-full gap-[32px]">
 							<Form.Item name={'series'} label={t('documentSeries')} className="w-full">
@@ -114,9 +110,11 @@ export const AddEducationModal = () => {
 						<Form.Item name={'qualification'} label={t('qualification')}>
 							<Input className="w-full"></Input>
 						</Form.Item>
-						<Form.Item name={'issueDate'} label={t('issueDate')}>
-							<DatePicker className="w-[47%]" maxDate={dayjs()}></DatePicker>
-						</Form.Item>
+						<ConfigProvider locale={i18next.language === 'ru' ? ru_RU : en_US}>
+							<Form.Item name={'issueDate'} label={t('issueDate')}>
+								<DatePicker className="w-[47%]" maxDate={dayjs()}></DatePicker>
+							</Form.Item>
+						</ConfigProvider>
 						<Form.Item
 							name={'file'}
 							label={

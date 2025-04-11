@@ -6,10 +6,12 @@ import dayjs from 'dayjs'
 import i18next, { t } from 'i18next'
 import { useState } from 'react'
 
+import { useGetEducationTypesQuery } from '../../../store/api/serviceApi'
 import { useGetCountriesQuery } from '../../../store/api/utilsApi'
 
 export const AddEducationModal = () => {
 	const { data: countries = [] } = useGetCountriesQuery(i18next.language)
+	const { data: levels = { edu_types: [] } } = useGetEducationTypesQuery()
 
 	const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 
@@ -64,7 +66,7 @@ export const AddEducationModal = () => {
 								className="w-full"
 							>
 								<Select
-									options={countries.map(country => ({ value: country.id, label: country.shortName }))}
+									options={levels.edu_types.map(country => ({ value: country.id, label: country.name }))}
 									placeholder="Выбрать"
 								></Select>
 							</Form.Item>

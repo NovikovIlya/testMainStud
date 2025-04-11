@@ -196,6 +196,11 @@ export const serviceApi = apiSlice.injectEndpoints({
 			query: () => ({
 				url: `about-me/get-edu-types`
 			})
+		}),
+		getNewEducations: builder.query<{ completed_edu: any[] }, void>({
+			query: () => ({
+				url: `about-me/get-completed-edu`
+			})
 		})
 	})
 })
@@ -225,5 +230,6 @@ export const {
 	useDeleteAccPhoneMutation,
 	useGetRoleQuery,
 	useGetOldEducationsQuery,
-	useGetEducationTypesQuery
+	useGetEducationTypesQuery,
+	useGetNewEducationsQuery
 } = serviceApi

@@ -127,12 +127,12 @@ export interface IMe {
 }
 
 export type EducationTableDataType = {
-	language: 'RU' | 'ENG'
-	beginningYear: string
-	graduateYear: string
-	educationLevelId: number
-	specialization: string
-	nameOfInstitute: string
+	language_portal: 1 | 2 | null
+	start_date: string
+	end_date: string
+	edu_level: number
+	eduspeciality: string
+	organization: string
 }
 
 export type OldEducationTableDataType = {

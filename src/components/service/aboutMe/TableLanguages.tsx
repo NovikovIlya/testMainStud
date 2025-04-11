@@ -127,6 +127,7 @@ const TableLanguages: React.FC<TableLanguagesProps> = ({isSuccess, dataCertifica
 		return false
 	}
 	console.log('selectInfo', selectInfo)
+	
 
 	return (
 		<>
@@ -215,7 +216,8 @@ const TableLanguages: React.FC<TableLanguagesProps> = ({isSuccess, dataCertifica
 							<Upload maxCount={1} beforeUpload={beforeUpload} accept=".pdf">
 								<Button className=" " icon={<UploadOutlined />}>
 
-									 {t('add') }/ Изменить
+								{fileList.length > 0 ? t('change') : t('add')}
+
 								</Button>
 							</Upload>
 						</Form.Item>

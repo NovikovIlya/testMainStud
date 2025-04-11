@@ -95,21 +95,27 @@ const AboutMeNew = () => {
 					<Col span={12}>
 						<div className="flex flex-wrap justify-start p-[40px]">
 							<Descriptions column={1} title={t('generalInfo')}>
-								<Descriptions.Item label={t('birthDate')}>{dataAboutMe?.BIRTH_DATE}</Descriptions.Item>
-								<Descriptions.Item label={t('gender')}>{dataAboutMe?.SEX ? t(dataAboutMe?.SEX) : ''}</Descriptions.Item>
-								<Descriptions.Item label={t('citizenshipType')}>{dataAboutMe?.CITIZENSHIP_TYPE}</Descriptions.Item>
+								{dataAboutMe?.BIRTH_DATE ? (
+									<Descriptions.Item label={t('birthDate')}>{dataAboutMe.BIRTH_DATE}</Descriptions.Item>
+								) : null}
+
+								{dataAboutMe?.SEX ? (
+									<Descriptions.Item label={t('gender')}>{t(dataAboutMe.SEX)}</Descriptions.Item>
+								) : null}
+
+								{dataAboutMe?.CITIZENSHIP_TYPE ? (
+									<Descriptions.Item label={t('citizenshipType')}>{dataAboutMe.CITIZENSHIP_TYPE}</Descriptions.Item>
+								) : null}
+
 								{dataAboutMe?.CITIZENSHIP_COUNTRY ? (
 									<Descriptions.Item label={t('citizenshipCountry')}>
-										{dataAboutMe?.CITIZENSHIP_COUNTRY}
+										{dataAboutMe.CITIZENSHIP_COUNTRY}
 									</Descriptions.Item>
-								) : (
-									''
-								)}
+								) : null}
+
 								{dataAboutMe?.BIRTH_CITY ? (
-									<Descriptions.Item label={t('birthPlace')}>{dataAboutMe?.BIRTH_CITY}</Descriptions.Item>
-								) : (
-									''
-								)}
+									<Descriptions.Item label={t('birthPlace')}>{dataAboutMe.BIRTH_CITY}</Descriptions.Item>
+								) : null}
 							</Descriptions>
 						</div>
 					</Col>
@@ -132,7 +138,7 @@ const AboutMeNew = () => {
 						<Collapse.Panel
 							showArrow={true}
 							forceRender
-							className="p-2 p-3 transition-all duration-500 ease-in-ou"
+							className=" p-[7px] transition-all duration-500 ease-in-ou"
 							header={
 								<Title className="!mb-0" level={5}>
 									{t('userAgreementText')}
@@ -245,27 +251,21 @@ const AboutMeNew = () => {
 										{/* Институт */}
 										{dataAboutMe?.studentAddedDto?.FACULTY ? (
 											<Descriptions.Item label={t('insitute')}>{dataAboutMe.studentAddedDto.FACULTY}</Descriptions.Item>
-										) : (
-											null
-										)}
+										) : null}
 
 										{/* Специализация */}
 										{dataAboutMe?.studentAddedDto?.SPECIALITY ? (
 											<Descriptions.Item label={t('specialization')}>
 												{dataAboutMe.studentAddedDto.SPECIALITY}
 											</Descriptions.Item>
-										) : (
-											null
-										)}
+										) : null}
 
 										{/* Тип обучения */}
 										{dataAboutMe?.studentAddedDto?.STUDY_TYPE ? (
 											<Descriptions.Item label={t('typeObr')}>
 												{dataAboutMe.studentAddedDto.STUDY_TYPE}
 											</Descriptions.Item>
-										) : (
-											null
-										)}
+										) : null}
 
 										{/* Категория */}
 										{dataAboutMe?.studentAddedDto?.CATEGORY ? (
@@ -279,34 +279,26 @@ const AboutMeNew = () => {
 										{/* Идентификатор */}
 										{dataAboutMe?.studentAddedDto?.IDENT ? (
 											<Descriptions.Item label={t('ident')}>{dataAboutMe.studentAddedDto.IDENT}</Descriptions.Item>
-										) : (
-											null
-										)}
+										) : null}
 
 										{/* Номер группы */}
 										{dataAboutMe?.studentAddedDto?.GROUP ? (
 											<Descriptions.Item label={t('groupNumbers')}>
 												{dataAboutMe.studentAddedDto.GROUP}
 											</Descriptions.Item>
-										) : (
-											null
-										)}
+										) : null}
 
 										{/* Билет */}
 										{dataAboutMe?.studentAddedDto?.LIBCARD ? (
 											<Descriptions.Item label={t('bilet')}>{dataAboutMe.studentAddedDto.LIBCARD}</Descriptions.Item>
-										) : (
-											null
-										)}
+										) : null}
 
 										{/* Год окончания */}
 										{dataAboutMe?.studentAddedDto?.STUDYEND ? (
 											<Descriptions.Item label={t('graduateYear')}>
 												{dataAboutMe.studentAddedDto.STUDYEND}
 											</Descriptions.Item>
-										) : (
-											null
-										)}
+										) : null}
 									</Descriptions>
 								</div>
 							</div>
@@ -375,30 +367,22 @@ const AboutMeNew = () => {
 												<Descriptions.Item label={t('job')}>
 													{dataAboutMe?.employeeAddedDto?.POSITION}
 												</Descriptions.Item>
-											) : (
-												null
-											)}
+											) : null}
 											{dataAboutMe?.employeeAddedDto?.WORKADDRESS_BUILDING ? (
 												<Descriptions.Item label={t('adress')}>
 													{dataAboutMe?.employeeAddedDto?.WORKADDRESS_BUILDING}
 												</Descriptions.Item>
-											) : (
-												null
-											)}
+											) : null}
 											{dataAboutMe?.employeeAddedDto?.WORKADDRESS_ROOM ? (
 												<Descriptions.Item label={t('numberCabinet')}>
 													{dataAboutMe?.employeeAddedDto?.WORKADDRESS_ROOM}
 												</Descriptions.Item>
-											) : (
-												null
-											)}
+											) : null}
 											{dataAboutMe?.employeeAddedDto?.PARTTIMEWORK ? (
 												<Descriptions.Item label={t('jobSovm')}>
 													{dataAboutMe?.employeeAddedDto?.PARTTIMEWORK}
 												</Descriptions.Item>
-											) : (
-												null
-											)}
+											) : null}
 										</Descriptions>
 									</div>
 								</div>

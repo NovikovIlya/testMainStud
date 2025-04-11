@@ -133,6 +133,13 @@ export type EducationTableDataType = {
 	edu_level: number
 	eduspeciality: string
 	organization: string
+	edu_country: string
+	development: string
+	qualification: string
+	issue_date: string
+	docnum: string
+	docseries: string
+	portal_status: '1' | null
 }
 
 export type OldEducationTableDataType = {

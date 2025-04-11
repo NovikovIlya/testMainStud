@@ -1,15 +1,21 @@
 import { DeleteTwoTone, EditTwoTone, EyeTwoTone } from '@ant-design/icons'
-import { ConfigProvider, Space, Table, TableProps } from 'antd'
+import { ConfigProvider, Form, Space, Table, TableProps } from 'antd'
+import dayjs from 'dayjs'
 import { t } from 'i18next'
+import { useState } from 'react'
 
 import { EngFlagSvg } from '../../../assets/svg/EngFlagSvg'
 import { RuFlagSvg } from '../../../assets/svg/RuFlagSvg'
 import { useGetEducationTypesQuery, useGetNewEducationsQuery } from '../../../store/api/serviceApi'
 import { EducationTableDataType } from '../../../store/reducers/type'
 
+import { AddEducationModal } from './AddEducationModal'
+
 export const EducationsTable = () => {
 	const { data: educations = { completed_edu: [] } } = useGetNewEducationsQuery()
 	const { data: levels = { edu_types: [] } } = useGetEducationTypesQuery()
+	const [form] = Form.useForm()
+	const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 
 	const columns: TableProps<EducationTableDataType>['columns'] = [
 		{
@@ -53,7 +59,26 @@ export const EducationsTable = () => {
 			render: (_, record) => (
 				<Space size="middle">
 					<EyeTwoTone />
-					<EditTwoTone />
+					<EditTwoTone
+						onClick={() => {
+							form.setFieldsValue({
+								language: record.language_portal ? record.language_portal : 1,
+								nameOfInstitute: record.organization,
+								educationLevelId: record.edu_level,
+								beginningYear: dayjs(record.start_date),
+								graduateYear: dayjs(record.end_date),
+								countryId: record.edu_country,
+								specialization: record.eduspeciality,
+								subdivision: record.development,
+								qualification: record.qualification,
+								issueDate: record.issue_date ? dayjs(record.issue_date) : null,
+								number: record.docnum,
+								series: record.docseries,
+								accept: record.portal_status ? true : false
+							})
+							setIsModalOpen(true)
+						}}
+					/>
 					<DeleteTwoTone />
 				</Space>
 			)
@@ -90,6 +115,13 @@ export const EducationsTable = () => {
 	return (
 		<>
 			{' '}
+			<AddEducationModal
+				form={form}
+				open={isModalOpen}
+				onCancel={() => {
+					setIsModalOpen(false)
+				}}
+			/>
 			<ConfigProvider
 				theme={{
 					components: {

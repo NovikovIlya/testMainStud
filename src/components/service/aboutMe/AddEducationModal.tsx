@@ -1,5 +1,7 @@
 import { PlusCircleFilled } from '@ant-design/icons'
 import { Button, Checkbox, ConfigProvider, DatePicker, Form, Input, Modal, Popover, Radio, Select, Upload } from 'antd'
+import en_US from 'antd/locale/en_US'
+import ru_RU from 'antd/locale/ru_RU'
 import dayjs from 'dayjs'
 import i18next, { t } from 'i18next'
 import { useState } from 'react'
@@ -27,6 +29,7 @@ export const AddEducationModal = () => {
 			</Button>
 			<ConfigProvider>
 				<Modal
+					width={'35%'}
 					open={isModalOpen}
 					footer={null}
 					title={'Добавление образования'}
@@ -89,7 +92,9 @@ export const AddEducationModal = () => {
 								rules={[{ required: true, message: t('beginningYearNotChosen') }]}
 								className="w-full"
 							>
-								<DatePicker.YearPicker className="w-full" maxDate={dayjs()}></DatePicker.YearPicker>
+								<ConfigProvider locale={i18next.language === 'ru' ? ru_RU : en_US}>
+									<DatePicker.YearPicker className="w-full" maxDate={dayjs()}></DatePicker.YearPicker>
+								</ConfigProvider>
 							</Form.Item>
 							<Form.Item
 								name={'graduateYear'}
@@ -97,7 +102,9 @@ export const AddEducationModal = () => {
 								className="w-full"
 								rules={[{ required: true, message: t('graduateYearNotChosen') }]}
 							>
-								<DatePicker.YearPicker className="w-full" maxDate={dayjs()}></DatePicker.YearPicker>
+								<ConfigProvider locale={i18next.language === 'ru' ? ru_RU : en_US}>
+									<DatePicker.YearPicker className="w-full" maxDate={dayjs()}></DatePicker.YearPicker>
+								</ConfigProvider>
 							</Form.Item>
 						</div>
 						<div className="flex w-full gap-[32px]">
@@ -115,7 +122,9 @@ export const AddEducationModal = () => {
 							<Input className="w-full"></Input>
 						</Form.Item>
 						<Form.Item name={'issueDate'} label={t('issueDate')}>
-							<DatePicker className="w-[47%]" maxDate={dayjs()}></DatePicker>
+							<ConfigProvider locale={i18next.language === 'ru' ? ru_RU : en_US}>
+								<DatePicker className="w-[47%]" maxDate={dayjs()}></DatePicker>
+							</ConfigProvider>
 						</Form.Item>
 						<Form.Item
 							name={'file'}

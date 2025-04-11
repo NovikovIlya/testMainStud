@@ -12,7 +12,7 @@ import { EducationTableDataType } from '../../../store/reducers/type'
 import { AddEducationModal } from './AddEducationModal'
 
 export const EducationsTable = () => {
-	const { data: educations = { completed_edu: [] } } = useGetNewEducationsQuery()
+	const { data: educations = { completed_edu: [] }, isLoading: loading } = useGetNewEducationsQuery()
 	const { data: levels = { edu_types: [] } } = useGetEducationTypesQuery()
 	const [form] = Form.useForm()
 	const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
@@ -138,6 +138,7 @@ export const EducationsTable = () => {
 					dataSource={educations.completed_edu}
 					className="w-full"
 					locale={{ emptyText: t('noData') }}
+					loading={loading}
 				/>
 			</ConfigProvider>
 		</>

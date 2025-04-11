@@ -6,8 +6,8 @@ const InfoStudent = ({ login = '123', password = '123' }) => {
 	const { t } = useTranslation()
 
 	return (
-		<Card className="border-l-rose-500 mt-5 mb-14 rounded-3xl">
-			<div>{t('welcome_message_student')}</div>
+		<Card className="border-l-rose-500 mt-5 mb-14 rounded-3xl text-base shadow-md ">
+			<div className='font-bold'>{t('welcome_message_student')}</div>
 			<div>
 			<div>{t('welcome_message_student1')}</div>
 			</div>

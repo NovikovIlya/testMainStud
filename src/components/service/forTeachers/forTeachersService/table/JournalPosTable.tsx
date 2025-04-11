@@ -21,6 +21,13 @@ const JournalPosTable = ({date,fixDay,time,timeId,groupId,description,title,data
 	const [sendData,{error,data:dataSend}] = useSendByDateMutation()
 	const [checkbox, setCheckbox] = useState(false)
 	const dispatch = useAppDispatch()
+	console.log('dataSenddataSend',dataSend)
+	useEffect(()=>{
+		console.log('dataSenddataSend',dataSend)
+		if (typeof dataSend?.data === 'string') { // Проверка на текстовый ответ
+			alert('Ответ сервера: ' + dataSend?.data); // Вывод alert
+		  }
+	},[dataSend])
 
 	const send = ()=>{
 		const data = {
@@ -40,8 +47,9 @@ const JournalPosTable = ({date,fixDay,time,timeId,groupId,description,title,data
 		console.log('data',data)
 		sendData(data)
 		.unwrap()
-		.then((res:any)=>{
-			console.log('res',res)
+		.then((res: string) => {
+			console.log('Текст ответа:', res)
+			alert('Ответ сервера: ' + res);
 		})
 		.catch((err:any)=>{
 			if(err.status === 501){

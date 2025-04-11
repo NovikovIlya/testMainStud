@@ -246,7 +246,7 @@ const AboutMeNew = () => {
 										{dataAboutMe?.studentAddedDto?.FACULTY ? (
 											<Descriptions.Item label={t('insitute')}>{dataAboutMe.studentAddedDto.FACULTY}</Descriptions.Item>
 										) : (
-											''
+											null
 										)}
 
 										{/* Специализация */}
@@ -255,7 +255,7 @@ const AboutMeNew = () => {
 												{dataAboutMe.studentAddedDto.SPECIALITY}
 											</Descriptions.Item>
 										) : (
-											''
+											null
 										)}
 
 										{/* Тип обучения */}
@@ -264,7 +264,7 @@ const AboutMeNew = () => {
 												{dataAboutMe.studentAddedDto.STUDY_TYPE}
 											</Descriptions.Item>
 										) : (
-											''
+											null
 										)}
 
 										{/* Категория */}
@@ -280,7 +280,7 @@ const AboutMeNew = () => {
 										{dataAboutMe?.studentAddedDto?.IDENT ? (
 											<Descriptions.Item label={t('ident')}>{dataAboutMe.studentAddedDto.IDENT}</Descriptions.Item>
 										) : (
-											''
+											null
 										)}
 
 										{/* Номер группы */}
@@ -289,14 +289,14 @@ const AboutMeNew = () => {
 												{dataAboutMe.studentAddedDto.GROUP}
 											</Descriptions.Item>
 										) : (
-											''
+											null
 										)}
 
 										{/* Билет */}
 										{dataAboutMe?.studentAddedDto?.LIBCARD ? (
 											<Descriptions.Item label={t('bilet')}>{dataAboutMe.studentAddedDto.LIBCARD}</Descriptions.Item>
 										) : (
-											''
+											null
 										)}
 
 										{/* Год окончания */}
@@ -305,7 +305,7 @@ const AboutMeNew = () => {
 												{dataAboutMe.studentAddedDto.STUDYEND}
 											</Descriptions.Item>
 										) : (
-											''
+											null
 										)}
 									</Descriptions>
 								</div>
@@ -376,28 +376,28 @@ const AboutMeNew = () => {
 													{dataAboutMe?.employeeAddedDto?.POSITION}
 												</Descriptions.Item>
 											) : (
-												''
+												null
 											)}
 											{dataAboutMe?.employeeAddedDto?.WORKADDRESS_BUILDING ? (
 												<Descriptions.Item label={t('adress')}>
 													{dataAboutMe?.employeeAddedDto?.WORKADDRESS_BUILDING}
 												</Descriptions.Item>
 											) : (
-												''
+												null
 											)}
 											{dataAboutMe?.employeeAddedDto?.WORKADDRESS_ROOM ? (
 												<Descriptions.Item label={t('numberCabinet')}>
 													{dataAboutMe?.employeeAddedDto?.WORKADDRESS_ROOM}
 												</Descriptions.Item>
 											) : (
-												''
+												null
 											)}
 											{dataAboutMe?.employeeAddedDto?.PARTTIMEWORK ? (
 												<Descriptions.Item label={t('jobSovm')}>
 													{dataAboutMe?.employeeAddedDto?.PARTTIMEWORK}
 												</Descriptions.Item>
 											) : (
-												''
+												null
 											)}
 										</Descriptions>
 									</div>

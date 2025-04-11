@@ -34,7 +34,7 @@ const Languages = () => {
 	const { data: dataLevels } = useGetLevelsQuery()
 	const { data: dataCertificate } = useGetCertificateQuery()
 	const { data: dataAll } = useGetAllNativeLanguagesQuery()
-	const { data: dataForeign, isLoading: isFetchingForeign, isError: isErrorForeign } = useGetforeignLanguagesQuery()
+	const { data: dataForeign, isLoading: isFetchingForeign, isError: isErrorForeign,isSuccess } = useGetforeignLanguagesQuery()
 	const [setNative, { isLoading }] = useSetNativeMutation()
 	const [setForeign, { isLoading: isLoadingSetForeign }] = useSetForeignMutation()
 	const [selectedLabel, setSelectedLabel] = useState(null)
@@ -201,7 +201,7 @@ const Languages = () => {
 						</Title>
 					</Row>
 					<Row>
-						<TableLanguages selectId={selectId} setSelectId={setSelectId} dataForeign={dataForeign} />
+						<TableLanguages isSuccess={isSuccess} dataCertificate={dataCertificate} dataLevels={dataLevels} dataAll={dataAll} selectId={selectId} setSelectId={setSelectId} dataForeign={dataForeign} />
 					</Row>
 					<Row className="flex items-center justify-start mt-4 gap-2">
 						<div

@@ -11,8 +11,8 @@ import i18next from 'i18next'
 import { logOut, setCredentials } from '../reducers/authSlice'
 
 const baseQuery = fetchBaseQuery({
-	   baseUrl: 'https://newlk.kpfu.ru/',
-	   //  baseUrl: 'https://newlk-test.kpfu.ru/',
+	   //  baseUrl: 'https://newlk.kpfu.ru/',
+	     baseUrl: 'https://newlk-test.kpfu.ru/',
 	prepareHeaders(headers, { getState }) {
 		const token = (getState() as RootState).auth.accessToken
 		if (token) {
@@ -28,7 +28,7 @@ const baseQueryWithReAuth = async (
 	extraOptions: {}
 ) => {
 	let result = await baseQuery(args, api, extraOptions)
-	console.log("result?.error?.status",result?.error?.status)
+	
 	if (result?.error?.status === 500 || result?.error?.status === 501){
 		// @ts-ignore
 		const errorMessage = result.error.data?.errors?.[0]?.message; // Извлекаем сообщение об ошибке

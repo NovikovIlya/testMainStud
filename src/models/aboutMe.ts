@@ -43,3 +43,50 @@ export interface CheckedFlags {
   IS_CHECKED_HANDLING: number;
   IS_CHECKED_PERS_DATA: number;
 }
+
+export interface CertificateTs {
+	id: string
+	certificateName: string
+	certificateLink: string
+}
+
+// Language data interface
+export interface LanguageData {
+	studLangId: string
+	key: string
+	language: string
+	code: string
+	languageLevel: string
+	languageLevelCode: string
+	certificates: CertificateTs[]
+	isPublished: boolean
+}
+
+// Props interface for TableLanguages component
+export interface TableLanguagesProps {
+	isSuccess: boolean
+	dataCertificate: {
+		id: string
+		certificateName: string
+	}[]
+	dataLevels: {
+		languageLevelCode: string
+		languageLevel: string
+	}[]
+	dataAll: {
+		code: string
+		language: string
+	}[]
+	dataForeign: LanguageData[]
+	setSelectId: (id: string) => void
+	selectId: string | null
+}
+
+export // Form values interface
+interface FormValues {
+  languageCode: string
+  languageLevelCode: string
+  certificateId: string | null
+  isPublished: boolean
+  file: any[]
+}

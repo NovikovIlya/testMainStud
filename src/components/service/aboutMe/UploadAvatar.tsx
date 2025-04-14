@@ -1,5 +1,5 @@
 import React from 'react';
-import { UploadOutlined, UserOutlined } from '@ant-design/icons';
+import { DeleteOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Button, message, Spin, Upload } from 'antd';
 import { useAddAvatarMutation, useGetAvatarQuery, usePutAvatarMutation } from '../../../store/api/aboutMe/forAboutMe';
 import { t } from 'i18next';
@@ -61,13 +61,24 @@ const UploadAvatar = ({dataAboutMe}:any) => {
           accept="image/png, image/jpeg, image/webp"
           customRequest={({ file }) => handleUpload(file as File)}
         >
-          {/* <Button
+          <Button
             className='!rounded-[50%]'
             icon={<UploadOutlined />}
             loading={isLoading}
-          /> */}
+          />
+          
         </Upload>
+
+        
       </div>
+
+      {avatarUrl?.url ? <div className='absolute bottom-[40%] right-[-13px]'>
+        <Button
+              className='!rounded-[50%]'
+              icon={<DeleteOutlined  />}
+
+            />
+        </div> : ''}
     </Spin>
   );
 };

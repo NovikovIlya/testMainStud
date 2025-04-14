@@ -1,5 +1,5 @@
 import { DownOutlined, EditOutlined, EyeOutlined, QuestionCircleOutlined, UpOutlined } from '@ant-design/icons'
-import { Button, Checkbox, Col, Collapse, Divider, Form, Row, Spin, Tooltip } from 'antd'
+import { Button, Checkbox, Col, Collapse, Divider, Form, Progress, Row, Spin, Switch, Tooltip } from 'antd'
 import { Descriptions } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
 import Title from 'antd/es/typography/Title'
@@ -20,11 +20,14 @@ import UploadAvatar from './UploadAvatar'
 const AboutMeNew = () => {
 	const { t } = useTranslation()
 	const [form] = Form.useForm()
+	const [form2] = Form.useForm()
 	const [content, setContent] = useState('')
 	const { data: dataAboutMe, isLoading: isFetchingAboutMe } = useGetAboutMeQuery()
 	const [sendComment, { isLoading: isLoadComment }] = useSetCommentMutation()
 	const { data: dataCheckbox } = useGetCheckboxQuery()
 	const [setCheckbox, { isLoading: isLoadingCheckbox }] = useSetCheckboxMutation()
+	const [disabled, setDisabled] = useState(true)
+	const switchForm = Form.useWatch('switch', form2)
 	const [initialCheckboxes, setInitialCheckboxes] = useState({
 		codex: false,
 		library: false,
@@ -32,11 +35,20 @@ const AboutMeNew = () => {
 		sogl: false,
 		oznak: false
 	})
+	console.log('switch', switchForm)
 
 	useEffect(() => {
 		if (dataAboutMe?.employeeAddedDto?.COMMENT) {
 			setContent(dataAboutMe?.employeeAddedDto?.COMMENT)
 		}
+
+		const allChecked =
+			dataCheckbox?.IS_CHECKED_ETIQ === 1 &&
+			dataCheckbox?.IS_CHECKED_LIB === 1 &&
+			dataCheckbox?.IS_CHECKED_REL === 1 &&
+			dataCheckbox?.IS_CHECKED_HANDLING === 1 &&
+			dataCheckbox?.IS_CHECKED_PERS_DATA === 1
+		setDisabled(!allChecked)
 	}, [dataAboutMe])
 
 	useEffect(() => {
@@ -82,6 +94,22 @@ const AboutMeNew = () => {
 
 	return (
 		<div className="px-[50px] pt-[60px] mb-[50px]">
+			<Row className="mb-8 flex items-center justify-between">
+				<Title level={2} className="!mb-0">
+					{t('PersonalData')}
+				</Title>
+				<div className="flex items-center gap-2">
+					<Form form={form2} className="flex items-center">
+						<Form.Item name={'switch'} className="flex items-center mb-0">
+							<Switch disabled={disabled} defaultChecked />
+						</Form.Item>
+					</Form>
+					<span>Сделать профиль публичным</span>
+					<Tooltip title={t('agreementTooltip')}>
+						<img src="/src/assets/svg/GroupVop.svg" />
+					</Tooltip>
+				</div>
+			</Row>
 			<div className="bg-white rounded-xl shadow-md">
 				<Row>
 					<Col span={12}>
@@ -90,6 +118,17 @@ const AboutMeNew = () => {
 							<div className="w-full mt-3 text-center">{`${dataAboutMe?.LASTNAME || ''} ${
 								dataAboutMe?.FIRSTNAME || ''
 							} ${dataAboutMe?.SECONDNAME || ''}`}</div>
+							<div className="mt-[32px] w-[80%]">
+								<div>Профиль заполнена на 20%</div>
+								<Progress
+									showInfo={false}
+									percent={20}
+									strokeColor={{
+										'0%': '#3073D7',
+										'100%': '#A0C6FF'
+									}}
+								/>
+							</div>
 						</div>
 					</Col>
 					<Col span={12}>

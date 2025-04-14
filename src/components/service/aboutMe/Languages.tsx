@@ -28,7 +28,7 @@ const Languages = () => {
 	const [form] = Form.useForm()
 	const [form2] = Form.useForm()
 	const [isModalOpen, setIsModalOpen] = useState(false)
-	const [selectId, setSelectId] = useState(null)
+	const [selectId, setSelectId] = useState<any>(null)
 	const [fileList, setFileList] = useState<any>([])
 	const { data: dataNative, isLoading: isFetchingNative, refetch, isError } = useGetNativeLanguagesQuery()
 	const { data: dataLevels } = useGetLevelsQuery()
@@ -206,9 +206,9 @@ const Languages = () => {
 					<Row className="flex items-center justify-start mt-4 gap-2">
 						<div
 							onClick={showModal}
-							className="gap-2 flex items-center cursor-pointer hover:animate-pulse transition delay-150 "
+							className="gap-2 flex items-center cursor-pointer  hover:bg-gray-200 p-2 rounded-xl"
 						>
-							<Button className="rounded-[50%] !w-[28px] hover:animate-pulse transition delay-150 text-[28px] " type="primary">
+							<Button size='small' className="rounded-[50%] !w-[28px] !h-[28px] text-[24px] " type="primary">
 								+
 							</Button>
 							<span>{t('add')}</span>

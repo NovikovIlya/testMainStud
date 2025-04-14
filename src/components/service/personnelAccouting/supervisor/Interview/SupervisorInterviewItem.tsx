@@ -48,7 +48,7 @@ export const SupervisorInterviewItem = (props: InterviewItemType) => {
 				const targetDate = new Date(props.eventTime)
 				const now = new Date()
 				const difference = targetDate.getTime() - now.getTime()
-				const minutes: number = Math.round((difference / 1000 / 60) % 60)
+				const minutes: number = Math.ceil((difference / 1000 / 60) % 60)
 				const hours: number = Math.floor((difference / (1000 * 60 * 60)) % 24)
 				const days: number = Math.floor(difference / (1000 * 60 * 60 * 24))
 				let datePublicString: string = ''
@@ -162,7 +162,7 @@ export const SupervisorInterviewItem = (props: InterviewItemType) => {
 		const datePublicString = day + '.' + month + '.' + shortYear + ' '
 
 		return (
-			<div className="w-[10%] ml-[3%]">
+			<div className="w-[5%] ml-[3%]">
 				<span>
 					{datePublicString}
 					<br />
@@ -173,7 +173,7 @@ export const SupervisorInterviewItem = (props: InterviewItemType) => {
 	}
 	const InterviewFormatElem = (props: InterviewFormatElemProps) => {
 		return (
-			<div className="w-[10%] ml-[1%] ">
+			<div className="w-[5%] ml-[3%] ">
 				{props.format === 'OFFLINE' && <span>Оффлайн</span>}
 				{props.format === 'ONLINE' && <span>Онлайн</span>}
 			</div>
@@ -250,7 +250,7 @@ export const SupervisorInterviewItem = (props: InterviewItemType) => {
 				<span className="w-[22%] ml-[3%]">{seekerName}</span>
 				<InterviewTimeElem eventTime={props.time}></InterviewTimeElem>
 				<InterviewFormatElem format={props.format}></InterviewFormatElem>
-				<div className="w-[25%] mr-[2%] gap-[21px] flex flex-row items-center justify-evenly">
+				<div className="w-[25%] ml-[2%] gap-[3%] flex flex-row items-center justify-between">
 					<InterviewCountdownTimeElem eventTime={props.time} format={props.format} url={props.url} id={props.id} />
 					<InterviewButtonElem id={props.respondId} format={props.format} time={props.time}></InterviewButtonElem>
 				</div>

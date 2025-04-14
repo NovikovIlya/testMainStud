@@ -143,7 +143,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 				const targetDate = new Date(props.time)
 				const now = new Date()
 				const difference = targetDate.getTime() - now.getTime()
-				const minutes: number = Math.round((difference / 1000 / 60) % 60)
+				const minutes: number = Math.ceil((difference / 1000 / 60) % 60)
 				const hours: number = Math.floor((difference / (1000 * 60 * 60)) % 24)
 				const days: number = Math.floor(difference / (1000 * 60 * 60 * 24))
 				let datePublicString: string = ''
@@ -215,7 +215,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 							</button>
 						</div>
 					)}
-				{((format === 'ONLINE' && isInterviewStarted && is5MinBeforeInterviewStarted) ||
+				{((format === 'ONLINE' && !isInterviewStarted && is5MinBeforeInterviewStarted) ||
 					(format === 'ONLINE' && isInterviewStarted && !is30MinAfterInterviewEnded)) && ( // Онлайн собес, подкбчиться 5 | 30
 					<div className="flex flex-col justify-center">
 						<h4 className="mb-[20px] font-content-font font-normal text-black text-[16px]/[19.2px]">

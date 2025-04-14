@@ -167,63 +167,64 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 					)}
 				</div>
 			</div>
-			{props.msgData.type === 'INVITATION' && (
-				<div
-					className={clsx('mt-[24px] w-[50%] grid grid-cols-2 grid-rows-[40px_40px] gap-[20px]', {
-						'self-start':
-							(props.msgData.sender === 'SEEKER' && isEmpDep) ||
-							(props.msgData.sender === 'PERSONNEL_DEPARTMENT' && !isEmpDep),
-						'self-end':
-							(props.msgData.sender === 'SEEKER' && !isEmpDep) ||
-							(props.msgData.sender === 'PERSONNEL_DEPARTMENT' && isEmpDep)
-					})}
-				>
-					<Button
-						onClick={() => {
-							answerMainTime({ id: page_id, ans: 'YES', messageId: props.msgData.id }).then(() => {
-								setIsResponsed(true)
-							})
-						}}
-						loading={answerMainTimeLoading}
-						disabled={isEmpDep || isResponsed}
-						className={`rounded-[54.5px] h-full border-black bg-inherit outline-none border cursor-pointer ${
-							isEmpDep || isResponsed ? 'select-none !cursor-not-allowed' : ''
-						}`}
+			{props.msgData.type === 'INVITATION' &&
+				!props.msgData.text.includes('Ссылка для подключения к собеседованию') && (
+					<div
+						className={clsx('mt-[24px] w-[50%] grid grid-cols-2 grid-rows-[40px_40px] gap-[20px]', {
+							'self-start':
+								(props.msgData.sender === 'SEEKER' && isEmpDep) ||
+								(props.msgData.sender === 'PERSONNEL_DEPARTMENT' && !isEmpDep),
+							'self-end':
+								(props.msgData.sender === 'SEEKER' && !isEmpDep) ||
+								(props.msgData.sender === 'PERSONNEL_DEPARTMENT' && isEmpDep)
+						})}
 					>
-						Да
-					</Button>
-					<Button
-						onClick={() => {
-							answerMainTime({ id: page_id, ans: 'NO', messageId: props.msgData.id }).then(() => {
-								setIsResponsed(true)
-							})
-						}}
-						disabled={isEmpDep || isResponsed}
-						className={`rounded-[54.5px] h-full border-black bg-inherit outline-none border cursor-pointer ${
-							isEmpDep || isResponsed ? 'select-none !cursor-not-allowed' : ''
-						}`}
-					>
-						Не удобно
-					</Button>
-					<Button
-						onClick={() => {
-							answerMainTime({
-								id: page_id,
-								ans: 'NOT_RELEVANT',
-								messageId: props.msgData.id
-							}).then(() => {
-								setIsResponsed(true)
-							})
-						}}
-						disabled={isEmpDep || isResponsed}
-						className={`col-span-2 rounded-[54.5px] h-full border-black bg-inherit outline-none border cursor-pointer ${
-							isEmpDep || isResponsed ? 'select-none !cursor-not-allowed' : ''
-						}`}
-					>
-						Вакансия не актуальна
-					</Button>
-				</div>
-			)}
+						<Button
+							onClick={() => {
+								answerMainTime({ id: page_id, ans: 'YES', messageId: props.msgData.id }).then(() => {
+									setIsResponsed(true)
+								})
+							}}
+							loading={answerMainTimeLoading}
+							disabled={isEmpDep || isResponsed}
+							className={`rounded-[54.5px] h-full border-black bg-inherit outline-none border cursor-pointer ${
+								isEmpDep || isResponsed ? 'select-none !cursor-not-allowed' : ''
+							}`}
+						>
+							Да
+						</Button>
+						<Button
+							onClick={() => {
+								answerMainTime({ id: page_id, ans: 'NO', messageId: props.msgData.id }).then(() => {
+									setIsResponsed(true)
+								})
+							}}
+							disabled={isEmpDep || isResponsed}
+							className={`rounded-[54.5px] h-full border-black bg-inherit outline-none border cursor-pointer ${
+								isEmpDep || isResponsed ? 'select-none !cursor-not-allowed' : ''
+							}`}
+						>
+							Не удобно
+						</Button>
+						<Button
+							onClick={() => {
+								answerMainTime({
+									id: page_id,
+									ans: 'NOT_RELEVANT',
+									messageId: props.msgData.id
+								}).then(() => {
+									setIsResponsed(true)
+								})
+							}}
+							disabled={isEmpDep || isResponsed}
+							className={`col-span-2 rounded-[54.5px] h-full border-black bg-inherit outline-none border cursor-pointer ${
+								isEmpDep || isResponsed ? 'select-none !cursor-not-allowed' : ''
+							}`}
+						>
+							Вакансия не актуальна
+						</Button>
+					</div>
+				)}
 			{props.msgData.type === 'INVITATION_RESERVE' && props.msgData.reserveTimes !== null && (
 				<div
 					className={clsx('mt-[24px] w-[50%] grid grid-cols-3 grid-rows-[40px_40px] gap-[20px]', {

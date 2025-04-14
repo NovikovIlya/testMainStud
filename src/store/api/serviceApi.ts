@@ -5,6 +5,7 @@ import {
 	DocumentDocumentation,
 	DocumentLib,
 	Documentation,
+	EducationTableDataType,
 	Email,
 	Exam,
 	ICalendar,
@@ -200,7 +201,24 @@ export const serviceApi = apiSlice.injectEndpoints({
 		getNewEducations: builder.query<{ completed_edu: any[] }, void>({
 			query: () => ({
 				url: `about-me/get-completed-edu`
-			})
+			}),
+			providesTags: ['Education']
+		}),
+		addNewEducation: builder.mutation<void, EducationTableDataType>({
+			query: arg => ({
+				url: `about-me/set-completed-edu`,
+				method: 'POST',
+				body: arg
+			}),
+			invalidatesTags: ['Education']
+		}),
+		deleteNewEducation: builder.mutation<void, EducationTableDataType>({
+			query: arg => ({
+				url: `about-me/set-completed-edu`,
+				method: 'DELETE',
+				body: arg
+			}),
+			invalidatesTags: ['Education']
 		})
 	})
 })
@@ -231,5 +249,7 @@ export const {
 	useGetRoleQuery,
 	useGetOldEducationsQuery,
 	useGetEducationTypesQuery,
-	useGetNewEducationsQuery
+	useGetNewEducationsQuery,
+	useAddNewEducationMutation,
+	useDeleteNewEducationMutation
 } = serviceApi

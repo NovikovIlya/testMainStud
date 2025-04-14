@@ -27,6 +27,7 @@ const AboutMeNew = () => {
 	const { data: dataCheckbox } = useGetCheckboxQuery()
 	const [setCheckbox, { isLoading: isLoadingCheckbox }] = useSetCheckboxMutation()
 	const [disabled, setDisabled] = useState(true)
+	const [percentProgress,setPercentProgress] = useState(0)
 	const switchForm = Form.useWatch('switch', form2)
 	const [initialCheckboxes, setInitialCheckboxes] = useState({
 		codex: false,
@@ -119,10 +120,10 @@ const AboutMeNew = () => {
 								dataAboutMe?.FIRSTNAME || ''
 							} ${dataAboutMe?.SECONDNAME || ''}`}</div>
 							<div className="mt-[32px] w-[80%]">
-								<div>Профиль заполнена на 20%</div>
+								<div>Профиль заполнена на {percentProgress}%</div>
 								<Progress
 									showInfo={false}
-									percent={20}
+									percent={percentProgress}
 									strokeColor={{
 										'0%': '#3073D7',
 										'100%': '#A0C6FF'

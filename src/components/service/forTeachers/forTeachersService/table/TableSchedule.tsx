@@ -167,7 +167,7 @@ export const TableSchedule = ({schedule,isFetching}:any) => {
 	
 
 	return (
-		<div className={` mt-14  radio w-full justify-center animate-fade-in`}>
+		<div className={` mt-14  radio w-full justify-center animate-fade-in styleCustom`}>
 			<Radio.Group
 				onChange={onChange}
 				defaultValue={initialDay}
@@ -222,7 +222,7 @@ export const TableSchedule = ({schedule,isFetching}:any) => {
 					columns={columns}
 					dataSource={sortedData}
 					pagination={false}
-					className="max-w-[1050px] w-full drop--lg -[#d4e3f1] rounded-none"
+					className="max-w-[1050px] w-full drop--lg -[#d4e3f1] rounded-none styleCustom"
 					locale={{ emptyText: t('noData') }}
 				/>
 				<div className={` flex flex-col gap-6 text-sm `}>

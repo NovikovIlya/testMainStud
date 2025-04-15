@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { TagOutlined } from '@ant-design/icons' 
 import { Button, Col, Input, Radio, Row, Typography } from 'antd' 
 import { RadioChangeEvent } from 'antd/lib' 
@@ -31,7 +32,9 @@ export const ModalNav = () => {
  const isStudent = role[0].type === 'STUD' 
  
  const filteredData = jsxElements.filter((item)=>{
+  // @ts-ignore
   if(message==='STUD'){
+    // @ts-ignore
     return item.index==='Schedule' ||
          item.index==='ElectronicBook' ||
          item.index==='Session' ||
@@ -57,7 +60,7 @@ export const ModalNav = () => {
 }).filter(item => 
   t(item.index.toString()).toLowerCase().includes(searchText.toLowerCase()) 
  ) 
- console.log('jsxElements',jsxElements)
+
  
  return ( 
   <Row> 

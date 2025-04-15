@@ -38,6 +38,7 @@ export const RangePickerFormItem = ({elem, label, nameField}: IRangePickerFormIt
                     className={`text-2xl w-full`}
                     format={'DD.MM.YYYY'}
                     onChange={(dates) => {
+                        // @ts-ignore
                         changeSumDay(dates)
                     }}
                     separator={'—'}

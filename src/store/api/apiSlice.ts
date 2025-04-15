@@ -5,7 +5,7 @@ import i18next from 'i18next'
 import { logOut, setCredentials } from '../reducers/authSlice'
 
 const baseQuery = fetchBaseQuery({
-	// baseUrl: 'https://newlk.kpfu.ru/',
+	//  baseUrl: 'https://newlk.kpfu.ru/',
 	baseUrl: 'https://newlk-test.kpfu.ru/',
 	prepareHeaders(headers, { getState }) {
 		const token = (getState() as RootState).auth.accessToken
@@ -19,7 +19,7 @@ const baseQuery = fetchBaseQuery({
 const baseQueryWithReAuth = async (args: string | FetchArgs, api: BaseQueryApi, extraOptions: {}) => {
 	let result = await baseQuery(args, api, extraOptions)
 
-	if (result?.error?.status === 500) {
+	if (result?.error?.status === 500 || result?.error?.status === 501) {
 		// @ts-ignore
 		const errorMessage = result.error.data?.errors?.[0]?.message // Извлекаем сообщение об ошибке
 		if (errorMessage === 'Истекло время или неверное значение session Id. Перезайдите на сайт.') {
@@ -83,6 +83,15 @@ export const apiSlice = createApi({
 		'Messages',
 		'forTeacherScedule',
 		'forTeacherSceduleBrs',
-		'forTeacherSceduleVedomost'
+		'forTeacherSceduleVedomost',
+		'forTeacherJournalDay',
+		'forTeacherJournalSemester',
+		'Avatar',
+		'AboutMe',
+		'nativeLanguages',
+		'foreignLanguages',
+		'Сheckboxes',
+		'levelsLanguages',
+		'certificateLanguages'
 	]
 })

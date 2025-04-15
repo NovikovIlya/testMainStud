@@ -160,6 +160,7 @@ export const NavPracticeTeacher = () => {
 	return (
 		<>
 			<Header type={"service"} service={t("Practices")}/>
+			<div className={`fixed left-0 top-[0px] h-[calc(100vh-144px)] z-50 ${'w-[230px]'}`}>
 			<Menu
 				defaultOpenKeys={['sub1','sub2']}
 				selectedKeys={[current]}
@@ -180,8 +181,9 @@ export const NavPracticeTeacher = () => {
 					)
 				  }))}
 			/>
+			</div>
 			{isMobile && orientation === 'portrait' ? <div className='flex justify-center items-center text-center p-4'>Для данного устройства модуль работает только в горизонтальном положении, поверните устройство</div> : 
-			<div className="bg-[#F5F8FB] w-full pt-14 px-14  xl:mt-20 mt-20  min-h-screen ">
+			<div className="bg-[#F5F8FB] overflow-hidden min-h-[840px] w-full pt-14 px-14 xl:mt-20 mt-20 ml-[230px]">
 				{current === 'practiceteacher' && <RoutePracticeTeacher/>}
 				
 				

@@ -1,6 +1,6 @@
-import { MessageOutlined, PieChartOutlined } from '@ant-design/icons'
+import { MenuFoldOutlined, MenuUnfoldOutlined, MessageOutlined, PieChartOutlined } from '@ant-design/icons'
 import type { MenuProps } from 'antd'
-import { Col, Form, Menu, Row, Select } from 'antd'
+import { Button, Col, Form, Menu, Row, Select } from 'antd'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -23,6 +23,7 @@ import ScheduleTeacher from './forTeachersService/ScheduleTeacher'
 import Vedomosti from './forTeachersService/Vedomosti'
 import NavJournal from './forTeachersService/NavJournal'
 import { getCurrentAcademicYear } from '../../../utils/getCurrentAcademicYear'
+import Rpd from './forTeachersService/Rpd'
 
 export const NavForTeachers = () => {
 	const dispatch = useAppDispatch()
@@ -37,6 +38,11 @@ export const NavForTeachers = () => {
 	const isEditTableScheduleTeacher = useAppSelector(state => state.auth.isEditTableScheduleTeacher)
 	const yearForm = Form.useWatch('year', form)
 	const semestrForm = Form.useWatch('semestr', form)
+	const [collapsed, setCollapsed] = useState(false);
+
+	const toggleCollapsed = () => {
+	  setCollapsed(!collapsed);
+	};
 
 	useEffect(() => {
 		dispatch(setYearForm(yearForm))
@@ -51,6 +57,7 @@ export const NavForTeachers = () => {
 		{ key: 'BRS', icon: <BrsSvg />, label: <p className="ml-[10px]">{t('BRS')}</p> },
 		{ key: 'vedomosti', icon: <VedomostiSvg />, label: <p className="ml-[10px]">{t('vedomosti')}</p> },
 		{ key: 'journalPos', icon: <JournalPos />, label: <p className="ml-[10px]">{t('journalPos')}</p> },
+		
 		// { key: 'rpd', icon: <Pvd />, label: <p className="ml-[10px]">{t('rpd')}</p> }
 	]
 
@@ -142,24 +149,35 @@ export const NavForTeachers = () => {
 	return (
 		<>
 			<Header type={'service'} service={t('ToTeacher')} />
-			<Menu
-				selectedKeys={[current]}
-				mode="inline"
-				onClick={onClick}
-				className="min-w-[230px] max-w-[230px] flex flex-col  mt-36 h-[calc(100vh-144px)] shadow"
-				items={items.map((item: any, index: number) => ({
-					key: item.key,
-					icon: item.icon,
-					children: item.children,
-					label: (
-						<div className="" ref={refArray[index]}>
-							{item?.label}
-						</div>
-					)
-				}))}
-			/>
+			<div className={`fixed left-0 top-[144px] h-[calc(100vh-144px)] z-50 ${collapsed ? 'w-[80px]' : 'w-[230px]'}`}>
+  <Menu
+    inlineCollapsed={collapsed}
+    selectedKeys={[current]}
+    mode="inline"
+    onClick={onClick}
+    className="h-full shadow flex flex-col"
+    items={items.map((item: any, index: number) => ({
+      key: item.key,
+      icon: item.icon,
+      children: item.children,
+      label: (
+        <div ref={refArray[index]}>
+          {item?.label}
+        </div>
+      )
+    }))}
+  />
+  <Button
+    type="primary"
+    className='absolute bottom-[10px] left-[-4px]'
+    onClick={toggleCollapsed}
+    style={{ marginBottom: 16 }}
+  >
+    {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+  </Button>
+</div>
 
-			<div className="bg-[#F5F8FB] w-full pt-[70px]      ">
+			<div className={`${collapsed ? 'ml-[80px]' : ' ml-[229px]'} bg-[#F5F8FB] w-full pt-[70px]  min-h-screen   `}>
 				<Form
 					form={form}
 					initialValues={{
@@ -207,7 +225,8 @@ export const NavForTeachers = () => {
 				{current === 'schedule' && <ScheduleTeacher />}
 				{current === 'BRS' ? <Brs /> : ''}
 				{current === 'vedomosti' ? <Vedomosti/> : ''}
-				{current === 'journalPos' ? <NavJournal /> : ''}
+				{current === 'journalPos' ? <NavJournal collapsed={collapsed}/> : ''}
+				{current === 'rpd' ? <Rpd collapsed={collapsed}/> : ''}
 			</div>
 		</>
 	)

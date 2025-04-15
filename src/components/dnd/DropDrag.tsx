@@ -15,6 +15,7 @@ import { useCheckIsEmployeeQuery } from '../../store/api/practiceApi/contracts'
 import { useGetModulesQuery } from '../../store/api/roleModel/roleModel'
 import { useGetRoleQuery } from '../../store/api/serviceApi'
 import { changeLayout, removeCard } from '../../store/reducers/LayoutsSlice'
+import InfoStudent from '../InfoStudent'
 import { AboutUniversityCard } from '../aboutUniversity/AboutUniversityCard'
 import { Apply } from '../apply/Apply'
 import { DirectResume } from '../cards/DirectResume'
@@ -22,8 +23,8 @@ import { Schedule } from '../cards/Schedule'
 import { Seeker } from '../cards/Seeker'
 import { TemplateCard } from '../cards/Template'
 
+import CookieConsent from './CookieConsent'
 import { block } from './constant'
-import { jsxElements } from './defaultElement'
 
 const studentKeys = [
 	'Schedule',
@@ -86,7 +87,7 @@ const DropDrag = () => {
 	const { data: dataSubRole, isSuccess: isSuccessSubRole, isLoading: isLoadingSubRole } = useGetRoleQuery(null)
 	const [subRole, setSubrole] = useLocalStorageState<any>('subRole', { defaultValue: '' })
 	const [windowSize, setWindowSize] = useState(getWindowSize())
-	const { data: dataModules } = useGetModulesQuery()
+	// const { data: dataModules } = useGetModulesQuery()
 	const [user, setInfo] = useLocalStorageState<any>('user')
 
 	const [href, setHref] = useLocalStorageState<any>('href', {
@@ -870,26 +871,30 @@ const DropDrag = () => {
 				</>
 			)
 		return (
-			<ResponsiveReactGridLayout
-				className="layout mb-10"
-				cols={{ lg: 3, md: 2, sm: 2, xs: 2, xxs: 1 }}
-				rowHeight={windowSize.innerWidth < 768 ? 210 : 320}
-				containerPadding={[0, 0]}
-				margin={[20, 20]}
-				layouts={layout}
-				measureBeforeMount={true}
-				useCSSTransforms={mounted}
-				onLayoutChange={onLayoutChange}
-				onBreakpointChange={onBreakpointChange}
-				isDraggable={edit}
-				isResizable={false}
-				compactType="vertical"
-				verticalCompact={true}
-				preventCollision={true}
-			>
-				{generateDOM}
-			</ResponsiveReactGridLayout>
+			<>
+				{mainRole === 'STUD' ? <InfoStudent /> : ''}
+				<ResponsiveReactGridLayout
+					className="layout mb-10"
+					cols={{ lg: 3, md: 2, sm: 2, xs: 2, xxs: 1 }}
+					rowHeight={windowSize.innerWidth < 768 ? 210 : 320}
+					containerPadding={[0, 0]}
+					margin={[20, 20]}
+					layouts={layout}
+					measureBeforeMount={true}
+					useCSSTransforms={mounted}
+					onLayoutChange={onLayoutChange}
+					onBreakpointChange={onBreakpointChange}
+					isDraggable={edit}
+					isResizable={false}
+					compactType="vertical"
+					verticalCompact={true}
+					preventCollision={true}
+				>
+					{generateDOM}
+				</ResponsiveReactGridLayout>
+			</>
 		)
+
 		// return (
 		// 	<div className="grid grid-cols-3 grid-rows-3 gap-4 ">
 		// 		{dataModules?.toSorted((a:any, b:any) => {

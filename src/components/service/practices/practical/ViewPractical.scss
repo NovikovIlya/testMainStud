@@ -1,51 +1,64 @@
-.viewPractical {
-  .ant-table-wrapper .ant-table-thead > tr > th {
-    background-color: #F5F8FB !important;
+.styleCustom{
+  .radio {
+      .ant-radio-button-wrapper:not(:first-child)::before {
+          width: 0;
+      }
+      .ant-radio-button-wrapper:first-child,
+      .ant-radio-button-wrapper:last-child {
+          border-radius: 99999px;
+      }
+      .ant-radio-button-wrapper {
+          border-block-start-width: 1px;
+          border-inline-start-width: 1px;
+          border-inline-end-width: 1px;
+          border-color: black;
+      }
   }
-
-  .ant-table-wrapper table {
-    border-spacing: 0 10px;
-    background-color: #F5F8FB;
+  .rotate {
+      transform: rotate(270deg);
+      white-space: nowrap;
+      width: 32px;
+      position: inherit;
+      bottom: -70px;
   }
-
-  .ant-table-cell {
-    background-color: white;
+  .ant-table-wrapper .ant-table-container {
+      border-start-start-radius: unset;
+      border-start-end-radius: unset;
   }
-
-  .ant-checkbox .ant-checkbox-inner:after {
-    box-sizing: border-box;
-    position: absolute;
-    top: 50%;
-    inset-inline-start: 25%;
-    display: flex;
-    width: 5px;
-    height: 9px;
-    border: 2px solid #fff;
-    border-top: 0;
-    border-inline-start: 0;
+  .ant-table-wrapper .ant-table-thead > tr > th,
+  .ant-table-wrapper .ant-table-thead > tr > td {
+      background-color: rgb(218, 231, 251);
+      color: rgba(0, 0, 0, 1);
+      border-radius: 0 ;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 120%;
   }
-
-  .ant-checkbox-indeterminate .ant-checkbox-inner:after {
-    top: 50%;
-    inset-inline-start: 50%;
-    width: 8px;
-    height: 8px;
-    background-color: #3073d7;
-    border: 0;
-    transform: translate(-50%, -50%) scale(1);
-    opacity: 1;
-    content: "";
+  .ant-table-wrapper
+      .ant-table-thead
+      > tr
+      > th:not(:last-child):not(.ant-table-selection-column):not(
+          .ant-table-row-expand-icon-cell
+      ):not([colspan])::before,
+  .ant-table-wrapper
+      .ant-table-thead
+      > tr
+      > td:not(:last-child):not(.ant-table-selection-column):not(
+          .ant-table-row-expand-icon-cell
+      ):not([colspan])::before {
+      width: 0;
   }
-  .ant-table-row{
-    height: 99px !important;
+  .shadowNav {
+      box-shadow: 0px 0px 19px 0px rgba(212, 227, 241, 0.6);
+      position: inherit;
+      z-index: 10;
   }
-  .text-xs{
-    font-size: 16px !important;
+  table {
+      border-collapse: separate !important;
+      border-spacing: 0;
   }
-  .ant-table-selection-column{
-    padding-right: 30px !important;
-    padding-left: 10px !important;
-  }
+  
+  
+  
 }
-
-

@@ -1,15 +1,13 @@
-import { Radio, Table } from 'antd'
+import { ConfigProvider, Radio, Table } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { performanceItem } from '../../../api/types'
+import { DataType, DateSemester } from '../../../models/electronicBook'
 import { useGetPerformanceQuery } from '../../../store/api/serviceApi'
 
 import './Styles.scss'
-import { DataType, DateSemester } from '../../../models/electronicBook'
-
-
 
 export const Estimation = () => {
 	const [semester, setSemester] = useState(0)
@@ -50,70 +48,70 @@ export const Estimation = () => {
 			dataIndex: 'term',
 			key: 'term',
 			render: item => <p className="text-base max-w-xs">{item}</p>,
-			align: "center",
+			align: 'center'
 		},
 		{
 			title: t('Discipline'),
 			dataIndex: 'discipline',
 			key: 'discipline',
 			render: item => <p className="text-bas text-start">{item}</p>,
-			align: "center",
+			align: 'center'
 		},
 		{
 			title: t('ScoreSemester'),
 			dataIndex: 'scoreSemester',
 			key: 'scoreSemester',
 			render: item => <p className="text-base">{item}</p>,
-			align: "center",
+			align: 'center'
 		},
 		{
 			title: t('Type'),
 			key: 'type',
 			dataIndex: 'type',
 			render: item => <p className="text-base">{t(item)}</p>,
-			align: "center",
+			align: 'center'
 		},
 		{
 			title: t('ScoreReceived'),
 			key: 'scoreReceived',
 			dataIndex: 'scoreReceived',
 			render: item => <p className="text-base">{item}</p>,
-			align: "center",
+			align: 'center'
 		},
 		{
 			title: t('DateDelivery'),
 			key: 'dateDelivery',
 			dataIndex: 'dateDelivery',
 			render: item => <p className="text-base">{item}</p>,
-			align: "center",
+			align: 'center'
 		},
 		{
 			title: t('FinalScore'),
 			key: 'finalScore',
 			dataIndex: 'finalScore',
 			render: item => <p className="text-base">{item}</p>,
-			align: "center",
+			align: 'center'
 		},
 		{
 			title: t('FinalAssessment'),
 			key: 'finalAssessment',
 			dataIndex: 'finalAssessment',
 			render: item => <p className="text-base">{item}</p>,
-			align: "center",
+			align: 'center'
 		},
 		{
 			title: t('AcademicHours'),
 			key: 'academicHours',
 			dataIndex: 'academicHours',
 			render: item => <p className="text-base">{item}</p>,
-			align: "center",
+			align: 'center'
 		},
 		{
 			title: t('Credits'),
 			key: 'credits',
 			dataIndex: 'credits',
 			render: item => <p className="text-base">{item}</p>,
-			align: "center",
+			align: 'center'
 		}
 	]
 	const changeSemester = (semester: number) => {
@@ -121,10 +119,7 @@ export const Estimation = () => {
 			if (semester > 0) {
 				changeData(
 					getPerformance(
-						performance.journal.filter(
-							el =>
-								el.semester === semester * 2 || el.semester === semester * 2 - 1
-						)
+						performance.journal.filter(el => el.semester === semester * 2 || el.semester === semester * 2 - 1)
 					)
 				)
 			} else changeData(getPerformance(performance.journal))
@@ -150,16 +145,12 @@ export const Estimation = () => {
 				discipline: el.subject_name,
 				scoreSemester: el.semester_points,
 				// type: el.type === 'e' ? 'exam' : 'quiz',
-				type: el.is_exam==='y' ? 'exam' : 
-				el.is_test==='y' ? 'quiz' : 'Дифзачет',
-				
+				type: el.is_exam === 'y' ? 'exam' : el.is_test === 'y' ? 'quiz' : 'Дифзачет',
+
 				scoreReceived: el.exam_points,
 				dateDelivery: el.pass_date,
 				finalScore: el.total_points,
-				finalAssessment:
-					el.points_string.length > 2
-						? el.points_string.substring(0, 3) + '.'
-						: el.points_string,
+				finalAssessment: el.points_string.length > 2 ? el.points_string.substring(0, 3) + '.' : el.points_string,
 				academicHours: el.hours,
 				credits: cred
 			}
@@ -175,46 +166,41 @@ export const Estimation = () => {
 				buttonStyle="solid"
 				className="flex gap-[10px] h-9"
 			>
-				<Radio.Button
-					className="rounded-full bg-transparent h-full flex items-center text-base"
-					value="0"
-				>
+				<Radio.Button className="rounded-full bg-transparent h-full flex items-center text-base" value="0">
 					{t('AllYears')}
 				</Radio.Button>
-				<Radio.Button
-					className="rounded-full h-full flex items-center text-base bg-transparent"
-					value="1"
-				>
+				<Radio.Button className="rounded-full h-full flex items-center text-base bg-transparent" value="1">
 					{t('1st year')}
 				</Radio.Button>
-				<Radio.Button
-					className="rounded-full h-full flex items-center text-base bg-transparent"
-					value="2"
-				>
+				<Radio.Button className="rounded-full h-full flex items-center text-base bg-transparent" value="2">
 					{t('SecondYear')}
 				</Radio.Button>
-				<Radio.Button
-					className="rounded-full h-full flex items-center text-base bg-transparent"
-					value="3"
-				>
+				<Radio.Button className="rounded-full h-full flex items-center text-base bg-transparent" value="3">
 					{t('ThirdYear')}
 				</Radio.Button>
-				<Radio.Button
-					className="rounded-full h-full flex items-center text-base bg-transparent"
-					value="4"
-				>
+				<Radio.Button className="rounded-full h-full flex items-center text-base bg-transparent" value="4">
 					{t('FourthYear')}
 				</Radio.Button>
 			</Radio.Group>
 			<div className="my-10 gap-5 flex flex-col">
-				<Table
-					dataSource={!data ? [] : data}
-					columns={columns}
-					pagination={false}
-					loading={!data ? true : false}
-					className="w-full drop-shadow-lg shadow-[#d4e3f1] rounded-none"
-					locale={{ emptyText: t('noData') }}
-				/>
+				<ConfigProvider
+					theme={{
+						components: {
+							Table: {
+								headerBg: 'rgb(218, 231, 251)'
+							}
+						}
+					}}
+				>
+					<Table
+						dataSource={!data ? [] : data}
+						columns={columns}
+						pagination={false}
+						loading={!data ? true : false}
+						className="w-full drop-shadow-lg shadow-[#d4e3f1] rounded-none"
+						locale={{ emptyText: t('noData') }}
+					/>
+				</ConfigProvider>
 			</div>
 		</div>
 	)

@@ -134,11 +134,11 @@ export const NumberInformation = () => {
 			subTitle="Произошла ошибка, попробуйте пожалуйста позднее."
 		
 		/></div>}
-	if (data === undefined || isLoading) return <SkeletonPage />
+	// if (data === undefined || isLoading) return <SkeletonPage />
 
 	return (
 		<Form form={form} onFinish={onSubmitPhone2}>
-			<section className="max-w-2xl mb-6">
+			<section className=" mb-6">
 				<article className=" mt-10">
 					<NumberDataBloc
 						isLoadingPost={isLoadingPost}
@@ -163,7 +163,7 @@ export const NumberInformation = () => {
 								) : (
 									<>
 										<p>{t('verText')}: {count}</p>
-										<p className="mb-2">{t('verText2')}</p>
+										<p className="mb-2">{t('verText22')}</p>
 										<Form.Item name={'code'}>
 											<Input.OTP length={4} />
 										</Form.Item>

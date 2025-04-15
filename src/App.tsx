@@ -26,6 +26,7 @@ import { Service } from './components/service'
 import ShortLink from './components/service/ShortLink/ShortLink'
 import EditSchedule from './components/service/practices/forming-schedule/EditSchedule'
 import { blue004, blue307 } from './utils/color'
+import LandingPage from './components/service/LandingPage'
 
 const App = () => {
 	const [email, changeEmail] = useState('')
@@ -72,7 +73,9 @@ const App = () => {
 				{ path: 'parent', element: <ParentForm /> },
 				{ path: 'services/*', element: <Service /> },
 				{ path: '*', element: <NotFound /> },
-				{ path: 'services/shorturl', element: <ShortLink /> }
+				{ path: 'services/shorturl', element: <ShortLink /> },
+				{ path: 'landing', element: <LandingPage /> }
+
 
 				// { path: "services/practices/formingSchedule/edit/:id", element: <EditSchedule /> },
 			]

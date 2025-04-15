@@ -1,6 +1,4 @@
-import { time } from 'console'
 import i18n from 'i18next'
-import { url } from 'inspector'
 
 import { IApproveRequest } from '../../api/types'
 import {
@@ -11,6 +9,7 @@ import {
 	DocumentDocumentation,
 	DocumentLib,
 	Documentation,
+	EducationTableDataType,
 	Email,
 	EmploymentDataType,
 	EmploymentDocsType,
@@ -23,6 +22,7 @@ import {
 	InterviewItemType,
 	InterviewRequestType,
 	InterviewViewResponseType,
+	OldEducationTableDataType,
 	PageableType,
 	ReserveTimeRequestType,
 	ResponceType,
@@ -1132,6 +1132,46 @@ export const serviceApi = apiSlice.injectEndpoints({
 			keepUnusedDataFor: 1,
 			providesTags: ['role']
 		}),
+		getOldEducations: builder.query<{ previous: OldEducationTableDataType[] }, void>({
+			query: () => ({
+				url: `about-me/get-edu-prev`
+			})
+		}),
+		getEducationTypes: builder.query<{ edu_types: { id: number; name: string }[] }, void>({
+			query: () => ({
+				url: `about-me/get-edu-types`
+			})
+		}),
+		getNewEducations: builder.query<{ completed_edu: any[] }, void>({
+			query: () => ({
+				url: `about-me/get-completed-edu`
+			}),
+			providesTags: ['Education']
+		}),
+		addNewEducation: builder.mutation<void, EducationTableDataType>({
+			query: arg => ({
+				url: `about-me/set-completed-edu`,
+				method: 'POST',
+				body: arg
+			}),
+			invalidatesTags: ['Education']
+		}),
+		deleteNewEducation: builder.mutation<void, EducationTableDataType>({
+			query: arg => ({
+				url: `about-me/set-completed-edu`,
+				method: 'DELETE',
+				body: arg
+			}),
+			invalidatesTags: ['Education']
+		}),
+		updateNewEducation: builder.mutation<void, EducationTableDataType>({
+			query: arg => ({
+				url: `about-me/set-completed-edu`,
+				method: 'PUT',
+				body: Object.fromEntries(Object.entries(arg).filter(([_, v]) => v != null))
+			}),
+			invalidatesTags: ['Education']
+		}),
 		checkIfTestIsPassed: builder.query<{ testPassed: boolean }, { testStageId: number }>({
 			query: ({ testStageId }) => ({
 				url: `http://${emplBaseURL}employment-api/v1/employment/test-stage/${testStageId}`
@@ -1302,6 +1342,12 @@ export const {
 	useFinalVerifyPhoneMutation,
 	useDeleteAccPhoneMutation,
 	useGetRoleQuery,
+	useGetOldEducationsQuery,
+	useGetEducationTypesQuery,
+	useGetNewEducationsQuery,
+	useAddNewEducationMutation,
+	useDeleteNewEducationMutation,
+	useUpdateNewEducationMutation,
 	useLazyCheckIfTestIsPassedQuery,
 	useLazyGetEmploymentStageStatusForSupervisorQuery,
 	useLazyDownloadChatFileQuery,

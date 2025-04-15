@@ -3,7 +3,7 @@ import { apiSlice } from '../apiSlice'
 import { testApiSlice } from '../testApiSlice'
 
 
-export const fotTeacherService = testApiSlice.injectEndpoints({
+export const fotTeacherService = apiSlice.injectEndpoints({
     endpoints: builder => ({
         // Расписание
         getScheduleForTeacher: builder.query<any, any>({
@@ -127,6 +127,19 @@ export const fotTeacherService = testApiSlice.injectEndpoints({
             providesTags: ['forTeacherJournalDay'],
             keepUnusedDataFor:0,
         }),
+        sendByDate: builder.mutation<any, any>({
+            query: (body) => {
+            return {
+                    url: `to-teacher/journal/by-date/save`,
+                    method: 'POST',
+                    body,
+                    responseHandler: (response) => response.text(),
+                }
+            },
+            invalidatesTags: ['forTeacherJournalDay'],
+           
+
+        }),
 
         getDisciplineSemester: builder.query<any, any>({
             query: ({year,semester}) => {
@@ -136,6 +149,76 @@ export const fotTeacherService = testApiSlice.injectEndpoints({
                 }
             },
             providesTags: ['forTeacherJournalSemester'],
+            keepUnusedDataFor:0,
+        }),
+
+        getDataSemester: builder.query<any, any>({
+            query: ({subjectId,groupId,year,semester,month}) => {
+            return {
+                    url: `to-teacher/journal/by-semester?subjectId=${subjectId}&groupId=${groupId}&year=${year}&semester=${semester}&month=${month}`,
+                    method: 'GET'
+                }
+            },
+            providesTags: ['forTeacherJournalSemester'],
+            keepUnusedDataFor:0,
+        }),
+        sendDataSemester: builder.mutation<any, any>({
+            query: (body) => {
+            return {
+                    url: `to-teacher/journal/by-semester/save`,
+                    method: 'POST',
+                    body,
+                    responseHandler: (response) => response.text(),
+                }
+            },
+            invalidatesTags: ['forTeacherJournalSemester'],
+           
+
+        }),
+
+
+
+        exportExcel: builder.query<any, any>({
+            query: ({subjectId,groupId,year,semester,month}) => {
+            return {
+                    url: `to-teacher/journal/export/excel?subjectId=${subjectId}&groupId=${groupId}&year=${year}&semester=${semester}&month=${month}`,
+                    method: 'GET',
+                    responseHandler: async (response) => {
+                        const blob = await response.blob();
+                        const url = window.URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = 'journal.xlsx'; // Имя файла для скачивания
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        window.URL.revokeObjectURL(url);
+                      },
+                }
+            },
+          
+            keepUnusedDataFor:0,
+        }),
+
+        exportExcelEmpty: builder.query<any, any>({
+            query: ({subjectId,groupId,year,semester,month}) => {
+            return {
+                    url: `to-teacher/journal/export/empty?subjectId=${subjectId}&groupId=${groupId}&year=${year}&semester=${semester}&month=${month}`,
+                    method: 'GET',
+                    responseHandler: async (response) => {
+                        const blob = await response.blob();
+                        const url = window.URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = 'journal.xlsx'; // Имя файла для скачивания
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        window.URL.revokeObjectURL(url);
+                      },
+                }
+            },
+          
             keepUnusedDataFor:0,
         }),
        
@@ -154,6 +237,11 @@ export const {
     useSaveVedomostMutation,
     useGetVedomostKindQuery,
     useGetByDateQuery,
-    useGetDisciplineSemesterQuery
+    useGetDisciplineSemesterQuery,
+    useGetDataSemesterQuery,
+    useSendDataSemesterMutation,
+    useLazyExportExcelQuery,
+    useSendByDateMutation,
+    useLazyExportExcelEmptyQuery
 } = fotTeacherService
 

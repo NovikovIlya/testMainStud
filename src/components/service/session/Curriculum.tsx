@@ -1,17 +1,15 @@
-import { Radio, Table } from 'antd'
+import { ConfigProvider, Radio, Table } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 import Column from 'antd/es/table/Column'
 import ColumnGroup from 'antd/es/table/ColumnGroup'
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useGetStudyPlanQuery } from '../../../store/api/serviceApi'
-
-import './Styles.scss'
 import { DataType } from '../../../models/session'
+import { useGetStudyPlanQuery } from '../../../store/api/serviceApi'
 import { truncateString } from '../../../utils/truncateString'
 
-
+import './Styles.scss'
 
 const dataExam: DataType[] = [
 	{
@@ -111,22 +109,17 @@ export const Curriculum = () => {
 			width: 580,
 			render: item => {
 				if (sortingWords.some(el => el === item))
-					return (
-						<div className="bg-[#e9eff8] justify-start pl-3 items-center p-[16px]">
-							{item}
-						</div>
-					)
+					return <div className="bg-[#e9eff8] justify-start pl-3 items-center p-[16px]">{item}</div>
 				else
 					return (
 						<div className="absolute top-0 bottom-0">
 							<span className="w-1/4">{item.split('~')[0]}</span>
-							<span className="ml-4 text-start">{truncateString(30,item.split('~')[1])}</span>
+							<span className="ml-4 text-start">{truncateString(30, item.split('~')[1])}</span>
 						</div>
 					)
 			},
 			onCell: (data, _) => {
-				if (sortingWords.length !== 0 && hideInfo(data.discipline))
-					return { colSpan: 19 }
+				if (sortingWords.length !== 0 && hideInfo(data.discipline)) return { colSpan: 19 }
 				else return { colSpan: 1 }
 			}
 		},
@@ -137,8 +130,7 @@ export const Curriculum = () => {
 			align: 'center',
 			width: 32,
 			onCell: (data, _) => {
-				if (sortingWords.length !== 0 && hideInfo(data.discipline))
-					return { colSpan: 0 }
+				if (sortingWords.length !== 0 && hideInfo(data.discipline)) return { colSpan: 0 }
 				else return { colSpan: 1 }
 			}
 		},
@@ -149,8 +141,7 @@ export const Curriculum = () => {
 			align: 'center',
 			width: 32,
 			onCell: (data, _) => {
-				if (sortingWords.length !== 0 && hideInfo(data.discipline))
-					return { colSpan: 0 }
+				if (sortingWords.length !== 0 && hideInfo(data.discipline)) return { colSpan: 0 }
 				else return { colSpan: 1 }
 			}
 		},
@@ -169,8 +160,7 @@ export const Curriculum = () => {
 					align: 'center',
 					width: 32,
 					onCell: (data, _) => {
-						if (sortingWords.length !== 0 && hideInfo(data.discipline))
-							return { colSpan: 0 }
+						if (sortingWords.length !== 0 && hideInfo(data.discipline)) return { colSpan: 0 }
 						else return { colSpan: 1 }
 					}
 				},
@@ -181,8 +171,7 @@ export const Curriculum = () => {
 					align: 'center',
 					width: 32,
 					onCell: (data, _) => {
-						if (sortingWords.length !== 0 && hideInfo(data.discipline))
-							return { colSpan: 0 }
+						if (sortingWords.length !== 0 && hideInfo(data.discipline)) return { colSpan: 0 }
 						else return { colSpan: 1 }
 					}
 				},
@@ -193,8 +182,7 @@ export const Curriculum = () => {
 					align: 'center',
 					width: 32,
 					onCell: (data, _) => {
-						if (sortingWords.length !== 0 && hideInfo(data.discipline))
-							return { colSpan: 0 }
+						if (sortingWords.length !== 0 && hideInfo(data.discipline)) return { colSpan: 0 }
 						else return { colSpan: 1 }
 					}
 				},
@@ -205,8 +193,7 @@ export const Curriculum = () => {
 					align: 'center',
 					width: 32,
 					onCell: (data, _) => {
-						if (sortingWords.length !== 0 && hideInfo(data.discipline))
-							return { colSpan: 0 }
+						if (sortingWords.length !== 0 && hideInfo(data.discipline)) return { colSpan: 0 }
 						else return { colSpan: 1 }
 					}
 				}
@@ -219,8 +206,7 @@ export const Curriculum = () => {
 			align: 'center',
 			width: 32,
 			onCell: (data, _) => {
-				if (sortingWords.length !== 0 && hideInfo(data.discipline))
-					return { colSpan: 0 }
+				if (sortingWords.length !== 0 && hideInfo(data.discipline)) return { colSpan: 0 }
 				else return { colSpan: 1 }
 			}
 		},
@@ -231,8 +217,7 @@ export const Curriculum = () => {
 			align: 'center',
 			width: 32,
 			onCell: (data, _) => {
-				if (sortingWords.length !== 0 && hideInfo(data.discipline))
-					return { colSpan: 0 }
+				if (sortingWords.length !== 0 && hideInfo(data.discipline)) return { colSpan: 0 }
 				else return { colSpan: 1 }
 			}
 		},
@@ -264,8 +249,7 @@ export const Curriculum = () => {
 						}
 					},
 					onCell: (data, _) => {
-						if (sortingWords.length !== 0 && hideInfo(data.discipline))
-							return { colSpan: 0 }
+						if (sortingWords.length !== 0 && hideInfo(data.discipline)) return { colSpan: 0 }
 						else return { colSpan: 1 }
 					}
 				},
@@ -286,8 +270,7 @@ export const Curriculum = () => {
 						}
 					},
 					onCell: (data, _) => {
-						if (sortingWords.length !== 0 && hideInfo(data.discipline))
-							return { colSpan: 0 }
+						if (sortingWords.length !== 0 && hideInfo(data.discipline)) return { colSpan: 0 }
 						else return { colSpan: 1 }
 					}
 				},
@@ -308,8 +291,7 @@ export const Curriculum = () => {
 						}
 					},
 					onCell: (data, _) => {
-						if (sortingWords.length !== 0 && hideInfo(data.discipline))
-							return { colSpan: 0 }
+						if (sortingWords.length !== 0 && hideInfo(data.discipline)) return { colSpan: 0 }
 						else return { colSpan: 1 }
 					}
 				},
@@ -330,8 +312,7 @@ export const Curriculum = () => {
 						}
 					},
 					onCell: (data, _) => {
-						if (sortingWords.length !== 0 && hideInfo(data.discipline))
-							return { colSpan: 0 }
+						if (sortingWords.length !== 0 && hideInfo(data.discipline)) return { colSpan: 0 }
 						else return { colSpan: 1 }
 					}
 				},
@@ -352,8 +333,7 @@ export const Curriculum = () => {
 						}
 					},
 					onCell: (data, _) => {
-						if (sortingWords.length !== 0 && hideInfo(data.discipline))
-							return { colSpan: 0 }
+						if (sortingWords.length !== 0 && hideInfo(data.discipline)) return { colSpan: 0 }
 						else return { colSpan: 1 }
 					}
 				}
@@ -387,8 +367,7 @@ export const Curriculum = () => {
 						}
 					},
 					onCell: (data, _) => {
-						if (sortingWords.length !== 0 && hideInfo(data.discipline))
-							return { colSpan: 0 }
+						if (sortingWords.length !== 0 && hideInfo(data.discipline)) return { colSpan: 0 }
 						else return { colSpan: 1 }
 					}
 				},
@@ -409,8 +388,7 @@ export const Curriculum = () => {
 						}
 					},
 					onCell: (data, _) => {
-						if (sortingWords.length !== 0 && hideInfo(data.discipline))
-							return { colSpan: 0 }
+						if (sortingWords.length !== 0 && hideInfo(data.discipline)) return { colSpan: 0 }
 						else return { colSpan: 1 }
 					}
 				},
@@ -431,8 +409,7 @@ export const Curriculum = () => {
 						}
 					},
 					onCell: (data, _) => {
-						if (sortingWords.length !== 0 && hideInfo(data.discipline))
-							return { colSpan: 0 }
+						if (sortingWords.length !== 0 && hideInfo(data.discipline)) return { colSpan: 0 }
 						else return { colSpan: 1 }
 					}
 				},
@@ -453,8 +430,7 @@ export const Curriculum = () => {
 						}
 					},
 					onCell: (data, _) => {
-						if (sortingWords.length !== 0 && hideInfo(data.discipline))
-							return { colSpan: 0 }
+						if (sortingWords.length !== 0 && hideInfo(data.discipline)) return { colSpan: 0 }
 						else return { colSpan: 1 }
 					}
 				},
@@ -475,8 +451,7 @@ export const Curriculum = () => {
 						}
 					},
 					onCell: (data, _) => {
-						if (sortingWords.length !== 0 && hideInfo(data.discipline))
-							return { colSpan: 0 }
+						if (sortingWords.length !== 0 && hideInfo(data.discipline)) return { colSpan: 0 }
 						else return { colSpan: 1 }
 					}
 				}
@@ -503,9 +478,7 @@ export const Curriculum = () => {
 			let result: TypeColumn[] = []
 			let selectedSubject: string[] = []
 			let filtByCourse = studyPlan.subjects.filter(
-				el =>
-					parseInt(course) * 2 - 1 === el.semester ||
-					parseInt(course) * 2 === el.semester
+				el => parseInt(course) * 2 - 1 === el.semester || parseInt(course) * 2 === el.semester
 			)
 			sortingWords.forEach((it, inIt) => {
 				result.push({
@@ -513,21 +486,16 @@ export const Curriculum = () => {
 					discipline: sortingWords[inIt]
 				})
 
-				const filtratedBySortWordBySelectWord = filtByCourse.filter(
-					el => el.type_name === sortingWords[inIt]
-				)
+				const filtratedBySortWordBySelectWord = filtByCourse.filter(el => el.type_name === sortingWords[inIt])
 
 				filtratedBySortWordBySelectWord.forEach(el => {
 					if (!selectedSubject.includes(el.subject_name)) {
-						const subjects = filtratedBySortWordBySelectWord.filter(
-							item => item.subject_name === el.subject_name
-						)
+						const subjects = filtratedBySortWordBySelectWord.filter(item => item.subject_name === el.subject_name)
 						selectedSubject.push(subjects[0].subject_name)
 
 						result.push({
 							key: subjects[0].full_shifr,
-							discipline:
-								subjects[0].full_shifr + '~' + subjects[0].subject_name,
+							discipline: subjects[0].full_shifr + '~' + subjects[0].subject_name,
 							total:
 								subjects[0].total_independent_hours +
 								subjects[0].total_laboratory_hours +
@@ -536,9 +504,7 @@ export const Curriculum = () => {
 								subjects[0].total_seminar_hours,
 							totalGost: subjects[0].gost_hours,
 							totalLectures:
-								subjects[0].total_lecture_hours +
-								subjects[0].total_practice_hours +
-								subjects[0].total_laboratory_hours,
+								subjects[0].total_lecture_hours + subjects[0].total_practice_hours + subjects[0].total_laboratory_hours,
 							lecturesLectures: subjects[0].total_lecture_hours,
 							practiceLectures: subjects[0].total_practice_hours,
 							laboratoryLectures: subjects[0].total_laboratory_hours,
@@ -549,16 +515,11 @@ export const Curriculum = () => {
 							laboratoryFirstSemester: subjects[0].laboratory_hours,
 							examFirstSemester: subjects[0].is_exam ? '+' : '-',
 							creditsFirstSemester: subjects[0].is_quiz ? '+' : '-',
-							lecturesSecondSemester:
-								subjects.length > 1 ? subjects[1].lecture_hours : 0,
-							practiceSecondSemester:
-								subjects.length > 1 ? subjects[1].practice_hours : 0,
-							laboratorySecondSemester:
-								subjects.length > 1 ? subjects[1].laboratory_hours : 0,
-							examSecondSemester:
-								subjects.length > 1 ? (subjects[0].is_exam ? '+' : '-') : '-',
-							creditsSecondSemester:
-								subjects.length > 1 ? (subjects[0].is_exam ? '+' : '-') : '-'
+							lecturesSecondSemester: subjects.length > 1 ? subjects[1].lecture_hours : 0,
+							practiceSecondSemester: subjects.length > 1 ? subjects[1].practice_hours : 0,
+							laboratorySecondSemester: subjects.length > 1 ? subjects[1].laboratory_hours : 0,
+							examSecondSemester: subjects.length > 1 ? (subjects[0].is_exam ? '+' : '-') : '-',
+							creditsSecondSemester: subjects.length > 1 ? (subjects[0].is_exam ? '+' : '-') : '-'
 						})
 					}
 				})
@@ -574,51 +535,46 @@ export const Curriculum = () => {
 
 	return (
 		<div className="radio ">
-			<div className="text-black text-3xl font-normal leading-7 mb-10">
-				{t('Curriculum')}
-			</div>
+			<div className="text-black text-3xl font-normal leading-7 mb-10">{t('Curriculum')}</div>
 			<Radio.Group
 				onChange={e => changeCourse(e.target.value)}
 				defaultValue={course}
 				buttonStyle="solid"
 				className="flex gap-[10px] h-9"
 			>
-				<Radio.Button
-					className="rounded-full bg-transparent h-full flex items-center  text-base"
-					value="1"
-				>
+				<Radio.Button className="rounded-full bg-transparent h-full flex items-center  text-base" value="1">
 					{t('FirstYear')}
 				</Radio.Button>
-				<Radio.Button
-					className="rounded-full h-full flex items-center text-base bg-transparent"
-					value="2"
-				>
+				<Radio.Button className="rounded-full h-full flex items-center text-base bg-transparent" value="2">
 					{t('SecondYear')}
 				</Radio.Button>
-				<Radio.Button
-					className="rounded-full h-full flex items-center text-base bg-transparent"
-					value="3"
-				>
+				<Radio.Button className="rounded-full h-full flex items-center text-base bg-transparent" value="3">
 					{t('ThirdYear')}
 				</Radio.Button>
-				<Radio.Button
-					className="rounded-full h-full flex items-center text-base bg-transparent"
-					value="4"
-				>
+				<Radio.Button className="rounded-full h-full flex items-center text-base bg-transparent" value="4">
 					{t('FourthYear')}
 				</Radio.Button>
 			</Radio.Group>
-
-			<Table
-				bordered
-				dataSource={tableData}
-				scroll={{ x: true }}
-				columns={columns}
-				className="tableCustom my-10"
-				pagination={false}
-				loading={isLoading}
-				locale={{ emptyText: t('noData') }}
-			/>
+			<ConfigProvider
+				theme={{
+					components: {
+						Table: {
+							headerBg: 'rgb(218, 231, 251)'
+						}
+					}
+				}}
+			>
+				<Table
+					bordered
+					dataSource={tableData}
+					scroll={{ x: true }}
+					columns={columns}
+					className="tableCustom my-10"
+					pagination={false}
+					loading={isLoading}
+					locale={{ emptyText: t('noData') }}
+				/>
+			</ConfigProvider>
 		</div>
 	)
 }

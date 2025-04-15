@@ -1,7 +1,7 @@
 import { UserSwitchOutlined } from '@ant-design/icons'
 import { useLocalStorageState } from 'ahooks'
 import { useClickAway } from 'ahooks'
-import { Badge, Button, Divider, Drawer, Dropdown, Modal, Select, Space } from 'antd'
+import { Avatar, Badge, Button, Divider, Drawer, Dropdown, Modal, Select, Space, Spin } from 'antd'
 import type { MenuProps } from 'antd'
 import clsx from 'clsx'
 import { useEffect, useRef, useState } from 'react'
@@ -29,6 +29,7 @@ import AccessibilityHelper from '../AccessibilityHelper/AccessibilityHelper'
 import { ModalNav } from '../service/ModalNav'
 import { useGetAllUnReadQuery } from '../../store/api/messages/messageApi'
 import { LogoSvgNew } from '../../assets/svg/LogoSvgNew'
+import { useGetAvatarQuery } from '../../store/api/aboutMe/forAboutMe'
 
 
 
@@ -54,12 +55,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const [mainRole, setmainRole] = useLocalStorageState<any>('typeAcc', {defaultValue: 'STUD'})
 	const [login, { data: dataLogin, isSuccess, isLoading }] = useFakeLoginMutation()
 	const [isOpen, setIsOpen] = useState(false)
-	const [info, setInfo] = useLocalStorageState<any>(
-		'info',
-		{
-		  defaultValue: '',
-		},
-	);
+	const [info, setInfo] = useLocalStorageState<any>('info',{  defaultValue: '',},);
 	const ref = useRef<any>(null)
 	const { unreadChatsCount } = useGetAllUnReadQuery(null, {
 		pollingInterval: 2000,
@@ -67,7 +63,8 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 		selectFromResult: ({ data }) => ({
 		  unreadChatsCount: data?.unreadChatsCount
 		}),
-	  })
+	})
+	const { data: avatarUrl, isLoading: isAvatarLoading } = useGetAvatarQuery();
 	
 	useEffect(() => {
 		if (isSuccessSubRole) {
@@ -116,13 +113,13 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 		setOpenDrawer(false)
 	}
 	const items: MenuProps['items'] = [
-		{
-			label: <div className={`p-2 text-sm text-blue1f5 font-bold cursor-default`}>{user?.email}</div>,
-			key: '0'
-		},
-		{
-			type: 'divider'
-		},
+		// {
+		// 	label: <div className={`p-2 text-sm text-blue1f5 font-bold cursor-default`}>{user?.email}</div>,
+		// 	key: '0'
+		// },
+		// {
+		// 	type: 'divider'
+		// },
 
 		...(maiRole === 'OTHER' ? [
 			{
@@ -155,22 +152,22 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 			key: '1'
 		},
 
-		{
-			label: (
-				<div
-					className="flex items-center gap-[15px] px-[4px] py-[5px]"
-					onClick={() => {
-						setOpenMenu(false)
+		// {
+		// 	label: (
+		// 		<div
+		// 			className="flex items-center gap-[15px] px-[4px] py-[5px]"
+		// 			onClick={() => {
+		// 				setOpenMenu(false)
 
-						navigate('/services/setting/contactInformation')
-					}}
-				>
-					<SettingSvg />
-					{t('Setting')}
-				</div>
-			),
-			key: '3'
-		},
+		// 				navigate('/services/setting/contactInformation')
+		// 			}}
+		// 		>
+		// 			<SettingSvg />
+		// 			{t('Setting')}
+		// 		</div>
+		// 	),
+		// 	key: '3'
+		// },
 
 
 		{
@@ -188,10 +185,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 			),
 			key: '5'
 		},
-		{
-			label: <div className="cursor-default" />,
-			key: '6'
-		}
+		
 	]
 	const changeLanguage = (language: string) => {
 		i18n.changeLanguage(language)
@@ -252,7 +246,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 				type === 'main' ? 'bg-white ' : `bg-blue65A`
 			)}
 		>
-			<div className={`w-screen flex h-full justify-between px-8 max-sm:px-5 ${type === 'main' ? 'max-w-[1650px] animate-fade-in' : 'animate-fade-in'} `}>
+			<div className={`w-screen flex h-full justify-between px-10 max-sm:px-5 ${type === 'main' ? 'max-w-[1680px] animate-fade-in' : 'animate-fade-in'} `}>
 				<div className="flex gap-8 max-sm:gap-2 items-center">
 					{user?.roles[0].type === 'ABITUR' || user?.roles[0].type === 'OTHER' ? (
 						''
@@ -427,7 +421,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 							className="cursor-pointer h-full  box-border"
 						>
 							<Space className="px-10 max-sm:px-5 max-[455px]:!gap-0 gap-2 w-[200px] flex justify-end">
-								<PersonSvg white={type === 'service'} />
+								{!avatarUrl?.url ?<PersonSvg white={type === 'service'} /> : <Avatar src={avatarUrl?.url}/>}
 								<div className={clsx('h-full max-[455px]:hidden', type === 'service' && 'text-white')}>
 									<div className="font-bold text-sm truncate max-w-[120px]">
 										

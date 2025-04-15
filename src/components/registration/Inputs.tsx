@@ -15,17 +15,17 @@ export const Inputs: FC<IInputsProps> = ({ error, changeEmail, email }) => {
 				style={{ marginBottom: 30 }}
 				validateStatus={
 					error !== null &&
-					error.details.length > 0 &&
-					error.details.some(el => el.field === 'lastName')
+					error?.details.length > 0 &&
+					error?.details.some(el => el.field === 'lastName')
 						? 'error'
 						: undefined
 				}
 				help={
 					error !== null &&
-					error.details.length > 0 &&
-					error.details.some(el => el.field === 'lastName') && (
+					error?.details?.length > 0 &&
+					error?.details?.some(el => el.field === 'lastName') && (
 						<div>
-							{error.details.map(el => {
+							{error?.details?.map(el => {
 								if (el.field === 'lastName') return <p>{el.message}</p>
 								else return ''
 							})}
@@ -45,17 +45,17 @@ export const Inputs: FC<IInputsProps> = ({ error, changeEmail, email }) => {
 				style={{ marginBottom: 30 }}
 				validateStatus={
 					error !== null &&
-					error.details.length > 0 &&
-					error.details.some(el => el.field === 'firstName')
+					error?.details?.length > 0 &&
+					error?.details?.some(el => el.field === 'firstName')
 						? 'error'
 						: undefined
 				}
 				help={
 					error !== null &&
-					error.details.length > 0 &&
-					error.details.some(el => el.field === 'firstName') && (
+					error?.details?.length > 0 &&
+					error?.details?.some(el => el.field === 'firstName') && (
 						<div>
-							{error.details.map(el => {
+							{error?.details.map(el => {
 								if (el.field === 'firstName') return <p>{el.message}</p>
 								else return ''
 							})}

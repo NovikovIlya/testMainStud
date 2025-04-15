@@ -24,13 +24,14 @@ const Brs = () => {
 	const groupeForm = Form.useWatch('group', form2)
 	const yearForm = useAppSelector(state => state.forTeacher.yearForm)
 	const semestrForm = useAppSelector(state => state.forTeacher.semestrForm)
+	console.log('semestrForm',semestrForm)
 	const { data, isError, error, isFetching } = useGetBrsForTeacherQuery({ subjectId: discilineForm, groupId: groupeForm,year:yearForm,semester :semestrForm },{ skip: !discilineForm || !groupeForm || !yearForm || !semestrForm })
 	const { data: dataSubjects,isFetching:isFetchingSubject } = useGetBrsSubjectsQuery({year:yearForm,semester :semestrForm},{skip: !yearForm || !semestrForm})
 	const { data: dataGroups,isFetching:isFetchingGroup } = useGetBrsGroupsQuery({subjectId:discilineForm,year:yearForm,semester :semestrForm}, { skip: !discilineForm || !yearForm || !semestrForm})
 	const [saveBrs, { data: dataSave, isLoading,isError:isErrorSave ,error:errorSave}] = useSaveBrsMutation()
 	const [dataSource, setDataSource] = useState<Student[]>([])
 	const [errorDisplayed, setErrorDisplayed] = useState(false);
-
+	console.log('dataSource',dataSource)
 	useEffect(() => {
 		if (data?.students) {
 			setDataSource(
@@ -173,17 +174,22 @@ const Brs = () => {
 					{groupeForm && data?.students?.length ? (
 						<div className="animate-fade-in">
 							<Row className="flex gap-2">
+							<a href={data?.emptyPrintForm}  target="_blank">
 								<Button className="rounded-xl" icon={<PrinterOutlined />}>
 									{t('printJournalEmpty')}
 								</Button>
+								</a>
+								<a href={data?.filledPrintForm}  target="_blank">
 								<Button className="rounded-xl" icon={<PrinterOutlined />}>
 									{t('printJournalFiled')}
 								</Button>
+								</a>
 							</Row>
 							<Spin spinning={isLoading}>
-							<TableBrs semester={data.semester} dataSource={dataSource} setDataSource={setDataSource} />
+							<TableBrs yearForm={yearForm} semester={semestrForm} dataSource={dataSource} setDataSource={setDataSource} />
 							</Spin>
-							<Button htmlType="submit" className="mt-8 mb-8 rounded-xl" type="primary">
+							{/* @ts-ignore */}
+							<Button disabled={dataSource?.[0]?.isBlocked} htmlType="submit" className="mt-8 mb-8 rounded-xl" type="primary">
 								{t('Save')}
 							</Button>
 

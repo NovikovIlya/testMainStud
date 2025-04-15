@@ -6,6 +6,8 @@ import { setIsEditTableScheduleTeacher } from '../../../../../store/reducers/aut
 import { DataType, EditableCellProps, EditableRowProps } from '../../../../../models/tables';
 import { truncateString } from '../../../../../utils/truncateString';
 import TextArea from 'antd/es/input/TextArea';
+import { t } from 'i18next';
+
 
 const EditableContext = React.createContext<FormInstance<any> | null>(null);
 
@@ -118,36 +120,41 @@ const TableVedomosti = ({kindForm,dataSource, setDataSource,subj_type,is_session
       width: '20%',
     },
     {
-      title: 'Отметка работы студента в семестре',
+      title: t('otmetka'),
       dataIndex: 'semesterMark',
       width: '10%',
     },
     {
-      title: `Отметка о сдаче ${kindForm==='e' ? 'экзамена' : kindForm === 'q' ? 'зачета' : 'дифзачета'}`,
+      title: `${t('otm')} ${kindForm==='e' ? t('exam') : kindForm === 'q' ? t('Credit') : t('difcredit')}`,
       dataIndex: 'subjectMark',
       editable: true,
       width: '10%',
       inputType: 'number',
     },  
     {
-      title: 'Рейтинговый показатель по дисциплине',
+      title: t('rateDisc'),
       dataIndex: 'subjectRate',
       width: '15%',
     },
     {
-      title: 'Итоговая оценка вносимая в зачетную книжку',
+      title: t('itog'),
       dataIndex: 'subjectMarkvalue',
       width: '25%',
       render: (text: any) => {
         return (
           <div className='flex flex-wrap  items-center '>
-            {text==='удовлетворительно' ? <div className='rounded-xl bg-yellow-400 w-[10px] h-[10px]' ></div> : <div ></div>}
-            {text==='не зачтено' ? <div className='rounded-xl bg-yellow-500 w-[10px] h-[10px]' ></div> : <div ></div>}
-            {text==='отлично' ? <div className='rounded-xl bg-red-500 w-[10px] h-[10px]' ></div> : <div ></div>}
-            {text==='зачтено' ? <div className='rounded-xl bg-green-500 w-[10px] h-[10px]' ></div> : <div ></div>}
-            {text==='не сдает' ? <div className='rounded-xl bg-gray-300 w-[10px] h-[10px]' ></div> : <div ></div>}
-            {text==='неудовлетворительно' ? <div className='rounded-xl bg-yellow-500 w-[10px] h-[10px]' ></div> : <div ></div>}
-            {text==='хорошо' ? <div className='rounded-xl bg-green-500 w-[10px] h-[10px]' ></div> : <div ></div>}
+            {text==='удовлетворительно' || text==='satisfactorily' ? <div className='rounded-xl bg-yellow-400 w-[10px] h-[10px]' ></div> : <div ></div>}
+            {text==='не зачтено' || text==='not credited'? <div className='rounded-xl bg-yellow-500 w-[10px] h-[10px]' ></div> : <div ></div>}
+            
+            {text==='отлично'  ? <div className='rounded-xl bg-red-500 w-[10px] h-[10px]' ></div> : <div ></div>}
+            {text==='excellent' ? <div className='rounded-xl bg-red-500 w-[10px] h-[10px]' ></div> : <div ></div>}
+
+            {(text==='зачтено')? <div className='rounded-xl bg-green-500 w-[10px] h-[10px]' ></div> : <div ></div>}
+            {(text==='credited')? <div className='rounded-xl bg-green-500 w-[10px] h-[10px]' ></div> : <div ></div>}
+
+            {text==='не сдает' ||text=== "doesn't pass" ? <div className='rounded-xl bg-gray-300 w-[10px] h-[10px]' ></div> : <div ></div>}
+            {text==='не удовлетворительно' || text==='unsatisfactory'? <div className='rounded-xl bg-yellow-500 w-[10px] h-[10px]' ></div> : <div ></div>}
+            {text==='хорошо' || text==='good'? <div className='rounded-xl bg-green-500 w-[10px] h-[10px]' ></div> : <div ></div>}
             <div className='ml-2'>{text}</div>
           </div>
         );
@@ -224,7 +231,7 @@ const TableVedomosti = ({kindForm,dataSource, setDataSource,subj_type,is_session
   })  
 
   return (
-    <div className='mt-4'>
+    <div className='mt-4 styleCustom'>
       <Table
         rowKey={(record) => record.key}
         components={components}

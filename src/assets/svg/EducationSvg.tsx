@@ -5,8 +5,8 @@ import { blue1f5 } from '../../utils/color'
 export const EducationSvg = () => {
 	return (
 		<svg
-			width="25"
-			height="19"
+			width="14"
+			height="14"
 			viewBox="0 0 25 19"
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"

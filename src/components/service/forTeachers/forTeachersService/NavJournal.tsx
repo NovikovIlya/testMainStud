@@ -1,7 +1,7 @@
 import { Result, Tabs } from 'antd'
 import Title from 'antd/es/typography/Title'
 import { t } from 'i18next'
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import { useAppSelector } from '../../../../store'
 
@@ -9,19 +9,20 @@ import InfoCard from './InfoCard'
 import JournalPosDay from './JournalPosDay'
 import JournalPosElem from './JournalPosElem'
 
-const NavJournal = () => {
+const NavJournal = ({collapsed}:{collapsed:boolean}) => {
 	const yearForm = useAppSelector(state => state.forTeacher.yearForm)
 	const semestrForm = useAppSelector(state => state.forTeacher.semestrForm)
 
+
 	return (
-		<div className="px-[80px]">
+		<div className="px-[80px] ">
 			{semestrForm ? (
 				<>
 					<InfoCard text={t('textLessonLog')} />
 					<Title className="mt-8" level={2}>
 						{t('journalPos')}
 					</Title>
-					<Tabs defaultActiveKey="1" className="mt-6">
+					<Tabs key={`tabs-${semestrForm}`} defaultActiveKey="1" className="mt-6">
 						<Tabs.TabPane tab={t('days')} key={1}>
 							<>
 								<JournalPosDay />
@@ -29,7 +30,7 @@ const NavJournal = () => {
 						</Tabs.TabPane>
 						<Tabs.TabPane tab={t('sem')} key={2}>
 							<>
-								<JournalPosElem />
+								<JournalPosElem collapsed={collapsed} />
 							</>
 						</Tabs.TabPane>
 					</Tabs>

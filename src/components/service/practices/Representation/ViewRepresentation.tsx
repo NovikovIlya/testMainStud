@@ -603,7 +603,8 @@ import {
 	Spin,
 	Table,
 	Typography, Form,
-	TreeSelect
+	TreeSelect,
+	ConfigProvider
 } from 'antd'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -1132,7 +1133,15 @@ export const ViewRepresentation = () => {
 			<Row>
 				<Col flex={'auto'}>
 					<Spin spinning={isLoading}>
-						<Table
+						<ConfigProvider
+														theme={{
+															components: {
+																Table: {
+																	headerBg: 'rgb(218, 231, 251)'
+																}
+															}
+														}}
+													><Table
 							onRow={record => ({
 								onClick: () => handleRowClick(record)
 							})}
@@ -1148,7 +1157,7 @@ export const ViewRepresentation = () => {
 									</div>
 								)
 							}}
-						/>
+						/></ConfigProvider>
 					</Spin>
 				</Col>
 			</Row>

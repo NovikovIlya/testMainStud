@@ -128,6 +128,33 @@ export interface IMe {
 	countryId: number
 }
 
+export type EducationTableDataType = {
+	language_portal: 1 | 2 | null
+	start_date: string
+	end_date: string
+	edu_level: number
+	eduspeciality: string
+	organization: string
+	edu_country: string
+	development: string
+	qualification: string
+	issue_date: string
+	docnum: string
+	docseries: string
+	portal_status: '1' | null
+	s_id?: number
+	e_id?: number
+	user_allid?: number
+	id?: number
+}
+
+export type OldEducationTableDataType = {
+	INSTITUTION_YEAR: string
+	GRADE: string
+	INSTITUTION_NAME: string
+	INSTITUTION_PLACE: string
+	MEDAL: string
+}
 export type VacancyItemType = {
 	id: number
 	title: string

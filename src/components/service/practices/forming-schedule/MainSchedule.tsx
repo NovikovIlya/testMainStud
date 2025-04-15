@@ -307,6 +307,7 @@
 
 import {
     Button, Col,
+    ConfigProvider,
     Popover,
     Row,
     Select,
@@ -578,7 +579,15 @@ export const PracticeSchedule = () => {
                 </Col>
             </Row>
             {isFetchingDataAll || flagLoad ? <Spin className='w-full mt-20' indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
-                : <Table
+                : <ConfigProvider
+                                theme={{
+                                    components: {
+                                        Table: {
+                                            headerBg: 'rgb(218, 231, 251)'
+                                        }
+                                    }
+                                }}
+                            ><Table
                     onRow={(record) => ({
                         onClick: () => handleRowClick(record),
                     })}
@@ -593,7 +602,7 @@ export const PracticeSchedule = () => {
                     }}
                     className="my-10"
                     rowClassName={() => 'animate-fade-in'}
-                />}
+                /></ConfigProvider>}
         </section>
     )
 }

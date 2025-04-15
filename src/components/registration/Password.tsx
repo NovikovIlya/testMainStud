@@ -25,8 +25,8 @@ export const Password: FC<IPasswordProps> = ({ error }) => {
 				}
 				help={
 					error !== null &&
-					error.details.length > 0 &&
-					error.details.some(el => el.field === 'password') && (
+					error?.details?.length > 0 &&
+					error?.details?.some(el => el.field === 'password') && (
 						<div>
 							{error.details.map(el => {
 								if (el.field === 'password') return <p>{el.message}</p>

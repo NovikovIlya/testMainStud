@@ -547,6 +547,7 @@ const CreateTask = () => {
                                        rules={[{required: true}]}
                                        name={'specialityName'}>
                                 <Select
+                                    showSearch
                                     disabled={!subDivision}
                                     size="large"
                                     popupMatchSelectWidth={false}
@@ -574,6 +575,7 @@ const CreateTask = () => {
                                 rules={[{required: true}]}
                                 name={"practiceType"}>
                                 <Select
+                                    showSearch
                                     disabled={!subDivision}
                                     size="large"
                                     popupMatchSelectWidth={false}
@@ -599,13 +601,13 @@ const CreateTask = () => {
                     <Col xs={24} sm={24} md={18} lg={16} xl={12}>
                         <Form.List name={'tasks'}
                                    initialValue={[{}]}
-                                   rules={[{
-                                       validator: async (_, tasks) => {
-                                           if (tasks.length < 1 || tasks.length > 10) {
-                                               return Promise.reject(new Error(t("errorTaskCount")))
-                                           }
-                                       }
-                                   }]}
+                                //    rules={[{
+                                //        validator: async (_, tasks) => {
+                                //            if (tasks.length < 1 || tasks.length > 10) {
+                                //                return Promise.reject(new Error(t("errorTaskCount")))
+                                //            }
+                                //        }
+                                //    }]}
                         >
                             {(fields, operation, {errors}) => (
                                 <>
@@ -656,7 +658,7 @@ const CreateTask = () => {
                                         type="primary"
                                         icon={<PlusOutlined/>}
                                         onClick={() => operation.add()}
-                                        disabled={fields.length === 10}
+                                        disabled={fields.length === 72}
                                     />
                                 </>
                             )}

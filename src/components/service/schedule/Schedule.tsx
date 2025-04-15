@@ -1,24 +1,20 @@
-import { Radio, RadioChangeEvent, Table } from 'antd'
+import { ConfigProvider, Radio, RadioChangeEvent, Table } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
+import { t } from 'i18next'
 import { useEffect, useState } from 'react'
 
-import { useGetScheduleQuery } from '../../../store/api/serviceApi'
-
-import './StyleSchedule.scss'
 import { DataType } from '../../../models/schedule'
+import { useGetScheduleQuery } from '../../../store/api/serviceApi'
 import useWindowOrientation from '../../../utils/hooks/useDeviceOrientation'
 import { isMobileDevice } from '../../../utils/hooks/useIsMobile'
-import { t } from 'i18next'
 
-
-
-
+import './StyleSchedule.scss'
 
 export const Schedule = () => {
 	const { data: schedule, isLoading } = useGetScheduleQuery()
 	const [data, setData] = useState<DataType[] | undefined>()
 	const isMobile = isMobileDevice()
-	const orientation  = useWindowOrientation()
+	const orientation = useWindowOrientation()
 	const columns: ColumnsType<DataType> = [
 		{
 			title: '',
@@ -27,19 +23,27 @@ export const Schedule = () => {
 			className: '',
 			render: (item, item2) => {
 				return (
-				  <div className={` ${isMobile ? 'hidden' : ''} !h-[105px] w-[32px] ${
-					item2.type === 'Практика' ? 'bg-[#844EC9]' :
-					item2.type === 'Потоковая лекция' ? 'bg-[#A7FAFF]' :
-					item2.type === 'Лекция' ? 'bg-[#3A92E3]' :
-					item2.type === 'Семинар' ? 'bg-[#FFE24C]' :
-					item2.type === 'Лабораторное занятие' ? 'bg-[#59C348]' :
-					item2.type === 'Факультатив' ? 'bg-[#E93A3A]' :
-					item2.type === 'Тестирование' ? 'bg-[#FF9838]' :
-					'bg-[#B3B3B3]' // Default case for "Тип дисциплины не указан"
-				  }`}></div>
+					<div
+						className={` ${isMobile ? 'hidden' : ''} !h-[105px] w-[32px] ${
+							item2.type === 'Практика'
+								? 'bg-[#844EC9]'
+								: item2.type === 'Потоковая лекция'
+								? 'bg-[#A7FAFF]'
+								: item2.type === 'Лекция'
+								? 'bg-[#3A92E3]'
+								: item2.type === 'Семинар'
+								? 'bg-[#FFE24C]'
+								: item2.type === 'Лабораторное занятие'
+								? 'bg-[#59C348]'
+								: item2.type === 'Факультатив'
+								? 'bg-[#E93A3A]'
+								: item2.type === 'Тестирование'
+								? 'bg-[#FF9838]'
+								: 'bg-[#B3B3B3]' // Default case for "Тип дисциплины не указан"
+						}`}
+					></div>
 				)
-			  }
-			  
+			}
 		},
 		{
 			title: t('time'),
@@ -76,7 +80,6 @@ export const Schedule = () => {
 	useEffect(() => {
 		setData(schedule?.monday)
 	}, [isLoading, schedule])
-	
 
 	const onChange = (e: RadioChangeEvent) => {
 		console.log('e', e)
@@ -86,69 +89,58 @@ export const Schedule = () => {
 
 	if (schedule === undefined) return null
 
-	if(isMobile && orientation === 'portrait') return <div className='max-w-full text-center mt-10'>В данном разрешении модуль не работает, пожалуйста поверните телефон</div>
+	if (isMobile && orientation === 'portrait')
+		return (
+			<div className="max-w-full text-center mt-10">
+				В данном разрешении модуль не работает, пожалуйста поверните телефон
+			</div>
+		)
 
 	return (
 		<div className={`${isMobile ? 'mx-0' : 'mx-14'} mt-14  radio w-full justify-center`}>
 			{/* <div className="mb-14 text-[28px]">Мое расписание</div> */}
-			<Radio.Group
-				onChange={onChange}
-				defaultValue="monday"
-				buttonStyle="solid"
-				className="flex gap-[10px] h-9"
-			>
-				<Radio.Button
-					className="rounded-full bg-transparent h-full flex items-center  text-base"
-					value="monday"
-				>
+			<Radio.Group onChange={onChange} defaultValue="monday" buttonStyle="solid" className="flex gap-[10px] h-9">
+				<Radio.Button className="rounded-full bg-transparent h-full flex items-center  text-base" value="monday">
 					{t('monday')}
 				</Radio.Button>
-				<Radio.Button
-					className="rounded-full h-full flex items-center text-base bg-transparent"
-					value="tuesday"
-				>
+				<Radio.Button className="rounded-full h-full flex items-center text-base bg-transparent" value="tuesday">
 					{t('tuesday')}
 				</Radio.Button>
-				<Radio.Button
-					className="rounded-full h-full flex items-center text-base bg-transparent"
-					value="wednesday"
-				>
+				<Radio.Button className="rounded-full h-full flex items-center text-base bg-transparent" value="wednesday">
 					{t('wednesday')}
 				</Radio.Button>
-				<Radio.Button
-					className="rounded-full h-full flex items-center text-base bg-transparent"
-					value="thursday"
-				>
+				<Radio.Button className="rounded-full h-full flex items-center text-base bg-transparent" value="thursday">
 					{t('thursday')}
 				</Radio.Button>
-				<Radio.Button
-					className="rounded-full h-full flex items-center text-base bg-transparent"
-					value="friday"
-				>
+				<Radio.Button className="rounded-full h-full flex items-center text-base bg-transparent" value="friday">
 					{t('friday')}
 				</Radio.Button>
-				<Radio.Button
-					className="rounded-full h-full flex items-center text-base bg-transparent"
-					value="saturday"
-				>
+				<Radio.Button className="rounded-full h-full flex items-center text-base bg-transparent" value="saturday">
 					{t('saturday')}
 				</Radio.Button>
-				<Radio.Button
-					className="rounded-full h-full flex items-center text-base bg-transparent"
-					value="sunday"
-				>
+				<Radio.Button className="rounded-full h-full flex items-center text-base bg-transparent" value="sunday">
 					{t('sunday')}
 				</Radio.Button>
 			</Radio.Group>
 			<div className="my-10  flex gap-12">
-				<Table
-					columns={columns}
-					dataSource={data}
-					pagination={false}
-					className="max-w-[1050px] w-full drop--lg -[#d4e3f1] rounded-none"
-					locale={{ emptyText: t('noData') }}
-				/>
-				<div className={`${isMobile? 'hidden' :''} flex flex-col gap-6 text-sm`}>
+				<ConfigProvider
+					theme={{
+						components: {
+							Table: {
+								headerBg: 'rgb(218, 231, 251)'
+							}
+						}
+					}}
+				>
+					<Table
+						columns={columns}
+						dataSource={data}
+						pagination={false}
+						className="max-w-[1050px] w-full drop--lg -[#d4e3f1] rounded-none"
+						locale={{ emptyText: t('noData') }}
+					/>
+				</ConfigProvider>
+				<div className={`${isMobile ? 'hidden' : ''} flex flex-col gap-6 text-sm`}>
 					<div className="flex items-center gap-2">
 						<div className="min-w-3 min-h-3 w-[11px] h-[11px]  rounded-full bg-[#A7FAFF]" />
 						{t('streamingLecture')}

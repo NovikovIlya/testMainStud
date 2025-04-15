@@ -156,7 +156,7 @@ const AccessibilityHelper: React.FC<AccessibilityHelperProps> = forwardRef(({ la
                 <SyncOutlined className="h-4 w-4" />
               </Button>
             </div>
-            <Button onClick={resetOptions} className="w-full bg-red-500 text-white p-2 rounded-xl">
+            <Button onClick={resetOptions} type='primary' className="w-full  text-white p-2 rounded-xl">
               {text?.reset}
             </Button>
           </div>

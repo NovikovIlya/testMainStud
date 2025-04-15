@@ -109,7 +109,7 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 								onClick={async () => {
 									try {
 										setIsReqModalOpen(false)
-										await markBankCardApplicationFormed({ subStageId: 5 })
+										await markBankCardApplicationFormed({ subStageId: props.stage })
 											.unwrap()
 											.then(() => {
 												dispatch(setFifthStageStatus('ACCEPTED'))

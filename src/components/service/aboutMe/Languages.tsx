@@ -146,7 +146,7 @@ const Languages = () => {
 				<Form form={form} onFinish={onFinish} className=" ">
 					<Spin spinning={isLoading} className="flex gap-2">
 						<Row className="mb-5">
-							<Title level={2}>{t('langZnan')}</Title>
+							<Title className='!text-[28px]'>{t('langZnan')}</Title>
 						</Row>
 						<Row className="mb-0 mt-3 w-full">
 							<Col span={24}>

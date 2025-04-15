@@ -120,7 +120,7 @@ export const ContactInformation = () => {
 	
 		<Form form={form} onFinish={onSubmitPhone2} className='w-full'>
 			<Row className="mb-8 flex items-center justify-between mt-6">
-			<Title level={2} className='!mb-0'>{t('contactInformation')}</Title></Row>
+			<Title  className='!mb-0 !text-[28px]'>{t('contactInformation')}</Title></Row>
 			<section className=" w-full">
 				<Card className='bg-white rounded-xl shadow-md overflow-hidden mt-4 w-full'>
 					<h3>{t('mainMail')}</h3>

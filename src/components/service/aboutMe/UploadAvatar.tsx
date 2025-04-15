@@ -3,6 +3,7 @@ import { DeleteOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons'
 import { Avatar, Button, message, Spin, Upload } from 'antd';
 import { useAddAvatarMutation, useGetAvatarQuery, usePutAvatarMutation } from '../../../store/api/aboutMe/forAboutMe';
 import { t } from 'i18next';
+import { Un } from '../../../assets/svg/Un';
 
 const UploadAvatar = ({dataAboutMe}:any) => {
   const { data: avatarUrl } = useGetAvatarQuery();
@@ -62,9 +63,10 @@ const UploadAvatar = ({dataAboutMe}:any) => {
           customRequest={({ file }) => handleUpload(file as File)}
         >
           <Button
-            className='!rounded-[50%]'
-            icon={<UploadOutlined />}
+            className='!rounded-[50%] bg-[#65A1FA] text-white !hover:text-black  '
+            icon={<Un />}
             loading={isLoading}
+            type='primary'
           />
           
         </Upload>
@@ -74,8 +76,9 @@ const UploadAvatar = ({dataAboutMe}:any) => {
 
       {avatarUrl?.url ? <div className='absolute bottom-[40%] right-[-13px]'>
         <Button
-              className='!rounded-[50%]'
+              className='!rounded-[50%] bg-[#65A1FA] text-white   '
               icon={<DeleteOutlined  />}
+                type='primary'
 
             />
         </div> : ''}

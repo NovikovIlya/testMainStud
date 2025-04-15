@@ -1,3 +1,4 @@
+
 import { DownOutlined, EditOutlined, EyeOutlined, QuestionCircleOutlined, UpOutlined } from '@ant-design/icons'
 import { Button, Checkbox, Col, Collapse, Divider, Form, Progress, Row, Spin, Switch, Tooltip } from 'antd'
 import { Descriptions } from 'antd'
@@ -36,7 +37,7 @@ const AboutMeNew = () => {
 		sogl: false,
 		oznak: false
 	})
-	console.log('switch', switchForm)
+	console.log('switchForm',switchForm)
 
 	useEffect(() => {
 		if (dataAboutMe?.employeeAddedDto?.COMMENT) {
@@ -69,7 +70,6 @@ const AboutMeNew = () => {
 	}, [dataCheckbox])
 
 	const onFinish = (values: any) => {
-		console.log('Отправка чекбоксов:', values)
 		const transformedObject = Object.fromEntries(Object.entries(values).map(([key, value]) => [key, value ? 1 : 0]))
 		const transformedObjectValid = {
 			IS_CHECKED_ETIQ: transformedObject.codex,
@@ -78,7 +78,6 @@ const AboutMeNew = () => {
 			IS_CHECKED_HANDLING: transformedObject.sogl,
 			IS_CHECKED_PERS_DATA: transformedObject.oznak
 		}
-		console.log('transformedObjectValid:', transformedObjectValid)
 		setCheckbox(transformedObjectValid)
 	}
 
@@ -96,7 +95,7 @@ const AboutMeNew = () => {
 	return (
 		<div className="px-[50px] pt-[60px] mb-[50px]">
 			<Row className="mb-8 flex items-center justify-between">
-				<Title level={2} className="!mb-0">
+				<Title  className="!mb-0 !text-[28px]">
 					{t('PersonalData')}
 				</Title>
 				<div className="flex items-center gap-2">
@@ -107,7 +106,7 @@ const AboutMeNew = () => {
 					</Form>
 					<span>Сделать профиль публичным</span>
 					<Tooltip title={t('agreementTooltip')}>
-						<img src="/src/assets/svg/GroupVop.svg" />
+						<img src="/public/GroupVop.svg" />
 					</Tooltip>
 				</div>
 			</Row>
@@ -134,7 +133,7 @@ const AboutMeNew = () => {
 					</Col>
 					<Col span={12}>
 						<div className="flex flex-wrap justify-start p-[40px]">
-							<Descriptions column={1} title={t('generalInfo')}>
+							<Descriptions  column={1} title={<div className='text-[20px]'>{t('generalInfo')}</div>}>
 								{dataAboutMe?.BIRTH_DATE ? (
 									<Descriptions.Item label={t('birthDate')}>{dataAboutMe.BIRTH_DATE}</Descriptions.Item>
 								) : null}
@@ -180,7 +179,7 @@ const AboutMeNew = () => {
 							forceRender
 							className=" p-[7px] transition-all duration-500 ease-in-ou"
 							header={
-								<Title className="!mb-0" level={5}>
+								<Title className="!mb-0" level={4}>
 									{t('userAgreementText')}
 								</Title>
 							}
@@ -280,7 +279,7 @@ const AboutMeNew = () => {
 						<Col span={24}>
 							<div className="flex flex-wrap justify-start p-6">
 								<div className="flex items-center gap-2">
-									<Title className="!mb-0" level={5}>
+									<Title className="!mb-0" level={4}>
 										{t(dataAboutMe?.studentAddedDto?.GRADE)}
 									</Title>
 								</div>
@@ -356,7 +355,7 @@ const AboutMeNew = () => {
 						<Col span={24}>
 							<div className="flex flex-wrap justify-start p-6">
 								<div className="flex items-center gap-2">
-									<Title className="!mb-0" level={5}>
+									<Title className="!mb-0" level={4}>
 										{t('Postgraduate')}
 									</Title>
 								</div>
@@ -395,7 +394,7 @@ const AboutMeNew = () => {
 							<Col span={24}>
 								<div className="flex flex-wrap justify-start p-6">
 									<div className="flex items-center gap-2">
-										<Title className="!mb-0" level={5}>
+										<Title className="!mb-0" level={4}>
 											{t('aboutWork')}
 										</Title>
 									</div>
@@ -436,7 +435,7 @@ const AboutMeNew = () => {
 								<Col span={24}>
 									<div className="flex flex-wrap justify-start p-6">
 										<div className="flex items-center gap-2">
-											<Title className="!mb-0" level={5}>
+											<Title className="!mb-0" level={4}>
 												{t('additionalInfo')}
 											</Title>
 										</div>

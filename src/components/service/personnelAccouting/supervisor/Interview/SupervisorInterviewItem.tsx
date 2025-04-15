@@ -3,16 +3,10 @@ import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-import { useAppSelector } from '../../../../../store'
-import { useLazyGetInterviewViewQuery } from '../../../../../store/api/serviceApi'
-import { setCurrentInterviewFormat } from '../../../../../store/reducers/CurrentInterviewFormatSlice'
-import { setCurrentInterviewTimeFormated } from '../../../../../store/reducers/CurrentInterviewTimeFormatedSlice'
-import { setCurrentInterviewTime } from '../../../../../store/reducers/CurrentInterviewTimeSlice'
-import { setCurrentResponce } from '../../../../../store/reducers/CurrentResponceSlice'
+import { useLazyGetInterviewQuery, useLazyGetInterviewViewQuery } from '../../../../../store/api/serviceApi'
 import { InterviewItemType } from '../../../../../store/reducers/type'
 
 export const SupervisorInterviewItem = (props: InterviewItemType) => {
-
 	interface InterviewButtonElemProps {
 		id: any
 		format: string
@@ -25,8 +19,10 @@ export const SupervisorInterviewItem = (props: InterviewItemType) => {
 		format: string
 	}
 	interface CountdownButtonProps {
+		id: number
 		eventTime: string
 		format: string
+		url: string
 	}
 
 	const [getInterview, result] = useLazyGetInterviewViewQuery()
@@ -36,23 +32,61 @@ export const SupervisorInterviewItem = (props: InterviewItemType) => {
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 
-	const seekerName =
-		props.seeker.lastName +
-		' ' +
-		props.seeker.firstName +
-		' ' +
-		props.seeker.middleName
-
+	const seekerName = props.seeker.lastName + ' ' + props.seeker.firstName + ' ' + props.seeker.middleName
 
 	const InterviewCountdownTimeElem = (props: CountdownButtonProps) => {
-		const [timeLeft, setTimeLeft] = useState<number>(0)
+		const [isInterviewStarted, setIsInterviewStarted] = useState<boolean>(false)
+		const [is5MinBeforeInterviewStarted, setIs5MinBeforeInterviewStarted] = useState<boolean>(false)
+		const [is30MinAfterInterviewEnded, SetIs30MinAfterInterviewEnded] = useState<boolean>(false)
+		const [datePublicString, setDatePublicString] = useState<string>('')
+		const [url, setUrl] = useState<string>(props.url)
+
+		const [getInterview, getInterviewStatus] = useLazyGetInterviewQuery()
 
 		useEffect(() => {
 			const updateTimeLeft = () => {
 				const targetDate = new Date(props.eventTime)
 				const now = new Date()
 				const difference = targetDate.getTime() - now.getTime()
-				setTimeLeft(difference)
+				const minutes: number = Math.ceil((difference / 1000 / 60) % 60)
+				const hours: number = Math.floor((difference / (1000 * 60 * 60)) % 24)
+				const days: number = Math.floor(difference / (1000 * 60 * 60 * 24))
+				let datePublicString: string = ''
+				const isDaysEmpty: boolean = days === 0
+				const isHoursEmpty: boolean = hours === 0
+
+				if (isDaysEmpty && isHoursEmpty) {
+					datePublicString += 'Осталось ' + minutes + ' минут'
+				}
+				if (isDaysEmpty && !isHoursEmpty) {
+					datePublicString += 'Осталось ' + hours + ' ч' + minutes + ' м'
+				}
+				if (!isDaysEmpty && !isHoursEmpty) {
+					datePublicString += 'Осталось ' + days + ' дн ' + hours + ' ч'
+				}
+				setDatePublicString(datePublicString)
+
+				if (difference < 0) {
+					setIsInterviewStarted(true)
+				} else {
+					setIsInterviewStarted(false)
+				}
+
+				if (difference > 0 && difference <= 60 * 1000 * 30) {
+					// 5 мин
+					setIs5MinBeforeInterviewStarted(true)
+				} else {
+					setIs5MinBeforeInterviewStarted(false)
+				}
+
+				if (difference * -1 < 60 * 1000 * 30) {
+					SetIs30MinAfterInterviewEnded(false)
+				} else {
+					SetIs30MinAfterInterviewEnded(true)
+				}
+				console.log(targetDate)
+				console.log(now)
+				console.log(difference)
 				return difference
 			}
 
@@ -63,81 +97,49 @@ export const SupervisorInterviewItem = (props: InterviewItemType) => {
 			return () => clearInterval(intervalId) // Очищаем интервал при размонтировании
 		}, [props.eventTime])
 
-		const targetDate = new Date(props.eventTime)
-		const now = new Date()
-		const difference = targetDate.getTime() - now.getTime()
-		const minutes: number = Math.floor((difference / 1000 / 60) % 60)
-		const hours: number = Math.floor((difference / (1000 * 60 * 60)) % 24)
-		const days: number = Math.floor(difference / (1000 * 60 * 60 * 24))
-		let isInterviewStarted: boolean = false
-		let is5MinBeforeInterviewStarted: boolean = false
-		let is30MinAfterInterviewEnded: boolean = false
+		useEffect(() => {
+			console.log('Собеседование стартовало, подгружаем ссылку')
+			is5MinBeforeInterviewStarted &&
+				getInterview(props.id)
+					.unwrap()
+					.then(res => {
+						setUrl(res.url)
+					})
+		}, [is5MinBeforeInterviewStarted])
 
-		if (difference < 0) {
-			isInterviewStarted = true
-		} else {
-			isInterviewStarted = false
-		}
-
-		if (difference > 0 && difference <= 60 * 1000 * 5) {
-			// 5 мин
-			is5MinBeforeInterviewStarted = true
-		} else {
-			is5MinBeforeInterviewStarted = false
-		}
-
-		if (difference * -1 < 60 * 1000 * 30) {
-			is30MinAfterInterviewEnded = false
-		} else {
-			is30MinAfterInterviewEnded = true
-		}
-
-		let datePublicString: string = ''
-		const isDaysEmpty: boolean = days === 0
-		const isHoursEmpty: boolean = hours === 0
-
-		if (isDaysEmpty && isHoursEmpty) {
-			datePublicString += 'Осталось ' + minutes + ' минут'
-		}
-		if (isDaysEmpty && !isHoursEmpty) {
-			datePublicString += 'Осталось ' + hours + ' ч' + minutes + ' м'
-		}
-		if (!isDaysEmpty && !isHoursEmpty) {
-			datePublicString += 'Осталось ' + days + ' дн ' + hours + ' ч'
-		}
 		return (
 			<div className="flex items-center">
-				{props.format === 'OFFLINE' && (
-					<span className="min-w-[220px] opacity-[0%]"></span>
+				{props.format === 'OFFLINE' && <span className="min-w-[220px] opacity-[0%]"></span>}
+				{props.format === 'ONLINE' && !is5MinBeforeInterviewStarted && !isInterviewStarted && (
+					<span className="min-w-[220px] flex justify-center bg-[#3073D7] opacity-[32%] text-white font-content-font font-normal text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[35px] border-0">
+						{datePublicString}
+					</span>
 				)}
-				{props.format === 'ONLINE' &&
-					!is5MinBeforeInterviewStarted &&
-					!isInterviewStarted && (
-						<span className="min-w-[220px] flex justify-center bg-[#3073D7] opacity-[32%] text-white font-content-font font-normal text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[35px] border-0">
-							{datePublicString}
-						</span>
-					)}
-				{props.format === 'ONLINE' &&
-					is5MinBeforeInterviewStarted &&
-					!isInterviewStarted && (
-						<span className="cursor-pointer w-[200px] flex justify-center bg-[#3073D7] text-white font-content-font cursor pointer font-normal text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[35px] border-0">
-							Подключиться
-						</span>
-					)}
-				{props.format === 'ONLINE' &&
-					!is30MinAfterInterviewEnded &&
-					isInterviewStarted && (
-						<span className="cursor-pointer w-[200px] flex justify-center bg-[#3073D7] text-white font-content-font cursor pointer font-normal text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[35px] border-0">
-							Подключиться
-						</span>
-					)}
-				{props.format === 'ONLINE' &&
-					isInterviewStarted &&
-					is30MinAfterInterviewEnded && (
-						<span className="min-w-[220px] flex justify-center bg-[#3073D7] opacity-[32%] text-white font-content-font font-normal text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[35px] border-0">
-							Время истекло
-						</span>
-					)}
+				{props.format === 'ONLINE' && is5MinBeforeInterviewStarted && !isInterviewStarted && (
+					<Button
+						type="link"
+						href={url}
+						target="_blank"
+						className="cursor-pointer w-[200px] flex justify-center bg-[#3073D7] text-white font-content-font cursor pointer font-normal text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[35px] border-0"
+					>
+						Подключиться
+					</Button>
+				)}
+				{props.format === 'ONLINE' && !is30MinAfterInterviewEnded && isInterviewStarted && (
+					<Button
+						type="link"
+						href={url}
+						target="_blank"
+						className="cursor-pointer w-[200px] flex justify-center bg-[#3073D7] text-white font-content-font cursor pointer font-normal text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[35px] border-0"
+					>
+						Подключиться
+					</Button>
+				)}
+				{props.format === 'ONLINE' && isInterviewStarted && is30MinAfterInterviewEnded && (
+					<span className="min-w-[220px] flex justify-center bg-[#3073D7] opacity-[32%] text-white font-content-font font-normal text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[35px] border-0">
+						Время истекло
+					</span>
+				)}
 			</div>
 		)
 	}
@@ -157,23 +159,23 @@ export const SupervisorInterviewItem = (props: InterviewItemType) => {
 		// Получаем последние две цифры года
 		const shortYear: string = year.slice(-2)
 		const shortTime: string = timePart.substring(0, 5)
-		const datePublicString =
-			day + '.' + month + '.' + shortYear + ' '
+		const datePublicString = day + '.' + month + '.' + shortYear + ' '
 
 		return (
-			<div className="w-[10%] ml-[3%]">
-				<span>{datePublicString}
-								<br/>
-						{shortTime}
-								</span>
+			<div className="w-[5%] ml-[3%]">
+				<span>
+					{datePublicString}
+					<br />
+					{shortTime}
+				</span>
 			</div>
 		)
 	}
 	const InterviewFormatElem = (props: InterviewFormatElemProps) => {
 		return (
-			<div className="w-[10%] ml-[1%] ">
-				{props.format === 'OFFLINE' && <span >Оффлайн</span>}
-				{props.format === 'ONLINE' && <span >Онлайн</span>}
+			<div className="w-[5%] ml-[3%] ">
+				{props.format === 'OFFLINE' && <span>Оффлайн</span>}
+				{props.format === 'ONLINE' && <span>Онлайн</span>}
 			</div>
 		)
 	}
@@ -192,16 +194,13 @@ export const SupervisorInterviewItem = (props: InterviewItemType) => {
 		const shortYear: string = year.slice(-2)
 		const shortTime: string = timePart.substring(0, 5)
 
-		const InterviewTimeStringForSeeker =
-			day + '.' + month + '.' + shortYear + ' в ' + shortTime
+		const InterviewTimeStringForSeeker = day + '.' + month + '.' + shortYear + ' в ' + shortTime
 
 		return (
 			<>
 				<Button
 					onClick={() => {
-						navigate(
-							`/services/personnelaccounting/supervisor/invitation/seekerinfo/${props.id}`
-						)
+						navigate(`/services/personnelaccounting/supervisor/invitation/seekerinfo/${props.id}`)
 					}}
 					className="font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black"
 				>
@@ -251,16 +250,9 @@ export const SupervisorInterviewItem = (props: InterviewItemType) => {
 				<span className="w-[22%] ml-[3%]">{seekerName}</span>
 				<InterviewTimeElem eventTime={props.time}></InterviewTimeElem>
 				<InterviewFormatElem format={props.format}></InterviewFormatElem>
-				<div className="w-[25%] mr-[2%] gap-[21px] flex flex-row items-center justify-evenly">
-					<InterviewCountdownTimeElem
-						eventTime={props.time}
-						format={props.format}
-					/>
-					<InterviewButtonElem
-						id={props.respondId}
-						format={props.format}
-						time={props.time}
-					></InterviewButtonElem>
+				<div className="w-[25%] ml-[2%] gap-[3%] flex flex-row items-center justify-between">
+					<InterviewCountdownTimeElem eventTime={props.time} format={props.format} url={props.url} id={props.id} />
+					<InterviewButtonElem id={props.respondId} format={props.format} time={props.time}></InterviewButtonElem>
 				</div>
 			</div>
 		</>

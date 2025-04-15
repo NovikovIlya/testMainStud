@@ -1,24 +1,25 @@
 import { LoadingOutlined } from '@ant-design/icons'
 import { Button, ConfigProvider, Form, Modal, Select, Spin, Tag } from 'antd'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import uuid from 'react-uuid'
 
 import { AvatartandardSvg } from '../../../../../assets/svg/AvatarStandardSvg'
+import { MyDocsSvg } from '../../../../../assets/svg/MyDocsSvg'
 import { NocircleArrowIconHover } from '../../../../../assets/svg/NocircleArrowIconHover'
 import { useAppSelector } from '../../../../../store'
 import {
 	useEmployeeSeekerRequestMutation,
-	useGetRespondFullInfoQuery, useGetSupervisorInterviewQuery,
+	useGetInterviewQuery,
+	useGetRespondFullInfoQuery,
+	useGetSupervisorInterviewQuery,
 	useLazyGetSeekerResumeFileQuery
 } from '../../../../../store/api/serviceApi'
 import { useGetCountriesQuery } from '../../../../../store/api/utilsApi'
 import { useAlert } from '../../../../../utils/Alert/AlertMessage'
 import { NocircleArrowIcon } from '../../../jobSeeker/NoCircleArrowIcon'
-import {MyDocsSvg} from "../../../../../assets/svg/MyDocsSvg";
 
 export const SupervisorInterviewSeekerInfo = () => {
-
 	const { openAlert } = useAlert()
 
 	const currentUrl = window.location.pathname
@@ -32,40 +33,38 @@ export const SupervisorInterviewSeekerInfo = () => {
 		console.error('id miss')
 	}
 
-	const { data: interviews = [], isLoading : interviewDataLoading } = useGetSupervisorInterviewQuery()
+	const { data: foundInterview, isLoading: interviewDataLoading } = useGetInterviewQuery(id_from_url)
 
-	const foundInterview = interviews.find(interview => interview.respondId === id_from_url)
-	console.log(interviews)
 	const format = foundInterview?.format || ''
 	const time = foundInterview?.time
 	console.log(time)
 
 	const createTimeFormatted = (time: string) => {
 		if (time) {
-			const date = new Date(time);
+			const date = new Date(time)
 
 			// Извлекаем компоненты даты
-			const day = String(date.getUTCDate()).padStart(2, '0'); // День (с ведущим нулем)
-			const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Месяц (с ведущим нулем)
-			const shortYear = String(date.getUTCFullYear()).slice(-2); // Последние две цифры года
+			const day = String(date.getUTCDate()).padStart(2, '0') // День (с ведущим нулем)
+			const month = String(date.getUTCMonth() + 1).padStart(2, '0') // Месяц (с ведущим нулем)
+			const shortYear = String(date.getUTCFullYear()).slice(-2) // Последние две цифры года
 
 			// Извлекаем компоненты времени
-			const hours = String(date.getUTCHours()).padStart(2, '0'); // Часы (с ведущим нулем)
-			const minutes = String(date.getUTCMinutes()).padStart(2, '0'); // Минуты (с ведущим нулем)
+			const hours = String(date.getUTCHours()).padStart(2, '0') // Часы (с ведущим нулем)
+			const minutes = String(date.getUTCMinutes()).padStart(2, '0') // Минуты (с ведущим нулем)
 
 			// Форматируем дату и время
-			const timeFormated = `${day}.${month}.${shortYear} в ${hours}:${minutes}`;
+			const timeFormated = `${day}.${month}.${shortYear} в ${hours}:${minutes}`
 
-			return timeFormated;
+			return timeFormated
 		} else {
-			console.error("Время не найдено.");
+			console.error('Время не найдено.')
 		}
 	}
 	let timeFormated = createTimeFormatted(time)
 
 	const { data, isLoading: loading } = useGetRespondFullInfoQuery(id_from_url)
 
-	const [getResume] = useLazyGetSeekerResumeFileQuery()
+	const [getResume, resumeQueryStatus] = useLazyGetSeekerResumeFileQuery()
 
 	const date = new Date()
 
@@ -105,6 +104,15 @@ export const SupervisorInterviewSeekerInfo = () => {
 	const [resume, setResume] = useState<string>('')
 	const [resumeSize, setResumeSize] = useState<number>(0)
 
+	useEffect(() => {
+		getResume(id_from_url)
+			.unwrap()
+			.then(resume => {
+				setResume(prev => resume.href)
+				setResumeSize(prev => resume.size)
+			})
+	}, [])
+
 	interface ComponentProps {
 		time: string
 		timeFormated: string
@@ -125,50 +133,66 @@ export const SupervisorInterviewSeekerInfo = () => {
 	}
 
 	const Component = (props: ComponentProps) => {
-		const targetDate = new Date(props.time)
-		console.log(props.time)
-		const now = new Date()
-		const difference = targetDate.getTime() - now.getTime()
-		let isInterviewStarted: boolean = false
-		let is5MinBeforeInterviewStarted: boolean = false
-		let is30MinAfterInterviewEnded: boolean = false
+		const [isInterviewStarted, setIsInterviewStarted] = useState<boolean>(false)
+		const [is5MinBeforeInterviewStarted, setIs5MinBeforeInterviewStarted] = useState<boolean>(false)
+		const [is30MinAfterInterviewEnded, SetIs30MinAfterInterviewEnded] = useState<boolean>(false)
+		const [datePublicString, setDatePublicString] = useState<string>('')
 
-		if (difference < 0) {
-			isInterviewStarted = true
-		} else {
-			isInterviewStarted = false
-		}
+		useEffect(() => {
+			const updateTimeLeft = () => {
+				const targetDate = new Date(props.time)
+				const now = new Date()
+				const difference = targetDate.getTime() - now.getTime()
+				const minutes: number = Math.ceil((difference / 1000 / 60) % 60)
+				const hours: number = Math.floor((difference / (1000 * 60 * 60)) % 24)
+				const days: number = Math.floor(difference / (1000 * 60 * 60 * 24))
+				let datePublicString: string = ''
+				const isDaysEmpty: boolean = days === 0
+				const isHoursEmpty: boolean = hours === 0
 
-		if (difference > 0 && difference <= 60 * 1000 * 5) {
-			// 5 мин
-			is5MinBeforeInterviewStarted = true
-		} else {
-			is5MinBeforeInterviewStarted = false
-		}
+				if (isDaysEmpty && isHoursEmpty) {
+					datePublicString += 'Осталось ' + minutes + ' минут'
+				}
+				if (isDaysEmpty && !isHoursEmpty) {
+					datePublicString += 'Осталось ' + hours + ' ч' + minutes + ' м'
+				}
+				if (!isDaysEmpty && !isHoursEmpty) {
+					datePublicString += 'Осталось ' + days + ' дн ' + hours + ' ч'
+				}
+				setDatePublicString(datePublicString)
 
-		if (difference * -1 < 60 * 1000 * 30) {
-			is30MinAfterInterviewEnded = false
-		} else {
-			is30MinAfterInterviewEnded = true
-		}
+				if (difference < 0) {
+					setIsInterviewStarted(true)
+				} else {
+					setIsInterviewStarted(false)
+				}
 
-		const minutes: number = Math.floor((difference / 1000 / 60) % 60)
-		const hours: number = Math.floor((difference / (1000 * 60 * 60)) % 24)
-		const days: number = Math.floor(difference / (1000 * 60 * 60 * 24))
-		let datePublicString: string = ''
-		const isDaysEmpty: boolean = days === 0
-		const isHoursEmpty: boolean = hours === 0
-		if (isDaysEmpty && isHoursEmpty) {
-			datePublicString += 'Осталось ' + minutes + ' минут'
-		}
-		if (isDaysEmpty && !isHoursEmpty) {
-			datePublicString += 'Осталось ' + hours + ' ч' + minutes + ' м'
-		}
-		if (!isDaysEmpty && !isHoursEmpty) {
-			datePublicString += 'Осталось ' + days + ' дн ' + hours + ' ч'
-		}
+				if (difference > 0 && difference <= 60 * 1000 * 30) {
+					// 5 мин
+					setIs5MinBeforeInterviewStarted(true)
+				} else {
+					setIs5MinBeforeInterviewStarted(false)
+				}
+
+				if (difference * -1 < 60 * 1000 * 30) {
+					SetIs30MinAfterInterviewEnded(false)
+				} else {
+					SetIs30MinAfterInterviewEnded(true)
+				}
+				console.log(targetDate)
+				console.log(now)
+				console.log(difference)
+				return difference
+			}
+
+			updateTimeLeft() // Обновляем сразу при монтировании
+
+			const intervalId = setInterval(updateTimeLeft, 1000) // Обновляем каждую секунду
+
+			return () => clearInterval(intervalId) // Очищаем интервал при размонтировании
+		}, [props.time])
 		return (
-			<div className="flex flex-col gap-[30px]">
+			<div className="flex flex-col gap-[30px] mr-[10%]">
 				{format === 'OFFLINE' &&
 					!isInterviewStarted && ( // Офлайн собес, ожидание
 						<div className="flex flex-col justify-center">
@@ -191,7 +215,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 							</button>
 						</div>
 					)}
-				{((format === 'ONLINE' && isInterviewStarted && is5MinBeforeInterviewStarted) ||
+				{((format === 'ONLINE' && !isInterviewStarted && is5MinBeforeInterviewStarted) ||
 					(format === 'ONLINE' && isInterviewStarted && !is30MinAfterInterviewEnded)) && ( // Онлайн собес, подкбчиться 5 | 30
 					<div className="flex flex-col justify-center">
 						<h4 className="mb-[20px] font-content-font font-normal text-black text-[16px]/[19.2px]">
@@ -199,7 +223,9 @@ export const SupervisorInterviewSeekerInfo = () => {
 						</h4>
 						<Button
 							className="h-[40px] w-[257px] bg-[#3073D7] rounded-[54.5px] text-white text-[16px]/[16px]"
-							onClick={() => {}}
+							type="link"
+							target="_blank"
+							href={foundInterview?.url}
 						>
 							Подключиться
 						</Button>
@@ -243,7 +269,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 							</Button>
 						</div>
 					)}
-				<Button
+				{/* <Button
 					disabled={isEmploymentRequestSent || isSeekerRejected}
 					className="h-[40px] w-[257px] bg-[#3073D7] rounded-[54.5px] text-white text-[16px]/[16px]"
 					onClick={values => {
@@ -259,7 +285,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 					}}
 				>
 					invite without time check
-				</Button>
+				</Button> */}
 			</div>
 		)
 	}
@@ -342,7 +368,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 					</button>
 				</div>
 				<div className="mt-[52px] flex flex-col gap-[36px]">
-					<div className="flex flex-wrap gap-[150px]">
+					<div className="flex justify-between flex-wrap gap-y-[40px]">
 						<div className="flex gap-[20px]">
 							<div className="flex h-[167px] w-[167px] bg-[#D9D9D9]">
 								<AvatartandardSvg />
@@ -477,7 +503,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 									<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">{edu.endYear}</p>
 									<div className="flex flex-col gap-[8px]">
 										<p className="font-content-font font-bold text-black text-[16px]/[19.2px]">
-											{edu.nameOfInstitute + ', ' + edu.country}
+											{edu.institution + ', ' + edu.country}
 										</p>
 										<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
 											{edu.speciality === null ? '' : edu.speciality + ', '}
@@ -490,8 +516,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 					</div>
 					<hr />
 					<div className="flex flex-col gap-[24px]">
-						<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">Опыт
-							работы</p>
+						<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">Опыт работы</p>
 						{data?.respondData.portfolio.workExperiences.length === 0 ? (
 							<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
 								Соискатель не имеет опыта работы
@@ -528,46 +553,54 @@ export const SupervisorInterviewSeekerInfo = () => {
 								))}
 							</div>
 						)}
-						<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
-							<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">Резюме</p>
-							<div
-								className="bg-white rounded-[16px] shadow-custom-shadow h-[59px] w-[65%] p-[20px] flex">
-								<MyDocsSvg/>
-								<p
-									className="ml-[20px] font-content-font font-normal text-black text-[16px]/[19.2px] underline cursor-pointer"
-									onClick={() => {
-										const link = document.createElement('a')
-										link.href = resume
-										link.download = 'Резюме'
-										link.click()
-									}}
-								>
-									{'Резюме ' +
-										data?.userData?.lastname +
-										' ' +
-										data?.userData?.firstname +
-										' ' +
-										data?.userData?.middlename}
-								</p>
-								<p className="ml-auto font-content-font font-normal text-black text-[16px]/[19.2px] opacity-70">
-									{Math.round(resumeSize / 1000000) > 0
-										? Math.round(resumeSize / 1000000) + ' Мб'
-										: Math.round(resumeSize / 1000) > 0
+						{data?.respondData.portfolio.url !== '' && (
+							<div className="grid grid-cols-[164px_auto] gap-x-[50px] gap-y-[24px] w-[90%]">
+								<p>Ссылка на портфолио:</p>
+								<a href={data?.respondData.portfolio.url} target="_blank">
+									{data?.respondData.portfolio.url}
+								</a>
+							</div>
+						)}
+						{resumeQueryStatus.isSuccess && (
+							<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
+								<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">Резюме</p>
+								<div className="bg-white rounded-[16px] shadow-custom-shadow h-[59px] w-[65%] p-[20px] flex">
+									<MyDocsSvg />
+									<p
+										className="ml-[20px] font-content-font font-normal text-black text-[16px]/[19.2px] underline cursor-pointer"
+										onClick={() => {
+											const link = document.createElement('a')
+											link.href = resume
+											link.download = 'Резюме'
+											link.click()
+										}}
+									>
+										{'Резюме ' +
+											data?.userData?.lastname +
+											' ' +
+											data?.userData?.firstname +
+											' ' +
+											data?.userData?.middlename}
+									</p>
+									<p className="ml-auto font-content-font font-normal text-black text-[16px]/[19.2px] opacity-70">
+										{Math.round(resumeSize / 1000000) > 0
+											? Math.round(resumeSize / 1000000) + ' Мб'
+											: Math.round(resumeSize / 1000) > 0
 											? Math.round(resumeSize / 1000) + ' Кб'
 											: resumeSize + ' б'}
-								</p>
+									</p>
+								</div>
 							</div>
-						</div>
+						)}
 					</div>
-					<hr/>
+					<hr />
 					<div className="flex flex-col gap-[24px]">
-						<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">О
-							себе</p>
+						<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">О себе</p>
 						<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
 							{data?.respondData.skills.aboutMe}
 						</p>
 					</div>
-					<hr/>
+					<hr />
 					<div className="flex flex-col">
 						<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40 w-[194px]">
 							Профессиональные навыки

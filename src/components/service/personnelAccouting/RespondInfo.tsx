@@ -187,7 +187,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 							</button>
 						</div>
 						<div className="mt-[52px] flex flex-col gap-[36px]" ref={targetRef}>
-							<div className="flex flex-wrap gap-[150px]">
+							<div className="flex justify-between flex-wrap gap-y-[40px]">
 								<div className="flex gap-[20px]">
 									<div className="flex h-[167px] w-[167px] bg-[#D9D9D9]">
 										<AvatartandardSvg />
@@ -322,7 +322,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 											onClick={() => {
 												dispatch(
 													setChatFilter(
-														res.status === 'IN_REVIEW'
+														res.status === 'IN_REVIEW' || res.status === 'IN_PERSONNEL_DEPT_REVIEW'
 															? 'IN_PERSONNEL_DEPT_REVIEW'
 															: res.status === 'IN_SUPERVISOR_REVIEW'
 															? 'IN_SUPERVISOR_REVIEW'
@@ -382,7 +382,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 								)}
 								{props.type === 'SUPERVISOR' && (
 									<div
-										className={`self-center grid grid-cols-1 grid-rows-[40px_40px_40px] gap-y-[12px] ${
+										className={`self-center grid grid-cols-1 grid-rows-[40px_40px_40px] gap-y-[12px] mr-[15%] ${
 											buttonsHidden && 'hidden'
 										}`}
 									>
@@ -479,7 +479,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 											<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">{edu.endYear}</p>
 											<div className="flex flex-col gap-[8px]">
 												<p className="font-content-font font-bold text-black text-[16px]/[19.2px]">
-													{edu.nameOfInstitute + ', ' + edu.country}
+													{edu.institution + ', ' + edu.country}
 												</p>
 												<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
 													{edu.speciality === null ? '' : edu.speciality + ', '}
@@ -620,7 +620,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 							</Button>
 						</div>
 						<div className="mt-[52px] flex flex-col gap-[36px]">
-							<div className="flex flex-wrap gap-[150px]">
+							<div className="flex justify-between flex-wrap gap-y-[40px]">
 								<div className="flex gap-[20px]">
 									<div className="flex h-[167px] w-[167px] bg-[#D9D9D9]">
 										<AvatartandardSvg />

@@ -6,7 +6,11 @@ import { useDispatch } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { useAppSelector } from '../../../store'
-import { useGetChatIdByRespondIdQuery, useGetUnreadMessagesCountQuery } from '../../../store/api/serviceApi'
+import {
+	useGetChatIdByRespondIdQuery,
+	useGetEmploymentPossibleRolesQuery,
+	useGetUnreadMessagesCountQuery
+} from '../../../store/api/serviceApi'
 import { closeChat, openChat } from '../../../store/reducers/ChatRespondStatusSlice'
 import { setRespondId } from '../../../store/reducers/CurrentRespondIdSlice'
 import { setCurrentVacancyId } from '../../../store/reducers/CurrentVacancyIdSlice'
@@ -21,7 +25,8 @@ export const ChatPreview = (props: {
 	checkableStatus?: string
 }) => {
 	const user = useAppSelector(state => state.auth.user)
-	const isEmpDemp = user?.roles.find(role => role.type === 'EMPL')
+	const { data: rolesData = undefined } = useGetEmploymentPossibleRolesQuery()
+	const isEmpDemp = rolesData?.find(role => role === 'PERSONNEL_DEPARTMENT')
 	const {
 		data: chatInfo = {
 			id: 0,
@@ -85,7 +90,7 @@ export const ChatPreview = (props: {
 		return () => {
 			window.removeEventListener('newmessage', smallhandler)
 		}
-	}, [pathname])
+	}, [])
 
 	return (
 		<>

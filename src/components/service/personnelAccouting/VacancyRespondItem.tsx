@@ -89,11 +89,13 @@ export const VacancyRespondItem = (
 						<p className="ml-[10%] w-[8%]">{props.responseDate.split('-').reverse().join('.')}</p>
 						<p className="ml-[1%] w-[25%]">
 							{props.status === respondStatus[respondStatus.IN_PERSONNEL_DEPT_REVIEW]
-								? 'на рассмотрении у отдела кадров'
+								? 'на рассмотрении'
 								: props.status === respondStatus[respondStatus.IN_SUPERVISOR_REVIEW]
 								? 'на рассмотрении у руководителя'
 								: props.status === respondStatus[respondStatus.INVITATION]
 								? 'приглашение'
+								: props.status === respondStatus[respondStatus.EMPLOYMENT]
+								? 'трудоустройство'
 								: props.status === respondStatus[respondStatus.REJECTED]
 								? 'отклонено'
 								: 'на рассмотрении'}

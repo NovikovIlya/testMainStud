@@ -5,6 +5,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { SubmitHandler } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
+import { DeleteSvg } from '../../assets/svg/DeleteSvg'
 import { ModalOkSvg } from '../../assets/svg/ModalOkSvg'
 import { useAppSelector } from '../../store'
 import { useLazyGetInfoUserQuery } from '../../store/api/formApi'
@@ -70,7 +71,7 @@ export const DirectResume = ({
 
 	const [getInfo] = useLazyGetInfoUserQuery()
 
-	const { control, register, handleSubmit, formState, setValue } = useForm({
+	const { control, register, handleSubmit, formState, setValue, watch } = useForm<formDataType>({
 		defaultValues: {
 			name: '',
 			lastname: '',
@@ -79,7 +80,8 @@ export const DirectResume = ({
 			phone: '',
 			vacancy: '',
 			resumeFile: null
-		}
+		},
+		mode: 'onChange'
 	})
 
 	const { errors } = formState
@@ -88,31 +90,112 @@ export const DirectResume = ({
 
 	const handleKeyDownPhone = (e: React.KeyboardEvent<HTMLInputElement>) => {
 		const allowedKeys = [
-			'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-			' ', '(', ')', '-', '+',
-			'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight',
-		];
+			'0',
+			'1',
+			'2',
+			'3',
+			'4',
+			'5',
+			'6',
+			'7',
+			'8',
+			'9',
+			' ',
+			'(',
+			')',
+			'-',
+			'+',
+			'Backspace',
+			'Delete',
+			'ArrowLeft',
+			'ArrowRight'
+		]
 
 		if (!allowedKeys.includes(e.key)) {
-			e.preventDefault();
+			e.preventDefault()
 		}
-	};
+	}
 
 	const handleKeyDownEmail = (e: React.KeyboardEvent<HTMLInputElement>) => {
 		const allowedKeys = [
-			'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-			'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-			'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-			'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-			'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-			'@', '.', '_', '%', '+', '-',
-			'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight'
-		];
+			'0',
+			'1',
+			'2',
+			'3',
+			'4',
+			'5',
+			'6',
+			'7',
+			'8',
+			'9',
+			'a',
+			'b',
+			'c',
+			'd',
+			'e',
+			'f',
+			'g',
+			'h',
+			'i',
+			'j',
+			'k',
+			'l',
+			'm',
+			'n',
+			'o',
+			'p',
+			'q',
+			'r',
+			's',
+			't',
+			'u',
+			'v',
+			'w',
+			'x',
+			'y',
+			'z',
+			'A',
+			'B',
+			'C',
+			'D',
+			'E',
+			'F',
+			'G',
+			'H',
+			'I',
+			'J',
+			'K',
+			'L',
+			'M',
+			'N',
+			'O',
+			'P',
+			'Q',
+			'R',
+			'S',
+			'T',
+			'U',
+			'V',
+			'W',
+			'X',
+			'Y',
+			'Z',
+			'@',
+			'.',
+			'_',
+			'%',
+			'+',
+			'-',
+			'Backspace',
+			'Delete',
+			'ArrowLeft',
+			'ArrowRight'
+		]
 
 		if (!allowedKeys.includes(e.key)) {
-			e.preventDefault();
+			e.preventDefault()
 		}
-	};
+	}
 
 	const onSubmit: SubmitHandler<formDataType> = data => {
 		const formData = new FormData()
@@ -147,12 +230,14 @@ export const DirectResume = ({
 
 	useEffect(() => {
 		if (user) {
+			setValue('name', user.firstname)
+			setValue('lastname', user.lastname)
 			getInfo()
 				.unwrap()
 				.then(info => {
 					setValue('name', info.name)
 					setValue('lastname', info.surName)
-					info.patronymic !== '' && (setValue('middlename', info.patronymic), setIsPatronymicSet(true))
+					info.patronymic !== null && (setValue('middlename', info.patronymic), setIsPatronymicSet(true))
 					setValue('email', user.email)
 					setValue('phone', info.phone)
 				})
@@ -227,10 +312,10 @@ export const DirectResume = ({
 							<Controller
 								name="lastname"
 								control={control}
-								rules={[
-									{ required: true, message: 'Фамилия введена некорректно' }, // Отдельное правило
-									{ maxLength: 500, message: 'Количество символов было превышено' }, // Отдельное правило
-								]}
+								rules={{
+									required: { value: true, message: 'Не введена фамилия' },
+									maxLength: { value: 1000, message: 'Количество символов превышено' }
+								}}
 								render={({ field }) => (
 									<Input
 										className={`${errors.lastname && 'border-[#C11616]'}`}
@@ -250,10 +335,10 @@ export const DirectResume = ({
 							<Controller
 								name="name"
 								control={control}
-								rules={[
-									{ required: true, message: 'Имя введено некорректно' },
-									{ maxLength: 500, message: 'Количество символов было превышено' },
-								]}
+								rules={{
+									required: { value: true, message: 'Не введено имя' },
+									maxLength: { value: 1000, message: 'Количество символов превышено' }
+								}}
 								render={({ field }) => (
 									<Input
 										onPressEnter={e => e.preventDefault()}
@@ -273,10 +358,10 @@ export const DirectResume = ({
 							<Controller
 								name="middlename"
 								control={control}
-								rules={[
-								{ required: true, message: 'Отчество введено некорректно' }, // Отдельное правило
-								{ maxLength: 500, message: 'Количество символов было превышено' }, // Отдельное правило
-							]}
+								rules={{
+									required: { value: true, message: 'Не введено отчество' },
+									maxLength: { value: 1000, message: 'Количество символов превышено' }
+								}}
 								render={({ field }) => (
 									<Input
 										onPressEnter={e => e.preventDefault()}
@@ -300,19 +385,19 @@ export const DirectResume = ({
 									required: 'Поле email обязательно для заполнения',
 									pattern: {
 										value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-										message: 'Введите корректный адрес электронной почты',
+										message: 'Введите корректный адрес электронной почты'
 									},
 									maxLength: {
 										value: 500,
-										message: 'Количество символов было превышено',
-									},
+										message: 'Количество символов было превышено'
+									}
 								}}
 								render={({ field, fieldState: { error } }) => (
 									<div>
 										<Input
 											{...field}
 											onKeyDown={handleKeyDownEmail}
-											onPressEnter={(e) => e.preventDefault()}
+											onPressEnter={e => e.preventDefault()}
 											className={error ? 'border-[#C11616]' : ''}
 											type="text"
 											placeholder="example@mail.com"
@@ -332,27 +417,23 @@ export const DirectResume = ({
 								rules={{
 									required: {
 										value: true,
-										message: 'Телефон введён некорректно',
-									},
-									pattern: {
-										value: /^\+7 \d{3} \d{3}-\d{2}-\d{2}$/, // Формат +7 999 999-99-99
-										message: 'Телефон должен быть в формате +7 999 999-99-99',
-									},
+										message: 'Телефон введён некорректно'
+									}
 								}}
-								render={({ field, fieldState: { error } }) => (
+								render={({ field }) => (
 									<div>
 										<Input
 											{...field}
 											onKeyDown={handleKeyDownPhone}
-											onPressEnter={(e) => e.preventDefault()}
+											onPressEnter={e => e.preventDefault()}
 											value={field.value}
-											className={error ? 'border-[#C11616]' : ''}
+											className={errors.phone ? 'border-[#C11616]' : ''}
 											type="text"
 											placeholder="Моб.телефон"
 										/>
 										{errors.phone && (
 											<p className="font-content-font text-[10px]/[12.94px] font-normal text-[#C11616]">
-												{error.message}
+												{errors.phone.message}
 											</p>
 										)}
 									</div>
@@ -361,10 +442,10 @@ export const DirectResume = ({
 							<Controller
 								name="vacancy"
 								control={control}
-								rules={[
-									{ required: true, message: 'Должность введена некорректно' },
-									{ maxLength: 1000, message: 'Количество символов было превышено' },
-								]}
+								rules={{
+									required: { value: true, message: 'Не введена должность' },
+									maxLength: { value: 1000, message: 'Количество символов превышено' }
+								}}
 								render={({ field }) => (
 									<div>
 										<Input
@@ -382,7 +463,6 @@ export const DirectResume = ({
 									</div>
 								)}
 							/>
-
 						</div>
 						<div className="flex gap-[18px] mt-[36px]">
 							<AttachIcon />
@@ -404,23 +484,25 @@ export const DirectResume = ({
 											{...register('resumeFile', {
 												required: {
 													value: true,
-													message: 'Пожалуйста, прикрепите резюме',
+													message: 'Пожалуйста, прикрепите резюме'
 												},
 												validate: {
 													// Проверка размера файла (не более 10 МБ)
-													fileSize: (fileList) => {
-														const file = fileList[0];
+													fileSize: fileList => {
+														console.log('Валидация')
+														const file = fileList?.[0]
 														if (file && file.size > 10 * 1024 * 1024) {
-															return 'Размер файла не должен превышать 10 МБ';
+															console.log('Не подходит')
+															return 'Размер файла не должен превышать 10 МБ'
 														}
-													},
-												},
-												onChange: (event) => {
-													const file = event.target.files?.[0];
-													if (file) {
-														setFilename(file.name);
 													}
 												},
+												onChange: event => {
+													const file = event.target.files?.[0]
+													if (file) {
+														setFilename(file.name)
+													}
+												}
 											})}
 										/>
 									</div>
@@ -432,9 +514,21 @@ export const DirectResume = ({
 								{errors.resumeFile?.message}
 							</p>
 						)}
-						<p className="w-[80%] whitespace-nowrap text-ellipsis overflow-auto mt-[5px] font-content-font text-[14px]/[14px] font-normal text-black">
-							{filename}
-						</p>
+						<div className="flex w-full items-center justify-between">
+							<p className="max-w-[80%] whitespace-nowrap text-ellipsis mt-[5px] font-content-font text-[14px]/[14px] font-normal text-black">
+								{filename}
+							</p>
+							{watch('resumeFile') !== null && (
+								<Button
+									icon={<DeleteSvg />}
+									type="text"
+									onClick={() => {
+										setValue('resumeFile', null, { shouldValidate: true })
+										setFilename('')
+									}}
+								/>
+							)}
+						</div>
 						<p className="mt-[12px] font-content-font font-normal text-black text-[12px]/[15.53px]">
 							Если у вас нет готового резюме скачайте и заполните{' '}
 							<a
@@ -444,7 +538,12 @@ export const DirectResume = ({
 								шаблон
 							</a>
 						</p>
-						<Button htmlType="submit" loading={buttonLoading} className="ml-auto mt-[40px] rounded-[54.5px]" type="primary">
+						<Button
+							htmlType="submit"
+							loading={buttonLoading}
+							className="ml-auto mt-[40px] rounded-[54.5px]"
+							type="primary"
+						>
 							Отправить
 						</Button>
 					</form>

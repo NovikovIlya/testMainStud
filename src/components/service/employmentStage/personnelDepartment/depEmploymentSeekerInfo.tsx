@@ -1,25 +1,27 @@
-import {Button, Spin, Tag} from 'antd'
+import { LoadingOutlined } from '@ant-design/icons'
+import { Button, Spin, Tag } from 'antd'
+import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Margin, usePDF } from 'react-to-pdf'
+import uuid from 'react-uuid'
+
 import { AvatartandardSvg } from '../../../../assets/svg/AvatarStandardSvg'
+import { MyDocsSvg } from '../../../../assets/svg/MyDocsSvg'
+import { NocircleArrowIconHover } from '../../../../assets/svg/NocircleArrowIconHover'
 import { useAppSelector } from '../../../../store'
 import {
-	useGetArchivedRespondFullInfoQuery, useGetRespondFullInfoQuery, useLazyGetSeekerResumeFileQuery
+	useGetArchivedRespondFullInfoQuery,
+	useGetRespondFullInfoQuery,
+	useLazyGetSeekerResumeFileQuery
 } from '../../../../store/api/serviceApi'
+import { useGetCountriesQuery } from '../../../../store/api/utilsApi'
 import { NocircleArrowIcon } from '../../jobSeeker/NoCircleArrowIcon'
-import { LoadingOutlined } from '@ant-design/icons'
-import {MyDocsSvg} from "../../../../assets/svg/MyDocsSvg";
-import React, {useEffect, useState} from "react";
-import {Margin, usePDF} from "react-to-pdf";
-import {useGetCountriesQuery} from "../../../../store/api/utilsApi";
-import {useTranslation} from "react-i18next";
-import uuid from "react-uuid";
-import {NocircleArrowIconHover} from "../../../../assets/svg/NocircleArrowIconHover";
 
-export const DepEmploymentSeekerInfo = ( ) => {
-
+export const DepEmploymentSeekerInfo = () => {
 	const respondId = useAppSelector(state => state.currentResponce)
 
-	const currentUrl = window.location.pathname;
-	const match = currentUrl.match(/\/stages\/(\d+)(?=\/|$)/);
+	const currentUrl = window.location.pathname
+	const match = currentUrl.match(/\/stages\/(\d+)(?=\/|$)/)
 
 	let id_from_url: string | undefined
 
@@ -29,51 +31,50 @@ export const DepEmploymentSeekerInfo = ( ) => {
 		console.error('id miss')
 	}
 
-	const { data, isLoading : loading } = useGetRespondFullInfoQuery(id_from_url)
+	const { data, isLoading: loading } = useGetRespondFullInfoQuery(id_from_url)
 
 	const date = new Date()
 
 	const { t, i18n } = useTranslation()
 	const { data: countries, isLoading: isLoadingCountry } = useGetCountriesQuery(i18n.language)
 
-	const [getResume] = useLazyGetSeekerResumeFileQuery()
+	const [getResume, resumeQueryStatus] = useLazyGetSeekerResumeFileQuery()
 	console.log(data)
 	const [resume, setResume] = useState<string>('')
 	const [resumeSize, setResumeSize] = useState<number>(0)
 
 	const calculateAge = (birthDateStr: string) => {
-		const birthDate = new Date(birthDateStr);
-		const currentDate = new Date();
+		const birthDate = new Date(birthDateStr)
+		const currentDate = new Date()
 
-		let age = currentDate.getFullYear() - birthDate.getFullYear();
-		const monthDifference = currentDate.getMonth() - birthDate.getMonth();
+		let age = currentDate.getFullYear() - birthDate.getFullYear()
+		const monthDifference = currentDate.getMonth() - birthDate.getMonth()
 
 		// Если день рождения еще не был в этом году, уменьшаем возраст на 1
 		if (monthDifference < 0 || (monthDifference === 0 && currentDate.getDate() < birthDate.getDate())) {
-			age--;
+			age--
 		}
 
-		return age;
+		return age
 	}
 
 	const birthday = data?.userData?.birthday
 	const age = birthday ? calculateAge(birthday) : undefined
 
-
-	const updatedDateStr = data?.userData?.birthday.replace(/-/g, '.');
+	const updatedDateStr = data?.userData?.birthday.replace(/-/g, '.')
 
 	const getFormattedSize = (sizeInBytes: number): string => {
-		const sizeInKilobytes = sizeInBytes / 1024;
+		const sizeInKilobytes = sizeInBytes / 1024
 
 		if (sizeInBytes < 1000) {
-			return sizeInBytes + 'байты';
+			return sizeInBytes + 'байты'
 		} else if (sizeInKilobytes < 1000) {
 			return sizeInKilobytes.toFixed(0) + ' Кб'
 		} else {
-			const sizeInMegabytes = sizeInKilobytes / 1024;
+			const sizeInMegabytes = sizeInKilobytes / 1024
 			return sizeInMegabytes.toFixed(2) + ' Мб'
 		}
-	};
+	}
 
 	useEffect(() => {
 		getResume(respondId.respondId)
@@ -90,12 +91,8 @@ export const DepEmploymentSeekerInfo = ( ) => {
 			<>
 				<div className="w-full h-full flex items-center">
 					<div className="text-center ml-auto mr-auto">
-						<Spin
-							indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}
-						></Spin>
-						<p className="font-content-font font-normal text-black text-[18px]/[18px]">
-							Идёт загрузка...
-						</p>
+						<Spin indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}></Spin>
+						<p className="font-content-font font-normal text-black text-[18px]/[18px]">Идёт загрузка...</p>
 					</div>
 				</div>
 			</>
@@ -132,49 +129,39 @@ export const DepEmploymentSeekerInfo = ( ) => {
 								 		  "
 					>
 						{/* Иконка при наведении */}
-						<div
-							className="absolute mt-[3px] group-hover:opacity-100 group-hover:scale-100 opacity-0 scale-95 transition-all duration-200">
-							<NocircleArrowIconHover/>
+						<div className="absolute mt-[3px] group-hover:opacity-100 group-hover:scale-100 opacity-0 scale-95 transition-all duration-200">
+							<NocircleArrowIconHover />
 						</div>
 
 						{/* Иконка по умолчанию */}
-						<div
-							className="mt-[3px] group-hover:opacity-0 group-hover:scale-95 opacity-100 scale-100 transition-all duration-200">
-							<NocircleArrowIcon/>
+						<div className="mt-[3px] group-hover:opacity-0 group-hover:scale-95 opacity-100 scale-100 transition-all duration-200">
+							<NocircleArrowIcon />
 						</div>
-						<span
-							className="group-hover:text-[#004EC2] transition-all duration-200 text-[14px] font-normal">
-									Назад
-								</span>
+						<span className="group-hover:text-[#004EC2] transition-all duration-200 text-[14px] font-normal">
+							Назад
+						</span>
 					</button>
 				</div>
 				<div className="mt-[52px] flex flex-col gap-[36px]">
 					<div className="flex flex-wrap gap-[150px]">
 						<div className="flex gap-[20px]">
 							<div className="flex h-[167px] w-[167px] bg-[#D9D9D9]">
-								<AvatartandardSvg/>
+								<AvatartandardSvg />
 							</div>
 							<div className="flex flex-col gap-[8px]">
 								<p className="font-content-font font-normal text-black text-[24px]/[28.8px]">
-									{data?.userData?.lastname +
-										' ' +
-										data?.userData?.firstname +
-										' ' +
-										data?.userData?.middlename}
+									{data?.userData?.lastname + ' ' + data?.userData?.firstname + ' ' + data?.userData?.middlename}
 								</p>
 								<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
 									{data?.userData?.sex === 'M' ? 'Мужчина' : ''}
-									{data?.userData?.sex === 'Ж' ? 'Женщина' : ''}
-									, {age} года
+									{data?.userData?.sex === 'Ж' ? 'Женщина' : ''}, {age} года
 								</p>
 								<div className="flex gap-[36px]">
 									<div className="flex flex-col gap-[8px]">
 										<p className="font-content-font font-normal text-black text-[12px]/[14.4x] opacity-40">
 											Дата рождения
 										</p>
-										<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-											{updatedDateStr}
-										</p>
+										<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">{updatedDateStr}</p>
 									</div>
 									<div className="flex flex-col gap-[8px]">
 										<p className="font-content-font font-normal text-black text-[12px]/[14.4x] opacity-40">
@@ -186,9 +173,7 @@ export const DepEmploymentSeekerInfo = ( ) => {
 									</div>
 								</div>
 								<div className="flex flex-col gap-[8px]">
-									<p className="font-content-font font-normal text-black text-[12px]/[14.4x] opacity-40">
-										Контакты:
-									</p>
+									<p className="font-content-font font-normal text-black text-[12px]/[14.4x] opacity-40">Контакты:</p>
 									<div className="flex gap-[24px]">
 										<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
 											{data?.userData?.phone}
@@ -201,7 +186,7 @@ export const DepEmploymentSeekerInfo = ( ) => {
 							</div>
 						</div>
 					</div>
-					<hr/>
+					<hr />
 					<div className="flex flex-col gap-[24px]">
 						<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">
 							Сопроводительное письмо
@@ -210,7 +195,7 @@ export const DepEmploymentSeekerInfo = ( ) => {
 							{data?.respondData.coverLetter}
 						</p>
 					</div>
-					<hr/>
+					<hr />
 					<div className="flex flex-col gap-[24px]">
 						<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">Образование</p>
 						<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
@@ -219,7 +204,7 @@ export const DepEmploymentSeekerInfo = ( ) => {
 									<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">{edu.endYear}</p>
 									<div className="flex flex-col gap-[8px]">
 										<p className="font-content-font font-bold text-black text-[16px]/[19.2px]">
-											{edu.nameOfInstitute + ', ' + edu.country}
+											{edu.institution + ', ' + edu.country}
 										</p>
 										<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
 											{edu.speciality === null ? '' : edu.speciality + ', '}
@@ -230,10 +215,9 @@ export const DepEmploymentSeekerInfo = ( ) => {
 							))}
 						</div>
 					</div>
-					<hr/>
+					<hr />
 					<div className="flex flex-col gap-[24px]">
-						<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">Опыт
-							работы</p>
+						<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">Опыт работы</p>
 						{data.respondData.portfolio.workExperiences.length === 0 ? (
 							<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
 								Соискатель не имеет опыта работы
@@ -258,61 +242,66 @@ export const DepEmploymentSeekerInfo = ( ) => {
 												{parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) >= 2 &&
 													parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) <= 4 &&
 													' года'}
-												{parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) > 4 &&
-													' лет'}
+												{parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) > 4 && ' лет'}
 											</p>
 										</div>
 										<div className="flex flex-col gap-[8px]">
 											<p className="font-content-font font-bold text-black text-[16px]/[19.2px]">{exp.position}</p>
-											<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-												{exp.workPlace}
-											</p>
+											<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">{exp.workPlace}</p>
 											<p className="font-content-font font-normal text-black text-[14px]/[16.8px]">{exp.duties}</p>
 										</div>
 									</>
 								))}
 							</div>
 						)}
-						<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
-							<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">Резюме</p>
-							<div
-								className="bg-white rounded-[16px] shadow-custom-shadow h-[59px] w-[65%] p-[20px] flex">
-								<MyDocsSvg/>
-								<p
-									className="ml-[20px] font-content-font font-normal text-black text-[16px]/[19.2px] underline cursor-pointer"
-									onClick={() => {
-										const link = document.createElement('a')
-										link.href = resume
-										link.download = 'Резюме'
-										link.click()
-									}}
-								>
-									{'Резюме ' +
-										data?.userData?.lastname +
-										' ' +
-										data?.userData?.firstname +
-										' ' +
-										data?.userData?.middlename}
-								</p>
-								<p className="ml-auto font-content-font font-normal text-black text-[16px]/[19.2px] opacity-70">
-									{Math.round(resumeSize / 1000000) > 0
-										? Math.round(resumeSize / 1000000) + ' Мб'
-										: Math.round(resumeSize / 1000) > 0
+						{data?.respondData.portfolio.url !== '' && (
+							<div className="grid grid-cols-[164px_auto] gap-x-[50px] gap-y-[24px] w-[90%]">
+								<p>Ссылка на портфолио:</p>
+								<a href={data?.respondData.portfolio.url} target="_blank">
+									{data?.respondData.portfolio.url}
+								</a>
+							</div>
+						)}
+						{resumeQueryStatus.isSuccess && (
+							<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
+								<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">Резюме</p>
+								<div className="bg-white rounded-[16px] shadow-custom-shadow h-[59px] w-[65%] p-[20px] flex">
+									<MyDocsSvg />
+									<p
+										className="ml-[20px] font-content-font font-normal text-black text-[16px]/[19.2px] underline cursor-pointer"
+										onClick={() => {
+											const link = document.createElement('a')
+											link.href = resume
+											link.download = 'Резюме'
+											link.click()
+										}}
+									>
+										{'Резюме ' +
+											data?.userData?.lastname +
+											' ' +
+											data?.userData?.firstname +
+											' ' +
+											data?.userData?.middlename}
+									</p>
+									<p className="ml-auto font-content-font font-normal text-black text-[16px]/[19.2px] opacity-70">
+										{Math.round(resumeSize / 1000000) > 0
+											? Math.round(resumeSize / 1000000) + ' Мб'
+											: Math.round(resumeSize / 1000) > 0
 											? Math.round(resumeSize / 1000) + ' Кб'
 											: resumeSize + ' б'}
-								</p>
+									</p>
+								</div>
 							</div>
-						</div>
+						)}
 					</div>
-					<hr/>
+					<hr />
 					<div className="flex flex-col gap-[24px]">
-						<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">О
-							себе</p>
+						<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">О себе</p>
 						<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
 							{data.respondData.skills.aboutMe}
 						</p>
 					</div>
-					<hr/>
+					<hr />
 					<div className="flex flex-col">
 						<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40 w-[194px]">
 							Профессиональные навыки
@@ -344,28 +333,22 @@ export const DepEmploymentSeekerInfo = ( ) => {
 						}}
 						className="bg-inherit h-[38px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer"
 					>
-						<NocircleArrowIcon/>
+						<NocircleArrowIcon />
 						Назад
 					</Button>
 				</div>
 				<div className="mt-[52px] flex flex-col gap-[36px]">
-				<div className="flex flex-wrap gap-[150px]">
+					<div className="flex flex-wrap gap-[150px]">
 						<div className="flex gap-[20px]">
 							<div className="flex h-[167px] w-[167px] bg-[#D9D9D9]">
-								<AvatartandardSvg/>
+								<AvatartandardSvg />
 							</div>
 							<div className="flex flex-col gap-[8px]">
 								<p className="font-content-font font-normal text-black text-[24px]/[28.8px]">
-									{data?.userData?.lastname +
-										' ' +
-										data?.userData?.firstname +
-										' ' +
-										data?.userData?.middlename}
+									{data?.userData?.lastname + ' ' + data?.userData?.firstname + ' ' + data?.userData?.middlename}
 								</p>
 								<div className="flex flex-col gap-[8px]">
-									<p className="font-content-font font-normal text-black text-[12px]/[14.4x] opacity-40">
-										Контакты:
-									</p>
+									<p className="font-content-font font-normal text-black text-[12px]/[14.4x] opacity-40">Контакты:</p>
 									<div className="flex gap-[24px]">
 										<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
 											{data?.userData?.phone}
@@ -378,33 +361,27 @@ export const DepEmploymentSeekerInfo = ( ) => {
 							</div>
 						</div>
 					</div>
-					<hr/>
+					<hr />
 					<div className="flex flex-col gap-[24px]">
 						<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
-							<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-								Желаемая должность
-							</p>
-							<p className="font-content-font font-bold text-black text-[16px]/[19.2px]">
-								{data?.desiredJob}
-							</p>
+							<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">Желаемая должность</p>
+							<p className="font-content-font font-bold text-black text-[16px]/[19.2px]">{data?.desiredJob}</p>
 						</div>
 					</div>
-					<hr/>
+					<hr />
 					<div className="flex flex-col gap-[24px]">
 						<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
-							<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-								Резюме
-							</p>
-							<div
-								className="bg-white rounded-[16px] shadow-custom-shadow h-[59px] w-[65%] p-[20px] flex">
-								<MyDocsSvg/>
+							<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">Резюме</p>
+							<div className="bg-white rounded-[16px] shadow-custom-shadow h-[59px] w-[65%] p-[20px] flex">
+								<MyDocsSvg />
 								<p
 									className="ml-[20px] font-content-font font-normal text-black text-[16px]/[19.2px] underline cursor-pointer"
 									onClick={() => {
 										const link = document.createElement('a')
 										link.href = resume
-										link.download = 'Резюме '
-											+ data?.userData?.lastname +
+										link.download =
+											'Резюме ' +
+											data?.userData?.lastname +
 											' ' +
 											data?.userData?.firstname +
 											' ' +
@@ -429,10 +406,6 @@ export const DepEmploymentSeekerInfo = ( ) => {
 			</div>
 		)
 	} else {
-		return (
-			<div>
-
-			</div>
-		)
+		return <div></div>
 	}
 }

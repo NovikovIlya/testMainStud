@@ -1,7 +1,18 @@
 import { useEffect, useRef, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { useLocation, useNavigate } from 'react-router-dom'
 
-import { useGetSeekerRespondsQuery, useLazyGetSeekerChatPreviewsQuery } from '../../../store/api/serviceApi'
+import {
+	useGetSeekerRespondsQuery,
+	useLazyGetChatIdByRespondIdQuery,
+	useLazyGetSeekerChatPreviewsQuery
+} from '../../../store/api/serviceApi'
+import { closeChat, openChat } from '../../../store/reducers/ChatRespondStatusSlice'
+import { setRespondId } from '../../../store/reducers/CurrentRespondIdSlice'
+import { setCurrentVacancyId } from '../../../store/reducers/CurrentVacancyIdSlice'
+import { setCurrentVacancyName } from '../../../store/reducers/CurrentVacancyNameSlice'
+import { setChatId } from '../../../store/reducers/chatIdSlice'
+import { respondStatus } from '../../../store/reducers/type'
 import VacancyView from '../jobSeeker/VacancyView'
 
 import { ChatPage } from './ChatPage'
@@ -14,6 +25,8 @@ const personnelDeparmentToken =
 
 export const Chat = () => {
 	const { pathname } = useLocation()
+	const dispatch = useDispatch()
+	const navigate = useNavigate()
 
 	const [requestData, setRequestData] = useState<{
 		page: number
@@ -37,6 +50,34 @@ export const Chat = () => {
 	>([])
 
 	const [getChatPreviews, chatPreviewsQueryState] = useLazyGetSeekerChatPreviewsQuery()
+	const [getChat, getChatState] = useLazyGetChatIdByRespondIdQuery()
+
+	useEffect(() => {
+		const respondId = parseInt(pathname.substring(pathname.lastIndexOf('/') + 1))
+		respondId &&
+			getChat({ chatId: respondId, role: 'SEEKER' })
+				.unwrap()
+				.then(res => {
+					dispatch(setCurrentVacancyName(res.respondInfo.vacancyName))
+					if (res.respondInfo.status) {
+						if (
+							res.respondInfo.status === respondStatus[respondStatus.INVITATION] ||
+							res.respondInfo.status === respondStatus[respondStatus.EMPLOYMENT_REQUEST] ||
+							res.respondInfo.status === respondStatus[respondStatus.EMPLOYMENT]
+						) {
+							dispatch(openChat())
+						} else {
+							dispatch(closeChat())
+						}
+					} else {
+						dispatch(openChat())
+					}
+					dispatch(setChatId(res.id))
+					dispatch(setRespondId(res.respondInfo.id))
+					dispatch(setCurrentVacancyId(res.respondInfo.vacancyId))
+					navigate(`/services/myresponds/chat/id/${res.id}`)
+				})
+	}, [])
 
 	useEffect(() => {
 		const lowerObserver = new IntersectionObserver(entries => {
@@ -112,15 +153,15 @@ export const Chat = () => {
 				{!pathname.includes('/services/myresponds/chat/vacancyview') && (
 					<div className=" shadowNav bg-white relative z-[5]">
 						<div className="sticky top-[80px]">
-							<div className="">
-								<p className="pl-[53px] pt-14 pb-[40px] font-content-font font-normal text-black text-[20px]/[20px] ">
-									Все отклики
-								</p>
+							<div className="flex items-center pt-[20px] pb-[20px]">
+								<p className="pl-[53px] font-content-font font-normal text-black text-[20px]/[20px] ">Все отклики</p>
 							</div>
-							<ul className="h-[75vh] w-[461px] flex flex-col gap-4 overflow-auto">
-								{handleList}
-								<li className="h-[1px]" ref={chatPreviewsBottomRef}></li>
-							</ul>
+							<div className="overflow-auto flex flex-col h-[calc(100vh-160px)]">
+								<ul className="w-[461px] flex flex-col gap-4 overflow-auto">
+									{handleList}
+									<li className="h-[1px]" ref={chatPreviewsBottomRef}></li>
+								</ul>
+							</div>
 						</div>
 					</div>
 				)}

@@ -59,6 +59,7 @@ import ExperienceFileReducer from './reducers/SeekerFormReducers/ExperienceFileR
 import ExperienceReducer from './reducers/SeekerFormReducers/ExperienceReducer'
 import FormCompletionReducer from './reducers/SeekerFormReducers/FormCompletionReducer'
 import RespondEducationReducer from './reducers/SeekerFormReducers/RespondEducationReducer'
+import ResponseDataSetReducer from './reducers/SeekerFormReducers/ResponseDataSetReducer'
 import SkillsReducer from './reducers/SeekerFormReducers/SkillsReducer'
 import authSlice from './reducers/authSlice'
 import chatIdSlice from './reducers/chatIdSlice'
@@ -128,7 +129,8 @@ export const store = configureStore({
 		[apiSliceTeacher.reducerPath]: apiSliceTeacher.reducer,
 		[emptyApiSlice.reducerPath]: emptyApiSlice.reducer,
 		experienceFile: ExperienceFileReducer,
-		chatFilter: ChatFilterSlice
+		chatFilter: ChatFilterSlice,
+		respondDataSet: ResponseDataSetReducer
 	},
 	//@ts-ignore
 	middleware: getDefaultMiddleware =>

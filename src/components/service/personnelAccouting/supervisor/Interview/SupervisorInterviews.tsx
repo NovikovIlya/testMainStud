@@ -107,14 +107,14 @@ export const SupervisorInterviews = () => {
 					</h3>
 					<h3
 						className="
-							w-[10%] ml-[3%] shrink-0 font-content-font font-normal text-[14px]/[14px] text-text-gray
+							w-[5%] ml-[3%] shrink-0 font-content-font font-normal text-[14px]/[14px] text-text-gray
 							"
 					>
 						Дата и время
 					</h3>
 					<h3
 						className="
-							w-[10%] ml-[1%] shrink-0 font-content-font font-normal text-[14px]/[14px] text-text-gray
+							w-[5%] ml-[3%] shrink-0 font-content-font font-normal text-[14px]/[14px] text-text-gray
 							"
 					>
 						Формат

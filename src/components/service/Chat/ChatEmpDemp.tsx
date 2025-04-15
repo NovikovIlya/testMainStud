@@ -2,7 +2,7 @@ import { LoadingOutlined } from '@ant-design/icons'
 import { Button, ConfigProvider, Select, Spin } from 'antd'
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import { ChatCrossIcon } from '../../../assets/svg/ChatCrossIcon'
 import { ChatFilterIcon } from '../../../assets/svg/ChatFilterIcon'
@@ -11,12 +11,18 @@ import {
 	useGetAllVacanciesQuery,
 	useGetSeekerRespondsQuery,
 	useGetVacancyGroupedResponcesQuery,
+	useLazyGetChatIdByRespondIdQuery,
 	useLazyGetChatPreviewsQuery,
 	useLazyGetResponcesByVacancyQuery,
 	useLazyGetVacancyGroupedResponcesQuery
 } from '../../../store/api/serviceApi'
 import { chatFilterType, setChatFilter } from '../../../store/reducers/ChatFilterSlice'
-import { VacancyRespondItemType } from '../../../store/reducers/type'
+import { closeChat, openChat } from '../../../store/reducers/ChatRespondStatusSlice'
+import { setRespondId } from '../../../store/reducers/CurrentRespondIdSlice'
+import { setCurrentVacancyId } from '../../../store/reducers/CurrentVacancyIdSlice'
+import { setCurrentVacancyName } from '../../../store/reducers/CurrentVacancyNameSlice'
+import { setChatId } from '../../../store/reducers/chatIdSlice'
+import { VacancyRespondItemType, respondStatus } from '../../../store/reducers/type'
 import VacancyView from '../jobSeeker/VacancyView'
 
 import { ChatEmpDempPreview } from './ChatEmpDempPreview'
@@ -29,6 +35,10 @@ const personnelDeparmentToken =
 	'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJTdWJCQXNhZHVsbG9ldkBzdHVkLmtwZnUucnUiLCJpYXQiOjE3MTE3MjQ1NDQsImV4cCI6MTcxMTczNTM0NCwic2NvcGUiOiJ1c2VyIiwicm9sZXMiOlt7InVzZXJJZCI6IjciLCJzZXNzaW9uSWQiOiIyNDA0NzM4MTc3NzI3MjIwMTMzMDkwNzU0ODQ2ODU5MSIsInNlc3Npb25IYXNoIjoiNTZEMTZENTNDOTc5MDk5MTk0QTY4OEY4Qjk0M0I0N0MiLCJkb2N1bWVudHNIYXNoIjoiQTdCMkI0MUU4MjQ4NDYzNkY2ODZDNTQ3NEY0NEREMjYiLCJsb2dpbiI6IlNCQXNhZHVsbG9ldiIsInR5cGUiOiJQRVJTT05ORUxfREVQQVJUTUVOVCJ9LHsidXNlcklkIjoiMzQ4NTQxIiwic2Vzc2lvbklkIjoiMjQwNDczODA1NjYxMjc2MDM3NTM5NjI3MjY1MTM0OTQiLCJzZXNzaW9uSGFzaCI6IkUzQUZFMTUzNUVCMTU3NEUyMkZCNUJDNEYxNUFERkUwIiwiZG9jdW1lbnRzSGFzaCI6IiIsImxvZ2luIjoiU3ViQkFzYWR1bGxvZXYiLCJ0eXBlIjoiRU1QTCJ9LHsidXNlcklkIjoiMzM2MDM3Iiwic2Vzc2lvbklkIjoiMjQwNDczODI0NDUwMjI3MTM5NzgzNzQ5OTMwNjk4MDciLCJzZXNzaW9uSGFzaCI6IjcxMEExMTFFM0FCN0Q4NDczNTVFOEM0QkUxMDI4RTZBIiwiZG9jdW1lbnRzSGFzaCI6IkEyMkE3NURCRTBBNzg4MDE4OTY4NjZCQjgzNUIxNDQxIiwibG9naW4iOiJTdUJBc2FkdWxsb2V2IiwidHlwZSI6IlNUVUQifV0sInNlc3Npb25JZCI6IjI0MDQ3MzgxNzc3MjcyMjAxMzMwOTA3NTQ4NDY4NTkxIiwic2Vzc2lvbkhhc2giOiI1NkQxNkQ1M0M5NzkwOTkxOTRBNjg4RjhCOTQzQjQ3QyIsImFsbElkIjoiMjM5MTc0IiwiZW1haWwiOiJCYXN1YmhvbmJla0BnbWFpbC5jb20ifQ.MMK47Gd4AKG8tPzmPAwgNq79zVEmfzdFCuoZjcXeW_o'
 
 export const ChatEmpDemp = () => {
+	const { pathname } = useLocation()
+	const dispatch = useDispatch()
+	const navigate = useNavigate()
+
 	const [isFilterWindowOpen, setIsFilterWindowOpen] = useState<boolean>(true)
 
 	const { filter } = useAppSelector(state => state.chatFilter)
@@ -60,7 +70,35 @@ export const ChatEmpDemp = () => {
 	>([])
 
 	const [getChatPreviews, chatPreviewsQueryState] = useLazyGetChatPreviewsQuery()
+	const [getChat, getChatState] = useLazyGetChatIdByRespondIdQuery()
 	const { data: vacancies = [] } = useGetAllVacanciesQuery()
+
+	useEffect(() => {
+		const respondId = parseInt(pathname.substring(pathname.lastIndexOf('/') + 1))
+		respondId &&
+			getChat({ chatId: respondId, role: 'SEEKER' })
+				.unwrap()
+				.then(res => {
+					dispatch(setCurrentVacancyName(res.respondInfo.vacancyName))
+					if (res.respondInfo.status) {
+						if (
+							res.respondInfo.status === respondStatus[respondStatus.INVITATION] ||
+							res.respondInfo.status === respondStatus[respondStatus.EMPLOYMENT_REQUEST] ||
+							res.respondInfo.status === respondStatus[respondStatus.EMPLOYMENT]
+						) {
+							dispatch(openChat())
+						} else {
+							dispatch(closeChat())
+						}
+					} else {
+						dispatch(openChat())
+					}
+					dispatch(setChatId(res.id))
+					dispatch(setRespondId(res.respondInfo.id))
+					dispatch(setCurrentVacancyId(res.respondInfo.vacancyId))
+					navigate(`/services/personnelaccounting/chat/id/${res.id}`)
+				})
+	}, [])
 
 	useEffect(() => {
 		const lowerObserver = new IntersectionObserver(entries => {
@@ -96,7 +134,7 @@ export const ChatEmpDemp = () => {
 			})
 				.unwrap()
 				.then(res => {
-					setChats(res)
+					setChats(res.content)
 					setBlockPageAddition(false)
 				})
 		} else {
@@ -109,7 +147,7 @@ export const ChatEmpDemp = () => {
 			})
 				.unwrap()
 				.then(res => {
-					setChats(prev => [...prev, ...res])
+					setChats(prev => [...prev, ...res.content])
 					setBlockPageAddition(false)
 				})
 		}
@@ -139,10 +177,6 @@ export const ChatEmpDemp = () => {
 	// 		})
 	// }, [])
 
-	const { pathname } = useLocation()
-
-	const dispatch = useDispatch()
-
 	const handleList = chats.map(chat => {
 		return (
 			// <ChatPreview
@@ -171,7 +205,7 @@ export const ChatEmpDemp = () => {
 				{!pathname.includes('/services/personnelaccounting/chat/vacancyview') && (
 					<div className="shadowNav bg-white relative z-[5] w-[461px]">
 						<div className="sticky top-[80px]">
-							<div className="flex items-center px-[30px] pt-[60px] pb-[20px]">
+							<div className="flex items-center px-[30px] pt-[20px] pb-[20px]">
 								<p className="font-content-font font-normal text-black text-[20px]/[20px] ">Все сообщения</p>
 								<ConfigProvider theme={{ components: { Button: { textHoverBg: '#ffffff' } } }}>
 									<Button
@@ -186,7 +220,7 @@ export const ChatEmpDemp = () => {
 									</Button>
 								</ConfigProvider>
 							</div>
-							<div className="overflow-auto flex flex-col h-[calc(100vh-200px)]">
+							<div className="overflow-auto flex flex-col h-[calc(100vh-160px)]">
 								{isFilterWindowOpen && (
 									<>
 										<div className="px-[30px] pb-[40px] flex flex-col gap-[20px] w-full h-[200px]">

@@ -1,20 +1,21 @@
+import { LoadingOutlined } from '@ant-design/icons'
 import { ThemeProvider } from '@material-tailwind/react'
-import {Button, ConfigProvider, DatePicker, Form, Input, Modal, Select, Spin} from 'antd'
+import { Button, ConfigProvider, DatePicker, Form, Input, Modal, Select, Spin } from 'antd'
+import TextArea from 'antd/es/input/TextArea'
+import dayjs from 'dayjs'
 import React, { useEffect, useState } from 'react'
-import moment from 'moment';
 
 import { useAppSelector } from '../../../../../store'
 import {
 	useGetSupervisorVacancyQuery,
 	useLazyGetResponcesByVacancyQuery,
+	useLazyGetSupervisorRespondsQuery,
 	useLazyGetVacancyGroupedResponcesQuery,
 	useRequestCreateInterviewMutation
 } from '../../../../../store/api/serviceApi'
 import { VacancyRespondItemType } from '../../../../../store/reducers/type'
 
 import value = ThemeProvider.propTypes.value
-import TextArea from 'antd/es/input/TextArea'
-import {LoadingOutlined} from "@ant-design/icons";
 
 export const SupervisorInterviewCreate = () => {
 	const [responds, setResponds] = useState<VacancyRespondItemType[]>([])
@@ -22,31 +23,22 @@ export const SupervisorInterviewCreate = () => {
 
 	const [requestCreateInterview] = useRequestCreateInterviewMutation()
 
-	const { data: vacancies = [], isLoading: loading } = useGetSupervisorVacancyQuery()
+	const { data: vacancies = { content: [] }, isLoading: loading } = useGetSupervisorVacancyQuery({
+		page: 0,
+		pageSize: 2000
+	})
 
 	const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
 
 	const [isUnsuccessModalOpen, setIsUnsuccessModalOpen] = useState(false)
 
 	const [fio, setFIO] = useState('')
-
-	const [getGroupedResponds] = useLazyGetVacancyGroupedResponcesQuery()
-	const [getResponds] = useLazyGetResponcesByVacancyQuery()
+	const [getResponds] = useLazyGetSupervisorRespondsQuery()
 
 	useEffect(() => {
-		getGroupedResponds({ category: 'АУП', role: 'SUPERVISOR' })
+		getResponds({ status: 'все', page: 0, pageSize: 2000 })
 			.unwrap()
-			.then(grData => {
-				grData.map(vacResp => {
-					getResponds({
-						id: vacResp.vacancyId,
-						status: '',
-						role: 'SUPERVISOR'
-					})
-						.unwrap()
-						.then(data => setResponds(prev => [...prev, ...data]))
-				})
-			})
+			.then(data => setResponds(prev => [...prev, ...data.content]))
 	}, [])
 
 	console.log(responds)
@@ -58,19 +50,14 @@ export const SupervisorInterviewCreate = () => {
 				.map(resp => {
 					// Проверяем, что userData существует
 					if (resp?.userData) {
-						const fio =
-							resp.userData.lastname +
-							' ' +
-							resp.userData.firstname +
-							' ' +
-							resp.userData.middlename;
+						const fio = resp.userData.lastname + ' ' + resp.userData.firstname + ' ' + resp.userData.middlename
 						return {
 							fio,
 							respondId: resp.id
-						};
+						}
 					}
 					// Если userData отсутствует, возвращаем null
-					return null;
+					return null
 				})
 				.filter(item => item !== null) // Убираем null
 				.map(item => [item?.respondId, item]) // Используем respondId как ключ в Map
@@ -79,38 +66,34 @@ export const SupervisorInterviewCreate = () => {
 		value: item?.fio,
 		label: item?.fio,
 		respondId: item?.respondId
-	}));
+	}))
 
-	const vacancyNameArray = vacancies.map(vacancy => vacancy.title)
+	const vacancyNameArray = vacancies.content.map(vacancy => vacancy.title)
 
 	const formattedJobs = vacancyNameArray.map(title => ({
 		value: title,
 		label: title
-	}));
+	}))
 
 	if (loading) {
 		return (
 			<>
 				<div className="w-full h-full flex items-center">
 					<div className="text-center ml-auto mr-auto">
-						<Spin
-							indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}
-						></Spin>
-						<p className="font-content-font font-normal text-black text-[18px]/[18px]">
-							Идёт загрузка...
-						</p>
+						<Spin indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}></Spin>
+						<p className="font-content-font font-normal text-black text-[18px]/[18px]">Идёт загрузка...</p>
 					</div>
 				</div>
 			</>
 		)
 	}
 
-	const validateDateTime = (_ : any, value : any) => {
-		if (value && value.isBefore(moment())) {
-			return Promise.reject(new Error('Выбранное время уже наступило'));
+	const validateDateTime = (_: any, value: any) => {
+		if (value && value.isBefore(dayjs())) {
+			return Promise.reject(new Error('Выбранное время уже наступило'))
 		}
-		return Promise.resolve();
-	};
+		return Promise.resolve()
+	}
 
 	return (
 		<>
@@ -207,7 +190,7 @@ export const SupervisorInterviewCreate = () => {
 						}
 						rules={[
 							{ required: true, message: 'Не выбран соискатель' },
-							{ max: 500, message: 'Количество символов было превышено'}
+							{ max: 500, message: 'Количество символов было превышено' }
 						]}
 					>
 						<Select
@@ -230,15 +213,10 @@ export const SupervisorInterviewCreate = () => {
 						}
 						rules={[
 							{ required: true, message: 'Не выбрана должность' },
-							{ max: 500, message: 'Количество символов было превышено'}
+							{ max: 500, message: 'Количество символов было превышено' }
 						]}
 					>
-						<Select
-							placeholder="Выбрать"
-							showSearch
-							optionFilterProp="label"
-							options={formattedJobs}
-						></Select>
+						<Select placeholder="Выбрать" showSearch optionFilterProp="label" options={formattedJobs}></Select>
 					</Form.Item>
 					<div className="flex flex-row w-full gap-[20px]">
 						<Form.Item
@@ -249,19 +227,16 @@ export const SupervisorInterviewCreate = () => {
 									Дата и время
 								</label>
 							}
-							rules={[
-								{ required: true, message: 'Не выбраны дата и время' },
-								{ validator: validateDateTime },
-							]}
+							rules={[{ required: true, message: 'Не выбраны дата и время' }, { validator: validateDateTime }]}
 						>
 							<DatePicker
 								format={'DD.MM.YYYY, h:mm'}
 								showTime={{
 									minuteStep: 15,
 									disabledHours: () => {
-										return [0, 1, 2, 3, 4, 5, 6, 7, 21, 22, 23];
+										return [0, 1, 2, 3, 4, 5, 6, 7, 21, 22, 23]
 									},
-									hideDisabledOptions: true,
+									hideDisabledOptions: true
 								}}
 								className="w-full"
 								placeholder="Выбрать"
@@ -295,19 +270,13 @@ export const SupervisorInterviewCreate = () => {
 						}
 						rules={[
 							{ required: true, message: 'Адрес не указан' },
-							{ max: 1000, message: 'Количество символов было превышено'}
+							{ max: 1000, message: 'Количество символов было превышено' }
 						]}
 					>
-						<TextArea
-							placeholder="Ввести текст"
-							autoSize={{minRows: 1, maxRows: 6}}></TextArea>
+						<TextArea placeholder="Ввести текст" autoSize={{ minRows: 1, maxRows: 6 }}></TextArea>
 					</Form.Item>
 					<Form.Item>
-						<Button
-							type="primary"
-							className="rounded-[30px] w-[121px]"
-							htmlType="submit"
-						>
+						<Button type="primary" className="rounded-[30px] w-[121px]" htmlType="submit">
 							Создать
 						</Button>
 					</Form.Item>

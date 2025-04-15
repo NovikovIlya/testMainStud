@@ -48,12 +48,8 @@ export const VacancyRequestCreateView = () => {
 
 	const { openAlert } = useAlert()
 
-	const { refetch } = useGetVacancyRequestsQuery('все')
-
 	const { data: categories = [] } = useGetCategoriesQuery()
 	const [categoryTitle, setCategoryTitle] = useState<string>('')
-	const { data: directions = [] } = useGetDirectionsQuery(categoryTitle)
-	const { data: subdivisions = [] } = useGetSubdivisionsQuery(categoryTitle)
 	const { data: definitions = [], isLoading: loading, isFetching: fetching } = useGetAllDocumentDefinitionsQuery()
 
 	const [isEdit, setIsEdit] = useState<boolean>(false)
@@ -255,7 +251,6 @@ export const VacancyRequestCreateView = () => {
 								}).unwrap()
 							}
 
-							refetch()
 							setIsModalOpen(false)
 							setResultModalText('Вакансия успешно опубликована')
 							setIsResultModalOpen(true)
@@ -301,17 +296,24 @@ export const VacancyRequestCreateView = () => {
 					>
 						<Select
 							placeholder="Выбрать"
-							options={
-								categories.find(cat => cat.title === categoryTitle)?.direction
-									? directions.map(dir => ({
-											value: dir.title,
-											label: dir.title
-									  }))
-									: subdivisions.map(sub => ({
-											value: sub.title,
-											label: sub.title
-									  }))
-							}
+							options={(() => {
+								let cat = categories.find(category => category.title === categoryTitle)
+								return cat && cat.directions.length !== 0
+									? [
+											...cat.directions.map(dir => ({
+												value: dir,
+												label: dir
+											}))
+									  ]
+									: cat && cat.subdivisionsList.length !== 0
+									? [
+											...cat.subdivisionsList.map(sub => ({
+												value: sub,
+												label: sub
+											}))
+									  ]
+									: []
+							})()}
 							onChange={value => {
 								setSecondOption(value)
 								categories.find(cat => cat.title === categoryTitle)?.direction
@@ -428,7 +430,7 @@ export const VacancyRequestCreateView = () => {
 						}
 						rules={[
 							{ required: true, message: 'Не указана должность' },
-							{ max: 500, message: 'Количество символов было превышено'}
+							{ max: 500, message: 'Количество символов было превышено' }
 						]}
 					>
 						<Input placeholder="Ввести название"></Input>
@@ -446,9 +448,10 @@ export const VacancyRequestCreateView = () => {
 							<Select
 								placeholder="Выбрать"
 								options={[
-									{ value: '0', label: '0' },
-									{ value: '1', label: '1' },
-									{ value: '2', label: '2' }
+									{ value: 'Нет опыта', label: 'Нет опыта' },
+									{ value: 'Опыт от 1 до 3 лет', label: 'Опыт от 1 до 3 лет' },
+									{ value: 'Опыт от 3 до 6 лет', label: 'Опыт от 3 до 6 лет' },
+									{ value: 'Опыт более 6 лет', label: 'Опыт более 6 лет' }
 								]}
 							></Select>
 						</Form.Item>
@@ -465,8 +468,9 @@ export const VacancyRequestCreateView = () => {
 								placeholder="Выбрать"
 								options={[
 									{ value: 'Полный день', label: 'Полный день' },
-									{ value: 'Пол ставки', label: 'Пол ставки' },
-									{ value: 'Четверть ставки', label: 'Четверть ставки' }
+									{ value: 'Гибкий график', label: 'Гибкий график' },
+									{ value: 'Сменный график', label: 'Сменный график' },
+									{ value: 'Удалённая работа', label: 'Удалённая работа' }
 								]}
 							></Select>
 						</Form.Item>
@@ -479,7 +483,7 @@ export const VacancyRequestCreateView = () => {
 							}
 							rules={[
 								{ required: true, message: 'Не указана зарплата' },
-								{ max: 70, message: 'Количество символов было превышено'}
+								{ max: 70, message: 'Количество символов было превышено' }
 							]}
 						>
 							<Input placeholder="Ввести"></Input>
@@ -492,7 +496,7 @@ export const VacancyRequestCreateView = () => {
 						}
 						rules={[
 							{ required: true, message: 'Не указаны задачи' },
-							{ max: 5000, message: 'Количество символов было превышено'}
+							{ max: 5000, message: 'Количество символов было превышено' }
 						]}
 					>
 						<Input.TextArea autoSize className="!h-[107px]" placeholder="Ввести текст..."></Input.TextArea>
@@ -506,7 +510,7 @@ export const VacancyRequestCreateView = () => {
 						}
 						rules={[
 							{ required: true, message: 'Не указаны требования' },
-							{ max: 5000, message: 'Количество символов было превышено'}
+							{ max: 5000, message: 'Количество символов было превышено' }
 						]}
 					>
 						<Input.TextArea autoSize className="!h-[107px]" placeholder="Ввести текст..."></Input.TextArea>
@@ -518,7 +522,7 @@ export const VacancyRequestCreateView = () => {
 						}
 						rules={[
 							{ required: true, message: 'Не указаны условия' },
-							{ max: 5000, message: 'Количество символов было превышено'}
+							{ max: 5000, message: 'Количество символов было превышено' }
 						]}
 					>
 						<Input.TextArea autoSize className="!h-[107px]" placeholder="Ввести текст..."></Input.TextArea>

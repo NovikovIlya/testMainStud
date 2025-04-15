@@ -8,7 +8,7 @@ import { WarningModalIconSvg } from '../../../assets/svg/WarningModalIconSvg'
 import { useDeleteReserveRespondMutation } from '../../../store/api/serviceApi'
 import { setCurrentResponce } from '../../../store/reducers/CurrentResponceSlice'
 import { useAlert } from '../../../utils/Alert/AlertMessage'
-import styles from "../../../utils/deleteOverwriteAntButton.module.css";
+import styles from '../../../utils/deleteOverwriteAntButton.module.css'
 
 export const ReserveItem = (props: {
 	id: number
@@ -46,7 +46,7 @@ export const ReserveItem = (props: {
 						<WarningModalIconSvg />
 					</div>
 					<p className="font-content-font font-normal text-black text-[16px]/[20px] text-center mt-[22px]">
-						Вы действительно хотите удалить отклик?
+						Вы действительно хотите отправить отклик в архив?
 					</p>
 					<div className="mt-[40px] flex gap-[12px]">
 						<Button
@@ -74,7 +74,7 @@ export const ReserveItem = (props: {
 							}}
 							loading={deleteResult.isLoading}
 						>
-							Удалить
+							В архив
 						</Button>
 					</div>
 				</Modal>

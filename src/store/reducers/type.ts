@@ -139,7 +139,9 @@ export type VacancyItemType = {
 export type CategoryType = {
 	title: string
 	direction: boolean
-	subdivision: boolean
+	directions: string[]
+	subdivisions: boolean
+	subdivisionsList: string[]
 }
 
 export type VacancyViewResponceType = {
@@ -332,7 +334,7 @@ export type VacancyRespondItemType = {
 		country: string
 		endYear: string
 		speciality: string | null
-		nameOfInstitute: string
+		institution: string
 	}[]
 }
 
@@ -419,6 +421,7 @@ export type InterviewItemType = {
 	format: 'OFFLINE' | 'ONLINE'
 	time: string
 	vacancyName: string
+	url: string
 }
 
 export type SeekerStatusChangeType = {

@@ -108,28 +108,30 @@ export const Reserve = () => {
 					}}
 				>
 					<label
-						className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
-							requestData.type === '' ? 'text-white bg-dasha-blue' : 'text-black border-solid border-black border-[1px]'
+						className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font cursor-pointer ${
+							requestData.type === ''
+								? 'text-white bg-dasha-blue'
+								: 'text-black border-solid border-black border-[1px] hover:bg-white hover:border-dasha-light-blue hover:text-dasha-light-blue'
 						} font-normal text-[16px]/[16px]`}
 					>
 						<Radio value={''} className="hidden"></Radio>
 						все
 					</label>
 					<label
-						className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
+						className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font cursor-pointer ${
 							requestData.type === 'RESUME'
 								? 'text-white bg-dasha-blue'
-								: 'text-black border-solid border-black border-[1px]'
+								: 'text-black border-solid border-black border-[1px] hover:bg-white hover:border-dasha-light-blue hover:text-dasha-light-blue'
 						} font-normal text-[16px]/[16px]`}
 					>
 						<Radio value={'RESUME'} className="hidden"></Radio>
 						резюме, отправленное напрямую
 					</label>
 					<label
-						className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font ${
+						className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font cursor-pointer ${
 							requestData.type === 'RESPOND'
 								? 'text-white bg-dasha-blue'
-								: 'text-black border-solid border-black border-[1px]'
+								: 'text-black border-solid border-black border-[1px] hover:bg-white hover:border-dasha-light-blue hover:text-dasha-light-blue'
 						} font-normal text-[16px]/[16px]`}
 					>
 						<Radio value={'RESPOND'} className="hidden"></Radio>

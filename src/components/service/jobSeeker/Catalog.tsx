@@ -2,32 +2,23 @@ import { LoadingOutlined } from '@ant-design/icons'
 import { Select, Spin } from 'antd'
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { useLocation } from 'react-router-dom'
 
 import { useAppSelector } from '../../../store'
-import { useLazyGetInfoUserQuery } from '../../../store/api/formApi'
 import {
 	useGetCategoriesQuery,
-	useGetDirectionsQuery,
-	useGetSubdivisionsQuery,
 	useLazyGetVacancyPreviewByDirectionQuery,
 	useLazyGetVacancyPreviewBySubdivisionQuery
 } from '../../../store/api/serviceApi'
 import { keepFilterCategory, keepFilterSubCategory, keepFilterType } from '../../../store/reducers/CatalogFilterSlice'
-import { allData } from '../../../store/reducers/SeekerFormReducers/AboutMeReducer'
 import { VacancyItemType } from '../../../store/reducers/type'
 
 import VacancyItem from './VacancyItem'
 
 export default function Catalog() {
 	const dispatch = useDispatch()
-	const user = useAppSelector(state => state.auth.user)
 	const catalogFilter = useAppSelector(state => state.catalogFilter)
 
 	const [categoryTitle, setCategoryTitle] = useState(catalogFilter.category)
-	const [directoryTitle, setDirectoryTitle] = useState(catalogFilter.subcategory)
-	const [subdivisionTitle, setSubdivisionTitle] = useState(catalogFilter.subcategory)
-	const [page, setPage] = useState(0)
 	const [secondOption, setSecondOption] = useState<string | null>(catalogFilter.subcategory)
 	const [requestData, setRequestData] = useState<{
 		category: string
@@ -45,38 +36,9 @@ export default function Catalog() {
 	const catalogBottomRef = useRef<null | HTMLDivElement>(null)
 	const [previews, setPreviews] = useState<VacancyItemType[]>([])
 	const { data: categories = [], isLoading: isCategoriesLoading } = useGetCategoriesQuery()
-	const { data: directions = [], isLoading: isDirectionsLoading } = useGetDirectionsQuery(categoryTitle)
-	const { data: subdivisions = [], isLoading: isSubdivisionsLoading } = useGetSubdivisionsQuery(categoryTitle)
 
 	const [getVacByDir, preLoadStatus] = useLazyGetVacancyPreviewByDirectionQuery()
 	const [getVacBySub] = useLazyGetVacancyPreviewBySubdivisionQuery()
-	const [getInfo] = useLazyGetInfoUserQuery()
-
-	useEffect(() => {
-		if (user) {
-			getInfo()
-				.unwrap()
-				.then(info => {
-					dispatch(
-						allData({
-							name: user.firstname,
-							surName: user.lastname,
-							patronymic: user.middleName,
-							phone: user.phone,
-							email: user.email,
-							birthDay: user.birthday,
-							gender: info.gender,
-							countryId: info.countryId,
-							isPatronymicSet:
-								user.middleName === null || user.middleName === undefined || user.middleName === '' ? false : true,
-							isBirthDaySet:
-								user.birthday === null || user.birthday === undefined || user.birthday === '' ? false : true,
-							isGenderSet: info.gender === null || info.gender === undefined ? false : true
-						})
-					)
-				})
-		}
-	}, [])
 
 	useEffect(() => {
 		const lowerObserver = new IntersectionObserver(entries => {
@@ -215,23 +177,28 @@ export default function Catalog() {
 			<Select
 				className="mt-[16px]"
 				style={{ width: 622 }}
-				options={
-					categories.find(category => category.title === categoryTitle)?.direction
+				options={(() => {
+					let cat = categories.find(category => category.title === categoryTitle)
+					return cat && cat.directions.length !== 0
 						? [
 								{ value: 'Все', label: 'Все' },
-								...directions.map(dir => ({
-									value: dir.title,
-									label: dir.title
+								...cat.directions.map(dir => ({
+									value: dir,
+									label: dir
 								}))
 						  ]
-						: subdivisions.map(sub => ({
-								value: sub.title,
-								label: sub.title
-						  }))
-				}
+						: cat && cat.subdivisionsList.length !== 0
+						? [
+								...cat.subdivisionsList.map(sub => ({
+									value: sub,
+									label: sub
+								}))
+						  ]
+						: []
+				})()}
 				defaultValue={catalogFilter.subcategory}
 				onChange={(value: string) => {
-					categories.find(category => category.title === categoryTitle)?.direction
+					categories.find(category => category.title === categoryTitle)?.directions.length !== 0
 						? (() => {
 								setBlockPageAddition(true)
 								setRequestData(prev => ({
@@ -257,9 +224,8 @@ export default function Catalog() {
 								dispatch(keepFilterType('SUBDIVISION'))
 						  })()
 				}}
-				placeholder={!isDirectionsLoading && !isSubdivisionsLoading && 'Выбрать'}
-				loading={categoryTitle === '' ? false : isDirectionsLoading || isSubdivisionsLoading}
-				disabled={categoryTitle === '' ? true : isDirectionsLoading || isSubdivisionsLoading}
+				placeholder={'Выбрать'}
+				loading={isCategoriesLoading}
 				value={secondOption}
 			/>
 

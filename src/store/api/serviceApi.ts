@@ -136,7 +136,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 			{ category: string; direction: string; page: number }
 		>({
 			query: ({ category, direction, page }) => ({
-				url: `http://${emplBaseURL}employment-api/v2/vacancy?category=${category}${
+				url: `http://${emplBaseURL}employment-api/v1/vacancy?category=${category}${
 					direction === 'Все' ? '' : `&direction=${direction}`
 				}&page=${page}`
 			})
@@ -147,7 +147,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		>({
 			query: ({ category, subdivision, page }) => ({
 				url:
-					`http://${emplBaseURL}employment-api/v2/vacancy?category=` +
+					`http://${emplBaseURL}employment-api/v1/vacancy?category=` +
 					category +
 					'&subdivisions=' +
 					subdivision +
@@ -259,24 +259,20 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
-		getSupervisorVacancy: builder.query<VacancyItemType[], void>({
-			query: () => ({
-				url: `http://${emplBaseURL}employment-api/v1/management/supervisor/vacancy`,
+		getSupervisorVacancy: builder.query<PageableType<VacancyItemType>, { page: number; pageSize?: number }>({
+			query: ({ page, pageSize }) => ({
+				url: `http://${emplBaseURL}employment-api/v1/management/supervisor/vacancy?page=${page}${
+					pageSize ? `&size=${pageSize}` : ``
+				}`,
 				headers: {
 					Authorization: `Bearer ${supervisorToken}`
 				}
 			})
 		}),
-		getVacancyRequests: builder.query<
-			{
-				content: VacancyRequestItemType[]
-				page: { size: number; number: number; totalElements: number; totalPages: number }
-			},
-			string
-		>({
-			query: action => ({
-				url: `http://${emplBaseURL}employment-api/v1/management/vacancy-requests${
-					action === 'все' ? '' : `?action=${action}`
+		getVacancyRequests: builder.query<PageableType<VacancyRequestItemType>, { action: string; page: number }>({
+			query: ({ action, page }) => ({
+				url: `http://${emplBaseURL}employment-api/v1/management/vacancy-requests?page=${page}${
+					action === 'все' ? '' : `&action=${action}`
 				}`,
 				headers: {
 					Authorization: `Bearer ${personnelDeparmentToken}`
@@ -351,13 +347,13 @@ export const serviceApi = apiSlice.injectEndpoints({
 			})
 		}),
 		getChatPreviews: builder.query<
-			{
+			PageableType<{
 				id: number
 				respondInfo: VacancyRespondItemType & { vacancyId: number }
 				unreadCount: number
 				lastMessageDate: string
 				chatName: string
-			}[],
+			}>,
 			{
 				vacancyId: number | null
 				status: string | null
@@ -410,9 +406,14 @@ export const serviceApi = apiSlice.injectEndpoints({
 				headers: { Authorization: `Bearer ${seekerToken}` }
 			})
 		}),
-		getSupervisorResponds: builder.query<{ content: VacancyRespondItemType[] }, { status: string; page: number }>({
-			query: ({ status, page }) => ({
-				url: `http://${emplBaseURL}employment-api/v1/supervisor/vacancy/respond?${status}&page=${page}`,
+		getSupervisorResponds: builder.query<
+			{ content: VacancyRespondItemType[] },
+			{ status: string; page: number; pageSize?: number }
+		>({
+			query: ({ status, page, pageSize }) => ({
+				url: `http://${emplBaseURL}employment-api/v1/supervisor/vacancy/respond?${status}&page=${page}${
+					pageSize ? `&size=${pageSize}` : ``
+				}`,
 				headers: { Authorization: `Bearer ${supervisorToken}` }
 			}),
 			transformResponse: (response: { content: VacancyRespondItemType[] }) => {
@@ -647,17 +648,19 @@ export const serviceApi = apiSlice.injectEndpoints({
 				format: 'OFFLINE' | 'ONLINE'
 				mainTime: string
 				reservedTimes: string[]
+				address?: string
 				additionalInfo?: string
 			}
 		>({
-			query: ({ respondId, format, mainTime, reservedTimes, additionalInfo }) => ({
+			query: ({ respondId, format, mainTime, reservedTimes, additionalInfo, address }) => ({
 				url: `http://${emplBaseURL}employment-api/v1/respond/${respondId}/status/invite`,
 				method: 'PUT',
 				body: {
 					format: format,
 					mainTime: mainTime,
 					reserveTimes: reservedTimes,
-					address: additionalInfo
+					address: address,
+					additionalInfo: additionalInfo
 				},
 				headers: {
 					Authorization: `Bearer ${supervisorToken}`
@@ -825,6 +828,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 				vacancyId: number
 				category: string
 				direction: string
+				subdivision: string
 			}
 		>({
 			query: arg => ({
@@ -943,18 +947,18 @@ export const serviceApi = apiSlice.injectEndpoints({
 					: { acceptance: true }
 			})
 		}),
-		getPersonnelStages: builder.query<EmploymentStageItemType[], void>({
-			query: arg => ({
-				url: `http://${emplBaseURL}employment-api/v1/management/employment`,
+		getPersonnelStages: builder.query<PageableType<EmploymentStageItemType>, number>({
+			query: page => ({
+				url: `http://${emplBaseURL}employment-api/v1/management/employment?page=${page}`,
 				method: 'GET',
 				headers: {
 					Authorization: `Bearer ${personnelDeparmentToken}`
 				}
 			})
 		}),
-		getAccountingStages: builder.query<EmploymentStageItemType[], void>({
-			query: arg => ({
-				url: `http://${emplBaseURL}employment-api/v1/management/employment`,
+		getAccountingStages: builder.query<PageableType<EmploymentStageItemType>, number>({
+			query: page => ({
+				url: `http://${emplBaseURL}employment-api/v1/management/employment?page=${page}`,
 				method: 'GET',
 				headers: {
 					Authorization: `Bearer ${accountingToken}`
@@ -1100,9 +1104,9 @@ export const serviceApi = apiSlice.injectEndpoints({
 				}
 			})
 		}),
-		getTestResults: builder.query<SignedItemType[], { signed: boolean; query?: string }>({
+		getTestResults: builder.query<PageableType<SignedItemType>, { signed: boolean; query?: string; page: number }>({
 			query: arg => ({
-				url: `http://${emplBaseURL}employment-api/v1/management/employment/sub-stage/test-stage?signed=${arg.signed}&query=${arg.query}`,
+				url: `http://${emplBaseURL}employment-api/v1/management/employment/sub-stage/test-stage?signed=${arg.signed}&query=${arg.query}&page=${arg.page}`,
 				method: 'GET'
 			})
 		}),
@@ -1161,15 +1165,21 @@ export const serviceApi = apiSlice.injectEndpoints({
 			}),
 			keepUnusedDataFor: 0
 		}),
-		getAllSupervisorRequests: builder.query<SupervisorRequestType[], string>({
+		getAllSupervisorRequests: builder.query<PageableType<SupervisorRequestType>, string>({
 			query: action => ({
-				url: `http://${emplBaseURL}employment-api/v1/management/vacancy-requests?action=${action}`,
+				url: `http://${emplBaseURL}employment-api/v1/management/vacancy-requests?action=${action}&size=2000&page=0`,
 				method: 'GET'
 			})
 		}),
 		getSeekerVacancyRelation: builder.query<{ canRespond: boolean }, number>({
 			query: vacancyId => ({
 				url: `http://${emplBaseURL}employment-api/v1/vacancy/${vacancyId}/seeker-relation`,
+				method: 'GET'
+			})
+		}),
+		getInterview: builder.query<InterviewItemType, number>({
+			query: interviewId => ({
+				url: `http://${emplBaseURL}employment-api/v1/interview/${interviewId}`,
 				method: 'GET'
 			})
 		})
@@ -1303,5 +1313,11 @@ export const {
 	useLazyGetSeekerEmploymentRespondsQuery,
 	useLazyGetReservedResponcesQuery,
 	useLazyGetArchivedResponcesQuery,
-	useLazyGetSeekerVacancyRelationQuery
+	useLazyGetSeekerVacancyRelationQuery,
+	useLazyGetPersonnelStagesQuery,
+	useLazyGetAccountingStagesQuery,
+	useLazyGetSupervisorVacancyQuery,
+	useGetInterviewQuery,
+	useLazyGetInterviewQuery,
+	useLazyGetChatIdByRespondIdQuery
 } = serviceApi

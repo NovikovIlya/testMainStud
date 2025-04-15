@@ -1,11 +1,15 @@
 import { LoadingOutlined } from '@ant-design/icons'
 import { Spin } from 'antd'
 import React, { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { useAppSelector } from '../../../store'
+import { useLazyGetInfoUserQuery } from '../../../store/api/formApi'
 import { useLazyGetSeekerVacancyRelationQuery, usePostVacancyRespondMutation } from '../../../store/api/serviceApi'
 import { useLazyGetVacancyViewQuery } from '../../../store/api/serviceApi'
+import { allData } from '../../../store/reducers/SeekerFormReducers/AboutMeReducer'
+import { setData } from '../../../store/reducers/SeekerFormReducers/ResponseDataSetReducer'
 
 import ArrowIcon from './ArrowIcon'
 import { ResponseForm } from './ResponceForm'
@@ -15,6 +19,9 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 
 	const [getVacancy, { data, isLoading, error }] = useLazyGetVacancyViewQuery()
 	const [getRelation, getRelationStatus] = useLazyGetSeekerVacancyRelationQuery()
+	const [getInfo, getInfoStatus] = useLazyGetInfoUserQuery()
+
+	const dispatch = useDispatch()
 
 	useEffect(() => {
 		// Получаем текущий URL
@@ -35,18 +42,53 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 		// Если id найден, запускаем запрос
 		if (id_from_url) {
 			getVacancy(id_from_url)
-			getRelation(parseInt(id_from_url))
+				.unwrap()
+				.then(() => {
+					getRelation(parseInt(id_from_url))
+						.unwrap()
+						.then(res => {
+							setCanRespond(res.canRespond)
+						})
+				})
 		}
 	}, [])
 
 	console.log(data)
 
 	const { user } = useAppSelector(state => state.auth)
+	const { dataSet } = useAppSelector(state => state.respondDataSet)
 	const { currentVacancy } = useAppSelector(state => state.currentVacancy)
 	const { chatId } = useAppSelector(state => state.chatId)
 	const navigate = useNavigate()
 	const [getVacancyRespond, respond] = usePostVacancyRespondMutation()
 	const isEmpDep = user?.roles.find(role => role.type === 'EMPL')
+
+	useEffect(() => {
+		if (user && !dataSet) {
+			getInfo()
+				.unwrap()
+				.then(info => {
+					dispatch(
+						allData({
+							name: user.firstname,
+							surName: user.lastname,
+							patronymic: user.middleName,
+							phone: user.phone,
+							email: user.email,
+							birthDay: user.birthday,
+							gender: info.gender,
+							countryId: info.countryId,
+							isPatronymicSet:
+								user.middleName === null || user.middleName === undefined || user.middleName === '' ? false : true,
+							isBirthDaySet:
+								user.birthday === null || user.birthday === undefined || user.birthday === '' ? false : true,
+							isGenderSet: info.gender === null || info.gender === undefined ? false : true
+						})
+					)
+					dispatch(setData(true))
+				})
+		}
+	}, [])
 
 	let responsibilities: string = ''
 	let responsibilitiesArr: RegExpMatchArray | null = null
@@ -105,7 +147,7 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 		conditionsArr = conditions.match(/<li>[a-zA-Zа-яА-ЯёЁ0-9\s\:\,\.\/\–\—\(\)\+\-]+/g)
 	}
 
-	if (isLoading || getRelationStatus.isLoading) {
+	if (isLoading || getRelationStatus.isLoading || getInfoStatus.isLoading) {
 		return (
 			<>
 				<div className="w-full h-full flex items-center">
@@ -123,7 +165,7 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 				<div className="flex">
 					<button
 						onClick={() => {
-							navigate(`/services/jobseeker/catalog`)
+							navigate(-1)
 						}}
 						className="bg-inherit border-none cursor-pointer"
 					>
@@ -138,7 +180,7 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 					<p className="w-[106px] font-content-font font-bold text-black text-[18px]/[21px]">Тип занятости</p>
 					<p className="w-[106px] font-content-font font-bold text-black text-[18px]/[21px]">Заработная плата</p>
 					{props.type === 'CATALOG' ? (
-						<ResponseForm canRespond={getRelationStatus.data?.canRespond} />
+						<ResponseForm canRespond={canRespond} />
 					) : (
 						<>
 							<div className="w-[143px]"></div>

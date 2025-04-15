@@ -1,4 +1,4 @@
-import {Button, ConfigProvider, Form, Input, Modal} from 'antd'
+import { Button, ConfigProvider, Form, Input, Modal } from 'antd'
 import React, { useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
@@ -35,6 +35,7 @@ interface Document {
 
 interface DepEmploymentStageItemProps {
 	stage: number
+	type: string
 	role: string
 	bank: string
 	stageStatus: string
@@ -108,7 +109,7 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 								onClick={async () => {
 									try {
 										setIsReqModalOpen(false)
-										await markBankCardApplicationFormed({ subStageId: 5 })
+										await markBankCardApplicationFormed({ subStageId: props.stage })
 											.unwrap()
 											.then(() => {
 												dispatch(setFifthStageStatus('ACCEPTED'))
@@ -172,7 +173,7 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 	const StageStatusComponent = () => {
 		return (
 			<>
-				{props.stage === 2 && (
+				{props.type === 'SECOND' && (
 					<div className="min-w-[300px] items-left">
 						{props.stageStatus === 'VERIFYING' && secondStageStatus.secondStageStatus === 'VERIFYING' && (
 							<div className="flex flex-row gap-[12px]">
@@ -231,7 +232,7 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 						)}
 					</div>
 				)}
-				{props.stage === 3 && (
+				{props.type === 'FOURTH' && (
 					<div className="min-w-[300px] items-left">
 						{props.stageStatus === 'VERIFYING' && thirdStageStatus.thirdStageStatus === 'VERIFYING' && (
 							<div className="flex flex-row gap-[12px] items-left">
@@ -290,7 +291,7 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 						)}
 					</div>
 				)}
-				{props.stage === 5 && props.role === 'accounting' && (
+				{props.type === 'SIXTH' && props.role === 'accounting' && (
 					<div className="min-w-[300px] items-left">
 						{props.stageStatus === 'VERIFYING' && fifthStageStatus.fifthStageStatus === 'VERIFYING' && (
 							<div className="flex flex-row gap-[12px]">
@@ -349,7 +350,7 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 						)}
 					</div>
 				)}
-				{props.stage === 5 && props.role === 'personnel' && (
+				{props.type === 'SIXTH' && props.role === 'personnel' && (
 					<div className="min-w-[300px] items-left">
 						{props.stageStatus === 'VERIFYING' && fifthStageStatus.fifthStageStatus === 'VERIFYING' && (
 							<div className="flex flex-row gap-[12px]">
@@ -379,7 +380,7 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 	const StageContentComponent = () => {
 		return (
 			<>
-				{props.stage === 2 && (
+				{props.type === 'SECOND' && (
 					<>
 						{props.documentArray?.map(document => (
 							<DocumentElem key={document.id} name={document.docType} id={document.id} fileName={document.name} />
@@ -397,7 +398,7 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 						)}
 					</>
 				)}
-				{props.stage === 3 && (
+				{props.type === 'FOURTH' && (
 					<>
 						{props.documentArray?.map(document => (
 							<DocumentElem key={document.id} name={document.docType} id={document.id} fileName={document.name} />
@@ -415,7 +416,7 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 						)}
 					</>
 				)}
-				{props.stage === 4 && (
+				{props.type === 'FIFTH' && (
 					<>
 						<div className="flex flex-row gap-[12px]">
 							<GreenCheck></GreenCheck>
@@ -423,7 +424,7 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 						</div>
 					</>
 				)}
-				{props.stage === 5 && props.role === 'accounting' && (
+				{props.type === 'SIXTH' && props.role === 'accounting' && (
 					<>
 						{props.documentArray?.map(document => (
 							<DocumentElem key={document.id} name={document.docType} id={document.id} fileName={document.name} />
@@ -441,7 +442,7 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 						)}
 					</>
 				)}
-				{props.stage === 5 && props.role === 'personnel' && (
+				{props.type === 'SIXTH' && props.role === 'personnel' && (
 					<>
 						{props.documentArray?.map(document => (
 							<DocumentElem key={document.id} name={document.docType} id={document.id} fileName={document.name} />
@@ -477,10 +478,7 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 						footer={null}
 						width={620}
 					>
-						<Form
-							layout="vertical"
-							requiredMark={false}
-						>
+						<Form layout="vertical" requiredMark={false}>
 							<p className="font-content-font font-normal mb-[18px] flex items-start text-black opacity-[80%] text-[16px]/[20px]">
 								Комментарий
 							</p>
@@ -493,14 +491,14 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 								]}
 							>
 								<TextArea
-									autoSize={{minRows: 4, maxRows: 8}}
-									style={{height: 107, resize: 'none', width: 520}}
+									autoSize={{ minRows: 4, maxRows: 8 }}
+									style={{ height: 107, resize: 'none', width: 520 }}
 									onChange={checkInputChange}
 								/>
 							</Form.Item>
 
 							<div className="mt-[40px] flex gap-[12px] w-full justify-end ">
-								{props.stage === 2 && (
+								{props.type === 'SECOND' && (
 									<Button
 										className="rounded-[54.5px] py-[12px] px-[24px]  text-[16px]"
 										type="primary"
@@ -523,14 +521,14 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 														})
 													})
 											} catch (error: any) {
-												openAlert({type: 'error', text: 'Извините, что-то пошло не так...'})
+												openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 											}
 										}}
 									>
 										Отправить
 									</Button>
 								)}
-								{props.stage === 3 && (
+								{props.type === 'FOURTH' && (
 									<Button
 										className="rounded-[54.5px] py-[12px] px-[24px]  text-[16px]"
 										type="primary"
@@ -553,14 +551,14 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 														})
 													})
 											} catch (error: any) {
-												openAlert({type: 'error', text: 'Извините, что-то пошло не так...'})
+												openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 											}
 										}}
 									>
 										Отправить
 									</Button>
 								)}
-								{props.stage === 4 && (
+								{props.type === 'FIFTH' && (
 									<Button
 										className="rounded-[54.5px] py-[12px] px-[24px]  text-[16px]"
 										type="primary"
@@ -582,19 +580,19 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 														})
 													})
 											} catch (error: any) {
-												openAlert({type: 'error', text: 'Извините, что-то пошло не так...'})
+												openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 											}
 										}}
 									>
 										Отправить
 									</Button>
 								)}
-								{props.stage === 5 && props.role === 'accounting' && (
+								{props.type === 'SIXTH' && props.role === 'accounting' && (
 									<Button
 										className="rounded-[54.5px] py-[12px] px-[24px]  text-[16px]"
 										type="primary"
 										loading={changeStatusAccountingLoading}
-										onClick={ async () => {
+										onClick={async () => {
 											try {
 												await changeStatusAccounting({
 													status: 'REFINE',
@@ -611,7 +609,7 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 														})
 													})
 											} catch (error: any) {
-												openAlert({type: 'error', text: 'Извините, что-то пошло не так...'})
+												openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
 											}
 										}}
 									>
@@ -633,25 +631,25 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 			<StageStatusModal></StageStatusModal>
 			<div className="p-[20px] pr-[0px] gap-[20px] flex flex-col w-full bg-[#FFFFFF]">
 				<div className="flex flex-row items-center justify-between min-h-[32px]">
-					{props.stage === 2 && (
+					{props.type === 'SECOND' && (
 						<div className="flex flex-row gap-[37px]">
 							<h3 className="font-bold text-[16px]/[19.2px]">1 ЭТАП</h3>
 							<h3 className="font-normal text-[18px]/[21.6px]">«Прикрепление документов»</h3>
 						</div>
 					)}
-					{props.stage === 3 && (
+					{props.type === 'FOURTH' && (
 						<div className="flex flex-row gap-[37px]">
 							<h3 className="font-bold text-[16px]/[19.2px]">2 ЭТАП</h3>
 							<h3 className="font-normal text-[18px]/[21.6px]">«Медицинский осмотр»</h3>
 						</div>
 					)}
-					{props.stage === 4 && (
+					{props.type === 'FIFTH' && (
 						<div className="flex flex-row gap-[37px]">
 							<h3 className="font-bold text-[16px]/[19.2px]">3 ЭТАП</h3>
 							<h3 className="font-normal text-[18px]/[21.6px]">«Инструктаж»</h3>
 						</div>
 					)}
-					{props.stage === 5 && (
+					{props.type === 'SIXTH' && (
 						<div className="flex flex-row gap-[37px]">
 							<h3 className="font-bold text-[16px]/[19.2px]">4 ЭТАП</h3>
 							<h3 className="font-normal text-[18px]/[21.6px]">«Реквизиты»</h3>

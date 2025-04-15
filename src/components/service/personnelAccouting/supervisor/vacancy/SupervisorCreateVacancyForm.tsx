@@ -91,7 +91,7 @@ export const SupervisorCreateVacancyForm = () => {
 						}
 						rules={[
 							{ required: true, message: 'Не указана должность' },
-							{ max: 500, message: 'Количество символов было превышено' },
+							{ max: 500, message: 'Количество символов было превышено' }
 						]}
 					>
 						<Input placeholder="Ввести название"></Input>
@@ -104,9 +104,7 @@ export const SupervisorCreateVacancyForm = () => {
 									Требуемый опыт работы
 								</label>
 							}
-							rules={[
-								{ required: true, message: 'Не указана опыт' },
-							]}
+							rules={[{ required: true, message: 'Не указан опыт' }]}
 						>
 							<Select
 								placeholder="Выбрать"
@@ -125,9 +123,7 @@ export const SupervisorCreateVacancyForm = () => {
 									Тип занятости
 								</label>
 							}
-							rules={[
-								{ required: true, message: 'Не указан тип' },
-							]}
+							rules={[{ required: true, message: 'Не указан тип' }]}
 						>
 							<Select
 								placeholder="Выбрать"
@@ -148,7 +144,7 @@ export const SupervisorCreateVacancyForm = () => {
 							}
 							rules={[
 								{ required: true, message: 'Не указана зарплата' },
-								{ max: 70, message: 'Количество символов было превышено' },
+								{ max: 70, message: 'Количество символов было превышено' }
 							]}
 						>
 							<Input placeholder="Ввести"></Input>
@@ -157,13 +153,11 @@ export const SupervisorCreateVacancyForm = () => {
 					<Form.Item
 						name={'responsibilities'}
 						label={
-							<label className="text-black text-[18px]/[18px] font-content-font font-normal opacity-80">
-								Задачи
-							</label>
+							<label className="text-black text-[18px]/[18px] font-content-font font-normal opacity-80">Задачи</label>
 						}
 						rules={[
 							{ required: true, message: 'Не указаны задачи' },
-							{ max: 5000, message: 'Количество символов было превышено' },
+							{ max: 5000, message: 'Количество символов было превышено' }
 						]}
 					>
 						<Input.TextArea autoSize className="!h-[107px]" placeholder="Ввести текст..."></Input.TextArea>
@@ -185,13 +179,11 @@ export const SupervisorCreateVacancyForm = () => {
 					<Form.Item
 						name={'conditions'}
 						label={
-							<label className="text-black text-[18px]/[18px] font-content-font font-normal opacity-80">
-								Условия
-							</label>
+							<label className="text-black text-[18px]/[18px] font-content-font font-normal opacity-80">Условия</label>
 						}
 						rules={[
 							{ required: true, message: 'Не указаны условия' },
-							{ max: 5000, message: 'Количество символов было превышено' },
+							{ max: 5000, message: 'Количество символов было превышено' }
 						]}
 					>
 						<Input.TextArea autoSize className="!h-[107px]" placeholder="Ввести текст..."></Input.TextArea>

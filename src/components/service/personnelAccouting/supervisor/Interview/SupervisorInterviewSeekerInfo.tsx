@@ -167,7 +167,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 					setIsInterviewStarted(false)
 				}
 
-				if (difference > 0 && difference <= 60 * 1000 * 5) {
+				if (difference > 0 && difference <= 60 * 1000 * 30) {
 					// 5 мин
 					setIs5MinBeforeInterviewStarted(true)
 				} else {

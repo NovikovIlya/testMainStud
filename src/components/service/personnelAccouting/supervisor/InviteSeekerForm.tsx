@@ -130,11 +130,16 @@ export const InviteSeekerForm = (props: { respondId: number; isButtonDisabled: b
 							console.log(values.mainTime.toISOString())
 							console.log(values.mainTime.toISOString())
 							console.log(dayjs.utc(values.mainTime).toISOString())
+							console.log('Адрес')
+							console.log(values.address)
+							console.log('Доп.информация')
+							console.log(values.details)
 							inviteSeeker({
 								respondId: current_page_id,
 								format: values.format,
 								mainTime: values.mainTime.toISOString(),
 								reservedTimes: reservedTime.map(reserve => reserve.timeToSend.toISOString()),
+								address: format === 'OFFLINE' ? values.address : undefined,
 								additionalInfo: format === 'OFFLINE' ? values.details : undefined
 							})
 								.unwrap()
@@ -249,20 +254,29 @@ export const InviteSeekerForm = (props: { respondId: number; isButtonDisabled: b
 							))}
 						</ul>
 						{format === 'OFFLINE' && (
-							<Form.Item
-								name={'details'}
-								label={
-									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
-										Адрес и дополнительная информация
-									</label>
-								}
-								rules={[
-									{ required: true, message: 'Не указан адрес и дополнительная информация' },
-									{ max: 1000, message: 'Количество символов было превышено' }
-								]}
-							>
-								<Input.TextArea autoSize className="!h-[107px]"></Input.TextArea>
-							</Form.Item>
+							<>
+								<Form.Item
+									name={'address'}
+									label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Адрес</label>}
+									rules={[
+										{ required: true, message: 'Не указан адрес' },
+										{ max: 1000, message: 'Количество символов было превышено' }
+									]}
+								>
+									<Input.TextArea autoSize className="!h-[107px]"></Input.TextArea>
+								</Form.Item>
+								<Form.Item
+									name={'details'}
+									label={
+										<label className="text-black text-[18px]/[18px] font-content-font font-normal">
+											Дополнительная информация
+										</label>
+									}
+									rules={[{ max: 1000, message: 'Количество символов было превышено' }]}
+								>
+									<Input.TextArea autoSize className="!h-[107px]"></Input.TextArea>
+								</Form.Item>
+							</>
 						)}
 						<Form.Item>
 							<div style={{ textAlign: 'right', marginTop: 40 }}>

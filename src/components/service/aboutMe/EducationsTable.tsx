@@ -68,6 +68,10 @@ export const EducationsTable = () => {
 					<EditTwoTone
 						onClick={() => {
 							form.setFieldsValue({
+								id: record.id,
+								s_id: record.s_id,
+								e_id: record.e_id,
+								user_allid: record.user_allid,
 								language: record.language_portal ? record.language_portal : 1,
 								nameOfInstitute: record.organization,
 								educationLevelId: record.edu_level,
@@ -126,6 +130,7 @@ export const EducationsTable = () => {
 		<>
 			{' '}
 			<AddEducationModal
+				type="UPDATE"
 				form={form}
 				open={isModalOpen}
 				onCancel={() => {

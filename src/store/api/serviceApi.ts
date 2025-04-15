@@ -219,6 +219,14 @@ export const serviceApi = apiSlice.injectEndpoints({
 				body: arg
 			}),
 			invalidatesTags: ['Education']
+		}),
+		updateNewEducation: builder.mutation<void, EducationTableDataType>({
+			query: arg => ({
+				url: `about-me/set-completed-edu`,
+				method: 'PUT',
+				body: Object.fromEntries(Object.entries(arg).filter(([_, v]) => v != null))
+			}),
+			invalidatesTags: ['Education']
 		})
 	})
 })
@@ -251,5 +259,6 @@ export const {
 	useGetEducationTypesQuery,
 	useGetNewEducationsQuery,
 	useAddNewEducationMutation,
-	useDeleteNewEducationMutation
+	useDeleteNewEducationMutation,
+	useUpdateNewEducationMutation
 } = serviceApi

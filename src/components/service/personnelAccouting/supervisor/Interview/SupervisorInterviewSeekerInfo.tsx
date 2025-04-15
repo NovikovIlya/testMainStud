@@ -269,7 +269,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 							</Button>
 						</div>
 					)}
-				<Button
+				{/* <Button
 					disabled={isEmploymentRequestSent || isSeekerRejected}
 					className="h-[40px] w-[257px] bg-[#3073D7] rounded-[54.5px] text-white text-[16px]/[16px]"
 					onClick={values => {
@@ -285,7 +285,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 					}}
 				>
 					invite without time check
-				</Button>
+				</Button> */}
 			</div>
 		)
 	}

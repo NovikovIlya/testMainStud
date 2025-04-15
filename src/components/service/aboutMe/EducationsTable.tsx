@@ -6,7 +6,11 @@ import { useState } from 'react'
 
 import { EngFlagSvg } from '../../../assets/svg/EngFlagSvg'
 import { RuFlagSvg } from '../../../assets/svg/RuFlagSvg'
-import { useGetEducationTypesQuery, useGetNewEducationsQuery } from '../../../store/api/serviceApi'
+import {
+	useDeleteNewEducationMutation,
+	useGetEducationTypesQuery,
+	useGetNewEducationsQuery
+} from '../../../store/api/serviceApi'
 import { EducationTableDataType } from '../../../store/reducers/type'
 
 import { AddEducationModal } from './AddEducationModal'
@@ -16,6 +20,8 @@ export const EducationsTable = () => {
 	const { data: levels = { edu_types: [] } } = useGetEducationTypesQuery()
 	const [form] = Form.useForm()
 	const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+
+	const [deleteEducation] = useDeleteNewEducationMutation()
 
 	const columns: TableProps<EducationTableDataType>['columns'] = [
 		{
@@ -62,6 +68,10 @@ export const EducationsTable = () => {
 					<EditTwoTone
 						onClick={() => {
 							form.setFieldsValue({
+								id: record.id,
+								s_id: record.s_id,
+								e_id: record.e_id,
+								user_allid: record.user_allid,
 								language: record.language_portal ? record.language_portal : 1,
 								nameOfInstitute: record.organization,
 								educationLevelId: record.edu_level,
@@ -79,7 +89,11 @@ export const EducationsTable = () => {
 							setIsModalOpen(true)
 						}}
 					/>
-					<DeleteTwoTone />
+					<DeleteTwoTone
+						onClick={() => {
+							deleteEducation(record)
+						}}
+					/>
 				</Space>
 			)
 		}
@@ -116,6 +130,7 @@ export const EducationsTable = () => {
 		<>
 			{' '}
 			<AddEducationModal
+				type="UPDATE"
 				form={form}
 				open={isModalOpen}
 				onCancel={() => {

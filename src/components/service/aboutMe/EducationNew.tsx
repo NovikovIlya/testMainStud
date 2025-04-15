@@ -17,6 +17,7 @@ const EducationNew = () => {
 			<h2 className="pt-[52px] font-bold text-[14px]/[100%]">{t('finishedEducationalInstitutions')}</h2>
 			<EducationsTable />
 			<AddEducationModal
+				type="ADD"
 				form={form}
 				open={isModalOpen}
 				onCancel={() => {

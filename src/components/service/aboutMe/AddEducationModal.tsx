@@ -7,12 +7,24 @@ import dayjs from 'dayjs'
 import i18next, { t } from 'i18next'
 import { useState } from 'react'
 
-import { useGetEducationTypesQuery } from '../../../store/api/serviceApi'
+import {
+	useAddNewEducationMutation,
+	useGetEducationTypesQuery,
+	useUpdateNewEducationMutation
+} from '../../../store/api/serviceApi'
 import { useGetCountriesQuery } from '../../../store/api/utilsApi'
 
-export const AddEducationModal = (props: { form: FormInstance; open: boolean; onCancel: Function }) => {
+export const AddEducationModal = (props: {
+	form: FormInstance
+	open: boolean
+	onCancel: Function
+	type: 'ADD' | 'UPDATE'
+}) => {
 	const { data: countries = [] } = useGetCountriesQuery(i18next.language)
 	const { data: levels = { edu_types: [] } } = useGetEducationTypesQuery()
+
+	const [addEducation, addEducationStatus] = useAddNewEducationMutation()
+	const [updateEducation, updateEducationStatus] = useUpdateNewEducationMutation()
 
 	return (
 		<>
@@ -35,10 +47,109 @@ export const AddEducationModal = (props: { form: FormInstance; open: boolean; on
 							let reader = new FileReader()
 							reader.onload = e => {
 								console.log({ ...values, file: e.target?.result })
+								props.type === 'ADD'
+									? addEducation({
+											language_portal: values.language,
+											start_date: values.beginningYear,
+											end_date: values.graduateYear,
+											edu_level: values.educationLevelId,
+											eduspeciality: values.specialization,
+											organization: values.nameOfInstitute,
+											edu_country: values.countryId,
+											development: values.subdivision,
+											qualification: values.qualification,
+											issue_date: values.issueDate,
+											docnum: values.number,
+											docseries: values.series,
+											portal_status: values.accept ? '1' : null
+									  })
+											.then(() => {
+												props.onCancel()
+											})
+											.catch(() => {
+												console.log('??????')
+											})
+									: updateEducation({
+											language_portal: values.language,
+											start_date: dayjs(values.beginningYear).format('DD.MM.YYYY'),
+											end_date: dayjs(values.graduateYear).format('DD.MM.YYYY'),
+											edu_level: values.educationLevelId,
+											eduspeciality: values.specialization,
+											organization: values.nameOfInstitute,
+											edu_country: values.countryId,
+											development: values.subdivision,
+											qualification: values.qualification,
+											issue_date: dayjs(values.issueDate).format('DD.MM.YYYY'),
+											docnum: values.number,
+											docseries: values.series,
+											portal_status: values.accept ? '1' : null,
+											id: values.id,
+											s_id: values.s_id,
+											e_id: values.e_id,
+											user_allid: values.user_allid
+									  })
+											.then(() => {
+												props.onCancel()
+											})
+											.catch(() => {
+												console.log('??????')
+											})
 							}
-							reader.readAsDataURL(values.file.file.originFileObj)
+							values.file
+								? reader.readAsDataURL(values.file.file.originFileObj)
+								: props.type === 'ADD'
+								? addEducation({
+										language_portal: values.language,
+										start_date: dayjs(values.beginningYear).format('DD.MM.YYYY'),
+										end_date: dayjs(values.graduateYear).format('DD.MM.YYYY'),
+										edu_level: values.educationLevelId,
+										eduspeciality: values.specialization,
+										organization: values.nameOfInstitute,
+										edu_country: values.countryId,
+										development: values.subdivision,
+										qualification: values.qualification,
+										issue_date: dayjs(values.issueDate).format('DD.MM.YYYY'),
+										docnum: values.number,
+										docseries: values.series,
+										portal_status: values.accept ? '1' : null
+								  })
+										.then(() => {
+											props.onCancel()
+										})
+										.catch(() => {
+											console.log('??????')
+										})
+								: updateEducation({
+										language_portal: values.language,
+										start_date: dayjs(values.beginningYear).format('DD.MM.YYYY'),
+										end_date: dayjs(values.graduateYear).format('DD.MM.YYYY'),
+										edu_level: values.educationLevelId,
+										eduspeciality: values.specialization,
+										organization: values.nameOfInstitute,
+										edu_country: values.countryId,
+										development: values.subdivision,
+										qualification: values.qualification,
+										issue_date: dayjs(values.issueDate).format('DD.MM.YYYY'),
+										docnum: values.number,
+										docseries: values.series,
+										portal_status: values.accept ? '1' : null,
+										id: values.id,
+										s_id: values.s_id,
+										e_id: values.e_id,
+										user_allid: values.user_allid
+								  })
+										.then(() => {
+											props.onCancel()
+										})
+										.catch(() => {
+											console.log('??????')
+										})
 						}}
 					>
+						<Form.Item name={'id'} className="hidden"></Form.Item>
+						<Form.Item name={'s_id'} className="hidden"></Form.Item>
+						<Form.Item name={'e_id'} className="hidden"></Form.Item>
+						<Form.Item name={'user_allid'} className="hidden"></Form.Item>
 						<Form.Item name={'language'} label={t('publicationLanguage')} initialValue={1}>
 							<Radio.Group>
 								<Radio value={1}>{t('rus')}</Radio>
@@ -53,7 +164,7 @@ export const AddEducationModal = (props: { form: FormInstance; open: boolean; on
 								className="w-full"
 							>
 								<Select
-									options={levels.edu_types.map(country => ({ value: country.id, label: country.name }))}
+									options={levels.edu_types.map(level => ({ value: level.id, label: level.name }))}
 									placeholder="Выбрать"
 								></Select>
 							</Form.Item>

@@ -48,7 +48,7 @@ export const SupervisorInterviewItem = (props: InterviewItemType) => {
 				const targetDate = new Date(props.eventTime)
 				const now = new Date()
 				const difference = targetDate.getTime() - now.getTime()
-				const minutes: number = Math.round((difference / 1000 / 60) % 60)
+				const minutes: number = Math.ceil((difference / 1000 / 60) % 60)
 				const hours: number = Math.floor((difference / (1000 * 60 * 60)) % 24)
 				const days: number = Math.floor(difference / (1000 * 60 * 60 * 24))
 				let datePublicString: string = ''

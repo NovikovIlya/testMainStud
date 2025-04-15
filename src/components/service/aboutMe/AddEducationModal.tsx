@@ -63,15 +63,15 @@ export const AddEducationModal = (props: { form: FormInstance; open: boolean; on
 								? reader.readAsDataURL(values.file.file.originFileObj)
 								: addEducation({
 										language_portal: values.language,
-										start_date: values.beginningYear,
-										end_date: values.graduateYear,
+										start_date: dayjs(values.beginningYear).format('DD.MM.YYYY'),
+										end_date: dayjs(values.graduateYear).format('DD.MM.YYYY'),
 										edu_level: values.educationLevelId,
 										eduspeciality: values.specialization,
 										organization: values.nameOfInstitute,
 										edu_country: values.countryId,
 										development: values.subdivision,
 										qualification: values.qualification,
-										issue_date: values.issueDate,
+										issue_date: dayjs(values.issueDate).format('DD.MM.YYYY'),
 										docnum: values.number,
 										docseries: values.series,
 										portal_status: values.accept ? '1' : null

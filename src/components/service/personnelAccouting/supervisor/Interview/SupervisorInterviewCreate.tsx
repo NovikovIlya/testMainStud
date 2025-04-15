@@ -2,7 +2,7 @@ import { LoadingOutlined } from '@ant-design/icons'
 import { ThemeProvider } from '@material-tailwind/react'
 import { Button, ConfigProvider, DatePicker, Form, Input, Modal, Select, Spin } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import React, { useEffect, useState } from 'react'
 
 import { useAppSelector } from '../../../../../store'
@@ -89,7 +89,7 @@ export const SupervisorInterviewCreate = () => {
 	}
 
 	const validateDateTime = (_: any, value: any) => {
-		if (value && value.isBefore(moment())) {
+		if (value && value.isBefore(dayjs())) {
 			return Promise.reject(new Error('Выбранное время уже наступило'))
 		}
 		return Promise.resolve()

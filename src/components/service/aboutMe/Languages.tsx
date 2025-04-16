@@ -23,54 +23,59 @@ import './Languages.css'
 import { SkeletonPage } from './Skeleton'
 import TableLanguages from './TableLanguages'
 import UploadAvatar from './UploadAvatar'
+import { Certificate, ForeignLanguage, Language, LanguageLevel, NativeLanguagesApiResponse } from '../../../models/aboutMe'
+
+
 
 const Languages = () => {
 	const [form] = Form.useForm()
 	const [form2] = Form.useForm()
 	const [isModalOpen, setIsModalOpen] = useState(false)
-	const [selectId, setSelectId] = useState<any>(null)
-	const [fileList, setFileList] = useState<any>([])
+	const [selectId, setSelectId] = useState<string | number | null>(null)
+	const [fileList, setFileList] = useState<File[]>([])
 	const { data: dataNative, isLoading: isFetchingNative, refetch, isError } = useGetNativeLanguagesQuery()
-	const { data: dataLevels } = useGetLevelsQuery()
+	const { data: dataLevels } = useGetLevelsQuery() 
 	const { data: dataCertificate } = useGetCertificateQuery()
-	const { data: dataAll } = useGetAllNativeLanguagesQuery()
-	const { data: dataForeign, isLoading: isFetchingForeign, isError: isErrorForeign,isSuccess } = useGetforeignLanguagesQuery()
+	const { data: dataAll } = useGetAllNativeLanguagesQuery() 
+	const { data: dataForeign, isLoading: isFetchingForeign, isError: isErrorForeign, isSuccess } = useGetforeignLanguagesQuery() 
 	const [setNative, { isLoading }] = useSetNativeMutation()
 	const [setForeign, { isLoading: isLoadingSetForeign }] = useSetForeignMutation()
-	const [selectedLabel, setSelectedLabel] = useState(null)
-	const nativeLanguageForm = Form.useWatch('languages', form)
-	const sertificateFormVal = Form.useWatch('certificateId', form2)
+	const [selectedLabel, setSelectedLabel] = useState<string | null>(null)
+	const nativeLanguageForm = Form.useWatch('languages', form) 
+	const sertificateFormVal = Form.useWatch('certificateId', form2) 
 
 	useEffect(() => {
 		console.log('dataNative updated:', dataNative)
 		if (dataNative) {
 			const initialValues = {
-				languages: dataNative.languages?.map((lang: any) => lang.code) || []
+				languages: dataNative.languages?.map((lang: Language) => lang.code) || []
 			}
 			form.setFieldsValue(initialValues)
 		}
 	}, [dataNative])
 
-	// Добавление Родной язык
+	// Добавление Родного языка
 	const onFinish = () => {
 		setNative({ languageCodes: nativeLanguageForm }).unwrap()
 	}
 
-	// Добавление Иностранный язык
-	const onFinishForm2 = (values: any) => {
+	// Добавление Иностранного языка
+	const onFinishForm2 = (values: Omit<ForeignLanguage, 'file'> & { file?: any[] }) => {
 		const formData = new FormData()
 
 		if (fileList.length > 0 && selectedLabel) {
-			const originalFile = values.file[0].originFileObj
-			const fileExtension = originalFile.name.split('.').pop() // Получаем расширение файла
-			const newFileName = `${selectedLabel}.${fileExtension}`
+			const originalFile = values.file?.[0]?.originFileObj as File
+			if (originalFile) {
+				const fileExtension = originalFile.name.split('.').pop() // Получаем расширение файла
+				const newFileName = `${selectedLabel}.${fileExtension}`
 
-			const modifiedFile = new File([originalFile], newFileName, {
-				type: originalFile.type,
-				lastModified: originalFile.lastModified
-			})
+				const modifiedFile = new File([originalFile], newFileName, {
+					type: originalFile.type,
+					lastModified: originalFile.lastModified
+				})
 
-			formData.append('certificate', modifiedFile)
+				formData.append('certificate', modifiedFile)
+			}
 		}
 
 		delete values.file
@@ -120,6 +125,7 @@ const Languages = () => {
 		setFileList([file])
 		return false
 	}
+	
 	if (isError || isErrorForeign) {
 		return (
 			<div className="mt-[75px] ml-[20px]">
@@ -158,7 +164,7 @@ const Languages = () => {
 										className="mb-0 w-full !h-auto"
 										rules={[
 											{
-												validator: (_, value) =>
+												validator: (_: any, value: string[]) =>
 													value?.length > 10 ? Promise.reject(new Error(t('maxLanguagesError'))) : Promise.resolve()
 											}
 										]}
@@ -167,7 +173,7 @@ const Languages = () => {
 											mode="multiple"
 											allowClear
 											className=" !h-auto w-full"
-											options={dataAll?.map((item: any) => ({
+											options={dataAll?.map((item: Language) => ({
 												value: item.code,
 												label: item.language
 											}))}
@@ -236,7 +242,7 @@ const Languages = () => {
 						>
 							<Select
 								allowClear
-								options={dataAll?.map((item: any) => ({
+								options={dataAll?.map((item: Language) => ({
 									value: item.code,
 									label: item.language
 								}))}
@@ -254,7 +260,7 @@ const Languages = () => {
 						>
 							<Select
 								aria-required
-								options={dataLevels?.map((item: any) => ({
+								options={dataLevels?.map((item: LanguageLevel) => ({
 									value: item.languageLevelCode,
 									label: item.languageLevel
 								}))}
@@ -272,14 +278,14 @@ const Languages = () => {
 							rules={[{ required: true, message: '' }]}
 						>
 							<Select
-								onSelect={(value: any) => {
-									const selectedOption = dataCertificate.find((item: any) => item.id === value)
+								onSelect={(value: Certificate['id']) => {
+									const selectedOption = dataCertificate?.find((item: Certificate) => item.id === value)
 									if (selectedOption) {
 										setSelectedLabel(selectedOption.certificateName)
 									}
 								}}
 								allowClear
-								options={dataCertificate?.map((item: any) => ({
+								options={dataCertificate?.map((item: Certificate) => ({
 									value: item.id,
 									label: item.certificateName
 								}))}

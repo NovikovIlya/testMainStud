@@ -15,12 +15,12 @@ const UploadAvatar = ({dataAboutMe}:any) => {
     const isLt5M = file.size / 1024 / 1024 < 5;
 
     if (!isImage) {
-      message.error('Можно загружать только изображения!');
+      message.error(t('onlyImages'));
       return false;
     }
 
     if (!isLt5M) {
-      message.error('Файл должен быть меньше 5MB!');
+      message.error(t('fileSize'));
       return false;
     }
 
@@ -45,7 +45,7 @@ const UploadAvatar = ({dataAboutMe}:any) => {
       message.error(t('error'));
     }
   };
-  console.log('avatarUrl111',avatarUrl)
+  
   return (
     <Spin spinning={isLoadingPut || isLoading} className='relative w-[180px] mb-4'>
       <Avatar
@@ -63,7 +63,7 @@ const UploadAvatar = ({dataAboutMe}:any) => {
           customRequest={({ file }) => handleUpload(file as File)}
         >
           <Button
-            className='!rounded-[50%] bg-[#65A1FA] text-white !hover:text-black  '
+            className='!rounded-[50%] bg-[#65A1FA] text-white !hover:text-black  border-2 border-white border-solid w-[36px]'
             icon={<Un />}
             loading={isLoading}
             type='primary'
@@ -74,9 +74,9 @@ const UploadAvatar = ({dataAboutMe}:any) => {
         
       </div>
 
-      {avatarUrl?.url ? <div className='absolute bottom-[40%] right-[-13px]'>
+      {avatarUrl?.url ? <div className='absolute bottom-[43%] right-[-13px]'>
         <Button
-              className='!rounded-[50%] bg-[#65A1FA] text-white   '
+              className='!rounded-[50%] bg-[#65A1FA] text-white   border-2 border-white border-solid w-[36px]'
               icon={<DeleteOutlined  />}
                 type='primary'
 

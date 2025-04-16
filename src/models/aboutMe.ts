@@ -66,20 +66,20 @@ export interface LanguageData {
 export interface TableLanguagesProps {
 	isSuccess: boolean
 	dataCertificate: {
-		id: string
+		id: string | number
 		certificateName: string
-	}[]
+	}[] | undefined;
 	dataLevels: {
 		languageLevelCode: string
 		languageLevel: string
-	}[]
+	}[] | undefined;
 	dataAll: {
 		code: string
 		language: string
-	}[]
-	dataForeign: LanguageData[]
+	}[] | undefined;
+	dataForeign:any;
 	setSelectId: (id: string) => void
-	selectId: string | null
+	selectId: string | number | null | undefined;
 }
 
 export // Form values interface
@@ -89,4 +89,34 @@ interface FormValues {
   certificateId: string | null
   isPublished: boolean
   file: any[]
+}
+
+/**
+ * Интерфейсы для типизации приходящих данных
+ */
+export interface Language {
+  code: string
+  language: string
+}
+
+export interface NativeLanguagesApiResponse {
+  languages: Language[]
+}
+
+export interface LanguageLevel {
+  languageLevelCode: string
+  languageLevel: string
+}
+
+export interface Certificate {
+  id: string | number
+  certificateName: string
+}
+
+export interface ForeignLanguage {
+  languageCode: string
+  languageLevelCode: string
+  certificateId: Certificate['id']
+  isPublished?: boolean
+  file?: File[]
 }

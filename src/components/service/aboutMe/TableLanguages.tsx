@@ -14,7 +14,7 @@ import { CertificateTs, FormValues, LanguageData, TableLanguagesProps } from '..
 
 
 
-const TableLanguages: React.FC<TableLanguagesProps> = ({isSuccess, dataCertificate, dataLevels, dataAll, dataForeign, setSelectId, selectId }) => {
+const TableLanguages = ({isSuccess, dataCertificate, dataLevels, dataAll, dataForeign, setSelectId, selectId }: TableLanguagesProps) => {
 	const [isModalOpenEdit, setIsModalOpenEdit] = useState<boolean>(false)
 	const [selectInfo, setSelectInfo] = useState<LanguageData | null>(null)
 	const [selectedLabel, setSelectedLabel] = useState<string | null>(null)
@@ -201,7 +201,7 @@ const TableLanguages: React.FC<TableLanguagesProps> = ({isSuccess, dataCertifica
 						>
 							<Select
 								onSelect={(value: string) => {
-									const selectedOption = dataCertificate.find((item) => item.id === value)
+									const selectedOption = dataCertificate?.find((item) => item.id === value)
 									if (selectedOption) {
 										setSelectedLabel(selectedOption.certificateName)
 									}
@@ -239,7 +239,7 @@ const TableLanguages: React.FC<TableLanguagesProps> = ({isSuccess, dataCertifica
 					<Table<LanguageData>
 						pagination={false}
 						columns={columns}
-						dataSource={dataForeign?.map((item) => ({
+						dataSource={dataForeign?.map((item:any) => ({
 							...item,
 							key: item.studLangId
 						}))}

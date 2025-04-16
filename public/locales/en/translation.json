@@ -914,5 +914,7 @@
 	"level": "Level",
 	"m": "Male",
 	"w": "Female",
-	"maxLanguagesError": "You can only add up to 10 languages"
+	"maxLanguagesError": "You can only add up to 10 languages",
+	"onlyImages": "Only images can be uploaded!",
+	"fileSize": "The file must be less than 5MB!"
 }

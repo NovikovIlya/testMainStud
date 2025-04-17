@@ -3,4 +3,4 @@ test_job:
   script:
     - echo "CI/CD работает на сервере Ubuntu"
   only:
-    - dev
+    - main

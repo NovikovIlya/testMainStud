@@ -48,7 +48,6 @@ const Languages = () => {
 	const sertificateFormVal = Form.useWatch('certificateId', form2) 
 
 	useEffect(() => {
-		console.log('dataNative updated:', dataNative)
 		if (dataNative) {
 			const initialValues = {
 				languages: dataNative.languages?.map((lang: Language) => lang.code) || []

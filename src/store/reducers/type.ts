@@ -1,3 +1,4 @@
+import { IGender } from '../../api/types'
 import { performanceItem } from '../../api/types'
 
 export interface InitialState {
@@ -60,6 +61,7 @@ export type IDocumentsRequest = {
 export interface Role {
 	login: string
 	id: string
+	userId: string
 	type: string
 	credentials?: any
 }
@@ -152,4 +154,415 @@ export type OldEducationTableDataType = {
 	INSTITUTION_NAME: string
 	INSTITUTION_PLACE: string
 	MEDAL: string
+}
+export type VacancyItemType = {
+	id: number
+	title: string
+	experience: string
+	employment: string
+	salary: string
+}
+
+export type CategoryType = {
+	title: string
+	direction: boolean
+	directions: string[]
+	subdivisions: boolean
+	subdivisionsList: string[]
+}
+
+export type VacancyViewResponceType = {
+	id: number
+	acf: {
+		experience: string
+		salary: string
+		employment: string
+		responsibilities: string
+		skills: string
+		conditions: string
+		category: string
+		direction: string
+		subdivision: string
+	}
+	title: {
+		rendered: string
+	}
+}
+
+export type InterviewViewResponseType = {
+	id: number
+	responseDate: string
+	vacancyId: number
+	vacancyName: string
+	status: string
+	userData: {
+		id: {
+			id: number
+			type: string
+		}
+		firstname: string
+		lastname: string
+		middlename: string
+		email: string
+		sex: string
+		desiredJob: string
+		countryId: number
+		birthday: string
+		phone: string
+	}
+	respondData: {
+		vacancyId: number
+		portfolio: {
+			url: string
+			workExperiences: [
+				{
+					workPlace: string
+					position: string
+					beginWork: string
+					endWork: string
+					duties: string
+				}
+			]
+		}
+		skills: {
+			keySkills: [string]
+			aboutMe: string
+		}
+		coverLetter: string
+	}
+	educations: [
+		{
+			educationLevel: string
+			country: string
+			endYear: string
+			speciality: string
+			nameOfInstitute: string
+		}
+	]
+}
+
+export enum respondStatus {
+	'IN_REVIEW',
+	'IN_SUPERVISOR_REVIEW',
+	'IN_PERSONNEL_DEPT_REVIEW',
+	'INVITATION',
+	'IN_RESERVE',
+	'ARCHIVE',
+	'EMPLOYMENT_REQUEST',
+	'EMPLOYMENT',
+	'REJECTED'
+}
+
+export type RespondItemType = {
+	id: number
+	vacancyId: number
+	name: string
+	desiredJob: string
+	type: 'RESPOND' | 'RESUME'
+	respondDate: string
+	status: string
+	employmentStageStatus: string
+}
+
+type experienceResponceType = {
+	workPlace: string
+	position: string
+	beginWork: string
+	endWork: string
+	duties: string
+}
+
+type educationResponceType = {
+	educationLevel: string
+	country: string
+	institution: string
+	speciality?: string
+	endYear: number
+}
+
+export type ResponceType = {
+	resume: {
+		name: string
+		contentType: string
+		bytes: string
+	} | null
+	coverLetter: string | null
+	aboutMe: {
+		gender: IGender
+		lastname: string
+		firstname: string
+		patronymic: string
+		birthday: string
+		countryId: number
+		phone: string
+		email: string
+	}
+	educations: educationResponceType[]
+	portfolio: {
+		url: string
+		workExperiences: experienceResponceType[]
+	}
+	skills: {
+		keySkills: string[]
+		aboutMe: string | null
+	}
+}
+
+export type VacancyGroupedResponcesType = {
+	vacancyId: number
+	vacancyTitle: string
+	respondsCount: number
+}
+
+export type VacancyRespondItemType = {
+	id: number
+	responseDate: string
+	respondDate: string
+	vacancyName: string
+	oldVacancyName?: string
+	vacancyId: number
+	status:
+		| 'IN_REVIEW'
+		| 'IN_PERSONNEL_DEPT_REVIEW'
+		| 'IN_SUPERVISOR_REVIEW'
+		| 'INVITATION'
+		| 'EMPLOYMENT_REQUEST'
+		| 'EMPLOYMENT'
+		| 'IN_RESERVE'
+		| 'ARCHIVE'
+	recipient: string
+	desiredJob: string
+	type: 'RESUME' | 'RESPOND'
+	url: string
+	userData: null | {
+		firstname: string
+		lastname: string
+		middlename: string
+		sex: string
+		age: number
+		email: string
+		phone: string
+		countryId: number
+		birthday: string
+	}
+	respondData: {
+		coverLetter: string
+		portfolio: {
+			url: string
+			workExperiences: experienceResponceType[]
+		}
+		skills: {
+			keySkills: string[]
+			aboutMe: string
+		}
+	}
+	educations: {
+		educationLevel: string
+		country: string
+		endYear: string
+		speciality: string | null
+		institution: string
+	}[]
+}
+
+export type ChatMessageType = {
+	id: number
+	sender: 'SEEKER' | 'PERSONNEL_DEPARTMENT'
+	text: string
+	read: boolean
+	sendDate: string
+	type:
+		| 'TEXT'
+		| 'FILE'
+		| 'RESPOND'
+		| 'IN_SUPERVISOR_REVIEW'
+		| 'INVITATION'
+		| 'REJECTED'
+		| 'EMPLOYMENT_REQUEST'
+		| 'INVITATION_RESERVE'
+	reserveTimes: string[] | null
+	responsed: boolean
+	fileInfos: { id: number; name: string }[] | null
+}
+
+export enum ChatMessageDateDisplayEnum {
+	'января',
+	'февраля',
+	'марта',
+	'апреля',
+	'мая',
+	'июня',
+	'июля',
+	'августа',
+	'сентября',
+	'октября',
+	'ноября',
+	'декабря'
+}
+
+export type VacancyRequestType = {
+	post: string
+	experience: string
+	salary: string
+	employment: string
+	responsibilities: string
+	skills: string
+	conditions: string
+}
+
+export type VacancyRequestItemType = {
+	id: number
+	vacancy: {
+		id: number
+		post: string
+	}
+	action: 'CREATE' | 'UPDATE' | 'DELETE'
+	status: string
+}
+
+export type VacancyRequestViewType = {
+	id: number
+	authorId: number
+	vacancyId: number | null
+	action: 'CREATE' | 'UPDATE' | 'DELETE'
+	status: string
+	newData: VacancyRequestType
+	oldData: VacancyRequestType | null
+}
+
+export type InterviewRequestType = {
+	respondId: number
+	date: string
+	format: string
+	address: string
+}
+
+export type InterviewItemType = {
+	id: number
+	respondId: number
+	seeker: {
+		firstName: string
+		middleName: string
+		lastName: string
+	}
+	format: 'OFFLINE' | 'ONLINE'
+	time: string
+	vacancyName: string
+	url: string
+}
+
+export type SeekerStatusChangeType = {
+	rejectionReason: string
+	action: 'EMPLOY' | 'REJECT'
+}
+
+export type ReserveTimeRequestType = {
+	time?: string
+}
+
+export type EmploymentRequestType = {
+	answer: 'YES' | 'NO'
+}
+
+export type EmployementStatus = 'FILLING' | 'VERIFYING' | 'REFINE' | 'COMPLETE' | 'READY' | 'ACCEPTED' | 'UPDATED'
+
+export type EmploymentDataType = {
+	id: number
+	status: EmployementStatus
+	stages: {
+		id: number
+		type: string
+		status: EmployementStatus
+		comment: string
+		documents: {
+			id: number
+			docType: string
+			status: 'ATTACHED' | 'NOT_ATTACHED'
+			name: string
+			size: number
+		}[]
+		hasRequisites?: boolean
+		testLink?: string
+		testPassed: boolean | null
+		workingConditionAccepted?: boolean
+		bank?: 'SBER' | 'VTB'
+	}[]
+}
+
+export type EmploymentStageItemType = {
+	respondId: number
+	vacancy: {
+		id: 0
+		name: string
+	}
+	applicant: {
+		firstName: string
+		middleName: string
+		lastName: string
+	}
+	status: 'FILLING' | 'VERIFYING' | 'REFINE' | 'ACCEPTED'
+}
+
+export type EmploymentStageStatusType = {
+	id: number
+	status: 'FILLING' | 'VERIFYING' | 'REFINE' | 'ACCEPTED' | 'UPDATE'
+	stages: {
+		id: number
+		status: 'FILLING' | 'VERIFYING' | 'REFINE' | 'ACCEPTED' | 'UPDATE'
+		comment: string
+		type: 'FIRST' | 'SECOND' | 'THIRD' | 'FOURTH' | 'FIFTH' | 'SIXTH'
+		hasRequisites: boolean
+		bank: string
+		documents: {
+			id: number
+			docType: string
+			name: string
+			status: 'ATTACHED' | 'NOT_ATTACHED'
+		}[]
+	}[]
+}
+
+export type EmploymentDocsType = {
+	id: number
+	employmentStageType: string
+	name: string
+}
+
+export type ChangeStageStatusType = {
+	status: 'ACCEPTED' | 'REFINE'
+	comment: string
+}
+
+export type SignedItemType = {
+	id: number
+	seeker: {
+		firstname: string
+		middlename: string
+		lastname: string
+	}
+	post: string
+	testPassed: boolean
+	signed: boolean
+}
+
+export type DocumentDefinitionType = EmploymentDocsType & { required: boolean }
+
+export type SupervisorRequestType = {
+	id: number
+	vacancy: {
+		id: number
+		post: string
+	}
+	action: 'CREATE' | 'UPDATE' | 'DELETE'
+	status: string
+}
+
+export type PageableType<ContentType> = {
+	content: ContentType[]
+	page: {
+		size: number
+		number: number
+		totalElements: number
+		totalPages: number
+	}
 }

@@ -1,5 +1,5 @@
 import { Button, ConfigProvider, Form, Input, Modal } from 'antd'
-import React, { useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 import { GreenCheck } from '../../../../assets/svg/GreenCheck'
@@ -11,15 +11,11 @@ import {
 	useMarkBankCardApplicationFormedMutation
 } from '../../../../store/api/serviceApi'
 import { setFifthStageCommentVisibility } from '../../../../store/reducers/EmploymentStageReducers/comments/FifthStageCommentVisibilitySlice'
-import { setForthStageCommentVisibility } from '../../../../store/reducers/EmploymentStageReducers/comments/ForthStageCommentVisibilitySlice'
 import { setSecondStageCommentVisibility } from '../../../../store/reducers/EmploymentStageReducers/comments/SecondStageCommentVisibilitySlice'
-import { setSixStageCommentVisibility } from '../../../../store/reducers/EmploymentStageReducers/comments/SixStageCommentVisibilitySlice'
 import { setThirdStageCommentVisibility } from '../../../../store/reducers/EmploymentStageReducers/comments/ThirdStageCommentVisibilitySlice'
 import { setFifthStageStatus } from '../../../../store/reducers/EmploymentStageReducers/stages/FifthStageStatusSlice'
 import { setForthStageStatus } from '../../../../store/reducers/EmploymentStageReducers/stages/ForthStageStatusSlice'
 import { setSecondStageStatus } from '../../../../store/reducers/EmploymentStageReducers/stages/SecondStageStatusSlice'
-import { setSixStageStatusPersonnel } from '../../../../store/reducers/EmploymentStageReducers/stages/SixStageStatusPersonnelSlice'
-import { setSixStageStatus } from '../../../../store/reducers/EmploymentStageReducers/stages/SixStageStatusSlice'
 import { setThirdStageStatus } from '../../../../store/reducers/EmploymentStageReducers/stages/ThirdStageStatusSlice'
 import { useAlert } from '../../../../utils/Alert/AlertMessage'
 

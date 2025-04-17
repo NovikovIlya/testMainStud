@@ -1,5 +1,5 @@
 import { Button, Upload } from 'antd'
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 import { MyDocsSvg } from '../../../../assets/svg/MyDocsSvg'
@@ -7,14 +7,9 @@ import { useAppSelector } from '../../../../store'
 import {
 	useDeleteEmploymentDocMutation,
 	useLazyDownloadEmploymentSeekerFileQuery,
-	useLazyGetEmploymentDataQuery,
 	useUploadEmploymentDocumentMutation
 } from '../../../../store/api/serviceApi'
-import {
-	removePartialData,
-	setAllData,
-	setPartialData
-} from '../../../../store/reducers/EmploymentDataSlice'
+import { removePartialData, setPartialData } from '../../../../store/reducers/EmploymentDataSlice'
 import { EmploymentDocsType } from '../../../../store/reducers/type'
 
 export const FileAttachment = (
@@ -35,9 +30,8 @@ export const FileAttachment = (
 		?.documents.find(doc => doc.docType === props.name)
 
 	const dispatch = useDispatch()
-	const [deleteDoc, {isLoading : deleteDocLoading }] = useDeleteEmploymentDocMutation()
-	const [getEmpData] = useLazyGetEmploymentDataQuery()
-	const [uploadDoc, {isLoading : uploadDocLoading }] = useUploadEmploymentDocumentMutation()
+	const [deleteDoc, { isLoading: deleteDocLoading }] = useDeleteEmploymentDocMutation()
+	const [uploadDoc, { isLoading: uploadDocLoading }] = useUploadEmploymentDocumentMutation()
 	const [downloadDoc] = useLazyDownloadEmploymentSeekerFileQuery()
 
 	return (
@@ -100,7 +94,7 @@ export const FileAttachment = (
 					accept=".png,.jpg,.jpeg,.pdf"
 					showUploadList={false}
 					customRequest={options => {
-						const { file, filename, onSuccess, onError } = options
+						const { file, onSuccess, onError } = options
 
 						setIsFileUploading(true)
 
@@ -137,8 +131,7 @@ export const FileAttachment = (
 					onChange={options => {
 						options.file.status === 'uploading'
 							? setIsFileUploading(true)
-							: options.file.status === 'error' ||
-							  options.file.status === 'removed'
+							: options.file.status === 'error' || options.file.status === 'removed'
 							? console.log('Произошла чудовищная ошибка')
 							: setIsFileUploading(false)
 					}}

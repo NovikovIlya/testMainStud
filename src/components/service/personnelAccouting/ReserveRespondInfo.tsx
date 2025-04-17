@@ -1,6 +1,6 @@
 import { LoadingOutlined } from '@ant-design/icons'
 import { Button, ConfigProvider, Modal, Spin, Tag } from 'antd'
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -13,14 +13,11 @@ import { NocircleArrowIconHover } from '../../../assets/svg/NocircleArrowIconHov
 import { RespondDownload } from '../../../assets/svg/RespondDownload'
 import { RespondDownloadHover } from '../../../assets/svg/RespondDownloadHover'
 import { WarningModalIconSvg } from '../../../assets/svg/WarningModalIconSvg'
-import { useAppSelector } from '../../../store'
 import {
-	useApproveReservedRespondMutation,
 	useDeleteReserveRespondMutation,
 	useGetChatIdByRespondIdQuery,
 	useGetReservedResponcesQuery,
 	useGetReservedRespondFullInfoQuery,
-	useGetSeekerResumeFileQuery,
 	useLazyGetSeekerResumeFileQuery
 } from '../../../store/api/serviceApi'
 import { useGetCountriesQuery } from '../../../store/api/utilsApi'
@@ -53,15 +50,13 @@ export const ReserveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 
 	const date = new Date()
 
-	const { t, i18n } = useTranslation()
-	const { data: countries, isLoading: isLoadingCountry } = useGetCountriesQuery(i18n.language)
+	const { i18n } = useTranslation()
+	const { data: countries } = useGetCountriesQuery(i18n.language)
 
 	const { openAlert } = useAlert()
 
-	//const { data: resume } = useGetSeekerResumeFileQuery(respondId.respondId)
 	const [getResume, resumeQueryStatus] = useLazyGetSeekerResumeFileQuery()
-	const { refetch } = useGetReservedResponcesQuery('все')
-	const [approveRespond] = useApproveReservedRespondMutation()
+	const { refetch } = useGetReservedResponcesQuery({ type: 'все', page: 0 })
 	const [deleteRespond, { isLoading: deleteRespondLoading }] = useDeleteReserveRespondMutation()
 
 	const [isRespondSentToSupervisor, setIsRespondSentToSupervisor] = useState<boolean>(
@@ -70,8 +65,6 @@ export const ReserveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 	const [isModalOpen, setModalOpen] = useState(false)
 	const [resume, setResume] = useState<string>('')
 	const [resumeSize, setResumeSize] = useState<number>(0)
-
-	//const linkRef = useRef<HTMLAnchorElement | null>(null)
 
 	useEffect(() => {
 		setIsRespondSentToSupervisor(res?.status === 'IN_SUPERVISOR_REVIEW')
@@ -295,25 +288,6 @@ export const ReserveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 											buttonsHidden && 'hidden'
 										}`}
 									>
-										{/* <Button
-											onClick={() => {
-												approveRespond({
-													respondId: respondId.respondId,
-													vacancyId: 2
-												})
-													.unwrap()
-													.then(() => {
-														setIsRespondSentToSupervisor(true)
-														refetch()
-														navigate('/services/personnelaccounting/reserve')
-													})
-											}}
-											disabled={isRespondSentToSupervisor}
-											type="primary"
-											className="font-content-font font-normal text-white text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px]"
-										>
-											Отправить руководителю
-										</Button> */}
 										<ApproveRespondForm
 											respondId={res.id}
 											vacancyId={0}
@@ -580,25 +554,6 @@ export const ReserveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 								</div>
 								{props.type === 'PERSONNEL_DEPARTMENT' && (
 									<div className="self-center flex flex-col gap-[12px]">
-										{/* <Button
-											onClick={() => {
-												approveRespond({
-													respondId: respondId.respondId,
-													vacancyId: 2
-												})
-													.unwrap()
-													.then(() => {
-														setIsRespondSentToSupervisor(true)
-														refetch()
-														navigate('/services/personnelaccounting/reserve')
-													})
-											}}
-											disabled={isRespondSentToSupervisor}
-											type="primary"
-											className="font-content-font font-normal text-white text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px]"
-										>
-											Отправить руководителю
-										</Button> */}
 										<ApproveRespondForm
 											respondId={res.id}
 											vacancyId={0}

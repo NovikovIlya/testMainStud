@@ -3,21 +3,11 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { ModalOkSvg } from '../../../../../assets/svg/ModalOkSvg'
-import {
-	useGetCategoriesQuery,
-	useGetDirectionsQuery,
-	useGetSubdivisionsQuery,
-	useRequestCreateVacancyMutation
-} from '../../../../../store/api/serviceApi'
+import { useRequestCreateVacancyMutation } from '../../../../../store/api/serviceApi'
 import { useAlert } from '../../../../../utils/Alert/AlertMessage'
 
 export const SupervisorCreateVacancyForm = () => {
 	const { openAlert } = useAlert()
-
-	const { data: categories = [] } = useGetCategoriesQuery()
-	const [categoryTitle, setCategoryTitle] = useState<string>('')
-	const { data: directions = [] } = useGetDirectionsQuery(categoryTitle)
-	const { data: subdivisions = [] } = useGetSubdivisionsQuery(categoryTitle)
 
 	const [requestCreateVacancy, { isLoading }] = useRequestCreateVacancyMutation()
 

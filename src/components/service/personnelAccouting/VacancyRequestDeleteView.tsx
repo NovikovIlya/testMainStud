@@ -1,43 +1,39 @@
-import {Button, ConfigProvider, Modal, Spin} from 'antd'
-import {useEffect, useState} from 'react'
+import { LoadingOutlined } from '@ant-design/icons'
+import { Button, ConfigProvider, Modal, Spin } from 'antd'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { ModalOkSvg } from '../../../assets/svg/ModalOkSvg'
 import { WarningModalIconSvg } from '../../../assets/svg/WarningModalIconSvg'
-import { useAppSelector } from '../../../store'
 import {
 	useAcceptDeleteVacancyRequestMutation,
 	useGetVacancyRequestsQuery,
 	useLazyGetVacancyViewQuery
 } from '../../../store/api/serviceApi'
+import { useAlert } from '../../../utils/Alert/AlertMessage'
+import styles from '../../../utils/deleteOverwriteAntButton.module.css'
 import ArrowIcon from '../jobSeeker/ArrowIcon'
-import {useAlert} from "../../../utils/Alert/AlertMessage";
-import {LoadingOutlined} from "@ant-design/icons";
-import styles from "../../../utils/deleteOverwriteAntButton.module.css";
 
 export const VacancyRequestDeleteView = () => {
-	const { currentVacancy } = useAppSelector(state => state.currentVacancy)
-	const { requestId } = useAppSelector(state => state.currentRequest)
+	const [getVacancy, { data, isLoading }] = useLazyGetVacancyViewQuery()
 
-	const [getVacancy, { data, isLoading, error }] = useLazyGetVacancyViewQuery();
-
-	const currentUrl = window.location.pathname;
+	const currentUrl = window.location.pathname
 
 	let request_id_from_url: string
 
-	const match = currentUrl.match(/\/services\/personnelaccounting\/request\/(\d+)\/delete\/(\d+)/);
+	const match = currentUrl.match(/\/services\/personnelaccounting\/request\/(\d+)\/delete\/(\d+)/)
 
 	if (match) {
 		request_id_from_url = match[1]
 	} else {
-		console.error('ID not found');
-		return;
+		console.error('ID not found')
+		return
 	}
 
 	useEffect(() => {
 		let vacancy_id_from_url: string
 
-		const match = currentUrl.match(/\/services\/personnelaccounting\/request\/(\d+)\/delete\/(\d+)/);
+		const match = currentUrl.match(/\/services\/personnelaccounting\/request\/(\d+)\/delete\/(\d+)/)
 
 		if (match) {
 			vacancy_id_from_url = match[2]
@@ -51,69 +47,12 @@ export const VacancyRequestDeleteView = () => {
 		}
 	}, [getVacancy])
 
-
 	const navigate = useNavigate()
-	const [acceptRequest, {isLoading: acceptRequestLoading} ] = useAcceptDeleteVacancyRequestMutation()
+	const [acceptRequest, { isLoading: acceptRequestLoading }] = useAcceptDeleteVacancyRequestMutation()
 
 	const { openAlert } = useAlert()
 
-	const { refetch } = useGetVacancyRequestsQuery('все')
-
-	const [post, setPost] = useState<string | undefined>(currentVacancy?.title.rendered)
-	const [experience, setExperience] = useState<string | undefined>(currentVacancy?.acf.experience)
-	const [employment, setEmployment] = useState<string | undefined>(currentVacancy?.acf.employment)
-	const [salary, setSalary] = useState<string | undefined>(currentVacancy?.acf.salary)
-	const [category, setCategory] = useState<string | undefined>(currentVacancy?.acf.category)
-	const [direction, setDirection] = useState<string | undefined>(currentVacancy?.acf.direction)
-	const [subdivision, setSubdivision] = useState<string | undefined>(currentVacancy?.acf.subdivision)
-
-	const [responsibilities, setResponsibilities] = useState<string | undefined>(
-		currentVacancy?.acf.responsibilities
-			.replace(/<strong>/g, '')
-			.replace(/<\/strong>/g, '')
-			.replace(/<u>/g, '')
-			.replace(/<\/u>/g, '')
-			.replace(/<i>/g, '')
-			.replace(/<\/i>/g, '')
-			.replace(/<em>/g, '')
-			.replace(/<\/em'>/g, '')
-			.replace(/<ul>/g, '')
-			.replace(/<\/ul>/g, '')
-			.replace(/<li>/g, '')
-			.replace(/<\/li>/g, '')
-	)
-
-	const [skills, setSkills] = useState<string | undefined>(
-		currentVacancy?.acf.skills
-			.replace(/<strong>/g, '')
-			.replace(/<\/strong>/g, '')
-			.replace(/<u>/g, '')
-			.replace(/<\/u>/g, '')
-			.replace(/<i>/g, '')
-			.replace(/<\/i>/g, '')
-			.replace(/<em>/g, '')
-			.replace(/<\/em'>/g, '')
-			.replace(/<ul>/g, '')
-			.replace(/<\/ul>/g, '')
-			.replace(/<li>/g, '')
-			.replace(/<\/li>/g, '')
-	)
-
-	const [conditions, setConditions] = useState<string | undefined>(
-		currentVacancy?.acf.conditions
-			.replace(/<strong>/g, '')
-			.replace(/<\/strong>/g, '')
-			.replace(/<u>/g, '')
-			.replace(/<\/u>/g, '')
-			.replace(/<i>/g, '')
-			.replace(/<\/i>/g, '')
-			.replace(/<em>/g, '')
-			.replace(/<\/em'>/g, '')
-			.replace(/<ul>/g, '')
-			.replace(/<\/ul>/g, '')
-			.replace(/<li>/g, '')
-			.replace(/<\/li>/g, '')
-	)
+	const { refetch } = useGetVacancyRequestsQuery({ action: 'все', page: 0 })
 
 	const [isResultModalOpen, setIsResultModalOpen] = useState<boolean>(false)
 	const [isVerifyModalOpen, setIsVerifyModalOpen] = useState<boolean>(false)
@@ -124,12 +63,8 @@ export const VacancyRequestDeleteView = () => {
 			<>
 				<div className="w-full h-full flex items-center">
 					<div className="text-center ml-auto mr-auto">
-						<Spin
-							indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}
-						></Spin>
-						<p className="font-content-font font-normal text-black text-[18px]/[18px]">
-							Идёт загрузка...
-						</p>
+						<Spin indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}></Spin>
+						<p className="font-content-font font-normal text-black text-[18px]/[18px]">Идёт загрузка...</p>
 					</div>
 				</div>
 			</>
@@ -249,28 +184,22 @@ export const VacancyRequestDeleteView = () => {
 						<ArrowIcon />
 					</button>
 					<p className="ml-[40px] font-content-font font-normal text-black text-[28px]/[33.6px]">
-						{"«" + data?.title.rendered + "»"}
+						{'«' + data?.title.rendered + '»'}
 					</p>
 				</div>
 				<div className="w-[50%] mt-[52px] flex flex-col gap-[40px]">
 					<div className="flex gap-[60px]">
 						<div className="flex flex-col gap-[16px]">
 							<p className="font-content-font font-bold text-black text-[18px]/[21px]">Требуемый опыт работы:</p>
-							<p className="font-content-font font-normal text-black text-[18px]/[21px]">
-								{data?.acf.experience}
-							</p>
+							<p className="font-content-font font-normal text-black text-[18px]/[21px]">{data?.acf.experience}</p>
 						</div>
 						<div className="flex flex-col gap-[16px]">
 							<p className="font-content-font font-bold text-black text-[18px]/[21px]">Тип занятости:</p>
-							<p className="font-content-font font-normal text-black text-[18px]/[21px]">
-								{data?.acf.employment}
-							</p>
+							<p className="font-content-font font-normal text-black text-[18px]/[21px]">{data?.acf.employment}</p>
 						</div>
 						<div className="flex flex-col gap-[16px]">
 							<p className="font-content-font font-bold text-black text-[18px]/[21px]">Заработная плата:</p>
-							<p className="font-content-font font-normal text-black text-[18px]/[21px]">
-								{data?.acf.salary}
-							</p>
+							<p className="font-content-font font-normal text-black text-[18px]/[21px]">{data?.acf.salary}</p>
 						</div>
 					</div>
 					<div className="flex flex-col gap-[16px]">
@@ -294,16 +223,14 @@ export const VacancyRequestDeleteView = () => {
 					<div className="flex gap-[40px]">
 						<div className="flex flex-col gap-[16px]">
 							<p className="font-content-font font-bold text-black text-[18px]/[21px]">Категория сотрудников</p>
-							<p className="font-content-font font-normal text-black text-[18px]/[21px]">
-								{data?.acf.category}
-							</p>
+							<p className="font-content-font font-normal text-black text-[18px]/[21px]">{data?.acf.category}</p>
 						</div>
 						<div className="flex flex-col gap-[16px]">
 							<p className="font-content-font font-bold text-black text-[18px]/[21px]">
-								{data?.acf.direction === "" ? "Подразделение" : "Профобласть"}
+								{data?.acf.direction === '' ? 'Подразделение' : 'Профобласть'}
 							</p>
 							<p className="font-content-font font-normal text-black text-[18px]/[21px]">
-								{data?.acf.direction === "" ? data?.acf.subdivision : data?.acf.direction}
+								{data?.acf.direction === '' ? data?.acf.subdivision : data?.acf.direction}
 							</p>
 						</div>
 					</div>

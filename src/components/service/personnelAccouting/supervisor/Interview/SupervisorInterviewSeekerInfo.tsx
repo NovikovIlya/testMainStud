@@ -1,18 +1,16 @@
 import { LoadingOutlined } from '@ant-design/icons'
 import { Button, ConfigProvider, Form, Modal, Select, Spin, Tag } from 'antd'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import uuid from 'react-uuid'
 
 import { AvatartandardSvg } from '../../../../../assets/svg/AvatarStandardSvg'
 import { MyDocsSvg } from '../../../../../assets/svg/MyDocsSvg'
 import { NocircleArrowIconHover } from '../../../../../assets/svg/NocircleArrowIconHover'
-import { useAppSelector } from '../../../../../store'
 import {
 	useEmployeeSeekerRequestMutation,
 	useGetInterviewQuery,
 	useGetRespondFullInfoQuery,
-	useGetSupervisorInterviewQuery,
 	useLazyGetSeekerResumeFileQuery
 } from '../../../../../store/api/serviceApi'
 import { useGetCountriesQuery } from '../../../../../store/api/utilsApi'

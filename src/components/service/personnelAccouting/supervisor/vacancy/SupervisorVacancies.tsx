@@ -2,7 +2,7 @@ import { LoadingOutlined } from '@ant-design/icons'
 import { Spin } from 'antd'
 import { useEffect, useRef, useState } from 'react'
 
-import { useGetSupervisorVacancyQuery, useLazyGetSupervisorVacancyQuery } from '../../../../../store/api/serviceApi'
+import { useLazyGetSupervisorVacancyQuery } from '../../../../../store/api/serviceApi'
 import { VacancyItemType } from '../../../../../store/reducers/type'
 
 import SupervisorVacancyItem from './SupervisorVacancyItem'

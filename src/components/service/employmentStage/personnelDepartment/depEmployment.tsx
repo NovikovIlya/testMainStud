@@ -1,8 +1,8 @@
 import { LoadingOutlined } from '@ant-design/icons'
 import { Button, Spin } from 'antd'
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
-import { useGetPersonnelStagesQuery, useLazyGetPersonnelStagesQuery } from '../../../../store/api/serviceApi'
+import { useLazyGetPersonnelStagesQuery } from '../../../../store/api/serviceApi'
 import { EmploymentStageItemType } from '../../../../store/reducers/type'
 
 import { DepEmploymentItem } from './depEmploymentItem'

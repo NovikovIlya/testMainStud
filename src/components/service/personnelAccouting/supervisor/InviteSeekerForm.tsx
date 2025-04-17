@@ -1,7 +1,6 @@
 import { Button, ConfigProvider, DatePicker, Form, Input, Modal, Select, message } from 'antd'
 import dayjs from 'dayjs'
 import { useState } from 'react'
-import { useLocation } from 'react-router-dom'
 import uuid from 'react-uuid'
 
 import { useInviteSeekerMutation } from '../../../../store/api/serviceApi'

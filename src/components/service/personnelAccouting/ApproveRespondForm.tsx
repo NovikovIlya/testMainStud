@@ -12,8 +12,6 @@ export const ApproveRespondForm = (props: {
 	callback: Function
 }) => {
 	const [isFormOpen, setIsFormOpen] = useState<boolean>(false)
-	// const [isRespondSentToSupervisor, setIsRespondSentToSupervisor] =
-	// 	useState<boolean>(props.isRespondSentToSupervisor)
 	const [approveRespond, result] = useApproveReservedRespondMutation()
 	const { data: vacancies = [] } = useGetAllVacanciesQuery()
 	const { openAlert } = useAlert()

@@ -4,16 +4,12 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { ModalOkSvg } from '../../../assets/svg/ModalOkSvg'
-import { useAppSelector } from '../../../store'
 import {
 	useAcceptCreateVacancyRequestMutation,
 	useAlterCreateVacancyRequestMutation,
 	useGetAllDocumentDefinitionsQuery,
 	useGetCategoriesQuery,
-	useGetDirectionsQuery,
-	useGetSubdivisionsQuery,
 	useGetVacancyRequestViewQuery,
-	useGetVacancyRequestsQuery,
 	useLazyGetVacancyRequestViewQuery
 } from '../../../store/api/serviceApi'
 import { useAlert } from '../../../utils/Alert/AlertMessage'
@@ -33,7 +29,7 @@ export const VacancyRequestCreateView = () => {
 	} else {
 		console.error('id miss')
 	}
-	page_id = Number(id_from_url)
+	page_id = parseInt(id_from_url)
 
 	const requestId = page_id
 
@@ -50,7 +46,7 @@ export const VacancyRequestCreateView = () => {
 
 	const { data: categories = [] } = useGetCategoriesQuery()
 	const [categoryTitle, setCategoryTitle] = useState<string>('')
-	const { data: definitions = [], isLoading: loading, isFetching: fetching } = useGetAllDocumentDefinitionsQuery()
+	const { data: definitions = [] } = useGetAllDocumentDefinitionsQuery()
 
 	const [isEdit, setIsEdit] = useState<boolean>(false)
 	const [isEdited, setIsEdited] = useState<boolean>(false)

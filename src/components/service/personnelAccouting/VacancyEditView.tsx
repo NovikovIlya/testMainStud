@@ -5,22 +5,18 @@ import { useNavigate } from 'react-router-dom'
 
 import { ModalOkSvg } from '../../../assets/svg/ModalOkSvg'
 import { WarningModalIconSvg } from '../../../assets/svg/WarningModalIconSvg'
-import { useAppSelector } from '../../../store'
 import {
 	useDeleteVacancyAsPerDepartmentMutation,
 	useEditVacancyAsPerDepartmentMutation,
 	useGetCategoriesQuery,
-	useGetDirectionsQuery,
-	useGetSubdivisionsQuery,
-	useLazyGetVacancyViewQuery,
-	useRequestUpdateVacancyMutation
+	useLazyGetVacancyViewQuery
 } from '../../../store/api/serviceApi'
 import { useAlert } from '../../../utils/Alert/AlertMessage'
 import styles from '../../../utils/deleteOverwriteAntButton.module.css'
 import ArrowIcon from '../jobSeeker/ArrowIcon'
 
 export const VacancyEditView = () => {
-	const [getVacancy, { data, isLoading, error }] = useLazyGetVacancyViewQuery()
+	const [getVacancy, { data, isLoading }] = useLazyGetVacancyViewQuery()
 
 	useEffect(() => {
 		// Получаем текущий URL
@@ -40,13 +36,11 @@ export const VacancyEditView = () => {
 
 		// Если id найден, запускаем запрос
 		if (id_from_url) {
-			getVacancy(id_from_url)
+			getVacancy(parseInt(id_from_url))
 		}
 	}, [getVacancy])
 
 	console.log(data)
-
-	const { currentVacancy } = useAppSelector(state => state.currentVacancy)
 
 	const { data: categories = [] } = useGetCategoriesQuery()
 	const [categoryTitle, setCategoryTitle] = useState<string>(data?.acf.category as string)
@@ -54,7 +48,6 @@ export const VacancyEditView = () => {
 	const { openAlert } = useAlert()
 
 	const navigate = useNavigate()
-	const [requestUpdate] = useRequestUpdateVacancyMutation()
 	const [editVacancy, { isLoading: editVacancyLoading }] = useEditVacancyAsPerDepartmentMutation()
 	const [deleteVacancy, { isLoading: deleteVacancyLoading }] = useDeleteVacancyAsPerDepartmentMutation()
 

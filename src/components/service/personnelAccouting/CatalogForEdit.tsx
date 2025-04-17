@@ -6,28 +6,19 @@ import { useDispatch } from 'react-redux'
 import { useAppSelector } from '../../../store'
 import {
 	useGetCategoriesQuery,
-	useGetDirectionsQuery,
-	useGetSubdivisionsQuery,
-	useGetVacancyPreviewByDirectionQuery,
-	useGetVacancyPreviewBySubdivisionQuery,
 	useLazyGetVacancyPreviewByDirectionQuery,
 	useLazyGetVacancyPreviewBySubdivisionQuery
 } from '../../../store/api/serviceApi'
 import { keepFilterCategory, keepFilterSubCategory, keepFilterType } from '../../../store/reducers/CatalogFilterSlice'
-import { allData } from '../../../store/reducers/SeekerFormReducers/AboutMeReducer'
 import { VacancyItemType } from '../../../store/reducers/type'
 
 import VacancyItem from './CatalogForEditItem'
 
 export default function Catalog() {
 	const dispatch = useDispatch()
-	const user = useAppSelector(state => state.auth.user)
 	const catalogFilter = useAppSelector(state => state.catalogFilter)
 
 	const [categoryTitle, setCategoryTitle] = useState(catalogFilter.category)
-	const [directoryTitle, setDirectoryTitle] = useState(catalogFilter.subcategory)
-	const [subdivisionTitle, setSubdivisionTitle] = useState(catalogFilter.subcategory)
-	const [page, setPage] = useState(0)
 	const [secondOption, setSecondOption] = useState<string | null>(catalogFilter.subcategory)
 	const [requestData, setRequestData] = useState<{
 		category: string
@@ -45,8 +36,6 @@ export default function Catalog() {
 	const catalogBottomRef = useRef<null | HTMLDivElement>(null)
 	const [previews, setPreviews] = useState<VacancyItemType[]>([])
 	const { data: categories = [], isLoading: isCategoriesLoading } = useGetCategoriesQuery()
-	const { data: directions = [], isLoading: isDirectionsLoading } = useGetDirectionsQuery(categoryTitle)
-	const { data: subdivisions = [], isLoading: isSubdivisionsLoading } = useGetSubdivisionsQuery(categoryTitle)
 
 	const [getVacByDir, preLoadStatus] = useLazyGetVacancyPreviewByDirectionQuery()
 	const [getVacBySub] = useLazyGetVacancyPreviewBySubdivisionQuery()
@@ -232,9 +221,9 @@ export default function Catalog() {
 									dispatch(keepFilterType('SUBDIVISION'))
 							  })()
 					}}
-					placeholder={!isDirectionsLoading && !isSubdivisionsLoading && 'Выбрать'}
-					loading={categoryTitle === '' ? false : isDirectionsLoading || isSubdivisionsLoading}
-					disabled={categoryTitle === '' ? true : isDirectionsLoading || isSubdivisionsLoading}
+					placeholder={!isCategoriesLoading && 'Выбрать'}
+					loading={categoryTitle === '' ? false : isCategoriesLoading}
+					disabled={categoryTitle === '' ? true : isCategoriesLoading}
 					value={secondOption}
 				/>
 				<div style={previews.length === 0 ? { display: 'none' } : {}} className="mt-[60px] ml-[20px] flex">

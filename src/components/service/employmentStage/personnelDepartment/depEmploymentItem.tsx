@@ -1,5 +1,4 @@
-import { LoadingOutlined } from '@ant-design/icons'
-import { Button, Spin } from 'antd'
+import { Button } from 'antd'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
@@ -14,7 +13,6 @@ import {
 } from '../../../../store/reducers/EmploymentStageReducers/EmploymentStageSeekerReducer'
 import { setChatId } from '../../../../store/reducers/chatIdSlice'
 import { EmploymentStageItemType } from '../../../../store/reducers/type'
-import React from 'react'
 
 export const DepEmploymentItem = (props: EmploymentStageItemType) => {
 	const dispatch = useDispatch()
@@ -102,9 +100,7 @@ export const DepEmploymentItem = (props: EmploymentStageItemType) => {
 						<div className="mt-[3px] group-hover:opacity-0 group-hover:scale-95 opacity-100 scale-100 transition-all duration-200">
 							<FileIconSvg />
 						</div>
-						<span className="group-hover:text-[#004EC2] transition-all duration-200 text-[16px] font-normal">
-							Чат
-						</span>
+						<span className="group-hover:text-[#004EC2] transition-all duration-200 text-[16px] font-normal">Чат</span>
 					</button>
 				</div>
 			</div>

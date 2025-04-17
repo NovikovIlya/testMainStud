@@ -44,7 +44,7 @@ import { ButtonPlusIcon } from './ButtonPlusIcon'
 import { CheckedIcon } from './CheckedIcon'
 
 export const ResponseForm = (props: { canRespond: boolean }) => {
-	const { t, i18n } = useTranslation()
+	const { i18n } = useTranslation()
 	const { data: countries } = useGetCountriesQuery(i18n.language)
 	const { data: levels } = useGetEducationLevelQuery(i18n.language)
 	const [isFormOpen, setIsFormOpen] = useState(false)
@@ -52,7 +52,7 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 
 	const aboutMeData = useAppSelector(state => state.seekerAboutMe)
 	const { currentVacancy } = useAppSelector(state => state.currentVacancy)
-	const { aboutMeCompleted, skillsCompleted } = useAppSelector(state => state.formCompletion)
+	const { aboutMeCompleted } = useAppSelector(state => state.formCompletion)
 	const skillsData = useAppSelector(state => state.skills)
 	const educationData = useAppSelector(state => state.RespondEducation)
 	const experienceData = useAppSelector(state => state.Experience)
@@ -405,59 +405,6 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 													setPage('skills')
 											  }
 											: () => {
-													// currentVacancy !== null &&
-													// 	getVacancy({
-													// 		id: currentVacancy?.id,
-													// 		aboutMe: {
-													// 			gender: aboutMeData.gender,
-													// 			lastname: aboutMeData.surName,
-													// 			firstname: aboutMeData.name,
-													// 			patronymic: aboutMeData.patronymic,
-													// 			birthday: aboutMeData.birthDay
-													// 				.split('-')
-													// 				.reverse()
-													// 				.join('-'),
-													// 			citizenship: 'Российская федерация (РФ)',
-													// 			phone: aboutMeData.phone,
-													// 			email: aboutMeData.email
-													// 		},
-													// 		educations: educationData.educations.map(edu => ({
-													// 			institution: edu.education.nameofInstitute,
-													// 			endYear: parseInt(edu.education.graduateYear),
-													// 			country: 'РФ',
-													// 			educationLevel: 'Высшее',
-													// 			speciality: edu.education.specialization
-													// 		})),
-													// 		portfolio: {
-													// 			url: '',
-													// 			workExperiences: experienceData.experiences.map(
-													// 				exp => ({
-													// 					workPlace: exp.experience.workplace,
-													// 					beginWork: exp.experience.beginWork
-													// 						.split('-')
-													// 						.reverse()
-													// 						.join('-'),
-													// 					endWork: exp.experience.endWork
-													// 						.split('-')
-													// 						.reverse()
-													// 						.join('-'),
-													// 					position: exp.experience.seat,
-													// 					duties: exp.experience.duties
-													// 				})
-													// 			)
-													// 		},
-													// 		skills: {
-													// 			keySkills: skillsData.skills,
-													// 			aboutMe: skillsData.details
-													// 		}
-													// 	})
-													// 		.unwrap()
-													// 		.then(() => {
-													// 			!result.isSuccess && setIsFormOpen(false)
-													// 		})
-													// 		.then(() => {
-													// 			!result.isSuccess && setIsSuccessModalOpen(true)
-													// 		})
 													setPage('coverletter')
 											  }
 									}
@@ -628,11 +575,7 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 								label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Пол</label>}
 								rules={[{ required: true, message: 'Не выбран пол' }]}
 							>
-								<Radio.Group
-									disabled={aboutMeData.isGenderSet}
-									value={aboutMeData.gender}
-									// onChange={e => dispatch(gender(e.target.value))}
-								>
+								<Radio.Group disabled={aboutMeData.isGenderSet} value={aboutMeData.gender}>
 									<Radio value={'M'}>Мужской</Radio>
 									<Radio value={'W'}>Женский</Radio>
 								</Radio.Group>
@@ -698,10 +641,6 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 									value={dayjs(aboutMeData.birthDay, 'DD.MM.YYYY')}
 									maxDate={dayjs(date)}
 									className="w-full"
-									onChange={(e, date) => {
-										// dispatch(birthDay(date))
-										// setBirthDayDate(date)
-									}}
 								></DatePicker>
 							</Form.Item>
 							<Form.Item
@@ -718,7 +657,6 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 									value={aboutMeData.countryId}
 									showSearch
 									optionFilterProp="label"
-									// onChange={e => dispatch(country(e))}
 									options={
 										countries === undefined
 											? []
@@ -1227,7 +1165,7 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 							>
 								<Checkbox
 									checked={haveNoExprience}
-									onChange={e => {
+									onChange={() => {
 										setHaveNoExperience(prev => !prev)
 										!haveNoExprience ? dispatch(raiseNoExperienceFlag()) : dispatch(lowerNoExperienceFlag())
 									}}
@@ -1612,13 +1550,6 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 									<Tag
 										closable={true}
 										key={uuid()}
-										// onClose={() => {
-										// 	setcurrentFormSkills(
-										// 		currentFormskills.filter(currentSkill => {
-										// 			return currentSkill !== skill
-										// 		})
-										// 	)
-										// }}
 										onClose={() => {
 											console.log(currentFormskills)
 											setcurrentFormSkills(prev => [...prev.filter(currentSkill => currentSkill !== skill)])

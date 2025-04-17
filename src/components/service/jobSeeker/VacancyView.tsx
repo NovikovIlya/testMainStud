@@ -1,8 +1,8 @@
 import { LoadingOutlined } from '@ant-design/icons'
 import { Spin } from 'antd'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import { useAppSelector } from '../../../store'
 import { useLazyGetInfoUserQuery } from '../../../store/api/formApi'
@@ -17,7 +17,7 @@ import { ResponseForm } from './ResponceForm'
 export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 	const [canRespond, setCanRespond] = useState<boolean>(false)
 
-	const [getVacancy, { data, isLoading, error }] = useLazyGetVacancyViewQuery()
+	const [getVacancy, { data, isLoading }] = useLazyGetVacancyViewQuery()
 	const [getRelation, getRelationStatus] = useLazyGetSeekerVacancyRelationQuery()
 	const [getInfo, getInfoStatus] = useLazyGetInfoUserQuery()
 
@@ -41,7 +41,7 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 
 		// Если id найден, запускаем запрос
 		if (id_from_url) {
-			getVacancy(id_from_url)
+			getVacancy(parseInt(id_from_url))
 				.unwrap()
 				.then(() => {
 					getRelation(parseInt(id_from_url))
@@ -58,9 +58,7 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 	const { user } = useAppSelector(state => state.auth)
 	const { dataSet } = useAppSelector(state => state.respondDataSet)
 	const { currentVacancy } = useAppSelector(state => state.currentVacancy)
-	const { chatId } = useAppSelector(state => state.chatId)
 	const navigate = useNavigate()
-	const [getVacancyRespond, respond] = usePostVacancyRespondMutation()
 	const isEmpDep = user?.roles.find(role => role.type === 'EMPL')
 
 	useEffect(() => {
@@ -210,14 +208,6 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 							{data?.acf.responsibilities}
 						</p>
 					)}
-					{/* <ul className="list-disc">
-						{responsibilitiesArr !== null &&
-							responsibilitiesArr.map(resp => (
-								<li className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-									{resp.substring(4)}
-								</li>
-							))}
-					</ul> */}
 					<p className="font-content-font font-bold text-black text-[18px]/[21px] whitespace-nowrap">Требования:</p>
 					{skills.includes('<li>') ? (
 						<ul className="list-disc">
@@ -233,14 +223,6 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 							{data?.acf.skills}
 						</p>
 					)}
-					{/* <ul className="list-disc">
-						{skillsArr !== null &&
-							skillsArr.map(skill => (
-								<li className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-									{skill.substring(4)}
-								</li>
-							))}
-					</ul> */}
 					<p className="font-content-font font-bold text-black text-[18px]/[21px] whitespace-nowrap">Условия:</p>
 					{conditions.includes('<li>') ? (
 						<ul className="list-disc">
@@ -254,14 +236,6 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 							{data?.acf.conditions}
 						</p>
 					)}
-					{/* <ul className="list-disc">
-						{conditionsArr !== null &&
-							conditionsArr.map(cond => (
-								<li className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-									{cond.substring(4)}
-								</li>
-							))}
-					</ul> */}
 				</div>
 			</div>
 		</>

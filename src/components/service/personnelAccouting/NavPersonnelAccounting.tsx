@@ -5,7 +5,6 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { BriefcaseSvg } from '../../../assets/svg/BriefcaseSvg'
 import { SignedIconSvg } from '../../../assets/svg/SignedIconSvg'
 import { TestResultsIconSvg } from '../../../assets/svg/TestResultsIconSvg'
-import { useAppSelector } from '../../../store'
 import { useGetEmploymentPossibleRolesQuery } from '../../../store/api/serviceApi'
 import { Header } from '../../layout/Header'
 import { ChatEmpDemp } from '../Chat/ChatEmpDemp'
@@ -45,8 +44,6 @@ import { SupervisorVacancies } from './supervisor/vacancy/SupervisorVacancies'
 export const NavPesonnelAccounting = () => {
 	const { pathname } = useLocation()
 	const navigate = useNavigate()
-	const roles = useAppSelector(state => state.auth.user?.roles)
-	const respondId = useAppSelector(state => state.currentResponce)
 
 	const handleNavigate = (url: string) => {
 		navigate(url)
@@ -315,16 +312,7 @@ export const NavPesonnelAccounting = () => {
 							'bg-[#F5F8FB]'
 					)}
 				>
-					<ConfigProvider
-					// theme={{
-					// 	components: {
-					// 		Collapse: {
-					// 			headerBg: '#ffffff',
-					// 			headerPadding: '0px 20px 0px 0px'
-					// 		}
-					// 	}
-					// }}
-					>
+					<ConfigProvider>
 						<Collapse
 							className="w-full !bg-inherit"
 							items={navEmployeeListVacancyItems}
@@ -473,16 +461,7 @@ export const NavPesonnelAccounting = () => {
 							'bg-[#F5F8FB]'
 					)}
 				>
-					<ConfigProvider
-					// theme={{
-					// 	components: {
-					// 		Collapse: {
-					// 			headerBg: '#ffffff',
-					// 			headerPadding: '0px 20px 0px 0px'
-					// 		}
-					// 	}
-					// }}
-					>
+					<ConfigProvider>
 						<Collapse
 							className="w-full !bg-inherit"
 							items={navSupervisorListVacancyItems}
@@ -506,16 +485,7 @@ export const NavPesonnelAccounting = () => {
 							'bg-[#F5F8FB]'
 					)}
 				>
-					<ConfigProvider
-					// theme={{
-					// 	components: {
-					// 		Collapse: {
-					// 			headerBg: '#ffffff',
-					// 			headerPadding: '0px 20px 0px 0px'
-					// 		}
-					// 	}
-					// }}
-					>
+					<ConfigProvider>
 						<Collapse
 							className="w-full !bg-inherit"
 							items={navSupervisorListInterviewItems}
@@ -612,7 +582,7 @@ export const NavPesonnelAccounting = () => {
 
 	return (
 		<>
-			<Header type="service" service="employment" />
+			<Header type="service" service="Трудоустройство" />
 			<div className="shadowNav">
 				<ul className="min-w-[230px] pt-14 flex flex-col gap-4 sticky top-[80px]">
 					{isPersonnelDepartment ? handleList : <></>}

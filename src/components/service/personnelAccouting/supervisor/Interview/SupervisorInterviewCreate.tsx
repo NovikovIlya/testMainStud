@@ -1,16 +1,13 @@
 import { LoadingOutlined } from '@ant-design/icons'
 import { ThemeProvider } from '@material-tailwind/react'
-import { Button, ConfigProvider, DatePicker, Form, Input, Modal, Select, Spin } from 'antd'
+import { Button, ConfigProvider, DatePicker, Form, Modal, Select, Spin } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
 import dayjs from 'dayjs'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
-import { useAppSelector } from '../../../../../store'
 import {
 	useGetSupervisorVacancyQuery,
-	useLazyGetResponcesByVacancyQuery,
 	useLazyGetSupervisorRespondsQuery,
-	useLazyGetVacancyGroupedResponcesQuery,
 	useRequestCreateInterviewMutation
 } from '../../../../../store/api/serviceApi'
 import { VacancyRespondItemType } from '../../../../../store/reducers/type'

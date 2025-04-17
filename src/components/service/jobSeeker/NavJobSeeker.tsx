@@ -10,12 +10,10 @@ export const NavJobSeeker = () => {
 	const { pathname } = useLocation()
 	return (
 		<>
-			<Header type="service" service="jobSeeker" />
+			<Header type="service" service="Каталог" />
 			<WrapperForServices>
 				{pathname.includes('/services/jobseeker/catalog') && <Catalog />}
-				{pathname.includes('/services/jobseeker/vacancyview') && (
-					<VacancyView type="CATALOG" />
-				)}
+				{pathname.includes('/services/jobseeker/vacancyview') && <VacancyView type="CATALOG" />}
 			</WrapperForServices>
 		</>
 	)

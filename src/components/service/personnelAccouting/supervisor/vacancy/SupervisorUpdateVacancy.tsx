@@ -4,18 +4,13 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { ModalOkSvg } from '../../../../../assets/svg/ModalOkSvg'
-import { useAppSelector } from '../../../../../store'
 import {
 	useAlterUpdateVacancyRequestMutation,
-	useGetCategoriesQuery,
-	useGetDirectionsQuery,
-	useGetSubdivisionsQuery,
 	useLazyGetAllSupervisorRequestsQuery,
 	useLazyGetVacancyRequestViewQuery,
 	useLazyGetVacancyViewQuery,
 	useRequestUpdateVacancyMutation
 } from '../../../../../store/api/serviceApi'
-import { VacancyViewResponceType } from '../../../../../store/reducers/type'
 import { useAlert } from '../../../../../utils/Alert/AlertMessage'
 import ArrowIcon from '../../../jobSeeker/ArrowIcon'
 
@@ -47,13 +42,6 @@ export const SupervisorUpdateVacancy = () => {
 	console.log(data)
 
 	const { openAlert } = useAlert()
-
-	const { currentVacancy } = useAppSelector(state => state.currentVacancy)
-
-	const { data: categories = [] } = useGetCategoriesQuery()
-	const [categoryTitle, setCategoryTitle] = useState<string>('')
-	const { data: directions = [] } = useGetDirectionsQuery(categoryTitle)
-	const { data: subdivisions = [] } = useGetSubdivisionsQuery(categoryTitle)
 
 	const navigate = useNavigate()
 	const [requestUpdate, { isLoading: loading }] = useRequestUpdateVacancyMutation()

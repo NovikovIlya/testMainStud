@@ -1,9 +1,8 @@
 import { LoadingOutlined } from '@ant-design/icons'
 import { Button, Spin } from 'antd'
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
-import { useAppSelector } from '../../../../../store'
-import { useGetAccountingStagesQuery, useLazyGetAccountingStagesQuery } from '../../../../../store/api/serviceApi'
+import { useLazyGetAccountingStagesQuery } from '../../../../../store/api/serviceApi'
 import { EmploymentStageItemType } from '../../../../../store/reducers/type'
 
 import { RequisiteItem } from './RequisiteItem'

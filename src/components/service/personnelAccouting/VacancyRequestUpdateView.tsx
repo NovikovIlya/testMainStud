@@ -5,40 +5,37 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { ModalOkSvg } from '../../../assets/svg/ModalOkSvg'
-import { useAppSelector } from '../../../store'
 import {
 	useAcceptUpdateVacancyRequestMutation,
 	useAlterUpdateVacancyRequestMutation,
 	useDenyVacancyRequestMutation,
 	useGetVacancyRequestViewQuery,
 	useGetVacancyRequestsQuery,
-	useLazyGetVacancyRequestViewQuery, useLazyGetVacancyViewQuery
+	useLazyGetVacancyRequestViewQuery
 } from '../../../store/api/serviceApi'
 import ArrowIcon from '../jobSeeker/ArrowIcon'
 
 export const VacancyRequestUpdateView = () => {
-
-	const currentUrl = window.location.pathname;
+	const currentUrl = window.location.pathname
 
 	// Ищем id из URL
-	const match = currentUrl.match(/\/update\/(\d+)$/);
+	const match = currentUrl.match(/\/update\/(\d+)$/)
 
-	let id_from_url: string;
-	let current_page_id : number
+	let id_from_url: string
+	let current_page_id: number
 	if (match) {
-		id_from_url = match[1];
+		id_from_url = match[1]
 	} else {
-		console.error('ID not found');
+		console.error('ID not found')
 	}
 	current_page_id = Number(id_from_url)
-	const { requestId } = useAppSelector(state => state.currentRequest)
 
 	const { data: requestView } = useGetVacancyRequestViewQuery(current_page_id)
 	console.log(requestView)
 	const [getVacancyRequestView, queryStatus] = useLazyGetVacancyRequestViewQuery()
 	const navigate = useNavigate()
-	const [acceptRequest, {isLoading: acceptRequestLoading} ] = useAcceptUpdateVacancyRequestMutation()
-	const [alterRequest, {isLoading: alterRequestLoading}] = useAlterUpdateVacancyRequestMutation()
+	const [acceptRequest, { isLoading: acceptRequestLoading }] = useAcceptUpdateVacancyRequestMutation()
+	const [alterRequest, { isLoading: alterRequestLoading }] = useAlterUpdateVacancyRequestMutation()
 	const [denyRequest] = useDenyVacancyRequestMutation()
 
 	const { refetch } = useGetVacancyRequestsQuery('все')
@@ -268,7 +265,7 @@ export const VacancyRequestUpdateView = () => {
 						skills: requestView?.newData?.skills,
 						conditions: requestView?.newData?.conditions,
 						experience: requestView?.newData?.experience,
-						employment: requestView?.newData?.employment,
+						employment: requestView?.newData?.employment
 					}}
 					layout="vertical"
 					requiredMark={false}
@@ -322,9 +319,10 @@ export const VacancyRequestUpdateView = () => {
 							<Select
 								placeholder="Выбрать"
 								options={[
-									{ value: '0', label: '0' },
-									{ value: '1', label: '1' },
-									{ value: '2', label: '2' }
+									{ value: 'Нет опыта', label: 'Нет опыта' },
+									{ value: 'Опыт от 1 до 3 лет', label: 'Опыт от 1 до 3 лет' },
+									{ value: 'Опыт от 3 до 6 лет', label: 'Опыт от 3 до 6 лет' },
+									{ value: 'Опыт более 6 лет', label: 'Опыт более 6 лет' }
 								]}
 							></Select>
 						</Form.Item>
@@ -341,8 +339,9 @@ export const VacancyRequestUpdateView = () => {
 								placeholder="Выбрать"
 								options={[
 									{ value: 'Полный день', label: 'Полный день' },
-									{ value: 'Пол ставки', label: 'Пол ставки' },
-									{ value: 'Четверть ставки', label: 'Четверть ставки' }
+									{ value: 'Гибкий график', label: 'Гибкий график' },
+									{ value: 'Сменный график', label: 'Сменный график' },
+									{ value: 'Удалённая работа', label: 'Удалённая работа' }
 								]}
 							></Select>
 						</Form.Item>
@@ -388,10 +387,7 @@ export const VacancyRequestUpdateView = () => {
 						<Input.TextArea autoSize className="!h-[107px]" placeholder="Ввести текст..."></Input.TextArea>
 					</Form.Item>
 					<Form.Item>
-						<Button
-							type="primary"
-							htmlType="submit"
-						>
+						<Button type="primary" htmlType="submit">
 							Сохранить
 						</Button>
 					</Form.Item>
@@ -439,7 +435,6 @@ export const VacancyRequestUpdateView = () => {
 							<div className="flex flex-col gap-[16px]">
 								<p className="font-content-font font-bold text-black text-[18px]/[21px]">Требуемый опыт работы:</p>
 								<p className="font-content-font font-normal text-black text-[18px]/[21px]">
-
 									{requestView !== undefined && requestView.oldData !== null
 										? (() => {
 												var test = dmp.diff_main(
@@ -463,7 +458,6 @@ export const VacancyRequestUpdateView = () => {
 							<div className="flex flex-col gap-[16px]">
 								<p className="font-content-font font-bold text-black text-[18px]/[21px]">Тип занятости:</p>
 								<p className="font-content-font font-normal text-black text-[18px]/[21px]">
-
 									{requestView !== undefined && requestView.oldData !== null
 										? (() => {
 												var test = dmp.diff_main(
@@ -487,7 +481,6 @@ export const VacancyRequestUpdateView = () => {
 							<div className="flex flex-col gap-[16px]">
 								<p className="font-content-font font-bold text-black text-[18px]/[21px]">Заработная плата:</p>
 								<p className="font-content-font font-normal text-black text-[18px]/[21px]">
-
 									{requestView !== undefined && requestView.oldData !== null
 										? (() => {
 												var test = dmp.diff_main(
@@ -512,7 +505,6 @@ export const VacancyRequestUpdateView = () => {
 						<div className="flex flex-col gap-[16px]">
 							<p className="font-content-font font-bold text-black text-[18px]/[21px]">Задачи:</p>
 							<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-pre-line">
-
 								{requestView !== undefined && requestView.oldData !== null
 									? (() => {
 											var test = dmp.diff_main(
@@ -536,7 +528,6 @@ export const VacancyRequestUpdateView = () => {
 						<div className="flex flex-col gap-[16px]">
 							<p className="font-content-font font-bold text-black text-[18px]/[21px]">Требования:</p>
 							<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-pre-line">
-
 								{requestView !== undefined && requestView.oldData !== null
 									? (() => {
 											var test = dmp.diff_main(
@@ -560,7 +551,6 @@ export const VacancyRequestUpdateView = () => {
 						<div className="flex flex-col gap-[16px]">
 							<p className="font-content-font font-bold text-black text-[18px]/[21px]">Условия:</p>
 							<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-pre-line">
-
 								{requestView !== undefined && requestView.oldData !== null
 									? (() => {
 											var test = dmp.diff_main(

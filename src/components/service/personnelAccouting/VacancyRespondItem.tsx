@@ -4,11 +4,9 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-import { useAppSelector } from '../../../store'
 import {
 	useLazyGetEmploymentDocsQuery,
-	useLazyGetEmploymentStageStatusForSupervisorQuery,
-	useLazyGetRespondFullInfoQuery
+	useLazyGetEmploymentStageStatusForSupervisorQuery
 } from '../../../store/api/serviceApi'
 import { setCurrentResponce } from '../../../store/reducers/CurrentResponceSlice'
 import { setAllProgress } from '../../../store/reducers/EmploymentProgressSlice'
@@ -21,11 +19,8 @@ export const VacancyRespondItem = (
 		itemType: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 	}
 ) => {
-	const [getResponceInfo] = useLazyGetRespondFullInfoQuery()
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
-
-	//const { docs } = useAppSelector(state => state.employmentSeekerDocs)
 	const [empStatus, setEmpStatus] = useState<string>('')
 
 	const [getEmpData, empDataStatus] = useLazyGetEmploymentStageStatusForSupervisorQuery()

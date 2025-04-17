@@ -1,6 +1,6 @@
 import { LoadingOutlined } from '@ant-design/icons'
 import { Button, Spin, Tag } from 'antd'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -8,8 +8,6 @@ import { Margin, usePDF } from 'react-to-pdf'
 import uuid from 'react-uuid'
 
 import { AvatartandardSvg } from '../../../assets/svg/AvatarStandardSvg'
-import { DeleteIconHoverLaborSvg } from '../../../assets/svg/DeleteIconHoverLaborSvg'
-import { DeleteIconLaborSvg } from '../../../assets/svg/DeleteIconLaborSvg'
 import { MyDocsSvg } from '../../../assets/svg/MyDocsSvg'
 import { NocircleArrowIconHover } from '../../../assets/svg/NocircleArrowIconHover'
 import { RespondDownload } from '../../../assets/svg/RespondDownload'
@@ -20,7 +18,6 @@ import {
 	useGetChatIdByRespondIdQuery,
 	useGetRespondFullInfoQuery,
 	useLazyGetSeekerResumeFileQuery,
-	useLazyGetVacancyViewQuery,
 	useSendRespondToArchiveMutation,
 	useSendRespondToReserveMutation
 } from '../../../store/api/serviceApi'
@@ -36,8 +33,8 @@ import { NocircleArrowIcon } from '../jobSeeker/NoCircleArrowIcon'
 import { InviteSeekerForm } from './supervisor/InviteSeekerForm'
 
 export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR' | 'SEEKER' }) => {
-	const { t, i18n } = useTranslation()
-	const { data: countries, isLoading: isLoadingCountry } = useGetCountriesQuery(i18n.language)
+	const { i18n } = useTranslation()
+	const { data: countries } = useGetCountriesQuery(i18n.language)
 
 	const { openAlert } = useAlert()
 
@@ -85,8 +82,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 			respondInfo: {},
 			unreadCount: 0,
 			lastMessageDate: ''
-		},
-		isLoading: isChatIdLoading
+		}
 	} = useGetChatIdByRespondIdQuery({
 		chatId: res ? res.id : 0,
 		role: props.type === 'PERSONNEL_DEPARTMENT' ? 'PERSONNEL_DEPARTMENT' : 'SEEKER'
@@ -585,9 +581,6 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 									Профессиональные навыки
 								</p>
 								<div className="grid grid-cols-[194px_auto] gap-x-[20px] w-[90%]">
-									{/* <div className="col-start-2">
-									{res.respondData.skills.aboutMe}
-								</div> */}
 									<div className="col-start-2 flex gap-[8px] flex-wrap">
 										{res.respondData.skills.keySkills.map(skill => (
 											<Tag

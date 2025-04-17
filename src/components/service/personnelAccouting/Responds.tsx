@@ -18,8 +18,6 @@ import { RespondItem } from './RespondItem'
 export const Responds = () => {
 	const catalogFilter = useAppSelector(state => state.catalogFilter)
 	const [categoryTitle, setCategoryTitle] = useState(catalogFilter.category)
-	const [directoryTitle, setDirectoryTitle] = useState(catalogFilter.subcategory)
-	const [subdivisionTitle, setSubdivisionTitle] = useState(catalogFilter.subcategory)
 	const [secondOption, setSecondOption] = useState<string | null>(catalogFilter.subcategory)
 	const [requestData, setRequestData] = useState<{
 		category: string

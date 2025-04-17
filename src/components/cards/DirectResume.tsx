@@ -67,7 +67,6 @@ export const DirectResume = ({
 
 	const token = useAppSelector(state => state.auth.accessToken)
 	const user = useAppSelector(state => state.auth.user)
-	const aboutMeData = useAppSelector(state => state.seekerAboutMe)
 
 	const [getInfo] = useLazyGetInfoUserQuery()
 

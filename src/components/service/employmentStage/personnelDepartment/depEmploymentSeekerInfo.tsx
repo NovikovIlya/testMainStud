@@ -1,19 +1,14 @@
 import { LoadingOutlined } from '@ant-design/icons'
 import { Button, Spin, Tag } from 'antd'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Margin, usePDF } from 'react-to-pdf'
 import uuid from 'react-uuid'
 
 import { AvatartandardSvg } from '../../../../assets/svg/AvatarStandardSvg'
 import { MyDocsSvg } from '../../../../assets/svg/MyDocsSvg'
 import { NocircleArrowIconHover } from '../../../../assets/svg/NocircleArrowIconHover'
 import { useAppSelector } from '../../../../store'
-import {
-	useGetArchivedRespondFullInfoQuery,
-	useGetRespondFullInfoQuery,
-	useLazyGetSeekerResumeFileQuery
-} from '../../../../store/api/serviceApi'
+import { useGetRespondFullInfoQuery, useLazyGetSeekerResumeFileQuery } from '../../../../store/api/serviceApi'
 import { useGetCountriesQuery } from '../../../../store/api/utilsApi'
 import { NocircleArrowIcon } from '../../jobSeeker/NoCircleArrowIcon'
 
@@ -35,8 +30,8 @@ export const DepEmploymentSeekerInfo = () => {
 
 	const date = new Date()
 
-	const { t, i18n } = useTranslation()
-	const { data: countries, isLoading: isLoadingCountry } = useGetCountriesQuery(i18n.language)
+	const { i18n } = useTranslation()
+	const { data: countries } = useGetCountriesQuery(i18n.language)
 
 	const [getResume, resumeQueryStatus] = useLazyGetSeekerResumeFileQuery()
 	console.log(data)

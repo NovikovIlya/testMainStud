@@ -41,11 +41,6 @@ export const DocumentElem = (props: DocumentElemProps) => {
 					{props.name}
 				</span>
 			</div>
-			{/*
-			<span className="font-normal opacity-[70%] text-[16px]/[19.2px]">
-         		тут кб по и дее
-      		</span>
-			*/}
 		</button>
 	)
 }

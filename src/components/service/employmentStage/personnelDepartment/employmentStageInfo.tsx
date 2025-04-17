@@ -1,21 +1,14 @@
 import { LoadingOutlined } from '@ant-design/icons'
-import { Button, ConfigProvider, Modal, Spin } from 'antd'
-import React, { useState } from 'react'
+import { Button, Spin } from 'antd'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import { NocircleArrowIconHover } from '../../../../assets/svg/NocircleArrowIconHover'
 import { useAppSelector } from '../../../../store'
-import {
-	useGetEmploymentReqStageStatusQuery,
-	useGetEmploymentStageStatusQuery,
-	useGetPersonnelStagesQuery,
-	useMarkBankCardApplicationFormedMutation
-} from '../../../../store/api/serviceApi'
+import { useGetEmploymentStageStatusQuery } from '../../../../store/api/serviceApi'
 import { setCurrentResponce } from '../../../../store/reducers/CurrentResponceSlice'
 import { NocircleArrowIcon } from '../../jobSeeker/NoCircleArrowIcon'
 
-import { DocumentElem } from './components/DocumentElem'
 import { DepEmploymentStageItem } from './depEmploymentStageItem'
 
 export const EmploymentStageInfo = () => {

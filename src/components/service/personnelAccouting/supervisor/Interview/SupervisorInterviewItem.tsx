@@ -1,9 +1,8 @@
 import { Button, ConfigProvider, Modal } from 'antd'
 import { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-import { useLazyGetInterviewQuery, useLazyGetInterviewViewQuery } from '../../../../../store/api/serviceApi'
+import { useLazyGetInterviewQuery } from '../../../../../store/api/serviceApi'
 import { InterviewItemType } from '../../../../../store/reducers/type'
 
 export const SupervisorInterviewItem = (props: InterviewItemType) => {
@@ -25,11 +24,7 @@ export const SupervisorInterviewItem = (props: InterviewItemType) => {
 		url: string
 	}
 
-	const [getInterview, result] = useLazyGetInterviewViewQuery()
-
 	const [isUnsuccessModalOpen, setIsUnsuccessModalOpen] = useState(false)
-
-	const dispatch = useDispatch()
 	const navigate = useNavigate()
 
 	const seekerName = props.seeker.lastName + ' ' + props.seeker.firstName + ' ' + props.seeker.middleName
@@ -41,7 +36,7 @@ export const SupervisorInterviewItem = (props: InterviewItemType) => {
 		const [datePublicString, setDatePublicString] = useState<string>('')
 		const [url, setUrl] = useState<string>(props.url)
 
-		const [getInterview, getInterviewStatus] = useLazyGetInterviewQuery()
+		const [getInterview] = useLazyGetInterviewQuery()
 
 		useEffect(() => {
 			const updateTimeLeft = () => {
@@ -180,22 +175,6 @@ export const SupervisorInterviewItem = (props: InterviewItemType) => {
 		)
 	}
 	const InterviewButtonElem = (props: InterviewButtonElemProps) => {
-		const date: Date = new Date(props.time)
-
-		const localDate = date.toLocaleString('ru-RU', {
-			timeZoneName: 'short',
-			hour12: false
-		})
-
-		// Преобразуем строку в формат "дд.мм.гг чч:мм"
-		const [datePart, timePart] = localDate.split(', ')
-		const [day, month, year] = datePart.split('.')
-
-		const shortYear: string = year.slice(-2)
-		const shortTime: string = timePart.substring(0, 5)
-
-		const InterviewTimeStringForSeeker = day + '.' + month + '.' + shortYear + ' в ' + shortTime
-
 		return (
 			<>
 				<Button

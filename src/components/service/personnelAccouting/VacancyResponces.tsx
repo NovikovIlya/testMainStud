@@ -1,9 +1,8 @@
 import { LoadingOutlined } from '@ant-design/icons'
 import { Radio, Spin } from 'antd'
 import { useEffect, useRef, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
-import { useAppSelector } from '../../../store'
 import { useLazyGetResponcesByVacancyQuery } from '../../../store/api/serviceApi'
 import { VacancyRespondItemType, respondStatus } from '../../../store/reducers/type'
 import ArrowIcon from '../jobSeeker/ArrowIcon'

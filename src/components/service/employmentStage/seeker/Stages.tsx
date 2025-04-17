@@ -13,10 +13,8 @@ import { setDocs } from '../../../../store/reducers/EmploymentSeekerDocsSlice'
 import { EmplDocAttachment } from './EmplDocAttachment'
 import { EmplInstruction } from './EmplInstruction'
 import { EmplMedExam } from './EmplMedExam'
-import { EmplMedInvite } from './EmplMedInvite'
 import { EmplRequisites } from './EmplRequisites'
 import { EmplSend } from './EmplSend'
-import { EmplWorkConditions } from './EmplWorkConditions'
 import { NavPanel } from './NavPanel'
 
 export const Stages = () => {

@@ -168,13 +168,17 @@ export const myPracticeService = apiSlice.injectEndpoints({
       }),
       deleteForeign: builder.mutation<any, any>({
         query: (id) => ({
-            url: '/languages/foreign',
+            url: `/languages/foreign?langId=${id}`,
             method: 'DELETE',
             
            
           }),
           invalidatesTags: ['foreignLanguages'],
       }),
+
+
+      // ОБщественная деятельность
+
 
 
 

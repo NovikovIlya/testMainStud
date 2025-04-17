@@ -916,5 +916,10 @@
 	"w": "Female",
 	"maxLanguagesError": "You can only add up to 10 languages",
 	"onlyImages": "Only images can be uploaded!",
-	"fileSize": "The file must be less than 5MB!"
+	"fileSize": "The file must be less than 5MB!",
+	"creativeCollectives": "Participation in creative collectives",
+	"socialWork": "Social work",
+	"sportsCompetitions": "Participation in sports competitions",
+	"sectionsAndClubs": "Participation in sections and clubs",
+	"socialTitle": "Social activities"
 }

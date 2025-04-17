@@ -60,6 +60,7 @@ export interface LanguageData {
 	languageLevelCode: string
 	certificates: CertificateTs[]
 	isPublished: boolean
+  langId:any
 }
 
 // Props interface for TableLanguages component

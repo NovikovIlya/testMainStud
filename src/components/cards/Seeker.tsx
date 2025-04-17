@@ -51,7 +51,7 @@ export const Seeker = () => {
 				/>
 			</div>
 			<div
-				className="flex w-fit max-[560px]:w-full justify-center items-center mr-[10%]"
+				className="flex w-fit max-[560px]:w-full justify-center items-center mr-[5%]"
 				onClick={() => {
 					dispatch(keepFilterCategory('АУП'))
 					dispatch(keepFilterSubCategory('Все'))

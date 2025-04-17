@@ -75,7 +75,7 @@ const TableLanguages = ({handleIdCert,isSuccess, dataCertificate, dataLevels, da
 			key: 'action',
 			render: (_, record) => (
 				<Space size="middle">
-					<DeleteTwoTone onClick={()=>handleDelete(record)} className="hover:scale-[140%] " />
+					<DeleteTwoTone onClick={()=>handleDelete(record?.langId)} className="hover:scale-[140%] " />
 				</Space>
 			)
 		}
@@ -101,7 +101,7 @@ const TableLanguages = ({handleIdCert,isSuccess, dataCertificate, dataLevels, da
 
 	const handleDelete = (record:any)=>{
 		console.log('recordDelete', record)
-		// deleteForeign()
+		 deleteForeign(record)
 	}
 
 	const showModalEdit = () => {
@@ -228,7 +228,7 @@ const TableLanguages = ({handleIdCert,isSuccess, dataCertificate, dataLevels, da
 							wrapperCol={{ span: 24 }}
 							layout="vertical"
 							className="mt-14 h-[35px]"
-							rules={[{ required: true, message: '' }]}
+							// rules={[{ required: true, message: '' }]}
 						>
 							<Select
 								onSelect={(value: string) => {

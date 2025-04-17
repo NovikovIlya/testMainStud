@@ -114,7 +114,7 @@ const AboutMeNew = () => {
 				<Row>
 					<Col span={12}>
 						<div className="flex flex-wrap justify-center p-[40px]">
-							<UploadAvatar dataAboutMe={dataAboutMe} />
+							<UploadAvatar  />
 							<div className="w-full mt-3 text-center">{`${dataAboutMe?.LASTNAME || ''} ${
 								dataAboutMe?.FIRSTNAME || ''
 							} ${dataAboutMe?.SECONDNAME || ''}`}</div>

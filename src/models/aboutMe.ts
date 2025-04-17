@@ -64,6 +64,7 @@ export interface LanguageData {
 
 // Props interface for TableLanguages component
 export interface TableLanguagesProps {
+  handleIdCert?:any
 	isSuccess: boolean
 	dataCertificate: {
 		id: string | number
@@ -82,8 +83,7 @@ export interface TableLanguagesProps {
 	selectId: string | number | null | undefined;
 }
 
-export // Form values interface
-interface FormValues {
+export interface FormValues {
   languageCode: string
   languageLevelCode: string
   certificateId: string | null
@@ -91,9 +91,7 @@ interface FormValues {
   file: any[]
 }
 
-/**
- * Интерфейсы для типизации приходящих данных
- */
+
 export interface Language {
   code: string
   language: string
@@ -119,4 +117,14 @@ export interface ForeignLanguage {
   certificateId: Certificate['id']
   isPublished?: boolean
   file?: File[]
+}
+
+export interface foreignLanguageAll {
+  langId: number;
+  code: number;
+  language: string;
+  languageLevelCode: number;
+  languageLevel: string;
+  isPublished: boolean;
+  certificates: Certificate[];
 }

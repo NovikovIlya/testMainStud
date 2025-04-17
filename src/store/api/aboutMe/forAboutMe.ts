@@ -1,4 +1,4 @@
-import { CheckedFlags, UserDto } from "../../../models/aboutMe";
+import { CheckedFlags, foreignLanguageAll, UserDto } from "../../../models/aboutMe";
 import { apiSlice } from "../apiSlice";
 
 export const myPracticeService = apiSlice.injectEndpoints({
@@ -111,10 +111,19 @@ export const myPracticeService = apiSlice.injectEndpoints({
           invalidatesTags: ['nativeLanguages'],
       }),
 
-
-      getforeignLanguages: builder.query<any, void>({
+      // Иностранные языки
+      getforeignLanguages: builder.query<foreignLanguageAll, void>({
         query: () => ({
           url: '/languages/foreign',
+          method: 'GET',
+         
+        }),
+        providesTags: ['foreignLanguages'],
+        keepUnusedDataFor: 1,
+      }),
+      getOneCertificate: builder.query<foreignLanguageAll, number | null>({
+        query: (id) => ({
+          url: `/languages/certificate?certificateId=${id}`,
           method: 'GET',
          
         }),
@@ -148,6 +157,24 @@ export const myPracticeService = apiSlice.injectEndpoints({
           }),
           invalidatesTags: ['foreignLanguages'],
       }),
+      editForeign: builder.mutation<any, any>({
+        query: (body) => ({
+            url: '/languages/foreign',
+            method: 'PUT',
+            body,
+           
+          }),
+          invalidatesTags: ['foreignLanguages'],
+      }),
+      deleteForeign: builder.mutation<any, any>({
+        query: (id) => ({
+            url: '/languages/foreign',
+            method: 'DELETE',
+            
+           
+          }),
+          invalidatesTags: ['foreignLanguages'],
+      }),
 
 
 
@@ -169,5 +196,8 @@ export const myPracticeService = apiSlice.injectEndpoints({
     useSetCheckboxMutation,
     useGetLevelsQuery,
     useGetCertificateQuery,
-    useSetForeignMutation
+    useSetForeignMutation,
+    useGetOneCertificateQuery,
+    useEditForeignMutation,
+    useDeleteForeignMutation
    } = myPracticeService;

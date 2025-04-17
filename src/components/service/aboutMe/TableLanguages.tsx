@@ -10,16 +10,20 @@ import React, { useEffect, useState } from 'react'
 
 import './TableLanguage.scss'
 import { CertificateTs, FormValues, LanguageData, TableLanguagesProps } from '../../../models/aboutMe'
+import { useDeleteForeignMutation, useEditForeignMutation } from '../../../store/api/aboutMe/forAboutMe'
 
 
 
 
-const TableLanguages = ({isSuccess, dataCertificate, dataLevels, dataAll, dataForeign, setSelectId, selectId }: TableLanguagesProps) => {
+const TableLanguages = ({handleIdCert,isSuccess, dataCertificate, dataLevels, dataAll, dataForeign, setSelectId, selectId }: TableLanguagesProps) => {
 	const [isModalOpenEdit, setIsModalOpenEdit] = useState<boolean>(false)
 	const [selectInfo, setSelectInfo] = useState<LanguageData | null>(null)
 	const [selectedLabel, setSelectedLabel] = useState<string | null>(null)
 	const [form2] = Form.useForm()
 	const [fileList, setFileList] = useState<any[]>([])
+	const [editForeign,{}] = useEditForeignMutation()
+	const [deleteCert,setDeleteCert] = useState(null)
+	const [deleteForeign,{}] = useDeleteForeignMutation()
 	const columns: TableProps<LanguageData>['columns'] = [
 		{
 			title: t('language'),
@@ -39,10 +43,12 @@ const TableLanguages = ({isSuccess, dataCertificate, dataLevels, dataAll, dataFo
 			render: certificates => (
 				<>
 					{certificates?.map((item: CertificateTs, index: number) => (
-						<div key={index}>
-							<a target="_blank" href={item.certificateLink} rel="noopener noreferrer">
+						<div key={index} onClick={()=>{
+							handleIdCert(item?.id)
+						}}>
+							
 								{item.certificateName} {index === certificates.length - 1 ? '' : ', '}
-							</a>
+							
 						</div>
 					))}
 				</>
@@ -77,7 +83,7 @@ const TableLanguages = ({isSuccess, dataCertificate, dataLevels, dataAll, dataFo
 
 	useEffect(() => {
 		if (selectInfo) {
-			const fileList = selectInfo.certificates.map((certificate: CertificateTs, index: number) => ({
+			const fileList = selectInfo?.certificates?.map((certificate: CertificateTs, index: number) => ({
 				uid: `-${index}`, // Уникальный ID для каждого файла
 				name: certificate.certificateName, // Имя файла
 				status: 'done', // Статус загрузки
@@ -95,6 +101,7 @@ const TableLanguages = ({isSuccess, dataCertificate, dataLevels, dataAll, dataFo
 
 	const handleDelete = (record:any)=>{
 		console.log('recordDelete', record)
+		// deleteForeign()
 	}
 
 	const showModalEdit = () => {
@@ -111,7 +118,31 @@ const TableLanguages = ({isSuccess, dataCertificate, dataLevels, dataAll, dataFo
 	
 	const onFinishForm2 = (values: FormValues) => {
 		console.log('value', values)
+		editForeign(values)
+		const obj = {
+			langId: 9007199254740991,
+			languageLevelCode: values.languageLevelCode,
+			isPublished: values.isPublished,
+			savingCertificates: [
+				{
+				"certificateId": 9007199254740991,
+				"certificateName": "string",
+				"certificateTypeId": 9007199254740991,
+				"userLangId": 9007199254740991,
+				"base64File": "string"
+				}
+			],
+			deletingCertificates: [
+				9007199254740991
+			]
+		}
 	}
+
+	const handleRemove = (file:any) => {
+		console.log('Удалённый файл ID:', file); // или file.id, если есть такое поле
+		// setDeleteCert()
+		return true; // чтобы файл удалился из списка
+	};
 	
 	const beforeUpload = (file: File) => {
 		const isImage = file.type === 'application/pdf'
@@ -217,7 +248,7 @@ const TableLanguages = ({isSuccess, dataCertificate, dataLevels, dataAll, dataFo
 						{/* <div className="mt-14 mb-2">{t('prikrep')}</div> */}
 						<div className="mt-14 mb-2"></div> 
 						<Form.Item valuePropName="fileList" name="file" getValueFromEvent={e => e?.fileList}>
-							<Upload maxCount={1} beforeUpload={beforeUpload} accept=".pdf">
+							<Upload onRemove={handleRemove} maxCount={1} beforeUpload={beforeUpload} accept=".pdf">
 								<Button className=" " icon={<UploadOutlined />}>
 
 								{fileList.length > 0 ? t('change') : t('add')}

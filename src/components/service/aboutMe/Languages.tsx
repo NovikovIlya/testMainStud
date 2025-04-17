@@ -14,6 +14,7 @@ import {
 	useGetCertificateQuery,
 	useGetLevelsQuery,
 	useGetNativeLanguagesQuery,
+	useGetOneCertificateQuery,
 	useGetforeignLanguagesQuery,
 	useSetForeignMutation,
 	useSetNativeMutation
@@ -40,6 +41,8 @@ const Languages = () => {
 	const { data: dataForeign, isLoading: isFetchingForeign, isError: isErrorForeign, isSuccess } = useGetforeignLanguagesQuery() 
 	const [setNative, { isLoading }] = useSetNativeMutation()
 	const [setForeign, { isLoading: isLoadingSetForeign }] = useSetForeignMutation()
+	const [idCert,setIdCert] = useState<null | number>(null)
+	const {data:dataOneCertificate} = useGetOneCertificateQuery(idCert,{skip:!idCert})
 	const [selectedLabel, setSelectedLabel] = useState<string | null>(null)
 	const nativeLanguageForm = Form.useWatch('languages', form) 
 	const sertificateFormVal = Form.useWatch('certificateId', form2) 
@@ -125,19 +128,23 @@ const Languages = () => {
 		setFileList([file])
 		return false
 	}
-	
-	if (isError || isErrorForeign) {
-		return (
-			<div className="mt-[75px] ml-[20px]">
-				<Result
-					status="error"
-					title=""
-					subTitle={t('errorFetch')}
-					
-				></Result>
-			</div>
-		)
+
+	const handleIdCert = (id:number)=>{
+		setIdCert(id)
 	}
+	
+	// if (isError || isErrorForeign) {
+	// 	return (
+	// 		<div className="mt-[75px] ml-[20px]">
+	// 			<Result
+	// 				status="error"
+	// 				title=""
+	// 				subTitle={t('errorFetch')}
+					
+	// 			></Result>
+	// 		</div>
+	// 	)
+	// }
 
 	if (isFetchingNative || isFetchingForeign)
 		return (
@@ -207,7 +214,7 @@ const Languages = () => {
 						</Title>
 					</Row>
 					<Row>
-						<TableLanguages isSuccess={isSuccess} dataCertificate={dataCertificate} dataLevels={dataLevels} dataAll={dataAll} selectId={selectId} setSelectId={setSelectId} dataForeign={dataForeign} />
+						<TableLanguages handleIdCert={handleIdCert} isSuccess={isSuccess} dataCertificate={dataCertificate} dataLevels={dataLevels} dataAll={dataAll} selectId={selectId} setSelectId={setSelectId} dataForeign={dataForeign} />
 					</Row>
 					<Row className="flex items-center justify-start mt-4 gap-2">
 						<div

@@ -5,7 +5,7 @@ import { useAddAvatarMutation, useGetAvatarQuery, usePutAvatarMutation } from '.
 import { t } from 'i18next';
 import { Un } from '../../../assets/svg/Un';
 
-const UploadAvatar = ({dataAboutMe}:any) => {
+const UploadAvatar = () => {
   const { data: avatarUrl } = useGetAvatarQuery();
   const [addAvatar, { isLoading }] = useAddAvatarMutation();
   const [putAvatar, { isLoading: isLoadingPut }] = usePutAvatarMutation();
@@ -39,8 +39,7 @@ const UploadAvatar = ({dataAboutMe}:any) => {
         await addAvatar(formData).unwrap();
         message.success(t('avatarChange'));
       }
-      // await addAvatar(formData).unwrap();
-      // message.success('Аватар успешно обновлен');
+     
     } catch (error) {
       message.error(t('error'));
     }

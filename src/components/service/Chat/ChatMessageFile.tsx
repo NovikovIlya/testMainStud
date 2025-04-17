@@ -13,7 +13,7 @@ const seekerToken =
 
 const host = import.meta.env.REACT_APP_HOST
 const port = import.meta.env.REACT_APP_PORT
-const emplBaseURL = `${host ? host : 'localhost'}:${port ? port : 8082}/`
+const emplBaseURL = host && port ? `http://${host}:${port}/` : `employment/`
 
 export const ChatMessageFile = (props: { id: number; name: string; msgId: number }) => {
 	const chatId = useAppSelector(state => state.chatId)

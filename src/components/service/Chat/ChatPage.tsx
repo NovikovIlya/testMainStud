@@ -28,7 +28,7 @@ const personnelDeparmentToken =
 
 const host = import.meta.env.REACT_APP_HOST
 const port = import.meta.env.REACT_APP_PORT
-const emplBaseURL = `${host ? host : 'localhost'}:${port ? port : 8082}/`
+const emplBaseURL = host && port ? `http://${host}:${port}/` : `employment/`
 
 type ChatMessageFormDataType = {
 	text: string
@@ -120,7 +120,7 @@ export const ChatPage = () => {
 	// из за юзэфекта снизу ломается чат
 	useEffect(() => {
 		const socket = new SockJS(
-			`http://${emplBaseURL}employment-api/v1/ws?sender=${
+			`${emplBaseURL}employment-api/v1/ws?sender=${
 				isEmpDemp ? 'PERSONNEL_DEPARTMENT' : 'SEEKER'
 			}&token=Bearer ${token?.replaceAll('"', '')}`
 		)
@@ -291,7 +291,7 @@ export const ChatPage = () => {
 			for (let i = 0; i < data.files.length; i++) {
 				formData.append('files', data.files[i])
 			}
-			fetch(`http://${emplBaseURL}employment-api/v1/chat/${chatId}/file`, {
+			fetch(`${emplBaseURL}employment-api/v1/chat/${chatId}/file`, {
 				method: 'POST',
 				body: formData,
 				headers: {

@@ -58,7 +58,7 @@ export const DirectResume = ({
 	const defEnvs = import.meta.env
 	const host = import.meta.env.REACT_APP_HOST
 	const port = import.meta.env.REACT_APP_PORT
-	const emplBaseURL = `${host ? host : 'localhost'}:${port ? port : 8082}/`
+	const emplBaseURL = host && port ? `http://${host}:${port}/` : `employment/`
 
 	console.log(host)
 	console.log(port)
@@ -207,7 +207,7 @@ export const DirectResume = ({
 		formData.append('desiredJob', data.vacancy)
 		console.log(data)
 		setButtonLoading(true)
-		fetch(`http://${emplBaseURL}employment-api/v1/resume`, {
+		fetch(`${emplBaseURL}employment-api/v1/resume`, {
 			method: 'POST',
 			body: formData,
 			headers: {

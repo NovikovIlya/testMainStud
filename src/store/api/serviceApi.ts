@@ -57,7 +57,7 @@ const accountingToken =
 const laborProtectionToken = ''
 const host = import.meta.env.REACT_APP_HOST
 const port = import.meta.env.REACT_APP_PORT
-const emplBaseURL = `${host ? host : 'localhost'}:${port ? port : 8082}/`
+const emplBaseURL = host && port ? `http://${host}:${port}/` : `employment/`
 
 export const serviceApi = apiSlice.injectEndpoints({
 	endpoints: builder => ({
@@ -114,21 +114,21 @@ export const serviceApi = apiSlice.injectEndpoints({
 			query: () => 'services/api-practices/user/subdivision'
 		}),
 		getCategories: builder.query<CategoryType[], void>({
-			query: () => ({ url: `http://${emplBaseURL}employment-api/v1/category` })
+			query: () => ({ url: `${emplBaseURL}employment-api/v1/category` })
 		}),
 		getDirections: builder.query<{ title: string }[], string>({
 			query: category => ({
-				url: `http://${emplBaseURL}employment-api/v1/direction?category=` + category
+				url: `${emplBaseURL}employment-api/v1/direction?category=` + category
 			})
 		}),
 		getSubdivisions: builder.query<{ title: string }[], string>({
 			query: category => ({
-				url: `http://${emplBaseURL}employment-api/v1/subdivision?category=` + category
+				url: `${emplBaseURL}employment-api/v1/subdivision?category=` + category
 			})
 		}),
 		getVacancyView: builder.query<VacancyViewResponceType, number>({
 			query: id => ({
-				url: `http://${emplBaseURL}employment-api/v1/vacancy/` + id
+				url: `${emplBaseURL}employment-api/v1/vacancy/` + id
 			})
 		}),
 		getVacancyPreviewByDirection: builder.query<
@@ -136,7 +136,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 			{ category: string; direction: string; page: number }
 		>({
 			query: ({ category, direction, page }) => ({
-				url: `http://${emplBaseURL}employment-api/v1/vacancy?category=${category}${
+				url: `${emplBaseURL}employment-api/v1/vacancy?category=${category}${
 					direction === 'Все' ? '' : `&direction=${direction}`
 				}&page=${page}`
 			})
@@ -147,7 +147,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		>({
 			query: ({ category, subdivision, page }) => ({
 				url:
-					`http://${emplBaseURL}employment-api/v1/vacancy?category=` +
+					`${emplBaseURL}employment-api/v1/vacancy?category=` +
 					category +
 					'&subdivisions=' +
 					subdivision +
@@ -157,7 +157,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		getSeekerResponds: builder.query<PageableType<RespondItemType>, { status: string; page: number }>({
 			query: ({ status, page }) => ({
-				url: `http://${emplBaseURL}employment-api/v1/seeker/responds?${status}&page=${page}`,
+				url: `${emplBaseURL}employment-api/v1/seeker/responds?${status}&page=${page}`,
 				headers: {
 					Authorization: `Bearer ${seekerToken}`
 				}
@@ -177,7 +177,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 			{ category: string; direction?: string; role: string; type: 'DIRECTORY' | 'SUBDIVISION'; page: number }
 		>({
 			query: ({ category, direction, role, type, page }) => ({
-				url: `http://${emplBaseURL}employment-api/v1/responds/grouped?category=${category}${
+				url: `${emplBaseURL}employment-api/v1/responds/grouped?category=${category}${
 					direction !== undefined ? `&${type === 'DIRECTORY' ? 'direction=' : 'subdivision='}` + direction : ''
 				}&page=${page}`,
 				headers: {
@@ -190,7 +190,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 			{ id: number; status: string; role: string; page: number }
 		>({
 			query: ({ id, status, role, page }) => ({
-				url: `http://${emplBaseURL}employment-api/v1/vacancy/${id}/responds?status=${status}&page=${page}`,
+				url: `${emplBaseURL}employment-api/v1/vacancy/${id}/responds?status=${status}&page=${page}`,
 				headers: {
 					Authorization: `Bearer ${role === 'PERSONNEL_DEPARTMENT' ? personnelDeparmentToken : supervisorToken}`
 				},
@@ -207,7 +207,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		getRespondFullInfo: builder.query<VacancyRespondItemType, number>({
 			query: id => ({
-				url: `http://${emplBaseURL}employment-api/v1/respond/${id}`,
+				url: `${emplBaseURL}employment-api/v1/respond/${id}`,
 				headers: {
 					Authorization: `Bearer ${personnelDeparmentToken}`
 				}
@@ -215,7 +215,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		getRespondFullInfoAccounting: builder.query<VacancyRespondItemType, number>({
 			query: id => ({
-				url: `http://${emplBaseURL}employment-api/v1/respond/${id}`,
+				url: `${emplBaseURL}employment-api/v1/respond/${id}`,
 				headers: {
 					Authorization: `Bearer ${accountingToken}`
 				}
@@ -231,7 +231,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 			{ chatId: number; role: string }
 		>({
 			query: arg => ({
-				url: `http://${emplBaseURL}employment-api/v1/respond/${arg.chatId}/chat?sender=${arg.role}`,
+				url: `${emplBaseURL}employment-api/v1/respond/${arg.chatId}/chat?sender=${arg.role}`,
 				headers: {
 					Authorization: `Bearer ${arg.role === 'PERSONNEL_DEPARTMENT' ? personnelDeparmentToken : seekerToken}`
 				}
@@ -239,7 +239,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		getUnreadMessagesCount: builder.query<number, { chatId: number; role: string }>({
 			query: ({ chatId, role }) => ({
-				url: `http://${emplBaseURL}employment-api/v1/chat/${chatId}/unread-count?sender=${role}`,
+				url: `${emplBaseURL}employment-api/v1/chat/${chatId}/unread-count?sender=${role}`,
 				headers: {
 					Authorization: `Bearer ${role === 'PERSONNEL_DEPARTMENT' ? personnelDeparmentToken : seekerToken}`
 				}
@@ -251,7 +251,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 			{ chatId: number; lastMessageId?: number; size?: number; role: string }
 		>({
 			query: ({ chatId, lastMessageId, size, role }) => ({
-				url: `http://${emplBaseURL}employment-api/v1/chat/${chatId}/messages?${
+				url: `${emplBaseURL}employment-api/v1/chat/${chatId}/messages?${
 					lastMessageId !== undefined ? `last_message_id=${lastMessageId}&` : ''
 				}${size !== undefined ? `size=${size}&` : ''}sender=${role}`,
 				headers: {
@@ -261,7 +261,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		getSupervisorVacancy: builder.query<PageableType<VacancyItemType>, { page: number; pageSize?: number }>({
 			query: ({ page, pageSize }) => ({
-				url: `http://${emplBaseURL}employment-api/v1/management/supervisor/vacancy?page=${page}${
+				url: `${emplBaseURL}employment-api/v1/management/supervisor/vacancy?page=${page}${
 					pageSize ? `&size=${pageSize}` : ``
 				}`,
 				headers: {
@@ -271,7 +271,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		getVacancyRequests: builder.query<PageableType<VacancyRequestItemType>, { action: string; page: number }>({
 			query: ({ action, page }) => ({
-				url: `http://${emplBaseURL}employment-api/v1/management/vacancy-requests?page=${page}${
+				url: `${emplBaseURL}employment-api/v1/management/vacancy-requests?page=${page}${
 					action === 'все' ? '' : `&action=${action}`
 				}`,
 				headers: {
@@ -282,7 +282,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		getVacancyRequestView: builder.query<VacancyRequestViewType, number>({
 			query: id => ({
-				url: `http://${emplBaseURL}employment-api/v1/management/vacancy-requests/${id}`,
+				url: `${emplBaseURL}employment-api/v1/management/vacancy-requests/${id}`,
 				headers: {
 					Authorization: `Bearer ${personnelDeparmentToken}`
 				}
@@ -290,7 +290,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		getArchivedResponces: builder.query<PageableType<VacancyRespondItemType>, number>({
 			query: page => ({
-				url: `http://${emplBaseURL}employment-api/v1/archive?page=${page}`,
+				url: `${emplBaseURL}employment-api/v1/archive?page=${page}`,
 				headers: {
 					Authorization: `Bearer ${personnelDeparmentToken}`
 				}
@@ -307,7 +307,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		getArchivedRespondFullInfo: builder.query<VacancyRespondItemType, number>({
 			query: id => ({
-				url: `http://${emplBaseURL}employment-api/v1/archive/${id}`,
+				url: `${emplBaseURL}employment-api/v1/archive/${id}`,
 				headers: {
 					Authorization: `Bearer ${personnelDeparmentToken}`
 				}
@@ -315,7 +315,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		getReservedResponces: builder.query<PageableType<VacancyRespondItemType>, { type: string; page: number }>({
 			query: ({ page, type }) => ({
-				url: `http://${emplBaseURL}employment-api/v1/reserve?reserveType=${type}&page=${page}`,
+				url: `${emplBaseURL}employment-api/v1/reserve?reserveType=${type}&page=${page}`,
 				headers: {
 					Authorization: `Bearer ${personnelDeparmentToken}`
 				}
@@ -332,7 +332,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		getReservedRespondFullInfo: builder.query<VacancyRespondItemType, number>({
 			query: id => ({
-				url: `http://${emplBaseURL}employment-api/v1/reserve/${id}`,
+				url: `${emplBaseURL}employment-api/v1/reserve/${id}`,
 				headers: {
 					Authorization: `Bearer ${personnelDeparmentToken}`
 				}
@@ -340,7 +340,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		getAllVacancies: builder.query<{ id: number; post: string }[], void>({
 			query: () => ({
-				url: `http://${emplBaseURL}employment-api/v1/vacancy/search/by-name`,
+				url: `${emplBaseURL}employment-api/v1/vacancy/search/by-name`,
 				headers: {
 					Authorization: `Bearer ${personnelDeparmentToken}`
 				}
@@ -363,7 +363,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 			}
 		>({
 			query: ({ vacancyId, status, sort, page, pageSize }) => ({
-				url: `http://${emplBaseURL}employment-api/v1/chat?page=${page}&pageSize=${pageSize}${
+				url: `${emplBaseURL}employment-api/v1/chat?page=${page}&pageSize=${pageSize}${
 					vacancyId ? `&vacancy_id=${vacancyId}` : ''
 				}
 				${status ? `&status=${status}` : ''}${sort ? `&chat_sort=${sort}` : ''}`,
@@ -374,7 +374,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		getSeekerEmploymentResponds: builder.query<{ content: RespondItemType[] }, number>({
 			query: page => ({
-				url: `http://${emplBaseURL}employment-api/v1/seeker/responds?statuses=EMPLOYMENT&page=${page}`,
+				url: `${emplBaseURL}employment-api/v1/seeker/responds?statuses=EMPLOYMENT&page=${page}`,
 				headers: {
 					Authorization: `Bearer ${seekerToken}`
 				}
@@ -396,13 +396,13 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		getEmploymentData: builder.query<EmploymentDataType, number>({
 			query: respondId => ({
-				url: `http://${emplBaseURL}employment-api/v1/respond/${respondId}/employment`,
+				url: `${emplBaseURL}employment-api/v1/respond/${respondId}/employment`,
 				headers: { Authorization: `Bearer ${seekerToken}` }
 			})
 		}),
 		getEmploymentDocs: builder.query<EmploymentDocsType[], number>({
 			query: vacancyId => ({
-				url: `http://${emplBaseURL}employment-api/v1/vacancy/${vacancyId}/empl-docs`,
+				url: `${emplBaseURL}employment-api/v1/vacancy/${vacancyId}/empl-docs`,
 				headers: { Authorization: `Bearer ${seekerToken}` }
 			})
 		}),
@@ -411,7 +411,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 			{ status: string; page: number; pageSize?: number }
 		>({
 			query: ({ status, page, pageSize }) => ({
-				url: `http://${emplBaseURL}employment-api/v1/supervisor/vacancy/respond?${status}&page=${page}${
+				url: `${emplBaseURL}employment-api/v1/supervisor/vacancy/respond?${status}&page=${page}${
 					pageSize ? `&size=${pageSize}` : ``
 				}`,
 				headers: { Authorization: `Bearer ${supervisorToken}` }
@@ -427,7 +427,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		getSeekerResumeFile: builder.query<{ href: string; size: number }, number>({
 			query: id => ({
-				url: `http://${emplBaseURL}employment-api/v1/resume/${id}/file`,
+				url: `${emplBaseURL}employment-api/v1/resume/${id}/file`,
 				headers: { Authorization: `Bearer ${personnelDeparmentToken}` },
 				responseHandler: async res => {
 					const data = await res.blob()
@@ -441,13 +441,13 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		getAllDocumentDefinitions: builder.query<DocumentDefinitionType[], void>({
 			query: () => ({
-				url: `http://${emplBaseURL}employment-api/v1/employment/document-definitions`,
+				url: `${emplBaseURL}employment-api/v1/employment/document-definitions`,
 				headers: { Authorization: `Bearer ${personnelDeparmentToken}` }
 			})
 		}),
 		getEmploymentPossibleRoles: builder.query<string[], void>({
 			query: () => ({
-				url: `http://${emplBaseURL}employment-api/v1/user/my/roles`
+				url: `${emplBaseURL}employment-api/v1/user/my/roles`
 			})
 		}),
 		getSeekerChatPreviews: builder.query<
@@ -468,7 +468,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 			}
 		>({
 			query: ({ page, pageSize }) => ({
-				url: `http://${emplBaseURL}employment-api/v1/chat/seeker-chats?page=${page}&size=${pageSize}`,
+				url: `${emplBaseURL}employment-api/v1/chat/seeker-chats?page=${page}&size=${pageSize}`,
 				headers: {
 					Authorization: `Bearer ${seekerToken}`
 				}
@@ -476,7 +476,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		downloadEmploymentSeekerFile: builder.query<{ href: string }, { respondId: number; docId: number }>({
 			query: ({ respondId, docId }) => ({
-				url: `http://${emplBaseURL}employment-api/v1/respond/${respondId}/employment/file/${docId}`,
+				url: `${emplBaseURL}employment-api/v1/respond/${respondId}/employment/file/${docId}`,
 				responseHandler: async res => {
 					const data = await res.blob()
 					const file = new Blob([data], {
@@ -594,7 +594,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		postVacancyRespond: builder.mutation<void, { id: number } & ResponceType>({
 			query: arg => ({
-				url: `http://${emplBaseURL}employment-api/v1/vacancy/` + arg.id + '/respond',
+				url: `${emplBaseURL}employment-api/v1/vacancy/` + arg.id + '/respond',
 				method: 'POST',
 				body: arg,
 				headers: {
@@ -604,7 +604,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		deleteVacancyRespond: builder.mutation<void, number>({
 			query: id => ({
-				url: `http://${emplBaseURL}employment-api/v1/respond/${id}`,
+				url: `${emplBaseURL}employment-api/v1/respond/${id}`,
 				method: 'DELETE',
 				headers: {
 					Authorization: `Bearer ${seekerToken}`
@@ -613,7 +613,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		postChatMessage: builder.mutation<ChatMessageType, { id: number; text: string; name: string; role: string }>({
 			query: ({ id, text, name, role }) => ({
-				url: `http://${emplBaseURL}employment-api/v1/chat/${id}/text`,
+				url: `${emplBaseURL}employment-api/v1/chat/${id}/text`,
 				method: 'POST',
 				body: { text: text, sender: role },
 				headers: {
@@ -624,7 +624,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		readChatMessage: builder.mutation<void, { chatId: number; messageId: number; sessionId: string; role: string }>({
 			query: ({ chatId, messageId, sessionId, role }) => ({
-				url: `http://${emplBaseURL}employment-api/v1/chat/${chatId}/message/${messageId}/read?sender=${role}`,
+				url: `${emplBaseURL}employment-api/v1/chat/${chatId}/message/${messageId}/read?sender=${role}`,
 				method: 'PUT',
 				headers: {
 					Authorization: `Bearer ${role === 'PERSONNEL_DEPARTMENT' ? personnelDeparmentToken : seekerToken}`,
@@ -634,7 +634,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		approveRespond: builder.mutation<VacancyRespondItemType, number>({
 			query: respondId => ({
-				url: `http://${emplBaseURL}employment-api/v1/respond/${respondId}/status/approve`,
+				url: `${emplBaseURL}employment-api/v1/respond/${respondId}/status/approve`,
 				method: 'PUT',
 				headers: {
 					Authorization: `Bearer ${personnelDeparmentToken}`
@@ -653,7 +653,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 			}
 		>({
 			query: ({ respondId, format, mainTime, reservedTimes, additionalInfo, address }) => ({
-				url: `http://${emplBaseURL}employment-api/v1/respond/${respondId}/status/invite`,
+				url: `${emplBaseURL}employment-api/v1/respond/${respondId}/status/invite`,
 				method: 'PUT',
 				body: {
 					format: format,
@@ -669,7 +669,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		requestDeleteVacancy: builder.mutation<void, number>({
 			query: id => ({
-				url: `http://${emplBaseURL}employment-api/v1/management/vacancy-requests/for-delete`,
+				url: `${emplBaseURL}employment-api/v1/management/vacancy-requests/for-delete`,
 				method: 'POST',
 				body: { vacancyId: id },
 				headers: {
@@ -679,7 +679,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		requestCreateVacancy: builder.mutation<void, VacancyRequestType>({
 			query: arg => ({
-				url: `http://${emplBaseURL}employment-api/v1/management/vacancy-requests/for-create`,
+				url: `${emplBaseURL}employment-api/v1/management/vacancy-requests/for-create`,
 				method: 'POST',
 				body: arg,
 				headers: {
@@ -689,7 +689,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		requestUpdateVacancy: builder.mutation<void, VacancyRequestType & { vacancyId: number }>({
 			query: arg => ({
-				url: `http://${emplBaseURL}employment-api/v1/management/vacancy-requests/for-update`,
+				url: `${emplBaseURL}employment-api/v1/management/vacancy-requests/for-update`,
 				method: 'POST',
 				body: arg,
 				headers: {
@@ -710,7 +710,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 			}
 		>({
 			query: arg => ({
-				url: `http://${emplBaseURL}employment-api/v1/management/vacancy-requests/for-create/${arg.requestId}/acceptance`,
+				url: `${emplBaseURL}employment-api/v1/management/vacancy-requests/for-create/${arg.requestId}/acceptance`,
 				method: 'PUT',
 				body: arg.data,
 				headers: {
@@ -720,7 +720,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		acceptUpdateVacancyRequest: builder.mutation<void, number>({
 			query: id => ({
-				url: `http://${emplBaseURL}employment-api/v1/management/vacancy-requests/for-update/${id}/acceptance`,
+				url: `${emplBaseURL}employment-api/v1/management/vacancy-requests/for-update/${id}/acceptance`,
 				method: 'PUT',
 				headers: {
 					Authorization: `Bearer ${personnelDeparmentToken}`
@@ -729,7 +729,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		acceptDeleteVacancyRequest: builder.mutation<void, number>({
 			query: id => ({
-				url: `http://${emplBaseURL}employment-api/v1/management/vacancy-requests/for-delete/${id}/acceptance`,
+				url: `${emplBaseURL}employment-api/v1/management/vacancy-requests/for-delete/${id}/acceptance`,
 				method: 'PUT',
 				headers: {
 					Authorization: `Bearer ${personnelDeparmentToken}`
@@ -738,7 +738,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		denyVacancyRequest: builder.mutation<void, number>({
 			query: id => ({
-				url: `http://${emplBaseURL}employment-api/v1/management/vacancy-requests/${id}/deny`,
+				url: `${emplBaseURL}employment-api/v1/management/vacancy-requests/${id}/deny`,
 				method: 'POST',
 				headers: {
 					Authorization: `Bearer ${personnelDeparmentToken}`
@@ -747,7 +747,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		alterCreateVacancyRequest: builder.mutation<void, VacancyRequestType & { vacancyRequestId: number }>({
 			query: body => ({
-				url: `http://${emplBaseURL}employment-api/v1/management/vacancy-requests/for-create`,
+				url: `${emplBaseURL}employment-api/v1/management/vacancy-requests/for-create`,
 				method: 'PATCH',
 				body: body,
 				headers: {
@@ -757,7 +757,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		alterUpdateVacancyRequest: builder.mutation<void, VacancyRequestType & { vacancyRequestId: number }>({
 			query: body => ({
-				url: `http://${emplBaseURL}employment-api/v1/management/vacancy-requests/for-update`,
+				url: `${emplBaseURL}employment-api/v1/management/vacancy-requests/for-update`,
 				method: 'PATCH',
 				body: body,
 				headers: {
@@ -767,7 +767,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		sendRespondToArchive: builder.mutation<VacancyRespondItemType, { id: number; role: string }>({
 			query: ({ id, role }) => ({
-				url: `http://${emplBaseURL}employment-api/v1/respond/${id}/status/archive`,
+				url: `${emplBaseURL}employment-api/v1/respond/${id}/status/archive`,
 				method: 'PUT',
 				headers: {
 					Authorization: `Bearer ${role === 'PERSONNEL_DEPARTMENT' ? personnelDeparmentToken : supervisorToken}`
@@ -776,7 +776,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		deleteRespondFromArchive: builder.mutation<void, number>({
 			query: id => ({
-				url: `http://${emplBaseURL}employment-api/v1/archive/${id}`,
+				url: `${emplBaseURL}employment-api/v1/archive/${id}`,
 				method: 'DELETE',
 				headers: {
 					Authorization: `Bearer ${personnelDeparmentToken}`
@@ -785,7 +785,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		approveArchivedRespond: builder.mutation<VacancyRespondItemType, number>({
 			query: respondId => ({
-				url: `http://${emplBaseURL}employment-api/v1/archive/${respondId}/status/approve`,
+				url: `${emplBaseURL}employment-api/v1/archive/${respondId}/status/approve`,
 				method: 'PUT',
 				headers: {
 					Authorization: `Bearer ${personnelDeparmentToken}`
@@ -794,7 +794,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		answerToInivitationMainTime: builder.mutation<void, { id: number; ans: string; messageId: number }>({
 			query: ({ id, ans, messageId }) => ({
-				url: `http://${emplBaseURL}employment-api/v1/respond/${id}/chat/buttons/interview/main-time?answer=${ans}&message-id=${messageId}`,
+				url: `${emplBaseURL}employment-api/v1/respond/${id}/chat/buttons/interview/main-time?answer=${ans}&message-id=${messageId}`,
 				method: 'POST',
 				headers: {
 					Authorization: `Bearer ${seekerToken}`
@@ -803,7 +803,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		sendRespondToReserve: builder.mutation<VacancyRespondItemType, number>({
 			query: id => ({
-				url: `http://${emplBaseURL}employment-api/v1/respond/${id}/status/reserve`,
+				url: `${emplBaseURL}employment-api/v1/respond/${id}/status/reserve`,
 				method: 'PUT',
 				headers: {
 					Authorization: `Bearer ${personnelDeparmentToken}`
@@ -812,7 +812,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		approveReservedRespond: builder.mutation<VacancyRespondItemType, { respondId: number; vacancyId: number }>({
 			query: ({ respondId, vacancyId }) => ({
-				url: `http://${emplBaseURL}employment-api/v1/reserve/${respondId}/approve`,
+				url: `${emplBaseURL}employment-api/v1/reserve/${respondId}/approve`,
 				method: 'POST',
 				body: {
 					vacancyId: vacancyId
@@ -832,7 +832,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 			}
 		>({
 			query: arg => ({
-				url: `http://${emplBaseURL}employment-api/v1/vacancy`,
+				url: `${emplBaseURL}employment-api/v1/vacancy`,
 				method: 'PATCH',
 				body: arg,
 				headers: {
@@ -842,7 +842,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		deleteVacancyAsPerDepartment: builder.mutation<void, number>({
 			query: id => ({
-				url: `http://${emplBaseURL}employment-api/v1/vacancy/${id}`,
+				url: `${emplBaseURL}employment-api/v1/vacancy/${id}`,
 				method: 'DELETE',
 				headers: {
 					Authorization: `Bearer ${personnelDeparmentToken}`
@@ -851,7 +851,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		requestCreateInterview: builder.mutation<void, InterviewRequestType>({
 			query: arg => ({
-				url: `http://${emplBaseURL}employment-api/v1/interview`,
+				url: `${emplBaseURL}employment-api/v1/interview`,
 				method: 'POST',
 				body: arg,
 				headers: {
@@ -861,7 +861,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		deleteReserveRespond: builder.mutation<void, number>({
 			query: id => ({
-				url: `http://${emplBaseURL}employment-api/v1/reserve/${id}`,
+				url: `${emplBaseURL}employment-api/v1/reserve/${id}`,
 				method: 'DELETE',
 				headers: {
 					Authorization: `Bearer ${personnelDeparmentToken}`
@@ -870,7 +870,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		getSupervisorInterview: builder.query<{ content: InterviewItemType[] }, number>({
 			query: arg => ({
-				url: `http://${emplBaseURL}employment-api/v1/interview?page=${arg}`,
+				url: `${emplBaseURL}employment-api/v1/interview?page=${arg}`,
 				method: 'GET',
 				headers: {
 					Authorization: `Bearer ${supervisorToken}`
@@ -879,7 +879,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		getInterviewView: builder.query<InterviewViewResponseType, number>({
 			query: id => ({
-				url: `http://${emplBaseURL}employment-api/v1/interview`,
+				url: `${emplBaseURL}employment-api/v1/interview`,
 				method: 'GET',
 				headers: {
 					Authorization: `Bearer ${supervisorToken}`
@@ -888,7 +888,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		employeeSeekerRequest: builder.mutation<void, SeekerStatusChangeType & { respondId: number }>({
 			query: arg => ({
-				url: `http://${emplBaseURL}employment-api/v1/respond/${arg.respondId}/status/employ`,
+				url: `${emplBaseURL}employment-api/v1/respond/${arg.respondId}/status/employ`,
 				method: 'PUT',
 				body: {
 					rejectionReason: arg.rejectionReason,
@@ -904,7 +904,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 			ReserveTimeRequestType & { respondId: number; messageId: number }
 		>({
 			query: arg => ({
-				url: `http://${emplBaseURL}employment-api/v1/respond/${arg.respondId}/chat/buttons/interview/reserve-time?message-id=${arg.messageId}`,
+				url: `${emplBaseURL}employment-api/v1/respond/${arg.respondId}/chat/buttons/interview/reserve-time?message-id=${arg.messageId}`,
 				method: 'POST',
 				body: {
 					time: arg.time ? arg.time : null
@@ -916,7 +916,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		answerEmploymentRequest: builder.mutation<void, EmploymentRequestType & { respondId: number; messageId: number }>({
 			query: arg => ({
-				url: `http://${emplBaseURL}employment-api/v1/respond/${arg.respondId}/chat/buttons/employment-request?answer=${arg.answer}&message-id=${arg.messageId}`,
+				url: `${emplBaseURL}employment-api/v1/respond/${arg.respondId}/chat/buttons/employment-request?answer=${arg.answer}&message-id=${arg.messageId}`,
 				method: 'POST',
 				headers: {
 					Authorization: `Bearer ${seekerToken}`
@@ -925,7 +925,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		deleteEmploymentDoc: builder.mutation<void, { respondId: number; docId: number }>({
 			query: ({ respondId, docId }) => ({
-				url: `http://${emplBaseURL}employment-api/v1/respond/${respondId}/employment/file/${docId}`,
+				url: `${emplBaseURL}employment-api/v1/respond/${respondId}/employment/file/${docId}`,
 				method: 'DELETE',
 				headers: {
 					Authorization: `Bearer ${seekerToken}`
@@ -934,7 +934,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		sendEmploymentDocs: builder.mutation<void, { respondId: number; hasNotRequisites: boolean }>({
 			query: ({ respondId, hasNotRequisites }) => ({
-				url: `http://${emplBaseURL}employment-api/v1/respond/${respondId}/employment/verification`,
+				url: `${emplBaseURL}employment-api/v1/respond/${respondId}/employment/verification`,
 				method: 'POST',
 				headers: {
 					Authorization: `Bearer ${seekerToken}`
@@ -949,7 +949,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		getPersonnelStages: builder.query<PageableType<EmploymentStageItemType>, number>({
 			query: page => ({
-				url: `http://${emplBaseURL}employment-api/v1/management/employment?page=${page}`,
+				url: `${emplBaseURL}employment-api/v1/management/employment?page=${page}`,
 				method: 'GET',
 				headers: {
 					Authorization: `Bearer ${personnelDeparmentToken}`
@@ -958,7 +958,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		getAccountingStages: builder.query<PageableType<EmploymentStageItemType>, number>({
 			query: page => ({
-				url: `http://${emplBaseURL}employment-api/v1/management/employment?page=${page}`,
+				url: `${emplBaseURL}employment-api/v1/management/employment?page=${page}`,
 				method: 'GET',
 				headers: {
 					Authorization: `Bearer ${accountingToken}`
@@ -967,7 +967,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		downloadFileEmploymentStages: builder.query<Blob, { respondId: number; fileId: number }>({
 			query: arg => ({
-				url: `http://${emplBaseURL}employment-api/v1/respond/${arg.respondId}/employment/file/${arg.fileId}/`,
+				url: `${emplBaseURL}employment-api/v1/respond/${arg.respondId}/employment/file/${arg.fileId}/`,
 				method: 'GET',
 				headers: {
 					Authorization: `Bearer ${supervisorToken}`
@@ -976,7 +976,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		getEmploymentStageStatus: builder.query<EmploymentStageStatusType, { respondId: number }>({
 			query: arg => ({
-				url: `http://${emplBaseURL}employment-api/v1/management/respond/${arg.respondId}/employment`,
+				url: `${emplBaseURL}employment-api/v1/management/respond/${arg.respondId}/employment`,
 				method: 'GET',
 				headers: {
 					Authorization: `Bearer ${personnelDeparmentToken}`
@@ -985,7 +985,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		getEmploymentReqStageStatus: builder.query<EmploymentStageStatusType, { respondId: number }>({
 			query: arg => ({
-				url: `http://${emplBaseURL}employment-api/v1/management/respond/${arg.respondId}/employment`,
+				url: `${emplBaseURL}employment-api/v1/management/respond/${arg.respondId}/employment`,
 				method: 'GET',
 				headers: {
 					Authorization: `Bearer ${accountingToken}`
@@ -994,7 +994,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		changeEmploymentStageStatusRequest: builder.mutation<void, ChangeStageStatusType & { subStageId: number }>({
 			query: arg => ({
-				url: `http://${emplBaseURL}employment-api/v1/management/employment/sub-stage/${arg.subStageId}`,
+				url: `${emplBaseURL}employment-api/v1/management/employment/sub-stage/${arg.subStageId}`,
 				method: 'PUT',
 				headers: {
 					Authorization: `Bearer ${personnelDeparmentToken}`
@@ -1010,7 +1010,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 			ChangeStageStatusType & { subStageId: number }
 		>({
 			query: arg => ({
-				url: `http://${emplBaseURL}employment-api/v1/management/employment/sub-stage/${arg.subStageId}`,
+				url: `${emplBaseURL}employment-api/v1/management/employment/sub-stage/${arg.subStageId}`,
 				method: 'PUT',
 				headers: {
 					Authorization: `Bearer ${accountingToken}`
@@ -1023,7 +1023,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		downloadEmploymentStageFile: builder.query<{ href: string; size: number }, { fileId: number }>({
 			query: arg => ({
-				url: `http://${emplBaseURL}employment-api/v1/management/employment/file/${arg.fileId}`,
+				url: `${emplBaseURL}employment-api/v1/management/employment/file/${arg.fileId}`,
 				method: 'GET',
 				headers: {
 					Authorization: `Bearer ${personnelDeparmentToken}`
@@ -1040,7 +1040,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		changeCardStatusRequest: builder.mutation<void, { subStageId: number }>({
 			query: arg => ({
-				url: `http://${emplBaseURL}employment-api/v1/management/employment/sub-stage/${arg.subStageId}/has-requisites`,
+				url: `${emplBaseURL}employment-api/v1/management/employment/sub-stage/${arg.subStageId}/has-requisites`,
 				method: 'PATCH',
 				headers: {
 					Authorization: `Bearer ${accountingToken}`
@@ -1049,7 +1049,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		agreeToWorkingConditions: builder.mutation<void, number>({
 			query: respondId => ({
-				url: `http://${emplBaseURL}employment-api/v1/respond/${respondId}/employment/working-conditions`,
+				url: `${emplBaseURL}employment-api/v1/respond/${respondId}/employment/working-conditions`,
 				method: 'POST',
 				headers: {
 					Authorization: `Bearer ${seekerToken}`
@@ -1058,7 +1058,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		setHasNoRequisitesOnEmployment: builder.mutation<void, { respondId: number; bank: 'SBER' | 'VTB' }>({
 			query: ({ respondId, bank }) => ({
-				url: `http://${emplBaseURL}employment-api/v1/respond/${respondId}/employment/requisites-missing`,
+				url: `${emplBaseURL}employment-api/v1/respond/${respondId}/employment/requisites-missing`,
 				body: { bank: bank },
 				method: 'POST',
 				headers: {
@@ -1068,7 +1068,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		markBankCardApplicationFormed: builder.mutation<void, { subStageId: number }>({
 			query: arg => ({
-				url: `http://${emplBaseURL}employment-api/v1/management/employment/sub-stage/${arg.subStageId}/requisites`,
+				url: `${emplBaseURL}employment-api/v1/management/employment/sub-stage/${arg.subStageId}/requisites`,
 				method: 'PATCH',
 				headers: {
 					Authorization: `Bearer ${personnelDeparmentToken}`
@@ -1077,14 +1077,14 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		updateEmploymentDocuments: builder.mutation<void, number>({
 			query: subStageId => ({
-				url: `http://${emplBaseURL}employment-api/v1/employment/sub-stage/${subStageId}/updated`,
+				url: `${emplBaseURL}employment-api/v1/employment/sub-stage/${subStageId}/updated`,
 				headers: { Authorization: `Bearer ${seekerToken}` },
 				method: 'PATCH'
 			})
 		}),
 		setHasRequisitesEmployment: builder.mutation<void, number>({
 			query: respondId => ({
-				url: `http://${emplBaseURL}employment-api/v1/respond/${respondId}/employment/requisites-missing`,
+				url: `${emplBaseURL}employment-api/v1/respond/${respondId}/employment/requisites-missing`,
 				method: 'DELETE',
 				headers: {
 					Authorization: `Bearer ${seekerToken}`
@@ -1096,7 +1096,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 			{ respondId: number; id: number; file: File; fileName: string }
 		>({
 			query: ({ respondId, id, file, fileName }) => ({
-				url: `http://${emplBaseURL}employment-api/v1/respond/${respondId}/employment/file?employmentDocDefId=${id}`,
+				url: `${emplBaseURL}employment-api/v1/respond/${respondId}/employment/file?employmentDocDefId=${id}`,
 				body: file,
 				method: 'PUT',
 				headers: {
@@ -1106,19 +1106,19 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		getTestResults: builder.query<PageableType<SignedItemType>, { signed: boolean; query?: string; page: number }>({
 			query: arg => ({
-				url: `http://${emplBaseURL}employment-api/v1/management/employment/sub-stage/test-stage?signed=${arg.signed}&query=${arg.query}&page=${arg.page}`,
+				url: `${emplBaseURL}employment-api/v1/management/employment/sub-stage/test-stage?signed=${arg.signed}&query=${arg.query}&page=${arg.page}`,
 				method: 'GET'
 			})
 		}),
 		setTestResultSigned: builder.mutation<void, { subStageId: number }>({
 			query: arg => ({
-				url: `http://${emplBaseURL}employment-api/v1/management/employment/sub-stage/test-stage/${arg.subStageId}/signed`,
+				url: `${emplBaseURL}employment-api/v1/management/employment/sub-stage/test-stage/${arg.subStageId}/signed`,
 				method: 'PATCH'
 			})
 		}),
 		setTestResultHidden: builder.mutation<void, { subStageId: number }>({
 			query: arg => ({
-				url: `http://${emplBaseURL}employment-api/v1/management/employment/sub-stage/test-stage/${arg.subStageId}/hidden`,
+				url: `${emplBaseURL}employment-api/v1/management/employment/sub-stage/test-stage/${arg.subStageId}/hidden`,
 				method: 'PATCH'
 			})
 		}),
@@ -1174,12 +1174,12 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		checkIfTestIsPassed: builder.query<{ testPassed: boolean }, { testStageId: number }>({
 			query: ({ testStageId }) => ({
-				url: `http://${emplBaseURL}employment-api/v1/employment/test-stage/${testStageId}`
+				url: `${emplBaseURL}employment-api/v1/employment/test-stage/${testStageId}`
 			})
 		}),
 		getEmploymentStageStatusForSupervisor: builder.query<EmploymentDataType, { respondId: number }>({
 			query: arg => ({
-				url: `http://${emplBaseURL}employment-api/v1/management/respond/${arg.respondId}/employment`,
+				url: `${emplBaseURL}employment-api/v1/management/respond/${arg.respondId}/employment`,
 				method: 'GET',
 				headers: {
 					Authorization: `Bearer ${personnelDeparmentToken}`
@@ -1191,7 +1191,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 			{ chatId: number; msgId: number; id: number; isEmpDemp: boolean }
 		>({
 			query: arg => ({
-				url: `http://${emplBaseURL}employment-api/v1/chat/${arg.chatId}/message/${arg.msgId}/file/${arg.id}?sender=${
+				url: `${emplBaseURL}employment-api/v1/chat/${arg.chatId}/message/${arg.msgId}/file/${arg.id}?sender=${
 					arg.isEmpDemp ? 'PERSONNEL_DEPARTMENT' : 'SEEKER'
 				}`,
 				method: 'GET',
@@ -1207,19 +1207,19 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		getAllSupervisorRequests: builder.query<PageableType<SupervisorRequestType>, string>({
 			query: action => ({
-				url: `http://${emplBaseURL}employment-api/v1/management/vacancy-requests?action=${action}&size=2000&page=0`,
+				url: `${emplBaseURL}employment-api/v1/management/vacancy-requests?action=${action}&size=2000&page=0`,
 				method: 'GET'
 			})
 		}),
 		getSeekerVacancyRelation: builder.query<{ canRespond: boolean }, number>({
 			query: vacancyId => ({
-				url: `http://${emplBaseURL}employment-api/v1/vacancy/${vacancyId}/seeker-relation`,
+				url: `${emplBaseURL}employment-api/v1/vacancy/${vacancyId}/seeker-relation`,
 				method: 'GET'
 			})
 		}),
 		getInterview: builder.query<InterviewItemType, number>({
 			query: interviewId => ({
-				url: `http://${emplBaseURL}employment-api/v1/interview/${interviewId}`,
+				url: `${emplBaseURL}employment-api/v1/interview/${interviewId}`,
 				method: 'GET'
 			})
 		})

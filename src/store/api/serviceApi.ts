@@ -57,7 +57,7 @@ const accountingToken =
 const laborProtectionToken = ''
 const host = import.meta.env.REACT_APP_HOST
 const port = import.meta.env.REACT_APP_PORT
-const emplBaseURL = host && port ? `http://${host}:${port}/` : `employment/`
+const emplBaseURL = host && port ? `http://${host}:${port}/` : `https://newlk.kpfu.ru/employment/`
 
 export const serviceApi = apiSlice.injectEndpoints({
 	endpoints: builder => ({

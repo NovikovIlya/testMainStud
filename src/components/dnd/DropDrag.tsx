@@ -15,6 +15,7 @@ import { useCheckIsEmployeeQuery } from '../../store/api/practiceApi/contracts'
 import { useGetModulesQuery } from '../../store/api/roleModel/roleModel'
 import { useGetRoleQuery } from '../../store/api/serviceApi'
 import { changeLayout, removeCard } from '../../store/reducers/LayoutsSlice'
+import InfoEmployment from '../InfoEmployment'
 import InfoStudent from '../InfoStudent'
 import { AboutUniversityCard } from '../aboutUniversity/AboutUniversityCard'
 import { Apply } from '../apply/Apply'
@@ -172,7 +173,16 @@ const DropDrag = () => {
 		{
 			key: 'personnelAccounting',
 			element: (
-				<TemplateCard title="Трудоустройство" info="" href="/services/personnelaccounting" buttonText="Изучить" />
+				<TemplateCard
+					title="Трудоустройство"
+					info="Здесь вы можете отслеживать все процессы, связанные с наймом и подбором сотрудников"
+					href="/services/personnelaccounting"
+					buttonText="Изучить"
+					img="/emplicon.png"
+					height={133}
+					width={122}
+					className={'absolute top-1'}
+				/>
 			),
 			place: {
 				w: 1,
@@ -872,7 +882,7 @@ const DropDrag = () => {
 			)
 		return (
 			<>
-				{mainRole === 'STUD' ? <InfoStudent /> : ''}
+				{mainRole === 'STUD' ? <InfoEmployment /> : ''}
 				<ResponsiveReactGridLayout
 					className="layout mb-10"
 					cols={{ lg: 3, md: 2, sm: 2, xs: 2, xxs: 1 }}

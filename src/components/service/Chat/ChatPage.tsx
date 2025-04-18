@@ -28,7 +28,7 @@ const personnelDeparmentToken =
 
 const host = import.meta.env.REACT_APP_HOST
 const port = import.meta.env.REACT_APP_PORT
-const emplBaseURL = host && port ? `http://${host}:${port}/` : `employment/`
+const emplBaseURL = host && port ? `http://${host}:${port}/` : `https://newlk.kpfu.ru/employment/`
 
 type ChatMessageFormDataType = {
 	text: string
@@ -162,8 +162,14 @@ export const ChatPage = () => {
 			})
 		})
 		return () => {
-			chatId !== 0 && client.disconnect(() => {})
-			chatId !== 0 && socket.close()
+			// chatId !== 0 && client && client.disconnect(() => {})
+			// chatId !== 0 && socket && socket.close()
+			try {
+				chatId !== 0 && client && client.disconnect(() => {})
+				chatId !== 0 && socket && socket.close()
+			} catch (e) {
+				console.log(e)
+			}
 		}
 	}, [chatId])
 

@@ -58,7 +58,7 @@ export const DirectResume = ({
 	const defEnvs = import.meta.env
 	const host = import.meta.env.REACT_APP_HOST
 	const port = import.meta.env.REACT_APP_PORT
-	const emplBaseURL = host && port ? `http://${host}:${port}/` : `employment/`
+	const emplBaseURL = host && port ? `http://${host}:${port}/` : `https://newlk.kpfu.ru/employment/`
 
 	console.log(host)
 	console.log(port)

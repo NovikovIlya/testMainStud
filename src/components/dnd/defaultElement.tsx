@@ -88,7 +88,15 @@ export const jsxElements = [
 	},
 	{
 		key: 'personnelAccounting',
-		element: <TemplateCard title="Трудоустройство" info="" href="/services/personnelaccounting" buttonText="Изучить" />,
+		element: (
+			<TemplateCard
+				title="Трудоустройство"
+				info="Здесь вы можете отслеживать все процессы, связанные с наймом и подбором сотрудников"
+				href="/services/personnelaccounting"
+				buttonText="Изучить"
+				img="/emplicon.png"
+			/>
+		),
 		place: {
 			w: 1,
 			h: 1,

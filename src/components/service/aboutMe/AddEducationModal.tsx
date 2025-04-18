@@ -46,6 +46,7 @@ export const AddEducationModal = (props: {
 						onFinish={values => {
 							let reader = new FileReader()
 							reader.onload = e => {
+								console.log(values)
 								console.log({ ...values, file: e.target?.result })
 								props.type === 'ADD'
 									? addEducation({
@@ -61,9 +62,11 @@ export const AddEducationModal = (props: {
 											issue_date: values.issueDate,
 											docnum: values.number,
 											docseries: values.series,
-											portal_status: values.accept ? '1' : null
+											portal_status: values.accept ? '1' : null,
+											edu_file: [{ filename: 'filename.pdf', file_base64: String(e.target?.result).split(',')[1] }]
 									  })
 											.then(() => {
+												props.form.resetFields()
 												props.onCancel()
 											})
 											.catch(() => {
@@ -86,9 +89,11 @@ export const AddEducationModal = (props: {
 											id: values.id,
 											s_id: values.s_id,
 											e_id: values.e_id,
-											user_allid: values.user_allid
+											user_allid: values.user_allid,
+											edu_file: [{ filename: values.file.file.fileName, file_base64: e.target?.result as string }]
 									  })
 											.then(() => {
+												props.form.resetFields()
 												props.onCancel()
 											})
 											.catch(() => {
@@ -111,9 +116,11 @@ export const AddEducationModal = (props: {
 										issue_date: dayjs(values.issueDate).format('DD.MM.YYYY'),
 										docnum: values.number,
 										docseries: values.series,
-										portal_status: values.accept ? '1' : null
+										portal_status: values.accept ? '1' : null,
+										edu_file: [{ filename: null, file_base64: null }]
 								  })
 										.then(() => {
+											props.form.resetFields()
 											props.onCancel()
 										})
 										.catch(() => {
@@ -136,7 +143,8 @@ export const AddEducationModal = (props: {
 										id: values.id,
 										s_id: values.s_id,
 										e_id: values.e_id,
-										user_allid: values.user_allid
+										user_allid: values.user_allid,
+										edu_file: [{ filename: null, file_base64: null }]
 								  })
 										.then(() => {
 											props.onCancel()

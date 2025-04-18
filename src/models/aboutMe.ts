@@ -45,6 +45,7 @@ export interface CheckedFlags {
 }
 
 export interface CertificateTs {
+  langId:any
 	id: string
 	certificateName: string
 	certificateLink: string

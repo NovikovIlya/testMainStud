@@ -1,29 +1,23 @@
-import {
-	DeleteTwoTone,
-	EditTwoTone,
-	UploadOutlined
-} from '@ant-design/icons'
-import { Button, Checkbox, ConfigProvider, Form, Modal, Select, Space, Table, Upload, message } from 'antd'
+import { DeleteTwoTone, EditTwoTone, UploadOutlined } from '@ant-design/icons'
+import { Button, Checkbox, ConfigProvider, Form, Modal, Select, Space, Spin, Table, Upload, message } from 'antd'
 import type { TableProps } from 'antd'
 import { t } from 'i18next'
 import React, { useEffect, useState } from 'react'
 
-import './TableLanguage.scss'
 import { CertificateTs, FormValues, LanguageData, TableLanguagesProps } from '../../../models/aboutMe'
 import { useDeleteForeignMutation, useEditForeignMutation } from '../../../store/api/aboutMe/forAboutMe'
 
+import './TableLanguage.scss'
 
-
-
-const TableLanguages = ({handleIdCert,isSuccess, dataCertificate, dataLevels, dataAll, dataForeign, setSelectId, selectId }: TableLanguagesProps) => {
+const TableLanguages = ({handleIdCert,isSuccess,dataCertificate,dataLevels,dataAll,dataForeign,setSelectId,selectId}: TableLanguagesProps) => {
 	const [isModalOpenEdit, setIsModalOpenEdit] = useState<boolean>(false)
 	const [selectInfo, setSelectInfo] = useState<LanguageData | null>(null)
 	const [selectedLabel, setSelectedLabel] = useState<string | null>(null)
 	const [form2] = Form.useForm()
 	const [fileList, setFileList] = useState<any[]>([])
-	const [editForeign,{}] = useEditForeignMutation()
-	const [deleteCert,setDeleteCert] = useState(null)
-	const [deleteForeign,{}] = useDeleteForeignMutation()
+	const [editForeign, {}] = useEditForeignMutation()
+	const [deleteCert, setDeleteCert] = useState(null)
+	const [deleteForeign, {isLoading:isLoadingDelete}] = useDeleteForeignMutation()
 	const columns: TableProps<LanguageData>['columns'] = [
 		{
 			title: t('language'),
@@ -43,12 +37,19 @@ const TableLanguages = ({handleIdCert,isSuccess, dataCertificate, dataLevels, da
 			render: certificates => (
 				<>
 					{certificates?.map((item: CertificateTs, index: number) => (
-						<div key={index} onClick={()=>{
-							handleIdCert(item?.id)
-						}}>
-							
+						<div
+							key={index}
+							onClick={() => {
+								// handleIdCert(item?.id)
+							}}
+						>
+							<a
+								href={`http://newlk-test.kpfu.ru/languages/certificate?certificateId=${item.langId}`}
+								target="_blank"
+								rel="noreferrer"
+							>
 								{item.certificateName} {index === certificates.length - 1 ? '' : ', '}
-							
+							</a>
 						</div>
 					))}
 				</>
@@ -75,7 +76,7 @@ const TableLanguages = ({handleIdCert,isSuccess, dataCertificate, dataLevels, da
 			key: 'action',
 			render: (_, record) => (
 				<Space size="middle">
-					<DeleteTwoTone onClick={()=>handleDelete(record?.langId)} className="hover:scale-[140%] " />
+					<DeleteTwoTone onClick={() => handleDelete(record?.langId)} className="hover:scale-[140%] " />
 				</Space>
 			)
 		}
@@ -87,21 +88,22 @@ const TableLanguages = ({handleIdCert,isSuccess, dataCertificate, dataLevels, da
 				uid: `-${index}`, // Уникальный ID для каждого файла
 				name: certificate.certificateName, // Имя файла
 				status: 'done', // Статус загрузки
-				url: certificate.certificateLink, // URL файла
-			}));
+				url: certificate.certificateLink // URL файла
+			}))
 			form2.setFieldsValue({
 				languageCode: selectInfo.code,
 				languageLevelCode: selectInfo.languageLevel,
 				certificateId: selectInfo.certificates?.[0]?.id || null, // Если сертификатов нет, устанавливаем null
 				isPublished: selectInfo.isPublished,
-				file: fileList,
-			});
+				file: fileList
+				
+			})
 		}
 	}, [isSuccess, selectInfo, form2])
 
-	const handleDelete = (record:any)=>{
+	const handleDelete = (record: any) => {
 		console.log('recordDelete', record)
-		 deleteForeign(record)
+		deleteForeign(record)
 	}
 
 	const showModalEdit = () => {
@@ -115,35 +117,87 @@ const TableLanguages = ({handleIdCert,isSuccess, dataCertificate, dataLevels, da
 	const handleCancelEdit = () => {
 		setIsModalOpenEdit(false)
 	}
-	
-	const onFinishForm2 = (values: FormValues) => {
-		console.log('value', values)
-		editForeign(values)
-		const obj = {
-			langId: 9007199254740991,
+
+	// const onFinishForm2 = (values: FormValues) => {
+	// 	console.log('value', values)
+	// 	editForeign(values)
+	// 	const obj = {
+	// 		langId: 9007199254740991,
+	// 		languageLevelCode: values.languageLevelCode,
+	// 		isPublished: values.isPublished,
+	// 		savingCertificates: [
+	// 			{
+	// 			"certificateId": 9007199254740991,
+	// 			"certificateName": "string",
+	// 			"certificateTypeId": 9007199254740991,
+	// 			"userLangId": 9007199254740991,
+	// 			"base64File": "string"
+	// 			}
+	// 		],
+	// 		deletingCertificates: [
+	// 			9007199254740991
+	// 		]
+	// 	}
+	// }
+	const onFinishForm2 = async (values: any) => {
+		console.log('values',values)
+		// Подготовка базовой структуры данных в новом формате
+		const requestData: any = {
+			langId: values.languageCode, // Используем languageCode как langId
 			languageLevelCode: values.languageLevelCode,
-			isPublished: values.isPublished,
-			savingCertificates: [
-				{
-				"certificateId": 9007199254740991,
-				"certificateName": "string",
-				"certificateTypeId": 9007199254740991,
-				"userLangId": 9007199254740991,
-				"base64File": "string"
-				}
-			],
-			deletingCertificates: [
-				9007199254740991
-			]
+			isPublished: values.isPublished || false,
+			savingCertificates: [], // Массив для сохраняемых сертификатов
+			deletingCertificates: [] // Массив для удаляемых сертификатов (пустой при добавлении нового языка)
+		}
+
+		// Обработка файла сертификата, если он есть
+		if (fileList.length > 0 && selectedLabel && values.certificateId) {
+			const originalFile = values.file?.[0]?.originFileObj as File
+			if (originalFile) {
+				// Конвертация файла в base64
+				const base64File = await new Promise<string>(resolve => {
+					const reader = new FileReader()
+					reader.onload = () => {
+						// Получаем base64 строку, удаляя префикс data:application/pdf;base64,
+						const base64String = reader.result as string
+						const base64Content = base64String.split(',')[1]
+						resolve(base64Content)
+					}
+					reader.readAsDataURL(originalFile)
+				})
+
+				// Добавление информации о сертификате в массив savingCertificates
+				requestData.savingCertificates = [
+					{
+						certId: values.certificateId,
+						certificateName: selectedLabel,
+						certificateTypeId: values.certificateId, // Используем тот же ID, если нет отдельного поля
+						userLangId: 0, // Будет заполнено на сервере
+						base64File: base64File
+					}
+				]
+			}
+		}
+
+		// Отправка данных на сервер
+		try {
+			await editForeign(requestData).unwrap()
+			setIsModalOpenEdit(false)
+			form2.resetFields()
+			setFileList([])
+			setSelectedLabel(null)
+		} catch (error) {
+			console.error('Ошибка при сохранении данных:', error)
+			message.error(t('error'))
 		}
 	}
 
-	const handleRemove = (file:any) => {
-		console.log('Удалённый файл ID:', file); // или file.id, если есть такое поле
+	const handleRemove = (file: any) => {
+		console.log('Удалённый файл ID:', file)
 		// setDeleteCert()
-		return true; // чтобы файл удалился из списка
-	};
-	
+		return true // чтобы файл удалился из списка
+	}
+
 	const beforeUpload = (file: File) => {
 		const isImage = file.type === 'application/pdf'
 		const isLt5M = file.size / 1024 / 1024 < 5
@@ -162,7 +216,6 @@ const TableLanguages = ({handleIdCert,isSuccess, dataCertificate, dataLevels, da
 		return false
 	}
 	console.log('selectInfo', selectInfo)
-	
 
 	return (
 		<>
@@ -195,7 +248,7 @@ const TableLanguages = ({handleIdCert,isSuccess, dataCertificate, dataLevels, da
 						>
 							<Select
 								allowClear
-								options={dataAll?.map((item) => ({
+								options={dataAll?.map(item => ({
 									value: item.code,
 									label: item.language
 								}))}
@@ -213,7 +266,7 @@ const TableLanguages = ({handleIdCert,isSuccess, dataCertificate, dataLevels, da
 						>
 							<Select
 								aria-required
-								options={dataLevels?.map((item) => ({
+								options={dataLevels?.map(item => ({
 									value: item.languageLevelCode,
 									label: item.languageLevel
 								}))}
@@ -232,13 +285,13 @@ const TableLanguages = ({handleIdCert,isSuccess, dataCertificate, dataLevels, da
 						>
 							<Select
 								onSelect={(value: string) => {
-									const selectedOption = dataCertificate?.find((item) => item.id === value)
+									const selectedOption = dataCertificate?.find(item => item.id === value)
 									if (selectedOption) {
 										setSelectedLabel(selectedOption.certificateName)
 									}
 								}}
 								allowClear
-								options={dataCertificate?.map((item) => ({
+								options={dataCertificate?.map(item => ({
 									value: item.id,
 									label: item.certificateName
 								}))}
@@ -246,13 +299,11 @@ const TableLanguages = ({handleIdCert,isSuccess, dataCertificate, dataLevels, da
 						</Form.Item>
 
 						{/* <div className="mt-14 mb-2">{t('prikrep')}</div> */}
-						<div className="mt-14 mb-2"></div> 
+						<div className="mt-14 mb-2"></div>
 						<Form.Item valuePropName="fileList" name="file" getValueFromEvent={e => e?.fileList}>
 							<Upload onRemove={handleRemove} maxCount={1} beforeUpload={beforeUpload} accept=".pdf">
 								<Button className=" " icon={<UploadOutlined />}>
-
-								{fileList.length > 0 ? t('change') : t('add')}
-
+									{fileList.length > 0 ? t('change') : t('add')}
 								</Button>
 							</Upload>
 						</Form.Item>
@@ -266,11 +317,14 @@ const TableLanguages = ({handleIdCert,isSuccess, dataCertificate, dataLevels, da
 						</Button>
 					</Form>
 				</Modal>
+				
 				<div className={'registerContracts animate-fade-in w-full'}>
+				<Spin className='w-full' spinning={isLoadingDelete}>
 					<Table<LanguageData>
+						
 						pagination={false}
 						columns={columns}
-						dataSource={dataForeign?.map((item:any) => ({
+						dataSource={dataForeign?.map((item: any) => ({
 							...item,
 							key: item.studLangId
 						}))}
@@ -280,7 +334,9 @@ const TableLanguages = ({handleIdCert,isSuccess, dataCertificate, dataLevels, da
 						className="w-full my-custom-table select-none"
 						locale={{ emptyText: t('noData') }}
 					/>
+					</Spin>
 				</div>
+				
 			</ConfigProvider>
 		</>
 	)

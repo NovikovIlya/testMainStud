@@ -10,6 +10,13 @@ import { t } from 'i18next'
 import React, { useEffect, useState } from 'react'
 
 import {
+	Certificate,
+	ForeignLanguage,
+	Language,
+	LanguageLevel,
+	NativeLanguagesApiResponse
+} from '../../../models/aboutMe'
+import {
 	useGetAllNativeLanguagesQuery,
 	useGetCertificateQuery,
 	useGetLevelsQuery,
@@ -24,9 +31,6 @@ import './Languages.css'
 import { SkeletonPage } from './Skeleton'
 import TableLanguages from './TableLanguages'
 import UploadAvatar from './UploadAvatar'
-import { Certificate, ForeignLanguage, Language, LanguageLevel, NativeLanguagesApiResponse } from '../../../models/aboutMe'
-
-
 
 const Languages = () => {
 	const [form] = Form.useForm()
@@ -35,17 +39,17 @@ const Languages = () => {
 	const [selectId, setSelectId] = useState<string | number | null>(null)
 	const [fileList, setFileList] = useState<File[]>([])
 	const { data: dataNative, isLoading: isFetchingNative, refetch, isError } = useGetNativeLanguagesQuery()
-	const { data: dataLevels } = useGetLevelsQuery() 
+	const { data: dataLevels } = useGetLevelsQuery()
 	const { data: dataCertificate } = useGetCertificateQuery()
-	const { data: dataAll } = useGetAllNativeLanguagesQuery() 
-	const { data: dataForeign, isLoading: isFetchingForeign, isError: isErrorForeign, isSuccess } = useGetforeignLanguagesQuery() 
+	const { data: dataAll } = useGetAllNativeLanguagesQuery()
+	const {data: dataForeign,isLoading: isFetchingForeign,isError: isErrorForeign,isSuccess} = useGetforeignLanguagesQuery()
 	const [setNative, { isLoading }] = useSetNativeMutation()
 	const [setForeign, { isLoading: isLoadingSetForeign }] = useSetForeignMutation()
-	const [idCert,setIdCert] = useState<null | number>(null)
-	const {data:dataOneCertificate} = useGetOneCertificateQuery(idCert,{skip:!idCert})
+	const [idCert, setIdCert] = useState<null | number>(null)
+	const { data: dataOneCertificate } = useGetOneCertificateQuery(idCert, { skip: !idCert })
 	const [selectedLabel, setSelectedLabel] = useState<string | null>(null)
-	const nativeLanguageForm = Form.useWatch('languages', form) 
-	const sertificateFormVal = Form.useWatch('certificateId', form2) 
+	const nativeLanguageForm = Form.useWatch('languages', form)
+	const sertificateFormVal = Form.useWatch('certificateId', form2)
 
 	useEffect(() => {
 		if (dataNative) {
@@ -62,39 +66,90 @@ const Languages = () => {
 	}
 
 	// Добавление Иностранного языка
-	const onFinishForm2 = (values: Omit<ForeignLanguage, 'file'> & { file?: any[] }) => {
-		const formData = new FormData()
+	// const onFinishForm2 = (values: Omit<ForeignLanguage, 'file'> & { file?: any[] }) => {
+	// const formData = new FormData()
 
-		if (fileList.length > 0 && selectedLabel) {
+	// if (fileList.length > 0 && selectedLabel) {
+	// 	const originalFile = values.file?.[0]?.originFileObj as File
+	// 	if (originalFile) {
+	// 		const fileExtension = originalFile.name.split('.').pop() // Получаем расширение файла
+	// 		const newFileName = `${selectedLabel}.${fileExtension}`
+
+	// 		const modifiedFile = new File([originalFile], newFileName, {
+	// 			type: originalFile.type,
+	// 			lastModified: originalFile.lastModified
+	// 		})
+
+	// 		formData.append('certificate', modifiedFile)
+	// 	}
+	// }
+
+	// delete values.file
+
+	// const jsonData = JSON.stringify(values)
+	// const blob = new Blob([jsonData], { type: 'application/json' })
+	// const reader = new FileReader()
+	// reader.onload = function () {
+	// 	console.log('Содержимое Blob:', reader.result)
+	// }
+	// reader.readAsText(blob)
+
+	// formData.append('language ', blob)
+
+	// setForeign(formData).unwrap()
+	// setIsModalOpen(false)
+	// form2.resetFields()
+
+	// }
+	const onFinishForm2 = async (values: Omit<ForeignLanguage, 'file'> & { file?: any[] }) => {
+		// Подготовка базовой структуры данных
+		const requestData: any = {
+			languageCode: values.languageCode,
+			languageLevelCode: values.languageLevelCode,
+			isPublished: values.isPublished || false,
+			certificates: []
+		}
+
+		// Обработка файла сертификата, если он есть
+		if (fileList.length > 0 && selectedLabel && values.certificateId) {
 			const originalFile = values.file?.[0]?.originFileObj as File
 			if (originalFile) {
-				const fileExtension = originalFile.name.split('.').pop() // Получаем расширение файла
-				const newFileName = `${selectedLabel}.${fileExtension}`
-
-				const modifiedFile = new File([originalFile], newFileName, {
-					type: originalFile.type,
-					lastModified: originalFile.lastModified
+				// Конвертация файла в base64
+				const base64File = await new Promise<string>(resolve => {
+					const reader = new FileReader()
+					reader.onload = () => {
+						// Получаем base64 строку, удаляя префикс data:application/pdf;base64,
+						const base64String = reader.result as string
+						const base64Content = base64String.split(',')[1]
+						resolve(base64Content)
+					}
+					reader.readAsDataURL(originalFile)
 				})
-
-				formData.append('certificate', modifiedFile)
+				
+				// Добавление информации о сертификате
+				requestData.certificates = [
+					{
+						// certId: values.certificateId,
+						certificateName: selectedLabel,
+						certificateTypeId: values.certificateId, // Используем тот же ID, если нет отдельного поля
+						base64File: base64File
+					}
+				]
 			}
 		}
 
-		delete values.file
-
-		const jsonData = JSON.stringify(values)
-		const blob = new Blob([jsonData], { type: 'application/json' })
-		const reader = new FileReader()
-		reader.onload = function () {
-			console.log('Содержимое Blob:', reader.result)
+		// Отправка данных на сервер
+		try {
+			await setForeign(requestData).unwrap()
+			setIsModalOpen(false)
+			form2.resetFields()
+			setFileList([])
+			setSelectedLabel(null)
+		} catch (error) {
+			
+			console.error('Ошибка при сохранении данных:', error)
+			message.error('Не удалось сохранить данные о языке')
 		}
-		reader.readAsText(blob)
-
-		formData.append('language ', blob)
-
-		setForeign(formData).unwrap()
-		setIsModalOpen(false)
-		form2.resetFields()
 	}
 
 	const handleSubmit = (values: { content: string }) => {}
@@ -128,10 +183,10 @@ const Languages = () => {
 		return false
 	}
 
-	const handleIdCert = (id:number)=>{
+	const handleIdCert = (id: number) => {
 		setIdCert(id)
 	}
-	
+
 	// if (isError || isErrorForeign) {
 	// 	return (
 	// 		<div className="mt-[75px] ml-[20px]">
@@ -139,7 +194,7 @@ const Languages = () => {
 	// 				status="error"
 	// 				title=""
 	// 				subTitle={t('errorFetch')}
-					
+
 	// 			></Result>
 	// 		</div>
 	// 	)
@@ -158,7 +213,7 @@ const Languages = () => {
 				<Form form={form} onFinish={onFinish} className=" ">
 					<Spin spinning={isLoading} className="flex gap-2">
 						<Row className="mb-5">
-							<Title className='!text-[28px]'>{t('langZnan')}</Title>
+							<Title className="!text-[28px]">{t('langZnan')}</Title>
 						</Row>
 						<Row className="mb-0 mt-3 w-full">
 							<Col span={24}>
@@ -213,14 +268,23 @@ const Languages = () => {
 						</Title>
 					</Row>
 					<Row>
-						<TableLanguages handleIdCert={handleIdCert} isSuccess={isSuccess} dataCertificate={dataCertificate} dataLevels={dataLevels} dataAll={dataAll} selectId={selectId} setSelectId={setSelectId} dataForeign={dataForeign} />
+						<TableLanguages
+							handleIdCert={handleIdCert}
+							isSuccess={isSuccess}
+							dataCertificate={dataCertificate}
+							dataLevels={dataLevels}
+							dataAll={dataAll}
+							selectId={selectId}
+							setSelectId={setSelectId}
+							dataForeign={dataForeign}
+						/>
 					</Row>
 					<Row className="flex items-center justify-start mt-4 gap-2">
 						<div
 							onClick={showModal}
 							className="gap-2 flex items-center cursor-pointer  hover:bg-gray-200 p-2 rounded-xl"
 						>
-							<Button size='small' className="rounded-[50%] !w-[28px] !h-[28px] text-[24px] " type="primary">
+							<Button size="small" className="rounded-[50%] !w-[28px] !h-[28px] text-[24px] " type="primary">
 								+
 							</Button>
 							<span>{t('add')}</span>
@@ -281,7 +345,7 @@ const Languages = () => {
 							wrapperCol={{ span: 24 }}
 							layout="vertical"
 							className="mt-14 h-[35px]"
-							rules={[{ required: true, message: '' }]}
+							// rules={[{ required: true, message: '' }]}
 						>
 							<Select
 								onSelect={(value: Certificate['id']) => {
@@ -299,7 +363,9 @@ const Languages = () => {
 						</Form.Item>
 
 						<div className="mt-14 mb-2">{t('prikrep')}</div>
-						<Form.Item name="file" getValueFromEvent={e => e?.fileList}>
+						<Form.Item 
+						// rules={[{ required: true, message: '' }]}
+						 name="file" getValueFromEvent={e => e?.fileList}>
 							<Upload maxCount={1} beforeUpload={beforeUpload} accept=".pdf">
 								<Button className=" " icon={<UploadOutlined />}>
 									{t('add')}

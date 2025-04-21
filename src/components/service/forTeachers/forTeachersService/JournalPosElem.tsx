@@ -3,7 +3,7 @@ import { Button, Col, Form, Modal, Radio, Result, Row, Select, Spin } from 'antd
 import { t } from 'i18next'
 import React, { useEffect, useState } from 'react'
 
-import { useAppSelector } from '../../../../store'
+import { useAppDispatch, useAppSelector } from '../../../../store'
 import {
 	useGetDataSemesterQuery,
 	useGetDisciplineSemesterQuery,
@@ -15,6 +15,7 @@ import {
 import InfoCard from './InfoCard'
 import TableBrs from './table/TableBrs'
 import TableJournalPos from './table/TableJournalPos'
+import { logOut } from '../../../../store/reducers/authSlice'
 
 const JournalPosElem = ({ collapsed }: { collapsed: boolean }) => {
 	const initialDay = ''
@@ -35,6 +36,7 @@ const JournalPosElem = ({ collapsed }: { collapsed: boolean }) => {
 	const [radioKey, setRadioKey] = useState(Math.random())
 	const [triggerExportExcel, { isFetching: isExporting }]  = useLazyExportExcelQuery()
 	const [triggerExportExcelEmpty, { isFetching: isExportingEmpty }]  = useLazyExportExcelEmptyQuery()
+	const dispatch = useAppDispatch()
 
 	useEffect(() => {
 		if (dataGetSemestr) {
@@ -86,6 +88,16 @@ const JournalPosElem = ({ collapsed }: { collapsed: boolean }) => {
 		}
 		console.log('data',data)
 		sendData(data)
+			.unwrap()
+			.then((res: string) => {
+				console.log('Текст ответа:', res)
+				alert('Ответ сервера: ' + res);
+			})
+			.catch((err:any)=>{
+						if(err.status === 501){
+						alert('Время сессии истекло. Пожалуйста, пройдите процедуру авторизации заново.');
+						dispatch(logOut())}
+			})
 	}
 
 	const onChangeSelect = () => {

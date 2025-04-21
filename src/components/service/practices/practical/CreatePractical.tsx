@@ -1495,6 +1495,7 @@ export const CreatePractical = () => {
 							rules={[{ required: true }]}
 						>
 							<Select
+								  showSearch
 								disabled={!isSuccessNameSpecialty}
 								size="large"
 								popupMatchSelectWidth={false}
@@ -1517,6 +1518,7 @@ export const CreatePractical = () => {
 							label={t('practiceKind')}
 						>
 							<Select
+							    showSearch
 								disabled={!pickSpeciality}
 								size="large"
 								popupMatchSelectWidth={false}
@@ -1539,6 +1541,7 @@ export const CreatePractical = () => {
 							label={t('practiceKind')}
 						>
 							<Select
+							    showSearch
 								onChange={handlePracticeKind}
 								size="large"
 								popupMatchSelectWidth={false}
@@ -1558,6 +1561,7 @@ export const CreatePractical = () => {
 							label={t('department')}
 						>
 							<Select
+							    showSearch
 								disabled={!isSuccessDep}
 								size="large"
 								popupMatchSelectWidth={false}
@@ -1575,6 +1579,7 @@ export const CreatePractical = () => {
 							label={t('groupNumber')}
 						>
 							<Select
+							    showSearch
 								disabled={!isSuccessGroupNumbers}
 								size="large"
 								popupMatchSelectWidth={false}
@@ -1597,23 +1602,7 @@ export const CreatePractical = () => {
 						</Form.Item>
 					</Col>
 				</Row>
-				{/* <Row gutter={[16, 16]}>
-					<Col xs={24} sm={24} md={18} lg={16} xl={12}>
-						<Form.Item
-							//rules={[{required: true}]}
-							name={'competences'}
-							label={'Код и наименование компетенции'}
-						>
-							<Select
-								disabled={!isSuccessCompetences}
-								size="large"
-								popupMatchSelectWidth={false}
-								className="w-full"
-								options={dataCompetences}
-							/>
-						</Form.Item>
-					</Col>
-				</Row> */}
+			
 				<Row gutter={[16, 16]}>
 				<Col xs={24} sm={24} md={18} lg={8} xl={6}>
 						<Form.Item
@@ -1623,6 +1612,7 @@ export const CreatePractical = () => {
 							rules={[{ required: true }]}
 						>
 							<Select
+							    showSearch
 								size="large"
 								popupMatchSelectWidth={false}
 								className="w-full"
@@ -1646,24 +1636,7 @@ export const CreatePractical = () => {
 						</Form.Item>
 					</Col>
 				</Row>
-				{/* <Row gutter={[16, 16]}>
-                    <Col xs={24} sm={24} md={18} lg={8} xl={6}>
-                        <Form.Item
-                            //rules={[{required: true}]}
-                            name={'period'}
-                            label={'Период практики'}>
-
-                            <DatePicker.RangePicker
-                                size={'large'}
-                                placeholder={['Начало', 'Конец']}
-                                format="DD.MM.YYYY"
-                                onChange={onChangePickerPeriodPractise}
-
-                            />
-
-                        </Form.Item>
-                    </Col>
-                </Row> */}
+				
 				<Row gutter={[16, 16]}>
 				<Col xs={24} sm={24} md={18} lg={8} xl={6}>
 						<Form.Item
@@ -1673,6 +1646,7 @@ export const CreatePractical = () => {
 							required
 						>
 							<Select
+							    showSearch
 							    disabled={!pickCourse}
 								size="large"
 								popupMatchSelectWidth={false}
@@ -1697,19 +1671,7 @@ export const CreatePractical = () => {
 							/>
 						</Form.Item>
 					</Col>
-					{/* <Col xs={24} sm={24} md={18} lg={8} xl={6}>
-                        <Form.Item
-                            //rules={[{required: true}]}
-                            name={'startStudy'}
-                            label={'Дата начала практики'}>
-                            <DatePicker
-                                size="large"
-                                format="DD.MM.YYYY"
-                                placeholder=""
-                                className="w-full"
-                            />
-                        </Form.Item>
-                    </Col> */}
+					
 				</Row>
 				<Row gutter={[16, 16]}>
 					<Col xs={24} sm={24} md={18} lg={8} xl={6}>
@@ -1727,18 +1689,7 @@ export const CreatePractical = () => {
 							/>
 						</Form.Item>
 					</Col>
-					{/* <Col xs={24} sm={24} md={18} lg={8} xl={6}>
-                        <Form.Item
-                            //rules={[{required: true}]}
-                            name={'endStudy'}
-                            label={'Дата окончания практики'}>
-                            <DatePicker
-                                size="large"
-                                format="DD.MM.YYYY"
-                                className="w-full"
-                            />
-                        </Form.Item>
-                    </Col> */}
+					
 				</Row>
 
 				<Row gutter={[16, 16]}>
@@ -1896,6 +1847,7 @@ export const CreatePractical = () => {
 							label={t('director')}
 						>
 							<Select
+							    showSearch
 								disabled={!isSuccessDepartmentDirector}
 								size="large"
 								popupMatchSelectWidth={false}

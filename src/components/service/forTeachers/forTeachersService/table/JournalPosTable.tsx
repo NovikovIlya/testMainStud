@@ -4,7 +4,8 @@ import { Button, Checkbox, CheckboxProps, Row, Typography } from 'antd'
 import Title from 'antd/es/typography/Title'
 import { t } from 'i18next'
 import { useSendByDateMutation } from '../../../../../store/api/forTeacher/forTeacherApi'
-import { useAppSelector } from '../../../../../store'
+import { useAppDispatch, useAppSelector } from '../../../../../store'
+import { logOut } from '../../../../../store/reducers/authSlice'
 
 const { Text, Link } = Typography
 
@@ -17,8 +18,16 @@ const JournalPosTable = ({date,fixDay,time,timeId,groupId,description,title,data
 	})
 	const yearForm = useAppSelector(state => state.forTeacher.yearForm)
 	const semestrForm = useAppSelector(state => state.forTeacher.semestrForm)
-	const [sendData,{}] = useSendByDateMutation()
+	const [sendData,{error,data:dataSend}] = useSendByDateMutation()
 	const [checkbox, setCheckbox] = useState(false)
+	const dispatch = useAppDispatch()
+	console.log('dataSenddataSend',dataSend)
+	useEffect(()=>{
+		console.log('dataSenddataSend',dataSend)
+		if (typeof dataSend?.data === 'string') { // Проверка на текстовый ответ
+			alert('Ответ сервера: ' + dataSend?.data); // Вывод alert
+		  }
+	},[dataSend])
 
 	const send = ()=>{
 		const data = {
@@ -37,12 +46,22 @@ const JournalPosTable = ({date,fixDay,time,timeId,groupId,description,title,data
 		}
 		console.log('data',data)
 		sendData(data)
+		.unwrap()
+		.then((res: string) => {
+			console.log('Текст ответа:', res)
+			alert('Ответ сервера: ' + res);
+		})
+		.catch((err:any)=>{
+			if(err.status === 501){
+			alert('Время сессии истекло. Пожалуйста, пройдите процедуру авторизации заново.');
+			dispatch(logOut())}
+		})
 	}
 	const onChange: CheckboxProps['onChange'] = (e) => {
 		console.log(`checked = ${e.target.checked}`);
 		setCheckbox(e.target.checked);
 	};
-
+	console.log('dataSend',dataSend)
 	console.log('localData,',localData)
 	return (
 		<>

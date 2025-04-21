@@ -6,6 +6,7 @@ import { setIsEditTableScheduleTeacher } from '../../../../../store/reducers/aut
 import { DataType, EditableCellProps, EditableRowProps } from '../../../../../models/tables';
 import { truncateString } from '../../../../../utils/truncateString';
 import TextArea from 'antd/es/input/TextArea';
+import { t } from 'i18next';
 
 
 const EditableContext = React.createContext<FormInstance<any> | null>(null);
@@ -119,24 +120,24 @@ const TableVedomosti = ({kindForm,dataSource, setDataSource,subj_type,is_session
       width: '20%',
     },
     {
-      title: 'Отметка работы студента в семестре',
+      title: t('otmetka'),
       dataIndex: 'semesterMark',
       width: '10%',
     },
     {
-      title: `Отметка о сдаче ${kindForm==='e' ? 'экзамена' : kindForm === 'q' ? 'зачета' : 'дифзачета'}`,
+      title: `${t('otm')} ${kindForm==='e' ? t('exam') : kindForm === 'q' ? t('Credit') : t('difcredit')}`,
       dataIndex: 'subjectMark',
       editable: true,
       width: '10%',
       inputType: 'number',
     },  
     {
-      title: 'Рейтинговый показатель по дисциплине',
+      title: t('rateDisc'),
       dataIndex: 'subjectRate',
       width: '15%',
     },
     {
-      title: 'Итоговая оценка вносимая в зачетную книжку',
+      title: t('itog'),
       dataIndex: 'subjectMarkvalue',
       width: '25%',
       render: (text: any) => {

@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
 	content: ['./src/**/*.{js,jsx,ts,tsx,scss}'],
-	darkMode: "class",
+	darkMode: 'class',
 	theme: {
 		extend: {
 			colors: {
@@ -9,18 +9,38 @@ module.exports = {
 				blue1f5: '#1F5CB8',
 				blue307: '#3073D7',
 				blue004: '#004EC2',
-				blue65A: '#65A1FA'
+				blue65A: '#65A1FA',
+				'header-blue': '#65A1FA',
+				'button-blue': '#3073D7',
+				'content-gray': '#F5F8FB',
+				'dasha-blue': '#1F5CB8',
+				'dasha-light-blue': '#3073D7',
+				'hover-gray-blue': '#E3E8ED',
+				'text-gray': '#909090',
+				'button-blue-hover': '#3483F9',
+				'button-focus-border-blue': '#045ADB'
+			},
+			screens: {
+				test: { min: '0px', max: '1580px' }
+				// тестовые медиа запросик
+			},
+			fontFamily: {
+				'main-font': ['"Open Sans"', 'sans-serif'],
+				'content-font': ['"PT Sans"', 'sans-serif']
+			},
+			boxShadow: {
+				'custom-shadow': '0 0 19px 0 rgba(212, 227, 241, 0.6)'
 			},
 			animation: {
 				'bounce-slow': 'bounce 12s  infinite ease-in-out',
-				'fade-in': 'fadeIn 0.6s ease-in-out',
+				'fade-in': 'fadeIn 0.6s ease-in-out'
 			},
 			keyframes: {
 				fadeIn: {
-				  '0%': { opacity: 0 },
-				  '100%': { opacity: 1 },
-				},
-			  },
+					'0%': { opacity: 0 },
+					'100%': { opacity: 1 }
+				}
+			}
 		}
 	},
 	corePlugins: {

@@ -547,6 +547,7 @@ const CreateTask = () => {
                                        rules={[{required: true}]}
                                        name={'specialityName'}>
                                 <Select
+                                    showSearch
                                     disabled={!subDivision}
                                     size="large"
                                     popupMatchSelectWidth={false}
@@ -574,6 +575,7 @@ const CreateTask = () => {
                                 rules={[{required: true}]}
                                 name={"practiceType"}>
                                 <Select
+                                    showSearch
                                     disabled={!subDivision}
                                     size="large"
                                     popupMatchSelectWidth={false}

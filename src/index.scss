@@ -12,23 +12,20 @@
 html,
 body {
 	@apply overflow-x-hidden;
-	
 }
-
 
 @layer utilities {
 	*::-webkit-scrollbar {
 		width: 10px; /* Ширина вертикального скролла */
 		height: 12px; /* Высота горизонтального скролла */
-		
 	}
 
 	*::-webkit-scrollbar-thumb {
-		 background: #c1c1c1; /* Цвет ползунка */
+		background: #c1c1c1; /* Цвет ползунка */
 		border-radius: 0px; /* Скругление углов ползунка */
 	}
 	*::-webkit-scrollbar-track {
-		 background: #f1f1f1
+		background: #f1f1f1;
 	}
 }
 .ant-modal .ant-modal-content {
@@ -199,52 +196,40 @@ body {
 }
 
 .ant-list-item {
-	background-color: #FFFFFF ; /* светло-серый фон */
+	background-color: #ffffff; /* светло-серый фон */
 }
 .ant-list-itemTwo {
 	background-color: #f5f8fb !important; /* светло-серый фон */
 }
 
-:where(.css-dev-only-do-not-override-to9039).ant-spin-nested-loading >div>.ant-spin{
-	bottom:0 !important;
-	top:auto !important;
+:where(.css-dev-only-do-not-override-to9039).ant-spin-nested-loading > div > .ant-spin {
+	bottom: 0 !important;
+	top: auto !important;
 }
 // .rc-virtual-list .rc-virtual-list-scrollbar {
 // 	display: block !important;
 //   }
-.ant-list-itemThree{
-    background-color: white !important;
+.ant-list-itemThree {
+	background-color: white !important;
 }
 :where(.css-dev-only-do-not-override-to9039).ant-list-split .ant-list-item {
-    border-block-end: 1px solid rgba(255, 255, 255, 0.06);
+	border-block-end: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-
-.heigh100{
-	height: 100vh
+.heigh100 {
+	height: 100vh;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-.userHelperLibrary{
+.userHelperLibrary {
 	display: flex;
 	position: fixed;
 	right: 20px;
 	top: 10%;
 	z-index: 9999;
-	font-family: "Roboto", sans-serif;
-  }
-  
-  .user-helper-toogleButton{
+	font-family: 'Roboto', sans-serif;
+}
+
+.user-helper-toogleButton {
 	cursor: pointer;
 	margin-right: -6px;
 	background-color: #d81f26;
@@ -255,69 +240,69 @@ body {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-  }
-  
-  .user-helper-toogleButton i{
+}
+
+.user-helper-toogleButton i {
 	color: #ffffff;
-  }
-  
-  .userHelperLibrary i{
+}
+
+.userHelperLibrary i {
 	font-size: 30px;
-  }
-  
-  .user-helper-block{
+}
+
+.user-helper-block {
 	background-color: #d81f26;
 	padding: 7px;
 	border-radius: 5px;
 	width: 300px;
-  }
-  
-  .user-helper-content{
+}
+
+.user-helper-content {
 	display: flex;
-	flex-direction: column
-  }
-  
-  .user-helper-topButton{
+	flex-direction: column;
+}
+
+.user-helper-topButton {
 	border-top-left-radius: 5px;
 	border-top-right-radius: 5px;
-  }
-  
-  .user-helper-btn{
+}
+
+.user-helper-btn {
 	background-color: #ffffff;
 	display: flex;
 	align-items: center;
 	padding: 10px;
 	cursor: pointer;
 	border: solid 1px #d81f26;
-  }
-  
-  .user-helper-icon{
+}
+
+.user-helper-icon {
 	min-width: 40px;
 	text-align: center;
 	margin-right: 5px;
-  }
-  
-  .user-helper-bottomButton{
+}
+
+.user-helper-bottomButton {
 	border-bottom-left-radius: 5px;
 	border-bottom-right-radius: 5px;
-  }
-  
-  .helper-btn-bottom{
+}
+
+.helper-btn-bottom {
 	text-align: center;
 	justify-content: center;
-  }
-  
-  .helper-btn-bottom i{
+}
+
+.helper-btn-bottom i {
 	font-size: 15px;
 	margin-left: 10px;
-  }
-  
-  .user-helper-middleContent{
+}
+
+.user-helper-middleContent {
 	display: grid;
 	grid-template-columns: 50% 50%;
-  }
-  
-  .user-helper-midBtn{
+}
+
+.user-helper-midBtn {
 	background-color: #ffffff;
 	border: 1px solid #d81f26;
 	display: flex;
@@ -327,97 +312,91 @@ body {
 	min-height: 110px;
 	cursor: pointer;
 	text-align: center;
-  }
-  
-  .user-helper-midBtn i{
+}
+
+.user-helper-midBtn i {
 	margin-bottom: 10px;
-  }
-  
-  .pressed-btn{
-	background-color: #DD3433 !important;
-  }
-  
-  .helper-btn:active{
-	background-color: #DD3433 !important;
-  }
-  .user-helper-fontBtn{
+}
+
+.pressed-btn {
+	background-color: #dd3433 !important;
+}
+
+.helper-btn:active {
+	background-color: #dd3433 !important;
+}
+.user-helper-fontBtn {
 	background-color: transparent;
 	border: none;
 	outline: none;
 	cursor: pointer;
 	font-size: 15px;
-  }
-  
-  .user-helper-block-d-none {
+}
+
+.user-helper-block-d-none {
 	display: none;
-  }
-  
-  
-  
-  /* core classes */
-  .helper-core-invert{
+}
+
+/* core classes */
+.helper-core-invert {
 	-webkit-filter: invert(100%);
 	filter: invert(100%);
-  }
-  
-  .helper-core-grey{
+}
+
+.helper-core-grey {
 	-webkit-filter: grayscale(100%);
 	filter: grayscale(100%);
-  }
-  
-  .helper-core-underline a{
+}
+
+.helper-core-underline a {
 	text-decoration: underline !important;
-  }
-  
-  .helper-core-blmouse{
-	cursor:url('./components/AccessibilityHelper/assets/img/black-cursor.png'), auto;
-  }
-  
-  .helper-core-tabHighlight *:focus {
-	background-color: #F5D029 !important;
-  }
-  
-  .helper-core-whmouse{
+}
+
+.helper-core-blmouse {
+	cursor: url('./components/AccessibilityHelper/assets/img/black-cursor.png'), auto;
+}
+
+.helper-core-tabHighlight *:focus {
+	background-color: #f5d029 !important;
+}
+
+.helper-core-whmouse {
 	cursor: url('./components/AccessibilityHelper/assets/img/white-cursor.png'), auto;
-  }
-  
-  .helper-core-zoom{
+}
+
+.helper-core-zoom {
 	zoom: 120%;
-  }
-  
-  .helper-core-blockAnim{
-  	animation-play-state: paused !important;
-  -webkit-filter: grayscale(0%);
-  filter: grayscale(0%);
-  }
-  
-  .helper-core-titlesubline h1{
-	border-bottom: solid 2px #111111 !important;
-  }
-  
-  .helper-core-titlesubline h2{
-	border-bottom: solid 2px #111111 !important;
-  }
-  
-  .helper-core-titlesubline h3{
-	border-bottom: solid 2px #111111 !important;
-  }
-  
-  .helper-core-titlesubline h4{
-	border-bottom: solid 2px #111111 !important;
-  }
-  
-  .helper-core-titlesubline h5{
-	border-bottom: solid 2px #111111 !important;
-  }
-  
-  .helper-core-titlesubline h6{
-	border-bottom: solid 2px #111111 !important;
-  }
+}
 
+.helper-core-blockAnim {
+	animation-play-state: paused !important;
+	-webkit-filter: grayscale(0%);
+	filter: grayscale(0%);
+}
 
+.helper-core-titlesubline h1 {
+	border-bottom: solid 2px #111111 !important;
+}
 
+.helper-core-titlesubline h2 {
+	border-bottom: solid 2px #111111 !important;
+}
 
+.helper-core-titlesubline h3 {
+	border-bottom: solid 2px #111111 !important;
+}
+
+.helper-core-titlesubline h4 {
+	border-bottom: solid 2px #111111 !important;
+}
+
+.helper-core-titlesubline h5 {
+	border-bottom: solid 2px #111111 !important;
+}
+
+.helper-core-titlesubline h6 {
+	border-bottom: solid 2px #111111 !important;
+}
 
 // .accesibility-helper .grid button {
 //     font-size: 14px !important;

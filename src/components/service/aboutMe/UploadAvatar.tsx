@@ -1,10 +1,11 @@
 import React from 'react';
-import { UploadOutlined, UserOutlined } from '@ant-design/icons';
+import { DeleteOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Button, message, Spin, Upload } from 'antd';
 import { useAddAvatarMutation, useGetAvatarQuery, usePutAvatarMutation } from '../../../store/api/aboutMe/forAboutMe';
 import { t } from 'i18next';
+import { Un } from '../../../assets/svg/Un';
 
-const UploadAvatar = ({dataAboutMe}:any) => {
+const UploadAvatar = () => {
   const { data: avatarUrl } = useGetAvatarQuery();
   const [addAvatar, { isLoading }] = useAddAvatarMutation();
   const [putAvatar, { isLoading: isLoadingPut }] = usePutAvatarMutation();
@@ -14,12 +15,12 @@ const UploadAvatar = ({dataAboutMe}:any) => {
     const isLt5M = file.size / 1024 / 1024 < 5;
 
     if (!isImage) {
-      message.error('Можно загружать только изображения!');
+      message.error(t('onlyImages'));
       return false;
     }
 
     if (!isLt5M) {
-      message.error('Файл должен быть меньше 5MB!');
+      message.error(t('fileSize'));
       return false;
     }
 
@@ -38,13 +39,12 @@ const UploadAvatar = ({dataAboutMe}:any) => {
         await addAvatar(formData).unwrap();
         message.success(t('avatarChange'));
       }
-      // await addAvatar(formData).unwrap();
-      // message.success('Аватар успешно обновлен');
+     
     } catch (error) {
       message.error(t('error'));
     }
   };
-  console.log('avatarUrl111',avatarUrl)
+  
   return (
     <Spin spinning={isLoadingPut || isLoading} className='relative w-[180px] mb-4'>
       <Avatar
@@ -61,13 +61,26 @@ const UploadAvatar = ({dataAboutMe}:any) => {
           accept="image/png, image/jpeg, image/webp"
           customRequest={({ file }) => handleUpload(file as File)}
         >
-          {/* <Button
-            className='!rounded-[50%]'
-            icon={<UploadOutlined />}
+          <Button
+            className='!rounded-[50%] bg-[#65A1FA] text-white !hover:text-black  border-2 border-white border-solid w-[36px]'
+            icon={<Un />}
             loading={isLoading}
-          /> */}
+            type='primary'
+          />
+          
         </Upload>
+
+        
       </div>
+
+      {avatarUrl?.url ? <div className='absolute bottom-[43%] right-[-13px]'>
+        <Button
+              className='!rounded-[50%] bg-[#65A1FA] text-white   border-2 border-white border-solid w-[36px]'
+              icon={<DeleteOutlined  />}
+                type='primary'
+
+            />
+        </div> : ''}
     </Spin>
   );
 };

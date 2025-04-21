@@ -1,32 +1,25 @@
-import {
-	DeleteTwoTone,
-	EditTwoTone,
-	EyeInvisibleOutlined,
-	EyeInvisibleTwoTone,
-	EyeTwoTone,
-	UploadOutlined
-} from '@ant-design/icons'
-import { Button, Checkbox, ConfigProvider, Form, Modal, Row, Select, Space, Table, Tag, Upload } from 'antd'
+import { DeleteTwoTone, EditTwoTone, EyeInvisibleTwoTone, EyeTwoTone, UploadOutlined } from '@ant-design/icons'
+import { Button, Checkbox, ConfigProvider, Form, Modal, Select, Space, Spin, Table, Upload, message } from 'antd'
 import type { TableProps } from 'antd'
 import { t } from 'i18next'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
-import { truncateString } from '../../../utils/truncateString'
+import { CertificateTs, FormValues, LanguageData, TableLanguagesProps } from '../../../models/aboutMe'
+import { useDeleteForeignMutation, useEditForeignMutation, useIsPublishedMutation } from '../../../store/api/aboutMe/forAboutMe'
 
 import './TableLanguage.scss'
 
-interface DataType {
-	key: string
-	name: string
-	age: number
-	address: string
-	tags: string[]
-}
-
-const TableLanguages = ({ dataForeign, setSelectId, selectId }: any) => {
-	const [isModalOpenEdit, setIsModalOpenEdit] = useState(false)
-	const [rowStates, setRowStates] = useState({})
-	const columns: TableProps<DataType>['columns'] = [
+const TableLanguages = ({triger,handleIdCert,isSuccess,dataCertificate,dataLevels,dataAll,dataForeign,setSelectId,selectId}: TableLanguagesProps) => {
+	const [isModalOpenEdit, setIsModalOpenEdit] = useState<boolean>(false)
+	const [selectInfo, setSelectInfo] = useState<LanguageData | null>(null)
+	const [selectedLabel, setSelectedLabel] = useState<string | null>(null)
+	const [form2] = Form.useForm()
+	const [fileList, setFileList] = useState<any[]>([])
+	const [editForeign, {}] = useEditForeignMutation()
+	const [deleteCert, setDeleteCert] = useState<any[]>([])
+	const [deleteForeign, {isLoading:isLoadingDelete}] = useDeleteForeignMutation()
+	const [changeGlaz,{isLoading:isLoadingGlaz}] = useIsPublishedMutation()
+	const columns: TableProps<LanguageData>['columns'] = [
 		{
 			title: t('language'),
 			dataIndex: 'language',
@@ -44,17 +37,27 @@ const TableLanguages = ({ dataForeign, setSelectId, selectId }: any) => {
 			key: 'address',
 			render: certificates => (
 				<>
-					{certificates?.map((item: any, index: any) => (
-						<div key={index}>
-							<a target="_blank" href={item.certificateLink} rel="noopener noreferrer">
+					{certificates?.map((item: CertificateTs, index: number) => (
+						<div
+							key={index}
+							onClick={() => {
+								// handleIdCert(item?.certId)
+								console.log('item?.id',item?.certId)
+								// triger(item?.certId)
+							}}
+						>
+							 <a
+								href={`https://newlk-test.kpfu.ru/languages/foreign/certificate?certificateId=${item.certId}`
+							} 
+								
+							>
 								{item.certificateName} {index === certificates.length - 1 ? '' : ', '}
-							</a>
+							 </a> 
 						</div>
 					))}
 				</>
 			)
 		},
-
 		{
 			title: '',
 			key: 'action',
@@ -69,21 +72,12 @@ const TableLanguages = ({ dataForeign, setSelectId, selectId }: any) => {
 							onClick={e => {
 								e.preventDefault()
 								e.stopPropagation()
+								console.log('record',record)
 								// @ts-ignore
-								setSelectId(record?.studLangId)
-								// setRowStates(prevState => {
-								// 	const newStates = { ...prevState };
-								// 	// @ts-ignore
-								// 	if (newStates[record?.studLangId]) {
-								// 			// @ts-ignore
-								// 	  delete newStates[record?.studLangId]; // Снимаем выделение
-								// 	// @ts-ignore
-								// 	} else {
-								// 	// @ts-ignore
-								// 	  newStates[record?.studLangId] = true; // Выделяем
-								// 	}
-								// 	return newStates;
-								//   });
+								setSelectId(record?.userLangId)
+								// @ts-ignore
+								changeGlaz(record?.langId)
+							
 							}}
 						/>
 					) : (
@@ -94,26 +88,17 @@ const TableLanguages = ({ dataForeign, setSelectId, selectId }: any) => {
 								e.preventDefault()
 								e.stopPropagation()
 								// @ts-ignore
-								setSelectId(record?.studLangId)
-								// setRowStates(prevState => {
-								// 	const newStates = { ...prevState };
-								// 	// @ts-ignore
-								// 	if (newStates[record?.studLangId]) {
-								// 			// @ts-ignore
-								// 	  delete newStates[record?.studLangId]; // Снимаем выделение
-								// 	// @ts-ignore
-								// 	} else {
-								// 	// @ts-ignore
-								// 	  newStates[record?.studLangId] = true; // Выделяем
-								// 	}
-								// 	return newStates;
-								//   });
+								setSelectId(record?.userLangId)
+								// @ts-ignore
+								changeGlaz(record?.langId)
+							
 							}}
 						/>
 					)}
 				</>
 			)
 		},
+
 		{
 			title: '',
 			key: 'action',
@@ -121,10 +106,9 @@ const TableLanguages = ({ dataForeign, setSelectId, selectId }: any) => {
 				<Space size="middle">
 					<EditTwoTone
 						className="hover:scale-[140%] transition-transform duration-200 delay-100"
-
 						onClick={() => {
-							// @ts-ignore
-							setSelectId(record?.studLangId)
+							setSelectId(record.studLangId)
+							setSelectInfo(record)
 							showModalEdit()
 						}}
 					/>
@@ -136,33 +120,39 @@ const TableLanguages = ({ dataForeign, setSelectId, selectId }: any) => {
 			key: 'action',
 			render: (_, record) => (
 				<Space size="middle">
-					<DeleteTwoTone className="hover:scale-[140%] " />
+					<DeleteTwoTone onClick={() => handleDelete(record?.langId)} className="hover:scale-[140%] " />
 				</Space>
 			)
 		}
 	]
-
-	const data: any = [
-		{
-			key: '1',
-			name: 'John Brown',
-			age: 32,
-			address: 'New York No. 1 Lake Park'
-		},
-		{
-			key: '2',
-			name: 'Jim Green',
-			age: 42,
-			address: 'London No. 1 Lake Park'
-		},
-		{
-			key: '3',
-			name: 'Joe Black',
-			age: 32,
-			address: 'Sydney No. 1 Lake Park',
-			tags: ['cool', 'teacher']
+	console.log('selectInfo',selectInfo)
+	useEffect(() => {
+		if (selectInfo) {
+			const fileList = selectInfo?.certificates?.map((certificate: CertificateTs, index: number) => ({
+				certId: certificate.certId,
+				uid: `-${index}`, // Уникальный ID для каждого файла
+				name: certificate.certificateName, // Имя файла
+				status: 'done', // Статус загрузки
+				url: certificate.certificateLink // URL файла
+			}))
+			form2.setFieldsValue({
+				languageCode: selectInfo.code,
+				languageLevelCode: selectInfo.languageLevel,
+				certificateId: selectInfo.certificates?.[0]?.certificateTypeName || null, // Если сертификатов нет, устанавливаем null
+				isPublished: selectInfo.isPublished,
+				file: fileList
+				
+			})
 		}
-	]
+	}, [isSuccess, selectInfo, form2])
+
+
+
+	const handleDelete = (record: any) => {
+		console.log('recordDelete', record)
+		deleteForeign(record)
+	}
+
 	const showModalEdit = () => {
 		setIsModalOpenEdit(true)
 	}
@@ -174,6 +164,86 @@ const TableLanguages = ({ dataForeign, setSelectId, selectId }: any) => {
 	const handleCancelEdit = () => {
 		setIsModalOpenEdit(false)
 	}
+
+
+	const onFinishForm2 = async (values: any) => {
+		console.log('values',values)
+		// Подготовка базовой структуры данных в новом формате
+		const requestData: any = {
+			langId: values.languageCode, // Используем languageCode как langId
+			languageLevelCode: values.languageLevelCode,
+			isPublished: values.isPublished || false,
+			savingCertificates: fileList, // Массив для сохраняемых сертификатов
+			deletingCertificates: deleteCert // Массив для удаляемых сертификатов (пустой при добавлении нового языка)
+		}
+
+		// Обработка файла сертификата, если он есть
+		if (fileList.length > 0 && selectedLabel && values.certificateId) {
+			const originalFile = values.file?.[0]?.originFileObj as File
+			if (originalFile) {
+				// Конвертация файла в base64
+				const base64File = await new Promise<string>(resolve => {
+					const reader = new FileReader()
+					reader.onload = () => {
+						// Получаем base64 строку, удаляя префикс data:application/pdf;base64,
+						const base64String = reader.result as string
+						const base64Content = base64String.split(',')[1]
+						resolve(base64Content)
+					}
+					reader.readAsDataURL(originalFile)
+				})
+
+				// Добавление информации о сертификате в массив savingCertificates
+				requestData.savingCertificates = [
+					{
+						// certId: values.certificateId,
+						certificateName: selectedLabel,
+						certificateTypeId: values.certificateId, 
+						base64File: base64File
+					}
+				]
+			}
+		}
+
+		// Отправка данных на сервер
+		try {
+			await editForeign({languageRequest :requestData}).unwrap()
+			setIsModalOpenEdit(false)
+			form2.resetFields()
+			setFileList([])
+			setSelectedLabel(null)
+		} catch (error) {
+			console.error('Ошибка при сохранении данных:', error)
+			message.error(t('error'))
+		}
+	}
+
+	const handleRemove = (file: any) => {
+		console.log('Удалённый файл ID:', file)
+		 setDeleteCert(prev=>[...prev,file.certId])
+		return true // чтобы файл удалился из списка
+	}
+
+	const beforeUpload = (file: File) => {
+		const isImage = file.type === 'application/pdf'
+		const isLt5M = file.size / 1024 / 1024 < 5
+
+		if (!isImage) {
+			message.error('Можно загружать только PDF!')
+			return false
+		}
+
+		if (!isLt5M) {
+			message.error('Файл должен быть меньше 5MB!')
+			return false
+		}
+
+		setFileList([file])
+		return false
+	}
+
+	
+	console.log('selectId', selectId)
 
 	return (
 		<>
@@ -187,76 +257,86 @@ const TableLanguages = ({ dataForeign, setSelectId, selectId }: any) => {
 				}}
 			>
 				<Modal
-					className=""
+					className="!z-[10000000]"
 					footer={null}
-					title={'Редактирование'}
+					title={t('langZnan')}
 					open={isModalOpenEdit}
 					onOk={handleOkEdit}
 					onCancel={handleCancelEdit}
 				>
-					<Form className="mt-4">
+					<Form className="mt-4" form={form2} onFinish={onFinishForm2}>
 						<Form.Item
 							label={<div className="">{t('language')}</div>}
-							name="languagesForm"
+							name="languageCode"
 							labelCol={{ span: 6 }}
 							wrapperCol={{ span: 24 }}
 							layout="vertical"
-							className="mt-4"
+							className="mt-4 h-[35px]"
+							rules={[{ required: true, message: '' }]}
 						>
 							<Select
-								mode="multiple"
 								allowClear
-								options={[
-									{ value: 'en', label: 'English' },
-									{ value: 'es', label: 'Spanish' }
-								]}
+								options={dataAll?.map(item => ({
+									value: item.code,
+									label: item.language
+								}))}
 							/>
 						</Form.Item>
 
 						<Form.Item
 							label={<div className="">{t('level')}</div>}
-							name="levelForm"
+							name="languageLevelCode"
 							labelCol={{ span: 12 }}
 							wrapperCol={{ span: 24 }}
 							layout="vertical"
-							className="mt-14"
+							className="mt-14 h-[35px]"
+							rules={[{ required: true, message: '' }]}
 						>
 							<Select
-								mode="multiple"
+								aria-required
+								options={dataLevels?.map(item => ({
+									value: item.languageLevelCode,
+									label: item.languageLevel
+								}))}
 								allowClear
-								options={[
-									{ value: 'en', label: 'English' },
-									{ value: 'es', label: 'Spanish' }
-								]}
 							/>
 						</Form.Item>
 
 						<Form.Item
 							label={<div className="">{t('sert')}</div>}
-							name="sertificateForm"
+							name="certificateId"
 							labelCol={{ span: 12 }}
 							wrapperCol={{ span: 24 }}
 							layout="vertical"
-							className="mt-14"
+							className="mt-14 h-[35px]"
+							// rules={[{ required: true, message: '' }]}
 						>
 							<Select
-								mode="multiple"
+								onSelect={(value: string) => {
+									const selectedOption = dataCertificate?.find(item => item.id === value)
+									if (selectedOption) {
+										setSelectedLabel(selectedOption.certificateName)
+									}
+								}}
 								allowClear
-								options={[
-									{ value: 'en', label: 'English' },
-									{ value: 'es', label: 'Spanish' }
-								]}
+								options={dataCertificate?.map(item => ({
+									value: item.id,
+									label: item.certificateName
+								}))}
 							/>
 						</Form.Item>
 
-						<div className="mt-14 mb-2">{t('prikrep')}</div>
-						<Upload className="" maxCount={1}>
-							<Button className=" " icon={<UploadOutlined />}>
-								{t('add')}
-							</Button>
-						</Upload>
+						{/* <div className="mt-14 mb-2">{t('prikrep')}</div> */}
+						<div className="mt-14 mb-2"></div>
+						<Form.Item valuePropName="fileList" name="file" getValueFromEvent={e => e?.fileList}>
+							<Upload  onRemove={handleRemove} maxCount={1} beforeUpload={beforeUpload} accept=".pdf">
+								<Button className=" " icon={<UploadOutlined />}>
+									{fileList.length > 0 ? t('change') : t('add')}
+								</Button>
+							</Upload>
+						</Form.Item>
 
-						<Form.Item className="mt-6" name="sogl" valuePropName="checked" label={null}>
+						<Form.Item className="mt-6" name="isPublished" valuePropName="checked" label={null}>
 							<Checkbox>{t('razrer')}</Checkbox>
 						</Form.Item>
 
@@ -265,8 +345,11 @@ const TableLanguages = ({ dataForeign, setSelectId, selectId }: any) => {
 						</Button>
 					</Form>
 				</Modal>
+				
 				<div className={'registerContracts animate-fade-in w-full'}>
-					<Table<DataType>
+				<Spin className='w-full' spinning={isLoadingDelete || isLoadingGlaz}>
+					<Table<LanguageData>
+						
 						pagination={false}
 						columns={columns}
 						dataSource={dataForeign?.map((item: any) => ({
@@ -274,13 +357,14 @@ const TableLanguages = ({ dataForeign, setSelectId, selectId }: any) => {
 							key: item.studLangId
 						}))}
 						rowClassName={record => {
-							// @ts-ignore
-							return record?.isPublished ? '' : 'bg-gray-200 opacity-60'
+							return record.isPublished ? '' : 'bg-gray-200 opacity-60'
 						}}
-						className="w-full my-custom-table  select-none"
+						className="w-full my-custom-table select-none"
 						locale={{ emptyText: t('noData') }}
 					/>
+					</Spin>
 				</div>
+				
 			</ConfigProvider>
 		</>
 	)

@@ -1,4 +1,4 @@
-import { Button, Card, Form, Input, Modal, Spin } from 'antd'
+import { Button, Card, Form, Input, Modal, Row, Spin } from 'antd'
 import { useEffect, useState } from 'react'
 
 import {
@@ -13,6 +13,7 @@ import { useAppDispatch, useAppSelector } from '../../../../store'
 import { apiSlice } from '../../../../store/api/apiSlice'
 import { showNotification } from '../../../../store/reducers/notificationSlice'
 import { t } from 'i18next'
+import Title from 'antd/es/typography/Title'
 
 export const ContactInformation = () => {
 	const [form] = Form.useForm()
@@ -37,7 +38,7 @@ export const ContactInformation = () => {
 	useEffect(()=>{
 		if(isErrorPost){
 			dispatch(showNotification({
-				message: `Такая почта уже занята`,
+				message: t('errorText'),
 				type: 'warning'
 			}))
 		}
@@ -118,6 +119,8 @@ export const ContactInformation = () => {
 	return (
 	
 		<Form form={form} onFinish={onSubmitPhone2} className='w-full'>
+			<Row className="mb-8 flex items-center justify-between mt-6">
+			<Title  className='!mb-0 !text-[28px]'>{t('contactInformation')}</Title></Row>
 			<section className=" w-full">
 				<Card className='bg-white rounded-xl shadow-md overflow-hidden mt-4 w-full'>
 					<h3>{t('mainMail')}</h3>

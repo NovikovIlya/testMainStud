@@ -204,6 +204,16 @@
 	"AboutUniversityDes": "Mini-text in 3-4 lines about how cool KFU is, statistics, infographics inside — laudatory marketing odes to the university",
 	"Watch": "View more",
 	"Practices": "Practices",
+	"o": "d",
+	"y": "v",
+	"otmetka": "Points for semester work",
+	"sdacha": "Points for passing the exam",
+	"rateDisc": "The total amount of points in the discipline",
+	"itog": "Final score",
+	"otm": "Отметка о сдаче",
+	"change": "Change",
+	"pdfOnly": "You can only upload PDF!",
+	"fileLessThan5MB": "The file must be less than 5MB!",
 	"practices": "Practices",
 	"Dormitory": "Dormitory",
 	"PersonalData": "Personal data",
@@ -211,7 +221,7 @@
 	"ElectronicBookInfo": "Here is the plan of your studies, the subjects and the hours allocated for them",
 	"SessionInfo": "All session information, materials and scores are displayed here",
 	"Study": "View more",
-	"DormitoryInfo": "How to get into the top two and many other answers on the location of KFU buildings can be found in this service",
+	"DormitoryInfo": "All necessary information and services for check-in and accommodation can be found here",
 	"Mon": "Mon",
 	"Tue": "Tue",
 	"Wed": "Wed",
@@ -313,6 +323,14 @@
 	"redirectText": "Are you sure you want to proceed?",
 	"cancel": "Cancel",
 	"welcome_message": "Dear first-year student, congratulations on the beginning of the school year.",
+	"welcome_message_student" : "Dear students!",
+	"welcome_message_student1" : "We are pleased to announce the test launch of the updated personal account! This is an important step in improving our services, and your help in testing will be invaluable.",
+	"welcome_message_student2" : "Please actively use the new personal account soon. Please send all comments, suggestions and bug reports to :",
+	"welcome_message_studentMail" : "MaAZolin@kpfu.ru",
+	"welcome_message_student3" : "If you would like to contribute to the development of your personal account and join our development team, please fill out this form.",
+	"welcome_message_student3Form" : "форму",
+	"welcome_message_student4" : "Thank you for your cooperation!",
+	
 	"account_creation_message": "An account has been created for you to access the university's information resources. To log in to your student's personal account on the website <a href='https://kpfu.ru' target='_blank'>https://kpfu.ru</a> , use the login {{login}} and password {{password}} You can change your password in your personal account",
 	"yandex_instructions_title": "In addition,an account in Yandex 360 has been created. In order to use this service, you need to do the following steps:",
 	"yandex_step_1": "Go to the website <a href='https://ya.ru/' target='_blank'>https://ya.ru/</a> and add an account",
@@ -553,7 +571,8 @@
 
 	"onlyPdf": "You can only upload PDF files!",
 	"fileSizeError": "The file must be less than 5 MB!",
-
+	"errorText": "An error occurred",
+	"errorFetch": "An error occurred while fetching data",
 	"addTask": "Add Task",
 
 	"print": "Print",
@@ -899,4 +918,11 @@
 	"deleteEducationTitle": "Delete education",
 	"deleteEducationDescription": "Are you sure you want to delete education?",
 	"select": "Select"
+	"onlyImages": "Only images can be uploaded!",
+	"fileSize": "The file must be less than 5MB!",
+	"creativeCollectives": "Participation in creative collectives",
+	"socialWork": "Social work",
+	"sportsCompetitions": "Participation in sports competitions",
+	"sectionsAndClubs": "Participation in sections and clubs",
+	"socialTitle": "Social activities"
 }

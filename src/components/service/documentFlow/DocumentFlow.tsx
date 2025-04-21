@@ -36,7 +36,7 @@ export const DocumentFlow = () => {
 	const [type, setType] = useState(1)
 	const [typeDocumentation, setTypeDocumentation] = useState('CorporateNetwork')
 	return (
-		<section className=" m-14">
+		<section className="m-14">
 			<Row gutter={[16, 16]}>
 				<Col span={24}>
 					{/* <Typography.Text className=" text-[28px]">Документы</Typography.Text> */}

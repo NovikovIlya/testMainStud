@@ -8,20 +8,23 @@ import { useDispatch } from 'react-redux'
 import 'react-resizable/css/styles.css'
 import { Link } from 'react-router-dom'
 
+import i18n from '../../18n'
 import { useAppSelector } from '../../store'
 import { useGetInfoUserQuery } from '../../store/api/formApi'
 import { useCheckIsEmployeeQuery } from '../../store/api/practiceApi/contracts'
 import { useGetModulesQuery } from '../../store/api/roleModel/roleModel'
 import { useGetRoleQuery } from '../../store/api/serviceApi'
 import { changeLayout, removeCard } from '../../store/reducers/LayoutsSlice'
+import InfoStudent from '../InfoStudent'
 import { AboutUniversityCard } from '../aboutUniversity/AboutUniversityCard'
 import { Apply } from '../apply/Apply'
+import { DirectResume } from '../cards/DirectResume'
 import { Schedule } from '../cards/Schedule'
+import { Seeker } from '../cards/Seeker'
 import { TemplateCard } from '../cards/Template'
 
-import { block } from './constant'
-import i18n from '../../18n'
 import CookieConsent from './CookieConsent'
+import { block } from './constant'
 
 const studentKeys = [
 	'Schedule',
@@ -40,15 +43,24 @@ const studentKeys = [
 	'Vacancies',
 	'petitionForDocument',
 	'contractEducation',
-	'educationPrograms'
+	'educationPrograms',
+	'jobSeeker',
+	'myResponds',
+	'DirectResume',
+	'personnelAccounting'
 ]
 
 const employeeKeys = [
 	'News',
 	'Practices',
+	'Practices',
 	'practiceTeacher',
 	'Staff',
-	'forTeachers'
+	'forTeachers',
+	'jobSeeker',
+	'myResponds',
+	'DirectResume',
+	'personnelAccounting'
 	// 'shortLink'
 ]
 
@@ -82,7 +94,6 @@ const DropDrag = () => {
 		defaultValue: ''
 	})
 
-
 	const urlObrProgram = useMemo(() => {
 		switch (href) {
 			case 'KAZAN':
@@ -101,6 +112,76 @@ const DropDrag = () => {
 	}, [href])
 
 	const jsxElements = [
+		{
+			key: 'jobSeeker',
+			element: <Seeker />,
+			place: {
+				w: 3,
+				h: 1,
+				minW: 3,
+				maxW: 3,
+				x: 0,
+				y: 0,
+				i: 'jobSeeker'
+			}
+		},
+		{
+			key: 'myResponds',
+			element: (
+				<TemplateCard
+					title="Мои отклики"
+					info="В разделе отображается ваш текущий статус заявления на работу"
+					href="/services/myresponds/responds"
+					img="/myrespondsicon.png"
+					width={146}
+					height={136}
+					mt="mt-[25px]"
+				/>
+			),
+			place: {
+				w: 1,
+				h: 1,
+				x: 0,
+				y: 0,
+				i: 'myResponds'
+			}
+		},
+		{
+			key: 'DirectResume',
+			element: (
+				<DirectResume
+					href="#"
+					img="/directresumeimage.png"
+					info="Не нашли подходящую вакансию? Заполняйте резюме, отправляйте на проверку и мы рассмотрим вашу кандидатуру"
+					title="Резюме"
+					buttonText="Создать"
+					buttonType="primary"
+					height={99}
+					width={85}
+					positionImage="mt-2"
+				/>
+			),
+			place: {
+				w: 1,
+				h: 1,
+				x: 1,
+				y: 0,
+				i: 'DirectResume'
+			}
+		},
+		{
+			key: 'personnelAccounting',
+			element: (
+				<TemplateCard title="Трудоустройство" info="" href="/services/personnelaccounting" buttonText="Изучить" />
+			),
+			place: {
+				w: 1,
+				h: 1,
+				x: 2,
+				y: 0,
+				i: 'personnelAccounting'
+			}
+		},
 		{
 			key: 'ElectronicBook',
 			element: (
@@ -206,7 +287,7 @@ const DropDrag = () => {
 			key: 'EducationalCourses',
 			element: (
 				<TemplateCard
-					href={`${i18n.language === 'ru' ? "https://edu.kpfu.ru" : " https://edu.kpfu.ru/?lang=en"}`}
+					href={`${i18n.language === 'ru' ? 'https://edu.kpfu.ru' : ' https://edu.kpfu.ru/?lang=en'}`}
 					info="EducationalCoursesInfo"
 					title="EducationalCourses"
 					img="/image2.png"
@@ -242,7 +323,11 @@ const DropDrag = () => {
 			key: 'News',
 			element: (
 				<TemplateCard
-					href={`${i18n.language === 'ru' ? "https://media.kpfu.ru/news?kn%5B0%5D=Новости%20науки&created=" : "https://eng.kpfu.ru/news-archive/"}`}
+					href={`${
+						i18n.language === 'ru'
+							? 'https://media.kpfu.ru/news?kn%5B0%5D=Новости%20науки&created='
+							: 'https://eng.kpfu.ru/news-archive/'
+					}`}
 					info="NewsInfo"
 					title="News"
 					img="/image3.png"
@@ -666,19 +751,17 @@ const DropDrag = () => {
 		dispatch(changeLayout(layouts))
 	}
 
-	
-	const layoutValid = layout.lg.filter(
-		obj1 =>
-			jsxElements.filter(item => {
-				if (mainRole === 'STUD') {
-					return studentKeys.includes(item.key)
-				} else if (mainRole === 'EMPL') {
-					// отображаем Практики для деканата в зависимости от contract
-					return (item.key === 'Practices' && isSuccessCheck) || employeeKeys.includes(item.key)
-				} else {
-					return <>Такой роли нет</>
-				}
-			})
+	const layoutValid = layout.lg.filter(obj1 =>
+		jsxElements.filter(item => {
+			if (mainRole === 'STUD') {
+				return studentKeys.includes(item.key)
+			} else if (mainRole === 'EMPL') {
+				// отображаем Практики для деканата в зависимости от contract
+				return (item.key === 'Practices' && isSuccessCheck) || employeeKeys.includes(item.key)
+			} else {
+				return <>Такой роли нет</>
+			}
+		})
 	)
 
 	const generateDOM = layoutValid
@@ -694,11 +777,7 @@ const DropDrag = () => {
 							<DeleteOutlined className=" mt-2 mr-2 opacity-50" />
 						</div>
 					)} */}
-						{
-							jsxElements
-								.filter(el => el.key === item.i)
-								[0]?.element
-						}
+						{jsxElements.filter(el => el.key === item.i)[0]?.element}
 					</div>
 				</div>
 			)
@@ -792,26 +871,30 @@ const DropDrag = () => {
 				</>
 			)
 		return (
-			<ResponsiveReactGridLayout
-				className="layout mb-10"
-				cols={{ lg: 3, md: 2, sm: 2, xs: 2, xxs: 1 }}
-				rowHeight={windowSize.innerWidth < 768 ? 210 : 320}
-				containerPadding={[0, 0]}
-				margin={[20, 20]}
-				layouts={layout}
-				measureBeforeMount={true}
-				useCSSTransforms={mounted}
-				onLayoutChange={onLayoutChange}
-				onBreakpointChange={onBreakpointChange}
-				isDraggable={edit}
-				isResizable={false}
-				compactType="vertical"
-				verticalCompact={true}
-				preventCollision={true}
-			>
-				{generateDOM}
-			</ResponsiveReactGridLayout>
+			<>
+				{mainRole === 'STUD' ? <InfoStudent /> : ''}
+				<ResponsiveReactGridLayout
+					className="layout mb-10"
+					cols={{ lg: 3, md: 2, sm: 2, xs: 2, xxs: 1 }}
+					rowHeight={windowSize.innerWidth < 768 ? 210 : 320}
+					containerPadding={[0, 0]}
+					margin={[20, 20]}
+					layouts={layout}
+					measureBeforeMount={true}
+					useCSSTransforms={mounted}
+					onLayoutChange={onLayoutChange}
+					onBreakpointChange={onBreakpointChange}
+					isDraggable={edit}
+					isResizable={false}
+					compactType="vertical"
+					verticalCompact={true}
+					preventCollision={true}
+				>
+					{generateDOM}
+				</ResponsiveReactGridLayout>
+			</>
 		)
+
 		// return (
 		// 	<div className="grid grid-cols-3 grid-rows-3 gap-4 ">
 		// 		{dataModules?.toSorted((a:any, b:any) => {
@@ -845,10 +928,7 @@ const DropDrag = () => {
 		// )
 	}
 
-	return <div className="  ">
-		{renderContent()}
-		
-		</div>
+	return <div className="  ">{renderContent()}</div>
 }
 
 function getWindowSize() {

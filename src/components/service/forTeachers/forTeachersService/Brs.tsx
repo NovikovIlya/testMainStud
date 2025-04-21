@@ -31,7 +31,7 @@ const Brs = () => {
 	const [saveBrs, { data: dataSave, isLoading,isError:isErrorSave ,error:errorSave}] = useSaveBrsMutation()
 	const [dataSource, setDataSource] = useState<Student[]>([])
 	const [errorDisplayed, setErrorDisplayed] = useState(false);
-
+	console.log('dataSource',dataSource)
 	useEffect(() => {
 		if (data?.students) {
 			setDataSource(
@@ -188,7 +188,8 @@ const Brs = () => {
 							<Spin spinning={isLoading}>
 							<TableBrs yearForm={yearForm} semester={semestrForm} dataSource={dataSource} setDataSource={setDataSource} />
 							</Spin>
-							<Button htmlType="submit" className="mt-8 mb-8 rounded-xl" type="primary">
+							{/* @ts-ignore */}
+							<Button disabled={dataSource?.[0]?.isBlocked} htmlType="submit" className="mt-8 mb-8 rounded-xl" type="primary">
 								{t('Save')}
 							</Button>
 

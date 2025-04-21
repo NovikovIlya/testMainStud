@@ -14,6 +14,8 @@
 	"chooseRole": "Now you choose your main role, later in the section “About me” You will be able to connect other roles by filling in additional information",
 	"back": "Back",
 	"next": "Next",
+	"creativeEvents": "Creative Events",
+	"sportEvents": "Sport Events",
 	"fillLater": "Fill in later",
 	"fillForm": "Fill out the short form",
 	"fillFormDescription": "This is necessary for full access on the platform, which includes the ability to enroll in courses, events and much more",
@@ -917,7 +919,7 @@
 	"maxLanguagesError": "You can only add up to 10 languages",
 	"deleteEducationTitle": "Delete education",
 	"deleteEducationDescription": "Are you sure you want to delete education?",
-	"select": "Select"
+	"select": "Select",
 	"onlyImages": "Only images can be uploaded!",
 	"fileSize": "The file must be less than 5MB!",
 	"creativeCollectives": "Participation in creative collectives",

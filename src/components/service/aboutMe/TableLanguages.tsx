@@ -15,10 +15,11 @@ const TableLanguages = ({triger,handleIdCert,isSuccess,dataCertificate,dataLevel
 	const [selectedLabel, setSelectedLabel] = useState<string | null>(null)
 	const [form2] = Form.useForm()
 	const [fileList, setFileList] = useState<any[]>([])
-	const [editForeign, {}] = useEditForeignMutation()
+	const [editForeign, {isLoading:isLoadingEdit}] = useEditForeignMutation()
 	const [deleteCert, setDeleteCert] = useState<any[]>([])
 	const [deleteForeign, {isLoading:isLoadingDelete}] = useDeleteForeignMutation()
 	const [changeGlaz,{isLoading:isLoadingGlaz}] = useIsPublishedMutation()
+	const [fileArray, setFileArray] = useState<any[]>([])
 	const columns: TableProps<LanguageData>['columns'] = [
 		{
 			title: t('language'),
@@ -47,6 +48,7 @@ const TableLanguages = ({triger,handleIdCert,isSuccess,dataCertificate,dataLevel
 							}}
 						>
 							 <a
+							    target='_blank'
 								href={`https://newlk-test.kpfu.ru/languages/foreign/certificate?certificateId=${item.certId}`
 							} 
 								
@@ -125,7 +127,13 @@ const TableLanguages = ({triger,handleIdCert,isSuccess,dataCertificate,dataLevel
 			)
 		}
 	]
+	console.log('fileArray',fileArray)
 	console.log('selectInfo',selectInfo)
+	useEffect(()=>{
+		if(selectInfo?.certificates){
+			setFileArray(selectInfo?.certificates)
+		}
+	},[selectInfo?.certificates])
 	useEffect(() => {
 		if (selectInfo) {
 			const fileList = selectInfo?.certificates?.map((certificate: CertificateTs, index: number) => ({
@@ -173,12 +181,12 @@ const TableLanguages = ({triger,handleIdCert,isSuccess,dataCertificate,dataLevel
 			langId: values.languageCode, // Используем languageCode как langId
 			languageLevelCode: values.languageLevelCode,
 			isPublished: values.isPublished || false,
-			savingCertificates: fileList, // Массив для сохраняемых сертификатов
+			savingCertificates: [], // Массив для сохраняемых сертификатов
 			deletingCertificates: deleteCert // Массив для удаляемых сертификатов (пустой при добавлении нового языка)
 		}
 
 		// Обработка файла сертификата, если он есть
-		if (fileList.length > 0 && selectedLabel && values.certificateId) {
+		if (fileList.length > 0 ) {
 			const originalFile = values.file?.[0]?.originFileObj as File
 			if (originalFile) {
 				// Конвертация файла в base64
@@ -221,6 +229,7 @@ const TableLanguages = ({triger,handleIdCert,isSuccess,dataCertificate,dataLevel
 	const handleRemove = (file: any) => {
 		console.log('Удалённый файл ID:', file)
 		 setDeleteCert(prev=>[...prev,file.certId])
+		 setFileArray(prev => prev.filter(item => item.certId !== file.certId))
 		return true // чтобы файл удалился из списка
 	}
 
@@ -330,10 +339,13 @@ const TableLanguages = ({triger,handleIdCert,isSuccess,dataCertificate,dataLevel
 						{/* <div className="mt-14 mb-2">{t('prikrep')}</div> */}
 						<div className="mt-14 mb-2"></div>
 						<Form.Item valuePropName="fileList" name="file" getValueFromEvent={e => e?.fileList}>
+							
 							<Upload  onRemove={handleRemove} maxCount={1} beforeUpload={beforeUpload} accept=".pdf">
+								{fileArray?.length>0 ? <div>Чтобы добавить, удалите старый</div>:
 								<Button className=" " icon={<UploadOutlined />}>
-									{fileList.length > 0 ? t('change') : t('add')}
+									{ t('add')} {'(pdf)'}
 								</Button>
+								}
 							</Upload>
 						</Form.Item>
 
@@ -341,14 +353,14 @@ const TableLanguages = ({triger,handleIdCert,isSuccess,dataCertificate,dataLevel
 							<Checkbox>{t('razrer')}</Checkbox>
 						</Form.Item>
 
-						<Button type="primary" htmlType="submit">
+						<Button loading={isLoadingEdit} type="primary" htmlType="submit">
 							{t('add')}
 						</Button>
 					</Form>
 				</Modal>
 				
 				<div className={'registerContracts animate-fade-in w-full'}>
-				<Spin className='w-full' spinning={isLoadingDelete || isLoadingGlaz}>
+				<Spin className='w-full' spinning={isLoadingDelete || isLoadingGlaz || isLoadingEdit}>
 					<Table<LanguageData>
 						
 						pagination={false}

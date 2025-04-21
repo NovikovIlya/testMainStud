@@ -76,6 +76,8 @@
 	"errorName": "Пожалуйста, введите свое имя!",
 	"errorSurnameName": "Пожалуйста, введите свою фамилию!",
 	"password": "Пароль",
+	"creativeEvents": "Творческие мероприятия",
+	"sportEvents": "Спортивные мероприятия",
 	"rememberPassword": "Не помню пароль",
 	"enter": "Войти",
 	"loginVia": "Войти через",

@@ -1,4 +1,4 @@
-import { CheckedFlags, foreignLanguageAll, UserDto } from "../../../models/aboutMe";
+import { CheckedFlags, foreignLanguageAll, socActivity, UserDto } from "../../../models/aboutMe";
 import { apiSlice } from "../apiSlice";
 
 export const myPracticeService = apiSlice.injectEndpoints({
@@ -198,7 +198,33 @@ export const myPracticeService = apiSlice.injectEndpoints({
 
 
       // ОБщественная деятельность
-
+      getSoc: builder.query<socActivity, void>({
+        query: () => ({
+          url: '/languages/social-activity',
+          method: 'GET',
+         
+        }),
+        providesTags: ['socialActivity'],
+        keepUnusedDataFor: 1,
+      }),
+      putSoc: builder.mutation<socActivity, any>({
+        query: (body) => ({
+            url: '/languages/social-activity',
+            method: 'PUT',
+            body,
+           
+          }),
+          invalidatesTags: ['socialActivity'],
+      }),
+      postSoc: builder.mutation<socActivity, any>({
+        query: (body) => ({
+            url: '/languages/social-activity',
+            method: 'POST',
+            body,
+           
+          }),
+          invalidatesTags: ['socialActivity'],
+      }),
 
 
 
@@ -225,5 +251,8 @@ export const myPracticeService = apiSlice.injectEndpoints({
     useEditForeignMutation,
     useDeleteForeignMutation,
     useLazyGetOneCertificateQuery,
-    useIsPublishedMutation
+    useIsPublishedMutation,
+    useGetSocQuery,
+    usePutSocMutation,
+    usePostSocMutation
    } = myPracticeService;

@@ -28,7 +28,7 @@ const AboutMeNew = () => {
 	const { data: dataCheckbox } = useGetCheckboxQuery()
 	const [setCheckbox, { isLoading: isLoadingCheckbox }] = useSetCheckboxMutation()
 	const [disabled, setDisabled] = useState(true)
-	const [percentProgress,setPercentProgress] = useState(0)
+	const [percentProgress,setPercentProgress] = useState(60)
 	const switchForm = Form.useWatch('switch', form2)
 	const [initialCheckboxes, setInitialCheckboxes] = useState({
 		codex: false,
@@ -106,7 +106,7 @@ const AboutMeNew = () => {
 					</Form>
 					<span>Сделать профиль публичным</span>
 					<Tooltip title={t('agreementTooltip')}>
-						<img src="/public/GroupVop.svg" />
+						<img src="/GroupVop.svg" />
 					</Tooltip>
 				</div>
 			</Row>

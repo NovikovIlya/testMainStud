@@ -387,7 +387,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						>
 							<EyeSvg white={type === 'service'} />
 						</div>
-						<div className='h-full'>
+						<div className='h-full '>
 							<AccessibilityHelper ref={ref} isOpen={isOpen} lang={i18n.language} />
 						</div>
 						</div>

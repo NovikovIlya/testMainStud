@@ -63,7 +63,9 @@ export const AddEducationModal = (props: {
 											docnum: values.number,
 											docseries: values.series,
 											portal_status: values.accept ? '1' : null,
-											edu_file: [{ filename: 'filename.pdf', file_base64: String(e.target?.result).split(',')[1] }]
+											edu_file: [
+												{ filename: values.file.file.name, file_base64: String(e.target?.result).split(',')[1] }
+											]
 									  })
 											.then(() => {
 												props.form.resetFields()
@@ -90,7 +92,7 @@ export const AddEducationModal = (props: {
 											s_id: values.s_id,
 											e_id: values.e_id,
 											user_allid: values.user_allid,
-											edu_file: [{ filename: values.file.file.fileName, file_base64: e.target?.result as string }]
+											edu_file: [{ filename: values.file.file.name, file_base64: e.target?.result as string }]
 									  })
 											.then(() => {
 												props.form.resetFields()
@@ -173,13 +175,13 @@ export const AddEducationModal = (props: {
 							>
 								<Select
 									options={levels.edu_types.map(level => ({ value: level.id, label: level.name }))}
-									placeholder="Выбрать"
+									placeholder={t('select')}
 								></Select>
 							</Form.Item>
 							<Form.Item name={'countryId'} label={t('countryEducation')} className="w-full">
 								<Select
 									options={countries.map(country => ({ value: country.shortName, label: country.shortName }))}
-									placeholder="Выбрать"
+									placeholder={t('select')}
 								></Select>
 							</Form.Item>
 						</div>

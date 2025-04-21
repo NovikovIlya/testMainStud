@@ -887,5 +887,6 @@
 	"w": "Женский",
 	"maxLanguagesError": "Вы можете добавить не более 10 языков",
 	"deleteEducationTitle": "Удалить образование",
-	"deleteEducationDescription": "Вы действительно хотите удалить образование?"
+	"deleteEducationDescription": "Вы действительно хотите удалить образование?",
+	"select": "Выбрать"
 }

@@ -49,6 +49,8 @@ export interface CertificateTs {
 	id: string
 	certificateName: string
 	certificateLink: string
+  certificateTypeName:any
+  certId:any
 }
 
 // Language data interface
@@ -66,6 +68,7 @@ export interface LanguageData {
 
 // Props interface for TableLanguages component
 export interface TableLanguagesProps {
+  triger:any
   handleIdCert?:any
 	isSuccess: boolean
 	dataCertificate: {

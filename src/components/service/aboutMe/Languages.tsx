@@ -23,6 +23,8 @@ import {
 	useGetNativeLanguagesQuery,
 	useGetOneCertificateQuery,
 	useGetforeignLanguagesQuery,
+	
+	useLazyGetOneCertificateQuery,
 	useSetForeignMutation,
 	useSetNativeMutation
 } from '../../../store/api/aboutMe/forAboutMe'
@@ -48,6 +50,8 @@ const Languages = () => {
 	const [idCert, setIdCert] = useState<null | number>(null)
 	const { data: dataOneCertificate } = useGetOneCertificateQuery(idCert, { skip: !idCert })
 	const [selectedLabel, setSelectedLabel] = useState<string | null>(null)
+	const [triger,{}] = useLazyGetOneCertificateQuery()
+	
 	const nativeLanguageForm = Form.useWatch('languages', form)
 	const sertificateFormVal = Form.useWatch('certificateId', form2)
 
@@ -66,41 +70,7 @@ const Languages = () => {
 	}
 
 	// Добавление Иностранного языка
-	// const onFinishForm2 = (values: Omit<ForeignLanguage, 'file'> & { file?: any[] }) => {
-	// const formData = new FormData()
-
-	// if (fileList.length > 0 && selectedLabel) {
-	// 	const originalFile = values.file?.[0]?.originFileObj as File
-	// 	if (originalFile) {
-	// 		const fileExtension = originalFile.name.split('.').pop() // Получаем расширение файла
-	// 		const newFileName = `${selectedLabel}.${fileExtension}`
-
-	// 		const modifiedFile = new File([originalFile], newFileName, {
-	// 			type: originalFile.type,
-	// 			lastModified: originalFile.lastModified
-	// 		})
-
-	// 		formData.append('certificate', modifiedFile)
-	// 	}
-	// }
-
-	// delete values.file
-
-	// const jsonData = JSON.stringify(values)
-	// const blob = new Blob([jsonData], { type: 'application/json' })
-	// const reader = new FileReader()
-	// reader.onload = function () {
-	// 	console.log('Содержимое Blob:', reader.result)
-	// }
-	// reader.readAsText(blob)
-
-	// formData.append('language ', blob)
-
-	// setForeign(formData).unwrap()
-	// setIsModalOpen(false)
-	// form2.resetFields()
-
-	// }
+	
 	const onFinishForm2 = async (values: Omit<ForeignLanguage, 'file'> & { file?: any[] }) => {
 		// Подготовка базовой структуры данных
 		const requestData: any = {
@@ -187,18 +157,18 @@ const Languages = () => {
 		setIdCert(id)
 	}
 
-	// if (isError || isErrorForeign) {
-	// 	return (
-	// 		<div className="mt-[75px] ml-[20px]">
-	// 			<Result
-	// 				status="error"
-	// 				title=""
-	// 				subTitle={t('errorFetch')}
+	if (isError || isErrorForeign) {
+		return (
+			<div className="mt-[75px] ml-[20px]">
+				<Result
+					status="error"
+					title=""
+					subTitle={t('errorFetch')}
 
-	// 			></Result>
-	// 		</div>
-	// 	)
-	// }
+				></Result>
+			</div>
+		)
+	}
 
 	if (isFetchingNative || isFetchingForeign)
 		return (
@@ -269,6 +239,7 @@ const Languages = () => {
 					</Row>
 					<Row>
 						<TableLanguages
+						    triger={triger}
 							handleIdCert={handleIdCert}
 							isSuccess={isSuccess}
 							dataCertificate={dataCertificate}
@@ -291,7 +262,7 @@ const Languages = () => {
 						</div>
 					</Row>
 				</Spin>
-
+				{isLoadingSetForeign ? '' :
 				<Modal
 					className="!z-[10000000]"
 					footer={null}
@@ -381,7 +352,8 @@ const Languages = () => {
 							{t('add')}
 						</Button>
 					</Form>
-				</Modal>
+				</Modal>}
+			
 			</div>
 		</div>
 	)

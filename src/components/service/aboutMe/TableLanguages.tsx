@@ -136,7 +136,7 @@ const TableLanguages = ({triger,handleIdCert,isSuccess,dataCertificate,dataLevel
 				url: certificate.certificateLink // URL файла
 			}))
 			form2.setFieldsValue({
-				languageCode: selectInfo.code,
+				languageCode: selectInfo.langId,
 				languageLevelCode: selectInfo.languageLevel,
 				certificateId: selectInfo.certificates?.[0]?.certificateTypeName || null, // Если сертификатов нет, устанавливаем null
 				isPublished: selectInfo.isPublished,
@@ -207,7 +207,7 @@ const TableLanguages = ({triger,handleIdCert,isSuccess,dataCertificate,dataLevel
 
 		// Отправка данных на сервер
 		try {
-			await editForeign({languageRequest :requestData}).unwrap()
+			await editForeign(requestData).unwrap()
 			setIsModalOpenEdit(false)
 			form2.resetFields()
 			setFileList([])

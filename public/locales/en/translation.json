@@ -915,6 +915,9 @@
 	"m": "Male",
 	"w": "Female",
 	"maxLanguagesError": "You can only add up to 10 languages",
+	"deleteEducationTitle": "Delete education",
+	"deleteEducationDescription": "Are you sure you want to delete education?",
+	"select": "Select"
 	"onlyImages": "Only images can be uploaded!",
 	"fileSize": "The file must be less than 5MB!",
 	"creativeCollectives": "Participation in creative collectives",

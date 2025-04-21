@@ -133,3 +133,12 @@ export interface foreignLanguageAll {
   isPublished: boolean;
   certificates: Certificate[];
 }
+
+export interface socActivity {
+
+    socialWork: string
+    creativeEvents: string
+    sportEvents: string
+    sectionsAndClubs: string
+
+}

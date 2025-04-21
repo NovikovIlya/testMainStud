@@ -79,7 +79,7 @@ const Languages = () => {
 			isPublished: values.isPublished || false,
 			certificates: []
 		}
-
+		console.log('values',values)
 		// Обработка файла сертификата, если он есть
 		if (fileList.length > 0 && selectedLabel && values.certificateId) {
 			const originalFile = values.file?.[0]?.originFileObj as File
@@ -100,7 +100,8 @@ const Languages = () => {
 				requestData.certificates = [
 					{
 						// certId: values.certificateId,
-						certificateName: selectedLabel,
+						// certificateName: selectedLabel,
+						certificateName: originalFile.name,
 						certificateTypeId: values.certificateId, // Используем тот же ID, если нет отдельного поля
 						base64File: base64File
 					}
@@ -208,6 +209,10 @@ const Languages = () => {
 												value: item.code,
 												label: item.language
 											}))}
+											filterOption={(input, option) => 
+												(option?.label ?? '').toString().toLowerCase().includes(input.toLowerCase())
+											  }
+											
 											onChange={values => {
 												if (values.length > 10) {
 													message.error(t('maxLanguagesError'))

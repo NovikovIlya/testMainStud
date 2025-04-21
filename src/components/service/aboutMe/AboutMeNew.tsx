@@ -28,7 +28,7 @@ const AboutMeNew = () => {
 	const { data: dataCheckbox } = useGetCheckboxQuery()
 	const [setCheckbox, { isLoading: isLoadingCheckbox }] = useSetCheckboxMutation()
 	const [disabled, setDisabled] = useState(true)
-	const [percentProgress,setPercentProgress] = useState(0)
+	const [percentProgress,setPercentProgress] = useState(60)
 	const switchForm = Form.useWatch('switch', form2)
 	const [initialCheckboxes, setInitialCheckboxes] = useState({
 		codex: false,
@@ -104,9 +104,9 @@ const AboutMeNew = () => {
 							<Switch disabled={disabled} defaultChecked />
 						</Form.Item>
 					</Form>
-					<span>Сделать профиль публичным</span>
+					<span>{t('publicProf')}</span>
 					<Tooltip title={t('agreementTooltip')}>
-						<img src="/public/GroupVop.svg" />
+						<img src="/GroupVop.svg" />
 					</Tooltip>
 				</div>
 			</Row>
@@ -119,7 +119,7 @@ const AboutMeNew = () => {
 								dataAboutMe?.FIRSTNAME || ''
 							} ${dataAboutMe?.SECONDNAME || ''}`}</div>
 							<div className="mt-[32px] w-[80%]">
-								<div>Профиль заполнена на {percentProgress}%</div>
+								<div>{t('zapolnen')} {percentProgress}%</div>
 								<Progress
 									showInfo={false}
 									percent={percentProgress}

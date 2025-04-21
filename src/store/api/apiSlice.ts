@@ -92,6 +92,7 @@ export const apiSlice = createApi({
 		'foreignLanguages',
 		'Сheckboxes',
 		'levelsLanguages',
-		'certificateLanguages'
+		'certificateLanguages',
+		'socialActivity'
 	]
 })

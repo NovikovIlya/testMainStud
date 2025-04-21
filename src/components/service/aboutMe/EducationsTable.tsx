@@ -1,7 +1,9 @@
 import { DeleteTwoTone, EditTwoTone, EyeTwoTone } from '@ant-design/icons'
-import { ConfigProvider, Form, Space, Table, TableProps } from 'antd'
+import { ConfigProvider, Form, Popconfirm, Space, Table, TableProps } from 'antd'
+import en_US from 'antd/locale/en_US'
+import ru_RU from 'antd/locale/ru_RU'
 import dayjs from 'dayjs'
-import { t } from 'i18next'
+import i18next, { t } from 'i18next'
 import { useState } from 'react'
 
 import { EngFlagSvg } from '../../../assets/svg/EngFlagSvg'
@@ -89,11 +91,17 @@ export const EducationsTable = () => {
 							setIsModalOpen(true)
 						}}
 					/>
-					<DeleteTwoTone
-						onClick={() => {
-							deleteEducation(record)
-						}}
-					/>
+					<ConfigProvider locale={i18next.language === 'ru' ? ru_RU : en_US}>
+						<Popconfirm
+							title={t('deleteEducationTitle')}
+							description={t('deleteEducationDescription')}
+							onConfirm={() => {
+								deleteEducation(record)
+							}}
+						>
+							<DeleteTwoTone />
+						</Popconfirm>
+					</ConfigProvider>
 				</Space>
 			)
 		}

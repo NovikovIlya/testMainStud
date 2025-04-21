@@ -104,7 +104,7 @@ const AboutMeNew = () => {
 							<Switch disabled={disabled} defaultChecked />
 						</Form.Item>
 					</Form>
-					<span>Сделать профиль публичным</span>
+					<span>{t('publicProf')}</span>
 					<Tooltip title={t('agreementTooltip')}>
 						<img src="/GroupVop.svg" />
 					</Tooltip>
@@ -119,7 +119,7 @@ const AboutMeNew = () => {
 								dataAboutMe?.FIRSTNAME || ''
 							} ${dataAboutMe?.SECONDNAME || ''}`}</div>
 							<div className="mt-[32px] w-[80%]">
-								<div>Профиль заполнена на {percentProgress}%</div>
+								<div>{t('zapolnen')} {percentProgress}%</div>
 								<Progress
 									showInfo={false}
 									percent={percentProgress}

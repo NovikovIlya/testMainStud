@@ -920,6 +920,8 @@
 	"deleteEducationTitle": "Delete education",
 	"deleteEducationDescription": "Are you sure you want to delete education?",
 	"select": "Select",
+	"publicProf": "Make profile public",
+	"zapolnen": "The profile is filled in",
 	"onlyImages": "Only images can be uploaded!",
 	"fileSize": "The file must be less than 5MB!",
 	"creativeCollectives": "Participation in creative collectives",

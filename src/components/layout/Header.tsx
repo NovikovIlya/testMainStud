@@ -420,7 +420,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 							trigger={['click']}
 							className="cursor-pointer h-full  box-border"
 						>
-							<Space className="px-10 max-sm:px-5 max-[455px]:!gap-0 gap-2 w-[200px] flex justify-end">
+							<Space className="px-4  gap-5 flex justyfy-between">
 								{!avatarUrl?.url ?<PersonSvg white={type === 'service'} /> : <Avatar src={avatarUrl?.url}/>}
 								<div className={clsx('h-full max-[455px]:hidden', type === 'service' && 'text-white')}>
 									<div className="font-bold text-sm truncate max-w-[120px]">

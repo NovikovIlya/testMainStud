@@ -137,7 +137,7 @@ const TableLanguages = ({triger,handleIdCert,isSuccess,dataCertificate,dataLevel
 			}))
 			form2.setFieldsValue({
 				languageCode: selectInfo.langId,
-				languageLevelCode: selectInfo.languageLevel,
+				languageLevelCode: selectInfo.languageLevelCode,
 				certificateId: selectInfo.certificates?.[0]?.certificateTypeName || null, // Если сертификатов нет, устанавливаем null
 				isPublished: selectInfo.isPublished,
 				file: fileList
@@ -272,9 +272,10 @@ const TableLanguages = ({triger,handleIdCert,isSuccess,dataCertificate,dataLevel
 							wrapperCol={{ span: 24 }}
 							layout="vertical"
 							className="mt-4 h-[35px]"
-							rules={[{ required: true, message: '' }]}
+							
 						>
 							<Select
+							    disabled
 								allowClear
 								options={dataAll?.map(item => ({
 									value: item.code,

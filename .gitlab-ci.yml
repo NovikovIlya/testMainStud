@@ -1,0 +1,6 @@
+test_job:
+  stage: test
+  script:
+    - echo "CI/CD работает на сервере Ubuntu"
+  only:
+    - main

@@ -132,10 +132,12 @@ export const fotTeacherService = apiSlice.injectEndpoints({
             return {
                     url: `to-teacher/journal/by-date/save`,
                     method: 'POST',
-                    body
+                    body,
+                    responseHandler: (response) => response.text(),
                 }
             },
             invalidatesTags: ['forTeacherJournalDay'],
+           
 
         }),
 
@@ -165,10 +167,12 @@ export const fotTeacherService = apiSlice.injectEndpoints({
             return {
                     url: `to-teacher/journal/by-semester/save`,
                     method: 'POST',
-                    body
+                    body,
+                    responseHandler: (response) => response.text(),
                 }
             },
             invalidatesTags: ['forTeacherJournalSemester'],
+           
 
         }),
 

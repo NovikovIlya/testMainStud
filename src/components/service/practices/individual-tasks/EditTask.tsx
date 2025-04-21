@@ -198,6 +198,7 @@ const EditTask = () => {
                                 rules={[{ required: true }]}
                                 name={'specialityName'}>
                                 <Select
+                                    showSearch
                                     disabled={!form.getFieldValue('subDivision')}
                                     size="large"
                                     popupMatchSelectWidth={false}
@@ -224,6 +225,7 @@ const EditTask = () => {
                                 <Select
                                     disabled={!form.getFieldValue('subDivision')}
                                     size="large"
+                                    showSearch
                                     popupMatchSelectWidth={false}
                                     className="w-full"
                                     options={practiceType?.map((item) => {

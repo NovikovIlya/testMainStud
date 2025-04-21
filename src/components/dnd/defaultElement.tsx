@@ -1,5 +1,7 @@
 import { useAppSelector } from '../../store'
+import { DirectResume } from '../cards/DirectResume'
 import { Schedule } from '../cards/Schedule'
+import { Seeker } from '../cards/Seeker'
 import { TemplateCard } from '../cards/Template'
 
 const cookies = document.cookie.split('; ')
@@ -8,27 +10,93 @@ const sId = cookies[2]?.split('=')[1] || ''
 const hId = cookies[3]?.split('=')[1] || ''
 const aId = cookies[4]?.split('=')[1] || ''
 
-
-const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '') : null;
-const urlObrProgram = (() => {
-
-    switch (user?.filialType) {
-        case 'KAZAN':
-            return 'https://kpfu.ru/sveden/education/#eduop';
-        case 'ELABUGA':
-            return 'https://stat-elabuga.kpfu.ru/sveden/education/#eduop';
-        case 'CHELNY':
-            return 'https://kpfu.ru/chelny/sveden/';
-        case 'DZHIZAK':
-            return 'https://kpfu.ru/dzhizak/sveden/education/';
-        case 'CAIRO':
-            return '';
-        default:
-            return ''; // или любое другое значение по умолчанию
-    }
-});
+const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '') : null
+const urlObrProgram = () => {
+	switch (user?.filialType) {
+		case 'KAZAN':
+			return 'https://kpfu.ru/sveden/education/#eduop'
+		case 'ELABUGA':
+			return 'https://stat-elabuga.kpfu.ru/sveden/education/#eduop'
+		case 'CHELNY':
+			return 'https://kpfu.ru/chelny/sveden/'
+		case 'DZHIZAK':
+			return 'https://kpfu.ru/dzhizak/sveden/education/'
+		case 'CAIRO':
+			return ''
+		default:
+			return '' // или любое другое значение по умолчанию
+	}
+}
 
 export const jsxElements = [
+	{
+		key: 'jobSeeker',
+		element: <Seeker />,
+		place: {
+			w: 3,
+			h: 1,
+			minW: 3,
+			maxW: 3,
+			x: 0,
+			y: 0,
+			i: 'jobSeeker'
+		}
+	},
+	{
+		key: 'myResponds',
+		element: (
+			<TemplateCard
+				title="Мои отклики"
+				info="В разделе отображается ваш текущий статус заявления на работу"
+				href="/services/myresponds/responds"
+				img="/myrespondsicon.png"
+				width={146}
+				height={136}
+				mt="mt-[25px]"
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 0,
+			y: 0,
+			i: 'myResponds'
+		}
+	},
+	{
+		key: 'DirectResume',
+		element: (
+			<DirectResume
+				href="#"
+				img="/directresumeimage.png"
+				info="Не нашли подходящую вакансию? Заполняйте резюме, отправляйте на проверку и мы рассмотрим вашу кандидатуру"
+				title="Резюме"
+				buttonText="Создать"
+				buttonType="primary"
+				height={99}
+				width={85}
+				positionImage="mt-2"
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 1,
+			y: 0,
+			i: 'DirectResume'
+		}
+	},
+	{
+		key: 'personnelAccounting',
+		element: <TemplateCard title="Трудоустройство" info="" href="/services/personnelaccounting" buttonText="Изучить" />,
+		place: {
+			w: 1,
+			h: 1,
+			x: 2,
+			y: 0,
+			i: 'personnelAccounting'
+		}
+	},
 	{
 		key: 'ElectronicBook',
 		element: (
@@ -37,7 +105,6 @@ export const jsxElements = [
 				img="/image23.png"
 				info="ElectronicBookInfo"
 				title="ElectronicBook"
-				
 			/>
 		),
 		place: {
@@ -160,7 +227,7 @@ export const jsxElements = [
 		place: {
 			w: 3,
 			h: 1,
-		
+
 			x: 0,
 			y: 0,
 			i: 'Schedule',
@@ -453,7 +520,7 @@ export const jsxElements = [
 				title="petitionForDocument"
 				buttonText="Watch"
 				img={'/petition.png'}
-				className='object-contain'
+				className="object-contain"
 				positionImage={'mt-7'}
 				isLink
 			/>
@@ -475,7 +542,7 @@ export const jsxElements = [
 				title="contractEducation"
 				buttonText="Watch"
 				img={'/contractEduc.png'}
-				className='object-contain'
+				className="object-contain"
 				positionImage={'mt-7'}
 				isLink
 			/>
@@ -497,7 +564,7 @@ export const jsxElements = [
 				title="educationPrograms"
 				buttonText="Watch"
 				img={'/educProg.png'}
-				className='object-contain'
+				className="object-contain"
 				positionImage={'mt-7'}
 				isLink
 			/>
@@ -547,5 +614,5 @@ export const jsxElements = [
 			y: 0,
 			i: 'ManagementScientificProjects'
 		}
-	},
+	}
 ]

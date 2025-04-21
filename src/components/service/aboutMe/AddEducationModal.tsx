@@ -56,7 +56,7 @@ export const AddEducationModal = (props: {
 											edu_level: values.educationLevelId,
 											eduspeciality: values.specialization,
 											organization: values.nameOfInstitute,
-											edu_country: values.countryId,
+											edu_country: countries.find(country => country.id === values.countryId)?.shortName!,
 											development: values.subdivision,
 											qualification: values.qualification,
 											issue_date: values.issueDate,
@@ -81,7 +81,7 @@ export const AddEducationModal = (props: {
 											edu_level: values.educationLevelId,
 											eduspeciality: values.specialization,
 											organization: values.nameOfInstitute,
-											edu_country: values.countryId,
+											edu_country: countries.find(country => country.id === values.countryId)?.shortName!,
 											development: values.subdivision,
 											qualification: values.qualification,
 											issue_date: dayjs(values.issueDate).format('DD.MM.YYYY'),
@@ -112,7 +112,7 @@ export const AddEducationModal = (props: {
 										edu_level: values.educationLevelId,
 										eduspeciality: values.specialization,
 										organization: values.nameOfInstitute,
-										edu_country: values.countryId,
+										edu_country: countries.find(country => country.id === values.countryId)?.shortName!,
 										development: values.subdivision,
 										qualification: values.qualification,
 										issue_date: dayjs(values.issueDate).format('DD.MM.YYYY'),
@@ -135,7 +135,7 @@ export const AddEducationModal = (props: {
 										edu_level: values.educationLevelId,
 										eduspeciality: values.specialization,
 										organization: values.nameOfInstitute,
-										edu_country: values.countryId,
+										edu_country: countries.find(country => country.id === values.countryId)?.shortName!,
 										development: values.subdivision,
 										qualification: values.qualification,
 										issue_date: dayjs(values.issueDate).format('DD.MM.YYYY'),
@@ -180,7 +180,7 @@ export const AddEducationModal = (props: {
 							</Form.Item>
 							<Form.Item name={'countryId'} label={t('countryEducation')} className="w-full">
 								<Select
-									options={countries.map(country => ({ value: country.shortName, label: country.shortName }))}
+									options={countries.map(country => ({ value: country.id, label: country.shortName }))}
 									placeholder={t('select')}
 								></Select>
 							</Form.Item>

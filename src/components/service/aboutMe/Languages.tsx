@@ -62,7 +62,7 @@ const Languages = () => {
 		setNative({ languageCodes: nativeLanguageForm }).unwrap()
 	}
 
-	// Добавление Иностранного языка!
+	// Добавление Иностранного языка!!
 	const onFinishForm2 = async (values: Omit<ForeignLanguage, 'file'> & { file?: any[] }) => {
 		// Подготовка базовой структуры данных
 		const requestData: any = {

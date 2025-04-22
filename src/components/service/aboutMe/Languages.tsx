@@ -51,7 +51,6 @@ const Languages = () => {
 	const { data: dataOneCertificate } = useGetOneCertificateQuery(idCert, { skip: !idCert })
 	const [selectedLabel, setSelectedLabel] = useState<string | null>(null)
 	const [triger,{}] = useLazyGetOneCertificateQuery()
-	
 	const nativeLanguageForm = Form.useWatch('languages', form)
 	const sertificateFormVal = Form.useWatch('certificateId', form2)
 

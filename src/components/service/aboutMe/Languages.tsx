@@ -1,20 +1,15 @@
-import { QuestionCircleOutlined, UploadOutlined } from '@ant-design/icons'
-import { Button, Checkbox, Col, Divider, Form, Modal, Result, Row, Spin, Tooltip, Upload, message } from 'antd'
-import { Descriptions } from 'antd'
-import type { DescriptionsProps } from 'antd'
-import { Select, Space } from 'antd'
-import type { SelectProps } from 'antd'
-import TextArea from 'antd/es/input/TextArea'
+import { UploadOutlined } from '@ant-design/icons'
+import { Button, Checkbox, Col, Form, Modal, Result, Row, Spin, Upload, message } from 'antd'
+import { Select } from 'antd'
 import Title from 'antd/es/typography/Title'
 import { t } from 'i18next'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import {
 	Certificate,
 	ForeignLanguage,
 	Language,
-	LanguageLevel,
-	NativeLanguagesApiResponse
+	LanguageLevel
 } from '../../../models/aboutMe'
 import {
 	useGetAllNativeLanguagesQuery,
@@ -23,7 +18,7 @@ import {
 	useGetNativeLanguagesQuery,
 	useGetOneCertificateQuery,
 	useGetforeignLanguagesQuery,
-	
+
 	useLazyGetOneCertificateQuery,
 	useSetForeignMutation,
 	useSetNativeMutation
@@ -32,7 +27,6 @@ import {
 import './Languages.css'
 import { SkeletonPage } from './Skeleton'
 import TableLanguages from './TableLanguages'
-import UploadAvatar from './UploadAvatar'
 
 const Languages = () => {
 	const [form] = Form.useForm()

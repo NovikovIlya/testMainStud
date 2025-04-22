@@ -139,14 +139,14 @@ const TableLanguages = ({triger,handleIdCert,isSuccess,dataCertificate,dataLevel
 			const fileList = selectInfo?.certificates?.map((certificate: CertificateTs, index: number) => ({
 				certId: certificate.certId,
 				uid: `-${index}`, // Уникальный ID для каждого файла
-				name: certificate.certificateName, // Имя файла
+				name: certificate.certificateTypeName, // Имя файла
 				status: 'done', // Статус загрузки
 				url: certificate.certificateLink // URL файла
 			}))
 			form2.setFieldsValue({
-				languageCode: selectInfo.langId,
+				languageCode: selectInfo.code,
 				languageLevelCode: selectInfo.languageLevelCode,
-				certificateId: selectInfo.certificates?.[0]?.certificateTypeName || null, // Если сертификатов нет, устанавливаем null
+				certificateId: selectInfo.certificates?.[0]?.certificateTypeId || null, // Если сертификатов нет, устанавливаем null
 				isPublished: selectInfo.isPublished,
 				file: fileList
 				
@@ -205,7 +205,7 @@ const TableLanguages = ({triger,handleIdCert,isSuccess,dataCertificate,dataLevel
 				requestData.savingCertificates = [
 					{
 						// certId: values.certificateId,
-						certificateName: selectedLabel,
+						certificateName: selectInfo?.certificates?.[0]?.certificateTypeName || '',
 						certificateTypeId: values.certificateId, 
 						base64File: base64File
 					}
@@ -341,7 +341,7 @@ const TableLanguages = ({triger,handleIdCert,isSuccess,dataCertificate,dataLevel
 						<Form.Item valuePropName="fileList" name="file" getValueFromEvent={e => e?.fileList}>
 							
 							<Upload  onRemove={handleRemove} maxCount={1} beforeUpload={beforeUpload} accept=".pdf">
-								{fileArray?.length>0 ? <div>Чтобы добавить, удалите старый</div>:
+								{fileArray?.length>0 ? <div>Чтобы добавить, удалите прошлый файл</div>:
 								<Button className=" " icon={<UploadOutlined />}>
 									{ t('add')} {'(pdf)'}
 								</Button>

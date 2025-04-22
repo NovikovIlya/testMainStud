@@ -139,7 +139,7 @@ const TableLanguages = ({triger,handleIdCert,isSuccess,dataCertificate,dataLevel
 			const fileList = selectInfo?.certificates?.map((certificate: CertificateTs, index: number) => ({
 				certId: certificate.certId,
 				uid: `-${index}`, // Уникальный ID для каждого файла
-				name: certificate.certificateTypeName, // Имя файла
+				name: certificate.certificateName, // Имя файла
 				status: 'done', // Статус загрузки
 				url: certificate.certificateLink // URL файла
 			}))
@@ -206,7 +206,7 @@ const TableLanguages = ({triger,handleIdCert,isSuccess,dataCertificate,dataLevel
 				requestData.savingCertificates = [
 					{
 						// certId: values.certificateId,
-						certificateName: selectInfo?.certificates?.[0]?.certificateTypeName || '',
+						certificateName: originalFile.name || '',
 						certificateTypeId: values.certificateId, 
 						base64File: base64File
 					}

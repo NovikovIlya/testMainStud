@@ -28,6 +28,7 @@ const AboutMeNew = () => {
 	const { data: dataCheckbox } = useGetCheckboxQuery()
 	const [setCheckbox, { isLoading: isLoadingCheckbox }] = useSetCheckboxMutation()
 	const [disabled, setDisabled] = useState(true)
+	const [switchBoolean, setSwitchBoolean] = useState(false)
 	const [percentProgress,setPercentProgress] = useState(60)
 	const switchForm = Form.useWatch('switch', form2)
 	const [initialCheckboxes, setInitialCheckboxes] = useState({
@@ -50,6 +51,7 @@ const AboutMeNew = () => {
 			dataCheckbox?.IS_CHECKED_REL === 1 &&
 			dataCheckbox?.IS_CHECKED_HANDLING === 1 &&
 			dataCheckbox?.IS_CHECKED_PERS_DATA === 1
+			console.log('allChecked',allChecked)
 		setDisabled(!allChecked)
 	}, [dataAboutMe])
 
@@ -101,7 +103,7 @@ const AboutMeNew = () => {
 				<div className="flex items-center gap-2">
 					<Form form={form2} className="flex items-center">
 						<Form.Item name={'switch'} className="flex items-center mb-0">
-							<Switch disabled={disabled} defaultChecked />
+							<Switch disabled={disabled}  />
 						</Form.Item>
 					</Form>
 					<span>{t('publicProf')}</span>
@@ -327,7 +329,7 @@ const AboutMeNew = () => {
 											</Descriptions.Item>
 										) : null}
 
-										{/* Билет */}
+										{/* Билет */}в
 										{dataAboutMe?.studentAddedDto?.LIBCARD ? (
 											<Descriptions.Item label={t('bilet')}>{dataAboutMe.studentAddedDto.LIBCARD}</Descriptions.Item>
 										) : null}

@@ -70,7 +70,6 @@ const Languages = () => {
 	}
 
 	// Добавление Иностранного языка
-	
 	const onFinishForm2 = async (values: Omit<ForeignLanguage, 'file'> & { file?: any[] }) => {
 		// Подготовка базовой структуры данных
 		const requestData: any = {
@@ -79,7 +78,6 @@ const Languages = () => {
 			isPublished: values.isPublished || false,
 			certificates: []
 		}
-		console.log('values',values)
 		// Обработка файла сертификата, если он есть
 		if (fileList.length > 0 && selectedLabel && values.certificateId) {
 			const originalFile = values.file?.[0]?.originFileObj as File

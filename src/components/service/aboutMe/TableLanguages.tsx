@@ -171,6 +171,7 @@ const TableLanguages = ({triger,handleIdCert,isSuccess,dataCertificate,dataLevel
 
 	const handleCancelEdit = () => {
 		setIsModalOpenEdit(false)
+		setDeleteCert([])
 	}
 
 
@@ -178,7 +179,7 @@ const TableLanguages = ({triger,handleIdCert,isSuccess,dataCertificate,dataLevel
 		console.log('values',values)
 		// Подготовка базовой структуры данных в новом формате
 		const requestData: any = {
-			langId: values.languageCode, // Используем languageCode как langId
+			langId: selectInfo?.langId , 
 			languageLevelCode: values.languageLevelCode,
 			isPublished: values.isPublished || false,
 			savingCertificates: [], // Массив для сохраняемых сертификатов

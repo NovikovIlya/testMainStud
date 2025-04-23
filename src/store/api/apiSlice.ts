@@ -40,7 +40,7 @@ const baseQueryWithReAuth = async (args: string | FetchArgs, api: BaseQueryApi, 
 		})
 		const refreshResultJson = await refreshResult.json()
 		if (refreshResultJson.accessToken) {
-			console.log('--------------2')
+			console.log('-------------2')
 			//@ts-ignore
 			const user = api.getState().auth.user
 			//@ts-ignore

@@ -1,5 +1,5 @@
 import { DeleteTwoTone, EditTwoTone, EyeInvisibleTwoTone, EyeTwoTone, UploadOutlined } from '@ant-design/icons'
-import { Button, Checkbox, ConfigProvider, Form, Modal, Select, Space, Spin, Table, Upload, message } from 'antd'
+import { Button, Checkbox, ConfigProvider, Form, Modal, Popconfirm, Select, Space, Spin, Table, Upload, message } from 'antd'
 import type { TableProps } from 'antd'
 import { t } from 'i18next'
 import React, { useEffect, useState } from 'react'
@@ -122,7 +122,15 @@ const TableLanguages = ({triger,handleIdCert,isSuccess,dataCertificate,dataLevel
 			key: 'action',
 			render: (_, record) => (
 				<Space size="middle">
-					<DeleteTwoTone onClick={() => handleDelete(record?.langId)} className="hover:scale-[140%] " />
+					<Popconfirm
+												title={t('deleteEducationTitle')}
+												description={t('deleteEducationDescription')}
+												onConfirm={() => {
+													handleDelete(record?.langId)
+												}}
+											>
+					<DeleteTwoTone className="hover:scale-[140%] " />
+					</Popconfirm>
 				</Space>
 			)
 		}

@@ -278,6 +278,7 @@ const Languages = () => {
 							rules={[{ required: true, message: '' }]}
 						>
 							<Select
+								placeholder={t('selectLanguage')}
 								allowClear
 								options={dataAll?.map((item: Language) => ({
 									value: item.code,
@@ -293,9 +294,10 @@ const Languages = () => {
 							wrapperCol={{ span: 24 }}
 							layout="vertical"
 							className="mt-14 h-[35px]"
-							rules={[{ required: true, message: '' }]}
+							// rules={[{ required: true, message: '' }]}
 						>
 							<Select
+							    placeholder={t('selectLevel')}
 								aria-required
 								options={dataLevels?.map((item: LanguageLevel) => ({
 									value: item.languageLevelCode,
@@ -315,6 +317,7 @@ const Languages = () => {
 							// rules={[{ required: true, message: '' }]}
 						>
 							<Select
+								placeholder={t('selectSert')}
 								onSelect={(value: Certificate['id']) => {
 									const selectedOption = dataCertificate?.find((item: Certificate) => item.id === value)
 									if (selectedOption) {

@@ -14,7 +14,7 @@ build:
   image: node:lts-alpine
   script:
     - npm ci
-    - npm run build
+    - npx vite build
   artifacts:
     paths:
       - $LOCAL_BUILD_DIR/

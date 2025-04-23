@@ -85,7 +85,7 @@ export const myPracticeService = apiSlice.injectEndpoints({
       //  Знание языков
       getNativeLanguages: builder.query<any, void>({
         query: () => ({
-          url: '/languages/native',
+          url: '/activities/languages/native',
           method: 'GET',
          
         }),
@@ -94,7 +94,7 @@ export const myPracticeService = apiSlice.injectEndpoints({
       }),
       getAllNativeLanguages: builder.query<any, void>({
         query: () => ({
-          url: '/languages/all',
+          url: '/activities/languages/all',
           method: 'GET',
          
         }),
@@ -103,7 +103,7 @@ export const myPracticeService = apiSlice.injectEndpoints({
       }),
       setNative: builder.mutation<any, any>({
         query: (body) => ({
-            url: '/languages/native',
+            url: '/activities/languages/native',
             method: 'POST',
             body,
            
@@ -114,7 +114,7 @@ export const myPracticeService = apiSlice.injectEndpoints({
       // Иностранные языки
       getforeignLanguages: builder.query<foreignLanguageAll, void>({
         query: () => ({
-          url: '/languages/foreign',
+          url: '/activities/languages/foreign',
           method: 'GET',
          
         }),
@@ -123,7 +123,7 @@ export const myPracticeService = apiSlice.injectEndpoints({
       }),
       getOneCertificate: builder.query<foreignLanguageAll, number | null>({
         query: (id) => ({
-          url: `/languages/foreign/certificate?certificateId=${id}`,
+          url: `/activities/languages/foreign/certificate?certificateId=${id}`,
           method: 'GET',
           responseHandler: async (response) => {
             const blob = await response.blob();
@@ -143,7 +143,7 @@ export const myPracticeService = apiSlice.injectEndpoints({
       }),
       getLevels: builder.query<any, void>({
         query: () => ({
-          url: '/languages/levels',
+          url: '/activities/languages/levels',
           method: 'GET',
          
         }),
@@ -152,7 +152,7 @@ export const myPracticeService = apiSlice.injectEndpoints({
       }),
       getCertificate: builder.query<any, void>({
         query: () => ({
-          url: '/languages/certificate-names',
+          url: '/activities/languages/certificate-names',
           method: 'GET',
          
         }),
@@ -161,7 +161,7 @@ export const myPracticeService = apiSlice.injectEndpoints({
       }),
       setForeign: builder.mutation<any, any>({
         query: (body) => ({
-            url: '/languages/foreign',
+            url: '/activities/languages/foreign',
             method: 'POST',
             body,
            
@@ -170,7 +170,7 @@ export const myPracticeService = apiSlice.injectEndpoints({
       }),
       editForeign: builder.mutation<any, any>({
         query: (body) => ({
-            url: '/languages/foreign',
+            url: '/activities/languages/foreign',
             method: 'PUT',
             body,
            
@@ -179,7 +179,7 @@ export const myPracticeService = apiSlice.injectEndpoints({
       }),
       deleteForeign: builder.mutation<any, any>({
         query: (id) => ({
-            url: `/languages/foreign?langId=${id}`,
+            url: `/activities/languages/foreign?langId=${id}`,
             method: 'DELETE',
             
            
@@ -188,7 +188,7 @@ export const myPracticeService = apiSlice.injectEndpoints({
       }),
       isPublished: builder.mutation<any, any>({
         query: (id) => ({
-            url: `/languages/foreign/is-published?langId=${id}`,
+            url: `/activities/languages/foreign/is-published?langId=${id}`,
             method: 'PATCH',
         
            
@@ -200,7 +200,7 @@ export const myPracticeService = apiSlice.injectEndpoints({
       // ОБщественная деятельность
       getSoc: builder.query<socActivity, void>({
         query: () => ({
-          url: '/languages/social-activity',
+          url: '/activities/social-activity',
           method: 'GET',
          
         }),
@@ -209,7 +209,7 @@ export const myPracticeService = apiSlice.injectEndpoints({
       }),
       putSoc: builder.mutation<socActivity, any>({
         query: (body) => ({
-            url: '/languages/social-activity',
+            url: '/activities/social-activity',
             method: 'PUT',
             body,
            
@@ -218,7 +218,7 @@ export const myPracticeService = apiSlice.injectEndpoints({
       }),
       postSoc: builder.mutation<socActivity, any>({
         query: (body) => ({
-            url: '/languages/social-activity',
+            url: '/activities/social-activity',
             method: 'POST',
             body,
            

@@ -7,7 +7,7 @@ variables:
   DEPLOY_USER: "$DEPLOY_USER"
   DEPLOY_PASSWORD: "$DEPLOY_PASSWORD"
   DEPLOY_PATH: "$DEPLOY_PATH"
-  LOCAL_BUILD_DIR: "dist"
+  LOCAL_BUILD_DIR: "build"
 
 build:
   stage: build

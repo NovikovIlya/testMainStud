@@ -147,16 +147,16 @@ export default function VacancyItem(props: VacancyItemType) {
 				</Modal>
 			</ConfigProvider>
 			<div className="flex w-full bg-white pl-[20px] pr-[55px] pt-[20px] pb-[20px] items-center shadow-custom-shadow">
-				<p className="w-[238px] shrink-0 font-content-font font-normal text-[16px]/[19px] text-black">{props.title}</p>
-				<div className="ml-[30px] flex gap-[40px] justify-between">
-					<p className="w-[104px] font-content-font font-normal text-[16px]/[19px] text-black whitespace-nowrap">
+				<p className="w-[30%] shrink-0 font-content-font font-normal text-[16px]/[19px] text-black">{props.title}</p>
+				<div className="ml-[5%] w-[20%] flex gap-[40px]">
+					<p className="font-content-font font-normal text-[16px]/[19px] text-black whitespace-nowrap">
 						{props.experience}
 					</p>
-					<p className="w-[104px] font-content-font font-normal text-[16px]/[19px] text-black whitespace-nowrap">
+					<p className="font-content-font font-normal text-[16px]/[19px] text-black whitespace-nowrap">
 						{props.employment}
 					</p>
 				</div>
-				<p className="ml-[140px] w-[150px] font-content-font font-normal text-[16px]/[19px] text-black text-balance">
+				<p className="ml-[5%] w-[8%] font-content-font font-normal text-[16px]/[19px] text-black text-balance">
 					{props.salary}
 				</p>
 				<Button
@@ -170,12 +170,12 @@ export default function VacancyItem(props: VacancyItemType) {
 								navigate(`/services/personnelaccounting/supervisor/vacancyview/${props.id}`)
 							})
 					}}
-					className="ml-[60px] font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black"
+					className="ml-[10%] max-w-[15%] font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black"
 				>
 					Подробнее
 				</Button>
 				<Button
-					className="ml-[90px]"
+					className="ml-auto max-w-[5%]"
 					onClick={() => {
 						setModalOpen(true)
 					}}

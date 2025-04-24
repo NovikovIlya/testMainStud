@@ -21,16 +21,28 @@ export const Redirect = () => {
             dispatch(setCredentials({ ...userData }))
             //так как s_id и h_id доступны из старого лк, то заново в куки их добавлять не нужно
 
-            document.cookie = `refresh=${
-                userData.refreshToken
-            }; max-age=31536000; domain=${
-                document.domain !== 'localhost' ? 'kpfu.ru' : 'localhost'
-            }; path=/; samesite=strict`
-            document.cookie = `a_id=${
-                userData.user.allId
-            }; max-age=31536000; domain=${
-                document.domain !== 'localhost' ? 'kpfu.ru' : 'localhost'
-            }; path=/; samesite=strict`
+            // document.cookie = `refresh=${
+            //     userData.refreshToken
+            // }; max-age=31536000; domain=${
+            //     document.domain !== 'localhost' ? 'kpfu.ru' : 'localhost'
+            // }; path=/; samesite=strict`
+            // document.cookie = `a_id=${
+            //     userData.user.allId
+            // }; max-age=31536000; domain=${
+            //     document.domain !== 'localhost' ? 'kpfu.ru' : 'localhost'
+            // }; path=/; samesite=strict`
+            document.cookie = `refresh=${userData.refreshToken}; max-age=31536000; domain=${
+				document.domain !== 'localhost' ? 'kpfu.ru' : 'localhost'
+			}; path=/; samesite=strict`
+			document.cookie = `s_id=${userData.user.sessionId}; max-age=31536000; domain=${
+				document.domain !== 'localhost' ? 'kpfu.ru' : 'localhost'
+			}; path=/; samesite=strict`
+			document.cookie = `h_id=${userData.user.sessionHash}; max-age=31536000; domain=${
+				document.domain !== 'localhost' ? 'kpfu.ru' : 'localhost'
+			}; path=/; samesite=strict`
+			document.cookie = `a_id=${userData.user.allId}; max-age=31536000; domain=${
+				document.domain !== 'localhost' ? 'kpfu.ru' : 'localhost'
+			}; path=/; samesite=strict`
             localStorage.setItem('user', JSON.stringify(userData.user))
             localStorage.setItem('access', JSON.stringify(userData.accessToken))
             localStorage.setItem('refresh', JSON.stringify(userData.refreshToken))

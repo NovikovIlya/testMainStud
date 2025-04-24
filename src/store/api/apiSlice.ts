@@ -7,7 +7,7 @@ import { logOut, setCredentials } from '../reducers/authSlice'
 const getBaseUrl = () => {
 	const { hostname } = window.location;
 	console.log("hostname",hostname)
-	// Для Vercel (тест)
+	// Для Vercel (тест)!
 	if (hostname.includes('vercel.app') || hostname.includes('vercel.com')) {
 	  return 'https://newlk-test.kpfu.ru/';
 	}

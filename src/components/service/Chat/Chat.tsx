@@ -157,7 +157,7 @@ export const Chat = () => {
 								<p className="pl-[53px] font-content-font font-normal text-black text-[20px]/[20px] ">Все отклики</p>
 							</div>
 							<div className="overflow-auto flex flex-col h-[calc(100vh-160px)]">
-								<ul className="w-[461px] flex flex-col gap-4 overflow-auto">
+								<ul className="w-[461px] flex flex-col gap-4 overflow-auto h-full">
 									{handleList}
 									<li className="h-[1px]" ref={chatPreviewsBottomRef}></li>
 								</ul>

@@ -76,13 +76,16 @@ export const ChatPreview = (props: {
 	const smallhandler = (e: CustomEventInit) => {
 		console.log('Отработка')
 		console.log(pathname)
+		console.log(props.respondId.toString())
 		pathname.includes(props.respondId.toString()) && console.log('Received a new message!')
 		pathname.includes(props.respondId.toString()) && console.log(e.detail.date)
 		pathname.includes(props.respondId.toString()) && setLastMessageDate(prev => e.detail.date as string)
 	}
 
 	useEffect(() => {
-		setLastMessageDate(prev => chatInfo.lastMessageDate)
+		console.log('Отработка эффекта по прокидыванию изначального времени')
+		console.log(chatInfo.lastMessageDate)
+		setLastMessageDate(prev => chatInfo.lastMessageDate + 'Z')
 	}, [chatInfo.lastMessageDate])
 
 	useEffect(() => {
@@ -90,7 +93,7 @@ export const ChatPreview = (props: {
 		return () => {
 			window.removeEventListener('newmessage', smallhandler)
 		}
-	}, [])
+	}, [pathname])
 
 	return (
 		<>

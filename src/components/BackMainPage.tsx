@@ -21,8 +21,10 @@ export const BackMainPage = ({ className,notAuth = false }:{className?:string, n
 		document.title = t('pageTitle')
 	}, [t])
 
+	const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+
 	return (
-		<div className={`${className} flex w-full items-center justify-between  pr-8 pl-0  absolute `}>
+		<div className={`${className} flex w-full items-center justify-between  pr-8 pl-0  absolute ${isMobile ? 'hidden' : ''}`}>
 			<div className=" flex w-fit items-center gap-[10px] my-[50px] ml-[50px] cursor-pointer ">
 				{notAuth ? (
 					<div className="h-3"></div>

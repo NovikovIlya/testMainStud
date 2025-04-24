@@ -17,6 +17,9 @@ export const Redirect = () => {
     const [info, setInfo] = useLocalStorageState<any>('info', {
             defaultValue: ''
      })
+    const [href, setHref] = useLocalStorageState<any>('href', {
+        defaultValue: ''
+    })
 
     async function redirectSuccess(p2: P2) {
         try {
@@ -48,6 +51,7 @@ export const Redirect = () => {
 				document.domain !== 'localhost' ? 'kpfu.ru' : 'localhost'
 			}; path=/; samesite=strict`
             setInfo(userData)
+            setHref(userData?.user?.filialType)
             localStorage.setItem('user', JSON.stringify(userData.user))
             localStorage.setItem('access', JSON.stringify(userData.accessToken))
             localStorage.setItem('refresh', JSON.stringify(userData.refreshToken))

@@ -920,7 +920,7 @@
 	"m": "Male",
 	"w": "Female",
 	"maxLanguagesError": "You can only add up to 10 languages",
-	"deleteEducationTitle": "Delete education",
+	"deleteEducationTitle": "Delete",
 	"deleteEducationDescription": "Are you sure you want to delete?",
 	"select": "Select",
 	"publicProf": "Make profile public",

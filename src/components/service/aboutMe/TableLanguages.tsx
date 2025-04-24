@@ -49,7 +49,7 @@ const TableLanguages = ({triger,handleIdCert,isSuccess,dataCertificate,dataLevel
 						>
 							 <a
 							    target='_blank'
-								href={`https://newlk-test.kpfu.ru/languages/foreign/certificate?certificateId=${item.certId}`
+								href={`https://newlk-test.kpfu.ru/activities/languages/foreign/certificate?certificateId=${item.certId}`
 							} 
 								
 							>
@@ -309,7 +309,7 @@ const TableLanguages = ({triger,handleIdCert,isSuccess,dataCertificate,dataLevel
 							wrapperCol={{ span: 24 }}
 							layout="vertical"
 							className="mt-14 h-[35px]"
-							rules={[{ required: true, message: '' }]}
+							// rules={[{ required: true, message: '' }]}
 						>
 							<Select
 								aria-required

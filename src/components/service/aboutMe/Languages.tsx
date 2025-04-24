@@ -110,7 +110,7 @@ const Languages = () => {
 		} catch (error) {
 			
 			console.error('Ошибка при сохранении данных:', error)
-			message.error('Не удалось сохранить данные о языке')
+			message.error('Не удалось сохранить данные о языке (такой язык уже добавлен)')
 		}
 	}
 
@@ -278,8 +278,12 @@ const Languages = () => {
 							rules={[{ required: true, message: '' }]}
 						>
 							<Select
+							   showSearch 
 								placeholder={t('selectLanguage')}
 								allowClear
+								filterOption={(input, option) => 
+									(option?.label ?? '').toString().toLowerCase().includes(input.toLowerCase())
+								}
 								options={dataAll?.map((item: Language) => ({
 									value: item.code,
 									label: item.language
@@ -332,7 +336,7 @@ const Languages = () => {
 							/>
 						</Form.Item>
 
-						<div className="mt-14 mb-2">{t('prikrep')}</div>
+						<div className="mt-14 mb-2">{t('prikrep')} </div>
 						<Form.Item 
 						// rules={[{ required: true, message: '' }]}
 						 name="file" getValueFromEvent={e => e?.fileList}>

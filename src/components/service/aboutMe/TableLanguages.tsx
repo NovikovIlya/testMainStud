@@ -40,6 +40,7 @@ const TableLanguages = ({triger,handleIdCert,isSuccess,dataCertificate,dataLevel
 				<>
 					{certificates?.map((item: CertificateTs, index: number) => (
 						<div
+							className='flex gap-2'
 							key={index}
 							onClick={() => {
 								// handleIdCert(item?.certId)
@@ -47,14 +48,16 @@ const TableLanguages = ({triger,handleIdCert,isSuccess,dataCertificate,dataLevel
 								// triger(item?.certId)
 							}}
 						>
+							
 							 <a
 							    target='_blank'
 								href={`https://newlk-test.kpfu.ru/activities/languages/foreign/certificate?certificateId=${item.certId}`
 							} 
 								
 							>
-								{item.certificateName} {index === certificates.length - 1 ? '' : ', '}
+								{item.certificateName} 
 							 </a> 
+							 <span>({item?.certificateTypeName}) {index === certificates.length - 1 ? '' : ', '}</span>
 						</div>
 					))}
 				</>

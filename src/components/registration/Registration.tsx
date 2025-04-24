@@ -49,6 +49,8 @@ export const Registration: FC<IRegProps> = ({ changeEmail, email }) => {
 		}
 	}
 
+	const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+
 	return (
 		<div className="flex flex-wrap justify-center items-center min-h-screen">
 			<BackMainPage className='top-0'/>
@@ -66,13 +68,14 @@ export const Registration: FC<IRegProps> = ({ changeEmail, email }) => {
 					<Password error={error} />
 					<Buttons isLoading={isLoading} check={check} setCheck={setCheck} />
 				</Form>
+				{isMobile ? '' : 
 				<div className="flex items-start mt-10">
 					<img
 						className="max-lg:hidden w-[400px] h-[400px]"
 						src={logo}
 						alt="group"
 					/>
-				</div>
+				</div>}
 			</div>
 		</div>
 	)

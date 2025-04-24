@@ -102,6 +102,8 @@ export const Login = () => {
 		}
 	}, [accessToken, navigate])
 
+	const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+
 	return (
 		<div className="flex flex-col items-center min-h-screen ">
 			<BackMainPage className="" notAuth={true} />
@@ -119,9 +121,10 @@ export const Login = () => {
 					<Inputs error={error!} />
 					<Buttons isLoading={isLoading} />
 				</Form>
+				{isMobile ? '' : 
 				<div className="flex items-start items-center">
 					<img className="max-lg:hidden w-[400px] h-[400px]" src={logo} alt="group" />
-				</div>
+				</div>}
 			</div>
 		</div>
 	)

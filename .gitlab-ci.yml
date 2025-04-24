@@ -11,10 +11,8 @@ variables:
 
 build_dev:
   stage: build
-  image: node:lts-alpine
-  variables:
-    VITE_BASE_URL: "https://newlk-test.kpfu.ru/"
   script:
+    - cp .env.development .env
     - npm ci
     - npx vite build
   artifacts:
@@ -23,11 +21,9 @@ build_dev:
   only:
     - dev
 
-build_main:
+build:
   stage: build
   image: node:lts-alpine
-  variables:
-    VITE_BASE_URL: "https://newlk.kpfu.ru/"
   script:
     - npm ci
     - npx vite build

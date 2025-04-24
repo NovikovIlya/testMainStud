@@ -4,8 +4,25 @@ import i18next from 'i18next'
 
 import { logOut, setCredentials } from '../reducers/authSlice'
 
+const getBaseUrl = () => {
+	const { hostname } = window.location;
+	console.log("hostname",hostname)
+	// Для Vercel (тест)
+	if (hostname.includes('vercel.app') || hostname.includes('vercel.com')) {
+	  return 'https://newlk-test.kpfu.ru/';
+	}
+	
+	// Для локального окружения
+	if (hostname === 'localhost' || hostname === '127.0.0.1') {
+	  return 'http://localhost:8000/'; // ваш локальный URL
+	}
+  
+	// По умолчанию для продакшена
+	return 'https://newlk.kpfu.ru/';
+  };
+
 const baseQuery = fetchBaseQuery({
-	  baseUrl: import.meta.env.VITE_BASE_URL || 'https://newlk-test.kpfu.ru/',
+	  baseUrl: getBaseUrl(),
 	 //  baseUrl: 'https://newlk.kpfu.ru/',
 	prepareHeaders(headers, { getState }) {
 		const token = (getState() as RootState).auth.accessToken

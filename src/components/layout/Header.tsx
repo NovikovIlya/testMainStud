@@ -9,29 +9,20 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-import {
-	EyeSvg,
-	LogoIasSvg,
-	LogoutSvg,
-	MenuSvg,
-	PersonCardSvg,
-	PersonSvg, SettingSvg
-} from '../../assets/svg'
+import { EyeSvg, LogoIasSvg, LogoutSvg, MenuSvg, PersonCardSvg, PersonSvg, SettingSvg } from '../../assets/svg'
 import { ArrowLeftBackInOldAccount } from '../../assets/svg/ArrowLeftBackInOldAccount'
 import { LogoIasSvgEn } from '../../assets/svg/LogoIasSvgEn'
+import { LogoSvgNew } from '../../assets/svg/LogoSvgNew'
 import { MessageModuleSvg } from '../../assets/svg/MessagesModuleSvg'
 import { TypeHeaderProps } from '../../models/layout'
 import { useAppSelector } from '../../store'
+import { useGetAvatarQuery } from '../../store/api/aboutMe/forAboutMe'
 import { useFakeLoginMutation } from '../../store/api/fakeLogin'
+import { useGetAllUnReadQuery } from '../../store/api/messages/messageApi'
 import { useGetRoleQuery } from '../../store/api/serviceApi'
 import { logOut } from '../../store/reducers/authSlice'
 import AccessibilityHelper from '../AccessibilityHelper/AccessibilityHelper'
 import { ModalNav } from '../service/ModalNav'
-import { useGetAllUnReadQuery } from '../../store/api/messages/messageApi'
-import { LogoSvgNew } from '../../assets/svg/LogoSvgNew'
-import { useGetAvatarQuery } from '../../store/api/aboutMe/forAboutMe'
-
-
 
 export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const [isModalOpen, setIsModalOpen] = useState(false)
@@ -52,20 +43,20 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const maiRole = roles.find((item: any) => item.login === username)?.type || ''
 	const maiRoleArray = roles.find((item: any) => item.login === username)
 	const [subRole, setSubrole] = useLocalStorageState<any>('subRole', { defaultValue: '' })
-	const [mainRole, setmainRole] = useLocalStorageState<any>('typeAcc', {defaultValue: 'STUD'})
+	const [mainRole, setmainRole] = useLocalStorageState<any>('typeAcc', { defaultValue: 'STUD' })
 	const [login, { data: dataLogin, isSuccess, isLoading }] = useFakeLoginMutation()
 	const [isOpen, setIsOpen] = useState(false)
-	const [info, setInfo] = useLocalStorageState<any>('info',{  defaultValue: '',},);
+	const [info, setInfo] = useLocalStorageState<any>('info', { defaultValue: '' })
 	const ref = useRef<any>(null)
 	const { unreadChatsCount } = useGetAllUnReadQuery(null, {
 		pollingInterval: 2000,
 		skipPollingIfUnfocused: true,
 		selectFromResult: ({ data }) => ({
-		  unreadChatsCount: data?.unreadChatsCount
-		}),
+			unreadChatsCount: data?.unreadChatsCount
+		})
 	})
-	const { data: avatarUrl, isLoading: isAvatarLoading } = useGetAvatarQuery();
-	
+	const { data: avatarUrl, isLoading: isAvatarLoading } = useGetAvatarQuery()
+
 	useEffect(() => {
 		if (isSuccessSubRole) {
 			if (mainRole === 'OTHER') {
@@ -121,21 +112,24 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 		// 	type: 'divider'
 		// },
 
-		...(maiRole === 'OTHER' ? [
-			{
-			label: (
-				<div
-					onClick={() => {
-						navigate('/infoUserUpdate')
-					}}
-					className={`${maiRole === 'OTHER' ? '' : 'hidden'} flex items-center gap-[15px] px-[4px] py-[5px]`}
-				>
-					<UserSwitchOutlined className="w-[22px] h-[22px] text-blue1f5 flex items-center justify-center" />
-					{t("changeRole")}
-				</div>
-			),
-			key: '7'
-		}]:[]),
+		...(maiRole === 'OTHER'
+			? [
+					{
+						label: (
+							<div
+								onClick={() => {
+									navigate('/infoUserUpdate')
+								}}
+								className={`${maiRole === 'OTHER' ? '' : 'hidden'} flex items-center gap-[15px] px-[4px] py-[5px]`}
+							>
+								<UserSwitchOutlined className="w-[22px] h-[22px] text-blue1f5 flex items-center justify-center" />
+								{t('changeRole')}
+							</div>
+						),
+						key: '7'
+					}
+			  ]
+			: []),
 		{
 			label: (
 				<div
@@ -169,7 +163,6 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 		// 	key: '3'
 		// },
 
-
 		{
 			label: (
 				<div
@@ -184,8 +177,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 				</div>
 			),
 			key: '5'
-		},
-		
+		}
 	]
 	const changeLanguage = (language: string) => {
 		i18n.changeLanguage(language)
@@ -222,9 +214,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const handleVisibleInspired = () => {
 		// userhelperlibrary({ lang: 'ru'});
 		setIsOpen(!isOpen)
-
 	}
-
 
 	const showModal = () => {
 		setIsModalOpen(true)
@@ -237,7 +227,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const handleCancel = () => {
 		setIsModalOpen(false)
 	}
-	console.log('info',info)
+	console.log('info', info)
 
 	return (
 		<header
@@ -246,7 +236,11 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 				type === 'main' ? 'bg-white ' : `bg-blue65A`
 			)}
 		>
-			<div className={`w-screen flex h-full justify-between px-10 max-sm:px-5 ${type === 'main' ? 'max-w-[1680px] animate-fade-in' : 'animate-fade-in'} `}>
+			<div
+				className={`w-screen flex h-full justify-between px-10 max-sm:px-5 ${
+					type === 'main' ? 'max-w-[1680px] animate-fade-in' : 'animate-fade-in'
+				} `}
+			>
 				<div className="flex gap-8 max-sm:gap-2 items-center">
 					{user?.roles[0].type === 'ABITUR' || user?.roles[0].type === 'OTHER' ? (
 						''
@@ -293,10 +287,10 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 							icon={<MenuSvg white={type === 'service'} />}
 						/> :''} */}
 						{i18n.language === 'ru' ? (
-							<LogoIasSvg white={type === 'service'}  />
+							<LogoIasSvg white={type === 'service'} />
 						) : (
 							// <LogoIasSvgEn white={type === 'service'} />
-							<LogoSvgNew white={type === 'service'}  />
+							<LogoSvgNew white={type === 'service'} />
 						)}
 
 						<Divider type="vertical" className="border-l-white h-10 m-0 hidden sm:block" />
@@ -307,21 +301,28 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 				</div>
 				<div className="flex gap-3 items-center h-full max-[1000px]:gap-0 w-fit justify-center">
 					<div className="flex h-full items-center ">
-						{maiRole==='ABITUR' || maiRole==='OTHER' ? '':
-						<a
-							className={clsx(
-								'h-full flex gap-2 items-center px-3 cursor-pointer no-underline',
-								type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'
-							)}
-							href={`${maiRole==='EMPL' ? `https://shelly.kpfu.ru/e-ksu/e_university.show_notification?p1=${maiRoleArray?.userId}&p2=${maiRoleArray?.sessionId}&p_h=${maiRoleArray?.sessionHash}&p_c_sess=1` : 'https://shelly.kpfu.ru/e-ksu/main_blocks.startpage'}`}
-						>
-							<ArrowLeftBackInOldAccount white={type === 'service'} />
-							<span
-								className={clsx(`text-[14px] text-[#3073D7]`, type === 'service' ? 'text-white' : 'text-[#3073D7]')}
+						{maiRole === 'ABITUR' || maiRole === 'OTHER' ? (
+							''
+						) : (
+							<a
+								className={clsx(
+									'h-full flex gap-2 items-center px-3 cursor-pointer no-underline',
+									type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'
+								)}
+								href={`${
+									maiRole === 'EMPL'
+										? `https://shelly.kpfu.ru/e-ksu/e_university.show_notification?p1=${maiRoleArray?.userId}&p2=${maiRoleArray?.sessionId}&p_h=${maiRoleArray?.sessionHash}&p_c_sess=1`
+										: 'https://shelly.kpfu.ru/e-ksu/main_blocks.startpage'
+								}`}
 							>
-								{t('OldLk')}
-							</span>
-						</a>}
+								<ArrowLeftBackInOldAccount white={type === 'service'} />
+								<span
+									className={clsx(`text-[14px] text-[#3073D7]`, type === 'service' ? 'text-white' : 'text-[#3073D7]')}
+								>
+									{t('OldLk')}
+								</span>
+							</a>
+						)}
 
 						{/* <div
 							className={clsx(
@@ -367,8 +368,10 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						</div> */}
 
 						<div
-							id='messagesForTest'
-							className={`cursor-pointer h-full p-2 flex items-center   ${type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'}`}
+							id="messagesForTest"
+							className={`cursor-pointer h-full p-2 flex items-center   ${
+								type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'
+							}`}
 							onClick={() => {
 								navigate('/services/messages')
 							}}
@@ -378,25 +381,31 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 							</Badge>
 						</div>
 						<div className="relative inline-block h-full">
-						<div
-							className={`cursor-pointer mx-3 p-2 h-full flex items-center ${type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'}`}
-							onClick={e => {
-								e.stopPropagation()
-								handleVisibleInspired()
-							}}
-						>
-							<EyeSvg white={type === 'service'} />
-						</div>
-						<div className='h-full '>
-							<AccessibilityHelper ref={ref} isOpen={isOpen} lang={i18n.language} />
-						</div>
+							<div
+								className={`cursor-pointer mx-3 p-2 h-full flex items-center ${
+									type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'
+								}`}
+								onClick={e => {
+									e.stopPropagation()
+									handleVisibleInspired()
+								}}
+							>
+								<EyeSvg white={type === 'service'} />
+							</div>
+							<div className="h-full ">
+								<AccessibilityHelper ref={ref} isOpen={isOpen} lang={i18n.language} />
+							</div>
 						</div>
 					</div>
 					<Select
 						defaultValue={paramValue === 'eng' ? 'en' : i18n.language}
 						style={{ width: 70 }}
 						variant="borderless"
-						className={clsx(type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307', 'h-full flex items-center max-sm:hidden ', type === 'service' && 'text-white')}
+						className={clsx(
+							type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307',
+							'h-full flex items-center max-sm:hidden ',
+							type === 'service' && 'text-white'
+						)}
 						dropdownStyle={{ color: 'white' }}
 						popupClassName="text-white"
 						onChange={e => changeLanguage(e.valueOf())}
@@ -421,25 +430,24 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 							className="cursor-pointer h-full  box-border"
 						>
 							<Space className="px-4  gap-5 flex justyfy-between">
-								{!avatarUrl?.url ?<PersonSvg white={type === 'service'} /> : <Avatar src={avatarUrl?.url}/>}
+								{!avatarUrl?.url ? <PersonSvg white={type === 'service'} /> : <Avatar src={avatarUrl?.url} />}
 								<div className={clsx('h-full max-[455px]:hidden', type === 'service' && 'text-white')}>
 									<div className="font-bold text-sm truncate max-w-[120px]">
-										
-										{i18n.language === 'ru' ?
-											`${user?.lastname} ${user?.firstname?.charAt(0)}. ${
-											user?.middlename === '' ? '' : (user?.middleName?.charAt(0) ?? '') }`  : 
-											`${info?.engLastname} ${info?.engFirstname?.charAt(0)}. ${
-											info?.engMiddlename === '' ? '' : (info?.engMiddlename?.charAt(0) ?? '') }`
-									}
+										{i18n.language === 'ru'
+											? `${user?.lastname} ${user?.firstname?.charAt(0)}. ${
+													user?.middlename === '' ? '' : user?.middleName?.charAt(0) ?? ''
+											  }`
+											: `${info?.engLastname} ${info?.engFirstname?.charAt(0)}. ${
+													info?.engMiddlename === '' ? '' : info?.engMiddlename?.charAt(0) ?? ''
+											  }`}
 									</div>
 									<div className="text-sm ">
 										{user?.roles && user?.roles?.length > 1
 											? user?.roles
-													.filter((item:any, index:any, self:any) => 
-														index === self.findIndex((t:any) => (
-															t.type === item.type
-														))
-													) 
+													.filter(
+														(item: any, index: any, self: any) =>
+															index === self.findIndex((t: any) => t.type === item.type)
+													)
 													.toSorted((a: any, b: any) => (a.type === mainRole ? -1 : b.type === mainRole ? 1 : 0))
 													.map((item: any) => (
 														<div className={`${item.type === mainRole ? '' : 'text-gray-300'}`}>

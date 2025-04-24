@@ -111,7 +111,7 @@ export const Login = () => {
 				<Form
 					form={form}
 					name="login"
-					className="min-w-[400px] rounded-lg shadow-[0_2px_22px_-4px_rgba(93,96,127,0.2)] p-6 mb-4 mx-2 max-sm:min-w-[345px] max-[321px]:min-w-[300px]"
+					className={`min-w-[400px] rounded-lg shadow-[0_2px_22px_-4px_rgba(93,96,127,0.2)] p-6 mb-4 mx-2 ${isMobile ? 'w-[90%]' : 'w-[50%]'} `}
 					initialValues={{ remember: true }}
 					onFinish={onFinish}
 				>

@@ -9,17 +9,6 @@ variables:
   DEPLOY_PATH: "$DEPLOY_PATH"
   LOCAL_BUILD_DIR: "build"
 
-build_dev:
-  stage: build
-  script:
-    - cp .env.development .env
-    - npm ci
-    - npx vite build
-  artifacts:
-    paths:
-      - $LOCAL_BUILD_DIR/
-  only:
-    - dev
 
 build:
   stage: build

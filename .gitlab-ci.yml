@@ -9,9 +9,25 @@ variables:
   DEPLOY_PATH: "$DEPLOY_PATH"
   LOCAL_BUILD_DIR: "build"
 
-build:
+build_dev:
   stage: build
   image: node:lts-alpine
+  variables:
+    VITE_BASE_URL: "https://newlk-test.kpfu.ru/"
+  script:
+    - npm ci
+    - npx vite build
+  artifacts:
+    paths:
+      - $LOCAL_BUILD_DIR/
+  only:
+    - dev
+
+build_main:
+  stage: build
+  image: node:lts-alpine
+  variables:
+    VITE_BASE_URL: "https://newlk.kpfu.ru/"
   script:
     - npm ci
     - npx vite build

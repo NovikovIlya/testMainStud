@@ -314,7 +314,7 @@ const AboutMeNew = () => {
 												{dataAboutMe.studentAddedDto.CATEGORY}
 											</Descriptions.Item>
 										) : (
-											''
+											null
 										)}
 
 										{/* Идентификатор */}
@@ -329,7 +329,7 @@ const AboutMeNew = () => {
 											</Descriptions.Item>
 										) : null}
 
-										{/* Билет */}в
+										{/* Билет */}
 										{dataAboutMe?.studentAddedDto?.LIBCARD ? (
 											<Descriptions.Item label={t('bilet')}>{dataAboutMe.studentAddedDto.LIBCARD}</Descriptions.Item>
 										) : null}

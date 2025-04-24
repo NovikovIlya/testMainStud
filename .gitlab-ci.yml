@@ -9,6 +9,7 @@ variables:
   DEPLOY_PATH: "$DEPLOY_PATH"
   LOCAL_BUILD_DIR: "build"
 
+
 build:
   stage: build
   image: node:lts-alpine

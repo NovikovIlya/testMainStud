@@ -1,5 +1,6 @@
+import { GlobalOutlined } from '@ant-design/icons'
 import { useLocalStorageState } from 'ahooks'
-import { Form, Typography } from 'antd'
+import { Button, Form, Modal, Radio, Space, Typography } from 'antd'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -18,9 +19,11 @@ const { Title } = Typography
 
 export const Login = () => {
 	const [form] = Form.useForm()
+	const [isLanguageModalOpen, setIsLanguageModalOpen] = useState(false)
 	const accessToken = useAppSelector(state => state.auth.accessToken)
 	const navigate = useNavigate()
 	const { t, i18n } = useTranslation()
+	const [selectedLanguage, setSelectedLanguage] = useState(i18n.language)
 	const [login, { data: dataLogin, isSuccess, isLoading }] = useLoginMutation()
 	const [error, setError] = useState<IError | null>(null)
 	const location = useLocation()
@@ -102,6 +105,12 @@ export const Login = () => {
 		}
 	}, [accessToken, navigate])
 
+	const changeLanguage = (language: string) => {
+		i18n.changeLanguage(language)
+		setSelectedLanguage(language)
+		setIsLanguageModalOpen(false)
+	}
+
 	const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 
 	return (
@@ -111,7 +120,9 @@ export const Login = () => {
 				<Form
 					form={form}
 					name="login"
-					className={`min-w-[400px] rounded-lg shadow-[0_2px_22px_-4px_rgba(93,96,127,0.2)] p-6 mb-4 mx-2 ${isMobile ? 'scale-[2.85]' : ''}   `}
+					className={`min-w-[400px] rounded-lg shadow-[0_2px_22px_-4px_rgba(93,96,127,0.2)] p-6 mb-4 mx-2 ${
+						isMobile ? 'scale-[2.85]' : ''
+					}   `}
 					initialValues={{ remember: true }}
 					onFinish={onFinish}
 				>
@@ -121,11 +132,50 @@ export const Login = () => {
 					<Inputs error={error!} />
 					<Buttons isLoading={isLoading} />
 				</Form>
-				{isMobile ? '' : 
-				<div className="flex items-start items-center">
-					<img className="max-lg:hidden w-[400px] h-[400px]" src={logo} alt="group" />
-				</div>}
+				{isMobile ? (
+					''
+				) : (
+					<div className="flex items-start items-center">
+						<img className="max-lg:hidden w-[400px] h-[400px]" src={logo} alt="group" />
+					</div>
+				)}
 			</div>
+			{isMobile ? (
+				<Button
+					onClick={() => setIsLanguageModalOpen(true)}
+					className="scale-[2.8] mt-[-150px]"
+					type="default"
+					size="large"
+				>
+					{t('selectLanguage')}
+				</Button>
+			) : (
+				''
+			)}
+			<Modal
+				className="pt-4"
+				open={isLanguageModalOpen}
+				onCancel={() => setIsLanguageModalOpen(false)}
+				footer={null}
+				centered
+				width="100%"
+				height={'100vh'}
+			>
+				<Radio.Group
+					value={selectedLanguage}
+					onChange={e => changeLanguage(e.target.value)}
+					className="w-full flex justify-center mt-4 mb-4"
+				>
+					<Space className="flex flex-wrap" direction="vertical" size="large">
+						<Radio.Button className="text-9xl w-full h-full" value="ru">
+							Русский
+						</Radio.Button>
+						<Radio.Button className="text-9xl w-full h-full" value="en">
+							English
+						</Radio.Button>
+					</Space>
+				</Radio.Group>
+			</Modal>
 		</div>
 	)
 }

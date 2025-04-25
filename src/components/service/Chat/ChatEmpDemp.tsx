@@ -189,8 +189,8 @@ export const ChatEmpDemp = () => {
 				chatId={chat.id}
 				vacancyId={chat.respondInfo.vacancyId}
 				respName={chat.chatName}
-				surname="Митрофанов"
-				name="Илья"
+				surname={chat.respondInfo.userData?.lastname || ''}
+				name={chat.respondInfo.userData?.firstname || ''}
 				status={chat.respondInfo.status}
 				unreadCount={chat.unreadCount}
 				lastMessageDate={chat.lastMessageDate}

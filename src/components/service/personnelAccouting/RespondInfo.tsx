@@ -1,5 +1,6 @@
 import { LoadingOutlined } from '@ant-design/icons'
 import { Button, Spin, Tag } from 'antd'
+import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
@@ -194,14 +195,14 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 										</p>
 										<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
 											{res.userData?.sex === 'M' ? 'Мужчина' : 'Женщина'},{' '}
-											{date.getFullYear() - parseInt(res.userData?.birthday.split('-')[0] as string)}{' '}
-											{date.getFullYear() - parseInt(res.userData?.birthday.split('-')[0] as string) >= 10 &&
-											date.getFullYear() - parseInt(res.userData?.birthday.split('-')[0] as string) <= 20
+											{dayjs().diff(dayjs(res.userData?.birthday), 'years')}{' '}
+											{dayjs().diff(dayjs(res.userData?.birthday), 'years') >= 10 &&
+											dayjs().diff(dayjs(res.userData?.birthday), 'years') <= 20
 												? 'лет'
-												: (date.getFullYear() - parseInt(res.userData?.birthday.split('-')[0] as string)) % 10 >= 2 &&
-												  (date.getFullYear() - parseInt(res.userData?.birthday.split('-')[0] as string)) % 10 <= 4
+												: dayjs().diff(dayjs(res.userData?.birthday), 'years') % 10 >= 2 &&
+												  dayjs().diff(dayjs(res.userData?.birthday), 'years') % 10 <= 4
 												? 'года'
-												: (date.getFullYear() - parseInt(res.userData?.birthday.split('-')[0] as string)) % 10 == 1
+												: dayjs().diff(dayjs(res.userData?.birthday), 'years') % 10 == 1
 												? 'год'
 												: 'лет'}
 										</p>

@@ -1,5 +1,6 @@
 import { LoadingOutlined } from '@ant-design/icons'
 import { Button, Spin, Tag } from 'antd'
+import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import uuid from 'react-uuid'
@@ -37,24 +38,6 @@ export const DepEmploymentSeekerInfo = () => {
 	console.log(data)
 	const [resume, setResume] = useState<string>('')
 	const [resumeSize, setResumeSize] = useState<number>(0)
-
-	const calculateAge = (birthDateStr: string) => {
-		const birthDate = new Date(birthDateStr)
-		const currentDate = new Date()
-
-		let age = currentDate.getFullYear() - birthDate.getFullYear()
-		const monthDifference = currentDate.getMonth() - birthDate.getMonth()
-
-		// Если день рождения еще не был в этом году, уменьшаем возраст на 1
-		if (monthDifference < 0 || (monthDifference === 0 && currentDate.getDate() < birthDate.getDate())) {
-			age--
-		}
-
-		return age
-	}
-
-	const birthday = data?.userData?.birthday
-	const age = birthday ? calculateAge(birthday) : undefined
 
 	const updatedDateStr = data?.userData?.birthday.replace(/-/g, '.')
 
@@ -148,8 +131,17 @@ export const DepEmploymentSeekerInfo = () => {
 									{data?.userData?.lastname + ' ' + data?.userData?.firstname + ' ' + data?.userData?.middlename}
 								</p>
 								<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-									{data?.userData?.sex === 'M' ? 'Мужчина' : ''}
-									{data?.userData?.sex === 'Ж' ? 'Женщина' : ''}, {age} года
+									{data.userData?.sex === 'M' ? 'Мужчина' : 'Женщина'},{' '}
+									{dayjs().diff(dayjs(data.userData?.birthday), 'years')}{' '}
+									{dayjs().diff(dayjs(data.userData?.birthday), 'years') >= 10 &&
+									dayjs().diff(dayjs(data.userData?.birthday), 'years') <= 20
+										? 'лет'
+										: dayjs().diff(dayjs(data.userData?.birthday), 'years') % 10 >= 2 &&
+										  dayjs().diff(dayjs(data.userData?.birthday), 'years') % 10 <= 4
+										? 'года'
+										: dayjs().diff(dayjs(data.userData?.birthday), 'years') % 10 == 1
+										? 'год'
+										: 'лет'}
 								</p>
 								<div className="flex gap-[36px]">
 									<div className="flex flex-col gap-[8px]">

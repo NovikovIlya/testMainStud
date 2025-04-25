@@ -1,8 +1,8 @@
 import { LoadingOutlined } from '@ant-design/icons'
 import { Button, Spin, Tag } from 'antd'
+import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Margin, usePDF } from 'react-to-pdf'
 import uuid from 'react-uuid'
 
 import { AvatartandardSvg } from '../../../../../assets/svg/AvatarStandardSvg'
@@ -52,24 +52,6 @@ export const RequisiteSeeker = () => {
 	const { t, i18n } = useTranslation()
 	const { data: countries, isLoading: isLoadingCountry } = useGetCountriesQuery(i18n.language)
 
-	const calculateAge = (birthDateStr: string) => {
-		const birthDate = new Date(birthDateStr)
-		const currentDate = new Date()
-
-		let age = currentDate.getFullYear() - birthDate.getFullYear()
-		const monthDifference = currentDate.getMonth() - birthDate.getMonth()
-
-		// Если день рождения еще не был в этом году, уменьшаем возраст на 1
-		if (monthDifference < 0 || (monthDifference === 0 && currentDate.getDate() < birthDate.getDate())) {
-			age--
-		}
-
-		return age
-	}
-
-	const birthday = data?.userData?.birthday
-	const age = birthday ? calculateAge(birthday) : undefined
-
 	const date = new Date()
 
 	const updatedDateStr = data?.userData?.birthday.replace(/-/g, '.')
@@ -83,13 +65,6 @@ export const RequisiteSeeker = () => {
 				setResumeSize(prev => Math.floor(resume.size))
 			})
 	}, [])
-
-	const { toPDF, targetRef } = usePDF({
-		filename: data?.userData?.lastname + ' ' + data?.userData?.firstname + ' ' + data?.userData?.middlename,
-		page: {
-			margin: Margin.SMALL
-		}
-	})
 
 	if (loading) {
 		return (
@@ -157,8 +132,17 @@ export const RequisiteSeeker = () => {
 									{data?.userData?.lastname + ' ' + data?.userData?.firstname + ' ' + data?.userData?.middlename}
 								</p>
 								<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-									{data?.userData?.sex === 'M' ? 'Мужчина' : ''}
-									{data?.userData?.sex === 'Ж' ? 'Женщина' : ''}, {age} года
+									{data.userData?.sex === 'M' ? 'Мужчина' : 'Женщина'},{' '}
+									{dayjs().diff(dayjs(data.userData?.birthday), 'years')}{' '}
+									{dayjs().diff(dayjs(data.userData?.birthday), 'years') >= 10 &&
+									dayjs().diff(dayjs(data.userData?.birthday), 'years') <= 20
+										? 'лет'
+										: dayjs().diff(dayjs(data.userData?.birthday), 'years') % 10 >= 2 &&
+										  dayjs().diff(dayjs(data.userData?.birthday), 'years') % 10 <= 4
+										? 'года'
+										: dayjs().diff(dayjs(data.userData?.birthday), 'years') % 10 == 1
+										? 'год'
+										: 'лет'}
 								</p>
 								<div className="flex gap-[36px]">
 									<div className="flex flex-col gap-[8px]">

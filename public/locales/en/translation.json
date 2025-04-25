@@ -69,6 +69,8 @@
 	"emainLogin" : "Email/login",
 	"errorInternet" : "It looks like you don't have internet.",
 	"errorInternetText" : "Please check your network connection and try again later.",
+	"placeholdSoc": "Here you can list the activities and tell us about your social work",
+	"placeholdCreative": "Here you can list the events and tell us about your creative activities",
 	"byPhone": "By Phone",
 	"errorPassword": "Please enter your password!",
 	"errorConfirmPassword": "The password does not match!",

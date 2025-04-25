@@ -51,7 +51,7 @@ const TableLanguages = ({triger,handleIdCert,isSuccess,dataCertificate,dataLevel
 							
 							 <a
 							    target='_blank'
-								href={`https://newlk-test.kpfu.ru/activities/languages/foreign/certificate?certificateId=${item.certId}`
+								href={`https://newlk.kpfu.ru/activities/languages/foreign/certificate?certificateId=${item.certId}`
 							} 
 								
 							>

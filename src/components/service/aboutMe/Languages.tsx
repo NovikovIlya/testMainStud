@@ -12,6 +12,7 @@ import {
 	LanguageLevel
 } from '../../../models/aboutMe'
 import {
+	useGetAllForeignLanguagesQuery,
 	useGetAllNativeLanguagesQuery,
 	useGetCertificateQuery,
 	useGetLevelsQuery,
@@ -38,6 +39,7 @@ const Languages = () => {
 	const { data: dataLevels } = useGetLevelsQuery()
 	const { data: dataCertificate } = useGetCertificateQuery()
 	const { data: dataAll } = useGetAllNativeLanguagesQuery()
+	const {data:dataAllForeignLang} = useGetAllForeignLanguagesQuery()
 	const {data: dataForeign,isLoading: isFetchingForeign,isError: isErrorForeign,isSuccess} = useGetforeignLanguagesQuery()
 	const [setNative, { isLoading }] = useSetNativeMutation()
 	const [setForeign, { isLoading: isLoadingSetForeign }] = useSetForeignMutation()
@@ -103,7 +105,7 @@ const Languages = () => {
 		// Отправка данных на сервер
 		try {
 			await setForeign(requestData).unwrap()
-			setIsModalOpen(false)
+			
 			form2.resetFields()
 			setFileList([])
 			setSelectedLabel(null)
@@ -111,6 +113,8 @@ const Languages = () => {
 			
 			console.error('Ошибка при сохранении данных:', error)
 			message.error('Не удалось сохранить данные о языке (такой язык уже добавлен)')
+		}finally{
+			setIsModalOpen(false)
 		}
 	}
 
@@ -240,7 +244,7 @@ const Languages = () => {
 							isSuccess={isSuccess}
 							dataCertificate={dataCertificate}
 							dataLevels={dataLevels}
-							dataAll={dataAll}
+							dataAll={dataAllForeignLang}
 							selectId={selectId}
 							setSelectId={setSelectId}
 							dataForeign={dataForeign}

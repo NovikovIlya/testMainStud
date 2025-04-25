@@ -93,8 +93,8 @@ export const myPracticeService = apiSlice.injectEndpoints({
         keepUnusedDataFor: 1,
       }),
       getAllNativeLanguages: builder.query<any, void>({
-        query: () => ({
-          url: '/activities/languages/all',
+        query: (isForeign) => ({
+          url: `/activities/languages/all?isForeign=false`,
           method: 'GET',
          
         }),
@@ -119,6 +119,15 @@ export const myPracticeService = apiSlice.injectEndpoints({
          
         }),
         providesTags: ['foreignLanguages'],
+        keepUnusedDataFor: 1,
+      }),
+      getAllForeignLanguages: builder.query<any, void>({
+        query: () => ({
+          url: `/activities/languages/all?isForeign=true`,
+          method: 'GET',
+         
+        }),
+        providesTags: ['nativeLanguages'],
         keepUnusedDataFor: 1,
       }),
       getOneCertificate: builder.query<foreignLanguageAll, number | null>({
@@ -254,5 +263,6 @@ export const myPracticeService = apiSlice.injectEndpoints({
     useIsPublishedMutation,
     useGetSocQuery,
     usePutSocMutation,
-    usePostSocMutation
+    usePostSocMutation,
+    useGetAllForeignLanguagesQuery
    } = myPracticeService;

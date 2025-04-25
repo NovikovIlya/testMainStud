@@ -228,13 +228,15 @@ const TableLanguages = ({triger,handleIdCert,isSuccess,dataCertificate,dataLevel
 		// Отправка данных на сервер
 		try {
 			await editForeign(requestData).unwrap()
-			setIsModalOpenEdit(false)
+			
 			form2.resetFields()
 			setFileList([])
 			setSelectedLabel(null)
 		} catch (error) {
 			console.error('Ошибка при сохранении данных:', error)
 			message.error(t('error'))
+		}finally{
+			setIsModalOpenEdit(false)
 		}
 	}
 

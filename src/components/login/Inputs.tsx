@@ -25,7 +25,7 @@ export const Inputs: FC<IInputsProps> = ({ error }) => {
 					type="text"
 					required
 					size="large"
-					placeholder="Email/Логин КФУ"
+					placeholder={t('emainLogin')}
 				/>
 			</Form.Item>
 			<Form.Item

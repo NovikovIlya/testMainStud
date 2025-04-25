@@ -153,7 +153,7 @@ export const Chat = () => {
 				{!pathname.includes('/services/myresponds/chat/vacancyview') && (
 					<div className=" shadowNav bg-white relative z-[5]">
 						<div className="sticky top-[80px]">
-							<div className="flex items-center pt-[20px] pb-[20px]">
+							<div className="flex items-center pt-[30px] pb-[10px]">
 								<p className="pl-[53px] font-content-font font-normal text-black text-[20px]/[20px] ">Все отклики</p>
 							</div>
 							<div className="overflow-auto flex flex-col h-[calc(100vh-160px)]">

@@ -341,7 +341,7 @@ export const ChatPage = () => {
 	return (
 		<>
 			<div className="flex flex-col w-full relative">
-				<div ref={chatPageRef} className="w-full h-full flex flex-col pt-[60px] pr-[40px] pl-[40px] overflow-scroll">
+				<div ref={chatPageRef} className="w-full h-full flex flex-col pt-[60px] pr-[40px] pl-[40px] overflow-y-auto">
 					<div className="h-[1px]" key={'verkhnyi_osobyi_kluch'} ref={chatPageUpperRef} />
 					{[...messages].reverse().map((msg, msgIndex, msgArray) => (
 						<>

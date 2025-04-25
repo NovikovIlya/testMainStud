@@ -34,8 +34,9 @@ export const ChatEmpDempPreview = (props: {
 	const navigate = useNavigate()
 
 	const handleNavigate = (url: string) => {
+		dispatch(openChat())
 		dispatch(setChatId(props.chatId))
-		//dispatch(setRespondId(props.respondId))
+		dispatch(setRespondId(0))
 		dispatch(setCurrentVacancyId(props.vacancyId))
 		navigate(url)
 	}
@@ -104,7 +105,7 @@ export const ChatEmpDempPreview = (props: {
 								{props.status === 'INVITATION'
 									? 'Приглашение'
 									: props.status === 'ARCHIVE'
-									? 'Отказ'
+									? 'Архив'
 									: props.status === 'IN_RESERVE'
 									? 'Резерв'
 									: props.status === 'IN_SUPERVISOR_REVIEW'

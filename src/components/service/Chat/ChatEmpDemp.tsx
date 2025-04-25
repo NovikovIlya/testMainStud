@@ -334,7 +334,7 @@ export const ChatEmpDemp = () => {
 									// className={`h-[calc(100vh-${
 									// 	isFilterWindowOpen ? '400' : '340'
 									// }px)] w-[461px] flex flex-col gap-4 overflow-auto`}
-									className="w-[461px] flex flex-col gap-4 overflow-auto"
+									className="w-[461px] flex flex-col gap-4 overflow-auto h-full"
 								>
 									{handleList}
 									<li className="h-[1px]" ref={chatPreviewsBottomRef}></li>

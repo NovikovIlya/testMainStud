@@ -50,6 +50,7 @@ const Languages = () => {
 	const nativeLanguageForm = Form.useWatch('languages', form)
 	const sertificateFormVal = Form.useWatch('certificateId', form2)
 
+	console.log('dataAll',dataAll)
 	useEffect(() => {
 		if (dataNative) {
 			const initialValues = {
@@ -288,7 +289,7 @@ const Languages = () => {
 								filterOption={(input, option) => 
 									(option?.label ?? '').toString().toLowerCase().includes(input.toLowerCase())
 								}
-								options={dataAll?.map((item: Language) => ({
+								options={dataAllForeignLang?.map((item: Language) => ({
 									value: item.code,
 									label: item.language
 								}))}

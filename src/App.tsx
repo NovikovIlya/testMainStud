@@ -1,5 +1,6 @@
-import { ConfigProvider } from 'antd'
+import { Button, ConfigProvider, Result } from 'antd'
 import ru_RU from 'antd/locale/ru_RU'
+import { t } from 'i18next'
 import { useEffect, useState } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { useTranslation } from 'react-i18next'
@@ -23,15 +24,16 @@ import { Notification } from './components/notification/Notification'
 import { Redirect } from './components/redirect/Redirect'
 import { Registration } from './components/registration/Registration'
 import { Service } from './components/service'
+import LandingPage from './components/service/LandingPage'
 import ShortLink from './components/service/ShortLink/ShortLink'
 import EditSchedule from './components/service/practices/forming-schedule/EditSchedule'
 import { blue004, blue307 } from './utils/color'
-import LandingPage from './components/service/LandingPage'
 
 const App = () => {
 	const [email, changeEmail] = useState('')
 	const [loadLanguage, setLoadLanguage] = useState(false)
 	const { i18n } = useTranslation()
+	const [isOnline, setIsOnline] = useState(navigator.onLine)
 	const router = createBrowserRouter([
 		{
 			path: 'redirect/:id',
@@ -76,7 +78,6 @@ const App = () => {
 				{ path: 'services/shorturl', element: <ShortLink /> },
 				{ path: 'landing', element: <LandingPage /> }
 
-
 				// { path: "services/practices/formingSchedule/edit/:id", element: <EditSchedule /> },
 			]
 		}
@@ -92,6 +93,18 @@ const App = () => {
 			i18n.off('languageChanged', onLanguageChanged)
 		}
 	}, [i18n])
+
+	useEffect(() => {
+		const updateStatus = () => setIsOnline(navigator.onLine)
+		
+		window.addEventListener('online', updateStatus)
+		window.addEventListener('offline', updateStatus)
+		
+		return () => {
+		  window.removeEventListener('online', updateStatus)
+		  window.removeEventListener('offline', updateStatus)
+		}
+	  }, [])
 
 	if (loadLanguage) {
 		return (
@@ -116,7 +129,11 @@ const App = () => {
 				}}
 				locale={ru_RU}
 			>
-				<RouterProvider router={router} />
+				{!isOnline ? (
+					<Result status="warning" title={t('errorInternet')} subTitle={t('errorInternetText')} />
+				) : (
+					<RouterProvider router={router} />
+				)}
 			</ConfigProvider>
 			<Notification />
 		</>

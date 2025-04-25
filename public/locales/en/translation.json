@@ -67,6 +67,8 @@
 	"pageTitle": "Kazan Federal University",
 	"byEmail": "By Email",
 	"emainLogin" : "Email/login",
+	"errorInternet" : "It looks like you don't have internet.",
+	"errorInternetText" : "Please check your network connection and try again later.",
 	"byPhone": "By Phone",
 	"errorPassword": "Please enter your password!",
 	"errorConfirmPassword": "The password does not match!",

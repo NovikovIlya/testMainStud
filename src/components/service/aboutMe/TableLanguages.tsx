@@ -166,6 +166,7 @@ const TableLanguages = ({
 			setFileArray(selectInfo?.certificates)
 		}
 	}, [selectInfo?.certificates])
+	console.log('selectInfo',selectInfo)
 	useEffect(() => {
 		if (selectInfo) {
 			const fileList = selectInfo?.certificates?.map((certificate: CertificateTs, index: number) => ({
@@ -176,7 +177,7 @@ const TableLanguages = ({
 				url: certificate.certificateLink // URL файла
 			}))
 			form2.setFieldsValue({
-				languageCode: selectInfo.code,
+				languageCode: selectInfo.language,
 				languageLevelCode: selectInfo.languageLevelCode,
 				certificateId: selectInfo.certificates?.[0]?.certificateTypeId || null, // Если сертификатов нет, устанавливаем null
 				isPublished: selectInfo.isPublished,
@@ -315,6 +316,7 @@ const TableLanguages = ({
 						>
 							<Select
 								disabled
+								suffixIcon={null} 
 								allowClear
 								options={dataAll?.map(item => ({
 									value: item.code,

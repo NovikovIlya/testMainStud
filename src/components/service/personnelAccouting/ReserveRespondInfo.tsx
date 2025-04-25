@@ -151,7 +151,7 @@ export const ReserveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 								<WarningModalIconSvg />
 							</div>
 							<p className="font-content-font font-normal text-black text-[16px]/[20px] text-center mt-[22px]">
-								Вы действительно хотите удалить отклик?
+								Вы действительно хотите отправить отклик в архив?
 							</p>
 							<div className="mt-[40px] flex gap-[12px]">
 								<Button
@@ -180,7 +180,7 @@ export const ReserveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 									}}
 									loading={deleteRespondLoading}
 								>
-									Удалить
+									В архив
 								</Button>
 							</div>
 						</Modal>

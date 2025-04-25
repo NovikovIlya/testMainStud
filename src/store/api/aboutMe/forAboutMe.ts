@@ -127,7 +127,7 @@ export const myPracticeService = apiSlice.injectEndpoints({
           method: 'GET',
          
         }),
-        providesTags: ['nativeLanguages'],
+        providesTags: ['foreignLanguages'],
         keepUnusedDataFor: 1,
       }),
       getOneCertificate: builder.query<foreignLanguageAll, number | null>({

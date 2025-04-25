@@ -104,13 +104,13 @@ const Languages = () => {
 
 		// Отправка данных на сервер
 		try {
+			setIsModalOpen(false)
 			await setForeign(requestData).unwrap()
 			
 			form2.resetFields()
 			setFileList([])
 			setSelectedLabel(null)
 		} catch (error) {
-			
 			console.error('Ошибка при сохранении данных:', error)
 			message.error('Не удалось сохранить данные о языке (такой язык уже добавлен)')
 		}finally{

@@ -34,15 +34,10 @@ export const InviteSeekerForm = (props: { respondId: number; isButtonDisabled: b
 	const { openAlert } = useAlert()
 
 	const handleDateChange = (e: any, dateString: any) => {
-		if (dayjs(e).isBefore(dayjs(), 'minute')) {
-			message.error('Нельзя выбрать время, которое уже наступило')
-			return
-		}
-
-		if (reservedTime.length >= 3) {
-			message.error('Максимальное количество резервных времён - 3')
-			return
-		}
+		// if (dayjs(e).isBefore(dayjs(), 'minute')) {
+		// 	message.error('Нельзя выбрать время, которое уже наступило')
+		// 	return
+		// }
 
 		if (dateString !== '') {
 			setReservedTimes([
@@ -217,7 +212,18 @@ export const InviteSeekerForm = (props: { respondId: number; isButtonDisabled: b
 							label={
 								<label className="text-black text-[18px]/[18px] font-content-font font-normal">Дата и время</label>
 							}
-							rules={[{ required: reservedTime.length === 0, message: 'Не выбрано резервное время' }]}
+							rules={[
+								{
+									validator: () => {
+										if (reservedTime.length === 0) {
+											return Promise.reject('Должно быть выбрано хотя бы одно резервное время')
+										} else if (reservedTime.length > 3) {
+											return Promise.reject('Нельзя выбрать больше трёх резервных времён')
+										}
+										return Promise.resolve()
+									}
+								}
+							]}
 						>
 							<DatePicker
 								format={'DD.MM.YYYY, HH:mm'}
@@ -244,6 +250,7 @@ export const InviteSeekerForm = (props: { respondId: number; isButtonDisabled: b
 											className="cursor-pointer underline text-black font-content-font font-normal text-[16px]/[16px] opacity-40"
 											onClick={() => {
 												setReservedTimes(prev => reservedTime.filter(delTime => delTime.id !== res.id))
+												form.validateFields(['reserveTime'])
 											}}
 										>
 											Удалить

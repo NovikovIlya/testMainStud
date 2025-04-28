@@ -337,8 +337,8 @@
 	"welcome_message_student1": "We are pleased to announce the test launch of the updated personal account! This is an important step in improving our services, and your help in testing will be invaluable.",
 	"welcome_message_student2": "Please actively use the new personal account soon. Please send all comments, suggestions and bug reports to :",
 	"welcome_message_studentMail": "MaAZolin@kpfu.ru",
-	"welcome_message_student3": "If you would like to contribute to the development of your personal account and join our development team, please fill out this form.",
-	"welcome_message_student3Form": "форму",
+	"welcome_message_student3": "If you would like to contribute to the development of your personal account and join our development team, please fill out this ",
+	"welcome_message_student3Form": "form",
 	"welcome_message_student4": "Thank you for your cooperation!",
 
 	"account_creation_message": "An account has been created for you to access the university's information resources. To log in to your student's personal account on the website <a href='https://kpfu.ru' target='_blank'>https://kpfu.ru</a> , use the login {{login}} and password {{password}} You can change your password in your personal account",

@@ -22,7 +22,7 @@ const getBaseUrl = () => {
   };
 
 const baseQuery = fetchBaseQuery({
-	  baseUrl: getBaseUrl(),
+	  baseUrl: 'https://newlk.kpfu.ru/',
 	 //  baseUrl: 'https://newlk.kpfu.ru/',
 	prepareHeaders(headers, { getState }) {
 		const token = (getState() as RootState).auth.accessToken

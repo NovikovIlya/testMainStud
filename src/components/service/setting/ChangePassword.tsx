@@ -40,7 +40,7 @@ export const ChangePassword = () => {
 	}
 
 	return (
-		<section className="max-w-2xl">
+		<section className="max-w-2xl pt-[70px] px-[40px]">
 			<h1 className="text-black text-2xl font-bold leading-normal">
 				Изменить пароль
 			</h1>

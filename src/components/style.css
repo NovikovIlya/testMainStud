@@ -1,0 +1,5 @@
+.custom-dropdown-v .ant-select-item {
+    transform: scale(2.8) !important;
+    transform-origin: left center;
+    padding: 8px 12px; /* Увеличьте отступы */
+  }

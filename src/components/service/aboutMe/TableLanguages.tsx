@@ -1,24 +1,51 @@
 import { DeleteTwoTone, EditTwoTone, EyeInvisibleTwoTone, EyeTwoTone, UploadOutlined } from '@ant-design/icons'
-import { Button, Checkbox, ConfigProvider, Form, Modal, Popconfirm, Select, Space, Spin, Table, Upload, message } from 'antd'
+import {
+	Button,
+	Checkbox,
+	ConfigProvider,
+	Form,
+	Modal,
+	Popconfirm,
+	Select,
+	Space,
+	Spin,
+	Table,
+	Upload,
+	message
+} from 'antd'
 import type { TableProps } from 'antd'
 import { t } from 'i18next'
 import React, { useEffect, useState } from 'react'
 
 import { CertificateTs, FormValues, LanguageData, TableLanguagesProps } from '../../../models/aboutMe'
-import { useDeleteForeignMutation, useEditForeignMutation, useIsPublishedMutation } from '../../../store/api/aboutMe/forAboutMe'
+import {
+	useDeleteForeignMutation,
+	useEditForeignMutation,
+	useIsPublishedMutation
+} from '../../../store/api/aboutMe/forAboutMe'
 
 import './TableLanguage.scss'
 
-const TableLanguages = ({triger,handleIdCert,isSuccess,dataCertificate,dataLevels,dataAll,dataForeign,setSelectId,selectId}: TableLanguagesProps) => {
+const TableLanguages = ({
+	triger,
+	handleIdCert,
+	isSuccess,
+	dataCertificate,
+	dataLevels,
+	dataAll,
+	dataForeign,
+	setSelectId,
+	selectId
+}: TableLanguagesProps) => {
 	const [isModalOpenEdit, setIsModalOpenEdit] = useState<boolean>(false)
 	const [selectInfo, setSelectInfo] = useState<LanguageData | null>(null)
 	const [selectedLabel, setSelectedLabel] = useState<string | null>(null)
 	const [form2] = Form.useForm()
 	const [fileList, setFileList] = useState<any[]>([])
-	const [editForeign, {isLoading:isLoadingEdit}] = useEditForeignMutation()
+	const [editForeign, { isLoading: isLoadingEdit }] = useEditForeignMutation()
 	const [deleteCert, setDeleteCert] = useState<any[]>([])
-	const [deleteForeign, {isLoading:isLoadingDelete}] = useDeleteForeignMutation()
-	const [changeGlaz,{isLoading:isLoadingGlaz}] = useIsPublishedMutation()
+	const [deleteForeign, { isLoading: isLoadingDelete }] = useDeleteForeignMutation()
+	const [changeGlaz, { isLoading: isLoadingGlaz }] = useIsPublishedMutation()
 	const [fileArray, setFileArray] = useState<any[]>([])
 	const columns: TableProps<LanguageData>['columns'] = [
 		{
@@ -40,21 +67,23 @@ const TableLanguages = ({triger,handleIdCert,isSuccess,dataCertificate,dataLevel
 				<>
 					{certificates?.map((item: CertificateTs, index: number) => (
 						<div
+							className="flex gap-2"
 							key={index}
 							onClick={() => {
 								// handleIdCert(item?.certId)
-								console.log('item?.id',item?.certId)
+								console.log('item?.id', item?.certId)
 								// triger(item?.certId)
 							}}
 						>
-							 <a
-							    target='_blank'
-								href={`https://newlk-test.kpfu.ru/activities/languages/foreign/certificate?certificateId=${item.certId}`
-							} 
-								
+							<a
+								target="_blank"
+								href={`https://newlk.kpfu.ru/activities/languages/foreign/certificate?certificateId=${item.certId}`}
 							>
-								{item.certificateName} {index === certificates.length - 1 ? '' : ', '}
-							 </a> 
+								{item.certificateName}
+							</a>
+							<span>
+								({item?.certificateTypeName}) {index === certificates.length - 1 ? '' : ', '}
+							</span>
 						</div>
 					))}
 				</>
@@ -74,12 +103,10 @@ const TableLanguages = ({triger,handleIdCert,isSuccess,dataCertificate,dataLevel
 							onClick={e => {
 								e.preventDefault()
 								e.stopPropagation()
-								console.log('record',record)
 								// @ts-ignore
 								setSelectId(record?.userLangId)
 								// @ts-ignore
 								changeGlaz(record?.langId)
-							
 							}}
 						/>
 					) : (
@@ -93,7 +120,6 @@ const TableLanguages = ({triger,handleIdCert,isSuccess,dataCertificate,dataLevel
 								setSelectId(record?.userLangId)
 								// @ts-ignore
 								changeGlaz(record?.langId)
-							
 							}}
 						/>
 					)}
@@ -123,25 +149,24 @@ const TableLanguages = ({triger,handleIdCert,isSuccess,dataCertificate,dataLevel
 			render: (_, record) => (
 				<Space size="middle">
 					<Popconfirm
-												title={t('deleteEducationTitle')}
-												description={t('deleteEducationDescription')}
-												onConfirm={() => {
-													handleDelete(record?.langId)
-												}}
-											>
-					<DeleteTwoTone className="hover:scale-[140%] " />
+						title={t('deleteEducationTitle')}
+						description={t('deleteEducationDescription')}
+						onConfirm={() => {
+							handleDelete(record?.langId)
+						}}
+					>
+						<DeleteTwoTone className="hover:scale-[140%] " />
 					</Popconfirm>
 				</Space>
 			)
 		}
 	]
-	console.log('fileArray',fileArray)
-	console.log('selectInfo',selectInfo)
-	useEffect(()=>{
-		if(selectInfo?.certificates){
+	useEffect(() => {
+		if (selectInfo?.certificates) {
 			setFileArray(selectInfo?.certificates)
 		}
-	},[selectInfo?.certificates])
+	}, [selectInfo?.certificates])
+	console.log('selectInfo',selectInfo)
 	useEffect(() => {
 		if (selectInfo) {
 			const fileList = selectInfo?.certificates?.map((certificate: CertificateTs, index: number) => ({
@@ -152,17 +177,14 @@ const TableLanguages = ({triger,handleIdCert,isSuccess,dataCertificate,dataLevel
 				url: certificate.certificateLink // URL файла
 			}))
 			form2.setFieldsValue({
-				languageCode: selectInfo.code,
+				languageCode: selectInfo.language,
 				languageLevelCode: selectInfo.languageLevelCode,
 				certificateId: selectInfo.certificates?.[0]?.certificateTypeId || null, // Если сертификатов нет, устанавливаем null
 				isPublished: selectInfo.isPublished,
 				file: fileList
-				
 			})
 		}
 	}, [isSuccess, selectInfo, form2])
-
-
 
 	const handleDelete = (record: any) => {
 		console.log('recordDelete', record)
@@ -182,12 +204,11 @@ const TableLanguages = ({triger,handleIdCert,isSuccess,dataCertificate,dataLevel
 		setDeleteCert([])
 	}
 
-
 	const onFinishForm2 = async (values: any) => {
-		console.log('values',values)
+		console.log('values', values)
 		// Подготовка базовой структуры данных в новом формате
 		const requestData: any = {
-			langId: selectInfo?.langId , 
+			langId: selectInfo?.langId,
 			languageLevelCode: values.languageLevelCode,
 			isPublished: values.isPublished || false,
 			savingCertificates: [], // Массив для сохраняемых сертификатов
@@ -195,7 +216,7 @@ const TableLanguages = ({triger,handleIdCert,isSuccess,dataCertificate,dataLevel
 		}
 
 		// Обработка файла сертификата, если он есть
-		if (fileList.length > 0 ) {
+		if (fileList.length > 0) {
 			const originalFile = values.file?.[0]?.originFileObj as File
 			if (originalFile) {
 				// Конвертация файла в base64
@@ -215,7 +236,7 @@ const TableLanguages = ({triger,handleIdCert,isSuccess,dataCertificate,dataLevel
 					{
 						// certId: values.certificateId,
 						certificateName: originalFile.name || '',
-						certificateTypeId: values.certificateId, 
+						certificateTypeId: values.certificateId,
 						base64File: base64File
 					}
 				]
@@ -224,21 +245,24 @@ const TableLanguages = ({triger,handleIdCert,isSuccess,dataCertificate,dataLevel
 
 		// Отправка данных на сервер
 		try {
-			await editForeign(requestData).unwrap()
 			setIsModalOpenEdit(false)
+			await editForeign(requestData).unwrap()
+
 			form2.resetFields()
 			setFileList([])
 			setSelectedLabel(null)
 		} catch (error) {
 			console.error('Ошибка при сохранении данных:', error)
 			message.error(t('error'))
+		} finally {
+			setIsModalOpenEdit(false)
 		}
 	}
 
 	const handleRemove = (file: any) => {
 		console.log('Удалённый файл ID:', file)
-		 setDeleteCert(prev=>[...prev,file.certId])
-		 setFileArray(prev => prev.filter(item => item.certId !== file.certId))
+		setDeleteCert(prev => [...prev, file.certId])
+		setFileArray(prev => prev.filter(item => item.certId !== file.certId))
 		return true // чтобы файл удалился из списка
 	}
 
@@ -260,7 +284,6 @@ const TableLanguages = ({triger,handleIdCert,isSuccess,dataCertificate,dataLevel
 		return false
 	}
 
-	
 	console.log('selectId', selectId)
 
 	return (
@@ -290,10 +313,10 @@ const TableLanguages = ({triger,handleIdCert,isSuccess,dataCertificate,dataLevel
 							wrapperCol={{ span: 24 }}
 							layout="vertical"
 							className="mt-4 h-[35px]"
-							
 						>
 							<Select
-							    disabled
+								disabled
+								suffixIcon={null} 
 								allowClear
 								options={dataAll?.map(item => ({
 									value: item.code,
@@ -348,13 +371,14 @@ const TableLanguages = ({triger,handleIdCert,isSuccess,dataCertificate,dataLevel
 						{/* <div className="mt-14 mb-2">{t('prikrep')}</div> */}
 						<div className="mt-14 mb-2"></div>
 						<Form.Item valuePropName="fileList" name="file" getValueFromEvent={e => e?.fileList}>
-							
-							<Upload  onRemove={handleRemove} maxCount={1} beforeUpload={beforeUpload} accept=".pdf">
-								{fileArray?.length>0 ? <div>Чтобы добавить, удалите прошлый файл</div>:
-								<Button className=" " icon={<UploadOutlined />}>
-									{ t('add')} {'(pdf)'}
-								</Button>
-								}
+							<Upload onRemove={handleRemove} maxCount={1} beforeUpload={beforeUpload} accept=".pdf">
+								{fileArray?.length > 0 ? (
+									<div>Чтобы добавить, удалите прошлый файл</div>
+								) : (
+									<Button className=" " icon={<UploadOutlined />}>
+										{t('add')} {'(pdf)'}
+									</Button>
+								)}
 							</Upload>
 						</Form.Item>
 
@@ -363,30 +387,28 @@ const TableLanguages = ({triger,handleIdCert,isSuccess,dataCertificate,dataLevel
 						</Form.Item>
 
 						<Button loading={isLoadingEdit} type="primary" htmlType="submit">
-							{t('add')}
+							{t('edit')}
 						</Button>
 					</Form>
 				</Modal>
-				
+
 				<div className={'registerContracts animate-fade-in w-full'}>
-				<Spin className='w-full' spinning={isLoadingDelete || isLoadingGlaz || isLoadingEdit}>
-					<Table<LanguageData>
-						
-						pagination={false}
-						columns={columns}
-						dataSource={dataForeign?.map((item: any) => ({
-							...item,
-							key: item.studLangId
-						}))}
-						rowClassName={record => {
-							return record.isPublished ? '' : 'bg-gray-200 opacity-60'
-						}}
-						className="w-full my-custom-table select-none"
-						locale={{ emptyText: t('noData') }}
-					/>
+					<Spin className="w-full" spinning={isLoadingDelete || isLoadingGlaz || isLoadingEdit}>
+						<Table<LanguageData>
+							pagination={false}
+							columns={columns}
+							dataSource={dataForeign?.map((item: any) => ({
+								...item,
+								key: item.studLangId
+							}))}
+							rowClassName={record => {
+								return record.isPublished ? '' : 'bg-gray-200 opacity-60'
+							}}
+							className="w-full my-custom-table select-none"
+							locale={{ emptyText: t('noData') }}
+						/>
 					</Spin>
 				</div>
-				
 			</ConfigProvider>
 		</>
 	)

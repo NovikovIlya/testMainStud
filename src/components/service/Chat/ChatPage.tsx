@@ -120,6 +120,9 @@ export const ChatPage = () => {
 
 	// из за юзэфекта снизу ломается чат
 	useEffect(() => {
+		reset()
+		setMsgInputText('')
+		setFileName('')
 		const socket = new SockJS(
 			`${emplBaseURL}employment-api/v1/ws?sender=${
 				isEmpDemp ? 'PERSONNEL_DEPARTMENT' : 'SEEKER'
@@ -401,7 +404,7 @@ export const ChatPage = () => {
 										placeholder="Ввести сообщение"
 										ref={formTextAreaRef}
 									></textarea>
-									<p className="w-[80%] whitespace-nowrap text-ellipsis overflow-auto font-content-font text-[14px]/[14px] font-normal text-black">
+									<p className="w-[80%] whitespace-nowrap text-ellipsis overflow-hidden font-content-font text-[14px]/[14px] font-normal text-black">
 										{fileName}
 									</p>
 								</div>

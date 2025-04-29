@@ -1,4 +1,4 @@
-import { ConfigProvider, Radio, Table } from 'antd'
+import { ConfigProvider, Radio, Result, Table } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 import Column from 'antd/es/table/Column'
 import ColumnGroup from 'antd/es/table/ColumnGroup'
@@ -90,6 +90,7 @@ type TypeColumn = {
 export const Curriculum = () => {
 	const [course, changeCourse] = useState<string>('1')
 	const [sortingWords, changeWords] = useState<string[]>([])
+	const [isSemestr9,setIsSemestr9] = useState(false)
 	const [isSemestr11,setIsSemestr11] = useState(false)
 	const { t } = useTranslation()
 
@@ -480,9 +481,11 @@ export const Curriculum = () => {
 
 	useEffect(()=>{
 		if(studyPlan){
+			const isSemestr9 = studyPlan?.subjects.some(s => s.semester === 9);
 			const isSemestr11 = studyPlan?.subjects.some(s => s.semester === 11);
 		 
 			console.log('isSemestr11',isSemestr11)
+			setIsSemestr9(isSemestr9)
 			setIsSemestr11(isSemestr11)
 		}
 	},[studyPlan])
@@ -635,8 +638,13 @@ export const Curriculum = () => {
 		console.log('newArray', newArray);
 		changeData(newArray.filter((item) => !item.isEmpty));
 	  }, [course, sortingWords, getData]);
-	  
 
+	if(!isLoading && studyPlan?.subjects?.length === 0) {
+		return <Result
+    title={t('notCur')}
+   
+  />}
+	  
 	return (
 		<div className="radio ">
 			<div className="text-black text-3xl font-normal leading-7 mb-10">{t('Curriculum')}</div>
@@ -658,11 +666,11 @@ export const Curriculum = () => {
 				<Radio.Button className="rounded-full h-full flex items-center text-base bg-transparent" value="4">
 					{t('FourthYear')}
 				</Radio.Button>
-				{isSemestr11 ?<Radio.Button className="rounded-full h-full flex items-center text-base bg-transparent" value="5">
-					5-й курс
+				{isSemestr9 ?<Radio.Button className="rounded-full h-full flex items-center text-base bg-transparent" value="5">
+					{t('5th_year')}
 				</Radio.Button> : ''}
 				{isSemestr11 ?<Radio.Button className="rounded-full h-full flex items-center text-base bg-transparent" value="6">
-					6-й курс
+					{t('6th_year')}
 				</Radio.Button>: ''}
 			</Radio.Group>
 			<ConfigProvider

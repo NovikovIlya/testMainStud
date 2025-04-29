@@ -8,6 +8,7 @@ import { useAppSelector } from '../../../store'
 import { useLazyGetInfoUserQuery } from '../../../store/api/formApi'
 import { useLazyGetSeekerVacancyRelationQuery, usePostVacancyRespondMutation } from '../../../store/api/serviceApi'
 import { useLazyGetVacancyViewQuery } from '../../../store/api/serviceApi'
+import { setCurrentVacancy } from '../../../store/reducers/CurrentVacancySlice'
 import { allData } from '../../../store/reducers/SeekerFormReducers/AboutMeReducer'
 import { setData } from '../../../store/reducers/SeekerFormReducers/ResponseDataSetReducer'
 
@@ -43,7 +44,8 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 		if (id_from_url) {
 			getVacancy(parseInt(id_from_url))
 				.unwrap()
-				.then(() => {
+				.then(res => {
+					dispatch(setCurrentVacancy(res))
 					getRelation(parseInt(id_from_url))
 						.unwrap()
 						.then(res => {

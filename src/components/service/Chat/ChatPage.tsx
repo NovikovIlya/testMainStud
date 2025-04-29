@@ -66,6 +66,7 @@ export const ChatPage = () => {
 	const chatPageUpperRef = useRef<null | HTMLDivElement>(null)
 	const chatPageRef = useRef<null | HTMLDivElement>(null)
 	const chatPageMessagesRef = useRef<Array<HTMLDivElement | null>>([])
+	const formTextAreaRef = useRef<null | HTMLTextAreaElement>(null)
 
 	const [isBottomOfChatVisible, setIsBottomOfChatVisible] = useState<boolean>(true)
 	const [isTopOfChatVisible, setIsTopOfChatVisible] = useState<boolean>(false)
@@ -398,6 +399,7 @@ export const ChatPage = () => {
 										}}
 										className="w-full h-full font-content-font font-normal text-black text-[16px]/[16px] placeholder:opacity-50 resize-none border-none focus:outline-none pt-[8px] disabled:bg-white"
 										placeholder="Ввести сообщение"
+										ref={formTextAreaRef}
 									></textarea>
 									<p className="w-[80%] whitespace-nowrap text-ellipsis overflow-auto font-content-font text-[14px]/[14px] font-normal text-black">
 										{fileName}
@@ -416,6 +418,7 @@ export const ChatPage = () => {
 											{...register('files', {
 												onChange(event) {
 													setFileName(event.target.files?.[0].name)
+													formTextAreaRef.current?.focus()
 												}
 											})}
 											id="files"

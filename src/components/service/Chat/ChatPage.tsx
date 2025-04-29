@@ -289,11 +289,12 @@ export const ChatPage = () => {
 	})
 
 	const handleMessage: SubmitHandler<ChatMessageFormDataType> = data => {
+		console.log(data)
 		if (data.files) {
 			console.log(data.files)
 			const formData = new FormData()
 			formData.append('sender', isEmpDemp ? 'PERSONNEL_DEPARTMENT' : 'SEEKER')
-			formData.append('text', data.text)
+			formData.append('text', msgInputText)
 			for (let i = 0; i < data.files.length; i++) {
 				formData.append('files', data.files[i])
 			}
@@ -376,6 +377,9 @@ export const ChatPage = () => {
 					<form
 						onSubmit={handleSubmit(handleMessage)}
 						className="w-full h-full flex items-center py-[24px] pl-[40px] pr-[85px]"
+						onKeyDown={e => {
+							!e.shiftKey && e.code === 'Enter' && handleSubmit(handleMessage)()
+						}}
 					>
 						<Controller
 							name="text"
@@ -383,9 +387,9 @@ export const ChatPage = () => {
 							render={({ field }) => (
 								<div className="flex flex-col w-full min-h-full">
 									<textarea
-										onKeyDown={e => {
-											!e.shiftKey && e.code === 'Enter' && handleSubmit(handleMessage)()
-										}}
+										// onKeyDown={e => {
+										// 	!e.shiftKey && e.code === 'Enter' && handleSubmit(handleMessage)()
+										// }}
 										disabled={ChatStatus.chatClosed}
 										{...register('text')}
 										value={msgInputText}

@@ -24,7 +24,7 @@ export const Login = () => {
 	const navigate = useNavigate()
 	const { t, i18n } = useTranslation()
 	const [selectedLanguage, setSelectedLanguage] = useState(i18n.language)
-	const [login, { data: dataLogin, isSuccess, isLoading }] = useLoginMutation()
+	const [login, { data: dataLogin, isSuccess, isLoading,error:errorLogin }] = useLoginMutation()
 	const [error, setError] = useState<IError | null>(null)
 	const location = useLocation()
 	const searchParams = new URLSearchParams(location.search)
@@ -41,7 +41,7 @@ export const Login = () => {
 	const [subRole, setSubrole] = useLocalStorageState<any>('subRole', {
 		defaultValue: ''
 	})
-
+	console.log('errorLogin',errorLogin)
 	const dispatch = useAppDispatch()
 
 	useEffect(() => {
@@ -109,6 +109,9 @@ export const Login = () => {
 		i18n.changeLanguage(language)
 		setSelectedLanguage(language)
 		setIsLanguageModalOpen(false)
+	}
+	if(errorLogin){
+		alert('Ошибка сети. Проверьте подключение к корпоративной сети')
 	}
 
 	const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)

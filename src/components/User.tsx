@@ -15,6 +15,7 @@ import InfoAbitAccepted from './InfoAbitAccepted'
 import { useLocalStorageState } from 'ahooks'
 import { useGetRoleQuery } from '../store/api/serviceApi'
 import { useGetAllUnReadQuery } from '../store/api/messages/messageApi'
+import { useLocation } from 'react-router-dom'
 
 export const User = () => {
 	const { t,i18n } = useTranslation()
@@ -22,6 +23,7 @@ export const User = () => {
 	const { data, isSuccess } = useCheckIsEmployeeQuery()
 	const user = useAppSelector(state => state.auth.user)
 	const dispatch = useAppDispatch()
+	const location = useLocation()
 	const [acceptedData,setAcceptedData] = useLocalStorageState<any>('acceptedData',{defaultValue:null})
 
 	const hide = () => {
@@ -46,6 +48,14 @@ export const User = () => {
 			}))
 		}
 	},[user?.roles])
+
+	useEffect(() => {
+		// @ts-ignore
+		if (typeof window.ym === 'function') {
+			// @ts-ignore
+		  window.ym(100713417, 'hit', location.pathname + location.search);
+		}
+	  }, [location]);
 
 
 

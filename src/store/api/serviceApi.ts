@@ -44,17 +44,6 @@ import {
 
 import { apiSlice } from './apiSlice'
 
-//Крайне временное решение из-за того, что в КФУ всё ещё отсутствует роль даже соискателя, что уж говорить об учёте кадров,
-//руководителе и т.д.
-const seekerToken =
-	'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJJQU1pdHJvZmFub3ZAc3R1ZC5rcGZ1LnJ1IiwiaWF0IjoxNzExNTc3OTMwLCJleHAiOjE3MTE1ODg3MzAsInNjb3BlIjoidXNlciIsInJvbGVzIjpbeyJ1c2VySWQiOiIyNTMxNjIiLCJzZXNzaW9uSWQiOiIyNDAzMjI3MTQ4NzUxOTQ4Mjk3MzMwOTA0NzM1MzY2NyIsInNlc3Npb25IYXNoIjoiRDJBMjI1QTc0OTlGMUNFMTZDQkUwMkI5RjZDOTE3RTEiLCJkb2N1bWVudHNIYXNoIjoiQjI2Q0IwQzNFOEFDMzZENkEwQ0I1MTJDRjMwMjM3NzciLCJsb2dpbiI6IklBTWl0cm9mYW5vdiIsInR5cGUiOiJTRUVLRVIifV0sInNlc3Npb25JZCI6IjI0MDMyMjcxNDg3NTE5NDgyOTczMzA5MDQ3MzUzNjY3Iiwic2Vzc2lvbkhhc2giOiJEMkEyMjVBNzQ5OUYxQ0UxNkNCRTAyQjlGNkM5MTdFMSIsImFsbElkIjoiMTc4NDQwIiwiZW1haWwiOiJtaXRyb18wMkBtYWlsLnJ1In0.4dmYBUEDz9UzKxvxWtQhA6poTVwFOkRn-YoSzngfVUs'
-const personnelDeparmentToken =
-	'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJTdWJCQXNhZHVsbG9ldkBzdHVkLmtwZnUucnUiLCJpYXQiOjE3MTE3MjQ1NDQsImV4cCI6MTcxMTczNTM0NCwic2NvcGUiOiJ1c2VyIiwicm9sZXMiOlt7InVzZXJJZCI6IjciLCJzZXNzaW9uSWQiOiIyNDA0NzM4MTc3NzI3MjIwMTMzMDkwNzU0ODQ2ODU5MSIsInNlc3Npb25IYXNoIjoiNTZEMTZENTNDOTc5MDk5MTk0QTY4OEY4Qjk0M0I0N0MiLCJkb2N1bWVudHNIYXNoIjoiQTdCMkI0MUU4MjQ4NDYzNkY2ODZDNTQ3NEY0NEREMjYiLCJsb2dpbiI6IlNCQXNhZHVsbG9ldiIsInR5cGUiOiJQRVJTT05ORUxfREVQQVJUTUVOVCJ9LHsidXNlcklkIjoiMzQ4NTQxIiwic2Vzc2lvbklkIjoiMjQwNDczODA1NjYxMjc2MDM3NTM5NjI3MjY1MTM0OTQiLCJzZXNzaW9uSGFzaCI6IkUzQUZFMTUzNUVCMTU3NEUyMkZCNUJDNEYxNUFERkUwIiwiZG9jdW1lbnRzSGFzaCI6IiIsImxvZ2luIjoiU3ViQkFzYWR1bGxvZXYiLCJ0eXBlIjoiRU1QTCJ9LHsidXNlcklkIjoiMzM2MDM3Iiwic2Vzc2lvbklkIjoiMjQwNDczODI0NDUwMjI3MTM5NzgzNzQ5OTMwNjk4MDciLCJzZXNzaW9uSGFzaCI6IjcxMEExMTFFM0FCN0Q4NDczNTVFOEM0QkUxMDI4RTZBIiwiZG9jdW1lbnRzSGFzaCI6IkEyMkE3NURCRTBBNzg4MDE4OTY4NjZCQjgzNUIxNDQxIiwibG9naW4iOiJTdUJBc2FkdWxsb2V2IiwidHlwZSI6IlNUVUQifV0sInNlc3Npb25JZCI6IjI0MDQ3MzgxNzc3MjcyMjAxMzMwOTA3NTQ4NDY4NTkxIiwic2Vzc2lvbkhhc2giOiI1NkQxNkQ1M0M5NzkwOTkxOTRBNjg4RjhCOTQzQjQ3QyIsImFsbElkIjoiMjM5MTc0IiwiZW1haWwiOiJCYXN1YmhvbmJla0BnbWFpbC5jb20ifQ.MMK47Gd4AKG8tPzmPAwgNq79zVEmfzdFCuoZjcXeW_o'
-const supervisorToken =
-	'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJJQU1pdHJvZmFub3ZAc3R1ZC5rcGZ1LnJ1IiwiaWF0IjoxNzExNTc3OTMwLCJleHAiOjE3MTE1ODg3MzAsInNjb3BlIjoidXNlciIsInJvbGVzIjpbeyJ1c2VySWQiOiIzMTE0NjQiLCJzZXNzaW9uSWQiOiIyNDAzMjI3MTQ4NzUxOTQ4Mjk3MzMwOTA0NzM1MzY2NyIsInNlc3Npb25IYXNoIjoiRDJBMjI1QTc0OTlGMUNFMTZDQkUwMkI5RjZDOTE3RTEiLCJkb2N1bWVudHNIYXNoIjoiQjI2Q0IwQzNFOEFDMzZENkEwQ0I1MTJDRjMwMjM3NzciLCJsb2dpbiI6IklBTWl0cm9mYW5vdiIsInR5cGUiOiJTVVBFUlZJU09SIn1dLCJzZXNzaW9uSWQiOiIyNDAzMjI3MTQ4NzUxOTQ4Mjk3MzMwOTA0NzM1MzY2NyIsInNlc3Npb25IYXNoIjoiRDJBMjI1QTc0OTlGMUNFMTZDQkUwMkI5RjZDOTE3RTEiLCJhbGxJZCI6IjE3ODQ0MCIsImVtYWlsIjoibWl0cm9fMDJAbWFpbC5ydSJ9.idm4ua4nH3WUN0Z119KV2pC6Dqb7uw4Rf1PMiHiCZh4'
-const accountingToken =
-	'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJTdWJCQXNhZHVsbG9ldkBzdHVkLmtwZnUucnUiLCJpYXQiOjE3MTE3MjQ1NDQsImV4cCI6MTcxMTczNTM0NCwic2NvcGUiOiJ1c2VyIiwicm9sZXMiOlt7InVzZXJJZCI6IjciLCJzZXNzaW9uSWQiOiIyNDA0NzM4MTc3NzI3MjIwMTMzMDkwNzU0ODQ2ODU5MSIsInNlc3Npb25IYXNoIjoiNTZEMTZENTNDOTc5MDk5MTk0QTY4OEY4Qjk0M0I0N0MiLCJkb2N1bWVudHNIYXNoIjoiQTdCMkI0MUU4MjQ4NDYzNkY2ODZDNTQ3NEY0NEREMjYiLCJsb2dpbiI6IlNCQXNhZHVsbG9ldiIsInR5cGUiOiJBQ0NPVU5USU5HIn0seyJ1c2VySWQiOiIzNDg1NDEiLCJzZXNzaW9uSWQiOiIyNDA0NzM4MDU2NjEyNzYwMzc1Mzk2MjcyNjUxMzQ5NCIsInNlc3Npb25IYXNoIjoiRTNBRkUxNTM1RUIxNTc0RTIyRkI1QkM0RjE1QURGRTAiLCJkb2N1bWVudHNIYXNoIjoiIiwibG9naW4iOiJTdWJCQXNhZHVsbG9ldiIsInR5cGUiOiJFTVBMIn0seyJ1c2VySWQiOiIzMzYwMzciLCJzZXNzaW9uSWQiOiIyNDA0NzM4MjQ0NTAyMjcxMzk3ODM3NDk5MzA2OTgwNyIsInNlc3Npb25IYXNoIjoiNzEwQTExMUUzQUI3RDg0NzM1NUU4QzRCRTEwMjhFNkEiLCJkb2N1bWVudHNIYXNoIjoiQTIyQTc1REJFMEE3ODgwMTg5Njg2NkJCODM1QjE0NDEiLCJsb2dpbiI6IlN1QkFzYWR1bGxvZXYiLCJ0eXBlIjoiU1RVRCJ9XSwic2Vzc2lvbklkIjoiMjQwNDczODE3NzcyNzIyMDEzMzA5MDc1NDg0Njg1OTEiLCJzZXNzaW9uSGFzaCI6IjU2RDE2RDUzQzk3OTA5OTE5NEE2ODhGOEI5NDNCNDdDIiwiYWxsSWQiOiIyMzkxNzQiLCJlbWFpbCI6IkJhc3ViaG9uYmVrQGdtYWlsLmNvbSJ9.whTYFKMIqDfVA0Y8LM0kp4Pe4ZCXWAAoaJGvQcD5r_I'
-const laborProtectionToken = ''
 const host = import.meta.env.REACT_APP_HOST
 const port = import.meta.env.REACT_APP_PORT
 const emplBaseURL = host && port ? `http://${host}:${port}/` : `employment/`
@@ -62,7 +51,8 @@ const emplBaseURL = host && port ? `http://${host}:${port}/` : `employment/`
 export const serviceApi = apiSlice.injectEndpoints({
 	endpoints: builder => ({
 		getSchedule: builder.query<TypeSchedule, void>({
-			query: () => `schedule-api/schedule`
+			query: () => `schedule-api/schedule`,
+			keepUnusedDataFor: 1,
 		}),
 		getPerformance: builder.query<IPerformance, void>({
 			query: () => 'academic-performance-api/performance'
@@ -157,10 +147,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		getSeekerResponds: builder.query<PageableType<RespondItemType>, { status: string; page: number }>({
 			query: ({ status, page }) => ({
-				url: `${emplBaseURL}employment-api/v1/seeker/responds?${status}&page=${page}`,
-				headers: {
-					Authorization: `Bearer ${seekerToken}`
-				}
+				url: `${emplBaseURL}employment-api/v1/seeker/responds?${status}&page=${page}`
 			}),
 			transformResponse: (response: PageableType<RespondItemType>) => {
 				return {
@@ -179,10 +166,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 			query: ({ category, direction, role, type, page }) => ({
 				url: `${emplBaseURL}employment-api/v1/responds/grouped?category=${category}${
 					direction !== undefined ? `&${type === 'DIRECTORY' ? 'direction=' : 'subdivision='}` + direction : ''
-				}&page=${page}`,
-				headers: {
-					Authorization: `Bearer ${role === 'PERSONNEL_DEPARTMENT' ? personnelDeparmentToken : supervisorToken}`
-				}
+				}&page=${page}`
 			})
 		}),
 		getResponcesByVacancy: builder.query<
@@ -191,9 +175,6 @@ export const serviceApi = apiSlice.injectEndpoints({
 		>({
 			query: ({ id, status, role, page }) => ({
 				url: `${emplBaseURL}employment-api/v1/vacancy/${id}/responds?status=${status}&page=${page}`,
-				headers: {
-					Authorization: `Bearer ${role === 'PERSONNEL_DEPARTMENT' ? personnelDeparmentToken : supervisorToken}`
-				},
 				keepUnusedDataFor: 0
 			}),
 			transformResponse: (response: { content: VacancyRespondItemType[] }) => {
@@ -207,18 +188,12 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		getRespondFullInfo: builder.query<VacancyRespondItemType, number>({
 			query: id => ({
-				url: `${emplBaseURL}employment-api/v1/respond/${id}`,
-				headers: {
-					Authorization: `Bearer ${personnelDeparmentToken}`
-				}
+				url: `${emplBaseURL}employment-api/v1/respond/${id}`
 			})
 		}),
 		getRespondFullInfoAccounting: builder.query<VacancyRespondItemType, number>({
 			query: id => ({
-				url: `${emplBaseURL}employment-api/v1/respond/${id}`,
-				headers: {
-					Authorization: `Bearer ${accountingToken}`
-				}
+				url: `${emplBaseURL}employment-api/v1/respond/${id}`
 			})
 		}),
 		getChatIdByRespondId: builder.query<
@@ -231,18 +206,12 @@ export const serviceApi = apiSlice.injectEndpoints({
 			{ chatId: number; role: string }
 		>({
 			query: arg => ({
-				url: `${emplBaseURL}employment-api/v1/respond/${arg.chatId}/chat?sender=${arg.role}`,
-				headers: {
-					Authorization: `Bearer ${arg.role === 'PERSONNEL_DEPARTMENT' ? personnelDeparmentToken : seekerToken}`
-				}
+				url: `${emplBaseURL}employment-api/v1/respond/${arg.chatId}/chat?sender=${arg.role}`
 			})
 		}),
 		getUnreadMessagesCount: builder.query<number, { chatId: number; role: string }>({
 			query: ({ chatId, role }) => ({
-				url: `${emplBaseURL}employment-api/v1/chat/${chatId}/unread-count?sender=${role}`,
-				headers: {
-					Authorization: `Bearer ${role === 'PERSONNEL_DEPARTMENT' ? personnelDeparmentToken : seekerToken}`
-				}
+				url: `${emplBaseURL}employment-api/v1/chat/${chatId}/unread-count?sender=${role}`
 			}),
 			keepUnusedDataFor: 0
 		}),
@@ -253,20 +222,14 @@ export const serviceApi = apiSlice.injectEndpoints({
 			query: ({ chatId, lastMessageId, size, role }) => ({
 				url: `${emplBaseURL}employment-api/v1/chat/${chatId}/messages?${
 					lastMessageId !== undefined ? `last_message_id=${lastMessageId}&` : ''
-				}${size !== undefined ? `size=${size}&` : ''}sender=${role}`,
-				headers: {
-					Authorization: `Bearer ${role === 'PERSONNEL_DEPARTMENT' ? personnelDeparmentToken : seekerToken}`
-				}
+				}${size !== undefined ? `size=${size}&` : ''}sender=${role}`
 			})
 		}),
 		getSupervisorVacancy: builder.query<PageableType<VacancyItemType>, { page: number; pageSize?: number }>({
 			query: ({ page, pageSize }) => ({
 				url: `${emplBaseURL}employment-api/v1/management/supervisor/vacancy?page=${page}${
 					pageSize ? `&size=${pageSize}` : ``
-				}`,
-				headers: {
-					Authorization: `Bearer ${supervisorToken}`
-				}
+				}`
 			})
 		}),
 		getVacancyRequests: builder.query<PageableType<VacancyRequestItemType>, { action: string; page: number }>({
@@ -274,26 +237,17 @@ export const serviceApi = apiSlice.injectEndpoints({
 				url: `${emplBaseURL}employment-api/v1/management/vacancy-requests?page=${page}${
 					action === 'все' ? '' : `&action=${action}`
 				}`,
-				headers: {
-					Authorization: `Bearer ${personnelDeparmentToken}`
-				},
 				keepUnusedDataFor: 0
 			})
 		}),
 		getVacancyRequestView: builder.query<VacancyRequestViewType, number>({
 			query: id => ({
-				url: `${emplBaseURL}employment-api/v1/management/vacancy-requests/${id}`,
-				headers: {
-					Authorization: `Bearer ${personnelDeparmentToken}`
-				}
+				url: `${emplBaseURL}employment-api/v1/management/vacancy-requests/${id}`
 			})
 		}),
 		getArchivedResponces: builder.query<PageableType<VacancyRespondItemType>, number>({
 			query: page => ({
-				url: `${emplBaseURL}employment-api/v1/archive?page=${page}`,
-				headers: {
-					Authorization: `Bearer ${personnelDeparmentToken}`
-				}
+				url: `${emplBaseURL}employment-api/v1/archive?page=${page}`
 			}),
 			transformResponse: (response: PageableType<VacancyRespondItemType>) => {
 				return {
@@ -307,18 +261,12 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		getArchivedRespondFullInfo: builder.query<VacancyRespondItemType, number>({
 			query: id => ({
-				url: `${emplBaseURL}employment-api/v1/archive/${id}`,
-				headers: {
-					Authorization: `Bearer ${personnelDeparmentToken}`
-				}
+				url: `${emplBaseURL}employment-api/v1/archive/${id}`
 			})
 		}),
 		getReservedResponces: builder.query<PageableType<VacancyRespondItemType>, { type: string; page: number }>({
 			query: ({ page, type }) => ({
-				url: `${emplBaseURL}employment-api/v1/reserve?reserveType=${type}&page=${page}`,
-				headers: {
-					Authorization: `Bearer ${personnelDeparmentToken}`
-				}
+				url: `${emplBaseURL}employment-api/v1/reserve?reserveType=${type}&page=${page}`
 			}),
 			transformResponse: (response: PageableType<VacancyRespondItemType>) => {
 				return {
@@ -332,18 +280,12 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		getReservedRespondFullInfo: builder.query<VacancyRespondItemType, number>({
 			query: id => ({
-				url: `${emplBaseURL}employment-api/v1/reserve/${id}`,
-				headers: {
-					Authorization: `Bearer ${personnelDeparmentToken}`
-				}
+				url: `${emplBaseURL}employment-api/v1/reserve/${id}`
 			})
 		}),
 		getAllVacancies: builder.query<{ id: number; post: string }[], void>({
 			query: () => ({
-				url: `${emplBaseURL}employment-api/v1/vacancy/search/by-name`,
-				headers: {
-					Authorization: `Bearer ${personnelDeparmentToken}`
-				}
+				url: `${emplBaseURL}employment-api/v1/vacancy/search/by-name`
 			})
 		}),
 		getChatPreviews: builder.query<
@@ -366,18 +308,12 @@ export const serviceApi = apiSlice.injectEndpoints({
 				url: `${emplBaseURL}employment-api/v1/chat?page=${page}&pageSize=${pageSize}${
 					vacancyId ? `&vacancy_id=${vacancyId}` : ''
 				}
-				${status ? `&status=${status}` : ''}${sort ? `&chat_sort=${sort}` : ''}`,
-				headers: {
-					Authorization: `Bearer ${personnelDeparmentToken}`
-				}
+				${status ? `&status=${status}` : ''}${sort ? `&chat_sort=${sort}` : ''}`
 			})
 		}),
 		getSeekerEmploymentResponds: builder.query<{ content: RespondItemType[] }, number>({
 			query: page => ({
-				url: `${emplBaseURL}employment-api/v1/seeker/responds?statuses=EMPLOYMENT&page=${page}`,
-				headers: {
-					Authorization: `Bearer ${seekerToken}`
-				}
+				url: `${emplBaseURL}employment-api/v1/seeker/responds?statuses=EMPLOYMENT&page=${page}`
 			}),
 			transformResponse: (response: { content: RespondItemType[] }) => {
 				// return response.map(resp => ({
@@ -396,14 +332,12 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		getEmploymentData: builder.query<EmploymentDataType, number>({
 			query: respondId => ({
-				url: `${emplBaseURL}employment-api/v1/respond/${respondId}/employment`,
-				headers: { Authorization: `Bearer ${seekerToken}` }
+				url: `${emplBaseURL}employment-api/v1/respond/${respondId}/employment`
 			})
 		}),
 		getEmploymentDocs: builder.query<EmploymentDocsType[], number>({
 			query: vacancyId => ({
-				url: `${emplBaseURL}employment-api/v1/vacancy/${vacancyId}/empl-docs`,
-				headers: { Authorization: `Bearer ${seekerToken}` }
+				url: `${emplBaseURL}employment-api/v1/vacancy/${vacancyId}/empl-docs`
 			})
 		}),
 		getSupervisorResponds: builder.query<
@@ -413,8 +347,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 			query: ({ status, page, pageSize }) => ({
 				url: `${emplBaseURL}employment-api/v1/supervisor/vacancy/respond?${status}&page=${page}${
 					pageSize ? `&size=${pageSize}` : ``
-				}`,
-				headers: { Authorization: `Bearer ${supervisorToken}` }
+				}`
 			}),
 			transformResponse: (response: { content: VacancyRespondItemType[] }) => {
 				return {
@@ -428,7 +361,6 @@ export const serviceApi = apiSlice.injectEndpoints({
 		getSeekerResumeFile: builder.query<{ href: string; size: number }, number>({
 			query: id => ({
 				url: `${emplBaseURL}employment-api/v1/resume/${id}/file`,
-				headers: { Authorization: `Bearer ${personnelDeparmentToken}` },
 				responseHandler: async res => {
 					const data = await res.blob()
 					const file = new Blob([data], {
@@ -441,8 +373,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		}),
 		getAllDocumentDefinitions: builder.query<DocumentDefinitionType[], void>({
 			query: () => ({
-				url: `${emplBaseURL}employment-api/v1/employment/document-definitions`,
-				headers: { Authorization: `Bearer ${personnelDeparmentToken}` }
+				url: `${emplBaseURL}employment-api/v1/employment/document-definitions`
 			})
 		}),
 		getEmploymentPossibleRoles: builder.query<string[], void>({
@@ -468,10 +399,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 			}
 		>({
 			query: ({ page, pageSize }) => ({
-				url: `${emplBaseURL}employment-api/v1/chat/seeker-chats?page=${page}&size=${pageSize}`,
-				headers: {
-					Authorization: `Bearer ${seekerToken}`
-				}
+				url: `${emplBaseURL}employment-api/v1/chat/seeker-chats?page=${page}&size=${pageSize}`
 			})
 		}),
 		downloadEmploymentSeekerFile: builder.query<{ href: string }, { respondId: number; docId: number }>({
@@ -596,19 +524,13 @@ export const serviceApi = apiSlice.injectEndpoints({
 			query: arg => ({
 				url: `${emplBaseURL}employment-api/v1/vacancy/` + arg.id + '/respond',
 				method: 'POST',
-				body: arg,
-				headers: {
-					Authorization: `Bearer ${seekerToken}`
-				}
+				body: arg
 			})
 		}),
 		deleteVacancyRespond: builder.mutation<void, number>({
 			query: id => ({
 				url: `${emplBaseURL}employment-api/v1/respond/${id}`,
-				method: 'DELETE',
-				headers: {
-					Authorization: `Bearer ${seekerToken}`
-				}
+				method: 'DELETE'
 			})
 		}),
 		postChatMessage: builder.mutation<ChatMessageType, { id: number; text: string; name: string; role: string }>({
@@ -617,7 +539,6 @@ export const serviceApi = apiSlice.injectEndpoints({
 				method: 'POST',
 				body: { text: text, sender: role },
 				headers: {
-					Authorization: `Bearer ${role === 'PERSONNEL_DEPARTMENT' ? personnelDeparmentToken : seekerToken}`,
 					'X-User-Name': name
 				}
 			})
@@ -627,7 +548,6 @@ export const serviceApi = apiSlice.injectEndpoints({
 				url: `${emplBaseURL}employment-api/v1/chat/${chatId}/message/${messageId}/read?sender=${role}`,
 				method: 'PUT',
 				headers: {
-					Authorization: `Bearer ${role === 'PERSONNEL_DEPARTMENT' ? personnelDeparmentToken : seekerToken}`,
 					'X-User-Name': sessionId
 				}
 			})
@@ -635,10 +555,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		approveRespond: builder.mutation<VacancyRespondItemType, number>({
 			query: respondId => ({
 				url: `${emplBaseURL}employment-api/v1/respond/${respondId}/status/approve`,
-				method: 'PUT',
-				headers: {
-					Authorization: `Bearer ${personnelDeparmentToken}`
-				}
+				method: 'PUT'
 			})
 		}),
 		inviteSeeker: builder.mutation<
@@ -661,9 +578,6 @@ export const serviceApi = apiSlice.injectEndpoints({
 					reserveTimes: reservedTimes,
 					address: address,
 					additionalInfo: additionalInfo
-				},
-				headers: {
-					Authorization: `Bearer ${supervisorToken}`
 				}
 			})
 		}),
@@ -671,30 +585,21 @@ export const serviceApi = apiSlice.injectEndpoints({
 			query: id => ({
 				url: `${emplBaseURL}employment-api/v1/management/vacancy-requests/for-delete`,
 				method: 'POST',
-				body: { vacancyId: id },
-				headers: {
-					Authorization: `Bearer ${supervisorToken}`
-				}
+				body: { vacancyId: id }
 			})
 		}),
 		requestCreateVacancy: builder.mutation<void, VacancyRequestType>({
 			query: arg => ({
 				url: `${emplBaseURL}employment-api/v1/management/vacancy-requests/for-create`,
 				method: 'POST',
-				body: arg,
-				headers: {
-					Authorization: `Bearer ${supervisorToken}`
-				}
+				body: arg
 			})
 		}),
 		requestUpdateVacancy: builder.mutation<void, VacancyRequestType & { vacancyId: number }>({
 			query: arg => ({
 				url: `${emplBaseURL}employment-api/v1/management/vacancy-requests/for-update`,
 				method: 'POST',
-				body: arg,
-				headers: {
-					Authorization: `Bearer ${supervisorToken}`
-				}
+				body: arg
 			})
 		}),
 		acceptCreateVacancyRequest: builder.mutation<
@@ -712,102 +617,69 @@ export const serviceApi = apiSlice.injectEndpoints({
 			query: arg => ({
 				url: `${emplBaseURL}employment-api/v1/management/vacancy-requests/for-create/${arg.requestId}/acceptance`,
 				method: 'PUT',
-				body: arg.data,
-				headers: {
-					Authorization: `Bearer ${personnelDeparmentToken}`
-				}
+				body: arg.data
 			})
 		}),
 		acceptUpdateVacancyRequest: builder.mutation<void, number>({
 			query: id => ({
 				url: `${emplBaseURL}employment-api/v1/management/vacancy-requests/for-update/${id}/acceptance`,
-				method: 'PUT',
-				headers: {
-					Authorization: `Bearer ${personnelDeparmentToken}`
-				}
+				method: 'PUT'
 			})
 		}),
 		acceptDeleteVacancyRequest: builder.mutation<void, number>({
 			query: id => ({
 				url: `${emplBaseURL}employment-api/v1/management/vacancy-requests/for-delete/${id}/acceptance`,
-				method: 'PUT',
-				headers: {
-					Authorization: `Bearer ${personnelDeparmentToken}`
-				}
+				method: 'PUT'
 			})
 		}),
 		denyVacancyRequest: builder.mutation<void, number>({
 			query: id => ({
 				url: `${emplBaseURL}employment-api/v1/management/vacancy-requests/${id}/deny`,
-				method: 'POST',
-				headers: {
-					Authorization: `Bearer ${personnelDeparmentToken}`
-				}
+				method: 'POST'
 			})
 		}),
 		alterCreateVacancyRequest: builder.mutation<void, VacancyRequestType & { vacancyRequestId: number }>({
 			query: body => ({
 				url: `${emplBaseURL}employment-api/v1/management/vacancy-requests/for-create`,
 				method: 'PATCH',
-				body: body,
-				headers: {
-					Authorization: `Bearer ${personnelDeparmentToken}`
-				}
+				body: body
 			})
 		}),
 		alterUpdateVacancyRequest: builder.mutation<void, VacancyRequestType & { vacancyRequestId: number }>({
 			query: body => ({
 				url: `${emplBaseURL}employment-api/v1/management/vacancy-requests/for-update`,
 				method: 'PATCH',
-				body: body,
-				headers: {
-					Authorization: `Bearer ${personnelDeparmentToken}`
-				}
+				body: body
 			})
 		}),
 		sendRespondToArchive: builder.mutation<VacancyRespondItemType, { id: number; role: string }>({
 			query: ({ id, role }) => ({
 				url: `${emplBaseURL}employment-api/v1/respond/${id}/status/archive`,
-				method: 'PUT',
-				headers: {
-					Authorization: `Bearer ${role === 'PERSONNEL_DEPARTMENT' ? personnelDeparmentToken : supervisorToken}`
-				}
+				method: 'PUT'
 			})
 		}),
 		deleteRespondFromArchive: builder.mutation<void, number>({
 			query: id => ({
 				url: `${emplBaseURL}employment-api/v1/archive/${id}`,
-				method: 'DELETE',
-				headers: {
-					Authorization: `Bearer ${personnelDeparmentToken}`
-				}
+				method: 'DELETE'
 			})
 		}),
 		approveArchivedRespond: builder.mutation<VacancyRespondItemType, number>({
 			query: respondId => ({
 				url: `${emplBaseURL}employment-api/v1/archive/${respondId}/status/approve`,
-				method: 'PUT',
-				headers: {
-					Authorization: `Bearer ${personnelDeparmentToken}`
-				}
+				method: 'PUT'
 			})
 		}),
 		answerToInivitationMainTime: builder.mutation<void, { id: number; ans: string; messageId: number }>({
 			query: ({ id, ans, messageId }) => ({
 				url: `${emplBaseURL}employment-api/v1/respond/${id}/chat/buttons/interview/main-time?answer=${ans}&message-id=${messageId}`,
-				method: 'POST',
-				headers: {
-					Authorization: `Bearer ${seekerToken}`
-				}
+				method: 'POST'
 			})
 		}),
 		sendRespondToReserve: builder.mutation<VacancyRespondItemType, number>({
 			query: id => ({
 				url: `${emplBaseURL}employment-api/v1/respond/${id}/status/reserve`,
-				method: 'PUT',
-				headers: {
-					Authorization: `Bearer ${personnelDeparmentToken}`
-				}
+				method: 'PUT'
 			})
 		}),
 		approveReservedRespond: builder.mutation<VacancyRespondItemType, { respondId: number; vacancyId: number }>({
@@ -816,9 +688,6 @@ export const serviceApi = apiSlice.injectEndpoints({
 				method: 'POST',
 				body: {
 					vacancyId: vacancyId
-				},
-				headers: {
-					Authorization: `Bearer ${personnelDeparmentToken}`
 				}
 			})
 		}),
@@ -834,56 +703,38 @@ export const serviceApi = apiSlice.injectEndpoints({
 			query: arg => ({
 				url: `${emplBaseURL}employment-api/v1/vacancy`,
 				method: 'PATCH',
-				body: arg,
-				headers: {
-					Authorization: `Bearer ${personnelDeparmentToken}`
-				}
+				body: arg
 			})
 		}),
 		deleteVacancyAsPerDepartment: builder.mutation<void, number>({
 			query: id => ({
 				url: `${emplBaseURL}employment-api/v1/vacancy/${id}`,
-				method: 'DELETE',
-				headers: {
-					Authorization: `Bearer ${personnelDeparmentToken}`
-				}
+				method: 'DELETE'
 			})
 		}),
 		requestCreateInterview: builder.mutation<void, InterviewRequestType>({
 			query: arg => ({
 				url: `${emplBaseURL}employment-api/v1/interview`,
 				method: 'POST',
-				body: arg,
-				headers: {
-					Authorization: `Bearer ${supervisorToken}`
-				}
+				body: arg
 			})
 		}),
 		deleteReserveRespond: builder.mutation<void, number>({
 			query: id => ({
 				url: `${emplBaseURL}employment-api/v1/reserve/${id}`,
-				method: 'DELETE',
-				headers: {
-					Authorization: `Bearer ${personnelDeparmentToken}`
-				}
+				method: 'DELETE'
 			})
 		}),
 		getSupervisorInterview: builder.query<{ content: InterviewItemType[] }, number>({
 			query: arg => ({
 				url: `${emplBaseURL}employment-api/v1/interview?page=${arg}`,
-				method: 'GET',
-				headers: {
-					Authorization: `Bearer ${supervisorToken}`
-				}
+				method: 'GET'
 			})
 		}),
 		getInterviewView: builder.query<InterviewViewResponseType, number>({
 			query: id => ({
 				url: `${emplBaseURL}employment-api/v1/interview`,
-				method: 'GET',
-				headers: {
-					Authorization: `Bearer ${supervisorToken}`
-				}
+				method: 'GET'
 			})
 		}),
 		employeeSeekerRequest: builder.mutation<void, SeekerStatusChangeType & { respondId: number }>({
@@ -893,9 +744,6 @@ export const serviceApi = apiSlice.injectEndpoints({
 				body: {
 					rejectionReason: arg.rejectionReason,
 					action: arg.action
-				},
-				headers: {
-					Authorization: `Bearer ${supervisorToken}`
 				}
 			})
 		}),
@@ -908,37 +756,25 @@ export const serviceApi = apiSlice.injectEndpoints({
 				method: 'POST',
 				body: {
 					time: arg.time ? arg.time : null
-				},
-				headers: {
-					Authorization: `Bearer ${seekerToken}`
 				}
 			})
 		}),
 		answerEmploymentRequest: builder.mutation<void, EmploymentRequestType & { respondId: number; messageId: number }>({
 			query: arg => ({
 				url: `${emplBaseURL}employment-api/v1/respond/${arg.respondId}/chat/buttons/employment-request?answer=${arg.answer}&message-id=${arg.messageId}`,
-				method: 'POST',
-				headers: {
-					Authorization: `Bearer ${seekerToken}`
-				}
+				method: 'POST'
 			})
 		}),
 		deleteEmploymentDoc: builder.mutation<void, { respondId: number; docId: number }>({
 			query: ({ respondId, docId }) => ({
 				url: `${emplBaseURL}employment-api/v1/respond/${respondId}/employment/file/${docId}`,
-				method: 'DELETE',
-				headers: {
-					Authorization: `Bearer ${seekerToken}`
-				}
+				method: 'DELETE'
 			})
 		}),
 		sendEmploymentDocs: builder.mutation<void, { respondId: number; hasNotRequisites: boolean }>({
 			query: ({ respondId, hasNotRequisites }) => ({
 				url: `${emplBaseURL}employment-api/v1/respond/${respondId}/employment/verification`,
 				method: 'POST',
-				headers: {
-					Authorization: `Bearer ${seekerToken}`
-				},
 				body: hasNotRequisites
 					? {
 							acceptance: true,
@@ -950,55 +786,37 @@ export const serviceApi = apiSlice.injectEndpoints({
 		getPersonnelStages: builder.query<PageableType<EmploymentStageItemType>, number>({
 			query: page => ({
 				url: `${emplBaseURL}employment-api/v1/management/employment?page=${page}`,
-				method: 'GET',
-				headers: {
-					Authorization: `Bearer ${personnelDeparmentToken}`
-				}
+				method: 'GET'
 			})
 		}),
 		getAccountingStages: builder.query<PageableType<EmploymentStageItemType>, number>({
 			query: page => ({
 				url: `${emplBaseURL}employment-api/v1/management/employment?page=${page}`,
-				method: 'GET',
-				headers: {
-					Authorization: `Bearer ${accountingToken}`
-				}
+				method: 'GET'
 			})
 		}),
 		downloadFileEmploymentStages: builder.query<Blob, { respondId: number; fileId: number }>({
 			query: arg => ({
 				url: `${emplBaseURL}employment-api/v1/respond/${arg.respondId}/employment/file/${arg.fileId}/`,
-				method: 'GET',
-				headers: {
-					Authorization: `Bearer ${supervisorToken}`
-				}
+				method: 'GET'
 			})
 		}),
 		getEmploymentStageStatus: builder.query<EmploymentStageStatusType, { respondId: number }>({
 			query: arg => ({
 				url: `${emplBaseURL}employment-api/v1/management/respond/${arg.respondId}/employment`,
-				method: 'GET',
-				headers: {
-					Authorization: `Bearer ${personnelDeparmentToken}`
-				}
+				method: 'GET'
 			})
 		}),
 		getEmploymentReqStageStatus: builder.query<EmploymentStageStatusType, { respondId: number }>({
 			query: arg => ({
 				url: `${emplBaseURL}employment-api/v1/management/respond/${arg.respondId}/employment`,
-				method: 'GET',
-				headers: {
-					Authorization: `Bearer ${accountingToken}`
-				}
+				method: 'GET'
 			})
 		}),
 		changeEmploymentStageStatusRequest: builder.mutation<void, ChangeStageStatusType & { subStageId: number }>({
 			query: arg => ({
 				url: `${emplBaseURL}employment-api/v1/management/employment/sub-stage/${arg.subStageId}`,
 				method: 'PUT',
-				headers: {
-					Authorization: `Bearer ${personnelDeparmentToken}`
-				},
 				body: {
 					status: arg.status,
 					comment: arg.comment
@@ -1012,9 +830,6 @@ export const serviceApi = apiSlice.injectEndpoints({
 			query: arg => ({
 				url: `${emplBaseURL}employment-api/v1/management/employment/sub-stage/${arg.subStageId}`,
 				method: 'PUT',
-				headers: {
-					Authorization: `Bearer ${accountingToken}`
-				},
 				body: {
 					status: arg.status,
 					comment: arg.comment
@@ -1025,9 +840,6 @@ export const serviceApi = apiSlice.injectEndpoints({
 			query: arg => ({
 				url: `${emplBaseURL}employment-api/v1/management/employment/file/${arg.fileId}`,
 				method: 'GET',
-				headers: {
-					Authorization: `Bearer ${personnelDeparmentToken}`
-				},
 				responseHandler: async res => {
 					const data = await res.blob()
 					const file = new Blob([data], {
@@ -1041,54 +853,38 @@ export const serviceApi = apiSlice.injectEndpoints({
 		changeCardStatusRequest: builder.mutation<void, { subStageId: number }>({
 			query: arg => ({
 				url: `${emplBaseURL}employment-api/v1/management/employment/sub-stage/${arg.subStageId}/has-requisites`,
-				method: 'PATCH',
-				headers: {
-					Authorization: `Bearer ${accountingToken}`
-				}
+				method: 'PATCH'
 			})
 		}),
 		agreeToWorkingConditions: builder.mutation<void, number>({
 			query: respondId => ({
 				url: `${emplBaseURL}employment-api/v1/respond/${respondId}/employment/working-conditions`,
-				method: 'POST',
-				headers: {
-					Authorization: `Bearer ${seekerToken}`
-				}
+				method: 'POST'
 			})
 		}),
 		setHasNoRequisitesOnEmployment: builder.mutation<void, { respondId: number; bank: 'SBER' | 'VTB' }>({
 			query: ({ respondId, bank }) => ({
 				url: `${emplBaseURL}employment-api/v1/respond/${respondId}/employment/requisites-missing`,
 				body: { bank: bank },
-				method: 'POST',
-				headers: {
-					Authorization: `Bearer ${seekerToken}`
-				}
+				method: 'POST'
 			})
 		}),
 		markBankCardApplicationFormed: builder.mutation<void, { subStageId: number }>({
 			query: arg => ({
 				url: `${emplBaseURL}employment-api/v1/management/employment/sub-stage/${arg.subStageId}/requisites`,
-				method: 'PATCH',
-				headers: {
-					Authorization: `Bearer ${personnelDeparmentToken}`
-				}
+				method: 'PATCH'
 			})
 		}),
 		updateEmploymentDocuments: builder.mutation<void, number>({
 			query: subStageId => ({
 				url: `${emplBaseURL}employment-api/v1/employment/sub-stage/${subStageId}/updated`,
-				headers: { Authorization: `Bearer ${seekerToken}` },
 				method: 'PATCH'
 			})
 		}),
 		setHasRequisitesEmployment: builder.mutation<void, number>({
 			query: respondId => ({
 				url: `${emplBaseURL}employment-api/v1/respond/${respondId}/employment/requisites-missing`,
-				method: 'DELETE',
-				headers: {
-					Authorization: `Bearer ${seekerToken}`
-				}
+				method: 'DELETE'
 			})
 		}),
 		uploadEmploymentDocument: builder.mutation<
@@ -1180,10 +976,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 		getEmploymentStageStatusForSupervisor: builder.query<EmploymentDataType, { respondId: number }>({
 			query: arg => ({
 				url: `${emplBaseURL}employment-api/v1/management/respond/${arg.respondId}/employment`,
-				method: 'GET',
-				headers: {
-					Authorization: `Bearer ${personnelDeparmentToken}`
-				}
+				method: 'GET'
 			})
 		}),
 		downloadChatFile: builder.query<

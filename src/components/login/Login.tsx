@@ -110,9 +110,9 @@ export const Login = () => {
 		setSelectedLanguage(language)
 		setIsLanguageModalOpen(false)
 	}
-	if(errorLogin){
-		alert('Ошибка сети. Проверьте подключение к корпоративной сети')
-	}
+	// if(errorLogin){
+	// 	alert('Ошибка сети. Проверьте подключение к корпоративной сети')
+	// }
 
 	const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 

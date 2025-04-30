@@ -30,6 +30,23 @@ import ShortLink from './components/service/ShortLink/ShortLink'
 import EditSchedule from './components/service/practices/forming-schedule/EditSchedule'
 import { blue004, blue307 } from './utils/color'
 
+import { useLocation } from 'react-router-dom';
+
+const YandexMetrikaTracker = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    // Проверка инициализации объекта ym
+	// @ts-ignore
+    if (typeof window.ym === 'function') {
+		// @ts-ignore
+      window.ym(100713417, 'hit', location.pathname + location.search);
+    }
+  }, [location]);
+
+  return null;
+};
+
 const App = () => {
 	const [email, changeEmail] = useState('')
 	const [loadLanguage, setLoadLanguage] = useState(false)
@@ -113,6 +130,9 @@ const App = () => {
 		}
 	  }, [])
 
+
+  
+
 	if (loadLanguage) {
 		return (
 			<div className="screen">
@@ -127,6 +147,7 @@ const App = () => {
 
 	return (
 		<>
+			 <YandexMetrikaTracker />
 			<ConfigProvider
 				theme={{
 					token: {

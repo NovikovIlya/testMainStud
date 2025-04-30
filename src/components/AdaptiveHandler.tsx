@@ -4,7 +4,7 @@ import { Outlet, useLocation } from 'react-router-dom'
 export const AdaptiveHandler = () => {
 	const { pathname } = useLocation()
 
-	const responsiveIndex = ['/user', '/services/aboutMe/personalData']
+	const responsiveIndex = ['blablabla']
 
 	useEffect(() => {
 		console.log(pathname)

@@ -32,20 +32,7 @@ import { blue004, blue307 } from './utils/color'
 
 import { useLocation } from 'react-router-dom';
 
-const YandexMetrikaTracker = () => {
-  const location = useLocation();
 
-  useEffect(() => {
-    // Проверка инициализации объекта ym
-	// @ts-ignore
-    if (typeof window.ym === 'function') {
-		// @ts-ignore
-      window.ym(100713417, 'hit', location.pathname + location.search);
-    }
-  }, [location]);
-
-  return null;
-};
 
 const App = () => {
 	const [email, changeEmail] = useState('')
@@ -147,7 +134,7 @@ const App = () => {
 
 	return (
 		<>
-			 <YandexMetrikaTracker />
+			
 			<ConfigProvider
 				theme={{
 					token: {

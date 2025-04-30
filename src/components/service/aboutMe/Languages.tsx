@@ -12,6 +12,7 @@ import {
 	LanguageLevel
 } from '../../../models/aboutMe'
 import {
+	useGetAllForeignLanguagesQuery,
 	useGetAllNativeLanguagesQuery,
 	useGetCertificateQuery,
 	useGetLevelsQuery,
@@ -38,6 +39,7 @@ const Languages = () => {
 	const { data: dataLevels } = useGetLevelsQuery()
 	const { data: dataCertificate } = useGetCertificateQuery()
 	const { data: dataAll } = useGetAllNativeLanguagesQuery()
+	const {data:dataAllForeignLang} = useGetAllForeignLanguagesQuery()
 	const {data: dataForeign,isLoading: isFetchingForeign,isError: isErrorForeign,isSuccess} = useGetforeignLanguagesQuery()
 	const [setNative, { isLoading }] = useSetNativeMutation()
 	const [setForeign, { isLoading: isLoadingSetForeign }] = useSetForeignMutation()
@@ -48,6 +50,7 @@ const Languages = () => {
 	const nativeLanguageForm = Form.useWatch('languages', form)
 	const sertificateFormVal = Form.useWatch('certificateId', form2)
 
+	console.log('dataAll',dataAll)
 	useEffect(() => {
 		if (dataNative) {
 			const initialValues = {
@@ -102,15 +105,17 @@ const Languages = () => {
 
 		// Отправка данных на сервер
 		try {
-			await setForeign(requestData).unwrap()
 			setIsModalOpen(false)
+			await setForeign(requestData).unwrap()
+			
 			form2.resetFields()
 			setFileList([])
 			setSelectedLabel(null)
 		} catch (error) {
-			
 			console.error('Ошибка при сохранении данных:', error)
 			message.error('Не удалось сохранить данные о языке (такой язык уже добавлен)')
+		}finally{
+			setIsModalOpen(false)
 		}
 	}
 
@@ -240,7 +245,7 @@ const Languages = () => {
 							isSuccess={isSuccess}
 							dataCertificate={dataCertificate}
 							dataLevels={dataLevels}
-							dataAll={dataAll}
+							dataAll={dataAllForeignLang}
 							selectId={selectId}
 							setSelectId={setSelectId}
 							dataForeign={dataForeign}
@@ -284,7 +289,7 @@ const Languages = () => {
 								filterOption={(input, option) => 
 									(option?.label ?? '').toString().toLowerCase().includes(input.toLowerCase())
 								}
-								options={dataAll?.map((item: Language) => ({
+								options={dataAllForeignLang?.map((item: Language) => ({
 									value: item.code,
 									label: item.language
 								}))}

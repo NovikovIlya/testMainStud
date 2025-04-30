@@ -23,6 +23,7 @@ import { useGetRoleQuery } from '../../store/api/serviceApi'
 import { logOut } from '../../store/reducers/authSlice'
 import AccessibilityHelper from '../AccessibilityHelper/AccessibilityHelper'
 import { ModalNav } from '../service/ModalNav'
+import { getBaseUrlShelly } from '../../store/api/studentPractice/getBaseUrlShelly'
 
 export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const [isModalOpen, setIsModalOpen] = useState(false)
@@ -311,8 +312,8 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 								)}
 								href={`${
 									maiRole === 'EMPL'
-										? `https://shelly.kpfu.ru/e-ksu/e_university.show_notification?p1=${maiRoleArray?.userId}&p2=${maiRoleArray?.sessionId}&p_h=${maiRoleArray?.sessionHash}&p_c_sess=1`
-										: 'https://shelly.kpfu.ru/e-ksu/main_blocks.startpage'
+										? `${getBaseUrlShelly()}e-ksu/e_university.show_notification?p1=${maiRoleArray?.userId}&p2=${maiRoleArray?.sessionId}&p_h=${maiRoleArray?.sessionHash}&p_c_sess=1`
+										: `${getBaseUrlShelly()}e-ksu/main_blocks.startpage`
 								}`}
 							>
 								<ArrowLeftBackInOldAccount white={type === 'service'} />

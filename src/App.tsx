@@ -1,5 +1,6 @@
-import { ConfigProvider } from 'antd'
+import { Button, ConfigProvider, Result } from 'antd'
 import ru_RU from 'antd/locale/ru_RU'
+import { t } from 'i18next'
 import { useEffect, useState } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { useTranslation } from 'react-i18next'
@@ -33,6 +34,7 @@ const App = () => {
 	const [email, changeEmail] = useState('')
 	const [loadLanguage, setLoadLanguage] = useState(false)
 	const { i18n } = useTranslation()
+	const [isOnline, setIsOnline] = useState(navigator.onLine)
 	const router = createBrowserRouter([
 		{
 			path: '/',
@@ -99,6 +101,18 @@ const App = () => {
 		}
 	}, [i18n])
 
+	useEffect(() => {
+		const updateStatus = () => setIsOnline(navigator.onLine)
+		
+		window.addEventListener('online', updateStatus)
+		window.addEventListener('offline', updateStatus)
+		
+		return () => {
+		  window.removeEventListener('online', updateStatus)
+		  window.removeEventListener('offline', updateStatus)
+		}
+	  }, [])
+
 	if (loadLanguage) {
 		return (
 			<div className="screen">
@@ -122,7 +136,11 @@ const App = () => {
 				}}
 				locale={ru_RU}
 			>
-				<RouterProvider router={router} />
+				{!isOnline ? (
+					<Result status="warning" title={t('errorInternet')} subTitle={t('errorInternetText')} />
+				) : (
+					<RouterProvider router={router} />
+				)}
 			</ConfigProvider>
 			<Notification />
 		</>

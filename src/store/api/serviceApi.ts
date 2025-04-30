@@ -62,7 +62,8 @@ const emplBaseURL = host && port ? `http://${host}:${port}/` : `employment/`
 export const serviceApi = apiSlice.injectEndpoints({
 	endpoints: builder => ({
 		getSchedule: builder.query<TypeSchedule, void>({
-			query: () => `schedule-api/schedule`
+			query: () => `schedule-api/schedule`,
+			keepUnusedDataFor: 1,
 		}),
 		getPerformance: builder.query<IPerformance, void>({
 			query: () => 'academic-performance-api/performance'

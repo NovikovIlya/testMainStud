@@ -50,33 +50,12 @@ export const User = () => {
 	},[user?.roles])
 
 	useEffect(() => {
-	// Проверяем загружен ли скрипт метрики
-	// @ts-ignore
-	if (typeof window.ym !== 'function') {
-		const script = document.createElement('script');
-		script.src = 'https://mc.yandex.ru/metrika/tag.js';
-		script.async = true;
-		script.onload = () => initYandexMetrika();
-		document.body.appendChild(script);
-	} else {
-		sendPageView();
-	}
-
-	function initYandexMetrika() {
 		// @ts-ignore
-		window.ym(100713417, 'init', {
-		clickmap: true,
-		trackLinks: true,
-		accurateTrackBounce: true
-		});
-		sendPageView();
-	}
-
-	function sendPageView() {
+		if (typeof window.ym === 'function') {
 			// @ts-ignore
-		window.ym(100713417, 'hit', location.pathname + location.search);
-	}
-	}, [location]);
+		  window.ym(100713417, 'hit', location.pathname + location.search);
+		}
+	  }, [location]);
 
 
 

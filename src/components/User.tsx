@@ -53,6 +53,8 @@ export const User = () => {
 		// @ts-ignore
 		if (typeof window.ym === 'function') {
 			// @ts-ignore
+		  window.ym(100713417, "hit", location.pathname + location.search);
+		   // @ts-ignore
 		  window.ym(101507808, 'hit', location.pathname + location.search);
 		}
 	  }, [location]);

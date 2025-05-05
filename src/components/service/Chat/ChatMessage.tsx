@@ -3,7 +3,7 @@ import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { forwardRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import { ArrowToTheRight } from '../../../assets/svg/ArrowToTheRight'
 import { MessageReadSvg } from '../../../assets/svg/MessageReadSvg'
@@ -33,6 +33,8 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 
 	const currentUrl = useLocation()
 	const match = currentUrl.pathname.match(/\/id\/(\d+)$/)
+
+	const params = useParams()
 
 	let id_from_url: string
 	let page_id: number
@@ -89,7 +91,7 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 									dispatch(setCurrentVacancy(result))
 									isEmpDep
 										? navigate(`/services/personnelaccounting/chat/vacancyview/${currentVacancyId}`)
-										: navigate(`/services/myresponds/chat/vacancyview/${currentVacancyId}`)
+										: navigate(`/services/myresponds/chat/vacancyview/${currentVacancyId}/${params.chatId}`)
 								})
 						}}
 					>

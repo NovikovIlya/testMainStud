@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Route, Routes, useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import {
 	useGetSeekerRespondsQuery,
@@ -52,6 +52,8 @@ export const Chat = () => {
 	const [getChatPreviews, chatPreviewsQueryState] = useLazyGetSeekerChatPreviewsQuery()
 	const [getChat, getChatState] = useLazyGetChatIdByRespondIdQuery()
 
+	const params = useParams()
+
 	useEffect(() => {
 		const respondId = parseInt(pathname.substring(pathname.lastIndexOf('/') + 1))
 		respondId &&
@@ -75,7 +77,7 @@ export const Chat = () => {
 					dispatch(setChatId(res.id))
 					dispatch(setRespondId(res.respondInfo.id))
 					dispatch(setCurrentVacancyId(res.respondInfo.vacancyId))
-					navigate(`/services/myresponds/chat/id/${res.id}`)
+					//navigate(`/services/myresponds/chat/id/${res.id}`)
 				})
 	}, [])
 
@@ -165,7 +167,7 @@ export const Chat = () => {
 						</div>
 					</div>
 				)}
-				{pathname.match('services/myresponds/chat/id/*') && <ChatPage />}
+				{/* {pathname.match('services/myresponds/chat/id/*') && <ChatPage />}
 				{pathname === '/services/myresponds/chat' && (
 					<div className="w-full h-full flex flex-col">
 						<p className="text-centerfont-content-font text-[20px]/[20px] text-black font-normal opacity-60 my-auto mx-auto">
@@ -173,7 +175,23 @@ export const Chat = () => {
 						</p>
 					</div>
 				)}
-				{pathname.includes('/services/myresponds/chat/vacancyview') && <VacancyView type="CHAT" />}
+				{pathname.includes('/services/myresponds/chat/vacancyview') && <VacancyView type="CHAT" />} */}
+				<Routes>
+					<Route path="/myresponds/chat">
+						<Route path="/myresponds/chat/id/:chatId" element={<ChatPage />}></Route>
+						<Route
+							path="/myresponds/chat"
+							element={
+								<div className="w-full h-full flex flex-col">
+									<p className="text-centerfont-content-font text-[20px]/[20px] text-black font-normal opacity-60 my-auto mx-auto">
+										Выберите, кому бы вы хотели написать
+									</p>
+								</div>
+							}
+						></Route>
+						<Route path="/myresponds/chat/vacancyview/:vacancyId/:chatId" element={<VacancyView type="CHAT" />}></Route>
+					</Route>
+				</Routes>
 			</div>
 		</>
 	)

@@ -2,7 +2,7 @@ import { LoadingOutlined } from '@ant-design/icons'
 import { Spin } from 'antd'
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { useAppSelector } from '../../../store'
 import { useLazyGetInfoUserQuery } from '../../../store/api/formApi'
@@ -24,21 +24,12 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 
 	const dispatch = useDispatch()
 
+	const parameters = useParams()
+
+	console.log(parameters)
+
 	useEffect(() => {
-		// Получаем текущий URL
-		const currentUrl = window.location.pathname
-
-		// Ищем id из URL
-		const match = currentUrl.match(/\/vacancyview\/(\d+)$/)
-
-		let id_from_url: string | number
-
-		if (match) {
-			id_from_url = match[1]
-		} else {
-			console.error('ID not found')
-			return // Возвращаемся, если id нет
-		}
+		let id_from_url = parameters.vacancyId
 
 		// Если id найден, запускаем запрос
 		if (id_from_url) {

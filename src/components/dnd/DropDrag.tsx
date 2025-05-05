@@ -44,11 +44,11 @@ const studentKeys = [
 	'Vacancies',
 	'petitionForDocument',
 	'contractEducation',
-	'educationPrograms'
-	// 'jobSeeker',
-	// 'myResponds',
-	// 'DirectResume',
-	// 'personnelAccounting'
+	'educationPrograms',
+	'jobSeeker',
+	'myResponds',
+	'DirectResume',
+	'personnelAccounting'
 ]
 
 const employeeKeys = [
@@ -57,11 +57,11 @@ const employeeKeys = [
 	'Practices',
 	'practiceTeacher',
 	'Staff',
-	'forTeachers'
-	// 'jobSeeker',
-	// 'myResponds',
-	// 'DirectResume',
-	// 'personnelAccounting'
+	'forTeachers',
+	'jobSeeker',
+	'myResponds',
+	'DirectResume',
+	'personnelAccounting'
 	// 'shortLink'
 ]
 
@@ -897,7 +897,6 @@ const DropDrag = () => {
 					isDraggable={edit}
 					isResizable={false}
 					compactType="vertical"
-				
 					preventCollision={true}
 				>
 					{generateDOM}

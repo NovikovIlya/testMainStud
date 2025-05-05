@@ -25,6 +25,7 @@ import {
 } from '../../../store/api/aboutMe/forAboutMe'
 
 import './TableLanguage.scss'
+import { getBaseUrl } from '../../../utils/getBaseUrl'
 
 const TableLanguages = ({
 	triger,
@@ -77,7 +78,7 @@ const TableLanguages = ({
 						>
 							<a
 								target="_blank"
-								href={`https://newlk.kpfu.ru/activities/languages/foreign/certificate?certificateId=${item.certId}`}
+								href={`${getBaseUrl()}activities/languages/foreign/certificate?certificateId=${item.certId}`}
 							>
 								{item.certificateName}
 							</a>

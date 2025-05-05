@@ -11,6 +11,7 @@
 		"@hookform/resolvers": "^3.8.0",
 		"@material-tailwind/react": "^2.1.9",
 		"@reduxjs/toolkit": "^2.6.1",
+		"@sentry/browser": "^9.15.0",
 		"@trivago/prettier-plugin-sort-imports": "^4.3.0",
 		"@types/diff-match-patch": "^1.0.36",
 		"@types/react-input-mask": "^3.0.5",

@@ -46,6 +46,7 @@ export const AddEducationModal = (props: {
 						onFinish={values => {
 							let reader = new FileReader()
 							reader.onload = e => {
+								console.log(values)
 								console.log({ ...values, file: e.target?.result })
 								props.type === 'ADD'
 									? addEducation({
@@ -55,15 +56,19 @@ export const AddEducationModal = (props: {
 											edu_level: values.educationLevelId,
 											eduspeciality: values.specialization,
 											organization: values.nameOfInstitute,
-											edu_country: values.countryId,
+											edu_country: countries.find(country => country.id === values.countryId)?.shortName!,
 											development: values.subdivision,
 											qualification: values.qualification,
 											issue_date: values.issueDate,
 											docnum: values.number,
 											docseries: values.series,
-											portal_status: values.accept ? '1' : null
+											portal_status: values.accept ? '1' : null,
+											edu_file: [
+												{ filename: values.file.file.name, file_base64: String(e.target?.result).split(',')[1] }
+											]
 									  })
 											.then(() => {
+												props.form.resetFields()
 												props.onCancel()
 											})
 											.catch(() => {
@@ -76,7 +81,7 @@ export const AddEducationModal = (props: {
 											edu_level: values.educationLevelId,
 											eduspeciality: values.specialization,
 											organization: values.nameOfInstitute,
-											edu_country: values.countryId,
+											edu_country: countries.find(country => country.id === values.countryId)?.shortName!,
 											development: values.subdivision,
 											qualification: values.qualification,
 											issue_date: dayjs(values.issueDate).format('DD.MM.YYYY'),
@@ -86,9 +91,11 @@ export const AddEducationModal = (props: {
 											id: values.id,
 											s_id: values.s_id,
 											e_id: values.e_id,
-											user_allid: values.user_allid
+											user_allid: values.user_allid,
+											edu_file: [{ filename: values.file.file.name, file_base64: e.target?.result as string }]
 									  })
 											.then(() => {
+												props.form.resetFields()
 												props.onCancel()
 											})
 											.catch(() => {
@@ -105,15 +112,17 @@ export const AddEducationModal = (props: {
 										edu_level: values.educationLevelId,
 										eduspeciality: values.specialization,
 										organization: values.nameOfInstitute,
-										edu_country: values.countryId,
+										edu_country: countries.find(country => country.id === values.countryId)?.shortName!,
 										development: values.subdivision,
 										qualification: values.qualification,
 										issue_date: dayjs(values.issueDate).format('DD.MM.YYYY'),
 										docnum: values.number,
 										docseries: values.series,
-										portal_status: values.accept ? '1' : null
+										portal_status: values.accept ? '1' : null,
+										edu_file: [{ filename: null, file_base64: null }]
 								  })
 										.then(() => {
+											props.form.resetFields()
 											props.onCancel()
 										})
 										.catch(() => {
@@ -126,7 +135,7 @@ export const AddEducationModal = (props: {
 										edu_level: values.educationLevelId,
 										eduspeciality: values.specialization,
 										organization: values.nameOfInstitute,
-										edu_country: values.countryId,
+										edu_country: countries.find(country => country.id === values.countryId)?.shortName!,
 										development: values.subdivision,
 										qualification: values.qualification,
 										issue_date: dayjs(values.issueDate).format('DD.MM.YYYY'),
@@ -136,7 +145,8 @@ export const AddEducationModal = (props: {
 										id: values.id,
 										s_id: values.s_id,
 										e_id: values.e_id,
-										user_allid: values.user_allid
+										user_allid: values.user_allid,
+										edu_file: [{ filename: null, file_base64: null }]
 								  })
 										.then(() => {
 											props.onCancel()
@@ -165,13 +175,13 @@ export const AddEducationModal = (props: {
 							>
 								<Select
 									options={levels.edu_types.map(level => ({ value: level.id, label: level.name }))}
-									placeholder="Выбрать"
+									placeholder={t('select')}
 								></Select>
 							</Form.Item>
 							<Form.Item name={'countryId'} label={t('countryEducation')} className="w-full">
 								<Select
-									options={countries.map(country => ({ value: country.shortName, label: country.shortName }))}
-									placeholder="Выбрать"
+									options={countries.map(country => ({ value: country.id, label: country.shortName }))}
+									placeholder={t('select')}
 								></Select>
 							</Form.Item>
 						</div>

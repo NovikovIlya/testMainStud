@@ -1,4 +1,4 @@
-import { CheckedFlags, UserDto } from "../../../models/aboutMe";
+import { CheckedFlags, foreignLanguageAll, socActivity, UserDto } from "../../../models/aboutMe";
 import { apiSlice } from "../apiSlice";
 
 export const myPracticeService = apiSlice.injectEndpoints({
@@ -85,7 +85,7 @@ export const myPracticeService = apiSlice.injectEndpoints({
       //  Знание языков
       getNativeLanguages: builder.query<any, void>({
         query: () => ({
-          url: '/languages/native',
+          url: '/activities/languages/native',
           method: 'GET',
          
         }),
@@ -93,8 +93,8 @@ export const myPracticeService = apiSlice.injectEndpoints({
         keepUnusedDataFor: 1,
       }),
       getAllNativeLanguages: builder.query<any, void>({
-        query: () => ({
-          url: '/languages/all',
+        query: (isForeign) => ({
+          url: `/activities/languages/all?isForeign=false`,
           method: 'GET',
          
         }),
@@ -103,7 +103,7 @@ export const myPracticeService = apiSlice.injectEndpoints({
       }),
       setNative: builder.mutation<any, any>({
         query: (body) => ({
-            url: '/languages/native',
+            url: '/activities/languages/native',
             method: 'POST',
             body,
            
@@ -111,19 +111,48 @@ export const myPracticeService = apiSlice.injectEndpoints({
           invalidatesTags: ['nativeLanguages'],
       }),
 
-
-      getforeignLanguages: builder.query<any, void>({
+      // Иностранные языки
+      getforeignLanguages: builder.query<foreignLanguageAll, void>({
         query: () => ({
-          url: '/languages/foreign',
+          url: '/activities/languages/foreign',
           method: 'GET',
          
         }),
         providesTags: ['foreignLanguages'],
         keepUnusedDataFor: 1,
       }),
+      getAllForeignLanguages: builder.query<any, void>({
+        query: () => ({
+          url: `/activities/languages/all?isForeign=true`,
+          method: 'GET',
+         
+        }),
+        providesTags: ['foreignLanguages'],
+        keepUnusedDataFor: 1,
+      }),
+      getOneCertificate: builder.query<foreignLanguageAll, number | null>({
+        query: (id) => ({
+          url: `/activities/languages/foreign/certificate?certificateId=${id}`,
+          method: 'GET',
+          responseHandler: async (response) => {
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'journal.xlsx'; // Имя файла для скачивания
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+          },
+        }),
+       
+        providesTags: ['foreignLanguages'],
+        keepUnusedDataFor: 1,
+      }),
       getLevels: builder.query<any, void>({
         query: () => ({
-          url: '/languages/levels',
+          url: '/activities/languages/levels',
           method: 'GET',
          
         }),
@@ -132,7 +161,7 @@ export const myPracticeService = apiSlice.injectEndpoints({
       }),
       getCertificate: builder.query<any, void>({
         query: () => ({
-          url: '/languages/certificate-names',
+          url: '/activities/languages/certificate-names',
           method: 'GET',
          
         }),
@@ -141,18 +170,75 @@ export const myPracticeService = apiSlice.injectEndpoints({
       }),
       setForeign: builder.mutation<any, any>({
         query: (body) => ({
-            url: '/languages/foreign',
+            url: '/activities/languages/foreign',
             method: 'POST',
             body,
            
           }),
           invalidatesTags: ['foreignLanguages'],
       }),
+      editForeign: builder.mutation<any, any>({
+        query: (body) => ({
+            url: '/activities/languages/foreign',
+            method: 'PUT',
+            body,
+           
+          }),
+          invalidatesTags: ['foreignLanguages'],
+      }),
+      deleteForeign: builder.mutation<any, any>({
+        query: (id) => ({
+            url: `/activities/languages/foreign?langId=${id}`,
+            method: 'DELETE',
+            
+           
+          }),
+          invalidatesTags: ['foreignLanguages'],
+      }),
+      isPublished: builder.mutation<any, any>({
+        query: (id) => ({
+            url: `/activities/languages/foreign/is-published?langId=${id}`,
+            method: 'PATCH',
+        
+           
+          }),
+          invalidatesTags: ['foreignLanguages'],
+      }),
+
+
+      // ОБщественная деятельность
+      getSoc: builder.query<socActivity, void>({
+        query: () => ({
+          url: '/activities/social-activity',
+          method: 'GET',
+         
+        }),
+        providesTags: ['socialActivity'],
+        keepUnusedDataFor: 1,
+      }),
+      putSoc: builder.mutation<socActivity, any>({
+        query: (body) => ({
+            url: '/activities/social-activity',
+            method: 'PUT',
+            body,
+           
+          }),
+          invalidatesTags: ['socialActivity'],
+      }),
+      postSoc: builder.mutation<socActivity, any>({
+        query: (body) => ({
+            url: '/activities/social-activity',
+            method: 'POST',
+            body,
+           
+          }),
+          invalidatesTags: ['socialActivity'],
+      }),
 
 
 
-    })
-  });
+
+    })  });
 
 
   export const { 
@@ -169,5 +255,14 @@ export const myPracticeService = apiSlice.injectEndpoints({
     useSetCheckboxMutation,
     useGetLevelsQuery,
     useGetCertificateQuery,
-    useSetForeignMutation
+    useSetForeignMutation,
+    useGetOneCertificateQuery,
+    useEditForeignMutation,
+    useDeleteForeignMutation,
+    useLazyGetOneCertificateQuery,
+    useIsPublishedMutation,
+    useGetSocQuery,
+    usePutSocMutation,
+    usePostSocMutation,
+    useGetAllForeignLanguagesQuery
    } = myPracticeService;

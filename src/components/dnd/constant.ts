@@ -4,7 +4,7 @@
 // y - расположение элемента по вертикали
 // static - если false, можно перемещать элемент. Если true, то нельзя
 // moved - устанавливает события перетаскивания
-
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 export const block = {
 	lg: [
 		{
@@ -202,7 +202,7 @@ export const block = {
 		{
 			w: 1,
 			h: 1,
-			x: 1,
+			x: isMobile ? 0 : 1,
 			y: 5,
 			i: 'DocumentFlow',
 
@@ -235,7 +235,7 @@ export const block = {
 		{
 			w: 1,
 			h: 1,
-			x: 1,
+			x: isMobile  ? 0 : 1,
 			y: 5,
 			i: 'DigitalDepartments',
 

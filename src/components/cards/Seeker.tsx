@@ -34,7 +34,7 @@ export const Seeker = () => {
 				<img src={img} alt="" width={'231px'} height={'233px'} className="ml-6 mt-4 mb-2 bottom-[40px] z-10" />
 			</div>
 			<div
-				className="flex w-fit max-[560px]:w-full justify-center items-center mr-[10%]"
+				className="flex w-fit max-[560px]:w-full justify-center items-center mr-[5%]"
 				onClick={() => {
 					dispatch(keepFilterCategory('АУП'))
 					dispatch(keepFilterSubCategory('Все'))

@@ -7,8 +7,8 @@ export const NotFound = () => {
 	const { t } = useTranslation()
 	return (
 		<>
-			<BackMainPage />
-			<Result status="404" title={t('error 404')} subTitle={t('notFound')} />
+			<BackMainPage  />
+			<Result className='pt-[150px]' status="404" title={t('error 404')} subTitle={t('notFound')} />
 		</>
 	)
 }

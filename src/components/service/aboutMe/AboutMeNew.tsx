@@ -28,7 +28,8 @@ const AboutMeNew = () => {
 	const { data: dataCheckbox } = useGetCheckboxQuery()
 	const [setCheckbox, { isLoading: isLoadingCheckbox }] = useSetCheckboxMutation()
 	const [disabled, setDisabled] = useState(true)
-	const [percentProgress,setPercentProgress] = useState(0)
+	const [switchBoolean, setSwitchBoolean] = useState(false)
+	const [percentProgress,setPercentProgress] = useState(60)
 	const switchForm = Form.useWatch('switch', form2)
 	const [initialCheckboxes, setInitialCheckboxes] = useState({
 		codex: false,
@@ -50,6 +51,7 @@ const AboutMeNew = () => {
 			dataCheckbox?.IS_CHECKED_REL === 1 &&
 			dataCheckbox?.IS_CHECKED_HANDLING === 1 &&
 			dataCheckbox?.IS_CHECKED_PERS_DATA === 1
+			console.log('allChecked',allChecked)
 		setDisabled(!allChecked)
 	}, [dataAboutMe])
 
@@ -101,12 +103,12 @@ const AboutMeNew = () => {
 				<div className="flex items-center gap-2">
 					<Form form={form2} className="flex items-center">
 						<Form.Item name={'switch'} className="flex items-center mb-0">
-							<Switch disabled={disabled} defaultChecked />
+							<Switch disabled={disabled}  />
 						</Form.Item>
 					</Form>
-					<span>Сделать профиль публичным</span>
+					<span>{t('publicProf')}</span>
 					<Tooltip title={t('agreementTooltip')}>
-						<img src="/public/GroupVop.svg" />
+						<img src="/GroupVop.svg" />
 					</Tooltip>
 				</div>
 			</Row>
@@ -114,12 +116,12 @@ const AboutMeNew = () => {
 				<Row>
 					<Col span={12}>
 						<div className="flex flex-wrap justify-center p-[40px]">
-							<UploadAvatar dataAboutMe={dataAboutMe} />
+							<UploadAvatar  />
 							<div className="w-full mt-3 text-center">{`${dataAboutMe?.LASTNAME || ''} ${
 								dataAboutMe?.FIRSTNAME || ''
 							} ${dataAboutMe?.SECONDNAME || ''}`}</div>
 							<div className="mt-[32px] w-[80%]">
-								<div>Профиль заполнена на {percentProgress}%</div>
+								<div>{t('zapolnen')} {percentProgress}%</div>
 								<Progress
 									showInfo={false}
 									percent={percentProgress}
@@ -312,7 +314,7 @@ const AboutMeNew = () => {
 												{dataAboutMe.studentAddedDto.CATEGORY}
 											</Descriptions.Item>
 										) : (
-											''
+											null
 										)}
 
 										{/* Идентификатор */}

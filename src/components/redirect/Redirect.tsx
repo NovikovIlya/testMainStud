@@ -5,6 +5,7 @@ import { useRedirectMutation } from "../../store/api/authApiSlice";
 import { useDispatch } from "react-redux";
 import { setCredentials } from "../../store/reducers/authSlice";
 import { P2 } from '../../models/redirect';
+import { useLocalStorageState } from 'ahooks';
 
 
 
@@ -13,6 +14,12 @@ export const Redirect = () => {
     const [redirect] = useRedirectMutation()
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const [info, setInfo] = useLocalStorageState<any>('info', {
+            defaultValue: ''
+     })
+    const [href, setHref] = useLocalStorageState<any>('href', {
+        defaultValue: ''
+    })
 
     async function redirectSuccess(p2: P2) {
         try {
@@ -21,16 +28,30 @@ export const Redirect = () => {
             dispatch(setCredentials({ ...userData }))
             //так как s_id и h_id доступны из старого лк, то заново в куки их добавлять не нужно
 
-            document.cookie = `refresh=${
-                userData.refreshToken
-            }; max-age=31536000; domain=${
-                document.domain !== 'localhost' ? 'kpfu.ru' : 'localhost'
-            }; path=/; samesite=strict`
-            document.cookie = `a_id=${
-                userData.user.allId
-            }; max-age=31536000; domain=${
-                document.domain !== 'localhost' ? 'kpfu.ru' : 'localhost'
-            }; path=/; samesite=strict`
+            // document.cookie = `refresh=${
+            //     userData.refreshToken
+            // }; max-age=31536000; domain=${
+            //     document.domain !== 'localhost' ? 'kpfu.ru' : 'localhost'
+            // }; path=/; samesite=strict`
+            // document.cookie = `a_id=${
+            //     userData.user.allId
+            // }; max-age=31536000; domain=${
+            //     document.domain !== 'localhost' ? 'kpfu.ru' : 'localhost'
+            // }; path=/; samesite=strict`
+            document.cookie = `refresh=${userData.refreshToken}; max-age=31536000; domain=${
+				document.domain !== 'localhost' ? 'kpfu.ru' : 'localhost'
+			}; path=/; samesite=strict`
+			document.cookie = `s_id=${userData.user.sessionId}; max-age=31536000; domain=${
+				document.domain !== 'localhost' ? 'kpfu.ru' : 'localhost'
+			}; path=/; samesite=strict`
+			document.cookie = `h_id=${userData.user.sessionHash}; max-age=31536000; domain=${
+				document.domain !== 'localhost' ? 'kpfu.ru' : 'localhost'
+			}; path=/; samesite=strict`
+			document.cookie = `a_id=${userData.user.allId}; max-age=31536000; domain=${
+				document.domain !== 'localhost' ? 'kpfu.ru' : 'localhost'
+			}; path=/; samesite=strict`
+            setInfo(userData)
+            setHref(userData?.user?.filialType)
             localStorage.setItem('user', JSON.stringify(userData.user))
             localStorage.setItem('access', JSON.stringify(userData.accessToken))
             localStorage.setItem('refresh', JSON.stringify(userData.refreshToken))

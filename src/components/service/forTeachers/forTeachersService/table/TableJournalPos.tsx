@@ -102,8 +102,8 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
     { value: null, label: "" },
     { value: "б", label: t('b') },
     { value: "н", label: t('n')},
-    { value: 'о', label: t('o')  },
-    { value: 'у', label:  t('y') }
+    // { value: 'о', label: t('o')  },
+    // { value: 'у', label:  t('y') }
   ]
   const optionsMap = new Map(options.map(opt => [opt.value, opt.label]));
 
@@ -128,8 +128,8 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
               { value: null, label: "" },
               { value: "б", label: t('b') },
               { value: "н", label: t('n')},
-              { value: 'о', label: t('o')  },
-              { value: 'у', label:  t('y') }
+              // { value: 'о', label: t('o')  },
+              // { value: 'у', label:  t('y') }
             ]}
           />
         </Form.Item>

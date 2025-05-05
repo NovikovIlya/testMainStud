@@ -48,11 +48,12 @@ export const Service = () => {
 						<Navigate to={'/user'}/>
 				} */}
 				{pathname.includes('/services/practices') && <NavPractices />}
-				{pathname.includes('/services/jobseeker') && <NavJobSeeker />}
+				{/* {pathname.includes('/services/jobseeker') && <NavJobSeeker />}
 				{pathname.includes('/services/myresponds') && <NavMyResponds />}
 				{pathname.includes('/services/personnelaccounting') && <NavPesonnelAccounting />}
-				{pathname.includes('/services/mypractices') && <NavMyPractices />}
+				 */}
 				{pathname.includes('/services/practiceteacher') && <NavPracticeTeacher />}
+				{pathname.includes('/services/mypractices') && <NavMyPractices />}
 
 				{/*{pathname.includes('/services/businessTrip') && <NavBusinessTrip />}*/}
 				{pathname.includes('/services/unifiedServiceCenter') && <NavUnifiedServiceCenter />}

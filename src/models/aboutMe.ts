@@ -45,9 +45,13 @@ export interface CheckedFlags {
 }
 
 export interface CertificateTs {
+  certificateTypeId:any
+  langId:any
 	id: string
 	certificateName: string
 	certificateLink: string
+  certificateTypeName:any
+  certId:any
 }
 
 // Language data interface
@@ -60,33 +64,82 @@ export interface LanguageData {
 	languageLevelCode: string
 	certificates: CertificateTs[]
 	isPublished: boolean
+  langId:any
 }
 
 // Props interface for TableLanguages component
 export interface TableLanguagesProps {
+  triger:any
+  handleIdCert?:any
 	isSuccess: boolean
 	dataCertificate: {
-		id: string
+		id: string | number
 		certificateName: string
-	}[]
+	}[] | undefined;
 	dataLevels: {
 		languageLevelCode: string
 		languageLevel: string
-	}[]
+	}[] | undefined;
 	dataAll: {
 		code: string
 		language: string
-	}[]
-	dataForeign: LanguageData[]
+	}[] | undefined;
+	dataForeign:any;
 	setSelectId: (id: string) => void
-	selectId: string | null
+	selectId: string | number | null | undefined;
 }
 
-export // Form values interface
-interface FormValues {
+export interface FormValues {
   languageCode: string
   languageLevelCode: string
   certificateId: string | null
   isPublished: boolean
   file: any[]
+}
+
+
+export interface Language {
+  code: string
+  language: string
+}
+
+export interface NativeLanguagesApiResponse {
+  languages: Language[]
+}
+
+export interface LanguageLevel {
+  languageLevelCode: string
+  languageLevel: string
+}
+
+export interface Certificate {
+  id: string | number
+  certificateName: string
+}
+
+export interface ForeignLanguage {
+  languageCode: string
+  languageLevelCode: string
+  certificateId: Certificate['id']
+  isPublished?: boolean
+  file?: File[]
+}
+
+export interface foreignLanguageAll {
+  langId: number;
+  code: number;
+  language: string;
+  languageLevelCode: number;
+  languageLevel: string;
+  isPublished: boolean;
+  certificates: Certificate[];
+}
+
+export interface socActivity {
+
+    socialWork: string
+    creativeEvents: string
+    sportEvents: string
+    sectionsAndClubs: string
+
 }

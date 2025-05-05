@@ -44,11 +44,11 @@ const studentKeys = [
 	'Vacancies',
 	'petitionForDocument',
 	'contractEducation',
-	'educationPrograms',
-	'jobSeeker',
-	'myResponds',
-	'DirectResume',
-	'personnelAccounting'
+	'educationPrograms'
+	// 'jobSeeker',
+	// 'myResponds',
+	// 'DirectResume',
+	// 'personnelAccounting'
 ]
 
 const employeeKeys = [
@@ -57,11 +57,11 @@ const employeeKeys = [
 	'Practices',
 	'practiceTeacher',
 	'Staff',
-	'forTeachers',
-	'jobSeeker',
-	'myResponds',
-	'DirectResume',
-	'personnelAccounting'
+	'forTeachers'
+	// 'jobSeeker',
+	// 'myResponds',
+	// 'DirectResume',
+	// 'personnelAccounting'
 	// 'shortLink'
 ]
 
@@ -759,6 +759,7 @@ const DropDrag = () => {
 	const onLayoutChange = (layout: any, layouts: any) => {
 		dispatch(changeLayout(layouts))
 	}
+	const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 
 	const layoutValid = layout.lg.filter(obj1 =>
 		jsxElements.filter(item => {
@@ -884,7 +885,7 @@ const DropDrag = () => {
 				{mainRole === 'STUD' ? <InfoEmployment /> : ''}
 				<ResponsiveReactGridLayout
 					className="layout mb-10"
-					cols={{ lg: 3, md: 2, sm: 2, xs: 2, xxs: 1 }}
+					cols={{ lg: isMobile ? 2 : 3, md: 2, sm: 2, xs: 2, xxs: 1 }}
 					rowHeight={windowSize.innerWidth < 768 ? 210 : 320}
 					containerPadding={[0, 0]}
 					margin={[20, 20]}
@@ -896,7 +897,7 @@ const DropDrag = () => {
 					isDraggable={edit}
 					isResizable={false}
 					compactType="vertical"
-					verticalCompact={true}
+				
 					preventCollision={true}
 				>
 					{generateDOM}

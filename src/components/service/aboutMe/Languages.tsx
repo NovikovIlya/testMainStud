@@ -1,20 +1,26 @@
-import { QuestionCircleOutlined, UploadOutlined } from '@ant-design/icons'
-import { Button, Checkbox, Col, Divider, Form, Modal, Result, Row, Spin, Tooltip, Upload, message } from 'antd'
-import { Descriptions } from 'antd'
-import type { DescriptionsProps } from 'antd'
-import { Select, Space } from 'antd'
-import type { SelectProps } from 'antd'
-import TextArea from 'antd/es/input/TextArea'
+import { UploadOutlined } from '@ant-design/icons'
+import { Button, Checkbox, Col, Form, Modal, Result, Row, Spin, Upload, message } from 'antd'
+import { Select } from 'antd'
 import Title from 'antd/es/typography/Title'
 import { t } from 'i18next'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import {
+	Certificate,
+	ForeignLanguage,
+	Language,
+	LanguageLevel
+} from '../../../models/aboutMe'
+import {
+	useGetAllForeignLanguagesQuery,
 	useGetAllNativeLanguagesQuery,
 	useGetCertificateQuery,
 	useGetLevelsQuery,
 	useGetNativeLanguagesQuery,
+	useGetOneCertificateQuery,
 	useGetforeignLanguagesQuery,
+
+	useLazyGetOneCertificateQuery,
 	useSetForeignMutation,
 	useSetNativeMutation
 } from '../../../store/api/aboutMe/forAboutMe'
@@ -22,72 +28,95 @@ import {
 import './Languages.css'
 import { SkeletonPage } from './Skeleton'
 import TableLanguages from './TableLanguages'
-import UploadAvatar from './UploadAvatar'
 
 const Languages = () => {
 	const [form] = Form.useForm()
 	const [form2] = Form.useForm()
 	const [isModalOpen, setIsModalOpen] = useState(false)
-	const [selectId, setSelectId] = useState<any>(null)
-	const [fileList, setFileList] = useState<any>([])
+	const [selectId, setSelectId] = useState<string | number | null>(null)
+	const [fileList, setFileList] = useState<File[]>([])
 	const { data: dataNative, isLoading: isFetchingNative, refetch, isError } = useGetNativeLanguagesQuery()
 	const { data: dataLevels } = useGetLevelsQuery()
 	const { data: dataCertificate } = useGetCertificateQuery()
 	const { data: dataAll } = useGetAllNativeLanguagesQuery()
-	const { data: dataForeign, isLoading: isFetchingForeign, isError: isErrorForeign,isSuccess } = useGetforeignLanguagesQuery()
+	const {data:dataAllForeignLang} = useGetAllForeignLanguagesQuery()
+	const {data: dataForeign,isLoading: isFetchingForeign,isError: isErrorForeign,isSuccess} = useGetforeignLanguagesQuery()
 	const [setNative, { isLoading }] = useSetNativeMutation()
 	const [setForeign, { isLoading: isLoadingSetForeign }] = useSetForeignMutation()
-	const [selectedLabel, setSelectedLabel] = useState(null)
+	const [idCert, setIdCert] = useState<null | number>(null)
+	const { data: dataOneCertificate } = useGetOneCertificateQuery(idCert, { skip: !idCert })
+	const [selectedLabel, setSelectedLabel] = useState<string | null>(null)
+	const [triger,{}] = useLazyGetOneCertificateQuery()
 	const nativeLanguageForm = Form.useWatch('languages', form)
 	const sertificateFormVal = Form.useWatch('certificateId', form2)
 
+	console.log('dataAll',dataAll)
 	useEffect(() => {
-		console.log('dataNative updated:', dataNative)
 		if (dataNative) {
 			const initialValues = {
-				languages: dataNative.languages?.map((lang: any) => lang.code) || []
+				languages: dataNative.languages?.map((lang: Language) => lang.code) || []
 			}
 			form.setFieldsValue(initialValues)
 		}
 	}, [dataNative])
 
-	// Добавление Родной язык
+	// Добавление Родного языка
 	const onFinish = () => {
 		setNative({ languageCodes: nativeLanguageForm }).unwrap()
 	}
 
-	// Добавление Иностранный язык
-	const onFinishForm2 = (values: any) => {
-		const formData = new FormData()
-
-		if (fileList.length > 0 && selectedLabel) {
-			const originalFile = values.file[0].originFileObj
-			const fileExtension = originalFile.name.split('.').pop() // Получаем расширение файла
-			const newFileName = `${selectedLabel}.${fileExtension}`
-
-			const modifiedFile = new File([originalFile], newFileName, {
-				type: originalFile.type,
-				lastModified: originalFile.lastModified
-			})
-
-			formData.append('certificate', modifiedFile)
+	// Добавление Иностранного языка!!
+	const onFinishForm2 = async (values: Omit<ForeignLanguage, 'file'> & { file?: any[] }) => {
+		// Подготовка базовой структуры данных
+		const requestData: any = {
+			languageCode: values.languageCode,
+			languageLevelCode: values.languageLevelCode,
+			isPublished: values.isPublished || false,
+			certificates: []
+		}
+		// Обработка файла сертификата, если он есть
+		if (fileList.length > 0 && selectedLabel && values.certificateId) {
+			const originalFile = values.file?.[0]?.originFileObj as File
+			if (originalFile) {
+				// Конвертация файла в base64
+				const base64File = await new Promise<string>(resolve => {
+					const reader = new FileReader()
+					reader.onload = () => {
+						// Получаем base64 строку, удаляя префикс data:application/pdf;base64,
+						const base64String = reader.result as string
+						const base64Content = base64String.split(',')[1]
+						resolve(base64Content)
+					}
+					reader.readAsDataURL(originalFile)
+				})
+				
+				// Добавление информации о сертификате
+				requestData.certificates = [
+					{
+						// certId: values.certificateId,
+						// certificateName: selectedLabel,
+						certificateName: originalFile.name,
+						certificateTypeId: values.certificateId, // Используем тот же ID, если нет отдельного поля
+						base64File: base64File
+					}
+				]
+			}
 		}
 
-		delete values.file
-
-		const jsonData = JSON.stringify(values)
-		const blob = new Blob([jsonData], { type: 'application/json' })
-		const reader = new FileReader()
-		reader.onload = function () {
-			console.log('Содержимое Blob:', reader.result)
+		// Отправка данных на сервер
+		try {
+			setIsModalOpen(false)
+			await setForeign(requestData).unwrap()
+			
+			form2.resetFields()
+			setFileList([])
+			setSelectedLabel(null)
+		} catch (error) {
+			console.error('Ошибка при сохранении данных:', error)
+			message.error('Не удалось сохранить данные о языке (такой язык уже добавлен)')
+		}finally{
+			setIsModalOpen(false)
 		}
-		reader.readAsText(blob)
-
-		formData.append('language ', blob)
-
-		setForeign(formData).unwrap()
-		setIsModalOpen(false)
-		form2.resetFields()
 	}
 
 	const handleSubmit = (values: { content: string }) => {}
@@ -120,6 +149,11 @@ const Languages = () => {
 		setFileList([file])
 		return false
 	}
+
+	const handleIdCert = (id: number) => {
+		setIdCert(id)
+	}
+
 	if (isError || isErrorForeign) {
 		return (
 			<div className="mt-[75px] ml-[20px]">
@@ -127,7 +161,7 @@ const Languages = () => {
 					status="error"
 					title=""
 					subTitle={t('errorFetch')}
-					
+
 				></Result>
 			</div>
 		)
@@ -146,7 +180,7 @@ const Languages = () => {
 				<Form form={form} onFinish={onFinish} className=" ">
 					<Spin spinning={isLoading} className="flex gap-2">
 						<Row className="mb-5">
-							<Title className='!text-[28px]'>{t('langZnan')}</Title>
+							<Title className="!text-[28px]">{t('langZnan')}</Title>
 						</Row>
 						<Row className="mb-0 mt-3 w-full">
 							<Col span={24}>
@@ -158,7 +192,7 @@ const Languages = () => {
 										className="mb-0 w-full !h-auto"
 										rules={[
 											{
-												validator: (_, value) =>
+												validator: (_: any, value: string[]) =>
 													value?.length > 10 ? Promise.reject(new Error(t('maxLanguagesError'))) : Promise.resolve()
 											}
 										]}
@@ -167,10 +201,14 @@ const Languages = () => {
 											mode="multiple"
 											allowClear
 											className=" !h-auto w-full"
-											options={dataAll?.map((item: any) => ({
+											options={dataAll?.map((item: Language) => ({
 												value: item.code,
 												label: item.language
 											}))}
+											filterOption={(input, option) => 
+												(option?.label ?? '').toString().toLowerCase().includes(input.toLowerCase())
+											  }
+											
 											onChange={values => {
 												if (values.length > 10) {
 													message.error(t('maxLanguagesError'))
@@ -201,21 +239,31 @@ const Languages = () => {
 						</Title>
 					</Row>
 					<Row>
-						<TableLanguages isSuccess={isSuccess} dataCertificate={dataCertificate} dataLevels={dataLevels} dataAll={dataAll} selectId={selectId} setSelectId={setSelectId} dataForeign={dataForeign} />
+						<TableLanguages
+						    triger={triger}
+							handleIdCert={handleIdCert}
+							isSuccess={isSuccess}
+							dataCertificate={dataCertificate}
+							dataLevels={dataLevels}
+							dataAll={dataAllForeignLang}
+							selectId={selectId}
+							setSelectId={setSelectId}
+							dataForeign={dataForeign}
+						/>
 					</Row>
 					<Row className="flex items-center justify-start mt-4 gap-2">
 						<div
 							onClick={showModal}
 							className="gap-2 flex items-center cursor-pointer  hover:bg-gray-200 p-2 rounded-xl"
 						>
-							<Button size='small' className="rounded-[50%] !w-[28px] !h-[28px] text-[24px] " type="primary">
+							<Button size="small" className="rounded-[50%] !w-[28px] !h-[28px] text-[24px] " type="primary">
 								+
 							</Button>
 							<span>{t('add')}</span>
 						</div>
 					</Row>
 				</Spin>
-
+				{isLoadingSetForeign ? '' :
 				<Modal
 					className="!z-[10000000]"
 					footer={null}
@@ -235,8 +283,13 @@ const Languages = () => {
 							rules={[{ required: true, message: '' }]}
 						>
 							<Select
+							   showSearch 
+								placeholder={t('selectLanguage')}
 								allowClear
-								options={dataAll?.map((item: any) => ({
+								filterOption={(input, option) => 
+									(option?.label ?? '').toString().toLowerCase().includes(input.toLowerCase())
+								}
+								options={dataAllForeignLang?.map((item: Language) => ({
 									value: item.code,
 									label: item.language
 								}))}
@@ -250,11 +303,12 @@ const Languages = () => {
 							wrapperCol={{ span: 24 }}
 							layout="vertical"
 							className="mt-14 h-[35px]"
-							rules={[{ required: true, message: '' }]}
+							// rules={[{ required: true, message: '' }]}
 						>
 							<Select
+							    placeholder={t('selectLevel')}
 								aria-required
-								options={dataLevels?.map((item: any) => ({
+								options={dataLevels?.map((item: LanguageLevel) => ({
 									value: item.languageLevelCode,
 									label: item.languageLevel
 								}))}
@@ -269,25 +323,28 @@ const Languages = () => {
 							wrapperCol={{ span: 24 }}
 							layout="vertical"
 							className="mt-14 h-[35px]"
-							rules={[{ required: true, message: '' }]}
+							// rules={[{ required: true, message: '' }]}
 						>
 							<Select
-								onSelect={(value: any) => {
-									const selectedOption = dataCertificate.find((item: any) => item.id === value)
+								placeholder={t('selectSert')}
+								onSelect={(value: Certificate['id']) => {
+									const selectedOption = dataCertificate?.find((item: Certificate) => item.id === value)
 									if (selectedOption) {
 										setSelectedLabel(selectedOption.certificateName)
 									}
 								}}
 								allowClear
-								options={dataCertificate?.map((item: any) => ({
+								options={dataCertificate?.map((item: Certificate) => ({
 									value: item.id,
 									label: item.certificateName
 								}))}
 							/>
 						</Form.Item>
 
-						<div className="mt-14 mb-2">{t('prikrep')}</div>
-						<Form.Item name="file" getValueFromEvent={e => e?.fileList}>
+						<div className="mt-14 mb-2">{t('prikrep')} </div>
+						<Form.Item 
+						// rules={[{ required: true, message: '' }]}
+						 name="file" getValueFromEvent={e => e?.fileList}>
 							<Upload maxCount={1} beforeUpload={beforeUpload} accept=".pdf">
 								<Button className=" " icon={<UploadOutlined />}>
 									{t('add')}
@@ -303,7 +360,8 @@ const Languages = () => {
 							{t('add')}
 						</Button>
 					</Form>
-				</Modal>
+				</Modal>}
+			
 			</div>
 		</div>
 	)

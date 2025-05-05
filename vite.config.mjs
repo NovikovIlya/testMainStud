@@ -9,7 +9,12 @@ export default defineConfig({
 	build: {
 		outDir: 'build',
 		rollupOptions: {
-			external: ['axios']
+			external: ['axios'],
+			output: {
+				entryFileNames: `assets/[name].js`,
+				chunkFileNames: `assets/[name].js`,
+				assetFileNames: `assets/[name].[ext]`
+			  }
 		}
 	},
 	resolve: {

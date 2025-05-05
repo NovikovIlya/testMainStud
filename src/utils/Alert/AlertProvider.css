@@ -1,4 +1,4 @@
-
+/* 
 @keyframes fadeInUp {
     0% {
         opacity: 0;
@@ -18,7 +18,7 @@
     width: 100%;
     height: 87% !important;
     display: flex;
-    align-items: end; /*поток сообщений*/
+    align-items: end; 
 }
 .alert-message {
     min-width: 400px;
@@ -30,15 +30,15 @@
     font-size: 16px;
     color: black;
     background-color: #ffffff;
-    box-shadow: none; /*стили алерта*/
+    box-shadow: none; 
     transition: transform 0.2s ease-in-out;
 }
 .alert-message:hover {
     transform: scale(1.05);
 }
 
-/* Позиционируем сообщения */
-.ant-message-notice-content { /*обертка для алерта*/
+
+.ant-message-notice-content { 
     position: absolute;
     right: 50px;
     z-index: 10000000;
@@ -48,11 +48,11 @@
 }
 
 
-.ant-message-notice { /*обертка для алерта*/
-    margin-bottom: 0px; /* Отступ между сообщениями */
+.ant-message-notice { 
+    margin-bottom: 0px; 
     display: flex;
 }
-.ant-message-notice-wrapper { /*обертка для алерта*/
+.ant-message-notice-wrapper { 
     padding: 8px !important;
     height: 0px;
     display: flex;
@@ -97,4 +97,4 @@
 }
 .krestik-wrapper:hover {
     transform: scale(1.5);
-}
+} */

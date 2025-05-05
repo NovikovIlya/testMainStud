@@ -1,5 +1,5 @@
 import { DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons'
-import { Button, Form, Input, Spin } from 'antd'
+import { Button, Form, Input, Select, Spin } from 'antd'
 import { useTranslation } from 'react-i18next'
 
 
@@ -20,6 +20,18 @@ const ContactDataBlock = ({isLoadingPost, sortedEmails, sendVer, handleDeleteEma
 								className="flex items-center justify-between p-3 bg-gray-50 rounded-lg group hover:bg-gray-100 transition-colors"
 							>
 								<span className="text-gray-700">{email.email}</span>
+								{/* <Select
+									defaultValue="lucy"
+									className='w-[30%]'
+									
+									options={[
+									{ value: 'jack', label: 'Личный' },
+									{ value: 'lucy', label: 'Рабочий' },
+									{ value: 'Yiminghe', label: 'Дополнительный' },
+									{ value: 'disabled', label: 'Контактный'},
+									{ value: 'disabled', label: 'SMS'},
+									]}
+								/> */}
 								<div className="flex gap-3">
 									<span className="text-gray-400">
 										{email.verified ? (
@@ -59,7 +71,26 @@ const ContactDataBlock = ({isLoadingPost, sortedEmails, sendVer, handleDeleteEma
 								className="flex-1 rounded-lg border-gray-300 shadow-sm px-4 py-2 bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
 							/>
 						</Form.Item>
-
+						{/* <Form.Item
+							name={'inputType'}
+							className=""
+							rules={[
+								{ type: 'email', message: 'Введите тип!' }
+							]}
+						>
+						<Select
+									defaultValue="lucy"
+									className='!w-[150px] h-[40px]'
+									
+									options={[
+									{ value: 'jack', label: 'Личный' },
+									{ value: 'lucy', label: 'Рабочий' },
+									{ value: 'Yiminghe', label: 'Дополнительный' },
+									{ value: 'disabled', label: 'Контактный'},
+									{ value: 'disabled', label: 'SMS'},
+									]}
+								/>
+								</Form.Item> */}
 						<Button
 							// onClick={handleAddEmail}
 							htmlType="submit"

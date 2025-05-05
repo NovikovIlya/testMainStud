@@ -1,7 +1,9 @@
 import { DeleteTwoTone, EditTwoTone, EyeTwoTone } from '@ant-design/icons'
-import { ConfigProvider, Form, Space, Table, TableProps } from 'antd'
+import { ConfigProvider, Form, Popconfirm, Space, Table, TableProps } from 'antd'
+import en_US from 'antd/locale/en_US'
+import ru_RU from 'antd/locale/ru_RU'
 import dayjs from 'dayjs'
-import { t } from 'i18next'
+import i18next, { t } from 'i18next'
 import { useState } from 'react'
 
 import { EngFlagSvg } from '../../../assets/svg/EngFlagSvg'
@@ -75,13 +77,13 @@ export const EducationsTable = () => {
 								language: record.language_portal ? record.language_portal : 1,
 								nameOfInstitute: record.organization,
 								educationLevelId: record.edu_level,
-								beginningYear: dayjs(record.start_date),
-								graduateYear: dayjs(record.end_date),
+								beginningYear: dayjs(record.start_date, 'DD.MM.YYYY'),
+								graduateYear: dayjs(record.end_date, 'DD.MM.YYYY'),
 								countryId: record.edu_country,
 								specialization: record.eduspeciality,
 								subdivision: record.development,
 								qualification: record.qualification,
-								issueDate: record.issue_date ? dayjs(record.issue_date) : null,
+								issueDate: record.issue_date ? dayjs(record.issue_date, 'DD.MM.YYYY') : null,
 								number: record.docnum,
 								series: record.docseries,
 								accept: record.portal_status ? true : false
@@ -89,11 +91,17 @@ export const EducationsTable = () => {
 							setIsModalOpen(true)
 						}}
 					/>
-					<DeleteTwoTone
-						onClick={() => {
-							deleteEducation(record)
-						}}
-					/>
+					<ConfigProvider locale={i18next.language === 'ru' ? ru_RU : en_US}>
+						<Popconfirm
+							title={t('deleteEducationTitle')}
+							description={t('deleteEducationDescription')}
+							onConfirm={() => {
+								deleteEducation(record)
+							}}
+						>
+							<DeleteTwoTone />
+						</Popconfirm>
+					</ConfigProvider>
 				</Space>
 			)
 		}

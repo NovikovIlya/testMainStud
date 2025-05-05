@@ -3,7 +3,6 @@
 	<head>
 		<meta class="meta-theme" name="theme-color" content="#FAFAFA" data-other="#18181B" />
 		<meta class="meta-theme" name="color-scheme" content="light" data-other="dark" />
-
 		<meta charset="utf-8" />
 		<!-- <meta name="viewport" content="width=device-width, initial-scale=1" /> -->
 		<meta name="viewport" content="width=1366" />
@@ -11,7 +10,44 @@
 		<link rel="icon" href="/logo.svg" />
 		<link rel="stylesheet" href="./src/assets/font-awesome.min.css" />
 		<title>Kazan Federal University</title>
+		<!-- Yandex.Metrika counter -->
+		<script type="text/javascript">
+			;(function (m, e, t, r, i, k, a) {
+				m[i] =
+					m[i] ||
+					function () {
+						;(m[i].a = m[i].a || []).push(arguments)
+					}
+				m[i].l = 1 * new Date()
+				for (var j = 0; j < document.scripts.length; j++) {
+					if (document.scripts[j].src === r) {
+						return
+					}
+				}
+				;(k = e.createElement(t)),
+					(a = e.getElementsByTagName(t)[0]),
+					(k.async = 1),
+					(k.src = r),
+					a.parentNode.insertBefore(k, a)
+			})(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js', 'ym')
 
+			ym(101507808, 'init', {
+				defer: true,
+				clickmap: true,
+				trackLinks: true,
+				accurateTrackBounce: true,
+				trackHash: true ,
+				webvisor: false 
+			})
+			ym(100713417, "init", { 
+				defer: true,
+				clickmap: true,
+				trackLinks: true,
+				accurateTrackBounce: true,
+				trackHash: true ,
+				webvisor: false 
+			});
+		</script>
 		<!-- <link href="/dist/output.css" rel="stylesheet" /> -->
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -20,6 +56,10 @@
 
 	<body>
 		<noscript>You need to enable JavaScript to run this app.</noscript>
+		<noscript>
+			<div><img src="https://mc.yandex.ru/watch/101507808" style="position: absolute; left: -9999px" alt="" /></div>
+			<div><img src="https://mc.yandex.ru/watch/100713417" style="position:absolute; left:-9999px;" alt="" /></div>
+		</noscript>
 		<div id="root"></div>
 		<script>
 			const global = globalThis

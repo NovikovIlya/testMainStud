@@ -8,8 +8,14 @@ import { LinkOutlined } from '@ant-design/icons'
 export const TemplateCard = ({isLink,className,href,img,info,title,height = 112,width = 112,buttonText = 'Watch',mt = 'mt-3',positionImage,isRounded,buttonType = 'default'}: SessionProps) => {
 	const { t } = useTranslation()
 
+	const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+
 	return (
-		<div className="transform transition hover:scale-[101%]  duration-300 hover:shadow-lg  shadow-md flex w-full bg-white rounded-3xl h-[320px] flex-col px-7 py-8 justify-between h-full max-[874px]:p-0 max-[874px]:py-3 max-[874px]:items-center ">
+		<div onClick={()=>{
+			if(isMobile){
+				window.open(href)
+			}
+		}} className="transform transition hover:scale-[101%]  duration-300 hover:shadow-lg  shadow-md flex w-full bg-white rounded-3xl h-[320px] flex-col px-7 py-8 justify-between h-full max-[874px]:p-0 max-[874px]:py-3 max-[874px]:items-center ">
 			<div className="flex max-[874px]:flex-col max-[874px]:h-full max-[874px]:w-full max-[874px]:items-center">
 				<div className="text-left">
 						<div className="leading-7 text-xl font-bold whitespace-nowrap">
@@ -35,13 +41,13 @@ export const TemplateCard = ({isLink,className,href,img,info,title,height = 112,
 				)}
 			</div>
 
-			<Button
+			{isMobile ? '' : <Button
 				type={buttonType}
 				href={href}
 				className="rounded-full w-[200px] h-[50px] max-[874px]:absolute  max-[874px]:bottom-5 flex items-center justify-center no-underline"
 			>
 			{isLink ? <LinkOutlined className='' /> :''}	{t(buttonText)}
-			</Button>
+			</Button>}
 		</div>
 	)
 }

@@ -112,19 +112,19 @@ export const NavAboutMe = () => {
 				icon: <SocialSvg />,
 				label: (
 					<div className="ml-[10px] min-w-0">
-						<p className="whitespace-normal break-words text-wrap text-sm leading-4">Общественная деятельность</p>
+						<p className="whitespace-normal break-words text-wrap text-sm leading-4">{t('socialTitle')}</p>
 					</div>
 				)
 			},
-			{
-				key: '/services/aboutMe/scientific',
-				icon: <ScientificSvg />,
-				label: (
-					<div className="ml-[10px] min-w-0">
-						<p className="whitespace-normal break-words text-wrap text-sm leading-4">Научная деятельность</p>
-					</div>
-				)
-			}
+			// {
+			// 	key: '/services/aboutMe/scientific',
+			// 	icon: <ScientificSvg />,
+			// 	label: (
+			// 		<div className="ml-[10px] min-w-0">
+			// 			<p className="whitespace-normal break-words text-wrap text-sm leading-4">Научная деятельность</p>
+			// 		</div>
+			// 	)
+			// }
 		]
 	} else {
 		navItems = [

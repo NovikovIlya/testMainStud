@@ -130,8 +130,8 @@ const DropDrag = () => {
 			key: 'myResponds',
 			element: (
 				<TemplateCard
-					title="Мои отклики"
-					info="В разделе отображается ваш текущий статус заявления на работу"
+					title="myResponds"
+					info="myRespondsCardDescription"
 					href="/services/myresponds/responds"
 					img="/myrespondsicon.png"
 					width={146}
@@ -153,9 +153,9 @@ const DropDrag = () => {
 				<DirectResume
 					href="#"
 					img="/directresumeimage.png"
-					info="Не нашли подходящую вакансию? Заполняйте резюме, отправляйте на проверку и мы рассмотрим вашу кандидатуру"
-					title="Резюме"
-					buttonText="Создать"
+					info="directResumeCardDescription"
+					title="resume"
+					buttonText="attach"
 					buttonType="primary"
 					height={99}
 					width={85}
@@ -174,10 +174,9 @@ const DropDrag = () => {
 			key: 'personnelAccounting',
 			element: (
 				<TemplateCard
-					title="Трудоустройство"
-					info="Здесь вы можете отслеживать все процессы, связанные с наймом и подбором сотрудников"
+					title="employment"
+					info="employmentCardDescription"
 					href="/services/personnelaccounting"
-					buttonText="Изучить"
 					img="/emplicon.png"
 					height={133}
 					width={122}

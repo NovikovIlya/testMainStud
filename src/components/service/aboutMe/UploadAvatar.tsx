@@ -94,7 +94,7 @@ const UploadAvatar = () => {
         
       </div>
 
-      {avatarUrl?.url!=='There is no photo' ? <div className='absolute bottom-[43%] right-[-13px]'>
+      {avatarUrl?.url && avatarUrl?.url!=='There is no photo' ? <div className='absolute bottom-[43%] right-[-13px]'>
         <Button
               className='!rounded-[50%] bg-[#65A1FA] text-white   border-2 border-white border-solid w-[36px]'
               icon={<DeleteOutlined  />}

@@ -9,7 +9,9 @@ import CookieConsent from './components/dnd/CookieConsent'
 import './index.scss'
 import { store } from './store'
 import { AlertProvider } from './utils/Alert/AlertMessage'
+import * as Sentry from "@sentry/browser";
 
+Sentry.init({ dsn: "https://3f6acd05f9694ea095dc26db003809cb@app.glitchtip.com/11250" });
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
 root.render(

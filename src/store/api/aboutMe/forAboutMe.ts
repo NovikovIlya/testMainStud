@@ -18,7 +18,7 @@ export const myPracticeService = apiSlice.injectEndpoints({
       }),
       putAvatar: builder.mutation<any, any>({
         query: (formData) => ({
-            url: '/user-api/settings/photo',
+            url: '/about-me/set-photo',
             method: 'PUT',
             body: formData,
             responseHandler: (response) => response.blob(),
@@ -38,6 +38,14 @@ export const myPracticeService = apiSlice.injectEndpoints({
         transformResponse: (blob: Blob) => {
           return URL.createObjectURL(blob);
         },
+        invalidatesTags: ['Avatar'],
+      }),
+      deleteAvatar: builder.mutation<any, void>({
+        query: () => ({
+          url: '/about-me/set-photo',
+          method: 'DELETE',
+        }),
+     
         invalidatesTags: ['Avatar'],
       }),
 
@@ -264,5 +272,6 @@ export const myPracticeService = apiSlice.injectEndpoints({
     useGetSocQuery,
     usePutSocMutation,
     usePostSocMutation,
-    useGetAllForeignLanguagesQuery
+    useGetAllForeignLanguagesQuery,
+    useDeleteAvatarMutation
    } = myPracticeService;

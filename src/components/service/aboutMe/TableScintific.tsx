@@ -4,8 +4,10 @@ import {
 	Checkbox,
 	ConfigProvider,
 	Form,
+	Input,
 	Modal,
 	Popconfirm,
+	Radio,
 	Select,
 	Space,
 	Spin,
@@ -27,7 +29,7 @@ import {
 import './TableLanguage.scss'
 import { getBaseUrl } from '../../../utils/getBaseUrl'
 
-const TableLanguages = ({
+const TableScintific = ({
 	triger,
 	handleIdCert,
 	isSuccess,
@@ -50,46 +52,29 @@ const TableLanguages = ({
 	const [fileArray, setFileArray] = useState<any[]>([])
 	const columns: TableProps<LanguageData>['columns'] = [
 		{
-			title: t('language'),
-			dataIndex: 'language',
+			title: t('Year'),
+			dataIndex: 'year',
 			key: 'name',
 			render: text => <div>{text}</div>
 		},
 		{
-			title: t('level'),
-			dataIndex: 'languageLevel',
+			title: t('themes'),
+			dataIndex: 'themes',
 			key: 'age'
 		},
 		{
-			title: t('sert'),
-			dataIndex: 'certificates',
+			title: t('direction'),
+			dataIndex: 'direction',
 			key: 'address',
-			render: certificates => (
-				<>
-					{certificates?.map((item: CertificateTs, index: number) => (
-						<div
-							className="flex gap-2"
-							key={index}
-							onClick={() => {
-								// handleIdCert(item?.certId)
-								console.log('item?.id', item?.certId)
-								// triger(item?.certId)
-							}}
-						>
-							<a
-								target="_blank"
-								href={`${getBaseUrl()}activities/languages/foreign/certificate?certificateId=${item.certId}`}
-							>
-								{item.certificateName}
-							</a>
-							<span>
-								({item?.certificateTypeName}) {index === certificates.length - 1 ? '' : ', '}
-							</span>
-						</div>
-					))}
-				</>
-			)
+			
 		},
+		{
+			title: t('naych'),
+			dataIndex: 'naych',
+			key: 'address',
+			
+		},
+		
 		{
 			title: '',
 			key: 'action',
@@ -298,100 +283,91 @@ const TableLanguages = ({
 					}
 				}}
 			>
-				<Modal
-					className="!z-[10000000]"
-					footer={null}
-					title={t('langZnan')}
-					open={isModalOpenEdit}
-					onOk={handleOkEdit}
-					onCancel={handleCancelEdit}
-				>
-					<Form className="mt-4" form={form2} onFinish={onFinishForm2}>
-						<Form.Item
-							label={<div className="">{t('language')}</div>}
-							name="languageCode"
-							labelCol={{ span: 6 }}
-							wrapperCol={{ span: 24 }}
-							layout="vertical"
-							className="mt-4 h-[35px]"
-						>
-							<Select
-								disabled
-								suffixIcon={null} 
-								allowClear
-								options={dataAll?.map(item => ({
-									value: item.code,
-									label: item.language
-								}))}
-							/>
-						</Form.Item>
+					<Modal
+						className="!z-[10000000]"
+						footer={null}
+						title={t('scient')}
+						open={isModalOpenEdit}
+						onOk={handleOkEdit}
+						onCancel={handleCancelEdit}
+					>
+						<Form className="mt-4" form={form2} onFinish={onFinishForm2} initialValues={{ languageCode: 1 }}>
+							<Form.Item
+								label={<div className="">{t('language')}</div>}
+								name="languageCode"
+								labelCol={{ span: 6 }}
+								wrapperCol={{ span: 24 }}
+								layout="vertical"
+								className="mt-4 h-[35px]"
+								rules={[{ required: true, message: '' }]}
+							>
+								<Radio.Group
+									options={[
+										{ value: 1, label: t('rus') },
+										{ value: 2, label: t('eng') }
+									]}
+								/>
+							</Form.Item>
 
-						<Form.Item
-							label={<div className="">{t('level')}</div>}
-							name="languageLevelCode"
-							labelCol={{ span: 12 }}
-							wrapperCol={{ span: 24 }}
-							layout="vertical"
-							className="mt-14 h-[35px]"
-							// rules={[{ required: true, message: '' }]}
-						>
-							<Select
-								aria-required
-								options={dataLevels?.map(item => ({
-									value: item.languageLevelCode,
-									label: item.languageLevel
-								}))}
-								allowClear
-							/>
-						</Form.Item>
+							<Form.Item
+								label={<div className="">{t('Year')}</div>}
+								name="languageLevelCode"
+								labelCol={{ span: 12 }}
+								wrapperCol={{ span: 24 }}
+								layout="vertical"
+								className="mt-14"
+								// rules={[{ required: true, message: '' }]}
+							>
+								<Select
+									placeholder={t('select')}
+									aria-required
+									options={dataLevels?.map((item: any) => ({
+										value: item.languageLevelCode,
+										label: item.languageLevel
+									}))}
+									allowClear
+								/>
+							</Form.Item>
 
-						<Form.Item
-							label={<div className="">{t('sert')}</div>}
-							name="certificateId"
-							labelCol={{ span: 12 }}
-							wrapperCol={{ span: 24 }}
-							layout="vertical"
-							className="mt-14 h-[35px]"
-							// rules={[{ required: true, message: '' }]}
-						>
-							<Select
-								onSelect={(value: string) => {
-									const selectedOption = dataCertificate?.find(item => item.id === value)
-									if (selectedOption) {
-										setSelectedLabel(selectedOption.certificateName)
-									}
-								}}
-								allowClear
-								options={dataCertificate?.map(item => ({
-									value: item.id,
-									label: item.certificateName
-								}))}
-							/>
-						</Form.Item>
+							<div className="mt-12">{t('theme')}</div>
+							<Form.Item name="theme" className=" mb-6" rules={[{ required: true, message: '' }]}>
+								<Input.TextArea rows={4} placeholder="Введите текст здесь" />
+							</Form.Item>
 
-						{/* <div className="mt-14 mb-2">{t('prikrep')}</div> */}
-						<div className="mt-14 mb-2"></div>
-						<Form.Item valuePropName="fileList" name="file" getValueFromEvent={e => e?.fileList}>
-							<Upload onRemove={handleRemove} maxCount={1} beforeUpload={beforeUpload} accept=".pdf">
-								{fileArray?.length > 0 ? (
-									<div>Чтобы добавить, удалите прошлый файл</div>
-								) : (
-									<Button className=" " icon={<UploadOutlined />}>
-										{t('add')} {'(pdf)'}
-									</Button>
-								)}
-							</Upload>
-						</Form.Item>
+							<div className="">{t('direction')}</div>
+							<Form.Item name="direction" className=" h-[35px]" rules={[{ required: true, message: '' }]}>
+								<Input.TextArea rows={4} placeholder="Введите текст здесь" />
+							</Form.Item>
 
-						<Form.Item className="mt-6" name="isPublished" valuePropName="checked" label={null}>
-							<Checkbox>{t('razrer')}</Checkbox>
-						</Form.Item>
+							<Form.Item
+								label={<div className="">{t('naych')}</div>}
+								name="naych"
+								labelCol={{ span: 12 }}
+								wrapperCol={{ span: 24 }}
+								layout="vertical"
+								className="mt-20"
+								// rules={[{ required: true, message: '' }]}
+							>
+								<Select
+									placeholder={t('select')}
+									aria-required
+									options={dataLevels?.map((item: any) => ({
+										value: item.languageLevelCode,
+										label: item.languageLevel
+									}))}
+									allowClear
+								/>
+							</Form.Item>
 
-						<Button loading={isLoadingEdit} type="primary" htmlType="submit">
-							{t('edit')}
-						</Button>
-					</Form>
-				</Modal>
+							<Form.Item className="" name="isPublished" valuePropName="checked" label={null}>
+								<Checkbox className="mt-12">{t('razrer')}</Checkbox>
+							</Form.Item>
+
+							<Button type="primary" htmlType="submit">
+								{t('add')}
+							</Button>
+						</Form>
+					</Modal>
 
 				<div className={'registerContracts animate-fade-in w-full'}>
 					<Spin className="w-full" spinning={isLoadingDelete || isLoadingGlaz || isLoadingEdit}>
@@ -415,4 +391,4 @@ const TableLanguages = ({
 	)
 }
 
-export default TableLanguages
+export default TableScintific

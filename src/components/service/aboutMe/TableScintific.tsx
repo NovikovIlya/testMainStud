@@ -252,23 +252,7 @@ const TableScintific = ({
 		return true // чтобы файл удалился из списка
 	}
 
-	const beforeUpload = (file: File) => {
-		const isImage = file.type === 'application/pdf'
-		const isLt5M = file.size / 1024 / 1024 < 5
 
-		if (!isImage) {
-			message.error('Можно загружать только PDF!')
-			return false
-		}
-
-		if (!isLt5M) {
-			message.error('Файл должен быть меньше 5MB!')
-			return false
-		}
-
-		setFileList([file])
-		return false
-	}
 
 	console.log('selectId', selectId)
 

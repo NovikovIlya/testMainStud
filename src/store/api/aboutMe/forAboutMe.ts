@@ -246,6 +246,11 @@ export const myPracticeService = apiSlice.injectEndpoints({
 
 
 
+      // Научная деятельность
+
+
+
+
     })  });
 
 

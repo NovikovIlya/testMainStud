@@ -116,15 +116,15 @@ export const NavAboutMe = () => {
 					</div>
 				)
 			},
-			// {
-			// 	key: '/services/aboutMe/scientific',
-			// 	icon: <ScientificSvg />,
-			// 	label: (
-			// 		<div className="ml-[10px] min-w-0">
-			// 			<p className="whitespace-normal break-words text-wrap text-sm leading-4">{t('scient')}</p>
-			// 		</div>
-			// 	)
-			// }
+			{
+				key: '/services/aboutMe/scientific',
+				icon: <ScientificSvg />,
+				label: (
+					<div className="ml-[10px] min-w-0">
+						<p className="whitespace-normal break-words text-wrap text-sm leading-4">{t('scient')}</p>
+					</div>
+				)
+			}
 		]
 	} else {
 		navItems = [

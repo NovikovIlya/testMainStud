@@ -51,10 +51,10 @@ const UploadAvatar = () => {
     try {
       if(avatarUrl?.url === 'There is no photo') {
         await addAvatar(formData).unwrap();
-        message.success(t('avatarChange'));
+        // message.success(t('avatarChange'));
       } else {
         await putAvatar(formData).unwrap();
-        message.success(t('avatarChange'));
+        // message.success(t('avatarChange'));
       }
      
     } catch (error) {

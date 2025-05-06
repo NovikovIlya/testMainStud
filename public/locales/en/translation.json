@@ -340,6 +340,9 @@
 	"welcome_message_student3": "If you would like to contribute to the development of your personal account and join our development team, please fill out this ",
 	"5th_year": "5th year",
 	"6th_year": "6th year",
+	"scient": "Scientific activities",
+	"themes": "Themes",
+	"direction" : "Direction",
 	"notCur": "There are no current curricula, please contact the dean's office",
 	"welcome_message_student3Form": "form",
 	"welcome_message_student4": "Thank you for your cooperation!",
@@ -939,5 +942,6 @@
 	"socialWork": "Social work",
 	"sportsCompetitions": "Participation in sports competitions",
 	"sectionsAndClubs": "Participation in sections and clubs",
-	"socialTitle": "Social activities"
+	"socialTitle": "Social activities",
+	"Year": "Year"
 }

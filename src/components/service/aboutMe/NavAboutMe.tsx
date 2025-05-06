@@ -121,7 +121,7 @@ export const NavAboutMe = () => {
 			// 	icon: <ScientificSvg />,
 			// 	label: (
 			// 		<div className="ml-[10px] min-w-0">
-			// 			<p className="whitespace-normal break-words text-wrap text-sm leading-4">Научная деятельность</p>
+			// 			<p className="whitespace-normal break-words text-wrap text-sm leading-4">{t('scient')}</p>
 			// 		</div>
 			// 	)
 			// }

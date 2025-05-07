@@ -1,3 +1,4 @@
+import { t } from 'i18next'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
@@ -35,7 +36,7 @@ export default function VacancyItem(props: VacancyItemType) {
 						})
 				}}
 			>
-				Подробнее
+				{t('more')}
 			</button>
 		</div>
 	)

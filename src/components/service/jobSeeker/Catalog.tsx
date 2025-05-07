@@ -1,5 +1,6 @@
 import { LoadingOutlined } from '@ant-design/icons'
 import { Select, Spin } from 'antd'
+import { t } from 'i18next'
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
@@ -138,8 +139,10 @@ export default function Catalog() {
 
 	return (
 		<>
-			<h1 className="font-content-font font-normal text-[28px]/[28px] text-black">Каталог вакансий</h1>
-			<h2 className="mt-[52px] font-content-font font-normal text-[18px]/[18px] text-black">Категория сотрудников</h2>
+			<h1 className="font-content-font font-normal text-[28px]/[28px] text-black">{t('vacancyCatalog')}</h1>
+			<h2 className="mt-[52px] font-content-font font-normal text-[18px]/[18px] text-black">
+				{t('employeesCategory')}
+			</h2>
 
 			<Select
 				className="mt-[16px]"
@@ -171,7 +174,9 @@ export default function Catalog() {
 			/>
 
 			<h2 className="mt-[36px] font-content-font font-normal text-[18px]/[18px] text-black">
-				{categories.find(category => category.title === categoryTitle)?.direction ? 'Профобласть' : 'Подразделение'}
+				{categories.find(category => category.title === categoryTitle)?.directions.length !== 0
+					? t('direction')
+					: t('subdivision')}
 			</h2>
 
 			<Select
@@ -231,13 +236,17 @@ export default function Catalog() {
 
 			<div style={previews.length === 0 ? { display: 'none' } : {}} className="mt-[60px] ml-[20px] flex">
 				<h3 className="w-[388px] shrink-0 font-content-font font-normal text-[14px]/[14px] text-text-gray">
-					Должность
+					{t('job')}
 				</h3>
 				<div className="ml-[30px] flex gap-[40px]">
-					<h3 className="w-[104px] font-content-font font-normal text-[14px]/[14px] text-text-gray">Опыт работы</h3>
-					<h3 className="w-[104px] font-content-font font-normal text-[14px]/[14px] text-text-gray">Тип занятости</h3>
+					<h3 className="w-[104px] font-content-font font-normal text-[14px]/[14px] text-text-gray">
+						{t('workExperience')}
+					</h3>
+					<h3 className="w-[104px] font-content-font font-normal text-[14px]/[14px] text-text-gray">
+						{t('employmentType')}
+					</h3>
 				</div>
-				<h3 className="ml-[140px] font-content-font font-normal text-[14px]/[14px] text-text-gray">Заработная плата</h3>
+				<h3 className="ml-[140px] font-content-font font-normal text-[14px]/[14px] text-text-gray">{t('salary')}</h3>
 			</div>
 			<div className="mt-[16px] mb-[50px] flex flex-col w-full gap-[10px]">
 				{previews.map(prev => (

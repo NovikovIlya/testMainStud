@@ -1,5 +1,6 @@
 import { LoadingOutlined } from '@ant-design/icons'
 import { Spin } from 'antd'
+import { t } from 'i18next'
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -167,9 +168,9 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 					</p>
 				</div>
 				<div className="w-[50%] mt-[52px] grid grid-cols-[repeat(3,_minmax(106px,_auto))_143px] gap-x-[120px] gap-y-[16px]">
-					<p className="w-[106px] font-content-font font-bold text-black text-[18px]/[21px]">Требуемый опыт работы</p>
-					<p className="w-[106px] font-content-font font-bold text-black text-[18px]/[21px]">Тип занятости</p>
-					<p className="w-[106px] font-content-font font-bold text-black text-[18px]/[21px]">Заработная плата</p>
+					<p className="w-[106px] font-content-font font-bold text-black text-[18px]/[21px]">{t('workExperience')}</p>
+					<p className="w-[106px] font-content-font font-bold text-black text-[18px]/[21px]">{t('employmentType')}</p>
+					<p className="w-[106px] font-content-font font-bold text-black text-[18px]/[21px]">{t('salary')}</p>
 					{props.type === 'CATALOG' ? (
 						<ResponseForm canRespond={canRespond} />
 					) : (
@@ -188,7 +189,9 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 					</p>
 				</div>
 				<div className="w-[60%] mt-[60px] mb-[86px] grid grid-cols-[9%_auto] gap-x-[160px] gap-y-[40px]">
-					<p className="font-content-font font-bold text-black text-[18px]/[21px] whitespace-nowrap">Задачи:</p>
+					<p className="font-content-font font-bold text-black text-[18px]/[21px] whitespace-nowrap">
+						{t('emplTasks')}:
+					</p>
 					{responsibilities.includes('<li>') ? (
 						<ul className="list-disc">
 							{responsibilitiesArr !== null &&
@@ -201,7 +204,9 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 							{data?.acf.responsibilities}
 						</p>
 					)}
-					<p className="font-content-font font-bold text-black text-[18px]/[21px] whitespace-nowrap">Требования:</p>
+					<p className="font-content-font font-bold text-black text-[18px]/[21px] whitespace-nowrap">
+						{t('requirements')}:
+					</p>
 					{skills.includes('<li>') ? (
 						<ul className="list-disc">
 							{skillsArr !== null &&
@@ -216,7 +221,9 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 							{data?.acf.skills}
 						</p>
 					)}
-					<p className="font-content-font font-bold text-black text-[18px]/[21px] whitespace-nowrap">Условия:</p>
+					<p className="font-content-font font-bold text-black text-[18px]/[21px] whitespace-nowrap">
+						{t('conditions')}:
+					</p>
 					{conditions.includes('<li>') ? (
 						<ul className="list-disc">
 							{conditionsArr !== null &&

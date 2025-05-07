@@ -41,10 +41,12 @@ const AboutMeNew = () => {
 	console.log('switchForm',switchForm)
 
 	useEffect(() => {
+		// Добавляем доп сведения
 		if (dataAboutMe?.employeeAddedDto?.COMMENT) {
 			setContent(dataAboutMe?.employeeAddedDto?.COMMENT)
 		}
 
+		// Активируем свитчер
 		const allChecked =
 			dataCheckbox?.IS_CHECKED_ETIQ === 1 &&
 			dataCheckbox?.IS_CHECKED_LIB === 1 &&
@@ -53,7 +55,7 @@ const AboutMeNew = () => {
 			dataCheckbox?.IS_CHECKED_PERS_DATA === 1
 			console.log('allChecked',allChecked)
 		setDisabled(!allChecked)
-	}, [dataAboutMe])
+	}, [dataAboutMe,dataCheckbox])
 
 	useEffect(() => {
 		if (dataCheckbox) {
@@ -103,7 +105,9 @@ const AboutMeNew = () => {
 				<div className="flex items-center gap-2">
 					<Form form={form2} className="flex items-center">
 						<Form.Item name={'switch'} className="flex items-center mb-0">
-							<Switch disabled={disabled}  />
+							<Tooltip title={disabled ? t('agreementTooltip2') : ''}>
+								<Switch disabled={disabled}  />
+							</Tooltip>
 						</Form.Item>
 					</Form>
 					<span>{t('publicProf')}</span>

@@ -89,6 +89,27 @@ export interface TableLanguagesProps {
 	selectId: string | number | null | undefined;
 }
 
+export interface TableScintificProps {
+ 
+  handleIdCert?:any
+	isSuccess: boolean
+	dataCertificate: {
+		id: string | number
+		certificateName: string
+	}[] | undefined;
+	dataLevels: {
+		languageLevelCode: string
+		languageLevel: string
+	}[] | undefined;
+	dataAll: {
+		code: string
+		language: string
+	}[] | undefined;
+	dataForeign:any;
+	setSelectId: (id: string) => void
+	selectId: string | number | null | undefined;
+}
+
 export interface FormValues {
   languageCode: string
   languageLevelCode: string

@@ -1,4 +1,4 @@
-import { DeleteTwoTone, EditTwoTone, EyeInvisibleTwoTone, EyeTwoTone, UploadOutlined } from '@ant-design/icons'
+import { DeleteTwoTone, EditTwoTone, EyeInvisibleTwoTone, EyeTwoTone } from '@ant-design/icons'
 import {
 	Button,
 	Checkbox,
@@ -11,15 +11,13 @@ import {
 	Select,
 	Space,
 	Spin,
-	Table,
-	Upload,
-	message
+	Table, message
 } from 'antd'
 import type { TableProps } from 'antd'
 import { t } from 'i18next'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
-import { CertificateTs, FormValues, LanguageData, TableLanguagesProps } from '../../../models/aboutMe'
+import { CertificateTs, LanguageData } from '../../../models/aboutMe'
 import {
 	useDeleteForeignMutation,
 	useEditForeignMutation,
@@ -27,19 +25,15 @@ import {
 } from '../../../store/api/aboutMe/forAboutMe'
 
 import './TableLanguage.scss'
-import { getBaseUrl } from '../../../utils/getBaseUrl'
+import { generateYearsArray } from '../../../utils/generateYearsArray'
 
 const TableScintific = ({
-	triger,
-	handleIdCert,
 	isSuccess,
-	dataCertificate,
 	dataLevels,
-	dataAll,
-	dataForeign,
+	dataScientific,
 	setSelectId,
 	selectId
-}: TableLanguagesProps) => {
+}: any) => {
 	const [isModalOpenEdit, setIsModalOpenEdit] = useState<boolean>(false)
 	const [selectInfo, setSelectInfo] = useState<LanguageData | null>(null)
 	const [selectedLabel, setSelectedLabel] = useState<string | null>(null)
@@ -59,7 +53,7 @@ const TableScintific = ({
 		},
 		{
 			title: t('themes'),
-			dataIndex: 'themes',
+			dataIndex: 'theme',
 			key: 'age'
 		},
 		{
@@ -70,7 +64,7 @@ const TableScintific = ({
 		},
 		{
 			title: t('naych'),
-			dataIndex: 'naych',
+			dataIndex: 'scientificDirectorName',
 			key: 'address',
 			
 		},
@@ -305,22 +299,19 @@ const TableScintific = ({
 								<Select
 									placeholder={t('select')}
 									aria-required
-									options={dataLevels?.map((item: any) => ({
-										value: item.languageLevelCode,
-										label: item.languageLevel
-									}))}
+									options={generateYearsArray()}
 									allowClear
 								/>
 							</Form.Item>
 
 							<div className="mt-12">{t('theme')}</div>
 							<Form.Item name="theme" className=" mb-6" rules={[{ required: true, message: '' }]}>
-								<Input.TextArea rows={4} placeholder="Введите текст здесь" />
+								<Input.TextArea rows={4} placeholder="Введите текст здесь" maxLength={200}/>
 							</Form.Item>
 
 							<div className="">{t('direction')}</div>
 							<Form.Item name="direction" className=" h-[35px]" rules={[{ required: true, message: '' }]}>
-								<Input.TextArea rows={4} placeholder="Введите текст здесь" />
+								<Input.TextArea rows={4} placeholder="Введите текст здесь" maxLength={200}/>
 							</Form.Item>
 
 							<Form.Item
@@ -358,7 +349,7 @@ const TableScintific = ({
 						<Table<LanguageData>
 							pagination={false}
 							columns={columns}
-							dataSource={dataForeign?.map((item: any) => ({
+							dataSource={dataScientific?.map((item: any) => ({
 								...item,
 								key: item.studLangId
 							}))}

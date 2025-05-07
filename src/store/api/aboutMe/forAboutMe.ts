@@ -247,7 +247,24 @@ export const myPracticeService = apiSlice.injectEndpoints({
 
 
       // Научная деятельность
-
+      getAllForScientific: builder.query<any, void>({
+        query: () => ({
+          url: `/activities/scientific-activity/list`,
+          method: 'GET',
+         
+        }),
+        providesTags: ['scientific'],
+        keepUnusedDataFor: 1,
+      }),
+      getScientificDirectors: builder.query<any, any>({
+        query: (name) => ({
+          url: `/activities/scientific-activity/scientific-directors/search?name=${name}`,
+          method: 'GET',
+         
+        }),
+        providesTags: ['scientific'],
+        keepUnusedDataFor: 1,
+      }),
 
 
 
@@ -278,5 +295,7 @@ export const myPracticeService = apiSlice.injectEndpoints({
     usePutSocMutation,
     usePostSocMutation,
     useGetAllForeignLanguagesQuery,
-    useDeleteAvatarMutation
+    useDeleteAvatarMutation,
+    useGetAllForScientificQuery,
+    useGetScientificDirectorsQuery
    } = myPracticeService;

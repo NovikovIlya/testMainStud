@@ -164,3 +164,27 @@ export interface socActivity {
     sectionsAndClubs: string
 
 }
+
+export interface ScientificActivityPayload {
+  isRussian: boolean;
+  year: number;
+  theme: string;
+  direction: string;
+  scientificDirectorId: number | null;
+  isPublished: boolean;
+}
+export interface EditScientificActivityPayload {
+  id: number,
+  isRussian: boolean;
+  year: number;
+  theme: string;
+  direction: string;
+  scientificDirectorId: number | null;
+  isPublished: boolean;
+  scientificDirector: string,
+}
+
+export interface Directors {
+   id: number;
+  name: string;
+}[]

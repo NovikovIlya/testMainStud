@@ -1,5 +1,7 @@
 import { DeleteTwoTone, EditTwoTone, EyeInvisibleTwoTone, EyeTwoTone } from '@ant-design/icons'
+import { useDebounce } from 'ahooks'
 import {
+	AutoComplete,
 	Button,
 	Checkbox,
 	ConfigProvider,
@@ -11,7 +13,8 @@ import {
 	Select,
 	Space,
 	Spin,
-	Table, message
+	Table,
+	message
 } from 'antd'
 import type { TableProps } from 'antd'
 import { t } from 'i18next'
@@ -19,56 +22,70 @@ import { useEffect, useState } from 'react'
 
 import { CertificateTs, LanguageData } from '../../../models/aboutMe'
 import {
-	useDeleteForeignMutation,
+	useDeleteScientificMutation,
 	useEditForeignMutation,
+	useEditScientificActivityMutation,
+	useGetOneScientificQuery,
+	useGetScientificDirectorsQuery,
 	useIsPublishedMutation
 } from '../../../store/api/aboutMe/forAboutMe'
-
-import './TableLanguage.scss'
 import { generateYearsArray } from '../../../utils/generateYearsArray'
 
-const TableScintific = ({
-	isSuccess,
-	dataLevels,
-	dataScientific,
-	setSelectId,
-	selectId
-}: any) => {
+import './TableLanguage.scss'
+
+const TableScintific = ({ isSuccess, dataLevels, dataScientific, setSelectId, selectId }: any) => {
 	const [isModalOpenEdit, setIsModalOpenEdit] = useState<boolean>(false)
-	const [selectInfo, setSelectInfo] = useState<LanguageData | null>(null)
+	const [selectInfo, setSelectInfo] = useState<any>(null)
 	const [selectedLabel, setSelectedLabel] = useState<string | null>(null)
 	const [form2] = Form.useForm()
-	const [fileList, setFileList] = useState<any[]>([])
-	const [editForeign, { isLoading: isLoadingEdit }] = useEditForeignMutation()
-	const [deleteCert, setDeleteCert] = useState<any[]>([])
-	const [deleteForeign, { isLoading: isLoadingDelete }] = useDeleteForeignMutation()
+	const [editScientific, { isLoading: isLoadingEdit }] = useEditScientificActivityMutation()
+	const [deleteScientific, { isLoading: isLoadingDelete }] = useDeleteScientificMutation()
+	const {
+		data: getOne,
+		isSuccess: isSuccesOne,
+		isLoading: isLoadingOne
+	} = useGetOneScientificQuery(selectInfo?.id, { skip: !selectInfo?.id })
 	const [changeGlaz, { isLoading: isLoadingGlaz }] = useIsPublishedMutation()
-	const [fileArray, setFileArray] = useState<any[]>([])
-	const columns: TableProps<LanguageData>['columns'] = [
+	const scientificDirector = Form.useWatch('scientificDirector', form2)
+	const debouncedNameStudent = useDebounce(scientificDirector, { wait: 1000 })
+	const { data: dataScientificDirectors, isLoading: isLoadingDirectors } = useGetScientificDirectorsQuery(
+		debouncedNameStudent,
+		{ skip: !debouncedNameStudent }
+	)
+	const [dataScientificDirectorsValue, setDataScientificDirectorsValue] = useState<any>([])
+	const [flag, setFlag] = useState(false)
+	const [id, setId] = useState(null)
+
+	useEffect(() => {
+		if (dataScientificDirectors) {
+			setDataScientificDirectorsValue(dataScientificDirectors)
+			setFlag(true)
+		}
+	}, [dataScientificDirectors])
+
+	const columns: TableProps<any>['columns'] = [
 		{
 			title: t('Year'),
 			dataIndex: 'year',
-			key: 'name',
+			key: 'year',
 			render: text => <div>{text}</div>
 		},
 		{
 			title: t('themes'),
 			dataIndex: 'theme',
-			key: 'age'
+			key: 'theme'
 		},
 		{
 			title: t('direction'),
 			dataIndex: 'direction',
-			key: 'address',
-			
+			key: 'direction'
 		},
 		{
 			title: t('naych'),
 			dataIndex: 'scientificDirectorName',
-			key: 'address',
-			
+			key: 'scientificDirectorName'
 		},
-		
+
 		{
 			title: '',
 			key: 'action',
@@ -84,9 +101,9 @@ const TableScintific = ({
 								e.preventDefault()
 								e.stopPropagation()
 								// @ts-ignore
-								setSelectId(record?.userLangId)
+								setSelectId(record?.id)
 								// @ts-ignore
-								changeGlaz(record?.langId)
+								changeGlaz(record?.id)
 							}}
 						/>
 					) : (
@@ -97,9 +114,9 @@ const TableScintific = ({
 								e.preventDefault()
 								e.stopPropagation()
 								// @ts-ignore
-								setSelectId(record?.userLangId)
+								setSelectId(record?.id)
 								// @ts-ignore
-								changeGlaz(record?.langId)
+								changeGlaz(record?.id)
 							}}
 						/>
 					)}
@@ -115,7 +132,6 @@ const TableScintific = ({
 					<EditTwoTone
 						className="hover:scale-[140%] transition-transform duration-200 delay-100"
 						onClick={() => {
-							setSelectId(record.studLangId)
 							setSelectInfo(record)
 							showModalEdit()
 						}}
@@ -132,7 +148,7 @@ const TableScintific = ({
 						title={t('deleteEducationTitle')}
 						description={t('deleteEducationDescription')}
 						onConfirm={() => {
-							handleDelete(record?.langId)
+							handleDelete(record?.id)
 						}}
 					>
 						<DeleteTwoTone className="hover:scale-[140%] " />
@@ -141,34 +157,22 @@ const TableScintific = ({
 			)
 		}
 	]
+
 	useEffect(() => {
-		if (selectInfo?.certificates) {
-			setFileArray(selectInfo?.certificates)
-		}
-	}, [selectInfo?.certificates])
-	console.log('selectInfo',selectInfo)
-	useEffect(() => {
-		if (selectInfo) {
-			const fileList = selectInfo?.certificates?.map((certificate: CertificateTs, index: number) => ({
-				certId: certificate.certId,
-				uid: `-${index}`, // Уникальный ID для каждого файла
-				name: certificate.certificateName, // Имя файла
-				status: 'done', // Статус загрузки
-				url: certificate.certificateLink // URL файла
-			}))
+		if (getOne) {
 			form2.setFieldsValue({
-				languageCode: selectInfo.language,
-				languageLevelCode: selectInfo.languageLevelCode,
-				certificateId: selectInfo.certificates?.[0]?.certificateTypeId || null, // Если сертификатов нет, устанавливаем null
-				isPublished: selectInfo.isPublished,
-				file: fileList
+				language: getOne?.isRussian ? 'rus' : 'eng',
+				year: getOne?.year,
+				theme: getOne?.theme,
+				direction: getOne?.direction,
+				isPublished: getOne?.isPublished
 			})
 		}
-	}, [isSuccess, selectInfo, form2])
+	}, [isSuccesOne, getOne, form2])
 
 	const handleDelete = (record: any) => {
 		console.log('recordDelete', record)
-		deleteForeign(record)
+		deleteScientific(record)
 	}
 
 	const showModalEdit = () => {
@@ -181,74 +185,43 @@ const TableScintific = ({
 
 	const handleCancelEdit = () => {
 		setIsModalOpenEdit(false)
-		setDeleteCert([])
+		form2.resetFields()
 	}
 
 	const onFinishForm2 = async (values: any) => {
-		console.log('values', values)
-		// Подготовка базовой структуры данных в новом формате
-		const requestData: any = {
-			langId: selectInfo?.langId,
-			languageLevelCode: values.languageLevelCode,
-			isPublished: values.isPublished || false,
-			savingCertificates: [], // Массив для сохраняемых сертификатов
-			deletingCertificates: deleteCert // Массив для удаляемых сертификатов (пустой при добавлении нового языка)
-		}
-
-		// Обработка файла сертификата, если он есть
-		if (fileList.length > 0) {
-			const originalFile = values.file?.[0]?.originFileObj as File
-			if (originalFile) {
-				// Конвертация файла в base64
-				const base64File = await new Promise<string>(resolve => {
-					const reader = new FileReader()
-					reader.onload = () => {
-						// Получаем base64 строку, удаляя префикс data:application/pdf;base64,
-						const base64String = reader.result as string
-						const base64Content = base64String.split(',')[1]
-						resolve(base64Content)
-					}
-					reader.readAsDataURL(originalFile)
-				})
-
-				// Добавление информации о сертификате в массив savingCertificates
-				requestData.savingCertificates = [
-					{
-						// certId: values.certificateId,
-						certificateName: originalFile.name || '',
-						certificateTypeId: values.certificateId,
-						base64File: base64File
-					}
-				]
-			}
-		}
-
-		// Отправка данных на сервер
-		try {
-			setIsModalOpenEdit(false)
-			await editForeign(requestData).unwrap()
-
-			form2.resetFields()
-			setFileList([])
-			setSelectedLabel(null)
-		} catch (error) {
-			console.error('Ошибка при сохранении данных:', error)
-			message.error(t('error'))
-		} finally {
-			setIsModalOpenEdit(false)
-		}
+		editScientific({
+			id: getOne?.id,
+			isRussian: values?.languageCode === 1 ? true : false,
+			year: values?.year,
+			theme: values?.theme,
+			direction: values?.direction,
+			isPublished: values?.isPublished
+			// scientificDirectorId: getOne?.scientificDirectorId,
+			// scientificDirector: getOne?.scientificDirector
+		})
+		handleCancelEdit()
 	}
 
-	const handleRemove = (file: any) => {
-		console.log('Удалённый файл ID:', file)
-		setDeleteCert(prev => [...prev, file.certId])
-		setFileArray(prev => prev.filter(item => item.certId !== file.certId))
-		return true // чтобы файл удалился из списка
+	const handleSearch = (value: string, field: string) => {
+		console.log('value', value)
+		if (value?.length < 4) {
+			form2.setFields([
+				{
+					name: field,
+					errors: ['Введите минимум 4 символа']
+				}
+			])
+			setDataScientificDirectorsValue([])
+			setFlag(false)
+		} else {
+			form2.setFields([
+				{
+					name: field,
+					errors: []
+				}
+			])
+		}
 	}
-
-
-
-	console.log('selectId', selectId)
 
 	return (
 		<>
@@ -261,14 +234,19 @@ const TableScintific = ({
 					}
 				}}
 			>
-					<Modal
-						className="!z-[10000000]"
-						footer={null}
-						title={t('scient')}
-						open={isModalOpenEdit}
-						onOk={handleOkEdit}
-						onCancel={handleCancelEdit}
-					>
+				<Modal
+					className="!z-[10000000]"
+					footer={null}
+					title={t('scient')}
+					open={isModalOpenEdit}
+					onOk={handleOkEdit}
+					onCancel={handleCancelEdit}
+				>
+					{isLoadingOne ? (
+						<div className="flex w-full justify-center items-center">
+							<Spin />
+						</div>
+					) : (
 						<Form className="mt-4" form={form2} onFinish={onFinishForm2} initialValues={{ languageCode: 1 }}>
 							<Form.Item
 								label={<div className="">{t('language')}</div>}
@@ -289,70 +267,124 @@ const TableScintific = ({
 
 							<Form.Item
 								label={<div className="">{t('Year')}</div>}
-								name="languageLevelCode"
+								name="year"
 								labelCol={{ span: 12 }}
 								wrapperCol={{ span: 24 }}
 								layout="vertical"
 								className="mt-14"
 								// rules={[{ required: true, message: '' }]}
 							>
-								<Select
-									placeholder={t('select')}
-									aria-required
-									options={generateYearsArray()}
-									allowClear
-								/>
+								<Select placeholder={t('select')} aria-required options={generateYearsArray()} allowClear />
 							</Form.Item>
 
-							<div className="mt-12">{t('theme')}</div>
+							<div className="mt-12 mb-1">{t('theme')}</div>
 							<Form.Item name="theme" className=" mb-6" rules={[{ required: true, message: '' }]}>
-								<Input.TextArea rows={4} placeholder="Введите текст здесь" maxLength={200}/>
+								<Input.TextArea rows={4} placeholder="Введите текст здесь" maxLength={200} />
 							</Form.Item>
 
-							<div className="">{t('direction')}</div>
+							<div className="mb-1">{t('direction')}</div>
 							<Form.Item name="direction" className=" h-[35px]" rules={[{ required: true, message: '' }]}>
-								<Input.TextArea rows={4} placeholder="Введите текст здесь" maxLength={200}/>
+								<Input.TextArea rows={4} placeholder="Введите текст здесь" maxLength={200} />
 							</Form.Item>
 
 							<Form.Item
+								// help={student && student.length < 4 ? t('minimumFour') : ''}
+								// validateStatus={student && student.length < 4 ? 'error' : ''}
+								className="mt-20 mb-20 min-h-[40px]"
 								label={<div className="">{t('naych')}</div>}
-								name="naych"
-								labelCol={{ span: 12 }}
-								wrapperCol={{ span: 24 }}
 								layout="vertical"
-								className="mt-20"
-								// rules={[{ required: true, message: '' }]}
+								name="scientificDirector"
 							>
-								<Select
-									placeholder={t('select')}
-									aria-required
-									options={dataLevels?.map((item: any) => ({
-										value: item.languageLevelCode,
-										label: item.languageLevel
-									}))}
-									allowClear
-								/>
+								{
+									<AutoComplete
+										className="min-h-[40px] 4"
+										onChange={value => handleSearch(value, 'scientificDirector')}
+										allowClear
+										// disabled={form.getFieldValue('graduate') || form.getFieldValue('teacher')}
+										placeholder={t('inputFio')}
+										onClear={() => {
+											setDataScientificDirectorsValue([])
+											setFlag(false)
+										}}
+										options={
+											isLoadingDirectors
+												? [
+														{
+															value: 'NULL',
+															disabled: true,
+															label: (
+																<div className="flex items-center justify-center w-full h-[100px]">
+																	<Spin size="large" />
+																</div>
+															)
+														}
+												  ]
+												: flag && dataScientificDirectorsValue?.length === 0
+												? [
+														{
+															value: 'NULL',
+															disabled: true,
+															label: (
+																<div className="flex items-center justify-center w-full h-[100px]">{t('notFound')}</div>
+															)
+														}
+												  ]
+												: dataScientificDirectorsValue?.map((student: any) => ({
+														key: student.id,
+														value: student.name,
+														id: student.id,
+														// userType: student.userType,
+														// userInfo: student.userInfo,
+														label: (
+															<div>
+																<div className="">{student?.name}</div>
+
+																{/* <div
+																	className={'w-auto'}
+																	style={{
+																		fontSize: '10px',
+																		color: '#888',
+																		whiteSpace: 'normal',
+																		wordBreak: 'break-word'
+																	}}
+																>
+																	{truncateString(160, student?.userInfo)}
+																</div> */}
+															</div>
+														)
+												  }))
+										}
+										onSelect={(value, option) => {
+											setId(option.id)
+											// setType(option.userType)
+											// setRecipientName(option.userInfo)
+										}}
+									/>
+								}
 							</Form.Item>
 
 							<Form.Item className="" name="isPublished" valuePropName="checked" label={null}>
-								<Checkbox className="mt-12">{t('razrer')}</Checkbox>
+								<Checkbox className="2">{t('razrer')}</Checkbox>
 							</Form.Item>
 
 							<Button type="primary" htmlType="submit">
 								{t('add')}
 							</Button>
 						</Form>
-					</Modal>
+					)}
+				</Modal>
 
 				<div className={'registerContracts animate-fade-in w-full'}>
 					<Spin className="w-full" spinning={isLoadingDelete || isLoadingGlaz || isLoadingEdit}>
-						<Table<LanguageData>
+						<Table<any>
 							pagination={false}
 							columns={columns}
-							dataSource={dataScientific?.map((item: any) => ({
-								...item,
-								key: item.studLangId
-							}))}
+							dataSource={dataScientific
+								?.map((item: any) => ({
+									...item,
+									key: item.studLangId
+								}))
+								?.sort((a: any, b: any) => b.year - a.year)}
 							rowClassName={record => {
 								return record.isPublished ? '' : 'bg-gray-200 opacity-60'
 							}}

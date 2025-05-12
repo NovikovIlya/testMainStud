@@ -89,6 +89,27 @@ export interface TableLanguagesProps {
 	selectId: string | number | null | undefined;
 }
 
+export interface TableScintificProps {
+ 
+  handleIdCert?:any
+	isSuccess: boolean
+	dataCertificate: {
+		id: string | number
+		certificateName: string
+	}[] | undefined;
+	dataLevels: {
+		languageLevelCode: string
+		languageLevel: string
+	}[] | undefined;
+	dataAll: {
+		code: string
+		language: string
+	}[] | undefined;
+	dataForeign:any;
+	setSelectId: (id: string) => void
+	selectId: string | number | null | undefined;
+}
+
 export interface FormValues {
   languageCode: string
   languageLevelCode: string
@@ -143,3 +164,27 @@ export interface socActivity {
     sectionsAndClubs: string
 
 }
+
+export interface ScientificActivityPayload {
+  isRussian: boolean;
+  year: number;
+  theme: string;
+  direction: string;
+  scientificDirectorId: number | null;
+  isPublished: boolean;
+}
+export interface EditScientificActivityPayload {
+  id: number,
+  isRussian: boolean;
+  year: number;
+  theme: string;
+  direction: string;
+  scientificDirectorId: number | null;
+  isPublished: boolean;
+  scientificDirector: string,
+}
+
+export interface Directors {
+   id: number;
+  name: string;
+}[]

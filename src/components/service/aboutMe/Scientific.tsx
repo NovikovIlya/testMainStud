@@ -1,76 +1,94 @@
-import { UploadOutlined } from '@ant-design/icons'
-import { Button, Checkbox, Col, Form, Input, Modal, Radio, Result, Row, Spin, Upload, message } from 'antd'
+import { useDebounce } from 'ahooks'
+import { AutoComplete, Button, Checkbox, Form, Input, Modal, Radio, Row, Spin } from 'antd'
 import { Select } from 'antd'
 import Title from 'antd/es/typography/Title'
 import { t } from 'i18next'
 import { useEffect, useState } from 'react'
 
-import { Certificate, ForeignLanguage, Language, LanguageLevel } from '../../../models/aboutMe'
+import { LanguageLevel } from '../../../models/aboutMe'
 import {
+	useCreateScientificActivityMutation,
+	useDeleteScientificMutation,
+	useGetAllForScientificQuery,
 	useGetAllForeignLanguagesQuery,
-	useGetAllNativeLanguagesQuery,
 	useGetCertificateQuery,
 	useGetLevelsQuery,
-	useGetNativeLanguagesQuery,
-	useGetOneCertificateQuery,
+	useGetScientificDirectorsQuery,
 	useGetforeignLanguagesQuery,
-	useLazyGetOneCertificateQuery,
-	useSetForeignMutation,
-	useSetNativeMutation
+	useSetForeignMutation
 } from '../../../store/api/aboutMe/forAboutMe'
+import { generateYearsArray } from '../../../utils/generateYearsArray'
+import { truncateString } from '../../../utils/truncateString'
 
 import './Languages.css'
 import { SkeletonPage } from './Skeleton'
-import TableLanguages from './TableLanguages'
 import TableScintific from './TableScintific'
 
 const Scientific = () => {
-	const [form] = Form.useForm()
+	const [flag, setFlag] = useState(false)
 	const [form2] = Form.useForm()
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const [selectId, setSelectId] = useState<string | number | null>(null)
-	const [fileList, setFileList] = useState<File[]>([])
-	const { data: dataNative, isLoading: isFetchingNative, refetch, isError } = useGetNativeLanguagesQuery()
 	const { data: dataLevels } = useGetLevelsQuery()
-	const { data: dataCertificate } = useGetCertificateQuery()
-	const { data: dataAll } = useGetAllNativeLanguagesQuery()
-	const { data: dataAllForeignLang } = useGetAllForeignLanguagesQuery()
 	const {
-		data: dataForeign,
+		data: dataScientific,
 		isLoading: isFetchingForeign,
 		isError: isErrorForeign,
-		isSuccess
-	} = useGetforeignLanguagesQuery()
-	const [setNative, { isLoading }] = useSetNativeMutation()
-	const [setForeign, { isLoading: isLoadingSetForeign }] = useSetForeignMutation()
-	const [idCert, setIdCert] = useState<null | number>(null)
-	const { data: dataOneCertificate } = useGetOneCertificateQuery(idCert, { skip: !idCert })
-	const [selectedLabel, setSelectedLabel] = useState<string | null>(null)
-	const [triger, {}] = useLazyGetOneCertificateQuery()
-	const nativeLanguageForm = Form.useWatch('languages', form)
-	const sertificateFormVal = Form.useWatch('certificateId', form2)
+		isSuccess,
+		isFetching
+	} = useGetAllForScientificQuery()
+	const scientificDirector = Form.useWatch('scientificDirector', form2)
+	const debouncedNameStudent = useDebounce(scientificDirector, { wait: 1000 })
+	const { data: dataScientificDirectors, isLoading: isLoadingDirectors } = useGetScientificDirectorsQuery(
+		debouncedNameStudent,
+		{ skip: !debouncedNameStudent }
+	)
+	const [createScientificActivity, { isLoading: isLoadingScientific }] = useCreateScientificActivityMutation()
+	const [dataScientificDirectorsValue, setDataScientificDirectorsValue] = useState<any>([])
+	const [id, setId] = useState(null)
 
 	useEffect(() => {
-		if (dataNative) {
-			const initialValues = {
-				languages: dataNative.languages?.map((lang: Language) => lang.code) || []
-			}
-			form.setFieldsValue(initialValues)
+		if (dataScientificDirectors) {
+			setDataScientificDirectorsValue(dataScientificDirectors)
+			setFlag(true)
 		}
-	}, [dataNative])
+	}, [dataScientificDirectors])
 
-	// Добавление Родного языка
-	const onFinish = () => {
-		setNative({ languageCodes: nativeLanguageForm }).unwrap()
-	}
-
-	// Добавление Иностранного языка!!
 	const onFinishForm2 = async (values: any) => {
-		// Подготовка базовой структуры данных
 		console.log('values', values)
+
+		createScientificActivity({
+			isRussian: values?.languageCode === 1 ? true : false,
+			year: values?.year,
+			theme: values?.theme,
+			direction: values?.direction,
+			scientificDirectorId: id,
+			isPublished: values?.isPublished
+		})
+		handleCancel()
 	}
 
-	const handleSubmit = (values: { content: string }) => {}
+	const handleSearch = (value: string, field: string) => {
+		console.log('value', value)
+		if (value?.length < 4) {
+			form2.setFields([
+				{
+					name: field,
+					errors: ['Введите минимум 4 символа']
+				}
+			])
+			setDataScientificDirectorsValue([])
+			setFlag(false)
+		} else {
+			form2.setFields([
+				{
+					name: field,
+					errors: []
+				}
+			])
+		}
+	}
+
 	const showModal = () => {
 		setIsModalOpen(true)
 	}
@@ -83,10 +101,13 @@ const Scientific = () => {
 		setIsModalOpen(false)
 		form2.resetFields()
 	}
-	
 
-	const handleIdCert = (id: number) => {
-		setIdCert(id)
+	if (isFetching) {
+		return (
+			<div className="mt-[-10px] ml-[6px]">
+				<SkeletonPage />
+			</div>
+		)
 	}
 
 	return (
@@ -95,19 +116,17 @@ const Scientific = () => {
 				<Spin spinning={false}>
 					<Title className="!text-[28px]">{t('scient')}</Title>
 
-					<Row>
-						<TableScintific
-							triger={triger}
-							handleIdCert={handleIdCert}
-							isSuccess={isSuccess}
-							dataCertificate={dataCertificate}
-							dataLevels={dataLevels}
-							dataAll={dataAllForeignLang}
-							selectId={selectId}
-							setSelectId={setSelectId}
-							dataForeign={dataForeign}
-						/>
-					</Row>
+					<Spin spinning={isLoadingScientific}>
+						<Row>
+							<TableScintific
+								isSuccess={isSuccess}
+								dataLevels={dataLevels}
+								selectId={selectId}
+								setSelectId={setSelectId}
+								dataScientific={dataScientific}
+							/>
+						</Row>
+					</Spin>
 					<Row className="flex items-center justify-start mt-4 gap-2">
 						<div
 							onClick={showModal}
@@ -120,7 +139,7 @@ const Scientific = () => {
 						</div>
 					</Row>
 				</Spin>
-				{isLoadingSetForeign ? (
+				{isLoadingScientific ? (
 					''
 				) : (
 					<Modal
@@ -151,56 +170,104 @@ const Scientific = () => {
 
 							<Form.Item
 								label={<div className="">{t('Year')}</div>}
-								name="languageLevelCode"
+								name="year"
 								labelCol={{ span: 12 }}
 								wrapperCol={{ span: 24 }}
 								layout="vertical"
 								className="mt-14"
 								// rules={[{ required: true, message: '' }]}
 							>
-								<Select
-									placeholder={t('select')}
-									aria-required
-									options={dataLevels?.map((item: LanguageLevel) => ({
-										value: item.languageLevelCode,
-										label: item.languageLevel
-									}))}
-									allowClear
-								/>
+								<Select placeholder={t('select')} aria-required options={generateYearsArray()} allowClear />
 							</Form.Item>
 
 							<div className="mt-12 mb-1">{t('theme')}</div>
 							<Form.Item name="theme" className=" mb-6" rules={[{ required: true, message: '' }]}>
-								<Input.TextArea rows={4} placeholder="Введите текст здесь" />
+								<Input.TextArea rows={4} placeholder="Введите текст здесь" maxLength={200} />
 							</Form.Item>
 
 							<div className="mb-1">{t('direction')}</div>
 							<Form.Item name="direction" className=" h-[35px]" rules={[{ required: true, message: '' }]}>
-								<Input.TextArea rows={4} placeholder="Введите текст здесь" />
+								<Input.TextArea rows={4} placeholder="Введите текст здесь" maxLength={200} />
 							</Form.Item>
 
 							<Form.Item
+								// help={student && student.length < 4 ? t('minimumFour') : ''}
+								// validateStatus={student && student.length < 4 ? 'error' : ''}
+								className="mt-20 mb-20 min-h-[40px]"
 								label={<div className="">{t('naych')}</div>}
-								name="naych"
-								labelCol={{ span: 12 }}
-								wrapperCol={{ span: 24 }}
 								layout="vertical"
-								className="mt-20"
-								// rules={[{ required: true, message: '' }]}
+								name="scientificDirector"
 							>
-								<Select
-									placeholder={t('select')}
-									aria-required
-									options={dataLevels?.map((item: LanguageLevel) => ({
-										value: item.languageLevelCode,
-										label: item.languageLevel
-									}))}
-									allowClear
-								/>
+								{
+									<AutoComplete
+										className="min-h-[40px] 4"
+										onChange={value => handleSearch(value, 'scientificDirector')}
+										allowClear
+										// disabled={form.getFieldValue('graduate') || form.getFieldValue('teacher')}
+										placeholder={t('inputFio')}
+										onClear={() => {
+											setDataScientificDirectorsValue([])
+											setFlag(false)
+										}}
+										options={
+											isLoadingDirectors
+												? [
+														{
+															value: 'NULL',
+															disabled: true,
+															label: (
+																<div className="flex items-center justify-center w-full h-[100px]">
+																	<Spin size="large" />
+																</div>
+															)
+														}
+												  ]
+												: flag && dataScientificDirectorsValue?.length === 0
+												? [
+														{
+															value: 'NULL',
+															disabled: true,
+															label: (
+																<div className="flex items-center justify-center w-full h-[100px]">{t('notFound')}</div>
+															)
+														}
+												  ]
+												: dataScientificDirectorsValue?.map((student: any) => ({
+														key: student.id,
+														value: student.name,
+														id: student.id,
+														// userType: student.userType,
+														// userInfo: student.userInfo,
+														label: (
+															<div>
+																<div className="">{student?.name}</div>
+
+																{/* <div
+																	className={'w-auto'}
+																	style={{
+																		fontSize: '10px',
+																		color: '#888',
+																		whiteSpace: 'normal',
+																		wordBreak: 'break-word'
+																	}}
+																>
+																	{truncateString(160, student?.userInfo)}
+																</div> */}
+															</div>
+														)
+												  }))
+										}
+										onSelect={(value, option) => {
+											setId(option.id)
+											// setType(option.userType)
+											// setRecipientName(option.userInfo)
+										}}
+									/>
+								}
 							</Form.Item>
 
 							<Form.Item className="" name="isPublished" valuePropName="checked" label={null}>
-								<Checkbox className="mt-12">{t('razrer')}</Checkbox>
+								<Checkbox className="2">{t('razrer')}</Checkbox>
 							</Form.Item>
 
 							<Button type="primary" htmlType="submit">

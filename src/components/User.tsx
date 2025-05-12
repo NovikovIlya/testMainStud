@@ -40,7 +40,7 @@ export const User = () => {
 	}, [data])
 
 	
-	// Проверка на роль Абитурента + зачислен ли и сбор данных по зачислению 
+	// Проверка на роль Абитурента + зачислен ли и сбор данных по зачислению document.title
 	useEffect(()=>{
 		if(user?.roles?.some((item:any) => item.credentials && item.credentials.length > 0)){
 			setAcceptedData(user?.roles?.map((item:any)=>{
@@ -58,6 +58,11 @@ export const User = () => {
 		  window.ym(101507808, 'hit', location.pathname + location.search);
 		}
 	  }, [location]);
+
+	  
+	useEffect(()=>{
+		document.title = i18n.language === 'ru' ? 'Казанский Федеральный Университет' : 'Kazan Federal University'
+	},[])
 
 
 

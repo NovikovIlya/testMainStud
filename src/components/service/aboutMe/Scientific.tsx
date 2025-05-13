@@ -5,20 +5,11 @@ import Title from 'antd/es/typography/Title'
 import { t } from 'i18next'
 import { useEffect, useState } from 'react'
 
-import { LanguageLevel } from '../../../models/aboutMe'
 import {
-	useCreateScientificActivityMutation,
-	useDeleteScientificMutation,
-	useGetAllForScientificQuery,
-	useGetAllForeignLanguagesQuery,
-	useGetCertificateQuery,
-	useGetLevelsQuery,
-	useGetScientificDirectorsQuery,
-	useGetforeignLanguagesQuery,
-	useSetForeignMutation
+	useCreateScientificActivityMutation, useGetAllForScientificQuery, useGetLevelsQuery,
+	useGetScientificDirectorsQuery
 } from '../../../store/api/aboutMe/forAboutMe'
 import { generateYearsArray } from '../../../utils/generateYearsArray'
-import { truncateString } from '../../../utils/truncateString'
 
 import './Languages.css'
 import { SkeletonPage } from './Skeleton'
@@ -26,6 +17,7 @@ import TableScintific from './TableScintific'
 
 const Scientific = () => {
 	const [flag, setFlag] = useState(false)
+	const [flag2, setFlag2] = useState(false)
 	const [form2] = Form.useForm()
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const [selectId, setSelectId] = useState<string | number | null>(null)
@@ -35,13 +27,12 @@ const Scientific = () => {
 		isLoading: isFetchingForeign,
 		isError: isErrorForeign,
 		isSuccess,
-	
 	} = useGetAllForScientificQuery()
 	const scientificDirector = Form.useWatch('scientificDirector', form2)
 	const debouncedNameStudent = useDebounce(scientificDirector, { wait: 1000 })
 	const { data: dataScientificDirectors, isLoading: isLoadingDirectors } = useGetScientificDirectorsQuery(
 		debouncedNameStudent,
-		{ skip: !debouncedNameStudent }
+		{ skip: !flag2 || !debouncedNameStudent }
 	)
 	const [createScientificActivity, { isLoading: isLoadingScientific }] = useCreateScientificActivityMutation()
 	const [dataScientificDirectorsValue, setDataScientificDirectorsValue] = useState<any>([])
@@ -63,11 +54,12 @@ const Scientific = () => {
 			theme: values?.theme,
 			direction: values?.direction,
 			scientificDirectorId: id,
-			isPublished: values?.isPublished
-		})
+			isPublished: values?.isPublished ? true : false 
+		}) 
 		handleCancel()
 	}
-
+	console.log('flag',flag)
+	console.log('scientificDirector',scientificDirector)
 	const handleSearch = (value: string, field: string) => {
 		console.log('value', value)
 		if (value?.length < 4) {
@@ -79,7 +71,9 @@ const Scientific = () => {
 			])
 			setDataScientificDirectorsValue([])
 			setFlag(false)
+			setFlag2(false)
 		} else {
+			setFlag2(true)
 			form2.setFields([
 				{
 					name: field,
@@ -144,6 +138,7 @@ const Scientific = () => {
 					''
 				) : (
 					<Modal
+					
 						className="!z-[10000000]"
 						footer={null}
 						title={t('scient')}
@@ -159,7 +154,7 @@ const Scientific = () => {
 								wrapperCol={{ span: 24 }}
 								layout="vertical"
 								className="mt-4 h-[35px]"
-								rules={[{ required: true, message: '' }]}
+							
 							>
 								<Radio.Group
 									options={[
@@ -175,18 +170,18 @@ const Scientific = () => {
 								labelCol={{ span: 12 }}
 								wrapperCol={{ span: 24 }}
 								layout="vertical"
-								className="mt-14"
-								// rules={[{ required: true, message: '' }]}
+								className="mt-14 min-h-[35px]"
+								 rules={[{ required: true, message: '' }]}
 							>
 								<Select placeholder={t('select')} aria-required options={generateYearsArray()} allowClear />
 							</Form.Item>
 
-							<div className="mt-12 mb-1">{t('theme')}</div>
+							<div className="mt-12 mb-1"> <span className="text-red-500 mr-[4px] font-[14px] !font-[SimSun,sans-serif]">*</span>{t('theme')}</div>
 							<Form.Item name="theme" className=" mb-6" rules={[{ required: true, message: '' }]}>
 								<Input.TextArea rows={4} placeholder="Введите текст здесь" maxLength={200} />
 							</Form.Item>
 
-							<div className="mb-1">{t('direction')}</div>
+							<div className="mb-1"><span className="text-red-500 mr-[4px] font-[14px] !font-[SimSun,sans-serif]">*</span>{t('direction')}</div>
 							<Form.Item name="direction" className=" h-[35px]" rules={[{ required: true, message: '' }]}>
 								<Input.TextArea rows={4} placeholder="Введите текст здесь" maxLength={200} />
 							</Form.Item>

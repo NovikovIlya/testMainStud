@@ -273,20 +273,20 @@ const TableScintific = ({ isSuccess, dataLevels, dataScientific, setSelectId, se
 								labelCol={{ span: 12 }}
 								wrapperCol={{ span: 24 }}
 								layout="vertical"
-								className="mt-14"
-								// rules={[{ required: true, message: '' }]}
+								className="mt-14 min-h-[35px]"
+								rules={[{ required: true, message: '' }]}
 							>
 								<Select placeholder={t('select')} aria-required options={generateYearsArray()} allowClear />
 							</Form.Item>
 
-							<div className="mt-12 mb-1">{t('theme')}</div>
+							<div className="mt-12 mb-1"><span className="text-red-500 mr-[4px] font-[14px] !font-[SimSun,sans-serif]">*</span>{t('theme')}</div>
 							<Form.Item name="theme" className=" mb-6" rules={[{ required: true, message: '' }]}>
-								<Input.TextArea rows={4} placeholder="Введите текст здесь" maxLength={200} />
+								<Input.TextArea rows={4}  maxLength={200} />
 							</Form.Item>
 
-							<div className="mb-1">{t('direction')}</div>
+							<div className="mb-1"><span className="text-red-500 mr-[4px] font-[14px] !font-[SimSun,sans-serif]">*</span>{t('direction')}</div>
 							<Form.Item name="direction" className=" h-[35px]" rules={[{ required: true, message: '' }]}>
-								<Input.TextArea rows={4} placeholder="Введите текст здесь" maxLength={200} />
+								<Input.TextArea rows={4}  maxLength={200} />
 							</Form.Item>
 
 							<Form.Item

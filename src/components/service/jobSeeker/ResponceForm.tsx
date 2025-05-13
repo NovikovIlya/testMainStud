@@ -367,7 +367,9 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 									}}
 									className="h-[43px] pl-[16px] pr-[16px] flex justify-between items-center border-[1px] border-dashed border-blue1f5 rounded-[5px] cursor-pointer"
 								>
-									<p className="font-content-font text-black text-[16px]/[19.2px] font-bold select-none">Опыт работы</p>
+									<p className="font-content-font text-black text-[16px]/[19.2px] font-bold select-none">
+										{t('workExperience')}
+									</p>
 									{experienceData.noExperienceFlag || experienceData.experiences.length !== 0 ? (
 										<CheckedIcon />
 									) : (
@@ -423,9 +425,11 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 					)}
 					{page === 'coverletter' && (
 						<>
-							<p className="mb-[36px] font-content-font text-black text-[18px]/[18px] font-normal">Откликнуться</p>
+							<p className="mb-[36px] font-content-font text-black text-[18px]/[18px] font-normal">{t('respond')}</p>
 							<div className="mb-[20px] rounded-[8px] bg-[#E5EBFB] py-[12px] px-[20px] relative">
-								<p className="font-content-font text-black text-[16px]/[19.2px] font-normal opacity-40">Вакансия</p>
+								<p className="font-content-font text-black text-[16px]/[19.2px] font-normal opacity-40">
+									{t('Vacancy')}
+								</p>
 								<p className="font-content-font text-black text-[16px]/[19.2px] font-normal w-[90%]">
 									{currentVacancy?.title.rendered}
 								</p>
@@ -439,12 +443,12 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 								</div>
 							</div>
 							<p className="mb-[16px] font-content-font text-black text-[16px]/[16px] font-normal">
-								Сопроводительное письмо
+								{t('coverLetter')}
 							</p>
 							<Input.TextArea
 								autoSize={true}
 								className="!h-[185px] !px-[16px] !py-[11px]"
-								placeholder="Введите сообщение"
+								placeholder={t('enterCoverLetter')}
 								value={coverLetter}
 								onChange={e => {
 									if (e.target.value.length < 10000) {
@@ -512,7 +516,7 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 											.unwrap()
 											.then(() => {
 												setCanRespond(false)
-												setResultModalText('Спасибо, ваш отклик успешно отправлен.')
+												setResultModalText(t('respondSuccess'))
 												setIsFormOpen(false)
 												setIsSuccessModalOpen(true)
 											})
@@ -522,7 +526,7 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 											})
 								}}
 							>
-								Отправить
+								{t('send')}
 							</Button>
 						</>
 					)}
@@ -1110,13 +1114,13 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 									<ArrowIcon />
 								</button>
 								<p className="mb-[2px] ml-[15px] font-content-font font-bold text-black text-[18px]/[21.6px]">
-									Опыт работы
+									{t('workExperience')}
 								</p>
 							</div>
 							<p className="font-content-font text-black text-[18px]/[18px]">
-								<b>Портфолио</b> (не обязательно)
+								<b>{t('portfolio')}</b> ({t('notNecessary')})
 							</p>
-							<p className="mt-[24px] font-content-font text-black text-[16px]/[16px]">Ссылка</p>
+							<p className="mt-[24px] font-content-font text-black text-[16px]/[16px]">{t('link')}</p>
 							<Form.Item className="mt-[18px]">
 								<Input
 									placeholder="https://disk.yandex.ru"
@@ -1176,9 +1180,9 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 								<div className="flex items-center gap-[12px] cursor-pointer">
 									<AttachIcon />
 									<p className="font-content-font font-normal text-[16px]/[16px] text-black underline select-none">
-										Прикрепить файл
+										{t('attachFile')}
 									</p>
-									<p className="font-content-font font-normal text-[16px]/[16px] text-black">(не более 10 мб)</p>
+									<p className="font-content-font font-normal text-[16px]/[16px] text-black">({t('max10MB')})</p>
 								</div>
 							</Upload>
 							<Form.Item
@@ -1192,7 +1196,7 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 										!haveNoExprience ? dispatch(raiseNoExperienceFlag()) : dispatch(lowerNoExperienceFlag())
 									}}
 								>
-									Я не имею опыта работы
+									{t('noExperience')}
 								</Checkbox>
 							</Form.Item>
 							<div className="mt-[40px]">
@@ -1272,7 +1276,7 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 									></Button>
 								</ConfigProvider>
 								<p className="mt-[5px] w-[94px] font-main-font font-normal text-[14px]/[18px] opacity-40">
-									добавить место работы
+									{t('add') + ' ' + t('placeWork').toLowerCase()}
 								</p>
 								{!jobValidHidden && (
 									<p className="mt-[20px] w-[250px] text-[#FF0133] font-main-font font-normal text-[14px]/[18px] opacity-100">
@@ -1313,17 +1317,19 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 									<ArrowIcon />
 								</button>
 								<p className="mb-[2px] ml-[15px] font-content-font font-bold text-black text-[18px]/[21.6px]">
-									Добавить место работы
+									{t('add') + ' ' + t('placeWork').toLowerCase()}
 								</p>
 							</div>
 							<Form.Item
 								name={'workplace'}
 								rules={[
-									{ required: true, message: 'Не указано Место работы"' },
+									{ required: true, message: t('specify') + ' ' + t('placeWork').toLowerCase() },
 									{ max: 1000, message: t('symbolExcess') }
 								]}
 								label={
-									<label className="text-black text-[18px]/[18px] font-content-font font-normal">Место работы</label>
+									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
+										{t('placeWork')}
+									</label>
 								}
 							>
 								<Input
@@ -1336,10 +1342,12 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 							<Form.Item
 								name={'seat'}
 								rules={[
-									{ required: true, message: 'Не указана должность' },
+									{ required: true, message: t('specify') + ' ' + t('job').toLowerCase() },
 									{ max: 1000, message: t('symbolExcess') }
 								]}
-								label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Должность</label>}
+								label={
+									<label className="text-black text-[18px]/[18px] font-content-font font-normal">{t('job')}</label>
+								}
 							>
 								<Input
 									onPressEnter={e => {
@@ -1352,9 +1360,11 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 								<Form.Item
 									className="w-[50%]"
 									name={'beginWork'}
-									rules={[{ required: true, message: 'Укажите период работы' }]}
+									rules={[{ required: true, message: t('specify') + ' ' + t('periodOperation').toLowerCase() }]}
 									label={
-										<label className="text-black text-[18px]/[18px] font-content-font font-normal">Период работы</label>
+										<label className="text-black text-[18px]/[18px] font-content-font font-normal">
+											{t('periodOperation')}
+										</label>
 									}
 								>
 									<DatePicker.MonthPicker className="w-full" disabled={haveNoExprience} maxDate={dayjs(date)} />
@@ -1362,7 +1372,7 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 								<Form.Item
 									name={'endWork'}
 									className="w-[50%] mt-auto"
-									rules={[{ required: true, message: 'Укажите период работы' }]}
+									rules={[{ required: true, message: t('specify') + ' ' + t('periodOperation').toLowerCase() }]}
 								>
 									<DatePicker.MonthPicker className="w-full" disabled={haveNoExprience} maxDate={dayjs(date)} />
 								</Form.Item>
@@ -1370,11 +1380,13 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 							<Form.Item
 								name={'duties'}
 								rules={[
-									{ required: true, message: 'Не указаны обязанности' },
+									{ required: true, message: t('specify') + ' ' + t('Responsibilities').toLowerCase() },
 									{ max: 1000, message: t('symbolExcess') }
 								]}
 								label={
-									<label className="text-black text-[18px]/[18px] font-content-font font-normal">Обязанности</label>
+									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
+										{t('Responsibilities')}
+									</label>
 								}
 							>
 								<Input.TextArea autoSize={true} className="!h-[107px]" disabled={haveNoExprience}></Input.TextArea>
@@ -1424,13 +1436,19 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 									<ArrowIcon />
 								</button>
 								<p className="mb-[2px] ml-[15px] font-content-font font-bold text-black text-[18px]/[21.6px]">
-									Изменить место работы
+									{t('edit') + ' ' + t('placeWork').toLowerCase()}
 								</p>
 							</div>
 							<Form.Item
 								name={'workplace'}
+								rules={[
+									{ required: true, message: t('specify') + ' ' + t('placeWork').toLowerCase() },
+									{ max: 1000, message: t('symbolExcess') }
+								]}
 								label={
-									<label className="text-black text-[18px]/[18px] font-content-font font-normal">Место работы</label>
+									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
+										{t('placeWork')}
+									</label>
 								}
 							>
 								<Input
@@ -1442,7 +1460,13 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 							</Form.Item>
 							<Form.Item
 								name={'seat'}
-								label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Должность</label>}
+								rules={[
+									{ required: true, message: t('specify') + ' ' + t('job').toLowerCase() },
+									{ max: 1000, message: t('symbolExcess') }
+								]}
+								label={
+									<label className="text-black text-[18px]/[18px] font-content-font font-normal">{t('job')}</label>
+								}
 							>
 								<Input
 									onPressEnter={e => {
@@ -1455,9 +1479,11 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 								<Form.Item
 									className="w-[50%]"
 									name={'beginWork'}
-									rules={[{ required: true, message: 'Укажите период работы' }]}
+									rules={[{ required: true, message: t('specify') + ' ' + t('periodOperation').toLowerCase() }]}
 									label={
-										<label className="text-black text-[18px]/[18px] font-content-font font-normal">Период работы</label>
+										<label className="text-black text-[18px]/[18px] font-content-font font-normal">
+											{t('periodOperation')}
+										</label>
 									}
 								>
 									<DatePicker.MonthPicker className="w-full" disabled={haveNoExprience} maxDate={dayjs(date)} />
@@ -1465,15 +1491,21 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 								<Form.Item
 									name={'endWork'}
 									className="w-[50%] mt-auto"
-									rules={[{ required: true, message: 'Укажите период работы' }]}
+									rules={[{ required: true, message: t('specify') + ' ' + t('periodOperation').toLowerCase() }]}
 								>
 									<DatePicker.MonthPicker className="w-full" disabled={haveNoExprience} maxDate={dayjs(date)} />
 								</Form.Item>
 							</div>
 							<Form.Item
 								name={'duties'}
+								rules={[
+									{ required: true, message: t('specify') + ' ' + t('Responsibilities').toLowerCase() },
+									{ max: 1000, message: t('symbolExcess') }
+								]}
 								label={
-									<label className="text-black text-[18px]/[18px] font-content-font font-normal">Обязанности</label>
+									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
+										{t('Responsibilities')}
+									</label>
 								}
 							>
 								<Input.TextArea autoSize={true} className="!h-[107px]" disabled={haveNoExprience}></Input.TextArea>
@@ -1513,7 +1545,7 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 									<ArrowIcon />
 								</button>
 								<p className="mb-[2px] ml-[15px] font-content-font font-bold text-black text-[18px]/[21.6px]">
-									Профессиональные навыки
+									{t('professionalSkills')}
 								</p>
 							</div>
 							<Form.Item
@@ -1521,17 +1553,17 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 								rules={[
 									{
 										required: currentFormskills.length === 0,
-										message: 'Не указаны ключевые навыки'
+										message: t('specify') + ' ' + t('keySkills').toLocaleLowerCase()
 									}
 								]}
 								label={
 									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
-										Какими ключевыми навыками вы обладаете?
+										{t('keySkillsQuestion')}
 									</label>
 								}
 							>
 								<Input
-									placeholder='Например, "Прототипирование"'
+									placeholder={t('keySkillExample')}
 									suffix={
 										<ConfigProvider
 											theme={{
@@ -1597,7 +1629,7 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 								]}
 								label={
 									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
-										О себе (необязательно)
+										{t('aboutMe')} ({t('notNecessary')})
 									</label>
 								}
 							>

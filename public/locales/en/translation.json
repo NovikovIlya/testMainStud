@@ -970,5 +970,20 @@
 	"errorMiddleName": "Please, enter your middlename!",
 	"symbolExcess": "The number of characters was exceede",
 	"educationalInstitution": "Educational Institution",
-	"specializationNotEntered": "Please enter specialization"
+	"specializationNotEntered": "Please enter specialization",
+	"attachFile": "Attach file",
+	"portfolio": "Portfolio",
+	"notNecessary": "Not necessary",
+	"max10MB": "10MB maximum",
+	"noExperience": "No work experience",
+	"specify": "Enter",
+	"professionalSkills": "Professional skills",
+	"keySkills": "Key skills",
+	"keySkillsQuestion": "What key skills do you possess?",
+	"keySkillExample": "e.g. \"prototyping\"",
+	"vacancy": "Vacancy",
+	"coverLetter": "Cover letter",
+	"enterCoverLetter": "Enter message",
+	"send": "Send",
+	"respondSuccess": "Thank you, successfull respond."
 }

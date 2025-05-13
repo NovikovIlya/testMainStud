@@ -961,5 +961,20 @@
 	"errorMiddleName": "Пожалуйста, укажите отчество!",
 	"symbolExcess": "Количество символов было превышено",
 	"educationalInstitution": "Учебное заведение",
-	"specializationNotEntered": "Не указана специальность"
+	"specializationNotEntered": "Не указана специальность",
+	"attachFile": "Прикрепить файл",
+	"portfolio": "Портфолио",
+	"notNecessary": "Не обязательно",
+	"max10MB": "Не более 10 мб",
+	"noExperience": "Я не имею опыта работы",
+	"specify": "Укажите",
+	"professionalSkills": "Профессиональные навыки",
+	"keySkills": "Ключевые навыки",
+	"keySkillsQuestion": "Какими ключевыми навыками вы обладаете?",
+	"keySkillExample": "Например, прототипирование",
+	"vacancy": "Вакансия",
+	"coverLetter": "Сопроводительное письмо",
+	"enterCoverLetter": "Введите сообщение",
+	"send": "Отправить",
+	"respondSuccess": "Спасибо, ваш отклик успешно отправлен."
 }

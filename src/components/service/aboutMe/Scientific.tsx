@@ -35,7 +35,7 @@ const Scientific = () => {
 		isLoading: isFetchingForeign,
 		isError: isErrorForeign,
 		isSuccess,
-		isFetching
+	
 	} = useGetAllForScientificQuery()
 	const scientificDirector = Form.useWatch('scientificDirector', form2)
 	const debouncedNameStudent = useDebounce(scientificDirector, { wait: 1000 })
@@ -100,9 +100,10 @@ const Scientific = () => {
 	const handleCancel = () => {
 		setIsModalOpen(false)
 		form2.resetFields()
+		setDataScientificDirectorsValue([])
 	}
 
-	if (isFetching) {
+	if (isFetchingForeign) {
 		return (
 			<div className="mt-[-10px] ml-[6px]">
 				<SkeletonPage />

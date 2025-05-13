@@ -252,31 +252,37 @@ export const myPracticeService = apiSlice.injectEndpoints({
 				method: 'POST',
 				body
 			}),
-      invalidatesTags: ['scientific'],
+			invalidatesTags: ['scientific']
 		}),
-    editScientificActivity: builder.mutation<void, EditScientificActivityPayload>({
+		editScientificActivity: builder.mutation<void, EditScientificActivityPayload>({
 			query: body => ({
 				url: 'activities/scientific-activity',
 				method: 'PUT',
 				body
 			}),
-      invalidatesTags: ['scientific'],
+			invalidatesTags: ['scientific']
 		}),
-    getOneScientific: builder.query<any, any>({
-			query: (id) => ({
+		getOneScientific: builder.query<any, any>({
+			query: id => ({
 				url: `/activities/scientific-activity/${id}`,
 				method: 'GET'
 			}),
 			providesTags: ['scientific'],
-      keepUnusedDataFor: 1
+			keepUnusedDataFor: 1
 		}),
-    deleteScientific: builder.mutation<any, any>({
-			query: (id) => ({
+		deleteScientific: builder.mutation<any, any>({
+			query: id => ({
 				url: `/activities/scientific-activity/${id}`,
 				method: 'DELETE'
 			}),
-			invalidatesTags: ['scientific'],
-
+			invalidatesTags: ['scientific']
+		}),
+		isPublishedScientific: builder.mutation<any, any>({
+			query: id => ({
+				url: `/activities/scientific-activity/${id}`,
+				method: 'PATCH'
+			}),
+			invalidatesTags: ['scientific']
 		}),
 	})
 })
@@ -309,7 +315,8 @@ export const {
 	useGetAllForScientificQuery,
 	useGetScientificDirectorsQuery,
 	useCreateScientificActivityMutation,
-  useDeleteScientificMutation,
-  useGetOneScientificQuery,
-  useEditScientificActivityMutation
+	useDeleteScientificMutation,
+	useGetOneScientificQuery,
+	useEditScientificActivityMutation,
+	useIsPublishedScientificMutation
 } = myPracticeService

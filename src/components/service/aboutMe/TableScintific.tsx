@@ -27,7 +27,8 @@ import {
 	useEditScientificActivityMutation,
 	useGetOneScientificQuery,
 	useGetScientificDirectorsQuery,
-	useIsPublishedMutation
+	useIsPublishedMutation,
+	useIsPublishedScientificMutation
 } from '../../../store/api/aboutMe/forAboutMe'
 import { generateYearsArray } from '../../../utils/generateYearsArray'
 
@@ -43,9 +44,9 @@ const TableScintific = ({ isSuccess, dataLevels, dataScientific, setSelectId, se
 	const {
 		data: getOne,
 		isSuccess: isSuccesOne,
-		isLoading: isLoadingOne
+		isFetching: isLoadingOne
 	} = useGetOneScientificQuery(selectInfo?.id, { skip: !selectInfo?.id })
-	const [changeGlaz, { isLoading: isLoadingGlaz }] = useIsPublishedMutation()
+	const [changeGlaz, { isLoading: isLoadingGlaz }] = useIsPublishedScientificMutation()
 	const scientificDirector = Form.useWatch('scientificDirector', form2)
 	const debouncedNameStudent = useDebounce(scientificDirector, { wait: 1000 })
 	const { data: dataScientificDirectors, isLoading: isLoadingDirectors } = useGetScientificDirectorsQuery(
@@ -165,7 +166,8 @@ const TableScintific = ({ isSuccess, dataLevels, dataScientific, setSelectId, se
 				year: getOne?.year,
 				theme: getOne?.theme,
 				direction: getOne?.direction,
-				isPublished: getOne?.isPublished
+				isPublished: getOne?.isPublished,
+				scientificDirector: getOne?.scientificDirector
 			})
 		}
 	}, [isSuccesOne, getOne, form2])
@@ -187,7 +189,7 @@ const TableScintific = ({ isSuccess, dataLevels, dataScientific, setSelectId, se
 		setIsModalOpenEdit(false)
 		form2.resetFields()
 	}
-
+	console.log('id',id)
 	const onFinishForm2 = async (values: any) => {
 		editScientific({
 			id: getOne?.id,
@@ -195,9 +197,9 @@ const TableScintific = ({ isSuccess, dataLevels, dataScientific, setSelectId, se
 			year: values?.year,
 			theme: values?.theme,
 			direction: values?.direction,
-			isPublished: values?.isPublished
-			// scientificDirectorId: getOne?.scientificDirectorId,
-			// scientificDirector: getOne?.scientificDirector
+			isPublished: values?.isPublished,
+			scientificDirectorId: id ? id : getOne?.scientificDirectorId,
+			
 		})
 		handleCancelEdit()
 	}

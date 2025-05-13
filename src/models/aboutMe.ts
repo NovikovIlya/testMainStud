@@ -181,10 +181,10 @@ export interface EditScientificActivityPayload {
   direction: string;
   scientificDirectorId: number | null;
   isPublished: boolean;
-  scientificDirector: string,
-}
 
-export interface Directors {
+};
+
+export type Directors = {
    id: number;
   name: string;
-}[]
+}[];

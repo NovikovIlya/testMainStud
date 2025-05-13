@@ -44,83 +44,34 @@ export const AddEducationModal = (props: {
 						requiredMark={false}
 						className="w-full"
 						onFinish={values => {
-							let reader = new FileReader()
-							reader.onload = e => {
-								console.log(values)
-								console.log({ ...values, file: e.target?.result })
-								props.type === 'ADD'
-									? addEducation({
-											language_portal: values.language,
-											start_date: values.beginningYear,
-											end_date: values.graduateYear,
-											edu_level: values.educationLevelId,
-											eduspeciality: values.specialization,
-											organization: values.nameOfInstitute,
-											edu_country: countries.find(country => country.id === values.countryId)?.shortName!,
-											development: values.subdivision,
-											qualification: values.qualification,
-											issue_date: values.issueDate,
-											docnum: values.number,
-											docseries: values.series,
-											portal_status: values.accept ? '1' : null,
-											edu_file: [
-												{ filename: values.file.file.name, file_base64: String(e.target?.result).split(',')[1] }
-											]
-									  })
-											.then(() => {
-												props.form.resetFields()
-												props.onCancel()
-											})
-											.catch(() => {
-												console.log('??????')
-											})
-									: updateEducation({
-											language_portal: values.language,
-											start_date: dayjs(values.beginningYear).format('DD.MM.YYYY'),
-											end_date: dayjs(values.graduateYear).format('DD.MM.YYYY'),
-											edu_level: values.educationLevelId,
-											eduspeciality: values.specialization,
-											organization: values.nameOfInstitute,
-											edu_country: countries.find(country => country.id === values.countryId)?.shortName!,
-											development: values.subdivision,
-											qualification: values.qualification,
-											issue_date: dayjs(values.issueDate).format('DD.MM.YYYY'),
-											docnum: values.number,
-											docseries: values.series,
-											portal_status: values.accept ? '1' : null,
-											id: values.id,
-											s_id: values.s_id,
-											e_id: values.e_id,
-											user_allid: values.user_allid,
-											edu_file: [{ filename: values.file.file.name, file_base64: e.target?.result as string }]
-									  })
-											.then(() => {
-												props.form.resetFields()
-												props.onCancel()
-											})
-											.catch(() => {
-												console.log('??????')
-											})
+							console.log(values)
+							let data = {
+								language_portal: values.language,
+								start_date: dayjs(values.beginningYear).format('DD.MM.YYYY'),
+								end_date: dayjs(values.graduateYear).format('DD.MM.YYYY'),
+								edu_level: values.educationLevelId,
+								eduspeciality: values.specialization,
+								organization: values.nameOfInstitute,
+								edu_country: countries.find(country => country.id === values.countryId)?.shortName!,
+								development: values.subdivision,
+								qualification: values.qualification,
+								issue_date: dayjs(values.issueDate).format('DD.MM.YYYY'),
+								docnum: values.number,
+								docseries: values.series,
+								portal_status: values.accept ? '1' : null,
+								id: values.id,
+								s_id: values.s_id,
+								e_id: values.e_id,
+								user_allid: values.user_allid
 							}
-							values.file
-								? reader.readAsDataURL(values.file.file.originFileObj)
-								: props.type === 'ADD'
-								? addEducation({
-										language_portal: values.language,
-										start_date: dayjs(values.beginningYear).format('DD.MM.YYYY'),
-										end_date: dayjs(values.graduateYear).format('DD.MM.YYYY'),
-										edu_level: values.educationLevelId,
-										eduspeciality: values.specialization,
-										organization: values.nameOfInstitute,
-										edu_country: countries.find(country => country.id === values.countryId)?.shortName!,
-										development: values.subdivision,
-										qualification: values.qualification,
-										issue_date: dayjs(values.issueDate).format('DD.MM.YYYY'),
-										docnum: values.number,
-										docseries: values.series,
-										portal_status: values.accept ? '1' : null,
-										edu_file: [{ filename: null, file_base64: null }]
-								  })
+							let clearData = Object.fromEntries(Object.entries(data).filter(([_, v]) => v != null))
+							let jsonData = JSON.stringify(clearData)
+							let blobData = new Blob([jsonData], { type: 'application/json' })
+							const formData = new FormData()
+							formData.append('data', blobData)
+							values.file && formData.append('file', values.file.file.originFileObj)
+							props.type === 'ADD'
+								? addEducation(formData)
 										.then(() => {
 											props.form.resetFields()
 											props.onCancel()
@@ -128,27 +79,9 @@ export const AddEducationModal = (props: {
 										.catch(() => {
 											console.log('??????')
 										})
-								: updateEducation({
-										language_portal: values.language,
-										start_date: dayjs(values.beginningYear).format('DD.MM.YYYY'),
-										end_date: dayjs(values.graduateYear).format('DD.MM.YYYY'),
-										edu_level: values.educationLevelId,
-										eduspeciality: values.specialization,
-										organization: values.nameOfInstitute,
-										edu_country: countries.find(country => country.id === values.countryId)?.shortName!,
-										development: values.subdivision,
-										qualification: values.qualification,
-										issue_date: dayjs(values.issueDate).format('DD.MM.YYYY'),
-										docnum: values.number,
-										docseries: values.series,
-										portal_status: values.accept ? '1' : null,
-										id: values.id,
-										s_id: values.s_id,
-										e_id: values.e_id,
-										user_allid: values.user_allid,
-										edu_file: [{ filename: null, file_base64: null }]
-								  })
+								: updateEducation(formData)
 										.then(() => {
+											props.form.resetFields()
 											props.onCancel()
 										})
 										.catch(() => {

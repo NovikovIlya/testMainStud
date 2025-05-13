@@ -1148,7 +1148,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 			}),
 			providesTags: ['Education']
 		}),
-		addNewEducation: builder.mutation<void, EducationTableDataType>({
+		addNewEducation: builder.mutation<void, any>({
 			query: arg => ({
 				url: `about-me/set-completed-edu`,
 				method: 'POST',
@@ -1164,11 +1164,11 @@ export const serviceApi = apiSlice.injectEndpoints({
 			}),
 			invalidatesTags: ['Education']
 		}),
-		updateNewEducation: builder.mutation<void, EducationTableDataType>({
+		updateNewEducation: builder.mutation<void, any>({
 			query: arg => ({
 				url: `about-me/set-completed-edu`,
 				method: 'PUT',
-				body: Object.fromEntries(Object.entries(arg).filter(([_, v]) => v != null))
+				body: arg
 			}),
 			invalidatesTags: ['Education']
 		}),

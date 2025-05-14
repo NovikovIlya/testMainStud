@@ -1,4 +1,4 @@
-import { ConfigProvider, Radio, RadioChangeEvent, Table } from 'antd'
+import { ConfigProvider, Radio, RadioChangeEvent, Spin, Table } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 import { t } from 'i18next'
 import { useEffect, useState } from 'react'
@@ -12,7 +12,7 @@ import './StyleSchedule.scss'
 
 export const Schedule = () => {
 	const { data: schedule, isLoading } = useGetScheduleQuery()
-	const {data: {date:dataCurrentDate}} = useGetCurrentDateQuery()
+	const {data: dataCurrentDate,isLoading:isLoadingDate} = useGetCurrentDateQuery()
 	const [data, setData] = useState<DataType[] | undefined>()
 	const isMobile = isMobileDevice()
 	const orientation = useWindowOrientation()
@@ -79,7 +79,7 @@ export const Schedule = () => {
 	]
 	useEffect(() => {
 		setData(filterLessonsByDate(schedule?.monday))
-	}, [isLoading, schedule])
+	}, [isLoading, schedule,dataCurrentDate])
 
 	const onChange = (e: RadioChangeEvent) => {
 		//@ts-ignore
@@ -93,10 +93,10 @@ export const Schedule = () => {
 	};
 
 	const isLessonActive = (duration: string) => {
-		if (!dataCurrentDate || !duration) return true; // Если данных нет, показываем все предметы
+		if (!dataCurrentDate?.date || !duration) return false; // Если данных нет, показываем все предметы
 		
 		try {
-			const currentDate = parseRussianDate(dataCurrentDate);
+			const currentDate = parseRussianDate(dataCurrentDate?.date);
 			const [startDateStr, endDateStr] = duration.split('-');
 			
 			// Преобразуем строки дат в формате "DD.MM.YY" в объекты Date
@@ -115,6 +115,7 @@ export const Schedule = () => {
 				parseInt(endParts[1]) - 1,      // Месяц
 				parseInt(endParts[0])           // День
 			);
+			console.log(currentDate, startDate, endDate);
 			// Проверяем, входит ли текущая дата в диапазон
 			return currentDate >= startDate && currentDate <= endDate;
 		} catch (error) {
@@ -135,9 +136,10 @@ export const Schedule = () => {
 			<div className="max-w-full text-center mt-10">
 				В данном разрешении модуль не работает, пожалуйста поверните телефон
 			</div>
-		)
+	)
 
 	return (
+		<Spin  spinning={isLoadingDate}>
 		<div className={`${isMobile ? 'mx-0' : 'mx-14'} mt-14  radio w-full justify-center`}>
 			{/* <div className="mb-14 text-[28px]">Мое расписание</div> */}
 			<Radio.Group onChange={onChange} defaultValue="monday" buttonStyle="solid" className="flex gap-[10px] h-9">
@@ -217,5 +219,6 @@ export const Schedule = () => {
 				</div>
 			</div>
 		</div>
+		</Spin>
 	)
 }

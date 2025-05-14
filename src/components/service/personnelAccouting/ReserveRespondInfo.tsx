@@ -1,6 +1,7 @@
 import { LoadingOutlined } from '@ant-design/icons'
 import { Button, ConfigProvider, Modal, Spin, Tag } from 'antd'
 import dayjs from 'dayjs'
+import { t } from 'i18next'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
@@ -28,14 +29,16 @@ import { setRespondId } from '../../../store/reducers/CurrentRespondIdSlice'
 import { setCurrentVacancyId } from '../../../store/reducers/CurrentVacancyIdSlice'
 import { setCurrentVacancyName } from '../../../store/reducers/CurrentVacancyNameSlice'
 import { setChatId } from '../../../store/reducers/chatIdSlice'
-import { useAlert } from '../../../utils/Alert/AlertMessage'
 import styles from '../../../utils/deleteOverwriteAntButton.module.css'
 import { NocircleArrowIcon } from '../jobSeeker/NoCircleArrowIcon'
 
 import { ApproveRespondForm } from './ApproveRespondForm'
 import { InviteSeekerForm } from './supervisor/InviteSeekerForm'
 
-export const ReserveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR' }) => {
+export const ReserveRespondInfo = (props: {
+	type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
+	handleAlert: (text: string, type: 'SUCCESS' | 'ERROR') => void
+}) => {
 	const currentUrl = window.location.pathname
 	const match = currentUrl.match(/\/fullinfo\/(\d+)(?=\/|$)/)
 
@@ -53,8 +56,6 @@ export const ReserveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 
 	const { i18n } = useTranslation()
 	const { data: countries } = useGetCountriesQuery(i18n.language)
-
-	const { openAlert } = useAlert()
 
 	const [getResume, resumeQueryStatus] = useLazyGetSeekerResumeFileQuery()
 	const { refetch } = useGetReservedResponcesQuery({ type: 'все', page: 0 })
@@ -174,9 +175,9 @@ export const ReserveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 														navigate('/services/personnelaccounting/reserve')
 													})
 												})
-											openAlert({ type: 'success', text: 'Отклик успешно удален' })
+											props.handleAlert('Отклик успешно удалён', 'SUCCESS')
 										} catch (error: any) {
-											openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+											props.handleAlert(t('alertError'), 'ERROR')
 										}
 									}}
 									loading={deleteRespondLoading}

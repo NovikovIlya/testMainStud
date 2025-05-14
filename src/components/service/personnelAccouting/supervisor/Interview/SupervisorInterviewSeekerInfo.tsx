@@ -1,5 +1,5 @@
 import { LoadingOutlined } from '@ant-design/icons'
-import { Button, ConfigProvider, Form, Modal, Select, Spin, Tag } from 'antd'
+import { Button, ConfigProvider, Form, Modal, Select, Spin, Tag, notification } from 'antd'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import uuid from 'react-uuid'
@@ -14,11 +14,10 @@ import {
 	useLazyGetSeekerResumeFileQuery
 } from '../../../../../store/api/serviceApi'
 import { useGetCountriesQuery } from '../../../../../store/api/utilsApi'
-import { useAlert } from '../../../../../utils/Alert/AlertMessage'
 import { NocircleArrowIcon } from '../../../jobSeeker/NoCircleArrowIcon'
 
 export const SupervisorInterviewSeekerInfo = () => {
-	const { openAlert } = useAlert()
+	const [api, contextHolder] = notification.useNotification()
 
 	const currentUrl = window.location.pathname
 	const match = currentUrl.match(/\/seekerinfo\/(\d+)$/)
@@ -246,9 +245,9 @@ export const SupervisorInterviewSeekerInfo = () => {
 											.then(() => {
 												setIsEmploymentRequestSent(true)
 											})
-										openAlert({ type: 'success', text: 'Приглашение на работу успешно отправлено' })
+										api.success({ message: 'Приглашение на работу успешно отправлено', placement: 'bottomRight' })
 									} catch (error: any) {
-										openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+										api.error({ message: t('alertError'), placement: 'bottomRight' })
 									}
 								}}
 								loading={aproveSeekerLoading}
@@ -289,6 +288,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 	}
 	return (
 		<>
+			{contextHolder}
 			<ConfigProvider
 				theme={{
 					token: {
@@ -441,9 +441,9 @@ export const SupervisorInterviewSeekerInfo = () => {
 													setIsSeekerRejected(true)
 												})
 											setIsRefuseModalOpen(false)
-											openAlert({ type: 'success', text: 'Причина отказа успешно отправлена' })
+											api.success({ message: 'Причина отказа успешно отправлена', placement: 'bottomRight' })
 										} catch (error: any) {
-											openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+											api.error({ message: t('alertError'), placement: 'bottomRight' })
 										}
 									}}
 								>

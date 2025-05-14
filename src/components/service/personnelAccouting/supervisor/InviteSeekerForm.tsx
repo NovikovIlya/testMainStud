@@ -1,10 +1,10 @@
-import { Button, ConfigProvider, DatePicker, Form, Input, Modal, Select, message } from 'antd'
+import { Button, ConfigProvider, DatePicker, Form, Input, Modal, Select, message, notification } from 'antd'
 import dayjs from 'dayjs'
+import { t } from 'i18next'
 import { useState } from 'react'
 import uuid from 'react-uuid'
 
 import { useInviteSeekerMutation } from '../../../../store/api/serviceApi'
-import { useAlert } from '../../../../utils/Alert/AlertMessage'
 
 export const InviteSeekerForm = (props: { respondId: number; isButtonDisabled: boolean; callback: Function }) => {
 	const [isFormOpen, setIsFormOpen] = useState<boolean>(false)
@@ -31,7 +31,7 @@ export const InviteSeekerForm = (props: { respondId: number; isButtonDisabled: b
 
 	const [form] = Form.useForm()
 
-	const { openAlert } = useAlert()
+	const [api, contextHolder] = notification.useNotification()
 
 	const handleDateChange = (e: any, dateString: any) => {
 		// if (dayjs(e).isBefore(dayjs(), 'minute')) {
@@ -53,6 +53,7 @@ export const InviteSeekerForm = (props: { respondId: number; isButtonDisabled: b
 
 	return (
 		<>
+			{contextHolder}
 			<Button
 				onClick={() => {
 					setIsFormOpen(true)
@@ -150,7 +151,7 @@ export const InviteSeekerForm = (props: { respondId: number; isButtonDisabled: b
 										setIsFormOpen(false)
 										setIsResultModalOpen(true)
 									} catch (error: any) {
-										openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+										api.error({ message: t('alertError'), placement: 'bottomRight' })
 										form.resetFields(['reserveTime'])
 									}
 								})

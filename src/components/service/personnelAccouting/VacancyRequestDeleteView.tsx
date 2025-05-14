@@ -1,5 +1,6 @@
 import { LoadingOutlined } from '@ant-design/icons'
-import { Button, ConfigProvider, Modal, Spin } from 'antd'
+import { Button, ConfigProvider, Modal, Spin, notification } from 'antd'
+import { t } from 'i18next'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -10,7 +11,6 @@ import {
 	useGetVacancyRequestsQuery,
 	useLazyGetVacancyViewQuery
 } from '../../../store/api/serviceApi'
-import { useAlert } from '../../../utils/Alert/AlertMessage'
 import styles from '../../../utils/deleteOverwriteAntButton.module.css'
 import ArrowIcon from '../jobSeeker/ArrowIcon'
 
@@ -50,7 +50,7 @@ export const VacancyRequestDeleteView = () => {
 	const navigate = useNavigate()
 	const [acceptRequest, { isLoading: acceptRequestLoading }] = useAcceptDeleteVacancyRequestMutation()
 
-	const { openAlert } = useAlert()
+	const [api, contextHolder] = notification.useNotification()
 
 	const { refetch } = useGetVacancyRequestsQuery({ action: 'все', page: 0 })
 
@@ -73,6 +73,7 @@ export const VacancyRequestDeleteView = () => {
 
 	return (
 		<>
+			{contextHolder}
 			<ConfigProvider
 				theme={{
 					token: {
@@ -162,7 +163,7 @@ export const VacancyRequestDeleteView = () => {
 												})
 											})
 									} catch (error: any) {
-										openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+										api.error({ message: t('alertError'), placement: 'bottomRight' })
 									}
 								}}
 								loading={acceptRequestLoading}

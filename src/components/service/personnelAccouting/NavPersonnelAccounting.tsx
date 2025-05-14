@@ -54,7 +54,7 @@ export const NavPesonnelAccounting = () => {
 	const handleAlert = (text: string, type: 'SUCCESS' | 'ERROR') => {
 		type === 'SUCCESS'
 			? api.success({ message: text, placement: 'bottomRight' })
-			: api.error({ message: t('alertError'), placement: 'bottomRight' })
+			: api.error({ message: text, placement: 'bottomRight' })
 	}
 
 	const { data: rolesData = undefined } = useGetEmploymentPossibleRolesQuery()
@@ -623,7 +623,7 @@ export const NavPesonnelAccounting = () => {
 
 				{pathname === navEmployeeList[4].id && <Reserve />}
 				{pathname.match(/\/services\/personnelaccounting\/reserve\/fullinfo\/\d+/) && (
-					<ReserveRespondInfo type="PERSONNEL_DEPARTMENT" />
+					<ReserveRespondInfo type="PERSONNEL_DEPARTMENT" handleAlert={handleAlert} />
 				)}
 				{pathname === '/services/personnelaccounting/archive' && <Archive />}
 				{pathname.match(/\/services\/personnelaccounting\/archive\/fullinfo\/\d+/) && (

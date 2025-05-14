@@ -1,5 +1,6 @@
 import { LoadingOutlined } from '@ant-design/icons'
-import { Button, ConfigProvider, Form, Input, Modal, Select, Spin } from 'antd'
+import { Button, ConfigProvider, Form, Input, Modal, Select, Spin, notification } from 'antd'
+import { t } from 'i18next'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -11,7 +12,6 @@ import {
 	useLazyGetVacancyViewQuery,
 	useRequestUpdateVacancyMutation
 } from '../../../../../store/api/serviceApi'
-import { useAlert } from '../../../../../utils/Alert/AlertMessage'
 import ArrowIcon from '../../../jobSeeker/ArrowIcon'
 
 export const SupervisorUpdateVacancy = () => {
@@ -41,7 +41,7 @@ export const SupervisorUpdateVacancy = () => {
 
 	console.log(data)
 
-	const { openAlert } = useAlert()
+	const [api, contextHolder] = notification.useNotification()
 
 	const navigate = useNavigate()
 	const [requestUpdate, { isLoading: loading }] = useRequestUpdateVacancyMutation()
@@ -236,7 +236,7 @@ export const SupervisorUpdateVacancy = () => {
 								form.isFieldsTouched() && setIsSendRequestButtonActivated(true)
 								setIsEdit(false)
 							} catch (error: any) {
-								openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+								api.error({ message: t('alertError'), placement: 'bottomRight' })
 							}
 						}}
 					>
@@ -469,7 +469,7 @@ export const SupervisorUpdateVacancy = () => {
 																})
 												})
 										} catch (error: any) {
-											openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+											api.error({ message: t('alertError'), placement: 'bottomRight' })
 										}
 									}}
 									type="primary"

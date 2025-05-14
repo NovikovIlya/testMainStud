@@ -1,5 +1,6 @@
 import { LoadingOutlined } from '@ant-design/icons'
-import { Button, Checkbox, ConfigProvider, Form, Input, Modal, Select, Spin } from 'antd'
+import { Button, Checkbox, ConfigProvider, Form, Input, Modal, Select, Spin, notification } from 'antd'
+import { t } from 'i18next'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -12,7 +13,6 @@ import {
 	useGetVacancyRequestViewQuery,
 	useLazyGetVacancyRequestViewQuery
 } from '../../../store/api/serviceApi'
-import { useAlert } from '../../../utils/Alert/AlertMessage'
 import ArrowIcon from '../jobSeeker/ArrowIcon'
 
 export const VacancyRequestCreateView = () => {
@@ -42,7 +42,7 @@ export const VacancyRequestCreateView = () => {
 	const [acceptRequest, { isLoading: acceptRequestLoading }] = useAcceptCreateVacancyRequestMutation()
 	const [alterRequest, { isLoading: alterRequestLoading }] = useAlterCreateVacancyRequestMutation()
 
-	const { openAlert } = useAlert()
+	const [api, contextHolder] = notification.useNotification()
 
 	const { data: categories = [] } = useGetCategoriesQuery()
 	const [categoryTitle, setCategoryTitle] = useState<string>('')
@@ -143,6 +143,7 @@ export const VacancyRequestCreateView = () => {
 
 	return (
 		<>
+			{contextHolder}
 			<ConfigProvider
 				theme={{
 					token: {
@@ -252,7 +253,7 @@ export const VacancyRequestCreateView = () => {
 							setIsResultModalOpen(true)
 						} catch (error: any) {
 							console.log(error)
-							openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+							api.error({ message: t('alertError'), placement: 'bottomRight' })
 						}
 					}}
 				>

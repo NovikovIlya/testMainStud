@@ -634,7 +634,7 @@ export const ArchiveRespondInfo = (props: {
 															refetch()
 															navigate('/services/personnelaccounting/archive')
 														})
-													props.handleAlert('Отклик успешно отправлен руководителю', 'ERROR')
+													props.handleAlert('Отклик успешно отправлен руководителю', 'SUCCESS')
 												} catch (error: any) {
 													props.handleAlert(t('alertError'), 'ERROR')
 												}

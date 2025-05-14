@@ -6,6 +6,7 @@ export interface DataType {
 	building: string
 	room: string
 	type: string
+	duration: string
 }
 
 export interface DataTypeService {

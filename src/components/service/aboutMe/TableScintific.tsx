@@ -189,7 +189,6 @@ const TableScintific = ({ isSuccess, dataLevels, dataScientific, setSelectId, se
 		setIsModalOpenEdit(false)
 		form2.resetFields()
 	}
-	console.log('id',id)
 	const onFinishForm2 = async (values: any) => {
 		editScientific({
 			id: getOne?.id,
@@ -205,7 +204,6 @@ const TableScintific = ({ isSuccess, dataLevels, dataScientific, setSelectId, se
 	}
 
 	const handleSearch = (value: string, field: string) => {
-		console.log('value', value)
 		if (value?.length < 4) {
 			form2.setFields([
 				{
@@ -335,8 +333,6 @@ const TableScintific = ({ isSuccess, dataLevels, dataScientific, setSelectId, se
 														key: student.id,
 														value: student.name,
 														id: student.id,
-														// userType: student.userType,
-														// userInfo: student.userInfo,
 														label: (
 															<div>
 																<div className="">{student?.name}</div>
@@ -358,8 +354,6 @@ const TableScintific = ({ isSuccess, dataLevels, dataScientific, setSelectId, se
 										}
 										onSelect={(value, option) => {
 											setId(option.id)
-											// setType(option.userType)
-											// setRecipientName(option.userInfo)
 										}}
 									/>
 								}

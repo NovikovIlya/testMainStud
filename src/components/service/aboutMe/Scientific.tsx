@@ -46,8 +46,6 @@ const Scientific = () => {
 	}, [dataScientificDirectors])
 
 	const onFinishForm2 = async (values: any) => {
-		console.log('values', values)
-
 		createScientificActivity({
 			isRussian: values?.languageCode === 1 ? true : false,
 			year: values?.year,
@@ -58,10 +56,7 @@ const Scientific = () => {
 		}) 
 		handleCancel()
 	}
-	console.log('flag',flag)
-	console.log('scientificDirector',scientificDirector)
 	const handleSearch = (value: string, field: string) => {
-		console.log('value', value)
 		if (value?.length < 4) {
 			form2.setFields([
 				{
@@ -138,7 +133,6 @@ const Scientific = () => {
 					''
 				) : (
 					<Modal
-					
 						className="!z-[10000000]"
 						footer={null}
 						title={t('scient')}
@@ -232,8 +226,6 @@ const Scientific = () => {
 														key: student.id,
 														value: student.name,
 														id: student.id,
-														// userType: student.userType,
-														// userInfo: student.userInfo,
 														label: (
 															<div>
 																<div className="">{student?.name}</div>
@@ -255,8 +247,7 @@ const Scientific = () => {
 										}
 										onSelect={(value, option) => {
 											setId(option.id)
-											// setType(option.userType)
-											// setRecipientName(option.userInfo)
+											
 										}}
 									/>
 								}

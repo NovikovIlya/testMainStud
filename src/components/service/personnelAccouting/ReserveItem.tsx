@@ -59,18 +59,17 @@ export const ReserveItem = (props: {
 						</Button>
 						<Button
 							className={`${styles.customAntButton}`}
-							onClick={async () => {
-								try {
-									deleteVacancy(props.id)
-										.unwrap()
-										.then(() => {
-											setModalOpen(false)
-											props.refetch()
-										})
-									props.handleAlert('Отклик успешно удалён', 'SUCCESS')
-								} catch (error: any) {
-									props.handleAlert(t('alertError'), 'ERROR')
-								}
+							onClick={() => {
+								deleteVacancy(props.id)
+									.unwrap()
+									.then(() => {
+										setModalOpen(false)
+										props.refetch()
+										props.handleAlert('Отклик успешно удалён', 'SUCCESS')
+									})
+									.catch(() => {
+										props.handleAlert(t('alertError'), 'ERROR')
+									})
 							}}
 							loading={deleteResult.isLoading}
 						>

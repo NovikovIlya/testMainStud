@@ -1,4 +1,5 @@
 import { Button, ConfigProvider, Modal } from 'antd'
+import { t } from 'i18next'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -13,12 +14,11 @@ import {
 } from '../../../../../store/api/serviceApi'
 import { setCurrentVacancy } from '../../../../../store/reducers/CurrentVacancySlice'
 import { VacancyItemType } from '../../../../../store/reducers/type'
-import { useAlert } from '../../../../../utils/Alert/AlertMessage'
 import styles from '../../../../../utils/deleteOverwriteAntButton.module.css'
 
-export default function VacancyItem(props: VacancyItemType) {
-	const { openAlert } = useAlert()
-
+export default function VacancyItem(
+	props: VacancyItemType & { handleAlert: (text: string, type: 'SUCCESS' | 'ERROR') => void }
+) {
 	const [getVacancy, result] = useLazyGetVacancyViewQuery()
 	const navigate = useNavigate()
 	const [isModalOpen, setModalOpen] = useState(false)
@@ -109,34 +109,64 @@ export default function VacancyItem(props: VacancyItemType) {
 							</Button>
 							<Button
 								className={`${styles.customAntButton}`}
-								onClick={async () => {
-									try {
-										await getAllRequests('DELETE')
-											.unwrap()
-											.then(requests => {
-												let alreadyRequest = requests.content.find(req => {
-													return req.vacancy.id === props.id && req.status === 'VERIFYING'
-												})
-												alreadyRequest
-													? (setModalOpen(false),
-													  setSuccessModalText(
-															'Вы уже отправляли заявку на удаление данной вакансии. Она будет удалена, как только ваша заявка будет рассмотрена.'
-													  ),
-													  setIsSuccessModalOpen(true))
-													: requestDeleteVacancy(props.id)
-															.unwrap()
-															.then(() => {
-																setModalOpen(false)
-																setSuccessModalText(
-																	'Ваша заявка на удаление вакансии успешно отправлена. Вакансия будет удалена после рассмотрения заявки кадрами.'
-																)
-																setIsSuccessModalOpen(true)
-															})
+								// onClick={async () => {
+								// 	try {
+								// 		await getAllRequests('DELETE')
+								// 			.unwrap()
+								// 			.then(requests => {
+								// 				let alreadyRequest = requests.content.find(req => {
+								// 					return req.vacancy.id === props.id && req.status === 'VERIFYING'
+								// 				})
+								// 				alreadyRequest
+								// 					? (setModalOpen(false),
+								// 					  setSuccessModalText(
+								// 							'Вы уже отправляли заявку на удаление данной вакансии. Она будет удалена, как только ваша заявка будет рассмотрена.'
+								// 					  ),
+								// 					  setIsSuccessModalOpen(true))
+								// 					: requestDeleteVacancy(props.id)
+								// 							.unwrap()
+								// 							.then(() => {
+								// 								setModalOpen(false)
+								// 								setSuccessModalText(
+								// 									'Ваша заявка на удаление вакансии успешно отправлена. Вакансия будет удалена после рассмотрения заявки кадрами.'
+								// 								)
+								// 								setIsSuccessModalOpen(true)
+								// 							})
+								// 			})
+								// 	} catch (error: any) {
+								// 		let errorStr = error.status + ' ' + error.data.message
+								// 		props.handleAlert(t('errorAlert'), 'ERROR')
+								// 	}
+								// }}
+								onClick={() => {
+									getAllRequests('DELETE')
+										.unwrap()
+										.then(requests => {
+											let alreadyRequest = requests.content.find(req => {
+												return req.vacancy.id === props.id && req.status === 'VERIFYING'
 											})
-									} catch (error: any) {
-										let errorStr = error.status + ' ' + error.data.message
-										openAlert({ type: 'error', text: errorStr })
-									}
+											alreadyRequest
+												? (setModalOpen(false),
+												  setSuccessModalText(
+														'Вы уже отправляли заявку на удаление данной вакансии. Она будет удалена, как только ваша заявка будет рассмотрена.'
+												  ),
+												  setIsSuccessModalOpen(true))
+												: requestDeleteVacancy(props.id)
+														.unwrap()
+														.then(() => {
+															setModalOpen(false)
+															setSuccessModalText(
+																'Ваша заявка на удаление вакансии успешно отправлена. Вакансия будет удалена после рассмотрения заявки кадрами.'
+															)
+															setIsSuccessModalOpen(true)
+														})
+														.catch(() => {
+															props.handleAlert(t('alertError'), 'ERROR')
+														})
+										})
+										.catch(() => {
+											props.handleAlert(t('alertError'), 'ERROR')
+										})
 								}}
 								loading={deleteRequestLoading}
 							>

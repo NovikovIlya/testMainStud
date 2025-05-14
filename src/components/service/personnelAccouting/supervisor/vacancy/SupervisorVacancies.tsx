@@ -1,5 +1,5 @@
 import { LoadingOutlined } from '@ant-design/icons'
-import { Spin } from 'antd'
+import { Spin, notification } from 'antd'
 import { useEffect, useRef, useState } from 'react'
 
 import { useLazyGetSupervisorVacancyQuery } from '../../../../../store/api/serviceApi'
@@ -22,6 +22,14 @@ export const SupervisorVacancies = () => {
 	const [vacancies, setVacancies] = useState<VacancyItemType[]>([])
 
 	const [getVacancies, getVacanciesStatus] = useLazyGetSupervisorVacancyQuery()
+
+	const [api, contextHolder] = notification.useNotification()
+
+	const handleAlert = (text: string, type: 'SUCCESS' | 'ERROR') => {
+		type === 'SUCCESS'
+			? api.success({ message: text, placement: 'bottomRight' })
+			: api.error({ message: text, placement: 'bottomRight' })
+	}
 
 	useEffect(() => {
 		const lowerObserver = new IntersectionObserver(entries => {
@@ -88,6 +96,7 @@ export const SupervisorVacancies = () => {
 
 	return (
 		<>
+			{contextHolder}
 			<div className="pl-[54px] pr-[54px] pt-[120px] w-full bg-content-gray">
 				<h1 className="font-content-font font-normal text-[28px]/[28px] text-black">Вакансии</h1>
 				<div className="mt-[60px] pl-[20px] pr-[55px] flex w-full">
@@ -114,7 +123,7 @@ export const SupervisorVacancies = () => {
 						<>
 							{' '}
 							{vacancies.map(vac => (
-								<SupervisorVacancyItem {...vac} key={vac.id} />
+								<SupervisorVacancyItem {...vac} key={vac.id} handleAlert={handleAlert} />
 							))}
 							{getVacanciesStatus.isFetching && requestData.page > 0 && showSpin && (
 								<div className="text-center ml-auto mr-auto mb-[3%]">

@@ -1,6 +1,7 @@
 import { LoadingOutlined } from '@ant-design/icons'
-import { Button, Spin, Tag } from 'antd'
+import { Button, Spin, Tag, notification } from 'antd'
 import dayjs from 'dayjs'
+import { t } from 'i18next'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
@@ -28,7 +29,6 @@ import { openChat } from '../../../store/reducers/ChatRespondStatusSlice'
 import { setRespondId } from '../../../store/reducers/CurrentRespondIdSlice'
 import { setCurrentVacancyId } from '../../../store/reducers/CurrentVacancyIdSlice'
 import { setChatId } from '../../../store/reducers/chatIdSlice'
-import { useAlert } from '../../../utils/Alert/AlertMessage'
 import { NocircleArrowIcon } from '../jobSeeker/NoCircleArrowIcon'
 
 import { InviteSeekerForm } from './supervisor/InviteSeekerForm'
@@ -37,7 +37,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 	const { i18n } = useTranslation()
 	const { data: countries } = useGetCountriesQuery(i18n.language)
 
-	const { openAlert } = useAlert()
+	const [api, contextHolder] = notification.useNotification()
 
 	const currentUrl = window.location.pathname
 	const match = currentUrl.match(/\/fullinfo\/(\d+)$/)
@@ -142,6 +142,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 		if (res.type === 'RESPOND') {
 			return (
 				<>
+					{contextHolder}
 					<div className="pl-[52px] pr-[10%] py-[60px] mt-[60px] w-full">
 						<div>
 							<button
@@ -252,16 +253,21 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 														.unwrap()
 														.then(() => {
 															setIsRespondSentToSupervisor(true)
+															api.success({
+																message: 'Отклик успешно отправлен руководителю',
+																placement: 'bottomRight'
+															})
 														})
-													openAlert({
-														type: 'success',
-														text: 'Отклик успешно отправлен руководителю'
-													})
 												} catch (error: any) {
-													openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+													api.error({ message: t('alertError'), placement: 'bottomRight' })
 												}
 											}}
-											disabled={isRespondSentToSupervisor || isRespondSentToReserve || isRespondSentToArchive}
+											disabled={
+												isRespondSentToSupervisor ||
+												isRespondSentToReserve ||
+												isRespondSentToArchive ||
+												isRespondEmployed
+											}
 											loading={approveRespondLoading}
 											type="primary"
 											className="font-content-font font-normal text-white text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px]"
@@ -278,23 +284,30 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 														.unwrap()
 														.then(() => {
 															setIsRespondSentToArchive(true)
+															api.success({ message: 'Отклик успешно отправлен в архив', placement: 'bottomRight' })
 														})
-													openAlert({
-														type: 'success',
-														text: 'Отклик успешно отправлен в архив'
-													})
 												} catch (error: any) {
-													openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+													api.error({ message: t('alertError'), placement: 'bottomRight' })
 												}
 											}}
-											disabled={isRespondSentToSupervisor || isRespondSentToReserve || isRespondSentToArchive}
+											disabled={
+												isRespondSentToSupervisor ||
+												isRespondSentToReserve ||
+												isRespondSentToArchive ||
+												isRespondEmployed
+											}
 											loading={sendToArchiveLoading}
 											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
 										>
 											Отказать
 										</Button>
 										<Button
-											disabled={isRespondSentToSupervisor || isRespondSentToReserve || isRespondSentToArchive}
+											disabled={
+												isRespondSentToSupervisor ||
+												isRespondSentToReserve ||
+												isRespondSentToArchive ||
+												isRespondEmployed
+											}
 											loading={sendToReserveLoading}
 											onClick={async () => {
 												try {
@@ -302,13 +315,13 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 														.unwrap()
 														.then(() => {
 															setIsRespondSentToReserve(true)
+															api.success({
+																message: 'Отклик успешно отправлен в резерв',
+																placement: 'bottomRight'
+															})
 														})
-													openAlert({
-														type: 'success',
-														text: 'Отклик успешно отправлен в резерв'
-													})
 												} catch (error: any) {
-													openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+													api.error({ message: t('alertError'), placement: 'bottomRight' })
 												}
 											}}
 											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[224px] h-[40px] py-[8px] px-[24px] border-black"
@@ -402,9 +415,9 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 														.then(() => {
 															setIsRespondSentToArchive(true)
 														})
-													openAlert({ type: 'success', text: 'Резюме успешно отклонено' })
+													api.success({ message: 'Резюме успешно отклонено', placement: 'bottomRight' })
 												} catch (error: any) {
-													openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+													api.error({ message: t('alertError'), placement: 'bottomRight' })
 												}
 											}}
 											loading={sendToArchiveLoading}
@@ -601,6 +614,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 		} else {
 			return (
 				<>
+					{contextHolder}
 					<div className="pl-[52px] pr-[10%] py-[60px] w-full mt-[60px]">
 						<div>
 							<Button
@@ -648,9 +662,9 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 														.then(() => {
 															setIsRespondSentToSupervisor(true)
 														})
-													openAlert({ type: 'success', text: 'Отклик успешно отправлен руководителю' })
+													api.success({ message: 'Отклик успешно отправлен руководителю', placement: 'bottomRight' })
 												} catch (error: any) {
-													openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+													api.error({ message: t('alertError'), placement: 'bottomRight' })
 												}
 											}}
 											disabled={isRespondSentToSupervisor || isRespondSentToReserve || isRespondSentToArchive}
@@ -671,9 +685,9 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 														.then(() => {
 															setIsRespondSentToArchive(true)
 														})
-													openAlert({ type: 'success', text: 'Отклик успешно отправлен в архив' })
+													api.success({ message: 'Отклик успешно отправлен в архив', placement: 'bottomRight' })
 												} catch (error: any) {
-													openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+													api.error({ message: t('alertError'), placement: 'bottomRight' })
 												}
 											}}
 											disabled={isRespondSentToSupervisor || isRespondSentToReserve || isRespondSentToArchive}
@@ -691,9 +705,9 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 														.then(() => {
 															setIsRespondSentToReserve(true)
 														})
-													openAlert({ type: 'success', text: 'Отклик успешно отправлен в резерв' })
+													api.success({ message: 'Отклик успешно отправлен в резерв', placement: 'bottomRight' })
 												} catch (error: any) {
-													openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+													api.error({ message: t('alertError'), placement: 'bottomRight' })
 												}
 											}}
 											loading={sendToReserveLoading}
@@ -733,9 +747,9 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 														.then(() => {
 															setIsRespondSentToArchive(true)
 														})
-													openAlert({ type: 'success', text: 'Отклик успешно отправлен в архив' })
+													api.success({ message: 'Отклик успешно отправлен в архив', placement: 'bottomRight' })
 												} catch (error: any) {
-													openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+													api.error({ message: t('alertError'), placement: 'bottomRight' })
 												}
 											}}
 											className="bg-inherit font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] w-[257px] h-[40px] py-[8px] px-[24px] border-black"

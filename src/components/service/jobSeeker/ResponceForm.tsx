@@ -1,4 +1,17 @@
-import { Button, Checkbox, ConfigProvider, DatePicker, Form, Input, Modal, Radio, Select, Tag, Upload } from 'antd'
+import {
+	Button,
+	Checkbox,
+	ConfigProvider,
+	DatePicker,
+	Form,
+	Input,
+	Modal,
+	Radio,
+	Select,
+	Tag,
+	Upload,
+	notification
+} from 'antd'
 import dayjs from 'dayjs'
 import { t } from 'i18next'
 import { useEffect, useState } from 'react'
@@ -37,7 +50,6 @@ import {
 	educationResponceItemType
 } from '../../../store/reducers/SeekerFormReducers/RespondEducationReducer'
 import { allSkillsData } from '../../../store/reducers/SeekerFormReducers/SkillsReducer'
-import { useAlert } from '../../../utils/Alert/AlertMessage'
 
 import ArrowIcon from './ArrowIcon'
 import { AttachIcon } from './AttachIcon'
@@ -58,8 +70,7 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 	const educationData = useAppSelector(state => state.RespondEducation)
 	const experienceData = useAppSelector(state => state.Experience)
 	const fileData = useAppSelector(state => state.experienceFile)
-
-	const { openAlert } = useAlert()
+	const [api, contextHolder] = notification.useNotification()
 
 	const [currentFormskills, setcurrentFormSkills] = useState<string[]>(skillsData.skills)
 	const [haveNoExprience, setHaveNoExperience] = useState(experienceData.noExperienceFlag)
@@ -216,6 +227,7 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 
 	return (
 		<>
+			{contextHolder}
 			<Button
 				className="rounded-[54.5px]"
 				type="primary"
@@ -521,7 +533,7 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 												setIsSuccessModalOpen(true)
 											})
 											.catch(error => {
-												openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+												api.error({ message: t('alertError'), placement: 'bottomRight' })
 												setIsFormOpen(false)
 											})
 								}}

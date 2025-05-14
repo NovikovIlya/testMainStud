@@ -985,5 +985,6 @@
 	"coverLetter": "Cover letter",
 	"enterCoverLetter": "Enter message",
 	"send": "Send",
-	"respondSuccess": "Thank you, successfull respond."
+	"respondSuccess": "Thank you, successfull respond.",
+	"alertError": "Sorry, something went wrong..."
 }

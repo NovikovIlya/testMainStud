@@ -30,13 +30,15 @@ import { setRespondId } from '../../../store/reducers/CurrentRespondIdSlice'
 import { setCurrentVacancyId } from '../../../store/reducers/CurrentVacancyIdSlice'
 import { setCurrentVacancyName } from '../../../store/reducers/CurrentVacancyNameSlice'
 import { setChatId } from '../../../store/reducers/chatIdSlice'
-import { useAlert } from '../../../utils/Alert/AlertMessage'
 import styles from '../../../utils/deleteOverwriteAntButton.module.css'
 import { NocircleArrowIcon } from '../jobSeeker/NoCircleArrowIcon'
 
 import { InviteSeekerForm } from './supervisor/InviteSeekerForm'
 
-export const ArchiveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR' }) => {
+export const ArchiveRespondInfo = (props: {
+	type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
+	handleAlert: (text: string, type: 'SUCCESS' | 'ERROR') => void
+}) => {
 	const respondId = useAppSelector(state => state.currentResponce)
 
 	const currentUrl = window.location.pathname
@@ -51,8 +53,6 @@ export const ArchiveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 	}
 
 	const { data: res } = useGetArchivedRespondFullInfoQuery(id_from_url)
-
-	const { openAlert } = useAlert()
 
 	const date = new Date()
 
@@ -178,9 +178,9 @@ export const ArchiveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 														navigate('/services/personnelaccounting/archive')
 													})
 												})
-											openAlert({ type: 'success', text: 'Отклик успешно удалён.' })
+											props.handleAlert('Отклик успешно удалён', 'SUCCESS')
 										} catch (error: any) {
-											openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+											props.handleAlert(t('alertError'), 'ERROR')
 										}
 									}}
 									loading={deleteRespondLoading}
@@ -306,9 +306,9 @@ export const ArchiveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 															refetch()
 															navigate('/services/personnelaccounting/archive')
 														})
-													openAlert({ type: 'success', text: 'Отклик успешно отправлен руководителю' })
+													props.handleAlert('Отклик успешно отправлен руководителю', 'SUCCESS')
 												} catch (error: any) {
-													openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+													props.handleAlert(t('alertError'), 'ERROR')
 												}
 											}}
 											disabled={isRespondSentToSupervisor}
@@ -634,9 +634,9 @@ export const ArchiveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 															refetch()
 															navigate('/services/personnelaccounting/archive')
 														})
-													openAlert({ type: 'success', text: 'Отклик успешно отправлен руководителю' })
+													props.handleAlert('Отклик успешно отправлен руководителю', 'ERROR')
 												} catch (error: any) {
-													openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+													props.handleAlert(t('alertError'), 'ERROR')
 												}
 											}}
 											disabled={isRespondSentToSupervisor}

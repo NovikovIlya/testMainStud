@@ -1,4 +1,4 @@
-import { Collapse, CollapseProps, ConfigProvider } from 'antd'
+import { Collapse, CollapseProps, ConfigProvider, notification } from 'antd'
 import clsx from 'clsx'
 import { useLocation, useNavigate } from 'react-router-dom'
 
@@ -45,8 +45,16 @@ export const NavPesonnelAccounting = () => {
 	const { pathname } = useLocation()
 	const navigate = useNavigate()
 
+	const [api, contextHolder] = notification.useNotification()
+
 	const handleNavigate = (url: string) => {
 		navigate(url)
+	}
+
+	const handleAlert = (text: string, type: 'SUCCESS' | 'ERROR') => {
+		type === 'SUCCESS'
+			? api.success({ message: text, placement: 'bottomRight' })
+			: api.error({ message: t('alertError'), placement: 'bottomRight' })
 	}
 
 	const { data: rolesData = undefined } = useGetEmploymentPossibleRolesQuery()
@@ -582,6 +590,7 @@ export const NavPesonnelAccounting = () => {
 
 	return (
 		<>
+			{contextHolder}
 			<Header type="service" service="Трудоустройство" />
 			<div className="shadowNav">
 				<ul className="min-w-[230px] pt-14 flex flex-col gap-4 sticky top-[80px]">
@@ -618,7 +627,7 @@ export const NavPesonnelAccounting = () => {
 				)}
 				{pathname === '/services/personnelaccounting/archive' && <Archive />}
 				{pathname.match(/\/services\/personnelaccounting\/archive\/fullinfo\/\d+/) && (
-					<ArchiveRespondInfo type="PERSONNEL_DEPARTMENT" />
+					<ArchiveRespondInfo type="PERSONNEL_DEPARTMENT" handleAlert={handleAlert} />
 				)}
 				{pathname === navSupervisorList[0].id && <RespondsSupervisor />}
 				{pathname === navSupervisorList[1].id && <></>}

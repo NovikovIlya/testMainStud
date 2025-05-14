@@ -1,4 +1,5 @@
-import { Button, ConfigProvider, Modal } from 'antd'
+import { Button, ConfigProvider, Modal, notification } from 'antd'
+import { t } from 'i18next'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -13,11 +14,10 @@ import { setCurrentVacancyId } from '../../../store/reducers/CurrentVacancyIdSli
 import { setCurrentVacancyName } from '../../../store/reducers/CurrentVacancyNameSlice'
 import { setChatId } from '../../../store/reducers/chatIdSlice'
 import { RespondItemType, respondStatus } from '../../../store/reducers/type'
-import { useAlert } from '../../../utils/Alert/AlertMessage'
 import styles from '../../../utils/deleteOverwriteAntButton.module.css'
 
 export const RespondItem = (props: RespondItemType) => {
-	const { openAlert } = useAlert()
+	const [api, contextHolder] = notification.useNotification()
 
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
@@ -60,6 +60,7 @@ export const RespondItem = (props: RespondItemType) => {
 
 	return (
 		<>
+			{contextHolder}
 			<ConfigProvider
 				theme={{
 					token: {
@@ -103,10 +104,10 @@ export const RespondItem = (props: RespondItemType) => {
 											setModalOpen(false)
 											setStatus('отказано')
 										})
-									openAlert({ type: 'success', text: 'Отклик успешно удален' })
+									api.success({ message: 'Отклик успешно удалён', placement: 'bottomRight' })
 								} catch (error: any) {
 									let errorStr = error.status + ' ' + error.data.message
-									openAlert({ type: 'error', text: errorStr })
+									api.error({ message: t('alertError'), placement: 'bottomRight' })
 								}
 							}}
 							loading={deleteResult.isLoading}

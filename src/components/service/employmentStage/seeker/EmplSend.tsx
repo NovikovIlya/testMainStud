@@ -1,11 +1,11 @@
-import { Button, Checkbox, ConfigProvider, Modal } from 'antd'
+import { Button, Checkbox, ConfigProvider, Modal, notification } from 'antd'
+import { t } from 'i18next'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { ModalOkSvg } from '../../../../assets/svg/ModalOkSvg'
 import { useAppSelector } from '../../../../store'
 import { useSendEmploymentDocsMutation } from '../../../../store/api/serviceApi'
-import { useAlert } from '../../../../utils/Alert/AlertMessage'
 
 import { FileAttachment } from './FileAttachment'
 
@@ -13,7 +13,7 @@ export const EmplSend = (props: { respondId: number; stageId: number; stageName:
 	const { empData } = useAppSelector(state => state.employmentData)
 	const { docs } = useAppSelector(state => state.employmentSeekerDocs)
 
-	const { openAlert } = useAlert()
+	const [api, contextHolder] = notification.useNotification()
 
 	const [sendDocs] = useSendEmploymentDocsMutation()
 	const hasNotRequisites = empData.stages.find(stage => stage.type === 'SIXTH')?.hasRequisites
@@ -27,6 +27,7 @@ export const EmplSend = (props: { respondId: number; stageId: number; stageName:
 
 	return (
 		<>
+			{contextHolder}
 			<ConfigProvider
 				theme={{
 					token: {
@@ -118,7 +119,7 @@ export const EmplSend = (props: { respondId: number; stageId: number; stageName:
 									setIsResultModalOpen(true)
 								})
 						} catch (error: any) {
-							openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+							api.error({ message: t('alertError'), placement: 'bottomRight' })
 						}
 					}}
 				>

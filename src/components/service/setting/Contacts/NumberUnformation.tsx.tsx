@@ -65,7 +65,8 @@ export const NumberInformation = () => {
 				sendVerOne(res.id)
 			})
 			.catch(err => {
-				alert('Ошибка, такой номер уже есть')
+				console.log("err",err?.data?.error)
+				alert(err?.data?.error)
 			})
 			
 			

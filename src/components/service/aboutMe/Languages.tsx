@@ -133,11 +133,12 @@ const Languages = () => {
 		form2.resetFields()
 	}
 	const beforeUpload = (file: File) => {
-		const isImage = file.type === 'application/pdf'
+		const isImage = file.type === 'application/pdf' || file.type === 'image/jpeg' || file.type === 'image/png'
+		// jpg pnd pdf
 		const isLt5M = file.size / 1024 / 1024 < 5
 
 		if (!isImage) {
-			message.error('Можно загружать только PDF!')
+			message.error('Неверный формат файла!')
 			return false
 		}
 

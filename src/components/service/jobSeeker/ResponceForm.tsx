@@ -1641,7 +1641,7 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 								]}
 								label={
 									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
-										{t('aboutMe')} ({t('notNecessary')})
+										{t('aboutMyself')} ({t('notNecessary')})
 									</label>
 								}
 							>

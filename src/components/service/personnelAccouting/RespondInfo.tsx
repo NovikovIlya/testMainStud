@@ -180,7 +180,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 									<NocircleArrowIcon />
 								</div>
 								<span className="group-hover:text-[#004EC2] transition-all duration-200 text-[14px] font-normal">
-									Назад
+									{t('back')}
 								</span>
 							</button>
 						</div>
@@ -195,22 +195,22 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 											{res?.userData?.lastname + ' ' + res?.userData?.firstname + ' ' + res?.userData?.middlename}
 										</p>
 										<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-											{res.userData?.sex === 'M' ? 'Мужчина' : 'Женщина'},{' '}
+											{res.userData?.sex === 'M' ? t('man') : t('woman')},{' '}
 											{dayjs().diff(dayjs(res.userData?.birthday), 'years')}{' '}
 											{dayjs().diff(dayjs(res.userData?.birthday), 'years') >= 10 &&
 											dayjs().diff(dayjs(res.userData?.birthday), 'years') <= 20
-												? 'лет'
+												? t('yearsOld')
 												: dayjs().diff(dayjs(res.userData?.birthday), 'years') % 10 >= 2 &&
 												  dayjs().diff(dayjs(res.userData?.birthday), 'years') % 10 <= 4
-												? 'года'
+												? t('yearsOldSpec')
 												: dayjs().diff(dayjs(res.userData?.birthday), 'years') % 10 == 1
-												? 'год'
-												: 'лет'}
+												? 'yearOld'
+												: 'yearsOld'}
 										</p>
 										<div className="flex gap-[36px]">
 											<div className="flex flex-col gap-[8px]">
 												<p className="font-content-font font-normal text-black text-[12px]/[14.4x] opacity-40">
-													Дата рождения
+													{t('birth')}
 												</p>
 												<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
 													{res.userData?.birthday.split('-').reverse().join('.')}
@@ -218,7 +218,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 											</div>
 											<div className="flex flex-col gap-[8px]">
 												<p className="font-content-font font-normal text-black text-[12px]/[14.4x] opacity-40">
-													Страна гражданства
+													{t('citizenshipCountry')}
 												</p>
 												<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
 													{countries?.find(country => country.id === res.userData?.countryId)?.shortName}
@@ -227,7 +227,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 										</div>
 										<div className="flex flex-col gap-[8px]">
 											<p className="font-content-font font-normal text-black text-[12px]/[14.4x] opacity-40">
-												Контакты:
+												{t('contacts')}:
 											</p>
 											<div className="flex gap-[24px]">
 												<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
@@ -474,7 +474,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 							<hr />
 							<div className="flex flex-col gap-[24px]">
 								<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">
-									Сопроводительное письмо
+									{t('coverLetter')}
 								</p>
 								<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
 									{res.respondData.coverLetter}
@@ -482,7 +482,9 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 							</div>
 							<hr />
 							<div className="flex flex-col gap-[24px]">
-								<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">Образование</p>
+								<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">
+									{t('education')}
+								</p>
 								<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
 									{res.educations.map(edu => (
 										<>
@@ -502,10 +504,12 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 							</div>
 							<hr />
 							<div className="flex flex-col gap-[24px]">
-								<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">Опыт работы</p>
+								<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">
+									{t('workExperience')}
+								</p>
 								{res.respondData.portfolio.workExperiences.length === 0 ? (
 									<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-										Соискатель не имеет опыта работы
+										{t('hasNoWorkExperience')}
 									</p>
 								) : (
 									<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
@@ -544,7 +548,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 								)}
 								{res.respondData.portfolio.url !== '' && (
 									<div className="grid grid-cols-[164px_auto] gap-x-[50px] gap-y-[24px] w-[90%]">
-										<p>Ссылка на портфолио:</p>
+										<p>{t('linkPortfolio')}:</p>
 										<a href={res.respondData.portfolio.url} target="_blank">
 											{res.respondData.portfolio.url}
 										</a>
@@ -552,7 +556,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 								)}
 								{resumeQueryStatus.isSuccess && (
 									<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
-										<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">Резюме</p>
+										<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">{t('resume')}</p>
 										<div className="bg-white rounded-[16px] shadow-custom-shadow h-[59px] w-[65%] p-[20px] flex">
 											<MyDocsSvg />
 											<p
@@ -560,11 +564,12 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 												onClick={() => {
 													const link = document.createElement('a')
 													link.href = resume
-													link.download = 'Резюме'
+													link.download = t('resume')
 													link.click()
 												}}
 											>
-												{'Резюме ' +
+												{t('resume') +
+													' ' +
 													res.userData?.lastname +
 													' ' +
 													res.userData?.firstname +
@@ -584,7 +589,9 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 							</div>
 							<hr />
 							<div className="flex flex-col gap-[24px]">
-								<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">О себе</p>
+								<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">
+									{t('aboutMyself')}
+								</p>
 								<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
 									{res.respondData.skills.aboutMe}
 								</p>
@@ -592,7 +599,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 							<hr />
 							<div className="flex flex-col">
 								<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40 w-[194px]">
-									Профессиональные навыки
+									{t('professionalSkills')}
 								</p>
 								<div className="grid grid-cols-[194px_auto] gap-x-[20px] w-[90%]">
 									<div className="col-start-2 flex gap-[8px] flex-wrap">
@@ -624,7 +631,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 								className="bg-inherit h-[38px] pt-[12px] pb-[12px] pr-[16px] pl-[16px] rounded-[50px] border border-black cursor-pointer"
 							>
 								<NocircleArrowIcon />
-								Назад
+								{t('back')}
 							</Button>
 						</div>
 						<div className="mt-[52px] flex flex-col gap-[36px]">
@@ -639,7 +646,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 										</p>
 										<div className="flex flex-col gap-[8px]">
 											<p className="font-content-font font-normal text-black text-[12px]/[14.4x] opacity-40">
-												Контакты:
+												{t('contacts')}:
 											</p>
 											<div className="flex gap-[24px]">
 												<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
@@ -762,14 +769,16 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 							<hr />
 							<div className="flex flex-col gap-[24px]">
 								<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
-									<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">Желаемая должность</p>
+									<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
+										{t('desiredPosition')}
+									</p>
 									<p className="font-content-font font-bold text-black text-[16px]/[19.2px]">{res?.desiredJob}</p>
 								</div>
 							</div>
 							<hr />
 							<div className="flex flex-col gap-[24px]">
 								<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
-									<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">Резюме</p>
+									<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">{t('resume')}</p>
 									<div className="bg-white rounded-[16px] shadow-custom-shadow h-[59px] w-[65%] p-[20px] flex">
 										<MyDocsSvg />
 										<p
@@ -777,11 +786,12 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 											onClick={() => {
 												const link = document.createElement('a')
 												link.href = resume
-												link.download = 'Резюме'
+												link.download = t('resume')
 												link.click()
 											}}
 										>
-											{'Резюме ' +
+											{t('resume') +
+												' ' +
 												res.userData?.lastname +
 												' ' +
 												res.userData?.firstname +

@@ -977,5 +977,20 @@
 	"enterCoverLetter": "Введите сообщение",
 	"send": "Отправить",
 	"respondSuccess": "Спасибо, ваш отклик успешно отправлен.",
-	"alertError": "Извините, что-то пошло не так..."
+	"alertError": "Извините, что-то пошло не так...",
+	"empStatusAll": "все",
+	"empStatusHR": "на рассмотрении у HR",
+	"empStatusSupervisor": "на рассмотрении у руководителя",
+	"empStatusRejected": "отказано",
+	"empStatusEmployment": "трудоустройство",
+	"empStatusInvitation": "приглашение на собеседование",
+	"respondDate": "Дата отклика",
+	"toChat": "Перейти в чат",
+	"contacts": "Контакты",
+	"aboutMyself": "О себе",
+	"hasNoWorkExperience": "Соискатель не имеет опыта работы",
+	"yearOld": "год",
+	"yearsOld": "лет",
+	"yearsOldSpec": "года",
+	"desiredPosition": "Желаемая должность"
 }

@@ -1,5 +1,6 @@
 import { LoadingOutlined } from '@ant-design/icons'
 import { Radio, Spin } from 'antd'
+import { t } from 'i18next'
 import { useEffect, useRef, useState } from 'react'
 
 import { useLazyGetSeekerRespondsQuery } from '../../../store/api/serviceApi'
@@ -86,7 +87,7 @@ export const MyResponds = () => {
 				<div className="w-full h-full flex items-center">
 					<div className="text-center ml-auto mr-auto">
 						<Spin indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}></Spin>
-						<p className="font-content-font font-normal text-black text-[18px]/[18px]">Идёт загрузка...</p>
+						<p className="font-content-font font-normal text-black text-[18px]/[18px]">{t('loading')}</p>
 					</div>
 				</div>
 			</>
@@ -116,7 +117,7 @@ export const MyResponds = () => {
 							} font-normal text-[16px]/[16px]`}
 						>
 							<Radio value={''} className="hidden"></Radio>
-							все
+							{t('empStatusAll')}
 						</label>
 						<label
 							className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font cursor-pointer ${
@@ -132,7 +133,7 @@ export const MyResponds = () => {
 								}`}
 								className="hidden"
 							></Radio>
-							отказано
+							{t('empStatusRejected')}
 						</label>
 						<label
 							className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font cursor-pointer ${
@@ -142,7 +143,7 @@ export const MyResponds = () => {
 							} font-normal text-[16px]/[16px]`}
 						>
 							<Radio value={`statuses=${respondStatus[respondStatus.IN_SUPERVISOR_REVIEW]}`} className="hidden"></Radio>
-							на рассмотрении у руководителя
+							{t('empStatusSupervisor')}
 						</label>
 						<label
 							className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font cursor-pointer ${
@@ -155,7 +156,7 @@ export const MyResponds = () => {
 								value={`statuses=${respondStatus[respondStatus.IN_PERSONNEL_DEPT_REVIEW]}`}
 								className="hidden"
 							></Radio>
-							на рассмотрении у HR
+							{t('empStatusHR')}
 						</label>
 						<label
 							className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font cursor-pointer ${
@@ -165,7 +166,7 @@ export const MyResponds = () => {
 							} font-normal text-[16px]/[16px]`}
 						>
 							<Radio value={`statuses=${respondStatus[respondStatus.INVITATION]}`} className="hidden"></Radio>
-							приглашение на собеседование
+							{t('empStatusInvitation')}
 						</label>
 						<label
 							className={`rounded-[54.5px] py-[8px] px-[16px] font-content-font cursor-pointer ${
@@ -175,19 +176,19 @@ export const MyResponds = () => {
 							} font-normal text-[16px]/[16px]`}
 						>
 							<Radio value={`statuses=${respondStatus[respondStatus.EMPLOYMENT]}`} className="hidden"></Radio>
-							трудоустройство
+							{t('empStatusEmployment')}
 						</label>
 					</Radio.Group>
 				</div>
 				<div className="w-full flex mb-[16px] pl-[20px] pr-[55px]">
 					<h3 className="w-[25%] font-content-font text-black font-normal text-[14px]/[14px] opacity-[60%]">
-						Вакансия
+						{t('vacancy')}
 					</h3>
 					<h3 className="ml-[5%] w-[8%] font-content-font text-black font-normal text-[14px]/[14px] opacity-[60%]">
-						Дата отклика
+						{t('respondDate')}
 					</h3>
 					<h3 className="ml-[2%] w-[25%] font-content-font text-black font-normal text-[14px]/[14px] opacity-[60%]">
-						Статус
+						{t('status')}
 					</h3>
 				</div>
 				{getRespondsStatus.isFetching && requestData.page === 0 && showSpin ? (

@@ -986,5 +986,20 @@
 	"enterCoverLetter": "Enter message",
 	"send": "Send",
 	"respondSuccess": "Thank you, successfull respond.",
-	"alertError": "Sorry, something went wrong..."
+	"alertError": "Sorry, something went wrong...",
+	"empStatusAll": "all",
+	"empStatusHR": "in HR review",
+	"empStatusSupervisor": "in supervisor review",
+	"empStatusRejected": "rejected",
+	"empStatusEmployment": "employment",
+	"empStatusInvitation": "interview invitation",
+	"respondDate": "Respond date",
+	"toChat": "To chat",
+	"contacts": "Contacts",
+	"aboutMyself": "About myself",
+	"hasNoWorkExperience": "Applicant has no work experience",
+	"yearOld": "year",
+	"yearsOld": "years",
+	"yearsOldSpec": "years",
+	"desiredPosition": "Desired position"
 }

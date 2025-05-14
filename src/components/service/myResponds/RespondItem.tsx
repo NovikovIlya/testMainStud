@@ -144,7 +144,7 @@ export const RespondItem = (props: RespondItemType) => {
 							navigate(`/services/myresponds/responds/fullinfo/${props.id}`)
 						}}
 					>
-						Посмотреть
+						{t('watch')}
 					</Button>
 					{props.name && (
 						<Button
@@ -154,7 +154,7 @@ export const RespondItem = (props: RespondItemType) => {
 							}}
 							className="font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black"
 						>
-							Перейти в чат
+							{t('toChat')}
 						</Button>
 					)}
 					<Button

@@ -130,7 +130,7 @@ export default function Catalog() {
 				<div className="w-full h-full flex items-center">
 					<div className="text-center ml-auto mr-auto">
 						<Spin indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}></Spin>
-						<p className="font-content-font font-normal text-black text-[18px]/[18px]">Идёт загрузка вакансий...</p>
+						<p className="font-content-font font-normal text-black text-[18px]/[18px]">{t('loading')}</p>
 					</div>
 				</div>
 			</>

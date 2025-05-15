@@ -157,6 +157,8 @@ export const Estimation = () => {
 		})
 		return result.sort((a, b) => a.term - b.term)
 	}
+	const scrollY = `calc(100vh - 340px)`; // но без кавычек внутри calc
+
 	return (
 		<div className="radio">
 			{/* <div className="mb-14 text-[28px]">{t('ElectronicBook')}</div> */}
@@ -199,6 +201,7 @@ export const Estimation = () => {
 						loading={!data ? true : false}
 						className="w-full drop-shadow-lg shadow-[#d4e3f1] rounded-none"
 						locale={{ emptyText: t('noData') }}
+						scroll={{ y: scrollY, x: 'max-content' }}
 					/>
 				</ConfigProvider>
 			</div>

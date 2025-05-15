@@ -1,4 +1,5 @@
 import { Button, Upload } from 'antd'
+import { t } from 'i18next'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 
@@ -83,7 +84,7 @@ export const FileAttachment = (
 										})
 								}}
 							>
-								Удалить
+								{t('remove')}
 							</Button>
 						)}
 					</div>
@@ -142,11 +143,11 @@ export const FileAttachment = (
 						className="border-black border rounded-[5px] py-[12px] px-[20px]"
 						type="text"
 					>
-						Добавить файл
+						{t('AddFile')}
 					</Button>
 				</Upload>
 			) : (
-				<p className="col-start-3 ml-auto">Отсутствует</p>
+				<p className="col-start-3 ml-auto">{t('noEmpDoc')}</p>
 			)}
 		</>
 	)

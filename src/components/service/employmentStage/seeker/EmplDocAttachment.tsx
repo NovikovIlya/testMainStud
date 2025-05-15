@@ -1,4 +1,5 @@
 import { Button, Popover } from 'antd'
+import { t } from 'i18next'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 
@@ -44,7 +45,7 @@ export const EmplDocAttachment = (props: { respondId: number; stageId: number; s
 		<>
 			<div className="flex flex-col gap-[40px] font-content-font font-normal text-black text-[16px]/[19.2px] w-full">
 				<div className="flex flex-col gap-[12px]">
-					<p>Необходимые документы:</p>
+					<p>{t('necessaryDocs')}:</p>
 					<ol className="ml-[2%]">
 						{docs
 							.filter(doc => doc.employmentStageType === props.stageName)
@@ -56,7 +57,7 @@ export const EmplDocAttachment = (props: { respondId: number; stageId: number; s
 											href="https://kadry.kpfu.ru/wp-content/uploads/2023/01/01_.zayavlenie.o.prieme.na_.rabotu._list.soglasovaniya__i_o.2022._2_.docx"
 											download={true}
 										>
-											(скачать)
+											({t('download')})
 										</a>
 									)}
 									{doc.name === 'Заполненный личный листок по учету кадров' && (
@@ -64,7 +65,7 @@ export const EmplDocAttachment = (props: { respondId: number; stageId: number; s
 											href="https://kadry.kpfu.ru/wp-content/uploads/2023/01/lichnyj.listok.po_.uchetu.kadrov.docx"
 											download={true}
 										>
-											(скачать)
+											({t('download')})
 										</a>
 									)}
 									{doc.name === 'Бланк согласия на обработку персональных данных' && (
@@ -72,7 +73,7 @@ export const EmplDocAttachment = (props: { respondId: number; stageId: number; s
 											href="https://kadry.kpfu.ru/wp-content/uploads/2023/01/soglasie.rabotnika.2017.docx"
 											download={true}
 										>
-											(скачать)
+											({t('download')})
 										</a>
 									)}
 								</li>
@@ -81,7 +82,7 @@ export const EmplDocAttachment = (props: { respondId: number; stageId: number; s
 				</div>
 				<div className="bg-white rounded-[16px] shadow-custom-shadow p-[20px] w-[70%] flex flex-col gap-[20px]">
 					<div className="flex gap-[9px] items-center">
-						<p className="opacity-80">Прикрепить файлы</p>
+						<p className="opacity-80">{t('attachFiles')}</p>
 						<Popover
 							overlayClassName="p-[20px] w-[369px]"
 							className="pointer-events-auto"
@@ -91,18 +92,17 @@ export const EmplDocAttachment = (props: { respondId: number; stageId: number; s
 								<>
 									<div className="font-content-font font-normal text-black text-[14px]/[16px] flex flex-col gap-[16px]">
 										<p>
-											1. <b>Формат файла</b> может быть jpg, png, pdf.
+											1. <b>{t('fileFormat')}</b> {t('fileFormatText')}.
 										</p>
 										<p>
-											2. <b>Вес файла</b> должен быть не больше 5мб.
+											2. <b>{t('sizeOfFile')}</b> {t('lessThen5MB')}.
 										</p>
 										<p>
-											3. <b>Объединение.</b> Если ваш документ содержит несколько страниц, необходимо объединить их в
-											один многостраничный файл pdf.
+											3. <b>{t('concatanation')}.</b> {t('concatanationText')}.
 										</p>
 										<div className="flex flex-col gap-[16px]">
 											<p>
-												4. <b>Пример</b>
+												4. <b>{t('example')}</b>
 											</p>
 											<img
 												className="mx-auto"
@@ -142,7 +142,7 @@ export const EmplDocAttachment = (props: { respondId: number; stageId: number; s
 								})
 						}}
 					>
-						Далее
+						{t('next')}
 					</Button>
 				)}
 			</div>

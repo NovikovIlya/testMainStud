@@ -1,5 +1,6 @@
 import { LoadingOutlined } from '@ant-design/icons'
 import { Button, Spin } from 'antd'
+import { t } from 'i18next'
 import { useState } from 'react'
 
 import { useAppSelector } from '../../../../store'
@@ -18,7 +19,7 @@ export const EmplInstruction = (props: { respondId: number; stageId: number; sta
 			<div className="font-content-font font-normal text-black text-[16px]/[19.2px] flex flex-col">
 				<div className="flex flex-col pointer-events-auto gap-[12px]">
 					<span className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-						Посмотрите видео-инструктаж, а затем пройдите тест
+						{t('emplInstructionText')}
 					</span>
 					<div className="overflow-hidden rounded-2xl w-[730px] h-[400px] items-center relative">
 						{firstLoad ? (
@@ -115,7 +116,7 @@ export const EmplInstruction = (props: { respondId: number; stageId: number; sta
 					href={foundStage?.testLink}
 					target="_blank"
 				>
-					Пройти тест
+					{t('Pass') + ' ' + t('Test')}
 				</Button>
 			</div>
 		</>

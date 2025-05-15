@@ -27,7 +27,8 @@ import {
 	useEditScientificActivityMutation,
 	useGetOneScientificQuery,
 	useGetScientificDirectorsQuery,
-	useIsPublishedMutation
+	useIsPublishedMutation,
+	useIsPublishedScientificMutation
 } from '../../../store/api/aboutMe/forAboutMe'
 import { generateYearsArray } from '../../../utils/generateYearsArray'
 
@@ -43,9 +44,9 @@ const TableScintific = ({ isSuccess, dataLevels, dataScientific, setSelectId, se
 	const {
 		data: getOne,
 		isSuccess: isSuccesOne,
-		isLoading: isLoadingOne
+		isFetching: isLoadingOne
 	} = useGetOneScientificQuery(selectInfo?.id, { skip: !selectInfo?.id })
-	const [changeGlaz, { isLoading: isLoadingGlaz }] = useIsPublishedMutation()
+	const [changeGlaz, { isLoading: isLoadingGlaz }] = useIsPublishedScientificMutation()
 	const scientificDirector = Form.useWatch('scientificDirector', form2)
 	const debouncedNameStudent = useDebounce(scientificDirector, { wait: 1000 })
 	const { data: dataScientificDirectors, isLoading: isLoadingDirectors } = useGetScientificDirectorsQuery(
@@ -165,7 +166,8 @@ const TableScintific = ({ isSuccess, dataLevels, dataScientific, setSelectId, se
 				year: getOne?.year,
 				theme: getOne?.theme,
 				direction: getOne?.direction,
-				isPublished: getOne?.isPublished
+				isPublished: getOne?.isPublished,
+				scientificDirector: getOne?.scientificDirector
 			})
 		}
 	}, [isSuccesOne, getOne, form2])
@@ -187,7 +189,6 @@ const TableScintific = ({ isSuccess, dataLevels, dataScientific, setSelectId, se
 		setIsModalOpenEdit(false)
 		form2.resetFields()
 	}
-
 	const onFinishForm2 = async (values: any) => {
 		editScientific({
 			id: getOne?.id,
@@ -195,15 +196,14 @@ const TableScintific = ({ isSuccess, dataLevels, dataScientific, setSelectId, se
 			year: values?.year,
 			theme: values?.theme,
 			direction: values?.direction,
-			isPublished: values?.isPublished
-			// scientificDirectorId: getOne?.scientificDirectorId,
-			// scientificDirector: getOne?.scientificDirector
+			isPublished: values?.isPublished,
+			scientificDirectorId: id ? id : getOne?.scientificDirectorId,
+			
 		})
 		handleCancelEdit()
 	}
 
 	const handleSearch = (value: string, field: string) => {
-		console.log('value', value)
 		if (value?.length < 4) {
 			form2.setFields([
 				{
@@ -271,20 +271,20 @@ const TableScintific = ({ isSuccess, dataLevels, dataScientific, setSelectId, se
 								labelCol={{ span: 12 }}
 								wrapperCol={{ span: 24 }}
 								layout="vertical"
-								className="mt-14"
-								// rules={[{ required: true, message: '' }]}
+								className="mt-14 min-h-[35px]"
+								rules={[{ required: true, message: '' }]}
 							>
 								<Select placeholder={t('select')} aria-required options={generateYearsArray()} allowClear />
 							</Form.Item>
 
-							<div className="mt-12 mb-1">{t('theme')}</div>
+							<div className="mt-12 mb-1"><span className="text-red-500 mr-[4px] font-[14px] !font-[SimSun,sans-serif]">*</span>{t('theme')}</div>
 							<Form.Item name="theme" className=" mb-6" rules={[{ required: true, message: '' }]}>
-								<Input.TextArea rows={4} placeholder="Введите текст здесь" maxLength={200} />
+								<Input.TextArea rows={4}  maxLength={200} />
 							</Form.Item>
 
-							<div className="mb-1">{t('direction')}</div>
+							<div className="mb-1"><span className="text-red-500 mr-[4px] font-[14px] !font-[SimSun,sans-serif]">*</span>{t('direction')}</div>
 							<Form.Item name="direction" className=" h-[35px]" rules={[{ required: true, message: '' }]}>
-								<Input.TextArea rows={4} placeholder="Введите текст здесь" maxLength={200} />
+								<Input.TextArea rows={4}  maxLength={200} />
 							</Form.Item>
 
 							<Form.Item
@@ -333,8 +333,6 @@ const TableScintific = ({ isSuccess, dataLevels, dataScientific, setSelectId, se
 														key: student.id,
 														value: student.name,
 														id: student.id,
-														// userType: student.userType,
-														// userInfo: student.userInfo,
 														label: (
 															<div>
 																<div className="">{student?.name}</div>
@@ -356,8 +354,6 @@ const TableScintific = ({ isSuccess, dataLevels, dataScientific, setSelectId, se
 										}
 										onSelect={(value, option) => {
 											setId(option.id)
-											// setType(option.userType)
-											// setRecipientName(option.userInfo)
 										}}
 									/>
 								}

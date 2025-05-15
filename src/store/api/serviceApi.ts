@@ -928,6 +928,16 @@ export const serviceApi = apiSlice.injectEndpoints({
 			keepUnusedDataFor: 1,
 			providesTags: ['role']
 		}),
+		getCurrentDate: builder.query<any, void>({
+			query: () => {
+				return {
+					url: 'schedule-api/current-date',
+					method: 'GET'
+				}
+			},
+			keepUnusedDataFor: 1,
+			
+		}),
 		getOldEducations: builder.query<{ previous: OldEducationTableDataType[] }, void>({
 			query: () => ({
 				url: `about-me/get-edu-prev`
@@ -1158,5 +1168,6 @@ export const {
 	useLazyGetSupervisorVacancyQuery,
 	useGetInterviewQuery,
 	useLazyGetInterviewQuery,
-	useLazyGetChatIdByRespondIdQuery
+	useLazyGetChatIdByRespondIdQuery,
+	useGetCurrentDateQuery
 } = serviceApi

@@ -99,6 +99,7 @@ interface Day {
 	building: string
 	room: string
 	type: string
+	duration:string
 }
 export interface Exam {
 	building_name: string

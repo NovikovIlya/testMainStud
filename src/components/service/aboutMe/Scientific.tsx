@@ -181,8 +181,6 @@ const Scientific = () => {
 							</Form.Item>
 
 							<Form.Item
-								// help={student && student.length < 4 ? t('minimumFour') : ''}
-								// validateStatus={student && student.length < 4 ? 'error' : ''}
 								className="mt-20 mb-20 min-h-[40px]"
 								label={<div className="">{t('naych')}</div>}
 								layout="vertical"
@@ -193,7 +191,6 @@ const Scientific = () => {
 										className="min-h-[40px] 4"
 										onChange={value => handleSearch(value, 'scientificDirector')}
 										allowClear
-										// disabled={form.getFieldValue('graduate') || form.getFieldValue('teacher')}
 										placeholder={t('inputFio')}
 										onClear={() => {
 											setDataScientificDirectorsValue([])

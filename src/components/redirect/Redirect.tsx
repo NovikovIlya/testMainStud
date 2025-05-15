@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { setCredentials } from "../../store/reducers/authSlice";
 import { P2 } from '../../models/redirect';
 import { useLocalStorageState } from 'ahooks';
+import i18n from '../../18n';
 
 
 
@@ -20,6 +21,8 @@ export const Redirect = () => {
     const [href, setHref] = useLocalStorageState<any>('href', {
         defaultValue: ''
     })
+    const searchParams = new URLSearchParams(location.search)
+	const paramValue = searchParams.get('lan')
 
     async function redirectSuccess(p2: P2) {
         try {
@@ -70,6 +73,13 @@ export const Redirect = () => {
         redirectSuccess(p2)
 
     }, []);
+
+    useEffect(() => {
+        
+                if (paramValue === 'eng') {
+                    i18n.changeLanguage('en')
+                }
+            }, [])
 
     return (
         <div className={'w-full h-screen flex items-center justify-center'}>

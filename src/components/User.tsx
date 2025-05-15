@@ -25,6 +25,8 @@ export const User = () => {
 	const dispatch = useAppDispatch()
 	const location = useLocation()
 	const [acceptedData,setAcceptedData] = useLocalStorageState<any>('acceptedData',{defaultValue:null})
+	const searchParams = new URLSearchParams(location.search)
+	const paramValue = searchParams.get('lan')
 
 	const hide = () => {
 		setOpen(false)
@@ -38,6 +40,13 @@ export const User = () => {
 			localStorage.setItem('practice', 'practice')
 		}
 	}, [data])
+
+	useEffect(() => {
+	
+			if (paramValue === 'eng') {
+				i18n.changeLanguage('en')
+			}
+		}, [])
 
 	
 	// Проверка на роль Абитурента + зачислен ли и сбор данных по зачислению document.title

@@ -488,7 +488,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 								</div>
 							</Space>
 						</Dropdown>
-						<Drawer
+						{/* <Drawer
 							rootStyle={{ position: 'fixed', top: 75 }}
 							placement="top"
 							size="large"
@@ -499,7 +499,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 							key="top"
 						>
 							<ModalNav />
-						</Drawer>
+						</Drawer> */}
 					</div>
 				</div>
 			</div>

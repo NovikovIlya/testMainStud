@@ -56,7 +56,12 @@ const employeeKeys = [
 	'Practices',
 	'practiceTeacher',
 	'Staff',
-	'forTeachers'
+	'forTeachers',
+	// 'otpusk',
+	// 'rasList',
+	// 'eventList',
+	// 'trip',
+
 	// 'jobSeeker',
 	// 'myResponds',
 	// 'DirectResume',
@@ -684,6 +689,82 @@ const DropDrag = () => {
 				y: 0,
 				i: 'ManagementScientificProjects'
 			}
+		},
+		{
+		key: 'otpusk',
+		element: (
+			<TemplateCard
+				info="otpuskInfo"
+				title="otpusk"
+				buttonText="Watch"
+				img={'/otpusk.png'}
+				href="https://otpusk.kpfu.ru/"
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 0,
+			y: 0,
+			i: 'ManagementScientificProjects'
+		}
+		},
+		{
+		key: 'rasList',
+		element: (
+			<TemplateCard
+				info="rasListInfo"
+				title="rasList"
+				buttonText="Watch"
+				img={'/rasList.png'}
+				href="https://shelly.kpfu.ru/e-ksu/PARUS_PAY_LIST?p1=374874&p2=27856037140880187799287444156964&p_h=4C172E19436D34D000957D55FAC6749D&p_menu=1460"
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 0,
+			y: 0,
+			i: 'ManagementScientificProjects'
+		}
+		},
+		{
+		key: 'eventList',
+		element: (
+			<TemplateCard
+				info="eventListInfo"
+				title="eventList"
+				buttonText="Watch"
+				img={'/eventList.png'}
+				href="https://shelly.kpfu.ru/e-ksu/meropriatie_vs_konkurs_grant.application_form?p1=374874&p2=27856153731089158292480594867045&p_h=B0FAA677ED70B8C1758F4AA028FAF447&p_menu=1589"
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 0,
+			y: 0,
+			i: 'ManagementScientificProjects'
+		}
+		},
+		{
+		key: 'trip',
+		element: (
+			<TemplateCard
+				info="tripInfo"
+				title="trip"
+				buttonText="Watch"
+				img={'/trip.png'}
+				href="https://shelly.kpfu.ru/e-ksu/business_trip.bt_card_form?p1=374874&p2=27856153731089158292480594867045&p_h=B0FAA677ED70B8C1758F4AA028FAF447&p_menu=1471"
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 0,
+			y: 0,
+			i: 'ManagementScientificProjects'
+		}
 		},
 		{
 			key: 'shortLink',

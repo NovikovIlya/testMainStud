@@ -1034,5 +1034,31 @@
 	"vtb": "VTB",
 	"requisitesText1": "Attach your details for payroll",
 	"requisitesText2": "only Sberbank or VTB bank card, MIR payment system",
-	"requisitesNoCardHint": "If you do not have any of the cards listed, click the check mark. The card will be issued in your name and you will be able to get it as soon as you are employed."
+	"requisitesNoCardHint": "If you do not have any of the cards listed, click the check mark. The card will be issued in your name and you will be able to get it as soon as you are employed.",
+	"emplSend": {
+		"modal": {
+			"successMessage": "Documents have been successfully sent. Track the status of your documents at the employment stage.",
+			"okButton": "OK"
+		},
+		"mainMessage": {
+			"part1": "Dear applicant!",
+			"part2": "Thank you for submitting some of the necessary documents for employment. We are pleased to inform you that there is very little left!",
+			"part3": "Please note that for final registration you will need to sign the remaining documents at the Human Resources Office. Please visit our office at your convenience. We work Monday to Friday from 9:00 to 17:00 at Kremlyovskaya st., 18, building 4",
+			"part4": "If you have any questions or need additional information, please do not hesitate to contact us.",
+			"part5": "+7 (843) 206-50-94",
+			"part6": "Best regards,",
+			"part7": "HR Team"
+		},
+		"list": {
+			"item1": "I have read the working conditions",
+			"item2": "Briefing completed",
+			"bankCard": "You need to create a bank card {{bankName}}"
+		},
+		"checkbox": {
+			"confirm": "I confirm the authenticity of the documents"
+		},
+		"button": {
+			"submit": "Confirm and send data"
+		}
+	}
 }

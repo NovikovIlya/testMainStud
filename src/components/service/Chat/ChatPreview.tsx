@@ -1,6 +1,7 @@
 import { Badge } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
+import { t } from 'i18next'
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -113,7 +114,7 @@ export const ChatPreview = (props: {
 				}}
 			>
 				<div className="w-full flex flex-col gap-[10px]">
-					<p className=" font-content-font font-normal text-black text-[16px]/[19.2px] opacity-50">Просмотрен</p>
+					<p className=" font-content-font font-normal text-black text-[16px]/[19.2px] opacity-50">{t('viewed')}</p>
 					<div className="w-full flex justify-between">
 						<p className="text-base w-[60%]">{props.respName}</p>
 						<div className="flex flex-col">

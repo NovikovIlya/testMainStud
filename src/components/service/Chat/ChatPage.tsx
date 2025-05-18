@@ -1,4 +1,5 @@
 import { Button } from 'antd'
+import { t } from 'i18next'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
@@ -396,7 +397,7 @@ export const ChatPage = () => {
 											setMsgInputText(e.target.value)
 										}}
 										className="w-full h-full font-content-font font-normal text-black text-[16px]/[16px] placeholder:opacity-50 resize-none border-none focus:outline-none pt-[8px] disabled:bg-white"
-										placeholder="Ввести сообщение"
+										placeholder={t('enterMessage')}
 										ref={formTextAreaRef}
 									></textarea>
 									<p className="w-[80%] whitespace-nowrap text-ellipsis overflow-hidden font-content-font text-[14px]/[14px] font-normal text-black">
@@ -436,7 +437,7 @@ export const ChatPage = () => {
 								type="primary"
 								htmlType="submit"
 							>
-								Отправить
+								{t('send')}
 							</Button>
 						</div>
 					</form>

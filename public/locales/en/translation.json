@@ -1060,5 +1060,9 @@
 		"button": {
 			"submit": "Confirm and send data"
 		}
-	}
+	},
+	"allResponds": "All responds",
+	"chooseChat": "Choost who you would like to write to",
+	"enterMessage": "Enter message",
+	"viewed": "Viewed"
 }

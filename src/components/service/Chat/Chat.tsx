@@ -1,3 +1,4 @@
+import { t } from 'i18next'
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Route, Routes, useLocation, useNavigate, useParams } from 'react-router-dom'
@@ -151,7 +152,9 @@ export const Chat = () => {
 					<div className=" shadowNav bg-white relative z-[5]">
 						<div className="sticky top-[80px]">
 							<div className="flex items-center pt-[30px] pb-[10px]">
-								<p className="pl-[53px] font-content-font font-normal text-black text-[20px]/[20px] ">Все отклики</p>
+								<p className="pl-[53px] font-content-font font-normal text-black text-[20px]/[20px] ">
+									{t('allResponds')}
+								</p>
 							</div>
 							<div className="overflow-auto flex flex-col h-[calc(100vh-160px)]">
 								<ul className="w-[461px] flex flex-col gap-4 overflow-auto h-full">
@@ -179,7 +182,7 @@ export const Chat = () => {
 							element={
 								<div className="w-full h-full flex flex-col">
 									<p className="text-centerfont-content-font text-[20px]/[20px] text-black font-normal opacity-60 my-auto mx-auto">
-										Выберите, кому бы вы хотели написать
+										{t('chooseChat')}
 									</p>
 								</div>
 							}

@@ -1,6 +1,7 @@
 import { Button } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
+import { t } from 'i18next'
 import { forwardRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
@@ -97,7 +98,7 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 					>
 						<div className="flex items-center">
 							<div>
-								<p className="font-bold">Отклик на вакансию</p>
+								<p className="font-bold">{t('vacancyRespond')}</p>
 								<p>{vacancyTitle}</p>
 							</div>
 							<div className="ml-auto">
@@ -192,7 +193,7 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 							isEmpDep || isResponsed ? 'select-none !cursor-not-allowed' : ''
 						}`}
 					>
-						Да
+						{t('Yes')}
 					</Button>
 					<Button
 						onClick={() => {
@@ -205,7 +206,7 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 							isEmpDep || isResponsed ? 'select-none !cursor-not-allowed' : ''
 						}`}
 					>
-						Не удобно
+						{t('notConvenient')}
 					</Button>
 					<Button
 						onClick={() => {
@@ -222,7 +223,7 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 							isEmpDep || isResponsed ? 'select-none !cursor-not-allowed' : ''
 						}`}
 					>
-						Вакансия не актуальна
+						{t('nonRelevantVacancy')}
 					</Button>
 				</div>
 			)}
@@ -275,7 +276,7 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 							isEmpDep || isResponsed ? 'select-none !cursor-not-allowed' : ''
 						}`}
 					>
-						Нет подходящего времени
+						{t('noRightTime')}
 					</Button>
 				</div>
 			)}
@@ -308,7 +309,7 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 								isEmpDep || isResponsed ? 'select-none !cursor-not-allowed' : ''
 							}`}
 						>
-							Да
+							{t('Yes')}
 						</Button>
 						<Button
 							onClick={() => {
@@ -327,7 +328,7 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 								isEmpDep || isResponsed ? 'select-none !cursor-not-allowed' : ''
 							}`}
 						>
-							Нет
+							{t('No')}
 						</Button>
 					</div>
 				</div>

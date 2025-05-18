@@ -1,4 +1,5 @@
 import clsx from 'clsx'
+import { t } from 'i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { BriefcaseSvg } from '../../../assets/svg/BriefcaseSvg'
@@ -24,22 +25,22 @@ export const NavMyResponds = () => {
 		{
 			id: '/services/myresponds/responds',
 			icon: <BriefcaseSvg />,
-			name: 'Мои отклики'
+			name: t('myResponds2')
 		},
 		{
 			id: '/services/myresponds/chat',
 			icon: <MyDocsSvg />,
-			name: 'Сообщения'
+			name: t('messages')
 		},
 		{
 			id: '/services/myresponds/employment',
 			icon: <CalendarSvg />,
-			name: 'Этап трудоустройства'
+			name: t('employmentStage')
 		}
 	]
 
 	const handleList = navList.map(({ id, icon, name }, index) => {
-		if (name === 'Мои отклики') {
+		if (name === t('myResponds2')) {
 			return (
 				<li
 					key={index}
@@ -57,7 +58,7 @@ export const NavMyResponds = () => {
 					</div>
 				</li>
 			)
-		} else if (name === 'Сообщения') {
+		} else if (name === t('messages')) {
 			return (
 				<li
 					key={index}
@@ -76,7 +77,7 @@ export const NavMyResponds = () => {
 					</div>
 				</li>
 			)
-		} else if (name === 'Этап трудоустройства') {
+		} else if (name === t('employmentStage')) {
 			return (
 				<li
 					key={index}
@@ -99,7 +100,7 @@ export const NavMyResponds = () => {
 
 	return (
 		<>
-			<Header type="service" service="Мои отклики" />
+			<Header type="service" service={t('myResponds')} />
 			<div className="shadowNav bg-white relative">
 				<ul className="min-w-[230px] pt-14 flex flex-col gap-4 sticky top-[80px]">{handleList}</ul>
 			</div>

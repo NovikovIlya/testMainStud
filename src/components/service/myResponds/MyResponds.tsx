@@ -97,7 +97,7 @@ export const MyResponds = () => {
 	return (
 		<>
 			<div className="mt-[120px] pl-[52px] w-full">
-				<h1 className="font-content-font font-normal text-black text-[28px]/[28px]">Мои отклики</h1>
+				<h1 className="font-content-font font-normal text-black text-[28px]/[28px]">{t('myResponds')}</h1>
 				<div className="mt-[52px] mb-[40px] flex items-center gap-[16px]">
 					<Radio.Group
 						className="flex gap-[8px]"

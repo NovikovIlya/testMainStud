@@ -1076,5 +1076,10 @@
 	"chatSeptember": "September",
 	"chatOctober": "October",
 	"chatNovember": "Nnovember",
-	"chatDecember": "December"
+	"chatDecember": "December",
+	"notConvenient": "Not convenient",
+	"nonRelevantVacancy": "The vacancy is not relevant",
+	"noRightTime": "There's no right time",
+	"vacancyRespond": "Vacancy respond",
+	"myResponds2": "My responds"
 }

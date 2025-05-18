@@ -1067,5 +1067,10 @@
 	"chatSeptember": "сентября",
 	"chatOctober": "октября",
 	"chatNovember": "ноября",
-	"chatDecember": "декабря"
+	"chatDecember": "декабря",
+	"notConvenient": "Не удобно",
+	"nonRelevantVacancy": "Вакансия не актуальна",
+	"noRightTime": "Нет подходящего времени",
+	"vacancyRespond": "Отклик на вакансию",
+	"myResponds2": "Мои отклики"
 }

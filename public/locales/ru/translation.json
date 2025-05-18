@@ -1055,5 +1055,17 @@
 	"allResponds": "Все отклики",
 	"chooseChat": "Выберите, кому бы вы хотели написать",
 	"enterMessage": "Ввести сообщение",
-	"viewed": "Просмотрен"
+	"viewed": "Просмотрен",
+	"chatJanuary": "января",
+	"chatFebruary": "февраля",
+	"chatMarch": "марта",
+	"chatApril": "апреля",
+	"chatMay": "мая",
+	"chatJune": "июня",
+	"chatJuly": "июля",
+	"chatAugust": "августа",
+	"chatSeptember": "сентября",
+	"chatOctober": "октября",
+	"chatNovember": "ноября",
+	"chatDecember": "декабря"
 }

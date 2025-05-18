@@ -122,7 +122,7 @@ export const ChatPreview = (props: {
 								<p className=" font-content-font font-normal text-black text-[12px]/[14.4px] opacity-[52%]">
 									{lastMessageDate.substring(8, 10) +
 										' ' +
-										ChatMessageDateDisplayEnum[parseInt(lastMessageDate.substring(5, 7)) - 1] +
+										t(ChatMessageDateDisplayEnum[parseInt(lastMessageDate.substring(5, 7)) - 1]) +
 										' ' +
 										dayjs(lastMessageDate).format().substring(11, 16)}
 								</p>

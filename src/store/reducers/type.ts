@@ -387,18 +387,18 @@ export type ChatMessageType = {
 }
 
 export enum ChatMessageDateDisplayEnum {
-	'января',
-	'февраля',
-	'марта',
-	'апреля',
-	'мая',
-	'июня',
-	'июля',
-	'августа',
-	'сентября',
-	'октября',
-	'ноября',
-	'декабря'
+	'chatJanuary',
+	'chatFebruary',
+	'chatMarch',
+	'chatApril',
+	'chatMay',
+	'chatJune',
+	'chatJuly',
+	'chatAugust',
+	'chatSeptember',
+	'chatOctober',
+	'chatNovember',
+	'chatDecember'
 }
 
 export type VacancyRequestType = {

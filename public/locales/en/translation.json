@@ -1064,5 +1064,17 @@
 	"allResponds": "All responds",
 	"chooseChat": "Choost who you would like to write to",
 	"enterMessage": "Enter message",
-	"viewed": "Viewed"
+	"viewed": "Viewed",
+	"chatJanuary": "January",
+	"chatFebruary": "February",
+	"chatMarch": "March",
+	"chatApril": "April",
+	"chatMay": "May",
+	"chatJune": "June",
+	"chatJuly": "July",
+	"chatAugust": "August",
+	"chatSeptember": "September",
+	"chatOctober": "October",
+	"chatNovember": "Nnovember",
+	"chatDecember": "December"
 }

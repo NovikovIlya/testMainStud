@@ -353,7 +353,7 @@ export const ChatPage = () => {
 									<div className="self-center font-content-font font-normal text-black text-[14px]/[16.8px] opacity-60 mt-[60px] mb-[30px]">
 										{parseInt(msg.sendDate.substring(8, 10)) +
 											' ' +
-											ChatMessageDateDisplayEnum[parseInt(msg.sendDate.substring(5, 7)) - 1]}
+											t(ChatMessageDateDisplayEnum[parseInt(msg.sendDate.substring(5, 7)) - 1])}
 									</div>
 								))}
 							<ChatMessage

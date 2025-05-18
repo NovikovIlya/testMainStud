@@ -115,7 +115,8 @@ export const FileAttachment = (
 										docType: props.name,
 										id: res.id,
 										name: res.name,
-										size: res.size
+										size: res.size,
+										mustUpload: props.mustUpload
 									})
 								)
 								setIsFileUploading(false)

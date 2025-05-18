@@ -481,6 +481,7 @@ export type EmploymentDataType = {
 			status: 'ATTACHED' | 'NOT_ATTACHED'
 			name: string
 			size: number
+			mustUpload: boolean
 		}[]
 		hasRequisites?: boolean
 		testLink?: string
@@ -527,6 +528,7 @@ export type EmploymentDocsType = {
 	id: number
 	employmentStageType: string
 	name: string
+	mustUpload: boolean
 }
 
 export type ChangeStageStatusType = {

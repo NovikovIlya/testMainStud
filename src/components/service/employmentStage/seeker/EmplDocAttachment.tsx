@@ -31,10 +31,18 @@ export const EmplDocAttachment = (props: { respondId: number; stageId: number; s
 			if (foundStage.status === 'ACCEPTED') {
 				return
 			}
-			if (foundStage.documents.length === docs.filter(doc => doc.employmentStageType === props.stageName).length) {
+			if (
+				foundStage.documents.filter(doc => doc.mustUpload).length ===
+				docs.filter(doc => doc.employmentStageType === props.stageName && doc.mustUpload).length
+			) {
+				console.log(foundStage.documents.filter(doc => doc.mustUpload))
+				console.log(docs.filter(doc => doc.employmentStageType === props.stageName && doc.mustUpload))
 				console.log('Все файлы на данном этапе загружены')
 				dispatch(setStageProgressAsReady(props.stageName))
 			} else {
+				console.log(foundStage.documents)
+				console.log(foundStage.documents.filter(doc => doc.mustUpload))
+				console.log(docs.filter(doc => doc.employmentStageType === props.stageName && doc.mustUpload))
 				console.log('Какого-то из файлов не хватает')
 				dispatch(setStageProgressAsFilling(props.stageName))
 			}

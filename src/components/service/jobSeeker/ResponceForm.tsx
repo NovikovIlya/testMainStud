@@ -429,7 +429,7 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 									educationData.educations.length !== 0 &&
 									(experienceData.noExperienceFlag || experienceData.experiences.length !== 0) &&
 									skillsData.skills.length !== 0
-										? t('Respond')
+										? t('respond')
 										: t('goNext')}
 								</Button>
 							</div>

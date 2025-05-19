@@ -57,10 +57,11 @@ const employeeKeys = [
 	'practiceTeacher',
 	'Staff',
 	'forTeachers',
-	// 'otpusk',
-	// 'rasList',
-	// 'eventList',
-	// 'trip',
+	'otpusk',
+	'rasList',
+	'eventList',
+	'trip',
+	'documentForTeacher',
 
 	// 'jobSeeker',
 	// 'myResponds',
@@ -755,6 +756,25 @@ const DropDrag = () => {
 				title="trip"
 				buttonText="Watch"
 				img={'/trip.png'}
+				href="https://shelly.kpfu.ru/e-ksu/business_trip.bt_card_form?p1=374874&p2=27856153731089158292480594867045&p_h=B0FAA677ED70B8C1758F4AA028FAF447&p_menu=1471"
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 0,
+			y: 0,
+			i: 'ManagementScientificProjects'
+		}
+		},
+		{
+		key: 'documentForTeacher',
+		element: (
+			<TemplateCard
+				info="DocumentFlowInfo"
+				title="documentForTeacher"
+				buttonText="Watch"
+				img={'/image8.png'}
 				href="https://shelly.kpfu.ru/e-ksu/business_trip.bt_card_form?p1=374874&p2=27856153731089158292480594867045&p_h=B0FAA677ED70B8C1758F4AA028FAF447&p_menu=1471"
 			/>
 		),

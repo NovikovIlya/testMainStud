@@ -325,6 +325,17 @@ export const block = {
 		{
 			w: 1,
 			h: 1,
+			x: 0,
+			y: 7,
+			i: 'documentForTeacher',
+
+			moved: true,
+			static: false
+		},
+		
+		{
+			w: 1,
+			h: 1,
 			x: 2,
 			y: 6,
 			i: 'trip',
@@ -341,6 +352,7 @@ export const block = {
 
 			moved: true,
 			static: false
-		}
+		},
+		
 	]
 }

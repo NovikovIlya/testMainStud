@@ -636,7 +636,7 @@ export const NavPesonnelAccounting = () => {
 				{pathname.match(/\/services\/personnelaccounting\/supervisor\/vacancyview\/\d+/) && <SupervisorUpdateVacancy />}
 				{pathname === '/services/personnelaccounting/supervisor/invitation' && <SupervisorInterviews />}
 				{pathname === '/services/personnelaccounting/supervisor/scheduleinvitation' && <SupervisorInterviewCreate />}
-				{pathname.match(/\/services\/personnelaccounting\/supervisor\/invitation\/seekerinfo\/\d+/) && (
+				{pathname.match(/\/services\/personnelaccounting\/supervisor\/invitation\/seekerinfo\/\d+\/\d+/) && (
 					<SupervisorInterviewSeekerInfo />
 				)}
 				{pathname.match(/\/services\/personnelaccounting\/personnel-department\/employment\/stages\/\d+/) &&

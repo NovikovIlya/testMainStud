@@ -2,6 +2,7 @@ import { LoadingOutlined } from '@ant-design/icons'
 import { Button, ConfigProvider, Form, Modal, Select, Spin, Tag, notification } from 'antd'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useLocation } from 'react-router-dom'
 import uuid from 'react-uuid'
 
 import { AvatartandardSvg } from '../../../../../assets/svg/AvatarStandardSvg'
@@ -19,18 +20,19 @@ import { NocircleArrowIcon } from '../../../jobSeeker/NoCircleArrowIcon'
 export const SupervisorInterviewSeekerInfo = () => {
 	const [api, contextHolder] = notification.useNotification()
 
-	const currentUrl = window.location.pathname
-	const match = currentUrl.match(/\/seekerinfo\/(\d+)$/)
+	const { pathname } = useLocation()
+	console.log(
+		pathname.substring(pathname.substring(0, pathname.lastIndexOf('/')).lastIndexOf('/') + 1, pathname.lastIndexOf('/'))
+	)
+	console.log(pathname.substring(pathname.lastIndexOf('/') + 1))
 
-	let id_from_url: number
+	const interviewId = pathname.substring(
+		pathname.substring(0, pathname.lastIndexOf('/')).lastIndexOf('/') + 1,
+		pathname.lastIndexOf('/')
+	)
+	const respondId = pathname.substring(pathname.lastIndexOf('/') + 1)
 
-	if (match) {
-		id_from_url = Number(match[1])
-	} else {
-		console.error('id miss')
-	}
-
-	const { data: foundInterview, isLoading: interviewDataLoading } = useGetInterviewQuery(id_from_url)
+	const { data: foundInterview, isLoading: interviewDataLoading } = useGetInterviewQuery(parseInt(interviewId))
 
 	const format = foundInterview?.format || ''
 	const time = foundInterview?.time
@@ -64,7 +66,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 	}
 	let timeFormated = createTimeFormatted(time)
 
-	const { data, isLoading: loading } = useGetRespondFullInfoQuery(id_from_url)
+	const { data, isLoading: loading } = useGetRespondFullInfoQuery(parseInt(respondId))
 
 	const [getResume, resumeQueryStatus] = useLazyGetSeekerResumeFileQuery()
 
@@ -107,7 +109,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 	const [resumeSize, setResumeSize] = useState<number>(0)
 
 	useEffect(() => {
-		getResume(id_from_url)
+		getResume(parseInt(respondId))
 			.unwrap()
 			.then(resume => {
 				setResume(prev => resume.href)
@@ -253,7 +255,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 										await aproveSeeker({
 											rejectionReason: 'approve',
 											action: 'EMPLOY',
-											respondId: id_from_url
+											respondId: parseInt(respondId)
 										})
 											.unwrap()
 											.then(() => {
@@ -287,7 +289,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 						aproveSeeker({
 							rejectionReason: 'approve',
 							action: 'EMPLOY',
-							respondId: id_from_url
+							respondId: parseInt(respondId)
 						})
 							.unwrap()
 							.then(() => {
@@ -448,7 +450,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 											await rejectSeeker({
 												rejectionReason: values.reason,
 												action: 'REJECT',
-												respondId: id_from_url
+												respondId: parseInt(respondId)
 											})
 												.unwrap()
 												.then(() => {

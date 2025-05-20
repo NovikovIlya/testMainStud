@@ -2,12 +2,14 @@ import { Button, ConfigProvider, Modal } from 'antd'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import { DeleteSvg } from '../../../../../assets/svg/DeleteSvg'
 import { useLazyGetInterviewQuery } from '../../../../../store/api/serviceApi'
 import { InterviewItemType } from '../../../../../store/reducers/type'
 
 export const SupervisorInterviewItem = (props: InterviewItemType) => {
 	interface InterviewButtonElemProps {
 		id: any
+		respondId: any
 		format: string
 		time: string
 	}
@@ -182,12 +184,25 @@ export const SupervisorInterviewItem = (props: InterviewItemType) => {
 			<>
 				<Button
 					onClick={() => {
-						navigate(`/services/personnelaccounting/supervisor/invitation/seekerinfo/${props.id}`)
+						navigate(`/services/personnelaccounting/supervisor/invitation/seekerinfo/${props.id}/${props.respondId}`)
 					}}
 					className="font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black"
 				>
 					Подробнее
 				</Button>
+			</>
+		)
+	}
+
+	const InterviewDeleteButton = () => {
+		return (
+			<>
+				<Button
+					className="rounded-[54.5px] border-solid border-black !px-[16px] !py-[7px] !w-[50px]"
+					onClick={() => {}}
+					type="text"
+					icon={<DeleteSvg />}
+				/>
 			</>
 		)
 	}
@@ -234,7 +249,12 @@ export const SupervisorInterviewItem = (props: InterviewItemType) => {
 				<InterviewFormatElem format={props.format}></InterviewFormatElem>
 				<div className="w-[25%] ml-[2%] gap-[3%] flex flex-row items-center justify-between">
 					<InterviewCountdownTimeElem eventTime={props.time} format={props.format} url={props.url} id={props.id} />
-					<InterviewButtonElem id={props.respondId} format={props.format} time={props.time}></InterviewButtonElem>
+					<InterviewButtonElem
+						id={props.id}
+						respondId={props.respondId}
+						format={props.format}
+						time={props.time}
+					></InterviewButtonElem>
 				</div>
 			</div>
 		</>

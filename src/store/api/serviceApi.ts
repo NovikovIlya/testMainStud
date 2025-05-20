@@ -52,7 +52,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 	endpoints: builder => ({
 		getSchedule: builder.query<TypeSchedule, void>({
 			query: () => `schedule-api/schedule`,
-			keepUnusedDataFor: 1,
+			keepUnusedDataFor: 1
 		}),
 		getPerformance: builder.query<IPerformance, void>({
 			query: () => 'academic-performance-api/performance'
@@ -1015,6 +1015,12 @@ export const serviceApi = apiSlice.injectEndpoints({
 				url: `${emplBaseURL}employment-api/v1/interview/${interviewId}`,
 				method: 'GET'
 			})
+		}),
+		deleteInterview: builder.mutation<void, number>({
+			query: interviewId => ({
+				url: `${emplBaseURL}employment-api/v1/interview/${interviewId}`,
+				method: 'DELETE'
+			})
 		})
 	})
 })
@@ -1158,5 +1164,6 @@ export const {
 	useLazyGetSupervisorVacancyQuery,
 	useGetInterviewQuery,
 	useLazyGetInterviewQuery,
-	useLazyGetChatIdByRespondIdQuery
+	useLazyGetChatIdByRespondIdQuery,
+	useDeleteInterviewMutation
 } = serviceApi

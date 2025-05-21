@@ -59,7 +59,7 @@ const employeeKeys = [
 	'Staff',
 	'forTeachers',
 	'otpusk',
-	'rasList',
+	// 'rasList',
 	'eventList',
 	'trip',
 	'documentForTeacher',
@@ -701,7 +701,7 @@ const DropDrag = () => {
 				title="otpusk"
 				buttonText="Watch"
 				img={'/otpusk.png'}
-				href={`https://otpusk.kpfu.ru/ext_login?p1=${maiRoleArray?.userId}&p2=${maiRoleArray?.sessionId}&p_h=${maiRoleArray?.sessionHash}`}
+				href={`https://otpusk.kpfu.ru/ext_login?p1=${maiRoleArray?.userId}&p2=${maiRoleArray?.sessionId}&p_hash=${maiRoleArray?.sessionHash}`}
 			/>
 		),
 		place: {

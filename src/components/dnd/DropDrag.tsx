@@ -25,6 +25,7 @@ import { TemplateCard } from '../cards/Template'
 
 import CookieConsent from './CookieConsent'
 import { block } from './constant'
+import { getBaseUrlShelly } from '../../store/api/studentPractice/getBaseUrlShelly'
 
 const studentKeys = [
 	'Schedule',
@@ -719,7 +720,7 @@ const DropDrag = () => {
 				title="rasList"
 				buttonText="Watch"
 				img={'/rasList.png'}
-				href={`https://shelly.kpfu.ru/e-ksu/PARUS_PAY_LIST?p1=${maiRoleArray?.userId}&p2=${maiRoleArray?.sessionId}&p_h=${maiRoleArray?.sessionHash}&p_menu=1460`}
+				href={`${getBaseUrlShelly()}e-ksu/PARUS_PAY_LIST?p1=${maiRoleArray?.userId}&p2=${maiRoleArray?.sessionId}&p_h=${maiRoleArray?.sessionHash}&p_menu=1460`}
 			/>
 		),
 		place: {
@@ -738,7 +739,7 @@ const DropDrag = () => {
 				title="eventList"
 				buttonText="Watch"
 				img={'/eventList.png'}
-				href={`https://shelly.kpfu.ru/e-ksu/meropriatie_vs_konkurs_grant.application_form?p1=${maiRoleArray?.userId}&p2=${maiRoleArray?.sessionId}&p_h=${maiRoleArray?.sessionHash}&p_menu=1589`}
+				href={`${getBaseUrlShelly()}e-ksu/meropriatie_vs_konkurs_grant.application_form?p1=${maiRoleArray?.userId}&p2=${maiRoleArray?.sessionId}&p_h=${maiRoleArray?.sessionHash}&p_menu=1589`}
 			/>
 		),
 		place: {
@@ -757,7 +758,7 @@ const DropDrag = () => {
 				title="trip"
 				buttonText="Watch"
 				img={'/trip.png'}
-				href={`https://shelly.kpfu.ru/e-ksu/business_trip.bt_card_form?p1=${maiRoleArray?.userId}&p2=${maiRoleArray?.sessionId}&p_h=${maiRoleArray?.sessionHash}&p_menu=1471`}
+				href={`${getBaseUrlShelly()}e-ksu/business_trip.bt_card_form?p1=${maiRoleArray?.userId}&p2=${maiRoleArray?.sessionId}&p_h=${maiRoleArray?.sessionHash}&p_menu=1471`}
 
 			/>
 		),
@@ -777,7 +778,7 @@ const DropDrag = () => {
 				title="documentForTeacher"
 				buttonText="Watch"
 				img={'/image8.png'}
-				href={`https://shelly.kpfu.ru/e-ksu/private_office.start_menu?p_menu=18&p_new_style=1&p1=${maiRoleArray?.userId}&p2=${maiRoleArray?.sessionId}&p_h=${maiRoleArray?.sessionHash}`}
+				href={`${getBaseUrlShelly()}e-ksu/private_office.start_menu?p_menu=18&p_new_style=1&p1=${maiRoleArray?.userId}&p2=${maiRoleArray?.sessionId}&p_h=${maiRoleArray?.sessionHash}`}
 			/>
 		),
 		place: {

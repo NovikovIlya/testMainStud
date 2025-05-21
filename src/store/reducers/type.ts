@@ -99,7 +99,7 @@ interface Day {
 	building: string
 	room: string
 	type: string
-	duration:string
+	duration: string
 }
 export interface Exam {
 	building_name: string
@@ -567,4 +567,10 @@ export type PageableType<ContentType> = {
 		totalElements: number
 		totalPages: number
 	}
+}
+
+export type AwardType = {
+	awardName: string
+	awardDate: string
+	awardDocumentNumber: string
 }

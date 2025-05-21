@@ -64,6 +64,7 @@ export const Redirect = () => {
 			const type = userData.user.roles.find(
 				(item: any) => item.login === userData?.user?.username
 			)?.type
+			console.log('userData',userData)
 			console.log('type',type)
 			setMessage(type) // mainRole
 			navigate('/user')

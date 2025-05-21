@@ -721,6 +721,7 @@ const DropDrag = () => {
 				buttonText="Watch"
 				img={'/rasList.png'}
 				href={`${getBaseUrlShelly()}e-ksu/PARUS_PAY_LIST?p1=${maiRoleArray?.userId}&p2=${maiRoleArray?.sessionId}&p_h=${maiRoleArray?.sessionHash}&p_menu=1460`}
+				isLink
 			/>
 		),
 		place: {
@@ -740,6 +741,7 @@ const DropDrag = () => {
 				buttonText="Watch"
 				img={'/eventList.png'}
 				href={`${getBaseUrlShelly()}e-ksu/meropriatie_vs_konkurs_grant.application_form?p1=${maiRoleArray?.userId}&p2=${maiRoleArray?.sessionId}&p_h=${maiRoleArray?.sessionHash}&p_menu=1589`}
+				isLink
 			/>
 		),
 		place: {
@@ -759,7 +761,7 @@ const DropDrag = () => {
 				buttonText="Watch"
 				img={'/trip.png'}
 				href={`${getBaseUrlShelly()}e-ksu/business_trip.bt_card_form?p1=${maiRoleArray?.userId}&p2=${maiRoleArray?.sessionId}&p_h=${maiRoleArray?.sessionHash}&p_menu=1471`}
-
+				isLink
 			/>
 		),
 		place: {
@@ -779,6 +781,7 @@ const DropDrag = () => {
 				buttonText="Watch"
 				img={'/image8.png'}
 				href={`${getBaseUrlShelly()}e-ksu/private_office.start_menu?p_menu=18&p_new_style=1&p1=${maiRoleArray?.userId}&p2=${maiRoleArray?.sessionId}&p_h=${maiRoleArray?.sessionHash}`}
+				isLink
 			/>
 		),
 		place: {

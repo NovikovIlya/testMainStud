@@ -2,7 +2,7 @@ import { useLocalStorageState } from 'ahooks'
 import { Spin } from 'antd'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import i18n from '../../18n'
 import { P2 } from '../../models/redirect'
@@ -20,6 +20,10 @@ export const Redirect = () => {
 	const [href, setHref] = useLocalStorageState<any>('href', {
 		defaultValue: ''
 	})
+	const [message, setMessage] = useLocalStorageState<any>('typeAcc', {
+		defaultValue: 'STUD'
+	})
+	const location = useLocation()
 	const searchParams = new URLSearchParams(location.search)
 	const paramValue = searchParams.get('lan')
 
@@ -57,6 +61,10 @@ export const Redirect = () => {
 			localStorage.setItem('user', JSON.stringify(userData.user))
 			localStorage.setItem('access', JSON.stringify(userData.accessToken))
 			localStorage.setItem('refresh', JSON.stringify(userData.refreshToken))
+			const type = userData.user.roles.find(
+				(item: any) => item.login === userData?.user?.username
+			)?.type
+			setMessage(type) // mainRole
 			navigate('/user')
 			console.log(userData.user)
 		} catch (e: any) {

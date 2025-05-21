@@ -74,6 +74,10 @@ const DropDrag = () => {
 	const dispatch = useDispatch()
 	const layout = block
 	const edit = useAppSelector(state => state.auth.edit)
+	const username = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '')?.username : ''
+	const roles = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '')?.roles : []
+	const maiRole = roles.find((item: any) => item.login === username)?.type || ''
+	const maiRoleArray = roles.find((item: any) => item.login === username)
 	const {
 		data: dataCheck,
 		isSuccess: isSuccessCheck,
@@ -93,13 +97,10 @@ const DropDrag = () => {
 	const { data: dataSubRole, isSuccess: isSuccessSubRole, isLoading: isLoadingSubRole } = useGetRoleQuery(null)
 	const [subRole, setSubrole] = useLocalStorageState<any>('subRole', { defaultValue: '' })
 	const [windowSize, setWindowSize] = useState(getWindowSize())
-	// const { data: dataModules } = useGetModulesQuery()
 	const [user, setInfo] = useLocalStorageState<any>('user')
-
 	const [href, setHref] = useLocalStorageState<any>('href', {
 		defaultValue: ''
 	})
-
 	const urlObrProgram = useMemo(() => {
 		switch (href) {
 			case 'KAZAN':
@@ -699,7 +700,7 @@ const DropDrag = () => {
 				title="otpusk"
 				buttonText="Watch"
 				img={'/otpusk.png'}
-				href="https://otpusk.kpfu.ru/"
+				href={`https://otpusk.kpfu.ru/?p1=${maiRoleArray?.userId}&p2=${maiRoleArray?.sessionId}&p_h=${maiRoleArray?.sessionHash}`}
 			/>
 		),
 		place: {
@@ -718,7 +719,7 @@ const DropDrag = () => {
 				title="rasList"
 				buttonText="Watch"
 				img={'/rasList.png'}
-				href="https://shelly.kpfu.ru/e-ksu/PARUS_PAY_LIST?p1=374874&p2=27856037140880187799287444156964&p_h=4C172E19436D34D000957D55FAC6749D&p_menu=1460"
+				href={`https://shelly.kpfu.ru/e-ksu/PARUS_PAY_LIST?p1=${maiRoleArray?.userId}&p2=${maiRoleArray?.sessionId}&p_h=${maiRoleArray?.sessionHash}&p_menu=1460`}
 			/>
 		),
 		place: {
@@ -737,7 +738,7 @@ const DropDrag = () => {
 				title="eventList"
 				buttonText="Watch"
 				img={'/eventList.png'}
-				href="https://shelly.kpfu.ru/e-ksu/meropriatie_vs_konkurs_grant.application_form?p1=374874&p2=27856153731089158292480594867045&p_h=B0FAA677ED70B8C1758F4AA028FAF447&p_menu=1589"
+				href={`https://shelly.kpfu.ru/e-ksu/meropriatie_vs_konkurs_grant.application_form?p1=${maiRoleArray?.userId}&p2=${maiRoleArray?.sessionId}&p_h=${maiRoleArray?.sessionHash}&p_menu=1589`}
 			/>
 		),
 		place: {
@@ -756,7 +757,8 @@ const DropDrag = () => {
 				title="trip"
 				buttonText="Watch"
 				img={'/trip.png'}
-				href="https://shelly.kpfu.ru/e-ksu/business_trip.bt_card_form?p1=374874&p2=27856153731089158292480594867045&p_h=B0FAA677ED70B8C1758F4AA028FAF447&p_menu=1471"
+				href={`https://shelly.kpfu.ru/e-ksu/business_trip.bt_card_form?p1=${maiRoleArray?.userId}&p2=${maiRoleArray?.sessionId}&p_h=${maiRoleArray?.sessionHash}&p_menu=1471`}
+
 			/>
 		),
 		place: {
@@ -775,7 +777,7 @@ const DropDrag = () => {
 				title="documentForTeacher"
 				buttonText="Watch"
 				img={'/image8.png'}
-				href="https://shelly.kpfu.ru/e-ksu/business_trip.bt_card_form?p1=374874&p2=27856153731089158292480594867045&p_h=B0FAA677ED70B8C1758F4AA028FAF447&p_menu=1471"
+				href={`https://shelly.kpfu.ru/e-ksu/private_office.start_menu?p_menu=18&p_new_style=1&p1=${maiRoleArray?.userId}&p2=${maiRoleArray?.sessionId}&p_h=${maiRoleArray?.sessionHash}`}
 			/>
 		),
 		place: {

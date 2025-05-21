@@ -54,10 +54,13 @@ export const SupervisorInterviewItem = (props: InterviewItemType) => {
 					datePublicString += 'Осталось ' + minutes + ' минут'
 				}
 				if (isDaysEmpty && !isHoursEmpty) {
-					datePublicString += 'Осталось ' + hours + ' ч' + minutes + ' м'
+					datePublicString += 'Осталось ' + hours + ' ч ' + minutes + ' м'
 				}
 				if (!isDaysEmpty && !isHoursEmpty) {
 					datePublicString += 'Осталось ' + days + ' дн ' + hours + ' ч'
+				}
+				if (!isDaysEmpty && isHoursEmpty) {
+					datePublicString += 'Осталось ' + days + ' дн ' + minutes + ' м'
 				}
 				setDatePublicString(datePublicString)
 

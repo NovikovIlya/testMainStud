@@ -40,17 +40,22 @@ export const SupervisorInterviewSeekerInfo = () => {
 		if (time) {
 			const date = new Date(time)
 
-			// Извлекаем компоненты даты
-			const day = String(date.getUTCDate()).padStart(2, '0') // День (с ведущим нулем)
-			const month = String(date.getUTCMonth() + 1).padStart(2, '0') // Месяц (с ведущим нулем)
-			const shortYear = String(date.getUTCFullYear()).slice(-2) // Последние две цифры года
+			// Получаем локальное время
+			const localDate = date.toLocaleString('ru-RU', {
+				timeZoneName: 'short',
+				hour12: false
+			})
 
-			// Извлекаем компоненты времени
-			const hours = String(date.getUTCHours()).padStart(2, '0') // Часы (с ведущим нулем)
-			const minutes = String(date.getUTCMinutes()).padStart(2, '0') // Минуты (с ведущим нулем)
+			// Преобразуем строку в формат "дд.мм.гг чч:мм"
+			const [datePart, timePart] = localDate.split(', ')
+			const [day, month, year] = datePart.split('.')
+
+			// Получаем последние две цифры года
+			const shortYear: string = year.slice(-2)
+			const shortTime: string = timePart.substring(0, 5)
 
 			// Форматируем дату и время
-			const timeFormated = `${day}.${month}.${shortYear} в ${hours}:${minutes}`
+			const timeFormated = `${day}.${month}.${shortYear} в ${shortTime}`
 
 			return timeFormated
 		} else {
@@ -151,10 +156,13 @@ export const SupervisorInterviewSeekerInfo = () => {
 					datePublicString += 'Осталось ' + minutes + ' минут'
 				}
 				if (isDaysEmpty && !isHoursEmpty) {
-					datePublicString += 'Осталось ' + hours + ' ч' + minutes + ' м'
+					datePublicString += 'Осталось ' + hours + ' ч ' + minutes + ' м'
 				}
 				if (!isDaysEmpty && !isHoursEmpty) {
 					datePublicString += 'Осталось ' + days + ' дн ' + hours + ' ч'
+				}
+				if (!isDaysEmpty && isHoursEmpty) {
+					datePublicString += 'Осталось ' + days + ' дн ' + minutes + ' м'
 				}
 				setDatePublicString(datePublicString)
 
@@ -179,6 +187,12 @@ export const SupervisorInterviewSeekerInfo = () => {
 				console.log(targetDate)
 				console.log(now)
 				console.log(difference)
+				console.log('Минуты')
+				console.log(minutes)
+				console.log('Часы')
+				console.log(hours)
+				console.log('Дни')
+				console.log(days)
 				return difference
 			}
 
@@ -191,7 +205,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 		return (
 			<div className="flex flex-col gap-[30px] mr-[10%]">
 				{format === 'OFFLINE' &&
-					!isInterviewStarted && ( // Офлайн собес, ожидание
+					!is30MinAfterInterviewEnded && ( // Офлайн собес, ожидание
 						<div className="flex flex-col justify-center">
 							<h3 className=" mb-[20px] font-content-font font-bold text-black text-[16px]/[19.2px]">Собеседование</h3>
 							<h4 className=" mb-[10px] font-content-font font-normal text-black text-[12px]/[14.4x] opacity-40">

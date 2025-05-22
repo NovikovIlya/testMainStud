@@ -63,14 +63,15 @@ export const AddEducationModal = (props: {
 								s_id: values.s_id,
 								e_id: values.e_id,
 								user_allid: values.user_allid,
-								is_modified: values.file.file ? true : false
+								is_modified: values.file && values.file.file ? true : false
 							}
 							let clearData = Object.fromEntries(Object.entries(data).filter(([_, v]) => v != null))
 							let jsonData = JSON.stringify(clearData)
 							let blobData = new Blob([jsonData], { type: 'application/json' })
 							const formData = new FormData()
 							formData.append('data', blobData)
-							values.file.file &&
+							values.file &&
+								values.file.file &&
 								values.file.file.originFileObj &&
 								formData.append('file', values.file.file.originFileObj)
 							props.type === 'ADD'
@@ -223,7 +224,12 @@ export const AddEducationModal = (props: {
 						<Form.Item name={'accept'} valuePropName="checked">
 							<Checkbox>{t('razrer')}</Checkbox>
 						</Form.Item>
-						<Button htmlType="submit" type="primary" className="!rounded-[54.5px]">
+						<Button
+							htmlType="submit"
+							type="primary"
+							className="!rounded-[54.5px]"
+							loading={addEducationStatus.isLoading || updateEducationStatus.isLoading}
+						>
 							{t('Save')}
 						</Button>
 					</Form>

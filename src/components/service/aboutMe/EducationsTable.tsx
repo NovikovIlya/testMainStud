@@ -89,14 +89,6 @@ export const EducationsTable = () => {
 								number: record.docnum,
 								series: record.docseries,
 								accept: record.portal_status ? true : false,
-								// file: [
-								// 	{
-								// 		uid: '1',
-								// 		name: 'xxx.png',
-								// 		status: 'done',
-								// 		url: 'http://www.baidu.com/xxx.png'
-								// 	}
-								// ]
 								file: record.filename
 									? [
 											{
@@ -116,7 +108,12 @@ export const EducationsTable = () => {
 							title={t('deleteEducationTitle')}
 							description={t('deleteEducationDescription')}
 							onConfirm={() => {
-								deleteEducation(record)
+								let clearData = Object.fromEntries(Object.entries(record).filter(([_, v]) => v != null))
+								let jsonData = JSON.stringify(clearData)
+								let blobData = new Blob([jsonData], { type: 'application/json' })
+								const formData = new FormData()
+								formData.append('data', blobData)
+								deleteEducation(formData)
 							}}
 						>
 							<DeleteTwoTone />

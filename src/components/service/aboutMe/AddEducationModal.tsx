@@ -1,11 +1,9 @@
-import { PlusCircleFilled } from '@ant-design/icons'
 import { Button, Checkbox, ConfigProvider, DatePicker, Form, Input, Modal, Popover, Radio, Select, Upload } from 'antd'
 import { FormInstance } from 'antd/lib'
 import en_US from 'antd/locale/en_US'
 import ru_RU from 'antd/locale/ru_RU'
 import dayjs from 'dayjs'
 import i18next, { t } from 'i18next'
-import { useState } from 'react'
 
 import {
 	useAddNewEducationMutation,

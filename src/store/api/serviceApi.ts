@@ -1156,7 +1156,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 			}),
 			invalidatesTags: ['Education']
 		}),
-		deleteNewEducation: builder.mutation<void, EducationTableDataType>({
+		deleteNewEducation: builder.mutation<void, any>({
 			query: arg => ({
 				url: `about-me/set-completed-edu`,
 				method: 'DELETE',

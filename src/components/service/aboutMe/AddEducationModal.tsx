@@ -117,6 +117,8 @@ export const AddEducationModal = (props: {
 								<Select
 									options={countries.map(country => ({ value: country.id, label: country.shortName }))}
 									placeholder={t('select')}
+									showSearch
+									optionFilterProp="label"
 								></Select>
 							</Form.Item>
 						</div>
@@ -174,16 +176,28 @@ export const AddEducationModal = (props: {
 						<Form.Item
 							name={'file'}
 							valuePropName="defaultFileList"
-							// getValueProps={ele => {
-							// 	console.log(ele)
-							// 	try {
-							// 		return { value: JSON.parse(ele) }
-							// 	} catch {
-							// 		return { value: ele }
-							// 	}
-							// }}
+							rules={[
+								{
+									validator: (_, value) => {
+										if (
+											value &&
+											value.fileList &&
+											value.fileList.length > 0 &&
+											value.fileList[0].size > 5 * 1024 * 1024
+										) {
+											return Promise.reject(t('fileSizeError'))
+										}
+										return Promise.resolve()
+									}
+								}
+							]}
 							label={
-								<div className="flex gap-[10px]">
+								<div
+									className="flex gap-[10px]"
+									onClick={e => {
+										e.preventDefault()
+									}}
+								>
 									{t('AttachDocuments')}
 									<Popover
 										overlayClassName="p-[20px] w-[369px]"
@@ -214,7 +228,7 @@ export const AddEducationModal = (props: {
 									onSuccess && onSuccess(file)
 								}}
 								maxCount={1}
-								accept=".pdf"
+								accept=".pdf,.jpg,.png,.gif"
 							>
 								<Button type="primary">{t('AddFile')}</Button>
 							</Upload>

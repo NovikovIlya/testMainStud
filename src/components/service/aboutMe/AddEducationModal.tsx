@@ -45,48 +45,48 @@ export const AddEducationModal = (props: {
 						className="w-full"
 						onFinish={values => {
 							console.log(values)
-							let data = {
-								language_portal: values.language,
-								start_date: dayjs(values.beginningYear).format('DD.MM.YYYY'),
-								end_date: dayjs(values.graduateYear).format('DD.MM.YYYY'),
-								edu_level: values.educationLevelId,
-								eduspeciality: values.specialization,
-								organization: values.nameOfInstitute,
-								edu_country: countries.find(country => country.id === values.countryId)?.shortName!,
-								development: values.subdivision,
-								qualification: values.qualification,
-								issue_date: dayjs(values.issueDate).format('DD.MM.YYYY'),
-								docnum: values.number,
-								docseries: values.series,
-								portal_status: values.accept ? '1' : null,
-								id: values.id,
-								s_id: values.s_id,
-								e_id: values.e_id,
-								user_allid: values.user_allid
-							}
-							let clearData = Object.fromEntries(Object.entries(data).filter(([_, v]) => v != null))
-							let jsonData = JSON.stringify(clearData)
-							let blobData = new Blob([jsonData], { type: 'application/json' })
-							const formData = new FormData()
-							formData.append('data', blobData)
-							values.file && formData.append('file', values.file.file.originFileObj)
-							props.type === 'ADD'
-								? addEducation(formData)
-										.then(() => {
-											props.form.resetFields()
-											props.onCancel()
-										})
-										.catch(() => {
-											console.log('??????')
-										})
-								: updateEducation(formData)
-										.then(() => {
-											props.form.resetFields()
-											props.onCancel()
-										})
-										.catch(() => {
-											console.log('??????')
-										})
+							// let data = {
+							// 	language_portal: values.language,
+							// 	start_date: dayjs(values.beginningYear).format('DD.MM.YYYY'),
+							// 	end_date: dayjs(values.graduateYear).format('DD.MM.YYYY'),
+							// 	edu_level: values.educationLevelId,
+							// 	eduspeciality: values.specialization,
+							// 	organization: values.nameOfInstitute,
+							// 	edu_country: countries.find(country => country.id === values.countryId)?.shortName!,
+							// 	development: values.subdivision,
+							// 	qualification: values.qualification,
+							// 	issue_date: dayjs(values.issueDate).format('DD.MM.YYYY'),
+							// 	docnum: values.number,
+							// 	docseries: values.series,
+							// 	portal_status: values.accept ? '1' : null,
+							// 	id: values.id,
+							// 	s_id: values.s_id,
+							// 	e_id: values.e_id,
+							// 	user_allid: values.user_allid
+							// }
+							// let clearData = Object.fromEntries(Object.entries(data).filter(([_, v]) => v != null))
+							// let jsonData = JSON.stringify(clearData)
+							// let blobData = new Blob([jsonData], { type: 'application/json' })
+							// const formData = new FormData()
+							// formData.append('data', blobData)
+							// values.file && formData.append('file', values.file.file.originFileObj)
+							// props.type === 'ADD'
+							// 	? addEducation(formData)
+							// 			.then(() => {
+							// 				props.form.resetFields()
+							// 				props.onCancel()
+							// 			})
+							// 			.catch(() => {
+							// 				console.log('??????')
+							// 			})
+							// 	: updateEducation(formData)
+							// 			.then(() => {
+							// 				props.form.resetFields()
+							// 				props.onCancel()
+							// 			})
+							// 			.catch(() => {
+							// 				console.log('??????')
+							// 			})
 						}}
 					>
 						<Form.Item name={'id'} className="hidden"></Form.Item>
@@ -171,6 +171,15 @@ export const AddEducationModal = (props: {
 						</ConfigProvider>
 						<Form.Item
 							name={'file'}
+							valuePropName="defaultFileList"
+							// getValueProps={ele => {
+							// 	console.log(ele)
+							// 	try {
+							// 		return { value: JSON.parse(ele) }
+							// 	} catch {
+							// 		return { value: ele }
+							// 	}
+							// }}
 							label={
 								<div className="flex gap-[10px]">
 									{t('AttachDocuments')}

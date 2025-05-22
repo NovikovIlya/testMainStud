@@ -5,6 +5,7 @@ import ru_RU from 'antd/locale/ru_RU'
 import dayjs from 'dayjs'
 import i18next, { t } from 'i18next'
 import { useState } from 'react'
+import uuid from 'react-uuid'
 
 import { EngFlagSvg } from '../../../assets/svg/EngFlagSvg'
 import { RuFlagSvg } from '../../../assets/svg/RuFlagSvg'
@@ -69,6 +70,7 @@ export const EducationsTable = () => {
 					<EyeTwoTone />
 					<EditTwoTone
 						onClick={() => {
+							form.resetFields()
 							form.setFieldsValue({
 								id: record.id,
 								s_id: record.s_id,
@@ -86,7 +88,25 @@ export const EducationsTable = () => {
 								issueDate: record.issue_date ? dayjs(record.issue_date, 'DD.MM.YYYY') : null,
 								number: record.docnum,
 								series: record.docseries,
-								accept: record.portal_status ? true : false
+								accept: record.portal_status ? true : false,
+								// file: [
+								// 	{
+								// 		uid: '1',
+								// 		name: 'xxx.png',
+								// 		status: 'done',
+								// 		url: 'http://www.baidu.com/xxx.png'
+								// 	}
+								// ]
+								file: record.filename
+									? [
+											{
+												uid: uuid(),
+												name: record.filename,
+												status: 'done',
+												url: record.edu_file_url
+											}
+									  ]
+									: []
 							})
 							setIsModalOpen(true)
 						}}

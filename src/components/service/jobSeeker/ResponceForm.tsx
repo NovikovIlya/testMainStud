@@ -1551,6 +1551,7 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 							<div className="flex items-center mb-[38px]">
 								<button
 									onClick={() => {
+										setcurrentFormSkills(skillsData.skills)
 										setPage('main')
 									}}
 									className="bg-white border-none cursor-pointer"

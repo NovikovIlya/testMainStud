@@ -440,7 +440,7 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 							<p className="mb-[36px] font-content-font text-black text-[18px]/[18px] font-normal">{t('respond')}</p>
 							<div className="mb-[20px] rounded-[8px] bg-[#E5EBFB] py-[12px] px-[20px] relative">
 								<p className="font-content-font text-black text-[16px]/[19.2px] font-normal opacity-40">
-									{t('Vacancy')}
+									{t('vacancy')}
 								</p>
 								<p className="font-content-font text-black text-[16px]/[19.2px] font-normal w-[90%]">
 									{currentVacancy?.title.rendered}

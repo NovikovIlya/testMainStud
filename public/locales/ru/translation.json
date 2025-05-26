@@ -1072,5 +1072,6 @@
 	"nonRelevantVacancy": "Вакансия не актуальна",
 	"noRightTime": "Нет подходящего времени",
 	"vacancyRespond": "Отклик на вакансию",
-	"myResponds2": "Мои отклики"
+	"myResponds2": "Мои отклики",
+	"responseFormMailError": "Укажите почту"
 }

@@ -1081,5 +1081,6 @@
 	"nonRelevantVacancy": "The vacancy is not relevant",
 	"noRightTime": "There's no right time",
 	"vacancyRespond": "Vacancy respond",
-	"myResponds2": "My responds"
+	"myResponds2": "My responds",
+	"responseFormMailError": "Enter email"
 }

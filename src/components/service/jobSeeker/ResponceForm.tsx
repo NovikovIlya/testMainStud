@@ -702,7 +702,7 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 										{t('telephone')}
 									</label>
 								}
-								rules={[{ required: true, message: t('errorPhone') }]}
+								rules={[{ required: true, message: t('specify' + ' ' + t('telephone').toLowerCase()) }]}
 							>
 								<Input
 									onKeyDown={handleKeyDownPhone}
@@ -717,7 +717,7 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 									<label className="text-black text-[18px]/[18px] font-content-font font-normal">{t('email')}</label>
 								}
 								rules={[
-									{ required: true, message: t('errorEmail') },
+									{ required: true, message: t('responseFormMailError') },
 									{
 										pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
 										message: t('BadEmail')
@@ -760,9 +760,10 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 										key={edu.id}
 										className="min-h-[90px] pl-[16px] pr-[16px] pb-[20px] mb-[20px] border-solid flex justify-between items-center border-0 border-b-[1px] border-black border-opacity-20 cursor-pointer"
 									>
-										<div className="flex flex-col gap-[12px]">
+										<div className="flex flex-col gap-[12px] overflow-hidden">
 											<p className="font-content-font text-black text-[16px]/[16px] font-bold select-none">
-												{edu.education.nameofInstitute}
+												{edu.education.nameofInstitute},{' '}
+												{countries?.find(country => country.id === edu.education.countryId)?.shortName}
 											</p>
 											<p className="font-content-font text-black text-[16px]/[16px] font-normal select-none">
 												{edu.education.specialization},{' '}
@@ -858,7 +859,7 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 									<ArrowIcon />
 								</button>
 								<p className="mb-[2px] ml-[15px] font-content-font font-bold text-black text-[18px]/[21.6px]">
-									{t('addEducation')}
+									{t('add') + ' ' + t('education').toLowerCase()}
 								</p>
 							</div>
 							<Form.Item
@@ -1217,7 +1218,7 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 										key={exp.id}
 										className="min-h-[90px] pl-[16px] pr-[16px] pb-[20px] mb-[20px] border-solid flex justify-between items-center border-0 border-b-[1px] border-black border-opacity-20 cursor-pointer"
 									>
-										<div className="flex flex-col gap-[12px]">
+										<div className="flex flex-col gap-[12px] overflow-hidden">
 											<p className="font-content-font text-black text-[16px]/[16px] font-bold select-none">
 												{exp.experience.seat}
 											</p>

@@ -56,13 +56,20 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 			unreadChatsCount: data?.unreadChatsCount
 		})
 	})
-	const { data: avatarUrl, isLoading: isAvatarLoading ,error:errorAva,isFetching} = useGetAvatarQuery(undefined, {
-		refetchOnMountOrArgChange: true,
+	const { data: avatarUrl, isLoading: isAvatarLoading ,isSuccess:isSuccesAvatar,error:errorAva,isFetching} = useGetAvatarQuery(undefined, {
+		skip: !(['/services/aboutMe', '/user'].some(path => location.pathname.includes(path))),	
 	});
+	const [avatarLocal, setAvatarLocal] = useLocalStorageState<any>('avatarLocal', { defaultValue: '' })
 	const [avatarUrlLocal, setAvatarUrlLocal] = useState<any>({
 		url: null,
 		id: null,
 	});
+
+	useEffect(()=>{
+		if(isSuccesAvatar){
+			setAvatarLocal(avatarUrl?.url)
+		}
+	},[isSuccesAvatar])
 
 	useEffect(() => {
 		if (isSuccessSubRole) {
@@ -451,7 +458,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 								 		key={avatarUrlLocal?.id}
 										className='bg-[#cbdaf1] rounded-[50%] !w-[45px] !h-[45px]'
 										size={180}
-										src={avatarUrl?.url}
+										src={avatarLocal}
 										icon={
 								avatarUrl?.url==='There is no photo' ? <PersonSvg white={type === 'service'} /> 
 								: avatarUrl===null ? <PersonSvg white={type === 'service'} /> 

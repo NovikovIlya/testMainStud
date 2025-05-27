@@ -1029,7 +1029,16 @@ export const serviceApi = apiSlice.injectEndpoints({
 		getAwards: builder.query<AwardType[], void>({
 			query: () => ({
 				url: `about-me/get-awards`
-			})
+			}),
+			providesTags: ['Awards']
+		}),
+		addNewAward: builder.mutation<void, any>({
+			query: arg => ({
+				url: `about-me/set-award`,
+				method: 'POST',
+				body: arg
+			}),
+			invalidatesTags: ['Awards']
 		})
 	})
 })
@@ -1175,5 +1184,6 @@ export const {
 	useLazyGetInterviewQuery,
 	useLazyGetChatIdByRespondIdQuery,
 	useGetCurrentDateQuery,
-	useGetAwardsQuery
+	useGetAwardsQuery,
+	useAddNewAwardMutation
 } = serviceApi

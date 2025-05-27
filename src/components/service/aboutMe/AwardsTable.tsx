@@ -5,6 +5,7 @@ import ru_RU from 'antd/locale/ru_RU'
 import dayjs from 'dayjs'
 import i18next, { t } from 'i18next'
 import { useState } from 'react'
+import uuid from 'react-uuid'
 
 import { useGetAwardsQuery } from '../../../store/api/serviceApi'
 import { AwardType } from '../../../store/reducers/type'
@@ -49,7 +50,18 @@ export const AwardsTable = () => {
 								awardDate: dayjs(record.awardDate, 'DD.MM.YYYY'),
 								awardDocumentNumber: record.docNum,
 								awardDocumentDate: record.docDate ? dayjs(record.docDate, 'DD.MM.YYYY') : null,
-								accept: record.portalStatus ? true : false
+								accept: record.portalStatus ? true : false,
+								url: record.url,
+								file: record.filename
+									? [
+											{
+												uid: uuid(),
+												name: record.filename,
+												status: 'done',
+												url: ''
+											}
+									  ]
+									: []
 							})
 							setIsModalOpen(true)
 						}}

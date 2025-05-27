@@ -8,6 +8,7 @@ import i18next, { t } from 'i18next'
 import { useState } from 'react'
 
 import {
+	useAddNewAwardMutation,
 	useAddNewEducationMutation,
 	useGetEducationTypesQuery,
 	useUpdateNewEducationMutation
@@ -26,6 +27,8 @@ export const AddAwardModal = (props: {
 	const [addEducation, addEducationStatus] = useAddNewEducationMutation()
 	const [updateEducation, updateEducationStatus] = useUpdateNewEducationMutation()
 
+	const [addAward, addAwardStatus] = useAddNewAwardMutation()
+
 	return (
 		<>
 			<ConfigProvider>
@@ -43,118 +46,38 @@ export const AddAwardModal = (props: {
 						layout="vertical"
 						requiredMark={false}
 						className="w-full"
-						// onFinish={values => {
-						// 	let reader = new FileReader()
-						// 	reader.onload = e => {
-						// 		console.log(values)
-						// 		console.log({ ...values, file: e.target?.result })
-						// 		props.type === 'ADD'
-						// 			? addEducation({
-						// 					language_portal: values.language,
-						// 					start_date: values.beginningYear,
-						// 					end_date: values.graduateYear,
-						// 					edu_level: values.educationLevelId,
-						// 					eduspeciality: values.specialization,
-						// 					organization: values.nameOfInstitute,
-						// 					edu_country: countries.find(country => country.id === values.countryId)?.shortName!,
-						// 					development: values.subdivision,
-						// 					qualification: values.qualification,
-						// 					issue_date: values.issueDate,
-						// 					docnum: values.number,
-						// 					docseries: values.series,
-						// 					portal_status: values.accept ? '1' : null,
-						// 					edu_file: [
-						// 						{ filename: values.file.file.name, file_base64: String(e.target?.result).split(',')[1] }
-						// 					]
-						// 			  })
-						// 					.then(() => {
-						// 						props.form.resetFields()
-						// 						props.onCancel()
-						// 					})
-						// 					.catch(() => {
-						// 						console.log('??????')
-						// 					})
-						// 			: updateEducation({
-						// 					language_portal: values.language,
-						// 					start_date: dayjs(values.beginningYear).format('DD.MM.YYYY'),
-						// 					end_date: dayjs(values.graduateYear).format('DD.MM.YYYY'),
-						// 					edu_level: values.educationLevelId,
-						// 					eduspeciality: values.specialization,
-						// 					organization: values.nameOfInstitute,
-						// 					edu_country: countries.find(country => country.id === values.countryId)?.shortName!,
-						// 					development: values.subdivision,
-						// 					qualification: values.qualification,
-						// 					issue_date: dayjs(values.issueDate).format('DD.MM.YYYY'),
-						// 					docnum: values.number,
-						// 					docseries: values.series,
-						// 					portal_status: values.accept ? '1' : null,
-						// 					id: values.id,
-						// 					s_id: values.s_id,
-						// 					e_id: values.e_id,
-						// 					user_allid: values.user_allid,
-						// 					edu_file: [{ filename: values.file.file.name, file_base64: e.target?.result as string }]
-						// 			  })
-						// 					.then(() => {
-						// 						props.form.resetFields()
-						// 						props.onCancel()
-						// 					})
-						// 					.catch(() => {
-						// 						console.log('??????')
-						// 					})
-						// 	}
-						// 	values.file
-						// 		? reader.readAsDataURL(values.file.file.originFileObj)
-						// 		: props.type === 'ADD'
-						// 		? addEducation({
-						// 				language_portal: values.language,
-						// 				start_date: dayjs(values.beginningYear).format('DD.MM.YYYY'),
-						// 				end_date: dayjs(values.graduateYear).format('DD.MM.YYYY'),
-						// 				edu_level: values.educationLevelId,
-						// 				eduspeciality: values.specialization,
-						// 				organization: values.nameOfInstitute,
-						// 				edu_country: countries.find(country => country.id === values.countryId)?.shortName!,
-						// 				development: values.subdivision,
-						// 				qualification: values.qualification,
-						// 				issue_date: dayjs(values.issueDate).format('DD.MM.YYYY'),
-						// 				docnum: values.number,
-						// 				docseries: values.series,
-						// 				portal_status: values.accept ? '1' : null,
-						// 				edu_file: [{ filename: null, file_base64: null }]
-						// 		  })
-						// 				.then(() => {
-						// 					props.form.resetFields()
-						// 					props.onCancel()
-						// 				})
-						// 				.catch(() => {
-						// 					console.log('??????')
-						// 				})
-						// 		: updateEducation({
-						// 				language_portal: values.language,
-						// 				start_date: dayjs(values.beginningYear).format('DD.MM.YYYY'),
-						// 				end_date: dayjs(values.graduateYear).format('DD.MM.YYYY'),
-						// 				edu_level: values.educationLevelId,
-						// 				eduspeciality: values.specialization,
-						// 				organization: values.nameOfInstitute,
-						// 				edu_country: countries.find(country => country.id === values.countryId)?.shortName!,
-						// 				development: values.subdivision,
-						// 				qualification: values.qualification,
-						// 				issue_date: dayjs(values.issueDate).format('DD.MM.YYYY'),
-						// 				docnum: values.number,
-						// 				docseries: values.series,
-						// 				portal_status: values.accept ? '1' : null,
-						// 				id: values.id,
-						// 				s_id: values.s_id,
-						// 				e_id: values.e_id,
-						// 				user_allid: values.user_allid,
-						// 				edu_file: [{ filename: null, file_base64: null }]
-						// 		  })
-						// 				.then(() => {
-						// 					props.onCancel()
-						// 				})
-						// 				.catch(() => {
-						// 					console.log('??????')
-						// 				})
-						// }}
+						onFinish={values => {
+							console.log(values)
+							let data = {
+								languagePortal: values.language,
+								award: values.award,
+								docDate: dayjs(values.awardDocumentDate).format('DD.MM.YYYY'),
+								awardDate: dayjs(values.awardDate).format('DD.MM.YYYY'),
+								docNum: values.awardDocumentNumber,
+								portalStatus: values.accept ? '1' : null,
+								url: values.url,
+								isModified: values.file && values.file.file ? true : false
+							}
+							let clearData = Object.fromEntries(Object.entries(data).filter(([_, v]) => v != null))
+							let jsonData = JSON.stringify(clearData)
+							let blobData = new Blob([jsonData], { type: 'application/json' })
+							const formData = new FormData()
+							formData.append('data', blobData)
+							values.file &&
+								values.file.file &&
+								values.file.file.originFileObj &&
+								formData.append('file', values.file.file.originFileObj)
+							props.type === 'ADD'
+								? addAward(formData)
+										.then(() => {
+											props.form.resetFields()
+											props.onCancel()
+										})
+										.catch(() => {
+											console.log('??????')
+										})
+								: () => {}
+						}}
 					>
 						<Form.Item name={'language'} label={t('publicationLanguage')} initialValue={1}>
 							<Radio.Group>
@@ -186,7 +109,29 @@ export const AddAwardModal = (props: {
 								<DatePicker className="w-[47%]" maxDate={dayjs()} format="DD.MM.YYYY"></DatePicker>
 							</Form.Item>
 						</ConfigProvider>
-						<Form.Item name={'file'} label={<div className="flex gap-[10px]">{t('AttachDocuments')}</div>}>
+						<Form.Item name={'url'} className="mt-[18px]" label={<div className="flex gap-[10px]">{t('link')}</div>}>
+							<Input placeholder="https://disk.yandex.ru"></Input>
+						</Form.Item>
+						<Form.Item
+							name={'file'}
+							label={<div className="flex gap-[10px]">{t('AttachDocuments')}</div>}
+							valuePropName="defaultFileList"
+							rules={[
+								{
+									validator: (_, value) => {
+										if (
+											value &&
+											value.fileList &&
+											value.fileList.length > 0 &&
+											value.fileList[0].size > 5 * 1024 * 1024
+										) {
+											return Promise.reject(t('fileSizeError'))
+										}
+										return Promise.resolve()
+									}
+								}
+							]}
+						>
 							<Upload
 								customRequest={data => {
 									const { file, onSuccess } = data
@@ -201,7 +146,7 @@ export const AddAwardModal = (props: {
 						<Form.Item name={'accept'} valuePropName="checked">
 							<Checkbox>{t('razrer')}</Checkbox>
 						</Form.Item>
-						<Button htmlType="submit" type="primary" className="!rounded-[54.5px]">
+						<Button htmlType="submit" type="primary" className="!rounded-[54.5px]" loading={addAwardStatus.isLoading}>
 							{t('Save')}
 						</Button>
 					</Form>

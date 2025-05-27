@@ -58,8 +58,9 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	})
 	const { data: avatarUrl, isLoading: isAvatarLoading ,isSuccess:isSuccesAvatar,error:errorAva,isFetching} = useGetAvatarQuery(undefined, {
 		skip: !(['/services/aboutMe', '/user'].some(path => location.pathname.includes(path))),	
+		refetchOnMountOrArgChange: true,
 	});
-	const [avatarLocal, setAvatarLocal] = useLocalStorageState<any>('avatarLocal', { defaultValue: '' })
+	const [avatarLocal, setAvatarLocal] = useLocalStorageState<any>('avatarLocal')
 	const [avatarUrlLocal, setAvatarUrlLocal] = useState<any>({
 		url: null,
 		id: null,
@@ -67,7 +68,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 
 	useEffect(()=>{
 		if(isSuccesAvatar){
-			setAvatarLocal(avatarUrl?.url)
+			setAvatarLocal(avatarUrl?.url ? avatarUrl?.url : '')
 		}
 	},[isSuccesAvatar])
 
@@ -251,7 +252,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const handleCancel = () => {
 		setIsModalOpen(false)
 	}
-	console.log('info', info)
+	console.log('avatarLocal', avatarLocal)
 
 	return (
 		<header
@@ -376,17 +377,13 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 							className="cursor-pointer h-full  box-border"
 						>
 							<Space className="px-4  gap-5 flex justyfy-between">
-								 <Avatar
+								 {isAvatarLoading ? '':
+									<Avatar
 								 		key={avatarUrlLocal?.id}
 										className='bg-[#cbdaf1] rounded-[50%] !w-[45px] !h-[45px]'
 										size={180}
-										src={avatarLocal}
-										icon={
-								avatarLocal==='There is no photo' ? <PersonSvg white={type === 'service'} /> 
-								: avatarLocal===null ? <PersonSvg white={type === 'service'} /> 
-								: errorAva ? <PersonSvg white={type === 'service'} /> 
-								: avatarLocal
-								}/>
+										src={avatarLocal ? avatarLocal : 'https://agilevirgin.in/wp-content/uploads/2022/04/avatar-placeholder.png'}
+										/>}
 								<div className={clsx('h-full max-[455px]:hidden', type === 'service' && 'text-white')}>
 									<div className="font-bold text-sm truncate max-w-[120px]">
 										{i18n.language === 'ru'

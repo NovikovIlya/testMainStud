@@ -6,6 +6,7 @@ import dayjs from 'dayjs'
 import i18next, { t } from 'i18next'
 import { useState } from 'react'
 
+import { useGetAwardsQuery } from '../../../store/api/serviceApi'
 import { AwardType } from '../../../store/reducers/type'
 
 import { AddAwardModal } from './AddAwardModal'
@@ -15,11 +16,13 @@ export const AwardsTable = () => {
 	const [form] = Form.useForm()
 	const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 
+	const { data: awards } = useGetAwardsQuery()
+
 	const columns: TableProps<AwardType>['columns'] = [
 		{
 			title: t('awardName'),
-			dataIndex: 'awardName',
-			key: 'awardName'
+			dataIndex: 'award',
+			key: 'award'
 		},
 		{
 			title: t('awardDate'),
@@ -28,8 +31,8 @@ export const AwardsTable = () => {
 		},
 		{
 			title: t('awardDocumentNumber'),
-			dataIndex: 'awardDocumentNumber',
-			key: 'awardDocumentNumber'
+			dataIndex: 'docNum',
+			key: 'docNum'
 		},
 		{
 			title: '',
@@ -39,25 +42,15 @@ export const AwardsTable = () => {
 					<EyeTwoTone />
 					<EditTwoTone
 						onClick={() => {
-							// form.setFieldsValue({
-							// 	id: record.id,
-							// 	s_id: record.s_id,
-							// 	e_id: record.e_id,
-							// 	user_allid: record.user_allid,
-							// 	language: record.language_portal ? record.language_portal : 1,
-							// 	nameOfInstitute: record.organization,
-							// 	educationLevelId: record.edu_level,
-							// 	beginningYear: dayjs(record.start_date, 'DD.MM.YYYY'),
-							// 	graduateYear: dayjs(record.end_date, 'DD.MM.YYYY'),
-							// 	countryId: record.edu_country,
-							// 	specialization: record.eduspeciality,
-							// 	subdivision: record.development,
-							// 	qualification: record.qualification,
-							// 	issueDate: record.issue_date ? dayjs(record.issue_date, 'DD.MM.YYYY') : null,
-							// 	number: record.docnum,
-							// 	series: record.docseries,
-							// 	accept: record.portal_status ? true : false
-							// })
+							form.setFieldsValue({
+								id: record.id,
+								language: record.languagePortal ? record.languagePortal : 1,
+								award: record.award,
+								awardDate: dayjs(record.awardDate, 'DD.MM.YYYY'),
+								awardDocumentNumber: record.docNum,
+								awardDocumentDate: record.docDate ? dayjs(record.docDate, 'DD.MM.YYYY') : null,
+								accept: record.portalStatus ? true : false
+							})
 							setIsModalOpen(true)
 						}}
 					/>
@@ -72,19 +65,6 @@ export const AwardsTable = () => {
 					</ConfigProvider>
 				</Space>
 			)
-		}
-	]
-
-	const data: AwardType[] = [
-		{
-			awardName: 'Премия им. Габдуллы Тукая',
-			awardDate: '26.04.2014',
-			awardDocumentNumber: '123456'
-		},
-		{
-			awardName: 'Народный художник Республики Татарстан',
-			awardDate: '08.10.2020',
-			awardDocumentNumber: '333333'
 		}
 	]
 
@@ -112,7 +92,7 @@ export const AwardsTable = () => {
 				<Table<AwardType>
 					pagination={false}
 					columns={columns}
-					dataSource={data}
+					dataSource={awards}
 					className="w-full"
 					locale={{ emptyText: t('noData') }}
 					// loading={loading}

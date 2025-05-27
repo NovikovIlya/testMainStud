@@ -570,7 +570,15 @@ export type PageableType<ContentType> = {
 }
 
 export type AwardType = {
-	awardName: string
+	id: number
+	award: string
 	awardDate: string
-	awardDocumentNumber: string
+	docNum: string
+	docDate: string
+	languagePortal: number
+	portalStatus: string
+	url: string
+	filename: string
+	awardFileUrl: string
+	awardFileId: number
 }

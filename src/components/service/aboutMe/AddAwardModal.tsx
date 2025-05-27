@@ -156,10 +156,6 @@ export const AddAwardModal = (props: {
 						// 				})
 						// }}
 					>
-						<Form.Item name={'id'} className="hidden"></Form.Item>
-						<Form.Item name={'s_id'} className="hidden"></Form.Item>
-						<Form.Item name={'e_id'} className="hidden"></Form.Item>
-						<Form.Item name={'user_allid'} className="hidden"></Form.Item>
 						<Form.Item name={'language'} label={t('publicationLanguage')} initialValue={1}>
 							<Radio.Group>
 								<Radio value={1}>{t('rus')}</Radio>
@@ -179,7 +175,7 @@ export const AddAwardModal = (props: {
 								label={t('awardDate') + '*'}
 								rules={[{ required: true, message: t('awardDateNotEntered') }]}
 							>
-								<DatePicker className="w-[47%]" maxDate={dayjs()}></DatePicker>
+								<DatePicker className="w-[47%]" maxDate={dayjs()} format="DD.MM.YYYY"></DatePicker>
 							</Form.Item>
 						</ConfigProvider>
 						<Form.Item name={'awardDocumentNumber'} label={t('awardDocumentNumber')}>
@@ -187,7 +183,7 @@ export const AddAwardModal = (props: {
 						</Form.Item>
 						<ConfigProvider locale={i18next.language === 'ru' ? ru_RU : en_US}>
 							<Form.Item name={'awardDocumentDate'} label={t('awardDocumentDate')}>
-								<DatePicker className="w-[47%]" maxDate={dayjs()}></DatePicker>
+								<DatePicker className="w-[47%]" maxDate={dayjs()} format="DD.MM.YYYY"></DatePicker>
 							</Form.Item>
 						</ConfigProvider>
 						<Form.Item name={'file'} label={<div className="flex gap-[10px]">{t('AttachDocuments')}</div>}>

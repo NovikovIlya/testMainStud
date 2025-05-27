@@ -2,6 +2,7 @@ import i18n from 'i18next'
 
 import { IApproveRequest } from '../../api/types'
 import {
+	AwardType,
 	CategoryType,
 	ChangeStageStatusType,
 	ChatMessageType,
@@ -52,7 +53,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 	endpoints: builder => ({
 		getSchedule: builder.query<TypeSchedule, void>({
 			query: () => `schedule-api/schedule`,
-			keepUnusedDataFor: 1,
+			keepUnusedDataFor: 1
 		}),
 		getPerformance: builder.query<IPerformance, void>({
 			query: () => 'academic-performance-api/performance'
@@ -935,8 +936,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 					method: 'GET'
 				}
 			},
-			keepUnusedDataFor: 1,
-			
+			keepUnusedDataFor: 1
 		}),
 		getOldEducations: builder.query<{ previous: OldEducationTableDataType[] }, void>({
 			query: () => ({
@@ -1024,6 +1024,11 @@ export const serviceApi = apiSlice.injectEndpoints({
 			query: interviewId => ({
 				url: `${emplBaseURL}employment-api/v1/interview/${interviewId}`,
 				method: 'GET'
+			})
+		}),
+		getAwards: builder.query<AwardType[], void>({
+			query: () => ({
+				url: `about-me/get-awards`
 			})
 		})
 	})
@@ -1169,5 +1174,6 @@ export const {
 	useGetInterviewQuery,
 	useLazyGetInterviewQuery,
 	useLazyGetChatIdByRespondIdQuery,
-	useGetCurrentDateQuery
+	useGetCurrentDateQuery,
+	useGetAwardsQuery
 } = serviceApi

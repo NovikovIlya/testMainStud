@@ -270,50 +270,14 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						''
 					) : (
 						<>
-							{/* <Button
-						onClick={showDrawer}
-						className={clsx(
-							'py-2.5 rounded-full hover:!bg-transparent font-semibold bg-transparent border-2 flex items-center justify-center block lg:hidden',
-							type === 'main'
-								? `text-blue1f5 border-blue1f5 hover:!text-blue1f5`
-								: 'text-white border-white '
-						)}
-						type="primary"
-						
-					>Сервисы
-						<span className="pl-2 max-md:!hidden">{t('services')}</span>
-					</Button> */}
-
-							{/* <Button
-						onClick={showDrawer}
-						className={clsx(
-							'h-[38px] py-2.5 rounded-full hover:!bg-transparent font-semibold bg-transparent border-2  items-center justify-center hidden md:flex',
-							type === 'main'
-								? `text-blue1f5 border-blue1f5 hover:!text-blue1f5`
-								: 'text-white border-white '
-						)}
-						type="primary"
-						// icon={<MenuSvg white={type === 'service'} />
-					>
-						<span className="w-[105px] pl-2 max-md:!hidden">{t('services')}</span>
-					</Button> */}
+							
 						</>
 					)}
 					<div className={`flex items-center gap-5 hover:scale-105 duration-500`}>
-						{/* бургер для сворачивания */}
-						{/* {location?.pathname !== "/user" ? <Button
-							onClick={setCollapsed}
-							className={clsx(
-								'!px-6  py-4 rounded-full hover:!bg-transparent font-semibold bg-transparent border-2 flex items-center justify-center ',
-								type === 'main' ? `text-blue1f5 border-blue1f5 hover:!text-blue1f5` : 'text-white border-white '
-							)}
-							type="primary"
-							icon={<MenuSvg white={type === 'service'} />}
-						/> :''} */}
+		
 						{i18n.language === 'ru' ? (
 							<LogoIasSvg white={type === 'service'} />
 						) : (
-							// <LogoIasSvgEn white={type === 'service'} />
 							<LogoSvgNew white={type === 'service'} />
 						)}
 
@@ -348,48 +312,6 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 							</a>
 						)}
 
-						{/* <div
-							className={clsx(
-								'h-full flex items-center px-3 cursor-pointer ',
-								type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'
-							)}
-						>
-							<SearchSvg white={type === 'service'} />
-						</div> */}
-
-						{/*<div*/}
-						{/*	className={clsx(*/}
-						{/*		'h-full flex items-center px-3 cursor-pointer ',*/}
-						{/*		type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'*/}
-						{/*	)}*/}
-						{/*>*/}
-						{/*	<mainRoleSvg white={type === 'service'} />*/}
-						{/*</div>*/}
-						{/*<div*/}
-						{/*	className={clsx(*/}
-						{/*		'h-full flex items-center px-3 cursor-pointer ',*/}
-						{/*		type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'*/}
-						{/*	)}*/}
-						{/*>*/}
-						{/*	<MapSvg white={type === 'service'} />*/}
-						{/*</div>*/}
-						{/*<div*/}
-						{/*	className={clsx(*/}
-						{/*		'h-full flex items-center px-3 cursor-pointer ',*/}
-						{/*		type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'*/}
-						{/*	)}*/}
-						{/*>*/}
-						{/*	<DocumentSvg white={type === 'service'} />*/}
-						{/*</div>*/}
-
-						{/* <div
-							className={clsx(
-								'h-full flex items-center px-3 cursor-pointer ',
-								type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'
-							)}
-						>
-							<EyeSvg white={type === 'service'} />
-						</div> */}
 
 						<div
 							id="messagesForTest"

@@ -382,10 +382,10 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 										size={180}
 										src={avatarLocal}
 										icon={
-								avatarUrl?.url==='There is no photo' ? <PersonSvg white={type === 'service'} /> 
-								: avatarUrl===null ? <PersonSvg white={type === 'service'} /> 
+								avatarLocal==='There is no photo' ? <PersonSvg white={type === 'service'} /> 
+								: avatarLocal===null ? <PersonSvg white={type === 'service'} /> 
 								: errorAva ? <PersonSvg white={type === 'service'} /> 
-								: avatarUrl?.url
+								: avatarLocal
 								}/>
 								<div className={clsx('h-full max-[455px]:hidden', type === 'service' && 'text-white')}>
 									<div className="font-bold text-sm truncate max-w-[120px]">

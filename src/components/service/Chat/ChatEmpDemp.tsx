@@ -74,19 +74,7 @@ export const ChatEmpDemp = () => {
 				.unwrap()
 				.then(res => {
 					dispatch(setCurrentVacancyName(res.respondInfo.vacancyName))
-					if (res.respondInfo.status) {
-						if (
-							res.respondInfo.status === respondStatus[respondStatus.INVITATION] ||
-							res.respondInfo.status === respondStatus[respondStatus.EMPLOYMENT_REQUEST] ||
-							res.respondInfo.status === respondStatus[respondStatus.EMPLOYMENT]
-						) {
-							dispatch(openChat())
-						} else {
-							dispatch(closeChat())
-						}
-					} else {
-						dispatch(openChat())
-					}
+					dispatch(openChat())
 					dispatch(setChatId(res.id))
 					dispatch(setRespondId(res.respondInfo.id))
 					dispatch(setCurrentVacancyId(res.respondInfo.vacancyId))

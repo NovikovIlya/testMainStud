@@ -7,7 +7,7 @@ import i18next, { t } from 'i18next'
 import { useState } from 'react'
 import uuid from 'react-uuid'
 
-import { useGetAwardsQuery } from '../../../store/api/serviceApi'
+import { useDeleteNewAwardMutation, useGetAwardsQuery } from '../../../store/api/serviceApi'
 import { AwardType } from '../../../store/reducers/type'
 
 import { AddAwardModal } from './AddAwardModal'
@@ -16,6 +16,7 @@ import { AddEducationModal } from './AddEducationModal'
 export const AwardsTable = () => {
 	const [form] = Form.useForm()
 	const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+	const [deleteAward] = useDeleteNewAwardMutation()
 
 	const { data: awards } = useGetAwardsQuery()
 
@@ -70,7 +71,9 @@ export const AwardsTable = () => {
 						<Popconfirm
 							title={t('deleteEducationTitle')}
 							description={t('deleteEducationDescription')}
-							onConfirm={() => {}}
+							onConfirm={() => {
+								deleteAward(record.id)
+							}}
 						>
 							<DeleteTwoTone />
 						</Popconfirm>

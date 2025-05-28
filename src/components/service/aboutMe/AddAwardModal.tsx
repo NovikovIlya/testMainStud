@@ -11,6 +11,7 @@ import {
 	useAddNewAwardMutation,
 	useAddNewEducationMutation,
 	useGetEducationTypesQuery,
+	useUpdateNewAwardMutation,
 	useUpdateNewEducationMutation
 } from '../../../store/api/serviceApi'
 import { useGetCountriesQuery } from '../../../store/api/utilsApi'
@@ -28,6 +29,7 @@ export const AddAwardModal = (props: {
 	const [updateEducation, updateEducationStatus] = useUpdateNewEducationMutation()
 
 	const [addAward, addAwardStatus] = useAddNewAwardMutation()
+	const [updateAward, updateAwardStatus] = useUpdateNewAwardMutation()
 
 	return (
 		<>
@@ -76,7 +78,16 @@ export const AddAwardModal = (props: {
 										.catch(() => {
 											console.log('??????')
 										})
-								: () => {}
+								: () => {
+										updateAward(formData)
+											.then(() => {
+												props.form.resetFields()
+												props.onCancel()
+											})
+											.catch(() => {
+												console.log('??????')
+											})
+								  }
 						}}
 					>
 						<Form.Item name={'language'} label={t('publicationLanguage')} initialValue={1}>
@@ -146,7 +157,12 @@ export const AddAwardModal = (props: {
 						<Form.Item name={'accept'} valuePropName="checked">
 							<Checkbox>{t('razrer')}</Checkbox>
 						</Form.Item>
-						<Button htmlType="submit" type="primary" className="!rounded-[54.5px]" loading={addAwardStatus.isLoading}>
+						<Button
+							htmlType="submit"
+							type="primary"
+							className="!rounded-[54.5px]"
+							loading={addAwardStatus.isLoading || updateAwardStatus.isLoading}
+						>
 							{t('Save')}
 						</Button>
 					</Form>

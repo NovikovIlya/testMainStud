@@ -1039,6 +1039,21 @@ export const serviceApi = apiSlice.injectEndpoints({
 				body: arg
 			}),
 			invalidatesTags: ['Awards']
+		}),
+		deleteNewAward: builder.mutation<void, number>({
+			query: awardId => ({
+				url: `about-me/set-award?id=${awardId}`,
+				method: 'DELETE'
+			}),
+			invalidatesTags: ['Awards']
+		}),
+		updateNewAward: builder.mutation<void, any>({
+			query: arg => ({
+				url: `about-me/set-award`,
+				method: 'PUT',
+				body: arg
+			}),
+			invalidatesTags: ['Awards']
 		})
 	})
 })
@@ -1185,5 +1200,7 @@ export const {
 	useLazyGetChatIdByRespondIdQuery,
 	useGetCurrentDateQuery,
 	useGetAwardsQuery,
-	useAddNewAwardMutation
+	useAddNewAwardMutation,
+	useUpdateNewAwardMutation,
+	useDeleteNewAwardMutation
 } = serviceApi

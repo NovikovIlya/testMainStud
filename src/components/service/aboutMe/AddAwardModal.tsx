@@ -1,20 +1,11 @@
-import { PlusCircleFilled } from '@ant-design/icons'
-import { Button, Checkbox, ConfigProvider, DatePicker, Form, Input, Modal, Popover, Radio, Select, Upload } from 'antd'
+import { Button, Checkbox, ConfigProvider, DatePicker, Form, Input, Modal, Radio, Upload } from 'antd'
 import { FormInstance } from 'antd/lib'
 import en_US from 'antd/locale/en_US'
 import ru_RU from 'antd/locale/ru_RU'
 import dayjs from 'dayjs'
 import i18next, { t } from 'i18next'
-import { useState } from 'react'
 
-import {
-	useAddNewAwardMutation,
-	useAddNewEducationMutation,
-	useGetEducationTypesQuery,
-	useUpdateNewAwardMutation,
-	useUpdateNewEducationMutation
-} from '../../../store/api/serviceApi'
-import { useGetCountriesQuery } from '../../../store/api/utilsApi'
+import { useAddNewAwardMutation, useUpdateNewAwardMutation } from '../../../store/api/serviceApi'
 
 export const AddAwardModal = (props: {
 	form: FormInstance
@@ -22,12 +13,6 @@ export const AddAwardModal = (props: {
 	onCancel: Function
 	type: 'ADD' | 'UPDATE'
 }) => {
-	const { data: countries = [] } = useGetCountriesQuery(i18next.language)
-	const { data: levels = { edu_types: [] } } = useGetEducationTypesQuery()
-
-	const [addEducation, addEducationStatus] = useAddNewEducationMutation()
-	const [updateEducation, updateEducationStatus] = useUpdateNewEducationMutation()
-
 	const [addAward, addAwardStatus] = useAddNewAwardMutation()
 	const [updateAward, updateAwardStatus] = useUpdateNewAwardMutation()
 

@@ -17,7 +17,7 @@ export const AwardsTable = () => {
 	const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 	const [deleteAward] = useDeleteNewAwardMutation()
 
-	const { data: awards } = useGetAwardsQuery()
+	const { data: awards, isLoading: loading } = useGetAwardsQuery()
 
 	const columns: TableProps<AwardType>['columns'] = [
 		{
@@ -110,7 +110,7 @@ export const AwardsTable = () => {
 					dataSource={awards}
 					className="w-full"
 					locale={{ emptyText: t('noData') }}
-					// loading={loading}
+					loading={loading}
 				/>
 			</ConfigProvider>
 		</>

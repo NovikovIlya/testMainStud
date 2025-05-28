@@ -51,9 +51,10 @@ export const AddAwardModal = (props: {
 						onFinish={values => {
 							console.log(values)
 							let data = {
+								id: values.id,
 								languagePortal: values.language,
 								award: values.award,
-								docDate: dayjs(values.awardDocumentDate).format('DD.MM.YYYY'),
+								docDate: values.awardDocumentDate ? dayjs(values.awardDocumentDate).format('DD.MM.YYYY') : null,
 								awardDate: dayjs(values.awardDate).format('DD.MM.YYYY'),
 								docNum: values.awardDocumentNumber,
 								portalStatus: values.accept ? '1' : null,
@@ -78,18 +79,17 @@ export const AddAwardModal = (props: {
 										.catch(() => {
 											console.log('??????')
 										})
-								: () => {
-										updateAward(formData)
-											.then(() => {
-												props.form.resetFields()
-												props.onCancel()
-											})
-											.catch(() => {
-												console.log('??????')
-											})
-								  }
+								: updateAward(formData)
+										.then(() => {
+											props.form.resetFields()
+											props.onCancel()
+										})
+										.catch(() => {
+											console.log('??????')
+										})
 						}}
 					>
+						<Form.Item name={'id'} className="hidden"></Form.Item>
 						<Form.Item name={'language'} label={t('publicationLanguage')} initialValue={1}>
 							<Radio.Group>
 								<Radio value={1}>{t('rus')}</Radio>

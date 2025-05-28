@@ -11,7 +11,6 @@ import { useDeleteNewAwardMutation, useGetAwardsQuery } from '../../../store/api
 import { AwardType } from '../../../store/reducers/type'
 
 import { AddAwardModal } from './AddAwardModal'
-import { AddEducationModal } from './AddEducationModal'
 
 export const AwardsTable = () => {
 	const [form] = Form.useForm()
@@ -44,6 +43,7 @@ export const AwardsTable = () => {
 					<EyeTwoTone />
 					<EditTwoTone
 						onClick={() => {
+							form.resetFields()
 							form.setFieldsValue({
 								id: record.id,
 								language: record.languagePortal ? record.languagePortal : 1,
@@ -59,7 +59,7 @@ export const AwardsTable = () => {
 												uid: uuid(),
 												name: record.filename,
 												status: 'done',
-												url: ''
+												url: record.awardFileUrl
 											}
 									  ]
 									: []

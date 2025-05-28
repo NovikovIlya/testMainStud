@@ -58,9 +58,8 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	})
 	const { data: avatarUrl, isLoading: isAvatarLoading ,isSuccess:isSuccesAvatar,error:errorAva,isFetching} = useGetAvatarQuery(undefined, {
 		skip: !(['/services/aboutMe', '/user'].some(path => location.pathname.includes(path))),	
-		refetchOnMountOrArgChange: true,
 	});
-	const [avatarLocal, setAvatarLocal] = useLocalStorageState<any>('avatarLocal')
+	const [avatarLocal, setAvatarLocal] = useLocalStorageState<any>('avatarLocal', { defaultValue: '' })
 	const [avatarUrlLocal, setAvatarUrlLocal] = useState<any>({
 		url: null,
 		id: null,
@@ -68,7 +67,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 
 	useEffect(()=>{
 		if(isSuccesAvatar){
-			setAvatarLocal(avatarUrl?.url ? avatarUrl?.url : '')
+			setAvatarLocal(avatarUrl?.url)
 		}
 	},[isSuccesAvatar])
 
@@ -252,7 +251,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const handleCancel = () => {
 		setIsModalOpen(false)
 	}
-	console.log('avatarLocal', avatarLocal)
+	console.log('info', info)
 
 	return (
 		<header
@@ -271,14 +270,50 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						''
 					) : (
 						<>
-							
+							{/* <Button
+						onClick={showDrawer}
+						className={clsx(
+							'py-2.5 rounded-full hover:!bg-transparent font-semibold bg-transparent border-2 flex items-center justify-center block lg:hidden',
+							type === 'main'
+								? `text-blue1f5 border-blue1f5 hover:!text-blue1f5`
+								: 'text-white border-white '
+						)}
+						type="primary"
+						
+					>Сервисы
+						<span className="pl-2 max-md:!hidden">{t('services')}</span>
+					</Button> */}
+
+							{/* <Button
+						onClick={showDrawer}
+						className={clsx(
+							'h-[38px] py-2.5 rounded-full hover:!bg-transparent font-semibold bg-transparent border-2  items-center justify-center hidden md:flex',
+							type === 'main'
+								? `text-blue1f5 border-blue1f5 hover:!text-blue1f5`
+								: 'text-white border-white '
+						)}
+						type="primary"
+						// icon={<MenuSvg white={type === 'service'} />
+					>
+						<span className="w-[105px] pl-2 max-md:!hidden">{t('services')}</span>
+					</Button> */}
 						</>
 					)}
 					<div className={`flex items-center gap-5 hover:scale-105 duration-500`}>
-		
+						{/* бургер для сворачивания */}
+						{/* {location?.pathname !== "/user" ? <Button
+							onClick={setCollapsed}
+							className={clsx(
+								'!px-6  py-4 rounded-full hover:!bg-transparent font-semibold bg-transparent border-2 flex items-center justify-center ',
+								type === 'main' ? `text-blue1f5 border-blue1f5 hover:!text-blue1f5` : 'text-white border-white '
+							)}
+							type="primary"
+							icon={<MenuSvg white={type === 'service'} />}
+						/> :''} */}
 						{i18n.language === 'ru' ? (
 							<LogoIasSvg white={type === 'service'} />
 						) : (
+							// <LogoIasSvgEn white={type === 'service'} />
 							<LogoSvgNew white={type === 'service'} />
 						)}
 
@@ -313,6 +348,48 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 							</a>
 						)}
 
+						{/* <div
+							className={clsx(
+								'h-full flex items-center px-3 cursor-pointer ',
+								type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'
+							)}
+						>
+							<SearchSvg white={type === 'service'} />
+						</div> */}
+
+						{/*<div*/}
+						{/*	className={clsx(*/}
+						{/*		'h-full flex items-center px-3 cursor-pointer ',*/}
+						{/*		type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'*/}
+						{/*	)}*/}
+						{/*>*/}
+						{/*	<mainRoleSvg white={type === 'service'} />*/}
+						{/*</div>*/}
+						{/*<div*/}
+						{/*	className={clsx(*/}
+						{/*		'h-full flex items-center px-3 cursor-pointer ',*/}
+						{/*		type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'*/}
+						{/*	)}*/}
+						{/*>*/}
+						{/*	<MapSvg white={type === 'service'} />*/}
+						{/*</div>*/}
+						{/*<div*/}
+						{/*	className={clsx(*/}
+						{/*		'h-full flex items-center px-3 cursor-pointer ',*/}
+						{/*		type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'*/}
+						{/*	)}*/}
+						{/*>*/}
+						{/*	<DocumentSvg white={type === 'service'} />*/}
+						{/*</div>*/}
+
+						{/* <div
+							className={clsx(
+								'h-full flex items-center px-3 cursor-pointer ',
+								type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'
+							)}
+						>
+							<EyeSvg white={type === 'service'} />
+						</div> */}
 
 						<div
 							id="messagesForTest"
@@ -376,14 +453,20 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 							trigger={['click']}
 							className="cursor-pointer h-full  box-border"
 						>
-							<Space className="px-4  gap-5 flex justyfy-between">
-								 {isAvatarLoading ? '':
-									<Avatar
+							<Space className="!border-none px-4  gap-5 flex justyfy-between">
+								 <Avatar
+								 		
 								 		key={avatarUrlLocal?.id}
-										className='bg-[#cbdaf1] rounded-[50%] !w-[45px] !h-[45px]'
+										className='bg-[#cbdaf1] rounded-[50%] !w-[45px] !h-[45px] !border-none blur-[0.5px]  opacity-[0.8]'
 										size={180}
-										src={avatarLocal ? avatarLocal : 'https://agilevirgin.in/wp-content/uploads/2022/04/avatar-placeholder.png'}
-										/>}
+										src={avatarLocal}
+								// 		icon={
+								// avatarUrl?.url==='There is no photo' ? <PersonSvg white={type === 'service'} /> 
+								// : avatarUrl===null ? <PersonSvg white={type === 'service'} /> 
+								// : errorAva ? <PersonSvg white={type === 'service'} /> 
+								// : avatarUrl?.url
+								// }
+								/>
 								<div className={clsx('h-full max-[455px]:hidden', type === 'service' && 'text-white')}>
 									<div className="font-bold text-sm truncate max-w-[120px]">
 										{i18n.language === 'ru'

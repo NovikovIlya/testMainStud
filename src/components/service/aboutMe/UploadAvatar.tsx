@@ -1,10 +1,10 @@
+
 import React, { useEffect, useState } from 'react';
 import { DeleteOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Button, message, Spin, Upload } from 'antd';
 import { useAddAvatarMutation, useDeleteAvatarMutation, useGetAvatarQuery, usePutAvatarMutation } from '../../../store/api/aboutMe/forAboutMe';
 import { t } from 'i18next';
 import { Un } from '../../../assets/svg/Un';
-import { useLocalStorageState } from 'ahooks';
 
 const UploadAvatar = () => {
   const { data: avatarUrl,error,refetch,isSuccess,isFetching } = useGetAvatarQuery();
@@ -15,15 +15,8 @@ const UploadAvatar = () => {
   const [addAvatar, { isLoading }] = useAddAvatarMutation();
   const [putAvatar, { isLoading: isLoadingPut }] = usePutAvatarMutation();
   const [deleteAvatar, { isLoading: isLoadingDelete }] = useDeleteAvatarMutation();
-  const [avatarLocal, setAvatarLocal] = useLocalStorageState<any>('avatarLocal', { defaultValue: '' })
   console.log('avatarUrl',avatarUrl?.url)
   console.log('avatarUrlLocal',avatarUrlLocal)
-
-  useEffect(() => {
-    if (isSuccess) {
-      setAvatarLocal(avatarUrl?.url);
-    }
-  }, [isSuccess])
 
   useEffect(()=>{
      if(!isFetching){
@@ -75,8 +68,12 @@ const UploadAvatar = () => {
       <Avatar
         className='bg-[#cbdaf1] rounded-[50%]'
         size={180}
-        src={avatarUrlLocal?.url ? avatarUrlLocal?.url : 'https://agilevirgin.in/wp-content/uploads/2022/04/avatar-placeholder.png'}
-        
+        src={avatarUrlLocal?.url}
+        icon={
+          avatarUrl?.url==='There is no photo' ? <UserOutlined /> 
+          : avatarUrl===null ? <UserOutlined /> 
+          : error ? <UserOutlined />
+          : avatarUrlLocal?.url}
       />
       <div className='absolute right-3 bottom-3'>
         <Upload
@@ -98,7 +95,7 @@ const UploadAvatar = () => {
         
       </div>
 
-      {avatarUrl?.url && avatarUrl?.url!=='There is no photo' ? <div className='absolute bottom-[43%] right-[-13px]'>
+      {avatarUrl?.emptyAvatar  ? '' :<div className='absolute bottom-[43%] right-[-13px]'>
         <Button
               className='!rounded-[50%] bg-[#65A1FA] text-white   border-2 border-white border-solid w-[36px]'
               icon={<DeleteOutlined  />}
@@ -114,9 +111,10 @@ const UploadAvatar = () => {
                 }}
 
             />
-        </div> : ''}
+        </div> }
     </Spin>
   );
 };
 
 export default UploadAvatar;
+

@@ -336,6 +336,8 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 															? 'IN_PERSONNEL_DEPT_REVIEW'
 															: res.status === 'IN_SUPERVISOR_REVIEW'
 															? 'IN_SUPERVISOR_REVIEW'
+															: res.status === 'EMPLOYMENT'
+															? 'EMPLOYMENT'
 															: 'INVITATION'
 													)
 												)

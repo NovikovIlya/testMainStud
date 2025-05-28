@@ -148,7 +148,7 @@ export const EmplRequisites = (props: { respondId: number; stageId: number; stag
 						</div>
 						{hasRequisites && (
 							<div className="flex flex-col gap-[8px]">
-								<p className="text-[14px]/[14px] ml-[24px]">{t('requisitesChooseCard')}:</p>
+								<p className="text-[14px]/[14px] ml-[24px]">{t('requsitesChooseCard')}:</p>
 								<Radio.Group name="bank" className="flex flex-col gap-[8px]" defaultValue={foundStage?.bank}>
 									<Radio
 										value={'SBER'}

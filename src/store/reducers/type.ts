@@ -147,7 +147,9 @@ export type EducationTableDataType = {
 	e_id?: number
 	user_allid?: number
 	id?: number
-	edu_file: { file_base64: string | null; filename: string | null }[]
+	filename: string
+	edu_file_url: string
+	is_modified: boolean
 }
 
 export type OldEducationTableDataType = {

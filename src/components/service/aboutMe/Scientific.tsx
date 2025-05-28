@@ -172,12 +172,12 @@ const Scientific = () => {
 
 							<div className="mt-12 mb-1"> <span className="text-red-500 mr-[4px] font-[14px] !font-[SimSun,sans-serif]">*</span>{t('theme')}</div>
 							<Form.Item name="theme" className=" mb-6" rules={[{ required: true, message: '' }]}>
-								<Input.TextArea rows={4} placeholder="Введите текст здесь" maxLength={200} />
+								<Input.TextArea rows={4} placeholder="Введите текст здесь" maxLength={100} />
 							</Form.Item>
 
 							<div className="mb-1"><span className="text-red-500 mr-[4px] font-[14px] !font-[SimSun,sans-serif]">*</span>{t('direction')}</div>
 							<Form.Item name="direction" className=" h-[35px]" rules={[{ required: true, message: '' }]}>
-								<Input.TextArea rows={4} placeholder="Введите текст здесь" maxLength={200} />
+								<Input.TextArea rows={4} placeholder="Введите текст здесь" maxLength={100} />
 							</Form.Item>
 
 							<Form.Item

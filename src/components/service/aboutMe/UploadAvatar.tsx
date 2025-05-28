@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { DeleteOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Button, message, Spin, Upload } from 'antd';
@@ -94,7 +95,7 @@ const UploadAvatar = () => {
         
       </div>
 
-      {avatarUrl?.url && avatarUrl?.url!=='There is no photo' ? <div className='absolute bottom-[43%] right-[-13px]'>
+      {avatarUrl?.emptyAvatar  ? '' :<div className='absolute bottom-[43%] right-[-13px]'>
         <Button
               className='!rounded-[50%] bg-[#65A1FA] text-white   border-2 border-white border-solid w-[36px]'
               icon={<DeleteOutlined  />}
@@ -110,9 +111,10 @@ const UploadAvatar = () => {
                 }}
 
             />
-        </div> : ''}
+        </div> }
     </Spin>
   );
 };
 
 export default UploadAvatar;
+

@@ -453,18 +453,20 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 							trigger={['click']}
 							className="cursor-pointer h-full  box-border"
 						>
-							<Space className="px-4  gap-5 flex justyfy-between">
+							<Space className="!border-none px-4  gap-5 flex justyfy-between">
 								 <Avatar
+								 		
 								 		key={avatarUrlLocal?.id}
-										className='bg-[#cbdaf1] rounded-[50%] !w-[45px] !h-[45px]'
+										className='bg-[#cbdaf1] rounded-[50%] !w-[45px] !h-[45px] !border-none blur-[0.5px]  opacity-[0.8]'
 										size={180}
 										src={avatarLocal}
-										icon={
-								avatarUrl?.url==='There is no photo' ? <PersonSvg white={type === 'service'} /> 
-								: avatarUrl===null ? <PersonSvg white={type === 'service'} /> 
-								: errorAva ? <PersonSvg white={type === 'service'} /> 
-								: avatarUrl?.url
-								}/>
+								// 		icon={
+								// avatarUrl?.url==='There is no photo' ? <PersonSvg white={type === 'service'} /> 
+								// : avatarUrl===null ? <PersonSvg white={type === 'service'} /> 
+								// : errorAva ? <PersonSvg white={type === 'service'} /> 
+								// : avatarUrl?.url
+								// }
+								/>
 								<div className={clsx('h-full max-[455px]:hidden', type === 'service' && 'text-white')}>
 									<div className="font-bold text-sm truncate max-w-[120px]">
 										{i18n.language === 'ru'

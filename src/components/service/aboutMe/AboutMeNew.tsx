@@ -17,6 +17,7 @@ import {
 import QuillComponents from './QuillComponents'
 import { SkeletonPage } from './Skeleton'
 import UploadAvatar from './UploadAvatar'
+import { useLocalStorageState } from 'ahooks'
 
 const AboutMeNew = () => {
 	const { t } = useTranslation()
@@ -39,6 +40,7 @@ const AboutMeNew = () => {
 		oznak: false
 	})
 	console.log('switchForm',switchForm)
+	
 
 	useEffect(() => {
 		// Добавляем доп сведения

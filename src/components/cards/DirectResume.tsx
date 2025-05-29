@@ -1,4 +1,5 @@
-import { Button, ConfigProvider, Input, Modal, message } from 'antd'
+import { LoadingOutlined } from '@ant-design/icons'
+import { Button, ConfigProvider, Input, Modal, Spin, message } from 'antd'
 import clsx from 'clsx'
 import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
@@ -7,7 +8,9 @@ import { useTranslation } from 'react-i18next'
 
 import { DeleteSvg } from '../../assets/svg/DeleteSvg'
 import { ModalOkSvg } from '../../assets/svg/ModalOkSvg'
+import { WarningModalIconSvg } from '../../assets/svg/WarningModalIconSvg'
 import { useAppSelector } from '../../store'
+import { useGetCheckboxQuery } from '../../store/api/aboutMe/forAboutMe'
 import { useLazyGetInfoUserQuery } from '../../store/api/formApi'
 import { AttachIcon } from '../service/jobSeeker/AttachIcon'
 
@@ -69,6 +72,7 @@ export const DirectResume = ({
 	const user = useAppSelector(state => state.auth.user)
 
 	const [getInfo] = useLazyGetInfoUserQuery()
+	const { data: checkboxes, isLoading: checkboxesLoading } = useGetCheckboxQuery()
 
 	const { control, register, handleSubmit, formState, setValue, watch } = useForm<formDataType>({
 		defaultValues: {
@@ -302,250 +306,281 @@ export const DirectResume = ({
 					}}
 					title={null}
 					footer={null}
+					centered
 				>
-					<form className="p-[26px]" onSubmit={handleSubmit(onSubmit)}>
-						<p className="font-content-font font-normal text-black text-[18px]/[18px] text-opacity-80">
-							Отправьте своё резюме
-						</p>
-						<div className="flex flex-col gap-[8px] mt-[24px]">
-							<Controller
-								name="lastname"
-								control={control}
-								rules={{
-									required: { value: true, message: 'Не введена фамилия' },
-									maxLength: { value: 1000, message: 'Количество символов превышено' }
+					{checkboxesLoading ? (
+						<>
+							{' '}
+							<div className="w-full h-full flex items-center">
+								<div className="text-center ml-auto mr-auto">
+									<Spin indicator={<LoadingOutlined style={{ fontSize: 36 }} spin />}></Spin>
+									<p className="font-content-font font-normal text-black text-[18px]/[18px]">Идёт загрузка...</p>
+								</div>
+							</div>
+						</>
+					) : checkboxes.IS_CHECKED_PERS_DATA === 0 ? (
+						<div className="flex flex-col">
+							<div className="w-full flex justify-center">
+								<WarningModalIconSvg />
+							</div>
+							<p className="font-content-font font-normal text-black text-[16px]/[20px] text-center mt-[22px]">
+								{t('personalDataNotChecked')}
+							</p>
+							<Button
+								className="rounded-[40px] mt-[40px]"
+								type="primary"
+								onClick={() => {
+									setIsOpen(false)
 								}}
-								render={({ field }) => (
-									<Input
-										className={`${errors.lastname && 'border-[#C11616]'}`}
-										onPressEnter={e => e.preventDefault()}
-										type="text"
-										placeholder="Фамилия*"
-										disabled
-										{...field}
-									/>
-								)}
-							/>
-							{errors.lastname && (
-								<p className="font-content-font text-[10px]/[12.94px] font-normal text-[#C11616]">
-									{errors.lastname?.message}
-								</p>
-							)}
-							<Controller
-								name="name"
-								control={control}
-								rules={{
-									required: { value: true, message: 'Не введено имя' },
-									maxLength: { value: 1000, message: 'Количество символов превышено' }
-								}}
-								render={({ field }) => (
-									<Input
-										onPressEnter={e => e.preventDefault()}
-										className={`${errors.name && 'border-[#C11616]'}`}
-										type="text"
-										placeholder="Имя*"
-										disabled
-										{...field}
-									/>
-								)}
-							/>
-							{errors.name && (
-								<p className="font-content-font text-[10px]/[12.94px] font-normal text-[#C11616]">
-									{errors.name?.message}
-								</p>
-							)}
-							<Controller
-								name="middlename"
-								control={control}
-								rules={{
-									required: { value: true, message: 'Не введено отчество' },
-									maxLength: { value: 1000, message: 'Количество символов превышено' }
-								}}
-								render={({ field }) => (
-									<Input
-										onPressEnter={e => e.preventDefault()}
-										className={`${errors.middlename && 'border-[#C11616]'}`}
-										type="text"
-										placeholder="Отчество"
-										disabled={isPatronymicSet}
-										{...field}
-									/>
-								)}
-							/>
-							{errors.middlename && (
-								<p className="font-content-font text-[10px]/[12.94px] font-normal text-[#C11616]">
-									{errors.middlename?.message}
-								</p>
-							)}
-							<Controller
-								name="email"
-								control={control}
-								rules={{
-									required: 'Поле email обязательно для заполнения',
-									pattern: {
-										value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-										message: 'Введите корректный адрес электронной почты'
-									},
-									maxLength: {
-										value: 500,
-										message: 'Количество символов было превышено'
-									}
-								}}
-								render={({ field, fieldState: { error } }) => (
-									<div>
-										<Input
-											{...field}
-											onKeyDown={handleKeyDownEmail}
-											onPressEnter={e => e.preventDefault()}
-											className={error ? 'border-[#C11616]' : ''}
-											type="text"
-											placeholder="example@mail.com"
-										/>
-										{errors.email && (
-											<p className="font-content-font text-[10px]/[12.94px] font-normal text-[#C11616]">
-												{errors.email?.message}
-											</p>
-										)}
-									</div>
-								)}
-							/>
-
-							<Controller
-								name="phone"
-								control={control}
-								rules={{
-									required: {
-										value: true,
-										message: 'Телефон введён некорректно'
-									}
-								}}
-								render={({ field }) => (
-									<div>
-										<Input
-											{...field}
-											onKeyDown={handleKeyDownPhone}
-											onPressEnter={e => e.preventDefault()}
-											value={field.value}
-											className={errors.phone ? 'border-[#C11616]' : ''}
-											type="text"
-											placeholder="Моб.телефон"
-										/>
-										{errors.phone && (
-											<p className="font-content-font text-[10px]/[12.94px] font-normal text-[#C11616]">
-												{errors.phone.message}
-											</p>
-										)}
-									</div>
-								)}
-							/>
-							<Controller
-								name="vacancy"
-								control={control}
-								rules={{
-									required: { value: true, message: 'Не введена должность' },
-									maxLength: { value: 1000, message: 'Количество символов превышено' }
-								}}
-								render={({ field }) => (
-									<div>
-										<Input
-											onPressEnter={e => e.preventDefault()}
-											className={`${errors.vacancy && 'border-[#C11616]'}`}
-											type="text"
-											placeholder="Желаемая должность"
-											{...field}
-										/>
-										{errors.vacancy && (
-											<p className="font-content-font text-[10px]/[12.94px] font-normal text-[#C11616]">
-												{errors.vacancy?.message}
-											</p>
-										)}
-									</div>
-								)}
-							/>
+							>
+								ОК
+							</Button>
 						</div>
-						<div className="flex gap-[18px] mt-[36px]">
-							<AttachIcon />
-							<Controller
-								name="resumeFile"
-								control={control}
-								render={({ field }) => (
-									<div>
-										<label
-											htmlFor="files"
-											className="text-black text-[16px]/[16px] font-content-font font-normal cursor-pointer underline"
-										>
-											Прикрепить резюме
-										</label>
-										<input
-											id="files"
-											type="file"
-											className="hidden"
-											{...register('resumeFile', {
-												required: {
-													value: true,
-													message: 'Пожалуйста, прикрепите резюме'
-												},
-												validate: {
-													// Проверка размера файла (не более 10 МБ)
-													fileSize: fileList => {
-														console.log('Валидация')
-														const file = fileList?.[0]
-														if (file && file.size > 10 * 1024 * 1024) {
-															console.log('Не подходит')
-															return 'Размер файла не должен превышать 10 МБ'
+					) : (
+						<form className="p-[26px]" onSubmit={handleSubmit(onSubmit)}>
+							<p className="font-content-font font-normal text-black text-[18px]/[18px] text-opacity-80">
+								Отправьте своё резюме
+							</p>
+							<div className="flex flex-col gap-[8px] mt-[24px]">
+								<Controller
+									name="lastname"
+									control={control}
+									rules={{
+										required: { value: true, message: 'Не введена фамилия' },
+										maxLength: { value: 1000, message: 'Количество символов превышено' }
+									}}
+									render={({ field }) => (
+										<Input
+											className={`${errors.lastname && 'border-[#C11616]'}`}
+											onPressEnter={e => e.preventDefault()}
+											type="text"
+											placeholder="Фамилия*"
+											disabled
+											{...field}
+										/>
+									)}
+								/>
+								{errors.lastname && (
+									<p className="font-content-font text-[10px]/[12.94px] font-normal text-[#C11616]">
+										{errors.lastname?.message}
+									</p>
+								)}
+								<Controller
+									name="name"
+									control={control}
+									rules={{
+										required: { value: true, message: 'Не введено имя' },
+										maxLength: { value: 1000, message: 'Количество символов превышено' }
+									}}
+									render={({ field }) => (
+										<Input
+											onPressEnter={e => e.preventDefault()}
+											className={`${errors.name && 'border-[#C11616]'}`}
+											type="text"
+											placeholder="Имя*"
+											disabled
+											{...field}
+										/>
+									)}
+								/>
+								{errors.name && (
+									<p className="font-content-font text-[10px]/[12.94px] font-normal text-[#C11616]">
+										{errors.name?.message}
+									</p>
+								)}
+								<Controller
+									name="middlename"
+									control={control}
+									rules={{
+										required: { value: true, message: 'Не введено отчество' },
+										maxLength: { value: 1000, message: 'Количество символов превышено' }
+									}}
+									render={({ field }) => (
+										<Input
+											onPressEnter={e => e.preventDefault()}
+											className={`${errors.middlename && 'border-[#C11616]'}`}
+											type="text"
+											placeholder="Отчество"
+											disabled={isPatronymicSet}
+											{...field}
+										/>
+									)}
+								/>
+								{errors.middlename && (
+									<p className="font-content-font text-[10px]/[12.94px] font-normal text-[#C11616]">
+										{errors.middlename?.message}
+									</p>
+								)}
+								<Controller
+									name="email"
+									control={control}
+									rules={{
+										required: 'Поле email обязательно для заполнения',
+										pattern: {
+											value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+											message: 'Введите корректный адрес электронной почты'
+										},
+										maxLength: {
+											value: 500,
+											message: 'Количество символов было превышено'
+										}
+									}}
+									render={({ field, fieldState: { error } }) => (
+										<div>
+											<Input
+												{...field}
+												onKeyDown={handleKeyDownEmail}
+												onPressEnter={e => e.preventDefault()}
+												className={error ? 'border-[#C11616]' : ''}
+												type="text"
+												placeholder="example@mail.com"
+											/>
+											{errors.email && (
+												<p className="font-content-font text-[10px]/[12.94px] font-normal text-[#C11616]">
+													{errors.email?.message}
+												</p>
+											)}
+										</div>
+									)}
+								/>
+
+								<Controller
+									name="phone"
+									control={control}
+									rules={{
+										required: {
+											value: true,
+											message: 'Телефон введён некорректно'
+										}
+									}}
+									render={({ field }) => (
+										<div>
+											<Input
+												{...field}
+												onKeyDown={handleKeyDownPhone}
+												onPressEnter={e => e.preventDefault()}
+												value={field.value}
+												className={errors.phone ? 'border-[#C11616]' : ''}
+												type="text"
+												placeholder="Моб.телефон"
+											/>
+											{errors.phone && (
+												<p className="font-content-font text-[10px]/[12.94px] font-normal text-[#C11616]">
+													{errors.phone.message}
+												</p>
+											)}
+										</div>
+									)}
+								/>
+								<Controller
+									name="vacancy"
+									control={control}
+									rules={{
+										required: { value: true, message: 'Не введена должность' },
+										maxLength: { value: 1000, message: 'Количество символов превышено' }
+									}}
+									render={({ field }) => (
+										<div>
+											<Input
+												onPressEnter={e => e.preventDefault()}
+												className={`${errors.vacancy && 'border-[#C11616]'}`}
+												type="text"
+												placeholder="Желаемая должность"
+												{...field}
+											/>
+											{errors.vacancy && (
+												<p className="font-content-font text-[10px]/[12.94px] font-normal text-[#C11616]">
+													{errors.vacancy?.message}
+												</p>
+											)}
+										</div>
+									)}
+								/>
+							</div>
+							<div className="flex gap-[18px] mt-[36px]">
+								<AttachIcon />
+								<Controller
+									name="resumeFile"
+									control={control}
+									render={({ field }) => (
+										<div>
+											<label
+												htmlFor="files"
+												className="text-black text-[16px]/[16px] font-content-font font-normal cursor-pointer underline"
+											>
+												Прикрепить резюме
+											</label>
+											<input
+												id="files"
+												type="file"
+												className="hidden"
+												{...register('resumeFile', {
+													required: {
+														value: true,
+														message: 'Пожалуйста, прикрепите резюме'
+													},
+													validate: {
+														// Проверка размера файла (не более 10 МБ)
+														fileSize: fileList => {
+															console.log('Валидация')
+															const file = fileList?.[0]
+															if (file && file.size > 10 * 1024 * 1024) {
+																console.log('Не подходит')
+																return 'Размер файла не должен превышать 10 МБ'
+															}
+														}
+													},
+													onChange: event => {
+														const file = event.target.files?.[0]
+														if (file) {
+															setFilename(file.name)
 														}
 													}
-												},
-												onChange: event => {
-													const file = event.target.files?.[0]
-													if (file) {
-														setFilename(file.name)
-													}
-												}
-											})}
-										/>
-									</div>
-								)}
-							/>
-						</div>
-						{errors.resumeFile && (
-							<p className="font-content-font text-[10px]/[12.94px] font-normal text-[#C11616]">
-								{errors.resumeFile?.message}
-							</p>
-						)}
-						<div className="flex w-full items-center justify-between">
-							<p className="max-w-[80%] whitespace-nowrap text-ellipsis mt-[5px] font-content-font text-[14px]/[14px] font-normal text-black">
-								{filename}
-							</p>
-							{watch('resumeFile') !== null && (
-								<Button
-									icon={<DeleteSvg />}
-									type="text"
-									onClick={() => {
-										setValue('resumeFile', null, { shouldValidate: true })
-										setFilename('')
-									}}
+												})}
+											/>
+										</div>
+									)}
 								/>
+							</div>
+							{errors.resumeFile && (
+								<p className="font-content-font text-[10px]/[12.94px] font-normal text-[#C11616]">
+									{errors.resumeFile?.message}
+								</p>
 							)}
-						</div>
-						<p className="mt-[12px] font-content-font font-normal text-black text-[12px]/[15.53px]">
-							Если у вас нет готового резюме скачайте и заполните{' '}
-							<a
-								className="underline text-black hover:text-black hover:underline"
-								href="https://kadry.kpfu.ru/wp-content/uploads/2023/01/01_.zayavlenie.o.prieme.na_.rabotu._list.soglasovaniya__i_o.2022._2_.docx"
+							<div className="flex w-full items-center justify-between">
+								<p className="max-w-[80%] whitespace-nowrap text-ellipsis mt-[5px] font-content-font text-[14px]/[14px] font-normal text-black">
+									{filename}
+								</p>
+								{watch('resumeFile') !== null && (
+									<Button
+										icon={<DeleteSvg />}
+										type="text"
+										onClick={() => {
+											setValue('resumeFile', null, { shouldValidate: true })
+											setFilename('')
+										}}
+									/>
+								)}
+							</div>
+							<p className="mt-[12px] font-content-font font-normal text-black text-[12px]/[15.53px]">
+								Если у вас нет готового резюме скачайте и заполните{' '}
+								<a
+									className="underline text-black hover:text-black hover:underline"
+									href="https://kadry.kpfu.ru/wp-content/uploads/2023/01/01_.zayavlenie.o.prieme.na_.rabotu._list.soglasovaniya__i_o.2022._2_.docx"
+								>
+									шаблон
+								</a>
+							</p>
+							<Button
+								htmlType="submit"
+								loading={buttonLoading}
+								className="ml-auto mt-[40px] rounded-[54.5px]"
+								type="primary"
 							>
-								шаблон
-							</a>
-						</p>
-						<Button
-							htmlType="submit"
-							loading={buttonLoading}
-							className="ml-auto mt-[40px] rounded-[54.5px]"
-							type="primary"
-						>
-							Отправить
-						</Button>
-					</form>
+								Отправить
+							</Button>
+						</form>
+					)}
 				</Modal>
 			</ConfigProvider>
 			<div className="transform transition hover:scale-[101%]  duration-300 hover:shadow-lg  shadow-md flex w-full bg-white rounded-3xl h-[320px] flex-col px-7 py-8 justify-between h-full max-[874px]:p-0 max-[874px]:py-3 max-[874px]:items-center ">

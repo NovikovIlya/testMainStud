@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { useAppSelector } from '../../../store'
+import { useGetCheckboxQuery } from '../../../store/api/aboutMe/forAboutMe'
 import { useLazyGetInfoUserQuery } from '../../../store/api/formApi'
 import { useLazyGetSeekerVacancyRelationQuery, usePostVacancyRespondMutation } from '../../../store/api/serviceApi'
 import { useLazyGetVacancyViewQuery } from '../../../store/api/serviceApi'
@@ -22,6 +23,7 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 	const [getVacancy, { data, isLoading }] = useLazyGetVacancyViewQuery()
 	const [getRelation, getRelationStatus] = useLazyGetSeekerVacancyRelationQuery()
 	const [getInfo, getInfoStatus] = useLazyGetInfoUserQuery()
+	const { data: checkboxes, isLoading: checkboxesLoading } = useGetCheckboxQuery()
 
 	const dispatch = useDispatch()
 
@@ -139,7 +141,7 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 		conditionsArr = conditions.match(/<li>[a-zA-Zа-яА-ЯёЁ0-9\s\:\,\.\/\–\—\(\)\+\-]+/g)
 	}
 
-	if (isLoading || getRelationStatus.isLoading || getInfoStatus.isLoading) {
+	if (isLoading || getRelationStatus.isLoading || getInfoStatus.isLoading || checkboxesLoading) {
 		return (
 			<>
 				<div className="w-full h-full flex items-center">
@@ -172,7 +174,7 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 					<p className="w-[106px] font-content-font font-bold text-black text-[18px]/[21px]">{t('employmentType')}</p>
 					<p className="w-[106px] font-content-font font-bold text-black text-[18px]/[21px]">{t('salary')}</p>
 					{props.type === 'CATALOG' ? (
-						<ResponseForm canRespond={canRespond} />
+						<ResponseForm canRespond={canRespond} personalData={checkboxes.IS_CHECKED_PERS_DATA === 1} />
 					) : (
 						<>
 							<div className="w-[143px]"></div>

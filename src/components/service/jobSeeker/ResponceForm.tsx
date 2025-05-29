@@ -56,7 +56,7 @@ import { AttachIcon } from './AttachIcon'
 import { ButtonPlusIcon } from './ButtonPlusIcon'
 import { CheckedIcon } from './CheckedIcon'
 
-export const ResponseForm = (props: { canRespond: boolean }) => {
+export const ResponseForm = (props: { canRespond: boolean; personalData: boolean }) => {
 	const { i18n } = useTranslation()
 	const { data: countries } = useGetCountriesQuery(i18n.language)
 	const { data: levels } = useGetEducationLevelQuery(i18n.language)
@@ -225,6 +225,8 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 		setCanRespond(props.canRespond)
 	}, [props.canRespond])
 
+	console.log(canRespond)
+
 	return (
 		<>
 			{contextHolder}
@@ -235,7 +237,7 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 					e.preventDefault()
 				}}
 				onClick={e => {
-					canRespond ? (setPage('main'), setIsFormOpen(true)) : setIsFailedModalOpen(true)
+					canRespond && props.personalData ? (setPage('main'), setIsFormOpen(true)) : setIsFailedModalOpen(true)
 				}}
 			>
 				{t('respond')}
@@ -264,7 +266,10 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 							<WarningModalIconSvg />
 						</div>
 						<p className="font-content-font font-normal text-black text-[16px]/[20px] text-center mt-[22px]">
-							{t('noRespondDuplicates')}
+							{!props.personalData && t('personalDataNotChecked')}
+							<br />
+							<br />
+							{!canRespond && t('noRespondDuplicates')}
 						</p>
 						<Button
 							className="rounded-[40px] mt-[40px]"

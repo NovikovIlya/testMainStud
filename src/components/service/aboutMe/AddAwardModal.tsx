@@ -42,7 +42,7 @@ export const AddAwardModal = (props: {
 								docDate: values.awardDocumentDate ? dayjs(values.awardDocumentDate).format('DD.MM.YYYY') : null,
 								awardDate: dayjs(values.awardDate).format('DD.MM.YYYY'),
 								docNum: values.awardDocumentNumber,
-								portalStatus: values.accept ? '1' : null,
+								portalStatus: values.accept ? '1' : '0',
 								url: values.url,
 								isModified: values.file && values.file.file ? true : false
 							}

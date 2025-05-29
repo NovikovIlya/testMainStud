@@ -51,7 +51,7 @@ export const AwardsTable = () => {
 								awardDate: dayjs(record.awardDate, 'DD.MM.YYYY'),
 								awardDocumentNumber: record.docNum,
 								awardDocumentDate: record.docDate ? dayjs(record.docDate, 'DD.MM.YYYY') : null,
-								accept: record.portalStatus ? true : false,
+								accept: record.portalStatus === '1' ? true : false,
 								url: record.url,
 								file: record.filename
 									? [

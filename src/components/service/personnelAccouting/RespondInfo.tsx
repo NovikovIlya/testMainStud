@@ -143,7 +143,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 			return (
 				<>
 					{contextHolder}
-					<div className="pl-[52px] pr-[10%] py-[60px] mt-[60px] w-full">
+					<div className="pl-[52px] py-[60px] mt-[60px] w-full">
 						<div>
 							<button
 								onClick={() => {
@@ -184,7 +184,7 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 								</span>
 							</button>
 						</div>
-						<div className="mt-[52px] flex flex-col gap-[36px]" ref={targetRef}>
+						<div className="mt-[52px] flex flex-col gap-[36px] w-[90%] overflow-hidden" ref={targetRef}>
 							<div className="flex justify-between flex-wrap gap-y-[40px]">
 								<div className="flex gap-[20px]">
 									<div className="flex h-[167px] w-[167px] bg-[#D9D9D9]">

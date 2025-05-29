@@ -1,27 +1,17 @@
 import { useInterval, useUpdateEffect } from 'ahooks'
 import { Button, Form, Input, Modal, Result, Spin } from 'antd'
-import PhoneInput from 'antd-phone-input'
-import FormItem from 'antd/es/form/FormItem'
 import { useState } from 'react'
 
 import { useAppDispatch } from '../../../../store'
 import { apiSlice } from '../../../../store/api/apiSlice'
-import { apiSliceTeacher } from '../../../../store/api/apiSliceTeacher'
 import {
-	useDeleteAccMutation,
 	useDeleteAccPhoneMutation,
-	useFinalVerifyMutation,
 	useFinalVerifyPhoneMutation,
-	useGetEmailQuery,
 	useGetPhoneUserQuery,
-	usePostEmailMutation,
 	usePostPhoneMutation,
-	useVerifyAccMutation,
 	useVerifyAccPhoneMutation
 } from '../../../../store/api/serviceApi'
-import { SkeletonPage } from '../../aboutMe/Skeleton'
 
-import ContactDataBlock from './ContactDataBlock'
 import NumberDataBloc from './NumberDataBloc'
 import { t } from 'i18next'
 
@@ -59,7 +49,7 @@ export const NumberInformation = () => {
 			// alert('Напишите телефон')
 			return
 		}
-		postMail({ phone: text })
+		postMail({ phone: text , marker:'PRIVATE'})
 			.unwrap()
 			.then(res => {	
 				sendVerOne(res.id)

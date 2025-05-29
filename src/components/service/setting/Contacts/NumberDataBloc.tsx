@@ -1,17 +1,7 @@
 import { DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons'
-import { Button, Form, Input, InputNumber, Popconfirm, Spin } from 'antd'
+import { Button, Form, Input, Popconfirm, Select, Spin, Switch, Tooltip } from 'antd'
 import { t } from 'i18next'
 import { useState } from 'react'
-
-import {
-	useDeleteAccMutation,
-	useFinalVerifyMutation,
-	useGetEmailQuery,
-	useGetPhoneUserQuery,
-	usePostEmailMutation,
-	usePostPhoneMutation,
-	useVerifyAccMutation
-} from '../../../../store/api/serviceApi'
 
 const NumberDataBloc = ({ isLoadingPost, sortedEmails, sendVer, handleDeleteEmail, showModal }: any) => {
 	const [detectedCountry, setDetectedCountry] = useState<string>('')
@@ -75,21 +65,35 @@ const NumberDataBloc = ({ isLoadingPost, sortedEmails, sendVer, handleDeleteEmai
 									</span>
 									<div className="flex gap-3">
 										<span className="text-gray-400">
-											{item.verified ? (
-												t('verification')
+											{!item.verified ? (
+												<div className="flex items-center gap-2">
+													<Form.Item name={'inputType'} className="flex h-full items-center m-0">
+														<Select
+															placeholder="Выберите тип"
+															defaultValue={null}
+															className="!w-[150px] "
+															options={[
+																{ value: null, label: '' },
+																{ value: 'lucy', label: 'Рабочий' },
+																{ value: 'Yiminghe', label: 'Дополнительный' },
+																{ value: 'disabled', label: 'Контактный' },
+																{ value: 'disabled', label: 'SMS' }
+															]}
+														/>
+													</Form.Item>
+													<div>|</div>
+													<Form.Item name={'switcher'} className="flex h-full items-center m-0">
+														<Tooltip title="prompt text">
+															<Switch />
+														</Tooltip>
+													</Form.Item>
+												</div>
 											) : (
 												<div
 													className="cursor-pointer shadow-sm"
 													onClick={() => {
-														console.log('item', item)
 														const num = detectCountry(item.phone)
-
 														console.log('num', num)
-														// if(num !== 'Страна:  Россия/Казахстан'){
-														// 	console.log('asd')
-														// 	setDetectedCountry(num);
-														// 	return
-														// }
 														sendVer(item.id)
 													}}
 												>
@@ -125,9 +129,13 @@ const NumberDataBloc = ({ isLoadingPost, sortedEmails, sendVer, handleDeleteEmai
 							>
 								<Input
 									allowClear
-									type="number"
+									
 									// maxLength={12}
-
+									onKeyPress={e => {
+										if (!/[0-9]/.test(e.key)) {
+											e.preventDefault() // Блокируем ввод нецифровых символов
+										}
+									}}
 									placeholder={t('addNumber')}
 									className="w-full  h-[40px] flex items-center rounded-lg border-gray-300 shadow-sm  bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
 									onChange={handlePhoneChange}

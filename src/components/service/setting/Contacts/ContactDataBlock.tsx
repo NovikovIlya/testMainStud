@@ -1,5 +1,5 @@
 import { DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons'
-import { Button, Form, Input, Popconfirm, Select, Spin } from 'antd'
+import { Button, Form, Input, Popconfirm, Select, Spin, Switch, Tooltip } from 'antd'
 import { useTranslation } from 'react-i18next'
 
 const ContactDataBlock = ({ isLoadingPost, sortedEmails, sendVer, handleDeleteEmail, showModal }: any) => {
@@ -34,7 +34,28 @@ const ContactDataBlock = ({ isLoadingPost, sortedEmails, sendVer, handleDeleteEm
 									<div className="flex gap-3">
 										<span className="text-gray-400">
 											{email.verified ? (
-												t('verification')
+												<div className="flex items-center gap-2">
+													<Form.Item name={'inputType'} className="flex h-full items-center m-0">
+														<Select
+															placeholder="Выберите тип"
+															defaultValue={null}
+															className="!w-[150px] "
+															options={[
+																{ value: null, label: '' },
+																{ value: 'lucy', label: 'Рабочий' },
+																{ value: 'Yiminghe', label: 'Дополнительный' },
+																{ value: 'disabled', label: 'Контактный' },
+																{ value: 'disabled', label: 'SMS' }
+															]}
+														/>
+													</Form.Item>
+													<div>|</div>
+													<Form.Item name={'switcher'} className="flex h-full items-center m-0">
+														<Tooltip title="prompt text">
+															<Switch />
+														</Tooltip>
+													</Form.Item>
+												</div>
 											) : (
 												<div className="cursor-pointer shadow-sm" onClick={() => sendVer(email.id)}>
 													{t('requiredVerification')}
@@ -48,14 +69,10 @@ const ContactDataBlock = ({ isLoadingPost, sortedEmails, sendVer, handleDeleteEm
 												handleDeleteEmail(email.id)
 											}}
 										>
-											<button
-											type="button"
-											// onClick={() => handleDeleteEmail(email.id)}
-											className="text-gray-400 hover:text-red-500 transition-colors border-none"
-											aria-label="Удалить"
-										>
+											
+										
 											<DeleteOutlined className="" />
-										</button>
+										
 										</Popconfirm>
 										
 									</div>

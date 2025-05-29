@@ -60,7 +60,7 @@ export const ContactInformation = () => {
 			// alert(t('emailNeed'))
 			return
 		}
-		postMail({ email: text }).unwrap().then(res => sendVerOne(res.id))
+		postMail({ email: text,marker:'PRIVATE' }).unwrap().then(res => sendVerOne(res.id))
 		form.setFieldValue('inputText', '')
 	}
 

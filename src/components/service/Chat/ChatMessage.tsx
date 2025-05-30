@@ -108,7 +108,7 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 						<div className="h-[1px] bg-black bg-opacity-[24%] mt-[16px]"></div>
 					</div>
 				)}
-				<p className="whitespace-pre-line">
+				<p className="whitespace-pre-line overflow-hidden text-ellipsis">
 					{props.msgData.text && props.msgData.text.match(/(https?:\/\/[^\s]+)/g) ? (
 						<>
 							{/* <span className="whitespace-pre-line">{props.msgData.text.split(/(https?:\/\/[^\s]+)/g)?.[0]}</span>

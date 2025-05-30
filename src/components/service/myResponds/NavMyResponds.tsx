@@ -102,9 +102,9 @@ export const NavMyResponds = () => {
 		<>
 			<Header type="service" service={t('myResponds')} />
 			<div className="shadowNav bg-white relative">
-				<ul className="min-w-[230px] pt-14 flex flex-col gap-4 sticky top-[80px]">{handleList}</ul>
+				<ul className="w-[230px] pt-14 flex flex-col gap-4 sticky top-[80px]">{handleList}</ul>
 			</div>
-			<div className="bg-[#F5F8FB] flex w-full">
+			<div className="bg-[#F5F8FB] flex w-[calc(100%-230px)] overflow-hidden">
 				{pathname === navList[0].id && <MyResponds />}
 				{pathname.match(/\/services\/myresponds\/responds\/fullinfo\/\d+/) && <RespondInfo type="SEEKER" />}
 				{pathname.includes(navList[1].id) && <Chat />}

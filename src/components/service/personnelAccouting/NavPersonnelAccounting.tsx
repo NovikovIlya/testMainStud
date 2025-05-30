@@ -592,15 +592,15 @@ export const NavPesonnelAccounting = () => {
 		<>
 			{contextHolder}
 			<Header type="service" service="Трудоустройство" />
-			<div className="shadowNav">
-				<ul className="min-w-[230px] pt-14 flex flex-col gap-4 sticky top-[80px]">
+			<div className="shadowNav bg-white relative">
+				<ul className="w-[230px] pt-14 flex flex-col gap-4 sticky top-[80px]">
 					{isPersonnelDepartment ? handleList : <></>}
 					{isSupervisor ? handleSupervisorList : <></>}
 					{isAccounting ? handleAccountingList : <></>}
 					{isLaborProtection ? handleLaborProtectionList : <></>}
 				</ul>
 			</div>
-			<div className="bg-[#F5F8FB] flex w-full">
+			<div className="bg-[#F5F8FB] flex w-[calc(100%-230px)]">
 				{pathname === navEmployeeList[0].id && <Responds />}
 				{pathname.match('services/personnelaccounting/responds/byvacancy/*') && <VacancyResponces />}
 				{pathname.match('services/personnelaccounting/responds/fullinfo') && (
@@ -614,13 +614,11 @@ export const NavPesonnelAccounting = () => {
 				{pathname === navEmployeeList[3].id && <Catalog />}
 				{pathname.match('services/personnelaccounting/vacancies/vacancyedit') && <VacancyEditView />}
 				{pathname === '/services/personnelaccounting/vacancyrequests' && <VacancyRequestsPage />}
-
 				{pathname.match(/\/services\/personnelaccounting\/request\/create\/\d+/) && <VacancyRequestCreateView />}
 				{pathname.match(/\/services\/personnelaccounting\/request\/update\/\d+/) && <VacancyRequestUpdateView />}
 				{pathname.match(/\/services\/personnelaccounting\/request\/(\d+)\/delete\/(\d+)/) && (
 					<VacancyRequestDeleteView />
 				)}
-
 				{pathname === navEmployeeList[4].id && <Reserve />}
 				{pathname.match(/\/services\/personnelaccounting\/reserve\/fullinfo\/\d+/) && (
 					<ReserveRespondInfo type="PERSONNEL_DEPARTMENT" handleAlert={handleAlert} />

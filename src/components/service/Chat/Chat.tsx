@@ -147,7 +147,7 @@ export const Chat = () => {
 	return (
 		<>
 			{' '}
-			<div className="bg-[#F5F8FB] flex w-full">
+			<div className="bg-[#F5F8FB] flex w-full h-screen">
 				{!pathname.includes('/services/myresponds/chat/vacancyview') && (
 					<div className=" shadowNav bg-white relative z-[5]">
 						<div className="sticky top-[80px]">

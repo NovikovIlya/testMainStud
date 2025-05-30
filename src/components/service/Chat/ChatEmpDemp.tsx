@@ -183,9 +183,9 @@ export const ChatEmpDemp = () => {
 	return (
 		<>
 			{' '}
-			<div className="bg-[#F5F8FB] flex w-full">
+			<div className="bg-[#F5F8FB] flex w-full h-screen">
 				{!pathname.includes('/services/personnelaccounting/chat/vacancyview') && (
-					<div className="shadowNav bg-white relative z-[5] w-[461px]">
+					<div className="shadowNav bg-white relative z-[5]">
 						<div className="sticky top-[80px]">
 							<div className="flex items-center px-[30px] pt-[20px] pb-[20px]">
 								<p className="font-content-font font-normal text-black text-[20px]/[20px] ">Все сообщения</p>

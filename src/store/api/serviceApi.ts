@@ -502,6 +502,26 @@ export const serviceApi = apiSlice.injectEndpoints({
 			},
 			invalidatesTags: ['emails']
 		}),
+		setMainEmail: builder.mutation<void, number>({
+			query: id => {
+				return {
+					url: `user-api/settings/emails/set-main/${id}`,
+					method: 'PATCH',
+					
+				}
+			},
+			invalidatesTags: ['emails']
+		}),
+		setMainPhone: builder.mutation<void, number>({
+			query: id => {
+				return {
+					url: `user-api/settings/phones/set-main/${id}`,
+					method: 'PATCH',
+					
+				}
+			},
+			invalidatesTags: ['emails']
+		}),
 		finalVerifyPhone: builder.mutation({
 			query: obj => {
 				return {
@@ -1202,5 +1222,6 @@ export const {
 	useGetAwardsQuery,
 	useAddNewAwardMutation,
 	useUpdateNewAwardMutation,
-	useDeleteNewAwardMutation
+	useDeleteNewAwardMutation,
+	useSetMainEmailMutation
 } = serviceApi

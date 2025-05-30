@@ -65,7 +65,7 @@ const NumberDataBloc = ({ isLoadingPost, sortedEmails, sendVer, handleDeleteEmai
 									</span>
 									<div className="flex gap-3">
 										<span className="text-gray-400">
-											{!item.verified ? (
+											{item.verified ? (
 												<div className="flex items-center gap-2">
 													<Form.Item name={'inputType'} className="flex h-full items-center m-0">
 														<Select
@@ -74,19 +74,27 @@ const NumberDataBloc = ({ isLoadingPost, sortedEmails, sendVer, handleDeleteEmai
 															className="!w-[150px] "
 															options={[
 																{ value: null, label: '' },
-																{ value: 'lucy', label: 'Рабочий' },
-																{ value: 'Yiminghe', label: 'Дополнительный' },
-																{ value: 'disabled', label: 'Контактный' },
-																{ value: 'disabled', label: 'SMS' }
+																{ value: 'PRIVATE', label: 'Личный' },
+																{ value: 'WORK', label: 'Рабочий' },
+																{ value: 'ADDITIONAL', label: 'Дополнительный' },
+																
 															]}
 														/>
 													</Form.Item>
 													<div>|</div>
-													<Form.Item name={'switcher'} className="flex h-full items-center m-0">
+													{/* <Form.Item name={'switcher'} className="flex h-full items-center m-0"> */}
 														<Tooltip title="prompt text">
-															<Switch />
+															<Switch 
+																value={item?.isMain}
+																onChange={() => {
+																if(item?.isMain){
+																	return
+																}
+																// setMainMail(item.id)
+															}}
+															/>
 														</Tooltip>
-													</Form.Item>
+													{/* </Form.Item> */}
 												</div>
 											) : (
 												<div
@@ -101,7 +109,7 @@ const NumberDataBloc = ({ isLoadingPost, sortedEmails, sendVer, handleDeleteEmai
 												</div>
 											)}
 										</span>
-										<Popconfirm
+										{item?.isMain ? '' : <Popconfirm
 											title={t('deleteEducationTitle')}
 											description={t('deleteEducationDescription')}
 											onConfirm={() => {
@@ -109,7 +117,7 @@ const NumberDataBloc = ({ isLoadingPost, sortedEmails, sendVer, handleDeleteEmai
 											}}
 										>
 											<DeleteOutlined className="" />
-										</Popconfirm>
+										</Popconfirm>}
 									</div>
 								</div>
 							))}

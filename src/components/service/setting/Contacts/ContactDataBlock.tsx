@@ -2,8 +2,11 @@ import { DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons'
 import { Button, Form, Input, Popconfirm, Select, Spin, Switch, Tooltip } from 'antd'
 import { useTranslation } from 'react-i18next'
 
+import { useSetMainEmailMutation } from '../../../../store/api/serviceApi'
+
 const ContactDataBlock = ({ isLoadingPost, sortedEmails, sendVer, handleDeleteEmail, showModal }: any) => {
 	const { t } = useTranslation()
+	const [setMainMail] = useSetMainEmailMutation()
 
 	return (
 		<Spin spinning={isLoadingPost}>
@@ -16,21 +19,10 @@ const ContactDataBlock = ({ isLoadingPost, sortedEmails, sendVer, handleDeleteEm
 							{sortedEmails?.map((email: any, index: number) => (
 								<div
 									key={email.id || index}
-									className="flex items-center justify-between p-3 bg-gray-50 rounded-lg group hover:bg-gray-100 transition-colors"
+									className={`${email.isCorporative ? 'border-l-1 border-l-blue65A border-r-0 border-t-0 border-b-0 border-solid ' :''} flex items-center justify-between p-3 bg-gray-50 rounded-lg group hover:bg-gray-100 transition-colors`}
 								>
 									<span className="text-gray-700">{email.email}</span>
-									{/* <Select
-									defaultValue="lucy"
-									className='w-[30%]'
-									
-									options={[
-									{ value: 'jack', label: 'Личный' },
-									{ value: 'lucy', label: 'Рабочий' },
-									{ value: 'Yiminghe', label: 'Дополнительный' },
-									{ value: 'disabled', label: 'Контактный'},
-									{ value: 'disabled', label: 'SMS'},
-									]}
-								/> */}
+
 									<div className="flex gap-3">
 										<span className="text-gray-400">
 											{email.verified ? (
@@ -42,19 +34,27 @@ const ContactDataBlock = ({ isLoadingPost, sortedEmails, sendVer, handleDeleteEm
 															className="!w-[150px] "
 															options={[
 																{ value: null, label: '' },
-																{ value: 'lucy', label: 'Рабочий' },
-																{ value: 'Yiminghe', label: 'Дополнительный' },
-																{ value: 'disabled', label: 'Контактный' },
-																{ value: 'disabled', label: 'SMS' }
+																{ value: 'PRIVATE', label: 'Личный' },
+																{ value: 'WORK', label: 'Рабочий' },
+																{ value: 'ADDITIONAL', label: 'Дополнительный' },
 															]}
 														/>
 													</Form.Item>
 													<div>|</div>
-													<Form.Item name={'switcher'} className="flex h-full items-center m-0">
-														<Tooltip title="prompt text">
-															<Switch />
-														</Tooltip>
-													</Form.Item>
+													{/* <Form.Item name={'switcher'} className="flex h-full items-center m-0"> */}
+													<Tooltip title="prompt text">
+														<Switch
+															
+															value={email?.isMain}
+															onChange={() => {
+																if(email?.isMain){
+																	return
+																}
+																setMainMail(email.id)
+															}}
+														/>
+													</Tooltip>
+													{/* </Form.Item> */}
 												</div>
 											) : (
 												<div className="cursor-pointer shadow-sm" onClick={() => sendVer(email.id)}>
@@ -62,19 +62,15 @@ const ContactDataBlock = ({ isLoadingPost, sortedEmails, sendVer, handleDeleteEm
 												</div>
 											)}
 										</span>
-										<Popconfirm
+										{email.isCorporative  ?  '' :<Popconfirm
 											title={t('deleteEducationTitle')}
 											description={t('deleteEducationDescription')}
 											onConfirm={() => {
 												handleDeleteEmail(email.id)
 											}}
 										>
-											
-										
 											<DeleteOutlined className="" />
-										
-										</Popconfirm>
-										
+										</Popconfirm>}
 									</div>
 								</div>
 							))}
@@ -96,26 +92,7 @@ const ContactDataBlock = ({ isLoadingPost, sortedEmails, sendVer, handleDeleteEm
 									className="flex-1 rounded-lg border-gray-300 shadow-sm px-4 py-2 bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
 								/>
 							</Form.Item>
-							{/* <Form.Item
-							name={'inputType'}
-							className=""
-							rules={[
-								{ type: 'email', message: 'Введите тип!' }
-							]}
-						>
-						<Select
-									defaultValue="lucy"
-									className='!w-[150px] h-[40px]'
-									
-									options={[
-									{ value: 'jack', label: 'Личный' },
-									{ value: 'lucy', label: 'Рабочий' },
-									{ value: 'Yiminghe', label: 'Дополнительный' },
-									{ value: 'disabled', label: 'Контактный'},
-									{ value: 'disabled', label: 'SMS'},
-									]}
-								/>
-								</Form.Item> */}
+		
 							<Button
 								// onClick={handleAddEmail}
 								htmlType="submit"

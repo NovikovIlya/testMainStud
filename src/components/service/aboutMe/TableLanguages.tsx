@@ -213,8 +213,15 @@ const TableLanguages = ({
 			languageLevelCode: values.languageLevelCode,
 			isPublished: values.isPublished || false,
 			savingCertificates: [], // Массив для сохраняемых сертификатов
-			deletingCertificates: deleteCert // Массив для удаляемых сертификатов (пустой при добавлении нового языка)
+			deletingCertificates: deleteCert // Массив для удаляемых сертификатов
 		}
+
+		
+		// if (values.certificateId) {
+		// 	requestData.savingCertificates.push({
+		// 		certificateTypeId: values.certificateId
+		// 	});
+		// }
 
 		// Обработка файла сертификата, если он есть
 		if (fileList.length > 0) {
@@ -224,7 +231,6 @@ const TableLanguages = ({
 				const base64File = await new Promise<string>(resolve => {
 					const reader = new FileReader()
 					reader.onload = () => {
-						// Получаем base64 строку, удаляя префикс data:application/pdf;base64,
 						const base64String = reader.result as string
 						const base64Content = base64String.split(',')[1]
 						resolve(base64Content)
@@ -232,23 +238,21 @@ const TableLanguages = ({
 					reader.readAsDataURL(originalFile)
 				})
 
-				// Добавление информации о сертификате в массив savingCertificates
-				requestData.savingCertificates = [
-					{
-						// certId: values.certificateId,
-						certificateName: originalFile.name || '',
-						certificateTypeId: values.certificateId,
-						base64File: base64File
-					}
-				]
+				// Добавляем данные файла и типа сертификата
+				requestData.savingCertificates.push({
+					certificateName: originalFile.name || '',
+					certificateTypeId: values.certificateId,
+					base64File: base64File
+				})
 			}
 		}
+
+		console.log('requestData', requestData)
 
 		// Отправка данных на сервер
 		try {
 			setIsModalOpenEdit(false)
 			await editForeign(requestData).unwrap()
-
 			form2.resetFields()
 			setFileList([])
 			setSelectedLabel(null)
@@ -257,6 +261,7 @@ const TableLanguages = ({
 			message.error(t('error'))
 		} finally {
 			setIsModalOpenEdit(false)
+			setDeleteCert([])
 		}
 	}
 
@@ -358,6 +363,7 @@ const TableLanguages = ({
 								onSelect={(value: string) => {
 									const selectedOption = dataCertificate?.find(item => item.id === value)
 									if (selectedOption) {
+										console.log('selectedOption',selectedOption)
 										setSelectedLabel(selectedOption.certificateName)
 									}
 								}}

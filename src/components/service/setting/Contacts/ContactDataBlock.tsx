@@ -27,7 +27,7 @@ const ContactDataBlock = ({ isLoadingPost, sortedEmails, sendVer, handleDeleteEm
 										<span className="text-gray-400">
 											{email.verified ? (
 												<div className="flex items-center gap-2">
-													<Form.Item name={'inputType'} className="flex h-full items-center m-0">
+													{email.isCorporative ? '': <Form.Item name={'inputType'} className="flex h-full items-center m-0">
 														<Select
 															placeholder="Выберите тип"
 															defaultValue={null}
@@ -39,8 +39,8 @@ const ContactDataBlock = ({ isLoadingPost, sortedEmails, sendVer, handleDeleteEm
 																{ value: 'ADDITIONAL', label: 'Дополнительный' },
 															]}
 														/>
-													</Form.Item>
-													<div>|</div>
+													</Form.Item> }
+													{email.isCorporative ? '':<div>|</div>}
 													{/* <Form.Item name={'switcher'} className="flex h-full items-center m-0"> */}
 													<Tooltip title={t('textMainAboutMe')}>
 														<Switch

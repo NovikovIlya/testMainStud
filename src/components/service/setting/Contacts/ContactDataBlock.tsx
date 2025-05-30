@@ -42,7 +42,7 @@ const ContactDataBlock = ({ isLoadingPost, sortedEmails, sendVer, handleDeleteEm
 													</Form.Item>
 													<div>|</div>
 													{/* <Form.Item name={'switcher'} className="flex h-full items-center m-0"> */}
-													<Tooltip title="prompt text">
+													<Tooltip title={t('textMainAboutMe')}>
 														<Switch
 															
 															value={email?.isMain}

@@ -963,5 +963,6 @@
 	"awardDocumentDate": "Document date",
 	"awardNameNotEntered": "Enter award title",
 	"awardDateNotEntered": "Enter date of award",
-	"awardEnterPlaceholder": "Enter"
+	"awardEnterPlaceholder": "Enter",
+	"textMainAboutMe" : "The active switch button makes your email and phone the main ones for communication. You can select only one main email and one phone. By default, the corporate email and the first phone in the list are selected as the main ones."
 }

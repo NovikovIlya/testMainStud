@@ -1,6 +1,5 @@
 export const getBaseUrl = () => {
 	const { hostname } = window.location;
-	console.log("hostname",hostname)
 	// Для Vercel (тест)!
 	if (hostname.includes('vercel.app') || hostname.includes('vector')) {
 	  return 'https://newlk-test.kpfu.ru/';

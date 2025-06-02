@@ -5,25 +5,25 @@ import i18next from 'i18next'
 import { logOut, setCredentials } from '../reducers/authSlice'
 
 const getBaseUrl = () => {
-	const { hostname } = window.location;
-	console.log("hostname",hostname)
+	const { hostname } = window.location
+	console.log('hostname', hostname)
 	// Для Vercel (тест)!
 	if (hostname.includes('vercel.app') || hostname.includes('vector')) {
-	  return 'https://newlk-test.kpfu.ru/';
+		return 'https://newlk-test.kpfu.ru/'
 	}
-	
+
 	// Для локального окружения
 	if (hostname === 'localhost' || hostname === '127.0.0.1') {
-	  return 'https://newlk-test.kpfu.ru/'; // ваш локальный URL
+		return 'https://newlk-test.kpfu.ru/' // ваш локальный URL
 	}
-  
+
 	// По умолчанию для продакшена
-	return 'https://newlk.kpfu.ru/';
-  };
+	return 'https://newlk.kpfu.ru/'
+}
 
 const baseQuery = fetchBaseQuery({
-	  baseUrl: getBaseUrl(),
-	 //  baseUrl: 'https://newlk.kpfu.ru/',
+	baseUrl: getBaseUrl(),
+	//  baseUrl: 'https://newlk.kpfu.ru/',
 	prepareHeaders(headers, { getState }) {
 		const token = (getState() as RootState).auth.accessToken
 		if (token) {
@@ -111,6 +111,8 @@ export const apiSlice = createApi({
 		'levelsLanguages',
 		'certificateLanguages',
 		'socialActivity',
-		'scientific'
+		'scientific',
+		'Awards',
+		'SocialNetwork'
 	]
 })

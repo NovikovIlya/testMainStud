@@ -52,7 +52,7 @@ export const AddEducationModal = (props: {
 								edu_country: countries.find(country => country.id === values.countryId)?.shortName!,
 								development: values.subdivision,
 								qualification: values.qualification,
-								issue_date: dayjs(values.issueDate).format('DD.MM.YYYY'),
+								issue_date: values.issueDate ? dayjs(values.issueDate).format('DD.MM.YYYY') : null,
 								docnum: values.number,
 								docseries: values.series,
 								portal_status: values.accept ? '1' : null,

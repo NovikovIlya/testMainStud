@@ -31,7 +31,7 @@ export const AddEducationModal = (props: {
 					width={'35%'}
 					open={props.open}
 					footer={null}
-					title={'Добавление образования'}
+					title={t('education')}
 					onCancel={() => {
 						props.onCancel()
 					}}
@@ -39,7 +39,6 @@ export const AddEducationModal = (props: {
 					<Form
 						form={props.form}
 						layout="vertical"
-						requiredMark={false}
 						className="w-full"
 						onFinish={values => {
 							console.log(values)
@@ -104,13 +103,14 @@ export const AddEducationModal = (props: {
 						<div className="flex w-full gap-[32px]">
 							<Form.Item
 								name={'educationLevelId'}
-								label={t('educationLevel') + '*'}
+								label={t('educationLevel')}
 								rules={[{ required: true, message: t('educationNotChosen') }]}
 								className="w-full"
 							>
 								<Select
 									options={levels.edu_types.map(level => ({ value: level.id, label: level.name }))}
 									placeholder={t('select')}
+									allowClear
 								></Select>
 							</Form.Item>
 							<Form.Item name={'countryId'} label={t('countryEducation')} className="w-full">
@@ -119,12 +119,13 @@ export const AddEducationModal = (props: {
 									placeholder={t('select')}
 									showSearch
 									optionFilterProp="label"
+									allowClear
 								></Select>
 							</Form.Item>
 						</div>
 						<Form.Item
 							name={'nameOfInstitute'}
-							label={t('nameEducational') + '*'}
+							label={t('nameEducational')}
 							rules={[{ required: true, message: t('institutionNameNotEntered') }]}
 						>
 							<Input className="w-full"></Input>
@@ -136,7 +137,7 @@ export const AddEducationModal = (props: {
 							<ConfigProvider locale={i18next.language === 'ru' ? ru_RU : en_US}>
 								<Form.Item
 									name={'beginningYear'}
-									label={t('beginningYear') + '*'}
+									label={t('beginningYear')}
 									rules={[{ required: true, message: t('beginningYearNotChosen') }]}
 									className="w-full"
 								>
@@ -146,7 +147,7 @@ export const AddEducationModal = (props: {
 							<ConfigProvider locale={i18next.language === 'ru' ? ru_RU : en_US}>
 								<Form.Item
 									name={'graduateYear'}
-									label={t('graduateYear') + '*'}
+									label={t('graduateYear')}
 									className="w-full"
 									rules={[{ required: true, message: t('graduateYearNotChosen') }]}
 								>
@@ -211,6 +212,7 @@ export const AddEducationModal = (props: {
 													<span className="font-bold">{t('addEducationPopover2')}</span>
 													{t('addEducationPopover3')}
 												</p>
+												<p>{t('addEducationPopover4')}</p>
 											</>
 										}
 									>

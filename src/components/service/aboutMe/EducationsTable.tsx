@@ -14,6 +14,7 @@ import {
 	useGetEducationTypesQuery,
 	useGetNewEducationsQuery
 } from '../../../store/api/serviceApi'
+import { useGetCountriesQuery } from '../../../store/api/utilsApi'
 import { EducationTableDataType } from '../../../store/reducers/type'
 
 import { AddEducationModal } from './AddEducationModal'
@@ -21,6 +22,7 @@ import { AddEducationModal } from './AddEducationModal'
 export const EducationsTable = () => {
 	const { data: educations = { completed_edu: [] }, isLoading: loading } = useGetNewEducationsQuery()
 	const { data: levels = { edu_types: [] } } = useGetEducationTypesQuery()
+	const { data: countries = [] } = useGetCountriesQuery(i18next.language)
 	const [form] = Form.useForm()
 	const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 
@@ -81,7 +83,7 @@ export const EducationsTable = () => {
 								educationLevelId: record.edu_level,
 								beginningYear: dayjs(record.start_date, 'DD.MM.YYYY'),
 								graduateYear: dayjs(record.end_date, 'DD.MM.YYYY'),
-								countryId: record.edu_country,
+								countryId: countries.find(country => country.shortName === record.edu_country)?.id!,
 								specialization: record.eduspeciality,
 								subdivision: record.development,
 								qualification: record.qualification,

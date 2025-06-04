@@ -157,10 +157,42 @@ export const AddEducationModal = (props: {
 						</div>
 						<div className="flex w-full gap-[32px]">
 							<Form.Item name={'series'} label={t('documentSeries')} className="w-full">
-								<Input></Input>
+								<Input
+									onKeyDown={e => {
+										if (e.key !== 'Backspace') {
+											if (!e.ctrlKey) {
+												!/[0-9]/.test(e.key) && e.preventDefault()
+											} else {
+												if (e.key !== 'a' && e.key !== 'v') {
+													e.preventDefault()
+												}
+											}
+										}
+									}}
+									onPaste={e => {
+										console.log(e.clipboardData.getData('Text'))
+										!/^\d+$/.test(e.clipboardData.getData('Text')) && e.preventDefault()
+									}}
+								></Input>
 							</Form.Item>
 							<Form.Item name={'number'} label={t('documentNumber')} className="w-full">
-								<Input></Input>
+								<Input
+									onKeyDown={e => {
+										if (e.key !== 'Backspace') {
+											if (!e.ctrlKey) {
+												!/[0-9]/.test(e.key) && e.preventDefault()
+											} else {
+												if (e.key !== 'a' && e.key !== 'v') {
+													e.preventDefault()
+												}
+											}
+										}
+									}}
+									onPaste={e => {
+										console.log(e.clipboardData.getData('Text'))
+										!/^\d+$/.test(e.clipboardData.getData('Text')) && e.preventDefault()
+									}}
+								></Input>
 							</Form.Item>
 						</div>
 						<Form.Item name={'specialization'} label={t('specialization')}>

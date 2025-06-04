@@ -1222,6 +1222,13 @@ export const serviceApi = apiSlice.injectEndpoints({
 				url: `${emplBaseURL}employment-api/v1/interview/${interviewId}`,
 				method: 'GET'
 			})
+		}),
+		publishEducation: builder.mutation<void, number>({
+			query: educationId => ({
+				url: `about-me/edu-is-published?id=${educationId}`,
+				method: 'PATCH'
+			}),
+			invalidatesTags: ['Education']
 		})
 	})
 })
@@ -1365,5 +1372,6 @@ export const {
 	useLazyGetSupervisorVacancyQuery,
 	useGetInterviewQuery,
 	useLazyGetInterviewQuery,
-	useLazyGetChatIdByRespondIdQuery
+	useLazyGetChatIdByRespondIdQuery,
+	usePublishEducationMutation
 } = serviceApi

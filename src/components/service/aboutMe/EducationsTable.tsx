@@ -1,4 +1,4 @@
-import { DeleteTwoTone, EditTwoTone, EyeTwoTone } from '@ant-design/icons'
+import { DeleteTwoTone, EditTwoTone, EyeInvisibleTwoTone, EyeTwoTone } from '@ant-design/icons'
 import { ConfigProvider, Form, Popconfirm, Space, Table, TableProps } from 'antd'
 import en_US from 'antd/locale/en_US'
 import ru_RU from 'antd/locale/ru_RU'
@@ -12,7 +12,8 @@ import { RuFlagSvg } from '../../../assets/svg/RuFlagSvg'
 import {
 	useDeleteNewEducationMutation,
 	useGetEducationTypesQuery,
-	useGetNewEducationsQuery
+	useGetNewEducationsQuery,
+	usePublishEducationMutation
 } from '../../../store/api/serviceApi'
 import { useGetCountriesQuery } from '../../../store/api/utilsApi'
 import { EducationTableDataType } from '../../../store/reducers/type'
@@ -27,6 +28,7 @@ export const EducationsTable = () => {
 	const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 
 	const [deleteEducation] = useDeleteNewEducationMutation()
+	const [publishEducation] = usePublishEducationMutation()
 
 	const columns: TableProps<EducationTableDataType>['columns'] = [
 		{
@@ -69,7 +71,19 @@ export const EducationsTable = () => {
 			key: 'action',
 			render: (_, record) => (
 				<Space size="middle">
-					<EyeTwoTone />
+					{record.portal_status === '1' ? (
+						<EyeTwoTone
+							onClick={() => {
+								publishEducation(record.id!)
+							}}
+						/>
+					) : (
+						<EyeInvisibleTwoTone
+							onClick={() => {
+								publishEducation(record.id!)
+							}}
+						/>
+					)}
 					<EditTwoTone
 						onClick={() => {
 							form.resetFields()

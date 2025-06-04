@@ -43,27 +43,57 @@ const TextAreaComponent = () => {
 
 						<div className="mb-2 !text-[16px] ">Vk.com:</div>
 						<Form.Item name="vk" noStyle>
-							<TextArea className="" maxLength={1000} rows={1}  />
+							<TextArea 
+								className="mb-8" 
+								maxLength={1000}  
+								rows={1}  
+								placeholder={t('placeholderAll')}
+								style={{ padding: '8px' }}  // Добавлено свойство padding
+							/>
 						</Form.Item>
 
 						<div className="mb-2 !text-[16px] ">Telegram</div>
 						<Form.Item name="telegram" noStyle>
-							<TextArea maxLength={1000} rows={1} className="mb-8" />
+							<TextArea 
+								maxLength={1000} 
+								rows={1} 
+								className="mb-8" 
+								placeholder={t('placeholderAll')}
+								style={{ padding: '8px' }}  // Добавлено свойство padding
+							/>
 						</Form.Item>
 
 						<div className="mb-2 !text-[16px] ">Rutube</div>
 						<Form.Item name="rutube" noStyle>
-							<TextArea maxLength={1000} rows={1} className="mb-8" />
+							<TextArea 
+								maxLength={1000} 
+								rows={1} 
+								className="mb-8" 
+								placeholder={t('placeholderAll')}
+								style={{ padding: '8px' }}  // Добавлено свойство padding
+							/>
 						</Form.Item>
 
 						<div className="mb-2 !text-[16px] ">{t('Odnoklassnik')}</div>
 						<Form.Item name="odnoklassniki" noStyle>
-							<TextArea maxLength={1000} rows={1} className="mb-8" />
+							<TextArea 
+								maxLength={1000} 
+								rows={1} 
+								className="mb-8" 
+								placeholder={t('placeholderAll')}
+								style={{ padding: '8px' }}  // Добавлено свойство padding
+							/>
 						</Form.Item>
 
 						<div className="mb-2 !text-[16px] ">{t('Dzen')}</div>
 						<Form.Item name="dzen" noStyle>
-							<TextArea maxLength={1000} rows={1} className="mb-8" />
+							<TextArea 
+								maxLength={1000} 
+								rows={1} 
+								className="mb-8" 
+								placeholder={t('placeholderAll')}
+								style={{ padding: '8px' }}  // Добавлено свойство padding
+							/>
 						</Form.Item>
 
 						<Button type="primary" htmlType="submit" className="rounded-lg" loading={isUpdating}>

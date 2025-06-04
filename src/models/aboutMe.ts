@@ -45,6 +45,7 @@ export interface CheckedFlags {
 }
 
 export interface CertificateTs {
+  certificateTypeId:any
   langId:any
 	id: string
 	certificateName: string
@@ -69,6 +70,27 @@ export interface LanguageData {
 // Props interface for TableLanguages component
 export interface TableLanguagesProps {
   triger:any
+  handleIdCert?:any
+	isSuccess: boolean
+	dataCertificate: {
+		id: string | number
+		certificateName: string
+	}[] | undefined;
+	dataLevels: {
+		languageLevelCode: string
+		languageLevel: string
+	}[] | undefined;
+	dataAll: {
+		code: string
+		language: string
+	}[] | undefined;
+	dataForeign:any;
+	setSelectId: (id: string) => void
+	selectId: string | number | null | undefined;
+}
+
+export interface TableScintificProps {
+ 
   handleIdCert?:any
 	isSuccess: boolean
 	dataCertificate: {
@@ -142,3 +164,27 @@ export interface socActivity {
     sectionsAndClubs: string
 
 }
+
+export interface ScientificActivityPayload {
+  isRussian: boolean;
+  year: number;
+  theme: string;
+  direction: string;
+  scientificDirectorId: number | null;
+  isPublished: boolean;
+}
+export interface EditScientificActivityPayload {
+  id: number,
+  isRussian: boolean;
+  year: number;
+  theme: string;
+  direction: string;
+  scientificDirectorId: number | null;
+  isPublished: boolean;
+
+};
+
+export type Directors = {
+   id: number;
+  name: string;
+}[];

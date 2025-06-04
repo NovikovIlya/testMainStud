@@ -25,6 +25,7 @@ import { TemplateCard } from '../cards/Template'
 
 import CookieConsent from './CookieConsent'
 import { block } from './constant'
+import { getBaseUrlShelly } from '../../store/api/studentPractice/getBaseUrlShelly'
 
 const studentKeys = [
 	'Schedule',
@@ -56,7 +57,13 @@ const employeeKeys = [
 	'Practices',
 	'practiceTeacher',
 	'Staff',
-	'forTeachers'
+	'forTeachers',
+	'otpusk',
+	// 'rasList',
+	'eventList',
+	'trip',
+	'documentForTeacher',
+
 	// 'jobSeeker',
 	// 'myResponds',
 	// 'DirectResume',
@@ -68,6 +75,10 @@ const DropDrag = () => {
 	const dispatch = useDispatch()
 	const layout = block
 	const edit = useAppSelector(state => state.auth.edit)
+	const username = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '')?.username : ''
+	const roles = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '')?.roles : []
+	const maiRole = roles.find((item: any) => item.login === username)?.type || ''
+	const maiRoleArray = roles.find((item: any) => item.login === username)
 	const {
 		data: dataCheck,
 		isSuccess: isSuccessCheck,
@@ -87,13 +98,10 @@ const DropDrag = () => {
 	const { data: dataSubRole, isSuccess: isSuccessSubRole, isLoading: isLoadingSubRole } = useGetRoleQuery(null)
 	const [subRole, setSubrole] = useLocalStorageState<any>('subRole', { defaultValue: '' })
 	const [windowSize, setWindowSize] = useState(getWindowSize())
-	// const { data: dataModules } = useGetModulesQuery()
 	const [user, setInfo] = useLocalStorageState<any>('user')
-
 	const [href, setHref] = useLocalStorageState<any>('href', {
 		defaultValue: ''
 	})
-
 	const urlObrProgram = useMemo(() => {
 		switch (href) {
 			case 'KAZAN':
@@ -686,6 +694,105 @@ const DropDrag = () => {
 			}
 		},
 		{
+		key: 'otpusk',
+		element: (
+			<TemplateCard
+				info="otpuskInfo"
+				title="otpusk"
+				buttonText="Watch"
+				img={'/otpusk.png'}
+				href={`https://otpusk.kpfu.ru/ext_login?p1=${maiRoleArray?.userId}&p2=${maiRoleArray?.sessionId}&p_hash=${maiRoleArray?.sessionHash}`}
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 0,
+			y: 0,
+			i: 'ManagementScientificProjects'
+		}
+		},
+		{
+		key: 'rasList',
+		element: (
+			<TemplateCard
+				info="rasListInfo"
+				title="rasList"
+				buttonText="Watch"
+				img={'/rasList.png'}
+				href={`${getBaseUrlShelly()}e-ksu/PARUS_PAY_LIST?p1=${maiRoleArray?.userId}&p2=${maiRoleArray?.sessionId}&p_h=${maiRoleArray?.sessionHash}&p_menu=1460`}
+				isLink
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 0,
+			y: 0,
+			i: 'ManagementScientificProjects'
+		}
+		},
+		{
+		key: 'eventList',
+		element: (
+			<TemplateCard
+				info="eventListInfo"
+				title="eventList"
+				buttonText="Watch"
+				img={'/eventList.png'}
+				href={`${getBaseUrlShelly()}e-ksu/meropriatie_vs_konkurs_grant.application_form?p1=${maiRoleArray?.userId}&p2=${maiRoleArray?.sessionId}&p_h=${maiRoleArray?.sessionHash}&p_menu=1589`}
+				isLink
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 0,
+			y: 0,
+			i: 'ManagementScientificProjects'
+		}
+		},
+		{
+		key: 'trip',
+		element: (
+			<TemplateCard
+				info="tripInfo"
+				title="trip"
+				buttonText="Watch"
+				img={'/trip.png'}
+				href={`${getBaseUrlShelly()}e-ksu/business_trip.bt_card_form?p1=${maiRoleArray?.userId}&p2=${maiRoleArray?.sessionId}&p_h=${maiRoleArray?.sessionHash}&p_menu=1471`}
+				isLink
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 0,
+			y: 0,
+			i: 'ManagementScientificProjects'
+		}
+		},
+		{
+		key: 'documentForTeacher',
+		element: (
+			<TemplateCard
+				info="DocumentFlowInfo"
+				title="documentForTeacher"
+				buttonText="Watch"
+				img={'/image8.png'}
+				href={`${getBaseUrlShelly()}e-ksu/private_office.start_menu?p_menu=18&p_new_style=1&p1=${maiRoleArray?.userId}&p2=${maiRoleArray?.sessionId}&p_h=${maiRoleArray?.sessionHash}`}
+				isLink
+			/>
+		),
+		place: {
+			w: 1,
+			h: 1,
+			x: 0,
+			y: 0,
+			i: 'ManagementScientificProjects'
+		}
+		},
+		{
 			key: 'shortLink',
 			element: (
 				<TemplateCard
@@ -750,6 +857,7 @@ const DropDrag = () => {
 	const onLayoutChange = (layout: any, layouts: any) => {
 		dispatch(changeLayout(layouts))
 	}
+	const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 
 	const layoutValid = layout.lg.filter(obj1 =>
 		jsxElements.filter(item => {
@@ -875,7 +983,7 @@ const DropDrag = () => {
 				{mainRole === 'STUD' ? <InfoStudent /> : ''}
 				<ResponsiveReactGridLayout
 					className="layout mb-10"
-					cols={{ lg: 3, md: 2, sm: 2, xs: 2, xxs: 1 }}
+					cols={{ lg: isMobile ? 2 : 3, md: 2, sm: 2, xs: 2, xxs: 1 }}
 					rowHeight={windowSize.innerWidth < 768 ? 210 : 320}
 					containerPadding={[0, 0]}
 					margin={[20, 20]}
@@ -887,7 +995,7 @@ const DropDrag = () => {
 					isDraggable={edit}
 					isResizable={false}
 					compactType="vertical"
-					verticalCompact={true}
+				
 					preventCollision={true}
 				>
 					{generateDOM}

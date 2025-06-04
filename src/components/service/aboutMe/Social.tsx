@@ -39,16 +39,25 @@ const Social = () => {
 				<Title className="!text-[28px]">{t('socialTitle')}</Title>
 				<Form form={form} onFinish={onFinish} className="w-full pt-10" layout="vertical">
 					<Form.Item name="socialWork" label={<Text strong>{t('socialWork')}</Text>} className="mb-4">
-						<TextArea rows={isExpanded ? 6 : 3} />
+						<TextArea 
+						 placeholder={t('placeholdSoc')}
+						 rows={isExpanded ? 6 : 3} />
 					</Form.Item>
 					<Form.Item name="creativeEvents" label={<Text strong>{t('creativeEvents')}</Text>} className="mb-4">
-						<TextArea rows={isExpanded ? 6 : 3} />
+						<TextArea 
+						 placeholder={t('placeholdCreative')}
+						 rows={isExpanded ? 6 : 3} />
 					</Form.Item>
 					<Form.Item name="sportEvents" label={<Text strong>{t('sportEvents')}</Text>} className="mb-4">
-						<TextArea rows={isExpanded ? 6 : 3} />
+						<TextArea
+						 placeholder={t('placesportEvents')}
+						 
+						 rows={isExpanded ? 6 : 3} />
 					</Form.Item>
 					<Form.Item name="sectionsAndClubs" label={<Text strong>{t('sectionsAndClubs')}</Text>} className="mb-4">
-						<TextArea rows={isExpanded ? 6 : 3} />
+						<TextArea 
+						 placeholder={t('placesectionsAndClubs')}
+						rows={isExpanded ? 6 : 3} />
 					</Form.Item>
 					<Form.Item>
 						<Button type="primary" htmlType="submit">

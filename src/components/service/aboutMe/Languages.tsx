@@ -1,29 +1,25 @@
-import { QuestionCircleOutlined, UploadOutlined } from '@ant-design/icons'
-import { Button, Checkbox, Col, Divider, Form, Modal, Result, Row, Spin, Tooltip, Upload, message } from 'antd'
-import { Descriptions } from 'antd'
-import type { DescriptionsProps } from 'antd'
-import { Select, Space } from 'antd'
-import type { SelectProps } from 'antd'
-import TextArea from 'antd/es/input/TextArea'
+import { UploadOutlined } from '@ant-design/icons'
+import { Button, Checkbox, Col, Form, Modal, Result, Row, Spin, Upload, message } from 'antd'
+import { Select } from 'antd'
 import Title from 'antd/es/typography/Title'
 import { t } from 'i18next'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import {
 	Certificate,
 	ForeignLanguage,
 	Language,
-	LanguageLevel,
-	NativeLanguagesApiResponse
+	LanguageLevel
 } from '../../../models/aboutMe'
 import {
+	useGetAllForeignLanguagesQuery,
 	useGetAllNativeLanguagesQuery,
 	useGetCertificateQuery,
 	useGetLevelsQuery,
 	useGetNativeLanguagesQuery,
 	useGetOneCertificateQuery,
 	useGetforeignLanguagesQuery,
-	
+
 	useLazyGetOneCertificateQuery,
 	useSetForeignMutation,
 	useSetNativeMutation
@@ -32,7 +28,6 @@ import {
 import './Languages.css'
 import { SkeletonPage } from './Skeleton'
 import TableLanguages from './TableLanguages'
-import UploadAvatar from './UploadAvatar'
 
 const Languages = () => {
 	const [form] = Form.useForm()
@@ -44,6 +39,7 @@ const Languages = () => {
 	const { data: dataLevels } = useGetLevelsQuery()
 	const { data: dataCertificate } = useGetCertificateQuery()
 	const { data: dataAll } = useGetAllNativeLanguagesQuery()
+	const {data:dataAllForeignLang} = useGetAllForeignLanguagesQuery()
 	const {data: dataForeign,isLoading: isFetchingForeign,isError: isErrorForeign,isSuccess} = useGetforeignLanguagesQuery()
 	const [setNative, { isLoading }] = useSetNativeMutation()
 	const [setForeign, { isLoading: isLoadingSetForeign }] = useSetForeignMutation()
@@ -51,10 +47,10 @@ const Languages = () => {
 	const { data: dataOneCertificate } = useGetOneCertificateQuery(idCert, { skip: !idCert })
 	const [selectedLabel, setSelectedLabel] = useState<string | null>(null)
 	const [triger,{}] = useLazyGetOneCertificateQuery()
-	
 	const nativeLanguageForm = Form.useWatch('languages', form)
 	const sertificateFormVal = Form.useWatch('certificateId', form2)
 
+	console.log('dataAll',dataAll)
 	useEffect(() => {
 		if (dataNative) {
 			const initialValues = {
@@ -69,8 +65,7 @@ const Languages = () => {
 		setNative({ languageCodes: nativeLanguageForm }).unwrap()
 	}
 
-	// Добавление Иностранного языка
-	
+	// Добавление Иностранного языка!!
 	const onFinishForm2 = async (values: Omit<ForeignLanguage, 'file'> & { file?: any[] }) => {
 		// Подготовка базовой структуры данных
 		const requestData: any = {
@@ -79,7 +74,6 @@ const Languages = () => {
 			isPublished: values.isPublished || false,
 			certificates: []
 		}
-		console.log('values',values)
 		// Обработка файла сертификата, если он есть
 		if (fileList.length > 0 && selectedLabel && values.certificateId) {
 			const originalFile = values.file?.[0]?.originFileObj as File
@@ -111,15 +105,17 @@ const Languages = () => {
 
 		// Отправка данных на сервер
 		try {
-			await setForeign(requestData).unwrap()
 			setIsModalOpen(false)
+			await setForeign(requestData).unwrap()
+			
 			form2.resetFields()
 			setFileList([])
 			setSelectedLabel(null)
 		} catch (error) {
-			
 			console.error('Ошибка при сохранении данных:', error)
-			message.error('Не удалось сохранить данные о языке')
+			message.error('Не удалось сохранить данные о языке (такой язык уже добавлен)')
+		}finally{
+			setIsModalOpen(false)
 		}
 	}
 
@@ -137,11 +133,12 @@ const Languages = () => {
 		form2.resetFields()
 	}
 	const beforeUpload = (file: File) => {
-		const isImage = file.type === 'application/pdf'
+		const isImage = file.type === 'application/pdf' || file.type === 'image/jpeg' || file.type === 'image/png'
+		// jpg pnd pdf
 		const isLt5M = file.size / 1024 / 1024 < 5
 
 		if (!isImage) {
-			message.error('Можно загружать только PDF!')
+			message.error('Неверный формат файла!')
 			return false
 		}
 
@@ -249,7 +246,7 @@ const Languages = () => {
 							isSuccess={isSuccess}
 							dataCertificate={dataCertificate}
 							dataLevels={dataLevels}
-							dataAll={dataAll}
+							dataAll={dataAllForeignLang}
 							selectId={selectId}
 							setSelectId={setSelectId}
 							dataForeign={dataForeign}
@@ -287,8 +284,13 @@ const Languages = () => {
 							rules={[{ required: true, message: '' }]}
 						>
 							<Select
+							   showSearch 
+								placeholder={t('selectLanguage')}
 								allowClear
-								options={dataAll?.map((item: Language) => ({
+								filterOption={(input, option) => 
+									(option?.label ?? '').toString().toLowerCase().includes(input.toLowerCase())
+								}
+								options={dataAllForeignLang?.map((item: Language) => ({
 									value: item.code,
 									label: item.language
 								}))}
@@ -302,9 +304,10 @@ const Languages = () => {
 							wrapperCol={{ span: 24 }}
 							layout="vertical"
 							className="mt-14 h-[35px]"
-							rules={[{ required: true, message: '' }]}
+							// rules={[{ required: true, message: '' }]}
 						>
 							<Select
+							    placeholder={t('selectLevel')}
 								aria-required
 								options={dataLevels?.map((item: LanguageLevel) => ({
 									value: item.languageLevelCode,
@@ -324,6 +327,7 @@ const Languages = () => {
 							// rules={[{ required: true, message: '' }]}
 						>
 							<Select
+								placeholder={t('selectSert')}
 								onSelect={(value: Certificate['id']) => {
 									const selectedOption = dataCertificate?.find((item: Certificate) => item.id === value)
 									if (selectedOption) {
@@ -338,7 +342,7 @@ const Languages = () => {
 							/>
 						</Form.Item>
 
-						<div className="mt-14 mb-2">{t('prikrep')}</div>
+						<div className="mt-14 mb-2">{t('prikrep')} </div>
 						<Form.Item 
 						// rules={[{ required: true, message: '' }]}
 						 name="file" getValueFromEvent={e => e?.fileList}>

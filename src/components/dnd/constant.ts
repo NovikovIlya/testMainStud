@@ -4,7 +4,7 @@
 // y - расположение элемента по вертикали
 // static - если false, можно перемещать элемент. Если true, то нельзя
 // moved - устанавливает события перетаскивания
-
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 export const block = {
 	lg: [
 		{
@@ -202,7 +202,7 @@ export const block = {
 		{
 			w: 1,
 			h: 1,
-			x: 1,
+			x: isMobile ? 0 : 1,
 			y: 5,
 			i: 'DocumentFlow',
 
@@ -235,7 +235,7 @@ export const block = {
 		{
 			w: 1,
 			h: 1,
-			x: 1,
+			x: isMobile  ? 0 : 1,
 			y: 5,
 			i: 'DigitalDepartments',
 
@@ -297,10 +297,62 @@ export const block = {
 			h: 1,
 			x: 2,
 			y: 5,
+			i: 'otpusk',
+
+			moved: true,
+			static: false
+		},
+		{
+			w: 1,
+			h: 1,
+			x: 0,
+			y: 6,
+			i: 'rasList',
+
+			moved: true,
+			static: false
+		},
+		{
+			w: 1,
+			h: 1,
+			x: 1,
+			y: 6,
+			i: 'eventList',
+
+			moved: true,
+			static: false
+		},
+		{
+			w: 1,
+			h: 1,
+			x: 0,
+			y: 7,
+			i: 'documentForTeacher',
+
+			moved: true,
+			static: false
+		},
+		
+		{
+			w: 1,
+			h: 1,
+			x: 2,
+			y: 6,
+			i: 'trip',
+
+			moved: true,
+			static: false
+		},
+		{
+			w: 1,
+			h: 1,
+			x: 2,
+			y: 5,
 			i: 'shortLink',
 
 			moved: true,
 			static: false
-		}
+		},
+		
 	]
 }

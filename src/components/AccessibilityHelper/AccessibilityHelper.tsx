@@ -120,12 +120,12 @@ const AccessibilityHelper: React.FC<AccessibilityHelperProps> = forwardRef(({ la
   }, [activeOptions]);
 
   return (
-    <div  className={` absolute top-full left-[340px] mt-[600px] z-[5000] `}>
+    <div  className={` absolute top-full left-[340px] mt-[600px] z-[5000]  `}>
       {/* <button onClick={toggleHelper} className="bg-blue-500 text-white p-2 rounded-full">
         <KeyOutlined className="h-6 w-6" />
       </button> */}
       {isOpen && (
-        <div ref={ref} className="absolute bottom-12 right-2 w-74 bg-white shadow-lg rounded-lg p-8 accesibility-helper">
+        <div ref={ref} className="absolute bottom-12 right-2 w-74 bg-white shadow-lg rounded-lg p-8 accesibility-helper min-w-[312px]">
           <div  className="grid gap-4">
             {[
               { icon: KeyOutlined, text: text?.tabs, option: 'helper-core-tabHighlight' },

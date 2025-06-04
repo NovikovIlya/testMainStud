@@ -1,6 +1,48 @@
-test_job:
-  stage: test
+stages:
+  - build
+  - deploy
+
+variables:
+  DEPLOY_HOST: "$DEPLOY_HOST"
+  DEPLOY_PASSWORD_TEST: "$DEPLOY_PASSWORD_TEST"
+  DEPLOY_HOST_TEST: "$DEPLOY_HOST_TEST"
+  DEPLOY_USER: "$DEPLOY_USER"
+  DEPLOY_PASSWORD: "$DEPLOY_PASSWORD"
+  DEPLOY_PATH: "$DEPLOY_PATH"
+  LOCAL_BUILD_DIR: "build"
+
+
+build:
+  stage: build
+  image: node:lts-alpine
   script:
-    - echo "CI/CD работает на сервере Ubuntu"
+    - npm ci
+    - npx vite build
+  artifacts:
+    paths:
+      - $LOCAL_BUILD_DIR/
+  only:
+    - dev
+    - main
+
+  
+deploy_test:
+  stage: deploy
+  image: alpine:latest
+  before_script:
+    - apk add --no-cache lftp openssh
+  script:
+    - lftp -u "$DEPLOY_USER","$DEPLOY_PASSWORD_TEST" sftp://$DEPLOY_HOST_TEST -e "set sftp:auto-confirm yes; mirror -R --delete --parallel=5 --ignore-time --verbose $LOCAL_BUILD_DIR $DEPLOY_PATH; quit"
+  only:
+    - dev
+
+
+deploy:
+  stage: deploy
+  image: alpine:latest
+  before_script:
+    - apk add --no-cache lftp openssh
+  script:
+  - lftp -u "$DEPLOY_USER","$DEPLOY_PASSWORD" sftp://$DEPLOY_HOST -e "set sftp:auto-confirm yes; mirror -R --delete --parallel=5 --ignore-time --verbose $LOCAL_BUILD_DIR $DEPLOY_PATH; quit"
   only:
     - main

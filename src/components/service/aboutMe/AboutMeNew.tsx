@@ -17,6 +17,7 @@ import {
 import QuillComponents from './QuillComponents'
 import { SkeletonPage } from './Skeleton'
 import UploadAvatar from './UploadAvatar'
+import { useLocalStorageState } from 'ahooks'
 
 const AboutMeNew = () => {
 	const { t } = useTranslation()
@@ -28,6 +29,7 @@ const AboutMeNew = () => {
 	const { data: dataCheckbox } = useGetCheckboxQuery()
 	const [setCheckbox, { isLoading: isLoadingCheckbox }] = useSetCheckboxMutation()
 	const [disabled, setDisabled] = useState(true)
+	const [switchBoolean, setSwitchBoolean] = useState(false)
 	const [percentProgress,setPercentProgress] = useState(60)
 	const switchForm = Form.useWatch('switch', form2)
 	const [initialCheckboxes, setInitialCheckboxes] = useState({
@@ -38,20 +40,24 @@ const AboutMeNew = () => {
 		oznak: false
 	})
 	console.log('switchForm',switchForm)
+	
 
 	useEffect(() => {
+		// Добавляем доп сведения
 		if (dataAboutMe?.employeeAddedDto?.COMMENT) {
 			setContent(dataAboutMe?.employeeAddedDto?.COMMENT)
 		}
 
+		// Активируем свитчер
 		const allChecked =
 			dataCheckbox?.IS_CHECKED_ETIQ === 1 &&
 			dataCheckbox?.IS_CHECKED_LIB === 1 &&
 			dataCheckbox?.IS_CHECKED_REL === 1 &&
 			dataCheckbox?.IS_CHECKED_HANDLING === 1 &&
 			dataCheckbox?.IS_CHECKED_PERS_DATA === 1
+			console.log('allChecked',allChecked)
 		setDisabled(!allChecked)
-	}, [dataAboutMe])
+	}, [dataAboutMe,dataCheckbox])
 
 	useEffect(() => {
 		if (dataCheckbox) {
@@ -101,7 +107,9 @@ const AboutMeNew = () => {
 				<div className="flex items-center gap-2">
 					<Form form={form2} className="flex items-center">
 						<Form.Item name={'switch'} className="flex items-center mb-0">
-							<Switch disabled={disabled} defaultChecked />
+							<Tooltip title={disabled ? t('agreementTooltip2') : ''}>
+								<Switch disabled={disabled}  />
+							</Tooltip>
 						</Form.Item>
 					</Form>
 					<span>{t('publicProf')}</span>
@@ -312,7 +320,7 @@ const AboutMeNew = () => {
 												{dataAboutMe.studentAddedDto.CATEGORY}
 											</Descriptions.Item>
 										) : (
-											''
+											null
 										)}
 
 										{/* Идентификатор */}

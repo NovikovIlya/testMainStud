@@ -4,9 +4,26 @@ import i18next from 'i18next'
 
 import { logOut, setCredentials } from '../reducers/authSlice'
 
+const getBaseUrl = () => {
+	const { hostname } = window.location
+	console.log('hostname', hostname)
+	// Для Vercel (тест)!
+	if (hostname.includes('vercel.app') || hostname.includes('vector')) {
+		return 'https://newlk-test.kpfu.ru/'
+	}
+
+	// Для локального окружения
+	if (hostname === 'localhost' || hostname === '127.0.0.1') {
+		return 'https://newlk-test.kpfu.ru/' // ваш локальный URL
+	}
+
+	// По умолчанию для продакшена
+	return 'https://newlk.kpfu.ru/'
+}
+
 const baseQuery = fetchBaseQuery({
-	 baseUrl: 'https://newlk-test.kpfu.ru/',
-	// baseUrl: 'https://newlk.kpfu.ru/',
+	baseUrl: getBaseUrl(),
+	//  baseUrl: 'https://newlk.kpfu.ru/',
 	prepareHeaders(headers, { getState }) {
 		const token = (getState() as RootState).auth.accessToken
 		if (token) {
@@ -40,7 +57,7 @@ const baseQueryWithReAuth = async (args: string | FetchArgs, api: BaseQueryApi, 
 		})
 		const refreshResultJson = await refreshResult.json()
 		if (refreshResultJson.accessToken) {
-			console.log('---------------2')
+			console.log('-------------2')
 			//@ts-ignore
 			const user = api.getState().auth.user
 			//@ts-ignore
@@ -93,6 +110,9 @@ export const apiSlice = createApi({
 		'Сheckboxes',
 		'levelsLanguages',
 		'certificateLanguages',
-		'socialActivity'
+		'socialActivity',
+		'scientific',
+		'Awards',
+		'SocialNetwork'
 	]
 })

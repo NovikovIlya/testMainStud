@@ -28,7 +28,6 @@ const TextAreaComponent = () => {
 	const onSubmit = async (values:any) => {
     try {
       await updateSocial(values).unwrap()
-      // message.success('Социальные сети успешно обновлены')
     } catch (error) {
       message.error('Ошибка при обновлении социальных сетей')
       console.error('Ошибка обновления:', error)
@@ -40,7 +39,7 @@ const TextAreaComponent = () => {
       <Spin spinning={isLoading || isUpdating}>
 			<section className=" mx-auto bg-white rounded-xl shadow-md overflow-hidden">
 				<div className="p-6">
-					<div className="mb-4 !text-[16px] font-bold">Соц сети:</div>
+					<div className="mb-4 !text-[16px] font-bold">{t('soc')}:</div>
 
           <div className="mb-4 !text-[16px] ">Vk.com:</div>
 					<Form.Item name="vk" noStyle>
@@ -57,12 +56,12 @@ const TextAreaComponent = () => {
 						<TextArea maxLength={1000}  rows={3} className='mb-8'/>
 					</Form.Item>
 
-          <div className="mb-4 !text-[16px] ">Однолкассники</div>
+          <div className="mb-4 !text-[16px] ">{t('Odnoklassnik')}</div>
 					<Form.Item name="odnoklassniki" noStyle>
 						<TextArea maxLength={1000}  rows={3} className='mb-8'/>
 					</Form.Item>
 
-            <div className="mb-4 !text-[16px] ">Яндекс Дзен</div>
+            <div className="mb-4 !text-[16px] ">{t('Dzen')}</div>
 					<Form.Item name="dzen" noStyle>
 						<TextArea maxLength={1000}  rows={3} className='mb-8'/>
 					</Form.Item>

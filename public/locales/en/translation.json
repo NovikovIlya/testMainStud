@@ -20,6 +20,8 @@
 	"otpuskInfo": "A module for managing vacation applications, accounting for remaining days and coordinating with the manager",
 	"creativeEvents": "Creative Events",
 	"sportEvents": "Sport Events",
+	"Odnoklassnik": "OK",
+	"Dzen" : "Yandex Dzen",
 	"eventList": "Events",
 	"eventListInfo": "Become part of the university's history. Participate in cultural events, lectures and conferences",
 	"fillLater": "Fill in later",

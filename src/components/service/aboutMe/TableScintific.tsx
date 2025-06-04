@@ -37,7 +37,6 @@ import './TableLanguage.scss'
 const TableScintific = ({ isSuccess, dataLevels, dataScientific, setSelectId, selectId }: any) => {
 	const [isModalOpenEdit, setIsModalOpenEdit] = useState<boolean>(false)
 	const [selectInfo, setSelectInfo] = useState<any>(null)
-	const [selectedLabel, setSelectedLabel] = useState<string | null>(null)
 	const [form2] = Form.useForm()
 	const [editScientific, { isLoading: isLoadingEdit }] = useEditScientificActivityMutation()
 	const [deleteScientific, { isLoading: isLoadingDelete }] = useDeleteScientificMutation()
@@ -56,13 +55,6 @@ const TableScintific = ({ isSuccess, dataLevels, dataScientific, setSelectId, se
 	const [dataScientificDirectorsValue, setDataScientificDirectorsValue] = useState<any>([])
 	const [flag, setFlag] = useState(false)
 	const [id, setId] = useState(null)
-
-	useEffect(() => {
-		if (dataScientificDirectors) {
-			setDataScientificDirectorsValue(dataScientificDirectors)
-			setFlag(true)
-		}
-	}, [dataScientificDirectors])
 
 	const columns: TableProps<any>['columns'] = [
 		{
@@ -160,6 +152,13 @@ const TableScintific = ({ isSuccess, dataLevels, dataScientific, setSelectId, se
 	]
 
 	useEffect(() => {
+		if (dataScientificDirectors) {
+			setDataScientificDirectorsValue(dataScientificDirectors)
+			setFlag(true)
+		}
+	}, [dataScientificDirectors])
+
+	useEffect(() => {
 		if (getOne) {
 			form2.setFieldsValue({
 				language: getOne?.isRussian ? 'rus' : 'eng',
@@ -167,13 +166,13 @@ const TableScintific = ({ isSuccess, dataLevels, dataScientific, setSelectId, se
 				theme: getOne?.theme,
 				direction: getOne?.direction,
 				isPublished: getOne?.isPublished,
-				scientificDirector: getOne?.scientificDirector
+				scientificDirector: getOne?.scientificDirector,
+				languageCode: getOne?.isRussian ? 1 : 2
 			})
 		}
 	}, [isSuccesOne, getOne, form2])
 
 	const handleDelete = (record: any) => {
-		console.log('recordDelete', record)
 		deleteScientific(record)
 	}
 
@@ -188,7 +187,9 @@ const TableScintific = ({ isSuccess, dataLevels, dataScientific, setSelectId, se
 	const handleCancelEdit = () => {
 		setIsModalOpenEdit(false)
 		form2.resetFields()
+		setSelectInfo(null) 
 	}
+
 	const onFinishForm2 = async (values: any) => {
 		editScientific({
 			id: getOne?.id,
@@ -198,6 +199,7 @@ const TableScintific = ({ isSuccess, dataLevels, dataScientific, setSelectId, se
 			direction: values?.direction,
 			isPublished: values?.isPublished,
 			scientificDirectorId: id ? id : getOne?.scientificDirectorId,
+			
 			
 		})
 		handleCancelEdit()
@@ -235,7 +237,7 @@ const TableScintific = ({ isSuccess, dataLevels, dataScientific, setSelectId, se
 				}}
 			>
 				<Modal
-					className="!z-[10000000]"
+					className="!z-[10000000] "
 					footer={null}
 					title={t('scient')}
 					open={isModalOpenEdit}
@@ -247,7 +249,7 @@ const TableScintific = ({ isSuccess, dataLevels, dataScientific, setSelectId, se
 							<Spin />
 						</div>
 					) : (
-						<Form className="mt-4" form={form2} onFinish={onFinishForm2} initialValues={{ languageCode: 1 }}>
+						<Form className="mt-4 animate-fade-in" form={form2} onFinish={onFinishForm2}  initialValues={{ languageCode: 1 }}>
 							<Form.Item
 								label={<div className="">{t('language')}</div>}
 								name="languageCode"

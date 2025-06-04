@@ -41,7 +41,7 @@ const TextAreaComponent = () => {
 					<div className="p-6">
 						<div className="mb-6 !text-[16px] font-bold">{t('soc')}:</div>
 
-						<div className="mb-2 !text-[16px] ">Vk.com:</div>
+						<div className="mb-2 !text-[16px] text-sm">Vk.com:</div>
 						<Form.Item name="vk" noStyle>
 							<TextArea 
 								className="mb-8" 

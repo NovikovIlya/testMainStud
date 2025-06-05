@@ -142,7 +142,7 @@ export type EducationTableDataType = {
 	issue_date: string
 	docnum: string
 	docseries: string
-	portal_status: '1' | null
+	portal_status: '1' | '0'
 	s_id?: number
 	e_id?: number
 	user_allid?: number

@@ -55,7 +55,7 @@ export const AddEducationModal = (props: {
 								issue_date: values.issueDate ? dayjs(values.issueDate).format('DD.MM.YYYY') : null,
 								docnum: values.number,
 								docseries: values.series,
-								portal_status: values.accept ? '1' : null,
+								portal_status: values.accept ? '1' : '0',
 								id: values.id,
 								s_id: values.s_id,
 								e_id: values.e_id,

@@ -607,6 +607,7 @@
 
 	"print": "Print",
 	"delete": "Delete",
+	"zagrFile" : "Please upload the file first",
 
 	"taskDescription": "Task Description",
 	"groupNumbers": "Group Numbers",

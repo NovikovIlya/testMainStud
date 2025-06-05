@@ -962,6 +962,7 @@
 	"awardDateNotEntered": "Не указана дата присуждения",
 	"awardEnterPlaceholder": "Ввести",
 	"private": "Личный",
+	"zagrFile" : "Сначала загрузите файл",
 	"working": "Рабочий",
 	"additional": "Дополнительный",
 	"textForContactInformation" : "Активная кнопка переключения делает Ваши почту и телефон основными для связи.",

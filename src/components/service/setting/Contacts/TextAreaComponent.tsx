@@ -41,7 +41,7 @@ const TextAreaComponent = () => {
 					<div className="p-6">
 						<div className="mb-6 !text-[16px] font-bold">{t('soc')}:</div>
 
-						<div className="mb-2 !text-[16px] text-sm">Vk.com:</div>
+						<div className="mb-2 !text-[16px] opacity-[60%] text-sm">Vk.com:</div>
 						<Form.Item name="vk" noStyle>
 							<TextArea 
 								className="mb-8" 
@@ -52,7 +52,7 @@ const TextAreaComponent = () => {
 							/>
 						</Form.Item>
 
-						<div className="mb-2 !text-[16px] ">Telegram</div>
+						<div className="mb-2 !text-[16px] opacity-[60%] ">Telegram</div>
 						<Form.Item name="telegram" noStyle>
 							<TextArea 
 								maxLength={1000} 
@@ -63,7 +63,7 @@ const TextAreaComponent = () => {
 							/>
 						</Form.Item>
 
-						<div className="mb-2 !text-[16px] ">Rutube</div>
+						<div className="mb-2 opacity-[60%] !text-[16px] ">Rutube</div>
 						<Form.Item name="rutube" noStyle>
 							<TextArea 
 								maxLength={1000} 
@@ -74,7 +74,7 @@ const TextAreaComponent = () => {
 							/>
 						</Form.Item>
 
-						<div className="mb-2 !text-[16px] ">{t('Odnoklassnik')}</div>
+						<div className="mb-2 opacity-[60%] !text-[16px] ">{t('Odnoklassnik')}</div>
 						<Form.Item name="odnoklassniki" noStyle>
 							<TextArea 
 								maxLength={1000} 
@@ -85,7 +85,7 @@ const TextAreaComponent = () => {
 							/>
 						</Form.Item>
 
-						<div className="mb-2 !text-[16px] ">{t('Dzen')}</div>
+						<div className="mb-2 opacity-[60%] !text-[16px] ">{t('Dzen')}</div>
 						<Form.Item name="dzen" noStyle>
 							<TextArea 
 								maxLength={1000} 
@@ -96,7 +96,7 @@ const TextAreaComponent = () => {
 							/>
 						</Form.Item>
 
-						<Button type="primary" htmlType="submit" className="rounded-lg" loading={isUpdating}>
+						<Button style={{borderRadius:'50px'}} className='rounded-lg' type="primary" htmlType="submit"  loading={isUpdating}>
 							{t('save')}
 						</Button>
 					</div>

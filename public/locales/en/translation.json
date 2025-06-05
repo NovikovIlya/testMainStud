@@ -71,7 +71,7 @@
 	"tellYourWorkExperience": "Tell us about your work experience in general",
 	"linkPortfolio": "Link to the portfolio",
 	"authorization": "Authorization",
-	"backPage": "Back to the main page",
+	"backPage": "To authorization",
 	"pageTitle": "Kazan Federal University",
 	"byEmail": "By Email",
 	"emainLogin": "Email/login",
@@ -964,6 +964,6 @@
 	"awardNameNotEntered": "Enter award title",
 	"awardDateNotEntered": "Enter date of award",
 	"awardEnterPlaceholder": "Enter",
-	"textForContactInformation" : "",
-	"textMainAboutMe" : "The active switch button makes your email and phone the main ones for communication. You can select only one main email and one phone. By default, the corporate email and the first phone in the list are selected as the main ones."
+	"textForContactInformation": "",
+	"textMainAboutMe": "The active switch button makes your email and phone the main ones for communication. You can select only one main email and one phone. By default, the corporate email and the first phone in the list are selected as the main ones."
 }

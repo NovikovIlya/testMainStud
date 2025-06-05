@@ -21,7 +21,8 @@ module.exports = {
 				'button-focus-border-blue': '#045ADB'
 			},
 			screens: {
-				test: { min: '0px', max: '1580px' }
+				test: { min: '0px', max: '1580px' },
+				tablet: { min: '426px' }
 				// тестовые медиа запросик
 			},
 			fontFamily: {

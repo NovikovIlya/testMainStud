@@ -44,7 +44,7 @@ export const Inputs: FC<IInputsProps> = ({ error }) => {
 			</Form.Item>
 			<div className="w-full flex items-center">
 				<a
-					className="mx-auto md:mx-0 cursor-pointer underline;"
+					className="mx-auto tablet:mx-0 cursor-pointer underline;"
 					href={'https://kpfu.ru/change_user_pass.forget_pass_form?p_lang=1'}
 				>
 					{t('rememberPassword')}

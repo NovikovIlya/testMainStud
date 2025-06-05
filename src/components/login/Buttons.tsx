@@ -14,7 +14,7 @@ export const Buttons = ({ isLoading }: { isLoading: boolean }) => {
 				</Button>
 
 				<div className="flex items-center justify-between">
-					<span className="flex flex-col md:flex-row md:gap-[10px]">
+					<span className="flex flex-col tablet:flex-row tablet:gap-[10px]">
 						{t('noProfile')}{' '}
 						<Link className={`text-base `} to="/registration">
 							{t('register')}

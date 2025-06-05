@@ -119,15 +119,15 @@ export const Login = () => {
 	return (
 		<div className="flex flex-col items-center min-h-screen ">
 			<BackMainPage className="" notAuth={true} />
-			<div className="flex mt-[20px] md:mt-0  justify-center gap-24 text-base max-xl:gap-4 items-center  w-full min-h-screen">
+			<div className="flex mt-[20px] tablet:mt-0  justify-center gap-24 text-base max-xl:gap-4 items-center  w-full min-h-screen">
 				<Form
 					form={form}
 					name="login"
-					className={`md:min-w-[400px] rounded-lg md:shadow-[0_2px_22px_-4px_rgba(93,96,127,0.2)] p-6 mb-4 mx-2`}
+					className={`tablet:min-w-[400px] rounded-lg tablet:shadow-[0_2px_22px_-4px_rgba(93,96,127,0.2)] p-6 mb-4 mx-2`}
 					initialValues={{ remember: true }}
 					onFinish={onFinish}
 				>
-					<Title level={3} className="mb-[20px] text-center md:text-start text-2xl font-bold">
+					<Title level={3} className="mb-[20px] text-center tablet:text-start text-2xl font-bold">
 						{t('authorization')}
 					</Title>
 					<Inputs error={error!} />

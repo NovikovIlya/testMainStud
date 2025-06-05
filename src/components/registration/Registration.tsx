@@ -64,11 +64,11 @@ export const Registration: FC<IRegProps> = ({ changeEmail, email }) => {
 				<div className="flex mt-32  flex-row justify-between gap-24 text-base max-xl:gap-4 max-lg:flex-col  max-lg:items-center  items-center">
 					<Form
 						name="login"
-						className={`md:w-[400px] p-2 rounded-lg md:shadow-[0_2px_22px_-4px_rgba(93,96,127,0.2)] p-6 mb-4`}
+						className={`tablet:w-[400px] p-2 rounded-lg tablet:shadow-[0_2px_22px_-4px_rgba(93,96,127,0.2)] p-6 mb-4`}
 						initialValues={{ remember: true }}
 						onFinish={onFinish}
 					>
-						<Title level={3} className="mb-[20px] text-center md:text-start text-2xl font-bold">
+						<Title level={3} className="mb-[20px] text-center tablet:text-start text-2xl font-bold">
 							{t('registration')}
 						</Title>
 						<Inputs email={email} error={error} changeEmail={changeEmail} />

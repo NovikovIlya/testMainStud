@@ -4,13 +4,12 @@ import { useTranslation } from 'react-i18next'
 
 import { IError } from '../../api/types'
 
-
 interface IInputsProps {
 	error?: IError
 }
 export const Inputs: FC<IInputsProps> = ({ error }) => {
 	const { t } = useTranslation()
-	console.log('error',error)
+	console.log('error', error)
 	return (
 		<>
 			<Form.Item
@@ -32,7 +31,7 @@ export const Inputs: FC<IInputsProps> = ({ error }) => {
 				name="password"
 				style={{ marginBottom: 30 }}
 				validateStatus={error !== null ? 'error' : undefined}
-				help={error !== null && <div className='w-80'>{error?.error}</div>}
+				help={error !== null && <div className="w-80">{error?.error}</div>}
 			>
 				<Input.Password
 					className="rounded-lg h-12 px-5 py-3"
@@ -43,10 +42,14 @@ export const Inputs: FC<IInputsProps> = ({ error }) => {
 					placeholder={t('password')}
 				/>
 			</Form.Item>
-			<a className="mt-5 w-fit cursor-pointer underline;"
-			   href={'https://kpfu.ru/change_user_pass.forget_pass_form?p_lang=1'}>
-				{t('rememberPassword')}
-			</a>
+			<div className="w-full flex items-center">
+				<a
+					className="mt-5 mx-auto md:mx-0 cursor-pointer underline;"
+					href={'https://kpfu.ru/change_user_pass.forget_pass_form?p_lang=1'}
+				>
+					{t('rememberPassword')}
+				</a>
+			</div>
 		</>
 	)
 }

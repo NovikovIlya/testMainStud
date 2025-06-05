@@ -24,7 +24,7 @@ export const Login = () => {
 	const navigate = useNavigate()
 	const { t, i18n } = useTranslation()
 	const [selectedLanguage, setSelectedLanguage] = useState(i18n.language)
-	const [login, { data: dataLogin, isSuccess, isLoading,error:errorLogin }] = useLoginMutation()
+	const [login, { data: dataLogin, isSuccess, isLoading, error: errorLogin }] = useLoginMutation()
 	const [error, setError] = useState<IError | null>(null)
 	const location = useLocation()
 	const searchParams = new URLSearchParams(location.search)
@@ -41,7 +41,7 @@ export const Login = () => {
 	const [subRole, setSubrole] = useLocalStorageState<any>('subRole', {
 		defaultValue: ''
 	})
-	console.log('errorLogin',errorLogin)
+	console.log('errorLogin', errorLogin)
 	const dispatch = useAppDispatch()
 
 	useEffect(() => {
@@ -114,7 +114,7 @@ export const Login = () => {
 	// 	alert('Ошибка сети. Проверьте подключение к корпоративной сети')
 	// }
 
-	const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+	//const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 
 	return (
 		<div className="flex flex-col items-center min-h-screen ">
@@ -123,38 +123,20 @@ export const Login = () => {
 				<Form
 					form={form}
 					name="login"
-					className={`min-w-[400px] rounded-lg shadow-[0_2px_22px_-4px_rgba(93,96,127,0.2)] p-6 mb-4 mx-2 ${
-						isMobile ? 'scale-[2.85]' : ''
-					}   `}
+					className={`md:min-w-[400px] rounded-lg md:shadow-[0_2px_22px_-4px_rgba(93,96,127,0.2)] p-6 mb-4 mx-2`}
 					initialValues={{ remember: true }}
 					onFinish={onFinish}
 				>
-					<Title level={3} className="mb-[20px] text-start text-2xl font-bold">
+					<Title level={3} className="mb-[20px] text-center md:text-start text-2xl font-bold">
 						{t('authorization')}
 					</Title>
 					<Inputs error={error!} />
 					<Buttons isLoading={isLoading} />
 				</Form>
-				{isMobile ? (
-					''
-				) : (
-					<div className="flex items-start items-center">
-						<img className="max-lg:hidden w-[400px] h-[400px]" src={logo} alt="group" />
-					</div>
-				)}
+				<div className="flex items-start items-center hidden lg:block">
+					<img className="w-[400px] h-[400px]" src={logo} alt="group" />
+				</div>
 			</div>
-			{isMobile ? (
-				<Button
-					onClick={() => setIsLanguageModalOpen(true)}
-					className="scale-[2.8] mt-[-150px]"
-					type="default"
-					size="large"
-				>
-					{t('selectLanguage')}
-				</Button>
-			) : (
-				''
-			)}
 			<Modal
 				className="pt-4"
 				open={isLanguageModalOpen}

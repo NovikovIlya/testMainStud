@@ -727,13 +727,7 @@ const Languages = () => {
 												{...restField}
 												name={[name, 'certificateTypeId']}
 												label={`${t('sert')} ${fields.length > 1 ? index + 1 : ''}`}
-												// rules={[
-												// 	{
-												// 		// @ts-ignore
-												// 		required: certificateFiles[index],
-												// 		message: 'Выберите тип сертификата'
-												// 	}
-												// ]}
+												
 												rules={[
 													{
 														validator: (_, value) => {

@@ -703,9 +703,7 @@ const TableLanguages = ({
 		}
 		form2.setFieldsValue({ certificates })
 
-		// setTimeout(() => {
-		// 	form2.validateFields([['certificates', fieldIndex, 'certificateTypeId']])
-		// }, 100)
+		
 	}
 
 	const beforeUpload = (file: File, fieldIndex: number) => {
@@ -861,12 +859,7 @@ const TableLanguages = ({
 												{...restField}
 												name={[name, 'certificateTypeId']}
 												label={`${t('sert')} ${index + 1}`}
-												// rules={[
-												// 	{
-												// 		required: certificateFiles[index] || form2.getFieldValue(['certificates', name, 'existingFile']),
-												// 		message: 'Выберите тип сертификата'
-												// 	}
-												// ]}
+												
 												rules={[
 													{
 														validator: (_, value) => {

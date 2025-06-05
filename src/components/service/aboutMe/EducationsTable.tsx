@@ -104,7 +104,7 @@ export const EducationsTable = () => {
 								issueDate: record.issue_date ? dayjs(record.issue_date, 'DD.MM.YYYY') : null,
 								number: record.docnum,
 								series: record.docseries,
-								accept: record.portal_status ? true : false,
+								accept: record.portal_status === '1' ? true : false,
 								file: record.filename
 									? [
 											{

@@ -894,7 +894,7 @@ const TableLanguages = ({
 												{form2.getFieldValue(['certificates', name, 'existingFile']) && !certificateFiles[index] ? (
 													<div className="flex items-center gap-2">
 														<a 
-															href={form2.getFieldValue(['certificates', name, 'existingFile'])?.url}
+															 href={`${getBaseUrl()}activities/languages/foreign/certificate?certificateId=${form2.getFieldValue(['certificates', name, 'existingCertId'])}`}
 															target="_blank"
 															rel="noopener noreferrer"
 														>

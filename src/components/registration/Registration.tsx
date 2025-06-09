@@ -55,7 +55,7 @@ export const Registration: FC<IRegProps> = ({ changeEmail, email }) => {
 		setIsLanguageModalOpen(false)
 	}
 
-	const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+	//const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 
 	return (
 		<>
@@ -64,38 +64,22 @@ export const Registration: FC<IRegProps> = ({ changeEmail, email }) => {
 				<div className="flex mt-32  flex-row justify-between gap-24 text-base max-xl:gap-4 max-lg:flex-col  max-lg:items-center  items-center">
 					<Form
 						name="login"
-						className={`max-w-[400px] p-2 max-sm:min-w-[345px] max-[321px]:min-w-[300px] rounded-lg shadow-[0_2px_22px_-4px_rgba(93,96,127,0.2)] p-6 mb-4 ${
-							isMobile ? 'scale-[2.85]' : ''
-						} `}
+						className={`tablet:w-[400px] p-2 rounded-lg tablet:shadow-[0_2px_22px_-4px_rgba(93,96,127,0.2)] p-6 mb-4`}
 						initialValues={{ remember: true }}
 						onFinish={onFinish}
 					>
-						<Title level={3} className="mb-[20px] text-start text-2xl font-bold">
+						<Title level={3} className="mb-[20px] text-center tablet:text-start text-2xl font-bold">
 							{t('registration')}
 						</Title>
 						<Inputs email={email} error={error} changeEmail={changeEmail} />
 						<Password error={error} />
 						<Buttons isLoading={isLoading} check={check} setCheck={setCheck} />
 					</Form>
-					{isMobile ? (
-						''
-					) : (
-						<div className="flex items-start mt-10">
-							<img className="max-lg:hidden w-[400px] h-[400px]" src={logo} alt="group" />
-						</div>
-					)}
+					<div className="flex items-start mt-10 hidden lg:block">
+						<img className="w-[400px] h-[400px]" src={logo} alt="group" />
+					</div>
 				</div>
 			</div>
-			{isMobile ? <div className="flex w-full justify-center">
-				<Button
-					onClick={() => setIsLanguageModalOpen(true)}
-					className="scale-[2.8] mt-[-150px]"
-					type="default"
-					size="large"
-				>
-					{t('selectLanguage')}
-				</Button>
-			</div> : ""}
 			<Modal
 				open={isLanguageModalOpen}
 				onCancel={() => setIsLanguageModalOpen(false)}
@@ -103,7 +87,7 @@ export const Registration: FC<IRegProps> = ({ changeEmail, email }) => {
 				centered
 				width="100%"
 				height={'100vh'}
-				className='pt-4'
+				className="pt-4"
 			>
 				<Radio.Group
 					value={selectedLanguage}

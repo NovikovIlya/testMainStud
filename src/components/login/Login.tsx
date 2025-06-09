@@ -133,8 +133,8 @@ export const Login = () => {
 					<Inputs error={error!} />
 					<Buttons isLoading={isLoading} />
 				</Form>
-				<div className="flex items-start items-center hidden lg:block">
-					<img className="w-[400px] h-[400px]" src={logo} alt="group" />
+				<div className="flex items-start items-center hidden md:block">
+					<img className="w-[250px] h-[250px] lg:w-[400px] lg:h-[400px]" src={logo} alt="group" />
 				</div>
 			</div>
 			<Modal

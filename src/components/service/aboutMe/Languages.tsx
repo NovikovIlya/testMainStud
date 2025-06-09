@@ -1,4 +1,375 @@
-import { UploadOutlined } from '@ant-design/icons'
+// import { UploadOutlined } from '@ant-design/icons'
+// import { Button, Checkbox, Col, Form, Modal, Result, Row, Spin, Upload, message } from 'antd'
+// import { Select } from 'antd'
+// import Title from 'antd/es/typography/Title'
+// import { t } from 'i18next'
+// import { useEffect, useState } from 'react'
+
+// import {
+// 	Certificate,
+// 	ForeignLanguage,
+// 	Language,
+// 	LanguageLevel
+// } from '../../../models/aboutMe'
+// import {
+// 	useGetAllForeignLanguagesQuery,
+// 	useGetAllNativeLanguagesQuery,
+// 	useGetCertificateQuery,
+// 	useGetLevelsQuery,
+// 	useGetNativeLanguagesQuery,
+// 	useGetOneCertificateQuery,
+// 	useGetforeignLanguagesQuery,
+
+// 	useLazyGetOneCertificateQuery,
+// 	useSetForeignMutation,
+// 	useSetNativeMutation
+// } from '../../../store/api/aboutMe/forAboutMe'
+
+// import './Languages.css'
+// import { SkeletonPage } from './Skeleton'
+// import TableLanguages from './TableLanguages'
+
+// const Languages = () => {
+// 	const [form] = Form.useForm()
+// 	const [form2] = Form.useForm()
+// 	const [isModalOpen, setIsModalOpen] = useState(false)
+// 	const [selectId, setSelectId] = useState<string | number | null>(null)
+// 	const [fileList, setFileList] = useState<File[]>([])
+// 	const { data: dataNative, isLoading: isFetchingNative, refetch, isError } = useGetNativeLanguagesQuery()
+// 	const { data: dataLevels } = useGetLevelsQuery()
+// 	const { data: dataCertificate } = useGetCertificateQuery()
+// 	const { data: dataAll } = useGetAllNativeLanguagesQuery()
+// 	const {data:dataAllForeignLang} = useGetAllForeignLanguagesQuery()
+// 	const {data: dataForeign,isLoading: isFetchingForeign,isError: isErrorForeign,isSuccess} = useGetforeignLanguagesQuery()
+// 	const [setNative, { isLoading }] = useSetNativeMutation()
+// 	const [setForeign, { isLoading: isLoadingSetForeign }] = useSetForeignMutation()
+// 	const [idCert, setIdCert] = useState<null | number>(null)
+// 	const { data: dataOneCertificate } = useGetOneCertificateQuery(idCert, { skip: !idCert })
+// 	const [selectedLabel, setSelectedLabel] = useState<string | null>(null)
+// 	const [triger,{}] = useLazyGetOneCertificateQuery()
+// 	const nativeLanguageForm = Form.useWatch('languages', form)
+// 	const sertificateFormVal = Form.useWatch('certificateId', form2)
+
+// 	console.log('dataAll',dataAll)
+// 	useEffect(() => {
+// 		if (dataNative) {
+// 			const initialValues = {
+// 				languages: dataNative.languages?.map((lang: Language) => lang.code) || []
+// 			}
+// 			form.setFieldsValue(initialValues)
+// 		}
+// 	}, [dataNative])
+
+// 	// Добавление Родного языка
+// 	const onFinish = () => {
+// 		setNative({ languageCodes: nativeLanguageForm }).unwrap()
+// 	}
+
+// 	// Добавление Иностранного языка!!
+// 	const onFinishForm2 = async (values: Omit<ForeignLanguage, 'file'> & { file?: any[] }) => {
+// 		// Подготовка базовой структуры данных
+// 		const requestData: any = {
+// 			languageCode: values.languageCode,
+// 			languageLevelCode: values.languageLevelCode,
+// 			isPublished: values.isPublished || false,
+// 			certificates: []
+// 		}
+// 		// Обработка файла сертификата, если он есть
+// 		if (fileList.length > 0 && selectedLabel && values.certificateId) {
+// 			const originalFile = values.file?.[0]?.originFileObj as File
+// 			if (originalFile) {
+// 				// Конвертация файла в base64
+// 				const base64File = await new Promise<string>(resolve => {
+// 					const reader = new FileReader()
+// 					reader.onload = () => {
+// 						// Получаем base64 строку, удаляя префикс data:application/pdf;base64,
+// 						const base64String = reader.result as string
+// 						const base64Content = base64String.split(',')[1]
+// 						resolve(base64Content)
+// 					}
+// 					reader.readAsDataURL(originalFile)
+// 				})
+				
+// 				// Добавление информации о сертификате
+// 				requestData.certificates = [
+// 					{
+// 						// certId: values.certificateId,
+// 						// certificateName: selectedLabel,
+// 						certificateName: originalFile.name,
+// 						certificateTypeId: values.certificateId, // Используем тот же ID, если нет отдельного поля
+// 						base64File: base64File
+// 					}
+// 				]
+// 			}
+// 		}
+
+// 		// Отправка данных на сервер
+// 		try {
+// 			setIsModalOpen(false)
+// 			await setForeign(requestData).unwrap()
+			
+// 			form2.resetFields()
+// 			setFileList([])
+// 			setSelectedLabel(null)
+// 		} catch (error) {
+// 			console.error('Ошибка при сохранении данных:', error)
+// 			message.error('Не удалось сохранить данные о языке (такой язык уже добавлен)')
+// 		}finally{
+// 			setIsModalOpen(false)
+// 		}
+// 	}
+
+// 	const handleSubmit = (values: { content: string }) => {}
+// 	const showModal = () => {
+// 		setIsModalOpen(true)
+// 	}
+
+// 	const handleOk = () => {
+// 		setIsModalOpen(false)
+// 	}
+
+// 	const handleCancel = () => {
+// 		setIsModalOpen(false)
+// 		form2.resetFields()
+// 	}
+// 	const beforeUpload = (file: File) => {
+// 		const isImage = file.type === 'application/pdf' || file.type === 'image/jpeg' || file.type === 'image/png'
+// 		// jpg pnd pdf
+// 		const isLt5M = file.size / 1024 / 1024 < 5
+
+// 		if (!isImage) {
+// 			message.error('Неверный формат файла!')
+// 			return false
+// 		}
+
+// 		if (!isLt5M) {
+// 			message.error('Файл должен быть меньше 5MB!')
+// 			return false
+// 		}
+
+// 		setFileList([file])
+// 		return false
+// 	}
+
+// 	const handleIdCert = (id: number) => {
+// 		setIdCert(id)
+// 	}
+
+// 	if (isError || isErrorForeign) {
+// 		return (
+// 			<div className="mt-[75px] ml-[20px]">
+// 				<Result
+// 					status="error"
+// 					title=""
+// 					subTitle={t('errorFetch')}
+
+// 				></Result>
+// 			</div>
+// 		)
+// 	}
+
+// 	if (isFetchingNative || isFetchingForeign)
+// 		return (
+// 			<div className="mt-[-10px] ml-[6px]">
+// 				<SkeletonPage />
+// 			</div>
+// 		)
+
+// 	return (
+// 		<div className="px-[50px] pt-[60px] mb-[50px]">
+// 			<div className=" rounded-xl  animate-fade-in">
+// 				<Form form={form} onFinish={onFinish} className=" ">
+// 					<Spin spinning={isLoading} className="flex gap-2">
+// 						<Row className="mb-5">
+// 							<Title className="!text-[28px]">{t('langZnan')}</Title>
+// 						</Row>
+// 						<Row className="mb-0 mt-3 w-full">
+// 							<Col span={24}>
+// 								<div className="text-[16px] font-bold mb-2">{t('nativeLanguage')}</div>
+
+// 								<div className="w-full h-auto">
+// 									<Form.Item
+// 										name="languages"
+// 										className="mb-0 w-full !h-auto"
+// 										rules={[
+// 											{
+// 												validator: (_: any, value: string[]) =>
+// 													value?.length > 10 ? Promise.reject(new Error(t('maxLanguagesError'))) : Promise.resolve()
+// 											}
+// 										]}
+// 									>
+// 										<Select
+// 											mode="multiple"
+// 											allowClear
+// 											className=" !h-auto w-full"
+// 											options={dataAll?.map((item: Language) => ({
+// 												value: item.code,
+// 												label: item.language
+// 											}))}
+// 											filterOption={(input, option) => 
+// 												(option?.label ?? '').toString().toLowerCase().includes(input.toLowerCase())
+// 											  }
+											
+// 											onChange={values => {
+// 												if (values.length > 10) {
+// 													message.error(t('maxLanguagesError'))
+// 													form.setFieldsValue({
+// 														languages: values.slice(0, 10)
+// 													})
+// 												}
+// 											}}
+// 										/>
+// 									</Form.Item>
+// 								</div>
+// 							</Col>
+// 						</Row>
+// 						<Row>
+// 							<Button className="mt-4 w-[100px]" type="primary" htmlType="submit">
+// 								{t('save')}
+// 							</Button>
+// 						</Row>
+// 					</Spin>
+// 				</Form>
+// 			</div>
+
+// 			<div className=" rounded-xl  mt-16 animate-fade-in">
+// 				<Spin spinning={isLoadingSetForeign}>
+// 					<Row className="mb-3">
+// 						<Title className="!mb-0" level={5}>
+// 							{t('foreignLanguage')}
+// 						</Title>
+// 					</Row>
+// 					<Row>
+// 						<TableLanguages
+// 						    triger={triger}
+// 							handleIdCert={handleIdCert}
+// 							isSuccess={isSuccess}
+// 							dataCertificate={dataCertificate}
+// 							dataLevels={dataLevels}
+// 							dataAll={dataAllForeignLang}
+// 							selectId={selectId}
+// 							setSelectId={setSelectId}
+// 							dataForeign={dataForeign}
+// 						/>
+// 					</Row>
+// 					<Row className="flex items-center justify-start mt-4 gap-2">
+// 						<div
+// 							onClick={showModal}
+// 							className="gap-2 flex items-center cursor-pointer  hover:bg-gray-200 p-2 rounded-xl"
+// 						>
+// 							<Button size="small" className="rounded-[50%] !w-[28px] !h-[28px] text-[24px] " type="primary">
+// 								+
+// 							</Button>
+// 							<span>{t('add')}</span>
+// 						</div>
+// 					</Row>
+// 				</Spin>
+// 				{isLoadingSetForeign ? '' :
+// 				<Modal
+// 					className="!z-[10000000]"
+// 					footer={null}
+// 					title={t('langZnan')}
+// 					open={isModalOpen}
+// 					onOk={handleOk}
+// 					onCancel={handleCancel}
+// 				>
+// 					<Form className="mt-4" form={form2} onFinish={onFinishForm2}>
+// 						<Form.Item
+// 							label={<div className="">{t('language')}</div>}
+// 							name="languageCode"
+// 							labelCol={{ span: 6 }}
+// 							wrapperCol={{ span: 24 }}
+// 							layout="vertical"
+// 							className="mt-4 h-[35px]"
+// 							rules={[{ required: true, message: '' }]}
+// 						>
+// 							<Select
+// 							   showSearch 
+// 								placeholder={t('selectLanguage')}
+// 								allowClear
+// 								filterOption={(input, option) => 
+// 									(option?.label ?? '').toString().toLowerCase().includes(input.toLowerCase())
+// 								}
+// 								options={dataAllForeignLang?.map((item: Language) => ({
+// 									value: item.code,
+// 									label: item.language
+// 								}))}
+// 							/>
+// 						</Form.Item>
+
+// 						<Form.Item
+// 							label={<div className="">{t('level')}</div>}
+// 							name="languageLevelCode"
+// 							labelCol={{ span: 12 }}
+// 							wrapperCol={{ span: 24 }}
+// 							layout="vertical"
+// 							className="mt-14 h-[35px]"
+// 							// rules={[{ required: true, message: '' }]}
+// 						>
+// 							<Select
+// 							    placeholder={t('selectLevel')}
+// 								aria-required
+// 								options={dataLevels?.map((item: LanguageLevel) => ({
+// 									value: item.languageLevelCode,
+// 									label: item.languageLevel
+// 								}))}
+// 								allowClear
+// 							/>
+// 						</Form.Item>
+
+// 						<Form.Item
+// 							label={<div className="">{t('sert')}</div>}
+// 							name="certificateId"
+// 							labelCol={{ span: 12 }}
+// 							wrapperCol={{ span: 24 }}
+// 							layout="vertical"
+// 							className="mt-14 h-[35px]"
+// 							// rules={[{ required: true, message: '' }]}
+// 						>
+// 							<Select
+// 								placeholder={t('selectSert')}
+// 								onSelect={(value: Certificate['id']) => {
+// 									const selectedOption = dataCertificate?.find((item: Certificate) => item.id === value)
+// 									if (selectedOption) {
+// 										setSelectedLabel(selectedOption.certificateName)
+// 									}
+// 								}}
+// 								allowClear
+// 								options={dataCertificate?.map((item: Certificate) => ({
+// 									value: item.id,
+// 									label: item.certificateName
+// 								}))}
+// 							/>
+// 						</Form.Item>
+
+// 						<div className="mt-14 mb-2">{t('prikrep')} </div>
+// 						<Form.Item 
+// 						// rules={[{ required: true, message: '' }]}
+// 						 name="file" getValueFromEvent={e => e?.fileList}>
+// 							<Upload maxCount={1} beforeUpload={beforeUpload} accept=".pdf">
+// 								<Button className=" " icon={<UploadOutlined />}>
+// 									{t('add')}
+// 								</Button>
+// 							</Upload>
+// 						</Form.Item>
+
+// 						<Form.Item className="mt-6" name="isPublished" valuePropName="checked" label={null}>
+// 							<Checkbox>{t('razrer')}</Checkbox>
+// 						</Form.Item>
+
+// 						<Button type="primary" htmlType="submit">
+// 							{t('add')}
+// 						</Button>
+// 					</Form>
+// 				</Modal>}
+			
+// 			</div>
+// 		</div>
+// 	)
+// }
+
+// export default Languages
+import { UploadOutlined, PlusOutlined, MinusCircleOutlined } from '@ant-design/icons'
 import { Button, Checkbox, Col, Form, Modal, Result, Row, Spin, Upload, message } from 'antd'
 import { Select } from 'antd'
 import Title from 'antd/es/typography/Title'
@@ -19,7 +390,6 @@ import {
 	useGetNativeLanguagesQuery,
 	useGetOneCertificateQuery,
 	useGetforeignLanguagesQuery,
-
 	useLazyGetOneCertificateQuery,
 	useSetForeignMutation,
 	useSetNativeMutation
@@ -34,7 +404,7 @@ const Languages = () => {
 	const [form2] = Form.useForm()
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const [selectId, setSelectId] = useState<string | number | null>(null)
-	const [fileList, setFileList] = useState<File[]>([])
+	const [certificateFiles, setCertificateFiles] = useState<{[key: number]: File}>({})
 	const { data: dataNative, isLoading: isFetchingNative, refetch, isError } = useGetNativeLanguagesQuery()
 	const { data: dataLevels } = useGetLevelsQuery()
 	const { data: dataCertificate } = useGetCertificateQuery()
@@ -45,12 +415,9 @@ const Languages = () => {
 	const [setForeign, { isLoading: isLoadingSetForeign }] = useSetForeignMutation()
 	const [idCert, setIdCert] = useState<null | number>(null)
 	const { data: dataOneCertificate } = useGetOneCertificateQuery(idCert, { skip: !idCert })
-	const [selectedLabel, setSelectedLabel] = useState<string | null>(null)
 	const [triger,{}] = useLazyGetOneCertificateQuery()
 	const nativeLanguageForm = Form.useWatch('languages', form)
-	const sertificateFormVal = Form.useWatch('certificateId', form2)
 
-	console.log('dataAll',dataAll)
 	useEffect(() => {
 		if (dataNative) {
 			const initialValues = {
@@ -66,7 +433,7 @@ const Languages = () => {
 	}
 
 	// Добавление Иностранного языка!!
-	const onFinishForm2 = async (values: Omit<ForeignLanguage, 'file'> & { file?: any[] }) => {
+	const onFinishForm2 = async (values: any) => {
 		// Подготовка базовой структуры данных
 		const requestData: any = {
 			languageCode: values.languageCode,
@@ -74,54 +441,53 @@ const Languages = () => {
 			isPublished: values.isPublished || false,
 			certificates: []
 		}
-		// Обработка файла сертификата, если он есть
-		if (fileList.length > 0 && selectedLabel && values.certificateId) {
-			const originalFile = values.file?.[0]?.originFileObj as File
-			if (originalFile) {
+
+		// Обработка сертификатов
+		if (values.certificates && values.certificates.length > 0) {
+			for (let i = 0; i < values.certificates.length; i++) {
+				const cert = values.certificates[i]
+				
+				// Пропускаем пустые записи
+				if (!cert?.certificateTypeId || !certificateFiles[i]) continue
+
+				const file = certificateFiles[i]
+				
 				// Конвертация файла в base64
 				const base64File = await new Promise<string>(resolve => {
 					const reader = new FileReader()
 					reader.onload = () => {
-						// Получаем base64 строку, удаляя префикс data:application/pdf;base64,
 						const base64String = reader.result as string
 						const base64Content = base64String.split(',')[1]
 						resolve(base64Content)
 					}
-					reader.readAsDataURL(originalFile)
+					reader.readAsDataURL(file)
 				})
-				
-				// Добавление информации о сертификате
-				requestData.certificates = [
-					{
-						// certId: values.certificateId,
-						// certificateName: selectedLabel,
-						certificateName: originalFile.name,
-						certificateTypeId: values.certificateId, // Используем тот же ID, если нет отдельного поля
-						base64File: base64File
-					}
-				]
+
+				requestData.certificates.push({
+					certificateName: file.name || '',
+					certificateTypeId: cert.certificateTypeId,
+					base64File: base64File
+				})
 			}
 		}
 
 		// Отправка данных на сервер
 		try {
-			setIsModalOpen(false)
 			await setForeign(requestData).unwrap()
-			
-			form2.resetFields()
-			setFileList([])
-			setSelectedLabel(null)
+			handleCancel()
+			// message.success(t('success'))
 		} catch (error) {
 			console.error('Ошибка при сохранении данных:', error)
-			message.error('Не удалось сохранить данные о языке (такой язык уже добавлен)')
-		}finally{
-			setIsModalOpen(false)
+			message.error('Не удалось сохранить данные о языке')
 		}
 	}
 
-	const handleSubmit = (values: { content: string }) => {}
 	const showModal = () => {
 		setIsModalOpen(true)
+		// Инициализируем форму с одним пустым сертификатом
+		form2.setFieldsValue({
+			certificates: [{}]
+		})
 	}
 
 	const handleOk = () => {
@@ -131,14 +497,15 @@ const Languages = () => {
 	const handleCancel = () => {
 		setIsModalOpen(false)
 		form2.resetFields()
+		setCertificateFiles({})
 	}
-	const beforeUpload = (file: File) => {
-		const isImage = file.type === 'application/pdf' || file.type === 'image/jpeg' || file.type === 'image/png'
-		// jpg pnd pdf
+
+	const beforeUpload = (file: File, fieldIndex: number) => {
+		const isPDF = file.type === 'application/pdf'
 		const isLt5M = file.size / 1024 / 1024 < 5
 
-		if (!isImage) {
-			message.error('Неверный формат файла!')
+		if (!isPDF) {
+			message.error('Можно загружать только PDF!')
 			return false
 		}
 
@@ -147,8 +514,32 @@ const Languages = () => {
 			return false
 		}
 
-		setFileList([file])
+		// Сохраняем файл для конкретного индекса
+		setCertificateFiles(prev => ({
+			...prev,
+			[fieldIndex]: file
+		}))
+
 		return false
+	}
+
+	const handleFileRemove = (fieldIndex: number) => {
+		setCertificateFiles(prev => {
+			const newFiles = { ...prev }
+			delete newFiles[fieldIndex]
+			return newFiles
+		})
+
+		// Очищаем тип сертификата при удалении файла
+		const certificates = form2.getFieldValue('certificates')
+		if (certificates && certificates[fieldIndex]) {
+			certificates[fieldIndex] = {
+				...certificates[fieldIndex],
+				certificateTypeId: undefined // Очищаем тип сертификата
+			}
+			form2.setFieldsValue({ certificates })
+		}
+	
 	}
 
 	const handleIdCert = (id: number) => {
@@ -162,7 +553,6 @@ const Languages = () => {
 					status="error"
 					title=""
 					subTitle={t('errorFetch')}
-
 				></Result>
 			</div>
 		)
@@ -208,8 +598,7 @@ const Languages = () => {
 											}))}
 											filterOption={(input, option) => 
 												(option?.label ?? '').toString().toLowerCase().includes(input.toLowerCase())
-											  }
-											
+											}
 											onChange={values => {
 												if (values.length > 10) {
 													message.error(t('maxLanguagesError'))
@@ -272,6 +661,7 @@ const Languages = () => {
 					open={isModalOpen}
 					onOk={handleOk}
 					onCancel={handleCancel}
+					width={600}
 				>
 					<Form className="mt-4" form={form2} onFinish={onFinishForm2}>
 						<Form.Item
@@ -281,7 +671,7 @@ const Languages = () => {
 							wrapperCol={{ span: 24 }}
 							layout="vertical"
 							className="mt-4 h-[35px]"
-							rules={[{ required: true, message: '' }]}
+							rules={[{ required: true, message: 'Выберите язык' }]}
 						>
 							<Select
 							   showSearch 
@@ -304,7 +694,6 @@ const Languages = () => {
 							wrapperCol={{ span: 24 }}
 							layout="vertical"
 							className="mt-14 h-[35px]"
-							// rules={[{ required: true, message: '' }]}
 						>
 							<Select
 							    placeholder={t('selectLevel')}
@@ -317,52 +706,104 @@ const Languages = () => {
 							/>
 						</Form.Item>
 
-						<Form.Item
-							label={<div className="">{t('sert')}</div>}
-							name="certificateId"
-							labelCol={{ span: 12 }}
-							wrapperCol={{ span: 24 }}
-							layout="vertical"
-							className="mt-14 h-[35px]"
-							// rules={[{ required: true, message: '' }]}
-						>
-							<Select
-								placeholder={t('selectSert')}
-								onSelect={(value: Certificate['id']) => {
-									const selectedOption = dataCertificate?.find((item: Certificate) => item.id === value)
-									if (selectedOption) {
-										setSelectedLabel(selectedOption.certificateName)
-									}
-								}}
-								allowClear
-								options={dataCertificate?.map((item: Certificate) => ({
-									value: item.id,
-									label: item.certificateName
-								}))}
-							/>
-						</Form.Item>
+						<div className="mt-14 mb-4 font-medium">{t('sert')}</div>
+						
+						<Form.List name="certificates">
+							{(fields, { add, remove }) => (
+								<>
+									{fields.map(({ key, name, ...restField }, index) => (
+										<div key={key} className="mb-4 p-4 border rounded-lg relative">
+											{fields.length > 1 && (
+												<MinusCircleOutlined
+													className="absolute top-2 right-2 text-red-500 hover:text-red-700 cursor-pointer"
+													onClick={() => {
+														remove(name)
+														handleFileRemove(index)
+													}}
+												/>
+											)}
+											
+											<Form.Item
+												{...restField}
+												name={[name, 'certificateTypeId']}
+												label={`${t('sert')} ${fields.length > 1 ? index + 1 : ''}`}
+												
+												rules={[
+													{
+														validator: (_, value) => {
+															const hasFile = certificateFiles[index] || form2.getFieldValue(['certificates', name, 'existingFile'])
+															
+															if (hasFile && !value) {
+																return Promise.reject(new Error('Выберите тип сертификата для загруженного файла'))
+															}
+															
+															return Promise.resolve()
+														}
+													}
+												]}
+											>
+												<Select
+													disabled={!certificateFiles[index]}
+													placeholder={certificateFiles[index] ? t('selectSert') : t('zagrFile')}
+													allowClear
+													options={dataCertificate?.map((item: Certificate) => ({
+														value: item.id,
+														label: item.certificateName
+													}))}
+												/>
+											</Form.Item>
 
-						<div className="mt-14 mb-2">{t('prikrep')} </div>
-						<Form.Item 
-						// rules={[{ required: true, message: '' }]}
-						 name="file" getValueFromEvent={e => e?.fileList}>
-							<Upload maxCount={1} beforeUpload={beforeUpload} accept=".pdf">
-								<Button className=" " icon={<UploadOutlined />}>
-									{t('add')}
-								</Button>
-							</Upload>
-						</Form.Item>
+											<Form.Item
+												label={t('prikrep')}
+												rules={[
+													{
+														required: form2.getFieldValue(['certificates', name, 'certificateTypeId']),
+														message: 'Загрузите файл сертификата'
+													}
+												]}
+											>
+												<Upload
+													maxCount={1}
+													beforeUpload={(file) => beforeUpload(file, index)}
+													onRemove={() => handleFileRemove(index)}
+													fileList={certificateFiles[index] ? [{
+														uid: '-1',
+														name: certificateFiles[index].name,
+														status: 'done'
+													}] : []}
+													accept=".pdf"
+												>
+													<Button icon={<UploadOutlined />}>
+														{t('add')} (PDF)
+													</Button>
+												</Upload>
+											</Form.Item>
+										</div>
+									))}
+									
+									<Form.Item>
+										<Button 
+											type="dashed" 
+											onClick={() => add()} 
+											block 
+											icon={<PlusOutlined />}
+										>
+											{t('add')}
+										</Button>
+									</Form.Item>
+								</>
+							)}
+						</Form.List>
 
 						<Form.Item className="mt-6" name="isPublished" valuePropName="checked" label={null}>
 							<Checkbox>{t('razrer')}</Checkbox>
 						</Form.Item>
 
-						<Button type="primary" htmlType="submit">
+						<Button loading={isLoadingSetForeign} type="primary" htmlType="submit">
 							{t('add')}
 						</Button>
 					</Form>
 				</Modal>}
-			
 			</div>
 		</div>
 	)

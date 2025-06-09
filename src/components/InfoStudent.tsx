@@ -6,7 +6,7 @@ const InfoStudent = () => {
 	const { t } = useTranslation()
 
 	return (
-		<Card className="border-l-rose-500 mt-5 mb-14 rounded-3xl text-base shadow-md ">
+		<Card className="border-l-rose-500 mt-5 mb-14 rounded-3xl text-xs sm:text-base shadow-md ">
 			<div className='font-bold'>{t('welcome_message_student')}</div>
 			<div>
 			<div>{t('welcome_message_student1')}</div>

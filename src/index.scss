@@ -203,8 +203,10 @@ body {
 }
 
 :where(.css-dev-only-do-not-override-to9039).ant-spin-nested-loading > div > .ant-spin {
-	bottom: 0 !important;
-	top: auto !important;
+	// bottom: 0 !important;
+	// top: auto !important;
+	display:flex !important;
+	align-items:center !important;
 }
 // .rc-virtual-list .rc-virtual-list-scrollbar {
 // 	display: block !important;

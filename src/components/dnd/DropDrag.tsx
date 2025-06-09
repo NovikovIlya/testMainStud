@@ -14,6 +14,7 @@ import { useGetInfoUserQuery } from '../../store/api/formApi'
 import { useCheckIsEmployeeQuery } from '../../store/api/practiceApi/contracts'
 import { useGetModulesQuery } from '../../store/api/roleModel/roleModel'
 import { useGetRoleQuery } from '../../store/api/serviceApi'
+import { getBaseUrlShelly } from '../../store/api/studentPractice/getBaseUrlShelly'
 import { changeLayout, removeCard } from '../../store/reducers/LayoutsSlice'
 import InfoStudent from '../InfoStudent'
 import { AboutUniversityCard } from '../aboutUniversity/AboutUniversityCard'
@@ -25,7 +26,6 @@ import { TemplateCard } from '../cards/Template'
 
 import CookieConsent from './CookieConsent'
 import { block } from './constant'
-import { getBaseUrlShelly } from '../../store/api/studentPractice/getBaseUrlShelly'
 
 const studentKeys = [
 	'Schedule',
@@ -62,7 +62,7 @@ const employeeKeys = [
 	// 'rasList',
 	'eventList',
 	'trip',
-	'documentForTeacher',
+	'documentForTeacher'
 
 	// 'jobSeeker',
 	// 'myResponds',
@@ -694,103 +694,111 @@ const DropDrag = () => {
 			}
 		},
 		{
-		key: 'otpusk',
-		element: (
-			<TemplateCard
-				info="otpuskInfo"
-				title="otpusk"
-				buttonText="Watch"
-				img={'/otpusk.png'}
-				href={`https://otpusk.kpfu.ru/ext_login?p1=${maiRoleArray?.userId}&p2=${maiRoleArray?.sessionId}&p_hash=${maiRoleArray?.sessionHash}`}
-			/>
-		),
-		place: {
-			w: 1,
-			h: 1,
-			x: 0,
-			y: 0,
-			i: 'ManagementScientificProjects'
-		}
+			key: 'otpusk',
+			element: (
+				<TemplateCard
+					info="otpuskInfo"
+					title="otpusk"
+					buttonText="Watch"
+					img={'/otpusk.png'}
+					href={`https://otpusk.kpfu.ru/ext_login?p1=${maiRoleArray?.userId}&p2=${maiRoleArray?.sessionId}&p_hash=${maiRoleArray?.sessionHash}`}
+				/>
+			),
+			place: {
+				w: 1,
+				h: 1,
+				x: 0,
+				y: 0,
+				i: 'ManagementScientificProjects'
+			}
 		},
 		{
-		key: 'rasList',
-		element: (
-			<TemplateCard
-				info="rasListInfo"
-				title="rasList"
-				buttonText="Watch"
-				img={'/rasList.png'}
-				href={`${getBaseUrlShelly()}e-ksu/PARUS_PAY_LIST?p1=${maiRoleArray?.userId}&p2=${maiRoleArray?.sessionId}&p_h=${maiRoleArray?.sessionHash}&p_menu=1460`}
-				isLink
-			/>
-		),
-		place: {
-			w: 1,
-			h: 1,
-			x: 0,
-			y: 0,
-			i: 'ManagementScientificProjects'
-		}
+			key: 'rasList',
+			element: (
+				<TemplateCard
+					info="rasListInfo"
+					title="rasList"
+					buttonText="Watch"
+					img={'/rasList.png'}
+					href={`${getBaseUrlShelly()}e-ksu/PARUS_PAY_LIST?p1=${maiRoleArray?.userId}&p2=${
+						maiRoleArray?.sessionId
+					}&p_h=${maiRoleArray?.sessionHash}&p_menu=1460`}
+					isLink
+				/>
+			),
+			place: {
+				w: 1,
+				h: 1,
+				x: 0,
+				y: 0,
+				i: 'ManagementScientificProjects'
+			}
 		},
 		{
-		key: 'eventList',
-		element: (
-			<TemplateCard
-				info="eventListInfo"
-				title="eventList"
-				buttonText="Watch"
-				img={'/eventList.png'}
-				href={`${getBaseUrlShelly()}e-ksu/meropriatie_vs_konkurs_grant.application_form?p1=${maiRoleArray?.userId}&p2=${maiRoleArray?.sessionId}&p_h=${maiRoleArray?.sessionHash}&p_menu=1589`}
-				isLink
-			/>
-		),
-		place: {
-			w: 1,
-			h: 1,
-			x: 0,
-			y: 0,
-			i: 'ManagementScientificProjects'
-		}
+			key: 'eventList',
+			element: (
+				<TemplateCard
+					info="eventListInfo"
+					title="eventList"
+					buttonText="Watch"
+					img={'/eventList.png'}
+					href={`${getBaseUrlShelly()}e-ksu/meropriatie_vs_konkurs_grant.application_form?p1=${
+						maiRoleArray?.userId
+					}&p2=${maiRoleArray?.sessionId}&p_h=${maiRoleArray?.sessionHash}&p_menu=1589`}
+					isLink
+				/>
+			),
+			place: {
+				w: 1,
+				h: 1,
+				x: 0,
+				y: 0,
+				i: 'ManagementScientificProjects'
+			}
 		},
 		{
-		key: 'trip',
-		element: (
-			<TemplateCard
-				info="tripInfo"
-				title="trip"
-				buttonText="Watch"
-				img={'/trip.png'}
-				href={`${getBaseUrlShelly()}e-ksu/business_trip.bt_card_form?p1=${maiRoleArray?.userId}&p2=${maiRoleArray?.sessionId}&p_h=${maiRoleArray?.sessionHash}&p_menu=1471`}
-				isLink
-			/>
-		),
-		place: {
-			w: 1,
-			h: 1,
-			x: 0,
-			y: 0,
-			i: 'ManagementScientificProjects'
-		}
+			key: 'trip',
+			element: (
+				<TemplateCard
+					info="tripInfo"
+					title="trip"
+					buttonText="Watch"
+					img={'/trip.png'}
+					href={`${getBaseUrlShelly()}e-ksu/business_trip.bt_card_form?p1=${maiRoleArray?.userId}&p2=${
+						maiRoleArray?.sessionId
+					}&p_h=${maiRoleArray?.sessionHash}&p_menu=1471`}
+					isLink
+				/>
+			),
+			place: {
+				w: 1,
+				h: 1,
+				x: 0,
+				y: 0,
+				i: 'ManagementScientificProjects'
+			}
 		},
 		{
-		key: 'documentForTeacher',
-		element: (
-			<TemplateCard
-				info="DocumentFlowInfo"
-				title="documentForTeacher"
-				buttonText="Watch"
-				img={'/image8.png'}
-				href={`${getBaseUrlShelly()}e-ksu/private_office.start_menu?p_menu=18&p_new_style=1&p1=${maiRoleArray?.userId}&p2=${maiRoleArray?.sessionId}&p_h=${maiRoleArray?.sessionHash}`}
-				isLink
-			/>
-		),
-		place: {
-			w: 1,
-			h: 1,
-			x: 0,
-			y: 0,
-			i: 'ManagementScientificProjects'
-		}
+			key: 'documentForTeacher',
+			element: (
+				<TemplateCard
+					info="DocumentFlowInfo"
+					title="documentForTeacher"
+					buttonText="Watch"
+					img={'/image8.png'}
+					href={`${getBaseUrlShelly()}e-ksu/private_office.start_menu?p_menu=18&p_new_style=1&p1=${
+						maiRoleArray?.userId
+					}&p2=${maiRoleArray?.sessionId}&p_h=${maiRoleArray?.sessionHash}`}
+					isLink
+				/>
+			),
+			place: {
+				w: 1,
+				h: 1,
+				x: 0,
+				y: 0,
+				i: 'ManagementScientificProjects'
+			}
 		},
 		{
 			key: 'shortLink',
@@ -978,11 +986,38 @@ const DropDrag = () => {
 					<Spin className="w-full mt-20" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
 				</>
 			)
+
+		if (isMobile) {
+			return (
+				<>
+					{mainRole === 'STUD' && <InfoStudent />}
+					<div className="grid grid-cols-2 gap-4 mb-10 sm:grid-cols-2 ">
+						{generateDOM.map((card:any, index:any) => {
+							console.log('card', card)
+							if (card?.key === 'Schedule') {
+								return (
+									<div  key={index} className="rounded-[20px] !max-w-[50vh] col-span-2">
+										{card}
+									</div>
+								)
+							} else {
+								return (
+									<div key={index} className="rounded-[20px] ">
+										{card}
+									</div>
+								)
+							}
+						})}
+					</div>
+				</>
+			)
+		}
 		return (
 			<>
 				{mainRole === 'STUD' ? <InfoStudent /> : ''}
 				<ResponsiveReactGridLayout
-					className="layout mb-10"
+				   
+					className="layout mb-10 !height-full"
 					cols={{ lg: isMobile ? 2 : 3, md: 2, sm: 2, xs: 2, xxs: 1 }}
 					rowHeight={windowSize.innerWidth < 768 ? 210 : 320}
 					containerPadding={[0, 0]}
@@ -995,7 +1030,6 @@ const DropDrag = () => {
 					isDraggable={edit}
 					isResizable={false}
 					compactType="vertical"
-				
 					preventCollision={true}
 				>
 					{generateDOM}

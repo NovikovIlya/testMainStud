@@ -15,9 +15,7 @@ export default function VacancyItem(props: VacancyItemType) {
 		<div className="flex w-full bg-white pl-[20px] pr-[105px] pt-[20px] pb-[20px] items-center shadow-custom-shadow">
 			<p className="w-[388px] shrink-0 font-content-font font-normal text-[16px]/[19px] text-black">{props.title}</p>
 			<div className="ml-[30px] flex gap-[40px] justify-between">
-				<p className="w-[104px] font-content-font font-normal text-[16px]/[19px] text-black whitespace-nowrap">
-					{props.experience}
-				</p>
+				<p className="w-[104px] font-content-font font-normal text-[16px]/[19px] text-black">{props.experience}</p>
 				<p className="w-[104px] font-content-font font-normal text-[16px]/[19px] text-black whitespace-nowrap">
 					{props.employment}
 				</p>

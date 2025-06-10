@@ -286,7 +286,9 @@ export const VacancyRequestCreateView = () => {
 					<Form.Item
 						label={
 							<label className="text-black text-[18px]/[18px] font-content-font font-normal opacity-80">
-								{categories.find(cat => cat.title === categoryTitle)?.direction ? 'Профобласть' : 'Подразделение'}
+								{categories.find(category => category.title === categoryTitle)?.directions.length !== 0
+									? 'Профобласть'
+									: 'Подразделение'}
 							</label>
 						}
 						rules={[{ required: true, message: 'Не указана подкатегория' }]}

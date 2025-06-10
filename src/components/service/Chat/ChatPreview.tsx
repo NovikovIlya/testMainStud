@@ -105,11 +105,7 @@ export const ChatPreview = (props: {
 				)}
 				onClick={() => {
 					dispatch(setCurrentVacancyName(props.respName))
-					handleNavigate(
-						isEmpDemp
-							? `/services/personnelaccounting/chat/id/${chatInfo.id}`
-							: `/services/myresponds/chat/id/${chatInfo.id}`
-					)
+					handleNavigate(`/services/myresponds/chat/id/${chatInfo.id}`)
 					setIsChatOpen(true)
 				}}
 			>

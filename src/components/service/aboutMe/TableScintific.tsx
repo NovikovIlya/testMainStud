@@ -34,6 +34,11 @@ import { generateYearsArray } from '../../../utils/generateYearsArray'
 
 import './TableLanguage.scss'
 
+import ruRU from 'antd/locale/ru_RU'
+import enUS from 'antd/locale/en_US'
+import i18n from '../../../18n'
+
+
 const TableScintific = ({ isSuccess, dataLevels, dataScientific, setSelectId, selectId }: any) => {
 	const [isModalOpenEdit, setIsModalOpenEdit] = useState<boolean>(false)
 	const [selectInfo, setSelectInfo] = useState<any>(null)
@@ -55,6 +60,11 @@ const TableScintific = ({ isSuccess, dataLevels, dataScientific, setSelectId, se
 	const [dataScientificDirectorsValue, setDataScientificDirectorsValue] = useState<any>([])
 	const [flag, setFlag] = useState(false)
 	const [id, setId] = useState(null)
+
+	// Определяем локаль на основе текущего языка
+	const getAntdLocale = () => {
+		return i18n.language === 'ru' ? ruRU : enUS
+	}
 
 	const columns: TableProps<any>['columns'] = [
 		{
@@ -228,6 +238,7 @@ const TableScintific = ({ isSuccess, dataLevels, dataScientific, setSelectId, se
 	return (
 		<>
 			<ConfigProvider
+			locale={getAntdLocale()}
 				theme={{
 					components: {
 						Table: {

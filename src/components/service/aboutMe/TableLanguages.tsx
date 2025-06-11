@@ -434,6 +434,7 @@ import {
 	Space,
 	Spin,
 	Table,
+	Tooltip,
 	Upload,
 	message
 } from 'antd'
@@ -450,6 +451,9 @@ import {
 
 import './TableLanguage.scss'
 import { getBaseUrl } from '../../../utils/getBaseUrl'
+import ruRU from 'antd/locale/ru_RU'
+import enUS from 'antd/locale/en_US'
+import i18n from '../../../18n'
 
 const TableLanguages = ({
 	triger,
@@ -471,6 +475,11 @@ const TableLanguages = ({
 	const [changeGlaz, { isLoading: isLoadingGlaz }] = useIsPublishedMutation()
 	const [certificateFiles, setCertificateFiles] = useState<{[key: number]: any}>({})
 	const [updatingCertificates, setUpdatingCertificates] = useState([])
+
+		// Определяем локаль на основе текущего языка
+		const getAntdLocale = () => {
+			return i18n.language === 'ru' ? ruRU : enUS
+		}
 
 	const columns: TableProps<LanguageData>['columns'] = [
 		{
@@ -776,6 +785,7 @@ const TableLanguages = ({
 	return (
 		<>
 			<ConfigProvider
+			locale={getAntdLocale()}
 				theme={{
 					components: {
 						Table: {
@@ -822,6 +832,7 @@ const TableLanguages = ({
 							className="mt-14 h-[35px]"
 						>
 							<Select
+								placeholder={t('selectLevel')}
 								aria-required
 								options={dataLevels?.map(item => ({
 									value: item.languageLevelCode,
@@ -889,7 +900,18 @@ const TableLanguages = ({
 											</Form.Item>
 
 											<Form.Item
-												label={t('prikrep')}
+												label={<div>{t('prikrep')}
+													<Tooltip
+														color='white'
+														title={
+															<>
+																<div  className="text-black p-2">{t('suda')} </div>
+															</>
+														}
+													>
+													<img className=" " src="/GroupVop.svg" />
+													</Tooltip>
+												</div>}
 											>
 												{form2.getFieldValue(['certificates', name, 'existingFile']) && !certificateFiles[index] ? (
 													<div className="flex items-center gap-2">
@@ -924,7 +946,7 @@ const TableLanguages = ({
 														accept=".pdf"
 													>
 														<Button icon={<UploadOutlined />}>
-															{t('add')} (pdf)
+															{t('add')}
 														</Button>
 													</Upload>
 												)}

@@ -270,10 +270,7 @@ export const ContactInformation = () => {
 						<>
 							<div  className="text-black p-2">{t('textForContactInformation')} </div>
 							<img className="" src="https://i.postimg.cc/Zq0bZ8Yv/image.png" />
-							{/* <div className="!text-yellow-50 font-extrabold">
-								123 <img className="rounded-[50%]" src="https://i.postimg.cc/Zq0bZ8Yv/image.png" />
-							</div>
-							<div className="!text-yellow-50 text-[30px]">55</div> */}
+						
 						</>
 					}
 				>

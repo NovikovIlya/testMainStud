@@ -144,7 +144,7 @@ export const RespondItem = (props: RespondItemType) => {
 							navigate(`/services/myresponds/responds/fullinfo/${props.id}`)
 						}}
 					>
-						{t('watch')}
+						{t('Watch')}
 					</Button>
 					{props.name && (
 						<Button

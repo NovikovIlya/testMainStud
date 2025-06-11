@@ -1083,5 +1083,6 @@
 	"vacancyRespond": "Vacancy respond",
 	"myResponds2": "My responds",
 	"responseFormMailError": "Enter email",
-	"personalDataNotChecked": "Please, go to \"About me\" page and accept consent to personal data processing before responding."
+	"personalDataNotChecked": "Please, go to \"About me\" page and accept consent to personal data processing before responding.",
+	"allMessages": "All messages"
 }

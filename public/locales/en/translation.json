@@ -21,7 +21,7 @@
 	"creativeEvents": "Creative Events",
 	"sportEvents": "Sport Events",
 	"Odnoklassnik": "OK",
-	"Dzen" : "Yandex Dzen",
+	"Dzen": "Yandex Dzen",
 	"placeholderAll": "Add text",
 	"eventList": "Events",
 	"eventListInfo": "Become part of the university's history. Participate in cultural events, lectures and conferences",
@@ -939,7 +939,7 @@
 	"issueDate": "Issue date",
 	"addEducationPopover1": "Here you need to attach documents in JPG, PNG, PDF, GIF format, the data of which was entered above, namely:",
 	"addEducationPopover2": "- a scan of the spread of the diploma of higher education",
-	"addEducationPopover3": ", where the series and number of the document, as well as the specialty are visible",
+	"addEducationPopover3": ", where the series and number of the document, as well as the specialty are visible.",
 	"medal": "Medal",
 	"previousEducation": "Previous education",
 	"level": "Proficiency level",
@@ -969,10 +969,10 @@
 	"awardNameNotEntered": "Enter award title",
 	"awardDateNotEntered": "Enter date of award",
 	"awardEnterPlaceholder": "Enter",
-	"textForContactInformation" : "An active toggle button makes your email and phone your primary communications devices",
+	"textForContactInformation": "An active toggle button makes your email and phone your primary communications devices",
 	"private": "private",
 	"working": "woking",
 	"additional": "additional",
-	"textMainAboutMe" : "The active switch button makes your email and phone the main ones for communication. You can select only one main email and one phone. By default, the corporate email and the first phone in the list are selected as the main ones.",
-	"addEducationPopover4": "The file size should not exceed 5 MB"
+	"textMainAboutMe": "The active switch button makes your email and phone the main ones for communication. You can select only one main email and one phone. By default, the corporate email and the first phone in the list are selected as the main ones.",
+	"addEducationPopover4": "The file size should not exceed 5 MB."
 }

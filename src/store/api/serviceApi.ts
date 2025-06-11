@@ -1089,6 +1089,13 @@ export const serviceApi = apiSlice.injectEndpoints({
 				body: arg
 			}),
 			invalidatesTags: ['Awards']
+		}),
+		publishEducation: builder.mutation<void, number>({
+			query: educationId => ({
+				url: `about-me/edu-is-published?id=${educationId}`,
+				method: 'PATCH'
+			}),
+			invalidatesTags: ['Education']
 		})
 	})
 })
@@ -1241,5 +1248,6 @@ export const {
 	useSetMainEmailMutation,
 	useSetEmailMarkerMutation,
 	useSetPhoneMarkerMutation,
-	useSetMainPhoneMutation
+	useSetMainPhoneMutation,
+	usePublishEducationMutation
 } = serviceApi

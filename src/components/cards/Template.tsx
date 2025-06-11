@@ -15,27 +15,34 @@ export const TemplateCard = ({isLink,className,href,img,info,title,height = 112,
 			if(isMobile){
 				window.open(href)
 			}
-		}} className="transform transition hover:scale-[101%]  duration-300 hover:shadow-lg  shadow-md flex w-full bg-white rounded-3xl h-[320px] flex-col px-7 py-8 justify-between h-full max-[874px]:p-0 max-[874px]:py-3 max-[874px]:items-center ">
-			<div className="flex max-[874px]:flex-col max-[874px]:h-full max-[874px]:w-full max-[874px]:items-center">
-				<div className="text-left">
-						<div className="leading-7 text-xl font-bold whitespace-nowrap">
+		}} className="transform transition hover:scale-[101%]  duration-300 hover:shadow-lg  shadow-md flex w-full bg-white rounded-3xl sm:h-[320px] flex-col px-7 py-8 justify-between h-full max-[874px]:p-0 max-[874px]:py-3 max-[874px]:items-center ">
+			<div className={` flex ${isMobile ? 'flex-wrap' : ''} max-[874px]:flex-col max-[874px]:h-full max-[874px]:w-full max-[874px]:items-center h-full `}>
+				<div className="!w-[100%]  text-left ">
+						<div className="text-[10px] sm:leading-7 md:text-xl font-bold sm:whitespace-nowrap h-10">
 						{t(title)}
 					</div>
-					<div className="text-base w-[84%] font-normal leading-relaxed mt-7 max-[870px]:hidden">
+					<div className="hidden sm:block text-xs sm:text-base w-[84%] font-normal leading-relaxed mt-7 max-[870px]:hidden">
 						{t(info)}
 					</div>
 				</div>
 				{img && (
-					<div className="w-60 justify-end flex max-[874px]:h-full max-[874px]:w-full max-[874px]:items-center">
+					<div
+					 className="h-[60px] sm:h-auto w-full flex sm:w-60 justify-center sm:justify-end  max-[874px] max-[874px]:w-full max-[874px]:items-center"
+					 >
 						<div
-							className={`bg-[#3E89F9] bg-opacity-80 w-[125px] h-[125px] rounded-full absolute -z-10 ${mt}`}
+							className={`${isMobile ? 'hidden' : ''} bg-[#3E89F9] bg-opacity-80 w-[50px] sm:w-[125px] h-[50px] sm:h-[125px] rounded-full absolute -z-10 ${mt}`}
 						/>
 						<img
 							src={img}
-							width={width}
-							height={height}
+							width={isMobile ? '50px' : width}
+							height={isMobile ? '60px' : height}
 							alt=""
-							className={clsx(className,positionImage, isRounded && 'rounded-full')}
+							className={clsx(
+								'rounded-full',
+								isRounded ? 'rounded-full' : 'rounded-3xl',
+								`${positionImage}`,
+								`${isMobile ? '!mt-0' : ''}`
+							)}
 						/>
 					</div>
 				)}

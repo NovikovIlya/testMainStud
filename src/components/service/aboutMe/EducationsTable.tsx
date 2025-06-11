@@ -1,4 +1,4 @@
-import { DeleteTwoTone, EditTwoTone, EyeTwoTone } from '@ant-design/icons'
+import { DeleteTwoTone, EditTwoTone, EyeInvisibleTwoTone, EyeTwoTone } from '@ant-design/icons'
 import { ConfigProvider, Form, Popconfirm, Space, Table, TableProps } from 'antd'
 import en_US from 'antd/locale/en_US'
 import ru_RU from 'antd/locale/ru_RU'
@@ -12,8 +12,10 @@ import { RuFlagSvg } from '../../../assets/svg/RuFlagSvg'
 import {
 	useDeleteNewEducationMutation,
 	useGetEducationTypesQuery,
-	useGetNewEducationsQuery
+	useGetNewEducationsQuery,
+	usePublishEducationMutation
 } from '../../../store/api/serviceApi'
+import { useGetCountriesQuery } from '../../../store/api/utilsApi'
 import { EducationTableDataType } from '../../../store/reducers/type'
 
 import { AddEducationModal } from './AddEducationModal'
@@ -21,10 +23,12 @@ import { AddEducationModal } from './AddEducationModal'
 export const EducationsTable = () => {
 	const { data: educations = { completed_edu: [] }, isLoading: loading } = useGetNewEducationsQuery()
 	const { data: levels = { edu_types: [] } } = useGetEducationTypesQuery()
+	const { data: countries = [] } = useGetCountriesQuery(i18next.language)
 	const [form] = Form.useForm()
 	const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 
 	const [deleteEducation] = useDeleteNewEducationMutation()
+	const [publishEducation] = usePublishEducationMutation()
 
 	const columns: TableProps<EducationTableDataType>['columns'] = [
 		{
@@ -67,7 +71,19 @@ export const EducationsTable = () => {
 			key: 'action',
 			render: (_, record) => (
 				<Space size="middle">
-					<EyeTwoTone />
+					{record.portal_status === '1' ? (
+						<EyeTwoTone
+							onClick={() => {
+								publishEducation(record.id!)
+							}}
+						/>
+					) : (
+						<EyeInvisibleTwoTone
+							onClick={() => {
+								publishEducation(record.id!)
+							}}
+						/>
+					)}
 					<EditTwoTone
 						onClick={() => {
 							form.resetFields()
@@ -81,14 +97,14 @@ export const EducationsTable = () => {
 								educationLevelId: record.edu_level,
 								beginningYear: dayjs(record.start_date, 'DD.MM.YYYY'),
 								graduateYear: dayjs(record.end_date, 'DD.MM.YYYY'),
-								countryId: record.edu_country,
+								countryId: countries.find(country => country.shortName === record.edu_country)?.id!,
 								specialization: record.eduspeciality,
 								subdivision: record.development,
 								qualification: record.qualification,
 								issueDate: record.issue_date ? dayjs(record.issue_date, 'DD.MM.YYYY') : null,
 								number: record.docnum,
 								series: record.docseries,
-								accept: record.portal_status ? true : false,
+								accept: record.portal_status === '1' ? true : false,
 								file: record.filename
 									? [
 											{

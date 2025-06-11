@@ -45,6 +45,7 @@ const Scientific = () => {
 		}
 	}, [dataScientificDirectors])
 
+
 	const onFinishForm2 = async (values: any) => {
 		createScientificActivity({
 			isRussian: values?.languageCode === 1 ? true : false,
@@ -55,6 +56,7 @@ const Scientific = () => {
 			isPublished: values?.isPublished ? true : false 
 		}) 
 		handleCancel()
+		setId(null)
 	}
 	const handleSearch = (value: string, field: string) => {
 		if (value?.length < 4) {
@@ -81,7 +83,7 @@ const Scientific = () => {
 	const showModal = () => {
 		setIsModalOpen(true)
 	}
-
+	
 	const handleOk = () => {
 		setIsModalOpen(false)
 	}

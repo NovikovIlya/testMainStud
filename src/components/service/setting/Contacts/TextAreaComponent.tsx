@@ -1,76 +1,107 @@
-import { Button, Form, Input } from 'antd'
-import { t } from 'i18next'
-
-import React, { useEffect } from 'react'
-import { useGetSocialNetworksQuery, useUpdateSocialNetworksMutation } from '../../../../store/api/aboutMe/forAboutMe'
+import { Button, Form, Input, Spin } from 'antd'
 import { message } from 'antd'
+import { t } from 'i18next'
+import React, { useEffect } from 'react'
+
+import { useGetSocialNetworksQuery, useUpdateSocialNetworksMutation } from '../../../../store/api/aboutMe/forAboutMe'
 
 const { TextArea } = Input
 
 const TextAreaComponent = () => {
 	const [form] = Form.useForm()
-  const { data: dataSocial, isLoading } = useGetSocialNetworksQuery()
-  const [updateSocial, { isLoading: isUpdating }] = useUpdateSocialNetworksMutation()
+	const { data: dataSocial, isLoading } = useGetSocialNetworksQuery()
+	const [updateSocial, { isLoading: isUpdating }] = useUpdateSocialNetworksMutation()
 
-  // Заполняем форму данными при их получении
-  useEffect(() => {
-    if (dataSocial) {
-      form.setFieldsValue({
-        vk: dataSocial.vk || '',
-        telegram: dataSocial.telegram || '',
-        rutube: dataSocial.rutube || '',
-        odnoklassniki: dataSocial.odnoklassniki || '',
-        dzen: dataSocial.dzen || ''
-      })
-    }
-  }, [dataSocial, form])
+	// Заполняем форму данными при их получении
+	useEffect(() => {
+		if (dataSocial) {
+			form.setFieldsValue({
+				vk: dataSocial.vk || '',
+				telegram: dataSocial.telegram || '',
+				rutube: dataSocial.rutube || '',
+				odnoklassniki: dataSocial.odnoklassniki || '',
+				dzen: dataSocial.dzen || ''
+			})
+		}
+	}, [dataSocial, form])
 
-	const onSubmit = async (values:any) => {
-    try {
-      await updateSocial(values).unwrap()
-      // message.success('Социальные сети успешно обновлены')
-    } catch (error) {
-      message.error('Ошибка при обновлении социальных сетей')
-      console.error('Ошибка обновления:', error)
-    }
-  }
+	const onSubmit = async (values: any) => {
+		try {
+			await updateSocial(values).unwrap()
+		} catch (error) {
+			message.error('Ошибка при обновлении социальных сетей')
+			console.error('Ошибка обновления:', error)
+		}
+	}
 
 	return (
 		<Form form={form} onFinish={onSubmit}>
-			<section className=" mx-auto bg-white rounded-xl shadow-md overflow-hidden">
-				<div className="p-6">
-					<div className="mb-4 !text-[16px] font-bold">Соц сети:</div>
+			<Spin spinning={isLoading || isUpdating}>
+				<section className=" mx-auto bg-white rounded-xl shadow-md overflow-hidden">
+					<div className="p-6">
+						<div className="mb-6 !text-[16px] font-bold">{t('soc')}:</div>
 
-          <div className="mb-4 !text-[16px] ">Vk.com:</div>
-					<Form.Item name="vk" noStyle>
-						<TextArea rows={3} className='mb-8'/>
-					</Form.Item>
+						<div className="mb-2 !text-[16px] opacity-[60%] text-sm">Vk.com:</div>
+						<Form.Item name="vk" noStyle>
+							<TextArea 
+								className="mb-8" 
+								maxLength={1000}  
+								rows={1}  
+								placeholder={t('placeholderAll')}
+								style={{ padding: '8px' }}  // Добавлено свойство padding
+							/>
+						</Form.Item>
 
-          <div className="mb-4 !text-[16px] ">Telegram</div>
-					<Form.Item name="telegram" noStyle>
-						<TextArea rows={3} className='mb-8'/>
-					</Form.Item>
+						<div className="mb-2 !text-[16px] opacity-[60%] ">Telegram</div>
+						<Form.Item name="telegram" noStyle>
+							<TextArea 
+								maxLength={1000} 
+								rows={1} 
+								className="mb-8" 
+								placeholder={t('placeholderAll')}
+								style={{ padding: '8px' }}  // Добавлено свойство padding
+							/>
+						</Form.Item>
 
-          <div className="mb-4 !text-[16px] ">Rutube</div>
-					<Form.Item name="rutube" noStyle>
-						<TextArea rows={3} className='mb-8'/>
-					</Form.Item>
+						<div className="mb-2 opacity-[60%] !text-[16px] ">Rutube</div>
+						<Form.Item name="rutube" noStyle>
+							<TextArea 
+								maxLength={1000} 
+								rows={1} 
+								className="mb-8" 
+								placeholder={t('placeholderAll')}
+								style={{ padding: '8px' }}  // Добавлено свойство padding
+							/>
+						</Form.Item>
 
-          <div className="mb-4 !text-[16px] ">Однолкассники</div>
-					<Form.Item name="odnoklassniki" noStyle>
-						<TextArea rows={3} className='mb-8'/>
-					</Form.Item>
+						<div className="mb-2 opacity-[60%] !text-[16px] ">{t('Odnoklassnik')}</div>
+						<Form.Item name="odnoklassniki" noStyle>
+							<TextArea 
+								maxLength={1000} 
+								rows={1} 
+								className="mb-8" 
+								placeholder={t('placeholderAll')}
+								style={{ padding: '8px' }}  // Добавлено свойство padding
+							/>
+						</Form.Item>
 
-            <div className="mb-4 !text-[16px] ">Яндекс Дзен</div>
-					<Form.Item name="dzen" noStyle>
-						<TextArea rows={3} className='mb-8'/>
-					</Form.Item>
+						<div className="mb-2 opacity-[60%] !text-[16px] ">{t('Dzen')}</div>
+						<Form.Item name="dzen" noStyle>
+							<TextArea 
+								maxLength={1000} 
+								rows={1} 
+								className="mb-8" 
+								placeholder={t('placeholderAll')}
+								style={{ padding: '8px' }}  // Добавлено свойство padding
+							/>
+						</Form.Item>
 
-          <Button  type="primary" htmlType="submit" className="rounded-lg" loading={isUpdating}>
-						{t('save')}
-					</Button>
-				</div>
-			</section>
+						<Button style={{borderRadius:'50px'}} className='rounded-lg' type="primary" htmlType="submit"  loading={isUpdating}>
+							{t('save')}
+						</Button>
+					</div>
+				</section>
+			</Spin>
 		</Form>
 	)
 }

@@ -370,7 +370,7 @@
 
 // export default Languages
 import { UploadOutlined, PlusOutlined, MinusCircleOutlined } from '@ant-design/icons'
-import { Button, Checkbox, Col, Form, Modal, Result, Row, Spin, Upload, message } from 'antd'
+import { Button, Checkbox, Col, Form, Modal, Result, Row, Spin, Tooltip, Upload, message } from 'antd'
 import { Select } from 'antd'
 import Title from 'antd/es/typography/Title'
 import { t } from 'i18next'
@@ -589,6 +589,7 @@ const Languages = () => {
 										]}
 									>
 										<Select
+											placeholder={t('selectLanguage')}
 											mode="multiple"
 											allowClear
 											className=" !h-auto w-full"
@@ -754,7 +755,18 @@ const Languages = () => {
 											</Form.Item>
 
 											<Form.Item
-												label={t('prikrep')}
+												label={<div>{t('prikrep')}
+													<Tooltip
+														color='white'
+														title={
+															<>
+																<div  className="text-black p-2">{t('suda')} </div>
+															</>
+														}
+													>
+													<img className=" " src="/GroupVop.svg" />
+													</Tooltip>
+												</div>}
 												rules={[
 													{
 														required: form2.getFieldValue(['certificates', name, 'certificateTypeId']),

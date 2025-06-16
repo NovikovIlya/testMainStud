@@ -195,6 +195,9 @@ export const EducationsTable = () => {
 					className="w-full"
 					locale={{ emptyText: t('noData') }}
 					loading={loading}
+					rowClassName={record => {
+						return record.portal_status === '1' ? '' : 'bg-gray-200 opacity-60'
+					}}
 				/>
 			</ConfigProvider>
 		</>

@@ -144,9 +144,9 @@ const Scientific = () => {
 					>
 						<Form className="mt-4" form={form2} onFinish={onFinishForm2} initialValues={{ languageCode: 1 }}>
 							<Form.Item
-								label={<div className="">{t('language')}</div>}
+								label={<div className="">{t('languagePub')}</div>}
 								name="languageCode"
-								labelCol={{ span: 6 }}
+								labelCol={{ span: 12 }}
 								wrapperCol={{ span: 24 }}
 								layout="vertical"
 								className="mt-4 h-[35px]"
@@ -167,19 +167,19 @@ const Scientific = () => {
 								wrapperCol={{ span: 24 }}
 								layout="vertical"
 								className="mt-14 min-h-[35px]"
-								 rules={[{ required: true, message: '' }]}
+								 rules={[{ required: true, message: t('validYear') }]}
 							>
 								<Select placeholder={t('select')} aria-required options={generateYearsArray()} allowClear />
 							</Form.Item>
 
 							<div className="mt-12 mb-1"> <span className="text-red-500 mr-[4px] font-[14px] !font-[SimSun,sans-serif]">*</span>{t('theme')}</div>
-							<Form.Item name="theme" className=" mb-6" rules={[{ required: true, message: '' }]}>
-								<Input.TextArea rows={4} placeholder="Введите текст здесь" maxLength={100} />
+							<Form.Item name="theme" className=" mb-6" rules={[{ required: true, message: t('validTheme') }]}>
+								<Input.TextArea rows={4} placeholder={t('inputMessage2')} maxLength={100} />
 							</Form.Item>
 
 							<div className="mb-1"><span className="text-red-500 mr-[4px] font-[14px] !font-[SimSun,sans-serif]">*</span>{t('direction')}</div>
-							<Form.Item name="direction" className=" h-[35px]" rules={[{ required: true, message: '' }]}>
-								<Input.TextArea rows={4} placeholder="Введите текст здесь" maxLength={100} />
+							<Form.Item name="direction" className=" h-[35px]" rules={[{ required: true, message: t('validTNap') }]}>
+								<Input.TextArea rows={4} placeholder={t("inputMessage2")} maxLength={100} />
 							</Form.Item>
 
 							<Form.Item

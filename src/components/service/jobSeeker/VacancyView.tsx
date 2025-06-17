@@ -92,7 +92,7 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 	let conditionsArr: RegExpMatchArray | null = null
 
 	if (currentVacancy !== null) {
-		responsibilities = currentVacancy.acf.responsibilities
+		responsibilities = currentVacancy.acf.responsibilities ? currentVacancy.acf.responsibilities : ''
 
 		responsibilities = responsibilities
 			.replace(/<strong>/g, '')
@@ -112,7 +112,7 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 		// 	/<li>[a-zA-Zа-яА-ЯёЁ0-9\s\:\,\.\/\–\—\(\)\+\-]+/g
 		// )
 
-		skills = currentVacancy.acf.skills
+		skills = currentVacancy.acf.skills ? currentVacancy.acf.skills : ''
 
 		skills = skills
 			.replace(/<strong>/g, '')
@@ -126,7 +126,7 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 
 		skillsArr = skills.match(/<li>[a-zA-Zа-яА-ЯёЁ0-9\s\:\,\.\/\–\—\(\)\+\-]+/g)
 
-		conditions = currentVacancy.acf.conditions
+		conditions = currentVacancy.acf.conditions ? currentVacancy.acf.conditions : ''
 
 		conditions = conditions
 			.replace(/<strong>/g, '')
@@ -180,9 +180,7 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 							<div className="w-[143px]"></div>
 						</>
 					)}
-					<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-nowrap">
-						{data?.acf.experience}
-					</p>
+					<p className="font-content-font font-normal text-black text-[18px]/[21px]">{data?.acf.experience}</p>
 					<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-nowrap">
 						{data?.acf.employment}
 					</p>

@@ -2,6 +2,7 @@ import clsx from 'clsx'
 import { t } from 'i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 
+import { BlueDocSvg } from '../../../assets/svg/BlueDocSvg'
 import { BriefcaseSvg } from '../../../assets/svg/BriefcaseSvg'
 import CalendarSvg from '../../../assets/svg/CalendarSvg'
 import { MyDocsSvg } from '../../../assets/svg/MyDocsSvg'
@@ -29,7 +30,7 @@ export const NavMyResponds = () => {
 		},
 		{
 			id: '/services/myresponds/chat',
-			icon: <MyDocsSvg />,
+			icon: <BlueDocSvg />,
 			name: t('messages')
 		},
 		{

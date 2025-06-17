@@ -2,7 +2,7 @@ import { LoadingOutlined } from '@ant-design/icons'
 import { Button, ConfigProvider, Select, Spin } from 'antd'
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 
 import { ChatCrossIcon } from '../../../assets/svg/ChatCrossIcon'
 import { ChatFilterIcon } from '../../../assets/svg/ChatFilterIcon'
@@ -78,7 +78,7 @@ export const ChatEmpDemp = () => {
 					dispatch(setChatId(res.id))
 					dispatch(setRespondId(res.respondInfo.id))
 					dispatch(setCurrentVacancyId(res.respondInfo.vacancyId))
-					navigate(`/services/personnelaccounting/chat/id/${res.id}`)
+					//navigate(`id/${res.id}`)
 				})
 	}, [])
 
@@ -325,8 +325,14 @@ export const ChatEmpDemp = () => {
 						</div>
 					</div>
 				)}
-				{pathname.match('services/personnelaccounting/chat/id/*') && <ChatPage />}
-				{pathname.includes('/services/personnelaccounting/chat/vacancyview') && <VacancyView type="CHAT" />}
+				{/* {pathname.match('services/personnelaccounting/chat/id/*') && <ChatPage />}
+				{pathname.includes('/services/personnelaccounting/chat/vacancyview') && <VacancyView type="CHAT" />} */}
+				<Routes>
+					<Route path="/">
+						<Route path="/id/:chatId" element={<ChatPage />}></Route>
+						<Route path="/vacancyview/:vacancyId/:chatId" element={<VacancyView type="CHAT" />}></Route>
+					</Route>
+				</Routes>
 			</div>
 		</>
 	)

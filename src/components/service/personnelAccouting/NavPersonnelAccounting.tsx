@@ -72,7 +72,7 @@ export const NavPesonnelAccounting = () => {
 			name: 'Отклики'
 		},
 		{
-			id: '/services/personnelaccounting/chat',
+			id: 'personnelaccounting/chat/*',
 			icon: <ChatIcon />,
 			name: 'Сообщения'
 		},
@@ -611,16 +611,21 @@ export const NavPesonnelAccounting = () => {
 						path="personnelaccounting/responds/fullinfo/:respondId"
 						element={<RespondInfo type="PERSONNEL_DEPARTMENT" />}
 					></Route>
+					<Route
+						path="personnelaccounting/supervisor/responds/fullinfo/:respondId"
+						element={<RespondInfo type="SUPERVISOR" />}
+					></Route>
+					<Route path={navEmployeeList[1].id} element={<ChatEmpDemp />}></Route>
 				</Routes>
 				{/* {pathname === navEmployeeList[0].id && <Responds />} */}
 				{/* {pathname.match('services/personnelaccounting/responds/byvacancy/*') && <VacancyResponces />} */}
 				{/* {pathname.match('services/personnelaccounting/responds/fullinfo') && (
 					<RespondInfo type="PERSONNEL_DEPARTMENT" />
 				)} */}
-				{pathname.match(/\/services\/personnelaccounting\/supervisor\/responds\/fullinfo\/\d+/) && (
+				{/* {pathname.match(/\/services\/personnelaccounting\/supervisor\/responds\/fullinfo\/\d+/) && (
 					<RespondInfo type="SUPERVISOR" />
-				)}
-				{pathname.includes(navEmployeeList[1].id) && <ChatEmpDemp />}
+				)} */}
+				{/* {pathname.includes(navEmployeeList[1].id) && <ChatEmpDemp />} */}
 				{pathname === navEmployeeList[2].id && <DepEmployment />}
 				{pathname === navEmployeeList[3].id && <Catalog />}
 				{pathname.match('services/personnelaccounting/vacancies/vacancyedit') && <VacancyEditView />}

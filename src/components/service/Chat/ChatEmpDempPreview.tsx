@@ -70,7 +70,7 @@ export const ChatEmpDempPreview = (props: {
 				)}
 				onClick={() => {
 					dispatch(setCurrentVacancyName(props.respName))
-					handleNavigate(`/services/personnelaccounting/chat/id/${props.chatId}`)
+					handleNavigate(`id/${props.chatId}`)
 					setIsChatOpen(true)
 				}}
 			>

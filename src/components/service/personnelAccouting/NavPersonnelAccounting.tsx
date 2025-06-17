@@ -1,6 +1,6 @@
 import { Collapse, CollapseProps, ConfigProvider, notification } from 'antd'
 import clsx from 'clsx'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 
 import { BriefcaseSvg } from '../../../assets/svg/BriefcaseSvg'
 import { SignedIconSvg } from '../../../assets/svg/SignedIconSvg'
@@ -67,7 +67,7 @@ export const NavPesonnelAccounting = () => {
 
 	const navEmployeeList = [
 		{
-			id: '/services/personnelaccounting/responds',
+			id: 'personnelaccounting/responds',
 			icon: <RespondsIcon />,
 			name: 'Отклики'
 		},
@@ -601,11 +601,22 @@ export const NavPesonnelAccounting = () => {
 				</ul>
 			</div>
 			<div className="bg-[#F5F8FB] flex w-[calc(100%-230px)]">
-				{pathname === navEmployeeList[0].id && <Responds />}
-				{pathname.match('services/personnelaccounting/responds/byvacancy/*') && <VacancyResponces />}
-				{pathname.match('services/personnelaccounting/responds/fullinfo') && (
+				<Routes>
+					<Route path={navEmployeeList[0].id} element={<Responds />}></Route>
+					<Route
+						path="personnelaccounting/responds/byvacancy/:vacancyTitle/:vacancyId"
+						element={<VacancyResponces />}
+					></Route>
+					<Route
+						path="personnelaccounting/responds/fullinfo/:respondId"
+						element={<RespondInfo type="PERSONNEL_DEPARTMENT" />}
+					></Route>
+				</Routes>
+				{/* {pathname === navEmployeeList[0].id && <Responds />} */}
+				{/* {pathname.match('services/personnelaccounting/responds/byvacancy/*') && <VacancyResponces />} */}
+				{/* {pathname.match('services/personnelaccounting/responds/fullinfo') && (
 					<RespondInfo type="PERSONNEL_DEPARTMENT" />
-				)}
+				)} */}
 				{pathname.match(/\/services\/personnelaccounting\/supervisor\/responds\/fullinfo\/\d+/) && (
 					<RespondInfo type="SUPERVISOR" />
 				)}

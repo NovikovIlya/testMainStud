@@ -5,7 +5,7 @@ import { t } from 'i18next'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Margin, usePDF } from 'react-to-pdf'
 import uuid from 'react-uuid'
 
@@ -42,19 +42,11 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 	const currentUrl = window.location.pathname
 	const match = currentUrl.match(/\/fullinfo\/(\d+)$/)
 
-	let id_from_url: string | number
-
-	if (match) {
-		id_from_url = match[1]
-	} else {
-		console.error('id miss')
-	}
-
-	console.log(id_from_url)
+	const parameters = useParams()
 
 	const respondId = useAppSelector(state => state.currentResponce)
 
-	const { data: res } = useGetRespondFullInfoQuery(id_from_url)
+	const { data: res } = useGetRespondFullInfoQuery(parseInt(parameters.respondId!))
 	const [approveRespond, { isLoading: approveRespondLoading }] = useApproveRespondMutation()
 	const [sendToArchive, { isLoading: sendToArchiveLoading }] = useSendRespondToArchiveMutation()
 	const [sendToReserve, { isLoading: sendToReserveLoading }] = useSendRespondToReserveMutation()

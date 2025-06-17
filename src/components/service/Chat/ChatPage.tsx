@@ -8,6 +8,7 @@ import SockJS from 'sockjs-client'
 // const Stomp = require('stompjs/lib/stomp').Stomp
 import Stomp from 'stompjs'
 
+import { DeleteSvg } from '../../../assets/svg/DeleteSvg'
 import { useAppSelector } from '../../../store'
 import {
 	useGetEmploymentPossibleRolesQuery,
@@ -282,6 +283,8 @@ export const ChatPage = () => {
 		handleSubmit,
 		register,
 		reset,
+		watch,
+		setValue,
 		formState,
 		formState: { isSubmitSuccessful }
 	} = useForm({
@@ -400,9 +403,21 @@ export const ChatPage = () => {
 										placeholder={t('enterMessage')}
 										ref={formTextAreaRef}
 									></textarea>
-									<p className="w-[80%] whitespace-nowrap text-ellipsis overflow-hidden font-content-font text-[14px]/[14px] font-normal text-black">
-										{fileName}
-									</p>
+									<div className="flex w-full items-center justify-between">
+										<p className="w-[80%] whitespace-nowrap text-ellipsis overflow-hidden font-content-font text-[14px]/[14px] font-normal text-black">
+											{fileName}
+										</p>
+										{watch('files') !== null && (
+											<Button
+												icon={<DeleteSvg />}
+												type="text"
+												onClick={() => {
+													setValue('files', null, { shouldValidate: true })
+													setFileName('')
+												}}
+											/>
+										)}
+									</div>
 								</div>
 							)}
 						/>

@@ -108,15 +108,15 @@ export const NavAboutMe = () => {
 					</div>
 				)
 			},
-			// {
-			// 	key: '/services/aboutMe/awards',
-			// 	icon: <AwardsSvgNew />,
-			// 	label: (
-			// 		<div className="ml-[10px] min-w-0">
-			// 			<p className="whitespace-normal break-words text-wrap text-sm leading-4">{t('awards')}</p>
-			// 		</div>
-			// 	)
-			// },
+			{
+				key: '/services/aboutMe/awards',
+				icon: <AwardsSvgNew />,
+				label: (
+					<div className="ml-[10px] min-w-0">
+						<p className="whitespace-normal break-words text-wrap text-sm leading-4">{t('awards')}</p>
+					</div>
+				)
+			},
 			{
 				key: '/services/aboutMe/social',
 				icon: <SocialSvg />,
@@ -210,7 +210,7 @@ export const NavAboutMe = () => {
 						{pathname === '/services/aboutMe/languages' && <Languages />}
 						{pathname === '/services/aboutMe/social' && <Social />}
 						{pathname === '/services/aboutMe/scientific' && <Scientific />}
-						{/* {pathname === '/services/aboutMe/awards' && <AwardsNew />} */}
+						{pathname === '/services/aboutMe/awards' && <AwardsNew />}
 					</>
 				) : (
 					<>

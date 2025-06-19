@@ -235,7 +235,7 @@ export const block = {
 		{
 			w: 1,
 			h: 1,
-			x: isMobile  ? 0 : 1,
+			x: isMobile ? 0 : 1,
 			y: 5,
 			i: 'DigitalDepartments',
 
@@ -332,7 +332,7 @@ export const block = {
 			moved: true,
 			static: false
 		},
-		
+
 		{
 			w: 1,
 			h: 1,
@@ -353,6 +353,105 @@ export const block = {
 			moved: true,
 			static: false
 		},
-		
+		{
+			w: 1,
+			h: 1,
+			x: 0,
+			y: 7,
+			i: 'portalAnnouncement',
+
+			moved: true,
+			static: false
+		},
+		{
+			w: 1,
+			h: 1,
+			x: 1,
+			y: 7,
+			i: 'internetReception',
+
+			moved: true,
+			static: false
+		},
+		{
+			w: 1,
+			h: 1,
+			x: 2,
+			y: 7,
+			i: 'ITRequests',
+
+			moved: true,
+			static: false
+		},
+		{
+			w: 1,
+			h: 1,
+			x: 0,
+			y: 8,
+			i: 'EducationDeparmentRequests',
+
+			moved: true,
+			static: false
+		},
+		{
+			w: 1,
+			h: 1,
+			x: 1,
+			y: 8,
+			i: 'Documentation',
+
+			moved: true,
+			static: false
+		},
+		{
+			w: 1,
+			h: 1,
+			x: 2,
+			y: 8,
+			i: 'HandyLinks',
+
+			moved: true,
+			static: false
+		},
+		{
+			w: 1,
+			h: 1,
+			x: 0,
+			y: 9,
+			i: 'NoticeList',
+
+			moved: true,
+			static: false
+		},
+		{
+			w: 1,
+			h: 1,
+			x: 1,
+			y: 9,
+			i: 'EmpDempDocument',
+
+			moved: true,
+			static: false
+		},
+		{
+			w: 1,
+			h: 1,
+			x: 2,
+			y: 9,
+			i: 'AccDempDocument',
+
+			moved: true,
+			static: false
+		},
+		{
+			w: 1,
+			h: 1,
+			x: 0,
+			y: 10,
+			i: 'PsychologicalHelpEmp',
+
+			moved: true,
+			static: false
+		}
 	]
 }

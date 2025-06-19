@@ -62,8 +62,17 @@ const employeeKeys = [
 	// 'rasList',
 	'eventList',
 	'trip',
-	'documentForTeacher'
-
+	'documentForTeacher',
+	'portalAnnouncement',
+	'internetReception',
+	'ITRequests',
+	'EducationDeparmentRequests',
+	'Documentation',
+	'HandyLinks',
+	'NoticeList',
+	'EmpDempDocument',
+	'AccDempDocument',
+	'PsychologicalHelpEmp'
 	// 'jobSeeker',
 	// 'myResponds',
 	// 'DirectResume',
@@ -818,6 +827,220 @@ const DropDrag = () => {
 				y: 0,
 				i: 'ManagementScientificProjects'
 			}
+		},
+		{
+			key: 'portalAnnouncement',
+			element: (
+				<TemplateCard
+					info="portalAnnouncementInfo"
+					title="portalAnnouncement"
+					buttonText="Watch"
+					href={`${getBaseUrlShelly()}e-ksu/PORTAL_EU_USER.begin_work?p1=${maiRoleArray?.userId}&p2=${
+						maiRoleArray?.sessionId
+					}&p_h=${maiRoleArray?.sessionHash}`}
+					isLink
+				/>
+			),
+			place: {
+				w: 1,
+				h: 1,
+				x: 0,
+				y: 0,
+				i: 'portalAnnouncement'
+			}
+		},
+		{
+			key: 'internetReception',
+			element: (
+				<TemplateCard
+					info="internetReceptionInfo"
+					title="internetReception"
+					buttonText="Watch"
+					href={`${getBaseUrlShelly()}e-ksu/personal_system.ir_mess?p1=${maiRoleArray?.userId}&p2=${
+						maiRoleArray?.sessionId
+					}&p_h=${maiRoleArray?.sessionHash}`}
+					isLink
+				/>
+			),
+			place: {
+				w: 1,
+				h: 1,
+				x: 0,
+				y: 0,
+				i: 'internetReception'
+			}
+		},
+		{
+			key: 'ITRequests',
+			element: (
+				<TemplateCard
+					info="ITRequestsInfo"
+					title="ITRequests"
+					buttonText="Watch"
+					href={`${getBaseUrlShelly()}e-ksu/private_office.start_menu?p_menu=80&p_recmenu=18&p_new_style=1&p1=${
+						maiRoleArray?.userId
+					}&p2=${maiRoleArray?.sessionId}&p_h=${maiRoleArray?.sessionHash}`}
+					isLink
+				/>
+			),
+			place: {
+				w: 1,
+				h: 1,
+				x: 0,
+				y: 0,
+				i: 'ITRequests'
+			}
+		},
+		{
+			key: 'EducationDeparmentRequests',
+			element: (
+				<TemplateCard
+					info="EducationDeparmentRequestsInfo"
+					title="EducationDeparmentRequests"
+					buttonText="Watch"
+					href={`${getBaseUrlShelly()}e-ksu/tech_center_system.web_request_form?p_eu=1&p_coverage=2&p1=${
+						maiRoleArray?.userId
+					}&p2=${maiRoleArray?.sessionId}&p_h=${maiRoleArray?.sessionHash}`}
+					isLink
+				/>
+			),
+			place: {
+				w: 1,
+				h: 1,
+				x: 0,
+				y: 0,
+				i: 'EducationDeparmentRequests'
+			}
+		},
+		{
+			key: 'Documentation',
+			element: (
+				<TemplateCard
+					info="DocumentationInfo"
+					title="Documentation"
+					buttonText="Watch"
+					href={`${getBaseUrlShelly()}e-ksu/docs_show_list?p_type=1&p1=${maiRoleArray?.userId}&p2=${
+						maiRoleArray?.sessionId
+					}&p_h=${maiRoleArray?.sessionHash}`}
+					isLink
+				/>
+			),
+			place: {
+				w: 1,
+				h: 1,
+				x: 0,
+				y: 0,
+				i: 'Documentation'
+			}
+		},
+		{
+			key: 'HandyLinks',
+			element: (
+				<TemplateCard
+					info="HandyLinksInfo"
+					title="HandyLinks"
+					buttonText="Watch"
+					href={`${getBaseUrlShelly()}e-ksu/docs_list?p_type=1&p1=${maiRoleArray?.userId}&p2=${
+						maiRoleArray?.sessionId
+					}&p_h=${maiRoleArray?.sessionHash}`}
+					isLink
+				/>
+			),
+			place: {
+				w: 1,
+				h: 1,
+				x: 0,
+				y: 0,
+				i: 'HandyLinks'
+			}
+		},
+		{
+			key: 'NoticeList',
+			element: (
+				<TemplateCard
+					info="NoticeListInfo"
+					title="NoticeList"
+					buttonText="Watch"
+					href={`${getBaseUrlShelly()}e-ksu/NOTICE_EU.notice_cabinetlist?p_menu=1461&p1=${maiRoleArray?.userId}&p2=${
+						maiRoleArray?.sessionId
+					}&p_h=${maiRoleArray?.sessionHash}`}
+					isLink
+				/>
+			),
+			place: {
+				w: 1,
+				h: 1,
+				x: 0,
+				y: 0,
+				i: 'NoticeList'
+			}
+		},
+		{
+			key: 'EmpDempDocument',
+			element: (
+				<TemplateCard
+					info="EmpDempDocumentInfo"
+					title="EmpDempDocument"
+					buttonText="Watch"
+					href={`${getBaseUrlShelly()}e-ksu/portal_request_doc.EU_DocForm2?p_menu=1335&p1=${maiRoleArray?.userId}&p2=${
+						maiRoleArray?.sessionId
+					}&p_h=${maiRoleArray?.sessionHash}`}
+					isLink
+				/>
+			),
+			place: {
+				w: 1,
+				h: 1,
+				x: 0,
+				y: 0,
+				i: 'EmpDempDocument'
+			}
+		},
+		{
+			key: 'AccDempDocument',
+			element: (
+				<TemplateCard
+					info="AccDempDocumentInfo"
+					title="AccDempDocument"
+					buttonText="Watch"
+					href={`${getBaseUrlShelly()}e-ksu/portal_request_doc.EU_BUHDocForm?p_menu=1554&p1=${
+						maiRoleArray?.userId
+					}&p2=${maiRoleArray?.sessionId}&p_h=${maiRoleArray?.sessionHash}`}
+					isLink
+				/>
+			),
+			place: {
+				w: 1,
+				h: 1,
+				x: 0,
+				y: 0,
+				i: 'AccDempDocument'
+			}
+		},
+		{
+			key: 'PsychologicalHelpEmp',
+			element: (
+				<TemplateCard
+					href={`${getBaseUrlShelly()}e-ksu/student_psi_test.record_medic_emp?p_menu=1914&p1=${
+						maiRoleArray?.userId
+					}&p2=${maiRoleArray?.sessionId}&p_h=${maiRoleArray?.sessionHash}`}
+					info="PsychologicalHelpEmpInfo"
+					title="PsychologicalHelp"
+					buttonText="Watch"
+					img={'/image50.png'}
+					width={110}
+					height={132}
+					mt={'mt-1'}
+					isLink
+				/>
+			),
+			place: {
+				w: 1,
+				h: 1,
+				x: 0,
+				y: 0,
+				i: 'PsychologicalHelpEmp'
+			}
 		}
 	]
 
@@ -992,11 +1215,11 @@ const DropDrag = () => {
 				<>
 					{mainRole === 'STUD' && <InfoStudent />}
 					<div className="grid grid-cols-2 gap-4 mb-10 sm:grid-cols-2 ">
-						{generateDOM.map((card:any, index:any) => {
+						{generateDOM.map((card: any, index: any) => {
 							console.log('card', card)
 							if (card?.key === 'Schedule') {
 								return (
-									<div  key={index} className="rounded-[20px] !max-w-[50vh] col-span-2">
+									<div key={index} className="rounded-[20px] !max-w-[50vh] col-span-2">
 										{card}
 									</div>
 								)
@@ -1016,7 +1239,6 @@ const DropDrag = () => {
 			<>
 				{mainRole === 'STUD' ? <InfoStudent /> : ''}
 				<ResponsiveReactGridLayout
-				   
 					className="layout mb-10 !height-full"
 					cols={{ lg: isMobile ? 2 : 3, md: 2, sm: 2, xs: 2, xxs: 1 }}
 					rowHeight={windowSize.innerWidth < 768 ? 210 : 320}

@@ -613,7 +613,7 @@
 
 	"print": "Print",
 	"delete": "Delete",
-	"zagrFile" : "Please upload the file first",
+	"zagrFile": "Please upload the file first",
 
 	"taskDescription": "Task Description",
 	"groupNumbers": "Group Numbers",
@@ -982,5 +982,22 @@
 	"working": "woking",
 	"additional": "additional",
 	"textMainAboutMe": "The active switch button makes your email and phone the main ones for communication. You can select only one main email and one phone. By default, the corporate email and the first phone in the list are selected as the main ones.",
-	"addEducationPopover4": "The file size should not exceed 5 MB."
+	"addEducationPopover4": "The file size should not exceed 5 MB.",
+	"portalAnnouncement": "Submit an ad on the portal",
+	"portalAnnouncementInfo": "Module for creating, publishing and moderating ads on the corporate portal",
+	"internetReception": "Internet reception",
+	"internetReceptionInfo": "Module for user requests, processing requests and tracking their status online",
+	"ITRequests": "Applications for IT services",
+	"ITRequestsInfo": "Module for submitting and managing requests to the IT department: from equipment repair to software setup",
+	"Documentation": "Documentation",
+	"DocumentationInfo": "Module for storing, searching and managing corporate documents with version support",
+	"HandyLinks": "Useful links",
+	"HandyLinksInfo": "A module for quick access to frequently used resources, templates and instructions",
+	"NoticeList": "List of notifications",
+	"NoticeListInfo": "Module for viewing all system and user notifications in a single list",
+	"EmpDempDocument": "Ordering documents from the HR department",
+	"EmpDempDocumentInfo": "Module for processing requests for personnel documents: copies of work books, extracts from orders and certificates related to work activities",
+	"AccDempDocument": "Order a certificate from the Accounting Department",
+	"AccDempDocumentInfo": "Module for processing requests for financial certificates (2-NDFL, statements) and their automatic generation",
+	"PsychologicalHelpEmpInfo": "Module for receiving consultations, accessing psychological support resources and making an appointment"
 }

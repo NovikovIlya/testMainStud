@@ -5,6 +5,9 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import InfiniteScroll from 'react-infinite-scroll-component'
 
+import { MessageReadSvg } from '../../../../assets/svg/MessageReadSvg'
+import { MessageUnreadSvg } from '../../../../assets/svg/MessageUnreadSvg'
+import { PlusMessage } from '../../../../assets/svg/PlusMessage'
 import { ChatResponse } from '../../../../models/chat'
 import { useAppDispatch, useAppSelector } from '../../../../store'
 import {
@@ -20,12 +23,11 @@ import {
 import { ContentWithinBrackets, extractContentWithinBrackets, hasBrackets } from '../../../../utils/extractBrackets'
 import { truncateString } from '../../../../utils/truncateString'
 
+import ChatSkeleton from './ChatSkeleton'
 import { CommentNewTeacher } from './CommentTeacher'
 import InputText from './InputText'
 import { NewDialogModal } from './NewDialogModal'
 import SearchComponent from './SearchComponent'
-import { PlusMessage } from '../../../../assets/svg/PlusMessage'
-import ChatSkeleton from './ChatSkeleton'
 
 export const ViewMessage = () => {
 	const user = useAppSelector(state => state.auth.user)
@@ -37,10 +39,17 @@ export const ViewMessage = () => {
 	const [activeDialog, setActiveDialog] = useState(null)
 	const [page, setPage] = useState(0)
 	const { data: dataAllDialogsOld } = useGetAllDialogsOldQuery({ page, size: 15 })
-	const {data: dataAllDialogs,isLoading,isFetching} = useGetAllDialogsQuery({ page: 0, size: 15 }, { pollingInterval: 2000 })
+	const {
+		data: dataAllDialogs,
+		isLoading,
+		isFetching
+	} = useGetAllDialogsQuery({ page: 0, size: 15 }, { pollingInterval: 2000 })
 	const [sendMessage, { isLoading: isLoadingSend }] = useSendMessageChatMutation()
 	const [pageChat, setPageChat] = useState(0)
-	const { data: dataOneChat } = useGetOneChatQuery({ id: activeDialog, page: 0, size: 100 },{ skip: !activeDialog, pollingInterval: 2000 })
+	const { data: dataOneChat } = useGetOneChatQuery(
+		{ id: activeDialog, page: 0, size: 100 },
+		{ skip: !activeDialog, pollingInterval: 2000 }
+	)
 	const { data: dataOneChatOld, isFetching: isFetchingOneChatOld } = useGetOneChatOldQuery(
 		{ id: activeDialog, page: pageChat, size: 100 },
 		{ skip: !activeDialog }
@@ -62,7 +71,7 @@ export const ViewMessage = () => {
 		{ skip: !debouncedSearchValue }
 	)
 	const [dataSearchValue, setdataSearchValue] = useState<ChatResponse[]>([])
-	
+
 	useEffect(() => {
 		if (dataSearch?.length > 0) {
 			setdataSearchValue(dataSearch)
@@ -101,6 +110,7 @@ export const ViewMessage = () => {
 	}, [dataSearchOld])
 
 	useEffect(() => {
+		console.log(dataAllDialogs)
 		if (dataAllDialogs) {
 			setDialogs(prevDialogs => {
 				const dialogMap = new Map(prevDialogs.map(dialog => [dialog.id, dialog]))
@@ -112,7 +122,8 @@ export const ViewMessage = () => {
 						if (
 							existingDialog.lastMessage !== newDialog.lastMessage ||
 							existingDialog.lastMessageTime !== newDialog.lastMessageTime ||
-							existingDialog.isRead !== newDialog.isRead
+							existingDialog.isRead !== newDialog.isRead ||
+							existingDialog.isAnotherUserRead !== newDialog.isAnotherUserRead
 						) {
 							dialogMap.set(newDialog.id, newDialog)
 						}
@@ -120,7 +131,6 @@ export const ViewMessage = () => {
 						dialogMap.set(newDialog.id, newDialog)
 					}
 				})
-
 				return Array.from(dialogMap.values()).sort(
 					(a, b) => new Date(b.lastMessageTime).getTime() - new Date(a.lastMessageTime).getTime()
 				)
@@ -128,7 +138,6 @@ export const ViewMessage = () => {
 		}
 	}, [dataAllDialogs])
 
-	
 	useEffect(() => {
 		if (dataAllDialogsOld) {
 			setDialogs(prevDialogs => {
@@ -165,6 +174,9 @@ export const ViewMessage = () => {
 				const newMessages = [...dataOneChat.messages]
 				const existingMessageIds = new Set(prevMessages.map((msg: any) => msg.id))
 				const uniqueNewMessages = newMessages.filter((msg: any) => !existingMessageIds.has(msg.id))
+				if (uniqueNewMessages.length !== 0) {
+					readMessage(activeDialog)
+				}
 				return [...prevMessages, ...uniqueNewMessages]
 			})
 		}
@@ -215,7 +227,7 @@ export const ViewMessage = () => {
 			senderName: `${user.lastname} ${user.firstname} ${user.middleName}`,
 			chatId: activeDialog
 		}
-	
+
 		sendMessage(obj).unwrap()
 		form.resetFields()
 	}
@@ -250,7 +262,6 @@ export const ViewMessage = () => {
 		setPageSearch(0)
 	}
 
-
 	if (isLoading)
 		return (
 			<div className="screen !z-[100000000] relative">
@@ -269,7 +280,10 @@ export const ViewMessage = () => {
 				<div className="mt-28 "></div>
 
 				<div className="mt-1 px-4 pb-2 flex justify-between items-center">
-					<div className="flex items-center gap-2 h-10 w-auto py-5 px-3  hover:shadow hover:bg-gray-100 hover:cursor-pointer rounded-xl" onClick={showModal}>
+					<div
+						className="flex items-center gap-2 h-10 w-auto py-5 px-3  hover:shadow hover:bg-gray-100 hover:cursor-pointer rounded-xl"
+						onClick={showModal}
+					>
 						<PlusMessage />
 						{t('newDialog')}
 					</div>
@@ -288,7 +302,6 @@ export const ViewMessage = () => {
 						}}
 					>
 						<InfiniteScroll
-							
 							dataLength={!isEmplty ? dataSearchValue.length : dialogs.length}
 							next={loadMoreData}
 							hasMore={dialogs.length < 50}
@@ -300,7 +313,6 @@ export const ViewMessage = () => {
 								''
 							) : (
 								<List
-								
 									locale={{
 										emptyText: <div></div>
 									}}
@@ -310,7 +322,7 @@ export const ViewMessage = () => {
 											key={item.id}
 											onClick={e => {
 												if (item.id === activeDialog) return
-											
+
 												e.stopPropagation()
 												setChatArray([])
 												setPageChat(0)
@@ -329,7 +341,9 @@ export const ViewMessage = () => {
 												title={
 													<>
 														<span className="  font-extrabold ">{item.userName}</span>
-														<div className='mb-3 w-[80%]' style={{ fontSize: '9px', color: '#888' }}>{truncateString(130,item.userInfo)}</div>
+														<div className="mb-3 w-[80%]" style={{ fontSize: '9px', color: '#888' }}>
+															{truncateString(130, item.userInfo)}
+														</div>
 													</>
 												}
 												description={truncateString(25, item.lastMessage)}
@@ -348,6 +362,9 @@ export const ViewMessage = () => {
 												) : (
 													''
 												)}
+												<div className="mt-auto">
+													{item.isAnotherUserRead ? <MessageReadSvg /> : <MessageUnreadSvg />}
+												</div>
 											</div>
 										</List.Item>
 									)}
@@ -381,7 +398,9 @@ export const ViewMessage = () => {
 									>
 										<>
 											<span className="font-extrabold text-[10px]">{currentItem?.userName}</span>
-											<div style={{ fontSize: '9px', color: '#888' }}>{truncateString(25,currentItem  ?  currentItem.userInfo : '')}</div>
+											<div style={{ fontSize: '9px', color: '#888' }}>
+												{truncateString(25, currentItem ? currentItem.userInfo : '')}
+											</div>
 										</>
 									</CommentNewTeacher>
 									<Form form={form} className="flex w-full flex-wrap" onFinish={onFinish}>
@@ -391,15 +410,13 @@ export const ViewMessage = () => {
 									</Form>
 								</div>
 							) : (
-						
-								<ChatSkeleton/>
-								  
+								<ChatSkeleton />
 							)}
 						</div>
 					</>
 				)}
 			</div>
-			<NewDialogModal  isModalOpen={isModalOpen} onCancel={handleCancel} />
+			<NewDialogModal isModalOpen={isModalOpen} onCancel={handleCancel} />
 		</div>
 	)
 }

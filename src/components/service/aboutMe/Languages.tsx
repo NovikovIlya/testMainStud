@@ -800,7 +800,7 @@ const Languages = () => {
 											block 
 											icon={<PlusOutlined />}
 										>
-											{t('add')}
+											{t('addSert')}
 										</Button>
 									</Form.Item>
 								</>

@@ -362,7 +362,7 @@ export const ViewMessage = () => {
 												) : (
 													''
 												)}
-												<div className="mt-auto">
+												<div className="mt-auto ml-auto">
 													{item.isAnotherUserRead ? <MessageReadSvg /> : <MessageUnreadSvg />}
 												</div>
 											</div>

@@ -25,6 +25,8 @@ export const User = () => {
 	const dispatch = useAppDispatch()
 	const location = useLocation()
 	const [acceptedData,setAcceptedData] = useLocalStorageState<any>('acceptedData',{defaultValue:null})
+	const searchParams = new URLSearchParams(location.search)
+	const paramValue = searchParams.get('lan')
 
 	const hide = () => {
 		setOpen(false)
@@ -39,8 +41,15 @@ export const User = () => {
 		}
 	}, [data])
 
+	useEffect(() => {
 	
-	// Проверка на роль Абитурента + зачислен ли и сбор данных по зачислению 
+			if (paramValue === 'eng') {
+				i18n.changeLanguage('en')
+			}
+		}, [])
+
+	
+	// Проверка на роль Абитурента + зачислен ли и сбор данных по зачислению document.title
 	useEffect(()=>{
 		if(user?.roles?.some((item:any) => item.credentials && item.credentials.length > 0)){
 			setAcceptedData(user?.roles?.map((item:any)=>{
@@ -58,6 +67,11 @@ export const User = () => {
 		  window.ym(101507808, 'hit', location.pathname + location.search);
 		}
 	  }, [location]);
+
+	  
+	useEffect(()=>{
+		document.title = i18n.language === 'ru' ? 'Казанский Федеральный Университет' : 'Kazan Federal University'
+	},[])
 
 
 

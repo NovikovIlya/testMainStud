@@ -7,6 +7,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 
 import { AboutMeSvg } from '../../../assets/svg/AboutMeSvg'
 import { AddressSvg } from '../../../assets/svg/AddressSvg'
+import { AwardsSvgNew } from '../../../assets/svg/AwardsSvgNew'
 import { ContactInformationSvg } from '../../../assets/svg/ContactInformationSvg'
 import { EducationSvg } from '../../../assets/svg/EducationSvg'
 import { LanguagesSvgNew } from '../../../assets/svg/LanguagesSvgNew'
@@ -20,6 +21,7 @@ import MainContact from '../setting/Contacts/MainContact'
 import { AboutMe } from './AboutMe'
 import AboutMeNew from './AboutMeNew'
 import { Address } from './Address'
+import { AwardsNew } from './AwardsNew'
 import { Document } from './Document'
 import { Education } from './Education'
 import EducationNew from './EducationNew'
@@ -106,7 +108,15 @@ export const NavAboutMe = () => {
 					</div>
 				)
 			},
-
+			{
+				key: '/services/aboutMe/awards',
+				icon: <AwardsSvgNew />,
+				label: (
+					<div className="ml-[10px] min-w-0">
+						<p className="whitespace-normal break-words text-wrap text-sm leading-4">{t('awards')}</p>
+					</div>
+				)
+			},
 			{
 				key: '/services/aboutMe/social',
 				icon: <SocialSvg />,
@@ -116,15 +126,15 @@ export const NavAboutMe = () => {
 					</div>
 				)
 			},
-			// {
-			// 	key: '/services/aboutMe/scientific',
-			// 	icon: <ScientificSvg />,
-			// 	label: (
-			// 		<div className="ml-[10px] min-w-0">
-			// 			<p className="whitespace-normal break-words text-wrap text-sm leading-4">Научная деятельность</p>
-			// 		</div>
-			// 	)
-			// }
+			{
+				key: '/services/aboutMe/scientific',
+				icon: <ScientificSvg />,
+				label: (
+					<div className="ml-[10px] min-w-0">
+						<p className="whitespace-normal break-words text-wrap text-sm leading-4">{t('scient')}</p>
+					</div>
+				)
+			}
 		]
 	} else {
 		navItems = [
@@ -185,13 +195,7 @@ export const NavAboutMe = () => {
 			</div>
 
 			<div className={`${'ml-[229px]'} bg-[#F5F8FB] w-full pt-[70px] min-h-screen`}>
-				{/* {pathname === '/services/aboutMe/personalData' && <AboutMe />}
-		   		{pathname === '/services/aboutMe/contactInformation' && <MainContact />}
-				{pathname === '/services/aboutMe/document' && <Document />}
-				{pathname === '/services/aboutMe/address' && <Address />}
-				{pathname === '/services/aboutMe/education' && <Education />} */}
-
-				{/* Новый */}
+				
 				{mainRole === 'STUD' || mainRole === 'EMPL' ? (
 					<>
 						{pathname === '/services/aboutMe/personalData' && <AboutMeNew />}
@@ -200,6 +204,7 @@ export const NavAboutMe = () => {
 						{pathname === '/services/aboutMe/languages' && <Languages />}
 						{pathname === '/services/aboutMe/social' && <Social />}
 						{pathname === '/services/aboutMe/scientific' && <Scientific />}
+						{pathname === '/services/aboutMe/awards' && <AwardsNew />}
 					</>
 				) : (
 					<>

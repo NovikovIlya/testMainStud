@@ -56,7 +56,20 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 			unreadChatsCount: data?.unreadChatsCount
 		})
 	})
-	const { data: avatarUrl, isLoading: isAvatarLoading } = useGetAvatarQuery()
+	const { data: avatarUrl, isLoading: isAvatarLoading ,isSuccess:isSuccesAvatar,error:errorAva,isFetching} = useGetAvatarQuery(undefined, {
+		skip: !(['/services/aboutMe', '/user'].some(path => location.pathname.includes(path))),	
+	});
+	const [avatarLocal, setAvatarLocal] = useLocalStorageState<any>('avatarLocal', { defaultValue: '' })
+	const [avatarUrlLocal, setAvatarUrlLocal] = useState<any>({
+		url: null,
+		id: null,
+	});
+
+	useEffect(()=>{
+		if(isSuccesAvatar){
+			setAvatarLocal(avatarUrl?.url)
+		}
+	},[isSuccesAvatar])
 
 	useEffect(() => {
 		if (isSuccessSubRole) {
@@ -75,6 +88,16 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	useClickAway(event => {
 		setIsOpen(false)
 	}, ref)
+
+	useEffect(()=>{
+	if(isFetching){
+		console.log('test')
+		setAvatarUrlLocal({
+		url: avatarUrl?.url,
+		id: Date.now(),
+		})
+	}
+	},[isFetching])
 
 	const getRole = (role: string | undefined) => {
 		switch (role) {
@@ -430,8 +453,20 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 							trigger={['click']}
 							className="cursor-pointer h-full  box-border"
 						>
-							<Space className="px-4  gap-5 flex justyfy-between">
-								{!avatarUrl?.url ? <PersonSvg white={type === 'service'} /> : <Avatar src={avatarUrl?.url} />}
+							<Space className="!border-none px-4  gap-5 flex justyfy-between">
+								{isAvatarLoading ? '' : <Avatar
+								 		
+								 		key={avatarUrlLocal?.id}
+										className='bg-[#cbdaf1] rounded-[50%] !w-[45px] !h-[45px] !border-none blur-[0.5px]  opacity-[0.8]'
+										size={180}
+										src={avatarLocal}
+								// 		icon={
+								// avatarUrl?.url==='There is no photo' ? <PersonSvg white={type === 'service'} /> 
+								// : avatarUrl===null ? <PersonSvg white={type === 'service'} /> 
+								// : errorAva ? <PersonSvg white={type === 'service'} /> 
+								// : avatarUrl?.url
+								// }
+								/>}
 								<div className={clsx('h-full max-[455px]:hidden', type === 'service' && 'text-white')}>
 									<div className="font-bold text-sm truncate max-w-[120px]">
 										{i18n.language === 'ru'
@@ -462,7 +497,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 								</div>
 							</Space>
 						</Dropdown>
-						<Drawer
+						{/* <Drawer
 							rootStyle={{ position: 'fixed', top: 75 }}
 							placement="top"
 							size="large"
@@ -473,7 +508,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 							key="top"
 						>
 							<ModalNav />
-						</Drawer>
+						</Drawer> */}
 					</div>
 				</div>
 			</div>

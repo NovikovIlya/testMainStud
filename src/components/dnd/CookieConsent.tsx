@@ -26,7 +26,7 @@ const CookieConsent = () => {
       <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <p className="text-gray-600 text-sm md:text-base flex-1">
           {t('continue')}{' '}
-          <a href="https://prepschool.kpfu.ru/content/uploads/2022/03/politika-konfidenczialnosti-1.docx" className="text-blue-500 hover:text-blue-600">
+          <a href="https://kpfu.ru/portal/docs/F722252292/pd_policy.pdf" className="text-blue-500 hover:text-blue-600">
             {t('privacyPolicy')}
           </a>
           . {t('block')}

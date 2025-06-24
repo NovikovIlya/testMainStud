@@ -13,7 +13,7 @@ export const Layout: FC<ILayoutProps> = ({ children }) => {
 			 
 			<div className=" flex w-full h-full min-h-screen">
 				<div className="flex flex-col w-full">
-					<Header />
+					 <Header /> 
 					{children}
 					
 				</div>

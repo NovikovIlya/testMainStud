@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/browser'
 import React, { Suspense } from 'react'
 import ReactDOM from 'react-dom/client'
 import { Provider } from 'react-redux'
@@ -9,6 +10,7 @@ import CookieConsent from './components/dnd/CookieConsent'
 import './index.scss'
 import { store } from './store'
 
+Sentry.init({ dsn: 'https://3f6acd05f9694ea095dc26db003809cb@app.glitchtip.com/11250' })
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
 root.render(

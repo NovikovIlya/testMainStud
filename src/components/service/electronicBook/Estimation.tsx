@@ -14,6 +14,8 @@ export const Estimation = () => {
 	const [data, changeData] = useState<DataType[] | null>(null)
 	const { data: performance } = useGetPerformanceQuery()
 	const { t } = useTranslation()
+	const [isSemestr9,setIsSemestr9] = useState(false)
+	const [isSemestr11,setIsSemestr11] = useState(false)
 
 	const columnSemester: ColumnsType<DateSemester> = [
 		{
@@ -127,6 +129,17 @@ export const Estimation = () => {
 		setSemester(semester)
 	}
 
+	useEffect(()=>{
+		if(performance?.journal){
+			const isSemestr9 = performance?.journal?.some(s => s.semester === 9);
+			const isSemestr11 = performance?.journal?.some(s => s.semester === 11);
+			
+			console.log('isSemestr11',isSemestr11)
+			setIsSemestr9(isSemestr9)
+			setIsSemestr11(isSemestr11)
+		}
+	},[performance])
+
 	useEffect(() => {
 		if (performance) {
 			changeData(getPerformance(performance.journal))
@@ -157,6 +170,8 @@ export const Estimation = () => {
 		})
 		return result.sort((a, b) => a.term - b.term)
 	}
+	const scrollY = `calc(100vh - 340px)`; // но без кавычек внутри calc
+
 	return (
 		<div className="radio">
 			{/* <div className="mb-14 text-[28px]">{t('ElectronicBook')}</div> */}
@@ -181,6 +196,12 @@ export const Estimation = () => {
 				<Radio.Button className="rounded-full h-full flex items-center text-base bg-transparent" value="4">
 					{t('FourthYear')}
 				</Radio.Button>
+				{isSemestr9 ?<Radio.Button className="rounded-full h-full flex items-center text-base bg-transparent" value="5">
+									{t('5th_year')}
+								</Radio.Button> : ''}
+								{isSemestr11 ?<Radio.Button className="rounded-full h-full flex items-center text-base bg-transparent" value="6">
+									{t('6th_year')}
+								</Radio.Button>: ''}
 			</Radio.Group>
 			<div className="my-10 gap-5 flex flex-col">
 				<ConfigProvider
@@ -199,6 +220,7 @@ export const Estimation = () => {
 						loading={!data ? true : false}
 						className="w-full drop-shadow-lg shadow-[#d4e3f1] rounded-none"
 						locale={{ emptyText: t('noData') }}
+						scroll={{ y: scrollY, x: 'max-content' }}
 					/>
 				</ConfigProvider>
 			</div>

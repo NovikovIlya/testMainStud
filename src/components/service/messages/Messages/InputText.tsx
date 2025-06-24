@@ -37,7 +37,7 @@ const InputText = ({disabled=false,files,text='',clickTextArea,isModal=false,for
 						backgroundColor: disabled ? '#FFFFF0' : 'white', // Задайте цвет в зависимости от состояния
 						color: disabled ? 'rgba(0, 0, 0, 0.25)' : 'black' // Цвет текста
 					  }}
-					maxLength={75}
+					maxLength={1000}
 					
 					className={`${isModal ? `rounded-[10px_0px_0px_10px]` : `rounded-[10px_0px_0px_10px]` }   !h-[54px]`}
 					onClick={clickTextArea}

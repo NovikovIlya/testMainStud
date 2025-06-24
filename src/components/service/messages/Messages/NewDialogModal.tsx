@@ -87,7 +87,7 @@ export const NewDialogModal = ({ isModalOpen, onCancel }: any) => {
 				form.resetFields()
 				dispatch(
 					showNotification({
-						message: `Такой диалог уже создан`,
+						message: err,
 						type: 'error'
 					})
 				)

@@ -2,6 +2,7 @@ import i18n from 'i18next'
 
 import { IApproveRequest } from '../../api/types'
 import {
+	AwardType,
 	CategoryType,
 	ChangeStageStatusType,
 	ChatMessageType,
@@ -501,6 +502,41 @@ export const serviceApi = apiSlice.injectEndpoints({
 			},
 			invalidatesTags: ['emails']
 		}),
+		setMainEmail: builder.mutation<void, number>({
+			query: id => {
+				return {
+					url: `user-api/settings/emails/set-main/${id}`,
+					method: 'PATCH'
+				}
+			},
+			invalidatesTags: ['emails']
+		}),
+		setEmailMarker: builder.mutation<any, { id: number; marker: string }>({
+			query: body => ({
+				url: 'user-api/settings/emails/marker',
+				method: 'PATCH',
+				body
+			}),
+			invalidatesTags: ['emails']
+		}),
+		setPhoneMarker: builder.mutation<any, { id: number; marker: string }>({
+			query: body => ({
+				url: 'user-api/settings/phones/marker',
+				method: 'PATCH',
+				body
+			}),
+			invalidatesTags: ['phones']
+		}),
+
+		setMainPhone: builder.mutation<void, number>({
+			query: id => {
+				return {
+					url: `user-api/settings/phones/set-main/${id}`,
+					method: 'PATCH'
+				}
+			},
+			invalidatesTags: ['phones']
+		}),
 		finalVerifyPhone: builder.mutation({
 			query: obj => {
 				return {
@@ -928,6 +964,15 @@ export const serviceApi = apiSlice.injectEndpoints({
 			keepUnusedDataFor: 1,
 			providesTags: ['role']
 		}),
+		getCurrentDate: builder.query<any, void>({
+			query: () => {
+				return {
+					url: 'schedule-api/current-date',
+					method: 'GET'
+				}
+			},
+			keepUnusedDataFor: 1
+		}),
 		getOldEducations: builder.query<{ previous: OldEducationTableDataType[] }, void>({
 			query: () => ({
 				url: `about-me/get-edu-prev`
@@ -944,7 +989,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 			}),
 			providesTags: ['Education']
 		}),
-		addNewEducation: builder.mutation<void, EducationTableDataType>({
+		addNewEducation: builder.mutation<void, any>({
 			query: arg => ({
 				url: `about-me/set-completed-edu`,
 				method: 'POST',
@@ -952,7 +997,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 			}),
 			invalidatesTags: ['Education']
 		}),
-		deleteNewEducation: builder.mutation<void, EducationTableDataType>({
+		deleteNewEducation: builder.mutation<void, any>({
 			query: arg => ({
 				url: `about-me/set-completed-edu`,
 				method: 'DELETE',
@@ -960,11 +1005,11 @@ export const serviceApi = apiSlice.injectEndpoints({
 			}),
 			invalidatesTags: ['Education']
 		}),
-		updateNewEducation: builder.mutation<void, EducationTableDataType>({
+		updateNewEducation: builder.mutation<void, any>({
 			query: arg => ({
 				url: `about-me/set-completed-edu`,
 				method: 'PUT',
-				body: Object.fromEntries(Object.entries(arg).filter(([_, v]) => v != null))
+				body: arg
 			}),
 			invalidatesTags: ['Education']
 		}),
@@ -1021,6 +1066,42 @@ export const serviceApi = apiSlice.injectEndpoints({
 				url: `${emplBaseURL}employment-api/v1/interview/${interviewId}`,
 				method: 'DELETE'
 			})
+		}),
+		getAwards: builder.query<AwardType[], void>({
+			query: () => ({
+				url: `about-me/get-awards`
+			}),
+			providesTags: ['Awards']
+		}),
+		addNewAward: builder.mutation<void, any>({
+			query: arg => ({
+				url: `about-me/set-award`,
+				method: 'POST',
+				body: arg
+			}),
+			invalidatesTags: ['Awards']
+		}),
+		deleteNewAward: builder.mutation<void, number>({
+			query: awardId => ({
+				url: `about-me/set-award?id=${awardId}`,
+				method: 'DELETE'
+			}),
+			invalidatesTags: ['Awards']
+		}),
+		updateNewAward: builder.mutation<void, any>({
+			query: arg => ({
+				url: `about-me/set-award`,
+				method: 'PUT',
+				body: arg
+			}),
+			invalidatesTags: ['Awards']
+		}),
+		publishEducation: builder.mutation<void, number>({
+			query: educationId => ({
+				url: `about-me/edu-is-published?id=${educationId}`,
+				method: 'PATCH'
+			}),
+			invalidatesTags: ['Education']
 		})
 	})
 })
@@ -1165,5 +1246,15 @@ export const {
 	useGetInterviewQuery,
 	useLazyGetInterviewQuery,
 	useLazyGetChatIdByRespondIdQuery,
-	useDeleteInterviewMutation
+	useDeleteInterviewMutation,
+	useGetCurrentDateQuery,
+	useGetAwardsQuery,
+	useAddNewAwardMutation,
+	useUpdateNewAwardMutation,
+	useDeleteNewAwardMutation,
+	useSetMainEmailMutation,
+	useSetEmailMarkerMutation,
+	useSetPhoneMarkerMutation,
+	useSetMainPhoneMutation,
+	usePublishEducationMutation
 } = serviceApi

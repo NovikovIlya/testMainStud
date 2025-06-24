@@ -1,10 +1,10 @@
-import { ConfigProvider, Radio, RadioChangeEvent, Table } from 'antd'
+import { ConfigProvider, Radio, RadioChangeEvent, Spin, Table } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 import { t } from 'i18next'
 import { useEffect, useState } from 'react'
 
 import { DataType } from '../../../models/schedule'
-import { useGetScheduleQuery } from '../../../store/api/serviceApi'
+import { useGetCurrentDateQuery, useGetScheduleQuery } from '../../../store/api/serviceApi'
 import useWindowOrientation from '../../../utils/hooks/useDeviceOrientation'
 import { isMobileDevice } from '../../../utils/hooks/useIsMobile'
 
@@ -12,6 +12,7 @@ import './StyleSchedule.scss'
 
 export const Schedule = () => {
 	const { data: schedule, isLoading } = useGetScheduleQuery()
+	const {data: dataCurrentDate,isLoading:isLoadingDate} = useGetCurrentDateQuery()
 	const [data, setData] = useState<DataType[] | undefined>()
 	const isMobile = isMobileDevice()
 	const orientation = useWindowOrientation()
@@ -76,15 +77,56 @@ export const Schedule = () => {
 			render: item => <p className="text-base">{item}</p>
 		}
 	]
-
 	useEffect(() => {
-		setData(schedule?.monday)
-	}, [isLoading, schedule])
+		setData(filterLessonsByDate(schedule?.monday))
+	}, [isLoading, schedule,dataCurrentDate])
 
 	const onChange = (e: RadioChangeEvent) => {
-		console.log('e', e)
 		//@ts-ignore
-		setData(schedule[e.target.value])
+		setData(filterLessonsByDate(schedule[e.target.value]))
+	}
+
+	const parseRussianDate = (dateStr: string) => {
+		// Преобразуем формат "DD.MM.YYYY" в "YYYY-MM-DD" для создания Date
+		const [day, month, year] = dateStr.split('.');
+		return new Date(`${year}-${month}-${day}`);
+	};
+
+	const isLessonActive = (duration: string) => {
+		if (!dataCurrentDate?.date || !duration) return false; // Если данных нет, показываем все предметы
+		
+		try {
+			const currentDate = parseRussianDate(dataCurrentDate?.date);
+			const [startDateStr, endDateStr] = duration.split('-');
+			
+			// Преобразуем строки дат в формате "DD.MM.YY" в объекты Date
+			const startParts = startDateStr.split('.');
+			const endParts = endDateStr.split('.');
+			
+			// Создаем даты в формате YYYY-MM-DD
+			const startDate = new Date(
+				parseInt(`20${startParts[2]}`), // Год (добавляем "20" к двузначному году)
+				parseInt(startParts[1]) - 1,    // Месяц (0-11)
+				parseInt(startParts[0])         // День
+			);
+			
+			const endDate = new Date(
+				parseInt(`20${endParts[2]}`),   // Год
+				parseInt(endParts[1]) - 1,      // Месяц
+				parseInt(endParts[0])           // День
+			);
+			console.log(currentDate, startDate, endDate);
+			// Проверяем, входит ли текущая дата в диапазон
+			return currentDate >= startDate && currentDate <= endDate;
+		} catch (error) {
+			console.error('Ошибка при обработке дат:', error);
+			return true; // В случае ошибки показываем предмет
+		}
+	}
+
+	const filterLessonsByDate = (lessons: DataType[] | undefined) => {
+		if (!lessons) return undefined;
+		return lessons?.filter(lesson => isLessonActive(lesson?.duration));
 	}
 
 	if (schedule === undefined) return null
@@ -94,9 +136,10 @@ export const Schedule = () => {
 			<div className="max-w-full text-center mt-10">
 				В данном разрешении модуль не работает, пожалуйста поверните телефон
 			</div>
-		)
+	)
 
 	return (
+		<Spin  spinning={isLoadingDate}>
 		<div className={`${isMobile ? 'mx-0' : 'mx-14'} mt-14  radio w-full justify-center`}>
 			{/* <div className="mb-14 text-[28px]">Мое расписание</div> */}
 			<Radio.Group onChange={onChange} defaultValue="monday" buttonStyle="solid" className="flex gap-[10px] h-9">
@@ -176,5 +219,6 @@ export const Schedule = () => {
 				</div>
 			</div>
 		</div>
+		</Spin>
 	)
 }

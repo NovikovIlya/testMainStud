@@ -99,6 +99,7 @@ interface Day {
 	building: string
 	room: string
 	type: string
+	duration: string
 }
 export interface Exam {
 	building_name: string
@@ -141,12 +142,14 @@ export type EducationTableDataType = {
 	issue_date: string
 	docnum: string
 	docseries: string
-	portal_status: '1' | null
+	portal_status: '1' | '0'
 	s_id?: number
 	e_id?: number
 	user_allid?: number
 	id?: number
-	edu_file: { file_base64: string | null; filename: string | null }[]
+	filename: string
+	edu_file_url: string
+	is_modified: boolean
 }
 
 export type OldEducationTableDataType = {
@@ -568,4 +571,18 @@ export type PageableType<ContentType> = {
 		totalElements: number
 		totalPages: number
 	}
+}
+
+export type AwardType = {
+	id: number
+	award: string
+	awardDate: string
+	docNum: string
+	docDate: string
+	languagePortal: number
+	portalStatus: string
+	url: string
+	filename: string
+	awardFileUrl: string
+	awardFileId: number
 }

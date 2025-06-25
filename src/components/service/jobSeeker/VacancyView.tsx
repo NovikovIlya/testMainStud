@@ -1,15 +1,17 @@
 import { LoadingOutlined } from '@ant-design/icons'
 import { Spin } from 'antd'
-import { t } from 'i18next'
+import i18next, { t } from 'i18next'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { useAppSelector } from '../../../store'
-import { useGetCheckboxQuery } from '../../../store/api/aboutMe/forAboutMe'
+import { useGetCheckboxQuery, useLazyGetAboutMeQuery } from '../../../store/api/aboutMe/forAboutMe'
 import { useLazyGetInfoUserQuery } from '../../../store/api/formApi'
 import { useLazyGetSeekerVacancyRelationQuery, usePostVacancyRespondMutation } from '../../../store/api/serviceApi'
 import { useLazyGetVacancyViewQuery } from '../../../store/api/serviceApi'
+import { useGetCountriesQuery, useLazyGetCountriesQuery } from '../../../store/api/utilsApi'
 import { setCurrentVacancy } from '../../../store/reducers/CurrentVacancySlice'
 import { allData } from '../../../store/reducers/SeekerFormReducers/AboutMeReducer'
 import { setData } from '../../../store/reducers/SeekerFormReducers/ResponseDataSetReducer'
@@ -19,10 +21,13 @@ import { ResponseForm } from './ResponceForm'
 
 export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 	const [canRespond, setCanRespond] = useState<boolean>(false)
+	const { i18n } = useTranslation()
 
 	const [getVacancy, { data, isLoading }] = useLazyGetVacancyViewQuery()
 	const [getRelation, getRelationStatus] = useLazyGetSeekerVacancyRelationQuery()
 	const [getInfo, getInfoStatus] = useLazyGetInfoUserQuery()
+	const [getAboutMe, getAboutMeStatus] = useLazyGetAboutMeQuery()
+	const [getCountries, getCountriesStatus] = useLazyGetCountriesQuery()
 	const { data: checkboxes, isLoading: checkboxesLoading } = useGetCheckboxQuery()
 
 	const dispatch = useDispatch()
@@ -59,27 +64,36 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 
 	useEffect(() => {
 		if (user && !dataSet) {
-			getInfo()
+			getAboutMe()
 				.unwrap()
 				.then(info => {
-					dispatch(
-						allData({
-							name: user.firstname,
-							surName: user.lastname,
-							patronymic: user.middleName,
-							phone: user.phone,
-							email: user.email,
-							birthDay: user.birthday,
-							gender: info.gender,
-							countryId: info.countryId,
-							isPatronymicSet:
-								user.middleName === null || user.middleName === undefined || user.middleName === '' ? false : true,
-							isBirthDaySet:
-								user.birthday === null || user.birthday === undefined || user.birthday === '' ? false : true,
-							isGenderSet: info.gender === null || info.gender === undefined ? false : true
+					getCountries(i18next.language)
+						.unwrap()
+						.then(countries => {
+							dispatch(
+								allData({
+									name: info.FIRSTNAME,
+									surName: info.LASTNAME,
+									patronymic: info.SECONDNAME,
+									phone: user.phone,
+									email: user.email,
+									birthDay: user.birthday,
+									gender: info.SEX === 'm' ? 'M' : 'W',
+									countryId:
+										i18next.language === 'ru'
+											? countries.find(country => country.shortName === info.CITIZENSHIP_COUNTRY)
+												? countries.find(country => country.shortName === info.CITIZENSHIP_COUNTRY)?.id
+												: user.countryId
+											: user.countryId,
+									isPatronymicSet:
+										info.SECONDNAME === null || info.SECONDNAME === undefined || info.SECONDNAME === '' ? false : true,
+									isBirthDaySet:
+										user.birthday === null || user.birthday === undefined || user.birthday === '' ? false : true,
+									isGenderSet: info.SEX === null || info.SEX === undefined ? false : true
+								})
+							)
+							dispatch(setData(true))
 						})
-					)
-					dispatch(setData(true))
 				})
 		}
 	}, [])
@@ -141,7 +155,7 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 		conditionsArr = conditions.match(/<li>[a-zA-Zа-яА-ЯёЁ0-9\s\:\,\.\/\–\—\(\)\+\-]+/g)
 	}
 
-	if (isLoading || getRelationStatus.isLoading || getInfoStatus.isLoading || checkboxesLoading) {
+	if (isLoading || getRelationStatus.isLoading || getAboutMeStatus.isLoading || checkboxesLoading) {
 		return (
 			<>
 				<div className="w-full h-full flex items-center">
@@ -174,7 +188,7 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 					<p className="w-[106px] font-content-font font-bold text-black text-[18px]/[21px]">{t('employmentType')}</p>
 					<p className="w-[106px] font-content-font font-bold text-black text-[18px]/[21px]">{t('salary')}</p>
 					{props.type === 'CATALOG' ? (
-						<ResponseForm canRespond={canRespond} personalData={checkboxes.IS_CHECKED_PERS_DATA === 1} />
+						<ResponseForm canRespond={canRespond} personalData={true} />
 					) : (
 						<>
 							<div className="w-[143px]"></div>

@@ -998,8 +998,10 @@
 	"NoticeList": "List of notifications",
 	"NoticeListInfo": "Module for viewing all system and user notifications in a single list",
 	"EmpDempDocument": "Ordering documents from the HR department",
-	"EmpDempDocumentInfo": "Module for processing requests for personnel documents: copies of work books, extracts from orders and certificates related to work activities",
+	"EmpDempDocumentInfo": "Preparation of personnel documents: copies of work books, extracts from orders, certificates",
 	"AccDempDocument": "Order a certificate from the Accounting Department",
-	"AccDempDocumentInfo": "Module for processing requests for financial certificates (2-NDFL, statements) and their automatic generation",
-	"PsychologicalHelpEmpInfo": "Module for receiving consultations, accessing psychological support resources and making an appointment"
+	"AccDempDocumentInfo": "Preparation of financial statements (2-NDFL, statements) and their automatic generation",
+	"PsychologicalHelpEmpInfo": "Module for receiving consultations, accessing psychological support resources and making an appointment",
+	"EducationDeparmentRequests": "Applications to the Department of Education",
+	"EducationDeparmentRequestsInfo": "Processing requests for educational processes, access to resources and system administration"
 }

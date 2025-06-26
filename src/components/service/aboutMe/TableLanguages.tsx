@@ -973,7 +973,7 @@ const TableLanguages = ({
 						</Form.Item>
 
 						<Button loading={isLoadingEdit} type="primary" htmlType="submit">
-							{t('edit')}
+							{t('save')}
 						</Button>
 					</Form>
 									</Modal>

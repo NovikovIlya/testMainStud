@@ -301,7 +301,7 @@ const Languages = () => {
 							wrapperCol={{ span: 24 }}
 							layout="vertical"
 							className="mt-4 h-[35px]"
-							rules={[{ required: true, message: 'Выберите язык' }]}
+							rules={[{ required: true, message: t('selectLanguage') }]}
 						>
 							<Select
 							   showSearch 

@@ -63,7 +63,7 @@ const Scientific = () => {
 			form2.setFields([
 				{
 					name: field,
-					errors: ['Введите минимум 4 символа']
+					errors: [t('inputFour')]
 				}
 			])
 			setDataScientificDirectorsValue([])

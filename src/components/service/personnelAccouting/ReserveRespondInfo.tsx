@@ -43,13 +43,7 @@ export const ReserveRespondInfo = (props: {
 	const currentUrl = window.location.pathname
 	const match = currentUrl.match(/\/fullinfo\/(\d+)(?=\/|$)/)
 
-	let id_from_url: string | number
-
-	if (match) {
-		id_from_url = match[1]
-	} else {
-		console.error('id miss')
-	}
+	const id_from_url = parseInt(currentUrl.substring(currentUrl.lastIndexOf('/') + 1))
 
 	const { data: res } = useGetReservedRespondFullInfoQuery(id_from_url)
 

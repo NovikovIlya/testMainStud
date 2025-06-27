@@ -1,7 +1,7 @@
 import { LoadingOutlined } from '@ant-design/icons'
 import { Radio, Spin } from 'antd'
 import { useEffect, useRef, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import { useLazyGetResponcesByVacancyQuery } from '../../../store/api/serviceApi'
 import { VacancyRespondItemType, respondStatus } from '../../../store/reducers/type'
@@ -15,7 +15,10 @@ export const VacancyResponces = () => {
 	const url = new URL(currentUrl)
 
 	const navigate = useNavigate()
-	const parameters = useParams()
+	const currentVacancyTitle = url.searchParams.get('vacancy')
+
+	const vacancyId = Number(url.searchParams.get('id'))
+	console.log(vacancyId)
 
 	const [requestData, setRequestData] = useState<{
 		status: string
@@ -59,24 +62,14 @@ export const VacancyResponces = () => {
 
 	useEffect(() => {
 		if (requestData.page === 0) {
-			getResponds({
-				status: requestData.status,
-				id: parseInt(parameters.vacancyId!),
-				role: 'PERSONNEL_DEPARTMENT',
-				page: requestData.page
-			})
+			getResponds({ status: requestData.status, id: vacancyId, role: 'PERSONNEL_DEPARTMENT', page: requestData.page })
 				.unwrap()
 				.then(res => {
 					setResponds(res.content)
 					setBlockPageAddition(false)
 				})
 		} else {
-			getResponds({
-				status: requestData.status,
-				id: parseInt(parameters.vacancyId!),
-				role: 'PERSONNEL_DEPARTMENT',
-				page: requestData.page
-			})
+			getResponds({ status: requestData.status, id: vacancyId, role: 'PERSONNEL_DEPARTMENT', page: requestData.page })
 				.unwrap()
 				.then(res => {
 					setResponds(prev => [...prev, ...res.content])
@@ -120,7 +113,7 @@ export const VacancyResponces = () => {
 						<ArrowIcon />
 					</button>
 					<p className="ml-[40px] font-content-font font-normal text-black text-[28px]/[33.6px]">
-						Отклики на вакансию «{parameters.vacancyTitle}»
+						Отклики на вакансию «{currentVacancyTitle}»
 					</p>
 				</div>
 				<div className="mt-[52px] mb-[60px] flex items-center gap-[16px]">

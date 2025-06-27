@@ -603,10 +603,10 @@ export const NavPesonnelAccounting = () => {
 			<div className="bg-[#F5F8FB] flex w-[calc(100%-230px)]">
 				<Routes>
 					<Route path={navEmployeeList[0].id} element={<Responds />}></Route>
-					<Route
+					{/* <Route
 						path="personnelaccounting/responds/byvacancy/:vacancyTitle/:vacancyId"
 						element={<VacancyResponces />}
-					></Route>
+					></Route> */}
 					<Route
 						path="personnelaccounting/responds/fullinfo/:respondId"
 						element={<RespondInfo type="PERSONNEL_DEPARTMENT" />}
@@ -618,7 +618,7 @@ export const NavPesonnelAccounting = () => {
 					<Route path={navEmployeeList[1].id} element={<ChatEmpDemp />}></Route>
 				</Routes>
 				{/* {pathname === navEmployeeList[0].id && <Responds />} */}
-				{/* {pathname.match('services/personnelaccounting/responds/byvacancy/*') && <VacancyResponces />} */}
+				{pathname.match('services/personnelaccounting/responds/byvacancy/*') && <VacancyResponces />}
 				{/* {pathname.match('services/personnelaccounting/responds/fullinfo') && (
 					<RespondInfo type="PERSONNEL_DEPARTMENT" />
 				)} */}

@@ -109,12 +109,12 @@ export const NavMyResponds = () => {
 				<Routes>
 					<Route path={navList[0].id} element={<MyResponds />}></Route>
 					<Route path="myresponds/responds/fullinfo/:respondId" element={<RespondInfo type="SEEKER" />}></Route>
-					<Route path={navList[1].id} element={<Chat />}></Route>
+					{/* <Route path={navList[1].id} element={<Chat />}></Route> */}
 					<Route path={navList[2].id + '/*'} element={<NavSeekerEmployment />}></Route>
 				</Routes>
 				{/* {pathname === navList[0].id && <MyResponds />} */}
 				{/* {pathname.match(/\/services\/myresponds\/responds\/fullinfo\/\d+/) && <RespondInfo type="SEEKER" />} */}
-				{/* {pathname.includes(navList[1].id) && <Chat />} */}
+				{pathname.includes(navList[1].id) && <Chat />}
 				{/* {pathname.includes(navList[2].id) && <NavSeekerEmployment />} */}
 			</div>
 		</>

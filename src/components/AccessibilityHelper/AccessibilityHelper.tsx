@@ -125,7 +125,7 @@ const AccessibilityHelper: React.FC<AccessibilityHelperProps> = forwardRef(({ la
         <KeyOutlined className="h-6 w-6" />
       </button> */}
       {isOpen && (
-        <div ref={ref} className="absolute bottom-12 right-2 w-74 bg-white shadow-lg rounded-lg p-8 accesibility-helper min-w-[312px]">
+        <div ref={ref} className="absolute bottom-12 right-[28px] w-74 bg-white shadow-lg rounded-lg p-8 accesibility-helper min-w-[312px]">
           <div  className="grid gap-4">
             {[
               { icon: KeyOutlined, text: text?.tabs, option: 'helper-core-tabHighlight' },

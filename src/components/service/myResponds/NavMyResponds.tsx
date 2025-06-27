@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import { t } from 'i18next'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 
 import { BlueDocSvg } from '../../../assets/svg/BlueDocSvg'
 import { BriefcaseSvg } from '../../../assets/svg/BriefcaseSvg'
@@ -24,17 +24,17 @@ export const NavMyResponds = () => {
 
 	const navList = [
 		{
-			id: '/services/myresponds/responds',
+			id: 'myresponds/responds',
 			icon: <BriefcaseSvg />,
 			name: t('myResponds2')
 		},
 		{
-			id: '/services/myresponds/chat',
+			id: 'myresponds/chat',
 			icon: <BlueDocSvg />,
 			name: t('messages')
 		},
 		{
-			id: '/services/myresponds/employment',
+			id: 'myresponds/employment',
 			icon: <CalendarSvg />,
 			name: t('employmentStage')
 		}
@@ -106,10 +106,16 @@ export const NavMyResponds = () => {
 				<ul className="w-[230px] pt-14 flex flex-col gap-4 sticky top-[80px]">{handleList}</ul>
 			</div>
 			<div className="bg-[#F5F8FB] flex w-[calc(100%-230px)] overflow-hidden">
-				{pathname === navList[0].id && <MyResponds />}
-				{pathname.match(/\/services\/myresponds\/responds\/fullinfo\/\d+/) && <RespondInfo type="SEEKER" />}
-				{pathname.includes(navList[1].id) && <Chat />}
-				{pathname.includes(navList[2].id) && <NavSeekerEmployment />}
+				<Routes>
+					<Route path={navList[0].id} element={<MyResponds />}></Route>
+					<Route path="myresponds/responds/fullinfo/:respondId" element={<RespondInfo type="SEEKER" />}></Route>
+					<Route path={navList[1].id} element={<Chat />}></Route>
+					<Route path={navList[2].id + '/*'} element={<NavSeekerEmployment />}></Route>
+				</Routes>
+				{/* {pathname === navList[0].id && <MyResponds />} */}
+				{/* {pathname.match(/\/services\/myresponds\/responds\/fullinfo\/\d+/) && <RespondInfo type="SEEKER" />} */}
+				{/* {pathname.includes(navList[1].id) && <Chat />} */}
+				{/* {pathname.includes(navList[2].id) && <NavSeekerEmployment />} */}
 			</div>
 		</>
 	)

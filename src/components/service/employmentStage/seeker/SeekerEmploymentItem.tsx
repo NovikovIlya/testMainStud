@@ -109,7 +109,7 @@ export const SeekerEmploymentItem = (props: RespondItemType) => {
 													: comm.type === 'FOURTH'
 													? dispatch(setStage('FOURTH'))
 													: dispatch(setStage('FIFTH'))
-												navigate(`/services/myresponds/employment/stages/${props.vacancyId}/${props.id}`)
+												navigate(`/stages/${props.vacancyId}/${props.id}`)
 											}}
 										>
 											{comm.type === 'SECOND'

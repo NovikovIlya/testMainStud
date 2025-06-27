@@ -39,7 +39,7 @@ export const TemplateCard = ({
 				} max-[874px]:flex-col max-[874px]:h-full max-[874px]:w-full max-[874px]:items-center h-full `}
 			>
 				<div className="!w-[100%]  text-left ">
-					<div className="text-[10px] sm:leading-7 md:text-xl font-bold h-10">{t(title)}</div>
+					<div className="text-[8px] text-center sm:text-start sm:text-[10px] sm:leading-7 md:text-xl font-bold h-10">{t(title)}</div>
 					<div className="hidden sm:block text-xs sm:text-base w-full font-normal leading-relaxed mt-7 max-[870px]:hidden">
 						{t(info)}
 					</div>

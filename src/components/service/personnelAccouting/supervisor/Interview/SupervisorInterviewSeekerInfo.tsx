@@ -16,6 +16,7 @@ import {
 } from '../../../../../store/api/serviceApi'
 import { useGetCountriesQuery } from '../../../../../store/api/utilsApi'
 import { NocircleArrowIcon } from '../../../jobSeeker/NoCircleArrowIcon'
+import { RespondInfoCommon } from '../../RespondInfoCommon'
 
 export const SupervisorInterviewSeekerInfo = () => {
 	const [api, contextHolder] = notification.useNotification()
@@ -499,139 +500,12 @@ export const SupervisorInterviewSeekerInfo = () => {
 						</ConfigProvider>
 						<Component time={time} format={format} timeFormated={timeFormated}></Component>
 					</div>
-					<hr />
-					<div className="flex flex-col gap-[24px]">
-						<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">
-							Сопроводительное письмо
-						</p>
-						<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-							{data?.respondData.coverLetter}
-						</p>
-					</div>
-					<hr />
-					<div className="flex flex-col gap-[24px]">
-						<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">Образование</p>
-						<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
-							{data?.educations.map(edu => (
-								<>
-									<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">{edu.endYear}</p>
-									<div className="flex flex-col gap-[8px]">
-										<p className="font-content-font font-bold text-black text-[16px]/[19.2px]">
-											{edu.institution + ', ' + edu.country}
-										</p>
-										<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-											{edu.speciality === null ? '' : edu.speciality + ', '}
-											{edu.educationLevel}
-										</p>
-									</div>
-								</>
-							))}
-						</div>
-					</div>
-					<hr />
-					<div className="flex flex-col gap-[24px]">
-						<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">Опыт работы</p>
-						{data?.respondData.portfolio.workExperiences.length === 0 ? (
-							<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-								Соискатель не имеет опыта работы
-							</p>
-						) : (
-							<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
-								{data?.respondData.portfolio.workExperiences.map(exp => (
-									<>
-										<div className="flex flex-col gap-[4px]">
-											<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-												{exp.beginWork.substring(0, 4)}-
-												{parseInt(exp.endWork.substring(0, 4)) === date.getFullYear()
-													? 'по наст.время'
-													: exp.endWork.substring(0, 4)}
-											</p>
-											<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-												{parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) === 0
-													? ''
-													: parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4))}
-												{parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) === 1 &&
-													' год'}
-												{parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) >= 2 &&
-													parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) <= 4 &&
-													' года'}
-												{parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) > 4 && ' лет'}
-											</p>
-										</div>
-										<div className="flex flex-col gap-[8px]">
-											<p className="font-content-font font-bold text-black text-[16px]/[19.2px]">{exp.position}</p>
-											<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">{exp.workPlace}</p>
-											<p className="font-content-font font-normal text-black text-[14px]/[16.8px]">{exp.duties}</p>
-										</div>
-									</>
-								))}
-							</div>
-						)}
-						{data?.respondData.portfolio.url !== '' && (
-							<div className="grid grid-cols-[164px_auto] gap-x-[50px] gap-y-[24px] w-[90%]">
-								<p>Ссылка на портфолио:</p>
-								<a href={data?.respondData.portfolio.url} target="_blank">
-									{data?.respondData.portfolio.url}
-								</a>
-							</div>
-						)}
-						{resumeQueryStatus.isSuccess && (
-							<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
-								<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">Резюме</p>
-								<div className="bg-white rounded-[16px] shadow-custom-shadow h-[59px] w-[65%] p-[20px] flex">
-									<MyDocsSvg />
-									<p
-										className="ml-[20px] font-content-font font-normal text-black text-[16px]/[19.2px] underline cursor-pointer"
-										onClick={() => {
-											const link = document.createElement('a')
-											link.href = resume
-											link.download = 'Резюме'
-											link.click()
-										}}
-									>
-										{'Резюме ' +
-											data?.userData?.lastname +
-											' ' +
-											data?.userData?.firstname +
-											' ' +
-											data?.userData?.middlename}
-									</p>
-									<p className="ml-auto font-content-font font-normal text-black text-[16px]/[19.2px] opacity-70">
-										{Math.round(resumeSize / 1000000) > 0
-											? Math.round(resumeSize / 1000000) + ' Мб'
-											: Math.round(resumeSize / 1000) > 0
-											? Math.round(resumeSize / 1000) + ' Кб'
-											: resumeSize + ' б'}
-									</p>
-								</div>
-							</div>
-						)}
-					</div>
-					<hr />
-					<div className="flex flex-col gap-[24px]">
-						<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">О себе</p>
-						<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-							{data?.respondData.skills.aboutMe}
-						</p>
-					</div>
-					<hr />
-					<div className="flex flex-col">
-						<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40 w-[194px]">
-							Профессиональные навыки
-						</p>
-						<div className="grid grid-cols-[194px_auto] gap-x-[20px] w-[90%]">
-							<div className="col-start-2 mt-[24px] flex gap-[8px] flex-wrap">
-								{data?.respondData.skills.keySkills.map(skill => (
-									<Tag
-										className="bg-black bg-opacity-10 rounded-[40px] py-[8px] px-[16px] font-content-font font-normal text-black text-[16px]/[19.2px]"
-										key={uuid()}
-									>
-										{skill}
-									</Tag>
-								))}
-							</div>
-						</div>
-					</div>
+					<RespondInfoCommon
+						res={data!}
+						resume={resume}
+						resumeSize={resumeSize}
+						isSuccess={resumeQueryStatus.isSuccess}
+					/>
 				</div>
 			</div>
 		</>

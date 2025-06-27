@@ -24,20 +24,13 @@ export const SupervisorUpdateVacancy = () => {
 		// Ищем id из URL
 		const match = currentUrl.match(/\/vacancyview\/(\d+)$/)
 
-		let id_from_url: string | undefined
-
-		if (match) {
-			id_from_url = match[1]
-		} else {
-			console.error('ID not found')
-			return // Возвращаемся, если id нет
-		}
+		const id_from_url = parseInt(currentUrl.substring(currentUrl.lastIndexOf('/') + 1))
 
 		// Если id найден, запускаем запрос
 		if (id_from_url) {
 			getVacancy(id_from_url)
 		}
-	}, [getVacancy])
+	}, [])
 
 	console.log(data)
 

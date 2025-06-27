@@ -37,15 +37,7 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 
 	const params = useParams()
 
-	let id_from_url: string
-	let page_id: number
-
-	if (match) {
-		id_from_url = match[1]
-	} else {
-		console.error('id miss')
-	}
-	page_id = Number(id_from_url)
+	const page_id = parseInt(currentUrl.pathname.substring(currentUrl.pathname.lastIndexOf('/') + 1))
 
 	const [answerMainTime, { isLoading: answerMainTimeLoading }] = useAnswerToInivitationMainTimeMutation()
 	const [getVacancy, result] = useLazyGetVacancyViewQuery()
@@ -188,7 +180,7 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 							})
 						}}
 						loading={answerMainTimeLoading}
-						disabled={isEmpDep || isResponsed}
+						disabled={isEmpDep === 'PERSONNEL_DEPARTMENT' || isResponsed}
 						className={`rounded-[54.5px] h-full border-black bg-inherit outline-none border cursor-pointer ${
 							isEmpDep || isResponsed ? 'select-none !cursor-not-allowed' : ''
 						}`}
@@ -201,7 +193,7 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 								setIsResponsed(true)
 							})
 						}}
-						disabled={isEmpDep || isResponsed}
+						disabled={isEmpDep === 'PERSONNEL_DEPARTMENT' || isResponsed}
 						className={`rounded-[54.5px] h-full border-black bg-inherit outline-none border cursor-pointer ${
 							isEmpDep || isResponsed ? 'select-none !cursor-not-allowed' : ''
 						}`}
@@ -218,7 +210,7 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 								setIsResponsed(true)
 							})
 						}}
-						disabled={isEmpDep || isResponsed}
+						disabled={isEmpDep === 'PERSONNEL_DEPARTMENT' || isResponsed}
 						className={`col-span-2 rounded-[54.5px] h-full border-black bg-inherit outline-none border cursor-pointer ${
 							isEmpDep || isResponsed ? 'select-none !cursor-not-allowed' : ''
 						}`}
@@ -251,7 +243,7 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 										setIsResponsed(true)
 									})
 								}}
-								disabled={isEmpDep || isResponsed}
+								disabled={isEmpDep === 'PERSONNEL_DEPARTMENT' || isResponsed}
 								loading={answerReserveTimeLoading && pressedButton === i}
 								className={`w-full text-[16px]/[19.2px] text-wrap h-full border-black rounded-[54.5px] py-[12px] px-[20px] text-center bg-inherit outline-none border cursor-pointer test:px-[12px]  ${
 									isEmpDep || isResponsed ? 'select-none !cursor-not-allowed' : ''
@@ -271,7 +263,7 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 							})
 						}}
 						loading={answerReserveTimeLoading && pressedButton === 3}
-						disabled={isEmpDep || isResponsed}
+						disabled={isEmpDep === 'PERSONNEL_DEPARTMENT' || isResponsed}
 						className={`row-start-2 row-end-2 col-span-3 rounded-[54.5px] h-full border-black bg-inherit outline-none border cursor-pointer ${
 							isEmpDep || isResponsed ? 'select-none !cursor-not-allowed' : ''
 						}`}
@@ -304,7 +296,7 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 								})
 							}}
 							loading={answerEmploymentRequestLoading && pressedButton === 4}
-							disabled={isEmpDep || isResponsed}
+							disabled={isEmpDep === 'PERSONNEL_DEPARTMENT' || isResponsed}
 							className={`w-6/12 text-[16px]/[19.2px] rounded-[54.5px] h-full border-black text-center bg-inherit outline-none border cursor-pointer ${
 								isEmpDep || isResponsed ? 'select-none !cursor-not-allowed' : ''
 							}`}
@@ -322,7 +314,7 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 									setIsResponsed(true)
 								})
 							}}
-							disabled={isEmpDep || isResponsed}
+							disabled={isEmpDep === 'PERSONNEL_DEPARTMENT' || isResponsed}
 							loading={answerEmploymentRequestLoading && pressedButton === 5}
 							className={`w-6/12 text-[16px]/[19.2px] rounded-[54.5px] h-full border-black text-center py-[12px] bg-inherit outline-none border cursor-pointer ${
 								isEmpDep || isResponsed ? 'select-none !cursor-not-allowed' : ''

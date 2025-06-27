@@ -60,7 +60,7 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 	const { dataSet } = useAppSelector(state => state.respondDataSet)
 	const { currentVacancy } = useAppSelector(state => state.currentVacancy)
 	const navigate = useNavigate()
-	const isEmpDep = user?.roles.find(role => role.type === 'EMPL')
+	const isEmpDep = user?.roles.find((role: { type: string }) => role.type === 'EMPL')
 
 	useEffect(() => {
 		if (user && !dataSet) {

@@ -45,13 +45,7 @@ export const ArchiveRespondInfo = (props: {
 	const currentUrl = window.location.pathname
 	const match = currentUrl.match(/\/fullinfo\/(\d+)(?=\/|$)/)
 
-	let id_from_url: string | number
-
-	if (match) {
-		id_from_url = match[1]
-	} else {
-		console.error('id miss')
-	}
+	const id_from_url = parseInt(currentUrl.substring(currentUrl.lastIndexOf('/') + 1))
 
 	const { data: res } = useGetArchivedRespondFullInfoQuery(id_from_url)
 
@@ -60,7 +54,7 @@ export const ArchiveRespondInfo = (props: {
 	const { t, i18n } = useTranslation()
 	const { data: countries, isLoading: isLoadingCountry } = useGetCountriesQuery(i18n.language)
 
-	const { refetch } = useGetArchivedResponcesQuery()
+	const { refetch } = useGetArchivedResponcesQuery(0)
 	const [approveRespond, { isLoading: approveRespondLoading }] = useApproveArchivedRespondMutation()
 	const [deleteRespond, { isLoading: deleteRespondLoading }] = useDeleteRespondFromArchiveMutation()
 	const [getResume, resumeQueryStatus] = useLazyGetSeekerResumeFileQuery()

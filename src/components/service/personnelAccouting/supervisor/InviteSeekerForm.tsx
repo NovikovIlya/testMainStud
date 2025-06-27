@@ -15,14 +15,7 @@ export const InviteSeekerForm = (props: { respondId: number; isButtonDisabled: b
 
 	const match = currentUrl.match(/\/fullinfo\/(\d+)$/)
 
-	let id_from_url: string
-	let current_page_id: number
-	if (match) {
-		id_from_url = match[1]
-	} else {
-		console.error('ID not found')
-	}
-	current_page_id = Number(id_from_url)
+	const current_page_id = parseInt(currentUrl.substring(currentUrl.lastIndexOf('/') + 1))
 
 	const [inviteSeeker, inviteSeekerQueryStatus] = useInviteSeekerMutation()
 

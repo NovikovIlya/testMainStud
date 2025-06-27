@@ -28,7 +28,7 @@ export const ChatEmpDempPreview = (props: {
 	lastMessageDate: string
 }) => {
 	const user = useAppSelector(state => state.auth.user)
-	const isEmpDemp = user?.roles.find(role => role.type === 'EMPL')
+	const isEmpDemp = user?.roles.find((role: { type: string }) => role.type === 'EMPL')
 
 	const { pathname } = useLocation()
 	const dispatch = useDispatch()

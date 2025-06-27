@@ -21,19 +21,9 @@ export const VacancyRequestCreateView = () => {
 	// Ищем id из URL
 	const match = currentUrl.match(/\/create\/(\d+)$/)
 
-	let id_from_url: string
-	let page_id: number
+	const requestId = parseInt(currentUrl.substring(currentUrl.lastIndexOf('/') + 1))
 
-	if (match) {
-		id_from_url = match[1]
-	} else {
-		console.error('id miss')
-	}
-	page_id = parseInt(id_from_url)
-
-	const requestId = page_id
-
-	const { data: requestView } = useGetVacancyRequestViewQuery(page_id)
+	const { data: requestView } = useGetVacancyRequestViewQuery(requestId)
 
 	console.log(requestView)
 
@@ -73,7 +63,7 @@ export const VacancyRequestCreateView = () => {
 	const [resultModalText, setResultModalText] = useState<string>('')
 
 	useEffect(() => {
-		getVacancyRequestView(page_id)
+		getVacancyRequestView(requestId)
 			.unwrap()
 			.then(req => {
 				setPost(req.newData.post)

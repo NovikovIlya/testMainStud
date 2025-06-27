@@ -39,7 +39,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 	const time = foundInterview?.time
 	console.log(time)
 
-	const createTimeFormatted = (time: string) => {
+	const createTimeFormatted = (time: string | undefined) => {
 		if (time) {
 			const date = new Date(time)
 
@@ -63,6 +63,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 			return timeFormated
 		} else {
 			console.error('Время не найдено.')
+			return ''
 		}
 	}
 	let timeFormated = createTimeFormatted(time)
@@ -498,7 +499,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 								</Form>
 							</Modal>
 						</ConfigProvider>
-						<Component time={time} format={format} timeFormated={timeFormated}></Component>
+						<Component time={time ? time : ''} format={format} timeFormated={timeFormated}></Component>
 					</div>
 					<RespondInfoCommon
 						res={data!}

@@ -21,14 +21,7 @@ export const VacancyRequestUpdateView = () => {
 	// Ищем id из URL
 	const match = currentUrl.match(/\/update\/(\d+)$/)
 
-	let id_from_url: string
-	let current_page_id: number
-	if (match) {
-		id_from_url = match[1]
-	} else {
-		console.error('ID not found')
-	}
-	current_page_id = Number(id_from_url)
+	const current_page_id = parseInt(currentUrl.substring(currentUrl.lastIndexOf('/') + 1))
 
 	const { data: requestView } = useGetVacancyRequestViewQuery(current_page_id)
 	console.log(requestView)
@@ -38,7 +31,7 @@ export const VacancyRequestUpdateView = () => {
 	const [alterRequest, { isLoading: alterRequestLoading }] = useAlterUpdateVacancyRequestMutation()
 	const [denyRequest] = useDenyVacancyRequestMutation()
 
-	const { refetch } = useGetVacancyRequestsQuery('все')
+	const { refetch } = useGetVacancyRequestsQuery({ action: 'все', page: 0 })
 
 	const [isEdit, setIsEdit] = useState<boolean>(false)
 	const [isEdited, setIsEdited] = useState<boolean>(false)

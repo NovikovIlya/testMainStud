@@ -716,27 +716,36 @@ const TableLanguages = ({
 	}
 
 	const beforeUpload = (file: File, fieldIndex: number) => {
-		const isPDF = file.type === 'application/pdf'
-		const isLt5M = file.size / 1024 / 1024 < 5
+    // Поддерживаемые форматы
+    const supportedFormats = [
+        'application/pdf',
+        'image/jpeg',
+        'image/jpg',
+        'image/png',
+        'image/gif'
+    ]
+    
+    const isValidFormat = supportedFormats.includes(file.type)
+    const isLt5M = file.size / 1024 / 1024 < 5
 
-		if (!isPDF) {
-			message.error('Можно загружать только PDF!')
-			return false
-		}
+    if (!isValidFormat) {
+        message.error('Можно загружать только PDF, JPEG/JPG, PNG или GIF!')
+        return false
+    }
 
-		if (!isLt5M) {
-			message.error('Файл должен быть меньше 5MB!')
-			return false
-		}
+    if (!isLt5M) {
+        message.error('Файл должен быть меньше 5MB!')
+        return false
+    }
 
-		// Сохраняем файл для конкретного индекса
-		setCertificateFiles(prev => ({
-			...prev,
-			[fieldIndex]: file
-		}))
+    // Сохраняем файл для конкретного индекса
+    setCertificateFiles(prev => ({
+        ...prev,
+        [fieldIndex]: file
+    }))
 
-		return false
-	}
+    return false
+}
 
 	const handleFileRemove = (fieldIndex: number) => {
 		setCertificateFiles(prev => {
@@ -943,7 +952,7 @@ const TableLanguages = ({
 															name: certificateFiles[index].name,
 															status: 'done'
 														}] : []}
-														accept=".pdf"
+														
 													>
 														<Button icon={<UploadOutlined />}>
 															{t('add')}
@@ -973,7 +982,7 @@ const TableLanguages = ({
 						</Form.Item>
 
 						<Button loading={isLoadingEdit} type="primary" htmlType="submit">
-							{t('edit')}
+							{t('save')}
 						</Button>
 					</Form>
 									</Modal>

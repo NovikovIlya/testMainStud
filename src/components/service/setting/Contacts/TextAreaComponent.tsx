@@ -35,7 +35,7 @@ const TextAreaComponent = () => {
 	}
 
 	return (
-		<Form form={form} onFinish={onSubmit}>
+		<Form form={form} onFinish={onSubmit} className='mt-10'>
 			<Spin spinning={isLoading || isUpdating}>
 				<section className=" mx-auto bg-white rounded-xl shadow-md overflow-hidden">
 					<div className="p-6">

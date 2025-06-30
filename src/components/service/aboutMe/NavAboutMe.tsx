@@ -108,15 +108,15 @@ export const NavAboutMe = () => {
 					</div>
 				)
 			},
-			// {
-			// 	key: '/services/aboutMe/awards',
-			// 	icon: <AwardsSvgNew />,
-			// 	label: (
-			// 		<div className="ml-[10px] min-w-0">
-			// 			<p className="whitespace-normal break-words text-wrap text-sm leading-4">{t('awards')}</p>
-			// 		</div>
-			// 	)
-			// },
+			{
+				key: '/services/aboutMe/awards',
+				icon: <AwardsSvgNew />,
+				label: (
+					<div className="ml-[10px] min-w-0">
+						<p className="whitespace-normal break-words text-wrap text-sm leading-4">{t('awards')}</p>
+					</div>
+				)
+			},
 			{
 				key: '/services/aboutMe/social',
 				icon: <SocialSvg />,
@@ -195,13 +195,7 @@ export const NavAboutMe = () => {
 			</div>
 
 			<div className={`${'ml-[229px]'} bg-[#F5F8FB] w-full pt-[70px] min-h-screen`}>
-				{/* {pathname === '/services/aboutMe/personalData' && <AboutMe />}
-		   		{pathname === '/services/aboutMe/contactInformation' && <MainContact />}
-				{pathname === '/services/aboutMe/document' && <Document />}
-				{pathname === '/services/aboutMe/address' && <Address />}
-				{pathname === '/services/aboutMe/education' && <Education />} */}
-
-				{/* Новый */}
+				
 				{mainRole === 'STUD' || mainRole === 'EMPL' ? (
 					<>
 						{pathname === '/services/aboutMe/personalData' && <AboutMeNew />}
@@ -210,7 +204,7 @@ export const NavAboutMe = () => {
 						{pathname === '/services/aboutMe/languages' && <Languages />}
 						{pathname === '/services/aboutMe/social' && <Social />}
 						{pathname === '/services/aboutMe/scientific' && <Scientific />}
-						{/* {pathname === '/services/aboutMe/awards' && <AwardsNew />} */}
+						{pathname === '/services/aboutMe/awards' && <AwardsNew />}
 					</>
 				) : (
 					<>

@@ -215,7 +215,7 @@ const NumberDataBloc = ({ isLoadingPost, sortedEmails, sendVer, handleDeleteEmai
 
 	return (
 		<Spin spinning={isLoadingPost || isLoadingMain || isLoading}>
-			<div className="">
+			<div className="mb-[16px]">
 				<div className=" mx-auto bg-white rounded-xl shadow-md overflow-hidden">
 					<div className="p-6">
 						<h1 className="mb-4">{t('telephoneBtn')}:</h1>

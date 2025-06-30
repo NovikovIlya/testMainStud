@@ -1090,6 +1090,13 @@ export const serviceApi = apiSlice.injectEndpoints({
 			}),
 			invalidatesTags: ['Awards']
 		}),
+		publishAward: builder.mutation<void, number>({
+			query: awardId => ({
+				url: `about-me/award-is-published?id=${awardId}`,
+				method: 'PATCH'
+			}),
+			invalidatesTags: ['Awards']
+		}),
 		publishEducation: builder.mutation<void, number>({
 			query: educationId => ({
 				url: `about-me/edu-is-published?id=${educationId}`,
@@ -1245,6 +1252,7 @@ export const {
 	useAddNewAwardMutation,
 	useUpdateNewAwardMutation,
 	useDeleteNewAwardMutation,
+	usePublishAwardMutation,
 	useSetMainEmailMutation,
 	useSetEmailMarkerMutation,
 	useSetPhoneMarkerMutation,

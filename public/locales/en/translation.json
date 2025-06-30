@@ -963,5 +963,6 @@
 	"awardDocumentDate": "Document date",
 	"awardNameNotEntered": "Enter award title",
 	"awardDateNotEntered": "Enter date of award",
-	"awardEnterPlaceholder": "Enter"
+	"awardEnterPlaceholder": "Enter",
+	"awardPopoverText": "Here you need to attach a certificate in JPG, PNG, PDF, GIF format. The file size should not exceed 5 MB"
 }

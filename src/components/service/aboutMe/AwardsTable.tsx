@@ -1,4 +1,4 @@
-import { DeleteTwoTone, EditTwoTone, EyeTwoTone } from '@ant-design/icons'
+import { DeleteTwoTone, EditTwoTone, EyeInvisibleTwoTone, EyeTwoTone } from '@ant-design/icons'
 import { ConfigProvider, Form, Popconfirm, Space, Table, TableProps } from 'antd'
 import en_US from 'antd/locale/en_US'
 import ru_RU from 'antd/locale/ru_RU'
@@ -7,7 +7,7 @@ import i18next, { t } from 'i18next'
 import { useState } from 'react'
 import uuid from 'react-uuid'
 
-import { useDeleteNewAwardMutation, useGetAwardsQuery } from '../../../store/api/serviceApi'
+import { useDeleteNewAwardMutation, useGetAwardsQuery, usePublishAwardMutation } from '../../../store/api/serviceApi'
 import { AwardType } from '../../../store/reducers/type'
 
 import { AddAwardModal } from './AddAwardModal'
@@ -16,6 +16,7 @@ export const AwardsTable = () => {
 	const [form] = Form.useForm()
 	const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 	const [deleteAward] = useDeleteNewAwardMutation()
+	const [publishAward] = usePublishAwardMutation()
 
 	const { data: awards, isLoading: loading } = useGetAwardsQuery()
 
@@ -40,7 +41,20 @@ export const AwardsTable = () => {
 			key: 'action',
 			render: (_, record) => (
 				<Space size="middle">
-					<EyeTwoTone />
+					{record.portalStatus === '1' ? (
+						<EyeTwoTone
+							onClick={() => {
+								publishAward(record.id!)
+							}}
+						/>
+					) : (
+						<EyeInvisibleTwoTone
+							onClick={() => {
+								publishAward(record.id!)
+							}}
+						/>
+					)}
+
 					<EditTwoTone
 						onClick={() => {
 							form.resetFields()
@@ -111,6 +125,9 @@ export const AwardsTable = () => {
 					className="w-full"
 					locale={{ emptyText: t('noData') }}
 					loading={loading}
+					rowClassName={record => {
+						return record.portalStatus === '1' ? '' : 'bg-gray-200 opacity-60'
+					}}
 				/>
 			</ConfigProvider>
 		</>

@@ -955,5 +955,6 @@
 	"awardDocumentDate": "Дата документа",
 	"awardNameNotEntered": "Не введено наименование награды",
 	"awardDateNotEntered": "Не указана дата присуждения",
-	"awardEnterPlaceholder": "Ввести"
+	"awardEnterPlaceholder": "Ввести",
+	"awardPopoverText": "Сюда нужно прикрепить сертификат в формате JPG, PNG, PDF, GIF. Размер файла не должен превышать 5 мб."
 }

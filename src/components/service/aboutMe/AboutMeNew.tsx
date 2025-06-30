@@ -17,6 +17,7 @@ import {
 import QuillComponents from './QuillComponents'
 import { SkeletonPage } from './Skeleton'
 import UploadAvatar from './UploadAvatar'
+import { useLocalStorageState } from 'ahooks'
 
 const AboutMeNew = () => {
 	const { t } = useTranslation()
@@ -39,6 +40,7 @@ const AboutMeNew = () => {
 		oznak: false
 	})
 	console.log('switchForm',switchForm)
+	
 
 	useEffect(() => {
 		// Добавляем доп сведения
@@ -231,6 +233,7 @@ const AboutMeNew = () => {
 											</Form.Item>
 											<Form.Item className="mb-[20px]" name="approve" valuePropName="checked" label={null}>
 												<Checkbox disabled={initialCheckboxes.approve}>
+													{t('generalAgreement3')}
 													<a
 														className="underline mr-1"
 														href="https://shelly.kpfu.ru/e-ksu/docs/F_437732066/prikaz_soglashenie_na_PEP211_docx_18_05_2022.docx"

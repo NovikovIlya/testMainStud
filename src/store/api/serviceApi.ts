@@ -502,6 +502,41 @@ export const serviceApi = apiSlice.injectEndpoints({
 			},
 			invalidatesTags: ['emails']
 		}),
+		setMainEmail: builder.mutation<void, number>({
+			query: id => {
+				return {
+					url: `user-api/settings/emails/set-main/${id}`,
+					method: 'PATCH'
+				}
+			},
+			invalidatesTags: ['emails']
+		}),
+		setEmailMarker: builder.mutation<any, { id: number; marker: string }>({
+			query: body => ({
+				url: 'user-api/settings/emails/marker',
+				method: 'PATCH',
+				body
+			}),
+			invalidatesTags: ['emails']
+		}),
+		setPhoneMarker: builder.mutation<any, { id: number; marker: string }>({
+			query: body => ({
+				url: 'user-api/settings/phones/marker',
+				method: 'PATCH',
+				body
+			}),
+			invalidatesTags: ['phones']
+		}),
+
+		setMainPhone: builder.mutation<void, number>({
+			query: id => {
+				return {
+					url: `user-api/settings/phones/set-main/${id}`,
+					method: 'PATCH'
+				}
+			},
+			invalidatesTags: ['phones']
+		}),
 		finalVerifyPhone: builder.mutation({
 			query: obj => {
 				return {
@@ -954,7 +989,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 			}),
 			providesTags: ['Education']
 		}),
-		addNewEducation: builder.mutation<void, EducationTableDataType>({
+		addNewEducation: builder.mutation<void, any>({
 			query: arg => ({
 				url: `about-me/set-completed-edu`,
 				method: 'POST',
@@ -962,7 +997,7 @@ export const serviceApi = apiSlice.injectEndpoints({
 			}),
 			invalidatesTags: ['Education']
 		}),
-		deleteNewEducation: builder.mutation<void, EducationTableDataType>({
+		deleteNewEducation: builder.mutation<void, any>({
 			query: arg => ({
 				url: `about-me/set-completed-edu`,
 				method: 'DELETE',
@@ -970,11 +1005,11 @@ export const serviceApi = apiSlice.injectEndpoints({
 			}),
 			invalidatesTags: ['Education']
 		}),
-		updateNewEducation: builder.mutation<void, EducationTableDataType>({
+		updateNewEducation: builder.mutation<void, any>({
 			query: arg => ({
 				url: `about-me/set-completed-edu`,
 				method: 'PUT',
-				body: Object.fromEntries(Object.entries(arg).filter(([_, v]) => v != null))
+				body: arg
 			}),
 			invalidatesTags: ['Education']
 		}),
@@ -1061,6 +1096,13 @@ export const serviceApi = apiSlice.injectEndpoints({
 				method: 'PATCH'
 			}),
 			invalidatesTags: ['Awards']
+		}),
+		publishEducation: builder.mutation<void, number>({
+			query: educationId => ({
+				url: `about-me/edu-is-published?id=${educationId}`,
+				method: 'PATCH'
+			}),
+			invalidatesTags: ['Education']
 		})
 	})
 })
@@ -1210,5 +1252,10 @@ export const {
 	useAddNewAwardMutation,
 	useUpdateNewAwardMutation,
 	useDeleteNewAwardMutation,
-	usePublishAwardMutation
+	usePublishAwardMutation,
+	useSetMainEmailMutation,
+	useSetEmailMarkerMutation,
+	useSetPhoneMarkerMutation,
+	useSetMainPhoneMutation,
+	usePublishEducationMutation
 } = serviceApi

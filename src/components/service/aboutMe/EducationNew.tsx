@@ -32,7 +32,7 @@ const EducationNew = () => {
 				}}
 			>
 				<PlusCircleFilled className="!text-[28px]/[28px]" style={{ height: 28, width: 28, color: '#3073D7' }} />
-				{t('addEducation')}
+				{t('add')}
 			</Button>
 			<h2 className="pt-[41.72px] font-bold text-[14px]/[100%]">{t('previousEducation')}</h2>
 			<OldEducationsTable />

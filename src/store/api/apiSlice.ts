@@ -112,6 +112,7 @@ export const apiSlice = createApi({
 		'certificateLanguages',
 		'socialActivity',
 		'scientific',
-		'Awards'
+		'Awards',
+		'SocialNetwork'
 	]
 })

@@ -34,10 +34,14 @@ import { generateYearsArray } from '../../../utils/generateYearsArray'
 
 import './TableLanguage.scss'
 
+import ruRU from 'antd/locale/ru_RU'
+import enUS from 'antd/locale/en_US'
+import i18n from '../../../18n'
+
+
 const TableScintific = ({ isSuccess, dataLevels, dataScientific, setSelectId, selectId }: any) => {
 	const [isModalOpenEdit, setIsModalOpenEdit] = useState<boolean>(false)
 	const [selectInfo, setSelectInfo] = useState<any>(null)
-	const [selectedLabel, setSelectedLabel] = useState<string | null>(null)
 	const [form2] = Form.useForm()
 	const [editScientific, { isLoading: isLoadingEdit }] = useEditScientificActivityMutation()
 	const [deleteScientific, { isLoading: isLoadingDelete }] = useDeleteScientificMutation()
@@ -57,12 +61,10 @@ const TableScintific = ({ isSuccess, dataLevels, dataScientific, setSelectId, se
 	const [flag, setFlag] = useState(false)
 	const [id, setId] = useState(null)
 
-	useEffect(() => {
-		if (dataScientificDirectors) {
-			setDataScientificDirectorsValue(dataScientificDirectors)
-			setFlag(true)
-		}
-	}, [dataScientificDirectors])
+	// Определяем локаль на основе текущего языка
+	const getAntdLocale = () => {
+		return i18n.language === 'ru' ? ruRU : enUS
+	}
 
 	const columns: TableProps<any>['columns'] = [
 		{
@@ -160,6 +162,13 @@ const TableScintific = ({ isSuccess, dataLevels, dataScientific, setSelectId, se
 	]
 
 	useEffect(() => {
+		if (dataScientificDirectors) {
+			setDataScientificDirectorsValue(dataScientificDirectors)
+			setFlag(true)
+		}
+	}, [dataScientificDirectors])
+
+	useEffect(() => {
 		if (getOne) {
 			form2.setFieldsValue({
 				language: getOne?.isRussian ? 'rus' : 'eng',
@@ -167,13 +176,13 @@ const TableScintific = ({ isSuccess, dataLevels, dataScientific, setSelectId, se
 				theme: getOne?.theme,
 				direction: getOne?.direction,
 				isPublished: getOne?.isPublished,
-				scientificDirector: getOne?.scientificDirector
+				scientificDirector: getOne?.scientificDirector,
+				languageCode: getOne?.isRussian ? 1 : 2
 			})
 		}
 	}, [isSuccesOne, getOne, form2])
 
 	const handleDelete = (record: any) => {
-		console.log('recordDelete', record)
 		deleteScientific(record)
 	}
 
@@ -188,7 +197,9 @@ const TableScintific = ({ isSuccess, dataLevels, dataScientific, setSelectId, se
 	const handleCancelEdit = () => {
 		setIsModalOpenEdit(false)
 		form2.resetFields()
+		setSelectInfo(null) 
 	}
+
 	const onFinishForm2 = async (values: any) => {
 		editScientific({
 			id: getOne?.id,
@@ -199,6 +210,7 @@ const TableScintific = ({ isSuccess, dataLevels, dataScientific, setSelectId, se
 			isPublished: values?.isPublished,
 			scientificDirectorId: id ? id : getOne?.scientificDirectorId,
 			
+			
 		})
 		handleCancelEdit()
 	}
@@ -208,7 +220,7 @@ const TableScintific = ({ isSuccess, dataLevels, dataScientific, setSelectId, se
 			form2.setFields([
 				{
 					name: field,
-					errors: ['Введите минимум 4 символа']
+					errors: [t('inputFour')]
 				}
 			])
 			setDataScientificDirectorsValue([])
@@ -226,6 +238,7 @@ const TableScintific = ({ isSuccess, dataLevels, dataScientific, setSelectId, se
 	return (
 		<>
 			<ConfigProvider
+			locale={getAntdLocale()}
 				theme={{
 					components: {
 						Table: {
@@ -235,7 +248,7 @@ const TableScintific = ({ isSuccess, dataLevels, dataScientific, setSelectId, se
 				}}
 			>
 				<Modal
-					className="!z-[10000000]"
+					className="!z-[10000000] "
 					footer={null}
 					title={t('scient')}
 					open={isModalOpenEdit}
@@ -247,15 +260,15 @@ const TableScintific = ({ isSuccess, dataLevels, dataScientific, setSelectId, se
 							<Spin />
 						</div>
 					) : (
-						<Form className="mt-4" form={form2} onFinish={onFinishForm2} initialValues={{ languageCode: 1 }}>
+						<Form className="mt-4 animate-fade-in" form={form2} onFinish={onFinishForm2}  initialValues={{ languageCode: 1 }}>
 							<Form.Item
-								label={<div className="">{t('language')}</div>}
+								label={<div className="">{t('languagePub')}</div>}
 								name="languageCode"
-								labelCol={{ span: 6 }}
+								labelCol={{ span: 12 }}
 								wrapperCol={{ span: 24 }}
 								layout="vertical"
 								className="mt-4 h-[35px]"
-								rules={[{ required: true, message: '' }]}
+							
 							>
 								<Radio.Group
 									options={[
@@ -272,19 +285,19 @@ const TableScintific = ({ isSuccess, dataLevels, dataScientific, setSelectId, se
 								wrapperCol={{ span: 24 }}
 								layout="vertical"
 								className="mt-14 min-h-[35px]"
-								rules={[{ required: true, message: '' }]}
+								rules={[{ required: true, message:  t('validYear') }]}
 							>
 								<Select placeholder={t('select')} aria-required options={generateYearsArray()} allowClear />
 							</Form.Item>
 
 							<div className="mt-12 mb-1"><span className="text-red-500 mr-[4px] font-[14px] !font-[SimSun,sans-serif]">*</span>{t('theme')}</div>
-							<Form.Item name="theme" className=" mb-6" rules={[{ required: true, message: '' }]}>
-								<Input.TextArea rows={4}  maxLength={200} />
+							<Form.Item name="theme" className=" mb-6" rules={[{ required: true, message: t('validTheme') }]}>
+								<Input.TextArea rows={4}  placeholder={t('inputMessage2')}  maxLength={200} />
 							</Form.Item>
 
 							<div className="mb-1"><span className="text-red-500 mr-[4px] font-[14px] !font-[SimSun,sans-serif]">*</span>{t('direction')}</div>
-							<Form.Item name="direction" className=" h-[35px]" rules={[{ required: true, message: '' }]}>
-								<Input.TextArea rows={4}  maxLength={200} />
+							<Form.Item name="direction" className=" h-[35px]" rules={[{ required: true, message: t('validTNap') }]}>
+								<Input.TextArea rows={4}  placeholder={t('inputMessage2')} maxLength={200} />
 							</Form.Item>
 
 							<Form.Item
@@ -364,7 +377,7 @@ const TableScintific = ({ isSuccess, dataLevels, dataScientific, setSelectId, se
 							</Form.Item>
 
 							<Button type="primary" htmlType="submit">
-								{t('add')}
+								{t('save')}
 							</Button>
 						</Form>
 					)}

@@ -4,11 +4,12 @@ import { useTranslation } from 'react-i18next'
 import { useLocation } from 'react-router-dom'
 
 import { ArrowLeftSvg } from '../assets/svg'
+
 import './style.css'
 
 const { Link } = Typography
 
-export const BackMainPage = ({ className,notAuth = false }:{className?:string, notAuth?:boolean}) => {
+export const BackMainPage = ({ className, notAuth = false }: { className?: string; notAuth?: boolean }) => {
 	const { t, i18n } = useTranslation()
 	const location = useLocation()
 	const searchParams = new URLSearchParams(location.search)
@@ -22,16 +23,16 @@ export const BackMainPage = ({ className,notAuth = false }:{className?:string, n
 		document.title = t('pageTitle')
 	}, [t])
 
-	const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+	//const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 
 	return (
-		<div className={`${className} flex w-full items-center justify-between  pr-8 pl-0  absolute ${isMobile ? 'opacity-0' : ''}`}>
+		<div className={`${className} flex w-full items-center justify-between  pr-8 pl-0  absolute`}>
 			<div className=" flex w-fit items-center gap-[10px] my-[50px] ml-[50px] cursor-pointer ">
 				{notAuth ? (
 					<div className="h-3"></div>
 				) : (
-					<div className='hover:shadow  flex gap-2 items-center p-2 m-[-8px] rounded-lg'>
-						<ArrowLeftSvg className='opacity-50'  />
+					<div className="hover:shadow  flex gap-2 items-center p-2 m-[-8px] rounded-lg">
+						<ArrowLeftSvg className="opacity-50" />
 						<Link style={{ color: 'black' }} href="/user">
 							{t('backPage')}
 						</Link>
@@ -39,8 +40,8 @@ export const BackMainPage = ({ className,notAuth = false }:{className?:string, n
 				)}
 			</div>
 			<Select
-				popupClassName=''
-				className={`hover:shadow rounded p-1 duration-300   ${isMobile ? '' : ''} `}
+				popupClassName=""
+				className={`hover:shadow rounded p-1 duration-300`}
 				defaultValue={paramValue === 'eng' ? 'en' : i18n.language}
 				style={{ width: 75 }}
 				bordered={false}

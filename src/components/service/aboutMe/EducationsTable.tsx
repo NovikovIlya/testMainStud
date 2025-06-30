@@ -1,18 +1,21 @@
-import { DeleteTwoTone, EditTwoTone, EyeTwoTone } from '@ant-design/icons'
+import { DeleteTwoTone, EditTwoTone, EyeInvisibleTwoTone, EyeTwoTone } from '@ant-design/icons'
 import { ConfigProvider, Form, Popconfirm, Space, Table, TableProps } from 'antd'
 import en_US from 'antd/locale/en_US'
 import ru_RU from 'antd/locale/ru_RU'
 import dayjs from 'dayjs'
 import i18next, { t } from 'i18next'
 import { useState } from 'react'
+import uuid from 'react-uuid'
 
 import { EngFlagSvg } from '../../../assets/svg/EngFlagSvg'
 import { RuFlagSvg } from '../../../assets/svg/RuFlagSvg'
 import {
 	useDeleteNewEducationMutation,
 	useGetEducationTypesQuery,
-	useGetNewEducationsQuery
+	useGetNewEducationsQuery,
+	usePublishEducationMutation
 } from '../../../store/api/serviceApi'
+import { useGetCountriesQuery } from '../../../store/api/utilsApi'
 import { EducationTableDataType } from '../../../store/reducers/type'
 
 import { AddEducationModal } from './AddEducationModal'
@@ -20,10 +23,12 @@ import { AddEducationModal } from './AddEducationModal'
 export const EducationsTable = () => {
 	const { data: educations = { completed_edu: [] }, isLoading: loading } = useGetNewEducationsQuery()
 	const { data: levels = { edu_types: [] } } = useGetEducationTypesQuery()
+	const { data: countries = [] } = useGetCountriesQuery(i18next.language)
 	const [form] = Form.useForm()
 	const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 
 	const [deleteEducation] = useDeleteNewEducationMutation()
+	const [publishEducation] = usePublishEducationMutation()
 
 	const columns: TableProps<EducationTableDataType>['columns'] = [
 		{
@@ -66,9 +71,22 @@ export const EducationsTable = () => {
 			key: 'action',
 			render: (_, record) => (
 				<Space size="middle">
-					<EyeTwoTone />
+					{record.portal_status === '1' ? (
+						<EyeTwoTone
+							onClick={() => {
+								publishEducation(record.id!)
+							}}
+						/>
+					) : (
+						<EyeInvisibleTwoTone
+							onClick={() => {
+								publishEducation(record.id!)
+							}}
+						/>
+					)}
 					<EditTwoTone
 						onClick={() => {
+							form.resetFields()
 							form.setFieldsValue({
 								id: record.id,
 								s_id: record.s_id,
@@ -79,14 +97,24 @@ export const EducationsTable = () => {
 								educationLevelId: record.edu_level,
 								beginningYear: dayjs(record.start_date, 'DD.MM.YYYY'),
 								graduateYear: dayjs(record.end_date, 'DD.MM.YYYY'),
-								countryId: record.edu_country,
+								countryId: countries.find(country => country.shortName === record.edu_country)?.id!,
 								specialization: record.eduspeciality,
 								subdivision: record.development,
 								qualification: record.qualification,
 								issueDate: record.issue_date ? dayjs(record.issue_date, 'DD.MM.YYYY') : null,
 								number: record.docnum,
 								series: record.docseries,
-								accept: record.portal_status ? true : false
+								accept: record.portal_status === '1' ? true : false,
+								file: record.filename
+									? [
+											{
+												uid: uuid(),
+												name: record.filename,
+												status: 'done',
+												url: record.edu_file_url
+											}
+									  ]
+									: []
 							})
 							setIsModalOpen(true)
 						}}
@@ -96,7 +124,12 @@ export const EducationsTable = () => {
 							title={t('deleteEducationTitle')}
 							description={t('deleteEducationDescription')}
 							onConfirm={() => {
-								deleteEducation(record)
+								let clearData = Object.fromEntries(Object.entries(record).filter(([_, v]) => v != null))
+								let jsonData = JSON.stringify(clearData)
+								let blobData = new Blob([jsonData], { type: 'application/json' })
+								const formData = new FormData()
+								formData.append('data', blobData)
+								deleteEducation(formData)
 							}}
 						>
 							<DeleteTwoTone />
@@ -162,6 +195,9 @@ export const EducationsTable = () => {
 					className="w-full"
 					locale={{ emptyText: t('noData') }}
 					loading={loading}
+					rowClassName={record => {
+						return record.portal_status === '1' ? '' : 'bg-gray-200 opacity-60'
+					}}
 				/>
 			</ConfigProvider>
 		</>

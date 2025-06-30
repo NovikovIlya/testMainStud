@@ -71,8 +71,8 @@ const employeeKeys = [
 	'HandyLinks',
 	'NoticeList',
 	'EmpDempDocument',
-	'AccDempDocument'
-	// 'PsychologicalHelpEmp'
+	'AccDempDocument',
+	'PsychologicalHelpEmp'
 	// 'jobSeeker',
 	// 'myResponds',
 	// 'DirectResume',

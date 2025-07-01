@@ -103,10 +103,12 @@ export const SupervisorVacancies = () => {
 					<h3 className="w-[30%] shrink-0 font-content-font font-normal text-[14px]/[14px] text-text-gray">
 						Должность
 					</h3>
-					<div className="ml-[5%] w-[20%] flex gap-[40px]">
-						<h3 className="font-content-font font-normal text-[14px]/[14px] text-text-gray">Опыт работы</h3>
-						<h3 className="font-content-font font-normal text-[14px]/[14px] text-text-gray">График работы</h3>
-					</div>
+					<h3 className="ml-[5%] w-[10%] font-content-font font-normal text-[14px]/[14px] text-text-gray">
+						Опыт работы
+					</h3>
+					<h3 className="ml-[40px] w-[10%] font-content-font font-normal text-[14px]/[14px] text-text-gray">
+						График работы
+					</h3>
 					<h3 className="ml-[5%] w-[8%] font-content-font font-normal text-[14px]/[14px] text-text-gray">
 						Заработная плата
 					</h3>

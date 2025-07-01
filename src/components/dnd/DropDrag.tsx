@@ -848,6 +848,8 @@ const DropDrag = () => {
 						maiRoleArray?.sessionId
 					}&p_h=${maiRoleArray?.sessionHash}`}
 					isLink
+					img="/portalannouncement.png"
+					positionImage="mt-2 mr-2"
 				/>
 			),
 			place: {
@@ -869,6 +871,7 @@ const DropDrag = () => {
 						maiRoleArray?.sessionId
 					}&p_h=${maiRoleArray?.sessionHash}`}
 					isLink
+					img="/internetReception.png"
 				/>
 			),
 			place: {
@@ -890,6 +893,8 @@ const DropDrag = () => {
 						maiRoleArray?.userId
 					}&p2=${maiRoleArray?.sessionId}&p_h=${maiRoleArray?.sessionHash}`}
 					isLink
+					img="/ITRequests.png"
+					positionImage="mt-5 mr-2"
 				/>
 			),
 			place: {
@@ -911,6 +916,10 @@ const DropDrag = () => {
 						maiRoleArray?.userId
 					}&p2=${maiRoleArray?.sessionId}&p_h=${maiRoleArray?.sessionHash}`}
 					isLink
+					img="/EducationDeparmentRequests.png"
+					positionImage="mt-4 mr-5"
+					width={83}
+					height={103}
 				/>
 			),
 			place: {
@@ -932,6 +941,10 @@ const DropDrag = () => {
 						maiRoleArray?.sessionId
 					}&p_h=${maiRoleArray?.sessionHash}`}
 					isLink
+					img="/Documentation.png"
+					positionImage="mr-3"
+					width={98}
+					height={105}
 				/>
 			),
 			place: {
@@ -953,6 +966,10 @@ const DropDrag = () => {
 						maiRoleArray?.sessionId
 					}&p_h=${maiRoleArray?.sessionHash}`}
 					isLink
+					img="/HandyLinks.png"
+					positionImage="mt-5"
+					width={105}
+					height={105}
 				/>
 			),
 			place: {
@@ -974,6 +991,10 @@ const DropDrag = () => {
 						maiRoleArray?.sessionId
 					}&p_h=${maiRoleArray?.sessionHash}`}
 					isLink
+					img="/NoticeList.png"
+					positionImage="mt-5 mr-5"
+					width={86}
+					height={97}
 				/>
 			),
 			place: {
@@ -995,6 +1016,10 @@ const DropDrag = () => {
 						maiRoleArray?.sessionId
 					}&p_h=${maiRoleArray?.sessionHash}`}
 					isLink
+					img="/EmpDempDocumentInfo.png"
+					positionImage="mt-2 mr-3"
+					width={94}
+					height={109}
 				/>
 			),
 			place: {
@@ -1016,6 +1041,10 @@ const DropDrag = () => {
 						maiRoleArray?.userId
 					}&p2=${maiRoleArray?.sessionId}&p_h=${maiRoleArray?.sessionHash}`}
 					isLink
+					img="/AccDempDocument.png"
+					positionImage="mr-1"
+					width={113}
+					height={113}
 				/>
 			),
 			place: {

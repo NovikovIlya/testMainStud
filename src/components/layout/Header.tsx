@@ -64,6 +64,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 		url: null,
 		id: null,
 	});
+	
 
 	useEffect(()=>{
 		if(isSuccesAvatar){

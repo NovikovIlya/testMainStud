@@ -130,27 +130,36 @@ const Languages = () => {
 	}
 
 	const beforeUpload = (file: File, fieldIndex: number) => {
-		const isPDF = file.type === 'application/pdf'
-		const isLt5M = file.size / 1024 / 1024 < 5
+    // Поддерживаемые форматы
+    const supportedFormats = [
+        'application/pdf',
+        'image/jpeg',
+        'image/jpg',
+        'image/png',
+        'image/gif'
+    ]
+    
+    const isValidFormat = supportedFormats.includes(file.type)
+    const isLt5M = file.size / 1024 / 1024 < 5
 
-		if (!isPDF) {
-			message.error('Можно загружать только PDF!')
-			return false
-		}
+    if (!isValidFormat) {
+        message.error('Можно загружать только PDF, JPEG/JPG, PNG или GIF!')
+        return false
+    }
 
-		if (!isLt5M) {
-			message.error('Файл должен быть меньше 5MB!')
-			return false
-		}
+    if (!isLt5M) {
+        message.error('Файл должен быть меньше 5MB!')
+        return false
+    }
 
-		// Сохраняем файл для конкретного индекса
-		setCertificateFiles(prev => ({
-			...prev,
-			[fieldIndex]: file
-		}))
+    // Сохраняем файл для конкретного индекса
+    setCertificateFiles(prev => ({
+        ...prev,
+        [fieldIndex]: file
+    }))
 
-		return false
-	}
+    return false
+}
 
 	const handleFileRemove = (fieldIndex: number) => {
 		setCertificateFiles(prev => {
@@ -301,7 +310,7 @@ const Languages = () => {
 							wrapperCol={{ span: 24 }}
 							layout="vertical"
 							className="mt-4 h-[35px]"
-							rules={[{ required: true, message: 'Выберите язык' }]}
+							rules={[{ required: true, message: t('selectLanguage') }]}
 						>
 							<Select
 							   showSearch 
@@ -412,10 +421,10 @@ const Languages = () => {
 														name: certificateFiles[index].name,
 														status: 'done'
 													}] : []}
-													accept=".pdf"
+													
 												>
 													<Button icon={<UploadOutlined />}>
-														{t('add')} (PDF)
+														{t('add')} 
 													</Button>
 												</Upload>
 											</Form.Item>

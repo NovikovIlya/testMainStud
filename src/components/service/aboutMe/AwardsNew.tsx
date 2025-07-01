@@ -31,7 +31,7 @@ export const AwardsNew = () => {
 				}}
 			>
 				<PlusCircleFilled className="!text-[28px]/[28px]" style={{ height: 28, width: 28, color: '#3073D7' }} />
-				{t('addAward')}
+				{t('add')}
 			</Button>
 		</div>
 	)

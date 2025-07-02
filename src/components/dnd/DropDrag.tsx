@@ -13,7 +13,7 @@ import { useAppSelector } from '../../store'
 import { useGetInfoUserQuery } from '../../store/api/formApi'
 import { useCheckIsEmployeeQuery } from '../../store/api/practiceApi/contracts'
 import { useGetModulesQuery } from '../../store/api/roleModel/roleModel'
-import { useGetRoleQuery } from '../../store/api/serviceApi'
+import { useGetEmploymentPossibleRolesQuery, useGetRoleQuery } from '../../store/api/serviceApi'
 import { getBaseUrlShelly } from '../../store/api/studentPractice/getBaseUrlShelly'
 import { changeLayout, removeCard } from '../../store/reducers/LayoutsSlice'
 import InfoEmployment from '../InfoEmployment'
@@ -102,6 +102,14 @@ const DropDrag = () => {
 		isLoading: isLoadingGetInfoSubrole,
 		isSuccess: isSuccessGetInfoSubrole
 	} = useGetInfoUserQuery()
+	const { data: rolesData = undefined } = useGetEmploymentPossibleRolesQuery()
+	const isPersonnelDepartment = rolesData?.find(
+		role =>
+			role === 'PERSONNEL_DEPARTMENT' ||
+			role === 'SUPERVISOR' ||
+			role === 'ACCOUNTING' ||
+			role === 'LABOR_PROTECTION_DEPARTMENT'
+	)
 	const [currentBreakpoint, setCurrentBreakpoint] = useState<string>('lg')
 	const [mounted, setMounted] = useState(false)
 	const [toolbox, setToolbox] = useState<{ [index: string]: any[] }>({ lg: [] })
@@ -1187,6 +1195,9 @@ const DropDrag = () => {
 			if (mainRole === 'STUD') {
 				return studentKeys.includes(item?.key ? item?.key : '')
 			} else if (mainRole === 'EMPL') {
+				if (item.key === 'personnelAccounting') {
+					return isPersonnelDepartment
+				}
 				return (item.key === 'Practices' && isSuccessCheck) || employeeKeys.includes(item?.key ? item?.key : '')
 			} else if (maiRole === 'OTHER' && subRole === 'SEEKER') {
 				return seekerKeys.includes(item?.key ? item?.key : '')

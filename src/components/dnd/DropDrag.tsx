@@ -45,11 +45,11 @@ const studentKeys = [
 	'Vacancies',
 	'petitionForDocument',
 	'contractEducation',
-	'educationPrograms',
-	'jobSeeker',
-	'myResponds',
-	'DirectResume',
-	'personnelAccounting'
+	'educationPrograms'
+	// 'jobSeeker',
+	// 'myResponds',
+	// 'DirectResume',
+	// 'personnelAccounting'
 ]
 
 const employeeKeys = [
@@ -74,12 +74,14 @@ const employeeKeys = [
 	'EmpDempDocument',
 	'AccDempDocument',
 	'PsychologicalHelpEmp',
-	'jobSeeker',
-	'myResponds',
-	'DirectResume',
+	// 'jobSeeker',
+	// 'myResponds',
+	// 'DirectResume',
 	'personnelAccounting'
 	// 'shortLink'
 ]
+
+const seekerKeys = ['jobSeeker', 'myResponds', 'DirectResume', 'AboutUniversity']
 
 const DropDrag = () => {
 	const dispatch = useDispatch()
@@ -1079,6 +1081,28 @@ const DropDrag = () => {
 				y: 0,
 				i: 'PsychologicalHelpEmp'
 			}
+		},
+		{
+			key: 'AboutUniversity',
+			element: (
+				<TemplateCard
+					href="/services/aboutUniversity"
+					info="infoUniversity"
+					title="AboutTheUniversity"
+					buttonText="Watch"
+					img={'/src/assets/images/aboutUniversity.png'}
+					width={102}
+					height={113}
+					positionImage={'mr-2 mt-2'}
+				/>
+			),
+			place: {
+				w: 1,
+				h: 1,
+				x: 0,
+				y: 0,
+				i: 'AboutUniversityCard'
+			}
 		}
 	]
 
@@ -1164,6 +1188,8 @@ const DropDrag = () => {
 				return studentKeys.includes(item?.key ? item?.key : '')
 			} else if (mainRole === 'EMPL') {
 				return (item.key === 'Practices' && isSuccessCheck) || employeeKeys.includes(item?.key ? item?.key : '')
+			} else if (maiRole === 'OTHER' && subRole === 'SEEKER') {
+				return seekerKeys.includes(item?.key ? item?.key : '')
 			} else {
 				return <>Такой роли не найдено</>
 			}
@@ -1222,38 +1248,24 @@ const DropDrag = () => {
 			if (subRole === 'SEEKER') {
 				return (
 					<>
-						<Row>
-							<Seeker />
-						</Row>
-						<Row>
-							<Col span={8}>
-								<TemplateCard
-									title="myResponds"
-									info="myRespondsCardDescription"
-									href="/services/myresponds/responds"
-									img="/myrespondsicon.png"
-									width={146}
-									height={136}
-									mt="mt-[25px]"
-								/>
-							</Col>
-							<Col span={8}>
-								<DirectResume
-									href="#"
-									img="/directresumeimage.png"
-									info="directResumeCardDescription"
-									title="resume"
-									buttonText="attach"
-									buttonType="primary"
-									height={99}
-									width={85}
-									positionImage="mt-2"
-								/>
-							</Col>
-							<Col span={8}>
-								<AboutUniversityCard />
-							</Col>
-						</Row>
+						<ResponsiveReactGridLayout
+							className="layout mb-10 !height-full"
+							cols={{ lg: isMobile ? 2 : 3, md: 2, sm: 2, xs: 2, xxs: 1 }}
+							rowHeight={windowSize.innerWidth < 768 ? 210 : 320}
+							containerPadding={[0, 0]}
+							margin={[20, 20]}
+							layouts={layout}
+							measureBeforeMount={true}
+							useCSSTransforms={mounted}
+							onLayoutChange={onLayoutChange}
+							onBreakpointChange={onBreakpointChange}
+							isDraggable={edit}
+							isResizable={false}
+							compactType="vertical"
+							preventCollision={true}
+						>
+							{generateDOM}
+						</ResponsiveReactGridLayout>
 					</>
 				)
 			}
@@ -1302,7 +1314,7 @@ const DropDrag = () => {
 		}
 		return (
 			<>
-				{mainRole === 'STUD' ? <InfoEmployment /> : ''}
+				{mainRole === 'STUD' ? <InfoStudent /> : ''}
 				<ResponsiveReactGridLayout
 					className="layout mb-10 !height-full"
 					cols={{ lg: isMobile ? 2 : 3, md: 2, sm: 2, xs: 2, xxs: 1 }}

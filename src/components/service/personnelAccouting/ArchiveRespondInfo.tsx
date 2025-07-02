@@ -258,7 +258,7 @@ export const ArchiveRespondInfo = (props: {
 													Дата рождения
 												</p>
 												<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-													{res.userData?.birthday.split('-').reverse().join('.')}
+													{res.userData?.birthday && res.userData?.birthday.split('-').reverse().join('.')}
 												</p>
 											</div>
 											<div className="flex flex-col gap-[8px]">

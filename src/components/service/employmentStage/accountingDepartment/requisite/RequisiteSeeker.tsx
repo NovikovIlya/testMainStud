@@ -55,7 +55,7 @@ export const RequisiteSeeker = () => {
 
 	const date = new Date()
 
-	const updatedDateStr = data?.userData?.birthday.replace(/-/g, '.')
+	const updatedDateStr = data?.userData?.birthday ? data?.userData?.birthday.replace(/-/g, '.') : ''
 
 	useEffect(() => {
 		getResume(respondId.respondId)

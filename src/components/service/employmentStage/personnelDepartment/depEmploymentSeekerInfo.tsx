@@ -40,7 +40,7 @@ export const DepEmploymentSeekerInfo = () => {
 	const [resume, setResume] = useState<string>('')
 	const [resumeSize, setResumeSize] = useState<number>(0)
 
-	const updatedDateStr = data?.userData?.birthday.replace(/-/g, '.')
+	const updatedDateStr = data?.userData?.birthday ? data?.userData?.birthday.replace(/-/g, '.') : ''
 
 	const getFormattedSize = (sizeInBytes: number): string => {
 		const sizeInKilobytes = sizeInBytes / 1024
